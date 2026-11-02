@@ -36,7 +36,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
-        "ForTauCeti.Analysis.InnerProductSpace.Singular.System",
         "ForTauCeti.Analysis.InnerProductSpace.Singular.Values",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
@@ -94,7 +93,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
-        "ForTauCeti.Analysis.InnerProductSpace.Singular.System",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
         "TauCeti.Analysis.SpecialFunctions.Sqrt"
@@ -1216,21 +1214,41 @@
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.MoorePenroseInverse",
-      "source_declarations": [],
+      "source_declarations": [
+        "TauCeti.IsMoorePenroseInverse",
+        "TauCeti.moorePenroseInverse",
+        "TauCeti.inner_apply_rightSingularBasis",
+        "TauCeti.moorePenroseInverse_apply_apply_rightSingularBasis",
+        "TauCeti.comp_moorePenroseInverse_comp",
+        "TauCeti.moorePenroseInverse_comp_apply_rightSingularBasis",
+        "TauCeti.isSymmetric_moorePenroseInverse_comp",
+        "TauCeti.moorePenroseInverse_apply",
+        "TauCeti.moorePenroseInverse_comp_comp",
+        "TauCeti.isSymmetric_comp_moorePenroseInverse",
+        "TauCeti.eq_moorePenroseInverse_of_isMoorePenroseInverse",
+        "TauCeti.isMoorePenroseInverse_moorePenroseInverse",
+        "TauCeti.isMoorePenroseInverse_adjoint_of",
+        "TauCeti.isMoorePenroseInverse_adjoint",
+        "TauCeti.moorePenroseInverse_comp_eq_id_of_injective",
+        "TauCeti.adjoint_moorePenroseInverse_of_isSymmetric",
+        "TauCeti.comp_moorePenroseInverse_comm_of_isSymmetric",
+        "TauCeti.moorePenroseInverse_comm_of_isSymmetric",
+        "TauCeti.comp_moorePenroseInverse_comp_eq_of_ker_le"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.MoorePenroseInverse",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.MoorePenrose",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
       "provenance_class": "moved; introduced at Davis--Kahan commit caa0966; authors Jon Crall, GPT-5.6 Thinking; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.Singular.System"
+        "TauCeti.Analysis.InnerProductSpace.MoorePenrose"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/13805",
+      "migration_note": "Consume LinearMap.moorePenroseInverse and LinearMap.IsMoorePenroseInverse, the four named fields of isMoorePenroseInverse_moorePenroseInverse, uniqueness, adjoint compatibility, and moorePenroseInverse_comp_of_injective from accepted #13805 (0edbdff64319599032f45b534ae7de31b86c3b21), present at pin 463ab293070d. Retain only the two self-adjoint commutation extensions and comp_moorePenroseInverse_comp_eq_of_ker_le, now about the accepted construction. The kernel-factorization proof uses the first Penrose equation directly. Retire the local constructor, predicate, coordinate machinery, four Penrose proofs, uniqueness and adjoint/injective proofs; migrate all paper consumers without forwarding aliases. Original source: e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/MoorePenroseInverse.lean, introduction caa0966; Jon Crall, GPT-5.6 Thinking, Kitware Inc., Apache-2.0. The upstream PR does not claim adaptation from DKPS; overlapping mathematics is not recorded as proof descent."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.NearIsometry",
@@ -1537,23 +1555,28 @@
         "TauCeti.selfCompAdjoint_apply_leftSingularVector",
         "TauCeti.singular_reconstruction",
         "TauCeti.eq_sum_singularValue_rankOne",
-        "TauCeti.exists_orthonormalBasis_extending_leftSingularVector"
+        "TauCeti.exists_orthonormalBasis_extending_leftSingularVector",
+        "TauCeti.rightSingularBasis",
+        "TauCeti.leftSingularVector",
+        "TauCeti.adjointCompSelf_apply_rightSingularBasis",
+        "TauCeti.apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero",
+        "TauCeti.apply_rightSingularBasis_eq_smul_leftSingularVector",
+        "TauCeti.orthonormal_leftSingularVector_subtype",
+        "TauCeti.norm_apply_rightSingularBasis",
+        "TauCeti.adjoint_apply_leftSingularVector"
       ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Singular.System",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SingularSystem",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SingularValues",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
       "provenance_class": "moved; introduced at Davis--Kahan commit 82d20de; authors Jon Crall, GPT-5.6 High, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
-      "direct_dependencies": [
-        "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues"
-      ],
+      "direct_dependencies": [],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "partially-upstreamed",
-      "upstream_pr": null,
-      "migration_note": "2026-10-31 upstream consumption: remove four locally unused singular-system proofs from ForTauCeti.Analysis.InnerProductSpace.Singular.System: the self-adjoint target Gram relation, finite singular expansion, rank-one expansion, and orthonormal-basis extension. The accepted TauCeti.Analysis.InnerProductSpace.SingularValues supplies respectively LinearMap.self_comp_adjoint_leftSingularVector, LinearMap.apply_eq_sum_singularValues_smul, LinearMap.eq_sum_singularValues_smul_rankOne, and LinearMap.exists_orthonormalBasis_apply_eq_leftSingularVector (the latter has stronger pointwise-index agreement). No maintained consumers call the four retired declarations; the one old reference to eq_sum_singularValue_rankOne is in a preserved, non-build historical exploration snapshot. The remaining local singular-system declarations remain because active DKPS proofs still depend on them. Historical source: e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/Singular/System.lean, earlier introduced at donor commit 82d20de. This does not claim that the accepted TauCeti singular-system proofs were adapted from DKPS."
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/13967",
+      "migration_note": "Complete the prior partial retirement by consuming LinearMap.rightSingularBasis, leftSingularVector, adjoint_comp_self_rightSingularBasis, apply_rightSingularBasis_eq_zero_iff, apply_rightSingularBasis, orthonormal_leftSingularVector, norm_apply_rightSingularBasis and adjoint_leftSingularVector from accepted #13967 (2aa5bee4a1a6ffac8becf3c118884b2ab9cf9486), present at pin 463ab293070d. These use the same ordered Gram eigenbasis and total inverse normalization over RCLike; the adjoint relation is stronger because it also covers zero singular values. Remove the remaining System donor and migrate principal-plane, trial-coordinate, double-angle and finite-source arbitrary-Hilbert-codomain consumers. Preserve the four historical declarations retired on 2026-10-31 and their accepted targets: selfCompAdjoint_apply_leftSingularVector -> LinearMap.self_comp_adjoint_leftSingularVector; singular_reconstruction -> LinearMap.apply_eq_sum_singularValues_smul; eq_sum_singularValue_rankOne -> LinearMap.eq_sum_singularValues_smul_rankOne; exists_orthonormalBasis_extending_leftSingularVector -> LinearMap.exists_orthonormalBasis_apply_eq_leftSingularVector. Original source e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/Singular/System.lean, introduction 82d20de; Jon Crall, GPT-5.6 High, Claude Fable 5, Kitware Inc., Apache-2.0. No claim of DKPS proof adaptation for the accepted implementation. The historical exploration snapshot remains unchanged."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.Singular.Values",

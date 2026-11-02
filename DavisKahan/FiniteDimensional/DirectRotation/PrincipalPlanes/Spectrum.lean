@@ -51,7 +51,7 @@ theorem sinThetaMap_apply_eq_zero_of_orthogonal_sources
     {x : E} (hx : ∀ i, ⟪principalSourceVector U V i, x⟫_𝕜 = 0) :
     sinThetaMap U V x = 0 := by
   classical
-  set b := rightSingularBasis (sinThetaMap U V) with hb
+  set b := LinearMap.rightSingularBasis (sinThetaMap U V) with hb
   have hxdecomp := b.sum_repr x
   calc sinThetaMap U V x
       = sinThetaMap U V (∑ j, b.repr x j • b j) := by rw [hxdecomp]
@@ -73,8 +73,7 @@ theorem sinThetaMap_apply_eq_zero_of_orthogonal_sources
         · have hσ : (sinThetaMap U V).singularValues (j : ℕ) = 0 :=
             (sinThetaMap U V).singularValues_eq_zero_iff_le_finrank_range.mpr
               (Nat.le_of_not_lt hj)
-          rw [apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero
-            (sinThetaMap U V) hσ, smul_zero]
+          rw [(LinearMap.apply_rightSingularBasis_eq_zero_iff (sinThetaMap U V)).mpr hσ, smul_zero]
 
 /-- A vector of `U` orthogonal to every principal source vector lies in `V`. -/
 theorem mem_of_mem_orthogonal_sources
@@ -112,7 +111,7 @@ theorem inner_sinThetaMap_apply_eq_zero_of_orthogonal_family
     (w : E) :
     ⟪sinThetaMap U V w, z⟫_𝕜 = 0 := by
   classical
-  set b := rightSingularBasis (sinThetaMap U V) with hb
+  set b := LinearMap.rightSingularBasis (sinThetaMap U V) with hb
   have hwdecomp := b.sum_repr w
   have hsinu : ∀ i : Fin (nontrivialAngleCount U V),
       ⟪sinThetaMap U V (principalSourceVector U V i), z⟫_𝕜 = 0 := by
@@ -145,8 +144,7 @@ theorem inner_sinThetaMap_apply_eq_zero_of_orthogonal_family
         · have hσ : (sinThetaMap U V).singularValues (j : ℕ) = 0 :=
             (sinThetaMap U V).singularValues_eq_zero_iff_le_finrank_range.mpr
               (Nat.le_of_not_lt hj)
-          rw [apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero
-            (sinThetaMap U V) hσ, inner_zero_left, mul_zero]
+          rw [(LinearMap.apply_rightSingularBasis_eq_zero_iff (sinThetaMap U V)).mpr hσ, inner_zero_left, mul_zero]
 
 /-- **Descent to the fixed part.**  On the orthogonal complement of the
 principal-plane family the two projections agree. -/

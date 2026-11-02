@@ -146,7 +146,7 @@ range of `sin Θ`, which is exactly where `(sin Θ)(sin Θ)⁺` is the identity.
 theorem sinAngleOperator_comp_moorePenroseInverse_comp_angleOperator
     (hsin : (sinAngleOperator U V).IsSymmetric) :
     (sinAngleOperator U V ∘ₗ
-        TauCeti.moorePenroseInverse (sinAngleOperator U V)) ∘ₗ angleOperator U V =
+        LinearMap.moorePenroseInverse (sinAngleOperator U V)) ∘ₗ angleOperator U V =
       angleOperator U V := by
   apply (hsin.eigenvectorBasis rfl).toBasis.ext
   intro i
@@ -167,23 +167,23 @@ theorem sinAngleOperator_comp_moorePenroseInverse_comp_angleOperator
       rw [map_smul, hAb, smul_smul,
         inv_mul_cancel₀ (RCLike.ofReal_ne_zero.mpr hzero), one_smul]
     have hfix : (sinAngleOperator U V ∘ₗ
-        TauCeti.moorePenroseInverse (sinAngleOperator U V))
+        LinearMap.moorePenroseInverse (sinAngleOperator U V))
           (hsin.eigenvectorBasis rfl i) = hsin.eigenvectorBasis rfl i := by
       calc (sinAngleOperator U V ∘ₗ
-            TauCeti.moorePenroseInverse (sinAngleOperator U V))
+            LinearMap.moorePenroseInverse (sinAngleOperator U V))
               (hsin.eigenvectorBasis rfl i)
           = (sinAngleOperator U V ∘ₗ
-              TauCeti.moorePenroseInverse (sinAngleOperator U V))
+              LinearMap.moorePenroseInverse (sinAngleOperator U V))
                 (sinAngleOperator U V
                   ((((hsin.eigenvalues rfl i : ℝ) : 𝕜))⁻¹ •
                     hsin.eigenvectorBasis rfl i)) := by rw [hpre]
         _ = (sinAngleOperator U V ∘ₗ
-              TauCeti.moorePenroseInverse (sinAngleOperator U V) ∘ₗ sinAngleOperator U V)
+              LinearMap.moorePenroseInverse (sinAngleOperator U V) ∘ₗ sinAngleOperator U V)
                 ((((hsin.eigenvalues rfl i : ℝ) : 𝕜))⁻¹ • hsin.eigenvectorBasis rfl i) := rfl
         _ = sinAngleOperator U V
                 ((((hsin.eigenvalues rfl i : ℝ) : 𝕜))⁻¹ • hsin.eigenvectorBasis rfl i) :=
               LinearMap.congr_fun
-                (TauCeti.comp_moorePenroseInverse_comp (sinAngleOperator U V)) _
+                ((LinearMap.isMoorePenroseInverse_moorePenroseInverse (sinAngleOperator U V)).comp_comp_self) _
         _ = hsin.eigenvectorBasis rfl i := hpre
     rw [LinearMap.comp_apply, hTheta, map_smul, hfix]
 
@@ -209,10 +209,10 @@ theorem angleComplexStructure_comp_angleOperator_comp_self (hacute : IsAcute U V
       angleOperator U V * angleComplexStructure U V hacute := by
     simpa [hmul] using angleOperator_comm_angleComplexStructure U V hacute
   have hJJ : angleComplexStructure U V hacute * angleComplexStructure U V hacute =
-      -(sinAngleOperator U V * TauCeti.moorePenroseInverse (sinAngleOperator U V)) := by
+      -(sinAngleOperator U V * LinearMap.moorePenroseInverse (sinAngleOperator U V)) := by
     simpa [hmul] using angleComplexStructure_comp_self U V hacute
   have hPT : (sinAngleOperator U V *
-      TauCeti.moorePenroseInverse (sinAngleOperator U V)) * angleOperator U V =
+      LinearMap.moorePenroseInverse (sinAngleOperator U V)) * angleOperator U V =
       angleOperator U V := by
     simpa [hmul] using
       sinAngleOperator_comp_moorePenroseInverse_comp_angleOperator U V hsin
@@ -228,10 +228,10 @@ theorem angleComplexStructure_comp_angleOperator_comp_self (hacute : IsAcute U V
     _ = (angleComplexStructure U V hacute * angleComplexStructure U V hacute) *
         (angleOperator U V * angleOperator U V) := by noncomm_ring
     _ = -((sinAngleOperator U V *
-        TauCeti.moorePenroseInverse (sinAngleOperator U V)) *
+        LinearMap.moorePenroseInverse (sinAngleOperator U V)) *
           (angleOperator U V * angleOperator U V)) := by rw [hJJ]; noncomm_ring
     _ = -(((sinAngleOperator U V *
-        TauCeti.moorePenroseInverse (sinAngleOperator U V)) * angleOperator U V) *
+        LinearMap.moorePenroseInverse (sinAngleOperator U V)) * angleOperator U V) *
           angleOperator U V) := by noncomm_ring
     _ = -(angleOperator U V * angleOperator U V) := by rw [hPT]
 

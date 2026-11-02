@@ -50,7 +50,6 @@ topics:
   modules:
   - Analysis.InnerProductSpace.Singular.Values
   - Analysis.InnerProductSpace.RectangularSingularValues
-  - Analysis.InnerProductSpace.Singular.System
   - Analysis.InnerProductSpace.MoorePenroseInverse
 - id: T26
   title: Inner-product identities, approximate rigid-motion alignment, orthogonal
@@ -431,7 +430,6 @@ rungs:
   - Analysis.InnerProductSpace.SchattenNorm
   - Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
   - Analysis.InnerProductSpace.Singular.Subspace
-  - Analysis.InnerProductSpace.Singular.System
   - Analysis.InnerProductSpace.Singular.Values
   - Analysis.InnerProductSpace.Spectral.Cutoff
   - Analysis.InnerProductSpace.Spectral.Gap

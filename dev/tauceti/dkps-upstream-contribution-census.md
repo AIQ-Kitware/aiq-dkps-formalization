@@ -2344,3 +2344,39 @@ integration commit `8c6d1312b675b1443cb85c6de6dff4b8b8ba93c4`,
 port #13876**. The PR's MSS-C01--C05 scope includes the uncentered
 Chebyshev theorem consumed in the preceding batch; this batch consumes
 MSS-C02--C05, not any unmerged higher-moment or matrix concentration work.
+
+## 2026-11-01: consume the accepted singular system and Moore–Penrose construction
+
+The remaining `ForTauCeti/Analysis/InnerProductSpace/Singular/System.lean`
+implementation is retired. Its ordered right Gram eigenbasis and normalized
+left vectors coincide with the definitions accepted in
+[TauCeti #13967](https://github.com/TauCetiProject/TauCeti/pull/13967), integration
+`2aa5bee4a1a6ffac8becf3c118884b2ab9cf9486`. Consumers use
+`LinearMap.rightSingularBasis`, `leftSingularVector`,
+`adjoint_comp_self_rightSingularBasis`, `apply_rightSingularBasis_eq_zero_iff`,
+`apply_rightSingularBasis`, `orthonormal_leftSingularVector`,
+`norm_apply_rightSingularBasis`, and `adjoint_leftSingularVector` directly.
+The last relation upstream covers zero singular values too. This completes the
+partial retirement recorded on October 31; its four earlier replacement
+mappings remain in the manifest. The principal-plane, trial-coordinate,
+double-angle, and finite-source arbitrary-Hilbert-codomain mathematics remains.
+
+`ForTauCeti/Analysis/InnerProductSpace/MoorePenroseInverse.lean` now uses the
+accepted `LinearMap.moorePenroseInverse` and `LinearMap.IsMoorePenroseInverse`
+from [#13805](https://github.com/TauCetiProject/TauCeti/pull/13805), integration
+`0edbdff64319599032f45b534ae7de31b86c3b21`. The local construction, four
+Penrose proofs, uniqueness, adjoint compatibility, injective case, and their
+coordinate proof machinery are removed. Consumers use the accepted predicate's
+fields and `moorePenroseInverse_comp_of_injective`. The donor retains the two
+self-adjoint commutation extensions and the kernel-inclusion factorization;
+these results are absent from the pinned accepted API. Their carrier is the
+accepted inverse, with no compatibility definition or forwarding alias.
+
+Both integrations are ancestors of pin `463ab293070d`. Neither PR supplies
+evidence that its proof was adapted from DKPS; record mathematical replacement,
+not proof descent. Historical Kitware Apache-2.0 source remains at
+`e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/Singular/System.lean`
+(introduction `82d20de`, Jon Crall, GPT-5.6 High, Claude Fable 5) and
+`e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/MoorePenroseInverse.lean`
+(introduction `caa0966`, Jon Crall, GPT-5.6 Thinking). The manifest preserves the
+original declarations, including those removed by the earlier partial retirement.

@@ -123,10 +123,10 @@ theorem absDoubleAngleTangent_scalar
     (hab : a < b)
     {i : Fin (finrank 𝕜 E)} (hi : T.singularValues (i : ℕ) ≠ 0) :
     (b - a) * absDoubleAngleTangent (T.singularValues (i : ℕ)) ≤
-      2 * |RCLike.re ⟪leftSingularVector T i, H (rightSingularBasis T i)⟫_𝕜| := by
+      2 * |RCLike.re ⟪LinearMap.leftSingularVector T i, H (LinearMap.rightSingularBasis T i)⟫_𝕜| := by
   set t : ℝ := T.singularValues (i : ℕ) with hts
   set c : ℝ :=
-    RCLike.re ⟪leftSingularVector T i, H (rightSingularBasis T i)⟫_𝕜 with hcs
+    RCLike.re ⟪LinearMap.leftSingularVector T i, H (LinearMap.rightSingularBasis T i)⟫_𝕜 with hcs
   have ht0 : 0 < t := lt_of_le_of_ne (T.singularValues_nonneg _) (Ne.symm hi)
   have hkey := paired_singularVector_gap_inequality hA hH hAU hHU hHUperp
     hTmem hTzero hUb hUa hinv hi
@@ -183,11 +183,11 @@ private theorem sum_absDoubleAngleTangent_le_of_ne_zero
       (fun j : Fin S.card => (e j : Fin (finrank 𝕜 E))) :=
     fun x y h => e.injective (Subtype.ext h)
   have huu : Orthonormal 𝕜
-      (fun j : Fin S.card => rightSingularBasis T (e j : Fin (finrank 𝕜 E))) :=
-    (rightSingularBasis T).orthonormal.comp _ hecoe_inj
+      (fun j : Fin S.card => LinearMap.rightSingularBasis T (e j : Fin (finrank 𝕜 E))) :=
+    (LinearMap.rightSingularBasis T).orthonormal.comp _ hecoe_inj
   have hww : Orthonormal 𝕜
-      (fun j : Fin S.card => leftSingularVector T (e j : Fin (finrank 𝕜 E))) :=
-    (orthonormal_leftSingularVector_subtype T).comp
+      (fun j : Fin S.card => LinearMap.leftSingularVector T (e j : Fin (finrank 𝕜 E))) :=
+    (LinearMap.orthonormal_leftSingularVector T).comp
       (fun j : Fin S.card => (⟨(e j : Fin (finrank 𝕜 E)), hSprop j⟩ :
         {j : Fin (finrank 𝕜 E) // T.singularValues j ≠ 0}))
       (fun x y h => hecoe_inj (congrArg
@@ -196,8 +196,8 @@ private theorem sum_absDoubleAngleTangent_le_of_ne_zero
   have hscalar : ∀ j : Fin S.card,
       (b - a) / 2 * absDoubleAngleTangent
           (T.singularValues ((e j : Fin (finrank 𝕜 E)) : ℕ)) ≤
-        |RCLike.re ⟪leftSingularVector T (e j : Fin (finrank 𝕜 E)),
-          H (rightSingularBasis T (e j : Fin (finrank 𝕜 E)))⟫_𝕜| := by
+        |RCLike.re ⟪LinearMap.leftSingularVector T (e j : Fin (finrank 𝕜 E)),
+          H (LinearMap.rightSingularBasis T (e j : Fin (finrank 𝕜 E)))⟫_𝕜| := by
     intro j
     have h := absDoubleAngleTangent_scalar hA hH hAU hHU hHUperp hTmem hTzero
       hUb hUa hinv hab (hSprop j)

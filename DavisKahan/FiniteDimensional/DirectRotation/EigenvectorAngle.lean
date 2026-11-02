@@ -91,8 +91,8 @@ theorem adjoint_angleComplexStructure (hacute : IsAcute U V) :
       directRotation_comm_sinAngleOperator U V hacute,
       directRotationCosine_comm_sinAngleOperator U V]
   have hGD : ((directRotation U V hacute).toLinearMap - directRotationCosine U V) ∘ₗ
-      TauCeti.moorePenroseInverse (sinAngleOperator U V) =
-      TauCeti.moorePenroseInverse (sinAngleOperator U V) ∘ₗ
+      LinearMap.moorePenroseInverse (sinAngleOperator U V) =
+      LinearMap.moorePenroseInverse (sinAngleOperator U V) ∘ₗ
         ((directRotation U V hacute).toLinearMap - directRotationCosine U V) :=
     TauCeti.moorePenroseInverse_comm_of_isSymmetric hsym hAD
   have hsum : (directRotation U V hacute).toLinearMap +
@@ -111,14 +111,14 @@ theorem adjoint_angleComplexStructure (hacute : IsAcute U V) :
       ((directRotation U V hacute).toLinearMap - directRotationCosine U V) =
       -((directRotation U V hacute).toLinearMap - directRotationCosine U V) := by
     rw [map_sub, LinearIsometryEquiv.adjoint_toLinearMap_eq_symm, hCsym.adjoint_eq, hSC]
-  have hGadj : LinearMap.adjoint (TauCeti.moorePenroseInverse (sinAngleOperator U V)) =
-      TauCeti.moorePenroseInverse (sinAngleOperator U V) :=
-    TauCeti.adjoint_moorePenroseInverse_of_isSymmetric hsym
+  have hGadj : LinearMap.adjoint (LinearMap.moorePenroseInverse (sinAngleOperator U V)) =
+      LinearMap.moorePenroseInverse (sinAngleOperator U V) :=
+    by rw [← LinearMap.moorePenroseInverse_adjoint, hsym.adjoint_eq]
   show LinearMap.adjoint
       (((directRotation U V hacute).toLinearMap - directRotationCosine U V) ∘ₗ
-        TauCeti.moorePenroseInverse (sinAngleOperator U V)) =
+        LinearMap.moorePenroseInverse (sinAngleOperator U V)) =
       -(((directRotation U V hacute).toLinearMap - directRotationCosine U V) ∘ₗ
-        TauCeti.moorePenroseInverse (sinAngleOperator U V))
+        LinearMap.moorePenroseInverse (sinAngleOperator U V))
   rw [LinearMap.adjoint_comp, hGadj, hDadj, LinearMap.comp_neg, ← hGD]
 
 /-- **`J` has vanishing real quadratic form**: `Re ⟪J x, x⟫ = 0` for every `x`.

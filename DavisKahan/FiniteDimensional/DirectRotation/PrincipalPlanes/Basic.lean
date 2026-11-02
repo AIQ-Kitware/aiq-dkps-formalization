@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Fable 5, GPT-6 (configuratio
 module
 
 public import DavisKahan.FiniteDimensional.DirectRotation.Basic
-public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
 
 /-!
 # Principal planes of an acute pair: definitions and rotation block
@@ -54,7 +54,7 @@ noncomputable def nontrivialAngleCount (U V : Submodule 𝕜 E)
 noncomputable def principalSourceVector (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (i : Fin (nontrivialAngleCount U V)) : E :=
-  rightSingularBasis (sinThetaMap U V) (nontrivialAngleIndex U V i)
+  LinearMap.rightSingularBasis (sinThetaMap U V) (nontrivialAngleIndex U V i)
 
 /-- Sine attached to a nontrivial principal plane. -/
 noncomputable def principalPlaneSine (U V : Submodule 𝕜 E)
@@ -147,7 +147,7 @@ theorem principalSourceVector_mem
   let p := nontrivialAngleIndex U V i
   let s := principalPlaneSine U V i
   have hs : s ≠ 0 := ne_of_gt (principalPlaneSine_pos U V i)
-  have heig := adjointCompSelf_apply_rightSingularBasis A p
+  have heig := LinearMap.adjoint_comp_self_rightSingularBasis A p
   have hUidem : ∀ y : E, projection U (projection U y) = projection U y := fun y =>
     Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem y)
   have hcVidem : ∀ y : E, complementaryProjection V (complementaryProjection V y)
@@ -187,7 +187,7 @@ theorem orthonormal_principalSourceVector
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Orthonormal 𝕜 (principalSourceVector U V) := by
-  exact (rightSingularBasis (sinThetaMap U V)).orthonormal.comp
+  exact (LinearMap.rightSingularBasis (sinThetaMap U V)).orthonormal.comp
     (nontrivialAngleIndex U V)
     (Fin.castLE_injective (LinearMap.finrank_range_le (sinThetaMap U V)))
 
@@ -228,7 +228,7 @@ theorem principalPlaneCosine_pos
     intro hs
     let u := principalSourceVector U V i
     have hu1 : ‖u‖ = 1 := (orthonormal_principalSourceVector U V).norm_eq_one i
-    have hnorm := norm_apply_rightSingularBasis
+    have hnorm := LinearMap.norm_apply_rightSingularBasis
       (sinThetaMap U V) (nontrivialAngleIndex U V i)
     have hzero : projection V u = 0 := by
       have hdecomp := Submodule.norm_sq_eq_add_norm_sq_starProjection u V
@@ -257,7 +257,7 @@ theorem abs_canonicalIntertwiner_apply_principalSourceVector
     TauCeti.operatorAbs (canonicalIntertwiner U V) (principalSourceVector U V i) =
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i := by
   have hu := principalSourceVector_mem U V hacute i
-  have heig := adjointCompSelf_apply_rightSingularBasis (sinThetaMap U V)
+  have heig := LinearMap.adjoint_comp_self_rightSingularBasis (sinThetaMap U V)
     (nontrivialAngleIndex U V i)
   have hProjUu : projection U (principalSourceVector U V i) =
       principalSourceVector U V i := Submodule.starProjection_eq_self_iff.mpr hu
@@ -293,7 +293,7 @@ theorem abs_canonicalIntertwiner_apply_principalSourceVector
         projection U (projection V (principalSourceVector U V i)) := by
     rw [hAgram]
     simp only [LinearMap.sub_apply, LinearMap.comp_apply, hProjUu]
-  rw [show rightSingularBasis (sinThetaMap U V) (nontrivialAngleIndex U V i) =
+  rw [show LinearMap.rightSingularBasis (sinThetaMap U V) (nontrivialAngleIndex U V i) =
     principalSourceVector U V i from rfl, hAu] at heig
   have hc0 : (0 : ℝ) ≤ principalPlaneCosine U V i := Real.sqrt_nonneg _
   have hsq : ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V)

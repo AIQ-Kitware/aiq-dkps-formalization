@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 module
 
 public import DavisKahan.DoubleAngle.ScalarDoubleAngleTangent
-public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
@@ -97,15 +97,15 @@ value lies in `U`. -/
 theorem rightSingularBasis_mem_of_singularValue_ne_zero
     {T : E →ₗ[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (hTzero : ∀ x ∈ Uᗮ, T x = 0) {i : Fin (finrank 𝕜 E)}
-    (hi : T.singularValues (i : ℕ) ≠ 0) : rightSingularBasis T i ∈ U := by
+    (hi : T.singularValues (i : ℕ) ≠ 0) : LinearMap.rightSingularBasis T i ∈ U := by
   have hσ2 : (((T.singularValues (i : ℕ) : ℝ) ^ 2 : ℝ) : 𝕜) ≠ 0 :=
     RCLike.ofReal_ne_zero.mpr (pow_ne_zero _ hi)
-  have hrepr : rightSingularBasis T i =
+  have hrepr : LinearMap.rightSingularBasis T i =
       (((T.singularValues (i : ℕ) : ℝ) ^ 2 : ℝ) : 𝕜)⁻¹ •
-        T.adjoint (T (rightSingularBasis T i)) := by
-    rw [show T.adjoint (T (rightSingularBasis T i)) =
-        (T.adjoint.comp T) (rightSingularBasis T i) from rfl,
-      adjointCompSelf_apply_rightSingularBasis, smul_smul,
+        T.adjoint (T (LinearMap.rightSingularBasis T i)) := by
+    rw [show T.adjoint (T (LinearMap.rightSingularBasis T i)) =
+        (T.adjoint.comp T) (LinearMap.rightSingularBasis T i) from rfl,
+      LinearMap.adjoint_comp_self_rightSingularBasis, smul_smul,
       inv_mul_cancel₀ hσ2, one_smul]
   rw [hrepr]
   exact Submodule.smul_mem _ _ (adjoint_apply_mem_of_orthogonal_zero hTzero _)
@@ -114,8 +114,9 @@ theorem rightSingularBasis_mem_of_singularValue_ne_zero
 theorem leftSingularVector_mem_orthogonal
     {T : E →ₗ[𝕜] E} {U : Submodule 𝕜 E}
     (hTmem : ∀ x, T x ∈ Uᗮ) (i : Fin (finrank 𝕜 E)) :
-    leftSingularVector T i ∈ Uᗮ :=
-  Submodule.smul_mem _ _ (hTmem _)
+    LinearMap.leftSingularVector T i ∈ Uᗮ := by
+  rw [LinearMap.leftSingularVector_def]
+  exact Submodule.smul_mem _ _ (hTmem _)
 
 section Scalar
 
@@ -146,20 +147,20 @@ theorem paired_singularVector_gap_inequality
     {i : Fin (finrank 𝕜 E)} (hi : T.singularValues (i : ℕ) ≠ 0) :
     (b - a) * T.singularValues (i : ℕ) ≤
       (1 - T.singularValues (i : ℕ) ^ 2) *
-        RCLike.re ⟪leftSingularVector T i, H (rightSingularBasis T i)⟫_𝕜 := by
+        RCLike.re ⟪LinearMap.leftSingularVector T i, H (LinearMap.rightSingularBasis T i)⟫_𝕜 := by
   set t : ℝ := T.singularValues (i : ℕ) with hts
-  set u : E := rightSingularBasis T i with hus
-  set v : E := leftSingularVector T i with hvs
+  set u : E := LinearMap.rightSingularBasis T i with hus
+  set v : E := LinearMap.leftSingularVector T i with hvs
   have ht0 : 0 < t := lt_of_le_of_ne (T.singularValues_nonneg _) (Ne.symm hi)
   have humem : u ∈ U := rightSingularBasis_mem_of_singularValue_ne_zero hTzero hi
   have hvmem : v ∈ Uᗮ := leftSingularVector_mem_orthogonal hTmem i
-  have hunorm : ‖u‖ = 1 := (rightSingularBasis T).orthonormal.norm_eq_one i
+  have hunorm : ‖u‖ = 1 := (LinearMap.rightSingularBasis T).orthonormal.norm_eq_one i
   have hvnorm : ‖v‖ = 1 :=
-    (orthonormal_leftSingularVector_subtype T).norm_eq_one ⟨i, hi⟩
+    (LinearMap.orthonormal_leftSingularVector T).norm_eq_one ⟨i, hi⟩
   have hTu : T u = ((t : ℝ) : 𝕜) • v :=
-    apply_rightSingularBasis_eq_smul_leftSingularVector T i
+    LinearMap.apply_rightSingularBasis T i
   have hTav : T.adjoint v = ((t : ℝ) : 𝕜) • u :=
-    adjoint_apply_leftSingularVector T hi
+    LinearMap.adjoint_leftSingularVector T i
   have hzw : ∀ z ∈ U, ∀ w ∈ Uᗮ, ⟪z, w⟫_𝕜 = 0 := fun z hz w hw =>
     (Submodule.mem_orthogonal U w).mp hw z hz
   have hwz : ∀ w ∈ Uᗮ, ∀ z ∈ U, ⟪w, z⟫_𝕜 = 0 := fun w hw z hz =>
@@ -232,7 +233,7 @@ theorem doubleAngleTangent_scalar
     (hT1 : T.singularValues 0 < 1)
     {i : Fin (finrank 𝕜 E)} (hi : T.singularValues (i : ℕ) ≠ 0) :
     (b - a) * doubleAngleTangent (T.singularValues (i : ℕ)) ≤
-      2 * RCLike.re ⟪leftSingularVector T i, H (rightSingularBasis T i)⟫_𝕜 := by
+      2 * RCLike.re ⟪LinearMap.leftSingularVector T i, H (LinearMap.rightSingularBasis T i)⟫_𝕜 := by
   set t : ℝ := T.singularValues (i : ℕ) with hts
   have ht0 : 0 < t := lt_of_le_of_ne (T.singularValues_nonneg _) (Ne.symm hi)
   have ht1 : t < 1 :=
@@ -282,11 +283,11 @@ private theorem sum_doubleAngleTangent_le_of_ne_zero
       (fun j : Fin S.card => (e j : Fin (finrank 𝕜 E))) :=
     fun x y h => e.injective (Subtype.ext h)
   have huu : Orthonormal 𝕜
-      (fun j : Fin S.card => rightSingularBasis T (e j : Fin (finrank 𝕜 E))) :=
-    (rightSingularBasis T).orthonormal.comp _ hecoe_inj
+      (fun j : Fin S.card => LinearMap.rightSingularBasis T (e j : Fin (finrank 𝕜 E))) :=
+    (LinearMap.rightSingularBasis T).orthonormal.comp _ hecoe_inj
   have hww : Orthonormal 𝕜
-      (fun j : Fin S.card => leftSingularVector T (e j : Fin (finrank 𝕜 E))) :=
-    (orthonormal_leftSingularVector_subtype T).comp
+      (fun j : Fin S.card => LinearMap.leftSingularVector T (e j : Fin (finrank 𝕜 E))) :=
+    (LinearMap.orthonormal_leftSingularVector T).comp
       (fun j : Fin S.card => (⟨(e j : Fin (finrank 𝕜 E)), hSprop j⟩ :
         {j : Fin (finrank 𝕜 E) // T.singularValues j ≠ 0}))
       (fun x y h => hecoe_inj (congrArg
@@ -295,8 +296,8 @@ private theorem sum_doubleAngleTangent_le_of_ne_zero
   have hscalar : ∀ j : Fin S.card,
       (b - a) / 2 * doubleAngleTangent
           (T.singularValues ((e j : Fin (finrank 𝕜 E)) : ℕ)) ≤
-        RCLike.re ⟪leftSingularVector T (e j : Fin (finrank 𝕜 E)),
-          H (rightSingularBasis T (e j : Fin (finrank 𝕜 E)))⟫_𝕜 := by
+        RCLike.re ⟪LinearMap.leftSingularVector T (e j : Fin (finrank 𝕜 E)),
+          H (LinearMap.rightSingularBasis T (e j : Fin (finrank 𝕜 E)))⟫_𝕜 := by
     intro j
     have h := doubleAngleTangent_scalar hA hH hAU hHU hHUperp hTmem hTzero
       hUb hUa hinv hT1 (hSprop j)

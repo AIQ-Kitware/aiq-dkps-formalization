@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
-public import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
+public import TauCeti.Analysis.InnerProductSpace.MoorePenrose
 
 /-!
 # Compatibility surface for unfinished finite angle constructions
@@ -63,7 +63,7 @@ current total signature is provisional; bounded inversion must ultimately
 require `IsTransverse U V`. -/
 noncomputable def tanThetaMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  sinThetaMap U V ∘ₗ TauCeti.moorePenroseInverse (cosThetaMap U V)
+  sinThetaMap U V ∘ₗ LinearMap.moorePenroseInverse (cosThetaMap U V)
 
 /-- The full-space canonical angle operator `Θ(U,V)` of Davis--Kahan.
 Its nonzero eigenvalues are the principal angles, with the multiplicities

@@ -10,7 +10,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
-public import ForTauCeti.Analysis.InnerProductSpace.MoorePenroseInverse
+public import TauCeti.Analysis.InnerProductSpace.MoorePenrose
 
 /-!
 # Coordinate tangent and double-angle embeddings
@@ -54,14 +54,14 @@ definition only fixes the canonical coordinate semantics. -/
 noncomputable def tanThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   sinThetaEmbedding U X ∘ₗ
-    TauCeti.moorePenroseInverse (cosThetaMagnitude U X)
+    LinearMap.moorePenroseInverse (cosThetaMagnitude U X)
 
 /-- Transversality supplies the injectivity that makes the coordinate tangent
 well defined.
 
 This is what the retired `tanThetaEmbedding_eq_inverseOnRange_of_isTransverse`
 actually contained.  Its stated conclusion was `rfl` — `inverseOnRange` was a
-definitional alias for `moorePenroseInverse`, which is what `tanThetaEmbedding`
+definitional alias for `LinearMap.moorePenroseInverse`, which is what `tanThetaEmbedding`
 is already defined by — so the only content was this translation of
 transversality into injectivity. -/
 theorem cosThetaMagnitude_injective_of_isTransverse
@@ -113,7 +113,7 @@ theorem sinTwoThetaEmbedding_uiNorm_le_two_mul
 noncomputable def tanTwoThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
   sinTwoThetaEmbedding U X ∘ₗ
-    TauCeti.moorePenroseInverse
+    LinearMap.moorePenroseInverse
       (cosTwoThetaSourceOperator U X)
 
 
@@ -143,13 +143,13 @@ private theorem cosThetaMagnitude_apply_rightSingularBasis
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E)
     (i : Fin (finrank 𝕜 F)) :
-    cosThetaMagnitude U X (rightSingularBasis (sinThetaEmbedding U X) i) =
+    cosThetaMagnitude U X (LinearMap.rightSingularBasis (sinThetaEmbedding U X) i) =
       ((Real.sqrt
         (1 - (sinThetaEmbedding U X).singularValues i ^ 2) : ℝ) : 𝕜) •
-        rightSingularBasis (sinThetaEmbedding U X) i := by
+        LinearMap.rightSingularBasis (sinThetaEmbedding U X) i := by
   let S := sinThetaEmbedding U X
   let C := cosThetaMagnitude U X
-  let v := rightSingularBasis S i
+  let v := LinearMap.rightSingularBasis S i
   let σ := S.singularValues i
   let c := Real.sqrt (1 - σ ^ 2)
   have hσ0 : 0 ≤ σ := S.singularValues_nonneg i
@@ -159,7 +159,7 @@ private theorem cosThetaMagnitude_apply_rightSingularBasis
   have hc0 : 0 ≤ c := Real.sqrt_nonneg _
   have hSgram : sinThetaGram U X v = (((σ ^ 2 : ℝ) : 𝕜)) • v := by
     simpa [S, v, σ, sinThetaGram] using
-      adjointCompSelf_apply_rightSingularBasis S i
+      LinearMap.adjoint_comp_self_rightSingularBasis S i
   have hpartition := LinearMap.congr_fun
     (cosThetaGram_add_sinThetaGram_eq_id U X) v
   have hCgram : cosThetaGram U X v = (((1 - σ ^ 2 : ℝ) : 𝕜)) • v := by
@@ -189,14 +189,14 @@ private theorem moorePenroseInverse_cosThetaMagnitude_apply_rightSingularBasis
     (X : F →ₗᵢ[𝕜] E)
     (htrans : IsTransverse (approximateSubspace X) U)
     (i : Fin (finrank 𝕜 F)) :
-    TauCeti.moorePenroseInverse (cosThetaMagnitude U X)
-        (rightSingularBasis (sinThetaEmbedding U X) i) =
+    LinearMap.moorePenroseInverse (cosThetaMagnitude U X)
+        (LinearMap.rightSingularBasis (sinThetaEmbedding U X) i) =
       ((((Real.sqrt
         (1 - (sinThetaEmbedding U X).singularValues i ^ 2) : ℝ) : 𝕜)⁻¹) •
-        rightSingularBasis (sinThetaEmbedding U X) i) := by
+        LinearMap.rightSingularBasis (sinThetaEmbedding U X) i) := by
   let S := sinThetaEmbedding U X
   let C := cosThetaMagnitude U X
-  let v := rightSingularBasis S i
+  let v := LinearMap.rightSingularBasis S i
   let σ := S.singularValues i
   let c := Real.sqrt (1 - σ ^ 2)
   have hσ1 : σ < 1 :=
@@ -210,16 +210,16 @@ private theorem moorePenroseInverse_cosThetaMagnitude_apply_rightSingularBasis
     cosThetaMagnitude_injective U X
       (LinearMap.ker_eq_bot.mp ((tanThetaEmbedding_defined_iff U X).mp htrans))
   have hleft := LinearMap.congr_fun
-    (TauCeti.moorePenroseInverse_comp_eq_id_of_injective C hCinj) v
-  change TauCeti.moorePenroseInverse C (C v) = v at hleft
+    (LinearMap.moorePenroseInverse_comp_of_injective C hCinj) v
+  change LinearMap.moorePenroseInverse C (C v) = v at hleft
   have hcK : (((c : ℝ) : 𝕜)) ≠ 0 := RCLike.ofReal_ne_zero.mpr hc.ne'
   calc
-    TauCeti.moorePenroseInverse C v =
-        TauCeti.moorePenroseInverse C
+    LinearMap.moorePenroseInverse C v =
+        LinearMap.moorePenroseInverse C
           (((((c : ℝ) : 𝕜))⁻¹) • C v) := by
             rw [hCv, inv_smul_smul₀ hcK]
     _ = (((((c : ℝ) : 𝕜))⁻¹) •
-        TauCeti.moorePenroseInverse C (C v)) := by rw [map_smul]
+        LinearMap.moorePenroseInverse C (C v)) := by rw [map_smul]
     _ = (((((c : ℝ) : 𝕜))⁻¹) • v) := by rw [hleft]
     _ = _ := by rfl
 
@@ -228,11 +228,11 @@ private theorem tanThetaEmbedding_apply_rightSingularBasis
     (X : F →ₗᵢ[𝕜] E)
     (htrans : IsTransverse (approximateSubspace X) U)
     (i : Fin (finrank 𝕜 F)) :
-    tanThetaEmbedding U X (rightSingularBasis (sinThetaEmbedding U X) i) =
+    tanThetaEmbedding U X (LinearMap.rightSingularBasis (sinThetaEmbedding U X) i) =
       ((((Real.sqrt
         (1 - (sinThetaEmbedding U X).singularValues i ^ 2) : ℝ) : 𝕜)⁻¹) •
         sinThetaEmbedding U X
-          (rightSingularBasis (sinThetaEmbedding U X) i)) := by
+          (LinearMap.rightSingularBasis (sinThetaEmbedding U X) i)) := by
   rw [tanThetaEmbedding, LinearMap.comp_apply,
     moorePenroseInverse_cosThetaMagnitude_apply_rightSingularBasis U X htrans i,
     map_smul]
@@ -248,7 +248,7 @@ theorem singularValues_tanThetaEmbedding
   classical
   let S := sinThetaEmbedding U X
   let T := tanThetaEmbedding U X
-  let b := rightSingularBasis S
+  let b := LinearMap.rightSingularBasis S
   let d : Fin (finrank 𝕜 F) → ℝ := fun i =>
     S.singularValues i / Real.sqrt (1 - S.singularValues i ^ 2)
   have hd0 : ∀ i, 0 ≤ d i := by
@@ -276,7 +276,7 @@ theorem singularValues_tanThetaEmbedding
     rw [tanThetaEmbedding_apply_rightSingularBasis U X htrans j,
       tanThetaEmbedding_apply_rightSingularBasis U X htrans i,
       inner_smul_left, inner_smul_right, map_inv₀, RCLike.conj_ofReal,
-      TauCeti.inner_apply_rightSingularBasis]
+      LinearMap.inner_apply_rightSingularBasis]
     -- the goal is an application, not a composition, so `diagOp_comp` cannot
     -- fire; apply the diagonal action twice instead
     rw [adjoint_diagOp]
@@ -490,7 +490,7 @@ theorem tanTheta_vector_le
       cosThetaMagnitude_injective U X
         (LinearMap.ker_eq_bot.mp ((tanThetaEmbedding_defined_iff U X).mp htrans))
     have hleft :=
-      TauCeti.moorePenroseInverse_comp_eq_id_of_injective
+      LinearMap.moorePenroseInverse_comp_of_injective
         (cosThetaMagnitude U X) hCinj
     have hfactor :
         tanThetaEmbedding U X ∘ₗ cosThetaMagnitude U X =

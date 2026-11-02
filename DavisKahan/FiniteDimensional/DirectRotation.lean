@@ -62,7 +62,7 @@ noncomputable def angleComplexStructure (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) : E →ₗ[𝕜] E :=
   ((directRotation U V hacute).toLinearMap - directRotationCosine U V) ∘ₗ
-    TauCeti.moorePenroseInverse (sinAngleOperator U V)
+    LinearMap.moorePenroseInverse (sinAngleOperator U V)
 
 /-- The zero-angle space of the full sine is contained in the zero space of
 `R-C`. -/
@@ -140,7 +140,7 @@ theorem directRotation_eq_cos_add_J_sin (U V : Submodule 𝕜 E)
         angleComplexStructure U V hacute ∘ₗ sinAngleOperator U V := by
   let A := sinAngleOperator U V
   let B := (directRotation U V hacute).toLinearMap - directRotationCosine U V
-  have hfactor : B ∘ₗ TauCeti.moorePenroseInverse A ∘ₗ A = B :=
+  have hfactor : B ∘ₗ LinearMap.moorePenroseInverse A ∘ₗ A = B :=
     TauCeti.comp_moorePenroseInverse_comp_eq_of_ker_le A B
       (ker_sinAngleOperator_le_ker_directRotation_sub_cosine U V hacute)
   ext x
@@ -637,8 +637,8 @@ theorem angleOperator_comm_sinAngleOperator (U V : Submodule 𝕜 E)
 carries the commutation of `Θ` with `sin Θ` across the pseudoinverse. -/
 theorem angleOperator_comm_moorePenroseInverse_sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    angleOperator U V ∘ₗ TauCeti.moorePenroseInverse (sinAngleOperator U V) =
-      TauCeti.moorePenroseInverse (sinAngleOperator U V) ∘ₗ angleOperator U V :=
+    angleOperator U V ∘ₗ LinearMap.moorePenroseInverse (sinAngleOperator U V) =
+      LinearMap.moorePenroseInverse (sinAngleOperator U V) ∘ₗ angleOperator U V :=
   TauCeti.moorePenroseInverse_comm_of_isSymmetric
     (TauCeti.isPositive_operatorAbs (projection U - projection V)).isSymmetric
     (angleOperator_comm_sinAngleOperator U V).symm
@@ -662,8 +662,8 @@ theorem angleOperator_comm_angleComplexStructure (U V : Submodule 𝕜 E)
   have hC : directRotationCosine U V * angleOperator U V =
       angleOperator U V * directRotationCosine U V := by
     simpa [hmul] using angleOperator_comm_directRotationCosine U V
-  have hG : angleOperator U V * TauCeti.moorePenroseInverse (sinAngleOperator U V) =
-      TauCeti.moorePenroseInverse (sinAngleOperator U V) * angleOperator U V := by
+  have hG : angleOperator U V * LinearMap.moorePenroseInverse (sinAngleOperator U V) =
+      LinearMap.moorePenroseInverse (sinAngleOperator U V) * angleOperator U V := by
     simpa [hmul] using angleOperator_comm_moorePenroseInverse_sinAngleOperator U V
   have hdiff : ((directRotation U V hacute).toLinearMap - directRotationCosine U V) *
       angleOperator U V =
@@ -671,25 +671,25 @@ theorem angleOperator_comm_angleComplexStructure (U V : Submodule 𝕜 E)
         ((directRotation U V hacute).toLinearMap - directRotationCosine U V) := by
     rw [sub_mul, mul_sub, hR, hC]
   show (((directRotation U V hacute).toLinearMap - directRotationCosine U V) ∘ₗ
-      TauCeti.moorePenroseInverse (sinAngleOperator U V)) ∘ₗ angleOperator U V = _
+      LinearMap.moorePenroseInverse (sinAngleOperator U V)) ∘ₗ angleOperator U V = _
   simp only [hmul, angleComplexStructure]
   calc ((directRotation U V hacute).toLinearMap - directRotationCosine U V) *
-        TauCeti.moorePenroseInverse (sinAngleOperator U V) * angleOperator U V
+        LinearMap.moorePenroseInverse (sinAngleOperator U V) * angleOperator U V
       = ((directRotation U V hacute).toLinearMap - directRotationCosine U V) *
-        (TauCeti.moorePenroseInverse (sinAngleOperator U V) * angleOperator U V) := by
+        (LinearMap.moorePenroseInverse (sinAngleOperator U V) * angleOperator U V) := by
         noncomm_ring
     _ = ((directRotation U V hacute).toLinearMap - directRotationCosine U V) *
-        (angleOperator U V * TauCeti.moorePenroseInverse (sinAngleOperator U V)) := by
+        (angleOperator U V * LinearMap.moorePenroseInverse (sinAngleOperator U V)) := by
         rw [hG]
     _ = (((directRotation U V hacute).toLinearMap - directRotationCosine U V) *
-        angleOperator U V) * TauCeti.moorePenroseInverse (sinAngleOperator U V) := by
+        angleOperator U V) * LinearMap.moorePenroseInverse (sinAngleOperator U V) := by
         noncomm_ring
     _ = (angleOperator U V *
         ((directRotation U V hacute).toLinearMap - directRotationCosine U V)) *
-        TauCeti.moorePenroseInverse (sinAngleOperator U V) := by rw [hdiff]
+        LinearMap.moorePenroseInverse (sinAngleOperator U V) := by rw [hdiff]
     _ = angleOperator U V *
         (((directRotation U V hacute).toLinearMap - directRotationCosine U V) *
-          TauCeti.moorePenroseInverse (sinAngleOperator U V)) := by noncomm_ring
+          LinearMap.moorePenroseInverse (sinAngleOperator U V)) := by noncomm_ring
 
 /-- The inverse rotation also commutes with the positive cosine.
 
@@ -772,13 +772,13 @@ theorem angleComplexStructure_comp_self (U V : Submodule 𝕜 E)
     (hacute : IsAcute U V) :
     angleComplexStructure U V hacute ∘ₗ angleComplexStructure U V hacute =
       -(sinAngleOperator U V ∘ₗ
-        TauCeti.moorePenroseInverse (sinAngleOperator U V)) := by
+        LinearMap.moorePenroseInverse (sinAngleOperator U V)) := by
   have hmul : ∀ f g : E →ₗ[𝕜] E, f ∘ₗ g = f * g := fun _ _ => rfl
   have hsym : (sinAngleOperator U V).IsSymmetric :=
     (TauCeti.isPositive_operatorAbs (projection U - projection V)).isSymmetric
   set D := (directRotation U V hacute).toLinearMap - directRotationCosine U V with hDdef
   set A := sinAngleOperator U V with hAdef
-  set G := TauCeti.moorePenroseInverse (sinAngleOperator U V) with hGdef
+  set G := LinearMap.moorePenroseInverse (sinAngleOperator U V) with hGdef
   -- `sin Θ` commutes with the skew part, hence so does its pseudoinverse.
   have hAD : A * D = D * A := by
     have hR : A * (directRotation U V hacute).toLinearMap =
@@ -799,7 +799,7 @@ theorem angleComplexStructure_comp_self (U V : Submodule 𝕜 E)
       TauCeti.comp_moorePenroseInverse_comm_of_isSymmetric hsym
   have hGAG : G * A * G = G := by
     simpa [hmul, hAdef, hGdef, mul_assoc] using
-      TauCeti.moorePenroseInverse_comp_comp (sinAngleOperator U V)
+      (LinearMap.isMoorePenroseInverse_moorePenroseInverse (sinAngleOperator U V)).comp_comp_self'
   have hproj : A * A * (G * G) = A * G := by
     calc A * A * (G * G) = A * (A * G) * G := by noncomm_ring
       _ = A * (G * A) * G := by rw [hAG]

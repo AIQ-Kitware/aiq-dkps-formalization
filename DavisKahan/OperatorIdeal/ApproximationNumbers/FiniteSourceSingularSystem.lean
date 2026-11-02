@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.Singular.System
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 
 /-!
@@ -60,13 +60,13 @@ noncomputable def finiteSourceSingularValue (A : E →L[ℂ] F)
 @[expose]
 noncomputable def finiteSourceRightSingularBasis (A : E →L[ℂ] F) :
     OrthonormalBasis (Fin (finrank ℂ E)) ℂ E :=
-  rightSingularBasis A.rangeRestrict.toLinearMap
+  LinearMap.rightSingularBasis A.rangeRestrict.toLinearMap
 
 /-- The ambient left singular vector obtained by including the range-valued singular
 vector into the original codomain. -/
 noncomputable def finiteSourceLeftSingularVector (A : E →L[ℂ] F)
     (i : Fin (finrank ℂ E)) : F :=
-  (leftSingularVector A.rangeRestrict.toLinearMap i : A.range)
+  (LinearMap.leftSingularVector A.rangeRestrict.toLinearMap i : A.range)
 
 omit [CompleteSpace F] in
 /-- Finite-source singular values are nonnegative. -/
@@ -119,8 +119,7 @@ value. -/
 theorem norm_apply_finiteSourceRightSingularBasis
     (A : E →L[ℂ] F) (i : Fin (finrank ℂ E)) :
     ‖A (finiteSourceRightSingularBasis A i)‖ = finiteSourceSingularValue A i := by
-  have h := norm_apply_rightSingularBasis A.rangeRestrict.toLinearMap i
-  simpa [finiteSourceRightSingularBasis, finiteSourceSingularValue] using h
+  exact LinearMap.norm_apply_rightSingularBasis A.rangeRestrict.toLinearMap i
 
 omit [CompleteSpace F] in
 /-- A zero finite-source singular value gives a zero image. -/
@@ -128,8 +127,8 @@ theorem apply_finiteSourceRightSingularBasis_eq_zero_of_singularValue_eq_zero
     (A : E →L[ℂ] F) {i : Fin (finrank ℂ E)}
     (hi : finiteSourceSingularValue A i = 0) :
     A (finiteSourceRightSingularBasis A i) = 0 := by
-  have h := apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero
-    A.rangeRestrict.toLinearMap (by simpa [finiteSourceSingularValue] using hi)
+  have h := (LinearMap.apply_rightSingularBasis_eq_zero_iff A.rangeRestrict.toLinearMap).mpr
+    (by simpa [finiteSourceSingularValue] using hi)
   exact congrArg Subtype.val h
 
 omit [CompleteSpace F] in
@@ -139,7 +138,7 @@ theorem apply_finiteSourceRightSingularBasis_eq_smul_leftSingularVector
     A (finiteSourceRightSingularBasis A i) =
       ((finiteSourceSingularValue A i : ℝ) : ℂ) •
         finiteSourceLeftSingularVector A i := by
-  have h := apply_rightSingularBasis_eq_smul_leftSingularVector
+  have h := LinearMap.apply_rightSingularBasis
     A.rangeRestrict.toLinearMap i
   exact congrArg Subtype.val h
 
@@ -148,7 +147,7 @@ omit [CompleteSpace F] in
 theorem finiteSourceLeftSingularVector_mem_range
     (A : E →L[ℂ] F) (i : Fin (finrank ℂ E)) :
     finiteSourceLeftSingularVector A i ∈ A.range :=
-  (leftSingularVector A.rangeRestrict.toLinearMap i).property
+  (LinearMap.leftSingularVector A.rangeRestrict.toLinearMap i).property
 
 omit [CompleteSpace F] in
 /-- Ambient left singular vectors attached to nonzero singular values are orthonormal. -/
@@ -157,7 +156,7 @@ theorem orthonormal_finiteSourceLeftSingularVector_subtype (A : E →L[ℂ] F) :
       (fun i : {j : Fin (finrank ℂ E) // finiteSourceSingularValue A j ≠ 0} =>
         finiteSourceLeftSingularVector A i.1) := by
   classical
-  have h := orthonormal_leftSingularVector_subtype A.rangeRestrict.toLinearMap
+  have h := LinearMap.orthonormal_leftSingularVector A.rangeRestrict.toLinearMap
   rw [orthonormal_iff_ite] at h ⊢
   intro i j
   let i' : {k : Fin (finrank ℂ E) //
@@ -182,18 +181,16 @@ theorem orthonormal_finiteSourceLeftSingularVector_subtype (A : E →L[ℂ] F) :
 /-- The ambient adjoint singular relation. -/
 theorem adjoint_apply_finiteSourceLeftSingularVector
     (A : E →L[ℂ] F) {i : Fin (finrank ℂ E)}
-    (hi : finiteSourceSingularValue A i ≠ 0) :
+    (_hi : finiteSourceSingularValue A i ≠ 0) :
     A.adjoint (finiteSourceLeftSingularVector A i) =
       ((finiteSourceSingularValue A i : ℝ) : ℂ) •
         finiteSourceRightSingularBasis A i := by
   let Ar : E →L[ℂ] A.range := A.rangeRestrict
-  let ur : A.range := leftSingularVector Ar.toLinearMap i
+  let ur : A.range := LinearMap.leftSingularVector Ar.toLinearMap i
   have hur : Ar.toLinearMap.adjoint ur =
       ((finiteSourceSingularValue A i : ℝ) : ℂ) •
         finiteSourceRightSingularBasis A i := by
-    simpa [Ar, ur, finiteSourceSingularValue, finiteSourceRightSingularBasis] using
-      (adjoint_apply_leftSingularVector Ar.toLinearMap
-        (by simpa [Ar, finiteSourceSingularValue] using hi))
+    exact LinearMap.adjoint_leftSingularVector A.rangeRestrict.toLinearMap i
   have hu : finiteSourceLeftSingularVector A i = (ur : F) := by
     rfl
   apply ext_inner_right ℂ
