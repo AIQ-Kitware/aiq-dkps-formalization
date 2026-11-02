@@ -7,7 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 

@@ -1050,7 +1050,7 @@ theorem kyFan_lowerCorner_le (htr : ‖sinAngleOperatorC U V‖ < 1) (k : ℕ) :
         (projectorDifference U V * secantSquared U V)) ≤
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((theorem63DirectedSineBlock U V).singularValue n : ℝ))) := by
-  rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_le_sum fun n _ => approximationNumber_lowerCorner_le htr n
 
 omit [CompleteSpace E] in
@@ -1099,7 +1099,8 @@ theorem corner_all_kyFan
   have hresidual : kyFanApproximationGauge k (theorem63Residual T U) ≤
       kyFanApproximationGauge k (projectionBlock Uᗮ U (T - A)) := by
     rw [kyFanApproximationGauge, kyFanApproximationGauge,
-      ContinuousLinearMap.kyFanGaugeReal_eq_sum, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+      ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, ContinuousLinearMap.kyFanGauge_def,
+        NNReal.coe_sum]
     exact Finset.sum_le_sum fun n _ =>
       approximationNumber_theorem63Residual_le hAU n
   nlinarith [hdirected, hcorner, hresidual]
@@ -1168,8 +1169,8 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
       kyFanApproximationGauge k (tanBlockRepresentative U V) := by
     rw [directedTanAngleOperatorC_eq_modulus_blockRepresentative htr]
     exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (ContinuousLinearMap.sameSingularValues_modulus
-      (tanBlockRepresentative U V)).kyFanGaugeReal_eq k)
+      (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_modulus
+      (tanBlockRepresentative U V)).kyFanGauge_eq k)))
   rw [hmodulus]
   exact hcombine.trans hpinch
 

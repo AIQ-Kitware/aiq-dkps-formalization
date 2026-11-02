@@ -987,11 +987,11 @@ theorem proposition4_1_restrictedDisplacement_approximationNumbers
       (((1 - W) ∘L U.starProjection).singularValue n : ℝ) := by
   have hsource := proposition4_1_approximationNumbers
     U V hacute W hWunitary hWmap n
-  have hDseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
+  have hDseq := (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
     (sourceRestrictedDisplacement_sameApproximationSingularSequence
-      U (spectraDirectRotation U V hacute)) n
-  have hWseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-    (sourceRestrictedDisplacement_sameApproximationSingularSequence U W) n
+      U (spectraDirectRotation U V hacute)) n))
+  have hWseq := (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+    (sourceRestrictedDisplacement_sameApproximationSingularSequence U W) n))
   change (((1 - spectraDirectRotation U V hacute) ∘L U.starProjection).singularValue n : ℝ) ≤
     (((1 - W) ∘L U.starProjection).singularValue n : ℝ)
   calc
@@ -1013,11 +1013,11 @@ theorem proposition4_1_nonacute_restrictedDisplacement_approximationNumbers
       (((1 - W) ∘L U.starProjection).singularValue n : ℝ) := by
   have hsource := proposition4_1_nonacute_approximationNumbers
     U V J W hWunitary hWmap n
-  have hDseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
+  have hDseq := (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
     (sourceRestrictedDisplacement_sameApproximationSingularSequence
-      U (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n
-  have hWseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-    (sourceRestrictedDisplacement_sameApproximationSingularSequence U W) n
+      U (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n))
+  have hWseq := (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+    (sourceRestrictedDisplacement_sameApproximationSingularSequence U W) n))
   change (((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L U.starProjection).singularValue n : ℝ) ≤
     (((1 - W) ∘L U.starProjection).singularValue n : ℝ)
   calc

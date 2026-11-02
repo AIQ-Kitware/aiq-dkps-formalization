@@ -102,7 +102,7 @@ theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers_rclike :
     rw [clm_sinTwoThetaIdealBlock] at hb
     rw [clm_directedSinTwoAngleOperator] at ha
     rw [← hb, ← ha]
-    exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq h n
+    exact (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp h n))
   rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with h | h
   · apply key (𝕂 := ℝ) (RCLikeIso.real h)
     apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr

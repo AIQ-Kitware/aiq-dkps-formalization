@@ -748,7 +748,7 @@ theorem reflectionTangent_all_kyFan
       kyFanApproximationGauge k T =
         Finset.sum (Finset.range F.count) (fun n => (T.singularValue n : ℝ)) +
           Finset.sum (Finset.Ico F.count k) (fun n => (T.singularValue n : ℝ)) := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     rw [← Finset.sum_range_add_sum_Ico (f := fun n => (T.singularValue n : ℝ)) F.count_le]
   have htailScaled :
       (b - a) * Finset.sum (Finset.Ico F.count k) (fun n => (T.singularValue n : ℝ)) ≤

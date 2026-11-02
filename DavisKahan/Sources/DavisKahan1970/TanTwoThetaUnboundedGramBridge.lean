@@ -567,17 +567,17 @@ theorem hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock :
   calc ((reflectionSineCorner U J).singularValue n : ℝ)
       = ((Uᗮ.subtypeL ∘L reflectionSineCorner U J ∘L
           U.subtypeL.adjoint).singularValue n : ℝ) :=
-        (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
+        ((congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
           (ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock U Uᗮ
-            (reflectionSineCorner U J)) n).symm
+            (reflectionSineCorner U J)) n))).symm
     _ = ((Uᗮ.starProjection ∘L J ∘L U.starProjection).singularValue n : ℝ) := by
         rw [hamb]
     _ = ((U.starProjection ∘L J ∘L Uᗮ.starProjection).singularValue n : ℝ) := by
         rw [← hstar, ContinuousLinearMap.star_eq_adjoint,
           ContinuousLinearMap.singularValue_adjoint]
     _ = (((U.starProjection ∘L J ∘L Uᗮ.starProjection) ∘L J).singularValue n : ℝ) :=
-        (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-          (ContinuousLinearMap.sameSingularValues_comp_right hJnorm hJnorm hJJ) n).symm
+        ((congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+          (ContinuousLinearMap.sameSingularValues_comp_right hJnorm hJnorm hJJ) n))).symm
     _ = ((DavisKahan.sinTwoThetaIdealBlock U V).singularValue n : ℝ) := by rw [hblock]
 
 end IdealBlockBridge
@@ -731,7 +731,7 @@ theorem kyFan_reflectionTangentCorner_le
     kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((reflectionSineCorner U Z).singularValue n : ℝ))) := by
-  rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_le_sum fun n _ =>
     approximationNumber_reflectionTangentCorner_le hZsa hZ2 hS1 n
 

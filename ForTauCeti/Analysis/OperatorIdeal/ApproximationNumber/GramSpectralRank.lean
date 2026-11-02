@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralVectorBounds
 

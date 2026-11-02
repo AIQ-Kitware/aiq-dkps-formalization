@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 module
 
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 
 /-!
 # Finite-dimensional localization of approximation numbers

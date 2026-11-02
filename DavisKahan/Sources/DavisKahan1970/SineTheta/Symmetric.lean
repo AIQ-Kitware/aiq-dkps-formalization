@@ -238,13 +238,13 @@ theorem forward_all_kyFan
         kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
       erw [hsineAdj, kyFanApproximationGauge_adjoint,
         (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hsine.kyFanGaugeReal_eq k)]
+      (congrArg NNReal.toReal (hsine.kyFanGauge_eq k)))]
     have hgaugeRes : kyFanApproximationGauge k P.forwardResidualBlock =
         kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) := by
       erw [← kyFanApproximationGauge_adjoint k P.forwardResidualBlock,
         ← kyFanApproximationGauge_neg k P.forwardResidualBlock.adjoint,
         (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hres.kyFanGaugeReal_eq k)]
+      (congrArg NNReal.toReal (hres.kyFanGauge_eq k)))]
     simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
       ENNReal.coe_toReal,
       ← kyFanApproximationGauge_eq_kyFanGauge,
@@ -318,11 +318,11 @@ theorem reverse_all_kyFan
         kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
       erw [hsineAdj, kyFanApproximationGauge_adjoint,
         (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hsine.kyFanGaugeReal_eq k)]
+      (congrArg NNReal.toReal (hsine.kyFanGauge_eq k)))]
     have hgaugeRes : kyFanApproximationGauge k P.reverseResidualBlock =
         kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) :=
       (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hres.kyFanGaugeReal_eq k)
+      (congrArg NNReal.toReal (hres.kyFanGauge_eq k)))
     simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
       ENNReal.coe_toReal,
       ← kyFanApproximationGauge_eq_kyFanGauge,
@@ -412,7 +412,7 @@ theorem symmetric_all_kyFan
         (((P.gap : ℝ) : ℂ) • crossSineSum P.U P.V) := by
       erw [kyFanApproximationGauge_smul, hgapNorm,
         (show ∀ j, kyFanApproximationGauge j _ = kyFanApproximationGauge j _ from
-      fun j => hsine.kyFanGaugeReal_eq j)]
+      fun j => (congrArg NNReal.toReal (hsine.kyFanGauge_eq j)))]
     _ ≤ kyFanApproximationGauge k
         (diagonalPair P.Uᗮ P.V P.perturbation) := hcombine
     _ ≤ kyFanApproximationGauge k P.perturbation := hres

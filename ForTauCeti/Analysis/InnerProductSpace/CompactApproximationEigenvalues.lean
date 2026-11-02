@@ -14,7 +14,7 @@ public import Mathlib.LinearAlgebra.Eigenspace.Minpoly
 public import Mathlib.LinearAlgebra.DFinsupp
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 public import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
 
 /-!

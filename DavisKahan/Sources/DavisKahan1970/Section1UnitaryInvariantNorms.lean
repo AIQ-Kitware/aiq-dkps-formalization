@@ -98,7 +98,7 @@ not that its range is `ν`-dimensional -- because it is only the ideal inequalit
 theorem equation1_12_gauge_comp_starProjection_le
     (K : E →L[ℂ] F) (ν : ℕ) (Ω : Submodule ℂ E) [Ω.HasOrthogonalProjection] :
     kyFanApproximationGauge ν (K ∘L Ω.starProjection) ≤ kyFanApproximationGauge ν K := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   refine Finset.sum_le_sum fun n _ => ?_
   calc ((K ∘L Ω.starProjection).singularValue n : ℝ)
       ≤ (K.singularValue n : ℝ) * ‖Ω.starProjection‖ :=
@@ -116,7 +116,7 @@ theorem equation1_13_gauge_starProjection_comp_le
     (Υ : Submodule ℂ F) [Υ.HasOrthogonalProjection] :
     kyFanApproximationGauge ν (Υ.starProjection ∘L K ∘L Ω.starProjection)
       ≤ kyFanApproximationGauge ν K := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   refine Finset.sum_le_sum fun n _ => ?_
   have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le Υ.starProjection K Ω.starProjection n))
   simp only [NNReal.coe_mul, coe_nnnorm] at h

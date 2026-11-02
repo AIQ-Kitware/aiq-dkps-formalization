@@ -409,8 +409,8 @@ theorem sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace
       kyFanApproximationGauge j H := by
     intro j
     change (H'.kyFanGauge j : ℝ) ≤ (H.kyFanGauge j : ℝ)
-    rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum,
-      ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum,
+      ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_le_sum fun n _ => ?_
     rw [hH'def]
     exact approximationSingularValue_comp_contractions_le n
@@ -419,8 +419,8 @@ theorem sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace
   have hHmono : kyFanApproximationGauge S'.card H ≤
       kyFanApproximationGauge S.card H := by
     change (H.kyFanGauge S'.card : ℝ) ≤ (H.kyFanGauge S.card : ℝ)
-    rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum,
-      ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum,
+      ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     exact Finset.sum_le_sum_of_subset_of_nonneg
       (fun x hx => Finset.mem_range.mpr
         (lt_of_lt_of_le (Finset.mem_range.mp hx) hS'card))
@@ -484,7 +484,7 @@ theorem kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSu
       Finset.sum_nonneg fun n _ => doubleAngleTangent_nonneg (hnn n) (hlt n)
     have hRHS : 0 ≤ kyFanApproximationGauge k H := by
       change 0 ≤ (H.kyFanGauge k : ℝ)
-      rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+      rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
       exact Finset.sum_nonneg fun n _ => (H.singularValue n).coe_nonneg
     nlinarith
 
@@ -514,7 +514,7 @@ theorem kyFan_tanTwoTheta0_offDiagonal_le_of_finiteDimensional_invariantSubspace
       ∑ n ∈ Finset.range k,
         doubleAngleTangent ((T.singularValue n : ℝ)) := by
     change (tanTwoTheta0.kyFanGauge k : ℝ) = _
-    rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     exact Finset.sum_congr rfl fun n _ => htan n
   rw [hgauge]
   exact kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSubspace hA hH hAU hHU
@@ -592,7 +592,7 @@ theorem kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace
       ∑ n ∈ S, absDoubleAngleTangent ((T.singularValue n : ℝ)) := by
     rw [hSdef, Finset.sum_image (fun x _ y _ h => π.symm.injective h)]
     change (tanTwoTheta.kyFanGauge k : ℝ) = _
-    rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [← htan (π.symm j), Equiv.apply_symm_apply]
   have h := sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace

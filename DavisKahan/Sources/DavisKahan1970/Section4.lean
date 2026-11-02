@@ -273,9 +273,9 @@ theorem proposition4_1_compact_nonacute_directRotationValues_complex
       U V J W hWunitary hWmap).approximationNumber_direct_cosineCutoff_eq_sine
       (S := S)
       (principalSineOperator_norm_sq_eq_one_sub_sourceCosine_norm_sq U V) n
-  have hDseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
+  have hDseq := (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
     (DavisKahan.Section4.sourceRestrictedDisplacement_sameApproximationSingularSequence
-      U (DavisKahan.nonacuteDirectRotation U V J)) n
+      U (DavisKahan.nonacuteDirectRotation U V J)) n))
   let a : Real := ((A.singularValue n : ℝ) : Real)
   let theta : Real := TauCeti.principalAngleSequence U V n
   let shalf : Real := Real.sin (theta / 2)
@@ -645,7 +645,7 @@ theorem Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_opNorm
   have hk := proposition4_3_infiniteDimensional_nonacute U V J W hWunitary hWmap 1
   rw [displacementSquare_eq_gramOperator, displacementSquare_eq_gramOperator] at hk
   simp only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
-    ContinuousLinearMap.kyFanGaugeReal_one, norm_gramOperator] at hk
+    ContinuousLinearMap.kyFanGauge_one, coe_nnnorm, norm_gramOperator] at hk
   exact le_of_sq_le_sq hk (norm_nonneg _)
 
 /-- **Davis--Kahan 1970, the Hilbert--Schmidt consequence of Proposition 4.3**, at the

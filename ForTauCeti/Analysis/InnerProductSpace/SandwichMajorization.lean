@@ -15,7 +15,7 @@ public import ForTauCeti.Analysis.Convex.Majorization
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 
 /-! # Weak majorization for the positive sandwich `D⋆ M D`
 

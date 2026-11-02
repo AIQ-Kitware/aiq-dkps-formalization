@@ -326,9 +326,9 @@ theorem sinTwoThetaIdealBlock_hasSameApproximationNumbers :
       ← ContinuousLinearMap.star_eq_adjoint, ← ContinuousLinearMap.star_eq_adjoint,
       (isSelfAdjoint_starProjection U).star_eq,
       (isSelfAdjoint_starProjection (reflectedU U V)ᗮ).star_eq]
-  have hmod := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
+  have hmod := (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
     (ContinuousLinearMap.sameSingularValues_modulus
-      ((reflectedU U V)ᗮ.starProjection ∘L U.starProjection)) n
+      ((reflectedU U V)ᗮ.starProjection ∘L U.starProjection)) n))
   rw [show ((reflectedU U V)ᗮ.starProjection ∘L U.starProjection).modulus
       = directedSinTwoAngleOperatorC U V from by
         rw [← directedSinAngleOperatorC,

@@ -7,7 +7,7 @@ module
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 
 /-!
 # Approximation-number transport across canonical subspace coordinates

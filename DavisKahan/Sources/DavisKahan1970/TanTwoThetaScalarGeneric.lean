@@ -295,8 +295,8 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
     have hsinApprox : ∀ n : ℕ,
         ((Angle.sinTwoAngleOperator U' V').singularValue n : ℝ) < 1 := by
       intro n
-      have hs := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-        (Angle.sinTwoAngleOperator_hasSameApproximationNumbers (U := U') (V := V')) n
+      have hs := (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+        (Angle.sinTwoAngleOperator_hasSameApproximationNumbers (U := U') (V := V')) n))
       rw [hs]
       exact hlt' n
     have hnorm : ‖Angle.sinTwoAngleOperator U' V'‖ < 1 := by

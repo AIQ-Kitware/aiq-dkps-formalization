@@ -47,7 +47,7 @@ theorem kyFanApproximationGauge_le_of_approximationSingularValue_le
     (h : ∀ n, (A.singularValue n : ℝ) ≤
       (B.singularValue n : ℝ)) (k : ℕ) :
     kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_le_sum fun n hn => h n
 
 /-- Correct infinite-dimensional ideal-dominance bridge for Corollary 4.1.

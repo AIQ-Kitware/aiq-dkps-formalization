@@ -9,7 +9,7 @@ public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan
 public import Mathlib.Topology.Algebra.Module.FiniteDimension
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 
@@ -413,7 +413,7 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto_of_minMax
     Tendsto
       (fun i => kyFanApproximationGauge k (K ∘L P i))
       l (𝓝 (kyFanApproximationGauge k K)) := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact tendsto_finsetSum (Finset.range k)
     (fun n hn => approximationSingularValue_comp_strongProjection_tendsto_of_minMax
       hlb hPproj hP n K)
@@ -549,7 +549,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 @[simp]
 theorem kyFanApproximationGauge_one (K : E →L[𝕜] F) :
     kyFanApproximationGauge 1 K = ‖K‖ :=
-  K.kyFanGaugeReal_one
+  (congrArg NNReal.toReal (ContinuousLinearMap.kyFanGauge_one K)).trans (coe_nnnorm K)
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Ky Fan approximation gauges are absolutely homogeneous. -/
@@ -689,7 +689,7 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
     have hkδ : (k : ℝ) * δ = ε := by
       rw [hδdef]
       field_simp
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     rw [hkδ] at hsum
     linarith
   -- both restrictions have room for `k` orthonormal vectors

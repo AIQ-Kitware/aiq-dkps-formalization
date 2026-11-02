@@ -220,9 +220,10 @@ theorem approximationSingularValue_blockCompression_complexify
     ((blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ) (complexify K)).singularValue n : ℝ) =
         ((complexify (blockCompression Ω Γ K)).singularValue n : ℝ) := by
       rw [← blockCompression_complexify_equiv Ω Γ K]
-      exact (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
+      exact (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+        (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
         _ (complexifySubmoduleEquiv Γ).symm
-        (complexifySubmoduleEquiv Ω)).approximationNumber_eq n
+        (complexifySubmoduleEquiv Ω)) n))
     _ = _ := approximationSingularValue_complexify (blockCompression Ω Γ K) n
 
 /-- The finite Ky Fan gauge of a directed corner is preserved on the nose by
@@ -233,7 +234,7 @@ theorem kyFanApproximationGauge_blockCompression_complexify
         (blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
           (complexify K)) =
       kyFanApproximationGauge k (blockCompression Ω Γ K) := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_congr rfl fun n _ =>
     approximationSingularValue_blockCompression_complexify Ω Γ K n
 
@@ -544,10 +545,10 @@ theorem kyFanApproximationGauge_directedCorner_complexify (K : E →L[ℝ] E) (k
           (complexify K)) =
       kyFanApproximationGauge k (blockCompression Uᗮ U K) := by
   have hc := (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-    (projectionBlock_same_compression (complexifySubmodule U)ᗮ
-      (complexifySubmodule U) (complexify K)).kyFanGaugeReal_eq k).symm
+    (congrArg NNReal.toReal ((projectionBlock_same_compression (complexifySubmodule U)ᗮ
+      (complexifySubmodule U) (complexify K)).kyFanGauge_eq k))).symm
   have hr := (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (projectionBlock_same_compression Uᗮ U K).kyFanGaugeReal_eq k)
+      (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U K).kyFanGauge_eq k)))
   rw [hc, projectionBlock_complexifySubmodule,
     kyFanApproximationGauge_complexify, hr]
 

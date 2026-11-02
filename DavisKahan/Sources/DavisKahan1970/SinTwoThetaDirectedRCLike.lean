@@ -327,7 +327,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
     intro k
     erw [kyFanApproximationGauge_smul, htwo, (show kyFanApproximationGauge k _ =
       kyFanApproximationGauge k _ from
-      hsameR.kyFanGaugeReal_eq k)]
+      (congrArg NNReal.toReal (hsameR.kyFanGauge_eq k)))]
     exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_rclike
       hA hred hVdom hres hδ hgap k
   have hMem2 : N.Mem ((2 : 𝕜) • R0) := by

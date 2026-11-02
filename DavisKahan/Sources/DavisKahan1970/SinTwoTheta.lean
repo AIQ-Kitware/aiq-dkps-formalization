@@ -310,7 +310,8 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
       ← kyFanApproximationGauge_eq_kyFanGauge,
     (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      sinTwoTheta₀.same_singular_values.kyFanGaugeReal_eq k)] using hcanonical.2
+      (congrArg NNReal.toReal (sinTwoTheta₀.same_singular_values.kyFanGauge_eq k)))] using
+        hcanonical.2
 
 open DavisKahan in
 /-- **Section 8 closing unequal-dimension extension of the directed

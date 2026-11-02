@@ -194,8 +194,8 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_lowerCorner
         kyFanApproximationGauge k (tanBlockRepresentative U V) := by
     rw [directedTanAngleOperatorC_eq_modulus_blockRepresentative htr]
     exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (ContinuousLinearMap.sameSingularValues_modulus
-      (tanBlockRepresentative U V)).kyFanGaugeReal_eq k)
+      (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_modulus
+      (tanBlockRepresentative U V)).kyFanGauge_eq k)))
   rw [hmodulus]
   exact hcombine.trans hpinch
 
@@ -278,7 +278,7 @@ theorem
       rw [hblock]
       have hs := ContinuousLinearMap.sameSingularValues_extendDomainByZero U data.residual
       exact ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hs.kyFanGaugeReal_eq k)).symm
+      (congrArg NNReal.toReal (hs.kyFanGauge_eq k)))).symm
     calc
       delta * kyFanApproximationGauge k
           (projectionBlock Uᗮ U
@@ -400,7 +400,7 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_complex_of_transvers
       rw [hblock]
       have hs := ContinuousLinearMap.sameSingularValues_extendDomainByZero U D.residual
       exact ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hs.kyFanGaugeReal_eq k)).symm
+      (congrArg NNReal.toReal (hs.kyFanGauge_eq k)))).symm
     calc
       delta * kyFanApproximationGauge k
           (projectionBlock Uᗮ U

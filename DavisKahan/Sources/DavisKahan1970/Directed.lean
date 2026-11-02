@@ -107,7 +107,7 @@ theorem tanTheta_directed_bounded_symmetricNorming_complex
     have htanKy : kyFanApproximationGauge k tanTheta0 =
         ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
           (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) := by
-      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
       refine Finset.sum_congr rfl fun n _ => ?_
       have h := htan n
       exact h

@@ -7,7 +7,7 @@ module
 
 public import TauCeti.Analysis.OperatorIdeal.Family.TraceClass
 public import TauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
 
 /-!

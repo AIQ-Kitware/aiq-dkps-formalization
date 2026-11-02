@@ -370,13 +370,13 @@ theorem forward_all_kyFan
       kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
     erw [hsineAdj, kyFanApproximationGauge_adjoint,
       (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hsine.kyFanGaugeReal_eq k)]
+      (congrArg NNReal.toReal (hsine.kyFanGauge_eq k)))]
   have hgaugeRes : kyFanApproximationGauge k P.forwardResidualBlock =
       kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) := by
     erw [← kyFanApproximationGauge_adjoint k P.forwardResidualBlock,
       ← kyFanApproximationGauge_neg k P.forwardResidualBlock.adjoint,
       (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hres.kyFanGaugeReal_eq k)]
+      (congrArg NNReal.toReal (hres.kyFanGauge_eq k)))]
   rw [hgaugeSine, hgaugeRes]
   exact hraw
 
@@ -431,11 +431,11 @@ theorem reverse_all_kyFan
       kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
     erw [hsineAdj, kyFanApproximationGauge_adjoint,
       (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hsine.kyFanGaugeReal_eq k)]
+      (congrArg NNReal.toReal (hsine.kyFanGauge_eq k)))]
   have hgaugeRes : kyFanApproximationGauge k P.reverseResidualBlock =
       kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) :=
     (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hres.kyFanGaugeReal_eq k)
+      (congrArg NNReal.toReal (hres.kyFanGauge_eq k)))
   rw [hgaugeSine, hgaugeRes]
   exact hraw
 
@@ -578,7 +578,7 @@ theorem symmetric_all_kyFan
   intro k
   have h := P.symmetric_all_kyFan_crossSineSum k
   rwa [(show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (crossSineSum_same_literalSin U V).kyFanGaugeReal_eq k)] at h
+      (congrArg NNReal.toReal ((crossSineSum_same_literalSin U V).kyFanGauge_eq k)))] at h
 
 /-- **Davis--Kahan 1970, Proposition 6.1 on a common dense domain**, for every normalized
 unitarily invariant norm in the source sense.

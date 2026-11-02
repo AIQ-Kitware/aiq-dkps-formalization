@@ -343,9 +343,9 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
     rw [projectionBlock_smul_unboundedAmbientExact,
       kyFanApproximationGauge_smul, hcnorm]
     erw [(show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (projectionBlock_same_compression Uᗮ U T).kyFanGaugeReal_eq k),
+      (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U T).kyFanGauge_eq k))),
       (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (projectionBlock_same_compression Uᗮ U B).kyFanGaugeReal_eq k)]
+      (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U B).kyFanGauge_eq k)))]
     change ((b - a) / 2) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
       kyFanApproximationGauge k (reflectionResidualCorner U B)
     linarith [hcorner k]
@@ -456,9 +456,9 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorm
     rw [projectionBlock_smul_unboundedAmbientExact,
       kyFanApproximationGauge_smul, hcnorm]
     erw [(show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (projectionBlock_same_compression Uᗮ U T).kyFanGaugeReal_eq k),
+      (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U T).kyFanGauge_eq k))),
       (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (projectionBlock_same_compression Uᗮ U B).kyFanGaugeReal_eq k)]
+      (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U B).kyFanGauge_eq k)))]
     change ((b - a) / 2) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
       kyFanApproximationGauge k (reflectionResidualCorner U B)
     linarith [hcorner k]
@@ -938,11 +938,11 @@ theorem approximationNumber_tanTwoDirectedCorner
       blockCompression Uᗮ U (2 * (projectorDifference U V * doubleSecant U V)) := by
     rw [reflectionTangentCorner_reflection_eq_tanTwoBlockCompression U V hinv,
       tanTwoBlockRepresentative, blockCompression_diagonalPair]
-  rw [ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-      (projectionBlock_same_compression Uᗮ U _) n, ← hcorner,
+  rw [(congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+    (projectionBlock_same_compression Uᗮ U _) n)), ← hcorner,
     approximationNumber_reflectionTangentCorner hZsa hZ2 hS1 n,
-    ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-      (hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock U V) n]
+    (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+      (hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock U V) n))]
 
 /-- **Davis--Kahan 1970, the `tan 2Θ` theorem, directed clause, over `ℂ`:
 `(b − a) N(tan 2Θ₀) ≤ 2 N(R)`.**

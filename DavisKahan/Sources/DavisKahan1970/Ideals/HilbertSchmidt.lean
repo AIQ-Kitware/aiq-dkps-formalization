@@ -80,7 +80,7 @@ theorem SameApproximationSingularSequence.approximationNumberEnergy_eq
   congr 1
   funext n
   exact congrArg (fun x : ℝ => ENNReal.ofReal (x ^ 2))
-    (ContinuousLinearMap.SameSingularValues.approximationNumber_eq h n)
+    ((congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp h n)))
 
 /-- Complete singular-value equality preserves Hilbert--Schmidt membership. -/
 theorem SameApproximationSingularSequence.approximationNumberEnergy_ne_top_iff

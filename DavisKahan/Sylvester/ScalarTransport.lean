@@ -64,8 +64,8 @@ omit [CompleteSpace E] [CompleteSpace F] in
 theorem kyFanApproximationGauge_clm (k : ℕ) (T : E →L[𝕜] F) :
     kyFanApproximationGauge k (clm (e := e) T) = kyFanApproximationGauge k T := by
   change ((clm (e := e) T).kyFanGauge k : ℝ) = (T.kyFanGauge k : ℝ)
-  rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum,
-    ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum,
+    ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_congr rfl fun n _ => approximationNumber_clm (e := e) T n
 
 omit [CompleteSpace E] in

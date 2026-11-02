@@ -1153,7 +1153,7 @@ approximation numbers in the sum are bounded by the operator norm. -/
 theorem beamKyFanTwo_gaugeReal_le (T : BeamL2 →L[ℂ] BeamL2) :
     beamKyFanTwo.gaugeReal T ≤ 2 * ‖T‖ := by
   have hsum : (T.kyFanGauge 2 : ℝ) ≤ 2 * ‖T‖ := by
-    rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum, Finset.sum_range_succ,
+    rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, Finset.sum_range_succ,
       Finset.sum_range_succ,
       Finset.sum_range_zero, zero_add]
     have h0 := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm T 0))
@@ -1629,7 +1629,7 @@ theorem kyFanTwo_beamResidual_le (ε : ℝ) :
     exact norm_beamPerturbation_comp_trialIncl_le ε
   have h1 := approximationSingularValue_one_beamResidual_le ε
   change ((beamResidual ε).kyFanGauge 2 : ℝ) ≤ residualKyFanTwo ε
-  rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_zero,
     zero_add, residualKyFanTwo]
   exact add_le_add h0 h1

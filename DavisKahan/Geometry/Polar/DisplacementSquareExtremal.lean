@@ -117,7 +117,7 @@ theorem kyFanApproximationGauge_gramOperator_mono_complex {E F G : Type u}
     (h : ∀ n, (A.singularValue n : ℝ) ≤ (B.singularValue n : ℝ)) (k : ℕ) :
     kyFanApproximationGauge k (ApproximationNumber.gramOperator A) ≤
       kyFanApproximationGauge k (ApproximationNumber.gramOperator B) := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   refine Finset.sum_le_sum fun n _ => ?_
   rw [approximationNumber_gramOperator_complex, approximationNumber_gramOperator_complex]
   have h0 : 0 ≤ (A.singularValue n : ℝ) := (A.singularValue n).coe_nonneg

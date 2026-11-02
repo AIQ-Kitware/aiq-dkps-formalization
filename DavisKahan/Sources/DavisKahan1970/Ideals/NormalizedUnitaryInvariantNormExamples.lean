@@ -58,7 +58,7 @@ noncomputable def kyFanNormalizedUnitaryInvariantNorm
     have hsum : kyFanApproximationGauge k V
         = ∑ n ∈ Finset.range k, (V.singularValue n : ℝ) := by
       change (V.kyFanGauge k : ℝ) = _
-      rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+      rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     rw [hsum]
     have hval : ∀ n ∈ Finset.range k,
         (V.singularValue n : ℝ) = if n = 0 then 1 else 0 := fun n _ =>

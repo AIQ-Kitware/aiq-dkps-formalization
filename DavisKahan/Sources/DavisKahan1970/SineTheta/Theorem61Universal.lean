@@ -110,7 +110,7 @@ theorem all_kyFan_bound
         gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })
     have hmain := FormBoundedGeneralSinThetaProblem.result N (P.toKyFanProblem k hk)
     have hsame := (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      S.same_singular_values.kyFanGaugeReal_eq k)
+      (congrArg NNReal.toReal (S.same_singular_values.kyFanGauge_eq k)))
     change kyFanApproximationGauge k S.operator = kyFanApproximationGauge k _ at hsame
     simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
       ENNReal.coe_toReal,
@@ -286,7 +286,7 @@ theorem all_kyFan_bound
         gauge_adjoint := (OperatorIdealFamily.kyFan ℝ k hk).gauge_adjoint })
     have hmain := RealGeneralSinThetaProblem.result N (P.toKyFanProblem k hk)
     have hsame := (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      S.same_singular_values.kyFanGaugeReal_eq k)
+      (congrArg NNReal.toReal (S.same_singular_values.kyFanGauge_eq k)))
     change kyFanApproximationGauge k S.operator = kyFanApproximationGauge k _ at hsame
     simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
       ENNReal.coe_toReal,

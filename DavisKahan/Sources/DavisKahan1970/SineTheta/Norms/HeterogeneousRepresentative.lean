@@ -43,7 +43,7 @@ theorem prefixGauge_eq
   unfold SymmetricNormingFunction.prefixGauge
   congr 1
   funext i
-  exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq h i
+  exact (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp h i))
 
 /-- Equal complete singular data gives equal source extended values. -/
 theorem normingExtendedGauge_eq

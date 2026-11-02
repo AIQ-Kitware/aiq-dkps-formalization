@@ -224,7 +224,7 @@ theorem sum_approximationPrefix
     ∑ i : Fin n, approximationPrefix n A i =
       kyFanApproximationGauge n A := by
   rw [kyFanApproximationGauge_eq_kyFanGauge,
-    ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   simp only [approximationPrefix]
   exact Fin.sum_univ_eq_sum_range (fun m => (A.singularValue m : ℝ)) n
 
@@ -259,7 +259,7 @@ theorem prefixGauge_le_of_all_kyFan_le
         Fin.sum_univ_eq_sum_range
           (fun k => (B.singularValue k : ℝ)) m]
       simpa only [kyFanApproximationGauge_eq_kyFanGauge,
-        ContinuousLinearMap.kyFanGaugeReal_eq_sum] using h m
+        ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum] using h m
     · have huniv :
           (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) =
             Finset.univ :=
@@ -302,7 +302,7 @@ theorem mul_prefixGauge_le_of_all_mul_kyFan_le
           Fin.sum_univ_eq_sum_range
             (fun k => (B.singularValue k : ℝ)) m]
         simpa only [kyFanApproximationGauge_eq_kyFanGauge,
-          ContinuousLinearMap.kyFanGaugeReal_eq_sum] using h m
+          ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum] using h m
       · have huniv :
             (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) =
               Finset.univ :=
@@ -434,7 +434,7 @@ theorem extendedGauge_eq_of_hasSameApproximationNumbers
   refine iSup_congr fun n => ?_
   have hpre : approximationPrefix n A = approximationPrefix n B := by
     funext i
-    exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq h (i : ℕ)
+    exact (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp h (i : ℕ)))
   rw [prefixGauge, prefixGauge, hpre]
 
 /-- Equality of complete approximation singular-value sequences gives equality
@@ -450,10 +450,10 @@ theorem gauge_eq_of_sameApproximationSingularValues
   apply le_antisymm
   · exact N.extendedGauge_le_of_all_kyFan_le fun k =>
       le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      h.kyFanGaugeReal_eq k))
+      (congrArg NNReal.toReal (h.kyFanGauge_eq k))))
   · exact N.extendedGauge_le_of_all_kyFan_le fun k =>
       le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      h.kyFanGaugeReal_eq k)).symm
+      (congrArg NNReal.toReal (h.kyFanGauge_eq k)))).symm
 
 end SymmetricNormingFunction
 

@@ -625,11 +625,11 @@ theorem sameApproximationSingularValues_unboundedReflectionTangent
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  rw [ContinuousLinearMap.SameSingularValues.approximationNumber_eq h1 n,
+  rw [(congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp h1 n)),
     absTanTwoAngleOperatorC_eq_modulus_blockRepresentative hcos]
-  exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
+  exact ((congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
     (ContinuousLinearMap.sameSingularValues_modulus
-      (tanTwoBlockRepresentative U V)) n).symm
+      (tanTwoBlockRepresentative U V)) n))).symm
 
 /-- **The reflection tangent and the paper's `|tan 2Θ|` have the same gauge in
 every source unitarily invariant norm**, and one lies in the norm's ideal exactly

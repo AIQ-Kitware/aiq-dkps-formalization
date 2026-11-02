@@ -86,7 +86,7 @@ theorem lpGauge_approximationNumber_add_le {p : ℝ} (hp : 1 ≤ p) (S T : E →
       have h : ((S + T).kyFanGauge (min j k) : ℝ) ≤
           (S.kyFanGauge (min j k) : ℝ) + (T.kyFanGauge (min j k) : ℝ) := by
         exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le S T (min j k)
-      simpa only [kyFanGaugeReal_eq_sum] using h
+      simpa only [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum] using h
   let _ : Fact (1 ≤ ENNReal.ofReal p) := ⟨by
     simpa only [ENNReal.ofReal_one] using ENNReal.ofReal_le_ofReal hp⟩
   simp only [TauCeti.FiniteVector.lpGauge_eq_norm (zero_lt_one.trans_le hp)]

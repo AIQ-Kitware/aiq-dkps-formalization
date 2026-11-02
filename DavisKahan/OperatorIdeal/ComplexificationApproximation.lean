@@ -338,8 +338,8 @@ theorem kyFanApproximationGauge_complexify
     kyFanApproximationGauge k (RealComplexification.complexify T) =
       kyFanApproximationGauge k T := by
   change ((RealComplexification.complexify T).kyFanGauge k : ℝ) = (T.kyFanGauge k : ℝ)
-  rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum,
-    ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum,
+    ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   apply Finset.sum_congr rfl
   intro n hn
   exact approximationSingularValue_complexify T n

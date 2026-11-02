@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
@@ -91,29 +91,32 @@ variable {E : Type v} {F : Type w}
 @[simp] theorem kyFanGaugeReal_neg (T : E →L[𝕜] F) (k : ℕ) :
     ((-T).kyFanGauge k : ℝ) = (T.kyFanGauge k : ℝ) :=
   by
-    rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
+    rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, ContinuousLinearMap.kyFanGauge_def,
+      NNReal.coe_sum]
     exact Finset.sum_congr rfl fun n _ => T.approximationNumber_neg n
 
 /-- The zeroth Ky Fan gauge is the empty sum, hence zero. -/
 @[simp] theorem kyFanGaugeReal_zero_index (T : E →L[𝕜] F) : (T.kyFanGauge 0 : ℝ) = 0 := by
-  rw [kyFanGaugeReal_eq_sum]
+  rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   simp
 
 /-- The zero operator has zero Ky Fan gauge at every index. -/
 @[simp] theorem kyFanGaugeReal_zero (k : ℕ) : ((0 : E →L[𝕜] F).kyFanGauge k : ℝ) = 0 := by
-  rw [kyFanGaugeReal_eq_sum]
+  rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   simp
 
 /-- Ky Fan gauges are absolutely homogeneous. -/
 theorem kyFanGaugeReal_smul (c : 𝕜) (T : E →L[𝕜] F) (k : ℕ) :
     ((c • T).kyFanGauge k : ℝ) = ‖c‖ * (T.kyFanGauge k : ℝ) := by
-  rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
+  rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, ContinuousLinearMap.kyFanGauge_def,
+    NNReal.coe_sum]
   simp only [ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm]
   rw [Finset.mul_sum]
 
 /-- Ky Fan gauges are nonnegative. -/
 theorem kyFanGaugeReal_nonneg (T : E →L[𝕜] F) (k : ℕ) : 0 ≤ (T.kyFanGauge k : ℝ) :=
-  by rw [kyFanGaugeReal_eq_sum]; exact Finset.sum_nonneg fun n _ => (T.singularValue n).coe_nonneg
+  by rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]; exact Finset.sum_nonneg fun n _ =>
+    (T.singularValue n).coe_nonneg
 
 /-- **The two-sided ideal inequality.** -/
 theorem kyFanGaugeReal_comp_le {G : Type x} {H : Type y}
@@ -125,11 +128,11 @@ theorem kyFanGaugeReal_comp_le {G : Type x} {H : Type y}
     ((L ∘L T ∘L R).kyFanGauge k : ℝ)
         ≤ ∑ n ∈ Finset.range k, (‖L‖ * (T.singularValue n : ℝ) * ‖R‖) :=
       by
-        rw [kyFanGaugeReal_eq_sum]
+        rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
         exact Finset.sum_le_sum fun n _ => (NNReal.coe_le_coe.mpr
             (ContinuousLinearMap.singularValue_comp_comp_le L T R n))
     _ = ‖L‖ * (T.kyFanGauge k : ℝ) * ‖R‖ := by
-      rw [kyFanGaugeReal_eq_sum]
+      rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
       rw [Finset.mul_sum, Finset.sum_mul]
 
 /-- **Ky Fan gauges do not see an enlargement of the codomain**, since the approximation
@@ -143,14 +146,15 @@ theorem kyFanGaugeReal_comp_eq_of_leftInverse {G : Type x}
     (hι : ‖ι‖ ≤ 1) (hπ : ‖π‖ ≤ 1) (T : E →L[𝕜] F) (k : ℕ) :
     ((ι ∘L T).kyFanGauge k : ℝ) = (T.kyFanGauge k : ℝ) :=
   by
-    rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
+    rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, ContinuousLinearMap.kyFanGauge_def,
+      NNReal.coe_sum]
     exact Finset.sum_congr rfl fun n _ =>
       congrArg NNReal.toReal (singularValue_comp_eq_of_leftInverse hπι hι hπ T n)
 
 /-- The operator norm is the first term of every positive Ky Fan gauge. -/
 theorem opNorm_le_kyFanGauge (T : E →L[𝕜] F) {k : ℕ} (hk : 0 < k) :
     ‖T‖ ≤ (T.kyFanGauge k : ℝ) := by
-  rw [kyFanGaugeReal_eq_sum]
+  rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero T)).trans (coe_nnnorm T))]
   exact Finset.single_le_sum (fun n _ => (T.singularValue n).coe_nonneg)
     (Finset.mem_range.mpr hk)
@@ -162,7 +166,7 @@ theorem kyFanGaugeReal_le_nat_mul_opNorm (T : E →L[𝕜] F) (k : ℕ) :
   calc
     (T.kyFanGauge k : ℝ) ≤ ∑ _n ∈ Finset.range k, ‖T‖ :=
       by
-        rw [kyFanGaugeReal_eq_sum]
+        rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
         exact Finset.sum_le_sum fun n _ => (NNReal.coe_le_coe.mpr
             (ContinuousLinearMap.singularValue_le_nnnorm T n))
     _ = (k : ℝ) * ‖T‖ := by simp
@@ -178,7 +182,8 @@ variable {E : Type v} {F : Type w}
 /-- Ky Fan gauges are adjoint-invariant, since the approximation numbers are. -/
 theorem kyFanGaugeReal_adjoint (T : E →L[𝕜] F) (k : ℕ) :
     (T.adjoint.kyFanGauge k : ℝ) = (T.kyFanGauge k : ℝ) := by
-  rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
+  rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, ContinuousLinearMap.kyFanGauge_def,
+    NNReal.coe_sum]
   apply Finset.sum_congr rfl
   intro n hn
   rw [ singularValue_adjoint]
@@ -195,7 +200,7 @@ variable {E : Type v} {F : Type w}
 theorem kyFanSum_eq_kyFanGauge (k : ℕ) (A : E →ₗ[𝕜] F) :
     A.kyFanSum k =
       (A.toContinuousLinearMap.kyFanGauge k : ℝ) := by
-  rw [kyFanGaugeReal_eq_sum]
+  rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   rw [LinearMap.kyFanSum_def]
   refine Finset.sum_congr rfl fun n _ => ?_
   rw [
@@ -289,7 +294,8 @@ theorem kyFanGaugeReal_orthogonalProjectionOnto_comp_eq
     (A : E →L[𝕜] F) (hA : ∀ x, A x ∈ W) (k : ℕ) :
     ((W.orthogonalProjectionOnto ∘L A).kyFanGauge k : ℝ) = (A.kyFanGauge k : ℝ) :=
   by
-    rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
+    rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, ContinuousLinearMap.kyFanGauge_def,
+      NNReal.coe_sum]
     exact Finset.sum_congr rfl fun n _ =>
       approximationNumber_orthogonalProjectionOnto_comp_eq W A hA n
 
@@ -407,17 +413,19 @@ theorem kyFanGaugeReal_add_le_of_exists_finiteRestriction {S T : E →L[𝕜] F}
     calc
       ((S + T).kyFanGauge k : ℝ) ≤ ∑ n ∈ Finset.range k,
           (((SV + TV).singularValue n : ℝ) + ε / (k : ℝ)) := by
-            rw [kyFanGaugeReal_eq_sum]
+            rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
             exact Finset.sum_le_sum hterm
       _ = ((SV + TV).kyFanGauge k : ℝ) + (k : ℝ) * (ε / (k : ℝ)) := by
-        rw [kyFanGaugeReal_eq_sum, Finset.sum_add_distrib]
+        rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, Finset.sum_add_distrib]
         simp [nsmul_eq_mul]
       _ = ((SV + TV).kyFanGauge k : ℝ) + ε := by rw [mul_div_cancel₀ ε hkreal.ne']
   have hrestrictS : (SV.kyFanGauge k : ℝ) ≤ (S.kyFanGauge k : ℝ) := by
-    rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
+    rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, ContinuousLinearMap.kyFanGauge_def,
+      NNReal.coe_sum]
     exact Finset.sum_le_sum fun n _ => S.approximationNumber_comp_subtypeL_le n V
   have hrestrictT : (TV.kyFanGauge k : ℝ) ≤ (T.kyFanGauge k : ℝ) := by
-    rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
+    rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, ContinuousLinearMap.kyFanGauge_def,
+      NNReal.coe_sum]
     exact Finset.sum_le_sum fun n _ => T.approximationNumber_comp_subtypeL_le n V
   calc
     ((S + T).kyFanGauge k : ℝ) ≤ ((SV + TV).kyFanGauge k : ℝ) + ε := hlocal

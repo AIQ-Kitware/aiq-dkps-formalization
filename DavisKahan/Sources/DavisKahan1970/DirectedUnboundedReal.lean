@@ -177,8 +177,9 @@ theorem approximationSingularValue_complexifyTrialData_residual
     ((complexifyTrialData data).residual.singularValue n : ℝ) =
         ((complexify data.residual).singularValue n : ℝ) := by
       rw [← hcoord]
-      exact (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
-        _ W.symm U).approximationNumber_eq n
+      exact (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+        (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
+        _ W.symm U) n))
     _ = _ := approximationSingularValue_complexify data.residual n
 
 /-- The finite Ky Fan gauge of the residual is exactly preserved by the complexification of
@@ -187,7 +188,7 @@ theorem kyFanApproximationGauge_complexifyTrialData_residual
     (data : Theorem63TrialData Z V) (k : ℕ) :
     kyFanApproximationGauge k (complexifyTrialData data).residual =
       kyFanApproximationGauge k data.residual := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_congr rfl fun n _ =>
     approximationSingularValue_complexifyTrialData_residual data n
 
@@ -318,7 +319,7 @@ theorem theorem6_3_ideal_infiniteData_exists_real
     have htanKy : kyFanApproximationGauge k tanTheta0 =
         ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
           (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ))) := by
-      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
       exact Finset.sum_congr rfl fun n _ => htan n
     rw [htanKy]
     exact hcore
@@ -345,7 +346,7 @@ theorem theorem6_3_ideal_infiniteData_real
   have htanKy : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ))) := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     exact Finset.sum_congr rfl fun n _ => htan n
   rw [htanKy]
   exact hcore

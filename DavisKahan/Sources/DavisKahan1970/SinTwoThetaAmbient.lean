@@ -189,11 +189,11 @@ theorem sinTheta_spectrum_block_all_kyFan
       ENNReal.coe_toReal,
       ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
     have hone := (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (projectionBlock_same_compression Vᗮ U
-      (((d : ℝ) : ℂ) • (1 : E →L[ℂ] E))).kyFanGaugeReal_eq k)
+      (congrArg NNReal.toReal ((projectionBlock_same_compression Vᗮ U
+      (((d : ℝ) : ℂ) • (1 : E →L[ℂ] E))).kyFanGauge_eq k)))
     have hpert :=
       (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (projectionBlock_same_compression Vᗮ U (B - A)).kyFanGaugeReal_eq k)
+      (congrArg NNReal.toReal ((projectionBlock_same_compression Vᗮ U (B - A)).kyFanGauge_eq k)))
     rw [hone, hpert, blockCompression_smul_one, blockCompression_apply,
       kyFanApproximationGauge_smul, hdnorm]
     exact hraw
@@ -292,10 +292,10 @@ theorem symmetric_sinTheta_spectrum_all_kyFan
       kyFanApproximationGauge k
         ((V.starProjection - U.starProjection).modulus) := by
     erw [(show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (crossSineSum_same_projectionDiff U V).kyFanGaugeReal_eq k)]
+      (congrArg NNReal.toReal ((crossSineSum_same_projectionDiff U V).kyFanGauge_eq k)))]
     exact ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (ContinuousLinearMap.sameSingularValues_modulus
-      (V.starProjection - U.starProjection)).kyFanGaugeReal_eq k)).symm
+      (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_modulus
+      (V.starProjection - U.starProjection)).kyFanGauge_eq k)))).symm
   rw [kyFanApproximationGauge_smul, hdnorm, hsine] at hcombine
   exact hcombine.trans hpinch
 
@@ -603,7 +603,7 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNormin
     intro k
     erw [kyFanApproximationGauge_smul, htwo,
       (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hsameR.kyFanGaugeReal_eq k)]
+      (congrArg NNReal.toReal (hsameR.kyFanGauge_eq k)))]
     exact sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
       (A := A) (U := U) (V := V) hA hU hd hab hUspec hUspec' M k
   have hMem2 : N.Mem (((2 : ℝ) : ℂ) • R0) := by

@@ -769,7 +769,7 @@ private theorem theorem6_3_kyFan_core_of_le_finrank
       T hT V Z hV hdelta hCompressionUpper hUnwantedLower
       tanTheta0 htan (castIndex i))
   simp only [kyFanApproximationGauge_eq_kyFanGauge,
-    ContinuousLinearMap.kyFanGaugeReal_eq_sum] at hsum ⊢
+    ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum] at hsum ⊢
   rw [Finset.mul_sum, ← Fin.sum_univ_eq_sum_range]
   simpa [castIndex] using hsum
 
@@ -790,8 +790,8 @@ theorem kyFanApproximationGauge_eq_finrank_of_finrank_le
       _ = (d : Cardinal) := by
         rw [← Module.finrank_eq_rank' ℂ E]
   change (A.kyFanGauge k : ℝ) = (A.kyFanGauge (finrank ℂ E) : ℝ)
-  rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum,
-    ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum,
+    ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   rw [← Finset.sum_range_add_sum_Ico _ hk]
   apply add_eq_left.mpr
   apply Finset.sum_eq_zero

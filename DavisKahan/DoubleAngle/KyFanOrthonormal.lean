@@ -100,7 +100,7 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge
     rw [kyFanSum_eq_kyFanApproximationGauge, hK'id]
   -- the compression does not increase approximation numbers
   have hmono : kyFanApproximationGauge k K' ≤ kyFanApproximationGauge k K := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_le_sum fun n _ => ?_
     have hcomp := approximationSingularValue_comp_le n
       L₁.orthogonalProjectionOnto K L₂.subtypeL
@@ -308,7 +308,7 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge_of_contraction
   have hNn : ‖N‖ ≤ cv := norm_familyCombination_le hcv hv
   have hmono : kyFanApproximationGauge k X ≤
       cu * cv * kyFanApproximationGauge k K := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     rw [Finset.mul_sum]
     refine Finset.sum_le_sum fun n _ => ?_
     have hcomp := approximationSingularValue_comp_le n

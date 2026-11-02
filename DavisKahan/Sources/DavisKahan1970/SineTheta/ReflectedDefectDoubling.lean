@@ -144,10 +144,10 @@ private theorem reflectedDefectBlocks_same
         ContinuousLinearMap.singularValue_adjoint]
     _ = ((V.reflectionOperator ∘L
           (projectionBlock Wᗮ U D).adjoint).singularValue n : ℝ) :=
-      (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hleft n).symm
+      ((congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hleft n))).symm
     _ = ((V.reflectionOperator ∘L (projectionBlock Wᗮ U D).adjoint ∘L
           V.reflectionOperator).singularValue n : ℝ) :=
-      (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hright n).symm
+      ((congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hright n))).symm
 
 /-- The two off-diagonal blocks of a self-adjoint operator have the same
 complete singular sequence. -/

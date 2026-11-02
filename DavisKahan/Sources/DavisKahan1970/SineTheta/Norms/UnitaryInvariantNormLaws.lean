@@ -119,7 +119,8 @@ theorem prefixGauge_add_le
               (B.singularValue k : ℝ)) m,
           Finset.sum_add_distrib]
         simpa only [kyFanApproximationGauge_eq_kyFanGauge,
-          ContinuousLinearMap.kyFanGaugeReal_eq_sum] using kyFanApproximationGauge_add_le m A B
+          ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum] using kyFanApproximationGauge_add_le
+            m A B
       · have huniv :
           (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) = Finset.univ :=
           Finset.filter_true_of_mem fun i _ => lt_trans i.isLt hm
@@ -221,7 +222,7 @@ theorem prefixGauge_le_of_all_kyFan_le_hetero (N : SymmetricNormingFunction)
         Fin.sum_univ_eq_sum_range
           (fun k => (B.singularValue k : ℝ)) m]
       simpa only [kyFanApproximationGauge_eq_kyFanGauge,
-        ContinuousLinearMap.kyFanGaugeReal_eq_sum] using h m
+        ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum] using h m
     · have huniv :
         (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) = Finset.univ :=
         Finset.filter_true_of_mem fun i _ => lt_trans i.isLt hm

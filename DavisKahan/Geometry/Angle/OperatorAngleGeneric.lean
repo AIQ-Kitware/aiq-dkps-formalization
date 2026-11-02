@@ -901,10 +901,10 @@ theorem directedSinTwoAngleOperator_hasSameApproximationNumbers_swap :
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  rw [hUV, hVU, ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-      (ContinuousLinearMap.sameSingularValues_modulus ((2 : ℝ) • star W)) n,
-    ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-      (ContinuousLinearMap.sameSingularValues_modulus ((2 : ℝ) • W)) n,
+  rw [hUV, hVU, (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+    (ContinuousLinearMap.sameSingularValues_modulus ((2 : ℝ) • star W)) n)),
+    (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+      (ContinuousLinearMap.sameSingularValues_modulus ((2 : ℝ) • W)) n)),
     show ((2 : ℝ) • star W) = ((2 : ℝ) • W).adjoint by
       rw [← ContinuousLinearMap.star_eq_adjoint, hstar2],
     ContinuousLinearMap.singularValue_adjoint]

@@ -152,8 +152,9 @@ theorem approximationSingularValue_theorem63DirectedSineBlock_complexify
     ((theorem63DirectedSineBlock (complexifySubmodule Z) (complexifySubmodule V)).singularValue n : ℝ) =
         ((complexify (theorem63DirectedSineBlockReal Z V)).singularValue n : ℝ) := by
       rw [← hcoord]
-      exact (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
-        _ W.symm U).approximationNumber_eq n
+      exact (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+        (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
+        _ W.symm U) n))
     _ = _ := approximationSingularValue_complexify (theorem63DirectedSineBlockReal Z V) n
 
 /-- Approximation singular values of the real Ritz residual are likewise
@@ -181,8 +182,9 @@ theorem approximationSingularValue_theorem63Residual_complexify
     ((theorem63Residual (complexify T) (complexifySubmodule Z)).singularValue n : ℝ) =
         ((complexify (theorem63ResidualReal T Z)).singularValue n : ℝ) := by
       rw [← hcoord]
-      exact (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
-        _ W.symm U).approximationNumber_eq n
+      exact (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+        (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
+        _ W.symm U) n))
     _ = _ := approximationSingularValue_complexify (theorem63ResidualReal T Z) n
 
 /-- The finite Ky Fan residual gauge is exactly preserved by the real-to-complex
@@ -193,7 +195,7 @@ theorem kyFanApproximationGauge_theorem63Residual_complexify
     kyFanApproximationGauge k
         (theorem63Residual (complexify T) (complexifySubmodule Z)) =
       kyFanApproximationGauge k (theorem63ResidualReal T Z) := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_congr rfl fun n _ =>
     approximationSingularValue_theorem63Residual_complexify T Z n
 
@@ -461,7 +463,7 @@ theorem tanTheta_directed_bounded_symmetricNorming_real
         Finset.sum (Finset.range k) (fun n =>
           Real.tan (Real.arcsin
             (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ)))) := by
-      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
       exact Finset.sum_congr rfl fun n _ => htan n
     rw [htanKy]
     exact hcore
@@ -661,11 +663,11 @@ theorem tanTheta_directed_bounded_perturbation_symmetricNorming_real
         Finset.sum (Finset.range k) (fun n =>
           Real.tan (Real.arcsin
             (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ)))) := by
-      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
       exact Finset.sum_congr rfl fun n _ => htan n
     have hres : kyFanApproximationGauge k (theorem63ResidualReal T Z) ≤
         kyFanApproximationGauge k (P ∘L Z.subtypeL) := by
-      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
       exact Finset.sum_le_sum fun n _ =>
         approximationSingularValue_theorem63ResidualReal_le_of_invariant T P Z hinv n
     rw [htanKy]

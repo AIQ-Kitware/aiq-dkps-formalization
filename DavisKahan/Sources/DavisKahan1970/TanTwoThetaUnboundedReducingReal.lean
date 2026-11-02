@@ -100,8 +100,9 @@ private theorem approximationNumber_realAmbientDoubleSine_complexify
           RealComplexification E →ₗ[ℂ] RealComplexification E)).starProjection -
       (complexifySubmodule U).starProjection).singularValue n : ℝ) =
       ((realAmbientDoubleSine U V).singularValue n : ℝ) := by
-  have hsame := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-    (sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference U V)
+  have hsame := (fun gaugeIndex => congrArg NNReal.toReal
+    ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+    (sameSingular_sinTwoAngleOperatorR_reflectedProjectorDifference U V) gaugeIndex))
   have hleft : ((sinTwoAngleOperatorC (complexifySubmodule U)
       (complexifySubmodule V)).singularValue n : ℝ) =
       ((complexify (sinTwoAngleOperatorR U V)).singularValue n : ℝ) := by

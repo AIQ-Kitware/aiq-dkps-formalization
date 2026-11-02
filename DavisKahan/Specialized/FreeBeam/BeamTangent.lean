@@ -219,7 +219,7 @@ theorem kyFanTwo_beamTrialBlock_residual_le (ε : ℝ) :
   have hsum : (((beamTrialBlock ε).residual).singularValue 0 : ℝ)
       + (((beamTrialBlock ε).residual).singularValue 1 : ℝ)
       ≤ orthogonalResidualSingularValue ε := by linarith
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_zero, zero_add]
   exact hsum
 end

@@ -16,7 +16,7 @@ min--max lower-bound property holds at every `RCLike` field.
 module
 
 public import ForTauCeti.Analysis.RCLike.ScalarTransport
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 
 public section
 

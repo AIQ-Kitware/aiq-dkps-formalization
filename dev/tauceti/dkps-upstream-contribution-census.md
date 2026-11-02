@@ -3609,3 +3609,26 @@ Fable 5), and ExtendedSequence (Jon Crall / Claude Opus 5). All retain Kitware
 copyright and Apache-2.0 licensing. Original declaration names remain in the
 manifest; the unbounded diagonal multiplication donor is unchanged except for
 its reference to the canonical bounded companion.
+
+
+## 2026-11-02: remove the CanonicalGauge real-coercion facade
+
+Delete `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/CanonicalGauge.lean`.
+Its remaining four forwarding laws are read directly from accepted APIs:
+`kyFanGauge_one` with `coe_nnnorm`, `kyFanGauge_def` with `NNReal.coe_sum`,
+pointwise `SameSingularValues` equality with `congrArg NNReal.toReal`, and
+`SameSingularValues.kyFanGauge_eq` under the same coercion. All maintained
+paper and donor consumers migrate directly; no replacement facade is introduced.
+The original arbitrary-field, seminormed-space and independent-universe scope
+is retained, including incomplete-target subspace transport.
+
+The elementary native gauges are independent #14501
+(`0095123bf736b0ed2b5df5986ee34f1b6640f0ea`); relation and gauge invariance are
+explicitly DKPS-adapted [#13866](https://github.com/TauCetiProject/TauCeti/pull/13866),
+integration `7bbe813acf610ee6db4caba078b9c4facf357b90`. Both are in accepted pin
+`463ab293070d4cb355d0a0e036469464070088bc`. Original CanonicalGauge source is
+recoverable at `e4637c3919ae` and pre-retirement `73633756b` under the path above;
+Jon Crall / GPT-6, Kitware copyright, Apache-2.0. The original data alias was
+retired in the earlier canonical-data checkpoint; this completes retirement of
+its forwarding module. Other genuine localization and subspace mathematics
+remains in its owning modules.

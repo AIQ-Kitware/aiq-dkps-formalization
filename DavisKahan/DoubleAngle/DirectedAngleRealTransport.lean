@@ -76,9 +76,9 @@ theorem approximationSingularValue_sinTwoThetaIdealBlock_real
   rw [← ExactSinTheta.ComplexificationApproximation.approximationSingularValue_complexify
       (sinTwoThetaIdealBlock U V) n,
     complexify_sinTwoThetaIdealBlock U V]
-  exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq
+  exact (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
     (sinTwoThetaIdealBlock_hasSameApproximationNumbers
-      (complexifySubmodule U) (complexifySubmodule V)) n
+      (complexifySubmodule U) (complexifySubmodule V)) n))
 
 /-- **The real `sin 2Θ` block and the real directed `sin 2Θ` have the same gauge
 in every source unitarily invariant norm**, and one lies in the norm's ideal

@@ -556,7 +556,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
       nlinarith [mul_nonneg hnum hκ2.le, hθsq1]
     linarith
   have hG0 : (0 : ℝ) ≤ kyFanApproximationGauge n (reflectionResidualCorner U B) := by
-    rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     exact Finset.sum_nonneg fun m _ =>
       ((reflectionResidualCorner U B).singularValue m).coe_nonneg
   have hxU : ∀ i, x i ∈ U := fun i => Ω.mem_subspace_of_eq (hxΩ i)
@@ -907,7 +907,7 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
       (f := fun p => Real.tan (Real.arcsin ((X.singularValue p : ℝ)))) hmk).symm
   -- assemble
   have hG0 : (0 : ℝ) ≤ kyFanApproximationGauge k (reflectionResidualCorner U B) := by
-    rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     exact Finset.sum_nonneg fun p _ =>
       ((reflectionResidualCorner U B).singularValue p).coe_nonneg
   have hGm : kyFanApproximationGauge m (reflectionResidualCorner U B) ≤ kyFanApproximationGauge k (reflectionResidualCorner U B) :=
@@ -1007,7 +1007,7 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_of_cutoff
   have hκ : 0 < κ := Real.sqrt_pos.mpr (by linarith)
   have hδ : 0 < b - a := by linarith
   have hG0 : (0 : ℝ) ≤ kyFanApproximationGauge k (reflectionResidualCorner U B) := by
-    rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     exact Finset.sum_nonneg fun p _ =>
       ((reflectionResidualCorner U B).singularValue p).coe_nonneg
   set W : ℝ := 3 * (k : ℝ) * kyFanApproximationGauge k (reflectionResidualCorner U B) / (2 * κ ^ 2) +
@@ -1133,7 +1133,7 @@ theorem kyFanApproximationGauge_reflectionResidualCorner_le
   have hdef : reflectionResidualCorner U K =
       Uᗮ.subtypeL.adjoint ∘L K ∘L U.subtypeL := rfl
   rw [hdef]
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   refine Finset.sum_le_sum fun p _ => ?_
   have hcomp := approximationSingularValue_comp_le p
     (Uᗮ.subtypeL.adjoint) K U.subtypeL

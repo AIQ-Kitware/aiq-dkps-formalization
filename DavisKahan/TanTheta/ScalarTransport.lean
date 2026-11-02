@@ -95,7 +95,7 @@ theorem approximationNumber_scalarTransportSubspaceCLM
     exact ContinuousLinearMap.sameSingularValues_symm
       (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
         (ScalarTransport.clm (e := e) T) W.symm I)
-  rw [← ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n]
+  rw [← (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hsame n))]
   exact ScalarTransport.approximationNumber_clm (e := e) T n
 
 /-- Every finite source gauge is unchanged for a transported subspace-domain map. -/
@@ -184,7 +184,7 @@ theorem approximationNumber_scalarTransportSubspaceBlockCLM
         (scalarTransportSubspaceBlockCLM (e := e) Z W T) := by
     exact ContinuousLinearMap.sameSingularValues_symm
       (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv _ V.symm U)
-  rw [← ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n]
+  rw [← (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hsame n))]
   exact ScalarTransport.approximationNumber_clm (e := e) T n
 
 /-- Transport a bounded operator from a closed subspace to its orthogonal complement.
@@ -236,7 +236,7 @@ theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLM
         (scalarTransportOrthogonalSubspaceBlockCLM (e := e) Z T) := by
     exact ContinuousLinearMap.sameSingularValues_symm
       (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv _ V.symm U)
-  rw [← ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame n]
+  rw [← (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hsame n))]
   exact ScalarTransport.approximationNumber_clm (e := e) T n
 
 omit [CompleteSpace H] in
@@ -268,8 +268,8 @@ theorem approximationNumber_scalarTransportOrthogonalSubspaceBlockCLMInv
       (ScalarTransport.approximationNumber_clm (e := e)
         (scalarTransportOrthogonalSubspaceBlockCLMInv (e := e) Z T) n).symm
     _ = (X.singularValue n : ℝ) := by rw [hclm]
-    _ = (T.singularValue n : ℝ) := (ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-      hcoord n).symm
+    _ = (T.singularValue n : ℝ) := ((congrArg NNReal.toReal
+      ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hcoord n))).symm
 
 /-- The extended symmetric-norming gauge is unchanged by orthogonal-corner
 transport.  This is proved directly from the cross-field approximation-number
@@ -445,8 +445,8 @@ theorem kyFanApproximationGauge_scalarTransport_residual
         kyFanApproximationGauge k (ScalarTransport.clm (e := e) D.residual) := by
       change (((D.scalarTransport (e := e)).residual).kyFanGauge k : ℝ) =
         ((ScalarTransport.clm (e := e) D.residual).kyFanGauge k : ℝ)
-      exact ContinuousLinearMap.SameSingularValues.kyFanGaugeReal_eq
-        (ContinuousLinearMap.sameSingularValues_symm hcoord) k
+      exact (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_symm
+        hcoord).kyFanGauge_eq k))
     _ = kyFanApproximationGauge k D.residual :=
       ScalarTransport.kyFanApproximationGauge_clm k D.residual
 

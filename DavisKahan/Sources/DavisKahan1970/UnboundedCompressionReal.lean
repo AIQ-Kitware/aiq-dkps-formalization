@@ -215,8 +215,9 @@ theorem approximationSingularValue_complexifyUnboundedCompressionTrialData_resid
     ((complexifyUnboundedCompressionTrialData D).residual.singularValue n : ℝ) =
         ((complexify D.residual).singularValue n : ℝ) := by
       rw [← hcoord]
-      exact (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
-        _ W.symm U).approximationNumber_eq n
+      exact (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+        (ContinuousLinearMap.sameSingularValues_comp_linearIsometryEquiv
+        _ W.symm U) n))
     _ = _ := approximationSingularValue_complexify D.residual n
 
 /-- The finite Ky Fan gauge of the residual is exactly preserved. -/
@@ -224,7 +225,7 @@ theorem kyFanApproximationGauge_complexifyUnboundedCompressionTrialData_residual
     (D : UnboundedCompressionTrialData Z) (k : ℕ) :
     kyFanApproximationGauge k (complexifyUnboundedCompressionTrialData D).residual =
       kyFanApproximationGauge k D.residual := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_congr rfl fun n _ =>
     approximationSingularValue_complexifyUnboundedCompressionTrialData_residual D n
 
@@ -362,7 +363,7 @@ theorem theorem6_3_unboundedCompression_ideal_exists_real
     have htanKy : kyFanApproximationGauge k tanTheta0 =
         ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
           (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ))) := by
-      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
       exact Finset.sum_congr rfl fun n _ => htan n
     rw [htanKy]
     exact hcore
@@ -390,7 +391,7 @@ theorem theorem6_3_unboundedCompression_ideal_real
   have htanKy : kyFanApproximationGauge k tanTheta0 =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ))) := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     exact Finset.sum_congr rfl fun n _ => htan n
   rw [htanKy]
   exact hcore

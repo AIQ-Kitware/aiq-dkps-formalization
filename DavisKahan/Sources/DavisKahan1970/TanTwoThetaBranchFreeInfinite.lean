@@ -136,7 +136,7 @@ theorem approximationNumber_blockGraphCoordinate
   have h := ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock U Uᗮ
     (blockGraphCoordinate T U)
   rw [← eq_subtypeL_comp_blockGraphCoordinate hTmem hTzero] at h
-  exact (ContinuousLinearMap.SameSingularValues.approximationNumber_eq h n).symm
+  exact ((congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp h n))).symm
 
 /-- The adjoint of the ambient graph coordinate agrees with the adjoint of the
 block coordinate on `Uᗮ`. -/
@@ -296,7 +296,7 @@ theorem sum_absDoubleAngleTangent_le_add_error
   rw [hreindex] at hpart₁
   have hkyfanmono : kyFanApproximationGauge m H ≤
       kyFanApproximationGauge S.card H := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_le_sum_of_subset_of_nonneg ?_ ?_
     · have hcard : m ≤ S.card := by
         rw [hmdef, hS₁def]
@@ -469,7 +469,7 @@ theorem kyFan_absTanTwoTheta_le_of_invariantSubspace
   have hgauge : kyFanApproximationGauge k tanTwoTheta =
       ∑ n ∈ S, absDoubleAngleTangent ((T.singularValue n : ℝ)) := by
     rw [hSdef, Finset.sum_image (fun x _ y _ h => π.symm.injective h)]
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [← htan (π.symm j), Equiv.apply_symm_apply]
   have h := sum_absDoubleAngleTangent_le_of_invariantSubspace hA hH hAU hHU

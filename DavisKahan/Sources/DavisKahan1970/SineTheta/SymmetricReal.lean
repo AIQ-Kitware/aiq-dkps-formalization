@@ -148,9 +148,9 @@ theorem approximationNumber_sourceFullSinR_eq_crossSineSum
       RealComplexification.complexify_sub]
   rw [hcx] at hcomplex
   intro n
-  rw [ContinuousLinearMap.SameSingularValues.approximationNumber_eq hcomplex n,
+  rw [(congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hcomplex n)),
       ComplexificationApproximation.approximationNumber_complexify,
-    (ContinuousLinearMap.SameSingularValues.approximationNumber_eq hreal n).symm]
+    ((congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hreal n))).symm]
 
 /-- Exact bounded inputs of Proposition 6.1 over a real Hilbert space.  This is
 `SymmetricSinThetaProblem` with `ℂ` replaced by `ℝ`: the same printed data
@@ -332,13 +332,13 @@ theorem forward_all_kyFan
       kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
     erw [hsineAdj, kyFanApproximationGauge_adjoint,
       (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hsine.kyFanGaugeReal_eq k)]
+      (congrArg NNReal.toReal (hsine.kyFanGauge_eq k)))]
   have hgaugeRes : kyFanApproximationGauge k P.forwardResidualBlock =
       kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) := by
     erw [← kyFanApproximationGauge_adjoint k P.forwardResidualBlock,
       ← kyFanApproximationGauge_neg k P.forwardResidualBlock.adjoint,
       (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hres.kyFanGaugeReal_eq k)]
+      (congrArg NNReal.toReal (hres.kyFanGauge_eq k)))]
   rw [hgaugeSine, hgaugeRes]
   exact hraw
 
@@ -402,11 +402,11 @@ theorem reverse_all_kyFan
       kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
     erw [hsineAdj, kyFanApproximationGauge_adjoint,
       (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hsine.kyFanGaugeReal_eq k)]
+      (congrArg NNReal.toReal (hsine.kyFanGauge_eq k)))]
   have hgaugeRes : kyFanApproximationGauge k P.reverseResidualBlock =
       kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) :=
     (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hres.kyFanGaugeReal_eq k)
+      (congrArg NNReal.toReal (hres.kyFanGauge_eq k)))
   rw [hgaugeSine, hgaugeRes]
   exact hraw
 

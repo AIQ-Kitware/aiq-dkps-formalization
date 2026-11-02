@@ -453,9 +453,9 @@ theorem sourceRestrictedDisplacementR_sameApproximationSingularSequence (T : E �
   intro n
   apply NNReal.eq
   rw [← sourceRestrictedDisplacementR_extendDomainByZero U T]
-  exact ContinuousLinearMap.SameSingularValues.approximationNumber_eq
+  exact (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
     (ContinuousLinearMap.sameSingularValues_extendDomainByZero U
-      (sourceRestrictedDisplacementR U T)) n
+      (sourceRestrictedDisplacementR U T)) n))
 
 /-- **Proposition 4.1 over `ℝ` at the exact matched-defect, nonacute scope.** -/
 theorem Proposition4_1_nonacute_real
@@ -466,11 +466,11 @@ theorem Proposition4_1_nonacute_real
           U.starProjection).singularValue n : ℝ) ≤
       (((1 - W) ∘L U.starProjection).singularValue n : ℝ) := by
   have hsource := proposition4_1_nonacute_real U V J W hWunitary hWmap n
-  have hD := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
+  have hD := (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
     (sourceRestrictedDisplacementR_sameApproximationSingularSequence U
-      (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n
-  have hW := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-    (sourceRestrictedDisplacementR_sameApproximationSingularSequence U W) n
+      (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n))
+  have hW := (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+    (sourceRestrictedDisplacementR_sameApproximationSingularSequence U W) n))
   change (((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
         U.starProjection).singularValue n : ℝ) ≤
     (((1 - W) ∘L U.starProjection).singularValue n : ℝ)
@@ -867,7 +867,7 @@ private theorem kyFanApproximationGauge_gramOperator_mono_real {X Y Z : Type*}
     (h : ∀ n, (A.singularValue n : ℝ) ≤ (B.singularValue n : ℝ)) (k : ℕ) :
     kyFanApproximationGauge k (gramOperatorR A) ≤
       kyFanApproximationGauge k (gramOperatorR B) := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
+  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   refine Finset.sum_le_sum fun n _ => ?_
   rw [approximationNumber_gramOperator_real, approximationNumber_gramOperator_real]
   nlinarith [h n, (A.singularValue n).coe_nonneg]
@@ -1251,9 +1251,9 @@ theorem proposition4_1_compact_nonacute_directRotationValues_real
     hAnorm (sourceRestrictedDisplacementR_nonacute_norm_sq U V J)
     (sourceRestrictedDisplacementR_competitor_norm_sq_lower U V W hWunitary hWmap)
     (principalSineOperator_norm_sq_eq_one_sub_sourceCosineR_norm_sq U V) n
-  have hDseq := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
+  have hDseq := (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
     (sourceRestrictedDisplacementR_sameApproximationSingularSequence U
-      (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n
+      (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) n))
   let a : Real := ((A.singularValue n : ℝ) : Real)
   let theta : Real := TauCeti.principalAngleSequence U V n
   let shalf : Real := Real.sin (theta / 2)
@@ -1455,7 +1455,7 @@ theorem Proposition4_3_nonacute_real_fullDisplacement_opNorm
   have hk := proposition4_3_nonacute_real U V J W hWunitary hWmap 1
   rw [displacementSquare_eq_gramOperatorR, displacementSquare_eq_gramOperatorR] at hk
   simp only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
-    ContinuousLinearMap.kyFanGaugeReal_one, gramOperatorR,
+    ContinuousLinearMap.kyFanGauge_one, coe_nnnorm, gramOperatorR,
     ContinuousLinearMap.norm_adjoint_comp_self] at hk
   nlinarith [norm_nonneg (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J),
     norm_nonneg (1 - W)]

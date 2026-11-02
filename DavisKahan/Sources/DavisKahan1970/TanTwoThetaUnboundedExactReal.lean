@@ -69,11 +69,13 @@ private theorem approximationSingularValue_directedCorner_complexify
     ((blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
           (complexify K)).singularValue n : ℝ) =
       ((blockCompression Uᗮ U K).singularValue n : ℝ) := by
-  have hc := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-    (projectionBlock_same_compression (complexifySubmodule U)ᗮ
-      (complexifySubmodule U) (complexify K))
-  have hr := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
-    (projectionBlock_same_compression Uᗮ U K)
+  have hc (i : ℕ) := congrArg NNReal.toReal
+    ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+      (projectionBlock_same_compression (complexifySubmodule U)ᗮ
+        (complexifySubmodule U) (complexify K)) i)
+  have hr (i : ℕ) := congrArg NNReal.toReal
+    ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
+      (projectionBlock_same_compression Uᗮ U K) i)
   calc
     ((blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
           (complexify K)).singularValue n : ℝ) =
@@ -804,9 +806,10 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNo
       (complexifySubmodule V).reflectionOperator :=
     DavisKahan.complexify_reflectionOperator V
   -- the directed sine corner and the ideal block, over `ℂ`
-  have hsameC := ContinuousLinearMap.SameSingularValues.approximationNumber_eq
+  have hsameC := (fun gaugeIndex => congrArg NNReal.toReal
+    ((ContinuousLinearMap.sameSingularValues_iff _ _).mp
     (hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock
-      (complexifySubmodule U) (complexifySubmodule V))
+      (complexifySubmodule U) (complexifySubmodule V)) gaugeIndex))
   -- the ideal block's approximation numbers are the real ones
   have hblock : ∀ n : ℕ,
       ((DavisKahan.sinTwoThetaIdealBlock (complexifySubmodule U)

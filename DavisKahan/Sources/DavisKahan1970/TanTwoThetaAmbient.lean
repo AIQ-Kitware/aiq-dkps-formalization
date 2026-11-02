@@ -1217,7 +1217,7 @@ private theorem kyFan_upperBlock_eq_compression (K : E →L[ℂ] E) (k : ℕ) :
     simp only [projectionBlock, Submodule.orthogonal_orthogonal]
   rw [heq]
   exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (projectionBlock_same_compression U Uᗮ K).kyFanGaugeReal_eq k)
+      (congrArg NNReal.toReal ((projectionBlock_same_compression U Uᗮ K).kyFanGauge_eq k)))
 
 private theorem kyFan_lowerBlock_eq_upperBlock (K : E →L[ℂ] E)
     (hK : IsSelfAdjoint K) (k : ℕ) :
@@ -1354,8 +1354,8 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
       kyFanApproximationGauge k (doubleAngleTangentOperator X hXc) := by
     rw [tanTwoBlockRepresentative_lowerBlock hq, hambient]
     exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock U Uᗮ
-      (doubleAngleTangentOperator X hXc)).kyFanGaugeReal_eq k)
+      (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock U Uᗮ
+      (doubleAngleTangentOperator X hXc)).kyFanGauge_eq k)))
   -- the right-hand side: the shifted block's cross entry is the upper block of `H`
   have hDB01 : Dd.B01 = -B.B01 := rfl
   have hright : kyFanApproximationGauge k Dd.B01 =
@@ -1445,8 +1445,8 @@ theorem tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner
       kyFanApproximationGauge k (tanTwoBlockRepresentative U V) := by
     rw [absTanTwoAngleOperatorC_eq_modulus_blockRepresentative hcos]
     exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (ContinuousLinearMap.sameSingularValues_modulus
-      (tanTwoBlockRepresentative U V)).kyFanGaugeReal_eq k)
+      (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_modulus
+      (tanTwoBlockRepresentative U V)).kyFanGauge_eq k)))
   rw [hmodulus]
   linarith [hcombine.trans hpinch]
 

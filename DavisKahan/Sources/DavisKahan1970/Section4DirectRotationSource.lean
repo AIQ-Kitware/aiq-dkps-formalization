@@ -137,7 +137,8 @@ theorem proposition4_1_directRotation_sourceExact_complex
   obtain ⟨hv, heq, hle⟩ :=
     proposition4_1_compact_nonacute_complex U V hcompact J W hWunitary hWmap
   have hsame := hasSameApproximationNumbers_displacement_of_isSourceDirectRotation U V hD J
-  have hsame' := ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame
+  have hsame' := (fun gaugeIndex => congrArg NNReal.toReal
+    ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hsame gaugeIndex))
   exact ⟨hv, fun n => (hsame' n).trans (heq n), fun n => (hsame' n).trans_le (hle n)⟩
 
 /-- **Davis--Kahan 1970, Corollary 4.1, on the source's own direct rotation.**
@@ -165,7 +166,7 @@ theorem corollary4_1_directRotation_sourceExact_complex
     (TauCeti.DavisKahan.ExactSinTheta.mem_and_gauge_le_of_all_kyFanApproximationGauge_le
       N.toSymmetricOperatorIdealFamily) hmem₀
       (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hsame.kyFanGaugeReal_eq k)))
+      (congrArg NNReal.toReal (hsame.kyFanGauge_eq k)))))
   exact ⟨hmem, hle.trans hle₀⟩
 
 /-- **Davis--Kahan 1970, Proposition 4.3, on the source's own direct rotation.** -/
@@ -218,7 +219,8 @@ theorem proposition4_1_directRotation_sourceExact_real
   obtain ⟨hv, heq, hle⟩ :=
     proposition4_1_compact_nonacute_real U V hcompact J W hWunitary hWmap
   have hsame := hasSameApproximationNumbers_displacement_of_isSourceDirectRotation U V hD J
-  have hsame' := ContinuousLinearMap.SameSingularValues.approximationNumber_eq hsame
+  have hsame' := (fun gaugeIndex => congrArg NNReal.toReal
+    ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hsame gaugeIndex))
   exact ⟨hv, fun n => (hsame' n).trans (heq n), fun n => (hsame' n).trans_le (hle n)⟩
 
 /-- **Davis--Kahan 1970, Corollary 4.1 over `ℝ`, on the source's own direct
@@ -244,7 +246,7 @@ theorem corollary4_1_directRotation_sourceExact_real
     (TauCeti.DavisKahan.ExactSinTheta.mem_and_gauge_le_of_all_kyFanApproximationGauge_le
       N.toSymmetricOperatorIdealFamily) hmem₀
       (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      hsame.kyFanGaugeReal_eq k)))
+      (congrArg NNReal.toReal (hsame.kyFanGauge_eq k)))))
   exact ⟨hmem, hle.trans hle₀⟩
 
 /-- **Davis--Kahan 1970, Proposition 4.3 over `ℝ`, on the source's own direct

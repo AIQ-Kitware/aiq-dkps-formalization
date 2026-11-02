@@ -160,7 +160,7 @@ theorem norm_sineBlockC_eq_directedProjectionGap
     ‖sineBlockC U V‖ = U.directedProjectionGap V := by
   have hseq := ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
     U Vᗮ (sineBlockC U V)
-  have h0 := ContinuousLinearMap.SameSingularValues.approximationNumber_eq hseq 0
+  have h0 := (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hseq 0))
   rw [ContinuousLinearMap.singularValue_zero, coe_nnnorm,
     ContinuousLinearMap.singularValue_zero, coe_nnnorm] at h0
   have hamb :

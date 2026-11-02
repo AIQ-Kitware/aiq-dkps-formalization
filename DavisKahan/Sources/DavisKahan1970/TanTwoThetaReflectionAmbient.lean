@@ -996,12 +996,12 @@ theorem tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_kyFa
   have h := reflection_block_data hA hH hAU hAplusH_V hab hUhigh hUperpLow
     hHU hHUperp hcos k
   erw [← (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (projectionBlock_same_compression Uᗮ U
-      (tanTwoBlockRepresentative U V)).kyFanGaugeReal_eq k),
+      (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U
+      (tanTwoBlockRepresentative U V)).kyFanGauge_eq k))),
     tanTwoBlockRepresentative] at h
   erw [projectionBlock_diagonalPair_lower_reflection U,
     ← (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
-      (projectionBlock_same_compression Uᗮ U H).kyFanGaugeReal_eq k)] at h
+      (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U H).kyFanGauge_eq k)))] at h
   exact h
 
 /-- **Branch-free Section 7 directed-corner estimate for every source
