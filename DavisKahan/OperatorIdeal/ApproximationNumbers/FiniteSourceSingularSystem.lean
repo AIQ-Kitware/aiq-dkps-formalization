@@ -102,7 +102,8 @@ theorem approximationSingularValue_eq_finiteSourceSingularValue
     (A.singularValue i : ℝ) = (AW.singularValue i : ℝ) :=
       (approximationSingularValue_orthogonalProjectionOnto_comp_eq W A hA i).symm
     _ = AW.toLinearMap.singularValues i :=
-      approximationSingularValue_eq_singularValues AW.toLinearMap i
+      (ContinuousLinearMap.singularValue_eq_linearMap_singularValues
+        (LinearMap.toContinuousLinearMap AW.toLinearMap) i)
     _ = finiteSourceSingularValue A i := by
       rw [hAW]
       rfl

@@ -277,7 +277,8 @@ theorem kyFanNormingFunction_prefixGauge
       rw [prefixSum_of_le hnk _]
       exact SymmetricNormingFunction.sum_approximationPrefix n A
   · intro i j hij
-    exact approximationSingularValue_antitone A (Fin.le_def.mp hij)
+    exact (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue A))
+      (Fin.le_def.mp hij)
   · intro i
     exact (ContinuousLinearMap.singularValue _ _).coe_nonneg
 

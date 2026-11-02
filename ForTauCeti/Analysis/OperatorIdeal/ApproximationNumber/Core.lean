@@ -18,7 +18,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 
 Approximation-number formulas use native `ContinuousLinearMap.singularValue`
 with explicit real coercions; the former `approximationSingularValue` data alias
-is retired. This lower module retains scalar-generic law statements, the
+is retired. Shared scalar laws are consumed directly from Tau Ceti. This module retains the
 finite-dimensional Ky Fan bridge, and the complex
 strong-cutoff and infinite-dimensional Ky Fan arguments. It intentionally does
 not import the real localization module, so the real proof can depend on this
@@ -66,96 +66,6 @@ def StronglyTendsto {ι : Type w} (T : ι → E →L[𝕜] E)
 @[expose]
 def IsOrthogonalProjectionMap (P : E →L[𝕜] E) : Prop :=
   P ∘L P = P ∧ P.IsSymmetric
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Approximation singular values of the zero map vanish. -/
-@[simp]
-theorem approximationSingularValue_zero_map (n : ℕ) :
-    ((0 : E →L[𝕜] F).singularValue n : ℝ) = 0 := by
-  simp
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- The zero-based first approximation singular value is the operator norm. -/
-@[simp]
-theorem approximationSingularValue_zero
-    (K : E →L[𝕜] F) :
-    (K.singularValue 0 : ℝ) = ‖K‖ := by
-  exact ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero K)).trans (coe_nnnorm K))
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Approximation singular values are absolutely homogeneous. -/
-theorem approximationSingularValue_smul
-    (n : ℕ) (c : 𝕜) (K : E →L[𝕜] F) :
-    ((c • K).singularValue n : ℝ) =
-      ‖c‖ * (K.singularValue n : ℝ) := by
-  exact ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_smul c K n)))
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Approximation singular values are unchanged by negation. -/
-@[simp]
-theorem approximationSingularValue_neg
-    (n : ℕ) (K : E →L[𝕜] F) :
-    ((-K).singularValue n : ℝ) = (K.singularValue n : ℝ) := by
-  simp
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Approximation singular values decrease with the index. -/
-theorem approximationSingularValue_antitone
-    (K : E →L[𝕜] F) :
-    Antitone (fun n => (K.singularValue n : ℝ)) := by
-  intro n m hnm
-  exact_mod_cast (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue K)) hnm
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Every approximation singular value is controlled by operator norm. -/
-theorem approximationSingularValue_le_opNorm
-    (n : ℕ) (K : E →L[𝕜] F) :
-    (K.singularValue n : ℝ) ≤ ‖K‖ := by
-  exact_mod_cast (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm K n))
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Perturbation inequality at a fixed approximation index. -/
-theorem approximationSingularValue_add_le
-    (n : ℕ) (K L : E →L[𝕜] F) :
-    ((K + L).singularValue n : ℝ) ≤
-      (K.singularValue n : ℝ) + ‖L‖ := by
-  exact_mod_cast (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_add_le K L n))
-
-/-- Adjoint invariance of approximation singular values on Hilbert spaces. -/
-theorem approximationSingularValue_adjoint
-    (n : ℕ) (K : E →L[𝕜] F) :
-    (K.adjoint.singularValue n : ℝ) =
-      (K.singularValue n : ℝ) := by
-  simp only [
-    ContinuousLinearMap.singularValue_adjoint]
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Ideal inequality for approximation singular values. -/
-theorem approximationSingularValue_comp_le
-    {G : Type vG} {H : Type vH}
-    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (n : ℕ) (L : F →L[𝕜] G) (K : E →L[𝕜] F)
-    (R : H →L[𝕜] E) :
-    ((L ∘L K ∘L R).singularValue n : ℝ)
-      ≤ ‖L‖ * (K.singularValue n : ℝ) * ‖R‖ := by
-  have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le L K R n))
-  exact_mod_cast h
-
-/-- On finite-dimensional Hilbert spaces, approximation singular values are
-exactly the ordinary singular values. -/
-theorem approximationSingularValue_eq_singularValues
-    {E₀ : Type vE0} {F₀ : Type vF0}
-    [NormedAddCommGroup E₀] [InnerProductSpace 𝕜 E₀]
-    [FiniteDimensional 𝕜 E₀]
-    [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
-    [FiniteDimensional 𝕜 F₀]
-    (A : E₀ →ₗ[𝕜] F₀) (n : ℕ) :
-    (A.toContinuousLinearMap.singularValue n : ℝ) =
-      A.singularValues n := by
-  rw [
-    ContinuousLinearMap.singularValue_eq_linearMap_singularValues,
-    LinearMap.coe_toContinuousLinearMap]
 
 omit [CompleteSpace E] in
 /-- An orthogonal projection does not increase vector norms. -/

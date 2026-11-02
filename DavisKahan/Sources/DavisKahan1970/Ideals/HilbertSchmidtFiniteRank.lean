@@ -115,7 +115,7 @@ theorem approximationNumberEnergy_le_rank_mul_opNorm_sq
       exact ENNReal.ofReal_le_ofReal
         (pow_le_pow_left₀
           ((A.singularValue n).coe_nonneg)
-          (approximationSingularValue_le_opNorm n A) 2)
+          ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm A n))) 2)
     _ = (r : ENNReal) * ENNReal.ofReal (‖A‖ ^ 2) := by
       simp [Finset.card_range, nsmul_eq_mul]
 

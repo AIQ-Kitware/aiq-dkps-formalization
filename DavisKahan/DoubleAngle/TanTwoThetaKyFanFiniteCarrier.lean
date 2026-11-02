@@ -127,7 +127,7 @@ private theorem approximationSingularValue_comp_contractions_le
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) :
     ((L ∘L K ∘L R).singularValue n : ℝ) ≤
       (K.singularValue n : ℝ) := by
-  refine (approximationSingularValue_comp_le n L K R).trans ?_
+  refine ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le L K R n))).trans ?_
   have h0 := (K.singularValue n).coe_nonneg
   calc ‖L‖ * (K.singularValue n : ℝ) * ‖R‖
       ≤ 1 * (K.singularValue n : ℝ) * 1 := by
@@ -358,7 +358,8 @@ theorem sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace
   have hTsv : ∀ n, T'.toLinearMap.singularValues n =
       (T.singularValue n : ℝ) := by
     intro n
-    have h := approximationSingularValue_eq_singularValues T'.toLinearMap n
+    have h := (ContinuousLinearMap.singularValue_eq_linearMap_singularValues
+      (LinearMap.toContinuousLinearMap T'.toLinearMap) n)
     rw [hT'id] at h
     rw [← h, hTa n]
   -- the participating indices inside the finite carrier
@@ -461,7 +462,8 @@ theorem kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSu
       2 * kyFanApproximationGauge k H := by
   classical
   have hlt : ∀ n, (T.singularValue n : ℝ) < 1 := fun n =>
-    lt_of_le_of_lt (approximationSingularValue_antitone T (Nat.zero_le n)) hT1
+    lt_of_le_of_lt ((NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue T))
+      (Nat.zero_le n)) hT1
   have hnn : ∀ n, 0 ≤ (T.singularValue n : ℝ) := fun n =>
     (T.singularValue n).coe_nonneg
   have hsame : ∀ n, doubleAngleTangent ((T.singularValue n : ℝ)) =

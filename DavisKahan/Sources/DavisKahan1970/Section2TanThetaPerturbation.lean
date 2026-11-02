@@ -97,18 +97,21 @@ theorem theorem63Residual_eq_neg_of_invariant
     eq_neg_of_add_eq_zero_left hsplit
   simpa using this
 
+omit [CompleteSpace H] in
 /-- Termwise domination of the residual's approximation numbers by those of the
 restricted perturbation. -/
-theorem approximationSingularValue_theorem63Residual_le_of_invariant
+theorem approximationSingularValue_theorem63Residual_le_of_invariant [CompleteSpace H]
     (T E : H →L[ℂ] H) (Z : Submodule ℂ H) [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
     (hinv : ∀ x ∈ Z, (T + E) x ∈ Z) (n : ℕ) :
     ((theorem63Residual T Z).singularValue n : ℝ) ≤
       ((E ∘L Z.subtypeL).singularValue n : ℝ) := by
   rw [theorem63Residual_eq_neg_of_invariant T E Z hinv,
-    approximationSingularValue_neg]
-  have hcomp := approximationSingularValue_comp_le (𝕜 := ℂ) n
-    (Zᗮ.starProjection) (E ∘L Z.subtypeL) (1 : Z →L[ℂ] Z)
+    ← neg_one_smul ℂ (Zᗮ.starProjection ∘L (E ∘L Z.subtypeL)),
+    ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm]
+  simp only [norm_neg, norm_one, one_mul]
+  have hcomp := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le (𝕜 := ℂ)
+    (Zᗮ.starProjection) (E ∘L Z.subtypeL) (1 : Z →L[ℂ] Z) n))
   have hid : (Zᗮ.starProjection ∘L ((E ∘L Z.subtypeL) ∘L
       (1 : Z →L[ℂ] Z))) = Zᗮ.starProjection ∘L (E ∘L Z.subtypeL) := by
     ext x

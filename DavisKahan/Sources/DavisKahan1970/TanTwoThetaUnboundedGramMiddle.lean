@@ -1135,8 +1135,8 @@ theorem kyFanApproximationGauge_reflectionResidualCorner_le
   rw [hdef]
   simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   refine Finset.sum_le_sum fun p _ => ?_
-  have hcomp := approximationSingularValue_comp_le p
-    (Uᗮ.subtypeL.adjoint) K U.subtypeL
+  have hcomp := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le
+    (Uᗮ.subtypeL.adjoint) K U.subtypeL p))
   have h1 : ‖(Uᗮ.subtypeL : Uᗮ →L[𝕜] G).adjoint‖ ≤ 1 := by
     rw [ContinuousLinearMap.adjoint.norm_map]
     exact Uᗮ.norm_subtypeL_le

@@ -3632,3 +3632,32 @@ Jon Crall / GPT-6, Kitware copyright, Apache-2.0. The original data alias was
 retired in the earlier canonical-data checkpoint; this completes retirement of
 its forwarding module. Other genuine localization and subspace mathematics
 remains in its owning modules.
+
+
+## 2026-11-02: remove Core's shared singular-value calculus
+
+Retire all ten `approximationSingularValue_{zero_map,zero,smul,neg,antitone,
+le_opNorm,add_le,adjoint,comp_le,eq_singularValues}` wrappers from
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Core.lean`, including
+their downstream exports. Consumers apply native zero, norm, scalar,
+antitonicity, perturbation, adjoint, ideal and finite-identification laws,
+with explicit real coercion congruences/order bridges. Negation uses native
+homogeneity at `-1`. No source-facing formula or completeness/universe scope
+is narrowed.
+
+Native elementary calculus is independent #14501
+(`0095123bf736b0ed2b5df5986ee34f1b6640f0ea`); finite identification is independent
+[#14820](https://github.com/TauCetiProject/TauCeti/pull/14820)
+(`561df1ec2196f312ef0c607bdfe3e202535374c1`). Adjoint invariance is accepted in
+[#14759](https://github.com/TauCetiProject/TauCeti/pull/14759), integration
+`2fb91e15df5a29a0a51617e038afcfd6736a0d8f`; neither its source nor integration
+discloses adaptation or independence, so no proof-descent claim is inferred.
+All are present in pin `463ab293070d4cb355d0a0e036469464070088bc`.
+
+Historical Core source is recoverable at `e4637c3919ae` and pre-retirement
+`bcd58fb6e` under the path above, with earlier
+`DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean` ancestry: Jon Crall /
+OpenAI GPT-5.6 Thinking, Kitware copyright, Apache-2.0. Genuine SOT cutoff and
+localization results, the incomplete-space projection predicate and approximate
+orthonormal variational theorem remain. The scalar Ky Fan wrappers and separate
+gauge alias are still pending consumption, not classified as unmatched.

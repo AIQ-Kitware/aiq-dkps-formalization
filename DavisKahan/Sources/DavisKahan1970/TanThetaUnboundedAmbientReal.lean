@@ -123,7 +123,7 @@ theorem norm_sinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent
     ‖sinAngleOperatorR U V‖ < 1 := by
   have hdirected := approximationSingularValue_sineBlockReal_lt_one_infiniteData
     data hdelta hCompression hcross 0
-  rw [approximationSingularValue_zero] at hdirected
+  rw [ContinuousLinearMap.singularValue_zero, coe_nnnorm] at hdirected
   have hfactor : Vᗮ.starProjection ∘L U.starProjection =
       theorem63DirectedSineBlockReal U V ∘L U.orthogonalProjectionOnto := rfl
   have hnorm : ‖Vᗮ.starProjection ∘L U.starProjection‖ < 1 := by
@@ -280,7 +280,7 @@ theorem norm_sinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefectsEqui
     ‖sinAngleOperatorR U V‖ < 1 := by
   have hdirected := approximationSingularValue_sineBlockReal_lt_one_unboundedCompression
     D V hdelta hupper hcross 0
-  rw [approximationSingularValue_zero] at hdirected
+  rw [ContinuousLinearMap.singularValue_zero, coe_nnnorm] at hdirected
   have hfactor : Vᗮ.starProjection ∘L U.starProjection =
       theorem63DirectedSineBlockReal U V ∘L U.orthogonalProjectionOnto := rfl
   have hnorm : ‖Vᗮ.starProjection ∘L U.starProjection‖ < 1 := by

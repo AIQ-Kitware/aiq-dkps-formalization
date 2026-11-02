@@ -287,7 +287,7 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteData
   classical
   by_contra hcon
   have ha_le : ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) ≤ 1 := by
-    refine (approximationSingularValue_le_opNorm _ _).trans ?_
+    refine ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm _ _))).trans ?_
     refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun z => ?_
     rw [one_mul]
     exact theorem63DirectedSineBlock_apply_norm_le Z V z

@@ -92,7 +92,7 @@ theorem restrictedDisplacement_opNorm_le
     {A B : E →L[𝕜] F}
     (D : RestrictedDisplacementApproximationDominance A B) :
     ‖A‖ ≤ ‖B‖ := by
-  simpa only [approximationSingularValue_zero] using D.approximation_le 0
+  simpa only [ContinuousLinearMap.singularValue_zero, coe_nnnorm] using D.approximation_le 0
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Every fixed positive Ky Fan gauge is a direct specialization. -/

@@ -243,7 +243,8 @@ theorem prefixGauge_le_of_all_kyFan_le
     N.finiteGauge n (approximationPrefix n B)
   apply (N.isSymmetricGauge_finiteGauge n).apply_le_of_prefixSum_le
   · intro i j hij
-    exact approximationSingularValue_antitone A (Fin.le_def.mp hij)
+    exact (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue A))
+      (Fin.le_def.mp hij)
   · intro i
     exact (ContinuousLinearMap.singularValue _ _).coe_nonneg
   · intro m
@@ -285,7 +286,8 @@ theorem mul_prefixGauge_le_of_all_mul_kyFan_le
     apply (N.isSymmetricGauge_finiteGauge n).apply_le_of_prefixSum_le
     · intro i j hij
       exact mul_le_mul_of_nonneg_left
-        (approximationSingularValue_antitone A (Fin.le_def.mp hij)) hc
+        ((NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue A))
+          (Fin.le_def.mp hij)) hc
     · intro i
       exact mul_nonneg hc ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
     · intro m
@@ -401,7 +403,7 @@ theorem approximationPrefix_adjoint
     (n : ℕ) (A : E →L[𝕜] F) :
     approximationPrefix n A.adjoint = approximationPrefix n A := by
   funext i
-  exact approximationSingularValue_adjoint (i : ℕ) A
+  exact (congrArg NNReal.toReal (ContinuousLinearMap.singularValue_adjoint A (i : ℕ)))
 
 /-- Prefix source gauges are invariant under adjoint. -/
 theorem prefixGauge_adjoint

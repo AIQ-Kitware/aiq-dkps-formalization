@@ -308,7 +308,8 @@ theorem exists_hasTheorem63DirectedTangentApproximationNumbersInfiniteReal
     intro m n hmn
     exact TanArcsin.tanArcsin_le_tanArcsin
       ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
-      (approximationSingularValue_antitone (theorem63DirectedSineBlockReal Z V) hmn)
+      ((NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue
+        (theorem63DirectedSineBlockReal Z V))) hmn)
       (hlt m)
   obtain ⟨D0, hD0⟩ :=
     TauCeti.ApproximationNumber.exists_approximationNumber_eq_of_antitone
@@ -373,7 +374,8 @@ theorem hasTheorem63DirectedTangentApproximationNumbersInfiniteReal_theorem63Dir
     intro i j hij
     exact TanArcsin.tanArcsin_le_tanArcsin
       ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
-      (approximationSingularValue_antitone (theorem63DirectedSineBlockReal Z V)
+      ((NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue
+        (theorem63DirectedSineBlockReal Z V)))
         (by exact_mod_cast hij))
       (hlt (i : Nat))
   intro k
@@ -388,7 +390,8 @@ theorem hasTheorem63DirectedTangentApproximationNumbersInfiniteReal_theorem63Dir
       _ = ((Matrix.toLin ((stdOrthonormalBasis ℝ Z)).toBasis ((stdOrthonormalBasis ℝ Z)).toBasis
           (Matrix.diagonal fun i => (((theorem63DirectedTangentDiagonalReal Z V)) i :
           _)))).singularValues k :=
-          approximationSingularValue_eq_singularValues _ k
+          (by rw [ContinuousLinearMap.singularValue_eq_linearMap_singularValues,
+          LinearMap.coe_toContinuousLinearMap])
       _ = theorem63DirectedTangentDiagonalReal Z V ⟨k, hk⟩ := by
           have ha : Antitone fun j => ‖theorem63DirectedTangentDiagonalReal Z V j‖ :=
             fun j l hjl => by
@@ -585,18 +588,21 @@ theorem theorem63ResidualReal_eq_neg_of_invariant
     eq_neg_of_add_eq_zero_left hsplit
   simpa using hneg
 
+omit [CompleteSpace E] in
 /-- Termwise domination of the real residual's approximation numbers by those of the
 restricted perturbation.  The residual is a contraction applied to `P|_Z`, so no estimate is
 involved. -/
-theorem approximationSingularValue_theorem63ResidualReal_le_of_invariant
+theorem approximationSingularValue_theorem63ResidualReal_le_of_invariant [CompleteSpace E]
     (T P : E →L[ℝ] E) (Z : Submodule ℝ E) [Z.HasOrthogonalProjection]
     (hinv : ∀ x ∈ Z, (T + P) x ∈ Z) (n : Nat) :
     ((theorem63ResidualReal T Z).singularValue n : ℝ) ≤
       ((P ∘L Z.subtypeL).singularValue n : ℝ) := by
   rw [theorem63ResidualReal_eq_neg_of_invariant T P Z hinv,
-    approximationSingularValue_neg]
-  have hcomp := approximationSingularValue_comp_le (𝕜 := ℝ) n
-    (Zᗮ.starProjection) (P ∘L Z.subtypeL) (1 : Z →L[ℝ] Z)
+    ← neg_one_smul ℝ (Zᗮ.starProjection ∘L (P ∘L Z.subtypeL)),
+    ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm]
+  simp only [norm_neg, norm_one, one_mul]
+  have hcomp := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le (𝕜 := ℝ)
+    (Zᗮ.starProjection) (P ∘L Z.subtypeL) (1 : Z →L[ℝ] Z) n))
   have hid : (Zᗮ.starProjection ∘L ((P ∘L Z.subtypeL) ∘L
       (1 : Z →L[ℝ] Z))) = Zᗮ.starProjection ∘L (P ∘L Z.subtypeL) := by
     ext x
@@ -698,7 +704,7 @@ theorem norm_sinAngleOperatorR_lt_one_of_crossedDefectsEquivalent
     ‖sinAngleOperatorR U V‖ < 1 := by
   have hdirected := approximationSingularValue_sineBlock_lt_one_infiniteTrial_real
     T hT V U hV hdelta hCompressionUpper hUnwantedLower 0
-  rw [approximationSingularValue_zero] at hdirected
+  rw [ContinuousLinearMap.singularValue_zero, coe_nnnorm] at hdirected
   have hfactor : Vᗮ.starProjection ∘L U.starProjection =
       theorem63DirectedSineBlockReal U V ∘L U.orthogonalProjectionOnto := rfl
   have hnorm : ‖Vᗮ.starProjection ∘L U.starProjection‖ < 1 := by

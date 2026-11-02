@@ -60,7 +60,8 @@ theorem approximationNumberEnergy_eq_ofReal_sum_sq_singularValues
   -- linear map, so it transfers to `A` without any further hypothesis.
   have hsv : ∀ n : ℕ,
       (A.singularValue n : ℝ) = A.toLinearMap.singularValues n := fun n =>
-    approximationSingularValue_eq_singularValues A.toLinearMap n
+    (ContinuousLinearMap.singularValue_eq_linearMap_singularValues
+      (LinearMap.toContinuousLinearMap A.toLinearMap) n)
   unfold approximationNumberEnergy
   rw [tsum_eq_sum (s := Finset.range (Module.finrank 𝕜 E))]
   · rw [← Fin.sum_univ_eq_sum_range,

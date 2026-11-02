@@ -223,13 +223,13 @@ private theorem norm_directedSine_lt_one_of_all_singular_lt_one
       approximationSingularValue_eq_finiteSourceSingularValue
         (directedSine Z V) i0
     have hi0 : (i0 : ℕ) = 0 := rfl
-    rw [hi0, approximationSingularValue_zero] at happrox
+    rw [hi0, ContinuousLinearMap.singularValue_zero, coe_nnnorm] at happrox
     rw [happrox]
     exact h0
   · have hzero : finrank ℂ Z ≤ 0 := Nat.le_zero.mpr (Nat.eq_zero_of_not_pos hpos)
     have happrox := approximationSingularValue_eq_zero_of_finrank_le_complex
       Z (directedSine Z V) hzero
-    rw [approximationSingularValue_zero] at happrox
+    rw [ContinuousLinearMap.singularValue_zero, coe_nnnorm] at happrox
     rw [happrox]
     norm_num
 

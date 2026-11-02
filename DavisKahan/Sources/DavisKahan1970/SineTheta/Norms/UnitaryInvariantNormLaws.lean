@@ -58,7 +58,7 @@ theorem extendedGauge_zero (N : SymmetricNormingFunction) :
     intro n
     have hx : approximationPrefix n (0 : E →L[𝕜] F) = (0 : Fin n → ℝ) := by
       funext i
-      simp only [approximationPrefix, approximationSingularValue_zero_map,
+      simp only [approximationPrefix, ContinuousLinearMap.zero_singularValue, NNReal.coe_zero,
         Pi.zero_apply]
     simp only [prefixGauge, hx, N.finiteGauge_zero n]
   simp only [extendedGauge, hzero, ENNReal.ofReal_zero, iSup_const]
@@ -81,7 +81,7 @@ theorem extendedGauge_smul (N : SymmetricNormingFunction)
         (fun i : Fin n => ((c • A).singularValue (i : ℕ) : ℝ)) =
           ‖c‖ • (fun i : Fin n => (A.singularValue (i : ℕ) : ℝ)) := by
       funext i
-      rw [approximationSingularValue_smul]
+      rw [ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm]
       simp [smul_eq_mul]
     rw [hprefix, N.finiteGauge_smul]
     simp [abs_of_nonneg (norm_nonneg c)]
@@ -100,7 +100,8 @@ theorem prefixGauge_add_le
           (approximationPrefix n A + approximationPrefix n B) := by
     apply (N.isSymmetricGauge_finiteGauge n).apply_le_of_prefixSum_le
     · intro i j hij
-      exact approximationSingularValue_antitone (A + B) (Fin.le_def.mp hij)
+      exact (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue (A + B)))
+        (Fin.le_def.mp hij)
     · intro i
       exact (ContinuousLinearMap.singularValue _ _).coe_nonneg
     · intro m
@@ -206,7 +207,8 @@ theorem prefixGauge_le_of_all_kyFan_le_hetero (N : SymmetricNormingFunction)
     N.finiteGauge n (approximationPrefix n B)
   apply (N.isSymmetricGauge_finiteGauge n).apply_le_of_prefixSum_le
   · intro i j hij
-    exact approximationSingularValue_antitone A (Fin.le_def.mp hij)
+    exact (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue A))
+      (Fin.le_def.mp hij)
   · intro i
     exact (ContinuousLinearMap.singularValue _ _).coe_nonneg
   · intro m

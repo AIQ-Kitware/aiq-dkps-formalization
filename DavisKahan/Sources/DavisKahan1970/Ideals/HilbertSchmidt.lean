@@ -109,7 +109,7 @@ theorem approximationNumberEnergy_ne_top_adjoint_iff
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  exact approximationSingularValue_adjoint n A
+  exact (congrArg NNReal.toReal (ContinuousLinearMap.singularValue_adjoint A n))
 
 
 
@@ -150,7 +150,7 @@ theorem approximationNumberEnergy_smul
   rw [← ENNReal.tsum_mul_left]
   congr 1
   funext n
-  rw [approximationSingularValue_smul, mul_pow,
+  rw [ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm, mul_pow,
     ENNReal.ofReal_mul (sq_nonneg _)]
 
 
@@ -204,7 +204,7 @@ theorem approximationNumberEnergy_comp_le
   rw [← ENNReal.tsum_mul_left]
   apply ENNReal.tsum_le_tsum
   intro n
-  have hsing := approximationSingularValue_comp_le n L A R
+  have hsing := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le L A R n))
   have hnonneg : 0 ≤ ((L ∘L A ∘L R).singularValue n : ℝ) :=
     (ContinuousLinearMap.singularValue _ _).coe_nonneg
   have hbound :

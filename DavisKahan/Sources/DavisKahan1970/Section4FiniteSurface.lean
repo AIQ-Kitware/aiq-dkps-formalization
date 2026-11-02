@@ -62,8 +62,10 @@ theorem finite_proposition4_1_approximationSingularValue
           U.starProjection.toLinearMap).toContinuousLinearMap).singularValue n : ℝ) ≤
       ((((LinearMap.id - W.toLinearMap) ∘ₗ
           U.starProjection.toLinearMap).toContinuousLinearMap).singularValue n : ℝ) := by
-  rw [approximationSingularValue_eq_singularValues,
-    approximationSingularValue_eq_singularValues]
+  rw [ContinuousLinearMap.singularValue_eq_linearMap_singularValues,
+    LinearMap.coe_toContinuousLinearMap,
+    ContinuousLinearMap.singularValue_eq_linearMap_singularValues,
+      LinearMap.coe_toContinuousLinearMap]
   exact finite_proposition4_1_singularValues U V hacute W hmap n
 
 /-- Package the finite Proposition 4.1 result as the certificate consumed by

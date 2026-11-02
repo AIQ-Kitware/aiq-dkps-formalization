@@ -102,8 +102,8 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge
   have hmono : kyFanApproximationGauge k K' ≤ kyFanApproximationGauge k K := by
     simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_le_sum fun n _ => ?_
-    have hcomp := approximationSingularValue_comp_le n
-      L₁.orthogonalProjectionOnto K L₂.subtypeL
+    have hcomp := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le
+      L₁.orthogonalProjectionOnto K L₂.subtypeL n))
     refine hcomp.trans ?_
     have h1 : ‖L₁.orthogonalProjectionOnto‖ ≤ 1 :=
       L₁.orthogonalProjectionOnto_norm_le
@@ -311,8 +311,8 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge_of_contraction
     simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     rw [Finset.mul_sum]
     refine Finset.sum_le_sum fun n _ => ?_
-    have hcomp := approximationSingularValue_comp_le n
-      (ContinuousLinearMap.adjoint M) K N
+    have hcomp := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le
+      (ContinuousLinearMap.adjoint M) K N n))
     have h0 := (K.singularValue n).coe_nonneg
     have s1 : ‖ContinuousLinearMap.adjoint M‖ * (K.singularValue n : ℝ) ≤
         cu * (K.singularValue n : ℝ) :=

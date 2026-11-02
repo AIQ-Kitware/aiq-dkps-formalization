@@ -615,8 +615,8 @@ theorem approximationSingularValue_truncSineBlock (τ : ℝ) (n : ℕ) :
       rw [D.cutoff_truncIncl τ f]
   refine le_antisymm ?_ ?_
   · rw [D.truncSineBlock_eq V τ, hincl]
-    have h := approximationSingularValue_comp_le (𝕜 := ℂ) n
-      (ContinuousLinearMap.id ℂ H) (S ∘L D.cutoff τ) (D.truncIncl τ)
+    have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le (𝕜 := ℂ)
+      (ContinuousLinearMap.id ℂ H) (S ∘L D.cutoff τ) (D.truncIncl τ) n))
     rw [ContinuousLinearMap.id_comp] at h
     refine h.trans ?_
     have hnn := ((S ∘L D.cutoff τ).singularValue n).coe_nonneg
@@ -629,8 +629,8 @@ theorem approximationSingularValue_truncSineBlock (τ : ℝ) (n : ℕ) :
         exact mul_le_mul_of_nonneg_right ContinuousLinearMap.norm_id_le hnn
       _ = ((S ∘L D.cutoff τ).singularValue n : ℝ) := by ring
   · rw [hcut, D.truncSineBlock_eq V τ]
-    have h := approximationSingularValue_comp_le (𝕜 := ℂ) n
-      (ContinuousLinearMap.id ℂ H) (S ∘L D.truncIncl τ) (D.truncProj τ)
+    have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le (𝕜 := ℂ)
+      (ContinuousLinearMap.id ℂ H) (S ∘L D.truncIncl τ) (D.truncProj τ) n))
     rw [ContinuousLinearMap.id_comp] at h
     refine h.trans ?_
     have hnn := ((S ∘L D.truncIncl τ).singularValue n).coe_nonneg
@@ -675,7 +675,7 @@ theorem approximationSingularValue_sineBlock_lt_one {α δ : ℝ} (hδ : 0 < δ)
   classical
   by_contra hcon
   have ha_le : ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) ≤ 1 := by
-    refine (approximationSingularValue_le_opNorm _ _).trans ?_
+    refine ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm _ _))).trans ?_
     refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun z => ?_
     rw [one_mul]
     exact theorem63DirectedSineBlock_apply_norm_le Z V z

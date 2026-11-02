@@ -1042,7 +1042,8 @@ theorem hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent
       (theorem63DirectedSineBlock Z V)) := by
     intro i j hij
     rw [← hsB i, ← hsB j]
-    exact approximationSingularValue_antitone _ (by exact_mod_cast hij)
+    exact (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue _)) (by
+      exact_mod_cast hij)
   have htanti : Antitone (theorem63DirectedTangentDiagonal Z V) := by
     intro i j hij
     have hsji := hsanti hij
@@ -1073,7 +1074,8 @@ theorem hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent
             (theorem63DirectedSineBlock Z V)); Matrix.toLin b'.toBasis b'.toBasis
                 (Matrix.diagonal fun i => (((theorem63DirectedTangentDiagonal Z V)) i :
                 _)))).singularValues k :=
-        approximationSingularValue_eq_singularValues _ k
+        (by rw [ContinuousLinearMap.singularValue_eq_linearMap_singularValues,
+          LinearMap.coe_toContinuousLinearMap])
       _ = theorem63DirectedTangentDiagonal Z V ⟨k, hk⟩ := by
         have ha : Antitone fun j => ‖(theorem63DirectedTangentDiagonal Z V j : ℂ)‖ :=
           fun j l hjl => by
