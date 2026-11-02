@@ -53,6 +53,9 @@ self-adjoint operator (Stone's theorem):
 
 public section
 
+open _root_.LinearPMap (
+  resolvent)
+
 namespace TauCeti
 namespace LinearPMap
 

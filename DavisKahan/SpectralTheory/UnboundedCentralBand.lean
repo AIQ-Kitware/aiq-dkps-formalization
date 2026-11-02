@@ -100,7 +100,7 @@ theorem specProjection_gaps_eq_zero
     exact fun hm => hnot (_root_.LinearPMap.mem_realSpectrum_iff.mpr hm)
   have hresRoot : (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
     simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using hnotSpectrum
-  exact (mem_local_resolventSet_iff_root A (lam : ℂ)).mpr hresRoot
+  exact hresRoot
 
 /-- The exterior of the band, as a set. -/
 @[expose]
@@ -328,7 +328,7 @@ theorem re_inner_le_of_realSpectrum_subset_Iic
     exact fun hm => hnot (_root_.LinearPMap.mem_realSpectrum_iff.mpr hm)
   have hresRoot : (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
     simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using hnotSpectrum
-  exact (mem_local_resolventSet_iff_root A (lam : ℂ)).mpr hresRoot
+  exact hresRoot
 
 /-- **Spectrum in `Ici c` gives the lower form bound.** -/
 theorem le_re_inner_of_realSpectrum_subset_Ici
@@ -345,7 +345,7 @@ theorem le_re_inner_of_realSpectrum_subset_Ici
     exact fun hm => hnot (_root_.LinearPMap.mem_realSpectrum_iff.mpr hm)
   have hresRoot : (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
     simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using hnotSpectrum
-  exact (mem_local_resolventSet_iff_root A (lam : ℂ)).mpr hresRoot
+  exact hresRoot
 
 -- Use the native theorem locally; a global instance would create an instance cycle.
 attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection

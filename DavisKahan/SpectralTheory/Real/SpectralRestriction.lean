@@ -139,22 +139,22 @@ spectral parameter. -/
 theorem conjugateOperator_tauCetiResolvent
     (A : E →ₗ.[ℝ] E) (_hA : IsSelfAdjoint A)
     {z : ℂ} (_hz : z.im ≠ 0)
-    (hzr : z ∈ TauCeti.LinearPMap.resolventSet
+    (hzr : z ∈ _root_.LinearPMap.resolventSet
       (PartialMapComplexification.complexify A))
-    (hzbr : (starRingEnd ℂ) z ∈ TauCeti.LinearPMap.resolventSet
+    (hzbr : (starRingEnd ℂ) z ∈ _root_.LinearPMap.resolventSet
       (PartialMapComplexification.complexify A)) :
-    conjugateOperator (TauCeti.LinearPMap.resolvent
+    conjugateOperator (_root_.LinearPMap.resolvent
         (PartialMapComplexification.complexify A) z)
-      = TauCeti.LinearPMap.resolvent
+      = _root_.LinearPMap.resolvent
           (PartialMapComplexification.complexify A) ((starRingEnd ℂ) z) := by
   apply ContinuousLinearMap.ext
   intro ξ
   set Aℂ := (PartialMapComplexification.complexify A) with hAc
-  set r : Eℂ := TauCeti.LinearPMap.resolvent Aℂ z (conjugation ξ) with hr
+  set r : Eℂ := _root_.LinearPMap.resolvent Aℂ z (conjugation ξ) with hr
   have hrdom : r ∈ Aℂ.domain :=
-    TauCeti.LinearPMap.resolvent_mem_domain hzr (conjugation ξ)
+    _root_.LinearPMap.resolvent_mem_domain hzr (conjugation ξ)
   have hsolve : z • r - Aℂ ⟨r, hrdom⟩ = conjugation ξ :=
-    TauCeti.LinearPMap.smul_sub_apply_resolvent hzr (conjugation ξ)
+    _root_.LinearPMap.smul_sub_apply_resolvent hzr (conjugation ξ)
   set jr : Aℂ.domain := conjugationDomain A ⟨r, hrdom⟩ with hjr
   have happ : Aℂ jr = conjugation (Aℂ ⟨r, hrdom⟩) :=
     complexify_apply_conjugationDomain A ⟨r, hrdom⟩
@@ -164,33 +164,37 @@ theorem conjugateOperator_tauCetiResolvent
       rw [map_sub, conjugation_complex_smul, ← happ]
       rfl
     rw [h1, hsolve, conjugation_involutive]
-  have hleft := TauCeti.LinearPMap.resolvent_smul_sub_apply hzbr jr
+  have hleft := _root_.LinearPMap.resolvent_smul_sub_apply hzbr jr
   rw [hjsolve] at hleft
   rw [conjugateOperator_apply]
-  change conjugation (TauCeti.LinearPMap.resolvent Aℂ z (conjugation ξ)) = _
+  change conjugation (_root_.LinearPMap.resolvent Aℂ z (conjugation ξ)) = _
   exact hleft.symm
 
 /-- The Cayley transform of a complexified real self-adjoint operator is sent to
 its adjoint by canonical conjugation. -/
 theorem conjugateOperator_cayley (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) :
-    conjugateOperator (TauCeti.LinearPMap.cayley
-        (PartialMapComplexification.isSelfAdjoint_complexify hA))
-      = star (TauCeti.LinearPMap.cayley
-          (PartialMapComplexification.isSelfAdjoint_complexify hA)) := by
+    conjugateOperator ((PartialMapComplexification.complexify A).cayley)
+      = star ((PartialMapComplexification.complexify A).cayley) := by
   set hAℂ := PartialMapComplexification.isSelfAdjoint_complexify hA with hhAc
-  have hni := TauCeti.LinearPMap.negI_mem_resolventSet hAℂ
-  have hi := TauCeti.LinearPMap.I_mem_resolventSet hAℂ
-  have hconjI : ((starRingEnd ℂ) (-Complex.I)) ∈ TauCeti.LinearPMap.resolventSet
+  have hni := (hAℂ.mem_resolventSet_of_im_ne_zero (z := -Complex.I) (by simp))
+  have hi := (hAℂ.mem_resolventSet_of_im_ne_zero (z := Complex.I) (by simp))
+  have hconjI : ((starRingEnd ℂ) (-Complex.I)) ∈ _root_.LinearPMap.resolventSet
       (PartialMapComplexification.complexify A) := by simpa using hi
   have hkey : conjugateOperator
-      (TauCeti.LinearPMap.resolvent
+      (_root_.LinearPMap.resolvent
         (PartialMapComplexification.complexify A) (-Complex.I))
       = ContinuousLinearMap.adjoint
-        (TauCeti.LinearPMap.resolvent
+        (_root_.LinearPMap.resolvent
           (PartialMapComplexification.complexify A) (-Complex.I)) := by
     rw [conjugateOperator_tauCetiResolvent A hA (by simp) hni hconjI,
-      TauCeti.LinearPMap.adjoint_resolvent hAℂ hni hconjI]
-  simp only [TauCeti.LinearPMap.cayley_def, conjugateOperator_add, conjugateOperator_one,
+      hAℂ.adjoint_resolvent hni]
+  have hC : (PartialMapComplexification.complexify A).cayley =
+      1 + (2 * Complex.I) • _root_.LinearPMap.resolvent (PartialMapComplexification.complexify A) (-Complex.I) := by
+    apply ContinuousLinearMap.ext
+    intro ξ
+    rw [add_apply, one_apply_eq_self, smul_apply]
+    exact _root_.LinearPMap.cayley_apply (PartialMapComplexification.complexify A) ξ
+  simp only [hC, conjugateOperator_add, conjugateOperator_one,
     conjugateOperator_complex_smul, hkey, star_add, star_one, star_smul,
     ContinuousLinearMap.star_eq_adjoint]
   rfl
@@ -250,14 +254,14 @@ theorem conjugateOperator_cfcHom {U : Eℂ →L[ℂ] Eℂ} (hU : IsStarNormal U)
 /-- The diagonal spectral measures of the Cayley transform are conjugation
 invariant: real symbols have conjugation-invariant calculus images. -/
 theorem diagMeasure_conjugation (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) (η : Eℂ) :
-    (cfcHom (TauCeti.LinearPMap.isStarNormal_cayley
+    (cfcHom (_root_.IsSelfAdjoint.isStarNormal_cayley
         (PartialMapComplexification.isSelfAdjoint_complexify hA))).representationDiagMeasure
           (conjugation η)
-      = (cfcHom (TauCeti.LinearPMap.isStarNormal_cayley
+      = (cfcHom (_root_.IsSelfAdjoint.isStarNormal_cayley
           (PartialMapComplexification.isSelfAdjoint_complexify hA))).representationDiagMeasure η
             := by
   have hUc := conjugateOperator_cayley A hA
-  let π := cfcHom (R := ℂ) (TauCeti.LinearPMap.isStarNormal_cayley
+  let π := cfcHom (R := ℂ) (_root_.IsSelfAdjoint.isStarNormal_cayley
     (PartialMapComplexification.isSelfAdjoint_complexify hA))
   change π.representationDiagMeasure (conjugation η) = π.representationDiagMeasure η
   refine Measure.ext_of_integral_eq_on_compactlySupported fun g => ?_
@@ -270,7 +274,7 @@ theorem diagMeasure_conjugation (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) (�
     rw [integral_complex_ofReal] at h
     simpa only [Complex.ofReal_re] using congrArg Complex.re h
   rw [hi, hi]
-  set T := cfcHom (TauCeti.LinearPMap.isStarNormal_cayley
+  set T := cfcHom (_root_.IsSelfAdjoint.isStarNormal_cayley
     (PartialMapComplexification.isSelfAdjoint_complexify hA))
     ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap) with hT
   change (⟪conjugation η, T (conjugation η)⟫_ℂ).re = (⟪η, T η⟫_ℂ).re
@@ -295,10 +299,10 @@ theorem conjugateOperator_specProjection (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjo
       = TauCeti.LinearPMap.specProjection
           (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS := by
   set hAℂ := PartialMapComplexification.isSelfAdjoint_complexify hA with hhAc
-  set hU := TauCeti.LinearPMap.isStarNormal_cayley hAℂ with hhU
-  set κ := TauCeti.LinearPMap.cayleyInv hAℂ with hκ
-  have hSm : MeasurableSet (κ ⁻¹' S) := TauCeti.LinearPMap.measurable_cayleyInv hAℂ hS
-  set ind : _root_.spectrum ℂ (TauCeti.LinearPMap.cayley hAℂ) → ℂ :=
+  set hU := hAℂ.isStarNormal_cayley with hhU
+  set κ := TauCeti.LinearPMap.cayleyInv (PartialMapComplexification.complexify A) with hκ
+  have hSm : MeasurableSet (κ ⁻¹' S) := TauCeti.LinearPMap.measurable_cayleyInv (PartialMapComplexification.complexify A) hS
+  set ind : _root_.spectrum ℂ ((PartialMapComplexification.complexify A).cayley) → ℂ :=
     (κ ⁻¹' S).indicator (fun _ => (1 : ℂ)) with hind
   -- the four polarisation integrals are real
   have hIreal : ∀ η : Eℂ,
@@ -358,7 +362,7 @@ theorem conjugatePVM_spectralPVM
       TauCeti.BorelCalculus.toProjValMeasure_diag, TauCeti.BorelCalculus.specDiag_def]
     rw [TauCeti.BorelCalculus.toProjValMeasure_diag, TauCeti.BorelCalculus.specDiag_def]
     exact congrArg (MeasureTheory.Measure.map (TauCeti.LinearPMap.cayleyInv
-      (PartialMapComplexification.isSelfAdjoint_complexify hA)))
+      (PartialMapComplexification.complexify A)))
       (diagMeasure_conjugation A hA ξ)
 
 /-- Every measurable spectral projection of a complexified real self-adjoint

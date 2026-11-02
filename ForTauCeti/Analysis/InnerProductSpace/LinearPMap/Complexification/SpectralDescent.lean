@@ -35,6 +35,13 @@ no parallel closed-operator bundle and no theorem-specific compatibility wrapper
 
 public section
 
+open _root_.LinearPMap (
+  resolventSet
+  resolvent
+  resolvent_mem_domain
+  smul_sub_apply_resolvent
+  resolvent_smul_sub_apply)
+
 open MeasureTheory
 
 open scoped InnerProductSpace ComplexConjugate
@@ -143,18 +150,24 @@ theorem conjugateOperator_resolvent_complexifyReal
 to its adjoint by canonical conjugation. -/
 theorem conjugateOperator_cayley_complexifyReal
     {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A) :
-    conjugateOperator (cayley (isSelfAdjoint_complexifyReal hA)) =
-      star (cayley (isSelfAdjoint_complexifyReal hA)) := by
+    conjugateOperator ((complexifyReal A).cayley) =
+      star ((complexifyReal A).cayley) := by
   set hAℂ := isSelfAdjoint_complexifyReal hA with hhAc
-  have hni := negI_mem_resolventSet hAℂ
-  have hi := I_mem_resolventSet hAℂ
+  have hni := (hAℂ.mem_resolventSet_of_im_ne_zero (z := -Complex.I) (by simp))
+  have hi := (hAℂ.mem_resolventSet_of_im_ne_zero (z := Complex.I) (by simp))
   have hconjI : ((starRingEnd ℂ) (-Complex.I)) ∈ resolventSet (complexifyReal A) := by
     simpa using hi
   have hkey : conjugateOperator (resolvent (complexifyReal A) (-Complex.I)) =
       ContinuousLinearMap.adjoint (resolvent (complexifyReal A) (-Complex.I)) := by
     rw [conjugateOperator_resolvent_complexifyReal A hni hconjI,
-      adjoint_resolvent hAℂ hni hconjI]
-  simp only [cayley_def, conjugateOperator_add, conjugateOperator_one,
+      hAℂ.adjoint_resolvent hni]
+  have hC : (complexifyReal A).cayley =
+      1 + (2 * Complex.I) • _root_.LinearPMap.resolvent (complexifyReal A) (-Complex.I) := by
+    apply ContinuousLinearMap.ext
+    intro ξ
+    rw [add_apply, one_apply_eq_self, smul_apply]
+    exact _root_.LinearPMap.cayley_apply (complexifyReal A) ξ
+  simp only [hC, conjugateOperator_add, conjugateOperator_one,
     conjugateOperator_complex_smul, hkey, star_add, star_one, star_smul,
     ContinuousLinearMap.star_eq_adjoint]
   rfl
@@ -214,12 +227,12 @@ theorem conjugateOperator_cfcHom_of_adjoint
 self-adjoint partial map are conjugation invariant. -/
 theorem diagMeasure_conjugation_complexifyReal
     {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A) (η : Eℂ) :
-    (cfcHom (isStarNormal_cayley (isSelfAdjoint_complexifyReal hA))).representationDiagMeasure
+    (cfcHom ((isSelfAdjoint_complexifyReal hA).isStarNormal_cayley)).representationDiagMeasure
         (conjugation η) =
-      (cfcHom (isStarNormal_cayley (isSelfAdjoint_complexifyReal hA))).representationDiagMeasure η
+      (cfcHom ((isSelfAdjoint_complexifyReal hA).isStarNormal_cayley)).representationDiagMeasure η
         := by
   have hUc := conjugateOperator_cayley_complexifyReal hA
-  let π := cfcHom (R := ℂ) (isStarNormal_cayley (isSelfAdjoint_complexifyReal hA))
+  let π := cfcHom (R := ℂ) ((isSelfAdjoint_complexifyReal hA).isStarNormal_cayley)
   change π.representationDiagMeasure (conjugation η) = π.representationDiagMeasure η
   refine Measure.ext_of_integral_eq_on_compactlySupported fun g => ?_
   have hi (v : Eℂ) :
@@ -231,7 +244,7 @@ theorem diagMeasure_conjugation_complexifyReal
     rw [integral_complex_ofReal] at h
     simpa only [Complex.ofReal_re] using congrArg Complex.re h
   rw [hi, hi]
-  set T := cfcHom (isStarNormal_cayley (isSelfAdjoint_complexifyReal hA))
+  set T := cfcHom ((isSelfAdjoint_complexifyReal hA).isStarNormal_cayley)
     ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) g.toContinuousMap) with hT
   change (⟪conjugation η, T (conjugation η)⟫_ℂ).re = (⟪η, T η⟫_ℂ).re
   have hfix : conjugateOperator T = T := by
@@ -253,10 +266,10 @@ theorem conjugateOperator_specProjection_complexifyReal
     conjugateOperator (specProjection (isSelfAdjoint_complexifyReal hA) S hS) =
       specProjection (isSelfAdjoint_complexifyReal hA) S hS := by
   set hAℂ := isSelfAdjoint_complexifyReal hA with hhAc
-  set hU := isStarNormal_cayley hAℂ with hhU
-  set κ := cayleyInv hAℂ with hκ
-  have hSm : MeasurableSet (κ ⁻¹' S) := measurable_cayleyInv hAℂ hS
-  set ind : _root_.spectrum ℂ (cayley hAℂ) → ℂ :=
+  set hU := hAℂ.isStarNormal_cayley with hhU
+  set κ := cayleyInv (complexifyReal A) with hκ
+  have hSm : MeasurableSet (κ ⁻¹' S) := measurable_cayleyInv (complexifyReal A) hS
+  set ind : _root_.spectrum ℂ ((complexifyReal A).cayley) → ℂ :=
     (κ ⁻¹' S).indicator (fun _ => (1 : ℂ)) with hind
   have hIreal : ∀ η : Eℂ,
       (starRingEnd ℂ) (∫ w, ind w ∂((cfcHom hU).representationDiagMeasure η)) =

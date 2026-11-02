@@ -271,7 +271,7 @@ theorem hasVectorSpectralGap_sylvesterGroup (hA : IsSelfAdjoint A) (hB : IsSelfA
   set hS := isSelfAdjoint_generator_sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
     (TauCeti.LinearPMap.genToGroup hB) b with hSdef
   -- every real point inside the gap is a resolvent point
-  have hres : ∀ s ∈ Set.Ioo (-δ) δ, (s : ℂ) ∈ TauCeti.LinearPMap.resolventSet
+  have hres : ∀ s ∈ Set.Ioo (-δ) δ, (s : ℂ) ∈ _root_.LinearPMap.resolventSet
       (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
         (TauCeti.LinearPMap.genToGroup hB) b)) := by
     intro s hs

@@ -7,7 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
 public import Mathlib.MeasureTheory.Integral.DominatedConvergence
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic
 
@@ -74,6 +74,14 @@ the Spectra endpoint `Spectra.QuantumMechanics.SpectralTheory.spectralPVM`.
 
 public section
 
+open _root_.LinearPMap (
+  resolventSet
+  resolvent
+  resolvent_mem_domain
+  smul_sub_apply_resolvent
+  resolvent_smul_sub_apply
+  resolvent_sub_resolvent_apply)
+
 open scoped InnerProductSpace
 open MeasureTheory
 
@@ -88,12 +96,13 @@ section Cayley
 
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 
+omit [CompleteSpace H] in
 /-- `1 - U = -(2i · R(-i))`: immediate from the definition of the Cayley
 transform, which in the canonical convention reads `U = 1 + 2i · R(-i)`. -/
 theorem one_sub_cayley_apply (ξ : H) :
-    ((1 : H →L[ℂ] H) - cayley hA) ξ
+    ((1 : H →L[ℂ] H) - A.cayley) ξ
       = -((2 * Complex.I) • resolvent A (-Complex.I) ξ) := by
-  simp [cayley_def]
+  simp [_root_.LinearPMap.cayley_apply]
 
 include hA in
 /-- The resolvent at `-i` is injective — it inverts the bijection
@@ -102,16 +111,18 @@ theorem injective_resolvent_negI :
     Function.Injective (resolvent A (-Complex.I)) := by
   rw [injective_iff_map_eq_zero]
   intro φ hφ
-  have hsub := smul_sub_apply_resolvent (negI_mem_resolventSet hA) φ
+  have hni : -Complex.I ∈ A.resolventSet := hA.mem_resolventSet_of_im_ne_zero (by simp)
+  have hsub := smul_sub_apply_resolvent hni φ
   have hz : (⟨resolvent A (-Complex.I) φ,
-      resolvent_mem_domain (negI_mem_resolventSet hA) φ⟩ : A.domain) = 0 :=
+      resolvent_mem_domain hni φ⟩ : A.domain) = 0 :=
     Subtype.ext (by simpa using hφ)
   rw [hz, _root_.LinearPMap.map_zero, hφ] at hsub
   simpa using hsub.symm
 
+include hA in
 /-- Hence `1 - U` is injective. -/
 theorem injective_one_sub_cayley :
-    Function.Injective ((1 : H →L[ℂ] H) - cayley hA) := by
+    Function.Injective ((1 : H →L[ℂ] H) - A.cayley) := by
   rw [injective_iff_map_eq_zero]
   intro φ hφ
   rw [one_sub_cayley_apply, neg_eq_zero] at hφ
@@ -131,17 +142,19 @@ of the spectrum of the Cayley transform.  Its value at `w = 1` is junk; see
 -- definition, which is fine: that is inside the defining module, where the body is visible
 -- whatever the attribute says.
 @[expose]
-noncomputable def cayleyInv (w : _root_.spectrum ℂ (cayley hA)) : ℝ :=
+noncomputable def cayleyInv (A : H →ₗ.[ℂ] H) (w : _root_.spectrum ℂ (A.cayley)) : ℝ :=
   (Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))).re
 
+omit [CompleteSpace H] in
 /-- Rewrite form of `cayleyInv`, so a call site need not unfold the definition.  It is the
 real part of the Cayley expression, which is what makes the value at `w = 1` junk. -/
-theorem cayleyInv_def (w : _root_.spectrum ℂ (cayley hA)) :
-    cayleyInv hA w = (Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))).re := (rfl)
+theorem cayleyInv_def (w : _root_.spectrum ℂ (A.cayley)) :
+    cayleyInv A w = (Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))).re := (rfl)
 
+omit [CompleteSpace H] in
 /-- The inverse Cayley relabelling is measurable.  Measurability, not continuity, is all that is
 available and all that is needed: the map is genuinely singular at `w = 1`. -/
-theorem measurable_cayleyInv : Measurable (cayleyInv hA) := by
+theorem measurable_cayleyInv (A : H →ₗ.[ℂ] H) : Measurable (cayleyInv A) := by
   unfold cayleyInv
   fun_prop
 
@@ -156,20 +169,20 @@ chain acquired — `specProjection_eq_borelCalculus` and `specProjection_def` he
 that rewrites by lemma rather than reducing through a body does not care whether the body is
 exposed, so each such rewiring retires consumers for every definition in the chain at once. -/
 noncomputable def spectralPVM : TauCeti.ProjValMeasure ℝ H :=
-  BorelCalculus.toProjValMeasure (isStarNormal_cayley hA) (measurable_cayleyInv hA)
+  BorelCalculus.toProjValMeasure (hA.isStarNormal_cayley) (measurable_cayleyInv A)
 
 /-- Rewrite form of `spectralPVM`, so a call site need not unfold the definition. -/
 theorem spectralPVM_def :
     spectralPVM hA
-      = BorelCalculus.toProjValMeasure (isStarNormal_cayley hA)
-          (measurable_cayleyInv hA) := (rfl)
+      = BorelCalculus.toProjValMeasure (hA.isStarNormal_cayley)
+          (measurable_cayleyInv A) := (rfl)
 
 /-- The Cayley singularity `{1}` is a null set for every diagonal measure. -/
 theorem diagMeasure_cayley_preimage_one (ξ : H) :
-    (cfcHom (isStarNormal_cayley hA)).representationDiagMeasure ξ
-      ((Subtype.val : _root_.spectrum ℂ (cayley hA) → ℂ) ⁻¹' {1}) = 0 := by
-  set U := cayley hA with hUdef
-  set hU := isStarNormal_cayley hA with hUn
+    (cfcHom (hA.isStarNormal_cayley)).representationDiagMeasure ξ
+      ((Subtype.val : _root_.spectrum ℂ (A.cayley) → ℂ) ⁻¹' {1}) = 0 := by
+  set U := A.cayley with hUdef
+  set hU := hA.isStarNormal_cayley with hUn
   set S : Set (_root_.spectrum ℂ U) := (Subtype.val : _root_.spectrum ℂ U → ℂ) ⁻¹' {1} with hSdef
   have hS : MeasurableSet S := measurable_subtype_coe (measurableSet_singleton 1)
   set ind : _root_.spectrum ℂ U → ℂ := S.indicator (fun _ => (1 : ℂ)) with hind
@@ -221,14 +234,14 @@ almost-everywhere statement only has to be checked where `w ≠ 1`.  Two spectra
 opened their symbol-comparison proofs with exactly this reduction, written out both
 times; this is that reduction, once. -/
 theorem borelCalculus_congr_of_ne_one
-    {f g : _root_.spectrum ℂ (cayley hA) → ℂ}
+    {f g : _root_.spectrum ℂ (A.cayley) → ℂ}
     (hf : BorelCalculus.IsBddMeasurable f) (hg : BorelCalculus.IsBddMeasurable g)
-    (h : ∀ w : _root_.spectrum ℂ (cayley hA), (w : ℂ) ≠ 1 → f w = g w) :
-    BorelCalculus.borelCalculus (isStarNormal_cayley hA) hf
-      = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hg := by
-  refine BorelCalculus.borelCalculus_congr_ae (isStarNormal_cayley hA) hf hg fun η => ?_
-  have hae : ∀ᵐ w ∂((cfcHom (isStarNormal_cayley hA)).representationDiagMeasure η),
-      w ∉ ((Subtype.val : _root_.spectrum ℂ (cayley hA) → ℂ) ⁻¹' {1}) :=
+    (h : ∀ w : _root_.spectrum ℂ (A.cayley), (w : ℂ) ≠ 1 → f w = g w) :
+    BorelCalculus.borelCalculus (hA.isStarNormal_cayley) hf
+      = BorelCalculus.borelCalculus (hA.isStarNormal_cayley) hg := by
+  refine BorelCalculus.borelCalculus_congr_ae (hA.isStarNormal_cayley) hf hg fun η => ?_
+  have hae : ∀ᵐ w ∂((cfcHom (hA.isStarNormal_cayley)).representationDiagMeasure η),
+      w ∉ ((Subtype.val : _root_.spectrum ℂ (A.cayley) → ℂ) ⁻¹' {1}) :=
     MeasureTheory.compl_mem_ae_iff.mpr (diagMeasure_cayley_preimage_one hA η)
   filter_upwards [hae] with w hw
   exact h w hw
@@ -258,28 +271,30 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {z : ℂ} (hz : z.im ≠ 
 -- **Not exposed.** It was, as part of the spectral-measure chain; the three call sites that
 -- relied on the body reducing were all the same `have hgval : gsym w = _ := rfl` against a
 -- `set`-bound symbol, and `cayleyCoord_apply` — which already existed — discharges them.
-noncomputable def cayleyCoord : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
-  (ContinuousMap.id ℂ).restrict (_root_.spectrum ℂ (cayley hA))
+noncomputable def cayleyCoord (A : H →ₗ.[ℂ] H) : C(_root_.spectrum ℂ (A.cayley), ℂ) :=
+  (ContinuousMap.id ℂ).restrict (_root_.spectrum ℂ (A.cayley))
 
+omit [CompleteSpace H] in
 /-- The Cayley coordinate is the spectral point itself, coerced. -/
-@[simp] theorem cayleyCoord_apply (w : _root_.spectrum ℂ (cayley hA)) :
-    cayleyCoord hA w = (w : ℂ) := (rfl)
-include hz in
+@[simp] theorem cayleyCoord_apply (w : _root_.spectrum ℂ (A.cayley)) :
+    cayleyCoord A w = (w : ℂ) := (rfl)
+include hA hz in
 /-- The resolvent symbol's denominator never vanishes on the spectrum of the Cayley transform,
 because that spectrum lies on the unit circle and `z` is non-real.  This is what makes the symbol
 continuous rather than merely measurable. -/
-theorem cayleyDenom_ne_zero (w : _root_.spectrum ℂ (cayley hA)) :
+theorem cayleyDenom_ne_zero (w : _root_.spectrum ℂ (A.cayley)) :
     (Complex.I - z) + (Complex.I + z) * (w : ℂ) ≠ 0 :=
   cayley_denom_ne_zero hz
-    (spectrum.norm_eq_one_of_unitary (cayley_mem_unitary hA) w.2)
+    (spectrum.norm_eq_one_of_unitary (hA.cayley_mem_unitary) w.2)
 
 /-- The symbol of `1 - (z + i) R(-i)`, up to the factor `2i`. -/
-noncomputable def cayleyDenomCM : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
+noncomputable def cayleyDenomCM (A : H →ₗ.[ℂ] H) : C(_root_.spectrum ℂ (A.cayley), ℂ) :=
   ⟨fun w => (Complex.I - z) + (Complex.I + z) * (w : ℂ), by fun_prop⟩
 
+omit [CompleteSpace H] in
 /-- The resolvent symbol's denominator, unfolded. -/
-@[simp] theorem cayleyDenomCM_apply (w : _root_.spectrum ℂ (cayley hA)) :
-    cayleyDenomCM hA (z := z) w = (Complex.I - z) + (Complex.I + z) * (w : ℂ) := (rfl)
+@[simp] theorem cayleyDenomCM_apply (w : _root_.spectrum ℂ (A.cayley)) :
+    cayleyDenomCM A (z := z) w = (Complex.I - z) + (Complex.I + z) * (w : ℂ) := (rfl)
 /-- The **resolvent symbol** `g_z(w) = (w - 1) / ((i - z) + (i + z) w)`.  For
 non-real `z` it is continuous on the whole spectrum of the Cayley transform:
 its only pole is the Cayley image of `z`, which is off the unit circle.
@@ -287,21 +302,21 @@ its only pole is the Cayley image of `z`, which is off the unit circle.
 Under the relabelling `s = i(1 + w)/(1 - w)` this is `(z - s)⁻¹`, the symbol of
 the canonical resolvent `(z • I - A)⁻¹`.  The `A - z` convention has the
 numerator `1 - w` instead, giving `(s - z)⁻¹`. -/
-noncomputable def resolventSymbol : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
+noncomputable def resolventSymbol : C(_root_.spectrum ℂ (A.cayley), ℂ) :=
   ⟨fun w => ((w : ℂ) - 1) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)),
     Continuous.div (by fun_prop) (by fun_prop) (cayleyDenom_ne_zero hA hz)⟩
 
 /-- The resolvent symbol, unfolded. -/
-@[simp] theorem resolventSymbol_apply (w : _root_.spectrum ℂ (cayley hA)) :
+@[simp] theorem resolventSymbol_apply (w : _root_.spectrum ℂ (A.cayley)) :
     resolventSymbol hA hz w
       = ((w : ℂ) - 1) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) := (rfl)
 /-- The reciprocal of the denominator symbol, scaled by `2i`. -/
-noncomputable def cayleyDenomInvCM : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
+noncomputable def cayleyDenomInvCM : C(_root_.spectrum ℂ (A.cayley), ℂ) :=
   ⟨fun w => (2 * Complex.I) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)),
     Continuous.div (by fun_prop) (by fun_prop) (cayleyDenom_ne_zero hA hz)⟩
 
 /-- The inverted denominator, unfolded. -/
-@[simp] theorem cayleyDenomInvCM_apply (w : _root_.spectrum ℂ (cayley hA)) :
+@[simp] theorem cayleyDenomInvCM_apply (w : _root_.spectrum ℂ (A.cayley)) :
     cayleyDenomInvCM hA hz w
       = (2 * Complex.I) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) := (rfl)
 /-- `2i ≠ 0`, needed to divide by it when inverting the Cayley symbol. -/
@@ -310,13 +325,13 @@ theorem two_I_ne_zero : (2 * Complex.I : ℂ) ≠ 0 := by simp
 /-- `R(-i)` is the functional calculus of `(w - 1)/(2i)`. -/
 theorem resolvent_negI_eq_cfcHom :
     resolvent A (-Complex.I)
-      = cfcHom (isStarNormal_cayley hA) ((2 * Complex.I)⁻¹ • (cayleyCoord hA - 1)) := by
+      = cfcHom (hA.isStarNormal_cayley) ((2 * Complex.I)⁻¹ • (cayleyCoord A - 1)) := by
   rw [map_smul, map_sub, map_one, cayleyCoord, cfcHom_id]
   refine ContinuousLinearMap.ext fun ξ => ?_
-  have h := one_sub_cayley_apply hA ξ
+  have h := one_sub_cayley_apply (A := A) ξ
   rw [_root_.sub_apply, one_apply_eq_self] at h
   rw [_root_.smul_apply, _root_.sub_apply, one_apply_eq_self,
-    show cayley hA ξ - ξ = (2 * Complex.I) • resolvent A (-Complex.I) ξ by
+    show A.cayley ξ - ξ = (2 * Complex.I) • resolvent A (-Complex.I) ξ by
       linear_combination (norm := module) -h,
     smul_smul, inv_mul_cancel₀ two_I_ne_zero, one_smul]
 
@@ -326,16 +341,16 @@ In the `A - z` convention this operator reads `1 - (z + i) Q(-i)`; the canonical
 resolvent is `-Q`, so the same operator is written with a `+` here. -/
 theorem one_add_smul_resolvent_eq_cfcHom :
     (1 : H →L[ℂ] H) + (z + Complex.I) • resolvent A (-Complex.I)
-      = cfcHom (isStarNormal_cayley hA) ((2 * Complex.I)⁻¹ • cayleyDenomCM hA (z := z)) := by
-  have hsplit : cayleyDenomCM hA (z := z)
-      = (Complex.I - z) • 1 + (Complex.I + z) • cayleyCoord hA := by
+      = cfcHom (hA.isStarNormal_cayley) ((2 * Complex.I)⁻¹ • cayleyDenomCM A (z := z)) := by
+  have hsplit : cayleyDenomCM A (z := z)
+      = (Complex.I - z) • 1 + (Complex.I + z) • cayleyCoord A := by
     ext w
     simp [cayleyDenomCM_apply, smul_eq_mul]
   simp only [hsplit, map_smul, map_add, map_one, cayleyCoord, cfcHom_id]
   refine ContinuousLinearMap.ext fun ξ => ?_
   have h2 : (2 * Complex.I : ℂ) ≠ 0 := two_I_ne_zero
-  have hU : cayley hA ξ = ξ + (2 * Complex.I) • resolvent A (-Complex.I) ξ := by
-    have h := one_sub_cayley_apply hA ξ
+  have hU : A.cayley ξ = ξ + (2 * Complex.I) • resolvent A (-Complex.I) ξ := by
+    have h := one_sub_cayley_apply (A := A) ξ
     rw [_root_.sub_apply, one_apply_eq_self] at h
     linear_combination (norm := module) -h
   simp only [one_apply_eq_self, _root_.smul_apply, _root_.add_apply, hU]
@@ -346,11 +361,11 @@ include hz in
 through the first resolvent identity, so no statement about `dom A` is
 needed. -/
 theorem resolvent_eq_cfcHom (hzr : z ∈ resolventSet A) :
-    resolvent A z = cfcHom (isStarNormal_cayley hA) (resolventSymbol hA hz) := by
-  set hni := negI_mem_resolventSet hA with hhni
-  set hU := isStarNormal_cayley hA with hhU
+    resolvent A z = cfcHom (hA.isStarNormal_cayley) (resolventSymbol hA hz) := by
+  set hni := (hA.mem_resolventSet_of_im_ne_zero (z := -Complex.I) (by simp)) with hhni
+  set hU := hA.isStarNormal_cayley with hhU
   -- the two functional-calculus factors are mutually inverse
-  have hprod : ((2 * Complex.I)⁻¹ • cayleyDenomCM hA (z := z)) * cayleyDenomInvCM hA hz
+  have hprod : ((2 * Complex.I)⁻¹ • cayleyDenomCM A (z := z)) * cayleyDenomInvCM hA hz
       = 1 := by
     ext w
     have hne := cayleyDenom_ne_zero hA hz w
@@ -358,7 +373,7 @@ theorem resolvent_eq_cfcHom (hzr : z ∈ resolventSet A) :
     simp only [ContinuousMap.mul_apply, ContinuousMap.smul_apply, cayleyDenomCM_apply,
       cayleyDenomInvCM_apply, ContinuousMap.one_apply, smul_eq_mul]
     field_simp
-  have hinv : cfcHom hU ((2 * Complex.I)⁻¹ • cayleyDenomCM hA (z := z))
+  have hinv : cfcHom hU ((2 * Complex.I)⁻¹ • cayleyDenomCM A (z := z))
       * cfcHom hU (cayleyDenomInvCM hA hz) = 1 := by
     rw [← map_mul, hprod, map_one]
   -- the first resolvent identity, in operator form
@@ -407,12 +422,12 @@ measure. -/
 theorem spectralPVM_resolvent_formula (hzr : z ∈ resolventSet A) (ξ : H) :
     ⟪ξ, resolvent A z ξ⟫_ℂ
       = ∫ s, (z - (s : ℂ))⁻¹ ∂((spectralPVM hA).diag ξ) := by
-  set hU := isStarNormal_cayley hA with hhU
+  set hU := hA.isStarNormal_cayley with hhU
   have hlhs : ⟪ξ, resolvent A z ξ⟫_ℂ
       = ∫ w, resolventSymbol hA hz w ∂((cfcHom hU).representationDiagMeasure ξ) := by
     rw [resolvent_eq_cfcHom hA hz hzr, StarAlgHom.integral_representationDiagMeasure]
   have hdiag : (spectralPVM hA).diag ξ
-      = Measure.map (cayleyInv hA) ((cfcHom hU).representationDiagMeasure ξ) := by
+      = Measure.map (cayleyInv A) ((cfcHom hU).representationDiagMeasure ξ) := by
     rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag,
       BorelCalculus.specDiag_def]
   have hne : ∀ s : ℝ, z - (s : ℂ) ≠ 0 := by
@@ -420,21 +435,21 @@ theorem spectralPVM_resolvent_formula (hzr : z ∈ resolventSet A) (ξ : H) :
     exact hz (by simpa using congrArg Complex.im (sub_eq_zero.mp hc))
   have hcont : Continuous (fun s : ℝ => (z - (s : ℂ))⁻¹) :=
     Continuous.inv₀ (by fun_prop) hne
-  rw [hlhs, hdiag, integral_map (measurable_cayleyInv hA).aemeasurable
+  rw [hlhs, hdiag, integral_map (measurable_cayleyInv A).aemeasurable
     hcont.aestronglyMeasurable]
   refine integral_congr_ae ?_
   have hnull := diagMeasure_cayley_preimage_one hA ξ
   have hae : ∀ᵐ w ∂((cfcHom hU).representationDiagMeasure ξ),
-      w ∉ ((Subtype.val : _root_.spectrum ℂ (cayley hA) → ℂ) ⁻¹' {1}) :=
+      w ∉ ((Subtype.val : _root_.spectrum ℂ (A.cayley) → ℂ) ⁻¹' {1}) :=
     MeasureTheory.compl_mem_ae_iff.mpr hnull
   filter_upwards [hae] with w hw
   have hw1 : (w : ℂ) ≠ 1 := hw
   have hnorm : ‖(w : ℂ)‖ = 1 :=
-    spectrum.norm_eq_one_of_unitary (cayley_mem_unitary hA) w.2
+    spectrum.norm_eq_one_of_unitary (hA.cayley_mem_unitary) w.2
   have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
   have hd' : (w : ℂ) - 1 ≠ 0 := sub_ne_zero.mpr hw1
   have hden := cayleyDenom_ne_zero hA hz w
-  have hcast : ((cayleyInv hA w : ℝ) : ℂ) = Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ)) :=
+  have hcast : ((cayleyInv A w : ℝ) : ℂ) = Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ)) :=
     Complex.ext rfl (by simpa using (inverseCayley_im_eq_zero hnorm hw1).symm)
   -- `z - s = -((i - z) + (i + z)w)/(1 - w) = ((i - z) + (i + z)w)/(w - 1)`
   have key : z - Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))
@@ -472,9 +487,9 @@ of `B`.  This is the whole chain `specProjection → spectralPVM → toProjValMe
 specProj` collapsed into the one equation consumers actually want. -/
 theorem specProjection_eq_borelCalculus (B : Set ℝ) (hB : MeasurableSet B) :
     specProjection hA B hB
-      = BorelCalculus.borelCalculus (isStarNormal_cayley hA)
-          (BorelCalculus.isBddMeasurable_indicator (a := cayley hA)
-            (measurable_cayleyInv hA hB)) := by
+      = BorelCalculus.borelCalculus (hA.isStarNormal_cayley)
+          (BorelCalculus.isBddMeasurable_indicator (a := A.cayley)
+            (measurable_cayleyInv A hB)) := by
   rw [specProjection_def, spectralPVM_def, BorelCalculus.toProjValMeasure_proj,
     BorelCalculus.specProj_def]
 
@@ -482,9 +497,9 @@ theorem specProjection_eq_borelCalculus (B : Set ℝ) (hB : MeasurableSet B) :
 transform — the bridge that makes spectral projections commute with it. -/
 theorem resolvent_negI_eq_borelCalculus
     (hs : BorelCalculus.IsBddMeasurable
-      (fun w => ((2 * Complex.I)⁻¹ • (cayleyCoord hA - 1)) w)) :
+      (fun w => ((2 * Complex.I)⁻¹ • (cayleyCoord A - 1)) w)) :
     resolvent A (-Complex.I)
-      = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hs := by
+      = BorelCalculus.borelCalculus (hA.isStarNormal_cayley) hs := by
   rw [BorelCalculus.borelCalculus_of_continuous, resolvent_negI_eq_cfcHom hA]
 
 /-- **Spectral projections commute with the resolvent.** -/
@@ -492,7 +507,7 @@ theorem specProjection_comm_resolvent (B : Set ℝ) (hB : MeasurableSet B) :
     specProjection hA B hB * resolvent A (-Complex.I)
       = resolvent A (-Complex.I) * specProjection hA B hB := by
   have hs : BorelCalculus.IsBddMeasurable
-      (fun w => ((2 * Complex.I)⁻¹ • (cayleyCoord hA - 1)) w) :=
+      (fun w => ((2 * Complex.I)⁻¹ • (cayleyCoord A - 1)) w) :=
     BorelCalculus.IsBddMeasurable.of_continuous _
   rw [resolvent_negI_eq_borelCalculus hA hs, specProjection, spectralPVM,
     BorelCalculus.toProjValMeasure_proj, BorelCalculus.specProj_def]
@@ -509,20 +524,20 @@ include hA in
 /-- Every vector of the domain is a resolvent image. -/
 theorem exists_resolvent_eq_of_mem_domain (x : A.domain) :
     resolvent A (-Complex.I) ((-Complex.I) • (x : H) - A x) = (x : H) :=
-  resolvent_smul_sub_apply (negI_mem_resolventSet hA) x
+  resolvent_smul_sub_apply ((hA.mem_resolventSet_of_im_ne_zero (z := -Complex.I) (by simp))) x
 
 /-- **Spectral projections preserve the domain.** -/
 theorem specProjection_mem_domain (B : Set ℝ) (hB : MeasurableSet B) (x : A.domain) :
     specProjection hA B hB (x : H) ∈ A.domain := by
   have hx := exists_resolvent_eq_of_mem_domain hA x
   rw [← hx, specProjection_resolvent_apply]
-  exact resolvent_mem_domain (negI_mem_resolventSet hA) _
+  exact resolvent_mem_domain ((hA.mem_resolventSet_of_im_ne_zero (z := -Complex.I) (by simp))) _
 
 /-- **Spectral projections intertwine the operator.** -/
 theorem specProjection_apply_domain (B : Set ℝ) (hB : MeasurableSet B) (x : A.domain) :
     A ⟨specProjection hA B hB (x : H), specProjection_mem_domain hA B hB x⟩
       = specProjection hA B hB (A x) := by
-  set hni := negI_mem_resolventSet hA with hhni
+  set hni := (hA.mem_resolventSet_of_im_ne_zero (z := -Complex.I) (by simp)) with hhni
   set P := specProjection hA B hB with hP
   set φ : H := (-Complex.I) • (x : H) - A x with hφ
   have hx : resolvent A (-Complex.I) φ = (x : H) := exists_resolvent_eq_of_mem_domain hA x
@@ -547,7 +562,7 @@ theorem specProjection_comm_resolvent' {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ 
       = resolvent A z * specProjection hA B hB := by
   have hs : BorelCalculus.IsBddMeasurable (fun w => resolventSymbol hA hz w) :=
     BorelCalculus.IsBddMeasurable.of_continuous _
-  have hR : resolvent A z = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hs := by
+  have hR : resolvent A z = BorelCalculus.borelCalculus (hA.isStarNormal_cayley) hs := by
     rw [BorelCalculus.borelCalculus_of_continuous, resolvent_eq_cfcHom hA hz hzr]
   rw [hR, specProjection, spectralPVM, BorelCalculus.toProjValMeasure_proj,
     BorelCalculus.specProj_def]
@@ -801,11 +816,11 @@ theorem isSelfAdjoint_specRestrict : IsSelfAdjoint (specRestrict hA B hB) := by
   -- `T ψ ± i • ψ = φ`, so solve at `-φ` and negate
   · intro φ
     obtain ⟨ψ, hψ⟩ := exists_specRestrict_resolvent hA B hB (z := -Complex.I) (by simp)
-      (negI_mem_resolventSet hA) (-φ)
+      ((hA.mem_resolventSet_of_im_ne_zero (z := -Complex.I) (by simp))) (-φ)
     exact ⟨ψ, by linear_combination (norm := module) -hψ⟩
   · intro φ
     obtain ⟨ψ, hψ⟩ := exists_specRestrict_resolvent hA B hB (z := Complex.I) (by simp)
-      (I_mem_resolventSet hA) (-φ)
+      ((hA.mem_resolventSet_of_im_ne_zero (z := Complex.I) (by simp))) (-φ)
     exact ⟨ψ, by linear_combination (norm := module) -hψ⟩
 
 

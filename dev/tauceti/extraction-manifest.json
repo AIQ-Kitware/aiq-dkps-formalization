@@ -2900,28 +2900,16 @@
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley",
       "ownership_class": "tauceti",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
-      "provenance_class": "partially upstreamed; Cayley construction and core unitary proofs now use canonical Tau Ceti APIs",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift",
-        "TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley",
-        "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary",
-        "Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap",
-        "Mathlib.Analysis.InnerProductSpace.LinearPMap"
-      ],
+      "provenance_class": "independent replacements; transitive reuse of DKPS-adapted self-adjoint foundations",
+      "direct_dependencies": [],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "DavisKahan.SpectralTheory.GapResolvent",
-        "DavisKahan.SpectralTheory.PartialMap.RealSpectrum",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
-        "ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner"
-      ],
-      "status": "partially-upstreamed",
-      "upstream_pr": null,
-      "migration_note": "Tau Ceti now owns the canonical Cayley transform, its isometry, surjectivity, unitarity, star-normality, off-real resolvent facts, and adjoint laws. The local construction and proofs were removed; short local spellings remain for the spectral-measure and complexification consumers while they migrate. The shift estimate, closed-range argument, and remaining local resolvent adapter are still donor mathematics."
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": "#14305, #15559",
+      "migration_note": "November 1: entire local module deleted, including inverse bridges and Cayley abbreviations. Consumers use LinearPMap.resolvent, LinearPMap.cayley, IsSelfAdjoint resolvent/unitarity/normality laws directly; pure spectral symbols take A rather than a redundant proof argument. Native formal-adjoint norm_smul_sub_sq and abs_im_mul_norm_le_norm_smul_sub cover complex shift estimates; native shift bijectivity covers specialized closed/dense range arguments. Separate Shift and RealLowerBound modules retain additional RCLike lower-bound/orthogonality APIs. Source e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SelfAdjointResolvent.lean; Jon Crall / Claude Opus 5, Kitware copyright, Apache-2.0. Independent resolvent PR #14305 b9288156cab0e9acffe09889dbb4f42a1b7d63cd and Cayley PR #15559 54252fb0e940e9de464fb187faa1ddf4fa69f7fc use previously adapted foundations transitively; no proof descent claimed."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -3091,7 +3079,7 @@
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent",
+        "TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley",
         "ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic",
         "Mathlib"
       ],
@@ -3247,7 +3235,7 @@
       ],
       "status": "partially-upstreamed",
       "upstream_pr": null,
-      "migration_note": "Yosida resolvents, their sharp norm estimates, and the adjoint-resolvent identity now use Tau Ceti's canonical LinearPMap resolver directly. The approximation and group-convergence mathematics remains local. The spectral-projection consumer temporarily converts at the existing local Borel-calculus boundary."
+      "migration_note": "Yosida resolvents, their sharp norm estimates, and the adjoint-resolvent identity now use Tau Ceti's canonical LinearPMap resolver directly. The approximation and group-convergence mathematics remains local. The spectral-projection consumer now shares the canonical inverse with the Borel calculus; no conversion remains."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -3686,7 +3674,6 @@
       "provenance_class": "partially upstreamed; Cayley intertwining now forwards to Tau Ceti",
       "direct_dependencies": [
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent",
         "TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley",
         "Mathlib"
       ],
@@ -3696,7 +3683,7 @@
       ],
       "status": "partially-upstreamed",
       "upstream_pr": null,
-      "migration_note": "The local self-adjoint partial-map intertwiner now uses Tau Ceti's `Intertwines.comp_cayley_eq`; its resolvent conversion and additional functional-calculus API remain local for downstream consumers."
+      "migration_note": "The local self-adjoint partial-map intertwiner now uses Tau Ceti's `Intertwines.comp_cayley_eq`; its consumers use the canonical inverse directly; additional functional-calculus API remains local."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -5025,7 +5012,7 @@
         "mem_resolventSet_toPMap_top_iff",
         "resolvent_toPMap_top"
       ],
-      "current_namespace": "TauCeti.LinearPMap",
+      "current_namespace": "LinearPMap",
       "staging_module": "ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded",
       "final_tauceti_module": "TauCeti.Analysis.Normed.Operator.Resolvent.Unbounded",
       "ownership_class": "tauceti",
@@ -5038,8 +5025,9 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
         "RoadmapBridge.TauCetiResolventConservativity"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": "#12771, #14357, #14459, #21914",
+      "migration_note": "November 1: all 484 donor lines deleted; generic inverse/set/identity/Neumann and bounded-operator bridge consumers use root LinearPMap / ContinuousLinearMap APIs. Accepted topological-module core is broader than the donor nontrivially-normed-field API; Neumann perturbations need only HasSummableGeomSeries on bounded operators rather than CompleteSpace E. Integrations: #12771 83eb0f7fbeb835397951914067a0b6fc359cf914; #14357 711bc67a45daa2b57ba1539190a9daa15ac05613; #14459 9c887749b7f41032d4ba21b2b637f083b75c91a4; #21914 2c980efea6aed36e84d620692293712b261d1a96, all in pin 463ab293070d. Original generalized upstream copy credits Tau Ceti contributors, Apache-2.0, upstream 1b39d420ac84ed9a5a7d536ce19b37818ad29c39, recoverable at e4637c3919ae under the donor path. No original Kitware proof authorship claimed. Conservativity fixture now exercises canonical generic, real and complex consumers."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",

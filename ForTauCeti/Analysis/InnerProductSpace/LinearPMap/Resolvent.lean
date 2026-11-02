@@ -4,7 +4,7 @@ Authors: Jon Crall, OpenAI GPT-6
 -/
 module
 
-public import ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded
+public import TauCeti.Analysis.Normed.Operator.Resolvent.Unbounded
 public import TauCeti.Analysis.Normed.Operator.Resolvent.Spectrum
 public import TauCeti.Analysis.Normed.Operator.Resolvent.RealSpectrum
 

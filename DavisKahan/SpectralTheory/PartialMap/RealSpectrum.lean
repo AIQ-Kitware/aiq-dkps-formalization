@@ -32,34 +32,6 @@ universe u v
 variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v} [NormedAddCommGroup E] [NormedSpace 𝕜 E]
 
-/-! ### The donor and upstream resolvent representations
-
-The mathematical endpoints use TauCeti's canonical partial-map spectrum.
-A few constructive source arguments still use the old donor resolvent with the
-same inverse-record fields. Those witnesses are translated here only at
-remaining legacy consumers; canonical spectral predicates stay in statements. -/
-
-/-- Membership in the donor and upstream resolvent sets is equivalent. -/
-theorem mem_local_resolventSet_iff_root
-    (A : E →ₗ.[𝕜] E) (z : 𝕜) :
-    z ∈ TauCeti.LinearPMap.resolventSet A ↔
-      z ∈ _root_.LinearPMap.resolventSet A := by
-  rw [TauCeti.LinearPMap.mem_resolventSet_iff,
-    _root_.LinearPMap.mem_resolventSet_iff]
-  constructor
-  · rintro ⟨R, hR⟩
-    exact ⟨R, {
-      mem_domain := hR.mem_domain
-      smul_sub_apply := hR.smul_sub_apply
-      apply_smul_sub := hR.apply_smul_sub
-    }⟩
-  · rintro ⟨R, hR⟩
-    exact ⟨R, {
-      mem_domain := hR.mem_domain
-      smul_sub_apply := hR.smul_sub_apply
-      apply_smul_sub := hR.apply_smul_sub
-    }⟩
-
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
@@ -67,16 +39,13 @@ variable {F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 omit [CompleteSpace E] in
-/-- The old sign-convention inverse condition and the donor complex-resolvent
-interface agree.  The hard sign change is proved once, scalar-generically, in
-`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean` and the donor
-complex resolvent has a separately proved equivalence with canonical TauCeti. -/
+/-- The old sign-convention inverse condition agrees with the canonical resolvent.
+The scalar-generic sign change is proved in `LinearPMap/Closed.lean`. -/
 theorem mem_realResolventSet_iff_mem_spectraResolvent
     (A : E →ₗ.[ℂ] E) (lam : ℝ) :
     lam ∈ TauCeti.LinearPMap.realResolventSet A ↔
-      (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet A :=
-  (TauCeti.LinearPMap.mem_realResolventSet_iff_mem_canonical_resolventSet A lam).trans
-    (mem_local_resolventSet_iff_root A (lam : ℂ)).symm
+      (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A :=
+  TauCeti.LinearPMap.mem_realResolventSet_iff_mem_canonical_resolventSet A lam
 
 /-! ## The spectrum of a self-adjoint operator is real
 

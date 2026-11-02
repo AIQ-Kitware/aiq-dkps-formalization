@@ -8,7 +8,7 @@ module
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital
 public import Mathlib.Topology.ContinuousMap.StoneWeierstrass
@@ -62,6 +62,13 @@ is short: for disjoint closed spectra pick a Borel `B ⊇ σ(A)` missing `σ(B)`
 
 public section
 
+open _root_.LinearPMap (
+  resolventSet
+  resolvent
+  resolvent_mem_domain
+  smul_sub_apply_resolvent
+  resolvent_smul_sub_apply)
+
 namespace TauCeti
 namespace LinearPMap
 
@@ -106,7 +113,7 @@ theorem resolvent_intertwines' {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
     (hzA : z ∈ resolventSet A) (hzB : z ∈ resolventSet B)
     (hmaps : ∀ y : B.domain, X (y : F) ∈ A.domain)
     (hint : ∀ y : B.domain, A ⟨X (y : F), hmaps y⟩ = X (B y)) :
-    X ∘L resolvent B z = resolvent A z ∘L X :=
+    X ∘L B.resolvent z = A.resolvent z ∘L X :=
   resolvent_intertwines (fun ψ => resolvent_smul_sub_apply hzA ψ)
     (fun φ => ⟨resolvent_mem_domain hzB φ, smul_sub_apply_resolvent hzB φ⟩) hmaps hint
 
@@ -313,18 +320,18 @@ variable {E F : Type*}
 /-- **An intertwiner intertwines the Cayley transforms.**
 
 Immediate from `resolvent_intertwines'` at `z = -i`, since
-`cayley hA = 1 + 2i • R_A(-i)`.  This is the step that carries the intertwining
+`A.cayley = 1 + 2i • R_A(-i)`.  This is the step that carries the intertwining
 into the bounded world, where the Borel calculus lives. -/
 theorem cayley_intertwines {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) {X : F →L[ℂ] E}
     (hmaps : ∀ y : B.domain, X (y : F) ∈ A.domain)
     (hint : ∀ y : B.domain, A ⟨X (y : F), hmaps y⟩ = X (B y)) :
-    X ∘L cayley hB = cayley hA ∘L X := by
+    X ∘L B.cayley = A.cayley ∘L X := by
   have hBA : B.Intertwines A X := ⟨hmaps, fun y => (hint y).symm⟩
   change X ∘L B.cayley = A.cayley ∘L X
   exact hBA.comp_cayley_eq
-    (_root_.IsSelfAdjoint.mem_resolventSet_of_im_ne_zero hB (by simp))
-    (_root_.IsSelfAdjoint.mem_resolventSet_of_im_ne_zero hA (by simp))
+    (hB.mem_resolventSet_of_im_ne_zero (by simp))
+    (hA.mem_resolventSet_of_im_ne_zero (by simp))
 
 /-- **An intertwiner intertwines the continuous functional calculi.**
 
@@ -429,12 +436,12 @@ theorem cfcHom_cayley_intertwines {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     (hmaps : ∀ y : B.domain, X (y : F) ∈ A.domain)
     (hint : ∀ y : B.domain, A ⟨X (y : F), hmaps y⟩ = X (B y))
     {K : Set ℂ} (hK : IsCompact K)
-    (huK : _root_.spectrum ℂ (cayley hA) ⊆ K) (hvK : _root_.spectrum ℂ (cayley hB) ⊆ K)
+    (huK : _root_.spectrum ℂ (A.cayley) ⊆ K) (hvK : _root_.spectrum ℂ (B.cayley) ⊆ K)
     (g : C(K, ℂ)) :
-    X ∘L cfcHom (isStarNormal_cayley hB) (symbolRestrict hvK g)
-      = cfcHom (isStarNormal_cayley hA) (symbolRestrict huK g) ∘L X :=
+    X ∘L cfcHom (hB.isStarNormal_cayley) (symbolRestrict hvK g)
+      = cfcHom (hA.isStarNormal_cayley) (symbolRestrict huK g) ∘L X :=
   cfcHom_intertwines _ _ (cayley_intertwines hA hB hmaps hint)
-    (star_intertwines_of_mem_unitary (cayley_mem_unitary hA) (cayley_mem_unitary hB)
+    (star_intertwines_of_mem_unitary (hA.cayley_mem_unitary) (hB.cayley_mem_unitary)
       (cayley_intertwines hA hB hmaps hint)) hK huK hvK g
 
 end Complex

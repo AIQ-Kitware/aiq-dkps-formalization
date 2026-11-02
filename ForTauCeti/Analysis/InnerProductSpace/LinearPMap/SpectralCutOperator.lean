@@ -50,13 +50,13 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : Measu
 @[expose]
 noncomputable def specCutOp {c r : ℝ} (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r) :
     H →L[ℂ] H :=
-  BorelCalculus.borelCalculus (isStarNormal_cayley hA)
-    (isBddMeasurable_truncSymbol hA B hB hr hcr)
+  BorelCalculus.borelCalculus (hA.isStarNormal_cayley)
+    (isBddMeasurable_truncSymbol (A := A) B hB hr hcr)
 
 /-- The cut operator is bounded by the radius of the spectral set. -/
 theorem norm_specCutOp_apply_le {c r : ℝ} (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r)
     (y : H) : ‖specCutOp hA B hB hr hcr y‖ ≤ r * ‖y‖ :=
-  BorelCalculus.norm_borelCalculus_apply_le _ _ hr (norm_truncSymbol_le hA B hr hcr) y
+  BorelCalculus.norm_borelCalculus_apply_le _ _ hr (norm_truncSymbol_le (A := A) B hr hcr) y
 
 /-- Operator-norm form of the cut bound, from the pointwise one. -/
 theorem norm_specCutOp_le {c r : ℝ} (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r) :

@@ -106,8 +106,8 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 example {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A) {z c : ℝ} (hc : 0 < c)
     (hbound : ∀ x : A.domain,
       c * ‖(x : E)‖ ≤ ‖A x - (z : 𝕜) • (x : E)‖) :
-    (z : 𝕜) ∈ TauCeti.LinearPMap.resolventSet A ∧
-      ‖TauCeti.LinearPMap.resolvent A (z : 𝕜)‖ ≤ c⁻¹ :=
+    (z : 𝕜) ∈ _root_.LinearPMap.resolventSet A ∧
+      ‖_root_.LinearPMap.resolvent A (z : 𝕜)‖ ≤ c⁻¹ :=
   TauCeti.LinearPMap.mem_resolventSet_and_norm_le_of_lower_bound hA hc hbound
 
 end Resolvents

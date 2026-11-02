@@ -2418,3 +2418,46 @@ are not claimed to be DKPS adaptations. Their use of the DKPS-adapted
 seminorm/certificate API from #14241 is **transitive reuse**, not descent of the
 Fan-dominance proof itself. The still-local budget extension is not marked
 accepted upstream.
+
+## 2026-11-01: canonical unbounded resolvents and Cayley consumers
+
+Deleted `ForTauCeti/Analysis/Normed/Operator/Resolvent/Unbounded.lean`
+(484 lines) and `LinearPMap/SelfAdjointResolvent.lean` (349 lines).
+All maintained inverse, resolvent-set, shift identity, Neumann, bounded-operator
+bridge, Cayley, spectral-measure, and real/complexification consumers now use
+accepted root `LinearPMap` / `IsSelfAdjoint` APIs. Local/root inverse conversions
+and the paper-side real-set equivalence are removed. Pure spectral symbols take
+the operator rather than a vacuous proof argument. General-field mathematical
+scope is preserved.
+
+The accepted core is broader: topological modules for the algebraic foundation,
+and `HasSummableGeomSeries` rather than ambient completeness for perturbations.
+Its integrations, all ancestors of pin `463ab293070d`, are
+[#12771](https://github.com/TauCetiProject/TauCeti/pull/12771)
+`83eb0f7fbeb835397951914067a0b6fc359cf914`,
+[#14357](https://github.com/TauCetiProject/TauCeti/pull/14357)
+`711bc67a45daa2b57ba1539190a9daa15ac05613`,
+[#14459](https://github.com/TauCetiProject/TauCeti/pull/14459)
+`9c887749b7f41032d4ba21b2b637f083b75c91a4`, and
+[#21914](https://github.com/TauCetiProject/TauCeti/pull/21914)
+`2c980efea6aed36e84d620692293712b261d1a96`.
+The donor was a generalized upstream copy, credited to Tau Ceti contributors
+under Apache-2.0 at upstream `1b39d420ac84ed9a5a7d536ce19b37818ad29c39`;
+no original Kitware proof contribution is claimed for that core.
+
+Independent self-adjoint resolvent laws come from
+[#14305](https://github.com/TauCetiProject/TauCeti/pull/14305),
+`b9288156cab0e9acffe09889dbb4f42a1b7d63cd`; independent Cayley unitarity
+and normality come from
+[#15559](https://github.com/TauCetiProject/TauCeti/pull/15559),
+`54252fb0e940e9de464fb187faa1ddf4fa69f7fc`. Their transitive use of
+DKPS-adapted self-adjoint foundations is distinct from proof adaptation.
+Native `LinearPMap.IsFormalAdjoint.norm_smul_sub_sq` and
+`abs_im_mul_norm_le_norm_smul_sub` cover the complex shift estimates;
+self-adjoint shift bijectivity covers the specialized closed/dense-range proof.
+Separate `Shift` / `RealLowerBound` donors retain additional RCLike lower-bound
+and orthogonality results. Historical source is
+`e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SelfAdjointResolvent.lean`,
+Jon Crall / Claude Opus 5, Kitware copyright, Apache-2.0. The deleted core is
+recoverable at the same source commit under its former path. The existing
+manifest preserves historical declaration names and source ancestry.

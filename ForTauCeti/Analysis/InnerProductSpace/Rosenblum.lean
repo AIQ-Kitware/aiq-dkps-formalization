@@ -61,6 +61,11 @@ the Cayley singularity is new.
 
 public section
 
+open _root_.LinearPMap (
+  resolventSet
+  mem_resolventSet_iff
+  isOpen_resolventSet)
+
 open scoped InnerProductSpace
 open Filter Topology MeasureTheory
 
@@ -239,30 +244,24 @@ point of the Cayley spectrum has its inverse-Cayley coordinate in the real
 spectrum.  This is `SpectralSupport`, transported through the pushforward that
 defines `spectralPVM`. -/
 theorem ae_cayleyInv_mem_spectrum (v : E) :
-    ∀ᵐ w ∂((cfcHom (isStarNormal_cayley hA)).representationDiagMeasure v),
-      ((cayleyInv hA w : ℝ) : ℂ) ∈ _root_.LinearPMap.spectrum A := by
+    ∀ᵐ w ∂((cfcHom (hA.isStarNormal_cayley)).representationDiagMeasure v),
+      ((cayleyInv A w : ℝ) : ℂ) ∈ _root_.LinearPMap.spectrum A := by
   have hmeas : MeasurableSet (Complex.ofReal ⁻¹' resolventSet A) :=
     ((isOpen_resolventSet A).preimage Complex.continuous_ofReal).measurableSet
   have hzero : (spectralPVM hA).diag v (Complex.ofReal ⁻¹' resolventSet A) = 0 :=
     diag_eq_zero_of_subset_resolventSet hA _ hmeas (fun _ h => h) v
   have hmap : (spectralPVM hA).diag v (Complex.ofReal ⁻¹' resolventSet A)
-      = (cfcHom (isStarNormal_cayley hA)).representationDiagMeasure v
-          (cayleyInv hA ⁻¹' (Complex.ofReal ⁻¹' resolventSet A)) := by
+      = (cfcHom (hA.isStarNormal_cayley)).representationDiagMeasure v
+          (cayleyInv A ⁻¹' (Complex.ofReal ⁻¹' resolventSet A)) := by
     rw [show (spectralPVM hA).diag v
-        = Measure.map (cayleyInv hA) ((cfcHom (isStarNormal_cayley hA)).representationDiagMeasure v)
+        = Measure.map (cayleyInv A) ((cfcHom (hA.isStarNormal_cayley)).representationDiagMeasure v)
       from by
         rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag, BorelCalculus.specDiag_def],
-      Measure.map_apply (measurable_cayleyInv hA) hmeas]
+      Measure.map_apply (measurable_cayleyInv A) hmeas]
   rw [hmap] at hzero
   have := MeasureTheory.compl_mem_ae_iff.mpr hzero
   filter_upwards [this] with w hw
-  have hnotLocal : ((cayleyInv hA w : ℝ) : ℂ) ∉ resolventSet A := hw
-  have hnotRoot : ((cayleyInv hA w : ℝ) : ℂ) ∉ _root_.LinearPMap.resolventSet A := by
-    intro hroot
-    obtain ⟨R, hR⟩ := _root_.LinearPMap.mem_resolventSet_iff.mp hroot
-    exact hnotLocal (mem_resolventSet_iff.mpr ⟨R,
-      ⟨hR.mem_domain, hR.smul_sub_apply, hR.apply_smul_sub⟩⟩)
-  exact (_root_.LinearPMap.mem_spectrum_iff A _).2 hnotRoot
+  exact (_root_.LinearPMap.mem_spectrum_iff A _).2 hw
 
 end Rosenblum
 
@@ -276,25 +275,25 @@ on `A`'s spectrum, and almost every point of the Cayley spectrum has its
 coordinate in that spectrum. -/
 theorem cfcHom_separator_eq_zero (hA : IsSelfAdjoint A) (f : C(ℝ, ℝ))
     (hfA : Set.EqOn f 0 (Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum A)) (n : ℕ)
-    (g : C(_root_.spectrum ℂ (cayley hA), ℂ))
+    (g : C(_root_.spectrum ℂ (A.cayley), ℂ))
     (hgval : ∀ w, g w = cayleySymbolFun f n (w : ℂ)) :
-    cfcHom (isStarNormal_cayley hA) g = 0 := by
+    cfcHom (hA.isStarNormal_cayley) g = 0 := by
   refine ContinuousLinearMap.ext fun v => ?_
-  have hae : ∀ᵐ w ∂((cfcHom (isStarNormal_cayley hA)).representationDiagMeasure v),
+  have hae : ∀ᵐ w ∂((cfcHom (hA.isStarNormal_cayley)).representationDiagMeasure v),
       (starRingEnd ℂ) (g w) * g w = 0 := by
     filter_upwards [ae_cayleyInv_mem_spectrum hA v] with w hw
-    have hf0 : f (cayleyInv hA w) = 0 := hfA hw
+    have hf0 : f (cayleyInv A w) = 0 := hfA hw
     have : g w = 0 := by
       rw [hgval w, cayleySymbolFun]
       -- states the goal with the definition unfolded, in the shape the next step needs;
       -- there is no `_apply` lemma to rewrite with here.
-      change ((f (cayleyInv hA w) * damp n (w : ℂ) : ℝ) : ℂ) = 0
+      change ((f (cayleyInv A w) * damp n (w : ℂ) : ℝ) : ℂ) = 0
       rw [hf0, zero_mul, Complex.ofReal_zero]
     rw [this, mul_zero]
-  have hnorm := norm_sq_cfcHom_apply (isStarNormal_cayley hA) g v
+  have hnorm := norm_sq_cfcHom_apply (hA.isStarNormal_cayley) g v
   rw [MeasureTheory.integral_congr_ae hae, integral_zero] at hnorm
-  have hz : ‖cfcHom (isStarNormal_cayley hA) g v‖ = 0 := by
-    have h2 : (‖cfcHom (isStarNormal_cayley hA) g v‖ : ℝ) ^ 2 = 0 := by
+  have hz : ‖cfcHom (hA.isStarNormal_cayley) g v‖ = 0 := by
+    have h2 : (‖cfcHom (hA.isStarNormal_cayley) g v‖ : ℝ) ^ 2 = 0 := by
       exact_mod_cast hnorm
     exact pow_eq_zero_iff (n := 2) (by norm_num) |>.mp h2
   simpa using norm_eq_zero.mp hz
@@ -306,10 +305,10 @@ coordinate there, and almost every Cayley point differs from the singularity
 theorem tendsto_cfcHom_separator (hB : IsSelfAdjoint B) (f : C(ℝ, ℝ))
     (hfB : Set.EqOn f 1 (Complex.ofReal ⁻¹' _root_.LinearPMap.spectrum B))
     (hf01 : ∀ x, f x ∈ Set.Icc (0 : ℝ) 1)
-    (g : ℕ → C(_root_.spectrum ℂ (cayley hB), ℂ))
+    (g : ℕ → C(_root_.spectrum ℂ (B.cayley), ℂ))
     (hgval : ∀ n w, g n w = cayleySymbolFun f n (w : ℂ)) (ξ : F) :
-    Tendsto (fun n => cfcHom (isStarNormal_cayley hB) (g n) ξ) atTop (nhds ξ) := by
-  set hU := isStarNormal_cayley hB with hhU
+    Tendsto (fun n => cfcHom (hB.isStarNormal_cayley) (g n) ξ) atTop (nhds ξ) := by
+  set hU := hB.isStarNormal_cayley with hhU
   set μ := (cfcHom hU).representationDiagMeasure ξ with hμ
   have hlim : Tendsto
       (fun n => ∫ w, (starRingEnd ℂ) ((g n - 1) w) * ((g n - 1) w) ∂μ) atTop (nhds 0) := by
@@ -377,21 +376,21 @@ theorem eq_zero_of_intertwines_of_disjoint_spectrum
     (hdisj : Disjoint (_root_.LinearPMap.spectrum A) (_root_.LinearPMap.spectrum B)) :
     X = 0 := by
   obtain ⟨f, hfA, hfB, hf01⟩ := exists_spectralSeparator (A := A) (B := B) hdisj
-  set K : Set ℂ := _root_.spectrum ℂ (cayley hA) ∪ _root_.spectrum ℂ (cayley hB) with hKdef
+  set K : Set ℂ := _root_.spectrum ℂ (A.cayley) ∪ _root_.spectrum ℂ (B.cayley) with hKdef
   have hKc : IsCompact K :=
-    (spectrum.isCompact (cayley hA)).union (spectrum.isCompact (cayley hB))
-  have huK : _root_.spectrum ℂ (cayley hA) ⊆ K := Set.subset_union_left
-  have hvK : _root_.spectrum ℂ (cayley hB) ⊆ K := Set.subset_union_right
+    (spectrum.isCompact (A.cayley)).union (spectrum.isCompact (B.cayley))
+  have huK : _root_.spectrum ℂ (A.cayley) ⊆ K := Set.subset_union_left
+  have hvK : _root_.spectrum ℂ (B.cayley) ⊆ K := Set.subset_union_right
   have hcont : ∀ n : ℕ, Continuous fun w : K => cayleySymbolFun f n (w : ℂ) :=
     fun n => (continuous_cayleySymbolFun f hf01 n).comp continuous_subtype_val
   set G : ℕ → C(K, ℂ) := fun n => ⟨_, hcont n⟩ with hGdef
   refine ContinuousLinearMap.ext fun ξ => ?_
   -- the `A`-side calculus vanishes outright, for every `n`
-  have hAzero : ∀ n, cfcHom (isStarNormal_cayley hA) (symbolRestrict huK (G n)) = 0 := fun n =>
+  have hAzero : ∀ n, cfcHom (hA.isStarNormal_cayley) (symbolRestrict huK (G n)) = 0 := fun n =>
     cfcHom_separator_eq_zero hA f hfA n _ (fun _ => rfl)
   -- so the intertwining kills the `B`-side image
   have hXzero : ∀ n,
-      X (cfcHom (isStarNormal_cayley hB) (symbolRestrict hvK (G n)) ξ) = 0 := by
+      X (cfcHom (hB.isStarNormal_cayley) (symbolRestrict hvK (G n)) ξ) = 0 := by
     intro n
     have h := cfcHom_cayley_intertwines hA hB hmaps hint hKc huK hvK (G n)
     have h2 := congrArg (fun T : F →L[ℂ] E => T ξ) h
@@ -402,7 +401,7 @@ theorem eq_zero_of_intertwines_of_disjoint_spectrum
   have hBlim := tendsto_cfcHom_separator hB f hfB hf01
     (fun n => symbolRestrict hvK (G n)) (fun _ _ => rfl) ξ
   have hXlim : Tendsto
-      (fun n => X (cfcHom (isStarNormal_cayley hB) (symbolRestrict hvK (G n)) ξ))
+      (fun n => X (cfcHom (hB.isStarNormal_cayley) (symbolRestrict hvK (G n)) ξ))
       atTop (nhds (X ξ)) := (X.continuous.tendsto _).comp hBlim
   have hconst : Tendsto (fun _ : ℕ => (0 : E)) atTop (nhds (X ξ)) :=
     hXlim.congr fun n => hXzero n

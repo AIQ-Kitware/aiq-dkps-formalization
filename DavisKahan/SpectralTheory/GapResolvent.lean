@@ -176,8 +176,7 @@ theorem notMem_spectrum_addBounded_of_spectrum_gap
       rfl
     rw [hV, ← hu]
     exact this
-  apply (TauCeti.DavisKahan.mem_local_resolventSet_iff_root _ _).mp
-  apply TauCeti.LinearPMap.mem_resolventSet_iff.mpr
+  apply _root_.LinearPMap.mem_resolventSet_iff.mpr
   refine ⟨R ∘L V, fun y => ?_, fun y => ?_, fun x => ?_⟩
   · exact (hright (V y)).choose
   · obtain ⟨hmem, hsolve⟩ := hright (V y)
@@ -347,7 +346,7 @@ theorem twoSidedShiftedInverseBound_of_coercive_comp
   have hres := (TauCeti.LinearPMap.mem_resolventSet_and_norm_le_of_lower_bound hA
     hpos hnorm).1
   rw [_root_.LinearPMap.mem_spectrum_iff, not_not]
-  exact (TauCeti.DavisKahan.mem_local_resolventSet_iff_root _ _).mp hres
+  exact hres
 
 end DavisKahan
 end TauCeti

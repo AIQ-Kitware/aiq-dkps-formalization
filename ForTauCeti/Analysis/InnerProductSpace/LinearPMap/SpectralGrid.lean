@@ -31,6 +31,9 @@ Pre-retirement DKPS source is preserved at `e4637c3919ae` and in
 
 public section
 
+open _root_.LinearPMap (
+  mem_resolventSet_iff)
+
 namespace TauCeti
 namespace LinearPMap
 
@@ -84,9 +87,7 @@ theorem exists_mem_spectrum_of_specProjection_ne_zero (B : Set ℝ) (hB : Measur
   have hroot : (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
     by_contra hnot
     exact this ((_root_.LinearPMap.mem_spectrum_iff A _).2 hnot)
-  obtain ⟨R, hR⟩ := _root_.LinearPMap.mem_resolventSet_iff.mp hroot
-  exact mem_resolventSet_iff.mpr ⟨R,
-    ⟨hR.mem_domain, hR.smul_sub_apply, hR.apply_smul_sub⟩⟩
+  exact hroot
 
 end LinearPMap
 end TauCeti

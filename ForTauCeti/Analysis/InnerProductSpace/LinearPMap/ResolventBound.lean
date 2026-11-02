@@ -12,9 +12,9 @@ public import Mathlib.Analysis.CStarAlgebra.Spectrum
 /-!
 # Resolvent spectral mapping
 
-`TauCeti.LinearPMap.resolvent`, the bounded two-sided inverse of `z • I - A`,
+`_root_.LinearPMap.resolvent`, the bounded two-sided inverse of `z • I - A`,
 and the first resolvent identity it satisfies are supplied by the canonical core
-in `ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded`.  This file adds the
+in `TauCeti.Analysis.Normed.Operator.Resolvent.Unbounded`.  This file adds the
 one thing that core does not carry, because it is about the *spectrum* rather
 than the resolvent set:
 
@@ -64,6 +64,12 @@ mapping is stated accordingly: the relevant point of `A` attached to a nonzero
 -/
 
 public section
+
+open _root_.LinearPMap (
+  resolventSet
+  resolvent
+  resolvent_sub_resolvent_apply
+  resolvent_comm)
 
 namespace TauCeti
 namespace LinearPMap
@@ -147,7 +153,7 @@ theorem notMem_spectrum_resolvent {A : E →ₗ.[𝕜] E} {z : 𝕜}
 
 /-- **Resolvents at two points of the resolvent set commute**, packaged as
 `Commute`.  The underlying equation is the canonical core's
-`TauCeti.LinearPMap.resolvent_comm`. -/
+`_root_.LinearPMap.resolvent_comm`. -/
 theorem resolvent_commute {A : E →ₗ.[𝕜] E} {w z : 𝕜}
     (hw : w ∈ resolventSet A) (hz : z ∈ resolventSet A) :
     Commute (resolvent A w) (resolvent A z) :=

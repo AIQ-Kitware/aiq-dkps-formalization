@@ -109,12 +109,12 @@ omit [CompleteSpace H] in
 invertibility locus of `A - z` in the bounded operator algebra. -/
 theorem mem_resolventSet_toPMap_top_iff
     (A : H →L[ℂ] H) (z : ℂ) :
-    z ∈ TauCeti.LinearPMap.resolventSet ((A : H →ₗ[ℂ] H).toPMap ⊤) ↔
+    z ∈ _root_.LinearPMap.resolventSet ((A : H →ₗ[ℂ] H).toPMap ⊤) ↔
       IsUnit (A - z • (1 : H →L[ℂ] H)) := by
   -- The canonical resolvent core already provides the bounded bridge, to Mathlib's
   -- `resolventSet`, i.e. to `IsUnit (z • 1 - A)`.  This statement is the `A - z`
   -- orientation, which differs from it by a sign, and `IsUnit` is sign-blind.
-  rw [TauCeti.LinearPMap.mem_resolventSet_toPMap_top_iff, spectrum.mem_resolventSet_iff,
+  rw [_root_.ContinuousLinearMap.mem_resolventSet_toPMap_top_iff, spectrum.mem_resolventSet_iff,
     Algebra.algebraMap_eq_smul_one,
     show z • (1 : H →L[ℂ] H) - A = -(A - z • (1 : H →L[ℂ] H)) by abel,
     IsUnit.neg_iff]
@@ -133,9 +133,7 @@ theorem realSpectrum_eq_toPMap_top_spectrum
   rw [_root_.LinearPMap.mem_spectrum_iff]
   rw [spectrum.mem_iff, Algebra.algebraMap_eq_smul_one,
     ← IsUnit.neg_iff, neg_sub]
-  exact not_congr ((mem_resolventSet_toPMap_top_iff A (r : ℂ)).symm.trans
-    (TauCeti.DavisKahan.mem_local_resolventSet_iff_root
-      ((A : H →ₗ[ℂ] H).toPMap ⊤) (r : ℂ)))
+  exact not_congr (mem_resolventSet_toPMap_top_iff A (r : ℂ)).symm
 
 /-- The real spectrum of a bounded self-adjoint operator is closed. -/
 theorem isClosed_realSpectrum_boundedSelfAdjoint

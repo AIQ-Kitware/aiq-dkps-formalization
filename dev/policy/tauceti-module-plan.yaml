@@ -179,7 +179,6 @@ topics:
   modules:
   - Analysis.InnerProductSpace.LinearPMap.Resolvent
   - Analysis.InnerProductSpace.LinearPMap.ResolventBound
-  - Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
   - Analysis.InnerProductSpace.LinearPMap.RealLowerBound
   - Analysis.InnerProductSpace.SeparatedIntertwiner
   - Analysis.InnerProductSpace.LinearPMap.Shift
@@ -504,7 +503,6 @@ rungs:
   - Analysis.InnerProductSpace.LinearPMap.RealLowerBound
   - Analysis.InnerProductSpace.LinearPMap.Resolvent
   - Analysis.InnerProductSpace.LinearPMap.ResolventBound
-  - Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
   - Analysis.InnerProductSpace.SeparatedIntertwiner
   - Analysis.InnerProductSpace.LinearPMap.Shift
 - id: N

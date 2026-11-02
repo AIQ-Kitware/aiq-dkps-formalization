@@ -65,11 +65,12 @@ theorem measurable_cayleyCoordPlane : Measurable cayleyCoordPlane := by
 
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 
+omit [CompleteSpace H] in
 /-- On the spectrum of a Cayley transform the plane-level map agrees with `cayleyInv`.
 This is the equation that lets one Borel subset of `ℝ` be fed to `specProjection` and
 its `ℂ`-indexed spelling `specProjC` at the same time. -/
-theorem cayleyInv_eq_cayleyCoordPlane (w : _root_.spectrum ℂ (cayley hA)) :
-    cayleyInv hA w = cayleyCoordPlane (w : ℂ) := by
+theorem cayleyInv_eq_cayleyCoordPlane (w : _root_.spectrum ℂ (A.cayley)) :
+    cayleyInv A w = cayleyCoordPlane (w : ℂ) := by
   rw [cayleyInv_def, cayleyCoordPlane]
 
 /-- **The two spellings of a spectral projection agree.**  `specProjection` cuts by a
@@ -77,22 +78,22 @@ real Borel set through `cayleyInv`; `specProjC` cuts by a complex Borel set thro
 coordinate itself.  They are the same operator for the preimage set. -/
 theorem specProjection_eq_specProjC (B : Set ℝ) (hB : MeasurableSet B) :
     specProjection hA B hB
-      = BorelCalculus.specProjC (isStarNormal_cayley hA)
+      = BorelCalculus.specProjC (hA.isStarNormal_cayley)
           (measurable_cayleyCoordPlane hB) := by
   rw [specProjection_eq_borelCalculus, BorelCalculus.specProjC_def]
   refine BorelCalculus.borelCalculus_congr_ae _ _ _ fun η => ?_
   refine Filter.Eventually.of_forall fun w => ?_
-  have hEq : cayleyInv hA w = cayleyCoordPlane (w : ℂ) := cayleyInv_eq_cayleyCoordPlane hA w
-  change (cayleyInv hA ⁻¹' B).indicator (fun _ => (1 : ℂ)) w
+  have hEq : cayleyInv A w = cayleyCoordPlane (w : ℂ) := cayleyInv_eq_cayleyCoordPlane w
+  change (cayleyInv A ⁻¹' B).indicator (fun _ => (1 : ℂ)) w
       = (cayleyCoordPlane ⁻¹' B).indicator (fun _ => (1 : ℂ)) (w : ℂ)
-  by_cases h : cayleyInv hA w ∈ B
+  by_cases h : cayleyInv A w ∈ B
   · have h' : (w : ℂ) ∈ cayleyCoordPlane ⁻¹' B := by
       rw [Set.mem_preimage, ← hEq]; exact h
-    rw [Set.indicator_of_mem (show w ∈ cayleyInv hA ⁻¹' B from h),
+    rw [Set.indicator_of_mem (show w ∈ cayleyInv A ⁻¹' B from h),
       Set.indicator_of_mem h']
   · have h' : (w : ℂ) ∉ cayleyCoordPlane ⁻¹' B := by
       rw [Set.mem_preimage, ← hEq]; exact h
-    rw [Set.indicator_of_notMem (show w ∉ cayleyInv hA ⁻¹' B from h),
+    rw [Set.indicator_of_notMem (show w ∉ cayleyInv A ⁻¹' B from h),
       Set.indicator_of_notMem h']
 
 /-- **Spectral projections are natural under a unitary intertwiner.**
@@ -104,17 +105,17 @@ theorem specProjection_apply_of_unitary_intertwines (e : H ≃ₗᵢ[ℂ] H)
     (hint : ∀ x : A.domain, A ⟨e (x : H), hmaps x⟩ = e (A x))
     (B : Set ℝ) (hB : MeasurableSet B) (x : H) :
     e (specProjection hA B hB x) = specProjection hA B hB (e x) := by
-  have hcay : e.toLinearIsometry.toContinuousLinearMap ∘L cayley hA
-      = cayley hA ∘L e.toLinearIsometry.toContinuousLinearMap :=
+  have hcay : e.toLinearIsometry.toContinuousLinearMap ∘L A.cayley
+      = A.cayley ∘L e.toLinearIsometry.toContinuousLinearMap :=
     cayley_intertwines hA hA hmaps hint
-  have he : ∀ z : H, e (cayley hA z) = cayley hA (e z) := by
+  have he : ∀ z : H, e (A.cayley z) = A.cayley (e z) := by
     intro z
     have h := congrArg (fun T : H →L[ℂ] H => T z) hcay
     simpa only [ContinuousLinearMap.coe_comp, Function.comp_apply,
       LinearIsometry.coe_toContinuousLinearMap,
       LinearIsometryEquiv.coe_toLinearIsometry] using h
   rw [specProjection_eq_specProjC hA B hB]
-  exact BorelCalculus.specProjC_apply_of_intertwines (isStarNormal_cayley hA) e he
+  exact BorelCalculus.specProjC_apply_of_intertwines (hA.isStarNormal_cayley) e he
     (measurable_cayleyCoordPlane hB) x
 
 end LinearPMap

@@ -147,7 +147,7 @@ theorem le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal
     have := hrep lam hlam
     have hresRoot : ((lam : ℝ) : ℂ) ∈ _root_.LinearPMap.resolventSet B := by
       simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using this
-    exact (mem_local_resolventSet_iff_root B _).mpr hresRoot
+    exact hresRoot
   have hxIoi : (x : H) ∈ TauCeti.LinearPMap.specRange hB (Set.Ioi alpha)
       measurableSet_Ioi := by
     rw [← canonicalLowBranchUnbounded_orthogonal hB alpha]

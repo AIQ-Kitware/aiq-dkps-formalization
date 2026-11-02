@@ -64,7 +64,7 @@ theorem semiboundedBelow_of_spectrum_subset_Ici
     by_contra hnot
     have hroot : (lam : ℂ) ∈ _root_.LinearPMap.spectrum A := by
       rw [_root_.LinearPMap.mem_spectrum_iff]
-      exact fun hres => hnot ((TauCeti.DavisKahan.mem_local_resolventSet_iff_root A _).2 hres)
+      exact hnot
     exact absurd (hσ hroot) (by simpa using not_le.mpr hlam)
   simpa using
     TauCeti.LinearPMap.le_re_inner_of_specProjection_Iio_eq_zero hA hzero x
@@ -86,7 +86,7 @@ theorem semiboundedAbove_of_spectrum_subset_Iic
     by_contra hnot
     have hroot : (lam : ℂ) ∈ _root_.LinearPMap.spectrum A := by
       rw [_root_.LinearPMap.mem_spectrum_iff]
-      exact fun hres => hnot ((TauCeti.DavisKahan.mem_local_resolventSet_iff_root A _).2 hres)
+      exact hnot
     exact absurd (hσ hroot) (by simpa using not_le.mpr hlam)
   simpa using
     TauCeti.LinearPMap.re_inner_le_of_specProjection_Ioi_eq_zero hA hzero x

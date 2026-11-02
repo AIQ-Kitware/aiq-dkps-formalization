@@ -132,13 +132,13 @@ omit [CompleteSpace H] [CompleteSpace K] in
 /-- A resolvent of a partial operator transports to its unitary conjugate. -/
 theorem mem_resolventSet_unitaryConj_of_mem
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) {z : ℂ}
-    (hz : z ∈ TauCeti.LinearPMap.resolventSet A) :
-    z ∈ TauCeti.LinearPMap.resolventSet
+    (hz : z ∈ _root_.LinearPMap.resolventSet A) :
+    z ∈ _root_.LinearPMap.resolventSet
       (_root_.LinearPMap.unitaryConj W A) := by
-  obtain ⟨R, hR⟩ := TauCeti.LinearPMap.mem_resolventSet_iff.mp hz
+  obtain ⟨R, hR⟩ := _root_.LinearPMap.mem_resolventSet_iff.mp hz
   -- `IsResolventAt` has three fields: the domain condition, the right inverse, and the
   -- left inverse.  Each transports by conjugating with `W`.
-  apply TauCeti.LinearPMap.mem_resolventSet_iff.mpr
+  apply _root_.LinearPMap.mem_resolventSet_iff.mpr
   refine ⟨unitaryConjugateBounded W R, fun φ => ?_, fun φ => ?_, fun ψ => ?_⟩
   · rw [unitaryConjugateBounded_apply,
       _root_.LinearPMap.mem_unitaryConj_domain_iff, W.symm_apply_apply]
@@ -174,9 +174,9 @@ omit [CompleteSpace H] [CompleteSpace K] in
 /-- Resolvent membership is invariant under unitary conjugation. -/
 theorem mem_resolventSet_unitaryConj_iff
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) {z : ℂ} :
-    z ∈ TauCeti.LinearPMap.resolventSet
+    z ∈ _root_.LinearPMap.resolventSet
         (_root_.LinearPMap.unitaryConj W A) ↔
-      z ∈ TauCeti.LinearPMap.resolventSet A := by
+      z ∈ _root_.LinearPMap.resolventSet A := by
   constructor
   · intro hz
     have hz' := mem_resolventSet_unitaryConj_of_mem
@@ -190,12 +190,12 @@ unitarily conjugated DK operator. -/
 theorem mem_resolventSet_unitaryConjugate_iff
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
     (hA : IsSelfAdjoint A) {z : ℂ} :
-    z ∈ TauCeti.LinearPMap.resolventSet
+    z ∈ _root_.LinearPMap.resolventSet
         (unitaryConjugate W A hA) ↔
-      z ∈ TauCeti.LinearPMap.resolventSet A := by
-  change z ∈ TauCeti.LinearPMap.resolventSet
+      z ∈ _root_.LinearPMap.resolventSet A := by
+  change z ∈ _root_.LinearPMap.resolventSet
       (_root_.LinearPMap.unitaryConj W A) ↔
-    z ∈ TauCeti.LinearPMap.resolventSet A
+    z ∈ _root_.LinearPMap.resolventSet A
   exact mem_resolventSet_unitaryConj_iff W A
 
 /-- The conjugated DK operator is self-adjoint. -/
@@ -215,9 +215,7 @@ theorem unitaryConjugate_spectrum_eq
   ext lam
   simp only [_root_.LinearPMap.mem_spectrum_iff]
   apply not_congr
-  exact (mem_local_resolventSet_iff_root (unitaryConjugate W A hA) lam).symm.trans
-    ((mem_resolventSet_unitaryConjugate_iff W A hA).trans
-      (mem_local_resolventSet_iff_root A lam))
+  exact mem_resolventSet_unitaryConjugate_iff W A hA
 
 /-- Restriction of an ambient unitary to a submodule and its transported
 image.  This same-ambient-space form is exactly what reflection transport

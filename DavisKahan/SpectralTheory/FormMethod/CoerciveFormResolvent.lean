@@ -104,7 +104,7 @@ noncomputable def resolvent
     D.solutionOperator f = D.formInverse (D.embed.adjoint f) := rfl
 
 /-- The form's inverse, unfolded.  **Note this is `A⁻¹`, not a resolvent at a spectral
-parameter** -- it is unrelated to `TauCeti.LinearPMap.resolvent` despite the name. -/
+parameter** -- it is unrelated to `_root_.LinearPMap.resolvent` despite the name. -/
 @[simp] theorem resolvent_apply
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (f : H) :
     D.resolvent f = D.embed (D.solutionOperator f) := rfl

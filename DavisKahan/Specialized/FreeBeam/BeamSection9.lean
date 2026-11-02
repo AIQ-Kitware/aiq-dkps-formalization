@@ -797,15 +797,14 @@ theorem realSpectrum_beamOperator_subset_sharp :
 /-- Every nonzero point below the gap is a resolvent point of the free beam. -/
 theorem beamOperator_mem_resolventSet_of_mem_lowSet_diff {lam : ℝ}
     (hlam : lam ∈ beamLowSet \ ({0} : Set ℝ)) :
-    (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet beamOperator := by
+    (lam : ℂ) ∈ _root_.LinearPMap.resolventSet beamOperator := by
   by_contra hcon
   -- The canonical real spectrum is the real preimage of the canonical complex
   -- spectrum, so its nonmembership witness is exactly the resolvent hypothesis.
   have hmem : lam ∈ _root_.LinearPMap.realSpectrum beamOperator := by
     rw [_root_.LinearPMap.mem_realSpectrum_iff, _root_.LinearPMap.mem_spectrum_iff]
     intro hr
-    exact hcon ((TauCeti.DavisKahan.mem_local_resolventSet_iff_root
-      beamOperator (lam : ℂ)).mpr hr)
+    exact hcon hr
   rcases realSpectrum_beamOperator_subset_sharp hmem with h0 | hgt
   · exact hlam.2 h0
   · have hle : lam ≤ (1001 : ℝ) / 2 := hlam.1

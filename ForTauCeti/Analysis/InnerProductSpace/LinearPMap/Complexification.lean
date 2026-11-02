@@ -52,6 +52,9 @@ are square.  That avoids repeating the same migration later for Sylvester-type m
 
 public section
 
+open _root_.LinearPMap (
+  resolvent)
+
 namespace TauCeti
 namespace LinearPMap
 

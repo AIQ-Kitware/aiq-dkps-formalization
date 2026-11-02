@@ -22,6 +22,9 @@ in place; no second shifted-map or resolvent representation is introduced.
 
 public section
 
+open _root_.LinearPMap (
+  resolvent)
+
 namespace TauCeti.LinearPMap
 
 open scoped InnerProductSpace ComplexConjugate

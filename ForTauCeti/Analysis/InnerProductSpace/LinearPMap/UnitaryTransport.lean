@@ -48,6 +48,9 @@ unitary `U ≃ₗᵢ U.map W` is.
 
 public section
 
+open _root_.LinearPMap (
+  resolvent)
+
 namespace TauCeti
 namespace LinearPMap
 

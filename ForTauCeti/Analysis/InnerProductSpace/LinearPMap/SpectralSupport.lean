@@ -43,6 +43,11 @@ which this construction does not have and does not need.
 
 public section
 
+open _root_.LinearPMap (
+  resolventSet
+  resolvent
+  resolvent_smul_sub_apply)
+
 open scoped InnerProductSpace
 open MeasureTheory
 

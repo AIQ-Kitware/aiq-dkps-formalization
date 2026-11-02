@@ -35,6 +35,9 @@ them; they are not bundled into a parallel operator structure.
 
 public section
 
+open _root_.LinearPMap (
+  resolvent)
+
 namespace TauCeti
 namespace LinearPMap
 
@@ -909,7 +912,7 @@ theorem mem_realResolventSet_iff {A : E →ₗ.[𝕜] E} {lam : ℝ} :
 `TauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSeparation`.
 This module *does not* define a second real spectrum.  The legacy real resolvent
 predicate is retained only while its constructive inversion arguments are being
-converted to the canonical `LinearPMap.resolventSet`.  Its operator is the inverse
+converted to the canonical `_root_.LinearPMap.resolventSet`.  Its operator is the inverse
 of `A - λ`; the canonical operator is the inverse of `λ I - A`, and the two
 inverses are negatives of each other.
 

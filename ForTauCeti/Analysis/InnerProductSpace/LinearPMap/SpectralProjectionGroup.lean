@@ -41,6 +41,9 @@ composition none of them performs.
 
 public section
 
+open _root_.LinearPMap (
+  resolvent)
+
 open scoped InnerProductSpace
 open Complex Filter Topology
 
@@ -60,20 +63,16 @@ theorem specProjection_comm_yosidaApproxSym (n : ℕ+) :
     hA.mem_resolventSet_of_im_ne_zero him
   have hrootNegIn : (-I * (n : ℂ)) ∈ _root_.LinearPMap.resolventSet A :=
     hA.mem_resolventSet_of_im_ne_zero hnim
-  have hlocalIn := root_mem_resolventSet_toLocal hrootIn
-  have hlocalNegIn := root_mem_resolventSet_toLocal hrootNegIn
   have h1 : Commute (specProjection hA B hB) (resolventAtIn hA n) :=
     by
       change Commute (specProjection hA B hB)
         (_root_.LinearPMap.resolvent A (I * (n : ℂ)))
-      rw [← local_resolvent_eq_root hrootIn]
-      exact specProjection_comm_resolvent' hA him hlocalIn B hB
+      exact specProjection_comm_resolvent' hA him hrootIn B hB
   have h2 : Commute (specProjection hA B hB) (resolventAtNegIn hA n) :=
     by
       change Commute (specProjection hA B hB)
         (_root_.LinearPMap.resolvent A (-I * (n : ℂ)))
-      rw [← local_resolvent_eq_root hrootNegIn]
-      exact specProjection_comm_resolvent' hA hnim hlocalNegIn B hB
+      exact specProjection_comm_resolvent' hA hnim hrootNegIn B hB
   rw [yosidaApproximantSym]
   exact (h1.add_right h2).smul_right (-((n : ℂ) ^ 2 / 2))
 

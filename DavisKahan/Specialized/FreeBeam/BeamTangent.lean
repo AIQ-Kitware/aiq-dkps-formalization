@@ -404,7 +404,7 @@ theorem beamPerturbed_form_nonneg (ε : ℝ) (hε : 0 ≤ ε)
 /-- Every negative real is a resolvent point of the perturbed beam. -/
 theorem beamPerturbed_mem_resolventSet_of_neg (ε : ℝ) (hε : 0 ≤ ε)
     {lam : ℝ} (hlam : lam < 0) :
-    (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet (beamPerturbed ε) := by
+    (lam : ℂ) ∈ _root_.LinearPMap.resolventSet (beamPerturbed ε) := by
   refine (TauCeti.LinearPMap.mem_resolventSet_and_norm_le_of_lower_bound
     (beamPerturbed_isSelfAdjoint ε) (c := -lam) (by linarith) ?_).1
   intro x

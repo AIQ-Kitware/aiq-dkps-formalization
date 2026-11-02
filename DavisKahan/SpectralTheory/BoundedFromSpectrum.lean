@@ -68,12 +68,12 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
   have hBm : MeasurableSet (Set.Icc β α) := measurableSet_Icc
   -- every point outside `[β, α]` is a resolvent point
   have hres : ∀ lam ∈ (Set.Icc β α)ᶜ,
-      (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet A := by
+      (lam : ℂ) ∈ _root_.LinearPMap.resolventSet A := by
     intro lam hlam
     by_contra hnot
     have hroot : (lam : ℂ) ∈ _root_.LinearPMap.spectrum A := by
       rw [_root_.LinearPMap.mem_spectrum_iff]
-      exact fun hres => hnot ((TauCeti.DavisKahan.mem_local_resolventSet_iff_root A _).2 hres)
+      exact hnot
     exact hlam (hσ hroot)
   -- the spectral projection of the complement vanishes
   have hprojc :

@@ -41,6 +41,13 @@ lower bound abstracted out of it.
 
 public section
 
+open _root_.LinearPMap (
+  resolventSet
+  mem_resolventSet_iff
+  resolvent
+  resolvent_mem_domain
+  smul_sub_apply_resolvent)
+
 open scoped InnerProductSpace
 
 namespace TauCeti

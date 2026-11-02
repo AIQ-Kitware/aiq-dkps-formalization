@@ -112,15 +112,14 @@ theorem selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
     rw [hdisj] at this
     exact this
   intro hnot
-  have hres : (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet
+  have hres : (lam : ℂ) ∈ _root_.LinearPMap.resolventSet
       (selfAdjointSpectralRestriction A hA B hB) := by
     convert (TauCeti.LinearPMap.mem_resolventSet_specRestrict_of_gap hA B hB hε hgap)
       using 1
     rfl
-  have hroot := (TauCeti.DavisKahan.mem_local_resolventSet_iff_root
-    (selfAdjointSpectralRestriction A hA B hB) (lam : ℂ)).mp hres
+
   exact (_root_.LinearPMap.mem_spectrum_iff
-    (selfAdjointSpectralRestriction A hA B hB) (lam : ℂ)).mp hnot hroot
+    (selfAdjointSpectralRestriction A hA B hB) (lam : ℂ)).mp hnot hres
 
 end DavisKahan
 end TauCeti

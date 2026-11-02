@@ -214,9 +214,8 @@ theorem notMem_spectrum_addBounded_of_offDiagonal_form_gap
     linarith [hgoal, h0]
   have hres := TauCeti.LinearPMap.mem_resolventSet_of_coercive_comp hAH
     (J := U.reflectionOperator) (Submodule.reflectionOperator_norm_map U) hε hcoer
-  have hresRoot := (TauCeti.DavisKahan.mem_local_resolventSet_iff_root
-    (TauCeti.LinearPMap.addBounded A Hop) (lam : ℂ)).mp hres
-  simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using hresRoot
+
+  exact fun hspec => (_root_.LinearPMap.mem_spectrum_iff _ _).1 hspec hres
 
 end
 
