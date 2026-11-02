@@ -114,7 +114,7 @@ theorem singularValues_directDisplacement_eq_sharpTransfer
     (hacute : IsAcute U V) :
     let S := sinAngleOperator U V
     let hS : S.IsPositive := LinearMap.isPositive_operatorAbs (projection U - projection V)
-    let F := TauCeti.selfAdjointFunctionalCalculus hS.isSymmetric sharpTransferWeight
+    let F := LinearMap.IsSymmetric.cfc hS.isSymmetric sharpTransferWeight
     (LinearMap.id - (directRotation U V hacute).toLinearMap).singularValues =
       (F ∘ₗ S).singularValues := by
   classical
@@ -122,11 +122,11 @@ theorem singularValues_directDisplacement_eq_sharpTransfer
   let S : E →ₗ[𝕜] E := sinAngleOperator U V
   let hS : S.IsPositive := LinearMap.isPositive_operatorAbs (projection U - projection V)
   let b := hS.isSymmetric.eigenvectorBasis rfl
-  let F := TauCeti.selfAdjointFunctionalCalculus hS.isSymmetric sharpTransferWeight
+  let F := LinearMap.IsSymmetric.cfc hS.isSymmetric sharpTransferWeight
   let B := F ∘ₗ S
   let A : E →ₗ[𝕜] E := LinearMap.id - (directRotation U V hacute).toLinearMap
   have hFsym : F.IsSymmetric :=
-    TauCeti.selfAdjointFunctionalCalculus_isSymmetric hS.isSymmetric sharpTransferWeight
+    LinearMap.IsSymmetric.isSymmetric_cfc hS.isSymmetric sharpTransferWeight
   have hBadj : B.adjoint = S ∘ₗ F := by
     change (F ∘ₗ S).adjoint = S ∘ₗ F
     rw [LinearMap.adjoint_comp, hFsym.adjoint_eq, hS.isSymmetric.adjoint_eq]
@@ -144,11 +144,11 @@ theorem singularValues_directDisplacement_eq_sharpTransfer
     have hSval : S (b i) = (s : 𝕜) • b i :=
       hS.isSymmetric.apply_eigenvectorBasis rfl i
     have hFval : F (b i) = (sharpTransferWeight s : 𝕜) • b i :=
-      TauCeti.selfAdjointFunctionalCalculus_apply_eigenvectorBasis
-        hS.isSymmetric sharpTransferWeight i
+      LinearMap.IsSymmetric.cfc_apply_eigenvectorBasis
+        hS.isSymmetric rfl sharpTransferWeight i
     have hCval : directRotationCosine U V (b i) =
         ((Real.sqrt (1 - s ^ 2) : ℝ) : 𝕜) • b i := by
-      rw [hC, TauCeti.selfAdjointFunctionalCalculus_apply_eigenvectorBasis,
+      rw [hC, LinearMap.IsSymmetric.cfc_apply_eigenvectorBasis,
         Real.cos_arcsin]
     have hBval : B (b i) = ((sharpTransferWeight s * s : ℝ) : 𝕜) • b i := by
       change F (S (b i)) = _
@@ -235,15 +235,17 @@ theorem cos_half_mul_uiNorm_directRotation_le_projection
   classical
   let S : E →ₗ[𝕜] E := sinAngleOperator U V
   let hS : S.IsPositive := LinearMap.isPositive_operatorAbs (projection U - projection V)
-  let F := TauCeti.selfAdjointFunctionalCalculus hS.isSymmetric sharpTransferWeight
+  let F := LinearMap.IsSymmetric.cfc hS.isSymmetric sharpTransferWeight
   let A : E →ₗ[𝕜] E := LinearMap.id - (directRotation U V hacute).toLinearMap
   have hc : 0 < Real.cos (alpha / 2) :=
     Real.cos_pos_of_mem_Ioo ⟨by linarith [Real.pi_pos], by linarith⟩
   have hFbound : ∀ y, ‖F y‖ ≤ (Real.cos (alpha / 2))⁻¹ * ‖y‖ := by
     intro y
-    apply TauCeti.norm_selfAdjointFunctionalCalculus_apply_le
-      hS.isSymmetric sharpTransferWeight (inv_nonneg.mpr hc.le) _ y
-    intro i
+    apply hS.isSymmetric.norm_cfc_apply_le sharpTransferWeight _ y
+    intro s hs
+    obtain ⟨i, hi⟩ := hS.isSymmetric.exists_eigenvalues_eq rfl hs
+    have hsi : hS.isSymmetric.eigenvalues rfl i = s := RCLike.ofReal_injective hi
+    subst s
     have hs0 : 0 ≤ hS.isSymmetric.eigenvalues rfl i :=
       hS.nonneg_eigenvalues rfl i
     have hs1 := hangle i
@@ -466,13 +468,15 @@ theorem uiNorm_directRotation_le_sqrt_two_mul_displacement
       Real.sqrt 2 * N (LinearMap.id - W.toLinearMap) := by
   let S : E →ₗ[𝕜] E := sinAngleOperator U V
   let hS : S.IsPositive := LinearMap.isPositive_operatorAbs (projection U - projection V)
-  let F := TauCeti.selfAdjointFunctionalCalculus hS.isSymmetric sharpTransferWeight
+  let F := LinearMap.IsSymmetric.cfc hS.isSymmetric sharpTransferWeight
   let A : E →ₗ[𝕜] E := LinearMap.id - (directRotation U V hacute).toLinearMap
   have hFbound : ∀ y, ‖F y‖ ≤ Real.sqrt 2 * ‖y‖ := by
     intro y
-    apply TauCeti.norm_selfAdjointFunctionalCalculus_apply_le
-      hS.isSymmetric sharpTransferWeight (Real.sqrt_nonneg 2) _ y
-    intro i
+    apply hS.isSymmetric.norm_cfc_apply_le sharpTransferWeight _ y
+    intro s hs
+    obtain ⟨i, hi⟩ := hS.isSymmetric.exists_eigenvalues_eq rfl hs
+    have hsi : hS.isSymmetric.eigenvalues rfl i = s := RCLike.ofReal_injective hi
+    subst s
     have hs0 := hS.nonneg_eigenvalues rfl i
     have hs1 := (sinAngleOperator_eigenvalues_mem_Icc U V hS.isSymmetric i).2
     rw [abs_of_nonneg (sharpTransferWeight_nonneg _)]

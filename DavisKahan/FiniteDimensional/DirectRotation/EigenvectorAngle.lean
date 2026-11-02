@@ -148,7 +148,7 @@ theorem sinAngleOperator_apply_of_angleOperator_apply {x : E} {θ : ℝ}
     (hx : angleOperator U V x = ((θ : ℝ) : 𝕜) • x) :
     sinAngleOperator U V x = ((Real.sin θ : ℝ) : 𝕜) • x := by
   have hsym : (sinAngleOperator U V).IsSymmetric := isSymmetric_sinAngleOperator U V
-  have hcalc : TauCeti.selfAdjointFunctionalCalculus hsym Real.arcsin x =
+  have hcalc : LinearMap.IsSymmetric.cfc hsym Real.arcsin x =
       ((θ : ℝ) : 𝕜) • x := by
     rw [← angleOperator_eq_calculus U V hsym]; exact hx
   have h := TauCeti.selfAdjointFunctionalCalculus_apply_of_calculus_apply_eq_smul
@@ -156,7 +156,7 @@ theorem sinAngleOperator_apply_of_angleOperator_apply {x : E} {θ : ℝ}
       have hmem := sinAngleOperator_eigenvalues_mem_Icc U V hsym i
       show hsym.eigenvalues rfl i = Real.sin θ
       rw [← hi, Real.sin_arcsin hmem.1 hmem.2])
-  rwa [TauCeti.selfAdjointFunctionalCalculus_id hsym] at h
+  rwa [LinearMap.IsSymmetric.cfc_id hsym] at h
 
 /-- **`cos Θ` acts on an angle eigenvector by `cos θ`.**
 
@@ -166,7 +166,7 @@ theorem directRotationCosine_apply_of_angleOperator_apply {x : E} {θ : ℝ}
     (hx : angleOperator U V x = ((θ : ℝ) : 𝕜) • x) :
     directRotationCosine U V x = ((Real.cos θ : ℝ) : 𝕜) • x := by
   have hsym : (sinAngleOperator U V).IsSymmetric := isSymmetric_sinAngleOperator U V
-  have hcalc : TauCeti.selfAdjointFunctionalCalculus hsym Real.arcsin x =
+  have hcalc : LinearMap.IsSymmetric.cfc hsym Real.arcsin x =
       ((θ : ℝ) : 𝕜) • x := by
     rw [← angleOperator_eq_calculus U V hsym]; exact hx
   rw [directRotationCosine_eq_calculus U V hsym]
@@ -184,7 +184,7 @@ theorem angleOperator_eigenvalue_mem_Icc {x : E} (hx0 : x ≠ 0) {θ : ℝ}
     (hx : angleOperator U V x = ((θ : ℝ) : 𝕜) • x) :
     θ ∈ Set.Icc 0 (Real.pi / 2) := by
   have hsym : (sinAngleOperator U V).IsSymmetric := isSymmetric_sinAngleOperator U V
-  have hcalc : TauCeti.selfAdjointFunctionalCalculus hsym Real.arcsin x =
+  have hcalc : LinearMap.IsSymmetric.cfc hsym Real.arcsin x =
       ((θ : ℝ) : 𝕜) • x := by
     rw [← angleOperator_eq_calculus U V hsym]; exact hx
   obtain ⟨i, hi⟩ :=

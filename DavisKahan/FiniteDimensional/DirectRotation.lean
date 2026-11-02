@@ -537,7 +537,7 @@ Corollary 3.2, at the level of the angle operator itself. -/
 theorem angleOperator_comm (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     angleOperator V U = angleOperator U V :=
-  TauCeti.selfAdjointFunctionalCalculus_congr_op _ _
+  TauCeti.cfc_congr_operator _ _
     (sinAngleOperator_comm U V) Real.arcsin
 
 /-- **`Θ` commutes with `U`** — Davis--Kahan Proposition 3.5, stated on the
@@ -548,24 +548,22 @@ theorem angleOperator_comm_directRotation (U V : Submodule 𝕜 E)
     (hacute : IsAcute U V) :
     (directRotation U V hacute).toLinearMap ∘ₗ angleOperator U V =
       angleOperator U V ∘ₗ (directRotation U V hacute).toLinearMap :=
-  TauCeti.selfAdjointFunctionalCalculus_comm _ Real.arcsin
-    (directRotation_comm_sinAngleOperator U V hacute)
+  (LinearMap.IsSymmetric.commute_cfc _
+    (directRotation_comm_sinAngleOperator U V hacute) Real.arcsin).eq
 
 /-- **`Θ` commutes with `P`** — Davis--Kahan Proposition 3.5, on the angle
 operator. -/
 theorem angleOperator_comm_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     projection U ∘ₗ angleOperator U V = angleOperator U V ∘ₗ projection U :=
-  TauCeti.selfAdjointFunctionalCalculus_comm _ Real.arcsin
-    (projection_comm_sinAngleOperator U V)
+  (LinearMap.IsSymmetric.commute_cfc _ (projection_comm_sinAngleOperator U V) Real.arcsin).eq
 
 /-- **`Θ` commutes with `Q`** — Davis--Kahan Proposition 3.5, on the angle
 operator. -/
 theorem angleOperator_comm_projection_right (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     projection V ∘ₗ angleOperator U V = angleOperator U V ∘ₗ projection V :=
-  TauCeti.selfAdjointFunctionalCalculus_comm _ Real.arcsin
-    (projection_right_comm_sinAngleOperator U V)
+  (LinearMap.IsSymmetric.commute_cfc _ (projection_right_comm_sinAngleOperator U V) Real.arcsin).eq
 
 /-- **`cos Θ` commutes with `sin Θ`.**
 
@@ -613,15 +611,15 @@ theorem angleOperator_comm_directRotationCosine (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     directRotationCosine U V ∘ₗ angleOperator U V =
       angleOperator U V ∘ₗ directRotationCosine U V :=
-  TauCeti.selfAdjointFunctionalCalculus_comm _ Real.arcsin
-    (directRotationCosine_comm_sinAngleOperator U V)
+  (LinearMap.IsSymmetric.commute_cfc _
+    (directRotationCosine_comm_sinAngleOperator U V) Real.arcsin).eq
 
 /-- `sin Θ` commutes with itself, restated as commutation with `Θ`. -/
 theorem angleOperator_comm_sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     sinAngleOperator U V ∘ₗ angleOperator U V =
       angleOperator U V ∘ₗ sinAngleOperator U V :=
-  TauCeti.selfAdjointFunctionalCalculus_comm _ Real.arcsin rfl
+  (LinearMap.IsSymmetric.commute_cfc _ (Commute.refl _) Real.arcsin).eq
 
 /-- **`Θ` commutes with the Moore--Penrose inverse of `sin Θ`.**
 

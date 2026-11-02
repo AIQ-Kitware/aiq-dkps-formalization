@@ -11,7 +11,7 @@ public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.TanTheta.Theorem63FiniteSource
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.AngleIdentity
-public import ForTauCeti.Analysis.InnerProductSpace.Polar.CFCBridge
+public import TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison
 public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles.Equisingular
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
@@ -63,63 +63,6 @@ noncomputable local instance instCStarAlgebraSubspaceCoordinateDirectedAngleBrid
     (W : Submodule ℂ H) [W.HasOrthogonalProjection] :
     CStarAlgebra (W →L[ℂ] W) :=
   inferInstance
-
-/-! ## A finite-dimensional CFC eigenvector bridge
-
-Tau Ceti's finite self-adjoint functional calculus evaluates arbitrary real
-functions on an eigenbasis, whereas Mathlib's `cfc` asks only for continuity on
-the spectrum.  The existing bridge in `Polar.Decomposition` assumes global
-continuity.  Here we need `tan`, which is only continuous on the pole-free
-spectrum, so we record the same bridge at its natural `ContinuousOn` strength.
--/
-
-private theorem selfAdjointFunctionalCalculus_toContinuousLinearMap_eq_cfc_of_continuousOn
-    {K : Type*} [NormedAddCommGroup K] [InnerProductSpace ℂ K]
-    [FiniteDimensional ℂ K] [CompleteSpace K]
-    {T : K →ₗ[ℂ] K} (hT : T.IsSymmetric) (f : ℝ → ℝ)
-    (hf : ContinuousOn f (spectrum ℝ T.toContinuousLinearMap)) :
-    (selfAdjointFunctionalCalculus hT f).toContinuousLinearMap =
-      cfc f T.toContinuousLinearMap := by
-  have ha : IsSelfAdjoint T.toContinuousLinearMap :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
-  have hcont : Continuous (calculusStarAlgHom hT) :=
-    AddMonoidHomClass.continuous_of_bound (calculusStarAlgHom hT) 1 fun g => by
-      rw [one_mul]
-      exact norm_calculusStarAlgHom_le hT g
-  have hhom : cfcHom ha = calculusStarAlgHom hT :=
-    cfcHom_eq_of_continuous_of_map_id ha _ hcont (calculusStarAlgHom_id hT)
-  rw [cfc_apply f T.toContinuousLinearMap ha hf, hhom]
-  have key :
-      (selfAdjointFunctionalCalculus hT
-        (extendSymbol (⟨_, hf.domRestrict⟩ :
-          C(spectrum ℝ T.toContinuousLinearMap, ℝ)))).toContinuousLinearMap =
-        (selfAdjointFunctionalCalculus hT f).toContinuousLinearMap := by
-    congr 1
-    refine selfAdjointFunctionalCalculus_congr hT fun i => ?_
-    rw [extendSymbol_apply_of_mem _
-      (eigenvalues_mem_spectrum_toContinuousLinearMap hT i)]
-    rfl
-  exact key.symm
-
-private theorem cfc_apply_of_apply_eq_smul_finite
-    {K : Type*} [NormedAddCommGroup K] [InnerProductSpace ℂ K]
-    [FiniteDimensional ℂ K] [CompleteSpace K]
-    {T : K →L[ℂ] K} (hT : IsSelfAdjoint T) (f : ℝ → ℝ)
-    (hf : ContinuousOn f (spectrum ℝ T))
-    {x : K} {lam : ℝ} (hx : T x = ((lam : ℝ) : ℂ) • x) :
-    cfc f T x = ((f lam : ℝ) : ℂ) • x := by
-  have hsym : T.toLinearMap.IsSymmetric :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hT
-  have hbridge :=
-    selfAdjointFunctionalCalculus_toContinuousLinearMap_eq_cfc_of_continuousOn
-      hsym f hf
-  have hTroundtrip : T.toLinearMap.toContinuousLinearMap = T := by
-    ext y
-    rfl
-  rw [hTroundtrip] at hbridge
-  have happ := congrArg (fun S : K →L[ℂ] K => S x) hbridge
-  rw [← happ]
-  exact selfAdjointFunctionalCalculus_apply_of_apply_eq_smul hsym f hx
 
 section
 
@@ -242,8 +185,7 @@ private theorem sourceDirectedAngle_apply_rightSingularBasis
     simpa [M, b, sigma] using
       coordinateSineModulus_apply_rightSingularBasis Z V i
   rw [sourceDirectedAngleC_eq_arcsin_sineModulus Z V]
-  exact cfc_apply_of_apply_eq_smul_finite hMsa Real.arcsin
-    Real.continuous_arcsin.continuousOn hMeig
+  exact ContinuousLinearMap.cfc_apply_of_apply_eq_smul Real.arcsin hMeig hMsa
 
 omit [FiniteDimensional ℂ ↥Z] in
 /-- The ambient-coordinate and subspace-coordinate sine blocks have the same
@@ -346,7 +288,7 @@ private theorem continuousOn_tan_sourceDirectedAngle
 inside `theorem63DirectedTangent` is exactly `tan` of the source-defined
 Davis--Kahan directed angle. -/
 theorem theorem63DirectedTangentCoordinate_eq_cfcTan_sourceDirectedAngle
-    (hlt : ∀ i, finiteSourceSingularValue
+    (_hlt : ∀ i, finiteSourceSingularValue
       (theorem63DirectedSineBlock Z V) i < 1) :
     (diagOp (finiteSourceRightSingularBasis (theorem63DirectedSineBlock Z V))
       (theorem63DirectedTangentDiagonal Z V)).toContinuousLinearMap =
@@ -356,8 +298,6 @@ theorem theorem63DirectedTangentCoordinate_eq_cfcTan_sourceDirectedAngle
   let A := directedAngleBlockC Z V
   have hAsa : IsSelfAdjoint A := by
     exact cfc_predicate Real.arccos (cosineBlockModulusC Z V)
-  have htan : ContinuousOn Real.tan (spectrum ℝ A) := by
-    simpa [A, S, directedSine] using continuousOn_tan_sourceDirectedAngle Z V hlt
   have hlin :
       diagOp b (theorem63DirectedTangentDiagonal Z V) =
         (cfc Real.tan A).toLinearMap := by
@@ -369,7 +309,7 @@ theorem theorem63DirectedTangentCoordinate_eq_cfcTan_sourceDirectedAngle
       simpa [A, b, S] using sourceDirectedAngle_apply_rightSingularBasis Z V i
     have hcfceig : cfc Real.tan A (b i) =
         ((Real.tan (Real.arcsin (finiteSourceSingularValue S i)) : ℝ) : ℂ) • b i :=
-      cfc_apply_of_apply_eq_smul_finite hAsa Real.tan htan hAeig
+      ContinuousLinearMap.cfc_apply_of_apply_eq_smul Real.tan hAeig hAsa
     rw [diagOp_apply_basis]
     change (((theorem63DirectedTangentDiagonal Z V i : ℝ) : ℂ) • b i) =
       cfc Real.tan A (b i)

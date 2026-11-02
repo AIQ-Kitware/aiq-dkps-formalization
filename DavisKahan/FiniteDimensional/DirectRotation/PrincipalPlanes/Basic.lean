@@ -308,10 +308,8 @@ theorem abs_canonicalIntertwiner_apply_principalSourceVector
     rw [hcossq, RCLike.ofReal_sub, RCLike.ofReal_one, sub_smul, one_smul, ← heig]
     abel
   have hpos := LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V)
-  have hfc := TauCeti.selfAdjointFunctionalCalculus_apply_of_apply_eq_smul
-    hpos.isSymmetric Real.sqrt hsq
-  rw [TauCeti.selfAdjointFunctionalCalculus_sqrt hpos,
-    Real.sqrt_sq hc0] at hfc
+  have hfc := hpos.sqrt_apply_of_apply_eq_smul hsq
+  rw [Real.sqrt_sq hc0] at hfc
   have habs : (canonicalIntertwiner U V).operatorAbs = hpos.sqrt :=
     hpos.sqrt_unique (canonicalIntertwiner U V).isPositive_operatorAbs
       (canonicalIntertwiner U V).operatorAbs_sq

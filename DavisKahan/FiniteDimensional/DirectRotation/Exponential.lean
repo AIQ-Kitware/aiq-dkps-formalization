@@ -55,7 +55,7 @@ theorem isSymmetric_sinAngleOperator : (sinAngleOperator U V).IsSymmetric :=
 /-- `Θ` is the arcsine functional calculus of `sin Θ`.  This is the definition of
 `angleOperator`, restated so that it can be used with any symmetry witness. -/
 theorem angleOperator_eq_calculus (hsin : (sinAngleOperator U V).IsSymmetric) :
-    angleOperator U V = TauCeti.selfAdjointFunctionalCalculus hsin Real.arcsin :=
+    angleOperator U V = LinearMap.IsSymmetric.cfc hsin Real.arcsin :=
   rfl
 
 /-- Operator Pythagoras in the solved form `cos²Θ = 1 - sin²Θ`. -/
@@ -105,31 +105,43 @@ so uniqueness of the positive square root identifies them.  Squaring the calculu
 uses `cos (arcsin λ)² = 1 - λ²`, which needs `|λ| ≤ 1`. -/
 theorem directRotationCosine_eq_calculus (hsin : (sinAngleOperator U V).IsSymmetric) :
     directRotationCosine U V =
-      TauCeti.selfAdjointFunctionalCalculus hsin (fun s => Real.cos (Real.arcsin s)) := by
-  set F := TauCeti.selfAdjointFunctionalCalculus hsin (fun s => Real.cos (Real.arcsin s)) with hF
+      LinearMap.IsSymmetric.cfc hsin (fun s => Real.cos (Real.arcsin s)) := by
+  set F := LinearMap.IsSymmetric.cfc hsin (fun s => Real.cos (Real.arcsin s)) with hF
   have hTpos := isPositive_one_sub_sq_sinAngleOperator U V
   have hCpos : (directRotationCosine U V).IsPositive :=
     LinearMap.isPositive_operatorAbs (canonicalIntertwiner U V)
   have hFpos : F.IsPositive := by
-    refine TauCeti.selfAdjointFunctionalCalculus_isPositive hsin fun i => ?_
+    refine hsin.isPositive_cfc fun s _ => ?_
     rw [Real.cos_arcsin]
     exact Real.sqrt_nonneg _
   have hFsq : F ∘ₗ F = LinearMap.id - sinAngleOperator U V ∘ₗ sinAngleOperator U V := by
-    rw [hF, TauCeti.selfAdjointFunctionalCalculus_comp]
-    have hcongr : TauCeti.selfAdjointFunctionalCalculus hsin
+    change F * F = _
+    rw [hF, ← LinearMap.IsSymmetric.cfc_mul]
+    have hcongr : LinearMap.IsSymmetric.cfc hsin
           (fun s => Real.cos (Real.arcsin s) * Real.cos (Real.arcsin s)) =
-        TauCeti.selfAdjointFunctionalCalculus hsin (fun s => 1 - s ^ 2) := by
-      refine TauCeti.selfAdjointFunctionalCalculus_congr hsin fun i => ?_
+        LinearMap.IsSymmetric.cfc hsin (fun s => 1 - s ^ 2) := by
+      refine hsin.cfc_congr fun s hs => ?_
+      obtain ⟨i, hi⟩ := hsin.exists_eigenvalues_eq rfl hs
+      have hsi : hsin.eigenvalues rfl i = s := RCLike.ofReal_injective hi
+      subst s
       have hi := sinAngleOperator_eigenvalues_mem_Icc U V hsin i
       rw [Real.cos_arcsin, Real.mul_self_sqrt]
       nlinarith [hi.1, hi.2]
+    change hsin.cfc (fun s => Real.cos (Real.arcsin s) * Real.cos (Real.arcsin s)) = _
     rw [hcongr]
-    have hadd := TauCeti.selfAdjointFunctionalCalculus_add hsin
+    have hadd := LinearMap.IsSymmetric.cfc_add hsin
       (fun s => 1 - s ^ 2) (fun s => s ^ 2)
     have hone : ((fun s : ℝ => 1 - s ^ 2) + fun s : ℝ => s ^ 2) = fun _ : ℝ => (1 : ℝ) := by
       funext s; simp
-    rw [hone, TauCeti.selfAdjointFunctionalCalculus_one,
-      TauCeti.selfAdjointFunctionalCalculus_pow hsin 2] at hadd
+    have hpow : hsin.cfc (fun s => s ^ 2) = sinAngleOperator U V ^ 2 := by
+      calc
+        hsin.cfc (fun s => s ^ 2) = hsin.cfc (id * id) := by
+          congr 1
+          funext s
+          exact pow_two s
+        _ = hsin.cfc id * hsin.cfc id := hsin.cfc_mul id id
+        _ = sinAngleOperator U V ^ 2 := by rw [hsin.cfc_id, pow_two]
+    rw [hone, hsin.cfc_const 1, hpow, RCLike.ofReal_one, one_smul] at hadd
     have hsq : (sinAngleOperator U V) ^ 2 =
         sinAngleOperator U V ∘ₗ sinAngleOperator U V := by
       rw [pow_two]; rfl
@@ -154,7 +166,7 @@ theorem sinAngleOperator_comp_moorePenroseInverse_comp_angleOperator
   have hTheta : angleOperator U V (hsin.eigenvectorBasis rfl i) =
       ((Real.arcsin (hsin.eigenvalues rfl i) : ℝ) : 𝕜) • hsin.eigenvectorBasis rfl i := by
     rw [angleOperator_eq_calculus U V hsin]
-    exact TauCeti.selfAdjointFunctionalCalculus_apply_eigenvectorBasis hsin Real.arcsin i
+    exact LinearMap.IsSymmetric.cfc_apply_eigenvectorBasis hsin rfl Real.arcsin i
   have hAb : sinAngleOperator U V (hsin.eigenvectorBasis rfl i) =
       ((hsin.eigenvalues rfl i : ℝ) : 𝕜) • hsin.eigenvectorBasis rfl i :=
     hsin.apply_eigenvectorBasis rfl i
@@ -285,7 +297,7 @@ theorem directRotation_eq_exp_angleComplexStructure_comp_angleOperator
     have hli := sinAngleOperator_eigenvalues_mem_Icc U V hsin i
     have hTheta : angleOperator U V (b i) = ((θ : ℝ) : 𝕜) • b i := by
       rw [angleOperator_eq_calculus U V hsin, hbdef]
-      exact TauCeti.selfAdjointFunctionalCalculus_apply_eigenvectorBasis hsin Real.arcsin i
+      exact LinearMap.IsSymmetric.cfc_apply_eigenvectorBasis hsin rfl Real.arcsin i
     have hAb : sinAngleOperator U V (b i) = ((l : ℝ) : 𝕜) • b i :=
       hsin.apply_eigenvectorBasis rfl i
     have hYb : Y (b i) = ((θ : ℝ) : 𝕜) • angleComplexStructure U V hacute (b i) := by
@@ -356,7 +368,7 @@ theorem directRotation_eq_exp_angleComplexStructure_comp_angleOperator
     rw [huniq, directRotation_eq_cos_add_J_sin U V hacute]
     have hC : directRotationCosine U V (b i) = ((Real.cos θ : ℝ) : 𝕜) • b i := by
       rw [directRotationCosine_eq_calculus U V hsin, hbdef]
-      exact TauCeti.selfAdjointFunctionalCalculus_apply_eigenvectorBasis hsin
+      exact LinearMap.IsSymmetric.cfc_apply_eigenvectorBasis hsin rfl
         (fun s => Real.cos (Real.arcsin s)) i
     have hlsin : Real.sin θ = l := Real.sin_arcsin hli.1 hli.2
     rw [LinearMap.add_apply, hC, LinearMap.comp_apply, hAb, map_smul, hlsin]

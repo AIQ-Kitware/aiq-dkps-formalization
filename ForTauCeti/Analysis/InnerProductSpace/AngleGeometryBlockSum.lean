@@ -88,9 +88,9 @@ theorem selfAdjointFunctionalCalculus_orthogonalBlockSum
     {A : E₁ →ₗ[𝕜] E₁} (hA : A.IsSymmetric)
     {B : E₂ →ₗ[𝕜] E₂} (hB : B.IsSymmetric) (f : ℝ → ℝ) :
     let hAB := UnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric hA hB
-    selfAdjointFunctionalCalculus hAB f =
+    LinearMap.IsSymmetric.cfc hAB f =
       UnitarilyInvariantSeminorm.orthogonalBlockSum
-        (selfAdjointFunctionalCalculus hA f) (selfAdjointFunctionalCalculus hB f) := by
+        (LinearMap.IsSymmetric.cfc hA f) (LinearMap.IsSymmetric.cfc hB f) := by
   dsimp only
   let J₁ : E₁ →ₗ[𝕜] WithLp 2 (E₁ × E₂) :=
     blockInlLinear (𝕜 := 𝕜) (E₁ := E₁) (E₂ := E₂)
@@ -102,8 +102,8 @@ theorem selfAdjointFunctionalCalculus_orthogonalBlockSum
     UnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric hA hB
   have hJ₁ : J₁ ∘ₗ A = T ∘ₗ J₁ := blockInlLinear_intertwines A B
   have hJ₂ : J₂ ∘ₗ B = T ∘ₗ J₂ := blockInrLinear_intertwines A B
-  have hfc₁ := selfAdjointFunctionalCalculus_intertwines hA hT J₁ hJ₁ f
-  have hfc₂ := selfAdjointFunctionalCalculus_intertwines hB hT J₂ hJ₂ f
+  have hfc₁ := hA.comp_cfc_eq_cfc_comp hT hJ₁ f
+  have hfc₂ := hB.comp_cfc_eq_cfc_comp hT hJ₂ f
   apply LinearMap.ext
   intro x
   have hx : x = J₁ x.ofLp.1 + J₂ x.ofLp.2 := by
@@ -111,24 +111,24 @@ theorem selfAdjointFunctionalCalculus_orthogonalBlockSum
     apply Prod.ext_iff.mpr
     constructor <;> simp [J₁, J₂]
   have h₁ :
-      selfAdjointFunctionalCalculus hT f (J₁ x.ofLp.1) =
-        J₁ (selfAdjointFunctionalCalculus hA f x.ofLp.1) := by
+      LinearMap.IsSymmetric.cfc hT f (J₁ x.ofLp.1) =
+        J₁ (LinearMap.IsSymmetric.cfc hA f x.ofLp.1) := by
     simpa only [LinearMap.comp_apply] using
       (LinearMap.congr_fun hfc₁ x.ofLp.1).symm
   have h₂ :
-      selfAdjointFunctionalCalculus hT f (J₂ x.ofLp.2) =
-        J₂ (selfAdjointFunctionalCalculus hB f x.ofLp.2) := by
+      LinearMap.IsSymmetric.cfc hT f (J₂ x.ofLp.2) =
+        J₂ (LinearMap.IsSymmetric.cfc hB f x.ofLp.2) := by
     simpa only [LinearMap.comp_apply] using
       (LinearMap.congr_fun hfc₂ x.ofLp.2).symm
   calc
-    selfAdjointFunctionalCalculus hT f x
-        = selfAdjointFunctionalCalculus hT f (J₁ x.ofLp.1 + J₂ x.ofLp.2) := by rw [← hx]
-    _ = selfAdjointFunctionalCalculus hT f (J₁ x.ofLp.1) +
-          selfAdjointFunctionalCalculus hT f (J₂ x.ofLp.2) := map_add _ _ _
-    _ = J₁ (selfAdjointFunctionalCalculus hA f x.ofLp.1) +
-          J₂ (selfAdjointFunctionalCalculus hB f x.ofLp.2) := by rw [h₁, h₂]
+    LinearMap.IsSymmetric.cfc hT f x
+        = LinearMap.IsSymmetric.cfc hT f (J₁ x.ofLp.1 + J₂ x.ofLp.2) := by rw [← hx]
+    _ = LinearMap.IsSymmetric.cfc hT f (J₁ x.ofLp.1) +
+          LinearMap.IsSymmetric.cfc hT f (J₂ x.ofLp.2) := map_add _ _ _
+    _ = J₁ (LinearMap.IsSymmetric.cfc hA f x.ofLp.1) +
+          J₂ (LinearMap.IsSymmetric.cfc hB f x.ofLp.2) := by rw [h₁, h₂]
     _ = UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (selfAdjointFunctionalCalculus hA f) (selfAdjointFunctionalCalculus hB f) x := by
+          (LinearMap.IsSymmetric.cfc hA f) (LinearMap.IsSymmetric.cfc hB f) x := by
         apply WithLp.ofLp_injective 2
         simp [J₁, J₂, UnitarilyInvariantSeminorm.orthogonalBlockSum_apply,
           WithLp.ofLp_fst, WithLp.ofLp_snd]

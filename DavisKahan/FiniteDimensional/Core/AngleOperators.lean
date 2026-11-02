@@ -77,7 +77,7 @@ independence through finite functional calculus (equivalently, apply
 @[expose]
 noncomputable def angleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  TauCeti.selfAdjointFunctionalCalculus
+  LinearMap.IsSymmetric.cfc
     (LinearMap.isPositive_operatorAbs (projection U - projection V)).isSymmetric
     Real.arcsin
 
@@ -92,8 +92,8 @@ norm as a principal tangent must assume transversality or acuteness. -/
 @[expose]
 noncomputable def tanAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  TauCeti.selfAdjointFunctionalCalculus
-    (TauCeti.selfAdjointFunctionalCalculus_isSymmetric
+  LinearMap.IsSymmetric.cfc
+    (LinearMap.IsSymmetric.isSymmetric_cfc
       (LinearMap.isPositive_operatorAbs (projection U - projection V)).isSymmetric Real.arcsin)
     safeTan
 
@@ -106,8 +106,8 @@ that pole-avoidance proof into the constructor. -/
 @[expose]
 noncomputable def tanTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  TauCeti.selfAdjointFunctionalCalculus
-    (TauCeti.selfAdjointFunctionalCalculus_isSymmetric
+  LinearMap.IsSymmetric.cfc
+    (LinearMap.IsSymmetric.isSymmetric_cfc
       (LinearMap.isPositive_operatorAbs (projection U - projection V)).isSymmetric Real.arcsin)
     safeTanTwo
 

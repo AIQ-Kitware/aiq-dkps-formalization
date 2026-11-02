@@ -2558,3 +2558,43 @@ at `3676b5559`, Jon Crall / Claude Opus 4.8. The manifest now records the
 original declarations of both split modules rather than an empty inventory.
 These replacements distinguish independent foundations from the Jon Crall-authored
 accepted comparison bridge; no donor-proof descent is inferred.
+
+## 2026-11-01: canonical finite symmetric functional calculus
+
+Removed `TauCeti.selfAdjointFunctionalCalculus` and its duplicate core proofs.
+All maintained consumers use `LinearMap.IsSymmetric.cfc` and accepted algebra,
+eigenvector, positivity, norm, intertwining and commutant-preservation laws.
+The defining spectral sums were proved equal with native `cfc_eq_sum` before
+retirement. Independent [#13785](https://github.com/TauCetiProject/TauCeti/pull/13785),
+`cb2fd0c03991250f6eea42030c41a3d025512cb8`, supplies the same arbitrary-symbol
+RCLike calculus; it does not require symbol continuity. Indexed paper estimates
+explicitly convert the native `HasEigenvalue` hypotheses through ordered
+eigenvalues. The zero-dimensional case remains covered.
+
+`SelfAdjointFunctionalCalculus.lean` retains coordinate vanishing, transfer
+between two scalar symbols, and extraction of a preimage eigenvalue from an
+eigenvector of `f(T)`: these are not supplied by the accepted module. Its short
+dependent operator-congruence lemma is now `cfc_congr_operator`. The planar
+paper's scalar-operator evaluation is private and follows directly from native
+eigenvector action; the sole square-symbol calculation uses native multiplication
+and identity laws. There is no forwarding calculus definition or core alias.
+
+Deleted the rest of `Polar/CFCBridge.lean`, including `calculusStarAlgHom`, its
+norm/identity/algebra proofs, and the globally continuous complex comparison.
+Native `IsSymmetric.toContinuousLinearMap_cfc` from
+[#16523](https://github.com/TauCetiProject/TauCeti/pull/16523),
+`893678359b586eace5dfe8ce192eb8a725406cb6`, is stronger: arbitrary symbols and
+RCLike scalars. The directed-tangent consumer also removes its duplicate private
+`ContinuousOn` comparison and finite CFC eigenvector proof, applying accepted
+`ContinuousLinearMap.cfc_apply_of_apply_eq_smul` directly. Its original source
+hypotheses remain in the paper-facing statement. Unused symbol-extension helpers
+and the finite bounded-polar presentation were proof support for the superseded
+construction and are retired with it; canonical polar factorization and the
+accepted modulus comparison cover their mathematical scope.
+
+Historical sources are `e4637c3919ae` under the two donor paths: the calculus
+originates at `caa0966`, Jon Crall / GPT-5.6 Thinking; the polar/CFC bridge at
+`3676b5559`, Jon Crall / Claude Opus 4.8. Both retain Kitware copyright and
+Apache-2.0 attribution in the manifest. No proof adaptation is inferred for
+#13785 or #16523; the distinct Jon Crall-authored #20358 comparison bridge is
+recorded above. All integrations are in pin `463ab293070d`.

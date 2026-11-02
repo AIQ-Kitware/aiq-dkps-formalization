@@ -65,12 +65,12 @@ theorem angleOperator_orthogonalBlockSumSubmodule
     angleOperator
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂) =
-      TauCeti.selfAdjointFunctionalCalculus hblock Real.arcsin := by
+      LinearMap.IsSymmetric.cfc hblock Real.arcsin := by
         unfold angleOperator
-        exact TauCeti.selfAdjointFunctionalCalculus_congr_op hsum hblock hsin Real.arcsin
+        exact TauCeti.cfc_congr_operator hsum hblock hsin Real.arcsin
     _ = UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (TauCeti.selfAdjointFunctionalCalculus hS₁ Real.arcsin)
-          (TauCeti.selfAdjointFunctionalCalculus hS₂ Real.arcsin) :=
+          (LinearMap.IsSymmetric.cfc hS₁ Real.arcsin)
+          (LinearMap.IsSymmetric.cfc hS₂ Real.arcsin) :=
       TauCeti.selfAdjointFunctionalCalculus_orthogonalBlockSum hS₁ hS₂ Real.arcsin
     _ = UnitarilyInvariantSeminorm.orthogonalBlockSum
           (angleOperator U₁ V₁) (angleOperator U₂ V₂) := rfl
@@ -89,10 +89,10 @@ theorem tanAngleOperator_orthogonalBlockSumSubmodule
   have hangle := angleOperator_orthogonalBlockSumSubmodule U₁ V₁ U₂ V₂
   have hA₁ : (angleOperator U₁ V₁).IsSymmetric := by
     unfold angleOperator
-    exact TauCeti.selfAdjointFunctionalCalculus_isSymmetric _ _
+    exact LinearMap.IsSymmetric.isSymmetric_cfc _ _
   have hA₂ : (angleOperator U₂ V₂).IsSymmetric := by
     unfold angleOperator
-    exact TauCeti.selfAdjointFunctionalCalculus_isSymmetric _ _
+    exact LinearMap.IsSymmetric.isSymmetric_cfc _ _
   let hblock :=
     UnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric hA₁ hA₂
   have hsum : LinearMap.IsSymmetric
@@ -100,17 +100,17 @@ theorem tanAngleOperator_orthogonalBlockSumSubmodule
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂)) := by
     unfold angleOperator
-    exact TauCeti.selfAdjointFunctionalCalculus_isSymmetric _ _
+    exact LinearMap.IsSymmetric.isSymmetric_cfc _ _
   calc
     tanAngleOperator
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂) =
-      TauCeti.selfAdjointFunctionalCalculus hblock safeTan := by
+      LinearMap.IsSymmetric.cfc hblock safeTan := by
         unfold tanAngleOperator
-        exact TauCeti.selfAdjointFunctionalCalculus_congr_op hsum hblock hangle safeTan
+        exact TauCeti.cfc_congr_operator hsum hblock hangle safeTan
     _ = UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (TauCeti.selfAdjointFunctionalCalculus hA₁ safeTan)
-          (TauCeti.selfAdjointFunctionalCalculus hA₂ safeTan) :=
+          (LinearMap.IsSymmetric.cfc hA₁ safeTan)
+          (LinearMap.IsSymmetric.cfc hA₂ safeTan) :=
       TauCeti.selfAdjointFunctionalCalculus_orthogonalBlockSum hA₁ hA₂ safeTan
     _ = UnitarilyInvariantSeminorm.orthogonalBlockSum
           (tanAngleOperator U₁ V₁) (tanAngleOperator U₂ V₂) := rfl
@@ -129,10 +129,10 @@ theorem tanTwoAngleOperator_orthogonalBlockSumSubmodule
   have hangle := angleOperator_orthogonalBlockSumSubmodule U₁ V₁ U₂ V₂
   have hA₁ : (angleOperator U₁ V₁).IsSymmetric := by
     unfold angleOperator
-    exact TauCeti.selfAdjointFunctionalCalculus_isSymmetric _ _
+    exact LinearMap.IsSymmetric.isSymmetric_cfc _ _
   have hA₂ : (angleOperator U₂ V₂).IsSymmetric := by
     unfold angleOperator
-    exact TauCeti.selfAdjointFunctionalCalculus_isSymmetric _ _
+    exact LinearMap.IsSymmetric.isSymmetric_cfc _ _
   let hblock :=
     UnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric hA₁ hA₂
   have hsum : LinearMap.IsSymmetric
@@ -140,17 +140,17 @@ theorem tanTwoAngleOperator_orthogonalBlockSumSubmodule
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂)) := by
     unfold angleOperator
-    exact TauCeti.selfAdjointFunctionalCalculus_isSymmetric _ _
+    exact LinearMap.IsSymmetric.isSymmetric_cfc _ _
   calc
     tanTwoAngleOperator
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂) =
-      TauCeti.selfAdjointFunctionalCalculus hblock safeTanTwo := by
+      LinearMap.IsSymmetric.cfc hblock safeTanTwo := by
         unfold tanTwoAngleOperator
-        exact TauCeti.selfAdjointFunctionalCalculus_congr_op hsum hblock hangle safeTanTwo
+        exact TauCeti.cfc_congr_operator hsum hblock hangle safeTanTwo
     _ = UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (TauCeti.selfAdjointFunctionalCalculus hA₁ safeTanTwo)
-          (TauCeti.selfAdjointFunctionalCalculus hA₂ safeTanTwo) :=
+          (LinearMap.IsSymmetric.cfc hA₁ safeTanTwo)
+          (LinearMap.IsSymmetric.cfc hA₂ safeTanTwo) :=
       TauCeti.selfAdjointFunctionalCalculus_orthogonalBlockSum hA₁ hA₂ safeTanTwo
     _ = UnitarilyInvariantSeminorm.orthogonalBlockSum
           (tanTwoAngleOperator U₁ V₁) (tanTwoAngleOperator U₂ V₂) := rfl

@@ -9,7 +9,7 @@ public import DavisKahan.FiniteDimensional.DirectRotation.ComplexCrossedDefects
 public import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceFiniteModel
 public import DavisKahan.Geometry.Angle.Proposition35Nonacute
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.PositiveTrace
-public import ForTauCeti.Analysis.InnerProductSpace.Polar.CFCBridge
+public import TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison
 
 /-!
 # Global complex trace-optimality via opposite phase corrections

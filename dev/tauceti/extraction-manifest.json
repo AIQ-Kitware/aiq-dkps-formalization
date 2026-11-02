@@ -1540,22 +1540,55 @@
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
-      "source_declarations": [],
+      "source_declarations": [
+        "selfAdjointFunctionalCalculus",
+        "selfAdjointFunctionalCalculus_add",
+        "selfAdjointFunctionalCalculus_smul",
+        "selfAdjointFunctionalCalculus_apply_eigenvectorBasis",
+        "selfAdjointFunctionalCalculus_isSymmetric",
+        "selfAdjointFunctionalCalculus_isPositive",
+        "norm_selfAdjointFunctionalCalculus_apply_le",
+        "selfAdjointFunctionalCalculus_id",
+        "selfAdjointFunctionalCalculus_congr_op",
+        "selfAdjointFunctionalCalculus_congr",
+        "selfAdjointFunctionalCalculus_comp",
+        "selfAdjointFunctionalCalculus_zero",
+        "selfAdjointFunctionalCalculus_real_smul_id",
+        "selfAdjointFunctionalCalculus_apply_of_apply_eq_smul",
+        "selfAdjointFunctionalCalculus_intertwines",
+        "repr_eq_zero_of_calculus_apply_eq_smul",
+        "selfAdjointFunctionalCalculus_apply_of_calculus_apply_eq_smul",
+        "exists_eigenvalue_of_calculus_apply_eq_smul",
+        "selfAdjointFunctionalCalculus_one",
+        "selfAdjointFunctionalCalculus_pow",
+        "selfAdjointFunctionalCalculus_indicator",
+        "selfAdjointFunctionalCalculus_mul",
+        "extendSymbol",
+        "extendSymbol_apply_of_mem",
+        "extendSymbol_eq_indicator",
+        "extendSymbol_mul",
+        "extendSymbol_add",
+        "extendSymbol_zero",
+        "extendSymbol_one_eq_indicator",
+        "selfAdjointFunctionalCalculus_comm",
+        "selfAdjointFunctionalCalculus_sqrt"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Symmetric.FunctionalCalculus",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
       "provenance_class": "moved; introduced at Davis--Kahan commit caa0966; authors Jon Crall, GPT-5.6 Thinking; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib",
+        "TauCeti.Analysis.InnerProductSpace.Symmetric.FunctionalCalculus",
         "TauCeti.Analysis.InnerProductSpace.CourantFischer",
         "TauCeti.Analysis.InnerProductSpace.Positive.SquareRoot"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "#13785",
+      "migration_note": "November 1: deleted the parallel finite functional-calculus definition and core algebra/eigenvector/positivity/norm/intertwining/commutation proofs. All maintained consumers use LinearMap.IsSymmetric.cfc and accepted laws directly. Equality of definitions was compiled from native cfc_eq_sum before retirement. Native index-free HasEigenvalue hypotheses are bridged explicitly at remaining indexed paper estimates, including zero-dimensional scope. Removed proof-only extendSymbol helpers with the obsolete CFC bridge construction. Retained coordinate vanishing, transfer between two scalar symbols, and preimage eigenvalue extraction for eigenvectors of f(T), absent from the accepted module; the dependent operator-congruence lemma is now cfc_congr_operator. Scalar-operator evaluation is a private planar-paper helper proved by native eigenvector action; the single monomial instance uses native cfc_mul/cfc_id directly. Independent #13785 cb2fd0c03991250f6eea42030c41a3d025512cb8; no external formalization vendored in its integration record, no DKPS proof descent claimed. Historical Kitware Apache-2.0 source at e4637c3919ae under donor path, introduction caa0966, Jon Crall / GPT-5.6 Thinking."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.SingularSubspace",
@@ -5484,17 +5517,13 @@
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
-      "provenance_class": "independent accepted modulus bridges; additional local functional-calculus bridge retained",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
-        "TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison",
-        "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus"
-      ],
+      "provenance_class": "retired: independent finite/bounded CFC replacement and Jon Crall-authored accepted modulus bridge",
+      "direct_dependencies": [],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "partially-upstreamed",
-      "upstream_pr": "#16523, #20358",
-      "migration_note": "November 1: removed both duplicate finite-modulus-to-bounded/CFC bridge proofs. Consumers use LinearMap.toContinuousLinearMap_operatorAbs_eq_cfcAbs and toContinuousLinearMap_operatorAbs_eq_modulus directly. Independent #16523 893678359b586eace5dfe8ce192eb8a725406cb6 and Jon Crall-authored direct accepted-API bridge #20358 f4a3266bdf016c565840d069c5db06eb5352ddd1; accepted modulus comparison is RCLike-generic and rectangular where meaningful. The additional local eigenframe functional-calculus comparison and bounded polar-decomposition presentation remain, using native finite polar engine. Source e4637c3919ae and introduction 3676b5559, Jon Crall / Claude Opus 4.8, Kitware copyright, Apache-2.0; no proof descent claimed."
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": "#13785, #16523, #20358",
+      "migration_note": "November 1: remainder of module retired after all finite-calculus consumers switched to LinearMap.IsSymmetric.cfc. Deleted the duplicate bounded endomorphism algebra equivalence, eigenvalue containment helper, calculusStarAlgHom construction/norm/id proofs, and continuous-symbol calculus comparison. Native IsSymmetric.toContinuousLinearMap_cfc covers arbitrary real symbols over RCLike, stronger than the donor globally continuous complex formulation. The private ContinuousOn variant and finite CFC eigenvector proof in the directed tangent bridge are removed too; native ContinuousLinearMap.cfc_apply_of_apply_eq_smul covers arbitrary symbols with finite spectrum. The unused finite bounded-polar existence presentation is subsumed by the canonical finite polar factor and its CFC modulus bridge; no extra mathematical scope is lost. Earlier modulus retirements: independent #16523 893678359b586eace5dfe8ce192eb8a725406cb6 and Jon Crall-authored direct accepted-API bridge #20358 f4a3266bdf016c565840d069c5db06eb5352ddd1. Source e4637c3919ae and introduction 3676b5559, Jon Crall / Claude Opus 4.8, Kitware copyright, Apache-2.0; original names retained."
     }
   ]
 }

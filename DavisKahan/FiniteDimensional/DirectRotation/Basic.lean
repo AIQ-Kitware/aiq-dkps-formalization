@@ -341,9 +341,7 @@ theorem abs_canonicalIntertwiner_apply_eq_self_of_projection_eq
   have hsq : (S.adjoint ∘ₗ S) x = ((1 : ℝ) : 𝕜) • x := by
     simp [LinearMap.comp_apply, hS, hSstar]
   have hpos := LinearMap.isPositive_adjoint_comp_self S
-  have hfc := TauCeti.selfAdjointFunctionalCalculus_apply_of_apply_eq_smul
-    hpos.isSymmetric Real.sqrt hsq
-  rw [TauCeti.selfAdjointFunctionalCalculus_sqrt hpos, Real.sqrt_one] at hfc
+  have hfc := hpos.sqrt_apply_of_apply_eq_smul hsq
   have habs : S.operatorAbs = hpos.sqrt :=
     hpos.sqrt_unique S.isPositive_operatorAbs S.operatorAbs_sq
   rw [habs, hfc]
