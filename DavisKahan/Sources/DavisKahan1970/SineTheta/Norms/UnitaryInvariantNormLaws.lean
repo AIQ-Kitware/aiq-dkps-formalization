@@ -98,16 +98,13 @@ theorem prefixGauge_add_le
       N.finiteGauge n (approximationPrefix n (A + B)) ≤
         N.finiteGauge n
           (approximationPrefix n A + approximationPrefix n B) := by
-    apply (N.finiteNorm n).gauge_le_gauge_of_prefix_sums_le
-      (EuclideanSpace.basisFun (Fin n) ℂ)
+    apply (N.isSymmetricGauge_finiteGauge n).apply_le_of_prefixSum_le
     · intro i j hij
       exact approximationSingularValue_antitone (A + B) (Fin.le_def.mp hij)
     · intro i
       exact approximationSingularValue_nonneg _ _
-    · intro i
-      exact add_nonneg (approximationSingularValue_nonneg _ _)
-        (approximationSingularValue_nonneg _ _)
     · intro m
+      simp only [TauCeti.prefixSum_def]
       rcases le_or_gt m n with hm | hm
       · simp only [approximationPrefix, Pi.add_apply]
         rw [sum_filter_lt_eq_sum_fin hm
@@ -205,18 +202,15 @@ theorem prefixGauge_le_of_all_kyFan_le_hetero (N : SymmetricNormingFunction)
     (h : ∀ k : ℕ, kyFanApproximationGauge k A ≤
       kyFanApproximationGauge k B) (n : ℕ) :
     N.prefixGauge n A ≤ N.prefixGauge n B := by
-  change (N.finiteNorm n).basisGauge (EuclideanSpace.basisFun (Fin n) ℂ)
-      (approximationPrefix n A) ≤
-      (N.finiteNorm n).basisGauge (EuclideanSpace.basisFun (Fin n) ℂ)
-      (approximationPrefix n B)
-  apply (N.finiteNorm n).gauge_le_gauge_of_prefix_sums_le
+  change N.finiteGauge n (approximationPrefix n A) ≤
+    N.finiteGauge n (approximationPrefix n B)
+  apply (N.isSymmetricGauge_finiteGauge n).apply_le_of_prefixSum_le
   · intro i j hij
     exact approximationSingularValue_antitone A (Fin.le_def.mp hij)
   · intro i
     exact approximationSingularValue_nonneg _ _
-  · intro i
-    exact approximationSingularValue_nonneg _ _
   · intro m
+    simp only [TauCeti.prefixSum_def]
     rcases le_or_gt m n with hm | hm
     · simp only [approximationPrefix]
       rw [sum_filter_lt_eq_sum_fin hm

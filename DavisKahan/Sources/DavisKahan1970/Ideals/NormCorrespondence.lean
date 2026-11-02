@@ -90,35 +90,15 @@ end DiagonalSingularValues
 
 /-! ### Gauge laws valid for every finite unitarily invariant norm -/
 
-section UnitarilyInvariantGauge
-
-variable {n : ℕ}
-  (N : TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n)) (EuclideanSpace ℂ (Fin n)))
-  (b : OrthonormalBasis (Fin n) ℂ (EuclideanSpace ℂ (Fin n)))
-
-/-- The gauge of any unitarily invariant norm ignores the signs of the
-diagonal. -/
-theorem uinGauge_abs (x : Fin n → ℝ) :
-    N.basisGauge b (fun i => |x i|) = N.basisGauge b x := by
-  have h1 := N.apply_eq_gauge finrank_euclideanSpace_fin b ((Matrix.toLin (b).toBasis
-      (b).toBasis (Matrix.diagonal fun i => ((x) i : _))))
-  have h2 := N.apply_eq_gauge finrank_euclideanSpace_fin b
-    ((Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => (((fun i => |x i|)) i : _))))
-  rw [singularValues_diagOp_abs b x] at h1
-  exact h2.trans h1.symm
-
-/-- The gauge of any unitarily invariant norm vanishes on the zero vector. -/
-@[simp]
-theorem uinGauge_zero : N.basisGauge b (0 : Fin n → ℝ) = 0 := by
-  simpa using N.gauge_real_smul b 0 (0 : Fin n → ℝ)
-
-end UnitarilyInvariantGauge
-
-/-- Singular values scale by the modulus of a complex scalar. -/
-theorem singularValues_smul_complex {n : ℕ} (a : ℂ)
-    (A : EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n)) (i : ℕ) :
-    (a • A).singularValues i = ‖a‖ * A.singularValues i := by
-  simp
+/-- The source diagonal evaluation ignores signs. -/
+theorem uinGauge_abs {n : ℕ}
+    (N : UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      (EuclideanSpace ℂ (Fin n)))
+    (b : OrthonormalBasis (Fin n) ℂ (EuclideanSpace ℂ (Fin n)))
+    (x : Fin n → ℝ) :
+    N (Matrix.toLin b.toBasis b.toBasis (Matrix.diagonal fun i => ((|x i| : ℝ) : ℂ))) =
+      N (Matrix.toLin b.toBasis b.toBasis (Matrix.diagonal fun i => (x i : ℂ))) :=
+  N.map_eq_of_singularValues_eq (singularValues_diagOp_abs b x).symm
 
 namespace SymmetricNormingFunction
 
@@ -146,9 +126,7 @@ theorem abs_le_finiteGauge (N : SymmetricNormingFunction) {n : ℕ}
           · rw [Equiv.swap_apply_of_ne_of_ne hi0 hij]
             have hi : (i : ℕ) ≠ 0 := fun h => hi0 (Fin.ext h)
             simp [hi]
-      rw [finiteGauge, hsw,
-        (N.finiteNorm (m + 1)).gauge_perm
-          (EuclideanSpace.basisFun (Fin (m + 1)) ℂ) _ (Equiv.swap 0 j)]
+      rw [hsw, (N.isSymmetricGauge_finiteGauge (m + 1)).map_comp_perm]
       exact N.finiteGauge_firstCoordinateVector m
     have hupd : Function.update (0 : Fin (m + 1) → ℝ) j |x j|
         = |x j| • Function.update (0 : Fin (m + 1) → ℝ) j 1 := by
@@ -162,20 +140,13 @@ theorem abs_le_finiteGauge (N : SymmetricNormingFunction) {n : ℕ}
     have hmono : N.finiteGauge (m + 1)
         (Function.update (0 : Fin (m + 1) → ℝ) j |x j|)
           ≤ N.finiteGauge (m + 1) (fun i => |x i|) := by
-      apply (N.finiteNorm (m + 1)).gauge_mono
-        (EuclideanSpace.basisFun (Fin (m + 1)) ℂ)
-      · intro i
-        rcases eq_or_ne i j with rfl | hij
-        · simp
-        · simp [Function.update_of_ne hij]
-      · intro i
-        rcases eq_or_ne i j with rfl | hij
-        · simp
-        · simp [Function.update_of_ne hij, abs_nonneg]
+      apply (N.isSymmetricGauge_finiteGauge (m + 1)).apply_le_of_abs_le
+      intro i
+      rcases eq_or_ne i j with rfl | hij
+      · simp
+      · simp [Function.update_of_ne hij, abs_nonneg]
     rw [hval] at hmono
-    exact hmono.trans_eq
-      (uinGauge_abs (N.finiteNorm (m + 1))
-        (EuclideanSpace.basisFun (Fin (m + 1)) ℂ) x)
+    exact hmono.trans_eq ((N.isSymmetricGauge_finiteGauge (m + 1)).map_abs x)
 
 /-- The source gauge vanishes only on the zero vector. -/
 theorem finiteGauge_eq_zero_iff (N : SymmetricNormingFunction) {n : ℕ}
@@ -188,7 +159,7 @@ theorem finiteGauge_eq_zero_iff (N : SymmetricNormingFunction) {n : ℕ}
     have hxi : x i = 0 := abs_eq_zero.mp (le_antisymm h (abs_nonneg _))
     simpa using hxi
   · rintro rfl
-    exact uinGauge_zero _ _
+    exact map_zero (N.finiteGauge n)
 
 end SymmetricNormingFunction
 
@@ -230,25 +201,23 @@ theorem ext {Φ Ψ : SymmetricNormingFunction.Axiomatic}
 /-- The symmetric norming function extracted from the coherent operator norms. -/
 noncomputable def ofNormingFunction (N : SymmetricNormingFunction) :
     SymmetricNormingFunction.Axiomatic where
-  gauge := N.finiteGauge
+  gauge := fun n => N.finiteGauge n
   nonneg := N.finiteGauge_nonneg
   definite := N.finiteGauge_eq_zero_iff
   add_le := N.finiteGauge_add_le
   smul := N.finiteGauge_smul
   perm := by
     intro n x π
-    exact (N.finiteNorm n).gauge_perm
-      (EuclideanSpace.basisFun (Fin n) ℂ) x π
+    exact (N.isSymmetricGauge_finiteGauge n).map_comp_perm π x
   abs := by
     intro n x
-    exact uinGauge_abs (N.finiteNorm n)
-      (EuclideanSpace.basisFun (Fin n) ℂ) x
+    exact (N.isSymmetricGauge_finiteGauge n).map_abs x
   zero_pad := N.finiteGauge_zeroPad
   normalized := N.finiteGauge_one
   weak_majorization := by
-    intro n x y hx h0x h0y hpre
-    exact (N.finiteNorm n).gauge_le_gauge_of_prefix_sums_le
-      (EuclideanSpace.basisFun (Fin n) ℂ) hx h0x h0y hpre
+    intro n x y hx h0x _h0y hpre
+    exact (N.isSymmetricGauge_finiteGauge n).apply_le_of_prefixSum_le hx h0x
+      (by simpa only [TauCeti.prefixSum_def] using hpre)
 
 /-- Operator value determined by a symmetric norming function. -/
 def finiteOperatorValue (Φ : SymmetricNormingFunction.Axiomatic) (n : ℕ)
@@ -258,78 +227,38 @@ def finiteOperatorValue (Φ : SymmetricNormingFunction.Axiomatic) (n : ℕ)
 /-- A source symmetric gauge induces the finite-dimensional unitarily
 invariant norm used by the implementation. -/
 noncomputable def finiteNorm (Φ : SymmetricNormingFunction.Axiomatic) (n : ℕ) :
-    TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n)) (EuclideanSpace ℂ (Fin n)) where
-  toSeminorm := Seminorm.of
-    (Φ.finiteOperatorValue n)
-    (fun A B => by
-      have hmaj : ∀ m : ℕ,
-          (∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < m),
-              (A + B).singularValues (i : ℕ)) ≤
-            ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < m),
-              (A.singularValues (i : ℕ) + B.singularValues (i : ℕ)) := by
-        intro m
-        rw [Finset.sum_add_distrib]
-        rcases le_or_gt m n with hm | hm
-        · rw [TauCeti.sum_filter_lt_eq_sum_fin hm
-              (fun k => (A + B).singularValues k),
-            TauCeti.sum_filter_lt_eq_sum_fin hm (fun k => A.singularValues k),
-            TauCeti.sum_filter_lt_eq_sum_fin hm (fun k => B.singularValues k),
-            Fin.sum_univ_eq_sum_range, ← LinearMap.kyFanSum_def, Fin.sum_univ_eq_sum_range,
-              ← LinearMap.kyFanSum_def,
-            Fin.sum_univ_eq_sum_range, ← LinearMap.kyFanSum_def]
-          exact LinearMap.kyFanSum_add_le A B m
-        · have huniv :
-              (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) = Finset.univ :=
-            Finset.filter_true_of_mem fun i _ => lt_trans i.isLt hm
-          rw [huniv, Fin.sum_univ_eq_sum_range, ← LinearMap.kyFanSum_def,
-            Fin.sum_univ_eq_sum_range, ← LinearMap.kyFanSum_def, Fin.sum_univ_eq_sum_range,
-              ← LinearMap.kyFanSum_def]
-          exact LinearMap.kyFanSum_add_le A B n
-      show Φ.gauge n (fun i : Fin n => (A + B).singularValues (i : ℕ)) ≤
-        Φ.gauge n (fun i : Fin n => A.singularValues (i : ℕ)) +
-          Φ.gauge n (fun i : Fin n => B.singularValues (i : ℕ))
-      calc
-        Φ.gauge n (fun i : Fin n => (A + B).singularValues (i : ℕ))
-            ≤ Φ.gauge n (fun i : Fin n =>
-                A.singularValues (i : ℕ) + B.singularValues (i : ℕ)) := by
-          apply Φ.weak_majorization
-          · exact fun i j hij =>
-              (A + B).singularValues_antitone (Fin.le_def.mp hij)
-          · exact fun i => (A + B).singularValues_nonneg _
-          · exact fun i =>
-              add_nonneg (A.singularValues_nonneg _) (B.singularValues_nonneg _)
-          · exact hmaj
-        _ ≤ Φ.gauge n (fun i : Fin n => A.singularValues (i : ℕ)) +
-              Φ.gauge n (fun i : Fin n => B.singularValues (i : ℕ)) :=
-          Φ.add_le _ _)
-    (fun c A => by
-      have hs : (fun i : Fin n => (c • A).singularValues (i : ℕ)) =
-          ‖c‖ • (fun i : Fin n => A.singularValues (i : ℕ)) := by
-        funext i
-        rw [singularValues_smul_complex c A (i : ℕ)]
-        rfl
-      show Φ.gauge n (fun i : Fin n => (c • A).singularValues (i : ℕ)) =
-        ‖c‖ * Φ.gauge n (fun i : Fin n => A.singularValues (i : ℕ))
-      rw [hs, Φ.smul, abs_of_nonneg (norm_nonneg c)])
-  map_linearIsometryEquiv_comp_comp' U V A := by
-    have h : (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues =
-        A.singularValues := by
-      change ((U : EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n)) ∘ₗ
-        A ∘ₗ (V : EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n))).singularValues = _
-      simp only [LinearMap.singularValues_linearIsometryEquiv_comp,
-        LinearMap.singularValues_comp_linearIsometryEquiv]
-    change Φ.gauge n (fun i : Fin n =>
-        (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap).singularValues (i : ℕ)) =
-      Φ.gauge n (fun i : Fin n => A.singularValues (i : ℕ))
-    rw [h]
+    TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n)) (EuclideanSpace ℂ (Fin n)) := by
+  let p : Seminorm ℝ (Fin n → ℝ) := Seminorm.of (Φ.gauge n) (Φ.add_le)
+    (fun c x => by simpa only [Real.norm_eq_abs] using Φ.smul c x)
+  have hp : p.IsSymmetricGauge := by
+    refine ⟨fun π x => Φ.perm x π, ?_⟩
+    intro x j
+    calc
+      p (Function.update x j (-x j)) = Φ.gauge n |Function.update x j (-x j)| :=
+        (Φ.abs _).symm
+      _ = Φ.gauge n |x| := by
+        congr 1
+        ext i
+        by_cases hij : i = j <;> simp [hij]
+      _ = p x := Φ.abs x
+  exact UnitarilyInvariantSeminorm.ofIsSymmetricGauge p hp
+
+/-- Native reconstruction has the original singular-value formula. -/
+theorem finiteNorm_apply (Φ : SymmetricNormingFunction.Axiomatic) (n : ℕ)
+    (A : EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n)) :
+    (Φ.finiteNorm n) A = Φ.finiteOperatorValue n A := by
+  unfold finiteNorm
+  rw [UnitarilyInvariantSeminorm.ofIsSymmetricGauge_apply]
+  rfl
 
 /-- **The induced finite norm has exactly the source gauge.**  Both the
 normalization and the zero-padding law of the reconstructed family reduce to
 the corresponding source law through this identity. -/
 theorem finiteNorm_gauge (Φ : SymmetricNormingFunction.Axiomatic) (n : ℕ)
     (x : Fin n → ℝ) :
-    (Φ.finiteNorm n).basisGauge (EuclideanSpace.basisFun (Fin n) ℂ) x =
+    ((Φ.finiteNorm n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((x) i : _))) =
       Φ.gauge n x := by
+  rw [finiteNorm_apply]
   obtain ⟨π, hπ⟩ :=
     exists_perm_singularValues_diagOp (EuclideanSpace.basisFun (Fin n) ℂ) x
   show Φ.gauge n (fun i : Fin n =>
@@ -350,8 +279,7 @@ noncomputable def toNormingFunction (Φ : SymmetricNormingFunction.Axiomatic) :
     SymmetricNormingFunction where
   finiteNorm := Φ.finiteNorm
   normalized := by
-    rw [Φ.finiteNorm_gauge]
-    exact Φ.normalized
+    exact (Φ.finiteNorm_gauge 1 (fun _ => 1)).trans Φ.normalized
   zero_pad := by
     intro n x
     rw [Φ.finiteNorm_gauge, Φ.finiteNorm_gauge]
@@ -361,22 +289,24 @@ noncomputable def toNormingFunction (Φ : SymmetricNormingFunction.Axiomatic) :
 @[simp]
 theorem toNormingFunction_finiteGauge (Φ : SymmetricNormingFunction.Axiomatic) (n : ℕ)
     (x : Fin n → ℝ) :
-    Φ.toNormingFunction.finiteGauge n x = Φ.gauge n x :=
-  Φ.finiteNorm_gauge n x
+    Φ.toNormingFunction.finiteGauge n x = Φ.gauge n x := by
+  rw [SymmetricNormingFunction.finiteGauge_def]
+  exact Φ.finiteNorm_gauge n x
 
 /-- Extracting the source gauge after reconstruction returns it exactly. -/
 theorem ofNormingFunction_toNormingFunction (Φ : SymmetricNormingFunction.Axiomatic) :
     ofNormingFunction Φ.toNormingFunction = Φ :=
-  ext fun n x => Φ.finiteNorm_gauge n x
+  ext fun n x => Φ.toNormingFunction_finiteGauge n x
 
 /-- The finite operator values of the reconstructed family agree with the
 original coherent family. -/
 theorem toNormingFunction_ofNormingFunction_finite_apply
     (N : SymmetricNormingFunction) (n : ℕ)
     (A : EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n)) :
-    ((ofNormingFunction N).toNormingFunction.finiteNorm n) A = (N.finiteNorm n) A :=
-  ((N.finiteNorm n).apply_eq_gauge finrank_euclideanSpace_fin
-    (EuclideanSpace.basisFun (Fin n) ℂ) A).symm
+    ((ofNormingFunction N).toNormingFunction.finiteNorm n) A = (N.finiteNorm n) A := by
+  change ((ofNormingFunction N).finiteNorm n) A = _
+  rw [finiteNorm_apply]
+  exact ((N.finiteNorm n).map_eq_gauge_singularValues A).symm
 
 /-- The coherent finite operator family is completely determined by its source
 symmetric norming function. -/
@@ -391,11 +321,8 @@ theorem ext_finiteGauge
       funext n
       apply TauCeti.UnitarilyInvariantSeminorm.ext
       intro A
-      rw [(Nf n).apply_eq_gauge finrank_euclideanSpace_fin
-          (EuclideanSpace.basisFun (Fin n) ℂ) A,
-        (Mf n).apply_eq_gauge finrank_euclideanSpace_fin
-          (EuclideanSpace.basisFun (Fin n) ℂ) A]
-      exact h n _
+      rw [(Nf n).map_eq_gauge_singularValues A, (Mf n).map_eq_gauge_singularValues A]
+      exact h n (fun i => A.singularValues i)
 
 /-- The current paper norm object and normalized symmetric norming functions
 are equivalent, so the universal theorem excludes no norm in the source class. -/
@@ -406,7 +333,7 @@ noncomputable def equiv :
   left_inv N := by
     apply ext_finiteGauge
     intro n x
-    exact (ofNormingFunction N).finiteNorm_gauge n x
+    exact (ofNormingFunction N).toNormingFunction_finiteGauge n x
   right_inv := ofNormingFunction_toNormingFunction
 
 end SymmetricNormingFunction.Axiomatic

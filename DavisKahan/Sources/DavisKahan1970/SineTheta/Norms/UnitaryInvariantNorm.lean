@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge
+
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
@@ -82,20 +84,24 @@ structure SymmetricNormingFunction where
   finiteNorm : ∀ n : ℕ,
     TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n)) (EuclideanSpace ℂ (Fin n))
   normalized :
-    (finiteNorm 1).basisGauge (EuclideanSpace.basisFun (Fin 1) ℂ)
-      (fun _ => 1) = 1
+    ((finiteNorm 1)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin 1) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin 1) ℂ)).toBasis (Matrix.diagonal fun i => (((fun _ => 1)) i : _))) = 1
   zero_pad : ∀ {n : ℕ} (x : Fin n → ℝ),
-    (finiteNorm (n + 1)).basisGauge
-        (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (zeroPad x) =
-      (finiteNorm n).basisGauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    ((finiteNorm (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((zeroPad x)) i : _))) =
+      ((finiteNorm n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((x) i : _)))
 
 namespace SymmetricNormingFunction
 
 /-- The finite symmetric gauge associated to the paper norm. -/
 @[expose]
-def finiteGauge (N : SymmetricNormingFunction) (n : ℕ)
-    (x : Fin n → ℝ) : ℝ :=
-  (N.finiteNorm n).basisGauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+def finiteGauge (N : SymmetricNormingFunction) (n : ℕ) : Seminorm ℝ (Fin n → ℝ) :=
+  let hn : min (Module.finrank ℂ (EuclideanSpace ℂ (Fin n)))
+      (Module.finrank ℂ (EuclideanSpace ℂ (Fin n))) = n := by simp
+  (N.finiteNorm n).gauge.comp (LinearMap.funLeft ℝ ℝ (finCongr hn))
+
+/-- The paper's finite gauge has the accepted permutation and sign symmetries. -/
+theorem isSymmetricGauge_finiteGauge (N : SymmetricNormingFunction) (n : ℕ) :
+    (N.finiteGauge n).IsSymmetricGauge := by
+  exact (N.finiteNorm n).isSymmetricGauge_gauge.comp_funLeft _
 
 /-- The first `n` approximation singular values of a rectangular bounded
 operator. -/
@@ -155,39 +161,57 @@ def gauge
 theorem finiteGauge_def (N : SymmetricNormingFunction) (n : ℕ)
     (x : Fin n → ℝ) :
     N.finiteGauge n x =
-  (N.finiteNorm n).basisGauge (EuclideanSpace.basisFun (Fin n) ℂ) x :=
-  rfl
+  ((N.finiteNorm n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((x) i : _))) := by
+  let b := EuclideanSpace.basisFun (Fin n) ℂ
+  let S := N.finiteNorm n
+  have hn : min (Module.finrank ℂ (EuclideanSpace ℂ (Fin n)))
+      (Module.finrank ℂ (EuclideanSpace ℂ (Fin n))) = n := by simp
+  let e := finCongr hn
+  change S.gauge (x ∘ e) =
+    S (Matrix.toLin b.toBasis b.toBasis (Matrix.diagonal fun i => (x i : ℂ)))
+  rw [S.gauge_apply (b.orthonormal.comp e e.injective) (b.orthonormal.comp e e.injective)]
+  have hsum := e.sum_comp (fun i => (x i : ℂ) •
+    (InnerProductSpace.rankOne ℂ (b i) (b i)).toLinearMap)
+  simp only [Function.comp_apply]
+  trans S (∑ i : Fin n, (x i : ℂ) •
+    (InnerProductSpace.rankOne ℂ (b i) (b i)).toLinearMap)
+  · exact congrArg S hsum
+  · congr 1
+    apply b.toBasis.ext
+    intro j
+    simp [Matrix.toLin_diagonal_apply_self, InnerProductSpace.rankOne_apply,
+      orthonormal_iff_ite.mp b.orthonormal]
 
 /-- Source normalization in one dimension. -/
 theorem finiteGauge_one (N : SymmetricNormingFunction) :
-    N.finiteGauge 1 (fun _ => 1) = 1 :=
-  N.normalized
+    N.finiteGauge 1 (fun _ => 1) = 1 := by
+  rw [finiteGauge_def]
+  exact N.normalized
 
 /-- Coherence under trailing-zero padding. -/
 theorem finiteGauge_zeroPad (N : SymmetricNormingFunction)
     {n : ℕ} (x : Fin n → ℝ) :
-    N.finiteGauge (n + 1) (zeroPad x) = N.finiteGauge n x :=
-  N.zero_pad x
+    N.finiteGauge (n + 1) (zeroPad x) = N.finiteGauge n x := by
+  rw [finiteGauge_def, finiteGauge_def]
+  exact N.zero_pad x
 
 /-- Finite gauges are nonnegative. -/
 theorem finiteGauge_nonneg (N : SymmetricNormingFunction)
     {n : ℕ} (x : Fin n → ℝ) : 0 ≤ N.finiteGauge n x :=
-  (N.finiteNorm n).basisGauge_nonneg _ _
+  apply_nonneg (N.finiteGauge n) x
 
 /-- Finite gauges are absolutely homogeneous. -/
 theorem finiteGauge_smul (N : SymmetricNormingFunction)
     {n : ℕ} (c : ℝ) (x : Fin n → ℝ) :
-    N.finiteGauge n (c • x) = |c| * N.finiteGauge n x :=
-  (N.finiteNorm n).gauge_real_smul
-    (EuclideanSpace.basisFun (Fin n) ℂ) c x
+    N.finiteGauge n (c • x) = |c| * N.finiteGauge n x := by
+  simpa only [Real.norm_eq_abs] using map_smul_eq_mul (N.finiteGauge n) c x
 
 /-- Finite gauges are subadditive. -/
 theorem finiteGauge_add_le (N : SymmetricNormingFunction)
     {n : ℕ} (x y : Fin n → ℝ) :
     N.finiteGauge n (x + y) ≤
       N.finiteGauge n x + N.finiteGauge n y :=
-  (N.finiteNorm n).gauge_add_le
-    (EuclideanSpace.basisFun (Fin n) ℂ) x y
+  map_add_le_add (N.finiteGauge n) x y
 
 /-- The sum of a singular-value prefix is the corresponding approximation
 Ky Fan gauge. -/
@@ -215,18 +239,15 @@ theorem prefixGauge_le_of_all_kyFan_le
     (h : ∀ k : ℕ, kyFanApproximationGauge k A ≤
       kyFanApproximationGauge k B) (n : ℕ) :
     N.prefixGauge n A ≤ N.prefixGauge n B := by
-  let NA := N.finiteNorm n
-  let b := EuclideanSpace.basisFun (Fin n) ℂ
-  change NA.basisGauge b (approximationPrefix n A) ≤
-    NA.basisGauge b (approximationPrefix n B)
-  apply NA.gauge_le_gauge_of_prefix_sums_le b
+  change N.finiteGauge n (approximationPrefix n A) ≤
+    N.finiteGauge n (approximationPrefix n B)
+  apply (N.isSymmetricGauge_finiteGauge n).apply_le_of_prefixSum_le
   · intro i j hij
     exact approximationSingularValue_antitone A (Fin.le_def.mp hij)
   · intro i
     exact approximationSingularValue_nonneg _ _
-  · intro i
-    exact approximationSingularValue_nonneg _ _
   · intro m
+    simp only [TauCeti.prefixSum_def]
     rcases le_or_gt m n with hm | hm
     · simp only [approximationPrefix]
       rw [sum_filter_lt_eq_sum_fin hm
@@ -260,19 +281,16 @@ theorem mul_prefixGauge_le_of_all_mul_kyFan_le
     (h : ∀ k : ℕ, c * kyFanApproximationGauge k A ≤
       kyFanApproximationGauge k B) (n : ℕ) :
     c * N.prefixGauge n A ≤ N.prefixGauge n B := by
-  let NA := N.finiteNorm n
-  let b := EuclideanSpace.basisFun (Fin n) ℂ
-  have hdom : NA.basisGauge b (c • approximationPrefix n A) ≤
-      NA.basisGauge b (approximationPrefix n B) := by
-    apply NA.gauge_le_gauge_of_prefix_sums_le b
+  have hdom : N.finiteGauge n (c • approximationPrefix n A) ≤
+      N.finiteGauge n (approximationPrefix n B) := by
+    apply (N.isSymmetricGauge_finiteGauge n).apply_le_of_prefixSum_le
     · intro i j hij
       exact mul_le_mul_of_nonneg_left
         (approximationSingularValue_antitone A (Fin.le_def.mp hij)) hc
     · intro i
       exact mul_nonneg hc (approximationSingularValue_nonneg _ _)
-    · intro i
-      exact approximationSingularValue_nonneg _ _
     · intro m
+      simp only [TauCeti.prefixSum_def]
       rcases le_or_gt m n with hm | hm
       · simp only [Pi.smul_apply, smul_eq_mul, approximationPrefix]
         rw [sum_filter_lt_eq_sum_fin hm
@@ -296,7 +314,7 @@ theorem mul_prefixGauge_le_of_all_mul_kyFan_le
         rw [← Finset.mul_sum,
           sum_approximationPrefix n A, sum_approximationPrefix n B]
         exact h n
-  rw [NA.gauge_real_smul b c (approximationPrefix n A),
+  rw [N.finiteGauge_smul c (approximationPrefix n A),
     abs_of_nonneg hc] at hdom
   exact hdom
 

@@ -39,7 +39,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Cutoff",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization",
         "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
@@ -123,7 +122,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization",
         "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
@@ -407,7 +405,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization",
         "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
@@ -1781,7 +1778,7 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit 7481732; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.; unified in the rectangular Seminorm-extending API; inherited laws and consumers migrated; current overlay awaits Lean compilation",
       "direct_dependencies": [
         "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge",
+        "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization"
       ],
@@ -2288,7 +2285,7 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge",
+        "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization"
       ],
       "status": "partially-upstreamed",
@@ -5408,18 +5405,15 @@
       "roadmap_target": "unitarily-invariant-norm",
       "provenance_class": "Dependency-layer extraction for the unified rectangular seminorm migration. Copyright (c) 2026 Kitware, Inc.; Apache 2.0.",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.Convex.Majorization",
-        "TauCeti.Analysis.InnerProductSpace.SingularValues",
-        "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic",
-        "Mathlib.Analysis.InnerProductSpace.Projection.Reflection"
+        "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm"
       ],
-      "status": "partially-upstreamed",
-      "upstream_pr": null,
-      "migration_note": " November 2 diagonal-model slice: basisGauge now evaluates the native Matrix.toLin diagonal carrier. apply_eq_gauge delegates directly to native any-basis SVD #14214 (03d87726208ff951996d950a44e5efda460d1513), retiring the selected-polar factorization proof. apply_adjoint and apply_operatorAbs wrappers are deleted; SinTheta, YWS Frobenius and RoadmapBridge consumers use map_eq_of_singularValues_eq with native singularValues_adjoint/operatorAbs, preserving the integration regression check. Source e4637c3919ae under this donor path, Jon Crall/Claude Fable 5, Kitware Apache-2.0. FiniteSymmetricGauge packaging and its parallel basis-gauge proof engine remain pending canonical Seminorm/gauge consumption, not an unmatched-mathematics exception."
+      "status": "upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/14662",
+      "migration_note": " November 2 diagonal-model slice: basisGauge now evaluates the native Matrix.toLin diagonal carrier. apply_eq_gauge delegates directly to native any-basis SVD #14214 (03d87726208ff951996d950a44e5efda460d1513), retiring the selected-polar factorization proof. apply_adjoint and apply_operatorAbs wrappers are deleted; SinTheta, YWS Frobenius and RoadmapBridge consumers use map_eq_of_singularValues_eq with native singularValues_adjoint/operatorAbs, preserving the integration regression check. Source e4637c3919ae under this donor path, Jon Crall/Claude Fable 5, Kitware Apache-2.0. FiniteSymmetricGauge packaging and its parallel basis-gauge proof engine remain pending canonical Seminorm/gauge consumption, not an unmatched-mathematics exception. November 2 gauge-representation slice: delete the remaining 198-line Gauge donor and its basisGauge, finiteSymmetricGauge and scalar/triangle/permutation/sign/monotonicity/representation engines. Consume native gauge, isSymmetricGauge_gauge, gauge_apply, map_eq_gauge_singularValues and ofIsSymmetricGauge from #14662, integration 38596bb4395faa26cd9c2ede1df65b5e67aeaa0b. The accepted API covers rectangular maps over arbitrary RCLike fields; source square complex diagonal evaluations are unchanged via a compiled reindexing/Matrix.toLin correspondence, including zero dimension. The paper finiteGauge now is a native Seminorm; all values, coherence, normalization and source definiteness are preserved. Source NormCorrespondence reconstruction uses native ofIsSymmetricGauge instead of maintaining a singular-value triangle proof. Necessary raw-matrix sign/sorted-list correspondences remain downstream; DoubleAngle consumes native Gram/singular-value invariance. #14662 explicitly says no external formalization was vendored; this is independent implementation consumption, not DKPS proof adaptation. Original source e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm/Gauge.lean, extraction bf84b6ff10c2adf06760b3ddc38c739e4687fb7f from the former aggregate module to this donor, header Jon Crall/Claude Fable 5, Kitware copyright, Apache-2.0. The separate older scalar FiniteSymmetricGauge bundle still has downstream consumers and is pending its own migration; SequenceGauge temporarily packages the native Seminorm values for that interface, without retaining the retired operator proof engine."
     },
     {
       "source_module": "new or refactored directly in ForTauCeti",

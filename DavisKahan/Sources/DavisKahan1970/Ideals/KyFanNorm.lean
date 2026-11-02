@@ -74,6 +74,34 @@ theorem zeroPadRight_comp_zeroPadPerm {n : ℕ}
   · simp [Function.comp_apply, zeroPadPerm, FiniteVector.zeroPadRight]
   · simp [Function.comp_apply, zeroPadPerm, FiniteVector.zeroPadRight]
 
+private theorem diagonalEval_perm {n : ℕ}
+    (N : UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      (EuclideanSpace ℂ (Fin n)))
+    (b : OrthonormalBasis (Fin n) ℂ (EuclideanSpace ℂ (Fin n)))
+    (x : Fin n → ℝ) (π : Equiv.Perm (Fin n)) :
+    N (Matrix.toLin b.toBasis b.toBasis (Matrix.diagonal fun i => (x (π i) : ℂ))) =
+      N (Matrix.toLin b.toBasis b.toBasis (Matrix.diagonal fun i => (x i : ℂ))) := by
+  have hn : min (Module.finrank ℂ (EuclideanSpace ℂ (Fin n)))
+      (Module.finrank ℂ (EuclideanSpace ℂ (Fin n))) = n := by simp
+  let e := finCongr hn
+  let p := N.gauge.comp (LinearMap.funLeft ℝ ℝ e)
+  have heval (y : Fin n → ℝ) : p y =
+      N (Matrix.toLin b.toBasis b.toBasis (Matrix.diagonal fun i => (y i : ℂ))) := by
+    change N.gauge (y ∘ e) = _
+    rw [N.gauge_apply (b.orthonormal.comp e e.injective) (b.orthonormal.comp e e.injective)]
+    simp only [Function.comp_apply]
+    trans N (∑ i : Fin n, (y i : ℂ) •
+      (InnerProductSpace.rankOne ℂ (b i) (b i)).toLinearMap)
+    · exact congrArg N (e.sum_comp (fun i => (y i : ℂ) •
+        (InnerProductSpace.rankOne ℂ (b i) (b i)).toLinearMap))
+    · congr 1
+      apply b.toBasis.ext
+      intro j
+      simp [Matrix.toLin_diagonal_apply_self, InnerProductSpace.rankOne_apply,
+        orthonormal_iff_ite.mp b.orthonormal]
+  exact (heval (x ∘ π)).symm.trans
+    (((N.isSymmetricGauge_gauge.comp_funLeft e).map_comp_perm π x).trans (heval x))
+
 /-- The finite square Ky Fan `k` seminorm used to build the coherent paper
 norm.  For `k` larger than the dimension the extra singular values are zero. -/
 noncomputable def kyFanFiniteNorm (k n : ℕ) :
@@ -87,8 +115,7 @@ corresponding prefix sum. -/
 theorem kyFanFiniteNorm_gauge_of_antitone_nonneg
     (k n : ℕ) (x : Fin n → ℝ) (hxanti : Antitone x)
     (hx0 : ∀ i, 0 ≤ x i) :
-    (kyFanFiniteNorm k n).basisGauge
-        (EuclideanSpace.basisFun (Fin n) ℂ) x =
+    ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((x) i : _))) =
       prefixSum k x := by
   let b := EuclideanSpace.basisFun (Fin n) ℂ
   have hsval (i : Fin n) :
@@ -145,10 +172,8 @@ theorem kyFanFiniteNorm_gauge_of_antitone_nonneg
 
 /-- The finite Ky Fan gauges are coherent under appending a zero coordinate. -/
 theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :
-    (kyFanFiniteNorm k (n + 1)).basisGauge
-        (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (zeroPad x) =
-      (kyFanFiniteNorm k n).basisGauge
-        (EuclideanSpace.basisFun (Fin n) ℂ) x := by
+    ((kyFanFiniteNorm k (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((zeroPad x)) i : _))) =
+      ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((x) i : _))) := by
   let absx : Fin n → ℝ := fun i => |x i|
   let pi : Equiv.Perm (Fin n) :=
     TauCeti.FiniteSymmetricGauge.antitoneSortPerm absx
@@ -162,19 +187,14 @@ theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :
     FiniteVector.zeroPadRight_nonneg hy0
 
   have hsmall :
-      (kyFanFiniteNorm k n).basisGauge
-          (EuclideanSpace.basisFun (Fin n) ℂ) y =
-        (kyFanFiniteNorm k n).basisGauge
-          (EuclideanSpace.basisFun (Fin n) ℂ) x := by
+      ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((y) i : _))) =
+        ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((x) i : _))) := by
     calc
-      (kyFanFiniteNorm k n).basisGauge
-          (EuclideanSpace.basisFun (Fin n) ℂ) y =
-          (kyFanFiniteNorm k n).basisGauge
-            (EuclideanSpace.basisFun (Fin n) ℂ) absx := by
-        exact (kyFanFiniteNorm k n).gauge_perm
+      ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((y) i : _))) =
+          ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((absx) i : _))) := by
+        exact diagonalEval_perm (kyFanFiniteNorm k n)
           (EuclideanSpace.basisFun (Fin n) ℂ) absx pi
-      _ = (kyFanFiniteNorm k n).basisGauge
-            (EuclideanSpace.basisFun (Fin n) ℂ) x := by
+      _ = ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((x) i : _))) := by
         exact uinGauge_abs (kyFanFiniteNorm k n)
           (EuclideanSpace.basisFun (Fin n) ℂ) x
 
@@ -193,36 +213,26 @@ theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :
 
   rw [SymmetricIdeal.zeroPad_eq_zeroPadRight]
   calc
-    (kyFanFiniteNorm k (n + 1)).basisGauge
-        (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
-        (FiniteVector.zeroPadRight (m := 1) x) =
-      (kyFanFiniteNorm k (n + 1)).basisGauge
-        (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
-        (fun i => |FiniteVector.zeroPadRight (m := 1) x i|) := by
+    ((kyFanFiniteNorm k (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((FiniteVector.zeroPadRight (m := 1) x)) i : _))) =
+      ((kyFanFiniteNorm k (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((fun i => |FiniteVector.zeroPadRight (m := 1) x i|)) i : _))) := by
           exact (uinGauge_abs (kyFanFiniteNorm k (n + 1))
             (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
             (FiniteVector.zeroPadRight (m := 1) x)).symm
-    _ = (kyFanFiniteNorm k (n + 1)).basisGauge
-        (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
-        (((fun i => |FiniteVector.zeroPadRight (m := 1) x i|) ∘
-          zeroPadPerm pi)) := by
-          exact ((kyFanFiniteNorm k (n + 1)).gauge_perm
+    _ = ((kyFanFiniteNorm k (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((((fun i => |FiniteVector.zeroPadRight (m := 1) x i|) ∘
+          zeroPadPerm pi))) i : _))) := by
+          exact (diagonalEval_perm (kyFanFiniteNorm k (n + 1))
             (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
             (fun i => |FiniteVector.zeroPadRight (m := 1) x i|)
             (zeroPadPerm pi)).symm
-    _ = (kyFanFiniteNorm k (n + 1)).basisGauge
-        (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
-        (FiniteVector.zeroPadRight (m := 1) y) := by rw [hpermPad]
+    _ = ((kyFanFiniteNorm k (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((FiniteVector.zeroPadRight (m := 1) y)) i : _))) := by rw [hpermPad]
     _ = prefixSum k (FiniteVector.zeroPadRight (m := 1) y) :=
       kyFanFiniteNorm_gauge_of_antitone_nonneg k (n + 1)
         _ hpadyanti hpady0
     _ = prefixSum k y :=
       FiniteVector.prefixSum_zeroPadRight k y
-    _ = (kyFanFiniteNorm k n).basisGauge
-        (EuclideanSpace.basisFun (Fin n) ℂ) y :=
+    _ = ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((y) i : _))) :=
       (kyFanFiniteNorm_gauge_of_antitone_nonneg k n y hyanti hy0).symm
-    _ = (kyFanFiniteNorm k n).basisGauge
-        (EuclideanSpace.basisFun (Fin n) ℂ) x := hsmall
+    _ = ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((x) i : _))) := hsmall
 
 /-- The Ky Fan `k` norm, for positive `k`, as an actual member of the coherent
 Davis--Kahan source norm class. -/
@@ -230,14 +240,13 @@ noncomputable def kyFanNormingFunction (k : ℕ) (hk : 0 < k) :
     SymmetricNormingFunction where
   finiteNorm := kyFanFiniteNorm k
   normalized := by
-    rw [kyFanFiniteNorm_gauge_of_antitone_nonneg k 1]
-    · rw [prefixSum_of_le (x := fun _ : Fin 1 => (1 : ℝ))]
-      · simp
-      · omega
-    · intro i j hij
-      simp
-    · intro i
-      norm_num
+    calc
+      _ = prefixSum k (fun _ : Fin 1 => (1 : ℝ)) :=
+        kyFanFiniteNorm_gauge_of_antitone_nonneg k 1 _
+          (fun _ _ _ => le_rfl) (fun _ => zero_le_one)
+      _ = 1 := by
+        rw [prefixSum_of_le (by omega)]
+        simp
   zero_pad := by
     intro n x
     exact kyFanFiniteNorm_zeroPad k n x
@@ -253,7 +262,11 @@ theorem kyFanNormingFunction_prefixGauge
     (kyFanNormingFunction k hk).prefixGauge n A =
       kyFanApproximationGauge (min k n) A := by
   rw [SymmetricNormingFunction.prefixGauge]
-  unfold SymmetricNormingFunction.finiteGauge kyFanNormingFunction
+  rw [SymmetricNormingFunction.finiteGauge_def]
+  change (kyFanFiniteNorm k n)
+    (Matrix.toLin (EuclideanSpace.basisFun (Fin n) ℂ).toBasis
+      (EuclideanSpace.basisFun (Fin n) ℂ).toBasis
+      (Matrix.diagonal fun i => (SymmetricNormingFunction.approximationPrefix n A i : ℂ))) = _
   rw [kyFanFiniteNorm_gauge_of_antitone_nonneg]
   · rcases le_total k n with hkn | hnk
     · rw [min_eq_left hkn]

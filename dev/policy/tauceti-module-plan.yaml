@@ -76,7 +76,6 @@ topics:
   - Analysis.InnerProductSpace.KyFan
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization
-  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm

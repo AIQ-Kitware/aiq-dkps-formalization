@@ -3212,3 +3212,41 @@ promotion `7500fcd559ce40bee8f68ff52a0f5a537f9ae8cc`, Jon Crall / OpenAI
 GPT-5.6 Thinking, Kitware Apache-2.0. No direct DKPS proof adaptation is
 claimed for #14214. The parallel finite symmetric-gauge packaging still
 awaits canonical `Seminorm` consumption; it is not classified as unmatched.
+
+
+### November 2: consume the native operator/gauge correspondence
+
+Deleted the remaining 198-line
+`ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm/Gauge.lean`.
+Its `basisGauge`, `finiteSymmetricGauge`, homogeneity, triangle, permutation,
+sign, shrinking, monotonicity and gauge-representation proofs are retired.
+Accepted [#14662](https://github.com/TauCetiProject/TauCeti/pull/14662),
+integration `38596bb4395faa26cd9c2ede1df65b5e67aeaa0b`, supplies
+`UnitarilyInvariantSeminorm.gauge`, `gauge_apply`, `isSymmetricGauge_gauge`,
+`map_eq_gauge_singularValues` and `ofIsSymmetricGauge`. Its scope is rectangular
+maps over arbitrary `RCLike` fields, so the square complex paper interface is
+covered without weakening its hypotheses. The PR explicitly states that no
+external formalization was vendored: this is consumption of an independent
+implementation, not a claim of DKPS proof adaptation.
+
+The paper's `SymmetricNormingFunction.finiteGauge` now returns a native
+`Seminorm`, with a compiled equality to its original chosen-basis diagonal
+matrix evaluation. Reindexing handles `min (finrank E) (finrank E) = n`,
+including dimension zero. Normalization, coherence, definiteness and all
+original pointwise formulas are preserved. The reverse source construction
+uses `ofIsSymmetricGauge`, retiring the separate singular-value triangle
+proof. Native symmetric-gauge laws handle the base and sequence-norm
+consumers. Necessary raw-matrix absolute-value and sorted-list correspondences
+remain in the paper layer; its Ky Fan coherence proof has a private
+chosen-basis/native-gauge bridge. The double-angle proof uses native
+Gram/singular-value invariance directly.
+
+Historical donor source is
+`e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm/Gauge.lean`,
+extracted from the former aggregate module in
+`bf84b6ff10c2adf06760b3ddc38c739e4687fb7f`. The header credits Jon Crall and
+Claude Fable 5, Kitware, Inc., Apache-2.0. The source correspondence module's
+original Jon Crall / OpenAI GPT-5.6 Thinking attribution is preserved. The
+separate scalar `FiniteSymmetricGauge` bundle still has consumers and awaits
+its own native migration; the temporary source sequence adapter packages
+native seminorm values, without retaining the retired operator proof engine.

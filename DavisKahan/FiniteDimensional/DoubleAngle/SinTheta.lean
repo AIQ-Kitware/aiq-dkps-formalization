@@ -513,10 +513,7 @@ theorem apply_orthogonal_starProjection_comp_starProjection_comp
     rw [RCLike.norm_ofReal, sq_abs, show w i ^ 2 = w i * w i from pow_two _, hwi]
     push_cast
     module
-  -- Read off via the gauge.
-  rw [N.apply_eq_gauge rfl bC M, N.apply_eq_gauge rfl bC ((Matrix.toLin (bC).toBasis
-      (bC).toBasis (Matrix.diagonal fun i => ((w) i : _)))),
-    singularValues_eq_of_gram_eq hgram]
+  exact N.map_eq_of_singularValues_eq (singularValues_eq_of_gram_eq hgram)
 
 end Dictionary
 

@@ -61,17 +61,18 @@ def sequenceGauge (N : SymmetricNormingFunction) (x : ℕ → ℝ) : ℝ :=
 finite majorization. -/
 @[expose]
 noncomputable def normingFiniteSymmetricGauge
-    (N : SymmetricNormingFunction) (n : ℕ) : FiniteSymmetricGauge n :=
-  (N.finiteNorm n).finiteSymmetricGauge
-    (EuclideanSpace.basisFun (Fin n) ℂ)
+    (N : SymmetricNormingFunction) (n : ℕ) : FiniteSymmetricGauge n where
+  toFun := N.finiteGauge n
+  add_le' := fun x y => map_add_le_add (N.finiteGauge n) x y
+  real_smul' := N.finiteGauge_smul
+  perm' := fun x π => (N.isSymmetricGauge_finiteGauge n).map_comp_perm π x
+  neg_single' := (N.isSymmetricGauge_finiteGauge n).map_update_neg
 
 /-- `normingFiniteSymmetricGauge` computes the paper's own finite gauge: the repackaging
 into `FiniteSymmetricGauge` changes the interface, not the value. -/
 @[simp] theorem normingFiniteSymmetricGauge_apply
     (N : SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) :
-    normingFiniteSymmetricGauge N n x = N.finiteGauge n x := by
-  rw [normingFiniteSymmetricGauge, UnitarilyInvariantSeminorm.finiteSymmetricGauge_apply]
-  rfl
+    normingFiniteSymmetricGauge N n x = N.finiteGauge n x := rfl
 
 /-- A Minkowski sum of two symmetric-gauge balls is symmetric-convex. -/
 theorem isSymmetricConvex_gaugeBall_add_gaugeBall
