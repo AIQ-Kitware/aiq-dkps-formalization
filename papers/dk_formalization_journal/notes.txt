@@ -21,3 +21,9 @@ Indagationes Mathematicae - https://www.sciencedirect.com/journal/indagationes-m
 Quarterly Journal of Mathematics - https://academic.oup.com/qjmath/pages/publish-with-us
 
 Archiv der Mathematik - Favors short papers (DK 4.4 result could be standalone here) - https://link.springer.com/article/10.1007/s00013-023-01936-0
+
+---
+
+
+Survery paper from Paige and Wei 1994, History and Generality of the CS Decomposition
+other info: https://math.stackexchange.com/questions/3348546/proof-of-the-cs-cosine-sine-matrix-decomposition
