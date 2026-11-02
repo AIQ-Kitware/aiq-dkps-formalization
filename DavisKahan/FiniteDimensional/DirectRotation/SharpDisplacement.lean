@@ -360,20 +360,10 @@ theorem principalAngles_zero_eq_arcsin_projectionGap
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hrank : finrank 𝕜 U = finrank 𝕜 V)
-    (hE : 0 < finrank 𝕜 E) :
-    principalAngles U V 0 = Real.arcsin (U.projectionGap V) := by
-  have hgap : U.projectionGap V = principalSines U V 0 := by
-    calc
-      U.projectionGap V =
-          ‖(projection U - projection V).toContinuousLinearMap‖ := by
-            rw [Submodule.projectionGap_def]
-            rfl
-      _ = ‖(sinThetaMap U V).toContinuousLinearMap‖ :=
-            opNorm_projection_sub_eq_opNorm_sinThetaMap U V hrank
-      _ = (sinThetaMap U V).singularValues 0 :=
-            TauCeti.opNorm_eq_singularValues_zero (sinThetaMap U V) rfl hE
-      _ = principalSines U V 0 := rfl
-  rw [principalAngles, Finsupp.mapRange_apply, ← hgap]
+    (_hE : 0 < finrank 𝕜 E) :
+    Submodule.principalAngles U V 0 = Real.arcsin (U.projectionGap V) := by
+  rw [Submodule.principalAngles_apply, Submodule.principalSines_zero,
+    ← Submodule.projectionGap_eq_directedProjectionGap_of_finrank_eq U V hrank]
 
 /-- The sharp inequality expressed directly with the largest principal
 angle, without an auxiliary spectrum hypothesis. -/
@@ -385,7 +375,7 @@ theorem cos_half_maxPrincipalAngle_mul_uiNorm_directRotation_le_displacement
     (hrank : finrank 𝕜 U = finrank 𝕜 V)
     (hE : 0 < finrank 𝕜 E)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
-    Real.cos (principalAngles U V 0 / 2) *
+    Real.cos (Submodule.principalAngles U V 0 / 2) *
         N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
       N (LinearMap.id - W.toLinearMap) := by
   rw [principalAngles_zero_eq_arcsin_projectionGap U V hrank hE]

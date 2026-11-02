@@ -777,9 +777,10 @@ Lean proof route for a weaker agent:
 3. Rewrite the first principal angle with `Real.arccos_cos` and the supplied range bounds.
 -/
 theorem principalAngles_model (θ : ℝ) (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 2) :
-    principalAngles (modelSubspace (𝕜 := 𝕜))
+    Submodule.principalAngles (modelSubspace (𝕜 := 𝕜))
       (rotatedModelSubspace (𝕜 := 𝕜) θ) 0 = θ := by
-  rw [principalAngles]
+  rw [Submodule.principalAngles_def, Finsupp.mapRange_apply,
+    Submodule.principalSines_def, Submodule.sinThetaMap_def]
   change Real.arcsin
       ((sinThetaMap (modelSubspace (𝕜 := 𝕜))
         (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues 0) = θ

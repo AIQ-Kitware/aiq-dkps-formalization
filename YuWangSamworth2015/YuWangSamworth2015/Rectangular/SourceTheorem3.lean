@@ -393,7 +393,7 @@ theorem theorem3_rightSinTheta {p q d r s : ℕ}
     (hVhat : IsRightSingularBlock Ahat hr hd Vhat)
     (Delta : ℝ) (hDelta : 0 < Delta)
     (hgap : SourceSingularGap q A r s Delta) :
-    sinThetaFrobenius (Submodule.span ℝ (Set.range V))
+    Submodule.sinThetaFrobenius (Submodule.span ℝ (Set.range V))
         (Submodule.span ℝ (Set.range Vhat)) ≤
       2 * (2 * A.singularValues 0 + ‖(Ahat - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Ahat - A).toContinuousLinearMap‖)
@@ -442,7 +442,7 @@ theorem theorem3_leftSinTheta {p q d r s : ℕ}
     (hUhat : IsLeftSingularBlock Ahat hr hd Uhat)
     (Delta : ℝ) (hDelta : 0 < Delta)
     (hgap : SourceSingularGap p A r s Delta) :
-    sinThetaFrobenius (Submodule.span ℝ (Set.range U))
+    Submodule.sinThetaFrobenius (Submodule.span ℝ (Set.range U))
         (Submodule.span ℝ (Set.range Uhat)) ≤
       2 * (2 * A.singularValues 0 + ‖(Ahat - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Ahat - A).toContinuousLinearMap‖)

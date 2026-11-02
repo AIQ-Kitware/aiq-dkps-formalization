@@ -172,7 +172,7 @@ theorem yuWangSamworth_rightSingularSubspace_block_le
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2)
     (hhi : ∀ q p : Fin n, (q : ℕ) = s → (p : ℕ) = s + 1 →
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2) :
-    sinThetaFrobenius (Submodule.span 𝕜 (Set.range v))
+    Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range v))
         (Submodule.span 𝕜 (Set.range vHat)) ≤
       2 * (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
@@ -193,7 +193,7 @@ theorem yuWangSamworth_leftSingularSubspace_block_le
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2)
     (hhi : ∀ q p : Fin m, (q : ℕ) = s → (p : ℕ) = s + 1 →
       Δ ≤ A.singularValues (q : ℕ) ^ 2 - A.singularValues (p : ℕ) ^ 2) :
-    sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+    Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range û)) ≤
       2 * (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)

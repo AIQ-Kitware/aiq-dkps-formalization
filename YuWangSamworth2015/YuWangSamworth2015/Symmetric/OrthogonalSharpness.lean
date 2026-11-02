@@ -291,7 +291,7 @@ angle is a right angle and the sine cross-projection is the block projector
 itself. -/
 theorem sinThetaFrobenius_orthogonalSharpness (hε : 0 < ε) (hd : 1 ≤ d)
     (hdp : 2 * d ≤ p) :
-    sinThetaFrobenius (eigenspace (orthogonalSharpnessPopulation b d) ((3 : ℝ) : 𝕜))
+    Submodule.sinThetaFrobenius (eigenspace (orthogonalSharpnessPopulation b d) ((3 : ℝ) : 𝕜))
         (eigenspace (orthogonalSharpnessSample b d ε) ((2 : ℝ) : 𝕜)) =
       Real.sqrt d := by
   classical

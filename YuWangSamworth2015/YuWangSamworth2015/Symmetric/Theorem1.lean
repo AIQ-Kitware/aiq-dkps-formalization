@@ -53,9 +53,9 @@ theorem yuWangSamworth_theorem1_frobenius_le
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
-    sinThetaFrobenius U V ≤
+    Submodule.sinThetaFrobenius U V ≤
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) / δ := by
-  rw [sinThetaFrobenius_eq]
+  rw [Submodule.sinThetaFrobenius_def, Submodule.sinThetaMap_def]
   exact yuWangSamworth_theorem1_uiNorm_le
       (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E))
       hA hB hU hV hδ hgap

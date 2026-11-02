@@ -209,13 +209,13 @@ theorem kyFanSum_projectionDifference_eq_directed_sines
         (LinearMap.operatorAbs (sinThetaMap U V) +
           LinearMap.operatorAbs ((sinThetaMap V U).adjoint))
     rw [← operatorAbs_projectionDifference_eq_directed_sine_sum U V]
-    simp only [kyFanSum_eq_sum_fin, singularValues_operatorAbs]
+    simp only [kyFanSum_eq_sum_fin, LinearMap.singularValues_operatorAbs]
   have hleft : kyFanSum (finrank 𝕜 E) A =
       kyFanSum (finrank 𝕜 E) (sinThetaMap U V) := by
-    simp only [A, kyFanSum_eq_sum_fin, singularValues_operatorAbs]
+    simp only [A, kyFanSum_eq_sum_fin, LinearMap.singularValues_operatorAbs]
   have hright : kyFanSum (finrank 𝕜 E) B =
       kyFanSum (finrank 𝕜 E) (sinThetaMap V U) := by
-    simp only [B, kyFanSum_eq_sum_fin, singularValues_operatorAbs,
+    simp only [B, kyFanSum_eq_sum_fin, LinearMap.singularValues_operatorAbs,
       LinearMap.singularValues_adjoint]
   calc
     kyFanSum (finrank 𝕜 E) (projection U - projection V) =

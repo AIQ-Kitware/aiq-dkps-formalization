@@ -367,7 +367,7 @@ theorem theorem8_1_upperEigenvalueRepulsion_blockSourceExact [FiniteDimensional 
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (i : Fin (finrank ℂ (Pᗮ : Submodule ℂ H))) :
     (isSymmetric_upperBlockCompression hA P alpha).eigenvalues rfl i ≤
-      TauCeti.principalCosines Pᗮ (branch A K alpha hA hK)ᗮ 0 ^ 2 *
+      Submodule.principalCosines Pᗮ (branch A K alpha hA hK)ᗮ 0 ^ 2 *
         (isSymmetric_upperBlockCompression (hA.add hK)
             (branch A K alpha hA hK) alpha).eigenvalues rfl
           (Fin.cast (theorem8_1_finrank_orthogonal_branch_eq A K P hdelta hA hK hAP
@@ -400,7 +400,7 @@ theorem theorem8_1_lowerEigenvalueRepulsion_blockSourceExact [FiniteDimensional 
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (i : Fin (finrank ℂ (P : Submodule ℂ H))) :
     (isSymmetric_lowerBlockCompression hA P alpha delta).eigenvalues rfl i ≤
-      TauCeti.principalCosines P (branch A K alpha hA hK) 0 ^ 2 *
+      Submodule.principalCosines P (branch A K alpha hA hK) 0 ^ 2 *
         (isSymmetric_lowerBlockCompression (hA.add hK)
             (branch A K alpha hA hK) alpha delta).eigenvalues rfl
           (Fin.cast (theorem8_1_finrank_branch_eq A K P hdelta hA hK hAP
@@ -446,7 +446,7 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact [FiniteDimensi
             (branch A K alpha hA hK) alpha).eigenvalues rfl
           (Fin.cast (theorem8_1_finrank_orthogonal_branch_eq A K P hdelta hA hK hAP
             hPlow hPhigh hKP hKPperp) i) *
-          TauCeti.principalCosines Pᗮ (branch A K alpha hA hK)ᗮ (i : ℕ) ^ 2) := by
+          Submodule.principalCosines Pᗮ (branch A K alpha hA hK)ᗮ (i : ℕ) ^ 2) := by
   have hle : finrank ℂ (Pᗮ : Submodule ℂ H) ≤ finrank ℂ H := Submodule.finrank_le _
   have hmaj := theorem8_1_upperWeightedWeakMajorization A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp
@@ -466,7 +466,7 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact [FiniteDimensi
             (branch A K alpha hA hK) alpha).eigenvalues rfl
           (Fin.cast (theorem8_1_finrank_orthogonal_branch_eq A K P hdelta hA hK hAP
             hPlow hPhigh hKP hKPperp) i) *
-          TauCeti.principalCosines Pᗮ (branch A K alpha hA hK)ᗮ (i : ℕ) ^ 2 := by
+          Submodule.principalCosines Pᗮ (branch A K alpha hA hK)ᗮ (i : ℕ) ^ 2 := by
     funext i
     have heigQ := approximationNumber_upperBlockCompression_eq_eigenvalues (hA.add hK)
       (branch A K alpha hA hK) alpha
@@ -497,7 +497,7 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact [FiniteDimensi
             (branch A K alpha hA hK) alpha delta).eigenvalues rfl
           (Fin.cast (theorem8_1_finrank_branch_eq A K P hdelta hA hK hAP
             hPlow hPhigh hKP hKPperp) i) *
-          TauCeti.principalCosines P (branch A K alpha hA hK) (i : ℕ) ^ 2) := by
+          Submodule.principalCosines P (branch A K alpha hA hK) (i : ℕ) ^ 2) := by
   have hle : finrank ℂ (P : Submodule ℂ H) ≤ finrank ℂ H := Submodule.finrank_le _
   have hmaj := theorem8_1_lowerWeightedWeakMajorization A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp
@@ -518,7 +518,7 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact [FiniteDimensi
             (branch A K alpha hA hK) alpha delta).eigenvalues rfl
           (Fin.cast (theorem8_1_finrank_branch_eq A K P hdelta hA hK hAP
             hPlow hPhigh hKP hKPperp) i) *
-          TauCeti.principalCosines P (branch A K alpha hA hK) (i : ℕ) ^ 2 := by
+          Submodule.principalCosines P (branch A K alpha hA hK) (i : ℕ) ^ 2 := by
     funext i
     have heigQ := approximationNumber_lowerBlockCompression_eq_eigenvalues (hA.add hK)
       (branch A K alpha hA hK) alpha delta
@@ -614,7 +614,7 @@ theorem theorem8_1_upperEigenvalueRepulsion_blockSourceExact_real [FiniteDimensi
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (i : Fin (finrank ℝ (Pᗮ : Submodule ℝ E))) :
     (isSymmetric_upperBlockCompression hA P alpha).eigenvalues rfl i ≤
-      TauCeti.principalCosines Pᗮ (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
+      Submodule.principalCosines Pᗮ (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
             hPhigh hKP hKPperp)ᗮ 0 ^ 2 *
         (isSymmetric_upperBlockCompression (hA.add hK) (canonicalLowBranchReal A K P hdelta hA hK
             hAP hPlow
@@ -652,7 +652,7 @@ theorem theorem8_1_lowerEigenvalueRepulsion_blockSourceExact_real [FiniteDimensi
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (i : Fin (finrank ℝ (P : Submodule ℝ E))) :
     (isSymmetric_lowerBlockCompression hA P alpha delta).eigenvalues rfl i ≤
-      TauCeti.principalCosines P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
+      Submodule.principalCosines P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
             hPhigh hKP hKPperp) 0 ^ 2 *
         (isSymmetric_lowerBlockCompression (hA.add hK) (canonicalLowBranchReal A K P hdelta hA hK
             hAP hPlow
@@ -696,7 +696,7 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real
               hPhigh hKP hKPperp) alpha).eigenvalues rfl
           (Fin.cast (theorem8_1_finrank_orthogonal_branch_eq_real A K P hdelta hA hK hAP
               hPlow hPhigh hKP hKPperp) i) *
-          TauCeti.principalCosines Pᗮ (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
+          Submodule.principalCosines Pᗮ (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
                 hPhigh hKP hKPperp)ᗮ (i : ℕ) ^ 2) := by
   have hle : finrank ℝ (Pᗮ : Submodule ℝ E) ≤ finrank ℝ E := Submodule.finrank_le _
   have hmaj := theorem8_1_upperWeightedWeakMajorization_real A K P hdelta hA hK hAP
@@ -722,7 +722,7 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real
             hPhigh hKP hKPperp) alpha).eigenvalues rfl
           (Fin.cast (theorem8_1_finrank_orthogonal_branch_eq_real A K P hdelta hA hK hAP
               hPlow hPhigh hKP hKPperp) i) *
-          TauCeti.principalCosines Pᗮ (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
+          Submodule.principalCosines Pᗮ (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
                 hPhigh hKP hKPperp)ᗮ (i : ℕ) ^ 2 := by
     funext i
     have heigQ := approximationNumber_upperBlockCompression_eq_eigenvalues (hA.add hK)
@@ -759,7 +759,7 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real
               hPhigh hKP hKPperp) alpha delta).eigenvalues rfl
           (Fin.cast (theorem8_1_finrank_branch_eq_real A K P hdelta hA hK hAP
               hPlow hPhigh hKP hKPperp) i) *
-          TauCeti.principalCosines P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
+          Submodule.principalCosines P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
                 hPhigh hKP hKPperp) (i : ℕ) ^ 2) := by
   have hle : finrank ℝ (P : Submodule ℝ E) ≤ finrank ℝ E := Submodule.finrank_le _
   have hmaj := theorem8_1_lowerWeightedWeakMajorization_real A K P hdelta hA hK hAP
@@ -786,7 +786,7 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real
             ).eigenvalues rfl
           (Fin.cast (theorem8_1_finrank_branch_eq_real A K P hdelta hA hK hAP
               hPlow hPhigh hKP hKPperp) i) *
-          TauCeti.principalCosines P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
+          Submodule.principalCosines P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow
                 hPhigh hKP hKPperp) (i : ℕ) ^ 2 := by
     funext i
     have heigQ := approximationNumber_lowerBlockCompression_eq_eigenvalues (hA.add hK)

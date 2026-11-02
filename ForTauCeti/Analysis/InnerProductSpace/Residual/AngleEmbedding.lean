@@ -287,41 +287,6 @@ theorem cosTwoThetaEmbedding_injective_iff (U : Submodule 𝕜 E)
   rw [← LinearMap.ker_eq_bot, ← LinearMap.ker_eq_bot,
     ker_cosTwoThetaEmbedding U X]
 
-/-- No principal angle between `U` and `range X` is `π/4`. -/
-def AvoidsQuarterTurnEmbedding (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : Prop :=
-  AvoidsQuarterTurn U (approximateSubspace X)
-
-omit [FiniteDimensional 𝕜 F] in
-/-- **The embedded quarter-turn condition unfolds to the ambient one.**
-
-The consuming lemma `AvoidsQuarterTurnEmbedding` lacked: it says that the
-definition is exactly `AvoidsQuarterTurn` on the range of `X`, so every fact
-proved about the ambient predicate — starting with `avoidsQuarterTurn_self` —
-applies to it.  Tau Ceti's `correctness` rubric rates an unexercised
-`Prop`-valued definition a block, on the ground that its faithfulness is
-otherwise unfalsifiable. -/
-theorem avoidsQuarterTurnEmbedding_iff (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
-    AvoidsQuarterTurnEmbedding U X ↔
-      ∀ i, principalAngles U (approximateSubspace X) i ≠ Real.pi / 4 :=
-  Iff.rfl
-
-omit [FiniteDimensional 𝕜 F] in
-/-- **A witness: an embedding whose range meets `U` at angle zero avoids the
-quarter turn.**  Instantiating the `iff` above at the configuration where every
-principal angle vanishes shows the predicate is satisfiable, which is what makes
-it falsifiable at all.  The ambient statement it specialises is
-`avoidsQuarterTurn_self`. -/
-theorem avoidsQuarterTurnEmbedding_of_principalAngles_eq_zero (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E)
-    (hX : ∀ i, principalAngles U (approximateSubspace X) i = 0) :
-    AvoidsQuarterTurnEmbedding U X := by
-  refine (avoidsQuarterTurnEmbedding_iff U X).mpr fun i => ?_
-  rw [hX i]
-  have : (0 : ℝ) < Real.pi / 4 := by positivity
-  exact ne_of_lt this
-
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- **The projected-residual (cross-block) Sylvester identity for an isometric
 trial map.**  This is the normalized specialization of
@@ -373,7 +338,7 @@ exactly the same singular-value sequence as the rectangular embedding map.
 theorem singularValues_sinThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
     (sinThetaEmbedding U X).singularValues =
-      principalSines (approximateSubspace X) U := by
+      Submodule.principalSines (approximateSubspace X) U := by
   have hmap :
       sinThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint =
         sinThetaMap (approximateSubspace X) U := by
@@ -385,15 +350,16 @@ theorem singularValues_sinThetaEmbedding (U : Submodule 𝕜 E)
         (sinThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint).singularValues :=
       (LinearMap.singularValues_comp_adjoint_linearIsometry (sinThetaEmbedding U X) X).symm
     _ = (sinThetaMap (approximateSubspace X) U).singularValues := by rw [hmap]
-    _ = principalSines (approximateSubspace X) U :=
-      singularValues_sinThetaMap (approximateSubspace X) U
+    _ = Submodule.principalSines (approximateSubspace X) U := by
+      rw [Submodule.principalSines_def, Submodule.sinThetaMap_def]
+      rfl
 
 /-- The singular values of `cosThetaEmbedding U X = P_U X` are the
 principal cosines directed from `range X` toward `U`. -/
 theorem singularValues_cosThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
     (cosThetaEmbedding U X).singularValues =
-      principalCosines (approximateSubspace X) U := by
+      Submodule.principalCosines (approximateSubspace X) U := by
   have hmap :
       cosThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint =
         cosThetaMap (approximateSubspace X) U := by
@@ -405,15 +371,16 @@ theorem singularValues_cosThetaEmbedding (U : Submodule 𝕜 E)
         (cosThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint).singularValues :=
       (LinearMap.singularValues_comp_adjoint_linearIsometry (cosThetaEmbedding U X) X).symm
     _ = (cosThetaMap (approximateSubspace X) U).singularValues := by rw [hmap]
-    _ = principalCosines (approximateSubspace X) U :=
-      singularValues_cosThetaMap (approximateSubspace X) U
+    _ = Submodule.principalCosines (approximateSubspace X) U := by
+      rw [Submodule.principalCosines_def, Submodule.cosThetaMap_def]
+      rfl
 
 /-- The positive coordinate cosine has the principal-angle cosine
 singular-value sequence. -/
 theorem singularValues_cosThetaMagnitude (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
     (cosThetaMagnitude U X).singularValues =
-      principalCosines (approximateSubspace X) U := by
+      Submodule.principalCosines (approximateSubspace X) U := by
   rw [singularValues_cosThetaMagnitude_eq_embedding,
     singularValues_cosThetaEmbedding]
 

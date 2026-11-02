@@ -95,7 +95,7 @@ theorem theorem8_1_upperEigenvalueRepulsion_sourceExact [FiniteDimensional ℂ H
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (i : Fin (finrank ℂ H)) :
     (isSymmetric_upperBlockShift hA P alpha).eigenvalues rfl i ≤
-      TauCeti.principalCosines Pᗮ (canonicalLowBranch (A + K)
+      Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha)ᗮ 0 ^ 2 * (isSymmetric_upperBlockShift (hA.add hK) (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha) alpha).eigenvalues rfl i := by
   have hposA : (upperBlockShift A P alpha : H →ₗ[ℂ] H).IsPositive :=
@@ -120,7 +120,7 @@ theorem theorem8_1_lowerEigenvalueRepulsion_sourceExact [FiniteDimensional ℂ H
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (i : Fin (finrank ℂ H)) :
     (isSymmetric_lowerBlockShift hA P alpha delta).eigenvalues rfl i ≤
-      TauCeti.principalCosines P (canonicalLowBranch (A + K)
+      Submodule.principalCosines P (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha) 0 ^ 2 * (isSymmetric_lowerBlockShift (hA.add hK) (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha) alpha delta).eigenvalues rfl i := by
   have hposA : (lowerBlockShift A P alpha delta : H →ₗ[ℂ] H).IsPositive :=
@@ -151,7 +151,7 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact [FiniteDimensional 
       ≤ Phi (fun i : Fin (finrank ℂ H) =>
         (isSymmetric_upperBlockShift (hA.add hK) (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha) alpha).eigenvalues rfl i.rev *
-          TauCeti.principalCosines Pᗮ (canonicalLowBranch (A + K)
+          Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha)ᗮ (i.rev : ℕ) ^ 2) := by
   have hposA : (upperBlockShift A P alpha : H →ₗ[ℂ] H).IsPositive :=
     isPositive_toLinearMap_of_nonneg (upperBlockShift_nonneg A P hdelta.le hA hPhigh)
@@ -168,11 +168,11 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact [FiniteDimensional 
   have hfQ : (fun i : Fin (finrank ℂ H) =>
       (upperBlockShift (A + K) (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha) alpha).approximationNumber (i.rev : ℕ) *
-        TauCeti.principalCosines Pᗮ (canonicalLowBranch (A + K)
+        Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha)ᗮ (i.rev : ℕ) ^ 2)
       = fun i : Fin (finrank ℂ H) => (isSymmetric_upperBlockShift (hA.add hK) (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha) alpha).eigenvalues rfl i.rev *
-        TauCeti.principalCosines Pᗮ (canonicalLowBranch (A + K)
+        Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha)ᗮ (i.rev : ℕ) ^ 2 := by
     funext i
     rw [approximationNumber_eq_eigenvalues_of_isPositive hposQ i.rev]
@@ -193,7 +193,7 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact [FiniteDimensional 
       ≤ Phi (fun i : Fin (finrank ℂ H) =>
         (isSymmetric_lowerBlockShift (hA.add hK) (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha) alpha delta).eigenvalues rfl i.rev *
-          TauCeti.principalCosines P (canonicalLowBranch (A + K)
+          Submodule.principalCosines P (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha) (i.rev : ℕ) ^ 2) := by
   have hposA : (lowerBlockShift A P alpha delta : H →ₗ[ℂ] H).IsPositive :=
     isPositive_toLinearMap_of_nonneg (lowerBlockShift_nonneg A P hdelta.le hA hPlow)
@@ -210,11 +210,11 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact [FiniteDimensional 
   have hfQ : (fun i : Fin (finrank ℂ H) =>
       (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha) alpha delta).approximationNumber (i.rev : ℕ) *
-        TauCeti.principalCosines P (canonicalLowBranch (A + K)
+        Submodule.principalCosines P (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha) (i.rev : ℕ) ^ 2)
       = fun i : Fin (finrank ℂ H) => (isSymmetric_lowerBlockShift (hA.add hK) (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha) alpha delta).eigenvalues rfl i.rev *
-        TauCeti.principalCosines P (canonicalLowBranch (A + K)
+        Submodule.principalCosines P (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha) (i.rev : ℕ) ^ 2 := by
     funext i
     rw [approximationNumber_eq_eigenvalues_of_isPositive hposQ i.rev]
@@ -238,7 +238,7 @@ theorem theorem8_1_upperEigenvalueRepulsion_sourceExact_real [FiniteDimensional 
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (i : Fin (finrank ℝ E)) :
     (isSymmetric_upperBlockShift hA P alpha).eigenvalues rfl i ≤
-      TauCeti.principalCosines Pᗮ (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)ᗮ 0 ^ 2 * (isSymmetric_upperBlockShift (hA.add hK) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) alpha).eigenvalues rfl i := by
+      Submodule.principalCosines Pᗮ (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)ᗮ 0 ^ 2 * (isSymmetric_upperBlockShift (hA.add hK) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) alpha).eigenvalues rfl i := by
   have hposA : (upperBlockShift A P alpha : E →ₗ[ℝ] E).IsPositive :=
     isPositive_toLinearMap_of_nonneg (upperBlockShift_nonneg A P hdelta.le hA
       (by simpa only [RCLike.re_to_real] using hPhigh))
@@ -262,7 +262,7 @@ theorem theorem8_1_lowerEigenvalueRepulsion_sourceExact_real [FiniteDimensional 
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (i : Fin (finrank ℝ E)) :
     (isSymmetric_lowerBlockShift hA P alpha delta).eigenvalues rfl i ≤
-      TauCeti.principalCosines P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) 0 ^ 2 * (isSymmetric_lowerBlockShift (hA.add hK) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) alpha delta).eigenvalues rfl i := by
+      Submodule.principalCosines P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) 0 ^ 2 * (isSymmetric_lowerBlockShift (hA.add hK) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) alpha delta).eigenvalues rfl i := by
   have hposA : (lowerBlockShift A P alpha delta : E →ₗ[ℝ] E).IsPositive :=
     isPositive_toLinearMap_of_nonneg (lowerBlockShift_nonneg A P hdelta.le hA
       (by simpa only [RCLike.re_to_real] using hPlow))
@@ -289,7 +289,7 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real [FiniteDimensi
     Phi (fun i : Fin (finrank ℝ E) => (isSymmetric_upperBlockShift hA P alpha).eigenvalues rfl i.rev)
       ≤ Phi (fun i : Fin (finrank ℝ E) =>
         (isSymmetric_upperBlockShift (hA.add hK) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) alpha).eigenvalues rfl i.rev *
-          TauCeti.principalCosines Pᗮ (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)ᗮ (i.rev : ℕ) ^ 2) := by
+          Submodule.principalCosines Pᗮ (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)ᗮ (i.rev : ℕ) ^ 2) := by
   have hposA : (upperBlockShift A P alpha : E →ₗ[ℝ] E).IsPositive :=
     isPositive_toLinearMap_of_nonneg (upperBlockShift_nonneg A P hdelta.le hA
       (by simpa only [RCLike.re_to_real] using hPhigh))
@@ -304,9 +304,9 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real [FiniteDimensi
     exact approximationNumber_eq_eigenvalues_of_isPositive hposA i.rev
   have hfQ : (fun i : Fin (finrank ℝ E) =>
       (upperBlockShift (A + K) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) alpha).approximationNumber (i.rev : ℕ) *
-        TauCeti.principalCosines Pᗮ (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)ᗮ (i.rev : ℕ) ^ 2)
+        Submodule.principalCosines Pᗮ (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)ᗮ (i.rev : ℕ) ^ 2)
       = fun i : Fin (finrank ℝ E) => (isSymmetric_upperBlockShift (hA.add hK) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) alpha).eigenvalues rfl i.rev *
-        TauCeti.principalCosines Pᗮ (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)ᗮ (i.rev : ℕ) ^ 2 := by
+        Submodule.principalCosines Pᗮ (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)ᗮ (i.rev : ℕ) ^ 2 := by
     funext i
     rw [approximationNumber_eq_eigenvalues_of_isPositive hposQ i.rev]
   exact (congrArg (fun f => Phi f) hfA.symm).trans_le (h.trans_eq (congrArg (fun f => Phi f) hfQ))
@@ -326,7 +326,7 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real [FiniteDimensi
     Phi (fun i : Fin (finrank ℝ E) => (isSymmetric_lowerBlockShift hA P alpha delta).eigenvalues rfl i.rev)
       ≤ Phi (fun i : Fin (finrank ℝ E) =>
         (isSymmetric_lowerBlockShift (hA.add hK) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) alpha delta).eigenvalues rfl i.rev *
-          TauCeti.principalCosines P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) (i.rev : ℕ) ^ 2) := by
+          Submodule.principalCosines P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) (i.rev : ℕ) ^ 2) := by
   have hposA : (lowerBlockShift A P alpha delta : E →ₗ[ℝ] E).IsPositive :=
     isPositive_toLinearMap_of_nonneg (lowerBlockShift_nonneg A P hdelta.le hA
       (by simpa only [RCLike.re_to_real] using hPlow))
@@ -341,9 +341,9 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real [FiniteDimensi
     exact approximationNumber_eq_eigenvalues_of_isPositive hposA i.rev
   have hfQ : (fun i : Fin (finrank ℝ E) =>
       (lowerBlockShift (A + K) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) alpha delta).approximationNumber (i.rev : ℕ) *
-        TauCeti.principalCosines P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) (i.rev : ℕ) ^ 2)
+        Submodule.principalCosines P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) (i.rev : ℕ) ^ 2)
       = fun i : Fin (finrank ℝ E) => (isSymmetric_lowerBlockShift (hA.add hK) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) alpha delta).eigenvalues rfl i.rev *
-        TauCeti.principalCosines P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) (i.rev : ℕ) ^ 2 := by
+        Submodule.principalCosines P (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) (i.rev : ℕ) ^ 2 := by
     funext i
     rw [approximationNumber_eq_eigenvalues_of_isPositive hposQ i.rev]
   exact (congrArg (fun f => Phi f) hfA.symm).trans_le (h.trans_eq (congrArg (fun f => Phi f) hfQ))

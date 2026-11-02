@@ -53,7 +53,7 @@ theorem yuWangSamworth_sinTheta_block_le
     (hu : IsOrderedEigenframe hA hn (consecutiveEmb (hd.trans_le hsn)) u)
     (hv : IsOrderedEigenframe hB hn (consecutiveEmb (hd.trans_le hsn)) v)
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r s Δ) :
-    sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+    Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range v)) ≤
       2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ :=
@@ -87,7 +87,7 @@ theorem yuWangSamworth_sinTheta_block_le_residual
     (hu : IsOrderedEigenframe hA hn (consecutiveEmb (hd.trans_le hsn)) u)
     (hv : IsOrderedEigenframe hB hn (consecutiveEmb (hd.trans_le hsn)) v)
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r s Δ) :
-    sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+    Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range v)) ≤
       Real.sqrt (∑ i,
         ‖(hA.eigenvalues hn (consecutiveEmb (hd.trans_le hsn) i) : 𝕜) • v i - A (v i)‖ ^ 2)
@@ -382,7 +382,7 @@ theorem theorem2_sinTheta
     (sinThetaNorm : Real)
     (hSinThetaNorm :
       sinThetaNorm =
-        sinThetaFrobenius (Submodule.span Real (Set.range V))
+        Submodule.sinThetaFrobenius (Submodule.span Real (Set.range V))
           (Submodule.span Real (Set.range Vhat)))
     (Delta : Real) (hDelta : 0 < Delta)
     (hgap : SourcePopulationGap Sigma hSigma r s Delta) :

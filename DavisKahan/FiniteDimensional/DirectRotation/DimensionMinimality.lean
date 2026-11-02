@@ -192,16 +192,11 @@ theorem exists_four_dimensional_shortAngle_nuclear_counterexample
           (LinearMap.id - (directRotation U V hacute).toLinearMap) := by
   obtain ⟨U, V, hacute, W, hmap, hpos, hsmall, hshort, hstrict⟩ :=
     arbitrarilySmall_fullDisplacement_refuted epsilon hepsilon
-  have hangle : principalAngles U V 0 = U.principalAngles V 0 := by
-    rw [principalAngles, Finsupp.mapRange_apply, U.principalAngles_apply V,
-      principalSines, U.principalSines_def V, U.sinThetaMap_def V]
-    rfl
   have hnorm (A : EuclideanSpace ℝ (Fin 4) →ₗ[ℝ] EuclideanSpace ℝ (Fin 4)) :
       kyFanSum 4 A = UnitarilyInvariantSeminorm.nuclear ℝ _ _ A := by
     rw [kyFanSum_eq_linearMap_kyFanSum]
     exact A.kyFanSum_eq_nuclear
       ((LinearMap.finrank_range_le A).trans_eq finrank_euclideanSpace_fin)
-  rw [hangle] at hpos hsmall hshort
   rw [hnorm, hnorm] at hstrict
   exact ⟨U, V, hacute, W, hmap, hpos, hsmall, hshort, hstrict⟩
 

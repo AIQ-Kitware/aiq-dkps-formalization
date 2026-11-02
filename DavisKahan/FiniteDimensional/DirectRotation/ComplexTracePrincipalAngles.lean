@@ -30,40 +30,18 @@ open Module (finrank)
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [FiniteDimensional ℂ H]
 
-/-- The sine of each finite-dimensional principal angle is its directed
-principal singular value, including zero and right-angle endpoints. -/
-theorem sin_principalAngles_eq_principalSines
-    (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (i : ℕ) :
-    Real.sin (principalAngles U V i) = principalSines U V i := by
-  rw [principalAngles, Finsupp.mapRange_apply]
-  have hnonneg : 0 ≤ principalSines U V i :=
-    (sinThetaMap U V).singularValues_nonneg i
-  have hle : principalSines U V i ≤ 1 := by
-    by_cases hi : i < finrank ℂ H
-    · have hcontr : ∀ x : H, ‖sinThetaMap U V x‖ ≤ ‖x‖ := by
-        intro x
-        change ‖Vᗮ.starProjection (U.starProjection x)‖ ≤ ‖x‖
-        exact (Vᗮ.norm_starProjection_apply_le _).trans
-          (U.norm_starProjection_apply_le x)
-      exact singularValues_le_one_of_contraction hcontr rfl ⟨i, hi⟩
-    · have hzero : principalSines U V i = 0 :=
-        (sinThetaMap U V).singularValues_of_finrank_le (Nat.le_of_not_gt hi)
-      rw [hzero]
-      norm_num
-  exact Real.sin_arcsin (by linarith) hle
-
 /-- The full ambient trace norm of a directed sine map is the sum of the
 sines of the principal angles indexed by the dimension of its source. -/
 theorem kyFanSum_directedSine_eq_sum_sin_principalAngles
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
     kyFanSum (finrank ℂ H) (sinThetaMap U V) =
-      ∑ j : Fin (finrank ℂ U), Real.sin (principalAngles U V (j : ℕ)) := by
+      ∑ j : Fin (finrank ℂ U), Real.sin (Submodule.principalAngles U V (j : ℕ)) := by
   let A : U →ₗ[ℂ] H := sinThetaMap U V ∘ₗ U.subtype
   have hσ : A.singularValues = (sinThetaMap U V).singularValues := by
     rw [show A = sinThetaMap U V ∘ₗ U.subtype from rfl,
-      singularValues_sinThetaMap_comp_subtype]
+      singularValues_sinThetaMap_comp_subtype, Submodule.principalSines_def,
+      Submodule.sinThetaMap_def]
     rfl
   have hrank : finrank ℂ U ≤ finrank ℂ H := Submodule.finrank_le U
   calc
@@ -72,11 +50,13 @@ theorem kyFanSum_directedSine_eq_sum_sin_principalAngles
           simp only [kyFanSum_eq_sum_fin, ← hσ]
     _ = kyFanSum (finrank ℂ U) A :=
       kyFanSum_eq_of_finrank_le hrank A
-    _ = ∑ j : Fin (finrank ℂ U), Real.sin (principalAngles U V (j : ℕ)) := by
+    _ = ∑ j : Fin (finrank ℂ U), Real.sin (Submodule.principalAngles U V (j : ℕ)) := by
       rw [kyFanSum_eq_sum_fin]
       apply Finset.sum_congr rfl
       intro j _
-      rw [sin_principalAngles_eq_principalSines U V]
+      rw [Submodule.sin_principalAngles U V, Submodule.principalSines_def,
+        Submodule.sinThetaMap_def]
+      change A.singularValues (j : ℕ) = (sinThetaMap U V).singularValues (j : ℕ)
       exact congrArg (fun s : ℕ →₀ ℝ => s (j : ℕ)) hσ
 
 /-- **Exact trace norm of the projector difference.** Every equal-dimensional
@@ -87,13 +67,16 @@ theorem kyFanSum_projectionDifference_eq_two_sum_sin_principalAngles
     [V.HasOrthogonalProjection]
     (hUV : finrank ℂ U = finrank ℂ V) :
     kyFanSum (finrank ℂ H) (projection U - projection V) =
-      2 * ∑ j : Fin (finrank ℂ U), Real.sin (principalAngles U V (j : ℕ)) := by
+      2 * ∑ j : Fin (finrank ℂ U), Real.sin (Submodule.principalAngles U V (j : ℕ)) := by
   have hswap : kyFanSum (finrank ℂ H) (sinThetaMap V U) =
       kyFanSum (finrank ℂ H) (sinThetaMap U V) := by
     simp only [kyFanSum_eq_sum_fin]
     have hσ : (sinThetaMap V U).singularValues =
         (sinThetaMap U V).singularValues := by
-      exact (principalSines_comm U V hUV).symm
+      have h := (Submodule.principalSines_comm U V hUV).symm
+      rw [Submodule.principalSines_def, Submodule.principalSines_def,
+        Submodule.sinThetaMap_def, Submodule.sinThetaMap_def] at h
+      exact h
     rw [hσ]
   rw [kyFanSum_projectionDifference_eq_directed_sines U V, hswap,
     kyFanSum_directedSine_eq_sum_sin_principalAngles U V]
@@ -107,18 +90,12 @@ theorem two_mul_sum_sin_principalAngles_le_nuclear_transport
     (hmap : K.map W.toLinearMap = L) :
     2 * (∑ i : Fin (finrank ℂ K), Real.sin (K.principalAngles L i)) ≤
       UnitarilyInvariantSeminorm.nuclear ℂ H H (LinearMap.id - W.toLinearMap) := by
-  have hsines : TauCeti.principalSines K L = K.principalSines L := by
-    rw [TauCeti.principalSines, Submodule.principalSines_def]
-    congr 1
-    rw [Submodule.sinThetaMap_def]
-    rfl
   have htrace := kyFanSum_projectionDifference_eq_two_sum_sin_principalAngles K L hKL
   have hfull (A : H →ₗ[ℂ] H) : TauCeti.kyFanSum (finrank ℂ H) A =
       UnitarilyInvariantSeminorm.nuclear ℂ H H A := by
     rw [TauCeti.kyFanSum_eq_kyFan, UnitarilyInvariantSeminorm.kyFan_apply]
     exact A.kyFanSum_eq_nuclear (LinearMap.finrank_range_le A)
   rw [hfull] at htrace
-  simp_rw [sin_principalAngles_eq_principalSines, hsines, ← Submodule.sin_principalAngles] at htrace
   rw [← htrace]
   exact projectionDifference_uiNorm_le_displacement
     (UnitarilyInvariantSeminorm.nuclear ℂ H H) K L W hmap
@@ -134,7 +111,7 @@ theorem exists_global_complex_trace_minimizer_with_principalAngles
       kyFanSum (finrank ℂ H) (LinearMap.id - W.toLinearMap) =
         kyFanSum (finrank ℂ H) (projection U - projection V) ∧
       kyFanSum (finrank ℂ H) (LinearMap.id - W.toLinearMap) =
-        2 * ∑ j : Fin (finrank ℂ U), Real.sin (principalAngles U V (j : ℕ)) ∧
+        2 * ∑ j : Fin (finrank ℂ U), Real.sin (Submodule.principalAngles U V (j : ℕ)) ∧
       ∀ Z : H ≃ₗᵢ[ℂ] H, U.map Z.toLinearMap = V →
         kyFanSum (finrank ℂ H) (LinearMap.id - W.toLinearMap) ≤
           kyFanSum (finrank ℂ H) (LinearMap.id - Z.toLinearMap) := by
@@ -145,7 +122,7 @@ theorem exists_global_complex_trace_minimizer_with_principalAngles
     kyFanSum (finrank ℂ H) (LinearMap.id - W.toLinearMap) =
         kyFanSum (finrank ℂ H) (projection U - projection V) := htrace
     _ = 2 * ∑ j : Fin (finrank ℂ U),
-        Real.sin (principalAngles U V (j : ℕ)) :=
+        Real.sin (Submodule.principalAngles U V (j : ℕ)) :=
       kyFanSum_projectionDifference_eq_two_sum_sin_principalAngles U V hUV
 
 end ComplexTraceOptimality

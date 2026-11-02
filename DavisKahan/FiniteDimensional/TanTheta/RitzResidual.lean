@@ -105,16 +105,8 @@ theorem principalTangents_approximateSubspace_apply
     (X : F →ₗᵢ[𝕜] E) (i : ℕ) :
     (approximateSubspace X).principalTangents U i =
       Real.tan (Real.arcsin ((sinThetaEmbedding U X).singularValues i)) := by
-  -- The source-coordinate sine block has the accepted subspace principal sines.
-  have hsines :
-      principalSines (approximateSubspace X) U =
-        (approximateSubspace X).principalSines U := by
-    rw [TauCeti.principalSines, Submodule.principalSines_def]
-    congr 1
-    rw [Submodule.sinThetaMap_def]
-    rfl
   rw [Submodule.principalTangents_apply, Submodule.principalAngles_apply,
-    ← hsines, ← singularValues_sinThetaEmbedding U X]
+    ← singularValues_sinThetaEmbedding U X]
 
 /-- Transversality makes every singular value of the directed sine block strictly less than one. -/
 theorem singularValues_sinThetaEmbedding_lt_one_of_isTransverse

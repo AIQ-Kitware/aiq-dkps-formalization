@@ -38,9 +38,9 @@ example (epsilon : Real) (h : 0 < epsilon) :
       (ha : IsAcute U V)
       (W : EuclideanSpace Real (Fin 4) ≃ₗᵢ[ℝ] EuclideanSpace Real (Fin 4)),
       U.map W.toLinearMap = V ∧
-      0 < principalAngles U V 0 ∧
-      principalAngles U V 0 < epsilon ∧
-      principalAngles U V 0 ≤ Real.pi / 3 ∧
+      0 < Submodule.principalAngles U V 0 ∧
+      Submodule.principalAngles U V 0 < epsilon ∧
+      Submodule.principalAngles U V 0 ≤ Real.pi / 3 ∧
       kyFanSum 4 (LinearMap.id - W.toLinearMap) <
         kyFanSum 4 (LinearMap.id - (directRotation U V ha).toLinearMap) :=
   TauCeti.DavisKahan1970.proposition4_4_arbitrarilySmall_refutingPair epsilon h

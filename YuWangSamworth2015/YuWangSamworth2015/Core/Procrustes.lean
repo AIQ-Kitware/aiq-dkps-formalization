@@ -187,7 +187,7 @@ theorem exists_unitary_sum_sq_norm_frameComp_sub_le {u v : Fin d → E}
     ∃ O : EuclideanSpace 𝕜 (Fin d) ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d),
       (∀ x y, ⟪O x, O y⟫_𝕜 = ⟪x, y⟫_𝕜) ∧
         ∑ i, ‖frameComp hv O i - u i‖ ^ 2 ≤
-          2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+          2 * Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
             (Submodule.span 𝕜 (Set.range v)) ^ 2 := by
   refine ⟨(choosePolarUnitary (overlapOperator 𝕜 u v)).symm,
     fun x y => LinearIsometryEquiv.inner_map_map _ x y, ?_⟩
@@ -208,19 +208,19 @@ conclusion by supplying that bound here.  The symmetric and rectangular theorems
 both use it. -/
 theorem exists_unitary_sqrt_sum_sq_norm_frameComp_sub_le {u v : Fin d → E}
     (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) {C : ℝ}
-    (hsine : sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+    (hsine : Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
       (Submodule.span 𝕜 (Set.range v)) ≤ C) :
     ∃ O : EuclideanSpace 𝕜 (Fin d) ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d),
       (∀ x y, ⟪O x, O y⟫_𝕜 = ⟪x, y⟫_𝕜) ∧
         Real.sqrt (∑ i, ‖frameComp hv O i - u i‖ ^ 2) ≤ Real.sqrt 2 * C := by
   obtain ⟨O, hO, hsum⟩ := exists_unitary_sum_sq_norm_frameComp_sub_le hu hv
   refine ⟨O, hO, ?_⟩
-  have hsnn : (0 : ℝ) ≤ sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
-      (Submodule.span 𝕜 (Set.range v)) := sinThetaFrobenius_nonneg _ _
+  have hsnn : (0 : ℝ) ≤ Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+      (Submodule.span 𝕜 (Set.range v)) := Submodule.sinThetaFrobenius_nonneg _ _
   calc Real.sqrt (∑ i, ‖frameComp hv O i - u i‖ ^ 2)
-      ≤ Real.sqrt (2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+      ≤ Real.sqrt (2 * Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) ^ 2) := Real.sqrt_le_sqrt hsum
-    _ = Real.sqrt 2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+    _ = Real.sqrt 2 * Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) := by
         rw [Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 2), Real.sqrt_sq hsnn]
     _ ≤ Real.sqrt 2 * C := mul_le_mul_of_nonneg_left hsine (Real.sqrt_nonneg 2)
@@ -254,15 +254,15 @@ theorem yuWangSamworth_alignedFrame_le
       (isOrderedEigenframe_iff.mp hv).orthonormal
   refine ⟨O, hO, ?_⟩
   have hsine := yuWangSamworth_sinTheta_frame_le hu hv hΔ hgap
-  have hsnn : (0 : ℝ) ≤ sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+  have hsnn : (0 : ℝ) ≤ Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
       (Submodule.span 𝕜 (Set.range v)) :=
     by
-      rw [sinThetaFrobenius_eq]
+      rw [Submodule.sinThetaFrobenius_def, Submodule.sinThetaMap_def]
       exact apply_nonneg (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)) _
   calc Real.sqrt (∑ i, ‖frameComp (isOrderedEigenframe_iff.mp hv).orthonormal O i - u i‖ ^ 2)
-      ≤ Real.sqrt (2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+      ≤ Real.sqrt (2 * Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) ^ 2) := Real.sqrt_le_sqrt hsum
-    _ = Real.sqrt 2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+    _ = Real.sqrt 2 * Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) := by
         rw [Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 2), Real.sqrt_sq hsnn]
     _ ≤ Real.sqrt 2 * (2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
@@ -323,15 +323,15 @@ theorem yuWangSamworth_alignedFrame_le_residual
       (isOrderedEigenframe_iff.mp hv).orthonormal
   refine ⟨O, hO, ?_⟩
   have hsine := yuWangSamworth_sinTheta_le_residual hu hv hΔ hgap
-  have hsnn : (0 : ℝ) ≤ sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+  have hsnn : (0 : ℝ) ≤ Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
       (Submodule.span 𝕜 (Set.range v)) :=
     by
-      rw [sinThetaFrobenius_eq]
+      rw [Submodule.sinThetaFrobenius_def, Submodule.sinThetaMap_def]
       exact apply_nonneg (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)) _
   calc Real.sqrt (∑ i, ‖frameComp (isOrderedEigenframe_iff.mp hv).orthonormal O i - u i‖ ^ 2)
-      ≤ Real.sqrt (2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+      ≤ Real.sqrt (2 * Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) ^ 2) := Real.sqrt_le_sqrt hsum
-    _ = Real.sqrt 2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+    _ = Real.sqrt 2 * Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) := by
         rw [Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 2), Real.sqrt_sq hsnn]
     _ ≤ Real.sqrt 2 *
@@ -396,7 +396,7 @@ isometry replaced by its matrix and the columns of `V̂ Ô` written out as
 `(V̂ Ô)ᵢ = ∑ⱼ Ôⱼᵢ v̂ⱼ`. -/
 theorem exists_orthogonal_sqrt_sum_sq_norm_sub_le {u v : Fin d → F}
     (hu : Orthonormal ℝ u) (hv : Orthonormal ℝ v) {C : ℝ}
-    (hsine : sinThetaFrobenius (Submodule.span ℝ (Set.range u))
+    (hsine : Submodule.sinThetaFrobenius (Submodule.span ℝ (Set.range u))
       (Submodule.span ℝ (Set.range v)) ≤ C) :
     ∃ O : Matrix (Fin d) (Fin d) ℝ, O ∈ Matrix.orthogonalGroup (Fin d) ℝ ∧
       Real.sqrt (∑ i, ‖(∑ j, O j i • v j) - u i‖ ^ 2) ≤ Real.sqrt 2 * C := by

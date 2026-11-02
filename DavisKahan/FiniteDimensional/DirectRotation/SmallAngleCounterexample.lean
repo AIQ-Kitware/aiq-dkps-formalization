@@ -427,25 +427,26 @@ private theorem gram_sinThetaMap_basis (theta : Real) (i : Fin 4) :
 /-- The first two principal sines are `sin(theta)`. -/
 theorem principalSines_eq (theta : Real) (hs : 0 ≤ Real.sin theta)
     (j : Fin 4) (hj : (j : Nat) < 2) :
-    principalSines U4 (V4 theta) (j : Nat) = Real.sin theta := by
+    Submodule.principalSines U4 (V4 theta) (j : Nat) = Real.sin theta := by
   have hfr : finrank Real E4 = 4 := finrank_euclideanSpace_fin
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
     (sinThetaMap U4 (V4 theta)).isSymmetric_adjoint_comp_self hfr
     (EuclideanSpace.basisFun (Fin 4) Real)
     (μ := ![Real.sin theta ^ 2, Real.sin theta ^ 2, 0, 0])
     (antitone_pair _ (sq_nonneg _)) (gram_sinThetaMap_basis theta)
-  rw [principalSines,
-    (sinThetaMap U4 (V4 theta)).singularValues_of_lt hfr j.isLt,
+  rw [Submodule.principalSines_def, Submodule.sinThetaMap_def]
+  change (sinThetaMap U4 (V4 theta)).singularValues (j : Nat) = _
+  rw [(sinThetaMap U4 (V4 theta)).singularValues_of_lt hfr j.isLt,
     congrFun heig ⟨(j : Nat), j.isLt⟩]
   fin_cases j <;> simp_all
 
 /-- Both principal angles are exactly the parameter; no angle bound is assumed of the pair. -/
 theorem principalAngles_eq (theta : Real) (h0 : 0 < theta) (h1 : theta < Real.pi / 2)
     (j : Fin 4) (hj : (j : Nat) < 2) :
-    principalAngles U4 (V4 theta) (j : Nat) = theta := by
+    Submodule.principalAngles U4 (V4 theta) (j : Nat) = theta := by
   have hs : 0 < Real.sin theta :=
     Real.sin_pos_of_pos_of_lt_pi h0 (by linarith [Real.pi_pos])
-  rw [principalAngles, Finsupp.mapRange_apply, principalSines_eq theta hs.le j hj]
+  rw [Submodule.principalAngles_def, Finsupp.mapRange_apply, principalSines_eq theta hs.le j hj]
   exact Real.arcsin_sin (by linarith [Real.pi_pos]) h1.le
 
 /-- Cosine is positive on the parameter interval used by the counterexample. -/
@@ -494,9 +495,9 @@ theorem arbitrarilySmall_fullDisplacement_refuted (epsilon : Real) (hepsilon : 0
       (hacute : IsAcute U V)
       (W : EuclideanSpace Real (Fin 4) ≃ₗᵢ[ℝ] EuclideanSpace Real (Fin 4)),
       U.map W.toLinearMap = V ∧
-      0 < principalAngles U V 0 ∧
-      principalAngles U V 0 < epsilon ∧
-      principalAngles U V 0 ≤ Real.pi / 3 ∧
+      0 < Submodule.principalAngles U V 0 ∧
+      Submodule.principalAngles U V 0 < epsilon ∧
+      Submodule.principalAngles U V 0 ≤ Real.pi / 3 ∧
       kyFanSum 4 (LinearMap.id - W.toLinearMap) <
         kyFanSum 4 (LinearMap.id - (directRotation U V hacute).toLinearMap) := by
   let theta := min (epsilon / 2) (Real.pi / 4)
@@ -508,7 +509,7 @@ theorem arbitrarilySmall_fullDisplacement_refuted (epsilon : Real) (hepsilon : 0
   have hc : 0 < Real.cos theta :=
     Real.cos_pos_of_mem_Ioo ⟨by linarith [Real.pi_pos], h1⟩
   have hangle :
-      principalAngles ShortRotationCounterexample.U4 (SmallAngleCounterexample.V4 theta) 0 =
+      Submodule.principalAngles ShortRotationCounterexample.U4 (SmallAngleCounterexample.V4 theta) 0 =
         theta := by
     simpa using (SmallAngleCounterexample.principalAngles_eq theta h0 h1
       (0 : Fin 4) (by norm_num))

@@ -8,7 +8,8 @@ Staged for Tau Ceti: additions to the principal-angle API.
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+public import TauCeti.Analysis.InnerProductSpace.Projection.FrobeniusSine
 
 /-! # The single-angle case: sine norms of a line against a subspace
 
@@ -21,8 +22,8 @@ value, so *every* normalized unitarily invariant norm of it is the same number
 That collapse is what makes the single-vector Davis--Kahan statements
 unambiguous: the paper writes `sin Θ(v̂, v)` without saying which norm, and for
 `d = 1` it does not matter.  The two lemmas below prove it for the two norms the
-statements actually use, directly from the rank-one formula rather than through
-singular-value theory.
+statements actually use: the operator norm follows from the rank-one action,
+and Frobenius sine from TauCeti's spanning-family projection formula.
 
 ## Main results
 
@@ -95,20 +96,13 @@ theorem opNorm_sinThetaMap_span_singleton {v : E} (hv : ‖v‖ = 1) :
 /-- **The Frobenius norm of the single-angle sine map** is the same number: a
 rank-one operator has one singular value, so the two norms agree. -/
 theorem sinThetaFrobenius_span_singleton {v : E} (hv : ‖v‖ = 1) :
-    sinThetaFrobenius (𝕜 ∙ v) W = ‖projection Wᗮ v‖ := by
-  classical
-  rw [sinThetaFrobenius_eq,
-    UnitarilyInvariantSeminorm.frobenius_apply
-      (𝕜 := 𝕜) (E := E) (F := E) (stdOrthonormalBasis 𝕜 E)]
-  have hcol : ∀ i, ‖sinThetaMap (𝕜 ∙ v) W (stdOrthonormalBasis 𝕜 E i)‖ ^ 2 =
-      ‖⟪v, stdOrthonormalBasis 𝕜 E i⟫_𝕜‖ ^ 2 * ‖projection Wᗮ v‖ ^ 2 := by
-    intro i
-    rw [sinThetaMap_span_singleton_apply hv, norm_smul, mul_pow]
-  rw [Finset.sum_congr rfl fun i _ => hcol i, ← Finset.sum_mul]
-  -- Parseval: the coefficients of the unit vector `v` square-sum to `1`.
-  rw [show (∑ i, ‖⟪v, stdOrthonormalBasis 𝕜 E i⟫_𝕜‖ ^ 2) = 1 by
-    rw [OrthonormalBasis.sum_sq_norm_inner_left (stdOrthonormalBasis 𝕜 E) v, hv,
-      one_pow], one_mul,
-    Real.sqrt_sq (norm_nonneg _)]
+    Submodule.sinThetaFrobenius (𝕜 ∙ v) W = ‖projection Wᗮ v‖ := by
+  have hfamily : Orthonormal 𝕜 (fun _ : Fin 1 => v) :=
+    orthonormal_subsingleton_iff.mpr fun _ => hv
+  have hspan : Submodule.span 𝕜 (Set.range (fun _ : Fin 1 => v)) = 𝕜 ∙ v := by
+    simp
+  have h := (𝕜 ∙ v).sq_sinThetaFrobenius_eq_sum_projection_of_orthonormal W hfamily hspan
+  simp only [Fin.sum_univ_one] at h
+  exact (sq_eq_sq₀ (Submodule.sinThetaFrobenius_nonneg _ _) (norm_nonneg _)).mp h
 
 end TauCeti

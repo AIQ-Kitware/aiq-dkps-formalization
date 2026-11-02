@@ -425,7 +425,7 @@ theorem tsum_displacementAngleSineSq_ge_tsum_sq_sin_principalAngleSequence
 
 The arbitrary-dimensional source theorem above uses
 `TauCeti.principalSineSequence`, the approximation-number sequence of
-`P_{Vᗮ}|_U`.  In finite dimension the existing `TauCeti.principalSines` list is
+`P_{Vᗮ}|_U`.  In finite dimension the existing `Submodule.principalSines` list is
 the same singular-value data.  The declarations below retain that finite
 dictionary for existing consumers.
 
@@ -449,7 +449,7 @@ statement asserts.
 
 This is the finite-dimensional compatibility form of the arbitrary-dimensional
 identity `tsum_one_sub_sq_norm_absoluteValue_eq_tsum_sq_principalSineSequence`.
-It uses `TauCeti.principalSines` and a basis indexed by `Fin (finrank ℂ U)`. -/
+It uses `Submodule.principalSines` and a basis indexed by `Fin (finrank ℂ U)`. -/
 theorem sum_one_sub_sq_norm_absoluteValue_eq_sum_sq_principalSines
     [FiniteDimensional ℂ H]
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -458,7 +458,7 @@ theorem sum_one_sub_sq_norm_absoluteValue_eq_sum_sq_principalSines
     ∑ i, (1 - ‖ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V)
         ((b i : U) : H)‖ ^ 2) =
       ∑ i : Fin (Module.finrank ℂ U),
-        TauCeti.principalSines U V (i : ℕ) ^ 2 := by
+        Submodule.principalSines U V (i : ℕ) ^ 2 := by
   rw [TauCeti.sum_sq_principalSines_eq_sum_one_sub_sq_norm_projection U V b]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [norm_absoluteValue_apply_eq_norm_projection U V (b i).2]
@@ -474,7 +474,7 @@ For every orthonormal basis of `U` and every unitary `W` carrying `U` onto `V`,
 
 This is the finite-dimensional compatibility form of
 `tsum_displacementAngleSineSq_ge_tsum_sq_principalSineSequence`, expressed with
-the existing `TauCeti.principalSines` list. -/
+the existing `Submodule.principalSines` list. -/
 theorem sum_displacementAngleSineSq_ge_sum_sq_principalSines
     [FiniteDimensional ℂ H]
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
@@ -482,7 +482,7 @@ theorem sum_displacementAngleSineSq_ge_sum_sq_principalSines
     (b : OrthonormalBasis (Fin (Module.finrank ℂ U)) ℂ U) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * U.starProjection = V.starProjection * W) :
-    ∑ i : Fin (Module.finrank ℂ U), TauCeti.principalSines U V (i : ℕ) ^ 2 ≤
+    ∑ i : Fin (Module.finrank ℂ U), Submodule.principalSines U V (i : ℕ) ^ 2 ≤
       ∑ i, displacementAngleSineSq W ((b i : U) : H) := by
   rw [← sum_one_sub_sq_norm_absoluteValue_eq_sum_sq_principalSines U V b]
   exact sum_displacementAngleSineSq_ge U V b W hWunitary hWmap

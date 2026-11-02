@@ -393,7 +393,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
-        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant",
@@ -1507,7 +1506,7 @@
       "downstream_users": [],
       "status": "partially-upstreamed",
       "upstream_pr": "#15340, #16582, #13988",
-      "migration_note": "November 1: retired duplicate cosPrincipalAngles and sinThetaSq definitions and their nonnegativity/bounds/order/symmetry/card-minus-overlap proofs, cosPrincipalAngles_eq, familyIsometry_mem_span, singularValues_comp_adjoint_familyIsometry, overlapOp_coord, familyIsometry_adjoint_coord, starProjection_span_range_eq_comp and singularValues_starProjection_comp_starProjection. Native cosine and squared-sine definitions support arbitrary finite index types; Fin d sums translate through Fintype.card_fin and Fin.sum_univ_eq_sum_range. Native #15340 fe7e204a9aa8c36b52c6605c774166bc590b4498 replaces the basic engine independently. Native #16582 0df7c1368e4d208845ec50de86ccac8e042e31ca replaces the cosine dictionary and rank-one proof, including isometric/coisometric padding. Paper callers apply Orthonormal.principalCosines_eq_cosPrincipalAngles and Submodule.principalCosines_span_singleton directly after native projection equations. #13988 6e9359613bce697ea5483673e3d46e96f4a6c881 supplies the range API replacing membership helpers. Retains Fin-indexed block enumeration, projector-distance/angle-norm consequences, selected-polar alignment, and equal-rank sine-spectrum arguments; no claim they have all been subsumed by this slice. Historical source e4637c3919ae under donor path, original introduction 34319dc; Jon Crall/Claude Opus 4.8, Kitware copyright, Apache-2.0. Explicitly adapted native cross-block Frobenius results are separate lineage from independent #15340."
+      "migration_note": "November 1: retired duplicate cosPrincipalAngles and sinThetaSq definitions and their nonnegativity/bounds/order/symmetry/card-minus-overlap proofs, cosPrincipalAngles_eq, familyIsometry_mem_span, singularValues_comp_adjoint_familyIsometry, overlapOp_coord, familyIsometry_adjoint_coord, starProjection_span_range_eq_comp and singularValues_starProjection_comp_starProjection. Native cosine and squared-sine definitions support arbitrary finite index types; Fin d sums translate through Fintype.card_fin and Fin.sum_univ_eq_sum_range. Native #15340 fe7e204a9aa8c36b52c6605c774166bc590b4498 replaces the basic engine independently. Native #16582 0df7c1368e4d208845ec50de86ccac8e042e31ca replaces the cosine dictionary and rank-one proof, including isometric/coisometric padding. Paper callers apply Orthonormal.principalCosines_eq_cosPrincipalAngles and Submodule.principalCosines_span_singleton directly after native projection equations. #13988 6e9359613bce697ea5483673e3d46e96f4a6c881 supplies the range API replacing membership helpers. Retains Fin-indexed block enumeration, projector-distance/angle-norm consequences, selected-polar alignment, and equal-rank sine-spectrum arguments; no claim they have all been subsumed by this slice. Historical source e4637c3919ae under donor path, original introduction 34319dc; Jon Crall/Claude Opus 4.8, Kitware copyright, Apache-2.0. Explicitly adapted native cross-block Frobenius results are separate lineage from independent #15340. Subsequent November 1 slice: removed singularValues_orthogonal_familyIsometry_comm, singularValues_orthogonal_starProjection_comp_starProjection_comm and their private complementary-Gram/polar-conjugation/padding helpers. Native Submodule.principalSines_comm (#14677, 7fd5323416c03413b1fbc4c956b7bd7552b4d82c) now supplies the same equal-rank RCLike symmetry directly. Retains only Fin-block enumeration/cross-block presentation, selected-polar alignment and the smallest-cosine/largest-angle norm bridge; there is no local sine-symmetry engine."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry",
@@ -4100,8 +4099,26 @@
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation"
       ],
       "status": "partially-upstreamed",
-      "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun. 2026-10-31: consume accepted Submodule.principalTangents directly in finite-dimensional Davis--Kahan/Ritz consumers and remove the parallel TauCeti.principalTangents definition from AngleGeometry. The original donor declaration and its history at e4637c3919ae are retained in source_declarations. Upstream owner: TauCeti.Analysis.InnerProductSpace.Projection.Acute, introduced via #16645 (2026-10-15). The subsequently accepted #19329 provides Submodule.tanThetaMap and singularValues_tanThetaMap, but those map values are not identical to the DKPS trial-coordinate tanThetaEmbedding = S |C|^+; the latter and its Ritz-residual proofs remain maintained here. This is direct API consumption, not a claim of DKPS proof descent for #16645 or #19329. November 1: principalCosines_span_eq_cosPrincipalAngles and principalCosines_rankOne retain their existing local-carrier statements but their coordinate/singleton proofs are replaced directly by native #16582 (0df7c1368e4d208845ec50de86ccac8e042e31ca). The ambient projection and local linear cosine maps agree definitionally after Submodule.cosThetaMap_def. No proof descent is inferred from the same mathematical factorization strategy."
+      "upstream_pr": "#14677, #16645, #15983, #16105, #16582",
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun. 2026-10-31: consume accepted Submodule.principalTangents directly in finite-dimensional Davis--Kahan/Ritz consumers and remove the parallel TauCeti.principalTangents definition from AngleGeometry. The original donor declaration and its history at e4637c3919ae are retained in source_declarations. Upstream owner: TauCeti.Analysis.InnerProductSpace.Projection.Acute, introduced via #16645 (2026-10-15). The subsequently accepted #19329 provides Submodule.tanThetaMap and singularValues_tanThetaMap, but those map values are not identical to the DKPS trial-coordinate tanThetaEmbedding = S |C|^+; the latter and its Ritz-residual proofs remain maintained here. This is direct API consumption, not a claim of DKPS proof descent for #16645 or #19329. November 1: principalCosines_span_eq_cosPrincipalAngles and principalCosines_rankOne retain their existing local-carrier statements but their coordinate/singleton proofs are replaced directly by native #16582 (0df7c1368e4d208845ec50de86ccac8e042e31ca). The ambient projection and local linear cosine maps agree definitionally after Submodule.cosThetaMap_def. No proof descent is inferred from the same mathematical factorization strategy. Subsequent November 1 slice: duplicate principalCosines/principalSines/principalAngles and AvoidsQuarterTurn definitions, their self/symmetry laws and unused span/singleton forwarders retired; all consumers use Submodule APIs directly. Equality of the three sequences, Frobenius sine and quarter-turn predicate was compiled before deletion. #14677 7fd5323416c03413b1fbc4c956b7bd7552b4d82c explicitly says no prior formalization was followed; its equal-rank sine proof uses Gram eigenspace multiplicities rather than the donor polar-unitary argument. #16645 3b449bc8628f565cf81e0129f4bd235e041d9f08 supplies quarter-turn avoidance. The local modulus-singular-value proof is retired for LinearMap.singularValues_operatorAbs (#16105 c3db4e6a16cd44b70f6d21cd48ed50171f8ac588). The equal-rank operator-norm proof and its basis-selection helper are retired for projectionGap_eq_directedProjectionGap_of_finrank_eq (#15983 0b158be1c6578d63da36f4a1e8c585b3556e63e8), which needs only finite-dimensional subspaces, not a finite-dimensional ambient space. Source SharpDisplacement and planar sharpness statements use that native identity; root sequence aliases and local/native identity bridges disappear. Linear projection operators and their modulus presentations, IsTransverse and IsAcute are still retained for further representation migration, not classified as unmatched. Source e4637c3919ae under donor path; Jon Crall/GPT 5.6 High, Kitware copyright, Apache-2.0. Paper-side source anchors: YWS Core.Statistics at e4637c3919ae (Jon Crall/GPT 5.6 High, Kitware Apache-2.0) retains sinThetaFrobenius_eq_sqrt_sum_cross and sinThetaSq_eq_sinThetaFrobenius_sq_of_spans with direct native #20342 93100a5ab2aab79794c6da85a98e8747aaa29591 proofs; its private exists_orthonormalBasis_image_eq_range is retired. Native #20342 explicitly adapts DKPS. ComplexTracePrincipalAngles.sin_principalAngles_eq_principalSines is also retired in favor of Submodule.sin_principalAngles; its Jon Crall/GPT-6 source is at da5b9cd731c91a893c8c04b5e1dad49ed0bb509f under DavisKahan/FiniteDimensional/DirectRotation/ComplexTracePrincipalAngles.lean (Kitware Apache-2.0). Only its consumers and paper trace theorems remain.",
+      "retired_local_declarations": [
+        "TauCeti.singularValues_operatorAbs",
+        "TauCeti.principalCosines",
+        "TauCeti.principalSines",
+        "TauCeti.principalAngles",
+        "TauCeti.principalAngles_self",
+        "TauCeti.AvoidsQuarterTurn",
+        "TauCeti.avoidsQuarterTurn_self",
+        "TauCeti.principalSines_comm",
+        "TauCeti.principalAngles_comm",
+        "TauCeti.principalCosines_comm",
+        "TauCeti.singularValues_cosThetaMap",
+        "TauCeti.singularValues_sinThetaMap",
+        "TauCeti.exists_orthonormal_pair_spanning (private)",
+        "TauCeti.opNorm_projection_sub_eq_opNorm_sinThetaMap",
+        "TauCeti.principalCosines_span_eq_cosPrincipalAngles",
+        "TauCeti.principalCosines_rankOne"
+      ]
     },
     {
       "source_module": "DavisKahan/BoundedOperator/Projector.lean",
@@ -4374,7 +4391,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation"
       ],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": " November 1: redundant AvoidsQuarterTurnEmbedding alias, its defining iff and proof-only zero-angle witness retired after native Submodule.AvoidsQuarterTurn consumption. They have no maintained consumers and only exercised the retired alias; native avoidsQuarterTurn_iff_principalAngles and avoidsQuarterTurn_self expose the general condition and its diagonal witness. Actual trial-coordinate tanThetaEmbedding, its domain/failure branches and Ritz-residual identities remain: S |C|^+ is not identified with the native Submodule.tanThetaMap. The native principal-sine/cosine dictionaries replace retired root aliases via explicit native projection equations. Historical e4637c3919ae donor source and original source_declarations are preserved."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Residual/Ritz.lean",
@@ -4528,8 +4546,9 @@
         "DavisKahan.FiniteDimensional.Sharpness",
         "DavisKahan.FiniteDimensional.SinTheta.All",
         "DavisKahan.Sources.DavisKahan1970.PartIII",
-        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius",
-        "RoadmapBridge.Integration"
+        "RoadmapBridge.Integration",
+        "ForTauCeti.Analysis.InnerProductSpace.RankOneSinTheta",
+        "YuWangSamworth2015.Core.Statistics"
       ],
       "status": "staged-partial",
       "upstream_pr": null,
@@ -4553,24 +4572,32 @@
     {
       "source_module": "DavisKahan/Specialized/Statistics.lean",
       "source_declarations": [
-        "sinThetaFrobenius",
-        "sinThetaFrobenius_eq"
+        "TauCeti.sinThetaFrobenius",
+        "TauCeti.sinThetaFrobenius_eq",
+        "TauCeti.sinThetaFrobenius_nonneg"
       ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Projection.FrobeniusSine",
       "ownership_class": "tauceti",
       "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
       "provenance_class": "extracted as paper-independent API from the former YWS statistics staging module",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation"
+        "TauCeti.Analysis.InnerProductSpace.Projection.FrobeniusSine"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.RankOneSinTheta"
+        "ForTauCeti.Analysis.InnerProductSpace.RankOneSinTheta",
+        "YuWangSamworth2015.Core.Statistics"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": "#18985",
+      "accepted_upstream_declarations": [
+        "Submodule.sinThetaFrobenius",
+        "Submodule.sinThetaFrobenius_def",
+        "Submodule.sinThetaFrobenius_nonneg"
+      ],
+      "migration_note": "November 1: deleted the full 56-line donor and migrated every maintained caller to native Submodule.sinThetaFrobenius. Its directed sine map is the same P_(V orthogonal) P_U, with explicit native map equations where the old linear carrier is still used. Equality with the donor was compiled before retirement for every finite-dimensional RCLike space. Accepted #18985, integration 8f3309548f652e2dcad9f36c5642a1e5f4b0d2a0 in pin 463ab293070d, explicitly adapts DKPS: definition, characteristic equality and nonnegativity, not merely independent overlap. Historical source e4637c3919ae under donor path; extraction from YWS at 6c7741125d3b025e7ac1ef2c13bf992711a9e1be. Jon Crall/GPT 5.6 Sol, Kitware copyright, Apache-2.0 preserved. Native Frobenius/general-family/cross-block consequences from #20342 shorten the YWS paper bridge without restricting its arbitrary orthonormal families. The weaker canonical-eigenbasis population-gap theorem of #20342 does not replace the maintained arbitrary-ordered-eigenframe YWS theorem."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/SinTheta/UnitarilyInvariant.lean",

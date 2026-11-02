@@ -5,7 +5,8 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+public import TauCeti.Analysis.InnerProductSpace.Projection.FrobeniusSine
 public import YuWangSamworth2015.Core.Residual
 public import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
 
@@ -29,7 +30,8 @@ This theorem layer was previously staged under
 2026-08-17 the YWS-specific population-gap statements moved downstream into
 `YuWangSamworth2015.Core`.  The reusable Frobenius sine distance was separated
 from them as `TauCeti.sinThetaFrobenius` in
-`ForTauCeti/Analysis/InnerProductSpace/SinTheta/Frobenius.lean`, so foundation
+`ForTauCeti/Analysis/InnerProductSpace/SinTheta/Frobenius.lean`. That donor is
+now retired in favor of accepted `Submodule.sinThetaFrobenius`; foundation
 clients do not depend on this application package.
 
 -/
@@ -130,104 +132,21 @@ is proved as a statement about cross-block energy and read back as an angle, so
 this is the bridge the whole development turns on and it belongs in the API. -/
 theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
     (bT bS : OrthonormalBasis (Fin n) 𝕜 E) (s : Finset (Fin n)) :
-    sinThetaFrobenius
+    Submodule.sinThetaFrobenius
         (Submodule.span 𝕜 (bT '' (↑s : Set (Fin n))))
         (Submodule.span 𝕜 (bS '' (↑s : Set (Fin n)))) =
       Real.sqrt (∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bT k, bS j⟫_𝕜‖ ^ 2) := by
   classical
-  let U : Submodule 𝕜 E := Submodule.span 𝕜 (bT '' (↑s : Set (Fin n)))
-  let V : Submodule 𝕜 E := Submodule.span 𝕜 (bS '' (↑s : Set (Fin n)))
-  have hn : finrank 𝕜 E = n := by
-    rw [Module.finrank_eq_card_basis bT.toBasis, Fintype.card_fin]
-  rw [sinThetaFrobenius_eq,
-    UnitarilyInvariantSeminorm.frobenius_apply bT (sinThetaMap U V)]
-  congr 1
-  have hcol : ∀ i : Fin n,
-      ‖sinThetaMap U V (bT i)‖ ^ 2 =
-        if i ∈ s then ∑ k ∈ sᶜ, ‖⟪bS k, bT i⟫_𝕜‖ ^ 2 else 0 := by
-    intro i
-    rw [sinThetaMap, LinearMap.comp_apply]
-    -- `rw [sinThetaMap, LinearMap.comp_apply]` leaves the composition applied but
-    -- not in the two-projection form the `hproj` rewrite below matches.
-    change ‖Vᗮ.starProjection (U.starProjection (bT i))‖ ^ 2 = _
-    have hproj : U.starProjection (bT i) = if i ∈ s then bT i else 0 := by
-      simpa [U] using
-        Orthonormal.starProjection_span_image_apply_self bT.orthonormal s i
-    rw [hproj]
-    split_ifs with hi
-    · rw [Submodule.starProjection_orthogonal_val]
-      simpa [V] using
-        OrthonormalBasis.norm_sq_sub_starProjection_span_image bS s (bT i)
-    · simp
-  calc
-    ∑ i, ‖sinThetaMap U V (bT i)‖ ^ 2
-        = ∑ i, if i ∈ s then ∑ k ∈ sᶜ, ‖⟪bS k, bT i⟫_𝕜‖ ^ 2 else 0 :=
-          Finset.sum_congr rfl fun i _ => hcol i
-    _ = ∑ i ∈ s, ∑ k ∈ sᶜ, ‖⟪bS k, bT i⟫_𝕜‖ ^ 2 := by simp
-    _ = ∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bT k, bS j⟫_𝕜‖ ^ 2 := by
-      rw [← sinThetaSq_blockFamily_eq_sum_cross bS bT rfl rfl,
-        sinThetaSq_comm,
-        sinThetaSq_blockFamily_eq_sum_cross bT bS rfl rfl]
-
-/-- **An orthonormal family is the image of a `Finset` under some orthonormal
-basis.**  Precisely: given an embedding `e : Fin d ↪ Fin n` of index types, with
-`n` the dimension of `E`, an orthonormal `w : Fin d → E` extends to an
-orthonormal basis of `E` carrying `s = Finset.univ.map e` onto `Set.range w`.
-
-This is the bridge between the *family*-indexed statements of this file and the
-*basis*-indexed ones: `sinThetaFrobenius_eq_sqrt_sum_cross` and `blockFamily`
-are phrased for an orthonormal basis together with a distinguished `Finset` of
-indices, and a caller holding only a `d`-element orthonormal family has to
-manufacture both.  Doing so is the only genuinely fiddly step — the extension
-`Function.extend e w 0` is orthonormal *on the image of `e`*, and getting Lean to
-see that means pushing the `Set.range e` subtype coercion out of the way before
-`orthonormal_iff_ite` applies.
-
-Stated because the manufacture is index bookkeeping and no part of it depends on
-`w` beyond orthonormality, so a proof that needs it for two families needs it
-twice, verbatim. -/
-private theorem exists_orthonormalBasis_image_eq_range {d n : ℕ}
-    (hncard : finrank 𝕜 E = Fintype.card (Fin n)) (e : Fin d ↪ Fin n)
-    {s : Finset (Fin n)} (hs : s = Finset.univ.map e)
-    {w : Fin d → E} (hw : Orthonormal 𝕜 w) :
-    ∃ b : OrthonormalBasis (Fin n) 𝕜 E, ⇑b '' (↑s : Set (Fin n)) = Set.range w := by
-  classical
-  let wExt : Fin n → E := Function.extend e w (fun _ => 0)
-  let S : Set (Fin n) := Set.range e
-  have hwS : Orthonormal 𝕜 (S.domRestrict wExt) := by
-    rw [orthonormal_iff_ite]
-    intro i j
-    rcases i with ⟨i, hi⟩
-    rcases j with ⟨j, hj⟩
-    rcases hi with ⟨i', rfl⟩
-    rcases hj with ⟨j', rfl⟩
-    -- After `orthonormal_iff_ite` the goal is phrased through the subtype (or
-    -- `Fin.cast`) coercion; `orthonormal_iff_ite.mp` is stated for the underlying
-    -- vectors, so the coercion has to be discharged before it can apply.
-    -- The membership witnesses must be spelled as `Set.mem_range_self`, not `⟨i', rfl⟩`: the
-    -- latter records the *unfolded* `∃ y, e y = e i'`, which leaves the subtype term
-    -- type-incorrect at `implicit` transparency and stops `simp` from touching it.
-    change ⟪wExt (e i'), wExt (e j')⟫_𝕜 =
-      if (⟨e i', Set.mem_range_self i'⟩ : S) = ⟨e j', Set.mem_range_self j'⟩ then 1 else 0
-    have hwi : wExt (e i') = w i' := e.injective.extend_apply w (fun _ => 0) i'
-    have hwj : wExt (e j') = w j' := e.injective.extend_apply w (fun _ => 0) j'
-    rw [hwi, hwj, orthonormal_iff_ite.mp hw i' j']
-    simp only [Subtype.mk.injEq, EmbeddingLike.apply_eq_iff_eq]
-  obtain ⟨b, hb⟩ :=
-    Orthonormal.exists_orthonormalBasis_extension_of_card_eq hncard hwS
-  have hbe (i : Fin d) : b (e i) = w i := by
-    rw [hb (e i) ⟨i, rfl⟩]
-    exact e.injective.extend_apply w (fun _ => 0) i
-  refine ⟨b, ?_⟩
-  subst hs
-  ext x
-  constructor
-  · rintro ⟨j, hj, rfl⟩
-    rw [Finset.mem_coe, Finset.mem_map] at hj
-    obtain ⟨i, -, rfl⟩ := hj
-    exact ⟨i, (hbe i).symm⟩
-  · rintro ⟨i, rfl⟩
-    exact ⟨e i, by simp, hbe i⟩
+  have hresult : (bT.spanIndices (↑s : Set (Fin n))).sinThetaFrobenius
+      (bS.spanIndices (↑s : Set (Fin n))) =
+        Real.sqrt (∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bT k, bS j⟫_𝕜‖ ^ 2) := by
+    have hrank : finrank 𝕜 (bT.spanIndices (↑s : Set (Fin n))) =
+        finrank 𝕜 (bS.spanIndices (↑s : Set (Fin n))) := by
+      rw [bT.finrank_spanIndices, bS.finrank_spanIndices]
+    rw [Submodule.sinThetaFrobenius_comm _ _ hrank,
+      ← bT.sq_sinThetaFrobenius_spanIndices bS s s,
+      Real.sqrt_sq (Submodule.sinThetaFrobenius_nonneg _ _)]
+  simpa only [OrthonormalBasis.spanIndices_eq_span] using hresult
 
 /-- The family-level squared sine agrees with the canonical Frobenius
 sine whenever the two orthonormal families span the supplied subspaces. -/
@@ -237,62 +156,9 @@ theorem sinThetaSq_eq_sinThetaFrobenius_sq_of_spans
     {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v)
     (hspanU : Submodule.span 𝕜 (Set.range u) = U)
     (hspanV : Submodule.span 𝕜 (Set.range v) = V) :
-    sinThetaSq hu hv = sinThetaFrobenius U V ^ 2 := by
-  classical
-  subst U
-  subst V
-  let n := finrank 𝕜 E
-  have hspanrank : finrank 𝕜 (Submodule.span 𝕜 (Set.range u)) = d := by
-    rw [finrank_span_eq_card hu.linearIndependent, Fintype.card_fin]
-  have hdn : d ≤ n := by
-    have hle := Submodule.finrank_le (Submodule.span 𝕜 (Set.range u))
-    rw [hspanrank] at hle
-    simpa only [n] using hle
-  let e : Fin d ↪ Fin n := Fin.castLEEmb hdn
-  let s : Finset (Fin n) := Finset.univ.map e
-  have hscard : s.card = d := by simp [s]
-  have hncard : finrank 𝕜 E = Fintype.card (Fin n) := by simp [n]
-  obtain ⟨bU, himageU⟩ := exists_orthonormalBasis_image_eq_range hncard e (s := s) rfl hu
-  obtain ⟨bV, himageV⟩ := exists_orthonormalBasis_image_eq_range hncard e (s := s) rfl hv
-  let uBlock : Fin d → E := blockFamily bU s hscard
-  let vBlock : Fin d → E := blockFamily bV s hscard
-  have huBlock : Orthonormal 𝕜 uBlock := orthonormal_blockFamily bU s hscard
-  have hvBlock : Orthonormal 𝕜 vBlock := orthonormal_blockFamily bV s hscard
-  have hspanUBlock : Submodule.span 𝕜 (Set.range uBlock) =
-      Submodule.span 𝕜 (Set.range u) := by
-    have hrangeU : Set.range uBlock = bU '' (↑s : Set (Fin n)) :=
-      range_blockFamily bU s hscard
-    rw [hrangeU, himageU]
-  have hspanVBlock : Submodule.span 𝕜 (Set.range vBlock) =
-      Submodule.span 𝕜 (Set.range v) := by
-    have hrangeV : Set.range vBlock = bV '' (↑s : Set (Fin n)) :=
-      range_blockFamily bV s hscard
-    rw [hrangeV, himageV]
-  have hcosUV := principalCosines_span_eq_cosPrincipalAngles hu hv
-  have hcosBlock := principalCosines_span_eq_cosPrincipalAngles huBlock hvBlock
-  have hcosBlock' :
-      principalCosines (Submodule.span 𝕜 (Set.range u))
-          (Submodule.span 𝕜 (Set.range v)) =
-        cosPrincipalAngles huBlock hvBlock := by
-    simpa only [hspanUBlock, hspanVBlock] using hcosBlock
-  have hcos : cosPrincipalAngles hu hv = cosPrincipalAngles huBlock hvBlock :=
-    hcosUV.symm.trans hcosBlock'
-  have hsq : sinThetaSq hu hv =
-      ∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bU k, bV j⟫_𝕜‖ ^ 2 := by
-    calc
-      sinThetaSq hu hv = sinThetaSq huBlock hvBlock := by
-        rw [sinThetaSq_def, sinThetaSq_def, hcos]
-      _ = ∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bU k, bV j⟫_𝕜‖ ^ 2 :=
-        sinThetaSq_blockFamily_eq_sum_cross bU bV hscard hscard
-  have hfrob :
-      sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
-          (Submodule.span 𝕜 (Set.range v)) =
-        Real.sqrt (∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bU k, bV j⟫_𝕜‖ ^ 2) := by
-    simpa only [himageU, himageV] using
-      (sinThetaFrobenius_eq_sqrt_sum_cross bU bV s)
-  have hnonneg : 0 ≤ ∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bU k, bV j⟫_𝕜‖ ^ 2 :=
-    Finset.sum_nonneg fun j _ => Finset.sum_nonneg fun k _ => sq_nonneg _
-  rw [hfrob, Real.sq_sqrt hnonneg, hsq]
+    sinThetaSq hu hv = Submodule.sinThetaFrobenius U V ^ 2 := by
+  rw [Submodule.sq_sinThetaFrobenius_eq_sinThetaSq_of_orthonormal V U hv hu hspanV hspanU,
+    sinThetaSq_comm hu hv]
 
 /-! ### Yu--Wang--Samworth Theorem 2 at the source's generality
 
@@ -333,7 +199,7 @@ theorem sinThetaSq_eq_sum_sq_norm_starProjection_orthogonal
 projection energy of the second block's frame. -/
 theorem sinThetaFrobenius_sq_eq_sum_sq_norm_starProjection_orthogonal
     {d : ℕ} {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
-    sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+    Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range v)) ^ 2
       = ∑ i, ‖(Submodule.span 𝕜 (Set.range u))ᗮ.starProjection (v i)‖ ^ 2 := by
   rw [← sinThetaSq_eq_sinThetaFrobenius_sq_of_spans hu hv rfl rfl]
@@ -363,7 +229,7 @@ theorem yuWangSamworth_sinTheta_le_residual
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range e →
       Δ ≤ |hA.eigenvalues hn (e i) - hA.eigenvalues hn k|) :
-    sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+    Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range v)) ≤
       Real.sqrt (∑ i, ‖(hA.eigenvalues hn (e i) : 𝕜) • v i - A (v i)‖ ^ 2) / Δ := by
   classical
@@ -371,18 +237,18 @@ theorem yuWangSamworth_sinTheta_le_residual
   set V := Submodule.span 𝕜 (Set.range v) with hV
   set R := ∑ i, ‖(hA.eigenvalues hn (e i) : 𝕜) • v i - A (v i)‖ ^ 2 with hR
   have hR0 : 0 ≤ R := Finset.sum_nonneg fun i _ => sq_nonneg _
-  have hkey : Δ ^ 2 * sinThetaFrobenius U V ^ 2 ≤ R := by
+  have hkey : Δ ^ 2 * Submodule.sinThetaFrobenius U V ^ 2 ≤ R := by
     rw [sinThetaFrobenius_sq_eq_sum_sq_norm_starProjection_orthogonal
       (isOrderedEigenframe_iff.mp hu).orthonormal (isOrderedEigenframe_iff.mp hv).orthonormal]
     exact sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le hA
       hΔ.le (hu.pointInternalGap_span hΔ hgap) v (fun i => hA.eigenvalues hn (e i))
       fun i => (isOrderedEigenframe_iff.mp hu).eigenvalue_mem_restrictedPointSpectrum i
-  have hs0 : 0 ≤ sinThetaFrobenius U V :=
-    sinThetaFrobenius_nonneg U V
+  have hs0 : 0 ≤ Submodule.sinThetaFrobenius U V :=
+    Submodule.sinThetaFrobenius_nonneg U V
   rw [le_div_iff₀ hΔ]
   nlinarith [hkey, hs0, Real.sq_sqrt hR0, Real.sqrt_nonneg R,
-    sq_nonneg (sinThetaFrobenius U V * Δ - Real.sqrt R),
-    sq_nonneg (sinThetaFrobenius U V * Δ + Real.sqrt R)]
+    sq_nonneg (Submodule.sinThetaFrobenius U V * Δ - Real.sqrt R),
+    sq_nonneg (Submodule.sinThetaFrobenius U V * Δ + Real.sqrt R)]
 
 /-- **Yu--Wang--Samworth Theorem 2, first conclusion, at the printed generality.**
 
@@ -404,7 +270,7 @@ theorem yuWangSamworth_sinTheta_frame_le
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range e →
       Δ ≤ |hA.eigenvalues hn (e i) - hA.eigenvalues hn k|) :
-    sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+    Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range v)) ≤
       2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
@@ -412,14 +278,14 @@ theorem yuWangSamworth_sinTheta_frame_le
   set U := Submodule.span 𝕜 (Set.range u) with hU
   set V := Submodule.span 𝕜 (Set.range v) with hV
   set R := ∑ i, ‖(hA.eigenvalues hn (e i) : 𝕜) • v i - A (v i)‖ ^ 2 with hR
-  have hkey : Δ ^ 2 * sinThetaFrobenius U V ^ 2 ≤ R := by
+  have hkey : Δ ^ 2 * Submodule.sinThetaFrobenius U V ^ 2 ≤ R := by
     rw [hR, sinThetaFrobenius_sq_eq_sum_sq_norm_starProjection_orthogonal
       (isOrderedEigenframe_iff.mp hu).orthonormal (isOrderedEigenframe_iff.mp hv).orthonormal]
     exact sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le hA
       hΔ.le (hu.pointInternalGap_span hΔ hgap) v (fun i => hA.eigenvalues hn (e i))
       fun i => (isOrderedEigenframe_iff.mp hu).eigenvalue_mem_restrictedPointSpectrum i
   -- Frobenius branch.
-  have hfrob : sinThetaFrobenius U V ≤
+  have hfrob : Submodule.sinThetaFrobenius U V ≤
       2 * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) / Δ := by
     refine le_two_mul_div_of_sq_gap_mul_sq_le hΔ
       (apply_nonneg (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)) _)
@@ -427,7 +293,7 @@ theorem yuWangSamworth_sinTheta_frame_le
     rw [UnitarilyInvariantSeminorm.sq_frobenius_apply (hA.eigenvectorBasis hn) (B - A)]
     exact sum_sq_norm_frameResidual_le hA hB hn hv
   -- Dimension-scaled operator-norm branch.
-  have hop : sinThetaFrobenius U V ≤
+  have hop : Submodule.sinThetaFrobenius U V ≤
       2 * (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖) / Δ := by
     refine le_two_mul_div_of_sq_gap_mul_sq_le hΔ (by positivity) (hkey.trans ?_)
     have hres := sum_sq_norm_frameResidual_le_of_opNorm hA hB hn hv
@@ -466,7 +332,7 @@ theorem yuWangSamworth_sinTheta_le
     (hcorr : CorrespondingEigenblock hA hB U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d) {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : PointInternalGap A U Δ) :
-    sinThetaFrobenius U V ≤
+    Submodule.sinThetaFrobenius U V ≤
       2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
   classical
@@ -517,7 +383,7 @@ theorem yuWangSamworth_intervalBlock_le
     (_hUeq : U = Module.End.pointSpectralSubspace A (Set.Icc a b))
     (hcorr : CorrespondingEigenblock hA hB U V)
     (hgap : PointInternalGap A U Δ) :
-    sinThetaFrobenius U V ≤
+    Submodule.sinThetaFrobenius U V ≤
       2 * min (Real.sqrt (finrank 𝕜 U) * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
   have hV : IsInvariant B V := by
@@ -534,7 +400,7 @@ theorem exists_aligned_orthonormalBasis
     ∃ (u v : Fin d → E), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
       Submodule.span 𝕜 (Set.range v) = V ∧
-      ∑ i, ‖v i - u i‖ ^ 2 ≤ 2 * sinThetaFrobenius U V ^ 2 := by
+      ∑ i, ‖v i - u i‖ ^ 2 ≤ 2 * Submodule.sinThetaFrobenius U V ^ 2 := by
   classical
   let bU := stdOrthonormalBasis 𝕜 U
   let bV := stdOrthonormalBasis 𝕜 V
@@ -603,13 +469,13 @@ theorem yuWangSamworth_alignedBasis_frame_le
       (by simpa only [Fintype.card_fin] using hv.finrank_span)
   refine ⟨u', v', hu', hv', hspanU, hspanV, ?_⟩
   have hsine := yuWangSamworth_sinTheta_frame_le hu hv hΔ hgap
-  have hsnn : (0 : ℝ) ≤ sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+  have hsnn : (0 : ℝ) ≤ Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
       (Submodule.span 𝕜 (Set.range v)) :=
-    sinThetaFrobenius_nonneg _ _
+    Submodule.sinThetaFrobenius_nonneg _ _
   calc Real.sqrt (∑ i, ‖v' i - u' i‖ ^ 2)
-      ≤ Real.sqrt (2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+      ≤ Real.sqrt (2 * Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) ^ 2) := Real.sqrt_le_sqrt hsum
-    _ = Real.sqrt 2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+    _ = Real.sqrt 2 * Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) := by
         rw [Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 2), Real.sqrt_sq hsnn]
     _ ≤ Real.sqrt 2 * (2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
@@ -640,13 +506,13 @@ theorem yuWangSamworth_alignedBasis_le_residual
       (by simpa only [Fintype.card_fin] using hv.finrank_span)
   refine ⟨u', v', hu', hv', hspanU, hspanV, ?_⟩
   have hsine := yuWangSamworth_sinTheta_le_residual hu hv hΔ hgap
-  have hsnn : (0 : ℝ) ≤ sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+  have hsnn : (0 : ℝ) ≤ Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
       (Submodule.span 𝕜 (Set.range v)) :=
-    sinThetaFrobenius_nonneg _ _
+    Submodule.sinThetaFrobenius_nonneg _ _
   calc Real.sqrt (∑ i, ‖v' i - u' i‖ ^ 2)
-      ≤ Real.sqrt (2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+      ≤ Real.sqrt (2 * Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) ^ 2) := Real.sqrt_le_sqrt hsum
-    _ = Real.sqrt 2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+    _ = Real.sqrt 2 * Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) := by
         rw [Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 2), Real.sqrt_sq hsnn]
     _ ≤ Real.sqrt 2 *
@@ -680,11 +546,11 @@ theorem yuWangSamworth_alignedBasis_le
     exists_aligned_orthonormalBasis hrankU hrankV
   refine ⟨u, v, hu, hv, hspanU, hspanV, ?_⟩
   have hsine := yuWangSamworth_sinTheta_le hA hB hV hcorr hrankU hΔ hgap
-  have hsnn : (0 : ℝ) ≤ sinThetaFrobenius U V :=
-    sinThetaFrobenius_nonneg U V
+  have hsnn : (0 : ℝ) ≤ Submodule.sinThetaFrobenius U V :=
+    Submodule.sinThetaFrobenius_nonneg U V
   calc Real.sqrt (∑ i, ‖v i - u i‖ ^ 2)
-      ≤ Real.sqrt (2 * sinThetaFrobenius U V ^ 2) := Real.sqrt_le_sqrt hsum
-    _ = Real.sqrt 2 * sinThetaFrobenius U V := by
+      ≤ Real.sqrt (2 * Submodule.sinThetaFrobenius U V ^ 2) := Real.sqrt_le_sqrt hsum
+    _ = Real.sqrt 2 * Submodule.sinThetaFrobenius U V := by
         rw [Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 2), Real.sqrt_sq hsnn]
     _ ≤ Real.sqrt 2 * (2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
           (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ) :=
@@ -843,7 +709,7 @@ theorem yuWangSamworth_eigenvector_frame_sinTheta_le
     (hBv : B v = (hB.eigenvalues hn j : 𝕜) • v)
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : ∀ k : Fin n, k ≠ j → Δ ≤ |hA.eigenvalues hn j - hA.eigenvalues hn k|) :
-    sinThetaFrobenius (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}) ≤
+    Submodule.sinThetaFrobenius (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}) ≤
       2 * ‖(B - A).toContinuousLinearMap‖ / Δ := by
   classical
   set e : Fin 1 ↪ Fin n := ⟨fun _ => j, fun a b _ => Subsingleton.elim a b⟩ with he
@@ -971,7 +837,7 @@ its Frobenius norm is the square root of that block's dimension. -/
 theorem sinThetaFrobenius_spanIndices_of_subset_compl {n : ℕ}
     (b : OrthonormalBasis (Fin n) 𝕜 E)
     (S T : Set (Fin n)) [DecidablePred (· ∈ S)] (hdisj : S ⊆ Tᶜ) :
-    sinThetaFrobenius (b.spanIndices S) (b.spanIndices T) =
+    Submodule.sinThetaFrobenius (b.spanIndices S) (b.spanIndices T) =
       Real.sqrt S.toFinset.card := by
   classical
   have hperp : b.spanIndices S ≤ (b.spanIndices T)ᗮ := by
@@ -986,8 +852,10 @@ theorem sinThetaFrobenius_spanIndices_of_subset_compl {n : ℕ}
     change ((b.spanIndices T)ᗮ).starProjection ((b.spanIndices S).starProjection x) =
       (b.spanIndices S).starProjection x
     exact Submodule.starProjection_eq_self_iff.mpr hmem
-  rw [sinThetaFrobenius_eq, hsin,
-    UnitarilyInvariantSeminorm.frobenius_apply b (projection (b.spanIndices S))]
+  rw [Submodule.sinThetaFrobenius_def, Submodule.sinThetaMap_def]
+  change UnitarilyInvariantSeminorm.frobenius 𝕜 E E
+    (sinThetaMap (b.spanIndices S) (b.spanIndices T)) = _
+  rw [hsin, UnitarilyInvariantSeminorm.frobenius_apply b (projection (b.spanIndices S))]
   have hspan : b.spanIndices S =
       Submodule.span 𝕜 (b '' (↑S.toFinset : Set (Fin n))) := by
     rw [OrthonormalBasis.spanIndices_eq_span, Set.coe_toFinset]

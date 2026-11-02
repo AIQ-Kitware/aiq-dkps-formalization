@@ -124,7 +124,7 @@ theorem pointInternalGap_planarSharpness :
 /-- **`‖sin Θ(v̂, v)‖_F = ε`.**  The single angle between the two lines. -/
 theorem sinThetaFrobenius_planarSharpness (hv : ‖v‖ = 1) (hw : ‖w‖ = 1)
     (hc0 : 0 ≤ c) (hoverlap : ⟪v, w⟫_𝕜 = (c : 𝕜)) :
-    sinThetaFrobenius (𝕜 ∙ w) (𝕜 ∙ v) = Real.sqrt (1 - c ^ 2) := by
+    Submodule.sinThetaFrobenius (𝕜 ∙ w) (𝕜 ∙ v) = Real.sqrt (1 - c ^ 2) := by
   rw [sinThetaFrobenius_span_singleton hw,
     norm_projection_orthogonal_span_singleton hv hw hc0 hoverlap]
 
@@ -137,8 +137,12 @@ theorem opNorm_planarSharpness_perturbation (hv : ‖v‖ = 1) (hw : ‖w‖ = 1
       2 * Real.sqrt (1 - c ^ 2) := by
   have hrank : finrank 𝕜 (𝕜 ∙ w) = finrank 𝕜 (𝕜 ∙ v) := by
     rw [finrank_span_singleton_of_norm_one hv, finrank_span_singleton_of_norm_one hw]
-  rw [twoLevelOperator_sub, map_smul, norm_smul,
-    opNorm_projection_sub_eq_opNorm_sinThetaMap (𝕜 ∙ w) (𝕜 ∙ v) hrank,
+  have hgap := Submodule.projectionGap_eq_directedProjectionGap_of_finrank_eq
+    (𝕜 ∙ w) (𝕜 ∙ v) hrank
+  rw [Submodule.projectionGap_def, Submodule.directedProjectionGap_def] at hgap
+  change ‖(projection (𝕜 ∙ w) - projection (𝕜 ∙ v)).toContinuousLinearMap‖ =
+    ‖(sinThetaMap (𝕜 ∙ w) (𝕜 ∙ v)).toContinuousLinearMap‖ at hgap
+  rw [twoLevelOperator_sub, map_smul, norm_smul, hgap,
     opNorm_sinThetaMap_span_singleton hw,
     norm_projection_orthogonal_span_singleton hv hw hc0 hoverlap]
   congr 1
@@ -175,7 +179,7 @@ theorem yuWangSamworth_sharpness_planarRotation (hv : ‖v‖ = 1) (hw : ‖w‖
     2 * (Real.sqrt 1 *
           ‖(twoLevelOperator (𝕜 := 𝕜) 1 3 (𝕜 ∙ w) -
             twoLevelOperator (𝕜 := 𝕜) 1 3 (𝕜 ∙ v)).toContinuousLinearMap‖) / 2 =
-      2 * sinThetaFrobenius (𝕜 ∙ w) (𝕜 ∙ v) := by
+      2 * Submodule.sinThetaFrobenius (𝕜 ∙ w) (𝕜 ∙ v) := by
   rw [opNorm_planarSharpness_perturbation hv hw hc0 hoverlap,
     sinThetaFrobenius_planarSharpness hv hw hc0 hoverlap, Real.sqrt_one]
   ring

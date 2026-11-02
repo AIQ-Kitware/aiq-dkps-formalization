@@ -7,16 +7,18 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
+public import TauCeti.Analysis.InnerProductSpace.Projection.Acute
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
-public import TauCeti.Analysis.InnerProductSpace.Projection.Acute
 
 /-!
 # Directed principal-angle geometry
 
-Canonical finite-dimensional cosine, sine, angle, tangent, and double-angle
-objects, together with their singular-value and projector dictionaries.
+Native submodule principal cosines, sines, angles, tangents and quarter-turn
+conditions are consumed directly from TauCeti. This donor retains linear
+projection/angle operators, transversality and the remaining projector
+consequences. Duplicate sequence definitions and symmetry proofs are retired.
 
 ## Provenance
 
@@ -42,20 +44,6 @@ open Module (finrank)
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
-section OperatorAbsSingularValues
-
-variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-  [FiniteDimensional 𝕜 F]
-
-/-- The modulus `|A| = (A⋆A)^{1/2}` has the same zero-padded singular-value sequence as
-`A`: both Gram operators coincide, `|A|⋆|A| = |A|² = A⋆A`. -/
-theorem singularValues_operatorAbs (A : E →ₗ[𝕜] F) :
-    (A.operatorAbs).singularValues = A.singularValues := by
-  refine TauCeti.singularValues_eq_of_gram_eq ?_
-  rw [(A.isPositive_operatorAbs).adjoint_eq, LinearMap.operatorAbs_sq]
-
-end OperatorAbsSingularValues
-
 /-- The cosine cross-projection `P_V P_U`. -/
 @[expose]
 noncomputable def cosThetaMap (U V : Submodule 𝕜 E)
@@ -69,7 +57,7 @@ noncomputable def sinThetaMap (U V : Submodule 𝕜 E)
   complementaryProjection V ∘ₗ projection U
 
 /-- `cos Θ` on the full ambient space, `|P_V P_U|`.  Its singular values are the
-principal-angle cosines (`singularValues_operatorAbs` and `singularValues_cosThetaMap`). -/
+principal-angle cosines by `LinearMap.singularValues_operatorAbs`. -/
 noncomputable def cosAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   LinearMap.operatorAbs (cosThetaMap U V)
@@ -100,30 +88,6 @@ noncomputable def sinTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   (2 : 𝕜) • (complementaryProjection U ∘ₗ projection V ∘ₗ projection U)
 
-/-- Principal-angle cosines: the singular values of the cross projection
-`P_V P_U`, sorted decreasingly and padded by zeros beyond the finite rank.  These
-are symmetric in `U, V` because `(P_V P_U)⋆ = P_U P_V` (`principalCosines_comm`). -/
-@[expose]
-noncomputable def principalCosines (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
-  (cosThetaMap U V : E →ₗ[𝕜] E).singularValues
-
-/-- Principal-angle sines: the singular values of the directed cross projection
-`P_{Vᗮ} P_U`.  In equal-dimension configurations these are the sines of the
-principal angles; when `dim U ≠ dim V` the directed map also records the
-`π/2` "defect" directions, so this is not symmetric in `U, V` in general. -/
-@[expose]
-noncomputable def principalSines (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
-  (sinThetaMap U V : E →ₗ[𝕜] E).singularValues
-
-/-- Principal angles as a sorted finitely supported sequence: `arcsin` applied to
-the principal sines.  `arcsin 0 = 0` keeps the support finite. -/
-@[expose]
-noncomputable def principalAngles (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ →₀ ℝ :=
-  (principalSines U V).mapRange Real.arcsin Real.arcsin_zero
-
 omit [FiniteDimensional 𝕜 E] in
 /-- `sin Θ` of a subspace with itself is zero: the complementary projector kills
 the range of the projector. -/
@@ -134,14 +98,6 @@ theorem sinThetaMap_self (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
   -- there is no `_apply` lemma to rewrite with here.
   change Uᗮ.starProjection (U.starProjection x) = 0
   exact Submodule.starProjection_orthogonal_apply_eq_zero (U.starProjection_apply_mem x)
-
-/-- Every principal angle of a subspace with itself is zero. -/
-theorem principalAngles_self (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (i : ℕ) : principalAngles U U i = 0 := by
-  have h : principalSines U U = 0 := by
-    rw [principalSines, sinThetaMap_self]
-    exact LinearMap.singularValues_zero
-  simp [principalAngles, h]
 
 /-- The pair has no angle `π/2`; equivalently, `P_V` is injective on `U`. -/
 @[expose]
@@ -406,28 +362,6 @@ theorem isAcute_iff_projectionGap_lt_one {U V : Submodule 𝕜 E}
     IsAcute U V ↔ U.projectionGap V < 1 :=
   ⟨projectionGap_lt_one_of_isAcute, isAcute_of_projectionGap_lt_one⟩
 
-/-- No principal angle is a quarter turn.  This is the natural domain condition
-for `tan (2 Θ)` before the canonical branch is selected.  The arbitrary
-reducing subspace in the raw `tan 2Θ` theorem may have angles on either side
-of `π/4`; the theorem itself excludes equality. -/
-@[expose]
-def AvoidsQuarterTurn (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : Prop :=
-  ∀ i, principalAngles U V i ≠ Real.pi / 4
-
-/-- **A subspace avoids the quarter turn with itself.**
-
-The non-degenerate witness for `AvoidsQuarterTurn`: every principal angle of `U`
-with `U` is zero, and `0 ≠ π/4`.  Without a witness the predicate would be
-unfalsifiable — it could be vacuous and nothing in the library would notice —
-which is the fault Tau Ceti's `correctness` rubric rates a block. -/
-theorem avoidsQuarterTurn_self (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    AvoidsQuarterTurn U U := by
-  intro i
-  rw [principalAngles_self]
-  have : (0 : ℝ) < Real.pi / 4 := by positivity
-  exact ne_of_lt this
-
 omit [FiniteDimensional 𝕜 E] in
 /-- Acuteness is symmetric.
 -/
@@ -436,102 +370,13 @@ theorem IsAcute.symm {U V : Submodule 𝕜 E}
     (h : IsAcute U V) : IsAcute V U :=
   ⟨h.2, h.1⟩
 
-/-- **Two equidimensional subspaces carry orthonormal families, on a common
-index type, spanning them.**
-
-`stdOrthonormalBasis` gives each subspace a basis; the content is the
-bookkeeping that puts both on `Fin (finrank 𝕜 U)` — `Fin.cast` across
-`finrank 𝕜 U = finrank 𝕜 V` — and the two `Submodule.eq_of_le_of_finrank_eq`
-arguments turning "spans a subspace of the right dimension" into "spans it".
-
-Stated existentially because that is all its callers want: the bases and the
-cast never escape, only `u`, `v`, their orthonormality and their spans.  It was
-written out twice in this file, in `principalSines_comm` and in
-`opNorm_projection_sub_eq_opNorm_sinThetaMap`, 29 identical lines each. -/
-private theorem exists_orthonormal_pair_spanning (U V : Submodule 𝕜 E)
-    (hrank : finrank 𝕜 U = finrank 𝕜 V) :
-    ∃ u v : Fin (finrank 𝕜 U) → E, ∃ _ : Orthonormal 𝕜 u, ∃ _ : Orthonormal 𝕜 v,
-      Submodule.span 𝕜 (Set.range u) = U ∧ Submodule.span 𝕜 (Set.range v) = V := by
-  classical
-  let d := finrank 𝕜 U
-  let bU := stdOrthonormalBasis 𝕜 U
-  let bV := stdOrthonormalBasis 𝕜 V
-  have hdV : d = finrank 𝕜 V := by simpa only [d] using hrank
-  let u : Fin d → E := fun i => ((bU i : U) : E)
-  let v : Fin d → E := fun i => ((bV (Fin.cast hdV i) : V) : E)
-  have hu : Orthonormal 𝕜 u := bU.orthonormal.comp_linearIsometry U.subtypeₗᵢ
-  have hv : Orthonormal 𝕜 v :=
-    (bV.orthonormal.comp_linearIsometry V.subtypeₗᵢ).comp _ (Fin.cast_injective hdV)
-  have hspanU : Submodule.span 𝕜 (Set.range u) = U :=
-    span_range_eq_of_orthonormal_of_mem hu (fun i => (bU i).2) rfl
-  have hspanV : Submodule.span 𝕜 (Set.range v) = V :=
-    span_range_eq_of_orthonormal_of_mem hv (fun i => (bV (Fin.cast hdV i)).2) hdV
-  exact ⟨u, v, hu, hv, hspanU, hspanV⟩
-
-/-- The directed principal-sine sequences are symmetric for equal-rank
-subspaces.  Equal rank lets us choose orthonormal families with the same finite
-index type; the family-level complementary-Gram theorem then identifies the two
-directed cross-projection singular-value sequences. -/
-theorem principalSines_comm (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hrank : finrank 𝕜 U = finrank 𝕜 V) :
-    principalSines U V = principalSines V U := by
-  classical
-  let d := finrank 𝕜 U
-  obtain ⟨u, v, hu, hv, hspanU, hspanV⟩ :=
-    exists_orthonormal_pair_spanning U V hrank
-  -- states the goal with the definition unfolded, in the shape the next step needs;
-  -- there is no `_apply` lemma to rewrite with here.
-  change
-    (((Vᗮ.starProjection ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E).singularValues) =
-      (((Uᗮ.starProjection ∘L V.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E).singularValues)
-  simpa only [hspanU, hspanV] using
-    singularValues_orthogonal_starProjection_comp_starProjection_comm hu hv
-
-/-- Principal angles are symmetric for equal-dimensional subspaces.
-
-The equal-rank hypothesis matches the multiplicities of quarter-turn defect
-directions in the two directed sine maps. -/
-theorem principalAngles_comm (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hrank : finrank 𝕜 U = finrank 𝕜 V) :
-    principalAngles U V = principalAngles V U := by
-  rw [principalAngles, principalAngles, principalSines_comm U V hrank]
-
-/-- Principal-angle cosines are the singular values of `P_V P_U` (definitional:
-`principalCosines` is defined as those singular values). -/
-theorem singularValues_cosThetaMap (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (cosThetaMap U V : E →ₗ[𝕜] E).singularValues = principalCosines U V :=
-  rfl
-
-/-- Principal-angle sines are the singular values of `P_{Vᗮ} P_U` (definitional:
-`principalSines` is defined as those singular values). -/
-theorem singularValues_sinThetaMap (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (sinThetaMap U V : E →ₗ[𝕜] E).singularValues = principalSines U V :=
-  rfl
-
-/-- Principal-angle cosines are symmetric in the two subspaces, since
-`(P_V P_U)⋆ = P_U P_V` and adjoints share singular values.  (The sines are *not*
-symmetric when `dim U ≠ dim V`; see `principalSines`.) -/
-theorem principalCosines_comm (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    principalCosines U V = principalCosines V U := by
-  have hadj : (cosThetaMap V U).adjoint = cosThetaMap U V := by
-    rw [eq_comm, LinearMap.eq_adjoint_iff]
-    intro x y
-    simp only [cosThetaMap, projection, LinearMap.comp_apply, ContinuousLinearMap.coe_coe]
-    rw [V.inner_starProjection_left_eq_right, U.inner_starProjection_left_eq_right]
-  rw [principalCosines, principalCosines, ← hadj, LinearMap.singularValues_adjoint]
-
 /-- The singular values of `P_U-P_V` are the full-space `sin Θ` values: with
-`sinAngleOperator = |P_U - P_V|` and `σ(|T|) = σ(T)` (`singularValues_operatorAbs`). -/
+`sinAngleOperator = |P_U - P_V|` and `σ(|T|) = σ(T)` (`LinearMap.singularValues_operatorAbs`). -/
 theorem singularValues_projection_sub_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     (projection U - projection V).singularValues =
       (sinAngleOperator U V).singularValues := by
-  rw [sinAngleOperator, singularValues_operatorAbs]
+  rw [sinAngleOperator, LinearMap.singularValues_operatorAbs]
 
 /-- **The full projector-difference UI-norm bridge.**  Every unitarily invariant
 norm of `P_U - P_V` equals that of the full `sin Θ` operator `|P_U - P_V|`, since
@@ -553,79 +398,6 @@ theorem sinTwoAngleOperator_eq_two_smul_cross (U V : Submodule 𝕜 E)
     sinTwoAngleOperator U V =
       (2 : 𝕜) • (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) := by
   rfl
-
-/-- Equal-rank subspaces have the same largest sine whether measured by a
-cross projection or by the difference of projectors.
-
-The proof combines the arbitrary-dimensional two-projection identity
-`‖P_U - P_V‖ = max ‖P_{Uᗮ}P_V‖ ‖P_{Vᗮ}P_U‖` with finite equal-rank principal-angle
-symmetry.  Finite dimensionality is used only to choose equal-length
-orthonormal bases and identify the two directed cross-projection norms. -/
-theorem opNorm_projection_sub_eq_opNorm_sinThetaMap (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hrank : finrank 𝕜 U = finrank 𝕜 V) :
-    ‖(projection U - projection V).toContinuousLinearMap‖ =
-      ‖(sinThetaMap U V).toContinuousLinearMap‖ := by
-  classical
-  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  -- names the application so the norm bound applies to it directly.
-  change ‖U.starProjection - V.starProjection‖ =
-    ‖Vᗮ.starProjection ∘L U.starProjection‖
-  let d := finrank 𝕜 U
-  by_cases hd0 : d = 0
-  · have hdimU : finrank 𝕜 U = 0 := by simpa [d] using hd0
-    have hdimV : finrank 𝕜 V = 0 := hrank.symm.trans hdimU
-    have hU0 : U = ⊥ := by
-      symm
-      exact Submodule.eq_of_le_of_finrank_eq bot_le (by simpa using hdimU.symm)
-    have hV0 : V = ⊥ := by
-      symm
-      exact Submodule.eq_of_le_of_finrank_eq bot_le (by simpa using hdimV.symm)
-    subst U
-    subst V
-    simp
-  have hd : 0 < d := Nat.pos_of_ne_zero hd0
-  obtain ⟨u, v, hu, hv, hspanU, hspanV⟩ :=
-    exists_orthonormal_pair_spanning U V hrank
-  have hdirSpan :
-      ‖(Submodule.span 𝕜 (Set.range u))ᗮ.starProjection ∘L
-          (Submodule.span 𝕜 (Set.range v)).starProjection‖ =
-        ‖(Submodule.span 𝕜 (Set.range v))ᗮ.starProjection ∘L
-          (Submodule.span 𝕜 (Set.range u)).starProjection‖ := by
-    rw [norm_orthogonal_starProjection_comp_starProjection hv hu hd,
-      norm_orthogonal_starProjection_comp_starProjection hu hv hd,
-      cosPrincipalAngles_comm hu hv]
-  have hdir : ‖Uᗮ.starProjection ∘L V.starProjection‖ =
-      ‖Vᗮ.starProjection ∘L U.starProjection‖ := by
-    simpa only [hspanU, hspanV] using hdirSpan
-  rw [← Submodule.projectionGap_def U V,
-    Submodule.projectionGap_eq_max,
-    Submodule.directedProjectionGap_def,
-    Submodule.directedProjectionGap_def,
-    hdir, max_self]
-
-/-- Family-level principal angles agree with the canonical submodule API: the
-subspace cosine spectrum of `span u, span v` is the family-level
-`cosPrincipalAngles`.  Both are singular values of the same cross projection
-`P_{span v} P_{span u}`, via the flat cosine dictionary
-`singularValues_starProjection_comp_starProjection`. -/
-theorem principalCosines_span_eq_cosPrincipalAngles {d : ℕ}
-    {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
-    principalCosines (Submodule.span 𝕜 (Set.range u))
-        (Submodule.span 𝕜 (Set.range v)) =
-      cosPrincipalAngles hu hv := by
-  have h := hu.principalCosines_eq_cosPrincipalAngles hv rfl rfl
-  rw [Submodule.principalCosines_def, Submodule.cosThetaMap_def] at h
-  exact h
-
-/-- The principal-cosine sequence of two unit-generated lines has one entry,
-the absolute overlap of their generators. -/
-theorem principalCosines_rankOne {u v : E} (hu : ‖u‖ = 1) (hv : ‖v‖ = 1) :
-    principalCosines (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}) =
-      Finsupp.single 0 ‖⟪u, v⟫_𝕜‖ := by
-  have h := Submodule.principalCosines_span_singleton (𝕜 := 𝕜) hu hv
-  rw [Submodule.principalCosines_def, Submodule.cosThetaMap_def] at h
-  exact h
 
 /-! ### Reading the principal-angle sequence on a basis of the source subspace
 
@@ -696,16 +468,18 @@ theorem sinThetaMap_comp_projection (U V : Submodule 𝕜 E)
 `U`, with no zero padding removed. -/
 theorem singularValues_cosThetaMap_comp_subtype (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (cosThetaMap U V ∘ₗ U.subtype).singularValues = principalCosines U V := by
-  rw [singularValues_comp_subtype, cosThetaMap_comp_projection]
+    (cosThetaMap U V ∘ₗ U.subtype).singularValues = Submodule.principalCosines U V := by
+  rw [singularValues_comp_subtype, cosThetaMap_comp_projection,
+    Submodule.principalCosines_def, Submodule.cosThetaMap_def]
   rfl
 
 /-- The principal sines are the singular values of `P_{Vᗮ} P_U` restricted to
 `U`. -/
 theorem singularValues_sinThetaMap_comp_subtype (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (sinThetaMap U V ∘ₗ U.subtype).singularValues = principalSines U V := by
-  rw [singularValues_comp_subtype, sinThetaMap_comp_projection]
+    (sinThetaMap U V ∘ₗ U.subtype).singularValues = Submodule.principalSines U V := by
+  rw [singularValues_comp_subtype, sinThetaMap_comp_projection,
+    Submodule.principalSines_def, Submodule.sinThetaMap_def]
   rfl
 
 /-- **The squared principal cosines summed over an orthonormal basis of `U`.**
@@ -717,7 +491,7 @@ identification of that energy. -/
 theorem sum_sq_principalCosines_eq_sum_sq_norm_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (b : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 U) :
-    ∑ i : Fin (finrank 𝕜 U), principalCosines U V (i : ℕ) ^ 2 =
+    ∑ i : Fin (finrank 𝕜 U), Submodule.principalCosines U V (i : ℕ) ^ 2 =
       ∑ i, ‖projection V ((b i : U) : E)‖ ^ 2 := by
   have happ : ∀ i, (cosThetaMap U V ∘ₗ U.subtype) (b i) =
       projection V ((b i : U) : E) := by
@@ -737,7 +511,7 @@ theorem sum_sq_principalSines_eq_sum_sq_norm_complementaryProjection
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (b : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 U) :
-    ∑ i : Fin (finrank 𝕜 U), principalSines U V (i : ℕ) ^ 2 =
+    ∑ i : Fin (finrank 𝕜 U), Submodule.principalSines U V (i : ℕ) ^ 2 =
       ∑ i, ‖complementaryProjection V ((b i : U) : E)‖ ^ 2 := by
   have happ : ∀ i, (sinThetaMap U V ∘ₗ U.subtype) (b i) =
       complementaryProjection V ((b i : U) : E) := by
@@ -761,7 +535,7 @@ theorem sum_sq_principalSines_eq_sum_one_sub_sq_norm_projection
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (b : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 U) :
-    ∑ i : Fin (finrank 𝕜 U), principalSines U V (i : ℕ) ^ 2 =
+    ∑ i : Fin (finrank 𝕜 U), Submodule.principalSines U V (i : ℕ) ^ 2 =
       ∑ i, (1 - ‖projection V ((b i : U) : E)‖ ^ 2) := by
   rw [sum_sq_principalSines_eq_sum_sq_norm_complementaryProjection U V b]
   refine Finset.sum_congr rfl fun i _ => ?_

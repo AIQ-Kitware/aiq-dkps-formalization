@@ -712,13 +712,13 @@ not depend on the basis, which is what the paper's basis-free statement asserts.
 
 This is the finite-dimensional compatibility form of the arbitrary-dimensional
 identity `tsum_one_sub_sq_norm_canonicalAbsoluteValueR_eq_tsum_sq_principalSineSequence`.
-It uses `TauCeti.principalSines` and a basis indexed by `Fin (finrank ℝ U)`. -/
+It uses `Submodule.principalSines` and a basis indexed by `Fin (finrank ℝ U)`. -/
 theorem sum_one_sub_sq_norm_canonicalAbsoluteValueR_eq_sum_sq_principalSines
     [FiniteDimensional ℝ E]
     (b : OrthonormalBasis (Fin (Module.finrank ℝ U)) ℝ U) :
     ∑ i, (1 - ‖TauCeti.DavisKahan.canonicalAbsoluteValueR U V ((b i : U) : E)‖ ^ 2) =
       ∑ i : Fin (Module.finrank ℝ U),
-        TauCeti.principalSines U V (i : ℕ) ^ 2 := by
+        Submodule.principalSines U V (i : ℕ) ^ 2 := by
   rw [TauCeti.sum_sq_principalSines_eq_sum_one_sub_sq_norm_projection U V b]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [norm_canonicalAbsoluteValueR_apply_eq_norm_projection U V (b i).2]
@@ -735,13 +735,13 @@ For every orthonormal basis of `U` and every orthogonal `W` carrying `U` onto `V
 
 This is the finite-dimensional compatibility form of
 `tsum_displacementAngleSineSqR_ge_tsum_sq_principalSineSequence`, expressed with
-the existing `TauCeti.principalSines` list. -/
+the existing `Submodule.principalSines` list. -/
 theorem sum_displacementAngleSineSqR_ge_sum_sq_principalSines
     [FiniteDimensional ℝ E]
     (b : OrthonormalBasis (Fin (Module.finrank ℝ U)) ℝ U) (W : E →L[ℝ] E)
     (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W) :
-    ∑ i : Fin (Module.finrank ℝ U), TauCeti.principalSines U V (i : ℕ) ^ 2 ≤
+    ∑ i : Fin (Module.finrank ℝ U), Submodule.principalSines U V (i : ℕ) ^ 2 ≤
       ∑ i, displacementAngleSineSqR W ((b i : U) : E) := by
   rw [← sum_one_sub_sq_norm_canonicalAbsoluteValueR_eq_sum_sq_principalSines U V b]
   refine sum_displacementAngleSineSq_ge_of_mem_real U V W hWunitary hWmap

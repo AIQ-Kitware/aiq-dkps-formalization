@@ -75,7 +75,7 @@ theorem yuWangSamworth_corollary1_sinTheta_le
     (hAu : A u = (hA.eigenvalues hn j : 𝕜) • u)
     (hBv : B v = (hB.eigenvalues hn j : 𝕜) • v)
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn (j : ℕ) (j : ℕ) Δ) :
-    sinThetaFrobenius (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}) ≤
+    Submodule.sinThetaFrobenius (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}) ≤
       2 * ‖(B - A).toContinuousLinearMap‖ / Δ :=
   yuWangSamworth_eigenvector_frame_sinTheta_le hu hv hAu hBv hΔ
     fun k hk => hgap.gap_of_singleton k hk
@@ -199,7 +199,7 @@ This is the case a formulation pinning `v̂` to a chosen eigenbasis of `Σ̂` ca
 express, and it is why the sample side must be an arbitrary ordered eigenframe
 rather than `spanIndices` of a fixed basis. -/
 theorem yuWangSamworth_corollary1_scalarSample (w : E) (hw : ‖w‖ = 1) :
-    sinThetaFrobenius (Submodule.span 𝕜 {b 0}) (Submodule.span 𝕜 {w}) ≤ 1 := by
+    Submodule.sinThetaFrobenius (Submodule.span 𝕜 {b 0}) (Submodule.span 𝕜 {w}) ≤ 1 := by
   classical
   have hn : finrank 𝕜 E = 2 := by
     simpa only [Fintype.card_fin] using Module.finrank_eq_card_basis b.toBasis
@@ -308,7 +308,7 @@ theorem corollary1_sinTheta
         (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) ⟨j, hj⟩ • vHat)
     (sinThetaNorm : Real)
     (hsinThetaNorm : sinThetaNorm =
-      TauCeti.sinThetaFrobenius (Submodule.span Real {v}) (Submodule.span Real {vHat}))
+      Submodule.sinThetaFrobenius (Submodule.span Real {v}) (Submodule.span Real {vHat}))
     (Delta : Real) (hDelta : 0 < Delta)
     (hgap : SourcePopulationGap Sigma hSigma j j Delta) :
     sinThetaNorm ≤ 2 * ‖SigmaHat - Sigma‖_op / Delta := by

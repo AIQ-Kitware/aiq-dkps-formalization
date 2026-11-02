@@ -113,7 +113,7 @@ private theorem yuWangSamworth_gram_sinTheta_le
     (hop : ‖(Ĝ - G).toContinuousLinearMap‖ ≤ c * perturbOp)
     (hfrob : UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := H) (F := H) (Ĝ - G) ≤
       c * perturbFrob) :
-    sinThetaFrobenius U V ≤
+    Submodule.sinThetaFrobenius U V ≤
       2 * c * min (Real.sqrt d * perturbOp) perturbFrob / Δ := by
   obtain ⟨_n, _d, _hn, _e, hcanonical⟩ := hcorr.toCorrespondingEigenblocks
   have hbase := yuWangSamworth_sinTheta_le hG hĜ
@@ -182,7 +182,7 @@ theorem yuWangSamworth_rightSingularSubspace_opNormCoefficient_le
     (hcorr : CorrespondingRightSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : PointInternalGap (rightGram A) U Δ) :
-    sinThetaFrobenius U V ≤
+    Submodule.sinThetaFrobenius U V ≤
       2 * (2 * ‖A.toContinuousLinearMap‖ +
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
@@ -203,7 +203,7 @@ theorem yuWangSamworth_leftSingularSubspace_opNormCoefficient_le
     (hcorr : CorrespondingLeftSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : PointInternalGap (leftGram A) U Δ) :
-    sinThetaFrobenius U V ≤
+    Submodule.sinThetaFrobenius U V ≤
       2 * (2 * ‖A.toContinuousLinearMap‖ +
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
@@ -271,7 +271,7 @@ theorem yuWangSamworth_rightSingularSubspace_le
     (hcorr : CorrespondingRightSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : PointInternalGap (rightGram A) U Δ) :
-    sinThetaFrobenius U V ≤
+    Submodule.sinThetaFrobenius U V ≤
       2 * (2 * A.singularValues 0 +
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
@@ -287,7 +287,7 @@ theorem yuWangSamworth_leftSingularSubspace_le
     (hcorr : CorrespondingLeftSingularBlock A Â U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d)
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : PointInternalGap (leftGram A) U Δ) :
-    sinThetaFrobenius U V ≤
+    Submodule.sinThetaFrobenius U V ≤
       2 * (2 * A.singularValues 0 +
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
@@ -364,7 +364,7 @@ private theorem yuWangSamworth_gram_sinTheta_frame_le
     (hop : ‖(Ĝ - G).toContinuousLinearMap‖ ≤ c * perturbOp)
     (hfrob : UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := H) (F := H) (Ĝ - G) ≤ c *
       perturbFrob) :
-    sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+    Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range v)) ≤
       2 * c * min (Real.sqrt d * perturbOp) perturbFrob / Δ := by
   refine (yuWangSamworth_sinTheta_frame_le hu hv hΔ hgap).trans ?_
@@ -428,7 +428,7 @@ theorem yuWangSamworth_rightSingularSubspace_frame_le
     (hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range (⇑e) →
       Δ ≤ |(isSymmetric_rightGram A).eigenvalues hn (e i) -
             (isSymmetric_rightGram A).eigenvalues hn k|) :
-    sinThetaFrobenius (Submodule.span 𝕜 (Set.range v))
+    Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range v))
         (Submodule.span 𝕜 (Set.range vHat)) ≤
       2 * (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
@@ -450,7 +450,7 @@ theorem yuWangSamworth_leftSingularSubspace_frame_le
     (hgap : ∀ (i : Fin d) (k : Fin m), k ∉ Set.range (⇑e) →
       Δ ≤ |(isSymmetric_leftGram A).eigenvalues hm (e i) -
             (isSymmetric_leftGram A).eigenvalues hm k|) :
-    sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
+    Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range û)) ≤
       2 * (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)

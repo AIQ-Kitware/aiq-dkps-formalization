@@ -92,7 +92,7 @@ theorem range_projection (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
 lines through two orthogonal unit vectors. -/
 theorem sinThetaFrobenius_orthogonal_lines {v w : E} (hv : ‖v‖ = 1) (hw : ‖w‖ = 1)
     (horth : ⟪v, w⟫_𝕜 = 0) :
-    sinThetaFrobenius (Submodule.span 𝕜 {v}) (Submodule.span 𝕜 {w}) = 1 := by
+    Submodule.sinThetaFrobenius (Submodule.span 𝕜 {v}) (Submodule.span 𝕜 {w}) = 1 := by
   have hon : ∀ {x : E}, ‖x‖ = 1 → Orthonormal 𝕜 (fun _ : Fin 1 => x) := by
     intro x hx
     rw [orthonormal_iff_ite]
@@ -109,10 +109,10 @@ theorem sinThetaFrobenius_orthogonal_lines {v w : E} (hv : ‖v‖ = 1) (hw : �
     Submodule.mem_orthogonal_singleton_iff_inner_right.mpr horth
   have hproj : (Submodule.span 𝕜 {v})ᗮ.starProjection w = w :=
     Submodule.starProjection_eq_self_iff.mpr hmem
-  have hsq : sinThetaFrobenius (Submodule.span 𝕜 {v}) (Submodule.span 𝕜 {w}) ^ 2 = 1 := by
+  have hsq : Submodule.sinThetaFrobenius (Submodule.span 𝕜 {v}) (Submodule.span 𝕜 {w}) ^ 2 = 1 := by
     rw [hbridge, Fin.sum_univ_one, hproj, hw, one_pow]
-  have hnn : (0 : ℝ) ≤ sinThetaFrobenius (Submodule.span 𝕜 {v}) (Submodule.span 𝕜 {w}) :=
-    sinThetaFrobenius_nonneg _ _
+  have hnn : (0 : ℝ) ≤ Submodule.sinThetaFrobenius (Submodule.span 𝕜 {v}) (Submodule.span 𝕜 {w}) :=
+    Submodule.sinThetaFrobenius_nonneg _ _
   nlinarith [hsq, hnn]
 
 end Projections
@@ -144,9 +144,9 @@ theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation
       finrank ℝ (LinearMap.range Â) = 1 ∧
       rightGram A v = (1 : ℝ) • v ∧
       rightGram Â w = (1 : ℝ) • w ∧
-      sinThetaFrobenius (Submodule.span ℝ {v}) (Submodule.span ℝ {w}) = 1 ∧
+      Submodule.sinThetaFrobenius (Submodule.span ℝ {v}) (Submodule.span ℝ {w}) = 1 ∧
       ¬ ∀ Δ : ℝ, 0 < Δ →
-          sinThetaFrobenius (Submodule.span ℝ {v}) (Submodule.span ℝ {w}) ≤
+          Submodule.sinThetaFrobenius (Submodule.span ℝ {v}) (Submodule.span ℝ {w}) ≤
             2 * (2 * ‖A.toContinuousLinearMap‖ + ‖(Â - A).toContinuousLinearMap‖) *
               min (Real.sqrt 1 * ‖(Â - A).toContinuousLinearMap‖)
                 (UnitarilyInvariantSeminorm.frobenius ℝ E E (Â - A)) / Δ := by
@@ -168,7 +168,7 @@ theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation
     set D : ℝ := ‖(Â - A).toContinuousLinearMap‖ with hD
     have hK0 : 0 ≤ K := by positivity
     have hD0 : 0 ≤ D := norm_nonneg _
-    have hsin : sinThetaFrobenius (Submodule.span ℝ {v}) (Submodule.span ℝ {w}) = 1 :=
+    have hsin : Submodule.sinThetaFrobenius (Submodule.span ℝ {v}) (Submodule.span ℝ {w}) = 1 :=
       sinThetaFrobenius_orthogonal_lines hv hw horth
     intro hall
     have hΔpos : (0 : ℝ) < 2 * K * D + 1 := by positivity
@@ -201,11 +201,11 @@ theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation_euclidean :
         = (1 : ℝ) • EuclideanSpace.single (0 : Fin 2) (1 : ℝ) ∧
       rightGram Â (EuclideanSpace.single (1 : Fin 2) (1 : ℝ))
         = (1 : ℝ) • EuclideanSpace.single (1 : Fin 2) (1 : ℝ) ∧
-      sinThetaFrobenius
+      Submodule.sinThetaFrobenius
           (Submodule.span ℝ {EuclideanSpace.single (0 : Fin 2) (1 : ℝ)})
           (Submodule.span ℝ {EuclideanSpace.single (1 : Fin 2) (1 : ℝ)}) = 1 ∧
       ¬ ∀ Δ : ℝ, 0 < Δ →
-          sinThetaFrobenius
+          Submodule.sinThetaFrobenius
               (Submodule.span ℝ {EuclideanSpace.single (0 : Fin 2) (1 : ℝ)})
               (Submodule.span ℝ {EuclideanSpace.single (1 : Fin 2) (1 : ℝ)}) ≤
             2 * (2 * ‖A.toContinuousLinearMap‖ + ‖(Â - A).toContinuousLinearMap‖) *

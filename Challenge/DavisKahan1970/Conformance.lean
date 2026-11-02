@@ -239,7 +239,7 @@ theorem proposition4_4_counterexample :
       (hacute : IsAcute U V)
       (W : EuclideanSpace ℝ (Fin 4) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin 4)),
       U.map W.toLinearMap = V ∧
-      principalAngles U V 0 ≤ Real.pi / 3 ∧
+      Submodule.principalAngles U V 0 ≤ Real.pi / 3 ∧
       kyFanSum 4 (LinearMap.id - W.toLinearMap) <
         kyFanSum 4 (LinearMap.id - (directRotation U V hacute).toLinearMap) := by
   sorry

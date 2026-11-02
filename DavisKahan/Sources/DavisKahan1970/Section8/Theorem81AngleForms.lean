@@ -45,7 +45,7 @@ is left as prose.
 
 3. **Cosine-block singular values are the principal cosines.**
    `approximationNumber_cosineBlock_eq_principalCosines` and its lower
-   companion.  `TauCeti.principalCosines U V` is the repository's principal-angle
+   companion.  `Submodule.principalCosines U V` is the repository's principal-angle
    cosine sequence, defined as the singular values of the cross projection
    `P_V P_U`; the ambient `C₁` *is* that cross projection for the pair
    `(Pᗮ, Qᗮ)`, so the identification is definitional once approximation numbers
@@ -59,7 +59,7 @@ is left as prose.
 
 ## Ordering conventions, handled on both sides at once
 
-`ContinuousLinearMap.approximationNumber` and `TauCeti.principalCosines` are
+`ContinuousLinearMap.approximationNumber` and `Submodule.principalCosines` are
 both indexed **decreasingly**.  The paper prints `λ₁ ≤ λ₂ ≤ ⋯` and
 `α₁ ≤ α₂ ≤ ⋯` increasing, and (Section 1, after (1.16)) `θ₁ ≥ θ₂ ≥ ⋯`
 decreasing, so the printed `cos²θ_k` is *increasing* in `k`.  The printed
@@ -115,7 +115,7 @@ universe u
 /-! ### 0. Scalar scope
 
 Sections 1--3 are the identifications, and they hold over **any** `RCLike`
-scalar field: `TauCeti.principalCosines` is `𝕜`-generic, the block algebra
+scalar field: `Submodule.principalCosines` is `𝕜`-generic, the block algebra
 (`upperBlockShift`, `cosineBlock`, `lowerBlockShift`, `lowerCosineBlock`) is
 `𝕜`-generic in `Section8PartII.lean`'s `section Generic`, and
 `approximationNumber = singularValues` in finite dimensions is `𝕜`-generic.
@@ -220,16 +220,17 @@ omit [CompleteSpace H] in
 /-- **The upper cosine block's singular values are the principal cosines of the
 pair `(Pᗮ, Qᗮ)`.**
 
-`TauCeti.principalCosines U V` is *defined* as the singular values of the cross
+`Submodule.principalCosines U V` is *defined* as the singular values of the cross
 projection `P_V P_U`, and the ambient `C₁ = P_{Qᗮ} P_{Pᗮ}` is that cross
 projection.  With `approximationNumber = singularValues` in finite dimensions,
-the identification is definitional. -/
+the native cosine-map equations give the identification. -/
 theorem approximationNumber_cosineBlock_eq_principalCosines [FiniteDimensional 𝕜 H]
     (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (i : ℕ) :
-    (cosineBlock P Q).approximationNumber i = TauCeti.principalCosines Pᗮ Qᗮ i := by
+    (cosineBlock P Q).approximationNumber i = Submodule.principalCosines Pᗮ Qᗮ i := by
   rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
-    ContinuousLinearMap.singularValue_eq_linearMap_singularValues]
+    ContinuousLinearMap.singularValue_eq_linearMap_singularValues,
+    Submodule.principalCosines_def, Submodule.cosThetaMap_def]
   rfl
 
 omit [CompleteSpace H] in
@@ -239,9 +240,10 @@ theorem approximationNumber_lowerCosineBlock_eq_principalCosines
     [FiniteDimensional 𝕜 H]
     (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection]
     (i : ℕ) :
-    (lowerCosineBlock P Q).approximationNumber i = TauCeti.principalCosines P Q i := by
+    (lowerCosineBlock P Q).approximationNumber i = Submodule.principalCosines P Q i := by
   rw [ContinuousLinearMap.approximationNumber_eq_singularValue_toReal,
-    ContinuousLinearMap.singularValue_eq_linearMap_singularValues]
+    ContinuousLinearMap.singularValue_eq_linearMap_singularValues,
+    Submodule.principalCosines_def, Submodule.cosThetaMap_def]
   rfl
 
 omit [CompleteSpace H] in
@@ -278,7 +280,7 @@ factor `‖C₁‖₁²` is `cos²θ_min` -- the cosine of the *smallest* princi
 which is the printed reading of replacing every `cos²θ_k` by the largest one. -/
 theorem norm_cosineBlock_eq_principalCosines_zero [FiniteDimensional 𝕜 H]
     (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] :
-    ‖cosineBlock P Q‖ = TauCeti.principalCosines Pᗮ Qᗮ 0 := by
+    ‖cosineBlock P Q‖ = Submodule.principalCosines Pᗮ Qᗮ 0 := by
   rw [← approximationNumber_cosineBlock_eq_principalCosines,
     ContinuousLinearMap.approximationNumber_index_zero]
 
@@ -286,7 +288,7 @@ omit [CompleteSpace H] in
 /-- The lower companion: `‖C₀‖₁` is the largest principal cosine of `(P, Q)`. -/
 theorem norm_lowerCosineBlock_eq_principalCosines_zero [FiniteDimensional 𝕜 H]
     (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] :
-    ‖lowerCosineBlock P Q‖ = TauCeti.principalCosines P Q 0 := by
+    ‖lowerCosineBlock P Q‖ = Submodule.principalCosines P Q 0 := by
   rw [← approximationNumber_lowerCosineBlock_eq_principalCosines,
     ContinuousLinearMap.approximationNumber_index_zero]
 
@@ -323,7 +325,7 @@ theorem theorem8_1_upperApproximationRepulsion_angle [FiniteDimensional ℂ H]
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
     (upperBlockShift A P alpha).approximationNumber n ≤
-      TauCeti.principalCosines Pᗮ (canonicalLowBranch (A + K)
+      Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha)ᗮ 0 ^ 2 *
         (upperBlockShift (A + K) (canonicalLowBranch (A + K)
@@ -343,7 +345,7 @@ theorem theorem8_1_lowerApproximationRepulsion_angle [FiniteDimensional ℂ H]
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
     (lowerBlockShift A P alpha delta).approximationNumber n ≤
-      TauCeti.principalCosines P (canonicalLowBranch (A + K)
+      Submodule.principalCosines P (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha) 0 ^ 2 *
         (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
@@ -377,14 +379,14 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle [FiniteDimensional ℂ H]
         (upperBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha) alpha).approximationNumber (i : ℕ) *
-          TauCeti.principalCosines Pᗮ (canonicalLowBranch (A + K)
+          Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha)ᗮ (i : ℕ) ^ 2) := by
   have hrw : (fun i : Fin (finrank ℂ H) =>
       (upperBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha) alpha).approximationNumber (i : ℕ) *
-        TauCeti.principalCosines Pᗮ (canonicalLowBranch (A + K)
+        Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha)ᗮ (i : ℕ) ^ 2) =
       (fun i : Fin (finrank ℂ H) =>
@@ -417,14 +419,14 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle [FiniteDimensional ℂ H]
         (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha) alpha delta).approximationNumber (i : ℕ) *
-          TauCeti.principalCosines P (canonicalLowBranch (A + K)
+          Submodule.principalCosines P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha) (i : ℕ) ^ 2) := by
   have hrw : (fun i : Fin (finrank ℂ H) =>
       (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha) alpha delta).approximationNumber (i : ℕ) *
-        TauCeti.principalCosines P (canonicalLowBranch (A + K)
+        Submodule.principalCosines P (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha) (i : ℕ) ^ 2) =
       (fun i : Fin (finrank ℂ H) =>
@@ -465,7 +467,7 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev
         (upperBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha) alpha).approximationNumber (i.rev : ℕ) *
-          TauCeti.principalCosines Pᗮ (canonicalLowBranch (A + K)
+          Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha)ᗮ (i.rev : ℕ) ^ 2) := by
   have hL := Phi.perm (fun i : Fin (finrank ℂ H) =>
@@ -475,7 +477,7 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev
     (upperBlockShift (A + K) (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
           (hA.add hK)) alpha) alpha).approximationNumber (i : ℕ) *
-      TauCeti.principalCosines Pᗮ (canonicalLowBranch (A + K)
+      Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
           (hA.add hK)) alpha)ᗮ (i : ℕ) ^ 2)
     (FiniteSymmetricGauge.revPerm (finrank ℂ H))
@@ -488,14 +490,14 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev
       (upperBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha) alpha).approximationNumber (i.rev : ℕ) *
-        TauCeti.principalCosines Pᗮ (canonicalLowBranch (A + K)
+        Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha)ᗮ (i.rev : ℕ) ^ 2) =
       (fun i : Fin (finrank ℂ H) =>
         (upperBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha) alpha).approximationNumber (i : ℕ) *
-          TauCeti.principalCosines Pᗮ (canonicalLowBranch (A + K)
+          Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha)ᗮ (i : ℕ) ^ 2) ∘
         (FiniteSymmetricGauge.revPerm (finrank ℂ H)) from rfl, hL, hR]
@@ -518,7 +520,7 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev
         (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha) alpha delta).approximationNumber (i.rev : ℕ) *
-          TauCeti.principalCosines P (canonicalLowBranch (A + K)
+          Submodule.principalCosines P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha) (i.rev : ℕ) ^ 2) := by
   have hL := Phi.perm (fun i : Fin (finrank ℂ H) =>
@@ -528,7 +530,7 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev
     (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
           (hA.add hK)) alpha) alpha delta).approximationNumber (i : ℕ) *
-      TauCeti.principalCosines P (canonicalLowBranch (A + K)
+      Submodule.principalCosines P (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
           (hA.add hK)) alpha) (i : ℕ) ^ 2)
     (FiniteSymmetricGauge.revPerm (finrank ℂ H))
@@ -541,14 +543,14 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev
       (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha) alpha delta).approximationNumber (i.rev : ℕ) *
-        TauCeti.principalCosines P (canonicalLowBranch (A + K)
+        Submodule.principalCosines P (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
             (hA.add hK)) alpha) (i.rev : ℕ) ^ 2) =
       (fun i : Fin (finrank ℂ H) =>
         (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha) alpha delta).approximationNumber (i : ℕ) *
-          TauCeti.principalCosines P (canonicalLowBranch (A + K)
+          Submodule.principalCosines P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha) (i : ℕ) ^ 2) ∘
         (FiniteSymmetricGauge.revPerm (finrank ℂ H)) from rfl, hL, hR]
@@ -574,7 +576,7 @@ sections 1--3, which are `𝕜`-generic and so apply at `ℝ` unchanged.
 `[FiniteDimensional ℝ E]` appears on all six, exactly as `[FiniteDimensional ℂ H]`
 appears on all six complex ones.  On the symmetric-gauge clauses it is the
 paper's own restriction.  On the two part (ii) clauses it is genuinely stronger
-than the endpoint being rewritten, which is dimension-free: `principalCosines`
+than the endpoint being rewritten, which is dimension-free: `Submodule.principalCosines`
 is a finite-dimensional object here, so writing the printed `‖C₁‖₁` as a
 principal cosine is precisely where the dimension enters.  The dimension-free
 reading of part (ii) over `ℝ` remains available, in the norm form. -/
@@ -604,7 +606,7 @@ theorem theorem8_1_upperApproximationRepulsion_angle_real [FiniteDimensional ℝ
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
     (upperBlockShift A P alpha).approximationNumber n ≤
-      TauCeti.principalCosines Pᗮ
+      Submodule.principalCosines Pᗮ
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp)ᗮ 0 ^ 2 *
         (upperBlockShift (A + K)
@@ -627,7 +629,7 @@ theorem theorem8_1_lowerApproximationRepulsion_angle_real [FiniteDimensional ℝ
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
     (n : ℕ) :
     (lowerBlockShift A P alpha delta).approximationNumber n ≤
-      TauCeti.principalCosines P
+      Submodule.principalCosines P
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp) 0 ^ 2 *
         (lowerBlockShift (A + K)
@@ -660,14 +662,14 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_real [FiniteDimensional �
         (upperBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp) alpha).approximationNumber (i : ℕ) *
-          TauCeti.principalCosines Pᗮ
+          Submodule.principalCosines Pᗮ
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp)ᗮ (i : ℕ) ^ 2) := by
   have hrw : (fun i : Fin (Module.finrank ℝ E) =>
       (upperBlockShift (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp) alpha).approximationNumber (i : ℕ) *
-        TauCeti.principalCosines Pᗮ
+        Submodule.principalCosines Pᗮ
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp)ᗮ (i : ℕ) ^ 2) =
       (fun i : Fin (Module.finrank ℝ E) =>
@@ -701,14 +703,14 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_real [FiniteDimensional �
         (lowerBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp) alpha delta).approximationNumber (i : ℕ) *
-          TauCeti.principalCosines P
+          Submodule.principalCosines P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp) (i : ℕ) ^ 2) := by
   have hrw : (fun i : Fin (Module.finrank ℝ E) =>
       (lowerBlockShift (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp) alpha delta).approximationNumber (i : ℕ) *
-        TauCeti.principalCosines P
+        Submodule.principalCosines P
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp) (i : ℕ) ^ 2) =
       (fun i : Fin (Module.finrank ℝ E) =>
@@ -744,7 +746,7 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real
         (upperBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp) alpha).approximationNumber (i.rev : ℕ) *
-          TauCeti.principalCosines Pᗮ
+          Submodule.principalCosines Pᗮ
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp)ᗮ (i.rev : ℕ) ^ 2) := by
   have hL := Phi.perm (fun i : Fin (Module.finrank ℝ E) =>
@@ -754,7 +756,7 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real
     (upperBlockShift (A + K)
         (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
           hKPperp) alpha).approximationNumber (i : ℕ) *
-      TauCeti.principalCosines Pᗮ
+      Submodule.principalCosines Pᗮ
         (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
           hKPperp)ᗮ (i : ℕ) ^ 2)
     (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E))
@@ -767,14 +769,14 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real
       (upperBlockShift (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp) alpha).approximationNumber (i.rev : ℕ) *
-        TauCeti.principalCosines Pᗮ
+        Submodule.principalCosines Pᗮ
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp)ᗮ (i.rev : ℕ) ^ 2) =
       (fun i : Fin (Module.finrank ℝ E) =>
         (upperBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp) alpha).approximationNumber (i : ℕ) *
-          TauCeti.principalCosines Pᗮ
+          Submodule.principalCosines Pᗮ
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp)ᗮ (i : ℕ) ^ 2) ∘
         (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E)) from rfl, hL, hR]
@@ -799,7 +801,7 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real
         (lowerBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp) alpha delta).approximationNumber (i.rev : ℕ) *
-          TauCeti.principalCosines P
+          Submodule.principalCosines P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp) (i.rev : ℕ) ^ 2) := by
   have hL := Phi.perm (fun i : Fin (Module.finrank ℝ E) =>
@@ -809,7 +811,7 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real
     (lowerBlockShift (A + K)
         (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
           hKPperp) alpha delta).approximationNumber (i : ℕ) *
-      TauCeti.principalCosines P
+      Submodule.principalCosines P
         (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
           hKPperp) (i : ℕ) ^ 2)
     (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E))
@@ -822,14 +824,14 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real
       (lowerBlockShift (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp) alpha delta).approximationNumber (i.rev : ℕ) *
-        TauCeti.principalCosines P
+        Submodule.principalCosines P
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
             hKPperp) (i.rev : ℕ) ^ 2) =
       (fun i : Fin (Module.finrank ℝ E) =>
         (lowerBlockShift (A + K)
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp) alpha delta).approximationNumber (i : ℕ) *
-          TauCeti.principalCosines P
+          Submodule.principalCosines P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp) (i : ℕ) ^ 2) ∘
         (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E)) from rfl, hL, hR]

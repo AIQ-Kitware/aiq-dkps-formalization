@@ -86,16 +86,9 @@ theorem two_rpow_mul_sum_sin_le_selfAdjoint_transport_complex
   have hPQ : Module.finrank ℂ P = Module.finrank ℂ Q := by
     rw [← hmap]
     exact (W.toLinearEquiv.finrank_map_eq P).symm
-  have hsines : TauCeti.principalSines P Q = P.principalSines Q := by
-    rw [TauCeti.principalSines, Submodule.principalSines_def]
-    congr 1
-    rw [Submodule.sinThetaMap_def]
-    rfl
   have htrace := ComplexTraceOptimality.kyFanSum_projectionDifference_eq_two_sum_sin_principalAngles
     P Q hPQ
   rw [fullKyFanSum_eq_nuclear] at htrace
-  simp_rw [ComplexTraceOptimality.sin_principalAngles_eq_principalSines, hsines,
-    ← Submodule.sin_principalAngles] at htrace
   have hbound := projectionDifference_uiNorm_le_displacement
     (UnitarilyInvariantSeminorm.nuclear ℂ E E) P Q W hmap
   have hcost : UnitarilyInvariantSeminorm.schatten ℂ E E p

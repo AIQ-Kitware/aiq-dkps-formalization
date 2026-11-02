@@ -372,7 +372,7 @@ theorem opNorm_middleSharpness_perturbation (hε : 0 < ε) (hd : 1 ≤ d)
 so every principal angle is a right angle. -/
 theorem sinThetaFrobenius_middleSharpness (hε : 0 < ε) (hε1 : ε < 3)
     (hdp : 2 * d ≤ p) :
-    sinThetaFrobenius (eigenspace (middleSharpnessPopulation b d) ((3 : ℝ) : 𝕜))
+    Submodule.sinThetaFrobenius (eigenspace (middleSharpnessPopulation b d) ((3 : ℝ) : 𝕜))
         (eigenspace (middleSharpnessSample b d ε) ((2 + ε : ℝ) : 𝕜)) =
       Real.sqrt d := by
   classical

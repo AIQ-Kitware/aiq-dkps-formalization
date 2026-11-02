@@ -2725,3 +2725,88 @@ native cross-block Frobenius proofs have separate provenance from #15340.
 Validation: focused coordinate/angle, Yu–Wang–Samworth, finite double-angle,
 Acharyya2025 and unbounded double-angle consumer builds passed. The full default
 `lake build` and `lake build Challenge` passed without compiler or linter warnings.
+
+## 2026-11-01: canonical submodule sequences and directed Frobenius sine
+
+Retired the `TauCeti.principalCosines`, `principalSines`, `principalAngles`
+and `AvoidsQuarterTurn` definitions in `AngleGeometry.lean`. Their defining
+correspondences with the accepted `Submodule` APIs were compiled before
+removal. All maintained papers and comparator statements now use those native
+objects. Their symmetry/self proofs, the unused span/singleton forwarders and
+local/native identity adapters are gone. The separate
+`AvoidsQuarterTurnEmbedding` alias and its two proof-only exercises have no
+maintained consumers; they retire with the old ambient predicate. The actual
+trial-coordinate tangent and its Ritz-residual mathematics remain intact.
+
+The accepted equal-rank `Submodule.principalSines_comm` also displaces the
+entire complementary-Gram/polar-conjugation sine-spectrum engine in
+`PrincipalAngles.lean`, including its coordinate and padding helpers. The
+local `singularValues_operatorAbs` proof is replaced by the native linear-map
+lemma. The projector-difference norm proof and its equal-length basis-selection
+helper are replaced directly at paper callers by
+`Submodule.projectionGap_eq_directedProjectionGap_of_finrank_eq`; the native
+identity needs only finite-dimensional subspaces, without finite-dimensional
+ambient space. The source largest-angle statement in `SharpDisplacement`
+retains its original positive-dimension hypothesis and now uses native
+`principalAngles_apply` and `principalSines_zero`.
+
+Deleted the complete `SinTheta/Frobenius.lean` donor: definition,
+characteristic equality and nonnegativity. All callers use
+`Submodule.sinThetaFrobenius`; the old linear sine map agrees with the native
+bounded map after its defining equation. The YWS complement identity and
+arbitrary-spanning-family Frobenius bridge retain their paper statements with
+direct native proofs. Their private ambient-basis extension construction is
+retired. The rank-one Frobenius consequence uses the native spanning-family
+projection formula. No forwarding donor module remains.
+
+Accepted integrations, verified in pin `463ab293070d`:
+
+- [#14677](https://github.com/TauCetiProject/TauCeti/pull/14677),
+  `7fd5323416c03413b1fbc4c956b7bd7552b4d82c`: native principal sequences and
+  equal-rank sine symmetry. The integration expressly says no prior
+  formalization was followed. Its Gram-eigenspace multiplicity argument differs
+  from the donor polar-unitary proof: independent replacement.
+- [#16645](https://github.com/TauCetiProject/TauCeti/pull/16645),
+  `3b449bc8628f565cf81e0129f4bd235e041d9f08`: quarter-turn avoidance and
+  largest-sine/gap identities. Direct API consumption; no donor adaptation is
+  inferred from overlapping statements.
+- [#15983](https://github.com/TauCetiProject/TauCeti/pull/15983),
+  `0b158be1c6578d63da36f4a1e8c585b3556e63e8`: the stronger equal-rank gap
+  identity. Its direct finite-rank projection geometry replaces the local
+  finite-ambient basis/singular-value symmetry route; no port lineage is claimed.
+- [#16105](https://github.com/TauCetiProject/TauCeti/pull/16105),
+  `c3db4e6a16cd44b70f6d21cd48ed50171f8ac588`:
+  `LinearMap.singularValues_operatorAbs`. The accepted norm-invariance proof
+  replaces the local Gram-equality proof; no direct adaptation claim is made.
+- [#18985](https://github.com/TauCetiProject/TauCeti/pull/18985),
+  `8f3309548f652e2dcad9f36c5642a1e5f4b0d2a0`: **explicitly adapted** DKPS
+  Frobenius sine definition and basic API. This is direct proof/API lineage,
+  distinct from independent #14677.
+- [#20342](https://github.com/TauCetiProject/TauCeti/pull/20342),
+  `93100a5ab2aab79794c6da85a98e8747aaa29591`: **explicitly adapted** DKPS
+  cross-block and arbitrary-spanning-family Frobenius bridges. These general
+  bridge lemmas replace the YWS proof support. Its population-gap theorem is
+  only canonical-eigenbasis scope, so the stronger maintained arbitrary-ordered-
+  eigenframe YWS theorem is not retired or weakened.
+
+Historical donor sources are recoverable at `e4637c3919ae` under
+`AngleGeometry.lean`, `PrincipalAngles.lean`, `Residual/AngleEmbedding.lean`,
+`SinTheta/Frobenius.lean` and `YuWangSamworth2015/Core/Statistics.lean` in their
+respective current source directories. `AngleGeometry`, `AngleEmbedding` and
+YWS statistics credit Jon Crall / GPT 5.6 High; `PrincipalAngles` credits Jon
+Crall / Claude Opus 4.8; Frobenius sine credits Jon Crall / GPT 5.6 Sol. The
+latter and the YWS bridge were separated by
+`6c7741125d3b025e7ac1ef2c13bf992711a9e1be`. All preserve Kitware copyright
+and Apache-2.0. The redundant paper helper
+`ComplexTraceOptimality.sin_principalAngles_eq_principalSines` is also retired
+for `Submodule.sin_principalAngles`; its original Jon Crall / GPT-6 source is at
+`da5b9cd731c91a893c8c04b5e1dad49ed0bb509f` under
+`DavisKahan/FiniteDimensional/DirectRotation/ComplexTracePrincipalAngles.lean`.
+
+Linear projection/angle-operator presentations and local acuteness remain for
+the next representation slice; they are not classified as mathematically
+unmatched merely because these consumers still use their old carrier.
+
+Validation: focused native-sequence, Frobenius, YWS, counterexample, Ritz,
+trace and Section 8 builds passed. The full default `lake build` and
+`lake build Challenge` passed without compiler or linter warnings.

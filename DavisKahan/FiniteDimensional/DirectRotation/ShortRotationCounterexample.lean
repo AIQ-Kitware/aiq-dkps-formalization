@@ -764,21 +764,22 @@ private theorem antitone_half_half_zero_zero :
   fin_cases i <;> fin_cases j <;> simp_all
 
 /-- The largest principal sine is `√½`. -/
-theorem principalSines_zero : principalSines U4 V4 0 = Real.sqrt 2⁻¹ := by
+theorem principalSines_zero : Submodule.principalSines U4 V4 0 = Real.sqrt 2⁻¹ := by
   have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
     (sinThetaMap U4 V4).isSymmetric_adjoint_comp_self hfr
     (EuclideanSpace.basisFun (Fin 4) ℝ)
     (μ := ![2⁻¹, 2⁻¹, 0, 0]) antitone_half_half_zero_zero
     (fun i => gram_sinThetaMap_apply i)
-  rw [principalSines]
+  rw [Submodule.principalSines_def, Submodule.sinThetaMap_def]
+  change (sinThetaMap U4 V4).singularValues 0 = _
   rw [(sinThetaMap U4 V4).singularValues_of_lt hfr (by norm_num : 0 < 4),
     congrFun heig ⟨0, by norm_num⟩]
   norm_num
 
 /-- Both principal angles are `π/4 ≤ π/3`. -/
-theorem principalAngle_le : principalAngles U4 V4 0 ≤ Real.pi / 3 := by
-  rw [principalAngles, Finsupp.mapRange_apply, principalSines_zero]
+theorem principalAngle_le : Submodule.principalAngles U4 V4 0 ≤ Real.pi / 3 := by
+  rw [Submodule.principalAngles_def, Finsupp.mapRange_apply, principalSines_zero]
   have hval : Real.sqrt 2⁻¹ = Real.sin (Real.pi / 4) := by
     rw [Real.sin_pi_div_four, sqrt_half_eq]
   rw [hval, Real.arcsin_sin (by linarith [Real.pi_pos]) (by linarith [Real.pi_pos])]
@@ -821,7 +822,7 @@ theorem shortRotation_fullDisplacement_refuted :
       (hacute : IsAcute U V)
       (W : EuclideanSpace ℝ (Fin 4) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin 4)),
       U.map W.toLinearMap = V ∧
-      principalAngles U V 0 ≤ Real.pi / 3 ∧
+      Submodule.principalAngles U V 0 ≤ Real.pi / 3 ∧
       kyFanSum 4 (LinearMap.id - W.toLinearMap) <
         kyFanSum 4 (LinearMap.id - (directRotation U V hacute).toLinearMap) :=
   ⟨U4, V4, acute, Wequiv, rfl, principalAngle_le, kyFanSum_lt⟩
@@ -851,7 +852,7 @@ def DavisKahanProposition4_4_Finite : Prop :=
     (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V)
-    (_hshort : principalAngles U V 0 ≤ Real.pi / 3)
+    (_hshort : Submodule.principalAngles U V 0 ≤ Real.pi / 3)
     (W : E ≃ₗᵢ[ℝ] E)
     (_hmap : U.map W.toLinearMap = V)
     (N : UnitarilyInvariantSeminorm ℝ E E),

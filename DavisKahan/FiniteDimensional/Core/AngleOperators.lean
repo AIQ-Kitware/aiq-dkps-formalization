@@ -123,18 +123,20 @@ Signature audit: The equal-rank hypothesis fixes the defect multiplicities.  Wit
 finitely-supported convention, additional zero angles disappear automatically, while the
 nonzero and `π/2` multiplicities agree under orthogonal complementation.
 
-Open obligation.  With the directed-sine `principalAngles`, this reduces to
+Open obligation.  With the directed-sine `Submodule.principalAngles`, this reduces to
 `singularValues (P_{Vᗮ} P_U) = singularValues (P_V P_{Uᗮ})` at equal rank, i.e.
 the two-projection statement that complementation preserves the sine spectrum.
 That decomposition lemma is not yet available in the flat layer; left incomplete
-pending it (or a redesign of `principalAngles` through the symmetric cosine
-spectrum, cf. `principalAngles_comm`). -/
+pending it (or a redesign of `Submodule.principalAngles` through the symmetric cosine
+spectrum, cf. `Submodule.principalAngles_comm`). -/
 theorem principalAngles_orthogonal (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hrank : finrank 𝕜 U = finrank 𝕜 V) :
-    principalAngles Uᗮ Vᗮ = principalAngles U V := by
-  rw [principalAngles, principalAngles]
+    Submodule.principalAngles Uᗮ Vᗮ = Submodule.principalAngles U V := by
+  rw [Submodule.principalAngles_def, Submodule.principalAngles_def]
   congr 1
+  rw [Submodule.principalSines_def, Submodule.principalSines_def,
+    Submodule.sinThetaMap_def, Submodule.sinThetaMap_def]
   change
     (complementaryProjection (Vᗮ) ∘ₗ projection (Uᗮ)).singularValues =
       (complementaryProjection V ∘ₗ projection U).singularValues
@@ -147,7 +149,10 @@ theorem principalAngles_orthogonal (U V : Submodule 𝕜 E)
     rw [sinThetaMap, complementaryProjection, LinearMap.adjoint_comp,
       projection_adjoint, projection_adjoint]
   rw [hadj, LinearMap.singularValues_adjoint]
-  exact (principalSines_comm U V hrank).symm
+  have h := (Submodule.principalSines_comm U V hrank).symm
+  rw [Submodule.principalSines_def, Submodule.principalSines_def,
+    Submodule.sinThetaMap_def, Submodule.sinThetaMap_def] at h
+  exact h
 
 end DavisKahan.FiniteDimensional
 end TauCeti
