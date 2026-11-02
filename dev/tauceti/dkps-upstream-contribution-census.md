@@ -2966,3 +2966,55 @@ Validation: focused block, modulus/projector compatibility, source trace,
 extremizer and doubled-Sylvester builds passed. Full default `lake build`
 (21,535 jobs) and `lake build Challenge` (19,783 jobs) passed without compiler
 or linter warnings. The obsolete local linter suppression was removed.
+
+## 2026-11-02: native directed cross-projection maps
+
+Retired `TauCeti.cosThetaMap`, `sinThetaMap` and `sinTwoAngleOperator` in
+favor of `Submodule.cosThetaMap`, `Submodule.sinThetaMap` and
+`Submodule.sinTwoAngleOperator`. Exact equalities of the old linear maps
+with the native continuous maps' linear carriers were compiled before
+removal over arbitrary RCLike inner-product spaces, without finite dimension
+or completeness. The duplicate self-zero and defining double-angle
+characterizations retire as well. Maintained finite matrix, singular-value
+and UI-norm arguments use explicit `.toLinearMap`; norm and application
+arguments use the native continuous maps directly. No global forwarding
+map or adapter is introduced.
+
+The accepted owners are [#14677](https://github.com/TauCetiProject/TauCeti/pull/14677),
+`7fd5323416c03413b1fbc4c956b7bd7552b4d82c`, and
+[#16645](https://github.com/TauCetiProject/TauCeti/pull/16645),
+`3b449bc8628f565cf81e0129f4bd235e041d9f08`, in pin `463ab293070d`.
+This is direct API consumption, with no inferred DKPS proof adaptation;
+#14677 expressly reports no prior formalization followed.
+
+The one-sided native double-angle map is `2 P_{Uᗮ} P_V P_U`.
+The paper's separate ambient CFC `sin(2 Θ)` operator remains: this migration
+does not identify those different operators. The trial-coordinate tangent
+`S |C|⁺` and its Ritz-residual identities retain their scope. The ambient
+projector Gram identity in `DoubleAngle/Gram.lean` remains on the native map;
+the accepted rectangular isometry-block Gram identity does not directly
+state that arbitrary-projector formula.
+
+The duplicate operator-norm interval/Sylvester proof in
+`SinTheta/Perturbation.lean` retires for the existing full UI-norm bound
+specialized to native `UnitarilyInvariantSeminorm.opNorm`.
+`RankOneSinTheta.lean` uses Mathlib's
+`norm_sq_eq_add_norm_sq_starProjection` directly for the unit-vector
+complement identity (pinned Mathlib `2cabef97b63d`,
+`Analysis/InnerProductSpace/Projection/Basic.lean`). Its line operator-norm
+formula now uses the native continuous map and omits the unused finite
+ambient dimension assumption. Paper-facing theorem hypotheses are preserved.
+
+Original directed-map donor:
+`e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/AngleGeometry.lean`,
+previous paper home `DavisKahan/FiniteDimensional/Core/AngleGeometry.lean`,
+Jon Crall / GPT 5.6 High, Kitware copyright, Apache-2.0. Original names and
+source anchors stay in the manifest. The finite positive angle-operator
+presentations remain for the next canonical-modulus slice, together with
+additional projector/basis results; they are not classified as unmatched
+merely because their callers still use linear maps.
+
+Validation: native-map correspondence, directed Gram, rank-one, Ritz,
+principal-plane, counterexample, planar sharpness, trace and YWS focused
+builds passed. Full default `lake build` (21,535 jobs) and
+`lake build Challenge` (19,783 jobs) passed without compiler or linter warnings.

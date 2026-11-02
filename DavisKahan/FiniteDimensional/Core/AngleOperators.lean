@@ -63,7 +63,7 @@ current total signature is provisional; bounded inversion must ultimately
 require `Disjoint U Vᗮ`. -/
 noncomputable def tanThetaMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  sinThetaMap U V ∘ₗ LinearMap.moorePenroseInverse (cosThetaMap U V)
+  (U.sinThetaMap V).toLinearMap ∘ₗ LinearMap.moorePenroseInverse ((U.cosThetaMap V).toLinearMap)
 
 /-- The full-space canonical angle operator `Θ(U,V)` of Davis--Kahan.
 Its nonzero eigenvalues are the principal angles, with the multiplicities
@@ -145,14 +145,23 @@ theorem principalAngles_orthogonal (U V : Submodule 𝕜 E)
   simp only [complementaryProjection, Submodule.orthogonal_orthogonal]
   -- the complemented cross block is the adjoint of the cross block with the two
   -- subspaces exchanged, and adjoints have the same singular values
-  have hadj : projection V ∘ₗ projection Uᗮ = (sinThetaMap V U).adjoint := by
-    rw [sinThetaMap, complementaryProjection, LinearMap.adjoint_comp,
+  have hadj : projection V ∘ₗ projection Uᗮ =
+      ((V.sinThetaMap U).toLinearMap).adjoint := by
+    rw [Submodule.sinThetaMap_def]
+    change projection V ∘ₗ projection Uᗮ =
+      (complementaryProjection U ∘ₗ projection V).adjoint
+    rw [complementaryProjection, LinearMap.adjoint_comp,
       projection_adjoint, projection_adjoint]
-  rw [hadj, LinearMap.singularValues_adjoint]
   have h := (Submodule.principalSines_comm U V hrank).symm
-  rw [Submodule.principalSines_def, Submodule.principalSines_def,
-    Submodule.sinThetaMap_def, Submodule.sinThetaMap_def] at h
-  exact h
+  simp only [Submodule.principalSines_def] at h
+  calc
+    (projection V ∘ₗ projection Uᗮ).singularValues =
+        ((V.sinThetaMap U).toLinearMap).singularValues := by
+      rw [hadj, LinearMap.singularValues_adjoint]
+    _ = ((U.sinThetaMap V).toLinearMap).singularValues := h
+    _ = (projection Vᗮ ∘ₗ projection U).singularValues := by
+      rw [Submodule.sinThetaMap_def]
+      rfl
 
 end DavisKahan.FiniteDimensional
 end TauCeti

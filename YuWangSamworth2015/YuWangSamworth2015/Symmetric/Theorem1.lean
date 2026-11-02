@@ -38,7 +38,7 @@ theorem yuWangSamworth_theorem1_uiNorm_le
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
-    N (sinThetaMap U V) ≤ N (B - A) / δ := by
+    N ((U.sinThetaMap V).toLinearMap) ≤ N (B - A) / δ := by
   rw [le_div_iff₀ hδ]
   simpa only [mul_comm] using
     sinTheta_perturbation_le N hA hB hU hV hδ hgap
@@ -55,7 +55,7 @@ theorem yuWangSamworth_theorem1_frobenius_le
     (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
     Submodule.sinThetaFrobenius U V ≤
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) / δ := by
-  rw [Submodule.sinThetaFrobenius_def, Submodule.sinThetaMap_def]
+  rw [Submodule.sinThetaFrobenius_def]
   exact yuWangSamworth_theorem1_uiNorm_le
       (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E))
       hA hB hU hV hδ hgap
@@ -67,7 +67,7 @@ theorem yuWangSamworth_theorem1_opNorm_le
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
-    ‖(sinThetaMap U V).toContinuousLinearMap‖ ≤
+    ‖(U.sinThetaMap V)‖ ≤
       ‖(B - A).toContinuousLinearMap‖ / δ := by
   rw [le_div_iff₀ hδ]
   simpa only [mul_comm] using
@@ -116,8 +116,7 @@ theorem yuWangSamworth_equation1_opNorm_le
     (hSigv : Sig v = ((lam : ℝ) : 𝕜) • v)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : ∀ k : Fin p, k ≠ j → δ ≤ |lamhat k - lam|) :
-    ‖(sinThetaMap (Submodule.span 𝕜 {v})
-        (Submodule.span 𝕜 {bhat j})).toContinuousLinearMap‖
+    ‖((Submodule.span 𝕜 {v}).sinThetaMap (Submodule.span 𝕜 {bhat j}))‖
       ≤ ‖(Sighat - Sig).toContinuousLinearMap‖ / δ := by
   classical
   set U : Submodule 𝕜 E := Submodule.span 𝕜 {v} with hU

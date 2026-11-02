@@ -738,16 +738,20 @@ theorem davisKahanEquation4_3_refuted :
 /-- The Gram operator of the directed sine map acts diagonally on the standard
 basis with values `(½, ½, 0, 0)`. -/
 theorem gram_sinThetaMap_apply (i : Fin 4) :
-    ((sinThetaMap U4 V4).adjoint ∘ₗ sinThetaMap U4 V4)
+    (((U4.sinThetaMap V4).toLinearMap).adjoint ∘ₗ (U4.sinThetaMap V4).toLinearMap)
         (EuclideanSpace.basisFun (Fin 4) ℝ i) =
       ((![2⁻¹, 2⁻¹, 0, 0] : Fin 4 → ℝ) i) •
         EuclideanSpace.basisFun (Fin 4) ℝ i := by
-  have hAadj : (sinThetaMap U4 V4).adjoint =
+  have hmap : (U4.sinThetaMap V4).toLinearMap =
+      complementaryProjection V4 ∘ₗ projection U4 := by
+    rw [Submodule.sinThetaMap_def]
+    rfl
+  have hAadj : ((U4.sinThetaMap V4).toLinearMap).adjoint =
       projection U4 ∘ₗ complementaryProjection V4 := by
-    rw [sinThetaMap, LinearMap.adjoint_comp, projection_adjoint]
+    rw [hmap, LinearMap.adjoint_comp, projection_adjoint]
     congr 1
     simp [complementaryProjection]
-  rw [hAadj, sinThetaMap]
+  rw [hAadj, hmap]
   have hcV : ∀ y : E4, complementaryProjection V4 y = y - projection V4 y :=
     fun y => Submodule.starProjection_orthogonal_val y
   apply PiLp.ext
@@ -766,13 +770,13 @@ private theorem antitone_half_half_zero_zero :
 theorem principalSines_zero : Submodule.principalSines U4 V4 0 = Real.sqrt 2⁻¹ := by
   have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
-    (sinThetaMap U4 V4).isSymmetric_adjoint_comp_self hfr
+    ((U4.sinThetaMap V4).toLinearMap).isSymmetric_adjoint_comp_self hfr
     (EuclideanSpace.basisFun (Fin 4) ℝ)
     (μ := ![2⁻¹, 2⁻¹, 0, 0]) antitone_half_half_zero_zero
     (fun i => gram_sinThetaMap_apply i)
-  rw [Submodule.principalSines_def, Submodule.sinThetaMap_def]
-  change (sinThetaMap U4 V4).singularValues 0 = _
-  rw [(sinThetaMap U4 V4).singularValues_of_lt hfr (by norm_num : 0 < 4),
+  rw [Submodule.principalSines_def]
+  change ((U4.sinThetaMap V4).toLinearMap).singularValues 0 = _
+  rw [((U4.sinThetaMap V4).toLinearMap).singularValues_of_lt hfr (by norm_num : 0 < 4),
     congrFun heig ⟨0, by norm_num⟩]
   norm_num
 

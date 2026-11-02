@@ -128,14 +128,17 @@ private theorem domainTransport_sinThetaEmbedding_apply
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
     (N.domainIsometryTransport U.subtypeₗᵢ)
-        (sinThetaEmbedding V U.subtypeₗᵢ) = N (sinThetaMap U V) := by
+        (sinThetaEmbedding V U.subtypeₗᵢ) = N ((U.sinThetaMap V).toLinearMap) := by
   -- states the goal with the local definitions unfolded, in the exact shape the
   -- following rewrite needs. `simp only` on those definitions normalises further
   -- and the rewrite then has nothing to match -- tried, and it fails here.
   change N ((sinThetaEmbedding V U.subtypeₗᵢ) ∘ₗ
-      LinearMap.adjoint U.subtypeₗᵢ.toLinearMap) = N (sinThetaMap U V)
+      LinearMap.adjoint U.subtypeₗᵢ.toLinearMap) = N ((U.sinThetaMap V).toLinearMap)
   rw [adjoint_subtype_eq_orthogonalProjectionOnto]
   congr 1
+  rw [Submodule.sinThetaMap_def]
+  ext x
+  rfl
 
 /-- The transported residual of the reducing inclusion is bounded by the
 ambient perturbation norm. -/
@@ -184,7 +187,7 @@ theorem sinTheta_perturbation_le
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
-    δ * N (sinThetaMap U V) ≤ N (B - A) := by
+    δ * N ((U.sinThetaMap V).toLinearMap) ≤ N (B - A) := by
   let NU : UnitarilyInvariantSeminorm 𝕜 U E :=
     N.domainIsometryTransport U.subtypeₗᵢ
   have hM : (A.restrict hU).IsSymmetric := hA.restrict_invariant hU
@@ -196,13 +199,13 @@ theorem sinTheta_perturbation_le
     sinTheta_residual_le (A := B) (U := V) (M := A.restrict hU)
       NU hB hV U.subtypeₗᵢ hM hδ hMspec hgap.2
   have hsin :
-      NU (sinThetaEmbedding V U.subtypeₗᵢ) = N (sinThetaMap U V) :=
+      NU (sinThetaEmbedding V U.subtypeₗᵢ) = N ((U.sinThetaMap V).toLinearMap) :=
     domainTransport_sinThetaEmbedding_apply N U V
   have hresBound :
       NU (residual B U.subtypeₗᵢ (A.restrict hU)) ≤ N (B - A) :=
     domainTransport_residual_le (B := B) N hU
   calc
-    δ * N (sinThetaMap U V) =
+    δ * N ((U.sinThetaMap V).toLinearMap) =
         δ * NU (sinThetaEmbedding V U.subtypeₗᵢ) := by rw [hsin]
     _ ≤ NU (residual B U.subtypeₗᵢ (A.restrict hU)) := hres
     _ ≤ N (B - A) := hresBound
@@ -216,7 +219,7 @@ theorem sinTheta_perturbation_le_of_orderedGap
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : OrderedGap A U B Vᗮ δ) :
-    δ * N (sinThetaMap U V) ≤ N (B - A) := by
+    δ * N ((U.sinThetaMap V).toLinearMap) ≤ N (B - A) := by
   let NU : UnitarilyInvariantSeminorm 𝕜 U E :=
     N.domainIsometryTransport U.subtypeₗᵢ
   have hM : (A.restrict hU).IsSymmetric := hA.restrict_invariant hU
@@ -233,13 +236,13 @@ theorem sinTheta_perturbation_le_of_orderedGap
       (A := B) (U := V) (M := A.restrict hU) NU hB hV
       U.subtypeₗᵢ hM hδ hgap'
   have hsin :
-      NU (sinThetaEmbedding V U.subtypeₗᵢ) = N (sinThetaMap U V) :=
+      NU (sinThetaEmbedding V U.subtypeₗᵢ) = N ((U.sinThetaMap V).toLinearMap) :=
     domainTransport_sinThetaEmbedding_apply N U V
   have hresBound :
       NU (residual B U.subtypeₗᵢ (A.restrict hU)) ≤ N (B - A) :=
     domainTransport_residual_le (B := B) N hU
   calc
-    δ * N (sinThetaMap U V) =
+    δ * N ((U.sinThetaMap V).toLinearMap) =
         δ * NU (sinThetaEmbedding V U.subtypeₗᵢ) := by rw [hsin]
     _ ≤ NU (residual B U.subtypeₗᵢ (A.restrict hU)) := hres
     _ ≤ N (B - A) := hresBound
@@ -255,84 +258,15 @@ theorem opNorm_sinThetaMap_le_of_intervalGap
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
-    δ * ‖(sinThetaMap U V).toContinuousLinearMap‖ ≤
+    δ * ‖(U.sinThetaMap V)‖ ≤
       ‖(B - A).toContinuousLinearMap‖ := by
-  have hVperp : IsInvariant B Vᗮ := isInvariant_orthogonal_of_isSymmetric hB hV
-  let AU : U →ₗ[𝕜] U := A.restrict hU
-  let BVperp : Vᗮ →ₗ[𝕜] Vᗮ := B.restrict hVperp
-  let X : U →ₗ[𝕜] Vᗮ :=
-    Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ U.subtype
-  let C : U →ₗ[𝕜] Vᗮ :=
-    Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ ((B - A) ∘ₗ U.subtype)
-  have hAU : AU.IsSymmetric := hA.restrict_invariant hU
-  have hBVperp : BVperp.IsSymmetric := hB.restrict_invariant hVperp
-  have hgap' : IntervalSylvesterGap BVperp AU a b δ := by
-    constructor
-    · exact (pointSpectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgap.1
-    · exact (pointSpectrumIn_restrict_iff B hVperp
-        {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}).2 hgap.2
-  have hEq : BVperp ∘ₗ X - X ∘ₗ AU = C := by
+  have hnative : (U.sinThetaMap V).toLinearMap.toContinuousLinearMap =
+      U.sinThetaMap V := by
     ext x
-    have hcomm := projection_apply_comm_of_isInvariant hB hVperp (x : E)
-    -- states the goal with the local definitions unfolded, in the exact shape the
-    -- following rewrite needs. `simp only` on those definitions normalises further
-    -- and the rewrite then has nothing to match -- tried, and it fails here.
-    change Vᗮ.starProjection (B (x : E)) =
-      B (Vᗮ.starProjection (x : E)) at hcomm
-    -- states the goal with the local definitions unfolded, in the exact shape the
-    -- following rewrite needs. `simp only` on those definitions normalises further
-    -- and the rewrite then has nothing to match -- tried, and it fails here.
-    change B (Vᗮ.starProjection (x : E)) -
-        Vᗮ.starProjection (A (x : E)) =
-      Vᗮ.starProjection ((B - A) (x : E))
-    rw [← hcomm]
-    simp only [LinearMap.sub_apply, map_sub]
-  have hXnorm : ‖X.toContinuousLinearMap‖ =
-      ‖(sinThetaMap U V).toContinuousLinearMap‖ := by
-    apply le_antisymm
-    · refine X.toContinuousLinearMap.opNorm_le_bound
-        (norm_nonneg (sinThetaMap U V).toContinuousLinearMap) fun x => ?_
-      have hxU : U.starProjection (x : E) = (x : E) :=
-        U.starProjection_eq_self_iff.mpr x.2
-      have hfull := (sinThetaMap U V).toContinuousLinearMap.le_opNorm (x : E)
-      -- states the norm goal against the local definition so the operator-norm bound
-      -- applies directly; `simp only` would unfold the composition further than the
-      -- bound lemma expects.
-      change ‖Vᗮ.starProjection (U.starProjection (x : E))‖ ≤
-        ‖(sinThetaMap U V).toContinuousLinearMap‖ * ‖x‖ at hfull
-      rw [hxU] at hfull
-      exact hfull
-    · refine (sinThetaMap U V).toContinuousLinearMap.opNorm_le_bound
-        (norm_nonneg X.toContinuousLinearMap) fun x => ?_
-      let ux : U := ⟨U.starProjection x, U.starProjection_apply_mem x⟩
-      have hXu := X.toContinuousLinearMap.le_opNorm ux
-      -- states the norm goal against the local definition so the operator-norm bound
-      -- applies directly; `simp only` would unfold the composition further than the
-      -- bound lemma expects.
-      change ‖Vᗮ.starProjection (U.starProjection x)‖ ≤
-        ‖X.toContinuousLinearMap‖ * ‖U.starProjection x‖ at hXu
-      -- states the norm goal against the local definition so the operator-norm bound
-      -- applies directly; `simp only` would unfold the composition further than the
-      -- bound lemma expects.
-      change ‖Vᗮ.starProjection (U.starProjection x)‖ ≤
-        ‖X.toContinuousLinearMap‖ * ‖x‖
-      exact hXu.trans (mul_le_mul_of_nonneg_left
-        (U.norm_starProjection_apply_le x) (norm_nonneg X.toContinuousLinearMap))
-  have hCnorm : ‖C.toContinuousLinearMap‖ ≤
-      ‖(B - A).toContinuousLinearMap‖ := by
-    refine C.toContinuousLinearMap.opNorm_le_bound
-      (norm_nonneg (B - A).toContinuousLinearMap) fun x => ?_
-    -- states the norm goal against the local definition so the operator-norm bound
-    -- applies directly; `simp only` would unfold the composition further than the
-    -- bound lemma expects.
-    change ‖Vᗮ.starProjection ((B - A) (x : E))‖ ≤
-      ‖(B - A).toContinuousLinearMap‖ * ‖x‖
-    exact (Vᗮ.norm_starProjection_apply_le ((B - A) (x : E))).trans
-      ((B - A).toContinuousLinearMap.le_opNorm (x : E))
-  have hSylvester := opNorm_sylvester_le_of_intervalGap
-    hBVperp hAU hδ hgap' hEq
-  rw [hXnorm] at hSylvester
-  exact hSylvester.trans hCnorm
+    rfl
+  simpa only [UnitarilyInvariantSeminorm.opNorm_apply, hnative] using
+    sinTheta_perturbation_le (UnitarilyInvariantSeminorm.opNorm 𝕜 E E)
+      hA hB hU hV hδ hgap
 
 /-- General disjoint-spectrum residual form for the Frobenius norm, with
 the sharp constant one.  Unlike a general symmetric gauge, the square norm
@@ -393,7 +327,8 @@ theorem frobenius_sinTheta_le
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
-    δ * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (sinThetaMap U V) ≤
+    δ * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)
+        (U.sinThetaMap V).toLinearMap ≤
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) := by
   exact sinTheta_perturbation_le (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E))
     hA hB hU hV hδ hgap
@@ -406,7 +341,7 @@ theorem kyFan_sinTheta_le
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) (k : ℕ) :
-    δ * (sinThetaMap U V).kyFanSum k ≤ (B - A).kyFanSum k := by
+    δ * ((U.sinThetaMap V).toLinearMap).kyFanSum k ≤ (B - A).kyFanSum k := by
   let NK : UnitarilyInvariantSeminorm 𝕜 E E :=
     (UnitarilyInvariantSeminorm.kyFan
       (𝕜 := 𝕜) (E := E) (F := E) k)
@@ -424,7 +359,7 @@ theorem sinTheta_perturbation_le_of_spectralDistance
     [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : PointSpectraSeparated A U B Vᗮ δ) :
-    δ * N (sinThetaMap U V) ≤ (Real.pi / 2) * N (B - A) := by
+    δ * N ((U.sinThetaMap V).toLinearMap) ≤ (Real.pi / 2) * N (B - A) := by
   let NU : UnitarilyInvariantSeminorm 𝕜 U E :=
     N.domainIsometryTransport U.subtypeₗᵢ
   have hM : (A.restrict hU).IsSymmetric := hA.restrict_invariant hU
@@ -441,13 +376,13 @@ theorem sinTheta_perturbation_le_of_spectralDistance
       (A := B) (U := V) (M := A.restrict hU) NU hB hV
       U.subtypeₗᵢ hM hδ hgap'
   have hsin :
-      NU (sinThetaEmbedding V U.subtypeₗᵢ) = N (sinThetaMap U V) :=
+      NU (sinThetaEmbedding V U.subtypeₗᵢ) = N ((U.sinThetaMap V).toLinearMap) :=
     domainTransport_sinThetaEmbedding_apply N U V
   have hresBound :
       NU (residual B U.subtypeₗᵢ (A.restrict hU)) ≤ N (B - A) :=
     domainTransport_residual_le (B := B) N hU
   calc
-    δ * N (sinThetaMap U V) =
+    δ * N ((U.sinThetaMap V).toLinearMap) =
         δ * NU (sinThetaEmbedding V U.subtypeₗᵢ) := by rw [hsin]
     _ ≤ (Real.pi / 2) *
         NU (residual B U.subtypeₗᵢ (A.restrict hU)) := hres

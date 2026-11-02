@@ -844,17 +844,18 @@ theorem sinThetaFrobenius_spanIndices_of_subset_compl {n : ℕ}
     rw [OrthonormalBasis.orthogonal_spanIndices]
     exact OrthonormalBasis.spanIndices_mono b hdisj
   -- On the first block the complementary projector of the second is the identity.
-  have hsin : sinThetaMap (b.spanIndices S) (b.spanIndices T) =
+  have hsin : ((b.spanIndices S).sinThetaMap (b.spanIndices T)).toLinearMap =
       projection (b.spanIndices S) := by
+    rw [Submodule.sinThetaMap_def]
     refine LinearMap.ext fun x => ?_
     have hmem : projection (b.spanIndices S) x ∈ (b.spanIndices T)ᗮ :=
       hperp (Submodule.starProjection_apply_mem _ x)
     change ((b.spanIndices T)ᗮ).starProjection ((b.spanIndices S).starProjection x) =
       (b.spanIndices S).starProjection x
     exact Submodule.starProjection_eq_self_iff.mpr hmem
-  rw [Submodule.sinThetaFrobenius_def, Submodule.sinThetaMap_def]
+  rw [Submodule.sinThetaFrobenius_def]
   change UnitarilyInvariantSeminorm.frobenius 𝕜 E E
-    (sinThetaMap (b.spanIndices S) (b.spanIndices T)) = _
+    (((b.spanIndices S).sinThetaMap (b.spanIndices T)).toLinearMap) = _
   rw [hsin, UnitarilyInvariantSeminorm.frobenius_apply b (projection (b.spanIndices S))]
   have hspan : b.spanIndices S =
       Submodule.span 𝕜 (b '' (↑S.toFinset : Set (Fin n))) := by

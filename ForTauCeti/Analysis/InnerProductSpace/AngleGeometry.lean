@@ -16,9 +16,11 @@ public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 # Directed principal-angle geometry
 
 Native submodule principal cosines, sines, angles, tangents and quarter-turn
-conditions are consumed directly from TauCeti. This donor retains linear
-projection/angle operators, transversality and the remaining projector
-consequences. Duplicate sequence definitions and symmetry proofs are retired.
+conditions and the directed cosine/sine/double-angle maps are consumed directly
+from TauCeti. Finite singular-value and matrix arguments use their explicit
+linear-map carriers. This donor retains the finite positive angle-operator
+presentations and additional projector/basis consequences; those positive
+presentations remain for the next representation slice.
 
 ## Provenance
 
@@ -44,23 +46,11 @@ open Module (finrank)
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
-/-- The cosine cross-projection `P_V P_U`. -/
-@[expose]
-noncomputable def cosThetaMap (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  projection V ∘ₗ projection U
-
-/-- The sine cross-projection `P_{Vᗮ} P_U`. -/
-@[expose]
-noncomputable def sinThetaMap (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  complementaryProjection V ∘ₗ projection U
-
 /-- `cos Θ` on the full ambient space, `|P_V P_U|`.  Its singular values are the
 principal-angle cosines by `LinearMap.singularValues_operatorAbs`. -/
 noncomputable def cosAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  LinearMap.operatorAbs (cosThetaMap U V)
+  LinearMap.operatorAbs ((U.cosThetaMap V).toLinearMap)
 
 /-- `sin Θ` on the full ambient space, the modulus `|P_U - P_V|` of the projector
 difference.  This is the symmetric full-space sine operator; its singular values
@@ -77,27 +67,6 @@ theorem sinAngleOperator_eq_operatorAbs (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     sinAngleOperator U V = LinearMap.operatorAbs (projection U - projection V) :=
   rfl
-
-/-- The one-sided finite-dimensional `sin (2 Θ)` map supported on `U`.
-
-This normalization matches the classic Davis--Kahan UI-norm theorem:
-`2 P_{Uᗮ} P_V P_U`.  A separate full positive angle operator would duplicate
-nonzero singular values and should not be conflated with this map. -/
-@[expose]
-noncomputable def sinTwoAngleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  (2 : 𝕜) • (complementaryProjection U ∘ₗ projection V ∘ₗ projection U)
-
-omit [FiniteDimensional 𝕜 E] in
-/-- `sin Θ` of a subspace with itself is zero: the complementary projector kills
-the range of the projector. -/
-theorem sinThetaMap_self (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    sinThetaMap U U = 0 := by
-  ext x
-  -- states the goal with the definition unfolded, in the shape the next step needs;
-  -- there is no `_apply` lemma to rewrite with here.
-  change Uᗮ.starProjection (U.starProjection x) = 0
-  exact Submodule.starProjection_orthogonal_apply_eq_zero (U.starProjection_apply_mem x)
 
 /-- In finite ambient dimension, native acuteness forces a uniform projection gap. -/
 theorem projectionGap_lt_one_of_isAcute {U V : Submodule 𝕜 E}
@@ -175,18 +144,6 @@ theorem uiNorm_projection_sub_eq_sinAngleOperator (N : UnitarilyInvariantSeminor
     N (projection U - projection V) = N (sinAngleOperator U V) :=
   N.map_eq_of_singularValues_eq (singularValues_projection_sub_projection U V)
 
-omit [FiniteDimensional 𝕜 E] in
-/-- The one-sided double-angle map is exactly twice the cross block.
-
-Signature audit: Valid after defining `sinTwoAngleOperator` as the one-sided
-classic Davis--Kahan map rather than a full-space positive operator.
--/
-theorem sinTwoAngleOperator_eq_two_smul_cross (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    sinTwoAngleOperator U V =
-      (2 : 𝕜) • (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) := by
-  rfl
-
 /-! ### Reading the principal-angle sequence on a basis of the source subspace
 
 `cosThetaMap U V = P_V P_U` and `sinThetaMap U V = P_{Vᗮ} P_U` both vanish on
@@ -234,7 +191,8 @@ omit [FiniteDimensional 𝕜 E] in
 /-- The cosine cross projection is unchanged by precomposition with `P_U`. -/
 theorem cosThetaMap_comp_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    cosThetaMap U V ∘ₗ projection U = cosThetaMap U V := by
+    (U.cosThetaMap V).toLinearMap ∘ₗ projection U = (U.cosThetaMap V).toLinearMap := by
+  simp only [Submodule.cosThetaMap_def]
   ext x
   -- exposes the two nested projections, which no `simp` lemma reassociates.
   change V.starProjection (U.starProjection (U.starProjection x)) =
@@ -245,7 +203,8 @@ omit [FiniteDimensional 𝕜 E] in
 /-- The sine cross projection is unchanged by precomposition with `P_U`. -/
 theorem sinThetaMap_comp_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    sinThetaMap U V ∘ₗ projection U = sinThetaMap U V := by
+    (U.sinThetaMap V).toLinearMap ∘ₗ projection U = (U.sinThetaMap V).toLinearMap := by
+  simp only [Submodule.sinThetaMap_def]
   ext x
   -- exposes the two nested projections, which no `simp` lemma reassociates.
   change Vᗮ.starProjection (U.starProjection (U.starProjection x)) =
@@ -256,19 +215,18 @@ theorem sinThetaMap_comp_projection (U V : Submodule 𝕜 E)
 `U`, with no zero padding removed. -/
 theorem singularValues_cosThetaMap_comp_subtype (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (cosThetaMap U V ∘ₗ U.subtype).singularValues = Submodule.principalCosines U V := by
+    ((U.cosThetaMap V).toLinearMap ∘ₗ U.subtype).singularValues =
+      Submodule.principalCosines U V := by
   rw [singularValues_comp_subtype, cosThetaMap_comp_projection,
     Submodule.principalCosines_def, Submodule.cosThetaMap_def]
-  rfl
 
 /-- The principal sines are the singular values of `P_{Vᗮ} P_U` restricted to
 `U`. -/
 theorem singularValues_sinThetaMap_comp_subtype (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (sinThetaMap U V ∘ₗ U.subtype).singularValues = Submodule.principalSines U V := by
+    ((U.sinThetaMap V).toLinearMap ∘ₗ U.subtype).singularValues = Submodule.principalSines U V := by
   rw [singularValues_comp_subtype, sinThetaMap_comp_projection,
     Submodule.principalSines_def, Submodule.sinThetaMap_def]
-  rfl
 
 /-- **The squared principal cosines summed over an orthonormal basis of `U`.**
 
@@ -281,15 +239,16 @@ theorem sum_sq_principalCosines_eq_sum_sq_norm_projection (U V : Submodule 𝕜 
     (b : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 U) :
     ∑ i : Fin (finrank 𝕜 U), Submodule.principalCosines U V (i : ℕ) ^ 2 =
       ∑ i, ‖projection V ((b i : U) : E)‖ ^ 2 := by
-  have happ : ∀ i, (cosThetaMap U V ∘ₗ U.subtype) (b i) =
+  have happ : ∀ i, ((U.cosThetaMap V).toLinearMap ∘ₗ U.subtype) (b i) =
       projection V ((b i : U) : E) := by
     intro i
+    rw [Submodule.cosThetaMap_def]
     -- exposes the inner projection, which is the identity on a vector of `U`.
     change V.starProjection (U.starProjection ((b i : U) : E)) =
       V.starProjection ((b i : U) : E)
     rw [U.starProjection_eq_self_iff.mpr (b i).2]
   rw [← singularValues_cosThetaMap_comp_subtype U V,
-    sum_sq_singularValues (cosThetaMap U V ∘ₗ U.subtype) rfl b]
+    sum_sq_singularValues ((U.cosThetaMap V).toLinearMap ∘ₗ U.subtype) rfl b]
   simp only [happ]
 
 /-- **The squared principal sines summed over an orthonormal basis of `U`.**
@@ -301,15 +260,16 @@ theorem sum_sq_principalSines_eq_sum_sq_norm_complementaryProjection
     (b : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 U) :
     ∑ i : Fin (finrank 𝕜 U), Submodule.principalSines U V (i : ℕ) ^ 2 =
       ∑ i, ‖complementaryProjection V ((b i : U) : E)‖ ^ 2 := by
-  have happ : ∀ i, (sinThetaMap U V ∘ₗ U.subtype) (b i) =
+  have happ : ∀ i, ((U.sinThetaMap V).toLinearMap ∘ₗ U.subtype) (b i) =
       complementaryProjection V ((b i : U) : E) := by
     intro i
+    rw [Submodule.sinThetaMap_def]
     -- exposes the inner projection, which is the identity on a vector of `U`.
     change Vᗮ.starProjection (U.starProjection ((b i : U) : E)) =
       Vᗮ.starProjection ((b i : U) : E)
     rw [U.starProjection_eq_self_iff.mpr (b i).2]
   rw [← singularValues_sinThetaMap_comp_subtype U V,
-    sum_sq_singularValues (sinThetaMap U V ∘ₗ U.subtype) rfl b]
+    sum_sq_singularValues ((U.sinThetaMap V).toLinearMap ∘ₗ U.subtype) rfl b]
   simp only [happ]
 
 /-- **`∑ₖ sin²θₖ = ∑ᵢ (1 - ‖P_V bᵢ‖²)` over an orthonormal basis of `U`.**

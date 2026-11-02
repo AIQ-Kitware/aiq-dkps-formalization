@@ -49,11 +49,12 @@ omit [FiniteDimensional 𝕜 E] in
 /-- **The single-angle sine map is rank one.**  On the line `𝕜 ∙ v` with `v` a
 unit vector, `sinThetaMap` sends `x` to `⟪v, x⟫ • P_{Wᗮ} v`. -/
 theorem sinThetaMap_span_singleton_apply {v : E} (hv : ‖v‖ = 1) (x : E) :
-    sinThetaMap (𝕜 ∙ v) W x = ⟪v, x⟫_𝕜 • projection Wᗮ v := by
+    ((𝕜 ∙ v).sinThetaMap W) x = ⟪v, x⟫_𝕜 • projection Wᗮ v := by
   have hproj : projection (𝕜 ∙ v) x = ⟪v, x⟫_𝕜 • v := by
     change (𝕜 ∙ v).starProjection x = _
     rw [Submodule.starProjection_singleton, hv]
     simp
+  rw [Submodule.sinThetaMap_def]
   change projection Wᗮ (projection (𝕜 ∙ v) x) = _
   rw [hproj, map_smul]
 
@@ -62,31 +63,26 @@ omit [FiniteDimensional 𝕜 E] in
 squared norm `1 - ‖P_W v‖²`. -/
 theorem norm_starProjection_orthogonal_sq {v : E} (hv : ‖v‖ = 1) :
     ‖projection Wᗮ v‖ ^ 2 = 1 - ‖projection W v‖ ^ 2 := by
-  have hsplit : projection W v + projection Wᗮ v = v := by
-    change W.starProjection v + Wᗮ.starProjection v = v
-    simp
-  have hperp : ⟪projection W v, projection Wᗮ v⟫_𝕜 = 0 :=
-    Submodule.inner_right_of_mem_orthogonal (W.starProjection_apply_mem v)
-      (Wᗮ.starProjection_apply_mem v)
-  have hkey := @norm_add_sq 𝕜 _ _ _ _ (projection W v) (projection Wᗮ v)
-  rw [hsplit, hv, hperp] at hkey
-  simp only [map_zero, mul_zero, add_zero, one_pow] at hkey
+  have hpy := W.norm_sq_eq_add_norm_sq_starProjection v
+  rw [hv, one_pow] at hpy
+  change ‖Wᗮ.starProjection v‖ ^ 2 = 1 - ‖W.starProjection v‖ ^ 2
   linarith
 
+omit [FiniteDimensional 𝕜 E] in
 /-- **The operator norm of the single-angle sine map** is the length of the
 complementary component. -/
 theorem opNorm_sinThetaMap_span_singleton {v : E} (hv : ‖v‖ = 1) :
-    ‖(sinThetaMap (𝕜 ∙ v) W).toContinuousLinearMap‖ = ‖projection Wᗮ v‖ := by
+    ‖((𝕜 ∙ v).sinThetaMap W)‖ = ‖projection Wᗮ v‖ := by
   refine le_antisymm (ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_) ?_
-  · rw [LinearMap.coe_toContinuousLinearMap', sinThetaMap_span_singleton_apply hv,
+  · rw [sinThetaMap_span_singleton_apply hv,
       norm_smul, mul_comm]
     have hcs : ‖⟪v, x⟫_𝕜‖ ≤ ‖x‖ := by
       have hle := norm_inner_le_norm (𝕜 := 𝕜) v x
       rwa [hv, one_mul] at hle
     exact mul_le_mul_of_nonneg_left hcs (norm_nonneg _)
   · -- The bound is attained at `v` itself.
-    have h := (sinThetaMap (𝕜 ∙ v) W).toContinuousLinearMap.le_opNorm v
-    rw [LinearMap.coe_toContinuousLinearMap', sinThetaMap_span_singleton_apply hv,
+    have h := ((𝕜 ∙ v).sinThetaMap W).le_opNorm v
+    rw [sinThetaMap_span_singleton_apply hv,
       norm_smul, hv, mul_one] at h
     have hvv : ‖⟪v, v⟫_𝕜‖ = 1 := by
       rw [inner_self_eq_norm_sq_to_K, hv]

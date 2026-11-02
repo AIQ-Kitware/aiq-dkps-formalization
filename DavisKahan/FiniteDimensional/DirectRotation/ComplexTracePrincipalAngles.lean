@@ -35,17 +35,15 @@ sines of the principal angles indexed by the dimension of its source. -/
 theorem kyFanSum_directedSine_eq_sum_sin_principalAngles
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    (sinThetaMap U V).kyFanSum (finrank ℂ H) =
+    ((U.sinThetaMap V).toLinearMap).kyFanSum (finrank ℂ H) =
       ∑ j : Fin (finrank ℂ U), Real.sin (Submodule.principalAngles U V (j : ℕ)) := by
-  let A : U →ₗ[ℂ] H := sinThetaMap U V ∘ₗ U.subtype
-  have hσ : A.singularValues = (sinThetaMap U V).singularValues := by
-    rw [show A = sinThetaMap U V ∘ₗ U.subtype from rfl,
-      singularValues_sinThetaMap_comp_subtype, Submodule.principalSines_def,
-      Submodule.sinThetaMap_def]
-    rfl
+  let A : U →ₗ[ℂ] H := (U.sinThetaMap V).toLinearMap ∘ₗ U.subtype
+  have hσ : A.singularValues = ((U.sinThetaMap V).toLinearMap).singularValues := by
+    rw [show A = (U.sinThetaMap V).toLinearMap ∘ₗ U.subtype from rfl,
+      singularValues_sinThetaMap_comp_subtype, Submodule.principalSines_def]
   have hrank : finrank ℂ U ≤ finrank ℂ H := Submodule.finrank_le U
   calc
-    (sinThetaMap U V).kyFanSum (finrank ℂ H) =
+    ((U.sinThetaMap V).toLinearMap).kyFanSum (finrank ℂ H) =
         A.kyFanSum (finrank ℂ H) := by
           simp only [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, ← hσ]
     _ = A.kyFanSum (finrank ℂ U) :=
@@ -55,9 +53,7 @@ theorem kyFanSum_directedSine_eq_sum_sin_principalAngles
       rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
       apply Finset.sum_congr rfl
       intro j _
-      rw [Submodule.sin_principalAngles U V, Submodule.principalSines_def,
-        Submodule.sinThetaMap_def]
-      change A.singularValues (j : ℕ) = (sinThetaMap U V).singularValues (j : ℕ)
+      rw [Submodule.sin_principalAngles U V, Submodule.principalSines_def]
       exact congrArg (fun s : ℕ →₀ ℝ => s (j : ℕ)) hσ
 
 /-- **Exact trace norm of the projector difference.** Every equal-dimensional
@@ -69,15 +65,13 @@ theorem kyFanSum_projectionDifference_eq_two_sum_sin_principalAngles
     (hUV : finrank ℂ U = finrank ℂ V) :
     (projection U - projection V).kyFanSum (finrank ℂ H) =
       2 * ∑ j : Fin (finrank ℂ U), Real.sin (Submodule.principalAngles U V (j : ℕ)) := by
-  have hswap : (sinThetaMap V U).kyFanSum (finrank ℂ H) =
-      (sinThetaMap U V).kyFanSum (finrank ℂ H) := by
+  have hswap : ((V.sinThetaMap U).toLinearMap).kyFanSum (finrank ℂ H) =
+      ((U.sinThetaMap V).toLinearMap).kyFanSum (finrank ℂ H) := by
     simp only [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
-    have hσ : (sinThetaMap V U).singularValues =
-        (sinThetaMap U V).singularValues := by
-      have h := (Submodule.principalSines_comm U V hUV).symm
-      rw [Submodule.principalSines_def, Submodule.principalSines_def,
-        Submodule.sinThetaMap_def, Submodule.sinThetaMap_def] at h
-      exact h
+    have hσ : ((V.sinThetaMap U).toLinearMap).singularValues =
+        ((U.sinThetaMap V).toLinearMap).singularValues := by
+      simpa only [Submodule.principalSines_def] using
+        (Submodule.principalSines_comm U V hUV).symm
     rw [hσ]
   rw [kyFanSum_projectionDifference_eq_directed_sines U V, hswap,
     kyFanSum_directedSine_eq_sum_sin_principalAngles U V]

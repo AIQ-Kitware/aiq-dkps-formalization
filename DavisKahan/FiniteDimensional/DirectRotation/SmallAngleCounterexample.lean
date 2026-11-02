@@ -384,11 +384,15 @@ theorem kyFanSum_displacement_W (theta : Real) (hs : 0 ≤ Real.sin theta) :
   ring
 
 private theorem gram_sinThetaMap (theta : Real) :
-    (sinThetaMap U4 (V4 theta)).adjoint ∘ₗ sinThetaMap U4 (V4 theta) =
+    ((U4.sinThetaMap (V4 theta)).toLinearMap).adjoint ∘ₗ (U4.sinThetaMap (V4 theta)).toLinearMap =
       projection U4 - projection U4 ∘ₗ projection (V4 theta) ∘ₗ projection U4 := by
-  have hAadj : (sinThetaMap U4 (V4 theta)).adjoint =
+  have hmap : (U4.sinThetaMap (V4 theta)).toLinearMap =
+      complementaryProjection (V4 theta) ∘ₗ projection U4 := by
+    rw [Submodule.sinThetaMap_def]
+    rfl
+  have hAadj : ((U4.sinThetaMap (V4 theta)).toLinearMap).adjoint =
       projection U4 ∘ₗ complementaryProjection (V4 theta) := by
-    rw [sinThetaMap, LinearMap.adjoint_comp, projection_adjoint]
+    rw [hmap, LinearMap.adjoint_comp, projection_adjoint]
     congr 1
     simp [complementaryProjection]
   have hUidem : ∀ y : E4, projection U4 (projection U4 y) = projection U4 y := fun y =>
@@ -400,13 +404,13 @@ private theorem gram_sinThetaMap (theta : Real) :
   have hcV : ∀ y : E4,
       complementaryProjection (V4 theta) y = y - projection (V4 theta) y :=
     fun y => Submodule.starProjection_orthogonal_val y
-  rw [hAadj, sinThetaMap]
+  rw [hAadj, hmap]
   ext x
   simp only [LinearMap.comp_apply, LinearMap.sub_apply]
   rw [hcVidem (projection U4 x), hcV (projection U4 x), map_sub, hUidem x]
 
 private theorem gram_sinThetaMap_coord (theta : Real) (x : E4) (i : Fin 4) :
-    (((sinThetaMap U4 (V4 theta)).adjoint ∘ₗ sinThetaMap U4 (V4 theta)) x) i =
+    ((((U4.sinThetaMap (V4 theta)).toLinearMap).adjoint ∘ₗ (U4.sinThetaMap (V4 theta)).toLinearMap) x) i =
       if i = 0 then Real.sin theta ^ 2 * x 0
       else if i = 1 then Real.sin theta ^ 2 * x 1 else 0 := by
   rw [gram_sinThetaMap]
@@ -421,7 +425,7 @@ private theorem gram_sinThetaMap_coord (theta : Real) (x : E4) (i : Fin 4) :
   · simp [projection_U4_coord]
 
 private theorem gram_sinThetaMap_basis (theta : Real) (i : Fin 4) :
-    ((sinThetaMap U4 (V4 theta)).adjoint ∘ₗ sinThetaMap U4 (V4 theta))
+    (((U4.sinThetaMap (V4 theta)).toLinearMap).adjoint ∘ₗ (U4.sinThetaMap (V4 theta)).toLinearMap)
         (EuclideanSpace.basisFun (Fin 4) Real i) =
       ((![Real.sin theta ^ 2, Real.sin theta ^ 2, 0, 0] : Fin 4 -> Real) i)
         • EuclideanSpace.basisFun (Fin 4) Real i := by
@@ -435,13 +439,13 @@ theorem principalSines_eq (theta : Real) (hs : 0 ≤ Real.sin theta)
     Submodule.principalSines U4 (V4 theta) (j : Nat) = Real.sin theta := by
   have hfr : finrank Real E4 = 4 := finrank_euclideanSpace_fin
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
-    (sinThetaMap U4 (V4 theta)).isSymmetric_adjoint_comp_self hfr
+    ((U4.sinThetaMap (V4 theta)).toLinearMap).isSymmetric_adjoint_comp_self hfr
     (EuclideanSpace.basisFun (Fin 4) Real)
     (μ := ![Real.sin theta ^ 2, Real.sin theta ^ 2, 0, 0])
     (antitone_pair _ (sq_nonneg _)) (gram_sinThetaMap_basis theta)
-  rw [Submodule.principalSines_def, Submodule.sinThetaMap_def]
-  change (sinThetaMap U4 (V4 theta)).singularValues (j : Nat) = _
-  rw [(sinThetaMap U4 (V4 theta)).singularValues_of_lt hfr j.isLt,
+  rw [Submodule.principalSines_def]
+  change ((U4.sinThetaMap (V4 theta)).toLinearMap).singularValues (j : Nat) = _
+  rw [((U4.sinThetaMap (V4 theta)).toLinearMap).singularValues_of_lt hfr j.isLt,
     congrFun heig ⟨(j : Nat), j.isLt⟩]
   fin_cases j <;> simp_all
 

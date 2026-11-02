@@ -14,8 +14,8 @@ import Mathlib.Tactic.Module
 
 The rectangular Gram identities, complementary-isometry block formulas, and
 scalar double-angle identities are maintained in Tau Ceti (PR #19299).
-This donor retains only the ambient projector formula for the local
-`TauCeti.sinTwoAngleOperator`.
+This donor retains only the ambient projector Gram formula for native
+`Submodule.sinTwoAngleOperator`, using its linear-map carrier.
 
 ## Provenance
 
@@ -50,10 +50,22 @@ the accepted reflected-block Gram identity records in isometry-block
 coordinates. -/
 theorem gram_sinTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    LinearMap.adjoint (sinTwoAngleOperator U V) ∘ₗ sinTwoAngleOperator U V =
-      (4 : 𝕜) • ((LinearMap.adjoint (cosThetaMap U V) ∘ₗ cosThetaMap U V) -
-        (LinearMap.adjoint (cosThetaMap U V) ∘ₗ cosThetaMap U V) ∘ₗ
-          (LinearMap.adjoint (cosThetaMap U V) ∘ₗ cosThetaMap U V)) := by
+    LinearMap.adjoint (U.sinTwoAngleOperator V).toLinearMap ∘ₗ
+      (U.sinTwoAngleOperator V).toLinearMap =
+      (4 : 𝕜) • ((LinearMap.adjoint (U.cosThetaMap V).toLinearMap ∘ₗ
+          (U.cosThetaMap V).toLinearMap) -
+        (LinearMap.adjoint (U.cosThetaMap V).toLinearMap ∘ₗ
+          (U.cosThetaMap V).toLinearMap) ∘ₗ
+          (LinearMap.adjoint (U.cosThetaMap V).toLinearMap ∘ₗ
+          (U.cosThetaMap V).toLinearMap)) := by
+  have hcos : (U.cosThetaMap V).toLinearMap = projection V ∘ₗ projection U := by
+    rw [Submodule.cosThetaMap_def]
+    rfl
+  have htwo : (U.sinTwoAngleOperator V).toLinearMap =
+      (2 : 𝕜) • (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) := by
+    rw [Submodule.sinTwoAngleOperator_def]
+    rfl
+  simp only [hcos, htwo]
   have hidem : ∀ (W : Submodule 𝕜 E) [W.HasOrthogonalProjection] (x : E),
       projection W (projection W x) = projection W x := by
     intro W _ x
@@ -64,18 +76,19 @@ theorem gram_sinTwoAngleOperator (U V : Submodule 𝕜 E)
     rw [complementaryProjection, projection, projection,
       Submodule.starProjection_orthogonal]
     simp
-  have hadjCos : LinearMap.adjoint (cosThetaMap U V) =
+  have hadjCos : LinearMap.adjoint (projection V ∘ₗ projection U) =
       projection U ∘ₗ projection V := by
-    rw [cosThetaMap, LinearMap.adjoint_comp, projection_adjoint, projection_adjoint]
-  have hadjSin : LinearMap.adjoint (sinTwoAngleOperator U V) =
+    rw [LinearMap.adjoint_comp, projection_adjoint, projection_adjoint]
+  have hadjSin : LinearMap.adjoint
+      ((2 : 𝕜) • (complementaryProjection U ∘ₗ projection V ∘ₗ projection U)) =
       (2 : 𝕜) • (projection U ∘ₗ projection V ∘ₗ complementaryProjection U) := by
-    rw [sinTwoAngleOperator_eq_two_smul_cross, map_smulₛₗ, map_ofNat,
+    rw [map_smulₛₗ, map_ofNat,
       LinearMap.adjoint_comp, LinearMap.adjoint_comp, complementaryProjection,
       projection_adjoint, projection_adjoint, projection_adjoint]
     rfl
-  rw [hadjSin, hadjCos, sinTwoAngleOperator_eq_two_smul_cross]
+  rw [hadjSin, hadjCos]
   ext x
-  simp only [cosThetaMap, LinearMap.comp_apply, LinearMap.smul_apply,
+  simp only [LinearMap.comp_apply, LinearMap.smul_apply,
     LinearMap.sub_apply, map_smul, hcomp, map_sub, hidem]
   module
 

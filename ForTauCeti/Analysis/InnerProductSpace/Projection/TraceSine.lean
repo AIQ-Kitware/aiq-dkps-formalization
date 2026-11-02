@@ -43,28 +43,34 @@ theorem projectionDifference_sq_eq_directed_gram_sum
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
     (projection U - projection V) ∘ₗ (projection U - projection V) =
-      (sinThetaMap U V).adjoint ∘ₗ sinThetaMap U V +
-        sinThetaMap V U ∘ₗ (sinThetaMap V U).adjoint := by
+      ((U.sinThetaMap V).toLinearMap).adjoint ∘ₗ (U.sinThetaMap V).toLinearMap +
+        (V.sinThetaMap U).toLinearMap ∘ₗ ((V.sinThetaMap U).toLinearMap).adjoint := by
   let p : E →ₗ[𝕜] E := projection U
   let q : E →ₗ[𝕜] E := projection V
   have hq : q * q = q := by
     ext x
     change projection V (projection V x) = projection V x
     exact Submodule.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem x)
-  have hleft : sinThetaMap U V = (1 - q) * p := by
-    rw [sinThetaMap, complementaryProjection_eq_id_sub V]
+  have hleft : (U.sinThetaMap V).toLinearMap = (1 - q) * p := by
+    rw [Submodule.sinThetaMap_def]
+    change complementaryProjection V ∘ₗ projection U = _
+    rw [complementaryProjection_eq_id_sub V]
     rfl
-  have hright : sinThetaMap V U = (1 - p) * q := by
-    rw [sinThetaMap, complementaryProjection_eq_id_sub U]
+  have hright : (V.sinThetaMap U).toLinearMap = (1 - p) * q := by
+    rw [Submodule.sinThetaMap_def]
+    change complementaryProjection U ∘ₗ projection V = _
+    rw [complementaryProjection_eq_id_sub U]
     rfl
-  have hleftAdj : (sinThetaMap U V).adjoint = p * (1 - q) := by
-    rw [sinThetaMap, LinearMap.adjoint_comp, projection_adjoint,
-      complementaryProjection_eq_id_sub V]
+  have hleftAdj : ((U.sinThetaMap V).toLinearMap).adjoint = p * (1 - q) := by
+    rw [Submodule.sinThetaMap_def]
+    change (complementaryProjection V ∘ₗ projection U).adjoint = _
+    rw [LinearMap.adjoint_comp, projection_adjoint, complementaryProjection_eq_id_sub V]
     rw [map_sub, LinearMap.adjoint_id, projection_adjoint]
     rfl
-  have hrightAdj : (sinThetaMap V U).adjoint = q * (1 - p) := by
-    rw [sinThetaMap, LinearMap.adjoint_comp, projection_adjoint,
-      complementaryProjection_eq_id_sub U]
+  have hrightAdj : ((V.sinThetaMap U).toLinearMap).adjoint = q * (1 - p) := by
+    rw [Submodule.sinThetaMap_def]
+    change (complementaryProjection U ∘ₗ projection V).adjoint = _
+    rw [LinearMap.adjoint_comp, projection_adjoint, complementaryProjection_eq_id_sub U]
     rw [map_sub, LinearMap.adjoint_id, projection_adjoint]
     rfl
   rw [hleftAdj, hrightAdj, hleft, hright]
@@ -102,17 +108,19 @@ theorem projectionDifference_sq_eq_directed_gram_sum
 private theorem operatorAbs_adjoint_reverse_sine_mem_complement
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (x : E) :
-    LinearMap.operatorAbs ((sinThetaMap V U).adjoint) x ∈ Uᗮ := by
-  have hmem : LinearMap.operatorAbs ((sinThetaMap V U).adjoint) x ∈
-      (LinearMap.ker ((sinThetaMap V U).adjoint))ᗮ := by
+    LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) x ∈ Uᗮ := by
+  have hmem : LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) x ∈
+      (LinearMap.ker (((V.sinThetaMap U).toLinearMap).adjoint))ᗮ := by
     rw [← LinearMap.range_operatorAbs]
     exact LinearMap.mem_range_self _ x
   -- `U` is in the kernel of the reversed sine adjoint. Orthogonality
   -- reverses inclusions, so the modulus image belongs to `Uᗮ`.
-  have hUker : U ≤ LinearMap.ker ((sinThetaMap V U).adjoint) := by
+  have hUker : U ≤ LinearMap.ker (((V.sinThetaMap U).toLinearMap).adjoint) := by
     intro y hy
-    change (sinThetaMap V U).adjoint y = 0
-    rw [sinThetaMap, LinearMap.adjoint_comp, projection_adjoint,
+    change ((V.sinThetaMap U).toLinearMap).adjoint y = 0
+    rw [Submodule.sinThetaMap_def]
+    change (complementaryProjection U ∘ₗ projection V).adjoint y = 0
+    rw [LinearMap.adjoint_comp, projection_adjoint,
       complementaryProjection, projection_adjoint]
     change V.starProjection (Uᗮ.starProjection y) = 0
     have hzero : Uᗮ.starProjection y = 0 :=
@@ -126,20 +134,22 @@ support. This is the operative orthogonality in the square-root splitting. -/
 private theorem operatorAbs_directed_mul_operatorAbs_reverse_adjoint_eq_zero
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    LinearMap.operatorAbs (sinThetaMap U V) ∘ₗ
-        LinearMap.operatorAbs ((sinThetaMap V U).adjoint) = 0 := by
+    LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap) ∘ₗ
+        LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) = 0 := by
   apply LinearMap.ext
   intro x
-  change LinearMap.operatorAbs (sinThetaMap U V)
-    (LinearMap.operatorAbs ((sinThetaMap V U).adjoint) x) = 0
+  change LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap)
+    (LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) x) = 0
   have hperp := operatorAbs_adjoint_reverse_sine_mem_complement U V x
-  have hker : LinearMap.operatorAbs ((sinThetaMap V U).adjoint) x ∈
-      LinearMap.ker (sinThetaMap U V) := by
-    change sinThetaMap U V (LinearMap.operatorAbs ((sinThetaMap V U).adjoint) x) = 0
+  have hker : LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) x ∈
+      LinearMap.ker ((U.sinThetaMap V).toLinearMap) := by
+    change (U.sinThetaMap V).toLinearMap
+      (LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) x) = 0
+    rw [Submodule.sinThetaMap_def]
     change Vᗮ.starProjection
-      (U.starProjection (LinearMap.operatorAbs ((sinThetaMap V U).adjoint) x)) = 0
+      (U.starProjection (LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) x)) = 0
     rw [(Submodule.starProjection_apply_eq_zero_iff U).mpr hperp, map_zero]
-  rw [← LinearMap.ker_operatorAbs (sinThetaMap U V)] at hker
+  rw [← LinearMap.ker_operatorAbs ((U.sinThetaMap V).toLinearMap)] at hker
   exact LinearMap.mem_ker.mp hker
 
 /-- **Positive sine-modulus splitting of the projector difference.**
@@ -152,11 +162,11 @@ theorem operatorAbs_projectionDifference_eq_directed_sine_sum
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
     LinearMap.operatorAbs (projection U - projection V) =
-      LinearMap.operatorAbs (sinThetaMap U V) +
-        LinearMap.operatorAbs ((sinThetaMap V U).adjoint) := by
+      LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap) +
+        LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) := by
   let D : E →ₗ[𝕜] E := projection U - projection V
-  let A : E →ₗ[𝕜] E := LinearMap.operatorAbs (sinThetaMap U V)
-  let B : E →ₗ[𝕜] E := LinearMap.operatorAbs ((sinThetaMap V U).adjoint)
+  let A : E →ₗ[𝕜] E := LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap)
+  let B : E →ₗ[𝕜] E := LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint)
   have hA : A.IsPositive := LinearMap.isPositive_operatorAbs _
   have hB : B.IsPositive := LinearMap.isPositive_operatorAbs _
   have hAB : A * B = 0 :=
@@ -171,9 +181,10 @@ theorem operatorAbs_projectionDifference_eq_directed_sine_sum
     dsimp [D]
     rw [map_sub, projection_adjoint, projection_adjoint]
   have hgram : A * A + B * B = D.adjoint * D := by
-    change LinearMap.operatorAbs (sinThetaMap U V) ∘ₗ LinearMap.operatorAbs (sinThetaMap U V) +
-        LinearMap.operatorAbs ((sinThetaMap V U).adjoint) ∘ₗ
-          LinearMap.operatorAbs ((sinThetaMap V U).adjoint) =
+    change LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap) ∘ₗ
+      LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap) +
+        LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) ∘ₗ
+          LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) =
         D.adjoint ∘ₗ D
     rw [LinearMap.operatorAbs_sq, LinearMap.operatorAbs_sq,
       LinearMap.adjoint_adjoint, hDstar]
@@ -196,26 +207,26 @@ theorem kyFanSum_projectionDifference_eq_directed_sines
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
     (projection U - projection V).kyFanSum (finrank 𝕜 E) =
-      (sinThetaMap U V).kyFanSum (finrank 𝕜 E) +
-        (sinThetaMap V U).kyFanSum (finrank 𝕜 E) := by
-  let A : E →ₗ[𝕜] E := LinearMap.operatorAbs (sinThetaMap U V)
-  let B : E →ₗ[𝕜] E := LinearMap.operatorAbs ((sinThetaMap V U).adjoint)
+      ((U.sinThetaMap V).toLinearMap).kyFanSum (finrank 𝕜 E) +
+        ((V.sinThetaMap U).toLinearMap).kyFanSum (finrank 𝕜 E) := by
+  let A : E →ₗ[𝕜] E := LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap)
+  let B : E →ₗ[𝕜] E := LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint)
   have hA : A.IsPositive := LinearMap.isPositive_operatorAbs _
   have hB : B.IsPositive := LinearMap.isPositive_operatorAbs _
   have hD : (projection U - projection V).kyFanSum (finrank 𝕜 E) =
       (A + B).kyFanSum (finrank 𝕜 E) := by
     change (projection U - projection V).kyFanSum (finrank 𝕜 E) =
-      (LinearMap.operatorAbs (sinThetaMap U V) +
-          LinearMap.operatorAbs ((sinThetaMap V U).adjoint)).kyFanSum (finrank 𝕜 E)
+      (LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap) +
+          LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint)).kyFanSum (finrank 𝕜 E)
     rw [← operatorAbs_projectionDifference_eq_directed_sine_sum U V]
     simp only [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range,
       LinearMap.singularValues_operatorAbs]
   have hleft : A.kyFanSum (finrank 𝕜 E) =
-      (sinThetaMap U V).kyFanSum (finrank 𝕜 E) := by
+      ((U.sinThetaMap V).toLinearMap).kyFanSum (finrank 𝕜 E) := by
     simp only [A, LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range,
       LinearMap.singularValues_operatorAbs]
   have hright : B.kyFanSum (finrank 𝕜 E) =
-      (sinThetaMap V U).kyFanSum (finrank 𝕜 E) := by
+      ((V.sinThetaMap U).toLinearMap).kyFanSum (finrank 𝕜 E) := by
     simp only [B, LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range,
       LinearMap.singularValues_operatorAbs,
       LinearMap.singularValues_adjoint]
@@ -224,8 +235,8 @@ theorem kyFanSum_projectionDifference_eq_directed_sines
         (A + B).kyFanSum (finrank 𝕜 E) := hD
     _ = A.kyFanSum (finrank 𝕜 E) + B.kyFanSum (finrank 𝕜 E) :=
       kyFanSum_add_of_isPositive A B hA hB
-    _ = (sinThetaMap U V).kyFanSum (finrank 𝕜 E) +
-          (sinThetaMap V U).kyFanSum (finrank 𝕜 E) := by
+    _ = ((U.sinThetaMap V).toLinearMap).kyFanSum (finrank 𝕜 E) +
+          ((V.sinThetaMap U).toLinearMap).kyFanSum (finrank 𝕜 E) := by
       rw [hleft, hright]
 
 end TauCeti

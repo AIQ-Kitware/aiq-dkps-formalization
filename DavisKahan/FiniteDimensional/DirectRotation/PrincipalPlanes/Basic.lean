@@ -41,33 +41,33 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 @[expose]
 noncomputable def nontrivialAngleCount (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℕ :=
-  finrank 𝕜 (sinThetaMap U V).range
+  finrank 𝕜 ((U.sinThetaMap V).toLinearMap).range
 
 /-- Cast a nontrivial-angle index into the ambient right singular basis. -/
 @[expose] noncomputable def nontrivialAngleIndex (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (i : Fin (nontrivialAngleCount U V)) : Fin (finrank 𝕜 E) :=
-  Fin.castLE (LinearMap.finrank_range_le (sinThetaMap U V)) i
+  Fin.castLE (LinearMap.finrank_range_le ((U.sinThetaMap V).toLinearMap)) i
 
 /-- Source principal vector. -/
 @[expose]
 noncomputable def principalSourceVector (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (i : Fin (nontrivialAngleCount U V)) : E :=
-  LinearMap.rightSingularBasis (sinThetaMap U V) (nontrivialAngleIndex U V i)
+  LinearMap.rightSingularBasis ((U.sinThetaMap V).toLinearMap) (nontrivialAngleIndex U V i)
 
 /-- Sine attached to a nontrivial principal plane. -/
 noncomputable def principalPlaneSine (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (i : Fin (nontrivialAngleCount U V)) : ℝ :=
-  (sinThetaMap U V).singularValues (nontrivialAngleIndex U V i)
+  ((U.sinThetaMap V).toLinearMap).singularValues (nontrivialAngleIndex U V i)
 
 /-- The sine attached to a principal plane is the corresponding nonzero
 singular value of the directed sine map. -/
 theorem principalPlaneSine_eq_singularValue (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (i : Fin (nontrivialAngleCount U V)) :
-    principalPlaneSine U V i = (sinThetaMap U V).singularValues (i : ℕ) := by
+    principalPlaneSine U V i = ((U.sinThetaMap V).toLinearMap).singularValues (i : ℕ) := by
   rw [principalPlaneSine]
   rfl
 
@@ -121,7 +121,7 @@ theorem principalPlaneSine_pos
     (i : Fin (nontrivialAngleCount U V)) :
     0 < principalPlaneSine U V i := by
   rw [principalPlaneSine]
-  exact (sinThetaMap U V).singularValues_pos_iff_lt_finrank_range.mpr i.isLt
+  exact ((U.sinThetaMap V).toLinearMap).singularValues_pos_iff_lt_finrank_range.mpr i.isLt
 
 /-- Directed principal sines are at most one. -/
 theorem principalPlaneSine_le_one
@@ -132,9 +132,10 @@ theorem principalPlaneSine_le_one
   rw [principalPlaneSine]
   refine singularValues_le_one_of_contraction ?_ rfl (nontrivialAngleIndex U V i)
   intro x
-  have h1 : ‖sinThetaMap U V x‖ ≤ ‖projection U x‖ :=
-    Vᗮ.norm_starProjection_apply_le (projection U x)
-  exact h1.trans (U.norm_starProjection_apply_le x)
+  change ‖(U.sinThetaMap V) x‖ ≤ ‖x‖
+  exact ((U.sinThetaMap V).le_opNorm x).trans (by
+    simpa only [one_mul] using
+      mul_le_mul_of_nonneg_right (U.norm_sinThetaMap_le_one V) (norm_nonneg x))
 
 /-- The source singular vector belongs to `U`. -/
 theorem principalSourceVector_mem
@@ -143,7 +144,7 @@ theorem principalSourceVector_mem
     (_hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     principalSourceVector U V i ∈ U := by
-  let A := sinThetaMap U V
+  let A := (U.sinThetaMap V).toLinearMap
   let p := nontrivialAngleIndex U V i
   let s := principalPlaneSine U V i
   have hs : s ≠ 0 := ne_of_gt (principalPlaneSine_pos U V i)
@@ -157,16 +158,17 @@ theorem principalSourceVector_mem
     Submodule.starProjection_orthogonal_val y
   have hgram : A.adjoint ∘ₗ A =
       projection U - projection U ∘ₗ projection V ∘ₗ projection U := by
-    have hAadj : A.adjoint = projection U ∘ₗ complementaryProjection V := by
-      show (complementaryProjection V ∘ₗ projection U).adjoint
-          = projection U ∘ₗ complementaryProjection V
+    have hmap : A = complementaryProjection V ∘ₗ projection U := by
+      dsimp [A]
+      rw [Submodule.sinThetaMap_def]
+      rfl
+    rw [hmap]
+    have hadj : (complementaryProjection V ∘ₗ projection U).adjoint =
+        projection U ∘ₗ complementaryProjection V := by
       rw [LinearMap.adjoint_comp, projection_adjoint]
       congr 1
       simp [complementaryProjection]
-    rw [hAadj]
-    show (projection U ∘ₗ complementaryProjection V) ∘ₗ
-        (complementaryProjection V ∘ₗ projection U) =
-        projection U - projection U ∘ₗ projection V ∘ₗ projection U
+    rw [hadj]
     ext x
     simp only [LinearMap.comp_apply, LinearMap.sub_apply]
     rw [hcVidem (projection U x), hcV (projection U x), map_sub, hUidem x]
@@ -187,9 +189,9 @@ theorem orthonormal_principalSourceVector
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Orthonormal 𝕜 (principalSourceVector U V) := by
-  exact (LinearMap.rightSingularBasis (sinThetaMap U V)).orthonormal.comp
+  exact (LinearMap.rightSingularBasis ((U.sinThetaMap V).toLinearMap)).orthonormal.comp
     (nontrivialAngleIndex U V)
-    (Fin.castLE_injective (LinearMap.finrank_range_le (sinThetaMap U V)))
+    (Fin.castLE_injective (LinearMap.finrank_range_le ((U.sinThetaMap V).toLinearMap)))
 
 /-- The source cosine has the expected Pythagorean identity. -/
 theorem principalPlaneCosine_sq_add_sine_sq
@@ -229,13 +231,14 @@ theorem principalPlaneCosine_pos
     let u := principalSourceVector U V i
     have hu1 : ‖u‖ = 1 := (orthonormal_principalSourceVector U V).norm_eq_one i
     have hnorm := LinearMap.norm_apply_rightSingularBasis
-      (sinThetaMap U V) (nontrivialAngleIndex U V i)
+      ((U.sinThetaMap V).toLinearMap) (nontrivialAngleIndex U V i)
     have hzero : projection V u = 0 := by
       have hdecomp := Submodule.norm_sq_eq_add_norm_sq_starProjection u V
       have hsinNorm : ‖Vᗮ.starProjection u‖ = 1 := by
-        have h : ‖sinThetaMap U V u‖ = principalPlaneSine U V i := hnorm
+        have h : ‖(U.sinThetaMap V).toLinearMap u‖ = principalPlaneSine U V i := hnorm
         rw [hs] at h
-        rwa [sinThetaMap, LinearMap.comp_apply, projection_apply_of_mem hu] at h
+        change ‖(U.sinThetaMap V) u‖ = 1 at h
+        rwa [Submodule.sinThetaMap_apply, U.starProjection_eq_self_iff.mpr hu] at h
       rw [hu1, hsinNorm] at hdecomp
       have hVsq : ‖V.starProjection u‖ ^ 2 = 0 := by nlinarith
       show V.starProjection u = 0
@@ -258,7 +261,7 @@ theorem abs_canonicalIntertwiner_apply_principalSourceVector
     LinearMap.operatorAbs (canonicalIntertwiner U V) (principalSourceVector U V i) =
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i := by
   have hu := principalSourceVector_mem U V hacute i
-  have heig := LinearMap.adjoint_comp_self_rightSingularBasis (sinThetaMap U V)
+  have heig := LinearMap.adjoint_comp_self_rightSingularBasis ((U.sinThetaMap V).toLinearMap)
     (nontrivialAngleIndex U V i)
   have hProjUu : projection U (principalSourceVector U V i) =
       principalSourceVector U V i := Submodule.starProjection_eq_self_iff.mpr hu
@@ -272,13 +275,18 @@ theorem abs_canonicalIntertwiner_apply_principalSourceVector
     Submodule.starProjection_eq_self_iff.mpr (Vᗮ.starProjection_apply_mem y)
   have hcV : ∀ y : E, complementaryProjection V y = y - projection V y := fun y =>
     Submodule.starProjection_orthogonal_val y
-  have hAgram : (sinThetaMap U V).adjoint ∘ₗ sinThetaMap U V =
+  have hAgram : ((U.sinThetaMap V).toLinearMap).adjoint ∘ₗ (U.sinThetaMap V).toLinearMap =
       projection U - projection U ∘ₗ projection V ∘ₗ projection U := by
-    have hAadj : (sinThetaMap U V).adjoint = projection U ∘ₗ complementaryProjection V := by
-      rw [sinThetaMap, LinearMap.adjoint_comp, projection_adjoint]
+    have hmap : (U.sinThetaMap V).toLinearMap = complementaryProjection V ∘ₗ projection U := by
+      rw [Submodule.sinThetaMap_def]
+      rfl
+    rw [hmap]
+    have hadj : (complementaryProjection V ∘ₗ projection U).adjoint =
+        projection U ∘ₗ complementaryProjection V := by
+      rw [LinearMap.adjoint_comp, projection_adjoint]
       congr 1
       simp [complementaryProjection]
-    rw [hAadj, sinThetaMap]
+    rw [hadj]
     ext x
     simp only [LinearMap.comp_apply, LinearMap.sub_apply]
     rw [hcVidem (projection U x), hcV (projection U x), map_sub, hUidem x]
@@ -288,13 +296,13 @@ theorem abs_canonicalIntertwiner_apply_principalSourceVector
     rw [canonicalIntertwiner_adjoint_comp_self]
     simp only [LinearMap.add_apply, LinearMap.comp_apply, hProjUu, hcompUu,
       map_zero, add_zero]
-  have hAu : ((sinThetaMap U V).adjoint ∘ₗ sinThetaMap U V)
+  have hAu : (((U.sinThetaMap V).toLinearMap).adjoint ∘ₗ (U.sinThetaMap V).toLinearMap)
         (principalSourceVector U V i) =
       principalSourceVector U V i -
         projection U (projection V (principalSourceVector U V i)) := by
     rw [hAgram]
     simp only [LinearMap.sub_apply, LinearMap.comp_apply, hProjUu]
-  rw [show LinearMap.rightSingularBasis (sinThetaMap U V) (nontrivialAngleIndex U V i) =
+  rw [show LinearMap.rightSingularBasis ((U.sinThetaMap V).toLinearMap) (nontrivialAngleIndex U V i) =
     principalSourceVector U V i from rfl, hAu] at heig
   have hc0 : (0 : ℝ) ≤ principalPlaneCosine U V i := Real.sqrt_nonneg _
   have hsq : ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V)
@@ -302,7 +310,7 @@ theorem abs_canonicalIntertwiner_apply_principalSourceVector
       ((principalPlaneCosine U V i ^ 2 : ℝ) : 𝕜) • principalSourceVector U V i := by
     rw [hSu]
     have hcossq : (principalPlaneCosine U V i ^ 2 : ℝ) =
-        1 - (sinThetaMap U V).singularValues (nontrivialAngleIndex U V i : ℕ) ^ 2 := by
+        1 - ((U.sinThetaMap V).toLinearMap).singularValues (nontrivialAngleIndex U V i : ℕ) ^ 2 := by
       have hp := principalPlaneCosine_sq_add_sine_sq U V i
       simp only [principalPlaneSine] at hp
       linarith
@@ -713,7 +721,7 @@ theorem principalPlaneSine_antitone
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Antitone (principalPlaneSine U V) := by
   intro i j hij
-  exact (sinThetaMap U V).singularValues_antitone hij
+  exact ((U.sinThetaMap V).toLinearMap).singularValues_antitone hij
 
 /-- Principal cosines increase with the index. -/
 theorem principalPlaneCosine_monotone

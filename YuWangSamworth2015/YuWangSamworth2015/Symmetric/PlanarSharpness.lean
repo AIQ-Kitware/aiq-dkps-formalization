@@ -139,9 +139,12 @@ theorem opNorm_planarSharpness_perturbation (hv : ‖v‖ = 1) (hw : ‖w‖ = 1
     rw [finrank_span_singleton_of_norm_one hv, finrank_span_singleton_of_norm_one hw]
   have hgap := Submodule.projectionGap_eq_directedProjectionGap_of_finrank_eq
     (𝕜 ∙ w) (𝕜 ∙ v) hrank
-  rw [Submodule.projectionGap_def, Submodule.directedProjectionGap_def] at hgap
-  change ‖(projection (𝕜 ∙ w) - projection (𝕜 ∙ v)).toContinuousLinearMap‖ =
-    ‖(sinThetaMap (𝕜 ∙ w) (𝕜 ∙ v)).toContinuousLinearMap‖ at hgap
+  rw [Submodule.projectionGap_def, ← Submodule.norm_sinThetaMap] at hgap
+  have hproj : (projection (𝕜 ∙ w) - projection (𝕜 ∙ v)).toContinuousLinearMap =
+      (𝕜 ∙ w).starProjection - (𝕜 ∙ v).starProjection := by
+    ext x
+    rfl
+  rw [← hproj] at hgap
   rw [twoLevelOperator_sub, map_smul, norm_smul, hgap,
     opNorm_sinThetaMap_span_singleton hw,
     norm_projection_orthogonal_span_singleton hv hw hc0 hoverlap]

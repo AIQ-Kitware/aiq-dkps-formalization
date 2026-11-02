@@ -109,9 +109,8 @@ theorem singularSubspace_dilation_sinTheta_le
     (hgap : HybridGap (LinearMap.hermitianDilation A) (LinearMap.hermitianDilation Â)
       (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation A) Ω)
       (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω) δ) :
-    δ * ‖(sinThetaMap
-        (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation A) Ω)
-        (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω)).toContinuousLinearMap‖
+    δ * ‖((Module.End.pointSpectralSubspace (LinearMap.hermitianDilation A) Ω).sinThetaMap
+        (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω))‖
       ≤
       (Real.pi / 2) * ‖(Â - A).toContinuousLinearMap‖ := by
   have h := sinTheta_perturbation_le_of_spectralDistance
@@ -119,7 +118,10 @@ theorem singularSubspace_dilation_sinTheta_le
     (LinearMap.isSymmetric_hermitianDilation A) (LinearMap.isSymmetric_hermitianDilation Â)
     (isInvariant_pointSpectralSubspace (LinearMap.hermitianDilation A) Ω)
     (isInvariant_pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω) hδ hgap
-  simp only [UnitarilyInvariantSeminorm.opNorm_apply] at h
+  have hnative (T : WithLp 2 (E × F) →L[𝕜] WithLp 2 (E × F)) :
+      T.toLinearMap.toContinuousLinearMap = T :=
+    LinearMap.toContinuousLinearMap.apply_symm_apply T
+  simp only [UnitarilyInvariantSeminorm.opNorm_apply, hnative] at h
   have hsub : (Â - A).toContinuousLinearMap =
       Â.toContinuousLinearMap - A.toContinuousLinearMap := by
     ext x
@@ -131,9 +133,8 @@ theorem singularSubspace_dilation_sinTheta_le
     ext x
     rfl
   calc
-    δ * ‖(sinThetaMap
-        (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation A) Ω)
-        (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω)).toContinuousLinearMap‖
+    δ * ‖((Module.End.pointSpectralSubspace (LinearMap.hermitianDilation A) Ω).sinThetaMap
+        (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω))‖
         ≤ (Real.pi / 2) *
           ‖(LinearMap.hermitianDilation Â -
             LinearMap.hermitianDilation A).toContinuousLinearMap‖ := h

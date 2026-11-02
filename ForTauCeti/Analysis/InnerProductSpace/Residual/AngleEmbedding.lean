@@ -341,18 +341,19 @@ theorem singularValues_sinThetaEmbedding (U : Submodule 𝕜 E)
       Submodule.principalSines (approximateSubspace X) U := by
   have hmap :
       sinThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint =
-        sinThetaMap (approximateSubspace X) U := by
-    rw [sinThetaEmbedding, sinThetaMap,
-      projection_approximateSubspace_eq_comp_adjoint X]
+        ((approximateSubspace X).sinThetaMap U).toLinearMap := by
+    rw [sinThetaEmbedding, Submodule.sinThetaMap_def]
+    change (complementaryProjection U ∘ₗ X.toLinearMap) ∘ₗ X.toLinearMap.adjoint =
+      complementaryProjection U ∘ₗ TauCeti.projection (approximateSubspace X)
+    rw [projection_approximateSubspace_eq_comp_adjoint X]
     simp only [LinearMap.comp_assoc]
   calc
     (sinThetaEmbedding U X).singularValues =
         (sinThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint).singularValues :=
       (LinearMap.singularValues_comp_adjoint_linearIsometry (sinThetaEmbedding U X) X).symm
-    _ = (sinThetaMap (approximateSubspace X) U).singularValues := by rw [hmap]
+    _ = (((approximateSubspace X).sinThetaMap U).toLinearMap).singularValues := by rw [hmap]
     _ = Submodule.principalSines (approximateSubspace X) U := by
-      rw [Submodule.principalSines_def, Submodule.sinThetaMap_def]
-      rfl
+      rw [Submodule.principalSines_def]
 
 /-- The singular values of `cosThetaEmbedding U X = P_U X` are the
 principal cosines directed from `range X` toward `U`. -/
@@ -362,18 +363,19 @@ theorem singularValues_cosThetaEmbedding (U : Submodule 𝕜 E)
       Submodule.principalCosines (approximateSubspace X) U := by
   have hmap :
       cosThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint =
-        cosThetaMap (approximateSubspace X) U := by
-    rw [cosThetaEmbedding, cosThetaMap,
-      projection_approximateSubspace_eq_comp_adjoint X]
+        ((approximateSubspace X).cosThetaMap U).toLinearMap := by
+    rw [cosThetaEmbedding, Submodule.cosThetaMap_def]
+    change (projection U ∘ₗ X.toLinearMap) ∘ₗ X.toLinearMap.adjoint =
+      projection U ∘ₗ TauCeti.projection (approximateSubspace X)
+    rw [projection_approximateSubspace_eq_comp_adjoint X]
     simp only [LinearMap.comp_assoc]
   calc
     (cosThetaEmbedding U X).singularValues =
         (cosThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint).singularValues :=
       (LinearMap.singularValues_comp_adjoint_linearIsometry (cosThetaEmbedding U X) X).symm
-    _ = (cosThetaMap (approximateSubspace X) U).singularValues := by rw [hmap]
+    _ = (((approximateSubspace X).cosThetaMap U).toLinearMap).singularValues := by rw [hmap]
     _ = Submodule.principalCosines (approximateSubspace X) U := by
-      rw [Submodule.principalCosines_def, Submodule.cosThetaMap_def]
-      rfl
+      rw [Submodule.principalCosines_def]
 
 /-- The positive coordinate cosine has the principal-angle cosine
 singular-value sequence. -/

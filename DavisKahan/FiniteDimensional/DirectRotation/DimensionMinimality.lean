@@ -43,11 +43,7 @@ theorem principalAngles_pos_iff_lt_nontrivialAngleCount (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (i : ℕ) :
     0 < U.principalAngles V i ↔ i < nontrivialAngleCount U V := by
   rw [U.principalAngles_apply V, Real.arcsin_pos, U.principalSines_def V]
-  have hmap : (U.sinThetaMap V).toLinearMap = sinThetaMap U V := by
-    rw [U.sinThetaMap_def V]
-    rfl
-  rw [hmap]
-  exact (sinThetaMap U V).singularValues_pos_iff_lt_finrank_range
+  exact ((U.sinThetaMap V).toLinearMap).singularValues_pos_iff_lt_finrank_range
 
 /-- An acute pair in dimension at most three has at most one positive
 principal-angle label, including multiplicities. -/
@@ -101,8 +97,7 @@ theorem nuclear_directRotation_displacement_eq_sum_principalAngles
       intro i _
       have hcos : Real.cos (U.principalAngles V i) = principalPlaneCosine U V i := by
         rw [U.principalAngles_apply V, Real.cos_arcsin, principalPlaneCosine,
-          principalPlaneSine_eq_singularValue, U.principalSines_def V, U.sinThetaMap_def V]
-        rfl
+          principalPlaneSine_eq_singularValue, U.principalSines_def V]
       rw [principalPlaneChord_eq_two_mul_sin_half U V i
         (U.principalAngles_nonneg V i)
         ((U.principalAngles_le_pi_div_two V i).trans (by linarith [Real.pi_pos])) hcos]

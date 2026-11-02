@@ -49,13 +49,13 @@ theorem sinThetaMap_apply_eq_zero_of_orthogonal_sources
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {x : E} (hx : ∀ i, ⟪principalSourceVector U V i, x⟫_𝕜 = 0) :
-    sinThetaMap U V x = 0 := by
+    (U.sinThetaMap V).toLinearMap x = 0 := by
   classical
-  set b := LinearMap.rightSingularBasis (sinThetaMap U V) with hb
+  set b := LinearMap.rightSingularBasis ((U.sinThetaMap V).toLinearMap) with hb
   have hxdecomp := b.sum_repr x
-  calc sinThetaMap U V x
-      = sinThetaMap U V (∑ j, b.repr x j • b j) := by rw [hxdecomp]
-    _ = ∑ j, b.repr x j • sinThetaMap U V (b j) := by
+  calc (U.sinThetaMap V).toLinearMap x
+      = (U.sinThetaMap V).toLinearMap (∑ j, b.repr x j • b j) := by rw [hxdecomp]
+    _ = ∑ j, b.repr x j • (U.sinThetaMap V).toLinearMap (b j) := by
         rw [map_sum]
         exact Finset.sum_congr rfl fun j _ => by rw [map_smul]
     _ = 0 := by
@@ -70,10 +70,11 @@ theorem sinThetaMap_apply_eq_zero_of_orthogonal_sources
             rw [hidx]
             exact hx ⟨(j : ℕ), hj⟩
           rw [hcoeff, zero_smul]
-        · have hσ : (sinThetaMap U V).singularValues (j : ℕ) = 0 :=
-            (sinThetaMap U V).singularValues_eq_zero_iff_le_finrank_range.mpr
+        · have hσ : ((U.sinThetaMap V).toLinearMap).singularValues (j : ℕ) = 0 :=
+            ((U.sinThetaMap V).toLinearMap).singularValues_eq_zero_iff_le_finrank_range.mpr
               (Nat.le_of_not_lt hj)
-          rw [(LinearMap.apply_rightSingularBasis_eq_zero_iff (sinThetaMap U V)).mpr hσ, smul_zero]
+          rw [(LinearMap.apply_rightSingularBasis_eq_zero_iff ((U.sinThetaMap V).toLinearMap)).mpr hσ,
+            smul_zero]
 
 /-- A vector of `U` orthogonal to every principal source vector lies in `V`. -/
 theorem mem_of_mem_orthogonal_sources
@@ -83,7 +84,8 @@ theorem mem_of_mem_orthogonal_sources
     (hx : ∀ i, ⟪principalSourceVector U V i, x⟫_𝕜 = 0) :
     x ∈ V := by
   have hsin := sinThetaMap_apply_eq_zero_of_orthogonal_sources U V hx
-  rw [sinThetaMap, LinearMap.comp_apply, projection_apply_of_mem hxU] at hsin
+  change (U.sinThetaMap V) x = 0 at hsin
+  rw [Submodule.sinThetaMap_apply, U.starProjection_eq_self_iff.mpr hxU] at hsin
   have hmem : x ∈ Vᗮᗮ :=
     (Submodule.starProjection_apply_eq_zero_iff Vᗮ).mp hsin
   rwa [Submodule.orthogonal_orthogonal] at hmem
@@ -109,27 +111,28 @@ theorem inner_sinThetaMap_apply_eq_zero_of_orthogonal_family
     {z : E} (hzu : ∀ i, ⟪principalSourceVector U V i, z⟫_𝕜 = 0)
     (hzj : ∀ i, ⟪principalOrthogonalVector U V hacute i, z⟫_𝕜 = 0)
     (w : E) :
-    ⟪sinThetaMap U V w, z⟫_𝕜 = 0 := by
+    ⟪(U.sinThetaMap V).toLinearMap w, z⟫_𝕜 = 0 := by
   classical
-  set b := LinearMap.rightSingularBasis (sinThetaMap U V) with hb
+  set b := LinearMap.rightSingularBasis ((U.sinThetaMap V).toLinearMap) with hb
   have hwdecomp := b.sum_repr w
   have hsinu : ∀ i : Fin (nontrivialAngleCount U V),
-      ⟪sinThetaMap U V (principalSourceVector U V i), z⟫_𝕜 = 0 := by
+      ⟪(U.sinThetaMap V).toLinearMap (principalSourceVector U V i), z⟫_𝕜 = 0 := by
     intro i
     have hu := principalSourceVector_mem U V hacute i
-    have hsin : sinThetaMap U V (principalSourceVector U V i) =
+    have hsin : (U.sinThetaMap V).toLinearMap (principalSourceVector U V i) =
         principalSourceVector U V i -
           projection V (principalSourceVector U V i) := by
-      rw [sinThetaMap, LinearMap.comp_apply, projection_apply_of_mem hu]
+      change (U.sinThetaMap V) (principalSourceVector U V i) = _
+      rw [Submodule.sinThetaMap_apply, U.starProjection_eq_self_iff.mpr hu]
       exact Submodule.starProjection_orthogonal_val _
     simp only [hsin, projection_apply_principalSourceVector U V hacute i,
       directRotation_apply_principalSourceVector U V hacute i, inner_sub_left,
       inner_smul_left, inner_add_left, inner_smul_left, inner_smul_left,
       hzu i, hzj i]
     ring
-  calc ⟪sinThetaMap U V w, z⟫_𝕜
-      = ⟪sinThetaMap U V (∑ j, b.repr w j • b j), z⟫_𝕜 := by rw [hwdecomp]
-    _ = ∑ j, (starRingEnd 𝕜) (b.repr w j) * ⟪sinThetaMap U V (b j), z⟫_𝕜 := by
+  calc ⟪(U.sinThetaMap V).toLinearMap w, z⟫_𝕜
+      = ⟪(U.sinThetaMap V).toLinearMap (∑ j, b.repr w j • b j), z⟫_𝕜 := by rw [hwdecomp]
+    _ = ∑ j, (starRingEnd 𝕜) (b.repr w j) * ⟪(U.sinThetaMap V).toLinearMap (b j), z⟫_𝕜 := by
         rw [map_sum, sum_inner]
         exact Finset.sum_congr rfl fun j _ => by
           rw [map_smul, inner_smul_left]
@@ -141,10 +144,11 @@ theorem inner_sinThetaMap_apply_eq_zero_of_orthogonal_family
             rw [principalSourceVector]
             congr 1
           rw [hidx, hsinu ⟨(j : ℕ), hj⟩, mul_zero]
-        · have hσ : (sinThetaMap U V).singularValues (j : ℕ) = 0 :=
-            (sinThetaMap U V).singularValues_eq_zero_iff_le_finrank_range.mpr
+        · have hσ : ((U.sinThetaMap V).toLinearMap).singularValues (j : ℕ) = 0 :=
+            ((U.sinThetaMap V).toLinearMap).singularValues_eq_zero_iff_le_finrank_range.mpr
               (Nat.le_of_not_lt hj)
-          rw [(LinearMap.apply_rightSingularBasis_eq_zero_iff (sinThetaMap U V)).mpr hσ, inner_zero_left, mul_zero]
+          rw [(LinearMap.apply_rightSingularBasis_eq_zero_iff ((U.sinThetaMap V).toLinearMap)).mpr hσ,
+            inner_zero_left, mul_zero]
 
 /-- **Descent to the fixed part.**  On the orthogonal complement of the
 principal-plane family the two projections agree. -/
@@ -200,8 +204,9 @@ theorem projection_eq_projection_of_orthogonal_family
       intro u huU
       have h1 : ⟪u, v⟫_𝕜 = ⟪projection V u, z⟫_𝕜 := by
         rw [hv, projection_inner_left_eq_right]
-      have h2 : projection V u = u - sinThetaMap U V u := by
-        rw [sinThetaMap, LinearMap.comp_apply, projection_apply_of_mem huU]
+      have h2 : projection V u = u - (U.sinThetaMap V).toLinearMap u := by
+        change V.starProjection u = u - (U.sinThetaMap V) u
+        rw [Submodule.sinThetaMap_apply, U.starProjection_eq_self_iff.mpr huU]
         -- `complementaryProjection` hides the `starProjection` the orthogonal
         -- splitting lemma matches on, so finish by the splitting identity
         exact (eq_sub_of_add_eq
@@ -287,7 +292,7 @@ theorem nontrivialAngleCount_le_finrank
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     nontrivialAngleCount U V ≤ finrank 𝕜 E :=
-  LinearMap.finrank_range_le (sinThetaMap U V)
+  LinearMap.finrank_range_le ((U.sinThetaMap V).toLinearMap)
 
 /-- Elementary pairing identity for a sequence whose entries occur twice. -/
 theorem sum_repeated_pair_prefix {m : ℕ}
