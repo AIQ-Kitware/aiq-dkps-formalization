@@ -97,7 +97,7 @@ low-dependency specialization from which many computational applications start. 
 theorem partIII_sinTheta_residual_uiNorm
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hMspec : Module.End.PointSpectrumIn M ⊤ (Set.Icc a b))
@@ -142,7 +142,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 theorem partIII_tanTheta_uiNorm
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) (hrank : finrank 𝕜 F = finrank 𝕜 U)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hMspec : Module.End.PointSpectrumIn (compression A X) ⊤ (Set.Icc β α))

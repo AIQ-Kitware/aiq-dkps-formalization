@@ -57,16 +57,17 @@ transverse.  Thus the tangent has no `π/2` pole; this is a conclusion, not an
 extra hypothesis. -/
 theorem isTransverse_of_tanThetaIntervalGap
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hδ : 0 < δ)
     (hgap : TanThetaIntervalGap A U X β α δ) :
     Disjoint (approximateSubspace X) Uᗮ := by
   rw [Submodule.disjoint_def]
   intro x hx hxperp
   rcases hx with ⟨y, rfl⟩
-  have hUperpRed : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
+  have hUperpRed : (Uᗮ ∈ Module.End.invtSubmodule A) :=
+      LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU
   have hxyUperp : X.toLinearMap y ∈ Uᗮ := hxperp
-  have hTopRed : IsInvariant (compression A X) ⊤ := by
+  have hTopRed : (⊤ ∈ Module.End.invtSubmodule (compression A X)) := by
     intro z _
     exact Submodule.mem_top
   have hMspec : Module.End.PointSpectrumIn (compression A X) ⊤ (Set.Iic α) := by
@@ -398,7 +399,7 @@ orthogonality removes that projection from the residual pairing, while its norm 
 cosine denominator. -/
 theorem tanThetaResidualWitness_scalar
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hδ : 0 < δ)
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
@@ -451,7 +452,7 @@ theorem tanThetaResidualWitness_scalar
       simpa [S, σ, v, y] using
         adjoint_apply_sinTheta_leftSingularVector U X hσzero
     have hMupper : RCLike.re ⟪M v, v⟫_𝕜 ≤ α := by
-      have hTopRed : IsInvariant M ⊤ := fun z _ => Submodule.mem_top
+      have hTopRed : (⊤ ∈ Module.End.invtSubmodule M) := fun z _ => Submodule.mem_top
       have hspec : Module.End.PointSpectrumIn M ⊤ (Set.Iic α) := by
         apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
         intro lam hlam
@@ -461,7 +462,8 @@ theorem tanThetaResidualWitness_scalar
           hTopRed hspec v Submodule.mem_top
       simpa [hvnorm] using hbound
     have hAlower : α + δ ≤ RCLike.re ⟪A y, y⟫_𝕜 := by
-      have hUperpRed : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
+      have hUperpRed : (Uᗮ ∈ Module.End.invtSubmodule A) :=
+          LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU
       have hbound : (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜 :=
         lowerFormBound_of_pointSpectrumIn hA hUperpRed hgap.2 y hyUperp
       simpa [hynorm] using hbound
@@ -471,11 +473,11 @@ theorem tanThetaResidualWitness_scalar
         RCLike.re ⟪y, R v⟫_𝕜 =
           σ * (RCLike.re ⟪A y, y⟫_𝕜 - RCLike.re ⟪M v, v⟫_𝕜) := by
       have hright :
-          ⟪y, complementaryProjection U (R v)⟫_𝕜 = ⟪y, R v⟫_𝕜 := by
+          ⟪y, Uᗮ.starProjection.toLinearMap (R v)⟫_𝕜 = ⟪y, R v⟫_𝕜 := by
         change ⟪y, Uᗮ.starProjection (R v)⟫_𝕜 = ⟪y, R v⟫_𝕜
         rw [← Uᗮ.inner_starProjection_left_eq_right,
           Submodule.starProjection_eq_self_iff.mpr hyUperp]
-      have hsyl' : A (S v) - S (M v) = complementaryProjection U (R v) := by
+      have hsyl' : A (S v) - S (M v) = Uᗮ.starProjection.toLinearMap (R v) := by
         simpa [S, M, R, ritzResidual] using hSyl
       have hSM : ⟪y, S (M v)⟫_𝕜 = ⟪S.adjoint y, M v⟫_𝕜 := by
         exact (LinearMap.adjoint_inner_left S (M v) y).symm
@@ -483,7 +485,7 @@ theorem tanThetaResidualWitness_scalar
           ⟪y, R v⟫_𝕜 =
             (((σ : ℝ) : 𝕜) * (⟪y, A y⟫_𝕜 - ⟪v, M v⟫_𝕜)) := by
         calc
-          ⟪y, R v⟫_𝕜 = ⟪y, complementaryProjection U (R v)⟫_𝕜 := hright.symm
+          ⟪y, R v⟫_𝕜 = ⟪y, Uᗮ.starProjection.toLinearMap (R v)⟫_𝕜 := hright.symm
           _ = ⟪y, A (S v) - S (M v)⟫_𝕜 := by rw [hsyl']
           _ = ⟪y, A (S v)⟫_𝕜 - ⟪y, S (M v)⟫_𝕜 := inner_sub_right _ _ _
           _ = (((σ : ℝ) : 𝕜) * ⟪y, A y⟫_𝕜) - ⟪y, S (M v)⟫_𝕜 := by
@@ -542,7 +544,7 @@ theorem tanThetaResidualWitness_scalar
 /-- Ky Fan domination up to the full trial-space dimension. -/
 private theorem kyFan_tanTheta0_ritzResidual_le_of_le_finrank
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hδ : 0 < δ)
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
@@ -592,7 +594,7 @@ singular values are prescribed.  This theorem is the single hard
 geometric/majorization seam. -/
 theorem kyFan_tanTheta0_ritzResidual_le
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (_hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
@@ -625,7 +627,7 @@ transversality. -/
 theorem tanTheta0_ritzResidual_le
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)
@@ -653,7 +655,7 @@ exact invariant subspace `U`. -/
 theorem davisKahan1970_tanTheta0_ritzResidual_le
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) (_hrank : finrank 𝕜 F = finrank 𝕜 U)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : TanThetaIntervalGap A U X β α δ)
@@ -672,7 +674,7 @@ in the finite-dimensional setting. -/
 theorem davisKahan1970_generalizedTanTheta0_ritzResidual_le
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) (_hrank : finrank 𝕜 F < finrank 𝕜 U)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : TanThetaIntervalGap A U X β α δ)
@@ -687,7 +689,7 @@ pole. -/
 theorem tanTheta0_ritzResidual_le_and_isTransverse
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : TanThetaIntervalGap A U X β α δ)
     (tanTheta0 : F →ₗ[𝕜] E)

@@ -149,9 +149,8 @@ theorem projection_orthogonalBlockSumSubmodule
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
     (U₁ : Submodule 𝕜 E₁) (U₂ : Submodule 𝕜 E₂) :
-    projection
-        (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂) =
-      ((projection U₁).prodMap (projection U₂)).withLpMap 2 :=
+    ((UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)).starProjection.toLinearMap =
+      ((U₁.starProjection.toLinearMap).prodMap (U₂.starProjection.toLinearMap)).withLpMap 2 :=
   UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule U₁ U₂
 
 /-- **The sine-angle operator of an orthogonal sum of subspace pairs is block-diagonal.** -/
@@ -166,13 +165,13 @@ theorem sinAngleOperator_orthogonalBlockSumSubmodule
       (((Submodule.sinAngleOperator U₁ V₁).toLinearMap).prodMap
         ((Submodule.sinAngleOperator U₂ V₂).toLinearMap)).withLpMap 2 := by
   have h₁ : (Submodule.sinAngleOperator U₁ V₁).toLinearMap =
-      (projection U₁ - projection V₁).operatorAbs := by
+      (U₁.starProjection.toLinearMap - V₁.starProjection.toLinearMap).operatorAbs := by
     symm
     apply (LinearMap.toContinuousLinearMap_eq_iff_eq_toLinearMap _ _).mp
     rw [LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus, Submodule.sinAngleOperator_def]
     congr 1
   have h₂ : (Submodule.sinAngleOperator U₂ V₂).toLinearMap =
-      (projection U₂ - projection V₂).operatorAbs := by
+      (U₂.starProjection.toLinearMap - V₂.starProjection.toLinearMap).operatorAbs := by
     symm
     apply (LinearMap.toContinuousLinearMap_eq_iff_eq_toLinearMap _ _).mp
     rw [LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus, Submodule.sinAngleOperator_def]
@@ -180,8 +179,9 @@ theorem sinAngleOperator_orthogonalBlockSumSubmodule
   have h₃ : (Submodule.sinAngleOperator
       (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
       (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂)).toLinearMap =
-      (projection (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂) -
-        projection (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂)).operatorAbs := by
+      (((UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)).starProjection.toLinearMap -
+        ((UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁
+            V₂)).starProjection.toLinearMap).operatorAbs := by
     symm
     apply (LinearMap.toContinuousLinearMap_eq_iff_eq_toLinearMap _ _).mp
     rw [LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus, Submodule.sinAngleOperator_def]
@@ -189,8 +189,8 @@ theorem sinAngleOperator_orthogonalBlockSumSubmodule
   rw [h₃, h₁, h₂,
     projection_orthogonalBlockSumSubmodule U₁ U₂,
     projection_orthogonalBlockSumSubmodule V₁ V₂]
-  change (((projection U₁ - projection V₁).prodMap
-    (projection U₂ - projection V₂)).withLpMap 2).operatorAbs = _
+  change (((U₁.starProjection.toLinearMap - V₁.starProjection.toLinearMap).prodMap
+    (U₂.starProjection.toLinearMap - V₂.starProjection.toLinearMap)).withLpMap 2).operatorAbs = _
   exact UnitarilyInvariantSeminorm.operatorAbs_orthogonalBlockSum _ _
 
 end TauCeti

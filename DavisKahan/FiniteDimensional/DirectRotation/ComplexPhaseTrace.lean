@@ -462,17 +462,17 @@ trace norm of the projector difference. -/
 private theorem kyFanSum_projector_eq_nonacute_sine
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    (projection U - projection V).kyFanSum (finrank ℂ H) =
+    (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank ℂ H) =
       (Proposition35.section3SinAngleOperator U V).toLinearMap.kyFanSum (finrank ℂ H) := by
   let S : BEnd H := Proposition35.section3SinAngleOperator U V
   have hS : S.toLinearMap = (Submodule.sinAngleOperator U V).toLinearMap := by
     simp only [S, Proposition35.section3SinAngleOperator, Submodule.sinAngleOperator_def]
   calc
-    (projection U - projection V).kyFanSum (finrank ℂ H) =
+    (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank ℂ H) =
         (UnitarilyInvariantSeminorm.kyFan ℂ H H (finrank ℂ H))
-          (projection U - projection V) :=
+          (U.starProjection.toLinearMap - V.starProjection.toLinearMap) :=
       (UnitarilyInvariantSeminorm.kyFan_apply
-        (finrank ℂ H) (projection U - projection V)).symm
+        (finrank ℂ H) (U.starProjection.toLinearMap - V.starProjection.toLinearMap)).symm
     _ = (UnitarilyInvariantSeminorm.kyFan ℂ H H (finrank ℂ H))
           ((Submodule.sinAngleOperator U V).toLinearMap) :=
       (UnitarilyInvariantSeminorm.kyFan ℂ H H (finrank ℂ H)).map_eq_of_singularValues_eq
@@ -581,7 +581,8 @@ theorem exists_trace_optimal_unitary_of_equal_finrank
       _ = S.toLinearMap.kyFanSum (finrank ℂ H) +
           S.toLinearMap.kyFanSum (finrank ℂ H) :=
         kyFanSum_add_of_nonneg S S hS0 hS0
-  have hprojtrace : (projection U - projection V).kyFanSum (finrank ℂ H) =
+  have hprojtrace : (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum
+      (finrank ℂ H) =
       S.toLinearMap.kyFanSum (finrank ℂ H) :=
     kyFanSum_projector_eq_nonacute_sine U V
   have hboundP := projectionDifference_kyFanSum_le_displacement
@@ -589,7 +590,7 @@ theorem exists_trace_optimal_unitary_of_equal_finrank
   have hboundM := projectionDifference_kyFanSum_le_displacement
     U V Wm hmapM (finrank ℂ H)
   have hOptimal : (LinearMap.id - Wp.toLinearMap).kyFanSum (finrank ℂ H) =
-        (projection U - projection V).kyFanSum (finrank ℂ H) := by
+        (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank ℂ H) := by
     rw [hprojtrace] at hboundP hboundM ⊢
     rw [htraceP] at hboundP ⊢
     rw [htraceM] at hboundM
@@ -605,7 +606,7 @@ theorem exists_global_complex_trace_minimizer
     ∃ W : H ≃ₗᵢ[ℂ] H,
       U.map W.toLinearMap = V ∧
       (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ H) =
-        (projection U - projection V).kyFanSum (finrank ℂ H) ∧
+        (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank ℂ H) ∧
       ∀ Z : H ≃ₗᵢ[ℂ] H, U.map Z.toLinearMap = V →
         (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ H) ≤
           (LinearMap.id - Z.toLinearMap).kyFanSum (finrank ℂ H) := by

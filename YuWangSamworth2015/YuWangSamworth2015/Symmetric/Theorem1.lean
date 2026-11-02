@@ -35,7 +35,8 @@ theorem yuWangSamworth_theorem1_uiNorm_le
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
+    [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
+        Module.End.invtSubmodule B))
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
     N ((U.sinThetaMap V).toLinearMap) ≤ N (B - A) / δ := by
@@ -50,7 +51,8 @@ specialization of this theorem, and no declaration writes it literally. -/
 theorem yuWangSamworth_theorem1_frobenius_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
+    [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
+        Module.End.invtSubmodule B))
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
     Submodule.sinThetaFrobenius U V ≤
@@ -64,7 +66,8 @@ theorem yuWangSamworth_theorem1_frobenius_le
 theorem yuWangSamworth_theorem1_opNorm_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : IsInvariant A U) (hV : IsInvariant B V)
+    [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
+        Module.End.invtSubmodule B))
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
     ‖(U.sinThetaMap V)‖ ≤
@@ -126,7 +129,7 @@ theorem yuWangSamworth_equation1_opNorm_le
     ⟨orthonormal_singleton_of_norm_eq_one hv, fun _ => hSigv⟩
   have hUeq : U = Submodule.span 𝕜 (Set.range fun _ : Fin 1 => v) := by
     rw [hU, Set.range_const]
-  have hUinv : IsInvariant Sig U := by
+  have hUinv : (U ∈ Module.End.invtSubmodule Sig) := by
     rw [hUeq]
     intro x hx
     exact hfamU.map_span_le (Submodule.mem_map_of_mem hx)
@@ -143,7 +146,7 @@ theorem yuWangSamworth_equation1_opNorm_le
     ⟨orthonormal_singleton_of_norm_eq_one hbhatj, fun _ => hbhat j⟩
   have hVeq1 : V = Submodule.span 𝕜 (Set.range fun _ : Fin 1 => bhat j) := by
     rw [hV, Set.range_const]
-  have hVinv : IsInvariant Sighat V := by
+  have hVinv : (V ∈ Module.End.invtSubmodule Sighat) := by
     rw [hVeq1]
     intro x hx
     exact hfamV1.map_span_le (Submodule.mem_map_of_mem hx)

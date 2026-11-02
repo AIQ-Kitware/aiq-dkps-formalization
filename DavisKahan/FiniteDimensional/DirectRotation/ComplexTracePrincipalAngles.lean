@@ -63,7 +63,7 @@ theorem kyFanSum_projectionDifference_eq_two_sum_sin_principalAngles
     (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
     (hUV : finrank ℂ U = finrank ℂ V) :
-    (projection U - projection V).kyFanSum (finrank ℂ H) =
+    (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank ℂ H) =
       2 * ∑ j : Fin (finrank ℂ U), Real.sin (Submodule.principalAngles U V (j : ℕ)) := by
   have hswap : ((V.sinThetaMap U).toLinearMap).kyFanSum (finrank ℂ H) =
       ((U.sinThetaMap V).toLinearMap).kyFanSum (finrank ℂ H) := by
@@ -103,7 +103,7 @@ theorem exists_global_complex_trace_minimizer_with_principalAngles
     ∃ W : H ≃ₗᵢ[ℂ] H,
       U.map W.toLinearMap = V ∧
       (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ H) =
-        (projection U - projection V).kyFanSum (finrank ℂ H) ∧
+        (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank ℂ H) ∧
       (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ H) =
         2 * ∑ j : Fin (finrank ℂ U), Real.sin (Submodule.principalAngles U V (j : ℕ)) ∧
       ∀ Z : H ≃ₗᵢ[ℂ] H, U.map Z.toLinearMap = V →
@@ -114,7 +114,8 @@ theorem exists_global_complex_trace_minimizer_with_principalAngles
   refine ⟨W, hmap, htrace, ?_, hmin⟩
   calc
     (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ H) =
-        (projection U - projection V).kyFanSum (finrank ℂ H) := htrace
+        (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank ℂ H) :=
+            htrace
     _ = 2 * ∑ j : Fin (finrank ℂ U),
         Real.sin (Submodule.principalAngles U V (j : ℕ)) :=
       kyFanSum_projectionDifference_eq_two_sum_sin_principalAngles U V hUV

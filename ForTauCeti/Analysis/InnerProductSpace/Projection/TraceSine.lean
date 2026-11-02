@@ -42,36 +42,44 @@ operator, because the complementary block is supported on `Uᗮ`. -/
 theorem projectionDifference_sq_eq_directed_gram_sum
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    (projection U - projection V) ∘ₗ (projection U - projection V) =
+    (U.starProjection.toLinearMap - V.starProjection.toLinearMap) ∘ₗ (U.starProjection.toLinearMap
+        - V.starProjection.toLinearMap) =
       ((U.sinThetaMap V).toLinearMap).adjoint ∘ₗ (U.sinThetaMap V).toLinearMap +
         (V.sinThetaMap U).toLinearMap ∘ₗ ((V.sinThetaMap U).toLinearMap).adjoint := by
-  let p : E →ₗ[𝕜] E := projection U
-  let q : E →ₗ[𝕜] E := projection V
+  let p : E →ₗ[𝕜] E := U.starProjection.toLinearMap
+  let q : E →ₗ[𝕜] E := V.starProjection.toLinearMap
   have hq : q * q = q := by
     ext x
-    change projection V (projection V x) = projection V x
+    change V.starProjection.toLinearMap (V.starProjection.toLinearMap x) =
+        V.starProjection.toLinearMap x
     exact Submodule.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem x)
   have hleft : (U.sinThetaMap V).toLinearMap = (1 - q) * p := by
     rw [Submodule.sinThetaMap_def]
-    change complementaryProjection V ∘ₗ projection U = _
-    rw [complementaryProjection_eq_id_sub V]
+    change Vᗮ.starProjection.toLinearMap ∘ₗ U.starProjection.toLinearMap = _
+    rw [Submodule.starProjection_orthogonal V, ContinuousLinearMap.toLinearMap_sub,
+        ContinuousLinearMap.coe_id]
     rfl
   have hright : (V.sinThetaMap U).toLinearMap = (1 - p) * q := by
     rw [Submodule.sinThetaMap_def]
-    change complementaryProjection U ∘ₗ projection V = _
-    rw [complementaryProjection_eq_id_sub U]
+    change Uᗮ.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap = _
+    rw [Submodule.starProjection_orthogonal U, ContinuousLinearMap.toLinearMap_sub,
+        ContinuousLinearMap.coe_id]
     rfl
   have hleftAdj : ((U.sinThetaMap V).toLinearMap).adjoint = p * (1 - q) := by
     rw [Submodule.sinThetaMap_def]
-    change (complementaryProjection V ∘ₗ projection U).adjoint = _
-    rw [LinearMap.adjoint_comp, projection_adjoint, complementaryProjection_eq_id_sub V]
-    rw [map_sub, LinearMap.adjoint_id, projection_adjoint]
+    change (Vᗮ.starProjection.toLinearMap ∘ₗ U.starProjection.toLinearMap).adjoint = _
+    rw [LinearMap.adjoint_comp, (Submodule.starProjection_isSymmetric _).adjoint_eq,
+        Submodule.starProjection_orthogonal V, ContinuousLinearMap.toLinearMap_sub,
+        ContinuousLinearMap.coe_id]
+    rw [map_sub, LinearMap.adjoint_id, (Submodule.starProjection_isSymmetric _).adjoint_eq]
     rfl
   have hrightAdj : ((V.sinThetaMap U).toLinearMap).adjoint = q * (1 - p) := by
     rw [Submodule.sinThetaMap_def]
-    change (complementaryProjection U ∘ₗ projection V).adjoint = _
-    rw [LinearMap.adjoint_comp, projection_adjoint, complementaryProjection_eq_id_sub U]
-    rw [map_sub, LinearMap.adjoint_id, projection_adjoint]
+    change (Uᗮ.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap).adjoint = _
+    rw [LinearMap.adjoint_comp, (Submodule.starProjection_isSymmetric _).adjoint_eq,
+        Submodule.starProjection_orthogonal U, ContinuousLinearMap.toLinearMap_sub,
+        ContinuousLinearMap.coe_id]
+    rw [map_sub, LinearMap.adjoint_id, (Submodule.starProjection_isSymmetric _).adjoint_eq]
     rfl
   rw [hleftAdj, hrightAdj, hleft, hright]
   change (p - q) * (p - q) = p * (1 - q) * ((1 - q) * p) +
@@ -119,9 +127,9 @@ private theorem operatorAbs_adjoint_reverse_sine_mem_complement
     intro y hy
     change ((V.sinThetaMap U).toLinearMap).adjoint y = 0
     rw [Submodule.sinThetaMap_def]
-    change (complementaryProjection U ∘ₗ projection V).adjoint y = 0
-    rw [LinearMap.adjoint_comp, projection_adjoint,
-      complementaryProjection, projection_adjoint]
+    change (Uᗮ.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap).adjoint y = 0
+    rw [LinearMap.adjoint_comp, (Submodule.starProjection_isSymmetric _).adjoint_eq,
+      (Submodule.starProjection_isSymmetric _).adjoint_eq]
     change V.starProjection (Uᗮ.starProjection y) = 0
     have hzero : Uᗮ.starProjection y = 0 :=
       (Submodule.starProjection_apply_eq_zero_iff Uᗮ).mpr (by
@@ -161,10 +169,10 @@ its support in `Uᗮ` instead of `V`. -/
 theorem operatorAbs_projectionDifference_eq_directed_sine_sum
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    LinearMap.operatorAbs (projection U - projection V) =
+    LinearMap.operatorAbs (U.starProjection.toLinearMap - V.starProjection.toLinearMap) =
       LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap) +
         LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint) := by
-  let D : E →ₗ[𝕜] E := projection U - projection V
+  let D : E →ₗ[𝕜] E := U.starProjection.toLinearMap - V.starProjection.toLinearMap
   let A : E →ₗ[𝕜] E := LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap)
   let B : E →ₗ[𝕜] E := LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint)
   have hA : A.IsPositive := LinearMap.isPositive_operatorAbs _
@@ -179,7 +187,8 @@ theorem operatorAbs_projectionDifference_eq_directed_sine_sum
     exact h
   have hDstar : D.adjoint = D := by
     dsimp [D]
-    rw [map_sub, projection_adjoint, projection_adjoint]
+    rw [map_sub, (Submodule.starProjection_isSymmetric _).adjoint_eq,
+        (Submodule.starProjection_isSymmetric _).adjoint_eq]
   have hgram : A * A + B * B = D.adjoint * D := by
     change LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap) ∘ₗ
       LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap) +
@@ -206,16 +215,16 @@ identity.  No dimension matching or acute-angle assumption is needed. -/
 theorem kyFanSum_projectionDifference_eq_directed_sines
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    (projection U - projection V).kyFanSum (finrank 𝕜 E) =
+    (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank 𝕜 E) =
       ((U.sinThetaMap V).toLinearMap).kyFanSum (finrank 𝕜 E) +
         ((V.sinThetaMap U).toLinearMap).kyFanSum (finrank 𝕜 E) := by
   let A : E →ₗ[𝕜] E := LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap)
   let B : E →ₗ[𝕜] E := LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint)
   have hA : A.IsPositive := LinearMap.isPositive_operatorAbs _
   have hB : B.IsPositive := LinearMap.isPositive_operatorAbs _
-  have hD : (projection U - projection V).kyFanSum (finrank 𝕜 E) =
+  have hD : (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank 𝕜 E) =
       (A + B).kyFanSum (finrank 𝕜 E) := by
-    change (projection U - projection V).kyFanSum (finrank 𝕜 E) =
+    change (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank 𝕜 E) =
       (LinearMap.operatorAbs ((U.sinThetaMap V).toLinearMap) +
           LinearMap.operatorAbs (((V.sinThetaMap U).toLinearMap).adjoint)).kyFanSum (finrank 𝕜 E)
     rw [← operatorAbs_projectionDifference_eq_directed_sine_sum U V]
@@ -231,7 +240,7 @@ theorem kyFanSum_projectionDifference_eq_directed_sines
       LinearMap.singularValues_operatorAbs,
       LinearMap.singularValues_adjoint]
   calc
-    (projection U - projection V).kyFanSum (finrank 𝕜 E) =
+    (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank 𝕜 E) =
         (A + B).kyFanSum (finrank 𝕜 E) := hD
     _ = A.kyFanSum (finrank 𝕜 E) + B.kyFanSum (finrank 𝕜 E) :=
       kyFanSum_add_of_isPositive A B hA hB

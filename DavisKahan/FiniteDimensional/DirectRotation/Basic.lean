@@ -34,64 +34,30 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
 omit [FiniteDimensional 𝕜 E] in
-private theorem projection_comp_complementaryProjection (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] :
-    projection U ∘ₗ complementaryProjection U = 0 := by
-  apply LinearMap.ext
-  intro x
-  change U.starProjection (Uᗮ.starProjection x) = 0
-  rw [Submodule.starProjection_apply_eq_zero_iff]
-  exact Uᗮ.starProjection_apply_mem x
-
-omit [FiniteDimensional 𝕜 E] in
-private theorem complementaryProjection_comp_projection (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] :
-    complementaryProjection U ∘ₗ projection U = 0 := by
-  apply LinearMap.ext
-  intro x
-  change Uᗮ.starProjection (U.starProjection x) = 0
-  rw [Submodule.starProjection_apply_eq_zero_iff]
-  exact U.le_orthogonal_orthogonal (U.starProjection_apply_mem x)
-
-omit [FiniteDimensional 𝕜 E] in
-private theorem projection_comp_self (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] :
-    projection U ∘ₗ projection U = projection U := by
-  ext x
-  exact Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
-
-omit [FiniteDimensional 𝕜 E] in
-private theorem complementaryProjection_comp_self (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] :
-    complementaryProjection U ∘ₗ complementaryProjection U =
-      complementaryProjection U := by
-  simpa [complementaryProjection] using projection_comp_self (𝕜 := 𝕜) Uᗮ
-
-omit [FiniteDimensional 𝕜 E] in
 /-- The projection fixes vectors already in the subspace. -/
 theorem projection_apply_of_mem {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    {x : E} (hx : x ∈ U) : projection U x = x :=
+    {x : E} (hx : x ∈ U) : U.starProjection.toLinearMap x = x :=
   Submodule.starProjection_eq_self_iff.mpr hx
 
 omit [FiniteDimensional 𝕜 E] in
 /-- The projection kills vectors in the orthogonal complement. -/
 theorem projection_apply_of_mem_orthogonal {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] {x : E} (hx : x ∈ Uᗮ) : projection U x = 0 :=
+    [U.HasOrthogonalProjection] {x : E} (hx : x ∈ Uᗮ) : U.starProjection.toLinearMap x = 0 :=
   (Submodule.starProjection_apply_eq_zero_iff U).mpr hx
 
 omit [FiniteDimensional 𝕜 E] in
 /-- The projection is self-adjoint at the inner-product level. -/
 theorem projection_inner_left_eq_right (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (u v : E) :
-    ⟪projection U u, v⟫_𝕜 = ⟪u, projection U v⟫_𝕜 :=
+    ⟪U.starProjection.toLinearMap u, v⟫_𝕜 = ⟪u, U.starProjection.toLinearMap v⟫_𝕜 :=
   Submodule.inner_starProjection_left_eq_right U u v
 
 /-- The canonical two-projection intertwiner. -/
 @[expose]
 noncomputable def canonicalIntertwiner (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  projection V ∘ₗ projection U +
-    complementaryProjection V ∘ₗ complementaryProjection U
+  V.starProjection.toLinearMap ∘ₗ U.starProjection.toLinearMap +
+    Vᗮ.starProjection.toLinearMap ∘ₗ Uᗮ.starProjection.toLinearMap
 
 /-- The ordered product of the target and source reflections. -/
 @[expose]
@@ -113,7 +79,7 @@ theorem two_smul_canonicalIntertwiner (U V : Submodule 𝕜 E)
       LinearMap.id + (reflectionProduct U V).toLinearMap := by
   ext x
   simp only [canonicalIntertwiner, LinearMap.smul_apply, LinearMap.add_apply,
-    LinearMap.comp_apply, LinearMap.id_apply, projection, complementaryProjection,
+    LinearMap.comp_apply, LinearMap.id_apply, ContinuousLinearMap.coe_coe,
     ContinuousLinearMap.coe_coe, LinearEquiv.coe_coe,
     LinearIsometryEquiv.coe_toLinearEquiv, reflectionProduct_apply,
     Submodule.reflection_apply, Submodule.starProjection_orthogonal_val,
@@ -126,67 +92,79 @@ theorem adjoint_canonicalIntertwiner (U V : Submodule 𝕜 E)
     (canonicalIntertwiner U V).adjoint = canonicalIntertwiner V U := by
   rw [canonicalIntertwiner, canonicalIntertwiner, map_add,
     LinearMap.adjoint_comp, LinearMap.adjoint_comp]
-  simp only [complementaryProjection, projection_adjoint]
+  simp only [(Submodule.starProjection_isSymmetric _).adjoint_eq]
 
 /-- Gram operator of the canonical intertwiner, displayed in source blocks. -/
 theorem canonicalIntertwiner_adjoint_comp_self (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     (canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V =
-      (projection U ∘ₗ projection V ∘ₗ projection U) +
-        (complementaryProjection U ∘ₗ complementaryProjection V ∘ₗ
-          complementaryProjection U) := by
-  have hVV : ∀ y : E, projection V (projection V y) = projection V y := fun y =>
+      (U.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap ∘ₗ
+          U.starProjection.toLinearMap) +
+        (Uᗮ.starProjection.toLinearMap ∘ₗ Vᗮ.starProjection.toLinearMap ∘ₗ
+          Uᗮ.starProjection.toLinearMap) := by
+  have hVV : ∀ y : E, V.starProjection (V.starProjection y) =
+      V.starProjection y := fun y =>
     Submodule.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem y)
-  have hcVcV : ∀ y : E, complementaryProjection V (complementaryProjection V y) =
-      complementaryProjection V y := fun y =>
+  have hcVcV : ∀ y : E, Vᗮ.starProjection (Vᗮ.starProjection y) =
+      Vᗮ.starProjection y := fun y =>
     Submodule.starProjection_eq_self_iff.mpr (Vᗮ.starProjection_apply_mem y)
-  have hVcV : ∀ y : E, projection V (complementaryProjection V y) = 0 := fun y =>
+  have hVcV : ∀ y : E, V.starProjection (Vᗮ.starProjection y) = 0 := fun y
+      =>
     (Submodule.starProjection_apply_eq_zero_iff V).mpr (Vᗮ.starProjection_apply_mem y)
-  have hcVV : ∀ y : E, complementaryProjection V (projection V y) = 0 := fun y =>
+  have hcVV : ∀ y : E, Vᗮ.starProjection (V.starProjection y) = 0 := fun y
+      =>
     (Submodule.starProjection_apply_eq_zero_iff Vᗮ).mpr
       (V.le_orthogonal_orthogonal (V.starProjection_apply_mem y))
   rw [adjoint_canonicalIntertwiner]
   ext x
   simp only [canonicalIntertwiner, LinearMap.add_apply, LinearMap.comp_apply,
-    map_add, hVV, hcVcV, hVcV, hcVV, map_zero, add_zero, zero_add]
+    ContinuousLinearMap.coe_coe, map_add, hVV, hcVcV, hVcV, hcVV, map_zero, add_zero, zero_add]
 
 /-- The Gram operator is block diagonal relative to `U`. -/
 theorem projection_comm_canonicalIntertwiner_gram (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    projection U ∘ₗ ((canonicalIntertwiner U V).adjoint ∘ₗ
+    U.starProjection ∘ₗ ((canonicalIntertwiner U V).adjoint ∘ₗ
       canonicalIntertwiner U V) =
       ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V) ∘ₗ
-        projection U := by
-  have hUU : ∀ y : E, projection U (projection U y) = projection U y := fun y =>
+        U.starProjection := by
+  have hUU : ∀ y : E, U.starProjection (U.starProjection y) =
+      U.starProjection y := fun y =>
     Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem y)
-  have hUcU : ∀ y : E, projection U (complementaryProjection U y) = 0 := fun y =>
+  have hUcU : ∀ y : E, U.starProjection (Uᗮ.starProjection y) = 0 := fun y
+      =>
     (Submodule.starProjection_apply_eq_zero_iff U).mpr (Uᗮ.starProjection_apply_mem y)
-  have hcUU : ∀ y : E, complementaryProjection U (projection U y) = 0 := fun y =>
+  have hcUU : ∀ y : E, Uᗮ.starProjection (U.starProjection y) = 0 := fun y
+      =>
     (Submodule.starProjection_apply_eq_zero_iff Uᗮ).mpr
       (U.le_orthogonal_orthogonal (U.starProjection_apply_mem y))
   rw [canonicalIntertwiner_adjoint_comp_self]
   ext x
-  simp only [LinearMap.comp_apply, LinearMap.add_apply, map_add, hUU, hUcU, hcUU,
+  simp only [LinearMap.comp_apply, LinearMap.add_apply, ContinuousLinearMap.coe_coe,
+    map_add, hUU, hUcU, hcUU,
     map_zero, add_zero]
 
 omit [FiniteDimensional 𝕜 E] in
 /-- The canonical intertwiner sends source blocks to target blocks. -/
 theorem canonicalIntertwiner_comp_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    canonicalIntertwiner U V ∘ₗ projection U =
-      projection V ∘ₗ canonicalIntertwiner U V := by
-  have hUU : ∀ y : E, projection U (projection U y) = projection U y := fun y =>
+    canonicalIntertwiner U V ∘ₗ U.starProjection =
+      V.starProjection ∘ₗ canonicalIntertwiner U V := by
+  have hUU : ∀ y : E, U.starProjection (U.starProjection y) =
+      U.starProjection y := fun y =>
     Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem y)
-  have hcUU : ∀ y : E, complementaryProjection U (projection U y) = 0 := fun y =>
+  have hcUU : ∀ y : E, Uᗮ.starProjection (U.starProjection y) = 0 := fun y
+      =>
     (Submodule.starProjection_apply_eq_zero_iff Uᗮ).mpr
       (U.le_orthogonal_orthogonal (U.starProjection_apply_mem y))
-  have hVV : ∀ y : E, projection V (projection V y) = projection V y := fun y =>
+  have hVV : ∀ y : E, V.starProjection (V.starProjection y) =
+      V.starProjection y := fun y =>
     Submodule.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem y)
-  have hVcV : ∀ y : E, projection V (complementaryProjection V y) = 0 := fun y =>
+  have hVcV : ∀ y : E, V.starProjection (Vᗮ.starProjection y) = 0 := fun y
+      =>
     (Submodule.starProjection_apply_eq_zero_iff V).mpr (Vᗮ.starProjection_apply_mem y)
   ext x
   simp only [canonicalIntertwiner, LinearMap.comp_apply, LinearMap.add_apply,
-    map_add, hUU, hcUU, hVV, hVcV, map_zero, add_zero]
+    ContinuousLinearMap.coe_coe, map_add, hUU, hcUU, hVV, hVcV, map_zero, add_zero]
 
 omit [FiniteDimensional 𝕜 E] in
 /-- Acuteness makes the canonical intertwiner injective. -/
@@ -197,45 +175,44 @@ theorem canonicalIntertwiner_injective_of_acute
     Function.Injective (canonicalIntertwiner U V) := by
   rw [injective_iff_map_eq_zero]
   intro x hx
-  have hVV : ∀ y : E, projection V (projection V y) = projection V y := fun y =>
+  have hVV : ∀ y : E, V.starProjection (V.starProjection y) =
+      V.starProjection y := fun y =>
     Submodule.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem y)
-  have hcVcV : ∀ y : E, complementaryProjection V (complementaryProjection V y) =
-      complementaryProjection V y := fun y =>
+  have hcVcV : ∀ y : E, Vᗮ.starProjection (Vᗮ.starProjection y) =
+      Vᗮ.starProjection y := fun y =>
     Submodule.starProjection_eq_self_iff.mpr (Vᗮ.starProjection_apply_mem y)
-  have hU : projection U x = 0 := by
-    have hVproj := congrArg (projection V) hx
-    have hcross : projection V (complementaryProjection V
-        (complementaryProjection U x)) = 0 := by
-      change V.starProjection (Vᗮ.starProjection
-        (Uᗮ.starProjection x)) = 0
+  have hU : U.starProjection x = 0 := by
+    have hVproj := congrArg (V.starProjection) hx
+    have hcross : V.starProjection (Vᗮ.starProjection
+        (Uᗮ.starProjection x)) = 0 := by
       rw [Submodule.starProjection_apply_eq_zero_iff]
       exact Vᗮ.starProjection_apply_mem _
-    have hzero : projection V (projection U x) = 0 := by
-      simpa [canonicalIntertwiner, LinearMap.add_apply, LinearMap.comp_apply,
-        hcross, hVV] using hVproj
+    have hzero : V.starProjection (U.starProjection x) = 0 := by
+      simpa only [canonicalIntertwiner, LinearMap.add_apply, LinearMap.comp_apply,
+        ContinuousLinearMap.coe_coe, map_add, hcross, hVV, map_zero, add_zero] using hVproj
     exact hacute.injOn_left (U.starProjection_apply_mem x) U.zero_mem
       (hzero.trans (map_zero V.starProjection).symm)
-  have hUperp : complementaryProjection U x = 0 := by
-    have hVperp := congrArg (complementaryProjection V) hx
-    have hcross : complementaryProjection V (projection V (projection U x)) = 0 := by
-      change Vᗮ.starProjection (V.starProjection (U.starProjection x)) = 0
+  have hUperp : Uᗮ.starProjection x = 0 := by
+    have hVperp := congrArg (Vᗮ.starProjection) hx
+    have hcross : Vᗮ.starProjection (V.starProjection
+        (U.starProjection x)) = 0 := by
       rw [Submodule.starProjection_apply_eq_zero_iff]
       exact V.le_orthogonal_orthogonal (V.starProjection_apply_mem _)
-    have hzero : complementaryProjection V (complementaryProjection U x) = 0 := by
-      simpa [canonicalIntertwiner, LinearMap.add_apply, LinearMap.comp_apply,
-        hcross, hcVcV] using hVperp
-    have hyV : complementaryProjection U x ∈ V := by
-      have : complementaryProjection U x ∈ (Vᗮ)ᗮ :=
+    have hzero : Vᗮ.starProjection (Uᗮ.starProjection x) = 0 := by
+      simpa only [canonicalIntertwiner, LinearMap.add_apply, LinearMap.comp_apply,
+        ContinuousLinearMap.coe_coe, map_add, hcross, hcVcV, map_zero, zero_add] using hVperp
+    have hyV : Uᗮ.starProjection.toLinearMap x ∈ V := by
+      have : Uᗮ.starProjection.toLinearMap x ∈ (Vᗮ)ᗮ :=
         (Submodule.starProjection_apply_eq_zero_iff Vᗮ).mp hzero
       simpa using this
-    have hyU : projection U (complementaryProjection U x) = 0 := by
+    have hyU : U.starProjection.toLinearMap (Uᗮ.starProjection.toLinearMap x) = 0 := by
       change U.starProjection (Uᗮ.starProjection x) = 0
       rw [Submodule.starProjection_apply_eq_zero_iff]
       exact Uᗮ.starProjection_apply_mem x
     exact hacute.injOn_right hyV V.zero_mem
       (hyU.trans (map_zero U.starProjection).symm)
   calc
-    x = projection U x + complementaryProjection U x := by
+    x = U.starProjection x + Uᗮ.starProjection x := by
       symm
       exact U.starProjection_add_starProjection_orthogonal x
     _ = 0 := by rw [hU, hUperp, add_zero]
@@ -290,13 +267,14 @@ projection. -/
 theorem projection_comm_abs_canonicalIntertwiner
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    projection U ∘ₗ LinearMap.operatorAbs (canonicalIntertwiner U V) =
-      LinearMap.operatorAbs (canonicalIntertwiner U V) ∘ₗ projection U := by
-  have hcomm : Commute (projection U)
+    U.starProjection.toLinearMap ∘ₗ LinearMap.operatorAbs (canonicalIntertwiner U V) =
+      LinearMap.operatorAbs (canonicalIntertwiner U V) ∘ₗ U.starProjection.toLinearMap := by
+  have hcomm : Commute (U.starProjection.toLinearMap)
       ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V) := by
-    change projection U ∘ₗ ((canonicalIntertwiner U V).adjoint ∘ₗ
+    change U.starProjection.toLinearMap ∘ₗ ((canonicalIntertwiner U V).adjoint ∘ₗ
       canonicalIntertwiner U V) =
-      ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V) ∘ₗ projection U
+      ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V) ∘ₗ
+          U.starProjection.toLinearMap
     exact projection_comm_canonicalIntertwiner_gram U V
   exact LinearMap.commute_operatorAbs_of_commute hcomm
 
@@ -307,13 +285,16 @@ that vector. -/
 theorem canonicalIntertwiner_apply_eq_self_of_projection_eq
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    {x : E} (hx : projection U x = projection V x) :
+    {x : E} (hx : U.starProjection.toLinearMap x = V.starProjection.toLinearMap x) :
     canonicalIntertwiner U V x = x := by
-  have hp : projection V (projection V x) = projection V x :=
+  have hp : V.starProjection.toLinearMap (V.starProjection.toLinearMap x) =
+      V.starProjection.toLinearMap x :=
     Submodule.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem x)
-  have hcU : ∀ y : E, complementaryProjection U y = y - projection U y := fun y =>
+  have hcU : ∀ y : E, Uᗮ.starProjection.toLinearMap y = y - U.starProjection.toLinearMap y := fun
+      y =>
     Submodule.starProjection_orthogonal_val y
-  have hcV : ∀ y : E, complementaryProjection V y = y - projection V y := fun y =>
+  have hcV : ∀ y : E, Vᗮ.starProjection.toLinearMap y = y - V.starProjection.toLinearMap y := fun
+      y =>
     Submodule.starProjection_orthogonal_val y
   simp only [canonicalIntertwiner, LinearMap.add_apply, LinearMap.comp_apply,
     hcU, hcV, hx, map_sub, hp]
@@ -324,7 +305,7 @@ projections agree. -/
 theorem adjoint_canonicalIntertwiner_apply_eq_self_of_projection_eq
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    {x : E} (hx : projection U x = projection V x) :
+    {x : E} (hx : U.starProjection.toLinearMap x = V.starProjection.toLinearMap x) :
     (canonicalIntertwiner U V).adjoint x = x := by
   rw [adjoint_canonicalIntertwiner]
   exact canonicalIntertwiner_apply_eq_self_of_projection_eq V U hx.symm
@@ -333,7 +314,7 @@ theorem adjoint_canonicalIntertwiner_apply_eq_self_of_projection_eq
 theorem abs_canonicalIntertwiner_apply_eq_self_of_projection_eq
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    {x : E} (hx : projection U x = projection V x) :
+    {x : E} (hx : U.starProjection.toLinearMap x = V.starProjection.toLinearMap x) :
     LinearMap.operatorAbs (canonicalIntertwiner U V) x = x := by
   let S := canonicalIntertwiner U V
   have hS : S x = x :=
@@ -370,7 +351,7 @@ theorem directRotation_apply_eq_self_of_projection_eq
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : Submodule.IsAcute U V) {x : E}
-    (hx : projection U x = projection V x) :
+    (hx : U.starProjection.toLinearMap x = V.starProjection.toLinearMap x) :
     directRotation U V hacute x = x := by
   let S := canonicalIntertwiner U V
   have hS : S x = x :=
@@ -432,8 +413,8 @@ private theorem abs_canonicalIntertwiner_surjective (U V : Submodule 𝕜 E)
 theorem directRotation_comp_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : Submodule.IsAcute U V) :
-    (directRotation U V hacute).toLinearMap ∘ₗ projection U =
-      projection V ∘ₗ (directRotation U V hacute).toLinearMap := by
+    (directRotation U V hacute).toLinearMap ∘ₗ U.starProjection.toLinearMap =
+      V.starProjection.toLinearMap ∘ₗ (directRotation U V hacute).toLinearMap := by
   let S := canonicalIntertwiner U V
   let C := S.operatorAbs
   let W := (directRotation U V hacute).toLinearMap
@@ -449,16 +430,16 @@ theorem directRotation_comp_projection (U V : Submodule 𝕜 E)
   have hCPy := LinearMap.congr_fun hCP y
   have hSPy := LinearMap.congr_fun hSP y
   have hpolar_y := LinearMap.congr_fun hpolar y
-  have hpolar_Py := LinearMap.congr_fun hpolar (projection U y)
+  have hpolar_Py := LinearMap.congr_fun hpolar (U.starProjection.toLinearMap y)
   calc
-    W (projection U (C y)) = W (C (projection U y)) := by
-      rw [show projection U (C y) = C (projection U y) by
+    W (U.starProjection.toLinearMap (C y)) = W (C (U.starProjection.toLinearMap y)) := by
+      rw [show U.starProjection.toLinearMap (C y) = C (U.starProjection.toLinearMap y) by
         simpa [LinearMap.comp_apply] using hCPy]
-    _ = S (projection U y) := by
+    _ = S (U.starProjection.toLinearMap y) := by
       simpa [LinearMap.comp_apply] using hpolar_Py.symm
-    _ = projection V (S y) := by
+    _ = V.starProjection.toLinearMap (S y) := by
       simpa [LinearMap.comp_apply] using hSPy
-    _ = projection V (W (C y)) := by
+    _ = V.starProjection.toLinearMap (W (C y)) := by
       have hWC : W (C y) = S y := by
         rw [← LinearMap.comp_apply]; exact hpolar_y.symm
       rw [hWC]
@@ -660,7 +641,7 @@ theorem directRotation_map_eq (U V : Submodule 𝕜 E)
   · rintro _ ⟨x, hxU, rfl⟩
     have h := LinearMap.congr_fun
       (directRotation_comp_projection U V hacute) x
-    have hxproj : projection U x = x :=
+    have hxproj : U.starProjection.toLinearMap x = x :=
       Submodule.starProjection_eq_self_iff.mpr hxU
     rw [LinearMap.comp_apply, LinearMap.comp_apply, hxproj] at h
     exact Submodule.starProjection_eq_self_iff.mp h.symm
@@ -677,7 +658,7 @@ theorem directRotation_map_eq (U V : Submodule 𝕜 E)
     have h := LinearMap.congr_fun
       (directRotation_comp_projection U V hacute)
       ((directRotation U V hacute).symm y)
-    have hyproj : projection V y = y :=
+    have hyproj : V.starProjection.toLinearMap y = y :=
       Submodule.starProjection_eq_self_iff.mpr hyV
     rw [LinearMap.comp_apply, LinearMap.comp_apply, hWsy, hyproj] at h
     exact h

@@ -70,7 +70,7 @@ That theorem requires `OrderedInternalGap` (or an equivalent two-sided form
 ordering). -/
 @[expose]
 def PointInternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) : Prop :=
-  IsInvariant A U ∧ PointSpectraSeparated A U A Uᗮ δ
+  (U ∈ Module.End.invtSubmodule A) ∧ PointSpectraSeparated A U A Uᗮ δ
 
 /-- Ordered quadratic-form separation between the two blocks of `A`.
 
@@ -150,7 +150,7 @@ omit [FiniteDimensional 𝕜 E] in
 -/
 theorem OrderedInternalGap.pointInternalGap {A : E →ₗ[𝕜] E}
     {U : Submodule 𝕜 E} {δ : ℝ} (hδ : 0 ≤ δ)
-    (h : OrderedInternalGap A U δ) (hU : IsInvariant A U) :
+    (h : OrderedInternalGap A U δ) (hU : (U ∈ Module.End.invtSubmodule A)) :
     PointInternalGap A U δ := by
   refine ⟨hU, ?_⟩
   intro lam μ hlam hμ

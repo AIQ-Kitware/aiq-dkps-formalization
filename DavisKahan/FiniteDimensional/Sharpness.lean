@@ -364,8 +364,8 @@ position. -/
   simp
 
 private theorem projection_sub_model_eq_matrix (θ : ℝ) :
-    projection (modelSubspace (𝕜 := 𝕜)) -
-        projection (rotatedModelSubspace (𝕜 := 𝕜) θ) =
+    ((modelSubspace (𝕜 := 𝕜))).starProjection.toLinearMap -
+        ((rotatedModelSubspace (𝕜 := 𝕜) θ)).starProjection.toLinearMap =
       Matrix.toEuclideanLin
         !![((Real.sin θ ^ 2 : ℝ) : 𝕜),
            ((-Real.sin θ * Real.cos θ : ℝ) : 𝕜);
@@ -377,7 +377,7 @@ private theorem projection_sub_model_eq_matrix (θ : ℝ) :
     exact h
   apply plane_linearMap_ext
   · -- reduce the projections *before* `e0`/`e1` are unfolded into coordinates
-    simp only [LinearMap.sub_apply, projection, ContinuousLinearMap.coe_coe,
+    simp only [LinearMap.sub_apply, ContinuousLinearMap.coe_coe,
       modelSubspace_starProjection_e0,
       rotatedModelSubspace_starProjection_e0]
     ext i
@@ -390,7 +390,7 @@ private theorem projection_sub_model_eq_matrix (θ : ℝ) :
       first
         | ring1
         | linear_combination (-1 : 𝕜) * hpy
-  · simp only [LinearMap.sub_apply, projection, ContinuousLinearMap.coe_coe,
+  · simp only [LinearMap.sub_apply, ContinuousLinearMap.coe_coe,
       modelSubspace_starProjection_e1,
       rotatedModelSubspace_starProjection_e1]
     ext i
@@ -406,15 +406,15 @@ private theorem sinThetaMap_model_eq_matrix (θ : ℝ) :
         !![((Real.sin θ ^ 2 : ℝ) : 𝕜), 0;
            ((-Real.sin θ * Real.cos θ : ℝ) : 𝕜), 0] := by
   rw [Submodule.sinThetaMap_def]
-  change complementaryProjection (rotatedModelSubspace (𝕜 := 𝕜) θ) ∘ₗ
-    projection (modelSubspace (𝕜 := 𝕜)) = _
+  change (((rotatedModelSubspace (𝕜 := 𝕜) θ))ᗮ).starProjection.toLinearMap ∘ₗ
+    ((modelSubspace (𝕜 := 𝕜))).starProjection.toLinearMap = _
   have hpy : ((Real.sin θ : 𝕜)) ^ 2 + ((Real.cos θ : 𝕜)) ^ 2 = 1 := by
     have h := congrArg (fun r : ℝ => (r : 𝕜)) (Real.sin_sq_add_cos_sq θ)
     push_cast at h
     exact h
   apply plane_linearMap_ext
   · -- reduce the projections *before* `e0`/`e1` are unfolded into coordinates
-    simp only [complementaryProjection, projection,
+    simp only [ContinuousLinearMap.coe_coe,
       ContinuousLinearMap.coe_coe, LinearMap.comp_apply,
       modelSubspace_starProjection_e0,
       rotatedModelSubspace_starProjection_e0,
@@ -429,7 +429,7 @@ private theorem sinThetaMap_model_eq_matrix (θ : ℝ) :
       first
         | ring1
         | linear_combination (-1 : 𝕜) * hpy
-  · simp only [complementaryProjection, projection,
+  · simp only [ContinuousLinearMap.coe_coe,
       ContinuousLinearMap.coe_coe, LinearMap.comp_apply,
       modelSubspace_starProjection_e1,
       Submodule.starProjection_orthogonal_val]
@@ -442,15 +442,16 @@ private theorem sinTwoAngleOperator_model_eq_matrix (θ : ℝ) :
       Matrix.toEuclideanLin
         !![0, 0; ((Real.sin (2 * θ) : ℝ) : 𝕜), 0] := by
   rw [Submodule.sinTwoAngleOperator_def]
-  change (2 : 𝕜) • (complementaryProjection (modelSubspace (𝕜 := 𝕜)) ∘ₗ
-    projection (rotatedModelSubspace (𝕜 := 𝕜) θ) ∘ₗ projection (modelSubspace (𝕜 := 𝕜))) = _
+  change (2 : 𝕜) • ((((modelSubspace (𝕜 := 𝕜)))ᗮ).starProjection.toLinearMap ∘ₗ
+    ((rotatedModelSubspace (𝕜 := 𝕜) θ)).starProjection.toLinearMap ∘ₗ ((modelSubspace (𝕜 :=
+        𝕜))).starProjection.toLinearMap) = _
   have hpy : ((Real.sin θ : 𝕜)) ^ 2 + ((Real.cos θ : 𝕜)) ^ 2 = 1 := by
     have h := congrArg (fun r : ℝ => (r : 𝕜)) (Real.sin_sq_add_cos_sq θ)
     push_cast at h
     exact h
   apply plane_linearMap_ext
   · -- reduce the projections before `e0`/`e1` become coordinates
-    simp only [complementaryProjection, projection,
+    simp only [ContinuousLinearMap.coe_coe,
       ContinuousLinearMap.coe_coe, LinearMap.comp_apply,
       LinearMap.smul_apply,
       modelSubspace_starProjection_e0,
@@ -466,7 +467,7 @@ private theorem sinTwoAngleOperator_model_eq_matrix (θ : ℝ) :
     try simp only [RCLike.real_smul_eq_coe_mul, RCLike.algebraMap_eq_ofReal]
     ring1
   ·
-    simp only [complementaryProjection, projection,
+    simp only [ContinuousLinearMap.coe_coe,
       ContinuousLinearMap.coe_coe, LinearMap.comp_apply,
       LinearMap.smul_apply,
       modelSubspace_starProjection_e1,
@@ -477,15 +478,15 @@ private theorem sinTwoAngleOperator_model_eq_matrix (θ : ℝ) :
         Real.sin_two_mul]
 
 private theorem projection_sub_model_isSymmetric (θ : ℝ) :
-    (projection (modelSubspace (𝕜 := 𝕜)) -
-      projection (rotatedModelSubspace (𝕜 := 𝕜) θ)).IsSymmetric :=
-  (projection_isSymmetric _).sub (projection_isSymmetric _)
+    (((modelSubspace (𝕜 := 𝕜))).starProjection.toLinearMap -
+      ((rotatedModelSubspace (𝕜 := 𝕜) θ)).starProjection.toLinearMap).IsSymmetric :=
+  ((Submodule.starProjection_isSymmetric _)).sub ((Submodule.starProjection_isSymmetric _))
 
 private theorem projection_sub_model_sq (θ : ℝ) :
-    (projection (modelSubspace (𝕜 := 𝕜)) -
-        projection (rotatedModelSubspace (𝕜 := 𝕜) θ)) ∘ₗ
-      (projection (modelSubspace (𝕜 := 𝕜)) -
-        projection (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
+    (((modelSubspace (𝕜 := 𝕜))).starProjection.toLinearMap -
+        ((rotatedModelSubspace (𝕜 := 𝕜) θ)).starProjection.toLinearMap) ∘ₗ
+      (((modelSubspace (𝕜 := 𝕜))).starProjection.toLinearMap -
+        ((rotatedModelSubspace (𝕜 := 𝕜) θ)).starProjection.toLinearMap) =
       ((((Real.sin θ) ^ 2 : ℝ) : 𝕜) • LinearMap.id) := by
   have hpy : ((Real.sin θ : 𝕜)) ^ 2 + ((Real.cos θ : 𝕜)) ^ 2 = 1 := by
     have h := congrArg (fun r : ℝ => (r : 𝕜)) (Real.sin_sq_add_cos_sq θ)
@@ -570,15 +571,15 @@ private theorem singularValues_sinThetaMap_model
 
 private theorem singularValues_projection_sub_model
     {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 2) :
-    (projection (modelSubspace (𝕜 := 𝕜)) -
-      projection (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues =
+    (((modelSubspace (𝕜 := 𝕜))).starProjection.toLinearMap -
+      ((rotatedModelSubspace (𝕜 := 𝕜) θ)).starProjection.toLinearMap).singularValues =
       pairSingularValues (Real.sin θ) (Real.sin θ) := by
   have hsin : 0 ≤ Real.sin θ := Real.sin_nonneg_of_nonneg_of_le_pi hθ0 (by linarith)
   simpa [abs_of_nonneg hsin] using
     singularValues_eq_abs_pair_of_isSymmetric_sq finrank_euclideanSpace_fin
       (EuclideanSpace.basisFun (Fin 2) 𝕜)
-      (projection (modelSubspace (𝕜 := 𝕜)) -
-        projection (rotatedModelSubspace (𝕜 := 𝕜) θ))
+      (((modelSubspace (𝕜 := 𝕜))).starProjection.toLinearMap -
+        ((rotatedModelSubspace (𝕜 := 𝕜) θ)).starProjection.toLinearMap)
       (Real.sin θ) (projection_sub_model_isSymmetric θ)
       (projection_sub_model_sq θ)
 
@@ -609,8 +610,8 @@ private theorem sinAngleOperator_model_eq_smul_id
     {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 2) :
     (Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ)).toLinearMap =
       (((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) := by
-  let A := projection (modelSubspace (𝕜 := 𝕜)) -
-    projection (rotatedModelSubspace (𝕜 := 𝕜) θ)
+  let A := ((modelSubspace (𝕜 := 𝕜))).starProjection.toLinearMap -
+    ((rotatedModelSubspace (𝕜 := 𝕜) θ)).starProjection.toLinearMap
   have hsin : 0 ≤ Real.sin θ := Real.sin_nonneg_of_nonneg_of_le_pi hθ0 (by linarith)
   have hpos : ((((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) :
       Plane 𝕜 →ₗ[𝕜] Plane 𝕜).IsPositive := by
@@ -1554,8 +1555,9 @@ theorem orthogonal_rotatedModelSubspace (θ : ℝ) :
 
 private theorem isInvariant_span_singleton {A : Plane 𝕜 →ₗ[𝕜] Plane 𝕜} {u : Plane 𝕜}
     {lam : ℝ} (h : A u = (lam : 𝕜) • u) :
-    IsInvariant A (Submodule.span 𝕜 {u}) := by
+    ((Submodule.span 𝕜 {u}) ∈ Module.End.invtSubmodule A) := by
   intro x hx
+  change A x ∈ Submodule.span 𝕜 {u}
   rw [Submodule.mem_span_singleton] at hx ⊢
   obtain ⟨c, rfl⟩ := hx
   exact ⟨c * (lam : 𝕜), by rw [map_smul, h, smul_smul, mul_comm]⟩
@@ -1735,12 +1737,13 @@ theorem modelRotatedOperator_sub_modelGappedOperator (a b θ : ℝ) :
 
 /-- The coordinate line is invariant under the gapped model operator. -/
 theorem isInvariant_modelGappedOperator_modelSubspace (a b : ℝ) :
-    IsInvariant (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) :=
+    ((modelSubspace (𝕜 := 𝕜)) ∈ Module.End.invtSubmodule (modelGappedOperator (𝕜 := 𝕜) a b)) :=
   isInvariant_span_singleton (lam := a) (modelGappedOperator_apply_e0 a b)
 
 /-- The rotated line is invariant under the rotated model operator. -/
 theorem isInvariant_modelRotatedOperator_rotatedModelSubspace (a b θ : ℝ) :
-    IsInvariant (modelRotatedOperator (𝕜 := 𝕜) a b θ) (rotatedModelSubspace (𝕜 := 𝕜) θ) :=
+    ((rotatedModelSubspace (𝕜 := 𝕜) θ) ∈ Module.End.invtSubmodule (modelRotatedOperator (𝕜 := 𝕜) a
+        b θ)) :=
   isInvariant_span_singleton (lam := a) (modelRotatedOperator_apply_uθ a b θ)
 
 /-- The interval/exterior gap of the `sin Θ` pair, in the orientation the theorem consumes
@@ -1804,9 +1807,9 @@ constant is sharp, not just a matrix-identity constant. -/
 theorem sinTheta_model_isAdmissiblePair {a b θ : ℝ} (hab : a < b) :
     (modelGappedOperator (𝕜 := 𝕜) a b).IsSymmetric ∧
       (modelRotatedOperator (𝕜 := 𝕜) a b θ).IsSymmetric ∧
-      IsInvariant (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) ∧
-      IsInvariant (modelRotatedOperator (𝕜 := 𝕜) a b θ)
-        (rotatedModelSubspace (𝕜 := 𝕜) θ) ∧
+      ((modelSubspace (𝕜 := 𝕜)) ∈ Module.End.invtSubmodule (modelGappedOperator (𝕜 := 𝕜) a b)) ∧
+      ((rotatedModelSubspace (𝕜 := 𝕜) θ) ∈ Module.End.invtSubmodule (modelRotatedOperator (𝕜 := 𝕜)
+          a b θ)) ∧
       PointIntervalExteriorGap (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜))
         (modelRotatedOperator (𝕜 := 𝕜) a b θ) (rotatedModelSubspace (𝕜 := 𝕜) θ)ᗮ a a (b - a) ∧
       PointIntervalExteriorGap (modelRotatedOperator (𝕜 := 𝕜) a b θ)
@@ -1992,22 +1995,23 @@ theorem modelTanThetaPerturbedOperator_apply_uθ {a b θ : ℝ} (hcos : Real.cos
 
 /-- The rotated line is invariant under the perturbed `tan Θ` operator. -/
 theorem isInvariant_modelTanThetaPerturbedOperator {a b θ : ℝ} (hcos : Real.cos θ ≠ 0) :
-    IsInvariant (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
-      (rotatedModelSubspace (𝕜 := 𝕜) θ) :=
+    ((rotatedModelSubspace (𝕜 := 𝕜) θ) ∈ Module.End.invtSubmodule (modelTanThetaPerturbedOperator
+        (𝕜 := 𝕜) a b θ)) :=
   isInvariant_span_singleton (lam := a + (b - a) * Real.tan θ ^ 2)
     (modelTanThetaPerturbedOperator_apply_uθ hcos)
 
 /-- The coordinate line is invariant under the unperturbed `tan Θ` operator. -/
 theorem isInvariant_modelTanThetaBaseOperator (a b θ : ℝ) :
-    IsInvariant (modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ) (modelSubspace (𝕜 := 𝕜)) :=
+    ((modelSubspace (𝕜 := 𝕜)) ∈ Module.End.invtSubmodule (modelTanThetaBaseOperator (𝕜 := 𝕜) a b
+        θ)) :=
   isInvariant_modelGappedOperator_modelSubspace _ _
 
 /-- **The Galerkin/Ritz condition of the `tan Θ` theorem holds for this pair**: the residual
 has vanishing compression onto the perturbed line. -/
 theorem compression_modelTanThetaResidual_eq_zero (a b θ : ℝ) :
-    projection (rotatedModelSubspace (𝕜 := 𝕜) θ) ∘ₗ
+    ((rotatedModelSubspace (𝕜 := 𝕜) θ)).starProjection.toLinearMap ∘ₗ
         modelRotatedOffDiagonal (𝕜 := 𝕜) ((b - a) * Real.tan θ) θ ∘ₗ
-      projection (rotatedModelSubspace (𝕜 := 𝕜) θ) = 0 := by
+      ((rotatedModelSubspace (𝕜 := 𝕜) θ)).starProjection.toLinearMap = 0 := by
   ext x
   have hproj : (rotatedModelSubspace (𝕜 := 𝕜) θ).starProjection x =
       ⟪uθ (𝕜 := 𝕜) θ, x⟫_𝕜 • uθ (𝕜 := 𝕜) θ :=
@@ -2016,7 +2020,7 @@ theorem compression_modelTanThetaResidual_eq_zero (a b θ : ℝ) :
     rw [rotatedModelSubspace,
       starProjection_span_singleton_apply_of_norm_one _ _ (norm_uθ θ), inner_uθ_vθ,
       zero_smul]
-  simp only [LinearMap.comp_apply, projection, ContinuousLinearMap.coe_coe,
+  simp only [LinearMap.comp_apply, ContinuousLinearMap.coe_coe,
     LinearMap.zero_apply, hproj, map_smul, modelRotatedOffDiagonal_apply_uθ, hvθ]
   simp
 
@@ -2050,16 +2054,17 @@ two singular values, which is why the seminorm equality is unaffected. -/
 theorem tanTheta_model_isAdmissiblePair {a b θ : ℝ} (hab : a < b) (hcos : Real.cos θ ≠ 0) :
     (modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ).IsSymmetric ∧
       (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ).IsSymmetric ∧
-      IsInvariant (modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ) (modelSubspace (𝕜 := 𝕜)) ∧
-      IsInvariant (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
-        (rotatedModelSubspace (𝕜 := 𝕜) θ) ∧
+      ((modelSubspace (𝕜 := 𝕜)) ∈ Module.End.invtSubmodule (modelTanThetaBaseOperator (𝕜 := 𝕜) a b
+          θ)) ∧
+      ((rotatedModelSubspace (𝕜 := 𝕜) θ) ∈ Module.End.invtSubmodule
+          (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ)) ∧
       OrderedGap (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
         (rotatedModelSubspace (𝕜 := 𝕜) θ) (modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ)
         (modelSubspace (𝕜 := 𝕜))ᗮ (b - a) ∧
-      projection (rotatedModelSubspace (𝕜 := 𝕜) θ) ∘ₗ
+      ((rotatedModelSubspace (𝕜 := 𝕜) θ)).starProjection.toLinearMap ∘ₗ
           (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
             modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ) ∘ₗ
-        projection (rotatedModelSubspace (𝕜 := 𝕜) θ) = 0 :=
+        ((rotatedModelSubspace (𝕜 := 𝕜) θ)).starProjection.toLinearMap = 0 :=
   ⟨modelTanThetaBaseOperator_isSymmetric a b θ,
    modelTanThetaPerturbedOperator_isSymmetric a b θ,
    isInvariant_modelTanThetaBaseOperator a b θ,
@@ -2096,18 +2101,18 @@ theorem tanTheta_model_sourceSharpness
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 2) :
     ((modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ).IsSymmetric ∧
       (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ).IsSymmetric ∧
-      IsInvariant (modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ)
-        (modelSubspace (𝕜 := 𝕜)) ∧
-      IsInvariant (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
-        (rotatedModelSubspace (𝕜 := 𝕜) θ) ∧
+      ((modelSubspace (𝕜 := 𝕜)) ∈ Module.End.invtSubmodule (modelTanThetaBaseOperator (𝕜 := 𝕜) a b
+          θ)) ∧
+      ((rotatedModelSubspace (𝕜 := 𝕜) θ) ∈ Module.End.invtSubmodule
+          (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ)) ∧
       OrderedGap (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
         (rotatedModelSubspace (𝕜 := 𝕜) θ)
         (modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ)
         (modelSubspace (𝕜 := 𝕜))ᗮ (b - a) ∧
-      projection (rotatedModelSubspace (𝕜 := 𝕜) θ) ∘ₗ
+      ((rotatedModelSubspace (𝕜 := 𝕜) θ)).starProjection.toLinearMap ∘ₗ
           (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
             modelTanThetaBaseOperator (𝕜 := 𝕜) a b θ) ∘ₗ
-        projection (rotatedModelSubspace (𝕜 := 𝕜) θ) = 0) ∧
+        ((rotatedModelSubspace (𝕜 := 𝕜) θ)).starProjection.toLinearMap = 0) ∧
       (b - a) * N (tanAngleOperator (modelSubspace (𝕜 := 𝕜))
         (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
         N (modelTanThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
@@ -2163,14 +2168,15 @@ theorem modelSinTwoThetaPerturbedOperator_apply_uθ (a b θ : ℝ) :
 
 /-- The rotated line is invariant under the perturbed `sin 2Θ` operator. -/
 theorem isInvariant_modelSinTwoThetaPerturbedOperator (a b θ : ℝ) :
-    IsInvariant (modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
-      (rotatedModelSubspace (𝕜 := 𝕜) θ) :=
+    ((rotatedModelSubspace (𝕜 := 𝕜) θ) ∈ Module.End.invtSubmodule
+        (modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)) :=
   isInvariant_span_singleton (lam := b * Real.cos θ ^ 2 + a * Real.sin θ ^ 2)
     (modelSinTwoThetaPerturbedOperator_apply_uθ a b θ)
 
 /-- The coordinate line is invariant under the unperturbed `sin 2Θ` operator. -/
 theorem isInvariant_modelSinTwoThetaBaseOperator (a b : ℝ) :
-    IsInvariant (modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) :=
+    ((modelSubspace (𝕜 := 𝕜)) ∈ Module.End.invtSubmodule (modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a
+        b)) :=
   isInvariant_modelGappedOperator_modelSubspace _ _
 
 /-- **The two-block form gap of the `sin 2Θ` pair is exactly `b - a`.** -/
@@ -2196,9 +2202,10 @@ coordinate line. -/
 theorem sinTwoTheta_model_isAdmissiblePair (a b θ : ℝ) :
     (modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b).IsSymmetric ∧
       (modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ).IsSymmetric ∧
-      IsInvariant (modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) ∧
-      IsInvariant (modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
-        (rotatedModelSubspace (𝕜 := 𝕜) θ) ∧
+      ((modelSubspace (𝕜 := 𝕜)) ∈ Module.End.invtSubmodule (modelSinTwoThetaBaseOperator (𝕜 := 𝕜)
+          a b)) ∧
+      ((rotatedModelSubspace (𝕜 := 𝕜) θ) ∈ Module.End.invtSubmodule
+          (modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)) ∧
       TwoBlockFormGap (modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b)
         (modelSubspace (𝕜 := 𝕜)) a b :=
   ⟨modelSinTwoThetaBaseOperator_isSymmetric a b,
@@ -2339,8 +2346,8 @@ theorem modelTanTwoThetaPerturbedOperator_apply_uθ {a b θ : ℝ}
 /-- The rotated line is invariant under the perturbed `tan 2Θ` operator. -/
 theorem isInvariant_modelTanTwoThetaPerturbedOperator {a b θ : ℝ}
     (hcos2 : Real.cos (2 * θ) ≠ 0) :
-    IsInvariant (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
-      (rotatedModelSubspace (𝕜 := 𝕜) θ) :=
+    ((rotatedModelSubspace (𝕜 := 𝕜) θ) ∈ Module.End.invtSubmodule
+        (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)) :=
   isInvariant_span_singleton
     (lam := a * Real.cos θ ^ 2 + b * Real.sin θ ^ 2 -
       ((b - a) / 2) * Real.tan (2 * θ) * Real.sin (2 * θ))
@@ -2366,12 +2373,12 @@ theorem pointInternalGap_tanTwoTheta_model {a b : ℝ} (hab : a < b) :
 /-- **The `tan 2Θ` residual is off-diagonal for the unperturbed splitting**, which is the extra
 hypothesis `P H P = 0 = P^⊥ H P^⊥` of the `tan 2Θ` theorem. -/
 theorem modelTanTwoThetaResidual_offDiagonal (a b θ : ℝ) :
-    projection (modelSubspace (𝕜 := 𝕜)) ∘ₗ
+    ((modelSubspace (𝕜 := 𝕜))).starProjection.toLinearMap ∘ₗ
         modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ ∘ₗ
-        projection (modelSubspace (𝕜 := 𝕜)) = 0 ∧
-      complementaryProjection (modelSubspace (𝕜 := 𝕜)) ∘ₗ
+        ((modelSubspace (𝕜 := 𝕜))).starProjection.toLinearMap = 0 ∧
+      (((modelSubspace (𝕜 := 𝕜)))ᗮ).starProjection.toLinearMap ∘ₗ
         modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ ∘ₗ
-        complementaryProjection (modelSubspace (𝕜 := 𝕜)) = 0 := by
+        (((modelSubspace (𝕜 := 𝕜)))ᗮ).starProjection.toLinearMap = 0 := by
   have he0 : modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ (e0 (𝕜 := 𝕜)) =
       ((((b - a) / 2) * Real.tan (2 * θ) : ℝ) : 𝕜) • e1 (𝕜 := 𝕜) := by
     rw [modelTanTwoThetaPerturbation]
@@ -2397,10 +2404,10 @@ theorem modelTanTwoThetaResidual_offDiagonal (a b θ : ℝ) :
     exact starProjection_span_singleton_apply_of_norm_one _ _ norm_e0
   constructor
   · refine LinearMap.ext fun x => ?_
-    simp only [LinearMap.comp_apply, projection, ContinuousLinearMap.coe_coe,
+    simp only [LinearMap.comp_apply, ContinuousLinearMap.coe_coe,
       LinearMap.zero_apply, hP, map_smul, he0, inner_e0_e1, zero_smul, smul_zero]
   · refine LinearMap.ext fun x => ?_
-    simp only [LinearMap.comp_apply, complementaryProjection, projection,
+    simp only [LinearMap.comp_apply, ContinuousLinearMap.coe_coe,
       ContinuousLinearMap.coe_coe, LinearMap.zero_apply]
     exact Submodule.starProjection_orthogonal_apply_eq_zero
       (key1 _ (Submodule.starProjection_apply_mem _ x))
@@ -2409,14 +2416,14 @@ theorem modelTanTwoThetaResidual_offDiagonal (a b θ : ℝ) :
 unperturbed splitting.  The sign in `B - A = -H` is immaterial for both diagonal
 compressions, but this theorem records the source hypothesis in exactly the residual spelling. -/
 theorem modelTanTwoThetaPerturbedResidual_offDiagonal (a b θ : ℝ) :
-    projection (modelSubspace (𝕜 := 𝕜)) ∘ₗ
+    ((modelSubspace (𝕜 := 𝕜))).starProjection.toLinearMap ∘ₗ
         (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
           modelGappedOperator (𝕜 := 𝕜) a b) ∘ₗ
-        projection (modelSubspace (𝕜 := 𝕜)) = 0 ∧
-      complementaryProjection (modelSubspace (𝕜 := 𝕜)) ∘ₗ
+        ((modelSubspace (𝕜 := 𝕜))).starProjection.toLinearMap = 0 ∧
+      (((modelSubspace (𝕜 := 𝕜)))ᗮ).starProjection.toLinearMap ∘ₗ
         (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
           modelGappedOperator (𝕜 := 𝕜) a b) ∘ₗ
-        complementaryProjection (modelSubspace (𝕜 := 𝕜)) = 0 := by
+        (((modelSubspace (𝕜 := 𝕜)))ᗮ).starProjection.toLinearMap = 0 := by
   rw [modelTanTwoThetaPerturbedOperator_sub_base]
   rcases modelTanTwoThetaResidual_offDiagonal (𝕜 := 𝕜) a b θ with ⟨hP, hPperp⟩
   constructor
@@ -2439,9 +2446,9 @@ theorem tanTwoTheta_model_isAdmissiblePair {a b θ : ℝ} (hab : a < b)
     (hcos2 : Real.cos (2 * θ) ≠ 0) :
     (modelGappedOperator (𝕜 := 𝕜) a b).IsSymmetric ∧
       (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ).IsSymmetric ∧
-      IsInvariant (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) ∧
-      IsInvariant (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
-        (rotatedModelSubspace (𝕜 := 𝕜) θ) ∧
+      ((modelSubspace (𝕜 := 𝕜)) ∈ Module.End.invtSubmodule (modelGappedOperator (𝕜 := 𝕜) a b)) ∧
+      ((rotatedModelSubspace (𝕜 := 𝕜) θ) ∈ Module.End.invtSubmodule
+          (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)) ∧
       PointInternalGap (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) (b - a) ∧
       modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ - modelGappedOperator (𝕜 := 𝕜) a b =
         -modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ :=
@@ -2478,22 +2485,22 @@ theorem tanTwoTheta_model_sourceSharpness
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 4) :
     ((modelGappedOperator (𝕜 := 𝕜) a b).IsSymmetric ∧
       (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ).IsSymmetric ∧
-      IsInvariant (modelGappedOperator (𝕜 := 𝕜) a b) (modelSubspace (𝕜 := 𝕜)) ∧
-      IsInvariant (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)
-        (rotatedModelSubspace (𝕜 := 𝕜) θ) ∧
+      ((modelSubspace (𝕜 := 𝕜)) ∈ Module.End.invtSubmodule (modelGappedOperator (𝕜 := 𝕜) a b)) ∧
+      ((rotatedModelSubspace (𝕜 := 𝕜) θ) ∈ Module.End.invtSubmodule
+          (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ)) ∧
       PointInternalGap (modelGappedOperator (𝕜 := 𝕜) a b)
         (modelSubspace (𝕜 := 𝕜)) (b - a) ∧
       modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
           modelGappedOperator (𝕜 := 𝕜) a b =
         -modelTanTwoThetaPerturbation (𝕜 := 𝕜) a b θ) ∧
-      (projection (modelSubspace (𝕜 := 𝕜)) ∘ₗ
+      (((modelSubspace (𝕜 := 𝕜))).starProjection.toLinearMap ∘ₗ
           (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
             modelGappedOperator (𝕜 := 𝕜) a b) ∘ₗ
-          projection (modelSubspace (𝕜 := 𝕜)) = 0 ∧
-        complementaryProjection (modelSubspace (𝕜 := 𝕜)) ∘ₗ
+          ((modelSubspace (𝕜 := 𝕜))).starProjection.toLinearMap = 0 ∧
+        (((modelSubspace (𝕜 := 𝕜)))ᗮ).starProjection.toLinearMap ∘ₗ
           (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
             modelGappedOperator (𝕜 := 𝕜) a b) ∘ₗ
-          complementaryProjection (modelSubspace (𝕜 := 𝕜)) = 0) ∧
+          (((modelSubspace (𝕜 := 𝕜)))ᗮ).starProjection.toLinearMap = 0) ∧
       (b - a) * N (tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
         (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
         2 * N (modelTanTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
@@ -2524,9 +2531,8 @@ theorem projection_orthogonalBlockSumSubmodule
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
     (U₁ : Submodule 𝕜 E₁) (U₂ : Submodule 𝕜 E₂) :
-    projection
-        (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂) =
-      ((projection U₁).prodMap (projection U₂)).withLpMap 2 :=
+    ((UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)).starProjection.toLinearMap =
+      ((U₁.starProjection.toLinearMap).prodMap (U₂.starProjection.toLinearMap)).withLpMap 2 :=
   TauCeti.projection_orthogonalBlockSumSubmodule U₁ U₂
 
 /-! ### Actual direct-sum subspace pairs and their angle operators -/

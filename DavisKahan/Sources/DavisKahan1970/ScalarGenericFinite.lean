@@ -78,7 +78,7 @@ theorem tanTheta_directed_finiteDimensional_symmetricNorming_rclike
     (N : SymmetricNormingFunction)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : IsInvariant A U)
+    (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E)
     (_hrank : Module.finrank 𝕜 F = Module.finrank 𝕜 U)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -116,7 +116,7 @@ theorem sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike
     (N : SymmetricNormingFunction)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : IsInvariant A U)
+    (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E)
     {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {β α δ : ℝ} (_hβα : β ≤ α) (hδ : 0 < δ)

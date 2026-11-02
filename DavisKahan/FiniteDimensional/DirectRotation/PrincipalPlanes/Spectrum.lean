@@ -121,7 +121,7 @@ theorem inner_sinThetaMap_apply_eq_zero_of_orthogonal_family
     have hu := principalSourceVector_mem U V hacute i
     have hsin : (U.sinThetaMap V).toLinearMap (principalSourceVector U V i) =
         principalSourceVector U V i -
-          projection V (principalSourceVector U V i) := by
+          V.starProjection.toLinearMap (principalSourceVector U V i) := by
       change (U.sinThetaMap V) (principalSourceVector U V i) = _
       rw [Submodule.sinThetaMap_apply, U.starProjection_eq_self_iff.mpr hu]
       exact Submodule.starProjection_orthogonal_val _
@@ -158,9 +158,9 @@ theorem projection_eq_projection_of_orthogonal_family
     (hacute : Submodule.IsAcute U V)
     {x : E} (hxu : ∀ i, ⟪principalSourceVector U V i, x⟫_𝕜 = 0)
     (hxj : ∀ i, ⟪principalOrthogonalVector U V hacute i, x⟫_𝕜 = 0) :
-    projection U x = projection V x := by
-  set y := projection U x with hy
-  set z := complementaryProjection U x with hz
+    U.starProjection.toLinearMap x = V.starProjection.toLinearMap x := by
+  set y := U.starProjection.toLinearMap x with hy
+  set z := Uᗮ.starProjection.toLinearMap x with hz
   have hxyz : y + z = x := U.starProjection_add_starProjection_orthogonal x
   have hyU : y ∈ U := U.starProjection_apply_mem x
   have hzUperp : z ∈ Uᗮ := Uᗮ.starProjection_apply_mem x
@@ -197,14 +197,14 @@ theorem projection_eq_projection_of_orthogonal_family
     rw [hxj i, hjy] at hsplit
     simpa using hsplit.symm
   -- The `V`-projection of `z` vanishes: it is a vector of `V` orthogonal to `U`.
-  have hvzero : projection V z = 0 := by
-    set v := projection V z with hv
+  have hvzero : V.starProjection.toLinearMap z = 0 := by
+    set v := V.starProjection.toLinearMap z with hv
     have hvV : v ∈ V := V.starProjection_apply_mem z
     have hvUperp : ∀ u ∈ U, ⟪u, v⟫_𝕜 = 0 := by
       intro u huU
-      have h1 : ⟪u, v⟫_𝕜 = ⟪projection V u, z⟫_𝕜 := by
+      have h1 : ⟪u, v⟫_𝕜 = ⟪V.starProjection.toLinearMap u, z⟫_𝕜 := by
         rw [hv, projection_inner_left_eq_right]
-      have h2 : projection V u = u - (U.sinThetaMap V).toLinearMap u := by
+      have h2 : V.starProjection.toLinearMap u = u - (U.sinThetaMap V).toLinearMap u := by
         change V.starProjection u = u - (U.sinThetaMap V) u
         rw [Submodule.sinThetaMap_apply, U.starProjection_eq_self_iff.mpr huU]
         -- `complementaryProjection` hides the `starProjection` the orthogonal
@@ -223,10 +223,11 @@ theorem projection_eq_projection_of_orthogonal_family
     exact hacute.injOn_right hvV V.zero_mem
       (hproj0.trans (map_zero U.starProjection).symm)
   -- Conclude.
-  have hyproj : projection V y = y := projection_apply_of_mem hyV
-  calc projection U x = y := hy.symm
-    _ = projection V y + projection V z := by rw [hyproj, hvzero, add_zero]
-    _ = projection V x := by rw [← map_add, hxyz]
+  have hyproj : V.starProjection.toLinearMap y = y := projection_apply_of_mem hyV
+  calc U.starProjection.toLinearMap x = y := hy.symm
+    _ = V.starProjection.toLinearMap y + V.starProjection.toLinearMap z := by rw [hyproj, hvzero,
+        add_zero]
+    _ = V.starProjection.toLinearMap x := by rw [← map_add, hxyz]
 
 /-! ## The spectrum of the direct displacement -/
 

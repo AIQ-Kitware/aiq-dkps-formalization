@@ -149,36 +149,39 @@ theorem principalSourceVector_mem
   let s := principalPlaneSine U V i
   have hs : s ≠ 0 := ne_of_gt (principalPlaneSine_pos U V i)
   have heig := LinearMap.adjoint_comp_self_rightSingularBasis A p
-  have hUidem : ∀ y : E, projection U (projection U y) = projection U y := fun y =>
+  have hUidem : ∀ y : E, U.starProjection.toLinearMap (U.starProjection.toLinearMap y) =
+      U.starProjection.toLinearMap y := fun y =>
     Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem y)
-  have hcVidem : ∀ y : E, complementaryProjection V (complementaryProjection V y)
-      = complementaryProjection V y := fun y =>
+  have hcVidem : ∀ y : E, Vᗮ.starProjection.toLinearMap (Vᗮ.starProjection.toLinearMap y)
+      = Vᗮ.starProjection.toLinearMap y := fun y =>
     Submodule.starProjection_eq_self_iff.mpr (Vᗮ.starProjection_apply_mem y)
-  have hcV : ∀ y : E, complementaryProjection V y = y - projection V y := fun y =>
+  have hcV : ∀ y : E, Vᗮ.starProjection.toLinearMap y = y - V.starProjection.toLinearMap y := fun
+      y =>
     Submodule.starProjection_orthogonal_val y
   have hgram : A.adjoint ∘ₗ A =
-      projection U - projection U ∘ₗ projection V ∘ₗ projection U := by
-    have hmap : A = complementaryProjection V ∘ₗ projection U := by
+      U.starProjection.toLinearMap - U.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap
+          ∘ₗ U.starProjection.toLinearMap := by
+    have hmap : A = Vᗮ.starProjection.toLinearMap ∘ₗ U.starProjection.toLinearMap := by
       dsimp [A]
       rw [Submodule.sinThetaMap_def]
       rfl
     rw [hmap]
-    have hadj : (complementaryProjection V ∘ₗ projection U).adjoint =
-        projection U ∘ₗ complementaryProjection V := by
-      rw [LinearMap.adjoint_comp, projection_adjoint]
-      congr 1
-      simp [complementaryProjection]
+    have hadj : (Vᗮ.starProjection.toLinearMap ∘ₗ U.starProjection.toLinearMap).adjoint =
+        U.starProjection.toLinearMap ∘ₗ Vᗮ.starProjection.toLinearMap := by
+      rw [LinearMap.adjoint_comp, U.starProjection_isSymmetric.adjoint_eq,
+        Vᗮ.starProjection_isSymmetric.adjoint_eq]
     rw [hadj]
     ext x
     simp only [LinearMap.comp_apply, LinearMap.sub_apply]
-    rw [hcVidem (projection U x), hcV (projection U x), map_sub, hUidem x]
+    rw [hcVidem (U.starProjection.toLinearMap x), hcV (U.starProjection.toLinearMap x), map_sub,
+        hUidem x]
   rw [hgram] at heig
   simp only [LinearMap.sub_apply, LinearMap.comp_apply] at heig
-  have hproj : projection U (principalSourceVector U V i) =
+  have hproj : U.starProjection.toLinearMap (principalSourceVector U V i) =
       principalSourceVector U V i := by
     have hc : ((s ^ 2 : ℝ) : 𝕜) ≠ 0 :=
       RCLike.ofReal_ne_zero.mpr (pow_ne_zero 2 hs)
-    have key := congrArg (projection U) heig
+    have key := congrArg (U.starProjection.toLinearMap) heig
     simp only [map_sub, map_smul, hUidem] at key
     rw [heig] at key
     exact (smul_right_injective E hc key).symm
@@ -232,7 +235,7 @@ theorem principalPlaneCosine_pos
     have hu1 : ‖u‖ = 1 := (orthonormal_principalSourceVector U V).norm_eq_one i
     have hnorm := LinearMap.norm_apply_rightSingularBasis
       ((U.sinThetaMap V).toLinearMap) (nontrivialAngleIndex U V i)
-    have hzero : projection V u = 0 := by
+    have hzero : V.starProjection.toLinearMap u = 0 := by
       have hdecomp := Submodule.norm_sq_eq_add_norm_sq_starProjection u V
       have hsinNorm : ‖Vᗮ.starProjection u‖ = 1 := by
         have h : ‖(U.sinThetaMap V).toLinearMap u‖ = principalPlaneSine U V i := hnorm
@@ -263,43 +266,49 @@ theorem abs_canonicalIntertwiner_apply_principalSourceVector
   have hu := principalSourceVector_mem U V hacute i
   have heig := LinearMap.adjoint_comp_self_rightSingularBasis ((U.sinThetaMap V).toLinearMap)
     (nontrivialAngleIndex U V i)
-  have hProjUu : projection U (principalSourceVector U V i) =
+  have hProjUu : U.starProjection.toLinearMap (principalSourceVector U V i) =
       principalSourceVector U V i := Submodule.starProjection_eq_self_iff.mpr hu
-  have hcompUu : complementaryProjection U (principalSourceVector U V i) = 0 :=
+  have hcompUu : Uᗮ.starProjection.toLinearMap (principalSourceVector U V i) = 0 :=
     (Submodule.starProjection_apply_eq_zero_iff Uᗮ).mpr
       (U.le_orthogonal_orthogonal hu)
-  have hUidem : ∀ y : E, projection U (projection U y) = projection U y := fun y =>
+  have hUidem : ∀ y : E, U.starProjection.toLinearMap (U.starProjection.toLinearMap y) =
+      U.starProjection.toLinearMap y := fun y =>
     Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem y)
-  have hcVidem : ∀ y : E, complementaryProjection V (complementaryProjection V y)
-      = complementaryProjection V y := fun y =>
+  have hcVidem : ∀ y : E, Vᗮ.starProjection.toLinearMap (Vᗮ.starProjection.toLinearMap y)
+      = Vᗮ.starProjection.toLinearMap y := fun y =>
     Submodule.starProjection_eq_self_iff.mpr (Vᗮ.starProjection_apply_mem y)
-  have hcV : ∀ y : E, complementaryProjection V y = y - projection V y := fun y =>
+  have hcV : ∀ y : E, Vᗮ.starProjection.toLinearMap y = y - V.starProjection.toLinearMap y := fun
+      y =>
     Submodule.starProjection_orthogonal_val y
   have hAgram : ((U.sinThetaMap V).toLinearMap).adjoint ∘ₗ (U.sinThetaMap V).toLinearMap =
-      projection U - projection U ∘ₗ projection V ∘ₗ projection U := by
-    have hmap : (U.sinThetaMap V).toLinearMap = complementaryProjection V ∘ₗ projection U := by
+      U.starProjection.toLinearMap - U.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap
+          ∘ₗ U.starProjection.toLinearMap := by
+    have hmap : (U.sinThetaMap V).toLinearMap = Vᗮ.starProjection.toLinearMap ∘ₗ
+        U.starProjection.toLinearMap := by
       rw [Submodule.sinThetaMap_def]
       rfl
     rw [hmap]
-    have hadj : (complementaryProjection V ∘ₗ projection U).adjoint =
-        projection U ∘ₗ complementaryProjection V := by
-      rw [LinearMap.adjoint_comp, projection_adjoint]
-      congr 1
-      simp [complementaryProjection]
+    have hadj : (Vᗮ.starProjection.toLinearMap ∘ₗ U.starProjection.toLinearMap).adjoint =
+        U.starProjection.toLinearMap ∘ₗ Vᗮ.starProjection.toLinearMap := by
+      rw [LinearMap.adjoint_comp, U.starProjection_isSymmetric.adjoint_eq,
+        Vᗮ.starProjection_isSymmetric.adjoint_eq]
     rw [hadj]
     ext x
     simp only [LinearMap.comp_apply, LinearMap.sub_apply]
-    rw [hcVidem (projection U x), hcV (projection U x), map_sub, hUidem x]
+    rw [hcVidem (U.starProjection.toLinearMap x), hcV (U.starProjection.toLinearMap x), map_sub,
+        hUidem x]
   have hSu : ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V)
         (principalSourceVector U V i) =
-      projection U (projection V (principalSourceVector U V i)) := by
+      U.starProjection.toLinearMap (V.starProjection.toLinearMap (principalSourceVector U V i)) :=
+          by
     rw [canonicalIntertwiner_adjoint_comp_self]
     simp only [LinearMap.add_apply, LinearMap.comp_apply, hProjUu, hcompUu,
       map_zero, add_zero]
   have hAu : (((U.sinThetaMap V).toLinearMap).adjoint ∘ₗ (U.sinThetaMap V).toLinearMap)
         (principalSourceVector U V i) =
       principalSourceVector U V i -
-        projection U (projection V (principalSourceVector U V i)) := by
+        U.starProjection.toLinearMap (V.starProjection.toLinearMap (principalSourceVector U V i))
+            := by
     rw [hAgram]
     simp only [LinearMap.sub_apply, LinearMap.comp_apply, hProjUu]
   rw [show LinearMap.rightSingularBasis ((U.sinThetaMap V).toLinearMap) (nontrivialAngleIndex U V i) =
@@ -383,18 +392,20 @@ theorem principalOrthogonalVector_mem
   have hcpos := principalPlaneCosine_pos U V hacute i
   have hcne : (principalPlaneCosine U V i : 𝕜) ≠ 0 := by exact_mod_cast ne_of_gt hcpos
   have hC := abs_canonicalIntertwiner_apply_principalSourceVector U V hacute i
-  have hcompUu : complementaryProjection U (principalSourceVector U V i) = 0 :=
+  have hcompUu : Uᗮ.starProjection.toLinearMap (principalSourceVector U V i) = 0 :=
     (Submodule.starProjection_apply_eq_zero_iff Uᗮ).mpr
       (U.le_orthogonal_orthogonal hu)
   have hSpsv : canonicalIntertwiner U V (principalSourceVector U V i) =
-      projection V (principalSourceVector U V i) := by
+      V.starProjection.toLinearMap (principalSourceVector U V i) := by
     simp only [canonicalIntertwiner, LinearMap.add_apply, LinearMap.comp_apply,
       projection_apply_of_mem hu, hcompUu, map_zero, add_zero]
-  have hprojUprojV : projection U (projection V (principalSourceVector U V i)) =
+  have hprojUprojV : U.starProjection.toLinearMap (V.starProjection.toLinearMap
+      (principalSourceVector U V i)) =
       ((principalPlaneCosine U V i ^ 2 : ℝ) : 𝕜) • principalSourceVector U V i := by
     have h1 : ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V)
           (principalSourceVector U V i) =
-        projection U (projection V (principalSourceVector U V i)) := by
+        U.starProjection.toLinearMap (V.starProjection.toLinearMap (principalSourceVector U V i))
+            := by
       rw [canonicalIntertwiner_adjoint_comp_self]
       simp only [LinearMap.add_apply, LinearMap.comp_apply,
         projection_apply_of_mem hu, hcompUu, map_zero, add_zero]
@@ -412,20 +423,20 @@ theorem principalOrthogonalVector_mem
         LinearMap.operatorAbs (canonicalIntertwiner U V) := by
     rw [directRotation_toLinearMap]
     exact (canonicalIntertwiner U V).polarFactor_comp_operatorAbs.symm
-  have hWpsv : projection V (principalSourceVector U V i) =
+  have hWpsv : V.starProjection.toLinearMap (principalSourceVector U V i) =
       (principalPlaneCosine U V i : 𝕜) •
         directRotation U V hacute (principalSourceVector U V i) := by
     have h := LinearMap.congr_fun hpolar (principalSourceVector U V i)
     simp only [LinearMap.comp_apply] at h
     rw [hC, map_smul, hSpsv] at h
     exact h
-  have hdiag : projection U
+  have hdiag : U.starProjection.toLinearMap
       (directRotation U V hacute (principalSourceVector U V i)) =
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i := by
-    have key := congrArg (projection U) hWpsv
+    have key := congrArg (U.starProjection.toLinearMap) hWpsv
     rw [map_smul, hprojUprojV] at key
     have key2 : (principalPlaneCosine U V i : 𝕜) •
-          projection U (directRotation U V hacute (principalSourceVector U V i)) =
+          U.starProjection.toLinearMap (directRotation U V hacute (principalSourceVector U V i)) =
         (principalPlaneCosine U V i : 𝕜) •
           ((principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i) := by
       rw [← key, smul_smul, ← RCLike.ofReal_mul, ← sq]
@@ -434,11 +445,11 @@ theorem principalOrthogonalVector_mem
     RCLike.conj_ofReal, RCLike.conj_ofReal]
   have hkey : ⟪directRotation U V hacute (principalSourceVector U V i), x⟫_𝕜 =
       (principalPlaneCosine U V i : 𝕜) * ⟪principalSourceVector U V i, x⟫_𝕜 := by
-    have hx' : projection U x = x := projection_apply_of_mem hx
+    have hx' : U.starProjection.toLinearMap x = x := projection_apply_of_mem hx
     calc ⟪directRotation U V hacute (principalSourceVector U V i), x⟫_𝕜
         = ⟪directRotation U V hacute (principalSourceVector U V i),
-            projection U x⟫_𝕜 := by rw [hx']
-      _ = ⟪projection U (directRotation U V hacute (principalSourceVector U V i)),
+            U.starProjection.toLinearMap x⟫_𝕜 := by rw [hx']
+      _ = ⟪U.starProjection.toLinearMap (directRotation U V hacute (principalSourceVector U V i)),
             x⟫_𝕜 := (projection_inner_left_eq_right U _ x).symm
       _ = ⟪(principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i, x⟫_𝕜 := by
             rw [hdiag]
@@ -453,16 +464,16 @@ theorem projection_apply_principalSourceVector
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
-    projection V (principalSourceVector U V i) =
+    V.starProjection.toLinearMap (principalSourceVector U V i) =
       (principalPlaneCosine U V i : 𝕜) •
         directRotation U V hacute (principalSourceVector U V i) := by
   have hu := principalSourceVector_mem U V hacute i
   have hC := abs_canonicalIntertwiner_apply_principalSourceVector U V hacute i
-  have hcompUu : complementaryProjection U (principalSourceVector U V i) = 0 :=
+  have hcompUu : Uᗮ.starProjection.toLinearMap (principalSourceVector U V i) = 0 :=
     (Submodule.starProjection_apply_eq_zero_iff Uᗮ).mpr
       (U.le_orthogonal_orthogonal hu)
   have hSpsv : canonicalIntertwiner U V (principalSourceVector U V i) =
-      projection V (principalSourceVector U V i) := by
+      V.starProjection.toLinearMap (principalSourceVector U V i) := by
     simp only [canonicalIntertwiner, LinearMap.add_apply, LinearMap.comp_apply,
       projection_apply_of_mem hu, hcompUu, map_zero, add_zero]
   have hpolar : canonicalIntertwiner U V =
@@ -481,7 +492,7 @@ theorem projection_apply_directRotation_principalSourceVector
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
-    projection U (directRotation U V hacute (principalSourceVector U V i)) =
+    U.starProjection.toLinearMap (directRotation U V hacute (principalSourceVector U V i)) =
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i := by
   simp only [directRotation_apply_principalSourceVector U V hacute i, map_add, map_smul, map_smul,
     projection_apply_of_mem (principalSourceVector_mem U V hacute i),
@@ -509,9 +520,9 @@ theorem orthonormal_principalOrthogonalVector
     calc ⟪directRotation U V hacute (principalSourceVector U V a),
           principalSourceVector U V b⟫_𝕜
         = ⟪directRotation U V hacute (principalSourceVector U V a),
-            projection U (principalSourceVector U V b)⟫_𝕜 := by
+            U.starProjection.toLinearMap (principalSourceVector U V b)⟫_𝕜 := by
           rw [projection_apply_of_mem (principalSourceVector_mem U V hacute b)]
-      _ = ⟪projection U (directRotation U V hacute (principalSourceVector U V a)),
+      _ = ⟪U.starProjection.toLinearMap (directRotation U V hacute (principalSourceVector U V a)),
             principalSourceVector U V b⟫_𝕜 :=
           (projection_inner_left_eq_right U _ _).symm
       _ = _ := by

@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 
 /-!
 # Operator blocks relative to an orthogonal decomposition
@@ -29,8 +29,8 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 @[expose]
 noncomputable def pinch (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (H : E →ₗ[𝕜] E) : E →ₗ[𝕜] E :=
-  projection U ∘ₗ H ∘ₗ projection U +
-    complementaryProjection U ∘ₗ H ∘ₗ complementaryProjection U
+  U.starProjection.toLinearMap ∘ₗ H ∘ₗ U.starProjection.toLinearMap +
+    Uᗮ.starProjection.toLinearMap ∘ₗ H ∘ₗ Uᗮ.starProjection.toLinearMap
 
 /-- The off-diagonal part of an operator relative to `U ⊕ Uᗮ`. -/
 noncomputable def offDiagonalPart (U : Submodule 𝕜 E)
@@ -45,7 +45,7 @@ def IsOffDiagonal (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
 /-- The weaker one-block condition used by the `tan Θ` theorem. -/
 def HasZeroCompression (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (H : E →ₗ[𝕜] E) : Prop :=
-  projection U ∘ₗ H ∘ₗ projection U = 0
+  U.starProjection.toLinearMap ∘ₗ H ∘ₗ U.starProjection.toLinearMap = 0
 
 omit [FiniteDimensional 𝕜 E] in
 /-- A vanishing pinch has a vanishing selected diagonal block.
@@ -57,14 +57,13 @@ theorem hasZeroCompression_of_isOffDiagonal
   unfold HasZeroCompression
   apply LinearMap.ext
   intro x
-  have hP_idem (y : E) : projection U (projection U y) = projection U y := by
-    change U.starProjection (U.starProjection y) = U.starProjection y
+  have hP_idem (y : E) : U.starProjection (U.starProjection y) =
+      U.starProjection y := by
     exact Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem y)
-  have hP_comp (y : E) : projection U (complementaryProjection U y) = 0 := by
-    change U.starProjection (Uᗮ.starProjection y) = 0
+  have hP_comp (y : E) : U.starProjection (Uᗮ.starProjection y) = 0 := by
     rw [Submodule.starProjection_apply_eq_zero_iff]
     exact Uᗮ.starProjection_apply_mem y
-  have h := congrArg (projection U) (LinearMap.congr_fun hoff x)
+  have h := congrArg (U.starProjection.toLinearMap) (LinearMap.congr_fun hoff x)
   simpa [pinch, LinearMap.comp_apply, hP_idem, hP_comp] using h
 
 omit [FiniteDimensional 𝕜 E] in
@@ -75,7 +74,7 @@ theorem isOffDiagonal_orthogonal
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] (H : E →ₗ[𝕜] E)
     (hoff : IsOffDiagonal U H) : IsOffDiagonal Uᗮ H := by
   unfold IsOffDiagonal at hoff ⊢
-  simpa [pinch, projection, complementaryProjection, add_comm] using hoff
+  simpa [pinch, ContinuousLinearMap.coe_coe, add_comm] using hoff
 
 omit [FiniteDimensional 𝕜 E] in
 /-- Operator-form zero compression implies the corresponding sesquilinear
@@ -87,7 +86,7 @@ theorem inner_map_eq_zero_of_hasZeroCompression
     {u u' : E} (hu : u ∈ U) (hu' : u' ∈ U) : ⟪u, H u'⟫_𝕜 = 0 := by
   have hblock := LinearMap.congr_fun hzero u'
   have hproj : U.starProjection (H u') = 0 := by
-    simpa [HasZeroCompression, projection,
+    simpa [HasZeroCompression, ContinuousLinearMap.coe_coe,
       Submodule.starProjection_eq_self_iff.mpr hu'] using hblock
   calc
     ⟪u, H u'⟫_𝕜 = ⟪U.starProjection u, H u'⟫_𝕜 := by

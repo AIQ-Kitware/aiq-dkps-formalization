@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 /-!
@@ -116,7 +116,7 @@ subspace.
 -/
 theorem ritzResidual_eq_zero_iff_reduces {A : E →ₗ[𝕜] E}
     (X : F →ₗᵢ[𝕜] E) :
-    ritzResidual A X = 0 ↔ IsInvariant A (approximateSubspace X) := by
+    ritzResidual A X = 0 ↔ ((approximateSubspace X) ∈ Module.End.invtSubmodule A) := by
   constructor
   · intro hR x hx
     rcases hx with ⟨y, rfl⟩
@@ -128,7 +128,7 @@ theorem ritzResidual_eq_zero_iff_reduces {A : E →ₗ[𝕜] E}
   · intro hred
     ext y
     have hmem : A (X y) ∈ approximateSubspace X :=
-      hred (X y) ⟨y, rfl⟩
+      hred ⟨y, rfl⟩
     rcases hmem with ⟨z, hz⟩
     have hz' : A (X.toLinearMap y) = X.toLinearMap z := hz.symm
     have hcomp : compression A X y = z := by

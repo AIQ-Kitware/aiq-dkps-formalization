@@ -49,20 +49,20 @@ omit [FiniteDimensional 𝕜 E] in
 /-- **The single-angle sine map is rank one.**  On the line `𝕜 ∙ v` with `v` a
 unit vector, `sinThetaMap` sends `x` to `⟪v, x⟫ • P_{Wᗮ} v`. -/
 theorem sinThetaMap_span_singleton_apply {v : E} (hv : ‖v‖ = 1) (x : E) :
-    ((𝕜 ∙ v).sinThetaMap W) x = ⟪v, x⟫_𝕜 • projection Wᗮ v := by
-  have hproj : projection (𝕜 ∙ v) x = ⟪v, x⟫_𝕜 • v := by
+    ((𝕜 ∙ v).sinThetaMap W) x = ⟪v, x⟫_𝕜 • Wᗮ.starProjection.toLinearMap v := by
+  have hproj : ((𝕜 ∙ v)).starProjection.toLinearMap x = ⟪v, x⟫_𝕜 • v := by
     change (𝕜 ∙ v).starProjection x = _
     rw [Submodule.starProjection_singleton, hv]
     simp
   rw [Submodule.sinThetaMap_def]
-  change projection Wᗮ (projection (𝕜 ∙ v) x) = _
+  change Wᗮ.starProjection.toLinearMap (((𝕜 ∙ v)).starProjection.toLinearMap x) = _
   rw [hproj, map_smul]
 
 omit [FiniteDimensional 𝕜 E] in
 /-- Pythagoras for a projector: the complementary component of a unit vector has
 squared norm `1 - ‖P_W v‖²`. -/
 theorem norm_starProjection_orthogonal_sq {v : E} (hv : ‖v‖ = 1) :
-    ‖projection Wᗮ v‖ ^ 2 = 1 - ‖projection W v‖ ^ 2 := by
+    ‖Wᗮ.starProjection.toLinearMap v‖ ^ 2 = 1 - ‖W.starProjection.toLinearMap v‖ ^ 2 := by
   have hpy := W.norm_sq_eq_add_norm_sq_starProjection v
   rw [hv, one_pow] at hpy
   change ‖Wᗮ.starProjection v‖ ^ 2 = 1 - ‖W.starProjection v‖ ^ 2
@@ -72,7 +72,7 @@ omit [FiniteDimensional 𝕜 E] in
 /-- **The operator norm of the single-angle sine map** is the length of the
 complementary component. -/
 theorem opNorm_sinThetaMap_span_singleton {v : E} (hv : ‖v‖ = 1) :
-    ‖((𝕜 ∙ v).sinThetaMap W)‖ = ‖projection Wᗮ v‖ := by
+    ‖((𝕜 ∙ v).sinThetaMap W)‖ = ‖Wᗮ.starProjection.toLinearMap v‖ := by
   refine le_antisymm (ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_) ?_
   · rw [sinThetaMap_span_singleton_apply hv,
       norm_smul, mul_comm]
@@ -92,7 +92,7 @@ theorem opNorm_sinThetaMap_span_singleton {v : E} (hv : ‖v‖ = 1) :
 /-- **The Frobenius norm of the single-angle sine map** is the same number: a
 rank-one operator has one singular value, so the two norms agree. -/
 theorem sinThetaFrobenius_span_singleton {v : E} (hv : ‖v‖ = 1) :
-    Submodule.sinThetaFrobenius (𝕜 ∙ v) W = ‖projection Wᗮ v‖ := by
+    Submodule.sinThetaFrobenius (𝕜 ∙ v) W = ‖Wᗮ.starProjection.toLinearMap v‖ := by
   have hfamily : Orthonormal 𝕜 (fun _ : Fin 1 => v) :=
     orthonormal_subsingleton_iff.mpr fun _ => hv
   have hspan : Submodule.span 𝕜 (Set.range (fun _ : Fin 1 => v)) = 𝕜 ∙ v := by

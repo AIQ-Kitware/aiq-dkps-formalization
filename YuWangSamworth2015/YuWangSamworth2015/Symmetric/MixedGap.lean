@@ -186,9 +186,7 @@ theorem pointInternalGap_section1 :
     PointInternalGap (section1Population b)
       (eigenspace (section1Population b) ((20 : ℝ) : 𝕜)) 10 := by
   refine ⟨?_, ?_⟩
-  · intro x hx
-    rw [Module.End.mem_eigenspace_iff] at hx ⊢
-    rw [← map_smul, hx]
+  · exact Module.End.eigenspace_mem_invtSubmodule _ _
   · intro lam μ hlam hμ
     rw [eigenspace_section1Population] at hlam hμ
     have h20 : lam = 20 := by

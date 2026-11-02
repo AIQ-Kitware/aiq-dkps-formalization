@@ -54,7 +54,7 @@ an exact subspace. -/
 @[expose]
 noncomputable def sinThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
-  complementaryProjection U ∘ₗ X.toLinearMap
+  Uᗮ.starProjection.toLinearMap ∘ₗ X.toLinearMap
 
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- On an *isometric* trial map the complementary block is the sine-Θ
@@ -68,7 +68,7 @@ for an arbitrary linear trial map and the embedding only for an isometric one. -
 /-- Cosine map from approximate coordinates into an exact subspace. -/
 noncomputable def cosThetaEmbedding (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) : F →ₗ[𝕜] E :=
-  projection U ∘ₗ X.toLinearMap
+  U.starProjection.toLinearMap ∘ₗ X.toLinearMap
 
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- The cosine embedding is pointwise contractive. -/
@@ -293,10 +293,10 @@ trial map.**  This is the normalized specialization of
 `sylvester_complementaryTrialBlock_eq_projectedGeneralResidual`. -/
 theorem sylvester_sinThetaEmbedding_eq_projectedResidual
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F) :
     A ∘ₗ sinThetaEmbedding U X - sinThetaEmbedding U X ∘ₗ M =
-      complementaryProjection U ∘ₗ residual A X M := by
+      Uᗮ.starProjection.toLinearMap ∘ₗ residual A X M := by
   simpa only [complementaryTrialBlock_toLinearMap, generalResidual_toLinearMap] using
     sylvester_complementaryTrialBlock_eq_projectedGeneralResidual
       hA hU X.toLinearMap M
@@ -304,7 +304,7 @@ theorem sylvester_sinThetaEmbedding_eq_projectedResidual
 /-- The orthogonal projection onto the range of an isometric embedding is
 `X X⋆`. -/
 theorem projection_approximateSubspace_eq_comp_adjoint (X : F →ₗᵢ[𝕜] E) :
-    projection (approximateSubspace X) =
+    ((approximateSubspace X)).starProjection.toLinearMap =
       X.toLinearMap ∘ₗ X.toLinearMap.adjoint := by
   ext y
   -- states the goal with the definition unfolded, in the shape the next step needs.
@@ -343,8 +343,8 @@ theorem singularValues_sinThetaEmbedding (U : Submodule 𝕜 E)
       sinThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint =
         ((approximateSubspace X).sinThetaMap U).toLinearMap := by
     rw [sinThetaEmbedding, Submodule.sinThetaMap_def]
-    change (complementaryProjection U ∘ₗ X.toLinearMap) ∘ₗ X.toLinearMap.adjoint =
-      complementaryProjection U ∘ₗ TauCeti.projection (approximateSubspace X)
+    change (Uᗮ.starProjection.toLinearMap ∘ₗ X.toLinearMap) ∘ₗ X.toLinearMap.adjoint =
+      Uᗮ.starProjection.toLinearMap ∘ₗ ((approximateSubspace X)).starProjection.toLinearMap
     rw [projection_approximateSubspace_eq_comp_adjoint X]
     simp only [LinearMap.comp_assoc]
   calc
@@ -365,8 +365,8 @@ theorem singularValues_cosThetaEmbedding (U : Submodule 𝕜 E)
       cosThetaEmbedding U X ∘ₗ X.toLinearMap.adjoint =
         ((approximateSubspace X).cosThetaMap U).toLinearMap := by
     rw [cosThetaEmbedding, Submodule.cosThetaMap_def]
-    change (projection U ∘ₗ X.toLinearMap) ∘ₗ X.toLinearMap.adjoint =
-      projection U ∘ₗ TauCeti.projection (approximateSubspace X)
+    change (U.starProjection.toLinearMap ∘ₗ X.toLinearMap) ∘ₗ X.toLinearMap.adjoint =
+      U.starProjection.toLinearMap ∘ₗ ((approximateSubspace X)).starProjection.toLinearMap
     rw [projection_approximateSubspace_eq_comp_adjoint X]
     simp only [LinearMap.comp_assoc]
   calc

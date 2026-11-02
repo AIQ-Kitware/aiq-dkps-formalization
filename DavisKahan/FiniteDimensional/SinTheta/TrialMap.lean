@@ -137,12 +137,13 @@ No injectivity or lower frame bound is needed at this stage. -/
 theorem complementaryTrialBlock_residual_le_of_intervalGap
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : (V ∈ Module.End.invtSubmodule A))
     (X : F →ₗ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : TrialComplementIntervalGap M A V a b δ) :
     δ * N (complementaryTrialBlock V X) ≤ N (generalResidual A X M) := by
-  have hVperp : IsInvariant A Vᗮ := isInvariant_orthogonal_of_isSymmetric hA hV
+  have hVperp : (Vᗮ ∈ Module.End.invtSubmodule A) :=
+      LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hV
   let AV : Vᗮ →ₗ[𝕜] Vᗮ := A.restrict hVperp
   let Y : F →ₗ[𝕜] Vᗮ :=
     Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X
@@ -162,31 +163,32 @@ theorem complementaryTrialBlock_residual_le_of_intervalGap
     ext x
     have hx := LinearMap.congr_fun
       (sylvester_complementaryTrialBlock_eq_projectedGeneralResidual hA hV X M) x
-    simpa [AV, Y, C, complementaryTrialBlock, complementaryProjection, projection,
-      LinearMap.comp_apply] using hx
+    change A (Vᗮ.starProjection (X x)) - Vᗮ.starProjection (X (M x)) =
+      Vᗮ.starProjection (generalResidual A X M x)
+    exact hx
   have hY : NV Y = N (complementaryTrialBlock V X) := by
     change N (Vᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) =
       N (complementaryTrialBlock V X)
     congr 1
   have hC : NV C =
-      N (complementaryProjection V ∘ₗ generalResidual A X M) := by
+      N (Vᗮ.starProjection.toLinearMap ∘ₗ generalResidual A X M) := by
     change N (Vᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
-      N (complementaryProjection V ∘ₗ generalResidual A X M)
+      N (Vᗮ.starProjection.toLinearMap ∘ₗ generalResidual A X M)
     congr 1
-  have hproj : ‖(complementaryProjection V).toContinuousLinearMap‖ ≤ 1 := by
-    refine (complementaryProjection V).toContinuousLinearMap.opNorm_le_bound
+  have hproj : ‖(Vᗮ.starProjection.toLinearMap).toContinuousLinearMap‖ ≤ 1 := by
+    refine (Vᗮ.starProjection.toLinearMap).toContinuousLinearMap.opNorm_le_bound
       zero_le_one fun x => ?_
     change ‖Vᗮ.starProjection x‖ ≤ 1 * ‖x‖
     simpa using Vᗮ.norm_starProjection_apply_le x
   have hC_le : NV C ≤ N (generalResidual A X M) := by
     rw [hC]
     calc
-      N (complementaryProjection V ∘ₗ generalResidual A X M)
-          ≤ ‖(complementaryProjection V).toContinuousLinearMap‖ *
+      N (Vᗮ.starProjection.toLinearMap ∘ₗ generalResidual A X M)
+          ≤ ‖(Vᗮ.starProjection.toLinearMap).toContinuousLinearMap‖ *
               N (generalResidual A X M) :=
         N.map_comp_le_left _ _ (c :=
-          ‖(complementaryProjection V).toContinuousLinearMap‖)
-          (fun x => (complementaryProjection V).toContinuousLinearMap.le_opNorm x)
+          ‖(Vᗮ.starProjection.toLinearMap).toContinuousLinearMap‖)
+          (fun x => (Vᗮ.starProjection.toLinearMap).toContinuousLinearMap.le_opNorm x)
       _ ≤ 1 * N (generalResidual A X M) :=
         mul_le_mul_of_nonneg_right hproj (apply_nonneg N _)
       _ = N (generalResidual A X M) := one_mul _
@@ -203,7 +205,7 @@ dimension through the directed sine block. -/
 theorem generalizedSinTheta_residual_le_of_intervalGap
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : (V ∈ Module.End.invtSubmodule A))
     (X : F →ₗ[𝕜] E)
     {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
@@ -233,7 +235,7 @@ translate it into a pointwise norm bound. -/
 theorem generalizedSinTheta_residual_le_of_gramLowerBound
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : (V ∈ Module.End.invtSubmodule A))
     (X : F →ₗ[𝕜] E)
     {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
@@ -254,7 +256,7 @@ canonical Gram-bound theorem transfers without loss. -/
 theorem generalizedSinTheta0_residual_le_of_gramLowerBound
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : (V ∈ Module.End.invtSubmodule A))
     (X : F →ₗ[𝕜] E)
     {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
@@ -282,7 +284,7 @@ bound. -/
 theorem generalizedSinTheta_residual_le
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : (V ∈ Module.End.invtSubmodule A))
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
     {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)

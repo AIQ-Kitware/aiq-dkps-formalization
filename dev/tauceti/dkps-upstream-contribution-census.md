@@ -3315,3 +3315,65 @@ covering empty tuples; no corresponding named fact was found in the pinned
 API. Source: `e4637c3919ae` under the retained path; original ForMathlib
 introduction `a8d4ea3d05105135dc959a4e10f5ac5a50f2bede`, Jon Crall /
 GPT-5.6 Thinking, Kitware, Inc., Apache-2.0.
+
+
+### November 2: canonical invariant submodules and projection carriers
+
+Retired `TauCeti.IsInvariant`, `projection`, `complementaryProjection` and
+seven elementary symmetry/adjoint/complement/invariance/commutation wrappers
+from `ForTauCeti/Analysis/InnerProductSpace/Spectral/Subspace.lean`.
+Maintained consumers use `Module.End.invtSubmodule` membership and
+`Submodule.starProjection.toLinearMap`. The full predicate/carrier
+correspondences and commutation replacement were compiled without a finite
+ambient-space assumption; finite adjoints retain their original hypotheses.
+Native membership has an implicit vector argument, whereas the old predicate
+made it explicit. Mathlib's
+`mem_invtSubmodule_iff_forall_mem_of_mem` supplies that exact bridge at
+restriction APIs. This changes elaboration, not mathematical scope.
+
+The replacements are pinned Mathlib's invariant-submodule/projection API,
+`starProjection_orthogonal`, `starProjection_isSymmetric`,
+`IsSymmetric.adjoint_eq` and `orthogonalComplement_mem_invtSubmodule`;
+Tau Ceti's `LinearMap.IsSymmetric.starProjection_apply_comm`, accepted in
+[#16545](https://github.com/TauCetiProject/TauCeti/pull/16545), integration
+`a2a2c9a9ba5c5d4e8a8dbb9ad641f17058b29206`; and
+`Module.End.map_pointSpectralSubspace_le`, accepted in
+[#14418](https://github.com/TauCetiProject/TauCeti/pull/14418), integration
+`1f2ab68732510bdfccdd517505193dc128901c7d`. Both integration messages
+state that no external formalization was vendored. This is independent
+implementation consumption. Mathlib primitives at pin
+`2cabef97b63d3275776b8b060d802de6a6fa1055` are pre-existing foundations,
+not new DKPS upstream contributions.
+
+Historical source:
+`e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/Spectral/Subspace.lean`,
+earlier `DavisKahan/FiniteDimensional/Core/SpectralSubspace.lean`, Wave-1
+extraction `1fbd3918f`, dependency-closure promotion `88c574dc5`. The
+header credits Jon Crall / GPT 5.6 High, Kitware, Inc., Apache-2.0. Original
+`Reduces`/`SpectrumIn` declaration names remain in the manifest as source
+history. Four unused private elementary composition proofs are also removed
+from `DavisKahan/FiniteDimensional/DirectRotation/Basic.lean`; that module's
+Jon Crall / GPT 5.6 High / OpenAI GPT-5.6 Thinking header is preserved.
+Source intertwiner and rotation formulas remain unchanged on native carriers.
+
+The donor retains its arbitrary-linear-map restriction/ambient
+restricted-point-spectrum correspondences, its finite-dimensional real
+spectrum/continuous-carrier bridge without a symmetry assumption, and the
+point-spectrum-to-form-bound consequences. No exact accepted replacement for
+those full statements is identified in this slice. Coordinate tangent and
+arbitrary-eigenframe consumers keep their stronger mathematical scope.
+
+The competitor-pinch positivity proof in the paper's direct-rotation
+majorization theorem now uses Mathlib `LinearMap.IsPositive.adjoint_conj`
+and `add`, retiring the manual symmetry and quadratic-form calculation.
+Finite coordinate counterexamples retain their original formulas, with
+coordinate lemmas stated on native continuous projection evaluations.
+The unrelated `BoundedSpectralSelection.projection` record field is unchanged.
+
+The YWS example theorems `pointInternalGap_middleSharpness`,
+`pointInternalGap_orthogonalSharpness` and `pointInternalGap_section1` now
+consume Mathlib `Module.End.eigenspace_mem_invtSubmodule` for their
+invariant-eigenspace premise. This is foundation reuse; the complete
+sharpness/gap examples remain DKPS/YWS mathematics. Their original per-file
+Kitware/Apache-2.0 authorship headers and source at `e4637c3919ae` under
+`YuWangSamworth2015/YuWangSamworth2015/Symmetric/` remain intact.

@@ -194,7 +194,7 @@ theorem sinAngleOperator_eigenvalue_le_projectionGap
     ((U.isPositive_sinAngleOperator V).toLinearMap).isSymmetric.eigenvalues rfl i ≤
         U.projectionGap V := by
   classical
-  let D : E →ₗ[𝕜] E := projection U - projection V
+  let D : E →ₗ[𝕜] E := U.starProjection.toLinearMap - V.starProjection.toLinearMap
   let S : E →ₗ[𝕜] E := (Submodule.sinAngleOperator U V).toLinearMap
   let hS : S.IsPositive := (U.isPositive_sinAngleOperator V).toLinearMap
   let b := hS.isSymmetric.eigenvectorBasis rfl
@@ -236,7 +236,7 @@ theorem cos_half_mul_uiNorm_directRotation_le_projection
         Real.sin alpha) :
     Real.cos (alpha / 2) *
         N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
-      N (projection U - projection V) := by
+      N (U.starProjection.toLinearMap - V.starProjection.toLinearMap) := by
   classical
   let S : E →ₗ[𝕜] E := (Submodule.sinAngleOperator U V).toLinearMap
   let hS : S.IsPositive := (U.isPositive_sinAngleOperator V).toLinearMap
@@ -273,7 +273,7 @@ theorem cos_half_mul_uiNorm_directRotation_le_projection
     Real.cos (alpha / 2) * N A ≤ N S := by
       rw [hcancel] at hbound'
       exact hbound'
-    _ = N (projection U - projection V) :=
+    _ = N (U.starProjection.toLinearMap - V.starProjection.toLinearMap) :=
       N.map_eq_of_singularValues_eq
         (Submodule.singularValues_sinAngleOperator_eq_sub_starProjection U V)
 
@@ -307,7 +307,7 @@ theorem cos_half_arcsin_projectionGap_mul_uiNorm_directRotation_le_projection
     (hacute : Submodule.IsAcute U V) :
     Real.cos (Real.arcsin (U.projectionGap V) / 2) *
         N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
-      N (projection U - projection V) := by
+      N (U.starProjection.toLinearMap - V.starProjection.toLinearMap) := by
   have hg0 : 0 ≤ U.projectionGap V := by
     rw [Submodule.projectionGap_def]
     exact norm_nonneg _
@@ -483,7 +483,7 @@ theorem uiNorm_directRotation_le_sqrt_two_mul_displacement
     N A = N (F ∘ₗ S) := hN
     _ ≤ Real.sqrt 2 * N S :=
       N.map_comp_le_left _ _ hFbound
-    _ = Real.sqrt 2 * N (projection U - projection V) := by
+    _ = Real.sqrt 2 * N (U.starProjection.toLinearMap - V.starProjection.toLinearMap) := by
       exact congrArg (fun t : ℝ => Real.sqrt 2 * t)
         (N.map_eq_of_singularValues_eq
           (Submodule.singularValues_sinAngleOperator_eq_sub_starProjection U V))
@@ -501,7 +501,7 @@ sine. It follows directly from the four equal singular values of `P_U-P_V`. -/
 theorem projectionGap_eq_sin (theta : ℝ)
     (h0 : 0 < theta) (h1 : theta < Real.pi / 2) :
     U4.projectionGap (V4 theta) = Real.sin theta := by
-  let D : E4 →ₗ[ℝ] E4 := projection U4 - projection (V4 theta)
+  let D : E4 →ₗ[ℝ] E4 := U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap
   have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
   have hs : 0 ≤ Real.sin theta :=
     (Real.sin_pos_of_pos_of_lt_pi h0 (by linarith [Real.pi_pos])).le

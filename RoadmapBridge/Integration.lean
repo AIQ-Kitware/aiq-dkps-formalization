@@ -67,7 +67,9 @@ example {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
       {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     let U := Module.End.pointSpectralSubspace A (Set.Icc a b)
     let V := Module.End.pointSpectralSubspace B (Set.Icc a b)
-    let hU : IsInvariant A U := isInvariant_pointSpectralSubspace A (Set.Icc a b)
+    let hU : (U ∈ Module.End.invtSubmodule A) := (fun _ hx =>
+        (Module.End.map_pointSpectralSubspace_le (A := A) (Ω := (Set.Icc a b)))
+        (Submodule.mem_map_of_mem hx))
     let M := A.restrict hU
     let N : UnitarilyInvariantSeminorm 𝕜 U E :=
       UnitarilyInvariantSeminorm.kyFan (𝕜 := 𝕜) (E := U) (F := E) 1
@@ -76,7 +78,9 @@ example {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
         U.subtypeₗᵢ.toContinuousLinearMap) := by
   let U := Module.End.pointSpectralSubspace A (Set.Icc a b)
   let V := Module.End.pointSpectralSubspace B (Set.Icc a b)
-  have hU : IsInvariant A U := isInvariant_pointSpectralSubspace A (Set.Icc a b)
+  have hU : (U ∈ Module.End.invtSubmodule A) := (fun _ hx =>
+      (Module.End.map_pointSpectralSubspace_le (A := A) (Ω := (Set.Icc a b)))
+      (Submodule.mem_map_of_mem hx))
   let M := A.restrict hU
   have hM : M.IsSymmetric := hA.restrict_invariant hU
   have hMspec : Module.End.PointSpectrumIn (M : U →ₗ[𝕜] U) ⊤ (Set.Icc a b) :=

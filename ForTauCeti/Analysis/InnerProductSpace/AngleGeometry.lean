@@ -7,7 +7,7 @@ module
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
 
-public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 public import TauCeti.Analysis.InnerProductSpace.Projection.Acute
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
@@ -129,7 +129,7 @@ onto `U`, so the second map is the first precomposed with the adjoint of an
 isometric embedding, which is `LinearMap.singularValues_comp_adjoint_linearIsometry`. -/
 theorem singularValues_comp_subtype (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (A : E →ₗ[𝕜] F) :
-    (A ∘ₗ U.subtype).singularValues = (A ∘ₗ projection U).singularValues := by
+    (A ∘ₗ U.subtype).singularValues = (A ∘ₗ U.starProjection.toLinearMap).singularValues := by
   have hsub : U.subtypeₗᵢ.toLinearMap = U.subtype := by
     ext x
     rfl
@@ -144,7 +144,7 @@ theorem singularValues_comp_subtype (U : Submodule 𝕜 E)
     rw [U.inner_starProjection_left_eq_right,
       U.starProjection_eq_self_iff.mpr y.2]
   have hcomp : (A ∘ₗ U.subtype) ∘ₗ LinearMap.adjoint U.subtypeₗᵢ.toLinearMap =
-      A ∘ₗ projection U := by
+      A ∘ₗ U.starProjection.toLinearMap := by
     rw [hadj]
     ext x
     rfl
@@ -154,7 +154,8 @@ omit [FiniteDimensional 𝕜 E] in
 /-- The cosine cross projection is unchanged by precomposition with `P_U`. -/
 theorem cosThetaMap_comp_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (U.cosThetaMap V).toLinearMap ∘ₗ projection U = (U.cosThetaMap V).toLinearMap := by
+    (U.cosThetaMap V).toLinearMap ∘ₗ U.starProjection.toLinearMap = (U.cosThetaMap V).toLinearMap
+        := by
   simp only [Submodule.cosThetaMap_def]
   ext x
   -- exposes the two nested projections, which no `simp` lemma reassociates.
@@ -166,7 +167,8 @@ omit [FiniteDimensional 𝕜 E] in
 /-- The sine cross projection is unchanged by precomposition with `P_U`. -/
 theorem sinThetaMap_comp_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (U.sinThetaMap V).toLinearMap ∘ₗ projection U = (U.sinThetaMap V).toLinearMap := by
+    (U.sinThetaMap V).toLinearMap ∘ₗ U.starProjection.toLinearMap = (U.sinThetaMap V).toLinearMap
+        := by
   simp only [Submodule.sinThetaMap_def]
   ext x
   -- exposes the two nested projections, which no `simp` lemma reassociates.
@@ -201,9 +203,9 @@ theorem sum_sq_principalCosines_eq_sum_sq_norm_projection (U V : Submodule 𝕜 
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (b : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 U) :
     ∑ i : Fin (finrank 𝕜 U), Submodule.principalCosines U V (i : ℕ) ^ 2 =
-      ∑ i, ‖projection V ((b i : U) : E)‖ ^ 2 := by
+      ∑ i, ‖V.starProjection.toLinearMap ((b i : U) : E)‖ ^ 2 := by
   have happ : ∀ i, ((U.cosThetaMap V).toLinearMap ∘ₗ U.subtype) (b i) =
-      projection V ((b i : U) : E) := by
+      V.starProjection.toLinearMap ((b i : U) : E) := by
     intro i
     rw [Submodule.cosThetaMap_def]
     -- exposes the inner projection, which is the identity on a vector of `U`.
@@ -222,9 +224,9 @@ theorem sum_sq_principalSines_eq_sum_sq_norm_complementaryProjection
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (b : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 U) :
     ∑ i : Fin (finrank 𝕜 U), Submodule.principalSines U V (i : ℕ) ^ 2 =
-      ∑ i, ‖complementaryProjection V ((b i : U) : E)‖ ^ 2 := by
+      ∑ i, ‖Vᗮ.starProjection.toLinearMap ((b i : U) : E)‖ ^ 2 := by
   have happ : ∀ i, ((U.sinThetaMap V).toLinearMap ∘ₗ U.subtype) (b i) =
-      complementaryProjection V ((b i : U) : E) := by
+      Vᗮ.starProjection.toLinearMap ((b i : U) : E) := by
     intro i
     rw [Submodule.sinThetaMap_def]
     -- exposes the inner projection, which is the identity on a vector of `U`.
@@ -247,7 +249,7 @@ theorem sum_sq_principalSines_eq_sum_one_sub_sq_norm_projection
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (b : OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 U) :
     ∑ i : Fin (finrank 𝕜 U), Submodule.principalSines U V (i : ℕ) ^ 2 =
-      ∑ i, (1 - ‖projection V ((b i : U) : E)‖ ^ 2) := by
+      ∑ i, (1 - ‖V.starProjection.toLinearMap ((b i : U) : E)‖ ^ 2) := by
   rw [sum_sq_principalSines_eq_sum_sq_norm_complementaryProjection U V b]
   refine Finset.sum_congr rfl fun i _ => ?_
   have hunit : ‖((b i : U) : E)‖ = 1 := by

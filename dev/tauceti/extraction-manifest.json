@@ -4862,7 +4862,8 @@
       "provenance_class": "Originally moved verbatim; now migrated in place to the revised roadmap. See source_module and source_declarations for the original extraction.",
       "direct_dependencies": [
         "TauCeti.Analysis.InnerProductSpace.CourantFischer",
-        "ForTauCeti.Analysis.InnerProductSpace.Projection.Gap",
+        "TauCeti.Analysis.InnerProductSpace.PointSpectrum",
+        "TauCeti.Analysis.InnerProductSpace.InvariantSubspace",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder",
         "Mathlib.Analysis.Normed.Operator.Banach"
       ],
@@ -4870,23 +4871,29 @@
       "downstream_users": [
         "Challenge.DavisKahan1970.Conformance",
         "DavisKahan.FiniteDimensional.Core.All",
-        "DavisKahan.FiniteDimensional.Core.OperatorBlocks",
-        "DavisKahan.FiniteDimensional.DoubleAngle.SinTheta",
         "DavisKahan.FiniteDimensional.SinTheta.TrialMap",
         "DavisKahan.FiniteDimensional.TanTheta.RitzResidual",
-        "ForTauCeti.Analysis.InnerProductSpace.AngleGeometry",
-        "ForTauCeti.Analysis.InnerProductSpace.BasisDiagonal",
-        "ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Basic",
-        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds",
-        "ForTauCeti.Analysis.InnerProductSpace.TwoLevelOperator"
+        "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds"
       ],
-      "status": "staged-needs-current-validation",
-      "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "status": "partially-upstreamed",
+      "upstream_pr": "#14418, #16545",
+      "migration_note": "November 2: retire the parallel IsInvariant predicate, projection/complementaryProjection linear-map aliases and their symmetry, adjoint, complement, orthogonal-invariance, point-spectral-invariance and projection-commutation wrappers. All maintained consumers use native Module.End.invtSubmodule membership and Submodule.starProjection.toLinearMap directly; native starProjection_orthogonal, starProjection_isSymmetric, IsSymmetric.adjoint_eq and orthogonalComplement_mem_invtSubmodule replace local proofs. Full dimension-free predicate/carrier/commutation correspondences were compiled, preserving the original arbitrary RCLike scope; finite adjoint uses retain their original finite-dimensional assumptions. Restriction APIs with explicit vector binders use Mathlib mem_invtSubmodule_iff_forall_mem_of_mem; membership itself has an implicit vector binder, which is an elaboration distinction, not a mathematical strengthening. Native LinearMap.IsSymmetric.starProjection_apply_comm is accepted in independent #16545 (a2a2c9a9ba5c5d4e8a8dbb9ad641f17058b29206), and Module.End.map_pointSpectralSubspace_le in independent #14418 (1f2ab68732510bdfccdd517505193dc128901c7d); both PR integration messages say no formalization was vendored. The invariant-submodule and projection primitives are pre-existing pinned Mathlib APIs (2cabef97b63d3275776b8b060d802de6a6fa1055), not newly attributed DKPS contributions. Original source e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/Spectral/Subspace.lean, earlier DavisKahan/FiniteDimensional/Core/SpectralSubspace.lean, Wave-1 extraction 1fbd3918f and dependency-closure promotion 88c574dc5; historical header Jon Crall/GPT 5.6 High, Kitware copyright, Apache-2.0. Preserve original source declaration names in source_declarations, including historical Reduces/SpectrumIn names. Retain the arbitrary-linear-map restriction/ambient restricted-point-spectrum correspondences, nonsymmetric finite-dimensional real-spectrum/continuous-carrier bridge, and point-spectrum-to-form-bound consequences: no exact accepted replacement for those full statements is identified here. Source direct-rotation blocks, residual/tangent operators and arbitrary-eigenframe YWS consumers retain their mathematical formulas. Remove four now-unused private elementary projection-composition proofs in the paper DirectRotation.Basic module, whose identities are already native Mathlib consequences; its remaining source intertwiner/rotation proofs use canonical projection carriers. Necessary local source correspondence wrappers are not re-exported from ForTauCeti. The competitor-pinch positivity proof in paper DirectRotation.Majorization now uses pinned Mathlib LinearMap.IsPositive.adjoint_conj and add directly, replacing the manual symmetric-inner-product/positivity calculation. Explicit finite coordinate counterexamples retain their original formulas and native projection coordinate lemmas; the unrelated BoundedSpectralSelection.projection record field is unchanged. The YWS pointInternalGap_middleSharpness, pointInternalGap_orthogonalSharpness and pointInternalGap_section1 examples now consume Mathlib Module.End.eigenspace_mem_invtSubmodule for their invariant-eigenspace premise. These remain DKPS/YWS example theorems; the Mathlib dependency is not a claim that the complete gap examples landed upstream. Their original per-file authorship/license headers and e4637c3919ae source remain intact.",
+      "retired_local_declarations": [
+        "TauCeti.IsInvariant",
+        "TauCeti.projection",
+        "TauCeti.complementaryProjection",
+        "TauCeti.complementaryProjection_eq_id_sub",
+        "TauCeti.projection_isSymmetric",
+        "TauCeti.projection_adjoint",
+        "TauCeti.isInvariant_orthogonal_of_isSymmetric",
+        "TauCeti.isInvariant_pointSpectralSubspace",
+        "TauCeti.projection_apply_comm_of_isInvariant",
+        "TauCeti.complementaryProjection_apply_comm_of_isInvariant"
+      ]
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Sylvester/Basic.lean",

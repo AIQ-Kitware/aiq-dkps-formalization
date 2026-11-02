@@ -202,7 +202,7 @@ theorem phaseUnitary_transports (theta : ℝ) :
 
 /-- The source line is the diagonal line; its projection averages coordinates. -/
 private theorem projection_sourceLine_apply (x : E2) :
-    projection sourceLine x = ((x 0 + x 1) / 2) • diagonalVector := by
+    sourceLine.starProjection.toLinearMap x = ((x 0 + x 1) / 2) • diagonalVector := by
   change sourceLine.starProjection x = _
   refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero ?_ ?_
   · exact Submodule.smul_mem _ _ (Submodule.subset_span (by simp))
@@ -225,19 +225,19 @@ private theorem projection_sourceLine_apply (x : E2) :
 
 /-- The first coordinate of projection onto the diagonal source line. -/
 theorem projection_sourceLine_zero (x : E2) :
-    projection sourceLine x 0 = (x 0 + x 1) / 2 := by
+    sourceLine.starProjection.toLinearMap x 0 = (x 0 + x 1) / 2 := by
   rw [projection_sourceLine_apply]
   simp [diagonalVector_zero]
 
 /-- The second coordinate of projection onto the diagonal source line. -/
 theorem projection_sourceLine_one (x : E2) :
-    projection sourceLine x 1 = (x 0 + x 1) / 2 := by
+    sourceLine.starProjection.toLinearMap x 1 = (x 0 + x 1) / 2 := by
   rw [projection_sourceLine_apply]
   simp [diagonalVector_one]
 
 private theorem projection_targetLine_apply (theta : ℝ) (x : E2) :
-    projection (targetLine theta) x =
-      phaseUnitary theta (projection sourceLine ((phaseUnitary theta).symm x)) := by
+    ((targetLine theta)).starProjection.toLinearMap x =
+      phaseUnitary theta (sourceLine.starProjection.toLinearMap ((phaseUnitary theta).symm x)) := by
   have h := projection_intertwines_of_map_eq sourceLine (targetLine theta)
     (phaseUnitary theta) (phaseUnitary_transports theta)
   have hx := LinearMap.congr_fun h ((phaseUnitary theta).symm x)
@@ -248,10 +248,10 @@ private theorem projection_targetLine_apply (theta : ℝ) (x : E2) :
   exact hx.symm
 
 private theorem projection_targetLine_zero (theta : ℝ) (x : E2) :
-    projection (targetLine theta) x 0 =
+    ((targetLine theta)).starProjection.toLinearMap x 0 =
       (x 0 + phase theta * x 1) / 2 := by
   rw [projection_targetLine_apply]
-  change (phaseMap theta (projection sourceLine (inversePhaseMap theta x))) 0 = _
+  change (phaseMap theta (sourceLine.starProjection.toLinearMap (inversePhaseMap theta x))) 0 = _
   rw [phaseMap_zero, projection_sourceLine_zero,
     inversePhaseMap_zero, inversePhaseMap_one]
   calc
@@ -263,22 +263,24 @@ private theorem projection_targetLine_zero (theta : ℝ) (x : E2) :
       ring
 
 private theorem projection_targetLine_one (theta : ℝ) (x : E2) :
-    projection (targetLine theta) x 1 =
+    ((targetLine theta)).starProjection.toLinearMap x 1 =
       (star (phase theta) * x 0 + x 1) / 2 := by
   rw [projection_targetLine_apply]
-  change (phaseMap theta (projection sourceLine (inversePhaseMap theta x))) 1 = _
+  change (phaseMap theta (sourceLine.starProjection.toLinearMap (inversePhaseMap theta x))) 1 = _
   rw [phaseMap_one, projection_sourceLine_one,
     inversePhaseMap_zero, inversePhaseMap_one]
 
 private theorem projectionDifference_zero (theta : ℝ) (x : E2) :
-    ((projection sourceLine - projection (targetLine theta)) x) 0 =
+    ((sourceLine.starProjection.toLinearMap - ((targetLine theta)).starProjection.toLinearMap) x)
+        0 =
       (1 - phase theta) * x 1 / 2 := by
   rw [LinearMap.sub_apply, PiLp.sub_apply, projection_sourceLine_zero,
     projection_targetLine_zero]
   ring
 
 private theorem projectionDifference_one (theta : ℝ) (x : E2) :
-    ((projection sourceLine - projection (targetLine theta)) x) 1 =
+    ((sourceLine.starProjection.toLinearMap - ((targetLine theta)).starProjection.toLinearMap) x)
+        1 =
       (1 - star (phase theta)) * x 0 / 2 := by
   rw [LinearMap.sub_apply, PiLp.sub_apply, projection_sourceLine_one,
     projection_targetLine_one]
@@ -308,8 +310,8 @@ private theorem phase_chord_mul_conj (theta : ℝ) :
 /-- The difference of the two complex-line projections has the same scalar
 square as a real principal-plane projection difference, even at right angles. -/
 theorem projectionDifference_sq (theta : ℝ) :
-    (projection sourceLine - projection (targetLine theta)) ∘ₗ
-        (projection sourceLine - projection (targetLine theta)) =
+    (sourceLine.starProjection.toLinearMap - ((targetLine theta)).starProjection.toLinearMap) ∘ₗ
+        (sourceLine.starProjection.toLinearMap - ((targetLine theta)).starProjection.toLinearMap) =
       ((Real.sin theta ^ 2 : ℝ) : ℂ) • (LinearMap.id : E2 →ₗ[ℂ] E2) := by
   apply LinearMap.ext
   intro x
@@ -324,8 +326,9 @@ theorem projectionDifference_sq (theta : ℝ) :
       4 * (Real.sin theta : ℂ) ^ 2 := by
     rw [mul_comm, hmul]
   have h0 :
-      ((projection sourceLine - projection (targetLine theta))
-        ((projection sourceLine - projection (targetLine theta)) x)) 0 =
+      ((sourceLine.starProjection.toLinearMap - ((targetLine theta)).starProjection.toLinearMap)
+        ((sourceLine.starProjection.toLinearMap - ((targetLine theta)).starProjection.toLinearMap)
+            x)) 0 =
           ((Real.sin theta ^ 2 : ℝ) : ℂ) * x 0 := by
     rw [projectionDifference_zero, projectionDifference_one]
     have hcast : (((Real.sin theta ^ 2 : ℝ) : ℂ)) = (Real.sin theta : ℂ) ^ 2 := by
@@ -333,8 +336,9 @@ theorem projectionDifference_sq (theta : ℝ) :
     rw [hcast]
     linear_combination (x 0 / 4) * hmul
   have h1 :
-      ((projection sourceLine - projection (targetLine theta))
-        ((projection sourceLine - projection (targetLine theta)) x)) 1 =
+      ((sourceLine.starProjection.toLinearMap - ((targetLine theta)).starProjection.toLinearMap)
+        ((sourceLine.starProjection.toLinearMap - ((targetLine theta)).starProjection.toLinearMap)
+            x)) 1 =
           ((Real.sin theta ^ 2 : ℝ) : ℂ) * x 1 := by
     rw [projectionDifference_one, projectionDifference_zero]
     have hcast : (((Real.sin theta ^ 2 : ℝ) : ℂ)) = (Real.sin theta : ℂ) ^ 2 := by
@@ -348,23 +352,26 @@ theorem projectionDifference_sq (theta : ℝ) :
 /-- The two complex principal-plane projection singular values coincide. -/
 theorem singularValues_projectionDifference (theta : ℝ)
     (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
-    (projection sourceLine - projection (targetLine theta)).singularValues =
+    (sourceLine.starProjection.toLinearMap - ((targetLine
+        theta)).starProjection.toLinearMap).singularValues =
       TauCeti.pairSingularValues (Real.sin theta) (Real.sin theta) := by
   have hs : 0 ≤ Real.sin theta :=
     Real.sin_nonneg_of_nonneg_of_le_pi h0 (by linarith [Real.pi_pos])
-  have hSym : (projection sourceLine - projection (targetLine theta)).IsSymmetric :=
-    (projection_isSymmetric _).sub (projection_isSymmetric _)
+  have hSym : (sourceLine.starProjection.toLinearMap - ((targetLine
+      theta)).starProjection.toLinearMap).IsSymmetric :=
+    ((Submodule.starProjection_isSymmetric _)).sub ((Submodule.starProjection_isSymmetric _))
   have hsq := projectionDifference_sq theta
   have h := TauCeti.singularValues_eq_abs_pair_of_isSymmetric_sq
     finrank_euclideanSpace_fin (EuclideanSpace.basisFun (Fin 2) ℂ)
-    (projection sourceLine - projection (targetLine theta))
+    (sourceLine.starProjection.toLinearMap - ((targetLine theta)).starProjection.toLinearMap)
     (Real.sin theta) hSym hsq
   simpa [abs_of_nonneg hs] using h
 
 /-- The complex planar projection distance is exactly `2 sin theta`. -/
 theorem kyFanSum_projectionDifference (theta : ℝ)
     (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
-    (projection sourceLine - projection (targetLine theta)).kyFanSum 2 =
+    (sourceLine.starProjection.toLinearMap - ((targetLine
+        theta)).starProjection.toLinearMap).kyFanSum 2 =
       2 * Real.sin theta := by
   rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_two,
     singularValues_projectionDifference theta h0 hpi]
@@ -380,13 +387,15 @@ theorem phaseUnitary_global_trace_minimizer (theta : ℝ)
         (LinearMap.id - (phaseUnitary theta).toLinearMap).kyFanSum 2 ≤
           (LinearMap.id - W.toLinearMap).kyFanSum 2) ∧
       (LinearMap.id - (phaseUnitary theta).toLinearMap).kyFanSum 2 =
-        (projection sourceLine - projection (targetLine theta)).kyFanSum 2 := by
+        (sourceLine.starProjection.toLinearMap - ((targetLine
+            theta)).starProjection.toLinearMap).kyFanSum 2 := by
   constructor
   · intro W hmap
     calc
       (LinearMap.id - (phaseUnitary theta).toLinearMap).kyFanSum 2 =
           2 * Real.sin theta := kyFanSum_phaseUnitary theta h0 hpi
-      _ = (projection sourceLine - projection (targetLine theta)).kyFanSum 2 :=
+      _ = (sourceLine.starProjection.toLinearMap - ((targetLine
+          theta)).starProjection.toLinearMap).kyFanSum 2 :=
         (kyFanSum_projectionDifference theta h0 hpi).symm
       _ ≤ (LinearMap.id - W.toLinearMap).kyFanSum 2 :=
         projectionDifference_kyFanSum_le_displacement sourceLine
@@ -397,7 +406,8 @@ theorem phaseUnitary_global_trace_minimizer (theta : ℝ)
 /-- The global projection bound already supplies the universal lower inequality
 for this complex plane, valid even at `theta = pi/2`. -/
 theorem projectionDifference_le_phaseUnitary (theta : ℝ) :
-    (projection sourceLine - projection (targetLine theta)).kyFanSum 2 ≤
+    (sourceLine.starProjection.toLinearMap - ((targetLine
+        theta)).starProjection.toLinearMap).kyFanSum 2 ≤
       (LinearMap.id - (phaseUnitary theta).toLinearMap).kyFanSum 2 :=
   projectionDifference_kyFanSum_le_displacement sourceLine
     (targetLine theta) (phaseUnitary theta) (phaseUnitary_transports theta) 2

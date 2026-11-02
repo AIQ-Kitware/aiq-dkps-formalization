@@ -124,7 +124,8 @@ same full ambient trace norm as the embedded phase displacement. -/
 theorem trace_planarProjectionDifference
     (ι : E2 →ₗᵢ[ℂ] H) (theta : ℝ)
     (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
-    (planarZeroExtension ι (projection sourceLine - projection (targetLine theta))).kyFanSum
+    (planarZeroExtension ι (sourceLine.starProjection.toLinearMap - ((targetLine
+        theta)).starProjection.toLinearMap)).kyFanSum
       (finrank ℂ H) =
         2 * Real.sin theta := by
   rw [trace_planarZeroExtension]
@@ -136,7 +137,8 @@ theorem trace_planarPhase_eq_projectionDifference
     (h0 : 0 ≤ theta) (hpi : theta ≤ Real.pi / 2) :
     (planarZeroExtension ι (LinearMap.id - (phaseUnitary theta).toLinearMap)).kyFanSum
       (finrank ℂ H) =
-      (planarZeroExtension ι (projection sourceLine - projection (targetLine theta))).kyFanSum
+      (planarZeroExtension ι (sourceLine.starProjection.toLinearMap - ((targetLine
+          theta)).starProjection.toLinearMap)).kyFanSum
         (finrank ℂ H) := by
   rw [trace_planarPhaseDisplacement ι theta h0 hpi,
     trace_planarProjectionDifference ι theta h0 hpi]
@@ -191,8 +193,10 @@ theorem twoPlanePhaseUnitary_trace_eq_projectionDifference
     (h0phi : 0 ≤ phi) (hpiPhi : phi ≤ Real.pi / 2) :
     (LinearMap.id - (twoPlanePhaseUnitary theta phi).toLinearMap).kyFanSum
       (finrank ℂ (WithLp 2 (E2 × E2))) =
-      (((projection sourceLine - projection (targetLine theta)).prodMap
-        (projection sourceLine - projection (targetLine phi))).withLpMap 2).kyFanSum
+      (((sourceLine.starProjection.toLinearMap - ((targetLine
+          theta)).starProjection.toLinearMap).prodMap
+        (sourceLine.starProjection.toLinearMap - ((targetLine
+            phi)).starProjection.toLinearMap)).withLpMap 2).kyFanSum
             (finrank ℂ (WithLp 2 (E2 × E2))) := by
   rw [twoPlanePhaseUnitary_displacement,
     kyFanSum_orthogonalBlockSum_full, kyFanSum_orthogonalBlockSum_full]
@@ -237,12 +241,16 @@ theorem twoPlanePhaseUnitary_global_trace_minimizer
       (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ (WithLp 2 (E2 × E2)))) ∧
     (LinearMap.id - (twoPlanePhaseUnitary theta phi).toLinearMap).kyFanSum
       (finrank ℂ (WithLp 2 (E2 × E2))) =
-      (projection twoPlaneSource - projection (twoPlaneTarget theta phi)).kyFanSum
+      (twoPlaneSource.starProjection.toLinearMap - ((twoPlaneTarget theta
+          phi)).starProjection.toLinearMap).kyFanSum
         (finrank ℂ (WithLp 2 (E2 × E2))) := by
   have hproj :
-      projection twoPlaneSource - projection (twoPlaneTarget theta phi) =
-        ((projection sourceLine - projection (targetLine theta)).prodMap
-          (projection sourceLine - projection (targetLine phi))).withLpMap 2 := by
+      twoPlaneSource.starProjection.toLinearMap - ((twoPlaneTarget theta
+          phi)).starProjection.toLinearMap =
+        ((sourceLine.starProjection.toLinearMap - ((targetLine
+            theta)).starProjection.toLinearMap).prodMap
+          (sourceLine.starProjection.toLinearMap - ((targetLine
+              phi)).starProjection.toLinearMap)).withLpMap 2 := by
     rw [twoPlaneSource, twoPlaneTarget,
       projection_orthogonalBlockSumSubmodule,
       projection_orthogonalBlockSumSubmodule]
@@ -255,7 +263,8 @@ theorem twoPlanePhaseUnitary_global_trace_minimizer
     calc
       (LinearMap.id - (twoPlanePhaseUnitary theta phi).toLinearMap).kyFanSum
         (finrank ℂ (WithLp 2 (E2 × E2))) =
-          (projection twoPlaneSource - projection (twoPlaneTarget theta phi)).kyFanSum
+          (twoPlaneSource.starProjection.toLinearMap - ((twoPlaneTarget theta
+              phi)).starProjection.toLinearMap).kyFanSum
             (finrank ℂ (WithLp 2 (E2 × E2))) := heq
       _ ≤ (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ (WithLp 2 (E2 × E2))) :=
         projectionDifference_kyFanSum_le_displacement

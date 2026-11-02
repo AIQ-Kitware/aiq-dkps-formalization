@@ -58,33 +58,37 @@ theorem gram_sinTwoAngleOperator (U V : Submodule 𝕜 E)
           (U.cosThetaMap V).toLinearMap) ∘ₗ
           (LinearMap.adjoint (U.cosThetaMap V).toLinearMap ∘ₗ
           (U.cosThetaMap V).toLinearMap)) := by
-  have hcos : (U.cosThetaMap V).toLinearMap = projection V ∘ₗ projection U := by
+  have hcos : (U.cosThetaMap V).toLinearMap = V.starProjection.toLinearMap ∘ₗ
+      U.starProjection.toLinearMap := by
     rw [Submodule.cosThetaMap_def]
     rfl
   have htwo : (U.sinTwoAngleOperator V).toLinearMap =
-      (2 : 𝕜) • (complementaryProjection U ∘ₗ projection V ∘ₗ projection U) := by
+      (2 : 𝕜) • (Uᗮ.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap ∘ₗ
+          U.starProjection.toLinearMap) := by
     rw [Submodule.sinTwoAngleOperator_def]
     rfl
   simp only [hcos, htwo]
   have hidem : ∀ (W : Submodule 𝕜 E) [W.HasOrthogonalProjection] (x : E),
-      projection W (projection W x) = projection W x := by
+      W.starProjection.toLinearMap (W.starProjection.toLinearMap x) = W.starProjection.toLinearMap
+          x := by
     intro W _ x
     exact Submodule.starProjection_eq_self_iff.mpr (W.starProjection_apply_mem x)
   have hcomp : ∀ (W : Submodule 𝕜 E) [W.HasOrthogonalProjection] (x : E),
-      complementaryProjection W x = x - projection W x := by
+      Wᗮ.starProjection.toLinearMap x = x - W.starProjection.toLinearMap x := by
     intro W _ x
-    rw [complementaryProjection, projection, projection,
-      Submodule.starProjection_orthogonal]
-    simp
-  have hadjCos : LinearMap.adjoint (projection V ∘ₗ projection U) =
-      projection U ∘ₗ projection V := by
-    rw [LinearMap.adjoint_comp, projection_adjoint, projection_adjoint]
+    exact W.starProjection_orthogonal_val x
+  have hadjCos : LinearMap.adjoint (V.starProjection.toLinearMap ∘ₗ U.starProjection.toLinearMap) =
+      U.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap := by
+    rw [LinearMap.adjoint_comp, (Submodule.starProjection_isSymmetric _).adjoint_eq,
+        (Submodule.starProjection_isSymmetric _).adjoint_eq]
   have hadjSin : LinearMap.adjoint
-      ((2 : 𝕜) • (complementaryProjection U ∘ₗ projection V ∘ₗ projection U)) =
-      (2 : 𝕜) • (projection U ∘ₗ projection V ∘ₗ complementaryProjection U) := by
-    rw [map_smulₛₗ, map_ofNat,
-      LinearMap.adjoint_comp, LinearMap.adjoint_comp, complementaryProjection,
-      projection_adjoint, projection_adjoint, projection_adjoint]
+      ((2 : 𝕜) • (Uᗮ.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap ∘ₗ
+          U.starProjection.toLinearMap)) =
+      (2 : 𝕜) • (U.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap ∘ₗ
+          Uᗮ.starProjection.toLinearMap) := by
+    rw [map_smulₛₗ, map_ofNat, LinearMap.adjoint_comp, LinearMap.adjoint_comp,
+      U.starProjection_isSymmetric.adjoint_eq, V.starProjection_isSymmetric.adjoint_eq,
+      Uᗮ.starProjection_isSymmetric.adjoint_eq]
     rfl
   rw [hadjSin, hadjCos]
   ext x

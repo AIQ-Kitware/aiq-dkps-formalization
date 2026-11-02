@@ -328,7 +328,7 @@ aligned-basis conclusion proved here.
 theorem yuWangSamworth_sinTheta_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (_hV : IsInvariant B V)
+    [V.HasOrthogonalProjection] (_hV : (V ∈ Module.End.invtSubmodule B))
     (hcorr : CorrespondingEigenblock hA hB U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d) {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : PointInternalGap A U Δ) :
@@ -386,7 +386,7 @@ theorem yuWangSamworth_intervalBlock_le
     Submodule.sinThetaFrobenius U V ≤
       2 * min (Real.sqrt (finrank 𝕜 U) * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
-  have hV : IsInvariant B V := by
+  have hV : (V ∈ Module.End.invtSubmodule B) := by
     obtain ⟨_n, _d, _hn, _e, hcanonical⟩ := hcorr.toCorrespondingEigenblocks
     intro x hx
     exact hcanonical.apply_mem_right hx
@@ -531,7 +531,7 @@ printed theorem in exactly the same way.
 theorem yuWangSamworth_alignedBasis_le
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hV : IsInvariant B V)
+    [V.HasOrthogonalProjection] (hV : (V ∈ Module.End.invtSubmodule B))
     (hcorr : CorrespondingEigenblock hA hB U V)
     {d : ℕ} (hrankU : finrank 𝕜 U = d) (hrankV : finrank 𝕜 V = d)
     {Δ : ℝ} (hΔ : 0 < Δ) (hgap : PointInternalGap A U Δ) :
@@ -563,8 +563,9 @@ omit [FiniteDimensional 𝕜 E] in
 scalar multiple of `u` is sent to a scalar multiple of `u`. -/
 private theorem isInvariant_span_singleton_of_apply_eq_smul
     {A : E →ₗ[𝕜] E} {u : E} {lam : ℝ} (hAu : A u = (lam : 𝕜) • u) :
-    IsInvariant A (Submodule.span 𝕜 {u}) := by
+    ((Submodule.span 𝕜 {u}) ∈ Module.End.invtSubmodule A) := by
   intro x hx
+  change A x ∈ Submodule.span 𝕜 {u}
   rw [Submodule.mem_span_singleton] at hx
   obtain ⟨a, rfl⟩ := hx
   rw [map_smul, hAu]
@@ -615,9 +616,9 @@ theorem yuWangSamworth_eigenvector_le
   have hu0 : u ≠ 0 := by rw [← norm_ne_zero_iff, hu]; norm_num
   have hv0 : v ≠ 0 := by rw [← norm_ne_zero_iff, hv]; norm_num
   -- The eigenlines reduce the operators.
-  have hU : IsInvariant A (Submodule.span 𝕜 {u}) :=
+  have hU : ((Submodule.span 𝕜 {u}) ∈ Module.End.invtSubmodule A) :=
     isInvariant_span_singleton_of_apply_eq_smul hAu
-  have hV : IsInvariant B (Submodule.span 𝕜 {v}) :=
+  have hV : ((Submodule.span 𝕜 {v}) ∈ Module.End.invtSubmodule B) :=
     isInvariant_span_singleton_of_apply_eq_smul hBv
   have hrankU : finrank 𝕜 (Submodule.span 𝕜 {u}) = 1 := finrank_span_singleton hu0
   have hrankV : finrank 𝕜 (Submodule.span 𝕜 {v}) = 1 := finrank_span_singleton hv0
@@ -845,10 +846,10 @@ theorem sinThetaFrobenius_spanIndices_of_subset_compl {n : ℕ}
     exact OrthonormalBasis.spanIndices_mono b hdisj
   -- On the first block the complementary projector of the second is the identity.
   have hsin : ((b.spanIndices S).sinThetaMap (b.spanIndices T)).toLinearMap =
-      projection (b.spanIndices S) := by
+      ((b.spanIndices S)).starProjection.toLinearMap := by
     rw [Submodule.sinThetaMap_def]
     refine LinearMap.ext fun x => ?_
-    have hmem : projection (b.spanIndices S) x ∈ (b.spanIndices T)ᗮ :=
+    have hmem : ((b.spanIndices S)).starProjection.toLinearMap x ∈ (b.spanIndices T)ᗮ :=
       hperp (Submodule.starProjection_apply_mem _ x)
     change ((b.spanIndices T)ᗮ).starProjection ((b.spanIndices S).starProjection x) =
       (b.spanIndices S).starProjection x
@@ -856,11 +857,12 @@ theorem sinThetaFrobenius_spanIndices_of_subset_compl {n : ℕ}
   rw [Submodule.sinThetaFrobenius_def]
   change UnitarilyInvariantSeminorm.frobenius 𝕜 E E
     (((b.spanIndices S).sinThetaMap (b.spanIndices T)).toLinearMap) = _
-  rw [hsin, UnitarilyInvariantSeminorm.frobenius_apply b (projection (b.spanIndices S))]
+  rw [hsin, UnitarilyInvariantSeminorm.frobenius_apply b (((b.spanIndices
+      S)).starProjection.toLinearMap)]
   have hspan : b.spanIndices S =
       Submodule.span 𝕜 (b '' (↑S.toFinset : Set (Fin n))) := by
     rw [OrthonormalBasis.spanIndices_eq_span, Set.coe_toFinset]
-  have hcol : ∀ i : Fin n, ‖projection (b.spanIndices S) (b i)‖ ^ 2 =
+  have hcol : ∀ i : Fin n, ‖((b.spanIndices S)).starProjection.toLinearMap (b i)‖ ^ 2 =
       if i ∈ S.toFinset then (1 : ℝ) else 0 := by
     intro i
     have hproj : (b.spanIndices S).starProjection (b i) =

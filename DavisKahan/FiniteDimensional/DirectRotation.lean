@@ -84,12 +84,12 @@ theorem ker_sinAngleOperator_le_ker_directRotation_sub_cosine
     ((Submodule.sinAngleOperator U V).toLinearMap).ker ≤
       ((directRotation U V hacute).toLinearMap - directRotationCosine U V).ker := by
   intro x hx
-  have hxD : x ∈ (projection U - projection V).ker := by
+  have hxD : x ∈ (U.starProjection.toLinearMap - V.starProjection.toLinearMap).ker := by
     have hnorm := U.norm_sinAngleOperator_apply V x
     have hzero : U.sinAngleOperator V x = 0 := hx
     rw [hzero, norm_zero] at hnorm
     exact norm_eq_zero.mp hnorm.symm
-  have hproj : projection U x = projection V x :=
+  have hproj : U.starProjection.toLinearMap x = V.starProjection.toLinearMap x :=
     sub_eq_zero.mp (by
       simpa [LinearMap.sub_apply] using LinearMap.mem_ker.mp hxD)
   have hR := directRotation_apply_eq_self_of_projection_eq U V hacute hproj
@@ -124,11 +124,11 @@ theorem directRotation_apply_eq_self_of_mem_common (U V : Submodule 𝕜 E)
     (hx : x ∈ U ⊓ V ⊔ (U ⊔ V)ᗮ) :
     directRotation U V hacute x = x := by
   obtain ⟨x₀, hx₀, x₁, hx₁, rfl⟩ := Submodule.mem_sup.mp hx
-  have hproj0 : projection U x₀ = projection V x₀ := by
+  have hproj0 : U.starProjection.toLinearMap x₀ = V.starProjection.toLinearMap x₀ := by
     simp [projection_apply_of_mem hx₀.1, projection_apply_of_mem hx₀.2]
   have hx₁U : x₁ ∈ Uᗮ := Submodule.orthogonal_le le_sup_left hx₁
   have hx₁V : x₁ ∈ Vᗮ := Submodule.orthogonal_le le_sup_right hx₁
-  have hproj1 : projection U x₁ = projection V x₁ := by
+  have hproj1 : U.starProjection.toLinearMap x₁ = V.starProjection.toLinearMap x₁ := by
     simp [projection_apply_of_mem_orthogonal hx₁U,
       projection_apply_of_mem_orthogonal hx₁V]
   rw [map_add,
@@ -221,8 +221,8 @@ theorem directRotation_minimizes_restrictedDisplacement_uiNorm
     (hacute : Submodule.IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
     (hmap : U.map W.toLinearMap = V) :
     N ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
-        projection U) ≤
-      N ((LinearMap.id - W.toLinearMap) ∘ₗ projection U) :=
+        U.starProjection.toLinearMap) ≤
+      N ((LinearMap.id - W.toLinearMap) ∘ₗ U.starProjection.toLinearMap) :=
   uiNorm_restrictedDisplacement_le N U V hacute W hmap
 
 /-- Pointwise maximum-displacement extremality, obtained from Proposition 4.3
@@ -408,25 +408,31 @@ theorem sq_sinAngleOperator_add_sq_directRotationCosine (U V : Submodule 𝕜 E)
     (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap +
         directRotationCosine U V ∘ₗ directRotationCosine U V = LinearMap.id := by
   have hsin : (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap
-      = (projection U - projection V) ∘ₗ (projection U - projection V) := by
+      = (U.starProjection.toLinearMap - V.starProjection.toLinearMap) ∘ₗ
+          (U.starProjection.toLinearMap - V.starProjection.toLinearMap) := by
     exact congrArg ContinuousLinearMap.toLinearMap (Submodule.sinAngleOperator_sq U V)
   have hcos : directRotationCosine U V ∘ₗ directRotationCosine U V
-      = projection U ∘ₗ projection V ∘ₗ projection U +
-        complementaryProjection U ∘ₗ complementaryProjection V ∘ₗ
-          complementaryProjection U := by
+      = U.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap ∘ₗ
+          U.starProjection.toLinearMap +
+        Uᗮ.starProjection.toLinearMap ∘ₗ Vᗮ.starProjection.toLinearMap ∘ₗ
+          Uᗮ.starProjection.toLinearMap := by
     rw [directRotationCosine, LinearMap.operatorAbs_sq,
       canonicalIntertwiner_adjoint_comp_self]
-  rw [hsin, hcos, complementaryProjection_eq_id_sub U,
-    complementaryProjection_eq_id_sub V]
-  set p : E →ₗ[𝕜] E := projection U with hpdef
-  set q : E →ₗ[𝕜] E := projection V with hqdef
+  rw [hsin, hcos, Submodule.starProjection_orthogonal U, ContinuousLinearMap.toLinearMap_sub,
+      ContinuousLinearMap.coe_id,
+    Submodule.starProjection_orthogonal V, ContinuousLinearMap.toLinearMap_sub,
+        ContinuousLinearMap.coe_id]
+  set p : E →ₗ[𝕜] E := U.starProjection.toLinearMap with hpdef
+  set q : E →ₗ[𝕜] E := V.starProjection.toLinearMap with hqdef
   have hp : p * p = p := by
     ext x
-    change projection U (projection U x) = projection U x
+    change U.starProjection.toLinearMap (U.starProjection.toLinearMap x) =
+        U.starProjection.toLinearMap x
     exact Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
   have hq : q * q = q := by
     ext x
-    change projection V (projection V x) = projection V x
+    change V.starProjection.toLinearMap (V.starProjection.toLinearMap x) =
+        V.starProjection.toLinearMap x
     exact Submodule.starProjection_eq_self_iff.mpr (V.starProjection_apply_mem x)
   have hmul : ∀ f g : E →ₗ[𝕜] E, f ∘ₗ g = f * g := fun _ _ => rfl
   have hone : (LinearMap.id : E →ₗ[𝕜] E) = 1 := rfl
@@ -451,21 +457,22 @@ theorem directRotation_comm_sinAngleOperator (U V : Submodule 𝕜 E)
     (directRotation U V hacute).toLinearMap ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap =
       (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ (directRotation U V hacute).toLinearMap := by
   have hgram : (directRotation U V hacute).toLinearMap ∘ₗ
-      ((projection U - projection V : E →ₗ[𝕜] E).adjoint ∘ₗ
-        (projection U - projection V)) =
-      ((projection U - projection V : E →ₗ[𝕜] E).adjoint ∘ₗ
-        (projection U - projection V)) ∘ₗ
+      ((U.starProjection.toLinearMap - V.starProjection.toLinearMap : E →ₗ[𝕜] E).adjoint ∘ₗ
+        (U.starProjection.toLinearMap - V.starProjection.toLinearMap)) =
+      ((U.starProjection.toLinearMap - V.starProjection.toLinearMap : E →ₗ[𝕜] E).adjoint ∘ₗ
+        (U.starProjection.toLinearMap - V.starProjection.toLinearMap)) ∘ₗ
         (directRotation U V hacute).toLinearMap := by
-    have hsq : (projection U - projection V : E →ₗ[𝕜] E).adjoint ∘ₗ
-        (projection U - projection V)
+    have hsq : (U.starProjection.toLinearMap - V.starProjection.toLinearMap : E →ₗ[𝕜] E).adjoint ∘ₗ
+        (U.starProjection.toLinearMap - V.starProjection.toLinearMap)
         = LinearMap.id - directRotationCosine U V ∘ₗ directRotationCosine U V := by
       have h := sq_sinAngleOperator_add_sq_directRotationCosine U V
-      have hDadj : (projection U - projection V : E →ₗ[𝕜] E).adjoint
-          = projection U - projection V := by
-        rw [map_sub, (projection_isSymmetric U).adjoint_eq,
-          (projection_isSymmetric V).adjoint_eq]
+      have hDadj : (U.starProjection.toLinearMap - V.starProjection.toLinearMap : E →ₗ[𝕜] E).adjoint
+          = U.starProjection.toLinearMap - V.starProjection.toLinearMap := by
+        rw [map_sub, ((Submodule.starProjection_isSymmetric U)).adjoint_eq,
+          ((Submodule.starProjection_isSymmetric V)).adjoint_eq]
       have hsin : (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap
-          = (projection U - projection V) ∘ₗ (projection U - projection V) := by
+          = (U.starProjection.toLinearMap - V.starProjection.toLinearMap) ∘ₗ
+              (U.starProjection.toLinearMap - V.starProjection.toLinearMap) := by
         exact congrArg ContinuousLinearMap.toLinearMap (Submodule.sinAngleOperator_sq U V)
       rw [hDadj, ← hsin]
       exact eq_sub_of_add_eq h
@@ -478,15 +485,17 @@ theorem directRotation_comm_sinAngleOperator (U V : Submodule 𝕜 E)
         (directRotationCosine U V) := hcomm
     exact (Commute.one_right _).sub_right (hc.mul_right hc)
   have hcomm : Commute ((directRotation U V hacute).toLinearMap)
-      ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) := by
+      ((U.starProjection.toLinearMap - V.starProjection.toLinearMap).adjoint ∘ₗ
+          (U.starProjection.toLinearMap - V.starProjection.toLinearMap)) := by
     change (directRotation U V hacute).toLinearMap ∘ₗ
-      ((projection U - projection V).adjoint ∘ₗ
-      (projection U - projection V)) =
-      ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) ∘ₗ
+      ((U.starProjection.toLinearMap - V.starProjection.toLinearMap).adjoint ∘ₗ
+      (U.starProjection.toLinearMap - V.starProjection.toLinearMap)) =
+      ((U.starProjection.toLinearMap - V.starProjection.toLinearMap).adjoint ∘ₗ
+          (U.starProjection.toLinearMap - V.starProjection.toLinearMap)) ∘ₗ
         (directRotation U V hacute).toLinearMap
     exact hgram
   have habs : (U.sinAngleOperator V).toLinearMap =
-      (projection U - projection V).operatorAbs := by
+      (U.starProjection.toLinearMap - V.starProjection.toLinearMap).operatorAbs := by
     symm
     apply (LinearMap.toContinuousLinearMap_eq_iff_eq_toLinearMap _ _).mp
     rw [LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus, Submodule.sinAngleOperator_def]
@@ -499,16 +508,16 @@ theorem directRotation_comm_sinAngleOperator (U V : Submodule 𝕜 E)
 Pythagoras identity transfers that to `sin²Θ` and then to `sin Θ`. -/
 theorem projection_comm_sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    projection U ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap =
-      (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ projection U := by
+    U.starProjection.toLinearMap ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap =
+      (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ U.starProjection.toLinearMap := by
   exact congrArg ContinuousLinearMap.toLinearMap (U.commute_starProjection_sinAngleOperator V).eq
 
 /-- **`Θ` commutes with `Q`** (Davis--Kahan Proposition 3.5), at the level of
 `sin Θ`, by the symmetry of `sin Θ` in the two subspaces. -/
 theorem projection_right_comm_sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    projection V ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap =
-      (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ projection V := by
+    V.starProjection.toLinearMap ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap =
+      (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ V.starProjection.toLinearMap := by
   have h := projection_comm_sinAngleOperator V U
   rwa [sinAngleOperator_comm U V] at h
 
@@ -535,14 +544,16 @@ theorem angleOperator_comm_directRotation (U V : Submodule 𝕜 E)
 operator. -/
 theorem angleOperator_comm_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    projection U ∘ₗ angleOperator U V = angleOperator U V ∘ₗ projection U :=
+    U.starProjection.toLinearMap ∘ₗ angleOperator U V = angleOperator U V ∘ₗ
+        U.starProjection.toLinearMap :=
   (LinearMap.IsSymmetric.commute_cfc _ (projection_comm_sinAngleOperator U V) Real.arcsin).eq
 
 /-- **`Θ` commutes with `Q`** — Davis--Kahan Proposition 3.5, on the angle
 operator. -/
 theorem angleOperator_comm_projection_right (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    projection V ∘ₗ angleOperator U V = angleOperator U V ∘ₗ projection V :=
+    V.starProjection.toLinearMap ∘ₗ angleOperator U V = angleOperator U V ∘ₗ
+        V.starProjection.toLinearMap :=
   (LinearMap.IsSymmetric.commute_cfc _ (projection_right_comm_sinAngleOperator U V) Real.arcsin).eq
 
 /-- **`cos Θ` commutes with `sin Θ`.**
@@ -555,19 +566,21 @@ theorem directRotationCosine_comm_sinAngleOperator (U V : Submodule 𝕜 E)
     directRotationCosine U V ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap =
       (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ directRotationCosine U V := by
   have hgram : directRotationCosine U V ∘ₗ
-      ((projection U - projection V : E →ₗ[𝕜] E).adjoint ∘ₗ
-        (projection U - projection V)) =
-      ((projection U - projection V : E →ₗ[𝕜] E).adjoint ∘ₗ
-        (projection U - projection V)) ∘ₗ directRotationCosine U V := by
-    have hDadj : (projection U - projection V : E →ₗ[𝕜] E).adjoint
-        = projection U - projection V := by
-      rw [map_sub, (projection_isSymmetric U).adjoint_eq,
-        (projection_isSymmetric V).adjoint_eq]
+      ((U.starProjection.toLinearMap - V.starProjection.toLinearMap : E →ₗ[𝕜] E).adjoint ∘ₗ
+        (U.starProjection.toLinearMap - V.starProjection.toLinearMap)) =
+      ((U.starProjection.toLinearMap - V.starProjection.toLinearMap : E →ₗ[𝕜] E).adjoint ∘ₗ
+        (U.starProjection.toLinearMap - V.starProjection.toLinearMap)) ∘ₗ directRotationCosine U V
+            := by
+    have hDadj : (U.starProjection.toLinearMap - V.starProjection.toLinearMap : E →ₗ[𝕜] E).adjoint
+        = U.starProjection.toLinearMap - V.starProjection.toLinearMap := by
+      rw [map_sub, ((Submodule.starProjection_isSymmetric U)).adjoint_eq,
+        ((Submodule.starProjection_isSymmetric V)).adjoint_eq]
     have hsin : (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap
-        = (projection U - projection V) ∘ₗ (projection U - projection V) := by
+        = (U.starProjection.toLinearMap - V.starProjection.toLinearMap) ∘ₗ
+            (U.starProjection.toLinearMap - V.starProjection.toLinearMap) := by
       exact congrArg ContinuousLinearMap.toLinearMap (Submodule.sinAngleOperator_sq U V)
-    have hsq : (projection U - projection V : E →ₗ[𝕜] E).adjoint ∘ₗ
-        (projection U - projection V)
+    have hsq : (U.starProjection.toLinearMap - V.starProjection.toLinearMap : E →ₗ[𝕜] E).adjoint ∘ₗ
+        (U.starProjection.toLinearMap - V.starProjection.toLinearMap)
         = LinearMap.id - directRotationCosine U V ∘ₗ directRotationCosine U V := by
       rw [hDadj, ← hsin]
       exact eq_sub_of_add_eq (sq_sinAngleOperator_add_sq_directRotationCosine U V)
@@ -577,14 +590,17 @@ theorem directRotationCosine_comm_sinAngleOperator (U V : Submodule 𝕜 E)
     simp only [hmul, hone]
     noncomm_ring
   have hcomm : Commute (directRotationCosine U V)
-      ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) := by
-    change directRotationCosine U V ∘ₗ ((projection U - projection V).adjoint ∘ₗ
-      (projection U - projection V)) =
-      ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) ∘ₗ
+      ((U.starProjection.toLinearMap - V.starProjection.toLinearMap).adjoint ∘ₗ
+          (U.starProjection.toLinearMap - V.starProjection.toLinearMap)) := by
+    change directRotationCosine U V ∘ₗ ((U.starProjection.toLinearMap -
+        V.starProjection.toLinearMap).adjoint ∘ₗ
+      (U.starProjection.toLinearMap - V.starProjection.toLinearMap)) =
+      ((U.starProjection.toLinearMap - V.starProjection.toLinearMap).adjoint ∘ₗ
+          (U.starProjection.toLinearMap - V.starProjection.toLinearMap)) ∘ₗ
         directRotationCosine U V
     exact hgram
   have habs : (U.sinAngleOperator V).toLinearMap =
-      (projection U - projection V).operatorAbs := by
+      (U.starProjection.toLinearMap - V.starProjection.toLinearMap).operatorAbs := by
     symm
     apply (LinearMap.toContinuousLinearMap_eq_iff_eq_toLinearMap _ _).mp
     rw [LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus, Submodule.sinAngleOperator_def]

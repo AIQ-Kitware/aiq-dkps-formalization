@@ -153,8 +153,8 @@ private theorem Wlin_adjoint (theta : Real) :
 def V4 (theta : Real) : Submodule Real E4 := U4.map (Wequiv theta).toLinearMap
 
 private theorem projection_V4_apply (theta : Real) (x : E4) :
-    projection (V4 theta) x =
-      Wequiv theta (projection U4 ((Wequiv theta).symm x)) := by
+    (V4 theta).starProjection x =
+      Wequiv theta (U4.starProjection ((Wequiv theta).symm x)) := by
   have h := projection_intertwines_of_map_eq U4 (V4 theta) (Wequiv theta) rfl
   have hx := LinearMap.congr_fun h ((Wequiv theta).symm x)
   simp only [LinearMap.comp_apply] at hx
@@ -165,7 +165,7 @@ private theorem projection_V4_apply (theta : Real) (x : E4) :
 
 /-- Coordinates of the target projection. -/
 theorem projection_V4_coord (theta : Real) (x : E4) (i : Fin 4) :
-    projection (V4 theta) x i =
+    (V4 theta).starProjection x i =
       if i = 0 then Real.cos theta ^ 2 * x 0 + Real.sin theta * Real.cos theta * x 3
       else if i = 1 then Real.cos theta ^ 2 * x 1 - Real.sin theta * Real.cos theta * x 2
       else if i = 2 then Real.sin theta ^ 2 * x 2 - Real.sin theta * Real.cos theta * x 1
@@ -194,8 +194,8 @@ theorem acute (theta : Real) (hc : 0 < Real.cos theta) : Submodule.IsAcute U4 (V
     obtain ⟨hx2, hx3⟩ := coord_eq_zero_of_mem_U4 hxU
     have h0 := congrArg (fun z : E4 => z 0) hzero
     have h1 := congrArg (fun z : E4 => z 1) hzero
-    change projection (V4 theta) x 0 = 0 at h0
-    change projection (V4 theta) x 1 = 0 at h1
+    change (V4 theta).starProjection x 0 = 0 at h0
+    change (V4 theta).starProjection x 1 = 0 at h1
     have hcx0 : Real.cos theta ^ 2 * x 0 = 0 := by
       simpa [projection_V4_coord, hx2, hx3] using h0
     have hcx1 : Real.cos theta ^ 2 * x 1 = 0 := by
@@ -211,8 +211,8 @@ theorem acute (theta : Real) (hc : 0 < Real.cos theta) : Submodule.IsAcute U4 (V
     obtain ⟨hz2, hz3⟩ := coord_eq_zero_of_mem_U4 hzU
     have h0 := congrArg (fun x : E4 => x 0) hzero
     have h1 := congrArg (fun x : E4 => x 1) hzero
-    change projection U4 (Wlin theta z) 0 = 0 at h0
-    change projection U4 (Wlin theta z) 1 = 0 at h1
+    change U4.starProjection (Wlin theta z) 0 = 0 at h0
+    change U4.starProjection (Wlin theta z) 1 = 0 at h1
     have hz0eq : Real.cos theta ^ 2 * z 0 -
         Real.sin theta * Real.cos theta * z 1 = 0 := by
       simpa [projection_U4_coord, Wlin_apply, Wmat, Fin.sum_univ_four,
@@ -244,12 +244,14 @@ theorem gram_canonicalIntertwiner (theta : Real) :
   apply LinearMap.ext
   intro x
   ext i
-  have hcU : ∀ y : E4, complementaryProjection U4 y = y - projection U4 y :=
+  have hcU : ∀ y : E4, U4ᗮ.starProjection y = y - U4.starProjection y :=
     fun y => Submodule.starProjection_orthogonal_val y
   have hcV : ∀ y : E4,
-      complementaryProjection (V4 theta) y = y - projection (V4 theta) y :=
+      ((V4 theta)ᗮ).starProjection y = y - (V4 theta).starProjection y
+          :=
     fun y => Submodule.starProjection_orthogonal_val y
-  simp only [LinearMap.add_apply, LinearMap.comp_apply, LinearMap.smul_apply,
+  simp only [LinearMap.add_apply, LinearMap.comp_apply, ContinuousLinearMap.coe_coe,
+    LinearMap.smul_apply,
     LinearMap.id_apply, hcU, hcV, map_sub]
   have hcircle := circle theta
   fin_cases i
@@ -385,29 +387,31 @@ theorem kyFanSum_displacement_W (theta : Real) (hs : 0 ≤ Real.sin theta) :
 
 private theorem gram_sinThetaMap (theta : Real) :
     ((U4.sinThetaMap (V4 theta)).toLinearMap).adjoint ∘ₗ (U4.sinThetaMap (V4 theta)).toLinearMap =
-      projection U4 - projection U4 ∘ₗ projection (V4 theta) ∘ₗ projection U4 := by
+      U4.starProjection.toLinearMap - U4.starProjection.toLinearMap ∘ₗ (V4 theta).starProjection.toLinearMap ∘ₗ U4.starProjection.toLinearMap := by
   have hmap : (U4.sinThetaMap (V4 theta)).toLinearMap =
-      complementaryProjection (V4 theta) ∘ₗ projection U4 := by
+      ((V4 theta)ᗮ).starProjection.toLinearMap ∘ₗ U4.starProjection.toLinearMap := by
     rw [Submodule.sinThetaMap_def]
     rfl
   have hAadj : ((U4.sinThetaMap (V4 theta)).toLinearMap).adjoint =
-      projection U4 ∘ₗ complementaryProjection (V4 theta) := by
-    rw [hmap, LinearMap.adjoint_comp, projection_adjoint]
-    congr 1
-    simp [complementaryProjection]
-  have hUidem : ∀ y : E4, projection U4 (projection U4 y) = projection U4 y := fun y =>
+      U4.starProjection.toLinearMap ∘ₗ ((V4 theta)ᗮ).starProjection.toLinearMap := by
+    rw [hmap, LinearMap.adjoint_comp, U4.starProjection_isSymmetric.adjoint_eq,
+      ((V4 theta)ᗮ).starProjection_isSymmetric.adjoint_eq]
+  have hUidem : ∀ y : E4, U4.starProjection (U4.starProjection y) =
+      U4.starProjection y := fun y =>
     Submodule.starProjection_eq_self_iff.mpr (U4.starProjection_apply_mem y)
   have hcVidem : ∀ y : E4,
-      complementaryProjection (V4 theta) (complementaryProjection (V4 theta) y) =
-        complementaryProjection (V4 theta) y := fun y =>
+      ((V4 theta)ᗮ).starProjection (((V4 theta)ᗮ).starProjection y) =
+        ((V4 theta)ᗮ).starProjection y := fun y =>
     Submodule.starProjection_eq_self_iff.mpr ((V4 theta)ᗮ.starProjection_apply_mem y)
   have hcV : ∀ y : E4,
-      complementaryProjection (V4 theta) y = y - projection (V4 theta) y :=
+      ((V4 theta)ᗮ).starProjection y = y - (V4 theta).starProjection y
+          :=
     fun y => Submodule.starProjection_orthogonal_val y
   rw [hAadj, hmap]
   ext x
-  simp only [LinearMap.comp_apply, LinearMap.sub_apply]
-  rw [hcVidem (projection U4 x), hcV (projection U4 x), map_sub, hUidem x]
+  simp only [LinearMap.comp_apply, LinearMap.sub_apply, ContinuousLinearMap.coe_coe]
+  rw [hcVidem (U4.starProjection x), hcV (U4.starProjection x), map_sub,
+      hUidem x]
 
 private theorem gram_sinThetaMap_coord (theta : Real) (x : E4) (i : Fin 4) :
     ((((U4.sinThetaMap (V4 theta)).toLinearMap).adjoint ∘ₗ (U4.sinThetaMap (V4 theta)).toLinearMap) x) i =

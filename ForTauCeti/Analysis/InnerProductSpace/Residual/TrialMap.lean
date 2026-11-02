@@ -59,7 +59,7 @@ the algebraic block bounded first in the generalized sine and tangent proofs. -/
 @[expose]
 noncomputable def complementaryTrialBlock (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗ[𝕜] E) : F →ₗ[𝕜] E :=
-  complementaryProjection U ∘ₗ X
+  Uᗮ.starProjection.toLinearMap ∘ₗ X
 
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- On an isometric trial map the general residual is the ordinary one,
@@ -84,13 +84,15 @@ coordinates.  It is the shared algebraic root of the ordinary and generalized
 residual sine bounds and of the graph-operator tangent development. -/
 theorem sylvester_complementaryTrialBlock_eq_projectedGeneralResidual
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗ[𝕜] E) (M : F →ₗ[𝕜] F) :
     A ∘ₗ complementaryTrialBlock U X - complementaryTrialBlock U X ∘ₗ M =
-      complementaryProjection U ∘ₗ generalResidual A X M := by
+      Uᗮ.starProjection.toLinearMap ∘ₗ generalResidual A X M := by
   ext x
   simp only [complementaryTrialBlock, generalResidual, LinearMap.comp_apply,
     LinearMap.sub_apply, map_sub]
-  rw [complementaryProjection_apply_comm_of_isInvariant hA hU (X x)]
+  change A (Uᗮ.starProjection (X x)) - Uᗮ.starProjection (X (M x)) =
+    Uᗮ.starProjection (A (X x)) - Uᗮ.starProjection (X (M x))
+  rw [hA.starProjection_apply_comm (hA.orthogonalComplement_mem_invtSubmodule hU) (X x)]
 
 end TauCeti

@@ -116,8 +116,10 @@ theorem singularSubspace_dilation_sinTheta_le
   have h := sinTheta_perturbation_le_of_spectralDistance
     (UnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := (WithLp 2 (E × F))) (F := (WithLp 2 (E × F))))
     (LinearMap.isSymmetric_hermitianDilation A) (LinearMap.isSymmetric_hermitianDilation Â)
-    (isInvariant_pointSpectralSubspace (LinearMap.hermitianDilation A) Ω)
-    (isInvariant_pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω) hδ hgap
+    ((fun _ hx => (Module.End.map_pointSpectralSubspace_le (A := (LinearMap.hermitianDilation A))
+        (Ω := Ω)) (Submodule.mem_map_of_mem hx)))
+    ((fun _ hx => (Module.End.map_pointSpectralSubspace_le (A := (LinearMap.hermitianDilation Â))
+        (Ω := Ω)) (Submodule.mem_map_of_mem hx))) hδ hgap
   have hnative (T : WithLp 2 (E × F) →L[𝕜] WithLp 2 (E × F)) :
       T.toLinearMap.toContinuousLinearMap = T :=
     LinearMap.toContinuousLinearMap.apply_symm_apply T

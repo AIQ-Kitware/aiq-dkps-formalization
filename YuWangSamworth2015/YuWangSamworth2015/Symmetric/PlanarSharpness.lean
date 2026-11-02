@@ -64,8 +64,8 @@ omit [FiniteDimensional 𝕜 E] in
 overlap. -/
 theorem norm_projection_span_singleton (hv : ‖v‖ = 1) (hc0 : 0 ≤ c)
     (hoverlap : ⟪v, w⟫_𝕜 = (c : 𝕜)) :
-    ‖projection (𝕜 ∙ v) w‖ = c := by
-  have hproj : projection (𝕜 ∙ v) w = ⟪v, w⟫_𝕜 • v := by
+    ‖((𝕜 ∙ v)).starProjection.toLinearMap w‖ = c := by
+  have hproj : ((𝕜 ∙ v)).starProjection.toLinearMap w = ⟪v, w⟫_𝕜 • v := by
     change (𝕜 ∙ v).starProjection w = _
     rw [Submodule.starProjection_singleton, hv]
     simp
@@ -76,8 +76,8 @@ omit [FiniteDimensional 𝕜 E] in
 paper's `ε`. -/
 theorem norm_projection_orthogonal_span_singleton (hv : ‖v‖ = 1) (hw : ‖w‖ = 1)
     (hc0 : 0 ≤ c) (hoverlap : ⟪v, w⟫_𝕜 = (c : 𝕜)) :
-    ‖projection (𝕜 ∙ v)ᗮ w‖ = Real.sqrt (1 - c ^ 2) := by
-  have hsq : ‖projection (𝕜 ∙ v)ᗮ w‖ ^ 2 = 1 - c ^ 2 := by
+    ‖((𝕜 ∙ v)ᗮ).starProjection.toLinearMap w‖ = Real.sqrt (1 - c ^ 2) := by
+  have hsq : ‖((𝕜 ∙ v)ᗮ).starProjection.toLinearMap w‖ ^ 2 = 1 - c ^ 2 := by
     rw [norm_starProjection_orthogonal_sq hw,
       norm_projection_span_singleton hv hc0 hoverlap]
   rw [← hsq, Real.sqrt_sq (norm_nonneg _)]
@@ -140,7 +140,8 @@ theorem opNorm_planarSharpness_perturbation (hv : ‖v‖ = 1) (hw : ‖w‖ = 1
   have hgap := Submodule.projectionGap_eq_directedProjectionGap_of_finrank_eq
     (𝕜 ∙ w) (𝕜 ∙ v) hrank
   rw [Submodule.projectionGap_def, ← Submodule.norm_sinThetaMap] at hgap
-  have hproj : (projection (𝕜 ∙ w) - projection (𝕜 ∙ v)).toContinuousLinearMap =
+  have hproj : (((𝕜 ∙ w)).starProjection.toLinearMap - ((𝕜 ∙
+      v)).starProjection.toLinearMap).toContinuousLinearMap =
       (𝕜 ∙ w).starProjection - (𝕜 ∙ v).starProjection := by
     ext x
     rfl

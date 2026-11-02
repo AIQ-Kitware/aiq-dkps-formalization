@@ -8,7 +8,7 @@ Staged for Tau Ceti: a new file alongside the spectral-subspace API.
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
-public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 
 /-! # The two-level spectral model
 
@@ -46,7 +46,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 /-- The symmetric operator acting as `b` on `U` and as `a` on `Uᗮ`. -/
 noncomputable def twoLevelOperator (a b : ℝ) (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  (a : 𝕜) • LinearMap.id + ((b : 𝕜) - (a : 𝕜)) • projection U
+  (a : 𝕜) • LinearMap.id + ((b : 𝕜) - (a : 𝕜)) • U.starProjection.toLinearMap
 
 variable {a b : ℝ} {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
@@ -55,22 +55,24 @@ variable {a b : ℝ} {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
 written as a scalar plus a multiple of the projection. -/
 theorem twoLevelOperator_apply (x : E) :
     twoLevelOperator a b U x =
-      (a : 𝕜) • x + ((b : 𝕜) - (a : 𝕜)) • projection U x := by
+      (a : 𝕜) • x + ((b : 𝕜) - (a : 𝕜)) • U.starProjection.toLinearMap x := by
   simp [twoLevelOperator]
 
 /-- The quadratic form of an orthogonal projector is the squared norm of the
 projection. -/
 theorem inner_projection_self (W : Submodule 𝕜 E) [W.HasOrthogonalProjection]
     (x : E) :
-    ⟪projection W x, x⟫_𝕜 = ((‖projection W x‖ : ℝ) : 𝕜) ^ 2 := by
-  have hmem : projection W x ∈ W := W.starProjection_apply_mem x
-  have hperp : x - projection W x ∈ Wᗮ := W.sub_starProjection_mem_orthogonal x
-  have hsplit : projection W x + (x - projection W x) = x := by abel
-  calc ⟪projection W x, x⟫_𝕜
-      = ⟪projection W x, projection W x + (x - projection W x)⟫_𝕜 := by rw [hsplit]
-    _ = ⟪projection W x, projection W x⟫_𝕜
-          + ⟪projection W x, x - projection W x⟫_𝕜 := inner_add_right _ _ _
-    _ = ((‖projection W x‖ : ℝ) : 𝕜) ^ 2 := by
+    ⟪W.starProjection.toLinearMap x, x⟫_𝕜 = ((‖W.starProjection.toLinearMap x‖ : ℝ) : 𝕜) ^ 2 := by
+  have hmem : W.starProjection.toLinearMap x ∈ W := W.starProjection_apply_mem x
+  have hperp : x - W.starProjection.toLinearMap x ∈ Wᗮ := W.sub_starProjection_mem_orthogonal x
+  have hsplit : W.starProjection.toLinearMap x + (x - W.starProjection.toLinearMap x) = x := by abel
+  calc ⟪W.starProjection.toLinearMap x, x⟫_𝕜
+      = ⟪W.starProjection.toLinearMap x, W.starProjection.toLinearMap x + (x -
+          W.starProjection.toLinearMap x)⟫_𝕜 := by rw [hsplit]
+    _ = ⟪W.starProjection.toLinearMap x, W.starProjection.toLinearMap x⟫_𝕜
+          + ⟪W.starProjection.toLinearMap x, x - W.starProjection.toLinearMap x⟫_𝕜 :=
+              inner_add_right _ _ _
+    _ = ((‖W.starProjection.toLinearMap x‖ : ℝ) : 𝕜) ^ 2 := by
         rw [Submodule.inner_right_of_mem_orthogonal hmem hperp, add_zero,
           inner_self_eq_norm_sq_to_K]
 
@@ -80,7 +82,7 @@ theorem isSymmetric_twoLevelOperator : (twoLevelOperator a b U).IsSymmetric := b
   intro x y
   simp only [twoLevelOperator_apply, inner_add_left, inner_add_right,
     inner_smul_left, inner_smul_right, map_sub, RCLike.conj_ofReal]
-  rw [projection_isSymmetric U x y]
+  rw [(Submodule.starProjection_isSymmetric U) x y]
 
 /-- **The top eigenspace of the model is the subspace it was built from.** -/
 theorem eigenspace_twoLevelOperator (hab : a ≠ b) :
@@ -93,12 +95,12 @@ theorem eigenspace_twoLevelOperator (hab : a ≠ b) :
   constructor
   · intro hx
     -- `(b - a) • P_U x = (b - a) • x`, and `b - a ≠ 0`.
-    have h : ((b : 𝕜) - (a : 𝕜)) • projection U x = ((b : 𝕜) - (a : 𝕜)) • x := by
+    have h : ((b : 𝕜) - (a : 𝕜)) • U.starProjection.toLinearMap x = ((b : 𝕜) - (a : 𝕜)) • x := by
       linear_combination (norm := module) hx
-    have hx' : projection U x = x := smul_right_injective E hne h
+    have hx' : U.starProjection.toLinearMap x = x := smul_right_injective E hne h
     exact hx' ▸ U.starProjection_apply_mem x
   · intro hx
-    have hproj : projection U x = x := Submodule.starProjection_eq_self_iff.mpr hx
+    have hproj : U.starProjection.toLinearMap x = x := Submodule.starProjection_eq_self_iff.mpr hx
     rw [hproj]
     module
 
@@ -115,12 +117,12 @@ theorem le_of_hasEigenvalue_twoLevelOperator (hab : a ≤ b) {lam : ℝ}
   simp only [twoLevelOperator_apply, inner_add_left, inner_smul_left, map_sub,
     RCLike.conj_ofReal, map_add, inner_projection_self,
     inner_self_eq_norm_sq_to_K] at h
-  have hq : a * ‖x‖ ^ 2 + (b - a) * ‖projection U x‖ ^ 2 = lam * ‖x‖ ^ 2 := by
+  have hq : a * ‖x‖ ^ 2 + (b - a) * ‖U.starProjection.toLinearMap x‖ ^ 2 = lam * ‖x‖ ^ 2 := by
     simpa using h
-  have hple : ‖projection U x‖ ^ 2 ≤ ‖x‖ ^ 2 := by
+  have hple : ‖U.starProjection.toLinearMap x‖ ^ 2 ≤ ‖x‖ ^ 2 := by
     have hle := U.norm_starProjection_apply_le x
-    have h0 : (0 : ℝ) ≤ ‖projection U x‖ := norm_nonneg _
-    change ‖projection U x‖ ≤ ‖x‖ at hle
+    have h0 : (0 : ℝ) ≤ ‖U.starProjection.toLinearMap x‖ := norm_nonneg _
+    change ‖U.starProjection.toLinearMap x‖ ≤ ‖x‖ at hle
     nlinarith
   have hxpos : (0 : ℝ) < ‖x‖ ^ 2 := by
     have hne : ‖x‖ ≠ 0 := norm_ne_zero_iff.mpr hx0
@@ -143,17 +145,18 @@ No `a < b` hypothesis: the separation is stated as the signed difference, which
 is the gap when `a < b` and a weaker true statement otherwise. -/
 theorem pointInternalGap_twoLevelOperator :
     PointInternalGap (twoLevelOperator a b U) U (b - a) := by
-  have hU : IsInvariant (twoLevelOperator a b U) U := by
+  have hU : (U ∈ Module.End.invtSubmodule (twoLevelOperator a b U)) := by
     intro x hx
+    change twoLevelOperator a b U x ∈ U
     rw [twoLevelOperator_apply,
-      show projection U x = x from Submodule.starProjection_eq_self_iff.mpr hx]
+      show U.starProjection.toLinearMap x = x from Submodule.starProjection_eq_self_iff.mpr hx]
     exact U.add_mem (U.smul_mem _ hx) (U.smul_mem _ hx)
   refine ⟨hU, ?_⟩
   intro lam μ hlam hμ
   -- On `U` the operator is multiplication by `b`.
   have hb : lam = b := by
     obtain ⟨x, hxU, hx0, hxeq⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam
-    have hproj : projection U x = x := Submodule.starProjection_eq_self_iff.mpr hxU
+    have hproj : U.starProjection.toLinearMap x = x := Submodule.starProjection_eq_self_iff.mpr hxU
     rw [twoLevelOperator_apply, hproj] at hxeq
     have hsm : ((b : ℝ) : 𝕜) • x = ((lam : ℝ) : 𝕜) • x := by
       rw [← hxeq]; module
@@ -161,7 +164,7 @@ theorem pointInternalGap_twoLevelOperator :
   -- On `Uᗮ` it is multiplication by `a`.
   have ha : μ = a := by
     obtain ⟨x, hxU, hx0, hxeq⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hμ
-    have hproj : projection U x = 0 := by
+    have hproj : U.starProjection.toLinearMap x = 0 := by
       change U.starProjection x = 0
       rw [Submodule.starProjection_apply_eq_zero_iff]
       exact hxU
@@ -181,7 +184,7 @@ theorem eigenvalues_twoLevelOperator_le [FiniteDimensional 𝕜 E] {n : ℕ}
 difference.**  This is what turns a perturbation norm into an angle. -/
 theorem twoLevelOperator_sub :
     twoLevelOperator a b U - twoLevelOperator a b V =
-      ((b : 𝕜) - (a : 𝕜)) • (projection U - projection V) := by
+      ((b : 𝕜) - (a : 𝕜)) • (U.starProjection.toLinearMap - V.starProjection.toLinearMap) := by
   ext x
   simp only [LinearMap.sub_apply, twoLevelOperator_apply, LinearMap.smul_apply,
     smul_sub]

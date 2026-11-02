@@ -77,16 +77,16 @@ pointwise; this is the operator form the norm estimates use, and both
 `frobenius_sinTheta_residual_le_of_spectralDistance` in `Perturbation.lean`
 unfolded it the same way. -/
 theorem sylvester_projectedResidual_eq {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} (hU : IsInvariant A U)
-    (hUperp : IsInvariant A Uᗮ) (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F) :
-    (A.restrict hUperp) ∘ₗ
+    {U : Submodule 𝕜 E} (hU : (U ∈ Module.End.invtSubmodule A))
+    (hUperp : (Uᗮ ∈ Module.End.invtSubmodule A)) (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F) :
+    (A.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hUperp)) ∘ₗ
         (Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap) -
       (Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap) ∘ₗ M =
       Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M := by
   ext x
   have hx := LinearMap.congr_fun
     (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) x
-  simpa [sinThetaEmbedding, complementaryProjection, projection,
+  simpa [sinThetaEmbedding, ContinuousLinearMap.coe_coe,
     LinearMap.comp_apply] using hx
 
 /-- **The residual `sin Θ` reduction, with the Sylvester estimate as a
@@ -105,15 +105,19 @@ the three theorems and look like the shape was wrong. -/
 private theorem sinTheta_residual_le_of_sylvester
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} {δ c : ℝ} (hc : 0 ≤ c)
     (hsylv : ∀ Y C : F →ₗ[𝕜] (Uᗮ : Submodule 𝕜 E),
-      A.restrict (isInvariant_orthogonal_of_isSymmetric hA hU) ∘ₗ Y - Y ∘ₗ M = C →
+      A.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp
+          (LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU)) ∘ₗ Y - Y ∘ₗ
+          M = C →
         δ * (N.codomainIsometryTransport Uᗮ.subtypeₗᵢ) Y
           ≤ c * (N.codomainIsometryTransport Uᗮ.subtypeₗᵢ) C) :
     δ * N (sinThetaEmbedding U X) ≤ c * N (residual A X M) := by
-  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
-  let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict hUperp
+  have hUperp : (Uᗮ ∈ Module.End.invtSubmodule A) :=
+      LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU
+  let AU : Uᗮ →ₗ[𝕜] Uᗮ := A.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp
+      hUperp)
   let Y : F →ₗ[𝕜] Uᗮ :=
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap
   let C : F →ₗ[𝕜] Uᗮ :=
@@ -130,15 +134,15 @@ private theorem sinTheta_residual_le_of_sylvester
     change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) = N (sinThetaEmbedding U X)
     congr 1
   have hC : NU C =
-      N (complementaryProjection U ∘ₗ residual A X M) := by
+      N (Uᗮ.starProjection.toLinearMap ∘ₗ residual A X M) := by
     -- states the goal with the local norm `NU` unfolded, which is the form `congr 1`
     -- can close. `simp only [NU]` normalises further and leaves goals `congr` no
     -- longer discharges -- tried, and it fails here.
     change N (Uᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
-      N (complementaryProjection U ∘ₗ residual A X M)
+      N (Uᗮ.starProjection.toLinearMap ∘ₗ residual A X M)
     congr 1
-  have hproj : ‖(complementaryProjection U).toContinuousLinearMap‖ ≤ 1 := by
-    refine (complementaryProjection U).toContinuousLinearMap.opNorm_le_bound
+  have hproj : ‖(Uᗮ.starProjection.toLinearMap).toContinuousLinearMap‖ ≤ 1 := by
+    refine (Uᗮ.starProjection.toLinearMap).toContinuousLinearMap.opNorm_le_bound
       zero_le_one fun x => ?_
     -- names the projection application so the operator-norm bound applies directly.
     change ‖Uᗮ.starProjection x‖ ≤ 1 * ‖x‖
@@ -146,15 +150,15 @@ private theorem sinTheta_residual_le_of_sylvester
   have hC_le : NU C ≤ N (residual A X M) := by
     rw [hC]
     calc
-      N (complementaryProjection U ∘ₗ residual A X M)
-          ≤ ‖(complementaryProjection U).toContinuousLinearMap‖ *
+      N (Uᗮ.starProjection.toLinearMap ∘ₗ residual A X M)
+          ≤ ‖(Uᗮ.starProjection.toLinearMap).toContinuousLinearMap‖ *
               N (residual A X M) :=
         N.map_comp_le_left _ _ (c :=
-            ‖(complementaryProjection U).toContinuousLinearMap‖) (by
+            ‖(Uᗮ.starProjection.toLinearMap).toContinuousLinearMap‖) (by
           intro x
           change ‖Uᗮ.starProjection x‖ ≤
-            ‖(complementaryProjection U).toContinuousLinearMap‖ * ‖x‖
-          exact (complementaryProjection U).toContinuousLinearMap.le_opNorm x)
+            ‖(Uᗮ.starProjection.toLinearMap).toContinuousLinearMap‖ * ‖x‖
+          exact (Uᗮ.starProjection.toLinearMap).toContinuousLinearMap.le_opNorm x)
       _ ≤ 1 * N (residual A X M) :=
         mul_le_mul_of_nonneg_right hproj (apply_nonneg N _)
       _ = N (residual A X M) := one_mul _
@@ -171,7 +175,7 @@ Then `δ ‖sin Θ‖ ≤ ‖R‖`.
 theorem sinTheta_residual_le
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {a b δ : ℝ} (hδ : 0 < δ)
     (hMspec : Module.End.PointSpectrumIn M ⊤ (Set.Icc a b))
@@ -181,11 +185,15 @@ theorem sinTheta_residual_le
     ?_).trans_eq (one_mul _)
   intro Y C hEq
   have hgap : IntervalSylvesterGap
-      (A.restrict (isInvariant_orthogonal_of_isSymmetric hA hU)) M a b δ := by
+      (A.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp
+          (LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU))) M a b δ :=
+          by
     refine ⟨hMspec, ?_⟩
-    exact (pointSpectrumIn_restrict_iff A (isInvariant_orthogonal_of_isSymmetric hA hU) _).2 hAspec
+    exact (pointSpectrumIn_restrict_iff A
+        (LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU) _).2 hAspec
   exact (uiNorm_sylvester_le_of_intervalGap (N.codomainIsometryTransport Uᗮ.subtypeₗᵢ)
-    (hA.restrict_invariant (isInvariant_orthogonal_of_isSymmetric hA hU)) hM hδ hgap
+    (hA.restrict_invariant (LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU))
+        hM hδ hgap
     hEq).trans_eq (one_mul _).symm
 
 /-- Ordered half-line residual form.
@@ -193,21 +201,23 @@ theorem sinTheta_residual_le
 theorem sinTheta_residual_le_of_orderedGap
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
     δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
   refine (sinTheta_residual_le_of_sylvester (c := 1) N hA hU X zero_le_one
     ?_).trans_eq (one_mul _)
   intro Y C hEq
-  have hUperp := isInvariant_orthogonal_of_isSymmetric hA hU
-  have hgap' : OrderedSylvesterGap (A.restrict hUperp) M δ := by
+  have hUperp := LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU
+  have hgap' : OrderedSylvesterGap (A.restrict
+      ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hUperp)) M δ := by
     left
     intro lam μ hlam hμ
     apply hgap lam μ hlam
     -- restates the spectrum membership through the restriction, the form the
     -- following step matches.
-    change μ ∈ Module.End.restrictedPointSpectrum (A.restrict hUperp) ⊤ at hμ
+    change μ ∈ Module.End.restrictedPointSpectrum (A.restrict
+        ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hUperp)) ⊤ at hμ
     rw [restrictedPointSpectrum_restrict A hUperp] at hμ
     exact hμ
   exact (uiNorm_sylvester_le_of_orderedGap (N.codomainIsometryTransport Uᗮ.subtypeₗᵢ)
@@ -221,7 +231,7 @@ The restriction and projection proof below is complete; the only open input is
 theorem sinTheta_residual_le_of_spectralDistance
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : PointSpectraSeparated M ⊤ A Uᗮ δ) :
@@ -229,8 +239,9 @@ theorem sinTheta_residual_le_of_spectralDistance
   refine sinTheta_residual_le_of_sylvester (c := Real.pi / 2) N hA hU X
     (by positivity) ?_
   intro Y C hEq
-  have hUperp := isInvariant_orthogonal_of_isSymmetric hA hU
-  have hgap' : PointSpectraSeparated (A.restrict hUperp) ⊤ M ⊤ δ := by
+  have hUperp := LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU
+  have hgap' : PointSpectraSeparated (A.restrict
+      ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hUperp)) ⊤ M ⊤ δ := by
     intro lam μ hlam hμ
     have hlam' : lam ∈ Module.End.restrictedPointSpectrum A Uᗮ := by
       rw [← restrictedPointSpectrum_restrict A hUperp]
@@ -260,7 +271,7 @@ core. -/
 theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : IsInvariant A U) (hV : IsInvariant B V)
+    (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈ Module.End.invtSubmodule B))
     {c g ε : ℝ} (hg : 0 < g)
     (hUspec : Module.End.PointSpectrumIn A U (Set.Ici (c + g)))
     (hVspec : Module.End.PointSpectrumIn B V (Set.Iic c))
@@ -277,7 +288,7 @@ theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
   have hVc : ∀ x ∈ V, RCLike.re ⟪Bc x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
     fun x hx => upperFormBound_of_pointSpectrumIn hB hV hVspec x hx
   have hExt := Submodule.norm_starProjection_comp_starProjection_le_norm_sub_div
-    (A := Ac) (B := Bc) U V hBself (fun x hx => hU x hx) (fun x hx => hV x hx)
+    (A := Ac) (B := Bc) U V hBself (fun x hx => hU hx) (fun x hx => hV hx)
     hg hUc hVc
   have hnorm : ‖(Bc - Ac : E →L[𝕜] E)‖ ≤ ε := by
     refine ContinuousLinearMap.opNorm_le_bound _ hε0 fun x => ?_
@@ -309,8 +320,10 @@ theorem opNorm_pointSpectralSubspace_directed_sinTheta_le {A B : E →ₗ[𝕜] 
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖((Module.End.pointSpectralSubspace B t).starProjection ∘L
         (Module.End.pointSpectralSubspace A s).starProjection : E →L[𝕜] E)‖ ≤ ε / g :=
-  opNorm_directed_sinTheta_le hA hB (isInvariant_pointSpectralSubspace A s)
-    (isInvariant_pointSpectralSubspace B t) hg hUspec hVspec hε0 hε
+  opNorm_directed_sinTheta_le hA hB ((fun _ hx => (Module.End.map_pointSpectralSubspace_le (A :=
+      A) (Ω := s)) (Submodule.mem_map_of_mem hx)))
+    ((fun _ hx => (Module.End.map_pointSpectralSubspace_le (A := B) (Ω := t))
+        (Submodule.mem_map_of_mem hx))) hg hUspec hVspec hε0 hε
 
 /-- **Every-unitarily-invariant-norm directed `sin Θ` theorem, spectral
 hypothesis form.**  If `A, B` are symmetric, `U` reduces `A` with `U`-carried
@@ -321,7 +334,7 @@ by the spectral coercivity bridges. -/
 theorem uiNorm_directed_sinTheta_le (N : UnitarilyInvariantSeminorm 𝕜 E E)
     {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : IsInvariant A U) (hV : IsInvariant B V)
+    (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈ Module.End.invtSubmodule B))
     {c g : ℝ} (hg : 0 < g)
     (hUspec : Module.End.PointSpectrumIn A U (Set.Ici (c + g)))
     (hVspec : Module.End.PointSpectrumIn B V (Set.Iic c)) :
@@ -347,8 +360,10 @@ theorem uiNorm_pointSpectralSubspace_directed_sinTheta_le
     N (((Module.End.pointSpectralSubspace B t).starProjection ∘L
         (Module.End.pointSpectralSubspace A s).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (B - A) / g :=
-  uiNorm_directed_sinTheta_le N hA hB (isInvariant_pointSpectralSubspace A s)
-    (isInvariant_pointSpectralSubspace B t) hg hUspec hVspec
+  uiNorm_directed_sinTheta_le N hA hB ((fun _ hx => (Module.End.map_pointSpectralSubspace_le (A :=
+      A) (Ω := s)) (Submodule.mem_map_of_mem hx)))
+    ((fun _ hx => (Module.End.map_pointSpectralSubspace_le (A := B) (Ω := t))
+        (Submodule.mem_map_of_mem hx))) hg hUspec hVspec
 
 /-! ## Two-sided projector-difference operator-norm form
 
@@ -370,7 +385,7 @@ no rank hypothesis and no factor-two loss. -/
 theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule 𝕜 E} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
-    (hU : IsInvariant A U) (hW : IsInvariant B W)
+    (hU : (U ∈ Module.End.invtSubmodule A)) (hW : (W ∈ Module.End.invtSubmodule B))
     {c g ε : ℝ} (hg : 0 < g)
     (hUhi : Module.End.PointSpectrumIn A U (Set.Ici (c + g)))
     (hUlo : Module.End.PointSpectrumIn A Uᗮ (Set.Iic c))
@@ -393,8 +408,10 @@ theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
     -- expects.
     change ⟪B x, y⟫_𝕜 = ⟪x, B y⟫_𝕜
     exact hB x y
-  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
-  have hWperp : IsInvariant B Wᗮ := isInvariant_orthogonal_of_isSymmetric hB hW
+  have hUperp : (Uᗮ ∈ Module.End.invtSubmodule A) :=
+      LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU
+  have hWperp : (Wᗮ ∈ Module.End.invtSubmodule B) :=
+      LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hB hW
   have hUhiForm : ∀ x ∈ U,
       (c + g) * ‖x‖ ^ 2 ≤ RCLike.re ⟪Ac x, x⟫_𝕜 :=
     fun x hx => by simpa [Ac] using lowerFormBound_of_pointSpectrumIn hA hU hUhi x hx
@@ -410,7 +427,7 @@ theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
   have hcore : ‖(U.starProjection - W.starProjection : E →L[𝕜] E)‖ ≤ ‖Bc - Ac‖ / g := by
     rw [← Submodule.projectionGap_def U W]
     exact Submodule.projectionGap_le_norm_sub_div (A := Ac) (B := Bc)
-      U W hAself hBself (fun x hx => hU x hx) (fun x hx => hW x hx)
+      U W hAself hBself (fun x hx => hU hx) (fun x hx => hW hx)
       hg hUhiForm hWloForm hWhiForm hUloForm
   have hnorm : ‖(Bc - Ac : E →L[𝕜] E)‖ ≤ ε := by
     refine ContinuousLinearMap.opNorm_le_bound _ hε0 fun x => ?_
@@ -422,7 +439,7 @@ The sharp theorem `opNorm_starProjection_sub_le` is strictly stronger. -/
 theorem opNorm_starProjection_sub_le_two {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule 𝕜 E} [U.HasOrthogonalProjection] [W.HasOrthogonalProjection]
-    (hU : IsInvariant A U) (hW : IsInvariant B W)
+    (hU : (U ∈ Module.End.invtSubmodule A)) (hW : (W ∈ Module.End.invtSubmodule B))
     {c g ε : ℝ} (hg : 0 < g)
     (hUhi : Module.End.PointSpectrumIn A U (Set.Ici (c + g)))
     (hUlo : Module.End.PointSpectrumIn A Uᗮ (Set.Iic c))
@@ -454,8 +471,10 @@ theorem opNorm_pointSpectralSubspace_sub_le {A B : E →ₗ[𝕜] E}
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖((Module.End.pointSpectralSubspace A s).starProjection
         - (Module.End.pointSpectralSubspace B t).starProjection : E →L[𝕜] E)‖ ≤ ε / g :=
-  opNorm_starProjection_sub_le hA hB (isInvariant_pointSpectralSubspace A s)
-    (isInvariant_pointSpectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
+  opNorm_starProjection_sub_le hA hB ((fun _ hx => (Module.End.map_pointSpectralSubspace_le (A :=
+      A) (Ω := s)) (Submodule.mem_map_of_mem hx)))
+    ((fun _ hx => (Module.End.map_pointSpectralSubspace_le (A := B) (Ω := t))
+        (Submodule.mem_map_of_mem hx))) hg hAhi hAlo hBhi hBlo hε0 hε
 
 /-- **Two-sided operator-norm spectral-projector Davis--Kahan theorem.**  The
 projector-difference bound for the canonical spectral subspaces (they reduce
@@ -470,7 +489,9 @@ theorem opNorm_pointSpectralSubspace_sub_le_two {A B : E →ₗ[𝕜] E}
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖((Module.End.pointSpectralSubspace A s).starProjection
         - (Module.End.pointSpectralSubspace B t).starProjection : E →L[𝕜] E)‖ ≤ 2 * (ε / g) :=
-  opNorm_starProjection_sub_le_two hA hB (isInvariant_pointSpectralSubspace A s)
-    (isInvariant_pointSpectralSubspace B t) hg hAhi hAlo hBhi hBlo hε0 hε
+  opNorm_starProjection_sub_le_two hA hB ((fun _ hx => (Module.End.map_pointSpectralSubspace_le (A
+      := A) (Ω := s)) (Submodule.mem_map_of_mem hx)))
+    ((fun _ hx => (Module.End.map_pointSpectralSubspace_le (A := B) (Ω := t))
+        (Submodule.mem_map_of_mem hx))) hg hAhi hAlo hBhi hBlo hε0 hε
 
 end TauCeti

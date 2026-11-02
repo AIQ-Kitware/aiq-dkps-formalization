@@ -10,7 +10,7 @@ module
 
 public import TauCeti.Analysis.InnerProductSpace.BasisSpan
 public import ForTauCeti.Analysis.InnerProductSpace.EigenblockSpan
-public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import TauCeti.Analysis.InnerProductSpace.PointSpectrum
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
 public import Mathlib.Analysis.InnerProductSpace.Positive
 
@@ -75,8 +75,10 @@ theorem basisDiagonal_apply_basis (b : OrthonormalBasis ι 𝕜 E) (c : ι → �
 
 /-- Every coordinate subspace is invariant under the diagonal operator. -/
 theorem isInvariant_basisDiagonal_spanIndices (b : OrthonormalBasis ι 𝕜 E)
-    (c : ι → ℝ) (S : Set ι) : IsInvariant (basisDiagonal b c) (b.spanIndices S) := by
+    (c : ι → ℝ) (S : Set ι) : ((b.spanIndices S) ∈ Module.End.invtSubmodule (basisDiagonal b c))
+        := by
   intro x hx
+  change basisDiagonal b c x ∈ b.spanIndices S
   rw [OrthonormalBasis.spanIndices_eq_span] at hx ⊢
   refine Submodule.span_induction ?_ ?_ ?_ ?_ hx
   · rintro y ⟨i, hi, rfl⟩

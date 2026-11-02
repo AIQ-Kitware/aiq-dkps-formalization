@@ -36,7 +36,7 @@ private theorem circle (theta : ℝ) :
 
 /-- Coordinate form of the projection difference in the two-plane family. -/
 theorem projectionDifference_coord (theta : ℝ) (x : E4) (i : Fin 4) :
-    ((projection U4 - projection (V4 theta)) x) i =
+    ((U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap) x) i =
       if i = 0 then Real.sin theta ^ 2 * x 0 -
           Real.sin theta * Real.cos theta * x 3
       else if i = 1 then Real.sin theta ^ 2 * x 1 +
@@ -58,8 +58,8 @@ theorem projectionDifference_coord (theta : ℝ) (x : E4) (i : Fin 4) :
 /-- Squaring the projection difference gives `sin(theta)^2` times the identity.
 The identity holds for arbitrary real `theta`, independently of acuteness. -/
 theorem projectionDifference_sq (theta : ℝ) :
-    (projection U4 - projection (V4 theta)) ∘ₗ
-        (projection U4 - projection (V4 theta)) =
+    (U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap) ∘ₗ
+        (U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap) =
       Real.sin theta ^ 2 • (LinearMap.id : E4 →ₗ[ℝ] E4) := by
   apply LinearMap.ext
   intro x
@@ -69,45 +69,45 @@ theorem projectionDifference_sq (theta : ℝ) :
   -- Rewrite the *outer* projector difference before expanding its argument.
   -- A broad `simp` unfolds the map subtraction first and hides the coordinate lemma.
   have h0 (z : E4) :
-      ((projection U4 - projection (V4 theta)) z) 0 =
+      ((U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap) z) 0 =
         Real.sin theta ^ 2 * z 0 - Real.sin theta * Real.cos theta * z 3 := by
     simpa using projectionDifference_coord theta z 0
   have h1 (z : E4) :
-      ((projection U4 - projection (V4 theta)) z) 1 =
+      ((U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap) z) 1 =
         Real.sin theta ^ 2 * z 1 + Real.sin theta * Real.cos theta * z 2 := by
     simpa using projectionDifference_coord theta z 1
   have h2 (z : E4) :
-      ((projection U4 - projection (V4 theta)) z) 2 =
+      ((U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap) z) 2 =
         -(Real.sin theta ^ 2 * z 2) + Real.sin theta * Real.cos theta * z 1 := by
     simpa using projectionDifference_coord theta z 2
   have h3 (z : E4) :
-      ((projection U4 - projection (V4 theta)) z) 3 =
+      ((U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap) z) 3 =
         -(Real.sin theta ^ 2 * z 3) - Real.sin theta * Real.cos theta * z 0 := by
     simpa using projectionDifference_coord theta z 3
   -- Prove the four scalar identities at literal indices before applying
   -- coordinate extensionality.  Rewriting under `fin_cases` otherwise leaves
   -- elaborator-generated `Fin` indices that do not match `h0` through `h3`.
   have hsq0 :
-      ((projection U4 - projection (V4 theta))
-        ((projection U4 - projection (V4 theta)) x)) 0 =
+      ((U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap)
+        ((U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap) x)) 0 =
         Real.sin theta ^ 2 * x 0 := by
     rw [h0, h0 x, h3 x]
     linear_combination (Real.sin theta ^ 2 * x 0) * hcircle
   have hsq1 :
-      ((projection U4 - projection (V4 theta))
-        ((projection U4 - projection (V4 theta)) x)) 1 =
+      ((U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap)
+        ((U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap) x)) 1 =
         Real.sin theta ^ 2 * x 1 := by
     rw [h1, h1 x, h2 x]
     linear_combination (Real.sin theta ^ 2 * x 1) * hcircle
   have hsq2 :
-      ((projection U4 - projection (V4 theta))
-        ((projection U4 - projection (V4 theta)) x)) 2 =
+      ((U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap)
+        ((U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap) x)) 2 =
         Real.sin theta ^ 2 * x 2 := by
     rw [h2, h2 x, h1 x]
     linear_combination (Real.sin theta ^ 2 * x 2) * hcircle
   have hsq3 :
-      ((projection U4 - projection (V4 theta))
-        ((projection U4 - projection (V4 theta)) x)) 3 =
+      ((U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap)
+        ((U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap) x)) 3 =
         Real.sin theta ^ 2 * x 3 := by
     rw [h3, h3 x, h0 x]
     linear_combination (Real.sin theta ^ 2 * x 3) * hcircle
@@ -120,19 +120,21 @@ theorem projectionDifference_sq (theta : ℝ) :
 /-- The projector difference is self-adjoint, so the same scalar identity
 holds for its Gram operator. -/
 theorem gram_projectionDifference (theta : ℝ) :
-    (projection U4 - projection (V4 theta)).adjoint ∘ₗ
-        (projection U4 - projection (V4 theta)) =
+    (U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap).adjoint ∘ₗ
+        (U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap) =
       Real.sin theta ^ 2 • (LinearMap.id : E4 →ₗ[ℝ] E4) := by
-  rw [map_sub, projection_adjoint, projection_adjoint]
+  rw [map_sub, (Submodule.starProjection_isSymmetric _).adjoint_eq,
+      (Submodule.starProjection_isSymmetric _).adjoint_eq]
   exact projectionDifference_sq theta
 
 /-- Every singular value of the projector difference is `sin(theta)` when
 that sine is nonnegative. -/
 theorem singularValues_projectionDifference (theta : ℝ)
     (hs : 0 ≤ Real.sin theta) (j : Fin 4) :
-    (projection U4 - projection (V4 theta)).singularValues (j : ℕ) =
+    (U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap).singularValues (j :
+        ℕ) =
       Real.sin theta := by
-  let D : E4 →ₗ[ℝ] E4 := projection U4 - projection (V4 theta)
+  let D : E4 →ₗ[ℝ] E4 := U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap
   have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
     D.isSymmetric_adjoint_comp_self hfr (EuclideanSpace.basisFun (Fin 4) ℝ)
@@ -146,7 +148,7 @@ theorem singularValues_projectionDifference (theta : ℝ)
 
 /-- The exact trace norm of the difference of the two rank-two projections. -/
 theorem kyFanSum_projectionDifference (theta : ℝ) (hs : 0 ≤ Real.sin theta) :
-    (projection U4 - projection (V4 theta)).kyFanSum 4 =
+    (U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap).kyFanSum 4 =
       4 * Real.sin theta := by
   rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range, Fin.sum_univ_four]
   rw [singularValues_projectionDifference theta hs 0,

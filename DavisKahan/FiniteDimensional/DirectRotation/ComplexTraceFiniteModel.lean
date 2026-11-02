@@ -42,7 +42,7 @@ def AttainsProjectionTraceBound {H : Type*}
     (U V : Submodule ℂ H) (W : H ≃ₗᵢ[ℂ] H) : Prop :=
   U.map W.toLinearMap = V ∧
     (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ H) =
-      (projection U - projection V).kyFanSum (finrank ℂ H)
+      (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank ℂ H)
 
 /-- Any attainer realizes an actual global minimum among all admissible unitaries. -/
 theorem AttainsProjectionTraceBound.le_competitor
@@ -78,9 +78,10 @@ theorem attainsProjectionTraceBound_orthogonalBlockSum
     apply WithLp.ofLp_injective 2
     rfl
   have hproj :
-      projection (orthogonalBlockSumSubmodule U₁ U₂) -
-          projection (orthogonalBlockSumSubmodule V₁ V₂) =
-        ((projection U₁ - projection V₁).prodMap (projection U₂ - projection V₂)).withLpMap 2 := by
+      ((orthogonalBlockSumSubmodule U₁ U₂)).starProjection.toLinearMap -
+          ((orthogonalBlockSumSubmodule V₁ V₂)).starProjection.toLinearMap =
+        ((U₁.starProjection.toLinearMap - V₁.starProjection.toLinearMap).prodMap
+            (U₂.starProjection.toLinearMap - V₂.starProjection.toLinearMap)).withLpMap 2 := by
     rw [projection_orthogonalBlockSumSubmodule U₁ U₂,
       projection_orthogonalBlockSumSubmodule V₁ V₂]
     rfl
@@ -131,8 +132,8 @@ private theorem projection_map_conjugate
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [FiniteDimensional ℂ H]
     [NormedAddCommGroup K] [InnerProductSpace ℂ K] [FiniteDimensional ℂ K]
     (F : H ≃ₗᵢ[ℂ] K) (U : Submodule ℂ H) :
-    projection (U.map F.toLinearMap) =
-      F.toLinearMap ∘ₗ projection U ∘ₗ F.symm.toLinearMap := by
+    ((U.map F.toLinearMap)).starProjection.toLinearMap =
+      F.toLinearMap ∘ₗ U.starProjection.toLinearMap ∘ₗ F.symm.toLinearMap := by
   apply LinearMap.ext
   intro x
   change (U.map F.toLinearMap).starProjection x =
@@ -188,9 +189,10 @@ theorem AttainsProjectionTraceBound.conjugate
     ext x
     change x - F (T (F.symm x)) = F (F.symm x - T (F.symm x))
     rw [map_sub, F.apply_symm_apply]
-  have hproj : projection (U.map F.toLinearMap) -
-      projection (V.map F.toLinearMap) =
-      F.toLinearMap ∘ₗ (projection U - projection V) ∘ₗ F.symm.toLinearMap := by
+  have hproj : ((U.map F.toLinearMap)).starProjection.toLinearMap -
+      ((V.map F.toLinearMap)).starProjection.toLinearMap =
+      F.toLinearMap ∘ₗ (U.starProjection.toLinearMap - V.starProjection.toLinearMap) ∘ₗ
+          F.symm.toLinearMap := by
     rw [projection_map_conjugate F U, projection_map_conjugate F V]
     ext x
     simp only [LinearMap.sub_apply, LinearMap.comp_apply, map_sub]
@@ -211,7 +213,7 @@ theorem AttainsProjectionTraceBound.refl
   · change C.map (LinearMap.id : H →ₗ[ℂ] H) = C
     simp
   · change ((LinearMap.id : H →ₗ[ℂ] H) - LinearMap.id).kyFanSum (finrank ℂ H) =
-        (projection C - projection C).kyFanSum (finrank ℂ H)
+        (C.starProjection.toLinearMap - C.starProjection.toLinearMap).kyFanSum (finrank ℂ H)
     simp
 
 /-- Transport an attained full-trace equality from *any* unitary-equivalent
@@ -230,7 +232,7 @@ theorem AttainsProjectionTraceBound.exists_minimizer_of_unitaryEquivalent
     ∃ W : K ≃ₗᵢ[ℂ] K,
       U'.map W.toLinearMap = V' ∧
       (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ K) =
-        (projection U' - projection V').kyFanSum (finrank ℂ K) ∧
+        ((U').starProjection.toLinearMap - (V').starProjection.toLinearMap).kyFanSum (finrank ℂ K) ∧
       ∀ Z : K ≃ₗᵢ[ℂ] K, U'.map Z.toLinearMap = V' →
         (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ K) ≤
           (LinearMap.id - Z.toLinearMap).kyFanSum (finrank ℂ K) := by
@@ -330,7 +332,8 @@ theorem phasePlaneModel_attains (n : ℕ) (theta : Fin (n + 1) → ℝ)
       change sourceLine.map (phaseUnitary (theta 0)).toLinearMap =
           targetLine (theta 0) ∧
         (LinearMap.id - (phaseUnitary (theta 0)).toLinearMap).kyFanSum (finrank ℂ E2) =
-          (projection sourceLine - projection (targetLine (theta 0))).kyFanSum (finrank ℂ E2)
+          (sourceLine.starProjection.toLinearMap - ((targetLine (theta
+              0))).starProjection.toLinearMap).kyFanSum (finrank ℂ E2)
       constructor
       · exact phaseUnitary_transports (theta 0)
       · have hdim : finrank ℂ E2 = 2 := finrank_euclideanSpace_fin
@@ -363,28 +366,31 @@ theorem phasePlaneModel_projection_trace_formula (n : ℕ)
     (theta : Fin (n + 1) → ℝ)
     (hzero : ∀ i, 0 ≤ theta i)
     (hpi : ∀ i, theta i ≤ Real.pi / 2) :
-    (projection (phasePlaneModelSource n) -
-        projection (phasePlaneModelTarget n theta)).kyFanSum (finrank ℂ (phasePlaneModel n)) =
+    (((phasePlaneModelSource n)).starProjection.toLinearMap -
+        ((phasePlaneModelTarget n theta)).starProjection.toLinearMap).kyFanSum (finrank ℂ
+            (phasePlaneModel n)) =
       ∑ i : Fin (n + 1), 2 * Real.sin (theta i) := by
   induction n with
   | zero =>
-      change (projection sourceLine - projection (targetLine (theta 0))).kyFanSum (finrank ℂ E2) =
+      change (sourceLine.starProjection.toLinearMap - ((targetLine (theta
+          0))).starProjection.toLinearMap).kyFanSum (finrank ℂ E2) =
         ∑ i : Fin 1, 2 * Real.sin (theta i)
       have hdim : finrank ℂ E2 = 2 := finrank_euclideanSpace_fin
       rw [hdim, kyFanSum_projectionDifference (theta 0) (hzero 0) (hpi 0)]
       simp
   | succ n ih =>
       have hproj :
-          projection (phasePlaneModelSource (n + 1)) -
-              projection (phasePlaneModelTarget (n + 1) theta) =
-            ((projection sourceLine - projection (targetLine (theta 0))).prodMap
-              (projection (phasePlaneModelSource n) -
-                projection (phasePlaneModelTarget n (fun i => theta i.succ)))).withLpMap 2 := by
-        change projection
-              (orthogonalBlockSumSubmodule sourceLine (phasePlaneModelSource n)) -
-            projection
-              (orthogonalBlockSumSubmodule (targetLine (theta 0))
-                (phasePlaneModelTarget n (fun i => theta i.succ))) = _
+          ((phasePlaneModelSource (n + 1))).starProjection.toLinearMap -
+              ((phasePlaneModelTarget (n + 1) theta)).starProjection.toLinearMap =
+            ((sourceLine.starProjection.toLinearMap - ((targetLine (theta
+                0))).starProjection.toLinearMap).prodMap
+              (((phasePlaneModelSource n)).starProjection.toLinearMap -
+                ((phasePlaneModelTarget n (fun i => theta
+                    i.succ))).starProjection.toLinearMap)).withLpMap 2 := by
+        change ((orthogonalBlockSumSubmodule sourceLine (phasePlaneModelSource
+            n))).starProjection.toLinearMap -
+            ((orthogonalBlockSumSubmodule (targetLine (theta 0))
+                (phasePlaneModelTarget n (fun i => theta i.succ)))).starProjection.toLinearMap = _
         rw [projection_orthogonalBlockSumSubmodule,
           projection_orthogonalBlockSumSubmodule]
         rfl
@@ -416,8 +422,9 @@ theorem phasePlaneModel_global_trace_minimizer (n : ℕ) (theta : Fin (n + 1) �
     ∃ W : phasePlaneModel n ≃ₗᵢ[ℂ] phasePlaneModel n,
       (phasePlaneModelSource n).map W.toLinearMap = phasePlaneModelTarget n theta ∧
       (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ (phasePlaneModel n)) =
-        (projection (phasePlaneModelSource n) -
-            projection (phasePlaneModelTarget n theta)).kyFanSum (finrank ℂ (phasePlaneModel n)) ∧
+        (((phasePlaneModelSource n)).starProjection.toLinearMap -
+            ((phasePlaneModelTarget n theta)).starProjection.toLinearMap).kyFanSum (finrank ℂ
+                (phasePlaneModel n)) ∧
       ∀ Z : phasePlaneModel n ≃ₗᵢ[ℂ] phasePlaneModel n,
         (phasePlaneModelSource n).map Z.toLinearMap = phasePlaneModelTarget n theta →
         (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ (phasePlaneModel n)) ≤
@@ -441,7 +448,7 @@ theorem exists_global_trace_minimizer_of_phasePlaneModel
     ∃ W : H ≃ₗᵢ[ℂ] H,
       U.map W.toLinearMap = V ∧
       (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ H) =
-        (projection U - projection V).kyFanSum (finrank ℂ H) ∧
+        (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank ℂ H) ∧
       ∀ Z : H ≃ₗᵢ[ℂ] H, U.map Z.toLinearMap = V →
         (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ H) ≤
           (LinearMap.id - Z.toLinearMap).kyFanSum (finrank ℂ H) := by
@@ -478,18 +485,19 @@ theorem phasePlaneModel_with_fixed_projection_trace_formula
     (C : Submodule ℂ G) (n : ℕ) (theta : Fin (n + 1) → ℝ)
     (hzero : ∀ i, 0 ≤ theta i)
     (hpi : ∀ i, theta i ≤ Real.pi / 2) :
-    (projection (orthogonalBlockSumSubmodule (phasePlaneModelSource n) C) -
-        projection (orthogonalBlockSumSubmodule (phasePlaneModelTarget n theta) C)).kyFanSum
+    (((orthogonalBlockSumSubmodule (phasePlaneModelSource n) C)).starProjection.toLinearMap -
+        ((orthogonalBlockSumSubmodule (phasePlaneModelTarget n theta)
+            C)).starProjection.toLinearMap).kyFanSum
           (finrank ℂ (WithLp 2 (phasePlaneModel n × G))) =
         ∑ i : Fin (n + 1), 2 * Real.sin (theta i) := by
   rw [projection_orthogonalBlockSumSubmodule,
     projection_orthogonalBlockSumSubmodule]
-  change (((projection (phasePlaneModelSource n) -
-    projection (phasePlaneModelTarget n theta)).prodMap
-      (projection C - projection C)).withLpMap 2).kyFanSum _ = _
+  change (((((phasePlaneModelSource n)).starProjection.toLinearMap -
+    ((phasePlaneModelTarget n theta)).starProjection.toLinearMap).prodMap
+      (C.starProjection.toLinearMap - C.starProjection.toLinearMap)).withLpMap 2).kyFanSum _ = _
   rw [kyFanSum_orthogonalBlockSum_full]
   have hzeroC :
-      (projection C - projection C).kyFanSum (finrank ℂ G) = 0 := by
+      (C.starProjection.toLinearMap - C.starProjection.toLinearMap).kyFanSum (finrank ℂ G) = 0 := by
     simp [LinearMap.kyFanSum_def, LinearMap.singularValues_zero]
   rw [hzeroC, add_zero]
   exact phasePlaneModel_projection_trace_formula n theta hzero hpi
@@ -508,8 +516,9 @@ theorem phasePlaneModel_with_fixed_global_trace_minimizer
       (orthogonalBlockSumSubmodule (phasePlaneModelSource n) C).map W.toLinearMap =
         orthogonalBlockSumSubmodule (phasePlaneModelTarget n theta) C ∧
       (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ (WithLp 2 (phasePlaneModel n × G))) =
-        (projection (orthogonalBlockSumSubmodule (phasePlaneModelSource n) C) -
-            projection (orthogonalBlockSumSubmodule (phasePlaneModelTarget n theta) C)).kyFanSum
+        (((orthogonalBlockSumSubmodule (phasePlaneModelSource n) C)).starProjection.toLinearMap -
+            ((orthogonalBlockSumSubmodule (phasePlaneModelTarget n theta)
+                C)).starProjection.toLinearMap).kyFanSum
               (finrank ℂ (WithLp 2 (phasePlaneModel n × G))) ∧
       ∀ Z : WithLp 2 (phasePlaneModel n × G) ≃ₗᵢ[ℂ]
           WithLp 2 (phasePlaneModel n × G),
@@ -540,12 +549,13 @@ theorem projection_trace_formula_of_phasePlaneModel_with_fixed
       F.toLinearMap = U)
     (hV : (orthogonalBlockSumSubmodule (phasePlaneModelTarget n theta) C).map
       F.toLinearMap = V) :
-    (projection U - projection V).kyFanSum (finrank ℂ H) =
+    (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank ℂ H) =
       ∑ i : Fin (n + 1), 2 * Real.sin (theta i) := by
-  have hproj : projection U - projection V =
+  have hproj : U.starProjection.toLinearMap - V.starProjection.toLinearMap =
       F.toLinearMap ∘ₗ
-        (projection (orthogonalBlockSumSubmodule (phasePlaneModelSource n) C) -
-          projection (orthogonalBlockSumSubmodule (phasePlaneModelTarget n theta) C)) ∘ₗ
+        (((orthogonalBlockSumSubmodule (phasePlaneModelSource n) C)).starProjection.toLinearMap -
+          ((orthogonalBlockSumSubmodule (phasePlaneModelTarget n theta)
+              C)).starProjection.toLinearMap) ∘ₗ
         F.symm.toLinearMap := by
     rw [← hU, ← hV]
     rw [projection_map_conjugate F, projection_map_conjugate F]
@@ -575,7 +585,7 @@ theorem exists_global_trace_minimizer_of_phasePlaneModel_with_fixed
     ∃ W : H ≃ₗᵢ[ℂ] H,
       U.map W.toLinearMap = V ∧
       (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ H) =
-        (projection U - projection V).kyFanSum (finrank ℂ H) ∧
+        (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum (finrank ℂ H) ∧
       ∀ Z : H ≃ₗᵢ[ℂ] H, U.map Z.toLinearMap = V →
         (LinearMap.id - W.toLinearMap).kyFanSum (finrank ℂ H) ≤
           (LinearMap.id - Z.toLinearMap).kyFanSum (finrank ℂ H) := by

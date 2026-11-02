@@ -7,15 +7,16 @@ module
 
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import TauCeti.Analysis.InnerProductSpace.PointSpectrum
-public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 public import Mathlib.Analysis.Normed.Operator.Banach
 
 /-!
 # Finite-dimensional spectral subspaces
 
-Restricted spectra, reducing subspaces, canonical spectral projectors, and the
-quadratic-form bridges used by finite Davis--Kahan theorems.
+Restriction/ambient point-spectrum correspondences, the real-spectrum bridge for finite
+continuous realizations, and the quadratic-form consequences used by Davis--Kahan.
+Invariant submodules and orthogonal projections use canonical Mathlib and Tau Ceti APIs.
 
 The point-spectrum predicates name eigenvalue data explicitly; the quadratic-form results
 reduce to the generic bounded spectral-order API after restricting to an invariant subspace.
@@ -31,79 +32,6 @@ open Module (finrank)
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
-/-- A subspace is **invariant** under an operator when the operator maps it into
-itself.
-
-Named for what it says.  It was called `Reduces`, which collided with
-`Submodule.IsReducing` — a *stronger* predicate requiring
-`Uᗮ` to be invariant too — so one name meant two things in one library and a
-reader meeting `IsInvariant A U` in a docstring could not tell which.  For a
-symmetric operator the two coincide, and `isInvariant_orthogonal_of_isSymmetric`
-is what supplies that; but the implication is one-directional in general, which
-is exactly why the names had to be separated. -/
-@[expose, reducible]
-def IsInvariant (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) : Prop :=
-  ∀ x ∈ U, A x ∈ U
-
-/-- The orthogonal projector onto a finite-dimensional subspace, as a linear
-map. -/
-@[expose]
-noncomputable def projection (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    E →ₗ[𝕜] E :=
-  ((U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
-
-/-- The complementary projector. -/
-@[expose]
-noncomputable def complementaryProjection (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  projection Uᗮ
-
-omit [FiniteDimensional 𝕜 E] in
-/-- **The complementary projector is `1 - P`.**  The linear-map form of
-`Submodule.starProjection_add_starProjection_orthogonal`, which is what turns a
-two-projection identity into ordinary algebra in the endomorphism ring. -/
-theorem complementaryProjection_eq_id_sub (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] :
-    complementaryProjection U = LinearMap.id - projection U := by
-  ext x
-  have h := U.starProjection_add_starProjection_orthogonal x
-  simp only [LinearMap.sub_apply, LinearMap.id_apply]
-  exact eq_sub_of_add_eq' h
-
-omit [FiniteDimensional 𝕜 E] in
-/-- An orthogonal projector is symmetric. -/
-theorem projection_isSymmetric (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] : (projection U).IsSymmetric :=
-  U.starProjection_isSymmetric
-
-/-- An orthogonal projector is its own adjoint. -/
-@[simp] theorem projection_adjoint (U : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] :
-    (projection U).adjoint = projection U :=
-  (projection_isSymmetric U).adjoint_eq
-
-omit [FiniteDimensional 𝕜 E] in
-/-- A symmetric operator leaves the orthogonal complement of an invariant
-subspace invariant.
--/
-theorem isInvariant_orthogonal_of_isSymmetric {A : E →ₗ[𝕜] E}
-    (hA : A.IsSymmetric) {U : Submodule 𝕜 E} (hU : IsInvariant A U) :
-    IsInvariant A Uᗮ := by
-  intro x hx
-  rw [Submodule.mem_orthogonal]
-  intro u hu
-  rw [← hA u x]
-  exact Submodule.inner_right_of_mem_orthogonal (hU u hu) hx
-
-omit [FiniteDimensional 𝕜 E] in
-/-- The accepted point-spectral subspace is invariant under its operator.
-No symmetry or finite-dimensionality is needed for this algebraic fact. -/
-theorem isInvariant_pointSpectralSubspace (A : E →ₗ[𝕜] E) (Ω : Set ℝ) :
-    IsInvariant A (Module.End.pointSpectralSubspace A Ω) := by
-  intro x hx
-  exact (Module.End.map_pointSpectralSubspace_le (A := A) (Ω := Ω))
-    (Submodule.mem_map_of_mem hx)
-
 /-! ### Restriction to an invariant subspace and the restricted-spectrum bridge
 
 These give the concrete restriction `A.restrict hU : U →ₗ[𝕜] U` of an operator to
@@ -116,7 +44,7 @@ omit [FiniteDimensional 𝕜 E] in
 `A.restrict hU : U →ₗ[𝕜] U` (over the whole `⊤`) equals the `U`-carried point
 spectrum of `A`.  Eigenvectors transport across the subtype coercion. -/
 theorem restrictedPointSpectrum_restrict (A : E →ₗ[𝕜] E)
-    {U : Submodule 𝕜 E} (hU : IsInvariant A U) :
+    {U : Submodule 𝕜 E} (hU : (U ∈ Module.End.invtSubmodule A)) :
     Module.End.restrictedPointSpectrum (A.restrict hU) ⊤ =
       Module.End.restrictedPointSpectrum A U := by
   ext lam
@@ -137,7 +65,7 @@ omit [FiniteDimensional 𝕜 E] in
 /-- The containment form of the restricted-spectrum bridge: `A.restrict hU` has
 spectrum in `s` iff `A` carries spectrum in `s` on `U`. -/
 theorem pointSpectrumIn_restrict_iff (A : E →ₗ[𝕜] E)
-    {U : Submodule 𝕜 E} (hU : IsInvariant A U) (s : Set ℝ) :
+    {U : Submodule 𝕜 E} (hU : (U ∈ Module.End.invtSubmodule A)) (s : Set ℝ) :
     Module.End.PointSpectrumIn (A.restrict hU) ⊤ s ↔ Module.End.PointSpectrumIn A U s := by
   constructor
   · intro h
@@ -146,7 +74,8 @@ theorem pointSpectrumIn_restrict_iff (A : E →ₗ[𝕜] E)
     have hsub := Module.End.pointSpectrumIn_iff.mp h
     have hxeq : (A.restrict hU) ⟨x, hxU⟩ = (lam : 𝕜) • ⟨x, hxU⟩ := by
       apply Subtype.ext
-      simpa using hAx
+      change A x = (lam : 𝕜) • x
+      exact hAx
     exact hsub ⟨x, hxU⟩ Submodule.mem_top
       (fun hzero => hx0 (congrArg (Subtype.val) hzero)) lam hxeq
   · intro h
@@ -154,39 +83,11 @@ theorem pointSpectrumIn_restrict_iff (A : E →ₗ[𝕜] E)
     intro x hxTop hx0 lam hAx
     have hambient := Module.End.pointSpectrumIn_iff.mp h
     have hxeq : A (x : E) = (lam : 𝕜) • (x : E) := by
-      have := congrArg (Subtype.val) hAx
-      simpa using this
+      have h := congrArg (Subtype.val) hAx
+      change A (x : E) = (lam : 𝕜) • (x : E) at h
+      exact h
     exact hambient (x : E) x.property
       (fun hzero => hx0 (Subtype.ext hzero)) lam hxeq
-
-omit [FiniteDimensional 𝕜 E] in
-/-- **A symmetric operator commutes with the projection onto a reducing
-subspace.**  For `A` symmetric and `U` an `A`-invariant subspace (so `Uᗮ` is
-invariant too), `P_U (A x) = A (P_U x)`. -/
-theorem projection_apply_comm_of_isInvariant {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U) (x : E) :
-    projection U (A x) = A (projection U x) := by
-  have hUperp : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
-  have hpx : U.starProjection x ∈ U := U.starProjection_apply_mem x
-  have hrest : x - U.starProjection x ∈ Uᗮ := U.sub_starProjection_mem_orthogonal x
-  have hApx : A (U.starProjection x) ∈ U := hU _ hpx
-  have hArest : A (x - U.starProjection x) ∈ Uᗮ := hUperp _ hrest
-  have hsplit : A x = A (U.starProjection x) + A (x - U.starProjection x) := by
-    rw [← map_add]; congr 1; abel
-  -- states the goal with the definition unfolded, in the shape the next step needs;
-  -- there is no `_apply` lemma to rewrite with here.
-  change U.starProjection (A x) = A (U.starProjection x)
-  rw [hsplit, map_add, U.starProjection_eq_self_iff.mpr hApx,
-    (Submodule.starProjection_apply_eq_zero_iff U).mpr hArest, add_zero]
-
-omit [FiniteDimensional 𝕜 E] in
-/-- The complementary projection onto `Uᗮ` also commutes with `A` when `A` is
-symmetric and `U` reduces `A`. -/
-theorem complementaryProjection_apply_comm_of_isInvariant {A : E →ₗ[𝕜] E}
-    (hA : A.IsSymmetric) {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : IsInvariant A U) (x : E) :
-    complementaryProjection U (A x) = A (complementaryProjection U x) :=
-  projection_apply_comm_of_isInvariant hA (isInvariant_orthogonal_of_isSymmetric hA hU) x
 
 /-! ### Spectral gap ⟹ quadratic-form coercivity bridge
 
@@ -240,7 +141,7 @@ theorem real_spectrum_toContinuousLinearMap_eq (A : E →ₗ[𝕜] E) :
 
 /-- Spectral containment gives an upper form bound on an invariant subspace. -/
 theorem upperFormBound_of_pointSpectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} (hU : IsInvariant A U) {c : ℝ}
+    {U : Submodule 𝕜 E} (hU : (U ∈ Module.End.invtSubmodule A)) {c : ℝ}
     (hSpec : Module.End.PointSpectrumIn A U (Set.Iic c)) :
     ∀ x ∈ U, RCLike.re ⟪A x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
   have := FiniteDimensional.complete 𝕜 U
@@ -256,7 +157,7 @@ theorem upperFormBound_of_pointSpectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymme
 
 /-- Spectral containment gives a lower form bound on an invariant subspace. -/
 theorem lowerFormBound_of_pointSpectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} (hU : IsInvariant A U) {c : ℝ}
+    {U : Submodule 𝕜 E} (hU : (U ∈ Module.End.invtSubmodule A)) {c : ℝ}
     (hSpec : Module.End.PointSpectrumIn A U (Set.Ici c)) :
     ∀ x ∈ U, c * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜 := by
   have := FiniteDimensional.complete 𝕜 U

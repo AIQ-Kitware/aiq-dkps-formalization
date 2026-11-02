@@ -54,7 +54,8 @@ theorem projectionDifference_uiNorm_le_displacement
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
-    N (projection U - projection V) ≤ N (LinearMap.id - W.toLinearMap) := by
+    N (U.starProjection.toLinearMap - V.starProjection.toLinearMap) ≤ N (LinearMap.id -
+        W.toLinearMap) := by
   let J : E →ₗ[𝕜] E := U.reflection.toLinearMap
   let K : E →ₗ[𝕜] E := V.reflection.toLinearMap
   let D : E →ₗ[𝕜] E := W.toLinearMap - LinearMap.id
@@ -62,7 +63,7 @@ theorem projectionDifference_uiNorm_le_displacement
       W (U.starProjection x) = V.starProjection (W x) := by
     have hx := LinearMap.congr_fun
       (projection_intertwines_of_map_eq U V W hmap) x
-    simpa only [LinearMap.comp_apply, projection, ContinuousLinearMap.coe_coe,
+    simpa only [LinearMap.comp_apply, ContinuousLinearMap.coe_coe,
       LinearIsometryEquiv.coe_toLinearEquiv, LinearEquiv.coe_coe] using hx
   have hreflect (x : E) : V.reflection (W x) = W (U.reflection x) := by
     rw [Submodule.reflection_apply, Submodule.reflection_apply]
@@ -100,13 +101,14 @@ theorem projectionDifference_uiNorm_le_displacement
       _ ≤ N (J ∘ₗ D) + N (D ∘ₗ J) := htriangle
       _ = 2 * N D := by rw [hunitaryLeft, hunitaryRightJ]; ring
   have hreflections :
-      (2 : 𝕜) • (projection U - projection V) = J - K := by
+      (2 : 𝕜) • (U.starProjection.toLinearMap - V.starProjection.toLinearMap) = J - K := by
     ext x
     change (2 : 𝕜) • (U.starProjection x - V.starProjection x) =
       U.reflection x - V.reflection x
     simp only [Submodule.reflection_apply, smul_sub, two_smul]
     module
-  have hscale : N (J - K) = 2 * N (projection U - projection V) := by
+  have hscale : N (J - K) = 2 * N (U.starProjection.toLinearMap - V.starProjection.toLinearMap) :=
+      by
     rw [← hreflections, map_smul_eq_mul N, RCLike.norm_ofNat]
   have hneg : N D = N (LinearMap.id - W.toLinearMap) := by
     change N (W.toLinearMap - LinearMap.id) =
@@ -136,7 +138,7 @@ theorem projectionDifference_kyFanSum_le_displacement
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V)
     (k : ℕ) :
-    (projection U - projection V).kyFanSum k ≤
+    (U.starProjection.toLinearMap - V.starProjection.toLinearMap).kyFanSum k ≤
       (LinearMap.id - W.toLinearMap).kyFanSum k := by
   rw [← UnitarilyInvariantSeminorm.kyFan_apply, ← UnitarilyInvariantSeminorm.kyFan_apply]
   exact projectionDifference_uiNorm_le_displacement

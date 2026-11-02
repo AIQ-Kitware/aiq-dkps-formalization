@@ -82,7 +82,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
   {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
 
 example {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E} {δ : ℝ}
-    (hgap : PointInternalGap A U δ) : IsInvariant A U := hgap.1
+    (hgap : PointInternalGap A U δ) : (U ∈ Module.End.invtSubmodule A) := hgap.1
 
 example {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} {δ c : ℝ} (hgap : PointInternalGap A U δ)

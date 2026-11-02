@@ -63,7 +63,7 @@ omit [FiniteDimensional 𝕜 E] in
 /-- The two-level operator with levels `0` and `1` is the orthogonal
 projection. -/
 theorem twoLevelOperator_zero_one (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    twoLevelOperator (𝕜 := 𝕜) 0 1 U = projection U := by
+    twoLevelOperator (𝕜 := 𝕜) 0 1 U = U.starProjection.toLinearMap := by
   ext x
   rw [twoLevelOperator_apply]
   simp
@@ -72,8 +72,8 @@ theorem twoLevelOperator_zero_one (U : Submodule 𝕜 E) [U.HasOrthogonalProject
 self-adjoint and idempotent, so `P⋆P = P`; its squared singular values are
 therefore its eigenvalues `1` and `0`. -/
 theorem rightGram_projection (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    rightGram (projection U) = projection U := by
-  rw [rightGram, projection_adjoint]
+    rightGram (U.starProjection.toLinearMap) = U.starProjection.toLinearMap := by
+  rw [rightGram, (Submodule.starProjection_isSymmetric _).adjoint_eq]
   ext x
   change U.starProjection (U.starProjection x) = U.starProjection x
   exact Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
@@ -82,7 +82,7 @@ omit [FiniteDimensional 𝕜 E] in
 /-- The range of an orthogonal projection is the subspace it projects onto, so
 its rank is that subspace's dimension. -/
 theorem range_projection (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    LinearMap.range (projection U) = U := by
+    LinearMap.range (U.starProjection.toLinearMap) = U := by
   refine le_antisymm ?_ fun x hx => ?_
   · rintro _ ⟨x, rfl⟩
     exact U.starProjection_apply_mem x
@@ -153,7 +153,8 @@ theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation
   classical
   have hv0 : v ≠ 0 := by rw [← norm_ne_zero_iff, hv]; norm_num
   have hw0 : w ≠ 0 := by rw [← norm_ne_zero_iff, hw]; norm_num
-  refine ⟨projection (Submodule.span ℝ {v}), projection (Submodule.span ℝ {w}),
+  refine ⟨((Submodule.span ℝ {v})).starProjection.toLinearMap, ((Submodule.span ℝ
+      {w})).starProjection.toLinearMap,
     ?_, ?_, ?_, ?_, sinThetaFrobenius_orthogonal_lines hv hw horth, ?_⟩
   · rw [range_projection, finrank_span_singleton hv0]
   · rw [range_projection, finrank_span_singleton hw0]
@@ -162,8 +163,8 @@ theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation
   · rw [rightGram_projection, one_smul]
     exact Submodule.starProjection_eq_self_iff.mpr (Submodule.mem_span_singleton_self w)
   · -- The angle is `1`; the numerator is finite; so a large enough `Δ` breaks it.
-    set A : E →ₗ[ℝ] E := projection (Submodule.span ℝ {v})
-    set Â : E →ₗ[ℝ] E := projection (Submodule.span ℝ {w})
+    set A : E →ₗ[ℝ] E := ((Submodule.span ℝ {v})).starProjection.toLinearMap
+    set Â : E →ₗ[ℝ] E := ((Submodule.span ℝ {w})).starProjection.toLinearMap
     set K : ℝ := 2 * ‖A.toContinuousLinearMap‖ + ‖(Â - A).toContinuousLinearMap‖ with hK
     set D : ℝ := ‖(Â - A).toContinuousLinearMap‖ with hD
     have hK0 : 0 ≤ K := by positivity

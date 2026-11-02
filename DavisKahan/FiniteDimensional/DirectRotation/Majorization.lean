@@ -124,7 +124,8 @@ theorem projection_intertwines_of_map_eq
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
-    W.toLinearMap ∘ₗ projection U = projection V ∘ₗ W.toLinearMap := by
+    W.toLinearMap ∘ₗ U.starProjection.toLinearMap = V.starProjection.toLinearMap ∘ₗ W.toLinearMap
+        := by
   apply LinearMap.ext
   intro x
   rw [← U.starProjection_add_starProjection_orthogonal x]
@@ -152,10 +153,11 @@ theorem adjoint_projection_intertwines_of_map_eq
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
-    W.symm.toLinearMap ∘ₗ projection V = projection U ∘ₗ W.symm.toLinearMap := by
+    W.symm.toLinearMap ∘ₗ V.starProjection.toLinearMap = U.starProjection.toLinearMap ∘ₗ
+        W.symm.toLinearMap := by
   have h := congrArg LinearMap.adjoint
     (projection_intertwines_of_map_eq U V W hmap)
-  simpa [LinearMap.adjoint_comp, projection_adjoint,
+  simpa [LinearMap.adjoint_comp, (Submodule.starProjection_isSymmetric _).adjoint_eq,
     W.adjoint_toLinearMap_eq_symm] using h.symm
 
 /-- Multiplying the canonical intertwiner by a competing unitary on the left
@@ -173,14 +175,14 @@ theorem symm_comp_canonicalIntertwiner_eq_pinch
   simp only [canonicalIntertwiner, pinch, LinearMap.comp_apply,
     LinearMap.add_apply, map_add,
     LinearIsometryEquiv.coe_toLinearEquiv, LinearEquiv.coe_coe]
-  rw [show W.symm (projection V (projection U x)) =
-      projection U (W.symm (projection U x)) by
+  rw [show W.symm (V.starProjection.toLinearMap (U.starProjection.toLinearMap x)) =
+      U.starProjection.toLinearMap (W.symm (U.starProjection.toLinearMap x)) by
         simpa [LinearMap.comp_apply] using
-          LinearMap.congr_fun hstar (projection U x)]
-  rw [show W.symm (complementaryProjection V (complementaryProjection U x)) =
-      complementaryProjection U (W.symm (complementaryProjection U x)) by
-        simpa [complementaryProjection, LinearMap.comp_apply] using
-          LinearMap.congr_fun hstarPerp (complementaryProjection U x)]
+          LinearMap.congr_fun hstar (U.starProjection.toLinearMap x)]
+  rw [show W.symm (Vᗮ.starProjection.toLinearMap (Uᗮ.starProjection.toLinearMap x)) =
+      Uᗮ.starProjection.toLinearMap (W.symm (Uᗮ.starProjection.toLinearMap x)) by
+        simpa [ContinuousLinearMap.coe_coe, LinearMap.comp_apply] using
+          LinearMap.congr_fun hstarPerp (Uᗮ.starProjection.toLinearMap x)]
 
 /-- The modulus of the pinched competitor is the modulus of the canonical
 intertwiner. -/
@@ -294,7 +296,7 @@ theorem uiNorm_pinch_le
     have hQ : ∀ y : E, Uᗮ.starProjection y = y - U.starProjection y :=
       fun y => eq_sub_of_add_eq'
         (Submodule.starProjection_add_starProjection_orthogonal (K := U) y)
-    simp only [pinch, complementaryProjection, projection,
+    simp only [pinch, ContinuousLinearMap.coe_coe,
       ContinuousLinearMap.coe_coe, LinearMap.add_apply, LinearMap.comp_apply,
       hQ, LinearIsometryEquiv.coe_toLinearEquiv,
       LinearEquiv.coe_coe, Submodule.reflection_apply, two_smul,
@@ -381,7 +383,7 @@ theorem kyFanSum_pinch_le
     have hQ : ∀ y : E, Uᗮ.starProjection y = y - U.starProjection y :=
       fun y => eq_sub_of_add_eq'
         (Submodule.starProjection_add_starProjection_orthogonal (K := U) y)
-    simp only [pinch, complementaryProjection, projection,
+    simp only [pinch, ContinuousLinearMap.coe_coe,
       ContinuousLinearMap.coe_coe, LinearMap.add_apply, LinearMap.comp_apply,
       LinearMap.smul_apply, hQ, LinearIsometryEquiv.coe_toLinearEquiv,
       LinearEquiv.coe_coe, Submodule.reflection_apply, two_smul,
@@ -540,7 +542,7 @@ theorem directRotation_displacementSquare_kyFan
     exact displacementSquare_directRotation U V hacute
   have hBadj : (pinch U W.symm.toLinearMap).adjoint = pinch U W.toLinearMap := by
     rw [pinch, pinch, map_add]
-    simp only [LinearMap.adjoint_comp, projection_adjoint, complementaryProjection,
+    simp only [LinearMap.adjoint_comp, (Submodule.starProjection_isSymmetric _).adjoint_eq,
       W.symm.adjoint_toLinearMap_eq_symm, LinearIsometryEquiv.symm_symm,
       LinearMap.comp_assoc]
   have hpinch_add : ∀ M N : E →ₗ[𝕜] E,
@@ -568,12 +570,12 @@ theorem directRotation_displacementSquare_kyFan
   have hpinch_id : pinch U (LinearMap.id : E →ₗ[𝕜] E) = LinearMap.id := by
     apply LinearMap.ext
     intro x
-    simp only [pinch, complementaryProjection, LinearMap.add_apply,
+    simp only [pinch, ContinuousLinearMap.coe_coe, LinearMap.add_apply,
       LinearMap.comp_apply, LinearMap.id_apply]
-    have h1 : projection U (projection U x) = projection U x :=
-      projection_apply_of_mem (U.starProjection_apply_mem x)
-    have h2 : projection Uᗮ (projection Uᗮ x) = projection Uᗮ x :=
-      projection_apply_of_mem (Uᗮ.starProjection_apply_mem x)
+    have h1 : U.starProjection (U.starProjection x) = U.starProjection x :=
+      Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
+    have h2 : Uᗮ.starProjection (Uᗮ.starProjection x) = Uᗮ.starProjection x :=
+      Submodule.starProjection_eq_self_iff.mpr (Uᗮ.starProjection_apply_mem x)
     rw [h1, h2]
     exact U.starProjection_add_starProjection_orthogonal x
   have hP1 : P1 = (2 : 𝕜) • (LinearMap.id - H) := by
@@ -594,18 +596,13 @@ theorem directRotation_displacementSquare_kyFan
   have hpositive0 : A0.IsPositive := displacementSquare_positive _
   have hA1pos : A1.IsPositive := displacementSquare_positive W.toLinearMap
   have hpositiveP : P1.IsPositive := by
-    refine ⟨fun x y => ?_, fun x => ?_⟩
-    · simp only [P1, pinch, complementaryProjection, LinearMap.add_apply,
-        LinearMap.comp_apply, inner_add_left, inner_add_right,
-        projection_inner_left_eq_right]
-      rw [hA1pos.isSymmetric (projection U x),
-        hA1pos.isSymmetric (projection Uᗮ x),
-        projection_inner_left_eq_right, projection_inner_left_eq_right]
-    · simp only [P1, pinch, complementaryProjection, LinearMap.add_apply,
-        LinearMap.comp_apply, inner_add_left, map_add,
-        projection_inner_left_eq_right]
-      exact add_nonneg (hA1pos.re_inner_nonneg_left _)
-        (hA1pos.re_inner_nonneg_left _)
+    change (pinch U A1).IsPositive
+    unfold pinch
+    have h1 := hA1pos.adjoint_conj U.starProjection.toLinearMap
+    have h2 := hA1pos.adjoint_conj Uᗮ.starProjection.toLinearMap
+    rw [U.starProjection_isSymmetric.adjoint_eq] at h1
+    rw [Uᗮ.starProjection_isSymmetric.adjoint_eq] at h2
+    exact h1.add h2
   have hprefix : ∀ j, A0.kyFanSum j ≤ P1.kyFanSum j := by
     intro j
     -- Diagonalize `C` and `H`.  The Fan--Hoffman inequality gives

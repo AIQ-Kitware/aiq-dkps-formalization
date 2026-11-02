@@ -8,7 +8,7 @@ module
 public import DavisKahan.FiniteDimensional.DirectRotation.SchattenRealAngleCosts
 public import ForTauCeti.Analysis.InnerProductSpace.OrthogonalFamilyGluing
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.CosineSineBlocks
-public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
+public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 
 /-!
 # Attainment on prescribed geometric real angle blocks
@@ -184,9 +184,9 @@ theorem exists_real_transport_attaining_incomplete_angle_blocks
       iSup_le (fun i x hx => (le_iSup W i) (hL i x hx))
     exact fun _ hx => hle hx
   have hKperp : ∀ x ∈ Sᗮ, K.starProjection x ∈ Sᗮ :=
-    TauCeti.isInvariant_orthogonal_of_isSymmetric K.starProjection_isSymmetric hKsum
+    LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule K.starProjection_isSymmetric hKsum
   have hLperp : ∀ x ∈ Sᗮ, L.starProjection x ∈ Sᗮ :=
-    TauCeti.isInvariant_orthogonal_of_isSymmetric L.starProjection_isSymmetric hLsum
+    LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule L.starProjection_isSymmetric hLsum
   have hrestrict : K.comap Sᗮ.subtype = L.comap Sᗮ.subtype := by
     ext x
     change (x : E) ∈ K ↔ (x : E) ∈ L

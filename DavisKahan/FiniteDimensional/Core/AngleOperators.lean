@@ -143,28 +143,29 @@ theorem principalAngles_orthogonal (U V : Submodule 𝕜 E)
   rw [Submodule.principalSines_def, Submodule.principalSines_def,
     Submodule.sinThetaMap_def, Submodule.sinThetaMap_def]
   change
-    (complementaryProjection (Vᗮ) ∘ₗ projection (Uᗮ)).singularValues =
-      (complementaryProjection V ∘ₗ projection U).singularValues
+    ((((Vᗮ))ᗮ).starProjection.toLinearMap ∘ₗ ((Uᗮ)).starProjection.toLinearMap).singularValues =
+      (Vᗮ.starProjection.toLinearMap ∘ₗ U.starProjection.toLinearMap).singularValues
   -- `Vᗮᗮ = V`, but `projection` is indexed by an instance on the submodule, so
   -- the rewrite has to go through `simp only`
-  simp only [complementaryProjection, Submodule.orthogonal_orthogonal]
+  simp only [Submodule.orthogonal_orthogonal]
   -- the complemented cross block is the adjoint of the cross block with the two
   -- subspaces exchanged, and adjoints have the same singular values
-  have hadj : projection V ∘ₗ projection Uᗮ =
+  have hadj : V.starProjection.toLinearMap ∘ₗ Uᗮ.starProjection.toLinearMap =
       ((V.sinThetaMap U).toLinearMap).adjoint := by
     rw [Submodule.sinThetaMap_def]
-    change projection V ∘ₗ projection Uᗮ =
-      (complementaryProjection U ∘ₗ projection V).adjoint
-    rw [complementaryProjection, LinearMap.adjoint_comp,
-      projection_adjoint, projection_adjoint]
+    change V.starProjection.toLinearMap ∘ₗ Uᗮ.starProjection.toLinearMap =
+      (Uᗮ.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap).adjoint
+    rw [LinearMap.adjoint_comp,
+      (Submodule.starProjection_isSymmetric _).adjoint_eq, (Submodule.starProjection_isSymmetric
+          _).adjoint_eq]
   have h := (Submodule.principalSines_comm U V hrank).symm
   simp only [Submodule.principalSines_def] at h
   calc
-    (projection V ∘ₗ projection Uᗮ).singularValues =
+    (V.starProjection.toLinearMap ∘ₗ Uᗮ.starProjection.toLinearMap).singularValues =
         ((V.sinThetaMap U).toLinearMap).singularValues := by
       rw [hadj, LinearMap.singularValues_adjoint]
     _ = ((U.sinThetaMap V).toLinearMap).singularValues := h
-    _ = (projection Vᗮ ∘ₗ projection U).singularValues := by
+    _ = (Vᗮ.starProjection.toLinearMap ∘ₗ U.starProjection.toLinearMap).singularValues := by
       rw [Submodule.sinThetaMap_def]
       rfl
 

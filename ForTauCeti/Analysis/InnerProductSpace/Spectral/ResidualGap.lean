@@ -70,7 +70,7 @@ theorem norm_sq_starProjection_of_span_range {W : Submodule 𝕜 E}
 /-- **An invariant subspace is spanned by an orthonormal eigenfamily.**
 Diagonalize the restriction `T|W` and push its eigenbasis back into `E`. -/
 theorem exists_isEigenFamily_span_eq (hT : T.IsSymmetric) {W : Submodule 𝕜 E}
-    (hW : IsInvariant T W) :
+    (hW : (W ∈ Module.End.invtSubmodule T)) :
     ∃ (m : ℕ) (y : Fin m → E) (c : Fin m → ℝ),
       Module.End.IsEigenfamily T c y ∧ Submodule.span 𝕜 (Set.range y) = W := by
   classical
@@ -108,7 +108,8 @@ theorem sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le (hT : T.IsSymmetric)
   classical
   have hU := hgap.1
   obtain ⟨m, y, c, hfam, hspan⟩ :=
-    exists_isEigenFamily_span_eq hT (isInvariant_orthogonal_of_isSymmetric hT hU)
+    exists_isEigenFamily_span_eq hT (LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule
+        hT hU)
   -- Each complementary eigenvalue is separated from every trial value.
   have hsep : ∀ (i : Fin d) (k : Fin m), Δ ≤ |lam i - c k| := fun i k =>
     hgap.2 (lam i) (c k) (hlam i)

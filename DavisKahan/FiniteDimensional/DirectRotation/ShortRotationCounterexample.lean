@@ -139,7 +139,7 @@ theorem coord_eq_zero_of_mem_U4 {x : E4} (hx : x ∈ U4) :
   constructor <;> simp [sv]
 
 private theorem projection_U4_apply (x : E4) :
-    projection U4 x = x 0 • sv 0 + x 1 • sv 1 := by
+    U4.starProjection x = x 0 • sv 0 + x 1 • sv 1 := by
   show U4.starProjection x = _
   apply Submodule.eq_starProjection_of_mem_orthogonal
   · exact add_mem
@@ -153,12 +153,12 @@ private theorem projection_U4_apply (x : E4) :
 
 /-- Coordinate formula for the source projection. -/
 theorem projection_U4_coord (x : E4) (i : Fin 4) :
-    projection U4 x i = if i = 0 then x 0 else if i = 1 then x 1 else 0 := by
+    U4.starProjection x i = if i = 0 then x 0 else if i = 1 then x 1 else 0 := by
   rw [projection_U4_apply]
   fin_cases i <;> simp [sv]
 
 private theorem projection_V4_apply (x : E4) :
-    projection V4 x = Wequiv (projection U4 (Wequiv.symm x)) := by
+    V4.starProjection x = Wequiv (U4.starProjection (Wequiv.symm x)) := by
   have h := projection_intertwines_of_map_eq U4 V4 Wequiv rfl
   have hx := LinearMap.congr_fun h (Wequiv.symm x)
   simp only [LinearMap.comp_apply] at hx
@@ -171,7 +171,7 @@ private theorem projection_V4_apply (x : E4) :
 /-- Coordinates of the target projection:
 `P_V x = ½ (x₀+x₃, x₁-x₂, x₂-x₁, x₀+x₃)`. -/
 theorem projection_V4_coord (x : E4) (i : Fin 4) :
-    projection V4 x i =
+    V4.starProjection x i =
       if i = 0 then (x 0 + x 3) / 2 else
       if i = 1 then (x 1 - x 2) / 2 else
       if i = 2 then (x 2 - x 1) / 2 else (x 0 + x 3) / 2 := by
@@ -246,11 +246,12 @@ theorem gram_canonicalIntertwiner :
   apply LinearMap.ext
   intro x
   ext i
-  have hcU : ∀ y : E4, complementaryProjection U4 y = y - projection U4 y :=
+  have hcU : ∀ y : E4, U4ᗮ.starProjection y = y - U4.starProjection y :=
     fun y => Submodule.starProjection_orthogonal_val y
-  have hcV : ∀ y : E4, complementaryProjection V4 y = y - projection V4 y :=
+  have hcV : ∀ y : E4, V4ᗮ.starProjection y = y - V4.starProjection y :=
     fun y => Submodule.starProjection_orthogonal_val y
-  simp only [LinearMap.add_apply, LinearMap.comp_apply, LinearMap.smul_apply,
+  simp only [LinearMap.add_apply, LinearMap.comp_apply, ContinuousLinearMap.coe_coe,
+    LinearMap.smul_apply,
     LinearMap.id_apply, hcU, hcV, map_sub]
   fin_cases i <;>
     simp [projection_U4_coord, projection_V4_coord] <;> ring
@@ -567,7 +568,7 @@ private theorem mem_omega2 {x : E4} (hx : x ∈ omega2) :
   fin_cases i <;> simp [sv]
 
 private theorem projection_omega1_apply (x : E4) :
-    projection omega1 x = x 0 • sv 0 + x 3 • sv 3 := by
+    omega1.starProjection x = x 0 • sv 0 + x 3 • sv 3 := by
   show omega1.starProjection x = _
   apply Submodule.eq_starProjection_of_mem_orthogonal
   · exact add_mem
@@ -580,7 +581,7 @@ private theorem projection_omega1_apply (x : E4) :
       EuclideanSpace.inner_single_left]
 
 private theorem projection_omega2_apply (x : E4) :
-    projection omega2 x = x 1 • sv 1 + x 2 • sv 2 := by
+    omega2.starProjection x = x 1 • sv 1 + x 2 • sv 2 := by
   show omega2.starProjection x = _
   apply Submodule.eq_starProjection_of_mem_orthogonal
   · exact add_mem
@@ -593,47 +594,49 @@ private theorem projection_omega2_apply (x : E4) :
       EuclideanSpace.inner_single_left]
 
 private theorem projection_omega1_coord (x : E4) (i : Fin 4) :
-    projection omega1 x i =
+    omega1.starProjection x i =
       if i = 0 then x 0 else if i = 3 then x 3 else 0 := by
   rw [projection_omega1_apply]
   fin_cases i <;> simp [sv]
 
 private theorem projection_omega2_coord (x : E4) (i : Fin 4) :
-    projection omega2 x i =
+    omega2.starProjection x i =
       if i = 1 then x 1 else if i = 2 then x 2 else 0 := by
   rw [projection_omega2_apply]
   fin_cases i <;> simp [sv]
 
 /-- The first block `K Ω₁` from the printed equation (4.3), for `K = I-W`. -/
 def equation43Block1 : E4 →ₗ[ℝ] E4 :=
-  (LinearMap.id - Wlin) ∘ₗ projection omega1
+  (LinearMap.id - Wlin) ∘ₗ omega1.starProjection.toLinearMap
 
 /-- The second block `K Ω₂` from the printed equation (4.3), for `K = I-W`. -/
 def equation43Block2 : E4 →ₗ[ℝ] E4 :=
-  (LinearMap.id - Wlin) ∘ₗ projection omega2
+  (LinearMap.id - Wlin) ∘ₗ omega2.starProjection.toLinearMap
 
 private theorem gram_equation43Block1 :
     LinearMap.adjoint equation43Block1 ∘ₗ equation43Block1 =
-      projection omega1 := by
+      omega1.starProjection.toLinearMap := by
   apply LinearMap.ext
   intro x
   ext i
-  rw [equation43Block1, LinearMap.adjoint_comp, projection_adjoint,
+  rw [equation43Block1, LinearMap.adjoint_comp, (Submodule.starProjection_isSymmetric _).adjoint_eq,
     map_sub, LinearMap.adjoint_id, Wlin_adjoint]
-  simp only [LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.id_apply]
+  simp only [LinearMap.comp_apply, ContinuousLinearMap.coe_coe, LinearMap.sub_apply,
+    LinearMap.id_apply]
   fin_cases i <;>
     simp [projection_omega1_coord, Wlin_apply, Wlin'_apply, Wmat,
       Fin.sum_univ_four, Matrix.smul_apply] <;> ring
 
 private theorem gram_equation43Block2 :
     LinearMap.adjoint equation43Block2 ∘ₗ equation43Block2 =
-      projection omega2 := by
+      omega2.starProjection.toLinearMap := by
   apply LinearMap.ext
   intro x
   ext i
-  rw [equation43Block2, LinearMap.adjoint_comp, projection_adjoint,
+  rw [equation43Block2, LinearMap.adjoint_comp, (Submodule.starProjection_isSymmetric _).adjoint_eq,
     map_sub, LinearMap.adjoint_id, Wlin_adjoint]
-  simp only [LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.id_apply]
+  simp only [LinearMap.comp_apply, ContinuousLinearMap.coe_coe, LinearMap.sub_apply,
+    LinearMap.id_apply]
   fin_cases i <;>
     simp [projection_omega2_coord, Wlin_apply, Wlin'_apply, Wmat,
       Fin.sum_univ_four, Matrix.smul_apply] <;> ring
@@ -645,7 +648,7 @@ private noncomputable def omega2Basis : OrthonormalBasis (Fin 4) ℝ E4 :=
   omega1Basis.reindex Fin.revPerm
 
 private theorem omega1Basis_projection (i : Fin 4) :
-    projection omega1 (omega1Basis i) =
+    omega1.starProjection (omega1Basis i) =
       ((![1, 1, 0, 0] : Fin 4 → ℝ) i) • omega1Basis i := by
   have hswap0 : (Equiv.swap (1 : Fin 4) 3) 0 = 0 := by decide
   have hswap1 : (Equiv.swap (1 : Fin 4) 3) 1 = 3 := by decide
@@ -657,7 +660,7 @@ private theorem omega1Basis_projection (i : Fin 4) :
       EuclideanSpace.basisFun_apply, hswap0, hswap1, hswap2, hswap3]
 
 private theorem omega2Basis_projection (i : Fin 4) :
-    projection omega2 (omega2Basis i) =
+    omega2.starProjection (omega2Basis i) =
       ((![1, 1, 0, 0] : Fin 4 → ℝ) i) • omega2Basis i := by
   have hswap0 : (Equiv.swap (1 : Fin 4) 3) 0 = 0 := by decide
   have hswap1 : (Equiv.swap (1 : Fin 4) 3) 1 = 3 := by decide
@@ -743,20 +746,19 @@ theorem gram_sinThetaMap_apply (i : Fin 4) :
       ((![2⁻¹, 2⁻¹, 0, 0] : Fin 4 → ℝ) i) •
         EuclideanSpace.basisFun (Fin 4) ℝ i := by
   have hmap : (U4.sinThetaMap V4).toLinearMap =
-      complementaryProjection V4 ∘ₗ projection U4 := by
+      V4ᗮ.starProjection.toLinearMap ∘ₗ U4.starProjection.toLinearMap := by
     rw [Submodule.sinThetaMap_def]
     rfl
   have hAadj : ((U4.sinThetaMap V4).toLinearMap).adjoint =
-      projection U4 ∘ₗ complementaryProjection V4 := by
-    rw [hmap, LinearMap.adjoint_comp, projection_adjoint]
-    congr 1
-    simp [complementaryProjection]
+      U4.starProjection.toLinearMap ∘ₗ V4ᗮ.starProjection.toLinearMap := by
+    rw [hmap, LinearMap.adjoint_comp, U4.starProjection_isSymmetric.adjoint_eq,
+      V4ᗮ.starProjection_isSymmetric.adjoint_eq]
   rw [hAadj, hmap]
-  have hcV : ∀ y : E4, complementaryProjection V4 y = y - projection V4 y :=
+  have hcV : ∀ y : E4, V4ᗮ.starProjection y = y - V4.starProjection y :=
     fun y => Submodule.starProjection_orthogonal_val y
   apply PiLp.ext
   intro k
-  simp only [LinearMap.comp_apply, hcV, map_sub]
+  simp only [LinearMap.comp_apply, ContinuousLinearMap.coe_coe, hcV, map_sub]
   fin_cases i <;> fin_cases k <;>
     simp [projection_U4_coord, projection_V4_coord,
       EuclideanSpace.basisFun_apply] <;> ring

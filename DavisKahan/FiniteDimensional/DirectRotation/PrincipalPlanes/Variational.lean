@@ -82,9 +82,9 @@ theorem principalPlaneChord_le_singularValues_restrictedDisplacement
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V)
     (i : Fin (nontrivialAngleCount U V)) :
     principalPlaneChord U V i ≤
-      ((LinearMap.id - W.toLinearMap) ∘ₗ projection U).singularValues (i : ℕ) := by
+      ((LinearMap.id - W.toLinearMap) ∘ₗ U.starProjection.toLinearMap).singularValues (i : ℕ) := by
   classical
-  set AW := (LinearMap.id - W.toLinearMap) ∘ₗ projection U with hAW
+  set AW := (LinearMap.id - W.toLinearMap) ∘ₗ U.starProjection.toLinearMap with hAW
   have hiE : (i : ℕ) < finrank 𝕜 E :=
     lt_of_lt_of_le i.isLt (nontrivialAngleCount_le_finrank U V)
   -- The span of the top `i+1` source vectors.
@@ -124,7 +124,7 @@ theorem principalPlaneChord_le_singularValues_restrictedDisplacement
       rw [hβ, hxnorm] at this
       simpa using this.symm
     -- `P_V x` in the rotated orthonormal family.
-    have hPV : projection V x = ∑ a,
+    have hPV : V.starProjection.toLinearMap x = ∑ a,
         (β a * (principalPlaneCosine U V (Fin.castLE (by omega) a) : 𝕜)) •
           directRotation U V hacute (u' a) := by
       rw [← hβ, map_sum]
@@ -136,12 +136,12 @@ theorem principalPlaneChord_le_singularValues_restrictedDisplacement
       intro a c
       rw [(directRotation U V hacute).inner_map_map]
       exact orthonormal_iff_ite.mp hu'on a c
-    have hPVnorm : ‖projection V x‖ ^ 2 = ∑ a,
+    have hPVnorm : ‖V.starProjection.toLinearMap x‖ ^ 2 = ∑ a,
         ‖β a * (principalPlaneCosine U V (Fin.castLE (by omega) a) : 𝕜)‖ ^ 2 := by
       rw [hPV]
       exact norm_sq_sum_smul_orthonormal hRon _
     -- Uniform cosine bound on the span.
-    have hcos : ‖projection V x‖ ^ 2 ≤ principalPlaneCosine U V i ^ 2 := by
+    have hcos : ‖V.starProjection.toLinearMap x‖ ^ 2 ≤ principalPlaneCosine U V i ^ 2 := by
       rw [hPVnorm]
       calc ∑ a, ‖β a * (principalPlaneCosine U V (Fin.castLE (by omega) a) : 𝕜)‖ ^ 2
           ≤ ∑ a, principalPlaneCosine U V i ^ 2 * ‖β a‖ ^ 2 := by
@@ -163,9 +163,9 @@ theorem principalPlaneChord_le_singularValues_restrictedDisplacement
                   exact pow_le_pow_left₀ h0 hmono 2
         _ = principalPlaneCosine U V i ^ 2 := by
             rw [← Finset.mul_sum, hxnorm2, mul_one]
-    have hPVle : ‖projection V x‖ ≤ principalPlaneCosine U V i := by
+    have hPVle : ‖V.starProjection.toLinearMap x‖ ≤ principalPlaneCosine U V i := by
       have h0 : 0 ≤ principalPlaneCosine U V i := Real.sqrt_nonneg _
-      nlinarith [norm_nonneg (projection V x)]
+      nlinarith [norm_nonneg (V.starProjection.toLinearMap x)]
     -- `W x` is a unit vector of `V`.
     have hWxV : W x ∈ V := by
       rw [← hmap]
@@ -173,12 +173,12 @@ theorem principalPlaneChord_le_singularValues_restrictedDisplacement
     have hWxnorm : ‖W x‖ = 1 := by rw [W.norm_map, hxnorm]
     -- Expand the squared displacement.
     have hre : RCLike.re ⟪x, W x⟫_𝕜 ≤ principalPlaneCosine U V i := by
-      have h1 : ⟪x, W x⟫_𝕜 = ⟪projection V x, W x⟫_𝕜 := by
+      have h1 : ⟪x, W x⟫_𝕜 = ⟪V.starProjection.toLinearMap x, W x⟫_𝕜 := by
         rw [projection_inner_left_eq_right, projection_apply_of_mem hWxV]
-      calc RCLike.re ⟪x, W x⟫_𝕜 = RCLike.re ⟪projection V x, W x⟫_𝕜 := by rw [h1]
-        _ ≤ ‖⟪projection V x, W x⟫_𝕜‖ := RCLike.re_le_norm _
-        _ ≤ ‖projection V x‖ * ‖W x‖ := norm_inner_le_norm _ _
-        _ = ‖projection V x‖ := by rw [hWxnorm, mul_one]
+      calc RCLike.re ⟪x, W x⟫_𝕜 = RCLike.re ⟪V.starProjection.toLinearMap x, W x⟫_𝕜 := by rw [h1]
+        _ ≤ ‖⟪V.starProjection.toLinearMap x, W x⟫_𝕜‖ := RCLike.re_le_norm _
+        _ ≤ ‖V.starProjection.toLinearMap x‖ * ‖W x‖ := norm_inner_le_norm _ _
+        _ = ‖V.starProjection.toLinearMap x‖ := by rw [hWxnorm, mul_one]
         _ ≤ principalPlaneCosine U V i := hPVle
     have hexpand : ‖x - W x‖ ^ 2 = 2 - 2 * RCLike.re ⟪x, W x⟫_𝕜 := by
       rw [@norm_sub_sq 𝕜, hxnorm, hWxnorm]
@@ -206,13 +206,13 @@ theorem singularValues_restrictedDisplacement_directRotation
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : Submodule.IsAcute U V) (n : ℕ) :
     ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
-        projection U).singularValues n =
+        U.starProjection.toLinearMap).singularValues n =
       if hn : n < nontrivialAngleCount U V then
         principalPlaneChord U V ⟨n, hn⟩ else 0 := by
   classical
   set m := nontrivialAngleCount U V with hm
   set AR := (LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
-    projection U with hAR
+    U.starProjection.toLinearMap with hAR
   have hmE : m ≤ finrank 𝕜 E := nontrivialAngleCount_le_finrank U V
   -- Eigenvector family: the source vectors, then an orthonormal completion.
   set v : Fin (finrank 𝕜 E) → E := fun k =>
@@ -255,9 +255,10 @@ theorem singularValues_restrictedDisplacement_directRotation
   -- The Gram operator of the restricted displacement.
   have hgramfull := adjoint_comp_displacement_directRotation U V hacute
   have hgram : AR.adjoint ∘ₗ AR =
-      projection U ∘ₗ ((2 : 𝕜) • (LinearMap.id -
-        LinearMap.operatorAbs (canonicalIntertwiner U V))) ∘ₗ projection U := by
-    rw [hAR, LinearMap.adjoint_comp, projection_adjoint, ← hgramfull]
+      U.starProjection.toLinearMap ∘ₗ ((2 : 𝕜) • (LinearMap.id -
+        LinearMap.operatorAbs (canonicalIntertwiner U V))) ∘ₗ U.starProjection.toLinearMap := by
+    rw [hAR, LinearMap.adjoint_comp, (Submodule.starProjection_isSymmetric _).adjoint_eq, ←
+        hgramfull]
     ext x
     simp only [LinearMap.comp_apply]
   have hdiag : ∀ k, (AR.adjoint ∘ₗ AR) (b k) = ((μ k : ℝ) : 𝕜) • b k := by
@@ -297,8 +298,9 @@ theorem singularValues_restrictedDisplacement_directRotation
           exact hk hval
         rw [← hbu]
         exact b.orthonormal.inner_eq_zero hne
-      have hPmem : projection U (b k) ∈ U := U.starProjection_apply_mem _
-      have hPperp : ∀ i, ⟪principalSourceVector U V i, projection U (b k)⟫_𝕜 = 0 := by
+      have hPmem : U.starProjection.toLinearMap (b k) ∈ U := U.starProjection_apply_mem _
+      have hPperp : ∀ i, ⟪principalSourceVector U V i, U.starProjection.toLinearMap (b k)⟫_𝕜 = 0
+          := by
         intro i
         have := projection_inner_left_eq_right U (principalSourceVector U V i) (b k)
         rw [projection_apply_of_mem (principalSourceVector_mem U V hacute i)] at this
@@ -330,8 +332,8 @@ theorem singularValues_restrictedDisplacement_le
     (hacute : Submodule.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) (n : ℕ) :
     ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
-        projection U).singularValues n ≤
-      ((LinearMap.id - W.toLinearMap) ∘ₗ projection U).singularValues n := by
+        U.starProjection.toLinearMap).singularValues n ≤
+      ((LinearMap.id - W.toLinearMap) ∘ₗ U.starProjection.toLinearMap).singularValues n := by
   rw [singularValues_restrictedDisplacement_directRotation U V hacute n]
   split_ifs with hn
   · exact principalPlaneChord_le_singularValues_restrictedDisplacement
@@ -346,8 +348,8 @@ theorem kyFanSum_restrictedDisplacement_le
     (hacute : Submodule.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) (k : ℕ) :
     ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
-        projection U).kyFanSum k ≤
-      ((LinearMap.id - W.toLinearMap) ∘ₗ projection U).kyFanSum k := by
+        U.starProjection.toLinearMap).kyFanSum k ≤
+      ((LinearMap.id - W.toLinearMap) ∘ₗ U.starProjection.toLinearMap).kyFanSum k := by
   simp only [LinearMap.kyFanSum_def]
   exact Finset.sum_le_sum fun i _ =>
     singularValues_restrictedDisplacement_le U V hacute W hmap i
@@ -364,8 +366,8 @@ theorem uiNorm_restrictedDisplacement_le
     (hacute : Submodule.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     N ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
-        projection U) ≤
-      N ((LinearMap.id - W.toLinearMap) ∘ₗ projection U) :=
+        U.starProjection.toLinearMap) ≤
+      N ((LinearMap.id - W.toLinearMap) ∘ₗ U.starProjection.toLinearMap) :=
   N.map_le_of_kyFanSum_le (fun k => by
     exact
       kyFanSum_restrictedDisplacement_le U V hacute W hmap k)

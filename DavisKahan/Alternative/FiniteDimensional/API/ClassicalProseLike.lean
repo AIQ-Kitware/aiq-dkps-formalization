@@ -278,8 +278,8 @@ structure ProjectorDifferenceGapClassicalProseLike (A B : E →ₗ[𝕜] E)
     (U W : Submodule 𝕜 E) (c g ε : ℝ) : Prop where
   A_symm : A.IsSymmetric
   B_symm : B.IsSymmetric
-  U_reduces : IsInvariant A U
-  W_reduces : IsInvariant B W
+  U_reduces : (U ∈ Module.End.invtSubmodule A)
+  W_reduces : (W ∈ Module.End.invtSubmodule B)
   gap_pos : 0 < g
   U_high : Module.End.PointSpectrumIn A U (Set.Ici (c + g))
   Uperp_low : Module.End.PointSpectrumIn A Uᗮ (Set.Iic c)

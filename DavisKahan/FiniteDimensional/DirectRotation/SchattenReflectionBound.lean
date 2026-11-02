@@ -102,7 +102,8 @@ theorem two_rpow_mul_sum_sin_le_selfAdjoint_transport_complex
     ring
   calc
     _ = (2 : ℝ) ^ (p.toReal - 1) *
-        UnitarilyInvariantSeminorm.nuclear ℂ E E (projection P - projection Q) := by
+        UnitarilyInvariantSeminorm.nuclear ℂ E E (P.starProjection.toLinearMap -
+            Q.starProjection.toLinearMap) := by
       rw [htrace, hpow]
       ring
     _ ≤ (2 : ℝ) ^ (p.toReal - 1) * UnitarilyInvariantSeminorm.nuclear ℂ E E

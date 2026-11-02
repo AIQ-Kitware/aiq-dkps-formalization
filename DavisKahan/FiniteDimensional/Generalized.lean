@@ -72,7 +72,7 @@ whitened coordinate operator `T M T⁻¹`, which is the operator that actually
 occurs in the normalized Sylvester equation. -/
 theorem generalizedSinTheta_frobenius_le_of_spectralDistance
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : (V ∈ Module.End.invtSubmodule A))
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
     {M : F →ₗ[𝕜] F}
     (hM : (whitenedCoordinateOperator X hX M).IsSymmetric)
@@ -114,7 +114,7 @@ theorem generalizedSinTheta_frobenius_le_of_spectralDistance
 /-- Nuclear fallback obtained from Theorem 6.2 and finite Cauchy--Schwarz. -/
 theorem generalizedSinTheta_nuclear_le_of_spectralDistance
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : (V ∈ Module.End.invtSubmodule A))
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
     {M : F →ₗ[𝕜] F}
     (hM : (whitenedCoordinateOperator X hX M).IsSymmetric)
@@ -158,7 +158,7 @@ theorem generalizedSinTheta_nuclear_le_of_spectralDistance
 theorem generalizedTanTheta_residual_le
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : IsInvariant A V)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : (V ∈ Module.End.invtSubmodule A))
     (X : F →ₗ[𝕜] E) (hX : Function.Injective X)
     (_hdim : finrank 𝕜 F ≤ finrank 𝕜 V)
     (_htrans : Disjoint
@@ -175,7 +175,7 @@ theorem generalizedTanTheta_residual_le
 theorem generalizedSinTwoTheta_unequalFinrank
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
     δ * N (sinTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) :=

@@ -183,17 +183,17 @@ private theorem norm_apply_le_of_opNorm_le {H : E →ₗ[𝕜] E} {ε : ℝ}
 theorem sinTwoTheta_eigenvector_product_le
     {A H : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : IsInvariant A U) {a b ε lam : ℝ} (_hab : a < b)
+    (hU : (U ∈ Module.End.invtSubmodule A)) {a b ε lam : ℝ} (_hab : a < b)
     (hupper : ∀ z ∈ Uᗮ, RCLike.re ⟪A z, z⟫_𝕜 ≤ a * ‖z‖ ^ 2)
     (hlower : ∀ y ∈ U, b * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜)
     {x : E} (hx : ‖x‖ = 1) (heig : (A + H) x = (lam : 𝕜) • x)
     (hHnorm : ‖H.toContinuousLinearMap‖ ≤ ε) :
-    (b - a) * ‖projection U x‖ * ‖complementaryProjection U x‖ ≤ ε := by
+    (b - a) * ‖U.starProjection.toLinearMap x‖ * ‖Uᗮ.starProjection.toLinearMap x‖ ≤ ε := by
   have hHbound : ∀ v : E, ‖H v‖ ≤ ε * ‖v‖ :=
     norm_apply_le_of_opNorm_le hHnorm
   have heig' : A x + H x = (lam : 𝕜) • x := by
     simpa using heig
-  simpa [projection, complementaryProjection, mul_assoc] using
+  simpa [ContinuousLinearMap.coe_coe, mul_assoc] using
     hA.sin_two_theta_le hH hU hlower hupper hHbound hx heig'
 
 /-- Vanishing-pinch product estimate, the 1963 ancestor of `tan 2Θ`.
@@ -201,20 +201,20 @@ theorem sinTwoTheta_eigenvector_product_le
 theorem tanTwoTheta_eigenvector_product_le
     {A H : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hH : H.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : IsInvariant A U) (hoff : IsOffDiagonal U H)
+    (hU : (U ∈ Module.End.invtSubmodule A)) (hoff : IsOffDiagonal U H)
     {a b ε lam : ℝ} (_hab : a < b)
     (hupper : ∀ z ∈ Uᗮ, RCLike.re ⟪A z, z⟫_𝕜 ≤ a * ‖z‖ ^ 2)
     (hlower : ∀ y ∈ U, b * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜)
     {x : E} (_hx : ‖x‖ = 1) (heig : (A + H) x = (lam : 𝕜) • x)
     (hHnorm : ‖H.toContinuousLinearMap‖ ≤ ε) :
-    (b - a) * ‖projection U x‖ * ‖complementaryProjection U x‖ ≤
-      |‖projection U x‖ ^ 2 - ‖complementaryProjection U x‖ ^ 2| * ε := by
+    (b - a) * ‖U.starProjection.toLinearMap x‖ * ‖Uᗮ.starProjection.toLinearMap x‖ ≤
+      |‖U.starProjection.toLinearMap x‖ ^ 2 - ‖Uᗮ.starProjection.toLinearMap x‖ ^ 2| * ε := by
   have hHbound : ∀ v : E, ‖H v‖ ≤ ε * ‖v‖ :=
     norm_apply_le_of_opNorm_le hHnorm
   obtain ⟨hHU, hHUperp⟩ := inner_blocks_eq_zero_of_isOffDiagonal U H hoff
   have heig' : A x + H x = (lam : 𝕜) • x := by
     simpa using heig
-  simpa [projection, complementaryProjection, mul_assoc] using
+  simpa [ContinuousLinearMap.coe_coe, mul_assoc] using
     hA.tan_two_theta_le hH hU hlower hupper hHbound hHU hHUperp heig'
 
 end DavisKahan.FiniteDimensional
