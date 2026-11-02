@@ -52,9 +52,9 @@ theorem approximationNumber_comp_contractions_le
     ((L ∘L T ∘L R).singularValue n : ℝ) ≤ (T.singularValue n : ℝ) := by
   have h1 : ((L ∘L T ∘L R).singularValue n : ℝ) ≤
       ‖L‖ * ((T ∘L R).singularValue n : ℝ) :=
-    ContinuousLinearMap.approximationNumber_comp_le_norm_mul L (T ∘L R) n
+    (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_left L (T ∘L R) n))
   have h2 : ((T ∘L R).singularValue n : ℝ) ≤ (T.singularValue n : ℝ) * ‖R‖ :=
-    T.approximationNumber_comp_le_mul_norm R n
+    (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right T R n))
   have hTn : 0 ≤ (T.singularValue n : ℝ) := (T.singularValue n).coe_nonneg
   have hTRn : 0 ≤ ((T ∘L R).singularValue n : ℝ) :=
     ((T ∘L R).singularValue n).coe_nonneg

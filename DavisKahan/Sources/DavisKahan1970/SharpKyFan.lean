@@ -103,7 +103,7 @@ theorem selected_doubleAngleTangent_le_kyFan_add_error
   have hs0 : ∀ i : Fin F.count, 0 ≤ (X.singularValue i : ℝ) :=
     fun i => (X.singularValue i).coe_nonneg
   have hsr : ∀ i : Fin F.count, (X.singularValue i : ℝ) ≤ r :=
-    fun i => (X.approximationNumber_le_norm i).trans hXr
+    fun i => ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm X i))).trans hXr
   have hs1 : ∀ i : Fin F.count, (X.singularValue i : ℝ) < 1 :=
     fun i => (hsr i).trans_lt hr1
   have hpoint : ∀ i : Fin F.count,

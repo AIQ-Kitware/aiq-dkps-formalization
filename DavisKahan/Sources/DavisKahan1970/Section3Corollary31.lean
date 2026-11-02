@@ -273,7 +273,7 @@ theorem compactAngleEigenvalueList_genericCosineBlock_le_one
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (n : ℕ) :
     compactAngleEigenvalueList (genericCosineBlock U V) n ≤ 1 :=
-  le_trans (ContinuousLinearMap.approximationNumber_le_norm _ n)
+  le_trans ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm _ n)))
     (norm_genericCosineBlock_le_one U V)
 
 /-- **Davis--Kahan 1970, Corollary 3.1, on the source's own invariant.**

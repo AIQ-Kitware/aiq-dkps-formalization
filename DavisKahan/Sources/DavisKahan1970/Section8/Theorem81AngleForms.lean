@@ -267,7 +267,7 @@ theorem cos_arccos_approximationNumber_cosineBlock [FiniteDimensional 𝕜 H]
       ((cosineBlock P Q).singularValue i : ℝ) :=
   Real.cos_arccos
     (by linarith [((cosineBlock P Q).singularValue i).coe_nonneg])
-    ((ContinuousLinearMap.approximationNumber_le_norm _ i).trans
+    (((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm _ i))).trans
       (norm_cosineBlock_le_one P Q))
 
 omit [CompleteSpace H] in
@@ -280,7 +280,7 @@ theorem norm_cosineBlock_eq_principalCosines_zero [FiniteDimensional 𝕜 H]
     (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] :
     ‖cosineBlock P Q‖ = Submodule.principalCosines Pᗮ Qᗮ 0 := by
   rw [← approximationNumber_cosineBlock_eq_principalCosines,
-    ContinuousLinearMap.approximationNumber_index_zero]
+    ContinuousLinearMap.singularValue_zero, coe_nnnorm]
 
 omit [CompleteSpace H] in
 /-- The lower companion: `‖C₀‖₁` is the largest principal cosine of `(P, Q)`. -/
@@ -288,7 +288,7 @@ theorem norm_lowerCosineBlock_eq_principalCosines_zero [FiniteDimensional 𝕜 H
     (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] :
     ‖lowerCosineBlock P Q‖ = Submodule.principalCosines P Q 0 := by
   rw [← approximationNumber_lowerCosineBlock_eq_principalCosines,
-    ContinuousLinearMap.approximationNumber_index_zero]
+    ContinuousLinearMap.singularValue_zero, coe_nnnorm]
 
 end Generic
 

@@ -81,7 +81,7 @@ private theorem orthonormal_polar_comp
 omit [CompleteSpace E0] [CompleteSpace E1] in
 private theorem approximationNumber_le_norm_local (T : E0 →L[ℂ] E1) (n : ℕ) :
     (T.singularValue n : ℝ) ≤ ‖T‖ :=
-  T.approximationNumber_le_norm n
+  (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm T n))
 
 /-- A uniform error coefficient for the actual-tangent approximate-pair
 calculation.  It is deliberately generous: only finiteness and nonnegativity

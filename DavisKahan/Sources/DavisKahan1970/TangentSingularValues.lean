@@ -106,7 +106,7 @@ theorem approximationNumber_sinAngleOperatorC (n : ℕ) :
   have hneg : U.starProjection - V.starProjection =
       ((-1 : ℂ)) • (V.starProjection - U.starProjection) := by
     module
-  rw [hneg, ContinuousLinearMap.approximationNumber_smul]
+  rw [hneg, ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm]
   simp
 
 end SingleAngle
@@ -243,7 +243,7 @@ theorem approximationNumber_projectorDifference_lt_one
     (((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
       U.starProjection).singularValue n : ℝ) < 1 := by
   rw [← approximationNumber_sinTwoAngleOperatorC U V n]
-  exact lt_of_le_of_lt (ContinuousLinearMap.approximationNumber_le_norm _ n)
+  exact lt_of_le_of_lt ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm _ n)))
     (norm_sinTwoAngleOperatorC_lt_one U V hcos)
 
 end DoubleAngle

@@ -99,8 +99,6 @@ topics:
 - id: T09
   title: Approximation numbers
   modules:
-  - SetTheory.Cardinal.Lift
-  - LinearAlgebra.Dimension.RankComp
   - Analysis.InnerProductSpace.Spectral.Cutoff
   - Analysis.OperatorIdeal.ApproximationNumber.Basic
   - Analysis.OperatorIdeal.ApproximationNumber.Adjoint
@@ -351,8 +349,6 @@ rungs:
   title: Rectangular approximation numbers
   seeds:
   - Analysis.OperatorIdeal.ApproximationNumber.Basic
-  - LinearAlgebra.Dimension.RankComp
-  - SetTheory.Cardinal.Lift
 - id: D
   title: Ky Fan majorization and unitarily invariant seminorms
   seeds:
@@ -447,8 +443,6 @@ rungs:
   - Analysis.OperatorIdeal.Family.Schatten
   - Topology.ENNRealLiminf
   - Analysis.OperatorIdeal.Family.TraceClass
-  - LinearAlgebra.Dimension.RankComp
-  - SetTheory.Cardinal.Lift
 - id: H
   title: Hilbert-Schmidt operators (T11)
   seeds:

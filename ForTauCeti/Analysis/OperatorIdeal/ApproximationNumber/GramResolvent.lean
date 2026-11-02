@@ -202,7 +202,8 @@ theorem approximationNumber_le_of_gramResolvent
       (X.singularValue n : ℝ) ^ 2 / (1 - (X.singularValue n : ℝ) ^ 2) := by
   set a : ℝ := (X.singularValue n : ℝ) with hadef
   have ha0 : 0 ≤ a := (X.singularValue n).coe_nonneg
-  have ha1 : a < 1 := lt_of_le_of_lt (X.approximationNumber_le_norm n) hX
+  have ha1 : a < 1 := lt_of_le_of_lt ((NNReal.coe_le_coe.mpr
+      (ContinuousLinearMap.singularValue_le_nnnorm X n))) hX
   have key : ∀ r : ℝ, a < r → r < 1 → (T.singularValue n : ℝ) ≤ r ^ 2 / (1 - r ^ 2) := by
     intro r hr hr1
     have hr0 : 0 ≤ r := ha0.trans hr.le

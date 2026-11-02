@@ -85,10 +85,9 @@ theorem approximationNumber_adjoint_sandwich_le
   have hleft :
       ((ContinuousLinearMap.adjoint C ∘L M ∘L C).singularValue n : ℝ) ≤
         ‖ContinuousLinearMap.adjoint C‖ * ((M ∘L C).singularValue n : ℝ) :=
-    ContinuousLinearMap.approximationNumber_comp_le_norm_mul
-      (ContinuousLinearMap.adjoint C) (M ∘L C) n
+    (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_left (ContinuousLinearMap.adjoint C) (M ∘L C) n))
   have hright : ((M ∘L C).singularValue n : ℝ) ≤ (M.singularValue n : ℝ) * ‖C‖ :=
-    ContinuousLinearMap.approximationNumber_comp_le_mul_norm M C n
+    (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right M C n))
   have hadj : ‖ContinuousLinearMap.adjoint C‖ = ‖C‖ :=
     ContinuousLinearMap.adjoint.norm_map C
   calc ((ContinuousLinearMap.adjoint C ∘L M ∘L C).singularValue n : ℝ)

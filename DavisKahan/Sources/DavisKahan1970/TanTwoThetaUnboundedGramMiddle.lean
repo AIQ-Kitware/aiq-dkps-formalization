@@ -769,7 +769,7 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
     nlinarith [norm_nonneg (reflectionSineCorner U Z),
       norm_nonneg (cutoffCorner Ω)]
   have har : ∀ p, (X.singularValue p : ℝ) ≤ r :=
-    fun p => le_trans (X.approximationNumber_le_norm p) hXnorm
+    fun p => le_trans ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm X p))) hXnorm
   have ha0 : ∀ p, 0 ≤ (X.singularValue p : ℝ) :=
     fun p => (X.singularValue p).coe_nonneg
   have htan : ∀ s : ℝ, 0 ≤ s → s ≤ r →

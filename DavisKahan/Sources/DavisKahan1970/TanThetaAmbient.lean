@@ -976,7 +976,7 @@ theorem approximationNumber_directedSineAmbient_le (n : ℕ) :
       ContinuousLinearMap.comp_assoc]
     congr 1
   rw [hfactor]
-  refine le_trans (ContinuousLinearMap.approximationNumber_comp_le_mul_norm _ _ n) ?_
+  refine le_trans ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right _ _ n))) ?_
   have h1 : ‖U.orthogonalProjectionOnto‖ ≤ (1 : ℝ) := U.orthogonalProjectionOnto_norm_le
   have h0 : 0 ≤ ((theorem63DirectedSineBlock U V).singularValue n : ℝ) :=
     (ContinuousLinearMap.singularValue _ _).coe_nonneg
@@ -999,7 +999,7 @@ theorem approximationSingularValue_theorem63DirectedSineBlock_lt_one
     exact (Submodule.starProjection_eq_self_iff.mpr x.2).symm
   have hle : ((theorem63DirectedSineBlock U V).singularValue n : ℝ) ≤
       ‖directedSineAmbient U V‖ := by
-    refine le_trans (ContinuousLinearMap.approximationNumber_le_norm _ n) ?_
+    refine le_trans ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm _ n))) ?_
     rw [hfac]
     refine le_trans (ContinuousLinearMap.opNorm_comp_le _ _) ?_
     have h1 : ‖U.subtypeL‖ ≤ (1 : ℝ) := U.norm_subtypeL_le
@@ -1020,7 +1020,7 @@ theorem approximationNumber_lowerCorner_le
   set sig := ((directedSineAmbient U V).singularValue n : ℝ) with hsigdef
   have hsig0 : 0 ≤ sig := (ContinuousLinearMap.singularValue _ _).coe_nonneg
   have hsiglt : sig < 1 :=
-    lt_of_le_of_lt (ContinuousLinearMap.approximationNumber_le_norm _ n)
+    lt_of_le_of_lt ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm _ n)))
       (norm_directedSineAmbient_lt_one htr)
   have hres := approximationNumber_le_of_gramResolvent (directedSineAmbient U V)
     (norm_directedSineAmbient_lt_one htr)
@@ -1073,7 +1073,8 @@ theorem approximationNumber_theorem63Residual_le
     simp only [ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply, hpz,
       sub_apply, map_sub, hAz, sub_zero]
   rw [hfac]
-  refine le_trans (ContinuousLinearMap.approximationNumber_comp_le_mul_norm _ _ n) ?_
+  refine le_trans ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right _ _ n))) ?_
+  simp only [NNReal.coe_mul, coe_nnnorm]
   have h1 : ‖U.subtypeL‖ ≤ (1 : ℝ) := U.norm_subtypeL_le
   have h0 : 0 ≤ ((projectionBlock Uᗮ U (T - A)).singularValue n : ℝ) :=
     (ContinuousLinearMap.singularValue _ _).coe_nonneg
@@ -1232,7 +1233,7 @@ theorem norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent
       hCompressionUpper hUnwantedLower 0
   have hambient : ‖directedSineAmbient U V‖ < 1 := by
     have h := approximationNumber_directedSineAmbient_le (U := U) (V := V) 0
-    rw [(directedSineAmbient U V).approximationNumber_index_zero] at h
+    rw [((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (directedSineAmbient U V))).trans (coe_nnnorm (directedSineAmbient U V)))] at h
     exact lt_of_le_of_lt h hdirected
   rw [norm_sinAngleOperatorC U V,
     DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent

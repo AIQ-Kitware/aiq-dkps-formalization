@@ -183,7 +183,7 @@ theorem sameApproximationSingularValues_comp_reflection_right
     calc ((T ∘L U.reflectionOperator).singularValue n : ℝ)
         ≤ (T.singularValue n : ℝ) *
             ‖(U.reflectionOperator : E →L[𝕜] E)‖ :=
-          T.approximationNumber_comp_le_mul_norm _ n
+          (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right T _ n))
       _ ≤ (T.singularValue n : ℝ) * 1 := by
         exact mul_le_mul_of_nonneg_left hnn ((T.singularValue n).coe_nonneg)
       _ = (T.singularValue n : ℝ) := mul_one _
@@ -220,7 +220,7 @@ theorem sameApproximationSingularValues_comp_reflection_left
     calc ((U.reflectionOperator ∘L T).singularValue n : ℝ)
         ≤ ‖(U.reflectionOperator : E →L[𝕜] E)‖ *
             (T.singularValue n : ℝ) :=
-          ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ T n
+          (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_left _ T n))
       _ ≤ 1 * (T.singularValue n : ℝ) := by
         exact mul_le_mul_of_nonneg_right hnn ((T.singularValue n).coe_nonneg)
       _ = (T.singularValue n : ℝ) := one_mul _

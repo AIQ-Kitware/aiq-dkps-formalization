@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 public import Mathlib.Analysis.Complex.Basic
 
 /-!
@@ -86,7 +86,8 @@ theorem approximationNumber_le_of_leadingCount_le
   unfold leadingCount at hcount
   split_ifs at hcount with h
   · have hcut : (X.singularValue (Nat.find h) : ℝ) ≤ ε := (Nat.find_spec h).2
-    exact (X.approximationNumber_antitone hcount).trans hcut
+    exact ((NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue X))
+        hcount).trans hcut
   · exact False.elim ((not_lt_of_ge hcount) hnk)
 
 end

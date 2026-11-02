@@ -52,7 +52,8 @@ theorem approxSeq_antitone {E F : Type*}
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) : Antitone (approxSeq A) := by
   intro m n hmn
-  exact ENNReal.ofReal_le_ofReal (A.approximationNumber_antitone hmn)
+  exact ENNReal.ofReal_le_ofReal ((NNReal.coe_mono.comp_antitone
+      (ContinuousLinearMap.antitone_singularValue A)) hmn)
 
 /-- Equal symmetric-gauge values on all bounded Hilbert-space maps determine the extensions on
 antitone nonnegative sequences. Bounded sequences are realized by diagonal operators; an

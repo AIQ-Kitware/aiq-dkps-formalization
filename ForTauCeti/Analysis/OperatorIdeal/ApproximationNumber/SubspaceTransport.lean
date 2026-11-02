@@ -111,7 +111,7 @@ theorem sameSingularValues_extendDomainByZero
     refine le_antisymm ?_ ?_
     · calc ((T ∘L U.subtypeL.adjoint).singularValue n : ℝ)
           ≤ (T.singularValue n : ℝ) * ‖U.subtypeL.adjoint‖ :=
-            T.approximationNumber_comp_le_mul_norm _ n
+            (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right T _ n))
         _ ≤ (T.singularValue n : ℝ) * 1 := by
             gcongr
             exact norm_adjoint_subtypeL_le_one U
@@ -120,7 +120,8 @@ theorem sameSingularValues_extendDomainByZero
           = (((T ∘L U.subtypeL.adjoint) ∘L U.subtypeL).singularValue n : ℝ) := by
             rw [hfactor]
         _ ≤ ((T ∘L U.subtypeL.adjoint).singularValue n : ℝ) * ‖U.subtypeL‖ :=
-            (T ∘L U.subtypeL.adjoint).approximationNumber_comp_le_mul_norm _ n
+            (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right (T ∘L
+                U.subtypeL.adjoint) _ n))
         _ ≤ ((T ∘L U.subtypeL.adjoint).singularValue n : ℝ) * 1 := by
             gcongr
             exact norm_subtypeL_le_one U
@@ -145,7 +146,7 @@ theorem sameSingularValues_includeCodomain
     refine le_antisymm ?_ ?_
     · calc ((V.subtypeL ∘L T).singularValue n : ℝ)
           ≤ ‖V.subtypeL‖ * (T.singularValue n : ℝ) :=
-            ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ T n
+            (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_left _ T n))
         _ ≤ 1 * (T.singularValue n : ℝ) := by
             gcongr
             exact norm_subtypeL_le_one V
@@ -154,7 +155,7 @@ theorem sameSingularValues_includeCodomain
           = ((V.subtypeL.adjoint ∘L (V.subtypeL ∘L T)).singularValue n : ℝ) := by
             rw [hfactor]
         _ ≤ ‖V.subtypeL.adjoint‖ * ((V.subtypeL ∘L T).singularValue n : ℝ) :=
-            ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ _ n
+            (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_left _ _ n))
         _ ≤ 1 * ((V.subtypeL ∘L T).singularValue n : ℝ) := by
             gcongr
             exact norm_adjoint_subtypeL_le_one V
@@ -184,14 +185,14 @@ theorem sameSingularValues_comp_right
     simp only [ContinuousLinearMap.comp_apply, hinv]
   refine le_antisymm ?_ ?_
   · calc ((T ∘L J).singularValue n : ℝ) ≤ (T.singularValue n : ℝ) * ‖J‖ :=
-        T.approximationNumber_comp_le_mul_norm _ n
+        (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right T _ n))
       _ ≤ (T.singularValue n : ℝ) * 1 := by
           gcongr
       _ = (T.singularValue n : ℝ) := mul_one _
   · calc (T.singularValue n : ℝ)
         = (((T ∘L J) ∘L J').singularValue n : ℝ) := by rw [hfactor]
       _ ≤ ((T ∘L J).singularValue n : ℝ) * ‖J'‖ :=
-          (T ∘L J).approximationNumber_comp_le_mul_norm _ n
+          (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right (T ∘L J) _ n))
       _ ≤ ((T ∘L J).singularValue n : ℝ) * 1 := by
           gcongr
       _ = ((T ∘L J).singularValue n : ℝ) := mul_one _

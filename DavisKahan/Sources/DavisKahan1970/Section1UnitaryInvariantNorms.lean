@@ -102,7 +102,7 @@ theorem equation1_12_gauge_comp_starProjection_le
   refine Finset.sum_le_sum fun n _ => ?_
   calc ((K ∘L Ω.starProjection).singularValue n : ℝ)
       ≤ (K.singularValue n : ℝ) * ‖Ω.starProjection‖ :=
-        K.approximationNumber_comp_le_mul_norm _ n
+        (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right K _ n))
     _ ≤ (K.singularValue n : ℝ) * 1 :=
         mul_le_mul_of_nonneg_left Ω.starProjection_norm_le ((K.singularValue n).coe_nonneg)
     _ = (K.singularValue n : ℝ) := mul_one _
@@ -118,8 +118,8 @@ theorem equation1_13_gauge_starProjection_comp_le
       ≤ kyFanApproximationGauge ν K := by
   simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGaugeReal_eq_sum]
   refine Finset.sum_le_sum fun n _ => ?_
-  have h := ContinuousLinearMap.approximationNumber_comp_comp_le
-    Υ.starProjection K Ω.starProjection n
+  have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le Υ.starProjection K Ω.starProjection n))
+  simp only [NNReal.coe_mul, coe_nnnorm] at h
   have h0 := (K.singularValue n).coe_nonneg
   have hΥ : ‖Υ.starProjection‖ ≤ 1 := Υ.starProjection_norm_le
   have hΩ : ‖Ω.starProjection‖ ≤ 1 := Ω.starProjection_norm_le

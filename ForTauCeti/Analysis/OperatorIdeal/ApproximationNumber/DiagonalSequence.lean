@@ -11,7 +11,7 @@ module
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import Mathlib.Analysis.Normed.Lp.lpHolder
 public import Mathlib.Analysis.InnerProductSpace.l2Space
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax
@@ -211,7 +211,8 @@ theorem tendsto_approximationNumber_diagOpLp (c : ℕ → 𝕜) {K : ℝ} (hK : 
   have hadm : (truncDiagOpLp c N hK hc).rank ≤ (n : Cardinal) :=
     (rank_truncDiagOpLp_le c N hK hc).trans (by exact_mod_cast hn)
   have hbound : ((diagOpLp c hK hc).singularValue n : ℝ) ≤ ε / 2 :=
-    ((diagOpLp c hK hc).approximationNumber_le_norm_sub hadm).trans
+    ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm_sub (diagOpLp c hK hc)
+        hadm))).trans
       (norm_sub_truncDiagOpLp_le c N hK hc (half_pos hε).le htail)
   rw [Real.dist_eq, sub_zero,
     abs_of_nonneg (((diagOpLp c hK hc).singularValue n).coe_nonneg)]
@@ -246,7 +247,8 @@ theorem approximationNumber_diagOpLp_le (c : ℕ → 𝕜) {K : ℝ} (hK : 0 ≤
     (hc : ∀ i, ‖c i‖ ≤ K) (hanti : Antitone fun i => ‖c i‖) (n : ℕ) :
     ((diagOpLp c hK hc).singularValue n : ℝ) ≤ ‖c n‖ := by
   refine le_trans
-    (ContinuousLinearMap.approximationNumber_le_norm_sub _ (rank_truncDiagOpLp_le c n hK hc)) ?_
+    ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm_sub _
+        (rank_truncDiagOpLp_le c n hK hc)))) ?_
   exact norm_sub_truncDiagOpLp_le c n hK hc (norm_nonneg _) fun i hi => hanti hi
 
 /-- Coordinates beyond `n` vanish on the span of the first `n + 1` basis vectors. -/

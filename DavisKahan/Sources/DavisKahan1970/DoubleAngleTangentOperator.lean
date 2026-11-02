@@ -644,7 +644,7 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
   classical
   let a := (X.singularValue n : ℝ)
   have ha0 : 0 ≤ a := (X.singularValue n).coe_nonneg
-  have ha1 : a < 1 := (X.approximationNumber_le_norm n).trans_lt hcontractive
+  have ha1 : a < 1 := ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm X n))).trans_lt hcontractive
   obtain ⟨v, hav, hv1, hfv⟩ := exists_gt_doubleAngleTangent_lt_add ha0 ha1 hε
   let u : ℝ := (a + v) / 2
   have hau : a < u := by dsimp only [u]; linarith
@@ -660,7 +660,9 @@ theorem exists_rank_le_norm_doubleAngleTangent_sub_lt
       rank_gramProjection_Ioi_le_natCast_of_approximationNumber_lt
         X n hu0 hau
   have hRrank : R.rank ≤ (n : Cardinal) :=
-    ContinuousLinearMap.rank_comp_le_natCast_right P T hPrank
+    (Cardinal.lift_le_nat_iff.mp
+      ((LinearMap.lift_rank_comp_le_right P.toLinearMap T.toLinearMap).trans
+        (Cardinal.lift_le_nat_iff.mpr hPrank)))
   have hQeq : Q = ContinuousLinearMap.id ℂ E0 - P := by
     dsimp only [Q, P, PVM]
     simpa only [Set.compl_Ioi] using
@@ -823,9 +825,9 @@ theorem doubleAngleTangent_approximationNumber_le
     have hpair := fun i : Fin (n + 1) =>
       norm_doubleAngleTangentOperator_apply_sub_le
         X hr0 hr1 hXr ((X.singularValue (i : ℕ)).coe_nonneg)
-        ((X.approximationNumber_le_norm (i : ℕ)).trans hXr) hεpos.le
+        (((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm X (i : ℕ)))).trans hXr) hεpos.le
         (happlyResidual i) (hadjointResidual i)
-    have hanti := X.approximationNumber_antitone
+    have hanti := (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue X))
     have htanmono : ∀ i : Fin (n + 1),
         DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue n : ℝ)) ≤
           DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue i : ℝ)) := by
@@ -833,7 +835,7 @@ theorem doubleAngleTangent_approximationNumber_le
       apply doubleAngleTangent_mono
       · exact (X.singularValue n).coe_nonneg
       · exact hanti (Nat.le_of_lt_succ i.isLt)
-      · exact (X.approximationNumber_le_norm i).trans_lt hcontractive
+      · exact ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm X i))).trans_lt hcontractive
     obtain ⟨coeff, hzCoord⟩ :=
       hrightOrtho.range_synthesisMapIsometry.ge hz
     have hzCoord' : hrightOrtho.synthesisMapIsometry coeff = z := hzCoord
@@ -847,7 +849,7 @@ theorem doubleAngleTangent_approximationNumber_le
     -- this re-derived it by `unfold` and `div_nonneg`.
     have htau0 : 0 ≤ tau0 :=
       DavisKahan.TanTwoTheta.doubleAngleTangent_nonneg ((X.singularValue n).coe_nonneg)
-        ((X.approximationNumber_le_norm n).trans_lt hcontractive)
+        (((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm X n))).trans_lt hcontractive)
     have htauLower : ∀ i : Fin (n + 1), tau0 ≤ tau i := by
       intro i
       exact htanmono i
@@ -904,8 +906,7 @@ theorem approximationNumber_doubleAngleTangentOperator
     intro ε hε
     obtain ⟨R, hRrank, hRnorm⟩ :=
       exists_rank_le_norm_doubleAngleTangent_sub_lt X hcontractive n hε
-    exact ((doubleAngleTangentOperator X hcontractive).approximationNumber_le_norm_sub
-      hRrank).trans hRnorm.le
+    exact ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm_sub (doubleAngleTangentOperator X hcontractive) hRrank))).trans hRnorm.le
   · exact doubleAngleTangent_approximationNumber_le X hcontractive n
 
 /-- Ky Fan prefix of the canonical tangent is the transformed approximation-

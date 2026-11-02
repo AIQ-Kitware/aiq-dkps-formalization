@@ -199,8 +199,9 @@ theorem approximationSingularValue_one_beamTrialBlock_residual_le (ε : ℝ) :
     (((beamTrialBlock ε).residual).singularValue 1 : ℝ) ≤ 0 := by
   have hrank : ((beamTrialBlock ε).residual).rank ≤ ((1 : ℕ) : Cardinal) := by
     simpa using beamTrialBlock_residual_rank_le ε
-  have h := ((beamTrialBlock ε).residual).approximationNumber_le_norm_sub hrank
-  rwa [sub_self, norm_zero] at h
+  exact (congrArg NNReal.toReal
+    (ContinuousLinearMap.singularValue_eq_zero_of_rank_le
+      (T := (beamTrialBlock ε).residual) hrank)).le
 
 /-- **The two-term Ky Fan gauge of the Rayleigh--Ritz residual equals its operator
 norm bound.**  This is the paper's `‖R̂‖₁ = ‖R̂‖₂ = ε/√15`. -/
@@ -211,7 +212,7 @@ theorem kyFanTwo_beamTrialBlock_residual_le (ε : ℝ) :
       ≤ orthogonalResidualSingularValue ε := by
     have hz : (((beamTrialBlock ε).residual).singularValue 0 : ℝ)
         = ‖(beamTrialBlock ε).residual‖ :=
-      ((beamTrialBlock ε).residual).approximationNumber_index_zero
+      ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero ((beamTrialBlock ε).residual))).trans (coe_nnnorm ((beamTrialBlock ε).residual)))
     rw [hz]
     exact norm_beamTrialBlock_residual_le ε
   have h1 := approximationSingularValue_one_beamTrialBlock_residual_le ε

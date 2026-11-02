@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
@@ -80,11 +81,10 @@ variable {E : Type v} {F : Type w}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
-/-- Approximation numbers are unchanged by negation.  Mathlib's staging layer has
-`approximationNumber_smul` but not this special case. -/
+/-- Negation preserves every real singular value. -/
 @[simp] theorem approximationNumber_neg (T : E →L[𝕜] F) (n : ℕ) :
     ((-T).singularValue n : ℝ) = (T.singularValue n : ℝ) := by
-  rw [← neg_one_smul 𝕜 T, approximationNumber_smul]
+  rw [← neg_one_smul 𝕜 T, ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm]
   simp
 
 /-- Ky Fan gauges are unchanged by negation. -/
@@ -108,7 +108,7 @@ variable {E : Type v} {F : Type w}
 theorem kyFanGaugeReal_smul (c : 𝕜) (T : E →L[𝕜] F) (k : ℕ) :
     ((c • T).kyFanGauge k : ℝ) = ‖c‖ * (T.kyFanGauge k : ℝ) := by
   rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
-  simp only [approximationNumber_smul]
+  simp only [ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm]
   rw [Finset.mul_sum]
 
 /-- Ky Fan gauges are nonnegative. -/
@@ -126,7 +126,8 @@ theorem kyFanGaugeReal_comp_le {G : Type x} {H : Type y}
         ≤ ∑ n ∈ Finset.range k, (‖L‖ * (T.singularValue n : ℝ) * ‖R‖) :=
       by
         rw [kyFanGaugeReal_eq_sum]
-        exact Finset.sum_le_sum fun n _ => approximationNumber_comp_comp_le L T R n
+        exact Finset.sum_le_sum fun n _ => (NNReal.coe_le_coe.mpr
+            (ContinuousLinearMap.singularValue_comp_comp_le L T R n))
     _ = ‖L‖ * (T.kyFanGauge k : ℝ) * ‖R‖ := by
       rw [kyFanGaugeReal_eq_sum]
       rw [Finset.mul_sum, Finset.sum_mul]
@@ -135,7 +136,7 @@ theorem kyFanGaugeReal_comp_le {G : Type x} {H : Type y}
 numbers do not: `ι` is a contraction of `F` into `G` and `π` a contractive left inverse,
 the model being the inclusion of `F` as one summand of an `ℓ²` direct sum together with
 the projection back onto it.  See
-`ContinuousLinearMap.approximationNumber_comp_eq_of_leftInverse`. -/
+`ContinuousLinearMap.singularValue_comp_eq_of_leftInverse`. -/
 theorem kyFanGaugeReal_comp_eq_of_leftInverse {G : Type x}
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
     {ι : F →L[𝕜] G} {π : G →L[𝕜] F} (hπι : Function.LeftInverse π ι)
@@ -144,13 +145,13 @@ theorem kyFanGaugeReal_comp_eq_of_leftInverse {G : Type x}
   by
     rw [kyFanGaugeReal_eq_sum, kyFanGaugeReal_eq_sum]
     exact Finset.sum_congr rfl fun n _ =>
-      approximationNumber_comp_eq_of_leftInverse hπι hι hπ T n
+      congrArg NNReal.toReal (singularValue_comp_eq_of_leftInverse hπι hι hπ T n)
 
 /-- The operator norm is the first term of every positive Ky Fan gauge. -/
 theorem opNorm_le_kyFanGauge (T : E →L[𝕜] F) {k : ℕ} (hk : 0 < k) :
     ‖T‖ ≤ (T.kyFanGauge k : ℝ) := by
   rw [kyFanGaugeReal_eq_sum]
-  rw [← T.approximationNumber_index_zero]
+  rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero T)).trans (coe_nnnorm T))]
   exact Finset.single_le_sum (fun n _ => (T.singularValue n).coe_nonneg)
     (Finset.mem_range.mpr hk)
 
@@ -162,7 +163,8 @@ theorem kyFanGaugeReal_le_nat_mul_opNorm (T : E →L[𝕜] F) (k : ℕ) :
     (T.kyFanGauge k : ℝ) ≤ ∑ _n ∈ Finset.range k, ‖T‖ :=
       by
         rw [kyFanGaugeReal_eq_sum]
-        exact Finset.sum_le_sum fun n _ => T.approximationNumber_le_norm n
+        exact Finset.sum_le_sum fun n _ => (NNReal.coe_le_coe.mpr
+            (ContinuousLinearMap.singularValue_le_nnnorm T n))
     _ = (k : ℝ) * ‖T‖ := by simp
 
 end Basic
@@ -240,7 +242,8 @@ theorem approximationNumber_restrict_mono (T : E →L[𝕜] F) (n : ℕ) {U V : 
   calc
     (((T ∘L V.subtypeL) ∘L J).singularValue n : ℝ)
         ≤ ((T ∘L V.subtypeL).singularValue n : ℝ) * ‖J‖ :=
-      (T ∘L V.subtypeL).approximationNumber_comp_le_mul_norm J n
+      (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right (T ∘L V.subtypeL) J
+          n))
     _ ≤ ((T ∘L V.subtypeL).singularValue n : ℝ) * 1 :=
       mul_le_mul_of_nonneg_left hJnorm ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
     _ = ((T ∘L V.subtypeL).singularValue n : ℝ) := by rw [mul_one]
@@ -265,8 +268,8 @@ theorem approximationNumber_orthogonalProjectionOnto_comp_eq
   · calc
       (AW.singularValue n : ℝ)
           ≤ ‖W.orthogonalProjectionOnto‖ * (A.singularValue n : ℝ) :=
-        ContinuousLinearMap.approximationNumber_comp_le_norm_mul
-          W.orthogonalProjectionOnto A n
+        (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_left
+            W.orthogonalProjectionOnto A n))
       _ ≤ 1 * (A.singularValue n : ℝ) :=
         mul_le_mul_of_nonneg_right hproj ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
       _ = (A.singularValue n : ℝ) := by rw [one_mul]
@@ -274,7 +277,7 @@ theorem approximationNumber_orthogonalProjectionOnto_comp_eq
     calc
       ((W.subtypeL ∘L AW).singularValue n : ℝ)
           ≤ ‖W.subtypeL‖ * (AW.singularValue n : ℝ) :=
-        ContinuousLinearMap.approximationNumber_comp_le_norm_mul W.subtypeL AW n
+        (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_left W.subtypeL AW n))
       _ ≤ 1 * (AW.singularValue n : ℝ) :=
         mul_le_mul_of_nonneg_right hsub ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
       _ = (AW.singularValue n : ℝ) := by rw [one_mul]

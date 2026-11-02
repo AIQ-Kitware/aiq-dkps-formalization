@@ -692,7 +692,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_presentation_rclike
   have hSseq := sourceDirectedSine_hasSameApproximationNumbers_directedSineBlock Z V
   have hSseq_apply := ContinuousLinearMap.SameSingularValues.approximationNumber_eq hSseq
   have htr : ‖directedSinAngleOperator Z V‖ < 1 := by
-    rw [← (directedSinAngleOperator Z V).approximationNumber_index_zero, hSseq_apply 0]
+    rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (directedSinAngleOperator Z V))).trans (coe_nnnorm (directedSinAngleOperator Z V))), hSseq_apply 0]
     exact hlt 0
   have hTanSeq : ContinuousLinearMap.SameSingularValues
       (sourceDirectedTanThetaOperator Z V) T := by
@@ -744,7 +744,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_present
       (Angle.sinTwoThetaIdealBlock_hasSameApproximationNumbers_trialSide U V)
   have hSseq_apply := ContinuousLinearMap.SameSingularValues.approximationNumber_eq hSseq
   have hSlt : ‖sourceDirectedSinTwoThetaOperator V U‖ < 1 := by
-    rw [← (sourceDirectedSinTwoThetaOperator V U).approximationNumber_index_zero,
+    rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (sourceDirectedSinTwoThetaOperator V U))).trans (coe_nnnorm (sourceDirectedSinTwoThetaOperator V U))),
       hSseq_apply 0]
     exact hlt 0
   have hTanSeq : ContinuousLinearMap.SameSingularValues

@@ -223,7 +223,7 @@ theorem lt_approximationNumber_competitor_of_lt_direct
   have hs₂a : s₂ < a := by dsimp only [s₂]; linarith
   have hs₁0 : 0 ≤ s₁ := hr0.trans hrs₁.le
   have hs₂0 : 0 ≤ s₂ := hs₁0.trans hs₁s₂.le
-  have haNorm : a ≤ ‖A‖ := A.approximationNumber_le_norm n
+  have haNorm : a ≤ ‖A‖ := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm A n))
   have hs₂sqrt : s₂ < Real.sqrt 2 :=
     hs₂a.trans_le (haNorm.trans D.direct_norm_le_sqrt_two)
   have hs₂sq : s₂ ^ 2 < 2 := by
@@ -287,12 +287,14 @@ theorem lt_approximationNumber_competitor_of_lt_direct
     intro hP
     let R : E →L[ℂ] F := A ∘L P
     have hRrank : R.rank ≤ (n : Cardinal) :=
-      ContinuousLinearMap.rank_comp_le_natCast_right P A hP
+      (Cardinal.lift_le_nat_iff.mp
+      ((LinearMap.lift_rank_comp_le_right P.toLinearMap A.toLinearMap).trans
+        (Cardinal.lift_le_nat_iff.mpr hP)))
     have herr : A - R = A ∘L Q := by
       ext x
       change A x - A (P x) = A (Q x)
       rw [hQeq, sub_apply, ContinuousLinearMap.id_apply, map_sub]
-    have happrox := A.approximationNumber_le_norm_sub hRrank
+    have happrox := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm_sub A hRrank))
     have happroxReal : a ≤ ‖A - R‖ := happrox
     have has₂ : a ≤ s₂ := by
       calc
@@ -371,7 +373,7 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
   let cs : Real := Real.sqrt (1 - s ^ 2)
   have ha0 : 0 <= a := (A.singularValue n).coe_nonneg
   have hs0 : 0 <= s := (S.singularValue n).coe_nonneg
-  have haNorm : a <= ‖A‖ := A.approximationNumber_le_norm n
+  have haNorm : a <= ‖A‖ := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm A n))
   have haSqrt : a <= Real.sqrt 2 := haNorm.trans D.direct_norm_le_sqrt_two
   have haSq : a ^ 2 <= 2 := by
     have h := (sq_le_sq₀ ha0 (Real.sqrt_nonneg 2)).2 haSqrt
@@ -387,7 +389,7 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
       nlinarith [sq_nonneg ‖C x‖]
     have hle : ‖S x‖ ≤ ‖x‖ := le_of_sq_le_sq hsq (norm_nonneg x)
     simpa only [one_mul] using hle
-  have hsNorm : s <= ‖S‖ := S.approximationNumber_le_norm n
+  have hsNorm : s <= ‖S‖ := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm S n))
   have hs1 : s <= 1 := hsNorm.trans hSnorm
   have hsSq : s ^ 2 <= 1 := by nlinarith
   have hcsSq : cs ^ 2 = 1 - s ^ 2 := by
@@ -508,12 +510,14 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
             (PVM.norm_proj_apply_le (Set.Ioi c) measurableSet_Ioi x) hr0
       let R : E →L[ℂ] F := A ∘L P
       have hRrank : R.rank <= (n : Cardinal) :=
-        ContinuousLinearMap.rank_comp_le_natCast_right P A hPrank
+        (Cardinal.lift_le_nat_iff.mp
+      ((LinearMap.lift_rank_comp_le_right P.toLinearMap A.toLinearMap).trans
+        (Cardinal.lift_le_nat_iff.mpr hPrank)))
       have herr : A - R = A ∘L Q := by
         ext x
         change A x - A (P x) = A (Q x)
         rw [hQeq, sub_apply, ContinuousLinearMap.id_apply, map_sub]
-      have happroxReal : a <= ‖A - R‖ := A.approximationNumber_le_norm_sub hRrank
+      have happroxReal : a <= ‖A - R‖ := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm_sub A hRrank))
       have haR : a <= r := by
         calc
           a <= ‖A - R‖ := happroxReal
@@ -593,12 +597,14 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
               (PVM.norm_proj_apply_le (Set.Ioi c) measurableSet_Ioi x) ht0
         let R : E →L[ℂ] F := S ∘L P
         have hRrank : R.rank <= (n : Cardinal) :=
-          ContinuousLinearMap.rank_comp_le_natCast_right P S hP
+          (Cardinal.lift_le_nat_iff.mp
+      ((LinearMap.lift_rank_comp_le_right P.toLinearMap S.toLinearMap).trans
+        (Cardinal.lift_le_nat_iff.mpr hP)))
         have herr : S - R = S ∘L Q := by
           ext x
           change S x - S (P x) = S (Q x)
           rw [hQeq, sub_apply, ContinuousLinearMap.id_apply, map_sub]
-        have hsApprox : s <= ‖S - R‖ := S.approximationNumber_le_norm_sub hRrank
+        have hsApprox : s <= ‖S - R‖ := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm_sub S hRrank))
         have hsT : s <= t := by
           calc
             s <= ‖S - R‖ := hsApprox

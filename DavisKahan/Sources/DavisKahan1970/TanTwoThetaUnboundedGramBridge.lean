@@ -453,7 +453,7 @@ theorem approximationNumber_reflectionTangentCorner_le
   set sig := ((reflectionSineCorner U Z).singularValue n : ℝ) with hsigdef
   have hsig0 : 0 ≤ sig := (ContinuousLinearMap.singularValue _ _).coe_nonneg
   have hsiglt : sig < 1 :=
-    lt_of_le_of_lt (ContinuousLinearMap.approximationNumber_le_norm _ n) hX1
+    lt_of_le_of_lt ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm _ n))) hX1
   have hres := approximationNumber_le_of_gramResolvent (reflectionSineCorner U Z)
     hX1 (gramOperator_reflectionTangentCorner_moebius hZsa hZ2 hCC) n
   rw [approximationNumber_gramOperator_complex (reflectionTangentCorner U Z) n] at hres
@@ -761,7 +761,7 @@ theorem tendsto_sum_tanArcsin_approximationNumber_reflectionSineCorner_comp
   have h0 : 0 ≤ ((reflectionSineCorner U Z).singularValue n : ℝ) :=
     (ContinuousLinearMap.singularValue _ _).coe_nonneg
   have h1 : ((reflectionSineCorner U Z).singularValue n : ℝ) < 1 :=
-    lt_of_le_of_lt (ContinuousLinearMap.approximationNumber_le_norm _ n)
+    lt_of_le_of_lt ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm _ n)))
       (lt_of_le_of_lt norm_reflectionSineCorner_le hS1)
   exact (TanArcsin.continuousAt_tanArcsin h0 h1).tendsto.comp
     (TauCeti.ApproximationNumber.approximationSingularValue_comp_strongProjection_tendsto_complex

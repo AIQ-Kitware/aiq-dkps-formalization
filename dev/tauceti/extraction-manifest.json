@@ -6,7 +6,7 @@
   "clusters": [
     {
       "cluster": "approximation-number",
-      "migration_note": "October 25: Family.Schatten retains broader positive-exponent power-sum results, including 0 < p < 1. Its obsolete schattenENorm_one/two wrappers were removed. Maintained Gram consumers now use accepted nuclear and Hilbert-Schmidt energy APIs directly, without importing this donor. The legacy real approximation-number view remains pending its own representation migration. October 26: preserve and register the genuine SubspaceTransport donor and its CanonicalGauge dependency. Its source-name facade is deleted; direct consumers use its native-carrier sameSingularValues_* declarations. These unmerged block-transport statements are not claimed upstreamed. November 2 canonical-data checkpoint: delete ContinuousLinearMap.approximationNumber, TauCeti.ApproximationNumber.approximationSingularValue and ContinuousLinearMap.kyFanGaugeReal, and the obsolete approximationNumber_eq_singularValue_toReal conversion lemma. All maintained consumers, including paper statements and Challenge conformance, use explicit real coercions of native ContinuousLinearMap.singularValue and kyFanGauge, with no new aliases or notation. This is equality of values, not a restriction to nonnegative real thresholds: original signed real expressions, negative thresholds, arbitrary exponents, dimension/completeness and scalar/universe scopes remain. Native construction and elementary laws are independent #14501 integration 0095123bf736b0ed2b5df5986ee34f1b6640f0ea in pin 463ab293070d4cb355d0a0e036469464070088bc; its integration explicitly disclaims following the DKPS bulk port #13866. Original source anchors e4637c3919ae:ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/{Basic,Core,CanonicalGauge}.lean, earlier Basic fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7:ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean. Basic ancestry includes adaptation from Mathlib PR #32126; authors Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta, Rawad Kansoh; Core Jon Crall/OpenAI GPT-5.6 Thinking; CanonicalGauge Jon Crall/GPT-6; Kitware copyright, Apache-2.0. Shared scalar theorem wrappers and the separate kyFanApproximationGauge sum remain intermediate consumption work, not unmatched mathematics or a completed retirement of this cluster. Broader incomplete-target comparison/subspace transport, strong-cutoff/localization and positive-exponent results remain intact.",
+      "migration_note": "October 25: Family.Schatten retains broader positive-exponent power-sum results, including 0 < p < 1. Its obsolete schattenENorm_one/two wrappers were removed. Maintained Gram consumers now use accepted nuclear and Hilbert-Schmidt energy APIs directly, without importing this donor. The legacy real approximation-number view remains pending its own representation migration. October 26: preserve and register the genuine SubspaceTransport donor and its CanonicalGauge dependency. Its source-name facade is deleted; direct consumers use its native-carrier sameSingularValues_* declarations. These unmerged block-transport statements are not claimed upstreamed. November 2 canonical-data checkpoint: delete ContinuousLinearMap.approximationNumber, TauCeti.ApproximationNumber.approximationSingularValue and ContinuousLinearMap.kyFanGaugeReal, and the obsolete approximationNumber_eq_singularValue_toReal conversion lemma. All maintained consumers, including paper statements and Challenge conformance, use explicit real coercions of native ContinuousLinearMap.singularValue and kyFanGauge, with no new aliases or notation. This is equality of values, not a restriction to nonnegative real thresholds: original signed real expressions, negative thresholds, arbitrary exponents, dimension/completeness and scalar/universe scopes remain. Native construction and elementary laws are independent #14501 integration 0095123bf736b0ed2b5df5986ee34f1b6640f0ea in pin 463ab293070d4cb355d0a0e036469464070088bc; its integration explicitly disclaims following the DKPS bulk port #13866. Original source anchors e4637c3919ae:ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/{Basic,Core,CanonicalGauge}.lean, earlier Basic fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7:ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean. Basic ancestry includes adaptation from Mathlib PR #32126; authors Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta, Rawad Kansoh; Core Jon Crall/OpenAI GPT-5.6 Thinking; CanonicalGauge Jon Crall/GPT-6; Kitware copyright, Apache-2.0. Shared scalar theorem wrappers and the separate kyFanApproximationGauge sum remain intermediate consumption work, not unmatched mathematics or a completed retirement of this cluster. Broader incomplete-target comparison/subspace transport, strong-cutoff/localization and positive-exponent results remain intact. November 2 calculus checkpoint: Basic retains only the genuinely extra contractive split-embedding invariant on native singularValue; the nineteen shared scalar calculus wrappers are deleted. Cardinal.Lift and Dimension.RankComp donors are deleted in favor of pinned Mathlib lift cancellation and general composition bounds. Core/KyFan scalar forwarding laws and kyFanApproximationGauge remain the next consumption work, not unmatched mathematics.",
       "roadmap_target": "SpectralSubspacePerturbation Part B (Approximation numbers and rectangular symmetric ideals) / public-api-integration-review PR 1",
       "roadmap_focus": "spectral-subspace-perturbation",
       "status": "staged-needs-current-validation",
@@ -57,8 +57,6 @@
         "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
-        "ForTauCeti.LinearAlgebra.Dimension.RankComp",
-        "ForTauCeti.SetTheory.Cardinal.Lift",
         "ForTauCeti.Topology.ENNRealLiminf",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.CanonicalGauge",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport"
@@ -457,48 +455,50 @@
     {
       "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumber",
       "source_declarations": [
-        "Cardinal.le_natCast_of_lift_le"
+        "Cardinal.le_natCast_of_lift_le",
+        "Cardinal.lift_le_natCast"
       ],
       "current_namespace": "Cardinal",
       "staging_module": "ForTauCeti.SetTheory.Cardinal.Lift",
-      "final_tauceti_module": "TauCeti.SetTheory.Cardinal.Lift",
+      "final_tauceti_module": "Mathlib.SetTheory.Cardinal.Order",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1 (dependency-closed prerequisite; separately upstreamable to Mathlib/SetTheory/Cardinal/Order.lean)",
       "provenance_class": "moved out of the approximation-number module and generalized to an iff (`Cardinal.lift_le_natCast`)",
       "direct_dependencies": [
-        "Mathlib"
+        "Mathlib.SetTheory.Cardinal.Order"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.LinearAlgebra.Dimension.RankComp"
-      ],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "maintained_declarations": [],
+      "migration_note": "November 2: delete this donor module. Pinned Mathlib 2cabef97b63d3275776b8b060d802de6a6fa1055 provides the exact Cardinal.lift_le_nat_iff and the stronger universe-lifted LinearMap.lift_rank_comp_le_right, plus rank_comp_le_left. Consumers use those declarations directly with explicit toLinearMap carriers and native lift cancellation; no replacement local aliases. Full independent-universe cardinal and arbitrary-semiring/module/continuous-map correspondences compiled, including the original cross-universe natural rank bounds, with no field, topology-compatibility, finite-rank or completeness strengthening. Pre-retirement source 7635423d9 and original e4637c3919ae under the donor path; rank-plumbing extraction 8874c1789ce9a2cd0742c9974b1ede44bc5b66de; earlier approximation-number source fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7, adapted from Mathlib PR #32126. Historical headers: Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta, Rawad Kansoh, Claude Opus 5; Kitware copyright, Apache-2.0. These are pre-existing pinned Mathlib APIs, not a claimed DKPS port; no unverified introduction PR or integration date is asserted. Remove retired paths from active module-plan and extraction cluster lists, preserving original names and history here."
     },
     {
       "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumber",
       "source_declarations": [
         "ContinuousLinearMap.rank_comp_left_le_of_rank_le",
-        "ContinuousLinearMap.rank_comp_right_le_rank"
+        "ContinuousLinearMap.rank_comp_right_le_rank",
+        "LinearMap.rank_comp_le_natCast_right",
+        "ContinuousLinearMap.rank_comp_le_left",
+        "ContinuousLinearMap.rank_comp_le_natCast_right"
       ],
       "current_namespace": "LinearMap, ContinuousLinearMap",
       "staging_module": "ForTauCeti.LinearAlgebra.Dimension.RankComp",
-      "final_tauceti_module": "TauCeti.LinearAlgebra.Dimension.RankComp",
+      "final_tauceti_module": "Mathlib.LinearAlgebra.Dimension.LinearMap",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1 (dependency-closed prerequisite; the LinearMap statement is separately upstreamable to Mathlib/LinearAlgebra/Dimension/LinearMap.lean)",
       "provenance_class": "moved out of the approximation-number module and generalized off continuous maps (`LinearMap.rank_comp_le_natCast_right`)",
       "direct_dependencies": [
-        "Mathlib",
-        "ForTauCeti.SetTheory.Cardinal.Lift"
+        "Mathlib.LinearAlgebra.Dimension.LinearMap",
+        "Mathlib.SetTheory.Cardinal.Order"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
-        "DavisKahan.Interop.Spectra.ApproximationNumberMinMax",
-        "DavisKahan.OperatorIdeal.ApproximationNumbers.Real.Threshold"
-      ],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": null,
+      "maintained_declarations": [],
+      "migration_note": "November 2: delete this donor module. Pinned Mathlib 2cabef97b63d3275776b8b060d802de6a6fa1055 provides the exact Cardinal.lift_le_nat_iff and the stronger universe-lifted LinearMap.lift_rank_comp_le_right, plus rank_comp_le_left. Consumers use those declarations directly with explicit toLinearMap carriers and native lift cancellation; no replacement local aliases. Full independent-universe cardinal and arbitrary-semiring/module/continuous-map correspondences compiled, including the original cross-universe natural rank bounds, with no field, topology-compatibility, finite-rank or completeness strengthening. Pre-retirement source 7635423d9 and original e4637c3919ae under the donor path; rank-plumbing extraction 8874c1789ce9a2cd0742c9974b1ede44bc5b66de; earlier approximation-number source fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7, adapted from Mathlib PR #32126. Historical headers: Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta, Rawad Kansoh, Claude Opus 5; Kitware copyright, Apache-2.0. These are pre-existing pinned Mathlib APIs, not a claimed DKPS port; no unverified introduction PR or integration date is asserted. Remove retired paths from active module-plan and extraction cluster lists, preserving original names and history here."
     },
     {
       "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumber",
@@ -525,7 +525,23 @@
         "TauCeti.ApproximationNumber.approximationSingularValue",
         "ContinuousLinearMap.kyFanGaugeReal",
         "ContinuousLinearMap.approximationNumber_eq_singularValue_toReal",
-        "TauCeti.ApproximationNumber.approximationSingularValue_nonneg"
+        "TauCeti.ApproximationNumber.approximationSingularValue_nonneg",
+        "ContinuousLinearMap.approximationNumber_eq_iInf",
+        "ContinuousLinearMap.approximationNumber_le_norm_sub",
+        "ContinuousLinearMap.le_approximationNumber_iff",
+        "ContinuousLinearMap.approximationNumber_eq_norm_sub_of_forall_le",
+        "ContinuousLinearMap.approximationNumber_index_zero",
+        "ContinuousLinearMap.approximationNumber_antitone",
+        "ContinuousLinearMap.approximationNumber_le_norm",
+        "ContinuousLinearMap.approximationNumber_eq_zero_of_rank_le",
+        "ContinuousLinearMap.approximationNumber_eq_zero_of_rank_le_of_le",
+        "ContinuousLinearMap.exists_rank_le_norm_sub_lt_approximationNumber_add",
+        "ContinuousLinearMap.approximationNumber_add_le_add_norm",
+        "ContinuousLinearMap.abs_approximationNumber_sub_approximationNumber_le",
+        "ContinuousLinearMap.approximationNumber_comp_add_le_mul",
+        "ContinuousLinearMap.approximationNumber_comp_le_mul_norm",
+        "ContinuousLinearMap.approximationNumber_comp_le_norm_mul",
+        "ContinuousLinearMap.approximationNumber_comp_eq_of_leftInverse"
       ],
       "current_namespace": "ContinuousLinearMap, Cardinal",
       "staging_module": "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
@@ -534,21 +550,18 @@
       "roadmap_target": "Part B / PR 1",
       "provenance_class": "copied",
       "direct_dependencies": [
-        "ForTauCeti.LinearAlgebra.Dimension.RankComp",
-        "Mathlib.Analysis.Normed.Operator.Basic",
-        "Mathlib.LinearAlgebra.Dimension.Finite",
-        "Mathlib.LinearAlgebra.Dimension.LinearMap"
+        "TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff",
-        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.MinMax"
+        "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan"
       ],
       "status": "partially-upstreamed",
       "upstream_pr": "#14501",
-      "migration_note": "Against TauCeti 273ea28e and Mathlib e3e75e86, the local real-valued approximationNumber constructor now coerces TauCeti ContinuousLinearMap.singularValue. Shared laws for best approximation, norm/rank bounds, perturbation, additive indices, composition, and homogeneity forward to TauCeti proofs. The real-valued infimum and API remain as a compatibility boundary for existing downstream estimates; continue migrating consumers before deleting this adapter and retain only genuinely missing results. November 2 canonical-data checkpoint: delete ContinuousLinearMap.approximationNumber, TauCeti.ApproximationNumber.approximationSingularValue and ContinuousLinearMap.kyFanGaugeReal, and the obsolete approximationNumber_eq_singularValue_toReal conversion lemma. All maintained consumers, including paper statements and Challenge conformance, use explicit real coercions of native ContinuousLinearMap.singularValue and kyFanGauge, with no new aliases or notation. This is equality of values, not a restriction to nonnegative real thresholds: original signed real expressions, negative thresholds, arbitrary exponents, dimension/completeness and scalar/universe scopes remain. Native construction and elementary laws are independent #14501 integration 0095123bf736b0ed2b5df5986ee34f1b6640f0ea in pin 463ab293070d4cb355d0a0e036469464070088bc; its integration explicitly disclaims following the DKPS bulk port #13866. Original source anchors e4637c3919ae:ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/{Basic,Core,CanonicalGauge}.lean, earlier Basic fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7:ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean. Basic ancestry includes adaptation from Mathlib PR #32126; authors Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta, Rawad Kansoh; Core Jon Crall/OpenAI GPT-5.6 Thinking; CanonicalGauge Jon Crall/GPT-6; Kitware copyright, Apache-2.0. Shared scalar theorem wrappers and the separate kyFanApproximationGauge sum remain intermediate consumption work, not unmatched mathematics or a completed retirement of this cluster. Broader incomplete-target comparison/subspace transport, strong-cutoff/localization and positive-exponent results remain intact. The same checkpoint deletes ContinuousLinearMap.approximationNumber_nonneg and TauCeti.ApproximationNumber.approximationSingularValue_nonneg; every maintained caller uses NNReal.coe_nonneg on the native singular value directly, including all original arbitrary-field and incomplete-space scopes."
+      "migration_note": "Against TauCeti 273ea28e and Mathlib e3e75e86, the local real-valued approximationNumber constructor now coerces TauCeti ContinuousLinearMap.singularValue. Shared laws for best approximation, norm/rank bounds, perturbation, additive indices, composition, and homogeneity forward to TauCeti proofs. The real-valued infimum and API remain as a compatibility boundary for existing downstream estimates; continue migrating consumers before deleting this adapter and retain only genuinely missing results. November 2 canonical-data checkpoint: delete ContinuousLinearMap.approximationNumber, TauCeti.ApproximationNumber.approximationSingularValue and ContinuousLinearMap.kyFanGaugeReal, and the obsolete approximationNumber_eq_singularValue_toReal conversion lemma. All maintained consumers, including paper statements and Challenge conformance, use explicit real coercions of native ContinuousLinearMap.singularValue and kyFanGauge, with no new aliases or notation. This is equality of values, not a restriction to nonnegative real thresholds: original signed real expressions, negative thresholds, arbitrary exponents, dimension/completeness and scalar/universe scopes remain. Native construction and elementary laws are independent #14501 integration 0095123bf736b0ed2b5df5986ee34f1b6640f0ea in pin 463ab293070d4cb355d0a0e036469464070088bc; its integration explicitly disclaims following the DKPS bulk port #13866. Original source anchors e4637c3919ae:ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/{Basic,Core,CanonicalGauge}.lean, earlier Basic fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7:ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean. Basic ancestry includes adaptation from Mathlib PR #32126; authors Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta, Rawad Kansoh; Core Jon Crall/OpenAI GPT-5.6 Thinking; CanonicalGauge Jon Crall/GPT-6; Kitware copyright, Apache-2.0. Shared scalar theorem wrappers and the separate kyFanApproximationGauge sum remain intermediate consumption work, not unmatched mathematics or a completed retirement of this cluster. Broader incomplete-target comparison/subspace transport, strong-cutoff/localization and positive-exponent results remain intact. The same checkpoint deletes ContinuousLinearMap.approximationNumber_nonneg and TauCeti.ApproximationNumber.approximationSingularValue_nonneg; every maintained caller uses NNReal.coe_nonneg on the native singular value directly, including all original arbitrary-field and incomplete-space scopes. November 2 calculus checkpoint (pre-retirement 7635423d9, historical e4637c3919ae under the same Basic path): retire approximationNumber_eq_iInf, le_approximationNumber_iff, approximationNumber_eq_norm_sub_of_forall_le, approximationNumber_index_zero, approximationNumber_antitone, approximationNumber_le_norm, approximationNumber_le_norm_sub, approximationNumber_zero, both rank-cutoff statements, exists_rank_le_norm_sub_lt_approximationNumber_add, approximationNumber_add_le_add_norm, abs_approximationNumber_sub_approximationNumber_le, approximationNumber_add_le, approximationNumber_comp_add_le_mul, both one-sided composition laws, approximationNumber_comp_comp_le and approximationNumber_smul. Their accepted replacements in independent #14501 (0095123bf736b0ed2b5df5986ee34f1b6640f0ea) are singularValue_def, le_singularValue_iff, singularValue_eq_nnnorm_sub, singularValue_zero, antitone_singularValue, singularValue_le_nnnorm, singularValue_le_nnnorm_sub, zero_singularValue, singularValue_eq_zero_of_rank_le, exists_rank_le_nnnorm_sub_lt, singularValue_add_le, abs_singularValue_sub_singularValue_le, singularValue_add_index_le, singularValue_comp_add_le_mul, singularValue_comp_le_right/left, singularValue_comp_comp_le and singularValue_smul. Real infimum callers use NNReal.coe_iInf; an independent-universe compiled bridge via Real.toNNReal_le_iff_le_coe validates the full arbitrary-real lower-bound characterization, including negative thresholds. Best approximant and rank-cutoff helper variants had no remaining production consumers. Block-sum near-minimizers use the native existence theorem with an explicitly typed positive NNReal error and exact real coercion. Scalar transport, complexification and all paper-facing statements retain their original scope. Four users of only shared calculus import native Basic directly. Retain the old approximationNumber_comp_eq_of_leftInverse mathematics as singularValue_comp_eq_of_leftInverse, stated on the native nonnegative carrier: the arbitrary-field/seminormed-space, independently-universed contractive split embedding need not be surjective, unlike accepted isometry-equivalence invariance. Its original real formulation is recovered directly by congrArg NNReal.toReal in the one genuine consumer; no forwarding alias remains in Basic. Historical original Mathlib PR #32126 ancestry and all original authors/license above remain. The native integration explicitly disclaims following DKPS bulk port #13866; no adaptation claim is inferred.",
+      "maintained_declarations": [
+        "ContinuousLinearMap.singularValue_comp_eq_of_leftInverse"
+      ]
     },
     {
       "source_module": "ForMathlib.Analysis.Normed.Operator.ApproximationNumberAdjoint",

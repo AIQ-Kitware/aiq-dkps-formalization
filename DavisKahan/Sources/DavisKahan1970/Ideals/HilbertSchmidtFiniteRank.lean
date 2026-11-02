@@ -48,7 +48,7 @@ theorem approximationSingularValue_eq_zero_of_rank_le
     (hA : A.rank ≤ (n : Cardinal)) :
     (A.singularValue n : ℝ) = 0 := by
   have h : (A.singularValue n : ℝ) ≤ ‖A - A‖ :=
-    A.approximationNumber_le_norm_sub (R := A) hA
+    (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm_sub A (R := A) hA))
   rw [sub_self, norm_zero] at h
   exact le_antisymm h ((A.singularValue n).coe_nonneg)
 

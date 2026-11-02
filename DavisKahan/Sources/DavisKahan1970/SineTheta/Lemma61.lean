@@ -255,7 +255,7 @@ omit [CompleteSpace E₀] [CompleteSpace F₀] in
 private theorem antitone_approximationSingularValue (A : E₀ →L[𝕜] F₀) :
     Antitone fun n => (A.singularValue n : ℝ) := by
   intro m n hmn
-  exact_mod_cast A.approximationNumber_antitone hmn
+  exact_mod_cast (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue A)) hmn
 
 /-- When the two blocks have identical singular sequences, the even Ky Fan
 prefixes of their orthogonal block sum double the prefixes of one block. -/

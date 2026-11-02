@@ -113,11 +113,11 @@ theorem theorem8_1_upperWeightedWeakMajorization_real [FiniteDimensional ℝ E]
           cosineBlock P Q).singularValue (i : ℕ) : ℝ)) :=
     IsWeaklyMajorizedBy.of_pointwise
       (fun i j hij =>
-        (upperBlockShift A P alpha).approximationNumber_antitone (Fin.le_def.mp hij))
+        (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue (upperBlockShift A P alpha))) (Fin.le_def.mp hij))
       (fun i j hij =>
-        (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
+        (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
           upperBlockShift (A + K) Q alpha ∘L
-          cosineBlock P Q).approximationNumber_antitone (Fin.le_def.mp hij))
+          cosineBlock P Q))) (Fin.le_def.mp hij))
       (fun i => ((upperBlockShift A P alpha).singularValue _).coe_nonneg)
       (fun i => ((ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
         upperBlockShift (A + K) Q alpha ∘L
@@ -200,12 +200,12 @@ theorem theorem8_1_lowerWeightedWeakMajorization_real [FiniteDimensional ℝ E]
           lowerCosineBlock P Q).singularValue (i : ℕ) : ℝ)) :=
     IsWeaklyMajorizedBy.of_pointwise
       (fun i j hij =>
-        (lowerBlockShift A P alpha delta).approximationNumber_antitone
+        (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue (lowerBlockShift A P alpha delta)))
           (Fin.le_def.mp hij))
       (fun i j hij =>
-        (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
+        (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
           lowerBlockShift (A + K) Q alpha delta ∘L
-          lowerCosineBlock P Q).approximationNumber_antitone (Fin.le_def.mp hij))
+          lowerCosineBlock P Q))) (Fin.le_def.mp hij))
       (fun i => ((lowerBlockShift A P alpha delta).singularValue _).coe_nonneg)
       (fun i => ((ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
         lowerBlockShift (A + K) Q alpha delta ∘L

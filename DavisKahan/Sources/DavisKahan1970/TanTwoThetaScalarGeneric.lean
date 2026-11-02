@@ -300,7 +300,7 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike
       rw [hs]
       exact hlt' n
     have hnorm : ‖Angle.sinTwoAngleOperator U' V'‖ < 1 := by
-      rw [← (Angle.sinTwoAngleOperator U' V').approximationNumber_index_zero]
+      rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (Angle.sinTwoAngleOperator U' V'))).trans (coe_nnnorm (Angle.sinTwoAngleOperator U' V')))]
       exact hsinApprox 0
     have hdefined' : Angle.HasDefinedDoubleTangent U' V' :=
       Angle.hasDefinedDoubleTangent_of_norm_sinTwoAngleOperator_lt_one U' V' hnorm

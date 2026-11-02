@@ -829,8 +829,8 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNo
   refine ⟨fun n => ?_, fun n => ?_, hmem, hle⟩
   · rw [← hblock n, ← hsameC n]
     exact lt_of_le_of_lt
-      ((reflectionSineCorner (complexifySubmodule U)
-        (complexifySubmodule V).reflectionOperator).approximationNumber_le_norm n)
+      ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm (reflectionSineCorner (complexifySubmodule U)
+        (complexifySubmodule V).reflectionOperator) n)))
       (lt_of_le_of_lt norm_reflectionSineCorner_le (hrefl ▸ hS1C))
   · rw [← hcorner n, ← hblock n, ← hsameC n, hrefl]
     have hZsaC' : IsSelfAdjoint (complexifySubmodule V).reflectionOperator := hrefl ▸ hZsaC

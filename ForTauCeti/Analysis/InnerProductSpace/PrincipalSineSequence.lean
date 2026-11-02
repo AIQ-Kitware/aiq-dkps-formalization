@@ -69,7 +69,8 @@ theorem principalSineSequence_nonneg (U V : Submodule 𝕜 H)
 theorem principalSineSequence_le_one (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (n : ℕ) :
     principalSineSequence U V n ≤ 1 := by
-  refine ((principalSineOperator U V).approximationNumber_le_norm n).trans ?_
+  refine ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm
+      (principalSineOperator U V) n))).trans ?_
   refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_
   change ‖Vᗮ.starProjection (x : H)‖ ≤ 1 * ‖x‖
   simpa using Vᗮ.norm_starProjection_apply_le (x : H)
@@ -78,7 +79,8 @@ theorem principalSineSequence_le_one (U V : Submodule 𝕜 H)
 theorem principalSineSequence_antitone (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Antitone (principalSineSequence U V) :=
-  (principalSineOperator U V).approximationNumber_antitone
+  (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue
+      (principalSineOperator U V)))
 
 variable [CompleteSpace H]
 

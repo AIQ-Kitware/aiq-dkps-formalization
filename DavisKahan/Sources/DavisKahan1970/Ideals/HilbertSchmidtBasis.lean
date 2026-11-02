@@ -218,13 +218,13 @@ theorem approximationNumberEnergy_comp_starProjection
           = ((T₀ ∘L K.orthogonalProjectionOnto).singularValue m : ℝ) := by
             rw [hfac1]
         _ ≤ (T₀.singularValue m : ℝ) * ‖K.orthogonalProjectionOnto‖ :=
-            T₀.approximationNumber_comp_le_mul_norm _ m
+            (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right T₀ _ m))
         _ ≤ (T₀.singularValue m : ℝ) * 1 :=
             mul_le_mul_of_nonneg_left hprojK
               ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
         _ = ((L.subtypeL ∘L T).singularValue m : ℝ) := by rw [mul_one, hfac2]
         _ ≤ ‖L.subtypeL‖ * (T.singularValue m : ℝ) :=
-            ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ _ m
+            (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_left _ _ m))
         _ ≤ 1 * (T.singularValue m : ℝ) :=
             mul_le_mul_of_nonneg_right hsubL
               ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
@@ -235,14 +235,14 @@ theorem approximationNumberEnergy_comp_starProjection
           = ((L.orthogonalProjectionOnto ∘L T₀).singularValue m : ℝ) := by
             rw [← hfac3]
         _ ≤ ‖L.orthogonalProjectionOnto‖ * (T₀.singularValue m : ℝ) :=
-            ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ _ m
+            (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_left _ _ m))
         _ ≤ 1 * (T₀.singularValue m : ℝ) :=
             mul_le_mul_of_nonneg_right hprojL
               ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
         _ = (((A ∘L K.starProjection) ∘L K.subtypeL).singularValue m : ℝ) := by
             rw [one_mul, ← hfac4]
         _ ≤ ((A ∘L K.starProjection).singularValue m : ℝ) * ‖K.subtypeL‖ :=
-            ContinuousLinearMap.approximationNumber_comp_le_mul_norm _ _ m
+            (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right _ _ m))
         _ ≤ ((A ∘L K.starProjection).singularValue m : ℝ) * 1 :=
             mul_le_mul_of_nonneg_left hsubK
               ((ContinuousLinearMap.singularValue _ _).coe_nonneg)
@@ -255,7 +255,7 @@ theorem approximationNumberEnergy_comp_starProjection
   have hTrank : T.rank ≤ (n : Cardinal) := by
     have hK : Module.rank 𝕜 K = (n : Cardinal) := by
       rw [← Module.finrank_eq_rank' 𝕜 K, hn]
-    refine Cardinal.lift_le_natCast.mp
+    refine Cardinal.lift_le_nat_iff.mp
       ((lift_rank_range_le T.toLinearMap).trans ?_)
     calc
       Cardinal.lift.{vE} (Module.rank 𝕜 K)
@@ -398,7 +398,7 @@ theorem approximationNumberEnergy_eq_iSup_cutoff {ι : Type*}
       calc
         ((A ∘L basisProjection b s).singularValue n : ℝ)
             ≤ (A.singularValue n : ℝ) * ‖basisProjection b s‖ :=
-          A.approximationNumber_comp_le_mul_norm (basisProjection b s) n
+          (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right A (basisProjection b s) n))
         _ ≤ (A.singularValue n : ℝ) * 1 :=
           mul_le_mul_of_nonneg_left hnormNN
               ((ContinuousLinearMap.singularValue _ _).coe_nonneg)

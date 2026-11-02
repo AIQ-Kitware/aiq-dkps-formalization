@@ -73,7 +73,7 @@ variable {𝕜 : Type u} [RCLike 𝕜] {E : Type v} {F : Type w}
 theorem approximationNumber_comp_subtypeL_le
     (T : E →L[𝕜] F) (n : ℕ) (V : Submodule 𝕜 E) :
     ((T ∘L V.subtypeL).singularValue n : ℝ) ≤ (T.singularValue n : ℝ) := by
-  have h := T.approximationNumber_comp_le_mul_norm V.subtypeL n
+  have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right T V.subtypeL n))
   have hsub : ‖V.subtypeL‖ ≤ (1 : ℝ) := V.norm_subtypeL_le
   calc
     ((T ∘L V.subtypeL).singularValue n : ℝ)

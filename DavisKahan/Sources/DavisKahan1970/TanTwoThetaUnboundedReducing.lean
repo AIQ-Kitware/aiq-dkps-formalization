@@ -218,7 +218,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmet
   have hcorner : ∀ n : ℕ,
       ((reflectionSineCorner U V.reflectionOperator).singularValue n : ℝ) < 1 := fun n =>
     lt_of_le_of_lt
-      ((reflectionSineCorner U V.reflectionOperator).approximationNumber_le_norm n)
+      ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm (reflectionSineCorner U V.reflectionOperator) n)))
       (lt_of_le_of_lt norm_reflectionSineCorner_le hS1)
   obtain ⟨-, hmem, hle⟩ :=
     tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex hA hred hB

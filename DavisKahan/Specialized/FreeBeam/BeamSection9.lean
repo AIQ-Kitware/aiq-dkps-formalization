@@ -1156,8 +1156,9 @@ theorem beamKyFanTwo_gaugeReal_le (T : BeamL2 →L[ℂ] BeamL2) :
     rw [ContinuousLinearMap.kyFanGaugeReal_eq_sum, Finset.sum_range_succ,
       Finset.sum_range_succ,
       Finset.sum_range_zero, zero_add]
-    have h0 := T.approximationNumber_le_norm 0
-    have h1 := T.approximationNumber_le_norm 1
+    have h0 := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm T 0))
+    have h1 := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm T 1))
+    simp only [coe_nnnorm] at h0 h1
     linarith
   simpa only [beamKyFanTwo, SymmetricOperatorIdealFamily.gaugeReal,
     OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal] using hsum
@@ -1611,7 +1612,7 @@ theorem approximationSingularValue_one_beamResidual_le (ε : ℝ) :
     ((beamResidual ε).singularValue 1 : ℝ) ≤ residualBottomSingularValue ε := by
   have hrank : (beamResidualRankOne ε).rank ≤ ((1 : ℕ) : Cardinal) := by
     simpa using beamResidualRankOne_rank_le ε
-  exact le_trans ((beamResidual ε).approximationNumber_le_norm_sub hrank)
+  exact le_trans ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm_sub (beamResidual ε) hrank)))
     (norm_beamResidual_sub_rankOne_le ε)
 
 open DavisKahan1970.Section9 in
@@ -1623,7 +1624,7 @@ theorem kyFanTwo_beamResidual_le (ε : ℝ) :
   have h0 : ((beamResidual ε).singularValue 0 : ℝ)
       ≤ residualTopSingularValue ε := by
     have hz : ((beamResidual ε).singularValue 0 : ℝ) = ‖beamResidual ε‖ :=
-      (beamResidual ε).approximationNumber_index_zero
+      ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (beamResidual ε))).trans (coe_nnnorm (beamResidual ε)))
     rw [hz]
     exact norm_beamPerturbation_comp_trialIncl_le ε
   have h1 := approximationSingularValue_one_beamResidual_le ε

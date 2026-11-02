@@ -233,9 +233,7 @@ theorem approximationNumber_le_blockSum_left
     (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) (n : ℕ) :
     (A.singularValue n : ℝ) ≤
       ((continuousOrthogonalBlockSum A B).singularValue n : ℝ) := by
-  have h := ContinuousLinearMap.approximationNumber_comp_comp_le
-    (WithLp.fstL 2 𝕜 F₀ F₁) (continuousOrthogonalBlockSum A B)
-    (blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁)) n
+  have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le (WithLp.fstL 2 𝕜 F₀ F₁) (continuousOrthogonalBlockSum A B) (blockInl : E₀ →L[𝕜] WithLp 2 (E₀ × E₁)) n))
   rw [fstL_comp_blockSum_comp_blockInl] at h
   refine h.trans ?_
   calc ‖(WithLp.fstL 2 𝕜 F₀ F₁)‖ *
@@ -254,9 +252,7 @@ theorem approximationNumber_le_blockSum_right
     (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) (n : ℕ) :
     (B.singularValue n : ℝ) ≤
       ((continuousOrthogonalBlockSum A B).singularValue n : ℝ) := by
-  have h := ContinuousLinearMap.approximationNumber_comp_comp_le
-    (WithLp.sndL 2 𝕜 F₀ F₁) (continuousOrthogonalBlockSum A B)
-    (blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁)) n
+  have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le (WithLp.sndL 2 𝕜 F₀ F₁) (continuousOrthogonalBlockSum A B) (blockInr : E₁ →L[𝕜] WithLp 2 (E₀ × E₁)) n))
   rw [sndL_comp_blockSum_comp_blockInr] at h
   refine h.trans ?_
   calc ‖(WithLp.sndL 2 𝕜 F₀ F₁)‖ *
@@ -314,11 +310,11 @@ theorem norm_continuousOrthogonalBlockSum
   apply le_antisymm
   · exact norm_continuousOrthogonalBlockSum_le A B
   · apply max_le
-    · rw [← A.approximationNumber_index_zero,
-        ← (continuousOrthogonalBlockSum A B).approximationNumber_index_zero]
+    · rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero A)).trans (coe_nnnorm A)),
+        ← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (continuousOrthogonalBlockSum A B))).trans (coe_nnnorm (continuousOrthogonalBlockSum A B)))]
       exact approximationNumber_le_blockSum_left A B 0
-    · rw [← B.approximationNumber_index_zero,
-        ← (continuousOrthogonalBlockSum A B).approximationNumber_index_zero]
+    · rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero B)).trans (coe_nnnorm B)),
+        ← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (continuousOrthogonalBlockSum A B))).trans (coe_nnnorm (continuousOrthogonalBlockSum A B)))]
       exact approximationNumber_le_blockSum_right A B 0
 
 /-- A block sum splits as a sum of two compressions, one per summand. -/
@@ -367,15 +363,26 @@ theorem approximationNumber_continuousOrthogonalBlockSum_le_max
       max ((A.singularValue r : ℝ)) ((B.singularValue s : ℝ)) := by
   apply le_of_forall_pos_le_add
   intro ε hε
-  obtain ⟨R, hRrank, hRdist⟩ := A.exists_rank_le_norm_sub_lt_approximationNumber_add r hε
-  obtain ⟨Q, hQrank, hQdist⟩ := B.exists_rank_le_norm_sub_lt_approximationNumber_add s hε
+  have hεNN : (0 : NNReal) < ⟨ε, hε.le⟩ := by exact_mod_cast hε
+  obtain ⟨R, hRrank, hRdistNN⟩ :=
+    ContinuousLinearMap.exists_rank_le_nnnorm_sub_lt (T := A) (n := r)
+      (c := A.singularValue r + ⟨ε, hε.le⟩)
+      (lt_add_of_pos_right _ hεNN)
+  have hRdist : ‖A - R‖ < (A.singularValue r : ℝ) + ε :=
+    NNReal.coe_lt_coe.mpr hRdistNN
+  obtain ⟨Q, hQrank, hQdistNN⟩ :=
+    ContinuousLinearMap.exists_rank_le_nnnorm_sub_lt (T := B) (n := s)
+      (c := B.singularValue s + ⟨ε, hε.le⟩)
+      (lt_add_of_pos_right _ hεNN)
+  have hQdist : ‖B - Q‖ < (B.singularValue s : ℝ) + ε :=
+    NNReal.coe_lt_coe.mpr hQdistNN
   have hrank : (continuousOrthogonalBlockSum R Q).rank ≤ ((r + s : ℕ) : Cardinal) := by
     calc (continuousOrthogonalBlockSum R Q).rank ≤ R.rank + Q.rank :=
           rank_continuousOrthogonalBlockSum_le R Q
       _ ≤ (r : Cardinal) + (s : Cardinal) := add_le_add hRrank hQrank
       _ = ((r + s : ℕ) : Cardinal) := by norm_cast
   refine le_trans
-    ((continuousOrthogonalBlockSum A B).approximationNumber_le_norm_sub hrank) ?_
+    ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm_sub (continuousOrthogonalBlockSum A B) hrank))) ?_
   rw [continuousOrthogonalBlockSum_sub]
   refine le_trans (norm_continuousOrthogonalBlockSum_le (A - R) (B - Q)) ?_
   refine max_le ?_ ?_

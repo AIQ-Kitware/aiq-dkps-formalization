@@ -266,7 +266,8 @@ theorem approximationNumber_complexify_le
     (T : E →L[ℝ] F) (n : ℕ) :
     ((RealComplexification.complexify T).singularValue n : ℝ) ≤
       (T.singularValue n : ℝ) := by
-  rw [T.approximationNumber_eq_iInf]
+  rw [T.singularValue_def, NNReal.coe_iInf]
+  simp only [coe_nnnorm]
   let : Nonempty {R : E →L[ℝ] F // R.rank ≤ (n : Cardinal)} :=
     ⟨⟨0, by simp⟩⟩
   apply le_ciInf
@@ -278,7 +279,7 @@ theorem approximationNumber_complexify_le
     ((RealComplexification.complexify T).singularValue n : ℝ) ≤
         ‖RealComplexification.complexify T -
           RealComplexification.complexify R‖ :=
-      (RealComplexification.complexify T).approximationNumber_le_norm_sub hRc
+      (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm_sub (RealComplexification.complexify T) hRc))
     _ = ‖T - R‖ := by
       rw [← RealComplexification.complexify_sub,
         RealComplexification.norm_complexify]

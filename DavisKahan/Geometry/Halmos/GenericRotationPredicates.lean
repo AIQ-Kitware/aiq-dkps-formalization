@@ -10,7 +10,7 @@ public import DavisKahan.Geometry.Halmos.TwoProjections
 public import DavisKahan.SpectralTheory.SpectralRestriction
 -- supplies `compressOperator`
 public import DavisKahan.Sylvester.Spectrum
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 
 /-!
 # Grounded generic direct-rotation predicates for Davis--Kahan 1970

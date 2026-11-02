@@ -115,8 +115,11 @@ theorem approximationNumber_le_of_spectral_band [CompleteSpace F₁]
       _ ≤ 1 * ‖x‖ := by gcongr
       _ = ‖x‖ := one_mul _
   -- The competitor `T ∘L P` has rank at most `r` and misses by at most `δ`.
-  refine le_trans (T.approximationNumber_le_norm_sub (R := T ∘L P) ?_) ?_
-  · exact ContinuousLinearMap.rank_comp_le_natCast_right P T hrank
+  refine le_trans ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm_sub T (R :=
+      T ∘L P) ?_))) ?_
+  · exact (Cardinal.lift_le_nat_iff.mp
+      ((LinearMap.lift_rank_comp_le_right P.toLinearMap T.toLinearMap).trans
+        (Cardinal.lift_le_nat_iff.mpr hrank)))
   · refine ContinuousLinearMap.opNorm_le_bound _ hδ fun x => ?_
     have hval : (T - T ∘L P) x = T (x - P x) := by simp
     rw [hval]

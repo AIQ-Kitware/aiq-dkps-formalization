@@ -123,7 +123,8 @@ theorem approximationNumber_eq_tanArcsin_of_gramMoebius
   set t : ℝ := (T.singularValue n : ℝ) with htdef
   have hs0 : 0 ≤ s := (X.singularValue n).coe_nonneg
   have ht0 : 0 ≤ t := (T.singularValue n).coe_nonneg
-  have hs1 : s < 1 := lt_of_le_of_lt (X.approximationNumber_le_norm n) hX
+  have hs1 : s < 1 := lt_of_le_of_lt ((NNReal.coe_le_coe.mpr
+      (ContinuousLinearMap.singularValue_le_nnnorm X n))) hX
   have hden : (0 : ℝ) < 1 - s ^ 2 := by nlinarith
   -- the adjoint orientation: `Q = P + Q · P`, hence `P = Q − Q · P`
   have hop : gramOperator T = gramOperator X + gramOperator X * gramOperator T := by

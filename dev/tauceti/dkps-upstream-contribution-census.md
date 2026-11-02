@@ -3485,3 +3485,75 @@ this order fact in pinned Mathlib `2cabef97b63d3275776b8b060d802de6a6fa1055`
 needs none of the extra Hilbert-space hypotheses
 of the old second wrapper. Original arbitrary-field and incomplete-space uses
 are preserved. Other shared scalar laws remain a subsequent consumption slice.
+
+
+## 2026-11-02: native approximation-number calculus and universe-safe rank bounds
+
+The basic approximation-number donor now retains only
+`ContinuousLinearMap.singularValue_comp_eq_of_leftInverse`. Retire its nineteen
+shared scalar calculus wrappers and the obsolete infimum-index instance. All
+production consumers use the accepted native calculus, with explicit real
+coercions at paper-facing formulas:
+
+| Retired local formulation | Accepted native declarations / bridge |
+| --- | --- |
+| `approximationNumber_eq_iInf`, `le_approximationNumber_iff` | `singularValue_def`, `le_singularValue_iff`; `NNReal.coe_iInf`, `Real.toNNReal_le_iff_le_coe` |
+| `approximationNumber_eq_norm_sub_of_forall_le` | `singularValue_eq_nnnorm_sub` |
+| `approximationNumber_index_zero`, `approximationNumber_zero` | `singularValue_zero`, `zero_singularValue`; `coe_nnnorm` |
+| `approximationNumber_antitone`, `approximationNumber_le_norm` | `antitone_singularValue`, `singularValue_le_nnnorm`; `NNReal.coe_mono`, `coe_le_coe` |
+| `approximationNumber_le_norm_sub`, both rank cutoffs | `singularValue_le_nnnorm_sub`, `singularValue_eq_zero_of_rank_le` |
+| `exists_rank_le_norm_sub_lt_approximationNumber_add` | `exists_rank_le_nnnorm_sub_lt` at a typed nonnegative threshold |
+| `approximationNumber_add_le_add_norm`, `approximationNumber_add_le` | `singularValue_add_le`, `singularValue_add_index_le` |
+| `abs_approximationNumber_sub_approximationNumber_le` | `abs_singularValue_sub_singularValue_le` (already real-valued) |
+| `approximationNumber_comp_add_le_mul`, the two one-sided bounds, `approximationNumber_comp_comp_le` | `singularValue_comp_add_le_mul`, `singularValue_comp_le_right`, `singularValue_comp_le_left`, `singularValue_comp_comp_le` |
+| `approximationNumber_smul` | `singularValue_smul`; `congrArg NNReal.toReal` |
+
+These native APIs are accepted in independent
+[#14501](https://github.com/TauCetiProject/TauCeti/pull/14501), integration
+`0095123bf736b0ed2b5df5986ee34f1b6640f0ea`, present in pin
+`463ab293070d4cb355d0a0e036469464070088bc`. Its disclosure explicitly says it
+does not follow or vendor DKPS bulk port #13866. Preserve the separate original
+DKPS adaptation from Mathlib PR #32126. Precise pre-retirement scalar statements
+are recoverable at `7635423d9:ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean`;
+original source is `e4637c3919ae` at that path, earlier
+`fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7:ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean`.
+Original authors: Jon Crall, OpenAI GPT-5.6 Thinking, Niels Voss, Arnav Mehta,
+Rawad Kansoh; Kitware copyright, Apache-2.0.
+
+The real lower-bound characterization was compiled against the native API
+for **arbitrary real thresholds**, including negative ones, over independent
+source/target universes and arbitrary nontrivially normed fields and seminormed
+spaces. No positivity restriction was introduced. The unused best-approximant,
+characteristic and extra rank-cutoff wrappers retire rather than remaining as
+aliases. The block-sum near-minimizer proof now calls native existence directly;
+its positive error is represented by `⟨ε, hε.le⟩`, so its real value is exactly ε.
+Scalar transport and real complexification use the native defining infimum.
+
+The retained contractive-left-inverse theorem has the original arbitrary-field,
+seminormed-space and independent-universe scope and does **not** require the
+embedding to be surjective. Accepted isometry-equivalence invariance does not
+cover that full statement. Its carrier is now native `singularValue`; the one
+real-valued gauge consumer uses `congrArg NNReal.toReal`. Only that genuine
+consumer imports the donor Basic module; former shared-calculus users import
+accepted Basic directly. Core/KyFan wrappers and the separate sum alias remain
+the next consumption work, not a claim of unmatched mathematics.
+
+Also delete `ForTauCeti/SetTheory/Cardinal/Lift.lean` and
+`ForTauCeti/LinearAlgebra/Dimension/RankComp.lean`. Pinned Mathlib
+`2cabef97b63d3275776b8b060d802de6a6fa1055` provides the exact
+`Cardinal.lift_le_nat_iff`, the stronger lifted
+`LinearMap.lift_rank_comp_le_right`, and `LinearMap.rank_comp_le_left`.
+Consumers use those directly, with `toLinearMap` and native lift cancellation.
+Full old cardinal and all three rank-helper signatures compiled over independent
+universes, arbitrary semirings/modules and topological spaces, preserving their
+scope beyond the normed-field approximation-number specialization. This is reuse
+of pre-existing Mathlib facts; no DKPS proof descent or unverified introduction
+PR is claimed.
+
+Original donor paths are recoverable at `e4637c3919ae` and `7635423d9`;
+rank-plumbing extraction anchor
+`8874c1789ce9a2cd0742c9974b1ede44bc5b66de` records their earlier approximation-number
+ancestry. Both original headers credit Jon Crall, OpenAI GPT-5.6 Thinking,
+Niels Voss, Arnav Mehta, Rawad Kansoh and Claude Opus 5, Kitware copyright,
+Apache-2.0. Preserve original source names (including pre-extraction names) in
+the manifest; remove only active module-plan and extraction-cluster entries.

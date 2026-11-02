@@ -175,7 +175,7 @@ theorem sameApproximationSingularValues_neg (A : E →L[ℂ] E) :
   apply NNReal.eq
   have h : (((-1 : ℂ) • A).singularValue n : ℝ) =
       ‖(-1 : ℂ)‖ * (A.singularValue n : ℝ) :=
-    ContinuousLinearMap.approximationNumber_smul (-1 : ℂ) A n
+    (congrArg NNReal.toReal (ContinuousLinearMap.singularValue_smul (-1 : ℂ) A n))
   simp only [neg_smul, one_smul, norm_neg, norm_one, one_mul] at h
   exact h
 

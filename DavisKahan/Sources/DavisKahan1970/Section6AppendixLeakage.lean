@@ -100,7 +100,7 @@ theorem opNorm_sq_le_approximationEnergy
   have hmem : 0 ∈ Finset.range n := Finset.mem_range.mpr hn
   have hzero :
       ((T.singularValue 0 : ℝ)) ^ 2 = ‖T‖ ^ 2 := by
-    rw [T.approximationNumber_index_zero]
+    rw [((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero T)).trans (coe_nnnorm T))]
   calc
     ‖T‖ ^ 2 = ((T.singularValue 0 : ℝ)) ^ 2 := hzero.symm
     _ ≤ ∑ i ∈ Finset.range n,
@@ -125,8 +125,7 @@ theorem approximationEnergy_starProjection_comp_le
     calc
       ((Q.starProjection ∘L K).singularValue i : ℝ)
           ≤ ‖Q.starProjection‖ * (K.singularValue i : ℝ) :=
-            ContinuousLinearMap.approximationNumber_comp_le_norm_mul
-              Q.starProjection K i
+            (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_left Q.starProjection K i))
       _ ≤ 1 * (K.singularValue i : ℝ) :=
             mul_le_mul_of_nonneg_right Q.starProjection_norm_le
               ((K.singularValue i).coe_nonneg)

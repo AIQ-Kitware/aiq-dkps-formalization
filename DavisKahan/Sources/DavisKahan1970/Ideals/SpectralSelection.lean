@@ -472,7 +472,7 @@ theorem sum_doubleAngleTangent_le_selected_add_tail
           have hane : (X.singularValue n : ℝ) ≤ ε :=
             F.tail_small n hnmem.1 hnmem.2
           have hanr : (X.singularValue n : ℝ) ≤ r :=
-            (X.approximationNumber_le_norm n).trans hXr
+            ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm X n))).trans hXr
           unfold DavisKahan.TanTwoTheta.doubleAngleTangent
           have hdenr : 0 < 1 - r ^ 2 := by nlinarith
           have hdena : 0 < 1 - ((X.singularValue n : ℝ)) ^ 2 := by

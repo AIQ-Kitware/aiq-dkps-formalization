@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT-6
 -/
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Equivalence
 
 /-! # Real scalar consequences of canonical singular values and Ky Fan gauges -/

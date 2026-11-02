@@ -116,8 +116,8 @@ theorem approximationNumber_projectorDifference_lt_one_real
       (V.starProjection - U.starProjection) n
   rw [← h2]
   exact lt_of_le_of_lt
-    ((sinAngleOperatorC (complexifySubmodule U)
-      (complexifySubmodule V)).approximationNumber_le_norm n) htrC
+    ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm (sinAngleOperatorC (complexifySubmodule U)
+      (complexifySubmodule V)) n))) htrC
 
 end SingleAngleReal
 

@@ -72,8 +72,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 @[simp]
 theorem approximationSingularValue_zero_map (n : ℕ) :
     ((0 : E →L[𝕜] F).singularValue n : ℝ) = 0 := by
-  exact (ContinuousLinearMap.approximationNumber_zero
-      (𝕜 := 𝕜) (E := E) (F := F) n)
+  simp
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The zero-based first approximation singular value is the operator norm. -/
@@ -81,7 +80,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 theorem approximationSingularValue_zero
     (K : E →L[𝕜] F) :
     (K.singularValue 0 : ℝ) = ‖K‖ := by
-  exact K.approximationNumber_index_zero
+  exact ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero K)).trans (coe_nnnorm K))
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Approximation singular values are absolutely homogeneous. -/
@@ -89,7 +88,7 @@ theorem approximationSingularValue_smul
     (n : ℕ) (c : 𝕜) (K : E →L[𝕜] F) :
     ((c • K).singularValue n : ℝ) =
       ‖c‖ * (K.singularValue n : ℝ) := by
-  exact (ContinuousLinearMap.approximationNumber_smul c K n)
+  exact ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_smul c K n)))
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Approximation singular values are unchanged by negation. -/
@@ -105,14 +104,14 @@ theorem approximationSingularValue_antitone
     (K : E →L[𝕜] F) :
     Antitone (fun n => (K.singularValue n : ℝ)) := by
   intro n m hnm
-  exact_mod_cast K.approximationNumber_antitone hnm
+  exact_mod_cast (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue K)) hnm
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Every approximation singular value is controlled by operator norm. -/
 theorem approximationSingularValue_le_opNorm
     (n : ℕ) (K : E →L[𝕜] F) :
     (K.singularValue n : ℝ) ≤ ‖K‖ := by
-  exact_mod_cast K.approximationNumber_le_norm n
+  exact_mod_cast (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm K n))
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Perturbation inequality at a fixed approximation index. -/
@@ -120,7 +119,7 @@ theorem approximationSingularValue_add_le
     (n : ℕ) (K L : E →L[𝕜] F) :
     ((K + L).singularValue n : ℝ) ≤
       (K.singularValue n : ℝ) + ‖L‖ := by
-  exact_mod_cast K.approximationNumber_add_le_add_norm L n
+  exact_mod_cast (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_add_le K L n))
 
 /-- Adjoint invariance of approximation singular values on Hilbert spaces. -/
 theorem approximationSingularValue_adjoint
@@ -140,7 +139,7 @@ theorem approximationSingularValue_comp_le
     (R : H →L[𝕜] E) :
     ((L ∘L K ∘L R).singularValue n : ℝ)
       ≤ ‖L‖ * (K.singularValue n : ℝ) * ‖R‖ := by
-  have h := ContinuousLinearMap.approximationNumber_comp_comp_le L K R n
+  have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le L K R n))
   exact_mod_cast h
 
 /-- On finite-dimensional Hilbert spaces, approximation singular values are
@@ -264,7 +263,7 @@ theorem approximationSingularValue_comp_le_of_isOrthogonalProjection
   have hnormNN : ‖P‖ ≤ (1 : ℝ) := by exact_mod_cast hP.norm_le_one
   have hNN : ((K ∘L P).singularValue n : ℝ) ≤ (K.singularValue n : ℝ) := by
     calc ((K ∘L P).singularValue n : ℝ) ≤ (K.singularValue n : ℝ) * ‖P‖ :=
-          K.approximationNumber_comp_le_mul_norm P n
+          (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right K P n))
       _ ≤ (K.singularValue n : ℝ) * 1 :=
           mul_le_mul_of_nonneg_left hnormNN ((K.singularValue n).coe_nonneg)
       _ = (K.singularValue n : ℝ) := by rw [mul_one]

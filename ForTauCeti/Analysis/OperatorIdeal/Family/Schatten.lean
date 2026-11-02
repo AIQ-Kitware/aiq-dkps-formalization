@@ -65,10 +65,13 @@ theorem lpGauge_approximationNumber_add_le {p : ℝ} (hp : 1 ≤ p) (S T : E →
       (fun i : Fin k => ((S + T).singularValue i : ℝ))
       (fun i : Fin k => (S.singularValue i : ℝ) + (T.singularValue i : ℝ)) := by
     refine ⟨?_, ?_, ?_, ?_, ?_⟩
-    · exact fun i j hij => (S + T).approximationNumber_antitone (by exact_mod_cast hij)
+    · exact fun i j hij => (NNReal.coe_mono.comp_antitone
+        (ContinuousLinearMap.antitone_singularValue (S + T))) (by exact_mod_cast hij)
     · exact fun i j hij =>
-        add_le_add (S.approximationNumber_antitone (by exact_mod_cast hij))
-          (T.approximationNumber_antitone (by exact_mod_cast hij))
+        add_le_add ((NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue S))
+            (by exact_mod_cast hij))
+          ((NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue T)) (by
+              exact_mod_cast hij))
     · exact fun i => ((S + T).singularValue i).coe_nonneg
     · exact fun i =>
         add_nonneg ((S.singularValue i).coe_nonneg) ((T.singularValue i).coe_nonneg)
@@ -183,7 +186,8 @@ theorem schattenENorm_smul {p : ℝ} (hp0 : 0 < p) (c : 𝕜) (T : E →L[𝕜] 
   have hterm : ∀ n : ℕ, ENNReal.ofReal (((c • T).singularValue n : ℝ)) ^ p =
       ‖c‖ₑ ^ p * ENNReal.ofReal ((T.singularValue n : ℝ)) ^ p := by
     intro n
-    rw [approximationNumber_smul, ENNReal.ofReal_mul (norm_nonneg c), ofReal_norm,
+    rw [ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm, ENNReal.ofReal_mul
+        (norm_nonneg c), ofReal_norm,
       ENNReal.mul_rpow_of_nonneg _ _ hp0.le]
   rw [schattenENorm, schattenENorm]
   simp only [hterm]
@@ -197,7 +201,8 @@ theorem enorm_le_schattenENorm {p : ℝ} (hp0 : 0 < p) (T : E →L[𝕜] F) :
     ‖T‖ₑ ≤ T.schattenENorm p := by
   have hz : ‖T‖ₑ ^ p ≤ ∑' n : ℕ, ENNReal.ofReal ((T.singularValue n : ℝ)) ^ p := by
     refine le_trans (le_of_eq ?_) (ENNReal.le_tsum 0)
-    rw [← ofReal_norm, ← T.approximationNumber_index_zero]
+    rw [← ofReal_norm, ← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero
+        T)).trans (coe_nnnorm T))]
   have := ENNReal.rpow_le_rpow hz (by positivity : (0 : ℝ) ≤ p⁻¹)
   rwa [← ENNReal.rpow_mul, mul_inv_cancel₀ hp0.ne', ENNReal.rpow_one] at this
 
@@ -218,7 +223,9 @@ theorem schattenENorm_comp_le {p : ℝ} (hp0 : 0 < p) {G H : Type*}
   have hterm : ∀ n : ℕ, ENNReal.ofReal (((L ∘L T ∘L R).singularValue n : ℝ)) ^ p ≤
       (‖L‖ₑ * ‖R‖ₑ) ^ p * ENNReal.ofReal ((T.singularValue n : ℝ)) ^ p := by
     intro n
-    have h := ENNReal.ofReal_le_ofReal (approximationNumber_comp_comp_le L T R n)
+    have h := ENNReal.ofReal_le_ofReal ((NNReal.coe_le_coe.mpr
+        (ContinuousLinearMap.singularValue_comp_comp_le L T R n)))
+    simp only [NNReal.coe_mul, coe_nnnorm] at h
     refine le_trans (ENNReal.rpow_le_rpow h hp0.le) (le_of_eq ?_)
     -- The `rw` chain this replaced repeated `ofReal_norm` twice and
     -- `mul_rpow_of_nonneg` three times, once per occurrence.
@@ -264,7 +271,7 @@ theorem schattenENorm_rpow_le_liminf {p : ℝ} (hp0 : 0 < p) {u : Filter ℕ} [u
   rw [tendsto_iff_dist_tendsto_zero]
   refine squeeze_zero (fun _ => dist_nonneg) (fun n => ?_) hop
   rw [Real.dist_eq]
-  exact abs_approximationNumber_sub_approximationNumber_le (T n) L i
+  exact ContinuousLinearMap.abs_singularValue_sub_singularValue_le (T n) L i
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The Schatten norm is unchanged by negation, term by term. -/
