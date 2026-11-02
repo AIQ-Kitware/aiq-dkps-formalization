@@ -41,19 +41,19 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace K F] [CompleteSpace F]
 
 /-- The polar partial isometry of a rectangular bounded operator is a contraction. -/
-theorem norm_polarPartial_le_one_rectangular (T : E →L[K] F) :
-    ‖T.polarPartial‖ ≤ 1 := by
-  refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_
-  rw [one_mul, T.polarPartial_apply, T.norm_polarInitialMap_apply]
-  exact T.polarInitial.norm_orthogonalProjectionOnto_apply_le x
+theorem norm_polarFactor_le_one_rectangular (T : E →L[K] F) :
+    ‖T.polarFactor‖ ≤ 1 := by
+  rw [T.polarFactor_eq_factorThru]
+  exact ContinuousLinearMap.norm_factorThru_le zero_le_one
+    (fun x => by rw [one_mul, T.norm_modulus_apply])
 
 /-- The polar partial isometry and its adjoint are contractions in `enorm`. -/
-theorem polarPartial_and_adjoint_enorm_le_one_rectangular (T : E →L[K] F) :
-    ‖T.polarPartial‖ₑ ≤ 1 ∧ ‖T.polarPartial.adjoint‖ₑ ≤ 1 := by
-  have hU : ‖T.polarPartial‖ ≤ 1 := norm_polarPartial_le_one_rectangular T
-  have hUa : ‖T.polarPartial.adjoint‖ ≤ 1 := by
+theorem polarFactor_and_adjoint_enorm_le_one_rectangular (T : E →L[K] F) :
+    ‖T.polarFactor‖ₑ ≤ 1 ∧ ‖T.polarFactor.adjoint‖ₑ ≤ 1 := by
+  have hU : ‖T.polarFactor‖ ≤ 1 := norm_polarFactor_le_one_rectangular T
+  have hUa : ‖T.polarFactor.adjoint‖ ≤ 1 := by
     calc
-      ‖T.polarPartial.adjoint‖ = ‖T.polarPartial‖ :=
+      ‖T.polarFactor.adjoint‖ = ‖T.polarFactor‖ :=
         ContinuousLinearMap.adjoint.norm_map _
       _ ≤ 1 := hU
   constructor <;> rw [← ofReal_norm, ← ENNReal.ofReal_one]
@@ -66,19 +66,19 @@ theorem gauge_modulus_eq
     N.toOperatorIdealFamily.gauge T.modulus =
       N.toOperatorIdealFamily.gauge T := by
   let S := N.toOperatorIdealFamily
-  have hU : ‖T.polarPartial‖ ≤ 1 := norm_polarPartial_le_one_rectangular T
-  have hUa : ‖T.polarPartial.adjoint‖ ≤ 1 := by
+  have hU : ‖T.polarFactor‖ ≤ 1 := norm_polarFactor_le_one_rectangular T
+  have hUa : ‖T.polarFactor.adjoint‖ ≤ 1 := by
     rw [ContinuousLinearMap.adjoint.norm_map]
     exact hU
   apply le_antisymm
   · calc
-      S.gauge T.modulus = S.gauge (T.polarPartial.adjoint ∘L T) := by
-        rw [T.adjoint_polarPartial_comp_self]
+      S.gauge T.modulus = S.gauge (T.polarFactor.adjoint ∘L T) := by
+        rw [T.adjoint_polarFactor_comp]
       _ ≤ S.gauge T :=
         S.gauge_comp_left_le_self hUa T
   · calc
-      S.gauge T = S.gauge (T.polarPartial ∘L T.modulus) := by
-        rw [T.polarPartial_comp_modulus]
+      S.gauge T = S.gauge (T.polarFactor ∘L T.modulus) := by
+        rw [T.polarFactor_comp_modulus]
       _ ≤ S.gauge T.modulus :=
         S.gauge_comp_left_le_self hU T.modulus
 

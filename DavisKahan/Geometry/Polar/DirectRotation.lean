@@ -208,7 +208,7 @@ theorem coe_spectraCanonicalIntertwinerUnit
 noncomputable def spectraCanonicalPolarFactor
     (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : H →L[𝕜] H :=
-  (spectraCanonicalIntertwiner U V).polarPartial
+  (spectraCanonicalIntertwiner U V).polarFactor
 
 /-- Spectra-backed direct-rotation candidate in the acute regime.  The acute
 witness records the intended branch; the underlying polar factor is defined
@@ -227,7 +227,7 @@ theorem spectraCanonicalPolarFactor_decomposition
     spectraCanonicalPolarFactor U V ∘L
         ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V) =
       spectraCanonicalIntertwiner U V :=
-  ContinuousLinearMap.polarPartial_comp_modulus (spectraCanonicalIntertwiner U V)
+  ContinuousLinearMap.polarFactor_comp_modulus (spectraCanonicalIntertwiner U V)
 
 /-- Polar decomposition stated through the acute direct-rotation candidate. -/
 theorem spectraDirectRotation_decomposition
@@ -708,7 +708,7 @@ theorem isUniformlyAcute_orthogonal {U V : Submodule 𝕜 H}
 
 The polar factor depends only on the canonical intertwiner, and the acute witness is a
 `Prop` the definition discards, so this is `spectraCanonicalIntertwiner_orthogonal`
-transported through `ContinuousLinearMap.polarPartial`. -/
+transported through `ContinuousLinearMap.polarFactor`. -/
 theorem spectraDirectRotation_orthogonal (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (hacute : IsUniformlyAcute U V) :
     spectraDirectRotation Uᗮ Vᗮ (isUniformlyAcute_orthogonal hacute) =

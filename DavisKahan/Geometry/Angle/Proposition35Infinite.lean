@@ -86,7 +86,7 @@ noncomputable def section3DirectRotation : H →L[𝕜] H :=
 resolution `W - cos Θ = J sin Θ`, hence is zero on the zero-angle space. -/
 @[expose]
 noncomputable def section3QuarterTurn : H →L[𝕜] H :=
-  (section3DirectRotation U V - section3CosAngleOperator U V).polarPartial
+  (section3DirectRotation U V - section3CosAngleOperator U V).polarFactor
 
 /-- The eigenspace `Ω({θ}) H` of the bounded operator angle. -/
 noncomputable def section3AngleEigenspace (θ : ℝ) : Submodule 𝕜 H :=
@@ -509,7 +509,7 @@ theorem section3QuarterTurn_symm :
         rw [hCstar]
       _ = -(section3DirectRotation U V - section3CosAngleOperator U V) := by
         simpa only [star_sub] using star_section3DirectRotation_sub_cosine U V
-  rw [hD, ContinuousLinearMap.polarPartial_neg]
+  rw [hD, ContinuousLinearMap.polarFactor_neg]
 
 /-- The skew part has modulus exactly `sin Θ`. -/
 theorem modulus_section3DirectRotation_sub_cosine (hacute : TauCeti.IsAcute U V) :
@@ -564,7 +564,7 @@ theorem section3DirectRotation_eq_cos_add_quarterTurn_sin (hacute : TauCeti.IsAc
         section3QuarterTurn U V ∘L section3SinAngleOperator U V := by
   let D := section3DirectRotation U V - section3CosAngleOperator U V
   have hmod := modulus_section3DirectRotation_sub_cosine U V hacute
-  have hpolar := D.polarPartial_comp_modulus
+  have hpolar := D.polarFactor_comp_modulus
   have hD : section3QuarterTurn U V ∘L section3SinAngleOperator U V = D := by
     rw [section3QuarterTurn, ← hmod]
     exact hpolar
@@ -587,7 +587,7 @@ theorem section3AngleOperator_comm_quarterTurn (hacute : TauCeti.IsAcute U V) :
     rw [hmod]
     rw [section3AngleOperator]
     exact Commute.cfc_real (Commute.refl (section3SinAngleOperator U V)) Real.arcsin
-  have h := ContinuousLinearMap.commute_polarPartial_of_commute hθD hθmod
+  have h := ContinuousLinearMap.commute_polarFactor_of_commute hθD hθmod
   simpa [D, section3QuarterTurn] using h
 
 /-! ## Eigenvectors -/

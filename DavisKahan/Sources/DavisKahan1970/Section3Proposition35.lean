@@ -220,7 +220,7 @@ theorem corollary3_2_nonacuteQuarterTurn_symm
       simpa only [add_comm] using hsum
     rw [hsW]
     abel
-  rw [hD, ContinuousLinearMap.polarPartial_neg]
+  rw [hD, ContinuousLinearMap.polarFactor_neg]
 
 /-- Full-scope Corollary 3.2 for a chosen direct rotation: the angle is symmetric,
 the paper quarter turn changes sign, and the reversed direct rotation is the

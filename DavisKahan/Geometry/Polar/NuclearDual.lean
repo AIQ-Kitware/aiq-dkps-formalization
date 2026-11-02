@@ -122,7 +122,7 @@ theorem nuclearTransportDual_add_star
         B.ker.starProjection + B.ker.starProjection := by
   let B := nonacuteDirectRotation K L D - Proposition35.section3CosAngleOperator K L
   have hF : star B.polarFactor = -B.polarFactor :=
-    ContinuousLinearMap.adjoint_polarFactor_eq_neg_of_adjoint_eq_neg B
+    ContinuousLinearMap.adjoint_polarFactor_eq_neg_of_adjoint_eq_neg
       (Proposition35.star_nonacuteDirectRotation_sub_cosine K L D)
   change (B.polarFactor + B.ker.starProjection) + star (B.polarFactor + B.ker.starProjection) = _
   rw [star_add, hF, (isSelfAdjoint_starProjection B.ker).star_eq]

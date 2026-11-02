@@ -389,50 +389,29 @@ theorem ker_canonicalIntertwiner_eq_crossedDefectSum :
       canonicalIntertwiner_apply_sourceDefect_eq_zero U V ⟨s, hs⟩,
       canonicalIntertwiner_apply_targetDefect_eq_zero U V ⟨t, ht⟩, add_zero]
 
+omit [CompleteSpace H] in
 /-- The polar initial space is the regular block. -/
 theorem polarInitial_canonicalIntertwiner_eq_regular :
-    (spectraCanonicalIntertwiner U V).polarInitial =
+    ((spectraCanonicalIntertwiner U V).ker)ᗮ =
       (crossedDefectSum U V)ᗮ := by
-  have hker : LinearMap.ker ((spectraCanonicalIntertwiner U V).modulus).toLinearMap =
-      crossedDefectSum U V := by
-    rw [← ker_canonicalIntertwiner_eq_crossedDefectSum U V]
-    ext y
-    simp only [LinearMap.mem_ker, ContinuousLinearMap.coe_coe]
-    constructor
-    · intro hy
-      have hn := ContinuousLinearMap.norm_modulus_apply
-        (spectraCanonicalIntertwiner U V) y
-      rw [hy, norm_zero, eq_comm, norm_eq_zero] at hn
-      exact hn
-    · intro hy
-      have hn := ContinuousLinearMap.norm_modulus_apply
-        (spectraCanonicalIntertwiner U V) y
-      rw [hy, norm_zero, norm_eq_zero] at hn
-      exact hn
-  simp only [ContinuousLinearMap.polarInitial_def,
-    ← Submodule.orthogonal_orthogonal_eq_closure,
-    ContinuousLinearMap.orthogonal_range,
-    ← ContinuousLinearMap.star_eq_adjoint,
-    (ContinuousLinearMap.isSelfAdjoint_modulus
-      (spectraCanonicalIntertwiner U V)).star_eq,
-    hker]
+  rw [ker_canonicalIntertwiner_eq_crossedDefectSum U V]
 
 /-- The canonical polar factor vanishes on the crossed defect block. -/
 theorem canonicalPolarFactor_apply_crossedDefect_eq_zero
     {x : H} (hx : x ∈ crossedDefectSum U V) :
     spectraCanonicalPolarFactor U V x = 0 := by
-  have hxperp : x ∈ (spectraCanonicalIntertwiner U V).polarInitialᗮ := by
+  have hxperp : x ∈ ((spectraCanonicalIntertwiner U V).ker)ᗮᗮ := by
     rw [polarInitial_canonicalIntertwiner_eq_regular U V]
     exact Submodule.le_orthogonal_orthogonal (crossedDefectSum U V) hx
   rw [spectraCanonicalPolarFactor]
-  exact ContinuousLinearMap.polarPartial_eq_zero_of_mem_orthogonal _ hxperp
+  apply ContinuousLinearMap.polarFactor_apply_of_mem_ker
+  simpa only [Submodule.orthogonal_orthogonal] using hxperp
 
 /-- The final range of the canonical intertwiner is the regular block. -/
 theorem polarFinal_canonicalIntertwiner_eq_regular :
-    (spectraCanonicalIntertwiner U V).polarFinal =
+    (spectraCanonicalIntertwiner U V).range.topologicalClosure =
       (crossedDefectSum U V)ᗮ := by
-  simp only [ContinuousLinearMap.polarFinal_def,
-    ← Submodule.orthogonal_orthogonal_eq_closure,
+  simp only [← Submodule.orthogonal_orthogonal_eq_closure,
     ContinuousLinearMap.orthogonal_range,
     ← ContinuousLinearMap.star_eq_adjoint,
     star_spectraCanonicalIntertwiner,
@@ -449,12 +428,12 @@ theorem canonicalPolarFactor_initial_final_projection :
     spectraCanonicalPolarFactor U V *
         star (spectraCanonicalPolarFactor U V) = regularProjection U V := by
   constructor
-  · have h := ContinuousLinearMap.adjoint_comp_polarPartial
+  · have h := ContinuousLinearMap.adjoint_polarFactor_comp_polarFactor
       (spectraCanonicalIntertwiner U V)
     simp only [polarInitial_canonicalIntertwiner_eq_regular U V] at h
     rw [ContinuousLinearMap.star_eq_adjoint]
     exact h
-  · have h := ContinuousLinearMap.polarPartial_comp_adjoint
+  · have h := ContinuousLinearMap.polarFactor_comp_adjoint_polarFactor
       (spectraCanonicalIntertwiner U V)
     simp only [polarFinal_canonicalIntertwiner_eq_regular U V] at h
     rw [ContinuousLinearMap.star_eq_adjoint]
@@ -464,7 +443,7 @@ theorem canonicalPolarFactor_initial_final_projection :
 theorem canonicalPolarFactor_mem_regular (x : H) :
     spectraCanonicalPolarFactor U V x ∈ (crossedDefectSum U V)ᗮ := by
   rw [← polarFinal_canonicalIntertwiner_eq_regular U V,
-    ContinuousLinearMap.polarFinal_eq_range_polarPartial]
+    ← ContinuousLinearMap.range_polarFactor]
   exact ⟨x, rfl⟩
 
 /-- **The crossed quarter-turn lands in the crossed defect sum.**

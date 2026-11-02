@@ -621,40 +621,40 @@ real functional calculus needed by the polar decomposition of the cross block. -
 /-- The polar factor of the cross block is isometric on the whole `Uc`-half: its
 initial space is all of `M`, because `B` is injective. -/
 theorem polarInitial_genericCrossBlock :
-    (genericCrossBlock Uc Vc).polarInitial = ⊤ := by
-  rw [← Submodule.orthogonal_eq_bot_iff]
-  rw [ContinuousLinearMap.polarInitial_orthogonal_eq_ker]
-  exact ker_genericCrossBlock Uc Vc
+    ((genericCrossBlock Uc Vc).ker)ᗮ = ⊤ := by
+  rw [ker_genericCrossBlock Uc Vc, Submodule.bot_orthogonal_eq_top]
 
 /-- **The two halves of the generic part are unitarily equivalent**, via the
 polar factor of the cross block. -/
 noncomputable def genericHalvesEquiv :
     genericLeftHalf Uc Vc ≃ₗᵢ[𝕜] genericRightHalf Uc Vc := by
   refine LinearIsometryEquiv.ofSurjective
-    { toLinearMap := (genericCrossBlock Uc Vc).polarPartial.toLinearMap
+    { toLinearMap := (genericCrossBlock Uc Vc).polarFactor.toLinearMap
       norm_map' := fun m => ?_ } ?_
-  · exact ContinuousLinearMap.norm_polarPartial_apply_of_mem _
+  · exact ContinuousLinearMap.norm_polarFactor_apply _
       (by rw [polarInitial_genericCrossBlock]; trivial)
   · -- The range is closed and dense, hence everything.
     have hsub : LinearMap.range (genericCrossBlock Uc Vc : genericLeftHalf Uc Vc →ₗ[𝕜]
         genericRightHalf Uc Vc) ≤
-        LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
+        LinearMap.range ((genericCrossBlock Uc Vc).polarFactor :
           genericLeftHalf Uc Vc →ₗ[𝕜] genericRightHalf Uc Vc) := by
       rintro _ ⟨m, rfl⟩
       exact ⟨(genericCrossBlock Uc Vc).modulus m,
-        ContinuousLinearMap.polarPartial_apply_modulus _ m⟩
+        ContinuousLinearMap.polarFactor_modulus_apply _ m⟩
     have hclosed : IsClosed
-        ((LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
+        ((LinearMap.range ((genericCrossBlock Uc Vc).polarFactor :
           genericLeftHalf Uc Vc →ₗ[𝕜] genericRightHalf Uc Vc) :
           Set (genericRightHalf Uc Vc))) :=
-      ContinuousLinearMap.isClosed_range_polarPartial _
-    have : (LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
+      by
+        rw [(genericCrossBlock Uc Vc).range_polarFactor]
+        exact Submodule.isClosed_topologicalClosure _
+    have : (LinearMap.range ((genericCrossBlock Uc Vc).polarFactor :
         genericLeftHalf Uc Vc →ₗ[𝕜] genericRightHalf Uc Vc)).HasOrthogonalProjection := by
-      have : CompleteSpace (LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
+      have : CompleteSpace (LinearMap.range ((genericCrossBlock Uc Vc).polarFactor :
           genericLeftHalf Uc Vc →ₗ[𝕜] genericRightHalf Uc Vc)) :=
         hclosed.completeSpace_coe
       exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
-    have htop : LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
+    have htop : LinearMap.range ((genericCrossBlock Uc Vc).polarFactor :
         genericLeftHalf Uc Vc →ₗ[𝕜] genericRightHalf Uc Vc) = ⊤ := by
       rw [← Submodule.orthogonal_eq_bot_iff, Submodule.eq_bot_iff]
       intro n hn
@@ -663,7 +663,7 @@ noncomputable def genericHalvesEquiv :
       rw [orthogonal_range_genericCrossBlock_eq_bot Uc Vc] at this
       simpa using this
     intro n
-    have : n ∈ LinearMap.range ((genericCrossBlock Uc Vc).polarPartial :
+    have : n ∈ LinearMap.range ((genericCrossBlock Uc Vc).polarFactor :
         genericLeftHalf Uc Vc →ₗ[𝕜] genericRightHalf Uc Vc) := by
       rw [htop]; trivial
     exact this
@@ -900,7 +900,7 @@ function of `A`. -/
 theorem genericHalvesEquiv_modulus (m : genericLeftHalf Uc Vc) :
     genericHalvesEquiv Uc Vc ((genericCrossBlock Uc Vc).modulus m) =
       genericCrossBlock Uc Vc m :=
-  ContinuousLinearMap.polarPartial_apply_modulus _ m
+  ContinuousLinearMap.polarFactor_modulus_apply _ m
 
 /-- **The modulus of the cross block squares to `A - A²`.**  With
 `ContinuousLinearMap.eq_modulus_iff` — uniqueness of the

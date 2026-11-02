@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 -/
 module
 
-public import TauCeti.Analysis.InnerProductSpace.Polar.Bounded
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 public import ForTauCeti.Analysis.InnerProductSpace.ModulusConjugation
 
 /-!
@@ -25,16 +25,6 @@ namespace ContinuousLinearMap
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
-
-/-- The accepted polar factor respects negation. -/
-theorem polarFactor_neg (A : E →L[𝕜] E) : (-A).polarFactor = -A.polarFactor := by
-  symm
-  apply eq_polarFactor
-  · rw [modulus_neg, neg_comp, A.polarFactor_comp_modulus]
-  · intro x hx
-    change -(A x) = 0 at hx
-    change -(A.polarFactor x) = 0
-    rw [A.polarFactor_apply_of_mem_ker (neg_eq_zero.mp hx), neg_zero]
 
 /-- Unitary conjugation preserves the accepted canonical polar factor. -/
 theorem conjStarAlgEquiv_polarFactor (A : E →L[𝕜] E) (U : E ≃ₗᵢ[𝕜] E) :
@@ -74,11 +64,6 @@ theorem commute_unitary_polarFactor (A : E →L[𝕜] E) (U : E ≃ₗᵢ[𝕜] 
   change U (A.polarFactor (U.symm (U x))) = A.polarFactor (U x) at hx
   simpa only [U.symm_apply_apply] using hx
 
-/-- The accepted polar factor of a skew-adjoint operator is skew-adjoint. -/
-theorem adjoint_polarFactor_eq_neg_of_adjoint_eq_neg
-    (A : E →L[𝕜] E) (hA : A.adjoint = -A) : A.polarFactor.adjoint = -A.polarFactor := by
-  rw [← A.polarFactor_adjoint, hA, polarFactor_neg]
-
 /-- A skew-adjoint polar phase, completed by identity on its kernel,
 is an actual unitary in arbitrary Hilbert dimension over either field. -/
 theorem polarFactor_add_ker_starProjection_mem_unitary_of_adjoint_eq_neg
@@ -87,7 +72,7 @@ theorem polarFactor_add_ker_starProjection_mem_unitary_of_adjoint_eq_neg
   let F := A.polarFactor
   let Q := A.ker.starProjection
   let P := A.kerᗮ.starProjection
-  have hF : star F = -F := adjoint_polarFactor_eq_neg_of_adjoint_eq_neg A hA
+  have hF : star F = -F := adjoint_polarFactor_eq_neg_of_adjoint_eq_neg hA
   have hQ : IsStarProjection Q := isStarProjection_starProjection
   have hFQ : F * Q = 0 := by
     apply ContinuousLinearMap.ext

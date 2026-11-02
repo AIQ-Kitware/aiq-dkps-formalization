@@ -249,15 +249,6 @@ variable {E : Type u} {F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
-/-- The polar partial isometry of `M` is isometric on the range of `|M|`.  This
-is the hypothesis of the equisingularity identity in the case the principal-angle
-application needs: `|M|` plays the role of `Θ` and `M.polarPartial` the role of
-the direct rotation's polar factor `J`. -/
-theorem adjoint_comp_self_comp_modulus (M : E →L[ℂ] F) :
-    M.polarPartial.adjoint ∘L M.polarPartial ∘L M.modulus = M.modulus :=
-  adjoint_comp_self_comp_of_starProjection (W := M.polarInitial)
-    (M.adjoint_comp_polarPartial) M.modulus_apply_mem_polarInitial
-
 /-- **The equisingularity identity for the polar factor.**  For `f` vanishing at
 the origin through a continuous factorisation, the off-diagonal representative
 `J f(|M|)` and the diagonal `f(|M|)` have the same modulus, hence the same value
@@ -269,9 +260,10 @@ source norm, for `f = tan` and for `f = (sin 2 ·)`. -/
 theorem modulus_polarPartial_comp_cfc_modulus (M : E →L[ℂ] F) (f g : ℝ → ℝ)
     (hfg : ∀ t ∈ spectrum ℝ M.modulus, f t = t * g t)
     (hg : ContinuousOn g (spectrum ℝ M.modulus)) :
-    (M.polarPartial ∘L cfc f M.modulus).modulus = (cfc f M.modulus).modulus :=
+    (M.polarFactor ∘L cfc f M.modulus).modulus = (cfc f M.modulus).modulus :=
   modulus_comp_left_cfc M.isSelfAdjoint_modulus
-    (adjoint_comp_self_comp_modulus M) f g hfg hg
+    (by rw [M.polarFactor_comp_modulus,
+      M.adjoint_polarFactor_comp]) f g hfg hg
 
 end Polar
 

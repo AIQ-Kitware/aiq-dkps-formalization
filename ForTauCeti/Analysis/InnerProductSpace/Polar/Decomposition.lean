@@ -17,8 +17,8 @@ public import Mathlib.Analysis.InnerProductSpace.StarOrder
 
 The modulus and canonical polar partial isometry are `LinearMap.operatorAbs`
 and `LinearMap.polarFactor`, supplied by TauCeti. This module retains selected
-square unitary factors used by alignment and direct-rotation consumers, uniqueness
-against a competing positive factor, and two additional modulus identities.
+square unitary factors used by alignment and direct-rotation consumers, and two
+additional modulus identities.
 The singular-case choice comes from the accepted unitary-extension theorem;
 its action on the kernel is not canonical.
 
@@ -150,32 +150,5 @@ needed. -/
 theorem exists_polar_decomposition_unitary (A : E →ₗ[𝕜] E) :
     ∃ U : E ≃ₗᵢ[𝕜] E, A = (U : E →ₗ[𝕜] E) ∘ₗ A.operatorAbs :=
   ⟨choosePolarUnitary A, polar_decomposition_choosePolarUnitary A⟩
-
-/-- Uniqueness of the unitary factor in an invertible polar decomposition.
-If `A = U H` with `U` unitary and `H` positive, then the canonical polar factor
-of `A` is `U`. -/
-theorem polarFactor_eq_of_isUnit_eq_comp_positive
-    {A H : E →ₗ[𝕜] E} (hA : IsUnit A)
-    (U : E ≃ₗᵢ[𝕜] E) (hH : H.IsPositive)
-    (hdecomp : A = U.toLinearMap ∘ₗ H) :
-    A.polarFactor = U.toLinearMap := by
-  have hgram : H ∘ₗ H = A.adjoint ∘ₗ A := by
-    rw [hdecomp, LinearMap.adjoint_comp, U.adjoint_toLinearMap_eq_symm,
-      hH.adjoint_eq]
-    ext x
-    simp [LinearMap.comp_apply]
-  have hHabs : H = A.operatorAbs := by
-    exact hH.eq_operatorAbs hgram
-  have habsinj : Function.Injective (A.operatorAbs) := by
-    rw [← LinearMap.ker_eq_bot, LinearMap.ker_operatorAbs,
-      (LinearMap.isUnit_iff_ker_eq_bot _).mp hA]
-  have habssurj : Function.Surjective (A.operatorAbs) :=
-    LinearMap.injective_iff_surjective.mp habsinj
-  apply LinearMap.ext
-  intro x
-  obtain ⟨y, rfl⟩ := habssurj x
-  rw [LinearMap.polarFactor_operatorAbs_apply]
-  have hy := LinearMap.congr_fun hdecomp y
-  simpa [LinearMap.comp_apply, hHabs] using hy
 
 end TauCeti

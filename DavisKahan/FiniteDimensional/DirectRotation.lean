@@ -5,6 +5,7 @@ Authors: Jon Crall, GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Polar.Isometry
 public import DavisKahan.FiniteDimensional.DirectRotation.Majorization
 public import DavisKahan.FiniteDimensional.Core.AngleOperators
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
@@ -165,11 +166,16 @@ theorem directRotation_unique (U V : Submodule 𝕜 E)
     (hH : H.IsPositive)
     (hdecomp : canonicalIntertwiner U V = W.toLinearMap ∘ₗ H) :
     W = directRotation U V hacute := by
-  have hpolar := polarFactor_eq_of_isUnit_eq_comp_positive
-    (canonicalIntertwiner_isUnit_of_acute U V hacute) W hH hdecomp
+  have hinj : Function.Injective (canonicalIntertwiner U V) :=
+    LinearMap.ker_eq_bot.mp ((LinearMap.isUnit_iff_ker_eq_bot _).mp
+      (canonicalIntertwiner_isUnit_of_acute U V hacute))
+  have hW := LinearMap.eq_polarIsometry_of_comp_eq (hA := hinj)
+    hH W.toLinearIsometry hdecomp.symm
+  have hWmap := congrArg LinearIsometry.toLinearMap hW
+  rw [LinearMap.polarIsometry_toLinearMap] at hWmap
   apply LinearIsometryEquiv.ext
   intro x
-  exact LinearMap.congr_fun hpolar.symm x
+  exact LinearMap.congr_fun hWmap x
 
 /-- Davis--Kahan Proposition 4.3: the direct rotation minimizes every UI norm
 of the positive displacement square. -/

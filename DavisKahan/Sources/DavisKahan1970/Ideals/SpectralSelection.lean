@@ -95,7 +95,7 @@ structure GramSpectralBandModel
   count_le : count ≤ k
   right : Fin count → E0
   right_orthonormal : Orthonormal ℂ right
-  right_mem_polarInitial : ∀ i, right i ∈ X.polarInitial
+  right_mem_polarInitial : ∀ i, right i ∈ (X.ker)ᗮ
   gram_residual : ∀ i,
     ‖gramOperator X (right i) -
       ((X.approximationNumber (i : ℕ)) ^ 2 : ℂ) • right i‖ ≤
@@ -317,7 +317,7 @@ theorem exists_gramSpectralBandModel
         (indexEquiv.symm i).2.1).mp hmem
       change (indexEquiv.symm i).2.1 = i at heq
       simpa only [heq] using hval
-    have hrightInitial : ∀ i : Fin count, right i ∈ X.polarInitial := by
+    have hrightInitial : ∀ i : Fin count, right i ∈ (X.ker)ᗮ := by
       intro i
       have hLabelEta : η < (indexEquiv.symm i).1.1 := by
         have h := hηa i
@@ -355,13 +355,14 @@ def GramSpectralBandModel.toApproximateLeadingSingularFamily
     {X : E0 →L[ℂ] E1} {k : ℕ} {ε : ℝ}
     (M : GramSpectralBandModel X k ε) (hε : 0 ≤ ε) :
     ApproximateLeadingSingularFamily X k ε := by
-  let left : Fin M.count → E1 := fun i => X.polarPartial (M.right i)
+  let left : Fin M.count → E1 := fun i => X.polarFactor (M.right i)
   have hleftOrtho : Orthonormal ℂ left := by
     rw [orthonormal_iff_ite]
     intro i j
     unfold left
-    rw [X.inner_polarPartial_apply_of_mem
-      (M.right_mem_polarInitial i) (M.right_mem_polarInitial j)]
+    rw [← ContinuousLinearMap.adjoint_inner_right, ← ContinuousLinearMap.comp_apply,
+      X.adjoint_polarFactor_comp_polarFactor,
+      Submodule.starProjection_eq_self_iff.mpr (M.right_mem_polarInitial j)]
     exact orthonormal_iff_ite.mp M.right_orthonormal i j
   refine {
     count := M.count
@@ -391,12 +392,12 @@ def GramSpectralBandModel.toApproximateLeadingSingularFamily
       hvalue (div_nonneg hε (by norm_num)) hgramReal
     calc
       ‖X (M.right i) - (value : ℂ) • left i‖ =
-          ‖X.polarPartial
+          ‖X.polarFactor
             (X.modulus (M.right i) - (value : ℂ) • M.right i)‖ := by
         unfold left
-        rw [map_sub, map_smul, X.polarPartial_apply_modulus]
+        rw [map_sub, map_smul, X.polarFactor_modulus_apply]
       _ ≤ ‖X.modulus (M.right i) - (value : ℂ) • M.right i‖ :=
-        norm_polarPartial_apply_le X _
+        norm_polarFactor_apply_le X _
       _ ≤ ε / 4 := hmod
       _ ≤ ε := by linarith
   · intro i
@@ -415,10 +416,11 @@ def GramSpectralBandModel.toApproximateLeadingSingularFamily
       hvalue (div_nonneg hε (by norm_num)) hgramReal
     have hadj : X.adjoint (left i) = X.modulus (M.right i) := by
       unfold left
-      rw [X.adjoint_eq_modulus_comp_adjoint_polarPartial,
-        ContinuousLinearMap.comp_apply,
-        X.adjoint_polarPartial_polarPartial_apply_of_mem
-          (M.right_mem_polarInitial i)]
+      have h : X.adjoint ∘L X.polarFactor = X.modulus := by
+        simpa only [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint,
+          ContinuousLinearMap.adjoint_modulus] using
+          congrArg ContinuousLinearMap.adjoint X.adjoint_polarFactor_comp
+      exact congrArg (fun T : E0 →L[ℂ] E0 => T (M.right i)) h
     rw [hadj]
     exact hmod.trans (by linarith)
 

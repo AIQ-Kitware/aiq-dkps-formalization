@@ -166,7 +166,7 @@ a finite-dimensional real inner product space satisfies `‖Mᵀ M - 1‖ ≤ δ
 then `M`
 lies within `δ` of a genuine linear isometry equivalence.
 
-See `ContinuousLinearMap.norm_sub_polarIsometryOfIsUnitModulus_le` in
+See `ContinuousLinearMap.norm_sub_polarFactor_le_of_isUnit_modulus` in
 `ForTauCeti/Analysis/InnerProductSpace/Polar/Isometry.lean` for the version over arbitrary
 `RCLike` Hilbert spaces, which additionally names the isometry. -/
 theorem exists_linearIsometryEquiv_norm_sub_apply_le (M : E →L[ℝ] E) {δ : ℝ} (hδ : δ < 1)

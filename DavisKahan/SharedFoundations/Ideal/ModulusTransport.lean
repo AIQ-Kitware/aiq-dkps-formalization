@@ -43,21 +43,21 @@ variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- The polar partial isometry is a contraction.
 
-`polarPartial` is an isometry on the initial space precomposed with the
+`polarFactor` is an isometry on the initial space precomposed with the
 orthogonal projection onto it, so it is norm non-increasing everywhere. -/
-theorem norm_polarPartial_le_one (T : E →L[ℂ] E) : ‖T.polarPartial‖ ≤ 1 := by
-  refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_
-  rw [one_mul, T.polarPartial_apply, T.norm_polarInitialMap_apply]
-  exact T.polarInitial.norm_orthogonalProjectionOnto_apply_le x
+theorem norm_polarFactor_le_one (T : E →L[ℂ] E) : ‖T.polarFactor‖ ≤ 1 := by
+  rw [T.polarFactor_eq_factorThru]
+  exact ContinuousLinearMap.norm_factorThru_le zero_le_one
+    (fun x => by rw [one_mul, T.norm_modulus_apply])
 
 /-- The polar factor and its adjoint are contractions. -/
-theorem polarPartial_and_adjoint_norm_le_one (T : E →L[ℂ] E) :
-    ‖T.polarPartial‖ ≤ 1 ∧ ‖T.polarPartial.adjoint‖ ≤ 1 := by
-  refine ⟨norm_polarPartial_le_one T, ?_⟩
+theorem polarFactor_and_adjoint_norm_le_one (T : E →L[ℂ] E) :
+    ‖T.polarFactor‖ ≤ 1 ∧ ‖T.polarFactor.adjoint‖ ≤ 1 := by
+  refine ⟨norm_polarFactor_le_one T, ?_⟩
   calc
-    ‖T.polarPartial.adjoint‖ = ‖T.polarPartial‖ :=
+    ‖T.polarFactor.adjoint‖ = ‖T.polarFactor‖ :=
       ContinuousLinearMap.adjoint.norm_map _
-    _ ≤ 1 := norm_polarPartial_le_one T
+    _ ≤ 1 := norm_polarFactor_le_one T
 
 /-- Every square symmetric ideal contains `|T|` exactly when it contains `T`,
 and assigns them equal gauge. -/
@@ -66,16 +66,16 @@ theorem SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq
     (T : E →L[ℂ] E) :
     (I.mem (ContinuousLinearMap.modulus T) ↔ I.mem T) ∧
       (I.mem T → I.gauge (ContinuousLinearMap.modulus T) = I.gauge T) := by
-  let U : E →L[ℂ] E := T.polarPartial
+  let U : E →L[ℂ] E := T.polarFactor
   let J : E →L[ℂ] E := ContinuousLinearMap.id ℂ E
   have hTfactor : T = U ∘L ContinuousLinearMap.modulus T ∘L J := by
     rw [ContinuousLinearMap.comp_id]
-    exact (T.polarPartial_comp_modulus).symm
+    exact (T.polarFactor_comp_modulus).symm
   have hAbsfactor : ContinuousLinearMap.modulus T = U.adjoint ∘L T ∘L J := by
     rw [ContinuousLinearMap.comp_id]
-    exact (T.adjoint_polarPartial_comp_self).symm
-  have hU := (polarPartial_and_adjoint_norm_le_one T).1
-  have hUa := (polarPartial_and_adjoint_norm_le_one T).2
+    exact (T.adjoint_polarFactor_comp).symm
+  have hU := (polarFactor_and_adjoint_norm_le_one T).1
+  have hUa := (polarFactor_and_adjoint_norm_le_one T).2
   have hJ : ‖J‖ ≤ 1 := ContinuousLinearMap.norm_id_le
   constructor
   · constructor

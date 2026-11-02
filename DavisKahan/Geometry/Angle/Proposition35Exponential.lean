@@ -63,7 +63,7 @@ variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
 theorem section3AngleOperator_apply_mem_skewPolarInitial
     (hacute : TauCeti.IsAcute U V) (x : H) :
     section3AngleOperator U V x ∈
-      (section3DirectRotation U V - section3CosAngleOperator U V).polarInitial := by
+      ((section3DirectRotation U V - section3CosAngleOperator U V).ker)ᗮ := by
   let D := section3DirectRotation U V - section3CosAngleOperator U V
   have hmod := modulus_section3DirectRotation_sub_cosine U V hacute
   have hkerDsin : LinearMap.ker D.toLinearMap =
@@ -75,7 +75,7 @@ theorem section3AngleOperator_apply_mem_skewPolarInitial
   have hkerDtheta : LinearMap.ker D.toLinearMap =
       LinearMap.ker (section3AngleOperator U V).toLinearMap :=
     hkerDsin.trans (ker_section3AngleOperator_eq_ker_sine U V).symm
-  rw [D.polarInitial_eq_orthogonal_ker, hkerDtheta]
+  rw [hkerDtheta]
   have hself : (section3AngleOperator U V).adjoint = section3AngleOperator U V :=
     (section3AngleOperator_isSelfAdjoint U V).adjoint_eq
   have horth : (section3AngleOperator U V).rangeᗮ =
@@ -104,7 +104,7 @@ theorem section3QuarterTurn_sq_comp_angleOperator
   ext x
   have hx := section3AngleOperator_apply_mem_skewPolarInitial U V hacute x
   have hquarter :=
-    ContinuousLinearMap.polarPartial_apply_polarPartial_apply_of_mem_of_adjoint_eq_neg
+    ContinuousLinearMap.polarFactor_apply_polarFactor_apply_of_mem_of_adjoint_eq_neg
       (M := D) hskew hx
   simpa [D, section3QuarterTurn, ContinuousLinearMap.comp_apply] using hquarter
 

@@ -54,9 +54,7 @@ theorem mem_polarInitial_of_mem_gramBand
     {x : E0}
     (hx : x ∈ ((gramSpectralPVM X).proj (Set.Icc lo hi)
       measurableSet_Icc).range) :
-    x ∈ X.polarInitial := by
-  rw [← Submodule.orthogonal_orthogonal X.polarInitial,
-    X.polarInitial_orthogonal_eq_ker]
+    x ∈ (X.ker)ᗮ := by
   rw [Submodule.mem_orthogonal]
   intro z hz
   have hzX : X z = 0 := hz
@@ -179,10 +177,16 @@ theorem gram_residual_le_of_mem_band
       nlinarith
 
 /-- The polar partial isometry is norm non-increasing on the whole source. -/
-theorem norm_polarPartial_apply_le (X : E0 →L[ℂ] E1) (x : E0) :
-    ‖X.polarPartial x‖ ≤ ‖x‖ := by
-  rw [X.polarPartial_apply, X.norm_polarInitialMap_apply]
-  exact X.polarInitial.norm_orthogonalProjectionOnto_apply_le x
+theorem norm_polarFactor_apply_le (X : E0 →L[ℂ] E1) (x : E0) :
+    ‖X.polarFactor x‖ ≤ ‖x‖ := by
+  have hU : ‖X.polarFactor‖ ≤ 1 := by
+    rw [X.polarFactor_eq_factorThru]
+    exact ContinuousLinearMap.norm_factorThru_le zero_le_one
+      (fun y => by rw [one_mul, X.norm_modulus_apply])
+  calc
+    ‖X.polarFactor x‖ ≤ ‖X.polarFactor‖ * ‖x‖ := X.polarFactor.le_opNorm x
+    _ ≤ 1 * ‖x‖ := mul_le_mul_of_nonneg_right hU (norm_nonneg x)
+    _ = ‖x‖ := one_mul _
 
 /-- A positive Gram residual bounds the corresponding modulus residual. -/
 theorem modulus_residual_le_of_gram_residual

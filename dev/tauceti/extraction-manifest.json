@@ -1361,27 +1361,44 @@
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "partially-upstreamed",
-      "upstream_pr": "#13940, #16086, #16450",
-      "migration_note": "November 1: removed the local rectangular modulus, restricted-modulus automorphism, square polar-factor construction, norm/kernel/range/partial-isometry/decomposition proofs, normal commutation proof and invertibility-restricted adjoint law. All maintained consumers use LinearMap.operatorAbs/polarFactor and native facts directly. Native polar factor is rectangular RCLike and its adjoint law needs no invertibility, strictly stronger than donor. Selected square unitary API remains for consumers; singular-case selection now delegates existence to accepted exists_linearIsometryEquiv_eqOn_polarFactor. Extra negation/normal-adjoint modulus identities and uniqueness against a competing positive factor remain. Independent replacements: #13940 7b2a8f443f96040539e6479461b3325307ffb9bb, #16086 0a2aed9e3a73e222aadd47ef9a13c09b1c256385, #16450 7d1da9ada3041f5e1e5d10884964da59fc89e5b9. No DKPS proof descent claimed. Historical source e4637c3919ae under donor path and original introduction 3676b5559, Jon Crall / Claude Opus 4.8, Kitware copyright, Apache-2.0. Canonical finite polar partial isometry is not confused with its noncanonical kernel-completed unitary."
+      "upstream_pr": "#13940, #16086, #16450, #16080",
+      "migration_note": "November 1: removed the local rectangular modulus, restricted-modulus automorphism, square polar-factor construction, norm/kernel/range/partial-isometry/decomposition proofs, normal commutation proof and invertibility-restricted adjoint law. All maintained consumers use LinearMap.operatorAbs/polarFactor and native facts directly. Native polar factor is rectangular RCLike and its adjoint law needs no invertibility, strictly stronger than donor. Selected square unitary API remains for consumers; singular-case selection now delegates existence to accepted exists_linearIsometryEquiv_eqOn_polarFactor. Extra negation/normal-adjoint modulus identities remain. Independent replacements: #13940 7b2a8f443f96040539e6479461b3325307ffb9bb, #16086 0a2aed9e3a73e222aadd47ef9a13c09b1c256385, #16450 7d1da9ada3041f5e1e5d10884964da59fc89e5b9. No DKPS proof descent claimed. Historical source e4637c3919ae under donor path and original introduction 3676b5559, Jon Crall / Claude Opus 4.8, Kitware copyright, Apache-2.0. Canonical finite polar partial isometry is not confused with its noncanonical kernel-completed unitary. Subsequent November 1 checkpoint: positive-factor uniqueness polarFactor_eq_of_isUnit_eq_comp_positive is also retired. Finite direct rotation applies native LinearMap.eq_polarIsometry_of_comp_eq (#16080, 18681919170b67de8799d152b7a29a9a6a315889), for rectangular injective RCLike maps, then polarIsometry_toLinearMap. This is broader than square invertible unitary uniqueness. #20360 (3f89d482c31ad0fb4325394ea7ba001e7d65c8c1) adds a source reference to the original donor statement; that citation alone is not evidence of proof adaptation."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry",
-      "source_declarations": [],
+      "source_declarations": [
+        "ContinuousLinearMap.polarIsometryOfIsUnitModulus",
+        "ContinuousLinearMap.polarIsometryOfIsUnitModulus_apply",
+        "ContinuousLinearMap.isUnit_modulus_iff",
+        "ContinuousLinearMap.isUnit_modulus_of_norm_adjoint_comp_self_sub_one_lt_one",
+        "ContinuousLinearMap.polarIsometryOfIsUnitModulus_comp_modulus",
+        "ContinuousLinearMap.polarIsometryOfIsUnitModulus_modulus_apply",
+        "ContinuousLinearMap.norm_polarIsometryOfIsUnitModulus_apply",
+        "ContinuousLinearMap.isometry_polarIsometryOfIsUnitModulus",
+        "ContinuousLinearMap.polarIsometryOfIsUnitModulus_injective",
+        "ContinuousLinearMap.norm_sub_polarIsometryOfIsUnitModulus_apply_eq",
+        "ContinuousLinearMap.norm_sub_polarIsometryOfIsUnitModulus_apply_le_norm_modulus_sub_one",
+        "ContinuousLinearMap.norm_modulus_sub_one_le",
+        "ContinuousLinearMap.norm_sub_polarIsometryOfIsUnitModulus_apply_le",
+        "ContinuousLinearMap.norm_sub_polarIsometryOfIsUnitModulus_le",
+        "ContinuousLinearMap.polarLinearIsometry",
+        "ContinuousLinearMap.polarLinearIsometryEquiv",
+        "ContinuousLinearMap.surjective_polarIsometryOfIsUnitModulus_of_surjective"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PolarIsometry",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Polar.Bounded",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
-      "provenance_class": "new; authors Jon Crall; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
+      "provenance_class": "Historical source e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/Polar/Isometry.lean; Claude Opus 5; Copyright (c) 2026 Kitware, Inc.; Apache-2.0.",
       "direct_dependencies": [
-        "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
-        "TauCeti.Analysis.SpecialFunctions.Sqrt"
+        "TauCeti.Analysis.InnerProductSpace.Polar.Bounded"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "#16936",
+      "migration_note": "November 1: retired inverse-defined polarIsometryOfIsUnitModulus and bundled polarLinearIsometry/polarLinearIsometryEquiv factories and construction lemmas. Callers now use canonical ContinuousLinearMap.polarFactor and native norm preservation/factorization (#16936, 3266a7a2637755febeecd0484d578678a508d44e). Retains modulus invertibility criteria, norm_modulus_sub_one_le and rectangular complex Hilbert-space pointwise equality and Gram perturbation bounds, renamed norm_sub_polarFactor_*_of_isUnit_modulus. These rectangular quantitative conclusions are not subsumed by the native square-operator norm bound. The old junk branch of the inverse constructor has no maintained consumer and is retired, not identified with the native factor there."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.PositiveSqrt",
@@ -2294,22 +2311,75 @@
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry",
-      "source_declarations": [],
+      "source_declarations": [
+        "ContinuousLinearMap.polarInitial",
+        "ContinuousLinearMap.polarInitial_def",
+        "ContinuousLinearMap.modulus_apply_mem_polarInitial",
+        "ContinuousLinearMap.modulusCorestrict",
+        "ContinuousLinearMap.coe_modulusCorestrict_apply",
+        "ContinuousLinearMap.denseRange_modulusCorestrict",
+        "ContinuousLinearMap.norm_apply_le_norm_modulusCorestrict",
+        "ContinuousLinearMap.polarInitialMap",
+        "ContinuousLinearMap.polarInitialMap_modulusCorestrict",
+        "ContinuousLinearMap.polarPartial",
+        "ContinuousLinearMap.polarPartial_apply",
+        "ContinuousLinearMap.polarPartial_apply_modulus",
+        "ContinuousLinearMap.polarPartial_comp_modulus",
+        "ContinuousLinearMap.inner_modulus_left",
+        "ContinuousLinearMap.norm_polarInitialMap_apply",
+        "ContinuousLinearMap.norm_polarPartial_apply_of_mem",
+        "ContinuousLinearMap.polarPartial_eq_zero_of_mem_orthogonal",
+        "ContinuousLinearMap.polarInitial_orthogonal_eq_ker",
+        "ContinuousLinearMap.polarInitial_eq_orthogonal_ker",
+        "ContinuousLinearMap.commute_polarPartial_of_commute",
+        "ContinuousLinearMap.ker_polarPartial",
+        "ContinuousLinearMap.orthogonal_ker_polarPartial",
+        "ContinuousLinearMap.inner_polarPartial_apply_of_mem",
+        "ContinuousLinearMap.adjoint_polarPartial_polarPartial_apply_of_mem",
+        "ContinuousLinearMap.adjoint_comp_polarPartial",
+        "ContinuousLinearMap.polarPartial_comp_starProjection",
+        "ContinuousLinearMap.polarPartial_comp_adjoint_comp_polarPartial",
+        "ContinuousLinearMap.polarPartial_isPartialIsometry",
+        "ContinuousLinearMap.adjoint_comp_polarPartial_comp_adjoint",
+        "ContinuousLinearMap.isSelfAdjoint_polarPartial_comp_adjoint",
+        "ContinuousLinearMap.isIdempotentElem_polarPartial_comp_adjoint",
+        "ContinuousLinearMap.polarInitialIsometry",
+        "ContinuousLinearMap.range_polarPartial_eq_range_polarInitialMap",
+        "ContinuousLinearMap.isClosed_range_polarPartial",
+        "ContinuousLinearMap.range_polarPartial",
+        "ContinuousLinearMap.adjoint_polarPartial_comp_self",
+        "ContinuousLinearMap.modulus_comp_starProjection",
+        "ContinuousLinearMap.adjoint_eq_modulus_comp_adjoint_polarPartial",
+        "ContinuousLinearMap.modulus_adjoint_comp_polarPartial",
+        "ContinuousLinearMap.eq_polarPartial_of_comp_modulus",
+        "ContinuousLinearMap.polarPartial_neg",
+        "ContinuousLinearMap.starProjection_comp_modulus",
+        "ContinuousLinearMap.starProjection_comp_adjoint_polarPartial",
+        "ContinuousLinearMap.polarPartial_adjoint",
+        "ContinuousLinearMap.adjoint_polarPartial_eq_neg_of_adjoint_eq_neg",
+        "ContinuousLinearMap.polarPartial_comp_self_eq_neg_starProjection_of_adjoint_eq_neg",
+        "ContinuousLinearMap.polarPartial_apply_polarPartial_apply_of_mem_of_adjoint_eq_neg",
+        "ContinuousLinearMap.polarFinal",
+        "ContinuousLinearMap.polarFinal_def",
+        "ContinuousLinearMap.polarFinal_eq_range_polarPartial",
+        "ContinuousLinearMap.adjoint_polarPartial_eq_zero_of_mem_orthogonal",
+        "ContinuousLinearMap.polarPartial_comp_adjoint",
+        "ContinuousLinearMap.polarPartial_eq_comp_ringInverse_modulus"
+      ],
       "current_namespace": "ContinuousLinearMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PolarPartialIsometry",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Polar.Bounded",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
-      "provenance_class": "authored in place 2026-07-28: the general bounded polar decomposition with a partial isometry, closing the TODO in PolarIsometry.lean and giving a Spectra-free replacement for Spectra.QuantumMechanics.Channels' polar API",
+      "provenance_class": "Historical source e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/Polar/PartialIsometry.lean; Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol; Copyright (c) 2026 Kitware, Inc.; Apache-2.0.",
       "direct_dependencies": [
-        "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus",
-        "TauCeti.Analysis.InnerProductSpace.PartialIsometry"
+        "TauCeti.Analysis.InnerProductSpace.Polar.Bounded"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "#16936",
+      "migration_note": "November 1: retired polarInitial, modulusCorestrict, polarInitialMap, polarPartial, polarInitialIsometry, polarFinal and their range-extension, projection, kernel/range, adjoint, inverse and uniqueness proofs. All maintained consumers use ContinuousLinearMap.polarFactor, ker orthogonal and range.topologicalClosure directly. General RCLike complete-space equality of old/new factors was compiled before retirement via native eq_polarFactor. Accepted #16936 integration 3266a7a2637755febeecd0484d578678a508d44e is in pin 463ab293070d; canonical factorThru implementation, no direct donor proof adaptation claimed. Its PartialIsometry dependency explicitly adapts Kitware proofs: transitive reuse is distinct. Retains only commutant preservation, negation and three skew-adjoint consequences on the native factor. Equisingular drops its obsolete adjoint_comp_self_comp_modulus wrapper and uses native factorization identities. Paper theorem statements keep their mathematical scope."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
@@ -5524,6 +5594,33 @@
       "status": "accepted-upstream-local-copy-removed",
       "upstream_pr": "#13785, #16523, #20358",
       "migration_note": "November 1: remainder of module retired after all finite-calculus consumers switched to LinearMap.IsSymmetric.cfc. Deleted the duplicate bounded endomorphism algebra equivalence, eigenvalue containment helper, calculusStarAlgHom construction/norm/id proofs, and continuous-symbol calculus comparison. Native IsSymmetric.toContinuousLinearMap_cfc covers arbitrary real symbols over RCLike, stronger than the donor globally continuous complex formulation. The private ContinuousOn variant and finite CFC eigenvector proof in the directed tangent bridge are removed too; native ContinuousLinearMap.cfc_apply_of_apply_eq_smul covers arbitrary symbols with finite spectrum. The unused finite bounded-polar existence presentation is subsumed by the canonical finite polar factor and its CFC modulus bridge; no extra mathematical scope is lost. Earlier modulus retirements: independent #16523 893678359b586eace5dfe8ce192eb8a725406cb6 and Jon Crall-authored direct accepted-API bridge #20358 f4a3266bdf016c565840d069c5db06eb5352ddd1. Source e4637c3919ae and introduction 3676b5559, Jon Crall / Claude Opus 4.8, Kitware copyright, Apache-2.0; original names retained."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.Symmetry",
+      "source_declarations": [
+        "ContinuousLinearMap.polarFactor_neg",
+        "ContinuousLinearMap.conjStarAlgEquiv_polarFactor",
+        "ContinuousLinearMap.commute_unitary_polarFactor",
+        "ContinuousLinearMap.adjoint_polarFactor_eq_neg_of_adjoint_eq_neg",
+        "ContinuousLinearMap.polarFactor_add_ker_starProjection_mem_unitary_of_adjoint_eq_neg"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.Symmetry",
+      "final_tauceti_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.Symmetry",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "Source b6ddeaf6bcee84f6270cfbc571b243ca0680419f under donor path; Jon Crall, GPT-6 (Codex; configuration unspecified); Copyright (c) 2026 Kitware, Inc.; Apache-2.0.",
+      "direct_dependencies": [
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry",
+        "ForTauCeti.Analysis.InnerProductSpace.ModulusConjugation"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.Geometry.Polar.NuclearDual"
+      ],
+      "status": "staged-partial",
+      "upstream_pr": null,
+      "migration_note": "November 1: duplicate square polarFactor_neg and adjoint_polarFactor_eq_neg_of_adjoint_eq_neg proofs retired in favor of the rectangular negation and skew-adjoint extensions retained in Polar.PartialIsometry on canonical TauCeti polarFactor. Retains unitary-conjugation equivariance, unitary commutation and skew-adjoint kernel completion, which have no accepted pinned replacements. This is local deduplication after canonical representation migration, not a claim these three extra theorems have landed upstream."
     }
   ]
 }

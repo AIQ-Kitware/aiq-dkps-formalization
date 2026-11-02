@@ -44,22 +44,23 @@ space. -/
 theorem polarInitial_invariant_of_commute_modulus
     (T P : H →L[𝕜] H)
     (hcomm : T.modulus ∘L P = P ∘L T.modulus)
-    {x : H} (hx : x ∈ T.polarInitial) : P x ∈ T.polarInitial := by
-  let M : Submodule 𝕜 H := Submodule.comap (P : H →ₗ[𝕜] H) (T.polarInitial)
+    {x : H} (hx : x ∈ (T.ker)ᗮ) : P x ∈ (T.ker)ᗮ := by
+  let M : Submodule 𝕜 H := Submodule.comap (P : H →ₗ[𝕜] H) ((T.ker)ᗮ)
   have hMclosed : IsClosed (M : Set H) := by
-    have hcl : IsClosed ((T.polarInitial : Set H)) := by
-      rw [ContinuousLinearMap.polarInitial_def]
+    have hcl : IsClosed (((T.ker)ᗮ : Set H)) := by
+      rw [← T.topologicalClosure_range_modulus]
       exact Submodule.isClosed_topologicalClosure _
     exact hcl.preimage P.continuous
   have hrange : LinearMap.range (T.modulus).toLinearMap ≤ M := by
     rintro y ⟨z, rfl⟩
-    change P (T.modulus z) ∈ T.polarInitial
+    change P (T.modulus z) ∈ (T.ker)ᗮ
     have hpoint := DFunLike.congr_fun hcomm z
     rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply] at hpoint
     rw [← hpoint]
-    exact T.modulus_apply_mem_polarInitial (P z)
-  have hclosure : T.polarInitial ≤ M := by
-    rw [ContinuousLinearMap.polarInitial_def]
+    rw [← T.topologicalClosure_range_modulus]
+    exact (T.modulus.range).le_topologicalClosure ⟨P z, rfl⟩
+  have hclosure : (T.ker)ᗮ ≤ M := by
+    rw [← T.topologicalClosure_range_modulus]
     exact Submodule.topologicalClosure_minimal _ hrange hMclosed
   exact hclosure hx
 
@@ -67,8 +68,8 @@ theorem polarInitial_invariant_of_commute_modulus
 preserves its orthogonal complement. -/
 theorem polarInitial_orthogonal_invariant_of_selfAdjoint
     (T P : H →L[𝕜] H) (hP : IsSelfAdjoint P)
-    (hpres : ∀ x ∈ T.polarInitial, P x ∈ T.polarInitial)
-    {x : H} (hx : x ∈ (T.polarInitial)ᗮ) : P x ∈ (T.polarInitial)ᗮ := by
+    (hpres : ∀ x ∈ (T.ker)ᗮ, P x ∈ (T.ker)ᗮ)
+    {x : H} (hx : x ∈ ((T.ker)ᗮ)ᗮ) : P x ∈ ((T.ker)ᗮ)ᗮ := by
   rw [Submodule.mem_orthogonal'] at hx ⊢
   intro y hy
   rw [← ContinuousLinearMap.adjoint_inner_right]
@@ -122,75 +123,37 @@ theorem polarPartial_intertwines_of_projection_intertwining
     (T P Q : H →L[𝕜] H)
     (hP : IsOrthogonalProjection P) (hQ : IsOrthogonalProjection Q)
     (hTP : T ∘L P = Q ∘L T) :
-    T.polarPartial ∘L P = Q ∘L T.polarPartial := by
+    T.polarFactor ∘L P = Q ∘L T.polarFactor := by
   have habs : T.modulus ∘L P = P ∘L T.modulus :=
     modulus_commutes_of_projection_intertwining T P Q hP hQ hTP
-  have hpres : ∀ x ∈ T.polarInitial, P x ∈ T.polarInitial :=
-    fun x hx => polarInitial_invariant_of_commute_modulus T P habs hx
-  have hPsa : IsSelfAdjoint P := LinearMap.IsSymmetric.isSelfAdjoint hP.2
-  have hpresOrth : ∀ x ∈ (T.polarInitial)ᗮ, P x ∈ (T.polarInitial)ᗮ :=
-    fun x hx => polarInitial_orthogonal_invariant_of_selfAdjoint T P hPsa hpres hx
-  refine ContinuousLinearMap.ext fun x => ?_
-  obtain ⟨m, hm, hmk⟩ :=
-    Submodule.HasOrthogonalProjection.exists_orthogonal
-      (K := T.polarInitial) x
-  obtain ⟨k, hk, rfl⟩ : ∃ k ∈ (T.polarInitial)ᗮ, x = m + k :=
-    ⟨x - m, hmk, by abel⟩
-  have hUk : T.polarPartial k = 0 := by
-    rw [ContinuousLinearMap.polarPartial_apply]
-    rw [Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr hk]
-    simp
-  have hUPk : T.polarPartial (P k) = 0 := by
-    rw [ContinuousLinearMap.polarPartial_apply]
-    rw [Submodule.orthogonalProjectionOnto_eq_zero_iff.mpr (hpresOrth k hk)]
-    simp
-  simp only [ContinuousLinearMap.comp_apply, map_add, hUk, hUPk, map_zero,
-    add_zero]
-  have heqOnDense :
-      T.polarInitialMap ((T.polarInitial).orthogonalProjectionOnto (P m)) =
-        Q (T.polarInitialMap ((T.polarInitial).orthogonalProjectionOnto m)) := by
-    let f : T.polarInitial →L[𝕜] H :=
-      T.polarInitialMap ∘L
-        (P ∘L (T.polarInitial).subtypeL).codRestrict
-          (T.polarInitial) (fun z => hpres z z.property)
-    let g : T.polarInitial →L[𝕜] H := Q ∘L T.polarInitialMap
-    have hfg : f = g := by
-      apply DFunLike.coe_injective
-      apply DenseRange.equalizer T.denseRange_modulusCorestrict
-        f.continuous g.continuous
-      funext z
-      change T.polarInitialMap
-          ⟨P (T.modulusCorestrict z), hpres _ (T.modulusCorestrict z).property⟩ =
-        Q (T.polarInitialMap (T.modulusCorestrict z))
-      simp only [ContinuousLinearMap.coe_modulusCorestrict_apply]
-      have hpabs := DFunLike.congr_fun habs z
-      rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.comp_apply] at hpabs
-      have hleft :
-          (⟨P (T.modulus z), hpres _ (T.modulus_apply_mem_polarInitial z)⟩ : T.polarInitial) =
-            T.modulusCorestrict (P z) := by
-        apply Subtype.ext
-        simpa using hpabs.symm
-      rw [hleft, ContinuousLinearMap.polarInitialMap_modulusCorestrict,
-        ContinuousLinearMap.polarInitialMap_modulusCorestrict]
-      exact DFunLike.congr_fun hTP z
-    have hmproj : (T.polarInitial).orthogonalProjectionOnto m = ⟨m, hm⟩ := by
-      apply Subtype.ext
-      exact Submodule.starProjection_eq_self_iff.mpr hm
-    have hPm : P m ∈ T.polarInitial := hpres m hm
-    have hPmproj : (T.polarInitial).orthogonalProjectionOnto (P m) = ⟨P m, hPm⟩ := by
-      apply Subtype.ext
-      exact Submodule.starProjection_eq_self_iff.mpr hPm
-    have hcodeq :
-        ((P ∘L (T.polarInitial).subtypeL).codRestrict (T.polarInitial)
-            (fun z => hpres z z.property)) ⟨m, hm⟩ = (⟨P m, hPm⟩ : T.polarInitial) := by
-      apply Subtype.ext
-      -- `simp` no longer takes the `codRestrict` coercion step; it is definitional.
-      rfl
-    have hkey := DFunLike.congr_fun hfg ⟨m, hm⟩
-    simp only [f, g, ContinuousLinearMap.comp_apply, hcodeq] at hkey
-    rw [hmproj, hPmproj]
-    exact hkey
-  simpa [ContinuousLinearMap.polarPartial_apply] using heqOnDense
+  let V := T.polarFactor ∘L P - Q ∘L T.polarFactor
+  have hcomp : V ∘L T.modulus = 0 := by
+    calc
+      V ∘L T.modulus = T.polarFactor ∘L (P ∘L T.modulus) -
+          Q ∘L (T.polarFactor ∘L T.modulus) := by
+        simp only [V, ContinuousLinearMap.sub_comp, ContinuousLinearMap.comp_assoc]
+      _ = T.polarFactor ∘L (T.modulus ∘L P) - Q ∘L T := by
+        rw [habs, T.polarFactor_comp_modulus]
+      _ = T ∘L P - Q ∘L T := by
+        rw [← ContinuousLinearMap.comp_assoc, T.polarFactor_comp_modulus]
+      _ = 0 := sub_eq_zero.mpr hTP
+  have hker : ∀ y ∈ T.modulus.rangeᗮ, V y = 0 := by
+    intro y hy
+    rw [T.orthogonal_range_modulus] at hy
+    have hPy : P y ∈ T.ker := by
+      change T (P y) = 0
+      have h := congrArg (fun S : H →L[𝕜] H => S y) hTP
+      change T (P y) = Q (T y) at h
+      rw [show T y = 0 from hy, map_zero] at h
+      exact h
+    simp only [V, _root_.sub_apply, ContinuousLinearMap.comp_apply,
+      T.polarFactor_apply_of_mem_ker hy, T.polarFactor_apply_of_mem_ker hPy,
+      map_zero, sub_self]
+  have hV := ContinuousLinearMap.eq_factorThru
+    (T := (0 : H →L[𝕜] H)) (A := T.modulus) hcomp hker
+  have hzero := ContinuousLinearMap.eq_factorThru
+    (T := (0 : H →L[𝕜] H)) (A := T.modulus) (V := 0) (by simp) (by simp)
+  exact sub_eq_zero.mp (hV.trans hzero.symm)
 
 /-- The polar factor of the canonical two-projection intertwiner intertwines
 both projections without an acuteness assumption. -/
@@ -215,7 +178,7 @@ theorem canonicalPolarFactor_adjoint_swap_from_polar
       spectraCanonicalPolarFactor V U := by
   rw [spectraCanonicalPolarFactor, spectraCanonicalPolarFactor,
     ContinuousLinearMap.star_eq_adjoint,
-    ← ContinuousLinearMap.polarPartial_adjoint,
+    ← ContinuousLinearMap.polarFactor_adjoint,
     ← ContinuousLinearMap.star_eq_adjoint, star_spectraCanonicalIntertwiner]
 
 end

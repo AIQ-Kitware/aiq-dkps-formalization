@@ -588,7 +588,7 @@ end IdealBlockBridge
 /-! ### Checkpoint B: the Gram-selected vectors are fixed by the cutoff
 
 `GramSpectralBandModel` promises only that its selected vectors lie in
-`X.polarInitial`.  It does *not* promise they are fixed by any cutoff, so
+`(X.ker)ᗮ`.  It does *not* promise they are fixed by any cutoff, so
 cutoff-fixity is a proof obligation rather than a library theorem.  It is
 however free once the operator being selected is already post-composed with the
 cutoff: the kernel of the cutoff is contained in the kernel of the composite, so
@@ -601,6 +601,7 @@ variable {E0 : Type*} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
 variable {E1 : Type*} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
   [CompleteSpace E1]
 
+omit [CompleteSpace E1] in
 /-- **The polar initial space of `Y ∘ P` is fixed by the orthogonal projection
 `P`.**
 
@@ -611,7 +612,7 @@ directly, without passing through `range P`, because the intermediate
 relations here make unnecessary. -/
 theorem eq_of_mem_polarInitial_comp {P : E0 →L[ℂ] E0} (hPsa : IsSelfAdjoint P)
     (hPid : IsIdempotentElem P) (Y : E0 →L[ℂ] E1) {v : E0}
-    (hv : v ∈ (Y ∘L P).polarInitial) : P v = v := by
+    (hv : v ∈ ((Y ∘L P).ker)ᗮ) : P v = v := by
   have hPP : ∀ w : E0, P (P w) = P w := fun w => by
     have h := congrArg (fun T : E0 →L[ℂ] E0 => T w) hPid.eq
     simpa only [_root_.mul_apply_eq_comp] using h
@@ -619,8 +620,8 @@ theorem eq_of_mem_polarInitial_comp {P : E0 →L[ℂ] E0} (hPsa : IsSelfAdjoint 
   have hker : v - P v ∈ LinearMap.ker (Y ∘L P).toLinearMap := by
     show (Y ∘L P) (v - P v) = 0
     simp only [ContinuousLinearMap.comp_apply, map_sub, hPP v, sub_self]
-  have hmem : v - P v ∈ (Y ∘L P).polarInitialᗮ := by
-    rw [ContinuousLinearMap.polarInitial_orthogonal_eq_ker]
+  have hmem : v - P v ∈ ((Y ∘L P).ker)ᗮᗮ := by
+    rw [Submodule.orthogonal_orthogonal]
     exact hker
   have hv0 : ⟪v, v - P v⟫_ℂ = 0 :=
     (Submodule.mem_orthogonal _ _).mp hmem v hv
@@ -701,7 +702,7 @@ is the hypothesis `hxΩ : ∀ i, Ω.toProj (x i) = x i` that every Section 7 lem
 of `TanTwoThetaUnboundedKyFan` demands of its selected family. -/
 theorem toProj_eq_of_mem_polarInitial_comp_cutoffCorner
     (Ω : TauCeti.BoundedCutoff A U τ) {v : U}
-    (hv : v ∈ (reflectionSineCorner U Z ∘L cutoffCorner Ω).polarInitial) :
+    (hv : v ∈ ((reflectionSineCorner U Z ∘L cutoffCorner Ω).ker)ᗮ) :
     Ω.toProj (v : H) = (v : H) := by
   have h := eq_of_mem_polarInitial_comp (isSelfAdjoint_cutoffCorner Ω)
     (isIdempotentElem_cutoffCorner Ω) (reflectionSineCorner U Z) hv

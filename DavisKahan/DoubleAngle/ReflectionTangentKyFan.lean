@@ -8,7 +8,7 @@ module
 public import DavisKahan.DoubleAngle.KyFanOrthonormal
 public import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 public import DavisKahan.Sources.DavisKahan1970.SharpKyFan
-public import ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry
+public import TauCeti.Analysis.InnerProductSpace.Polar.Bounded
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar
 
 public section
@@ -49,54 +49,31 @@ variable {E0 : Type u} [NormedAddCommGroup E0] [InnerProductSpace ℂ E0]
 variable {E1 : Type v} [NormedAddCommGroup E1] [InnerProductSpace ℂ E1]
   [CompleteSpace E1]
 
-private theorem isUnit_modulus_of_isUnit_selfAdjoint
-    (C : E0 →L[ℂ] E0) (hCsa : IsSelfAdjoint C) (hCunit : IsUnit C) :
-    IsUnit C.modulus := by
-  rw [C.isUnit_modulus_iff, hCsa.adjoint_eq, ← ContinuousLinearMap.mul_def]
-  exact hCunit.mul hCunit
-
-private theorem polar_apply_modulus_eq_self
-    (C : E0 →L[ℂ] E0) (hCsa : IsSelfAdjoint C) (hCunit : IsUnit C) (x : E0) :
-    C.polarIsometryOfIsUnitModulus (C.modulus x) = C x := by
-  exact C.polarIsometryOfIsUnitModulus_modulus_apply
-    (isUnit_modulus_of_isUnit_selfAdjoint C hCsa hCunit) x
-
 private theorem selfAdjoint_polar_then_apply_eq_modulus
-    (C : E0 →L[ℂ] E0) (hCsa : IsSelfAdjoint C) (hCunit : IsUnit C) (x : E0) :
-    C (C.polarIsometryOfIsUnitModulus x) = C.modulus x := by
-  let hM : IsUnit C.modulus := isUnit_modulus_of_isUnit_selfAdjoint C hCsa hCunit
-  have hsq : C * C = C.modulus * C.modulus := by
-    symm
-    rw [ContinuousLinearMap.mul_def, C.modulus_comp_modulus,
-      hCsa.adjoint_eq, ← ContinuousLinearMap.mul_def]
-  have hunitM : C.modulus * Ring.inverse C.modulus = 1 :=
-    Ring.mul_inverse_cancel _ hM
-  rw [ContinuousLinearMap.polarIsometryOfIsUnitModulus_apply]
-  change (C * C) (Ring.inverse C.modulus x) = C.modulus x
-  rw [hsq]
-  change C.modulus (C.modulus (Ring.inverse C.modulus x)) = C.modulus x
-  have hcancel : C.modulus (Ring.inverse C.modulus x) = x := by
-    have h := congrArg (fun M : E0 →L[ℂ] E0 => M x) hunitM
-    change C.modulus (Ring.inverse C.modulus x) = x at h
-    exact h
-  exact congrArg C.modulus hcancel
+    (C : E0 →L[ℂ] E0) (hCsa : IsSelfAdjoint C) (_hCunit : IsUnit C) (x : E0) :
+    C (C.polarFactor x) = C.modulus x := by
+  have h : C.adjoint ∘L C.polarFactor = C.modulus := by
+    simpa only [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_adjoint,
+      ContinuousLinearMap.adjoint_modulus] using
+      congrArg ContinuousLinearMap.adjoint C.adjoint_polarFactor_comp
+  rw [hCsa.adjoint_eq] at h
+  exact congrArg (fun T : E0 →L[ℂ] E0 => T x) h
 
 private theorem norm_polar_apply
-    (C : E0 →L[ℂ] E0) (hCsa : IsSelfAdjoint C) (hCunit : IsUnit C) (x : E0) :
-    ‖C.polarIsometryOfIsUnitModulus x‖ = ‖x‖ :=
-  C.norm_polarIsometryOfIsUnitModulus_apply
-    (isUnit_modulus_of_isUnit_selfAdjoint C hCsa hCunit) x
+    (C : E0 →L[ℂ] E0) (_hCsa : IsSelfAdjoint C) (hCunit : IsUnit C) (x : E0) :
+    ‖C.polarFactor x‖ = ‖x‖ :=
+  C.norm_polarFactor_apply_of_injective (ContinuousLinearMap.isUnit_iff_bijective.mp hCunit).1 x
 
 private theorem orthonormal_polar_comp
-    {m : ℕ} (C : E0 →L[ℂ] E0) (hCsa : IsSelfAdjoint C) (hCunit : IsUnit C)
+    {m : ℕ} (C : E0 →L[ℂ] E0) (_hCsa : IsSelfAdjoint C) (hCunit : IsUnit C)
     {f : Fin m → E0} (hf : Orthonormal ℂ f) :
-    Orthonormal ℂ (fun i => C.polarIsometryOfIsUnitModulus (f i)) := by
+    Orthonormal ℂ (fun i => C.polarFactor (f i)) := by
   rw [orthonormal_iff_ite] at hf ⊢
   intro i j
-  let hM : IsUnit C.modulus := isUnit_modulus_of_isUnit_selfAdjoint C hCsa hCunit
-  let J := C.polarLinearIsometry hM
-  rw [← ContinuousLinearMap.polarLinearIsometry_apply hM,
-    ← ContinuousLinearMap.polarLinearIsometry_apply hM]
+  let J : E0 →ₗᵢ[ℂ] E0 := {
+    toLinearMap := C.polarFactor.toLinearMap
+    norm_map' := C.norm_polarFactor_apply_of_injective
+      (ContinuousLinearMap.isUnit_iff_bijective.mp hCunit).1 }
   change ⟪J (f i), J (f j)⟫_ℂ = _
   rw [J.inner_map_map]
   exact hf i j
@@ -311,11 +288,11 @@ theorem reflectionTangent_approximate_pair
     (hTv : ‖T.adjoint v - (t : ℂ) • u‖ ≤ eps) :
     (b - a) * t ≤
       |RCLike.re ⟪v, B u⟫_ℂ| +
-        |RCLike.re ⟪C1.polarIsometryOfIsUnitModulus v,
-          B (C0.polarIsometryOfIsUnitModulus u)⟫_ℂ| +
+        |RCLike.re ⟪C1.polarFactor v,
+          B (C0.polarFactor u)⟫_ℂ| +
         reflectionTangentErrorCoefficient A0 A1 B T C0 C1 * eps := by
-  let J0 := C0.polarIsometryOfIsUnitModulus
-  let J1 := C1.polarIsometryOfIsUnitModulus
+  let J0 := C0.polarFactor
+  let J1 := C1.polarFactor
   let q : ℝ := Real.sqrt (1 + ‖T‖ ^ 2)
   let r : ℝ := Real.sqrt (1 + t ^ 2)
   let c : ℝ := r⁻¹
@@ -354,10 +331,9 @@ theorem reflectionTangent_approximate_pair
       hgram1Adj ht0 htnormAdj hTv hTuAdj
     simpa [q, r, c, M1, ContinuousLinearMap.adjoint.norm_map] using hraw
   have hC0polar : ‖C0 u - (c : ℂ) • J0 u‖ ≤ M0 * eps := by
-    have hM0 : IsUnit C0.modulus := isUnit_modulus_of_isUnit_selfAdjoint C0 hC0 hC0unit
     have hJ0modulus : J0 (C0.modulus u) = C0 u := by
       dsimp [J0]
-      exact C0.polarIsometryOfIsUnitModulus_modulus_apply hM0 u
+      exact C0.polarFactor_modulus_apply u
     have hvec0 :
         C0 u - (c : ℂ) • J0 u =
           J0 (C0.modulus u - (c : ℂ) • u) := by
@@ -367,14 +343,13 @@ theorem reflectionTangent_approximate_pair
           ‖J0 (C0.modulus u - (c : ℂ) • u)‖ := by rw [hvec0]
       _ = ‖C0.modulus u - (c : ℂ) • u‖ := by
         simpa only [J0] using
-          C0.norm_polarIsometryOfIsUnitModulus_apply hM0
+          norm_polar_apply C0 hC0 hC0unit
             (C0.modulus u - (c : ℂ) • u)
       _ ≤ M0 * eps := hmod0
   have hC1polar : ‖C1 v - (c : ℂ) • J1 v‖ ≤ M1 * eps := by
-    have hM1 : IsUnit C1.modulus := isUnit_modulus_of_isUnit_selfAdjoint C1 hC1 hC1unit
     have hJ1modulus : J1 (C1.modulus v) = C1 v := by
       dsimp [J1]
-      exact C1.polarIsometryOfIsUnitModulus_modulus_apply hM1 v
+      exact C1.polarFactor_modulus_apply v
     have hvec1 :
         C1 v - (c : ℂ) • J1 v =
           J1 (C1.modulus v - (c : ℂ) • v) := by
@@ -384,7 +359,7 @@ theorem reflectionTangent_approximate_pair
           ‖J1 (C1.modulus v - (c : ℂ) • v)‖ := by rw [hvec1]
       _ = ‖C1.modulus v - (c : ℂ) • v‖ := by
         simpa only [J1] using
-          C1.norm_polarIsometryOfIsUnitModulus_apply hM1
+          norm_polar_apply C1 hC1 hC1unit
             (C1.modulus v - (c : ℂ) • v)
       _ ≤ M1 * eps := hmod1
   have hTstarMod :
@@ -664,8 +639,8 @@ theorem reflectionTangent_selected_le_kyFan_add_error
     (b - a) * ∑ i : Fin F.count, T.approximationNumber (i : ℕ) ≤
       2 * kyFanApproximationGauge F.count B +
         F.count * (reflectionTangentErrorCoefficient A0 A1 B T C0 C1 * eps) := by
-  let J0 := C0.polarIsometryOfIsUnitModulus
-  let J1 := C1.polarIsometryOfIsUnitModulus
+  let J0 := C0.polarFactor
+  let J1 := C1.polarFactor
   have hJ0 := orthonormal_polar_comp C0 hC0 hC0unit F.right_orthonormal
   have hJ1 := orthonormal_polar_comp C1 hC1 hC1unit F.left_orthonormal
   have hscalar : ∀ i : Fin F.count,

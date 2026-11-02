@@ -428,12 +428,11 @@ theorem eq_spectraCanonicalPolarFactor_of_diagonalBlocks_isPositive
   have hcomp : W ∘L S.modulus = S := by
     rw [hAeqT, ← ContinuousLinearMap.mul_def]
     exact hSeq.symm
-  have hker : ∀ y ∈ S.polarInitialᗮ, W y = 0 := by
+  have hker : ∀ y ∈ S.ker, W y = 0 := by
     intro y hy
-    rw [ContinuousLinearMap.polarInitial_orthogonal_eq_ker,
-      ker_spectraCanonicalIntertwiner_eq_bot U V hUV hVU, Submodule.mem_bot] at hy
+    rw [ker_spectraCanonicalIntertwiner_eq_bot U V hUV hVU, Submodule.mem_bot] at hy
     rw [hy, map_zero]
-  exact ContinuousLinearMap.eq_polarPartial_of_comp_modulus S W hcomp hker
+  exact S.eq_polarFactor hcomp hker
 
 /-- **Proposition 3.1 at the printed hypothesis, as a biconditional.** -/
 theorem eq_spectraCanonicalPolarFactor_iff_diagonalBlocks_isPositive

@@ -59,7 +59,7 @@ polar partial isometry of the skew part `W - cos Θ`, hence vanishes on the zero
 noncomputable def section3NonacuteQuarterTurn
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     H →L[𝕜] H :=
-  (nonacuteDirectRotation U V J - section3CosAngleOperator U V).polarPartial
+  (nonacuteDirectRotation U V J - section3CosAngleOperator U V).polarFactor
 
 /-- Every completed nonacute direct rotation commutes with `cos Θ`. -/
 theorem nonacuteDirectRotation_comm_cosine
@@ -163,7 +163,7 @@ vector reached by `Θ`, while remaining zero on the zero-angle kernel. -/
 theorem section3AngleOperator_apply_mem_nonacuteSkewPolarInitial
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) (x : H) :
     section3AngleOperator U V x ∈
-      (nonacuteDirectRotation U V J - section3CosAngleOperator U V).polarInitial := by
+      ((nonacuteDirectRotation U V J - section3CosAngleOperator U V).ker)ᗮ := by
   let D := nonacuteDirectRotation U V J - section3CosAngleOperator U V
   have hmod := modulus_nonacuteDirectRotation_sub_cosine U V J
   have hkerDsin : LinearMap.ker D.toLinearMap =
@@ -175,7 +175,7 @@ theorem section3AngleOperator_apply_mem_nonacuteSkewPolarInitial
   have hkerDtheta : LinearMap.ker D.toLinearMap =
       LinearMap.ker (section3AngleOperator U V).toLinearMap :=
     hkerDsin.trans (ker_section3AngleOperator_eq_ker_sine U V).symm
-  rw [D.polarInitial_eq_orthogonal_ker, hkerDtheta]
+  rw [hkerDtheta]
   have hself : (section3AngleOperator U V).adjoint = section3AngleOperator U V :=
     (section3AngleOperator_isSelfAdjoint U V).adjoint_eq
   have horth : (section3AngleOperator U V).rangeᗮ =
@@ -205,7 +205,7 @@ theorem section3NonacuteQuarterTurn_sq_comp_angleOperator
   ext x
   have hx := section3AngleOperator_apply_mem_nonacuteSkewPolarInitial U V J x
   have hquarter :=
-    ContinuousLinearMap.polarPartial_apply_polarPartial_apply_of_mem_of_adjoint_eq_neg
+    ContinuousLinearMap.polarFactor_apply_polarFactor_apply_of_mem_of_adjoint_eq_neg
       (M := D) hskew hx
   simpa [D, section3NonacuteQuarterTurn, ContinuousLinearMap.comp_apply] using hquarter
 
@@ -217,7 +217,7 @@ theorem nonacuteDirectRotation_eq_cos_add_quarterTurn_sin
         section3NonacuteQuarterTurn U V J ∘L section3SinAngleOperator U V := by
   let D := nonacuteDirectRotation U V J - section3CosAngleOperator U V
   have hmod := modulus_nonacuteDirectRotation_sub_cosine U V J
-  have hpolar := D.polarPartial_comp_modulus
+  have hpolar := D.polarFactor_comp_modulus
   have hD : section3NonacuteQuarterTurn U V J ∘L section3SinAngleOperator U V = D := by
     rw [section3NonacuteQuarterTurn, ← hmod]
     exact hpolar
@@ -242,7 +242,7 @@ theorem section3AngleOperator_comm_nonacuteQuarterTurn
     rw [hmod]
     rw [section3AngleOperator]
     exact Commute.cfc_real (Commute.refl (section3SinAngleOperator U V)) Real.arcsin
-  have h := ContinuousLinearMap.commute_polarPartial_of_commute hθD hθmod
+  have h := ContinuousLinearMap.commute_polarFactor_of_commute hθD hθmod
   simpa [D, section3NonacuteQuarterTurn] using h
 
 /-! ## The eigenvector clause at the completed nonacute scope

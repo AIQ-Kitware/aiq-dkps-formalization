@@ -2598,3 +2598,60 @@ originates at `caa0966`, Jon Crall / GPT-5.6 Thinking; the polar/CFC bridge at
 Apache-2.0 attribution in the manifest. No proof adaptation is inferred for
 #13785 or #16523; the distinct Jon Crall-authored #20358 comparison bridge is
 recorded above. All integrations are in pin `463ab293070d`.
+
+
+## 2026-11-01: canonical bounded polar factors and injective-factor uniqueness
+
+Retired the range-extension engine in `Polar/PartialIsometry.lean`:
+`polarInitial`, `modulusCorestrict`, `polarInitialMap`, `polarPartial`,
+`polarInitialIsometry`, `polarFinal` and their construction, kernel/range,
+projection, factorization, adjoint, inverse and uniqueness proofs. The full
+RCLike complete-space equality with the accepted factor was compiled before
+removal using `ContinuousLinearMap.eq_polarFactor`. Maintained callers now use
+`ContinuousLinearMap.polarFactor`, `(ker M)ᗮ` and `range.topologicalClosure`
+directly. Polar intertwining uses native factorization uniqueness; the obsolete
+`TauCeti.adjoint_comp_self_comp_modulus` support wrapper in
+`PrincipalAngles/Equisingular.lean` is gone.
+
+Accepted [#16936](https://github.com/TauCetiProject/TauCeti/pull/16936),
+`3266a7a2637755febeecd0484d578678a508d44e`, is an ancestor of pin
+`463ab293070d`. It constructs the factor through `factorThru`, rather than the
+donor range-extension implementation. No direct donor proof adaptation is
+claimed. Its partial-isometry dependency explicitly adapts Kitware proofs;
+that is transitive reuse, not authorship of the canonical polar construction.
+The donor now retains five additional commutant, negation and skew-adjoint
+identities on the accepted factor. `Polar/Symmetry.lean` consumes these
+negation/skew identities, removing its duplicate square specializations.
+
+`Polar/Isometry.lean` also loses its inverse-defined
+`polarIsometryOfIsUnitModulus` and `polarLinearIsometry`/`polarLinearIsometryEquiv`
+factories. Reflection-tangent proofs use native norm preservation and a standard
+isometry bundle. The retained modulus-invertibility criteria and sharp
+pointwise/rectangular Gram perturbation bounds are now stated on the canonical
+factor. They cover rectangular complex Hilbert spaces, whereas the accepted
+`norm_sub_polarFactor_le` is an endomorphism bound. The old inverse constructor's
+junk branch has no maintained consumer; no equality with the canonical factor
+is claimed in that branch.
+
+Finally, `Polar/Decomposition.lean` loses
+`TauCeti.polarFactor_eq_of_isUnit_eq_comp_positive`. Finite direct rotation
+applies `LinearMap.eq_polarIsometry_of_comp_eq` and
+`polarIsometry_toLinearMap` directly. Accepted
+[#16080](https://github.com/TauCetiProject/TauCeti/pull/16080),
+`18681919170b67de8799d152b7a29a9a6a315889`, covers rectangular injective maps,
+strictly beyond the old square invertible formulation. The later source
+reference [#20360](https://github.com/TauCetiProject/TauCeti/pull/20360),
+`3f89d482c31ad0fb4325394ea7ba001e7d65c8c1`, cites the donor statement;
+a citation is not a claim of proof adaptation.
+
+Historical sources remain at `e4637c3919ae` under the three donor paths.
+`PartialIsometry` credits Jon Crall, Claude Opus 5 and OpenAI GPT-5.6 Sol;
+`Isometry` credits Claude Opus 5; finite `Decomposition` credits Jon Crall and
+Claude Opus 4.8 (introduction `3676b5559`). All carry Kitware copyright and
+Apache-2.0. The manifest preserves original declaration names and distinguishes
+retired construction from the retained quantitative and algebraic extensions.
+
+Validation: focused polar, reflection-tangent, equisingularity, support geometry,
+finite uniqueness and nuclear-duality builds passed. The full default
+`lake build` passed (21529 jobs), followed by `lake build Challenge` (19769 jobs),
+with no compiler or linter warnings.
