@@ -291,10 +291,12 @@ theorem tanTheta_unbounded_vector_of_centered_bounds
           ‖(x - V.starProjection x) -
               Z.starProjection (x - V.starProjection x)‖ ^ 2 =
         ‖x - V.starProjection x‖ ^ 2 :=
-      norm_sq_starProjection_add_norm_sq_sub Z _
+      (by simpa only [Submodule.starProjection_orthogonal_val] using
+        (Submodule.norm_sq_eq_add_norm_sq_starProjection _ Z).symm)
     have hpyVx : ‖V.starProjection x‖ ^ 2 +
         ‖x - V.starProjection x‖ ^ 2 = ‖x‖ ^ 2 :=
-      norm_sq_starProjection_add_norm_sq_sub V x
+      (by simpa only [Submodule.starProjection_orthogonal_val] using
+        (Submodule.norm_sq_eq_add_norm_sq_starProjection x V).symm)
     have hq : (0 : ℝ) < ‖x - V.starProjection x‖ := norm_pos_iff.mpr h0
     set q : ℝ := ‖x - V.starProjection x‖ with hqdef
     set pz : ℝ := ‖Z.starProjection (x - V.starProjection x)‖ with hpzdef

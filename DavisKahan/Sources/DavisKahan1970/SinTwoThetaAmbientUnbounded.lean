@@ -199,7 +199,7 @@ theorem reflectionPerturbation_normingMem_and_gauge_le
       (1 : ℝ) * ((DavisKahan.reflectionPerturbation V Eop).kyFanGauge k : ℝ) ≤
         ((((2 : ℝ) : 𝕜) • Eop).kyFanGauge k : ℝ) := by
     intro k
-    rw [one_mul, kyFanApproximationGauge_smul, htwo]
+    rw [one_mul, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo]
     rcases Nat.eq_zero_or_pos k with rfl | hk
     · simp []
     · have h := DavisKahan.reflectionPerturbation_mem_and_gauge_le

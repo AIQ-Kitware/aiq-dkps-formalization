@@ -184,7 +184,7 @@ theorem equation1_12 (K : E →L[ℂ] F) {ν : ℕ}
     simpa using hb i j
   have hgauge : ∀ T : E →L[ℂ] F,
       ((ι ∘L T).kyFanGauge ν : ℝ) = (T.kyFanGauge ν : ℝ) := fun T =>
-    kyFanApproximationGauge_comp_eq_of_leftInverse hleft hιnorm hprnorm ν T
+    (ContinuousLinearMap.kyFanGaugeReal_comp_eq_of_leftInverse hleft hιnorm hprnorm T ν)
   constructor
   · rintro r ⟨v, -, rfl⟩
     exact equation1_12_gauge_comp_starProjection_le K ν _

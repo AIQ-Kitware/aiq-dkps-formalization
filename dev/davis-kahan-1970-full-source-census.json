@@ -106,9 +106,8 @@
         "TauCeti.ApproximationNumber.exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner",
         "TauCeti.ApproximationNumber.exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner_complex",
         "LinearMap.exists_orthonormal_sum_inner_eq_kyFanSum",
-        "ContinuousLinearMap.approximationNumber_comp_eq_of_leftInverse",
+        "ContinuousLinearMap.singularValue_comp_eq_of_leftInverse",
         "ContinuousLinearMap.kyFanGaugeReal_comp_eq_of_leftInverse",
-        "TauCeti.ApproximationNumber.kyFanApproximationGauge_comp_eq_of_leftInverse",
         "TauCeti.DavisKahan1970.equation1_18_directRotation_exponential",
         "TauCeti.DavisKahan1970.equation1_18_directRotation_resolution"
       ],

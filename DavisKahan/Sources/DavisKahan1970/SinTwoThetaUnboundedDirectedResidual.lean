@@ -151,7 +151,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_k
             (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection ∘L
           ((-2 : ℂ) • trialOffDiagonalPart V M R) ∘L
           (selfAdjointSpectralSubspace A hA B hB).starProjection).kyFanGauge k : ℝ) := by
-    rw [← kyFanApproximationGauge_adjoint]
+    rw [← ContinuousLinearMap.kyFanGauge_adjoint]
     congr 1
     rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp,
       (isSelfAdjoint_starProjection _).adjoint_eq,
@@ -168,13 +168,13 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_k
   have hblockR : ((trialOffDiagonalBlock V M R).kyFanGauge k : ℝ) ≤
       (R.kyFanGauge k : ℝ) := by
     rw [trialOffDiagonalBlock_eq]
-    refine (kyFanApproximationGauge_comp_le k Vᗮ.starProjection R
-      V.subtypeL.adjoint).trans ?_
+    refine ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le
+        Vᗮ.starProjection R V.subtypeL.adjoint k))).trans ?_
     have hQ : ‖(Vᗮ.starProjection : H →L[ℂ] H)‖ ≤ 1 := Submodule.starProjection_norm_le _
     have hI : ‖(V.subtypeL.adjoint : H →L[ℂ] V)‖ ≤ 1 := by
       rw [ContinuousLinearMap.adjoint.norm_map]
       exact opNorm_le_one_of_isometry (fun _ => rfl)
-    have hnn : 0 ≤ (R.kyFanGauge k : ℝ) := kyFanApproximationGauge_nonneg k R
+    have hnn : 0 ≤ (R.kyFanGauge k : ℝ) := (NNReal.coe_nonneg (R.kyFanGauge k))
     calc ‖(Vᗮ.starProjection : H →L[ℂ] H)‖ * (R.kyFanGauge k : ℝ) *
           ‖(V.subtypeL.adjoint : H →L[ℂ] V)‖
         ≤ 1 * (R.kyFanGauge k : ℝ) * 1 := by gcongr
@@ -236,7 +236,7 @@ theorem
       δ * ((sinTwoThetaIdealBlock (selfAdjointSpectralSubspace A hA B hB) V).kyFanGauge k : ℝ) ≤
         ((((2 : ℝ) : ℂ) • R0).kyFanGauge k : ℝ) := by
     intro k
-    erw [kyFanApproximationGauge_smul, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+    erw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
       (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsameR.kyFanGauge_eq k)))]
     exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_kyFan_complex hA
@@ -316,7 +316,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_complex
             (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection ∘L
           ((-2 : ℂ) • trialOffDiagonalPart V M R) ∘L
           (selfAdjointSpectralSubspace A hA B hB).starProjection).kyFanGauge k : ℝ) := by
-    rw [← kyFanApproximationGauge_adjoint]
+    rw [← ContinuousLinearMap.kyFanGauge_adjoint]
     congr 1
     rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp,
       (isSelfAdjoint_starProjection _).adjoint_eq,
@@ -333,13 +333,13 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_complex
   have hblockR : ((trialOffDiagonalBlock V M R).kyFanGauge k : ℝ) ≤
       (R.kyFanGauge k : ℝ) := by
     rw [trialOffDiagonalBlock_eq]
-    refine (kyFanApproximationGauge_comp_le k Vᗮ.starProjection R
-      V.subtypeL.adjoint).trans ?_
+    refine ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le
+        Vᗮ.starProjection R V.subtypeL.adjoint k))).trans ?_
     have hQ : ‖(Vᗮ.starProjection : H →L[ℂ] H)‖ ≤ 1 := Submodule.starProjection_norm_le _
     have hI : ‖(V.subtypeL.adjoint : H →L[ℂ] V)‖ ≤ 1 := by
       rw [ContinuousLinearMap.adjoint.norm_map]
       exact opNorm_le_one_of_isometry (fun _ => rfl)
-    have hnn : 0 ≤ (R.kyFanGauge k : ℝ) := kyFanApproximationGauge_nonneg k R
+    have hnn : 0 ≤ (R.kyFanGauge k : ℝ) := (NNReal.coe_nonneg (R.kyFanGauge k))
     calc ‖(Vᗮ.starProjection : H →L[ℂ] H)‖ * (R.kyFanGauge k : ℝ) *
           ‖(V.subtypeL.adjoint : H →L[ℂ] V)‖
         ≤ 1 * (R.kyFanGauge k : ℝ) * 1 := by gcongr
@@ -396,7 +396,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
       δ * ((sinTwoThetaIdealBlock (selfAdjointSpectralSubspace A hA B hB) V).kyFanGauge k : ℝ) ≤
         ((((2 : ℝ) : ℂ) • R0).kyFanGauge k : ℝ) := by
     intro k
-    erw [kyFanApproximationGauge_smul, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+    erw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
       (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsameR.kyFanGauge_eq k)))]
     exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_complex
@@ -475,7 +475,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
             (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection ∘L
           ((-2 : ℂ) • trialOffDiagonalPart V M R) ∘L
           U.starProjection).kyFanGauge k : ℝ) := by
-    rw [← kyFanApproximationGauge_adjoint]
+    rw [← ContinuousLinearMap.kyFanGauge_adjoint]
     congr 1
     rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp,
       (isSelfAdjoint_starProjection _).adjoint_eq,
@@ -492,13 +492,13 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
   have hblockR : ((trialOffDiagonalBlock V M R).kyFanGauge k : ℝ) ≤
       (R.kyFanGauge k : ℝ) := by
     rw [trialOffDiagonalBlock_eq]
-    refine (kyFanApproximationGauge_comp_le k Vᗮ.starProjection R
-      V.subtypeL.adjoint).trans ?_
+    refine ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le
+        Vᗮ.starProjection R V.subtypeL.adjoint k))).trans ?_
     have hQ : ‖(Vᗮ.starProjection : H →L[ℂ] H)‖ ≤ 1 := Submodule.starProjection_norm_le _
     have hI : ‖(V.subtypeL.adjoint : H →L[ℂ] V)‖ ≤ 1 := by
       rw [ContinuousLinearMap.adjoint.norm_map]
       exact opNorm_le_one_of_isometry (fun _ => rfl)
-    have hnn : 0 ≤ (R.kyFanGauge k : ℝ) := kyFanApproximationGauge_nonneg k R
+    have hnn : 0 ≤ (R.kyFanGauge k : ℝ) := (NNReal.coe_nonneg (R.kyFanGauge k))
     calc ‖(Vᗮ.starProjection : H →L[ℂ] H)‖ * (R.kyFanGauge k : ℝ) *
           ‖(V.subtypeL.adjoint : H →L[ℂ] V)‖
         ≤ 1 * (R.kyFanGauge k : ℝ) * 1 := by gcongr
@@ -556,7 +556,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
       δ * ((sinTwoThetaIdealBlock U V).kyFanGauge k : ℝ) ≤
         ((((2 : ℝ) : ℂ) • R0).kyFanGauge k : ℝ) := by
     intro k
-    erw [kyFanApproximationGauge_smul, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+    erw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
       (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsameR.kyFanGauge_eq k)))]
     exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_complex

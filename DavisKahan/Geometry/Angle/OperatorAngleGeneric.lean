@@ -680,7 +680,8 @@ theorem sinAngleOperator_hasSameApproximationNumbers_projectorDifference :
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  rw [hneg, ContinuousLinearMap.approximationNumber_neg]
+  rw [hneg, ← neg_one_smul 𝕜, ContinuousLinearMap.singularValue_smul,
+    nnnorm_neg, nnnorm_one, one_mul]
 
 /-- The consequence the ambient `sin 2Θ` theorem uses: `sin 2Θ` and the reflected projector
 difference have the same complete singular-value sequence, so no unitarily invariant norm can

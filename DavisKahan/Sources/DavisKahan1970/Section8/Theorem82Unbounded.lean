@@ -139,7 +139,7 @@ theorem norm_sinTwoAngleOperator_le_of_perturbedGap_unbounded_complex
     (mem_kyFanNormalizedUnitaryInvariantNorm 1 one_pos Hop)
   rw [hN] at hle
   simp only [gauge_kyFanNormalizedUnitaryInvariantNorm,
-    kyFanApproximationGauge_one] at hle
+    ContinuousLinearMap.kyFanGauge_one, coe_nnnorm] at hle
   exact hle
 
 /-- **Davis--Kahan 1970, Theorem 8.2's acute conclusion at unbounded ambient

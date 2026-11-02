@@ -449,7 +449,8 @@ theorem beam_tan_eta_le (ε : ℝ) (hε : 0 ≤ ε) {f : BeamL2} {lam : ℝ}
       ≤ orthogonalResidualSingularValue ε / ((1001 : ℝ) / 2 - lam) := by
   have hne := beam_starProjection_ne_zero ε hε hfdom hf hlam hfn
   have hpos : 0 < ‖beamTrial.starProjection f‖ := norm_pos_iff.2 hne
-  have hpy := TauCeti.norm_sq_starProjection_add_norm_sq_sub beamTrial f
+  have hpy := (by simpa only [Submodule.starProjection_orthogonal_val] using
+        (Submodule.norm_sq_eq_add_norm_sq_starProjection f beamTrial).symm)
   rw [hfn] at hpy
   have hsqrt : Real.sqrt (1 - ‖beamTrial.starProjection f‖ ^ 2)
       = ‖f - beamTrial.starProjection f‖ := by

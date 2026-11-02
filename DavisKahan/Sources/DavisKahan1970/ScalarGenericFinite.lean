@@ -96,8 +96,8 @@ theorem tanTheta_directed_finiteDimensional_symmetricNorming_rclike
     ⟨hCompressionSpectrum, hUnwantedSpectrum⟩
   apply N.mul_gauge_le_of_all_mul_kyFan_le hδ hR
   intro k
-  rw [← kyFanSum_eq_kyFanApproximationGauge k tanTheta0,
-    ← kyFanSum_eq_kyFanApproximationGauge k (ritzResidual A X)]
+  rw [ContinuousLinearMap.kyFanGauge_eq_kyFanSum, ContinuousLinearMap.kyFanGauge_eq_kyFanSum]
+  simp only [LinearMap.coe_toContinuousLinearMap]
   exact kyFan_tanTheta0_ritzResidual_le hA hU X hβα hδ hgap tanTheta0 htan k
 
 /-- **Davis--Kahan 1970, Section 2 `sin (2 Theta0)`, scalar-generic directed
@@ -136,11 +136,11 @@ theorem sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike
       δ * (S.kyFanGauge k : ℝ) ≤
         ((((2 : ℝ) : 𝕜) • R).kyFanGauge k : ℝ) := by
     intro k
-    rw [kyFanApproximationGauge_smul, htwo]
+    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo]
     change δ * ((sinTwoThetaEmbedding U X).toContinuousLinearMap.kyFanGauge k : ℝ) ≤
       2 * ((residual A X M).toContinuousLinearMap.kyFanGauge k : ℝ)
-    rw [← kyFanSum_eq_kyFanApproximationGauge k (sinTwoThetaEmbedding U X),
-      ← kyFanSum_eq_kyFanApproximationGauge k (residual A X M)]
+    rw [ContinuousLinearMap.kyFanGauge_eq_kyFanSum, ContinuousLinearMap.kyFanGauge_eq_kyFanSum]
+    simp only [LinearMap.coe_toContinuousLinearMap]
     have hOutside :
         Module.End.PointSpectrumIn A Uᗮ {lam : ℝ | lam ∉ Set.Ioo (β - δ) (α + δ)} := by
       apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr

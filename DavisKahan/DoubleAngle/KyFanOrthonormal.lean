@@ -93,11 +93,9 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge
       _ ≤ K'.toLinearMap.kyFanSum k := by
         simpa using K'.toLinearMap.norm_sum_inner_le_kyFanSum hu' hv'
   -- finite bridge to the approximation-number prefix
-  have hK'id : K'.toLinearMap.toContinuousLinearMap = K' := by
-    ext x; rfl
   have hbridge :
       K'.toLinearMap.kyFanSum k = (K'.kyFanGauge k : ℝ) := by
-    rw [kyFanSum_eq_kyFanApproximationGauge, hK'id]
+    exact (ContinuousLinearMap.kyFanGauge_eq_kyFanSum K' k).symm
   -- the compression does not increase approximation numbers
   have hmono : (K'.kyFanGauge k : ℝ) ≤ (K.kyFanGauge k : ℝ) := by
     simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]

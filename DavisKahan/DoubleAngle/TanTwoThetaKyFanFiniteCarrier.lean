@@ -399,13 +399,10 @@ theorem sum_absDoubleAngleTangent_le_of_finiteDimensional_invariantSubspace
     rw [hsplit, ← himg, Finset.sum_image hS'inj]
     exact Finset.sum_congr rfl fun x _ => by rw [hTsv (x : ℕ)]
   -- one-sided transport of the perturbation prefix
-  have hH'id : H'.toLinearMap.toContinuousLinearMap = H' := by
-    ext x; rfl
   have hHbridge : ∀ j : ℕ,
       H'.toLinearMap.kyFanSum j = (H'.kyFanGauge j : ℝ) := by
     intro j
-    rw [kyFanSum_eq_kyFanApproximationGauge j H'.toLinearMap,
-      hH'id]
+    exact (ContinuousLinearMap.kyFanGauge_eq_kyFanSum H' j).symm
   have hHgauge : ∀ j : ℕ, (H'.kyFanGauge j : ℝ) ≤
       (H.kyFanGauge j : ℝ) := by
     intro j

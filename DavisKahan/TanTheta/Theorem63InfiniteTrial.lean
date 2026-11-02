@@ -188,10 +188,12 @@ theorem approximationSingularValue_sineBlock_lt_one_of_finite
     rw [h0]
     exact one_pos
 
+omit [CompleteSpace H] in
 /-- The Ritz residual of a subspace `F ≤ Z` is the restriction of the residual of `Z` plus
 the leakage of the compression of `Z` out of `F`; at the Ky Fan level the leakage costs at
 most `k · ε`. -/
 theorem kyFanApproximationGauge_theorem63Residual_le_add
+    [CompleteSpace H]
     (T : H →L[ℂ] H) (Z F : Submodule ℂ H)
     [Z.HasOrthogonalProjection] [F.HasOrthogonalProjection]
     [CompleteSpace Z] [CompleteSpace F]
@@ -244,12 +246,12 @@ theorem kyFanApproximationGauge_theorem63Residual_le_add
     _ ≤ ((theorem63Residual T Z).kyFanGauge k : ℝ) + (k : ℝ) * ε := by
       have h1 : ((theorem63Residual T Z ∘L J).kyFanGauge k : ℝ) ≤
           ((theorem63Residual T Z).kyFanGauge k : ℝ) := by
-        have h := kyFanApproximationGauge_comp_le k
-          (ContinuousLinearMap.id ℂ H) (theorem63Residual T Z) J
+        have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le
+            (ContinuousLinearMap.id ℂ H) (theorem63Residual T Z) J k))
         rw [ContinuousLinearMap.id_comp] at h
         refine h.trans ?_
         have hid : ‖ContinuousLinearMap.id ℂ H‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-        have hnn := kyFanApproximationGauge_nonneg k (theorem63Residual T Z)
+        have hnn := (NNReal.coe_nonneg ((theorem63Residual T Z).kyFanGauge k))
         calc
           ‖ContinuousLinearMap.id ℂ H‖ *
               ((theorem63Residual T Z).kyFanGauge k : ℝ) * ‖J‖ ≤
@@ -261,7 +263,7 @@ theorem kyFanApproximationGauge_theorem63Residual_le_add
             simp
           _ = ((theorem63Residual T Z).kyFanGauge k : ℝ) := by ring
       have h2 : (G.kyFanGauge k : ℝ) ≤ (k : ℝ) * ε := by
-        refine (kyFanApproximationGauge_le_nat_mul_opNorm k G).trans ?_
+        refine ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_le_mul_nnnorm G k))).trans ?_
         exact mul_le_mul_of_nonneg_left hGnorm (Nat.cast_nonneg k)
       linarith
 
@@ -398,7 +400,7 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteTrial (hT : T.IsSymm
   have haeq : ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) = 1 :=
     le_antisymm ha_le (le_of_not_gt fun h => hcon h)
   set B' : ℝ := ((theorem63Residual T Z).kyFanGauge (n + 1) : ℝ) with hB'_def
-  have hB'0 : 0 ≤ B' := kyFanApproximationGauge_nonneg _ _
+  have hB'0 : 0 ≤ B' := (NNReal.coe_nonneg _)
   set C : ℝ := B' / delta + 1 with hC_def
   have hC0 : 0 ≤ C := by positivity
   set c : ℝ := Real.sin (Real.arctan C) with hc_def
@@ -423,7 +425,7 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteTrial (hT : T.IsSymm
     exact (norm_sub_starProjection_le_of_mem _ hyF).trans hy
   have hmono : ((theorem63DirectedSineBlock F₁ V).singularValue n : ℝ) ≤
       ((theorem63DirectedSineBlock F V).singularValue n : ℝ) :=
-    approximationSingularValue_restrict_mono (Vᗮ.starProjection) n hF₁F
+    (ContinuousLinearMap.approximationNumber_restrict_mono (Vᗮ.starProjection) n hF₁F)
   have hcF : c < ((theorem63DirectedSineBlock F V).singularValue n : ℝ) :=
     lt_of_lt_of_le hF₁ hmono
   have hFlt1 : ((theorem63DirectedSineBlock F V).singularValue n : ℝ) < 1 :=
@@ -488,7 +490,7 @@ theorem theorem6_3_all_kyFan_core_infiniteTrial (hT : T.IsSymmetric)
   rcases Nat.eq_zero_or_pos k with hk0 | hkpos
   · subst hk0
     simp only [Finset.range_zero, Finset.sum_empty, mul_zero]
-    exact kyFanApproximationGauge_nonneg _ _
+    exact (NNReal.coe_nonneg _)
   refine le_of_forall_pos_le_add fun κ hκ => ?_
   have hk0R : (0 : ℝ) < (k : ℝ) := Nat.cast_pos.mpr hkpos
   set κ' : ℝ := κ / (2 * delta * (k : ℝ)) with hκ'_def
@@ -545,7 +547,7 @@ theorem theorem6_3_all_kyFan_core_infiniteTrial (hT : T.IsSymmetric)
       have := hFnfin
       have hmono : ((theorem63DirectedSineBlock Fn V).singularValue n : ℝ) ≤
           ((theorem63DirectedSineBlock F V).singularValue n : ℝ) :=
-        approximationSingularValue_restrict_mono (Vᗮ.starProjection) n hFnF
+        (ContinuousLinearMap.approximationNumber_restrict_mono (Vᗮ.starProjection) n hFnF)
       have hcF : cn ≤ ((theorem63DirectedSineBlock F V).singularValue n : ℝ) :=
         (lt_of_lt_of_le hFn hmono).le
       have hFlt1 : ((theorem63DirectedSineBlock F V).singularValue n : ℝ) < 1 :=
@@ -678,10 +680,12 @@ theorem theorem6_3_infiniteTrial_of_formBounds
 
 /-! ### The tangent representative exists at every trial dimension -/
 
+omit [CompleteSpace H] in
 /-- Composing with the trial-space inclusion moves no approximation singular value; the
 finite-source file proves this under a finiteness instance, and this is the general form.
 -/
 theorem approximationSingularValue_subtypeL_comp_infinite
+    [CompleteSpace H]
     (Z : Submodule ℂ H) [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (A : Z →L[ℂ] Z) (k : ℕ) :
     ((Z.subtypeL ∘L A).singularValue k : ℝ) = (A.singularValue k : ℝ) := by
@@ -693,8 +697,8 @@ theorem approximationSingularValue_subtypeL_comp_infinite
   calc
     ((Z.subtypeL ∘L A).singularValue k : ℝ) =
         ((Z.orthogonalProjectionOnto ∘L (Z.subtypeL ∘L A)).singularValue k : ℝ) :=
-      (approximationSingularValue_orthogonalProjectionOnto_comp_eq Z
-        (Z.subtypeL ∘L A) hmem k).symm
+      ((ContinuousLinearMap.approximationNumber_orthogonalProjectionOnto_comp_eq
+          Z (Z.subtypeL ∘L A) hmem k)).symm
     _ = (A.singularValue k : ℝ) := by rw [hcomp]
 
 /-- **The directed tangent representative exists at every trial dimension.**  Under the

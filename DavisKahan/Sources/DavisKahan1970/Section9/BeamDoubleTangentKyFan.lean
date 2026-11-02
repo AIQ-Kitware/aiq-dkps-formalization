@@ -164,7 +164,7 @@ theorem kyFanTwo_reflectionResidualCorner_le (ε : ℝ) :
     exact beamTrialᗮ.norm_subtypeL_le
   have hid : ‖ContinuousLinearMap.id ℂ beamTrial‖ ≤ 1 := ContinuousLinearMap.norm_id_le
   have hnn : 0 ≤ (((beamTrialBlock ε).residual).kyFanGauge 2 : ℝ) :=
-    kyFanApproximationGauge_nonneg 2 _
+    (NNReal.coe_nonneg _)
   rw [reflectionResidualCorner_beamRitzOffDiagonal]
   calc (((beamTrialᗮ.subtypeL).adjoint ∘L (beamTrialBlock ε).residual).kyFanGauge 2 : ℝ)
       = (((beamTrialᗮ.subtypeL).adjoint ∘L (beamTrialBlock ε).residual ∘L
@@ -172,7 +172,7 @@ theorem kyFanTwo_reflectionResidualCorner_le (ε : ℝ) :
     _ ≤ ‖(beamTrialᗮ.subtypeL : beamTrialᗮ →L[ℂ] BeamL2).adjoint‖ *
           (((beamTrialBlock ε).residual).kyFanGauge 2 : ℝ) *
           ‖ContinuousLinearMap.id ℂ beamTrial‖ :=
-        kyFanApproximationGauge_comp_le _ _ _ _
+        (NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le _ _ _ _))
     _ ≤ (((beamTrialBlock ε).residual).kyFanGauge 2 : ℝ) := by
         have h1 := mul_le_mul_of_nonneg_right hadj hnn
         have h2 := mul_le_mul_of_nonneg_left hid
@@ -229,7 +229,7 @@ theorem beamTanTwoThetaSum_le (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
     (fun _ => beamTrialCutoff ε)
     (stronglyTendsto_cutoffCorner_beamTrialCutoff ε) 2
   have hres := kyFanTwo_reflectionResidualCorner_le ε
-  have hnn : 0 ≤ beamTanTwoThetaSum ε := kyFanApproximationGauge_nonneg 2 _
+  have hnn : 0 ≤ beamTanTwoThetaSum ε := (NNReal.coe_nonneg _)
   rw [hbound, le_div_iff₀ hgapPos]
   have hchain : ((1001 : ℝ) / 2 - ritzHigh ε) * beamTanTwoThetaSum ε
       ≤ 2 * orthogonalResidualSingularValue ε := by

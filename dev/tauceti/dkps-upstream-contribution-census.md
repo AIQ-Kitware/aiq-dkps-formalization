@@ -2783,7 +2783,7 @@ Accepted integrations, verified in pin `463ab293070d`:
   Frobenius sine definition and basic API. This is direct proof/API lineage,
   distinct from independent #14677.
 - [#20342](https://github.com/TauCetiProject/TauCeti/pull/20342),
-  `93100a5ab2aab79794c6da85a98e8747aaa29591`: **explicitly adapted** DKPS
+  `93100a5ab2aab79794c6da85a98e8747aaa29591aab79794c6da85a98e8747aaa29591`: **explicitly adapted** DKPS
   cross-block and arbitrary-spanning-family Frobenius bridges. These general
   bridge lemmas replace the YWS proof support. Its population-gap theorem is
   only canonical-eigenbasis scope, so the stronger maintained arbitrary-ordered-
@@ -3686,3 +3686,146 @@ pre-retirement `3b796085a` under
 OpenAI GPT-5.6 Thinking, Kitware copyright, Apache-2.0. Original declaration names
 remain in the existing manifest. Genuine SOT/localization and incomplete-space
 results remain; scalar gauge-law wrappers are still pending consumption.
+
+## 2026-11-02: consume the remaining shared gauge, projection and polar APIs
+
+The retained-donor comparison uses Tau Ceti
+`463ab293070d4cb355d0a0e036469464070088bc`, Mathlib
+`2cabef97b63d3275776b8b060d802de6a6fa1055` and Lean `v4.36.0-rc1`.
+The pre-retirement local mathematics is recoverable at `3b0cfebc5`.
+This is consumption of accepted results, with no new submission or PR repair.
+
+**Ky Fan laws.** Retire the shared real-valued laws in approximation-number
+`Core` and `KyFan`, their paper-library exports, and the scalar-generic addition
+wrapper. Consumers use native zero/one, homogeneity, ideal/norm bounds, adjoint
+invariance, finite singular-value identification and triangle inequality, with
+explicit `NNReal` coercions. Negation follows homogeneity at `-1`. Retire the
+unused real continuity wrapper; native `continuous_kyFanGauge` already supplies
+continuity. Remove Core forwarding declarations to genuine restriction,
+projection and split-embedding donor facts without labeling those facts accepted.
+
+The native elementary laws are independent
+[#14501](https://github.com/TauCetiProject/TauCeti/pull/14501), integration
+`0095123bf736b0ed2b5df5986ee34f1b6640f0ea`. Native adjoint invariance is
+[#14759](https://github.com/TauCetiProject/TauCeti/pull/14759), integration
+`2fb91e15df5a29a0a51617e038afcfd6736a0d8f`; no explicit proof-adaptation or
+independence disclosure was found. Finite gauge identification and pair-local
+triangle inequality are
+[#15423](https://github.com/TauCetiProject/TauCeti/pull/15423), integration
+`abc7ac35a2fa3a5e87ddcac3b6e3209aa7e6cd6d`, using the finite singular-value
+calculus of independent #14820. Complete-source triangle inequality is
+[#16133](https://github.com/TauCetiProject/TauCeti/pull/16133), integration
+`350fb9e6dedfc46255d67193b19739817600ad3a`. Neither triangle integration makes
+an explicit DKPS proof-descent disclosure; overlap alone establishes none.
+
+The native triangle theorem needs completeness of the source only, so it
+replaces the finite-source compression proof even with an incomplete target.
+Keep `kyFanGaugeReal_add_le_of_exists_finiteRestriction`: its hypothesis concerns
+finite restrictions of `S + T` alone and assumes neither ambient space complete;
+the native global `HasMinMaxLowerBound` capability is stronger. Keep contractive
+split-embedding invariance without surjectivity, incomplete-space projection
+facts, SOT cutoff/localization, the approximate orthonormal variational theorem
+and Bochner integration. Existing completeness binders on retained consumer
+results are made explicit when stronger upstream proofs render them incidental.
+Historical sources are `e4637c3919ae` under
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/{Core,KyFan}.lean` and the
+earlier `DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean`; authors Jon
+Crall, OpenAI GPT-5.6 Thinking and Claude Opus 5, Kitware copyright, Apache-2.0.
+Original names remain in the extraction manifest.
+
+**Projection geometry.** Retire local Pythagoras and finite-family
+projection/Parseval engines, the complementary-basis Parseval wrapper and
+`Spectral.ResidualGap.norm_sq_starProjection_of_span_range`. Callers apply
+Mathlib's `Submodule.norm_sq_eq_add_norm_sq_starProjection` and
+`starProjection_orthogonal_val`, and native
+`Orthonormal.starProjection_apply_eq_sum` / `norm_starProjection_sq_eq_sum`.
+A finite subset of an arbitrary family is restricted to its subtype; the
+finite sum is transported with `Finset.sum_coe_sort`. This preserves the original
+incomplete-ambient scope. Complementary Parseval uses native
+`OrthonormalBasis.norm_starProjection_orthogonal_spanIndices_sq`, rewriting the
+public `spanIndices_eq_span` equation.
+
+Family formulas come from independent
+[#16089](https://github.com/TauCetiProject/TauCeti/pull/16089), integration
+`f1031b9e4fc722623197777fbb84d58909c46d35`, whose integration explicitly says
+nothing was taken from DKPS #13864. Complementary selected-span Parseval comes
+from [#20342](https://github.com/TauCetiProject/TauCeti/pull/20342), integration
+`93100a5ab2aab79794c6da85a98e8747aaa29591`, which explicitly reports DKPS YWS adaptation and builds on the
+accepted BasisSpan and independent family APIs. Keep those distinct lineages.
+The arbitrary-two-basis projector-distance identity
+`sum_norm_sub_starProjection_span_sq_eq` and its block-counting proof remain;
+#16089 explicitly distinguishes that result from its family sine formula.
+Historical Geometry introduction `f44d966`, authors Jon Crall, Claude Fable 5,
+Claude Opus 4.8; ResidualGap introduction
+`519e08272205896c588aee4a6de90861bc897f01`, authors Jon Crall, Claude Opus 5;
+Kitware copyright, Apache-2.0. Original declarations and retained ownership are
+recorded in the existing manifest.
+
+**Polar factories.** Retire `polarUnitaryEquiv`, `coe_polarUnitaryEquiv`,
+`polar_decomposition_of_isUnit` and the unused
+`exists_polar_decomposition_unitary`. The finite direct rotation consumes
+`(A.polarIsometry hinj).toLinearIsometryEquiv rfl` directly. Its characteristic
+linear-map equation uses the public `polarIsometry_toLinearMap` theorem;
+module transparency does not justify unfolding the native factory.
+Native injective polar factorization is
+[#16080](https://github.com/TauCetiProject/TauCeti/pull/16080), integration
+`18681919170b67de8799d152b7a29a9a6a315889`; the integration cites existing APIs
+and mathematical references but does not explicitly disclose DKPS adaptation or
+independence. The existential square factorization is native
+`exists_linearIsometryEquiv_comp_operatorAbs_eq rfl` with equality reversed,
+including zero-dimensional spaces. It comes from independent
+[#16127](https://github.com/TauCetiProject/TauCeti/pull/16127), integration
+`2b69ec4d366e7d65e006370c54e65109a08a02b9`, which explicitly disclaims copying
+or adapting DKPS. Original local source `e4637c3919ae`, introduction `3676b55`,
+Jon Crall / Claude Opus 4.8, Kitware copyright, Apache-2.0.
+
+Keep `choosePolarUnitary` and both identities at its selected witness: the
+singular kernel completion is a choice, whereas canonical `polarFactor` vanishes
+on the kernel. The rectangular sign-invariance and normal-adjoint modulus
+extras have no exact pinned replacement; native `operatorAbs_adjoint` is a
+conjugation identity with different content. Broader prescribed-sequence
+realizations, incomplete-target transport/localization, and the arbitrary-frame
+results remain donor mathematics. Retention is based on actual hypotheses and
+conclusions, not an inference that an overlapping roadmap node was integrated.
+
+The final comparison also retires the Bochner module's
+`norm_le_one_of_mem_unitary`, `kyFanGaugeReal_comp_comp_le_of_norm_le_one` and
+`kyFanGaugeReal_unitary_comp_comp`: the Fourier-orbit consumer directly applies
+`kyFanGauge_comp_linearIsometryEquiv` after Mathlib's
+`Unitary.linearIsometryEquiv` conversion. This preserves arbitrary Hilbert-space
+dimensions, separate carrier universes and the zero space. The accepted
+Isometry API explicitly credits DKPS adaptation in
+[#13866](https://github.com/TauCetiProject/TauCeti/pull/13866), integration
+`7bbe813acf610ee6db4caba078b9c4facf357b90`; distinguish that descent from the
+independent elementary gauge laws. This consumes a different DKPS-adapted
+foundation; it does not establish that the Bochner unitary proof was ported.
+The original Bochner source was the
+`DavisKahan/Experimental/MathAhead/HiddenFoundations/KyFanBochner.lean` sketch,
+restated and reproved by Jon Crall / OpenAI GPT-5.6 Thinking under Kitware's
+Apache-2.0 license; its maintained pre-retirement home is the `ForTauCeti`
+KyFanBochner module at `3b0cfebc5`, whose maintained header also credits
+Claude Opus 5. Its integral inequality and private
+seminorm/Hahn--Banach proof remain, with no full pinned replacement found.
+
+The YWS statistics module's one-use
+`sinThetaSq_eq_sum_sq_norm_starProjection_orthogonal` helper is also retired for
+native `TauCeti.sinThetaSq_eq_sum_norm_starProjection_orthogonal_sq` from
+independent #16089. The source-facing Frobenius-sine wrapper and arbitrary-frame
+residual estimates remain in their established paper home. This replacement
+consumes the family formula for the same input family; it does not substitute a
+canonical perturbed eigenbasis for the arbitrary eigenframes of the paper.
+
+The retired YWS helper is from `3b0cfebc5:YuWangSamworth2015/`
+`YuWangSamworth2015/Core/Statistics.lean`; its header credits Jon Crall and
+GPT 5.6 High, Kitware copyright, Apache-2.0.
+
+Validation at the completed local consumption checkpoint: the affected-module
+build, full default `lake --wfail build`, and `lake --wfail build Challenge`
+all passed without warnings, using `LEAN_NUM_THREADS=8` and CPU affinity `0-7`.
+The final logs are `/tmp/dkps-migration-consumers8.log`,
+`/tmp/dkps-migration-full.log`, and `/tmp/dkps-migration-challenge.log`.
+The import-layer check reports no violations. The static declaration-name scan
+still reports 38 unrelated external-name, older migration-map and audit-metadata
+findings; it is not reported green. This slice updates the two stale S1
+split-embedding registrations to their surviving canonical declarations.
+No paper-result boundary or semantic completion status is changed.

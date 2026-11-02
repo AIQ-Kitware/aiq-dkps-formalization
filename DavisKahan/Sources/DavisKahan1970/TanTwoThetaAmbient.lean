@@ -1231,7 +1231,7 @@ private theorem kyFan_lowerBlock_eq_upperBlock (K : E →L[ℂ] E)
     simp only [star_mul, star_sub, star_one,
       (isSelfAdjoint_starProjection U).star_eq, hK.star_eq]
     noncomm_ring
-  rw [hadj, kyFanApproximationGauge_adjoint]
+  rw [hadj, ContinuousLinearMap.kyFanGauge_adjoint]
 
 /-- **The printed residual form of the directed half of the `tan 2θ` theorem.**
 
@@ -1360,7 +1360,8 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
   have hDB01 : Dd.B01 = -B.B01 := rfl
   have hright : (Dd.B01.kyFanGauge k : ℝ) =
       ((projectionBlock Uᗮᗮ Uᗮ H).kyFanGauge k : ℝ) := by
-    rw [hDB01, kyFanApproximationGauge_neg, kyFan_upperBlock_eq_compression H k,
+    rw [hDB01, ← neg_one_smul ℂ, ContinuousLinearMap.kyFanGauge_smul,
+        nnnorm_neg, nnnorm_one, one_mul, kyFan_upperBlock_eq_compression H k,
       hB01, blockCompression, Submodule.adjoint_subtypeL]
   rw [hleft, ← hright]
   exact hraw
@@ -1408,7 +1409,7 @@ theorem tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner
             (2 * (projectorDifference U V * doubleSecant U V)))).kyFanGauge j : ℝ) ≤
         ((projectionBlock Uᗮ U H).kyFanGauge j : ℝ) := by
     intro j
-    rw [projectionBlock_smul', kyFanApproximationGauge_smul, hcnorm,
+    rw [projectionBlock_smul', ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm,
       kyFan_lowerBlock_eq_upperBlock H hH j]
     linarith [hcorner j]
   have h₁ : ∀ j : ℕ,
@@ -1417,7 +1418,7 @@ theorem tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner
             (2 * (projectorDifference U V * doubleSecant U V)))).kyFanGauge j : ℝ) ≤
         ((projectionBlock Uᗮᗮ Uᗮ H).kyFanGauge j : ℝ) := by
     intro j
-    rw [projectionBlock_smul', kyFanApproximationGauge_smul, hcnorm,
+    rw [projectionBlock_smul', ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm,
       ← kyFan_lowerBlock_eq_upperBlock _ hKsa j]
     linarith [hcorner j]
   have hcombine := lemma61_all_kyFan Uᗮ U
@@ -1438,7 +1439,7 @@ theorem tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner
     rfl
   have hsumH : projectionBlock Uᗮ U H + projectionBlock Uᗮᗮ Uᗮ H =
       diagonalPair Uᗮ U H := rfl
-  rw [hsum, hsumH, kyFanApproximationGauge_smul, hcnorm] at hcombine
+  rw [hsum, hsumH, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm] at hcombine
   have hpinch := diagonalPair_all_kyFan_le Uᗮ U H k
   have hmodulus : ((absTanTwoAngleOperatorC U V).kyFanGauge k : ℝ) =
       ((tanTwoBlockRepresentative U V).kyFanGauge k : ℝ) := by
@@ -1506,7 +1507,7 @@ theorem tanTwoTheta_ambient_bounded_branchFree_symmetricNorming_complex_of_corne
       (b - a) * ((absTanTwoAngleOperatorC U V).kyFanGauge k : ℝ) ≤
         ((((2 : ℝ) : ℂ) • H).kyFanGauge k : ℝ) := by
     intro k
-    rw [kyFanApproximationGauge_smul, htwo]
+    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo]
     exact tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner hH hab hcos hcorner k
   have hMem2 : N.Mem (((2 : ℝ) : ℂ) • H) := by
     intro htop
@@ -1543,7 +1544,7 @@ theorem tanTwoTheta_ambient_bounded_orderedForm_symmetricNorming_complex
       (b - a) * ((tanTwoAngleOperatorC U V).kyFanGauge k : ℝ) ≤
         ((((2 : ℝ) : ℂ) • H).kyFanGauge k : ℝ) := by
     intro k
-    rw [kyFanApproximationGauge_smul, htwo]
+    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo]
     exact tanTwoTheta_ambient_bounded_orderedForm_kyFan_complex hA hH hAU hAplusH_V hab hUhigh
       hUperpLow hVhigh hVperpLow hHU hHUperp k
   have hMem2 : N.Mem (((2 : ℝ) : ℂ) • H) := by

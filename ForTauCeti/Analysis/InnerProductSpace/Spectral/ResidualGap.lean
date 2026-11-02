@@ -9,6 +9,7 @@ alongside the finite-dimensional spectral perturbation material.
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.EigenFrame
+public import TauCeti.Analysis.InnerProductSpace.Orthonormal.Family
 
 /-! # The spectral-gap residual lower bound
 
@@ -32,7 +33,7 @@ eigenspace — the point of `Module.End.IsEigenfamily`.
 
 ## Main results
 
-* `TauCeti.norm_sq_starProjection_of_span_range`: Parseval for the projection
+* Native `Orthonormal.norm_starProjection_sq_eq_sum`: Parseval for the projection
   onto the span of an orthonormal family.
 * `TauCeti.exists_isEigenFamily_span_eq`: an invariant subspace of a symmetric
   operator is spanned by an orthonormal eigenfamily.
@@ -50,22 +51,6 @@ namespace TauCeti
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E] {T : E →ₗ[𝕜] E}
-
-/-- **Parseval for the projection onto the span of an orthonormal family.**
-`‖P_W x‖² = ∑ₖ ‖⟪yₖ, x⟫‖²` whenever the orthonormal family `y` spans `W`.
-
-`Orthonormal.norm_sq_starProjection_span_image` says this for the span written
-as an image; this is the form a caller holding a named subspace can use. -/
-theorem norm_sq_starProjection_of_span_range {W : Submodule 𝕜 E}
-    [W.HasOrthogonalProjection] {m : ℕ} {y : Fin m → E} (hy : Orthonormal 𝕜 y)
-    (hspan : Submodule.span 𝕜 (Set.range y) = W) (x : E) :
-    ‖W.starProjection x‖ ^ 2 = ∑ k, ‖⟪y k, x⟫_𝕜‖ ^ 2 := by
-  classical
-  subst hspan
-  have himg : Set.range y = y '' (↑(Finset.univ : Finset (Fin m)) : Set (Fin m)) := by
-    simp
-  simp only [himg]
-  exact Orthonormal.norm_sq_starProjection_span_image hy Finset.univ x
 
 /-- **An invariant subspace is spanned by an orthonormal eigenfamily.**
 Diagonalize the restriction `T|W` and push its eigenbasis back into `E`. -/
@@ -126,7 +111,7 @@ theorem sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le (hT : T.IsSymmetric)
     ring
   calc Δ ^ 2 * ‖Uᗮ.starProjection (w i)‖ ^ 2
       = Δ ^ 2 * ∑ k, ‖⟪y k, w i⟫_𝕜‖ ^ 2 := by
-        rw [norm_sq_starProjection_of_span_range hfam.orthonormal hspan]
+        rw [hfam.orthonormal.norm_starProjection_sq_eq_sum hspan]
     _ = ∑ k, Δ ^ 2 * ‖⟪y k, w i⟫_𝕜‖ ^ 2 := Finset.mul_sum _ _ _
     _ ≤ ∑ k, ‖⟪y k, (lam i : 𝕜) • w i - T (w i)⟫_𝕜‖ ^ 2 := by
         refine Finset.sum_le_sum fun k _ => ?_

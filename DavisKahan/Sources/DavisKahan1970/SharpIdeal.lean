@@ -54,7 +54,7 @@ private theorem half_mul_kyFan_le_adjoint
       (B.B01.adjoint.kyFanGauge k : ℝ) := by
   have hsharp := sharp_doubleAngleTangentOperator_kyFan
     B hd.le hA0 hA1 hX hcontractive k
-  rw [kyFanApproximationGauge_adjoint]
+  rw [ContinuousLinearMap.kyFanGauge_adjoint]
   calc
     (d / 2) * ((TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive).kyFanGauge k : ℝ) =
         (d * ((TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive).kyFanGauge k : ℝ)) /
@@ -90,7 +90,7 @@ theorem sharp_standardSymmetricIdeal_scaled
       (S.kyFanGauge k : ℝ) ≤
         (B.B01.adjoint.kyFanGauge k : ℝ) := by
     intro k
-    simpa only [S, T, kyFanApproximationGauge_smul, hscalarNorm] using
+    simpa only [S, T, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hscalarNorm] using
       half_mul_kyFan_le_adjoint B hd hA0 hA1 hX hcontractive k
   have hfan : I.Mem S ∧ I.gauge S ≤ I.gauge B.B01.adjoint :=
     TauCeti.SymmetricIdeal.standard_fanDominance I hBadj hdom

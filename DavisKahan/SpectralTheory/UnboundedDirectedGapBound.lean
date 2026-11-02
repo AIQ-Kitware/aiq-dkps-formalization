@@ -97,7 +97,7 @@ theorem directedGap_le_of_reducingGap_unbounded_complex
     (by simp [SymmetricOperatorIdealFamily.Mem])
   obtain ⟨-, hle⟩ := key
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-    kyFanApproximationGauge_one] at hle
+    ContinuousLinearMap.kyFanGauge_one, coe_nnnorm] at hle
   have hblock : (ContinuousLinearMap.id ℂ Hc -
       Q.subtypeL ∘L ContinuousLinearMap.adjoint Q.subtypeL) = Qᗮ.starProjection := by
     rw [Submodule.adjoint_subtypeL]

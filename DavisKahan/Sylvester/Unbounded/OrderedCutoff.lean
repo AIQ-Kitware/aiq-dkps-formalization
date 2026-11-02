@@ -92,7 +92,7 @@ theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
   have hlimit : (K.kyFanGauge k : ℝ) =
       (K.adjoint.kyFanGauge k : ℝ) := by
     symm
-    exact kyFanApproximationGauge_adjoint k K
+    exact (congrArg NNReal.toReal (ContinuousLinearMap.kyFanGauge_adjoint K k))
   simpa only [hpoint, hlimit] using hright
 
 /-- Left-cutoff finite Ky Fan inequalities pass to the original operators. -/

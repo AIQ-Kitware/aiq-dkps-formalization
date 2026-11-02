@@ -217,10 +217,8 @@ theorem norm_orthogonal_starProjection_comp_starProjection
           = ∑ i, ⟪u i, (Submodule.span 𝕜 (Set.range u)).starProjection z⟫_𝕜 • u i := by
         rw [Orthonormal.synthesisMapIsometry_apply]
         exact Finset.sum_congr rfl fun i _ => by rw [hcoord]
-      rw [hsum, ← Orthonormal.starProjection_span_image_apply hu Finset.univ]
-      apply Submodule.starProjection_eq_self_iff.mpr
-      rw [Finset.coe_univ, Set.image_univ]
-      exact Submodule.starProjection_apply_mem _ z
+      rw [hsum, ← hu.starProjection_apply_eq_sum rfl]
+      exact Submodule.starProjection_eq_self_iff.mpr (Submodule.starProjection_apply_mem _ z)
     have hyz : ‖y‖ ≤ ‖z‖ := by
       have h1 : ‖y‖ = ‖(Submodule.span 𝕜 (Set.range u)).starProjection z‖ := by
         rw [← hxy, (hu.synthesisMapIsometry).norm_map]

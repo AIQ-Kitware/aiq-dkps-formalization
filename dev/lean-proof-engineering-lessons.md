@@ -288,6 +288,11 @@ One-line `simpa` proofs become fragile when they cross several of these at once:
 - projection implementations;
 - equality orientation.
 
+A scratch file without `module` may unfold a native definition that is opaque to a production
+module. Promote the proof using the public characteristic theorem (for example
+`LinearMap.polarIsometry_toLinearMap`), then migrate callers that relied on the old
+definitional equality. A scratch `rfl` is not evidence that a production-module `rfl` works.
+
 Use this order instead:
 
 1. `change` the target to the intended representation;

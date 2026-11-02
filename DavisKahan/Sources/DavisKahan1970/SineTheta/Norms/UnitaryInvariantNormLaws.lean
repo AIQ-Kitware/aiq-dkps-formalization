@@ -120,8 +120,8 @@ theorem prefixGauge_add_le
               (B.singularValue k : ℝ)) m,
           Finset.sum_add_distrib]
         simpa only [
-          ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum] using kyFanApproximationGauge_add_le
-            m A B
+          ContinuousLinearMap.kyFanGauge_def, NNReal.coe_add, NNReal.coe_sum] using
+          (NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_add_le A B m))
       · have huniv :
           (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) = Finset.univ :=
           Finset.filter_true_of_mem fun i _ => lt_trans i.isLt hm
@@ -130,7 +130,7 @@ theorem prefixGauge_add_le
         rw [Finset.sum_add_distrib,
           sum_approximationPrefix n (A + B),
           sum_approximationPrefix n A, sum_approximationPrefix n B]
-        exact kyFanApproximationGauge_add_le n A B
+        exact NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_add_le A B n)
   exact hmajor.trans (N.finiteGauge_add_le _ _)
 
 /-- Triangle inequality of the canonical infinite-dimensional extension. -/
@@ -257,11 +257,11 @@ theorem extendedGauge_comp_le (N : SymmetricNormingFunction)
       ((L ∘L A ∘L R).kyFanGauge k : ℝ) ≤
         ((((‖L‖ * ‖R‖ : ℝ) : 𝕜) • A).kyFanGauge k : ℝ) := by
     intro k
-    rw [kyFanApproximationGauge_smul, hcnorm]
+    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm]
     calc
       ((L ∘L A ∘L R).kyFanGauge k : ℝ)
           ≤ ‖L‖ * (A.kyFanGauge k : ℝ) * ‖R‖ :=
-        kyFanApproximationGauge_comp_le k L A R
+        (NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le L A R k))
       _ = ‖L‖ * ‖R‖ * (A.kyFanGauge k : ℝ) := by ring
   have hle := N.extendedGauge_le_of_all_kyFan_le_hetero hkey
   rw [N.extendedGauge_smul, hcnorm,

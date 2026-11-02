@@ -145,7 +145,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_lowerCorner
         ((projectionBlock Uᗮ U H).kyFanGauge j : ℝ) := by
     intro j
     rw [projectionBlock_smul_unboundedTanThetaAmbient,
-      kyFanApproximationGauge_smul, hdeltac]
+      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdeltac]
     exact hlower j
   have h₁ : ∀ j : ℕ,
       ((projectionBlock Uᗮᗮ Uᗮ (((delta : ℝ) : ℂ) • K)).kyFanGauge j : ℝ) ≤
@@ -168,8 +168,8 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_lowerCorner
       show _ = star _
       simp only [star_mul, star_sub, star_one, hp.star_eq, hH.star_eq]
       noncomm_ring
-    rw [hleft, hright, kyFanApproximationGauge_adjoint,
-      kyFanApproximationGauge_adjoint, kyFanApproximationGauge_smul, hdeltac]
+    rw [hleft, hright, ContinuousLinearMap.kyFanGauge_adjoint,
+      ContinuousLinearMap.kyFanGauge_adjoint, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdeltac]
     exact hlower j
   have hcombine := lemma61_all_kyFan Uᗮ U
     (((delta : ℝ) : ℂ) • K) (((delta : ℝ) : ℂ) • K) H H h₀ h₁ k
@@ -184,7 +184,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_lowerCorner
   have hsumH :
       projectionBlock Uᗮ U H + projectionBlock Uᗮᗮ Uᗮ H =
         diagonalPair Uᗮ U H := rfl
-  rw [hsum, hsumH, kyFanApproximationGauge_smul, hdeltac] at hcombine
+  rw [hsum, hsumH, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdeltac] at hcombine
   have hpinch := diagonalPair_all_kyFan_le Uᗮ U H k
   have hmodulus :
       ((tanAngleOperatorC U V).kyFanGauge k : ℝ) =

@@ -95,8 +95,8 @@ theorem ker_sinAngleOperator_le_ker_directRotation_sub_cosine
   have hR := directRotation_apply_eq_self_of_projection_eq U V hacute hproj
   have hC := abs_canonicalIntertwiner_apply_eq_self_of_projection_eq U V hproj
   apply LinearMap.mem_ker.mpr
-  have hRx : LinearMap.polarFactor (canonicalIntertwiner U V) x = x := hR
-  simp [LinearMap.sub_apply, directRotationCosine, hRx, hC]
+  change directRotation U V hacute x - (canonicalIntertwiner U V).operatorAbs x = 0
+  rw [hR, hC, sub_self]
 
 /-- Reversing the pair gives the inverse rotation. -/
 theorem directRotation_symm (U V : Submodule 𝕜 E)
@@ -109,11 +109,15 @@ theorem directRotation_symm (U V : Submodule 𝕜 E)
   apply LinearIsometryEquiv.ext
   intro x
   have h1 : directRotation V U hacute.symm x
-      = LinearMap.polarFactor (canonicalIntertwiner V U) x := rfl
+      = LinearMap.polarFactor (canonicalIntertwiner V U) x :=
+    LinearMap.congr_fun (directRotation_toLinearMap V U hacute.symm) x
   have h2 : (directRotation U V hacute).symm x
       = LinearMap.adjoint (LinearMap.polarFactor (canonicalIntertwiner U V)) x :=
-    (LinearMap.congr_fun
-      (directRotation U V hacute).adjoint_toLinearMap_eq_symm x).symm
+    by
+      have h := (LinearMap.congr_fun
+        (directRotation U V hacute).adjoint_toLinearMap_eq_symm x).symm
+      rw [directRotation_toLinearMap] at h
+      exact h
   rw [h1, h2, ← hstar, hpolar]
 
 /-- The direct rotation is the identity on the common and doubly-orthogonal
@@ -135,14 +139,13 @@ theorem directRotation_apply_eq_self_of_mem_common (U V : Submodule 𝕜 E)
     directRotation_apply_eq_self_of_projection_eq U V hacute hproj0,
     directRotation_apply_eq_self_of_projection_eq U V hacute hproj1]
 
-/-- The direct rotation is definitionally the polar factor of the canonical
-intertwiner. -/
+/-- The direct rotation acts as the polar factor of the canonical intertwiner. -/
 theorem directRotation_eq_polarFactor (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : Submodule.IsAcute U V) :
     (directRotation U V hacute).toLinearMap =
       LinearMap.polarFactor (canonicalIntertwiner U V) :=
-  rfl
+  directRotation_toLinearMap U V hacute
 
 /-- Full-space trigonometric factorization `R = C + J sin Θ`. -/
 theorem directRotation_eq_cos_add_J_sin (U V : Submodule 𝕜 E)
@@ -188,7 +191,9 @@ theorem directRotation_unique (U V : Submodule 𝕜 E)
   rw [LinearMap.polarIsometry_toLinearMap] at hWmap
   apply LinearIsometryEquiv.ext
   intro x
-  exact LinearMap.congr_fun hWmap x
+  have h := LinearMap.congr_fun hWmap x
+  rw [← directRotation_toLinearMap U V hacute] at h
+  exact h
 
 /-- Davis--Kahan Proposition 4.3: the direct rotation minimizes every UI norm
 of the positive displacement square. -/

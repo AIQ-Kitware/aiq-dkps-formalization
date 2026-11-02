@@ -270,9 +270,11 @@ def HasTheorem63DirectedTangentApproximationNumbersInfiniteReal
     Real.tan (Real.arcsin
       (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ)))
 
+omit [CompleteSpace E] in
 /-- Inclusion of a closed real trial subspace preserves every approximation
 singular value of an endomorphism of that subspace. -/
 theorem approximationSingularValue_subtypeL_comp_real
+    [CompleteSpace E]
     (Z : Submodule ℝ E) [Z.HasOrthogonalProjection]
     (A : Z →L[ℝ] Z) (k : Nat) :
     ((Z.subtypeL.comp A).singularValue k : ℝ) =
@@ -286,8 +288,8 @@ theorem approximationSingularValue_subtypeL_comp_real
   calc
     ((Z.subtypeL.comp A).singularValue k : ℝ) =
         ((Z.orthogonalProjectionOnto.comp (Z.subtypeL.comp A)).singularValue k : ℝ) :=
-      (approximationSingularValue_orthogonalProjectionOnto_comp_eq Z
-        (Z.subtypeL.comp A) hmem k).symm
+      ((ContinuousLinearMap.approximationNumber_orthogonalProjectionOnto_comp_eq
+          Z (Z.subtypeL.comp A) hmem k)).symm
     _ = (A.singularValue k : ℝ) := by rw [hcomp]
 
 /-- On an infinite-dimensional real trial space, the tangent representative

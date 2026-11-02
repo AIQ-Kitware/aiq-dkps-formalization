@@ -67,25 +67,26 @@ universe v
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
+omit [CompleteSpace E] in
 /-- **Conjugating by a reflection preserves Ky Fan approximation gauges.**
 
 A reflection is an isometry in both slots, so the gauge cannot grow; it is
 also involutive, so it cannot shrink either.  Only the `≤` direction is used
 below, but the equality is the honest statement. -/
 theorem kyFanApproximationGauge_reflectionConjugate_le
+    [CompleteSpace E]
     (U : Submodule ℂ E) [U.HasOrthogonalProjection] (A : E →L[ℂ] E) (k : ℕ) :
     (((U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E)).kyFanGauge k : ℝ) ≤
       (A.kyFanGauge k : ℝ) := by
   let J : E →L[ℂ] E := U.reflection
-  have h := kyFanApproximationGauge_comp_le (𝕜 := ℂ) k
-    J A J
+  have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le J A J k))
   have hJ : ‖J‖ ≤ 1 := by
     refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one ?_
     intro x
     change ‖U.reflection x‖ ≤ 1 * ‖x‖
     simpa only [one_mul] using le_of_eq (U.reflection.norm_map x)
   have hnn : 0 ≤ (A.kyFanGauge k : ℝ) :=
-    kyFanApproximationGauge_nonneg k A
+    (NNReal.coe_nonneg (A.kyFanGauge k))
   refine h.trans ?_
   have h1 : ‖J‖ *
       (A.kyFanGauge k : ℝ) ≤ 1 * (A.kyFanGauge k : ℝ) :=
@@ -106,8 +107,8 @@ theorem kyFanApproximationGauge_conj_le_complex {F : Type v} [NormedAddCommGroup
     [InnerProductSpace ℂ F] [CompleteSpace F] {L : E →L[ℂ] F} {R : F →L[ℂ] E}
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) (A : E →L[ℂ] E) (k : ℕ) :
     ((L ∘L A ∘L R).kyFanGauge k : ℝ) ≤ (A.kyFanGauge k : ℝ) := by
-  refine (kyFanApproximationGauge_comp_le (𝕜 := ℂ) k L A R).trans ?_
-  have hnn : 0 ≤ (A.kyFanGauge k : ℝ) := kyFanApproximationGauge_nonneg k A
+  refine ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le L A R k))).trans ?_
+  have hnn : 0 ≤ (A.kyFanGauge k : ℝ) := (NNReal.coe_nonneg (A.kyFanGauge k))
   have h1 : ‖L‖ * (A.kyFanGauge k : ℝ) ≤ 1 * (A.kyFanGauge k : ℝ) :=
     mul_le_mul_of_nonneg_right hL hnn
   calc
@@ -166,7 +167,7 @@ theorem kyFanApproximationGauge_diagBlock_le_complex
     refine hreal.trans ?_
     have := kyFanApproximationGauge_reflectionConjugate_le U A k
     linarith
-  rw [kyFanApproximationGauge_smul] at hsum
+  rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm] at hsum
   have hnorm : ‖(2 : ℂ)‖ = 2 := by norm_num
   rw [hnorm] at hsum
   linarith

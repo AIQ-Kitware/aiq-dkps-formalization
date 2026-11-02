@@ -10,6 +10,7 @@ public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 public import DavisKahan.OperatorIdeal.ComplexificationApproximation
 public import DavisKahan.SpectralTheory.Complexification.Spectrum
 public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFanBochner
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
 
 public section
 
@@ -92,15 +93,21 @@ variable {Fc : Type v} [NormedAddCommGroup Fc] [InnerProductSpace ℂ Fc]
 /-- The unitary orbit appearing in the Fourier inverse preserves every finite Ky Fan gauge.
 
 Sylvester-specific glue: the general two-sided invariance is
-`ContinuousLinearMap.kyFanGaugeReal_unitary_comp_comp`, and all this adds is that the two Fourier
+`ContinuousLinearMap.kyFanGauge_comp_linearIsometryEquiv`, and all this adds is that the two Fourier
 group elements are unitary.  It is the Ky Fan analogue of `norm_unitary_left_right`. -/
 private theorem kyFanGaugeReal_unitaryGroup_orbit
     (A : Fc →L[ℂ] Fc) (hA : A.IsSymmetric)
     (B : Ec →L[ℂ] Ec) (hB : B.IsSymmetric)
     (t : ℝ) (C : Ec →L[ℂ] Fc) (k : ℕ) :
     ((unitaryGroup A t ∘L C ∘L unitaryGroup B (-t)).kyFanGauge k : ℝ) = (C.kyFanGauge k : ℝ) :=
-  ContinuousLinearMap.kyFanGaugeReal_unitary_comp_comp
-    (unitaryGroup_mem_unitary A hA t) (unitaryGroup_mem_unitary B hB (-t)) C k
+  by
+    let e := Unitary.linearIsometryEquiv
+      ⟨unitaryGroup B (-t), unitaryGroup_mem_unitary B hB (-t)⟩
+    let f := Unitary.linearIsometryEquiv
+      ⟨unitaryGroup A t, unitaryGroup_mem_unitary A hA t⟩
+    simpa only [LinearIsometryEquiv.toContinuousLinearMap_toLinearIsometry,
+      e, f, Unitary.coe_linearIsometryEquiv_apply] using
+      congrArg NNReal.toReal (C.kyFanGauge_comp_linearIsometryEquiv e f k)
 
 /-- **The universal `π/2` Sylvester estimate in every finite Ky Fan gauge**, on arbitrary
 complex Hilbert spaces.
@@ -136,7 +143,7 @@ theorem kyFan_sylvester_le_of_generalSeparation_complex
       congr 1
       apply integral_congr_ae
       filter_upwards [] with t
-      rw [ContinuousLinearMap.kyFanGaugeReal_smul,
+      rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm,
         kyFanGaugeReal_unitaryGroup_orbit A hA B hB t C k]
     _ = d * ((∫ t : ℝ, ‖separatedSylvesterMultiplier d hd t‖) * (C.kyFanGauge k : ℝ)) := by
       rw [integral_mul_const]
@@ -224,7 +231,7 @@ theorem idealGauge_sylvester_le_of_generalSeparation_real
   have hfan : ∀ k, d * (X.kyFanGauge k : ℝ) ≤
       (((Real.pi / 2 : ℝ) • C).kyFanGauge k : ℝ) := by
     intro k
-    rw [kyFanApproximationGauge_smul, Real.norm_eq_abs, abs_of_pos hc]
+    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, Real.norm_eq_abs, abs_of_pos hc]
     exact kyFan_sylvester_le_of_generalSeparation_real hA hB hd hsep hEq k
   obtain ⟨hX, hg⟩ :=
     mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hd hCscaled hfan

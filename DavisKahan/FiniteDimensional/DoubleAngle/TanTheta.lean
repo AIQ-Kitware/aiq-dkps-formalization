@@ -145,20 +145,6 @@ section ReflectionAlgebra
 
 variable {T : E →ₗ[𝕜] E}
 
-/-- Pythagoras for the orthogonal projection: `‖P_K x‖² + ‖x − P_K x‖² = ‖x‖²`.
-Auxiliary. -/
-private theorem norm_sq_starProjection_add_norm_sq_sub (K : Submodule 𝕜 E)
-    [K.HasOrthogonalProjection] (x : E) :
-    ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2 = ‖x‖ ^ 2 := by
-  have horth : ⟪K.starProjection x, x - K.starProjection x⟫_𝕜 = 0 :=
-    Submodule.inner_right_of_mem_orthogonal (K.starProjection_apply_mem x)
-      (K.sub_starProjection_mem_orthogonal x)
-  have hx : K.starProjection x + (x - K.starProjection x) = x := by abel
-  calc ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2
-      = ‖K.starProjection x + (x - K.starProjection x)‖ ^ 2 := by
-        rw [norm_add_sq (𝕜 := 𝕜), horth, map_zero]; ring
-    _ = ‖x‖ ^ 2 := by rw [hx]
-
 /-- The reflection through `K`, with the doubling written as a `𝕜`-scalar.
 Auxiliary. -/
 private theorem reflection_apply_ofNat_smul (K : Submodule 𝕜 E) [K.HasOrthogonalProjection]
@@ -237,7 +223,8 @@ private theorem le_re_inner_reflection_map (hT : T.IsSymmetric) {U : Submodule �
     LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hT (p := U) hUinv hu
   have hpU : U.starProjection w ∈ U := U.starProjection_apply_mem w
   have hmU : w - U.starProjection w ∈ Uᗮ := U.sub_starProjection_mem_orthogonal w
-  have hpyth := norm_sq_starProjection_add_norm_sq_sub U w
+  have hpyth := (by simpa only [Submodule.starProjection_orthogonal_val] using
+        (Submodule.norm_sq_eq_add_norm_sq_starProjection w U).symm)
   have hwsum : w = U.starProjection w + (w - U.starProjection w) := by abel
   set p : E := U.starProjection w with hp
   set m : E := w - U.starProjection w with hm

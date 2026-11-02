@@ -132,7 +132,8 @@ private theorem reflectedDefectBlocks_same
   apply (ContinuousLinearMap.sameSingularValues_iff _ _).mpr
   intro n
   apply NNReal.eq
-  rw [hblock, ContinuousLinearMap.approximationNumber_neg]
+  rw [hblock, ← neg_one_smul 𝕜, ContinuousLinearMap.singularValue_smul,
+    nnnorm_neg, nnnorm_one, one_mul]
   have hright := sameApproximationSingularValues_comp_reflection_right V
     (V.reflectionOperator ∘L (projectionBlock Wᗮ U D).adjoint)
   have hleft := sameApproximationSingularValues_comp_reflection_left V
@@ -221,7 +222,7 @@ theorem kyFan_reflectionDefectBlock_le_two_mul
     rw [hD, reflectionDefect_eq_neg_two_smul_offdiag, hpairAdef]
   have hDgauge : (D.kyFanGauge (2 * k) : ℝ) =
       4 * ((Vᗮ.starProjection ∘L S ∘L V.starProjection).kyFanGauge k : ℝ) := by
-    rw [hoffdiag, kyFanApproximationGauge_smul]
+    rw [hoffdiag, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm]
     have hnorm : ‖(-2 : 𝕜)‖ = 2 := by
       rw [norm_neg]
       simp

@@ -1735,14 +1735,14 @@ theorem beamSinThetaSum_le (ε : ℝ) :
             ((ContinuousLinearMap.adjoint (beamPerturbation ε ∘L beamTrialIncl)).kyFanGauge 2 : ℝ) *
             ‖selfAdjointSpectralSubspaceInclusion (beamPerturbed ε)
               (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet‖ :=
-          kyFanApproximationGauge_comp_le _ _ _ _
+          (NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le _ _ _ _))
       _ ≤ 1 * ((beamResidual ε).kyFanGauge 2 : ℝ) * 1 := by
-          rw [kyFanApproximationGauge_adjoint,
+          rw [ContinuousLinearMap.kyFanGauge_adjoint,
             show (beamPerturbation ε ∘L beamTrialIncl) = beamResidual ε from rfl]
           have hid : ‖ContinuousLinearMap.id ℂ beamTrial‖ ≤ 1 :=
             ContinuousLinearMap.norm_id_le
           have hnn : 0 ≤ ((beamResidual ε).kyFanGauge 2 : ℝ) :=
-            kyFanApproximationGauge_nonneg 2 _
+            (NNReal.coe_nonneg _)
           have h1 : ‖ContinuousLinearMap.id ℂ beamTrial‖ *
               ((beamResidual ε).kyFanGauge 2 : ℝ) ≤
                 1 * ((beamResidual ε).kyFanGauge 2 : ℝ) :=

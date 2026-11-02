@@ -290,7 +290,9 @@ theorem tan_theta_le (hT : T.IsSymmetric)
           _ = ‖Z.starProjection u₀‖ * ‖v‖ := mul_comm _ _
     -- the chain at the maximizer
     have hpy₀ : ‖Z.starProjection u₀‖ ^ 2 + ‖u₀ - Z.starProjection u₀‖ ^ 2 = 1 := by
-      rw [norm_sq_starProjection_add_norm_sq_sub Z u₀, hu₀n, one_pow]
+      have h := (Submodule.norm_sq_eq_add_norm_sq_starProjection u₀ Z).symm
+      rw [Submodule.starProjection_orthogonal_val] at h
+      simpa only [hu₀n, one_pow] using h
     have hchain := hZ (Z.starProjection u₀) (Z.starProjection_apply_mem u₀)
     have hsplit : Z.starProjection (T (Z.starProjection u₀))
           - (((α + β) / 2 : ℝ) : 𝕜) • Z.starProjection u₀
@@ -323,7 +325,8 @@ theorem tan_theta_le (hT : T.IsSymmetric)
     -- transfer to `u` by monotonicity of `t ↦ t/√(1−t²)`, kept in squares
     have hPu : ‖Z.starProjection u‖ ≤ ‖Z.starProjection u₀‖ * ‖u‖ := hmax u huV
     have hpyu : ‖Z.starProjection u‖ ^ 2 + ‖u - Z.starProjection u‖ ^ 2 = ‖u‖ ^ 2 :=
-      norm_sq_starProjection_add_norm_sq_sub Z u
+      (by simpa only [Submodule.starProjection_orthogonal_val] using
+        (Submodule.norm_sq_eq_add_norm_sq_starProjection u Z).symm)
     have hsq : (δ * ‖Z.starProjection u‖) ^ 2 ≤ (ρ * ‖u - Z.starProjection u‖) ^ 2 := by
       have h1 : ‖Z.starProjection u‖ ^ 2 ≤ ‖Z.starProjection u₀‖ ^ 2 * ‖u‖ ^ 2 := by
         have := pow_le_pow_left₀ (norm_nonneg _) hPu 2
@@ -381,9 +384,11 @@ theorem tan_theta_le (hT : T.IsSymmetric)
     have hpyZu : ‖Z.starProjection (x - V.starProjection x)‖ ^ 2
           + ‖(x - V.starProjection x) - Z.starProjection (x - V.starProjection x)‖ ^ 2
         = ‖x - V.starProjection x‖ ^ 2 :=
-      norm_sq_starProjection_add_norm_sq_sub Z _
+      (by simpa only [Submodule.starProjection_orthogonal_val] using
+        (Submodule.norm_sq_eq_add_norm_sq_starProjection _ Z).symm)
     have hpyVx : ‖V.starProjection x‖ ^ 2 + ‖x - V.starProjection x‖ ^ 2 = ‖x‖ ^ 2 :=
-      norm_sq_starProjection_add_norm_sq_sub V x
+      (by simpa only [Submodule.starProjection_orthogonal_val] using
+        (Submodule.norm_sq_eq_add_norm_sq_starProjection x V).symm)
     have hq : (0 : ℝ) < ‖x - V.starProjection x‖ := norm_pos_iff.mpr h0
     set q : ℝ := ‖x - V.starProjection x‖ with hqdef
     set pz : ℝ := ‖Z.starProjection (x - V.starProjection x)‖ with hpzdef

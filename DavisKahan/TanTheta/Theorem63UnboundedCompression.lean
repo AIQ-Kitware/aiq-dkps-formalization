@@ -577,11 +577,11 @@ theorem all_kyFan_core_trunc {α δ : ℝ} (hδ : 0 < δ)
     (D.truncData_compression_upper V hupper τ) (D.truncData_crossed_lower V hcross τ) k
   refine hcore.trans ?_
   rw [D.truncData_residual V τ]
-  have h := kyFanApproximationGauge_comp_le (𝕜 := ℂ) k
-    (ContinuousLinearMap.id ℂ H) D.residual (D.truncIncl τ)
+  have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le
+      (ContinuousLinearMap.id ℂ H) D.residual (D.truncIncl τ) k))
   rw [ContinuousLinearMap.id_comp] at h
   refine h.trans ?_
-  have hnn := kyFanApproximationGauge_nonneg k D.residual
+  have hnn := (NNReal.coe_nonneg (D.residual.kyFanGauge k))
   calc
     ‖ContinuousLinearMap.id ℂ H‖ * (D.residual.kyFanGauge k : ℝ) *
         ‖D.truncIncl τ‖ ≤ 1 * (D.residual.kyFanGauge k : ℝ) * 1 := by
@@ -682,7 +682,7 @@ theorem approximationSingularValue_sineBlock_lt_one {α δ : ℝ} (hδ : 0 < δ)
   have haeq : ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) = 1 :=
     le_antisymm ha_le (le_of_not_gt fun h => hcon h)
   set B : ℝ := (D.residual.kyFanGauge (n + 1) : ℝ) with hB_def
-  have hB0 : 0 ≤ B := kyFanApproximationGauge_nonneg _ _
+  have hB0 : 0 ≤ B := (NNReal.coe_nonneg _)
   set C : ℝ := B / δ + 1 with hC_def
   have hC0 : 0 ≤ C := by positivity
   set c : ℝ := Real.sin (Real.arctan C) with hc_def

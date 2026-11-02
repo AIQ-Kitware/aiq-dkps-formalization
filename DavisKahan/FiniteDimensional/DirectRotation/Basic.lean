@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
+public import TauCeti.Analysis.InnerProductSpace.Polar.Isometry
 public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 
 /-!
@@ -336,14 +337,19 @@ factor of the canonical intertwiner. -/
 noncomputable def directRotation (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : Submodule.IsAcute U V) : E ≃ₗᵢ[𝕜] E :=
-  polarUnitaryEquiv (canonicalIntertwiner_isUnit_of_acute U V hacute)
+  ((canonicalIntertwiner U V).polarIsometry
+    ((LinearMap.ker_eq_bot (f := canonicalIntertwiner U V)).mp
+      ((LinearMap.isUnit_iff_ker_eq_bot _).mp
+        (canonicalIntertwiner_isUnit_of_acute U V hacute)))).toLinearIsometryEquiv rfl
 
 /-- The direct rotation, as a plain linear map. -/
 @[simp] theorem directRotation_toLinearMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : Submodule.IsAcute U V) :
     (directRotation U V hacute).toLinearMap =
-      LinearMap.polarFactor (canonicalIntertwiner U V) := rfl
+      LinearMap.polarFactor (canonicalIntertwiner U V) := by
+  change ((canonicalIntertwiner U V).polarIsometry _).toLinearMap = _
+  exact LinearMap.polarIsometry_toLinearMap _ _
 
 
 /-- The direct rotation fixes every zero-angle direction. -/

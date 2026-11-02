@@ -339,7 +339,7 @@ theorem kyFanNormingFunction_gauge
     (k : ℕ) (hk : 0 < k) (A : E →L[𝕜] F) :
     (kyFanNormingFunction k hk).gauge A = (A.kyFanGauge k : ℝ) := by
   rw [SymmetricNormingFunction.gauge, kyFanNormingFunction_extendedGauge,
-    ENNReal.toReal_ofReal (kyFanApproximationGauge_nonneg k A)]
+    ENNReal.toReal_ofReal ((NNReal.coe_nonneg (A.kyFanGauge k)))]
 
 /-- **Converse Ky Fan principle for the source class.**  If every coherent
 Davis--Kahan source norm of `A` is at most the corresponding norm of `B`, then
@@ -362,7 +362,7 @@ theorem all_kyFan_le_of_every_ext_finiteGaugeendedGauge_le
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     have hN := h (kyFanNormingFunction k hk)
     rw [kyFanNormingFunction_extendedGauge, kyFanNormingFunction_extendedGauge] at hN
-    exact (ENNReal.ofReal_le_ofReal_iff (kyFanApproximationGauge_nonneg k B)).mp hN
+    exact (ENNReal.ofReal_le_ofReal_iff ((NNReal.coe_nonneg (B.kyFanGauge k)))).mp hN
 
 /-- Real-valued scaled converse, in the form most useful to source-facing
 Davis--Kahan inequalities. -/

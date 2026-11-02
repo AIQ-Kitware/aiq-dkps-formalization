@@ -1129,7 +1129,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
       ((projectionBlock Uᗮ U (((delta : ℝ) : ℂ) • K)).kyFanGauge j : ℝ) ≤
         ((projectionBlock Uᗮ U (T - A)).kyFanGauge j : ℝ) := by
     intro j
-    rw [projectionBlock_smul, kyFanApproximationGauge_smul, hdeltac]
+    rw [projectionBlock_smul, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdeltac]
     exact corner_all_kyFan hT hV hAU hdelta hCompressionUpper hUnwantedLower htr j
   have h₁ : ∀ j : ℕ,
       ((projectionBlock Uᗮᗮ Uᗮ (((delta : ℝ) : ℂ) • K)).kyFanGauge j : ℝ) ≤
@@ -1148,8 +1148,8 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
       show _ = star _
       simp only [star_mul, star_sub, star_one, hp.star_eq, hHsa.star_eq]
       noncomm_ring
-    rw [hleft, hright, kyFanApproximationGauge_adjoint,
-      kyFanApproximationGauge_adjoint, kyFanApproximationGauge_smul, hdeltac]
+    rw [hleft, hright, ContinuousLinearMap.kyFanGauge_adjoint,
+      ContinuousLinearMap.kyFanGauge_adjoint, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdeltac]
     exact corner_all_kyFan hT hV hAU hdelta hCompressionUpper hUnwantedLower htr j
   have hcombine := lemma61_all_kyFan Uᗮ U (((delta : ℝ) : ℂ) • K)
     (((delta : ℝ) : ℂ) • K) (T - A) (T - A) h₀ h₁ k
@@ -1161,7 +1161,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
     rfl
   have hsumH : projectionBlock Uᗮ U (T - A) +
       projectionBlock Uᗮᗮ Uᗮ (T - A) = diagonalPair Uᗮ U (T - A) := rfl
-  rw [hsum, hsumH, kyFanApproximationGauge_smul, hdeltac] at hcombine
+  rw [hsum, hsumH, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdeltac] at hcombine
   have hpinch := diagonalPair_all_kyFan_le Uᗮ U (T - A) k
   have hmodulus : ((tanAngleOperatorC U V).kyFanGauge k : ℝ) =
       ((tanBlockRepresentative U V).kyFanGauge k : ℝ) := by

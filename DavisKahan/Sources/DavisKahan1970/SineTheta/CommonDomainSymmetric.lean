@@ -368,13 +368,15 @@ theorem forward_all_kyFan
         Vᗮ U (-(D.residual.adjoint ∘L D.F₁))
   have hgaugeSine : (P.forwardSineBlock.kyFanGauge k : ℝ) =
       ((D.X.adjoint ∘L D.F₁).kyFanGauge k : ℝ) := by
-    erw [hsineAdj, kyFanApproximationGauge_adjoint,
+    erw [hsineAdj, ContinuousLinearMap.kyFanGauge_adjoint,
       (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsine.kyFanGauge_eq k)))]
   have hgaugeRes : (P.forwardResidualBlock.kyFanGauge k : ℝ) =
       ((-(D.residual.adjoint ∘L D.F₁)).kyFanGauge k : ℝ) := by
-    erw [← kyFanApproximationGauge_adjoint k P.forwardResidualBlock,
-      ← kyFanApproximationGauge_neg k P.forwardResidualBlock.adjoint,
+    erw [← (congrArg NNReal.toReal (ContinuousLinearMap.kyFanGauge_adjoint P.forwardResidualBlock k)),
+      ← (congrArg NNReal.toReal (by
+          simpa only [neg_one_smul, nnnorm_neg, nnnorm_one, one_mul] using
+            (ContinuousLinearMap.kyFanGauge_smul (-1 : 𝕜) P.forwardResidualBlock.adjoint k))),
       (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hres.kyFanGauge_eq k)))]
   rw [hgaugeSine, hgaugeRes]
@@ -429,7 +431,7 @@ theorem reverse_all_kyFan
         Uᗮ V (-(D.residual.adjoint ∘L D.F₁))
   have hgaugeSine : (P.reverseSineBlock.kyFanGauge k : ℝ) =
       ((D.X.adjoint ∘L D.F₁).kyFanGauge k : ℝ) := by
-    erw [hsineAdj, kyFanApproximationGauge_adjoint,
+    erw [hsineAdj, ContinuousLinearMap.kyFanGauge_adjoint,
       (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsine.kyFanGauge_eq k)))]
   have hgaugeRes : (P.reverseResidualBlock.kyFanGauge k : ℝ) =
@@ -478,8 +480,8 @@ theorem symmetric_all_kyFan_crossSineSum
           (isSelfAdjoint_starProjection V).adjoint_eq,
           (isSelfAdjoint_starProjection Uᗮ).adjoint_eq,
           ContinuousLinearMap.comp_assoc]
-      rw [hblockSine, hblockRes, kyFanApproximationGauge_smul,
-        hgapNorm, kyFanApproximationGauge_adjoint]
+      rw [hblockSine, hblockRes, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm,
+        hgapNorm, ContinuousLinearMap.kyFanGauge_adjoint]
       exact hrev)
     (fun j => by
       have hfwd := P.forward_all_kyFan j
@@ -501,9 +503,9 @@ theorem symmetric_all_kyFan_crossSineSum
           (isSelfAdjoint_starProjection U).adjoint_eq,
           (isSelfAdjoint_starProjection Vᗮ).adjoint_eq,
           ContinuousLinearMap.comp_assoc]
-      rw [hblockSine, hblockRes, kyFanApproximationGauge_smul,
-        hgapNorm, kyFanApproximationGauge_adjoint,
-        kyFanApproximationGauge_adjoint]
+      rw [hblockSine, hblockRes, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm,
+        hgapNorm, ContinuousLinearMap.kyFanGauge_adjoint,
+        ContinuousLinearMap.kyFanGauge_adjoint]
       exact hfwd) k
   have hres := diagonalPair_all_kyFan_le Uᗮ V P.perturbation k
   have hcross :
@@ -518,7 +520,7 @@ theorem symmetric_all_kyFan_crossSineSum
   calc
     P.gap * ((crossSineSum U V).kyFanGauge k : ℝ) =
         ((((P.gap : ℝ) : 𝕜) • crossSineSum U V).kyFanGauge k : ℝ) := by
-      erw [kyFanApproximationGauge_smul, hgapNorm]
+      erw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hgapNorm]
     _ ≤ ((diagonalPair Uᗮ V P.perturbation).kyFanGauge k : ℝ) := hcombine
     _ ≤ (P.perturbation.kyFanGauge k : ℝ) := hres
 

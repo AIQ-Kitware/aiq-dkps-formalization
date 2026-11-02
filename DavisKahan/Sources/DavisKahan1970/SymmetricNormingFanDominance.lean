@@ -112,8 +112,8 @@ theorem symmetricNorming_of_kyFanDominant
   refine N.mul_gauge_le_of_all_mul_kyFan_le hd hY (fun k => ?_)
   rcases Nat.eq_zero_or_pos k with rfl | hk
   · rw [
-      ContinuousLinearMap.kyFanGaugeReal_zero_index,
-      ContinuousLinearMap.kyFanGaugeReal_zero_index, mul_zero]
+      ContinuousLinearMap.kyFanGauge_zero,
+      ContinuousLinearMap.kyFanGauge_zero, NNReal.coe_zero, mul_zero]
   · have hM := h ((show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
     { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
       gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint }))
@@ -158,8 +158,8 @@ theorem kyFanDominant_of_symmetricNorming
   refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le M hd hY (fun k => ?_)
   rcases Nat.eq_zero_or_pos k with rfl | hk
   · rw [
-      ContinuousLinearMap.kyFanGaugeReal_zero_index,
-      ContinuousLinearMap.kyFanGaugeReal_zero_index, mul_zero]
+      ContinuousLinearMap.kyFanGauge_zero,
+      ContinuousLinearMap.kyFanGauge_zero, NNReal.coe_zero, mul_zero]
   · have hN := (h (kyFanNormingFunction k hk) (kyFanNormingFunction_mem k hk Y)).2
     rwa [kyFanNormingFunction_gauge, kyFanNormingFunction_gauge] at hN
 

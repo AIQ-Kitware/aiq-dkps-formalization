@@ -284,7 +284,7 @@ theorem kyFan_left_comp_interfaceCutoff_tendsto
   have hlimit : (K.kyFanGauge k : ℝ) =
       (K.adjoint.kyFanGauge k : ℝ) := by
     symm
-    exact kyFanApproximationGauge_adjoint k K
+    exact (congrArg NNReal.toReal (ContinuousLinearMap.kyFanGauge_adjoint K k))
   simpa only [hpoint, hlimit] using hright
 
 /-- Left interface-cutoff inequalities pass to the uncut operators. -/

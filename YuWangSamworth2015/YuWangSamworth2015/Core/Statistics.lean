@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 public import TauCeti.Analysis.InnerProductSpace.Projection.FrobeniusSine
+public import TauCeti.Analysis.InnerProductSpace.Orthonormal.Overlap
 public import YuWangSamworth2015.Core.Residual
 public import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
 
@@ -174,27 +175,6 @@ both blocks to Mathlib's chosen eigenbases — is recovered from them as the
 special case in which the chosen eigenvectors happen to be the canonical ones.
 -/
 
-/-- **The Frobenius sine as complementary projection energy.**
-`‖sin Θ‖²_F = ∑ᵢ ‖P_{Uᗮ} vᵢ‖²` for orthonormal families `u`, `v` of equal size
-with `u` spanning `U` — the paper's `‖V₁ᵀ V̂‖²_F`, without a choice of `V₁`.
-
-This is the shape the residual estimate produces, and it is why the residual
-argument never needs a basis for the perturbed block. -/
-theorem sinThetaSq_eq_sum_sq_norm_starProjection_orthogonal
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] {d : ℕ} {u v : Fin d → E}
-    (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v)
-    (hspanU : Submodule.span 𝕜 (Set.range u) = U) :
-    sinThetaSq hu hv = ∑ i, ‖Uᗮ.starProjection (v i)‖ ^ 2 := by
-  rw [sinThetaSq_eq_card_sub_sum_norm_inner_sq, Fintype.card_fin]
-  have hproj : ∀ k, ∑ i, ‖⟪u i, v k⟫_𝕜‖ ^ 2 = ‖U.starProjection (v k)‖ ^ 2 := fun k =>
-    (norm_sq_starProjection_of_span_range hu hspanU (v k)).symm
-  have hsplit : ∀ k, ‖U.starProjection (v k)‖ ^ 2 + ‖Uᗮ.starProjection (v k)‖ ^ 2 = 1 := by
-    intro k
-    rw [← Submodule.norm_sq_eq_add_norm_sq_starProjection (v k) U, hv.norm_eq_one k, one_pow]
-  rw [Finset.sum_congr rfl fun k (_ : k ∈ Finset.univ) => hproj k,
-    show ((d : ℝ)) = ∑ _k : Fin d, (1 : ℝ) by simp, ← Finset.sum_sub_distrib]
-  exact Finset.sum_congr rfl fun k _ => by linarith [hsplit k]
-
 /-- The canonical Frobenius sine of two spanned blocks, as complementary
 projection energy of the second block's frame. -/
 theorem sinThetaFrobenius_sq_eq_sum_sq_norm_starProjection_orthogonal
@@ -203,7 +183,7 @@ theorem sinThetaFrobenius_sq_eq_sum_sq_norm_starProjection_orthogonal
         (Submodule.span 𝕜 (Set.range v)) ^ 2
       = ∑ i, ‖(Submodule.span 𝕜 (Set.range u))ᗮ.starProjection (v i)‖ ^ 2 := by
   rw [← sinThetaSq_eq_sinThetaFrobenius_sq_of_spans hu hv rfl rfl]
-  exact sinThetaSq_eq_sum_sq_norm_starProjection_orthogonal hu hv rfl
+  exact TauCeti.sinThetaSq_eq_sum_norm_starProjection_orthogonal_sq hu hv rfl
 
 /-- **Turning the squared residual sandwich into the printed bound.**  From
 `Δ² s² ≤ 4 c²` with `s, c ≥ 0` and `Δ > 0` one gets `s ≤ 2 c / Δ`. -/
@@ -868,7 +848,15 @@ theorem sinThetaFrobenius_spanIndices_of_subset_compl {n : ℕ}
     have hproj : (b.spanIndices S).starProjection (b i) =
         if i ∈ S.toFinset then b i else 0 := by
       rw [hspan]
-      exact Orthonormal.starProjection_span_image_apply_self b.orthonormal _ i
+      have hr : Set.range (b ∘ fun j : S.toFinset => (j : Fin n)) =
+          b '' (S.toFinset : Set (Fin n)) := by ext; simp
+      rw [(b.orthonormal.comp _ Subtype.val_injective).starProjection_apply_eq_sum
+        (U := Submodule.span 𝕜 (b '' ↑S.toFinset)) (by rw [hr])]
+      simp only [Function.comp_apply]
+      rw [Finset.sum_coe_sort S.toFinset (fun j => ⟪b j, b i⟫_𝕜 • b j)]
+      simp only [orthonormal_iff_ite.mp b.orthonormal, ite_smul,
+        one_smul, zero_smul]
+      exact Finset.sum_ite_eq' S.toFinset i fun j => b j
     change ‖(b.spanIndices S).starProjection (b i)‖ ^ 2 = _
     rw [hproj]
     split_ifs

@@ -897,10 +897,9 @@ private theorem kyFanApproximationGauge_conj_le_real {F : Type v}
     {L : E →L[ℝ] F} {R : F →L[ℝ] E}
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) (A : E →L[ℝ] E) (k : ℕ) :
     ((L ∘L A ∘L R).kyFanGauge k : ℝ) ≤ (A.kyFanGauge k : ℝ) := by
-  have hcomp := kyFanApproximationGauge_comp_le
-    (𝕜 := ℝ) (E := E) (F := E) (G := F) (H := F) k L A R
+  have hcomp := NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le L A R k)
   refine hcomp.trans ?_
-  have hnn := kyFanApproximationGauge_nonneg k A
+  have hnn := (NNReal.coe_nonneg (A.kyFanGauge k))
   calc
     ‖L‖ * (A.kyFanGauge k : ℝ) * ‖R‖ ≤
         1 * (A.kyFanGauge k : ℝ) * 1 :=

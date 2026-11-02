@@ -278,7 +278,7 @@ theorem beamTanTheta_le (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
     (by simp [SymmetricOperatorIdealFamily.Mem])
   have hgauge := hmain.2
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-    kyFanApproximationGauge_one] at hgauge
+    ContinuousLinearMap.kyFanGauge_one, coe_nnnorm] at hgauge
   have hchain : (500 - ritzHigh ε) * beamTanTheta ε
       ≤ orthogonalResidualSingularValue ε :=
     le_trans hgauge (norm_beamTrialBlock_residual_le ε)
@@ -699,7 +699,7 @@ theorem beamColumn_tangent_le (ε : ℝ) (v : BeamL2) (hv : v ∈ beamTrial)
     (by simp [SymmetricOperatorIdealFamily.Mem])
   have hgauge := hmain.2
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-    kyFanApproximationGauge_one] at hgauge
+    ContinuousLinearMap.kyFanGauge_one, coe_nnnorm] at hgauge
   exact hgauge.trans (norm_beamColumnBlock_residual_le ε v hv hvnorm a hform hcol)
 
 /-- The tangent of the angle between a single Ritz vector and the exact low spectral

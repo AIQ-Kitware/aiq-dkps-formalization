@@ -386,7 +386,7 @@ theorem scaledGaugeLEWhereDefined_of_all_mul_kyFan_le
   have hscaled : ∀ k, (((((c : ℝ) : 𝕜)) • A).kyFanGauge k : ℝ) ≤
       (B.kyFanGauge k : ℝ) := by
     intro k
-    rw [kyFanApproximationGauge_smul, RCLike.norm_ofReal, abs_of_pos hc]
+    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, RCLike.norm_ofReal, abs_of_pos hc]
     exact hky k
   have hle : S.gauge ((((c : ℝ) : 𝕜)) • A) ≤ S.gauge B :=
     N.hasFanDominanceWhereDefined hscaledMem hB hscaled

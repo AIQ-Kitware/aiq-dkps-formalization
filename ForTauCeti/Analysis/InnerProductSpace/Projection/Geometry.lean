@@ -6,14 +6,14 @@ Authors: Jon Crall, Claude Fable 5, Claude Opus 4.8
 module
 
 public import Mathlib.Analysis.InnerProductSpace.Projection.Basic
-public import Mathlib.Analysis.InnerProductSpace.PiL2
+public import TauCeti.Analysis.InnerProductSpace.Orthonormal.SpanProjection
 
 
 /-!
-# Projection geometry for finite orthonormal families
+# Projector distance between arbitrary orthonormal bases
 
-Reusable projection and Parseval identities for spans of finite orthonormal
-subfamilies.  These results are independent of Davis--Kahan perturbation theory.
+The squared Frobenius distance between selected basis projections equals twice
+the cross-overlap sum. Elementary projection formulas are consumed upstream.
 -/
 
 public section
@@ -27,122 +27,22 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 
-/-- **Pythagoras across an orthogonal projection**:
-`‖P_K x‖² + ‖x − P_K x‖² = ‖x‖²`.
-
-`x` splits into its projection and the complementary component, which are orthogonal, so the
-norms add in square. Stated for any submodule carrying an orthogonal projection. -/
-theorem norm_sq_starProjection_add_norm_sq_sub (K : Submodule 𝕜 F)
-    [K.HasOrthogonalProjection] (x : F) :
-    ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2 = ‖x‖ ^ 2 := by
-  have horth : ⟪K.starProjection x, x - K.starProjection x⟫_𝕜 = 0 :=
-    Submodule.inner_right_of_mem_orthogonal (K.starProjection_apply_mem x)
-      (K.sub_starProjection_mem_orthogonal x)
-  have hx : K.starProjection x + (x - K.starProjection x) = x := by abel
-  calc ‖K.starProjection x‖ ^ 2 + ‖x - K.starProjection x‖ ^ 2
-      = ‖K.starProjection x + (x - K.starProjection x)‖ ^ 2 := by
-        rw [norm_add_sq (𝕜 := 𝕜), horth, map_zero]; ring
-    _ = ‖x‖ ^ 2 := by rw [hx]
-
-/-! The three bridge lemmas hold for an orthonormal family in *any* inner product
-space: the span of a finite subfamily is finite-dimensional, so it always carries
-an orthogonal projection (the `HasOrthogonalProjection` instance is automatic when
-the ambient space is finite-dimensional, as in the spectral-subspace application
-below, and is requested explicitly otherwise).
+/-!
+The elementary projection and finite-family Parseval formulas are supplied by
+Mathlib and Tau Ceti. The retained identity compares two arbitrary orthonormal
+bases; it is distinct from the canonical-family Frobenius sine formula.
 
 ## Provenance
 
-* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: `ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry`, moved to
-  `ForTauCeti` in the Wave-1 staging migration; introduced at Davis--Kahan
-  commit `f44d966`.
-* Extraction class: **moved**.  The Wave-1 migration renamed the namespace
-  `ForMathlib` to `TauCeti`; declaration names and proofs are unchanged.
-* Original authors / copyright: Jon Crall, Claude Fable 5, Claude Opus 4.8; Copyright (c) 2026
-  Kitware, Inc.;
-  Apache 2.0.
-* Spectra influence: **none** — this module imports only Mathlib and sibling
-  `ForTauCeti` staging modules.
+Original module `ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry`,
+introduced at DKPS `f44d966`; authors Jon Crall, Claude Fable 5, Claude Opus 4.8,
+Kitware copyright, Apache-2.0. Native finite-family formulas were independently
+implemented in Tau Ceti #16089; its integration explicitly disclaims DKPS #13864
+proof descent. The complementary selected-span formula consumes the accepted
+BasisSpan construction and family Parseval theorem.
 -/
-
-/--
-**Projection onto the span of an orthonormal subfamily.** For an orthonormal
-family `w` and a finite index set `s`, the orthogonal projection onto
-`span 𝕜 (w '' s)` acts as `x ↦ ∑ i ∈ s, ⟪w i, x⟫ • w i`.
--/
-@[simp]
-theorem Orthonormal.starProjection_span_image_apply {ι : Type*} {w : ι → F}
-    (hw : Orthonormal 𝕜 w) (s : Finset ι)
-    [(Submodule.span 𝕜 (w '' ↑s)).HasOrthogonalProjection] (x : F) :
-    (Submodule.span 𝕜 (w '' ↑s)).starProjection x = ∑ i ∈ s, ⟪w i, x⟫_𝕜 • w i := by
-  classical
-  refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero ?_ ?_
-  · exact Submodule.sum_smul_mem _ _ fun i hi =>
-      Submodule.subset_span (Set.mem_image_of_mem w (by exact_mod_cast hi))
-  · intro y hy
-    induction hy using Submodule.span_induction with
-    | mem y hy =>
-      obtain ⟨j, hj, rfl⟩ := hy
-      have hj' : j ∈ s := by exact_mod_cast hj
-      rw [inner_sub_left, sum_inner, Finset.sum_congr rfl (fun i _ => by
-        rw [inner_smul_left, orthonormal_iff_ite.mp hw i j, mul_ite, mul_one, mul_zero])]
-      rw [Finset.sum_ite_eq' s j fun i => (starRingEnd 𝕜) ⟪w i, x⟫_𝕜, ite_eq_left hj',
-        inner_conj_symm, sub_self]
-    | zero => simp
-    | add a b _ _ ha hb => rw [inner_add_right, ha, hb, add_zero]
-    | smul c a _ ha => rw [inner_smul_right, ha, mul_zero]
-
-/--
-On a member `w k` of the orthonormal family, the projection onto
-`span 𝕜 (w '' s)` keeps it iff `k ∈ s`.
--/
-theorem Orthonormal.starProjection_span_image_apply_self {ι : Type*} [DecidableEq ι]
-    {w : ι → F} (hw : Orthonormal 𝕜 w) (s : Finset ι)
-    [(Submodule.span 𝕜 (w '' ↑s)).HasOrthogonalProjection] (k : ι) :
-    (Submodule.span 𝕜 (w '' ↑s)).starProjection (w k) = if k ∈ s then w k else 0 := by
-  rw [Orthonormal.starProjection_span_image_apply hw s (w k),
-    Finset.sum_congr rfl (fun i _ => by
-      rw [orthonormal_iff_ite.mp hw i k, ite_smul, one_smul, zero_smul]),
-    Finset.sum_ite_eq' s k fun i => w i]
-
-/--
-Parseval for the projection onto the span of an orthonormal subfamily:
-`‖P x‖² = ∑ i ∈ s, ‖⟪w i, x⟫‖²`.
--/
-theorem Orthonormal.norm_sq_starProjection_span_image {ι : Type*} {w : ι → F}
-    (hw : Orthonormal 𝕜 w) (s : Finset ι)
-    [(Submodule.span 𝕜 (w '' ↑s)).HasOrthogonalProjection] (x : F) :
-    ‖(Submodule.span 𝕜 (w '' ↑s)).starProjection x‖ ^ 2 = ∑ i ∈ s, ‖⟪w i, x⟫_𝕜‖ ^ 2 := by
-  have hcast : ((‖(Submodule.span 𝕜 (w '' ↑s)).starProjection x‖ : ℝ) : 𝕜) ^ 2
-      = ((∑ i ∈ s, ‖⟪w i, x⟫_𝕜‖ ^ 2 : ℝ) : 𝕜) := by
-    rw [← inner_self_eq_norm_sq_to_K (𝕜 := 𝕜),
-      Orthonormal.starProjection_span_image_apply hw s x, _root_.Orthonormal.inner_sum hw]
-    rw [Finset.sum_congr rfl fun i _ => RCLike.conj_mul ⟪w i, x⟫_𝕜]
-    push_cast
-    rfl
-  exact_mod_cast hcast
 
 variable [FiniteDimensional 𝕜 F] {m : ℕ}
-
-/-- **Complementary Parseval for a projection residual.** For a subfamily of an orthonormal
-*basis* `w`, the residual of the projection onto its span carries the complementary Parseval
-sum: `‖x − P x‖² = ∑_{i ∉ s} ‖⟪w i, x⟫‖²`.  Companion to
-`Orthonormal.norm_sq_starProjection_span_image` (`‖P x‖² = ∑_{i ∈ s}`); together they split
-Parseval `‖x‖² = ∑_i ‖⟪w i, x⟫‖²` across `s` and its complement. -/
-theorem OrthonormalBasis.norm_sq_sub_starProjection_span_image
-    (w : OrthonormalBasis (Fin m) 𝕜 F) (s : Finset (Fin m)) (x : F) :
-    ‖x - (Submodule.span 𝕜 (w '' ↑s)).starProjection x‖ ^ 2
-      = ∑ i ∈ sᶜ, ‖⟪w i, x⟫_𝕜‖ ^ 2 := by
-  -- `x − P x = Pᗮ x`, and `‖x‖² = ‖P x‖² + ‖Pᗮ x‖²`; subtract off `‖P x‖² = ∑_s` from
-  -- Parseval `‖x‖² = ∑_i` to leave the complement sum.
-  have hres : x - (Submodule.span 𝕜 (w '' ↑s)).starProjection x
-      = (Submodule.span 𝕜 (w '' ↑s))ᗮ.starProjection x :=
-    (Submodule.starProjection_orthogonal_val x).symm
-  have hdecomp := Submodule.norm_sq_eq_add_norm_sq_starProjection x (Submodule.span 𝕜 (w '' ↑s))
-  rw [Orthonormal.norm_sq_starProjection_span_image w.orthonormal s x] at hdecomp
-  rw [hres]
-  linarith [w.sum_sq_norm_inner_right x,
-    Finset.sum_add_sum_compl s fun i => ‖⟪w i, x⟫_𝕜‖ ^ 2, hdecomp]
 
 omit [FiniteDimensional 𝕜 F] in
 /-- Symmetric block-counting identity for two orthonormal bases `u`, `v` and an
@@ -185,21 +85,40 @@ theorem sum_norm_sub_starProjection_span_sq_eq (u v : OrthonormalBasis (Fin m) �
   -- Per-`k` reduction: the `k`-th term is a single cross-overlap row.
   have hQnorm : ∀ k, ‖(Submodule.span 𝕜 (v '' ↑s)).starProjection (u k)‖ ^ 2
       = ∑ j ∈ s, ‖⟪v j, u k⟫_𝕜‖ ^ 2 :=
-    fun k => Orthonormal.norm_sq_starProjection_span_image v.orthonormal s (u k)
+    fun k => by
+      have hr : Set.range (v ∘ fun i : s => (i : Fin m)) = v '' (s : Set (Fin m)) := by
+        ext; simp
+      have hf := (v.orthonormal.comp _ Subtype.val_injective).norm_starProjection_sq_eq_sum
+        (U := Submodule.span 𝕜 (v '' ↑s)) (by rw [hr]) (u k)
+      simpa only [Function.comp_apply] using hf.trans
+        (Finset.sum_coe_sort s (fun j => ‖⟪v j, u k⟫_𝕜‖ ^ 2))
   have hterm : ∀ k, ‖((Submodule.span 𝕜 (v '' ↑s)).starProjection
         - (Submodule.span 𝕜 (u '' ↑s)).starProjection) (u k)‖ ^ 2
       = if k ∈ s then ∑ j ∈ sᶜ, ‖⟪v j, u k⟫_𝕜‖ ^ 2 else ∑ j ∈ s, ‖⟪v j, u k⟫_𝕜‖ ^ 2 := by
     intro k
+    have hproj : (Submodule.span 𝕜 (u '' ↑s)).starProjection (u k) =
+        if k ∈ s then u k else 0 := by
+      have hr : Set.range (u ∘ fun i : s => (i : Fin m)) = u '' (s : Set (Fin m)) := by
+        ext; simp
+      rw [(u.orthonormal.comp _ Subtype.val_injective).starProjection_apply_eq_sum
+        (U := Submodule.span 𝕜 (u '' ↑s)) (by rw [hr])]
+      simp only [Function.comp_apply]
+      rw [Finset.sum_coe_sort s (fun i => ⟪u i, u k⟫_𝕜 • u i)]
+      simp only [orthonormal_iff_ite.mp u.orthonormal, ite_smul,
+        one_smul, zero_smul]
+      exact Finset.sum_ite_eq' s k fun i => u i
     rw [show (((Submodule.span 𝕜 (v '' ↑s)).starProjection
           - (Submodule.span 𝕜 (u '' ↑s)).starProjection) (u k))
         = (Submodule.span 𝕜 (v '' ↑s)).starProjection (u k)
           - (Submodule.span 𝕜 (u '' ↑s)).starProjection (u k) from rfl,
-      Orthonormal.starProjection_span_image_apply_self u.orthonormal s k]
+      hproj]
     split <;> rename_i hk
     · -- `k ∈ s`: `P_u` keeps `uₖ`, so the term is the residual of `uₖ` against the `v`-span,
       -- which is the complementary Parseval sum.
       rw [norm_sub_rev]
-      exact OrthonormalBasis.norm_sq_sub_starProjection_span_image v s (u k)
+      rw [← Submodule.starProjection_orthogonal_val]
+      simpa only [OrthonormalBasis.spanIndices_eq_span] using
+        v.norm_starProjection_orthogonal_spanIndices_sq s (u k)
     · -- `k ∉ s`: the `u`-projection vanishes; the term is the `v`-projection norm.
       rw [sub_zero, hQnorm k]
   -- Sum the per-`k` formula and swap the two cross blocks into each other.

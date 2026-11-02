@@ -81,10 +81,11 @@ theorem restrict_residual_apply_eq
   simp only [add_zero]
   abel
 
-omit [CompleteSpace ↥Z] in
+omit [CompleteSpace ↥Z] [CompleteSpace H] in
 /-- Restricting trial-block data to `F ≤ Z` costs at most `k * ε` in the `k`-th Ky Fan
 approximation gauge when the Ritz compression leaks from `F` by at most `ε`. -/
 theorem kyFanApproximationGauge_restrict_residual_le_add
+    [CompleteSpace H]
     (data : Theorem63TrialData Z V)
     (F : Submodule ℂ H) (hFZ : F ≤ Z)
     [F.HasOrthogonalProjection] [CompleteSpace F]
@@ -127,12 +128,12 @@ theorem kyFanApproximationGauge_restrict_residual_le_add
     _ ≤ (data.residual.kyFanGauge k : ℝ) + (k : ℝ) * ε := by
       have h1 : ((data.residual ∘L J).kyFanGauge k : ℝ) ≤
           (data.residual.kyFanGauge k : ℝ) := by
-        have h := kyFanApproximationGauge_comp_le k
-          (ContinuousLinearMap.id ℂ H) data.residual J
+        have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le
+            (ContinuousLinearMap.id ℂ H) data.residual J k))
         rw [ContinuousLinearMap.id_comp] at h
         refine h.trans ?_
         have hid : ‖ContinuousLinearMap.id ℂ H‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-        have hnn := kyFanApproximationGauge_nonneg k data.residual
+        have hnn := (NNReal.coe_nonneg (data.residual.kyFanGauge k))
         calc
           ‖ContinuousLinearMap.id ℂ H‖ * (data.residual.kyFanGauge k : ℝ) * ‖J‖ ≤
               1 * (data.residual.kyFanGauge k : ℝ) * ‖J‖ := by
@@ -143,7 +144,7 @@ theorem kyFanApproximationGauge_restrict_residual_le_add
             simp
           _ = (data.residual.kyFanGauge k : ℝ) := by ring
       have h2 : (G.kyFanGauge k : ℝ) ≤ (k : ℝ) * ε := by
-        refine (kyFanApproximationGauge_le_nat_mul_opNorm k G).trans ?_
+        refine ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_le_mul_nnnorm G k))).trans ?_
         exact mul_le_mul_of_nonneg_left hGnorm (Nat.cast_nonneg k)
       linarith
 
@@ -294,7 +295,7 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteData
   have haeq : ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) = 1 :=
     le_antisymm ha_le (le_of_not_gt fun h => hcon h)
   set B' : ℝ := (data.residual.kyFanGauge (n + 1) : ℝ) with hB'_def
-  have hB'0 : 0 ≤ B' := kyFanApproximationGauge_nonneg _ _
+  have hB'0 : 0 ≤ B' := (NNReal.coe_nonneg _)
   set C : ℝ := B' / delta + 1 with hC_def
   have hC0 : 0 ≤ C := by positivity
   set c : ℝ := Real.sin (Real.arctan C) with hc_def
@@ -320,7 +321,7 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteData
     exact (norm_sub_starProjection_le_of_mem _ hyF).trans hy
   have hmono : ((theorem63DirectedSineBlock F₁ V).singularValue n : ℝ) ≤
       ((theorem63DirectedSineBlock F V).singularValue n : ℝ) :=
-    approximationSingularValue_restrict_mono (Vᗮ.starProjection) n hF₁F
+    (ContinuousLinearMap.approximationNumber_restrict_mono (Vᗮ.starProjection) n hF₁F)
   have hcF : c < ((theorem63DirectedSineBlock F V).singularValue n : ℝ) :=
     lt_of_lt_of_le hF₁ hmono
   let dataF := data.restrict F hFZ
@@ -388,7 +389,7 @@ theorem all_kyFan_core_of_formBounds_infinite
   rcases Nat.eq_zero_or_pos k with hk0 | hkpos
   · subst hk0
     simp only [Finset.range_zero, Finset.sum_empty, mul_zero]
-    exact kyFanApproximationGauge_nonneg _ _
+    exact (NNReal.coe_nonneg _)
   refine le_of_forall_pos_le_add fun κ hκ => ?_
   have hk0R : (0 : ℝ) < (k : ℝ) := Nat.cast_pos.mpr hkpos
   set κ' : ℝ := κ / (2 * delta * (k : ℝ)) with hκ'_def
@@ -444,7 +445,7 @@ theorem all_kyFan_core_of_formBounds_infinite
       have := hFnfin
       have hmono : ((theorem63DirectedSineBlock Fn V).singularValue n : ℝ) ≤
           ((theorem63DirectedSineBlock F V).singularValue n : ℝ) :=
-        approximationSingularValue_restrict_mono (Vᗮ.starProjection) n hFnF
+        (ContinuousLinearMap.approximationNumber_restrict_mono (Vᗮ.starProjection) n hFnF)
       have hcF : cn ≤ ((theorem63DirectedSineBlock F V).singularValue n : ℝ) :=
         (lt_of_lt_of_le hFn hmono).le
       let dataF := data.restrict F hFZ

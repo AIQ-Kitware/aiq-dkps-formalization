@@ -94,7 +94,7 @@ private theorem kyFan_lowerBlock_eq_upperBlock_reflection
     simp only [star_mul, star_sub, star_one,
       (isSelfAdjoint_starProjection U).star_eq, hK.star_eq]
     noncomm_ring
-  rw [hadj, kyFanApproximationGauge_adjoint]
+  rw [hadj, ContinuousLinearMap.kyFanGauge_adjoint]
 
 omit [CompleteSpace E] in
 private theorem projectionBlock_diagonalPair_lower_reflection

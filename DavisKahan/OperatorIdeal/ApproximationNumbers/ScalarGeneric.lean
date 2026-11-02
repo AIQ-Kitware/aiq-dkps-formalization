@@ -119,16 +119,6 @@ theorem approximationSingularValue_comp_strongProjection_tendsto
   HasApproximationNumberStrongCutoff.tendsto_comp_strongProjection
     (𝕜 := 𝕜) hPproj hP n K
 
-omit [CompleteSpace F] in
-/-- Ky Fan's addition inequality for approximation numbers. -/
-theorem kyFanApproximationGauge_add_le
-    (k : ℕ) (K L : E →L[𝕜] F) :
-    ((K + L).kyFanGauge k : ℝ) ≤
-      (K.kyFanGauge k : ℝ) + (L.kyFanGauge k : ℝ) :=
-  by
-    exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le K L k
-
-
 /-- Ky Fan gauges converge under strong orthogonal cutoffs. -/
 theorem kyFanApproximationGauge_comp_strongProjection_tendsto
     [HasApproximationNumberStrongCutoff.{u, v, w} 𝕜]
@@ -183,7 +173,7 @@ theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
       ((d • A).kyFanGauge k : ℝ) ≤
         (B.kyFanGauge k : ℝ) := by
     intro k
-    rw [kyFanApproximationGauge_smul, hdnorm]
+    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdnorm]
     exact h k
   obtain ⟨hdA, hgauge⟩ := mem_and_gauge_le_of_all_kyFanApproximationGauge_le N hB hscaled
   have hA : N.Mem A := by
@@ -206,7 +196,7 @@ theorem kyFanApproximationGauge_proj_comp_eq_adjoint_comp
     {k : ℕ} {P : F →L[𝕜] F} (hP : IsOrthogonalProjectionMap P) (K : E →L[𝕜] F) :
     ((P ∘L K).kyFanGauge k : ℝ) =
       ((K.adjoint ∘L P).kyFanGauge k : ℝ) := by
-  rw [← kyFanApproximationGauge_adjoint k (P ∘L K)]
+  rw [← ContinuousLinearMap.kyFanGauge_adjoint (P ∘L K) k]
   simp only [ContinuousLinearMap.adjoint_comp]
   rw [hP.2.clm_adjoint_eq]
 

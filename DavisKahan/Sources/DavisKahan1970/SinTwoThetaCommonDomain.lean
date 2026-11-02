@@ -259,7 +259,7 @@ theorem sinTwoTheta_commonDomain_block_kyFan
           (Qᗮ.map (P.reflection.toLinearEquiv : E →ₗ[K] E)).starProjection).kyFanGauge k : ℝ) =
       (((Qᗮ.map (P.reflection.toLinearEquiv : E →ₗ[K] E)).starProjection ∘L
           ((-2 : K) • trialOffDiagonalPart P 0 R) ∘L Q.starProjection).kyFanGauge k : ℝ) := by
-    rw [← kyFanApproximationGauge_adjoint]
+    rw [← ContinuousLinearMap.kyFanGauge_adjoint]
     congr 1
     rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp,
       (isSelfAdjoint_starProjection _).adjoint_eq,
@@ -271,14 +271,14 @@ theorem sinTwoTheta_commonDomain_block_kyFan
   have hblockR : ((trialOffDiagonalBlock P 0 R).kyFanGauge k : ℝ) ≤
       (R.kyFanGauge k : ℝ) := by
     rw [trialOffDiagonalBlock_eq]
-    refine (kyFanApproximationGauge_comp_le k Pᗮ.starProjection R
-      P.subtypeL.adjoint).trans ?_
+    refine ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_comp_comp_le
+        Pᗮ.starProjection R P.subtypeL.adjoint k))).trans ?_
     have hQ : ‖(Pᗮ.starProjection : E →L[K] E)‖ ≤ 1 :=
       Submodule.starProjection_norm_le _
     have hI : ‖(P.subtypeL.adjoint : E →L[K] P)‖ ≤ 1 := by
       rw [ContinuousLinearMap.adjoint.norm_map]
       exact opNorm_le_one_of_isometry (fun _ => rfl)
-    have hnn : 0 ≤ (R.kyFanGauge k : ℝ) := kyFanApproximationGauge_nonneg k R
+    have hnn : 0 ≤ (R.kyFanGauge k : ℝ) := (NNReal.coe_nonneg (R.kyFanGauge k))
     calc
       ‖(Pᗮ.starProjection : E →L[K] E)‖ * (R.kyFanGauge k : ℝ) *
             ‖(P.subtypeL.adjoint : E →L[K] P)‖

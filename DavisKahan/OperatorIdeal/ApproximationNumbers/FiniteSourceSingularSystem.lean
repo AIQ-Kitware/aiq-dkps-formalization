@@ -76,9 +76,11 @@ theorem finiteSourceSingularValue_nonneg (A : E →L[ℂ] F)
     0 ≤ finiteSourceSingularValue A i :=
   A.rangeRestrict.toLinearMap.singularValues_nonneg i
 
+omit [CompleteSpace F] in
 /-- The finite-source singular value equals the corresponding approximation singular value
 of the original ambient-codomain operator. -/
 theorem approximationSingularValue_eq_finiteSourceSingularValue
+    [CompleteSpace F]
     (A : E →L[ℂ] F) (i : Fin (finrank ℂ E)) :
     (A.singularValue i : ℝ) = finiteSourceSingularValue A i := by
   let W : Submodule ℂ F := A.range
@@ -100,7 +102,7 @@ theorem approximationSingularValue_eq_finiteSourceSingularValue
     exact W.starProjection_eq_self_iff.mpr (hA x)
   calc
     (A.singularValue i : ℝ) = (AW.singularValue i : ℝ) :=
-      (approximationSingularValue_orthogonalProjectionOnto_comp_eq W A hA i).symm
+      ((ContinuousLinearMap.approximationNumber_orthogonalProjectionOnto_comp_eq W A hA i)).symm
     _ = AW.toLinearMap.singularValues i :=
       (ContinuousLinearMap.singularValue_eq_linearMap_singularValues
         (LinearMap.toContinuousLinearMap AW.toLinearMap) i)

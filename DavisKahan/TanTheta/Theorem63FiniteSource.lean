@@ -978,9 +978,11 @@ noncomputable def theorem63DirectedTangent : Z →L[ℂ] H :=
         b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((theorem63DirectedTangentDiagonal Z
         V)) i : _)))).toContinuousLinearMap
 
+omit [CompleteSpace H] [FiniteDimensional ℂ Z] in
 /-- Composing with the inclusion of the trial space does not move approximation
 singular values: the inclusion is an isometry with a norm-one left inverse. -/
 theorem approximationSingularValue_subtypeL_comp_complex
+    [CompleteSpace H] [FiniteDimensional ℂ Z]
     (A : Z →L[ℂ] Z) (k : ℕ) :
     ((Z.subtypeL ∘L A).singularValue k : ℝ) =
       (A.singularValue k : ℝ) := by
@@ -992,8 +994,8 @@ theorem approximationSingularValue_subtypeL_comp_complex
   calc
     ((Z.subtypeL ∘L A).singularValue k : ℝ) =
         ((Z.orthogonalProjectionOnto ∘L (Z.subtypeL ∘L A)).singularValue k : ℝ) :=
-      (approximationSingularValue_orthogonalProjectionOnto_comp_eq Z
-        (Z.subtypeL ∘L A) hmem k).symm
+      ((ContinuousLinearMap.approximationNumber_orthogonalProjectionOnto_comp_eq
+          Z (Z.subtypeL ∘L A) hmem k)).symm
     _ = (A.singularValue k : ℝ) := by rw [hcomp]
 
 omit [Z.HasOrthogonalProjection] in

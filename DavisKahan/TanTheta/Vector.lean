@@ -162,7 +162,8 @@ theorem mul_le_mul_sqrt_one_sub_sq_of_chain
       have hεκ : (0 : ℝ) ≤ κ - ε := by linarith [hε.2]
       have ha1 : ‖Z.starProjection (x : E)‖ ≤ 1 :=
         le_trans (Z.norm_starProjection_apply_le _) hu₀n
-      have hpy := norm_sq_starProjection_add_norm_sq_sub Z (x : E)
+      have hpy := (by simpa only [Submodule.starProjection_orthogonal_val] using
+        (Submodule.norm_sq_eq_add_norm_sq_starProjection (x : E) Z).symm)
       have hb : ‖(x : E) - Z.starProjection (x : E)‖ ≤
           Real.sqrt (1 - (κ - ε) ^ 2) := by
         have hb2 : ‖(x : E) - Z.starProjection (x : E)‖ ^ 2 ≤
@@ -220,7 +221,8 @@ theorem mul_norm_starProjection_le_of_compression_bound
   intro u huV
   have hPu : ‖Z.starProjection u‖ ≤ κ * ‖u‖ := hmax u huV
   have hpyu : ‖Z.starProjection u‖ ^ 2 + ‖u - Z.starProjection u‖ ^ 2 =
-      ‖u‖ ^ 2 := norm_sq_starProjection_add_norm_sq_sub Z u
+      ‖u‖ ^ 2 := (by simpa only [Submodule.starProjection_orthogonal_val] using
+        (Submodule.norm_sq_eq_add_norm_sq_starProjection u Z).symm)
   have h1κ2 : (0 : ℝ) ≤ 1 - κ ^ 2 := by nlinarith [hκ1, hκ0]
   have hsq : (δ * ‖Z.starProjection u‖) ^ 2 ≤
       (ρ * ‖u - Z.starProjection u‖) ^ 2 := by
@@ -367,10 +369,12 @@ theorem tan_theta_le' (hT : T.IsSymmetric)
           + ‖(x - V.starProjection x)
               - Z.starProjection (x - V.starProjection x)‖ ^ 2
         = ‖x - V.starProjection x‖ ^ 2 :=
-      norm_sq_starProjection_add_norm_sq_sub Z _
+      (by simpa only [Submodule.starProjection_orthogonal_val] using
+        (Submodule.norm_sq_eq_add_norm_sq_starProjection _ Z).symm)
     have hpyVx : ‖V.starProjection x‖ ^ 2 + ‖x - V.starProjection x‖ ^ 2 =
         ‖x‖ ^ 2 :=
-      norm_sq_starProjection_add_norm_sq_sub V x
+      (by simpa only [Submodule.starProjection_orthogonal_val] using
+        (Submodule.norm_sq_eq_add_norm_sq_starProjection x V).symm)
     have hq : (0 : ℝ) < ‖x - V.starProjection x‖ := norm_pos_iff.mpr h0
     set q : ℝ := ‖x - V.starProjection x‖ with hqdef
     set pz : ℝ := ‖Z.starProjection (x - V.starProjection x)‖ with hpzdef
