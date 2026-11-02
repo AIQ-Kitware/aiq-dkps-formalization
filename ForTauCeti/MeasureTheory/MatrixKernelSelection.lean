@@ -9,7 +9,7 @@ public import Mathlib.Analysis.Matrix.Spectrum
 public import Mathlib.Analysis.Matrix.PosDef
 public import Mathlib.MeasureTheory.Constructions.BorelSpace.Metrizable
 public import Mathlib.MeasureTheory.Constructions.BorelSpace.Complex
-public import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
+public import TauCeti.Analysis.Matrix.MeasurableSpace
 public import Mathlib.LinearAlgebra.Matrix.Rank
 public import Mathlib.Topology.Instances.Matrix
 public import Mathlib.Analysis.SpecialFunctions.Sqrt
@@ -56,7 +56,7 @@ argument would need a partition by rank and by pivot pattern.
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Extraction class: **authored in place** for the Tau Ceti staging layer.
-* Spectra influence: **none** -- this module imports only Mathlib.
+* Spectra influence: **none**. Matrix inversion measurability is supplied by TauCeti.
 -/
 
 public section
@@ -66,40 +66,6 @@ open MeasureTheory Matrix
 open scoped ComplexOrder
 
 namespace TauCeti
-
-section Measurability
-
-variable {α : Type*} [MeasurableSpace α]
-
-/-- The determinant of a measurable family of matrices is measurable: it is a polynomial in the
-entries. -/
-theorem measurable_matrix_det {d : ℕ} {M : α → Matrix (Fin d) (Fin d) ℂ}
-    (hM : ∀ i j, Measurable fun x => M x i j) : Measurable fun x => (M x).det := by
-  simp only [Matrix.det_apply']
-  refine Finset.measurable_sum _ fun σ _ => ?_
-  exact (Finset.measurable_prod _ fun i _ => hM (σ i) i).const_mul _
-
-/-- Each entry of the adjugate of a measurable family of matrices is measurable: it is a
-determinant of a matrix whose entries are entries of the original or constants. -/
-theorem measurable_matrix_adjugate {d : ℕ} {M : α → Matrix (Fin d) (Fin d) ℂ}
-    (hM : ∀ i j, Measurable fun x => M x i j) (i j : Fin d) :
-    Measurable fun x => (M x).adjugate i j := by
-  simp only [Matrix.adjugate_apply]
-  refine measurable_matrix_det fun i' j' => ?_
-  by_cases h : i' = j
-  · simp [Matrix.updateRow_apply, h]
-  · simpa [Matrix.updateRow_apply, h] using hM i' j'
-
-/-- Each entry of the inverse of a measurable family of matrices is measurable, by the formula
-`M⁻¹ = det M⁻¹ • adjugate M` -- no invertibility hypothesis is needed, the junk value being
-just as measurable. -/
-theorem measurable_matrix_inv {d : ℕ} {M : α → Matrix (Fin d) (Fin d) ℂ}
-    (hM : ∀ i j, Measurable fun x => M x i j) (i j : Fin d) :
-    Measurable fun x => (M x)⁻¹ i j := by
-  simp only [Matrix.inv_def, Matrix.smul_apply, Ring.inverse_eq_inv, smul_eq_mul]
-  exact ((measurable_matrix_det hM).inv).mul (measurable_matrix_adjugate hM i j)
-
-end Measurability
 
 section Pointwise
 
@@ -286,7 +252,10 @@ theorem exists_measurable_unit_nullVector {m n : ℕ} (hmn : m < n)
   have hQkm : ∀ k i j, Measurable fun x => Qk k x i j := by
     intro k i j
     simp only [hQkdef, Matrix.smul_apply, smul_eq_mul]
-    refine measurable_const.mul (measurable_matrix_inv (fun i' j' => ?_) i j)
+    apply measurable_const.mul
+    apply Matrix.measurable_iff.mp (Measurable.inv ?_) i j
+    apply Matrix.measurable_iff.mpr
+    intro i' j'
     simp only [Matrix.add_apply]
     exact (hBm i' j').add measurable_const
   have hQx : ∀ x, ∃ Q : Matrix (Fin n) (Fin n) ℂ,

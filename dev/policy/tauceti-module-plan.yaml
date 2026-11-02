@@ -178,10 +178,8 @@ topics:
   title: Resolvents of self-adjoint LinearPMap operators, and semiboundedness
   modules:
   - Analysis.InnerProductSpace.LinearPMap.Resolvent
-  - Analysis.InnerProductSpace.LinearPMap.ResolventBound
   - Analysis.InnerProductSpace.LinearPMap.RealLowerBound
   - Analysis.InnerProductSpace.SeparatedIntertwiner
-  - Analysis.InnerProductSpace.LinearPMap.Shift
 - id: T15c
   title: The spectral measure of an unbounded self-adjoint operator, and Stone
   modules:
@@ -502,9 +500,7 @@ rungs:
   seeds:
   - Analysis.InnerProductSpace.LinearPMap.RealLowerBound
   - Analysis.InnerProductSpace.LinearPMap.Resolvent
-  - Analysis.InnerProductSpace.LinearPMap.ResolventBound
   - Analysis.InnerProductSpace.SeparatedIntertwiner
-  - Analysis.InnerProductSpace.LinearPMap.Shift
 - id: N
   title: The spectral measure of an unbounded self-adjoint operator, and Stone (T15c)
   seeds:

@@ -300,7 +300,7 @@ operator.
 No new Lax--Milgram is needed.  Coercivity against an isometry already forces the
 norm lower bound `δ ‖x‖ ≤ ‖A x - c x‖`; the triangle inequality spreads it across
 the whole interval `(c - δ, c + δ)` with constant `δ - |lam - c|`; each point is
-then a resolvent point by `mem_resolventSet_and_norm_le_of_lower_bound`; and the existing gap
+then a resolvent point by `IsSelfAdjoint.mem_resolventSet_of_norm_le`; and the existing gap
 resolvent supplies the two-sided bounded inverse of norm at most `δ⁻¹`.
 
 `J` is only required to preserve norms, so a reflection qualifies. -/
@@ -343,8 +343,9 @@ theorem twoSidedShiftedInverseBound_of_coercive_comp
       _ ≤ ‖A x - ((c : ℝ) : ℂ) • (x : H)‖ - |lam - c| * ‖(x : H)‖ :=
           sub_le_sub_right hb _
       _ ≤ ‖A x - ((lam : ℝ) : ℂ) • (x : H)‖ := htri
-  have hres := (TauCeti.LinearPMap.mem_resolventSet_and_norm_le_of_lower_bound hA
-    hpos hnorm).1
+  have hres := hA.mem_resolventSet_of_norm_le hpos (fun x => by
+    rw [norm_sub_rev]
+    exact hnorm x)
   rw [_root_.LinearPMap.mem_spectrum_iff, not_not]
   exact hres
 

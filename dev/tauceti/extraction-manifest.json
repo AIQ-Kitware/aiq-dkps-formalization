@@ -2768,12 +2768,13 @@
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "staged in ForTauCeti",
       "direct_dependencies": [
-        "Mathlib"
+        "TauCeti.Topology.Algebra.Module.LinearPMap.GraphCore"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "#13871",
+      "migration_note": "November 1: removed duplicate root LinearPMap.IsClosed.mem_domain_of_tendsto; UnboundedAdjointRiccati now consumes the accepted theorem through the native import. #13871 b73f7898d5854ded5adbc9fa738a8f150c039724 explicitly adapts the DKPS proof, generalized from sequences in RCLike inner product spaces to arbitrary nontrivial filters over topological modules. Retained IsGraphCore/top/ambient_approximation: sequential graph density without closedness, not automatically identical to Mathlib HasCore. Source e4637c3919ae under donor path, earlier CommonCore source, Jon Crall, Kitware copyright, Apache-2.0."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -2781,7 +2782,10 @@
         "eq_zero_of_orthogonal_shiftRange_of_real",
         "injective_shiftMap_of_lower_bound",
         "isClosed_range_shiftMap_of_lower_bound",
-        "mem_resolventSet_of_lower_bound"
+        "mem_resolventSet_of_lower_bound",
+        "mem_resolventSet_and_norm_le_of_lower_bound",
+        "norm_sub_smul_ge_of_coercive_comp",
+        "mem_resolventSet_of_coercive_comp"
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound",
@@ -2790,7 +2794,7 @@
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "new",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Shift"
+        "TauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -2800,9 +2804,9 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralGap",
         "RoadmapBridge.OperatorTheory"
       ],
-      "status": "staged-needs-current-validation",
-      "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "status": "partially-upstreamed",
+      "upstream_pr": "#14305",
+      "migration_note": "November 1: deleted injectivity, real-shift dense-range and inverse construction proofs. All four norm-lower-bound consumers call IsSelfAdjoint.mem_resolventSet_of_norm_le directly, translating the sign with norm_sub_rev. Accepted theorem permits arbitrary RCLike shifts, stronger than real shifts; inverse bound is IsResolventAt.norm_le_inv. Retained only norm_sub_smul_ge_of_coercive_comp and mem_resolventSet_of_coercive_comp, the coercivity-to-norm estimate and its direct application to canonical inversion. Historical Kitware Apache-2.0 source at e4637c3919ae, Jon Crall / Claude Opus 5, with revised closure source 5427f8bccf6d; accepted independent inversion PR #14305 b9288156cab0e9acffe09889dbb4f42a1b7d63cd uses adapted self-adjoint foundations transitively."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -2836,20 +2840,16 @@
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
+      "final_tauceti_module": "TauCeti.Topology.Algebra.Module.LinearPMap.Resolvent.SpectralMapping",
       "ownership_class": "tauceti",
       "roadmap_target": "Unbounded self-adjoint operators on a Hilbert space: the Cayley transform, the bounded and unbounded Borel functional calculus, projection-valued measures and the spectral measure, Yosida approximants, Stone's theorem in both directions, and the spectral-gap inverse.",
       "provenance_class": "staged in ForTauCeti",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
-        "Mathlib"
-      ],
+      "direct_dependencies": [],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent"
-      ],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": "#14486",
+      "migration_note": "November 1: entire 163-line donor removed. Independent accepted #14486 bd5ca4d951ad85677e9b60deb0d11f13279fc37c supplies notMem_spectrum_resolvent_iff (both directions, arbitrary topological field/module) and root resolvent_sub_resolvent_apply/resolvent_comm supply the product and commutation facts. No surviving consumer required the donor specializations. Original source a58913e9e and e4637c3919ae under donor path, Jon Crall / Claude Opus 5, Kitware copyright, Apache-2.0. Historical declarations preserved; no claim of proof adaptation."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -2909,7 +2909,7 @@
       "downstream_users": [],
       "status": "accepted-upstream-local-copy-removed",
       "upstream_pr": "#14305, #15559",
-      "migration_note": "November 1: entire local module deleted, including inverse bridges and Cayley abbreviations. Consumers use LinearPMap.resolvent, LinearPMap.cayley, IsSelfAdjoint resolvent/unitarity/normality laws directly; pure spectral symbols take A rather than a redundant proof argument. Native formal-adjoint norm_smul_sub_sq and abs_im_mul_norm_le_norm_smul_sub cover complex shift estimates; native shift bijectivity covers specialized closed/dense range arguments. Separate Shift and RealLowerBound modules retain additional RCLike lower-bound/orthogonality APIs. Source e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SelfAdjointResolvent.lean; Jon Crall / Claude Opus 5, Kitware copyright, Apache-2.0. Independent resolvent PR #14305 b9288156cab0e9acffe09889dbb4f42a1b7d63cd and Cayley PR #15559 54252fb0e940e9de464fb187faa1ddf4fa69f7fc use previously adapted foundations transitively; no proof descent claimed."
+      "migration_note": "November 1: entire local module deleted, including inverse bridges and Cayley abbreviations. Consumers use LinearPMap.resolvent, LinearPMap.cayley, IsSelfAdjoint resolvent/unitarity/normality laws directly; pure spectral symbols take A rather than a redundant proof argument. Native formal-adjoint norm_smul_sub_sq and abs_im_mul_norm_le_norm_smul_sub cover complex shift estimates; native shift bijectivity covers specialized closed/dense range arguments. The subsequent lower-bound consumption retired Shift too; RealLowerBound now retains only the coercivity estimate and its inversion consequence. Source e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SelfAdjointResolvent.lean; Jon Crall / Claude Opus 5, Kitware copyright, Apache-2.0. Independent resolvent PR #14305 b9288156cab0e9acffe09889dbb4f42a1b7d63cd and Cayley PR #15559 54252fb0e940e9de464fb187faa1ddf4fa69f7fc use previously adapted foundations transitively; no proof descent claimed."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -5266,18 +5266,12 @@
       "ownership_class": "tauceti",
       "roadmap_target": "unbounded-spectral-theory",
       "provenance_class": "shared shift/range proofs factored from SelfAdjointResolvent and RealLowerBound and generalized to RCLike",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
-        "Mathlib.Analysis.InnerProductSpace.LinearPMap"
-      ],
+      "direct_dependencies": [],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound",
-        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent"
-      ],
-      "status": "staged-needs-current-validation",
-      "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "downstream_users": [],
+      "status": "accepted-upstream-local-copy-removed",
+      "upstream_pr": "#14305",
+      "migration_note": "November 1: entire opposite-sign shift implementation removed after real-lower-bound callers migrated to native self-adjoint inversion. Native smulSub, smul_sub_injective_of_norm_le, isClosed_range_smul_sub_of_norm_le and IsSelfAdjoint.denseRange_smul_sub_of_norm_le supply the canonical shift/range API; negation preserves the old shift range properties. Old helpers had no external consumers once inversion was retired. RCLike scope preserved; no new forwarding aliases. Historical source e4637c3919ae under donor path, Kitware copyright, Jon Crall / Claude Opus 5, Apache-2.0; later factoring b95a44bea credited GPT-6 Astra. Native shifted-surjectivity foundations have explicit DKPS adaptation; use by #14305 is transitive."
     },
     {
       "source_module": "new or refactored directly in ForTauCeti",
@@ -5418,6 +5412,31 @@
       "status": "partially-upstreamed",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/19277",
       "migration_note": "November 1 upstream consumption: preserve the remaining pointwise TauCeti.re_inner_reducedExtension_self theorem in ForTauCeti/Analysis/InnerProductSpace/ReducedExtension.lean because it applies to arbitrary possibly-discontinuous linear maps on any normed inner-product space; accepted TauCeti ContinuousLinearMap.re_inner_reducedExtension_self does not subsume this scope. Retire the duplicated local TauCeti.norm_sq_eq_starProjection_add_sub helper; Mathlib/Submodule supplies norm_sq_eq_add_norm_sq_starProjection, already used by the native form bounds. Migrate the only maintained consumer ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm to TauCeti.Analysis.InnerProductSpace.Projection.Block and its stronger ContinuousLinearMap.le_re_inner_reducedExtension_self and ContinuousLinearMap.re_inner_reducedExtension_self_le; remove private consumer wrapper re_inner_reducedExtension_self'. Preserve the downstream theorem statement, both forms of its Sylvester residual identity, and paper-facing results. Upstream integration commit ca1eac22f582487d71706084aee719436b098186 (PR #19277) is an ancestor of pinned TauCeti main 463ab293070d4cb355d0a0e036469464070088bc. PR #19277 explicitly identifies the Kitware DKPS ReducedExtension.lean as the adaptation source; upstream Projection.Block also credits Spectra for the overall block-operator development. Historical donor source and both declarations at e4637c3919ae, authored Jon Crall and Claude Opus 5 (Apache-2.0). No forwarding theorem was introduced."
+    },
+    {
+      "source_module": "ForTauCeti/MeasureTheory/MatrixKernelSelection.lean at e4637c3919ae (introduction cf57b8201)",
+      "source_declarations": [
+        "measurable_matrix_det",
+        "measurable_matrix_adjugate",
+        "measurable_matrix_inv",
+        "exists_tendsto_kernel_matrix",
+        "exists_measurable_unit_nullVector"
+      ],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.MeasureTheory.MatrixKernelSelection",
+      "final_tauceti_module": "TauCeti.Analysis.Matrix.MeasurableSpace",
+      "ownership_class": "tauceti",
+      "roadmap_target": "measurable kernel-vector selection",
+      "provenance_class": "independent replacement of inversion measurability; kernel selection retained",
+      "direct_dependencies": [
+        "TauCeti.Analysis.Matrix.MeasurableSpace",
+        "Mathlib"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "partially-upstreamed",
+      "upstream_pr": "#6967",
+      "migration_note": "November 1: deleted local complex Fin-matrix determinant, adjugate and inverse measurability proofs. The approximants use accepted MeasurableInv (Matrix m m 𝕜) / Measurable.inv and Matrix.measurable_iff directly. Native API covers arbitrary finite index types and suitable fields; no invertibility hypothesis required, same junk inverse behavior. Independent #6967 integration 42f6e23a92392ac7001bbda30dc71f3d38c20672; no DKPS proof descent claimed. Preserved full measurable unit-kernel-vector selection for arbitrary measurable wide complex-matrix families and the pointwise kernel-projection limit: neither is supplied by the donor replacement. Original Jon Crall / Claude Fable 5, Kitware copyright, Apache-2.0, source e4637c3919ae and introduction cf57b8201."
     }
   ]
 }

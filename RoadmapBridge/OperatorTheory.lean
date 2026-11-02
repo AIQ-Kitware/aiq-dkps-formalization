@@ -108,7 +108,11 @@ example {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A) {z c : ℝ} (hc : 0 < c)
       c * ‖(x : E)‖ ≤ ‖A x - (z : 𝕜) • (x : E)‖) :
     (z : 𝕜) ∈ _root_.LinearPMap.resolventSet A ∧
       ‖_root_.LinearPMap.resolvent A (z : 𝕜)‖ ≤ c⁻¹ :=
-  TauCeti.LinearPMap.mem_resolventSet_and_norm_le_of_lower_bound hA hc hbound
+  by
+    have hbound' : ∀ x : A.domain, c * ‖(x : E)‖ ≤ ‖(z : 𝕜) • (x : E) - A x‖ :=
+      fun x => by simpa only [norm_sub_rev] using hbound x
+    have hr := hA.mem_resolventSet_of_norm_le hc hbound'
+    exact ⟨hr, (_root_.LinearPMap.isResolventAt_resolvent hr).norm_le_inv hc hbound'⟩
 
 end Resolvents
 

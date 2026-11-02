@@ -2461,3 +2461,54 @@ and orthogonality results. Historical source is
 Jon Crall / Claude Opus 5, Kitware copyright, Apache-2.0. The deleted core is
 recoverable at the same source commit under its former path. The existing
 manifest preserves historical declaration names and source ancestry.
+
+## 2026-11-01: retire lower-bound inversion and auxiliary analytic proofs
+
+Deleted `LinearPMap/Shift.lean` and `LinearPMap/ResolventBound.lean` and removed
+the injectivity, real-shift density, and inverse construction from
+`RealLowerBound.lean`. Paper gap, form, Sylvester and free-beam consumers now
+apply `IsSelfAdjoint.mem_resolventSet_of_norm_le` directly; `norm_sub_rev`
+translates the opposite shift sign. The accepted RCLike theorem covers arbitrary
+shifts, strictly extending the real-shift donor. Inverse norms use
+`LinearPMap.IsResolventAt.norm_le_inv`. These are independent accepted
+[#14305](https://github.com/TauCetiProject/TauCeti/pull/14305),
+`b9288156cab0e9acffe09889dbb4f42a1b7d63cd`, with transitive reuse of adapted
+self-adjoint foundations. The canonical `smulSub` and lower-bound closed/dense
+range facts replace the unconsumed opposite-sign shift implementation.
+`RealLowerBound` retains only the coercivity-to-norm estimate and its direct
+canonical-inversion consequence; the mathematical estimate is not superseded.
+
+The unused product/commutation specializations and one-direction spectral
+mapping proof are subsumed by the canonical first resolvent identity and
+`TauCeti.LinearPMap.notMem_spectrum_resolvent_iff` in
+[#14486](https://github.com/TauCetiProject/TauCeti/pull/14486),
+`bd5ca4d951ad85677e9b60deb0d11f13279fc37c`. The latter is an independent
+both-directions theorem over topological fields/modules, broader than the
+retired RCLike normed-space statement. No proof descent is claimed.
+Historical Kitware Apache-2.0 sources are preserved at `e4637c3919ae` under
+the deleted paths and `RealLowerBound.lean`, Jon Crall / Claude Opus 5;
+`ResolventBound` introduction is `a58913e9e`. Later shift factoring at
+`b95a44bea` credits GPT-6 Astra. The existing manifest retains original names.
+
+Removed the duplicate `LinearPMap.IsClosed.mem_domain_of_tendsto` proof from
+`GraphCore.lean`. Its accepted replacement in
+[#13871](https://github.com/TauCetiProject/TauCeti/pull/13871),
+`b73f7898d5854ded5adbc9fa738a8f150c039724`, explicitly adapts DKPS and
+extends sequences in inner product spaces to arbitrary nontrivial filters over
+topological modules. The Riccati consumer uses that accepted declaration.
+`IsGraphCore`, `top`, and `ambient_approximation` remain: they express sequential
+graph density without closedness, which cannot simply be identified with
+Mathlib's `HasCore`. Source: `e4637c3919ae`, earlier `CommonCore.lean`,
+Jon Crall, Kitware copyright, Apache-2.0.
+
+Removed the determinant, adjugate and inverse measurability helpers from
+`MeasureTheory/MatrixKernelSelection.lean`. Its approximants use the accepted
+matrix `MeasurableInv` instance, `Measurable.inv`, and `Matrix.measurable_iff`.
+Independent [#6967](https://github.com/TauCetiProject/TauCeti/pull/6967),
+`42f6e23a92392ac7001bbda30dc71f3d38c20672`, covers arbitrary finite matrix
+indices and suitable fields, with no invertibility hypothesis. The measurable
+unit kernel-vector selection and pointwise kernel-projection limit remain;
+they are not consequences supplied by that replacement. Historical source is
+`e4637c3919ae:ForTauCeti/MeasureTheory/MatrixKernelSelection.lean`, introduction
+`cf57b8201`, Jon Crall / Claude Fable 5, Kitware copyright, Apache-2.0.
+All cited integrations are contained in pin `463ab293070d`.

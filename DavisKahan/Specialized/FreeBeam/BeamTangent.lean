@@ -405,9 +405,10 @@ theorem beamPerturbed_form_nonneg (ε : ℝ) (hε : 0 ≤ ε)
 theorem beamPerturbed_mem_resolventSet_of_neg (ε : ℝ) (hε : 0 ≤ ε)
     {lam : ℝ} (hlam : lam < 0) :
     (lam : ℂ) ∈ _root_.LinearPMap.resolventSet (beamPerturbed ε) := by
-  refine (TauCeti.LinearPMap.mem_resolventSet_and_norm_le_of_lower_bound
-    (beamPerturbed_isSelfAdjoint ε) (c := -lam) (by linarith) ?_).1
+  refine (beamPerturbed_isSelfAdjoint ε).mem_resolventSet_of_norm_le
+    (c := -lam) (by linarith) ?_
   intro x
+  rw [norm_sub_rev]
   rcases eq_or_lt_of_le (norm_nonneg ((x : BeamL2))) with hx0 | hxpos
   · rw [← hx0, mul_zero]
     exact norm_nonneg _

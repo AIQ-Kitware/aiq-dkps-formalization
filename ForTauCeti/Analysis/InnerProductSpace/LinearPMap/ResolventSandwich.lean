@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
 public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds
@@ -330,15 +331,16 @@ theorem norm_sub_smul_ge_of_lowerFormBound {β lam : ℝ}
 
 /-- **A real point below a form lower bound is a resolvent point.**
 
-`mem_resolventSet_and_norm_le_of_lower_bound` does the analytic work; this is
+`IsSelfAdjoint.mem_resolventSet_of_norm_le` does the analytic work; this is
 the packaging that lets a caller supply the *form* bound the rest of this file
 uses, rather than the norm bound that theorem states. -/
 theorem mem_resolventSet_of_lowerFormBound [CompleteSpace E]
     (hA : IsSelfAdjoint A) {β lam : ℝ} (hlt : lam < β)
     (hform : ∀ x : A.domain, β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re) :
     (lam : ℂ) ∈ A.resolventSet :=
-  (mem_resolventSet_and_norm_le_of_lower_bound hA (by simpa using sub_pos.mpr hlt)
-    (norm_sub_smul_ge_of_lowerFormBound hform)).1
+  hA.mem_resolventSet_of_norm_le (sub_pos.mpr hlt) (fun x => by
+    rw [norm_sub_rev]
+    exact norm_sub_smul_ge_of_lowerFormBound hform x)
 
 /-- **The resolvent of a form-semibounded operator is coercive**, with constant
 `β - lam`.
