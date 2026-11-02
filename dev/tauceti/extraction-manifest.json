@@ -21,7 +21,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
-        "ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
         "ForTauCeti.Analysis.InnerProductSpace.KyFan",
@@ -109,7 +108,6 @@
         "ForTauCeti.Analysis.Convex.Majorization",
         "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
         "ForTauCeti.Analysis.InnerProductSpace.Basic",
-        "ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator",
         "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy",
@@ -371,7 +369,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus",
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.Spectrum",
-        "ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator",
         "ForTauCeti.Analysis.InnerProductSpace.FrameFactorization",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Operator",
@@ -1200,7 +1197,6 @@
         "DavisKahan.FiniteDimensional.DirectRotation.Majorization",
         "DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Spectrum",
         "DavisKahan.Sources.DavisKahan1970.Ideals.NormCorrespondence",
-        "ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator",
         "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
         "ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization",
         "ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues",
@@ -1771,7 +1767,8 @@
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": " November 2: planar pair-sequence and Gram source statements now use native Matrix.toLin diagonals, Matrix.singularValues_toLin_diagonal and Matrix.adjoint_comp_self_toLin_diagonal_apply (#14214 03d87726208ff951996d950a44e5efda460d1513). The explicit pairSingularValues formulations and additional planar operator reductions remain; they are not a second SVD engine."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
@@ -2316,7 +2313,7 @@
       "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantSeminorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users; unified in the rectangular Seminorm-extending API; inherited laws and consumers migrated; current overlay awaits Lean compilation",
       "direct_dependencies": [
         "ForTauCeti.Analysis.Convex.Majorization",
-        "ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator",
+        "TauCeti.Analysis.InnerProductSpace.SingularValues",
         "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
         "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic",
         "Mathlib.Analysis.InnerProductSpace.Projection.Reflection"
@@ -5334,21 +5331,34 @@
         "TauCeti.exists_unitary_diagOp_factorization"
       ],
       "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.DiagonalOperator",
+      "staging_module": null,
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SingularValues",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
       "provenance_class": "Dependency-layer extraction for the unified rectangular seminorm migration. Copyright (c) 2026 Kitware, Inc.; Apache 2.0.",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.KyFan"
+        "TauCeti.Analysis.InnerProductSpace.SingularValues"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge",
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization"
+      "downstream_users": [],
+      "status": "upstream-consumed",
+      "upstream_pr": "#14214",
+      "maintained_module": "TauCeti.Analysis.InnerProductSpace.SingularValues",
+      "retired_local_declarations": [
+        "TauCeti.diagOp",
+        "TauCeti.diagOp_apply",
+        "TauCeti.diagOp_apply_basis",
+        "TauCeti.diagOp_add",
+        "TauCeti.diagOp_real_smul",
+        "TauCeti.diagOp_const",
+        "TauCeti.diagOp_const_pair",
+        "TauCeti.isSymmetric_diagOp",
+        "TauCeti.adjoint_diagOp",
+        "TauCeti.diagOp_comp",
+        "TauCeti.singularValues_diagOp",
+        "TauCeti.exists_unitary_diagOp_factorization"
       ],
-      "status": "staged-needs-current-validation",
-      "upstream_pr": null
+      "migration_note": "November 2: delete the full 191-line DiagonalOperator donor, including diagOp and its action/additivity/homogeneity/constant/symmetry/adjoint/composition helpers, singular-value computation and selected-polar SVD factorization. All maintained consumers use Matrix.toLin b.toBasis b.toBasis (Matrix.diagonal ...) directly; no forwarding map remains. The exact correspondence of the old rank-one sum and canonical matrix carrier was compiled for arbitrary RCLike orthonormal bases without an extra finite-dimensionality assumption. Accepted #14214 integration 03d87726208ff951996d950a44e5efda460d1513 provides Matrix.toLin_diagonal_apply_self, Matrix.adjoint_comp_self_toLin_diagonal_apply, Matrix.singularValues_toLin_diagonal (arbitrary finite index sets and complex coefficients with a norm-ordering permutation), and LinearMap.exists_linearIsometryEquiv_eq_comp_toLin_diagonal_comp for any chosen orthonormal basis, not only a canonical basis. The local singular-value and SVD correspondences were compiled before deletion; all zero-dimensional and original RCLike scopes are retained. Other identities consume pinned Mathlib Matrix.toLin_conjTranspose, toLin_mul, toLin_scalar and linear-map additivity/homogeneity. Source e4637c3919ae under ForTauCeti/Analysis/InnerProductSpace/DiagonalOperator.lean, dependency-layer extraction bf84b6ff10c2adf06760b3ddc38c739e4687fb7f from ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm. Header authors Jon Crall/Claude Fable 5, Kitware copyright, Apache-2.0; extraction/refactoring commit authorship does not establish original proof authorship. No direct DKPS proof-adaptation claim is made for #14214. Paper NormCorrespondence also retires its now-unused singularValues_diagOp_comp_perm and private coe_toLinearMap_apply; exists_perm_singularValues_diagOp and the absolute-diagonal correspondence remain as short source-facing native Matrix proofs. Their source e4637c3919ae under DavisKahan/Sources/DavisKahan1970/Ideals/NormCorrespondence.lean, promotion 7500fcd559ce40bee8f68ff52a0f5a537f9ae8cc, Jon Crall/OpenAI GPT-5.6 Thinking, Kitware Apache-2.0. The generic symmetric-gauge representation remains pending its own canonical Seminorm migration, not classified as unmatched."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances",
@@ -5399,7 +5409,7 @@
       "provenance_class": "Dependency-layer extraction for the unified rectangular seminorm migration. Copyright (c) 2026 Kitware, Inc.; Apache 2.0.",
       "direct_dependencies": [
         "ForTauCeti.Analysis.Convex.Majorization",
-        "ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator",
+        "TauCeti.Analysis.InnerProductSpace.SingularValues",
         "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic",
         "Mathlib.Analysis.InnerProductSpace.Projection.Reflection"
       ],
@@ -5407,8 +5417,9 @@
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm"
       ],
-      "status": "staged-needs-current-validation",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": null,
+      "migration_note": " November 2 diagonal-model slice: basisGauge now evaluates the native Matrix.toLin diagonal carrier. apply_eq_gauge delegates directly to native any-basis SVD #14214 (03d87726208ff951996d950a44e5efda460d1513), retiring the selected-polar factorization proof. apply_adjoint and apply_operatorAbs wrappers are deleted; SinTheta, YWS Frobenius and RoadmapBridge consumers use map_eq_of_singularValues_eq with native singularValues_adjoint/operatorAbs, preserving the integration regression check. Source e4637c3919ae under this donor path, Jon Crall/Claude Fable 5, Kitware Apache-2.0. FiniteSymmetricGauge packaging and its parallel basis-gauge proof engine remain pending canonical Seminorm/gauge consumption, not an unmatched-mathematics exception."
     },
     {
       "source_module": "new or refactored directly in ForTauCeti",

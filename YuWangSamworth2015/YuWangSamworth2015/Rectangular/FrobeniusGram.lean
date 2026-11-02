@@ -75,8 +75,9 @@ theorem frobenius_rightGram_sub_le
           UnitarilyInvariantSeminorm.frobenius 𝕜 E F D := by
     have h := UnitarilyInvariantSeminorm.schatten_comp_le_left 2 A.adjoint D
       (fun y => A.adjoint.toContinuousLinearMap.le_opNorm y)
-    rw [← (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)).apply_adjoint
-      (D.adjoint ∘ₗ A), LinearMap.adjoint_comp,
+    rw [← (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜)
+        (E := E) (F := E)).map_eq_of_singularValues_eq
+      (LinearMap.singularValues_adjoint (D.adjoint ∘ₗ A)), LinearMap.adjoint_comp,
       LinearMap.adjoint_adjoint]
     simpa only [UnitarilyInvariantSeminorm.schatten_two,
       LinearMap.adjoint_toContinuousLinearMap,

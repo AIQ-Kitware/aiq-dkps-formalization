@@ -16,7 +16,7 @@ public import DavisKahan.DoubleAngle.KyFanOrthonormal
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.FiniteSourceSingularSystem
-public import ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder
 
@@ -976,8 +976,9 @@ of the sine block. -/
 @[expose]
 noncomputable def theorem63DirectedTangent : Z →L[ℂ] H :=
   Z.subtypeL ∘L
-    (diagOp (finiteSourceRightSingularBasis (theorem63DirectedSineBlock Z V))
-      (theorem63DirectedTangentDiagonal Z V)).toContinuousLinearMap
+    ((let b' := (finiteSourceRightSingularBasis (theorem63DirectedSineBlock Z V)); Matrix.toLin
+        b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((theorem63DirectedTangentDiagonal Z
+        V)) i : _)))).toContinuousLinearMap
 
 /-- Composing with the inclusion of the trial space does not move approximation
 singular values: the inclusion is an isometry with a norm-one left inverse. -/
@@ -1067,19 +1068,26 @@ theorem hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent
     calc
       approximationSingularValue k (theorem63DirectedTangent Z V) =
           approximationSingularValue k
-            (diagOp (finiteSourceRightSingularBasis
-              (theorem63DirectedSineBlock Z V))
-              (theorem63DirectedTangentDiagonal Z V)).toContinuousLinearMap :=
+            ((let b' := (finiteSourceRightSingularBasis
+              (theorem63DirectedSineBlock Z V)); Matrix.toLin b'.toBasis b'.toBasis
+                  (Matrix.diagonal fun i => (((theorem63DirectedTangentDiagonal Z V)) i :
+                  _)))).toContinuousLinearMap :=
         approximationSingularValue_subtypeL_comp_complex Z _ k
-      _ = (diagOp (finiteSourceRightSingularBasis
-            (theorem63DirectedSineBlock Z V))
-            (theorem63DirectedTangentDiagonal Z V)).singularValues k :=
+      _ = ((let b' := (finiteSourceRightSingularBasis
+            (theorem63DirectedSineBlock Z V)); Matrix.toLin b'.toBasis b'.toBasis
+                (Matrix.diagonal fun i => (((theorem63DirectedTangentDiagonal Z V)) i :
+                _)))).singularValues k :=
         approximationSingularValue_eq_singularValues _ k
       _ = theorem63DirectedTangentDiagonal Z V ⟨k, hk⟩ := by
-        simpa only [hkfin] using
-          singularValues_diagOp (𝕜 := ℂ) (E := Z) (n := finrank ℂ Z) rfl
+        have ha : Antitone fun j => ‖(theorem63DirectedTangentDiagonal Z V j : ℂ)‖ :=
+          fun j l hjl => by
+            simpa only [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (ht0 j),
+              abs_of_nonneg (ht0 l)] using htanti hjl
+        simpa only [hkfin, Equiv.refl_apply, Complex.norm_real, Real.norm_eq_abs,
+          abs_of_nonneg (ht0 _)] using
+          Matrix.singularValues_toLin_diagonal
             (finiteSourceRightSingularBasis (theorem63DirectedSineBlock Z V))
-            htanti ht0 ⟨k, hk⟩
+            (fun j => (theorem63DirectedTangentDiagonal Z V j : ℂ)) (Equiv.refl _) ha ⟨k, hk⟩
   · have hkge : finrank ℂ Z ≤ k := Nat.le_of_not_lt hk
     rw [approximationSingularValue_eq_zero_of_finrank_le_complex Z
       (theorem63DirectedTangent Z V) hkge,

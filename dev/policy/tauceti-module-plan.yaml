@@ -74,7 +74,6 @@ topics:
   - Analysis.Convex.Majorization
   - Analysis.InnerProductSpace.Singular.Subspace
   - Analysis.InnerProductSpace.KyFan
-  - Analysis.InnerProductSpace.DiagonalOperator
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization
   - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge

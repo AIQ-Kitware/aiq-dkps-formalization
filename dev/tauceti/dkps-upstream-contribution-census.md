@@ -3166,3 +3166,49 @@ introduction `18078bab944877bf757ae3cf2574f4c407bcc0cf`, finite bridge
 `77721351e0de9fe3c3f7b37226be1412b19943ce`. The header credits Claude Opus 5,
 Kitware, Inc. copyright, Apache-2.0. Earlier names and source evidence remain
 in the existing extraction manifest.
+
+
+## 2026-11-02: canonical diagonal matrices and any-basis SVD
+
+Deleted `ForTauCeti/Analysis/InnerProductSpace/DiagonalOperator.lean` (191
+lines): `TauCeti.diagOp`, its action/algebra/constant/adjoint helpers,
+`singularValues_diagOp` and `exists_unitary_diagOp_factorization`.
+All maintained users now take `Matrix.toLin b.toBasis b.toBasis
+(Matrix.diagonal ...)` directly. No forwarding map or module remains.
+The old rank-one sum equals this carrier for any `RCLike` orthonormal basis;
+that full correspondence, including the absence of extra completeness or
+finite-dimensionality hypotheses on the construction, was compiled first.
+
+Accepted [#14214](https://github.com/TauCetiProject/TauCeti/pull/14214),
+integration `03d87726208ff951996d950a44e5efda460d1513`, supplies
+`Matrix.toLin_diagonal_apply_self`,
+`Matrix.adjoint_comp_self_toLin_diagonal_apply`,
+`Matrix.singularValues_toLin_diagonal` and
+`LinearMap.exists_linearIsometryEquiv_eq_comp_toLin_diagonal_comp` in
+`TauCeti.Analysis.InnerProductSpace.SingularValues`. The singular-value
+result allows arbitrary finite index sets, complex coefficients and an
+ordering permutation. The SVD works relative to any chosen orthonormal basis,
+so it fully subsumes the local basis choice. Both old local conclusions were
+compiled from these accepted results before deleting the donor proofs.
+Pinned Mathlib's matrix-to-linear-map algebra, adjoint and scalar identities
+replace the remaining helpers.
+
+The generic square-gauge proof now calls native any-basis SVD directly. Its
+`apply_adjoint` and `apply_operatorAbs` aliases are retired for native
+singular-value invariance. The RoadmapBridge modulus check is preserved on
+that native API. Planar pair-sequence, residual, sharpness, Ky Fan and
+real/complex tangent-source statements retain their mathematical scope.
+`NormCorrespondence` also drops its unused diagonal-permutation proof and
+private coercion lemma; its source-facing absolute-diagonal and sorted
+singular-value conclusions use native matrix results directly.
+
+Historical donor source: `e4637c3919ae` under the deleted path, dependency-layer
+extraction `bf84b6ff10c2adf06760b3ddc38c739e4687fb7f` from
+`ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm`. The header
+credits Jon Crall and Claude Fable 5, Kitware, Inc., Apache-2.0. Refactoring
+commit authorship is not original-proof attribution. The paper helper source
+is `e4637c3919ae:DavisKahan/Sources/DavisKahan1970/Ideals/NormCorrespondence.lean`,
+promotion `7500fcd559ce40bee8f68ff52a0f5a537f9ae8cc`, Jon Crall / OpenAI
+GPT-5.6 Thinking, Kitware Apache-2.0. No direct DKPS proof adaptation is
+claimed for #14214. The parallel finite symmetric-gauge packaging still
+awaits canonical `Seminorm` consumption; it is not classified as unmatched.

@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.DiagonalOperator
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
 public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic
 public import ForTauCeti.Analysis.Convex.Majorization
 public import Mathlib.Analysis.InnerProductSpace.Projection.Reflection
@@ -43,7 +43,7 @@ invariance, and single-coordinate sign invariance on arbitrary vectors. -/
 @[expose]
 noncomputable def basisGauge (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : ℝ :=
-  N (diagOp b x)
+  N ((Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => ((x) i : _))))
 
 omit [FiniteDimensional 𝕜 E] in
 /-- A basis gauge is nonnegative, as it is the norm of a diagonal operator. -/
@@ -51,32 +51,44 @@ theorem basisGauge_nonneg (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → �
     0 ≤ N.basisGauge b x :=
   apply_nonneg N _
 
-/- The induced vector gauge is subadditive, inherited from the norm through `diagOp_add`. -/
+/- The induced vector gauge is subadditive by diagonal-matrix and linear-map additivity. -/
 omit [FiniteDimensional 𝕜 E] in
 theorem gauge_add_le (b : OrthonormalBasis (Fin n) 𝕜 E) (x y : Fin n → ℝ) :
     N.basisGauge b (x + y) ≤ N.basisGauge b x + N.basisGauge b y := by
-  rw [basisGauge, diagOp_add]
+  have hd : Matrix.diagonal (fun i => ((x + y) i : 𝕜)) =
+      Matrix.diagonal (fun i => (x i : 𝕜)) + Matrix.diagonal (fun i => (y i : 𝕜)) := by
+    ext i j
+    by_cases hij : i = j <;> simp [Matrix.diagonal, hij]
+  simp only [basisGauge, hd, map_add]
   exact N.add_le' _ _
 
 /- The induced vector gauge is absolutely homogeneous over `ℝ`. -/
 omit [FiniteDimensional 𝕜 E] in
 theorem gauge_real_smul (b : OrthonormalBasis (Fin n) 𝕜 E) (c : ℝ)
     (x : Fin n → ℝ) : N.basisGauge b (c • x) = |c| * N.basisGauge b x := by
-  rw [basisGauge, diagOp_real_smul, map_smul_eq_mul, RCLike.norm_ofReal]
-  rfl
+  have hd : Matrix.diagonal (fun i => ((c • x) i : 𝕜)) =
+      (c : 𝕜) • Matrix.diagonal (fun i => (x i : 𝕜)) := by
+    rw [← Matrix.diagonal_smul]
+    congr 1
+    ext i
+    simp
+  simp only [basisGauge, hd, map_smul, map_smul_eq_mul, RCLike.norm_ofReal]
 
 /- Permutation invariance of the gauge: conjugating the diagonal operator by
 the basis-permutation unitary permutes the diagonal. -/
 omit [FiniteDimensional 𝕜 E] in
 theorem gauge_perm (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ)
     (π : Equiv.Perm (Fin n)) : N.basisGauge b (x ∘ π) = N.basisGauge b x := by
-  have hconj : diagOp b (x ∘ π)
-      = (b.equiv b π).symm.toLinearMap ∘ₗ diagOp b x
+  have hconj : (Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => (((x ∘ π)) i : _)))
+      = (b.equiv b π).symm.toLinearMap ∘ₗ (Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal
+          fun i => ((x) i : _)))
         ∘ₗ (b.equiv b π).toLinearMap := by
     refine b.toBasis.ext fun j => ?_
-    change diagOp b (x ∘ π) (b j) =
-      (b.equiv b π).symm (diagOp b x ((b.equiv b π) (b j)))
-    simp only [OrthonormalBasis.equiv_apply_basis, diagOp_apply_basis,
+    change (Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => (((x ∘ π)) i : _)))
+        (b j) =
+      (b.equiv b π).symm ((Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => ((x) i
+          : _))) ((b.equiv b π) (b j)))
+    simp only [OrthonormalBasis.equiv_apply_basis, Matrix.toLin_diagonal_apply_self,
       map_smul, Function.comp_apply]
     congr 1
     rw [← OrthonormalBasis.equiv_apply_basis b b π j,
@@ -91,28 +103,32 @@ omit [FiniteDimensional 𝕜 E] in
 theorem gauge_neg_single (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ)
     (j : Fin n) :
     N.basisGauge b (Function.update x j (-(x j))) = N.basisGauge b x := by
-  have hcomp : diagOp b (Function.update x j (-(x j)))
-      = diagOp b x ∘ₗ ((𝕜 ∙ b j)ᗮ).reflection.toLinearMap := by
+  have hcomp : (Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i =>
+      (((Function.update x j (-(x j)))) i : _)))
+      = (Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => ((x) i : _))) ∘ₗ ((𝕜 ∙ b
+          j)ᗮ).reflection.toLinearMap := by
     refine b.toBasis.ext fun i => ?_
-    change diagOp b (Function.update x j (-(x j))) (b i) =
-      diagOp b x (((𝕜 ∙ b j)ᗮ).reflection (b i))
+    change (Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => (((Function.update x
+        j (-(x j)))) i : _))) (b i) =
+      (Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => ((x) i : _))) (((𝕜 ∙ b
+          j)ᗮ).reflection (b i))
     rcases eq_or_ne i j with rfl | hij
     · simp only [Submodule.reflection_orthogonalComplement_singleton_eq_neg,
-        map_neg, diagOp_apply_basis, Function.update_self, neg_smul]
+        map_neg, Matrix.toLin_diagonal_apply_self, Function.update_self, neg_smul]
     · have hmem : b i ∈ (𝕜 ∙ b j)ᗮ :=
         Submodule.mem_orthogonal_singleton_iff_inner_right.mpr
           (b.orthonormal.2 (Ne.symm hij))
-      rw [Submodule.reflection_mem_subspace_eq_self hmem, diagOp_apply_basis,
-        diagOp_apply_basis, Function.update_of_ne hij]
+      rw [Submodule.reflection_mem_subspace_eq_self hmem, Matrix.toLin_diagonal_apply_self,
+        Matrix.toLin_diagonal_apply_self, Function.update_of_ne hij]
   rw [basisGauge, hcomp]
   exact N.map_comp_linearIsometryEquiv ((𝕜 ∙ b j)ᗮ).reflection _
 
 /-- **The gauge representation**: a unitarily invariant norm is the gauge of
 the singular values, via the operator SVD. -/
-theorem apply_eq_gauge (hn : finrank 𝕜 E = n)
+theorem apply_eq_gauge (_hn : finrank 𝕜 E = n)
     (b : OrthonormalBasis (Fin n) 𝕜 E) (A : E →ₗ[𝕜] E) :
     N A = N.basisGauge b fun i => A.singularValues (i : ℕ) := by
-  obtain ⟨U, V, hUV⟩ := exists_unitary_diagOp_factorization hn b A
+  obtain ⟨U, V, hUV⟩ := A.exists_linearIsometryEquiv_eq_comp_toLin_diagonal_comp b
   conv_lhs => rw [hUV]
   exact N.map_linearIsometryEquiv_comp_comp U V _
 
@@ -175,16 +191,6 @@ theorem gauge_le_gauge_of_prefix_sums_le (b : OrthonormalBasis (Fin n) 𝕜 E)
   (N.finiteSymmetricGauge b).le_of_prefixSum_le hz_anti hz0 hy0 hpre
 
 /-! ### The Fan dominance principle -/
-
-
-/-- A square seminorm is unchanged by taking the adjoint. -/
-theorem apply_adjoint (A : E →ₗ[𝕜] E) : N A.adjoint = N A :=
-  N.map_eq_of_singularValues_eq (LinearMap.singularValues_adjoint A)
-
-/-- A square seminorm is unchanged by taking the operator absolute value. -/
-theorem apply_operatorAbs (A : E →ₗ[𝕜] E) : N (A.operatorAbs) = N A := by
-  conv_rhs => rw [polar_decomposition_choosePolarUnitary A]
-  exact (N.map_linearIsometryEquiv_comp (choosePolarUnitary A) (A.operatorAbs)).symm
 
 
 end UnitarilyInvariantSeminorm

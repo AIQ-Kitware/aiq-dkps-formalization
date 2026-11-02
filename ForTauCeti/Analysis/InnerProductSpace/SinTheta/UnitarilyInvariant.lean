@@ -148,7 +148,8 @@ theorem apply_starProjection_comp_starProjection_le (N : UnitarilyInvariantSemin
         ext x; simp
       rw [hcoe, LinearMap.adjoint_comp, hPsym.adjoint_eq, hQsym.adjoint_eq]
       ext x; simp [hX]
-    rw [← N.apply_adjoint ((Q ∘L P : E →L[𝕜] E) : E →ₗ[𝕜] E), hadj]
+    rw [← N.map_eq_of_singularValues_eq
+      (LinearMap.singularValues_adjoint ((Q ∘L P : E →L[𝕜] E) : E →ₗ[𝕜] E)), hadj]
   calc N ((V.starProjection ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
       = N' X := hstar
     _ ≤ N' Y / g := hbound

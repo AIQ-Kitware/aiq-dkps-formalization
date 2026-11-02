@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
+
 public import DavisKahan.Sources.DavisKahan1970.Ideals.StandardInstances
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances
 
@@ -89,9 +91,18 @@ theorem kyFanFiniteNorm_gauge_of_antitone_nonneg
         (EuclideanSpace.basisFun (Fin n) ℂ) x =
       prefixSum k x := by
   let b := EuclideanSpace.basisFun (Fin n) ℂ
+  have hsval (i : Fin n) :
+      (Matrix.toLin b.toBasis b.toBasis (Matrix.diagonal fun j => (x j : ℂ))).singularValues i =
+        x i := by
+    have ha : Antitone fun j => ‖(x j : ℂ)‖ := fun j l hjl => by
+      simpa only [Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (hx0 j), abs_of_nonneg (hx0 l)]
+        using hxanti hjl
+    simpa only [Equiv.refl_apply, Complex.norm_real, Real.norm_eq_abs, abs_of_nonneg (hx0 i)] using
+      Matrix.singularValues_toLin_diagonal b (fun j => (x j : ℂ)) (Equiv.refl _) ha i
   change TauCeti.UnitarilyInvariantSeminorm.kyFan
       (𝕜 := ℂ) (E := EuclideanSpace ℂ (Fin n))
-      (F := EuclideanSpace ℂ (Fin n)) k (TauCeti.diagOp b x) =
+      (F := EuclideanSpace ℂ (Fin n)) k ((Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal
+          fun i => ((x) i : _)))) =
         prefixSum k x
   rw [TauCeti.UnitarilyInvariantSeminorm.kyFan_apply]
   rcases le_total k n with hkn | hnk
@@ -117,23 +128,20 @@ theorem kyFanFiniteNorm_gauge_of_antitone_nonneg
     rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
     apply Finset.sum_congr rfl
     intro i hi
-    exact TauCeti.singularValues_diagOp
-      (𝕜 := ℂ) (E := EuclideanSpace ℂ (Fin n))
-      finrank_euclideanSpace_fin b hxanti hx0
-      ⟨i, lt_of_lt_of_le i.isLt hkn⟩
+    exact hsval ⟨i, lt_of_lt_of_le i.isLt hkn⟩
   · have hnk' : Module.finrank ℂ (EuclideanSpace ℂ (Fin n)) ≤ k := by simpa using hnk
-    have hstab := ((TauCeti.diagOp b x).kyFanSum_eq_nuclear
+    have hstab := (((Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => ((x) i :
+        _)))).kyFanSum_eq_nuclear
       ((LinearMap.finrank_range_le _).trans hnk')).trans
-        ((TauCeti.diagOp b x).kyFanSum_eq_nuclear (LinearMap.finrank_range_le _)).symm
+        (((Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => ((x) i :
+            _)))).kyFanSum_eq_nuclear (LinearMap.finrank_range_le _)).symm
     rw [hstab]
     rw [finrank_euclideanSpace_fin]
     rw [prefixSum_of_le hnk x]
     rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
     apply Finset.sum_congr rfl
     intro i hi
-    exact TauCeti.singularValues_diagOp
-      (𝕜 := ℂ) (E := EuclideanSpace ℂ (Fin n))
-      finrank_euclideanSpace_fin b hxanti hx0 i
+    exact hsval i
 
 /-- The finite Ky Fan gauges are coherent under appending a zero coordinate. -/
 theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :

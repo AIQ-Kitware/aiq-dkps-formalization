@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
+
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 public import DavisKahan.FiniteDimensional.TanTheta.RitzResidual
@@ -259,7 +261,7 @@ theorem singularValues_tanThetaEmbedding
     exact tangentScalar_mono (S.singularValues_nonneg j)
       (S.singularValues_antitone (Fin.le_def.mp hij))
       (singularValues_sinThetaEmbedding_lt_one_of_isTransverse U X htrans i)
-  let D : F →ₗ[𝕜] F := diagOp b d
+  let D : F →ₗ[𝕜] F := (Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => ((d) i : _)))
   have hgram : T.adjoint ∘ₗ T = D.adjoint ∘ₗ D := by
     apply b.toBasis.ext
     intro i
@@ -277,10 +279,15 @@ theorem singularValues_tanThetaEmbedding
       tanThetaEmbedding_apply_rightSingularBasis U X htrans i,
       inner_smul_left, inner_smul_right, map_inv₀, RCLike.conj_ofReal,
       LinearMap.inner_apply_rightSingularBasis]
-    -- the goal is an application, not a composition, so `diagOp_comp` cannot
-    -- fire; apply the diagonal action twice instead
-    rw [adjoint_diagOp]
-    simp only [D, b, S, diagOp_apply_basis, map_smul, smul_smul]
+    -- Apply the native diagonal action twice after identifying the adjoint.
+    have hDadj : D.adjoint = D := by
+      dsimp only [D]
+      rw [← Matrix.toLin_conjTranspose, Matrix.diagonal_conjTranspose]
+      congr 2
+      ext l
+      simp only [Pi.star_apply, RCLike.star_def, RCLike.conj_ofReal]
+    rw [hDadj]
+    simp only [D, b, S, Matrix.toLin_diagonal_apply_self, map_smul, smul_smul]
     rw [inner_smul_right]
     by_cases hji : j = i
     · subst j
@@ -305,8 +312,11 @@ theorem singularValues_tanThetaEmbedding
     calc
       T.singularValues k = D.singularValues k := by rw [hTD]
       _ = d i := by
-        simpa [D, i] using singularValues_diagOp (𝕜 := 𝕜)
-          (E := F) (n := finrank 𝕜 F) rfl b hdanti hd0 i
+        have ha : Antitone fun j => ‖(d j : 𝕜)‖ := fun j l hjl => by
+          simpa only [RCLike.norm_ofReal, abs_of_nonneg (hd0 j), abs_of_nonneg (hd0 l)]
+            using hdanti hjl
+        simpa only [D, i, Equiv.refl_apply, RCLike.norm_ofReal, abs_of_nonneg (hd0 _)] using
+          Matrix.singularValues_toLin_diagonal b (fun j => (d j : 𝕜)) (Equiv.refl _) ha i
       _ = Real.tan (Real.arcsin (S.singularValues k)) := by
         rw [Real.tan_arcsin]
       _ = (approximateSubspace X).principalTangents U k := by

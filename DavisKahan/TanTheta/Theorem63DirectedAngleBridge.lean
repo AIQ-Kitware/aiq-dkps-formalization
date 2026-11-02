@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 
 module
 
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
+
 public import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
@@ -290,8 +292,9 @@ Davis--Kahan directed angle. -/
 theorem theorem63DirectedTangentCoordinate_eq_cfcTan_sourceDirectedAngle
     (_hlt : ∀ i, finiteSourceSingularValue
       (theorem63DirectedSineBlock Z V) i < 1) :
-    (diagOp (finiteSourceRightSingularBasis (theorem63DirectedSineBlock Z V))
-      (theorem63DirectedTangentDiagonal Z V)).toContinuousLinearMap =
+    ((let b' := (finiteSourceRightSingularBasis (theorem63DirectedSineBlock Z V)); Matrix.toLin
+        b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((theorem63DirectedTangentDiagonal Z
+        V)) i : _)))).toContinuousLinearMap =
       cfc Real.tan (directedAngleBlockC Z V) := by
   let S := directedSine Z V
   let b := finiteSourceRightSingularBasis S
@@ -299,7 +302,8 @@ theorem theorem63DirectedTangentCoordinate_eq_cfcTan_sourceDirectedAngle
   have hAsa : IsSelfAdjoint A := by
     exact cfc_predicate Real.arccos (cosineBlockModulusC Z V)
   have hlin :
-      diagOp b (theorem63DirectedTangentDiagonal Z V) =
+      (Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i =>
+          (((theorem63DirectedTangentDiagonal Z V)) i : _))) =
         (cfc Real.tan A).toLinearMap := by
     apply b.toBasis.ext
     intro i
@@ -310,7 +314,7 @@ theorem theorem63DirectedTangentCoordinate_eq_cfcTan_sourceDirectedAngle
     have hcfceig : cfc Real.tan A (b i) =
         ((Real.tan (Real.arcsin (finiteSourceSingularValue S i)) : ℝ) : ℂ) • b i :=
       ContinuousLinearMap.cfc_apply_of_apply_eq_smul Real.tan hAeig hAsa
-    rw [diagOp_apply_basis]
+    rw [Matrix.toLin_diagonal_apply_self]
     change (((theorem63DirectedTangentDiagonal Z V i : ℝ) : ℂ) • b i) =
       cfc Real.tan A (b i)
     simpa [theorem63DirectedTangentDiagonal, S, directedSine] using hcfceig.symm

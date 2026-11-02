@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
+
 public import DavisKahan.Sources.DavisKahan1970.Ideals.UnitaryInvariantNormDefinite
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 
@@ -24,7 +26,7 @@ the reverse construction independent of matrix coordinates.
 The bridge in both directions rests on one computation: the singular values of
 a real diagonal operator are the decreasing rearrangement of the absolute
 values of its diagonal.  That is established here as
-`exists_perm_singularValues_diagOp`, from the Gram identity for diagonal
+`exists_perm_singularValues_diagOp`, from the native singular-value theorem for diagonal
 operators together with the basis-permutation unitary.
 -/
 
@@ -49,49 +51,17 @@ the same Gram operator, hence exactly the same singular values. -/
 theorem singularValues_diagOp_abs
     (b : OrthonormalBasis (Fin n) ℂ (EuclideanSpace ℂ (Fin n)))
     (x : Fin n → ℝ) :
-    (TauCeti.diagOp b x).singularValues =
-      (TauCeti.diagOp b fun i => |x i|).singularValues := by
+    ((Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => ((x) i : _)))).singularValues =
+      ((Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => (((fun i => |x i|)) i :
+          _)))).singularValues := by
   apply TauCeti.singularValues_eq_of_gram_eq
-  rw [TauCeti.adjoint_diagOp, TauCeti.adjoint_diagOp,
-    TauCeti.diagOp_comp, TauCeti.diagOp_comp]
-  congr 1
+  rw [← Matrix.toLin_conjTranspose, ← Matrix.toLin_conjTranspose,
+    ← Matrix.toLin_mul, ← Matrix.toLin_mul]
+  simp only [Matrix.diagonal_conjTranspose, Matrix.diagonal_mul_diagonal]
+  congr 2
   funext i
-  simp [abs_mul_abs_self]
-
-private theorem coe_toLinearMap_apply
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    (U : E ≃ₗᵢ[ℂ] E) (v : E) : U.toLinearMap v = U v := rfl
-
-/-- Permuting the diagonal conjugates a diagonal operator by the
-basis-permutation unitary, so the singular values are unchanged. -/
-theorem singularValues_diagOp_comp_perm
-    (b : OrthonormalBasis (Fin n) ℂ (EuclideanSpace ℂ (Fin n)))
-    (x : Fin n → ℝ) (π : Equiv.Perm (Fin n)) :
-    (TauCeti.diagOp b (x ∘ π)).singularValues =
-      (TauCeti.diagOp b x).singularValues := by
-  have hconj : TauCeti.diagOp b (x ∘ π)
-      = (↑(b.equiv b π).symm.toLinearEquiv :
-            EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n)) ∘ₗ
-          (TauCeti.diagOp b x ∘ₗ
-            (↑(b.equiv b π).toLinearEquiv :
-              EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n))) := by
-    refine b.toBasis.ext fun j => ?_
-    rw [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply,
-      LinearMap.comp_apply]
-    show TauCeti.diagOp b (x ∘ π) (b j) =
-      (b.equiv b π).symm (TauCeti.diagOp b x ((b.equiv b π) (b j)))
-    rw [OrthonormalBasis.equiv_apply_basis, TauCeti.diagOp_apply_basis,
-      TauCeti.diagOp_apply_basis, map_smul, Function.comp_apply]
-    congr 1
-    rw [← OrthonormalBasis.equiv_apply_basis b b π j,
-      LinearIsometryEquiv.symm_apply_apply]
-  rw [hconj]
-  change (((b.equiv b π).symm :
-      EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n)) ∘ₗ
-    diagOp b x ∘ₗ (b.equiv b π :
-      EuclideanSpace ℂ (Fin n) →ₗ[ℂ] EuclideanSpace ℂ (Fin n))).singularValues = _
-  simp only [LinearMap.singularValues_linearIsometryEquiv_comp,
-    LinearMap.singularValues_comp_linearIsometryEquiv]
+  simp only [Pi.star_apply, Complex.star_def, Complex.conj_ofReal, ← Complex.ofReal_mul,
+    abs_mul_abs_self]
 
 /-- Every real vector can be permuted so that its absolute values decrease. -/
 theorem exists_perm_abs_antitone (x : Fin n → ℝ) :
@@ -107,15 +77,14 @@ theorem exists_perm_singularValues_diagOp
     (b : OrthonormalBasis (Fin n) ℂ (EuclideanSpace ℂ (Fin n)))
     (x : Fin n → ℝ) :
     ∃ π : Equiv.Perm (Fin n), ∀ i : Fin n,
-      (TauCeti.diagOp b x).singularValues (i : ℕ) = |x (π i)| := by
+      ((Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => ((x) i :
+          _)))).singularValues (i : ℕ) = |x (π i)| := by
   obtain ⟨π, hπ⟩ := exists_perm_abs_antitone x
   refine ⟨π, fun i => ?_⟩
-  have hsorted := TauCeti.singularValues_diagOp
-    (𝕜 := ℂ) (E := EuclideanSpace ℂ (Fin n)) finrank_euclideanSpace_fin b
-    (x := fun i => |x (π i)|) hπ (fun i => abs_nonneg _) i
-  have hcomp : (fun i => |x (π i)|) = (fun i => |x i|) ∘ π := rfl
-  rw [← hsorted, hcomp, singularValues_diagOp_comp_perm b (fun i => |x i|) π,
-    ← singularValues_diagOp_abs b x]
+  have ha : Antitone fun i => ‖(x (π i) : ℂ)‖ := by
+    simpa only [Complex.norm_real, Real.norm_eq_abs] using hπ
+  simpa only [Complex.norm_real, Real.norm_eq_abs] using
+    Matrix.singularValues_toLin_diagonal b (fun i => (x i : ℂ)) π ha i
 
 end DiagonalSingularValues
 
@@ -131,9 +100,10 @@ variable {n : ℕ}
 diagonal. -/
 theorem uinGauge_abs (x : Fin n → ℝ) :
     N.basisGauge b (fun i => |x i|) = N.basisGauge b x := by
-  have h1 := N.apply_eq_gauge finrank_euclideanSpace_fin b (TauCeti.diagOp b x)
+  have h1 := N.apply_eq_gauge finrank_euclideanSpace_fin b ((Matrix.toLin (b).toBasis
+      (b).toBasis (Matrix.diagonal fun i => ((x) i : _))))
   have h2 := N.apply_eq_gauge finrank_euclideanSpace_fin b
-    (TauCeti.diagOp b fun i => |x i|)
+    ((Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => (((fun i => |x i|)) i : _))))
   rw [singularValues_diagOp_abs b x] at h1
   exact h2.trans h1.symm
 
@@ -363,10 +333,12 @@ theorem finiteNorm_gauge (Φ : SymmetricNormingFunction.Axiomatic) (n : ℕ)
   obtain ⟨π, hπ⟩ :=
     exists_perm_singularValues_diagOp (EuclideanSpace.basisFun (Fin n) ℂ) x
   show Φ.gauge n (fun i : Fin n =>
-      (TauCeti.diagOp (EuclideanSpace.basisFun (Fin n) ℂ) x).singularValues
+      ((let b' := (EuclideanSpace.basisFun (Fin n) ℂ); Matrix.toLin b'.toBasis b'.toBasis
+          (Matrix.diagonal fun i => ((x) i : _)))).singularValues
         (i : ℕ)) = Φ.gauge n x
   have hfun : (fun i : Fin n =>
-      (TauCeti.diagOp (EuclideanSpace.basisFun (Fin n) ℂ) x).singularValues
+      ((let b' := (EuclideanSpace.basisFun (Fin n) ℂ); Matrix.toLin b'.toBasis b'.toBasis
+          (Matrix.diagonal fun i => ((x) i : _)))).singularValues
         (i : ℕ)) = (fun i => |x i|) ∘ π := by
     funext i
     exact hπ i

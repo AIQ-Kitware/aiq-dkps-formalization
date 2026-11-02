@@ -26,6 +26,8 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 
 module
 
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
+
 import Mathlib.Analysis.InnerProductSpace.Semisimple
 
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
@@ -409,11 +411,12 @@ theorem apply_orthogonal_starProjection_comp_starProjection_comp
         (Submodule.span 𝕜 (Set.range v)).starProjection ∘L
         (Submodule.span 𝕜 (Set.range u)).starProjection : E →L[𝕜] E)
         : E →ₗ[𝕜] E))
-      = N (diagOp ((((Submodule.span 𝕜 (Set.range v)).starProjection ∘L
+      = N ((let b' := ((((Submodule.span 𝕜 (Set.range v)).starProjection ∘L
             (Submodule.span 𝕜 (Set.range u)).starProjection : E →L[𝕜] E)
-            : E →ₗ[𝕜] E).isSymmetric_adjoint_comp_self.eigenvectorBasis rfl)
-          (fun i => cosPrincipalAngles hv hu i
-            * Real.sqrt (1 - cosPrincipalAngles hv hu i ^ 2))) := by
+            : E →ₗ[𝕜] E).isSymmetric_adjoint_comp_self.eigenvectorBasis rfl); Matrix.toLin
+                b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((fun i => cosPrincipalAngles
+                hv hu i
+            * Real.sqrt (1 - cosPrincipalAngles hv hu i ^ 2))) i : _)))) := by
   classical
   set P : E →ₗ[𝕜] E := ((Submodule.span 𝕜 (Set.range u)).starProjection : E →ₗ[𝕜] E) with hPdef
   set Ph : E →ₗ[𝕜] E := ((Submodule.span 𝕜 (Set.range v)).starProjection : E →ₗ[𝕜] E) with hPhdef
@@ -493,8 +496,10 @@ theorem apply_orthogonal_starProjection_comp_starProjection_comp
       exact zero_le_one
   -- Gram of `M` equals gram of the diagonal operator.
   set w : Fin (finrank 𝕜 E) → ℝ := fun i => c i * Real.sqrt (1 - c i ^ 2) with hwdef
-  have hgram : LinearMap.adjoint M ∘ₗ M = LinearMap.adjoint (diagOp bC w) ∘ₗ diagOp bC w := by
-    rw [hMM, adjoint_diagOp, diagOp_comp]
+  have hgram : LinearMap.adjoint M ∘ₗ M = LinearMap.adjoint ((Matrix.toLin (bC).toBasis
+      (bC).toBasis (Matrix.diagonal fun i => ((w) i : _)))) ∘ₗ (Matrix.toLin (bC).toBasis
+      (bC).toBasis (Matrix.diagonal fun i => ((w) i : _))) := by
+    rw [hMM]
     refine bC.toBasis.ext fun i => ?_
     simp only [OrthonormalBasis.coe_toBasis]
     have hle : (0 : ℝ) ≤ 1 - c i ^ 2 := by nlinarith [hc0 i, hc1 i]
@@ -503,13 +508,14 @@ theorem apply_orthogonal_starProjection_comp_starProjection_comp
       rw [show c i * Real.sqrt (1 - c i ^ 2) * (c i * Real.sqrt (1 - c i ^ 2))
           = c i ^ 2 * Real.sqrt (1 - c i ^ 2) ^ 2 by ring, Real.sq_sqrt hle]
       ring
+    rw [Matrix.adjoint_comp_self_toLin_diagonal_apply]
     simp only [LinearMap.sub_apply, LinearMap.comp_apply, hCeig, map_smul, smul_smul]
-    rw [diagOp_apply_basis, Pi.mul_apply, hwi, ← sub_smul]
-    congr 1
+    rw [RCLike.norm_ofReal, sq_abs, show w i ^ 2 = w i * w i from pow_two _, hwi]
     push_cast
-    ring
+    module
   -- Read off via the gauge.
-  rw [N.apply_eq_gauge rfl bC M, N.apply_eq_gauge rfl bC (diagOp bC w),
+  rw [N.apply_eq_gauge rfl bC M, N.apply_eq_gauge rfl bC ((Matrix.toLin (bC).toBasis
+      (bC).toBasis (Matrix.diagonal fun i => ((w) i : _)))),
     singularValues_eq_of_gram_eq hgram]
 
 end Dictionary

@@ -148,7 +148,8 @@ example {A B : E →ₗ[𝕜] F} :
   exact N.map_le_of_kyFanSum_le h
 
 example (N : UnitarilyInvariantSeminorm 𝕜 E E) (A : E →ₗ[𝕜] E) :
-    N (A.operatorAbs) = N A := N.apply_operatorAbs A
+    N (A.operatorAbs) = N A :=
+  N.map_eq_of_singularValues_eq (LinearMap.singularValues_operatorAbs A)
 
 noncomputable example : UnitarilyInvariantSeminorm 𝕜 E E :=
   UnitarilyInvariantSeminorm.frobenius 𝕜 E E

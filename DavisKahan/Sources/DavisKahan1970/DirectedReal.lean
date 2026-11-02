@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
+
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Isometry
@@ -341,8 +343,9 @@ noncomputable def theorem63DirectedTangentReal
     (Z V : Submodule ℝ E) [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     [FiniteDimensional ℝ Z] : Z →L[ℝ] E :=
   Z.subtypeL ∘L
-    (TauCeti.diagOp (stdOrthonormalBasis ℝ Z)
-      (theorem63DirectedTangentDiagonalReal Z V)).toContinuousLinearMap
+    ((Matrix.toLin ((stdOrthonormalBasis ℝ Z)).toBasis ((stdOrthonormalBasis ℝ Z)).toBasis
+        (Matrix.diagonal fun i => (((theorem63DirectedTangentDiagonalReal Z V)) i :
+        _)))).toContinuousLinearMap
 
 omit [CompleteSpace E] in
 /-- Above the dimension of a finite-dimensional real trial space every
@@ -381,17 +384,22 @@ theorem hasTheorem63DirectedTangentApproximationNumbersInfiniteReal_theorem63Dir
     calc
       approximationSingularValue k (theorem63DirectedTangentReal Z V)
         = approximationSingularValue k
-            (TauCeti.diagOp (stdOrthonormalBasis ℝ Z)
-              (theorem63DirectedTangentDiagonalReal Z V)).toContinuousLinearMap :=
+            ((Matrix.toLin ((stdOrthonormalBasis ℝ Z)).toBasis ((stdOrthonormalBasis ℝ
+                Z)).toBasis (Matrix.diagonal fun i => (((theorem63DirectedTangentDiagonalReal Z
+                V)) i : _)))).toContinuousLinearMap :=
           approximationSingularValue_subtypeL_comp_real Z _ k
-      _ = (TauCeti.diagOp (stdOrthonormalBasis ℝ Z)
-            (theorem63DirectedTangentDiagonalReal Z V)).singularValues k :=
+      _ = ((Matrix.toLin ((stdOrthonormalBasis ℝ Z)).toBasis ((stdOrthonormalBasis ℝ Z)).toBasis
+          (Matrix.diagonal fun i => (((theorem63DirectedTangentDiagonalReal Z V)) i :
+          _)))).singularValues k :=
           approximationSingularValue_eq_singularValues _ k
       _ = theorem63DirectedTangentDiagonalReal Z V ⟨k, hk⟩ := by
-          simpa only [hkfin] using
-            TauCeti.singularValues_diagOp (𝕜 := ℝ) (E := Z)
-              (n := Module.finrank ℝ Z) rfl (stdOrthonormalBasis ℝ Z)
-              htanti ht0 ⟨k, hk⟩
+          have ha : Antitone fun j => ‖theorem63DirectedTangentDiagonalReal Z V j‖ :=
+            fun j l hjl => by
+              simpa only [Real.norm_eq_abs, abs_of_nonneg (ht0 j), abs_of_nonneg (ht0 l)]
+                using htanti hjl
+          simpa only [hkfin, Equiv.refl_apply, Real.norm_eq_abs, abs_of_nonneg (ht0 _)] using
+            Matrix.singularValues_toLin_diagonal (stdOrthonormalBasis ℝ Z)
+              (theorem63DirectedTangentDiagonalReal Z V) (Equiv.refl _) ha ⟨k, hk⟩
       _ = Real.tan (Real.arcsin (approximationSingularValue k
             (theorem63DirectedSineBlockReal Z V))) := rfl
   · have hkge : Module.finrank ℝ Z ≤ k := Nat.le_of_not_lt hk

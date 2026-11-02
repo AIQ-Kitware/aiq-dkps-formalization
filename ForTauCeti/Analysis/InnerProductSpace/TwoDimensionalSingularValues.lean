@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
+
 public import ForTauCeti.Analysis.InnerProductSpace.KyFan
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import Mathlib.Analysis.Matrix.Hermitian
@@ -57,7 +59,8 @@ theorem singularValues_diagOp_fin_two
     [FiniteDimensional 𝕜 E]
     (hfin : finrank 𝕜 E = 2) (b : OrthonormalBasis (Fin 2) 𝕜 E)
     {s0 s1 : ℝ} (hs0 : 0 ≤ s0) (hs1 : 0 ≤ s1) (hord : s1 ≤ s0) :
-    (diagOp b ![s0, s1]).singularValues = pairSingularValues s0 s1 := by
+    ((Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => ((![s0, s1]) i :
+        _)))).singularValues = pairSingularValues s0 s1 := by
   ext i
   have hanti : Antitone (![s0, s1] : Fin 2 → ℝ) := by
     intro a c hac
@@ -67,13 +70,21 @@ theorem singularValues_diagOp_fin_two
     fin_cases j
     · simpa using hs0
     · simpa using hs1
+  have hnrm : ∀ j : Fin 2, ‖((![s0, s1] : Fin 2 → ℝ) j : 𝕜)‖ =
+      (![s0, s1] : Fin 2 → ℝ) j := fun j =>
+    (RCLike.norm_ofReal _).trans (abs_of_nonneg (hnonneg j))
+  have ha : Antitone fun j : Fin 2 => ‖((![s0, s1] : Fin 2 → ℝ) j : 𝕜)‖ := by
+    simpa only [hnrm] using hanti
   by_cases hi : i < 2
   · -- `fin_cases` cannot see through a `let`-bound index, so split on `i` itself
     interval_cases i
-    · simpa using singularValues_diagOp (𝕜 := 𝕜) hfin b hanti hnonneg (0 : Fin 2)
-    · simpa using singularValues_diagOp (𝕜 := 𝕜) hfin b hanti hnonneg (1 : Fin 2)
+    · simpa [RCLike.norm_ofReal, abs_of_nonneg hs0] using Matrix.singularValues_toLin_diagonal b
+        (fun j => ((![s0, s1] : Fin 2 → ℝ) j : 𝕜)) (Equiv.refl _) ha (0 : Fin 2)
+    · simpa [RCLike.norm_ofReal, abs_of_nonneg hs1] using Matrix.singularValues_toLin_diagonal b
+        (fun j => ((![s0, s1] : Fin 2 → ℝ) j : 𝕜)) (Equiv.refl _) ha (1 : Fin 2)
   · have h2 : 2 ≤ i := Nat.le_of_not_gt hi
-    rw [(diagOp b ![s0, s1]).singularValues_of_finrank_le]
+    rw [((Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => ((![s0, s1]) i :
+        _)))).singularValues_of_finrank_le]
     · exact (pairSingularValues_of_two_le s0 s1 h2).symm
     · simpa [hfin] using h2
 
@@ -86,15 +97,20 @@ theorem singularValues_eq_pair_of_gram_eq
     (hfin : finrank 𝕜 E = 2) (b : OrthonormalBasis (Fin 2) 𝕜 E)
     (A : E →ₗ[𝕜] F) {s0 s1 : ℝ}
     (hs0 : 0 ≤ s0) (hs1 : 0 ≤ s1) (hord : s1 ≤ s0)
-    (hgram : A.adjoint ∘ₗ A = diagOp b ![s0 ^ 2, s1 ^ 2]) :
+    (hgram : A.adjoint ∘ₗ A = (Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i =>
+        ((![s0 ^ 2, s1 ^ 2]) i : _)))) :
     A.singularValues = pairSingularValues s0 s1 := by
-  let D : E →ₗ[𝕜] E := diagOp b ![s0, s1]
-  have hDgram : D.adjoint ∘ₗ D = diagOp b ![s0 ^ 2, s1 ^ 2] := by
-    dsimp [D]
-    rw [adjoint_diagOp, diagOp_comp]
+  let D : E →ₗ[𝕜] E := (Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => ((![s0,
+      s1]) i : _)))
+  have hDgram : D.adjoint ∘ₗ D = (Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i =>
+      ((![s0 ^ 2, s1 ^ 2]) i : _))) := by
+    dsimp only [D]
+    apply b.toBasis.ext
+    intro i
+    simp only [OrthonormalBasis.coe_toBasis,
+      Matrix.adjoint_comp_self_toLin_diagonal_apply, Matrix.toLin_diagonal_apply_self]
     congr 1
-    funext i
-    fin_cases i <;> simp [pow_two]
+    fin_cases i <;> simp [sq_abs]
   calc
     A.singularValues = D.singularValues :=
       singularValues_eq_of_gram_eq (hgram.trans hDgram.symm)
@@ -184,14 +200,15 @@ theorem singularValues_lowerLeft_two_by_two (r : ℝ) :
     fin_cases i <;> fin_cases j <;>
       simp [Matrix.conjTranspose_apply, RCLike.conj_ofReal]
   have hgram : A.adjoint ∘ₗ A =
-      diagOp (EuclideanSpace.basisFun (Fin 2) 𝕜) ![|r| ^ 2, 0] := by
+      (let b' := (EuclideanSpace.basisFun (Fin 2) 𝕜); Matrix.toLin b'.toBasis b'.toBasis
+          (Matrix.diagonal fun i => ((![|r| ^ 2, 0]) i : _))) := by
     rw [hadj]
     refine (EuclideanSpace.basisFun (Fin 2) 𝕜).toBasis.ext fun i => ?_
     rw [OrthonormalBasis.coe_toBasis]
     -- reduce the diagonal side first: unfolding the basis vector would stop
-    -- `diagOp_apply_basis` from matching
+    -- `Matrix.toLin_diagonal_apply_self` from matching
     fin_cases i <;>
-      rw [diagOp_apply_basis] <;>
+      rw [Matrix.toLin_diagonal_apply_self] <;>
       ext j <;> fin_cases j <;>
       simp [A, LinearMap.comp_apply, Matrix.toLpLin_apply,
         Matrix.vecHead, Matrix.vecTail, EuclideanSpace.basisFun_apply,

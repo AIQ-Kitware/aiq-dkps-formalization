@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
+
 public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
 public import TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison
 
@@ -559,7 +561,7 @@ private theorem singularValues_sinThetaMap_model
   refine (EuclideanSpace.basisFun (Fin 2) 𝕜).toBasis.ext fun i => ?_
   rw [OrthonormalBasis.coe_toBasis]
   fin_cases i <;>
-    rw [diagOp_apply_basis] <;>
+    rw [Matrix.toLin_diagonal_apply_self] <;>
     ext j <;> fin_cases j <;>
     simp [LinearMap.comp_apply, Matrix.toLpLin_apply,
       Matrix.vecHead, Matrix.vecTail, EuclideanSpace.basisFun_apply]
@@ -680,7 +682,16 @@ private theorem singularValues_tanAngle_model
   rw [show Real.sin θ / Real.cos θ = Real.tan θ from (Real.tan_eq_sin_div_cos θ).symm]
   -- restate the scalar operator as a constant diagonal so the planar
   -- singular-value lemma applies
-  rw [← diagOp_const_pair (EuclideanSpace.basisFun (Fin 2) 𝕜) (Real.tan θ)]
+  have hd : Matrix.toLin (EuclideanSpace.basisFun (Fin 2) 𝕜).toBasis
+      (EuclideanSpace.basisFun (Fin 2) 𝕜).toBasis
+      (Matrix.diagonal fun i : Fin 2 => ((![Real.tan θ, Real.tan θ] : Fin 2 → ℝ) i : 𝕜)) =
+      ((Real.tan θ : ℝ) : 𝕜) • LinearMap.id := by
+    have hm : (Matrix.diagonal fun i : Fin 2 => ((![Real.tan θ, Real.tan θ] : Fin 2 → ℝ) i : 𝕜)) =
+        Matrix.scalar (Fin 2) ((Real.tan θ : ℝ) : 𝕜) := by
+      ext i j
+      fin_cases i <;> fin_cases j <;> rfl
+    rw [hm, Matrix.toLin_scalar]
+  rw [← hd]
   simpa [abs_of_nonneg htan] using
     singularValues_diagOp_fin_two (𝕜 := 𝕜) finrank_euclideanSpace_fin
       (EuclideanSpace.basisFun (Fin 2) 𝕜) htan htan le_rfl
@@ -730,9 +741,18 @@ private theorem singularValues_tanTwoAngle_model
       hinner safeTanTwo,
     cfc_real_smul_id]
   simp only [safeTanTwo, ite_eq_right hcos]
+  have hd : Matrix.toLin (EuclideanSpace.basisFun (Fin 2) 𝕜).toBasis
+      (EuclideanSpace.basisFun (Fin 2) 𝕜).toBasis
+      (Matrix.diagonal fun i : Fin 2 => ((![Real.tan (2 * θ), Real.tan (2 * θ)] : Fin 2 → ℝ) i : 𝕜)) =
+      ((Real.tan (2 * θ) : ℝ) : 𝕜) • LinearMap.id := by
+    have hm : (Matrix.diagonal fun i : Fin 2 => ((![Real.tan (2 * θ), Real.tan (2 * θ)] : Fin 2 → ℝ) i : 𝕜)) =
+        Matrix.scalar (Fin 2) ((Real.tan (2 * θ) : ℝ) : 𝕜) := by
+      ext i j
+      fin_cases i <;> fin_cases j <;> rfl
+    rw [hm, Matrix.toLin_scalar]
   rw [show Real.sin (2 * θ) / Real.cos (2 * θ) = Real.tan (2 * θ) from
     (Real.tan_eq_sin_div_cos (2 * θ)).symm,
-    ← diagOp_const_pair (EuclideanSpace.basisFun (Fin 2) 𝕜) (Real.tan (2 * θ))]
+    ← hd]
   simpa [abs_of_nonneg htan] using
     singularValues_diagOp_fin_two (𝕜 := 𝕜) finrank_euclideanSpace_fin
       (EuclideanSpace.basisFun (Fin 2) 𝕜) htan htan le_rfl
