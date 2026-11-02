@@ -2272,3 +2272,32 @@ copyright and authors Jon Crall and Claude Opus 5. The full original
 `diagMeasure_le_sum` remain local, as do downstream Borel-calculus constructions.
 This consumption does not claim that those results have migrated to the accepted
 general approximation theorem.
+
+
+## 2026-11-01: MSS-C01 uncentered Chebyshev consumption
+
+**Full 83-line donor retirement.** Remove
+`ForTauCeti/Probability/Moments/Variance.lean` (originally
+`ForMathlib/Probability/Moments/Variance.lean`) and migrate the maintained
+Quench, Acharyya, and probability-challenge consumers from
+`TauCeti.meas_gt_le_ofReal_integral_sq_div_sq` to
+`TauCeti.meas_gt_le_div_sq_of_integral_sq_le` in
+`TauCeti.Probability.Moments.Chebyshev`. The accepted theorem gives the same
+uncentered event bound from integrability and `∫ Y² ≤ v`, but it needs no
+`IsProbabilityMeasure` instance and takes arguments in the order
+`(integrability, moment bound, positive threshold)`. The paper-facing
+`Acharyya2024.Probability.meas_gt_le_ofReal_secondMoment_div_sq` remains with
+its original theorem type and uses the accepted result directly. No new alias
+or substitute proof is introduced in `ForTauCeti`.
+
+**Distinct mathematical lineage.** The historical Kitware donor was introduced
+at Davis--Kahan commit `56f7495`, authored by Jon Crall and Claude Fable 5,
+Apache-2.0; its original implementation is recoverable in donor revision
+`e4637c3919ae:ForTauCeti/Probability/Moments/Variance.lean`.
+[TauCeti PR #15962](https://github.com/TauCetiProject/TauCeti/pull/15962)
+(MSS-C01--C05), integrated as
+`8c6d1312b675b1443cb85c6de6dff4b8b8ba93c4`, **explicitly says its
+implementation was written independently of the DKPS bulk port #13876**.
+This is replacement by accepted mathematics, **not** a DKPS proof port.
+The separate `ForTauCeti/Probability/Moments/SampleMean.lean` still contains
+local finite-sample proofs and remains available for subsequent migration.

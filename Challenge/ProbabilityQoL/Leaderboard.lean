@@ -4,9 +4,9 @@
 module
 
 public import TauCeti.MeasureTheory.Measure.Typeclasses.Probability
-public import ForTauCeti.Probability.Moments.Variance
+public import TauCeti.Probability.Moments.Chebyshev
 
 public section
 
-#print axioms MeasureTheory.Measure.one_sub_measure_compl_le
-#print axioms TauCeti.meas_gt_le_ofReal_integral_sq_div_sq
+/- The probability-complement lemma and uncentered Chebyshev inequality are now
+supplied directly by TauCeti; no local proof or routine axiom dump remains. -/

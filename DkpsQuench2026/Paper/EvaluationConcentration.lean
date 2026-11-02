@@ -16,7 +16,7 @@ module
 
 public import DkpsQuench2026.Paper.EvaluationBridges
 public import ForTauCeti.Probability.Moments.SampleMean
-public import ForTauCeti.Probability.Moments.Variance
+public import TauCeti.Probability.Moments.Chebyshev
 public import TauCeti.MeasureTheory.Measure.Typeclasses.Probability
 
 public section
@@ -99,8 +99,7 @@ theorem measure_randomEmpiricalMean_deviation_gt_le
     simpa [sq_abs] using
       integral_sq_randomEmpiricalMean_sub_le
         P hr Z center γ hL2 hmean hindep hsecond
-  exact TauCeti.meas_gt_le_ofReal_integral_sq_div_sq
-    P hdevInt hε hmoment
+  exact TauCeti.meas_gt_le_div_sq_of_integral_sq_le hdevInt hmoment hε
 
 /-- If both the statistic and its mean lie in `[0,1]`, its centered second
 moment is at most one.  This deliberately uses the simple universal bound one;

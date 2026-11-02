@@ -16,6 +16,7 @@ module
 
 public import Acharyya2024.SecondMoment
 public import Acharyya2025.RateChain
+public import TauCeti.Probability.Moments.Chebyshev
 
 public section
 
@@ -117,7 +118,7 @@ theorem prob_uniformResponseMeanClose_ge_of_secondMoment
       ≤ P {ω | UniformResponseMeanClose (Xbar ω) (μ ω) η} := by
   have hcheb : ∀ i : Fin N,
       P {ω | η < ‖Xbar ω i - μ ω i‖} ≤ ENNReal.ofReal (σ2 / η ^ 2) := fun i =>
-    TauCeti.meas_gt_le_ofReal_integral_sq_div_sq P (hint i) hη (hσ2 i)
+    TauCeti.meas_gt_le_div_sq_of_integral_sq_le (hint i) (hσ2 i) hη
   have hincl : {ω | UniformResponseMeanClose (Xbar ω) (μ ω) η}ᶜ
       ⊆ ⋃ i : Fin N, {ω | η < ‖Xbar ω i - μ ω i‖} := by
     intro ω hω
@@ -182,8 +183,8 @@ theorem highProb_uniformResponseMeanClose_of_growing_secondMoment
     have hcheb : ∀ i : Fin (count u),
         P u {ω | η u < ‖Xbar u ω i - μ u ω i‖}
           ≤ ENNReal.ofReal (σ2 u / (η u) ^ 2) := fun i =>
-      TauCeti.meas_gt_le_ofReal_integral_sq_div_sq
-        (P u) (hint u i) (hη_pos u) (hσ2 u i)
+      TauCeti.meas_gt_le_div_sq_of_integral_sq_le
+        (hint u i) (hσ2 u i) (hη_pos u)
     calc
       P u ((GrowingUniformResponseMeanClose count Xbar μ η u)ᶜ)
           ≤ P u (⋃ i : Fin (count u),
@@ -623,8 +624,8 @@ theorem highProb_uniformTargetResponseMeanClose_of_secondMoment
     have hcheb : ∀ t (i : Fin (count u)),
         P u {ω | η u < ‖Xbar u ω t i - μ u ω t i‖}
           ≤ ENNReal.ofReal (σ2 u / (η u) ^ 2) := fun t i =>
-      TauCeti.meas_gt_le_ofReal_integral_sq_div_sq
-        (P u) (hint u t i) (hη_pos u) (hσ2 u t i)
+      TauCeti.meas_gt_le_div_sq_of_integral_sq_le
+        (hint u t i) (hσ2 u t i) (hη_pos u)
     calc
       P u ({ω | ∀ t i,
           ‖Xbar u ω t i - μ u ω t i‖ ≤ η u}ᶜ)

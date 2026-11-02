@@ -25,7 +25,7 @@ module
 
 public import Acharyya2024.Common
 public import Acharyya2024.SecondMoment
-public import ForTauCeti.Probability.Moments.Variance
+public import TauCeti.Probability.Moments.Chebyshev
 public import ForTauCeti.Probability.ProductConvergence
 
 public section
@@ -42,12 +42,11 @@ variable {Ω : Type} [MeasurableSpace Ω]
 /--
 Chebyshev/Markov inequality in second-moment form, packaged for `ENNReal`.
 
-For a nonnegative measurable function `Y` with `∫ Y² ≤ v` and `0 < η`,
+For a real function `Y` with integrable `Y²`, `∫ Y² ≤ v` and `0 < η`,
 the probability of `{ω | η < Y ω}` is at most `ENNReal.ofReal (v / η²)`.
 
-Thin wrapper around the Mathlib-staged
-`TauCeti.meas_gt_le_ofReal_integral_sq_div_sq`; kept under its original
-name for downstream call-sites.
+Thin paper-facing wrapper around the accepted TauCeti theorem
+`TauCeti.meas_gt_le_div_sq_of_integral_sq_le`, retained for downstream callers.
 
 Internal tooling: this is the standard Chebyshev/Markov second-moment bound (it
 is the inequality applied to each model in the proof of Theorem 2); it is not a
@@ -63,7 +62,7 @@ theorem meas_gt_le_ofReal_secondMoment_div_sq
     (hmoment : ∫ ω, (Y ω) ^ 2 ∂P ≤ v) :            -- second moment bounded by v
     -- Conclusion: the tail probability P(Y > η) is at most v/η² (Chebyshev/Markov).
     P {ω | η < Y ω} ≤ ENNReal.ofReal (v / η ^ 2) :=
-  TauCeti.meas_gt_le_ofReal_integral_sq_div_sq P hY_int hη hmoment
+  TauCeti.meas_gt_le_div_sq_of_integral_sq_le hY_int hmoment hη
 
 /--
 Main probabilistic theorem (paper Theorem 2 / Appendix A.2).

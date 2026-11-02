@@ -20,6 +20,7 @@ module
 public import DkpsQuench2026.Geometry.CenteredCovariance
 public import DkpsQuench2026.Spectral.GramSpectrum
 public import TauCeti.Analysis.Matrix.Eigenvalues
+public import TauCeti.Probability.Moments.Chebyshev
 
 public section
 
@@ -323,11 +324,11 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
     have hInt' : Integrable
         (fun ωref => (-(referenceCoordinateMean ψ f_ref n ωref a - c)) ^ 2) (μref n) := by
       simpa only [neg_sq] using hInt
-    have hpos := TauCeti.meas_gt_le_ofReal_integral_sq_div_sq (μref n)
-      (Y := fun ωref => referenceCoordinateMean ψ f_ref n ωref a - c) hInt hε (hmse n hn)
-    have hneg := TauCeti.meas_gt_le_ofReal_integral_sq_div_sq (μref n)
-      (Y := fun ωref => -(referenceCoordinateMean ψ f_ref n ωref a - c)) hInt' hε
-      (by simpa only [neg_sq] using hmse n hn)
+    have hpos := TauCeti.meas_gt_le_div_sq_of_integral_sq_le
+      (Y := fun ωref => referenceCoordinateMean ψ f_ref n ωref a - c) hInt (hmse n hn) hε
+    have hneg := TauCeti.meas_gt_le_div_sq_of_integral_sq_le
+      (Y := fun ωref => -(referenceCoordinateMean ψ f_ref n ωref a - c)) hInt'
+      (by simpa only [neg_sq] using hmse n hn) hε
     have hsub : {ωref | |referenceCoordinateMean ψ f_ref n ωref a - c| ≤ ε}ᶜ
         ⊆ {ωref | ε < referenceCoordinateMean ψ f_ref n ωref a - c}
           ∪ {ωref | ε < -(referenceCoordinateMean ψ f_ref n ωref a - c)} := by
@@ -544,11 +545,11 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
     have hInt' : Integrable
         (fun ωref => (-(referenceCoordinateProductMean ψ f_ref n ωref a b - c)) ^ 2) (μref n) := by
       simpa only [neg_sq] using hInt
-    have hpos := TauCeti.meas_gt_le_ofReal_integral_sq_div_sq (μref n)
-      (Y := fun ωref => referenceCoordinateProductMean ψ f_ref n ωref a b - c) hInt hε (hmse n hn)
-    have hneg := TauCeti.meas_gt_le_ofReal_integral_sq_div_sq (μref n)
-      (Y := fun ωref => -(referenceCoordinateProductMean ψ f_ref n ωref a b - c)) hInt' hε
-      (by simpa only [neg_sq] using hmse n hn)
+    have hpos := TauCeti.meas_gt_le_div_sq_of_integral_sq_le
+      (Y := fun ωref => referenceCoordinateProductMean ψ f_ref n ωref a b - c) hInt (hmse n hn) hε
+    have hneg := TauCeti.meas_gt_le_div_sq_of_integral_sq_le
+      (Y := fun ωref => -(referenceCoordinateProductMean ψ f_ref n ωref a b - c)) hInt'
+      (by simpa only [neg_sq] using hmse n hn) hε
     have hsub : {ωref | |referenceCoordinateProductMean ψ f_ref n ωref a b - c| ≤ ε}ᶜ
         ⊆ {ωref | ε < referenceCoordinateProductMean ψ f_ref n ωref a b - c}
           ∪ {ωref | ε < -(referenceCoordinateProductMean ψ f_ref n ωref a b - c)} := by

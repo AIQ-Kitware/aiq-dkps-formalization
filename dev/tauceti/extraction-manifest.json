@@ -2005,20 +2005,30 @@
     },
     {
       "source_module": "ForMathlib.Probability.Moments.Variance",
-      "source_declarations": [],
+      "source_declarations": [
+        "TauCeti.meas_gt_le_ofReal_integral_sq_div_sq"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Probability.Moments.Variance",
-      "final_tauceti_module": "TauCeti.Probability.Moments.Variance",
+      "final_tauceti_module": "TauCeti.Probability.Moments.Chebyshev",
       "ownership_class": "tauceti",
       "roadmap_target": "probability-concentration",
       "provenance_class": "moved; introduced at Davis--Kahan commit 56f7495; authors Jon Crall, Claude Fable 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib"
+        "TauCeti.Probability.Moments.Chebyshev"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "downstream_users": [
+        "Acharyya2024.Probability",
+        "Acharyya2025.GrowingResponse",
+        "DkpsQuench2026.Paper.EvaluationConcentration",
+        "DkpsQuench2026.Probability.UniformConcentration",
+        "DkpsQuench2026.Spectral.Regularity",
+        "Challenge.ProbabilityQoL.Leaderboard"
+      ],
+      "status": "upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/15962",
+      "migration_note": "Delete the original 83-line ForMathlib-to-ForTauCeti uncentered second-moment Chebyshev proof; migrate its paper-facing wrapper and all direct consumer calls to TauCeti.meas_gt_le_div_sq_of_integral_sq_le (integrability, moment bound, positive threshold). The accepted TauCeti theorem is stronger: it does not require a probability measure and is sourced from the independent PR #15962 implementation, integrated at 8c6d1312b675b1443cb85c6de6dff4b8b8ba93c4. PR #15962 explicitly says it was written independently of the DKPS bulk port #13876; this is consumption, not proof adaptation. Original Kitware theorem (Jon Crall, Claude Fable 5, Apache-2.0) is recoverable at e4637c3919ae:ForTauCeti/Probability/Moments/Variance.lean (Davis--Kahan origin 56f7495). The SampleMean donor remains separate."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
