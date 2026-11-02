@@ -94,7 +94,7 @@ theorem exists_continuous_pair_close {ι : Type*} [Finite ι] (P : ι → H × H
   set ν : Measure (spectrum ℂ a) := ∑ j, (cfcHom ha).representationDiagMeasure (v j) with hν
   have : IsFiniteMeasure ν := by dsimp only [ν]; infer_instance
   have hfi : Integrable f ν := integrable_of_bounded hfm hfb ν
-  obtain ⟨g, hgi, hgle⟩ := exists_continuous_integral_norm_sub_le ν hfi hε
+  obtain ⟨g, hgi, hgle⟩ := ν.exists_continuous_integral_norm_sub_le hfi hε
   refine ⟨g, fun i => ?_⟩
   rw [← pair_of_continuous ha g]
   exact le_trans (norm_pair_sub_pair_le ha ν _ _ (fun k => diagMeasure_le_sum ha v (i, k))

@@ -2243,3 +2243,32 @@ and Claude Opus 4.8, then redesigned by Claude Opus 5 (Kitware, Apache-2.0).
 The original reconstruction is present in donor revision `e4637c3919ae`.
 The local five public declarations are preserved, and their original naming
 and source history remain in `extraction-manifest.json`.
+
+## 2026-11-01: SA-B02 consumes the accepted one-measure continuous-approximation theorem
+
+**Removed donor implementation.** In
+`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Polarization.lean`,
+`TauCeti.BorelCalculus.exists_continuous_integral_norm_sub_le` was the
+one-measure L¹ approximation of an integrable complex-valued function on the
+compact operator spectrum. Its local proof is now deleted; direct consumers
+in `BorelCalculus/Operator.lean` and `BorelCalculus/Multiplicative.lean`
+apply `ν.exists_continuous_integral_norm_sub_le` from
+`TauCeti.MeasureTheory.Function.ContinuousApproximation`. The accepted
+`MeasureTheory.Measure.exists_continuous_integral_norm_sub_le` is the same
+estimate for **any** compact metric Borel space, not only an operator spectrum.
+No local compatibility alias was retained.
+
+**Lineage.** [TauCeti #18907](https://github.com/TauCetiProject/TauCeti/pull/18907)
+(SA-B02) explicitly states that its approximation proof was **adapted from**
+the maintained Kitware DKPS donor module. Its integration commit is
+`254557afab32f37a4214172559f7849c801f5ba3`, included in pinned TauCeti
+`463ab293070d4cb355d0a0e036469464070088bc`.
+Original donor revision `e4637c3919ae` retains Kitware's Apache-2.0
+copyright and authors Jon Crall and Claude Opus 5. The full original
+`source_declarations` list remains in `extraction-manifest.json`.
+
+**Scope retained in DKPS.** The polarized integral `pair`, `pair_of_continuous`,
+`norm_integral_sub_integral_le`, `norm_pair_sub_pair_le`, `pairVectors`, and
+`diagMeasure_le_sum` remain local, as do downstream Borel-calculus constructions.
+This consumption does not claim that those results have migrated to the accepted
+general approximation theorem.

@@ -2674,15 +2674,16 @@
       "direct_dependencies": [
         "TauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure",
         "TauCeti.Analysis.InnerProductSpace.OperatorIdentities",
+        "TauCeti.MeasureTheory.Function.ContinuousApproximation",
         "Mathlib"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Operator"
       ],
-      "status": "staged",
-      "upstream_pr": null,
-      "migration_note": "October 25, following DKPS 9380d70b0: the polarised integral is defined directly over accepted StarAlgHom.representationDiagMeasure (cfcHom ha). The duplicate finite-sum measure theorem is removed; consumers use the accepted Mathlib finite-sum instance. Other integral-transport and polarization mathematics remains local and retains its scope and Kitware provenance."
+      "status": "partially-upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/18907",
+      "migration_note": "October 25, following DKPS 9380d70b0: the polarised integral is defined directly over accepted StarAlgHom.representationDiagMeasure (cfcHom ha). The duplicate finite-sum measure theorem is removed; consumers use the accepted Mathlib finite-sum instance. Other integral-transport and polarization mathematics remains local and retains its scope and Kitware provenance. 2026-11-01: Retired the standalone local theorem TauCeti.BorelCalculus.exists_continuous_integral_norm_sub_le and its one-measure L1 approximation proof, now consumed directly as MeasureTheory.Measure.exists_continuous_integral_norm_sub_le in the accepted TauCeti.MeasureTheory.Function.ContinuousApproximation (SA-B02, PR #18907, integration commit 254557afab32f37a4214172559f7849c801f5ba3; ancestor of TauCeti pin 463ab293070d). Upstream explicitly adapted this Kitware DKPS proof, retaining Jon Crall and Claude Opus 5 credit, Apache-2.0; original complete donor exists at e4637c3919ae. The local polarized pair, local integral domination, and Borel functional-calculus transport statements retain their separate, not-yet-replaced semantics; no forwarding alias was added."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",

@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import TauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
-public import Mathlib.MeasureTheory.Function.ContinuousMapDense
+public import TauCeti.MeasureTheory.Function.ContinuousApproximation
 public import TauCeti.Analysis.InnerProductSpace.OperatorIdentities
 
 /-!
@@ -178,35 +178,6 @@ theorem norm_pair_sub_pair_le {f g : spectrum ℂ a → ℂ}
 
 end Pair
 
-section Approximation
-
-/-- Every `L¹` symbol on the spectrum is `L¹`-approximable by continuous ones:
-the spectrum is a compact metric space, so finite measures on it are weakly
-regular. -/
-theorem exists_continuous_integral_norm_sub_le (ν : Measure (spectrum ℂ a))
-    [IsFiniteMeasure ν] {f : spectrum ℂ a → ℂ} (hf : Integrable f ν)
-    {ε : ℝ} (hε : 0 < ε) :
-    ∃ g : C(spectrum ℂ a, ℂ), Integrable (fun x => g x) ν ∧ ∫ x, ‖f x - g x‖ ∂ν ≤ ε := by
-  have hmem : MemLp f 1 ν := memLp_one_iff_integrable.mpr hf
-  obtain ⟨g, hgle, hgmem⟩ :=
-    hmem.exists_boundedContinuous_eLpNorm_sub_le (p := 1) (by simp)
-      (ε := ENNReal.ofReal ε) (by simp only [ne_eq, ENNReal.ofReal_eq_zero, not_le]; exact hε)
-  have hgint : Integrable (fun x => g x) ν := memLp_one_iff_integrable.mp hgmem
-  refine ⟨g.toContinuousMap, hgint, ?_⟩
-  -- names the application so the norm bound applies to it directly.
-  change (∫ x, ‖f x - g x‖ ∂ν) ≤ ε
-  have hint : ∫ x, ‖f x - g x‖ ∂ν = (eLpNorm (f - ⇑g) 1 ν).toReal := by
-    rw [eLpNorm_one_eq_lintegral_enorm ((hf.sub hgint).aestronglyMeasurable),
-      integral_norm_eq_lintegral_enorm (μ := ν) (f := fun x => f x - g x)
-        (hf.sub hgint).aestronglyMeasurable]
-    rfl
-  rw [hint]
-  calc (eLpNorm (f - ⇑g) 1 ν).toReal ≤ (ENNReal.ofReal ε).toReal := by
-        apply ENNReal.toReal_mono _ hgle
-        simp
-    _ = ε := ENNReal.toReal_ofReal hε.le
-
-end Approximation
 
 section SumMeasure
 
