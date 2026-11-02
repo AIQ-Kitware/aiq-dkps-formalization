@@ -6,6 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+
 public import DavisKahan.Geometry.Polar.Section3Elementary
 public import DavisKahan.InfiniteDimensional.SinTheta.General
 
@@ -52,17 +54,14 @@ Interchanging the subspaces leaves the angle operator unchanged.  The two
 projections enter the angle operator only through their difference, and the
 absolute value is insensitive to its sign. -/
 theorem corollary3_2_sinAngleOperator_symm :
-    DavisKahanExt.sinAngleOperator V U = DavisKahanExt.sinAngleOperator U V := by
-  rw [DavisKahanExt.sinAngleOperator, DavisKahanExt.sinAngleOperator,
-    ← ContinuousLinearMap.modulus_neg]
-  congr 1
-  abel
+    (Submodule.sinAngleOperator V U) = (Submodule.sinAngleOperator U V) :=
+  Submodule.sinAngleOperator_comm U V
 
 /-- **Davis--Kahan 1970, Corollary 3.2**, both halves in one statement: swapping
 the pair leaves the angle operator unchanged and reverses the quarter-turn. -/
 theorem corollary3_2_reversal
     (hacute : IsUniformlyAcute U V) :
-    DavisKahanExt.sinAngleOperator V U = DavisKahanExt.sinAngleOperator U V ∧
+    (Submodule.sinAngleOperator V U) = (Submodule.sinAngleOperator U V) ∧
       spectraDirectRotation V U (IsUniformlyAcute.symm hacute) =
         star (spectraDirectRotation U V hacute) :=
   ⟨corollary3_2_sinAngleOperator_symm U V, corollary3_2_reversal_form U V hacute⟩

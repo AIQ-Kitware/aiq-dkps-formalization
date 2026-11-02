@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT-6
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+
 public import DavisKahan.FiniteDimensional.DirectRotation.ProjectionDisplacement
 public import DavisKahan.FiniteDimensional.DirectRotation.Exponential
 public import DavisKahan.FiniteDimensional.DirectRotation.PrincipalPlanes.Spectrum
@@ -26,6 +28,11 @@ of the resulting product with the direct-displacement Gram operator.
 -/
 
 public section
+
+local instance {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
+    [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : CompleteSpace E :=
+  FiniteDimensional.complete 𝕜 E
+
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
@@ -112,15 +119,15 @@ theorem singularValues_directDisplacement_eq_sharpTransfer
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : Submodule.IsAcute U V) :
-    let S := sinAngleOperator U V
-    let hS : S.IsPositive := LinearMap.isPositive_operatorAbs (projection U - projection V)
+    let S := (Submodule.sinAngleOperator U V).toLinearMap
+    let hS : S.IsPositive := (U.isPositive_sinAngleOperator V).toLinearMap
     let F := LinearMap.IsSymmetric.cfc hS.isSymmetric sharpTransferWeight
     (LinearMap.id - (directRotation U V hacute).toLinearMap).singularValues =
       (F ∘ₗ S).singularValues := by
   classical
   dsimp only
-  let S : E →ₗ[𝕜] E := sinAngleOperator U V
-  let hS : S.IsPositive := LinearMap.isPositive_operatorAbs (projection U - projection V)
+  let S : E →ₗ[𝕜] E := (Submodule.sinAngleOperator U V).toLinearMap
+  let hS : S.IsPositive := (U.isPositive_sinAngleOperator V).toLinearMap
   let b := hS.isSymmetric.eigenvectorBasis rfl
   let F := LinearMap.IsSymmetric.cfc hS.isSymmetric sharpTransferWeight
   let B := F ∘ₗ S
@@ -184,13 +191,12 @@ theorem sinAngleOperator_eigenvalue_le_projectionGap
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (i : Fin (finrank 𝕜 E)) :
-    (LinearMap.isPositive_operatorAbs
-      (projection U - projection V)).isSymmetric.eigenvalues rfl i ≤
+    ((U.isPositive_sinAngleOperator V).toLinearMap).isSymmetric.eigenvalues rfl i ≤
         U.projectionGap V := by
   classical
   let D : E →ₗ[𝕜] E := projection U - projection V
-  let S : E →ₗ[𝕜] E := sinAngleOperator U V
-  let hS : S.IsPositive := D.isPositive_operatorAbs
+  let S : E →ₗ[𝕜] E := (Submodule.sinAngleOperator U V).toLinearMap
+  let hS : S.IsPositive := (U.isPositive_sinAngleOperator V).toLinearMap
   let b := hS.isSymmetric.eigenvectorBasis rfl
   let s : ℝ := hS.isSymmetric.eigenvalues rfl i
   have hs0 : 0 ≤ s := hS.nonneg_eigenvalues rfl i
@@ -200,7 +206,7 @@ theorem sinAngleOperator_eigenvalue_le_projectionGap
   have hnormS : ‖S (b i)‖ = s := by
     rw [hSval, norm_smul, RCLike.norm_ofReal, abs_of_nonneg hs0, hb, mul_one]
   have hnormD : ‖S (b i)‖ = ‖D (b i)‖ :=
-    LinearMap.norm_operatorAbs_apply D (b i)
+    U.norm_sinAngleOperator_apply V (b i)
   have hbound : ‖D (b i)‖ ≤ ‖D.toContinuousLinearMap‖ := by
     calc
       ‖D (b i)‖ ≤ ‖D.toContinuousLinearMap‖ * ‖b i‖ :=
@@ -226,15 +232,14 @@ theorem cos_half_mul_uiNorm_directRotation_le_projection
     (hacute : Submodule.IsAcute U V)
     (alpha : ℝ) (ha0 : 0 ≤ alpha) (ha1 : alpha < Real.pi / 2)
     (hangle : ∀ i : Fin (finrank 𝕜 E),
-      (LinearMap.isPositive_operatorAbs
-        (projection U - projection V)).isSymmetric.eigenvalues rfl i ≤
+      ((U.isPositive_sinAngleOperator V).toLinearMap).isSymmetric.eigenvalues rfl i ≤
         Real.sin alpha) :
     Real.cos (alpha / 2) *
         N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
       N (projection U - projection V) := by
   classical
-  let S : E →ₗ[𝕜] E := sinAngleOperator U V
-  let hS : S.IsPositive := LinearMap.isPositive_operatorAbs (projection U - projection V)
+  let S : E →ₗ[𝕜] E := (Submodule.sinAngleOperator U V).toLinearMap
+  let hS : S.IsPositive := (U.isPositive_sinAngleOperator V).toLinearMap
   let F := LinearMap.IsSymmetric.cfc hS.isSymmetric sharpTransferWeight
   let A : E →ₗ[𝕜] E := LinearMap.id - (directRotation U V hacute).toLinearMap
   have hc : 0 < Real.cos (alpha / 2) :=
@@ -269,7 +274,8 @@ theorem cos_half_mul_uiNorm_directRotation_le_projection
       rw [hcancel] at hbound'
       exact hbound'
     _ = N (projection U - projection V) :=
-      (uiNorm_projection_sub_eq_sinAngleOperator N U V).symm
+      N.map_eq_of_singularValues_eq
+        (Submodule.singularValues_sinAngleOperator_eq_sub_starProjection U V)
 
 /-- Every admissible competitor is at least the sharp cosine-weighted
 canonical displacement, in every unitarily invariant seminorm. -/
@@ -280,8 +286,7 @@ theorem cos_half_mul_uiNorm_directRotation_le_displacement
     (hacute : Submodule.IsAcute U V)
     (alpha : ℝ) (ha0 : 0 ≤ alpha) (ha1 : alpha < Real.pi / 2)
     (hangle : ∀ i : Fin (finrank 𝕜 E),
-      (LinearMap.isPositive_operatorAbs
-        (projection U - projection V)).isSymmetric.eigenvalues rfl i ≤
+      ((U.isPositive_sinAngleOperator V).toLinearMap).isSymmetric.eigenvalues rfl i ≤
         Real.sin alpha)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     Real.cos (alpha / 2) *
@@ -456,8 +461,8 @@ theorem uiNorm_directRotation_le_sqrt_two_mul_displacement
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
       Real.sqrt 2 * N (LinearMap.id - W.toLinearMap) := by
-  let S : E →ₗ[𝕜] E := sinAngleOperator U V
-  let hS : S.IsPositive := LinearMap.isPositive_operatorAbs (projection U - projection V)
+  let S : E →ₗ[𝕜] E := (Submodule.sinAngleOperator U V).toLinearMap
+  let hS : S.IsPositive := (U.isPositive_sinAngleOperator V).toLinearMap
   let F := LinearMap.IsSymmetric.cfc hS.isSymmetric sharpTransferWeight
   let A : E →ₗ[𝕜] E := LinearMap.id - (directRotation U V hacute).toLinearMap
   have hFbound : ∀ y, ‖F y‖ ≤ Real.sqrt 2 * ‖y‖ := by
@@ -479,7 +484,9 @@ theorem uiNorm_directRotation_le_sqrt_two_mul_displacement
     _ ≤ Real.sqrt 2 * N S :=
       N.map_comp_le_left _ _ hFbound
     _ = Real.sqrt 2 * N (projection U - projection V) := by
-      rw [uiNorm_projection_sub_eq_sinAngleOperator N U V]
+      exact congrArg (fun t : ℝ => Real.sqrt 2 * t)
+        (N.map_eq_of_singularValues_eq
+          (Submodule.singularValues_sinAngleOperator_eq_sub_starProjection U V))
     _ ≤ Real.sqrt 2 * N (LinearMap.id - W.toLinearMap) :=
       mul_le_mul_of_nonneg_left
         (projectionDifference_uiNorm_le_displacement N U V W hmap)

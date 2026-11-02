@@ -75,7 +75,7 @@ at **every** `RCLike` field.  Nothing below takes it as a binder.
 operator angle, and at the time this repository built no real continuous functional
 calculus.  It now does, at every `RCLike` field
 (`ForTauCeti/Analysis/RCLike/ScalarTransportFunctionalCalculus.lean`), and
-`TauCeti.DavisKahan.Angle.sinAngleOperator` is the scalar-generic angle.  The statements
+`Submodule.sinAngleOperator` is the canonical scalar-generic sine operator.  The statements
 below still conclude on `crossSineSum U V`, which is not a defect: the two have the same
 complete approximation-singular-value sequence, which is all a unitarily invariant norm can
 see, and the block form is what the proof produces.  So the

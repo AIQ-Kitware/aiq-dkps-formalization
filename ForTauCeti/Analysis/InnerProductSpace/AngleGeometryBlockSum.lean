@@ -5,6 +5,9 @@ Authors: Jon Crall, GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+public import TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison
+
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum
@@ -21,6 +24,13 @@ model equalities into equalities for an actual pair of direct-sum subspaces.
 -/
 
 public section
+
+local instance {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
+    [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : CompleteSpace E :=
+  FiniteDimensional.complete 𝕜 E
+
+
+attribute [local instance] ContinuousLinearMap.realAlgebra ContinuousLinearMap.realIsScalarTower
 
 namespace TauCeti
 
@@ -150,15 +160,33 @@ theorem sinAngleOperator_orthogonalBlockSumSubmodule
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
     (U₁ V₁ : Submodule 𝕜 E₁) (U₂ V₂ : Submodule 𝕜 E₂) :
-    sinAngleOperator
-        (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
-        (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂) =
-      ((sinAngleOperator U₁ V₁).prodMap (sinAngleOperator U₂ V₂)).withLpMap 2 := by
-  rw [sinAngleOperator_eq_operatorAbs
+    (Submodule.sinAngleOperator
       (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
-      (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂),
-    sinAngleOperator_eq_operatorAbs U₁ V₁,
-    sinAngleOperator_eq_operatorAbs U₂ V₂,
+      (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂)).toLinearMap =
+      (((Submodule.sinAngleOperator U₁ V₁).toLinearMap).prodMap
+        ((Submodule.sinAngleOperator U₂ V₂).toLinearMap)).withLpMap 2 := by
+  have h₁ : (Submodule.sinAngleOperator U₁ V₁).toLinearMap =
+      (projection U₁ - projection V₁).operatorAbs := by
+    symm
+    apply (LinearMap.toContinuousLinearMap_eq_iff_eq_toLinearMap _ _).mp
+    rw [LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus, Submodule.sinAngleOperator_def]
+    congr 1
+  have h₂ : (Submodule.sinAngleOperator U₂ V₂).toLinearMap =
+      (projection U₂ - projection V₂).operatorAbs := by
+    symm
+    apply (LinearMap.toContinuousLinearMap_eq_iff_eq_toLinearMap _ _).mp
+    rw [LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus, Submodule.sinAngleOperator_def]
+    congr 1
+  have h₃ : (Submodule.sinAngleOperator
+      (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
+      (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂)).toLinearMap =
+      (projection (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂) -
+        projection (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂)).operatorAbs := by
+    symm
+    apply (LinearMap.toContinuousLinearMap_eq_iff_eq_toLinearMap _ _).mp
+    rw [LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus, Submodule.sinAngleOperator_def]
+    congr 1
+  rw [h₃, h₁, h₂,
     projection_orthogonalBlockSumSubmodule U₁ U₂,
     projection_orthogonalBlockSumSubmodule V₁ V₂]
   change (((projection U₁ - projection V₁).prodMap

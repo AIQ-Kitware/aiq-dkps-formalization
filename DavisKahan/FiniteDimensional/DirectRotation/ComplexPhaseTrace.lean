@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT-6
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+
 public import DavisKahan.FiniteDimensional.DirectRotation.ComplexCrossedDefects
 public import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceFiniteModel
 public import DavisKahan.Geometry.Angle.Proposition35Nonacute
@@ -34,6 +36,11 @@ This avoids a singular-value enumeration and a CS-coordinate equivalence.
 -/
 
 public section
+
+local instance {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
+    [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : CompleteSpace E :=
+  FiniteDimensional.complete 𝕜 E
+
 
 attribute [local instance] ContinuousLinearMap.realAlgebra ContinuousLinearMap.realIsScalarTower
 
@@ -458,20 +465,8 @@ private theorem kyFanSum_projector_eq_nonacute_sine
     (projection U - projection V).kyFanSum (finrank ℂ H) =
       (Proposition35.section3SinAngleOperator U V).toLinearMap.kyFanSum (finrank ℂ H) := by
   let S : BEnd H := Proposition35.section3SinAngleOperator U V
-  have hcont : (projection U - projection V).toContinuousLinearMap =
-      (U.starProjection - V.starProjection : BEnd H) := by
-    ext x
-    rfl
-  have habs := LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus
-    (projection U - projection V)
-  rw [hcont] at habs
-  have hS : S.toLinearMap = sinAngleOperator U V := by
-    apply LinearMap.ext
-    intro x
-    simp only [S, Proposition35.section3SinAngleOperator]
-    change ((U.starProjection - V.starProjection : BEnd H).modulus) x =
-      (LinearMap.operatorAbs (projection U - projection V)).toContinuousLinearMap x
-    exact congrArg (fun T : BEnd H => T x) habs.symm
+  have hS : S.toLinearMap = (Submodule.sinAngleOperator U V).toLinearMap := by
+    simp only [S, Proposition35.section3SinAngleOperator, Submodule.sinAngleOperator_def]
   calc
     (projection U - projection V).kyFanSum (finrank ℂ H) =
         (UnitarilyInvariantSeminorm.kyFan ℂ H H (finrank ℂ H))
@@ -479,9 +474,9 @@ private theorem kyFanSum_projector_eq_nonacute_sine
       (UnitarilyInvariantSeminorm.kyFan_apply
         (finrank ℂ H) (projection U - projection V)).symm
     _ = (UnitarilyInvariantSeminorm.kyFan ℂ H H (finrank ℂ H))
-          (sinAngleOperator U V) :=
-      uiNorm_projection_sub_eq_sinAngleOperator
-        (UnitarilyInvariantSeminorm.kyFan ℂ H H (finrank ℂ H)) U V
+          ((Submodule.sinAngleOperator U V).toLinearMap) :=
+      (UnitarilyInvariantSeminorm.kyFan ℂ H H (finrank ℂ H)).map_eq_of_singularValues_eq
+        (Submodule.singularValues_sinAngleOperator_eq_sub_starProjection U V).symm
     _ = S.toLinearMap.kyFanSum (finrank ℂ H) := by
       rw [← hS]
       exact UnitarilyInvariantSeminorm.kyFan_apply (finrank ℂ H) S.toLinearMap

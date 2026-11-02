@@ -5,6 +5,9 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+public import TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison
+
 public import DavisKahan.Sources.Davis1963.RotationEnergy
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import DavisKahan.FiniteDimensional.Core.AngleOperatorBlockSum
@@ -102,6 +105,13 @@ sharpness development.
 -/
 
 public section
+
+local instance {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
+    [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : CompleteSpace E :=
+  FiniteDimensional.complete 𝕜 E
+
+
+attribute [local instance] ContinuousLinearMap.realAlgebra ContinuousLinearMap.realIsScalarTower
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
@@ -588,16 +598,14 @@ private theorem singularValues_modelSinThetaPerturbation
 
 private theorem singularValues_sinAngle_model
     {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 2) :
-    (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-      (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues =
+    ((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ)).toLinearMap).singularValues =
       pairSingularValues (Real.sin θ) (Real.sin θ) := by
-  rw [← singularValues_projection_sub_projection]
+  rw [Submodule.singularValues_sinAngleOperator_eq_sub_starProjection]
   exact singularValues_projection_sub_model hθ0 hθ1
 
 private theorem sinAngleOperator_model_eq_smul_id
     {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 2) :
-    sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-        (rotatedModelSubspace (𝕜 := 𝕜) θ) =
+    (Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ)).toLinearMap =
       (((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) := by
   let A := projection (modelSubspace (𝕜 := 𝕜)) -
     projection (rotatedModelSubspace (𝕜 := 𝕜) θ)
@@ -624,8 +632,13 @@ private theorem sinAngleOperator_model_eq_smul_id
     simp only [LinearMap.comp_apply, LinearMap.smul_apply, LinearMap.id_apply]
     match_scalars
     ring
-  change A.operatorAbs = _
-  exact (hpos.eq_operatorAbs hsquare).symm
+  have habs : (Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+      (rotatedModelSubspace (𝕜 := 𝕜) θ)).toLinearMap = A.operatorAbs := by
+    symm
+    apply (LinearMap.toContinuousLinearMap_eq_iff_eq_toLinearMap _ _).mp
+    rw [LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus, Submodule.sinAngleOperator_def]
+    congr 1
+  exact habs.trans (hpos.eq_operatorAbs hsquare).symm
 
 private theorem singularValues_tanAngle_model
     {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 2) :
@@ -641,14 +654,9 @@ private theorem singularValues_tanAngle_model
     Real.tan_nonneg_of_nonneg_of_le_pi_div_two hθ0 hθle
   -- the operator sits inside the symmetry witness, so it can only be
   -- replaced through the congruence bridge
-  -- `sinAngleOperator` is *defined* as this modulus, so the equation has to
-  -- be restated in the form the goal actually carries
-  have hsinEq' : LinearMap.operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
-      projection (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
-      (((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) := hsinEq
   have hinner : LinearMap.IsSymmetric.cfc
-      (LinearMap.isPositive_operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
-        projection (rotatedModelSubspace (𝕜 := 𝕜) θ))).isSymmetric
+      ((Submodule.isPositive_sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+          (rotatedModelSubspace (𝕜 := 𝕜) θ)).toLinearMap).isSymmetric
       Real.arcsin = (((θ : ℝ) : 𝕜) • LinearMap.id) := by
     rw [TauCeti.cfc_congr_operator _
       (show ((((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) :
@@ -656,7 +664,7 @@ private theorem singularValues_tanAngle_model
         intro x y
         simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
           inner_smul_right, RCLike.conj_ofReal])
-      hsinEq' Real.arcsin]
+      hsinEq Real.arcsin]
     rw [cfc_real_smul_id,
       harcsin]
   rw [tanAngleOperator,
@@ -700,9 +708,6 @@ private theorem singularValues_tanTwoAngle_model
     exact ne_of_gt (Real.cos_pos_of_mem_Ioo ⟨by linarith [Real.pi_pos], by linarith⟩)
   have htan : 0 ≤ Real.tan (2 * θ) :=
     Real.tan_nonneg_of_nonneg_of_le_pi_div_two (by linarith) (by linarith)
-  have hsinEq' : LinearMap.operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
-      projection (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
-      (((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) := hsinEq
   have hsymSin : ((((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) :
       Plane 𝕜 →ₗ[𝕜] Plane 𝕜).IsSymmetric := by
     intro x y
@@ -714,11 +719,11 @@ private theorem singularValues_tanTwoAngle_model
     simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
       inner_smul_right, RCLike.conj_ofReal]
   have hinner : LinearMap.IsSymmetric.cfc
-      (LinearMap.isPositive_operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
-        projection (rotatedModelSubspace (𝕜 := 𝕜) θ))).isSymmetric
+      ((Submodule.isPositive_sinAngleOperator (modelSubspace (𝕜 := 𝕜))
+          (rotatedModelSubspace (𝕜 := 𝕜) θ)).toLinearMap).isSymmetric
       Real.arcsin = (((θ : ℝ) : 𝕜) • LinearMap.id) := by
     rw [TauCeti.cfc_congr_operator _ hsymSin
-      hsinEq' Real.arcsin,
+      hsinEq Real.arcsin,
       cfc_real_smul_id, harcsin]
   rw [tanTwoAngleOperator,
     TauCeti.cfc_congr_operator _ hsymTheta
@@ -807,23 +812,20 @@ for the tangent or double-angle families.
 theorem sinTheta_model_equality
     (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜) (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 2) :
-    (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-      (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
+    (b - a) * N ((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ)).toLinearMap) =
       N (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ) := by
   have hsing :
       (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ).singularValues =
-        ((b-a : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-          (rotatedModelSubspace (𝕜 := 𝕜) θ)).singularValues := by
+        ((b-a : 𝕜) • (Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ)).toLinearMap).singularValues := by
     rw [singularValues_modelSinThetaPerturbation hab hθ0 (le_of_lt hθ1),
       LinearMap.singularValues_smul,
       singularValues_sinAngle_model hθ0 (le_of_lt hθ1)]
     ext i
     simp [pairSingularValues, norm_ofReal_sub_of_lt hab]
   calc
-    (b-a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-      (rotatedModelSubspace (𝕜 := 𝕜) θ))
-        = N ((b-a : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-            (rotatedModelSubspace (𝕜 := 𝕜) θ)) := by
+    (b-a) * N ((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ)).toLinearMap)
+        =
+          N ((b-a : 𝕜) • (Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ)).toLinearMap) := by
           rw [map_smul_eq_mul N, norm_ofReal_sub_of_lt hab]
     _ = N (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ) :=
       N.map_eq_of_singularValues_eq hsing.symm
@@ -949,12 +951,10 @@ attain equality, by `sinTwoTheta_model_equality_fails_beyond_operatorNorm`. -/
 theorem sinTwoTheta_model_equality
     (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜) (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 4) :
-    (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-      (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))) =
+    (b - a) * N ((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))).toLinearMap) =
       2 * N (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) := by
   have hsing :
-      (((b - a : ℝ) : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-        (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))).singularValues =
+      (((b - a : ℝ) : 𝕜) • (Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))).toLinearMap).singularValues =
         (((2 : ℝ) : 𝕜) • modelSinTwoThetaPerturbation
           (𝕜 := 𝕜) a b θ).singularValues := by
     rw [LinearMap.singularValues_smul,
@@ -970,10 +970,8 @@ theorem sinTwoTheta_model_equality
       Finsupp.add_apply, Finsupp.single_apply, smul_eq_mul]
     split_ifs <;> ring
   calc
-    (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-        (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))) =
-        N (((b - a : ℝ) : 𝕜) • sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-          (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))) := by
+    (b - a) * N ((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))).toLinearMap) =
+        N (((b - a : ℝ) : 𝕜) • (Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))).toLinearMap) := by
       rw [map_smul_eq_mul N, RCLike.norm_ofReal, abs_of_pos (sub_pos.mpr hab)]
     _ = N (((2 : ℝ) : 𝕜) • modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) :=
       N.map_eq_of_singularValues_eq hsing
@@ -989,8 +987,7 @@ the angle to the reflected subspace. -/
 theorem norm_sinTwoAngle_model_eq_norm_sinAngle_doubled
     {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 4) :
     ‖((modelSubspace (𝕜 := 𝕜)).sinTwoAngleOperator (rotatedModelSubspace (𝕜 := 𝕜) θ))‖ =
-      ‖(sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-        (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))).toContinuousLinearMap‖ := by
+      ‖((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))).toLinearMap).toContinuousLinearMap‖ := by
   rw [← LinearMap.toContinuousLinearMap.apply_symm_apply
     ((modelSubspace (𝕜 := 𝕜)).sinTwoAngleOperator (rotatedModelSubspace (𝕜 := 𝕜) θ))]
   rw [opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin (by norm_num),
@@ -1062,8 +1059,7 @@ Lean proof route for a weaker agent:
 theorem sinTheta_constant_optimal :
     ∀ c : ℝ, c < 1 → ∃ (a b θ : ℝ), a < b ∧ 0 < θ ∧
       c * ‖(modelSinThetaPerturbation (𝕜 := 𝕜) a b θ).toContinuousLinearMap‖ <
-        (b - a) * ‖(sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-          (rotatedModelSubspace (𝕜 := 𝕜) θ)).toContinuousLinearMap‖ := by
+        (b - a) * ‖((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ)).toLinearMap).toContinuousLinearMap‖ := by
   intro c hc
   refine ⟨0, 1, Real.pi / 6, by norm_num, by positivity, ?_⟩
   have heq := sinTheta_model_equality
@@ -1080,8 +1076,7 @@ theorem sinTheta_constant_optimal :
       pairSingularValues_zero, Real.sin_pi_div_six]
     norm_num
   -- `opNorm` is definitionally the continuous-map norm
-  have hgoal : (1 - 0 : ℝ) * ‖(sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-      (rotatedModelSubspace (𝕜 := 𝕜) (Real.pi/6))).toContinuousLinearMap‖
+  have hgoal : (1 - 0 : ℝ) * ‖((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) (Real.pi/6))).toLinearMap).toContinuousLinearMap‖
       = ‖(modelSinThetaPerturbation (𝕜 := 𝕜) 0 1
         (Real.pi/6)).toContinuousLinearMap‖ := by
     simpa only [UnitarilyInvariantSeminorm.opNorm_apply] using heq
@@ -1211,14 +1206,12 @@ single perturbation saturates all four, since the extremal residual norms
 theorem model_all_four_equalities
     (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜) (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 4) :
-    (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-        (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
+    (b - a) * N ((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ)).toLinearMap) =
         N (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ) ∧
       (b - a) * N (tanAngleOperator (modelSubspace (𝕜 := 𝕜))
         (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
         N (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ) ∧
-      (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-        (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))) =
+      (b - a) * N ((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))).toLinearMap) =
         2 * N (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ) ∧
       (b - a) * N (tanTwoAngleOperator (modelSubspace (𝕜 := 𝕜))
         (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
@@ -1257,12 +1250,8 @@ theorem sinTheta_directSum_model_equality
     (N : UnitarilyInvariantSeminorm 𝕜 (WithLp 2 (Plane 𝕜 × Plane 𝕜)) (WithLp 2 (Plane 𝕜 × Plane 𝕜)))
     {a b θ₁ θ₂ : ℝ} (hab : a < b) (h₁0 : 0 ≤ θ₁) (h₁1 : θ₁ ≤ Real.pi / 2)
     (h₂0 : 0 ≤ θ₂) (h₂1 : θ₂ ≤ Real.pi / 2) :
-    (b - a) * N (((sinAngleOperator
-        (modelSubspace (𝕜 := 𝕜))
-        (rotatedModelSubspace (𝕜 := 𝕜) θ₁)).prodMap
-        (sinAngleOperator
-        (modelSubspace (𝕜 := 𝕜))
-        (rotatedModelSubspace (𝕜 := 𝕜) θ₂))).withLpMap 2) =
+    (b - a) * N ((((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₁)).toLinearMap).prodMap
+        ((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₂)).toLinearMap)).withLpMap 2) =
       N (((modelSinThetaPerturbation (𝕜 := 𝕜) a b θ₁).prodMap
         (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ₂)).withLpMap 2) :=
   UnitarilyInvariantSeminorm.apply_orthogonalBlockSum_eq_of_singularValues_smul_eq
@@ -1306,10 +1295,8 @@ theorem sinTwoTheta_directSum_model_equality
     (N : UnitarilyInvariantSeminorm 𝕜 (WithLp 2 (Plane 𝕜 × Plane 𝕜)) (WithLp 2 (Plane 𝕜 × Plane 𝕜)))
     {a b θ₁ θ₂ : ℝ} (hab : a < b) (h₁0 : 0 ≤ θ₁) (h₁1 : θ₁ ≤ Real.pi / 4)
     (h₂0 : 0 ≤ θ₂) (h₂1 : θ₂ ≤ Real.pi / 4) :
-    (b - a) * N (((sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-          (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ₁))).prodMap
-            (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-          (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ₂)))).withLpMap 2) =
+    (b - a) * N ((((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ₁))).toLinearMap).prodMap
+            ((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ₂))).toLinearMap)).withLpMap 2) =
       2 * N (((modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ₁).prodMap
         (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ₂)).withLpMap 2) := by
   have hc : (0 : ℝ) ≤ (b - a) / 2 := by linarith [sub_pos.mpr hab]
@@ -1364,12 +1351,8 @@ theorem directSum_model_all_four_equalities
     (N : UnitarilyInvariantSeminorm 𝕜 (WithLp 2 (Plane 𝕜 × Plane 𝕜)) (WithLp 2 (Plane 𝕜 × Plane 𝕜)))
     {a b θ₁ θ₂ : ℝ} (hab : a < b) (h₁0 : 0 ≤ θ₁) (h₁1 : θ₁ < Real.pi / 4)
     (h₂0 : 0 ≤ θ₂) (h₂1 : θ₂ < Real.pi / 4) :
-    ((b - a) * N (((sinAngleOperator
-        (modelSubspace (𝕜 := 𝕜))
-        (rotatedModelSubspace (𝕜 := 𝕜) θ₁)).prodMap
-        (sinAngleOperator
-        (modelSubspace (𝕜 := 𝕜))
-        (rotatedModelSubspace (𝕜 := 𝕜) θ₂))).withLpMap 2) =
+    ((b - a) * N ((((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₁)).toLinearMap).prodMap
+        ((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₂)).toLinearMap)).withLpMap 2) =
         N (((modelSinThetaPerturbation (𝕜 := 𝕜) a b θ₁).prodMap
           (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ₂)).withLpMap 2)) ∧
       ((b - a) * N (((tanAngleOperator
@@ -1380,10 +1363,8 @@ theorem directSum_model_all_four_equalities
           (rotatedModelSubspace (𝕜 := 𝕜) θ₂))).withLpMap 2) =
         N (((modelTanThetaPerturbation (𝕜 := 𝕜) a b θ₁).prodMap
           (modelTanThetaPerturbation (𝕜 := 𝕜) a b θ₂)).withLpMap 2)) ∧
-      ((b - a) * N (((sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-          (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ₁))).prodMap
-            (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-          (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ₂)))).withLpMap 2) =
+      ((b - a) * N ((((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ₁))).toLinearMap).prodMap
+            ((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ₂))).toLinearMap)).withLpMap 2) =
         2 * N (((modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ₁).prodMap
           (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ₂)).withLpMap 2)) ∧
       ((b - a) * N (((tanTwoAngleOperator
@@ -1798,7 +1779,7 @@ interval/exterior gap holds in both orientations with `δ = b - a`, and the resi
 `modelSinThetaPerturbation a b θ`.  Consequently `sinTheta_model_equality` -- and through it
 `sinTheta_constant_optimal` -- is equality in the symmetric full-projector
 conclusion of `UnitarilyInvariantSeminorm.mul_map_sub_starProjection_le_map_sub`
-(after `uiNorm_projection_sub_eq_sinAngleOperator`), establishing the theorem's
+(after native singular-value invariance of the sine modulus), establishing the theorem's
 constant is sharp, not just a matrix-identity constant. -/
 theorem sinTheta_model_isAdmissiblePair {a b θ : ℝ} (hab : a < b) :
     (modelGappedOperator (𝕜 := 𝕜) a b).IsSymmetric ∧
@@ -1823,15 +1804,14 @@ theorem sinTheta_model_isAdmissiblePair {a b θ : ℝ} (hab : a < b) :
 
 The accepted `UnitarilyInvariantSeminorm.mul_map_sub_starProjection_le_map_sub`
 gives `δ * N (P_U - P_V) ≤ N (B - A)` for an admissible pair. The existing
-`uiNorm_projection_sub_eq_sinAngleOperator` bridge identifies its left-hand
+native singular-value invariance of the sine modulus bridge identifies its left-hand
 norm with the local model's `N (sin Θ)`. The admissible pair is given by
 `sinTheta_model_isAdmissiblePair` with `δ = b - a`, and this theorem proves
 equality for every unitarily invariant seminorm. -/
 theorem sinTheta_perturbation_le_model_equality
     (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜) (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 2) :
-    (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-      (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
+    (b - a) * N ((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ)).toLinearMap) =
       N (modelRotatedOperator (𝕜 := 𝕜) a b θ - modelGappedOperator (𝕜 := 𝕜) a b) := by
   rw [modelRotatedOperator_sub_modelGappedOperator]
   exact sinTheta_model_equality N hab hθ0 hθ1
@@ -2246,8 +2226,7 @@ which is the form of the source's simultaneous-equality claim. -/
 theorem sinTwoTheta_model_equality_of_admissiblePair
     (N : UnitarilyInvariantSeminorm 𝕜 (Plane 𝕜) (Plane 𝕜))
     {a b θ : ℝ} (hab : a < b) (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ Real.pi / 4) :
-    (b - a) * N (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-      (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))) =
+    (b - a) * N ((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))).toLinearMap) =
       2 * N (modelSinTwoThetaPerturbedOperator (𝕜 := 𝕜) a b θ -
         modelSinTwoThetaBaseOperator (𝕜 := 𝕜) a b) := by
   rw [modelSinTwoThetaPerturbedOperator_sub_base,
@@ -2547,11 +2526,8 @@ noncomputable def directSumRotatedModelSubspace (θ₁ θ₂ : ℝ) :
 /-- The sine-angle operator of the actual direct-sum pair is the block sum of the two planar
 sine-angle operators. -/
 theorem sinAngleOperator_directSumModelSubspaces (θ₁ θ₂ : ℝ) :
-    sinAngleOperator (directSumModelSubspace (𝕜 := 𝕜))
-        (directSumRotatedModelSubspace (𝕜 := 𝕜) θ₁ θ₂) =
-      ((sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-          (rotatedModelSubspace (𝕜 := 𝕜) θ₁)).prodMap (sinAngleOperator (modelSubspace (𝕜 := 𝕜))
-          (rotatedModelSubspace (𝕜 := 𝕜) θ₂))).withLpMap 2 :=
+    (Submodule.sinAngleOperator (directSumModelSubspace (𝕜 := 𝕜)) (directSumRotatedModelSubspace (𝕜 := 𝕜) θ₁ θ₂)).toLinearMap =
+      (((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₁)).toLinearMap).prodMap ((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₂)).toLinearMap)).withLpMap 2 :=
   TauCeti.sinAngleOperator_orthogonalBlockSumSubmodule
     (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₁)
     (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) θ₂)
@@ -2594,8 +2570,7 @@ theorem sinTheta_directSum_subspace_equality
     (N : UnitarilyInvariantSeminorm 𝕜 (WithLp 2 (Plane 𝕜 × Plane 𝕜)) (WithLp 2 (Plane 𝕜 × Plane 𝕜)))
     {a b θ₁ θ₂ : ℝ} (hab : a < b) (h₁0 : 0 ≤ θ₁) (h₁1 : θ₁ ≤ Real.pi / 2)
     (h₂0 : 0 ≤ θ₂) (h₂1 : θ₂ ≤ Real.pi / 2) :
-    (b - a) * N (sinAngleOperator (directSumModelSubspace (𝕜 := 𝕜))
-      (directSumRotatedModelSubspace (𝕜 := 𝕜) θ₁ θ₂)) =
+    (b - a) * N ((Submodule.sinAngleOperator (directSumModelSubspace (𝕜 := 𝕜)) (directSumRotatedModelSubspace (𝕜 := 𝕜) θ₁ θ₂)).toLinearMap) =
       N (((modelSinThetaPerturbation (𝕜 := 𝕜) a b θ₁).prodMap
         (modelSinThetaPerturbation (𝕜 := 𝕜) a b θ₂)).withLpMap 2) := by
   rw [sinAngleOperator_directSumModelSubspaces]
@@ -2618,8 +2593,7 @@ theorem sinTwoTheta_directSum_subspace_equality
     (N : UnitarilyInvariantSeminorm 𝕜 (WithLp 2 (Plane 𝕜 × Plane 𝕜)) (WithLp 2 (Plane 𝕜 × Plane 𝕜)))
     {a b θ₁ θ₂ : ℝ} (hab : a < b) (h₁0 : 0 ≤ θ₁) (h₁1 : θ₁ ≤ Real.pi / 4)
     (h₂0 : 0 ≤ θ₂) (h₂1 : θ₂ ≤ Real.pi / 4) :
-    (b - a) * N (sinAngleOperator (directSumModelSubspace (𝕜 := 𝕜))
-      (directSumRotatedModelSubspace (𝕜 := 𝕜) (2 * θ₁) (2 * θ₂))) =
+    (b - a) * N ((Submodule.sinAngleOperator (directSumModelSubspace (𝕜 := 𝕜)) (directSumRotatedModelSubspace (𝕜 := 𝕜) (2 * θ₁) (2 * θ₂))).toLinearMap) =
       2 * N (((modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ₁).prodMap
         (modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ₂)).withLpMap 2) := by
   rw [sinAngleOperator_directSumModelSubspaces]

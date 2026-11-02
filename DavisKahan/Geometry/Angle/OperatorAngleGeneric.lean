@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Modulus
 public import DavisKahan.Geometry.Angle.AngleFunctionalCalculusReal
 public import DavisKahan.SpectralTheory.ReflectionRestriction
@@ -67,19 +69,12 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [Complet
 
 /-! ## The definitions -/
 
-/-- **The paper's `sin Θ` between two closed subspaces**, at an arbitrary `RCLike` field: the
-modulus of the projector difference. -/
-@[expose]
-def sinAngleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
-  ContinuousLinearMap.modulus (U.starProjection - V.starProjection)
-
 /-- **The paper's Hermitian operator angle `Θ = arcsin |P_U - P_V|`**, at an arbitrary `RCLike`
 field. -/
 @[expose]
 def angleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
-  cfc Real.arcsin (sinAngleOperator U V)
+  cfc Real.arcsin ((Submodule.sinAngleOperator U V))
 
 /-- **The paper's ambient `sin 2Θ`**, at an arbitrary `RCLike` field. -/
 @[expose]
@@ -100,22 +95,9 @@ def ambientSinThetaOperator (U V : Submodule 𝕜 E)
 
 variable (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
-/-- **`sin Θ` is symmetric in the two subspaces.**  `|P_U - P_V| = |P_V - P_U|`,
-because the modulus does not see a sign.
-
-This is the ambient (`ContinuousLinearMap`) companion of
-`TauCeti.DavisKahan.sinAngleOperator_comm`, which says the same for the
-`LinearMap` spelling.  It is what makes the *ambient* estimates indifferent to
-which of the two subspaces is named first -- unlike the directed quantities,
-which are genuinely asymmetric. -/
-theorem sinAngleOperator_comm : sinAngleOperator V U = sinAngleOperator U V := by
-  have hneg : (V.starProjection - U.starProjection : E →L[𝕜] E)
-      = -(U.starProjection - V.starProjection) := by abel
-  rw [sinAngleOperator, sinAngleOperator, hneg, ContinuousLinearMap.modulus_neg]
-
 /-- `Θ` is symmetric in the two subspaces. -/
 theorem angleOperator_comm : angleOperator V U = angleOperator U V := by
-  rw [angleOperator, angleOperator, sinAngleOperator_comm]
+  rw [angleOperator, angleOperator, Submodule.sinAngleOperator_comm]
 
 /-- **The ambient `sin 2Θ` is symmetric in the two subspaces.**
 
@@ -126,68 +108,29 @@ theorem sinTwoAngleOperator_comm :
     sinTwoAngleOperator V U = sinTwoAngleOperator U V := by
   rw [sinTwoAngleOperator, sinTwoAngleOperator, angleOperator_comm]
 
-/-- `sin Θ` is nonnegative, being a modulus. -/
-theorem sinAngleOperator_nonneg : 0 ≤ sinAngleOperator U V :=
-  ContinuousLinearMap.modulus_nonneg _
-
-/-- The operator norm of the generic ambient sine is exactly the projection gap. -/
-theorem norm_sinAngleOperator : ‖sinAngleOperator U V‖ = U.projectionGap V := by
-  rw [Submodule.projectionGap_def]
-  unfold sinAngleOperator
-  exact ContinuousLinearMap.norm_modulus _
-
-/-- `sin Θ` is self-adjoint. -/
-theorem isSelfAdjoint_sinAngleOperator : IsSelfAdjoint (sinAngleOperator U V) :=
-  ContinuousLinearMap.isSelfAdjoint_modulus _
-
-/-- The ambient sine operator is a contraction. -/
-theorem norm_sinAngleOperator_le_one : ‖sinAngleOperator U V‖ ≤ 1 := by
-  rw [sinAngleOperator, ContinuousLinearMap.norm_modulus,
-    ← Submodule.projectionGap_def U V,
-    Submodule.projectionGap_eq_max,
-    Submodule.directedProjectionGap_def,
-    Submodule.directedProjectionGap_def]
-  apply max_le
-  · calc
-      ‖Vᗮ.starProjection ∘L U.starProjection‖
-          ≤ ‖Vᗮ.starProjection‖ * ‖U.starProjection‖ :=
-        ContinuousLinearMap.opNorm_comp_le _ _
-      _ ≤ 1 * 1 :=
-        mul_le_mul Vᗮ.starProjection_norm_le U.starProjection_norm_le
-          (norm_nonneg _) zero_le_one
-      _ = 1 := by ring
-  · calc
-      ‖Uᗮ.starProjection ∘L V.starProjection‖
-          ≤ ‖Uᗮ.starProjection‖ * ‖V.starProjection‖ :=
-        ContinuousLinearMap.opNorm_comp_le _ _
-      _ ≤ 1 * 1 :=
-        mul_le_mul Uᗮ.starProjection_norm_le V.starProjection_norm_le
-          (norm_nonneg _) zero_le_one
-      _ = 1 := by ring
-
 /-- The real spectrum of the generic positive sine lies in `[0,1]`. -/
 theorem spectrum_sinAngleOperator_subset_Icc :
-    spectrum ℝ (sinAngleOperator U V) ⊆ Set.Icc 0 1 := by
+    spectrum ℝ ((Submodule.sinAngleOperator U V)) ⊆ Set.Icc 0 1 := by
   intro x hx
   have hx0 : 0 ≤ x :=
     (StarOrderedRing.nonneg_iff_spectrum_nonneg
-      (R := ℝ) _ (isSelfAdjoint_sinAngleOperator U V)).mp
-        (sinAngleOperator_nonneg U V) x hx
+      (R := ℝ) _ ((U.isPositive_sinAngleOperator V).isSelfAdjoint)).mp
+        ((ContinuousLinearMap.nonneg_iff_isPositive.mpr (U.isPositive_sinAngleOperator V))) x hx
   have hnormK : ‖((x : 𝕜))‖ ≤
-      ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ :=
+      ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ :=
     spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem 𝕜 hx)
   have hnorm : |x| ≤
-      ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ := by
+      ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ := by
     rwa [RCLike.norm_ofReal] at hnormK
   have hone : ‖(1 : E →L[𝕜] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have habs : |x| ≤ ‖sinAngleOperator U V‖ := by
+  have habs : |x| ≤ ‖(Submodule.sinAngleOperator U V)‖ := by
     calc
-      |x| ≤ ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ := hnorm
-      _ ≤ ‖sinAngleOperator U V‖ * 1 :=
+      |x| ≤ ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ := hnorm
+      _ ≤ ‖(Submodule.sinAngleOperator U V)‖ * 1 :=
         mul_le_mul_of_nonneg_left hone (norm_nonneg _)
-      _ = ‖sinAngleOperator U V‖ := mul_one _
+      _ = ‖(Submodule.sinAngleOperator U V)‖ := mul_one _
   exact ⟨hx0, ((le_abs_self x).trans habs).trans
-    (norm_sinAngleOperator_le_one U V)⟩
+    (Submodule.norm_sinAngleOperator_le_one U V)⟩
 
 /-- Applying sine to the literal generic angle recovers exactly the positive
 ambient sine.  This is the semantic bridge between the paper expression
@@ -195,38 +138,38 @@ ambient sine.  This is the semantic bridge between the paper expression
 theorem cfc_sin_angleOperator
     [a : Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
     [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] :
-    cfc Real.sin (angleOperator U V) = sinAngleOperator U V := by
+    cfc Real.sin (angleOperator U V) = (Submodule.sinAngleOperator U V) := by
   have hAlg := ContinuousLinearMap.realAlgebra_eq_of_isScalarTower a inferInstance
   subst a
-  have hsa : IsSelfAdjoint (sinAngleOperator U V) :=
-    isSelfAdjoint_sinAngleOperator U V
+  have hsa : IsSelfAdjoint ((Submodule.sinAngleOperator U V)) :=
+    (U.isPositive_sinAngleOperator V).isSelfAdjoint
   have harcsin : ContinuousOn Real.arcsin
-      (spectrum ℝ (sinAngleOperator U V)) :=
+      (spectrum ℝ ((Submodule.sinAngleOperator U V))) :=
     Real.continuous_arcsin.continuousOn
   have hsin : ContinuousOn Real.sin
-      (Real.arcsin '' spectrum ℝ (sinAngleOperator U V)) :=
+      (Real.arcsin '' spectrum ℝ ((Submodule.sinAngleOperator U V))) :=
     Real.continuous_sin.continuousOn
   rw [angleOperator,
-    ← cfc_comp Real.sin Real.arcsin (sinAngleOperator U V)
+    ← cfc_comp Real.sin Real.arcsin ((Submodule.sinAngleOperator U V))
       hsa hsin harcsin]
   calc
-    cfc (Real.sin ∘ Real.arcsin) (sinAngleOperator U V) =
-        cfc (fun x : ℝ => x) (sinAngleOperator U V) := by
+    cfc (Real.sin ∘ Real.arcsin) ((Submodule.sinAngleOperator U V)) =
+        cfc (fun x : ℝ => x) ((Submodule.sinAngleOperator U V)) := by
       apply cfc_congr
       intro x hx
       have hxi := spectrum_sinAngleOperator_subset_Icc U V hx
       exact Real.sin_arcsin (by linarith [hxi.1]) hxi.2
-    _ = sinAngleOperator U V := cfc_id' ℝ _
+    _ = (Submodule.sinAngleOperator U V) := cfc_id' ℝ _
 
 /-- The literal ambient `sin Θ` presentation object is exactly the positive
 modulus representation used by the proof API. -/
 theorem ambientSinThetaOperator_eq_sinAngleOperator :
-    ambientSinThetaOperator U V = sinAngleOperator U V := by
+    ambientSinThetaOperator U V = (Submodule.sinAngleOperator U V) := by
   exact cfc_sin_angleOperator U V
 
 /-- The operator angle is self-adjoint. -/
 theorem isSelfAdjoint_angleOperator : IsSelfAdjoint (angleOperator U V) :=
-  cfc_predicate Real.arcsin (sinAngleOperator U V)
+  cfc_predicate Real.arcsin ((Submodule.sinAngleOperator U V))
 
 /-- `sin 2Θ` is self-adjoint. -/
 theorem isSelfAdjoint_sinTwoAngleOperator : IsSelfAdjoint (sinTwoAngleOperator U V) :=
@@ -243,7 +186,10 @@ variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [Complete
 variable (U V : Submodule ℂ F) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
 /-- Over `ℂ` the generic ambient sine *is* `sinAngleOperatorC`. -/
-@[simp] theorem sinAngleOperator_complex : sinAngleOperator U V = sinAngleOperatorC U V := by rfl
+@[simp] theorem sinAngleOperator_complex : (Submodule.sinAngleOperator U V) =
+  sinAngleOperatorC U V := by
+  rw [Submodule.sinAngleOperator_def]
+  rfl
 
 @[simp] theorem angleOperator_complex : angleOperator U V = angleOperatorC U V := by
   have h : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := F) =
@@ -278,9 +224,10 @@ variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace ℝ F] [Complete
 variable (U V : Submodule ℝ F) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
 /-- Over `ℝ` the generic ambient sine *is* `sinAngleOperatorR`. -/
-@[simp] theorem sinAngleOperator_real : sinAngleOperator U V = sinAngleOperatorR U V := by
+@[simp] theorem sinAngleOperator_real : (Submodule.sinAngleOperator U V) =
+  sinAngleOperatorR U V := by
   refine complexify_injective ?_
-  rw [complexify_sinAngleOperatorR]
+  rw [complexify_sinAngleOperatorR, Submodule.sinAngleOperator_def]
   change complexify (ContinuousLinearMap.modulus (U.starProjection - V.starProjection)) =
     ContinuousLinearMap.modulus
       ((complexifySubmodule U).starProjection - (complexifySubmodule V).starProjection)
@@ -294,12 +241,12 @@ variable (U V : Submodule ℝ F) [U.HasOrthogonalProjection] [V.HasOrthogonalPro
   have h : ContinuousLinearMap.realAlgebra (𝕜 := ℝ) (E := F) =
       (ContinuousLinearMap.algebra : Algebra ℝ (F →L[ℝ] F)) :=
     ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
-  have hcalc : angleOperator U V = cfc Real.arcsin (sinAngleOperator U V) := by
+  have hcalc : angleOperator U V = cfc Real.arcsin ((Submodule.sinAngleOperator U V)) := by
     unfold angleOperator
     congr 1
     exact proof_irrel_heq _ _
   rw [hcalc]
-  rw [complexify_cfc Real.arcsin (isSelfAdjoint_sinAngleOperator U V)
+  rw [complexify_cfc Real.arcsin ((U.isPositive_sinAngleOperator V).isSelfAdjoint)
       Real.continuous_arcsin.continuousOn,
     sinAngleOperator_real, complexify_sinAngleOperatorR]
   rfl
@@ -340,13 +287,9 @@ open TauCeti.ScalarTransport
 
 /-- The scalar transport carries the ambient sine. -/
 @[simp] theorem clm_sinAngleOperator :
-    clm (e := e) (sinAngleOperator U V) =
-      sinAngleOperator (ScalarTransport.submodule (e := e) U)
-        (ScalarTransport.submodule (e := e) V) := by
-  change clm (e := e) (ContinuousLinearMap.modulus (U.starProjection - V.starProjection)) =
-    ContinuousLinearMap.modulus
-      ((ScalarTransport.submodule (e := e) U).starProjection -
-        (ScalarTransport.submodule (e := e) V).starProjection)
+    clm (e := e) ((Submodule.sinAngleOperator U V)) =
+      (Submodule.sinAngleOperator (ScalarTransport.submodule (e := e) U) (ScalarTransport.submodule (e := e) V)) := by
+  simp only [Submodule.sinAngleOperator_def]
   rw [clm_modulus, starProjection_clm, starProjection_clm, clm_sub]
 
 /-- The scalar transport carries the ambient angle. -/
@@ -354,8 +297,8 @@ open TauCeti.ScalarTransport
     clm (e := e) (angleOperator U V) =
       angleOperator (ScalarTransport.submodule (e := e) U)
         (ScalarTransport.submodule (e := e) V) := by
-  change clm (e := e) (cfc Real.arcsin (sinAngleOperator U V)) = _
-  rw [clm_cfc Real.arcsin (isSelfAdjoint_sinAngleOperator U V)
+  change clm (e := e) (cfc Real.arcsin ((Submodule.sinAngleOperator U V))) = _
+  rw [clm_cfc Real.arcsin ((U.isPositive_sinAngleOperator V).isSelfAdjoint)
       Real.continuous_arcsin.continuousOn, clm_sinAngleOperator]
   rfl
 
@@ -727,9 +670,9 @@ have the same complete approximation-number sequence.  This is a proof-facing
 transport lemma; `cfc_sin_angleOperator` is the stronger semantic identity that
 identifies the presentation object with the positive sine itself. -/
 theorem sinAngleOperator_hasSameApproximationNumbers_projectorDifference :
-    (sinAngleOperator U V).SameSingularValues
+    ((Submodule.sinAngleOperator U V)).SameSingularValues
       (V.starProjection - U.starProjection) := by
-  rw [sinAngleOperator]
+  rw [Submodule.sinAngleOperator_def]
   refine ContinuousLinearMap.sameSingularValues_trans
     (ContinuousLinearMap.sameSingularValues_modulus (U.starProjection - V.starProjection)) ?_
   have hneg : (V.starProjection - U.starProjection : E →L[𝕜] E) =

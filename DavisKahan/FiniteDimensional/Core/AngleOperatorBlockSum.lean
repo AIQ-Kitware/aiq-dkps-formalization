@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+
 public import DavisKahan.FiniteDimensional.Core.AngleOperators
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometryBlockSum
 
@@ -18,6 +20,11 @@ operator geometry through the Davis--Kahan finite functional-calculus definition
 -/
 
 public section
+
+local instance {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
+    [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : CompleteSpace E :=
+  FiniteDimensional.complete 𝕜 E
+
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
@@ -36,28 +43,20 @@ theorem angleOperator_orthogonalBlockSumSubmodule
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂) =
       ((angleOperator U₁ V₁).prodMap (angleOperator U₂ V₂)).withLpMap 2 := by
-  let S₁ := sinAngleOperator U₁ V₁
-  let S₂ := sinAngleOperator U₂ V₂
+  let S₁ := (Submodule.sinAngleOperator U₁ V₁).toLinearMap
+  let S₂ := (Submodule.sinAngleOperator U₂ V₂).toLinearMap
   have hS₁ : S₁.IsSymmetric := by
-    dsimp only [S₁]
-    rw [TauCeti.sinAngleOperator_eq_operatorAbs]
-    exact (LinearMap.isPositive_operatorAbs (projection U₁ - projection V₁)).isSymmetric
+    exact (U₁.isPositive_sinAngleOperator V₁).isSelfAdjoint.isSymmetric
   have hS₂ : S₂.IsSymmetric := by
-    dsimp only [S₂]
-    rw [TauCeti.sinAngleOperator_eq_operatorAbs]
-    exact (LinearMap.isPositive_operatorAbs (projection U₂ - projection V₂)).isSymmetric
+    exact (U₂.isPositive_sinAngleOperator V₂).isSelfAdjoint.isSymmetric
   let hblock :=
     UnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric hS₁ hS₂
   have hsin :
-      sinAngleOperator
-          (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
-          (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂) =
+      (Submodule.sinAngleOperator (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂) (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂)).toLinearMap =
         (S₁.prodMap S₂).withLpMap 2 :=
     TauCeti.sinAngleOperator_orthogonalBlockSumSubmodule U₁ V₁ U₂ V₂
   have hsum : LinearMap.IsSymmetric
-      (sinAngleOperator
-        (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
-        (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂)) := by
+      ((Submodule.sinAngleOperator (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂) (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂)).toLinearMap) := by
     rw [hsin]
     exact hblock
   calc

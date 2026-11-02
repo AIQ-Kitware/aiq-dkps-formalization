@@ -8,6 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
 public import TauCeti.Analysis.InnerProductSpace.MoorePenrose
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
 
 /-!
 # Compatibility surface for unfinished finite angle constructions
@@ -30,6 +31,10 @@ missing:
 -/
 
 public section
+
+local instance {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
+    [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : CompleteSpace E :=
+  FiniteDimensional.complete 𝕜 E
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
@@ -78,7 +83,7 @@ independence through finite functional calculus (equivalently, apply
 noncomputable def angleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   LinearMap.IsSymmetric.cfc
-    (LinearMap.isPositive_operatorAbs (projection U - projection V)).isSymmetric
+    (U.isPositive_sinAngleOperator V).isSelfAdjoint.isSymmetric
     Real.arcsin
 
 /-- `tan Θ` on the full ambient space.  In non-acute configurations this is
@@ -94,7 +99,7 @@ noncomputable def tanAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   LinearMap.IsSymmetric.cfc
     (LinearMap.IsSymmetric.isSymmetric_cfc
-      (LinearMap.isPositive_operatorAbs (projection U - projection V)).isSymmetric Real.arcsin)
+      (U.isPositive_sinAngleOperator V).isSelfAdjoint.isSymmetric Real.arcsin)
     safeTan
 
 /-- `tan (2 Θ)` on the full ambient space.
@@ -108,7 +113,7 @@ noncomputable def tanTwoAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   LinearMap.IsSymmetric.cfc
     (LinearMap.IsSymmetric.isSymmetric_cfc
-      (LinearMap.isPositive_operatorAbs (projection U - projection V)).isSymmetric Real.arcsin)
+      (U.isPositive_sinAngleOperator V).isSelfAdjoint.isSymmetric Real.arcsin)
     safeTanTwo
 
 /-- Orthogonal complements preserve the nontrivial principal angles.

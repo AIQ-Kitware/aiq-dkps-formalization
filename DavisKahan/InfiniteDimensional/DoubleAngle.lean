@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.BoundedOperator.Reflection
 public import DavisKahan.DoubleAngle.CompatibilitySinTwoTheta
@@ -657,10 +659,8 @@ only the operator-norm identity. -/
 theorem norm_sinAngle_reflected_eq_norm_sinTwoAngle
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ‖sinAngleOperator U (reflectedSubspace V U)‖ = ‖sinTwoAngleOperator U V‖ := by
-  rw [show sinAngleOperator U (reflectedSubspace V U) =
-      (U.starProjection - (reflectedSubspace V U).starProjection).modulus from rfl,
-    ContinuousLinearMap.norm_modulus]
+    ‖(Submodule.sinAngleOperator U (reflectedSubspace V U))‖ = ‖sinTwoAngleOperator U V‖ := by
+  rw [Submodule.norm_sinAngleOperator]
   simpa only [Submodule.projectionGap_def] using sinAngle_reflected_eq_sinTwoAngle U V
 
 omit [CompleteSpace E] in

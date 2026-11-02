@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT-6
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+
 public import DavisKahan.FiniteDimensional.DirectRotation.Majorization
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 
@@ -28,6 +30,11 @@ rotation; that requires an additional principal-plane comparison.
 -/
 
 public section
+
+local instance {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
+    [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : CompleteSpace E :=
+  FiniteDimensional.complete 𝕜 E
+
 
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
@@ -117,8 +124,9 @@ theorem sinAngleOperator_uiNorm_le_displacement
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
-    N (sinAngleOperator U V) ≤ N (LinearMap.id - W.toLinearMap) := by
-  rw [← uiNorm_projection_sub_eq_sinAngleOperator N U V]
+    N ((Submodule.sinAngleOperator U V).toLinearMap) ≤ N (LinearMap.id - W.toLinearMap) := by
+  rw [N.map_eq_of_singularValues_eq
+    (Submodule.singularValues_sinAngleOperator_eq_sub_starProjection U V)]
   exact projectionDifference_uiNorm_le_displacement N U V W hmap
 
 /-- The lower bound for every Ky Fan partial sum, including the trace norm

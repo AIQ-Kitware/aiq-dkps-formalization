@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+
 public import DavisKahan.Geometry.Angle.OperatorAngleGeneric
 public import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
@@ -91,45 +93,45 @@ theorem spectrum_angleOperator_lt_pi_div_two
     (ht : t ∈ spectrum ℝ (angleOperator U V)) : 0 ≤ t ∧ t < Real.pi / 2 := by
   rw [angleOperator,
     cfc_map_spectrum (R := ℝ) (f := Real.arcsin)
-      (a := sinAngleOperator U V) (isSelfAdjoint_sinAngleOperator U V)
+      (a := (Submodule.sinAngleOperator U V)) ((U.isPositive_sinAngleOperator V).isSelfAdjoint)
       Real.continuous_arcsin.continuousOn] at ht
   obtain ⟨s, hs, rfl⟩ := ht
   have hsi : 0 ≤ s ∧ s ≤ 1 := by
     have hsnonneg := (StarOrderedRing.nonneg_iff_spectrum_nonneg
-      (R := ℝ) _ (isSelfAdjoint_sinAngleOperator U V)).mp
-        (sinAngleOperator_nonneg U V) s hs
-    have hnormK : ‖((s : 𝕜))‖ ≤ ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ :=
+      (R := ℝ) _ ((U.isPositive_sinAngleOperator V).isSelfAdjoint)).mp
+        ((ContinuousLinearMap.nonneg_iff_isPositive.mpr (U.isPositive_sinAngleOperator V))) s hs
+    have hnormK : ‖((s : 𝕜))‖ ≤ ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ :=
       spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem 𝕜 hs)
-    have hnorm : |s| ≤ ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ := by
+    have hnorm : |s| ≤ ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ := by
       rwa [RCLike.norm_ofReal] at hnormK
     have hone : ‖(1 : E →L[𝕜] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
     have hsle : s ≤ 1 := by
-      have habs : |s| ≤ ‖sinAngleOperator U V‖ := by
+      have habs : |s| ≤ ‖(Submodule.sinAngleOperator U V)‖ := by
         calc
-          |s| ≤ ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ := hnorm
-          _ ≤ ‖sinAngleOperator U V‖ * 1 :=
+          |s| ≤ ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ := hnorm
+          _ ≤ ‖(Submodule.sinAngleOperator U V)‖ * 1 :=
             mul_le_mul_of_nonneg_left hone (norm_nonneg _)
-          _ = ‖sinAngleOperator U V‖ := mul_one _
-      have hsin : ‖sinAngleOperator U V‖ < 1 := by
-        rw [norm_sinAngleOperator]
+          _ = ‖(Submodule.sinAngleOperator U V)‖ := mul_one _
+      have hsin : ‖(Submodule.sinAngleOperator U V)‖ < 1 := by
+        rw [Submodule.norm_sinAngleOperator]
         exact h
       exact ((le_abs_self s).trans habs).trans (le_of_lt hsin)
     exact ⟨hsnonneg, hsle⟩
-  have hnormK : ‖((s : 𝕜))‖ ≤ ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ :=
+  have hnormK : ‖((s : 𝕜))‖ ≤ ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ :=
     spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem 𝕜 hs)
-  have hnorm : |s| ≤ ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ := by
+  have hnorm : |s| ≤ ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ := by
     rwa [RCLike.norm_ofReal] at hnormK
   have hone : ‖(1 : E →L[𝕜] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
   have hslt : s < 1 := by
-    have habs : |s| ≤ ‖sinAngleOperator U V‖ := by
+    have habs : |s| ≤ ‖(Submodule.sinAngleOperator U V)‖ := by
       calc
-        |s| ≤ ‖sinAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ := hnorm
-        _ ≤ ‖sinAngleOperator U V‖ * 1 :=
+        |s| ≤ ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ := hnorm
+        _ ≤ ‖(Submodule.sinAngleOperator U V)‖ * 1 :=
           mul_le_mul_of_nonneg_left hone (norm_nonneg _)
-        _ = ‖sinAngleOperator U V‖ := mul_one _
-    have hsle : s ≤ ‖sinAngleOperator U V‖ := (le_abs_self s).trans habs
-    have hsin : ‖sinAngleOperator U V‖ < 1 := by
-      rw [norm_sinAngleOperator]
+        _ = ‖(Submodule.sinAngleOperator U V)‖ := mul_one _
+    have hsle : s ≤ ‖(Submodule.sinAngleOperator U V)‖ := (le_abs_self s).trans habs
+    have hsin : ‖(Submodule.sinAngleOperator U V)‖ < 1 := by
+      rw [Submodule.norm_sinAngleOperator]
       exact h
     exact hsle.trans_lt hsin
   exact ⟨Real.arcsin_nonneg.mpr hsi.1, Real.arcsin_lt_pi_div_two.mpr hslt⟩
@@ -306,8 +308,8 @@ theorem hasDefinedTangent_submodule :
     HasDefinedTangent (submodule (e := e) U) (submodule (e := e) V) ↔
       HasDefinedTangent U V := by
   unfold HasDefinedTangent
-  rw [← norm_sinAngleOperator (submodule (e := e) U) (submodule (e := e) V),
-    ← norm_sinAngleOperator U V, ← clm_sinAngleOperator (e := e) U V, clm_norm]
+  rw [← Submodule.norm_sinAngleOperator (submodule (e := e) U) (submodule (e := e) V),
+    ← Submodule.norm_sinAngleOperator U V, ← clm_sinAngleOperator (e := e) U V, clm_norm]
 
 /-- Scalar transport carries `tan Θ` on the domain where the tangent exists. -/
 theorem clm_tanAngleOperator (h : HasDefinedTangent U V) :

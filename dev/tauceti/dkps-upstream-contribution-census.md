@@ -3018,3 +3018,60 @@ Validation: native-map correspondence, directed Gram, rank-one, Ritz,
 principal-plane, counterexample, planar sharpness, trace and YWS focused
 builds passed. Full default `lake build` (21,535 jobs) and
 `lake build Challenge` (19,783 jobs) passed without compiler or linter warnings.
+
+
+## 2026-11-02: native positive cosine and sine operators
+
+Retired `TauCeti.cosAngleOperator`, `TauCeti.sinAngleOperator`,
+`sinAngleOperator_eq_operatorAbs`, `singularValues_projection_sub_projection`
+and `uiNorm_projection_sub_eq_sinAngleOperator` from `AngleGeometry.lean`.
+The finite linear-map presentations agree with native
+`Submodule.cosAngleOperator` and `Submodule.sinAngleOperator` after conversion
+to continuous maps; both correspondences were compiled before deletion using
+`LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus`. Native completeness
+requirements are discharged locally from the original finite-dimensional
+hypotheses. Finite source-facing functional calculus uses the native sine
+carrier; the mathematical statements of the direct-rotation and sharpness
+results retain their scope.
+
+The accepted owner is
+`TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator`:
+
+- [#17050](https://github.com/TauCetiProject/TauCeti/pull/17050), integration
+  `e36963f4148ed374ed24fcac1fe1953e93b69982`, provides the definitions,
+  positivity, squares, commutation, symmetry and norm results. Its integration
+  message explicitly says that no external formalization was vendored.
+- [#19817](https://github.com/TauCetiProject/TauCeti/pull/19817), integration
+  `140f78ce562fc8b1652cc184a409bf38a70cb81f`, provides
+  `Submodule.singularValues_sinAngleOperator_eq_sub_starProjection`.
+  The accepted provenance explicitly credits adaptation from Kitware DKPS
+  `SinTheta/Perturbation.lean`, Jon Crall and GPT-6, Apache-2.0. This is
+  proof descent, unlike the independent initial angle-operator implementation.
+
+The finite UI-norm consumers apply native singular-value invariance directly,
+without a retained donor forwarding lemma. The repeated projection-commutation
+proof in finite direct rotation is replaced by the native theorem; square
+identities likewise use `Submodule.sinAngleOperator_sq`.
+
+Also retired the duplicate dimension-free bounded sine definitions in
+`DavisKahan/Geometry/Angle/OperatorAngleGeneric.lean` and
+`DavisKahan/InfiniteDimensional/SinTheta/General.lean`, after compiling their
+full-scope correspondences. The generic sine symmetry, norm, positivity,
+self-adjointness and contraction wrappers disappear in favor of native APIs.
+Block sums, scalar transport and the additional spectral-angle consequences
+remain. Fixed-field real/complex angle constructions await their own
+correspondence migration. The source full-space cosine `sqrt(1-sin² Theta)`
+and ambient CFC double-angle operator are distinct from the native directed
+cosine and one-sided double-angle map and are preserved.
+
+Historical finite source:
+`e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/AngleGeometry.lean`, original
+paper home `DavisKahan/FiniteDimensional/Core/AngleGeometry.lean`, Jon Crall /
+GPT 5.6 High. Generic bounded source: `OperatorAngleGeneric.lean` at
+`e4637c3919ae`, Jon Crall / Claude Opus 5, introduction `342438a66`.
+The infinite-dimensional source at the same snapshot credits Jon Crall /
+GPT 5.6 High; its promotion from the experimental surface is
+`507ea63b55d8ae002256a4d9863415fb3e798361`. All three carry Kitware, Inc.
+copyright and Apache-2.0 licensing. Earlier source-name evidence remains in
+the manifest; deletion is not a claim that these authors wrote independent
+upstream implementations.

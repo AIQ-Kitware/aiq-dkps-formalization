@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+
 public import DavisKahan.FiniteDimensional.DirectRotation
 public import ForTauCeti.Analysis.Normed.Algebra.TrigonometricSeries
 
@@ -32,6 +34,11 @@ Mathlib's `NormedSpace.exp` lives.
 
 public section
 
+local instance {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
+    [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : CompleteSpace E :=
+  FiniteDimensional.complete 𝕜 E
+
+
 namespace TauCeti
 namespace DavisKahan.FiniteDimensional
 
@@ -49,24 +56,24 @@ variable (U V : Submodule 𝕜 E)
 
 /-- `sin Θ` is self-adjoint: it is the modulus of the self-adjoint difference of
 the two orthogonal projections. -/
-theorem isSymmetric_sinAngleOperator : (sinAngleOperator U V).IsSymmetric :=
-  (LinearMap.isPositive_operatorAbs (projection U - projection V)).isSymmetric
+theorem isSymmetric_sinAngleOperator : ((Submodule.sinAngleOperator U V).toLinearMap).IsSymmetric :=
+  (U.isPositive_sinAngleOperator V).isSelfAdjoint.isSymmetric
 
 /-- `Θ` is the arcsine functional calculus of `sin Θ`.  This is the definition of
 `angleOperator`, restated so that it can be used with any symmetry witness. -/
-theorem angleOperator_eq_calculus (hsin : (sinAngleOperator U V).IsSymmetric) :
+theorem angleOperator_eq_calculus (hsin : ((Submodule.sinAngleOperator U V).toLinearMap).IsSymmetric) :
     angleOperator U V = LinearMap.IsSymmetric.cfc hsin Real.arcsin :=
   rfl
 
 /-- Operator Pythagoras in the solved form `cos²Θ = 1 - sin²Θ`. -/
 theorem directRotationCosine_comp_self_eq :
     directRotationCosine U V ∘ₗ directRotationCosine U V =
-      LinearMap.id - sinAngleOperator U V ∘ₗ sinAngleOperator U V :=
+      LinearMap.id - (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap :=
   eq_sub_of_add_eq' (sq_sinAngleOperator_add_sq_directRotationCosine U V)
 
 /-- `1 - sin²Θ` is a positive operator: it is `cos²Θ`, and `cos Θ` is self-adjoint. -/
 theorem isPositive_one_sub_sq_sinAngleOperator :
-    (LinearMap.id - sinAngleOperator U V ∘ₗ sinAngleOperator U V : E →ₗ[𝕜] E).IsPositive := by
+    (LinearMap.id - (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap : E →ₗ[𝕜] E).IsPositive := by
   rw [← directRotationCosine_comp_self_eq U V]
   have hCsym : (directRotationCosine U V).IsSymmetric :=
     (LinearMap.isPositive_operatorAbs (canonicalIntertwiner U V)).isSymmetric
@@ -79,15 +86,15 @@ The Pythagoras identity makes `1 - sin²Θ` positive, and testing it against a u
 eigenvector of `sin Θ` with eigenvalue `λ` gives `0 ≤ 1 - λ²`.  This is what lets
 `arcsin` be inverted on the spectrum. -/
 theorem sinAngleOperator_eigenvalues_mem_Icc
-    (hsin : (sinAngleOperator U V).IsSymmetric) (i : Fin (finrank 𝕜 E)) :
+    (hsin : ((Submodule.sinAngleOperator U V).toLinearMap).IsSymmetric) (i : Fin (finrank 𝕜 E)) :
     hsin.eigenvalues rfl i ∈ Set.Icc (-1 : ℝ) 1 := by
   have hpos := isPositive_one_sub_sq_sinAngleOperator U V
-  have hAb : sinAngleOperator U V (hsin.eigenvectorBasis rfl i) =
+  have hAb : (Submodule.sinAngleOperator U V).toLinearMap (hsin.eigenvectorBasis rfl i) =
       ((hsin.eigenvalues rfl i : ℝ) : 𝕜) • hsin.eigenvectorBasis rfl i :=
     hsin.apply_eigenvectorBasis rfl i
   have hbb : ⟪hsin.eigenvectorBasis rfl i, hsin.eigenvectorBasis rfl i⟫_𝕜 = 1 := by
     simp
-  have hval : (LinearMap.id - sinAngleOperator U V ∘ₗ sinAngleOperator U V : E →ₗ[𝕜] E)
+  have hval : (LinearMap.id - (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap : E →ₗ[𝕜] E)
       (hsin.eigenvectorBasis rfl i) =
       ((1 - (hsin.eigenvalues rfl i : ℝ) ^ 2 : ℝ) : 𝕜) • hsin.eigenvectorBasis rfl i := by
     simp [LinearMap.sub_apply, LinearMap.comp_apply, hAb, smul_smul, sub_smul, sq]
@@ -103,7 +110,7 @@ The positive cosine `|S|` is the functional calculus of `s ↦ cos (arcsin s)`
 applied to `sin Θ`.  Both operators are positive and both square to `1 - sin²Θ`,
 so uniqueness of the positive square root identifies them.  Squaring the calculus
 uses `cos (arcsin λ)² = 1 - λ²`, which needs `|λ| ≤ 1`. -/
-theorem directRotationCosine_eq_calculus (hsin : (sinAngleOperator U V).IsSymmetric) :
+theorem directRotationCosine_eq_calculus (hsin : ((Submodule.sinAngleOperator U V).toLinearMap).IsSymmetric) :
     directRotationCosine U V =
       LinearMap.IsSymmetric.cfc hsin (fun s => Real.cos (Real.arcsin s)) := by
   set F := LinearMap.IsSymmetric.cfc hsin (fun s => Real.cos (Real.arcsin s)) with hF
@@ -114,7 +121,8 @@ theorem directRotationCosine_eq_calculus (hsin : (sinAngleOperator U V).IsSymmet
     refine hsin.isPositive_cfc fun s _ => ?_
     rw [Real.cos_arcsin]
     exact Real.sqrt_nonneg _
-  have hFsq : F ∘ₗ F = LinearMap.id - sinAngleOperator U V ∘ₗ sinAngleOperator U V := by
+  have hFsq : F ∘ₗ F =
+    LinearMap.id - (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap := by
     change F * F = _
     rw [hF, ← LinearMap.IsSymmetric.cfc_mul]
     have hcongr : LinearMap.IsSymmetric.cfc hsin
@@ -133,17 +141,17 @@ theorem directRotationCosine_eq_calculus (hsin : (sinAngleOperator U V).IsSymmet
       (fun s => 1 - s ^ 2) (fun s => s ^ 2)
     have hone : ((fun s : ℝ => 1 - s ^ 2) + fun s : ℝ => s ^ 2) = fun _ : ℝ => (1 : ℝ) := by
       funext s; simp
-    have hpow : hsin.cfc (fun s => s ^ 2) = sinAngleOperator U V ^ 2 := by
+    have hpow : hsin.cfc (fun s => s ^ 2) = (Submodule.sinAngleOperator U V).toLinearMap ^ 2 := by
       calc
         hsin.cfc (fun s => s ^ 2) = hsin.cfc (id * id) := by
           congr 1
           funext s
           exact pow_two s
         _ = hsin.cfc id * hsin.cfc id := hsin.cfc_mul id id
-        _ = sinAngleOperator U V ^ 2 := by rw [hsin.cfc_id, pow_two]
+        _ = (Submodule.sinAngleOperator U V).toLinearMap ^ 2 := by rw [hsin.cfc_id, pow_two]
     rw [hone, hsin.cfc_const 1, hpow, RCLike.ofReal_one, one_smul] at hadd
-    have hsq : (sinAngleOperator U V) ^ 2 =
-        sinAngleOperator U V ∘ₗ sinAngleOperator U V := by
+    have hsq : ((Submodule.sinAngleOperator U V).toLinearMap) ^ 2 =
+        (Submodule.sinAngleOperator U V).toLinearMap ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap := by
       rw [pow_two]; rfl
     rw [hsq] at hadd
     exact eq_sub_of_add_eq hadd.symm
@@ -156,9 +164,9 @@ theorem directRotationCosine_eq_calculus (hsin : (sinAngleOperator U V).IsSymmet
 `Θ = arcsin (sin Θ)` vanishes wherever `sin Θ` does, so it takes values in the
 range of `sin Θ`, which is exactly where `(sin Θ)(sin Θ)⁺` is the identity. -/
 theorem sinAngleOperator_comp_moorePenroseInverse_comp_angleOperator
-    (hsin : (sinAngleOperator U V).IsSymmetric) :
-    (sinAngleOperator U V ∘ₗ
-        LinearMap.moorePenroseInverse (sinAngleOperator U V)) ∘ₗ angleOperator U V =
+    (hsin : ((Submodule.sinAngleOperator U V).toLinearMap).IsSymmetric) :
+    ((Submodule.sinAngleOperator U V).toLinearMap ∘ₗ
+        LinearMap.moorePenroseInverse ((Submodule.sinAngleOperator U V).toLinearMap)) ∘ₗ angleOperator U V =
       angleOperator U V := by
   apply (hsin.eigenvectorBasis rfl).toBasis.ext
   intro i
@@ -167,35 +175,35 @@ theorem sinAngleOperator_comp_moorePenroseInverse_comp_angleOperator
       ((Real.arcsin (hsin.eigenvalues rfl i) : ℝ) : 𝕜) • hsin.eigenvectorBasis rfl i := by
     rw [angleOperator_eq_calculus U V hsin]
     exact LinearMap.IsSymmetric.cfc_apply_eigenvectorBasis hsin rfl Real.arcsin i
-  have hAb : sinAngleOperator U V (hsin.eigenvectorBasis rfl i) =
+  have hAb : (Submodule.sinAngleOperator U V).toLinearMap (hsin.eigenvectorBasis rfl i) =
       ((hsin.eigenvalues rfl i : ℝ) : 𝕜) • hsin.eigenvectorBasis rfl i :=
     hsin.apply_eigenvectorBasis rfl i
   by_cases hzero : hsin.eigenvalues rfl i = 0
   · rw [LinearMap.comp_apply, hTheta, hzero, Real.arcsin_zero]
     simp
-  · have hpre : sinAngleOperator U V
+  · have hpre : (Submodule.sinAngleOperator U V).toLinearMap
         ((((hsin.eigenvalues rfl i : ℝ) : 𝕜))⁻¹ • hsin.eigenvectorBasis rfl i) =
         hsin.eigenvectorBasis rfl i := by
       rw [map_smul, hAb, smul_smul,
         inv_mul_cancel₀ (RCLike.ofReal_ne_zero.mpr hzero), one_smul]
-    have hfix : (sinAngleOperator U V ∘ₗ
-        LinearMap.moorePenroseInverse (sinAngleOperator U V))
+    have hfix : ((Submodule.sinAngleOperator U V).toLinearMap ∘ₗ
+        LinearMap.moorePenroseInverse ((Submodule.sinAngleOperator U V).toLinearMap))
           (hsin.eigenvectorBasis rfl i) = hsin.eigenvectorBasis rfl i := by
-      calc (sinAngleOperator U V ∘ₗ
-            LinearMap.moorePenroseInverse (sinAngleOperator U V))
+      calc ((Submodule.sinAngleOperator U V).toLinearMap ∘ₗ
+            LinearMap.moorePenroseInverse ((Submodule.sinAngleOperator U V).toLinearMap))
               (hsin.eigenvectorBasis rfl i)
-          = (sinAngleOperator U V ∘ₗ
-              LinearMap.moorePenroseInverse (sinAngleOperator U V))
-                (sinAngleOperator U V
+          = ((Submodule.sinAngleOperator U V).toLinearMap ∘ₗ
+              LinearMap.moorePenroseInverse ((Submodule.sinAngleOperator U V).toLinearMap))
+                ((Submodule.sinAngleOperator U V).toLinearMap
                   ((((hsin.eigenvalues rfl i : ℝ) : 𝕜))⁻¹ •
                     hsin.eigenvectorBasis rfl i)) := by rw [hpre]
-        _ = (sinAngleOperator U V ∘ₗ
-              LinearMap.moorePenroseInverse (sinAngleOperator U V) ∘ₗ sinAngleOperator U V)
+        _ = ((Submodule.sinAngleOperator U V).toLinearMap ∘ₗ
+              LinearMap.moorePenroseInverse ((Submodule.sinAngleOperator U V).toLinearMap) ∘ₗ (Submodule.sinAngleOperator U V).toLinearMap)
                 ((((hsin.eigenvalues rfl i : ℝ) : 𝕜))⁻¹ • hsin.eigenvectorBasis rfl i) := rfl
-        _ = sinAngleOperator U V
+        _ = (Submodule.sinAngleOperator U V).toLinearMap
                 ((((hsin.eigenvalues rfl i : ℝ) : 𝕜))⁻¹ • hsin.eigenvectorBasis rfl i) :=
               LinearMap.congr_fun
-                ((LinearMap.isMoorePenroseInverse_moorePenroseInverse (sinAngleOperator U V)).comp_comp_self) _
+                ((LinearMap.isMoorePenroseInverse_moorePenroseInverse ((Submodule.sinAngleOperator U V).toLinearMap)).comp_comp_self) _
         _ = hsin.eigenvectorBasis rfl i := hpre
     rw [LinearMap.comp_apply, hTheta, map_smul, hfix]
 
@@ -221,10 +229,10 @@ theorem angleComplexStructure_comp_angleOperator_comp_self (hacute : Submodule.I
       angleOperator U V * angleComplexStructure U V hacute := by
     simpa [hmul] using angleOperator_comm_angleComplexStructure U V hacute
   have hJJ : angleComplexStructure U V hacute * angleComplexStructure U V hacute =
-      -(sinAngleOperator U V * LinearMap.moorePenroseInverse (sinAngleOperator U V)) := by
+      -((Submodule.sinAngleOperator U V).toLinearMap * LinearMap.moorePenroseInverse ((Submodule.sinAngleOperator U V).toLinearMap)) := by
     simpa [hmul] using angleComplexStructure_comp_self U V hacute
-  have hPT : (sinAngleOperator U V *
-      LinearMap.moorePenroseInverse (sinAngleOperator U V)) * angleOperator U V =
+  have hPT : ((Submodule.sinAngleOperator U V).toLinearMap *
+      LinearMap.moorePenroseInverse ((Submodule.sinAngleOperator U V).toLinearMap)) * angleOperator U V =
       angleOperator U V := by
     simpa [hmul] using
       sinAngleOperator_comp_moorePenroseInverse_comp_angleOperator U V hsin
@@ -239,11 +247,11 @@ theorem angleComplexStructure_comp_angleOperator_comp_self (hacute : Submodule.I
         rw [hcomm]
     _ = (angleComplexStructure U V hacute * angleComplexStructure U V hacute) *
         (angleOperator U V * angleOperator U V) := by noncomm_ring
-    _ = -((sinAngleOperator U V *
-        LinearMap.moorePenroseInverse (sinAngleOperator U V)) *
+    _ = -(((Submodule.sinAngleOperator U V).toLinearMap *
+        LinearMap.moorePenroseInverse ((Submodule.sinAngleOperator U V).toLinearMap)) *
           (angleOperator U V * angleOperator U V)) := by rw [hJJ]; noncomm_ring
-    _ = -(((sinAngleOperator U V *
-        LinearMap.moorePenroseInverse (sinAngleOperator U V)) * angleOperator U V) *
+    _ = -((((Submodule.sinAngleOperator U V).toLinearMap *
+        LinearMap.moorePenroseInverse ((Submodule.sinAngleOperator U V).toLinearMap)) * angleOperator U V) *
           angleOperator U V) := by noncomm_ring
     _ = -(angleOperator U V * angleOperator U V) := by rw [hPT]
 
@@ -298,7 +306,7 @@ theorem directRotation_eq_exp_angleComplexStructure_comp_angleOperator
     have hTheta : angleOperator U V (b i) = ((θ : ℝ) : 𝕜) • b i := by
       rw [angleOperator_eq_calculus U V hsin, hbdef]
       exact LinearMap.IsSymmetric.cfc_apply_eigenvectorBasis hsin rfl Real.arcsin i
-    have hAb : sinAngleOperator U V (b i) = ((l : ℝ) : 𝕜) • b i :=
+    have hAb : (Submodule.sinAngleOperator U V).toLinearMap (b i) = ((l : ℝ) : 𝕜) • b i :=
       hsin.apply_eigenvectorBasis rfl i
     have hYb : Y (b i) = ((θ : ℝ) : 𝕜) • angleComplexStructure U V hacute (b i) := by
       rw [hYdef, LinearMap.comp_apply, hTheta, map_smul]

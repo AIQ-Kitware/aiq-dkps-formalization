@@ -636,13 +636,6 @@ and completeness assumptions.
 
 section OperatorModulus
 
-/-- The full ambient sine-angle operator of two subspaces: the modulus of the projector
-difference. -/
-@[expose]
-noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
-  (U.starProjection - V.starProjection).modulus
-
 /-- **Symmetric norm ideals contain moduli with equal gauge, given a polar contraction.**
 
 Only the two factorization identities and the operator-norm bounds are needed.  The ideal

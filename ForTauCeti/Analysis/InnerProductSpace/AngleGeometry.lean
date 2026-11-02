@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
+
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles
 public import TauCeti.Analysis.InnerProductSpace.Projection.Acute
@@ -46,28 +48,6 @@ open Module (finrank)
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
-/-- `cos Θ` on the full ambient space, `|P_V P_U|`.  Its singular values are the
-principal-angle cosines by `LinearMap.singularValues_operatorAbs`. -/
-noncomputable def cosAngleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  LinearMap.operatorAbs ((U.cosThetaMap V).toLinearMap)
-
-/-- `sin Θ` on the full ambient space, the modulus `|P_U - P_V|` of the projector
-difference.  This is the symmetric full-space sine operator; its singular values
-are those of `P_U - P_V` (`singularValues_projection_sub_projection`). -/
-@[expose]
-noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  LinearMap.operatorAbs (projection U - projection V)
-
-/-- Public characterization of the sine-angle operator as the modulus of the projector
-difference.  Keep downstream proofs on this theorem rather than unfolding the definition
-directly. -/
-theorem sinAngleOperator_eq_operatorAbs (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    sinAngleOperator U V = LinearMap.operatorAbs (projection U - projection V) :=
-  rfl
-
 /-- In finite ambient dimension, native acuteness forces a uniform projection gap. -/
 theorem projectionGap_lt_one_of_isAcute {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -126,23 +106,6 @@ theorem isAcute_iff_projectionGap_lt_one {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     Submodule.IsAcute U V ↔ U.projectionGap V < 1 :=
   ⟨projectionGap_lt_one_of_isAcute, Submodule.IsAcute.of_projectionGap_lt_one U V⟩
-
-/-- The singular values of `P_U-P_V` are the full-space `sin Θ` values: with
-`sinAngleOperator = |P_U - P_V|` and `σ(|T|) = σ(T)` (`LinearMap.singularValues_operatorAbs`). -/
-theorem singularValues_projection_sub_projection (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    (projection U - projection V).singularValues =
-      (sinAngleOperator U V).singularValues := by
-  rw [sinAngleOperator, LinearMap.singularValues_operatorAbs]
-
-/-- **The full projector-difference UI-norm bridge.**  Every unitarily invariant
-norm of `P_U - P_V` equals that of the full `sin Θ` operator `|P_U - P_V|`, since
-they share the singular-value sequence.  This is the only projection-geometry
-rewrite the final UI-norm projector theorem needs. -/
-theorem uiNorm_projection_sub_eq_sinAngleOperator (N : UnitarilyInvariantSeminorm 𝕜 E E)
-    (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    N (projection U - projection V) = N (sinAngleOperator U V) :=
-  N.map_eq_of_singularValues_eq (singularValues_projection_sub_projection U V)
 
 /-! ### Reading the principal-angle sequence on a basis of the source subspace
 
