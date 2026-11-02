@@ -45,7 +45,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization",
         "TauCeti.Analysis.InnerProductSpace.ZeroExtension",
         "ForTauCeti.Analysis.Normed.FiniteLpGauge",
-        "ForTauCeti.Analysis.Normed.SymmetricGauge",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Adjoint",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core",
@@ -5480,32 +5479,55 @@
       "source_declarations": [
         "extend",
         "extend_eq_iSup_truncate",
-        "extend_le_extend_of_forall_sum_le"
+        "extend_le_extend_of_forall_sum_le",
+        "ofFin",
+        "ofFin_apply",
+        "ofFin_apply_of_le",
+        "ofFin_le_ofFin",
+        "ofFin_add_le",
+        "ofFin_smul",
+        "ofFin_update_neg",
+        "natPerm",
+        "natPerm_apply_of_lt",
+        "natPerm_symm_apply_of_lt",
+        "ofFin_comp_perm",
+        "toFiniteSymmetricGauge",
+        "le_of_prefixSum_le",
+        "mono_weaklyMajorized",
+        "extend_eq_iSup_ofFin"
       ],
       "current_namespace": "TauCeti.SymmetricGauge",
-      "staging_module": "ForTauCeti.Analysis.Normed.SymmetricGauge",
+      "staging_module": null,
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.SymmetricGauge.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "approximation-number",
       "provenance_class": "canonical dominated-sequence extension; no antitone assumption on the B60 input",
       "direct_dependencies": [
-        "TauCeti.Analysis.OperatorIdeal.SymmetricGauge.Basic",
-        "ForTauCeti.Analysis.Convex.Majorization"
+        "TauCeti.Analysis.OperatorIdeal.SymmetricGauge.Basic"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [
-        "DavisKahan.Sources.DavisKahan1970.Section8"
-      ],
-      "status": "upstream-consumed-with-dkps-bridge",
-      "upstream_pr": null,
-      "migration_note": "Tau Ceti now owns SymmetricGauge and its sequence-extension laws. The file imports Tau Ceti and retains only DKPS finite-vector/finite-gauge bridge results.",
-      "maintained_module": "ForTauCeti.Analysis.Normed.SymmetricGauge",
-      "maintained_declarations": [
-        "SymmetricGauge.ofFin",
-        "SymmetricGauge.toFiniteSymmetricGauge",
-        "SymmetricGauge.le_of_prefixSum_le",
-        "SymmetricGauge.mono_weaklyMajorized",
-        "SymmetricGauge.extend_eq_iSup_ofFin"
+      "downstream_users": [],
+      "status": "upstream-consumed",
+      "upstream_pr": "#15917, #17212, #18021",
+      "migration_note": "Tau Ceti now owns SymmetricGauge and its sequence-extension laws. The file imports Tau Ceti and retains only DKPS finite-vector/finite-gauge bridge results. November 2: the remaining finite bridge is fully retired and ForTauCeti/Analysis/Normed/SymmetricGauge.lean deleted. No maintained importer or declaration consumer remains. Compiler-checked correspondences identify ofFin with Finsupp.indicator (range n) of nnnorms, natPerm with Equiv.Perm.extendDomain Fin.equivSubtype, and toFiniteSymmetricGauge evaluations with native SymmetricGauge.finSeminorm; native isSymmetricGauge_finSeminorm and IsWeaklyMajorizedBy.apply_le recover finite monotonicity. The original nonnegative-real extension equality follows directly from native extend_coe_eq_iSup_indicator after the same embedding correspondence; no extra antitonicity or finiteness assumption is added. Native finite restriction introduced in #17212, integration 5ac8d8e6560127be38a10a628fdeffeb7e871000; extension in #15917, integration 6ff0822dc90cb2e050392623c4a504c93f52d7bd; #18021 710e4228753cefbc3278e72292a7c21d6599a1dd only moves the existing module unchanged to its current Basic path, not the introduction of finSeminorm. #15917 explicitly says it does not draw on DKPS; #17212 consumes the already-accepted finite descent, with no direct donor-proof adaptation claimed. Historical source e4637c3919ae under the deleted path, original module introduction 18078bab944877bf757ae3cf2574f4c407bcc0cf, bridge introductions e79a0b5ecbb8dfb89c9327d9431dd37b3d599cee / 27a7623895865afe169d93e14d47f226cbd762e4, extension-view checkpoint 77721351e0de9fe3c3f7b37226be1412b19943ce. Header author Claude Opus 5, Kitware copyright, Apache-2.0. Auxiliary embedding/permutation proofs are retired with their definitions, without replacing them by forwarding aliases.",
+      "maintained_module": "TauCeti.Analysis.OperatorIdeal.SymmetricGauge.Basic",
+      "maintained_declarations": [],
+      "retired_local_declarations": [
+        "TauCeti.SymmetricGauge.ofFin",
+        "TauCeti.SymmetricGauge.ofFin_apply",
+        "TauCeti.SymmetricGauge.ofFin_apply_of_le",
+        "TauCeti.SymmetricGauge.ofFin_le_ofFin",
+        "TauCeti.SymmetricGauge.ofFin_add_le",
+        "TauCeti.SymmetricGauge.ofFin_smul",
+        "TauCeti.SymmetricGauge.ofFin_update_neg",
+        "TauCeti.SymmetricGauge.natPerm",
+        "TauCeti.SymmetricGauge.natPerm_apply_of_lt",
+        "TauCeti.SymmetricGauge.natPerm_symm_apply_of_lt",
+        "TauCeti.SymmetricGauge.ofFin_comp_perm",
+        "TauCeti.SymmetricGauge.toFiniteSymmetricGauge",
+        "TauCeti.SymmetricGauge.le_of_prefixSum_le",
+        "TauCeti.SymmetricGauge.mono_weaklyMajorized",
+        "TauCeti.SymmetricGauge.extend_eq_iSup_ofFin"
       ]
     },
     {

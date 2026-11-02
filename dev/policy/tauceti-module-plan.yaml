@@ -131,7 +131,6 @@ topics:
   - Analysis.InnerProductSpace.HilbertSchmidt.Energy
   - Analysis.Normed.FiniteLpGauge
   - Topology.ENNRealLiminf
-  - Analysis.Normed.SymmetricGauge
 - id: T11
   title: Hilbert-Schmidt operators
   modules:

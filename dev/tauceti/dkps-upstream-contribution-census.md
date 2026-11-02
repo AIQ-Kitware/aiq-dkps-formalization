@@ -3128,3 +3128,41 @@ The two prefix/range helpers are recoverable at the same snapshot under
 `8752c585f06b7c8548ec929ea41ec30f221af9f4` and
 `90dceb24ddacda60c3839f316b0a0080631a64a2`; both credit Jon Crall and
 Claude Opus 5. All carry Kitware, Inc. copyright and Apache-2.0 licensing.
+
+
+## 2026-11-02: retire the finite-sequence symmetric-gauge bridge
+
+Deleted `ForTauCeti/Analysis/Normed/SymmetricGauge.lean` (170 lines), including
+`SymmetricGauge.ofFin`, `natPerm`, `toFiniteSymmetricGauge`, their embedding,
+permutation and gauge proofs, finite majorization monotonicity and
+`extend_eq_iSup_ofFin`. There are no maintained importers or declaration
+consumers. No forwarding module or aliases remain.
+
+Before deletion, compiled full correspondences identified `ofFin` with
+`Finsupp.indicator (range n)` of the coordinate nnnorms and `natPerm` with
+`Equiv.Perm.extendDomain Fin.equivSubtype`. The old finite gauge evaluations
+agree with native `SymmetricGauge.finSeminorm`; its native symmetry proof and
+`IsWeaklyMajorizedBy.apply_le` give the finite majorization law. The same
+embedding equality derives the old nonnegative-real extension formula from
+`extend_coe_eq_iSup_indicator`, without added antitonicity or finiteness.
+
+Accepted integrations:
+[#15917](https://github.com/TauCetiProject/TauCeti/pull/15917),
+`6ff0822dc90cb2e050392623c4a504c93f52d7bd`, owns the sequence extension and
+explicitly disclaims drawing on DKPS;
+[#17212](https://github.com/TauCetiProject/TauCeti/pull/17212),
+`5ac8d8e6560127be38a10a628fdeffeb7e871000`, adds `finSeminorm` and its symmetry
+and majorization proofs by reusing the accepted finite descent. No direct
+DKPS proof adaptation is claimed for that bridge.
+[#18021](https://github.com/TauCetiProject/TauCeti/pull/18021),
+`710e4228753cefbc3278e72292a7c21d6599a1dd`, moves the existing module unchanged
+to `TauCeti.Analysis.OperatorIdeal.SymmetricGauge.Basic`; it does not introduce
+these declarations.
+
+Historical source is `e4637c3919ae` under the deleted path, original module
+introduction `18078bab944877bf757ae3cf2574f4c407bcc0cf`, finite bridge
+`e79a0b5ecbb8dfb89c9327d9431dd37b3d599cee` and
+`27a7623895865afe169d93e14d47f226cbd762e4`, extension-view checkpoint
+`77721351e0de9fe3c3f7b37226be1412b19943ce`. The header credits Claude Opus 5,
+Kitware, Inc. copyright, Apache-2.0. Earlier names and source evidence remain
+in the existing extraction manifest.
