@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT-6
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 
 /-!
 # Full trace norm of an orthogonal block sum
@@ -37,7 +38,7 @@ theorem kyFanSum_orthogonalBlockSum_full
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
     (A : E₁ →ₗ[𝕜] E₁) (B : E₂ →ₗ[𝕜] E₂) :
-    (orthogonalBlockSum A B).kyFanSum (finrank 𝕜 (WithLp 2 (E₁ × E₂))) =
+    ((A.prodMap B).withLpMap 2).kyFanSum (finrank 𝕜 (WithLp 2 (E₁ × E₂))) =
       A.kyFanSum (finrank 𝕜 E₁) + B.kyFanSum (finrank 𝕜 E₂) := by
   classical
   let n₁ := finrank 𝕜 E₁
@@ -53,26 +54,26 @@ theorem kyFanSum_orthogonalBlockSum_full
         (WithLp.linearEquiv 2 𝕜 (E₁ × E₂)).finrank_eq
       _ = n₁ + n₂ := by simp [n₁, n₂, Module.finrank_prod]
   have hleft (i : Fin n₁) :
-      RCLike.re ⟪LinearMap.operatorAbs (orthogonalBlockSum A B) (b (e (.inl i))),
+      RCLike.re ⟪LinearMap.operatorAbs ((A.prodMap B).withLpMap 2) (b (e (.inl i))),
           b (e (.inl i))⟫_𝕜 =
         RCLike.re ⟪A.operatorAbs (b₁ i), b₁ i⟫_𝕜 := by
     rw [operatorAbs_orthogonalBlockSum]
     simp [b, OrthonormalBasis.reindex_apply]
   have hright (i : Fin n₂) :
-      RCLike.re ⟪LinearMap.operatorAbs (orthogonalBlockSum A B) (b (e (.inr i))),
+      RCLike.re ⟪LinearMap.operatorAbs ((A.prodMap B).withLpMap 2) (b (e (.inr i))),
           b (e (.inr i))⟫_𝕜 =
         RCLike.re ⟪B.operatorAbs (b₂ i), b₂ i⟫_𝕜 := by
     rw [operatorAbs_orthogonalBlockSum]
     simp [b, OrthonormalBasis.reindex_apply]
   calc
-    (orthogonalBlockSum A B).kyFanSum (finrank 𝕜 (WithLp 2 (E₁ × E₂))) =
+    ((A.prodMap B).withLpMap 2).kyFanSum (finrank 𝕜 (WithLp 2 (E₁ × E₂))) =
         ∑ k : Fin (n₁ + n₂),
-          RCLike.re ⟪LinearMap.operatorAbs (orthogonalBlockSum A B) (b k), b k⟫_𝕜 := by
+          RCLike.re ⟪LinearMap.operatorAbs ((A.prodMap B).withLpMap 2) (b k), b k⟫_𝕜 := by
       rw [hn, LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
       exact (sum_re_inner_abs_self_eq_sum_singularValues
-        (orthogonalBlockSum A B) hn b).symm
+        ((A.prodMap B).withLpMap 2) hn b).symm
     _ = ∑ k : Fin n₁ ⊕ Fin n₂,
-          RCLike.re ⟪LinearMap.operatorAbs (orthogonalBlockSum A B) (b (e k)), b (e k)⟫_𝕜 :=
+          RCLike.re ⟪LinearMap.operatorAbs ((A.prodMap B).withLpMap 2) (b (e k)), b (e k)⟫_𝕜 :=
       (e.sum_comp _).symm
     _ = (∑ i : Fin n₁, RCLike.re ⟪A.operatorAbs (b₁ i), b₁ i⟫_𝕜) +
         (∑ i : Fin n₂, RCLike.re ⟪B.operatorAbs (b₂ i), b₂ i⟫_𝕜) := by
@@ -104,7 +105,8 @@ theorem map_orthogonalBlockSumSubmodule
     (orthogonalBlockSumSubmodule U₁ U₂).map
         (LinearIsometryEquiv.withLpProdCongr 2 W₁ W₂).toLinearMap =
       orthogonalBlockSumSubmodule V₁ V₂ := by
-  rw [← orthogonalBlockSum_linearIsometryEquiv W₁ W₂]
+  change (orthogonalBlockSumSubmodule U₁ U₂).map
+    ((W₁.toLinearMap.prodMap W₂.toLinearMap).withLpMap 2) = _
   apply le_antisymm
   · rintro x ⟨y, hy, rfl⟩
     obtain ⟨hy₁, hy₂⟩ := mem_orthogonalBlockSumSubmodule.mp hy
@@ -117,8 +119,8 @@ theorem map_orthogonalBlockSumSubmodule
     have hmem₂ : (W₂.toLinearEquiv : E₂ →ₗ[𝕜] F₂) y.snd ∈ V₂ := by
       rw [hcoe₂, ← h₂]
       exact ⟨y.snd, hy₂, rfl⟩
-    simpa only [orthogonalBlockSum_apply, WithLp.toLp_fst,
-      WithLp.toLp_snd] using And.intro hmem₁ hmem₂
+    change W₁ y.fst ∈ V₁ ∧ W₂ y.snd ∈ V₂
+    exact ⟨hmem₁, hmem₂⟩
   · intro x hx
     obtain ⟨hx₁, hx₂⟩ := mem_orthogonalBlockSumSubmodule.mp hx
     rw [← h₁] at hx₁
@@ -129,9 +131,9 @@ theorem map_orthogonalBlockSumSubmodule
     · exact mem_orthogonalBlockSumSubmodule.mpr ⟨hy₁, hy₂⟩
     · apply WithLp.ofLp_injective 2
       apply Prod.ext
-      · simpa only [orthogonalBlockSum_apply, WithLp.ofLp_toLp,
+      · simpa only [LinearMap.coe_withLpMap, WithLp.map, LinearMap.prodMap_apply, WithLp.ofLp_toLp,
           WithLp.toLp_fst, WithLp.ofLp_fst] using hxy₁
-      · simpa only [orthogonalBlockSum_apply, WithLp.ofLp_toLp,
+      · simpa only [LinearMap.coe_withLpMap, WithLp.map, LinearMap.prodMap_apply, WithLp.ofLp_toLp,
           WithLp.toLp_snd, WithLp.ofLp_snd] using hxy₂
 
 end TauCeti

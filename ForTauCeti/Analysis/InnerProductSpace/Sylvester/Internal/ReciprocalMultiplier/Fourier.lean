@@ -298,12 +298,10 @@ def HasDoubledRealReciprocalOrbitInterpolation
     ∃ U : Fin q → WithLp 2 (FR × FR) ≃ₗᵢ[ℝ] WithLp 2 (FR × FR),
       ∃ V : Fin q → WithLp 2 (ER × ER) ≃ₗᵢ[ℝ] WithLp 2 (ER × ER),
         (∀ i j,
-          delta • UnitarilyInvariantSeminorm.orthogonalBlockSum
-              (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j) =
+          delta • ((basisMatrixUnit eF eE i j).prodMap (basisMatrixUnit eF eE i j)).withLpMap 2 =
             (alpha i - beta j) •
               ((∑ r, w r • unitaryOrbitAction (U r) (V r))
-                (UnitarilyInvariantSeminorm.orthogonalBlockSum
-                  (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j)))) ∧
+                (((basisMatrixUnit eF eE i j).prodMap (basisMatrixUnit eF eE i j)).withLpMap 2))) ∧
         ∑ r, |w r| ≤ mass
 
 /-- An integrable scalar Fourier kernel representing the reciprocal function
@@ -859,12 +857,12 @@ theorem hasDoubledRealReciprocalOrbitInterpolation_of_finiteFourierInterpolation
     let d : ℝ := alpha i - beta j
     have horbit :
         ((∑ r, w r • unitaryOrbitAction (U r) (V r))
-            (UnitarilyInvariantSeminorm.orthogonalBlockSum T T)) =
+            ((T.prodMap T).withLpMap 2)) =
           doubledComplexScalarAction
             (∑ r, a r * Complex.exp ((((t r * d : ℝ) : ℂ) * Complex.I))) T := by
       calc
         ((∑ r, w r • unitaryOrbitAction (U r) (V r))
-            (UnitarilyInvariantSeminorm.orthogonalBlockSum T T)) =
+            ((T.prodMap T).withLpMap 2)) =
             ∑ r, ‖a r‖ •
               doubledPhaseAction (Complex.arg (a r) + t r * d) T := by
                 simp only [LinearMap.sum_apply, LinearMap.smul_apply, w]
@@ -875,7 +873,7 @@ theorem hasDoubledRealReciprocalOrbitInterpolation_of_finiteFourierInterpolation
                 change ‖a r‖ •
                     ((basisDoubledRealRotation eF
                         (fun i => Complex.arg (a r) + t r * alpha i)).toLinearMap ∘ₗ
-                      UnitarilyInvariantSeminorm.orthogonalBlockSum T T ∘ₗ
+                      (T.prodMap T).withLpMap 2 ∘ₗ
                         (basisDoubledRealRotation eE
                           (fun j => -(t r * beta j))).toLinearMap) = _
                 rw [show T = basisMatrixUnit eF eE i j by rfl,

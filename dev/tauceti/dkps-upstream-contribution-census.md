@@ -2907,3 +2907,62 @@ Validation: focused donor/ideal/block-trace, branch-free double-angle, Ritz,
 finite trace and source norm builds passed. Full default `lake build`
 (21,535 jobs) and `lake build Challenge` (19,783 jobs) passed without compiler
 or linter warnings.
+
+## 2026-11-02: native product-map block sums and doubled spectra
+
+Retired `UnitarilyInvariantSeminorm.orthogonalBlockSum` throughout maintained
+Lean sources. The compiled carrier correspondence is exactly Mathlib's
+`(A.prodMap B).withLpMap 2`, including the rectangular, scalar, subtraction
+and product-unitary presentations. The local `orthogonalBlockSum_apply`,
+`_smul`, `_sub`, `_comp`, `_adjoint` and `_linearIsometryEquiv` interfaces
+retire; consumers use native product maps and explicit carrier changes.
+No replacement local block-map definition or forwarding alias is introduced.
+
+Accepted [#14456](https://github.com/TauCetiProject/TauCeti/pull/14456),
+`13f061f3f1b1dfce3a28c5af2629c16b08b97584`, supplies
+`LinearMap.adjoint_prodMap_withLpMap`,
+`LinearMap.singularValues_prodMap_withLpMap_self` and
+`LinearMap.kyFanSum_prodMap_withLpMap_self`. These replace the local adjoint
+and doubled-block spectral/Ky Fan proofs, including arbitrary rectangular
+RCLike maps and zero-dimensional spaces.
+
+Accepted [#14451](https://github.com/TauCetiProject/TauCeti/pull/14451),
+`9c78f15118d3d6dfa5db26ee032eeb0c7989686c`, supplies native unitary-orbit and
+orbit-hull block stability and `UnitarilyInvariantSeminorm.map_prodMap_withLpMap_le`.
+It replaces `orthogonalBlockSum_apply_le_of_kyFanSum_le`; its coupling theorem
+requires neither finite dimension nor completeness. The unused local
+`orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit` weighted-product
+proof and its private real-scalar bridge retire. The
+`singularValues_orthogonalBlockSum_congr` forwarding corollary also retires;
+the scalar equality consumer applies native orbit stability and the accepted
+orbit/singular-value equivalence directly.
+
+Both integrations are in the unchanged pin `463ab293070d`; their integration
+messages explicitly report no external formalization vendored. This records
+independent implementations of the same roadmap results and transitive reuse
+of accepted APIs, not DKPS proof-adaptation lineage.
+
+Retained on the native map: the linear diagonal assembly,
+symmetry/positivity and modulus compatibility, the block-subspace definition
+and its projector formula, the scalar equality consequence used by finite
+extremizers, and pointwise singular-value norm comparison. These additional
+formulations are absent from the accepted module. The donor now imports only
+the native block-sum module. The remaining trace assembly/instance consumers
+explicitly import the still-local `Singular.Subspace` trace identity, rather
+than obtaining it through unrelated block-map imports.
+
+Historical source:
+`e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm/BlockSum.lean`;
+split `7b732f4ca` under `RectangularUnitarilyInvariantNorm/BlockSum.lean`;
+Jon Crall / Claude Fable 5, copyright Kitware, Inc., Apache-2.0. Original donor
+names remain in the manifest even after their declarations are deleted.
+
+The old real-convex-hull formulation was compiled directly from native
+orbit-hull stability and `LinearMap.twoSidedUnitaryOrbitHull_eq_convexHull`
+under the original restricted real scalar action, without finite dimension.
+This verifies the scalar-action correspondence explicitly.
+
+Validation: focused block, modulus/projector compatibility, source trace,
+extremizer and doubled-Sylvester builds passed. Full default `lake build`
+(21,535 jobs) and `lake build Challenge` (19,783 jobs) passed without compiler
+or linter warnings. The obsolete local linter suppression was removed.

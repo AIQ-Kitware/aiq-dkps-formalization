@@ -70,29 +70,20 @@ theorem attainsProjectionTraceBound_orthogonalBlockSum
       (orthogonalBlockSumSubmodule U₁ U₂)
       (orthogonalBlockSumSubmodule V₁ V₂)
       (LinearIsometryEquiv.withLpProdCongr 2 W₁ W₂) := by
-  have hid :
-      orthogonalBlockSum
-          (LinearMap.id : H₁ →ₗ[ℂ] H₁) (LinearMap.id : H₂ →ₗ[ℂ] H₂) =
-        (LinearMap.id : WithLp 2 (H₁ × H₂) →ₗ[ℂ] WithLp 2 (H₁ × H₂)) := by
-    ext x
-    apply WithLp.ofLp_injective 2
-    simp only [orthogonalBlockSum_apply, LinearMap.id_apply]
-    rfl
   have hdisp :
       (LinearMap.id : WithLp 2 (H₁ × H₂) →ₗ[ℂ] WithLp 2 (H₁ × H₂)) -
           (LinearIsometryEquiv.withLpProdCongr 2 W₁ W₂).toLinearMap =
-        orthogonalBlockSum (LinearMap.id - W₁.toLinearMap)
-          (LinearMap.id - W₂.toLinearMap) := by
-    rw [← hid, ← orthogonalBlockSum_linearIsometryEquiv]
-    exact (orthogonalBlockSum_sub _ _ _ _).symm
+        ((LinearMap.id - W₁.toLinearMap).prodMap (LinearMap.id - W₂.toLinearMap)).withLpMap 2 := by
+    ext x
+    apply WithLp.ofLp_injective 2
+    rfl
   have hproj :
       projection (orthogonalBlockSumSubmodule U₁ U₂) -
           projection (orthogonalBlockSumSubmodule V₁ V₂) =
-        orthogonalBlockSum (projection U₁ - projection V₁)
-          (projection U₂ - projection V₂) := by
+        ((projection U₁ - projection V₁).prodMap (projection U₂ - projection V₂)).withLpMap 2 := by
     rw [projection_orthogonalBlockSumSubmodule U₁ U₂,
-      projection_orthogonalBlockSumSubmodule V₁ V₂,
-      ← orthogonalBlockSum_sub]
+      projection_orthogonalBlockSumSubmodule V₁ V₂]
+    rfl
   constructor
   · exact TauCeti.map_orthogonalBlockSumSubmodule
       U₁ U₂ V₁ V₂ W₁ W₂ h₁.1 h₂.1
@@ -386,17 +377,17 @@ theorem phasePlaneModel_projection_trace_formula (n : ℕ)
       have hproj :
           projection (phasePlaneModelSource (n + 1)) -
               projection (phasePlaneModelTarget (n + 1) theta) =
-            orthogonalBlockSum
-              (projection sourceLine - projection (targetLine (theta 0)))
+            ((projection sourceLine - projection (targetLine (theta 0))).prodMap
               (projection (phasePlaneModelSource n) -
-                projection (phasePlaneModelTarget n (fun i => theta i.succ))) := by
+                projection (phasePlaneModelTarget n (fun i => theta i.succ)))).withLpMap 2 := by
         change projection
               (orthogonalBlockSumSubmodule sourceLine (phasePlaneModelSource n)) -
             projection
               (orthogonalBlockSumSubmodule (targetLine (theta 0))
                 (phasePlaneModelTarget n (fun i => theta i.succ))) = _
         rw [projection_orthogonalBlockSumSubmodule,
-          projection_orthogonalBlockSumSubmodule, ← orthogonalBlockSum_sub]
+          projection_orthogonalBlockSumSubmodule]
+        rfl
       rw [hproj, kyFanSum_orthogonalBlockSum_full]
       have hdim : finrank ℂ E2 = 2 := finrank_euclideanSpace_fin
       rw [hdim, kyFanSum_projectionDifference (theta 0) (hzero 0) (hpi 0)]
@@ -492,8 +483,11 @@ theorem phasePlaneModel_with_fixed_projection_trace_formula
           (finrank ℂ (WithLp 2 (phasePlaneModel n × G))) =
         ∑ i : Fin (n + 1), 2 * Real.sin (theta i) := by
   rw [projection_orthogonalBlockSumSubmodule,
-    projection_orthogonalBlockSumSubmodule, ← orthogonalBlockSum_sub,
-    kyFanSum_orthogonalBlockSum_full]
+    projection_orthogonalBlockSumSubmodule]
+  change (((projection (phasePlaneModelSource n) -
+    projection (phasePlaneModelTarget n theta)).prodMap
+      (projection C - projection C)).withLpMap 2).kyFanSum _ = _
+  rw [kyFanSum_orthogonalBlockSum_full]
   have hzeroC :
       (projection C - projection C).kyFanSum (finrank ℂ G) = 0 := by
     simp [LinearMap.kyFanSum_def, LinearMap.singularValues_zero]

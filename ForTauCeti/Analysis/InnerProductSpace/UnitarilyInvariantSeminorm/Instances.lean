@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum
+public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import TauCeti.Analysis.InnerProductSpace.FanDominance
 public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius
 public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.KyFan

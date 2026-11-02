@@ -62,11 +62,11 @@ private theorem blockInlLinear_intertwines
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
     (A : E₁ →ₗ[𝕜] E₁) (B : E₂ →ₗ[𝕜] E₂) :
     blockInlLinear (𝕜 := 𝕜) (E₂ := E₂) ∘ₗ A =
-      UnitarilyInvariantSeminorm.orthogonalBlockSum A B ∘ₗ
+      (A.prodMap B).withLpMap 2 ∘ₗ
         blockInlLinear (𝕜 := 𝕜) (E₂ := E₂) := by
   ext x
   apply WithLp.ofLp_injective 2
-  simp [UnitarilyInvariantSeminorm.orthogonalBlockSum_apply]
+  simp [LinearMap.coe_withLpMap, WithLp.map, LinearMap.prodMap_apply]
 
 private theorem blockInrLinear_intertwines
     {E₁ E₂ : Type*}
@@ -74,11 +74,11 @@ private theorem blockInrLinear_intertwines
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂]
     (A : E₁ →ₗ[𝕜] E₁) (B : E₂ →ₗ[𝕜] E₂) :
     blockInrLinear (𝕜 := 𝕜) (E₁ := E₁) ∘ₗ B =
-      UnitarilyInvariantSeminorm.orthogonalBlockSum A B ∘ₗ
+      (A.prodMap B).withLpMap 2 ∘ₗ
         blockInrLinear (𝕜 := 𝕜) (E₁ := E₁) := by
   ext x
   apply WithLp.ofLp_injective 2
-  simp [UnitarilyInvariantSeminorm.orthogonalBlockSum_apply]
+  simp [LinearMap.coe_withLpMap, WithLp.map, LinearMap.prodMap_apply]
 
 /-- **Finite self-adjoint functional calculus preserves an orthogonal block sum.** -/
 theorem selfAdjointFunctionalCalculus_orthogonalBlockSum
@@ -89,15 +89,14 @@ theorem selfAdjointFunctionalCalculus_orthogonalBlockSum
     {B : E₂ →ₗ[𝕜] E₂} (hB : B.IsSymmetric) (f : ℝ → ℝ) :
     let hAB := UnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric hA hB
     LinearMap.IsSymmetric.cfc hAB f =
-      UnitarilyInvariantSeminorm.orthogonalBlockSum
-        (LinearMap.IsSymmetric.cfc hA f) (LinearMap.IsSymmetric.cfc hB f) := by
+      ((LinearMap.IsSymmetric.cfc hA f).prodMap (LinearMap.IsSymmetric.cfc hB f)).withLpMap 2 := by
   dsimp only
   let J₁ : E₁ →ₗ[𝕜] WithLp 2 (E₁ × E₂) :=
     blockInlLinear (𝕜 := 𝕜) (E₁ := E₁) (E₂ := E₂)
   let J₂ : E₂ →ₗ[𝕜] WithLp 2 (E₁ × E₂) :=
     blockInrLinear (𝕜 := 𝕜) (E₁ := E₁) (E₂ := E₂)
   let T : WithLp 2 (E₁ × E₂) →ₗ[𝕜] WithLp 2 (E₁ × E₂) :=
-    UnitarilyInvariantSeminorm.orthogonalBlockSum A B
+    (A.prodMap B).withLpMap 2
   let hT : T.IsSymmetric :=
     UnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric hA hB
   have hJ₁ : J₁ ∘ₗ A = T ∘ₗ J₁ := blockInlLinear_intertwines A B
@@ -127,10 +126,10 @@ theorem selfAdjointFunctionalCalculus_orthogonalBlockSum
           LinearMap.IsSymmetric.cfc hT f (J₂ x.ofLp.2) := map_add _ _ _
     _ = J₁ (LinearMap.IsSymmetric.cfc hA f x.ofLp.1) +
           J₂ (LinearMap.IsSymmetric.cfc hB f x.ofLp.2) := by rw [h₁, h₂]
-    _ = UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (LinearMap.IsSymmetric.cfc hA f) (LinearMap.IsSymmetric.cfc hB f) x := by
+    _ = ((LinearMap.IsSymmetric.cfc hA f).prodMap
+      (LinearMap.IsSymmetric.cfc hB f)).withLpMap 2 x := by
         apply WithLp.ofLp_injective 2
-        simp [J₁, J₂, UnitarilyInvariantSeminorm.orthogonalBlockSum_apply,
+        simp [J₁, J₂, LinearMap.coe_withLpMap, WithLp.map, LinearMap.prodMap_apply,
           WithLp.ofLp_fst, WithLp.ofLp_snd]
 
 /-- The projector onto an orthogonal block sum of subspaces is the block sum of the
@@ -142,8 +141,7 @@ theorem projection_orthogonalBlockSumSubmodule
     (U₁ : Submodule 𝕜 E₁) (U₂ : Submodule 𝕜 E₂) :
     projection
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂) =
-      UnitarilyInvariantSeminorm.orthogonalBlockSum
-        (projection U₁) (projection U₂) :=
+      ((projection U₁).prodMap (projection U₂)).withLpMap 2 :=
   UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule U₁ U₂
 
 /-- **The sine-angle operator of an orthogonal sum of subspace pairs is block-diagonal.** -/
@@ -155,16 +153,16 @@ theorem sinAngleOperator_orthogonalBlockSumSubmodule
     sinAngleOperator
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂) =
-      UnitarilyInvariantSeminorm.orthogonalBlockSum
-        (sinAngleOperator U₁ V₁) (sinAngleOperator U₂ V₂) := by
+      ((sinAngleOperator U₁ V₁).prodMap (sinAngleOperator U₂ V₂)).withLpMap 2 := by
   rw [sinAngleOperator_eq_operatorAbs
       (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
       (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂),
     sinAngleOperator_eq_operatorAbs U₁ V₁,
     sinAngleOperator_eq_operatorAbs U₂ V₂,
     projection_orthogonalBlockSumSubmodule U₁ U₂,
-    projection_orthogonalBlockSumSubmodule V₁ V₂,
-    ← UnitarilyInvariantSeminorm.orthogonalBlockSum_sub,
-    UnitarilyInvariantSeminorm.operatorAbs_orthogonalBlockSum]
+    projection_orthogonalBlockSumSubmodule V₁ V₂]
+  change (((projection U₁ - projection V₁).prodMap
+    (projection U₂ - projection V₂)).withLpMap 2).operatorAbs = _
+  exact UnitarilyInvariantSeminorm.operatorAbs_orthogonalBlockSum _ _
 
 end TauCeti

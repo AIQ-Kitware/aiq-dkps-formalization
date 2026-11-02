@@ -65,7 +65,7 @@ entries are real scalars embedded in `𝕜`.  This realization is `𝕜`-linear,
 norm-preserving, and available uniformly over `ℝ` and `ℂ`, so a finite
 complex Fourier interpolation of the reciprocal descends to a doubled orbit
 certificate over every `RCLike` field at once.  Combined with singular-value
-duplication on `orthogonalBlockSum`, it recovers the sharp generic Ky Fan
+duplication on the native product-map sum, it recovers the sharp generic Ky Fan
 reciprocal-multiplier estimate without any exact undoubled certificate. -/
 
 
@@ -82,8 +82,7 @@ theorem basisDoubledPhaseRotation_comp_basisMatrixUnit
     (i : Fin (Module.finrank 𝕜 F))
     (j : Fin (Module.finrank 𝕜 E)) :
     (basisDoubledPhaseRotation eF thetaF).toLinearMap ∘ₗ
-        UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j) ∘ₗ
+        ((basisMatrixUnit eF eE i j).prodMap (basisMatrixUnit eF eE i j)).withLpMap 2 ∘ₗ
         (basisDoubledPhaseRotation eE thetaE).toLinearMap =
       doubledPhaseMapAction (thetaF i + thetaE j)
         (basisMatrixUnit eF eE i j) := by
@@ -95,28 +94,28 @@ theorem basisDoubledPhaseRotation_comp_basisMatrixUnit
       apply WithLp.ofLp_injective 2
       apply Prod.ext <;>
         simp [basisDoubledPhaseRotation_apply,
-          UnitarilyInvariantSeminorm.orthogonalBlockSum_apply,
+          LinearMap.coe_withLpMap, WithLp.map, LinearMap.prodMap_apply,
           doubledPhaseMapAction_apply, basisMatrixUnit_apply,
           Real.cos_add, Real.sin_add, RCLike.ofReal_mul,
           RCLike.ofReal_sub, RCLike.ofReal_add] <;> module
     · apply WithLp.ofLp_injective 2
       apply Prod.ext <;>
         simp [basisDoubledPhaseRotation_apply,
-          UnitarilyInvariantSeminorm.orthogonalBlockSum_apply,
+          LinearMap.coe_withLpMap, WithLp.map, LinearMap.prodMap_apply,
           doubledPhaseMapAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite, hq]
   · by_cases hq : j = q
     · subst q
       apply WithLp.ofLp_injective 2
       apply Prod.ext <;>
         simp [basisDoubledPhaseRotation_apply,
-          UnitarilyInvariantSeminorm.orthogonalBlockSum_apply,
+          LinearMap.coe_withLpMap, WithLp.map, LinearMap.prodMap_apply,
           doubledPhaseMapAction_apply, basisMatrixUnit_apply,
           inner_smul_right, Real.cos_add, Real.sin_add, RCLike.ofReal_mul,
           RCLike.ofReal_sub, RCLike.ofReal_add] <;> module
     · apply WithLp.ofLp_injective 2
       apply Prod.ext <;>
         simp [basisDoubledPhaseRotation_apply,
-          UnitarilyInvariantSeminorm.orthogonalBlockSum_apply,
+          LinearMap.coe_withLpMap, WithLp.map, LinearMap.prodMap_apply,
           doubledPhaseMapAction_apply, basisMatrixUnit_apply, eE.inner_eq_ite,
           inner_smul_right, hq]
 
@@ -134,12 +133,10 @@ def HasDoubledReciprocalOrbitInterpolation
       ∃ V : Fin q → WithLp 2 (E × E) ≃ₗᵢ[𝕜] WithLp 2 (E × E),
         (∀ i j,
           ((δ : ℝ) : 𝕜) •
-              UnitarilyInvariantSeminorm.orthogonalBlockSum
-                (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j) =
+              ((basisMatrixUnit eF eE i j).prodMap (basisMatrixUnit eF eE i j)).withLpMap 2 =
             (((α i - β j : ℝ) : 𝕜)) •
               ((∑ r, ((w r : ℝ) : 𝕜) • unitaryOrbitAction (U r) (V r))
-                (UnitarilyInvariantSeminorm.orthogonalBlockSum
-                  (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j)))) ∧
+                (((basisMatrixUnit eF eE i j).prodMap (basisMatrixUnit eF eE i j)).withLpMap 2))) ∧
         ∑ r, |w r| ≤ mass
 
 omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
@@ -168,12 +165,12 @@ theorem hasDoubledReciprocalOrbitInterpolation_of_finiteFourierInterpolation
     let d : ℝ := α i - β j
     have horbit :
         ((∑ r, ((w r : ℝ) : 𝕜) • unitaryOrbitAction (U r) (V r))
-            (UnitarilyInvariantSeminorm.orthogonalBlockSum T T)) =
+            ((T.prodMap T).withLpMap 2)) =
           doubledComplexScalarMapAction
             (∑ r, a r * Complex.exp ((((t r * d : ℝ) : ℂ) * Complex.I))) T := by
       calc
         ((∑ r, ((w r : ℝ) : 𝕜) • unitaryOrbitAction (U r) (V r))
-            (UnitarilyInvariantSeminorm.orthogonalBlockSum T T)) =
+            ((T.prodMap T).withLpMap 2)) =
             ∑ r, ((‖a r‖ : ℝ) : 𝕜) •
               doubledPhaseMapAction (Complex.arg (a r) + t r * d) T := by
                 simp only [LinearMap.sum_apply, LinearMap.smul_apply, w]
@@ -184,7 +181,7 @@ theorem hasDoubledReciprocalOrbitInterpolation_of_finiteFourierInterpolation
                 change ((‖a r‖ : ℝ) : 𝕜) •
                     ((basisDoubledPhaseRotation eF
                         (fun i => Complex.arg (a r) + t r * α i)).toLinearMap ∘ₗ
-                      UnitarilyInvariantSeminorm.orthogonalBlockSum T T ∘ₗ
+                      (T.prodMap T).withLpMap 2 ∘ₗ
                         (basisDoubledPhaseRotation eE
                           (fun j => -(t r * β j))).toLinearMap) = _
                 rw [show T = basisMatrixUnit eF eE i j from rfl,
@@ -219,8 +216,8 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_doubledInterpolation
         ⟪C (eE j), eF i⟫_𝕜) :
     UnitarilyInvariantSeminorm.HasFiniteUnitaryOrbitCertificate
       mass
-      (((δ : ℝ) : 𝕜) • UnitarilyInvariantSeminorm.orthogonalBlockSum X X)
-      (UnitarilyInvariantSeminorm.orthogonalBlockSum C C) := by
+      (((δ : ℝ) : 𝕜) • (X.prodMap X).withLpMap 2)
+      ((C.prodMap C).withLpMap 2) := by
   classical
   rcases hinterp with ⟨q, w, U, V, hinterp, hmass⟩
   let S :
@@ -229,11 +226,10 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_doubledInterpolation
     ∑ r, ((w r : ℝ) : 𝕜) • unitaryOrbitAction (U r) (V r)
   have hunit (i : Fin (Module.finrank 𝕜 F))
       (j : Fin (Module.finrank 𝕜 E)) :
-      ((δ : ℝ) : 𝕜) • UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j) =
+      ((δ : ℝ) : 𝕜) • ((basisMatrixUnit eF eE i j).prodMap
+        (basisMatrixUnit eF eE i j)).withLpMap 2 =
         (((α i - β j : ℝ) : 𝕜)) •
-          S (UnitarilyInvariantSeminorm.orthogonalBlockSum
-            (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j)) := by
+          S (((basisMatrixUnit eF eE i j).prodMap (basisMatrixUnit eF eE i j)).withLpMap 2) := by
     exact hinterp i j
   have hcoeff' (i : Fin (Module.finrank 𝕜 F))
       (j : Fin (Module.finrank 𝕜 E)) :
@@ -246,10 +242,9 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_doubledInterpolation
   let blockDiagonal := UnitarilyInvariantSeminorm.orthogonalBlockSumDiagonal
     (𝕜 := 𝕜) (E₁ := E) (F₁ := F)
   have hblock (A : E →ₗ[𝕜] F) :
-      UnitarilyInvariantSeminorm.orthogonalBlockSum A A =
+      (A.prodMap A).withLpMap 2 =
         ∑ i, ∑ j, ⟪eF i, A (eE j)⟫_𝕜 •
-          UnitarilyInvariantSeminorm.orthogonalBlockSum
-            (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j) := by
+          ((basisMatrixUnit eF eE i j).prodMap (basisMatrixUnit eF eE i j)).withLpMap 2 := by
     -- states the goal with the definition unfolded, in the shape the next step needs;
     -- there is no `_apply` lemma to rewrite with here.
     change blockDiagonal A = _
@@ -257,19 +252,18 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_doubledInterpolation
     simp only [map_sum, map_smul, blockDiagonal]
     rfl
   have hrepr : ((δ : ℝ) : 𝕜) •
-      UnitarilyInvariantSeminorm.orthogonalBlockSum X X =
+      (X.prodMap X).withLpMap 2 =
         ∑ r, ((w r : ℝ) : 𝕜) • ((U r).toLinearMap ∘ₗ
-          UnitarilyInvariantSeminorm.orthogonalBlockSum C C ∘ₗ
+          (C.prodMap C).withLpMap 2 ∘ₗ
             (V r).toLinearMap) := by
     calc
-      ((δ : ℝ) : 𝕜) • UnitarilyInvariantSeminorm.orthogonalBlockSum X X =
+      ((δ : ℝ) : 𝕜) • (X.prodMap X).withLpMap 2 =
           ((δ : ℝ) : 𝕜) • ∑ i, ∑ j, ⟪eF i, X (eE j)⟫_𝕜 •
-            UnitarilyInvariantSeminorm.orthogonalBlockSum
-              (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j) := by
+            ((basisMatrixUnit eF eE i j).prodMap (basisMatrixUnit eF eE i j)).withLpMap 2 := by
         rw [hblock X]
       _ = ∑ i, ∑ j, ⟪eF i, X (eE j)⟫_𝕜 •
-            (((δ : ℝ) : 𝕜) • UnitarilyInvariantSeminorm.orthogonalBlockSum
-              (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j)) := by
+            (((δ : ℝ) : 𝕜) • ((basisMatrixUnit eF eE i j).prodMap
+              (basisMatrixUnit eF eE i j)).withLpMap 2) := by
         rw [Finset.smul_sum]
         apply Finset.sum_congr rfl
         intro i _
@@ -279,29 +273,27 @@ theorem finiteUnitaryOrbitCertificate_orthogonalBlockSum_of_doubledInterpolation
         rw [smul_smul, smul_smul, mul_comm]
       _ = ∑ i, ∑ j, ⟪eF i, X (eE j)⟫_𝕜 •
             ((((α i - β j : ℝ) : 𝕜)) •
-              S (UnitarilyInvariantSeminorm.orthogonalBlockSum
-                (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j))) := by
+              S (((basisMatrixUnit eF eE i j).prodMap
+                (basisMatrixUnit eF eE i j)).withLpMap 2)) := by
         apply Finset.sum_congr rfl
         intro i _
         apply Finset.sum_congr rfl
         intro j _
         rw [hunit i j]
       _ = ∑ i, ∑ j, ⟪eF i, C (eE j)⟫_𝕜 •
-            S (UnitarilyInvariantSeminorm.orthogonalBlockSum
-              (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j)) := by
+            S (((basisMatrixUnit eF eE i j).prodMap (basisMatrixUnit eF eE i j)).withLpMap 2) := by
         apply Finset.sum_congr rfl
         intro i _
         apply Finset.sum_congr rfl
         intro j _
         rw [← hcoeff' i j, smul_smul, mul_comm]
       _ = S (∑ i, ∑ j, ⟪eF i, C (eE j)⟫_𝕜 •
-            UnitarilyInvariantSeminorm.orthogonalBlockSum
-              (basisMatrixUnit eF eE i j) (basisMatrixUnit eF eE i j)) := by
+            ((basisMatrixUnit eF eE i j).prodMap (basisMatrixUnit eF eE i j)).withLpMap 2) := by
         simp only [map_sum, map_smul]
-      _ = S (UnitarilyInvariantSeminorm.orthogonalBlockSum C C) := by
+      _ = S ((C.prodMap C).withLpMap 2) := by
         rw [← hblock C]
       _ = ∑ r, ((w r : ℝ) : 𝕜) • ((U r).toLinearMap ∘ₗ
-          UnitarilyInvariantSeminorm.orthogonalBlockSum C C ∘ₗ
+          (C.prodMap C).withLpMap 2 ∘ₗ
             (V r).toLinearMap) := by
         simp only [S, LinearMap.sum_apply, LinearMap.smul_apply,
           unitaryOrbitAction_apply]
@@ -358,23 +350,23 @@ theorem kyFan_reciprocalMultiplier_le_of_approximateFourierInterpolation
   rcases hcert with ⟨_, cert, hmass⟩
   have hbound :
       (((δ : ℝ) : 𝕜) •
-            UnitarilyInvariantSeminorm.orthogonalBlockSum X X).kyFanSum (2 * k) ≤
-        cert.mass * (UnitarilyInvariantSeminorm.orthogonalBlockSum C C).kyFanSum (2 * k) := by
+            (X.prodMap X).withLpMap 2).kyFanSum (2 * k) ≤
+        cert.mass * ((C.prodMap C).withLpMap 2).kyFanSum (2 * k) := by
     simpa only [TauCeti.UnitarilyInvariantSeminorm.kyFan_apply] using
       cert.apply_le_mass_mul
         (TauCeti.UnitarilyInvariantSeminorm.kyFan 𝕜
           (WithLp 2 (E × E)) (WithLp 2 (F × F)) (2 * k))
-  have hnonneg : 0 ≤ (UnitarilyInvariantSeminorm.orthogonalBlockSum C C).kyFanSum (2 * k) := by
+  have hnonneg : 0 ≤ ((C.prodMap C).withLpMap 2).kyFanSum (2 * k) := by
     exact LinearMap.kyFanSum_nonneg _ _
   have hbound' := hbound.trans (mul_le_mul_of_nonneg_right hmass hnonneg)
   have hscale :
       (((δ : ℝ) : 𝕜) •
-            UnitarilyInvariantSeminorm.orthogonalBlockSum X X).kyFanSum (2 * k) =
-        δ * (UnitarilyInvariantSeminorm.orthogonalBlockSum X X).kyFanSum (2 * k) := by
+            (X.prodMap X).withLpMap 2).kyFanSum (2 * k) =
+        δ * ((X.prodMap X).withLpMap 2).kyFanSum (2 * k) := by
     rw [LinearMap.kyFanSum_smul, RCLike.norm_of_nonneg hδ.le]
   rw [hscale,
-    TauCeti.UnitarilyInvariantSeminorm.kyFanSum_orthogonalBlockSum_self,
-    TauCeti.UnitarilyInvariantSeminorm.kyFanSum_orthogonalBlockSum_self]
+    LinearMap.kyFanSum_prodMap_withLpMap_self,
+    LinearMap.kyFanSum_prodMap_withLpMap_self]
       at hbound'
   have hbound' :
       δ * X.kyFanSum k ≤

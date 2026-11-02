@@ -2313,20 +2313,21 @@
       ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BlockSum",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
-      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantSeminorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users; unified in the rectangular Seminorm-extending API; inherited laws and consumers migrated; current overlay awaits Lean compilation",
+      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantSeminorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users; unified in the rectangular Seminorm-extending API; inherited laws and consumers migrated; that earlier overlay initially awaited compilation; current consumption and validation are recorded in migration_note",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization"
+        "TauCeti.Analysis.InnerProductSpace.BlockSum"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.AngleGeometryBlockSum",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Instances"
       ],
-      "status": "staged-needs-current-validation",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/14456",
+      "migration_note": "2026-11-02: replace the local orthogonalBlockSum definition everywhere maintained by Mathlib (A.prodMap B).withLpMap 2, after compiled correspondence including scalar/subtraction and product-unitary carriers. Delete orthogonalBlockSum_apply/smul/sub/comp/adjoint/linearIsometryEquiv; native product/withLpMap laws and explicit carrier changes serve consumers directly. Accepted #14456 integration 13f061f3f1b1dfce3a28c5af2629c16b08b97584 (in pin 463ab293070d) replaces singularValues_orthogonalBlockSum_self and kyFanSum_orthogonalBlockSum_self by LinearMap.singularValues_prodMap_withLpMap_self and kyFanSum_prodMap_withLpMap_self, with exactly the rectangular RCLike scope. Accepted #14451 integration 9c78f15118d3d6dfa5db26ee032eeb0c7989686c replaces orthogonalBlockSum_apply_le_of_kyFanSum_le by UnitarilyInvariantSeminorm.map_prodMap_withLpMap_le; its orbit-hull coupling has no finite-dimensionality/completeness hypotheses, so the unused local orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit engine and private real_smul_linearMap_eq retire. The singularValues_orthogonalBlockSum_congr forwarding corollary retires; the retained scalar-equality consequence applies native orbit stability and the native orbit/singular-value characterization directly. Both upstream integration messages explicitly report no external formalization vendored; record independent native implementations/transitive API reuse, not DKPS proof adaptation. Retain orthogonalBlockSumDiagonal, symmetry/positivity, operatorAbs block compatibility, orthogonalBlockSumSubmodule and its projection, scalar equality consequence, and pointwise norm comparison: these extra formulations are not supplied by the accepted module. All retained results use the canonical map; no local block-map alias remains. Historical donor e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm/BlockSum.lean, split at 7b732f4ca from RectangularUnitarilyInvariantNorm, Jon Crall / Claude Fable 5, Kitware Inc., Apache-2.0. BlockSum now imports only the accepted native module; Instances and the paper trace assembly explicitly import the still-local Singular.Subspace trace identity instead of receiving it transitively. The old real-convex-hull statement was also compiled directly from native orbit-hull stability using twoSidedUnitaryOrbitHull_eq_convexHull under the original restricted real action, without finite-dimensionality; this verifies the scalar-action correspondence rather than inferring it from names."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",
@@ -2364,7 +2365,8 @@
       "roadmap_target": "unitarily-invariant-norm",
       "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantSeminorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users; unified in the rectangular Seminorm-extending API; inherited laws and consumers migrated; current overlay awaits Lean compilation",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum"
+        "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSum",
+        "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace"
       ],
       "blocked_dependencies": [],
       "downstream_users": [

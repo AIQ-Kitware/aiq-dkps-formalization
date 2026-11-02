@@ -35,8 +35,7 @@ theorem angleOperator_orthogonalBlockSumSubmodule
     angleOperator
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂) =
-      UnitarilyInvariantSeminorm.orthogonalBlockSum
-        (angleOperator U₁ V₁) (angleOperator U₂ V₂) := by
+      ((angleOperator U₁ V₁).prodMap (angleOperator U₂ V₂)).withLpMap 2 := by
   let S₁ := sinAngleOperator U₁ V₁
   let S₂ := sinAngleOperator U₂ V₂
   have hS₁ : S₁.IsSymmetric := by
@@ -53,7 +52,7 @@ theorem angleOperator_orthogonalBlockSumSubmodule
       sinAngleOperator
           (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
           (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂) =
-        UnitarilyInvariantSeminorm.orthogonalBlockSum S₁ S₂ :=
+        (S₁.prodMap S₂).withLpMap 2 :=
     TauCeti.sinAngleOperator_orthogonalBlockSumSubmodule U₁ V₁ U₂ V₂
   have hsum : LinearMap.IsSymmetric
       (sinAngleOperator
@@ -68,12 +67,10 @@ theorem angleOperator_orthogonalBlockSumSubmodule
       LinearMap.IsSymmetric.cfc hblock Real.arcsin := by
         unfold angleOperator
         exact TauCeti.cfc_congr_operator hsum hblock hsin Real.arcsin
-    _ = UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (LinearMap.IsSymmetric.cfc hS₁ Real.arcsin)
-          (LinearMap.IsSymmetric.cfc hS₂ Real.arcsin) :=
+    _ = ((LinearMap.IsSymmetric.cfc hS₁ Real.arcsin).prodMap
+      (LinearMap.IsSymmetric.cfc hS₂ Real.arcsin)).withLpMap 2 :=
       TauCeti.selfAdjointFunctionalCalculus_orthogonalBlockSum hS₁ hS₂ Real.arcsin
-    _ = UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (angleOperator U₁ V₁) (angleOperator U₂ V₂) := rfl
+    _ = ((angleOperator U₁ V₁).prodMap (angleOperator U₂ V₂)).withLpMap 2 := rfl
 
 /-- The canonical finite `tan Theta` operator preserves orthogonal direct sums. -/
 theorem tanAngleOperator_orthogonalBlockSumSubmodule
@@ -84,8 +81,7 @@ theorem tanAngleOperator_orthogonalBlockSumSubmodule
     tanAngleOperator
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂) =
-      UnitarilyInvariantSeminorm.orthogonalBlockSum
-        (tanAngleOperator U₁ V₁) (tanAngleOperator U₂ V₂) := by
+      ((tanAngleOperator U₁ V₁).prodMap (tanAngleOperator U₂ V₂)).withLpMap 2 := by
   have hangle := angleOperator_orthogonalBlockSumSubmodule U₁ V₁ U₂ V₂
   have hA₁ : (angleOperator U₁ V₁).IsSymmetric := by
     unfold angleOperator
@@ -108,12 +104,10 @@ theorem tanAngleOperator_orthogonalBlockSumSubmodule
       LinearMap.IsSymmetric.cfc hblock safeTan := by
         unfold tanAngleOperator
         exact TauCeti.cfc_congr_operator hsum hblock hangle safeTan
-    _ = UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (LinearMap.IsSymmetric.cfc hA₁ safeTan)
-          (LinearMap.IsSymmetric.cfc hA₂ safeTan) :=
+    _ = ((LinearMap.IsSymmetric.cfc hA₁ safeTan).prodMap
+      (LinearMap.IsSymmetric.cfc hA₂ safeTan)).withLpMap 2 :=
       TauCeti.selfAdjointFunctionalCalculus_orthogonalBlockSum hA₁ hA₂ safeTan
-    _ = UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (tanAngleOperator U₁ V₁) (tanAngleOperator U₂ V₂) := rfl
+    _ = ((tanAngleOperator U₁ V₁).prodMap (tanAngleOperator U₂ V₂)).withLpMap 2 := rfl
 
 /-- The canonical finite `tan (2 Theta)` operator preserves orthogonal direct sums. -/
 theorem tanTwoAngleOperator_orthogonalBlockSumSubmodule
@@ -124,8 +118,7 @@ theorem tanTwoAngleOperator_orthogonalBlockSumSubmodule
     tanTwoAngleOperator
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule U₁ U₂)
         (UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule V₁ V₂) =
-      UnitarilyInvariantSeminorm.orthogonalBlockSum
-        (tanTwoAngleOperator U₁ V₁) (tanTwoAngleOperator U₂ V₂) := by
+      ((tanTwoAngleOperator U₁ V₁).prodMap (tanTwoAngleOperator U₂ V₂)).withLpMap 2 := by
   have hangle := angleOperator_orthogonalBlockSumSubmodule U₁ V₁ U₂ V₂
   have hA₁ : (angleOperator U₁ V₁).IsSymmetric := by
     unfold angleOperator
@@ -148,12 +141,10 @@ theorem tanTwoAngleOperator_orthogonalBlockSumSubmodule
       LinearMap.IsSymmetric.cfc hblock safeTanTwo := by
         unfold tanTwoAngleOperator
         exact TauCeti.cfc_congr_operator hsum hblock hangle safeTanTwo
-    _ = UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (LinearMap.IsSymmetric.cfc hA₁ safeTanTwo)
-          (LinearMap.IsSymmetric.cfc hA₂ safeTanTwo) :=
+    _ = ((LinearMap.IsSymmetric.cfc hA₁ safeTanTwo).prodMap
+      (LinearMap.IsSymmetric.cfc hA₂ safeTanTwo)).withLpMap 2 :=
       TauCeti.selfAdjointFunctionalCalculus_orthogonalBlockSum hA₁ hA₂ safeTanTwo
-    _ = UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (tanTwoAngleOperator U₁ V₁) (tanTwoAngleOperator U₂ V₂) := rfl
+    _ = ((tanTwoAngleOperator U₁ V₁).prodMap (tanTwoAngleOperator U₂ V₂)).withLpMap 2 := rfl
 
 end DavisKahan.FiniteDimensional
 end TauCeti

@@ -176,26 +176,11 @@ displacements. -/
 theorem twoPlanePhaseUnitary_displacement (theta phi : ℝ) :
     (LinearMap.id : WithLp 2 (E2 × E2) →ₗ[ℂ] WithLp 2 (E2 × E2)) -
         (twoPlanePhaseUnitary theta phi).toLinearMap =
-      UnitarilyInvariantSeminorm.orthogonalBlockSum
-        (LinearMap.id - (phaseUnitary theta).toLinearMap)
-        (LinearMap.id - (phaseUnitary phi).toLinearMap) := by
-  have hid :
-      UnitarilyInvariantSeminorm.orthogonalBlockSum
-        (LinearMap.id : E2 →ₗ[ℂ] E2) (LinearMap.id : E2 →ₗ[ℂ] E2) =
-        (LinearMap.id : WithLp 2 (E2 × E2) →ₗ[ℂ] WithLp 2 (E2 × E2)) := by
-    ext x
-    apply WithLp.ofLp_injective 2
-    simp [UnitarilyInvariantSeminorm.orthogonalBlockSum_apply]
-    rfl
-  calc
-    LinearMap.id - (twoPlanePhaseUnitary theta phi).toLinearMap =
-        UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (LinearMap.id : E2 →ₗ[ℂ] E2) (LinearMap.id : E2 →ₗ[ℂ] E2) -
-        UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (phaseUnitary theta).toLinearMap (phaseUnitary phi).toLinearMap := by
-      rw [hid, UnitarilyInvariantSeminorm.orthogonalBlockSum_linearIsometryEquiv]
-      rfl
-    _ = _ := (UnitarilyInvariantSeminorm.orthogonalBlockSum_sub _ _ _ _).symm
+      ((LinearMap.id - (phaseUnitary theta).toLinearMap).prodMap
+        (LinearMap.id - (phaseUnitary phi).toLinearMap)).withLpMap 2 := by
+  ext x
+  apply WithLp.ofLp_injective 2
+  rfl
 
 /-- The *full four-dimensional trace* of two independently phase-minimized
 principal planes is exactly the trace norm of the corresponding block sum of
@@ -206,9 +191,8 @@ theorem twoPlanePhaseUnitary_trace_eq_projectionDifference
     (h0phi : 0 ≤ phi) (hpiPhi : phi ≤ Real.pi / 2) :
     (LinearMap.id - (twoPlanePhaseUnitary theta phi).toLinearMap).kyFanSum
       (finrank ℂ (WithLp 2 (E2 × E2))) =
-      (UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (projection sourceLine - projection (targetLine theta))
-          (projection sourceLine - projection (targetLine phi))).kyFanSum
+      (((projection sourceLine - projection (targetLine theta)).prodMap
+        (projection sourceLine - projection (targetLine phi))).withLpMap 2).kyFanSum
             (finrank ℂ (WithLp 2 (E2 × E2))) := by
   rw [twoPlanePhaseUnitary_displacement,
     kyFanSum_orthogonalBlockSum_full, kyFanSum_orthogonalBlockSum_full]
@@ -257,13 +241,12 @@ theorem twoPlanePhaseUnitary_global_trace_minimizer
         (finrank ℂ (WithLp 2 (E2 × E2))) := by
   have hproj :
       projection twoPlaneSource - projection (twoPlaneTarget theta phi) =
-        UnitarilyInvariantSeminorm.orthogonalBlockSum
-          (projection sourceLine - projection (targetLine theta))
-          (projection sourceLine - projection (targetLine phi)) := by
+        ((projection sourceLine - projection (targetLine theta)).prodMap
+          (projection sourceLine - projection (targetLine phi))).withLpMap 2 := by
     rw [twoPlaneSource, twoPlaneTarget,
       projection_orthogonalBlockSumSubmodule,
-      projection_orthogonalBlockSumSubmodule,
-      ← UnitarilyInvariantSeminorm.orthogonalBlockSum_sub]
+      projection_orthogonalBlockSumSubmodule]
+    rfl
   have heq := twoPlanePhaseUnitary_trace_eq_projectionDifference
     theta phi h0theta hpiTheta h0phi hpiPhi
   rw [← hproj] at heq
