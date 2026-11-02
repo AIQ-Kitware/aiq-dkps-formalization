@@ -365,7 +365,8 @@ theorem uiNorm_restrictedDisplacement_le
     N ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
         projection U) ≤
       N ((LinearMap.id - W.toLinearMap) ∘ₗ projection U) :=
-  N.apply_le_of_kyFanSum_le
-    (kyFanSum_restrictedDisplacement_le U V hacute W hmap)
+  N.map_le_of_kyFanSum_le (fun k => by
+    simpa only [kyFanSum_eq_linearMap_kyFanSum] using
+      kyFanSum_restrictedDisplacement_le U V hacute W hmap k)
 end DavisKahan.FiniteDimensional
 end TauCeti

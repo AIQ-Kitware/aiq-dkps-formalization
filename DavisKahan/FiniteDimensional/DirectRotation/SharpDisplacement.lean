@@ -257,7 +257,7 @@ theorem cos_half_mul_uiNorm_directRotation_le_projection
       (singularValues_directDisplacement_eq_sharpTransfer U V hacute)
   have hbound : N A ≤ (Real.cos (alpha / 2))⁻¹ * N S := by
     rw [hN]
-    exact N.apply_comp_le (inv_nonneg.mpr hc.le) hFbound
+    exact N.map_comp_le_left _ _ hFbound
   have hbound' := mul_le_mul_of_nonneg_left hbound hc.le
   have hcancel : Real.cos (alpha / 2) *
       ((Real.cos (alpha / 2))⁻¹ * N S) = N S := by
@@ -483,7 +483,7 @@ theorem uiNorm_directRotation_le_sqrt_two_mul_displacement
   calc
     N A = N (F ∘ₗ S) := hN
     _ ≤ Real.sqrt 2 * N S :=
-      N.apply_comp_le (Real.sqrt_nonneg 2) hFbound
+      N.map_comp_le_left _ _ hFbound
     _ = Real.sqrt 2 * N (projection U - projection V) := by
       rw [uiNorm_projection_sub_eq_sinAngleOperator N U V]
     _ ≤ Real.sqrt 2 * N (LinearMap.id - W.toLinearMap) :=

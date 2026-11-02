@@ -166,13 +166,12 @@ private theorem domainTransport_residual_le
     rfl
   rw [hcomp]
   calc
-    N ((B - A) ∘ₗ projection U) ≤ N (B - A) * 1 :=
-      N.apply_comp_le' zero_le_one fun x => by
-        -- states the norm goal against the local definition so the operator-norm bound
-        -- applies directly; `simp only` would unfold the composition further than the
-        -- bound lemma expects.
-        change ‖U.starProjection x‖ ≤ 1 * ‖x‖
-        simpa using U.norm_starProjection_apply_le x
+    N ((B - A) ∘ₗ projection U) ≤ N (B - A) * 1 := by
+      simpa only [mul_comm] using
+        N.map_comp_le_right (B - A) (projection U) (c := 1)
+          (fun x => by
+            change ‖U.starProjection x‖ ≤ 1 * ‖x‖
+            simpa only [one_mul] using U.norm_starProjection_apply_le x)
     _ = N (B - A) := mul_one _
 
 

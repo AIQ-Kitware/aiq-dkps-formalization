@@ -2380,3 +2380,41 @@ not proof descent. Historical Kitware Apache-2.0 source remains at
 `e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/MoorePenroseInverse.lean`
 (introduction `caa0966`, Jon Crall, GPT-5.6 Thinking). The manifest preserves the
 original declarations, including those removed by the earlier partial retirement.
+
+## 2026-11-01: retire the rectangular Fan-dominance proof engine
+
+`UnitarilyInvariantSeminorm/Majorization.lean` retains only the Sylvester
+coefficient-mass budget and its nonnegative scaling theorem. The coordinate
+unitary-extension, diagonal-lift, SVD-transport, transfer-descent, convex-hull
+norm comparison, and bounded-factor implementations are removed. The retained
+budget proof scales a unit-mass certificate supplied by TauCeti, rather than
+reconstructing a convex combination. The donor's linter override is removed.
+
+The accepted replacements, both in pin `463ab293070d`, are:
+
+- [#14308](https://github.com/TauCetiProject/TauCeti/pull/14308), integration
+  `9de0d666098a9ef046dbb7ce3384f0e63af2980c`:
+  `LinearMap.mem_twoSidedUnitaryOrbitHull_iff_kyFanSum_le`,
+  `UnitaryOrbitCertificate.exists_mass_eq_one_of_mem_twoSidedUnitaryOrbitHull`,
+  `UnitarilyInvariantSeminorm.map_le_of_mem_twoSidedUnitaryOrbitHull`, and
+  `map_le_of_kyFanSum_le`.
+- [#14662](https://github.com/TauCetiProject/TauCeti/pull/14662), integration
+  `38596bb4395faa26cd9c2ede1df65b5e67aeaa0b`: `map_comp_le_left` and
+  `map_comp_le_right`. These also allow negative factor-bound constants,
+  strictly extending the retired nonnegative-constant statements.
+
+Paper-facing Ky Fan statements retain their finite-prefix presentation;
+consumers translate with `kyFanSum_eq_linearMap_kyFanSum`. The block-sum norm
+comparison uses `LinearMap.prodMap_withLpMap_mem_twoSidedUnitaryOrbitHull`.
+The existing challenge dependency audit now names the accepted leaves.
+No forwarding Fan-dominance theorem remains in `ForTauCeti`.
+
+The original source is preserved at
+`e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm/Majorization.lean`,
+with Jon Crall / Claude Fable 5, Kitware copyright, and Apache-2.0 attribution;
+the API unification at `bf84b6ff1` credits GPT-6 Astra. The existing manifest
+preserves the retired declarations. The accepted Fan-dominance and gauge proofs
+are not claimed to be DKPS adaptations. Their use of the DKPS-adapted
+seminorm/certificate API from #14241 is **transitive reuse**, not descent of the
+Fan-dominance proof itself. The still-local budget extension is not marked
+accepted upstream.

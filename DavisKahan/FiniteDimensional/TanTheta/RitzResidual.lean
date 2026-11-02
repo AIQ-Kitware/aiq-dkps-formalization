@@ -648,7 +648,8 @@ theorem tanTheta0_ritzResidual_le
       k tanTheta0 hδ.le]
     exact kyFan_tanTheta0_ritzResidual_le hA hU X hβα hδ hgap
       tanTheta0 htan k
-  have hN := N.apply_le_of_kyFanSum_le hprefix
+  have hN := N.map_le_of_kyFanSum_le (fun k => by
+    simpa only [kyFanSum_eq_linearMap_kyFanSum] using hprefix k)
   rw [map_smul_eq_mul N] at hN
   simpa [RCLike.norm_ofReal, abs_of_pos hδ] using hN
 

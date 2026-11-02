@@ -9,9 +9,9 @@ signatures against an independent conformance module.
 
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+public import TauCeti.Analysis.InnerProductSpace.FanDominance
 
 public section
 
-#print axioms TauCeti.UnitarilyInvariantSeminorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
-#print axioms TauCeti.UnitarilyInvariantSeminorm.apply_le_of_kyFanSum_le
+#print axioms LinearMap.mem_twoSidedUnitaryOrbitHull_iff_kyFanSum_le
+#print axioms TauCeti.UnitarilyInvariantSeminorm.map_le_of_kyFanSum_le

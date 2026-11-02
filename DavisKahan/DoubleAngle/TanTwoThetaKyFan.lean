@@ -532,7 +532,8 @@ theorem tanTwoTheta0_offDiagonal_le
       kyFanSum_real_smul k H (by norm_num : (0 : ℝ) ≤ 2)]
     exact kyFan_tanTwoTheta0_offDiagonal_le hA hH hAU hHU hHUperp hTmem
       hTzero hUb hUa hinv hT1 tanTwoTheta0 htan k
-  have hN := N.apply_le_of_kyFanSum_le hprefix
+  have hN := N.map_le_of_kyFanSum_le (fun k => by
+    simpa only [kyFanSum_eq_linearMap_kyFanSum] using hprefix k)
   rw [map_smul_eq_mul N, map_smul_eq_mul N] at hN
   have hnorm1 : ‖(((b - a : ℝ)) : 𝕜)‖ = b - a := by
     rw [RCLike.norm_ofReal]

@@ -2088,18 +2088,18 @@
         "TauCeti.UnitarilyInvariantSeminorm.codomainIsometryTransport",
         "TauCeti.UnitarilyInvariantSeminorm.codomainIsometryTransport_apply",
         "TauCeti.UnitarilyInvariantSeminorm.domainIsometryTransport",
-        "TauCeti.UnitarilyInvariantSeminorm.domainIsometryTransport_apply"
+        "TauCeti.UnitarilyInvariantSeminorm.domainIsometryTransport_apply",
+        "TauCeti.UnitarilyInvariantSeminorm.HasFiniteUnitaryOrbitCertificate",
+        "TauCeti.UnitarilyInvariantSeminorm.hasFiniteUnitaryOrbitCertificate_of_smul_mem_convexHull"
       ],
       "current_namespace": "TauCeti",
       "staging_module": null,
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Basic",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.FanDominance",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
-      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantSeminorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users; unified in the rectangular Seminorm-extending API; inherited laws and consumers migrated; current overlay awaits Lean compilation; TauCeti Basic accepted upstream at 3a1967e; local duplicate deleted during the upstream-first migration",
+      "provenance_class": "split out of the 2124-line RectangularUnitarilyInvariantSeminorm on 2026-07-28 to meet Tau Ceti's 1500-line hard ceiling (1000 for a new file); no statement, proof or name changed, except that exists_unitary_factorization_of_singularValues_eq was promoted from private to public because the split separates it from its users; unified in the rectangular Seminorm-extending API; inherited laws and consumers migrated; TauCeti Basic accepted upstream at 3a1967e; local duplicate deleted during the upstream-first migration",
       "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.KyFan",
-        "Mathlib.Analysis.Convex.Caratheodory",
-        "Mathlib.Analysis.Seminorm"
+        "TauCeti.Analysis.InnerProductSpace.FanDominance"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -2107,8 +2107,9 @@
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Gauge",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization"
       ],
-      "status": "accepted-upstream-local-copy-removed",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/14308",
+      "migration_note": "2026-11-01: retire the duplicated rectangular Fan-dominance, orbit-hull characterization, rank bound, coordinate-unitary extension, SVD transport, convex-hull norm bound, and bounded-factor proof engine. Accepted #14308 (9de0d666098a9ef046dbb7ce3384f0e63af2980c) supplies LinearMap.mem_twoSidedUnitaryOrbitHull_iff_kyFanSum_le, UnitaryOrbitCertificate.exists_mass_eq_one_of_mem_twoSidedUnitaryOrbitHull, and UnitarilyInvariantSeminorm.map_le_of_kyFanSum_le; accepted #14662 (38596bb4395faa26cd9c2ede1df65b5e67aeaa0b) supplies map_comp_le_left/right, with weaker assumptions on the factor bound. Both are included in pin 463ab293070d. Consumers use the canonical APIs directly, bridging the existing finite-prefix kyFanSum presentation explicitly. Retain only HasFiniteUnitaryOrbitCertificate and its nonnegative scaling/budget theorem, now proved by scaling the accepted unit-mass certificate; this budget extension is absent upstream. The block-sum consumer uses the accepted product-map orbit-hull theorem. Retain the existing challenge dependency audit, now naming the accepted leaves. Historical source: e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm/Majorization.lean, Kitware Inc., Jon Crall and Claude Fable 5, Apache-2.0; API unification at bf84b6ff1 credited GPT-6 Astra. Do not infer DKPS proof adaptation for #14308 or #14662. Their use of the DKPS-adapted certificate/seminorm API from #14241 is transitive reuse, separately recorded in the census."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm",

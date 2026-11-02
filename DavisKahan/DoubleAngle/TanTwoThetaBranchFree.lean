@@ -350,7 +350,8 @@ theorem absTanTwoTheta0_offDiagonal_le
       rw [TauCeti.kyFanSum_eq_of_finrank_le hk' tanTwoTheta,
         TauCeti.kyFanSum_eq_of_finrank_le hk' H]
       exact hkey (finrank 𝕜 E) le_rfl
-  have hN := N.apply_le_of_kyFanSum_le hprefix
+  have hN := N.map_le_of_kyFanSum_le (fun k => by
+    simpa only [kyFanSum_eq_linearMap_kyFanSum] using hprefix k)
   rw [map_smul_eq_mul N, map_smul_eq_mul N] at hN
   have hnorm1 : ‖(((b - a : ℝ)) : 𝕜)‖ = b - a := by
     rw [RCLike.norm_ofReal]

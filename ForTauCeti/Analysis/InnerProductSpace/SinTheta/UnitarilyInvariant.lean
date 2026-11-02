@@ -102,10 +102,12 @@ theorem apply_starProjection_comp_starProjection_le (N : UnitarilyInvariantSemin
     simp only [hN', ContinuousLinearMap.toLinearMap_smul]; exact map_smul_eq_mul N _ _
   have hidealL : ∀ C f : E →L[𝕜] E, N' (C ∘L f) ≤ ‖C‖ * N' f := fun C f => by
     simp only [hN']
-    exact N.apply_comp_le (norm_nonneg C) fun y => C.le_opNorm y
+    exact N.map_comp_le_left _ _ fun y => C.le_opNorm y
   have hidealR : ∀ f C : E →L[𝕜] E, N' (f ∘L C) ≤ N' f * ‖C‖ := fun f C => by
     simp only [hN']
-    exact N.apply_comp_le' (norm_nonneg C) fun y => C.le_opNorm y
+    rw [ContinuousLinearMap.toLinearMap_comp, mul_comm]
+    exact N.map_comp_le_right (f : E →ₗ[𝕜] E) (C : E →ₗ[𝕜] E)
+      (fun y => C.le_opNorm y)
   -- The abstract Sylvester bound gives `N' X ≤ N' Y / g`.
   have hsylv' : A ∘L X - X ∘L B = Y := by
     calc
@@ -126,12 +128,15 @@ theorem apply_starProjection_comp_starProjection_le (N : UnitarilyInvariantSemin
     rw [hYcoe]
     calc N ((P : E →ₗ[𝕜] E) ∘ₗ ((T - S) ∘ₗ (Q : E →ₗ[𝕜] E)))
         ≤ 1 * N ((T - S) ∘ₗ (Q : E →ₗ[𝕜] E)) :=
-          N.apply_comp_le zero_le_one fun y => by
+          N.map_comp_le_left _ _ fun y => by
             rw [one_mul]; exact U.norm_starProjection_apply_le y
       _ = N ((T - S) ∘ₗ (Q : E →ₗ[𝕜] E)) := one_mul _
-      _ ≤ N (T - S) * 1 :=
-          N.apply_comp_le' zero_le_one fun y => by
-            rw [one_mul]; exact V.norm_starProjection_apply_le y
+      _ ≤ N (T - S) * 1 := by
+          rw [mul_comm (N (T - S)) 1]
+          exact N.map_comp_le_right (T - S) (Q : E →ₗ[𝕜] E) (fun y => by
+            change ‖Q y‖ ≤ 1 * ‖y‖
+            rw [hQ, one_mul]
+            exact V.norm_starProjection_apply_le y)
       _ = N (T - S) := mul_one _
       _ = N (S - T) := by rw [show (T - S : E →ₗ[𝕜] E) = -(S - T) by abel, map_neg_eq_map N]
   -- `N (Q ∘ P) = N' X` by star-invariance of `N`.

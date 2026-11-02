@@ -640,8 +640,9 @@ theorem directRotation_displacementSquare_uiNorm
     (hmap : U.map W.toLinearMap = V) :
     N (displacementSquare (directRotation U V hacute).toLinearMap) ≤
       N (displacementSquare W.toLinearMap) :=
-  N.apply_le_of_kyFanSum_le
-    (directRotation_displacementSquare_kyFan U V hacute W hmap)
+  N.map_le_of_kyFanSum_le (fun k => by
+    simpa only [kyFanSum_eq_linearMap_kyFanSum] using
+      directRotation_displacementSquare_kyFan U V hacute W hmap k)
 
 /-!
 The corresponding full-displacement theorem is intentionally absent.  The

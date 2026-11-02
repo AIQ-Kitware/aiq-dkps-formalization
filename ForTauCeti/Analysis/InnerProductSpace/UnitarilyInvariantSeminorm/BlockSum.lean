@@ -6,6 +6,9 @@ Authors: Jon Crall, Claude Fable 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization
+public import ForTauCeti.Analysis.InnerProductSpace.KyFan
+public import ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition
+public import TauCeti.Analysis.InnerProductSpace.BlockSum
 
 /-!
 # Orthogonal block sums of rectangular maps
@@ -608,20 +611,22 @@ theorem orthogonalBlockSum_apply_le_of_kyFanSum_le
     (hA : ∀ k, kyFanSum k A ≤ kyFanSum k C)
     (hB : ∀ k, kyFanSum k B ≤ kyFanSum k D) :
     NB (orthogonalBlockSum A B) ≤ NB (orthogonalBlockSum C D) := by
-  have hconv := orthogonalBlockSum_mem_convexHull_twoSidedUnitaryOrbit
-    (mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le hA)
-    (mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le hB)
-  exact NB.apply_le_of_mem_convexHull_twoSidedUnitaryOrbit
-    (A := orthogonalBlockSum A B) (B := orthogonalBlockSum C D) hconv
+  apply NB.map_le_of_mem_twoSidedUnitaryOrbitHull
+  change (A.prodMap B).withLpMap 2 ∈ ((C.prodMap D).withLpMap 2).twoSidedUnitaryOrbitHull
+  exact LinearMap.prodMap_withLpMap_mem_twoSidedUnitaryOrbitHull
+    (LinearMap.mem_twoSidedUnitaryOrbitHull_iff_kyFanSum_le.mpr fun k => by
+      simpa only [kyFanSum_eq_linearMap_kyFanSum] using hA k)
+    (LinearMap.mem_twoSidedUnitaryOrbitHull_iff_kyFanSum_le.mpr fun k => by
+      simpa only [kyFanSum_eq_linearMap_kyFanSum] using hB k)
 
 /-- Pointwise singular-value dominance implies norm dominance.
 -/
 theorem apply_le_of_singularValues_le {A B : E →ₗ[𝕜] F}
     (h : ∀ i, A.singularValues i ≤ B.singularValues i) : N A ≤ N B := by
-  apply N.apply_le_of_kyFanSum_le
+  apply N.map_le_of_kyFanSum_le
   intro k
-  unfold kyFanSum
-  exact Finset.sum_le_sum fun i _ => h (i : ℕ)
+  rw [LinearMap.kyFanSum_def, LinearMap.kyFanSum_def]
+  exact Finset.sum_le_sum fun i _ => h i
 
 
 end UnitarilyInvariantSeminorm

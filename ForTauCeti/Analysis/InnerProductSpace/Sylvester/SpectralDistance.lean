@@ -153,9 +153,12 @@ theorem sylvester_barycentricOrbitRepresentation_of_spectralDistance
   have hpinv0 : 0 ≤ p⁻¹ := inv_nonneg.mpr hp0
   let Y : E →ₗ[𝕜] F := (((p⁻¹ : ℝ) : 𝕜)) • (((δ : 𝕜)) • X)
   refine ⟨p, hp0, le_rfl, Y, ?_, ?_⟩
-  · apply
-      UnitarilyInvariantSeminorm.mem_convexHull_twoSidedUnitaryOrbit_of_kyFanSum_le
+  · let : Module ℝ F := Module.compHom F (algebraMap ℝ 𝕜)
+    let : IsScalarTower ℝ 𝕜 F := IsScalarTower.of_compHom ℝ 𝕜 F
+    rw [← LinearMap.twoSidedUnitaryOrbitHull_eq_convexHull]
+    apply LinearMap.mem_twoSidedUnitaryOrbitHull_iff_kyFanSum_le.mpr
     intro k
+    rw [← kyFanSum_eq_linearMap_kyFanSum, ← kyFanSum_eq_linearMap_kyFanSum]
     have hcore :=
       kyFan_sylvester_le_of_spectralDistance
         hA hB hδ hgap hEq k
@@ -223,8 +226,9 @@ theorem uiNorm_sylvester_le_of_spectralDistance
     dsimp [p]
     positivity
   have hscaled : N (((δ : 𝕜)) • X) ≤ N (((p : 𝕜)) • C) := by
-    apply N.apply_le_of_kyFanSum_le
+    apply N.map_le_of_kyFanSum_le
     intro k
+    rw [← kyFanSum_eq_linearMap_kyFanSum, ← kyFanSum_eq_linearMap_kyFanSum]
     rw [TauCeti.kyFanSum_real_smul k X hδ0,
       TauCeti.kyFanSum_real_smul k C hp0]
     simpa [p] using
