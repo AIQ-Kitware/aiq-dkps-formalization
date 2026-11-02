@@ -14,7 +14,12 @@ A contribution may be **ported** (proof/declaration adapted from this repository
 **developed from** (a new upstream proof built on a construction or result first
 formalized here), **campaign-associated** (submitted in the DKPS port effort but
 exact derivation not established), or **independently developed** (the same
-roadmap topic was solved without using the donor implementation). Do not collapse
+roadmap topic was solved without using the donor implementation). Also record
+**roadmap implemented by others**: accepted implementations of DKPS-derived
+roadmap items count in this ledger as roadmap contributions, even when their
+proofs were independently written. The user reaffirmed this accounting boundary
+on 2026-11-02: these roadmap items originated in DKPS and this repository.
+Keep the roadmap origin and the upstream implementer visible separately. Do not collapse
 these relationships into one number. In particular:
 
 - An explicit donor path or provenance statement in a PR body is evidence of a
@@ -198,8 +203,28 @@ attempt, not an accepted TauCeti theorem.
 | [#16293](https://github.com/TauCetiProject/TauCeti/pull/16293) | MSS-B11–B13 Hermitian threshold-projector proposal citing DKPS source | Closed, no Bors label; acceptance not established |
 | [#19009](https://github.com/TauCetiProject/TauCeti/pull/19009) | SA-B42 older variation attempt; explicitly replaced by #19145 | Closed, no Bors label |
 | [#18927](https://github.com/TauCetiProject/TauCeti/pull/18927) | SA-E32–E34 measurable spectral grid cells | Open |
-| [#19242](https://github.com/TauCetiProject/TauCeti/pull/19242), [#19277](https://github.com/TauCetiProject/TauCeti/pull/19277) | SSP-C23 pairwise pi/2; SSP-C09/C10 reduced extensions | Open |
+| [#19242](https://github.com/TauCetiProject/TauCeti/pull/19242) | SSP-C23 pairwise pi/2 | Closed by the user on 2026-11-02 after the exact endpoint and invariant-subspace Sylvester bound landed through #24932; not an integration of this submission |
+| [#19277](https://github.com/TauCetiProject/TauCeti/pull/19277) | SSP-C09/C10 reduced extensions | Open (2026-10-21 observation) |
+| [#20359](https://github.com/TauCetiProject/TauCeti/pull/20359) | SSP-A16 two-sided exponential decay; adapted from historical `ForTauCeti/Analysis/Fourier/ExponentialAbs.lean` (Jon Crall, GPT 5.6 High; Kitware 2026, Apache-2.0) | Open; repair pushed as `8e0e29ab74` on 2026-11-02; moves the complex estimate to `SpecialFunctions/Exp/Decay.lean`; real estimate remains in `SpecialFunctions/Pow/Real.lean` |
 | [#19329](https://github.com/TauCetiProject/TauCeti/pull/19329), [#19338](https://github.com/TauCetiProject/TauCeti/pull/19338) | SSP-C28/C29 sine-to-tangent; SSP-D19 right singular-vector gap | Open |
+
+The 2026-11-02 PR repair review compared #19242 with current upstream main
+`37f5e9dce5ac83d2825198ac72d7f5d64eb26c85`, rather than the pinned dependency.
+The Bors integration of [#24932](https://github.com/TauCetiProject/TauCeti/pull/24932)
+is present there as `e87be712e119978b7802ab9f8820d7e727d8264c` (2026-11-01).
+Its `TauCeti.UnitarilyInvariantSeminorm.mul_map_starProjection_comp_starProjection_le_pi_div_two_mul_map_sub`
+has the same finite-dimensional `RCLike`, square unitarily invariant seminorm,
+invariant-subspace and pairwise-separation scope as the #19242 endpoint. Its
+`mul_map_le_pi_div_two_mul_map_sylvester_apply_of_mem` uses reduced extensions on
+orthogonal complements, whereas #19242 used compressed blocks and zero extension.
+The integration cites Bhatia–Davis–McIntosh and Bhatia; no DKPS proof descent is
+established by the inspected integration or review. Count #24932 as an accepted
+implementation by another contributor of our
+DKPS-derived SSP-C23 roadmap item. Record separate proof implementations,
+not an accepted #19242 submission or accepted compression API. The redundant PR
+was closed without pushing a conflict resolution or promoting its unused helpers.
+This observation does not advance the DKPS dependency pin or reclassify the completed
+consumption at that pin.
 
 The first-wave campaign's `manifest.json` and `roadmap_port_index.json`
 record additional target-node detail. An old prepared branch, an unmerged PR,
@@ -213,6 +238,7 @@ without assigning donor provenance to independent work.
 
 | Upstream PR | Result / relationship | Current provenance judgment |
 | --- | --- | --- |
+| [#24932](https://github.com/TauCetiProject/TauCeti/pull/24932) | **DKPS-derived roadmap item implemented by others:** SSP-C23 pairwise `π/2` sine-theta theorem, plus its invariant-subspace Sylvester prerequisite; verified on current main at `e87be712e119978b7802ab9f8820d7e727d8264c` | Counts as delivery of our roadmap contribution; implementation by `tauceti-ai-for-science`, citing Bhatia–Davis–McIntosh and Bhatia. Separate proof route from DKPS #19242; direct donor proof adaptation not established. Supersedes that submission, which the user closed on 2026-11-02. |
 | [#13247](https://github.com/TauCetiProject/TauCeti/pull/13247) | OG-01–OG-08 Gram rigidity | Independently submitted by `sqrt-of-2`; not a DKPS code port |
 | [#13380](https://github.com/TauCetiProject/TauCeti/pull/13380) | PD-A07 eigenvector cross term | Independently submitted by `roed-math`; not a DKPS port |
 | [#14102](https://github.com/TauCetiProject/TauCeti/pull/14102) | MAJ-A weak majorization/transfer descent | Independently developed by `tauceti-ai-for-science` |

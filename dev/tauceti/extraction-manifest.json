@@ -834,7 +834,7 @@
       "downstream_users": [],
       "status": "retired-upstream-subsumed-local-copy-removed",
       "upstream_pr": null,
-      "migration_note": "The staging source was deleted after the Fourier paper consumers migrated to canonical TauCeti.Analysis.Fourier.HaagerupZsido.{Fourier,Mass,Basic} in upstream commit f99e274230de08a9a8189a97dbfc910536646449. The final_tauceti_module above is a historical export target, not a claim that this support module exists or that every intermediate proof was ported. Original provenance remains recorded here."
+      "migration_note": "The staging source was deleted after the Fourier paper consumers migrated to canonical TauCeti.Analysis.Fourier.HaagerupZsido.{Fourier,Mass,Basic} in upstream commit f99e274230de08a9a8189a97dbfc910536646449. The final_tauceti_module above is a historical export target, not a claim that this support module exists or that every intermediate proof was ported. Original provenance remains recorded here. Separately, SSP-A16 PR #20359 adapts the historical cexp_neg_mul_abs_isLittleO_rpow_cocompact declaration (source before retirement at 138bd70b4) into TauCeti.exp_neg_mul_abs_isLittleO_abs_rpow_cocompact in TauCeti.Analysis.SpecialFunctions.Pow.Real and the stronger complex-rate TauCeti.cexp_neg_mul_abs_isLittleO_abs_rpow_cocompact in TauCeti.Analysis.SpecialFunctions.Exp.Decay. Its 2026-11-02 placement repair is a submission update, not acceptance; both declarations retain Jon Crall / GPT 5.6 High, Kitware 2026 Apache-2.0 attribution."
     },
     {
       "source_module": "ForTauCeti.Analysis.Fourier.HaagerupZsido.Defs",
