@@ -236,7 +236,7 @@ private theorem gram_residual_of_tangent_pair_right
         exact mul_le_mul_of_nonneg_right hc2le (by positivity)
       _ = 2 * ‖C‖ ^ 2 * ‖T‖ * eps := by ring
   have hgramForMod :
-      ‖gramOperator C u - ((c ^ 2 : ℝ) : ℂ) • u‖ ≤
+      ‖ApproximationNumber.gramOperator C u - ((c ^ 2 : ℝ) : ℂ) • u‖ ≤
         (2 * ‖C‖ ^ 2 * ‖T‖ * q * eps) * c := by
     change ‖C.adjoint (C u) - ((c ^ 2 : ℝ) : ℂ) • u‖ ≤ _
     refine hGramPoint.trans ?_

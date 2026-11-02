@@ -97,7 +97,7 @@ structure GramSpectralBandModel
   right_orthonormal : Orthonormal ℂ right
   right_mem_polarInitial : ∀ i, right i ∈ (X.ker)ᗮ
   gram_residual : ∀ i,
-    ‖gramOperator X (right i) -
+    ‖ApproximationNumber.gramOperator X (right i) -
       ((X.approximationNumber (i : ℕ)) ^ 2 : ℂ) • right i‖ ≤
         ε * X.approximationNumber (i : ℕ) / 4
   selected_large : ∀ i : Fin count,
@@ -327,7 +327,7 @@ theorem exists_gramSpectralBandModel
       exact mem_polarInitial_of_mem_gramBand X hLower
         (by simpa only [P, band] using hrightBand i)
     have hgramResidual : ∀ i : Fin count,
-        ‖gramOperator X (right i) -
+        ‖ApproximationNumber.gramOperator X (right i) -
           ((X.approximationNumber (i : ℕ)) ^ 2 : ℂ) • right i‖ ≤
             ε * X.approximationNumber (i : ℕ) / 4 := by
       intro i
@@ -380,11 +380,11 @@ def GramSpectralBandModel.toApproximateLeadingSingularFamily
     let value := X.approximationNumber (i : ℕ)
     have hvalue : 0 < value := hε.trans_lt (M.selected_large i)
     have hgram :
-        ‖gramOperator X (M.right i) - (value : ℂ) ^ 2 • M.right i‖ ≤
+        ‖ApproximationNumber.gramOperator X (M.right i) - (value : ℂ) ^ 2 • M.right i‖ ≤
           (ε / 4) * value := by
       convert M.gram_residual i using 1 ; dsimp only [value] ; ring
     have hgramReal :
-        ‖gramOperator X (M.right i) - ((value ^ 2 : ℝ) : ℂ) • M.right i‖ ≤
+        ‖ApproximationNumber.gramOperator X (M.right i) - ((value ^ 2 : ℝ) : ℂ) • M.right i‖ ≤
           (ε / 4) * value := by
       simpa only [Complex.ofReal_pow] using hgram
     have hmod := modulus_residual_le_of_gram_residual
@@ -404,11 +404,11 @@ def GramSpectralBandModel.toApproximateLeadingSingularFamily
     let value := X.approximationNumber (i : ℕ)
     have hvalue : 0 < value := hε.trans_lt (M.selected_large i)
     have hgram :
-        ‖gramOperator X (M.right i) - (value : ℂ) ^ 2 • M.right i‖ ≤
+        ‖ApproximationNumber.gramOperator X (M.right i) - (value : ℂ) ^ 2 • M.right i‖ ≤
           (ε / 4) * value := by
       convert M.gram_residual i using 1 ; dsimp only [value] ; ring
     have hgramReal :
-        ‖gramOperator X (M.right i) - ((value ^ 2 : ℝ) : ℂ) • M.right i‖ ≤
+        ‖ApproximationNumber.gramOperator X (M.right i) - ((value ^ 2 : ℝ) : ℂ) • M.right i‖ ≤
           (ε / 4) * value := by
       simpa only [Complex.ofReal_pow] using hgram
     have hmod := modulus_residual_le_of_gram_residual

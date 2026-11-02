@@ -220,8 +220,8 @@ needs `Set.Iic (u ^ 2)`, but nothing in the proof looks at the band, and a
 lemma that names one is a lemma the next cutoff cannot reuse. -/
 theorem gramOperator_comm_gramSpectralPVM_proj (X : E0 →L[ℂ] E1)
     (s : Set ℝ) (hs : MeasurableSet s) (y : E0) :
-    gramOperator X ((gramSpectralPVM X).proj s hs y) =
-      (gramSpectralPVM X).proj s hs (gramOperator X y) := by
+    ApproximationNumber.gramOperator X ((gramSpectralPVM X).proj s hs y) =
+      (gramSpectralPVM X).proj s hs (ApproximationNumber.gramOperator X y) := by
   have hyDom : y ∈ (gramLinearPMap X).domain := by
     rw [gramLinearPMap_domain]
     exact Submodule.mem_top
@@ -241,7 +241,7 @@ theorem doubleAngleDenominator_comm_gramSpectralPVM_proj (X : E0 →L[ℂ] E1)
       (ContinuousLinearMap.adjoint X ∘SL X) ((gramSpectralPVM X).proj s hs y) =
         (gramSpectralPVM X).proj s hs
           ((ContinuousLinearMap.adjoint X ∘SL X) y) := by
-    simpa only [gramOperator] using gramOperator_comm_gramSpectralPVM_proj X s hs y
+    simpa only [ApproximationNumber.gramOperator] using gramOperator_comm_gramSpectralPVM_proj X s hs y
   dsimp only [doubleAngleDenominator]
   rw [sub_apply, ContinuousLinearMap.id_apply, sub_apply,
     ContinuousLinearMap.id_apply, map_sub, hCQ']
@@ -585,7 +585,7 @@ theorem norm_doubleAngleTangentOperator_comp_gramSpectralPVM_proj_Iic_le
     (⟨w, hwDom⟩ : (gramLinearPMap X).domain) hhighZero'
   have hXenergy : ‖X w‖ ^ 2 ≤ v ^ 2 * ‖w‖ ^ 2 := by
     calc
-      ‖X w‖ ^ 2 = (⟪gramOperator X w, w⟫_ℂ).re :=
+      ‖X w‖ ^ 2 = (⟪ApproximationNumber.gramOperator X w, w⟫_ℂ).re :=
         (re_inner_gramOperator X w).symm
       _ = (⟪gramLinearPMap X
           (⟨w, hwDom⟩ : (gramLinearPMap X).domain), w⟫_ℂ).re := by
@@ -729,8 +729,8 @@ theorem norm_apply_sub_familyIsometry_le {d : ℕ} (T : E0 →L[ℂ] E1)
     (tau : Fin d → ℝ) (coeff : EuclideanSpace ℂ (Fin d)) {b : ℝ} (hb : 0 ≤ b)
     (hpair : ∀ i, ‖T (right i) - (tau i : ℂ) • left i‖ ≤ b)
     (hcoeff : ‖coeff‖ = 1) :
-    ‖T (familyIsometry hright coeff) -
-        familyIsometry hleft
+    ‖T (hright.synthesisMapIsometry coeff) -
+        hleft.synthesisMapIsometry
           (WithLp.toLp 2 (fun i => (tau i : ℂ) * coeff i) :
             EuclideanSpace ℂ (Fin d))‖ ≤ Real.sqrt d * b := by
   have hL1 : (∑ i : Fin d, ‖coeff i‖) ≤ Real.sqrt d := by
@@ -738,12 +738,12 @@ theorem norm_apply_sub_familyIsometry_le {d : ℕ} (T : E0 →L[ℂ] E1)
     rw [hcoeff, mul_one] at h
     simpa using h
   have hidentity :
-      T (familyIsometry hright coeff) -
-          familyIsometry hleft
+      T (hright.synthesisMapIsometry coeff) -
+          hleft.synthesisMapIsometry
             (WithLp.toLp 2 (fun i => (tau i : ℂ) * coeff i) :
               EuclideanSpace ℂ (Fin d)) =
         ∑ i : Fin d, coeff i • (T (right i) - (tau i : ℂ) • left i) := by
-    rw [familyIsometry_apply, familyIsometry_apply, map_sum]
+    rw [Orthonormal.synthesisMapIsometry_apply, Orthonormal.synthesisMapIsometry_apply, map_sum]
     simp only [map_smul]
     rw [← Finset.sum_sub_distrib]
     refine Finset.sum_congr rfl fun i _ => ?_
@@ -836,10 +836,10 @@ theorem doubleAngleTangent_approximationNumber_le
       · exact hanti (Nat.le_of_lt_succ i.isLt)
       · exact (X.approximationNumber_le_norm i).trans_lt hcontractive
     obtain ⟨coeff, hzCoord⟩ :=
-      TauCeti.span_range_le_range_familyIsometry hrightOrtho hz
-    have hzCoord' : familyIsometry hrightOrtho coeff = z := hzCoord
+      hrightOrtho.range_synthesisMapIsometry.ge hz
+    have hzCoord' : hrightOrtho.synthesisMapIsometry coeff = z := hzCoord
     have hcoeffNorm : ‖coeff‖ = 1 := by
-      rw [← hznorm, ← hzCoord', (familyIsometry hrightOrtho).norm_map]
+      rw [← hznorm, ← hzCoord', (hrightOrtho.synthesisMapIsometry).norm_map]
     let tau : Fin (n + 1) → ℝ := fun i =>
       DavisKahan.TanTwoTheta.doubleAngleTangent (X.approximationNumber i)
     let tau0 : ℝ :=
@@ -854,10 +854,10 @@ theorem doubleAngleTangent_approximationNumber_le
       exact htanmono i
     let diagonalCoeff : EuclideanSpace ℂ (Fin (n + 1)) :=
       WithLp.toLp 2 (fun i => (tau i : ℂ) * coeff i)
-    let diagonal : E1 := familyIsometry hleftOrtho diagonalCoeff
+    let diagonal : E1 := hleftOrtho.synthesisMapIsometry diagonalCoeff
     have hdiagonalLower : tau0 ≤ ‖diagonal‖ := by
       dsimp only [diagonal, diagonalCoeff]
-      rw [(familyIsometry hleftOrtho).norm_map]
+      rw [(hleftOrtho.synthesisMapIsometry).norm_map]
       exact le_norm_toLp_mul_of_le htau0 htauLower hcoeffNorm
     have hresidualBound :
         ‖doubleAngleTangentOperator X hcontractive z - diagonal‖ ≤

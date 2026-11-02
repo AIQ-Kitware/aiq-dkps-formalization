@@ -692,15 +692,15 @@ exactly the object the approximate Section-7 estimates are stated about. -/
 theorem coe_gramOperator_reflectionSineCorner_comp_cutoffCorner_apply
     (hZsa : IsSelfAdjoint Z) (Ω : TauCeti.BoundedCutoff A U τ) {y : U}
     (hy : cutoffCorner Ω y = y) :
-    ((gramOperator (reflectionSineCorner U Z ∘L cutoffCorner Ω) y : U) : H) =
+    ((ApproximationNumber.gramOperator (reflectionSineCorner U Z ∘L cutoffCorner Ω) y : U) : H) =
       Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z ((y : U) : H))) := by
   have hadj : (reflectionSineCorner U Z ∘L cutoffCorner Ω).adjoint =
       cutoffCorner Ω ∘L (reflectionSineCorner U Z).adjoint := by
     rw [ContinuousLinearMap.adjoint_comp,
       (isSelfAdjoint_cutoffCorner Ω).adjoint_eq]
-  have h1 : gramOperator (reflectionSineCorner U Z ∘L cutoffCorner Ω) y =
-      cutoffCorner Ω (gramOperator (reflectionSineCorner U Z) y) := by
-    simp only [gramOperator, ContinuousLinearMap.comp_apply, hy, hadj]
+  have h1 : ApproximationNumber.gramOperator (reflectionSineCorner U Z ∘L cutoffCorner Ω) y =
+      cutoffCorner Ω (ApproximationNumber.gramOperator (reflectionSineCorner U Z) y) := by
+    simp only [ApproximationNumber.gramOperator, ContinuousLinearMap.comp_apply, hy, hadj]
   rw [h1, coe_cutoffCorner_apply,
     coe_gramOperator_reflectionSineCorner_apply hZsa]
 
@@ -742,7 +742,7 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
   classical
   set X : U →L[ℂ] Uᗮ := reflectionSineCorner U Z ∘L cutoffCorner Ω with hXdef
   have hgramAmb : ∀ v : U, cutoffCorner Ω v = v →
-      ((gramOperator X v : U) : H) =
+      ((ApproximationNumber.gramOperator X v : U) : H) =
         Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z ((v : U) : H))) :=
     fun v hv =>
       coe_gramOperator_reflectionSineCorner_comp_cutoffCorner_apply hZsa Ω hv
@@ -825,14 +825,14 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
     intro j
     have hres := M.gram_residual (Fin.castLE hmc j)
     rw [hqcast j] at hres
-    have hcoe : (((gramOperator X (M.right (Fin.castLE hmc j)) -
+    have hcoe : (((ApproximationNumber.gramOperator X (M.right (Fin.castLE hmc j)) -
         ((q j : ℂ)) ^ 2 • M.right (Fin.castLE hmc j)) : U) : H) =
         Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z (y j))) -
           ((q j ^ 2 : ℝ) : ℂ) • y j := by
       simp only [hydef]
       rw [Submodule.coe_sub, Submodule.coe_smul, hgramAmb _ (hfix j)]
       norm_cast
-    have hnorm : ‖gramOperator X (M.right (Fin.castLE hmc j)) -
+    have hnorm : ‖ApproximationNumber.gramOperator X (M.right (Fin.castLE hmc j)) -
         ((q j : ℂ)) ^ 2 • M.right (Fin.castLE hmc j)‖ =
         ‖Ω.toProj (U.offDiagBlock Z (U.offDiagBlock Z (y j))) -
           ((q j ^ 2 : ℝ) : ℂ) • y j‖ := by

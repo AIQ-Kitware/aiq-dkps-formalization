@@ -935,7 +935,18 @@
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.AlignedBasis",
-      "source_declarations": [],
+      "source_declarations": [
+        "TauCeti.span_range_eq_of_orthonormal_of_mem",
+        "TauCeti.span_range_le_range_familyIsometry",
+        "TauCeti.overlapOp",
+        "TauCeti.overlapOp_apply",
+        "TauCeti.overlapOp_contraction",
+        "TauCeti.sum_sq_singularValues_overlapOp",
+        "TauCeti.sum_overlap_le_sum_singularValues",
+        "TauCeti.inner_u_aligned_eq",
+        "TauCeti.sum_re_inner_u_aligned",
+        "TauCeti.sum_sq_norm_aligned_le"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.AlignedBasis",
@@ -944,12 +955,14 @@
       "provenance_class": "moved; introduced at Davis--Kahan commit 75fdc44; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
         "Mathlib",
-        "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace"
+        "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
+        "TauCeti.Analysis.InnerProductSpace.Orthonormal.Overlap"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "#15120, #13988, #15340",
+      "migration_note": "November 1: span_range_le_range_familyIsometry, overlapOp, overlapOp_apply, overlapOp_contraction and sum_sq_singularValues_overlapOp retired. The general old overlap equals TauCeti.overlapOperator by synthesisMapIsometry_toLinearMap and adjoint_synthesisMap_comp_synthesisMap; correspondence compiled before deletion. Consumers use native overlap, norm bound and Orthonormal.range_synthesisMapIsometry directly. Native #15340 fe7e204a9aa8c36b52c6605c774166bc590b4498 is explicitly independent, not a DKPS port. Retains selected choosePolarUnitary cross-term identities and alignment bound, plus a short inequality from native cosine bounds: the accepted existential Procrustes family does not identify this selected witness. Historical source e4637c3919ae under donor path, introduction 75fdc44; Jon Crall/Claude Opus 4.8, Kitware copyright, Apache-2.0. Coordinate-isometry/range integrations #15120 63ca9e2f2bac253526484a022e3bc0b557712c40 and #13988 6e9359613bce697ea5483673e3d46e96f4a6c881."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.Basic",
@@ -1075,7 +1088,28 @@
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.GramMatrix",
-      "source_declarations": [],
+      "source_declarations": [
+        "TauCeti.exists_rigidMotion_of_dist_eq",
+        "TauCeti.eventually_exists_rigidMotion_dist_lt",
+        "TauCeti.exists_delta_forall_exists_rigidMotion",
+        "TauCeti.rigidTolerances",
+        "TauCeti.alignmentError",
+        "TauCeti.rigidTolerances_nonempty",
+        "TauCeti.bddBelow_rigidTolerances",
+        "TauCeti.alignmentError_nonneg",
+        "TauCeti.alignmentError_le",
+        "TauCeti.exists_rigidMotion_norm_le_alignmentError_add",
+        "TauCeti.alignedConfig",
+        "TauCeti.norm_alignedConfig_sub_le",
+        "TauCeti.dist_alignedConfig_le",
+        "TauCeti.exists_delta_alignmentError_le",
+        "TauCeti.familyMap",
+        "TauCeti.familyMap_apply",
+        "TauCeti.familyMap_inner_map_map",
+        "TauCeti.familyIsometry",
+        "TauCeti.familyIsometry_apply",
+        "TauCeti.familyIsometry_single"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Gram.Rigidity",
@@ -1085,12 +1119,14 @@
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.InnerProductSpace.Basic",
-        "TauCeti.Analysis.InnerProductSpace.Gram.Rigidity"
+        "TauCeti.Analysis.InnerProductSpace.Gram.Rigidity",
+        "TauCeti.Analysis.InnerProductSpace.Orthonormal.Family"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "partially-upstreamed",
-      "upstream_pr": null
+      "upstream_pr": "#15120, #13988",
+      "migration_note": "November 1: familyMap, familyMap_apply, familyMap_inner_map_map, familyIsometry, familyIsometry_apply and familyIsometry_single retired. All maintained callers, including nested YuWangSamworth2015 and Acharyya2025, use TauCeti.synthesisMap and Orthonormal.synthesisMapIsometry/apply/single directly. Equality of the old and accepted isometries was compiled before removal. Native finite-index API strictly generalizes Fin d. #15120 integration 63ca9e2f2bac253526484a022e3bc0b557712c40 supplies the independent synthesis-isometry implementation; #13988 6e9359613bce697ea5483673e3d46e96f4a6c881 extends the canonical range/adjoint API using Mathlib, replacing its proposed parallel familyIsometry implementation. No unchanged donor proof is claimed for this final accepted refactor. Retains approximate rigid-motion alignment; existing equal-Gram rigidity consumption is unchanged. Historical source e4637c3919ae under donor path, original coordinate-family source in AlignedBasis at 75fdc44, moved here by 7295883b5. Coordinate-family authors Jon Crall/Claude Opus 4.8; Gram.Matrix header Jon Crall/Claude Fable 5; Kitware copyright, Apache-2.0."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.HoffmanWielandt",
@@ -1426,10 +1462,38 @@
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.PrincipalAngles",
-      "source_declarations": [],
+      "source_declarations": [
+        "TauCeti.cosPrincipalAngles",
+        "TauCeti.cosPrincipalAngles_nonneg",
+        "TauCeti.cosPrincipalAngles_le_one",
+        "TauCeti.cosPrincipalAngles_antitone",
+        "TauCeti.overlapOp_adjoint",
+        "TauCeti.cosPrincipalAngles_comm",
+        "TauCeti.sinThetaSq",
+        "TauCeti.sinThetaSq_eq_sub_overlap",
+        "TauCeti.sinThetaSq_eq_card_sub_sum_sq",
+        "TauCeti.sinThetaSq_nonneg",
+        "TauCeti.sinThetaSq_comm",
+        "TauCeti.sum_sq_norm_aligned_le_sinThetaSq",
+        "TauCeti.blockFamily",
+        "TauCeti.orthonormal_blockFamily",
+        "TauCeti.range_blockFamily",
+        "TauCeti.sinThetaSq_blockFamily_eq_sum_cross",
+        "TauCeti.sum_norm_sub_starProjection_sq_eq_two_mul_sinThetaSq",
+        "TauCeti.cosPrincipalAngles_eq",
+        "TauCeti.familyIsometry_mem_span",
+        "TauCeti.singularValues_comp_adjoint_familyIsometry",
+        "TauCeti.overlapOp_coord",
+        "TauCeti.norm_orthogonal_starProjection_comp_starProjection",
+        "TauCeti.familyIsometry_adjoint_coord",
+        "TauCeti.starProjection_span_range_eq_comp",
+        "TauCeti.singularValues_starProjection_comp_starProjection",
+        "TauCeti.singularValues_orthogonal_familyIsometry_comm",
+        "TauCeti.singularValues_orthogonal_starProjection_comp_starProjection_comm"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.PrincipalAngles",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PrincipalAngles",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Orthonormal.Overlap",
       "ownership_class": "tauceti",
       "roadmap_target": "unitarily-invariant-norm",
       "provenance_class": "moved; introduced at Davis--Kahan commit 34319dc; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
@@ -1441,8 +1505,9 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "#15340, #16582, #13988",
+      "migration_note": "November 1: retired duplicate cosPrincipalAngles and sinThetaSq definitions and their nonnegativity/bounds/order/symmetry/card-minus-overlap proofs, cosPrincipalAngles_eq, familyIsometry_mem_span, singularValues_comp_adjoint_familyIsometry, overlapOp_coord, familyIsometry_adjoint_coord, starProjection_span_range_eq_comp and singularValues_starProjection_comp_starProjection. Native cosine and squared-sine definitions support arbitrary finite index types; Fin d sums translate through Fintype.card_fin and Fin.sum_univ_eq_sum_range. Native #15340 fe7e204a9aa8c36b52c6605c774166bc590b4498 replaces the basic engine independently. Native #16582 0df7c1368e4d208845ec50de86ccac8e042e31ca replaces the cosine dictionary and rank-one proof, including isometric/coisometric padding. Paper callers apply Orthonormal.principalCosines_eq_cosPrincipalAngles and Submodule.principalCosines_span_singleton directly after native projection equations. #13988 6e9359613bce697ea5483673e3d46e96f4a6c881 supplies the range API replacing membership helpers. Retains Fin-indexed block enumeration, projector-distance/angle-norm consequences, selected-polar alignment, and equal-rank sine-spectrum arguments; no claim they have all been subsumed by this slice. Historical source e4637c3919ae under donor path, original introduction 34319dc; Jon Crall/Claude Opus 4.8, Kitware copyright, Apache-2.0. Explicitly adapted native cross-block Frobenius results are separate lineage from independent #15340."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.ProjectionGeometry",
@@ -4036,7 +4101,7 @@
       ],
       "status": "partially-upstreamed",
       "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun. 2026-10-31: consume accepted Submodule.principalTangents directly in finite-dimensional Davis--Kahan/Ritz consumers and remove the parallel TauCeti.principalTangents definition from AngleGeometry. The original donor declaration and its history at e4637c3919ae are retained in source_declarations. Upstream owner: TauCeti.Analysis.InnerProductSpace.Projection.Acute, introduced via #16645 (2026-10-15). The subsequently accepted #19329 provides Submodule.tanThetaMap and singularValues_tanThetaMap, but those map values are not identical to the DKPS trial-coordinate tanThetaEmbedding = S |C|^+; the latter and its Ritz-residual proofs remain maintained here. This is direct API consumption, not a claim of DKPS proof descent for #16645 or #19329."
+      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun. 2026-10-31: consume accepted Submodule.principalTangents directly in finite-dimensional Davis--Kahan/Ritz consumers and remove the parallel TauCeti.principalTangents definition from AngleGeometry. The original donor declaration and its history at e4637c3919ae are retained in source_declarations. Upstream owner: TauCeti.Analysis.InnerProductSpace.Projection.Acute, introduced via #16645 (2026-10-15). The subsequently accepted #19329 provides Submodule.tanThetaMap and singularValues_tanThetaMap, but those map values are not identical to the DKPS trial-coordinate tanThetaEmbedding = S |C|^+; the latter and its Ritz-residual proofs remain maintained here. This is direct API consumption, not a claim of DKPS proof descent for #16645 or #19329. November 1: principalCosines_span_eq_cosPrincipalAngles and principalCosines_rankOne retain their existing local-carrier statements but their coordinate/singleton proofs are replaced directly by native #16582 (0df7c1368e4d208845ec50de86ccac8e042e31ca). The ambient projection and local linear cosine maps agree definitionally after Submodule.cosThetaMap_def. No proof descent is inferred from the same mathematical factorization strategy."
     },
     {
       "source_module": "DavisKahan/BoundedOperator/Projector.lean",

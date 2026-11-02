@@ -614,63 +614,18 @@ theorem principalCosines_span_eq_cosPrincipalAngles {d : ℕ}
     principalCosines (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range v)) =
       cosPrincipalAngles hu hv := by
-  have hcomp : cosThetaMap (Submodule.span 𝕜 (Set.range u)) (Submodule.span 𝕜 (Set.range v))
-      = (((Submodule.span 𝕜 (Set.range v)).starProjection ∘L
-          (Submodule.span 𝕜 (Set.range u)).starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E) :=
-    rfl
-  rw [principalCosines, hcomp,
-    TauCeti.singularValues_starProjection_comp_starProjection hu hv,
-    cosPrincipalAngles_comm hv hu]
+  have h := hu.principalCosines_eq_cosPrincipalAngles hv rfl rfl
+  rw [Submodule.principalCosines_def, Submodule.cosThetaMap_def] at h
+  exact h
 
 /-- The principal-cosine sequence of two unit-generated lines has one entry,
 the absolute overlap of their generators. -/
 theorem principalCosines_rankOne {u v : E} (hu : ‖u‖ = 1) (hv : ‖v‖ = 1) :
     principalCosines (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}) =
       Finsupp.single 0 ‖⟪u, v⟫_𝕜‖ := by
-  classical
-  let uf : Fin 1 → E := fun _ => u
-  let vf : Fin 1 → E := fun _ => v
-  have huf : Orthonormal 𝕜 uf := by
-    rw [orthonormal_iff_ite]
-    intro i j
-    have hij : i = j := Subsingleton.elim _ _
-    subst j
-    simp [uf, hu]
-  have hvf : Orthonormal 𝕜 vf := by
-    rw [orthonormal_iff_ite]
-    intro i j
-    have hij : i = j := Subsingleton.elim _ _
-    subst j
-    simp [vf, hv]
-  have hspanU : Submodule.span 𝕜 (Set.range uf) = Submodule.span 𝕜 {u} := by
-    congr 1
-    ext x
-    simp [uf]
-  have hspanV : Submodule.span 𝕜 (Set.range vf) = Submodule.span 𝕜 {v} := by
-    congr 1
-    ext x
-    simp [vf]
-  -- `principalCosines` is indexed by a projection instance on each submodule,
-  -- so a plain `rw` produces an ill-typed motive
-  simp only [← hspanU, ← hspanV]
-  rw [principalCosines_span_eq_cosPrincipalAngles huf hvf]
-  ext i
-  by_cases hi : i = 0
-  · subst i
-    have hsq := sum_sq_singularValues_overlapOp huf hvf
-    have hnonneg := cosPrincipalAngles_nonneg huf hvf 0
-    have hnorm : 0 ≤ ‖⟪u, v⟫_𝕜‖ := norm_nonneg _
-    have heq : cosPrincipalAngles huf hvf 0 = ‖⟪u, v⟫_𝕜‖ := by
-      -- put the goal and both bounds on the same atom as `hsq`
-      simp only [cosPrincipalAngles] at hnonneg ⊢
-      simp [uf, vf] at hsq
-      nlinarith [hsq, hnonneg, hnorm]
-    simp [heq]
-  · have hle : 1 ≤ i := Nat.one_le_iff_ne_zero.mpr hi
-    rw [cosPrincipalAngles,
-      (overlapOp huf hvf).singularValues_of_finrank_le]
-    · simp [hi]
-    · simpa using hle
+  have h := Submodule.principalCosines_span_singleton (𝕜 := 𝕜) hu hv
+  rw [Submodule.principalCosines_def, Submodule.cosThetaMap_def] at h
+  exact h
 
 /-! ### Reading the principal-angle sequence on a basis of the source subspace
 

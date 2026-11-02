@@ -121,7 +121,7 @@ scalar field: `TauCeti.principalCosines` is `𝕜`-generic, the block algebra
 `approximationNumber = singularValues` in finite dimensions is `𝕜`-generic.
 
 Sections 4--6 are the printed statements, and they are complex.  The obstruction
-is *not* the `gramOperator`/`gramSpectralPVM` layer that holds
+is *not* the `ApproximationNumber.gramOperator`/`gramSpectralPVM` layer that holds
 `approximationNumber_mono_of_form_le` at `ℂ`; that layer is reached only
 transitively.  It is that the statements **name** `canonicalLowBranch`, which is
 `boundedSelfAdjointSpectralSubspace` and is declared for `E →L[ℂ] E` alone.  The

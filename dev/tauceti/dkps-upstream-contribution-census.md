@@ -2655,3 +2655,73 @@ Validation: focused polar, reflection-tangent, equisingularity, support geometry
 finite uniqueness and nuclear-duality builds passed. The full default
 `lake build` passed (21529 jobs), followed by `lake build Challenge` (19769 jobs),
 with no compiler or linter warnings.
+
+
+## 2026-11-01: native orthonormal synthesis, overlap and principal cosines
+
+Compiled the two defining correspondences before removing the local engines:
+`TauCeti.familyIsometry hu = hu.synthesisMapIsometry`, and
+`TauCeti.overlapOp hu hv = TauCeti.overlapOperator 𝕜 u v`.
+Thus the previously scope-sensitive coordinate-overlap comparison is resolved
+for these family operators. Native finite-index APIs include the donor's
+`Fin d` case without changing the paper's mathematical scope.
+
+Retired `familyMap` and its inner-product proof, `familyIsometry` and its
+coordinate/single-vector proofs from `Gram/Matrix.lean`; the span/range
+containment helper in `AlignedBasis.lean` is replaced by
+`Orthonormal.range_synthesisMapIsometry`. All maintained callers, including
+Acharyya2025 and the nested Yu–Wang–Samworth package, use the native synthesis
+isometry. Approximate rigid-motion alignment remains in `Gram/Matrix`.
+
+Retired `overlapOp`, its action/contraction/Frobenius proofs, and the duplicate
+`cosPrincipalAngles`/`sinThetaSq` definitions and basic order, bounds, symmetry
+and sum identities. Consumers use native overlap, principal cosines and squared
+sine directly; finite sums use `Fintype.card_fin` and
+`Fin.sum_univ_eq_sum_range` where necessary. Deleted the coordinate adjoint,
+projection-factorization, span membership and coisometry forwarding helpers,
+and the long cosine dictionary proof. The existing local-carrier cosine bridge
+and rank-one statements in `AngleGeometry` now apply the accepted span and
+singleton theorems directly; the finite double-angle caller does likewise.
+
+Accepted integrations (each verified in pin `463ab293070d`):
+
+- [#15120](https://github.com/TauCetiProject/TauCeti/pull/15120),
+  `63ca9e2f2bac253526484a022e3bc0b557712c40`: canonical coordinate isometry,
+  independently using native synthesis and Mathlib.
+- [#13988](https://github.com/TauCetiProject/TauCeti/pull/13988),
+  `6e9359613bce697ea5483673e3d46e96f4a6c881`: canonical range/adjoint extension.
+  The integrated refactor removed its proposed parallel `familyIsometry` API;
+  its final range proof uses Mathlib's linear-combination range machinery.
+  This is not an unchanged DKPS-family implementation landing under another name.
+- [#15340](https://github.com/TauCetiProject/TauCeti/pull/15340),
+  `fe7e204a9aa8c36b52c6605c774166bc590b4498`: expressly independent overlap and
+  principal-cosine development, not a port of DKPS.
+- [#16582](https://github.com/TauCetiProject/TauCeti/pull/16582),
+  `0df7c1368e4d208845ec50de86ccac8e042e31ca`: canonical span/cosine dictionary,
+  singleton formula and isometric/coisometric padding. The integration uses the
+  native frame factorization; no donor proof adaptation is asserted.
+
+Historical source is `e4637c3919ae` under the three donor paths plus
+`AngleGeometry.lean`. The coordinate family was introduced in `AlignedBasis`
+at `75fdc44`, then moved to `Gram/Matrix` by `7295883b5`; `PrincipalAngles`
+originates at `34319dc`. Original family/angle authors are Jon Crall and Claude
+Opus 4.8; the surrounding Gram module credits Jon Crall and Claude Fable 5.
+Kitware copyright and Apache-2.0 remain recorded. The manifest preserves the
+original public declaration inventories, rather than replacing source names
+with the new API names.
+
+Importing the native frame API also exposes `TauCeti.gramOperator` for finite
+families. Bounded-operator paper consumers explicitly qualify their existing
+`ApproximationNumber.gramOperator`, preserving the original operator and avoiding
+name shadowing; no new adapter is introduced.
+
+The selected-polar cross-term identities remain distinct from TauCeti's
+existentially chosen Procrustes family. Fin-indexed eigenblock enumeration,
+projector-distance/largest-angle consequences and equal-rank sine-spectrum
+arguments also remain for further comparison; this checkpoint does not claim
+that every surrounding angle theorem is unmatched upstream. Explicitly adapted
+native cross-block Frobenius proofs have separate provenance from #15340.
+
+Validation: focused coordinate/angle, Yu–Wang–Samworth, finite double-angle,
+Acharyya2025 and unbounded double-angle consumer builds passed. The full default
+`lake build` and `lake build Challenge` passed without compiler or linter warnings.

@@ -142,7 +142,7 @@ theorem proposition4_1_compact_orthonormalVectors_complex
   let _ : CompleteSpace U :=
     (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
   let T : U →L[ℂ] H := TauCeti.principalSineOperator U V
-  let A : U →L[ℂ] U := gramOperator T
+  let A : U →L[ℂ] U := ApproximationNumber.gramOperator T
   have hAc : IsCompactOperator A := hcompact.clm_comp T.adjoint
   have hAs : IsSelfAdjoint A := by
     exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
@@ -181,7 +181,7 @@ theorem proposition4_1_compact_orthonormalVectors_complex
     have hnormsq : ‖T x‖ ^ 2 = s ^ 2 := by
       calc
         ‖T x‖ ^ 2 = RCLike.re ⟪A x, x⟫_ℂ := by
-          simpa only [A, gramOperator] using
+          simpa only [A, ApproximationNumber.gramOperator] using
             ContinuousLinearMap.apply_norm_sq_eq_inner_adjoint_left T x
         _ = s ^ 2 := by
           rw [hAx, inner_smul_left, RCLike.conj_ofReal,
@@ -627,7 +627,7 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 `(1 − W⋆)(1 − W)` is how Proposition 4.3 spells it and `gramOperator (1 − W)` is how the
 approximation-number layer spells it; this is the one-line bridge between them. -/
 theorem displacementSquare_eq_gramOperator (W : H →L[ℂ] H) :
-    (1 - star W) * (1 - W) = gramOperator (1 - W) := by
+    (1 - star W) * (1 - W) = ApproximationNumber.gramOperator (1 - W) := by
   rw [show (1 : H →L[ℂ] H) - star W = star (1 - W) by rw [star_sub, star_one]]
   rfl
 
@@ -673,15 +673,15 @@ theorem Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_hilbertSchm
     (hWmap : W * U.starProjection = V.starProjection * W) :
     ((OperatorIdealFamily.hilbertSchmidt ℂ).gauge (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
       ((OperatorIdealFamily.hilbertSchmidt ℂ).gauge (1 - W)) := by
-  have hnuc : (gramOperator (1 - DavisKahan.nonacuteDirectRotation U V J)).nuclearENorm ≤
-      (gramOperator (1 - W)).nuclearENorm := by
+  have hnuc : (ApproximationNumber.gramOperator (1 - DavisKahan.nonacuteDirectRotation U V J)).nuclearENorm ≤
+      (ApproximationNumber.gramOperator (1 - W)).nuclearENorm := by
     rw [ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge,
       ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge]
     refine iSup_mono fun k => ?_
     have hk := proposition4_3_infiniteDimensional_nonacute U V J W hWunitary hWmap k
     rw [displacementSquare_eq_gramOperator, displacementSquare_eq_gramOperator] at hk
-    have hk' : ((gramOperator (1 - DavisKahan.nonacuteDirectRotation U V J)).kyFanGauge k : ℝ) ≤
-        ((gramOperator (1 - W)).kyFanGauge k : ℝ) := by
+    have hk' : ((ApproximationNumber.gramOperator (1 - DavisKahan.nonacuteDirectRotation U V J)).kyFanGauge k : ℝ) ≤
+        ((ApproximationNumber.gramOperator (1 - W)).kyFanGauge k : ℝ) := by
       simpa only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
         ContinuousLinearMap.kyFanGaugeReal] using hk
     exact ENNReal.coe_le_coe.mpr (NNReal.coe_le_coe.mp hk')

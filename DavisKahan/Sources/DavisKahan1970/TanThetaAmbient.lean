@@ -792,14 +792,14 @@ private theorem projectionBlock_smul (Ω Γ : Submodule ℂ E)
 /-- The Gram operator of the ambient directed sine block is `sin²Θ` compressed
 to `U`. -/
 theorem gramOperator_directedSineAmbient :
-    gramOperator (directedSineAmbient U V) =
+    ApproximationNumber.gramOperator (directedSineAmbient U V) =
       projectorDifference U V * projectorDifference U V *
         U.starProjection := by
   have hp := starProjection_idem U
   have hq := starProjection_idem V
   rw [sq_mul_idempotent_of_anticommutator hp
       (projectorDifference_anticommutator (U := U) (V := V)),
-    gramOperator, directedSineAmbient, ContinuousLinearMap.adjoint_comp,
+    ApproximationNumber.gramOperator, directedSineAmbient, ContinuousLinearMap.adjoint_comp,
     (isSelfAdjoint_starProjection U).adjoint_eq,
     (isSelfAdjoint_starProjection Vᗮ).adjoint_eq, projectorDifference]
   simp only [comp_eq_mul, Submodule.starProjection_orthogonal']
@@ -874,7 +874,7 @@ theorem upperCorner_eq_adjoint_lowerCorner :
 /-- **The Gram operator of the lower corner is `tan²Θ` compressed to `U`**, in
 the Möbius form `Q (1 − Q)⁻¹` of the directed sine's Gram operator `Q`. -/
 theorem gramOperator_lowerCorner :
-    gramOperator (projectionBlock Uᗮ U
+    ApproximationNumber.gramOperator (projectionBlock Uᗮ U
         (projectorDifference U V * secantSquared U V)) =
       projectorDifference U V * projectorDifference U V *
         U.starProjection * secantSquared U V := by
@@ -889,7 +889,7 @@ theorem gramOperator_lowerCorner :
     rw [star_mul, star_mul, star_mul, star_sub, star_one, hpsa.star_eq,
       hD.star_eq, secant_selfAdjoint htr]
     noncomm_ring
-  rw [gramOperator, comp_eq_mul, lowerCorner_eq htr]
+  rw [ApproximationNumber.gramOperator, comp_eq_mul, lowerCorner_eq htr]
   rw [show (((1 - U.starProjection) * projectorDifference U V *
       U.starProjection) * secantSquared U V).adjoint =
       secantSquared U V * (U.starProjection *
@@ -916,11 +916,11 @@ theorem gramOperator_lowerCorner :
 /-- The defining relation of the Möbius transform, pointwise: this is exactly
 the hypothesis of `TauCeti.ApproximationNumber.approximationNumber_le_of_gramResolvent`. -/
 theorem gramOperator_lowerCorner_moebius (y : E) :
-    gramOperator (projectionBlock Uᗮ U
+    ApproximationNumber.gramOperator (projectionBlock Uᗮ U
         (projectorDifference U V * secantSquared U V)) y =
-      gramOperator (directedSineAmbient U V) y +
-        gramOperator (directedSineAmbient U V)
-          (gramOperator (projectionBlock Uᗮ U
+      ApproximationNumber.gramOperator (directedSineAmbient U V) y +
+        ApproximationNumber.gramOperator (directedSineAmbient U V)
+          (ApproximationNumber.gramOperator (projectionBlock Uᗮ U
             (projectorDifference U V * secantSquared U V)) y) := by
   have hp := starProjection_idem U
   have hkey := projectorDifference_anticommutator (U := U) (V := V)

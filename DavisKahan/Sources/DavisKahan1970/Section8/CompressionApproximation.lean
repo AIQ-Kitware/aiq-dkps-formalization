@@ -47,7 +47,7 @@ the obstruction is *not* `CFC.sqrt`, which is available over any `RCLike` field
 through the accepted real functional calculus consumed by
 `TauCeti/Analysis/InnerProductSpace/Modulus.lean`. It is
 the squaring step `TauCeti.ApproximationNumber.approximationNumber_gramOperator_complex`
-(`aₙ(X⋆X) = aₙ(X)²`), whose whole layer — `gramOperator`, `gramLinearPMap`,
+(`aₙ(X⋆X) = aₙ(X)²`), whose whole layer — `ApproximationNumber.gramOperator`, `gramLinearPMap`,
 `gramSpectralPVM` — is defined only for `InnerProductSpace ℂ`, because it runs
 through the bounded projection-valued measure of a self-adjoint operator.  Since
 `RCLike` carries no `ℝ`/`ℂ` discriminator, that cannot be worked around inside a
@@ -156,7 +156,7 @@ theorem approximationNumber_mono_of_form_le
       rw [ContinuousLinearMap.adjoint_inner_left, happ]
     rw [← inner_self_eq_norm_sq (𝕜 := ℂ) (CFC.sqrt R x), hkey]
   have hgram : ∀ {R : E →L[ℂ] E}, (0 : E →L[ℂ] E) ≤ R →
-      gramOperator (CFC.sqrt R) = R := by
+      ApproximationNumber.gramOperator (CFC.sqrt R) = R := by
     intro R hR
     show ContinuousLinearMap.adjoint (CFC.sqrt R) ∘L CFC.sqrt R = R
     rw [← ContinuousLinearMap.star_eq_adjoint, (hsa hR).star_eq]
@@ -166,14 +166,14 @@ theorem approximationNumber_mono_of_form_le
     have := (hnormsq hS x).trans_le ((h x).trans_eq (hnormsq hT x).symm)
     exact (pow_le_pow_iff_left₀ (norm_nonneg _) (norm_nonneg _) two_ne_zero).mp this
   calc S.approximationNumber n
-      = (gramOperator (CFC.sqrt S)).approximationNumber n := by rw [hgram hS]
+      = (ApproximationNumber.gramOperator (CFC.sqrt S)).approximationNumber n := by rw [hgram hS]
     _ = (CFC.sqrt S).approximationNumber n ^ 2 :=
         approximationNumber_gramOperator_complex _ n
     _ ≤ (CFC.sqrt T).approximationNumber n ^ 2 := by
         gcongr
         · exact _root_.ContinuousLinearMap.approximationNumber_nonneg _ _
         · exact _root_.ContinuousLinearMap.approximationNumber_le_of_norm_apply_le _ _ hle n
-    _ = (gramOperator (CFC.sqrt T)).approximationNumber n :=
+    _ = (ApproximationNumber.gramOperator (CFC.sqrt T)).approximationNumber n :=
         (approximationNumber_gramOperator_complex _ n).symm
     _ = T.approximationNumber n := by rw [hgram hT]
 

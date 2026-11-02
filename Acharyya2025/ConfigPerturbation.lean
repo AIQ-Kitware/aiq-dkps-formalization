@@ -1380,21 +1380,21 @@ theorem exists_isometry_configFrobError_spectralConfig_le
         YuWangSamworth2015.yuWangSamworth_alignmentMap_sub_overlapOp_apply_le
           hu hv hα_pos hgap
       have hM_overlap :
-          M = TauCeti.overlapOp hu_orthonormal hv_orthonormal := by
+          M = TauCeti.overlapOperator ℝ
+            (fun i => hT.eigenvectorBasis hn_eq (e i))
+            (fun i => hS.eigenvectorBasis hn_eq (e i)) := by
         apply LinearMap.ext
         intro x
         ext l
-        rw [hM, nearIsometry_apply, TauCeti.overlapOp_coord,
-          TauCeti.familyIsometry_apply, inner_sum]
+        rw [hM, nearIsometry_apply, TauCeti.overlapOperator_apply]
         refine Finset.sum_congr rfl (fun k _ => ?_)
-        rw [real_inner_smul_right]
         simp only [Acharyya2025.Overlap.overlap]
         rw [real_inner_comm]
         simp [e, mul_comm]
       refine ⟨W, hWiso, fun x => ?_⟩
       have hMnorm : ‖M x‖ ≤ ‖x‖ := by
         rw [hM_overlap]
-        exact TauCeti.overlapOp_contraction hu_orthonormal hv_orthonormal x
+        exact TauCeti.norm_overlapOperator_apply_le hu_orthonormal hv_orthonormal x
       have hWnorm : ‖W x‖ = ‖x‖ := by
         have hsq : ‖W x‖ ^ 2 = ‖x‖ ^ 2 := by
           rw [← real_inner_self_eq_norm_sq, ← real_inner_self_eq_norm_sq,

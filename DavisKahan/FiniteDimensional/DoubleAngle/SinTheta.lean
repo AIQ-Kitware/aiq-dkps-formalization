@@ -470,7 +470,10 @@ theorem apply_orthogonal_starProjection_comp_starProjection_comp
   -- Eigenbasis of `gram (P̂ P)` and its eigenvalues `= c²`.
   set bC := PhP.isSymmetric_adjoint_comp_self.eigenvectorBasis rfl with hbCdef
   have hσ : PhP.singularValues = cosPrincipalAngles hv hu := by
-    rw [hPhPdef]; exact singularValues_starProjection_comp_starProjection hu hv
+    rw [hPhPdef]
+    have h := hu.principalCosines_eq_cosPrincipalAngles hv rfl rfl
+    rw [Submodule.principalCosines_def, Submodule.cosThetaMap_def] at h
+    exact h.trans (cosPrincipalAngles_comm hu hv)
   have hCeig : ∀ i, C (bC i) = ((c i ^ 2 : ℝ) : 𝕜) • bC i := fun i => by
     rw [hCgram, PhP.isSymmetric_adjoint_comp_self.apply_eigenvectorBasis rfl i]
     congr 2
@@ -482,11 +485,11 @@ theorem apply_orthogonal_starProjection_comp_starProjection_comp
   have hc1 : ∀ k : ℕ, c k ≤ 1 := fun k => by
     simp only [hcdef]
     rcases lt_or_ge k d with hk | hk
-    · rw [cosPrincipalAngles_eq]
-      exact singularValues_le_one_of_contraction (overlapOp_contraction hv hu)
+    · rw [cosPrincipalAngles_def]
+      exact singularValues_le_one_of_contraction (norm_overlapOperator_apply_le hv hu)
         finrank_euclideanSpace_fin ⟨k, hk⟩
-    · rw [cosPrincipalAngles_eq,
-        (overlapOp hv hu).singularValues_of_finrank_le (by rw [finrank_euclideanSpace_fin]; exact hk)]
+    · rw [cosPrincipalAngles_def,
+        (overlapOperator 𝕜 v u).singularValues_of_finrank_le (by rw [finrank_euclideanSpace_fin]; exact hk)]
       exact zero_le_one
   -- Gram of `M` equals gram of the diagonal operator.
   set w : Fin (finrank 𝕜 E) → ℝ := fun i => c i * Real.sqrt (1 - c i ^ 2) with hwdef

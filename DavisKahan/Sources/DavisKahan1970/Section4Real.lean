@@ -851,8 +851,8 @@ private theorem complexify_gramOperator_real {X Y : Type*}
     [NormedAddCommGroup X] [InnerProductSpace ℝ X] [CompleteSpace X]
     [NormedAddCommGroup Y] [InnerProductSpace ℝ Y] [CompleteSpace Y]
     (A : X →L[ℝ] Y) :
-    complexify (gramOperatorR A) = gramOperator (complexify A) := by
-  rw [gramOperatorR, gramOperator, complexify_comp, complexify_adjoint]
+    complexify (gramOperatorR A) = ApproximationNumber.gramOperator (complexify A) := by
+  rw [gramOperatorR, ApproximationNumber.gramOperator, complexify_comp, complexify_adjoint]
 
 /-- The Gram-square approximation-number identity over `ℝ`, descended from the complex one. -/
 private theorem approximationNumber_gramOperator_real {X Y : Type*}

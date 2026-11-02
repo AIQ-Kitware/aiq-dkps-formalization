@@ -4,8 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 
 TauCeti's `Gram.Rigidity` owns equal-Gram span and ambient isometries. This
-module keeps DKPS-specific approximate rigid-motion alignment and coordinate
-family constructions.
+module keeps DKPS-specific approximate rigid-motion alignment.
+Coordinate family isometries come from
+TauCeti's accepted orthonormal synthesis API.
 -/
 module
 
@@ -14,6 +15,7 @@ public import Mathlib.Analysis.InnerProductSpace.PiL2
 public import Mathlib.LinearAlgebra.Isomorphisms
 public import ForTauCeti.Analysis.InnerProductSpace.Basic
 public import TauCeti.Analysis.InnerProductSpace.Gram.Rigidity
+public import TauCeti.Analysis.InnerProductSpace.Orthonormal.Family
 public import Mathlib.Analysis.Normed.Module.FiniteDimension
 public import Mathlib.Topology.MetricSpace.Sequences
 
@@ -21,7 +23,7 @@ public import Mathlib.Topology.MetricSpace.Sequences
 /-! # Gram matrix rigidity
 
 This module develops finite-family distance alignment and its quantitative
-approximation form, then gives coordinate isometries for orthonormal families.
+approximation form. Coordinate isometries for orthonormal families come from TauCeti.
 Exact Gram rigidity is imported from TauCeti and used as the foundation for the
 rigid-motion result.
 
@@ -450,57 +452,5 @@ theorem exists_delta_alignmentError_le {F : Type*} [NormedAddCommGroup F]
       alignmentError ψ φ ≤ ε := by
   obtain ⟨δ, hδpos, h⟩ := exists_delta_forall_exists_rigidMotion (F := F) (ι := ι) D hε
   exact ⟨δ, hδpos, fun φ ψ h1 h2 => alignmentError_le (h φ ψ h1 h2)⟩
-
-section CoordinateFamily
-
-variable {d : ℕ}
-
-/-- The linear map `EuclideanSpace 𝕜 (Fin d) →ₗ[𝕜] E` sending the `j`-th standard
-basis vector to `v j` (extended linearly): `x ↦ ∑ j, x j • v j`. -/
-noncomputable def familyMap (v : Fin d → E) : EuclideanSpace 𝕜 (Fin d) →ₗ[𝕜] E :=
-  (Fintype.linearCombination 𝕜 v).comp (WithLp.linearEquiv 2 𝕜 (Fin d → 𝕜)).toLinearMap
-
-/-- The family map, unfolded to its expansion in the family. -/
-@[simp] theorem familyMap_apply (v : Fin d → E) (x : EuclideanSpace 𝕜 (Fin d)) :
-    familyMap v x = ∑ i, x i • v i := by
-  rw [familyMap, LinearMap.comp_apply, Fintype.linearCombination_apply]
-  rfl
-
-/-- The coordinate map of an orthonormal family preserves inner products. -/
-theorem familyMap_inner_map_map {v : Fin d → E} (hv : Orthonormal 𝕜 v)
-    (x y : EuclideanSpace 𝕜 (Fin d)) :
-    ⟪familyMap v x, familyMap v y⟫_𝕜 = ⟪x, y⟫_𝕜 := by
-  rw [familyMap_apply, familyMap_apply, sum_inner, PiLp.inner_apply]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  rw [inner_sum, Finset.sum_eq_single i]
-  · rw [inner_smul_left, inner_smul_right, orthonormal_iff_ite.mp hv i i, ite_eq_left rfl, mul_one,
-      RCLike.inner_apply]
-    ring
-  · intro j _ hji
-    rw [inner_smul_left, inner_smul_right, orthonormal_iff_ite.mp hv i j,
-      ite_eq_right (Ne.symm hji), mul_zero, mul_zero]
-  · intro hi; exact absurd (Finset.mem_univ i) hi
-
-/-- The bundled coordinate isometry `EuclideanSpace 𝕜 (Fin d) →ₗᵢ[𝕜] E` of an
-orthonormal family `v`, sending `eⱼ ↦ vⱼ`. -/
-noncomputable def familyIsometry {v : Fin d → E} (hv : Orthonormal 𝕜 v) :
-    EuclideanSpace 𝕜 (Fin d) →ₗᵢ[𝕜] E :=
-  (familyMap v).isometryOfInner (familyMap_inner_map_map hv)
-
-/-- The bundled isometry acts as the family map. -/
-@[simp] theorem familyIsometry_apply {v : Fin d → E} (hv : Orthonormal 𝕜 v)
-    (x : EuclideanSpace 𝕜 (Fin d)) : familyIsometry hv x = ∑ i, x i • v i := by
-  rw [familyIsometry, LinearMap.coe_isometryOfInner, familyMap_apply]
-
-/-- It sends the `k`-th standard basis vector to `v k`. -/
-@[simp] theorem familyIsometry_single {v : Fin d → E} (hv : Orthonormal 𝕜 v) (k : Fin d) :
-    familyIsometry hv (EuclideanSpace.single k 1) = v k := by
-  rw [familyIsometry_apply]
-  rw [Finset.sum_eq_single k]
-  · rw [PiLp.single_apply, ite_eq_left rfl, one_smul]
-  · intro i _ hik; rw [PiLp.single_apply, ite_eq_right hik, zero_smul]
-  · intro hk; exact absurd (Finset.mem_univ k) hk
-
-end CoordinateFamily
 
 end TauCeti

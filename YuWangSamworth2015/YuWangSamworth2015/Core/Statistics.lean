@@ -281,8 +281,7 @@ theorem sinThetaSq_eq_sinThetaFrobenius_sq_of_spans
       ∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bU k, bV j⟫_𝕜‖ ^ 2 := by
     calc
       sinThetaSq hu hv = sinThetaSq huBlock hvBlock := by
-        unfold sinThetaSq
-        rw [hcos]
+        rw [sinThetaSq_def, sinThetaSq_def, hcos]
       _ = ∑ j ∈ s, ∑ k ∈ sᶜ, ‖⟪bU k, bV j⟫_𝕜‖ ^ 2 :=
         sinThetaSq_blockFamily_eq_sum_cross bU bV hscard hscard
   have hfrob :
@@ -320,7 +319,7 @@ theorem sinThetaSq_eq_sum_sq_norm_starProjection_orthogonal
     (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v)
     (hspanU : Submodule.span 𝕜 (Set.range u) = U) :
     sinThetaSq hu hv = ∑ i, ‖Uᗮ.starProjection (v i)‖ ^ 2 := by
-  rw [sinThetaSq_eq_sub_overlap]
+  rw [sinThetaSq_eq_card_sub_sum_norm_inner_sq, Fintype.card_fin]
   have hproj : ∀ k, ∑ i, ‖⟪u i, v k⟫_𝕜‖ ^ 2 = ‖U.starProjection (v k)‖ ^ 2 := fun k =>
     (norm_sq_starProjection_of_span_range hu hspanU (v k)).symm
   have hsplit : ∀ k, ‖U.starProjection (v k)‖ ^ 2 + ‖Uᗮ.starProjection (v k)‖ ^ 2 = 1 := by
@@ -553,24 +552,24 @@ theorem exists_aligned_orthonormalBasis
   have hspanV0 : Submodule.span 𝕜 (Set.range v0) = V :=
     span_range_eq_of_orthonormal_of_mem hv0
       (fun i => (bV (Fin.cast hrankV.symm i)).2) hrankV.symm
-  let O := choosePolarUnitary (overlapOp hu hv0)
+  let O := choosePolarUnitary (overlapOperator 𝕜 u v0)
   let v : Fin d → E := fun i =>
-    familyIsometry hv0 (O.symm (EuclideanSpace.single i 1))
+    hv0.synthesisMapIsometry (O.symm (EuclideanSpace.single i 1))
   have hv : Orthonormal 𝕜 v := by
     rw [orthonormal_iff_ite]
     intro i j
     -- states the goal with the definition unfolded, in the shape the next step needs;
     -- there is no `_apply` lemma to rewrite with here.
     change
-      ⟪familyIsometry hv0 (O.symm (EuclideanSpace.single i (1 : 𝕜))),
-        familyIsometry hv0 (O.symm (EuclideanSpace.single j (1 : 𝕜)))⟫_𝕜 =
+      ⟪hv0.synthesisMapIsometry (O.symm (EuclideanSpace.single i (1 : 𝕜))),
+        hv0.synthesisMapIsometry (O.symm (EuclideanSpace.single j (1 : 𝕜)))⟫_𝕜 =
           if i = j then 1 else 0
-    rw [(familyIsometry hv0).inner_map_map, O.symm.inner_map_map]
+    rw [(hv0.synthesisMapIsometry).inner_map_map, O.symm.inner_map_map]
     exact orthonormal_iff_ite.mp EuclideanSpace.orthonormal_single i j
   have hspanV : Submodule.span 𝕜 (Set.range v) = V :=
     span_range_eq_of_orthonormal_of_mem hv
-      (fun i => hspanV0 ▸ familyIsometry_mem_span hv0
-        (O.symm (EuclideanSpace.single i 1))) hrankV.symm
+      (fun i => hspanV0 ▸ hv0.range_synthesisMapIsometry.le
+        ⟨O.symm (EuclideanSpace.single i 1), rfl⟩) hrankV.symm
   have hsum := sum_sq_norm_aligned_le_sinThetaSq hu hv0
   have hbridge := sinThetaSq_eq_sinThetaFrobenius_sq_of_spans
     hu hv0 hspanU hspanV0
