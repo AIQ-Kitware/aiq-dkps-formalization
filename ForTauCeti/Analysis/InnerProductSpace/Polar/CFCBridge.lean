@@ -23,29 +23,6 @@ open LinearMap InnerProductSpace
 
 /-! ### Finite/complete modulus agreement -/
 
-section ModulusAgreement
-
-variable {𝕜 : Type*} [RCLike 𝕜]
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-  [FiniteDimensional 𝕜 E]
-variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-  [FiniteDimensional 𝕜 F]
-
-local instance : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-local instance : CompleteSpace F := FiniteDimensional.complete 𝕜 F
-
-/-- In finite dimension, the spectral source modulus and the bounded CFC source modulus are
-the same operator. -/
-theorem operatorAbs_toContinuousLinearMap_eq_modulus (A : E →ₗ[𝕜] F) :
-    (operatorAbs A).toContinuousLinearMap = A.toContinuousLinearMap.modulus := by
-  refine ContinuousLinearMap.eq_modulus_iff.mpr ⟨?_, ?_⟩
-  · exact (LinearMap.isPositive_toContinuousLinearMap_iff (operatorAbs A)).mpr
-      (isPositive_operatorAbs A)
-  · ext x
-    exact congrArg (fun f : E →ₗ[𝕜] E => f x) (operatorAbs_mul_self A)
-
-end ModulusAgreement
-
 /-! ### CFC bridge — the ℂ / ContinuousLinearMap headline (`|A| = CFC.abs A`)
 
 ## Provenance
@@ -204,33 +181,20 @@ theorem selfAdjointFunctionalCalculus_toContinuousLinearMap_eq_cfc {T : H →ₗ
     rfl
   exact key.symm
 
-/-- Over `ℂ`, the common modulus is Mathlib's C⋆-algebra absolute value. -/
-theorem operatorAbs_toContinuousLinearMap_eq_cfcAbs (A : H →ₗ[ℂ] H) :
-    (operatorAbs A).toContinuousLinearMap = CFC.abs A.toContinuousLinearMap := by
-  have heq : TauCeti.operatorAbs A = LinearMap.operatorAbs A :=
-    LinearMap.IsPositive.eq_operatorAbs
-      (TauCeti.isPositive_operatorAbs A) (TauCeti.operatorAbs_mul_self A)
-  calc
-    (operatorAbs A).toContinuousLinearMap =
-        (LinearMap.operatorAbs A).toContinuousLinearMap :=
-      congrArg LinearMap.toContinuousLinearMap heq
-    _ = CFC.abs A.toContinuousLinearMap :=
-      LinearMap.toContinuousLinearMap_operatorAbs_eq_cfcAbs A
-
 /-- **Headline (via CFC):** every `A : H →L[ℂ] H` factors as `A = U ∘L CFC.abs A` with `U` a
 partial isometry. -/
 theorem continuousLinearMap_polar_decomposition (A : H →L[ℂ] H) :
     ∃ U : H →L[ℂ] H, IsPartialIsometry U ∧ A = U ∘L CFC.abs A := by
-  refine ⟨(polarFactor (A : H →ₗ[ℂ] H)).toContinuousLinearMap, ?_, ?_⟩
+  refine ⟨(LinearMap.polarFactor (A : H →ₗ[ℂ] H)).toContinuousLinearMap, ?_, ?_⟩
   · -- transport `IsPartialIsometry` across the (definitional) star-monoid bridge
     exact (ContinuousLinearMap.isPartialIsometry_iff_starMul).mp <|
       (LinearMap.isPartialIsometry_toContinuousLinearMap_iff).mpr <|
-        (LinearMap.isPartialIsometry_iff_starMul).mpr
-          (isPartialIsometry_polarFactor (A : H →ₗ[ℂ] H))
+        (LinearMap.isPartialIsometry_polarFactor (A : H →ₗ[ℂ] H))
   · rw [show CFC.abs A = CFC.abs ((A : H →ₗ[ℂ] H)).toContinuousLinearMap from rfl,
-      ← operatorAbs_toContinuousLinearMap_eq_cfcAbs (A : H →ₗ[ℂ] H)]
+      ← LinearMap.toContinuousLinearMap_operatorAbs_eq_cfcAbs (A : H →ₗ[ℂ] H)]
     ext x
-    exact congrArg (fun f : H →ₗ[ℂ] H => f x) (polar_decomposition (A : H →ₗ[ℂ] H))
+    exact congrArg (fun f : H →ₗ[ℂ] H => f x)
+      (LinearMap.polarFactor_comp_operatorAbs (A : H →ₗ[ℂ] H)).symm
 
 end CFCBridge
 

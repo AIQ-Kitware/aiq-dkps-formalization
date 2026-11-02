@@ -26,7 +26,8 @@ canonical unitary
 `U Pⱼ = (P'ⱼ Pⱼ P'ⱼ)^{-1/2} P'ⱼ Pⱼ = P'ⱼ (Pⱼ P'ⱼ Pⱼ)^{-1/2} Pⱼ`,  with  `U Pⱼ = P'ⱼ U`,
 the polar factor of `P'ⱼ Pⱼ` on each block. It measures the rotation of the spectral resolution.
 
-Here the unitary is assembled as `U = ∑ⱼ Uⱼ ∘ₗ Pⱼ` with `Uⱼ = polarFactor (P'ⱼ ∘ₗ Pⱼ)` the polar
+Here the unitary is assembled as `U = ∑ⱼ Uⱼ ∘ₗ Pⱼ` with `Uⱼ = (P'ⱼ ∘ₗ Pⱼ).polarFactor`,
+the polar
 factor of the `j`-th block map: under non-degeneracy, `ker (P'ⱼ Pⱼ) = ker Pⱼ`, so `Uⱼ` is isometric
 on `range Pⱼ` and carries it into `range P'ⱼ`; since the `range P'ⱼ` are pairwise orthogonal and the
 `Pⱼ` resolve the identity, `U` is isometric, hence unitary. The block polar factors
@@ -293,28 +294,28 @@ theorem injOn_of_nonDegenerate (hnd : P.NonDegenerate P') (j : Fin m) :
 
 /-- The polar factor of the `j`-th block map is isometric on `range Pⱼ`. -/
 private theorem norm_blockFactor_apply_proj (hnd : P.NonDegenerate P') (j : Fin m) (x : E) :
-    ‖polarFactor (P'.proj j ∘ₗ P.proj j) (P.proj j x)‖ = ‖P.proj j x‖ :=
-  norm_polarFactor_apply_of_mem <| by
+    ‖(P'.proj j ∘ₗ P.proj j).polarFactor (P.proj j x)‖ = ‖P.proj j x‖ :=
+  LinearMap.norm_polarFactor_apply _ <| by
     rw [ker_comp_of_nonDegenerate hnd j, ker_proj, Submodule.orthogonal_orthogonal]
     exact LinearMap.mem_range_self _ x
 
 /-- The polar factor of the `j`-th block map lands in `range P'ⱼ`. -/
 private theorem blockFactor_apply_mem_range (P P' : OrthoProjFamily 𝕜 E m) (j : Fin m) (y : E) :
-    polarFactor (P'.proj j ∘ₗ P.proj j) y ∈ range (P'.proj j) := by
-  have h : polarFactor (P'.proj j ∘ₗ P.proj j) y
-      ∈ range (polarFactor (P'.proj j ∘ₗ P.proj j)) := LinearMap.mem_range_self _ y
-  rw [range_polarFactor] at h
+    (P'.proj j ∘ₗ P.proj j).polarFactor y ∈ range (P'.proj j) := by
+  have h : (P'.proj j ∘ₗ P.proj j).polarFactor y
+      ∈ range ((P'.proj j ∘ₗ P.proj j).polarFactor) := LinearMap.mem_range_self _ y
+  rw [LinearMap.range_polarFactor] at h
   exact LinearMap.range_comp_le_range _ _ h
 
 /-! ### The intertwining unitary (ticket PD-16) -/
 
 private theorem norm_sum_blockFactor (hnd : P.NonDegenerate P') (x : E) :
-    ‖∑ j, polarFactor (P'.proj j ∘ₗ P.proj j) (P.proj j x)‖ = ‖x‖ := by
-  have hsq : ‖∑ j, polarFactor (P'.proj j ∘ₗ P.proj j) (P.proj j x)‖ ^ 2 = ‖x‖ ^ 2 := by
+    ‖∑ j, (P'.proj j ∘ₗ P.proj j).polarFactor (P.proj j x)‖ = ‖x‖ := by
+  have hsq : ‖∑ j, (P'.proj j ∘ₗ P.proj j).polarFactor (P.proj j x)‖ ^ 2 = ‖x‖ ^ 2 := by
     rw [norm_sq_sum_of_pairwise_inner_eq_zero fun j k hjk =>
       inner_eq_zero_of_ne (P := P') hjk (blockFactor_apply_mem_range P P' j _)
         (blockFactor_apply_mem_range P P' k _)]
-    calc ∑ j, ‖polarFactor (P'.proj j ∘ₗ P.proj j) (P.proj j x)‖ ^ 2
+    calc ∑ j, ‖(P'.proj j ∘ₗ P.proj j).polarFactor (P.proj j x)‖ ^ 2
         = ∑ j, ‖P.proj j x‖ ^ 2 :=
           Finset.sum_congr rfl fun j _ => by rw [norm_blockFactor_apply_proj hnd j x]
       _ = ‖∑ j, P.proj j x‖ ^ 2 :=
@@ -329,16 +330,16 @@ private theorem norm_sum_blockFactor (hnd : P.NonDegenerate P') (x : E) :
 Davis §2, lines 217–229. -/
 noncomputable def intertwiningUnitary (hnd : P.NonDegenerate P') : E ≃ₗᵢ[𝕜] E :=
   have hnorm : ∀ x : E,
-      ‖(∑ j, polarFactor (P'.proj j ∘ₗ P.proj j) ∘ₗ P.proj j : E →ₗ[𝕜] E) x‖ = ‖x‖ := fun x => by
+      ‖(∑ j, (P'.proj j ∘ₗ P.proj j).polarFactor ∘ₗ P.proj j : E →ₗ[𝕜] E) x‖ = ‖x‖ := fun x => by
     rw [LinearMap.sum_apply]
     simp only [LinearMap.comp_apply]
     exact norm_sum_blockFactor hnd x
   have hinj : Function.Injective
-      (∑ j, polarFactor (P'.proj j ∘ₗ P.proj j) ∘ₗ P.proj j : E →ₗ[𝕜] E) := fun x y hxy => by
+      (∑ j, (P'.proj j ∘ₗ P.proj j).polarFactor ∘ₗ P.proj j : E →ₗ[𝕜] E) := fun x y hxy => by
     have h0 : ‖x - y‖ = 0 := by rw [← hnorm (x - y), map_sub, hxy, sub_self, norm_zero]
     exact sub_eq_zero.mp (norm_eq_zero.mp h0)
   { LinearEquiv.ofBijective
-      (∑ j, polarFactor (P'.proj j ∘ₗ P.proj j) ∘ₗ P.proj j : E →ₗ[𝕜] E)
+      (∑ j, (P'.proj j ∘ₗ P.proj j).polarFactor ∘ₗ P.proj j : E →ₗ[𝕜] E)
       ⟨hinj, LinearMap.injective_iff_surjective.mp hinj⟩ with
     norm_map' := hnorm }
 
@@ -352,9 +353,9 @@ isometry equivalence.  `simp` normal form for moving between the two views. -/
 applied to the `j`-th component of `x`.  Unfolds the bundled `LinearIsometryEquiv` to the sum
 that defines it. -/
 theorem intertwiningUnitary_apply (hnd : P.NonDegenerate P') (x : E) :
-    intertwiningUnitary hnd x = ∑ j, polarFactor (P'.proj j ∘ₗ P.proj j) (P.proj j x) := by
+    intertwiningUnitary hnd x = ∑ j, (P'.proj j ∘ₗ P.proj j).polarFactor (P.proj j x) := by
   have h : intertwiningUnitary hnd x
-      = (∑ j, polarFactor (P'.proj j ∘ₗ P.proj j) ∘ₗ P.proj j : E →ₗ[𝕜] E) x := (rfl)
+      = (∑ j, (P'.proj j ∘ₗ P.proj j).polarFactor ∘ₗ P.proj j : E →ₗ[𝕜] E) x := (rfl)
   rw [h, LinearMap.sum_apply]
   simp only [LinearMap.comp_apply]
 
@@ -362,16 +363,16 @@ theorem intertwiningUnitary_apply (hnd : P.NonDegenerate P') (x : E) :
 theorem intertwiningUnitary_comp_proj (hnd : P.NonDegenerate P') (j : Fin m) :
     ((intertwiningUnitary hnd : E →ₗ[𝕜] E)) ∘ₗ P.proj j
       = P'.proj j ∘ₗ (intertwiningUnitary hnd : E →ₗ[𝕜] E) := by
-  have hL : ∀ x : E, ∑ k, polarFactor (P'.proj k ∘ₗ P.proj k) (P.proj k (P.proj j x))
-      = polarFactor (P'.proj j ∘ₗ P.proj j) (P.proj j x) := fun x => by
+  have hL : ∀ x : E, ∑ k, LinearMap.polarFactor (P'.proj k ∘ₗ P.proj k) (P.proj k (P.proj j x))
+      = (P'.proj j ∘ₗ P.proj j).polarFactor (P.proj j x) := fun x => by
     refine (Finset.sum_eq_single j (fun k _ hkj => ?_)
       (fun hj => absurd (Finset.mem_univ j) hj)).trans ?_
     · rw [show P.proj k (P.proj j x) = 0 from
         congrArg (fun f : E →ₗ[𝕜] E => f x) (P.orthogonal hkj), map_zero]
     · rw [show P.proj j (P.proj j x) = P.proj j x from
         congrArg (fun f : E →ₗ[𝕜] E => f x) (P.proj_comp_self j)]
-  have hR : ∀ x : E, ∑ k, P'.proj j (polarFactor (P'.proj k ∘ₗ P.proj k) (P.proj k x))
-      = polarFactor (P'.proj j ∘ₗ P.proj j) (P.proj j x) := fun x => by
+  have hR : ∀ x : E, ∑ k, P'.proj j (LinearMap.polarFactor (P'.proj k ∘ₗ P.proj k) (P.proj k x))
+      = (P'.proj j ∘ₗ P.proj j).polarFactor (P.proj j x) := fun x => by
     refine (Finset.sum_eq_single j (fun k _ hkj => ?_)
       (fun hj => absurd (Finset.mem_univ j) hj)).trans ?_
     · exact proj_apply_of_mem_range_of_ne (Ne.symm hkj) (blockFactor_apply_mem_range P P' k _)

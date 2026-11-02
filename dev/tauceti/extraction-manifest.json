@@ -1318,23 +1318,51 @@
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.PolarDecomposition",
-      "source_declarations": [],
+      "source_declarations": [
+        "operatorAbs",
+        "isPositive_operatorAbs",
+        "operatorAbs_mul_self",
+        "norm_operatorAbs_apply",
+        "ker_operatorAbs",
+        "range_operatorAbs",
+        "operatorAbs_apply_mem_orthogonal_ker",
+        "operatorAbs_neg",
+        "operatorAbs_adjoint_of_normal",
+        "operatorAbsRestrict",
+        "polarFactor",
+        "polarFactor_apply_operatorAbs_apply",
+        "polar_decomposition",
+        "ker_polarFactor",
+        "range_polarFactor",
+        "norm_polarFactor_apply_of_mem",
+        "isPartialIsometry_polarFactor",
+        "polarUnitaryEquiv",
+        "coe_polarUnitaryEquiv",
+        "polar_decomposition_of_isUnit",
+        "polarIsometryOnOrthogonal",
+        "choosePolarUnitary",
+        "choosePolarUnitary_apply_operatorAbs_apply",
+        "polar_decomposition_choosePolarUnitary",
+        "exists_polar_decomposition_unitary",
+        "operatorAbs_comm_of_normal",
+        "polarFactor_eq_of_isUnit_eq_comp_positive",
+        "polarFactor_adjoint_of_isUnit"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PolarDecomposition",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Polar.Finite",
       "ownership_class": "tauceti",
       "roadmap_target": "operator-polar-decomposition",
       "provenance_class": "moved; introduced at Davis--Kahan commit 3676b55; authors Jon Crall, Claude Opus 4.8; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib",
-        "TauCeti.Analysis.InnerProductSpace.PartialIsometry",
-        "ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace",
+        "TauCeti.Analysis.InnerProductSpace.Polar.Finite",
         "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "#13940, #16086, #16450",
+      "migration_note": "November 1: removed the local rectangular modulus, restricted-modulus automorphism, square polar-factor construction, norm/kernel/range/partial-isometry/decomposition proofs, normal commutation proof and invertibility-restricted adjoint law. All maintained consumers use LinearMap.operatorAbs/polarFactor and native facts directly. Native polar factor is rectangular RCLike and its adjoint law needs no invertibility, strictly stronger than donor. Selected square unitary API remains for consumers; singular-case selection now delegates existence to accepted exists_linearIsometryEquiv_eqOn_polarFactor. Extra negation/normal-adjoint modulus identities and uniqueness against a competing positive factor remain. Independent replacements: #13940 7b2a8f443f96040539e6479461b3325307ffb9bb, #16086 0a2aed9e3a73e222aadd47ef9a13c09b1c256385, #16450 7d1da9ada3041f5e1e5d10884964da59fc89e5b9. No DKPS proof descent claimed. Historical source e4637c3919ae under donor path and original introduction 3676b5559, Jon Crall / Claude Opus 4.8, Kitware copyright, Apache-2.0. Canonical finite polar partial isometry is not confused with its noncanonical kernel-completed unitary."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.Isometry",
@@ -5437,6 +5465,36 @@
       "status": "partially-upstreamed",
       "upstream_pr": "#6967",
       "migration_note": "November 1: deleted local complex Fin-matrix determinant, adjugate and inverse measurability proofs. The approximants use accepted MeasurableInv (Matrix m m 𝕜) / Measurable.inv and Matrix.measurable_iff directly. Native API covers arbitrary finite index types and suitable fields; no invertibility hypothesis required, same junk inverse behavior. Independent #6967 integration 42f6e23a92392ac7001bbda30dc71f3d38c20672; no DKPS proof descent claimed. Preserved full measurable unit-kernel-vector selection for arbitrary measurable wide complex-matrix families and the pointwise kernel-projection limit: neither is supplied by the donor replacement. Original Jon Crall / Claude Fable 5, Kitware copyright, Apache-2.0, source e4637c3919ae and introduction cf57b8201."
+    },
+    {
+      "source_module": "ForMathlib.Analysis.InnerProductSpace.PolarDecomposition; split donor e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/Polar/CFCBridge.lean",
+      "source_declarations": [
+        "operatorAbs_toContinuousLinearMap_eq_modulus",
+        "operatorAbs_toContinuousLinearMap_eq_cfcAbs",
+        "endAlgEquivContinuousLinearMap",
+        "eigenvalues_mem_spectrum_toContinuousLinearMap",
+        "calculusStarAlgHom",
+        "calculusStarAlgHom_id",
+        "norm_calculusStarAlgHom_le",
+        "selfAdjointFunctionalCalculus_toContinuousLinearMap_eq_cfc",
+        "continuousLinearMap_polar_decomposition"
+      ],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Polar.CFCBridge",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison",
+      "ownership_class": "tauceti",
+      "roadmap_target": "operator-polar-decomposition",
+      "provenance_class": "independent accepted modulus bridges; additional local functional-calculus bridge retained",
+      "direct_dependencies": [
+        "ForTauCeti.Analysis.InnerProductSpace.Polar.Decomposition",
+        "TauCeti.Analysis.InnerProductSpace.FunctionalCalculusComparison",
+        "ForTauCeti.Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "partially-upstreamed",
+      "upstream_pr": "#16523, #20358",
+      "migration_note": "November 1: removed both duplicate finite-modulus-to-bounded/CFC bridge proofs. Consumers use LinearMap.toContinuousLinearMap_operatorAbs_eq_cfcAbs and toContinuousLinearMap_operatorAbs_eq_modulus directly. Independent #16523 893678359b586eace5dfe8ce192eb8a725406cb6 and Jon Crall-authored direct accepted-API bridge #20358 f4a3266bdf016c565840d069c5db06eb5352ddd1; accepted modulus comparison is RCLike-generic and rectangular where meaningful. The additional local eigenframe functional-calculus comparison and bounded polar-decomposition presentation remain, using native finite polar engine. Source e4637c3919ae and introduction 3676b5559, Jon Crall / Claude Opus 4.8, Kitware copyright, Apache-2.0; no proof descent claimed."
     }
   ]
 }

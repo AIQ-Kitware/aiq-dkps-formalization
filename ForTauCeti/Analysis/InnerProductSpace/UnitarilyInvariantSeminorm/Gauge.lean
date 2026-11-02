@@ -182,9 +182,9 @@ theorem apply_adjoint (A : E →ₗ[𝕜] E) : N A.adjoint = N A :=
   N.map_eq_of_singularValues_eq (LinearMap.singularValues_adjoint A)
 
 /-- A square seminorm is unchanged by taking the operator absolute value. -/
-theorem apply_operatorAbs (A : E →ₗ[𝕜] E) : N (operatorAbs A) = N A := by
+theorem apply_operatorAbs (A : E →ₗ[𝕜] E) : N (A.operatorAbs) = N A := by
   conv_rhs => rw [polar_decomposition_choosePolarUnitary A]
-  exact (N.map_linearIsometryEquiv_comp (choosePolarUnitary A) (operatorAbs A)).symm
+  exact (N.map_linearIsometryEquiv_comp (choosePolarUnitary A) (A.operatorAbs)).symm
 
 
 end UnitarilyInvariantSeminorm

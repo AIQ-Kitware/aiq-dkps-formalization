@@ -610,8 +610,8 @@ private theorem sinAngleOperator_model_eq_smul_id
     simp only [LinearMap.comp_apply, LinearMap.smul_apply, LinearMap.id_apply]
     match_scalars
     ring
-  change TauCeti.operatorAbs A = _
-  exact (LinearMap.IsPositive.sqrt_unique A.isPositive_adjoint_comp_self hpos hsquare).symm
+  change A.operatorAbs = _
+  exact (hpos.eq_operatorAbs hsquare).symm
 
 private theorem singularValues_tanAngle_model
     {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ < Real.pi / 2) :
@@ -629,11 +629,11 @@ private theorem singularValues_tanAngle_model
   -- replaced through the congruence bridge
   -- `sinAngleOperator` is *defined* as this modulus, so the equation has to
   -- be restated in the form the goal actually carries
-  have hsinEq' : TauCeti.operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
+  have hsinEq' : LinearMap.operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
       projection (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       (((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) := hsinEq
   have hinner : TauCeti.selfAdjointFunctionalCalculus
-      (TauCeti.isPositive_operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
+      (LinearMap.isPositive_operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
         projection (rotatedModelSubspace (𝕜 := 𝕜) θ))).isSymmetric
       Real.arcsin = (((θ : ℝ) : 𝕜) • LinearMap.id) := by
     rw [TauCeti.selfAdjointFunctionalCalculus_congr_op _
@@ -687,7 +687,7 @@ private theorem singularValues_tanTwoAngle_model
     exact ne_of_gt (Real.cos_pos_of_mem_Ioo ⟨by linarith [Real.pi_pos], by linarith⟩)
   have htan : 0 ≤ Real.tan (2 * θ) :=
     Real.tan_nonneg_of_nonneg_of_le_pi_div_two (by linarith) (by linarith)
-  have hsinEq' : TauCeti.operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
+  have hsinEq' : LinearMap.operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
       projection (rotatedModelSubspace (𝕜 := 𝕜) θ)) =
       (((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) := hsinEq
   have hsymSin : ((((Real.sin θ : ℝ) : 𝕜) • LinearMap.id) :
@@ -701,7 +701,7 @@ private theorem singularValues_tanTwoAngle_model
     simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
       inner_smul_right, RCLike.conj_ofReal]
   have hinner : TauCeti.selfAdjointFunctionalCalculus
-      (TauCeti.isPositive_operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
+      (LinearMap.isPositive_operatorAbs (projection (modelSubspace (𝕜 := 𝕜)) -
         projection (rotatedModelSubspace (𝕜 := 𝕜) θ))).isSymmetric
       Real.arcsin = (((θ : ℝ) : 𝕜) • LinearMap.id) := by
     rw [TauCeti.selfAdjointFunctionalCalculus_congr_op _ hsymSin

@@ -67,9 +67,9 @@ theorem nuclear_adjoint_comp_self_eq_sum_sq_norm
     nuclear 𝕜 E E (A.adjoint ∘ₗ A) = ∑ i, ‖A (b i)‖ ^ 2 := by
   let G := A.adjoint ∘ₗ A
   have hG : G.IsPositive := LinearMap.isPositive_adjoint_comp_self A
-  have hGabs : TauCeti.operatorAbs G = G := by
+  have hGabs : G.operatorAbs = G := by
     symm
-    exact (LinearMap.isPositive_adjoint_comp_self G).sqrt_unique hG (by
+    exact hG.eq_operatorAbs (by
       rw [hG.adjoint_eq])
   rw [nuclear_apply]
   change G.singularValues.sum (fun _ s => s) = _

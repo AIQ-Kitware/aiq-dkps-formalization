@@ -50,9 +50,9 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 /-- The modulus `|A| = (A⋆A)^{1/2}` has the same zero-padded singular-value sequence as
 `A`: both Gram operators coincide, `|A|⋆|A| = |A|² = A⋆A`. -/
 theorem singularValues_operatorAbs (A : E →ₗ[𝕜] F) :
-    (TauCeti.operatorAbs A).singularValues = A.singularValues := by
+    (A.operatorAbs).singularValues = A.singularValues := by
   refine TauCeti.singularValues_eq_of_gram_eq ?_
-  rw [(TauCeti.isPositive_operatorAbs A).adjoint_eq, TauCeti.operatorAbs_mul_self]
+  rw [(A.isPositive_operatorAbs).adjoint_eq, LinearMap.operatorAbs_sq]
 
 end OperatorAbsSingularValues
 
@@ -72,7 +72,7 @@ noncomputable def sinThetaMap (U V : Submodule 𝕜 E)
 principal-angle cosines (`singularValues_operatorAbs` and `singularValues_cosThetaMap`). -/
 noncomputable def cosAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  TauCeti.operatorAbs (cosThetaMap U V)
+  LinearMap.operatorAbs (cosThetaMap U V)
 
 /-- `sin Θ` on the full ambient space, the modulus `|P_U - P_V|` of the projector
 difference.  This is the symmetric full-space sine operator; its singular values
@@ -80,14 +80,14 @@ are those of `P_U - P_V` (`singularValues_projection_sub_projection`). -/
 @[expose]
 noncomputable def sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  TauCeti.operatorAbs (projection U - projection V)
+  LinearMap.operatorAbs (projection U - projection V)
 
 /-- Public characterization of the sine-angle operator as the modulus of the projector
 difference.  Keep downstream proofs on this theorem rather than unfolding the definition
 directly. -/
 theorem sinAngleOperator_eq_operatorAbs (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    sinAngleOperator U V = TauCeti.operatorAbs (projection U - projection V) :=
+    sinAngleOperator U V = LinearMap.operatorAbs (projection U - projection V) :=
   rfl
 
 /-- The one-sided finite-dimensional `sin (2 Θ)` map supported on `U`.

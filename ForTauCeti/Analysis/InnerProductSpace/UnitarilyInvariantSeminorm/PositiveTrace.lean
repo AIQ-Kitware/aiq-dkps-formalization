@@ -31,9 +31,9 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 /-- The operator modulus of a positive endomorphism is the endomorphism
 itself. -/
 theorem operatorAbs_eq_self_of_isPositive (A : E →ₗ[𝕜] E)
-    (hA : A.IsPositive) : operatorAbs A = A := by
+    (hA : A.IsPositive) : A.operatorAbs = A := by
   symm
-  exact (LinearMap.isPositive_adjoint_comp_self A).sqrt_unique hA (by
+  exact hA.eq_operatorAbs (by
     rw [hA.adjoint_eq])
 
 /-- Full Ky Fan sum of a positive endomorphism is its ordinary trace, in
@@ -48,7 +48,7 @@ theorem kyFanSum_positive_eq_basis_trace (A : E →ₗ[𝕜] E)
         ∑ i : Fin (finrank 𝕜 E), A.singularValues i :=
       kyFanSum_eq_sum_fin _ A
     _ = ∑ i : Fin (finrank 𝕜 E),
-        RCLike.re ⟪operatorAbs A (b i), b i⟫_𝕜 :=
+        RCLike.re ⟪A.operatorAbs (b i), b i⟫_𝕜 :=
       (sum_re_inner_abs_self_eq_sum_singularValues A rfl b).symm
     _ = ∑ i : Fin (finrank 𝕜 E), RCLike.re ⟪A (b i), b i⟫_𝕜 := by
       rw [operatorAbs_eq_self_of_isPositive A hA]

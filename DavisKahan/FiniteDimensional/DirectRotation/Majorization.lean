@@ -188,8 +188,8 @@ theorem abs_pinch_competitor_eq_abs_canonicalIntertwiner
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
-    TauCeti.operatorAbs (pinch U W.symm.toLinearMap) =
-      TauCeti.operatorAbs (canonicalIntertwiner U V) := by
+    LinearMap.operatorAbs (pinch U W.symm.toLinearMap) =
+      LinearMap.operatorAbs (canonicalIntertwiner U V) := by
   have hfactor := symm_comp_canonicalIntertwiner_eq_pinch U V W hmap
   have hgram :
       (pinch U W.symm.toLinearMap).adjoint ∘ₗ pinch U W.symm.toLinearMap =
@@ -200,14 +200,12 @@ theorem abs_pinch_competitor_eq_abs_canonicalIntertwiner
     -- the composite is `W (W.symm _)`, so the cancellation is `apply_symm_apply`
     simp only [LinearMap.comp_apply, LinearIsometryEquiv.coe_toLinearEquiv,
       LinearEquiv.coe_coe, LinearIsometryEquiv.apply_symm_apply]
-  have hsq : TauCeti.operatorAbs (pinch U W.symm.toLinearMap) ∘ₗ
-      TauCeti.operatorAbs (pinch U W.symm.toLinearMap) =
+  have hsq : LinearMap.operatorAbs (pinch U W.symm.toLinearMap) ∘ₗ
+      LinearMap.operatorAbs (pinch U W.symm.toLinearMap) =
       (canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V := by
-    rw [TauCeti.operatorAbs, LinearMap.IsPositive.sqrt_sq]
+    rw [LinearMap.operatorAbs_sq]
     exact hgram
-  exact LinearMap.IsPositive.sqrt_unique
-    (LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V))
-    (TauCeti.isPositive_operatorAbs _) hsq
+  exact (LinearMap.isPositive_operatorAbs _).eq_operatorAbs hsq
 
 set_option maxHeartbeats 1000000 in
 /-- Fan--Hoffman pointwise inequality: every sorted eigenvalue of the Hermitian
@@ -218,8 +216,8 @@ theorem eigenvalues_hermitianPart_le_singularValues
       A.singularValues (i : ℕ) := by
   classical
   let H := hermitianPart A
-  let C := TauCeti.operatorAbs A
-  -- Use the Gram eigenbasis throughout: `operatorAbs A` is *defined* through it, so
+  let C := A.operatorAbs
+  -- Use the Gram eigenbasis throughout: `A.operatorAbs` is *defined* through it, so
   -- staying in it avoids an expensive cross-basis defeq.
   let b := A.isSymmetric_adjoint_comp_self.eigenvectorBasis rfl
   let tail := b.spanIndices (Set.Ici i)
@@ -267,8 +265,8 @@ theorem eigenvalues_hermitianPart_le_singularValues
       calc RCLike.re ⟪(LinearMap.adjoint A ∘ₗ A) x, x⟫_𝕜
           ≤ A.singularValues (i : ℕ) ^ 2 * ‖x‖ ^ 2 := hgram
         _ = A.singularValues (i : ℕ) ^ 2 := by rw [hxnorm, one_pow, mul_one]
-    show ‖TauCeti.operatorAbs A x‖ ≤ A.singularValues (i : ℕ)
-    rw [TauCeti.norm_operatorAbs_apply]
+    show ‖A.operatorAbs x‖ ≤ A.singularValues (i : ℕ)
+    rw [LinearMap.norm_operatorAbs_apply]
     nlinarith [norm_nonneg (A x), A.singularValues_nonneg (i : ℕ), hsq]
   calc
     (hermitianPart_isSymmetric A).eigenvalues rfl i
@@ -276,7 +274,7 @@ theorem eigenvalues_hermitianPart_le_singularValues
     _ = RCLike.re ⟪A x, x⟫_𝕜 := re_inner_hermitianPart A x
     _ ≤ ‖A x‖ * ‖x‖ :=
       (RCLike.re_le_norm _).trans (norm_inner_le_norm _ _)
-    _ = ‖C x‖ := by rw [hxnorm, mul_one, norm_operatorAbs_apply]
+    _ = ‖C x‖ := by rw [hxnorm, mul_one, LinearMap.norm_operatorAbs_apply]
     _ ≤ A.singularValues (i : ℕ) := hCbound
 
 omit [FiniteDimensional 𝕜 E] in
@@ -495,7 +493,7 @@ theorem hermitianPart_directRotation (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     hermitianPart (directRotation U V hacute).toLinearMap =
-      TauCeti.operatorAbs (canonicalIntertwiner U V) := by
+      LinearMap.operatorAbs (canonicalIntertwiner U V) := by
   have htwo := two_smul_abs_canonicalIntertwiner U V hacute
   apply LinearMap.ext
   intro x
@@ -515,7 +513,7 @@ theorem displacementSquare_directRotation (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     displacementSquare (directRotation U V hacute).toLinearMap =
-      (2 : 𝕜) • (LinearMap.id - TauCeti.operatorAbs (canonicalIntertwiner U V)) := by
+      (2 : 𝕜) • (LinearMap.id - LinearMap.operatorAbs (canonicalIntertwiner U V)) := by
   rw [displacementSquare_unitary, hermitianPart_directRotation]
 
 /-- Weak majorization of the positive displacement squares.  This is the
@@ -529,13 +527,13 @@ theorem directRotation_displacementSquare_kyFan
       kyFanSum k (displacementSquare W.toLinearMap) := by
   classical
   let S := canonicalIntertwiner U V
-  let C := TauCeti.operatorAbs S
+  let C := S.operatorAbs
   let B := pinch U W.symm.toLinearMap
   let H := hermitianPart B
   let A0 := displacementSquare (directRotation U V hacute).toLinearMap
   let A1 := displacementSquare W.toLinearMap
   let P1 := pinch U A1
-  have hCeq : TauCeti.operatorAbs B = C := by
+  have hCeq : B.operatorAbs = C := by
     simpa [B, C, S] using
       abs_pinch_competitor_eq_abs_canonicalIntertwiner U V W hmap
   have hA0 : A0 = (2 : 𝕜) • (LinearMap.id - C) := by
@@ -617,12 +615,12 @@ theorem directRotation_displacementSquare_kyFan
     -- largest `j` transformed eigenvalues gives the desired prefix bound.
     have hlam : ∀ i : Fin (finrank 𝕜 E),
         (hermitianPart_isSymmetric B).eigenvalues rfl i ≤
-          (isPositive_operatorAbs B).isSymmetric.eigenvalues rfl i := by
+          (B.isPositive_operatorAbs).isSymmetric.eigenvalues rfl i := by
       intro i
       rw [congrFun (eigenvalues_operatorAbs B) i]
       exact eigenvalues_hermitianPart_le_singularValues B i
     have hA0eig := positive_affine_reverse_kyFanSum
-      hpositive0 (isPositive_operatorAbs B).isSymmetric (by rw [hA0, hCeq]) j
+      hpositive0 (B.isPositive_operatorAbs).isSymmetric (by rw [hA0, hCeq]) j
     have hP1eig := positive_affine_reverse_kyFanSum
       hpositiveP (hermitianPart_isSymmetric B) hP1 j
     rw [hA0eig, hP1eig]

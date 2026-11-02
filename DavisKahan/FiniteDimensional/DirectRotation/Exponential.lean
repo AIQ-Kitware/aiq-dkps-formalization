@@ -50,7 +50,7 @@ variable (U V : Submodule 𝕜 E)
 /-- `sin Θ` is self-adjoint: it is the modulus of the self-adjoint difference of
 the two orthogonal projections. -/
 theorem isSymmetric_sinAngleOperator : (sinAngleOperator U V).IsSymmetric :=
-  (TauCeti.isPositive_operatorAbs (projection U - projection V)).isSymmetric
+  (LinearMap.isPositive_operatorAbs (projection U - projection V)).isSymmetric
 
 /-- `Θ` is the arcsine functional calculus of `sin Θ`.  This is the definition of
 `angleOperator`, restated so that it can be used with any symmetry witness. -/
@@ -69,7 +69,7 @@ theorem isPositive_one_sub_sq_sinAngleOperator :
     (LinearMap.id - sinAngleOperator U V ∘ₗ sinAngleOperator U V : E →ₗ[𝕜] E).IsPositive := by
   rw [← directRotationCosine_comp_self_eq U V]
   have hCsym : (directRotationCosine U V).IsSymmetric :=
-    (TauCeti.isPositive_operatorAbs (canonicalIntertwiner U V)).isSymmetric
+    (LinearMap.isPositive_operatorAbs (canonicalIntertwiner U V)).isSymmetric
   have h := LinearMap.isPositive_adjoint_comp_self (directRotationCosine U V)
   rwa [hCsym.adjoint_eq] at h
 
@@ -109,7 +109,7 @@ theorem directRotationCosine_eq_calculus (hsin : (sinAngleOperator U V).IsSymmet
   set F := TauCeti.selfAdjointFunctionalCalculus hsin (fun s => Real.cos (Real.arcsin s)) with hF
   have hTpos := isPositive_one_sub_sq_sinAngleOperator U V
   have hCpos : (directRotationCosine U V).IsPositive :=
-    TauCeti.isPositive_operatorAbs (canonicalIntertwiner U V)
+    LinearMap.isPositive_operatorAbs (canonicalIntertwiner U V)
   have hFpos : F.IsPositive := by
     refine TauCeti.selfAdjointFunctionalCalculus_isPositive hsin fun i => ?_
     rw [Real.cos_arcsin]

@@ -463,7 +463,7 @@ private theorem kyFanSum_projector_eq_nonacute_sine
       (U.starProjection - V.starProjection : BEnd H) := by
     ext x
     rfl
-  have habs := operatorAbs_toContinuousLinearMap_eq_modulus
+  have habs := LinearMap.toContinuousLinearMap_operatorAbs_eq_modulus
     (projection U - projection V)
   rw [hcont] at habs
   have hS : S.toLinearMap = sinAngleOperator U V := by
@@ -471,7 +471,7 @@ private theorem kyFanSum_projector_eq_nonacute_sine
     intro x
     simp only [S, Proposition35.section3SinAngleOperator]
     change ((U.starProjection - V.starProjection : BEnd H).modulus) x =
-      (operatorAbs (projection U - projection V)).toContinuousLinearMap x
+      (LinearMap.operatorAbs (projection U - projection V)).toContinuousLinearMap x
     exact congrArg (fun T : BEnd H => T x) habs.symm
   calc
     kyFanSum (finrank ℂ H) (projection U - projection V) =

@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 
 module
 
+public import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.TanTheta.Theorem63FiniteSource

@@ -109,8 +109,9 @@ The library carries three polar factors, and they are a hierarchy rather than
 three independent attempts. The separating hypotheses are the carrier, the
 field, and whether the modulus is invertible:
 
-* `TauCeti.polarFactor`, in `PolarDecomposition.lean` — square `E →ₗ[𝕜] E`,
-  `RCLike`, finite dimension; a genuine **unitary** factor.
+* `LinearMap.polarFactor`, in TauCeti's `Polar/Finite.lean` — rectangular
+  finite-dimensional `RCLike` maps; the canonical **partial isometry**.
+  `TauCeti.polarUnitaryEquiv` bundles it as a unitary when the square map is invertible.
 * `TauCeti.polarPartial`, in `PolarPartialIsometry.lean` — rectangular
   `E →L[ℂ] F` over `ℂ`, no invertibility assumed; a **partial isometry**.
 * `TauCeti.polarIsometryOfIsUnitModulus`, in `PolarIsometry.lean` — rectangular

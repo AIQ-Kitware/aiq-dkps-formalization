@@ -288,17 +288,15 @@ projection. -/
 theorem projection_comm_abs_canonicalIntertwiner
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    projection U ∘ₗ TauCeti.operatorAbs (canonicalIntertwiner U V) =
-      TauCeti.operatorAbs (canonicalIntertwiner U V) ∘ₗ projection U := by
-  have hT := LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V)
+    projection U ∘ₗ LinearMap.operatorAbs (canonicalIntertwiner U V) =
+      LinearMap.operatorAbs (canonicalIntertwiner U V) ∘ₗ projection U := by
   have hcomm : Commute (projection U)
       ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V) := by
     change projection U ∘ₗ ((canonicalIntertwiner U V).adjoint ∘ₗ
       canonicalIntertwiner U V) =
       ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V) ∘ₗ projection U
     exact projection_comm_canonicalIntertwiner_gram U V
-  change projection U * hT.sqrt = hT.sqrt * projection U
-  exact hT.commute_sqrt hcomm
+  exact LinearMap.commute_operatorAbs_of_commute hcomm
 
 
 omit [FiniteDimensional 𝕜 E] in
@@ -334,7 +332,7 @@ theorem abs_canonicalIntertwiner_apply_eq_self_of_projection_eq
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {x : E} (hx : projection U x = projection V x) :
-    TauCeti.operatorAbs (canonicalIntertwiner U V) x = x := by
+    LinearMap.operatorAbs (canonicalIntertwiner U V) x = x := by
   let S := canonicalIntertwiner U V
   have hS : S x = x :=
     canonicalIntertwiner_apply_eq_self_of_projection_eq U V hx
@@ -346,8 +344,9 @@ theorem abs_canonicalIntertwiner_apply_eq_self_of_projection_eq
   have hfc := TauCeti.selfAdjointFunctionalCalculus_apply_of_apply_eq_smul
     hpos.isSymmetric Real.sqrt hsq
   rw [TauCeti.selfAdjointFunctionalCalculus_sqrt hpos, Real.sqrt_one] at hfc
-  show hpos.sqrt x = x
-  rw [hfc]
+  have habs : S.operatorAbs = hpos.sqrt :=
+    hpos.sqrt_unique S.isPositive_operatorAbs S.operatorAbs_sq
+  rw [habs, hfc]
   simp
 
 /-- The canonical direct rotation from `U` to `V`, defined as the unitary polar
@@ -363,7 +362,7 @@ noncomputable def directRotation (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     (directRotation U V hacute).toLinearMap =
-      polarFactor (canonicalIntertwiner U V) := rfl
+      LinearMap.polarFactor (canonicalIntertwiner U V) := rfl
 
 
 /-- The direct rotation fixes every zero-angle direction. -/
@@ -376,11 +375,11 @@ theorem directRotation_apply_eq_self_of_projection_eq
   let S := canonicalIntertwiner U V
   have hS : S x = x :=
     canonicalIntertwiner_apply_eq_self_of_projection_eq U V hx
-  have hC : TauCeti.operatorAbs S x = x :=
+  have hC : S.operatorAbs x = x :=
     abs_canonicalIntertwiner_apply_eq_self_of_projection_eq U V hx
-  have hpolar := LinearMap.congr_fun (polar_decomposition S) x
+  have hpolar := LinearMap.congr_fun ((LinearMap.polarFactor_comp_operatorAbs S).symm) x
   rw [LinearMap.comp_apply, hC, hS] at hpolar
-  -- hpolar : x = polarFactor S x
+  -- hpolar : x = S.polarFactor x
   have hgoal : (directRotation U V hacute).toLinearMap x = x := by
     rw [directRotation_toLinearMap]; exact hpolar.symm
   simpa only [LinearEquiv.coe_coe, LinearIsometryEquiv.coe_toLinearEquiv] using hgoal
@@ -391,22 +390,25 @@ theorem directRotation_comm_abs_canonicalIntertwiner
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     (directRotation U V hacute).toLinearMap ∘ₗ
-        TauCeti.operatorAbs (canonicalIntertwiner U V) =
-      TauCeti.operatorAbs (canonicalIntertwiner U V) ∘ₗ
+        LinearMap.operatorAbs (canonicalIntertwiner U V) =
+      LinearMap.operatorAbs (canonicalIntertwiner U V) ∘ₗ
         (directRotation U V hacute).toLinearMap := by
   let S := canonicalIntertwiner U V
-  let C := TauCeti.operatorAbs S
+  let C := S.operatorAbs
   let R := (directRotation U V hacute).toLinearMap
-  have hSC : S ∘ₗ C = C ∘ₗ S :=
-    operatorAbs_comm_of_normal (canonicalIntertwiner_normal_of_acute U V hacute)
+  have hnormal := canonicalIntertwiner_normal_of_acute U V hacute
+  have hSC : S ∘ₗ C = C ∘ₗ S := by
+    apply LinearMap.commute_operatorAbs_of_commute
+    change S ∘ₗ (S.adjoint ∘ₗ S) = (S.adjoint ∘ₗ S) ∘ₗ S
+    rw [← LinearMap.comp_assoc, ← hnormal]
   have hCinj : Function.Injective C := by
-    rw [← LinearMap.ker_eq_bot, ker_operatorAbs,
+    rw [← LinearMap.ker_eq_bot, LinearMap.ker_operatorAbs,
       (LinearMap.isUnit_iff_ker_eq_bot _).mp
         (canonicalIntertwiner_isUnit_of_acute U V hacute)]
   have hCsurj : Function.Surjective C :=
     LinearMap.injective_iff_surjective.mp hCinj
   have hdecomp : S = R ∘ₗ C := by
-    simpa [R, directRotation, S, C] using polar_decomposition S
+    simp [R, S, C]
   rw [hdecomp] at hSC
   apply LinearMap.ext
   intro x
@@ -415,13 +417,13 @@ theorem directRotation_comm_abs_canonicalIntertwiner
 
 /-- **The modulus of the canonical intertwiner is surjective** on an acute pair.
 
-Injective because the intertwiner is a unit and `operatorAbs` shares its kernel, then
+Injective because the intertwiner is a unit and `LinearMap.operatorAbs` shares its kernel, then
 injective-implies-surjective in finite dimensions.  Derived twice below. -/
 private theorem abs_canonicalIntertwiner_surjective (U V : Submodule 𝕜 E)
     (hacute : IsAcute U V) :
-    Function.Surjective (TauCeti.operatorAbs (canonicalIntertwiner U V)) := by
-  have hCin : Function.Injective (TauCeti.operatorAbs (canonicalIntertwiner U V)) := by
-    rw [← LinearMap.ker_eq_bot, ker_operatorAbs,
+    Function.Surjective (LinearMap.operatorAbs (canonicalIntertwiner U V)) := by
+  have hCin : Function.Injective (LinearMap.operatorAbs (canonicalIntertwiner U V)) := by
+    rw [← LinearMap.ker_eq_bot, LinearMap.ker_operatorAbs,
       (LinearMap.isUnit_iff_ker_eq_bot _).mp
         (canonicalIntertwiner_isUnit_of_acute U V hacute)]
   exact LinearMap.injective_iff_surjective.mp hCin
@@ -433,11 +435,10 @@ theorem directRotation_comp_projection (U V : Submodule 𝕜 E)
     (directRotation U V hacute).toLinearMap ∘ₗ projection U =
       projection V ∘ₗ (directRotation U V hacute).toLinearMap := by
   let S := canonicalIntertwiner U V
-  let C := TauCeti.operatorAbs S
+  let C := S.operatorAbs
   let W := (directRotation U V hacute).toLinearMap
   have hpolar : S = W ∘ₗ C := by
-    simpa [S, C, W, directRotation] using
-      polar_decomposition_of_isUnit (canonicalIntertwiner_isUnit_of_acute U V hacute)
+    simp [S, C, W]
   have hCP := projection_comm_abs_canonicalIntertwiner U V
   have hSP := canonicalIntertwiner_comp_projection U V
   have hCsurj : Function.Surjective C :=
@@ -555,10 +556,9 @@ theorem reflectionProduct_comm_abs_canonicalIntertwiner
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     (reflectionProduct U V).toLinearMap ∘ₗ
-        TauCeti.operatorAbs (canonicalIntertwiner U V) =
-      TauCeti.operatorAbs (canonicalIntertwiner U V) ∘ₗ
+        LinearMap.operatorAbs (canonicalIntertwiner U V) =
+      LinearMap.operatorAbs (canonicalIntertwiner U V) ∘ₗ
         (reflectionProduct U V).toLinearMap := by
-  have hT := LinearMap.isPositive_adjoint_comp_self (canonicalIntertwiner U V)
   have hcomm : Commute ((reflectionProduct U V).toLinearMap)
       ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V) := by
     change (reflectionProduct U V).toLinearMap ∘ₗ
@@ -566,9 +566,7 @@ theorem reflectionProduct_comm_abs_canonicalIntertwiner
       ((canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V) ∘ₗ
         (reflectionProduct U V).toLinearMap
     exact reflectionProduct_comm_canonicalIntertwiner_gram U V
-  change (reflectionProduct U V).toLinearMap * hT.sqrt =
-    hT.sqrt * (reflectionProduct U V).toLinearMap
-  exact hT.commute_sqrt hcomm
+  exact LinearMap.commute_operatorAbs_of_commute hcomm
 
 /-- The square of the canonical direct rotation is the ordered product of the
 reflections. -/
@@ -579,15 +577,13 @@ theorem directRotation_sq (U V : Submodule 𝕜 E)
         (directRotation U V hacute).toLinearMap =
       (reflectionProduct U V).toLinearMap := by
   let S := canonicalIntertwiner U V
-  let C := TauCeti.operatorAbs S
+  let C := S.operatorAbs
   let W := (directRotation U V hacute).toLinearMap
   let R := (reflectionProduct U V).toLinearMap
   have hpolar : S = W ∘ₗ C := by
-    simpa [S, C, W, directRotation] using
-      polar_decomposition_of_isUnit
-        (canonicalIntertwiner_isUnit_of_acute U V hacute)
+    simp [S, C, W]
   have hstar : S.adjoint = C ∘ₗ W.adjoint := by
-    rw [hpolar, LinearMap.adjoint_comp, (isPositive_operatorAbs S).adjoint_eq]
+    rw [hpolar, LinearMap.adjoint_comp, (S.isPositive_operatorAbs).adjoint_eq]
   have hRSstar : S = R ∘ₗ S.adjoint := by
     simpa [S, R] using
       canonicalIntertwiner_eq_reflectionProduct_comp_adjoint U V
@@ -626,16 +622,14 @@ theorem two_smul_abs_canonicalIntertwiner
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
-    (2 : 𝕜) • TauCeti.operatorAbs (canonicalIntertwiner U V) =
+    (2 : 𝕜) • LinearMap.operatorAbs (canonicalIntertwiner U V) =
       (directRotation U V hacute).toLinearMap +
         (directRotation U V hacute).symm.toLinearMap := by
   let S := canonicalIntertwiner U V
-  let C := TauCeti.operatorAbs S
+  let C := S.operatorAbs
   let W := (directRotation U V hacute).toLinearMap
   have hpolar : S = W ∘ₗ C := by
-    simpa [S, C, W, directRotation] using
-      polar_decomposition_of_isUnit
-        (canonicalIntertwiner_isUnit_of_acute U V hacute)
+    simp [S, C, W]
   have htwo := two_smul_canonicalIntertwiner U V
   have hsq := directRotation_sq U V hacute
   have hWinj : Function.Injective W := by

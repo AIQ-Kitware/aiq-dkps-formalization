@@ -2512,3 +2512,49 @@ they are not consequences supplied by that replacement. Historical source is
 `e4637c3919ae:ForTauCeti/MeasureTheory/MatrixKernelSelection.lean`, introduction
 `cf57b8201`, Jon Crall / Claude Fable 5, Kitware copyright, Apache-2.0.
 All cited integrations are contained in pin `463ab293070d`.
+
+## 2026-11-01: canonical finite polar factors and modulus comparisons
+
+Retired the modulus and restricted-modulus polar construction from
+`Polar/Decomposition.lean`. Direct rotations, principal planes, alignment,
+intertwining unitaries, singular-subspace arguments and UI-seminorm consumers use
+`LinearMap.operatorAbs` and `LinearMap.polarFactor` directly, with native
+norm/kernel/range, factorization, commutation and adjoint facts. The accepted
+factor supports rectangular RCLike maps; its adjoint law has no invertibility
+hypothesis, strengthening the old square invertible result. The two modulus
+bridges in `Polar/CFCBridge.lean` are deleted; callers use
+`LinearMap.toContinuousLinearMap_operatorAbs_eq_cfcAbs` and
+`toContinuousLinearMap_operatorAbs_eq_modulus` directly.
+
+Accepted integrations, all in pin `463ab293070d` (independent implementations
+unless noted otherwise):
+
+- [#13940](https://github.com/TauCetiProject/TauCeti/pull/13940),
+  `7b2a8f443f96040539e6479461b3325307ffb9bb`: finite positive square root/modulus.
+- [#16086](https://github.com/TauCetiProject/TauCeti/pull/16086),
+  `0a2aed9e3a73e222aadd47ef9a13c09b1c256385`: canonical rectangular polar factor.
+- [#16450](https://github.com/TauCetiProject/TauCeti/pull/16450),
+  `7d1da9ada3041f5e1e5d10884964da59fc89e5b9`: adjoint law and unitary extensions.
+  Its integration explicitly says it does not copy or adapt the DKPS implementation.
+- [#16523](https://github.com/TauCetiProject/TauCeti/pull/16523),
+  `893678359b586eace5dfe8ce192eb8a725406cb6`: finite/bounded CFC comparison.
+- [#20358](https://github.com/TauCetiProject/TauCeti/pull/20358),
+  `f4a3266bdf016c565840d069c5db06eb5352ddd1`: finite/bounded modulus agreement.
+  Jon Crall authored this direct bridge from accepted comparison lemmas; it does
+  not copy the donor square-root uniqueness proof.
+
+Retained selected square unitary APIs are used by direct rotations and alignment.
+The singular-case choice now uses the accepted extension theorem instead of
+reproving isometric extension. A selected unitary's kernel action is not
+canonical; it is distinct from the canonical polar partial isometry. Extra
+negation/normal-adjoint modulus identities and uniqueness against a competing
+positive factor remain. The local functional-calculus comparison and bounded
+polar-decomposition presentation use the native engine. No forwarding alias for
+the retired modulus, polar factor or their core theorems remains.
+
+Historical Kitware Apache-2.0 source is at `e4637c3919ae` under the two donor
+paths, originating in `ForMathlib.Analysis.InnerProductSpace.PolarDecomposition`
+at `3676b5559`, Jon Crall / Claude Opus 4.8. The manifest now records the
+original declarations of both split modules rather than an empty inventory.
+These replacements distinguish independent foundations from the Jon Crall-authored
+accepted comparison bridge; no donor-proof descent is inferred.

@@ -104,8 +104,9 @@ not tell a designed hierarchy from three independent
 attempts. The separating hypotheses are the carrier, the field, and whether the
 modulus is invertible:
 
-* `TauCeti.polarFactor`, in `Polar/Decomposition.lean` — square `E →ₗ[𝕜] E`,
-  `RCLike`, finite dimension; a genuine **unitary** factor.
+* `LinearMap.polarFactor`, in TauCeti's `Polar/Finite.lean` — rectangular
+  finite-dimensional `RCLike` maps; the canonical **partial isometry**.
+  `TauCeti.polarUnitaryEquiv` bundles it as a unitary when the square map is invertible.
 * `TauCeti.polarPartial`, in `Polar/PartialIsometry.lean` — rectangular
   `E →L[𝕜] F` over `RCLike`, no invertibility assumed; a **partial isometry**.
 * `TauCeti.polarIsometryOfIsUnitModulus`, in `Polar/Isometry.lean` — rectangular

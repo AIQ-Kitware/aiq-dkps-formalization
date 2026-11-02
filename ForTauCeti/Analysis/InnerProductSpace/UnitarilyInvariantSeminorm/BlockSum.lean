@@ -201,14 +201,12 @@ theorem operatorAbs_orthogonalBlockSum
     [NormedAddCommGroup E₁] [InnerProductSpace 𝕜 E₁] [FiniteDimensional 𝕜 E₁]
     [NormedAddCommGroup E₂] [InnerProductSpace 𝕜 E₂] [FiniteDimensional 𝕜 E₂]
     (A : E₁ →ₗ[𝕜] E₁) (B : E₂ →ₗ[𝕜] E₂) :
-    operatorAbs (orthogonalBlockSum A B) =
-      orthogonalBlockSum (operatorAbs A) (operatorAbs B) := by
+    LinearMap.operatorAbs (orthogonalBlockSum A B) =
+      orthogonalBlockSum (A.operatorAbs) (B.operatorAbs) := by
   symm
-  change orthogonalBlockSum (operatorAbs A) (operatorAbs B) =
-    (LinearMap.isPositive_adjoint_comp_self (orthogonalBlockSum A B)).sqrt
-  refine (LinearMap.isPositive_adjoint_comp_self (orthogonalBlockSum A B)).sqrt_unique
-    (orthogonalBlockSum_isPositive (isPositive_operatorAbs A) (isPositive_operatorAbs B)) ?_
-  rw [orthogonalBlockSum_comp, operatorAbs_mul_self, operatorAbs_mul_self,
+  refine LinearMap.IsPositive.eq_operatorAbs
+    (orthogonalBlockSum_isPositive (A.isPositive_operatorAbs) (B.isPositive_operatorAbs)) ?_
+  rw [orthogonalBlockSum_comp, LinearMap.operatorAbs_sq, LinearMap.operatorAbs_sq,
     orthogonalBlockSum_adjoint, orthogonalBlockSum_comp]
 
 /-- The orthogonal block sum of two unitaries is the `L²` product unitary.  This is what makes

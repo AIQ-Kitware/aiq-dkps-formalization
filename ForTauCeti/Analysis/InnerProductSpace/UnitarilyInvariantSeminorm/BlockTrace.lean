@@ -53,29 +53,29 @@ theorem kyFanSum_orthogonalBlockSum_full
         (WithLp.linearEquiv 2 𝕜 (E₁ × E₂)).finrank_eq
       _ = n₁ + n₂ := by simp [n₁, n₂, Module.finrank_prod]
   have hleft (i : Fin n₁) :
-      RCLike.re ⟪operatorAbs (orthogonalBlockSum A B) (b (e (.inl i))),
+      RCLike.re ⟪LinearMap.operatorAbs (orthogonalBlockSum A B) (b (e (.inl i))),
           b (e (.inl i))⟫_𝕜 =
-        RCLike.re ⟪operatorAbs A (b₁ i), b₁ i⟫_𝕜 := by
+        RCLike.re ⟪A.operatorAbs (b₁ i), b₁ i⟫_𝕜 := by
     rw [operatorAbs_orthogonalBlockSum]
     simp [b, OrthonormalBasis.reindex_apply]
   have hright (i : Fin n₂) :
-      RCLike.re ⟪operatorAbs (orthogonalBlockSum A B) (b (e (.inr i))),
+      RCLike.re ⟪LinearMap.operatorAbs (orthogonalBlockSum A B) (b (e (.inr i))),
           b (e (.inr i))⟫_𝕜 =
-        RCLike.re ⟪operatorAbs B (b₂ i), b₂ i⟫_𝕜 := by
+        RCLike.re ⟪B.operatorAbs (b₂ i), b₂ i⟫_𝕜 := by
     rw [operatorAbs_orthogonalBlockSum]
     simp [b, OrthonormalBasis.reindex_apply]
   calc
     kyFanSum (finrank 𝕜 (WithLp 2 (E₁ × E₂))) (orthogonalBlockSum A B) =
         ∑ k : Fin (n₁ + n₂),
-          RCLike.re ⟪operatorAbs (orthogonalBlockSum A B) (b k), b k⟫_𝕜 := by
+          RCLike.re ⟪LinearMap.operatorAbs (orthogonalBlockSum A B) (b k), b k⟫_𝕜 := by
       rw [hn, kyFanSum_eq_sum_fin]
       exact (sum_re_inner_abs_self_eq_sum_singularValues
         (orthogonalBlockSum A B) hn b).symm
     _ = ∑ k : Fin n₁ ⊕ Fin n₂,
-          RCLike.re ⟪operatorAbs (orthogonalBlockSum A B) (b (e k)), b (e k)⟫_𝕜 :=
+          RCLike.re ⟪LinearMap.operatorAbs (orthogonalBlockSum A B) (b (e k)), b (e k)⟫_𝕜 :=
       (e.sum_comp _).symm
-    _ = (∑ i : Fin n₁, RCLike.re ⟪operatorAbs A (b₁ i), b₁ i⟫_𝕜) +
-        (∑ i : Fin n₂, RCLike.re ⟪operatorAbs B (b₂ i), b₂ i⟫_𝕜) := by
+    _ = (∑ i : Fin n₁, RCLike.re ⟪A.operatorAbs (b₁ i), b₁ i⟫_𝕜) +
+        (∑ i : Fin n₂, RCLike.re ⟪B.operatorAbs (b₂ i), b₂ i⟫_𝕜) := by
       rw [Fintype.sum_sum_type]
       exact congrArg₂ (· + ·)
         (Finset.sum_congr rfl (fun i _ => hleft i))

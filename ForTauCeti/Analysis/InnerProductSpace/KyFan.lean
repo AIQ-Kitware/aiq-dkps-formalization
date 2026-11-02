@@ -77,13 +77,15 @@ Mathlib's `LinearMap.singularValues_*` API. -/
 
 /-- The sorted eigenvalues of the modulus `|A|` are the singular values. -/
 theorem eigenvalues_operatorAbs (A : E →ₗ[𝕜] E) :
-    (isPositive_operatorAbs A).isSymmetric.eigenvalues rfl
+    (A.isPositive_operatorAbs).isSymmetric.eigenvalues rfl
       = fun i : Fin (finrank 𝕜 E) => A.singularValues (i : ℕ) := by
   refine LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis _ rfl
     (A.isSymmetric_adjoint_comp_self.eigenvectorBasis rfl)
     (fun i j hij => A.singularValues_antitone (by exact_mod_cast hij))
     fun i => ?_
-  rw [show operatorAbs A = (LinearMap.isPositive_adjoint_comp_self A).sqrt from rfl,
+  rw [show A.operatorAbs = (LinearMap.isPositive_adjoint_comp_self A).sqrt from
+      (LinearMap.isPositive_adjoint_comp_self A).sqrt_unique
+        A.isPositive_operatorAbs A.operatorAbs_sq,
     (LinearMap.isPositive_adjoint_comp_self A).sqrt_apply_eigenvectorBasis rfl i,
     A.singularValues_fin rfl i]
 

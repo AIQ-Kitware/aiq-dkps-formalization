@@ -82,7 +82,7 @@ theorem adjoint_angleComplexStructure (hacute : IsAcute U V) :
       -angleComplexStructure U V hacute := by
   have hsym : (sinAngleOperator U V).IsSymmetric := isSymmetric_sinAngleOperator U V
   have hCsym : (directRotationCosine U V).IsSymmetric :=
-    (TauCeti.isPositive_operatorAbs (canonicalIntertwiner U V)).isSymmetric
+    (LinearMap.isPositive_operatorAbs (canonicalIntertwiner U V)).isSymmetric
   have hAD : ((directRotation U V hacute).toLinearMap - directRotationCosine U V) ∘ₗ
       sinAngleOperator U V =
       sinAngleOperator U V ∘ₗ
@@ -191,7 +191,7 @@ theorem angleOperator_eigenvalue_mem_Icc {x : E} (hx0 : x ≠ 0) {θ : ℝ}
     TauCeti.exists_eigenvalue_of_calculus_apply_eq_smul hsym Real.arcsin hx0 hcalc
   have hIcc : θ ∈ Set.Icc (-(Real.pi / 2)) (Real.pi / 2) := hi ▸ Real.arcsin_mem_Icc _
   have hpos : (sinAngleOperator U V).IsPositive :=
-    TauCeti.isPositive_operatorAbs (projection U - projection V)
+    LinearMap.isPositive_operatorAbs (projection U - projection V)
   have hnn := hpos.re_inner_nonneg_left x
   rw [sinAngleOperator_apply_of_angleOperator_apply U V hx, inner_smul_left,
     RCLike.conj_ofReal, RCLike.re_ofReal_mul, inner_self_eq_norm_sq] at hnn

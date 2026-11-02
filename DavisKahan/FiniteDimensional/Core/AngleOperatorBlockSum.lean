@@ -42,11 +42,11 @@ theorem angleOperator_orthogonalBlockSumSubmodule
   have hS₁ : S₁.IsSymmetric := by
     dsimp only [S₁]
     rw [TauCeti.sinAngleOperator_eq_operatorAbs]
-    exact (TauCeti.isPositive_operatorAbs (projection U₁ - projection V₁)).isSymmetric
+    exact (LinearMap.isPositive_operatorAbs (projection U₁ - projection V₁)).isSymmetric
   have hS₂ : S₂.IsSymmetric := by
     dsimp only [S₂]
     rw [TauCeti.sinAngleOperator_eq_operatorAbs]
-    exact (TauCeti.isPositive_operatorAbs (projection U₂ - projection V₂)).isSymmetric
+    exact (LinearMap.isPositive_operatorAbs (projection U₂ - projection V₂)).isSymmetric
   let hblock :=
     UnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric hS₁ hS₂
   have hsin :

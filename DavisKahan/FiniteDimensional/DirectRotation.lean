@@ -44,7 +44,7 @@ orthogonal complement and therefore participates in the full-space formula
 @[expose]
 noncomputable def directRotationCosine (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
-  TauCeti.operatorAbs (canonicalIntertwiner U V)
+  LinearMap.operatorAbs (canonicalIntertwiner U V)
 
 /-- **Davis--Kahan's intertwiner `J`**: the partial complex structure on the
 nonzero-angle space.  Total Moore--Penrose inversion makes it zero on the
@@ -74,14 +74,14 @@ theorem ker_sinAngleOperator_le_ker_directRotation_sub_cosine
       ((directRotation U V hacute).toLinearMap - directRotationCosine U V).ker := by
   intro x hx
   have hxD : x ∈ (projection U - projection V).ker := by
-    simpa [sinAngleOperator, ker_operatorAbs] using hx
+    simpa [sinAngleOperator, LinearMap.ker_operatorAbs] using hx
   have hproj : projection U x = projection V x :=
     sub_eq_zero.mp (by
       simpa [LinearMap.sub_apply] using LinearMap.mem_ker.mp hxD)
   have hR := directRotation_apply_eq_self_of_projection_eq U V hacute hproj
   have hC := abs_canonicalIntertwiner_apply_eq_self_of_projection_eq U V hproj
   apply LinearMap.mem_ker.mpr
-  have hRx : polarFactor (canonicalIntertwiner U V) x = x := hR
+  have hRx : LinearMap.polarFactor (canonicalIntertwiner U V) x = x := hR
   simp [LinearMap.sub_apply, directRotationCosine, hRx, hC]
 
 /-- Reversing the pair gives the inverse rotation. -/
@@ -91,14 +91,13 @@ theorem directRotation_symm (U V : Submodule 𝕜 E)
     directRotation V U hacute.symm = (directRotation U V hacute).symm := by
   have hstar : (canonicalIntertwiner U V).adjoint = canonicalIntertwiner V U :=
     adjoint_canonicalIntertwiner U V
-  have hpolar := polarFactor_adjoint_of_isUnit
-    (canonicalIntertwiner_isUnit_of_acute U V hacute)
+  have hpolar := LinearMap.polarFactor_adjoint (canonicalIntertwiner U V)
   apply LinearIsometryEquiv.ext
   intro x
   have h1 : directRotation V U hacute.symm x
-      = polarFactor (canonicalIntertwiner V U) x := rfl
+      = LinearMap.polarFactor (canonicalIntertwiner V U) x := rfl
   have h2 : (directRotation U V hacute).symm x
-      = LinearMap.adjoint (polarFactor (canonicalIntertwiner U V)) x :=
+      = LinearMap.adjoint (LinearMap.polarFactor (canonicalIntertwiner U V)) x :=
     (LinearMap.congr_fun
       (directRotation U V hacute).adjoint_toLinearMap_eq_symm x).symm
   rw [h1, h2, ← hstar, hpolar]
@@ -128,7 +127,7 @@ theorem directRotation_eq_polarFactor (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     (directRotation U V hacute).toLinearMap =
-      polarFactor (canonicalIntertwiner U V) :=
+      LinearMap.polarFactor (canonicalIntertwiner U V) :=
   rfl
 
 /-- Full-space trigonometric factorization `R = C + J sin Θ`. -/
@@ -396,12 +395,12 @@ theorem sq_sinAngleOperator_add_sq_directRotationCosine (U V : Submodule 𝕜 E)
       (projection_isSymmetric V).adjoint_eq]
   have hsin : sinAngleOperator U V ∘ₗ sinAngleOperator U V
       = (projection U - projection V) ∘ₗ (projection U - projection V) := by
-    rw [sinAngleOperator, TauCeti.operatorAbs_mul_self, hDadj]
+    rw [sinAngleOperator, LinearMap.operatorAbs_sq, hDadj]
   have hcos : directRotationCosine U V ∘ₗ directRotationCosine U V
       = projection U ∘ₗ projection V ∘ₗ projection U +
         complementaryProjection U ∘ₗ complementaryProjection V ∘ₗ
           complementaryProjection U := by
-    rw [directRotationCosine, TauCeti.operatorAbs_mul_self,
+    rw [directRotationCosine, LinearMap.operatorAbs_sq,
       canonicalIntertwiner_adjoint_comp_self]
   rw [hsin, hcos, complementaryProjection_eq_id_sub U,
     complementaryProjection_eq_id_sub V]
@@ -453,7 +452,7 @@ theorem directRotation_comm_sinAngleOperator (U V : Submodule 𝕜 E)
           (projection_isSymmetric V).adjoint_eq]
       have hsin : sinAngleOperator U V ∘ₗ sinAngleOperator U V
           = (projection U - projection V) ∘ₗ (projection U - projection V) := by
-        rw [sinAngleOperator, TauCeti.operatorAbs_mul_self, hDadj]
+        rw [sinAngleOperator, LinearMap.operatorAbs_sq, hDadj]
       rw [hDadj, ← hsin]
       exact eq_sub_of_add_eq h
     have hcomm := directRotation_comm_cosine U V hacute
@@ -464,7 +463,6 @@ theorem directRotation_comm_sinAngleOperator (U V : Submodule 𝕜 E)
     have hc : Commute (directRotation U V hacute).toLinearMap
         (directRotationCosine U V) := hcomm
     exact (Commute.one_right _).sub_right (hc.mul_right hc)
-  have hT := LinearMap.isPositive_adjoint_comp_self (projection U - projection V)
   have hcomm : Commute ((directRotation U V hacute).toLinearMap)
       ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) := by
     change (directRotation U V hacute).toLinearMap ∘ₗ
@@ -473,9 +471,7 @@ theorem directRotation_comm_sinAngleOperator (U V : Submodule 𝕜 E)
       ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) ∘ₗ
         (directRotation U V hacute).toLinearMap
     exact hgram
-  change (directRotation U V hacute).toLinearMap * hT.sqrt =
-    hT.sqrt * (directRotation U V hacute).toLinearMap
-  exact hT.commute_sqrt hcomm
+  exact LinearMap.commute_operatorAbs_of_commute hcomm
 
 /-- **`Θ` commutes with `P`** (Davis--Kahan Proposition 3.5), at the level of
 `sin Θ`.  `P_U` commutes with the Gram operator `S⋆S = cos²Θ`, and the
@@ -499,7 +495,7 @@ theorem projection_comm_sinAngleOperator (U V : Submodule 𝕜 E)
           (projection_isSymmetric V).adjoint_eq]
       have hsin : sinAngleOperator U V ∘ₗ sinAngleOperator U V
           = (projection U - projection V) ∘ₗ (projection U - projection V) := by
-        rw [sinAngleOperator, TauCeti.operatorAbs_mul_self, hDadj]
+        rw [sinAngleOperator, LinearMap.operatorAbs_sq, hDadj]
       rw [hDadj, ← hsin]
       exact eq_sub_of_add_eq h
     have hcomm : projection U ∘ₗ
@@ -509,7 +505,7 @@ theorem projection_comm_sinAngleOperator (U V : Submodule 𝕜 E)
       have hmul : ∀ f g : E →ₗ[𝕜] E, f ∘ₗ g = f * g := fun _ _ => rfl
       simp only [hmul, directRotationCosine] at h ⊢
       have hc : Commute (projection U)
-          (TauCeti.operatorAbs (canonicalIntertwiner U V)) := h
+          (LinearMap.operatorAbs (canonicalIntertwiner U V)) := h
       exact hc.mul_right hc
     rw [hsq]
     have hmul : ∀ f g : E →ₗ[𝕜] E, f ∘ₗ g = f * g := fun _ _ => rfl
@@ -518,7 +514,6 @@ theorem projection_comm_sinAngleOperator (U V : Submodule 𝕜 E)
     have hc2 : Commute (projection U)
         (directRotationCosine U V ∘ₗ directRotationCosine U V) := hcomm
     exact (Commute.one_right _).sub_right hc2
-  have hT := LinearMap.isPositive_adjoint_comp_self (projection U - projection V)
   have hcomm : Commute (projection U)
       ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) := by
     change projection U ∘ₗ ((projection U - projection V).adjoint ∘ₗ
@@ -526,8 +521,7 @@ theorem projection_comm_sinAngleOperator (U V : Submodule 𝕜 E)
       ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) ∘ₗ
         projection U
     exact hgram
-  change projection U * hT.sqrt = hT.sqrt * projection U
-  exact hT.commute_sqrt hcomm
+  exact LinearMap.commute_operatorAbs_of_commute hcomm
 
 /-- **`Θ` commutes with `Q`** (Davis--Kahan Proposition 3.5), at the level of
 `sin Θ`, by the symmetry of `sin Θ` in the two subspaces. -/
@@ -593,7 +587,7 @@ theorem directRotationCosine_comm_sinAngleOperator (U V : Submodule 𝕜 E)
         (projection_isSymmetric V).adjoint_eq]
     have hsin : sinAngleOperator U V ∘ₗ sinAngleOperator U V
         = (projection U - projection V) ∘ₗ (projection U - projection V) := by
-      rw [sinAngleOperator, TauCeti.operatorAbs_mul_self, hDadj]
+      rw [sinAngleOperator, LinearMap.operatorAbs_sq, hDadj]
     have hsq : (projection U - projection V : E →ₗ[𝕜] E).adjoint ∘ₗ
         (projection U - projection V)
         = LinearMap.id - directRotationCosine U V ∘ₗ directRotationCosine U V := by
@@ -604,7 +598,6 @@ theorem directRotationCosine_comm_sinAngleOperator (U V : Submodule 𝕜 E)
     have hone : (LinearMap.id : E →ₗ[𝕜] E) = 1 := rfl
     simp only [hmul, hone]
     noncomm_ring
-  have hT := LinearMap.isPositive_adjoint_comp_self (projection U - projection V)
   have hcomm : Commute (directRotationCosine U V)
       ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) := by
     change directRotationCosine U V ∘ₗ ((projection U - projection V).adjoint ∘ₗ
@@ -612,8 +605,7 @@ theorem directRotationCosine_comm_sinAngleOperator (U V : Submodule 𝕜 E)
       ((projection U - projection V).adjoint ∘ₗ (projection U - projection V)) ∘ₗ
         directRotationCosine U V
     exact hgram
-  change directRotationCosine U V * hT.sqrt = hT.sqrt * directRotationCosine U V
-  exact hT.commute_sqrt hcomm
+  exact LinearMap.commute_operatorAbs_of_commute hcomm
 
 /-- **`Θ` commutes with `cos Θ`** — Davis--Kahan Proposition 3.5, on the angle
 operator. -/
@@ -640,7 +632,7 @@ theorem angleOperator_comm_moorePenroseInverse_sinAngleOperator (U V : Submodule
     angleOperator U V ∘ₗ LinearMap.moorePenroseInverse (sinAngleOperator U V) =
       LinearMap.moorePenroseInverse (sinAngleOperator U V) ∘ₗ angleOperator U V :=
   TauCeti.moorePenroseInverse_comm_of_isSymmetric
-    (TauCeti.isPositive_operatorAbs (projection U - projection V)).isSymmetric
+    (LinearMap.isPositive_operatorAbs (projection U - projection V)).isSymmetric
     (angleOperator_comm_sinAngleOperator U V).symm
 
 /-- **`Θ` commutes with `J`** — the remaining commutation statement of
@@ -775,7 +767,7 @@ theorem angleComplexStructure_comp_self (U V : Submodule 𝕜 E)
         LinearMap.moorePenroseInverse (sinAngleOperator U V)) := by
   have hmul : ∀ f g : E →ₗ[𝕜] E, f ∘ₗ g = f * g := fun _ _ => rfl
   have hsym : (sinAngleOperator U V).IsSymmetric :=
-    (TauCeti.isPositive_operatorAbs (projection U - projection V)).isSymmetric
+    (LinearMap.isPositive_operatorAbs (projection U - projection V)).isSymmetric
   set D := (directRotation U V hacute).toLinearMap - directRotationCosine U V with hDdef
   set A := sinAngleOperator U V with hAdef
   set G := LinearMap.moorePenroseInverse (sinAngleOperator U V) with hGdef

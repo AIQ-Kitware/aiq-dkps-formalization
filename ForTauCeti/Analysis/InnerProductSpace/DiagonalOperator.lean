@@ -161,25 +161,27 @@ theorem exists_unitary_diagOp_factorization (hn : finrank 𝕜 E = n)
     rw [hK, OrthonormalBasis.equiv_apply_basis, Equiv.refl_apply]
   have hKsymm : ∀ i, K.symm (w i) = b i := fun i => by
     rw [← hKb i, LinearIsometryEquiv.symm_apply_apply]
-  have habs_w : ∀ i, operatorAbs A (w i)
+  have habs_w : ∀ i, A.operatorAbs (w i)
       = ((A.singularValues (i : ℕ) : ℝ) : 𝕜) • w i := by
     intro i
-    rw [show operatorAbs A = (LinearMap.isPositive_adjoint_comp_self A).sqrt from rfl,
+    rw [show A.operatorAbs = (LinearMap.isPositive_adjoint_comp_self A).sqrt from
+        (LinearMap.isPositive_adjoint_comp_self A).sqrt_unique
+          A.isPositive_operatorAbs A.operatorAbs_sq,
       (LinearMap.isPositive_adjoint_comp_self A).sqrt_apply_eigenvectorBasis rfl i,
       ← A.singularValues_fin rfl i]
-  have habs : operatorAbs A
+  have habs : A.operatorAbs
       = K.toLinearMap ∘ₗ diagOp b (fun i => A.singularValues (i : ℕ))
         ∘ₗ K.symm.toLinearMap := by
     refine w.toBasis.ext fun i => ?_
-    change operatorAbs A (w i) =
+    change A.operatorAbs (w i) =
       K (diagOp b (fun i => A.singularValues (i : ℕ)) (K.symm (w i)))
     simp only [habs_w i, hKsymm i, diagOp_apply_basis, map_smul, hKb i]
   refine ⟨K.trans (choosePolarUnitary A), K.symm, ?_⟩
   ext v
   have hpolar := LinearMap.congr_fun (polar_decomposition_choosePolarUnitary A) v
-  change A v = choosePolarUnitary A (operatorAbs A v) at hpolar
+  change A v = choosePolarUnitary A (A.operatorAbs v) at hpolar
   have habsv := LinearMap.congr_fun habs v
-  change operatorAbs A v =
+  change A.operatorAbs v =
     K (diagOp b (fun i => A.singularValues (i : ℕ)) (K.symm v)) at habsv
   change A v = (K.trans (choosePolarUnitary A))
     (diagOp b (fun i => A.singularValues (i : ℕ)) (K.symm v))

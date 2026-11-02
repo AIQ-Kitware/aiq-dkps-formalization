@@ -8,6 +8,7 @@ corollary combining with Result A (Theorem 4.1). Tickets PD-18 + BL1/BL2/BL4/BL5
 
 module
 
+public import ForTauCeti.Analysis.InnerProductSpace.Positive.SquareRoot.Eigenspace
 public import ForTauCeti.Analysis.InnerProductSpace.IntertwiningUnitary
 public import ForTauCeti.Analysis.InnerProductSpace.EigenvalueChange
 public import TauCeti.Analysis.InnerProductSpace.Spectrum
@@ -187,12 +188,13 @@ theorem intertwiningUnitary_apply_ofOrthonormalBasis {b b' : OrthonormalBasis (F
       = ⟪b' i, b i⟫_𝕜 • b' i := by
     rw [LinearMap.comp_apply, hPb, OrthonormalBasis.spanIndicesProjection_singleton_apply]
   -- `|Mᵢ|` acts on `b i` as multiplication by the overlap size `‖c‖`
-  have habs : operatorAbs (OrthonormalBasis.spanIndicesProjection b' {i} ∘ₗ
+  have habs : LinearMap.operatorAbs (OrthonormalBasis.spanIndicesProjection b' {i} ∘ₗ
         OrthonormalBasis.spanIndicesProjection b {i}) (b i)
       = ((‖⟪b' i, b i⟫_𝕜‖ : ℝ) : 𝕜) • b i := by
-    refine (isPositive_operatorAbs _).apply_eq_smul_of_apply_apply_eq_smul (norm_nonneg _) ?_
+    refine (LinearMap.isPositive_operatorAbs _).apply_eq_smul_of_apply_apply_eq_smul
+      (norm_nonneg _) ?_
     have h2 := congrArg (fun f : E →ₗ[𝕜] E => f (b i))
-      (operatorAbs_mul_self (OrthonormalBasis.spanIndicesProjection b' {i} ∘ₗ
+      (LinearMap.operatorAbs_sq (OrthonormalBasis.spanIndicesProjection b' {i} ∘ₗ
             OrthonormalBasis.spanIndicesProjection b {i}))
     simp only [LinearMap.comp_apply] at h2
     rw [h2, LinearMap.adjoint_comp,
@@ -208,14 +210,14 @@ theorem intertwiningUnitary_apply_ofOrthonormalBasis {b b' : OrthonormalBasis (F
   simp only [OrthoProjFamily.ofOrthonormalBasis_proj]
   rw [Finset.sum_eq_single i (fun j _ hji => ?_) (fun hi => absurd (Finset.mem_univ i) hi)]
   · -- the block polar factor sends `b i` to the polar phase of the overlap times `b' i`
-    have hinv : operatorAbs (OrthonormalBasis.spanIndicesProjection b' {i} ∘ₗ
+    have hinv : LinearMap.operatorAbs (OrthonormalBasis.spanIndicesProjection b' {i} ∘ₗ
           OrthonormalBasis.spanIndicesProjection b {i})
         (((‖⟪b' i, b i⟫_𝕜‖⁻¹ : ℝ) : 𝕜) • b i) = b i := by
       rw [map_smul, habs, smul_smul, ← RCLike.ofReal_mul, inv_mul_cancel₀ hcnorm]
       simp
     rw [hPb]
     conv_lhs => rw [← hinv]
-    rw [polarFactor_apply_operatorAbs_apply, map_smul, hMb, smul_smul]
+    rw [LinearMap.polarFactor_operatorAbs_apply, map_smul, hMb, smul_smul]
   · rw [OrthonormalBasis.spanIndicesProjection_apply_basis]
     simp only [Finset.mem_singleton]
     rw [ite_eq_right (Ne.symm hji), map_zero]

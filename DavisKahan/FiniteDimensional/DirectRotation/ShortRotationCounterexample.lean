@@ -258,7 +258,7 @@ theorem gram_canonicalIntertwiner :
 
 /-- The operator cosine is the scalar `√½`. -/
 theorem abs_canonicalIntertwiner_eq :
-    TauCeti.operatorAbs (canonicalIntertwiner U4 V4) =
+    LinearMap.operatorAbs (canonicalIntertwiner U4 V4) =
       Real.sqrt 2⁻¹ • LinearMap.id := by
   have hpos : (Real.sqrt 2⁻¹ • (LinearMap.id : E4 →ₗ[ℝ] E4)).IsPositive := by
     refine ⟨fun x y => ?_, fun x => ?_⟩
@@ -278,7 +278,7 @@ theorem abs_canonicalIntertwiner_eq :
     simp only [LinearMap.comp_apply, LinearMap.smul_apply, LinearMap.id_apply,
       smul_smul]
     rw [Real.mul_self_sqrt (by norm_num : (0:ℝ) ≤ 2⁻¹)]
-  exact ((LinearMap.isPositive_adjoint_comp_self _).sqrt_unique hpos hsq).symm
+  exact (hpos.eq_operatorAbs hsq).symm
 
 private theorem sqrt_two_mul_self : Real.sqrt 2 * Real.sqrt 2 = 2 :=
   Real.mul_self_sqrt (by norm_num)

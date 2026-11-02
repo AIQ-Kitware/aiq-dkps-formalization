@@ -102,8 +102,11 @@ theorem projectionDifference_sq_eq_directed_gram_sum
 private theorem operatorAbs_adjoint_reverse_sine_mem_complement
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (x : E) :
-    operatorAbs ((sinThetaMap V U).adjoint) x ∈ Uᗮ := by
-  have hmem := operatorAbs_apply_mem_orthogonal_ker ((sinThetaMap V U).adjoint) x
+    LinearMap.operatorAbs ((sinThetaMap V U).adjoint) x ∈ Uᗮ := by
+  have hmem : LinearMap.operatorAbs ((sinThetaMap V U).adjoint) x ∈
+      (LinearMap.ker ((sinThetaMap V U).adjoint))ᗮ := by
+    rw [← LinearMap.range_operatorAbs]
+    exact LinearMap.mem_range_self _ x
   -- `U` is in the kernel of the reversed sine adjoint. Orthogonality
   -- reverses inclusions, so the modulus image belongs to `Uᗮ`.
   have hUker : U ≤ LinearMap.ker ((sinThetaMap V U).adjoint) := by
@@ -123,20 +126,20 @@ support. This is the operative orthogonality in the square-root splitting. -/
 private theorem operatorAbs_directed_mul_operatorAbs_reverse_adjoint_eq_zero
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    operatorAbs (sinThetaMap U V) ∘ₗ
-        operatorAbs ((sinThetaMap V U).adjoint) = 0 := by
+    LinearMap.operatorAbs (sinThetaMap U V) ∘ₗ
+        LinearMap.operatorAbs ((sinThetaMap V U).adjoint) = 0 := by
   apply LinearMap.ext
   intro x
-  change operatorAbs (sinThetaMap U V)
-    (operatorAbs ((sinThetaMap V U).adjoint) x) = 0
+  change LinearMap.operatorAbs (sinThetaMap U V)
+    (LinearMap.operatorAbs ((sinThetaMap V U).adjoint) x) = 0
   have hperp := operatorAbs_adjoint_reverse_sine_mem_complement U V x
-  have hker : operatorAbs ((sinThetaMap V U).adjoint) x ∈
+  have hker : LinearMap.operatorAbs ((sinThetaMap V U).adjoint) x ∈
       LinearMap.ker (sinThetaMap U V) := by
-    change sinThetaMap U V (operatorAbs ((sinThetaMap V U).adjoint) x) = 0
+    change sinThetaMap U V (LinearMap.operatorAbs ((sinThetaMap V U).adjoint) x) = 0
     change Vᗮ.starProjection
-      (U.starProjection (operatorAbs ((sinThetaMap V U).adjoint) x)) = 0
+      (U.starProjection (LinearMap.operatorAbs ((sinThetaMap V U).adjoint) x)) = 0
     rw [(Submodule.starProjection_apply_eq_zero_iff U).mpr hperp, map_zero]
-  rw [← ker_operatorAbs (sinThetaMap U V)] at hker
+  rw [← LinearMap.ker_operatorAbs (sinThetaMap U V)] at hker
   exact LinearMap.mem_ker.mp hker
 
 /-- **Positive sine-modulus splitting of the projector difference.**
@@ -148,14 +151,14 @@ its support in `Uᗮ` instead of `V`. -/
 theorem operatorAbs_projectionDifference_eq_directed_sine_sum
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] :
-    operatorAbs (projection U - projection V) =
-      operatorAbs (sinThetaMap U V) +
-        operatorAbs ((sinThetaMap V U).adjoint) := by
+    LinearMap.operatorAbs (projection U - projection V) =
+      LinearMap.operatorAbs (sinThetaMap U V) +
+        LinearMap.operatorAbs ((sinThetaMap V U).adjoint) := by
   let D : E →ₗ[𝕜] E := projection U - projection V
-  let A : E →ₗ[𝕜] E := operatorAbs (sinThetaMap U V)
-  let B : E →ₗ[𝕜] E := operatorAbs ((sinThetaMap V U).adjoint)
-  have hA : A.IsPositive := isPositive_operatorAbs _
-  have hB : B.IsPositive := isPositive_operatorAbs _
+  let A : E →ₗ[𝕜] E := LinearMap.operatorAbs (sinThetaMap U V)
+  let B : E →ₗ[𝕜] E := LinearMap.operatorAbs ((sinThetaMap V U).adjoint)
+  have hA : A.IsPositive := LinearMap.isPositive_operatorAbs _
+  have hB : B.IsPositive := LinearMap.isPositive_operatorAbs _
   have hAB : A * B = 0 :=
     operatorAbs_directed_mul_operatorAbs_reverse_adjoint_eq_zero U V
   have hBA : B * A = 0 := by
@@ -168,11 +171,11 @@ theorem operatorAbs_projectionDifference_eq_directed_sine_sum
     dsimp [D]
     rw [map_sub, projection_adjoint, projection_adjoint]
   have hgram : A * A + B * B = D.adjoint * D := by
-    change operatorAbs (sinThetaMap U V) ∘ₗ operatorAbs (sinThetaMap U V) +
-        operatorAbs ((sinThetaMap V U).adjoint) ∘ₗ
-          operatorAbs ((sinThetaMap V U).adjoint) =
+    change LinearMap.operatorAbs (sinThetaMap U V) ∘ₗ LinearMap.operatorAbs (sinThetaMap U V) +
+        LinearMap.operatorAbs ((sinThetaMap V U).adjoint) ∘ₗ
+          LinearMap.operatorAbs ((sinThetaMap V U).adjoint) =
         D.adjoint ∘ₗ D
-    rw [operatorAbs_mul_self, operatorAbs_mul_self,
+    rw [LinearMap.operatorAbs_sq, LinearMap.operatorAbs_sq,
       LinearMap.adjoint_adjoint, hDstar]
     exact (projectionDifference_sq_eq_directed_gram_sum U V).symm
   have hsq : (A + B) * (A + B) = D.adjoint * D := by
@@ -180,10 +183,9 @@ theorem operatorAbs_projectionDifference_eq_directed_sine_sum
       (A + B) * (A + B) = A * A + B * B := by
         noncomm_ring [hAB, hBA]
       _ = D.adjoint * D := hgram
-  have hsqrt : operatorAbs D = A + B := by
+  have hsqrt : D.operatorAbs = A + B := by
     symm
-    exact (LinearMap.isPositive_adjoint_comp_self D).sqrt_unique
-      (hA.add hB) hsq
+    exact (hA.add hB).eq_operatorAbs hsq
   exact hsqrt
 
 /-- **Trace-norm decomposition for any two projections.**
@@ -196,16 +198,16 @@ theorem kyFanSum_projectionDifference_eq_directed_sines
     kyFanSum (finrank 𝕜 E) (projection U - projection V) =
       kyFanSum (finrank 𝕜 E) (sinThetaMap U V) +
         kyFanSum (finrank 𝕜 E) (sinThetaMap V U) := by
-  let A : E →ₗ[𝕜] E := operatorAbs (sinThetaMap U V)
-  let B : E →ₗ[𝕜] E := operatorAbs ((sinThetaMap V U).adjoint)
-  have hA : A.IsPositive := isPositive_operatorAbs _
-  have hB : B.IsPositive := isPositive_operatorAbs _
+  let A : E →ₗ[𝕜] E := LinearMap.operatorAbs (sinThetaMap U V)
+  let B : E →ₗ[𝕜] E := LinearMap.operatorAbs ((sinThetaMap V U).adjoint)
+  have hA : A.IsPositive := LinearMap.isPositive_operatorAbs _
+  have hB : B.IsPositive := LinearMap.isPositive_operatorAbs _
   have hD : kyFanSum (finrank 𝕜 E) (projection U - projection V) =
       kyFanSum (finrank 𝕜 E) (A + B) := by
     change kyFanSum (finrank 𝕜 E) (projection U - projection V) =
       kyFanSum (finrank 𝕜 E)
-        (operatorAbs (sinThetaMap U V) +
-          operatorAbs ((sinThetaMap V U).adjoint))
+        (LinearMap.operatorAbs (sinThetaMap U V) +
+          LinearMap.operatorAbs ((sinThetaMap V U).adjoint))
     rw [← operatorAbs_projectionDifference_eq_directed_sine_sum U V]
     simp only [kyFanSum_eq_sum_fin, singularValues_operatorAbs]
   have hleft : kyFanSum (finrank 𝕜 E) A =

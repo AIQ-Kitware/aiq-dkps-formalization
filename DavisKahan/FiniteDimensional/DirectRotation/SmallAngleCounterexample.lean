@@ -257,7 +257,7 @@ theorem gram_canonicalIntertwiner (theta : Real) :
 
 /-- Identifying the modulus ties the calculation to the canonical direct rotation. -/
 theorem abs_canonicalIntertwiner_eq (theta : Real) (hc : 0 < Real.cos theta) :
-    TauCeti.operatorAbs (canonicalIntertwiner U4 (V4 theta)) =
+    LinearMap.operatorAbs (canonicalIntertwiner U4 (V4 theta)) =
       Real.cos theta • (LinearMap.id : E4 →ₗ[ℝ] E4) := by
   have hpos : (Real.cos theta • (LinearMap.id : E4 →ₗ[ℝ] E4)).IsPositive := by
     refine ⟨fun x y => ?_, fun x => ?_⟩
@@ -274,7 +274,7 @@ theorem abs_canonicalIntertwiner_eq (theta : Real) (hc : 0 < Real.cos theta) :
     apply LinearMap.ext
     intro x
     simp [LinearMap.comp_apply, smul_smul, pow_two]
-  exact ((LinearMap.isPositive_adjoint_comp_self _).sqrt_unique hpos hsq).symm
+  exact (hpos.eq_operatorAbs hsq).symm
 
 /-- The direct displacement has scalar Gram operator `(2 - 2 cos(theta)) I`. -/
 theorem gram_displacement_R (theta : Real) (hc : 0 < Real.cos theta) :

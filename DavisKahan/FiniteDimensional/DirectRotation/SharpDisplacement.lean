@@ -113,14 +113,14 @@ theorem singularValues_directDisplacement_eq_sharpTransfer
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hacute : IsAcute U V) :
     let S := sinAngleOperator U V
-    let hS : S.IsPositive := TauCeti.isPositive_operatorAbs (projection U - projection V)
+    let hS : S.IsPositive := LinearMap.isPositive_operatorAbs (projection U - projection V)
     let F := TauCeti.selfAdjointFunctionalCalculus hS.isSymmetric sharpTransferWeight
     (LinearMap.id - (directRotation U V hacute).toLinearMap).singularValues =
       (F ∘ₗ S).singularValues := by
   classical
   dsimp only
   let S : E →ₗ[𝕜] E := sinAngleOperator U V
-  let hS : S.IsPositive := TauCeti.isPositive_operatorAbs (projection U - projection V)
+  let hS : S.IsPositive := LinearMap.isPositive_operatorAbs (projection U - projection V)
   let b := hS.isSymmetric.eigenvectorBasis rfl
   let F := TauCeti.selfAdjointFunctionalCalculus hS.isSymmetric sharpTransferWeight
   let B := F ∘ₗ S
@@ -184,13 +184,13 @@ theorem sinAngleOperator_eigenvalue_le_projectionGap
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (i : Fin (finrank 𝕜 E)) :
-    (TauCeti.isPositive_operatorAbs
+    (LinearMap.isPositive_operatorAbs
       (projection U - projection V)).isSymmetric.eigenvalues rfl i ≤
         U.projectionGap V := by
   classical
   let D : E →ₗ[𝕜] E := projection U - projection V
   let S : E →ₗ[𝕜] E := sinAngleOperator U V
-  let hS : S.IsPositive := TauCeti.isPositive_operatorAbs D
+  let hS : S.IsPositive := D.isPositive_operatorAbs
   let b := hS.isSymmetric.eigenvectorBasis rfl
   let s : ℝ := hS.isSymmetric.eigenvalues rfl i
   have hs0 : 0 ≤ s := hS.nonneg_eigenvalues rfl i
@@ -200,7 +200,7 @@ theorem sinAngleOperator_eigenvalue_le_projectionGap
   have hnormS : ‖S (b i)‖ = s := by
     rw [hSval, norm_smul, RCLike.norm_ofReal, abs_of_nonneg hs0, hb, mul_one]
   have hnormD : ‖S (b i)‖ = ‖D (b i)‖ :=
-    TauCeti.norm_operatorAbs_apply D (b i)
+    LinearMap.norm_operatorAbs_apply D (b i)
   have hbound : ‖D (b i)‖ ≤ ‖D.toContinuousLinearMap‖ := by
     calc
       ‖D (b i)‖ ≤ ‖D.toContinuousLinearMap‖ * ‖b i‖ :=
@@ -226,7 +226,7 @@ theorem cos_half_mul_uiNorm_directRotation_le_projection
     (hacute : IsAcute U V)
     (alpha : ℝ) (ha0 : 0 ≤ alpha) (ha1 : alpha < Real.pi / 2)
     (hangle : ∀ i : Fin (finrank 𝕜 E),
-      (TauCeti.isPositive_operatorAbs
+      (LinearMap.isPositive_operatorAbs
         (projection U - projection V)).isSymmetric.eigenvalues rfl i ≤
         Real.sin alpha) :
     Real.cos (alpha / 2) *
@@ -234,7 +234,7 @@ theorem cos_half_mul_uiNorm_directRotation_le_projection
       N (projection U - projection V) := by
   classical
   let S : E →ₗ[𝕜] E := sinAngleOperator U V
-  let hS : S.IsPositive := TauCeti.isPositive_operatorAbs (projection U - projection V)
+  let hS : S.IsPositive := LinearMap.isPositive_operatorAbs (projection U - projection V)
   let F := TauCeti.selfAdjointFunctionalCalculus hS.isSymmetric sharpTransferWeight
   let A : E →ₗ[𝕜] E := LinearMap.id - (directRotation U V hacute).toLinearMap
   have hc : 0 < Real.cos (alpha / 2) :=
@@ -278,7 +278,7 @@ theorem cos_half_mul_uiNorm_directRotation_le_displacement
     (hacute : IsAcute U V)
     (alpha : ℝ) (ha0 : 0 ≤ alpha) (ha1 : alpha < Real.pi / 2)
     (hangle : ∀ i : Fin (finrank 𝕜 E),
-      (TauCeti.isPositive_operatorAbs
+      (LinearMap.isPositive_operatorAbs
         (projection U - projection V)).isSymmetric.eigenvalues rfl i ≤
         Real.sin alpha)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
@@ -465,7 +465,7 @@ theorem uiNorm_directRotation_le_sqrt_two_mul_displacement
     N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
       Real.sqrt 2 * N (LinearMap.id - W.toLinearMap) := by
   let S : E →ₗ[𝕜] E := sinAngleOperator U V
-  let hS : S.IsPositive := TauCeti.isPositive_operatorAbs (projection U - projection V)
+  let hS : S.IsPositive := LinearMap.isPositive_operatorAbs (projection U - projection V)
   let F := TauCeti.selfAdjointFunctionalCalculus hS.isSymmetric sharpTransferWeight
   let A : E →ₗ[𝕜] E := LinearMap.id - (directRotation U V hacute).toLinearMap
   have hFbound : ∀ y, ‖F y‖ ≤ Real.sqrt 2 * ‖y‖ := by
