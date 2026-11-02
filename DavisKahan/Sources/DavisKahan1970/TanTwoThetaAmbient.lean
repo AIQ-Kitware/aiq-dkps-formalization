@@ -1211,18 +1211,19 @@ private theorem isOffDiagonal_of_maps_orthogonal'
   simp only [Submodule.diagBlock_apply, hPzero, hQzero, add_zero, zero_apply]
 
 private theorem kyFan_upperBlock_eq_compression (K : E →L[ℂ] E) (k : ℕ) :
-    kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ K) =
-      kyFanApproximationGauge k (blockCompression U Uᗮ K) := by
+    ((projectionBlock Uᗮᗮ Uᗮ K).kyFanGauge k : ℝ) =
+      ((blockCompression U Uᗮ K).kyFanGauge k : ℝ) := by
   have heq : projectionBlock Uᗮᗮ Uᗮ K = projectionBlock U Uᗮ K := by
     simp only [projectionBlock, Submodule.orthogonal_orthogonal]
   rw [heq]
-  exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+  exact (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ)
+    from
       (congrArg NNReal.toReal ((projectionBlock_same_compression U Uᗮ K).kyFanGauge_eq k)))
 
 private theorem kyFan_lowerBlock_eq_upperBlock (K : E →L[ℂ] E)
     (hK : IsSelfAdjoint K) (k : ℕ) :
-    kyFanApproximationGauge k (projectionBlock Uᗮ U K) =
-      kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ K) := by
+    ((projectionBlock Uᗮ U K).kyFanGauge k : ℝ) =
+      ((projectionBlock Uᗮᗮ Uᗮ K).kyFanGauge k : ℝ) := by
   have hadj : projectionBlock Uᗮᗮ Uᗮ K =
       (projectionBlock Uᗮ U K).adjoint := by
     rw [projectionBlock_upper', projectionBlock_lower']
@@ -1251,10 +1252,9 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
     (hUperpLow : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hq : IsQuarterAcute U V) (k : ℕ) :
-    (b - a) * kyFanApproximationGauge k
-        (projectionBlock Uᗮ U
-          (2 * (projectorDifference U V * doubleSecant U V))) ≤
-      2 * kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ H) := by
+    (b - a) * ((projectionBlock Uᗮ U
+          (2 * (projectorDifference U V * doubleSecant U V))).kyFanGauge k : ℝ) ≤
+      2 * ((projectionBlock Uᗮᗮ Uᗮ H).kyFanGauge k : ℝ) := by
   have hAsym : A.IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
   have hHsym : H.IsSymmetric :=
@@ -1348,18 +1348,18 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
         (TauCeti.DavisKahanExt.quarterAcuteAngularOperator U V hq)
         (TauCeti.DavisKahanExt.quarterAcuteAngularOperator_isAngularOperator U V hq)
         hYc
-  have hleft : kyFanApproximationGauge k
-      (projectionBlock Uᗮ U
-        (2 * (projectorDifference U V * doubleSecant U V))) =
-      kyFanApproximationGauge k (doubleAngleTangentOperator X hXc) := by
+  have hleft : ((projectionBlock Uᗮ U
+        (2 * (projectorDifference U V * doubleSecant U V))).kyFanGauge k : ℝ) =
+      ((doubleAngleTangentOperator X hXc).kyFanGauge k : ℝ) := by
     rw [tanTwoBlockRepresentative_lowerBlock hq, hambient]
-    exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+    exact (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k :
+      ℝ) from
       (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock U Uᗮ
       (doubleAngleTangentOperator X hXc)).kyFanGauge_eq k)))
   -- the right-hand side: the shifted block's cross entry is the upper block of `H`
   have hDB01 : Dd.B01 = -B.B01 := rfl
-  have hright : kyFanApproximationGauge k Dd.B01 =
-      kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ H) := by
+  have hright : (Dd.B01.kyFanGauge k : ℝ) =
+      ((projectionBlock Uᗮᗮ Uᗮ H).kyFanGauge k : ℝ) := by
     rw [hDB01, kyFanApproximationGauge_neg, kyFan_upperBlock_eq_compression H k,
       hB01, blockCompression, Submodule.adjoint_subtypeL]
   rw [hleft, ← hright]
@@ -1384,13 +1384,12 @@ theorem tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner
     (hH : IsSelfAdjoint H) (hab : a < b)
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0)
     (hcorner : ∀ j : ℕ,
-      (b - a) * kyFanApproximationGauge j
-          (projectionBlock Uᗮ U
-            (2 * (projectorDifference U V * doubleSecant U V))) ≤
-        2 * kyFanApproximationGauge j (projectionBlock Uᗮᗮ Uᗮ H)) :
+      (b - a) * ((projectionBlock Uᗮ U
+            (2 * (projectorDifference U V * doubleSecant U V))).kyFanGauge j : ℝ) ≤
+        2 * ((projectionBlock Uᗮᗮ Uᗮ H).kyFanGauge j : ℝ)) :
     ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (absTanTwoAngleOperatorC U V) ≤
-        2 * kyFanApproximationGauge k H := by
+      (b - a) * ((absTanTwoAngleOperatorC U V).kyFanGauge k : ℝ) ≤
+        2 * (H.kyFanGauge k : ℝ) := by
   intro k
   have hinv := isUnit_one_sub_two_mul_projectorDifference_sq_of_cos_two_ne_zero
     hcos
@@ -1404,19 +1403,19 @@ theorem tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner
       isSelfAdjoint_projectorDifference.star_eq,
       ← doubleSecant_comm_projectorDifference hinv, two_comm']
   have h₀ : ∀ j : ℕ,
-      kyFanApproximationGauge j (projectionBlock Uᗮ U
+      ((projectionBlock Uᗮ U
           (((((b - a) / 2 : ℝ)) : ℂ) •
-            (2 * (projectorDifference U V * doubleSecant U V)))) ≤
-        kyFanApproximationGauge j (projectionBlock Uᗮ U H) := by
+            (2 * (projectorDifference U V * doubleSecant U V)))).kyFanGauge j : ℝ) ≤
+        ((projectionBlock Uᗮ U H).kyFanGauge j : ℝ) := by
     intro j
     rw [projectionBlock_smul', kyFanApproximationGauge_smul, hcnorm,
       kyFan_lowerBlock_eq_upperBlock H hH j]
     linarith [hcorner j]
   have h₁ : ∀ j : ℕ,
-      kyFanApproximationGauge j (projectionBlock Uᗮᗮ Uᗮ
+      ((projectionBlock Uᗮᗮ Uᗮ
           (((((b - a) / 2 : ℝ)) : ℂ) •
-            (2 * (projectorDifference U V * doubleSecant U V)))) ≤
-        kyFanApproximationGauge j (projectionBlock Uᗮᗮ Uᗮ H) := by
+            (2 * (projectorDifference U V * doubleSecant U V)))).kyFanGauge j : ℝ) ≤
+        ((projectionBlock Uᗮᗮ Uᗮ H).kyFanGauge j : ℝ) := by
     intro j
     rw [projectionBlock_smul', kyFanApproximationGauge_smul, hcnorm,
       ← kyFan_lowerBlock_eq_upperBlock _ hKsa j]
@@ -1441,10 +1440,11 @@ theorem tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner
       diagonalPair Uᗮ U H := rfl
   rw [hsum, hsumH, kyFanApproximationGauge_smul, hcnorm] at hcombine
   have hpinch := diagonalPair_all_kyFan_le Uᗮ U H k
-  have hmodulus : kyFanApproximationGauge k (absTanTwoAngleOperatorC U V) =
-      kyFanApproximationGauge k (tanTwoBlockRepresentative U V) := by
+  have hmodulus : ((absTanTwoAngleOperatorC U V).kyFanGauge k : ℝ) =
+      ((tanTwoBlockRepresentative U V).kyFanGauge k : ℝ) := by
     rw [absTanTwoAngleOperatorC_eq_modulus_blockRepresentative hcos]
-    exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+    exact (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k :
+      ℝ) from
       (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_modulus
       (tanTwoBlockRepresentative U V)).kyFanGauge_eq k)))
   rw [hmodulus]
@@ -1465,8 +1465,8 @@ theorem tanTwoTheta_ambient_bounded_orderedForm_kyFan_complex
     (hVperpLow : ∀ x ∈ Vᗮ, RCLike.re ⟪(A + H) x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U) :
     ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (tanTwoAngleOperatorC U V) ≤
-        2 * kyFanApproximationGauge k H := by
+      (b - a) * ((tanTwoAngleOperatorC U V).kyFanGauge k : ℝ) ≤
+        2 * (H.kyFanGauge k : ℝ) := by
   intro k
   have hq : IsQuarterAcute U V :=
     isQuarterAcute_of_orderedFormGap A H U V hA hH hAU hAplusH_V hab
@@ -1494,18 +1494,17 @@ theorem tanTwoTheta_ambient_bounded_branchFree_symmetricNorming_complex_of_corne
     (hH : IsSelfAdjoint H) (hab : a < b)
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0)
     (hcorner : ∀ j : ℕ,
-      (b - a) * kyFanApproximationGauge j
-          (projectionBlock Uᗮ U
-            (2 * (projectorDifference U V * doubleSecant U V))) ≤
-        2 * kyFanApproximationGauge j (projectionBlock Uᗮᗮ Uᗮ H))
+      (b - a) * ((projectionBlock Uᗮ U
+            (2 * (projectorDifference U V * doubleSecant U V))).kyFanGauge j : ℝ) ≤
+        2 * ((projectionBlock Uᗮᗮ Uᗮ H).kyFanGauge j : ℝ))
     (hHmem : N.Mem H) :
     N.Mem (absTanTwoAngleOperatorC U V) ∧
       (b - a) * N.gauge (absTanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
   have htwo : ‖((2 : ℝ) : ℂ)‖ = 2 := by norm_num
   have hd : (0 : ℝ) < b - a := by linarith
   have hscaled : ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (absTanTwoAngleOperatorC U V) ≤
-        kyFanApproximationGauge k (((2 : ℝ) : ℂ) • H) := by
+      (b - a) * ((absTanTwoAngleOperatorC U V).kyFanGauge k : ℝ) ≤
+        ((((2 : ℝ) : ℂ) • H).kyFanGauge k : ℝ) := by
     intro k
     rw [kyFanApproximationGauge_smul, htwo]
     exact tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner hH hab hcos hcorner k
@@ -1541,8 +1540,8 @@ theorem tanTwoTheta_ambient_bounded_orderedForm_symmetricNorming_complex
   have htwo : ‖((2 : ℝ) : ℂ)‖ = 2 := by norm_num
   have hd : (0 : ℝ) < b - a := by linarith
   have hscaled : ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (tanTwoAngleOperatorC U V) ≤
-        kyFanApproximationGauge k (((2 : ℝ) : ℂ) • H) := by
+      (b - a) * ((tanTwoAngleOperatorC U V).kyFanGauge k : ℝ) ≤
+        ((((2 : ℝ) : ℂ) • H).kyFanGauge k : ℝ) := by
     intro k
     rw [kyFanApproximationGauge_smul, htwo]
     exact tanTwoTheta_ambient_bounded_orderedForm_kyFan_complex hA hH hAU hAplusH_V hab hUhigh

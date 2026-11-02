@@ -50,19 +50,17 @@ private theorem half_mul_kyFan_le_adjoint
     (hA1 : ∀ z : E1, d * ‖z‖ ^ 2 ≤ RCLike.re ⟪B.A1 z, z⟫_ℂ)
     {X : E0 →L[ℂ] E1} (hX : SolvesRiccati B X)
     (hcontractive : ‖X‖ < 1) (k : ℕ) :
-    (d / 2) * kyFanApproximationGauge k
-        (TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive) ≤
-      kyFanApproximationGauge k B.B01.adjoint := by
+    (d / 2) * ((TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive).kyFanGauge k : ℝ) ≤
+      (B.B01.adjoint.kyFanGauge k : ℝ) := by
   have hsharp := sharp_doubleAngleTangentOperator_kyFan
     B hd.le hA0 hA1 hX hcontractive k
   rw [kyFanApproximationGauge_adjoint]
   calc
-    (d / 2) * kyFanApproximationGauge k
-        (TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive) =
-        (d * kyFanApproximationGauge k
-          (TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive)) / 2 := by
+    (d / 2) * ((TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive).kyFanGauge k : ℝ) =
+        (d * ((TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive).kyFanGauge k : ℝ)) /
+          2 := by
       ring
-    _ ≤ kyFanApproximationGauge k B.B01 := by
+    _ ≤ (B.B01.kyFanGauge k : ℝ) := by
       linarith
 
 /-- Sharp endpoint for every standard symmetric completion, formulated in the
@@ -89,8 +87,8 @@ theorem sharp_standardSymmetricIdeal_scaled
     rw [Complex.norm_real, Real.norm_eq_abs,
       abs_of_nonneg (by positivity : 0 ≤ d / 2)]
   have hdom : ∀ k : ℕ,
-      kyFanApproximationGauge k S ≤
-        kyFanApproximationGauge k B.B01.adjoint := by
+      (S.kyFanGauge k : ℝ) ≤
+        (B.B01.adjoint.kyFanGauge k : ℝ) := by
     intro k
     simpa only [S, T, kyFanApproximationGauge_smul, hscalarNorm] using
       half_mul_kyFan_le_adjoint B hd hA0 hA1 hX hcontractive k
@@ -121,8 +119,8 @@ theorem sharp_symmetricNormingFunction
   have hBadj : N.Mem B.B01.adjoint :=
     (N.mem_adjoint_iff B.B01).mpr hB
   have hfan : ∀ k : ℕ,
-      (d / 2) * kyFanApproximationGauge k T ≤
-        kyFanApproximationGauge k B.B01.adjoint := by
+      (d / 2) * (T.kyFanGauge k : ℝ) ≤
+        (B.B01.adjoint.kyFanGauge k : ℝ) := by
     intro k
     exact half_mul_kyFan_le_adjoint B hd hA0 hA1 hX hcontractive k
   have h : N.Mem T ∧ (d / 2) * N.gauge T ≤ N.gauge B.B01.adjoint :=

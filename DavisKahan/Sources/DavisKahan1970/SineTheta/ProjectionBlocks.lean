@@ -117,12 +117,12 @@ theorem diagonalPair_all_kyFan_le
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (K : E →L[𝕜] E) :
     ∀ k : ℕ,
-      kyFanApproximationGauge k (diagonalPair U V K) ≤
-        kyFanApproximationGauge k K := by
+      ((diagonalPair U V K).kyFanGauge k : ℝ) ≤
+        (K.kyFanGauge k : ℝ) := by
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp []
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := (show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
       { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
@@ -133,8 +133,8 @@ theorem diagonalPair_all_kyFan_le
       N U V (K := K)
       (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     simpa only [N,
-      SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] using h
+      SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal]
+        using h
 
 /-- Literal source-norm form of Davis--Kahan Lemma 6.2. -/
 theorem diagonalPair_symmetricNorming_le

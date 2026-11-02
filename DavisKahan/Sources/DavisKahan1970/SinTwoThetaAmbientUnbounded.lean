@@ -196,12 +196,12 @@ theorem reflectionPerturbation_normingMem_and_gauge_le
     · exact hEmem h
     · exact absurd h (by simp)
   have hkyFan : ∀ k : ℕ,
-      (1 : ℝ) * kyFanApproximationGauge k (DavisKahan.reflectionPerturbation V Eop) ≤
-        kyFanApproximationGauge k (((2 : ℝ) : 𝕜) • Eop) := by
+      (1 : ℝ) * ((DavisKahan.reflectionPerturbation V Eop).kyFanGauge k : ℝ) ≤
+        ((((2 : ℝ) : 𝕜) • Eop).kyFanGauge k : ℝ) := by
     intro k
     rw [one_mul, kyFanApproximationGauge_smul, htwo]
     rcases Nat.eq_zero_or_pos k with rfl | hk
-    · simp [kyFanApproximationGauge]
+    · simp []
     · have h := DavisKahan.reflectionPerturbation_mem_and_gauge_le
         ((show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
           { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
@@ -209,9 +209,8 @@ theorem reflectionPerturbation_normingMem_and_gauge_le
         V Eop (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
       rw [                SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
         ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
-        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at h
+        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+          ENNReal.coe_toReal] at h
       exact h.2
   obtain ⟨hmem, hle⟩ := N.mul_gauge_le_of_all_mul_kyFan_le one_pos hMem2 hkyFan
   refine ⟨hmem, ?_⟩
@@ -498,16 +497,15 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike
     intro k
     by_cases hk0 : k = 0
     · subst k
-      simp [kyFanApproximationGauge]
+      simp []
     · have hk : 0 < k := Nat.pos_of_ne_zero hk0
       have hmain :=
         sinTwoTheta_ambient_unbounded_perturbedGap_symmetricNorming_rclike
           (𝕜 := 𝕜) (kyFanNormingFunction k hk) hA Hop hHop
           hPred hQred hδ hgap (kyFanNormingFunction_mem k hk Hop)
       have hky :
-          δ * kyFanApproximationGauge k
-              (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
-            2 * kyFanApproximationGauge k Hop := by
+          δ * ((TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q).kyFanGauge k : ℝ) ≤
+            2 * (Hop.kyFanGauge k : ℝ) := by
         simpa only [kyFanNormingFunction_gauge] using hmain.2
       nlinarith
   have hle := hhalf hAngle hHopMem

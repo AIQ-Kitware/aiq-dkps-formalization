@@ -227,12 +227,12 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
       (A.restrict hred.isInvariant)
       (A.restrict hred.orthogonal.isInvariant) δ) :
     ∀ k : ℕ,
-      δ * kyFanApproximationGauge k (sinTwoThetaIdealBlock U V) ≤
-        2 * kyFanApproximationGauge k R := by
+      δ * ((sinTwoThetaIdealBlock U V).kyFanGauge k : ℝ) ≤
+        2 * (R.kyFanGauge k : ℝ) := by
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp []
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   have hSsa : IsSelfAdjoint (trialOffDiagonalPart V M R) :=
     isSelfAdjoint_trialOffDiagonalPart
@@ -251,16 +251,13 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
     (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
     ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
-    SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
-  have hflip : kyFanApproximationGauge k
-        (U.starProjection ∘L
+    SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal]
+      at hraw
+  have hflip : ((U.starProjection ∘L
           ((-2 : 𝕜) • trialOffDiagonalPart V M R) ∘L
-          (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection) =
-      kyFanApproximationGauge k
-        ((Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection ∘L
-          ((-2 : 𝕜) • trialOffDiagonalPart V M R) ∘L U.starProjection) := by
+          (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection).kyFanGauge k : ℝ) =
+      (((Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection ∘L
+          ((-2 : 𝕜) • trialOffDiagonalPart V M R) ∘L U.starProjection).kyFanGauge k : ℝ) := by
     rw [← kyFanApproximationGauge_adjoint]
     congr 1
     rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp,
@@ -270,8 +267,8 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
     rfl
   have hdouble := kyFan_reflectionDefectBlock_le_two_mul hSsa U V k
   rw [reflectionDefect_trialOffDiagonalPart, trialOffDiagonalPart_upper] at hdouble
-  have hblockR : kyFanApproximationGauge k (trialOffDiagonalBlock V M R) ≤
-      kyFanApproximationGauge k R := by
+  have hblockR : ((trialOffDiagonalBlock V M R).kyFanGauge k : ℝ) ≤
+      (R.kyFanGauge k : ℝ) := by
     rw [trialOffDiagonalBlock_eq]
     refine (kyFanApproximationGauge_comp_le k Vᗮ.starProjection R
       V.subtypeL.adjoint).trans ?_
@@ -280,23 +277,22 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
     have hI : ‖(V.subtypeL.adjoint : H →L[𝕜] V)‖ ≤ 1 := by
       rw [ContinuousLinearMap.adjoint.norm_map]
       exact opNorm_le_one_of_isometry (fun _ => rfl)
-    have hnn : 0 ≤ kyFanApproximationGauge k R := kyFanApproximationGauge_nonneg k R
+    have hnn : 0 ≤ (R.kyFanGauge k : ℝ) := kyFanApproximationGauge_nonneg k R
     calc
-      ‖(Vᗮ.starProjection : H →L[𝕜] H)‖ * kyFanApproximationGauge k R *
+      ‖(Vᗮ.starProjection : H →L[𝕜] H)‖ * (R.kyFanGauge k : ℝ) *
             ‖(V.subtypeL.adjoint : H →L[𝕜] V)‖
-          ≤ 1 * kyFanApproximationGauge k R * 1 := by gcongr
-      _ = kyFanApproximationGauge k R := by ring
+          ≤ 1 * (R.kyFanGauge k : ℝ) * 1 := by gcongr
+      _ = (R.kyFanGauge k : ℝ) := by ring
   calc
-    δ * kyFanApproximationGauge k (sinTwoThetaIdealBlock U V)
-        ≤ kyFanApproximationGauge k
-          (U.starProjection ∘L
+    δ * ((sinTwoThetaIdealBlock U V).kyFanGauge k : ℝ)
+        ≤ ((U.starProjection ∘L
             ((-2 : 𝕜) • trialOffDiagonalPart V M R) ∘L
-            (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection) := hraw.2
-    _ = kyFanApproximationGauge k
-          ((Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection ∘L
-            ((-2 : 𝕜) • trialOffDiagonalPart V M R) ∘L U.starProjection) := hflip
-    _ ≤ 2 * kyFanApproximationGauge k (trialOffDiagonalBlock V M R) := hdouble
-    _ ≤ 2 * kyFanApproximationGauge k R := by gcongr
+            (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection).kyFanGauge k : ℝ) :=
+              hraw.2
+    _ = (((Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection ∘L
+            ((-2 : 𝕜) • trialOffDiagonalPart V M R) ∘L U.starProjection).kyFanGauge k : ℝ) := hflip
+    _ ≤ 2 * ((trialOffDiagonalBlock V M R).kyFanGauge k : ℝ) := hdouble
+    _ ≤ 2 * (R.kyFanGauge k : ℝ) := by gcongr
 
 /-- Scalar-generic symmetric-norming engine for the directed `sin 2Θ₀` residual clause,
 in the proof's block representation. -/
@@ -322,11 +318,11 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
   have hgauge : N.gauge R0 = N.gauge R := htransport.2
   have htwo : ‖(2 : 𝕜)‖ = 2 := by simp
   have hscaled : ∀ k : ℕ,
-      δ * kyFanApproximationGauge k (sinTwoThetaIdealBlock U V) ≤
-        kyFanApproximationGauge k ((2 : 𝕜) • R0) := by
+      δ * ((sinTwoThetaIdealBlock U V).kyFanGauge k : ℝ) ≤
+        (((2 : 𝕜) • R0).kyFanGauge k : ℝ) := by
     intro k
-    erw [kyFanApproximationGauge_smul, htwo, (show kyFanApproximationGauge k _ =
-      kyFanApproximationGauge k _ from
+    erw [kyFanApproximationGauge_smul, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+      (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsameR.kyFanGauge_eq k)))]
     exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_rclike
       hA hred hVdom hres hδ hgap k
@@ -392,15 +388,15 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
     intro k
     by_cases hk0 : k = 0
     · subst k
-      simp [kyFanApproximationGauge]
+      simp []
     · have hk : 0 < k := Nat.pos_of_ne_zero hk0
       have hmain :=
         sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
           (kyFanNormingFunction k hk) hA hred hVdom hres hδ hgap
           (kyFanNormingFunction_mem k hk R)
       have hky :
-          δ * kyFanApproximationGauge k (Angle.directedSinTwoAngleOperator V U) ≤
-            2 * kyFanApproximationGauge k R := by
+          δ * ((Angle.directedSinTwoAngleOperator V U).kyFanGauge k : ℝ) ≤
+            2 * (R.kyFanGauge k : ℝ) := by
         simpa only [kyFanNormingFunction_gauge] using hmain.2
       nlinarith
   have hle := hhalf hAngle hR

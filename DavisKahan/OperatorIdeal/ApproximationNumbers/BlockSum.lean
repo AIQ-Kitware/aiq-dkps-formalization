@@ -608,8 +608,8 @@ def splitKyFanGauge
     [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
     (k : ℕ) (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) : ℝ :=
   Finset.sup' (Finset.range (k + 1)) (by simp)
-    (fun r => kyFanApproximationGauge r A +
-      kyFanApproximationGauge (k - r) B)
+    (fun r => (A.kyFanGauge r : ℝ) +
+      (B.kyFanGauge (k - r) : ℝ))
 
 /-- Monotonicity of the split-prefix functional.  The two pairs are allowed to
 live in different coordinate spaces, since only the two scalar Ky Fan
@@ -626,16 +626,16 @@ theorem splitKyFanGauge_mono
     [NormedAddCommGroup F₁'] [InnerProductSpace 𝕜 F₁'] [CompleteSpace F₁']
     {A : E₀ →L[𝕜] F₀} {C : E₀' →L[𝕜] F₀'}
     {B : E₁ →L[𝕜] F₁} {D : E₁' →L[𝕜] F₁'}
-    (hA : ∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k C)
-    (hB : ∀ k, kyFanApproximationGauge k B ≤ kyFanApproximationGauge k D)
+    (hA : ∀ k, (A.kyFanGauge k : ℝ) ≤ (C.kyFanGauge k : ℝ))
+    (hB : ∀ k, (B.kyFanGauge k : ℝ) ≤ (D.kyFanGauge k : ℝ))
     (k : ℕ) : splitKyFanGauge k A B ≤ splitKyFanGauge k C D := by
   unfold splitKyFanGauge
   apply Finset.sup'_le
   intro r hr
   refine le_trans (add_le_add (hA r) (hB (k - r))) ?_
   exact Finset.le_sup'
-    (f := fun s => kyFanApproximationGauge s C +
-      kyFanApproximationGauge (k - s) D) hr
+    (f := fun s => (C.kyFanGauge s : ℝ) +
+      (D.kyFanGauge (k - s) : ℝ)) hr
 
 /-- Exact Ky Fan prefix formula for an orthogonal block sum.
 
@@ -650,7 +650,7 @@ theorem kyFanApproximationGauge_continuousOrthogonalBlockSum
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
     [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
     (k : ℕ) (A : E₀ →L[𝕜] F₀) (B : E₁ →L[𝕜] F₁) :
-    kyFanApproximationGauge k (continuousOrthogonalBlockSum A B) =
+    ((continuousOrthogonalBlockSum A B).kyFanGauge k : ℝ) =
       splitKyFanGauge k A B := by
   classical
   set a : ℕ → ℝ := fun n => (A.singularValue n : ℝ) with ha
@@ -674,13 +674,13 @@ theorem kyFanApproximationGauge_continuousOrthogonalBlockSum
     -- block currently supplies the larger one.  The resulting allocation is a
     -- split of `k` into `r` and `k - r`, hence one of the candidates.
     obtain ⟨r, hrk, hle⟩ := exists_split_prefix_sum_le a b c hmax k
-    have hle' : kyFanApproximationGauge k (continuousOrthogonalBlockSum A B) ≤
-        kyFanApproximationGauge r A + kyFanApproximationGauge (k - r) B := by
-      simpa [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, ha, hb,
+    have hle' : ((continuousOrthogonalBlockSum A B).kyFanGauge k : ℝ) ≤
+        (A.kyFanGauge r : ℝ) + (B.kyFanGauge (k - r) : ℝ) := by
+      simpa [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, ha, hb,
         hcdef] using hle
     refine le_trans hle' ?_
     exact Finset.le_sup'
-      (f := fun r => kyFanApproximationGauge r A + kyFanApproximationGauge (k - r) B)
+      (f := fun r => (A.kyFanGauge r : ℝ) + (B.kyFanGauge (k - r) : ℝ))
       (Finset.mem_range.mpr (by omega))
   · -- Lower bound: for each split, the two component witnesses combine into an
     -- orthogonal witness for the block prefix.
@@ -689,7 +689,7 @@ theorem kyFanApproximationGauge_continuousOrthogonalBlockSum
     intro r hr
     have hrle : r ≤ k := Nat.lt_succ_iff.mp (Finset.mem_range.mp hr)
     have hsplit := split_prefix_sum_le a b c hac hbc hmin k r (k - r) (by omega)
-    simpa [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, ha, hb,
+    simpa [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, ha, hb,
       hcdef] using hsplit
 
 /-- Weak majorization is stable under orthogonal block sum.  This is the
@@ -701,10 +701,10 @@ theorem kyFanApproximationGauge_blockSum_le
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀] [CompleteSpace F₀]
     [NormedAddCommGroup F₁] [InnerProductSpace 𝕜 F₁] [CompleteSpace F₁]
     {A C : E₀ →L[𝕜] F₀} {B D : E₁ →L[𝕜] F₁}
-    (hA : ∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k C)
-    (hB : ∀ k, kyFanApproximationGauge k B ≤ kyFanApproximationGauge k D) :
-    ∀ k, kyFanApproximationGauge k (continuousOrthogonalBlockSum A B) ≤
-      kyFanApproximationGauge k (continuousOrthogonalBlockSum C D) := by
+    (hA : ∀ k, (A.kyFanGauge k : ℝ) ≤ (C.kyFanGauge k : ℝ))
+    (hB : ∀ k, (B.kyFanGauge k : ℝ) ≤ (D.kyFanGauge k : ℝ)) :
+    ∀ k, ((continuousOrthogonalBlockSum A B).kyFanGauge k : ℝ) ≤
+      ((continuousOrthogonalBlockSum C D).kyFanGauge k : ℝ) := by
   intro k
   rw [kyFanApproximationGauge_continuousOrthogonalBlockSum,
     kyFanApproximationGauge_continuousOrthogonalBlockSum]
@@ -718,8 +718,8 @@ theorem approximationSingularValue_eq_kyFan_succ_sub
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (n : ℕ) (A : E →L[𝕜] F) :
     (A.singularValue n : ℝ) =
-      kyFanApproximationGauge (n + 1) A - kyFanApproximationGauge n A := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+      (A.kyFanGauge (n + 1) : ℝ) - (A.kyFanGauge n : ℝ) := by
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   rw [Finset.sum_range_succ]
   simp []
 
@@ -747,24 +747,32 @@ theorem hasSameApproximationNumbers_continuousOrthogonalBlockSum
       kyFanApproximationGauge_continuousOrthogonalBlockSum] <;>
     apply le_antisymm
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hA.kyFanGauge_eq k)))))
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hB.kyFanGauge_eq k))))) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hA.kyFanGauge_eq k)))).symm)
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hB.kyFanGauge_eq k)))).symm) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hA.kyFanGauge_eq k)))))
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hB.kyFanGauge_eq k))))) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hA.kyFanGauge_eq k)))).symm)
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hB.kyFanGauge_eq k)))).symm) _
 
 
@@ -798,24 +806,32 @@ theorem sameApproximationSingularSequence_continuousOrthogonalBlockSum
     kyFanApproximationGauge_continuousOrthogonalBlockSum]
   congr 1 <;> apply le_antisymm
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hA.kyFanGauge_eq k)))))
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hB.kyFanGauge_eq k))))) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hA.kyFanGauge_eq k)))).symm)
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hB.kyFanGauge_eq k)))).symm) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hA.kyFanGauge_eq k)))))
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hB.kyFanGauge_eq k))))) _
   · exact splitKyFanGauge_mono
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hA.kyFanGauge_eq k)))).symm)
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hB.kyFanGauge_eq k)))).symm) _
 
 section PinchChart

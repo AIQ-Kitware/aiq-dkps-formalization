@@ -133,13 +133,12 @@ theorem sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike
     rw [RCLike.norm_ofReal]
     norm_num
   have hscaled : ∀ k : ℕ,
-      δ * kyFanApproximationGauge k S ≤
-        kyFanApproximationGauge k (((2 : ℝ) : 𝕜) • R) := by
+      δ * (S.kyFanGauge k : ℝ) ≤
+        ((((2 : ℝ) : 𝕜) • R).kyFanGauge k : ℝ) := by
     intro k
     rw [kyFanApproximationGauge_smul, htwo]
-    change δ * kyFanApproximationGauge k
-        (sinTwoThetaEmbedding U X).toContinuousLinearMap ≤
-      2 * kyFanApproximationGauge k (residual A X M).toContinuousLinearMap
+    change δ * ((sinTwoThetaEmbedding U X).toContinuousLinearMap.kyFanGauge k : ℝ) ≤
+      2 * ((residual A X M).toContinuousLinearMap.kyFanGauge k : ℝ)
     rw [← kyFanSum_eq_kyFanApproximationGauge k (sinTwoThetaEmbedding U X),
       ← kyFanSum_eq_kyFanApproximationGauge k (residual A X M)]
     have hOutside :

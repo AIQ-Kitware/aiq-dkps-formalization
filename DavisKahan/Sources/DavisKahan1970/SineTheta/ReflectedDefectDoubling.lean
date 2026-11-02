@@ -192,11 +192,9 @@ This is the geometric half of the directed residual `sin 2Θ₀` estimate. -/
 theorem kyFan_reflectionDefectBlock_le_two_mul
     {S : E →L[𝕜] E} (hS : IsSelfAdjoint S) (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (k : ℕ) :
-    kyFanApproximationGauge k
-        ((Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E)).starProjection ∘L
-          reflectionDefect V S ∘L U.starProjection) ≤
-      2 * kyFanApproximationGauge k
-        (Vᗮ.starProjection ∘L S ∘L V.starProjection) := by
+    (((Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E)).starProjection ∘L
+          reflectionDefect V S ∘L U.starProjection).kyFanGauge k : ℝ) ≤
+      2 * ((Vᗮ.starProjection ∘L S ∘L V.starProjection).kyFanGauge k : ℝ) := by
   set W := U.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E) with hW
   set D := reflectionDefect V S with hD
   have hperp : Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E) = Wᗮ :=
@@ -221,9 +219,8 @@ theorem kyFan_reflectionDefectBlock_le_two_mul
     rw [hp]
   have hoffdiag : D = (-2 : 𝕜) • diagonalPair Vᗮ V S := by
     rw [hD, reflectionDefect_eq_neg_two_smul_offdiag, hpairAdef]
-  have hDgauge : kyFanApproximationGauge (2 * k) D =
-      4 * kyFanApproximationGauge k
-        (Vᗮ.starProjection ∘L S ∘L V.starProjection) := by
+  have hDgauge : (D.kyFanGauge (2 * k) : ℝ) =
+      4 * ((Vᗮ.starProjection ∘L S ∘L V.starProjection).kyFanGauge k : ℝ) := by
     rw [hoffdiag, kyFanApproximationGauge_smul]
     have hnorm : ‖(-2 : 𝕜)‖ = 2 := by
       rw [norm_neg]

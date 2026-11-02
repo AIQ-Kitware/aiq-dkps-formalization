@@ -170,7 +170,7 @@ theorem theorem6_3_perturbation_equalRank
   refine le_trans
     (theorem6_3_all_kyFan_core_directedTangent Z V T hT hV hdelta
       hCompressionUpper hUnwantedLower k) ?_
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_le_sum fun n _ =>
     approximationSingularValue_theorem63Residual_le_of_invariant T E Z hinv n
 
@@ -207,18 +207,18 @@ theorem theorem6_3_perturbation_infiniteTrial
         hdelta hCompressionUpper hUnwantedLower n)
   refine ⟨tanTheta0, htan, ?_⟩
   refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hEmem fun k => ?_
-  have hKyTan : kyFanApproximationGauge k tanTheta0 =
+  have hKyTan : (tanTheta0.kyFanGauge k : ℝ) =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_congr rfl fun n _ => ?_
     have h := htan n
     exact h
   have hcore := theorem6_3_all_kyFan_core_infiniteTrial T V Z hT hV hdelta
     hCompressionUpper hUnwantedLower k
-  have hRE : kyFanApproximationGauge k (theorem63Residual T Z) ≤
-      kyFanApproximationGauge k (E ∘L Z.subtypeL) := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+  have hRE : ((theorem63Residual T Z).kyFanGauge k : ℝ) ≤
+      ((E ∘L Z.subtypeL).kyFanGauge k : ℝ) := by
+    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_le_sum fun n _ => ?_
     have h := approximationSingularValue_theorem63Residual_le_of_invariant T E Z hinv n
     exact h

@@ -48,12 +48,10 @@ theorem kyFanApproximationGauge_le_of_cutoff_le
     (PCB : SpectralCutoffInterface B hB)
     {X C : F →L[𝕜] E} {δ : ℝ} (k : ℕ)
     (hcut : ∀ τ : ℝ, 0 ≤ τ →
-      δ * kyFanApproximationGauge k
-          (X ∘L PCB.cutoff τ) ≤
-        kyFanApproximationGauge k
-          (C ∘L PCB.cutoff τ)) :
-    δ * kyFanApproximationGauge k X ≤
-      kyFanApproximationGauge k C := by
+      δ * ((X ∘L PCB.cutoff τ).kyFanGauge k : ℝ) ≤
+        ((C ∘L PCB.cutoff τ).kyFanGauge k : ℝ)) :
+    δ * (X.kyFanGauge k : ℝ) ≤
+      (C.kyFanGauge k : ℝ) := by
   have hPproj : ∀ τ : ℝ,
       IsOrthogonalProjectionMap (PCB.cutoff τ) := by
     intro τ
@@ -68,10 +66,8 @@ theorem kyFanApproximationGauge_le_of_cutoff_le
   have hC := kyFanApproximationGauge_comp_strongProjection_tendsto
     hPproj hPstrong k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
-      δ * kyFanApproximationGauge k
-          (X ∘L PCB.cutoff τ) ≤
-        kyFanApproximationGauge k
-          (C ∘L PCB.cutoff τ) := by
+      δ * ((X ∘L PCB.cutoff τ).kyFanGauge k : ℝ) ≤
+        ((C ∘L PCB.cutoff τ).kyFanGauge k : ℝ) := by
     filter_upwards [eventually_ge_atTop (0 : ℝ)] with τ hτ
     exact hcut τ hτ
   exact le_of_tendsto_of_tendsto
@@ -85,16 +81,16 @@ theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
     (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E))
     (k : ℕ) (K : F →L[𝕜] E) :
     Tendsto
-      (fun i => kyFanApproximationGauge k (P i ∘L K))
-      l (𝓝 (kyFanApproximationGauge k K)) := by
+      (fun i => ((P i ∘L K).kyFanGauge k : ℝ))
+      l (𝓝 ((K.kyFanGauge k : ℝ))) := by
   have hright := kyFanApproximationGauge_comp_strongProjection_tendsto
     hPproj hP k K.adjoint
   have hpoint : ∀ i,
-      kyFanApproximationGauge k (P i ∘L K) =
-        kyFanApproximationGauge k (K.adjoint ∘L P i) :=
+      ((P i ∘L K).kyFanGauge k : ℝ) =
+        ((K.adjoint ∘L P i).kyFanGauge k : ℝ) :=
     fun i => kyFanApproximationGauge_proj_comp_eq_adjoint_comp (hPproj i) K
-  have hlimit : kyFanApproximationGauge k K =
-      kyFanApproximationGauge k K.adjoint := by
+  have hlimit : (K.kyFanGauge k : ℝ) =
+      (K.adjoint.kyFanGauge k : ℝ) := by
     symm
     exact kyFanApproximationGauge_adjoint k K
   simpa only [hpoint, hlimit] using hright
@@ -106,12 +102,10 @@ theorem kyFanApproximationGauge_le_of_leftCutoff_le
     (PCA : SpectralCutoffInterface A hA)
     {X C : F →L[𝕜] E} {δ : ℝ} (k : ℕ)
     (hcut : ∀ τ : ℝ, 0 ≤ τ →
-      δ * kyFanApproximationGauge k
-          (PCA.cutoff τ ∘L X) ≤
-        kyFanApproximationGauge k
-          (PCA.cutoff τ ∘L C)) :
-    δ * kyFanApproximationGauge k X ≤
-      kyFanApproximationGauge k C := by
+      δ * ((PCA.cutoff τ ∘L X).kyFanGauge k : ℝ) ≤
+        ((PCA.cutoff τ ∘L C).kyFanGauge k : ℝ)) :
+    δ * (X.kyFanGauge k : ℝ) ≤
+      (C.kyFanGauge k : ℝ) := by
   have hPproj : ∀ τ : ℝ,
       IsOrthogonalProjectionMap (PCA.cutoff τ) := by
     intro τ
@@ -126,10 +120,8 @@ theorem kyFanApproximationGauge_le_of_leftCutoff_le
   have hC := kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
     hPproj hPstrong k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
-      δ * kyFanApproximationGauge k
-          (PCA.cutoff τ ∘L X) ≤
-        kyFanApproximationGauge k
-          (PCA.cutoff τ ∘L C) := by
+      δ * ((PCA.cutoff τ ∘L X).kyFanGauge k : ℝ) ≤
+        ((PCA.cutoff τ ∘L C).kyFanGauge k : ℝ) := by
     filter_upwards [eventually_ge_atTop (0 : ℝ)] with τ hτ
     exact hcut τ hτ
   exact le_of_tendsto_of_tendsto
@@ -223,12 +215,10 @@ theorem all_kyFanApproximationGauge_le_of_cutoff_le
     (PCB : SpectralCutoffInterface B hB)
     {X C : F →L[𝕜] E} {δ : ℝ}
     (hcut : ∀ τ : ℝ, 0 ≤ τ → ∀ k : ℕ,
-      δ * kyFanApproximationGauge k
-          (X ∘L PCB.cutoff τ) ≤
-        kyFanApproximationGauge k
-          (C ∘L PCB.cutoff τ)) :
-    ∀ k, δ * kyFanApproximationGauge k X ≤
-      kyFanApproximationGauge k C := by
+      δ * ((X ∘L PCB.cutoff τ).kyFanGauge k : ℝ) ≤
+        ((C ∘L PCB.cutoff τ).kyFanGauge k : ℝ)) :
+    ∀ k, δ * (X.kyFanGauge k : ℝ) ≤
+      (C.kyFanGauge k : ℝ) := by
   intro k
   exact kyFanApproximationGauge_le_of_cutoff_le hB PCB k
     (fun τ hτ => hcut τ hτ k)
@@ -269,12 +259,12 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
     (hAc : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
     (hBc : TauCeti.LinearPMap.SemiboundedAbove B c)
     (hEq : _root_.LinearPMap.SylvesterEquation A B X C) :
-    ∀ k, δ * kyFanApproximationGauge k X
-      ≤ kyFanApproximationGauge k C := by
+    ∀ k, δ * (X.kyFanGauge k : ℝ)
+      ≤ (C.kyFanGauge k : ℝ) := by
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp []
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   apply kyFanApproximationGauge_le_of_leftCutoff_le hA PCA k
   intro τA hτA
@@ -354,8 +344,8 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
     (N)
     hA1inv B1 hρ hδ hA1invNorm hB1norm hEqShift
       (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-  simp only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at hmain
+  simp only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+    ENNReal.coe_toReal] at hmain
   simpa only [Xc, Cc, PA, PB, ContinuousLinearMap.comp_assoc] using hmain.2
 
 /-- The opposite ordered orientation, obtained by adjointing and swapping the
@@ -373,12 +363,12 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
     (hAc : TauCeti.LinearPMap.SemiboundedAbove A c)
     (hBc : TauCeti.LinearPMap.SemiboundedBelow B (c + δ))
     (hEq : _root_.LinearPMap.SylvesterEquation A B X C) :
-    ∀ k, δ * kyFanApproximationGauge k X
-      ≤ kyFanApproximationGauge k C := by
+    ∀ k, δ * (X.kyFanGauge k : ℝ)
+      ≤ (C.kyFanGauge k : ℝ) := by
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp []
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   apply kyFanApproximationGauge_le_of_leftCutoff_le hA PCA k
   intro τA hτA
@@ -458,8 +448,8 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
     (N)
     hB1inv A1 hρ hδ hB1invNorm hA1norm hEqShift
       (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-  simp only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at hmain
+  simp only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+    ENNReal.coe_toReal] at hmain
   simpa only [Xc, Cc, PA, PB, ContinuousLinearMap.comp_assoc] using hmain.2
 
 /-- Ideal membership of the Sylvester solution from ordered cutoff estimates. -/

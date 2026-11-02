@@ -138,7 +138,7 @@ theorem all_kyFan_core_rclike
     (k : ℕ) :
     delta * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((directedSineBlock Z V).singularValue n : ℝ))) ≤
-      kyFanApproximationGauge k D.residual := by
+      (D.residual.kyFanGauge k : ℝ) := by
   rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with h | h
   · let e := RCLikeIso.real h
     let D' := D.scalarTransport (e := e)
@@ -225,10 +225,10 @@ theorem symmetricNorming_rclike
   apply N.mul_gauge_le_of_all_mul_kyFan_le hdelta hResidual
   intro k
   have hcore := D.all_kyFan_core_rclike (V := V) hdelta hupper hcross k
-  have htanKy : kyFanApproximationGauge k tanTheta0 =
+  have htanKy : (tanTheta0.kyFanGauge k : ℝ) =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((directedSineBlock Z V).singularValue n : ℝ))) := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     exact Finset.sum_congr rfl fun n _ => by
       exact htan n
   rwa [htanKy]

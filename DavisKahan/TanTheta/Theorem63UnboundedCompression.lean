@@ -572,7 +572,7 @@ theorem all_kyFan_core_trunc {α δ : ℝ} (hδ : 0 < δ)
           Vᗮ.starProjection (D.action z)⟫_ℂ) (τ : ℝ) (k : ℕ) :
     δ * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((theorem63DirectedSineBlock (D.truncSpace τ) V).singularValue n : ℝ))) ≤
-      kyFanApproximationGauge k D.residual := by
+      (D.residual.kyFanGauge k : ℝ) := by
   have hcore := (D.truncData V τ).all_kyFan_core_of_formBounds_infinite hδ
     (D.truncData_compression_upper V hupper τ) (D.truncData_crossed_lower V hcross τ) k
   refine hcore.trans ?_
@@ -583,12 +583,12 @@ theorem all_kyFan_core_trunc {α δ : ℝ} (hδ : 0 < δ)
   refine h.trans ?_
   have hnn := kyFanApproximationGauge_nonneg k D.residual
   calc
-    ‖ContinuousLinearMap.id ℂ H‖ * kyFanApproximationGauge k D.residual *
-        ‖D.truncIncl τ‖ ≤ 1 * kyFanApproximationGauge k D.residual * 1 := by
+    ‖ContinuousLinearMap.id ℂ H‖ * (D.residual.kyFanGauge k : ℝ) *
+        ‖D.truncIncl τ‖ ≤ 1 * (D.residual.kyFanGauge k : ℝ) * 1 := by
       refine mul_le_mul ?_ (D.norm_truncIncl_le τ) (norm_nonneg (D.truncIncl τ))
         (by positivity)
       exact mul_le_mul_of_nonneg_right ContinuousLinearMap.norm_id_le hnn
-    _ = kyFanApproximationGauge k D.residual := by ring
+    _ = (D.residual.kyFanGauge k : ℝ) := by ring
 
 /-! ### Releasing the cutoff -/
 
@@ -681,7 +681,7 @@ theorem approximationSingularValue_sineBlock_lt_one {α δ : ℝ} (hδ : 0 < δ)
     exact theorem63DirectedSineBlock_apply_norm_le Z V z
   have haeq : ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) = 1 :=
     le_antisymm ha_le (le_of_not_gt fun h => hcon h)
-  set B : ℝ := kyFanApproximationGauge (n + 1) D.residual with hB_def
+  set B : ℝ := (D.residual.kyFanGauge (n + 1) : ℝ) with hB_def
   have hB0 : 0 ≤ B := kyFanApproximationGauge_nonneg _ _
   set C : ℝ := B / δ + 1 with hC_def
   have hC0 : 0 ≤ C := by positivity
@@ -737,7 +737,7 @@ theorem all_kyFan_core {α δ : ℝ} (hδ : 0 < δ)
           Vᗮ.starProjection (D.action z)⟫_ℂ) (k : ℕ) :
     δ * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) ≤
-      kyFanApproximationGauge k D.residual := by
+      (D.residual.kyFanGauge k : ℝ) := by
   classical
   have hlt := D.approximationSingularValue_sineBlock_lt_one V hδ hupper hcross
   have hsum : Filter.Tendsto
@@ -784,10 +784,10 @@ theorem ideal_of_formBounds
   refine ExactSinTheta.mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ
     hResidual fun k => ?_
   have hcore := D.all_kyFan_core V hδ hupper hcross k
-  have hKyTan : kyFanApproximationGauge k tanTheta0 =
+  have hKyTan : (tanTheta0.kyFanGauge k : ℝ) =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_congr rfl fun n _ => ?_
     have h := htan n
     exact h

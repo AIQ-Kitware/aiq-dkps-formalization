@@ -100,8 +100,8 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto_real
     (hP : StronglyTendsto P l (ContinuousLinearMap.id ℝ ER))
     (k : ℕ) (K : ER →L[ℝ] FR) :
     Tendsto
-      (fun i => kyFanApproximationGauge k (K ∘L P i))
-      l (𝓝 (kyFanApproximationGauge k K)) :=
+      (fun i => ((K ∘L P i).kyFanGauge k : ℝ))
+      l (𝓝 ((K.kyFanGauge k : ℝ))) :=
   ApproximationNumbersReal.kyFanApproximationGauge_comp_strongProjection_tendsto_real
     hPproj hP k K
 
@@ -123,10 +123,9 @@ omit [CompleteSpace F] in
 /-- Ky Fan's addition inequality for approximation numbers. -/
 theorem kyFanApproximationGauge_add_le
     (k : ℕ) (K L : E →L[𝕜] F) :
-    kyFanApproximationGauge k (K + L) ≤
-      kyFanApproximationGauge k K + kyFanApproximationGauge k L :=
+    ((K + L).kyFanGauge k : ℝ) ≤
+      (K.kyFanGauge k : ℝ) + (L.kyFanGauge k : ℝ) :=
   by
-    change ((K + L).kyFanGauge k : ℝ) ≤ K.kyFanGauge k + L.kyFanGauge k
     exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le K L k
 
 
@@ -138,9 +137,9 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto
     (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E))
     (k : ℕ) (K : E →L[𝕜] F) :
     Tendsto
-      (fun i => kyFanApproximationGauge k (K ∘L P i))
-      l (𝓝 (kyFanApproximationGauge k K)) := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+      (fun i => ((K ∘L P i).kyFanGauge k : ℝ))
+      l (𝓝 ((K.kyFanGauge k : ℝ))) := by
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact tendsto_finsetSum (Finset.range k)
     (fun n hn => approximationSingularValue_comp_strongProjection_tendsto
       hPproj hP n K)
@@ -153,7 +152,7 @@ theorem mem_and_gauge_le_of_all_kyFanApproximationGauge_le
     [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E'] [CompleteSpace E']
     [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
     {A : E →L[𝕜] F} {B : E' →L[𝕜] F'} (hB : N.Mem B)
-    (h : ∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) :
+    (h : ∀ k, (A.kyFanGauge k : ℝ) ≤ (B.kyFanGauge k : ℝ)) :
     N.Mem A ∧ N.gaugeReal A ≤ N.gaugeReal B := by
   have hle : N.gauge A ≤ N.gauge B := by
     apply OperatorIdealFamily.gauge_le_of_forall_kyFanGauge_le
@@ -171,8 +170,8 @@ theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
     {A : E →L[𝕜] F} {B : E' →L[𝕜] F'} {δ : ℝ}
     (hδ : 0 < δ)
     (hB : N.Mem B)
-    (h : ∀ k, δ * kyFanApproximationGauge k A ≤
-      kyFanApproximationGauge k B) :
+    (h : ∀ k, δ * (A.kyFanGauge k : ℝ) ≤
+      (B.kyFanGauge k : ℝ)) :
     N.Mem A ∧
       δ * N.gaugeReal A ≤
         N.gaugeReal B := by
@@ -181,8 +180,8 @@ theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
   have hdnorm : ‖d‖ = δ := by
     simp [d, abs_of_pos hδ]
   have hscaled : ∀ k,
-      kyFanApproximationGauge k (d • A) ≤
-        kyFanApproximationGauge k B := by
+      ((d • A).kyFanGauge k : ℝ) ≤
+        (B.kyFanGauge k : ℝ) := by
     intro k
     rw [kyFanApproximationGauge_smul, hdnorm]
     exact h k
@@ -205,8 +204,8 @@ in `Sylvester/Unbounded/OrderedCutoff.lean` and
 `Sylvester/Unbounded/OrderedFromCutoffs.lean`, which share no import edge. -/
 theorem kyFanApproximationGauge_proj_comp_eq_adjoint_comp
     {k : ℕ} {P : F →L[𝕜] F} (hP : IsOrthogonalProjectionMap P) (K : E →L[𝕜] F) :
-    kyFanApproximationGauge k (P ∘L K) =
-      kyFanApproximationGauge k (K.adjoint ∘L P) := by
+    ((P ∘L K).kyFanGauge k : ℝ) =
+      ((K.adjoint ∘L P).kyFanGauge k : ℝ) := by
   rw [← kyFanApproximationGauge_adjoint k (P ∘L K)]
   simp only [ContinuousLinearMap.adjoint_comp]
   rw [hP.2.clm_adjoint_eq]

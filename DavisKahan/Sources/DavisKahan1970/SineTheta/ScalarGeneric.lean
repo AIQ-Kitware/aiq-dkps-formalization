@@ -243,7 +243,7 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike
   intro k
   by_cases hk : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp []
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have hmain := sinTheta_unbounded_formGap_idealFamily_rclike
       ((show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
@@ -251,8 +251,8 @@ theorem sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike
           gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hkpos).gauge_adjoint }))
       D F₀ hA hA₀ hΛ₁ hE₀ hExact hδ hgap
       (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-    simpa only [D, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] using hmain.2
+    simpa only [D, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+      ENNReal.coe_toReal] using hmain.2
 
 /-- **Davis--Kahan 1970, Section 2 `sin Theta` theorem, scalar-generic
 paper-facing form.**

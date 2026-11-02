@@ -230,11 +230,10 @@ theorem approximationSingularValue_blockCompression_complexify
 complexification. -/
 theorem kyFanApproximationGauge_blockCompression_complexify
     (K : E →L[ℝ] E) (k : ℕ) :
-    kyFanApproximationGauge k
-        (blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
-          (complexify K)) =
-      kyFanApproximationGauge k (blockCompression Ω Γ K) := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    ((blockCompression (complexifySubmodule Ω) (complexifySubmodule Γ)
+          (complexify K)).kyFanGauge k : ℝ) =
+      ((blockCompression Ω Γ K).kyFanGauge k : ℝ) := by
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_congr rfl fun n _ =>
     approximationSingularValue_blockCompression_complexify Ω Γ K n
 
@@ -540,14 +539,15 @@ theorem projectionBlock_complexifySubmodule (K : E →L[ℝ] E) :
 /-- **The Ky Fan gauge of a directed corner is preserved on the nose by
 complexification.**  This is the single numerical fact the descent needs. -/
 theorem kyFanApproximationGauge_directedCorner_complexify (K : E →L[ℝ] E) (k : ℕ) :
-    kyFanApproximationGauge k
-        (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
-          (complexify K)) =
-      kyFanApproximationGauge k (blockCompression Uᗮ U K) := by
-  have hc := (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+    ((blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+          (complexify K)).kyFanGauge k : ℝ) =
+      ((blockCompression Uᗮ U K).kyFanGauge k : ℝ) := by
+  have hc := (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k
+    : ℝ) from
     (congrArg NNReal.toReal ((projectionBlock_same_compression (complexifySubmodule U)ᗮ
       (complexifySubmodule U) (complexify K)).kyFanGauge_eq k))).symm
-  have hr := (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+  have hr := (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k
+    : ℝ) from
       (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U K).kyFanGauge_eq k)))
   rw [hc, projectionBlock_complexifySubmodule,
     kyFanApproximationGauge_complexify, hr]
@@ -587,8 +587,8 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_real
     (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
       (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℝ U))
     (k : ℕ) :
-    (b - a) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
-      2 * kyFanApproximationGauge k (reflectionResidualCorner U B) := by
+    (b - a) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
+      2 * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) := by
   classical
   -- the pole is excluded over `ℝ` exactly as it is over `ℂ`
   have hSS : ‖U.offDiagBlock Z * U.offDiagBlock Z‖ < 1 := by
@@ -709,8 +709,8 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_ambient_real
     (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
       (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℝ U))
     (k : ℕ) :
-    (b - a) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
-      2 * kyFanApproximationGauge k B := by
+    (b - a) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
+      2 * (B.kyFanGauge k : ℝ) := by
   have h := gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_real hred hB hZsa
     hZ2 hZdom hZcomm hUa hUb hab hS1 hσ Ω hstrong k
   have h2 := kyFanApproximationGauge_reflectionResidualCorner_le U B k

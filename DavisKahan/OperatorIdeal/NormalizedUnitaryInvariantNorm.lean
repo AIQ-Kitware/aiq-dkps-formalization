@@ -76,7 +76,6 @@ when that stronger domain assertion is not part of the statement being modeled. 
 structure NormalizedUnitaryInvariantNorm (𝕜 : Type u) [RCLike 𝕜] where
   /-- The Fan-dominant symmetric ideal family supplying the gauge, its domain,
   and all the norm and ideal laws.
-
   **Completeness is deliberately not here.**  It is a property of the ideal that
   the analytic development needs and that Gohberg--Krein prove about the closed
   class; Davis and Kahan do not print it, so it must not restrict the
@@ -301,7 +300,7 @@ structure NormalizedSymmetricOperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜] w
       {A : E →L[𝕜] F} {B : E' →L[𝕜] F'},
       toSymmetricOperatorIdealFamily.gauge A ≠ ⊤ →
       toSymmetricOperatorIdealFamily.gauge B ≠ ⊤ →
-      (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
+      (∀ k, (A.kyFanGauge k : ℝ) ≤ (B.kyFanGauge k : ℝ)) →
         toSymmetricOperatorIdealFamily.gauge A ≤
           toSymmetricOperatorIdealFamily.gauge B
 
@@ -342,7 +341,7 @@ def HasFanDominanceWhereDefined
     {A : E →L[𝕜] F} {B : E' →L[𝕜] F'},
     N.toSymmetricOperatorIdealFamily.gauge A ≠ ⊤ →
     N.toSymmetricOperatorIdealFamily.gauge B ≠ ⊤ →
-    (∀ k, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) →
+    (∀ k, (A.kyFanGauge k : ℝ) ≤ (B.kyFanGauge k : ℝ)) →
       N.toSymmetricOperatorIdealFamily.gauge A ≤
         N.toSymmetricOperatorIdealFamily.gauge B
 
@@ -379,13 +378,13 @@ theorem scaledGaugeLEWhereDefined_of_all_mul_kyFan_le
     [NormedAddCommGroup F'] [InnerProductSpace 𝕜 F'] [CompleteSpace F']
     {c : ℝ} {A : E →L[𝕜] F} {B : E' →L[𝕜] F'}
     (hc : 0 < c)
-    (hky : ∀ k, c * kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) :
+    (hky : ∀ k, c * (A.kyFanGauge k : ℝ) ≤ (B.kyFanGauge k : ℝ)) :
     N.ScaledGaugeLEWhereDefined c A B := by
   intro hA hB
   let S := N.toSymmetricOperatorIdealFamily
   have hscaledMem : S.Mem ((((c : ℝ) : 𝕜)) • A) := S.smul_mem (((c : ℝ) : 𝕜)) hA
-  have hscaled : ∀ k, kyFanApproximationGauge k ((((c : ℝ) : 𝕜)) • A) ≤
-      kyFanApproximationGauge k B := by
+  have hscaled : ∀ k, (((((c : ℝ) : 𝕜)) • A).kyFanGauge k : ℝ) ≤
+      (B.kyFanGauge k : ℝ) := by
     intro k
     rw [kyFanApproximationGauge_smul, RCLike.norm_ofReal, abs_of_pos hc]
     exact hky k

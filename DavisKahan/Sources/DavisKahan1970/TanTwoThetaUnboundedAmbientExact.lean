@@ -95,8 +95,8 @@ private theorem projectionBlock_smul_unboundedAmbientExact
 private theorem kyFan_upper_eq_lower_of_selfAdjoint_unboundedAmbientExact
     {U : Submodule ℂ G} [U.HasOrthogonalProjection]
     (K : G →L[ℂ] G) (hK : IsSelfAdjoint K) (k : ℕ) :
-    kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ K) =
-      kyFanApproximationGauge k (projectionBlock Uᗮ U K) := by
+    ((projectionBlock Uᗮᗮ Uᗮ K).kyFanGauge k : ℝ) =
+      ((projectionBlock Uᗮ U K).kyFanGauge k : ℝ) := by
   have hadj : projectionBlock Uᗮᗮ Uᗮ K =
       (projectionBlock Uᗮ U K).adjoint := by
     rw [projectionBlock_upper_unboundedAmbientExact,
@@ -110,8 +110,8 @@ private theorem kyFan_upper_eq_lower_of_selfAdjoint_unboundedAmbientExact
 private theorem kyFan_upper_eq_lower_of_skewAdjoint_unboundedAmbientExact
     {U : Submodule ℂ G} [U.HasOrthogonalProjection]
     (K : G →L[ℂ] G) (hK : K.adjoint = -K) (k : ℕ) :
-    kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ K) =
-      kyFanApproximationGauge k (projectionBlock Uᗮ U K) := by
+    ((projectionBlock Uᗮᗮ Uᗮ K).kyFanGauge k : ℝ) =
+      ((projectionBlock Uᗮ U K).kyFanGauge k : ℝ) := by
   have hadj : projectionBlock Uᗮᗮ Uᗮ K =
       -(projectionBlock Uᗮ U K).adjoint := by
     rw [projectionBlock_upper_unboundedAmbientExact,
@@ -318,8 +318,8 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
       (ContinuousLinearMap.id ℂ U) := by
     simpa [U] using stronglyTendsto_cutoffCorner_spectralCutoffSeq hA c
   have hcorner : ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
-        2 * kyFanApproximationGauge k (reflectionResidualCorner U B) := by
+      (b - a) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
+        2 * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) := by
     intro k
     exact gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan hred hB hZsa hZ2
       hZdom hZcomm hUa hUb hab hS1
@@ -336,23 +336,24 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
   have hcnorm : ‖((((b - a) / 2 : ℝ)) : ℂ)‖ = (b - a) / 2 := by
     rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos hhalf]
   have h₀ : ∀ k : ℕ,
-      kyFanApproximationGauge k (projectionBlock Uᗮ U
-          (((((b - a) / 2 : ℝ)) : ℂ) • T)) ≤
-        kyFanApproximationGauge k (projectionBlock Uᗮ U B) := by
+      ((projectionBlock Uᗮ U
+          (((((b - a) / 2 : ℝ)) : ℂ) • T)).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Uᗮ U B).kyFanGauge k : ℝ) := by
     intro k
     rw [projectionBlock_smul_unboundedAmbientExact,
       kyFanApproximationGauge_smul, hcnorm]
-    erw [(show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+    erw [(show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ)
+      from
       (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U T).kyFanGauge_eq k))),
-      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U B).kyFanGauge_eq k)))]
-    change ((b - a) / 2) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
-      kyFanApproximationGauge k (reflectionResidualCorner U B)
+    change ((b - a) / 2) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
+      ((reflectionResidualCorner U B).kyFanGauge k : ℝ)
     linarith [hcorner k]
   have h₁ : ∀ k : ℕ,
-      kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ
-          (((((b - a) / 2 : ℝ)) : ℂ) • T)) ≤
-        kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ B) := by
+      ((projectionBlock Uᗮᗮ Uᗮ
+          (((((b - a) / 2 : ℝ)) : ℂ) • T)).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Uᗮᗮ Uᗮ B).kyFanGauge k : ℝ) := by
     intro k
     rw [projectionBlock_smul_unboundedAmbientExact,
       kyFanApproximationGauge_smul, hcnorm,
@@ -370,7 +371,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
   have hpairB : diagonalPair Uᗮ U B = B :=
     diagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact hB
   have hwhole : ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k T ≤ 2 * kyFanApproximationGauge k B := by
+      (b - a) * (T.kyFanGauge k : ℝ) ≤ 2 * (B.kyFanGauge k : ℝ) := by
     intro k
     have h := hcombine k
     have hsumT :
@@ -388,7 +389,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
     rw [hsumT, hsumB, kyFanApproximationGauge_smul, hcnorm] at h
     linarith
   have hscaled : ∀ k : ℕ,
-      ((b - a) / 2) * kyFanApproximationGauge k T ≤ kyFanApproximationGauge k B := by
+      ((b - a) / 2) * (T.kyFanGauge k : ℝ) ≤ (B.kyFanGauge k : ℝ) := by
     intro k
     linarith [hwhole k]
   have hUI := N.mul_gauge_le_of_all_mul_kyFan_le hhalf hBmem hscaled
@@ -449,23 +450,24 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorm
   have hcnorm : ‖((((b - a) / 2 : ℝ)) : ℂ)‖ = (b - a) / 2 := by
     rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos hhalf]
   have h₀ : ∀ k : ℕ,
-      kyFanApproximationGauge k (projectionBlock Uᗮ U
-          (((((b - a) / 2 : ℝ)) : ℂ) • T)) ≤
-        kyFanApproximationGauge k (projectionBlock Uᗮ U B) := by
+      ((projectionBlock Uᗮ U
+          (((((b - a) / 2 : ℝ)) : ℂ) • T)).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Uᗮ U B).kyFanGauge k : ℝ) := by
     intro k
     rw [projectionBlock_smul_unboundedAmbientExact,
       kyFanApproximationGauge_smul, hcnorm]
-    erw [(show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+    erw [(show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ)
+      from
       (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U T).kyFanGauge_eq k))),
-      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U B).kyFanGauge_eq k)))]
-    change ((b - a) / 2) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
-      kyFanApproximationGauge k (reflectionResidualCorner U B)
+    change ((b - a) / 2) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
+      ((reflectionResidualCorner U B).kyFanGauge k : ℝ)
     linarith [hcorner k]
   have h₁ : ∀ k : ℕ,
-      kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ
-          (((((b - a) / 2 : ℝ)) : ℂ) • T)) ≤
-        kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ B) := by
+      ((projectionBlock Uᗮᗮ Uᗮ
+          (((((b - a) / 2 : ℝ)) : ℂ) • T)).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Uᗮᗮ Uᗮ B).kyFanGauge k : ℝ) := by
     intro k
     rw [projectionBlock_smul_unboundedAmbientExact,
       kyFanApproximationGauge_smul, hcnorm,
@@ -483,7 +485,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorm
   have hpairB : diagonalPair Uᗮ U B = B :=
     diagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact hB
   have hwhole : ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k T ≤ 2 * kyFanApproximationGauge k B := by
+      (b - a) * (T.kyFanGauge k : ℝ) ≤ 2 * (B.kyFanGauge k : ℝ) := by
     intro k
     have h := hcombine k
     have hsumT :
@@ -501,7 +503,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorm
     rw [hsumT, hsumB, kyFanApproximationGauge_smul, hcnorm] at h
     linarith
   have hscaled : ∀ k : ℕ,
-      ((b - a) / 2) * kyFanApproximationGauge k T ≤ kyFanApproximationGauge k B := by
+      ((b - a) / 2) * (T.kyFanGauge k : ℝ) ≤ (B.kyFanGauge k : ℝ) := by
     intro k
     linarith [hwhole k]
   have hUI := N.mul_gauge_le_of_all_mul_kyFan_le hhalf hBmem hscaled

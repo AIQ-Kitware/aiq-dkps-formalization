@@ -88,11 +88,10 @@ example
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : SpectralSylvesterGap A0
       (selfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ) :
-    δ * kyFanApproximationGauge 2
-        ((ContinuousLinearMap.id ℂ E -
+    δ * (((ContinuousLinearMap.id ℂ E -
           selfAdjointSpectralSubspaceInclusion A hA S hS ∘L
-            (selfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X)
-      ≤ kyFanApproximationGauge 2 Rop := by
+            (selfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X).kyFanGauge 2 : ℝ)
+      ≤ (Rop.kyFanGauge 2 : ℝ) := by
   have hk : 0 < (2 : ℕ) := by omega
   let N := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
     { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ 2 hk
@@ -100,8 +99,8 @@ example
   have hmain := sinTheta_unbounded_spectralSubspace_of_spectrumGap
     N A hA S hS A0 hA0 X Rop hX hXdom hReq hδ hgap
       (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-  simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] using hmain.2
+  simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+    ENNReal.coe_toReal] using hmain.2
 
 end AbstractComplexUse
 

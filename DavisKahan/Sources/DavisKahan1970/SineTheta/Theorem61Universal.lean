@@ -98,23 +98,22 @@ theorem all_kyFan_bound
     (P : Theorem61Data (E := E) (F := F) (G := G) (H := H))
     (S : SinThetaRepresentative P.canonicalSinTheta) :
     ∀ k : ℕ,
-      P.gap * P.frameLowerBound * kyFanApproximationGauge k S.operator ≤
-        kyFanApproximationGauge k P.data.residual := by
+      P.gap * P.frameLowerBound * (S.operator.kyFanGauge k : ℝ) ≤
+        (P.data.residual.kyFanGauge k : ℝ) := by
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp []
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
       { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
         gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })
     have hmain := FormBoundedGeneralSinThetaProblem.result N (P.toKyFanProblem k hk)
-    have hsame := (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+    have hsame := (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge
+      _ k : ℝ) from
       (congrArg NNReal.toReal (S.same_singular_values.kyFanGauge_eq k)))
-    change kyFanApproximationGauge k S.operator = kyFanApproximationGauge k _ at hsame
     simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
       ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
       Theorem61Data.toKyFanProblem,
       Theorem61Data.canonicalSinTheta, hsame] using hmain.2
 
@@ -274,23 +273,22 @@ theorem all_kyFan_bound
     (P : RealTheorem61Data (E := E) (F := F) (G := G) (H := H))
     (S : SinThetaRepresentative P.canonicalSinTheta) :
     ∀ k : ℕ,
-      P.gap * P.frameLowerBound * kyFanApproximationGauge k S.operator ≤
-        kyFanApproximationGauge k P.data.residual := by
+      P.gap * P.frameLowerBound * (S.operator.kyFanGauge k : ℝ) ≤
+        (P.data.residual.kyFanGauge k : ℝ) := by
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp []
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := (show TauCeti.SymmetricOperatorIdealFamily ℝ from
       { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℝ k hk
         gauge_adjoint := (OperatorIdealFamily.kyFan ℝ k hk).gauge_adjoint })
     have hmain := RealGeneralSinThetaProblem.result N (P.toKyFanProblem k hk)
-    have hsame := (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+    have hsame := (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge
+      _ k : ℝ) from
       (congrArg NNReal.toReal (S.same_singular_values.kyFanGauge_eq k)))
-    change kyFanApproximationGauge k S.operator = kyFanApproximationGauge k _ at hsame
     simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
       ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
       RealTheorem61Data.toKyFanProblem,
       RealTheorem61Data.canonicalSinTheta, hsame] using hmain.2
 

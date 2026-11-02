@@ -296,7 +296,7 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex
   apply mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hδ hRmem
   intro k
   rcases Nat.eq_zero_or_pos k with rfl | hk
-  · simp [kyFanApproximationGauge]
+  · simp []
   let M := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
     { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
       gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })
@@ -308,8 +308,7 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex
       (by simp [M, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
   simpa only [M,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
-    (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+    (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (sinTwoTheta₀.same_singular_values.kyFanGauge_eq k)))] using
         hcanonical.2
 
@@ -505,8 +504,8 @@ available over `ℝ` for the same notion of "every unitarily invariant norm". -/
 omit [CompleteSpace Er] in
 private theorem kyFanApproximationGauge_zero_real {Fr : Type v}
     [NormedAddCommGroup Fr] [InnerProductSpace ℝ Fr]
-    (T : Er →L[ℝ] Fr) : kyFanApproximationGauge 0 T = 0 := by
-  simp [kyFanApproximationGauge]
+    (T : Er →L[ℝ] Fr) : (T.kyFanGauge 0 : ℝ) = 0 := by
+  simp []
 
 open DavisKahan DavisKahan.RealSpectralRestriction in
 /-- **Davis--Kahan 1970, directed `sin 2Θ` theorem over a REAL Hilbert space,
@@ -544,8 +543,7 @@ theorem sinTwoTheta_directed_unboundedReflectionResidual_blockRepresentative_sym
       hJdom hJintertwines (by simp [SymmetricOperatorIdealFamily.Mem,
         OperatorIdealFamily.gauge_kyFan])
     simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
-      ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at h
+      ENNReal.coe_toReal] at h
     exact h.2
 
 open DavisKahan DavisKahan.RealSpectralRestriction in
@@ -589,9 +587,8 @@ theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricN
         (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
       simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
         ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
-        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at h
+        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+          ENNReal.coe_toReal] at h
       linarith [h.2]
 
 open DavisKahan DavisKahan.RealSpectralRestriction in
@@ -770,7 +767,7 @@ theorem
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) (fun k => ?_)
   · exact ⟨hmain.1, by linarith [hmain.2]⟩
   · rcases Nat.eq_zero_or_pos k with rfl | hk
-    · simp [kyFanApproximationGauge]
+    · simp []
     · have h := DavisKahan.sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
         ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
           { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
@@ -780,9 +777,8 @@ theorem
         (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
       simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
         ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
-        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at h
+        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+          ENNReal.coe_toReal] at h
       linarith [h.2]
 
 open DavisKahan in
@@ -897,7 +893,7 @@ theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricN
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) (fun k => ?_)
   · exact ⟨hmain.1, by linarith [hmain.2]⟩
   · rcases Nat.eq_zero_or_pos k with rfl | hk
-    · simp [kyFanApproximationGauge]
+    · simp []
     · have h := DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap
         ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
           { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
@@ -906,9 +902,8 @@ theorem sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricN
         hδ hgap (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
       simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
         ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
-        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at h
+        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+          ENNReal.coe_toReal] at h
       linarith [h.2]
 
 open DavisKahan in

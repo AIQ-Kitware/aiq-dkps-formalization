@@ -492,10 +492,8 @@ theorem theorem8_2_sinTwoTheta_residual_all_kyFan
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (_hPred : Submodule.IsReducing P A) :
     ∀ k : ℕ,
-      delta * kyFanApproximationGauge k
-          (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ≤
-        2 * kyFanApproximationGauge k
-          (residual (A + K) P.subtypeL (compressOperator P A)) := by
+      delta * ((TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P).kyFanGauge k : ℝ) ≤
+        2 * ((residual (A + K) P.subtypeL (compressOperator P A)).kyFanGauge k : ℝ) := by
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
   have hKsa : IsSelfAdjoint K :=

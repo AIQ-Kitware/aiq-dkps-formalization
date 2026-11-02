@@ -146,32 +146,34 @@ theorem lemma61_all_kyFan
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K Ktilde L Ltilde : E →L[𝕜] E)
     (h₀ : ∀ k,
-      kyFanApproximationGauge k (projectionBlock Ω Γ K) ≤
-        kyFanApproximationGauge k (projectionBlock Ω Γ L))
+      ((projectionBlock Ω Γ K).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Ω Γ L).kyFanGauge k : ℝ))
     (h₁ : ∀ k,
-      kyFanApproximationGauge k (projectionBlock Ωᗮ Γᗮ Ktilde) ≤
-        kyFanApproximationGauge k (projectionBlock Ωᗮ Γᗮ Ltilde)) :
+      ((projectionBlock Ωᗮ Γᗮ Ktilde).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Ωᗮ Γᗮ Ltilde).kyFanGauge k : ℝ)) :
     ∀ k,
-      kyFanApproximationGauge k
-          (projectionBlock Ω Γ K +
-            projectionBlock Ωᗮ Γᗮ Ktilde) ≤
-        kyFanApproximationGauge k
-          (projectionBlock Ω Γ L +
-            projectionBlock Ωᗮ Γᗮ Ltilde) := by
+      ((projectionBlock Ω Γ K +
+            projectionBlock Ωᗮ Γᗮ Ktilde).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Ω Γ L +
+            projectionBlock Ωᗮ Γᗮ Ltilde).kyFanGauge k : ℝ) := by
   intro k
-  rw [(show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+  rw [(show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal ((projectionBlockPair_same_blockSum Ω Γ K Ktilde).kyFanGauge_eq k))),
-    (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+    (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal ((projectionBlockPair_same_blockSum Ω Γ L Ltilde).kyFanGauge_eq k)))]
   refine kyFanApproximationGauge_blockSum_le (fun j => ?_) (fun j => ?_) k
-  · rw [← (show kyFanApproximationGauge j _ = kyFanApproximationGauge j _ from
+  · rw [← (show (ContinuousLinearMap.kyFanGauge _ j : ℝ) = (ContinuousLinearMap.kyFanGauge _ j :
+    ℝ) from
       (congrArg NNReal.toReal ((projectionBlock_same_compression Ω Γ K).kyFanGauge_eq j))),
-      ← (show kyFanApproximationGauge j _ = kyFanApproximationGauge j _ from
+      ← (show (ContinuousLinearMap.kyFanGauge _ j : ℝ) = (ContinuousLinearMap.kyFanGauge _ j : ℝ)
+        from
       (congrArg NNReal.toReal ((projectionBlock_same_compression Ω Γ L).kyFanGauge_eq j)))]
     exact h₀ j
-  · rw [← (show kyFanApproximationGauge j _ = kyFanApproximationGauge j _ from
+  · rw [← (show (ContinuousLinearMap.kyFanGauge _ j : ℝ) = (ContinuousLinearMap.kyFanGauge _ j :
+    ℝ) from
       (congrArg NNReal.toReal ((projectionBlock_same_compression Ωᗮ Γᗮ Ktilde).kyFanGauge_eq j))),
-      ← (show kyFanApproximationGauge j _ = kyFanApproximationGauge j _ from
+      ← (show (ContinuousLinearMap.kyFanGauge _ j : ℝ) = (ContinuousLinearMap.kyFanGauge _ j : ℝ)
+        from
       (congrArg NNReal.toReal ((projectionBlock_same_compression Ωᗮ Γᗮ Ltilde).kyFanGauge_eq j)))]
     exact h₁ j
 
@@ -182,11 +184,11 @@ theorem lemma61_every_unitarilyInvariantNorm
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (K Ktilde L Ltilde : E →L[𝕜] E)
     (h₀ : ∀ k,
-      kyFanApproximationGauge k (projectionBlock Ω Γ K) ≤
-        kyFanApproximationGauge k (projectionBlock Ω Γ L))
+      ((projectionBlock Ω Γ K).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Ω Γ L).kyFanGauge k : ℝ))
     (h₁ : ∀ k,
-      kyFanApproximationGauge k (projectionBlock Ωᗮ Γᗮ Ktilde) ≤
-        kyFanApproximationGauge k (projectionBlock Ωᗮ Γᗮ Ltilde)) :
+      ((projectionBlock Ωᗮ Γᗮ Ktilde).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Ωᗮ Γᗮ Ltilde).kyFanGauge k : ℝ)) :
     N.extendedGauge
         (projectionBlock Ω Γ K +
           projectionBlock Ωᗮ Γᗮ Ktilde) ≤
@@ -262,8 +264,8 @@ prefixes of their orthogonal block sum double the prefixes of one block. -/
 theorem splitKyFanGauge_two_mul_of_same
     {A : E₀ →L[𝕜] F₀} {B : E₁ →L[𝕜] F₁}
     (h : ContinuousLinearMap.SameSingularValues A B) (k : ℕ) :
-    splitKyFanGauge (2 * k) A B = 2 * kyFanApproximationGauge k A := by
-  have hgauge : ∀ m, kyFanApproximationGauge m B = kyFanApproximationGauge m A :=
+    splitKyFanGauge (2 * k) A B = 2 * (A.kyFanGauge k : ℝ) := by
+  have hgauge : ∀ m, (B.kyFanGauge m : ℝ) = (A.kyFanGauge m : ℝ) :=
     fun m => ((congrArg NNReal.toReal (h.kyFanGauge_eq m))).symm
   unfold splitKyFanGauge
   refine le_antisymm (Finset.sup'_le _ _ fun r hr => ?_) ?_
@@ -271,14 +273,14 @@ theorem splitKyFanGauge_two_mul_of_same
       have := Finset.mem_range.mp hr
       omega
     rw [hgauge]
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     exact sum_range_add_sum_range_le_two_mul
       (antitone_approximationSingularValue A) hr2
   · have hmem : k ∈ Finset.range (2 * k + 1) := Finset.mem_range.mpr (by omega)
     refine le_trans (le_of_eq ?_)
       (Finset.le_sup'
-        (f := fun r => kyFanApproximationGauge r A +
-          kyFanApproximationGauge (2 * k - r) B) hmem)
+        (f := fun r => (A.kyFanGauge r : ℝ) +
+          (B.kyFanGauge (2 * k - r) : ℝ)) hmem)
     rw [hgauge]
     have hkk : 2 * k - k = k := by omega
     rw [hkk]
@@ -299,8 +301,8 @@ theorem diagonalPair_even_kyFan_eq_two_mul_of_same
       (projectionBlock Ω Γ K)
       (projectionBlock Ωᗮ Γᗮ K))
     (k : ℕ) :
-    kyFanApproximationGauge (2 * k) (diagonalPair Ω Γ K) =
-      2 * kyFanApproximationGauge k (projectionBlock Ω Γ K) := by
+    ((diagonalPair Ω Γ K).kyFanGauge (2 * k) : ℝ) =
+      2 * ((projectionBlock Ω Γ K).kyFanGauge k : ℝ) := by
   have hc₀ := projectionBlock_same_compression Ω Γ K
   have hc₁ := projectionBlock_same_compression Ωᗮ Γᗮ K
   have hcomp : ContinuousLinearMap.SameSingularValues
@@ -313,11 +315,12 @@ theorem diagonalPair_even_kyFan_eq_two_mul_of_same
       projectionBlock Ω Γ K + projectionBlock Ωᗮ Γᗮ K := by
     rw [diagonalPair, projectionBlock, projectionBlock]
   rw [hdiag,
-    (show kyFanApproximationGauge (2 * k) _ = kyFanApproximationGauge (2 * k) _ from
+    (show (ContinuousLinearMap.kyFanGauge _ (2 * k) : ℝ) = (ContinuousLinearMap.kyFanGauge _ (2 *
+      k) : ℝ) from
       (congrArg NNReal.toReal ((projectionBlockPair_same_blockSum Ω Γ K K).kyFanGauge_eq (2 * k)))),
     kyFanApproximationGauge_continuousOrthogonalBlockSum,
     splitKyFanGauge_two_mul_of_same hcomp k,
-    (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+    (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hc₀.kyFanGauge_eq k)))]
 
 /-- The converse in Lemma 6.1 under the source paper's matching-singular-value
@@ -333,15 +336,13 @@ theorem lemma61_converse
       (projectionBlock Ω Γ L)
       (projectionBlock Ωᗮ Γᗮ Ltilde))
     (hsum : ∀ k,
-      kyFanApproximationGauge k
-          (projectionBlock Ω Γ K +
-            projectionBlock Ωᗮ Γᗮ Ktilde) ≤
-        kyFanApproximationGauge k
-          (projectionBlock Ω Γ L +
-            projectionBlock Ωᗮ Γᗮ Ltilde)) :
+      ((projectionBlock Ω Γ K +
+            projectionBlock Ωᗮ Γᗮ Ktilde).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Ω Γ L +
+            projectionBlock Ωᗮ Γᗮ Ltilde).kyFanGauge k : ℝ)) :
     ∀ k,
-      kyFanApproximationGauge k (projectionBlock Ω Γ K) ≤
-        kyFanApproximationGauge k (projectionBlock Ω Γ L) := by
+      ((projectionBlock Ω Γ K).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Ω Γ L).kyFanGauge k : ℝ) := by
   intro k
   have hcK := projectionBlock_same_compression Ω Γ K
   have hcKt := projectionBlock_same_compression Ωᗮ Γᗮ Ktilde
@@ -358,28 +359,28 @@ theorem lemma61_converse
       (ContinuousLinearMap.sameSingularValues_trans
         (ContinuousLinearMap.sameSingularValues_symm hcL) hL) hcLt
   have htwiceK :
-      kyFanApproximationGauge (2 * k)
-          (projectionBlock Ω Γ K +
-            projectionBlock Ωᗮ Γᗮ Ktilde) =
-        2 * kyFanApproximationGauge k (projectionBlock Ω Γ K) := by
-    rw [(show kyFanApproximationGauge (2 * k) _ = kyFanApproximationGauge (2 * k) _ from
+      ((projectionBlock Ω Γ K +
+            projectionBlock Ωᗮ Γᗮ Ktilde).kyFanGauge (2 * k) : ℝ) =
+        2 * ((projectionBlock Ω Γ K).kyFanGauge k : ℝ) := by
+    rw [(show (ContinuousLinearMap.kyFanGauge _ (2 * k) : ℝ) = (ContinuousLinearMap.kyFanGauge _
+      (2 * k) : ℝ) from
       (congrArg NNReal.toReal ((projectionBlockPair_same_blockSum Ω Γ K Ktilde).kyFanGauge_eq (2 *
         k)))),
       kyFanApproximationGauge_continuousOrthogonalBlockSum,
       splitKyFanGauge_two_mul_of_same hKcomp k,
-      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hcK.kyFanGauge_eq k)))]
   have htwiceL :
-      kyFanApproximationGauge (2 * k)
-          (projectionBlock Ω Γ L +
-            projectionBlock Ωᗮ Γᗮ Ltilde) =
-        2 * kyFanApproximationGauge k (projectionBlock Ω Γ L) := by
-    rw [(show kyFanApproximationGauge (2 * k) _ = kyFanApproximationGauge (2 * k) _ from
+      ((projectionBlock Ω Γ L +
+            projectionBlock Ωᗮ Γᗮ Ltilde).kyFanGauge (2 * k) : ℝ) =
+        2 * ((projectionBlock Ω Γ L).kyFanGauge k : ℝ) := by
+    rw [(show (ContinuousLinearMap.kyFanGauge _ (2 * k) : ℝ) = (ContinuousLinearMap.kyFanGauge _
+      (2 * k) : ℝ) from
       (congrArg NNReal.toReal ((projectionBlockPair_same_blockSum Ω Γ L Ltilde).kyFanGauge_eq (2 *
         k)))),
       kyFanApproximationGauge_continuousOrthogonalBlockSum,
       splitKyFanGauge_two_mul_of_same hLcomp k,
-      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hcL.kyFanGauge_eq k)))]
   have h := hsum (2 * k)
   rw [htwiceK, htwiceL] at h

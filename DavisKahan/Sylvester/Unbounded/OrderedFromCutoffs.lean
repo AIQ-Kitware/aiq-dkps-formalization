@@ -245,9 +245,9 @@ theorem kyFan_le_of_interfaceRightCutoff_le
     (P : SpectralCutoffInterface B hB)
     {X C : F →L[ℂ] E} {δ : ℝ} (k : ℕ)
     (hcut : ∀ τ : ℝ, 0 ≤ τ →
-      δ * kyFanApproximationGauge k (X ∘L P.cutoff τ) ≤
-        kyFanApproximationGauge k (C ∘L P.cutoff τ)) :
-    δ * kyFanApproximationGauge k X ≤ kyFanApproximationGauge k C := by
+      δ * ((X ∘L P.cutoff τ).kyFanGauge k : ℝ) ≤
+        ((C ∘L P.cutoff τ).kyFanGauge k : ℝ)) :
+    δ * (X.kyFanGauge k : ℝ) ≤ (C.kyFanGauge k : ℝ) := by
   have hPproj : ∀ τ : ℝ, IsOrthogonalProjectionMap (P.cutoff τ) :=
     P.isOrthogonalProjection
   have hPstrong : StronglyTendsto (fun τ : ℝ => P.cutoff τ) atTop
@@ -259,8 +259,8 @@ theorem kyFan_le_of_interfaceRightCutoff_le
   have hC := kyFanApproximationGauge_comp_strongProjection_tendsto
     hPproj hPstrong k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
-      δ * kyFanApproximationGauge k (X ∘L P.cutoff τ) ≤
-        kyFanApproximationGauge k (C ∘L P.cutoff τ) := by
+      δ * ((X ∘L P.cutoff τ).kyFanGauge k : ℝ) ≤
+        ((C ∘L P.cutoff τ).kyFanGauge k : ℝ) := by
     filter_upwards [eventually_ge_atTop (0 : ℝ)] with τ hτ
     exact hcut τ hτ
   exact le_of_tendsto_of_tendsto
@@ -273,16 +273,16 @@ theorem kyFan_left_comp_interfaceCutoff_tendsto
     (hPproj : ∀ i, IsOrthogonalProjectionMap (P i))
     (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E))
     (k : ℕ) (K : F →L[ℂ] E) :
-    Tendsto (fun i => kyFanApproximationGauge k (P i ∘L K)) l
-      (𝓝 (kyFanApproximationGauge k K)) := by
+    Tendsto (fun i => ((P i ∘L K).kyFanGauge k : ℝ)) l
+      (𝓝 ((K.kyFanGauge k : ℝ))) := by
   have hright := kyFanApproximationGauge_comp_strongProjection_tendsto
     hPproj hP k K.adjoint
   have hpoint : ∀ i,
-      kyFanApproximationGauge k (P i ∘L K) =
-        kyFanApproximationGauge k (K.adjoint ∘L P i) :=
+      ((P i ∘L K).kyFanGauge k : ℝ) =
+        ((K.adjoint ∘L P i).kyFanGauge k : ℝ) :=
     fun i => kyFanApproximationGauge_proj_comp_eq_adjoint_comp (hPproj i) K
-  have hlimit : kyFanApproximationGauge k K =
-      kyFanApproximationGauge k K.adjoint := by
+  have hlimit : (K.kyFanGauge k : ℝ) =
+      (K.adjoint.kyFanGauge k : ℝ) := by
     symm
     exact kyFanApproximationGauge_adjoint k K
   simpa only [hpoint, hlimit] using hright
@@ -294,9 +294,9 @@ theorem kyFan_le_of_interfaceLeftCutoff_le
     (P : SpectralCutoffInterface A hA)
     {X C : F →L[ℂ] E} {δ : ℝ} (k : ℕ)
     (hcut : ∀ τ : ℝ, 0 ≤ τ →
-      δ * kyFanApproximationGauge k (P.cutoff τ ∘L X) ≤
-        kyFanApproximationGauge k (P.cutoff τ ∘L C)) :
-    δ * kyFanApproximationGauge k X ≤ kyFanApproximationGauge k C := by
+      δ * ((P.cutoff τ ∘L X).kyFanGauge k : ℝ) ≤
+        ((P.cutoff τ ∘L C).kyFanGauge k : ℝ)) :
+    δ * (X.kyFanGauge k : ℝ) ≤ (C.kyFanGauge k : ℝ) := by
   have hPproj : ∀ τ : ℝ, IsOrthogonalProjectionMap (P.cutoff τ) :=
     P.isOrthogonalProjection
   have hPstrong : StronglyTendsto (fun τ : ℝ => P.cutoff τ) atTop
@@ -306,8 +306,8 @@ theorem kyFan_le_of_interfaceLeftCutoff_le
   have hX := kyFan_left_comp_interfaceCutoff_tendsto hPproj hPstrong k X
   have hC := kyFan_left_comp_interfaceCutoff_tendsto hPproj hPstrong k C
   have hcutEventually : ∀ᶠ τ : ℝ in atTop,
-      δ * kyFanApproximationGauge k (P.cutoff τ ∘L X) ≤
-        kyFanApproximationGauge k (P.cutoff τ ∘L C) := by
+      δ * ((P.cutoff τ ∘L X).kyFanGauge k : ℝ) ≤
+        ((P.cutoff τ ∘L C).kyFanGauge k : ℝ) := by
     filter_upwards [eventually_ge_atTop (0 : ℝ)] with τ hτ
     exact hcut τ hτ
   exact le_of_tendsto_of_tendsto

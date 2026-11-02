@@ -501,7 +501,7 @@ theorem sum_absDoubleAngleTangent_le_of_approximatePairs
       ((t i : ℝ) : 𝕜) • u i‖ ≤ ε)
     (hsmall : approximatePairErrorCoefficient A H T * ε ≤ (b - a) / 4) :
     (b - a) * ∑ i, absDoubleAngleTangent (t i) ≤
-      2 * kyFanApproximationGauge m H +
+      2 * (H.kyFanGauge m : ℝ) +
         m * (branchFreeTangentErrorCoefficient A H T (b - a) * ε) := by
   classical
   set C : ℝ := branchFreeTangentErrorCoefficient A H T (b - a) with hC

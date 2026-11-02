@@ -99,15 +99,15 @@ theorem tanTheta_directed_bounded_symmetricNorming_complex
       (fun n => approximationSingularValue_sineBlock_lt_one_infiniteTrial T V Z hT hV
         hdelta hCompressionUpper hUnwantedLower n)
   have hky : ∀ k : ℕ,
-      delta * kyFanApproximationGauge k tanTheta0 ≤
-        kyFanApproximationGauge k (theorem63Residual T Z) := by
+      delta * (tanTheta0.kyFanGauge k : ℝ) ≤
+        ((theorem63Residual T Z).kyFanGauge k : ℝ) := by
     intro k
     have hcore := theorem6_3_all_kyFan_core_infiniteTrial T V Z hT hV hdelta
       hCompressionUpper hUnwantedLower k
-    have htanKy : kyFanApproximationGauge k tanTheta0 =
+    have htanKy : (tanTheta0.kyFanGauge k : ℝ) =
         ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
           (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) := by
-      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+      simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
       refine Finset.sum_congr rfl fun n _ => ?_
       have h := htan n
       exact h

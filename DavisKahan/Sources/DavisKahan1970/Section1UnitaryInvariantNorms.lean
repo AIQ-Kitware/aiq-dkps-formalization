@@ -97,8 +97,8 @@ not that its range is `ν`-dimensional -- because it is only the ideal inequalit
 `‖Ω‖ ≤ 1` discharged. -/
 theorem equation1_12_gauge_comp_starProjection_le
     (K : E →L[ℂ] F) (ν : ℕ) (Ω : Submodule ℂ E) [Ω.HasOrthogonalProjection] :
-    kyFanApproximationGauge ν (K ∘L Ω.starProjection) ≤ kyFanApproximationGauge ν K := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    ((K ∘L Ω.starProjection).kyFanGauge ν : ℝ) ≤ (K.kyFanGauge ν : ℝ) := by
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   refine Finset.sum_le_sum fun n _ => ?_
   calc ((K ∘L Ω.starProjection).singularValue n : ℝ)
       ≤ (K.singularValue n : ℝ) * ‖Ω.starProjection‖ :=
@@ -114,9 +114,9 @@ theorem equation1_13_gauge_starProjection_comp_le
     (K : E →L[ℂ] F) (ν : ℕ)
     (Ω : Submodule ℂ E) [Ω.HasOrthogonalProjection]
     (Υ : Submodule ℂ F) [Υ.HasOrthogonalProjection] :
-    kyFanApproximationGauge ν (Υ.starProjection ∘L K ∘L Ω.starProjection)
-      ≤ kyFanApproximationGauge ν K := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    ((Υ.starProjection ∘L K ∘L Ω.starProjection).kyFanGauge ν : ℝ)
+      ≤ (K.kyFanGauge ν : ℝ) := by
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   refine Finset.sum_le_sum fun n _ => ?_
   have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le Υ.starProjection K Ω.starProjection n))
   simp only [NNReal.coe_mul, coe_nnnorm] at h
@@ -146,8 +146,8 @@ theorem equation1_12 (K : E →L[ℂ] F) {ν : ℕ}
     (hE : ∃ x : Fin ν → E, Orthonormal ℂ x) :
     IsLUB
       {r : ℝ | ∃ v : Fin ν → E, Orthonormal ℂ v ∧
-        r = kyFanApproximationGauge ν (K ∘L (Submodule.span ℂ (Set.range v)).starProjection)}
-      (kyFanApproximationGauge ν K) := by
+        r = ((K ∘L (Submodule.span ℂ (Set.range v)).starProjection).kyFanGauge ν : ℝ)}
+      ((K.kyFanGauge ν : ℝ)) := by
   obtain ⟨x, hx⟩ := hE
   -- Pad the codomain with a `ν`-dimensional Euclidean summand so the attaining engine has the
   -- orthonormal `ν`-tuple it wants there.  The inclusion `ι` of `F` as the first summand and
@@ -183,7 +183,7 @@ theorem equation1_12 (K : E →L[ℂ] F) {ν : ℕ}
     intro i j
     simpa using hb i j
   have hgauge : ∀ T : E →L[ℂ] F,
-      kyFanApproximationGauge ν (ι ∘L T) = kyFanApproximationGauge ν T := fun T =>
+      ((ι ∘L T).kyFanGauge ν : ℝ) = (T.kyFanGauge ν : ℝ) := fun T =>
     kyFanApproximationGauge_comp_eq_of_leftInverse hleft hιnorm hprnorm ν T
   constructor
   · rintro r ⟨v, -, rfl⟩
@@ -202,16 +202,14 @@ theorem equation1_12 (K : E →L[ℂ] F) {ν : ℕ}
     have hle := DavisKahan.ExactSinTheta.re_sum_inner_map_le_kyFanApproximationGauge
       ((ι ∘L K) ∘L (Submodule.span ℂ (Set.range v)).starProjection) hu hv
     rw [hpair] at hle
-    have hcomp : kyFanApproximationGauge ν
-          ((ι ∘L K) ∘L (Submodule.span ℂ (Set.range v)).starProjection)
-        = kyFanApproximationGauge ν
-          (K ∘L (Submodule.span ℂ (Set.range v)).starProjection) := by
+    have hcomp : (((ι ∘L K) ∘L (Submodule.span ℂ (Set.range v)).starProjection).kyFanGauge ν : ℝ)
+        = ((K ∘L (Submodule.span ℂ (Set.range v)).starProjection).kyFanGauge ν : ℝ) := by
       rw [ContinuousLinearMap.comp_assoc]
       exact hgauge _
     rw [hcomp] at hle
     rw [hgauge K] at hlow
-    have hub : kyFanApproximationGauge ν
-        (K ∘L (Submodule.span ℂ (Set.range v)).starProjection) ≤ b := hb ⟨v, hv, rfl⟩
+    have hub : ((K ∘L (Submodule.span ℂ (Set.range v)).starProjection).kyFanGauge ν : ℝ) ≤ b := hb
+      ⟨v, hv, rfl⟩
     linarith
 
 /-- **Davis--Kahan 1970, equation (1.13), first form:**
@@ -223,10 +221,9 @@ theorem equation1_13_compressions (K : E →L[ℂ] F) {ν : ℕ}
     (hE : ∃ x : Fin ν → E, Orthonormal ℂ x) (hF : ∃ y : Fin ν → F, Orthonormal ℂ y) :
     IsLUB
       {r : ℝ | ∃ (v : Fin ν → E) (u : Fin ν → F), Orthonormal ℂ v ∧ Orthonormal ℂ u ∧
-        r = kyFanApproximationGauge ν
-          ((Submodule.span ℂ (Set.range u)).starProjection ∘L K ∘L
-            (Submodule.span ℂ (Set.range v)).starProjection)}
-      (kyFanApproximationGauge ν K) := by
+        r = (((Submodule.span ℂ (Set.range u)).starProjection ∘L K ∘L
+            (Submodule.span ℂ (Set.range v)).starProjection).kyFanGauge ν : ℝ)}
+      ((K.kyFanGauge ν : ℝ)) := by
   obtain ⟨x, hx⟩ := hE
   obtain ⟨y, hy⟩ := hF
   constructor
@@ -251,9 +248,9 @@ theorem equation1_13_compressions (K : E →L[ℂ] F) {ν : ℕ}
       ((Submodule.span ℂ (Set.range u)).starProjection ∘L K ∘L
         (Submodule.span ℂ (Set.range v)).starProjection) hu hv
     rw [hpair] at hle
-    have hub : kyFanApproximationGauge ν
-        ((Submodule.span ℂ (Set.range u)).starProjection ∘L K ∘L
-          (Submodule.span ℂ (Set.range v)).starProjection) ≤ b := hb ⟨v, u, hv, hu, rfl⟩
+    have hub : (((Submodule.span ℂ (Set.range u)).starProjection ∘L K ∘L
+          (Submodule.span ℂ (Set.range v)).starProjection).kyFanGauge ν : ℝ) ≤ b := hb ⟨v, u, hv,
+            hu, rfl⟩
     linarith
 
 /-- **Davis--Kahan 1970, equation (1.13), second form:**
@@ -269,7 +266,7 @@ theorem equation1_13_reSum (K : E →L[ℂ] F) {ν : ℕ}
     IsLUB
       {r : ℝ | ∃ (v : Fin ν → E) (u : Fin ν → F), Orthonormal ℂ v ∧ Orthonormal ℂ u ∧
         r = RCLike.re (∑ i, ⟪u i, K (v i)⟫_ℂ)}
-      (kyFanApproximationGauge ν K) := by
+      ((K.kyFanGauge ν : ℝ)) := by
   obtain ⟨x, hx⟩ := hE
   obtain ⟨y, hy⟩ := hF
   constructor

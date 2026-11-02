@@ -52,11 +52,11 @@ theorem real_unbounded_sylvester_kyFan
     (hgap : FormBoundedSylvesterGap A B δ)
     (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (k : ℕ) :
-    δ * kyFanApproximationGauge k X ≤
-      kyFanApproximationGauge k C := by
+    δ * (X.kyFanGauge k : ℝ) ≤
+      (C.kyFanGauge k : ℝ) := by
   by_cases hk : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp []
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     let K := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
       { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hkpos
@@ -69,7 +69,6 @@ theorem real_unbounded_sylvester_kyFan
       (by simp [K, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
     have hbound := hcomplex.2
     simp only [K, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
       ] at hbound
     simpa only [kyFanApproximationGauge_complexify] using hbound
 

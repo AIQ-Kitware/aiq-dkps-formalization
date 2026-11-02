@@ -865,9 +865,9 @@ private theorem kyFanApproximationGauge_gramOperator_mono_real {X Y Z : Type*}
     [NormedAddCommGroup Z] [InnerProductSpace ℝ Z] [CompleteSpace Z]
     (A : X →L[ℝ] Y) (B : X →L[ℝ] Z)
     (h : ∀ n, (A.singularValue n : ℝ) ≤ (B.singularValue n : ℝ)) (k : ℕ) :
-    kyFanApproximationGauge k (gramOperatorR A) ≤
-      kyFanApproximationGauge k (gramOperatorR B) := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    ((gramOperatorR A).kyFanGauge k : ℝ) ≤
+      ((gramOperatorR B).kyFanGauge k : ℝ) := by
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   refine Finset.sum_le_sum fun n _ => ?_
   rw [approximationNumber_gramOperator_real, approximationNumber_gramOperator_real]
   nlinarith [h n, (A.singularValue n).coe_nonneg]
@@ -884,7 +884,7 @@ private theorem diagonalPart_complexify_real (A : E →L[ℝ] E) :
 /-- Pinching contracts every real Ky Fan approximation gauge. -/
 private theorem kyFanApproximationGauge_diagonalPart_le_real
     (A : E →L[ℝ] E) (k : ℕ) :
-    kyFanApproximationGauge k (U.diagBlock A) ≤ kyFanApproximationGauge k A := by
+    ((U.diagBlock A).kyFanGauge k : ℝ) ≤ (A.kyFanGauge k : ℝ) := by
   rw [← kyFanApproximationGauge_complexify, ← kyFanApproximationGauge_complexify,
     ← diagonalPart_complexify_real U]
   exact TauCeti.ApproximationNumber.kyFanApproximationGauge_diagBlock_le_complex
@@ -896,16 +896,16 @@ private theorem kyFanApproximationGauge_conj_le_real {F : Type v}
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
     {L : E →L[ℝ] F} {R : F →L[ℝ] E}
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) (A : E →L[ℝ] E) (k : ℕ) :
-    kyFanApproximationGauge k (L ∘L A ∘L R) ≤ kyFanApproximationGauge k A := by
+    ((L ∘L A ∘L R).kyFanGauge k : ℝ) ≤ (A.kyFanGauge k : ℝ) := by
   have hcomp := kyFanApproximationGauge_comp_le
     (𝕜 := ℝ) (E := E) (F := E) (G := F) (H := F) k L A R
   refine hcomp.trans ?_
   have hnn := kyFanApproximationGauge_nonneg k A
   calc
-    ‖L‖ * kyFanApproximationGauge k A * ‖R‖ ≤
-        1 * kyFanApproximationGauge k A * 1 :=
+    ‖L‖ * (A.kyFanGauge k : ℝ) * ‖R‖ ≤
+        1 * (A.kyFanGauge k : ℝ) * 1 :=
       mul_le_mul (mul_le_mul_of_nonneg_right hL hnn) hR (norm_nonneg _) (by linarith)
-    _ = kyFanApproximationGauge k A := by ring
+    _ = (A.kyFanGauge k : ℝ) := by ring
 
 /-- Ky Fan gauges are invariant under a real isometric change of chart. -/
 private theorem kyFanApproximationGauge_conj_eq_real {F : Type v}
@@ -914,7 +914,7 @@ private theorem kyFanApproximationGauge_conj_eq_real {F : Type v}
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1)
     (hRL : R ∘L L = ContinuousLinearMap.id ℝ E)
     (A : E →L[ℝ] E) (k : ℕ) :
-    kyFanApproximationGauge k (L ∘L A ∘L R) = kyFanApproximationGauge k A := by
+    ((L ∘L A ∘L R).kyFanGauge k : ℝ) = (A.kyFanGauge k : ℝ) := by
   refine le_antisymm
     (kyFanApproximationGauge_conj_le_real (E := E) (F := F) hL hR A k) ?_
   have hRLapp : ∀ y : E, R (L y) = y := by
@@ -1001,10 +1001,9 @@ theorem proposition4_3_nonacute_real
     (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W) (k : ℕ) :
-    kyFanApproximationGauge k
-        ((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
-          (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)) ≤
-      kyFanApproximationGauge k ((1 - star W) * (1 - W)) := by
+    (((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
+          (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)).kyFanGauge k : ℝ) ≤
+      (((1 - star W) * (1 - W)).kyFanGauge k : ℝ) := by
   let : CompleteSpace (U : Type v) :=
     (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
   let : CompleteSpace ((U.orthogonal : Submodule ℝ E) : Type v) :=
@@ -1023,10 +1022,10 @@ theorem proposition4_3_nonacute_real
     ext x
     simp
   have hchart : ∀ T : E →L[ℝ] E,
-      kyFanApproximationGauge k (U.diagBlock ((1 - star T) * (1 - T))) =
-        kyFanApproximationGauge k (continuousOrthogonalBlockSum
+      ((U.diagBlock ((1 - star T) * (1 - T))).kyFanGauge k : ℝ) =
+        ((continuousOrthogonalBlockSum
           (gramOperatorR ((1 - T) ∘L U.subtypeL))
-          (gramOperatorR ((1 - T) ∘L U.orthogonal.subtypeL))) := by
+          (gramOperatorR ((1 - T) ∘L U.orthogonal.subtypeL))).kyFanGauge k : ℝ) := by
     intro T
     have hst : (1 - star T) * (1 - T) = star (1 - T) * (1 - T) := by
       rw [star_sub, star_one]
@@ -1054,23 +1053,21 @@ theorem proposition4_3_nonacute_real
     (fun j => kyFanApproximationGauge_gramOperator_mono_real _ _ hU j)
     (fun j => kyFanApproximationGauge_gramOperator_mono_real _ _ hUperp j) k
   calc
-    kyFanApproximationGauge k
+    (((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
+          (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)).kyFanGauge k : ℝ) =
+      ((U.diagBlock
         ((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
-          (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)) =
-      kyFanApproximationGauge k (U.diagBlock
-        ((1 - star (TauCeti.DavisKahan.nonacuteDirectRotation U V J)) *
-          (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J))) := by
+          (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J))).kyFanGauge k : ℝ) := by
         rw [diagonalPart_nonacuteDirectRotation_displacementSquare_real U V J]
-    _ = kyFanApproximationGauge k (continuousOrthogonalBlockSum
+    _ = ((continuousOrthogonalBlockSum
           (gramOperatorR ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L U.subtypeL))
           (gramOperatorR ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
-            U.orthogonal.subtypeL))) := hchart _
-    _ ≤ kyFanApproximationGauge k (continuousOrthogonalBlockSum
+            U.orthogonal.subtypeL))).kyFanGauge k : ℝ) := hchart _
+    _ ≤ ((continuousOrthogonalBlockSum
           (gramOperatorR ((1 - W) ∘L U.subtypeL))
-          (gramOperatorR ((1 - W) ∘L U.orthogonal.subtypeL))) := hblock
-    _ = kyFanApproximationGauge k
-          (U.diagBlock ((1 - star W) * (1 - W))) := (hchart W).symm
-    _ ≤ kyFanApproximationGauge k ((1 - star W) * (1 - W)) :=
+          (gramOperatorR ((1 - W) ∘L U.orthogonal.subtypeL))).kyFanGauge k : ℝ) := hblock
+    _ = ((U.diagBlock ((1 - star W) * (1 - W))).kyFanGauge k : ℝ) := (hchart W).symm
+    _ ≤ (((1 - star W) * (1 - W)).kyFanGauge k : ℝ) :=
       kyFanApproximationGauge_diagonalPart_le_real U _ k
 
 /-- Proposition 4.3 over `ℝ`, promoted to every real unitarily invariant ideal gauge at the
@@ -1363,10 +1360,9 @@ what the repository's refutation of Proposition 4.4 records. -/
 theorem proposition4_3_real (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * U.starProjection = V.starProjection * W) (k : ℕ) :
-    kyFanApproximationGauge k
-        ((1 - star (TauCeti.DavisKahan.directRotationR U V hacute)) *
-          (1 - TauCeti.DavisKahan.directRotationR U V hacute)) ≤
-      kyFanApproximationGauge k ((1 - star W) * (1 - W)) := by
+    (((1 - star (TauCeti.DavisKahan.directRotationR U V hacute)) *
+          (1 - TauCeti.DavisKahan.directRotationR U V hacute)).kyFanGauge k : ℝ) ≤
+      (((1 - star W) * (1 - W)).kyFanGauge k : ℝ) := by
   rw [← kyFanApproximationGauge_complexify, ← kyFanApproximationGauge_complexify,
     complexify_displacementSquare, complexify_displacementSquare,
     TauCeti.DavisKahan.complexify_directRotationR]
@@ -1454,7 +1450,7 @@ theorem Proposition4_3_nonacute_real_fullDisplacement_opNorm
     ‖1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J‖ ≤ ‖1 - W‖ := by
   have hk := proposition4_3_nonacute_real U V J W hWunitary hWmap 1
   rw [displacementSquare_eq_gramOperatorR, displacementSquare_eq_gramOperatorR] at hk
-  simp only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
+  simp only [
     ContinuousLinearMap.kyFanGauge_one, coe_nnnorm, gramOperatorR,
     ContinuousLinearMap.norm_adjoint_comp_self] at hk
   nlinarith [norm_nonneg (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J),
@@ -1483,7 +1479,7 @@ theorem Proposition4_3_nonacute_real_fullDisplacement_hilbertSchmidt
     have hk' : ((gramOperatorR (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)).kyFanGauge k
       : ℝ) ≤
         ((gramOperatorR (1 - W)).kyFanGauge k : ℝ) := by
-      simpa only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge] using hk
+      exact hk
     exact ENNReal.coe_le_coe.mpr (NNReal.coe_le_coe.mp hk')
   rw [nuclearENorm_gramOperatorR, nuclearENorm_gramOperatorR] at hnuc
   rw [← ENNReal.rpow_natCast _ 2, ← ENNReal.rpow_natCast _ 2] at hnuc

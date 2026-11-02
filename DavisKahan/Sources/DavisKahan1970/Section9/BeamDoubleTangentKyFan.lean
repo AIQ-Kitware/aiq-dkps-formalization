@@ -157,26 +157,23 @@ theorem reflectionResidualCorner_beamRitzOffDiagonal (ε : ℝ) :
 /-- **Both singular values of the corner residual at once**: `‖R̂‖₂ = ‖R̂‖₁`, the
 paper's `ε/√15`, because the recentered residual Gram is rank one. -/
 theorem kyFanTwo_reflectionResidualCorner_le (ε : ℝ) :
-    kyFanApproximationGauge 2
-        (DavisKahan1970.reflectionResidualCorner beamTrial (beamRitzOffDiagonal ε))
+    ((DavisKahan1970.reflectionResidualCorner beamTrial (beamRitzOffDiagonal ε)).kyFanGauge 2 : ℝ)
       ≤ orthogonalResidualSingularValue ε := by
   have hadj : ‖(beamTrialᗮ.subtypeL : beamTrialᗮ →L[ℂ] BeamL2).adjoint‖ ≤ 1 := by
     rw [ContinuousLinearMap.adjoint.norm_map]
     exact beamTrialᗮ.norm_subtypeL_le
   have hid : ‖ContinuousLinearMap.id ℂ beamTrial‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have hnn : 0 ≤ kyFanApproximationGauge 2 ((beamTrialBlock ε).residual) :=
+  have hnn : 0 ≤ (((beamTrialBlock ε).residual).kyFanGauge 2 : ℝ) :=
     kyFanApproximationGauge_nonneg 2 _
   rw [reflectionResidualCorner_beamRitzOffDiagonal]
-  calc kyFanApproximationGauge 2
-        ((beamTrialᗮ.subtypeL).adjoint ∘L (beamTrialBlock ε).residual)
-      = kyFanApproximationGauge 2
-          ((beamTrialᗮ.subtypeL).adjoint ∘L (beamTrialBlock ε).residual ∘L
-            ContinuousLinearMap.id ℂ beamTrial) := by congr 1
+  calc (((beamTrialᗮ.subtypeL).adjoint ∘L (beamTrialBlock ε).residual).kyFanGauge 2 : ℝ)
+      = (((beamTrialᗮ.subtypeL).adjoint ∘L (beamTrialBlock ε).residual ∘L
+            ContinuousLinearMap.id ℂ beamTrial).kyFanGauge 2 : ℝ) := by congr 1
     _ ≤ ‖(beamTrialᗮ.subtypeL : beamTrialᗮ →L[ℂ] BeamL2).adjoint‖ *
-          kyFanApproximationGauge 2 ((beamTrialBlock ε).residual) *
+          (((beamTrialBlock ε).residual).kyFanGauge 2 : ℝ) *
           ‖ContinuousLinearMap.id ℂ beamTrial‖ :=
         kyFanApproximationGauge_comp_le _ _ _ _
-    _ ≤ kyFanApproximationGauge 2 ((beamTrialBlock ε).residual) := by
+    _ ≤ (((beamTrialBlock ε).residual).kyFanGauge 2 : ℝ) := by
         have h1 := mul_le_mul_of_nonneg_right hadj hnn
         have h2 := mul_le_mul_of_nonneg_left hid
           (mul_nonneg (norm_nonneg
@@ -188,8 +185,7 @@ theorem kyFanTwo_reflectionResidualCorner_le (ε : ℝ) :
 trial subspace and the perturbed beam's low spectral subspace: the paper's
 `tan 2θ₁ + tan 2θ₂`. -/
 def beamTanTwoThetaSum (ε : ℝ) : ℝ :=
-  kyFanApproximationGauge 2
-    (DavisKahan1970.reflectionTangentCorner beamTrial (beamLowReflection ε))
+  ((DavisKahan1970.reflectionTangentCorner beamTrial (beamLowReflection ε)).kyFanGauge 2 : ℝ)
 
 /-- **Davis--Kahan 1970, the 2-norm sentence of equation (9.7), for the genuine
 free-beam operator.**

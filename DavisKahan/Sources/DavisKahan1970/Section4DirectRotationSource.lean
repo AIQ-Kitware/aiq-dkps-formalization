@@ -165,7 +165,8 @@ theorem corollary4_1_directRotation_sourceExact_complex
   obtain ⟨hmem, hle⟩ :=
     (TauCeti.DavisKahan.ExactSinTheta.mem_and_gauge_le_of_all_kyFanApproximationGauge_le
       N.toSymmetricOperatorIdealFamily) hmem₀
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsame.kyFanGauge_eq k)))))
   exact ⟨hmem, hle.trans hle₀⟩
 
@@ -245,7 +246,8 @@ theorem corollary4_1_directRotation_sourceExact_real
   obtain ⟨hmem, hle⟩ :=
     (TauCeti.DavisKahan.ExactSinTheta.mem_and_gauge_le_of_all_kyFanApproximationGauge_le
       N.toSymmetricOperatorIdealFamily) hmem₀
-      (fun k => le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (fun k => le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+        (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsame.kyFanGauge_eq k)))))
   exact ⟨hmem, hle.trans hle₀⟩
 

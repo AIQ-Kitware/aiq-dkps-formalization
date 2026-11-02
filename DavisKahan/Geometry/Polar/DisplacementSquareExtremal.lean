@@ -115,9 +115,9 @@ theorem kyFanApproximationGauge_gramOperator_mono_complex {E F G : Type u}
     [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
     (A : E →L[ℂ] F) (B : E →L[ℂ] G)
     (h : ∀ n, (A.singularValue n : ℝ) ≤ (B.singularValue n : ℝ)) (k : ℕ) :
-    kyFanApproximationGauge k (ApproximationNumber.gramOperator A) ≤
-      kyFanApproximationGauge k (ApproximationNumber.gramOperator B) := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    ((ApproximationNumber.gramOperator A).kyFanGauge k : ℝ) ≤
+      ((ApproximationNumber.gramOperator B).kyFanGauge k : ℝ) := by
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   refine Finset.sum_le_sum fun n _ => ?_
   rw [approximationNumber_gramOperator_complex, approximationNumber_gramOperator_complex]
   have h0 : 0 ≤ (A.singularValue n : ℝ) := (A.singularValue n).coe_nonneg
@@ -272,10 +272,9 @@ theorem proposition4_3_squaredDisplacement_kyFan (U V : Submodule ℂ H)
     (hacute : IsUniformlyAcute U V) (W : H →L[ℂ] H)
     (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * U.starProjection = V.starProjection * W) (k : ℕ) :
-    kyFanApproximationGauge k
-        ((1 - star (spectraDirectRotation U V hacute)) *
-          (1 - spectraDirectRotation U V hacute)) ≤
-      kyFanApproximationGauge k ((1 - star W) * (1 - W)) := by
+    (((1 - star (spectraDirectRotation U V hacute)) *
+          (1 - spectraDirectRotation U V hacute)).kyFanGauge k : ℝ) ≤
+      (((1 - star W) * (1 - W)).kyFanGauge k : ℝ) := by
   let : CompleteSpace (U : Type u) :=
     (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
   let : CompleteSpace ((Uᗮ : Submodule ℂ H) : Type u) :=
@@ -294,10 +293,10 @@ theorem proposition4_3_squaredDisplacement_kyFan (U V : Submodule ℂ H)
     ext x
     simp
   have hchart : ∀ T : H →L[ℂ] H,
-      kyFanApproximationGauge k (U.diagBlock ((1 - star T) * (1 - T))) =
-        kyFanApproximationGauge k (continuousOrthogonalBlockSum
+      ((U.diagBlock ((1 - star T) * (1 - T))).kyFanGauge k : ℝ) =
+        ((continuousOrthogonalBlockSum
           (ApproximationNumber.gramOperator ((1 - T) ∘L U.subtypeL))
-          (ApproximationNumber.gramOperator ((1 - T) ∘L Uᗮ.subtypeL))) := by
+          (ApproximationNumber.gramOperator ((1 - T) ∘L Uᗮ.subtypeL))).kyFanGauge k : ℝ) := by
     intro T
     have hst : (1 - star T) * (1 - T) = star (1 - T) * (1 - T) := by
       rw [star_sub, star_one]
@@ -322,23 +321,22 @@ theorem proposition4_3_squaredDisplacement_kyFan (U V : Submodule ℂ H)
   have hblock := kyFanApproximationGauge_blockSum_le
     (fun j => kyFanApproximationGauge_gramOperator_mono_complex _ _ hU j)
     (fun j => kyFanApproximationGauge_gramOperator_mono_complex _ _ hUperp j) k
-  calc kyFanApproximationGauge k
-        ((1 - star (spectraDirectRotation U V hacute)) *
-          (1 - spectraDirectRotation U V hacute))
-      = kyFanApproximationGauge k (U.diagBlock
+  calc (((1 - star (spectraDirectRotation U V hacute)) *
+          (1 - spectraDirectRotation U V hacute)).kyFanGauge k : ℝ)
+      = ((U.diagBlock
           ((1 - star (spectraDirectRotation U V hacute)) *
-            (1 - spectraDirectRotation U V hacute))) := by
+            (1 - spectraDirectRotation U V hacute))).kyFanGauge k : ℝ) := by
         rw [diagonalPart_directRotation_displacementSquare U V hacute]
-    _ = kyFanApproximationGauge k (continuousOrthogonalBlockSum
+    _ = ((continuousOrthogonalBlockSum
           (ApproximationNumber.gramOperator ((1 - spectraDirectRotation U V hacute) ∘L U.subtypeL))
-          (ApproximationNumber.gramOperator ((1 - spectraDirectRotation U V hacute) ∘L Uᗮ.subtypeL))) :=
+          (ApproximationNumber.gramOperator ((1 - spectraDirectRotation U V hacute) ∘L
+            Uᗮ.subtypeL))).kyFanGauge k : ℝ) :=
         hchart _
-    _ ≤ kyFanApproximationGauge k (continuousOrthogonalBlockSum
+    _ ≤ ((continuousOrthogonalBlockSum
           (ApproximationNumber.gramOperator ((1 - W) ∘L U.subtypeL))
-          (ApproximationNumber.gramOperator ((1 - W) ∘L Uᗮ.subtypeL))) := hblock
-    _ = kyFanApproximationGauge k
-          (U.diagBlock ((1 - star W) * (1 - W))) := (hchart W).symm
-    _ ≤ kyFanApproximationGauge k ((1 - star W) * (1 - W)) :=
+          (ApproximationNumber.gramOperator ((1 - W) ∘L Uᗮ.subtypeL))).kyFanGauge k : ℝ) := hblock
+    _ = ((U.diagBlock ((1 - star W) * (1 - W))).kyFanGauge k : ℝ) := (hchart W).symm
+    _ ≤ (((1 - star W) * (1 - W)).kyFanGauge k : ℝ) :=
         kyFanApproximationGauge_diagBlock_le_complex U _ k
 
 /-- **Davis--Kahan Proposition 4.3 at the matched-crossed-defect nonacute scope.** -/
@@ -347,10 +345,9 @@ theorem proposition4_3_nonacute_squaredDisplacement_kyFan (U V : Submodule ℂ H
     (J : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V)
     (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
     (hWmap : W * U.starProjection = V.starProjection * W) (k : ℕ) :
-    kyFanApproximationGauge k
-        ((1 - star (nonacuteDirectRotation U V J)) *
-          (1 - nonacuteDirectRotation U V J)) ≤
-      kyFanApproximationGauge k ((1 - star W) * (1 - W)) := by
+    (((1 - star (nonacuteDirectRotation U V J)) *
+          (1 - nonacuteDirectRotation U V J)).kyFanGauge k : ℝ) ≤
+      (((1 - star W) * (1 - W)).kyFanGauge k : ℝ) := by
   let : CompleteSpace (U : Type u) :=
     (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
   let : CompleteSpace ((U.orthogonal : Submodule ℂ H) : Type u) :=
@@ -369,10 +366,11 @@ theorem proposition4_3_nonacute_squaredDisplacement_kyFan (U V : Submodule ℂ H
     ext x
     simp
   have hchart : ∀ T : H →L[ℂ] H,
-      kyFanApproximationGauge k (U.diagBlock ((1 - star T) * (1 - T))) =
-        kyFanApproximationGauge k (continuousOrthogonalBlockSum
+      ((U.diagBlock ((1 - star T) * (1 - T))).kyFanGauge k : ℝ) =
+        ((continuousOrthogonalBlockSum
           (ApproximationNumber.gramOperator ((1 - T) ∘L U.subtypeL))
-          (ApproximationNumber.gramOperator ((1 - T) ∘L U.orthogonal.subtypeL))) := by
+          (ApproximationNumber.gramOperator ((1 - T) ∘L U.orthogonal.subtypeL))).kyFanGauge k : ℝ)
+            := by
     intro T
     have hst : (1 - star T) * (1 - T) = star (1 - T) * (1 - T) := by
       rw [star_sub, star_one]
@@ -397,22 +395,22 @@ theorem proposition4_3_nonacute_squaredDisplacement_kyFan (U V : Submodule ℂ H
   have hblock := kyFanApproximationGauge_blockSum_le
     (fun j => kyFanApproximationGauge_gramOperator_mono_complex _ _ hU j)
     (fun j => kyFanApproximationGauge_gramOperator_mono_complex _ _ hUperp j) k
-  calc kyFanApproximationGauge k
-        ((1 - star (nonacuteDirectRotation U V J)) *
-          (1 - nonacuteDirectRotation U V J))
-      = kyFanApproximationGauge k (U.diagBlock
+  calc (((1 - star (nonacuteDirectRotation U V J)) *
+          (1 - nonacuteDirectRotation U V J)).kyFanGauge k : ℝ)
+      = ((U.diagBlock
           ((1 - star (nonacuteDirectRotation U V J)) *
-            (1 - nonacuteDirectRotation U V J))) := by
+            (1 - nonacuteDirectRotation U V J))).kyFanGauge k : ℝ) := by
         rw [diagonalPart_nonacuteDirectRotation_displacementSquare_complex U V J]
-    _ = kyFanApproximationGauge k (continuousOrthogonalBlockSum
+    _ = ((continuousOrthogonalBlockSum
           (ApproximationNumber.gramOperator ((1 - nonacuteDirectRotation U V J) ∘L U.subtypeL))
-          (ApproximationNumber.gramOperator ((1 - nonacuteDirectRotation U V J) ∘L U.orthogonal.subtypeL))) := hchart _
-    _ ≤ kyFanApproximationGauge k (continuousOrthogonalBlockSum
+          (ApproximationNumber.gramOperator ((1 - nonacuteDirectRotation U V J) ∘L
+            U.orthogonal.subtypeL))).kyFanGauge k : ℝ) := hchart _
+    _ ≤ ((continuousOrthogonalBlockSum
           (ApproximationNumber.gramOperator ((1 - W) ∘L U.subtypeL))
-          (ApproximationNumber.gramOperator ((1 - W) ∘L U.orthogonal.subtypeL))) := hblock
-    _ = kyFanApproximationGauge k
-          (U.diagBlock ((1 - star W) * (1 - W))) := (hchart W).symm
-    _ ≤ kyFanApproximationGauge k ((1 - star W) * (1 - W)) :=
+          (ApproximationNumber.gramOperator ((1 - W) ∘L U.orthogonal.subtypeL))).kyFanGauge k : ℝ)
+            := hblock
+    _ = ((U.diagBlock ((1 - star W) * (1 - W))).kyFanGauge k : ℝ) := (hchart W).symm
+    _ ≤ (((1 - star W) * (1 - W)).kyFanGauge k : ℝ) :=
         kyFanApproximationGauge_diagBlock_le_complex U _ k
 
 end

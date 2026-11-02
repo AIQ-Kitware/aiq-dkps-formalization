@@ -124,8 +124,8 @@ theorem isUnit_diagonalPart_sq_reducing_exact :
 
 /-- The Ky Fan chain at an arbitrary reducing subspace. -/
 theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_reducing (k : ℕ) :
-    (b - a) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
-      2 * kyFanApproximationGauge k (reflectionResidualCorner U B) :=
+    (b - a) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
+      2 * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) :=
   gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan hred hB hZsa hZ2 hZdom
     hZcomm hUa hUb hab
     (norm_offDiagonalPart_lt_one_reducing_exact hA hred hB hZsa hZ2 hZdom hZcomm
@@ -154,8 +154,8 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_complex
     hZcomm hUa hUb hab
   have hhalf : 0 < (b - a) / 2 := by linarith
   have hscaled : ∀ k : ℕ,
-      ((b - a) / 2) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
-        kyFanApproximationGauge k (reflectionResidualCorner U B) := by
+      ((b - a) / 2) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
+        ((reflectionResidualCorner U B).kyFanGauge k : ℝ) := by
     intro k
     have h := gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_reducing hA
       hred hB hZsa hZ2 hZdom hZcomm hUa hUb hab k

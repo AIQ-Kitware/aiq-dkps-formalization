@@ -728,10 +728,10 @@ No finite family is asked to realise or attain anything. -/
 theorem kyFan_reflectionTangentCorner_le
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hS1 : ‖U.offDiagBlock Z‖ < 1) (k : ℕ) :
-    kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
+    ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((reflectionSineCorner U Z).singularValue n : ℝ))) := by
-  rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+  rw [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_le_sum fun n _ =>
     approximationNumber_reflectionTangentCorner_le hZsa hZ2 hS1 n
 

@@ -325,8 +325,8 @@ def reverseResidualBlock (P : CommonDomainSymmetricSinThetaProblem U V) :
 theorem forward_all_kyFan
     (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
-      P.gap * kyFanApproximationGauge k P.forwardSineBlock ≤
-        kyFanApproximationGauge k P.forwardResidualBlock := by
+      P.gap * (P.forwardSineBlock.kyFanGauge k : ℝ) ≤
+        (P.forwardResidualBlock.kyFanGauge k : ℝ) := by
   intro k
   set D := P.forwardData with hD
   have hA0 : _root_.IsSelfAdjoint D.A₀ := by
@@ -366,16 +366,16 @@ theorem forward_all_kyFan
       map_neg] using
       ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
         Vᗮ U (-(D.residual.adjoint ∘L D.F₁))
-  have hgaugeSine : kyFanApproximationGauge k P.forwardSineBlock =
-      kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
+  have hgaugeSine : (P.forwardSineBlock.kyFanGauge k : ℝ) =
+      ((D.X.adjoint ∘L D.F₁).kyFanGauge k : ℝ) := by
     erw [hsineAdj, kyFanApproximationGauge_adjoint,
-      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsine.kyFanGauge_eq k)))]
-  have hgaugeRes : kyFanApproximationGauge k P.forwardResidualBlock =
-      kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) := by
+  have hgaugeRes : (P.forwardResidualBlock.kyFanGauge k : ℝ) =
+      ((-(D.residual.adjoint ∘L D.F₁)).kyFanGauge k : ℝ) := by
     erw [← kyFanApproximationGauge_adjoint k P.forwardResidualBlock,
       ← kyFanApproximationGauge_neg k P.forwardResidualBlock.adjoint,
-      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hres.kyFanGauge_eq k)))]
   rw [hgaugeSine, hgaugeRes]
   exact hraw
@@ -384,8 +384,8 @@ theorem forward_all_kyFan
 theorem reverse_all_kyFan
     (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
-      P.gap * kyFanApproximationGauge k P.reverseSineBlock ≤
-        kyFanApproximationGauge k P.reverseResidualBlock := by
+      P.gap * (P.reverseSineBlock.kyFanGauge k : ℝ) ≤
+        (P.reverseResidualBlock.kyFanGauge k : ℝ) := by
   intro k
   set D := P.reverseData with hD
   have hA0 : _root_.IsSelfAdjoint D.A₀ := by
@@ -427,14 +427,14 @@ theorem reverse_all_kyFan
       map_neg] using
       ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
         Uᗮ V (-(D.residual.adjoint ∘L D.F₁))
-  have hgaugeSine : kyFanApproximationGauge k P.reverseSineBlock =
-      kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
+  have hgaugeSine : (P.reverseSineBlock.kyFanGauge k : ℝ) =
+      ((D.X.adjoint ∘L D.F₁).kyFanGauge k : ℝ) := by
     erw [hsineAdj, kyFanApproximationGauge_adjoint,
-      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsine.kyFanGauge_eq k)))]
-  have hgaugeRes : kyFanApproximationGauge k P.reverseResidualBlock =
-      kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) :=
-    (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+  have hgaugeRes : (P.reverseResidualBlock.kyFanGauge k : ℝ) =
+      ((-(D.residual.adjoint ∘L D.F₁)).kyFanGauge k : ℝ) :=
+    (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hres.kyFanGauge_eq k)))
   rw [hgaugeSine, hgaugeRes]
   exact hraw
@@ -449,8 +449,8 @@ norm can see.  Over `ℂ` the literal functional-calculus form is `symmetric_all
 theorem symmetric_all_kyFan_crossSineSum
     (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
-      P.gap * kyFanApproximationGauge k (crossSineSum U V) ≤
-        kyFanApproximationGauge k P.perturbation := by
+      P.gap * ((crossSineSum U V).kyFanGauge k : ℝ) ≤
+        (P.perturbation.kyFanGauge k : ℝ) := by
   intro k
   have hadjH : P.perturbation.adjoint = P.perturbation :=
     P.perturbation_isSymmetric.isSelfAdjoint.adjoint_eq
@@ -516,12 +516,11 @@ theorem symmetric_all_kyFan_crossSineSum
     simp [projectionBlock, crossSineSum, smul_add]
   rw [hcross] at hcombine
   calc
-    P.gap * kyFanApproximationGauge k (crossSineSum U V) =
-        kyFanApproximationGauge k (((P.gap : ℝ) : 𝕜) • crossSineSum U V) := by
+    P.gap * ((crossSineSum U V).kyFanGauge k : ℝ) =
+        ((((P.gap : ℝ) : 𝕜) • crossSineSum U V).kyFanGauge k : ℝ) := by
       erw [kyFanApproximationGauge_smul, hgapNorm]
-    _ ≤ kyFanApproximationGauge k
-        (diagonalPair Uᗮ V P.perturbation) := hcombine
-    _ ≤ kyFanApproximationGauge k P.perturbation := hres
+    _ ≤ ((diagonalPair Uᗮ V P.perturbation).kyFanGauge k : ℝ) := hcombine
+    _ ≤ (P.perturbation.kyFanGauge k : ℝ) := hres
 
 /-- **Davis--Kahan 1970, Proposition 6.1 on a common dense domain over any `RCLike`
 field**, for every normalized unitarily invariant norm in the source sense.
@@ -572,12 +571,12 @@ functional-calculus `sin Θ` have the same complete singular-value sequence. -/
 theorem symmetric_all_kyFan
     (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
-      P.gap * kyFanApproximationGauge k
-          (TauCeti.DavisKahan.Angle.sinAngleOperatorC U V) ≤
-        kyFanApproximationGauge k P.perturbation := by
+      P.gap * ((TauCeti.DavisKahan.Angle.sinAngleOperatorC U V).kyFanGauge k : ℝ) ≤
+        (P.perturbation.kyFanGauge k : ℝ) := by
   intro k
   have h := P.symmetric_all_kyFan_crossSineSum k
-  rwa [(show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+  rwa [(show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ)
+    from
       (congrArg NNReal.toReal ((crossSineSum_same_literalSin U V).kyFanGauge_eq k)))] at h
 
 /-- **Davis--Kahan 1970, Proposition 6.1 on a common dense domain**, for every normalized
@@ -650,8 +649,8 @@ and that changes what is *possible* here rather than what is *needed*. -/
 theorem symmetric_all_kyFan_real
     (P : CommonDomainSymmetricSinThetaProblem U V) :
     ∀ k,
-      P.gap * kyFanApproximationGauge k (crossSineSum U V) ≤
-        kyFanApproximationGauge k P.perturbation :=
+      P.gap * ((crossSineSum U V).kyFanGauge k : ℝ) ≤
+        (P.perturbation.kyFanGauge k : ℝ) :=
   P.symmetric_all_kyFan_crossSineSum
 
 /-- **Davis--Kahan 1970, Proposition 6.1 on a common dense domain over a real Hilbert

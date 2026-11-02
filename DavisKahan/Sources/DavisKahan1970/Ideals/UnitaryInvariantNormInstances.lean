@@ -162,7 +162,7 @@ theorem nuclearNormingFunction_prefixGauge
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (n : ℕ) (A : E →L[𝕜] F) :
-    nuclearNormingFunction.prefixGauge n A = kyFanApproximationGauge n A := by
+    nuclearNormingFunction.prefixGauge n A = (A.kyFanGauge n : ℝ) := by
   have habs : ∀ i : Fin n,
       |SymmetricNormingFunction.approximationPrefix n A i| =
         SymmetricNormingFunction.approximationPrefix n A i := fun _ =>

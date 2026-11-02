@@ -497,8 +497,8 @@ private theorem kyFan_core_of_le_finrank (data : Theorem63TrialData Z V)
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
     {k : ℕ} (hk : k ≤ finrank ℂ Z) :
-    delta * kyFanApproximationGauge k tanTheta0 ≤
-      kyFanApproximationGauge k data.residual := by
+    delta * (tanTheta0.kyFanGauge k : ℝ) ≤
+      (data.residual.kyFanGauge k : ℝ) := by
   have hlt := sine_lt_one_of_formBounds data hdelta hMupper hcross
   let castIndex : Fin k → Fin (finrank ℂ Z) := fun i => Fin.castLE hk i
   have huFull := orthonormal_theorem63ResidualWitness Z V hlt
@@ -536,7 +536,7 @@ private theorem kyFan_core_of_le_finrank (data : Theorem63TrialData Z V)
     abel
   have hsum := sum_le_kyFanApproximationGauge_of_orthonormal
     data.residual hu hv hscalar
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum] at hsum ⊢
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum] at hsum ⊢
   rw [Finset.mul_sum, ← Fin.sum_univ_eq_sum_range]
   simpa [castIndex] using hsum
 
@@ -554,8 +554,8 @@ theorem all_kyFan_core_of_formBounds (data : Theorem63TrialData Z V)
         Vᗮ.starProjection (data.action z)⟫_ℂ)
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0) :
-    ∀ k, delta * kyFanApproximationGauge k tanTheta0 ≤
-      kyFanApproximationGauge k data.residual := by
+    ∀ k, delta * (tanTheta0.kyFanGauge k : ℝ) ≤
+      (data.residual.kyFanGauge k : ℝ) := by
   intro k
   by_cases hk : k ≤ finrank ℂ Z
   · exact kyFan_core_of_le_finrank data hdelta hMupper hcross tanTheta0 htan hk

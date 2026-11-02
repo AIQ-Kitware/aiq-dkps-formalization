@@ -47,7 +47,7 @@ bounded operator is controlled by the `k`-th approximation-number prefix. -/
 theorem re_sum_inner_map_le_kyFanApproximationGauge
     (K : E →L[𝕜] F) {k : ℕ} {u : Fin k → F} {v : Fin k → E}
     (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) :
-    RCLike.re (∑ i, ⟪u i, K (v i)⟫_𝕜) ≤ kyFanApproximationGauge k K := by
+    RCLike.re (∑ i, ⟪u i, K (v i)⟫_𝕜) ≤ (K.kyFanGauge k : ℝ) := by
   classical
   set L₁ : Submodule 𝕜 F := Submodule.span 𝕜 (Set.range u) with hL₁def
   set L₂ : Submodule 𝕜 E := Submodule.span 𝕜 (Set.range v) with hL₂def
@@ -96,11 +96,11 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge
   have hK'id : K'.toLinearMap.toContinuousLinearMap = K' := by
     ext x; rfl
   have hbridge :
-      K'.toLinearMap.kyFanSum k = kyFanApproximationGauge k K' := by
+      K'.toLinearMap.kyFanSum k = (K'.kyFanGauge k : ℝ) := by
     rw [kyFanSum_eq_kyFanApproximationGauge, hK'id]
   -- the compression does not increase approximation numbers
-  have hmono : kyFanApproximationGauge k K' ≤ kyFanApproximationGauge k K := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+  have hmono : (K'.kyFanGauge k : ℝ) ≤ (K.kyFanGauge k : ℝ) := by
+    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_le_sum fun n _ => ?_
     have hcomp := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le
       L₁.orthogonalProjectionOnto K L₂.subtypeL n))
@@ -121,8 +121,8 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge
         congr 1
         exact Finset.sum_congr rfl fun i _ => (hpair i).symm
     _ ≤ K'.toLinearMap.kyFanSum k := hfin
-    _ = kyFanApproximationGauge k K' := hbridge
-    _ ≤ kyFanApproximationGauge k K := hmono
+    _ = (K'.kyFanGauge k : ℝ) := hbridge
+    _ ≤ (K.kyFanGauge k : ℝ) := hmono
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Witness form of the variational bound: pointwise lower bounds by paired
@@ -131,7 +131,7 @@ theorem sum_le_kyFanApproximationGauge_of_orthonormal
     (K : E →L[𝕜] F) {k : ℕ} {u : Fin k → F} {v : Fin k → E}
     (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) {t : Fin k → ℝ}
     (ht : ∀ i, t i ≤ RCLike.re ⟪u i, K (v i)⟫_𝕜) :
-    ∑ i, t i ≤ kyFanApproximationGauge k K := by
+    ∑ i, t i ≤ (K.kyFanGauge k : ℝ) := by
   refine le_trans ?_ (re_sum_inner_map_le_kyFanApproximationGauge K hu hv)
   rw [map_sum]
   exact Finset.sum_le_sum fun i _ => ht i
@@ -169,7 +169,7 @@ theorem sum_abs_le_kyFanApproximationGauge_of_orthonormal
     (K : E →L[𝕜] F) {k : ℕ} {u : Fin k → F} {v : Fin k → E}
     (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v) {t : Fin k → ℝ}
     (ht : ∀ i, t i ≤ |RCLike.re ⟪u i, K (v i)⟫_𝕜|) :
-    ∑ i, t i ≤ kyFanApproximationGauge k K := by
+    ∑ i, t i ≤ (K.kyFanGauge k : ℝ) := by
   classical
   set σ : Fin k → Bool :=
     fun i => decide (0 ≤ RCLike.re ⟪u i, K (v i)⟫_𝕜) with hσ
@@ -285,7 +285,7 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge_of_contraction
     (hu : ∀ α : Fin k → 𝕜, ‖∑ i, α i • u i‖ ^ 2 ≤ cu ^ 2 * ∑ i, ‖α i‖ ^ 2)
     (hv : ∀ α : Fin k → 𝕜, ‖∑ i, α i • v i‖ ^ 2 ≤ cv ^ 2 * ∑ i, ‖α i‖ ^ 2) :
     RCLike.re (∑ i, ⟪u i, K (v i)⟫_𝕜) ≤
-      cu * cv * kyFanApproximationGauge k K := by
+      cu * cv * (K.kyFanGauge k : ℝ) := by
   classical
   set M : EuclideanSpace 𝕜 (Fin k) →L[𝕜] F := familyCombination u with hM
   set N : EuclideanSpace 𝕜 (Fin k) →L[𝕜] E := familyCombination v with hN
@@ -306,9 +306,9 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge_of_contraction
     rw [ContinuousLinearMap.adjoint.norm_map]
     exact norm_familyCombination_le hcu hu
   have hNn : ‖N‖ ≤ cv := norm_familyCombination_le hcv hv
-  have hmono : kyFanApproximationGauge k X ≤
-      cu * cv * kyFanApproximationGauge k K := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+  have hmono : (X.kyFanGauge k : ℝ) ≤
+      cu * cv * (K.kyFanGauge k : ℝ) := by
+    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     rw [Finset.mul_sum]
     refine Finset.sum_le_sum fun n _ => ?_
     have hcomp := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le
@@ -331,8 +331,8 @@ theorem re_sum_inner_map_le_kyFanApproximationGauge_of_contraction
           X (EuclideanSpace.single i (1 : 𝕜))⟫_𝕜) := by
         congr 1
         exact Finset.sum_congr rfl fun i _ => (hpair i).symm
-    _ ≤ kyFanApproximationGauge k X := hfin
-    _ ≤ cu * cv * kyFanApproximationGauge k K := hmono
+    _ ≤ (X.kyFanGauge k : ℝ) := hfin
+    _ ≤ cu * cv * (K.kyFanGauge k : ℝ) := hmono
 
 omit [CompleteSpace E] in
 /-- Witness form of the contraction Ky Fan bound: pointwise lower bounds by
@@ -344,7 +344,7 @@ theorem sum_le_kyFanApproximationGauge_of_contraction
     (hu : ∀ α : Fin k → 𝕜, ‖∑ i, α i • u i‖ ^ 2 ≤ cu ^ 2 * ∑ i, ‖α i‖ ^ 2)
     (hv : ∀ α : Fin k → 𝕜, ‖∑ i, α i • v i‖ ^ 2 ≤ cv ^ 2 * ∑ i, ‖α i‖ ^ 2)
     {t : Fin k → ℝ} (ht : ∀ i, t i ≤ RCLike.re ⟪u i, K (v i)⟫_𝕜) :
-    ∑ i, t i ≤ cu * cv * kyFanApproximationGauge k K := by
+    ∑ i, t i ≤ cu * cv * (K.kyFanGauge k : ℝ) := by
   refine le_trans ?_
     (re_sum_inner_map_le_kyFanApproximationGauge_of_contraction K hcu hcv hu hv)
   rw [map_sum]

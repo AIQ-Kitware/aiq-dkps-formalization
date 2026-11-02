@@ -105,7 +105,7 @@ theorem sum_absDoubleAngleTangent_le_of_approximatePairs_residual
       ((t i : ℝ) : 𝕜) • u i‖ ≤ ε)
     (hsmall : approximatePairErrorCoefficient A H T * ε ≤ (b - a) / 4) :
     (b - a) * ∑ i, absDoubleAngleTangent (t i) ≤
-      2 * kyFanApproximationGauge m (branchFreeResidualCompression U H) +
+      2 * ((branchFreeResidualCompression U H).kyFanGauge m : ℝ) +
         m * (branchFreeTangentErrorCoefficient A H T (b - a) * ε) := by
   classical
   set C : ℝ := branchFreeTangentErrorCoefficient A H T (b - a) with hC
@@ -184,8 +184,8 @@ private theorem projectionBlock_upper_branchFree
 private theorem kyFan_lowerBlock_eq_upperBlock_branchFree
     {U : Submodule ℂ E} [U.HasOrthogonalProjection]
     (K : E →L[ℂ] E) (hK : IsSelfAdjoint K) (k : ℕ) :
-    kyFanApproximationGauge k (projectionBlock Uᗮ U K) =
-      kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ K) := by
+    ((projectionBlock Uᗮ U K).kyFanGauge k : ℝ) =
+      ((projectionBlock Uᗮᗮ Uᗮ K).kyFanGauge k : ℝ) := by
   have hadj : projectionBlock Uᗮᗮ Uᗮ K =
       (projectionBlock Uᗮ U K).adjoint := by
     rw [projectionBlock_upper_branchFree, projectionBlock_lower_branchFree]
@@ -218,30 +218,30 @@ theorem tanTwoTheta_ambient_bounded_kyFan_complex_of_block
     {a b : ℝ}
     (hH : IsSelfAdjoint H) (hK : IsSelfAdjoint K) (hab : a < b)
     (hblockModulus : ∀ k : ℕ,
-      kyFanApproximationGauge k (tanTwoAngleOperatorC U V) =
-        kyFanApproximationGauge k (diagonalPair Uᗮ U K))
+      ((tanTwoAngleOperatorC U V).kyFanGauge k : ℝ) =
+        ((diagonalPair Uᗮ U K).kyFanGauge k : ℝ))
     (hcorner : ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (projectionBlock Uᗮ U K) ≤
-        2 * kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ H)) :
+      (b - a) * ((projectionBlock Uᗮ U K).kyFanGauge k : ℝ) ≤
+        2 * ((projectionBlock Uᗮᗮ Uᗮ H).kyFanGauge k : ℝ)) :
     ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (tanTwoAngleOperatorC U V) ≤
-        2 * kyFanApproximationGauge k H := by
+      (b - a) * ((tanTwoAngleOperatorC U V).kyFanGauge k : ℝ) ≤
+        2 * (H.kyFanGauge k : ℝ) := by
   intro k
   have hd : (0 : ℝ) < (b - a) / 2 := by linarith
   have hcnorm : ‖((((b - a) / 2 : ℝ)) : ℂ)‖ = (b - a) / 2 := by
     rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos hd]
   have h₀ : ∀ j : ℕ,
-      kyFanApproximationGauge j (projectionBlock Uᗮ U
-          (((((b - a) / 2 : ℝ)) : ℂ) • K)) ≤
-        kyFanApproximationGauge j (projectionBlock Uᗮ U H) := by
+      ((projectionBlock Uᗮ U
+          (((((b - a) / 2 : ℝ)) : ℂ) • K)).kyFanGauge j : ℝ) ≤
+        ((projectionBlock Uᗮ U H).kyFanGauge j : ℝ) := by
     intro j
     rw [projectionBlock_smul_branchFree, kyFanApproximationGauge_smul, hcnorm,
       kyFan_lowerBlock_eq_upperBlock_branchFree H hH j]
     linarith [hcorner j]
   have h₁ : ∀ j : ℕ,
-      kyFanApproximationGauge j (projectionBlock Uᗮᗮ Uᗮ
-          (((((b - a) / 2 : ℝ)) : ℂ) • K)) ≤
-        kyFanApproximationGauge j (projectionBlock Uᗮᗮ Uᗮ H) := by
+      ((projectionBlock Uᗮᗮ Uᗮ
+          (((((b - a) / 2 : ℝ)) : ℂ) • K)).kyFanGauge j : ℝ) ≤
+        ((projectionBlock Uᗮᗮ Uᗮ H).kyFanGauge j : ℝ) := by
     intro j
     rw [projectionBlock_smul_branchFree, kyFanApproximationGauge_smul, hcnorm,
       ← kyFan_lowerBlock_eq_upperBlock_branchFree K hK j]
@@ -272,19 +272,19 @@ theorem tanTwoTheta_ambient_bounded_symmetricNorming_complex_of_block
     {a b : ℝ}
     (hH : IsSelfAdjoint H) (hK : IsSelfAdjoint K) (hab : a < b)
     (hblockModulus : ∀ k : ℕ,
-      kyFanApproximationGauge k (tanTwoAngleOperatorC U V) =
-        kyFanApproximationGauge k (diagonalPair Uᗮ U K))
+      ((tanTwoAngleOperatorC U V).kyFanGauge k : ℝ) =
+        ((diagonalPair Uᗮ U K).kyFanGauge k : ℝ))
     (hcorner : ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (projectionBlock Uᗮ U K) ≤
-        2 * kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ H))
+      (b - a) * ((projectionBlock Uᗮ U K).kyFanGauge k : ℝ) ≤
+        2 * ((projectionBlock Uᗮᗮ Uᗮ H).kyFanGauge k : ℝ))
     (hHmem : N.Mem H) :
     N.Mem (tanTwoAngleOperatorC U V) ∧
       (b - a) * N.gauge (tanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
   have htwo : ‖((2 : ℝ) : ℂ)‖ = 2 := by norm_num
   have hd : (0 : ℝ) < b - a := by linarith
   have hscaled : ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (tanTwoAngleOperatorC U V) ≤
-        kyFanApproximationGauge k (((2 : ℝ) : ℂ) • H) := by
+      (b - a) * ((tanTwoAngleOperatorC U V).kyFanGauge k : ℝ) ≤
+        ((((2 : ℝ) : ℂ) • H).kyFanGauge k : ℝ) := by
     intro k
     rw [kyFanApproximationGauge_smul, htwo]
     exact tanTwoTheta_ambient_bounded_kyFan_complex_of_block hH hK hab

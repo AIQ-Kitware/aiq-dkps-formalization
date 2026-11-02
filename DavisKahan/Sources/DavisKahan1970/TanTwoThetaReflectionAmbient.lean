@@ -85,8 +85,8 @@ private theorem projectionBlock_upper_reflection
 private theorem kyFan_lowerBlock_eq_upperBlock_reflection
     {U : Submodule ℂ E} [U.HasOrthogonalProjection]
     (K : E →L[ℂ] E) (hK : IsSelfAdjoint K) (k : ℕ) :
-    kyFanApproximationGauge k (projectionBlock Uᗮ U K) =
-      kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ K) := by
+    ((projectionBlock Uᗮ U K).kyFanGauge k : ℝ) =
+      ((projectionBlock Uᗮᗮ Uᗮ K).kyFanGauge k : ℝ) := by
   have hadj : projectionBlock Uᗮᗮ Uᗮ K =
       (projectionBlock Uᗮ U K).adjoint := by
     rw [projectionBlock_upper_reflection, projectionBlock_lower_reflection]
@@ -506,9 +506,8 @@ private theorem reflection_block_data
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) :
     ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k
-          (blockCompression Uᗮ U (tanTwoBlockRepresentative U V)) ≤
-        2 * kyFanApproximationGauge k (blockCompression Uᗮ U H) := by
+      (b - a) * ((blockCompression Uᗮ U (tanTwoBlockRepresentative U V)).kyFanGauge k : ℝ) ≤
+        2 * ((blockCompression Uᗮ U H).kyFanGauge k : ℝ) := by
   let N : E →L[ℂ] E := signedCosTwo U V
   let L : E →L[ℂ] E := tanTwoBlockRepresentative U V
   let A0 : U →L[ℂ] U := compressOperator U A
@@ -988,19 +987,19 @@ theorem tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_kyFa
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) :
     ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k
-          (projectionBlock Uᗮ U
-            (2 * (projectorDifference U V * doubleSecant U V))) ≤
-        2 * kyFanApproximationGauge k (projectionBlock Uᗮ U H) := by
+      (b - a) * ((projectionBlock Uᗮ U
+            (2 * (projectorDifference U V * doubleSecant U V))).kyFanGauge k : ℝ) ≤
+        2 * ((projectionBlock Uᗮ U H).kyFanGauge k : ℝ) := by
   intro k
   have h := reflection_block_data hA hH hAU hAplusH_V hab hUhigh hUperpLow
     hHU hHUperp hcos k
-  erw [← (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+  erw [← (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ)
+    from
       (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U
       (tanTwoBlockRepresentative U V)).kyFanGauge_eq k))),
     tanTwoBlockRepresentative] at h
   erw [projectionBlock_diagonalPair_lower_reflection U,
-    ← (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+    ← (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U H).kyFanGauge_eq k)))] at h
   exact h
 
@@ -1035,10 +1034,9 @@ theorem tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_symm
         2 * N.gauge (projectionBlock Uᗮ U H) := by
   have hhalf : (0 : ℝ) < (b - a) / 2 := by linarith
   have hscaled : ∀ k : ℕ,
-      (b - a) / 2 * kyFanApproximationGauge k
-          (projectionBlock Uᗮ U
-            (2 * (projectorDifference U V * doubleSecant U V))) ≤
-        kyFanApproximationGauge k (projectionBlock Uᗮ U H) := by
+      (b - a) / 2 * ((projectionBlock Uᗮ U
+            (2 * (projectorDifference U V * doubleSecant U V))).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Uᗮ U H).kyFanGauge k : ℝ) := by
     intro k
     have h := tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_kyFan_complex
       hA hH hAU hAplusH_V hab hUhigh hUperpLow hHU hHUperp hcos k
@@ -1063,10 +1061,9 @@ theorem
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) :
     ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k
-          (projectionBlock Uᗮ U
-            (2 * (projectorDifference U V * doubleSecant U V))) ≤
-        2 * kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ H) := by
+      (b - a) * ((projectionBlock Uᗮ U
+            (2 * (projectorDifference U V * doubleSecant U V))).kyFanGauge k : ℝ) ≤
+        2 * ((projectionBlock Uᗮᗮ Uᗮ H).kyFanGauge k : ℝ) := by
   intro k
   have h := tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_kyFan_complex
     hA hH hAU hAplusH_V hab hUhigh hUperpLow hHU hHUperp hcos k
@@ -1090,8 +1087,8 @@ theorem tanTwoTheta_ambient_bounded_branchFree_orderedForm_kyFan_complex
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) :
     ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (absTanTwoAngleOperatorC U V) ≤
-        2 * kyFanApproximationGauge k H := by
+      (b - a) * ((absTanTwoAngleOperatorC U V).kyFanGauge k : ℝ) ≤
+        2 * (H.kyFanGauge k : ℝ) := by
   exact tanTwoTheta_ambient_bounded_branchFree_kyFan_complex_of_corner hH hab hcos
     (tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_kyFan_complex_upperCorner
       hA hH hAU hAplusH_V hab hUhigh hUperpLow hHU hHUperp hcos)

@@ -207,7 +207,7 @@ theorem sum_absDoubleAngleTangent_le_add_error
     (S : Finset ℕ) {ε : ℝ} (hε0 : 0 < ε) (hεhalf : ε ≤ 1 / 2)
     (hsmall : approximatePairErrorCoefficient A H T * ε ≤ (b - a) / 4) :
     (b - a) * ∑ n ∈ S, absDoubleAngleTangent ((T.singularValue n : ℝ)) ≤
-      2 * kyFanApproximationGauge S.card H +
+      2 * (H.kyFanGauge S.card : ℝ) +
         S.card * (branchFreeTotalErrorCoefficient A H T (b - a) * ε) := by
   classical
   have hd : 0 < b - a := by linarith
@@ -294,9 +294,9 @@ theorem sum_absDoubleAngleTangent_le_add_error
       (fun x : {x // x ∈ S₁} =>
         absDoubleAngleTangent ((T.singularValue (x : ℕ) : ℝ)))
   rw [hreindex] at hpart₁
-  have hkyfanmono : kyFanApproximationGauge m H ≤
-      kyFanApproximationGauge S.card H := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+  have hkyfanmono : (H.kyFanGauge m : ℝ) ≤
+      (H.kyFanGauge S.card : ℝ) := by
+    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_le_sum_of_subset_of_nonneg ?_ ?_
     · have hcard : m ≤ S.card := by
         rw [hmdef, hS₁def]
@@ -350,11 +350,11 @@ theorem sum_absDoubleAngleTangent_le_add_error
     positivity
   have hstep₁ : (b - a) * ∑ n ∈ S₁,
       absDoubleAngleTangent ((T.singularValue n : ℝ)) ≤
-        2 * kyFanApproximationGauge S.card H +
+        2 * (H.kyFanGauge S.card : ℝ) +
           S.card * (branchFreeTangentErrorCoefficient A H T (b - a) * ε) := by
     refine hpart₁.trans ?_
-    have h1 : 2 * kyFanApproximationGauge m H ≤
-        2 * kyFanApproximationGauge S.card H := by linarith
+    have h1 : 2 * (H.kyFanGauge m : ℝ) ≤
+        2 * (H.kyFanGauge S.card : ℝ) := by linarith
     have h2 : (m : ℝ) *
         (branchFreeTangentErrorCoefficient A H T (b - a) * ε) ≤
           S.card * (branchFreeTangentErrorCoefficient A H T (b - a) * ε) := by
@@ -385,7 +385,7 @@ theorem sum_absDoubleAngleTangent_le_of_invariantSubspace
     (hab : a < b)
     (S : Finset ℕ) :
     (b - a) * ∑ n ∈ S, absDoubleAngleTangent ((T.singularValue n : ℝ)) ≤
-      2 * kyFanApproximationGauge S.card H := by
+      2 * (H.kyFanGauge S.card : ℝ) := by
   have hd : 0 < b - a := by linarith
   set E₀ : ℝ := approximatePairErrorCoefficient A H T with hE₀
   set Ctot : ℝ := branchFreeTotalErrorCoefficient A H T (b - a) with hCtot
@@ -459,17 +459,17 @@ theorem kyFan_absTanTwoTheta_le_of_invariantSubspace
     (htan : ∀ n, (tanTwoTheta.singularValue (π n) : ℝ) =
       absDoubleAngleTangent ((T.singularValue n : ℝ)))
     (k : ℕ) :
-    (b - a) * kyFanApproximationGauge k tanTwoTheta ≤
-      2 * kyFanApproximationGauge k H := by
+    (b - a) * (tanTwoTheta.kyFanGauge k : ℝ) ≤
+      2 * (H.kyFanGauge k : ℝ) := by
   classical
   set S : Finset ℕ := (Finset.range k).image π.symm with hSdef
   have hScard : S.card = k := by
     rw [hSdef, Finset.card_image_of_injective _ π.symm.injective,
       Finset.card_range]
-  have hgauge : kyFanApproximationGauge k tanTwoTheta =
+  have hgauge : (tanTwoTheta.kyFanGauge k : ℝ) =
       ∑ n ∈ S, absDoubleAngleTangent ((T.singularValue n : ℝ)) := by
     rw [hSdef, Finset.sum_image (fun x _ y _ h => π.symm.injective h)]
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [← htan (π.symm j), Equiv.apply_symm_apply]
   have h := sum_absDoubleAngleTangent_le_of_invariantSubspace hA hH hAU hHU
@@ -509,8 +509,8 @@ theorem absTanTwoTheta_offDiagonal_mem_and_gauge_le_of_invariantSubspace
       (b - a) * N.gaugeReal tanTwoTheta ≤ 2 * N.gaugeReal H := by
   have hδ : (0 : ℝ) < (b - a) / 2 := by linarith
   have hscaled : ∀ k,
-      (b - a) / 2 * kyFanApproximationGauge k tanTwoTheta ≤
-        kyFanApproximationGauge k H := by
+      (b - a) / 2 * (tanTwoTheta.kyFanGauge k : ℝ) ≤
+        (H.kyFanGauge k : ℝ) := by
     intro k
     have h := kyFan_absTanTwoTheta_le_of_invariantSubspace hA hH hAU hHU
       hHUperp hTmem hTzero hUb hUa hinv hab tanTwoTheta π htan k

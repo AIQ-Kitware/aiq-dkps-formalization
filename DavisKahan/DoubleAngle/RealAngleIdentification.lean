@@ -201,9 +201,7 @@ theorem sinTwoTheta_reflectionResidual_opNorm_real
     hJdom hJintertwines
     (by simp [SymmetricOperatorIdealFamily.Mem])
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
     kyFanApproximationGauge_one,
     norm_sinTwoThetaIdealBlock_real] at h
   exact h.2
@@ -232,9 +230,7 @@ theorem sinTwoTheta_addBounded_opNorm_real
         gauge_adjoint := (OperatorIdealFamily.kyFan ℝ 1 Nat.one_pos).gauge_adjoint })) S T hS hT hδ hgap
     (by simp [SymmetricOperatorIdealFamily.Mem])
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
     kyFanApproximationGauge_one,
     norm_sinTwoThetaIdealBlock_real] at h
   exact h.2

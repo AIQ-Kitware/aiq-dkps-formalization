@@ -111,15 +111,15 @@ theorem symmetricNorming_of_kyFanDominant
     N.Mem X ∧ d * N.gauge X ≤ N.gauge Y := by
   refine N.mul_gauge_le_of_all_mul_kyFan_le hd hY (fun k => ?_)
   rcases Nat.eq_zero_or_pos k with rfl | hk
-  · rw [kyFanApproximationGauge, kyFanApproximationGauge,
+  · rw [
       ContinuousLinearMap.kyFanGaugeReal_zero_index,
       ContinuousLinearMap.kyFanGaugeReal_zero_index, mul_zero]
   · have hM := h ((show TauCeti.SymmetricOperatorIdealFamily 𝕜 from
     { toOperatorIdealFamily := OperatorIdealFamily.kyFan 𝕜 k hk
       gauge_adjoint := (OperatorIdealFamily.kyFan 𝕜 k hk).gauge_adjoint }))
       (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at hM
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+      ENNReal.coe_toReal] at hM
     exact hM.2
 
 /-- **The converse bridge: a source-norm estimate holds at every Fan-dominant
@@ -157,7 +157,7 @@ theorem kyFanDominant_of_symmetricNorming
     M.Mem X ∧ d * M.gaugeReal X ≤ M.gaugeReal Y := by
   refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le M hd hY (fun k => ?_)
   rcases Nat.eq_zero_or_pos k with rfl | hk
-  · rw [kyFanApproximationGauge, kyFanApproximationGauge,
+  · rw [
       ContinuousLinearMap.kyFanGaugeReal_zero_index,
       ContinuousLinearMap.kyFanGaugeReal_zero_index, mul_zero]
   · have hN := (h (kyFanNormingFunction k hk) (kyFanNormingFunction_mem k hk Y)).2

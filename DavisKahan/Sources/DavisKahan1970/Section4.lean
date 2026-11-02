@@ -644,7 +644,7 @@ theorem Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_opNorm
     ‖1 - DavisKahan.nonacuteDirectRotation U V J‖ ≤ ‖1 - W‖ := by
   have hk := proposition4_3_infiniteDimensional_nonacute U V J W hWunitary hWmap 1
   rw [displacementSquare_eq_gramOperator, displacementSquare_eq_gramOperator] at hk
-  simp only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
+  simp only [
     ContinuousLinearMap.kyFanGauge_one, coe_nnnorm, norm_gramOperator] at hk
   exact le_of_sq_le_sq hk (norm_nonneg _)
 
@@ -676,7 +676,7 @@ theorem Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_hilbertSchm
     rw [displacementSquare_eq_gramOperator, displacementSquare_eq_gramOperator] at hk
     have hk' : ((ApproximationNumber.gramOperator (1 - DavisKahan.nonacuteDirectRotation U V J)).kyFanGauge k : ℝ) ≤
         ((ApproximationNumber.gramOperator (1 - W)).kyFanGauge k : ℝ) := by
-      simpa only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge] using hk
+      exact hk
     exact ENNReal.coe_le_coe.mpr (NNReal.coe_le_coe.mp hk')
   rw [nuclearENorm_gramOperator, nuclearENorm_gramOperator] at hnuc
   rw [← ENNReal.rpow_natCast _ 2, ← ENNReal.rpow_natCast _ 2] at hnuc

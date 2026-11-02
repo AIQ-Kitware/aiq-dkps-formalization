@@ -74,9 +74,8 @@ also involutive, so it cannot shrink either.  Only the `≤` direction is used
 below, but the equality is the honest statement. -/
 theorem kyFanApproximationGauge_reflectionConjugate_le
     (U : Submodule ℂ E) [U.HasOrthogonalProjection] (A : E →L[ℂ] E) (k : ℕ) :
-    kyFanApproximationGauge k
-        ((U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E)) ≤
-      kyFanApproximationGauge k A := by
+    (((U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E)).kyFanGauge k : ℝ) ≤
+      (A.kyFanGauge k : ℝ) := by
   let J : E →L[ℂ] E := U.reflection
   have h := kyFanApproximationGauge_comp_le (𝕜 := ℂ) k
     J A J
@@ -85,17 +84,17 @@ theorem kyFanApproximationGauge_reflectionConjugate_le
     intro x
     change ‖U.reflection x‖ ≤ 1 * ‖x‖
     simpa only [one_mul] using le_of_eq (U.reflection.norm_map x)
-  have hnn : 0 ≤ kyFanApproximationGauge k A :=
+  have hnn : 0 ≤ (A.kyFanGauge k : ℝ) :=
     kyFanApproximationGauge_nonneg k A
   refine h.trans ?_
   have h1 : ‖J‖ *
-      kyFanApproximationGauge k A ≤ 1 * kyFanApproximationGauge k A :=
+      (A.kyFanGauge k : ℝ) ≤ 1 * (A.kyFanGauge k : ℝ) :=
     mul_le_mul_of_nonneg_right hJ hnn
   calc
-    ‖J‖ * kyFanApproximationGauge k A * ‖J‖ ≤
-        1 * kyFanApproximationGauge k A * 1 :=
+    ‖J‖ * (A.kyFanGauge k : ℝ) * ‖J‖ ≤
+        1 * (A.kyFanGauge k : ℝ) * 1 :=
       mul_le_mul h1 hJ (norm_nonneg _) (by linarith)
-    _ = kyFanApproximationGauge k A := by ring
+    _ = (A.kyFanGauge k : ℝ) := by ring
 
 omit [CompleteSpace E] in
 /-- **Conjugating by a contraction pair cannot increase a Ky Fan approximation gauge.**
@@ -106,15 +105,15 @@ it twice with the roles exchanged. -/
 theorem kyFanApproximationGauge_conj_le_complex {F : Type v} [NormedAddCommGroup F]
     [InnerProductSpace ℂ F] [CompleteSpace F] {L : E →L[ℂ] F} {R : F →L[ℂ] E}
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) (A : E →L[ℂ] E) (k : ℕ) :
-    kyFanApproximationGauge k (L ∘L A ∘L R) ≤ kyFanApproximationGauge k A := by
+    ((L ∘L A ∘L R).kyFanGauge k : ℝ) ≤ (A.kyFanGauge k : ℝ) := by
   refine (kyFanApproximationGauge_comp_le (𝕜 := ℂ) k L A R).trans ?_
-  have hnn : 0 ≤ kyFanApproximationGauge k A := kyFanApproximationGauge_nonneg k A
-  have h1 : ‖L‖ * kyFanApproximationGauge k A ≤ 1 * kyFanApproximationGauge k A :=
+  have hnn : 0 ≤ (A.kyFanGauge k : ℝ) := kyFanApproximationGauge_nonneg k A
+  have h1 : ‖L‖ * (A.kyFanGauge k : ℝ) ≤ 1 * (A.kyFanGauge k : ℝ) :=
     mul_le_mul_of_nonneg_right hL hnn
   calc
-    ‖L‖ * kyFanApproximationGauge k A * ‖R‖ ≤ 1 * kyFanApproximationGauge k A * 1 :=
+    ‖L‖ * (A.kyFanGauge k : ℝ) * ‖R‖ ≤ 1 * (A.kyFanGauge k : ℝ) * 1 :=
       mul_le_mul h1 hR (norm_nonneg _) (by linarith)
-    _ = kyFanApproximationGauge k A := by ring
+    _ = (A.kyFanGauge k : ℝ) := by ring
 
 /-- **Ky Fan approximation gauges are invariant under conjugation by an isometry
 equivalence**, in the form the block chart needs: a contraction pair with `R ∘L L = 1`.
@@ -127,7 +126,7 @@ theorem kyFanApproximationGauge_conj_eq_complex {F : Type v} [NormedAddCommGroup
     [InnerProductSpace ℂ F] [CompleteSpace F] {L : E →L[ℂ] F} {R : F →L[ℂ] E}
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) (hRL : R ∘L L = ContinuousLinearMap.id ℂ E)
     (A : E →L[ℂ] E) (k : ℕ) :
-    kyFanApproximationGauge k (L ∘L A ∘L R) = kyFanApproximationGauge k A := by
+    ((L ∘L A ∘L R).kyFanGauge k : ℝ) = (A.kyFanGauge k : ℝ) := by
   refine le_antisymm (kyFanApproximationGauge_conj_le_complex hL hR A k) ?_
   have hRLapp : ∀ y : E, R (L y) = y := by
     intro y
@@ -148,21 +147,21 @@ The pinch is the average of `A` and its reflection conjugate, and the gauge is
 subadditive and conjugation-invariant. -/
 theorem kyFanApproximationGauge_diagBlock_le_complex
     (U : Submodule ℂ E) [U.HasOrthogonalProjection] (A : E →L[ℂ] E) (k : ℕ) :
-    kyFanApproximationGauge k (U.diagBlock A) ≤
-      kyFanApproximationGauge k A := by
+    ((U.diagBlock A).kyFanGauge k : ℝ) ≤
+      (A.kyFanGauge k : ℝ) := by
   have hsplit : (2 : ℂ) • U.diagBlock A =
       A + (U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E) := by
     simpa [← Nat.cast_smul_eq_nsmul ℂ] using
       (Submodule.two_smul_diagBlock (𝕜 := ℂ) U A)
-  have hsum : kyFanApproximationGauge k ((2 : ℂ) • U.diagBlock A) ≤
-      2 * kyFanApproximationGauge k A := by
+  have hsum : (((2 : ℂ) • U.diagBlock A).kyFanGauge k : ℝ) ≤
+      2 * (A.kyFanGauge k : ℝ) := by
     rw [hsplit]
     have htri := ContinuousLinearMap.kyFanGauge_add_le A
       ((U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E)) k
-    have hreal : kyFanApproximationGauge k
-        (A + (U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E)) ≤
-        kyFanApproximationGauge k A + kyFanApproximationGauge k
-          ((U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E)) := by
+    have hreal : ((A + (U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ] E)).kyFanGauge k
+      : ℝ) ≤
+        (A.kyFanGauge k : ℝ) + (((U.reflection : E →L[ℂ] E) ∘L A ∘L (U.reflection : E →L[ℂ]
+          E)).kyFanGauge k : ℝ) := by
       exact_mod_cast htri
     refine hreal.trans ?_
     have := kyFanApproximationGauge_reflectionConjugate_le U A k

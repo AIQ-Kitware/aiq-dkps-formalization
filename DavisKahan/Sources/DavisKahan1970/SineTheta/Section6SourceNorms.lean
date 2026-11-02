@@ -67,8 +67,8 @@ omit [CompleteSpace E] in
 /-- The Ky Fan gauge at level `0` is the empty sum. -/
 private theorem kyFanApproximationGauge_zero' {F : Type v}
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    (A : E →L[𝕜] F) : kyFanApproximationGauge 0 A = 0 := by
-  simp [kyFanApproximationGauge]
+    (A : E →L[𝕜] F) : (A.kyFanGauge 0 : ℝ) = 0 := by
+  simp []
 
 /-- A bound assumed for every member of the source norm class gives the Ky Fan
 inequalities at every level, because the Ky Fan norms *are* members. -/
@@ -76,7 +76,7 @@ private theorem all_kyFan_le_of_forall_normalizedUnitaryInvariantNorm
     {X Y : E →L[𝕜] E}
     (h : ∀ M : NormalizedUnitaryInvariantNorm.{u, v} 𝕜,
       M.Mem Y → M.Mem X ∧ M.gauge X ≤ M.gauge Y) (k : ℕ) :
-    kyFanApproximationGauge k X ≤ kyFanApproximationGauge k Y := by
+    (X.kyFanGauge k : ℝ) ≤ (Y.kyFanGauge k : ℝ) := by
   rcases Nat.eq_zero_or_pos k with rfl | hk
   · rw [kyFanApproximationGauge_zero' X, kyFanApproximationGauge_zero' Y]
   · obtain ⟨-, hle⟩ := h (kyFanNormalizedUnitaryInvariantNorm (𝕜 := 𝕜) k hk)

@@ -637,7 +637,7 @@ theorem reflectionTangent_selected_le_kyFan_add_error
       B ∘L C0 + C1 ∘L B)
     {k : ℕ} {eps : ℝ} (F : ApproximateLeadingSingularFamily T k eps) :
     (b - a) * ∑ i : Fin F.count, (T.singularValue (i : ℕ) : ℝ) ≤
-      2 * kyFanApproximationGauge F.count B +
+      2 * (B.kyFanGauge F.count : ℝ) +
         F.count * (reflectionTangentErrorCoefficient A0 A1 B T C0 C1 * eps) := by
   let J0 := C0.polarFactor
   let J1 := C1.polarFactor
@@ -678,10 +678,10 @@ theorem reflectionTangent_selected_le_kyFan_add_error
     _ ≤ ∑ i : Fin F.count, |RCLike.re ⟪F.left i, B (F.right i)⟫_ℂ| +
         ∑ i : Fin F.count, |RCLike.re ⟪J1 (F.left i), B (J0 (F.right i))⟫_ℂ| +
           F.count * (reflectionTangentErrorCoefficient A0 A1 B T C0 C1 * eps) := hsum
-    _ ≤ kyFanApproximationGauge F.count B + kyFanApproximationGauge F.count B +
+    _ ≤ (B.kyFanGauge F.count : ℝ) + (B.kyFanGauge F.count : ℝ) +
           F.count * (reflectionTangentErrorCoefficient A0 A1 B T C0 C1 * eps) := by
           exact add_le_add (add_le_add hvar0 hvar1) le_rfl
-    _ = 2 * kyFanApproximationGauge F.count B +
+    _ = 2 * (B.kyFanGauge F.count : ℝ) +
           F.count * (reflectionTangentErrorCoefficient A0 A1 B T C0 C1 * eps) := by ring
 
 /-- **Dimension-free Ky Fan reflection tangent theorem.** -/
@@ -698,8 +698,8 @@ theorem reflectionTangent_all_kyFan
     (hgram1 : C1.adjoint ∘L C1 ∘L (1 + T ∘L T.adjoint) = 1)
     (heq76 : (C1 ∘L T) ∘L A0 - A1 ∘L (C1 ∘L T) =
       B ∘L C0 + C1 ∘L B) :
-    ∀ k : ℕ, (b - a) * kyFanApproximationGauge k T ≤
-      2 * kyFanApproximationGauge k B := by
+    ∀ k : ℕ, (b - a) * (T.kyFanGauge k : ℝ) ≤
+      2 * (B.kyFanGauge k : ℝ) := by
   intro k
   have hd : 0 < b - a := by linarith
   set Ctot := reflectionTangentErrorCoefficient A0 A1 B T C0 C1 with hCtot
@@ -719,11 +719,11 @@ theorem reflectionTangent_all_kyFan
   obtain ⟨F⟩ := exists_approximateLeadingSingularFamily T k heps0
   have hselected := reflectionTangent_selected_le_kyFan_add_error A0 A1 B T C0 C1
     hA0 hA1 hC0 hC1 hC0unit hC1unit hab hA0high hA1low hgram0 hgram1 heq76 F
-  have hBmono : kyFanApproximationGauge F.count B ≤ kyFanApproximationGauge k B :=
+  have hBmono : (B.kyFanGauge F.count : ℝ) ≤ (B.kyFanGauge k : ℝ) :=
     kyFanApproximationGauge_mono_length B F.count_le
   have hprefix :
       (b - a) * Finset.sum (Finset.range F.count) (fun n => (T.singularValue n : ℝ)) ≤
-        2 * kyFanApproximationGauge k B + (k : ℝ) * (Ctot * eps) := by
+        2 * (B.kyFanGauge k : ℝ) + (k : ℝ) * (Ctot * eps) := by
     have hsumfin : ∑ i : Fin F.count, (T.singularValue (i : ℕ) : ℝ) =
         Finset.sum (Finset.range F.count) (fun n => (T.singularValue n : ℝ)) := by
       rw [← Fin.sum_univ_eq_sum_range]
@@ -745,10 +745,10 @@ theorem reflectionTangent_all_kyFan
         rw [Finset.sum_const, Nat.card_Ico, nsmul_eq_mul,
           Nat.cast_sub F.count_le]
   have hsplit :
-      kyFanApproximationGauge k T =
+      (T.kyFanGauge k : ℝ) =
         Finset.sum (Finset.range F.count) (fun n => (T.singularValue n : ℝ)) +
           Finset.sum (Finset.Ico F.count k) (fun n => (T.singularValue n : ℝ)) := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     rw [← Finset.sum_range_add_sum_Ico (f := fun n => (T.singularValue n : ℝ)) F.count_le]
   have htailScaled :
       (b - a) * Finset.sum (Finset.Ico F.count k) (fun n => (T.singularValue n : ℝ)) ≤
@@ -798,8 +798,8 @@ theorem reflectionTangent_all_kyFan_of_pythagorean
     (hpyth1 : C1 ∘L C1 + G ∘L G.adjoint = 1)
     (hleft : C1 ∘L T = G) (hright : T ∘L C0 = G)
     (heq76G : G ∘L A0 - A1 ∘L G = B ∘L C0 + C1 ∘L B) :
-    ∀ k : ℕ, (b - a) * kyFanApproximationGauge k T ≤
-      2 * kyFanApproximationGauge k B := by
+    ∀ k : ℕ, (b - a) * (T.kyFanGauge k : ℝ) ≤
+      2 * (B.kyFanGauge k : ℝ) := by
   have hadjIntertwine : C0 ∘L T.adjoint = T.adjoint ∘L C1 := by
     have h := congrArg ContinuousLinearMap.adjoint (hleft.trans hright.symm)
     simpa [ContinuousLinearMap.adjoint_comp, hC0.adjoint_eq, hC1.adjoint_eq,

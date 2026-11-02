@@ -63,8 +63,8 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto_real
     (hP : StronglyTendsto P l (ContinuousLinearMap.id ℝ E))
     (k : ℕ) (K : E →L[ℝ] F) :
     Tendsto
-      (fun i => kyFanApproximationGauge k (K ∘L P i))
-      l (𝓝 (kyFanApproximationGauge k K)) :=
+      (fun i => ((K ∘L P i).kyFanGauge k : ℝ))
+      l (𝓝 ((K.kyFanGauge k : ℝ))) :=
   kyFanApproximationGauge_comp_strongProjection_tendsto_of_minMax
     TauCeti.HasMinMaxLowerBound.of_completeSpace hPproj hP k K
 

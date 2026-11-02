@@ -278,8 +278,8 @@ def reverseResidualBlock (P : RealSymmetricSinThetaProblem (E := E)) :
 theorem forward_all_kyFan
     (P : RealSymmetricSinThetaProblem (E := E)) :
     ∀ k,
-      P.gap * kyFanApproximationGauge k P.forwardSineBlock ≤
-        kyFanApproximationGauge k P.forwardResidualBlock := by
+      P.gap * (P.forwardSineBlock.kyFanGauge k : ℝ) ≤
+        (P.forwardResidualBlock.kyFanGauge k : ℝ) := by
   intro k
   set D := P.forwardData with hD
   have hA0 : _root_.IsSelfAdjoint D.A₀ := by
@@ -328,16 +328,16 @@ theorem forward_all_kyFan
       map_sub, map_neg] using
       ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
         P.Vᗮ P.U (-(D.residual.adjoint ∘L D.F₁))
-  have hgaugeSine : kyFanApproximationGauge k P.forwardSineBlock =
-      kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
+  have hgaugeSine : (P.forwardSineBlock.kyFanGauge k : ℝ) =
+      ((D.X.adjoint ∘L D.F₁).kyFanGauge k : ℝ) := by
     erw [hsineAdj, kyFanApproximationGauge_adjoint,
-      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsine.kyFanGauge_eq k)))]
-  have hgaugeRes : kyFanApproximationGauge k P.forwardResidualBlock =
-      kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) := by
+  have hgaugeRes : (P.forwardResidualBlock.kyFanGauge k : ℝ) =
+      ((-(D.residual.adjoint ∘L D.F₁)).kyFanGauge k : ℝ) := by
     erw [← kyFanApproximationGauge_adjoint k P.forwardResidualBlock,
       ← kyFanApproximationGauge_neg k P.forwardResidualBlock.adjoint,
-      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hres.kyFanGauge_eq k)))]
   rw [hgaugeSine, hgaugeRes]
   exact hraw
@@ -346,8 +346,8 @@ theorem forward_all_kyFan
 theorem reverse_all_kyFan
     (P : RealSymmetricSinThetaProblem (E := E)) :
     ∀ k,
-      P.gap * kyFanApproximationGauge k P.reverseSineBlock ≤
-        kyFanApproximationGauge k P.reverseResidualBlock := by
+      P.gap * (P.reverseSineBlock.kyFanGauge k : ℝ) ≤
+        (P.reverseResidualBlock.kyFanGauge k : ℝ) := by
   intro k
   set D := P.reverseData with hD
   have hA0 : _root_.IsSelfAdjoint D.A₀ := by
@@ -398,14 +398,14 @@ theorem reverse_all_kyFan
       map_sub, map_neg] using
       ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
         P.Uᗮ P.V (-(D.residual.adjoint ∘L D.F₁))
-  have hgaugeSine : kyFanApproximationGauge k P.reverseSineBlock =
-      kyFanApproximationGauge k (D.X.adjoint ∘L D.F₁) := by
+  have hgaugeSine : (P.reverseSineBlock.kyFanGauge k : ℝ) =
+      ((D.X.adjoint ∘L D.F₁).kyFanGauge k : ℝ) := by
     erw [hsineAdj, kyFanApproximationGauge_adjoint,
-      (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsine.kyFanGauge_eq k)))]
-  have hgaugeRes : kyFanApproximationGauge k P.reverseResidualBlock =
-      kyFanApproximationGauge k (-(D.residual.adjoint ∘L D.F₁)) :=
-    (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+  have hgaugeRes : (P.reverseResidualBlock.kyFanGauge k : ℝ) =
+      ((-(D.residual.adjoint ∘L D.F₁)).kyFanGauge k : ℝ) :=
+    (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hres.kyFanGauge_eq k)))
   rw [hgaugeSine, hgaugeRes]
   exact hraw
@@ -416,8 +416,8 @@ representative; see `crossSineSum_normingMem_iff_and_gauge_eq`. -/
 theorem symmetric_all_kyFan_real
     (P : RealSymmetricSinThetaProblem (E := E)) :
     ∀ k,
-      P.gap * kyFanApproximationGauge k (crossSineSum P.U P.V) ≤
-        kyFanApproximationGauge k P.perturbation := by
+      P.gap * ((crossSineSum P.U P.V).kyFanGauge k : ℝ) ≤
+        (P.perturbation.kyFanGauge k : ℝ) := by
   intro k
   have hadjA : P.A.adjoint = P.A := P.selfAdjoint_A.isSelfAdjoint.adjoint_eq
   have hadjB : P.B.adjoint = P.B := P.selfAdjoint_B.isSelfAdjoint.adjoint_eq
@@ -484,12 +484,11 @@ theorem symmetric_all_kyFan_real
     simp [projectionBlock, crossSineSum, smul_add]
   rw [hcross] at hcombine
   calc
-    P.gap * kyFanApproximationGauge k (crossSineSum P.U P.V) =
-        kyFanApproximationGauge k (P.gap • crossSineSum P.U P.V) := by
+    P.gap * ((crossSineSum P.U P.V).kyFanGauge k : ℝ) =
+        ((P.gap • crossSineSum P.U P.V).kyFanGauge k : ℝ) := by
       rw [kyFanApproximationGauge_smul, hgapNorm]
-    _ ≤ kyFanApproximationGauge k
-        (diagonalPair P.Uᗮ P.V P.perturbation) := hcombine
-    _ ≤ kyFanApproximationGauge k P.perturbation := hres
+    _ ≤ ((diagonalPair P.Uᗮ P.V P.perturbation).kyFanGauge k : ℝ) := hcombine
+    _ ≤ (P.perturbation.kyFanGauge k : ℝ) := hres
 
 /-- **Davis--Kahan 1970, Proposition 6.1 over a real Hilbert space**, for every
 normalized unitarily invariant norm in the source sense. -/

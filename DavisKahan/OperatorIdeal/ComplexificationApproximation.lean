@@ -335,9 +335,8 @@ omit [CompleteSpace F] in
 complexification. -/
 theorem kyFanApproximationGauge_complexify
     (T : E →L[ℝ] F) (k : ℕ) :
-    kyFanApproximationGauge k (RealComplexification.complexify T) =
-      kyFanApproximationGauge k T := by
-  change ((RealComplexification.complexify T).kyFanGauge k : ℝ) = (T.kyFanGauge k : ℝ)
+    ((RealComplexification.complexify T).kyFanGauge k : ℝ) =
+      (T.kyFanGauge k : ℝ) := by
   rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum,
     ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   apply Finset.sum_congr rfl

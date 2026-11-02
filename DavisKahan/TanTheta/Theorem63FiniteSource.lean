@@ -740,8 +740,8 @@ private theorem theorem6_3_kyFan_core_of_le_finrank
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
     {k : ℕ} (hk : k ≤ finrank ℂ Z) :
-    delta * kyFanApproximationGauge k tanTheta0 ≤
-      kyFanApproximationGauge k (theorem63Residual T Z) := by
+    delta * (tanTheta0.kyFanGauge k : ℝ) ≤
+      ((theorem63Residual T Z).kyFanGauge k : ℝ) := by
   let castIndex : Fin k → Fin (finrank ℂ Z) := fun i => Fin.castLE hk i
   have huFull := orthonormal_theorem63ResidualWitness Z V
     (fun i => theorem63_singularValues_sine_lt_one T hT V Z hV hdelta
@@ -768,7 +768,7 @@ private theorem theorem6_3_kyFan_core_of_le_finrank
     (fun i => theorem63ResidualWitness_scalar
       T hT V Z hV hdelta hCompressionUpper hUnwantedLower
       tanTheta0 htan (castIndex i))
-  simp only [kyFanApproximationGauge_eq_kyFanGauge,
+  simp only [
     ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum] at hsum ⊢
   rw [Finset.mul_sum, ← Fin.sum_univ_eq_sum_range]
   simpa [castIndex] using hsum
@@ -781,15 +781,14 @@ theorem kyFanApproximationGauge_eq_finrank_of_finrank_le
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     [FiniteDimensional ℂ E]
     (A : E →L[ℂ] F) {k : ℕ} (hk : finrank ℂ E ≤ k) :
-    kyFanApproximationGauge k A =
-      kyFanApproximationGauge (finrank ℂ E) A := by
+    (A.kyFanGauge k : ℝ) =
+      (A.kyFanGauge (finrank ℂ E) : ℝ) := by
   let d := finrank ℂ E
   have hrank : A.rank ≤ (d : Cardinal) := by
     calc
       A.rank ≤ Module.rank ℂ E := LinearMap.rank_le_domain _
       _ = (d : Cardinal) := by
         rw [← Module.finrank_eq_rank' ℂ E]
-  change (A.kyFanGauge k : ℝ) = (A.kyFanGauge (finrank ℂ E) : ℝ)
   rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum,
     ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   rw [← Finset.sum_range_add_sum_Ico _ hk]
@@ -811,8 +810,8 @@ theorem theorem6_3_all_kyFan_core
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0) :
-    ∀ k, delta * kyFanApproximationGauge k tanTheta0 ≤
-      kyFanApproximationGauge k (theorem63Residual T Z) := by
+    ∀ k, delta * (tanTheta0.kyFanGauge k : ℝ) ≤
+      ((theorem63Residual T Z).kyFanGauge k : ℝ) := by
   intro k
   by_cases hk : k ≤ finrank ℂ Z
   · exact theorem6_3_kyFan_core_of_le_finrank T hT V Z hV hdelta
@@ -915,8 +914,8 @@ def Theorem63KyFanCore
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     (delta : ℝ) (tanTheta0 residual : E →L[ℂ] F) : Prop :=
-  ∀ k, delta * ExactSinTheta.kyFanApproximationGauge k tanTheta0 ≤
-    ExactSinTheta.kyFanApproximationGauge k residual
+  ∀ k, delta * (tanTheta0.kyFanGauge k : ℝ) ≤
+    (residual.kyFanGauge k : ℝ)
 
 /-- Fan-dominance promotion retained at its historical scratch name. -/
 theorem theorem6_3_ideal_of_kyFan_core
@@ -1109,8 +1108,8 @@ theorem theorem6_3_all_kyFan_core_directedTangent
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ) :
-    ∀ k, delta * kyFanApproximationGauge k (theorem63DirectedTangent Z V) ≤
-      kyFanApproximationGauge k (theorem63Residual T Z) :=
+    ∀ k, delta * ((theorem63DirectedTangent Z V).kyFanGauge k : ℝ) ≤
+      ((theorem63Residual T Z).kyFanGauge k : ℝ) :=
   theorem6_3_all_kyFan_core T hT V Z hV hdelta hCompressionUpper hUnwantedLower
     (theorem63DirectedTangent Z V)
     (hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent

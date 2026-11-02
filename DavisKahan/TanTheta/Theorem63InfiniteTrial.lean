@@ -199,8 +199,8 @@ theorem kyFanApproximationGauge_theorem63Residual_le_add
     (hleak : ∀ f : F, ‖Z.starProjection (T (f : H)) -
         F.starProjection (Z.starProjection (T (f : H)))‖ ≤ ε * ‖(f : H)‖)
     (k : ℕ) :
-    kyFanApproximationGauge k (theorem63Residual T F) ≤
-      kyFanApproximationGauge k (theorem63Residual T Z) + (k : ℝ) * ε := by
+    ((theorem63Residual T F).kyFanGauge k : ℝ) ≤
+      ((theorem63Residual T Z).kyFanGauge k : ℝ) + (k : ℝ) * ε := by
   classical
   set J : F →L[ℂ] Z := (Submodule.inclusion hFZ).mkContinuous 1 (fun x => by
     change ‖((x : F) : H)‖ ≤ 1 * ‖x‖
@@ -236,14 +236,14 @@ theorem kyFanApproximationGauge_theorem63Residual_le_add
     rw [hlhs, hL, hR, hGf, hJf, hPF]
     abel
   calc
-    kyFanApproximationGauge k (theorem63Residual T F) =
-        kyFanApproximationGauge k (theorem63Residual T Z ∘L J + G) := by rw [hsplit]
-    _ ≤ kyFanApproximationGauge k (theorem63Residual T Z ∘L J) +
-        kyFanApproximationGauge k G :=
+    ((theorem63Residual T F).kyFanGauge k : ℝ) =
+        ((theorem63Residual T Z ∘L J + G).kyFanGauge k : ℝ) := by rw [hsplit]
+    _ ≤ ((theorem63Residual T Z ∘L J).kyFanGauge k : ℝ) +
+        (G.kyFanGauge k : ℝ) :=
       by exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le (theorem63Residual T Z ∘L J) G k
-    _ ≤ kyFanApproximationGauge k (theorem63Residual T Z) + (k : ℝ) * ε := by
-      have h1 : kyFanApproximationGauge k (theorem63Residual T Z ∘L J) ≤
-          kyFanApproximationGauge k (theorem63Residual T Z) := by
+    _ ≤ ((theorem63Residual T Z).kyFanGauge k : ℝ) + (k : ℝ) * ε := by
+      have h1 : ((theorem63Residual T Z ∘L J).kyFanGauge k : ℝ) ≤
+          ((theorem63Residual T Z).kyFanGauge k : ℝ) := by
         have h := kyFanApproximationGauge_comp_le k
           (ContinuousLinearMap.id ℂ H) (theorem63Residual T Z) J
         rw [ContinuousLinearMap.id_comp] at h
@@ -252,15 +252,15 @@ theorem kyFanApproximationGauge_theorem63Residual_le_add
         have hnn := kyFanApproximationGauge_nonneg k (theorem63Residual T Z)
         calc
           ‖ContinuousLinearMap.id ℂ H‖ *
-              kyFanApproximationGauge k (theorem63Residual T Z) * ‖J‖ ≤
-              1 * kyFanApproximationGauge k (theorem63Residual T Z) * ‖J‖ := by
+              ((theorem63Residual T Z).kyFanGauge k : ℝ) * ‖J‖ ≤
+              1 * ((theorem63Residual T Z).kyFanGauge k : ℝ) * ‖J‖ := by
             apply mul_le_mul_of_nonneg_right _ (norm_nonneg J)
             exact mul_le_mul_of_nonneg_right hid hnn
-          _ ≤ 1 * kyFanApproximationGauge k (theorem63Residual T Z) * 1 := by
+          _ ≤ 1 * ((theorem63Residual T Z).kyFanGauge k : ℝ) * 1 := by
             apply mul_le_mul_of_nonneg_left hJnorm
-            simpa using hnn
-          _ = kyFanApproximationGauge k (theorem63Residual T Z) := by ring
-      have h2 : kyFanApproximationGauge k G ≤ (k : ℝ) * ε := by
+            simp
+          _ = ((theorem63Residual T Z).kyFanGauge k : ℝ) := by ring
+      have h2 : (G.kyFanGauge k : ℝ) ≤ (k : ℝ) * ε := by
         refine (kyFanApproximationGauge_le_nat_mul_opNorm k G).trans ?_
         exact mul_le_mul_of_nonneg_left hGnorm (Nat.cast_nonneg k)
       linarith
@@ -353,27 +353,27 @@ private theorem finite_leak_step (hT : T.IsSymmetric)
       F.starProjection (Z.starProjection (T (f : H)))‖ ≤ ε * ‖(f : H)‖) :
     delta * ∑ n ∈ Finset.range k', Real.tan (Real.arcsin
         (((theorem63DirectedSineBlock F V).singularValue n : ℝ))) ≤
-      kyFanApproximationGauge k' (theorem63Residual T Z) + (k' : ℝ) * ε := by
+      ((theorem63Residual T Z).kyFanGauge k' : ℝ) + (k' : ℝ) * ε := by
   have hCU := compression_upper_transfer T Z hCompressionUpper F hFZ
   have hcore := theorem6_3_all_kyFan_core_directedTangent F V T hT hV hdelta
     hCU hUnwantedLower k'
   have htanvals := hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent
     F V (fun i => theorem63_singularValues_sine_lt_one T hT V F hV hdelta
       hCU hUnwantedLower i)
-  have hKyTan : kyFanApproximationGauge k' (theorem63DirectedTangent F V) =
+  have hKyTan : ((theorem63DirectedTangent F V).kyFanGauge k' : ℝ) =
       ∑ n ∈ Finset.range k', Real.tan (Real.arcsin
         (((theorem63DirectedSineBlock F V).singularValue n : ℝ))) := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_congr rfl fun n _ => ?_
     have h := htanvals n
     exact h
   calc
     delta * ∑ n ∈ Finset.range k', Real.tan (Real.arcsin
         (((theorem63DirectedSineBlock F V).singularValue n : ℝ))) =
-        delta * kyFanApproximationGauge k' (theorem63DirectedTangent F V) := by
+        delta * ((theorem63DirectedTangent F V).kyFanGauge k' : ℝ) := by
       rw [hKyTan]
-    _ ≤ kyFanApproximationGauge k' (theorem63Residual T F) := hcore
-    _ ≤ kyFanApproximationGauge k' (theorem63Residual T Z) + (k' : ℝ) * ε :=
+    _ ≤ ((theorem63Residual T F).kyFanGauge k' : ℝ) := hcore
+    _ ≤ ((theorem63Residual T Z).kyFanGauge k' : ℝ) + (k' : ℝ) * ε :=
       kyFanApproximationGauge_theorem63Residual_le_add T Z F hFZ hε hleak k'
 
 /-- Under the source gap the directed sine block of the **full** trial space has every
@@ -397,7 +397,7 @@ theorem approximationSingularValue_sineBlock_lt_one_infiniteTrial (hT : T.IsSymm
     exact theorem63DirectedSineBlock_apply_norm_le Z V z
   have haeq : ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) = 1 :=
     le_antisymm ha_le (le_of_not_gt fun h => hcon h)
-  set B' : ℝ := kyFanApproximationGauge (n + 1) (theorem63Residual T Z) with hB'_def
+  set B' : ℝ := ((theorem63Residual T Z).kyFanGauge (n + 1) : ℝ) with hB'_def
   have hB'0 : 0 ≤ B' := kyFanApproximationGauge_nonneg _ _
   set C : ℝ := B' / delta + 1 with hC_def
   have hC0 : 0 ≤ C := by positivity
@@ -479,7 +479,7 @@ theorem theorem6_3_all_kyFan_core_infiniteTrial (hT : T.IsSymmetric)
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ) (k : ℕ) :
     delta * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) ≤
-      kyFanApproximationGauge k (theorem63Residual T Z) := by
+      ((theorem63Residual T Z).kyFanGauge k : ℝ) := by
   classical
   have ha_lt_one : ∀ n, ((theorem63DirectedSineBlock Z V).singularValue n : ℝ) < 1 := fun n =>
     approximationSingularValue_sineBlock_lt_one_infiniteTrial T V Z hT hV hdelta
@@ -619,10 +619,10 @@ theorem theorem6_3_all_kyFan_core_infiniteTrial (hT : T.IsSymmetric)
     _ = delta * (∑ n ∈ Finset.range k, Real.tan (Real.arcsin
           (((theorem63DirectedSineBlock F V).singularValue n : ℝ)))) +
         delta * ((k : ℝ) * κ') := by ring
-    _ ≤ (kyFanApproximationGauge k (theorem63Residual T Z) +
+    _ ≤ (((theorem63Residual T Z).kyFanGauge k : ℝ) +
           (k : ℝ) * (κ / (2 * (k : ℝ)))) + delta * ((k : ℝ) * κ') := by
       linarith [hfinstep]
-    _ = kyFanApproximationGauge k (theorem63Residual T Z) + κ := by
+    _ = ((theorem63Residual T Z).kyFanGauge k : ℝ) + κ := by
       rw [hkε, hδκ']
       ring
 
@@ -666,10 +666,10 @@ theorem theorem6_3_infiniteTrial_of_formBounds
     N hdelta hResidual fun k => ?_
   have hcore := theorem6_3_all_kyFan_core_infiniteTrial T V Z hT hV hdelta
     hCompressionUpper hUnwantedLower k
-  have hKyTan : kyFanApproximationGauge k tanTheta0 =
+  have hKyTan : (tanTheta0.kyFanGauge k : ℝ) =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((theorem63DirectedSineBlock Z V).singularValue n : ℝ))) := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_congr rfl fun n _ => ?_
     have h := htan n
     exact h

@@ -437,17 +437,15 @@ theorem scalarTransport_residual_sameApproximationNumbers_clm
 /-- The transported residual has the same finite Ky Fan gauges as the original. -/
 theorem kyFanApproximationGauge_scalarTransport_residual
     (D : UnboundedCompressionTrialData Z) (k : ℕ) :
-    kyFanApproximationGauge k (D.scalarTransport (e := e)).residual =
-      kyFanApproximationGauge k D.residual := by
+    ((D.scalarTransport (e := e)).residual.kyFanGauge k : ℝ) =
+      (D.residual.kyFanGauge k : ℝ) := by
   have hcoord := D.scalarTransport_residual_sameApproximationNumbers_clm (e := e)
   calc
-    kyFanApproximationGauge k (D.scalarTransport (e := e)).residual =
-        kyFanApproximationGauge k (ScalarTransport.clm (e := e) D.residual) := by
-      change (((D.scalarTransport (e := e)).residual).kyFanGauge k : ℝ) =
-        ((ScalarTransport.clm (e := e) D.residual).kyFanGauge k : ℝ)
+    ((D.scalarTransport (e := e)).residual.kyFanGauge k : ℝ) =
+        ((ScalarTransport.clm (e := e) D.residual).kyFanGauge k : ℝ) := by
       exact (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_symm
         hcoord).kyFanGauge_eq k))
-    _ = kyFanApproximationGauge k D.residual :=
+    _ = (D.residual.kyFanGauge k : ℝ) :=
       ScalarTransport.kyFanApproximationGauge_clm k D.residual
 
 /-- Source ideal membership of the residual is invariant under transport. -/

@@ -374,7 +374,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_doubleAngleEigenfamily
         ((x i : A.domain) : H)) =
       (((q i) ^ 2 : ℝ) : ℂ) • ((x i : A.domain) : H)) :
     (b - a) * ∑ i, q i / √(1 - (q i) ^ 2) ≤
-      2 * kyFanApproximationGauge n B := by
+      2 * (B.kyFanGauge n : ℝ) := by
   classical
   have hx1 : ∀ i, ‖((x i : A.domain) : H)‖ = 1 := fun i => hxon.norm_eq_one i
   have hq1 : ∀ i, q i < 1 := fun i =>
@@ -451,13 +451,13 @@ theorem gap_mul_sum_tangent_le_kyFan_of_doubleAngleEigenfamily
     nlinarith [mul_le_mul_of_nonneg_left hmain hpos]
   have hsum1 : ∑ i, RCLike.re ⟪(((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
       U.diagBlock Z (U.offDiagBlock Z ((x i : A.domain) : H)),
-      B ((x i : A.domain) : H)⟫_ℂ ≤ kyFanApproximationGauge n B :=
+      B ((x i : A.domain) : H)⟫_ℂ ≤ (B.kyFanGauge n : ℝ) :=
     sum_le_kyFanApproximationGauge_of_orthonormal B hvon hxon (fun _ => le_rfl)
   have hsum2 : ∑ i, RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ •
       U.offDiagBlock Z ((x i : A.domain) : H)),
       B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
         U.diagBlock Z ((x i : A.domain) : H)))⟫_ℂ ≤
-      kyFanApproximationGauge n B :=
+      (B.kyFanGauge n : ℝ) :=
     sum_le_kyFanApproximationGauge_of_orthonormal B hnegon huon (fun _ => le_rfl)
   calc (b - a) * ∑ i, q i / √(1 - (q i) ^ 2)
       = ∑ i, (b - a) * (q i / √(1 - (q i) ^ 2)) := by rw [Finset.mul_sum]
@@ -477,7 +477,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_doubleAngleEigenfamily
           B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
             U.diagBlock Z ((x i : A.domain) : H)))⟫_ℂ :=
         Finset.sum_add_distrib
-    _ ≤ 2 * kyFanApproximationGauge n B := by linarith [hsum1, hsum2]
+    _ ≤ 2 * (B.kyFanGauge n : ℝ) := by linarith [hsum1, hsum2]
 
 /-- A trial-subspace eigenbasis for `sin² 2Θ` realising the Ky Fan prefixes of a
 candidate tangent operator.
@@ -494,7 +494,7 @@ def IsDoubleAngleEigenbasis (A : H →ₗ.[ℂ] H) (U : Submodule ℂ H)
       (∀ i, 0 < q i) ∧
       (∀ i, U.offDiagBlock Z (U.offDiagBlock Z ((y i : A.domain) : H)) =
         (((q i) ^ 2 : ℝ) : ℂ) • ((y i : A.domain) : H)) ∧
-      kyFanApproximationGauge k T ≤ ∑ i, q i / √(1 - (q i) ^ 2)
+      (T.kyFanGauge k : ℝ) ≤ ∑ i, q i / √(1 - (q i) ^ 2)
 
 /-- **The unbounded residual `tan 2Θ` theorem at every Ky Fan gauge.**
 
@@ -513,8 +513,8 @@ theorem gap_mul_kyFan_le_two_mul_kyFan_of_doubleAngleEigenbasis
       b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
     (hab : a < b) {T : H →L[ℂ] H}
     (hT : IsDoubleAngleEigenbasis A U Z T) (k : ℕ) :
-    (b - a) * kyFanApproximationGauge k T ≤
-      2 * kyFanApproximationGauge k B := by
+    (b - a) * (T.kyFanGauge k : ℝ) ≤
+      2 * (B.kyFanGauge k : ℝ) := by
   obtain ⟨y, q, hyU, hyon, hqpos, hyeig, hle⟩ := hT k
   have hmain := gap_mul_sum_tangent_le_kyFan_of_doubleAngleEigenfamily hred hB
     hZsa hZ2 hZdom hZcomm hUa hUb hab y hyU hyon hqpos hyeig
@@ -1292,7 +1292,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
         (U.offDiagBlock Z ((x i : A.domain) : H)) -
           (((q i) ^ 2 : ℝ) : ℂ) • ((x i : A.domain) : H)⟫_ℂ ≤ 0) :
     (b - a) * ∑ i, q i / √(1 - (q i) ^ 2) ≤
-      2 * kyFanApproximationGauge n B := by
+      2 * (B.kyFanGauge n : ℝ) := by
   classical
   have hx1 : ∀ i, ‖((x i : A.domain) : H)‖ = 1 := fun i => hxon.norm_eq_one i
   have hself : ∀ i, ⟪((x i : A.domain) : H), U.offDiagBlock Z
@@ -1369,7 +1369,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
     nlinarith [mul_le_mul_of_nonneg_left hmain hpos]
   have hsum1 : ∑ i, RCLike.re ⟪(((q i * √(1 - (q i) ^ 2)) : ℝ) : ℂ)⁻¹ •
       U.diagBlock Z (U.offDiagBlock Z ((x i : A.domain) : H)),
-      B ((x i : A.domain) : H)⟫_ℂ ≤ kyFanApproximationGauge n B := by
+      B ((x i : A.domain) : H)⟫_ℂ ≤ (B.kyFanGauge n : ℝ) := by
     have h := sum_le_kyFanApproximationGauge_of_contraction B zero_le_one
       zero_le_one hcontr
       (fun α => sq_norm_sum_smul_le_of_orthonormal hxon (le_refl (1 : ℝ)) α)
@@ -1379,7 +1379,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
       U.offDiagBlock Z ((x i : A.domain) : H)),
       B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
         U.diagBlock Z ((x i : A.domain) : H)))⟫_ℂ ≤
-      kyFanApproximationGauge n B :=
+      (B.kyFanGauge n : ℝ) :=
     sum_le_kyFanApproximationGauge_of_orthonormal B hnegon huon (fun _ => le_rfl)
   calc (b - a) * ∑ i, q i / √(1 - (q i) ^ 2)
       = ∑ i, (b - a) * (q i / √(1 - (q i) ^ 2)) := by rw [Finset.mul_sum]
@@ -1399,7 +1399,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
           B ((((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ •
             U.diagBlock Z ((x i : A.domain) : H)))⟫_ℂ :=
         Finset.sum_add_distrib
-    _ ≤ 2 * kyFanApproximationGauge n B := by linarith [hsum1, hsum2]
+    _ ≤ 2 * (B.kyFanGauge n : ℝ) := by linarith [hsum1, hsum2]
 
 /-- A trial-subspace *compressed* eigenbasis for `sin² 2Θ` realising the Ky Fan
 prefixes of a candidate tangent operator.
@@ -1422,7 +1422,7 @@ def IsCompressedDoubleAngleEigenbasis (A : H →ₗ.[ℂ] H) (U : Submodule ℂ 
       (∀ i, RCLike.re ⟪A (y i), U.offDiagBlock Z
           (U.offDiagBlock Z ((y i : A.domain) : H)) -
             (((q i) ^ 2 : ℝ) : ℂ) • ((y i : A.domain) : H)⟫_ℂ ≤ 0) ∧
-      kyFanApproximationGauge k T ≤ ∑ i, q i / √(1 - (q i) ^ 2)
+      (T.kyFanGauge k : ℝ) ≤ ∑ i, q i / √(1 - (q i) ^ 2)
 
 omit [CompleteSpace H] in
 /-- **An exact eigenbasis is a compressed one.**  The leakage vanishes
@@ -1458,8 +1458,8 @@ theorem gap_mul_kyFan_le_two_mul_kyFan_of_compressedDoubleAngleEigenbasis
       b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
     (hab : a < b) {T : H →L[ℂ] H}
     (hT : IsCompressedDoubleAngleEigenbasis A U Z T) (k : ℕ) :
-    (b - a) * kyFanApproximationGauge k T ≤
-      2 * kyFanApproximationGauge k B := by
+    (b - a) * (T.kyFanGauge k : ℝ) ≤
+      2 * (B.kyFanGauge k : ℝ) := by
   obtain ⟨y, q, hyU, hyon, hqpos, hygram, hyres, hle⟩ := hT k
   have hmain := gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
     hred hB hZsa hZ2 hZdom hZcomm hUa hUb hab y hyU hyon hqpos hygram hyres
@@ -1486,8 +1486,8 @@ theorem gap_mul_kyFan_le_two_mul_kyFan_of_doubleAngleEigenbasis_via_compressed
       b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
     (hab : a < b) {T : H →L[ℂ] H}
     (hT : IsDoubleAngleEigenbasis A U Z T) (k : ℕ) :
-    (b - a) * kyFanApproximationGauge k T ≤
-      2 * kyFanApproximationGauge k B :=
+    (b - a) * (T.kyFanGauge k : ℝ) ≤
+      2 * (B.kyFanGauge k : ℝ) :=
   gap_mul_kyFan_le_two_mul_kyFan_of_compressedDoubleAngleEigenbasis hred hB hZsa
     hZ2 hZdom hZcomm hUa hUb hab
     (isCompressedDoubleAngleEigenbasis_of_isDoubleAngleEigenbasis hT) k
@@ -1723,7 +1723,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_invariantSubspace
         (∀ i, ‖U.offDiagBlock Z ((y i : A.domain) : H)‖ ^ 2 = q i ^ 2) ∧
         (∀ i, 0 ≤ q i) ∧ (∀ i, q i < 1) ∧
         (b - a) * ∑ i, q i / √(1 - (q i) ^ 2) ≤
-          2 * kyFanApproximationGauge k B := by
+          2 * (B.kyFanGauge k : ℝ) := by
   classical
   obtain ⟨y, q, hyW, hyU, hyon, hqnn, hgram, hres⟩ :=
     exists_compressedDoubleAngleEigenfamily_of_invariantSubspace (U := U)
@@ -1784,11 +1784,10 @@ theorem gap_mul_sum_tangent_le_kyFan_of_invariantSubspace
       le_antisymm (not_lt.mp fun hc => hnot ((hsmem i).mpr hc)) (hqnn i)
     rw [hzero]
     simp
-  have hmono : kyFanApproximationGauge m B ≤ kyFanApproximationGauge k B := by
+  have hmono : (B.kyFanGauge m : ℝ) ≤ (B.kyFanGauge k : ℝ) := by
     have hmk : m ≤ k := by
       rw [hm]
       simpa using Finset.card_le_card (Finset.subset_univ s)
-    change (B.kyFanGauge m : ℝ) ≤ (B.kyFanGauge k : ℝ)
     rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum,
       ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_le_sum_of_subset_of_nonneg
@@ -1822,7 +1821,7 @@ def HasInvariantDoubleAngleFiltration (A : H →ₗ.[ℂ] H) (U : Submodule ℂ 
             (U.offDiagBlock Z ((y i : A.domain) : H))⟫_ℂ =
           (((q i) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0)) →
         (∀ i, 0 < q i) ∧
-          kyFanApproximationGauge k T ≤ ∑ i, q i / √(1 - (q i) ^ 2)
+          (T.kyFanGauge k : ℝ) ≤ ∑ i, q i / √(1 - (q i) ^ 2)
 
 /-- **An invariant filtration supplies a compressed double-angle eigenbasis.**
 
@@ -1859,8 +1858,8 @@ theorem gap_mul_kyFan_le_two_mul_kyFan_of_invariantDoubleAngleFiltration
       b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
     (hab : a < b) {T : H →L[ℂ] H}
     (hT : HasInvariantDoubleAngleFiltration A U Z T) (k : ℕ) :
-    (b - a) * kyFanApproximationGauge k T ≤
-      2 * kyFanApproximationGauge k B :=
+    (b - a) * (T.kyFanGauge k : ℝ) ≤
+      2 * (B.kyFanGauge k : ℝ) :=
   gap_mul_kyFan_le_two_mul_kyFan_of_compressedDoubleAngleEigenbasis hred hB hZsa
     hZ2 hZdom hZcomm hUa hUb hab
     (isCompressedDoubleAngleEigenbasis_of_hasInvariantDoubleAngleFiltration
@@ -2187,7 +2186,7 @@ theorem sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
     (hgram : ∀ i j, ⟪x j, U.offDiagBlock Z
         (U.offDiagBlock Z (x i))⟫_ℂ =
       (((q i) ^ 2 : ℝ) : ℂ) * (if j = i then (1 : ℂ) else 0)) :
-    ∑ i, q i / √(1 - (q i) ^ 2) ≤ kyFanApproximationGauge n T := by
+    ∑ i, q i / √(1 - (q i) ^ 2) ≤ (T.kyFanGauge n : ℝ) := by
   classical
   have hcarg : ∀ i, (0 : ℝ) < 1 - (q i) ^ 2 := by
     intro i; nlinarith [hq i, hq1 i]
@@ -2260,7 +2259,7 @@ theorem sum_tangent_le_kyFan_of_invariantSubspace
         (Orthonormal ℂ fun i => ((y i : A.domain) : H)) ∧
         (∀ i, ‖U.offDiagBlock Z ((y i : A.domain) : H)‖ ^ 2 = q i ^ 2) ∧
         (∀ i, 0 ≤ q i) ∧ (∀ i, q i < 1) ∧
-        ∑ i, q i / √(1 - (q i) ^ 2) ≤ kyFanApproximationGauge k T := by
+        ∑ i, q i / √(1 - (q i) ^ 2) ≤ (T.kyFanGauge k : ℝ) := by
   classical
   obtain ⟨y, q, hyW, hyU, hyon, hqnn, hgram, hres⟩ :=
     exists_compressedDoubleAngleEigenfamily_of_invariantSubspace (U := U)
@@ -2320,11 +2319,10 @@ theorem sum_tangent_le_kyFan_of_invariantSubspace
       le_antisymm (not_lt.mp fun hc => hnot ((hsmem i).mpr hc)) (hqnn i)
     rw [hzero]
     simp
-  have hmono : kyFanApproximationGauge m T ≤ kyFanApproximationGauge k T := by
+  have hmono : (T.kyFanGauge m : ℝ) ≤ (T.kyFanGauge k : ℝ) := by
     have hmk : m ≤ k := by
       rw [hm]
       simpa using Finset.card_le_card (Finset.subset_univ s)
-    change (T.kyFanGauge m : ℝ) ≤ (T.kyFanGauge k : ℝ)
     rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum,
       ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     refine Finset.sum_le_sum_of_subset_of_nonneg
@@ -2358,7 +2356,7 @@ theorem kyFan_eq_sum_tangent_of_isCompressedDoubleAngleEigenbasis
       (∀ i, ((y i : A.domain) : H) ∈ U) ∧
         (Orthonormal ℂ fun i => ((y i : A.domain) : H)) ∧
         (∀ i, 0 < q i) ∧ (∀ i, q i < 1) ∧
-        kyFanApproximationGauge k T = ∑ i, q i / √(1 - (q i) ^ 2) := by
+        (T.kyFanGauge k : ℝ) = ∑ i, q i / √(1 - (q i) ^ 2) := by
   obtain ⟨y, q, hyU, hyon, hqpos, hygram, hyres, hle⟩ := hT k
   have hx1 : ∀ i, ‖((y i : A.domain) : H)‖ = 1 := fun i => hyon.norm_eq_one i
   have hself : ∀ i, ⟪((y i : A.domain) : H), U.offDiagBlock Z
@@ -2397,8 +2395,8 @@ theorem gap_mul_kyFan_le_two_mul_kyFan_unboundedReflectionTangent
     (hab : a < b)
     (hT : IsCompressedDoubleAngleEigenbasis A U Z
       (unboundedReflectionTangent U Z)) (k : ℕ) :
-    (b - a) * kyFanApproximationGauge k (unboundedReflectionTangent U Z) ≤
-      2 * kyFanApproximationGauge k B :=
+    (b - a) * ((unboundedReflectionTangent U Z).kyFanGauge k : ℝ) ≤
+      2 * (B.kyFanGauge k : ℝ) :=
   gap_mul_kyFan_le_two_mul_kyFan_of_compressedDoubleAngleEigenbasis hred hB hZsa
     hZ2 hZdom hZcomm hUa hUb hab hT k
 
@@ -2816,7 +2814,7 @@ theorem gap_mul_sum_tangent_le_kyFan_on_model :
           ((y i : unperturbed.domain) : Model)‖ ^ 2 = q i ^ 2) ∧
         (∀ i, 0 ≤ q i) ∧ (∀ i, q i < 1) ∧
         ((1 : ℝ) - 0) * ∑ i, q i / √(1 - (q i) ^ 2) ≤
-          2 * kyFanApproximationGauge 1 residual := by
+          2 * (residual.kyFanGauge 1 : ℝ) := by
   refine gap_mul_sum_tangent_le_kyFan_of_invariantSubspace
     reducesSubspace_unperturbed isOddFor_residual isSelfAdjoint_reflectionZ
     reflectionZ_mul_self mapsDomainTo_reflectionZ reflectionZ_comm

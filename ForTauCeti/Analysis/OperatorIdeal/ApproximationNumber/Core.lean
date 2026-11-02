@@ -283,26 +283,11 @@ theorem approximationSingularValue_comp_strongProjection_tendsto_complex
 
 end StrongCutoff
 
-/-- Finite Ky Fan gauge built from approximation singular values.
-
-This is `ContinuousLinearMap.kyFanGaugeReal` with the arguments in the paper's order; the
-theory lives in `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFan.lean` and
-every statement below delegates to it. -/
-@[expose]
-noncomputable def kyFanApproximationGauge
-    (k : ℕ) (K : E →L[𝕜] F) : ℝ :=
-  (K.kyFanGauge k : ℝ)
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- The approximation-number Ky Fan gauge agrees definitionally with the Ky Fan gauge. -/
-theorem kyFanApproximationGauge_eq_kyFanGauge (k : ℕ) (K : E →L[𝕜] F) :
-    kyFanApproximationGauge k K = (K.kyFanGauge k : ℝ) := rfl
-
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Finite Ky Fan gauges are unchanged by negation. -/
 @[simp]
 theorem kyFanApproximationGauge_neg (k : ℕ) (K : E →L[𝕜] F) :
-    kyFanApproximationGauge k (-K) = kyFanApproximationGauge k K :=
+    ((-K).kyFanGauge k : ℝ) = (K.kyFanGauge k : ℝ) :=
   K.kyFanGaugeReal_neg k
 
 section KyFanStrongCutoff
@@ -321,9 +306,9 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto_of_minMax
     (hP : StronglyTendsto P l (ContinuousLinearMap.id 𝕜 E₀))
     (k : ℕ) (K : E₀ →L[𝕜] F₀) :
     Tendsto
-      (fun i => kyFanApproximationGauge k (K ∘L P i))
-      l (𝓝 (kyFanApproximationGauge k K)) := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+      (fun i => ((K ∘L P i).kyFanGauge k : ℝ))
+      l (𝓝 ((K.kyFanGauge k : ℝ))) := by
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact tendsto_finsetSum (Finset.range k)
     (fun n hn => approximationSingularValue_comp_strongProjection_tendsto_of_minMax
       hlb hPproj hP n K)
@@ -339,8 +324,8 @@ theorem kyFanApproximationGauge_comp_strongProjection_tendsto_complex
     (hP : StronglyTendsto P l (ContinuousLinearMap.id ℂ E₁))
     (k : ℕ) (K : E₁ →L[ℂ] F₁) :
     Tendsto
-      (fun i => kyFanApproximationGauge k (K ∘L P i))
-      l (𝓝 (kyFanApproximationGauge k K)) :=
+      (fun i => ((K ∘L P i).kyFanGauge k : ℝ))
+      l (𝓝 ((K.kyFanGauge k : ℝ))) :=
   kyFanApproximationGauge_comp_strongProjection_tendsto_of_minMax
     TauCeti.HasMinMaxLowerBound.of_completeSpace hPproj hP k K
 
@@ -355,7 +340,7 @@ theorem kyFanSum_le_kyFanApproximationGauge
     [FiniteDimensional 𝕜 F₀]
     (k : ℕ) (A : E₀ →ₗ[𝕜] F₀) :
     A.kyFanSum k ≤
-      kyFanApproximationGauge k A.toContinuousLinearMap :=
+      (A.toContinuousLinearMap.kyFanGauge k : ℝ) :=
   (ContinuousLinearMap.kyFanSum_eq_kyFanGauge k A).le
 
 /-- In finite dimensions the two agree: the rectangular Ky Fan sum *is* the
@@ -368,7 +353,7 @@ theorem kyFanSum_eq_kyFanApproximationGauge
     [FiniteDimensional 𝕜 F₀]
     (k : ℕ) (A : E₀ →ₗ[𝕜] F₀) :
     A.kyFanSum k =
-      kyFanApproximationGauge k A.toContinuousLinearMap :=
+      (A.toContinuousLinearMap.kyFanGauge k : ℝ) :=
   ContinuousLinearMap.kyFanSum_eq_kyFanGauge k A
 
 /-- Subadditivity of the Ky Fan gauge in finite dimensions. -/
@@ -379,9 +364,9 @@ theorem kyFanApproximationGauge_add_le_finiteDimensional
     [NormedAddCommGroup F₀] [InnerProductSpace 𝕜 F₀]
     [FiniteDimensional 𝕜 F₀]
     (k : ℕ) (A B : E₀ →ₗ[𝕜] F₀) :
-    kyFanApproximationGauge k (A + B).toContinuousLinearMap ≤
-      kyFanApproximationGauge k A.toContinuousLinearMap +
-        kyFanApproximationGauge k B.toContinuousLinearMap :=
+    ((A + B).toContinuousLinearMap.kyFanGauge k : ℝ) ≤
+      (A.toContinuousLinearMap.kyFanGauge k : ℝ) +
+        (B.toContinuousLinearMap.kyFanGauge k : ℝ) :=
   ContinuousLinearMap.kyFanGaugeReal_add_le_of_finiteDimensional k A B
 
 
@@ -423,8 +408,8 @@ theorem kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     (W : Submodule 𝕜 G) [W.HasOrthogonalProjection]
     (A : V →L[𝕜] G) (hA : ∀ x, A x ∈ W) (k : ℕ) :
-    kyFanApproximationGauge k (W.orthogonalProjectionOnto ∘L A) =
-      kyFanApproximationGauge k A :=
+    ((W.orthogonalProjectionOnto ∘L A).kyFanGauge k : ℝ) =
+      (A.kyFanGauge k : ℝ) :=
   ContinuousLinearMap.kyFanGaugeReal_orthogonalProjectionOnto_comp_eq W A hA k
 
 /-- Subadditivity of the Ky Fan gauge for finite-source operators. -/
@@ -434,8 +419,8 @@ theorem kyFanApproximationGauge_add_le_finiteSource
     [FiniteDimensional 𝕜 V]
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     (k : ℕ) (A B : V →L[𝕜] G) :
-    kyFanApproximationGauge k (A + B) ≤
-      kyFanApproximationGauge k A + kyFanApproximationGauge k B :=
+    ((A + B).kyFanGauge k : ℝ) ≤
+      (A.kyFanGauge k : ℝ) + (B.kyFanGauge k : ℝ) :=
   ContinuousLinearMap.kyFanGaugeReal_add_le_of_finiteDimensional_source k A B
 
 end KyFanTriangle
@@ -444,43 +429,43 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- The zero-term Ky Fan gauge vanishes. -/
 @[simp]
 theorem kyFanApproximationGauge_zero :
-    kyFanApproximationGauge 0 (0 : E →L[𝕜] F) = 0 :=
+    ((0 : E →L[𝕜] F).kyFanGauge 0 : ℝ) = 0 :=
   (0 : E →L[𝕜] F).kyFanGaugeReal_zero_index
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Every finite Ky Fan gauge vanishes on the zero operator. -/
 @[simp]
 theorem kyFanApproximationGauge_zero_map (k : ℕ) :
-    kyFanApproximationGauge k (0 : E →L[𝕜] F) = 0 :=
+    ((0 : E →L[𝕜] F).kyFanGauge k : ℝ) = 0 :=
   ContinuousLinearMap.kyFanGaugeReal_zero k
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The first positive Ky Fan gauge is operator norm. -/
 @[simp]
 theorem kyFanApproximationGauge_one (K : E →L[𝕜] F) :
-    kyFanApproximationGauge 1 K = ‖K‖ :=
+    (K.kyFanGauge 1 : ℝ) = ‖K‖ :=
   (congrArg NNReal.toReal (ContinuousLinearMap.kyFanGauge_one K)).trans (coe_nnnorm K)
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Ky Fan approximation gauges are absolutely homogeneous. -/
 theorem kyFanApproximationGauge_smul
     (k : ℕ) (c : 𝕜) (K : E →L[𝕜] F) :
-    kyFanApproximationGauge k (c • K) =
-      ‖c‖ * kyFanApproximationGauge k K :=
+    ((c • K).kyFanGauge k : ℝ) =
+      ‖c‖ * (K.kyFanGauge k : ℝ) :=
   ContinuousLinearMap.kyFanGaugeReal_smul c K k
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Ky Fan approximation gauges are nonnegative. -/
 theorem kyFanApproximationGauge_nonneg
     (k : ℕ) (K : E →L[𝕜] F) :
-    0 ≤ kyFanApproximationGauge k K :=
+    0 ≤ (K.kyFanGauge k : ℝ) :=
   K.kyFanGaugeReal_nonneg k
 
 /-- Ky Fan approximation gauges are invariant under adjoint. -/
 theorem kyFanApproximationGauge_adjoint
     (k : ℕ) (K : E →L[𝕜] F) :
-    kyFanApproximationGauge k K.adjoint =
-      kyFanApproximationGauge k K :=
+    (K.adjoint.kyFanGauge k : ℝ) =
+      (K.kyFanGauge k : ℝ) :=
   K.kyFanGaugeReal_adjoint k
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -491,8 +476,8 @@ theorem kyFanApproximationGauge_comp_le
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
     (k : ℕ) (L : F →L[𝕜] G) (K : E →L[𝕜] F)
     (R : H →L[𝕜] E) :
-    kyFanApproximationGauge k (L ∘L K ∘L R) ≤
-      ‖L‖ * kyFanApproximationGauge k K * ‖R‖ :=
+    ((L ∘L K ∘L R).kyFanGauge k : ℝ) ≤
+      ‖L‖ * (K.kyFanGauge k : ℝ) * ‖R‖ :=
   ContinuousLinearMap.kyFanGaugeReal_comp_le L K R k
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -506,21 +491,21 @@ theorem kyFanApproximationGauge_comp_eq_of_leftInverse
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
     {ι : F →L[𝕜] G} {π : G →L[𝕜] F} (hπι : Function.LeftInverse π ι)
     (hι : ‖ι‖ ≤ 1) (hπ : ‖π‖ ≤ 1) (k : ℕ) (K : E →L[𝕜] F) :
-    kyFanApproximationGauge k (ι ∘L K) = kyFanApproximationGauge k K :=
+    ((ι ∘L K).kyFanGauge k : ℝ) = (K.kyFanGauge k : ℝ) :=
   ContinuousLinearMap.kyFanGaugeReal_comp_eq_of_leftInverse hπι hι hπ K k
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- The operator norm is the first term of every positive finite Ky Fan gauge. -/
 theorem opNorm_le_kyFanApproximationGauge
     {k : ℕ} (hk : 0 < k) (K : E →L[𝕜] F) :
-    ‖K‖ ≤ kyFanApproximationGauge k K :=
+    ‖K‖ ≤ (K.kyFanGauge k : ℝ) :=
   K.opNorm_le_kyFanGauge hk
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- A finite Ky Fan gauge is bounded by `k` times operator norm. -/
 theorem kyFanApproximationGauge_le_nat_mul_opNorm
     (k : ℕ) (K : E →L[𝕜] F) :
-    kyFanApproximationGauge k K ≤ (k : ℝ) * ‖K‖ :=
+    (K.kyFanGauge k : ℝ) ≤ (k : ℝ) * ‖K‖ :=
   K.kyFanGaugeReal_le_nat_mul_opNorm k
 
 omit [CompleteSpace E] in
@@ -550,12 +535,12 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
     {x : Fin k → E} (hx : Orthonormal 𝕜 x)
     {y : Fin k → F} (hy : Orthonormal 𝕜 y) :
     ∃ (u : Fin k → F) (v : Fin k → E), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
-      kyFanApproximationGauge k K - ε ≤ RCLike.re (∑ i, ⟪u i, K (v i)⟫_𝕜) := by
+      (K.kyFanGauge k : ℝ) - ε ≤ RCLike.re (∑ i, ⟪u i, K (v i)⟫_𝕜) := by
   classical
   rcases Nat.eq_zero_or_pos k with hk0 | hkpos
   · subst hk0
     exact ⟨y, x, hy, hx, by
-      simp [kyFanApproximationGauge, hε.le]⟩
+      simp [ hε.le]⟩
   set δ : ℝ := ε / k with hδdef
   have hδ : 0 < δ := div_pos hε (by exact_mod_cast hkpos)
   -- a finite set of vectors whose span nearly attains the `n`-th approximation number
@@ -580,8 +565,8 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
     refine Submodule.span_mono (Finset.coe_subset.mpr ?_)
     exact (Finset.subset_biUnion_of_mem S (Finset.mem_range.mpr hn)).trans
       Finset.subset_union_left
-  have hgaugeW : kyFanApproximationGauge k K - ε
-      ≤ kyFanApproximationGauge k (K ∘L W.subtypeL) := by
+  have hgaugeW : (K.kyFanGauge k : ℝ) - ε
+      ≤ ((K ∘L W.subtypeL).kyFanGauge k : ℝ) := by
     have hterm : ∀ n ∈ Finset.range k,
         (K.singularValue n : ℝ)
           < ((K ∘L W.subtypeL).singularValue n : ℝ) + δ := by
@@ -599,7 +584,7 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
     have hkδ : (k : ℝ) * δ = ε := by
       rw [hδdef]
       field_simp
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     rw [hkδ] at hsum
     linarith
   -- both restrictions have room for `k` orthonormal vectors
@@ -630,13 +615,13 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
       exact Or.inl ⟨t, ht, rfl⟩
     exact hle z.2
   set K' : W →L[𝕜] W' := W'.orthogonalProjectionOnto ∘L (K ∘L W.subtypeL) with hK'def
-  have hgaugeK' : kyFanApproximationGauge k K'
-      = kyFanApproximationGauge k (K ∘L W.subtypeL) :=
+  have hgaugeK' : (K'.kyFanGauge k : ℝ)
+      = ((K ∘L W.subtypeL).kyFanGauge k : ℝ) :=
     kyFanApproximationGauge_orthogonalProjectionOnto_comp_eq W' (K ∘L W.subtypeL) hKW k
   obtain ⟨u', v', hu', hv', heq⟩ :=
     K'.toLinearMap.exists_orthonormal_sum_inner_eq_kyFanSum hkW hkW'
   have hbridge : K'.toLinearMap.kyFanSum k
-      = kyFanApproximationGauge k K' :=
+      = (K'.kyFanGauge k : ℝ) :=
     kyFanSum_eq_kyFanApproximationGauge k K'.toLinearMap
   refine ⟨fun i => (u' i : F), fun i => (v' i : E), ?_, ?_, ?_⟩
   · rw [orthonormal_iff_ite] at hu' ⊢
@@ -655,14 +640,14 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
         = ∑ i, ⟪u' i, K'.toLinearMap (v' i)⟫_𝕜 :=
       Finset.sum_congr rfl fun i _ => (hpair i).symm
     have hreal : RCLike.re (∑ i, ⟪((u' i : F)), K ((v' i : E))⟫_𝕜)
-        = kyFanApproximationGauge k (K ∘L W.subtypeL) := by
+        = ((K ∘L W.subtypeL).kyFanGauge k : ℝ) := by
       calc
         RCLike.re (∑ i, ⟪((u' i : F)), K ((v' i : E))⟫_𝕜)
             = RCLike.re (∑ i, ⟪u' i, K'.toLinearMap (v' i)⟫_𝕜) :=
               congrArg RCLike.re hsum
         _ = K'.toLinearMap.kyFanSum k := by rw [heq]; simp
-        _ = kyFanApproximationGauge k K' := hbridge
-        _ = kyFanApproximationGauge k (K ∘L W.subtypeL) := hgaugeK'
+        _ = (K'.kyFanGauge k : ℝ) := hbridge
+        _ = ((K ∘L W.subtypeL).kyFanGauge k : ℝ) := hgaugeK'
     rw [hreal]
     exact hgaugeW
 
@@ -677,7 +662,7 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner_complex
     {x : Fin k → E₂} (hx : Orthonormal ℂ x)
     {y : Fin k → F₂} (hy : Orthonormal ℂ y) :
     ∃ (u : Fin k → F₂) (v : Fin k → E₂), Orthonormal ℂ u ∧ Orthonormal ℂ v ∧
-      kyFanApproximationGauge k K - ε ≤ RCLike.re (∑ i, ⟪u i, K (v i)⟫_ℂ) :=
+      (K.kyFanGauge k : ℝ) - ε ≤ RCLike.re (∑ i, ⟪u i, K (v i)⟫_ℂ) :=
   exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
     TauCeti.HasMinMaxLowerBound.of_completeSpace K hε hx hy
 

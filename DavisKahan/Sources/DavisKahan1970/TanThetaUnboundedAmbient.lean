@@ -130,29 +130,26 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_lowerCorner
     {delta : ℝ} (hdelta : 0 < delta)
     (htr : ‖sinAngleOperatorC U V‖ < 1)
     (hlower : ∀ k : ℕ,
-      delta * kyFanApproximationGauge k
-          (projectionBlock Uᗮ U
-            (projectorDifference U V * secantSquared U V)) ≤
-        kyFanApproximationGauge k (projectionBlock Uᗮ U H)) :
+      delta * ((projectionBlock Uᗮ U
+            (projectorDifference U V * secantSquared U V)).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Uᗮ U H).kyFanGauge k : ℝ)) :
     ∀ k : ℕ,
-      delta * kyFanApproximationGauge k (tanAngleOperatorC U V) ≤
-        kyFanApproximationGauge k H := by
+      delta * ((tanAngleOperatorC U V).kyFanGauge k : ℝ) ≤
+        (H.kyFanGauge k : ℝ) := by
   intro k
   have hdeltac : ‖((delta : ℝ) : ℂ)‖ = delta := by
     simp [abs_of_pos hdelta]
   set K := projectorDifference U V * secantSquared U V
   have h₀ : ∀ j : ℕ,
-      kyFanApproximationGauge j
-          (projectionBlock Uᗮ U (((delta : ℝ) : ℂ) • K)) ≤
-        kyFanApproximationGauge j (projectionBlock Uᗮ U H) := by
+      ((projectionBlock Uᗮ U (((delta : ℝ) : ℂ) • K)).kyFanGauge j : ℝ) ≤
+        ((projectionBlock Uᗮ U H).kyFanGauge j : ℝ) := by
     intro j
     rw [projectionBlock_smul_unboundedTanThetaAmbient,
       kyFanApproximationGauge_smul, hdeltac]
     exact hlower j
   have h₁ : ∀ j : ℕ,
-      kyFanApproximationGauge j
-          (projectionBlock Uᗮᗮ Uᗮ (((delta : ℝ) : ℂ) • K)) ≤
-        kyFanApproximationGauge j (projectionBlock Uᗮᗮ Uᗮ H) := by
+      ((projectionBlock Uᗮᗮ Uᗮ (((delta : ℝ) : ℂ) • K)).kyFanGauge j : ℝ) ≤
+        ((projectionBlock Uᗮᗮ Uᗮ H).kyFanGauge j : ℝ) := by
     intro j
     have hleft :
         projectionBlock Uᗮᗮ Uᗮ (((delta : ℝ) : ℂ) • K) =
@@ -190,10 +187,11 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_lowerCorner
   rw [hsum, hsumH, kyFanApproximationGauge_smul, hdeltac] at hcombine
   have hpinch := diagonalPair_all_kyFan_le Uᗮ U H k
   have hmodulus :
-      kyFanApproximationGauge k (tanAngleOperatorC U V) =
-        kyFanApproximationGauge k (tanBlockRepresentative U V) := by
+      ((tanAngleOperatorC U V).kyFanGauge k : ℝ) =
+        ((tanBlockRepresentative U V).kyFanGauge k : ℝ) := by
     rw [directedTanAngleOperatorC_eq_modulus_blockRepresentative htr]
-    exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+    exact (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k :
+      ℝ) from
       (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_modulus
       (tanBlockRepresentative U V)).kyFanGauge_eq k)))
   rw [hmodulus]
@@ -208,10 +206,9 @@ theorem tanTheta_ambient_bounded_symmetricNorming_complex_of_lowerCorner
     {delta : ℝ} (hdelta : 0 < delta)
     (htr : ‖sinAngleOperatorC U V‖ < 1)
     (hlower : ∀ k : ℕ,
-      delta * kyFanApproximationGauge k
-          (projectionBlock Uᗮ U
-            (projectorDifference U V * secantSquared U V)) ≤
-        kyFanApproximationGauge k (projectionBlock Uᗮ U H))
+      delta * ((projectionBlock Uᗮ U
+            (projectorDifference U V * secantSquared U V)).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Uᗮ U H).kyFanGauge k : ℝ))
     (hMem : N.Mem H) :
     N.Mem (tanAngleOperatorC U V) ∧
       delta * N.gauge (tanAngleOperatorC U V) ≤ N.gauge H :=
@@ -264,30 +261,29 @@ theorem
     simpa only [ContinuousLinearMap.comp_apply] using
       (congrArg (fun y : E => Uᗮ.starProjection (H y)) happ).symm
   have hlower : ∀ k : ℕ,
-      delta * kyFanApproximationGauge k
-          (projectionBlock Uᗮ U
-            (projectorDifference U V * secantSquared U V)) ≤
-        kyFanApproximationGauge k (projectionBlock Uᗮ U H) := by
+      delta * ((projectionBlock Uᗮ U
+            (projectorDifference U V * secantSquared U V)).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Uᗮ U H).kyFanGauge k : ℝ) := by
     intro k
     have hcorner := kyFan_lowerCorner_le (U := U) (V := V) htr k
     have hcore := data.all_kyFan_core_of_formBounds_infinite
       hdelta hCompression hcross k
     have hresKy :
-        kyFanApproximationGauge k data.residual =
-          kyFanApproximationGauge k (projectionBlock Uᗮ U H) := by
+        (data.residual.kyFanGauge k : ℝ) =
+          ((projectionBlock Uᗮ U H).kyFanGauge k : ℝ) := by
       rw [hblock]
       have hs := ContinuousLinearMap.sameSingularValues_extendDomainByZero U data.residual
-      exact ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      exact ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k
+        : ℝ) from
       (congrArg NNReal.toReal (hs.kyFanGauge_eq k)))).symm
     calc
-      delta * kyFanApproximationGauge k
-          (projectionBlock Uᗮ U
-            (projectorDifference U V * secantSquared U V))
+      delta * ((projectionBlock Uᗮ U
+            (projectorDifference U V * secantSquared U V)).kyFanGauge k : ℝ)
           ≤ delta * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
               (((theorem63DirectedSineBlock U V).singularValue n : ℝ))) :=
         mul_le_mul_of_nonneg_left hcorner hdelta.le
-      _ ≤ kyFanApproximationGauge k data.residual := hcore
-      _ = kyFanApproximationGauge k (projectionBlock Uᗮ U H) := hresKy
+      _ ≤ (data.residual.kyFanGauge k : ℝ) := hcore
+      _ = ((projectionBlock Uᗮ U H).kyFanGauge k : ℝ) := hresKy
   exact tanTheta_ambient_bounded_symmetricNorming_complex_of_lowerCorner N hH hdelta htr hlower hMem
 
 /-- **Unbounded-data ambient `tan Theta` theorem, complex form.**
@@ -387,29 +383,28 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_complex_of_transvers
     simpa only [ContinuousLinearMap.comp_apply] using
       (congrArg (fun y : E => Uᗮ.starProjection (H y)) happ).symm
   have hlower : ∀ k : ℕ,
-      delta * kyFanApproximationGauge k
-          (projectionBlock Uᗮ U
-            (projectorDifference U V * secantSquared U V)) ≤
-        kyFanApproximationGauge k (projectionBlock Uᗮ U H) := by
+      delta * ((projectionBlock Uᗮ U
+            (projectorDifference U V * secantSquared U V)).kyFanGauge k : ℝ) ≤
+        ((projectionBlock Uᗮ U H).kyFanGauge k : ℝ) := by
     intro k
     have hcorner := kyFan_lowerCorner_le (U := U) (V := V) htr k
     have hcore := D.all_kyFan_core V hdelta hupper hcross k
     have hresKy :
-        kyFanApproximationGauge k D.residual =
-          kyFanApproximationGauge k (projectionBlock Uᗮ U H) := by
+        (D.residual.kyFanGauge k : ℝ) =
+          ((projectionBlock Uᗮ U H).kyFanGauge k : ℝ) := by
       rw [hblock]
       have hs := ContinuousLinearMap.sameSingularValues_extendDomainByZero U D.residual
-      exact ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      exact ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k
+        : ℝ) from
       (congrArg NNReal.toReal (hs.kyFanGauge_eq k)))).symm
     calc
-      delta * kyFanApproximationGauge k
-          (projectionBlock Uᗮ U
-            (projectorDifference U V * secantSquared U V))
+      delta * ((projectionBlock Uᗮ U
+            (projectorDifference U V * secantSquared U V)).kyFanGauge k : ℝ)
           ≤ delta * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
               (((theorem63DirectedSineBlock U V).singularValue n : ℝ))) :=
         mul_le_mul_of_nonneg_left hcorner hdelta.le
-      _ ≤ kyFanApproximationGauge k D.residual := hcore
-      _ = kyFanApproximationGauge k (projectionBlock Uᗮ U H) := hresKy
+      _ ≤ (D.residual.kyFanGauge k : ℝ) := hcore
+      _ = ((projectionBlock Uᗮ U H).kyFanGauge k : ℝ) := hresKy
   exact tanTheta_ambient_bounded_symmetricNorming_complex_of_lowerCorner N hH hdelta htr hlower hMem
 
 /-- **Davis--Kahan's ambient `tan Theta` estimate with an unbounded Ritz

@@ -121,7 +121,7 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_complex
   intro k
   by_cases hk : k = 0
   · subst hk
-    simp [kyFanApproximationGauge]
+    simp []
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := theorem6_3_unbounded_infiniteTrial_ideal
       ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
@@ -129,8 +129,8 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_complex
           gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hkpos).gauge_adjoint })) A hA D hdelta hgap
       hCompression tanTheta0 htan
       (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at h
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+      ENNReal.coe_toReal] at h
     exact h.2
 
 end Complex
@@ -165,7 +165,7 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_real
   intro k
   by_cases hk : k = 0
   · subst hk
-    simp [kyFanApproximationGauge]
+    simp []
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := theorem6_3_unbounded_infiniteTrial_ideal_real A hA
       ((show TauCeti.SymmetricOperatorIdealFamily ℝ from
@@ -173,8 +173,8 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_real
           gauge_adjoint := (OperatorIdealFamily.kyFan ℝ k hkpos).gauge_adjoint })) D hdelta hgap
       hCompression tanTheta0 htan
       (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at h
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+      ENNReal.coe_toReal] at h
     exact h.2
 
 end Real
@@ -245,7 +245,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_complex
   intro k
   by_cases hk : k = 0
   · subst hk
-    simp [kyFanApproximationGauge]
+    simp []
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := D.trial.ideal_of_formBounds V
       ((show TauCeti.SymmetricOperatorIdealFamily ℂ from
@@ -253,8 +253,8 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_complex
           gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hkpos).gauge_adjoint })) hdelta hupper hcross
       tanTheta0 htan
       (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at h
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+      ENNReal.coe_toReal] at h
     exact h.2
 
 end AppendixComplex
@@ -291,7 +291,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_real
   intro k
   by_cases hk : k = 0
   · subst hk
-    simp [kyFanApproximationGauge]
+    simp []
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
     have h := theorem6_3_unboundedCompression_ideal_real
       ((show TauCeti.SymmetricOperatorIdealFamily ℝ from
@@ -299,8 +299,8 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_real
           gauge_adjoint := (OperatorIdealFamily.kyFan ℝ k hkpos).gauge_adjoint })) D.trial V hdelta hupper
       hcross tanTheta0 htan
       (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at h
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+      ENNReal.coe_toReal] at h
     exact h.2
 
 end AppendixReal

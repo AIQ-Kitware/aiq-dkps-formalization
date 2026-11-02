@@ -46,8 +46,8 @@ theorem kyFanApproximationGauge_le_of_approximationSingularValue_le
     {A B : E →L[𝕜] F}
     (h : ∀ n, (A.singularValue n : ℝ) ≤
       (B.singularValue n : ℝ)) (k : ℕ) :
-    kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    (A.kyFanGauge k : ℝ) ≤ (B.kyFanGauge k : ℝ) := by
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_le_sum fun n hn => h n
 
 /-- Correct infinite-dimensional ideal-dominance bridge for Corollary 4.1.
@@ -100,7 +100,7 @@ theorem restrictedDisplacement_kyFan_le
     {A B : E →L[𝕜] F}
     (D : RestrictedDisplacementApproximationDominance A B)
     (k : ℕ) :
-    kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B :=
+    (A.kyFanGauge k : ℝ) ≤ (B.kyFanGauge k : ℝ) :=
   kyFanApproximationGauge_le_of_approximationSingularValue_le
     D.approximation_le k
 

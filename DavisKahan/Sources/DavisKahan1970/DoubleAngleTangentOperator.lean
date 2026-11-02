@@ -913,10 +913,9 @@ theorem approximationNumber_doubleAngleTangentOperator
 number prefix. -/
 theorem kyFanApproximationGauge_doubleAngleTangentOperator
     (X : E0 →L[ℂ] E1) (hcontractive : ‖X‖ < 1) (k : ℕ) :
-    kyFanApproximationGauge k (doubleAngleTangentOperator X hcontractive) =
+    ((doubleAngleTangentOperator X hcontractive).kyFanGauge k : ℝ) =
       ∑ n ∈ Finset.range k,
         DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue n : ℝ)) := by
-  change ((doubleAngleTangentOperator X hcontractive).kyFanGauge k : ℝ) = _
   rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   apply Finset.sum_congr rfl
   intro n hn

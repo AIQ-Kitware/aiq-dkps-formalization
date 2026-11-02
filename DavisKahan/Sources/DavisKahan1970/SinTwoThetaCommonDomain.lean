@@ -231,12 +231,12 @@ theorem sinTwoTheta_commonDomain_block_kyFan
       (TauCeti.LinearPMap.reducingRestriction T Q hQ)
       (TauCeti.LinearPMap.reducingRestriction T Q.orthogonal hQ.orthogonal) gap) :
     ∀ k : Nat,
-      gap * kyFanApproximationGauge k (sinTwoThetaIdealBlock Q P) ≤
-        2 * kyFanApproximationGauge k R := by
+      gap * ((sinTwoThetaIdealBlock Q P).kyFanGauge k : ℝ) ≤
+        2 * (R.kyFanGauge k : ℝ) := by
   intro k
   by_cases hk0 : k = 0
   · subst k
-    simp [kyFanApproximationGauge]
+    simp []
   have hk : 0 < k := Nat.pos_of_ne_zero hk0
   have hSsa : IsSelfAdjoint (trialOffDiagonalPart P 0 R) :=
     isSelfAdjoint_trialOffDiagonalPart
@@ -252,16 +252,13 @@ theorem sinTwoTheta_commonDomain_block_kyFan
     (commonDomain_trialReflection_intertwines hT hdom hP R hres)
     (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
-    SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at hraw
-  have hflip : kyFanApproximationGauge k
-        (Q.starProjection ∘L
+    SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal]
+      at hraw
+  have hflip : ((Q.starProjection ∘L
           ((-2 : K) • trialOffDiagonalPart P 0 R) ∘L
-          (Qᗮ.map (P.reflection.toLinearEquiv : E →ₗ[K] E)).starProjection) =
-      kyFanApproximationGauge k
-        ((Qᗮ.map (P.reflection.toLinearEquiv : E →ₗ[K] E)).starProjection ∘L
-          ((-2 : K) • trialOffDiagonalPart P 0 R) ∘L Q.starProjection) := by
+          (Qᗮ.map (P.reflection.toLinearEquiv : E →ₗ[K] E)).starProjection).kyFanGauge k : ℝ) =
+      (((Qᗮ.map (P.reflection.toLinearEquiv : E →ₗ[K] E)).starProjection ∘L
+          ((-2 : K) • trialOffDiagonalPart P 0 R) ∘L Q.starProjection).kyFanGauge k : ℝ) := by
     rw [← kyFanApproximationGauge_adjoint]
     congr 1
     rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp,
@@ -271,8 +268,8 @@ theorem sinTwoTheta_commonDomain_block_kyFan
     rfl
   have hdouble := kyFan_reflectionDefectBlock_le_two_mul hSsa Q P k
   rw [reflectionDefect_trialOffDiagonalPart, trialOffDiagonalPart_upper] at hdouble
-  have hblockR : kyFanApproximationGauge k (trialOffDiagonalBlock P 0 R) ≤
-      kyFanApproximationGauge k R := by
+  have hblockR : ((trialOffDiagonalBlock P 0 R).kyFanGauge k : ℝ) ≤
+      (R.kyFanGauge k : ℝ) := by
     rw [trialOffDiagonalBlock_eq]
     refine (kyFanApproximationGauge_comp_le k Pᗮ.starProjection R
       P.subtypeL.adjoint).trans ?_
@@ -281,23 +278,22 @@ theorem sinTwoTheta_commonDomain_block_kyFan
     have hI : ‖(P.subtypeL.adjoint : E →L[K] P)‖ ≤ 1 := by
       rw [ContinuousLinearMap.adjoint.norm_map]
       exact opNorm_le_one_of_isometry (fun _ => rfl)
-    have hnn : 0 ≤ kyFanApproximationGauge k R := kyFanApproximationGauge_nonneg k R
+    have hnn : 0 ≤ (R.kyFanGauge k : ℝ) := kyFanApproximationGauge_nonneg k R
     calc
-      ‖(Pᗮ.starProjection : E →L[K] E)‖ * kyFanApproximationGauge k R *
+      ‖(Pᗮ.starProjection : E →L[K] E)‖ * (R.kyFanGauge k : ℝ) *
             ‖(P.subtypeL.adjoint : E →L[K] P)‖
-          ≤ 1 * kyFanApproximationGauge k R * 1 := by gcongr
-      _ = kyFanApproximationGauge k R := by ring
+          ≤ 1 * (R.kyFanGauge k : ℝ) * 1 := by gcongr
+      _ = (R.kyFanGauge k : ℝ) := by ring
   calc
-    gap * kyFanApproximationGauge k (sinTwoThetaIdealBlock Q P)
-        ≤ kyFanApproximationGauge k
-          (Q.starProjection ∘L
+    gap * ((sinTwoThetaIdealBlock Q P).kyFanGauge k : ℝ)
+        ≤ ((Q.starProjection ∘L
             ((-2 : K) • trialOffDiagonalPart P 0 R) ∘L
-            (Qᗮ.map (P.reflection.toLinearEquiv : E →ₗ[K] E)).starProjection) := hraw.2
-    _ = kyFanApproximationGauge k
-          ((Qᗮ.map (P.reflection.toLinearEquiv : E →ₗ[K] E)).starProjection ∘L
-            ((-2 : K) • trialOffDiagonalPart P 0 R) ∘L Q.starProjection) := hflip
-    _ ≤ 2 * kyFanApproximationGauge k (trialOffDiagonalBlock P 0 R) := hdouble
-    _ ≤ 2 * kyFanApproximationGauge k R := by gcongr
+            (Qᗮ.map (P.reflection.toLinearEquiv : E →ₗ[K] E)).starProjection).kyFanGauge k : ℝ) :=
+              hraw.2
+    _ = (((Qᗮ.map (P.reflection.toLinearEquiv : E →ₗ[K] E)).starProjection ∘L
+            ((-2 : K) • trialOffDiagonalPart P 0 R) ∘L Q.starProjection).kyFanGauge k : ℝ) := hflip
+    _ ≤ 2 * ((trialOffDiagonalBlock P 0 R).kyFanGauge k : ℝ) := hdouble
+    _ ≤ 2 * (R.kyFanGauge k : ℝ) := by gcongr
 
 /-- Common-domain directed residual bound. Both displayed norms are finite.
 There is no bounded trial operator and no global bounded perturbation in the hypotheses.
@@ -330,12 +326,12 @@ theorem sinTwoTheta_directed_commonDomain_whereDefinedUIN_rclike
     intro k
     by_cases hk0 : k = 0
     · subst k
-      simp [kyFanApproximationGauge]
+      simp []
     · have hk : 0 < k := Nat.pos_of_ne_zero hk0
       have hblock := sinTwoTheta_commonDomain_block_kyFan
         hT hdom hP hQ R hres hgapPos hgap k
-      have hsame : kyFanApproximationGauge k (Angle.directedSinTwoAngleOperator P Q) =
-          kyFanApproximationGauge k (sinTwoThetaIdealBlock Q P) := by
+      have hsame : ((Angle.directedSinTwoAngleOperator P Q).kyFanGauge k : ℝ) =
+          ((sinTwoThetaIdealBlock Q P).kyFanGauge k : ℝ) := by
         have h := Angle.gauge_directedSinTwoAngleOperator_trialSide Q P
           (kyFanNormingFunction k hk)
         simpa only [kyFanNormingFunction_gauge] using h

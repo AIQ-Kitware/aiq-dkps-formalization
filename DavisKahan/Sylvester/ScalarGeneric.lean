@@ -82,7 +82,7 @@ class HasUnboundedSylvesterKyFan (𝕜 : Type u) [RCLike 𝕜] : Prop where
         FormBoundedSylvesterGap A B δ →
         _root_.LinearPMap.SylvesterEquation A B X C →
         ∀ k : ℕ,
-          δ * kyFanApproximationGauge k X ≤ kyFanApproximationGauge k C
+          δ * (X.kyFanGauge k : ℝ) ≤ (C.kyFanGauge k : ℝ)
 
 section
 
@@ -102,7 +102,7 @@ theorem unbounded_sylvester_kyFan
     (hgap : FormBoundedSylvesterGap A B δ)
     (hEq : _root_.LinearPMap.SylvesterEquation A B X C)
     (k : ℕ) :
-    δ * kyFanApproximationGauge k X ≤ kyFanApproximationGauge k C :=
+    δ * (X.kyFanGauge k : ℝ) ≤ (C.kyFanGauge k : ℝ) :=
   HasUnboundedSylvesterKyFan.out hA hB hδ hgap hEq k
 
 end
@@ -115,15 +115,15 @@ instance hasUnboundedSylvesterKyFan_complex :
     intro E F _ _ _ _ _ _ A B hA hB X C δ hδ hgap hEq k
     by_cases hk : k = 0
     · subst k
-      simp [kyFanApproximationGauge]
+      simp []
     · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
       let N := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
         { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hkpos
           gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hkpos).gauge_adjoint })
       have hraw := davisKahan1970_sylvester_complex N hA hB hδ hgap hEq
         (by simp [N, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-      simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] using hraw.2
+      simpa only [N, SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+        ENNReal.coe_toReal] using hraw.2
 
 /-- `ℝ` satisfies the estimate, by the complexification descent. -/
 instance hasUnboundedSylvesterKyFan_real :

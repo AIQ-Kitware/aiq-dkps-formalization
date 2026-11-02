@@ -189,8 +189,6 @@ theorem kyFan_sylvester_le_of_generalSeparation_real
     (spectraSeparated_top_complexify hsep) (complexify_sylvesterEquation hEq) k
   have hX := kyFanApproximationGauge_complexify X k
   have hC := kyFanApproximationGauge_complexify C k
-  rw [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
-    TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge] at hX hC
   rwa [hX, hC] at hfan
 
 end Real
@@ -223,8 +221,8 @@ theorem idealGauge_sylvester_le_of_generalSeparation_real
   have hc : (0 : ℝ) < Real.pi / 2 := by positivity
   have hCscaled : N.Mem ((Real.pi / 2 : ℝ) • C) :=
     N.smul_mem (Real.pi / 2 : ℝ) hC
-  have hfan : ∀ k, d * kyFanApproximationGauge k X ≤
-      kyFanApproximationGauge k ((Real.pi / 2 : ℝ) • C) := by
+  have hfan : ∀ k, d * (X.kyFanGauge k : ℝ) ≤
+      (((Real.pi / 2 : ℝ) • C).kyFanGauge k : ℝ) := by
     intro k
     rw [kyFanApproximationGauge_smul, Real.norm_eq_abs, abs_of_pos hc]
     exact kyFan_sylvester_le_of_generalSeparation_real hA hB hd hsep hEq k

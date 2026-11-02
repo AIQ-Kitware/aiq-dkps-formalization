@@ -65,7 +65,7 @@ def MinimalFullySymmetricMem
     (N : SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop :=
   ∃ B : E →L[𝕜] F,
     FiniteRankGaugeClosure N B ∧
-      ∀ k : ℕ, kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B
+      ∀ k : ℕ, (A.kyFanGauge k : ℝ) ≤ (B.kyFanGauge k : ℝ)
 
 /-- Every member of the raw finite-rank closure belongs to its fully symmetric
 envelope. -/
@@ -172,7 +172,7 @@ theorem minimalFullySymmetricMem_of_kyFan_dominated
     (N : SymmetricNormingFunction) {A B : E →L[𝕜] F}
     (hB : MinimalFullySymmetricMem N B)
     (hAB : ∀ k : ℕ,
-      kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) :
+      (A.kyFanGauge k : ℝ) ≤ (B.kyFanGauge k : ℝ)) :
     MinimalFullySymmetricMem N A ∧ N.gauge A ≤ N.gauge B := by
   obtain ⟨C, hC, hBC⟩ := hB
   have hBmem : N.Mem B :=
@@ -195,7 +195,7 @@ theorem standard_fanDominance
     (I : StandardSymmetricIdeal) {A B : E →L[𝕜] F}
     (hB : I.Mem B)
     (hAB : ∀ k : ℕ,
-      kyFanApproximationGauge k A ≤ kyFanApproximationGauge k B) :
+      (A.kyFanGauge k : ℝ) ≤ (B.kyFanGauge k : ℝ)) :
     I.Mem A ∧ I.gauge A ≤ I.gauge B := by
   cases I with
   | mk N completion =>

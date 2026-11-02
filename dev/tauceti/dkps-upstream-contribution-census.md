@@ -3661,3 +3661,28 @@ OpenAI GPT-5.6 Thinking, Kitware copyright, Apache-2.0. Genuine SOT cutoff and
 localization results, the incomplete-space projection predicate and approximate
 orthonormal variational theorem remain. The scalar Ky Fan wrappers and separate
 gauge alias are still pending consumption, not classified as unmatched.
+
+
+## 2026-11-02: retire the final Ky Fan data alias
+
+Delete `TauCeti.ApproximationNumber.kyFanApproximationGauge` and its definitional
+conversion theorem `kyFanApproximationGauge_eq_kyFanGauge`, including downstream
+exports. All maintained paper and donor expressions use `(T.kyFanGauge k : ℝ)`
+directly. This covers the unbounded Sylvester class, Riccati bounds, finite and
+infinite tangent representatives, SOT cutoffs/localization and scalar/ideal
+transport. Remove the obsolete unfolding and conversion proof steps. The
+original real formulas, signed coefficients, hypotheses and carrier/scalar
+universes are unchanged; no replacement alias or notation is introduced.
+
+The native gauge is accepted in independent
+[#14501](https://github.com/TauCetiProject/TauCeti/pull/14501), integration
+`0095123bf736b0ed2b5df5986ee34f1b6640f0ea`, present in pin
+`463ab293070d4cb355d0a0e036469464070088bc`. Its real coercion is definitionally
+the retired value; this is canonical representation reuse, not inferred DKPS
+proof adaptation. Original source is recoverable at `e4637c3919ae` and
+pre-retirement `3b796085a` under
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Core.lean`, with earlier
+`DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean` ancestry: Jon Crall /
+OpenAI GPT-5.6 Thinking, Kitware copyright, Apache-2.0. Original declaration names
+remain in the existing manifest. Genuine SOT/localization and incomplete-space
+results remain; scalar gauge-law wrappers are still pending consumption.

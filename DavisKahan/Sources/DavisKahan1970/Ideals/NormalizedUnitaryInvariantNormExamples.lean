@@ -53,11 +53,10 @@ noncomputable def kyFanNormalizedUnitaryInvariantNorm
   isKyFanDominant := inferInstanceAs (OperatorIdealFamily.kyFan 𝕜 k hk).IsKyFanDominant
   gauge_rankOne_eq_one := by
     intro E F _ _ _ _ _ _ V hVnorm hVrank
-    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge]
-    have hsum : kyFanApproximationGauge k V
+    simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+      ENNReal.coe_toReal]
+    have hsum : (V.kyFanGauge k : ℝ)
         = ∑ n ∈ Finset.range k, (V.singularValue n : ℝ) := by
-      change (V.kyFanGauge k : ℝ) = _
       rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     rw [hsum]
     have hval : ∀ n ∈ Finset.range k,
@@ -75,11 +74,10 @@ theorem gauge_kyFanNormalizedUnitaryInvariantNorm
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (A : E →L[𝕜] F) :
     (kyFanNormalizedUnitaryInvariantNorm (𝕜 := 𝕜) k hk).gauge A
-      = kyFanApproximationGauge k A :=
+      = (A.kyFanGauge k : ℝ) :=
   by
     change ((OperatorIdealFamily.kyFan 𝕜 k hk).gauge A).toReal = _
     rw [OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal]
-    rfl
 
 /-- Every bounded operator lies in the Ky Fan member's ideal. -/
 theorem mem_kyFanNormalizedUnitaryInvariantNorm

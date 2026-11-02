@@ -133,8 +133,8 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
       atTop (ContinuousLinearMap.id ℂ U) := by
     simpa [U] using stronglyTendsto_cutoffCorner_spectralCutoffSeq hA c
   have hkyFan : ∀ k : ℕ,
-      (b - a) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
-        2 * kyFanApproximationGauge k (reflectionResidualCorner U B) := by
+      (b - a) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
+        2 * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) := by
     intro k
     exact gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan hred hB hZsa hZ2
       hZdom hZcomm hUa hUb hab hS1
@@ -142,8 +142,8 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
       (fun n : ℕ => TauCeti.spectralCutoffSeq hA c n) hstrong k
   have hhalf : 0 < (b - a) / 2 := by linarith
   have hscaled : ∀ k : ℕ,
-      ((b - a) / 2) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
-        kyFanApproximationGauge k (reflectionResidualCorner U B) := by
+      ((b - a) / 2) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
+        ((reflectionResidualCorner U B).kyFanGauge k : ℝ) := by
     intro k
     have h := hkyFan k
     linarith

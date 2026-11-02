@@ -1620,7 +1620,7 @@ open DavisKahan1970.Section9 in
 gauge of the residual is at most `residualKyFanTwo ε`.  This is what equation (9.3)
 needs and equation (9.1) did not: (9.1) used only the top singular value. -/
 theorem kyFanTwo_beamResidual_le (ε : ℝ) :
-    kyFanApproximationGauge 2 (beamResidual ε) ≤ residualKyFanTwo ε := by
+    ((beamResidual ε).kyFanGauge 2 : ℝ) ≤ residualKyFanTwo ε := by
   have h0 : ((beamResidual ε).singularValue 0 : ℝ)
       ≤ residualTopSingularValue ε := by
     have hz : ((beamResidual ε).singularValue 0 : ℝ) = ‖beamResidual ε‖ :=
@@ -1628,7 +1628,6 @@ theorem kyFanTwo_beamResidual_le (ε : ℝ) :
     rw [hz]
     exact norm_beamPerturbation_comp_trialIncl_le ε
   have h1 := approximationSingularValue_one_beamResidual_le ε
-  change ((beamResidual ε).kyFanGauge 2 : ℝ) ≤ residualKyFanTwo ε
   rw [ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_zero,
     zero_add, residualKyFanTwo]
@@ -1717,45 +1716,42 @@ theorem beamSinThetaSum_le (ε : ℝ) :
       ≤ residualKyFanTwo ε := by
     have hgauge : ∀ {G : Type} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
         [CompleteSpace G] (T : G →L[ℂ] beamTrial),
-        beamKyFanTwo.gaugeReal T = kyFanApproximationGauge 2 T := by
+        beamKyFanTwo.gaugeReal T = (T.kyFanGauge 2 : ℝ) := by
       intro G _ _ _ T
       simp only [beamKyFanTwo, SymmetricOperatorIdealFamily.gaugeReal,
-        OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-        ← kyFanApproximationGauge_eq_kyFanGauge]
+        OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal]
     rw [hgauge]
-    calc kyFanApproximationGauge 2
-          (ContinuousLinearMap.adjoint (beamPerturbation ε ∘L beamTrialIncl) ∘L
+    calc ((ContinuousLinearMap.adjoint (beamPerturbation ε ∘L beamTrialIncl) ∘L
             selfAdjointSpectralSubspaceInclusion (beamPerturbed ε)
-              (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet)
-        = kyFanApproximationGauge 2
-            (ContinuousLinearMap.id ℂ beamTrial ∘L
+              (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet).kyFanGauge 2
+                : ℝ)
+        = ((ContinuousLinearMap.id ℂ beamTrial ∘L
               ContinuousLinearMap.adjoint (beamPerturbation ε ∘L beamTrialIncl) ∘L
               selfAdjointSpectralSubspaceInclusion (beamPerturbed ε)
                 (beamPerturbed_isSelfAdjoint ε) beamHighSet
-                measurableSet_beamHighSet) := by
+                measurableSet_beamHighSet).kyFanGauge 2 : ℝ) := by
           congr 1
       _ ≤ ‖ContinuousLinearMap.id ℂ beamTrial‖ *
-            kyFanApproximationGauge 2
-              (ContinuousLinearMap.adjoint (beamPerturbation ε ∘L beamTrialIncl)) *
+            ((ContinuousLinearMap.adjoint (beamPerturbation ε ∘L beamTrialIncl)).kyFanGauge 2 : ℝ) *
             ‖selfAdjointSpectralSubspaceInclusion (beamPerturbed ε)
               (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet‖ :=
           kyFanApproximationGauge_comp_le _ _ _ _
-      _ ≤ 1 * kyFanApproximationGauge 2 (beamResidual ε) * 1 := by
+      _ ≤ 1 * ((beamResidual ε).kyFanGauge 2 : ℝ) * 1 := by
           rw [kyFanApproximationGauge_adjoint,
             show (beamPerturbation ε ∘L beamTrialIncl) = beamResidual ε from rfl]
           have hid : ‖ContinuousLinearMap.id ℂ beamTrial‖ ≤ 1 :=
             ContinuousLinearMap.norm_id_le
-          have hnn : 0 ≤ kyFanApproximationGauge 2 (beamResidual ε) :=
+          have hnn : 0 ≤ ((beamResidual ε).kyFanGauge 2 : ℝ) :=
             kyFanApproximationGauge_nonneg 2 _
           have h1 : ‖ContinuousLinearMap.id ℂ beamTrial‖ *
-              kyFanApproximationGauge 2 (beamResidual ε) ≤
-                1 * kyFanApproximationGauge 2 (beamResidual ε) :=
+              ((beamResidual ε).kyFanGauge 2 : ℝ) ≤
+                1 * ((beamResidual ε).kyFanGauge 2 : ℝ) :=
             mul_le_mul_of_nonneg_right hid hnn
           nlinarith [hF₁norm, norm_nonneg (selfAdjointSpectralSubspaceInclusion
             (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε) beamHighSet
             measurableSet_beamHighSet), hnn, h1,
             mul_nonneg (norm_nonneg (ContinuousLinearMap.id ℂ beamTrial)) hnn]
-      _ = kyFanApproximationGauge 2 (beamResidual ε) := by ring
+      _ = ((beamResidual ε).kyFanGauge 2 : ℝ) := by ring
       _ ≤ residualKyFanTwo ε := kyFanTwo_beamResidual_le ε
   have hchain : 500 * beamSinThetaSum ε ≤ residualKyFanTwo ε :=
     le_trans hmain.2 hres

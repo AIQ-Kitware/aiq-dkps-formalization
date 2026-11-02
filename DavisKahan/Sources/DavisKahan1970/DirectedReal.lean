@@ -192,10 +192,9 @@ Theorem 6.3 transport. -/
 theorem kyFanApproximationGauge_theorem63Residual_complexify
     (T : E →L[ℝ] E) (Z : Submodule ℝ E)
     [Z.HasOrthogonalProjection] (k : Nat) :
-    kyFanApproximationGauge k
-        (theorem63Residual (complexify T) (complexifySubmodule Z)) =
-      kyFanApproximationGauge k (theorem63ResidualReal T Z) := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    ((theorem63Residual (complexify T) (complexifySubmodule Z)).kyFanGauge k : ℝ) =
+      ((theorem63ResidualReal T Z).kyFanGauge k : ℝ) := by
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_congr rfl fun n _ =>
     approximationSingularValue_theorem63Residual_complexify T Z n
 
@@ -214,7 +213,7 @@ theorem theorem6_3_all_kyFan_core_infiniteTrial_real
     delta * Finset.sum (Finset.range k) (fun n =>
       Real.tan (Real.arcsin
         (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ)))) <=
-      kyFanApproximationGauge k (theorem63ResidualReal T Z) := by
+      ((theorem63ResidualReal T Z).kyFanGauge k : ℝ) := by
   have hTC : (complexify T).IsSymmetric :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
       ((complexify_isSelfAdjoint_iff T).2 hT)
@@ -457,16 +456,16 @@ theorem tanTheta_directed_bounded_symmetricNorming_real
       (fun n => approximationSingularValue_sineBlock_lt_one_infiniteTrial_real
         T hT V Z hV hdelta hCompressionUpper hUnwantedLower n)
   have hky : ∀ k : Nat,
-      delta * kyFanApproximationGauge k tanTheta0 <=
-        kyFanApproximationGauge k (theorem63ResidualReal T Z) := by
+      delta * (tanTheta0.kyFanGauge k : ℝ) <=
+        ((theorem63ResidualReal T Z).kyFanGauge k : ℝ) := by
     intro k
     have hcore := theorem6_3_all_kyFan_core_infiniteTrial_real
       T hT V Z hV hdelta hCompressionUpper hUnwantedLower k
-    have htanKy : kyFanApproximationGauge k tanTheta0 =
+    have htanKy : (tanTheta0.kyFanGauge k : ℝ) =
         Finset.sum (Finset.range k) (fun n =>
           Real.tan (Real.arcsin
             (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ)))) := by
-      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+      simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
       exact Finset.sum_congr rfl fun n _ => htan n
     rw [htanKy]
     exact hcore
@@ -660,20 +659,20 @@ theorem tanTheta_directed_bounded_perturbation_symmetricNorming_real
       (fun n => approximationSingularValue_sineBlock_lt_one_infiniteTrial_real
         T hT V Z hV hdelta hCompressionUpper hUnwantedLower n)
   have hky : ∀ k : Nat,
-      delta * kyFanApproximationGauge k tanTheta0 ≤
-        kyFanApproximationGauge k (P ∘L Z.subtypeL) := by
+      delta * (tanTheta0.kyFanGauge k : ℝ) ≤
+        ((P ∘L Z.subtypeL).kyFanGauge k : ℝ) := by
     intro k
     have hcore := theorem6_3_all_kyFan_core_infiniteTrial_real
       T hT V Z hV hdelta hCompressionUpper hUnwantedLower k
-    have htanKy : kyFanApproximationGauge k tanTheta0 =
+    have htanKy : (tanTheta0.kyFanGauge k : ℝ) =
         Finset.sum (Finset.range k) (fun n =>
           Real.tan (Real.arcsin
             (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ)))) := by
-      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+      simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
       exact Finset.sum_congr rfl fun n _ => htan n
-    have hres : kyFanApproximationGauge k (theorem63ResidualReal T Z) ≤
-        kyFanApproximationGauge k (P ∘L Z.subtypeL) := by
-      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    have hres : ((theorem63ResidualReal T Z).kyFanGauge k : ℝ) ≤
+        ((P ∘L Z.subtypeL).kyFanGauge k : ℝ) := by
+      simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
       exact Finset.sum_le_sum fun n _ =>
         approximationSingularValue_theorem63ResidualReal_le_of_invariant T P Z hinv n
     rw [htanKy]

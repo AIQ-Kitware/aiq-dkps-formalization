@@ -109,8 +109,8 @@ theorem tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike
       (b - a) * N.gauge tanTwoTheta ≤ 2 * N.gauge H := by
   have hδ : (0 : ℝ) < (b - a) / 2 := by linarith
   have hscaled : ∀ k : ℕ,
-      (b - a) / 2 * kyFanApproximationGauge k tanTwoTheta ≤
-        kyFanApproximationGauge k H := by
+      (b - a) / 2 * (tanTwoTheta.kyFanGauge k : ℝ) ≤
+        (H.kyFanGauge k : ℝ) := by
     intro k
     have h := DavisKahan.TanTwoTheta.kyFan_absTanTwoTheta_le_of_finiteDimensional_invariantSubspace
       hA hH hAU hHU hHUperp hTmem hTzero hUb hUa hinv hab tanTwoTheta π htan k
@@ -163,8 +163,8 @@ theorem tanTwoTheta_branchFree_bounded_symmetricNorming_complex
       (b - a) * N.gauge tanTwoTheta ≤ 2 * N.gauge H := by
   have hδ : (0 : ℝ) < (b - a) / 2 := by linarith
   have hscaled : ∀ k : ℕ,
-      (b - a) / 2 * kyFanApproximationGauge k tanTwoTheta ≤
-        kyFanApproximationGauge k H := by
+      (b - a) / 2 * (tanTwoTheta.kyFanGauge k : ℝ) ≤
+        (H.kyFanGauge k : ℝ) := by
     intro k
     have h := DavisKahan.TanTwoTheta.kyFan_absTanTwoTheta_le_of_invariantSubspace
       hA hH hAU hHU hHUperp hTmem hTzero hUb hUa hinv hab tanTwoTheta π htan k

@@ -1046,11 +1046,11 @@ theorem approximationNumber_lowerCorner_le
 /-- The Ky Fan gauge of the directed corner is dominated by the paper's directed
 tangent prefix sums. -/
 theorem kyFan_lowerCorner_le (htr : ‖sinAngleOperatorC U V‖ < 1) (k : ℕ) :
-    kyFanApproximationGauge k (projectionBlock Uᗮ U
-        (projectorDifference U V * secantSquared U V)) ≤
+    ((projectionBlock Uᗮ U
+        (projectorDifference U V * secantSquared U V)).kyFanGauge k : ℝ) ≤
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((theorem63DirectedSineBlock U V).singularValue n : ℝ))) := by
-  rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+  rw [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_le_sum fun n _ => approximationNumber_lowerCorner_le htr n
 
 omit [CompleteSpace E] in
@@ -1090,15 +1090,15 @@ theorem corner_all_kyFan
     (hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (htr : ‖sinAngleOperatorC U V‖ < 1) (k : ℕ) :
-    delta * kyFanApproximationGauge k (projectionBlock Uᗮ U
-        (projectorDifference U V * secantSquared U V)) ≤
-      kyFanApproximationGauge k (projectionBlock Uᗮ U (T - A)) := by
+    delta * ((projectionBlock Uᗮ U
+        (projectorDifference U V * secantSquared U V)).kyFanGauge k : ℝ) ≤
+      ((projectionBlock Uᗮ U (T - A)).kyFanGauge k : ℝ) := by
   have hdirected := theorem6_3_all_kyFan_core_infiniteTrial T V U hT hV hdelta
     hCompressionUpper hUnwantedLower k
   have hcorner := kyFan_lowerCorner_le (U := U) (V := V) htr k
-  have hresidual : kyFanApproximationGauge k (theorem63Residual T U) ≤
-      kyFanApproximationGauge k (projectionBlock Uᗮ U (T - A)) := by
-    rw [kyFanApproximationGauge, kyFanApproximationGauge,
+  have hresidual : ((theorem63Residual T U).kyFanGauge k : ℝ) ≤
+      ((projectionBlock Uᗮ U (T - A)).kyFanGauge k : ℝ) := by
+    rw [
       ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum, ContinuousLinearMap.kyFanGauge_def,
         NNReal.coe_sum]
     exact Finset.sum_le_sum fun n _ =>
@@ -1117,8 +1117,8 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (htr : ‖sinAngleOperatorC U V‖ < 1) :
     ∀ k : ℕ,
-      delta * kyFanApproximationGauge k (tanAngleOperatorC U V) ≤
-        kyFanApproximationGauge k (T - A) := by
+      delta * ((tanAngleOperatorC U V).kyFanGauge k : ℝ) ≤
+        ((T - A).kyFanGauge k : ℝ) := by
   intro k
   have hTsa : IsSelfAdjoint T := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
   have hHsa : IsSelfAdjoint (T - A) := hTsa.sub hA
@@ -1126,16 +1126,14 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
   set K := projectorDifference U V * secantSquared U V with hKdef
   -- the two corner hypotheses of Lemma 6.1
   have h₀ : ∀ j : ℕ,
-      kyFanApproximationGauge j
-          (projectionBlock Uᗮ U (((delta : ℝ) : ℂ) • K)) ≤
-        kyFanApproximationGauge j (projectionBlock Uᗮ U (T - A)) := by
+      ((projectionBlock Uᗮ U (((delta : ℝ) : ℂ) • K)).kyFanGauge j : ℝ) ≤
+        ((projectionBlock Uᗮ U (T - A)).kyFanGauge j : ℝ) := by
     intro j
     rw [projectionBlock_smul, kyFanApproximationGauge_smul, hdeltac]
     exact corner_all_kyFan hT hV hAU hdelta hCompressionUpper hUnwantedLower htr j
   have h₁ : ∀ j : ℕ,
-      kyFanApproximationGauge j
-          (projectionBlock Uᗮᗮ Uᗮ (((delta : ℝ) : ℂ) • K)) ≤
-        kyFanApproximationGauge j (projectionBlock Uᗮᗮ Uᗮ (T - A)) := by
+      ((projectionBlock Uᗮᗮ Uᗮ (((delta : ℝ) : ℂ) • K)).kyFanGauge j : ℝ) ≤
+        ((projectionBlock Uᗮᗮ Uᗮ (T - A)).kyFanGauge j : ℝ) := by
     intro j
     have hleft : projectionBlock Uᗮᗮ Uᗮ (((delta : ℝ) : ℂ) • K) =
         (((delta : ℝ) : ℂ) • projectionBlock Uᗮ U K).adjoint := by
@@ -1165,10 +1163,11 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
       projectionBlock Uᗮᗮ Uᗮ (T - A) = diagonalPair Uᗮ U (T - A) := rfl
   rw [hsum, hsumH, kyFanApproximationGauge_smul, hdeltac] at hcombine
   have hpinch := diagonalPair_all_kyFan_le Uᗮ U (T - A) k
-  have hmodulus : kyFanApproximationGauge k (tanAngleOperatorC U V) =
-      kyFanApproximationGauge k (tanBlockRepresentative U V) := by
+  have hmodulus : ((tanAngleOperatorC U V).kyFanGauge k : ℝ) =
+      ((tanBlockRepresentative U V).kyFanGauge k : ℝ) := by
     rw [directedTanAngleOperatorC_eq_modulus_blockRepresentative htr]
-    exact (show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+    exact (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k :
+      ℝ) from
       (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_modulus
       (tanBlockRepresentative U V)).kyFanGauge_eq k)))
   rw [hmodulus]
@@ -1255,8 +1254,8 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_crossedDefects
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V) :
     ∀ k : ℕ,
-      delta * kyFanApproximationGauge k (tanAngleOperatorC U V) ≤
-        kyFanApproximationGauge k (T - A) :=
+      delta * ((tanAngleOperatorC U V).kyFanGauge k : ℝ) ≤
+        ((T - A).kyFanGauge k : ℝ) :=
   tanTheta_ambient_bounded_kyFan_complex_of_transversality hT hA hV hAU hdelta hCompressionUpper
     hUnwantedLower
     (norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent hT hV hdelta

@@ -119,7 +119,7 @@ theorem prefixGauge_add_le
             (fun k => (A.singularValue k : ℝ) +
               (B.singularValue k : ℝ)) m,
           Finset.sum_add_distrib]
-        simpa only [kyFanApproximationGauge_eq_kyFanGauge,
+        simpa only [
           ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum] using kyFanApproximationGauge_add_le
             m A B
       · have huniv :
@@ -200,8 +200,8 @@ singular-value prefixes are compared, and those live in `Fin n → ℝ` whatever
 the operators' codomains are, so the statement generalizes verbatim. -/
 theorem prefixGauge_le_of_all_kyFan_le_hetero (N : SymmetricNormingFunction)
     {A : E →L[𝕜] G} {B : E →L[𝕜] F}
-    (h : ∀ k : ℕ, kyFanApproximationGauge k A ≤
-      kyFanApproximationGauge k B) (n : ℕ) :
+    (h : ∀ k : ℕ, (A.kyFanGauge k : ℝ) ≤
+      (B.kyFanGauge k : ℝ)) (n : ℕ) :
     N.prefixGauge n A ≤ N.prefixGauge n B := by
   change N.finiteGauge n (approximationPrefix n A) ≤
     N.finiteGauge n (approximationPrefix n B)
@@ -223,7 +223,7 @@ theorem prefixGauge_le_of_all_kyFan_le_hetero (N : SymmetricNormingFunction)
           (fun k => (A.singularValue k : ℝ)) m,
         Fin.sum_univ_eq_sum_range
           (fun k => (B.singularValue k : ℝ)) m]
-      simpa only [kyFanApproximationGauge_eq_kyFanGauge,
+      simpa only [
         ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum] using h m
     · have huniv :
         (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) = Finset.univ :=
@@ -235,8 +235,8 @@ theorem prefixGauge_le_of_all_kyFan_le_hetero (N : SymmetricNormingFunction)
 theorem extendedGauge_le_of_all_kyFan_le_hetero
     (N : SymmetricNormingFunction)
     {A : E →L[𝕜] G} {B : E →L[𝕜] F}
-    (h : ∀ k : ℕ, kyFanApproximationGauge k A ≤
-      kyFanApproximationGauge k B) :
+    (h : ∀ k : ℕ, (A.kyFanGauge k : ℝ) ≤
+      (B.kyFanGauge k : ℝ)) :
     N.extendedGauge A ≤ N.extendedGauge B := by
   apply iSup_le
   intro n
@@ -254,15 +254,15 @@ theorem extendedGauge_comp_le (N : SymmetricNormingFunction)
   have hcnorm : ‖((‖L‖ * ‖R‖ : ℝ) : 𝕜)‖ = ‖L‖ * ‖R‖ := by
     rw [RCLike.norm_ofReal, abs_of_nonneg hLR]
   have hkey : ∀ k : ℕ,
-      kyFanApproximationGauge k (L ∘L A ∘L R) ≤
-        kyFanApproximationGauge k (((‖L‖ * ‖R‖ : ℝ) : 𝕜) • A) := by
+      ((L ∘L A ∘L R).kyFanGauge k : ℝ) ≤
+        ((((‖L‖ * ‖R‖ : ℝ) : 𝕜) • A).kyFanGauge k : ℝ) := by
     intro k
     rw [kyFanApproximationGauge_smul, hcnorm]
     calc
-      kyFanApproximationGauge k (L ∘L A ∘L R)
-          ≤ ‖L‖ * kyFanApproximationGauge k A * ‖R‖ :=
+      ((L ∘L A ∘L R).kyFanGauge k : ℝ)
+          ≤ ‖L‖ * (A.kyFanGauge k : ℝ) * ‖R‖ :=
         kyFanApproximationGauge_comp_le k L A R
-      _ = ‖L‖ * ‖R‖ * kyFanApproximationGauge k A := by ring
+      _ = ‖L‖ * ‖R‖ * (A.kyFanGauge k : ℝ) := by ring
   have hle := N.extendedGauge_le_of_all_kyFan_le_hetero hkey
   rw [N.extendedGauge_smul, hcnorm,
     ENNReal.ofReal_mul (norm_nonneg L)] at hle

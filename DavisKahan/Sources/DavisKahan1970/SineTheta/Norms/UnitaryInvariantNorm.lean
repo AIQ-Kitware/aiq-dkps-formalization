@@ -222,8 +222,8 @@ theorem sum_approximationPrefix
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (n : ℕ) (A : E →L[𝕜] F) :
     ∑ i : Fin n, approximationPrefix n A i =
-      kyFanApproximationGauge n A := by
-  rw [kyFanApproximationGauge_eq_kyFanGauge,
+      (A.kyFanGauge n : ℝ) := by
+  rw [
     ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   simp only [approximationPrefix]
   exact Fin.sum_univ_eq_sum_range (fun m => (A.singularValue m : ℝ)) n
@@ -236,8 +236,8 @@ theorem prefixGauge_le_of_all_kyFan_le
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (N : SymmetricNormingFunction) {A B : E →L[𝕜] F}
-    (h : ∀ k : ℕ, kyFanApproximationGauge k A ≤
-      kyFanApproximationGauge k B) (n : ℕ) :
+    (h : ∀ k : ℕ, (A.kyFanGauge k : ℝ) ≤
+      (B.kyFanGauge k : ℝ)) (n : ℕ) :
     N.prefixGauge n A ≤ N.prefixGauge n B := by
   change N.finiteGauge n (approximationPrefix n A) ≤
     N.finiteGauge n (approximationPrefix n B)
@@ -259,7 +259,7 @@ theorem prefixGauge_le_of_all_kyFan_le
           (fun k => (A.singularValue k : ℝ)) m,
         Fin.sum_univ_eq_sum_range
           (fun k => (B.singularValue k : ℝ)) m]
-      simpa only [kyFanApproximationGauge_eq_kyFanGauge,
+      simpa only [
         ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum] using h m
     · have huniv :
           (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) =
@@ -278,8 +278,8 @@ theorem mul_prefixGauge_le_of_all_mul_kyFan_le
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (N : SymmetricNormingFunction) {A B : E →L[𝕜] F}
     {c : ℝ} (hc : 0 ≤ c)
-    (h : ∀ k : ℕ, c * kyFanApproximationGauge k A ≤
-      kyFanApproximationGauge k B) (n : ℕ) :
+    (h : ∀ k : ℕ, c * (A.kyFanGauge k : ℝ) ≤
+      (B.kyFanGauge k : ℝ)) (n : ℕ) :
     c * N.prefixGauge n A ≤ N.prefixGauge n B := by
   have hdom : N.finiteGauge n (c • approximationPrefix n A) ≤
       N.finiteGauge n (approximationPrefix n B) := by
@@ -303,7 +303,7 @@ theorem mul_prefixGauge_le_of_all_mul_kyFan_le
             (fun k => (A.singularValue k : ℝ)) m,
           Fin.sum_univ_eq_sum_range
             (fun k => (B.singularValue k : ℝ)) m]
-        simpa only [kyFanApproximationGauge_eq_kyFanGauge,
+        simpa only [
           ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum] using h m
       · have huniv :
             (Finset.univ.filter fun i : Fin n => (i : ℕ) < m) =
@@ -325,8 +325,8 @@ theorem extendedGauge_le_of_all_kyFan_le
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (N : SymmetricNormingFunction) {A B : E →L[𝕜] F}
-    (h : ∀ k : ℕ, kyFanApproximationGauge k A ≤
-      kyFanApproximationGauge k B) :
+    (h : ∀ k : ℕ, (A.kyFanGauge k : ℝ) ≤
+      (B.kyFanGauge k : ℝ)) :
     N.extendedGauge A ≤ N.extendedGauge B := by
   apply iSup_le
   intro n
@@ -343,8 +343,8 @@ theorem mul_extendedGauge_le_of_all_mul_kyFan_le
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (N : SymmetricNormingFunction) {A B : E →L[𝕜] F}
     {c : ℝ} (hc : 0 ≤ c)
-    (h : ∀ k : ℕ, c * kyFanApproximationGauge k A ≤
-      kyFanApproximationGauge k B) :
+    (h : ∀ k : ℕ, c * (A.kyFanGauge k : ℝ) ≤
+      (B.kyFanGauge k : ℝ)) :
     ENNReal.ofReal c * N.extendedGauge A ≤ N.extendedGauge B := by
   rw [extendedGauge, ENNReal.mul_iSup]
   apply iSup_le
@@ -367,8 +367,8 @@ theorem mem_of_all_mul_kyFan_le
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (N : SymmetricNormingFunction) {A B : E →L[𝕜] F}
     {c : ℝ} (hc : 0 < c) (hB : N.Mem B)
-    (h : ∀ k : ℕ, c * kyFanApproximationGauge k A ≤
-      kyFanApproximationGauge k B) : N.Mem A := by
+    (h : ∀ k : ℕ, c * (A.kyFanGauge k : ℝ) ≤
+      (B.kyFanGauge k : ℝ)) : N.Mem A := by
   have hle := N.mul_extendedGauge_le_of_all_mul_kyFan_le hc.le h
   intro htop
   have hc0 : ENNReal.ofReal c ≠ 0 := ENNReal.ofReal_ne_zero_iff.mpr hc
@@ -383,8 +383,8 @@ theorem mul_gauge_le_of_all_mul_kyFan_le
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     (N : SymmetricNormingFunction) {A B : E →L[𝕜] F}
     {c : ℝ} (hc : 0 < c) (hB : N.Mem B)
-    (h : ∀ k : ℕ, c * kyFanApproximationGauge k A ≤
-      kyFanApproximationGauge k B) :
+    (h : ∀ k : ℕ, c * (A.kyFanGauge k : ℝ) ≤
+      (B.kyFanGauge k : ℝ)) :
     N.Mem A ∧ c * N.gauge A ≤ N.gauge B := by
   have hA := N.mem_of_all_mul_kyFan_le hc hB h
   refine ⟨hA, ?_⟩
@@ -451,10 +451,12 @@ theorem gauge_eq_of_sameApproximationSingularValues
     N.extendedGauge A = N.extendedGauge B := by
   apply le_antisymm
   · exact N.extendedGauge_le_of_all_kyFan_le fun k =>
-      le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _
+        k : ℝ) from
       (congrArg NNReal.toReal (h.kyFanGauge_eq k))))
   · exact N.extendedGauge_le_of_all_kyFan_le fun k =>
-      le_of_eq ((show kyFanApproximationGauge k _ = kyFanApproximationGauge k _ from
+      le_of_eq ((show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _
+        k : ℝ) from
       (congrArg NNReal.toReal (h.kyFanGauge_eq k)))).symm
 
 end SymmetricNormingFunction

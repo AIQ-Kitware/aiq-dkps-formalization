@@ -186,9 +186,9 @@ theorem approximationSingularValue_complexifyTrialData_residual
 trial-block data. -/
 theorem kyFanApproximationGauge_complexifyTrialData_residual
     (data : Theorem63TrialData Z V) (k : ℕ) :
-    kyFanApproximationGauge k (complexifyTrialData data).residual =
-      kyFanApproximationGauge k data.residual := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    ((complexifyTrialData data).residual.kyFanGauge k : ℝ) =
+      (data.residual.kyFanGauge k : ℝ) := by
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   exact Finset.sum_congr rfl fun n _ =>
     approximationSingularValue_complexifyTrialData_residual data n
 
@@ -269,7 +269,7 @@ theorem theorem6_3_all_kyFan_core_infiniteData_real (data : Theorem63TrialData Z
     (k : ℕ) :
     delta * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ))) ≤
-      kyFanApproximationGauge k data.residual := by
+      (data.residual.kyFanGauge k : ℝ) := by
   have hcore := (complexifyTrialData data).all_kyFan_core_of_formBounds_infinite
     hdelta (complexifyTrialData_compression_upper data hMupper)
     (complexifyTrialData_crossed_lower data hcross) k
@@ -312,14 +312,14 @@ theorem theorem6_3_ideal_infiniteData_exists_real
       (fun n => approximationSingularValue_sineBlockReal_lt_one_infiniteData
         data hdelta hMupper hcross n)
   have hky : ∀ k : ℕ,
-      delta * kyFanApproximationGauge k tanTheta0 ≤
-        kyFanApproximationGauge k data.residual := by
+      delta * (tanTheta0.kyFanGauge k : ℝ) ≤
+        (data.residual.kyFanGauge k : ℝ) := by
     intro k
     have hcore := theorem6_3_all_kyFan_core_infiniteData_real data hdelta hMupper hcross k
-    have htanKy : kyFanApproximationGauge k tanTheta0 =
+    have htanKy : (tanTheta0.kyFanGauge k : ℝ) =
         ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
           (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ))) := by
-      simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+      simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
       exact Finset.sum_congr rfl fun n _ => htan n
     rw [htanKy]
     exact hcore
@@ -343,10 +343,10 @@ theorem theorem6_3_ideal_infiniteData_real
     N.Mem tanTheta0 ∧ delta * N.gaugeReal tanTheta0 ≤ N.gaugeReal data.residual := by
   refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta hResidual fun k => ?_
   have hcore := theorem6_3_all_kyFan_core_infiniteData_real data hdelta hMupper hcross k
-  have htanKy : kyFanApproximationGauge k tanTheta0 =
+  have htanKy : (tanTheta0.kyFanGauge k : ℝ) =
       ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
         (((theorem63DirectedSineBlockReal Z V).singularValue n : ℝ))) := by
-    simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     exact Finset.sum_congr rfl fun n _ => htan n
   rw [htanKy]
   exact hcore

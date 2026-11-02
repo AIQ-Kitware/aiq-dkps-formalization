@@ -452,8 +452,7 @@ theorem sum_le_kyFanApproximationGauge_reflectionResidualCorner_of_contraction
     (hucon : ∀ α : Fin n → ℂ, ‖∑ i, α i • u i‖ ^ 2 ≤ cu ^ 2 * ∑ i, ‖α i‖ ^ 2)
     (hvcon : ∀ α : Fin n → ℂ, ‖∑ i, α i • v i‖ ^ 2 ≤ cv ^ 2 * ∑ i, ‖α i‖ ^ 2)
     {t : Fin n → ℝ} (ht : ∀ i, t i ≤ RCLike.re ⟪u i, K (v i)⟫_ℂ) :
-    ∑ i, t i ≤ cu * cv * kyFanApproximationGauge n
-      (reflectionResidualCorner U K) := by
+    ∑ i, t i ≤ cu * cv * ((reflectionResidualCorner U K).kyFanGauge n : ℝ) := by
   classical
   set uu : Fin n → Uᗮ := fun i => ⟨u i, hu i⟩ with huudef
   set vv : Fin n → U := fun i => ⟨v i, hv i⟩ with hvvdef
@@ -513,7 +512,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
     (hc1 : 1 ≤ c)
     (hc : 1 + 3 * (n : ℝ) * (ρ / 4) / (θ ^ 2 * κ ^ 2) ≤ c ^ 2) :
     (b - a) * ∑ i, q i / √(1 - q i ^ 2) ≤
-      2 * c ^ 2 * kyFanApproximationGauge n (reflectionResidualCorner U B) +
+      2 * c ^ 2 * ((reflectionResidualCorner U B).kyFanGauge n : ℝ) +
         n * ((τ + |b|) * ρ / (4 * κ)) := by
   classical
   have hc0' : (0 : ℝ) ≤ c := le_trans zero_le_one hc1
@@ -555,8 +554,8 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
       rw [div_le_div_iff₀ hκ2 (by positivity)]
       nlinarith [mul_nonneg hnum hκ2.le, hθsq1]
     linarith
-  have hG0 : (0 : ℝ) ≤ kyFanApproximationGauge n (reflectionResidualCorner U B) := by
-    rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+  have hG0 : (0 : ℝ) ≤ ((reflectionResidualCorner U B).kyFanGauge n : ℝ) := by
+    rw [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     exact Finset.sum_nonneg fun m _ =>
       ((reflectionResidualCorner U B).singularValue m).coe_nonneg
   have hxU : ∀ i, x i ∈ U := fun i => Ω.mem_subspace_of_eq (hxΩ i)
@@ -628,7 +627,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
     linarith [hmul, herr]
   have hsum1 : ∑ i, RCLike.re ⟪(((q i * √(1 - q i ^ 2)) : ℝ) : ℂ)⁻¹ •
       U.diagBlock Z (U.offDiagBlock Z (x i)), B (x i)⟫_ℂ ≤
-      c * 1 * kyFanApproximationGauge n (reflectionResidualCorner U B) :=
+      c * 1 * ((reflectionResidualCorner U B).kyFanGauge n : ℝ) :=
     sum_le_kyFanApproximationGauge_reflectionResidualCorner_of_contraction B
       hc0' zero_le_one
       (fun i => Uᗮ.smul_mem _ (hCSU i)) hxU
@@ -638,7 +637,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
       (fun _ => le_rfl)
   have hsum2 : ∑ i, RCLike.re ⟪-(((q i : ℝ) : ℂ)⁻¹ • U.offDiagBlock Z (x i)),
       B ((((√(1 - q i ^ 2) : ℝ) : ℂ)⁻¹ • U.diagBlock Z (x i)))⟫_ℂ ≤
-      c * c * kyFanApproximationGauge n (reflectionResidualCorner U B) :=
+      c * c * ((reflectionResidualCorner U B).kyFanGauge n : ℝ) :=
     sum_le_kyFanApproximationGauge_reflectionResidualCorner_of_contraction B
       hc0' hc0'
       (fun i => Uᗮ.neg_mem (Uᗮ.smul_mem _ (hSU i)))
@@ -665,11 +664,11 @@ theorem gap_mul_sum_tangent_le_kyFan_of_approximateDoubleAngleEigenfamily
               U.diagBlock Z (x i)))⟫_ℂ) := by
         rw [Finset.sum_add_distrib, Finset.sum_add_distrib, Finset.sum_const,
           Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
-    _ ≤ 2 * c ^ 2 * kyFanApproximationGauge n (reflectionResidualCorner U B) +
+    _ ≤ 2 * c ^ 2 * ((reflectionResidualCorner U B).kyFanGauge n : ℝ) +
         (n : ℝ) * ((τ + |b|) * ρ / (4 * κ)) := by
         have hcsq : c ≤ c ^ 2 := by nlinarith [hc1]
-        have hcc : c * kyFanApproximationGauge n (reflectionResidualCorner U B) ≤
-            c ^ 2 * kyFanApproximationGauge n (reflectionResidualCorner U B) :=
+        have hcc : c * ((reflectionResidualCorner U B).kyFanGauge n : ℝ) ≤
+            c ^ 2 * ((reflectionResidualCorner U B).kyFanGauge n : ℝ) :=
           mul_le_mul_of_nonneg_right hcsq hG0
         nlinarith [hsum1, hsum2, hcc]
 
@@ -734,8 +733,8 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
     {θ : ℝ} (hθ : 0 < θ) (hθ1 : θ < 1) :
     (b - a) * ∑ p ∈ Finset.range k, Real.tan (Real.arcsin
         (((reflectionSineCorner U Z ∘L cutoffCorner Ω).singularValue p : ℝ))) ≤
-      2 * kyFanApproximationGauge k (reflectionResidualCorner U B) +
-        θ * (3 * k * kyFanApproximationGauge k (reflectionResidualCorner U B) /
+      2 * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) +
+        θ * (3 * k * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) /
               (2 * (√(1 - ‖U.offDiagBlock Z‖ ^ 2)) ^ 2) +
             k * (τ + |b|) / (4 * √(1 - ‖U.offDiagBlock Z‖ ^ 2)) +
             (b - a) * k / √(1 - ‖U.offDiagBlock Z‖ ^ 2)) := by
@@ -906,30 +905,31 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
     (Finset.sum_range_add_sum_Ico
       (f := fun p => Real.tan (Real.arcsin ((X.singularValue p : ℝ)))) hmk).symm
   -- assemble
-  have hG0 : (0 : ℝ) ≤ kyFanApproximationGauge k (reflectionResidualCorner U B) := by
-    rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+  have hG0 : (0 : ℝ) ≤ ((reflectionResidualCorner U B).kyFanGauge k : ℝ) := by
+    rw [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     exact Finset.sum_nonneg fun p _ =>
       ((reflectionResidualCorner U B).singularValue p).coe_nonneg
-  have hGm : kyFanApproximationGauge m (reflectionResidualCorner U B) ≤ kyFanApproximationGauge k (reflectionResidualCorner U B) :=
+  have hGm : ((reflectionResidualCorner U B).kyFanGauge m : ℝ) ≤ ((reflectionResidualCorner U
+    B).kyFanGauge k : ℝ) :=
     TauCeti.DavisKahan.kyFanApproximationGauge_mono_length
       (reflectionResidualCorner U B) hmk
   have hmkR : (m : ℝ) ≤ (k : ℝ) := Nat.cast_le.mpr hmk
   have hm0 : (0 : ℝ) ≤ (m : ℝ) := Nat.cast_nonneg m
   have hcsq0 : (0 : ℝ) ≤ c ^ 2 := sq_nonneg c
-  have hstep1 : 2 * c ^ 2 * kyFanApproximationGauge m (reflectionResidualCorner U B) +
+  have hstep1 : 2 * c ^ 2 * ((reflectionResidualCorner U B).kyFanGauge m : ℝ) +
       (m : ℝ) * ((τ + |b|) * ρ / (4 * κ)) ≤
-      2 * kyFanApproximationGauge k (reflectionResidualCorner U B) +
+      2 * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) +
         (3 * (k : ℝ) * ρ / (2 * θ ^ 2 * κ ^ 2)) *
-          kyFanApproximationGauge k (reflectionResidualCorner U B) +
+          ((reflectionResidualCorner U B).kyFanGauge k : ℝ) +
         (k : ℝ) * ((τ + |b|) * ρ / (4 * κ)) := by
-    have h1 : 2 * c ^ 2 * kyFanApproximationGauge m (reflectionResidualCorner U B) ≤
-        2 * c ^ 2 * kyFanApproximationGauge k (reflectionResidualCorner U B) := by
+    have h1 : 2 * c ^ 2 * ((reflectionResidualCorner U B).kyFanGauge m : ℝ) ≤
+        2 * c ^ 2 * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) := by
       have : (0 : ℝ) ≤ 2 * c ^ 2 := by positivity
       exact mul_le_mul_of_nonneg_left hGm this
-    have h2 : 2 * c ^ 2 * kyFanApproximationGauge k (reflectionResidualCorner U B) =
-        2 * kyFanApproximationGauge k (reflectionResidualCorner U B) +
+    have h2 : 2 * c ^ 2 * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) =
+        2 * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) +
           (3 * (k : ℝ) * ρ / (2 * θ ^ 2 * κ ^ 2)) *
-            kyFanApproximationGauge k (reflectionResidualCorner U B) := by
+            ((reflectionResidualCorner U B).kyFanGauge k : ℝ) := by
       rw [hcsq]
       field_simp
       ring
@@ -948,15 +948,16 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff
   have hθ2θ : θ ^ 2 ≤ θ := by nlinarith [hθ, hθ1]
   have hκ2pos : (0 : ℝ) < κ ^ 2 := by positivity
   have hE1 : (3 * (k : ℝ) * ρ / (2 * θ ^ 2 * κ ^ 2)) *
-      kyFanApproximationGauge k (reflectionResidualCorner U B) ≤
-      θ * (3 * (k : ℝ) * kyFanApproximationGauge k (reflectionResidualCorner U B) / (2 * κ ^ 2)) := by
+      ((reflectionResidualCorner U B).kyFanGauge k : ℝ) ≤
+      θ * (3 * (k : ℝ) * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) / (2 * κ ^ 2)) := by
     have hid : (3 * (k : ℝ) * ρ / (2 * θ ^ 2 * κ ^ 2)) *
-        kyFanApproximationGauge k (reflectionResidualCorner U B) =
-        θ ^ 2 * (3 * (k : ℝ) * kyFanApproximationGauge k (reflectionResidualCorner U B) / (2 * κ ^ 2)) := by
+        ((reflectionResidualCorner U B).kyFanGauge k : ℝ) =
+        θ ^ 2 * (3 * (k : ℝ) * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) / (2 * κ ^ 2)) :=
+          by
       rw [hρdef]
       field_simp
     rw [hid]
-    have hcoef : (0 : ℝ) ≤ 3 * (k : ℝ) * kyFanApproximationGauge k (reflectionResidualCorner U B) /
+    have hcoef : (0 : ℝ) ≤ 3 * (k : ℝ) * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) /
         (2 * κ ^ 2) := by positivity
     exact mul_le_mul_of_nonneg_right hθ2θ hcoef
   have hE2 : (k : ℝ) * ((τ + |b|) * ρ / (4 * κ)) ≤
@@ -998,7 +999,7 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_of_cutoff
     (hτ : 0 ≤ τ) (Ω : TauCeti.BoundedCutoff A U τ) (k : ℕ) :
     (b - a) * ∑ p ∈ Finset.range k, Real.tan (Real.arcsin
         (((reflectionSineCorner U Z ∘L cutoffCorner Ω).singularValue p : ℝ))) ≤
-      2 * kyFanApproximationGauge k (reflectionResidualCorner U B) := by
+      2 * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) := by
   classical
   set r : ℝ := ‖U.offDiagBlock Z‖ with hrdef
   have hr0 : 0 ≤ r := norm_nonneg _
@@ -1006,14 +1007,14 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_of_cutoff
   set κ : ℝ := √(1 - r ^ 2) with hκdef
   have hκ : 0 < κ := Real.sqrt_pos.mpr (by linarith)
   have hδ : 0 < b - a := by linarith
-  have hG0 : (0 : ℝ) ≤ kyFanApproximationGauge k (reflectionResidualCorner U B) := by
-    rw [kyFanApproximationGauge_eq_kyFanGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+  have hG0 : (0 : ℝ) ≤ ((reflectionResidualCorner U B).kyFanGauge k : ℝ) := by
+    rw [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
     exact Finset.sum_nonneg fun p _ =>
       ((reflectionResidualCorner U B).singularValue p).coe_nonneg
-  set W : ℝ := 3 * (k : ℝ) * kyFanApproximationGauge k (reflectionResidualCorner U B) / (2 * κ ^ 2) +
+  set W : ℝ := 3 * (k : ℝ) * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) / (2 * κ ^ 2) +
       (k : ℝ) * (τ + |b|) / (4 * κ) + (b - a) * (k : ℝ) / κ with hWdef
   have hW0 : (0 : ℝ) ≤ W := by
-    have h1 : (0 : ℝ) ≤ 3 * (k : ℝ) * kyFanApproximationGauge k (reflectionResidualCorner U B) /
+    have h1 : (0 : ℝ) ≤ 3 * (k : ℝ) * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) /
         (2 * κ ^ 2) := by positivity
     have hbb : (0 : ℝ) ≤ τ + |b| := by positivity
     have h2 : (0 : ℝ) ≤ (k : ℝ) * (τ + |b|) / (4 * κ) := by positivity
@@ -1038,7 +1039,7 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan_of_cutoff
   have hmain := gap_mul_sum_tanArcsin_le_two_mul_kyFan_add_of_cutoff hred hB hZsa
     hZ2 hZdom hZcomm hUa hUb hab hS1 hτ Ω k hθpos hθ1
   rw [← hrdef, ← hκdef] at hmain
-  have hWeq : 3 * (k : ℝ) * kyFanApproximationGauge k (reflectionResidualCorner U B) / (2 * κ ^ 2) +
+  have hWeq : 3 * (k : ℝ) * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) / (2 * κ ^ 2) +
       (k : ℝ) * (τ + |b|) / (4 * κ) + (b - a) * (k : ℝ) / κ = W := hWdef.symm
   rw [hWeq] at hmain
   linarith [hmain, hθW]
@@ -1069,7 +1070,7 @@ theorem gap_mul_sum_tanArcsin_le_two_mul_kyFan
     (k : ℕ) :
     (b - a) * ∑ p ∈ Finset.range k, Real.tan (Real.arcsin
         (((reflectionSineCorner U Z).singularValue p : ℝ))) ≤
-      2 * kyFanApproximationGauge k (reflectionResidualCorner U B) := by
+      2 * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) := by
   have hlim :=
     (tendsto_sum_tanArcsin_approximationNumber_reflectionSineCorner_comp hS1
       hproj hstrong k).const_mul (b - a)
@@ -1109,8 +1110,8 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan
     (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
       (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℂ U))
     (k : ℕ) :
-    (b - a) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
-      2 * kyFanApproximationGauge k (reflectionResidualCorner U B) := by
+    (b - a) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
+      2 * ((reflectionResidualCorner U B).kyFanGauge k : ℝ) := by
   have hleft := kyFan_reflectionTangentCorner_le hZsa hZ2 hS1 k
   have hmid := gap_mul_sum_tanArcsin_le_two_mul_kyFan hred hB hZsa hZ2 hZdom
     hZcomm hUa hUb hab hS1 hσ Ω (fun i => isOrthogonalProjectionMap_cutoffCorner (Ω i))
@@ -1128,12 +1129,12 @@ operator: it is the ambient operator pre- and post-composed with contractions. -
 theorem kyFanApproximationGauge_reflectionResidualCorner_le
     (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] (K : G →L[𝕜] G)
     (k : ℕ) :
-    kyFanApproximationGauge k (reflectionResidualCorner U K) ≤
-      kyFanApproximationGauge k K := by
+    ((reflectionResidualCorner U K).kyFanGauge k : ℝ) ≤
+      (K.kyFanGauge k : ℝ) := by
   have hdef : reflectionResidualCorner U K =
       Uᗮ.subtypeL.adjoint ∘L K ∘L U.subtypeL := rfl
   rw [hdef]
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   refine Finset.sum_le_sum fun p _ => ?_
   have hcomp := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le
     (Uᗮ.subtypeL.adjoint) K U.subtypeL p))
@@ -1172,8 +1173,8 @@ theorem gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan_ambient
     (hstrong : TauCeti.ApproximationNumber.StronglyTendsto
       (fun i => cutoffCorner (Ω i)) l (ContinuousLinearMap.id ℂ U))
     (k : ℕ) :
-    (b - a) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
-      2 * kyFanApproximationGauge k B := by
+    (b - a) * ((reflectionTangentCorner U Z).kyFanGauge k : ℝ) ≤
+      2 * (B.kyFanGauge k : ℝ) := by
   have h := gap_mul_kyFan_reflectionTangentCorner_le_two_mul_kyFan hred hB hZsa
     hZ2 hZdom hZcomm hUa hUb hab hS1 hσ Ω hstrong k
   have h2 := kyFanApproximationGauge_reflectionResidualCorner_le (U := U) B k

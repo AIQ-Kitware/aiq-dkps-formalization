@@ -581,11 +581,11 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
     (selfAdjointSpectralSubspace A hA B hB)
     (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
       (addBounded_isSelfAdjoint A hA E hE) S hS)
-  have hprefix : ∀ k, (δ / 2) * kyFanApproximationGauge k T ≤
-      kyFanApproximationGauge k E := by
+  have hprefix : ∀ k, (δ / 2) * (T.kyFanGauge k : ℝ) ≤
+      (E.kyFanGauge k : ℝ) := by
     intro k
     rcases Nat.eq_zero_or_pos k with rfl | hk
-    · simp [kyFanApproximationGauge]
+    · simp []
     let M := (show TauCeti.SymmetricOperatorIdealFamily ℂ from
       { toOperatorIdealFamily := OperatorIdealFamily.kyFan ℂ k hk
         gauge_adjoint := (OperatorIdealFamily.kyFan ℂ k hk).gauge_adjoint })
@@ -594,10 +594,10 @@ theorem sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
     have hmain := sinTwoTheta_addBounded_gauge_of_spectrum_gap
       M A hA E hE B S hB hS
       hβα hδ hBlow hBhigh hBcomplSpec (by simp [M, SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
-    have hbound : δ * kyFanApproximationGauge k T ≤ 2 * kyFanApproximationGauge k E := by
+    have hbound : δ * (T.kyFanGauge k : ℝ) ≤ 2 * (E.kyFanGauge k : ℝ) := by
       simpa only [M,
-        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge, T] using hmain.2
+        SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+          ENNReal.coe_toReal, T] using hmain.2
     linarith
   obtain ⟨hT, hbound⟩ :=
     mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N (half_pos hδ) hEmem hprefix

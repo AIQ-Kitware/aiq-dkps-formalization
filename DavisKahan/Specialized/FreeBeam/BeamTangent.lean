@@ -206,7 +206,7 @@ theorem approximationSingularValue_one_beamTrialBlock_residual_le (ε : ℝ) :
 /-- **The two-term Ky Fan gauge of the Rayleigh--Ritz residual equals its operator
 norm bound.**  This is the paper's `‖R̂‖₁ = ‖R̂‖₂ = ε/√15`. -/
 theorem kyFanTwo_beamTrialBlock_residual_le (ε : ℝ) :
-    kyFanApproximationGauge 2 ((beamTrialBlock ε).residual)
+    (((beamTrialBlock ε).residual).kyFanGauge 2 : ℝ)
       ≤ orthogonalResidualSingularValue ε := by
   have h0 : (((beamTrialBlock ε).residual).singularValue 0 : ℝ)
       ≤ orthogonalResidualSingularValue ε := by
@@ -219,7 +219,7 @@ theorem kyFanTwo_beamTrialBlock_residual_le (ε : ℝ) :
   have hsum : (((beamTrialBlock ε).residual).singularValue 0 : ℝ)
       + (((beamTrialBlock ε).residual).singularValue 1 : ℝ)
       ≤ orthogonalResidualSingularValue ε := by linarith
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   rw [Finset.sum_range_succ, Finset.sum_range_succ, Finset.sum_range_zero, zero_add]
   exact hsum
 end
@@ -278,7 +278,6 @@ theorem beamTanTheta_le (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
     (by simp [SymmetricOperatorIdealFamily.Mem])
   have hgauge := hmain.2
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
     kyFanApproximationGauge_one] at hgauge
   have hchain : (500 - ritzHigh ε) * beamTanTheta ε
       ≤ orthogonalResidualSingularValue ε :=
@@ -318,9 +317,9 @@ two-term Ky Fan gauge is again `ε/√15`. -/
 /-- **The two-term Ky Fan sum of the tangents** of the angles between the affine trial
 subspace and the exact low spectral subspace of `A + ε t`. -/
 noncomputable def beamTanThetaSum (ε : ℝ) : ℝ :=
-  kyFanApproximationGauge 2 (theorem63DirectedTangent beamTrial
+  ((theorem63DirectedTangent beamTrial
     (selfAdjointSpectralSubspace (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε)
-      (Set.Iic (ritzHigh ε)) measurableSet_Iic))
+      (Set.Iic (ritzHigh ε)) measurableSet_Iic)).kyFanGauge 2 : ℝ)
 
 /-- **Davis--Kahan 1970, equation (9.6) in the 2-norm, for the genuine free-beam
 operator.**
@@ -346,8 +345,8 @@ theorem beamTanThetaSum_le (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
     (beamTrialBlock_compression_form_le ε hε.le)
     (by simp [SymmetricOperatorIdealFamily.Mem, OperatorIdealFamily.gauge_kyFan])
   have hgauge := hmain.2
-  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge] at hgauge
+  simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan,
+    ENNReal.coe_toReal] at hgauge
   have hchain : (500 - ritzHigh ε) * beamTanThetaSum ε
       ≤ orthogonalResidualSingularValue ε :=
     le_trans hgauge (kyFanTwo_beamTrialBlock_residual_le ε)
@@ -700,7 +699,6 @@ theorem beamColumn_tangent_le (ε : ℝ) (v : BeamL2) (hv : v ∈ beamTrial)
     (by simp [SymmetricOperatorIdealFamily.Mem])
   have hgauge := hmain.2
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-      ← kyFanApproximationGauge_eq_kyFanGauge,
     kyFanApproximationGauge_one] at hgauge
   exact hgauge.trans (norm_beamColumnBlock_residual_le ε v hv hvnorm a hform hcol)
 

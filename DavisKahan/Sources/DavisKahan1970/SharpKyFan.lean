@@ -75,8 +75,8 @@ theorem stablePairError_le_uniform
 /-- Ky Fan prefixes are monotone in the prefix length. -/
 theorem kyFanApproximationGauge_mono_length
     (K : E1 →L[ℂ] E0) {m k : ℕ} (hmk : m ≤ k) :
-    kyFanApproximationGauge m K ≤ kyFanApproximationGauge k K := by
-  simp only [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
+    (K.kyFanGauge m : ℝ) ≤ (K.kyFanGauge k : ℝ) := by
+  simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   rw [← Finset.sum_range_add_sum_Ico
     (f := fun n => (K.singularValue n : ℝ)) hmk]
   exact le_add_of_nonneg_right (Finset.sum_nonneg fun n _ =>
@@ -98,7 +98,7 @@ theorem selected_doubleAngleTangent_le_kyFan_add_error
     (F : TauCeti.DavisKahan.ApproximateLeadingSingularFamily X k ε) :
     d * (∑ i : Fin F.count,
         DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue i : ℝ))) ≤
-      2 * kyFanApproximationGauge k B.B01 +
+      2 * (B.B01.kyFanGauge k : ℝ) +
         (F.count : ℝ) * uniformStablePairError B r ε := by
   have hs0 : ∀ i : Fin F.count, 0 ≤ (X.singularValue i : ℝ) :=
     fun i => (X.singularValue i).coe_nonneg
@@ -152,7 +152,7 @@ theorem selected_doubleAngleTangent_le_kyFan_add_error
   have hcoeff :
       (∑ i : Fin F.count,
         (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ)) ≤
-        kyFanApproximationGauge F.count B.B01 := by
+        (B.B01.kyFanGauge F.count : ℝ) := by
     apply sum_le_kyFanApproximationGauge_of_orthonormal
       B.B01 F.orthonormal_neg_right F.left_orthonormal
     intro i
@@ -164,9 +164,9 @@ theorem selected_doubleAngleTangent_le_kyFan_add_error
         ≤ 2 * (∑ i : Fin F.count,
           (-RCLike.re ⟪F.right i, B.B01 (F.left i)⟫_ℂ)) +
             (F.count : ℝ) * uniformStablePairError B r ε := hsum
-    _ ≤ 2 * kyFanApproximationGauge F.count B.B01 +
+    _ ≤ 2 * (B.B01.kyFanGauge F.count : ℝ) +
           (F.count : ℝ) * uniformStablePairError B r ε := by gcongr
-    _ ≤ 2 * kyFanApproximationGauge k B.B01 +
+    _ ≤ 2 * (B.B01.kyFanGauge k : ℝ) +
           (F.count : ℝ) * uniformStablePairError B r ε := by gcongr
 
 /-- Error-bound form of the full transformed prefix estimate. -/
@@ -181,7 +181,7 @@ theorem transformed_prefix_le_kyFan_add_error
     (F : TauCeti.DavisKahan.ApproximateLeadingSingularFamily X k ε) :
     d * (∑ n ∈ Finset.range k,
         DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue n : ℝ))) ≤
-      2 * kyFanApproximationGauge k B.B01 +
+      2 * (B.B01.kyFanGauge k : ℝ) +
         (F.count : ℝ) * uniformStablePairError B r ε +
         d * ((k - F.count : ℕ) : ℝ) * ((2 / (1 - r ^ 2)) * ε) := by
   have hprefix := TauCeti.DavisKahan.sum_doubleAngleTangent_le_selected_add_tail
@@ -200,7 +200,7 @@ theorem transformed_prefix_le_kyFan_add_error
         d * ((k - F.count : ℕ) : ℝ) * ((2 / (1 - r ^ 2)) * ε) := by
           rw [Nat.cast_sub F.count_le]
           ring
-    _ ≤ 2 * kyFanApproximationGauge k B.B01 +
+    _ ≤ 2 * (B.B01.kyFanGauge k : ℝ) +
           (F.count : ℝ) * uniformStablePairError B r ε +
         d * ((k - F.count : ℕ) : ℝ) * ((2 / (1 - r ^ 2)) * ε) := by gcongr
 
@@ -214,7 +214,7 @@ theorem sharp_transformed_prefix
     (hcontractive : ‖X‖ < 1) (k : ℕ) :
     d * (∑ n ∈ Finset.range k,
         DavisKahan.TanTwoTheta.doubleAngleTangent ((X.singularValue n : ℝ))) ≤
-      2 * kyFanApproximationGauge k B.B01 := by
+      2 * (B.B01.kyFanGauge k : ℝ) := by
   let r : ℝ := (‖X‖ + 1) / 2
   have hr0 : 0 ≤ r := by dsimp [r]; positivity
   have hXr : ‖X‖ ≤ r := by dsimp [r]; linarith
@@ -341,9 +341,8 @@ theorem sharp_doubleAngleTangentOperator_kyFan
     (hA1 : ∀ z : E1, d * ‖z‖ ^ 2 ≤ RCLike.re ⟪B.A1 z, z⟫_ℂ)
     {X : E0 →L[ℂ] E1} (hX : SolvesRiccati B X)
     (hcontractive : ‖X‖ < 1) (k : ℕ) :
-    d * kyFanApproximationGauge k
-        (TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive) ≤
-      2 * kyFanApproximationGauge k B.B01 := by
+    d * ((TauCeti.DavisKahan.doubleAngleTangentOperator X hcontractive).kyFanGauge k : ℝ) ≤
+      2 * (B.B01.kyFanGauge k : ℝ) := by
   rw [TauCeti.DavisKahan.kyFanApproximationGauge_doubleAngleTangentOperator]
   exact sharp_transformed_prefix B hd0 hA0 hA1 hX hcontractive k
 
