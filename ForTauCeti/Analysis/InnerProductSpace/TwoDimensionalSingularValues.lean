@@ -135,26 +135,6 @@ theorem singularValues_eq_abs_pair_of_isSymmetric_sq
     simp [LinearMap.smul_apply, LinearMap.id_apply, sq_abs]
 
 
-/-- In positive finite dimension, the operator norm is the largest singular
-value. -/
-theorem opNorm_eq_singularValues_zero
-    {E F : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
-    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
-    (A : E →ₗ[𝕜] F) {n : ℕ} (hn : finrank 𝕜 E = n) (hn0 : 0 < n) :
-    ‖A.toContinuousLinearMap‖ = A.singularValues 0 := by
-  apply le_antisymm
-  · refine A.toContinuousLinearMap.opNorm_le_bound
-      (A.singularValues_nonneg 0) fun x => ?_
-    exact norm_apply_le_singularValues_zero_mul A hn hn0 x
-  · obtain ⟨x, hx, hAx⟩ := exists_norm_apply_eq_singularValues_zero A hn hn0
-    rw [← hAx]
-    calc
-      ‖A x‖ = ‖A.toContinuousLinearMap x‖ := rfl
-      _ ≤ ‖A.toContinuousLinearMap‖ * ‖x‖ :=
-        A.toContinuousLinearMap.le_opNorm x
-      _ = ‖A.toContinuousLinearMap‖ := by rw [hx, mul_one]
-
 /-- The singular values of the symmetric off-diagonal planar block
 `[[0,r],[r,0]]` are `|r|,|r|`. -/
 theorem singularValues_offDiagonal_two_by_two (r : ℝ) :
@@ -260,9 +240,17 @@ theorem gramTraceFinTwo_eq_sum_sq_singularValues
     [FiniteDimensional 𝕜 F]
     (A : EuclideanSpace 𝕜 (Fin 2) →ₗ[𝕜] F) :
     gramTraceFinTwo A = A.singularValues 0 ^ 2 + A.singularValues 1 ^ 2 := by
-  rw [gramTraceFinTwo, ← sum_sq_singularValues A finrank_euclideanSpace_fin
-    (EuclideanSpace.basisFun (Fin 2) 𝕜)]
-  simp [Fin.sum_univ_two]
+  rw [gramTraceFinTwo]
+  have h := A.sum_fin_singularValues (· ^ 2) (by simp)
+  rw [Fin.sum_univ_eq_sum_range (fun i : ℕ => A.singularValues i ^ 2) _,
+    finrank_euclideanSpace_fin] at h
+  rw [← Fin.sum_univ_eq_sum_range (fun i : ℕ => A.singularValues i ^ 2) _] at h
+  have heq : ∑ i : Fin 2, A.singularValues i ^ 2 =
+      ∑ i, ‖A (EuclideanSpace.basisFun (Fin 2) 𝕜 i)‖ ^ 2 :=
+    h.trans (RCLike.ofReal_injective
+      (A.trace_adjoint_comp_self_eq_sum_sq_singularValues.symm.trans
+        (A.trace_adjoint_comp_self_eq_sum_norm_apply_sq _)))
+  simpa [Fin.sum_univ_two] using heq.symm
 
 /-- The planar Gram determinant is the product of the two squared singular
 values.  This is the determinant identity for `A star A`; the Gram-determinant

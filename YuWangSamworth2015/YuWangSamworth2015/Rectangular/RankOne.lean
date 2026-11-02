@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
+
 public import YuWangSamworth2015.Rectangular.Theorem4
 
 /-!
@@ -113,7 +115,7 @@ theorem yuWangSamworth_rightSingularVector_le
           (2 * A.singularValues 0 +
             ‖(Â - A).toContinuousLinearMap‖) *
           ‖(Â - A).toContinuousLinearMap‖ / Δ := by
-  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
+  simpa only [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero A] using
     yuWangSamworth_rightSingularVector_opNormCoefficient_le
       hu hv hAu hÂv hcorr hΔ hgap
 
@@ -135,7 +137,7 @@ theorem yuWangSamworth_leftSingularVector_le
           (2 * A.singularValues 0 +
             ‖(Â - A).toContinuousLinearMap‖) *
           ‖(Â - A).toContinuousLinearMap‖ / Δ := by
-  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
+  simpa only [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero A] using
     yuWangSamworth_leftSingularVector_opNormCoefficient_le
       hu hv hAu hÂv hcorr hΔ hgap
 
@@ -227,7 +229,7 @@ theorem yuWangSamworth_rightSingularVector_frame_le
           (2 * A.singularValues 0 +
             ‖(Â - A).toContinuousLinearMap‖) *
           ‖(Â - A).toContinuousLinearMap‖ / Δ := by
-  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
+  simpa only [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero A] using
     yuWangSamworth_rightSingularVector_frame_opNormCoefficient_le
       (hn := hn) (j := j) hu hv hAu hÂv hΔ hgap
 
@@ -251,7 +253,7 @@ theorem yuWangSamworth_leftSingularVector_frame_le
           (2 * A.singularValues 0 +
             ‖(Â - A).toContinuousLinearMap‖) *
           ‖(Â - A).toContinuousLinearMap‖ / Δ := by
-  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
+  simpa only [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero A] using
     yuWangSamworth_leftSingularVector_frame_opNormCoefficient_le
       (hm := hm) (j := j) hu hv hAu hÂv hΔ hgap
 

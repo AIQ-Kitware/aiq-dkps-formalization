@@ -115,8 +115,8 @@ theorem singularValues_sinThetaEmbedding_lt_one_of_isTransverse
   let S := sinThetaEmbedding U X
   let v := LinearMap.rightSingularBasis S i
   have hle : S.singularValues i ≤ 1 :=
-    singularValues_le_one_of_contraction
-      (sinThetaEmbedding_apply_norm_le U X) rfl i
+    LinearMap.singularValues_le_of_norm_apply_le zero_le_one
+      (by simpa only [one_mul] using sinThetaEmbedding_apply_norm_le U X) i
   by_contra hlt
   have hσ : S.singularValues i = 1 := le_antisymm hle (not_lt.mp hlt)
   have hvnorm : ‖v‖ = 1 := (LinearMap.rightSingularBasis S).orthonormal.norm_eq_one i

@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 module
 
 public import YuWangSamworth2015.Core.Statistics
-public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
+public import TauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularVectors
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Operator
 public import TauCeti.Analysis.InnerProductSpace.HermitianDilation.Basic
 public import TauCeti.Analysis.InnerProductSpace.HermitianDilation.Norm
@@ -172,10 +172,10 @@ right singular vectors of `A, Â : E →ₗ[𝕜] F` are the eigenvectors of the
 operators `A⋆A, Â⋆Â`, whose eigenvalues are the squared singular values.
 Applying the symmetric YWS bound (`sq_gap_mul_sum_cross_le_of_population_gap_opNorm`)
 to the Gram operators — with the perturbation controlled by
-`norm_gram_sub_gram_apply_le` — gives, for a squared-singular-value population gap
+the native pointwise Gram perturbation estimate — gives, for a squared-singular-value population gap
 `Γ` separating the block `s`, `Γ² · overlap ≤ 4 · d · ((a + â) ε)²`. -/
 theorem sq_gap_mul_sum_cross_singularVectors_le
-    {A Â : E →ₗ[𝕜] F} {Γ a â ε : ℝ} (hΓ : 0 ≤ Γ) (hâ : 0 ≤ â) (hε : 0 ≤ ε)
+    {A Â : E →ₗ[𝕜] F} {Γ a â ε : ℝ} (hΓ : 0 ≤ Γ) (_hâ : 0 ≤ â) (_hε : 0 ≤ ε)
     (hA : ∀ x, ‖A x‖ ≤ a * ‖x‖) (hÂ : ∀ x, ‖Â x‖ ≤ â * ‖x‖)
     (hE : ∀ x, ‖(Â - A) x‖ ≤ ε * ‖x‖)
     {n : ℕ} (hn : finrank 𝕜 E = n) (s : Finset (Fin n))
@@ -185,9 +185,16 @@ theorem sq_gap_mul_sum_cross_singularVectors_le
     Γ ^ 2 * ∑ j ∈ s, ∑ k ∈ sᶜ,
         ‖⟪A.isSymmetric_adjoint_comp_self.eigenvectorBasis hn k,
             Â.isSymmetric_adjoint_comp_self.eigenvectorBasis hn j⟫_𝕜‖ ^ 2
-      ≤ 4 * s.card * ((a + â) * ε) ^ 2 :=
-  sq_gap_mul_sum_cross_le_of_population_gap_opNorm
-    A.isSymmetric_adjoint_comp_self Â.isSymmetric_adjoint_comp_self hn s hΓ hgap
-    (fun x => norm_gram_sub_gram_apply_le hâ hε hA hÂ hE x)
+      ≤ 4 * s.card * ((a + â) * ε) ^ 2 := by
+  subst hn
+  have hgap' : ∀ j ∈ s, ∀ k ∉ s,
+      Γ ≤ |A.singularValues j ^ 2 - A.singularValues k ^ 2| := by
+    intro j hj k hk
+    rw [A.sq_singularValues_fin rfl j, A.sq_singularValues_fin rfl k]
+    exact hgap j hj k hk
+  have h := A.sq_mul_sum_sum_norm_inner_rightSingularBasis_sq_le_four_mul_card_mul_sq
+    Â hΓ hA hÂ hE s hgap'
+  rw [A.rightSingularBasis_def, Â.rightSingularBasis_def] at h
+  exact h
 
 end YuWangSamworth2015

@@ -23,7 +23,8 @@ identity `A A⋆ = U (A⋆A) U⁻¹` with `U = choosePolarUnitary A`.
 -/
 module
 
-public import Mathlib.Analysis.InnerProductSpace.SingularValues
+public import TauCeti.Analysis.InnerProductSpace.SingularValues
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import TauCeti.Analysis.InnerProductSpace.Gram.Perturbation
 public import TauCeti.Analysis.InnerProductSpace.SchurHorn
@@ -40,15 +41,13 @@ terms of `Â − A`.
 
 ## Main results
 
-* `TauCeti.norm_gram_sub_gram_apply_le`: the pointwise consequence of Tau Ceti's
-  accepted operator-norm perturbation estimate for Gram operators.
-* `TauCeti.abs_sq_singularValues_sub_le`: Weyl for squared singular values,
-  `|σₖ(Â)² − σₖ(A)²| ≤ (a + â) ε` — the singular-value stability underlying the
-  singular-subspace bound.
-* `TauCeti.sum_sq_singularValues`: the squared Frobenius norm equals the sum
-  of squared singular values, `∑ᵢ σᵢ(A)² = ∑ₖ ‖A bₖ‖²`.
-* `TauCeti.eigenvalues_conj_unitary`: the sorted eigenvalues of a symmetric
-  operator are invariant under unitary conjugation `S ↦ U S U⁻¹`.
+Gram perturbation, singular-value extrema, energy identities and Gram eigenvalue
+symmetry are consumed directly from accepted Tau Ceti APIs. The remaining results
+relate the modulus trace to arbitrary basis evaluations, compare its trace with
+contraction energy, state a squared singular-value growth-constant corollary, and
+prove unitary conjugation identities. In particular, `isSymmetric_conj_unitary`
+has no finite-dimensionality or completeness assumption; the generic adjoint-
+conjugation API does not cover that full scope.
 
 ## References
 
@@ -85,70 +84,6 @@ private theorem re_inner_real_smul_self_of_norm_one {c : ℝ} {v : E} (hv : ‖v
   rw [inner_smul_left, RCLike.conj_ofReal, RCLike.re_ofReal_mul, inner_self_eq_norm_sq, hv]
   simp
 
-/-- **Gram-operator perturbation bound.** With `A, Â, Â − A` bounded by `a, â, ε`
-respectively, `‖(Â⋆Â − A⋆A) x‖ ≤ (a + â) ε ‖x‖`. This pointwise form is
-obtained from Tau Ceti's accepted operator-norm bound after converting the three
-pointwise assumptions to operator-norm bounds. -/
-theorem norm_gram_sub_gram_apply_le {A Â : E →ₗ[𝕜] F} {a â ε : ℝ}
-    (hâ : 0 ≤ â) (hε : 0 ≤ ε)
-    (hA : ∀ x, ‖A x‖ ≤ a * ‖x‖) (hÂ : ∀ x, ‖Â x‖ ≤ â * ‖x‖)
-    (hE : ∀ x, ‖(Â - A) x‖ ≤ ε * ‖x‖) (x : E) :
-    ‖(Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A) x‖ ≤ (a + â) * ε * ‖x‖ := by
-  by_cases hE0 : Subsingleton E
-  · have hx : x = 0 := Subsingleton.elim _ _
-    subst x
-    simp
-  · have hnonzero : ∃ y : E, y ≠ 0 := by
-      by_contra h
-      apply hE0
-      refine ⟨fun x y => ?_⟩
-      have hx : x = 0 := by
-        by_contra hx
-        exact h ⟨x, hx⟩
-      have hy : y = 0 := by
-        by_contra hy
-        exact h ⟨y, hy⟩
-      rw [hx, hy]
-    have ha : 0 ≤ a := by
-      by_contra hna
-      obtain ⟨y, hy⟩ := hnonzero
-      have hypos : 0 < ‖y‖ := norm_pos_iff.mpr hy
-      have hnonneg : 0 ≤ ‖A y‖ := norm_nonneg _
-      exact (not_lt_of_ge (hnonneg.trans (hA y)))
-        (mul_neg_of_neg_of_pos (lt_of_not_ge hna) hypos)
-    let Ac := A.toContinuousLinearMap
-    let Âc := Â.toContinuousLinearMap
-    have hAop : ‖Ac‖ ≤ a := Ac.opNorm_le_bound ha hA
-    have hÂop : ‖Âc‖ ≤ â := Âc.opNorm_le_bound hâ hÂ
-    have hdiff : ∀ z, ‖(Âc - Ac) z‖ ≤ ε * ‖z‖ := by
-      intro z
-      change ‖(Â - A) z‖ ≤ ε * ‖z‖
-      exact hE z
-    have hdiffop : ‖Âc - Ac‖ ≤ ε := (Âc - Ac).opNorm_le_bound hε hdiff
-    have hgramEq :
-        (Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A).toContinuousLinearMap =
-          Âc.adjoint ∘L Âc - Ac.adjoint ∘L Ac := by
-      ext z
-      simp [Ac, Âc, LinearMap.adjoint_eq_toCLM_adjoint]
-    have hgramNorm :
-        ‖(Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A).toContinuousLinearMap‖ ≤ (a + â) * ε := by
-      rw [hgramEq]
-      calc
-        ‖Âc.adjoint ∘L Âc - Ac.adjoint ∘L Ac‖ ≤
-            (‖Âc‖ + ‖Ac‖) * ‖Âc - Ac‖ :=
-          ContinuousLinearMap.norm_adjoint_comp_self_sub_adjoint_comp_self_le Âc Ac
-        _ ≤ (â + a) * ε := by
-          exact mul_le_mul (add_le_add hÂop hAop) hdiffop (norm_nonneg _)
-            (add_nonneg hâ ha)
-        _ = (a + â) * ε := by ring
-    calc
-      ‖(Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A) x‖ =
-          ‖(Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A).toContinuousLinearMap x‖ := rfl
-      _ ≤ ‖(Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A).toContinuousLinearMap‖ * ‖x‖ :=
-        (Â.adjoint ∘ₗ Â - A.adjoint ∘ₗ A).toContinuousLinearMap.le_opNorm x
-      _ ≤ (a + â) * ε * ‖x‖ :=
-        mul_le_mul_of_nonneg_right hgramNorm (norm_nonneg x)
-
 /-- **Trace of the modulus = sum of singular values.** For an endomorphism
 `A : E →ₗ[𝕜] E`, `∑ₖ re⟪|A| bₖ, bₖ⟫ = ∑ᵢ σᵢ(A)` in any orthonormal basis `b`.
 The modulus `|A| = √(A⋆A)` is diagonal in the `A⋆A`-eigenbasis with entries
@@ -173,63 +108,6 @@ theorem sum_re_inner_abs_self_eq_sum_singularValues (A : E →ₗ[𝕜] E)
     re_inner_real_smul_self_of_norm_one (w.orthonormal.norm_eq_one k)]
   exact (A.singularValues_fin rfl k).symm
 
-/-- **The Gram quadratic form at an eigenvector of the Gram operator is its
-eigenvalue.**
-
-The `A.adjoint ∘ₗ A` eigenbasis diagonalises the Gram form by construction, so
-this is bookkeeping — but it is the bookkeeping three proofs in this file were
-doing inline, as chains of eight to ten named rewrites through `inner_smul_left`,
-`RCLike.conj_ofReal`, `RCLike.re_ofReal_mul` and orthonormality.  One statement
-is both shorter at each site and no longer dependent on the order those rewrites
-fire in. -/
-private theorem re_inner_gram_eigenvectorBasis_self
-    {n : ℕ} (A : E →ₗ[𝕜] F)
-    (hsym : (A.adjoint ∘ₗ A).IsSymmetric) (hn : Module.finrank 𝕜 E = n) (k : Fin n) :
-    RCLike.re ⟪(A.adjoint ∘ₗ A) (hsym.eigenvectorBasis hn k),
-        hsym.eigenvectorBasis hn k⟫_𝕜 = hsym.eigenvalues hn k := by
-  rw [hsym.apply_eigenvectorBasis hn k,
-    re_inner_real_smul_self_of_norm_one
-      ((hsym.eigenvectorBasis hn).orthonormal.norm_eq_one k)]
-
-/-- **Contraction ⇒ singular values ≤ 1.** If `A` is a contraction
-(`‖A x‖ ≤ ‖x‖`), then every singular value satisfies `σᵢ(A) ≤ 1`.  Each eigenvalue
-`λᵢ(A⋆A) = re⟪A wᵢ, A wᵢ⟫ = ‖A wᵢ‖² ≤ 1` (`wᵢ` the unit eigenvector), and
-`σᵢ = √λᵢ`. -/
-theorem singularValues_le_one_of_contraction {A : E →ₗ[𝕜] F}
-    (h : ∀ x, ‖A x‖ ≤ ‖x‖) {n : ℕ} (hn : finrank 𝕜 E = n) (i : Fin n) :
-    A.singularValues (i : ℕ) ≤ 1 := by
-  have hSsym := A.isSymmetric_adjoint_comp_self
-  have hunit : ‖hSsym.eigenvectorBasis hn i‖ = 1 :=
-    (hSsym.eigenvectorBasis hn).orthonormal.norm_eq_one i
-  have hquad : RCLike.re ⟪(A.adjoint ∘ₗ A) (hSsym.eigenvectorBasis hn i),
-      hSsym.eigenvectorBasis hn i⟫_𝕜 = ‖A (hSsym.eigenvectorBasis hn i)‖ ^ 2 := by
-    rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
-  have heig : RCLike.re ⟪(A.adjoint ∘ₗ A) (hSsym.eigenvectorBasis hn i),
-      hSsym.eigenvectorBasis hn i⟫_𝕜 = hSsym.eigenvalues hn i := by
-    exact re_inner_gram_eigenvectorBasis_self A hSsym hn i
-  have heval : hSsym.eigenvalues hn i ≤ 1 := by
-    rw [← heig, hquad]
-    have := h (hSsym.eigenvectorBasis hn i)
-    rw [hunit] at this
-    nlinarith [norm_nonneg (A (hSsym.eigenvectorBasis hn i))]
-  rw [A.singularValues_fin hn]
-  calc √(hSsym.eigenvalues hn i) ≤ √1 := Real.sqrt_le_sqrt heval
-    _ = 1 := Real.sqrt_one
-
-/-- **Squared Frobenius norm = sum of squared singular values.** For any
-orthonormal basis `b` of `E`, `∑ᵢ σᵢ(A)² = ∑ₖ ‖A bₖ‖²`.  Via the dictionary
-`σᵢ² = λᵢ(A⋆A)`, basis independence of the trace, and
-`re⟪bₖ, A⋆A bₖ⟫ = ‖A bₖ‖²`. -/
-theorem sum_sq_singularValues (A : E →ₗ[𝕜] F) {n : ℕ} (hn : finrank 𝕜 E = n)
-    (b : OrthonormalBasis (Fin n) 𝕜 E) :
-    ∑ i : Fin n, A.singularValues (i : ℕ) ^ 2 = ∑ k, ‖A (b k)‖ ^ 2 := by
-  have h1 : ∑ i : Fin n, A.singularValues (i : ℕ) ^ 2
-      = ∑ i, A.isSymmetric_adjoint_comp_self.eigenvalues hn i :=
-    Finset.sum_congr rfl fun i _ => A.sq_singularValues_fin hn i
-  rw [h1, ← A.isSymmetric_adjoint_comp_self.sum_re_inner_apply_self_eq_sum_eigenvalues hn b]
-  exact Finset.sum_congr rfl fun k _ => by
-    rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
-
 /-- **Frobenius² ≤ trace of the modulus, for a contraction.** If `A : E →ₗ[𝕜] E`
 is a contraction, then `∑ₖ ‖A bₖ‖² ≤ ∑ₖ re⟪|A| bₖ, bₖ⟫`, i.e. `∑ σᵢ² ≤ ∑ σᵢ`
 (each `σᵢ ∈ [0, 1]`).  This is the core inequality of the aligned-basis
@@ -237,29 +115,27 @@ is a contraction, then `∑ₖ ‖A bₖ‖² ≤ ∑ₖ re⟪|A| bₖ, bₖ⟫`
 theorem sum_sq_norm_le_sum_re_inner_abs_of_contraction {A : E →ₗ[𝕜] E}
     (h : ∀ x, ‖A x‖ ≤ ‖x‖) {n : ℕ} (hn : finrank 𝕜 E = n) (b : OrthonormalBasis (Fin n) 𝕜 E) :
     ∑ k, ‖A (b k)‖ ^ 2 ≤ ∑ k, RCLike.re ⟪A.operatorAbs (b k), b k⟫_𝕜 := by
-  rw [← sum_sq_singularValues A hn b, sum_re_inner_abs_self_eq_sum_singularValues A hn b]
+  subst hn
+  rw [sum_re_inner_abs_self_eq_sum_singularValues A rfl b]
+  have henergy : ∑ k, ‖A (b k)‖ ^ 2 =
+      ∑ i : Fin (finrank 𝕜 E), A.singularValues i ^ 2 :=
+    (RCLike.ofReal_injective
+      ((A.trace_adjoint_comp_self_eq_sum_norm_apply_sq b).symm.trans
+        A.trace_adjoint_comp_self_eq_sum_sq_singularValues)).trans
+      (A.sum_fin_singularValues (· ^ 2) (by simp)).symm
+  rw [henergy]
   refine Finset.sum_le_sum fun i _ => ?_
-  have h1 := singularValues_le_one_of_contraction h hn i
+  have h1 : A.singularValues i ≤ 1 :=
+    LinearMap.singularValues_le_of_norm_apply_le zero_le_one
+      (by simpa only [one_mul] using h) i
   have h0 := A.singularValues_nonneg (i : ℕ)
   nlinarith
-
-/-- **Unitary invariance of the Frobenius sum.** Pre-composing with a unitary `U`
-does not change `∑ₖ ‖A (b k)‖²`: `∑ₖ ‖A (U bₖ)‖² = ∑ₖ ‖A bₖ‖²`.  Both equal the
-sum of squared singular values (`sum_sq_singularValues`), since `k ↦ U bₖ` is
-another orthonormal basis. -/
-theorem sum_sq_norm_apply_unitary_comp (A : E →ₗ[𝕜] F) (U : E ≃ₗᵢ[𝕜] E)
-    {n : ℕ} (hn : finrank 𝕜 E = n) (b : OrthonormalBasis (Fin n) 𝕜 E) :
-    ∑ k, ‖A (U (b k))‖ ^ 2 = ∑ k, ‖A (b k)‖ ^ 2 := by
-  have h1 := sum_sq_singularValues A hn (b.map U)
-  have h2 := sum_sq_singularValues A hn b
-  simp only [OrthonormalBasis.map_apply] at h1
-  rw [← h2, ← h1]
 
 /-- **Gram-transported Weyl bound for squared singular values.** The `k`-th
 squared singular values of `A` and `Â` differ by at most the Gram perturbation
 bound: `|σₖ(Â)² − σₖ(A)²| ≤ (a + â) ε`.  Via the dictionary `σₖ² = λₖ(·⋆·)`
 (`sq_singularValues_fin`) and Weyl's inequality on the Gram operators, fed by the
-perturbation bound `norm_gram_sub_gram_apply_le`.
+perturbation bound from `LinearMap.norm_adjoint_comp_self_sub_adjoint_comp_self_apply_le`.
 
 **This is weaker than Weyl's inequality for singular values, in three ways**, and
 the name is deliberately not "Weyl's inequality" on that account: it bounds the
@@ -272,7 +148,7 @@ that the genuine theorem does not.  The sharp form is
 back out by `σₖ(A) + σₖ(Â)` recovers nothing when the singular values are small.
 This version survives because it is the shape the Gram-side arguments produce. -/
 theorem abs_sq_singularValues_sub_le {A Â : E →ₗ[𝕜] F} {a â ε : ℝ}
-    (hâ : 0 ≤ â) (hε : 0 ≤ ε)
+    (_hâ : 0 ≤ â) (_hε : 0 ≤ ε)
     (hA : ∀ x, ‖A x‖ ≤ a * ‖x‖) (hÂ : ∀ x, ‖Â x‖ ≤ â * ‖x‖)
     (hE : ∀ x, ‖(Â - A) x‖ ≤ ε * ‖x‖)
     {n : ℕ} (hn : finrank 𝕜 E = n) (k : Fin n) :
@@ -281,100 +157,11 @@ theorem abs_sq_singularValues_sub_le {A Â : E →ₗ[𝕜] F} {a â ε : ℝ}
   exact LinearMap.IsSymmetric.abs_eigenvalue_sub_eigenvalue_le
     Â.isSymmetric_adjoint_comp_self
     A.isSymmetric_adjoint_comp_self hn
-    (fun x => norm_gram_sub_gram_apply_le hâ hε hA hÂ hE x) k
+    (fun x => by
+      simpa only [add_comm â a] using
+        LinearMap.norm_adjoint_comp_self_sub_adjoint_comp_self_apply_le Â A hÂ hA hE x) k
 
-/-! ### Extreme singular values: variational characterization
 
-The largest singular value is the operator norm and the smallest is the
-minimum gain, both attained.  These are the quantitative
-inputs for the operator-norm principal-angle identification. -/
-
-section Extreme
-
-variable {n : ℕ}
-
-/-- `‖A x‖² = re ⟪(A⋆A) x, x⟫`, the seed of every variational bound here. -/
-private theorem sq_norm_apply_eq_re_inner_gram (A : E →ₗ[𝕜] F) (x : E) :
-    ‖A x‖ ^ 2 = RCLike.re ⟪(A.adjoint ∘ₗ A) x, x⟫_𝕜 := by
-  rw [LinearMap.comp_apply, LinearMap.adjoint_inner_left, inner_self_eq_norm_sq]
-
-/-- The squared gain at a Gram eigenvector is the corresponding eigenvalue. -/
-private theorem sq_norm_apply_eigenvectorBasis
-    {n : ℕ} (A : E →ₗ[𝕜] F)
-    (hsym : (A.adjoint ∘ₗ A).IsSymmetric) (hn : Module.finrank 𝕜 E = n) (k : Fin n) :
-    ‖A (hsym.eigenvectorBasis hn k)‖ ^ 2 = hsym.eigenvalues hn k := by
-  rw [sq_norm_apply_eq_re_inner_gram, re_inner_gram_eigenvectorBasis_self A hsym hn k]
-
-/-- **The smallest singular value is a lower bound for the gain:**
-`σ_{n-1}(A) * ‖x‖ ≤ ‖A x‖`. -/
-theorem singularValues_last_mul_norm_le (A : E →ₗ[𝕜] F) (hn : finrank 𝕜 E = n)
-    (hn0 : 0 < n) (x : E) : A.singularValues (n - 1) * ‖x‖ ≤ ‖A x‖ := by
-  have hlast : n - 1 < n := by omega
-  set k : Fin n := ⟨n - 1, hlast⟩
-  have hsym := A.isSymmetric_adjoint_comp_self
-  have hsq : (A.singularValues (n - 1) * ‖x‖) ^ 2 ≤ ‖A x‖ ^ 2 := by
-    rw [sq_norm_apply_eq_re_inner_gram,
-      LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hsym hn x, mul_pow,
-      A.sq_singularValues_of_lt hn hlast]
-    have hpars : ∑ i : Fin n, ‖(hsym.eigenvectorBasis hn).repr x i‖ ^ 2 = ‖x‖ ^ 2 := by
-      simp_rw [(hsym.eigenvectorBasis hn).repr_apply_apply]
-      exact (hsym.eigenvectorBasis hn).sum_sq_norm_inner_right x
-    calc hsym.eigenvalues hn k * ‖x‖ ^ 2
-        = ∑ i : Fin n, hsym.eigenvalues hn k * ‖(hsym.eigenvectorBasis hn).repr x i‖ ^ 2 := by
-          rw [← Finset.mul_sum, hpars]
-      _ ≤ ∑ i : Fin n, hsym.eigenvalues hn i * ‖(hsym.eigenvectorBasis hn).repr x i‖ ^ 2 :=
-          Finset.sum_le_sum fun i _ =>
-            mul_le_mul_of_nonneg_right
-              (hsym.eigenvalues_antitone hn (Fin.le_def.mpr (by omega : (i : ℕ) ≤ n - 1)))
-              (sq_nonneg _)
-  exact le_of_sq_le_sq hsq (norm_nonneg _)
-
-/-- **The smallest singular value is attained.** -/
-theorem exists_norm_apply_eq_singularValues_last (A : E →ₗ[𝕜] F) (hn : finrank 𝕜 E = n)
-    (hn0 : 0 < n) : ∃ x, ‖x‖ = 1 ∧ ‖A x‖ = A.singularValues (n - 1) := by
-  have hlast : n - 1 < n := by omega
-  set k : Fin n := ⟨n - 1, hlast⟩
-  have hsym := A.isSymmetric_adjoint_comp_self
-  refine ⟨hsym.eigenvectorBasis hn k, (hsym.eigenvectorBasis hn).orthonormal.norm_eq_one k, ?_⟩
-  have hsq : ‖A (hsym.eigenvectorBasis hn k)‖ ^ 2 = A.singularValues (n - 1) ^ 2 := by
-    rw [sq_norm_apply_eigenvectorBasis A hsym hn k, A.sq_singularValues_of_lt hn hlast]
-  have := congrArg Real.sqrt hsq
-  rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (A.singularValues_nonneg _)] at this
-
-/-- **The largest singular value bounds the gain:** `‖A x‖ ≤ σ₀(A) * ‖x‖`
-(the elementwise form of `σ₀ = ‖A‖`). -/
-theorem norm_apply_le_singularValues_zero_mul (A : E →ₗ[𝕜] F) (hn : finrank 𝕜 E = n)
-    (hn0 : 0 < n) (x : E) : ‖A x‖ ≤ A.singularValues 0 * ‖x‖ := by
-  have hsym := A.isSymmetric_adjoint_comp_self
-  have hsq : ‖A x‖ ^ 2 ≤ (A.singularValues 0 * ‖x‖) ^ 2 := by
-    rw [sq_norm_apply_eq_re_inner_gram,
-      LinearMap.IsSymmetric.re_inner_apply_self_eq_sum_eigenvalues_mul_sq hsym hn x, mul_pow,
-      A.sq_singularValues_of_lt hn hn0]
-    have hpars : ∑ i : Fin n, ‖(hsym.eigenvectorBasis hn).repr x i‖ ^ 2 = ‖x‖ ^ 2 := by
-      simp_rw [(hsym.eigenvectorBasis hn).repr_apply_apply]
-      exact (hsym.eigenvectorBasis hn).sum_sq_norm_inner_right x
-    calc ∑ i : Fin n, hsym.eigenvalues hn i * ‖(hsym.eigenvectorBasis hn).repr x i‖ ^ 2
-        ≤ ∑ i : Fin n, hsym.eigenvalues hn ⟨0, hn0⟩
-            * ‖(hsym.eigenvectorBasis hn).repr x i‖ ^ 2 :=
-          Finset.sum_le_sum fun i _ =>
-            mul_le_mul_of_nonneg_right
-              (hsym.eigenvalues_antitone hn (Fin.le_def.mpr (Nat.zero_le _)))
-              (sq_nonneg _)
-      _ = hsym.eigenvalues hn ⟨0, hn0⟩ * ‖x‖ ^ 2 := by rw [← Finset.mul_sum, hpars]
-  exact le_of_sq_le_sq hsq (mul_nonneg (A.singularValues_nonneg 0) (norm_nonneg x))
-
-/-- **The largest singular value is attained.** -/
-theorem exists_norm_apply_eq_singularValues_zero (A : E →ₗ[𝕜] F) (hn : finrank 𝕜 E = n)
-    (hn0 : 0 < n) : ∃ x, ‖x‖ = 1 ∧ ‖A x‖ = A.singularValues 0 := by
-  have hsym := A.isSymmetric_adjoint_comp_self
-  refine ⟨hsym.eigenvectorBasis hn ⟨0, hn0⟩,
-    (hsym.eigenvectorBasis hn).orthonormal.norm_eq_one _, ?_⟩
-  have hsq : ‖A (hsym.eigenvectorBasis hn ⟨0, hn0⟩)‖ ^ 2 = A.singularValues 0 ^ 2 := by
-    rw [sq_norm_apply_eigenvectorBasis A hsym hn _, A.sq_singularValues_of_lt hn hn0]
-  have := congrArg Real.sqrt hsq
-  rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (A.singularValues_nonneg _)] at this
-
-end Extreme
 
 /-! ### Singular values of the adjoint (square case)
 
@@ -481,18 +268,6 @@ theorem comp_adjoint_eq_conj_adjoint_comp (A : E →ₗ[𝕜] E) :
         ext v; simp only [LinearMap.comp_apply]
     _ = U.toLinearMap ∘ₗ (A.adjoint ∘ₗ A) ∘ₗ U.symm.toLinearMap := by
       rw [LinearMap.operatorAbs_sq A]
-
-/-- The Gram operators of `A` and `A⋆` have equal sorted eigenvalues. -/
-theorem eigenvalues_gram_adjoint (A : E →ₗ[𝕜] E) (hn : finrank 𝕜 E = n) :
-    A.adjoint.isSymmetric_adjoint_comp_self.eigenvalues hn
-      = A.isSymmetric_adjoint_comp_self.eigenvalues hn := by
-  have hAA : A.adjoint.adjoint ∘ₗ A.adjoint = (choosePolarUnitary A).toLinearMap
-      ∘ₗ (A.adjoint ∘ₗ A) ∘ₗ (choosePolarUnitary A).symm.toLinearMap := by
-    rw [LinearMap.adjoint_adjoint]; exact comp_adjoint_eq_conj_adjoint_comp A
-  have hcong := LinearMap.IsSymmetric.eigenvalues_congr hAA
-    A.adjoint.isSymmetric_adjoint_comp_self
-    (isSymmetric_conj_unitary A.isSymmetric_adjoint_comp_self (choosePolarUnitary A)) hn
-  rw [hcong, eigenvalues_conj_unitary A.isSymmetric_adjoint_comp_self hn (choosePolarUnitary A)]
 
 end Adjoint
 

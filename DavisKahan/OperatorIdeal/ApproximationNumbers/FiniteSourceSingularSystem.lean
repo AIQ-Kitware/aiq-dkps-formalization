@@ -211,10 +211,11 @@ theorem finiteSourceSingularValue_le_one_of_contraction
     (A : E →L[ℂ] F) (hA : ∀ x, ‖A x‖ ≤ ‖x‖)
     (i : Fin (finrank ℂ E)) :
     finiteSourceSingularValue A i ≤ 1 := by
-  apply singularValues_le_one_of_contraction (A := A.rangeRestrict.toLinearMap)
-  · intro x
-    simpa using hA x
-  · rfl
+  apply LinearMap.singularValues_le_of_norm_apply_le
+    (A := A.rangeRestrict.toLinearMap) zero_le_one
+  intro x
+  change ‖A x‖ ≤ 1 * ‖x‖
+  simpa only [one_mul] using hA x
 
 end
 

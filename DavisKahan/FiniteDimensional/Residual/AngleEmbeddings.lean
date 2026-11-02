@@ -156,8 +156,8 @@ private theorem cosThetaMagnitude_apply_rightSingularBasis
   let c := Real.sqrt (1 - σ ^ 2)
   have hσ0 : 0 ≤ σ := S.singularValues_nonneg i
   have hσ1 : σ ≤ 1 :=
-    singularValues_le_one_of_contraction
-      (sinThetaEmbedding_apply_norm_le U X) rfl i
+    LinearMap.singularValues_le_of_norm_apply_le zero_le_one
+      (by simpa only [one_mul] using sinThetaEmbedding_apply_norm_le U X) i
   have hc0 : 0 ≤ c := Real.sqrt_nonneg _
   have hSgram : sinThetaGram U X v = (((σ ^ 2 : ℝ) : 𝕜)) • v := by
     simpa [S, v, σ, sinThetaGram] using

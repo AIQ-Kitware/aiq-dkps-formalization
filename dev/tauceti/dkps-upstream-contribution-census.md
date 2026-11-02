@@ -3377,3 +3377,68 @@ invariant-eigenspace premise. This is foundation reuse; the complete
 sharpness/gap examples remain DKPS/YWS mathematics. Their original per-file
 Kitware/Apache-2.0 authorship headers and source at `e4637c3919ae` under
 `YuWangSamworth2015/YuWangSamworth2015/Symmetric/` remain intact.
+
+
+## 2026-11-02: native singular-value extrema, energy and right-vector gap
+
+The installed pin `463ab293070d4cb355d0a0e036469464070088bc` contains
+[#19338](https://github.com/TauCetiProject/TauCeti/pull/19338), integration
+`1e77c6499fb5e9f35cb57611638b25c3de9ce0b6`. Its accepted message and source
+explicitly adapt `ForTauCeti/Analysis/InnerProductSpace/Singular/Subspace.lean`
+and `YuWangSamworth2015/YuWangSamworth2015/Core/SingularSubspace.lean`.
+This supersedes the historical October 21 “Open” snapshot above. The native
+`LinearMap.norm_adjoint_comp_self_sub_adjoint_comp_self_apply_le` replaces
+`TauCeti.norm_gram_sub_gram_apply_le`, including trivial spaces; growth constants
+need no additional sign assumptions. The paper-facing
+`sq_gap_mul_sum_cross_singularVectors_le` now applies native
+`sq_mul_sum_sum_norm_inner_rightSingularBasis_sq_le_four_mul_card_mul_sq`
+through explicit squared-Gram-eigenvalue and canonical-right-basis equalities.
+Its statement and original hypotheses remain. This is the canonical Gram
+basis theorem, not a replacement for arbitrary-eigenframe YWS theorems.
+
+The same slice retires the contraction bound, four extremal gain/attainment
+proofs, squared-energy/basis-invariance proofs and square Gram-adjoint spectrum
+proof from the Singular/Subspace donor. Consumers apply native
+`singularValues_le_of_norm_apply_le`, `singularValues_mul_norm_le_norm_apply`,
+`norm_apply_le_singularValues_mul_norm`, `norm_apply_rightSingularBasis`,
+`trace_adjoint_comp_self_eq_sum_norm_apply_sq`,
+`trace_adjoint_comp_self_eq_sum_sq_singularValues`,
+`sum_norm_apply_sq_eq_sum_norm_apply_sq`, and
+`eigenvalues_adjoint_comp_self_eq_eigenvalues_self_comp_adjoint`.
+Explicit Fin/Finsupp, real-scalar and span-index bridges preserve the full
+original rectangular RCLike scope. Finite-source/infinite-target contraction
+callers use the finite range restriction, with no new completeness assumption.
+
+Accepted source anchors for these APIs are
+[#14677](https://github.com/TauCetiProject/TauCeti/pull/14677)
+`7fd5323416c03413b1fbc4c956b7bd7552b4d82c`,
+[#14820](https://github.com/TauCetiProject/TauCeti/pull/14820)
+`561df1ec2196f312ef0c607bdfe3e202535374c1`,
+[#14442](https://github.com/TauCetiProject/TauCeti/pull/14442)
+`09e43a78d09cdef107d8604de0517331119edd6e`, and
+[#13839](https://github.com/TauCetiProject/TauCeti/pull/13839)
+`0229509ce8dcd20951f52978eb5e6b20f595ea47`.
+These native implementations and transitive dependencies are distinct from the
+explicit #19338 adaptation; shared mathematical statements imply no proof descent.
+#14820 explicitly reports no external formalization vendored. Its
+`LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero` also replaces
+`TauCeti.opNorm_eq_singularValues_zero` from TwoDimensionalSingularValues,
+including every paper and sharpness caller; the native theorem covers dimension
+zero too. The planar Gram trace wrapper remains and uses native energy identities.
+
+Historical source is recoverable at `e4637c3919ae` under the donor paths above:
+Singular/Subspace, introduced at `29506b0`, Jon Crall / Claude Opus 4.8;
+TwoDimensionalSingularValues, introduced at `cd7541b`, Jon Crall / GPT-5.6
+Thinking; YWS Core/SingularSubspace, Jon Crall / GPT-5.6 High. All retain
+Kitware copyright and Apache-2.0 lineage. The extraction manifest preserves
+original retired declaration names.
+
+Retained Singular/Subspace results have specific additional content:
+dimension/completeness-free symmetry of unitary conjugation; sorted signed
+spectra of arbitrary symmetric maps rather than positive Gram operators;
+Gram conjugation at the selected `choosePolarUnitary` witness; modulus trace in
+an arbitrary basis; and its energy and explicit squared-growth consequences.
+Their proofs consume native engines where available. Native finite-dimensional
+adjoint conjugation or an existential polar witness does not replace those full
+statements. Planar pair-sequence/determinant reductions and arbitrary-eigenframe
+paper theorems also remain.

@@ -273,7 +273,12 @@ theorem approximationNumberEnergy_comp_starProjection
       ContinuousLinearMap.singularValue_eq_linearMap_singularValues]
   have hfrob : ∑ k : Fin n, T.toLinearMap.singularValues (k : ℕ) ^ 2
       = ∑ k : Fin n, ‖T (c k)‖ ^ 2 :=
-    TauCeti.sum_sq_singularValues T.toLinearMap hn c
+    by
+      subst hn
+      exact (T.toLinearMap.sum_fin_singularValues (· ^ 2) (by simp)).trans
+        (RCLike.ofReal_injective
+          (T.toLinearMap.trace_adjoint_comp_self_eq_sum_sq_singularValues.symm.trans
+            (T.toLinearMap.trace_adjoint_comp_self_eq_sum_norm_apply_sq c)))
   rw [(SameApproximationSingularSequence.approximationNumberEnergy_eq hsame),
     approximationNumberEnergy_eq_sum_range_of_rank_le hTrank,
     ← Fin.sum_univ_eq_sum_range

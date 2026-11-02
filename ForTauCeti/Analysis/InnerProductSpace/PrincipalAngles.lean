@@ -228,7 +228,12 @@ theorem norm_orthogonal_starProjection_comp_starProjection
       exact Submodule.norm_starProjection_apply_le _ z
     have hmin : cosPrincipalAngles hw hu (d - 1) * ‖y‖ ≤ ‖overlapOperator 𝕜 w u y‖ := by
       rw [cosPrincipalAngles_def]
-      exact singularValues_last_mul_norm_le (overlapOperator 𝕜 w u) finrank_euclideanSpace_fin hd y
+      apply (overlapOperator 𝕜 w u).singularValues_mul_norm_le_norm_apply
+      rw [OrthonormalBasis.mem_spanIndices_iff]
+      intro i hi
+      have hi' : (i : ℕ) < d := by
+        simpa only [finrank_euclideanSpace_fin] using i.isLt
+      exact (hi (show (i : ℕ) ≤ d - 1 from by omega)).elim
     have h2 : ‖(Submodule.span 𝕜 (Set.range w))ᗮ.starProjection
           ((Submodule.span 𝕜 (Set.range u)).starProjection z)‖ ^ 2
         ≤ (1 - cosPrincipalAngles hw hu (d - 1) ^ 2) * ‖z‖ ^ 2 := by
@@ -251,8 +256,13 @@ theorem norm_orthogonal_starProjection_comp_starProjection
       _ = Real.sqrt (1 - cosPrincipalAngles hw hu (d - 1) ^ 2) * ‖z‖ := by
           rw [Real.sqrt_mul h1σ, Real.sqrt_sq (norm_nonneg z)]
   · -- lower bound: the minimizing singular vector attains the angle.
-    obtain ⟨y₀, hy₀n, hy₀⟩ := exists_norm_apply_eq_singularValues_last (overlapOperator 𝕜 w u)
-      finrank_euclideanSpace_fin hd
+    let i₀ : Fin (finrank 𝕜 (EuclideanSpace 𝕜 (Fin d))) :=
+      ⟨d - 1, by rw [finrank_euclideanSpace_fin]; omega⟩
+    let y₀ := (overlapOperator 𝕜 w u).rightSingularBasis i₀
+    have hy₀n : ‖y₀‖ = 1 :=
+      (overlapOperator 𝕜 w u).rightSingularBasis.orthonormal.norm_eq_one i₀
+    have hy₀ : ‖overlapOperator 𝕜 w u y₀‖ = (overlapOperator 𝕜 w u).singularValues (d - 1) :=
+      (overlapOperator 𝕜 w u).norm_apply_rightSingularBasis i₀
     have hx₀U : hu.synthesisMapIsometry y₀ ∈ Submodule.span 𝕜 (Set.range u) :=
       (hu.range_synthesisMapIsometry.le ⟨y₀, rfl⟩)
     have hx₀n : ‖hu.synthesisMapIsometry y₀‖ = 1 := by

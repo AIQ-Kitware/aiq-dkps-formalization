@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
+
 public import YuWangSamworth2015.Rectangular.FrobeniusGram
 
 /-!
@@ -276,7 +278,7 @@ theorem yuWangSamworth_rightSingularSubspace_le
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
           (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
+  simpa only [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero A] using
     yuWangSamworth_rightSingularSubspace_opNormCoefficient_le
       hcorr hrank hΔ hgap
 
@@ -292,7 +294,7 @@ theorem yuWangSamworth_leftSingularSubspace_le
           ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
           (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
+  simpa only [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero A] using
     yuWangSamworth_leftSingularSubspace_opNormCoefficient_le
       hcorr hrank hΔ hgap
 
@@ -312,7 +314,7 @@ theorem yuWangSamworth_rightSingularAlignedBasis_le
             ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
+  simpa only [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero A] using
     yuWangSamworth_rightSingularAlignedBasis_opNormCoefficient_le
       hcorr hrank hΔ hgap
 
@@ -332,7 +334,7 @@ theorem yuWangSamworth_leftSingularAlignedBasis_le
             ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
+  simpa only [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero A] using
     yuWangSamworth_leftSingularAlignedBasis_opNormCoefficient_le
       hcorr hrank hΔ hgap
 
@@ -433,7 +435,7 @@ theorem yuWangSamworth_rightSingularSubspace_frame_le
       2 * (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
           (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
+  simpa only [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero A] using
     yuWangSamworth_gram_sinTheta_frame_le
       hv hvHat
       hΔ hgap (opNorm_rightGram_sub_le_paperCoefficient A Â)
@@ -455,7 +457,7 @@ theorem yuWangSamworth_leftSingularSubspace_frame_le
       2 * (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
         min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
           (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
+  simpa only [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero A] using
     yuWangSamworth_gram_sinTheta_frame_le
       hu hû
       hΔ hgap (opNorm_leftGram_sub_le_paperCoefficient A Â)
@@ -480,7 +482,7 @@ theorem yuWangSamworth_rightSingularAlignedBasis_frame_le
           (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
+  simpa only [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero A] using
     yuWangSamworth_gram_alignedBasis_frame_le
       hv hvHat
       hΔ hgap (opNorm_rightGram_sub_le_paperCoefficient A Â)
@@ -505,7 +507,7 @@ theorem yuWangSamworth_leftSingularAlignedBasis_frame_le
           (2 * A.singularValues 0 + ‖(Â - A).toContinuousLinearMap‖) *
           min (Real.sqrt d * ‖(Â - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A)) / Δ := by
-  simpa only [TauCeti.opNorm_eq_singularValues_zero A rfl Module.finrank_pos] using
+  simpa only [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero A] using
     yuWangSamworth_gram_alignedBasis_frame_le
       hu hû
       hΔ hgap (opNorm_leftGram_sub_le_paperCoefficient A Â)

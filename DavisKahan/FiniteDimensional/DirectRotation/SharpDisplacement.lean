@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT-6
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
+
 public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
 
 public import DavisKahan.FiniteDimensional.DirectRotation.ProjectionDisplacement
@@ -502,7 +504,6 @@ theorem projectionGap_eq_sin (theta : ℝ)
     (h0 : 0 < theta) (h1 : theta < Real.pi / 2) :
     U4.projectionGap (V4 theta) = Real.sin theta := by
   let D : E4 →ₗ[ℝ] E4 := U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap
-  have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
   have hs : 0 ≤ Real.sin theta :=
     (Real.sin_pos_of_pos_of_lt_pi h0 (by linarith [Real.pi_pos])).le
   calc
@@ -510,7 +511,7 @@ theorem projectionGap_eq_sin (theta : ℝ)
       rw [Submodule.projectionGap_def]
       rfl
     _ = D.singularValues 0 :=
-      TauCeti.opNorm_eq_singularValues_zero D hfr (by norm_num)
+      LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero D
     _ = Real.sin theta := singularValues_projectionDifference theta hs 0
 
 /-- At **every** prescribed nonzero acute angle, the trace-norm witness

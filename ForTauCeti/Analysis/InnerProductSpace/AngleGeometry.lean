@@ -112,7 +112,7 @@ theorem isAcute_iff_projectionGap_lt_one {U V : Submodule 𝕜 E}
 `cosThetaMap U V = P_V P_U` and `sinThetaMap U V = P_{Vᗮ} P_U` both vanish on
 `Uᗮ`, so restricting their domain to `U` loses nothing: the singular-value
 sequence is unchanged.  Combined with the Frobenius identity
-`∑ᵢ σᵢ(A)² = ∑ₖ ‖A bₖ‖²` (`sum_sq_singularValues`), this reads the squared
+`∑ᵢ σᵢ(A)² = ∑ₖ ‖A bₖ‖²` (the native Frobenius energy identity), this reads the squared
 principal cosines and sines as ordinary sums over an orthonormal basis of `U`,
 with **no** basis of the ambient space and no trace machinery. -/
 
@@ -212,9 +212,18 @@ theorem sum_sq_principalCosines_eq_sum_sq_norm_projection (U V : Submodule 𝕜 
     change V.starProjection (U.starProjection ((b i : U) : E)) =
       V.starProjection ((b i : U) : E)
     rw [U.starProjection_eq_self_iff.mpr (b i).2]
-  rw [← singularValues_cosThetaMap_comp_subtype U V,
-    sum_sq_singularValues ((U.cosThetaMap V).toLinearMap ∘ₗ U.subtype) rfl b]
-  simp only [happ]
+  rw [← singularValues_cosThetaMap_comp_subtype U V]
+  let A := (U.cosThetaMap V).toLinearMap ∘ₗ U.subtype
+  calc
+    ∑ i : Fin (finrank 𝕜 U), A.singularValues i ^ 2 =
+        A.singularValues.sum (fun _ s => s ^ 2) :=
+      A.sum_fin_singularValues (· ^ 2) (by simp)
+    _ = ∑ i, ‖A (b i)‖ ^ 2 :=
+      RCLike.ofReal_injective
+        (A.trace_adjoint_comp_self_eq_sum_sq_singularValues.symm.trans
+          (A.trace_adjoint_comp_self_eq_sum_norm_apply_sq b))
+    _ = ∑ i, ‖V.starProjection.toLinearMap ((b i : U) : E)‖ ^ 2 :=
+      Finset.sum_congr rfl fun i _ => congrArg (fun x : E => ‖x‖ ^ 2) (happ i)
 
 /-- **The squared principal sines summed over an orthonormal basis of `U`.**
 
@@ -233,9 +242,18 @@ theorem sum_sq_principalSines_eq_sum_sq_norm_complementaryProjection
     change Vᗮ.starProjection (U.starProjection ((b i : U) : E)) =
       Vᗮ.starProjection ((b i : U) : E)
     rw [U.starProjection_eq_self_iff.mpr (b i).2]
-  rw [← singularValues_sinThetaMap_comp_subtype U V,
-    sum_sq_singularValues ((U.sinThetaMap V).toLinearMap ∘ₗ U.subtype) rfl b]
-  simp only [happ]
+  rw [← singularValues_sinThetaMap_comp_subtype U V]
+  let A := (U.sinThetaMap V).toLinearMap ∘ₗ U.subtype
+  calc
+    ∑ i : Fin (finrank 𝕜 U), A.singularValues i ^ 2 =
+        A.singularValues.sum (fun _ s => s ^ 2) :=
+      A.sum_fin_singularValues (· ^ 2) (by simp)
+    _ = ∑ i, ‖A (b i)‖ ^ 2 :=
+      RCLike.ofReal_injective
+        (A.trace_adjoint_comp_self_eq_sum_sq_singularValues.symm.trans
+          (A.trace_adjoint_comp_self_eq_sum_norm_apply_sq b))
+    _ = ∑ i, ‖Vᗮ.starProjection.toLinearMap ((b i : U) : E)‖ ^ 2 :=
+      Finset.sum_congr rfl fun i _ => congrArg (fun x : E => ‖x‖ ^ 2) (happ i)
 
 /-- **`∑ₖ sin²θₖ = ∑ᵢ (1 - ‖P_V bᵢ‖²)` over an orthonormal basis of `U`.**
 

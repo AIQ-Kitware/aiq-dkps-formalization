@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
+
 public import TauCeti.Analysis.InnerProductSpace.SingularValues
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.AngleOperator
@@ -905,8 +907,8 @@ theorem sinTwoTheta_model_operatorNorm_equality
       2 * ‖(modelSinTwoThetaPerturbation (𝕜 := 𝕜) a b θ).toContinuousLinearMap‖ := by
   rw [← LinearMap.toContinuousLinearMap.apply_symm_apply
     ((modelSubspace (𝕜 := 𝕜)).sinTwoAngleOperator (rotatedModelSubspace (𝕜 := 𝕜) θ))]
-  rw [opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin (by norm_num),
-    opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin (by norm_num),
+  rw [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero _,
+    LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero _,
     LinearMap.coe_toContinuousLinearMap_symm,
     singularValues_sinTwoAngle_model hθ0 hθ1,
     singularValues_modelSinTwoThetaPerturbation hab hθ0 hθ1]
@@ -1011,8 +1013,8 @@ theorem norm_sinTwoAngle_model_eq_norm_sinAngle_doubled
       ‖((Submodule.sinAngleOperator (modelSubspace (𝕜 := 𝕜)) (rotatedModelSubspace (𝕜 := 𝕜) (2 * θ))).toLinearMap).toContinuousLinearMap‖ := by
   rw [← LinearMap.toContinuousLinearMap.apply_symm_apply
     ((modelSubspace (𝕜 := 𝕜)).sinTwoAngleOperator (rotatedModelSubspace (𝕜 := 𝕜) θ))]
-  rw [opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin (by norm_num),
-    opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin (by norm_num),
+  rw [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero _,
+    LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero _,
     LinearMap.coe_toContinuousLinearMap_symm,
     singularValues_sinTwoAngle_model hθ0 hθ1,
     singularValues_sinAngle_model (𝕜 := 𝕜) (by linarith) (by linarith)]
@@ -1090,8 +1092,7 @@ theorem sinTheta_constant_optimal :
   -- read the norm off the singular values rather than off a component
   have hpos : 0 < ‖(modelSinThetaPerturbation (𝕜 := 𝕜) 0 1
       (Real.pi/6)).toContinuousLinearMap‖ := by
-    rw [opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin
-        (by norm_num),
+    rw [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero _,
       singularValues_modelSinThetaPerturbation (𝕜 := 𝕜) (by norm_num)
         (by positivity) (by linarith [Real.pi_pos]),
       pairSingularValues_zero, Real.sin_pi_div_six]
@@ -1124,8 +1125,7 @@ theorem sinTwoTheta_constant_optimal :
     (by norm_num) (by positivity) (by linarith [Real.pi_pos])
   have hpos : 0 < ‖(modelSinTwoThetaPerturbation (𝕜 := 𝕜) 0 1
       (Real.pi/8)).toContinuousLinearMap‖ := by
-    rw [opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin
-        (by norm_num),
+    rw [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero _,
       singularValues_modelSinTwoThetaPerturbation (𝕜 := 𝕜) (by norm_num)
         (by positivity) (by linarith [Real.pi_pos]),
       pairSingularValues_zero]
@@ -1159,7 +1159,7 @@ theorem tanTheta_constant_optimal :
     Real.tan_pos_of_pos_of_lt_pi_div_two (by positivity) (by linarith)
   have hpos : 0 < ‖(modelTanThetaPerturbation (𝕜 := 𝕜) 0 1
       (Real.pi / 6)).toContinuousLinearMap‖ := by
-    rw [opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin (by norm_num),
+    rw [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero _,
       singularValues_modelTanThetaPerturbation (𝕜 := 𝕜) (by norm_num) htan.le,
       pairSingularValues_zero]
     nlinarith
@@ -1189,7 +1189,7 @@ theorem tanTwoTheta_constant_optimal :
     Real.tan_pos_of_pos_of_lt_pi_div_two (by positivity) (by linarith)
   have hpos : 0 < ‖(modelTanTwoThetaPerturbation (𝕜 := 𝕜) 0 1
       (Real.pi / 8)).toContinuousLinearMap‖ := by
-    rw [opNorm_eq_singularValues_zero _ finrank_euclideanSpace_fin (by norm_num),
+    rw [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero _,
       singularValues_modelTanTwoThetaPerturbation (𝕜 := 𝕜) (by norm_num) htan.le,
       pairSingularValues_zero]
     nlinarith
@@ -1926,10 +1926,8 @@ set_option maxHeartbeats 800000 in
 private theorem norm_eq_of_singularValues_eq {A B : Plane 𝕜 →ₗ[𝕜] Plane 𝕜}
     (h : A.singularValues = B.singularValues) :
     ‖A.toContinuousLinearMap‖ = ‖B.toContinuousLinearMap‖ := by
-  rw [opNorm_eq_singularValues_zero (𝕜 := 𝕜) A (n := 2)
-      finrank_euclideanSpace_fin (by norm_num),
-    opNorm_eq_singularValues_zero (𝕜 := 𝕜) B (n := 2)
-      finrank_euclideanSpace_fin (by norm_num), h]
+  rw [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero (𝕜 := 𝕜) A,
+    LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero (𝕜 := 𝕜) B, h]
 
 /-! ### The `tan Θ` model as an admissible perturbation pair -/
 

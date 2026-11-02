@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
+
 public import DavisKahan.Sources.DavisKahan1970.Sylvester.HilbertSchmidtEstimate
 public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 -- the planar trace/determinant recovery of singular values, used for the
@@ -260,13 +262,11 @@ theorem sharp52_singularValues_C :
 
 /-- `‖X‖₁ = 2 + √10`, the paper's `5.16…`. -/
 theorem sharp52_opNorm_X : ‖sharpX52.toContinuousLinearMap‖ = 2 + Real.sqrt 10 := by
-  rw [TauCeti.opNorm_eq_singularValues_zero sharpX52 finrank_euclideanSpace_fin
-    (by norm_num), sharp52_singularValues_X, TauCeti.pairSingularValues_zero]
+  rw [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero sharpX52, sharp52_singularValues_X, TauCeti.pairSingularValues_zero]
 
 /-- `‖AX - XB‖₁ = 3√2`, the paper's `4.24…`. -/
 theorem sharp52_opNorm_C : ‖sharpC52.toContinuousLinearMap‖ = 3 * Real.sqrt 2 := by
-  rw [TauCeti.opNorm_eq_singularValues_zero sharpC52 finrank_euclideanSpace_fin
-    (by norm_num), sharp52_singularValues_C, TauCeti.pairSingularValues_zero]
+  rw [LinearMap.norm_toContinuousLinearMap_eq_singularValues_zero sharpC52, sharp52_singularValues_C, TauCeti.pairSingularValues_zero]
 
 /-- **The witness really solves the Sylvester equation**: `C = AX - XB`. -/
 theorem sharp52_sylvester : sharpC52 = sharpA52 ∘ₗ sharpX52 - sharpX52 ∘ₗ sharpB52 := by

@@ -489,8 +489,8 @@ theorem apply_orthogonal_starProjection_comp_starProjection_comp
     simp only [hcdef]
     rcases lt_or_ge k d with hk | hk
     · rw [cosPrincipalAngles_def]
-      exact singularValues_le_one_of_contraction (norm_overlapOperator_apply_le hv hu)
-        finrank_euclideanSpace_fin ⟨k, hk⟩
+      exact LinearMap.singularValues_le_of_norm_apply_le zero_le_one
+        (by simpa only [one_mul] using norm_overlapOperator_apply_le hv hu) k
     · rw [cosPrincipalAngles_def,
         (overlapOperator 𝕜 v u).singularValues_of_finrank_le (by rw [finrank_euclideanSpace_fin]; exact hk)]
       exact zero_le_one

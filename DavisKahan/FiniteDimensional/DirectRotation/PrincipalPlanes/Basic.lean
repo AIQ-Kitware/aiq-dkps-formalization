@@ -130,9 +130,11 @@ theorem principalPlaneSine_le_one
     (i : Fin (nontrivialAngleCount U V)) :
     principalPlaneSine U V i ≤ 1 := by
   rw [principalPlaneSine]
-  refine singularValues_le_one_of_contraction ?_ rfl (nontrivialAngleIndex U V i)
+  refine LinearMap.singularValues_le_of_norm_apply_le zero_le_one ?_
+    (nontrivialAngleIndex U V i)
   intro x
-  change ‖(U.sinThetaMap V) x‖ ≤ ‖x‖
+  change ‖(U.sinThetaMap V) x‖ ≤ 1 * ‖x‖
+  rw [one_mul]
   exact ((U.sinThetaMap V).le_opNorm x).trans (by
     simpa only [one_mul] using
       mul_le_mul_of_nonneg_right (U.norm_sinThetaMap_le_one V) (norm_nonneg x))
