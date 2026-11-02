@@ -71,8 +71,8 @@ does.
 That reindex is not left as a remark.  `Fin.rev` versions of both part (iii)
 statements are proved below (`..._rev_source`), and they are the printed
 increasing-index reading: **both** sides are reversed, never one.  A symmetric
-gauge cannot tell the difference, which is exactly `FiniteSymmetricGauge.perm`
-at `TauCeti.FiniteSymmetricGauge.revPerm`.
+gauge cannot tell the difference, which is exactly `Seminorm.IsSymmetricGauge.map_comp_perm`
+at `Fin.revPerm`.
 
 ## The source-facing statements
 
@@ -366,7 +366,8 @@ pair `(Pᗮ, Qᗮ)` -- the singular values of the printed `C₁`, by equation (1
 Indices run decreasingly; see `theorem8_1_upperSymmetricGaugeRepulsion_angle_rev`
 for the printed increasing reading. -/
 theorem theorem8_1_upperSymmetricGaugeRepulsion_angle [FiniteDimensional ℂ H]
-    (Phi : FiniteSymmetricGauge (finrank ℂ H))
+    (Phi : Seminorm ℝ (Fin (finrank ℂ H) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
     (hAP : ∀ x ∈ P, A x ∈ P)
@@ -399,14 +400,15 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle [FiniteDimensional ℂ H]
     funext i
     rw [approximationNumber_cosineBlock_eq_principalCosines]
   rw [hrw]
-  exact theorem8_1_upperSymmetricGaugeRepulsion Phi A K P hdelta hA hK hAP
+  exact theorem8_1_upperSymmetricGaugeRepulsion Phi hPhi A K P hdelta hA hK hAP
     hPlow hPhigh hKP hKPperp
 
 /-- **Theorem 8.1(iii), lower block, printed form.**  The printed "with a
 similar relation for `Λ₀`", for every symmetric gauge, with the principal
 cosines of `(P, Q)`. -/
 theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle [FiniteDimensional ℂ H]
-    (Phi : FiniteSymmetricGauge (finrank ℂ H))
+    (Phi : Seminorm ℝ (Fin (finrank ℂ H) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
     (hAP : ∀ x ∈ P, A x ∈ P)
@@ -439,7 +441,7 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle [FiniteDimensional ℂ H]
     funext i
     rw [approximationNumber_lowerCosineBlock_eq_principalCosines]
   rw [hrw]
-  exact theorem8_1_lowerSymmetricGaugeRepulsion Phi A K P hdelta hA hK hAP
+  exact theorem8_1_lowerSymmetricGaugeRepulsion Phi hPhi A K P hdelta hA hK hAP
     hPlow hPhigh hKP hKPperp
 
 /-! ### 6. The printed increasing index, by a global reindex
@@ -454,7 +456,8 @@ follow from the decreasing statements by permutation invariance alone. -/
 are reindexed by `Fin.rev` together. -/
 theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev
     [FiniteDimensional ℂ H]
-    (Phi : FiniteSymmetricGauge (finrank ℂ H))
+    (Phi : Seminorm ℝ (Fin (finrank ℂ H) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
     (hAP : ∀ x ∈ P, A x ∈ P)
@@ -470,22 +473,22 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev
           Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha)ᗮ (i.rev : ℕ) ^ 2) := by
-  have hL := Phi.perm (fun i : Fin (finrank ℂ H) =>
+  have hL := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (finrank ℂ H) =>
     (upperBlockShift A P alpha).approximationNumber (i : ℕ))
-    (FiniteSymmetricGauge.revPerm (finrank ℂ H))
-  have hR := Phi.perm (fun i : Fin (finrank ℂ H) =>
+    (Fin.revPerm (n := finrank ℂ H))
+  have hR := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (finrank ℂ H) =>
     (upperBlockShift (A + K) (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
           (hA.add hK)) alpha) alpha).approximationNumber (i : ℕ) *
       Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
           (hA.add hK)) alpha)ᗮ (i : ℕ) ^ 2)
-    (FiniteSymmetricGauge.revPerm (finrank ℂ H))
+    (Fin.revPerm (n := finrank ℂ H))
   rw [show (fun i : Fin (finrank ℂ H) =>
       (upperBlockShift A P alpha).approximationNumber (i.rev : ℕ)) =
       (fun i : Fin (finrank ℂ H) =>
         (upperBlockShift A P alpha).approximationNumber (i : ℕ)) ∘
-        (FiniteSymmetricGauge.revPerm (finrank ℂ H)) from rfl,
+        (Fin.revPerm (n := finrank ℂ H)) from rfl,
     show (fun i : Fin (finrank ℂ H) =>
       (upperBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
@@ -500,14 +503,15 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev
           Submodule.principalCosines Pᗮ (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha)ᗮ (i : ℕ) ^ 2) ∘
-        (FiniteSymmetricGauge.revPerm (finrank ℂ H)) from rfl, hL, hR]
-  exact theorem8_1_upperSymmetricGaugeRepulsion_angle A K P Phi hdelta hA hK
+        (Fin.revPerm (n := finrank ℂ H)) from rfl, hL, hR]
+  exact theorem8_1_upperSymmetricGaugeRepulsion_angle A K P Phi hPhi hdelta hA hK
     hAP hPlow hPhigh hKP hKPperp
 
 /-- **Theorem 8.1(iii), lower block, in the paper's index order.** -/
 theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev
     [FiniteDimensional ℂ H]
-    (Phi : FiniteSymmetricGauge (finrank ℂ H))
+    (Phi : Seminorm ℝ (Fin (finrank ℂ H) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
     (hAP : ∀ x ∈ P, A x ∈ P)
@@ -523,22 +527,22 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev
           Submodule.principalCosines P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha) (i.rev : ℕ) ^ 2) := by
-  have hL := Phi.perm (fun i : Fin (finrank ℂ H) =>
+  have hL := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (finrank ℂ H) =>
     (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
-    (FiniteSymmetricGauge.revPerm (finrank ℂ H))
-  have hR := Phi.perm (fun i : Fin (finrank ℂ H) =>
+    (Fin.revPerm (n := finrank ℂ H))
+  have hR := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (finrank ℂ H) =>
     (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
           (hA.add hK)) alpha) alpha delta).approximationNumber (i : ℕ) *
       Submodule.principalCosines P (canonicalLowBranch (A + K)
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
           (hA.add hK)) alpha) (i : ℕ) ^ 2)
-    (FiniteSymmetricGauge.revPerm (finrank ℂ H))
+    (Fin.revPerm (n := finrank ℂ H))
   rw [show (fun i : Fin (finrank ℂ H) =>
       (lowerBlockShift A P alpha delta).approximationNumber (i.rev : ℕ)) =
       (fun i : Fin (finrank ℂ H) =>
         (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ)) ∘
-        (FiniteSymmetricGauge.revPerm (finrank ℂ H)) from rfl,
+        (Fin.revPerm (n := finrank ℂ H)) from rfl,
     show (fun i : Fin (finrank ℂ H) =>
       (lowerBlockShift (A + K) (canonicalLowBranch (A + K)
           (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
@@ -553,8 +557,8 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev
           Submodule.principalCosines P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha) (i : ℕ) ^ 2) ∘
-        (FiniteSymmetricGauge.revPerm (finrank ℂ H)) from rfl, hL, hR]
-  exact theorem8_1_lowerSymmetricGaugeRepulsion_angle A K P Phi hdelta hA hK
+        (Fin.revPerm (n := finrank ℂ H)) from rfl, hL, hR]
+  exact theorem8_1_lowerSymmetricGaugeRepulsion_angle A K P Phi hPhi hdelta hA hK
     hAP hPlow hPhigh hKP hKPperp
 
 end Source
@@ -648,7 +652,8 @@ pair `(Pᗮ, Qᗮ)`.  Indices run decreasingly; see
 `theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real` for the printed
 increasing reading. -/
 theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_real [FiniteDimensional ℝ E]
-    (Phi : FiniteSymmetricGauge (Module.finrank ℝ E))
+    (Phi : Seminorm ℝ (Fin (Module.finrank ℝ E) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -682,14 +687,15 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_real [FiniteDimensional �
     funext i
     rw [approximationNumber_cosineBlock_eq_principalCosines]
   rw [hrw]
-  exact theorem8_1_upperSymmetricGaugeRepulsion_real Phi A K P hdelta hA hK hAP
+  exact theorem8_1_upperSymmetricGaugeRepulsion_real Phi hPhi A K P hdelta hA hK hAP
     hPlow hPhigh hKP hKPperp
 
 /-- **Theorem 8.1(iii), lower block, over a REAL Hilbert space, printed form.**
 The printed "with a similar relation for `Λ₀`", for every symmetric gauge, with
 the principal cosines of `(P, Q)`. -/
 theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_real [FiniteDimensional ℝ E]
-    (Phi : FiniteSymmetricGauge (Module.finrank ℝ E))
+    (Phi : Seminorm ℝ (Fin (Module.finrank ℝ E) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -723,7 +729,7 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_real [FiniteDimensional �
     funext i
     rw [approximationNumber_lowerCosineBlock_eq_principalCosines]
   rw [hrw]
-  exact theorem8_1_lowerSymmetricGaugeRepulsion_real Phi A K P hdelta hA hK hAP
+  exact theorem8_1_lowerSymmetricGaugeRepulsion_real Phi hPhi A K P hdelta hA hK hAP
     hPlow hPhigh hKP hKPperp
 
 /-- **Theorem 8.1(iii), upper block, over a REAL Hilbert space, in the paper's
@@ -732,7 +738,8 @@ global reindex and not a reordering of one side against the other; it follows
 from the decreasing statement by permutation invariance alone. -/
 theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real
     [FiniteDimensional ℝ E]
-    (Phi : FiniteSymmetricGauge (Module.finrank ℝ E))
+    (Phi : Seminorm ℝ (Fin (Module.finrank ℝ E) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -749,22 +756,22 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real
           Submodule.principalCosines Pᗮ
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp)ᗮ (i.rev : ℕ) ^ 2) := by
-  have hL := Phi.perm (fun i : Fin (Module.finrank ℝ E) =>
+  have hL := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (Module.finrank ℝ E) =>
     (upperBlockShift A P alpha).approximationNumber (i : ℕ))
-    (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E))
-  have hR := Phi.perm (fun i : Fin (Module.finrank ℝ E) =>
+    (Fin.revPerm (n := Module.finrank ℝ E))
+  have hR := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (Module.finrank ℝ E) =>
     (upperBlockShift (A + K)
         (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
           hKPperp) alpha).approximationNumber (i : ℕ) *
       Submodule.principalCosines Pᗮ
         (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
           hKPperp)ᗮ (i : ℕ) ^ 2)
-    (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E))
+    (Fin.revPerm (n := Module.finrank ℝ E))
   rw [show (fun i : Fin (Module.finrank ℝ E) =>
       (upperBlockShift A P alpha).approximationNumber (i.rev : ℕ)) =
       (fun i : Fin (Module.finrank ℝ E) =>
         (upperBlockShift A P alpha).approximationNumber (i : ℕ)) ∘
-        (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E)) from rfl,
+        (Fin.revPerm (n := Module.finrank ℝ E)) from rfl,
     show (fun i : Fin (Module.finrank ℝ E) =>
       (upperBlockShift (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
@@ -779,15 +786,16 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real
           Submodule.principalCosines Pᗮ
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp)ᗮ (i : ℕ) ^ 2) ∘
-        (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E)) from rfl, hL, hR]
-  exact theorem8_1_upperSymmetricGaugeRepulsion_angle_real Phi A K P hdelta hA hK
+        (Fin.revPerm (n := Module.finrank ℝ E)) from rfl, hL, hR]
+  exact theorem8_1_upperSymmetricGaugeRepulsion_angle_real Phi hPhi A K P hdelta hA hK
     hAP hPlow hPhigh hKP hKPperp
 
 /-- **Theorem 8.1(iii), lower block, over a REAL Hilbert space, in the paper's
 index order.** -/
 theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real
     [FiniteDimensional ℝ E]
-    (Phi : FiniteSymmetricGauge (Module.finrank ℝ E))
+    (Phi : Seminorm ℝ (Fin (Module.finrank ℝ E) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -804,22 +812,22 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real
           Submodule.principalCosines P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp) (i.rev : ℕ) ^ 2) := by
-  have hL := Phi.perm (fun i : Fin (Module.finrank ℝ E) =>
+  have hL := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (Module.finrank ℝ E) =>
     (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
-    (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E))
-  have hR := Phi.perm (fun i : Fin (Module.finrank ℝ E) =>
+    (Fin.revPerm (n := Module.finrank ℝ E))
+  have hR := (fun x π => hPhi.map_comp_perm π x) (fun i : Fin (Module.finrank ℝ E) =>
     (lowerBlockShift (A + K)
         (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
           hKPperp) alpha delta).approximationNumber (i : ℕ) *
       Submodule.principalCosines P
         (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
           hKPperp) (i : ℕ) ^ 2)
-    (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E))
+    (Fin.revPerm (n := Module.finrank ℝ E))
   rw [show (fun i : Fin (Module.finrank ℝ E) =>
       (lowerBlockShift A P alpha delta).approximationNumber (i.rev : ℕ)) =
       (fun i : Fin (Module.finrank ℝ E) =>
         (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ)) ∘
-        (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E)) from rfl,
+        (Fin.revPerm (n := Module.finrank ℝ E)) from rfl,
     show (fun i : Fin (Module.finrank ℝ E) =>
       (lowerBlockShift (A + K)
           (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
@@ -834,8 +842,8 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real
           Submodule.principalCosines P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp) (i : ℕ) ^ 2) ∘
-        (FiniteSymmetricGauge.revPerm (Module.finrank ℝ E)) from rfl, hL, hR]
-  exact theorem8_1_lowerSymmetricGaugeRepulsion_angle_real Phi A K P hdelta hA hK
+        (Fin.revPerm (n := Module.finrank ℝ E)) from rfl, hL, hR]
+  exact theorem8_1_lowerSymmetricGaugeRepulsion_angle_real Phi hPhi A K P hdelta hA hK
     hAP hPlow hPhigh hKP hKPperp
 
 end SourceReal

@@ -135,7 +135,8 @@ space: the printed every-symmetric-gauge form.**
 
 Immediate from the weak majorization above and Fan dominance. -/
 theorem theorem8_1_upperSymmetricGaugeRepulsion_real [FiniteDimensional ℝ E]
-    (Phi : FiniteSymmetricGauge (Module.finrank ℝ E))
+    (Phi : Seminorm ℝ (Fin (Module.finrank ℝ E) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -152,7 +153,7 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion_real [FiniteDimensional ℝ E]
           (cosineBlock P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp)).approximationNumber (i : ℕ) ^ 2) :=
-  Phi.mono_weaklyMajorized
+  (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi)
     (theorem8_1_upperWeightedWeakMajorization_real A K P hdelta hA hK hAP hPlow
       hPhigh hKP hKPperp)
 
@@ -220,7 +221,8 @@ space: the printed every-symmetric-gauge form.**
   `Φ((α + δ) - α₁, …) ≤ Φ(((α + δ) - λ₁) cos²θ₁, …)`   for every symmetric
 gauge. -/
 theorem theorem8_1_lowerSymmetricGaugeRepulsion_real [FiniteDimensional ℝ E]
-    (Phi : FiniteSymmetricGauge (Module.finrank ℝ E))
+    (Phi : Seminorm ℝ (Fin (Module.finrank ℝ E) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -237,7 +239,7 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion_real [FiniteDimensional ℝ E]
           (lowerCosineBlock P
             (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP
               hKPperp)).approximationNumber (i : ℕ) ^ 2) :=
-  Phi.mono_weaklyMajorized
+  (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi)
     (theorem8_1_lowerWeightedWeakMajorization_real A K P hdelta hA hK hAP hPlow
       hPhigh hKP hKPperp)
 

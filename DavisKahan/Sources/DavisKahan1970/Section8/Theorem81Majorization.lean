@@ -177,11 +177,12 @@ every-symmetric-gauge form.**
   `Φ(α₁ - α, …) ≤ Φ((λ₁ - α) cos²θ₁, …)`   for every symmetric gauge `Φ`.
 
 Immediate from the weak majorization above and Fan dominance
-(`FiniteSymmetricGauge.mono_weaklyMajorized`): a symmetric gauge is monotone
+(`IsWeaklyMajorizedBy.apply_le`): a symmetric gauge is monotone
 under weak majorization, so no convexity, permutation-invariance or dominance
 argument has to be repeated here. -/
 theorem theorem8_1_upperSymmetricGaugeRepulsion [FiniteDimensional ℂ H]
-    (Phi : FiniteSymmetricGauge (Module.finrank ℂ H))
+    (Phi : Seminorm ℝ (Fin (Module.finrank ℂ H) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -198,7 +199,7 @@ theorem theorem8_1_upperSymmetricGaugeRepulsion [FiniteDimensional ℂ H]
           (cosineBlock P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha)).approximationNumber (i : ℕ) ^ 2) :=
-  Phi.mono_weaklyMajorized
+  (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi)
     (theorem8_1_upperWeightedWeakMajorization A K P hdelta hA hK hAP
       hPlow hPhigh hKP hKPperp)
 
@@ -281,7 +282,8 @@ every-symmetric-gauge form.**
 Immediate from the lower weak majorization and Fan dominance, exactly as in the
 upper block. -/
 theorem theorem8_1_lowerSymmetricGaugeRepulsion [FiniteDimensional ℂ H]
-    (Phi : FiniteSymmetricGauge (Module.finrank ℂ H))
+    (Phi : Seminorm ℝ (Fin (Module.finrank ℂ H) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -298,7 +300,7 @@ theorem theorem8_1_lowerSymmetricGaugeRepulsion [FiniteDimensional ℂ H]
           (lowerCosineBlock P (canonicalLowBranch (A + K)
             (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
               (hA.add hK)) alpha)).approximationNumber (i : ℕ) ^ 2) :=
-  Phi.mono_weaklyMajorized
+  (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi)
     (theorem8_1_lowerWeightedWeakMajorization A K P hdelta hA hK hAP
       hPlow hPhigh hKP hKPperp)
 

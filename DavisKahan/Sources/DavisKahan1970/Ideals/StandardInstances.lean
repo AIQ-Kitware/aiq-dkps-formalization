@@ -22,98 +22,77 @@ public section
 namespace TauCeti
 namespace SymmetricIdeal
 
-open scoped BigOperators
+open scoped BigOperators ENNReal
 open DavisKahan.ExactSinTheta
 
 noncomputable section
 
-/-- The two zero-padding implementations used by the existing finite-gauge and
-paper-norm layers agree. -/
-theorem zeroPad_eq_zeroPadRight {n : ℕ} (x : Fin n → ℝ) :
-    zeroPad x = FiniteVector.zeroPadRight (m := 1) x := by
-  funext i
-  refine Fin.lastCases ?_ (fun j => ?_) i
-  · simp [zeroPad, FiniteVector.zeroPadRight]
-  · simp [zeroPad, FiniteVector.zeroPadRight]
+/-- The source's trailing zero agrees with native tuple append. -/
+theorem zeroPad_eq_append_zero {n : ℕ} (x : Fin n → ℝ) :
+    zeroPad x = Fin.append x (0 : Fin 1 → ℝ) := by
+  rw [Fin.append_right_eq_snoc]
+  ext i
+  refine Fin.lastCases ?_ (fun j => ?_) i <;> simp [zeroPad]
 
 /-- The coherent finite `ell^p` symmetric norming function, `1 ≤ p < ∞`. -/
 noncomputable def lpAxiomatic
-    (p : ℝ) (hp : 1 ≤ p) : SymmetricNormingFunction.Axiomatic where
-  gauge := fun _ x => FiniteVector.lpGauge p x
-  nonneg := FiniteVector.lpGauge_nonneg p
-  definite := by
-    intro n x
-    exact FiniteVector.lpGauge_eq_zero_iff (lt_of_lt_of_le zero_lt_one hp) x
-  add_le := by
-    intro n x y
-    exact FiniteVector.lpGauge_add_le hp x y
-  smul := by
-    intro n c x
-    exact FiniteVector.lpGauge_smul (lt_of_lt_of_le zero_lt_one hp) c x
-  perm := by
-    intro n x π
-    exact FiniteVector.lpGauge_perm p x π
-  abs := by
-    intro n x
-    unfold FiniteVector.lpGauge
-    congr 2
-    funext i
-    rw [abs_abs]
-  zero_pad := by
-    intro n x
-    rw [zeroPad_eq_zeroPadRight]
-    exact FiniteVector.lpGauge_zeroPadRight p x
-  normalized := by
-    simp [FiniteVector.lpGauge]
-  weak_majorization := by
-    intro n x y hx h0x h0y hprefix
-    exact (FiniteVector.lpSymmetricGauge (n := n) p hp).le_of_prefixSum_le
-      hx h0x h0y hprefix
+    (p : ℝ) (hp : 1 ≤ p) : SymmetricNormingFunction.Axiomatic := by
+  let _ : Fact (1 ≤ ENNReal.ofReal p) := ⟨by
+    simpa only [ENNReal.ofReal_one] using ENNReal.ofReal_le_ofReal hp⟩
+  have hp0 : 0 < p := zero_lt_one.trans_le hp
+  exact
+    { gauge := fun _ x => FiniteVector.lpGauge p x
+      nonneg := FiniteVector.lpGauge_nonneg p
+      definite := fun {_} x => FiniteVector.lpGauge_eq_zero_iff hp0 x
+      add_le := by
+        intro n x y
+        simp only [FiniteVector.lpGauge_eq_norm hp0]
+        simpa only [WithLp.toLp_add] using
+          norm_add_le (WithLp.toLp (ENNReal.ofReal p) x :
+            PiLp (ENNReal.ofReal p) fun _ : Fin n => ℝ) (WithLp.toLp _ y)
+      smul := fun {_} c x => FiniteVector.lpGauge_smul hp0 c x
+      perm := fun {_} x π => FiniteVector.lpGauge_perm p x π
+      abs := by
+        intro n x
+        unfold FiniteVector.lpGauge
+        congr 2
+        funext i
+        rw [abs_abs]
+      zero_pad := by
+        intro n x
+        rw [zeroPad_eq_append_zero]
+        exact FiniteVector.lpGauge_append_zero p x
+      normalized := by simp [FiniteVector.lpGauge]
+      weak_majorization := by
+        intro n x y hx h0x _h0y hprefix
+        simp only [FiniteVector.lpGauge_eq_norm hp0]
+        apply (Seminorm.isSymmetricGauge_piLp (ENNReal.ofReal p)).apply_le_of_prefixSum_le
+          hx h0x
+        simpa only [TauCeti.prefixSum_def] using hprefix }
 
 /-- Coherent Schatten/`ell^p` source norm. -/
 noncomputable def lpNormingFunction (p : ℝ) (hp : 1 ≤ p) :
     SymmetricNormingFunction :=
   (lpAxiomatic p hp).toNormingFunction
 
-/-- The finite `ell^infinity` gauge vanishes exactly on the zero vector. -/
-theorem linftyGauge_eq_zero_iff {n : ℕ} (x : Fin n → ℝ) :
-    FiniteVector.linftyGauge x = 0 ↔ x = 0 := by
-  constructor
-  · intro h
-    funext i
-    have hi : |x i| ≤ FiniteVector.linftyGauge x := by
-      unfold FiniteVector.linftyGauge
-      exact le_ciSup (Finite.bddAbove_range (fun j : Fin n => |x j|)) i
-    have habs : |x i| = 0 := le_antisymm (by simpa [h] using hi) (abs_nonneg _)
-    exact abs_eq_zero.mp habs
-  · rintro rfl
-    exact FiniteVector.linftyGauge_zero
-
 /-- The coherent finite `ell^infinity` symmetric norming function. -/
-noncomputable def linftyAxiomatic :
-    SymmetricNormingFunction.Axiomatic where
-  gauge := fun _ x => FiniteVector.linftyGauge x
-  nonneg := FiniteVector.linftyGauge_nonneg
-  definite := linftyGauge_eq_zero_iff
-  add_le := FiniteVector.linftyGauge_add_le
-  smul := FiniteVector.linftyGauge_smul
-  perm := FiniteVector.linftyGauge_perm
-  abs := by
-    intro n x
-    unfold FiniteVector.linftyGauge
-    congr 1
-    funext i
-    simp
+noncomputable def linftyAxiomatic : SymmetricNormingFunction.Axiomatic where
+  gauge := fun _ x => ‖x‖
+  nonneg := fun {_} x => norm_nonneg x
+  definite := fun {_} x => norm_eq_zero
+  add_le := fun {_} x y => norm_add_le x y
+  smul := fun {_} c x => by simpa only [Real.norm_eq_abs] using norm_smul c x
+  perm := fun {_} x π => Seminorm.isSymmetricGauge_normSeminorm.map_comp_perm π x
+  abs := fun {_} x => Seminorm.isSymmetricGauge_normSeminorm.map_abs x
   zero_pad := by
     intro n x
-    rw [zeroPad_eq_zeroPadRight]
-    exact FiniteVector.linftyGauge_zeroPadRight x
-  normalized := by
-    simp [FiniteVector.linftyGauge]
+    rw [zeroPad_eq_append_zero]
+    exact FiniteVector.norm_append_zero x
+  normalized := by simp
   weak_majorization := by
-    intro n x y hx h0x h0y hprefix
-    exact (FiniteVector.linftySymmetricGauge (n := n)).le_of_prefixSum_le
-      hx h0x h0y hprefix
+    intro n x y hx h0x _h0y hprefix
+    apply Seminorm.isSymmetricGauge_normSeminorm.apply_le_of_prefixSum_le hx h0x
+    simpa only [TauCeti.prefixSum_def] using hprefix
 
 /-- Coherent operator norm as the `ell^infinity` source norm. -/
 noncomputable def operatorNormingFunction : SymmetricNormingFunction :=

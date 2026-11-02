@@ -139,7 +139,8 @@ set_option maxHeartbeats 1000000 in
 sequences.**  `Φ(α₁ − α, …, α_n − α) ≤ Φ((λ₁ − α)cos²θ₁, …, (λ_n − α)cos²θ_n)`,
 for every symmetric gauge, in finite dimensions, in the paper's index order. -/
 theorem theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact [FiniteDimensional ℂ H]
-    (Phi : FiniteSymmetricGauge (finrank ℂ H))
+    (Phi : Seminorm ℝ (Fin (finrank ℂ H) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -159,7 +160,7 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact [FiniteDimensional 
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha) alpha : H →ₗ[ℂ] H).IsPositive :=
     isPositive_toLinearMap_of_nonneg
       (theorem8_1_perturbedUpperBlockShift_nonneg A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)
-  have h := theorem8_1_upperSymmetricGaugeRepulsion_angle_rev A K P Phi hdelta hA hK hAP hPlow hPhigh hKP hKPperp
+  have h := theorem8_1_upperSymmetricGaugeRepulsion_angle_rev A K P Phi hPhi hdelta hA hK hAP hPlow hPhigh hKP hKPperp
   have hfA : (fun i : Fin (finrank ℂ H) =>
       (upperBlockShift A P alpha).approximationNumber (i.rev : ℕ))
       = fun i : Fin (finrank ℂ H) => (isSymmetric_upperBlockShift hA P alpha).eigenvalues rfl i.rev := by
@@ -181,7 +182,8 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact [FiniteDimensional 
 set_option maxHeartbeats 1000000 in
 /-- **Theorem 8.1 (iii), lower block, on the printed eigenvalue sequences.** -/
 theorem theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact [FiniteDimensional ℂ H]
-    (Phi : FiniteSymmetricGauge (finrank ℂ H))
+    (Phi : Seminorm ℝ (Fin (finrank ℂ H) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (A K : H →L[ℂ] H) (P : Submodule ℂ H) [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -201,7 +203,7 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact [FiniteDimensional 
         (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp (hA.add hK)) alpha) alpha delta : H →ₗ[ℂ] H).IsPositive :=
     isPositive_toLinearMap_of_nonneg
       (theorem8_1_perturbedLowerBlockShift_nonneg A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)
-  have h := theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev A K P Phi hdelta hA hK hAP hPlow hPhigh hKP hKPperp
+  have h := theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev A K P Phi hPhi hdelta hA hK hAP hPlow hPhigh hKP hKPperp
   have hfA : (fun i : Fin (finrank ℂ H) =>
       (lowerBlockShift A P alpha delta).approximationNumber (i.rev : ℕ))
       = fun i : Fin (finrank ℂ H) => (isSymmetric_lowerBlockShift hA P alpha delta).eigenvalues rfl i.rev := by
@@ -278,7 +280,8 @@ set_option maxHeartbeats 1000000 in
 /-- **Theorem 8.1 (iii), upper block, on the printed eigenvalue sequences, over a
 real Hilbert space.** -/
 theorem theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real [FiniteDimensional ℝ E]
-    (Phi : FiniteSymmetricGauge (finrank ℝ E))
+    (Phi : Seminorm ℝ (Fin (finrank ℝ E) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -296,7 +299,7 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_sourceExact_real [FiniteDimensi
   have hposQ : (upperBlockShift (A + K) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) alpha : E →ₗ[ℝ] E).IsPositive :=
     isPositive_toLinearMap_of_nonneg
       (theorem8_1_perturbedUpperBlockShift_nonneg_real A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)
-  have h := theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real Phi A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp
+  have h := theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real Phi hPhi A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp
   have hfA : (fun i : Fin (finrank ℝ E) =>
       (upperBlockShift A P alpha).approximationNumber (i.rev : ℕ))
       = fun i : Fin (finrank ℝ E) => (isSymmetric_upperBlockShift hA P alpha).eigenvalues rfl i.rev := by
@@ -315,7 +318,8 @@ set_option maxHeartbeats 1000000 in
 /-- **Theorem 8.1 (iii), lower block, on the printed eigenvalue sequences, over a
 real Hilbert space.** -/
 theorem theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real [FiniteDimensional ℝ E]
-    (Phi : FiniteSymmetricGauge (finrank ℝ E))
+    (Phi : Seminorm ℝ (Fin (finrank ℝ E) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge)
     (A K : E →L[ℝ] E) (P : Submodule ℝ E) [P.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hA : IsSelfAdjoint A) (hK : IsSelfAdjoint K)
@@ -333,7 +337,7 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_sourceExact_real [FiniteDimensi
   have hposQ : (lowerBlockShift (A + K) (canonicalLowBranchReal A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp) alpha delta : E →ₗ[ℝ] E).IsPositive :=
     isPositive_toLinearMap_of_nonneg
       (theorem8_1_perturbedLowerBlockShift_nonneg_real A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp)
-  have h := theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real Phi A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp
+  have h := theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real Phi hPhi A K P hdelta hA hK hAP hPlow hPhigh hKP hKPperp
   have hfA : (fun i : Fin (finrank ℝ E) =>
       (lowerBlockShift A P alpha delta).approximationNumber (i.rev : ℕ))
       = fun i : Fin (finrank ℝ E) => (isSymmetric_lowerBlockShift hA P alpha delta).eigenvalues rfl i.rev := by

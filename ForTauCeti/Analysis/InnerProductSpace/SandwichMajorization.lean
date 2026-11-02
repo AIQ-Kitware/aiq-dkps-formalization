@@ -27,7 +27,7 @@ inner product space,
 Both sides are decreasing nonnegative sequences of the same finite length, and
 `≺w` is `TauCeti.IsWeaklyMajorizedBy`: **every** prefix sum of the left
 side is dominated by the corresponding prefix sum of the right side.  By
-`FiniteSymmetricGauge.mono_weaklyMajorized` this gives the same inequality for
+`IsWeaklyMajorizedBy.apply_le` this gives the same inequality for
 every symmetric gauge, hence for every unitarily invariant norm.
 
 This is the generalized von Neumann / rearrangement content of the sandwich

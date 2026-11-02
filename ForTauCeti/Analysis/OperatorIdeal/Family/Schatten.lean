@@ -54,8 +54,8 @@ the same length.
 The proof is the whole point of the module: the truncated sequences are weakly majorized —
 antitone and nonnegative because approximation numbers are, and prefix-comparable because
 that comparison *is* `kyFanGaugeReal_add_le` — so
-`TauCeti.FiniteVector.lpGauge_mono_weaklyMajorized`
-applies, and finite Minkowski splits the right-hand side. -/
+the native `PiLp` symmetric-gauge comparison applies, and its norm triangle
+inequality splits the right-hand side. -/
 theorem lpGauge_approximationNumber_add_le {p : ℝ} (hp : 1 ≤ p) (S T : E →L[𝕜] F) (k : ℕ) :
     TauCeti.FiniteVector.lpGauge p (fun i : Fin k => (S + T).approximationNumber i) ≤
       TauCeti.FiniteVector.lpGauge p (fun i : Fin k => S.approximationNumber i) +
@@ -86,11 +86,12 @@ theorem lpGauge_approximationNumber_add_le {p : ℝ} (hp : 1 ≤ p) (S T : E →
           S.kyFanGauge (min j k) + T.kyFanGauge (min j k)
         exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le S T (min j k)
       simpa only [kyFanGaugeReal_eq_sum] using h
-  calc TauCeti.FiniteVector.lpGauge p (fun i : Fin k => (S + T).approximationNumber i)
-      ≤ TauCeti.FiniteVector.lpGauge p
-          (fun i : Fin k => S.approximationNumber i + T.approximationNumber i) :=
-        TauCeti.FiniteVector.lpGauge_mono_weaklyMajorized hp hmaj
-    _ ≤ _ := TauCeti.FiniteVector.lpGauge_add_le hp _ _
+  let _ : Fact (1 ≤ ENNReal.ofReal p) := ⟨by
+    simpa only [ENNReal.ofReal_one] using ENNReal.ofReal_le_ofReal hp⟩
+  simp only [TauCeti.FiniteVector.lpGauge_eq_norm (zero_lt_one.trans_le hp)]
+  exact (hmaj.apply_le (Seminorm.isSymmetricGauge_piLp (ENNReal.ofReal p))).trans
+    (map_add_le_add ((normSeminorm ℝ (PiLp (ENNReal.ofReal p) fun _ : Fin k => ℝ)).comp
+      (WithLp.linearEquiv (ENNReal.ofReal p) ℝ (Fin k → ℝ)).symm.toLinearMap) _ _)
 
 end Finite
 

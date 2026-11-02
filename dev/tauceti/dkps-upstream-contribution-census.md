@@ -3250,3 +3250,68 @@ original Jon Crall / OpenAI GPT-5.6 Thinking attribution is preserved. The
 separate scalar `FiniteSymmetricGauge` bundle still has consumers and awaits
 its own native migration; the temporary source sequence adapter packages
 native seminorm values, without retaining the retired operator proof engine.
+
+
+### November 2: native finite symmetric gauges, padding and transfers
+
+Deleted the 153-line `FiniteSymmetricGauge` data/law/rearrangement engine from
+`ForTauCeti/Analysis/Convex/Majorization.lean`. The paper's twenty generic
+Section 8 gauge results now quantify over native `Seminorm ℝ (Fin n → ℝ)`
+and `IsSymmetricGauge`. The old bundle and native pair were compiled to have
+identical values in both directions; no definiteness or nonempty-index
+assumption was added. Native `IsWeaklyMajorizedBy.apply_le`,
+`IsSymmetricGauge.apply_le_of_prefixSum_le`, `map_comp_perm` and
+`isSymmetricConvex_setOf_le` replace the local gauge proofs. The source
+sequence decomposition likewise consumes native sublevel sets, deleting
+`normingFiniteSymmetricGauge` and its temporary packaging adapter.
+
+`Fin.revPerm` replaces the old `FiniteSymmetricGauge.revPerm` exactly.
+`Tuple.sortDesc` replaces `antitoneSortPerm` after a compiled equality of
+sorted values; the actual permutations may differ at ties. `Fin.append`
+replaces `FiniteVector.zeroPadRight`, and native `prefixSum_append_zero`
+and `IsWeaklyMajorizedBy.append_zero` retire the padding proof engine.
+The source `zeroPad` statement remains, with a short correspondence to append.
+
+`robinHood` and `prefixSum_robinHood` replace `FiniteVector.transfer` and
+its action/prefix helpers at distinct coordinates. This qualification matters:
+the old nested-update self-transfer added mass, while native self-transfer
+is identity. Every productive step in the retained exact MAJ-A14 progress
+proof has distinct endpoints. Its stronger single-swap-average relation
+`FiniteVector.IsTTransform`, coefficient witness `isTTransform_robinHood`
+and strict coordinate-agreement progress theorem remain; native
+`TauCeti.IsTTransform` permits a further arbitrary permutation and is not
+identified with this relation. The additional pointwise and total-sum
+consequences remain on the native weak-majorization predicate.
+
+Native symmetric gauges/padding/transfers are accepted in
+[#14102](https://github.com/TauCetiProject/TauCeti/pull/14102), integration
+`715fea57c28ebfd7287e23bcaf772e416a5f928f`, explicitly independent of DKPS
+and bulk port #13865. Additional gauge symmetries come from
+[#14662](https://github.com/TauCetiProject/TauCeti/pull/14662), integration
+`38596bb4395faa26cd9c2ede1df65b5e67aeaa0b`.
+Historical majorization source remains
+`e4637c3919ae:ForTauCeti/Analysis/Convex/Majorization.lean`, extraction
+`6c958c237425ecacf403c670a15c5c65d01a59eb`, Jon Crall / GPT-5.6 Thinking /
+Claude Fable 5 / Claude Opus 5, Kitware, Inc., Apache-2.0.
+
+The standard finite norm instances use native `PiLp` norms and
+`Seminorm.isSymmetricGauge_piLp`, introduced by
+[#16023](https://github.com/TauCetiProject/TauCeti/pull/16023), integration
+`23602ef9b1bc4404e5e57bc41bbb8aed97d1c816`; that PR says nothing was
+vendored and distinguishes the DKPS ideal-family port. The native sup norm
+and `isSymmetricGauge_normSeminorm` replace the whole local `linftyGauge`
+engine. The maintained Schatten truncation statement is unchanged, with a
+proof through the native finite norm and triangle inequality. No direct
+proof adaptation is claimed for these independent replacements.
+
+`ForTauCeti/Analysis/Normed/FiniteLpGauge.lean` retains its all-real-exponent
+power-sum formula and broader laws. At exponent zero it is constantly one,
+whereas native `PiLp 0` counts support; negative exponents and the quasi-norm
+range also prevent replacing the entire donor by the `p ≥ 1` API. Its
+positive-exponent/native norm correspondence is compiled, including `0 < p < 1`.
+The all-real padding statement is preserved as `lpGauge_append_zero`.
+A short `norm_append_zero` identity remains on the canonical sup norm,
+covering empty tuples; no corresponding named fact was found in the pinned
+API. Source: `e4637c3919ae` under the retained path; original ForMathlib
+introduction `a8d4ea3d05105135dc959a4e10f5ac5a50f2bede`, Jon Crall /
+GPT-5.6 Thinking, Kitware, Inc., Apache-2.0.

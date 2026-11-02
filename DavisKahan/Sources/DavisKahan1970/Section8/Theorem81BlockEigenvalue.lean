@@ -439,7 +439,8 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact [FiniteDimensi
     (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
-    (Phi : FiniteSymmetricGauge (finrank ℂ (Pᗮ : Submodule ℂ H))) :
+    (Phi : Seminorm ℝ (Fin (finrank ℂ (Pᗮ : Submodule ℂ H)) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge) :
     Phi (fun i => (isSymmetric_upperBlockCompression hA P alpha).eigenvalues rfl i)
       ≤ Phi (fun i =>
         (isSymmetric_upperBlockCompression (hA.add hK)
@@ -450,7 +451,7 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact [FiniteDimensi
   have hle : finrank ℂ (Pᗮ : Submodule ℂ H) ≤ finrank ℂ H := Submodule.finrank_le _
   have hmaj := theorem8_1_upperWeightedWeakMajorization A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp
-  have hgauge := Phi.mono_weaklyMajorized (weaklyMajorized_comp_castLE hle hmaj)
+  have hgauge := (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi) (weaklyMajorized_comp_castLE hle hmaj)
   simp only [Fin.val_castLE] at hgauge
   have hfA : (fun i : Fin (finrank ℂ (Pᗮ : Submodule ℂ H)) =>
       (upperBlockShift A P alpha).approximationNumber (i : ℕ))
@@ -490,7 +491,8 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact [FiniteDimensi
     (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
-    (Phi : FiniteSymmetricGauge (finrank ℂ (P : Submodule ℂ H))) :
+    (Phi : Seminorm ℝ (Fin (finrank ℂ (P : Submodule ℂ H)) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge) :
     Phi (fun i => (isSymmetric_lowerBlockCompression hA P alpha delta).eigenvalues rfl i)
       ≤ Phi (fun i =>
         (isSymmetric_lowerBlockCompression (hA.add hK)
@@ -501,7 +503,7 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact [FiniteDimensi
   have hle : finrank ℂ (P : Submodule ℂ H) ≤ finrank ℂ H := Submodule.finrank_le _
   have hmaj := theorem8_1_lowerWeightedWeakMajorization A K P hdelta hA hK hAP hPlow
     hPhigh hKP hKPperp
-  have hgauge := Phi.mono_weaklyMajorized (weaklyMajorized_comp_castLE hle hmaj)
+  have hgauge := (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi) (weaklyMajorized_comp_castLE hle hmaj)
   simp only [Fin.val_castLE] at hgauge
   have hfA : (fun i : Fin (finrank ℂ (P : Submodule ℂ H)) =>
       (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
@@ -688,7 +690,8 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real
     (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
-    (Phi : FiniteSymmetricGauge (finrank ℝ (Pᗮ : Submodule ℝ E))) :
+    (Phi : Seminorm ℝ (Fin (finrank ℝ (Pᗮ : Submodule ℝ E)) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge) :
     Phi (fun i => (isSymmetric_upperBlockCompression hA P alpha).eigenvalues rfl i)
       ≤ Phi (fun i =>
         (isSymmetric_upperBlockCompression (hA.add hK) (canonicalLowBranchReal A K P hdelta hA hK
@@ -701,7 +704,7 @@ theorem theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real
   have hle : finrank ℝ (Pᗮ : Submodule ℝ E) ≤ finrank ℝ E := Submodule.finrank_le _
   have hmaj := theorem8_1_upperWeightedWeakMajorization_real A K P hdelta hA hK hAP
       hPlow hPhigh hKP hKPperp
-  have hgauge := Phi.mono_weaklyMajorized (weaklyMajorized_comp_castLE hle hmaj)
+  have hgauge := (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi) (weaklyMajorized_comp_castLE hle hmaj)
   simp only [Fin.val_castLE] at hgauge
   have hfA : (fun i : Fin (finrank ℝ (Pᗮ : Submodule ℝ E)) =>
       (upperBlockShift A P alpha).approximationNumber (i : ℕ))
@@ -751,7 +754,8 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real
     (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P)
-    (Phi : FiniteSymmetricGauge (finrank ℝ (P : Submodule ℝ E))) :
+    (Phi : Seminorm ℝ (Fin (finrank ℝ (P : Submodule ℝ E)) → ℝ))
+    (hPhi : Phi.IsSymmetricGauge) :
     Phi (fun i => (isSymmetric_lowerBlockCompression hA P alpha delta).eigenvalues rfl i)
       ≤ Phi (fun i =>
         (isSymmetric_lowerBlockCompression (hA.add hK) (canonicalLowBranchReal A K P hdelta hA hK
@@ -764,7 +768,7 @@ theorem theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real
   have hle : finrank ℝ (P : Submodule ℝ E) ≤ finrank ℝ E := Submodule.finrank_le _
   have hmaj := theorem8_1_lowerWeightedWeakMajorization_real A K P hdelta hA hK hAP
       hPlow hPhigh hKP hKPperp
-  have hgauge := Phi.mono_weaklyMajorized (weaklyMajorized_comp_castLE hle hmaj)
+  have hgauge := (TauCeti.IsWeaklyMajorizedBy.apply_le · hPhi) (weaklyMajorized_comp_castLE hle hmaj)
   simp only [Fin.val_castLE] at hgauge
   have hfA : (fun i : Fin (finrank ℝ (P : Submodule ℝ E)) =>
       (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))

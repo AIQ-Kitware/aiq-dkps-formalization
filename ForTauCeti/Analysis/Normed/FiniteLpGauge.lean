@@ -6,28 +6,20 @@ Authors: Jon Crall, GPT-5.6 Thinking
 module
 
 public import Mathlib.Analysis.MeanInequalities
-public import ForTauCeti.Analysis.Convex.Majorization
+public import TauCeti.Analysis.Convex.Majorization
 public import Mathlib.Data.Fintype.Order
 
 
 /-!
 # The finite `ℓᵖ` gauges
 
-The `ℓᵖ` family of `FiniteSymmetricGauge`s, `1 ≤ p ≤ ∞`, and their monotonicity under weak
-majorization.
+The real power-sum formula is retained for all real exponents, including the
+zero exponent and the quasi-norm range `0 < p < 1`. For positive exponents it
+agrees with the native `PiLp` norm. Standard norm and symmetric-gauge laws
+are consumed directly from Mathlib and Tau Ceti.
 
-* `FiniteVector.lpGauge p x = (∑ i, |xᵢ|ᵖ)^(1/p)` for `1 ≤ p < ∞`, with the finite Minkowski
-  inequality, and `FiniteVector.linftyGauge`, the coordinatewise supremum;
-* `FiniteVector.lpSymmetricGauge` and `FiniteVector.linftySymmetricGauge`, the corresponding
-  bundled gauges;
-* their monotonicity under `IsWeaklyMajorizedBy`, which is
-  `FiniteSymmetricGauge.mono_weaklyMajorized` specialized;
-* the zero-padding bridges used to compare gauges across index lengths.
-
-The majorization theory these consume — `prefixSum`,
-`IsWeaklyMajorizedBy`, `FiniteVector.zeroPadRight`, `FiniteSymmetricGauge` itself,
-and the Hardy--Littlewood--Pólya transfer descent that makes every symmetric gauge monotone —
-lives in `ForTauCeti.Analysis.Convex.Majorization`.
+The remaining zero-padding facts preserve these broader exponent formulas
+and compare native finite sup norms across dimensions.
 
 ## Provenance
 
@@ -132,151 +124,35 @@ theorem lpGauge_neg_single (p : ℝ) (x : Fin n → ℝ) (j : Fin n) :
   · simp
   · rw [Function.update_of_ne hij]
 
-/-- Finite-dimensional Minkowski inequality. -/
-theorem lpGauge_add_le {p : ℝ} (hp : 1 ≤ p) (x y : Fin n → ℝ) :
-    lpGauge p (x + y) ≤ lpGauge p x + lpGauge p y := by
-  simpa [lpGauge] using Real.Lp_add_le Finset.univ x y hp
-
-/-- The `ℓᵖ` gauge as a finite symmetric gauge. -/
-@[expose]
-noncomputable def lpSymmetricGauge (p : ℝ) (hp : 1 ≤ p) :
-    FiniteSymmetricGauge n where
-  toFun := lpGauge p
-  add_le' := lpGauge_add_le hp
-  real_smul' := lpGauge_smul (zero_lt_one.trans_le hp)
-  perm' := lpGauge_perm p
-  neg_single' := lpGauge_neg_single p
-
-/-- `ℓᵖ` gauge monotonicity under weak majorization. -/
-theorem lpGauge_mono_weaklyMajorized {p : ℝ} (hp : 1 ≤ p)
-    {x y : Fin n → ℝ} (h : IsWeaklyMajorizedBy x y) :
-    lpGauge p x ≤ lpGauge p y :=
-  (lpSymmetricGauge (n := n) p hp).mono_weaklyMajorized h
-
-/-- Coordinatewise monotonicity of the `ℓᵖ` gauge on nonnegative vectors. -/
-theorem lpGauge_mono {p : ℝ} (hp : 1 ≤ p) {x y : Fin n → ℝ}
-    (hx0 : ∀ i, 0 ≤ x i) (hxy : ∀ i, x i ≤ y i) :
-    lpGauge p x ≤ lpGauge p y :=
-  (lpSymmetricGauge (n := n) p hp).mono hx0 hxy
+/-- The positive-exponent formula is the native finite `Lᵖ` norm, also for `p < 1`. -/
+theorem lpGauge_eq_norm {p : ℝ} (hp : 0 < p) (x : Fin n → ℝ) :
+    lpGauge p x =
+      ‖(WithLp.toLp (ENNReal.ofReal p) x : PiLp (ENNReal.ofReal p) fun _ : Fin n => ℝ)‖ := by
+  rw [PiLp.norm_eq_sum (by simpa only [ENNReal.toReal_ofReal hp.le] using hp)]
+  simp only [ENNReal.toReal_ofReal hp.le, Real.norm_eq_abs, lpGauge]
 
 /-- Right zero-padding does not change the finite `ℓᵖ` gauge. -/
-theorem lpGauge_zeroPadRight (p : ℝ) (x : Fin n → ℝ) :
-    lpGauge p (zeroPadRight (m := m) x) = lpGauge p x := by
+theorem lpGauge_append_zero (p : ℝ) (x : Fin n → ℝ) :
+    lpGauge p (Fin.append x (0 : Fin m → ℝ)) = lpGauge p x := by
   rcases eq_or_ne p 0 with rfl | hp
   · -- the outer exponent `1 / 0` is zero, so both gauges collapse to `1`
     simp [lpGauge]
-  · unfold lpGauge zeroPadRight
+  · unfold lpGauge
     rw [Fin.sum_univ_add]
     simp [Real.zero_rpow hp]
 
-/-- The finite `ℓ∞` gauge. -/
-@[expose]
-noncomputable def linftyGauge (x : Fin n → ℝ) : ℝ :=
-  ⨆ i, |x i|
-
-/-- The `ℓ∞` gauge is nonnegative. -/
-theorem linftyGauge_nonneg (x : Fin n → ℝ) : 0 ≤ linftyGauge x := by
-  rcases n with _ | n
-  · simp [linftyGauge]
-  · exact (abs_nonneg (x 0)).trans
-      (le_ciSup (Finite.bddAbove_range (fun j : Fin (n + 1) => |x j|)) 0)
-
-/-- The `ℓ∞` gauge of zero is zero. -/
-@[simp] theorem linftyGauge_zero :
-    linftyGauge (0 : Fin n → ℝ) = 0 := by
-  simp [linftyGauge]
-
-/-- Coordinatewise domination of absolute values implies `ℓ∞` domination. -/
-theorem linftyGauge_mono {x y : Fin n → ℝ}
-    (hxy : ∀ i, |x i| ≤ |y i|) : linftyGauge x ≤ linftyGauge y := by
-  unfold linftyGauge
-  exact ciSup_mono (Finite.bddAbove_range (fun i => |y i|)) hxy
-
-/-- Triangle inequality for the finite `ℓ∞` gauge. -/
-theorem linftyGauge_add_le (x y : Fin n → ℝ) :
-    linftyGauge (x + y) ≤ linftyGauge x + linftyGauge y := by
-  -- `ciSup_le` needs a nonempty index type; the empty gauge is zero
-  rcases n with _ | n
-  · simp [linftyGauge]
-  unfold linftyGauge
-  refine ciSup_le fun i => ?_
-  exact (abs_add_le (x i) (y i)).trans
-    (add_le_add (le_ciSup (Finite.bddAbove_range (fun j => |x j|)) i)
-      (le_ciSup (Finite.bddAbove_range (fun j => |y j|)) i))
-
-/-- Positive homogeneity of the finite `ℓ∞` gauge. -/
-theorem linftyGauge_smul (c : ℝ) (x : Fin n → ℝ) :
-    linftyGauge (c • x) = |c| * linftyGauge x := by
-  unfold linftyGauge
-  -- `Real.mul_iSup_of_nonneg` is already total in `c`, including `c = 0`
-  rw [Real.mul_iSup_of_nonneg (abs_nonneg c)]
-  apply congrArg iSup
-  funext i
-  simp [abs_mul, Pi.smul_apply, smul_eq_mul]
-
-/-- Permutation invariance of the finite `ℓ∞` gauge. -/
-theorem linftyGauge_perm (x : Fin n → ℝ) (π : Equiv.Perm (Fin n)) :
-    linftyGauge (x ∘ π) = linftyGauge x := by
-  rcases n with _ | n
-  · simp [linftyGauge]
-  unfold linftyGauge
+/-- Appending zeros preserves the native finite sup norm, including dimension zero. -/
+theorem norm_append_zero (x : Fin n → ℝ) :
+    ‖Fin.append x (0 : Fin m → ℝ)‖ = ‖x‖ := by
   apply le_antisymm
-  · refine ciSup_le fun i => ?_
-    exact le_ciSup (Finite.bddAbove_range (fun j => |x j|)) (π i)
-  · refine ciSup_le fun i => ?_
-    simpa using le_ciSup (Finite.bddAbove_range (fun j => |x (π j)|)) (π.symm i)
-
-/-- A single sign flip does not change the finite `ℓ∞` gauge. -/
-theorem linftyGauge_neg_single (x : Fin n → ℝ) (j : Fin n) :
-    linftyGauge (Function.update x j (-(x j))) = linftyGauge x := by
-  unfold linftyGauge
-  congr 1
-  funext i
-  rcases eq_or_ne i j with rfl | hij
-  · simp
-  · simp [Function.update_of_ne hij]
-
-/-- The `ℓ∞` gauge as a finite symmetric gauge. -/
-@[expose]
-noncomputable def linftySymmetricGauge : FiniteSymmetricGauge n where
-  toFun := linftyGauge
-  add_le' := linftyGauge_add_le
-  real_smul' := linftyGauge_smul
-  perm' := linftyGauge_perm
-  neg_single' := linftyGauge_neg_single
-
-/-- `ℓ∞` gauge monotonicity under weak majorization. -/
-theorem linftyGauge_mono_weaklyMajorized {x y : Fin n → ℝ}
-    (h : IsWeaklyMajorizedBy x y) : linftyGauge x ≤ linftyGauge y :=
-  (linftySymmetricGauge (n := n)).mono_weaklyMajorized h
-
-/-- Right zero-padding does not change the finite `ℓ∞` gauge. -/
-theorem linftyGauge_zeroPadRight (x : Fin n → ℝ) :
-    linftyGauge (zeroPadRight (m := m) x) = linftyGauge x := by
-  rcases n with _ | n
-  · -- nothing to pad: the padded vector is identically zero
-    have hz : zeroPadRight (m := m) x = 0 := by
-      funext i
-      simp [zeroPadRight]
-    rw [hz]
-    simp [linftyGauge]
-  have : Nonempty (Fin (n + 1 + m)) := ⟨⟨0, by omega⟩⟩
-  apply le_antisymm
-  · unfold linftyGauge
-    refine ciSup_le fun i => ?_
-    refine Fin.addCases (motive := fun i =>
-      |zeroPadRight (m := m) x i| ≤ ⨆ q, |x q|) ?_ ?_ i
-    · intro j
-      rw [zeroPadRight_left]
-      exact le_ciSup (Finite.bddAbove_range (fun q => |x q|)) j
-    · intro j
-      rw [zeroPadRight_right, abs_zero]
-      exact linftyGauge_nonneg x
-  · unfold linftyGauge
-    refine ciSup_le fun i => ?_
-    simpa using le_ciSup
-      (Finite.bddAbove_range (fun q => |zeroPadRight (m := m) x q|))
-      (Fin.castAdd m i)
+  · apply (pi_norm_le_iff_of_nonneg (norm_nonneg x)).2
+    intro i
+    induction i using Fin.addCases with
+    | left i => simpa using norm_le_pi_norm x i
+    | right i => simp
+  · apply (pi_norm_le_iff_of_nonneg (norm_nonneg _)).2
+    intro i
+    simpa using norm_le_pi_norm (Fin.append x (0 : Fin m → ℝ)) (Fin.castAdd m i)
 
 end FiniteVector
 end TauCeti

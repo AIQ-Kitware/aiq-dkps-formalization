@@ -65,14 +65,14 @@ theorem zeroPadPerm_natAdd {n : ℕ} (pi : Equiv.Perm (Fin n)) (i : Fin 1) :
   simp [zeroPadPerm]
 
 /-- Zero-padding commutes with extending a permutation by the identity. -/
-theorem zeroPadRight_comp_zeroPadPerm {n : ℕ}
+theorem append_zero_comp_zeroPadPerm {n : ℕ}
     (pi : Equiv.Perm (Fin n)) (x : Fin n → ℝ) :
-    FiniteVector.zeroPadRight (m := 1) x ∘ zeroPadPerm pi =
-      FiniteVector.zeroPadRight (m := 1) (x ∘ pi) := by
+    (Fin.append x (0 : Fin 1 → ℝ)) ∘ zeroPadPerm pi =
+      (Fin.append (x ∘ pi) (0 : Fin 1 → ℝ)) := by
   funext i
-  refine Fin.lastCases ?_ (fun j => ?_) i
-  · simp [Function.comp_apply, zeroPadPerm, FiniteVector.zeroPadRight]
-  · simp [Function.comp_apply, zeroPadPerm, FiniteVector.zeroPadRight]
+  induction i using Fin.addCases with
+  | left i => simp [Function.comp_apply]
+  | right i => simp [Function.comp_apply]
 
 private theorem diagonalEval_perm {n : ℕ}
     (N : UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
@@ -176,15 +176,15 @@ theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :
       ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((x) i : _))) := by
   let absx : Fin n → ℝ := fun i => |x i|
   let pi : Equiv.Perm (Fin n) :=
-    TauCeti.FiniteSymmetricGauge.antitoneSortPerm absx
+    Tuple.sortDesc absx
   let y : Fin n → ℝ := absx ∘ pi
   have hyanti : Antitone y :=
-    TauCeti.FiniteSymmetricGauge.antitone_comp_antitoneSortPerm absx
+    Tuple.antitone_sortDesc absx
   have hy0 : ∀ i, 0 ≤ y i := fun i => abs_nonneg _
-  have hpadyanti : Antitone (FiniteVector.zeroPadRight (m := 1) y) :=
-    FiniteVector.antitone_zeroPadRight hyanti hy0
-  have hpady0 : ∀ i, 0 ≤ FiniteVector.zeroPadRight (m := 1) y i :=
-    FiniteVector.zeroPadRight_nonneg hy0
+  have hpadyanti : Antitone ((Fin.append y (0 : Fin 1 → ℝ))) :=
+    ((IsWeaklyMajorizedBy.refl hyanti hy0).append_zero 1).antitone_left
+  have hpady0 : ∀ i, 0 ≤ (Fin.append y (0 : Fin 1 → ℝ)) i :=
+    ((IsWeaklyMajorizedBy.refl hyanti hy0).append_zero 1).nonneg_left
 
   have hsmall :
       ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((y) i : _))) =
@@ -199,37 +199,38 @@ theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :
           (EuclideanSpace.basisFun (Fin n) ℂ) x
 
   have habspad :
-      (fun i : Fin (n + 1) => |FiniteVector.zeroPadRight (m := 1) x i|) =
-        FiniteVector.zeroPadRight (m := 1) absx := by
+      (fun i : Fin (n + 1) => |(Fin.append x (0 : Fin 1 → ℝ)) i|) =
+        (Fin.append absx (0 : Fin 1 → ℝ)) := by
     funext i
-    unfold FiniteVector.zeroPadRight absx
-    split_ifs <;> simp
+    induction i using Fin.addCases with
+    | left i => simp [absx]
+    | right i => simp
 
   have hpermPad :
-      (fun i : Fin (n + 1) => |FiniteVector.zeroPadRight (m := 1) x i|) ∘
+      (fun i : Fin (n + 1) => |(Fin.append x (0 : Fin 1 → ℝ)) i|) ∘
           zeroPadPerm pi =
-        FiniteVector.zeroPadRight (m := 1) y := by
-    rw [habspad, zeroPadRight_comp_zeroPadPerm]
+        (Fin.append y (0 : Fin 1 → ℝ)) := by
+    rw [habspad, append_zero_comp_zeroPadPerm]
 
-  rw [SymmetricIdeal.zeroPad_eq_zeroPadRight]
+  rw [SymmetricIdeal.zeroPad_eq_append_zero]
   calc
-    ((kyFanFiniteNorm k (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((FiniteVector.zeroPadRight (m := 1) x)) i : _))) =
-      ((kyFanFiniteNorm k (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((fun i => |FiniteVector.zeroPadRight (m := 1) x i|)) i : _))) := by
+    ((kyFanFiniteNorm k (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => ((((Fin.append x (0 : Fin 1 → ℝ)))) i : _))) =
+      ((kyFanFiniteNorm k (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((fun i => |(Fin.append x (0 : Fin 1 → ℝ)) i|)) i : _))) := by
           exact (uinGauge_abs (kyFanFiniteNorm k (n + 1))
             (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
-            (FiniteVector.zeroPadRight (m := 1) x)).symm
-    _ = ((kyFanFiniteNorm k (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((((fun i => |FiniteVector.zeroPadRight (m := 1) x i|) ∘
+            ((Fin.append x (0 : Fin 1 → ℝ)))).symm
+    _ = ((kyFanFiniteNorm k (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((((fun i => |(Fin.append x (0 : Fin 1 → ℝ)) i|) ∘
           zeroPadPerm pi))) i : _))) := by
           exact (diagonalEval_perm (kyFanFiniteNorm k (n + 1))
             (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
-            (fun i => |FiniteVector.zeroPadRight (m := 1) x i|)
+            (fun i => |(Fin.append x (0 : Fin 1 → ℝ)) i|)
             (zeroPadPerm pi)).symm
-    _ = ((kyFanFiniteNorm k (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => (((FiniteVector.zeroPadRight (m := 1) y)) i : _))) := by rw [hpermPad]
-    _ = prefixSum k (FiniteVector.zeroPadRight (m := 1) y) :=
+    _ = ((kyFanFiniteNorm k (n + 1))) (let b' := (EuclideanSpace.basisFun (Fin (n + 1)) ℂ); Matrix.toLin b'.toBasis b'.toBasis (Matrix.diagonal fun i => ((((Fin.append y (0 : Fin 1 → ℝ)))) i : _))) := by rw [hpermPad]
+    _ = prefixSum k ((Fin.append y (0 : Fin 1 → ℝ))) :=
       kyFanFiniteNorm_gauge_of_antitone_nonneg k (n + 1)
         _ hpadyanti hpady0
     _ = prefixSum k y :=
-      FiniteVector.prefixSum_zeroPadRight k y
+      TauCeti.prefixSum_append_zero k y
     _ = ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((y) i : _))) :=
       (kyFanFiniteNorm_gauge_of_antitone_nonneg k n y hyanti hy0).symm
     _ = ((kyFanFiniteNorm k n)) (Matrix.toLin ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis ((EuclideanSpace.basisFun (Fin n) ℂ)).toBasis (Matrix.diagonal fun i => ((x) i : _))) := hsmall

@@ -57,26 +57,10 @@ def SequenceMem (N : SymmetricNormingFunction) (x : ℕ → ℝ) : Prop :=
 def sequenceGauge (N : SymmetricNormingFunction) (x : ℕ → ℝ) : ℝ :=
   (sequenceExtendedGauge N x).toReal
 
-/-- The paper's finite gauge, packaged in the algebraic interface consumed by
-finite majorization. -/
-@[expose]
-noncomputable def normingFiniteSymmetricGauge
-    (N : SymmetricNormingFunction) (n : ℕ) : FiniteSymmetricGauge n where
-  toFun := N.finiteGauge n
-  add_le' := fun x y => map_add_le_add (N.finiteGauge n) x y
-  real_smul' := N.finiteGauge_smul
-  perm' := fun x π => (N.isSymmetricGauge_finiteGauge n).map_comp_perm π x
-  neg_single' := (N.isSymmetricGauge_finiteGauge n).map_update_neg
-
-/-- `normingFiniteSymmetricGauge` computes the paper's own finite gauge: the repackaging
-into `FiniteSymmetricGauge` changes the interface, not the value. -/
-@[simp] theorem normingFiniteSymmetricGauge_apply
-    (N : SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) :
-    normingFiniteSymmetricGauge N n x = N.finiteGauge n x := rfl
-
 /-- A Minkowski sum of two symmetric-gauge balls is symmetric-convex. -/
 theorem isSymmetricConvex_gaugeBall_add_gaugeBall
-    {n : ℕ} (Φ Ψ : FiniteSymmetricGauge n)
+    {n : ℕ} (Φ Ψ : Seminorm ℝ (Fin n → ℝ))
+    (hΦ : Φ.IsSymmetricGauge) (hΨ : Ψ.IsSymmetricGauge)
     (r s : ℝ) :
     IsSymmetricConvex
       {x : Fin n → ℝ | ∃ u v,
@@ -84,9 +68,9 @@ theorem isSymmetricConvex_gaugeBall_add_gaugeBall
   let U : Set (Fin n → ℝ) := {u | Φ u ≤ r}
   let V : Set (Fin n → ℝ) := {v | Ψ v ≤ s}
   have hU : IsSymmetricConvex U :=
-    Φ.isSymmetricConvex_sublevel r
+    hΦ.isSymmetricConvex_setOf_le r
   have hV : IsSymmetricConvex V :=
-    Ψ.isSymmetricConvex_sublevel s
+    hΨ.isSymmetricConvex_setOf_le s
   refine
     { convex := ?_
       comp_perm_mem := ?_
@@ -119,7 +103,8 @@ If `x` is weakly majorized by `y + z`, then `x` splits as `u + v`, with
 `u` no larger than `y` in one prescribed symmetric gauge and `v` no larger
 than `z` in another. -/
 theorem exists_gauge_decomposition_of_weaklyMajorized
-    {n : ℕ} (Φ Ψ : FiniteSymmetricGauge n)
+    {n : ℕ} (Φ Ψ : Seminorm ℝ (Fin n → ℝ))
+    (hΦ : Φ.IsSymmetricGauge) (hΨ : Ψ.IsSymmetricGauge)
     {x y z : Fin n → ℝ}
     (h : IsWeaklyMajorizedBy x (y + z)) :
     ∃ u v : Fin n → ℝ,
@@ -127,7 +112,7 @@ theorem exists_gauge_decomposition_of_weaklyMajorized
   let K : Set (Fin n → ℝ) :=
     {w | ∃ u v, w = u + v ∧ Φ u ≤ Φ y ∧ Ψ v ≤ Ψ z}
   have hK : IsSymmetricConvex K :=
-    isSymmetricConvex_gaugeBall_add_gaugeBall Φ Ψ (Φ y) (Ψ z)
+    isSymmetricConvex_gaugeBall_add_gaugeBall Φ Ψ hΦ hΨ (Φ y) (Ψ z)
   have hyz : y + z ∈ K := ⟨y, z, rfl, le_rfl, le_rfl⟩
   exact h.mem hK hyz
 
@@ -143,12 +128,12 @@ theorem exists_l1_normingGauge_decomposition_of_weaklyMajorized
       N.finiteGauge n v ≤ N.finiteGauge n z := by
   obtain ⟨u, v, huv, hu, hv⟩ :=
     exists_gauge_decomposition_of_weaklyMajorized
-      (normingFiniteSymmetricGauge nuclearNormingFunction n)
-      (normingFiniteSymmetricGauge N n) h
+      (nuclearNormingFunction.finiteGauge n) (N.finiteGauge n)
+      (nuclearNormingFunction.isSymmetricGauge_finiteGauge n)
+      (N.isSymmetricGauge_finiteGauge n) h
   refine ⟨u, v, huv, ?_, ?_⟩
-  · simpa only [normingFiniteSymmetricGauge_apply,
-      nuclearNormingFunction_finiteGauge] using hu
-  · simpa only [normingFiniteSymmetricGauge_apply] using hv
+  · simpa only [nuclearNormingFunction_finiteGauge] using hu
+  · exact hv
 
 end
 
