@@ -82,7 +82,7 @@ theorem directRotation_fullDisplacement_qnorm
     (N : UnitarilyInvariantSeminorm 𝕜 E E) (hN : IsQNorm N)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
+    (hacute : Submodule.IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
     (hmap : U.map W.toLinearMap = V) :
     N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
       N (LinearMap.id - W.toLinearMap) := by

@@ -15,7 +15,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 Davis 1958, Theorem 7.2 (= Davis--Kahan 1970, Proposition 4.1): among all
 unitaries `W` carrying `U` onto `V`, the direct rotation minimizes every
 singular value of the restricted displacement `(I - W) P_U` — pointwise, over
-any `RCLike` field, and with no largest-angle threshold.  (`IsAcute` is
+any `RCLike` field, and with no largest-angle threshold.  (`Submodule.IsAcute` is
 standing throughout: it is the hypothesis under which the direct rotation
 exists, not a restriction on the conclusion.)  The main results are
 
@@ -78,7 +78,7 @@ chord. -/
 theorem principalPlaneChord_le_singularValues_restrictedDisplacement
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V)
     (i : Fin (nontrivialAngleCount U V)) :
     principalPlaneChord U V i ≤
@@ -204,7 +204,7 @@ the principal chords, then zeros. -/
 theorem singularValues_restrictedDisplacement_directRotation
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (n : ℕ) :
+    (hacute : Submodule.IsAcute U V) (n : ℕ) :
     ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
         projection U).singularValues n =
       if hn : n < nontrivialAngleCount U V then
@@ -327,7 +327,7 @@ unitary `W` carrying `U` onto `V`. -/
 theorem singularValues_restrictedDisplacement_le
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) (n : ℕ) :
     ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
         projection U).singularValues n ≤
@@ -343,7 +343,7 @@ Corollary 4.1, Ky Fan form). -/
 theorem kyFanSum_restrictedDisplacement_le
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) (k : ℕ) :
     kyFanSum k ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
         projection U) ≤
@@ -354,13 +354,13 @@ theorem kyFanSum_restrictedDisplacement_le
 /-- **Unitarily-invariant-norm minimality of the restricted displacement**
 (Davis--Kahan Corollary 4.1): the direct rotation minimizes `N ((I - W) P_U)`
 for every UI norm `N`, over any `RCLike` field, with no largest-angle
-threshold.  `IsAcute` is required, but only because `directRotation` is
+threshold.  `Submodule.IsAcute` is required, but only because `directRotation` is
 defined from it. -/
 theorem uiNorm_restrictedDisplacement_le
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     N ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
         projection U) ≤

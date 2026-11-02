@@ -60,16 +60,12 @@ theorem isTransverse_of_tanThetaIntervalGap
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : IsInvariant A U)
     (X : F →ₗᵢ[𝕜] E) {β α δ : ℝ} (hδ : 0 < δ)
     (hgap : TanThetaIntervalGap A U X β α δ) :
-    IsTransverse (approximateSubspace X) U := by
-  intro x hx hPx
+    Disjoint (approximateSubspace X) Uᗮ := by
+  rw [Submodule.disjoint_def]
+  intro x hx hxperp
   rcases hx with ⟨y, rfl⟩
   have hUperpRed : IsInvariant A Uᗮ := isInvariant_orthogonal_of_isSymmetric hA hU
-  have hxyUperp : X.toLinearMap y ∈ Uᗮ := by
-    have horth :
-        X.toLinearMap y - U.starProjection (X.toLinearMap y) ∈ Uᗮ :=
-      U.sub_starProjection_mem_orthogonal (X.toLinearMap y)
-    rw [hPx, sub_zero] at horth
-    exact horth
+  have hxyUperp : X.toLinearMap y ∈ Uᗮ := hxperp
   have hTopRed : IsInvariant (compression A X) ⊤ := by
     intro z _
     exact Submodule.mem_top
@@ -112,7 +108,7 @@ theorem principalTangents_approximateSubspace_apply
 theorem singularValues_sinThetaEmbedding_lt_one_of_isTransverse
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E)
-    (htrans : IsTransverse (approximateSubspace X) U)
+    (htrans : Disjoint (approximateSubspace X) Uᗮ)
     (i : Fin (finrank 𝕜 F)) :
     (sinThetaEmbedding U X).singularValues i < 1 := by
   let S := sinThetaEmbedding U X
@@ -133,7 +129,8 @@ theorem singularValues_sinThetaEmbedding_lt_one_of_isTransverse
   have hprojnorm : ‖U.starProjection (X v)‖ = 0 := by
     nlinarith [norm_nonneg (U.starProjection (X v))]
   have hprojzero : U.starProjection (X v) = 0 := norm_eq_zero.mp hprojnorm
-  have hXzero : X v = 0 := htrans (X v) ⟨v, rfl⟩ hprojzero
+  have hXzero : X v = 0 := (Submodule.disjoint_def.mp htrans) (X v) ⟨v, rfl⟩
+    ((Submodule.starProjection_apply_eq_zero_iff U).mp hprojzero)
   have : ‖X v‖ = 0 := by rw [hXzero, norm_zero]
   linarith
 
@@ -210,7 +207,7 @@ theorem inner_apply_left_of_adjoint_eq_smul {X : E →ₗ[𝕜] F} {y : F} {v : 
 theorem orthonormal_tanThetaResidualWitness
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (X : F →ₗᵢ[𝕜] E)
-    (htrans : IsTransverse (approximateSubspace X) U) :
+    (htrans : Disjoint (approximateSubspace X) Uᗮ) :
     Orthonormal 𝕜 (tanThetaResidualWitness U X) := by
   classical
   let S := sinThetaEmbedding U X
@@ -695,7 +692,7 @@ theorem tanTheta0_ritzResidual_le_and_isTransverse
     (tanTheta0 : F →ₗ[𝕜] E)
     (htan : tanTheta0.singularValues =
       (approximateSubspace X).principalTangents U) :
-    IsTransverse (approximateSubspace X) U ∧
+    Disjoint (approximateSubspace X) Uᗮ ∧
       δ * N tanTheta0 ≤ N (ritzResidual A X) := by
   exact ⟨isTransverse_of_tanThetaIntervalGap hA hU X hδ hgap,
     tanTheta0_ritzResidual_le N hA hU X hβα hδ hgap tanTheta0 htan⟩

@@ -452,7 +452,7 @@ omit [CompleteSpace E] in
 theorem crossedDefectsEquivalent_of_hasDefinedAmbientTangentReal
     {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (h : HasDefinedAmbientTangentReal U V) : DavisKahan.CrossedDefectsEquivalent U V :=
-  DavisKahan.crossedDefectsEquivalent_of_isAcute U V (TauCeti.isAcute_of_projectionGap_lt_one h)
+  DavisKahan.crossedDefectsEquivalent_of_isAcute U V (Submodule.IsAcute.of_projectionGap_lt_one _ _ h)
 
 /-- **Davis--Kahan 1970, the `tan Θ` theorem, ambient clause, over `ℝ`, at the printed
 hypotheses**, with the source's vacuity convention in place of condition (3.5). -/

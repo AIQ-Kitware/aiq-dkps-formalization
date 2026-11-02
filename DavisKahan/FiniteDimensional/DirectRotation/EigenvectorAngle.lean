@@ -77,7 +77,7 @@ This holds on the whole space, including the zero-angle kernel where `J` is zero
 by convention.  It is the property Proposition 3.5's eigenvector clause needs;
 the complex-structure identity `J² = -(sin Θ)(sin Θ)⁺` is the one that does *not*
 extend to the kernel. -/
-theorem adjoint_angleComplexStructure (hacute : IsAcute U V) :
+theorem adjoint_angleComplexStructure (hacute : Submodule.IsAcute U V) :
     LinearMap.adjoint (angleComplexStructure U V hacute) =
       -angleComplexStructure U V hacute := by
   have hsym : (sinAngleOperator U V).IsSymmetric := isSymmetric_sinAngleOperator U V
@@ -125,7 +125,7 @@ theorem adjoint_angleComplexStructure (hacute : IsAcute U V) :
 
 Immediate from skew-adjointness: `⟪J x, x⟫ = -⟪x, J x⟫` and the two inner
 products have the same real part. -/
-theorem re_inner_angleComplexStructure_apply_self (hacute : IsAcute U V) (x : E) :
+theorem re_inner_angleComplexStructure_apply_self (hacute : Submodule.IsAcute U V) (x : E) :
     RCLike.re (inner 𝕜 (angleComplexStructure U V hacute x) x) = 0 := by
   have h1 : inner 𝕜 x (LinearMap.adjoint (angleComplexStructure U V hacute) x) =
       inner 𝕜 (angleComplexStructure U V hacute x) x :=
@@ -218,10 +218,10 @@ The angle is the paper's (1.14) vector angle, which
 `[x]` and `[U x]`, which uses the modulus of the inner product and would give a
 different number.
 
-`IsAcute` is not an extra hypothesis on the clause: it is the hypothesis under
+`Submodule.IsAcute` is not an extra hypothesis on the clause: it is the hypothesis under
 which the paper's direct rotation exists and is unique (Proposition 3.1), so it
 is what makes `U` a well-defined object here at all. -/
-theorem vectorAngle_directRotation_eq_of_angleOperator_apply (hacute : IsAcute U V)
+theorem vectorAngle_directRotation_eq_of_angleOperator_apply (hacute : Submodule.IsAcute U V)
     {x : E} (hx0 : x ≠ 0) {θ : ℝ}
     (hx : angleOperator U V x = ((θ : ℝ) : 𝕜) • x) :
     TauCeti.vectorAngle 𝕜 x (directRotation U V hacute x) = θ := by

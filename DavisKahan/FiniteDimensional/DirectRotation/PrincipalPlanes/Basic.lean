@@ -108,7 +108,7 @@ theorem principalPlaneChord_eq_two_mul_sin_half (U V : Submodule 𝕜 E)
 /-- The source-orthogonal partner of a principal source vector. -/
 noncomputable def principalOrthogonalVector (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) : E :=
   (((principalPlaneSine U V i)⁻¹ : ℝ) : 𝕜) •
     (directRotation U V hacute (principalSourceVector U V i) -
@@ -140,7 +140,7 @@ theorem principalPlaneSine_le_one
 theorem principalSourceVector_mem
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (_hacute : IsAcute U V)
+    (_hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     principalSourceVector U V i ∈ U := by
   let A := sinThetaMap U V
@@ -219,7 +219,7 @@ theorem principalPlaneCosine_le_one
 theorem principalPlaneCosine_pos
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     0 < principalPlaneCosine U V i := by
   rw [principalPlaneCosine, Real.sqrt_pos]
@@ -241,8 +241,9 @@ theorem principalPlaneCosine_pos
       show V.starProjection u = 0
       exact norm_eq_zero.mp ((pow_eq_zero_iff (by norm_num)).mp hVsq)
     exact (by
-      have := hacute.1 u hu hzero
-      exact one_ne_zero (hu1.symm.trans (by rw [this, norm_zero])))
+      have hu0 : u = 0 := hacute.injOn_left hu U.zero_mem
+        (hzero.trans (map_zero V.starProjection).symm)
+      exact one_ne_zero (hu1.symm.trans (by rw [hu0, norm_zero])))
   have hlt : principalPlaneSine U V i < 1 :=
     lt_of_le_of_ne (principalPlaneSine_le_one U V i) hnot
   nlinarith [principalPlaneSine_pos U V i, hlt]
@@ -252,7 +253,7 @@ cosine on the source vector. -/
 theorem abs_canonicalIntertwiner_apply_principalSourceVector
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     LinearMap.operatorAbs (canonicalIntertwiner U V) (principalSourceVector U V i) =
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i := by
@@ -322,7 +323,7 @@ sines decrease while their complementary cosines increase. -/
 theorem exists_canonicalIntertwiner_singularValue_eq_principalPlaneCosine
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     ∃ j : Fin (finrank 𝕜 E),
       (canonicalIntertwiner U V).singularValues (j : ℕ) =
@@ -350,7 +351,7 @@ principal vector. -/
 theorem directRotation_apply_principalSourceVector
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     directRotation U V hacute (principalSourceVector U V i) =
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i +
@@ -365,7 +366,7 @@ theorem directRotation_apply_principalSourceVector
 theorem principalOrthogonalVector_mem
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     principalOrthogonalVector U V hacute i ∈ Uᗮ := by
   rw [Submodule.mem_orthogonal']
@@ -442,7 +443,7 @@ its direct-rotation image. -/
 theorem projection_apply_principalSourceVector
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     projection V (principalSourceVector U V i) =
       (principalPlaneCosine U V i : 𝕜) •
@@ -470,7 +471,7 @@ theorem projection_apply_principalSourceVector
 theorem projection_apply_directRotation_principalSourceVector
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     projection U (directRotation U V hacute (principalSourceVector U V i)) =
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i := by
@@ -483,7 +484,7 @@ theorem projection_apply_directRotation_principalSourceVector
 theorem orthonormal_principalOrthogonalVector
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     Orthonormal 𝕜 (principalOrthogonalVector U V hacute) := by
   rw [orthonormal_iff_ite]
   intro i j
@@ -546,7 +547,7 @@ theorem orthonormal_principalOrthogonalVector
 theorem orthonormal_principalPlaneFamily
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     Orthonormal 𝕜 (fun p : Fin (nontrivialAngleCount U V) × Fin 2 =>
       if p.2 = 0 then principalSourceVector U V p.1
       else principalOrthogonalVector U V hacute p.1) := by
@@ -577,7 +578,7 @@ rotation block. -/
 theorem directRotation_symm_apply_principalSourceVector
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     (directRotation U V hacute).symm (principalSourceVector U V i) =
       (principalPlaneCosine U V i : 𝕜) • principalSourceVector U V i -
@@ -603,7 +604,7 @@ its principal rotation block. -/
 theorem directRotation_apply_principalOrthogonalVector
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     directRotation U V hacute (principalOrthogonalVector U V hacute i) =
       -(principalPlaneSine U V i : 𝕜) • principalSourceVector U V i +
@@ -645,7 +646,7 @@ column of the transposed rotation block. -/
 theorem directRotation_symm_apply_principalOrthogonalVector
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     (directRotation U V hacute).symm (principalOrthogonalVector U V hacute i) =
       (principalPlaneSine U V i : 𝕜) • principalSourceVector U V i +
@@ -686,7 +687,7 @@ cosine on the orthogonal partner as well. -/
 theorem abs_canonicalIntertwiner_apply_principalOrthogonalVector
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (i : Fin (nontrivialAngleCount U V)) :
     LinearMap.operatorAbs (canonicalIntertwiner U V)
         (principalOrthogonalVector U V hacute i) =

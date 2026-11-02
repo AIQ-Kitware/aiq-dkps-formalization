@@ -61,7 +61,7 @@ variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
 
 /-- The operator angle takes values in the polar initial space of the acute skew part. -/
 theorem section3AngleOperator_apply_mem_skewPolarInitial
-    (hacute : TauCeti.IsAcute U V) (x : H) :
+    (hacute : Submodule.IsAcute U V) (x : H) :
     section3AngleOperator U V x ∈
       ((section3DirectRotation U V - section3CosAngleOperator U V).ker)ᗮ := by
   let D := section3DirectRotation U V - section3CosAngleOperator U V
@@ -93,7 +93,7 @@ theorem section3AngleOperator_apply_mem_skewPolarInitial
 
 /-- On the support reached by the acute operator angle, the paper quarter turn squares to `-1`. -/
 theorem section3QuarterTurn_sq_comp_angleOperator
-    (hacute : TauCeti.IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     section3QuarterTurn U V ∘L section3QuarterTurn U V ∘L
         section3AngleOperator U V =
       -section3AngleOperator U V := by
@@ -109,7 +109,7 @@ theorem section3QuarterTurn_sq_comp_angleOperator
   simpa [D, section3QuarterTurn, ContinuousLinearMap.comp_apply] using hquarter
 
 /-- The supported Euler identity for the acute paper quarter turn and operator angle. -/
-theorem exp_quarterTurn_mul_angleOperator (hacute : TauCeti.IsAcute U V) :
+theorem exp_quarterTurn_mul_angleOperator (hacute : Submodule.IsAcute U V) :
     NormedSpace.exp (section3QuarterTurn U V * section3AngleOperator U V) =
       section3CosAngleOperator U V +
         section3QuarterTurn U V * section3SinAngleOperator U V := by
@@ -128,7 +128,7 @@ theorem exp_quarterTurn_mul_angleOperator (hacute : TauCeti.IsAcute U V) :
 
 /-- Davis--Kahan's exponential formula for the canonical direct rotation of an acute pair. -/
 theorem section3DirectRotation_eq_exp_quarterTurn_mul_angleOperator
-    (hacute : TauCeti.IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     section3DirectRotation U V =
       NormedSpace.exp (section3QuarterTurn U V * section3AngleOperator U V) := by
   rw [section3DirectRotation_eq_cos_add_quarterTurn_sin U V hacute]

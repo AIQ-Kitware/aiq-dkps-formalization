@@ -113,7 +113,7 @@ end ProjectorDifference
 /-- Comparator-facing name for the explicit refutation witness of Proposition 4.4. -/
 theorem proposition4_4_counterexample :
     ∃ (U V : Submodule ℝ (EuclideanSpace ℝ (Fin 4)))
-      (hacute : IsAcute U V)
+      (hacute : Submodule.IsAcute U V)
       (W : EuclideanSpace ℝ (Fin 4) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin 4)),
       U.map W.toLinearMap = V ∧
       Submodule.principalAngles U V 0 ≤ Real.pi / 3 ∧

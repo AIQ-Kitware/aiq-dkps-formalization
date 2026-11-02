@@ -54,7 +54,7 @@ section GeneralizedTangent
 The previous frontier draft mistranscribed the paper.  Davis--Kahan Theorem 6.3
 assumes a strict dimension inequality between the coordinate spaces and defines
 `tan Θ₀` from the singular values of the directed cross block `E₀⋆ F₁`.  It does
-not infer the symmetric relation `IsAcute Z V` from an abstract isometric
+not infer the symmetric relation `Submodule.IsAcute Z V` from an abstract isometric
 embedding of the smaller space into the larger one.
 
 The bounded strict-dimension theorem is now proved at the paper's effective

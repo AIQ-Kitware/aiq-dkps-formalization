@@ -111,7 +111,7 @@ enumeration, and uses only the verified operator Pythagorean identity. -/
 theorem singularValues_directDisplacement_eq_sharpTransfer
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     let S := sinAngleOperator U V
     let hS : S.IsPositive := LinearMap.isPositive_operatorAbs (projection U - projection V)
     let F := LinearMap.IsSymmetric.cfc hS.isSymmetric sharpTransferWeight
@@ -223,7 +223,7 @@ theorem cos_half_mul_uiNorm_directRotation_le_projection
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (alpha : ℝ) (ha0 : 0 ≤ alpha) (ha1 : alpha < Real.pi / 2)
     (hangle : ∀ i : Fin (finrank 𝕜 E),
       (LinearMap.isPositive_operatorAbs
@@ -277,7 +277,7 @@ theorem cos_half_mul_uiNorm_directRotation_le_displacement
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (alpha : ℝ) (ha0 : 0 ≤ alpha) (ha1 : alpha < Real.pi / 2)
     (hangle : ∀ i : Fin (finrank 𝕜 E),
       (LinearMap.isPositive_operatorAbs
@@ -299,7 +299,7 @@ theorem cos_half_arcsin_projectionGap_mul_uiNorm_directRotation_le_projection
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     Real.cos (Real.arcsin (U.projectionGap V) / 2) *
         N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
       N (projection U - projection V) := by
@@ -327,7 +327,7 @@ theorem cos_half_arcsin_projectionGap_mul_uiNorm_directRotation_le_displacement
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     Real.cos (Real.arcsin (U.projectionGap V) / 2) *
         N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
@@ -341,7 +341,7 @@ theorem cos_half_mul_uiNorm_directRotation_le_displacement_of_gap
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (alpha : ℝ) (ha0 : 0 ≤ alpha) (ha1 : alpha < Real.pi / 2)
     (hgap : U.projectionGap V ≤ Real.sin alpha)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
@@ -371,7 +371,7 @@ theorem cos_half_maxPrincipalAngle_mul_uiNorm_directRotation_le_displacement
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (hrank : finrank 𝕜 U = finrank 𝕜 V)
     (hE : 0 < finrank 𝕜 E)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
@@ -388,7 +388,7 @@ theorem sqrt_three_div_two_mul_uiNorm_directRotation_le_displacement
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (hgap : U.projectionGap V ≤ Real.sin (Real.pi / 3))
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     Real.sqrt 3 / 2 *
@@ -410,7 +410,7 @@ theorem uiNorm_directRotation_le_two_div_sqrt_three_mul_displacement
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (hgap : U.projectionGap V ≤ Real.sin (Real.pi / 3))
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
@@ -452,7 +452,7 @@ theorem uiNorm_directRotation_le_sqrt_two_mul_displacement
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     N (LinearMap.id - (directRotation U V hacute).toLinearMap) ≤
       Real.sqrt 2 * N (LinearMap.id - W.toLinearMap) := by

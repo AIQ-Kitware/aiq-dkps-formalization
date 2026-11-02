@@ -105,7 +105,7 @@ principal-plane family. -/
 theorem inner_sinThetaMap_apply_eq_zero_of_orthogonal_family
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     {z : E} (hzu : ∀ i, ⟪principalSourceVector U V i, z⟫_𝕜 = 0)
     (hzj : ∀ i, ⟪principalOrthogonalVector U V hacute i, z⟫_𝕜 = 0)
     (w : E) :
@@ -151,7 +151,7 @@ principal-plane family the two projections agree. -/
 theorem projection_eq_projection_of_orthogonal_family
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     {x : E} (hxu : ∀ i, ⟪principalSourceVector U V i, x⟫_𝕜 = 0)
     (hxj : ∀ i, ⟪principalOrthogonalVector U V hacute i, x⟫_𝕜 = 0) :
     projection U x = projection V x := by
@@ -215,7 +215,8 @@ theorem projection_eq_projection_of_orthogonal_family
       exact hvUperp
     have hproj0 : U.starProjection v = 0 :=
       projection_apply_of_mem_orthogonal hvmem
-    exact hacute.2 v hvV hproj0
+    exact hacute.injOn_right hvV V.zero_mem
+      (hproj0.trans (map_zero U.starProjection).symm)
   -- Conclude.
   have hyproj : projection V y = y := projection_apply_of_mem hyV
   calc projection U x = y := hy.symm
@@ -229,7 +230,7 @@ positive cosine: `(I-R)⋆(I-R) = 2 (I - |S|)`. -/
 theorem adjoint_comp_displacement_directRotation
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (LinearMap.id - (directRotation U V hacute).toLinearMap).adjoint ∘ₗ
         (LinearMap.id - (directRotation U V hacute).toLinearMap) =
       (2 : 𝕜) • (LinearMap.id -
@@ -269,7 +270,7 @@ space. -/
 theorem twice_nontrivialAngleCount_le_finrank_of_acute
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     2 * nontrivialAngleCount U V ≤ finrank 𝕜 E := by
   let f : Fin (nontrivialAngleCount U V) × Fin 2 → E := fun p =>
     if p.2 = 0 then principalSourceVector U V p.1
@@ -359,7 +360,7 @@ heart of Davis--Kahan Proposition 4.1: `sigma_k (I - R) = 2 sin(theta_{k/2}/2)`.
 theorem singularValues_directRotation_displacement
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (n : ℕ) :
+    (hacute : Submodule.IsAcute U V) (n : ℕ) :
     (LinearMap.id - (directRotation U V hacute).toLinearMap).singularValues n =
       if hn : n < 2 * nontrivialAngleCount U V then
         principalPlaneChord U V
@@ -542,7 +543,7 @@ theorem singularValues_directRotation_displacement
 theorem kyFanSum_directRotation_displacement_eq_principalChords
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (k : ℕ) :
+    (hacute : Submodule.IsAcute U V) (k : ℕ) :
     kyFanSum k (LinearMap.id - (directRotation U V hacute).toLinearMap) =
       (∑ i : Fin (min (k / 2) (nontrivialAngleCount U V)),
         2 * principalPlaneChord U V

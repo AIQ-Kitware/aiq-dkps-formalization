@@ -196,11 +196,11 @@ private theorem inner_Wlin_sv1 (x : E4) :
   ring
 
 /-- The pair is acute. -/
-theorem acute : IsAcute U4 V4 := by
+theorem acute : Submodule.IsAcute U4 V4 := by
+  apply Submodule.isAcute_iff_disjoint.mpr
   constructor
-  · intro x hxU h0
-    have hxperp : x ∈ V4ᗮ :=
-      (Submodule.starProjection_apply_eq_zero_iff V4).mp h0
+  · rw [Submodule.disjoint_def]
+    intro x hxU hxperp
     rw [Submodule.mem_orthogonal] at hxperp
     have h1 : ⟪Wlin (sv 0), x⟫_ℝ = 0 :=
       hxperp _ ⟨sv 0, Submodule.subset_span (by simp), rfl⟩
@@ -213,10 +213,9 @@ theorem acute : IsAcute U4 V4 := by
     have hx1 : x 1 = 0 := by rw [hx2, hx3] at h1 h2; linarith
     rw [mem_U4 hxU, hx0, hx1]
     simp
-  · intro y hyV h0
+  · rw [Submodule.disjoint_def]
+    intro y hyV hyperp
     obtain ⟨z, hzU, rfl⟩ := hyV
-    have hyperp : Wequiv.toLinearMap z ∈ U4ᗮ :=
-      (Submodule.starProjection_apply_eq_zero_iff U4).mp h0
     rw [Submodule.mem_orthogonal] at hyperp
     have h1 : ⟪sv 0, Wequiv.toLinearMap z⟫_ℝ = 0 :=
       hyperp _ (Submodule.subset_span (by simp))
@@ -819,7 +818,7 @@ hypothesis) and `directRotation_displacementSquare_uiNorm` (displacement
 square). -/
 theorem shortRotation_fullDisplacement_refuted :
     ∃ (U V : Submodule ℝ (EuclideanSpace ℝ (Fin 4)))
-      (hacute : IsAcute U V)
+      (hacute : Submodule.IsAcute U V)
       (W : EuclideanSpace ℝ (Fin 4) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin 4)),
       U.map W.toLinearMap = V ∧
       Submodule.principalAngles U V 0 ≤ Real.pi / 3 ∧
@@ -842,7 +841,7 @@ invariant norm of the full displacement `1 - V`, over unitaries `V` carrying
 `U` onto `V`.
 
 This is a `Prop`-valued definition rather than a theorem because the assertion
-is false; see `not_davisKahanProposition4_4_Finite`.  The `IsAcute` hypothesis
+is false; see `not_davisKahanProposition4_4_Finite`.  The `Submodule.IsAcute` hypothesis
 is not an extra mathematical restriction: `Θ ≤ π/3` already excludes a right
 principal angle, and acuteness is what the direct-rotation constructor
 consumes. -/
@@ -851,7 +850,7 @@ def DavisKahanProposition4_4_Finite : Prop :=
     [FiniteDimensional ℝ E]
     (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V)
+    (hacute : Submodule.IsAcute U V)
     (_hshort : Submodule.principalAngles U V 0 ≤ Real.pi / 3)
     (W : E ≃ₗᵢ[ℝ] E)
     (_hmap : U.map W.toLinearMap = V)

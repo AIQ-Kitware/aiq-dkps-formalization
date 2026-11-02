@@ -11,7 +11,6 @@ public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
 public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.Geometry.Halmos.GenericRotationPredicates
-public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.SeparableOrthonormal
 
 public section
@@ -135,7 +134,7 @@ Acuteness of a pair is the vanishing of both crossed intersections `U ⊓ Vᗮ` 
 identification supplied by (3.5) then transports that to the source defect. -/
 theorem halmosSourceDefect_ne_bot_of_not_isAcute
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hdefect : CrossedDefectsEquivalent U V) (hnonacute : ¬ TauCeti.IsAcute U V) :
+    (hdefect : CrossedDefectsEquivalent U V) (hnonacute : ¬ Submodule.IsAcute U V) :
     halmosSourceDefect U V ≠ ⊥ := by
   intro hbot
   exact hnonacute (TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mpr
@@ -155,22 +154,11 @@ standing setup rather than escaping it -- which is what makes it a refutation of
 the printed proposition rather than of a statement the paper never made. -/
 theorem crossedDefectsEquivalent_of_isAcute
     (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (h : TauCeti.IsAcute U V) :
+    (h : Submodule.IsAcute U V) :
     CrossedDefectsEquivalent U V := by
-  have hzero : ∀ (W : Submodule 𝕜 H) [W.HasOrthogonalProjection] (x : H),
-      x ∈ Wᗮ → W.starProjection x = 0 := by
-    intro W _ x hx
-    refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero W.zero_mem ?_
-    intro w hw
-    simpa [inner_eq_zero_symm] using (Submodule.mem_orthogonal W x).mp hx w hw
-  have hs : halmosSourceDefect U V = ⊥ := by
-    refine (Submodule.eq_bot_iff _).2 ?_
-    rintro x ⟨hxU, hxV⟩
-    exact h.1 x hxU (hzero V x hxV)
-  have ht : halmosTargetDefect U V = ⊥ := by
-    refine (Submodule.eq_bot_iff _).2 ?_
-    rintro y ⟨hyU, hyV⟩
-    exact h.2 y hyV (hzero U y hyU)
+  obtain ⟨hUV, hVU⟩ := TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mp h
+  have hs : halmosSourceDefect U V = ⊥ := hUV
+  have ht : halmosTargetDefect U V = ⊥ := hVU
   refine ⟨?_⟩
   rw [hs, ht]
   exact LinearIsometryEquiv.refl 𝕜 _

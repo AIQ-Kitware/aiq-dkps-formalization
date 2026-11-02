@@ -14,7 +14,7 @@ public import DavisKahan.TanTheta.Theorem63FiniteSource
 
 A previous repository distillation mistranscribed Davis--Kahan 1970,
 Theorem 6.3.  It replaced the paper's directed cross-block definition of
-`tan Θ₀` by a symmetric `IsAcute Z V` conclusion and attempted to derive that
+`tan Θ₀` by a symmetric `Submodule.IsAcute Z V` conclusion and attempted to derive that
 conclusion from an isometric embedding of the smaller trial space into the
 larger exact space.
 
@@ -49,7 +49,7 @@ def MistranscribedDimensionImpliesAcute : Prop :=
   ∀ (Z V : Submodule ℂ ℂ),
     finrank ℂ Z < finrank ℂ V →
     Nonempty (Z →ₗᵢ[ℂ] V) →
-    IsAcute Z V
+    Submodule.IsAcute Z V
 
 /-- A strict dimension inequality and an isometric embedding do **not** imply
 symmetric Davis--Kahan acuteness.  For `Z = ⊥` and `V = ⊤`, the nonzero vector
@@ -59,7 +59,7 @@ theorem not_mistranscribedDimensionImpliesAcute :
   intro h
   have hacute := h (⊥ : Submodule ℂ ℂ) (⊤ : Submodule ℂ ℂ)
     (by simp) ⟨botToTopIsometry⟩
-  have hone : (1 : ℂ) = 0 := hacute.2 1 (by simp) (by simp)
+  have hone : (1 : ℂ) = 0 := hacute.injOn_right (by simp) (by simp) (by simp)
   exact one_ne_zero hone
 
 #check TauCeti.DavisKahan.TanTheta.theorem63DirectedSineBlock

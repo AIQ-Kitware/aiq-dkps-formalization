@@ -35,7 +35,7 @@ open TauCeti.DavisKahan.FiniteDimensional
 /-- Exercise the exported arbitrary-threshold result without unfolding its construction. -/
 example (epsilon : Real) (h : 0 < epsilon) :
     ∃ (U V : Submodule Real (EuclideanSpace Real (Fin 4)))
-      (ha : IsAcute U V)
+      (ha : Submodule.IsAcute U V)
       (W : EuclideanSpace Real (Fin 4) ≃ₗᵢ[ℝ] EuclideanSpace Real (Fin 4)),
       U.map W.toLinearMap = V ∧
       0 < Submodule.principalAngles U V 0 ∧

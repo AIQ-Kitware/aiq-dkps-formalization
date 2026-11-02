@@ -24,7 +24,7 @@ characterised by property (i) — positivity of the two diagonal blocks — alon
 
 Every other module in this development states the Section 3 endpoints at
 `IsUniformlyAcute`, i.e. `‖P_U - P_V‖ < 1`.  That is strictly stronger in
-infinite dimension (`TauCeti.isAcute_of_projectionGap_lt_one` is the only
+infinite dimension (`Submodule.IsAcute.of_projectionGap_lt_one` is the only
 implication that survives without `FiniteDimensional`), and Section 3 of the
 paper is explicitly infinite-dimensional.  This module removes the gap.
 

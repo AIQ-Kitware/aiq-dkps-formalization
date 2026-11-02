@@ -116,7 +116,7 @@ unique (even if `dim Null(C₀) = 1`), and the nonuniqueness will survive" -- wi
 the arbitrary unitary extension replaced by the single sign change, which is
 enough to refute uniqueness. -/
 theorem proposition3_2_not_unique
-    (hdefect : CrossedDefectsEquivalent U V) (hnonacute : ¬ TauCeti.IsAcute U V) :
+    (hdefect : CrossedDefectsEquivalent U V) (hnonacute : ¬ Submodule.IsAcute U V) :
     ∃ T₁ T₂ : H →L[𝕜] H,
       IsDirectRotation U V T₁ ∧ IsDirectRotation U V T₂ ∧ T₁ ≠ T₂ := by
   obtain ⟨build, hbuild, hinj⟩ :=
@@ -144,7 +144,7 @@ theorem proposition3_2_not_unique
 
 /-- **Proposition 3.2's nonuniqueness in literal `∃!` form.** -/
 theorem proposition3_2_not_existsUnique
-    (hdefect : CrossedDefectsEquivalent U V) (hnonacute : ¬ TauCeti.IsAcute U V) :
+    (hdefect : CrossedDefectsEquivalent U V) (hnonacute : ¬ Submodule.IsAcute U V) :
     ¬ ∃! T : H →L[𝕜] H, IsDirectRotation U V T := by
   rintro ⟨T, _, huniq⟩
   obtain ⟨T₁, T₂, h₁, h₂, hne⟩ := proposition3_2_not_unique U V hdefect hnonacute
@@ -240,7 +240,7 @@ statements below are the `𝕜 = ℝ` instances of the generic theorems above, e
 grounded by `:=` on the generic theorem and each carrying exactly the generic
 theorem's hypotheses.  In particular the real forms assume no finite dimension,
 no separability and no compactness, and they do **not** add a nondegeneracy
-hypothesis on the crossed defects: `¬ TauCeti.IsAcute U V` already forces one of
+hypothesis on the crossed defects: `¬ Submodule.IsAcute U V` already forces one of
 them to be nonzero, by `TauCeti.isAcute_iff_inf_orthogonal_eq_bot`.
 
 They are *not* obtained by descending the complex theorem.  That route is
@@ -293,7 +293,7 @@ are still `build J` and `build (-J)`; the sign change is available because the
 scalar field has characteristic zero, which `RCLike` supplies. -/
 theorem proposition3_2_not_unique_real
     (hdefect : CrossedDefectsEquivalent U V)
-    (hnonacute : ¬ TauCeti.IsAcute U V) :
+    (hnonacute : ¬ Submodule.IsAcute U V) :
     ∃ T₁ T₂ : E →L[ℝ] E,
       IsDirectRotation U V T₁ ∧ IsDirectRotation U V T₂ ∧
         T₁ ≠ T₂ :=
@@ -305,7 +305,7 @@ space.**
 The `𝕜 = ℝ` instance of `proposition3_2_not_existsUnique`. -/
 theorem proposition3_2_not_existsUnique_real
     (hdefect : CrossedDefectsEquivalent U V)
-    (hnonacute : ¬ TauCeti.IsAcute U V) :
+    (hnonacute : ¬ Submodule.IsAcute U V) :
     ¬ ∃! T : E →L[ℝ] E, IsDirectRotation U V T :=
   proposition3_2_not_existsUnique U V hdefect hnonacute
 

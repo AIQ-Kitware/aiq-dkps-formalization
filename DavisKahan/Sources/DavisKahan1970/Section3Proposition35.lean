@@ -33,7 +33,7 @@ The acute restriction is attached to the third clause only.  Accordingly:
   hypothesis, because the source puts it there.
 
 `proposition3_5_commutations_acute` and `proposition3_5_eigenvector_angle_acute` read the same
-two clauses on the canonical acute direct rotation, for consumers that hold `IsAcute` rather
+two clauses on the canonical acute direct rotation, for consumers that hold `Submodule.IsAcute` rather
 than a crossed-defect isometry.
 
 The implementation in `DavisKahan.Geometry.Angle.Proposition35Infinite`
@@ -141,7 +141,7 @@ theorem equation1_18_directRotation_resolution
 
 /-- The defining polar resolution of the quarter turn used by Proposition 3.5:
 `W = cos Theta + J sin Theta`. -/
-theorem proposition3_5_directRotation_resolution (hacute : TauCeti.IsAcute U V) :
+theorem proposition3_5_directRotation_resolution (hacute : Submodule.IsAcute U V) :
     proposition3_5_directRotation U V =
       section3CosAngleOperator U V +
         proposition3_5_quarterTurn U V ∘L section3SinAngleOperator U V :=
@@ -149,7 +149,7 @@ theorem proposition3_5_directRotation_resolution (hacute : TauCeti.IsAcute U V) 
 
 /-- The functional-calculus representation immediately preceding Proposition 3.5:
 `U = exp (J Theta)` for the canonical direct rotation of an acute pair. -/
-theorem proposition3_5_directRotation_exponential (hacute : TauCeti.IsAcute U V) :
+theorem proposition3_5_directRotation_exponential (hacute : Submodule.IsAcute U V) :
     proposition3_5_directRotation U V =
       NormedSpace.exp
         (proposition3_5_quarterTurn U V * proposition3_5_angleOperator U V) :=
@@ -271,7 +271,7 @@ isometry `J` itself, which is the paper's matched-crossing condition (3.5) in Le
 
 The `*_acute` twins below are the same two clauses read on the *canonical acute* direct
 rotation `section3DirectRotation` and its quarter turn, rather than on a completed rotation.
-They are kept because acute-only consumers hold `IsAcute` rather than a crossed-defect
+They are kept because acute-only consumers hold `Submodule.IsAcute` rather than a crossed-defect
 isometry.  They are not corollaries of the nonacute theorems: this repository does not
 currently prove that a completed rotation agrees with the canonical acute one when the pair is
 acute, so the two families are about different (if morally identical) operators. -/
@@ -296,7 +296,7 @@ theorem proposition3_5_commutations
 /-- The four commutations read on the canonical acute direct rotation and its quarter turn.
 Kept for acute-only consumers; see the section note on why this is not a corollary of
 `proposition3_5_commutations`. -/
-theorem proposition3_5_commutations_acute (hacute : TauCeti.IsAcute U V) :
+theorem proposition3_5_commutations_acute (hacute : Submodule.IsAcute U V) :
     Commute (proposition3_5_angleOperator U V) (U.starProjection) ∧
       Commute (proposition3_5_angleOperator U V) (V.starProjection) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_quarterTurn U V) ∧
@@ -327,7 +327,7 @@ theorem proposition3_5_eigenvector_angle
 /-- The eigenvector clause read on the canonical acute direct rotation.  Kept for acute-only
 consumers; see the section note on why this is not a corollary of
 `proposition3_5_eigenvector_angle`. -/
-theorem proposition3_5_eigenvector_angle_acute (hacute : TauCeti.IsAcute U V)
+theorem proposition3_5_eigenvector_angle_acute (hacute : Submodule.IsAcute U V)
     {x : H} (hx0 : x ≠ 0) {θ : ℝ}
     (hx : proposition3_5_angleOperator U V x = ((θ : ℝ) : 𝕜) • x) :
     TauCeti.vectorAngle 𝕜 x (proposition3_5_directRotation U V x) = θ :=
@@ -336,7 +336,7 @@ theorem proposition3_5_eigenvector_angle_acute (hacute : TauCeti.IsAcute U V)
 /-- The actual angle eigenspace is the fixed-cosine Halmos eigenspace used by
 the paper's maximality argument. -/
 theorem proposition3_5_angleEigenspace_eq_fixedCosineSubspace
-    (hacute : TauCeti.IsAcute U V) {θ : ℝ}
+    (hacute : Submodule.IsAcute U V) {θ : ℝ}
     (hθ : Module.End.HasEigenvalue (proposition3_5_angleOperator U V).toLinearMap
       ((θ : ℝ) : 𝕜)) :
     proposition3_5_angleEigenspace U V θ = fixedCosineSubspace U V (Real.cos θ) :=
@@ -347,7 +347,7 @@ For every genuine angle eigenvalue `theta`, `Omega({theta}) H` itself has the
 printed properties (a)--(c), and every subspace having those printed properties
 is contained in it.  Thus it is the unique maximal such subspace. -/
 theorem proposition3_5_angleEigenspace_uniqueMaximal
-    (hacute : TauCeti.IsAcute U V) {θ : ℝ}
+    (hacute : Submodule.IsAcute U V) {θ : ℝ}
     (hθ : Module.End.HasEigenvalue (proposition3_5_angleOperator U V).toLinearMap
       ((θ : ℝ) : 𝕜)) :
     IsPrintedFixedCosineReducingSubspace U V

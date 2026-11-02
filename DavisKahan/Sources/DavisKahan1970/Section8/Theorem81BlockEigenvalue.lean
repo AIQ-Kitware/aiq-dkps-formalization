@@ -209,29 +209,29 @@ theorem finrank_le_finrank_of_isTransverse {U V : Submodule 𝕜 G}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (h : ∀ x ∈ U, V.starProjection x = 0 → x = 0) :
     finrank 𝕜 U ≤ finrank 𝕜 V := by
-  have hinj : Function.Injective
-      ((V.orthogonalProjectionOnto ∘L U.subtypeL : U →L[𝕜] V) : U →ₗ[𝕜] V) := by
-    rw [← LinearMap.ker_eq_bot]
-    refine (Submodule.eq_bot_iff _).mpr fun x hx => ?_
-    have hx0 : V.starProjection (x : G) = 0 := by
-      have : (V.orthogonalProjectionOnto ((x : G)) : V) = 0 := hx
-      exact congrArg Subtype.val this
-    exact Subtype.ext (h (x : G) x.2 hx0)
-  exact LinearMap.finrank_le_finrank_of_injective hinj
+  have hdisj : Disjoint U Vᗮ := by
+    rw [Submodule.disjoint_def]
+    intro x hx hxperp
+    exact h x hx ((Submodule.starProjection_apply_eq_zero_iff V).mpr hxperp)
+  have hle := Submodule.finrank_add_finrank_le_of_disjoint hdisj
+  have hdim := Submodule.finrank_add_finrank_orthogonal V
+  omega
 
 omit [CompleteSpace G] in
 /-- **An acute pair has equal dimension.** -/
 theorem finrank_eq_of_isAcute {U V : Submodule 𝕜 G}
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (h : TauCeti.IsAcute U V) :
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (h : Submodule.IsAcute U V) :
     finrank 𝕜 U = finrank 𝕜 V :=
-  le_antisymm (finrank_le_finrank_of_isTransverse h.1)
-    (finrank_le_finrank_of_isTransverse h.2)
+  le_antisymm (finrank_le_finrank_of_isTransverse fun _ hx hz =>
+    h.injOn_left hx U.zero_mem (hz.trans (map_zero V.starProjection).symm))
+    (finrank_le_finrank_of_isTransverse fun _ hy hz =>
+      h.injOn_right hy V.zero_mem (hz.trans (map_zero U.starProjection).symm))
 
 omit [CompleteSpace G] in
 /-- **An acute pair's complements have equal dimension**, which is what parts
 (ii) and (iii) need: `A₁` is read on `Pᗮ` and `Λ₁` on `Qᗮ`. -/
 theorem finrank_orthogonal_eq_of_isAcute {U V : Submodule 𝕜 G}
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (h : TauCeti.IsAcute U V) :
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (h : Submodule.IsAcute U V) :
     finrank 𝕜 (Uᗮ : Submodule 𝕜 G) = finrank 𝕜 (Vᗮ : Submodule 𝕜 G) := by
   have hU := Submodule.finrank_add_finrank_orthogonal (𝕜 := 𝕜) (K := U)
   have hV := Submodule.finrank_add_finrank_orthogonal (𝕜 := 𝕜) (K := V)
@@ -242,8 +242,8 @@ omit [CompleteSpace G] [FiniteDimensional 𝕜 G] in
 /-- The Theorem 8.1 conclusion's quarter-acute clause is acuteness. -/
 theorem isAcute_of_isQuarterAcute {U V : Submodule 𝕜 G}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (h : DavisKahan.IsQuarterAcute U V) : TauCeti.IsAcute U V := by
-  refine TauCeti.isAcute_of_projectionGap_lt_one (lt_of_lt_of_le h ?_)
+    (h : DavisKahan.IsQuarterAcute U V) : Submodule.IsAcute U V := by
+  refine Submodule.IsAcute.of_projectionGap_lt_one _ _ (lt_of_lt_of_le h ?_)
   have h2 : Real.sqrt 2 ≤ 2 := by
     nlinarith [Real.sq_sqrt (by norm_num : (0:ℝ) ≤ 2), Real.sqrt_nonneg 2]
   linarith

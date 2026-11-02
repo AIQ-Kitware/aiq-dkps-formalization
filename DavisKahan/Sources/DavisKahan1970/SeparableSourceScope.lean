@@ -64,7 +64,7 @@ variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalPr
 /-- **Davis--Kahan 1970, Proposition 3.1, at the paper's separable ambient
 scope.** -/
 theorem proposition3_1_separable [TopologicalSpace.SeparableSpace H]
-    (hacute : TauCeti.IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     acute_directRotation U V ∈ unitary (H →L[𝕜] H) ∧
       acute_directRotation U V * U.starProjection =
         V.starProjection * acute_directRotation U V ∧
@@ -103,7 +103,7 @@ theorem proposition3_2_exists_iff_crossedDefectsEquivalent_separable
 /-- **Davis--Kahan 1970, Proposition 3.2, non-uniqueness half, at the paper's
 separable ambient scope.** -/
 theorem proposition3_2_not_unique_separable [TopologicalSpace.SeparableSpace H]
-    (hdefect : CrossedDefectsEquivalent U V) (hnonacute : ¬ TauCeti.IsAcute U V) :
+    (hdefect : CrossedDefectsEquivalent U V) (hnonacute : ¬ Submodule.IsAcute U V) :
     ∃ T₁ T₂ : H →L[𝕜] H,
       IsDirectRotation U V T₁ ∧ IsDirectRotation U V T₂ ∧ T₁ ≠ T₂ :=
   proposition3_2_not_unique U V hdefect hnonacute
@@ -143,7 +143,7 @@ theorem proposition3_5_eigenvector_angle_separable [TopologicalSpace.SeparableSp
 /-- **Davis--Kahan 1970, Proposition 3.5, maximal fixed-cosine subspace, at the
 paper's separable ambient scope.** -/
 theorem proposition3_5_angleEigenspace_uniqueMaximal_separable [TopologicalSpace.SeparableSpace H]
-    (hacute : TauCeti.IsAcute U V) {θ : ℝ}
+    (hacute : Submodule.IsAcute U V) {θ : ℝ}
     (hθ : Module.End.HasEigenvalue (proposition3_5_angleOperator U V).toLinearMap
       ((θ : ℝ) : 𝕜)) :
     IsPrintedFixedCosineReducingSubspace U V

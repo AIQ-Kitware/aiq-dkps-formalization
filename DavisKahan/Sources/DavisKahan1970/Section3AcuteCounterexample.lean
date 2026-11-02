@@ -245,9 +245,12 @@ theorem norm_starProjection_basis_false
 /-- **The pair is acute in the printed sense**: both crossed intersections
 vanish, because no model cosine or sine is zero. -/
 theorem source_target_isAcute (b : HilbertBasis (ℕ × Bool) 𝕜 H) :
-    IsAcute (sourceSubspace b) (targetSubspace b) := by
+    Submodule.IsAcute (sourceSubspace b) (targetSubspace b) := by
+  apply Submodule.isAcute_iff_disjoint.mpr
   constructor
-  · intro x hxU hxV
+  · rw [Submodule.disjoint_def]
+    intro x hxU hxVperp
+    have hxV := (Submodule.starProjection_apply_eq_zero_iff (targetSubspace b)).mpr hxVperp
     apply b.repr.injective
     ext i
     simp only [map_zero, b.repr_apply_apply]
@@ -266,7 +269,9 @@ theorem source_target_isAcute (b : HilbertBasis (ℕ × Bool) 𝕜 H) :
     · change ⟪b (n, true), x⟫_𝕜 = 0
       exact Submodule.inner_left_of_mem_orthogonal
           hxU (basis_true_mem_sourceSubspace_orthogonal b n)
-  · intro y hyV hyU
+  · rw [Submodule.disjoint_def]
+    intro y hyV hyUperp
+    have hyU := (Submodule.starProjection_apply_eq_zero_iff (sourceSubspace b)).mpr hyUperp
     apply b.repr.injective
     ext i
     simp only [map_zero, b.repr_apply_apply]
@@ -312,7 +317,7 @@ Over either real or complex scalars there are closed subspaces satisfying the
 paper's Definition 3.2 whose projection gap is one. -/
 theorem exists_isAcute_projectionGap_eq_one :
     let b : HilbertBasis (ℕ × Bool) 𝕜 (ℓ²(ℕ × Bool, 𝕜)) := default
-    IsAcute (sourceSubspace b) (targetSubspace b) ∧
+    Submodule.IsAcute (sourceSubspace b) (targetSubspace b) ∧
       (sourceSubspace b).projectionGap (targetSubspace b) = 1 := by
   let b : HilbertBasis (ℕ × Bool) 𝕜 (ℓ²(ℕ × Bool, 𝕜)) := default
   exact ⟨source_target_isAcute b, source_target_projectionGap_eq_one b⟩

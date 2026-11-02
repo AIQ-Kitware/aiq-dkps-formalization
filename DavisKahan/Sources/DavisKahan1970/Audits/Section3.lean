@@ -63,7 +63,7 @@ variable (U V : Submodule ℝ H) [U.HasOrthogonalProjection]
 -- picks up depends on the enclosing namespace.  Spelling the underlying
 -- `starProjection` fixes the reading here and simultaneously checks that the
 -- endpoint's projections really are the orthogonal ones.
-example (hacute : TauCeti.IsAcute U V) :
+example (hacute : Submodule.IsAcute U V) :
     Commute (proposition3_5_angleOperator U V) (U.starProjection : H →L[ℝ] H) ∧
       Commute (proposition3_5_angleOperator U V) (V.starProjection : H →L[ℝ] H) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_quarterTurn U V) ∧
@@ -90,7 +90,7 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 variable (U V : Submodule ℂ H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 
-example (hacute : TauCeti.IsAcute U V) :
+example (hacute : Submodule.IsAcute U V) :
     Commute (proposition3_5_angleOperator U V) (U.starProjection : H →L[ℂ] H) ∧
       Commute (proposition3_5_angleOperator U V) (V.starProjection : H →L[ℂ] H) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_quarterTurn U V) ∧

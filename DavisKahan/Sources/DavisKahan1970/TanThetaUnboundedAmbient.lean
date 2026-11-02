@@ -649,7 +649,7 @@ by replacing (3.5) with definedness. -/
 theorem crossedDefectsEquivalent_of_hasDefinedAmbientTangent
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (h : HasDefinedAmbientTangent U V) : DavisKahan.CrossedDefectsEquivalent U V :=
-  DavisKahan.crossedDefectsEquivalent_of_isAcute U V (TauCeti.isAcute_of_projectionGap_lt_one h)
+  DavisKahan.crossedDefectsEquivalent_of_isAcute U V (Submodule.IsAcute.of_projectionGap_lt_one _ _ h)
 
 /-- **Under a defined tangent the angle spectrum misses `π/2`.**
 

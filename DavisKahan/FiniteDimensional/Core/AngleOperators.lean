@@ -60,7 +60,7 @@ part of `U`, invert it there, compose with the sine block, and extend by zero
 on the orthogonal complement (equivalently, compose the sine block with the
 Moore--Penrose inverse of the cosine block once that inverse exists).  The
 current total signature is provisional; bounded inversion must ultimately
-require `IsTransverse U V`. -/
+require `Disjoint U Vᗮ`. -/
 noncomputable def tanThetaMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →ₗ[𝕜] E :=
   sinThetaMap U V ∘ₗ LinearMap.moorePenroseInverse (cosThetaMap U V)
@@ -83,7 +83,7 @@ noncomputable def angleOperator (U V : Submodule 𝕜 E)
 
 /-- `tan Θ` on the full ambient space.  In non-acute configurations this is
 understood as the Moore--Penrose/graph-operator extension on the transverse
-part, with the pole recorded separately by `IsTransverse`.
+part, with the pole recorded separately by native submodule disjointness.
 
 Construction route: use the spectral decomposition of `angleOperator`, map
 finite angles by `safeTan`, and set the quarter-turn defect summand to zero

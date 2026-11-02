@@ -2810,3 +2810,59 @@ unmatched merely because these consumers still use their old carrier.
 Validation: focused native-sequence, Frobenius, YWS, counterexample, Ritz,
 trace and Section 8 builds passed. The full default `lake build` and
 `lake build Challenge` passed without compiler or linter warnings.
+
+## 2026-11-01: native acuteness and transversality conditions
+
+Removed `TauCeti.IsAcute` and `TauCeti.IsTransverse` from `AngleGeometry.lean`.
+Compiled their correspondences before removal: the two projection-zero
+conditions are exactly native `Submodule.IsAcute`, and one-sided
+transversality is `Disjoint U Vᗮ`. These comparisons are RCLike-generic and
+need no completeness or finite-dimensionality. All maintained paper and
+comparator callers use the native predicate/property; pointwise proofs now
+use native projection injectivity or disjointness explicitly.
+
+Accepted [#16645](https://github.com/TauCetiProject/TauCeti/pull/16645),
+`3b449bc8628f565cf81e0129f4bd235e041d9f08` (in pin `463ab293070d`), supplies
+`Submodule.IsAcute`, `isAcute_iff_disjoint`,
+`IsAcute.of_projectionGap_lt_one` and
+`directedProjectionGap_lt_one_iff`. Its dimension-free gap-to-acuteness
+replaces the old projection-zero/gap proofs; its finite directed-gap
+characterization replaces the donor compactness/minimum-of-projection-norm
+engine. Local acuteness symmetry is also retired. This records direct native
+API consumption; no proof-adaptation lineage is inferred for #16645.
+
+The literal source formulation of Definition 3.2,
+`TauCeti.isAcute_iff_inf_orthogonal_eq_bot`, moves to the existing paper module
+`DavisKahan/Geometry/Halmos/TwoProjections.lean`, proved directly by the native
+predicate's disjointness characterization. The maintained source statement map
+and full census now name `Submodule.IsAcute`; their old historical notes are
+preserved. Generic infinite geometry no longer imports the old finite angle
+donor just to obtain its predicate. The infinite-dimensional acute/gap-one
+counterexample remains, along with the distinction between printed acuteness
+and a uniform gap below one.
+
+The trial-coordinate kernel characterization now takes native disjointness
+and uses `Submodule.injOn_starProjection_iff_disjoint` with
+`LinearMap.ker_eq_bot`. It retains the original omission of *both*
+finite-dimensional hypotheses and does not require orthogonal projection onto
+`range X`. The actual `tanThetaEmbedding = S |C|⁺`, its failure branch and
+Ritz-residual identities are preserved; this predicate migration asserts no
+operator equality with `Submodule.tanThetaMap`.
+
+The finite converse/iff without a separate rank-equality parameter remains as
+a short consequence of two native directed-gap characterizations. Section 8's
+source dimension comparison uses Mathlib's disjoint-subspace rank bound and
+orthogonal-complement dimension identity. The
+infinite-dimensional approximate-annihilation lower-gap criterion remains:
+it covers angles approaching `π/2` without attaining it, beyond the accepted
+finite converse. Linear angle-operator presentations remain for the next slice.
+
+Original donor source remains at
+`e4637c3919ae:ForTauCeti/Analysis/InnerProductSpace/AngleGeometry.lean` and
+`Residual/AngleEmbedding.lean`, Jon Crall / GPT 5.6 High, Kitware copyright,
+Apache-2.0. The manifest preserves original declaration names and records
+exactly which proof engine retires and which broader/source formulations remain.
+
+Validation: focused finite, infinite, Ritz, counterexample, Section 8 and
+changed audit builds passed. The full default `lake build` (21,535 jobs) and
+`lake build Challenge` (19,783 jobs) passed without compiler or linter warnings.

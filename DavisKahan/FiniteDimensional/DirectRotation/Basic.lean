@@ -193,7 +193,7 @@ omit [FiniteDimensional 𝕜 E] in
 theorem canonicalIntertwiner_injective_of_acute
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     Function.Injective (canonicalIntertwiner U V) := by
   rw [injective_iff_map_eq_zero]
   intro x hx
@@ -213,7 +213,8 @@ theorem canonicalIntertwiner_injective_of_acute
     have hzero : projection V (projection U x) = 0 := by
       simpa [canonicalIntertwiner, LinearMap.add_apply, LinearMap.comp_apply,
         hcross, hVV] using hVproj
-    exact hacute.1 (projection U x) (U.starProjection_apply_mem x) hzero
+    exact hacute.injOn_left (U.starProjection_apply_mem x) U.zero_mem
+      (hzero.trans (map_zero V.starProjection).symm)
   have hUperp : complementaryProjection U x = 0 := by
     have hVperp := congrArg (complementaryProjection V) hx
     have hcross : complementaryProjection V (projection V (projection U x)) = 0 := by
@@ -231,7 +232,8 @@ theorem canonicalIntertwiner_injective_of_acute
       change U.starProjection (Uᗮ.starProjection x) = 0
       rw [Submodule.starProjection_apply_eq_zero_iff]
       exact Uᗮ.starProjection_apply_mem x
-    exact hacute.2 (complementaryProjection U x) hyV hyU
+    exact hacute.injOn_right hyV V.zero_mem
+      (hyU.trans (map_zero U.starProjection).symm)
   calc
     x = projection U x + complementaryProjection U x := by
       symm
@@ -242,7 +244,7 @@ theorem canonicalIntertwiner_injective_of_acute
 theorem canonicalIntertwiner_isUnit_of_acute
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : IsUnit (canonicalIntertwiner U V) := by
+    (hacute : Submodule.IsAcute U V) : IsUnit (canonicalIntertwiner U V) := by
   rw [LinearMap.isUnit_iff_ker_eq_bot, LinearMap.ker_eq_bot]
   exact canonicalIntertwiner_injective_of_acute U V hacute
 
@@ -250,7 +252,7 @@ theorem canonicalIntertwiner_isUnit_of_acute
 theorem canonicalIntertwiner_normal_of_acute
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (_hacute : IsAcute U V) :
+    (_hacute : Submodule.IsAcute U V) :
     (canonicalIntertwiner U V).adjoint ∘ₗ canonicalIntertwiner U V =
       canonicalIntertwiner U V ∘ₗ (canonicalIntertwiner U V).adjoint := by
   have hS := two_smul_canonicalIntertwiner U V
@@ -352,13 +354,13 @@ factor of the canonical intertwiner. -/
 @[expose]
 noncomputable def directRotation (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : E ≃ₗᵢ[𝕜] E :=
+    (hacute : Submodule.IsAcute U V) : E ≃ₗᵢ[𝕜] E :=
   polarUnitaryEquiv (canonicalIntertwiner_isUnit_of_acute U V hacute)
 
 /-- The direct rotation, as a plain linear map. -/
 @[simp] theorem directRotation_toLinearMap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (directRotation U V hacute).toLinearMap =
       LinearMap.polarFactor (canonicalIntertwiner U V) := rfl
 
@@ -367,7 +369,7 @@ noncomputable def directRotation (U V : Submodule 𝕜 E)
 theorem directRotation_apply_eq_self_of_projection_eq
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) {x : E}
+    (hacute : Submodule.IsAcute U V) {x : E}
     (hx : projection U x = projection V x) :
     directRotation U V hacute x = x := by
   let S := canonicalIntertwiner U V
@@ -386,7 +388,7 @@ theorem directRotation_apply_eq_self_of_projection_eq
 theorem directRotation_comm_abs_canonicalIntertwiner
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (directRotation U V hacute).toLinearMap ∘ₗ
         LinearMap.operatorAbs (canonicalIntertwiner U V) =
       LinearMap.operatorAbs (canonicalIntertwiner U V) ∘ₗ
@@ -418,7 +420,7 @@ theorem directRotation_comm_abs_canonicalIntertwiner
 Injective because the intertwiner is a unit and `LinearMap.operatorAbs` shares its kernel, then
 injective-implies-surjective in finite dimensions.  Derived twice below. -/
 private theorem abs_canonicalIntertwiner_surjective (U V : Submodule 𝕜 E)
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     Function.Surjective (LinearMap.operatorAbs (canonicalIntertwiner U V)) := by
   have hCin : Function.Injective (LinearMap.operatorAbs (canonicalIntertwiner U V)) := by
     rw [← LinearMap.ker_eq_bot, LinearMap.ker_operatorAbs,
@@ -429,7 +431,7 @@ private theorem abs_canonicalIntertwiner_surjective (U V : Submodule 𝕜 E)
 /-- The intertwining identity `W P_U = P_V W`. -/
 theorem directRotation_comp_projection (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (directRotation U V hacute).toLinearMap ∘ₗ projection U =
       projection V ∘ₗ (directRotation U V hacute).toLinearMap := by
   let S := canonicalIntertwiner U V
@@ -570,7 +572,7 @@ theorem reflectionProduct_comm_abs_canonicalIntertwiner
 reflections. -/
 theorem directRotation_sq (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (directRotation U V hacute).toLinearMap ∘ₗ
         (directRotation U V hacute).toLinearMap =
       (reflectionProduct U V).toLinearMap := by
@@ -619,7 +621,7 @@ theorem directRotation_sq (U V : Submodule 𝕜 E)
 theorem two_smul_abs_canonicalIntertwiner
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (2 : 𝕜) • LinearMap.operatorAbs (canonicalIntertwiner U V) =
       (directRotation U V hacute).toLinearMap +
         (directRotation U V hacute).symm.toLinearMap := by
@@ -652,7 +654,7 @@ theorem two_smul_abs_canonicalIntertwiner
 /-- The direct rotation maps `U` onto `V`. -/
 theorem directRotation_map_eq (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     U.map (directRotation U V hacute).toLinearMap = V := by
   apply le_antisymm
   · rintro _ ⟨x, hxU, rfl⟩

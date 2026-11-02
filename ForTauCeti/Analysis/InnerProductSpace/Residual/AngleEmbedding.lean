@@ -388,35 +388,25 @@ omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
 /-- The tangent map is finite exactly when the represented subspace is
 transverse to `U`.
 
-Signature audit: Valid because `IsTransverse (range X) U` is the one-sided injectivity of
-`P_U` on `range X`, exactly the kernel statement on the right.
+The native disjointness condition is projection injectivity on `range X`,
+exactly the kernel condition on the right.
 -/
 theorem tanThetaEmbedding_defined_iff (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] (X : F →ₗᵢ[𝕜] E) :
-    IsTransverse (approximateSubspace X) U ↔
+    Disjoint (approximateSubspace X) Uᗮ ↔
       LinearMap.ker (cosThetaEmbedding U X) = ⊥ := by
+  rw [← Submodule.injOn_starProjection_iff_disjoint (approximateSubspace X) U,
+    LinearMap.ker_eq_bot]
   constructor
-  · intro htrans
-    rw [LinearMap.ker_eq_bot]
-    intro x y hxy
-    have hproj : U.starProjection (X (x - y)) = 0 := by
-      -- unfolds the named residual/compression so the following rewrite sees its
-      -- definition; there is no `_apply` lemma for it to route through.
-      change cosThetaEmbedding U X (x - y) = 0
-      rw [map_sub, hxy, sub_self]
-    have hXzero : X (x - y) = 0 :=
-      htrans (X (x - y)) ⟨x - y, rfl⟩ hproj
-    have hxyzero : x - y = 0 := by
-      apply X.injective
-      simpa using hXzero
-    exact sub_eq_zero.mp hxyzero
-  · intro hker x hx hproj
-    rcases hx with ⟨y, rfl⟩
-    have hyker : y ∈ LinearMap.ker (cosThetaEmbedding U X) := by
-      simpa [cosThetaEmbedding, projection, LinearMap.comp_apply] using hproj
-    rw [hker] at hyker
-    have hy : y = 0 := by simpa using hyker
-    rw [hy, map_zero]
+  · intro h x y hxy
+    apply X.injective
+    apply h ⟨x, rfl⟩ ⟨y, rfl⟩
+    exact hxy
+  · intro h x hx y hy hxy
+    rcases hx with ⟨u, rfl⟩
+    rcases hy with ⟨v, rfl⟩
+    have huv : u = v := h hxy
+    exact congrArg X huv
 
 
 end TauCeti

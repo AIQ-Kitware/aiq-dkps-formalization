@@ -488,7 +488,7 @@ Stated at the **printed** hypotheses.  Three narrowings that earlier versions of
 this statement carried are gone, and none of them was load-bearing.
 
 * `IsUniformlyAcute U V` — printed Proposition 3.5 says "in the acute case",
-  which is `IsAcute` (Definition 3.2), and `IsUniformlyAcute` is strictly
+  which is `Submodule.IsAcute` (Definition 3.2), and `IsUniformlyAcute` is strictly
   stronger in infinite dimension.  Neither is needed: the proof never used the
   hypothesis, which the earlier statement bound and discarded.
 * `c ≤ 1` — likewise unused.

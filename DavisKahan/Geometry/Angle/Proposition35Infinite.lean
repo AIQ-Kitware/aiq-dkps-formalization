@@ -10,9 +10,6 @@ public import DavisKahan.Geometry.Halmos.TwoProjections
 public import DavisKahan.Geometry.Halmos.FixedCosineSubspace
 -- supplies the fixed-cosine eigenspace this file identifies with `Ω({θ})H`, together
 -- with the `halmosCosineSq` commutation lemmas underneath it.
-public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
--- supplies `TauCeti.IsAcute` and `TauCeti.isAcute_iff_inf_orthogonal_eq_bot`, which this
--- file used to receive indirectly through the former `DavisKahan.Section3`.
 public import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 public import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
 public import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
@@ -428,7 +425,7 @@ private theorem add_self_cancel {a b : H →L[𝕜] H} (h : a + a = b + b) : a =
   simpa only [two_smul 𝕜] using h
 
 /-- In the acute case the direct rotation commutes with the positive cosine. -/
-theorem section3DirectRotation_comm_cosine (hacute : TauCeti.IsAcute U V) :
+theorem section3DirectRotation_comm_cosine (hacute : Submodule.IsAcute U V) :
     Commute (section3DirectRotation U V) (section3CosAngleOperator U V) := by
   obtain ⟨hUV, hVU⟩ := (TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mp hacute)
   let W := section3DirectRotation U V
@@ -452,7 +449,7 @@ theorem section3DirectRotation_comm_cosine (hacute : TauCeti.IsAcute U V) :
   exact add_self_cancel hleft
 
 /-- In the acute case the direct rotation commutes with `sin Θ`. -/
-theorem section3DirectRotation_comm_sine (hacute : TauCeti.IsAcute U V) :
+theorem section3DirectRotation_comm_sine (hacute : Submodule.IsAcute U V) :
     Commute (section3DirectRotation U V) (section3SinAngleOperator U V) := by
   have hC := section3DirectRotation_comm_cosine U V hacute
   have hS2 : Commute
@@ -468,7 +465,7 @@ theorem section3DirectRotation_comm_sine (hacute : TauCeti.IsAcute U V) :
     (section3SinAngleOperator_nonneg U V) hS2).symm
 
 /-- Proposition 3.5: `Θ` commutes with the direct rotation `U`. -/
-theorem section3AngleOperator_comm_directRotation (hacute : TauCeti.IsAcute U V) :
+theorem section3AngleOperator_comm_directRotation (hacute : Submodule.IsAcute U V) :
     Commute (section3AngleOperator U V) (section3DirectRotation U V) := by
   rw [section3AngleOperator]
   exact Commute.cfc_real (section3DirectRotation_comm_sine U V hacute).symm Real.arcsin
@@ -512,7 +509,7 @@ theorem section3QuarterTurn_symm :
   rw [hD, ContinuousLinearMap.polarFactor_neg]
 
 /-- The skew part has modulus exactly `sin Θ`. -/
-theorem modulus_section3DirectRotation_sub_cosine (hacute : TauCeti.IsAcute U V) :
+theorem modulus_section3DirectRotation_sub_cosine (hacute : Submodule.IsAcute U V) :
     (section3DirectRotation U V - section3CosAngleOperator U V).modulus =
       section3SinAngleOperator U V := by
   obtain ⟨hUV, hVU⟩ := TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mp hacute
@@ -558,7 +555,7 @@ theorem modulus_section3DirectRotation_sub_cosine (hacute : TauCeti.IsAcute U V)
   exact hmod.symm
 
 /-- The paper's polar resolution `W = cos Θ + J sin Θ`. -/
-theorem section3DirectRotation_eq_cos_add_quarterTurn_sin (hacute : TauCeti.IsAcute U V) :
+theorem section3DirectRotation_eq_cos_add_quarterTurn_sin (hacute : Submodule.IsAcute U V) :
     section3DirectRotation U V =
       section3CosAngleOperator U V +
         section3QuarterTurn U V ∘L section3SinAngleOperator U V := by
@@ -573,7 +570,7 @@ theorem section3DirectRotation_eq_cos_add_quarterTurn_sin (hacute : TauCeti.IsAc
   abel
 
 /-- Proposition 3.5: `Θ` commutes with the quarter turn `J`. -/
-theorem section3AngleOperator_comm_quarterTurn (hacute : TauCeti.IsAcute U V) :
+theorem section3AngleOperator_comm_quarterTurn (hacute : Submodule.IsAcute U V) :
     Commute (section3AngleOperator U V) (section3QuarterTurn U V) := by
   let D := section3DirectRotation U V - section3CosAngleOperator U V
   have hθW := section3AngleOperator_comm_directRotation U V hacute
@@ -664,7 +661,7 @@ theorem re_inner_section3DirectRotation_sub_cosine_apply_self (x : H) :
 /-- Proposition 3.5 eigenvector clause: an angle eigenvector is rotated through
 exactly its angle eigenvalue. -/
 theorem vectorAngle_section3DirectRotation_eq_of_angleOperator_apply
-    (hacute : TauCeti.IsAcute U V) {x : H} (hx0 : x ≠ 0) {θ : ℝ}
+    (hacute : Submodule.IsAcute U V) {x : H} (hx0 : x ≠ 0) {θ : ℝ}
     (hx : section3AngleOperator U V x = ((θ : ℝ) : 𝕜) • x) :
     TauCeti.vectorAngle 𝕜 x (section3DirectRotation U V x) = θ := by
   obtain ⟨hUV, hVU⟩ := TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mp hacute
@@ -704,7 +701,7 @@ private theorem positive_square_eigenvector
 /-- The angle eigenspace equals the fixed-cosine Halmos eigenspace at every
 actual acute angle eigenvalue. -/
 theorem section3AngleEigenspace_eq_fixedCosineSubspace
-    (hacute : TauCeti.IsAcute U V) {θ : ℝ}
+    (hacute : Submodule.IsAcute U V) {θ : ℝ}
     (hθ : Module.End.HasEigenvalue (section3AngleOperator U V).toLinearMap
       ((θ : ℝ) : 𝕜)) :
     section3AngleEigenspace U V θ = fixedCosineSubspace U V (Real.cos θ) := by
@@ -794,7 +791,7 @@ theorem section3AngleEigenspace_eq_fixedCosineSubspace
 /-- Proposition 3.5's maximal-subspace clause, now stated on the actual
 operator-angle eigenspace `Ω({θ})H` in arbitrary dimension. -/
 theorem proposition3_5_angleEigenspace_maximal
-    (hacute : TauCeti.IsAcute U V) {θ : ℝ}
+    (hacute : Submodule.IsAcute U V) {θ : ℝ}
     (hθ : Module.End.HasEigenvalue (section3AngleOperator U V).toLinearMap
       ((θ : ℝ) : 𝕜)) :
     IsFixedCosineReducingSubspace U V (section3AngleEigenspace U V θ)

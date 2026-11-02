@@ -211,7 +211,7 @@ variable (U V : Submodule 𝕜 E)
 `J` commutes with `Θ`, so `(JΘ)² = J²Θ²`; and `J² = -(sin Θ)(sin Θ)⁺` while the
 Penrose projection `(sin Θ)(sin Θ)⁺` fixes `Θ`.  This is the identity that makes
 the exponential series collapse to a cosine and a sine. -/
-theorem angleComplexStructure_comp_angleOperator_comp_self (hacute : IsAcute U V) :
+theorem angleComplexStructure_comp_angleOperator_comp_self (hacute : Submodule.IsAcute U V) :
     (angleComplexStructure U V hacute ∘ₗ angleOperator U V) ∘ₗ
         (angleComplexStructure U V hacute ∘ₗ angleOperator U V) =
       -(angleOperator U V ∘ₗ angleOperator U V) := by
@@ -260,7 +260,7 @@ Continuous linear maps carry the statement because that is where Mathlib's
 `NormedSpace.exp` is defined; `LinearMap.toContinuousLinearMap` is the
 finite-dimensional identification. -/
 theorem directRotation_eq_exp_angleComplexStructure_comp_angleOperator
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (directRotation U V hacute).toLinearMap.toContinuousLinearMap =
       NormedSpace.exp
         ((angleComplexStructure U V hacute ∘ₗ angleOperator U V).toContinuousLinearMap) := by

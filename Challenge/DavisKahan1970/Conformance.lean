@@ -236,7 +236,7 @@ whose trace-norm displacement is strictly smaller than that of the direct
 rotation. -/
 theorem proposition4_4_counterexample :
     ∃ (U V : Submodule ℝ (EuclideanSpace ℝ (Fin 4)))
-      (hacute : IsAcute U V)
+      (hacute : Submodule.IsAcute U V)
       (W : EuclideanSpace ℝ (Fin 4) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin 4)),
       U.map W.toLinearMap = V ∧
       Submodule.principalAngles U V 0 ≤ Real.pi / 3 ∧

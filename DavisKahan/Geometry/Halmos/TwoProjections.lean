@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
+public import TauCeti.Analysis.InnerProductSpace.Projection.Acute
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Geometry.Polar.DirectRotation
 
@@ -37,6 +38,15 @@ public section
 open scoped InnerProductSpace
 
 namespace TauCeti
+/-- Definition 3.2 in crossed-intersection form, on the accepted acute predicate.
+The original donor statement is in `AngleGeometry.lean` at `e4637c3919ae`
+(Jon Crall / GPT 5.6 High; Kitware, Apache-2.0). -/
+theorem isAcute_iff_inf_orthogonal_eq_bot {𝕜 E : Type*} [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    U.IsAcute V ↔ U ⊓ Vᗮ = ⊥ ∧ Uᗮ ⊓ V = ⊥ := by
+  rw [Submodule.isAcute_iff_disjoint, disjoint_iff, disjoint_iff, inf_comm V Uᗮ]
+
 namespace DavisKahan
 
 variable {𝕜 : Type*} [RCLike 𝕜]

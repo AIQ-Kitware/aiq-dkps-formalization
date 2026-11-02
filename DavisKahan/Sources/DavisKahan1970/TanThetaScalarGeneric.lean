@@ -407,7 +407,7 @@ theorem tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_rclike
       (Angle.hasDefinedTangent_submodule (e := e) U V).2 hdefined
     have h35' : DavisKahan.CrossedDefectsEquivalent U' V' :=
       DavisKahan.crossedDefectsEquivalent_of_isAcute U' V'
-        (TauCeti.isAcute_of_projectionGap_lt_one hdefined')
+        (Submodule.IsAcute.of_projectionGap_lt_one _ _ hdefined')
     have hResidual' := D.trial.scalarTransport_residual_eq_projectionBlock
       (e := e) H hResidual
     have hMem' : N.Mem H' := (SymmetricNormingFunction.mem_clm_iff N H).2 hMem
@@ -439,7 +439,7 @@ theorem tanTheta_ambient_unboundedRitz_definedTangent_symmetricNorming_rclike
       (Angle.hasDefinedTangent_submodule (e := e) U V).2 hdefined
     have h35' : DavisKahan.CrossedDefectsEquivalent U' V' :=
       DavisKahan.crossedDefectsEquivalent_of_isAcute U' V'
-        (TauCeti.isAcute_of_projectionGap_lt_one hdefined')
+        (Submodule.IsAcute.of_projectionGap_lt_one _ _ hdefined')
     have hResidual' := D.trial.scalarTransport_residual_eq_projectionBlock
       (e := e) H hResidual
     have hMem' : N.Mem H' := (SymmetricNormingFunction.mem_clm_iff N H).2 hMem

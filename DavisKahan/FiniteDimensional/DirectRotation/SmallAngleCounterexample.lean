@@ -184,10 +184,13 @@ theorem projection_V4_coord (theta : Real) (x : E4) (i : Fin 4) :
       (Real.sin theta ^ 2 * x 3 + Real.sin theta * Real.cos theta * x 0) * hcircle
 
 /-- The subspace pair is acute whenever its cosine is positive. -/
-theorem acute (theta : Real) (hc : 0 < Real.cos theta) : IsAcute U4 (V4 theta) := by
+theorem acute (theta : Real) (hc : 0 < Real.cos theta) : Submodule.IsAcute U4 (V4 theta) := by
   have hc2 : Real.cos theta ^ 2 ≠ 0 := pow_ne_zero 2 hc.ne'
+  apply Submodule.isAcute_iff_disjoint.mpr
   constructor
-  · intro x hxU hzero
+  · rw [Submodule.disjoint_def]
+    intro x hxU hxperp
+    have hzero := (Submodule.starProjection_apply_eq_zero_iff (V4 theta)).mpr hxperp
     obtain ⟨hx2, hx3⟩ := coord_eq_zero_of_mem_U4 hxU
     have h0 := congrArg (fun z : E4 => z 0) hzero
     have h1 := congrArg (fun z : E4 => z 1) hzero
@@ -201,7 +204,9 @@ theorem acute (theta : Real) (hc : 0 < Real.cos theta) : IsAcute U4 (V4 theta) :
     have hx1 : x 1 = 0 := (mul_eq_zero.mp hcx1).resolve_left hc2
     rw [mem_U4 hxU, hx0, hx1]
     simp
-  · intro y hyV hzero
+  · rw [Submodule.disjoint_def]
+    intro y hyV hyperp
+    have hzero := (Submodule.starProjection_apply_eq_zero_iff U4).mpr hyperp
     obtain ⟨z, hzU, rfl⟩ := hyV
     obtain ⟨hz2, hz3⟩ := coord_eq_zero_of_mem_U4 hzU
     have h0 := congrArg (fun x : E4 => x 0) hzero
@@ -492,7 +497,7 @@ threshold, yet an orthogonal competitor beats its canonical direct rotation in
 trace norm. This strengthening is separate from the source-result inventory. -/
 theorem arbitrarilySmall_fullDisplacement_refuted (epsilon : Real) (hepsilon : 0 < epsilon) :
     ∃ (U V : Submodule Real (EuclideanSpace Real (Fin 4)))
-      (hacute : IsAcute U V)
+      (hacute : Submodule.IsAcute U V)
       (W : EuclideanSpace Real (Fin 4) ≃ₗᵢ[ℝ] EuclideanSpace Real (Fin 4)),
       U.map W.toLinearMap = V ∧
       0 < Submodule.principalAngles U V 0 ∧

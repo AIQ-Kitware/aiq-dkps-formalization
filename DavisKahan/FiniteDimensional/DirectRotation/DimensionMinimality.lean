@@ -53,7 +53,7 @@ theorem principalAngles_pos_iff_lt_nontrivialAngleCount (U V : Submodule 𝕜 E)
 principal-angle label, including multiplicities. -/
 theorem positive_principalAngle_unique_of_finrank_le_three (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (hdim : finrank 𝕜 E ≤ 3)
+    (hacute : Submodule.IsAcute U V) (hdim : finrank 𝕜 E ≤ 3)
     {i j : ℕ} (hi : 0 < U.principalAngles V i) (hj : 0 < U.principalAngles V j) :
     i = j := by
   have hn := twice_nontrivialAngleCount_le_finrank_of_acute U V hacute
@@ -66,7 +66,7 @@ principal-plane chord costs, with the accepted angle multiplicities. -/
 theorem nuclear_directRotation_displacement_eq_sum_principalAngles
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     UnitarilyInvariantSeminorm.nuclear 𝕜 E E
         (LinearMap.id - (directRotation U V hacute).toLinearMap) =
       ∑ i : Fin (finrank 𝕜 U), 4 * Real.sin (U.principalAngles V i / 2) := by
@@ -133,7 +133,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 hypothesis does give full trace-norm minimality of the direct rotation.
 The competitor is any ambient orthogonal transporter. -/
 theorem nuclear_directRotation_le_of_finrank_le_three
-    (U V : Submodule ℝ E) (hacute : IsAcute U V)
+    (U V : Submodule ℝ E) (hacute : Submodule.IsAcute U V)
     (hdim : finrank ℝ E ≤ 3) (hshort : U.principalAngles V 0 ≤ Real.pi / 3)
     (W : E ≃ₗᵢ[ℝ] E) (hmap : U.map W.toLinearMap = V) :
     UnitarilyInvariantSeminorm.nuclear ℝ E E
@@ -165,7 +165,7 @@ theorem nuclear_directRotation_le_of_finrank_le_three
 /-- A real trace-norm counterexample within the printed short-angle
 range requires ambient dimension at least four. -/
 theorem four_le_finrank_of_shortAngle_nuclear_counterexample
-    (U V : Submodule ℝ E) (hacute : IsAcute U V)
+    (U V : Submodule ℝ E) (hacute : Submodule.IsAcute U V)
     (hshort : U.principalAngles V 0 ≤ Real.pi / 3)
     (W : E ≃ₗᵢ[ℝ] E) (hmap : U.map W.toLinearMap = V)
     (hstrict : UnitarilyInvariantSeminorm.nuclear ℝ E E (LinearMap.id - W.toLinearMap) <
@@ -182,7 +182,7 @@ small positive angles even under the printed `pi / 3` bound. -/
 theorem exists_four_dimensional_shortAngle_nuclear_counterexample
     (epsilon : ℝ) (hepsilon : 0 < epsilon) :
     ∃ (U V : Submodule ℝ (EuclideanSpace ℝ (Fin 4)))
-      (hacute : IsAcute U V)
+      (hacute : Submodule.IsAcute U V)
       (W : EuclideanSpace ℝ (Fin 4) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin 4)),
       U.map W.toLinearMap = V ∧
       0 < U.principalAngles V 0 ∧ U.principalAngles V 0 < epsilon ∧
@@ -205,7 +205,7 @@ trace-norm counterexample within the printed short-angle range. -/
 theorem isLeast_real_shortAngle_nuclear_counterexample_dimension :
     IsLeast {n : ℕ |
       ∃ (U V : Submodule ℝ (EuclideanSpace ℝ (Fin n)))
-        (hacute : IsAcute U V)
+        (hacute : Submodule.IsAcute U V)
         (W : EuclideanSpace ℝ (Fin n) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin n)),
         U.map W.toLinearMap = V ∧ U.principalAngles V 0 ≤ Real.pi / 3 ∧
         UnitarilyInvariantSeminorm.nuclear ℝ _ _ (LinearMap.id - W.toLinearMap) <

@@ -555,7 +555,7 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.2-def",
       "review_declarations": [
-        "TauCeti.IsAcute",
+        "Submodule.IsAcute",
         "TauCeti.isAcute_iff_inf_orthogonal_eq_bot",
         "TauCeti.DavisKahan1970.Section3AcuteCounterexample.exists_isAcute_projectionGap_eq_one"
       ],
@@ -564,7 +564,7 @@
           "id": "DK-3.2-def.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.IsAcute",
+            "Submodule.IsAcute",
             "TauCeti.isAcute_iff_inf_orthogonal_eq_bot",
             "TauCeti.DavisKahan1970.Section3AcuteCounterexample.exists_isAcute_projectionGap_eq_one"
           ]

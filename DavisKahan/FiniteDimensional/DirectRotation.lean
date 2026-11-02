@@ -61,7 +61,7 @@ hence with that block; `directRotation_eq_cos_add_J_sin` is the paper's
 @[expose]
 noncomputable def angleComplexStructure (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) : E →ₗ[𝕜] E :=
+    (hacute : Submodule.IsAcute U V) : E →ₗ[𝕜] E :=
   ((directRotation U V hacute).toLinearMap - directRotationCosine U V) ∘ₗ
     LinearMap.moorePenroseInverse (sinAngleOperator U V)
 
@@ -70,7 +70,7 @@ noncomputable def angleComplexStructure (U V : Submodule 𝕜 E)
 theorem ker_sinAngleOperator_le_ker_directRotation_sub_cosine
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (sinAngleOperator U V).ker ≤
       ((directRotation U V hacute).toLinearMap - directRotationCosine U V).ker := by
   intro x hx
@@ -88,7 +88,7 @@ theorem ker_sinAngleOperator_le_ker_directRotation_sub_cosine
 /-- Reversing the pair gives the inverse rotation. -/
 theorem directRotation_symm (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     directRotation V U hacute.symm = (directRotation U V hacute).symm := by
   have hstar : (canonicalIntertwiner U V).adjoint = canonicalIntertwiner V U :=
     adjoint_canonicalIntertwiner U V
@@ -107,7 +107,7 @@ theorem directRotation_symm (U V : Submodule 𝕜 E)
 parts. -/
 theorem directRotation_apply_eq_self_of_mem_common (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) {x : E}
+    (hacute : Submodule.IsAcute U V) {x : E}
     (hx : x ∈ U ⊓ V ⊔ (U ⊔ V)ᗮ) :
     directRotation U V hacute x = x := by
   obtain ⟨x₀, hx₀, x₁, hx₁, rfl⟩ := Submodule.mem_sup.mp hx
@@ -126,7 +126,7 @@ theorem directRotation_apply_eq_self_of_mem_common (U V : Submodule 𝕜 E)
 intertwiner. -/
 theorem directRotation_eq_polarFactor (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (directRotation U V hacute).toLinearMap =
       LinearMap.polarFactor (canonicalIntertwiner U V) :=
   rfl
@@ -134,7 +134,7 @@ theorem directRotation_eq_polarFactor (U V : Submodule 𝕜 E)
 /-- Full-space trigonometric factorization `R = C + J sin Θ`. -/
 theorem directRotation_eq_cos_add_J_sin (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (directRotation U V hacute).toLinearMap =
       directRotationCosine U V +
         angleComplexStructure U V hacute ∘ₗ sinAngleOperator U V := by
@@ -152,7 +152,7 @@ theorem directRotation_eq_cos_add_J_sin (U V : Submodule 𝕜 E)
 /-- The direct rotation commutes with the global positive cosine. -/
 theorem directRotation_comm_cosine (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (directRotation U V hacute).toLinearMap ∘ₗ directRotationCosine U V =
       directRotationCosine U V ∘ₗ (directRotation U V hacute).toLinearMap := by
   simpa [directRotationCosine] using
@@ -162,7 +162,7 @@ theorem directRotation_comm_cosine (U V : Submodule 𝕜 E)
 intertwiner uses the direct rotation as its unitary factor. -/
 theorem directRotation_unique (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[𝕜] E) (H : E →ₗ[𝕜] E)
+    (hacute : Submodule.IsAcute U V) (W : E ≃ₗᵢ[𝕜] E) (H : E →ₗ[𝕜] E)
     (hH : H.IsPositive)
     (hdecomp : canonicalIntertwiner U V = W.toLinearMap ∘ₗ H) :
     W = directRotation U V hacute := by
@@ -182,7 +182,7 @@ of the positive displacement square. -/
 theorem directRotation_minimizes_displacementSquare_uiNorm
     (N : UnitarilyInvariantSeminorm 𝕜 E E) (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
+    (hacute : Submodule.IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
     (hmap : U.map W.toLinearMap = V) :
     N (displacementSquare (directRotation U V hacute).toLinearMap) ≤
       N (displacementSquare W.toLinearMap) :=
@@ -193,11 +193,11 @@ invariant norm of the displacement restricted to the source subspace.
 
 This is the sound replacement for the historical full-displacement `pi / 3`
 candidate: what is dropped is the *largest-angle threshold*, not every angle
-condition.  `IsAcute` remains, and is not a weakening of the result — it is the
+condition.  `Submodule.IsAcute` remains, and is not a weakening of the result — it is the
 hypothesis under which `directRotation U V hacute` exists at all
-(`IsAcute` says no principal angle is a quarter turn, in either direction).
+(`Submodule.IsAcute` says no principal angle is a quarter turn, in either direction).
 
-The `IsAcute` here is `TauCeti.IsAcute`, Davis--Kahan's printed Definition 3.2.
+The `Submodule.IsAcute` here is `Submodule.IsAcute`, Davis--Kahan's printed Definition 3.2.
 This module is finite dimensional throughout, where that predicate is
 equivalent to the quantitative `TauCeti.DavisKahan.IsUniformlyAcute` by
 `TauCeti.isAcute_iff_projectionGap_lt_one`; the earlier reference here was to
@@ -205,7 +205,7 @@ equivalent to the quantitative `TauCeti.DavisKahan.IsUniformlyAcute` by
 theorem directRotation_minimizes_restrictedDisplacement_uiNorm
     (N : UnitarilyInvariantSeminorm 𝕜 E E) (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
+    (hacute : Submodule.IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
     (hmap : U.map W.toLinearMap = V) :
     N ((LinearMap.id - (directRotation U V hacute).toLinearMap) ∘ₗ
         projection U) ≤
@@ -216,7 +216,7 @@ theorem directRotation_minimizes_restrictedDisplacement_uiNorm
 with the operator norm and `‖A⋆A‖ = ‖A‖²`. -/
 theorem directRotation_minimizes_max_displacement
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V)
+    [V.HasOrthogonalProjection] (hacute : Submodule.IsAcute U V)
     (W : E ≃ₗᵢ[𝕜] E) (hmap : U.map W.toLinearMap = V) :
     ‖((directRotation U V hacute).toLinearMap - LinearMap.id).toContinuousLinearMap‖ ≤
       ‖(W.toLinearMap - LinearMap.id).toContinuousLinearMap‖ := by
@@ -252,7 +252,7 @@ This is Proposition 4.2, equivalently the nuclear-norm specialization of the
 positive displacement-square majorization. -/
 theorem directRotation_minimizes_sum_sq_basis_angles
     {n : ℕ} (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hacute : IsAcute U V)
+    [V.HasOrthogonalProjection] (hacute : Submodule.IsAcute U V)
     (b : OrthonormalBasis (Fin n) 𝕜 E) (W : E ≃ₗᵢ[𝕜] E)
     (hmap : U.map W.toLinearMap = V) :
     ∑ i, ‖directRotation U V hacute (b i) - b i‖ ^ 2 ≤
@@ -314,7 +314,7 @@ It is the identity that makes the paper's `U = cos Θ + J sin Θ` readable as a
 splitting of `U` into its Hermitian and skew parts. -/
 theorem directRotationCosine_eq_half_smul_add (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     directRotationCosine U V =
       (2 : 𝕜)⁻¹ • ((directRotation U V hacute).toLinearMap +
         (directRotation U V hacute).symm.toLinearMap) := by
@@ -330,7 +330,7 @@ part of `U`, so `angleComplexStructure` composed with `sin Θ` recovers it; this
 lemma is that identification. -/
 theorem directRotation_sub_cosine_eq_half_smul_sub (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (directRotation U V hacute).toLinearMap - directRotationCosine U V =
       (2 : 𝕜)⁻¹ • ((directRotation U V hacute).toLinearMap -
         (directRotation U V hacute).symm.toLinearMap) := by
@@ -355,7 +355,7 @@ agree.  Together with `sinAngleOperator_comm` this is "`Θ` remains the same"
 of Corollary 3.2. -/
 theorem directRotationCosine_comm (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     directRotationCosine V U = directRotationCosine U V := by
   rw [directRotationCosine, directRotationCosine, ← adjoint_canonicalIntertwiner U V,
     TauCeti.operatorAbs_adjoint_of_normal
@@ -372,7 +372,7 @@ on both sides because `Θ` is symmetric.  The `Θ` half is
 `sinAngleOperator_comm`, `directRotationCosine_comm` and `angleOperator_comm`. -/
 theorem angleComplexStructure_symm (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     angleComplexStructure V U hacute.symm = -angleComplexStructure U V hacute := by
   have hR : (directRotation V U hacute.symm).toLinearMap =
       (directRotation U V hacute).symm.toLinearMap := by
@@ -439,7 +439,7 @@ hence with `sin²Θ = 1 - cos²Θ`, and commutation passes to the positive squar
 root. -/
 theorem directRotation_comm_sinAngleOperator (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (directRotation U V hacute).toLinearMap ∘ₗ sinAngleOperator U V =
       sinAngleOperator U V ∘ₗ (directRotation U V hacute).toLinearMap := by
   have hgram : (directRotation U V hacute).toLinearMap ∘ₗ
@@ -551,7 +551,7 @@ angle operator `Θ = arcsin (sin Θ)`.  Anything commuting with `sin Θ` commute
 with every real functional calculus of it. -/
 theorem angleOperator_comm_directRotation (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (directRotation U V hacute).toLinearMap ∘ₗ angleOperator U V =
       angleOperator U V ∘ₗ (directRotation U V hacute).toLinearMap :=
   (LinearMap.IsSymmetric.commute_cfc _
@@ -648,7 +648,7 @@ with `U` (`angleOperator_comm_directRotation`), with `cos Θ`
 (`angleOperator_comm_moorePenroseInverse_sinAngleOperator`). -/
 theorem angleOperator_comm_angleComplexStructure (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     angleComplexStructure U V hacute ∘ₗ angleOperator U V =
       angleOperator U V ∘ₗ angleComplexStructure U V hacute := by
   have hmul : ∀ f g : E →ₗ[𝕜] E, f ∘ₗ g = f * g := fun _ _ => rfl
@@ -693,7 +693,7 @@ theorem angleOperator_comm_angleComplexStructure (U V : Submodule 𝕜 E)
 `directRotation_comm_cosine` read at the swapped pair. -/
 theorem directRotation_symm_comm_cosine (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     (directRotation U V hacute).symm.toLinearMap ∘ₗ directRotationCosine U V =
       directRotationCosine U V ∘ₗ (directRotation U V hacute).symm.toLinearMap := by
   have h := directRotation_comm_cosine V U hacute.symm
@@ -707,7 +707,7 @@ both `U` and `U⁻¹`.  This is the operator identity behind the paper's asserti
 that `J` is a complex structure. -/
 theorem directRotation_sub_cosine_comp_self (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     ((directRotation U V hacute).toLinearMap - directRotationCosine U V) ∘ₗ
         ((directRotation U V hacute).toLinearMap - directRotationCosine U V) =
       -(sinAngleOperator U V ∘ₗ sinAngleOperator U V) := by
@@ -765,7 +765,7 @@ self-adjoint, so `J² = (U - cos Θ)² ((sin Θ)⁺)² = -(sin Θ)²((sin Θ)⁺
 Penrose identities collapse the right-hand factor to the projection. -/
 theorem angleComplexStructure_comp_self (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     angleComplexStructure U V hacute ∘ₗ angleComplexStructure U V hacute =
       -(sinAngleOperator U V ∘ₗ
         LinearMap.moorePenroseInverse (sinAngleOperator U V)) := by

@@ -53,7 +53,7 @@ This module is a thin re-export aggregate.  The material is split by topic into
   closed form `singularValues_restrictedDisplacement_directRotation`, the
   direct rotation minimizes every singular value of the restricted
   displacement pointwise — over any `RCLike` field, and with no largest-angle
-  threshold (the standing `IsAcute` hypothesis is what makes the direct
+  threshold (the standing `Submodule.IsAcute` hypothesis is what makes the direct
   rotation exist, not a restriction on the conclusion).
 * `kyFanSum_restrictedDisplacement_le` and
   `uiNorm_restrictedDisplacement_le` (Davis--Kahan Corollary 4.1): Ky Fan and

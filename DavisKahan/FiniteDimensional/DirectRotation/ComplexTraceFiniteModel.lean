@@ -13,7 +13,7 @@ public import DavisKahan.FiniteDimensional.DirectRotation.ComplexTraceAssembly
 The two-plane construction extends to *every finite number* of orthogonal
 complex principal planes.  The induction uses only the full-trace block-sum
 identity and the projection-displacement lower bound.  In particular, it
-includes zero angles and right angles; there is no `IsAcute` assumption.
+includes zero angles and right angles; there is no `Submodule.IsAcute` assumption.
 
 This is the finite-model half of arbitrary-dimensional complex trace
 optimality. Identifying an arbitrary subspace pair with this model additionally

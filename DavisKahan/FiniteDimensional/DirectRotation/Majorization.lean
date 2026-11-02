@@ -481,7 +481,7 @@ the 2026-07-21 repair note (Git history); a competitor may mix an
 equal-angle multiplicity space and beat the direct rotation in trace norm at
 every angle).  The valid arbitrary-UI endpoint is the restricted-displacement
 theorem `uiNorm_restrictedDisplacement_le`, which needs no largest-angle
-threshold (only the standing `IsAcute`).
+threshold (only the standing `Submodule.IsAcute`).
 The spectral-floor lemma that fed the historical corollary also relied on the
 two-projection identity `‖P_U - P_V‖ = sin theta_max`, which is not yet in the
 tree; both were removed with the corollary since nothing else consumes them.
@@ -491,7 +491,7 @@ tree; both were removed with the corollary since nothing else consumes them.
 `Re R = |S|`, the operator cosine. -/
 theorem hermitianPart_directRotation (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     hermitianPart (directRotation U V hacute).toLinearMap =
       LinearMap.operatorAbs (canonicalIntertwiner U V) := by
   have htwo := two_smul_abs_canonicalIntertwiner U V hacute
@@ -511,7 +511,7 @@ theorem hermitianPart_directRotation (U V : Submodule 𝕜 E)
 image `2(I - |S|)` of the operator cosine. -/
 theorem displacementSquare_directRotation (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) :
+    (hacute : Submodule.IsAcute U V) :
     displacementSquare (directRotation U V hacute).toLinearMap =
       (2 : 𝕜) • (LinearMap.id - LinearMap.operatorAbs (canonicalIntertwiner U V)) := by
   rw [displacementSquare_unitary, hermitianPart_directRotation]
@@ -521,7 +521,7 @@ operator-theoretic core of Davis--Kahan Proposition 4.3. -/
 theorem directRotation_displacementSquare_kyFan
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
+    (hacute : Submodule.IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
     (hmap : U.map W.toLinearMap = V) (k : ℕ) :
     kyFanSum k (displacementSquare (directRotation U V hacute).toLinearMap) ≤
       kyFanSum k (displacementSquare W.toLinearMap) := by
@@ -634,7 +634,7 @@ theorem directRotation_displacementSquare_uiNorm
     (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hacute : IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
+    (hacute : Submodule.IsAcute U V) (W : E ≃ₗᵢ[𝕜] E)
     (hmap : U.map W.toLinearMap = V) :
     N (displacementSquare (directRotation U V hacute).toLinearMap) ≤
       N (displacementSquare W.toLinearMap) :=
