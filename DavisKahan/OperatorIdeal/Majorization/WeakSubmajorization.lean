@@ -99,9 +99,10 @@ def sequencePrefixVector (n : ℕ) (x : ℕ → ℝ) : Fin n → ℝ :=
 its length. -/
 theorem finitePrefixSum_sequencePrefixVector
     (x : ℕ → ℝ) (n k : ℕ) (hk : k ≤ n) :
-    FiniteVector.prefixSum k (sequencePrefixVector n x) =
+    prefixSum k (sequencePrefixVector n x) =
       sequencePrefixSum k x := by
-  unfold FiniteVector.prefixSum sequencePrefixSum sequencePrefixVector
+  simp only [prefixSum_def]
+  unfold sequencePrefixSum sequencePrefixVector
   rw [show (∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < k), x (i : ℕ)) =
         ∑ i : Fin n, if (i : ℕ) < k then x (i : ℕ) else 0 from
       Finset.sum_filter _ _,
@@ -116,7 +117,7 @@ theorem finitePrefixSum_sequencePrefixVector
 in the existing finite-vector sense. -/
 theorem finite_weaklyMajorized_of_weaklySubmajorized
     {x y : ℕ → ℝ} (hxy : x ≺w y) (n : ℕ) :
-    FiniteVector.WeaklyMajorized
+    IsWeaklyMajorizedBy
       (sequencePrefixVector n x)
       (sequencePrefixVector n y) := by
   refine ⟨?_, ?_, ?_, ?_, fun k => ?_⟩
@@ -133,8 +134,8 @@ theorem finite_weaklyMajorized_of_weaklySubmajorized
         finitePrefixSum_sequencePrefixVector y n k hk]
       exact hxy.prefix_le k
     · have hnk : n ≤ k := Nat.le_of_not_ge hk
-      rw [FiniteVector.prefixSum_eq_full_sum_of_le _ hnk,
-        FiniteVector.prefixSum_eq_full_sum_of_le _ hnk]
+      rw [prefixSum_of_le hnk _,
+        prefixSum_of_le hnk _]
       simpa [sequencePrefixVector, sequencePrefixSum,
         Fin.sum_univ_eq_sum_range] using hxy.prefix_le n
 

@@ -75,7 +75,7 @@ space: the weak-majorization core.**
   `a(A₁ - α)  ≺w  (i ↦ aᵢ(Λ₁ - α) · aᵢ(C₁)²)`.
 
 Same two links as the complex proof: the pointwise real Weyl step, packaged by
-`FiniteVector.WeaklyMajorized.of_pointwise`, then the `RCLike`-generic
+`IsWeaklyMajorizedBy.of_pointwise`, then the `RCLike`-generic
 positive-sandwich weak majorization, whose middle factor is positive by
 `theorem8_1_perturbedUpperBlockShift_nonneg_real`. -/
 theorem theorem8_1_upperWeightedWeakMajorization_real [FiniteDimensional ℝ E]
@@ -86,7 +86,7 @@ theorem theorem8_1_upperWeightedWeakMajorization_real [FiniteDimensional ℝ E]
     (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
-    FiniteVector.WeaklyMajorized
+    IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℝ E) =>
         (upperBlockShift A P alpha).approximationNumber (i : ℕ))
       (fun i : Fin (Module.finrank ℝ E) =>
@@ -104,14 +104,14 @@ theorem theorem8_1_upperWeightedWeakMajorization_real [FiniteDimensional ℝ E]
     theorem8_1_perturbedUpperBlockShift_nonneg_real A K P hdelta hA hK hAP hPlow
       hPhigh hKP hKPperp
   -- Link one: the real Weyl step, promoted from pointwise domination.
-  have hstep1 : FiniteVector.WeaklyMajorized
+  have hstep1 : IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℝ E) =>
         (upperBlockShift A P alpha).approximationNumber (i : ℕ))
       (fun i : Fin (Module.finrank ℝ E) =>
         (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
           upperBlockShift (A + K) Q alpha ∘L
           cosineBlock P Q).approximationNumber (i : ℕ)) :=
-    FiniteVector.WeaklyMajorized.of_pointwise
+    IsWeaklyMajorizedBy.of_pointwise
       (fun i j hij =>
         (upperBlockShift A P alpha).approximationNumber_antitone (Fin.le_def.mp hij))
       (fun i j hij =>
@@ -174,7 +174,7 @@ theorem theorem8_1_lowerWeightedWeakMajorization_real [FiniteDimensional ℝ E]
     (hPlow : ∀ x ∈ P, ⟪A x, x⟫_ℝ ≤ alpha * ‖x‖ ^ 2)
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
-    FiniteVector.WeaklyMajorized
+    IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℝ E) =>
         (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
       (fun i : Fin (Module.finrank ℝ E) =>
@@ -190,14 +190,14 @@ theorem theorem8_1_lowerWeightedWeakMajorization_real [FiniteDimensional ℝ E]
   have hM : (0 : E →L[ℝ] E) ≤ lowerBlockShift (A + K) Q alpha delta :=
     theorem8_1_perturbedLowerBlockShift_nonneg_real A K P hdelta hA hK hAP hPlow
       hPhigh hKP hKPperp
-  have hstep1 : FiniteVector.WeaklyMajorized
+  have hstep1 : IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℝ E) =>
         (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
       (fun i : Fin (Module.finrank ℝ E) =>
         (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
           lowerBlockShift (A + K) Q alpha delta ∘L
           lowerCosineBlock P Q).approximationNumber (i : ℕ)) :=
-    FiniteVector.WeaklyMajorized.of_pointwise
+    IsWeaklyMajorizedBy.of_pointwise
       (fun i j hij =>
         (lowerBlockShift A P alpha delta).approximationNumber_antitone
           (Fin.le_def.mp hij))

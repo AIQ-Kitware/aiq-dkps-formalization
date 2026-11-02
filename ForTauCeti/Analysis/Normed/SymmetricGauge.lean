@@ -143,7 +143,7 @@ theorem le_of_prefixSum_le (Φ : SymmetricGauge) {n : ℕ} {z y : Fin n → ℝ}
   exact_mod_cast h
 
 theorem mono_weaklyMajorized (Φ : SymmetricGauge) {n : ℕ} {x y : Fin n → ℝ}
-    (h : FiniteVector.WeaklyMajorized x y) : Φ (ofFin x) ≤ Φ (ofFin y) := by
+    (h : IsWeaklyMajorizedBy x y) : Φ (ofFin x) ≤ Φ (ofFin y) := by
   have h' := (Φ.toFiniteSymmetricGauge n).mono_weaklyMajorized h
   exact_mod_cast h'
 

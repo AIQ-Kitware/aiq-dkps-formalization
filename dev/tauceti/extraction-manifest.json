@@ -1927,7 +1927,32 @@
     },
     {
       "source_module": "ForTauCeti.Analysis.Normed.FiniteLpGauge + ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm + ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization",
-      "source_declarations": [],
+      "source_declarations": [
+        "FiniteVector.prefixSum",
+        "FiniteVector.prefixSum_zero",
+        "FiniteVector.prefixSum_add",
+        "FiniteVector.prefixSum_smul",
+        "FiniteVector.prefixSum_eq_full_sum_of_le",
+        "FiniteVector.WeaklyMajorized",
+        "FiniteVector.WeaklyMajorized.refl",
+        "FiniteVector.WeaklyMajorized.trans",
+        "FiniteVector.WeaklyMajorized.of_pointwise",
+        "FiniteVector.WeaklyMajorized.add",
+        "FiniteVector.WeaklyMajorized.nonneg_smul",
+        "FiniteVector.WeaklyMajorized.sum_le",
+        "FiniteVector.WeaklyMajorized.zeroPadRight",
+        "FiniteVector.IsSymmetricConvex",
+        "FiniteVector.IsSymmetricConvex.mem_of_isTTransform",
+        "FiniteVector.IsSymmetricConvex.update_mem",
+        "FiniteVector.IsSymmetricConvex.mem_of_forall_le",
+        "FiniteVector.IsSymmetricConvex.mem_of_prefixSum_le",
+        "FiniteVector.IsSymmetricConvex.mem_of_weaklyMajorized",
+        "FiniteVector.transfer",
+        "FiniteVector.IsTTransform",
+        "FiniteVector.exists_isTTransform_of_not_forall_le",
+        "FiniteSymmetricGauge",
+        "FiniteVector.zeroPadRight"
+      ],
       "current_namespace": "TauCeti",
       "staging_module": "ForTauCeti.Analysis.Convex.Majorization",
       "final_tauceti_module": "TauCeti.Analysis.Convex.Majorization",
@@ -1935,7 +1960,7 @@
       "roadmap_target": "unitarily-invariant-norm",
       "provenance_class": "split and generalized on 2026-07-28; the finite-vector majorization vocabulary and FiniteSymmetricGauge moved out of FiniteLpGauge, and the Hardy--Littlewood--Polya transfer descent -- which existed as three independent copies -- was restated once for a symmetric-convex set; authors Jon Crall, GPT-5.6 Thinking, Claude Fable 5, Claude Opus 5; Apache 2.0, Copyright (c) 2026 Kitware, Inc.",
       "direct_dependencies": [
-        "Mathlib"
+        "TauCeti.Analysis.Convex.Majorization"
       ],
       "blocked_dependencies": [],
       "downstream_users": [
@@ -1943,8 +1968,28 @@
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm",
         "ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Majorization"
       ],
-      "status": "staged",
-      "upstream_pr": null
+      "status": "partially-upstreamed",
+      "upstream_pr": "#14102, #17175",
+      "retired_local_declarations": [
+        "TauCeti.FiniteVector.prefixSum",
+        "TauCeti.FiniteVector.prefixSum_zero",
+        "TauCeti.FiniteVector.prefixSum_add",
+        "TauCeti.FiniteVector.prefixSum_smul",
+        "TauCeti.FiniteVector.prefixSum_eq_full_sum_of_le",
+        "TauCeti.FiniteVector.WeaklyMajorized",
+        "TauCeti.FiniteVector.WeaklyMajorized.refl",
+        "TauCeti.FiniteVector.WeaklyMajorized.trans",
+        "TauCeti.FiniteVector.WeaklyMajorized.add",
+        "TauCeti.FiniteVector.WeaklyMajorized.nonneg_smul",
+        "TauCeti.FiniteVector.WeaklyMajorized.zeroPadRight",
+        "TauCeti.FiniteVector.IsSymmetricConvex",
+        "TauCeti.FiniteVector.IsSymmetricConvex.mem_of_isTTransform",
+        "TauCeti.FiniteVector.IsSymmetricConvex.update_mem",
+        "TauCeti.FiniteVector.IsSymmetricConvex.mem_of_forall_le",
+        "TauCeti.FiniteVector.IsSymmetricConvex.mem_of_prefixSum_le",
+        "TauCeti.FiniteVector.IsSymmetricConvex.mem_of_weaklyMajorized"
+      ],
+      "migration_note": "November 2: consume native prefixSum, IsWeaklyMajorizedBy and IsSymmetricConvex directly; delete duplicate prefix algebra, weak-majorization definition/basic laws, symmetric-convex definition, coordinate shrinking/solidness and transfer-descent engines. Full correspondences were compiled before deletion, including transposition closure versus all permutation closure by swap induction. Native #14102 integration 715fea57c28ebfd7287e23bcaf772e416a5f928f explicitly reports an implementation independent of DKPS and bulk port #13865. Prefix sums were moved and generalized to AddCommMonoid/DistribSMul by #17175 integration 1825b1a3978087c76c9c13f7c172e7433ca0376d, now Algebra.BigOperators.Finset.PartialSum. Retain the stronger MAJ-A14 one-step transfer theorem and single-swap-average IsTTransform: it certifies strict coordinate-agreement progress, not supplied by native general transfer descent; native IsTTransform permits an arbitrary post-permutation, a distinct broader relation. Existing of_pointwise and sum_le consequences are retained on native IsWeaklyMajorizedBy, without a local predicate alias. FiniteSymmetricGauge, zeroPadRight and rearrangement helpers remain pending subsequent canonical representation slices, not classified as unmatched. Source e4637c3919ae under ForTauCeti/Analysis/Convex/Majorization.lean, extraction 6c958c237425ecacf403c670a15c5c65d01a59eb, authors Jon Crall/GPT-5.6 Thinking/Claude Fable 5/Claude Opus 5, Kitware copyright, Apache-2.0; original source homes and provenance retained. Also retire TauCeti.prefixSum_comp_val from SandwichMajorization and the historical TauCeti.FiniteVector.prefixSum_comp_val from OperatorIdeal.Family.Schatten: both consumers use native prefixSum_eq_sum_range directly. Their source e4637c3919ae under respective paths, introductions 8752c585f06b7c8548ec929ea41ec30f221af9f4 and 90dceb24ddacda60c3839f316b0a0080631a64a2, Jon Crall/Claude Opus 5, Kitware copyright, Apache-2.0. No proof descent is claimed for independent upstream replacements."
     },
     {
       "source_module": "ForMathlib.Analysis.Normed.FiniteLpGauge",

@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT-5.6 Thinking, Claude Fable 5, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.Convex.Majorization
+
 public import Mathlib.Analysis.Convex.Basic
 public import Mathlib.Algebra.BigOperators.Fin
 public import Mathlib.Algebra.Order.Field.Basic
@@ -16,50 +18,23 @@ public import Mathlib.Tactic.LinearCombination
 public import Mathlib.Algebra.Order.BigOperators.Group.Finset
 
 /-!
-# Weak majorization and the Hardy–Littlewood–Pólya transfer lemma
+# Additional finite majorization results
 
-The combinatorial engine underlying every unitarily invariant norm inequality in this
-development, isolated from the operator theory that consumes it.
+Prefix sums, `IsWeaklyMajorizedBy`, `IsSymmetricConvex` and transfer descent are consumed
+from `TauCeti.Analysis.Convex.Majorization`. The native symmetric-convex predicate uses all
+permutations; its equivalence with the former transposition formulation was compiled before
+removing the local predicate and descent proofs.
 
-A **T-transform** (Hardy–Littlewood–Pólya; also called a *Robin Hood operation*) replaces a
-vector by a convex combination of itself with one of its transpositions.  Concretely, moving
-`δ` from a larger coordinate `j` down to a smaller coordinate `l` — `FiniteVector.transfer` —
-is such a combination.  The transfer lemma
-`FiniteVector.exists_isTTransform_of_not_forall_le` says that a single T-transform always
-makes progress: given prefix-sum domination `z ≺w q` that is not yet coordinatewise
-domination, some T-transform of `q` still dominates `z` in prefix sums while agreeing with
-`z` in strictly more coordinates.  Iterating it is
-`IsSymmetricConvex.mem_of_prefixSum_le`, the **transfer descent**.
+This module retains the stronger constructive one-step transfer lemma
+`FiniteVector.exists_isTTransform_of_not_forall_le`: a single convex combination with a
+transposition preserves prefix domination and nonnegativity while strictly reducing the number
+of coordinates disagreeing with the target. Native transfer descent does not expose that progress
+certificate. Its `FiniteVector.IsTTransform` is specifically one swap average, whereas native
+`TauCeti.IsTTransform` permits a Robin Hood transfer followed by an arbitrary permutation.
 
-## Main definitions
-
-* `FiniteVector.prefixSum k x` — the sum of the first `k` coordinates of `x : Fin n → ℝ`.
-* `FiniteVector.WeaklyMajorized x y` — weak majorization of vectors already presented in
-  decreasing nonnegative order: every prefix sum of `x` is at most that of `y`.
-* `FiniteVector.transfer q j l δ` — the elementary transfer of `δ` from coordinate `j` to
-  coordinate `l`.
-* `FiniteVector.IsTTransform y q` — `q` is a convex combination of `y` with a transposition
-  of `y`.
-* `FiniteVector.IsSymmetricConvex K` — `K` is convex, transposition-closed, and closed under
-  flipping the sign of a single coordinate.  These are exactly the closure properties the
-  descent consumes.
-* `FiniteSymmetricGauge n` — a subadditive, absolutely homogeneous, permutation-invariant,
-  sign-flip-invariant function on `Fin n → ℝ`.
-
-## Main results
-
-* `FiniteVector.exists_isTTransform_of_not_forall_le` — **the transfer lemma**.
-* `FiniteVector.IsSymmetricConvex.mem_of_prefixSum_le` — **the transfer descent**: a
-  symmetric-convex set containing `y` contains every antitone nonnegative `z` whose prefix
-  sums are dominated by those of `y`.
-* `FiniteSymmetricGauge.le_of_prefixSum_le` and `FiniteSymmetricGauge.mono_weaklyMajorized` —
-  the same statement for a gauge, obtained by applying the descent to the sublevel set
-  `{x | Φ x ≤ Φ y}`, which `FiniteSymmetricGauge.isSymmetricConvex_sublevel` shows is
-  symmetric-convex.
-
-Nothing here needs a separation theorem, Birkhoff's theorem on doubly stochastic matrices, or
-a majorization *completion*: total-sum equality is never assumed, and each descent step costs
-one convexity application and one closure property.
+The finite gauge presentation, zero-padding presentation and sorting consequences remain for
+subsequent canonical representation migrations. The additional pointwise and total-sum
+consequences are stated directly on native weak majorization.
 
 ## Provenance
 
@@ -74,7 +49,8 @@ one convexity application and one closure property.
   generalization of the three copies, and factored through the T-transform vocabulary.
 * Original authors / copyright: Jon Crall, GPT-5.6 Thinking, Claude Fable 5, Claude Opus 5;
   Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
-* Spectra influence: **none** — this module imports only Mathlib.
+* Spectra influence: **none** in the original extraction. The current module consumes accepted
+  Tau Ceti majorization directly.
 -/
 
 public section
@@ -83,118 +59,29 @@ namespace TauCeti
 
 open scoped BigOperators
 
-namespace FiniteVector
+namespace IsWeaklyMajorizedBy
 
-variable {n m : ℕ}
+variable {n : ℕ}
 
-/-! ### Prefix sums -/
-
-/-- Sum of the first `k` coordinates of a finite vector.  For `k ≥ n` this is
-its full sum. -/
-@[expose]
-def prefixSum (k : ℕ) (x : Fin n → ℝ) : ℝ :=
-  ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < k), x i
-
-/-- Prefix sums of the zero vector vanish. -/
-@[simp] theorem prefixSum_zero (k : ℕ) :
-    prefixSum k (0 : Fin n → ℝ) = 0 := by
-  simp [prefixSum]
-
-/-- Prefix sums are additive. -/
-@[simp] theorem prefixSum_add (k : ℕ) (x y : Fin n → ℝ) :
-    prefixSum k (x + y) = prefixSum k x + prefixSum k y := by
-  simp [prefixSum, Finset.sum_add_distrib]
-
-/-- Prefix sums are homogeneous. -/
-@[simp] theorem prefixSum_smul (k : ℕ) (c : ℝ) (x : Fin n → ℝ) :
-    prefixSum k (c • x) = c * prefixSum k x := by
-  simp [prefixSum, Finset.mul_sum]
-
-/-- Prefix sums stabilize after the vector length. -/
-theorem prefixSum_eq_full_sum_of_le (x : Fin n → ℝ) {k : ℕ} (hk : n ≤ k) :
-    prefixSum k x = ∑ i, x i := by
-  unfold prefixSum
-  have hfilter : Finset.univ.filter (fun i : Fin n => (i : ℕ) < k) =
-      Finset.univ :=
-    Finset.filter_true_of_mem fun i _ => lt_of_lt_of_le i.isLt hk
-  rw [hfilter]
-
-/-! ### Weak majorization -/
-
-/-- Weak majorization for vectors already presented in decreasing,
-nonnegative order. -/
-structure WeaklyMajorized (x y : Fin n → ℝ) : Prop where
-  left_antitone : Antitone x
-  right_antitone : Antitone y
-  left_nonneg : ∀ i, 0 ≤ x i
-  right_nonneg : ∀ i, 0 ≤ y i
-  prefix_le : ∀ k, prefixSum k x ≤ prefixSum k y
-
-@[inherit_doc] local infix:50 " ≺w " => WeaklyMajorized
-
-namespace WeaklyMajorized
-
-/-- Weak majorization is reflexive on decreasing nonnegative vectors. -/
-theorem refl {x : Fin n → ℝ} (hxanti : Antitone x) (hx0 : ∀ i, 0 ≤ x i) :
-    x ≺w x :=
-  ⟨hxanti, hxanti, hx0, hx0, fun _ => le_rfl⟩
-
-/-- Weak majorization is transitive. -/
-theorem trans {x y z : Fin n → ℝ} (hxy : x ≺w y) (hyz : y ≺w z) :
-    x ≺w z :=
-  ⟨hxy.left_antitone, hyz.right_antitone,
-    hxy.left_nonneg, hyz.right_nonneg,
-    fun k => (hxy.prefix_le k).trans (hyz.prefix_le k)⟩
-
-/-- Coordinatewise domination implies weak majorization when both vectors are
-already decreasing and nonnegative. -/
+/-- Coordinatewise domination implies weak majorization for antitone nonnegative tuples. -/
 theorem of_pointwise {x y : Fin n → ℝ}
     (hxanti : Antitone x) (hyanti : Antitone y)
     (hx0 : ∀ i, 0 ≤ x i) (hy0 : ∀ i, 0 ≤ y i)
-    (hxy : ∀ i, x i ≤ y i) : x ≺w y := by
+    (hxy : ∀ i, x i ≤ y i) : IsWeaklyMajorizedBy x y := by
   refine ⟨hxanti, hyanti, hx0, hy0, fun k => ?_⟩
-  exact Finset.sum_le_sum fun i _ => hxy i
-
-/-- Weak majorization is compatible with vector addition. -/
-theorem add {x₁ x₂ y₁ y₂ : Fin n → ℝ}
-    (h₁ : x₁ ≺w y₁) (h₂ : x₂ ≺w y₂) :
-    x₁ + x₂ ≺w y₁ + y₂ := by
-  refine ⟨?_, ?_, ?_, ?_, fun k => ?_⟩
-  · intro i j hij
-    exact add_le_add (h₁.left_antitone hij) (h₂.left_antitone hij)
-  · intro i j hij
-    exact add_le_add (h₁.right_antitone hij) (h₂.right_antitone hij)
-  · intro i
-    exact add_nonneg (h₁.left_nonneg i) (h₂.left_nonneg i)
-  · intro i
-    exact add_nonneg (h₁.right_nonneg i) (h₂.right_nonneg i)
-  · rw [prefixSum_add, prefixSum_add]
-    exact add_le_add (h₁.prefix_le k) (h₂.prefix_le k)
-
-/-- Nonnegative scaling preserves weak majorization. -/
-theorem nonneg_smul {x y : Fin n → ℝ} (h : x ≺w y)
-    {c : ℝ} (hc : 0 ≤ c) : c • x ≺w c • y := by
-  refine ⟨?_, ?_, ?_, ?_, fun k => ?_⟩
-  · intro i j hij
-    exact mul_le_mul_of_nonneg_left (h.left_antitone hij) hc
-  · intro i j hij
-    exact mul_le_mul_of_nonneg_left (h.right_antitone hij) hc
-  · intro i
-    exact mul_nonneg hc (h.left_nonneg i)
-  · intro i
-    exact mul_nonneg hc (h.right_nonneg i)
-  · rw [prefixSum_smul, prefixSum_smul]
-    exact mul_le_mul_of_nonneg_left (h.prefix_le k) hc
+  exact prefixSum_mono k hxy
 
 /-- The full-sum consequence of weak majorization. -/
-theorem sum_le {x y : Fin n → ℝ} (h : x ≺w y) :
+theorem sum_le {x y : Fin n → ℝ} (h : IsWeaklyMajorizedBy x y) :
     ∑ i, x i ≤ ∑ i, y i := by
-  have hfull := h.prefix_le n
-  rw [prefixSum_eq_full_sum_of_le x le_rfl,
-    prefixSum_eq_full_sum_of_le y le_rfl] at hfull
-  exact hfull
+  have hfull := h.prefixSum_le n
+  rwa [prefixSum_of_le le_rfl, prefixSum_of_le le_rfl] at hfull
 
-end WeaklyMajorized
+end IsWeaklyMajorizedBy
+
+namespace FiniteVector
+
+variable {n m : ℕ}
 
 /-! ### Zero padding -/
 
@@ -216,7 +103,7 @@ def zeroPadRight (x : Fin n → ℝ) : Fin (n + m) → ℝ :=
 /-- Zero padding preserves every prefix sum. -/
 theorem prefixSum_zeroPadRight (k : ℕ) (x : Fin n → ℝ) :
     prefixSum k (zeroPadRight (m := m) x) = prefixSum k x := by
-  unfold prefixSum
+  simp only [prefixSum_def]
   rw [Finset.sum_filter, Fin.sum_univ_add, Finset.sum_filter]
   simp [zeroPadRight]
 
@@ -244,17 +131,6 @@ theorem zeroPadRight_nonneg {x : Fin n → ℝ} (hx0 : ∀ i, 0 ≤ x i) :
   split_ifs
   · exact hx0 _
   · exact le_rfl
-
-/-- Appending a common zero tail preserves weak majorization. -/
-theorem WeaklyMajorized.zeroPadRight {x y : Fin n → ℝ}
-    (h : WeaklyMajorized x y) :
-    WeaklyMajorized (zeroPadRight (m := m) x)
-      (zeroPadRight (m := m) y) := by
-  exact ⟨antitone_zeroPadRight h.left_antitone h.left_nonneg,
-    antitone_zeroPadRight h.right_antitone h.right_nonneg,
-    zeroPadRight_nonneg h.left_nonneg,
-    zeroPadRight_nonneg h.right_nonneg, fun k => by
-      simpa only [prefixSum_zeroPadRight] using h.prefix_le k⟩
 
 /-! ### T-transforms -/
 
@@ -305,10 +181,10 @@ theorem prefixSum_transfer {q : Fin n → ℝ} {j l : Fin n} (hjl : j ≠ l) (δ
       ring
   have hj : prefixSum k (fun i : Fin n => if i = j then -δ else 0) =
       if (j : ℕ) < k then -δ else 0 := by
-    simp [prefixSum]
+    simp [prefixSum_def]
   have hl : prefixSum k (fun i : Fin n => if i = l then δ else 0) =
       if (l : ℕ) < k then δ else 0 := by
-    simp [prefixSum]
+    simp [prefixSum_def]
   rw [hsplit, prefixSum_add, prefixSum_add, hj, hl]
   split_ifs <;> ring
 
@@ -392,7 +268,7 @@ theorem exists_isTTransform_of_not_forall_le {z q : Fin n → ℝ}
         · exact Or.inr hlt
       · rintro (rfl | hi) <;> omega
     have hlnot : l ∉ Finset.univ.filter fun i : Fin n => (i : ℕ) < (l : ℕ) := by simp
-    rw [prefixSum, prefixSum, hset, Finset.sum_insert hlnot,
+    rw [prefixSum_def, prefixSum_def, hset, Finset.sum_insert hlnot,
       Finset.sum_insert hlnot] at hp
     have hsum_eq :
         ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < (l : ℕ), z i
@@ -439,7 +315,7 @@ theorem exists_isTTransform_of_not_forall_le {z q : Fin n → ℝ}
           have hivk : (i : ℕ) < k := (Finset.mem_filter.mp hi).2
           linarith [hlmin i (Fin.lt_def.mpr (by omega : (i : ℕ) < (l : ℕ)))]
         rw [Finset.sum_sub_distrib] at hterm
-        simp only [prefixSum]
+        simp only [prefixSum_def]
         linarith
     · -- Neither coordinate lies in the prefix: the sums are unchanged.
       rw [ite_eq_right (by omega), ite_eq_right (by omega : ¬ (l : ℕ) < k)]
@@ -461,151 +337,6 @@ theorem exists_isTTransform_of_not_forall_le {z q : Fin n → ℝ}
         have : transfer q j l δ l = z l := by
           rw [transfer_apply_right, hδdef, hmin]; ring
         simp [this]
-
-/-! ### Symmetric-convex sets and the transfer descent -/
-
-/-- A set of finite real vectors is **symmetric-convex** when it is convex, closed under
-coordinate transpositions, and closed under flipping the sign of a single coordinate.
-
-These are exactly the properties the transfer descent consumes, and exactly the properties a
-sublevel set of a symmetric gauge has (`FiniteSymmetricGauge.isSymmetricConvex_sublevel`). -/
-structure IsSymmetricConvex (K : Set (Fin n → ℝ)) : Prop where
-  convex : Convex ℝ K
-  swap_mem : ∀ y ∈ K, ∀ j l : Fin n, y ∘ Equiv.swap j l ∈ K
-  neg_single_mem : ∀ y ∈ K, ∀ j : Fin n, Function.update y j (-(y j)) ∈ K
-
-namespace IsSymmetricConvex
-
-variable {K : Set (Fin n → ℝ)} (hK : IsSymmetricConvex K)
-include hK
-
-/-- A symmetric-convex set is closed under T-transforms. -/
-theorem mem_of_isTTransform {y q : Fin n → ℝ} (hy : y ∈ K) (h : IsTTransform y q) : q ∈ K := by
-  obtain ⟨j, l, c, hc0, hc1, rfl⟩ := h
-  exact hK.convex hy (hK.swap_mem y hy j l) (by linarith) hc0 (by ring)
-
-/-- Shrinking one coordinate of `q ∈ K` in absolute value stays in `K`: the update is the
-midpoint-style convex combination of `q` with its `j`-th sign flip. -/
-theorem update_mem {q : Fin n → ℝ} (hq : q ∈ K) (j : Fin n) {t : ℝ} (ht : |t| ≤ q j) :
-    Function.update q j t ∈ K := by
-  have hqj : 0 ≤ q j := le_trans (abs_nonneg t) ht
-  rcases hqj.eq_or_lt with hzero | hpos
-  · -- `q j = 0` forces `t = 0`: the update is trivial.
-    have ht0 : t = 0 := abs_eq_zero.mp (le_antisymm (by rw [← hzero] at ht; exact ht)
-      (abs_nonneg t))
-    have hupd : Function.update q j t = q := by
-      funext i
-      rcases eq_or_ne i j with rfl | hij
-      · rw [Function.update_self, ht0, ← hzero]
-      · rw [Function.update_of_ne hij]
-    rwa [hupd]
-  · obtain ⟨ht₁, ht₂⟩ := abs_le.mp ht
-    have hden : 0 < 2 * q j := by linarith
-    set c₁ : ℝ := (q j + t) / (2 * q j) with hc₁
-    set c₂ : ℝ := (q j - t) / (2 * q j) with hc₂
-    have hc₁0 : 0 ≤ c₁ := div_nonneg (by linarith) hden.le
-    have hc₂0 : 0 ≤ c₂ := div_nonneg (by linarith) hden.le
-    have hsum : c₁ + c₂ = 1 := by rw [hc₁, hc₂]; field_simp; ring
-    have hdecomp : Function.update q j t = c₁ • q + c₂ • Function.update q j (-(q j)) := by
-      funext i
-      simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
-      rcases eq_or_ne i j with rfl | hij
-      · rw [Function.update_self, Function.update_self, hc₁, hc₂]
-        field_simp
-        ring
-      · rw [Function.update_of_ne hij, Function.update_of_ne hij, ← add_mul, hsum, one_mul]
-    rw [hdecomp]
-    exact hK.convex hq (hK.neg_single_mem q hq j) hc₁0 hc₂0 hsum
-
-/-- **Coordinatewise descent.**  A symmetric-convex set containing `q` contains every
-nonnegative vector below `q`. -/
-theorem mem_of_forall_le {z q : Fin n → ℝ} (hz0 : ∀ i, 0 ≤ z i) (hzq : ∀ i, z i ≤ q i)
-    (hq : q ∈ K) : z ∈ K := by
-  classical
-  -- Induct on the number of coordinates where `z` and `q` disagree.
-  suffices H : ∀ d (q : Fin n → ℝ), (Finset.univ.filter fun i => z i ≠ q i).card ≤ d →
-      (∀ i, z i ≤ q i) → q ∈ K → z ∈ K from H _ q le_rfl hzq hq
-  intro d
-  induction d with
-  | zero =>
-    intro q hcard _ hqK
-    have hemp : (Finset.univ.filter fun i => z i ≠ q i) = ∅ :=
-      Finset.card_eq_zero.mp (Nat.le_zero.mp hcard)
-    have hzq' : z = q := funext fun i => by
-      by_contra hne
-      exact Finset.filter_eq_empty_iff.mp hemp (Finset.mem_univ i) hne
-    rwa [hzq']
-  | succ d ih =>
-    intro q hcard hzq hqK
-    by_cases heq : z = q
-    · rwa [heq]
-    obtain ⟨j, hj⟩ : (Finset.univ.filter fun i => z i ≠ q i).Nonempty := by
-      rw [Finset.nonempty_iff_ne_empty]
-      intro hemp
-      refine heq (funext fun i => ?_)
-      by_contra hne
-      exact Finset.filter_eq_empty_iff.mp hemp (Finset.mem_univ i) hne
-    refine ih (Function.update q j (z j)) ?_ ?_
-      (hK.update_mem hqK j (by rw [abs_of_nonneg (hz0 j)]; exact hzq j))
-    · have hsub : (Finset.univ.filter fun i => z i ≠ Function.update q j (z j) i)
-          ⊆ (Finset.univ.filter fun i => z i ≠ q i).erase j := by
-        intro i hi
-        obtain ⟨-, hine⟩ := Finset.mem_filter.mp hi
-        have hij : i ≠ j := by
-          rintro rfl
-          exact hine (by rw [Function.update_self])
-        refine Finset.mem_erase.mpr ⟨hij, Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩⟩
-        rwa [Function.update_of_ne hij] at hine
-      have h1 := Finset.card_le_card hsub
-      have h2 := Finset.card_erase_of_mem hj
-      omega
-    · intro i
-      rcases eq_or_ne i j with rfl | hij
-      · rw [Function.update_self]
-      · rw [Function.update_of_ne hij]
-        exact hzq i
-
-/-- **The Hardy–Littlewood–Pólya transfer descent.**  If `z` is antitone and nonnegative, `y`
-is nonnegative, and every prefix sum of `z` is dominated by the corresponding prefix sum of
-`y`, then every symmetric-convex set containing `y` contains `z`.
-
-The proof iterates the transfer lemma `exists_isTTransform_of_not_forall_le`: each T-transform
-stays inside `K`, keeps the prefix domination, and strictly reduces the number of coordinates
-where `z` and the current vector disagree.  When no disagreement above `z` is left, the
-coordinatewise descent finishes.
-
-No total-sum equality is assumed, and no majorization *completion*, separation theorem, or
-Birkhoff decomposition is used. -/
-theorem mem_of_prefixSum_le {z y : Fin n → ℝ} (hz : Antitone z) (hz0 : ∀ i, 0 ≤ z i)
-    (hy0 : ∀ i, 0 ≤ y i) (hpre : ∀ k, prefixSum k z ≤ prefixSum k y) (hy : y ∈ K) : z ∈ K := by
-  classical
-  suffices H : ∀ d (q : Fin n → ℝ), (Finset.univ.filter fun i => z i ≠ q i).card ≤ d →
-      (∀ i, 0 ≤ q i) → (∀ k, prefixSum k z ≤ prefixSum k q) → q ∈ K → z ∈ K from
-    H _ y le_rfl hy0 hpre hy
-  intro d
-  induction d with
-  | zero =>
-    intro q hcard hq0 hqpre hqK
-    refine hK.mem_of_forall_le hz0 (fun i => ?_) hqK
-    have hemp : (Finset.univ.filter fun i => z i ≠ q i) = ∅ :=
-      Finset.card_eq_zero.mp (Nat.le_zero.mp hcard)
-    by_contra hne
-    exact Finset.filter_eq_empty_iff.mp hemp (Finset.mem_univ i)
-      (ne_of_gt (lt_of_not_ge hne))
-  | succ d ih =>
-    intro q hcard hq0 hqpre hqK
-    by_cases hall : ∀ i, z i ≤ q i
-    · exact hK.mem_of_forall_le hz0 hall hqK
-    obtain ⟨q', htr, hq'0, hq'pre, hcard'⟩ :=
-      exists_isTTransform_of_not_forall_le hz hz0 hq0 hqpre hall
-    exact ih q' (by omega) hq'0 hq'pre (hK.mem_of_isTTransform hqK htr)
-
-/-- The transfer descent, phrased with `WeaklyMajorized`. -/
-theorem mem_of_weaklyMajorized {z y : Fin n → ℝ} (h : WeaklyMajorized z y) (hy : y ∈ K) :
-    z ∈ K :=
-  hK.mem_of_prefixSum_le h.left_antitone h.left_nonneg h.right_nonneg h.prefix_le hy
-
-end IsSymmetricConvex
 
 end FiniteVector
 
@@ -657,7 +388,7 @@ bridge that lets the whole majorization theory be proved once, for sets, and rea
 gauges: convexity is subadditivity plus absolute homogeneity, and the two closure properties
 are the gauge's permutation and sign-flip invariance. -/
 theorem isSymmetricConvex_sublevel (r : ℝ) :
-    FiniteVector.IsSymmetricConvex {x : Fin n → ℝ | Φ x ≤ r} where
+    IsSymmetricConvex {x : Fin n → ℝ | Φ x ≤ r} where
   convex := by
     intro x hx y hy a b ha hb hab
     have hx' : Φ x ≤ r := hx
@@ -671,10 +402,10 @@ theorem isSymmetricConvex_sublevel (r : ℝ) :
       refine this.trans (hle.trans_eq ?_)
       rw [← add_mul, hab, one_mul]
     exact this
-  swap_mem := fun y hy j l => by
-    have : Φ (y ∘ Equiv.swap j l) ≤ r := by rw [Φ.perm]; exact hy
+  comp_perm_mem := fun π y hy => by
+    have : Φ (y ∘ π) ≤ r := by rw [Φ.perm]; exact hy
     exact this
-  neg_single_mem := fun y hy j => by
+  update_neg_mem := fun y hy j => by
     have : Φ (Function.update y j (-(y j))) ≤ r := by rw [Φ.neg_single]; exact hy
     exact this
 
@@ -684,33 +415,38 @@ gauge: `update y j t` with `|t| ≤ y j` is a convex combination of `y` and its
 theorem update_le {y : Fin n → ℝ} {j : Fin n} {t : ℝ} (ht : |t| ≤ y j) :
     Φ (Function.update y j t) ≤ Φ y := by
   have hy : y ∈ {x : Fin n → ℝ | Φ x ≤ Φ y} := by exact le_refl (Φ y)
-  exact (Φ.isSymmetricConvex_sublevel (Φ y)).update_mem hy j ht
+  exact (Φ.isSymmetricConvex_sublevel (Φ y)).update_mem hy j (ht.trans (le_abs_self _))
 
 /-- **Coordinatewise monotonicity of the gauge** on nonnegative vectors. -/
 theorem mono {x y : Fin n → ℝ} (hx0 : ∀ i, 0 ≤ x i) (hxy : ∀ i, x i ≤ y i) : Φ x ≤ Φ y := by
   have hy : y ∈ {v : Fin n → ℝ | Φ v ≤ Φ y} := by exact le_refl (Φ y)
-  exact (Φ.isSymmetricConvex_sublevel (Φ y)).mem_of_forall_le hx0 hxy hy
+  exact (Φ.isSymmetricConvex_sublevel (Φ y)).isSolid hy
+    (fun i => by
+      change |x i| ≤ |y i|
+      rw [abs_of_nonneg (hx0 i), abs_of_nonneg ((hx0 i).trans (hxy i))]
+      exact hxy i)
 
 /-- **The T-transform descent on the gauge** — the engine of Fan dominance.
 If `z` is antitone and nonnegative, `y` is nonnegative, and every prefix sum
 of `z` is dominated by the corresponding prefix sum of `y`, then `Φ z ≤ Φ y`.
 
-An instance of `FiniteVector.IsSymmetricConvex.mem_of_prefixSum_le` at the sublevel set
+An instance of `IsSymmetricConvex.mem_of_prefixSum_le` at the sublevel set
 `{x | Φ x ≤ Φ y}`. -/
 theorem le_of_prefixSum_le {z y : Fin n → ℝ} (hz_anti : Antitone z) (hz0 : ∀ i, 0 ≤ z i)
-    (hy0 : ∀ i, 0 ≤ y i)
+    (_hy0 : ∀ i, 0 ≤ y i)
     (hpre : ∀ k : ℕ,
       ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < k, z i
         ≤ ∑ i ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < k, y i) :
     Φ z ≤ Φ y := by
   have hy : y ∈ {v : Fin n → ℝ | Φ v ≤ Φ y} := by exact le_refl (Φ y)
-  exact (Φ.isSymmetricConvex_sublevel (Φ y)).mem_of_prefixSum_le hz_anti hz0 hy0 hpre hy
+  exact (Φ.isSymmetricConvex_sublevel (Φ y)).mem_of_prefixSum_le hy hz_anti hz0
+    (by simpa only [prefixSum_def] using hpre)
 
 /-- Every finite symmetric gauge is monotone under weak majorization. -/
 theorem mono_weaklyMajorized {x y : Fin n → ℝ}
-    (h : FiniteVector.WeaklyMajorized x y) : Φ x ≤ Φ y := by
+    (h : IsWeaklyMajorizedBy x y) : Φ x ≤ Φ y := by
   have hy : y ∈ {v : Fin n → ℝ | Φ v ≤ Φ y} := by exact le_refl (Φ y)
-  exact (Φ.isSymmetricConvex_sublevel (Φ y)).mem_of_weaklyMajorized h hy
+  exact h.mem (Φ.isSymmetricConvex_sublevel (Φ y)) hy
 
 /-! ### Antitone rearrangement
 

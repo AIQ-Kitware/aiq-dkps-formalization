@@ -25,7 +25,7 @@ inner product space,
   `σ(D⋆ M D)  ≺w  (i ↦ σᵢ(M) · σᵢ(D)²)`.
 
 Both sides are decreasing nonnegative sequences of the same finite length, and
-`≺w` is `TauCeti.FiniteVector.WeaklyMajorized`: **every** prefix sum of the left
+`≺w` is `TauCeti.IsWeaklyMajorizedBy`: **every** prefix sum of the left
 side is dominated by the corresponding prefix sum of the right side.  By
 `FiniteSymmetricGauge.mono_weaklyMajorized` this gives the same inequality for
 every symmetric gauge, hence for every unitarily invariant norm.
@@ -344,19 +344,6 @@ theorem sum_range_singularValues_adjoint_sandwich_le
 
 /-! ### The weak-majorization package -/
 
-/-- Prefix sums of a finite vector cut out of an `ℕ`-indexed sequence are the
-corresponding truncated range sums. -/
-theorem prefixSum_comp_val {N : ℕ} (g : ℕ → ℝ) (k : ℕ) :
-    FiniteVector.prefixSum k (fun i : Fin N => g (i : ℕ))
-      = ∑ j ∈ Finset.range (min k N), g j := by
-  unfold FiniteVector.prefixSum
-  rw [Finset.sum_filter,
-    Fin.sum_univ_eq_sum_range (fun m => if m < k then g m else 0) N, ← Finset.sum_filter]
-  congr 1
-  ext m
-  simp only [Finset.mem_filter, Finset.mem_range]
-  omega
-
 /-- **Weak majorization for the positive sandwich.**  For positive `M` and
 arbitrary `D` on a finite-dimensional space,
 
@@ -366,7 +353,7 @@ The right-hand side keeps the entire singular-value sequence of `D`; it is not
 the operator-norm relaxation `‖D‖² σᵢ(M)`. -/
 theorem singularValues_adjoint_sandwich_weaklyMajorized
     {M : E →ₗ[𝕜] E} (hM : M.IsPositive) (D : E →ₗ[𝕜] E) :
-    FiniteVector.WeaklyMajorized
+    IsWeaklyMajorizedBy
       (fun i : Fin (finrank 𝕜 E) => (D.adjoint ∘ₗ M ∘ₗ D).singularValues (i : ℕ))
       (fun i : Fin (finrank 𝕜 E) =>
         M.singularValues (i : ℕ) * D.singularValues (i : ℕ) ^ 2) := by
@@ -380,8 +367,8 @@ theorem singularValues_adjoint_sandwich_weaklyMajorized
   · exact fun i => (D.adjoint ∘ₗ M ∘ₗ D).singularValues_nonneg _
   · exact fun i => mul_nonneg (M.singularValues_nonneg _) (sq_nonneg _)
   · intro k
-    rw [prefixSum_comp_val (fun j => (D.adjoint ∘ₗ M ∘ₗ D).singularValues j) k,
-      prefixSum_comp_val (fun j => M.singularValues j * D.singularValues j ^ 2) k]
+    rw [prefixSum_eq_sum_range k (fun j => (D.adjoint ∘ₗ M ∘ₗ D).singularValues j),
+      prefixSum_eq_sum_range k (fun j => M.singularValues j * D.singularValues j ^ 2)]
     exact sum_range_singularValues_adjoint_sandwich_le hM D _
 
 /-- **Weak majorization for the positive sandwich, approximation-number form.**
@@ -391,7 +378,7 @@ finite dimensions, so this is the previous theorem in the vocabulary that
 perturbation arguments use. -/
 theorem approximationNumber_adjoint_sandwich_weaklyMajorized [CompleteSpace E]
     {M : E →L[𝕜] E} (hM : (0 : E →L[𝕜] E) ≤ M) (D : E →L[𝕜] E) :
-    FiniteVector.WeaklyMajorized
+    IsWeaklyMajorizedBy
       (fun i : Fin (finrank 𝕜 E) =>
         (ContinuousLinearMap.adjoint D ∘L M ∘L D).approximationNumber (i : ℕ))
       (fun i : Fin (finrank 𝕜 E) =>

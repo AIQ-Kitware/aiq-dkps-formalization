@@ -3075,3 +3075,56 @@ GPT 5.6 High; its promotion from the experimental surface is
 copyright and Apache-2.0 licensing. Earlier source-name evidence remains in
 the manifest; deletion is not a claim that these authors wrote independent
 upstream implementations.
+
+
+## 2026-11-02: canonical finite majorization and convex descent
+
+Retired the local `TauCeti.FiniteVector.prefixSum`, `WeaklyMajorized` and
+`IsSymmetricConvex` definitions, prefix-sum algebra, weak-majorization basic
+laws, coordinate-shrinking/solidness proofs and the local transfer-descent
+engine. Maintained consumers use native `TauCeti.prefixSum`,
+`IsWeaklyMajorizedBy` and `IsSymmetricConvex`, including source Section 8's
+real/complex majorization and the Minkowski-sum gauge decomposition.
+The equivalences of all three presentations were compiled first. In
+particular, closure under transpositions gives closure under every
+permutation by swap induction, so the predicate migration loses no scope.
+
+Accepted owners:
+[#14102](https://github.com/TauCetiProject/TauCeti/pull/14102), integration
+`715fea57c28ebfd7287e23bcaf772e416a5f928f`, and
+[#17175](https://github.com/TauCetiProject/TauCeti/pull/17175), integration
+`1825b1a3978087c76c9c13f7c172e7433ca0376d`.
+The former explicitly states independence from DKPS and bulk port #13865.
+The latter moves prefix sums into
+`TauCeti.Algebra.BigOperators.Finset.PartialSum` and generalizes their
+additive/scalar API. This is consumption of independent accepted work,
+not proof-adaptation attribution.
+
+Also removed two copies of the finite-prefix/range-sum bridge:
+`TauCeti.prefixSum_comp_val` in `SandwichMajorization.lean` and historical
+`TauCeti.FiniteVector.prefixSum_comp_val` in `OperatorIdeal/Family/Schatten.lean`.
+Both call `TauCeti.prefixSum_eq_sum_range` directly. The sandwich inequality
+and the broader positive-exponent Schatten results remain.
+
+The stronger MAJ-A14 result
+`FiniteVector.exists_isTTransform_of_not_forall_le` remains: one swap average
+preserves nonnegativity and prefix domination and strictly increases the
+number of coordinates agreeing with the target. Native general descent
+provides no such single-step certificate. The local `IsTTransform` records
+one swap average; native `TauCeti.IsTTransform` allows a Robin Hood move
+followed by an arbitrary permutation, so these relations are not identified.
+The additional pointwise and total-sum consequences remain on the native
+weak-majorization predicate. Finite gauge, zero-padding and rearrangement
+presentations await subsequent canonical slices; they are not yet classified
+as unmatched mathematics.
+
+Historical source:
+`e4637c3919ae:ForTauCeti/Analysis/Convex/Majorization.lean`, extraction
+`6c958c237425ecacf403c670a15c5c65d01a59eb`, Jon Crall, GPT-5.6 Thinking,
+Claude Fable 5 and Claude Opus 5. Original source homes remain in the manifest.
+The two prefix/range helpers are recoverable at the same snapshot under
+`ForTauCeti/Analysis/InnerProductSpace/SandwichMajorization.lean` and
+`ForTauCeti/Analysis/OperatorIdeal/Family/Schatten.lean`, introductions
+`8752c585f06b7c8548ec929ea41ec30f221af9f4` and
+`90dceb24ddacda60c3839f316b0a0080631a64a2`; both credit Jon Crall and
+Claude Opus 5. All carry Kitware, Inc. copyright and Apache-2.0 licensing.

@@ -264,7 +264,7 @@ open FiniteVector
 /-- Prefix sums of a restricted vector are prefix sums of the original, at the
 truncated cut. -/
 theorem prefixSum_comp_castLE {N n : ℕ} (h : n ≤ N) (x : Fin N → ℝ) (k : ℕ) :
-    FiniteVector.prefixSum k (fun i : Fin n => x (Fin.castLE h i)) = FiniteVector.prefixSum (min k n) x := by
+    prefixSum k (fun i : Fin n => x (Fin.castLE h i)) = prefixSum (min k n) x := by
   classical
   have hmap : (Finset.univ.filter (fun i : Fin n => (i : ℕ) < k)).map (Fin.castLEEmb h)
       = Finset.univ.filter (fun j : Fin N => (j : ℕ) < min k n) := by
@@ -276,24 +276,24 @@ theorem prefixSum_comp_castLE {N n : ℕ} (h : n ≤ N) (x : Fin N → ℝ) (k :
       exact ⟨hi, i.isLt⟩
     · rintro ⟨hk, hn⟩
       exact ⟨⟨(j : ℕ), hn⟩, hk, Fin.ext rfl⟩
-  rw [FiniteVector.prefixSum, FiniteVector.prefixSum, ← hmap, Finset.sum_map]
+  rw [prefixSum_def, prefixSum_def, ← hmap, Finset.sum_map]
   rfl
 
 /-- **A weak majorization restricts to an initial segment of the indices.** -/
 theorem weaklyMajorized_comp_castLE {N n : ℕ} (h : n ≤ N) {x y : Fin N → ℝ}
-    (hxy : WeaklyMajorized x y) :
-    WeaklyMajorized (fun i : Fin n => x (Fin.castLE h i))
+    (hxy : IsWeaklyMajorizedBy x y) :
+    IsWeaklyMajorizedBy (fun i : Fin n => x (Fin.castLE h i))
       (fun i : Fin n => y (Fin.castLE h i)) where
-  left_antitone := fun _ _ hab => hxy.left_antitone (by exact hab)
-  right_antitone := fun _ _ hab => hxy.right_antitone (by exact hab)
-  left_nonneg := fun i => hxy.left_nonneg _
-  right_nonneg := fun i => hxy.right_nonneg _
-  prefix_le := fun k => by
+  antitone_left := fun _ _ hab => hxy.antitone_left (by exact hab)
+  antitone_right := fun _ _ hab => hxy.antitone_right (by exact hab)
+  nonneg_left := fun i => hxy.nonneg_left _
+  nonneg_right := fun i => hxy.nonneg_right _
+  prefixSum_le := fun k => by
     calc
-      FiniteVector.prefixSum k (fun i : Fin n => x (Fin.castLE h i)) = FiniteVector.prefixSum (min k n) x :=
+      prefixSum k (fun i : Fin n => x (Fin.castLE h i)) = prefixSum (min k n) x :=
         prefixSum_comp_castLE h x k
-      _ ≤ FiniteVector.prefixSum (min k n) y := hxy.prefix_le (min k n)
-      _ = FiniteVector.prefixSum k (fun i : Fin n => y (Fin.castLE h i)) :=
+      _ ≤ prefixSum (min k n) y := hxy.prefixSum_le (min k n)
+      _ = prefixSum k (fun i : Fin n => y (Fin.castLE h i)) :=
         (prefixSum_comp_castLE h y k).symm
 
 end Restriction

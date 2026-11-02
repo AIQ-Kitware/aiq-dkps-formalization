@@ -20,12 +20,12 @@ majorization.
   inequality, and `FiniteVector.linftyGauge`, the coordinatewise supremum;
 * `FiniteVector.lpSymmetricGauge` and `FiniteVector.linftySymmetricGauge`, the corresponding
   bundled gauges;
-* their monotonicity under `FiniteVector.WeaklyMajorized`, which is
+* their monotonicity under `IsWeaklyMajorizedBy`, which is
   `FiniteSymmetricGauge.mono_weaklyMajorized` specialized;
 * the zero-padding bridges used to compare gauges across index lengths.
 
-The majorization theory these consume — `FiniteVector.prefixSum`,
-`FiniteVector.WeaklyMajorized`, `FiniteVector.zeroPadRight`, `FiniteSymmetricGauge` itself,
+The majorization theory these consume — `prefixSum`,
+`IsWeaklyMajorizedBy`, `FiniteVector.zeroPadRight`, `FiniteSymmetricGauge` itself,
 and the Hardy--Littlewood--Pólya transfer descent that makes every symmetric gauge monotone —
 lives in `ForTauCeti.Analysis.Convex.Majorization`.
 
@@ -149,7 +149,7 @@ noncomputable def lpSymmetricGauge (p : ℝ) (hp : 1 ≤ p) :
 
 /-- `ℓᵖ` gauge monotonicity under weak majorization. -/
 theorem lpGauge_mono_weaklyMajorized {p : ℝ} (hp : 1 ≤ p)
-    {x y : Fin n → ℝ} (h : WeaklyMajorized x y) :
+    {x y : Fin n → ℝ} (h : IsWeaklyMajorizedBy x y) :
     lpGauge p x ≤ lpGauge p y :=
   (lpSymmetricGauge (n := n) p hp).mono_weaklyMajorized h
 
@@ -247,7 +247,7 @@ noncomputable def linftySymmetricGauge : FiniteSymmetricGauge n where
 
 /-- `ℓ∞` gauge monotonicity under weak majorization. -/
 theorem linftyGauge_mono_weaklyMajorized {x y : Fin n → ℝ}
-    (h : WeaklyMajorized x y) : linftyGauge x ≤ linftyGauge y :=
+    (h : IsWeaklyMajorizedBy x y) : linftyGauge x ≤ linftyGauge y :=
   (linftySymmetricGauge (n := n)).mono_weaklyMajorized h
 
 /-- Right zero-padding does not change the finite `ℓ∞` gauge. -/

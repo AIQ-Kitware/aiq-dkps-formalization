@@ -117,7 +117,7 @@ The proof is the two-step chain
 
 whose first link is the pointwise Weyl step of part (i)
 (`theorem8_1_upperSandwichApproximation`, packaged by
-`FiniteVector.WeaklyMajorized.of_pointwise`) and whose second link is the
+`IsWeaklyMajorizedBy.of_pointwise`) and whose second link is the
 generic sandwich majorization for a positive middle factor.  The middle factor
 is positive by `theorem8_1_perturbedUpperBlockShift_nonneg`. -/
 theorem theorem8_1_upperWeightedWeakMajorization [FiniteDimensional ℂ H]
@@ -128,7 +128,7 @@ theorem theorem8_1_upperWeightedWeakMajorization [FiniteDimensional ℂ H]
     (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
-    FiniteVector.WeaklyMajorized
+    IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℂ H) =>
         (upperBlockShift A P alpha).approximationNumber (i : ℕ))
       (fun i : Fin (Module.finrank ℂ H) =>
@@ -147,14 +147,14 @@ theorem theorem8_1_upperWeightedWeakMajorization [FiniteDimensional ℂ H]
     theorem8_1_perturbedUpperBlockShift_nonneg A K P hdelta hA hK hAP hPlow
       hPhigh hKP hKPperp
   -- Link one: the Weyl step of part (i), promoted from pointwise domination.
-  have hstep1 : FiniteVector.WeaklyMajorized
+  have hstep1 : IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℂ H) =>
         (upperBlockShift A P alpha).approximationNumber (i : ℕ))
       (fun i : Fin (Module.finrank ℂ H) =>
         (ContinuousLinearMap.adjoint (cosineBlock P Q) ∘L
           upperBlockShift (A + K) Q alpha ∘L
           cosineBlock P Q).approximationNumber (i : ℕ)) :=
-    FiniteVector.WeaklyMajorized.of_pointwise
+    IsWeaklyMajorizedBy.of_pointwise
       (fun i j hij =>
         (upperBlockShift A P alpha).approximationNumber_antitone (Fin.le_def.mp hij))
       (fun i j hij =>
@@ -217,7 +217,7 @@ core.**
 
 the printed lower companion of `theorem8_1_upperWeightedWeakMajorization`.
 Same two links: the pointwise lower Weyl step of part (i), packaged by
-`FiniteVector.WeaklyMajorized.of_pointwise`, then the generic positive-sandwich
+`IsWeaklyMajorizedBy.of_pointwise`, then the generic positive-sandwich
 weak majorization with `theorem8_1_perturbedLowerBlockShift_nonneg` supplying
 positivity of the middle factor.  No `‖C₀‖²` relaxation is used: the whole cosine
 sequence is retained, weight by weight. -/
@@ -229,7 +229,7 @@ theorem theorem8_1_lowerWeightedWeakMajorization [FiniteDimensional ℂ H]
     (hPlow : ∀ x ∈ P, RCLike.re ⟪A x, x⟫_ℂ ≤ alpha * ‖x‖ ^ 2)
     (hPhigh : ∀ x ∈ Pᗮ, (alpha + delta) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hKP : ∀ x ∈ P, K x ∈ Pᗮ) (hKPperp : ∀ x ∈ Pᗮ, K x ∈ P) :
-    FiniteVector.WeaklyMajorized
+    IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℂ H) =>
         (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
       (fun i : Fin (Module.finrank ℂ H) =>
@@ -248,14 +248,14 @@ theorem theorem8_1_lowerWeightedWeakMajorization [FiniteDimensional ℂ H]
     theorem8_1_perturbedLowerBlockShift_nonneg A K P hdelta hA hK hAP hPlow
       hPhigh hKP hKPperp
   -- Link one: the lower Weyl step of part (i), promoted from pointwise domination.
-  have hstep1 : FiniteVector.WeaklyMajorized
+  have hstep1 : IsWeaklyMajorizedBy
       (fun i : Fin (Module.finrank ℂ H) =>
         (lowerBlockShift A P alpha delta).approximationNumber (i : ℕ))
       (fun i : Fin (Module.finrank ℂ H) =>
         (ContinuousLinearMap.adjoint (lowerCosineBlock P Q) ∘L
           lowerBlockShift (A + K) Q alpha delta ∘L
           lowerCosineBlock P Q).approximationNumber (i : ℕ)) :=
-    FiniteVector.WeaklyMajorized.of_pointwise
+    IsWeaklyMajorizedBy.of_pointwise
       (fun i j hij =>
         (lowerBlockShift A P alpha delta).approximationNumber_antitone
           (Fin.le_def.mp hij))

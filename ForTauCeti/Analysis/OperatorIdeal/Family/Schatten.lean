@@ -41,20 +41,6 @@ variable {E : Type v} {F : Type w}
 
 section Truncation
 
-/-- The prefix sums of a truncated sequence are the sequence's own partial sums, capped at the
-truncation length.  This is the only bridge the file needs between
-`TauCeti.FiniteVector.prefixSum` on `Fin k` and `Finset.range`. -/
-theorem _root_.TauCeti.FiniteVector.prefixSum_comp_val {k : ℕ} (f : ℕ → ℝ) (j : ℕ) :
-    TauCeti.FiniteVector.prefixSum j (fun i : Fin k => f i) =
-      ∑ n ∈ Finset.range (min j k), f n := by
-  classical
-  rw [TauCeti.FiniteVector.prefixSum, Finset.sum_filter, Fin.sum_univ_eq_sum_range
-    (fun m => if m < j then f m else 0) k, ← Finset.sum_filter]
-  congr 1
-  ext m
-  simp only [Finset.mem_filter, Finset.mem_range, Nat.lt_min]
-  exact and_comm
-
 end Truncation
 
 section Finite
@@ -75,7 +61,7 @@ theorem lpGauge_approximationNumber_add_le {p : ℝ} (hp : 1 ≤ p) (S T : E →
       TauCeti.FiniteVector.lpGauge p (fun i : Fin k => S.approximationNumber i) +
         TauCeti.FiniteVector.lpGauge p (fun i : Fin k => T.approximationNumber i) := by
   classical
-  have hmaj : TauCeti.FiniteVector.WeaklyMajorized
+  have hmaj : TauCeti.IsWeaklyMajorizedBy
       (fun i : Fin k => (S + T).approximationNumber i)
       (fun i : Fin k => S.approximationNumber i + T.approximationNumber i) := by
     refine ⟨?_, ?_, ?_, ?_, ?_⟩
@@ -87,12 +73,12 @@ theorem lpGauge_approximationNumber_add_le {p : ℝ} (hp : 1 ≤ p) (S T : E →
     · exact fun i =>
         add_nonneg (S.approximationNumber_nonneg i) (T.approximationNumber_nonneg i)
     · intro j
-      rw [TauCeti.FiniteVector.prefixSum_comp_val (fun n => (S + T).approximationNumber n) j,
+      rw [TauCeti.prefixSum_eq_sum_range j (fun n => (S + T).approximationNumber n),
         show (fun i : Fin k => S.approximationNumber i + T.approximationNumber i)
           = (fun i : Fin k => (fun n => S.approximationNumber n + T.approximationNumber n) i)
           from rfl,
-        TauCeti.FiniteVector.prefixSum_comp_val
-          (fun n => S.approximationNumber n + T.approximationNumber n) j,
+        TauCeti.prefixSum_eq_sum_range j
+          (fun n => S.approximationNumber n + T.approximationNumber n),
         Finset.sum_add_distrib]
       have h : (S + T).kyFanGaugeReal (min j k) ≤
           S.kyFanGaugeReal (min j k) + T.kyFanGaugeReal (min j k) := by

@@ -25,7 +25,7 @@ operator ideal is built from; that construction lives downstream, and this file
 is the sequence-space half of it.
 
 The proof is not an assumption and does not use a separation theorem.  It
-applies the repository's constructive Hardy--Littlewood--Pólya descent to the
+applies Tau Ceti's accepted Hardy--Littlewood--Pólya descent to the
 Minkowski sum of two symmetric-convex gauge balls.
 -/
 
@@ -77,31 +77,31 @@ into `FiniteSymmetricGauge` changes the interface, not the value. -/
 theorem isSymmetricConvex_gaugeBall_add_gaugeBall
     {n : ℕ} (Φ Ψ : FiniteSymmetricGauge n)
     (r s : ℝ) :
-    FiniteVector.IsSymmetricConvex
+    IsSymmetricConvex
       {x : Fin n → ℝ | ∃ u v,
         x = u + v ∧ Φ u ≤ r ∧ Ψ v ≤ s} := by
   let U : Set (Fin n → ℝ) := {u | Φ u ≤ r}
   let V : Set (Fin n → ℝ) := {v | Ψ v ≤ s}
-  have hU : FiniteVector.IsSymmetricConvex U :=
+  have hU : IsSymmetricConvex U :=
     Φ.isSymmetricConvex_sublevel r
-  have hV : FiniteVector.IsSymmetricConvex V :=
+  have hV : IsSymmetricConvex V :=
     Ψ.isSymmetricConvex_sublevel s
   refine
     { convex := ?_
-      swap_mem := ?_
-      neg_single_mem := ?_ }
+      comp_perm_mem := ?_
+      update_neg_mem := ?_ }
   · rintro x ⟨ux, vx, rfl, hux, hvx⟩
       y ⟨uy, vy, rfl, huy, hvy⟩ a b ha hb hab
     refine ⟨a • ux + b • uy, a • vx + b • vy, ?_, ?_, ?_⟩
     · module
     · exact hU.convex hux huy ha hb hab
     · exact hV.convex hvx hvy ha hb hab
-  · rintro x ⟨u, v, rfl, hu, hv⟩ j l
-    refine ⟨u ∘ Equiv.swap j l, v ∘ Equiv.swap j l, ?_, ?_, ?_⟩
+  · rintro π x ⟨u, v, rfl, hu, hv⟩
+    refine ⟨u ∘ π, v ∘ π, ?_, ?_, ?_⟩
     · funext i
       simp [Function.comp_apply]
-    · exact hU.swap_mem u hu j l
-    · exact hV.swap_mem v hv j l
+    · exact hU.comp_perm_mem π u hu
+    · exact hV.comp_perm_mem π v hv
   · rintro x ⟨u, v, rfl, hu, hv⟩ j
     refine ⟨Function.update u j (-(u j)),
       Function.update v j (-(v j)), ?_, ?_, ?_⟩
@@ -109,8 +109,8 @@ theorem isSymmetricConvex_gaugeBall_add_gaugeBall
       rcases eq_or_ne i j with rfl | hij
       · simp [add_comm]
       · simp [Function.update_of_ne hij]
-    · exact hU.neg_single_mem u hu j
-    · exact hV.neg_single_mem v hv j
+    · exact hU.update_neg_mem u hu j
+    · exact hV.update_neg_mem v hv j
 
 /-- **Finite Riesz decomposition for weak majorization.**
 
@@ -120,22 +120,22 @@ than `z` in another. -/
 theorem exists_gauge_decomposition_of_weaklyMajorized
     {n : ℕ} (Φ Ψ : FiniteSymmetricGauge n)
     {x y z : Fin n → ℝ}
-    (h : FiniteVector.WeaklyMajorized x (y + z)) :
+    (h : IsWeaklyMajorizedBy x (y + z)) :
     ∃ u v : Fin n → ℝ,
       x = u + v ∧ Φ u ≤ Φ y ∧ Ψ v ≤ Ψ z := by
   let K : Set (Fin n → ℝ) :=
     {w | ∃ u v, w = u + v ∧ Φ u ≤ Φ y ∧ Ψ v ≤ Ψ z}
-  have hK : FiniteVector.IsSymmetricConvex K :=
+  have hK : IsSymmetricConvex K :=
     isSymmetricConvex_gaugeBall_add_gaugeBall Φ Ψ (Φ y) (Ψ z)
   have hyz : y + z ∈ K := ⟨y, z, rfl, le_rfl, le_rfl⟩
-  exact hK.mem_of_weaklyMajorized h hyz
+  exact h.mem hK hyz
 
 /-- The finite Riesz decomposition specialized to the normalized ℓ¹ gauge and
 one coherent paper gauge. -/
 theorem exists_l1_normingGauge_decomposition_of_weaklyMajorized
     (N : SymmetricNormingFunction) {n : ℕ}
     {x y z : Fin n → ℝ}
-    (h : FiniteVector.WeaklyMajorized x (y + z)) :
+    (h : IsWeaklyMajorizedBy x (y + z)) :
     ∃ u v : Fin n → ℝ,
       x = u + v ∧
       l1Gauge n u ≤ l1Gauge n y ∧

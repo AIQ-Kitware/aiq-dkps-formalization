@@ -87,18 +87,18 @@ theorem kyFanFiniteNorm_gauge_of_antitone_nonneg
     (hx0 : ∀ i, 0 ≤ x i) :
     (kyFanFiniteNorm k n).basisGauge
         (EuclideanSpace.basisFun (Fin n) ℂ) x =
-      FiniteVector.prefixSum k x := by
+      prefixSum k x := by
   let b := EuclideanSpace.basisFun (Fin n) ℂ
   change TauCeti.UnitarilyInvariantSeminorm.kyFan
       (𝕜 := ℂ) (E := EuclideanSpace ℂ (Fin n))
       (F := EuclideanSpace ℂ (Fin n)) k (TauCeti.diagOp b x) =
-        FiniteVector.prefixSum k x
+        prefixSum k x
   rw [TauCeti.UnitarilyInvariantSeminorm.kyFan_apply]
   rcases le_total k n with hkn | hnk
   · have hprefix :
-        FiniteVector.prefixSum k x =
+        prefixSum k x =
           ∑ i : Fin k, x ⟨i, lt_of_lt_of_le i.isLt hkn⟩ := by
-      unfold FiniteVector.prefixSum
+      simp only [prefixSum_def]
       let f : ℕ → ℝ := fun m => if hm : m < n then x ⟨m, hm⟩ else 0
       calc
         ∑ j ∈ Finset.univ.filter (fun j : Fin n => (j : ℕ) < k), x j =
@@ -127,7 +127,7 @@ theorem kyFanFiniteNorm_gauge_of_antitone_nonneg
         ((TauCeti.diagOp b x).kyFanSum_eq_nuclear (LinearMap.finrank_range_le _)).symm
     rw [hstab]
     rw [finrank_euclideanSpace_fin]
-    rw [FiniteVector.prefixSum_eq_full_sum_of_le x hnk]
+    rw [prefixSum_of_le hnk x]
     rw [LinearMap.kyFanSum_def, ← Fin.sum_univ_eq_sum_range]
     apply Finset.sum_congr rfl
     intro i hi
@@ -205,10 +205,10 @@ theorem kyFanFiniteNorm_zeroPad (k n : ℕ) (x : Fin n → ℝ) :
     _ = (kyFanFiniteNorm k (n + 1)).basisGauge
         (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
         (FiniteVector.zeroPadRight (m := 1) y) := by rw [hpermPad]
-    _ = FiniteVector.prefixSum k (FiniteVector.zeroPadRight (m := 1) y) :=
+    _ = prefixSum k (FiniteVector.zeroPadRight (m := 1) y) :=
       kyFanFiniteNorm_gauge_of_antitone_nonneg k (n + 1)
         _ hpadyanti hpady0
-    _ = FiniteVector.prefixSum k y :=
+    _ = prefixSum k y :=
       FiniteVector.prefixSum_zeroPadRight k y
     _ = (kyFanFiniteNorm k n).basisGauge
         (EuclideanSpace.basisFun (Fin n) ℂ) y :=
@@ -223,7 +223,7 @@ noncomputable def kyFanNormingFunction (k : ℕ) (hk : 0 < k) :
   finiteNorm := kyFanFiniteNorm k
   normalized := by
     rw [kyFanFiniteNorm_gauge_of_antitone_nonneg k 1]
-    · rw [FiniteVector.prefixSum_eq_full_sum_of_le (fun _ : Fin 1 => (1 : ℝ))]
+    · rw [prefixSum_of_le (x := fun _ : Fin 1 => (1 : ℝ))]
       · simp
       · omega
     · intro i j hij
@@ -249,14 +249,14 @@ theorem kyFanNormingFunction_prefixGauge
   rw [kyFanFiniteNorm_gauge_of_antitone_nonneg]
   · rcases le_total k n with hkn | hnk
     · rw [min_eq_left hkn]
-      unfold FiniteVector.prefixSum
+      simp only [prefixSum_def]
       simp only [SymmetricNormingFunction.approximationPrefix]
       rw [TauCeti.sum_filter_lt_eq_sum_fin hkn
         (fun m => approximationSingularValue m A)]
       simpa only [SymmetricNormingFunction.approximationPrefix] using
         (SymmetricNormingFunction.sum_approximationPrefix k A)
     · rw [min_eq_right hnk]
-      rw [FiniteVector.prefixSum_eq_full_sum_of_le _ hnk]
+      rw [prefixSum_of_le hnk _]
       exact SymmetricNormingFunction.sum_approximationPrefix n A
   · intro i j hij
     exact approximationSingularValue_antitone A (Fin.le_def.mp hij)
