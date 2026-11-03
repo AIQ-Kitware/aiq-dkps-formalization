@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Pairwise
+
 public import YuWangSamworth2015.Core.Statistics
 public import TauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularVectors
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Operator
@@ -105,7 +107,7 @@ Signature audit: the previous constant-one conclusion was too strong for an
 arbitrary `HybridGap`; constant one requires a stronger gap predicate.
 -/
 theorem singularSubspace_dilation_sinTheta_le
-    {A Â : E →ₗ[𝕜] F} {Ω : Set ℝ} {δ : ℝ} (hδ : 0 < δ)
+    {A Â : E →ₗ[𝕜] F} {Ω : Set ℝ} {δ : ℝ} (_hδ : 0 < δ)
     (hgap : HybridGap (LinearMap.hermitianDilation A) (LinearMap.hermitianDilation Â)
       (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation A) Ω)
       (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω) δ) :
@@ -113,17 +115,22 @@ theorem singularSubspace_dilation_sinTheta_le
         (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω))‖
       ≤
       (Real.pi / 2) * ‖(Â - A).toContinuousLinearMap‖ := by
-  have h := sinTheta_perturbation_le_of_spectralDistance
+  have h :=
+    UnitarilyInvariantSeminorm.mul_map_starProjection_comp_starProjection_le_pi_div_two_mul_map_sub
+    (A := (LinearMap.hermitianDilation A).toContinuousLinearMap)
+    (B := (LinearMap.hermitianDilation Â).toContinuousLinearMap)
     (UnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := (WithLp 2 (E × F))) (F := (WithLp 2 (E × F))))
     (LinearMap.isSymmetric_hermitianDilation A) (LinearMap.isSymmetric_hermitianDilation Â)
     ((fun _ hx => (Module.End.map_pointSpectralSubspace_le (A := (LinearMap.hermitianDilation A))
         (Ω := Ω)) (Submodule.mem_map_of_mem hx)))
     ((fun _ hx => (Module.End.map_pointSpectralSubspace_le (A := (LinearMap.hermitianDilation Â))
-        (Ω := Ω)) (Submodule.mem_map_of_mem hx))) hδ hgap
+        (Ω := Ω)) (Submodule.mem_map_of_mem hx)))
+    (Module.End.pointSpectraSeparated_iff.mpr fun lam hlam μ hμ => hgap lam μ hlam hμ)
   have hnative (T : WithLp 2 (E × F) →L[𝕜] WithLp 2 (E × F)) :
       T.toLinearMap.toContinuousLinearMap = T :=
     LinearMap.toContinuousLinearMap.apply_symm_apply T
-  simp only [UnitarilyInvariantSeminorm.opNorm_apply, hnative] at h
+  simp only [LinearMap.coe_toContinuousLinearMap,
+    UnitarilyInvariantSeminorm.opNorm_apply, hnative] at h
   have hsub : (Â - A).toContinuousLinearMap =
       Â.toContinuousLinearMap - A.toContinuousLinearMap := by
     ext x
@@ -139,7 +146,8 @@ theorem singularSubspace_dilation_sinTheta_le
         (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω))‖
         ≤ (Real.pi / 2) *
           ‖(LinearMap.hermitianDilation Â -
-            LinearMap.hermitianDilation A).toContinuousLinearMap‖ := h
+            LinearMap.hermitianDilation A).toContinuousLinearMap‖ := by
+          simpa only [Submodule.sinThetaMap_def] using h
     _ = (Real.pi / 2) *
           ‖Â.toContinuousLinearMap - A.toContinuousLinearMap‖ := by
         rw [hdilsub, LinearMap.norm_toContinuousLinearMap_hermitianDilation_sub]

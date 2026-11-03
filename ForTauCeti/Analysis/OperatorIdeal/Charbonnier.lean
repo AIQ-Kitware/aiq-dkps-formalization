@@ -75,7 +75,7 @@ spectral cost, for any scale and including infinite sums. -/
 theorem charbonnierCost_le_of_singularValue_le (tau : ℝ) (A B : E →L[𝕜] F)
     (h : ∀ n, A.singularValue n ≤ B.singularValue n) :
     A.charbonnierCost tau ≤ B.charbonnierCost tau := by
-  apply ENNReal.tsum_le_tsum
+  apply tsum_le_tsum
   intro n
   apply ENNReal.ofReal_le_ofReal
   apply sub_le_sub_right
@@ -89,7 +89,7 @@ theorem schatten_two_sq_le_mul_charbonnierCost (tau : ℝ) (hτ : 0 < tau) (T : 
     (TauCeti.OperatorIdealFamily.schatten 𝕜 2 (by norm_num)).gauge T ^ (2 : ℝ) ≤
       ENNReal.ofReal (Real.sqrt (tau ^ 2 + ‖T‖ ^ 2) + tau) * T.charbonnierCost tau := by
   rw [TauCeti.OperatorIdealFamily.gauge_schatten_rpow, charbonnierCost, ← ENNReal.tsum_mul_left]
-  apply ENNReal.tsum_le_tsum
+  apply tsum_le_tsum
   intro n
   have hs : 0 ≤ (T.singularValue n : ℝ) := NNReal.coe_nonneg _
   have hsM : (T.singularValue n : ℝ) ≤ ‖T‖ := by exact_mod_cast T.singularValue_le_nnnorm n
@@ -105,7 +105,7 @@ theorem charbonnierCost_le_mul_schatten_two_sq (tau : ℝ) (hτ : 0 < tau) (T : 
     T.charbonnierCost tau ≤ ENNReal.ofReal ((2 * tau)⁻¹) *
       (TauCeti.OperatorIdealFamily.schatten 𝕜 2 (by norm_num)).gauge T ^ (2 : ℝ) := by
   rw [TauCeti.OperatorIdealFamily.gauge_schatten_rpow, charbonnierCost, ← ENNReal.tsum_mul_left]
-  apply ENNReal.tsum_le_tsum
+  apply tsum_le_tsum
   intro n
   have hs : 0 ≤ (T.singularValue n : ℝ) := NNReal.coe_nonneg _
   have hsM : (T.singularValue n : ℝ) ≤ ‖T‖ := by exact_mod_cast T.singularValue_le_nnnorm n
@@ -141,7 +141,7 @@ theorem charbonnierCost_eq_zero_iff (tau : ℝ) (hτ : 0 ≤ tau) (T : E →L[�
     T.charbonnierCost tau = 0 ↔ T = 0 := by
   constructor
   · intro hzero
-    have h := ENNReal.le_tsum (f := fun n : ℕ => ENNReal.ofReal
+    have h := le_tsum (f := fun n : ℕ => ENNReal.ofReal
       (Real.sqrt (tau ^ 2 + (T.singularValue n : ℝ) ^ 2) - tau)) 0
     change ENNReal.ofReal (Real.sqrt (tau ^ 2 + (T.singularValue 0 : ℝ) ^ 2) - tau) ≤
       T.charbonnierCost tau at h

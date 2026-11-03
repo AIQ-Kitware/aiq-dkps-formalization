@@ -21,7 +21,7 @@ public import Acharyya2024.Common
 public import Acharyya2025.Deterministic
 public import Acharyya2025.MathlibBridge
 public import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
-public import TauCeti.Analysis.Matrix.Eigenvalues
+public import TauCeti.Analysis.Matrix.Eigenvalues.Basic
 public import Acharyya2025.GramRealization
 
 public section

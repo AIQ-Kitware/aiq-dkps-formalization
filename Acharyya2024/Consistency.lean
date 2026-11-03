@@ -883,13 +883,13 @@ noncomputable def coinMeasure : Measure Bool :=
 
 instance : IsProbabilityMeasure coinMeasure := by
   constructor
-  simp only [coinMeasure, Measure.coe_add, Measure.coe_smul, Pi.add_apply, Pi.smul_apply,
+  simp only [coinMeasure, FunLike.coe_add, FunLike.coe_smul, Pi.add_apply, Pi.smul_apply,
     measure_univ, smul_eq_mul, mul_one]
   rw [one_div]
   exact ENNReal.inv_two_add_inv_two
 
 theorem coinMeasure_singleton (b : Bool) : coinMeasure {b} = 1 / 2 := by
-  cases b <;> simp [coinMeasure, Measure.coe_add, Measure.coe_smul]
+  cases b <;> simp [coinMeasure]
 
 /-- Integration against the fair two-point measure. -/
 theorem integral_coinMeasure (f : Bool → Real) :

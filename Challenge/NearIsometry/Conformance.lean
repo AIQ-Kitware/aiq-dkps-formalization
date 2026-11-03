@@ -83,7 +83,7 @@ theorem exists_linearIsometryEquiv_norm_sub_le (M : E →ₗ[ℝ] E) {δ : ℝ} 
   have hGsymm : G.IsSymmetric := LinearMap.isSymmetric_adjoint_mul_self M
   have hGquad : ∀ x : E, ⟪G x, x⟫_ℝ = ⟪M x, M x⟫_ℝ := by
     intro x
-    rw [hG, Module.End.mul_apply, LinearMap.adjoint_inner_left]
+    rw [hG, mul_apply_eq_comp, LinearMap.adjoint_inner_left]
   set b := hGsymm.eigenvectorBasis hd with hb
   set μ := hGsymm.eigenvalues hd with hμ
   have hunit : ∀ k : Fin d, ⟪b k, b k⟫_ℝ = 1 := fun k => by
@@ -114,7 +114,7 @@ theorem exists_linearIsometryEquiv_norm_sub_le (M : E →ₗ[ℝ] E) {δ : ℝ} 
   have hMM : ∀ j k : Fin d, ⟪M (b j), M (b k)⟫_ℝ = if j = k then μ j else 0 := by
     intro j k
     have hadj : ⟪M (b j), M (b k)⟫_ℝ = ⟪G (b j), b k⟫_ℝ := by
-      rw [hG, Module.End.mul_apply, LinearMap.adjoint_inner_left]
+      rw [hG, mul_apply_eq_comp, LinearMap.adjoint_inner_left]
     rw [hadj, hb, hGsymm.apply_eigenvectorBasis, real_inner_smul_left, ← hb, ← hμ]
     simp only [RCLike.ofReal_real_eq_id, id_eq]
     by_cases hjk : j = k

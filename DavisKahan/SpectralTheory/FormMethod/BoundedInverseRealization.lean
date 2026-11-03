@@ -271,8 +271,12 @@ theorem inversePartialMap_one_add_surjective
     ∀ h : H, ∃ x : (inversePartialMap R hR hinj).domain,
       (inversePartialMap R hR hinj) x + (x : H) = h := by
   have hunit : IsUnit (1 + R) := by
-    apply ContinuousLinearMap.isUnit_of_coercive one_pos
+    refine _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := 1) one_pos ?_
     intro z
+    apply le_trans ?_ (RCLike.re_le_norm _)
+    change ‖z‖ ^ 2 * 1 ≤ _
+    rw [mul_comm]
     have hNz : (1 + R) z = z + R z := rfl
     rw [one_mul, hNz, inner_add_left, map_add, inner_self_eq_norm_sq]
     nlinarith [hRpos z]

@@ -5,6 +5,11 @@ Staged for Mathlib: additions to `Mathlib/Analysis/InnerProductSpace/` (new file
 Formalized by Claude Fable 5 (claude-fable-5[1m]), plan step G1 of
 the July 2026 completion campaign (Git history).
 
+Canonical consumption (2026-11-03): the ordinary perturbation bounds now use
+accepted TauCeti `UnitarilyInvariantSeminorm.SinTheta.DoubleAngle` (#25082),
+an independent upstream implementation. The stronger mirror-defect bound
+below remains local. Paper-facing formulas and hypotheses are retained.
+
 The subspace Davis–Kahan sin 2Θ theorem, in every unitarily invariant norm:
 `N (Q ∘ P̂ ∘ P) ≤ N (S − T) / (b − a)`, where `P, Q = 1 − P` split along a
 `T`-invariant subspace across whose splitting the quadratic form of `T` jumps
@@ -25,6 +30,8 @@ To be re-authored per Mathlib's AI-contribution policy at PR time.
 -/
 
 module
+
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.DoubleAngle
 
 public import TauCeti.Analysis.InnerProductSpace.SingularValues
 
@@ -257,50 +264,15 @@ theorem sin_two_theta_starProjection_le (N : UnitarilyInvariantSeminorm 𝕜 E E
     N ((Uᗮ.starProjection ∘L V.starProjection ∘L U.starProjection
         : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (S - T) / (b - a) := by
-  have hg : (0 : ℝ) < b - a := by linarith
-  -- The mirror-defect bound with the perturbed subspace as the mirror.
-  have h1 := N.sin_two_theta_reflection_le (W := V) hT hUinv hab hUb hUa
-  -- The reflection through the `S`-invariant `V` commutes with `S`.
-  have hcomm : ∀ x, V.reflection (S x) = S (V.reflection x) := by
-    intro x
-    have hc := starProjection_comp_toContinuousLinearMap_comm hS hVinv x
-    rw [Submodule.reflection_apply, Submodule.reflection_apply, map_sub,
-      map_nsmul, hc]
-  have hJSJ : V.reflection.toLinearMap ∘ₗ S ∘ₗ V.reflection.toLinearMap = S := by
-    ext x
-    simp only [LinearMap.comp_apply, LinearEquiv.coe_coe,
-      LinearIsometryEquiv.coe_toLinearEquiv]
-    rw [← hcomm, Submodule.reflection_reflection]
-  -- The mirror defect of `T` is twice the perturbation:
-  -- `J T J − T = J (T − S) J + (S − T)`.
-  have hident : V.reflection.toLinearMap ∘ₗ T ∘ₗ V.reflection.toLinearMap - T
-      = V.reflection.toLinearMap ∘ₗ (T - S) ∘ₗ V.reflection.toLinearMap
-        + (S - T) := by
-    have hexp : V.reflection.toLinearMap ∘ₗ (T - S) ∘ₗ V.reflection.toLinearMap
-        = V.reflection.toLinearMap ∘ₗ T ∘ₗ V.reflection.toLinearMap
-          - V.reflection.toLinearMap ∘ₗ S ∘ₗ V.reflection.toLinearMap := by
-      ext x
-      simp [map_sub]
-    rw [hexp, hJSJ]
-    abel
-  have hbound : N (V.reflection.toLinearMap ∘ₗ T ∘ₗ V.reflection.toLinearMap - T)
-      ≤ 2 * N (S - T) := by
-    rw [hident]
-    calc N (V.reflection.toLinearMap ∘ₗ (T - S) ∘ₗ V.reflection.toLinearMap
-          + (S - T))
-        ≤ N (V.reflection.toLinearMap ∘ₗ (T - S) ∘ₗ V.reflection.toLinearMap)
-          + N (S - T) := map_add_le_add N _ _
-      _ = N (T - S) + N (S - T) := by
-          rw [map_toLinearMap_comp_comp N V.reflection V.reflection (T - S)]
-      _ = 2 * N (S - T) := by
-          rw [show T - S = -(S - T) by abel, map_neg_eq_map N]
-          ring
-  have h2 : N (V.reflection.toLinearMap ∘ₗ T ∘ₗ V.reflection.toLinearMap - T)
-        / (b - a)
-      ≤ 2 * N (S - T) / (b - a) := by gcongr
-  have h3 := h1.trans h2
-  have h4 : 2 * N (S - T) / (b - a) = 2 * (N (S - T) / (b - a)) := by ring
-  linarith
+  let _ : CompleteSpace E := inferInstance
+  have h := N.mul_map_sinTwoAngleOperator_le_two_mul_map_sub
+    (A := T.toContinuousLinearMap) (B := S.toContinuousLinearMap)
+    (U := U) (V := V) hT hS hUinv hVinv hUa hUb
+  rw [Submodule.sinTwoAngleOperator_def, ContinuousLinearMap.toLinearMap_smul,
+    map_smul_eq_mul, RCLike.norm_ofNat] at h
+  simp only [LinearMap.coe_toContinuousLinearMap] at h
+  rw [le_div_iff₀ (sub_pos.mpr hab)]
+  nlinarith
 
 /-- **The Frobenius subspace sin 2Θ theorem.**  The every-UI-norm sin 2Θ bound
 instantiated at the Frobenius norm:
@@ -549,37 +521,12 @@ theorem sinTwoTheta_perturbation_le
     {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
         Module.End.invtSubmodule B))
-    {a b : ℝ} (hab : a < b) (hgap : TwoBlockFormGap A U a b) :
+    {a b : ℝ} (_hab : a < b) (hgap : TwoBlockFormGap A U a b) :
     (b - a) * N ((U.sinTwoAngleOperator V).toLinearMap) ≤ 2 * N (B - A) := by
-  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  have hcross :
-      N (Uᗮ.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap ∘ₗ
-          U.starProjection.toLinearMap) ≤
-        N (B - A) / (b - a) := by
-    simpa [ContinuousLinearMap.coe_coe, ContinuousLinearMap.coe_coe] using
-      N.sin_two_theta_starProjection_le hA hB hU hV hab hgap.1 hgap.2
-  have hg : 0 < b - a := sub_pos.mpr hab
-  rw [le_div_iff₀ hg] at hcross
-  have hscale :
-      N ((U.sinTwoAngleOperator V).toLinearMap) =
-        2 * N (Uᗮ.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap ∘ₗ
-            U.starProjection.toLinearMap) := by
-    rw [Submodule.sinTwoAngleOperator_def]
-    change N ((2 : 𝕜) • (Uᗮ.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap ∘ₗ
-        U.starProjection.toLinearMap)) = _
-    rw [map_smul_eq_mul N]
-    norm_num
-  rw [hscale]
-  calc
-    (b - a) * (2 * N
-        (Uᗮ.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap ∘ₗ
-            U.starProjection.toLinearMap)) =
-        2 * ((b - a) * N
-          (Uᗮ.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap ∘ₗ
-              U.starProjection.toLinearMap)) := by ring
-    _ ≤ 2 * N (B - A) := by
-      gcongr
-      simpa [mul_comm] using hcross
+  simpa only [LinearMap.coe_toContinuousLinearMap] using
+    N.mul_map_sinTwoAngleOperator_le_two_mul_map_sub
+    (A := A.toContinuousLinearMap) (B := B.toContinuousLinearMap)
+    (U := U) (V := V) hA hB (fun x hx => hU hx) (fun x hx => hV hx) hgap.2 hgap.1
 
 /-- The one-sided cross-block normalization of the `sin 2 Theta` theorem. -/
 theorem sinTwoTheta_cross_perturbation_le

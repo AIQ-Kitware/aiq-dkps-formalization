@@ -64,8 +64,11 @@ over it. It is divided at its own `## Perturbation form` boundary:
   `sinTheta_perturbation_le_of_orderedGap`,
   `opNorm_sinThetaMap_le_of_intervalGap`,
   `frobenius_sinTheta_residual_le_of_spectralDistance`,
-  `frobenius_sinTheta_le`, `kyFan_sinTheta_le` and
-  `sinTheta_perturbation_le_of_spectralDistance`.
+  `frobenius_sinTheta_le` and `kyFan_sinTheta_le`.
+
+The former pairwise `sinTheta_perturbation_le_of_spectralDistance` facade is
+retired: its consumer now applies the accepted TauCeti `SinTheta.Pairwise`
+API (#24932) directly. That upstream proof was independently implemented.
 
 The seam is that transport: nothing in `DirectedBounds` mentions a domain
 isometry, and the perturbation theorems kept here use that transport.
@@ -354,46 +357,5 @@ theorem kyFan_sinTheta_le
   have h := sinTheta_perturbation_le NK hA hB hU hV hδ hgap
   simpa only [NK, UnitarilyInvariantSeminorm.kyFan_apply] using h
 
-/-- General two-sided spectral separation with the `π/2` constant.  The
-ambient transport proof is complete; the only open analytic input is the Ky Fan
-separated reciprocal-multiplier theorem in `Sylvester.lean`.
--/
-theorem sinTheta_perturbation_le_of_spectralDistance
-    (N : UnitarilyInvariantSeminorm 𝕜 E E)
-    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
-        Module.End.invtSubmodule B))
-    {δ : ℝ} (hδ : 0 < δ)
-    (hgap : PointSpectraSeparated A U B Vᗮ δ) :
-    δ * N ((U.sinThetaMap V).toLinearMap) ≤ (Real.pi / 2) * N (B - A) := by
-  let NU : UnitarilyInvariantSeminorm 𝕜 U E :=
-    N.domainIsometryTransport U.subtypeₗᵢ
-  have hM : (A.restrict hU).IsSymmetric := hA.restrict_invariant hU
-  have hgap' : PointSpectraSeparated (A.restrict hU) ⊤ B Vᗮ δ := by
-    intro lam μ hlam hμ
-    apply hgap lam μ
-    · rw [← restrictedPointSpectrum_restrict A hU]
-      exact hlam
-    · exact hμ
-  have hres :
-      δ * NU (sinThetaEmbedding V U.subtypeₗᵢ) ≤
-        (Real.pi / 2) * NU (residual B U.subtypeₗᵢ (A.restrict hU)) :=
-    sinTheta_residual_le_of_spectralDistance
-      (A := B) (U := V) (M := A.restrict hU) NU hB hV
-      U.subtypeₗᵢ hM hδ hgap'
-  have hsin :
-      NU (sinThetaEmbedding V U.subtypeₗᵢ) = N ((U.sinThetaMap V).toLinearMap) :=
-    domainTransport_sinThetaEmbedding_apply N U V
-  have hresBound :
-      NU (residual B U.subtypeₗᵢ (A.restrict hU)) ≤ N (B - A) :=
-    domainTransport_residual_le (B := B) N hU
-  calc
-    δ * N ((U.sinThetaMap V).toLinearMap) =
-        δ * NU (sinThetaEmbedding V U.subtypeₗᵢ) := by rw [hsin]
-    _ ≤ (Real.pi / 2) *
-        NU (residual B U.subtypeₗᵢ (A.restrict hU)) := hres
-    _ ≤ (Real.pi / 2) * N (B - A) :=
-      mul_le_mul_of_nonneg_left hresBound (by positivity)
 
 end TauCeti

@@ -28,10 +28,12 @@ theorem exp_smul_starProjection (M : Submodule ℂ E) [M.HasOrthogonalProjection
       1 + (Complex.exp a - 1) • M.starProjection := by
   apply ContinuousLinearMap.ext
   intro x
-  have hP : M.starProjection (M.starProjection x) = (1 : ℂ) • M.starProjection x := by
-    rw [one_smul, M.starProjection_eq_self_iff.mpr (M.starProjection_apply_mem x)]
-  have hPc : M.starProjection (Mᗮ.starProjection x) = (0 : ℂ) • Mᗮ.starProjection x := by
-    rw [zero_smul, M.starProjection_apply_eq_zero_iff.mpr (Mᗮ.starProjection_apply_mem x)]
+  have hP : (a • M.starProjection) (M.starProjection x) = a • M.starProjection x := by
+    rw [smul_apply,
+      M.starProjection_eq_self_iff.mpr (M.starProjection_apply_mem x)]
+  have hPc : (a • M.starProjection) (Mᗮ.starProjection x) = (0 : ℂ) • Mᗮ.starProjection x := by
+    rw [smul_apply,
+      M.starProjection_apply_eq_zero_iff.mpr (Mᗮ.starProjection_apply_mem x), smul_zero, zero_smul]
   change NormedSpace.exp (a • M.starProjection) x = x + (Complex.exp a - 1) • M.starProjection x
   calc
     _ = NormedSpace.exp (a • M.starProjection)
@@ -39,9 +41,9 @@ theorem exp_smul_starProjection (M : Submodule ℂ E) [M.HasOrthogonalProjection
       congrArg (fun y : E => (NormedSpace.exp (a • M.starProjection)) y)
         (M.starProjection_add_starProjection_orthogonal x).symm
     _ = Complex.exp a • M.starProjection x + Mᗮ.starProjection x := by
-      rw [map_add, ContinuousLinearMap.exp_smul_apply_of_apply_eq_smul M.starProjection hP,
-        ContinuousLinearMap.exp_smul_apply_of_apply_eq_smul M.starProjection hPc,
-        mul_one, mul_zero, NormedSpace.exp_zero, one_smul, ← Complex.exp_eq_exp_ℂ]
+      rw [map_add, ContinuousLinearMap.exp_apply_of_apply_eq_smul (a • M.starProjection) hP,
+        ContinuousLinearMap.exp_apply_of_apply_eq_smul (a • M.starProjection) hPc,
+        NormedSpace.exp_zero, one_smul, ← Complex.exp_eq_exp_ℂ]
     _ = (M.starProjection x + Mᗮ.starProjection x) +
         (Complex.exp a - 1) • M.starProjection x := by rw [sub_smul, one_smul]; abel
     _ = _ := by rw [M.starProjection_add_starProjection_orthogonal]

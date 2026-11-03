@@ -52,7 +52,7 @@ theorem gauge_schatten_rpow_eq_tsum_of_dominated_approximation
         (fun _ _ h => ENNReal.rpow_le_rpow h (by linarith))
     exact (hlsc.isClosed_preimage (∑' j, f (B.singularValue j))).mem_of_tendsto hA
       (Eventually.of_forall (fun n => (heq n).trans_le (hdomB n)))
-  · rw [ENNReal.tsum_eq_iSup_sum]
+  · rw [tsum_eq_iSup_sum]
     apply iSup_le
     intro s
     have hterm (j : ℕ) :=
@@ -60,7 +60,7 @@ theorem gauge_schatten_rpow_eq_tsum_of_dominated_approximation
     apply le_of_tendsto' (tendsto_finsetSum s (fun j _ => hterm j))
     intro n
     calc
-      _ ≤ ∑' j, f ((Bₙ n).singularValue j) := ENNReal.sum_le_tsum s
+      _ ≤ ∑' j, f ((Bₙ n).singularValue j) := sum_le_tsum s
       _ = (schatten 𝕜 p hp).gauge (Aₙ n) ^ p := (heq n).symm
       _ ≤ _ := hdomA n
 

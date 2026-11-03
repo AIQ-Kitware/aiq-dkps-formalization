@@ -406,7 +406,7 @@ theorem approximationNumberEnergy_eq_iSup_cutoff {ι : Type*}
     exact_mod_cast hNN
   apply le_antisymm
   · unfold approximationNumberEnergy
-    rw [ENNReal.tsum_eq_iSup_sum]
+    rw [tsum_eq_iSup_sum]
     refine iSup_le fun t => ?_
     have hten : Tendsto
         (fun s : Finset ι => ∑ n ∈ t, ENNReal.ofReal
@@ -421,7 +421,7 @@ theorem approximationNumberEnergy_eq_iSup_cutoff {ι : Type*}
       ∑ n ∈ t, ENNReal.ofReal
           ((((A ∘L basisProjection b s).singularValue n : ℝ)) ^ 2)
           ≤ approximationNumberEnergy (A ∘L basisProjection b s) :=
-            ENNReal.sum_le_tsum t
+            sum_le_tsum t
       _ ≤ ⨆ t : Finset ι,
             approximationNumberEnergy
               (A ∘L basisProjection b t) :=
@@ -429,7 +429,7 @@ theorem approximationNumberEnergy_eq_iSup_cutoff {ι : Type*}
               approximationNumberEnergy (A ∘L basisProjection b t)) s
   · refine iSup_le fun s => ?_
     unfold approximationNumberEnergy
-    refine ENNReal.tsum_le_tsum fun n => ?_
+    refine tsum_le_tsum fun n => ?_
     exact ENNReal.ofReal_le_ofReal (pow_le_pow_left₀
       ((ContinuousLinearMap.singularValue _ n).coe_nonneg) (hle s n) 2)
 
@@ -440,7 +440,7 @@ theorem hilbertSchmidtBasisEnergy_eq_iSup_finset {ι : Type*}
     hilbertSchmidtBasisEnergy b A =
       ⨆ s : Finset ι, ∑ i ∈ s, ENNReal.ofReal (‖A (b i)‖ ^ 2) := by
   unfold hilbertSchmidtBasisEnergy
-  rw [ENNReal.tsum_eq_iSup_sum]
+  rw [tsum_eq_iSup_sum]
   refine iSup_congr fun s => Finset.sum_congr rfl fun i _ => ?_
   rw [ENNReal.ofReal_pow (norm_nonneg _), ofReal_norm, enorm_eq_nnnorm]
 

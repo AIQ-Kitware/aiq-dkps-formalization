@@ -293,7 +293,8 @@ theorem spectrum_addBounded_subset_of_gap
 
 This is the theorem GOAL.md section 6.2 asks for, in the form Theorem 8.1
 consumes.  The bounded Section 8 argument reaches invertibility of `J (A - c)`
-through `TauCeti.isUnit_of_coercive`, which needs `A` everywhere defined; that is
+through `ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map`,
+which needs `A` everywhere defined; that is
 what blocks lifting `isQuarterAcute_of_orderedFormGap` to an unbounded ambient
 operator.
 

@@ -76,7 +76,9 @@ namespace CoerciveFormData
 algebra. -/
 theorem formOperator_isUnit (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
     IsUnit D.formOperator :=
-  ContinuousLinearMap.isUnit_of_coercive D.coercivity_pos D.coercive
+  _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := ⟨D.coercivityConstant, D.coercivity_pos.le⟩) D.coercivity_pos
+      (fun z => (mul_comm _ _).le.trans ((D.coercive z).trans (RCLike.re_le_norm _)))
 
 /-- Bounded inverse of the represented form operator. -/
 @[expose]

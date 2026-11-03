@@ -342,7 +342,9 @@ theorem boundedInverseData_of_coercive_direct
     (hcoer : ∀ x, a * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜) :
     ∃ hInv : BoundedInverseData A, ‖hInv.inv‖ ≤ a⁻¹ := by
   have hunit : IsUnit A :=
-    TauCeti.ContinuousLinearMap.isUnit_of_coercive ha hcoer
+    _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := ⟨a, by positivity⟩) ha
+      (fun z => (mul_comm _ _).le.trans ((hcoer z).trans (RCLike.re_le_norm _)))
   let J : H →L[𝕜] H := Ring.inverse A
   have hJA : J ∘L A = ContinuousLinearMap.id 𝕜 H := by
     exact Ring.inverse_mul_cancel A hunit

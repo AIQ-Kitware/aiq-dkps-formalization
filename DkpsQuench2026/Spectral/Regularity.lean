@@ -19,7 +19,7 @@ module
 
 public import DkpsQuench2026.Geometry.CenteredCovariance
 public import DkpsQuench2026.Spectral.GramSpectrum
-public import TauCeti.Analysis.Matrix.Eigenvalues
+public import TauCeti.Analysis.Matrix.Eigenvalues.Basic
 public import TauCeti.Probability.Moments.Chebyshev
 public import TauCeti.Probability.Moments.SampleMean
 

@@ -206,7 +206,7 @@ theorem exists_orthogonal_real_projection_blocks [FiniteDimensional ℝ E]
         (F : Set (Submodule ℝ E)).Pairwise Submodule.IsOrtho ∧ F.sup id = S := by
     intro n
     induction n using Nat.strong_induction_on with
-    | h n ih =>
+    | ind n ih =>
       intro S hdim hXS hYS
       by_cases hS : S = ⊥
       · subst S

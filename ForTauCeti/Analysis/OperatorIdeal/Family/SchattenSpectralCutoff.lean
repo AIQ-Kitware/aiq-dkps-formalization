@@ -52,6 +52,6 @@ theorem finrank_eigenSpan_mul_cutoff_rpow_le_schatten_rpow
       apply ENNReal.rpow_le_rpow _ (by linarith : 0 ≤ p)
       rw [← ENNReal.ofReal_coe_nnreal]
       exact ENNReal.ofReal_le_ofReal hreal
-    _ ≤ _ := ENNReal.sum_le_tsum _
+    _ ≤ _ := sum_le_tsum _
 
 end TauCeti

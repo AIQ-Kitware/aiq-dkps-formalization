@@ -15,7 +15,7 @@ public import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 public import Mathlib.Analysis.InnerProductSpace.Dual
 public import Mathlib.Analysis.Convex.Deriv
 public import TauCeti.Analysis.Convex.StrictConvexSpace
-public import TauCeti.Analysis.Normed.Module.Trace
+public import TauCeti.Topology.Algebra.Module.Trace
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity
 public import Mathlib.Analysis.Normed.Operator.Mul
 public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius
@@ -242,7 +242,7 @@ theorem spectral_sum_support
     have hweight : ∑ j, (e.schurWeight v j i : ℂ) = 1 := by
       rw [← Complex.ofReal_sum, e.sum_schurWeight_col v, Complex.ofReal_one]
     have hv : ⟪v i, v i⟫_ℂ = 1 := v.inner_eq_one i
-    simp only [Module.End.mul_apply, LinearMap.sub_apply,
+    simp only [mul_apply_eq_comp, LinearMap.sub_apply,
       LinearMap.adjoint_inner_right, hG, inner_smul_left, inner_sub_right,
       hS, inner_smul_right, hv, mul_one]
     rw [hdiag]

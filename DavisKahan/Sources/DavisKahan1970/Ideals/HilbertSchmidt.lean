@@ -202,8 +202,9 @@ theorem approximationNumberEnergy_comp_le
         approximationNumberEnergy A := by
   unfold approximationNumberEnergy
   rw [← ENNReal.tsum_mul_left]
-  apply ENNReal.tsum_le_tsum
+  apply tsum_le_tsum
   intro n
+  dsimp only
   have hsing := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le L A R n))
   have hnonneg : 0 ≤ ((L ∘L A ∘L R).singularValue n : ℝ) :=
     (ContinuousLinearMap.singularValue _ _).coe_nonneg

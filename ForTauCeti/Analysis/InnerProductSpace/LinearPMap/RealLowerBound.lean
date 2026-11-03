@@ -54,7 +54,8 @@ theorem norm_sub_smul_ge_of_coercive_comp
 /-- **A real point is a resolvent point when the shifted operator is coercive
 against a bounded isometry.**
 
-The unbounded companion of `TauCeti.isUnit_of_coercive`: where that concludes
+The unbounded companion of `ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map`:
+where that concludes
 invertibility of a bounded `J (A - c)` from its quadratic form, this concludes
 that `c` lies in the resolvent set of a self-adjoint partial map `A`, which is
 the same statement for an operator that is not everywhere defined. -/

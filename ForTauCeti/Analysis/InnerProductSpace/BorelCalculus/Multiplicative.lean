@@ -99,7 +99,8 @@ theorem pair_self_eq_integral (hfm : Measurable f) {M : ℝ} (hfb : ∀ x, ‖f 
       ha).representationDiagMeasure ξ with hν
   have : IsFiniteMeasure ν := by rw [hν]; infer_instance
   have hfi : Integrable f ν := integrable_of_bounded hfm hfb ν
-  obtain ⟨g, hgi, hgle⟩ := ν.exists_continuous_integral_norm_sub_le hfi hε
+  obtain ⟨g₀, hgle, hgi⟩ := hfi.exists_boundedContinuous_integral_sub_le hε
+  let g := g₀.toContinuousMap
   have hdom : ∀ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ξ ξ k) ≤ ν := fun k =>
     Measure.le_add_right (diagMeasure_le_sum ha (pairVectors ξ ξ) k)
   have hdomξ : (cfcHom ha).representationDiagMeasure ξ ≤ ν := Measure.le_add_left le_rfl
@@ -233,7 +234,8 @@ private theorem norm_pair_sub_cfcHom_le (ha : IsStarNormal a) {u : spectrum ℂ 
 
 The proof is an `ε`-argument in five steps, and what remains inline after the four preliminary
 lemmas above is the scaffolding they cannot absorb: three measures, each needing its own
-`IsFiniteMeasure` instance, and two applications of `exists_continuous_integral_norm_sub_le`
+`IsFiniteMeasure` instance, and two applications of
+`Integrable.exists_boundedContinuous_integral_sub_le`
 whose outputs (`p`, `q`) every later step mentions.
 
 1. replace `f` by a continuous `p` at the pair `(ψ, η)` — `norm_pair_sub_cfcHom_le`;
@@ -263,8 +265,9 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
     νP + ∑ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ψ η k) with hν₁
   have : IsFiniteMeasure ν₁ := by rw [hν₁]; infer_instance
   -- choose the approximant of `f` first
-  obtain ⟨p, hpi, hple⟩ :=
-    ν₁.exists_continuous_integral_norm_sub_le (hf.integrable ν₁) hε
+  obtain ⟨p₀, hple, hpi⟩ :=
+    (hf.integrable ν₁).exists_boundedContinuous_integral_sub_le hε
+  let p := p₀.toContinuousMap
   have hpnn : (0 : ℝ) < 1 + ‖p‖ := by positivity
   set ε' : ℝ := ε / (1 + ‖p‖) with hε'
   have hε'pos : 0 < ε' := div_pos hε hpnn
@@ -278,8 +281,9 @@ theorem pair_mul_eq_inner_comp (hf : IsBddMeasurable f) (hg : IsBddMeasurable g)
   set ν₂ : Measure (spectrum ℂ a) :=
     νP + ∑ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ζ ξ k) with hν₂
   have : IsFiniteMeasure ν₂ := by rw [hν₂]; infer_instance
-  obtain ⟨q, hqi, hqle⟩ :=
-    ν₂.exists_continuous_integral_norm_sub_le (hg.integrable ν₂) hε'pos
+  obtain ⟨q₀, hqle, hqi⟩ :=
+    (hg.integrable ν₂).exists_boundedContinuous_integral_sub_le hε'pos
+  let q := q₀.toContinuousMap
   -- step 1: replace `f` by `p` at the pair `(ψ, η)`
   have hdom₁ : ∀ k : Fin 4, (cfcHom ha).representationDiagMeasure (pairVectors ψ η k) ≤ ν₁ := fun
     k =>
@@ -433,7 +437,8 @@ theorem pair_conj (hfm : Measurable f) {M : ℝ} (hfb : ∀ x, ‖f x‖ ≤ M) 
   set ν : Measure (spectrum ℂ a) := ∑ j, (cfcHom ha).representationDiagMeasure (v j) with hν
   have : IsFiniteMeasure ν := by dsimp only [ν]; infer_instance
   have hfi : Integrable f ν := integrable_of_bounded hfm hfb ν
-  obtain ⟨g, hgi, hgle⟩ := ν.exists_continuous_integral_norm_sub_le hfi hε
+  obtain ⟨g₀, hgle, hgi⟩ := hfi.exists_boundedContinuous_integral_sub_le hε
+  let g := g₀.toContinuousMap
   have hcfi : Integrable (fun x => (starRingEnd ℂ) (f x)) ν :=
     integrable_of_bounded (f := fun x => (starRingEnd ℂ) (f x))
       (Complex.continuous_conj.measurable.comp hfm)

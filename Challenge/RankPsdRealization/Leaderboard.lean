@@ -3,7 +3,7 @@
 -/
 module
 
-public import TauCeti.Analysis.Matrix.Eigenvalues
+public import TauCeti.Analysis.Matrix.Eigenvalues.Basic
 public import ForTauCeti.LinearAlgebra.Matrix.PosDef
 
 public section

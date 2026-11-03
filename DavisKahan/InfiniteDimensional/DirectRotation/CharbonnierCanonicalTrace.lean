@@ -247,7 +247,7 @@ theorem charbonnier_nonacuteDirectRotation_eq_minimum_sum_of_subcritical
     let : FiniteDimensional ℂ (M n) := hM n
     rw [← hsin, K.sinThetaMap_map_truncation_eq_comp_starProjection L (M n) R (V n) hmap
       (hRM n) (hK n) (hL n) (hV n) (hfix n)]
-    apply ENNReal.tsum_le_tsum
+    apply tsum_le_tsum
     intro j
     apply ENNReal.ofReal_le_ofReal
     apply subcritical_scalar_mono tau _ _ hτ (Real.arcsin_nonneg.mpr (NNReal.coe_nonneg _))

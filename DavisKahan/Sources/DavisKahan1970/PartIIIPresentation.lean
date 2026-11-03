@@ -280,8 +280,14 @@ alias banach_sylvester_lower_bound_unboundedA :=
   DavisKahan1970.theorem5_1_banach_sylvester_unboundedA
 
 /-! ## Graph and Riccati theory (continued) -/
-alias bounded_coercive_isUnit :=
-  TauCeti.ContinuousLinearMap.isUnit_of_coercive
+/-- Bounded coercive invertibility, using Mathlib's canonical Hilbert-space criterion. -/
+theorem bounded_coercive_isUnit {𝕜 E : Type*} [RCLike 𝕜]
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    {N : E →L[𝕜] E} {c : ℝ} (hc : 0 < c)
+    (hcoer : ∀ z, c * ‖z‖ ^ 2 ≤ RCLike.re (inner 𝕜 (N z) z)) : IsUnit N :=
+  _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := ⟨c, by positivity⟩) hc
+      (fun z => (mul_comm _ _).le.trans ((hcoer z).trans (RCLike.re_le_norm _)))
 alias bounded_one_add_star_mul_self_isUnit :=
   TauCeti.ContinuousLinearMap.isUnit_one_add_star_mul_self
 alias bounded_positive_cauchy_schwarz :=

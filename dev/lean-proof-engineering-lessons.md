@@ -909,3 +909,14 @@ Durable rules:
 4. Keep the status map of true/false/replacement statements in a module-level
    note next to the refuted declaration's former location, so the false form
    is not reintroduced under a new name.
+
+## 32. Preserve tactic sequencing when removing redundant combinators
+
+A warning that `all_goals` is redundant in `all_goals ring` can mean exactly
+one arithmetic goal remains: replace the command with `ring`, rather than
+removing the closing tactic. Likewise, after removing a redundant `try`, keep
+`match_scalars <;> field_simp; ring` distinct from
+`match_scalars <;> (field_simp; ring)`. The latter runs `ring` inside each
+branch, including branches already closed by `field_simp`; the former runs it
+after the branch-wise simplification, on the remaining goal. Check the goal
+state and the combinator's scope before following a linter hint mechanically.

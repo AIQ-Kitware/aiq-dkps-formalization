@@ -134,7 +134,7 @@ theorem schatten_nonacuteDirectRotation_rpow_eq_canonical_sine_sum
     rw [← hsin, hsinR,
       K.sinThetaMap_map_truncation_eq_comp_starProjection L (M n) R (V n) hmap
         (hRM n) (hK n) (hL n) (hV n) (hfix n)]
-    apply ENNReal.tsum_le_tsum
+    apply tsum_le_tsum
     intro j
     apply monotone_sine_canonical_phasePower p.toReal hp0
     calc

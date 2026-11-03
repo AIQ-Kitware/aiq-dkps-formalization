@@ -16,7 +16,7 @@ public import Acharyya2025.GramRealization
 public import Acharyya2025.RateChain
 public import Helm2025.Basic
 public import ForTauCeti.Probability.RigidAlignment
-public import TauCeti.Analysis.Matrix.Eigenvalues
+public import TauCeti.Analysis.Matrix.Eigenvalues.Basic
 
 public section
 

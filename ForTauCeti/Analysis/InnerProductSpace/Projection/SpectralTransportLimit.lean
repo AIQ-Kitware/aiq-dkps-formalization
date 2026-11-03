@@ -89,7 +89,7 @@ theorem tsum_angle_penalty_le_displacement_of_finite_transport_bound
   suffices (∑' j, m (Real.arcsin ((S (U : E →L[ℂ] E)).singularValue j : ℝ))) ≤
       ∑' j, f ((1 - (U : E →L[ℂ] E)).singularValue j) by
     simpa only [← hsin, hmap] using this
-  rw [ENNReal.tsum_eq_iSup_sum]
+  rw [tsum_eq_iSup_sum]
   apply iSup_le
   intro s
   have hterms (j : ℕ) := (((hterm j).comp hS).tendsto (U : E →L[ℂ] E)).comp hlim
@@ -97,11 +97,11 @@ theorem tsum_angle_penalty_le_displacement_of_finite_transport_bound
   intro n
   calc
     _ ≤ ∑' j, m (Real.arcsin ((S (V n : E →L[ℂ] E)).singularValue j : ℝ)) :=
-      ENNReal.sum_le_tsum s
+      sum_le_tsum s
     _ = ∑' j, m (Real.arcsin ((K.sinThetaMap (K.map (V n).toLinearMap)).singularValue j : ℝ)) := by
       rw [← hsin]
     _ ≤ ∑' j, f ((1 - (V n : E →L[ℂ] E)).singularValue j) :=
       hfinite_rank K (K.map (V n).toLinearMap) (V n) rfl (N n) (hN n)
-    _ ≤ _ := ENNReal.tsum_le_tsum (fun j => hf (hdom n j))
+    _ ≤ _ := tsum_le_tsum (fun j => hf (hdom n j))
 
 end TauCeti
