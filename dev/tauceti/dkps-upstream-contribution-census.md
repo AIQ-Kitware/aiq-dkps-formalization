@@ -241,7 +241,7 @@ Both branches independently start from accepted main
 | Target and branch commit | Original donor and final declaration(s) | Scope and descent |
 | --- | --- | --- |
 | SSP-D19 left orientation, `8af8fb271a5ab7acde93bf1ad9806bd0de4dc636`, branch `port-ssp-d19-left-population-gap` | DKPS `4138aafdf:YuWangSamworth2015/YuWangSamworth2015/Rectangular/Theorem4.lean`, `yuWangSamworth_leftSingularSubspace_le` and its operator-norm form → `LinearMap.sq_mul_sum_sum_norm_inner_self_comp_adjoint_eigenvectorBasis_sq_le_four_mul_card_mul_sq` in `YuWangSamworth/SingularVectors.lean` | Adapted by target-Gram duality into the exact squared overlap formulation required by D19. Finite-dimensional `RCLike`, independent source/target, arbitrary finite index block, population-only gap, zero gap and zero-dimensional source allowed. The complete target-Gram eigenbases include kernels; this does not confuse them with zero-valued singular vectors. Source authors Jon Crall / GPT 5.6 High, Kitware 2026, Apache-2.0. Focused build: 5839 jobs, no warnings. |
-| SSP-D16 arbitrary frames, `6a30bfaebc5896a18c8045b78582f6dcc46fc6be`, branch `port-ssp-d16-arbitrary-eigenframes` | DKPS `4138aafdf:ForTauCeti/Analysis/InnerProductSpace/Spectral/EigenFrame.lean` and `YuWangSamworth2015/YuWangSamworth2015/Core/{Residual,Statistics}.lean`: `span_eq_spanIndices`, `sum_sq_norm_apply_orthonormal_le`, `frameResidual_eq`, `sum_sq_norm_frameResidual_le`, `sum_sq_norm_frameResidual_le_of_opNorm`, `yuWangSamworth_sinTheta_frame_le` → `LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices`, `LinearMap.sum_sq_norm_apply_orthonormal_le`, `LinearMap.IsSymmetric.{frameResidual_eq,sum_sq_norm_frameResidual_le,sum_sq_norm_frameResidual_le_of_opNorm,sinThetaFrobenius_orderedEigenframe_le}` | Adapted to the native eigenframe, Weyl, Hoffman–Wielandt and projection interfaces. Generic compression is generalized to arbitrary rectangular maps, without symmetry or a finite-dimensional target, through native basis extension. The endpoint allows arbitrary sample eigenframes inside repeated eigenspaces and keeps the operator/Frobenius minimum; the accepted canonical-eigenbasis theorem now derives from it. No sample gap, nonzero rank, separate frame representation or unmerged dependency. Source headers: Jon Crall, Claude Opus 5, GPT-6 and GPT 5.6 High as applicable; Kitware 2026, Apache-2.0. Focused build: 5995 jobs, no warnings. |
+| SSP-D16 arbitrary frames, `8e38c87a53ba48b098477b0986fbef4a3bbb24bc`, branch `port-ssp-d16-arbitrary-eigenframes` | DKPS `4138aafdf:ForTauCeti/Analysis/InnerProductSpace/Spectral/EigenFrame.lean` and `YuWangSamworth2015/YuWangSamworth2015/Core/{Residual,Statistics}.lean`: `span_eq_spanIndices`, `sum_sq_norm_apply_orthonormal_le`, `frameResidual_eq`, `sum_sq_norm_frameResidual_le`, `sum_sq_norm_frameResidual_le_of_opNorm`, `yuWangSamworth_sinTheta_frame_le` → `LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices`, `LinearMap.sum_sq_norm_apply_orthonormal_le`, `LinearMap.IsSymmetric.{frameResidual_eq,sum_sq_norm_frameResidual_le,sum_sq_norm_frameResidual_le_of_opNorm,sinThetaFrobenius_orderedEigenframe_le}` | Adapted to the native eigenframe, Weyl, Hoffman–Wielandt and projection interfaces. Generic compression is generalized to arbitrary rectangular maps, without symmetry or a finite-dimensional target, through native basis extension. The endpoint allows arbitrary sample eigenframes inside repeated eigenspaces and keeps the operator/Frobenius minimum; the accepted canonical-eigenbasis theorem now derives from it. No sample gap, nonzero rank, separate frame representation or unmerged dependency. Source headers: Jon Crall, Claude Opus 5, GPT-6 and GPT 5.6 High as applicable; Kitware 2026, Apache-2.0. Focused build: 5995 jobs, no warnings. |
 
 Two further independent packets were prepared against accepted main
 `1a1975037a2bb0a6ee3a1ffdb5a9d1089266b905` with the same Lean/Mathlib pins. Both
@@ -3914,3 +3914,17 @@ corrected heads:
 - `204af2a3734a69a4bf32f00b70be15866bdae11d` → `6a30bfaebc5896a18c8045b78582f6dcc46fc6be` (`d16-frames`).
 - `d4d7722113497e8ad86f27d2d7b65333ad7682b6` → `14d1e51111524a2a3d8b071c262d1d5758dbc963` (`coercive-unit`).
 - `c2ad4ba50d6eb65c2e5cfc49ec9a8322e0f2c912` → `af618df07e144de2386ed4e7b744526269d211c4` (`ritz-tangent`).
+
+### PR #26824 index generality repair
+
+The [generality finding](https://github.com/TauCetiProject/TauCeti/pull/26824#discussion_r4449643540)
+on `6a30bfaebc5896a18c8045b78582f6dcc46fc6be` requested arbitrary finite
+indices in five ordered-eigenframe theorems. Repair `8e38c87a53ba48b098477b0986fbef4a3bbb24bc`
+generalizes the span, pointwise residual, two residual-sum bounds and the sine
+endpoint. The pointwise identity needs no finiteness assumption, and span
+identification infers finiteness from the embedding into `Fin n`. Only sums
+and explicit cardinality factors request a `Fintype`. The canonical consumer
+now uses the finset subtype directly, without reindexing through `Fin`.
+Focused warning-as-error compilation and full source header/text style checks
+pass; this records a submitted repair, not upstream integration or approval
+of the new head. The original donor attribution and license are unchanged.
