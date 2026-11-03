@@ -164,6 +164,10 @@
   {A}{A}{old}{Reference self-adjoint operator before perturbation.}
 \dkDeclareSymbol{A1}{A_1}{old}{Complementary block of the reference operator.}
 \dkDeclareSymbol{a1}{a_1}{old}{Reference eigenvalue or complementary spectral value.}
+\dkDeclareSymbol[Reference block A_0: the restriction of A to the range of the reducing source projection P, expressed in source coordinates. In Theorem 8.1 it lies at or below alpha; in Theorem 8.2 its spectrum lies in the enlarged central interval. The perturbed blocks are denoted Lambda_0 and Lambda_1.]
+  {ReferenceBlock0}{A_0}{old}{Reference operator restricted to the source subspace in Section 8.}
+\dkDeclareSymbol[Reference block A_1: the restriction of A to the kernel of the reducing source projection P, expressed in complementary coordinates. In Theorem 8.1 it lies at or above alpha + delta in quadratic-form order.]
+  {ReferenceBlock1}{A_1}{old}{Reference operator restricted to the source complement in Section 8.}
 \dkDeclareSymbol[Self-adjoint ambient operator Ahat being studied; in the perturbation setting Ahat = A + H. Its action on a trial vector is compared with the proposed eigenvalue times that vector.]
   {Ahat}{\widehat A}{current}{Operator under study; in the perturbation setting, the reference operator plus its perturbation.}
 \dkDeclareSymbol[Self-adjoint ambient operator Ahat being studied. In the perturbation setting Ahat = A + H. The trial residual is R = Ahat E_0 - E_0 A_0, and the exact complementary block satisfies Ahat F_1 = F_1 Lambda_1 on its domain.]
@@ -261,17 +265,25 @@
 % Angle and error geometry, including distinct rectangular and positive maps.
 \dkDeclareSymbol[Individual principal angle, between 0 and pi/2. For orthonormal subspace frames X and Y, the singular values of X* Y are the principal cosines. In Figure 1, theta is the angle between the unit trial vector v and the exact wanted line.]
   {theta}{\theta}{sine}{Principal angle between the subspaces under comparison.}
-\dkDeclareSymbol[Positive principal-angle operator for the two subspaces. In finite dimensions its eigenvalues are their principal angles between 0 and pi/2; in Hilbert space it is defined by functional calculus of the positive cosine compression.]
-  {Theta}{\Theta}{angleoperator}{Principal-angle operator.}
-\dkDeclareSymbol[Directed principal-angle operator Theta_0 on trial-coordinate space F, determined by cos(Theta_0) = sqrt(E_0* P E_0). Its positive sine is sqrt(I_F - E_0* P E_0), which measures leakage of the trial space from the exact wanted space.]
-  {Theta0}{\Theta_0}{angleoperator}{Directed principal-angle operator acting on trial coordinates.}
+\dkDeclareSymbol[Full positive angle operator Theta = diag(Theta_0, Theta_1) for the source/target decompositions. Theta_0 compares the source with the target; Theta_1 compares their orthogonal complements. Its operator norm is the largest spectral angle. For positive c, the conditions Theta <= c and Theta < c mean operator norm at most c and strictly below c, respectively.]
+  {Theta}{\Theta}{angleoperator}{Full angle operator, the diagonal sum of the source and complementary angle blocks.}
+\dkDeclareSymbol[Directed principal-angle operator Theta_0 on source or trial coordinates. For a trial frame E_0 and exact wanted projection P, cos(Theta_0) = sqrt(E_0* P E_0), and sin(Theta_0) = sqrt(I_F - E_0* P E_0). In the two-projection geometry it comes from the positive cosine compression P Q P restricted to range(P).]
+  {Theta0}{\Theta_0}{angleoperator}{Directed principal-angle operator acting on source or trial coordinates.}
+\dkDeclareSymbol[Complementary directed angle operator Theta_1, obtained from the projections I-P and I-Q by the same cosine-compression construction as Theta_0. It acts on the source complement, or its isometric coordinates. The full angle operator is diag(Theta_0, Theta_1).]
+  {Theta1}{\Theta_1}{angleoperator}{Directed angle operator comparing the orthogonal complements.}
+\dkDeclareSymbol[Right-angle source defect D_0 = range(P) intersect kernel(Q). These are source vectors orthogonal to the target. Section 8 uses the standing Hilbert-dimension condition dim(D_0) = dim(D_1); in Lean their identification is CrossedDefectsEquivalent.]
+  {CrossedSourceDefect}{D_0}{fg}{Source directions perpendicular to the target subspace.}
+\dkDeclareSymbol[Right-angle target defect D_1 = kernel(P) intersect range(Q). These are target vectors orthogonal to the source. Equality of its Hilbert dimension with that of D_0 is the standing crossed-defect condition used for the full-angle conclusion of Theorem 8.2.]
+  {CrossedTargetDefect}{D_1}{fg}{Target directions perpendicular to the source subspace.}
+\dkDeclareSymbol[Positive complementary cosine block C_1 = cos(Theta_1) in direct-rotation-aligned coordinates. Theorem 8.1 compares A_1 - alpha I with C_1 (Lambda_1 - alpha I) C_1 as quadratic forms, quantifying outward spectral repulsion.]
+  {ComplementCosineBlock}{C_1}{anglecos}{Cosine of the complementary angle block in the spectral-repulsion inequality.}
 \dkDeclareSymbol[Scalar sine of a principal angle. For a unit principal trial vector v and exact wanted projection P, sin(theta) = ||(I - P)v||. In Figure 1 it is the length of the pink leg S(1).]
   {sintheta}{\sin\theta}{sine}{Sine of an individual principal angle: the length of the complementary component of a unit principal trial vector.}
 \dkDeclareSymbol[Positive sine operator sin(Theta_0) = sqrt(I_F - E_0* P E_0): F -> F. It equals |S| for S = (I - P)E_0: F -> E. Its eigenvalues in finite dimensions are the principal sines; the sine theorem bounds its ideal norm by N(R)/delta.]
   {sinTheta0}{\sin\Theta_0}{sineoperator}{Positive sine operator on trial coordinates; the modulus of the rectangular complementary error.}
 \dkDeclareSymbol[Rectangular complementary error S = (I - P) E_0: F -> E. It records how much each trial vector leaks outside the exact wanted subspace. Its modulus |S| = sqrt(S* S) is sin(Theta_0): F -> F. In rank one S(1) = Pperp v.]
   {S}{S}{sineblock}{Rectangular complementary error: the trial frame projected onto the unwanted exact subspace.}
-\dkDeclareSymbol[Complementary-coordinate map X = F_1* E_0: F -> G, with S = F_1 X. It satisfies Lambda_1 X - X A_0 = F_1* R on domain(A_0). Because F_1 is an isometry, X, S and sin(Theta_0) have the same supported ideal-norm values.]
+\dkDeclareSymbol[Complementary-coordinate map X = F_1* E_0: F -> G, with S = F_1 X. It satisfies Lambda_1 X - X A_0 = F_1* R on domain(A_0). Isometric multiplication gives N(X) = N(S); the separate modulus identity abs(S) = sin(Theta_0) gives N(S) = N(sin(Theta_0)), whenever these norms are finite.]
   {X}{X}{sylvester}{Solution of the Sylvester equation; for the sine bound, the trial frame in unwanted exact coordinates.}
 \dkDeclareSymbol{alphaAngle}{\alpha}{anglemax}{Largest principal angle.}
 \dkDeclareSymbol[Scalar c = cos(theta) in the counterexample. In the general two-projection decomposition, the same role denotes a positive cosine operator C; the cosine and sine blocks commute and satisfy C squared + S squared = I.]
@@ -301,12 +313,12 @@
 \dkDeclareSymbol[Real skew-symmetric matrix B, with B transpose = -B, giving the orthogonal variation W exp(tB). If B commutes with the source projection P, this curve preserves the constraint W(U) = V.]
   {SkewDirection}{B}{ambient}{Skew-symmetric direction for a first variation of an orthogonal transporter.}
 % Spectral separation family: gap and original gap are NOT identical.
-\dkDeclareSymbol[Positive separation parameter between the spectra of A_0 and Lambda_1, under the stated interval/exterior or ordered configuration. It gives delta N(sin(Theta_0)) <= N(R). Figure 1 uses delta = |rho - 0.7|; it is not the original gap of A.]
-  {delta}{\delta}{gap}{Positive spectral separation between the trial operator and the unwanted exact block.}
+\dkDeclareSymbol[Positive spectral separation in the stated configuration. In the sine theorem it separates the trial operator from the exact complementary block; Theorem 8.1 uses it for the ordered reference gap, and Theorem 8.2 for the perturbed central-band separation. Figure 1 uses delta = abs(rho - 0.7).]
+  {delta}{\delta}{gap}{Positive spectral separation in the stated gap configuration.}
 \dkDeclareSymbol{g}{g}{gaporiginal}{Original spectral gap of the reference operator; distinct from the certified sine-theta separation.}
 \dkDeclareSymbol{Delta}{\Delta}{gapstat}{Population or statistical spectral gap.}
-\dkDeclareSymbol[Upper endpoint alpha of the finite interval from beta to alpha in the gap hypothesis. One spectrum lies in that interval; the other lies at or below beta - delta or at or above alpha + delta.]
-  {alphaEndpoint}{\alpha}{gapinterval}{Upper endpoint of the finite interval in the interval/exterior gap hypothesis.}
+\dkDeclareSymbol[Spectral endpoint alpha. In the interval/exterior configuration, one spectrum lies between beta and alpha, the other at or below beta - delta or at or above alpha + delta. Theorem 8.2 places the selected perturbed block in the central interval. In Theorem 8.1, alpha bounds the lower reference block and alpha + delta bounds the upper block from below.]
+  {alphaEndpoint}{\alpha}{gapinterval}{Upper endpoint of the central band, or lower-block cut in the ordered gap.}
 \dkDeclareSymbol[Lower endpoint beta of the finite interval from beta to alpha in the gap hypothesis. One spectrum lies in that interval; the other lies at or below beta - delta or at or above alpha + delta.]
   {betaEndpoint}{\beta}{gapinterval}{Lower endpoint of the finite interval in the interval/exterior gap hypothesis.}
 % Spectral/projector and auxiliary matrix objects, context-scoped.

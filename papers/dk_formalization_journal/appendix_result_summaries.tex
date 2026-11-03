@@ -254,24 +254,25 @@ half-infinite.
 \multicolumn{3}{@{}l}{\textbf{Spectral selection and repulsion}}\\*\addlinespace[3pt]
 \path{DK-8.1-thm} &
  Ordered reference gap
- $\mathcal O_{\sym{delta}}(\sym{A0},\sym{A1})$ with endpoint $\alpha$;
+ $\mathcal O_{\sym{delta}}(\sym{ReferenceBlock0},\sym{ReferenceBlock1})$ with endpoint $\sym{alphaEndpoint}$;
  bounded $\sym{H}$, $\sym{H0}=\sym{H1}=0$.
- For the equivalence, $\dim D_0=\dim D_1$. &
+ For the equivalence, $\dim\sym{CrossedSourceDefect}=\dim\sym{CrossedTargetDefect}$. &
+ For a chosen reducing target,
  $\sym{Theta}\le\pi/4$ iff
- $\sym{Lambda0}\le\alpha I$ and
- $\sym{Lambda1}\ge(\alpha+\sym{delta})I$; such a reducing target exists.
+ $\sym{Lambda0}\le\sym{alphaEndpoint} I$ and
+ $\sym{Lambda1}\ge(\sym{alphaEndpoint}+\sym{delta})I$; such a reducing target exists.
  With direct-rotation-aligned exact frames,
- $\sym{A1}-\alpha I\le C_1(\sym{Lambda1}-\alpha I)C_1$,
+ $\sym{ReferenceBlock1}-\sym{alphaEndpoint} I\le\sym{ComplementCosineBlock}(\sym{Lambda1}-\sym{alphaEndpoint} I)\sym{ComplementCosineBlock}$,
  as quadratic forms, with the lower-block analogue.
  In finite dimensions there are eigenvalue and symmetric-gauge
  repulsion inequalities.\\\addlinespace
 \path{DK-8.2-thm} &
- Double-angle sine hypotheses; $\dim D_0=\dim D_1$;
+ Double-angle sine hypotheses; $\dim\sym{CrossedSourceDefect}=\dim\sym{CrossedTargetDefect}$;
  either bounded $\sym{H}$ with
  $\|\sym{H}\|_{\mathrm{op}}<\sym{delta}/2$, or bounded
  $\sym{R}$ with $\|\sym{R}\|_{\mathrm{op}}<\sym{delta}/2$;
- $\sigma(\sym{A0})\subset
- [\beta-\sym{delta}/2,\alpha+\sym{delta}/2]$. &
+ $\sigma(\sym{ReferenceBlock0})\subset
+ [\sym{betaEndpoint}-\sym{delta}/2,\sym{alphaEndpoint}+\sym{delta}/2]$. &
  The corresponding ambient or directed double-angle sine bound holds
  on the branch with angles strictly below $\pi/4$.\\
 \end{longtable}

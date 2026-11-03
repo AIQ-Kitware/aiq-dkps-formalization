@@ -33,12 +33,15 @@ $\sym{A},\sym{H},\sym{Acurrent}$ & Reference operator, additive perturbation, an
 $\sym{Eambient};\ \sym{Ftrial},\sym{Hexact},\sym{Gunwanted}$ & Ambient, trial-coordinate, exact-coordinate, and complementary-coordinate Hilbert spaces.\\
 $\sym{E0}:\sym{Ftrial}\to\sym{Eambient}$ & \dkSymbolDescription{E0}\\
 $\sym{A0}$ & Self-adjoint trial operator. A Rayleigh--Ritz choice is $\sym{A0}=\like{E0}{E_0^*}\sym{Acurrent}\sym{E0}$.\\
+$\sym{ReferenceBlock0},\sym{ReferenceBlock1}$ & Reference blocks on $\DKRange(\sym{Psource})$ and $\DKKernel(\sym{Psource})$ in Section~\ref{sec:foundations}.\\
 $\sym{F0}:\sym{Hexact}\to\sym{Eambient}$ & \dkSymbolDescription{F0}\\
 $\sym{F1}:\sym{Gunwanted}\to\sym{Eambient}$ & \dkSymbolDescription{F1}\\
 $\sym{Lambda1}$ & Complementary self-adjoint block, with $\sym{Acurrent}\sym{F1}=\sym{F1}\sym{Lambda1}$ on its domain.\\
 $\sym{SpectralMeasure},\sym{SpectralSet}$ & Projection-valued measure and Borel spectral set; $\sym{SpectralMeasure}(\sym{SpectralSet})$ is the corresponding spectral projection. These symbols differ from the ambient space $\sym{Eambient}$ and complementary block $\sym{S}$.\\
 $\sym{Pexact}=\sym{F0}\like{F0}{F_0^*}$ & Projection onto the desired exact subspace in the sine-theta theorem.\\
 $\sym{Theta0},\sym{sinTheta0}$ & Trial-coordinate angle operator and its positive sine, with $\sym{sinTheta0}=(I-\like{E0}{E_0^*}\sym{Pexact}\sym{E0})^{1/2}$.\\
+$\sym{Theta}=\operatorname{diag}(\sym{Theta0},\sym{Theta1})$ & Full angle operator; $\sym{Theta1}$ compares the orthogonal complements. Its operator norm is the largest spectral angle.\\
+$\sym{CrossedSourceDefect},\sym{CrossedTargetDefect}$ & Source directions perpendicular to the target, and target directions perpendicular to the source. Section~\ref{sec:foundations} uses the condition $\dim\sym{CrossedSourceDefect}=\dim\sym{CrossedTargetDefect}$.\\
 $\sym{S}=(I-\sym{Pexact})\sym{E0}$ & Complementary block, with modulus $|\sym{S}|=\sym{sinTheta0}$.\\
 $\sym{X}=\like{F1}{F_1^*}\sym{E0}$ & Coordinates of the trial component in the unwanted space; $\sym{S}=\sym{F1}\sym{X}$.\\
 $\sym{SylvesterLeft},\sym{SylvesterRight},\sym{SylvesterRHS}$ & Generic left and right Sylvester coefficients and right side: $\sym{SylvesterLeft}\sym{X}-\sym{X}\sym{SylvesterRight}=\sym{SylvesterRHS}$. The historical equation writes the right coefficient as $\like{SylvesterRight}{A}$.\\

@@ -281,6 +281,51 @@ questions. `make matching-study` builds its ignored PDF separately from the
 article. The study note uses the article's semantic symbol registry. It adds
 no theorem to the source inventory and changes no Lean declaration.
 
+## Validated reader critique of Section 8 and the abstract (3 November 2026)
+
+The author supplied twelve critiques from qwen3.8:27b and requested validation
+before editing. Compared the manuscript with the original local 1970 PDF,
+the distributable source specification, and the current Section 8 declarations.
+The author then authorized the corrections supported by that comparison.
+
+- Theorem 8.1 now states the ordered form gap and fully off-diagonal bounded
+  self-adjoint perturbation. Gap exclusion precedes selection of the canonical
+  spectral branch; the equivalence quantifies a chosen reducing subspace, and
+  existence and uniqueness are stated separately. The cosine-weighted
+  compression inequality is identified as quantitative repulsion.
+- Theorem 8.2 now identifies the perturbed central band, its complementary
+  exterior, and the enlarged band for the reference block. The crossed-defect
+  spaces are defined in the body and their dimension equality is explicit.
+  Full versus directed double-angle estimates and the common-domain,
+  bounded-residual-only scope are retained. Current evidence is
+  `Section8/Theorem81.lean`, `Theorem81UnboundedBranch.lean`,
+  `Theorem82CommonDomain.lean`, and `Theorem82WhereDefinedNorms.lean` under
+  `DavisKahan/Sources/DavisKahan1970/`.
+- The full angle is defined as the diagonal sum of source and complementary
+  directed angles, with its norm interpretation. Its hover reminder and the
+  notation appendix agree. Reference-block and defect-space symbols are
+  registered centrally and used in the detailed result table.
+- The abstract introduces full ambient displacement, names the complete
+  positive acute parameter range of the constructed family, and gives the
+  Frobenius norm as an example of a Q-norm. The introduction and discussion
+  use the same parameter range. The weaker small-angle statement was true,
+  not contradictory; the complete family is the preferred description.
+- Mathlib use and Spectra adaptation are distinguished in the abstract and
+  introduction. The review's categorical denial of Mathlib adaptation is
+  unsupported: the historical approximation-number source at
+  `fc38eb48b9b49f2e1d87fe0c7022dc5e262820a7:ForMathlib/Analysis/Normed/Operator/ApproximationNumber.lean`
+  explicitly adapts Mathlib PR #32126. Its provenance remains in
+  `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean` and the
+  upstream contribution census; the replacement by an independent accepted
+  Tau Ceti API does not erase that historical adaptation.
+- The isometry and modulus equalities have separate justifications. The
+  two-dimensional example states its exact subspace and complementary block.
+  Removed the undefined qualifier “supported” from the norm statements and
+  related hover reminder while retaining explicit norm-domain conditions.
+
+These are manuscript corrections; no Lean statement, proof, or source-result
+selection changed.
+
 ## Generated artifacts (2 November 2026)
 
 The author requested ignoring regenerable outputs. Figure PGF/PDF/SVG exports,
