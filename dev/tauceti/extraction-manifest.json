@@ -5262,7 +5262,7 @@
       "downstream_users": [],
       "status": "staged",
       "upstream_pr": "#26821",
-      "migration_note": "2026-11-02 prepared independent branch port-ssp-c31-coercive-unit at 14d1e51111524a2a3d8b071c262d1d5758dbc963, base 1a1975037a2bb0a6ee3a1ffdb5a9d1089266b905, ports norm_smul_le_norm_apply_of_coercive and isUnit_of_coercive to root ContinuousLinearMap and adds ContinuousLinearMap.le_re_of_mem_spectrum_of_coercive adapted from DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean:spectrum_re_lower_of_coercive. Source anchor aec34fb9a; CoerciveUnit authors Jon Crall / Claude Fable 5, QuarterAcuteFormGap authors Jon Crall / OpenAI GPT-5.6 Thinking / Claude Opus 5; Kitware 2026 Apache-2.0. The new inverse proof consumes native real Lax–Milgram through scalar restriction instead of reproducing the donor closed-range argument. Norm control requires neither completeness nor positive c; invertibility requires completeness and positive c; the complex spectral bound permits arbitrary real c and no self-adjointness. This supplies direct coercive-invertibility and Lyapunov spectral-half-plane prerequisites of SSP-C31, not its quarter-acute endpoint. Other declarations in this donor remain unported. Packet: tauceti-dkps-campaign/waves/2026-11-02/coercive-unit. Prepared and locally compiled/style-checked, not submitted or integrated; pins/local consumers unchanged pending upstream integration. PR #26821 repair 339f5b641484cb54b98bf4af0b7c0e199f5e494d directly applies Mathlib ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map from Analysis/InnerProductSpace/Positive, removing the earlier realification/Lax–Milgram scaffolding and redundant imports. Final lower-bound name is ContinuousLinearMap.mul_norm_le_norm_apply_of_coercive, with no old alias; the two unit/spectral names are unchanged. Source_declarations retain original donor spellings. The mathematical hypotheses and conclusions are unchanged. Fresh focused compilation (5511 jobs) and full style pass; submitted repair, not integration."
+      "migration_note": "2026-11-02 prepared independent branch port-ssp-c31-coercive-unit at 14d1e51111524a2a3d8b071c262d1d5758dbc963, base 1a1975037a2bb0a6ee3a1ffdb5a9d1089266b905, ports norm_smul_le_norm_apply_of_coercive and isUnit_of_coercive to root ContinuousLinearMap and adds ContinuousLinearMap.le_re_of_mem_spectrum_of_coercive adapted from DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean:spectrum_re_lower_of_coercive. Source anchor aec34fb9a; CoerciveUnit authors Jon Crall / Claude Fable 5, QuarterAcuteFormGap authors Jon Crall / OpenAI GPT-5.6 Thinking / Claude Opus 5; Kitware 2026 Apache-2.0. The new inverse proof consumes native real Lax–Milgram through scalar restriction instead of reproducing the donor closed-range argument. Norm control requires neither completeness nor positive c; invertibility requires completeness and positive c; the complex spectral bound permits arbitrary real c and no self-adjointness. This supplies direct coercive-invertibility and Lyapunov spectral-half-plane prerequisites of SSP-C31, not its quarter-acute endpoint. Other declarations in this donor remain unported. Packet: tauceti-dkps-campaign/waves/2026-11-02/coercive-unit. Prepared and locally compiled/style-checked, not submitted or integrated; pins/local consumers unchanged pending upstream integration. PR #26821 repair 339f5b641484cb54b98bf4af0b7c0e199f5e494d directly applies Mathlib ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map from Analysis/InnerProductSpace/Positive, removing the earlier realification/Lax–Milgram scaffolding and redundant imports. Final lower-bound name is ContinuousLinearMap.mul_norm_le_norm_apply_of_coercive, with no old alias; the two unit/spectral names are unchanged. Source_declarations retain original donor spellings. The mathematical hypotheses and conclusions are unchanged. Fresh focused compilation (5511 jobs) and full style pass; submitted repair, not integration. Selected campaign census 2026-11-03T02:00:51Z: #26821 remains open at 339f5b641484cb54b98bf4af0b7c0e199f5e494d, description synchronized; prior three rubric findings refer to the earlier head and current re-review/build are pending. No integration claimed."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -6165,8 +6165,57 @@
         "DavisKahan.Sources.DavisKahan1970.PartIII"
       ],
       "status": "staged",
-      "upstream_pr": null,
-      "migration_note": "2026-11-02 prepared independent branch port-ssp-c28-c29-ritz-tangent at af618df07e144de2386ed4e7b744526269d211c4, base 1a1975037a2bb0a6ee3a1ffdb5a9d1089266b905, from aec34fb9a:DavisKahan/FiniteDimensional/TanTheta/RitzResidual.lean. Final public declarations are Submodule.directedProjectionGap_lt_one_of_pointSpectrumIn_compression and TauCeti.UnitarilyInvariantSeminorm.mul_map_tanThetaMap_le_map_ritzResidual. The genuine witness/scalar/Ky Fan prefix proof is adapted to native tanThetaMap, principal-tangent singular values, PointSpectrumIn form bounds and Rayleigh–Ritz Galerkin orthogonality. Delete temporary port factories and reuse accepted transversality/principal-sine facts. One RCLike-generic finite-dimensional theorem in every rectangular unitarily invariant seminorm covers equal and lower rank without a dimension comparison, nonzero rank, extra completeness or beta <= alpha hypothesis. Right-angle exclusion is proved, not assumed. Packet: tauceti-dkps-campaign/waves/2026-11-02/ritz-tangent. Focused warning-as-error build (5783 jobs) and style checks passed. Prepared and pushed submission branch, not upstream integration; paper wrappers, local math and dependency pins are retained until acceptance/consumption."
+      "upstream_pr": "#26822",
+      "migration_note": "2026-11-02 prepared independent branch port-ssp-c28-c29-ritz-tangent at af618df07e144de2386ed4e7b744526269d211c4, base 1a1975037a2bb0a6ee3a1ffdb5a9d1089266b905, from aec34fb9a:DavisKahan/FiniteDimensional/TanTheta/RitzResidual.lean. Final public declarations are Submodule.directedProjectionGap_lt_one_of_pointSpectrumIn_compression and TauCeti.UnitarilyInvariantSeminorm.mul_map_tanThetaMap_le_map_ritzResidual. The genuine witness/scalar/Ky Fan prefix proof is adapted to native tanThetaMap, principal-tangent singular values, PointSpectrumIn form bounds and Rayleigh–Ritz Galerkin orthogonality. Delete temporary port factories and reuse accepted transversality/principal-sine facts. One RCLike-generic finite-dimensional theorem in every rectangular unitarily invariant seminorm covers equal and lower rank without a dimension comparison, nonzero rank, extra completeness or beta <= alpha hypothesis. Right-angle exclusion is proved, not assumed. Packet: tauceti-dkps-campaign/waves/2026-11-02/ritz-tangent. Focused warning-as-error build (5783 jobs) and style checks passed. Prepared and pushed submission branch, not upstream integration; paper wrappers, local math and dependency pins are retained until acceptance/consumption. Selected campaign census 2026-11-03T02:00:51Z: submitted as #26822 at af618df07e144de2386ed4e7b744526269d211c4; upstream build failed while earlier local focused/style validation passed. Current CI repair is on this existing PR, not another submission. Not integrated."
+    },
+    {
+      "source_module": "YuWangSamworth2015.Core.Statistics",
+      "source_declarations": [
+        "YuWangSamworth2015.yuWangSamworth_sinTheta_frame_le",
+        "YuWangSamworth2015.frameResidual_eq",
+        "YuWangSamworth2015.sum_sq_norm_frameResidual_le",
+        "YuWangSamworth2015.sum_sq_norm_frameResidual_le_of_opNorm",
+        "LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices"
+      ],
+      "current_namespace": "YuWangSamworth2015",
+      "staging_module": "YuWangSamworth2015.Core.Statistics",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.YuWangSamworth.SinTheta",
+      "ownership_class": "tauceti",
+      "roadmap_target": "SSP-D16",
+      "provenance_class": "Explicit DKPS adaptation/generalization. Jon Crall / GPT 5.6 High; spectral helper Jon Crall / Claude Opus 5 / GPT-6; Kitware 2026, Apache-2.0.",
+      "direct_dependencies": [
+        "TauCeti.Analysis.InnerProductSpace.Spectral.Eigenframe",
+        "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius",
+        "TauCeti.Analysis.InnerProductSpace.YuWangSamworth.FrameResidual"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": "#26824",
+      "migration_note": "Submitted at 8e38c87a53ba48b098477b0986fbef4a3bbb24bc, donor 4138aafdf:YuWangSamworth2015/YuWangSamworth2015/Core/{Residual,Statistics}.lean and ForTauCeti/Analysis/InnerProductSpace/Spectral/EigenFrame.lean. Final six declarations are listed in the contribution census and shared d16-frames packet. Arbitrary finite index types, arbitrary sample eigenspace choices, only a population gap, operator/Frobenius minimum; pointwise residual and span need no finiteness binder. Generic orthonormal compression is generalized to rectangular maps. Focused 5995-job/style validation passed; live current-head build and all ten rubrics approved at 2026-11-03T02:00:51Z, but PR is still open and not integrated. No pin or local consumer migration is claimed."
+    },
+    {
+      "source_module": "YuWangSamworth2015.Rectangular.Theorem4",
+      "source_declarations": [
+        "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_le",
+        "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_opNormCoefficient_le"
+      ],
+      "current_namespace": "YuWangSamworth2015.DavisKahanTheory",
+      "staging_module": "YuWangSamworth2015.Rectangular.Theorem4",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularVectors",
+      "ownership_class": "tauceti",
+      "roadmap_target": "SSP-D19 left orientation",
+      "provenance_class": "Explicit target-Gram adaptation from DKPS 4138aafdf; Jon Crall / GPT 5.6 High, Kitware 2026 Apache-2.0.",
+      "direct_dependencies": [
+        "TauCeti.Analysis.InnerProductSpace.Gram.Perturbation",
+        "TauCeti.Analysis.InnerProductSpace.SingularValues",
+        "TauCeti.Analysis.InnerProductSpace.YuWangSamworth.Basic"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": "#26823",
+      "migration_note": "Submitted at 8af8fb271a5ab7acde93bf1ad9806bd0de4dc636, source YuWangSamworth2015/YuWangSamworth2015/Rectangular/Theorem4.lean. Final declaration LinearMap.sq_mul_sum_sum_norm_inner_self_comp_adjoint_eigenvectorBasis_sq_le_four_mul_card_mul_sq. Native target-Gram eigenbases include zero eigenspaces; arbitrary finite blocks, RCLike, independent source/target, population-only gap, zero gap and zero dimensions allowed. Accepted #19338 supplies the right orientation separately. Local 5839-job/style validation passed; upstream build in progress at 2026-11-03T02:00:51Z. Open, not integrated; no dependency pin or donor deletion claimed."
     }
   ]
 }

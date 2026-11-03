@@ -1,6 +1,6 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
-**Status: expanded, intentionally incomplete audit (2026-10-21 baseline; 2026-10-25 Gram and Hilbert–Schmidt consumption updates).** This is a
+**Status: intentionally incomplete provenance audit; selected campaign reconciliation at 2026-11-03T02:00:51Z.** This is a
 maintained *provenance and results* record, not a PR action queue, a theorem
 census, or a claim of exclusive mathematical authorship. Its purpose is to make
 it possible to say exactly which results in TauCeti benefited from the Kitware
@@ -52,6 +52,42 @@ was located on TauCeti `main` on October 21 (not a final-diff/commit audit);
 `B` = presently Bors-marked closed, but the
 accepted diff has not yet been compared declaration-by-declaration in this
 census. Evidence is as of 2026-10-21 unless a dated source is given; see the current [consumption review](upstream-consumption-review-2026-10-22.md).
+
+## Current submitted campaign — 2026-11-03T02:00:51Z
+
+The complete live Erotemic open-PR search returns exactly five PRs. These are
+submissions, not accepted integrations. Details and REST review/check evidence
+are committed in `tauceti-dkps-campaign/proof/campaign/` and the existing
+`waves/2026-11-02/` census; other historical observations retain their dates.
+
+| Open PR | Mathematical scope | Current HEAD | Observation |
+| --- | --- | --- | --- |
+| [#20359](https://github.com/TauCetiProject/TauCeti/pull/20359) | SSP-A16 | `8e0e29ab74e5d5f1e6929951a5f4f6a5f952ed48` | Build successful; ten rubrics approved at this HEAD; still open. |
+| [#26821](https://github.com/TauCetiProject/TauCeti/pull/26821) | SSP-C31 prerequisite only | `339f5b641484cb54b98bf4af0b7c0e199f5e494d` | Build queued; earlier reuse/placement/naming findings repaired in code; current-head re-review pending. Description is synchronized. |
+| [#26822](https://github.com/TauCetiProject/TauCeti/pull/26822) | SSP-C28/C29 | `af618df07e144de2386ed4e7b744526269d211c4` | Upstream sandboxed build and build status failed; no rubric scoreboard captured. Local focused validation is separate. |
+| [#26823](https://github.com/TauCetiProject/TauCeti/pull/26823) | SSP-D19 left orientation | `8af8fb271a5ab7acde93bf1ad9806bd0de4dc636` | Upstream sandboxed build in progress; no rubric scoreboard captured. |
+| [#26824](https://github.com/TauCetiProject/TauCeti/pull/26824) | SSP-D16 arbitrary frames | `8e38c87a53ba48b098477b0986fbef4a3bbb24bc` | Build successful; all ten rubrics approved at this HEAD; still open. Saved finite-index description clarification is not synchronized. |
+
+The seven earlier approvals on #26821 were for its pre-repair head, not current
+approval. The current #26824 scoreboard explicitly reviews its repaired head.
+Local build evidence does not override #26822's observed upstream failure.
+The #26821 description is synchronized; #26824's saved index-generalization
+clarification still needs its host description-update command. All four wave
+commits use `joncrall <erotemic@gmail.com>` and preserve model co-author trailers.
+
+SSP-C23 and SSP-C27 are accepted implementations of DKPS-derived roadmap items
+by other contributors (#24932 and #25082), with integration ancestry checked
+against main `caaed55334360ea2b92d4549e580c4bbcef41c59`. #19242 is closed
+unmerged. Proof descent and roadmap delivery remain separate classifications.
+
+There are no additional ready submissions in the reviewed source-backed
+frontier. D17/D18 wait for #26824; the full C31 endpoint waits for #26821;
+B05 → E01 → E35 still needs the representation PVM. External open #26244 is
+partial SA-B59 polarization/Borel-operator work, not an accepted PVM or a new
+DKPS port obligation. B16's cited donor does not have the full pairwise scope;
+B12 retains its specification conflict; Gram aliases add no missing theorem.
+The 899-item intention inventory is not claimed exhaustively solved or audited.
+DKPS dependency pins remain unchanged; this update runs no Lean builds.
 
 ## Intention #776: scope, explicit references, and comparison discipline
 
@@ -177,6 +213,18 @@ rectangular prerequisites. The retirement and its consumers passed the full
 default build together with the module migration on October 25, with
 warnings treated as errors (21,039 jobs).
 
+### Previously open submissions with subsequently verified integration
+
+These supersede their old October 21 open-state observations; no successful
+mathematics checkpoint was re-audited for this status reconciliation.
+
+| PR | Accepted contribution and scope limit | Existing main evidence |
+| --- | --- | --- |
+| #18927 | SA-E32–E34 grid cells, not the unbounded PVM | `3bd7882f07072fe6918ca2a50175cbca678f07de` |
+| #19277 | SSP-C09/C10 reduced extensions, not the full C23 sine bound | `ca1eac22f582487d71706084aee719436b098186` |
+| #19329 | Tangent representative/singular values; residual inequalities remain #26822 | `3c5f90168962d9621de78324b9bbf1ce3fe3f383` |
+| #19338 | D19 right orientation; left orientation remains #26823 | `1e77c6499fb5e9f35cb57611638b25c3de9ce0b6` |
+
 ## B. DKPS-origin submissions without established upstream integration
 
 These are relevant to the contribution history, but are **not** counted as
@@ -202,11 +250,8 @@ attempt, not an accepted TauCeti theorem.
 | [#16156](https://github.com/TauCetiProject/TauCeti/pull/16156) | PD-B41/B43 Gram-defect near-isometry proposal; refactored to consume independent #16127 | Closed, no Bors label |
 | [#16293](https://github.com/TauCetiProject/TauCeti/pull/16293) | MSS-B11–B13 Hermitian threshold-projector proposal citing DKPS source | Closed, no Bors label; acceptance not established |
 | [#19009](https://github.com/TauCetiProject/TauCeti/pull/19009) | SA-B42 older variation attempt; explicitly replaced by #19145 | Closed, no Bors label |
-| [#18927](https://github.com/TauCetiProject/TauCeti/pull/18927) | SA-E32–E34 measurable spectral grid cells | Open |
 | [#19242](https://github.com/TauCetiProject/TauCeti/pull/19242) | SSP-C23 pairwise pi/2 | Closed by the user on 2026-11-02 after the exact endpoint and invariant-subspace Sylvester bound landed through #24932; not an integration of this submission |
-| [#19277](https://github.com/TauCetiProject/TauCeti/pull/19277) | SSP-C09/C10 reduced extensions | Open (2026-10-21 observation) |
 | [#20359](https://github.com/TauCetiProject/TauCeti/pull/20359) | SSP-A16 two-sided exponential decay; adapted from historical `ForTauCeti/Analysis/Fourier/ExponentialAbs.lean` (Jon Crall, GPT 5.6 High; Kitware 2026, Apache-2.0) | Open; repair pushed as `8e0e29ab74` on 2026-11-02; moves the complex estimate to `SpecialFunctions/Exp/Decay.lean`; real estimate remains in `SpecialFunctions/Pow/Real.lean` |
-| [#19329](https://github.com/TauCetiProject/TauCeti/pull/19329), [#19338](https://github.com/TauCetiProject/TauCeti/pull/19338) | SSP-C28/C29 sine-to-tangent; SSP-D19 right singular-vector gap | Open |
 
 The 2026-11-02 PR repair review compared #19242 with current upstream main
 `37f5e9dce5ac83d2825198ac72d7f5d64eb26c85`, rather than the pinned dependency.
@@ -226,14 +271,14 @@ was closed without pushing a conflict resolution or promoting its unused helpers
 This observation does not advance the DKPS dependency pin or reclassify the completed
 consumption at that pin.
 
-### Next source-backed wave prepared on 2026-11-02
+### Source-backed wave submitted on 2026-11-02
 
-These are committed, locally validated submission branches, **not accepted PRs**.
+These are committed, locally validated branches now submitted as #26821–#26824, **not accepted integrations**.
 The host-run packets and submission commands live in
 `/home/joncrall/code/tauceti-dkps-campaign/waves/2026-11-02/`; each includes an
 incremental Git bundle, source patch, proposed body, SHA-bound source review and
 successful compiler/style logs. The existing campaign preflight is run on the
-host with its live `gh` credentials before PR creation; no PR number is invented.
+host with its live `gh` credentials before PR creation. Current PR numbers and statuses are in the table above.
 Both branches independently start from accepted main
 `37f5e9dce5ac83d2825198ac72d7f5d64eb26c85` (Lean v4.36.0-rc2, Mathlib
 `1b1ccf4b088b32fa3f23f2de1127433254a81e1e`); neither changes the DKPS pin.
@@ -246,7 +291,7 @@ Both branches independently start from accepted main
 Two further independent packets were prepared against accepted main
 `1a1975037a2bb0a6ee3a1ffdb5a9d1089266b905` with the same Lean/Mathlib pins. Both
 branches are pushed to the Erotemic fork; neither is an upstream integration.
-The host runs the live overlap/metadata gate and opens the PRs using
+The host submitted the PRs after its live overlap/metadata gate using
 `bash waves/2026-11-02/submit.sh --item next --submit`. It reuses the exact-HEAD
 VM build evidence and runs no Lake commands.
 
