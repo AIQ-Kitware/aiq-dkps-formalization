@@ -28,7 +28,7 @@ TARGETS = [
     ("Quench umbrella", "DkpsQuench2026"),
 ]
 
-IMPORT_RE = re.compile(r"^\s*import\s+(.+?)\s*$")
+IMPORT_RE = re.compile(r"^\s*(?:public\s+)?import\s+(.+?)\s*$")
 
 
 def lean_files() -> list[pathlib.Path]:
