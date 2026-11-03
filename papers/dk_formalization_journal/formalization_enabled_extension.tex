@@ -13,6 +13,7 @@ $\like{theta}{\theta_1},\ldots,\like{theta}{\theta_m}\in(0,\pi/2]$ be their posi
 counted with multiplicity.  A matching $\sym{Matching}$ on the angle labels consists
 of disjoint unordered pairs $\{i,j\}$ from $\{1,\ldots,m\}$;
 labels outside the pairs are unmatched.
+\jonsays{This could be made more clear, instead of saying "disjoint" we say we are picking pairs without replacement, or something more intuitive...}
 
 Each positive principal angle describes a source line and a target line
 in a two-dimensional principal plane. Transporting that plane independently
@@ -94,8 +95,13 @@ Preservation by the projections splits the source and target across these
 blocks; preservation by the transporter makes the displacement cost add
 over them. A block containing one positive principal angle gives a
 singleton choice, while a block containing two can give a paired choice.
-To obtain a decomposition that also preserves the minimizer, we use its
-stationarity under feasible variations. \jonsays{stationary is not defined, and feasible variations is vague}
+We construct this decomposition by considering smooth curves
+$\sym{Wcompetitor}(t)$ of orthogonal maps satisfying
+$\sym{Wcompetitor}(0)=\sym{Wcompetitor}$ and
+$\sym{Wcompetitor}(t)\like{Usource}{K}=\like{Vtarget}{L}$.
+Since $\sym{Wcompetitor}$ minimizes the cost, the derivative of
+$\like{PowerCost}{\Phi_p}(\sym{Wcompetitor}(t))$ at $t=0$ vanishes along
+every such curve. This condition is called stationarity.
 
 Let $\sym{SkewDirection}$ be a real skew-symmetric matrix. Then
 $\sym{Wcompetitor}\exp(t\sym{SkewDirection})$ is orthogonal for every real $t$.
