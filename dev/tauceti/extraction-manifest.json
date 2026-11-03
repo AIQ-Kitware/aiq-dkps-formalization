@@ -1152,7 +1152,7 @@
       "downstream_users": [],
       "status": "accepted-upstream-local-copy-removed",
       "upstream_pr": null,
-      "migration_note": "The local rearrangement, Birkhoff, von Neumann, and Hoffman--Wielandt proofs were deleted. YuWangSamworth2015.Core.Residual now imports TauCeti's theorem and preserves its paper-facing overlap bounds as explicit forwarding wrappers; arbitrary ordered-eigenframe extensions remain local. The 2026-11-02 prepared SSP-D16 branch 6a30bfaebc5896a18c8045b78582f6dcc46fc6be ports the remaining arbitrary-frame residual and sine bounds from Core/Residual and Core/Statistics (DKPS 4138aafdf; Jon Crall / GPT 5.6 High, Kitware 2026 Apache-2.0), plus the gap-separated span fact from Spectral/EigenFrame (Jon Crall / Claude Opus 5 / GPT-6). Final API: LinearMap.sum_sq_norm_apply_orthonormal_le (generalized to rectangular maps), LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices, and LinearMap.IsSymmetric.{frameResidual_eq,sum_sq_norm_frameResidual_le,sum_sq_norm_frameResidual_le_of_opNorm,sinThetaFrobenius_orderedEigenframe_le}. The packet is in tauceti-dkps-campaign/waves/2026-11-02/d16-frames; this is prepared submission evidence, not upstream acceptance. Existing local mathematics and dependency pins remain until integration and consumption. PR #26824 generality repair 8e38c87a53ba48b098477b0986fbef4a3bbb24bc: generalize span, pointwise residual, both residual sums and sine bounds to arbitrary frame index types. Pointwise residual and span equality request no explicit finiteness binder; span equality derives a Fintype from the embedding. Sums and dimension factors use Fintype.card. The canonical consumer uses the finset subtype directly. Fresh focused compilation and full style checks pass; upstream re-review/integration remain distinct."
+      "migration_note": "The local rearrangement, Birkhoff, von Neumann, and Hoffman--Wielandt proofs were deleted. YuWangSamworth2015.Core.Residual now imports TauCeti's theorem and preserves its paper-facing overlap bounds as explicit forwarding wrappers; arbitrary ordered-eigenframe extensions remain local. The 2026-11-02 prepared SSP-D16 branch 6a30bfaebc5896a18c8045b78582f6dcc46fc6be ports the remaining arbitrary-frame residual and sine bounds from Core/Residual and Core/Statistics (DKPS 4138aafdf; Jon Crall / GPT 5.6 High, Kitware 2026 Apache-2.0), plus the gap-separated span fact from Spectral/EigenFrame (Jon Crall / Claude Opus 5 / GPT-6). Final API: LinearMap.sum_sq_norm_apply_orthonormal_le (generalized to rectangular maps), LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices, and LinearMap.IsSymmetric.{frameResidual_eq,sum_sq_norm_frameResidual_le,sum_sq_norm_frameResidual_le_of_opNorm,sinThetaFrobenius_orderedEigenframe_le}. The packet is in tauceti-dkps-campaign/waves/2026-11-02/d16-frames; this is prepared submission evidence, not upstream acceptance. Existing local mathematics and dependency pins remain until integration and consumption. PR #26824 generality repair 8e38c87a53ba48b098477b0986fbef4a3bbb24bc: generalize span, pointwise residual, both residual sums and sine bounds to arbitrary frame index types. Pointwise residual and span equality request no explicit finiteness binder; span equality derives a Fintype from the embedding. Sums and dimension factors use Fintype.card. The canonical consumer uses the finset subtype directly. Fresh focused compilation and full style checks pass; upstream re-review/integration remain distinct. November 3: those formerly local ordered-frame extensions are now consumed from accepted #26824, integration dc24e4e61e56332f931351d15e4821fb2db763f7; see its integration/consumption record. Original source names remain historical provenance."
     },
     {
       "source_module": "ForMathlib.Analysis.InnerProductSpace.IntertwiningUnitary",
@@ -6192,7 +6192,8 @@
         "YuWangSamworth2015.frameResidual_eq",
         "YuWangSamworth2015.sum_sq_norm_frameResidual_le",
         "YuWangSamworth2015.sum_sq_norm_frameResidual_le_of_opNorm",
-        "LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices"
+        "LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices",
+        "YuWangSamworth2015.sum_sq_norm_apply_orthonormal_le"
       ],
       "current_namespace": "YuWangSamworth2015",
       "staging_module": "YuWangSamworth2015.Core.Statistics",
@@ -6206,10 +6207,29 @@
         "TauCeti.Analysis.InnerProductSpace.YuWangSamworth.FrameResidual"
       ],
       "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
+      "downstream_users": [
+        "YuWangSamworth2015.Core.Statistics",
+        "ForTauCeti.Analysis.InnerProductSpace.Spectral.EigenFrame"
+      ],
+      "status": "consumed-upstream-with-dkps-result-retained",
       "upstream_pr": "#26824",
-      "migration_note": "Submitted at 8e38c87a53ba48b098477b0986fbef4a3bbb24bc, donor 4138aafdf:YuWangSamworth2015/YuWangSamworth2015/Core/{Residual,Statistics}.lean and ForTauCeti/Analysis/InnerProductSpace/Spectral/EigenFrame.lean. Final six declarations are listed in the contribution census and shared d16-frames packet. Arbitrary finite index types, arbitrary sample eigenspace choices, only a population gap, operator/Frobenius minimum; pointwise residual and span need no finiteness binder. Generic orthonormal compression is generalized to rectangular maps. Focused 5995-job/style validation passed; live current-head build and all ten rubrics approved at 2026-11-03T02:00:51Z, but PR is still open and not integrated. No pin or local consumer migration is claimed."
+      "migration_note": "Submitted at 8e38c87a53ba48b098477b0986fbef4a3bbb24bc, donor 4138aafdf:YuWangSamworth2015/YuWangSamworth2015/Core/{Residual,Statistics}.lean and ForTauCeti/Analysis/InnerProductSpace/Spectral/EigenFrame.lean. Final six declarations are listed in the contribution census and shared d16-frames packet. Arbitrary finite index types, arbitrary sample eigenspace choices, only a population gap, operator/Frobenius minimum; pointwise residual and span need no finiteness binder. Generic orthonormal compression is generalized to rectangular maps. Focused 5995-job/style validation passed; live current-head build and all ten rubrics approved at 2026-11-03T02:00:51Z, but PR is still open and not integrated. No pin or local consumer migration is claimed. November 3 integration and consumption: GitHub marks the PR [Merged by Bors] with merged=false; accepted main contains dc24e4e61e56332f931351d15e4821fb2db763f7, verified as an ancestor of the new DKPS pin ddf6493515728b8f1caee2a41acc40f31644ef08. Mathlib 1b1ccf4b088b32fa3f23f2de1127433254a81e1e / Lean v4.36.0-rc2 are unchanged. Delete the local span proof, four frame residual/compression foundations and the now-unused private index-sum helper. Preserve the exact paper-facing yuWangSamworth_sinTheta_frame_le formula as a native application with Fintype.card_fin; retain the distinct PointInternalGap consequence and sharper residual/alignment mathematics. Native compression strictly generalizes the symmetric donor to rectangular maps with incomplete arbitrary codomain; native frame laws allow arbitrary finite index types, and the pointwise identity/span need no explicit finiteness binder. Source anchors and original authors/license above remain; this is explicit DKPS adaptation/generalization, not independent roadmap work. YWS source census registrations are updated in the same slice. Final validation is recorded in the contribution census. The maintained pre-retirement Core/Residual header also credits Claude Opus 4.8; preserve that ancestry alongside the accepted port attribution.",
+      "accepted_upstream_declarations": [
+        "LinearMap.sum_sq_norm_apply_orthonormal_le",
+        "LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices",
+        "LinearMap.IsSymmetric.frameResidual_eq",
+        "LinearMap.IsSymmetric.sum_sq_norm_frameResidual_le",
+        "LinearMap.IsSymmetric.sum_sq_norm_frameResidual_le_of_opNorm",
+        "LinearMap.IsSymmetric.sinThetaFrobenius_orderedEigenframe_le"
+      ],
+      "retired_local_declarations": [
+        "YuWangSamworth2015.sum_sq_norm_apply_orthonormal_le",
+        "YuWangSamworth2015.frameResidual_eq",
+        "YuWangSamworth2015.sum_sq_norm_frameResidual_le",
+        "YuWangSamworth2015.sum_sq_norm_frameResidual_le_of_opNorm",
+        "LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices (local proof)",
+        "YuWangSamworth2015.sum_comp_embedding_le (private)"
+      ]
     },
     {
       "source_module": "YuWangSamworth2015.Rectangular.Theorem4",

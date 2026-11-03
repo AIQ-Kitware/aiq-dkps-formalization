@@ -1,6 +1,6 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
-**Status: intentionally incomplete provenance audit; selected campaign reconciliation at 2026-11-03T02:00:51Z.** This is a
+**Status: intentionally incomplete provenance audit; latest integration update 2026-11-03.** This is a
 maintained *provenance and results* record, not a PR action queue, a theorem
 census, or a claim of exclusive mathematical authorship. Its purpose is to make
 it possible to say exactly which results in TauCeti benefited from the Kitware
@@ -53,10 +53,14 @@ was located on TauCeti `main` on October 21 (not a final-diff/commit audit);
 accepted diff has not yet been compared declaration-by-declaration in this
 census. Evidence is as of 2026-10-21 unless a dated source is given; see the current [consumption review](upstream-consumption-review-2026-10-22.md).
 
-## Current submitted campaign — 2026-11-03T02:00:51Z
+**Latest integration:** #26824 (SSP-D16 arbitrary eigenframes) is accepted
+and consumed; #20359/#26821/#26822/#26823 remain open as individually checked
+on November 3. See the final SSP-D16 integration section below.
 
-The complete live Erotemic open-PR search returns exactly five PRs. These are
-submissions, not accepted integrations. Details and REST review/check evidence
+## Historical submitted-campaign snapshot — 2026-11-03T02:00:51Z
+
+At that observation time the complete Erotemic open-PR search returned five
+PRs. This table is historical: #26824 has since landed and is consumed below. Details and REST review/check evidence
 are committed in `tauceti-dkps-campaign/proof/campaign/` and the existing
 `waves/2026-11-02/` census; other historical observations retain their dates.
 
@@ -4096,3 +4100,72 @@ comparator run is claimed. The import-layer check reports zero violations.
 The static name-drift scan retains the prior 38 external-name/historical-map
 findings; it is not reported green. Source-result boundaries and completion
 certification are unchanged.
+
+### November 3: consume accepted SSP-D16 arbitrary ordered eigenframes (#26824)
+
+At 2026-11-03T17:22:24Z, direct PR metadata reports #26824 closed with a
+`[Merged by Bors]` title and `merged=false`. Accepted TauCeti main independently
+confirms integration `dc24e4e61e56332f931351d15e4821fb2db763f7`. This integration
+is an ancestor of the new consumed pin
+`ddf6493515728b8f1caee2a41acc40f31644ef08`. Mathlib
+`1b1ccf4b088b32fa3f23f2de1127433254a81e1e` and Lean `v4.36.0-rc2` are unchanged.
+The four other previously pending campaign PRs, #20359/#26821/#26822/#26823,
+were individually checked and remain open; this is not a fresh whole-campaign
+PR enumeration or review audit. The D16 acceptance prerequisite for D17/D18 is
+now met; no additional PR preparation is part of this consumption slice.
+
+This is an **explicit DKPS adaptation/generalization**, not independent work
+on the same roadmap node. The accepted commit and module documentation cite
+DKPS `4138aafdf` and preserve the Kitware 2026 / Apache-2.0 provenance:
+`Spectral/EigenFrame.lean` credits Jon Crall, Claude Opus 5 and GPT-6;
+`Core/Residual.lean` and `Core/Statistics.lean` development is credited to
+Jon Crall and GPT 5.6 High in the accepted port. The maintained pre-retirement
+`Core/Residual.lean` header also credits Claude Opus 4.8; that ancestry and
+header are preserved. The pre-retirement current
+sources are those same maintained paths at DKPS `114b6dd42`.
+
+| Original local declaration | Accepted canonical declaration | Local disposition |
+| --- | --- | --- |
+| `LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices` in `ForTauCeti/Analysis/InnerProductSpace/Spectral/EigenFrame.lean` | Same qualified name in `TauCeti/Analysis/InnerProductSpace/Spectral/Eigenframe.lean` | Delete the local proof; its gap consequence uses the native theorem directly. |
+| `YuWangSamworth2015.sum_sq_norm_apply_orthonormal_le` | `LinearMap.sum_sq_norm_apply_orthonormal_le` | Delete the local symmetric compression proof; native Frobenius owns the stronger rectangular result. |
+| `YuWangSamworth2015.frameResidual_eq` | `LinearMap.IsSymmetric.frameResidual_eq` | Delete local identity; use native `YuWangSamworth/FrameResidual.lean`. |
+| `YuWangSamworth2015.sum_sq_norm_frameResidual_le` | `LinearMap.IsSymmetric.sum_sq_norm_frameResidual_le` | Delete local Frobenius residual engine. |
+| `YuWangSamworth2015.sum_sq_norm_frameResidual_le_of_opNorm` | `LinearMap.IsSymmetric.sum_sq_norm_frameResidual_le_of_opNorm` | Delete local operator residual engine and its now-unused private index-sum helper. |
+| `YuWangSamworth2015.yuWangSamworth_sinTheta_frame_le` | `LinearMap.IsSymmetric.sinThetaFrobenius_orderedEigenframe_le` | Keep the paper-facing name and exact `Fin d` formula; its proof is a direct native application with `Fintype.card_fin`. |
+
+All original scalar, dimension, zero-rank and population-gap cases are covered.
+The accepted span and pointwise residual statements allow arbitrary indices
+without an explicit finiteness binder; the embedding supplies finiteness for
+the span proof. Residual sums and the sine endpoint use arbitrary finite
+indices. The sample eigenframes still vary freely inside repeated eigenspaces;
+no sample gap is introduced. Generic compression permits rectangular maps and
+an arbitrary inner-product codomain, with no completeness premise. This is a
+strict generalization of the retired symmetric endomorphism helper.
+
+The sharper residual/aligned-frame conclusions and the local
+`PointInternalGap` consequence remain. The paper source census now points to
+the native residual/compression declarations; its source-facing Theorem 2
+wrapper and completion judgement are unchanged. Historical submission and
+review observations above keep their original dates and are superseded here
+for integration/consumption status.
+
+Validation of the SSP-D16 consumption checkpoint: focused build (7,116 jobs),
+full default build (21,661 jobs), and Challenge (19,907 jobs) passed without
+warnings, sequentially, using `LEAN_NUM_THREADS=8` and CPU affinity `0-7`.
+Final VM logs are `/tmp/dkps-d16-consume-focused1.log`,
+`/tmp/dkps-d16-consume-full1.log`, and
+`/tmp/dkps-d16-consume-challenge.log`. The import policy reports zero violations.
+The YWS census compiler probe resolves **202/202** cited declarations through
+`import YuWangSamworth2015` (`/tmp/dkps-d16-census-probe2.log`); its existing
+source-census checker and generated-view check pass.
+
+The first probe additionally exposed 17 stale names left by earlier
+migrations, separate from this PR: Frobenius-sine/principal-sine names, explicit
+residual identities/bounds, renamed intrinsic-gap examples, retired singular-gap
+aliases, and Hermitian-dilation names. The source census now points to their
+actual existing owners. Removed data aliases are represented by the native
+formulas or `PointInternalGap` applied to the existing Gram operators, not
+recreated. This is registry maintenance, not additional mathematics delivered
+by #26824. No Lean rebuild was repeated for those documentation/data-only
+repairs. The static name-drift check retains the same 38 known findings and
+is not reported green; no source semantic recertification is claimed.
