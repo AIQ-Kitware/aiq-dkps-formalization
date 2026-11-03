@@ -57,6 +57,7 @@ public import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
 public import DavisKahan.Sources.DavisKahan1970.Section6Example61
 public import DavisKahan.Sources.DavisKahan1970.Section6SourceNormClass
 public import DavisKahan.Sources.DavisKahan1970.Section6SourceScope
+public import DavisKahan.Sources.DavisKahan1970.Section456WhereDefinedNorms
 public import DavisKahan.Sources.DavisKahan1970.Section6Theorem63Presentation
 public import DavisKahan.Sources.DavisKahan1970.Section7IdealBounds
 public import DavisKahan.Sources.DavisKahan1970.Section7SwapAsymmetry
@@ -80,6 +81,7 @@ public import DavisKahan.Sources.DavisKahan1970.SymmetricNormingFanDominance
 public import DavisKahan.Sources.DavisKahan1970.TanTheta
 public import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 public import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
+public import DavisKahan.Sources.DavisKahan1970.TanThetaWhereDefinedNorms
 public import DavisKahan.Sources.DavisKahan1970.TanThetaScalarGeneric
 public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
 public import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
@@ -92,6 +94,7 @@ public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfiniteRea
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaWhereDefinedNorms
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge

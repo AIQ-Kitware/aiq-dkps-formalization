@@ -27,6 +27,8 @@ public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedConve
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81UnboundedReal
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Branch
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82CommonDomain
+public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82WhereDefinedNorms
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Real
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82SourceUnbounded
 public import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Unbounded

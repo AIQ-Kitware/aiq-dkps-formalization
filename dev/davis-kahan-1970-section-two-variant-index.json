@@ -105,42 +105,42 @@
       "short_api": {
         "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta",
         "status": "unbound",
-        "reason": "No single scalar-generic declaration currently carries both ledger-selected clauses at the intended statement boundary. The directed short API is now a literal functional-calculus presentation theorem on `sourceDirectedTanThetaOperator`; the ambient clause remains separate."
+        "reason": "No single scalar-generic declaration currently carries both ledger-selected clauses at the intended statement boundary. The directed short API is now a literal functional-calculus presentation theorem on `sourceDirectedTanThetaOperator`; the ambient clause remains separate. Fixed-field whereDefinedUIN clause aliases now expose the weaker family; the existing scalar-generic symmetricNorming aliases remain stronger compatibility APIs."
       },
       "ledger_witnesses": [
-        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_complex",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_real",
-        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex",
-        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real"
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_whereDefinedUIN_complex",
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_whereDefinedUIN_real",
+        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_complex",
+        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_real"
       ],
       "variants": [
         {
           "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_complex",
-          "role": "ledger_witness",
+          "role": "implementation_engine",
           "scalar_scope": "complex",
-          "source_fidelity": "attested_by_ledger",
-          "reason": "Current fixed-field clause selected by the result ledger."
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Retained stronger normalized-norm API with unconditional Fan dominance and ideal-membership transfer."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_real",
-          "role": "ledger_witness",
+          "role": "implementation_engine",
           "scalar_scope": "real",
-          "source_fidelity": "attested_by_ledger",
-          "reason": "Current fixed-field clause selected by the result ledger."
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Retained stronger normalized-norm API with unconditional Fan dominance and ideal-membership transfer."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex",
-          "role": "ledger_witness",
+          "role": "implementation_engine",
           "scalar_scope": "complex",
-          "source_fidelity": "attested_by_ledger",
-          "reason": "Current fixed-field clause selected by the result ledger."
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Retained stronger normalized-norm API with unconditional Fan dominance and ideal-membership transfer."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real",
-          "role": "ledger_witness",
+          "role": "implementation_engine",
           "scalar_scope": "real",
-          "source_fidelity": "attested_by_ledger",
-          "reason": "Current fixed-field clause selected by the result ledger."
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Retained stronger normalized-norm API with unconditional Fan dominance and ideal-membership transfer."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient_complex",
@@ -204,6 +204,48 @@
           "scalar_scope": "rclike",
           "source_fidelity": "not_ledger_witness",
           "reason": "Presentation theorem whose inequality is stated directly on `sourceDirectedTanThetaOperator = cfc tan Theta_0`; it transports the existing representative theorem through proved equality of the complete approximation-number sequence."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_whereDefinedUIN_complex",
+          "role": "ledger_witness",
+          "scalar_scope": "complex",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Selected weaker normalized symmetric family. The inequality is asserted where both displayed norms exist; no unconditional domain-solidity field is assumed."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_whereDefinedUIN_real",
+          "role": "ledger_witness",
+          "scalar_scope": "real",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Selected weaker normalized symmetric family. The inequality is asserted where both displayed norms exist; no unconditional domain-solidity field is assumed."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_whereDefinedUIN_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Equisingular representative/complexified comparison retained as an auxiliary API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_whereDefinedUIN_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Equisingular representative/complexified comparison retained as an auxiliary API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_complex",
+          "role": "ledger_witness",
+          "scalar_scope": "complex",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Literal directed functional-calculus tangent on the original real or complex carrier; both displayed norms exist under one weaker normalized symmetric family."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_real",
+          "role": "ledger_witness",
+          "scalar_scope": "real",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Literal directed functional-calculus tangent on the original real or complex carrier; both displayed norms exist under one weaker normalized symmetric family."
         }
       ]
     },
@@ -439,42 +481,42 @@
       "short_api": {
         "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta",
         "status": "unbound",
-        "reason": "No single combined scalar-generic declaration currently packages both printed clauses, but the two public clause APIs are now presentation-facing: the directed clause is stated on literal `cfc (fun t => tan (2*t)) Theta_0`, and the ambient clause on literal signed `cfc (fun t => tan (2*t)) Theta`. Proof representatives remain separate implementation theorems."
+        "reason": "No single combined scalar-generic declaration currently packages both printed clauses, but the two public clause APIs are now presentation-facing: the directed clause is stated on literal `cfc (fun t => tan (2*t)) Theta_0`, and the ambient clause on literal signed `cfc (fun t => tan (2*t)) Theta`. Proof representatives remain separate implementation theorems. Fixed-field whereDefinedUIN clause aliases now expose the weaker family; the existing scalar-generic symmetricNorming aliases remain stronger compatibility APIs."
       },
       "ledger_witnesses": [
-        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_complex",
-        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_real",
-        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_complex",
-        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_real"
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_whereDefinedUIN_complex",
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_whereDefinedUIN_real",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_complex",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_real"
       ],
       "variants": [
         {
           "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_complex",
-          "role": "ledger_witness",
+          "role": "implementation_engine",
           "scalar_scope": "complex",
-          "source_fidelity": "attested_by_ledger",
-          "reason": "Current fixed-field clause selected by the result ledger."
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Retained stronger normalized-norm API with unconditional Fan dominance and ideal-membership transfer."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_real",
-          "role": "ledger_witness",
+          "role": "implementation_engine",
           "scalar_scope": "real",
-          "source_fidelity": "attested_by_ledger",
-          "reason": "Current fixed-field clause selected by the result ledger."
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Retained stronger normalized-norm API with unconditional Fan dominance and ideal-membership transfer."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_complex",
-          "role": "ledger_witness",
+          "role": "implementation_engine",
           "scalar_scope": "complex",
-          "source_fidelity": "attested_by_ledger",
-          "reason": "Current fixed-field clause selected by the result ledger."
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Retained stronger normalized-norm API with unconditional Fan dominance and ideal-membership transfer."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_real",
-          "role": "ledger_witness",
+          "role": "implementation_engine",
           "scalar_scope": "real",
-          "source_fidelity": "attested_by_ledger",
-          "reason": "Current fixed-field clause selected by the result ledger."
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Retained stronger normalized-norm API with unconditional Fan dominance and ideal-membership transfer."
         },
         {
           "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_directed_complex",
@@ -573,6 +615,48 @@
           "scalar_scope": "real",
           "source_fidelity": "not_ledger_witness",
           "reason": "Fixed-field real presentation specialization on signed literal ambient `tan 2Theta`."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_whereDefinedUIN_complex",
+          "role": "ledger_witness",
+          "scalar_scope": "complex",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Selected weaker normalized symmetric family. The inequality is asserted where both displayed norms exist; no unconditional domain-solidity field is assumed."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_whereDefinedUIN_real",
+          "role": "ledger_witness",
+          "scalar_scope": "real",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Selected weaker normalized symmetric family. The inequality is asserted where both displayed norms exist; no unconditional domain-solidity field is assumed."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex",
+          "role": "fixed_field_api",
+          "scalar_scope": "complex",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Equisingular representative/complexified comparison retained as an auxiliary API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_whereDefinedUIN_real",
+          "role": "fixed_field_api",
+          "scalar_scope": "real",
+          "source_fidelity": "not_ledger_witness",
+          "reason": "Equisingular representative/complexified comparison retained as an auxiliary API."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_complex",
+          "role": "ledger_witness",
+          "scalar_scope": "complex",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Literal directed functional-calculus tangent on the original real or complex carrier; both displayed norms exist under one weaker normalized symmetric family."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_real",
+          "role": "ledger_witness",
+          "scalar_scope": "real",
+          "source_fidelity": "attested_by_ledger",
+          "reason": "Literal directed functional-calculus tangent on the original real or complex carrier; both displayed norms exist under one weaker normalized symmetric family."
         }
       ]
     }

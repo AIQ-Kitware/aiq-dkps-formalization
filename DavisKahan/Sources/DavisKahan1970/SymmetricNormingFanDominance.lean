@@ -21,56 +21,24 @@ open TauCeti.DavisKahan.Angle
 open TauCeti.DavisKahan.Sylvester
 
 /-!
-# Reading the ideal-gauge results at the paper's own unitarily invariant norm
+# Fan-dominant analytic norm interfaces
 
-Several results Davis and Kahan state "for every unitary-invariant norm" are
-proved here at an arbitrary native symmetric ideal family with Ky Fan dominance, and stated source-facing
-at an arbitrary `SymmetricNormingFunction`.  The two are different Lean objects,
-and a reviewer comparing a Lean statement with the paper is entitled to ask which
-one is the printed quantifier.
+The estimates in this module compare two stronger analytic interfaces:
+`SymmetricNormingFunction` and symmetric ideal families with unconditional
+Ky Fan dominance. Their bridge can infer ideal membership from majorization.
+`NormalizedUnitaryInvariantNorm` retains that stronger property and rank-one
+normalization.
 
-**Neither is, on its own, and it does not matter, because a bound proved in one
-holds in the other.**  Both bridges are theorems here:
+The paper's where-defined norm convention instead uses
+`NormalizedSymmetricOperatorIdealFamily` and asks for both displayed norms to
+exist. The weaker source comparisons are proved in the `WhereDefinedNorms`
+modules through the finite Ky Fan instances of these analytic endpoints; no
+unconditional domain-solidity assertion is needed for their input norm family.
+See `Ideals.WhereDefinedNormTransfer` for the precise transfer theorems.
 
-* `symmetricNorming_of_kyFanDominant` -- an estimate holding at every
-  Fan-dominant ideal gauge holds at every symmetric norming function.  Instantiate
-  at the finite Ky Fan gauges, which are such families, to get Ky Fan
-  majorization, then apply Fan dominance
-  (`SymmetricNormingFunction.mul_gauge_le_of_all_mul_kyFan_le`).
-* `kyFanDominant_of_symmetricNorming` -- the converse.  Instantiate at
-  `kyFanNormingFunction k`, the Ky Fan gauge presented as a coherent symmetric
-  norming function (`Ideals/KyFanNorm.lean`), to get the same majorization, then
-  apply the family's own dominance field.
-
-So both quantifiers are equivalent to weak Ky Fan majorization, which is exactly
-the criterion the paper's Section 1 states it will use: "Fan dominance is used in
-the strong form: `‖K‖ ≤ ‖L‖` for every unitary-invariant norm iff the inequality
-holds for every Ky Fan norm."
-
-That equivalence is what makes the source-facing endpoints cover the *printed*
-norm class rather than only the Gohberg--Krein symmetrically normed ideals.  A
-unitarily invariant norm on `B(H)` such as `T ↦ ‖T‖ + ‖π(T)‖`, with `π` the Calkin
-quotient map, agrees with the operator norm on finite-rank operators and so is not
-the prefix-supremum extension of any symmetric gauge -- it is *not* a
-`SymmetricNormingFunction`.  It is a Fan-dominant ideal family, though, so the
-displayed estimates hold in it, by `kyFanDominant_of_symmetricNorming` applied to
-the source-facing endpoint.
-
-This module adds no mathematics beyond the two bridges: each endpoint is the
-already proved ideal-gauge theorem, read at the source's norm.
-
-## Main results
-
-* `symmetricNorming_of_kyFanDominant` and `kyFanDominant_of_symmetricNorming`;
-* `corollary4_1_compact_nonacute_symmetricNorming_complex` and `..._real`;
-* `proposition4_3_compact_nonacute_symmetricNorming_complex` and `..._real`;
-* `theorem5_2_symmetricNorming_complex` and `theorem5_2_symmetricNorming_real`.
-
-## References
-
-* C. Davis and W. M. Kahan, *The rotation of eigenvectors by a perturbation.
-  III*, SIAM J. Numer. Anal. 7 (1970), 1--46: Corollary 4.1, Proposition 4.3,
-  Theorem 5.2.
+The older `sourceExact` names below are retained compatibility APIs with a
+stronger norm hypothesis. They do not assert equality between that norm class
+and the weaker where-defined family.
 -/
 
 open scoped InnerProductSpace
@@ -549,26 +517,18 @@ theorem theorem5_2_sourceExact_real
 
 end Sylvester
 
-/-! ## The source's own norm class
+/-! ## The normalized Fan-dominant class
 
-`NormalizedUnitaryInvariantNorm` is the Lean type for the object Davis--Kahan
-quantify over in Section 1.  The theorem below is the source's own reduction,
-formalized: an estimate established for every `SymmetricNormingFunction` holds
-for every normalized unitarily invariant norm.
-
-The route is exactly the one the paper announces at (1.11)-(1.13).  A source norm
-is Fan dominant by construction, so it is a native symmetric ideal family with Ky Fan dominance; and
-`kyFanDominant_of_symmetricNorming` transports an estimate across that class by
-instantiating at the Ky Fan gauges.  Nothing analytic is rebuilt here.
-
-This is what lets a source-facing façade quantify over the literal source class
-while its proof discharges through the existing machinery in one step. -/
+These membership-transfer APIs quantify over `NormalizedUnitaryInvariantNorm`.
+Their unconditional Fan law is useful analytically, but is stronger than the
+where-defined convention at the source boundary. The current source witnesses
+use the weaker family and require both displayed norms to exist.
+-/
 
 /-- **The Fan-dominance bridge into the source's norm class.**
 
 An estimate `d ‖X‖ ≤ ‖Y‖` proved for every symmetric norming function holds for
-every normalized unitarily invariant norm -- which is the class Davis--Kahan
-actually quantify over. -/
+every normalized unitarily invariant norm -- under the stronger Fan-dominance assumption. -/
 theorem normalizedUnitaryInvariant_of_symmetricNorming
     {𝕜 : Type u} [RCLike 𝕜]
     {E F : Type v}

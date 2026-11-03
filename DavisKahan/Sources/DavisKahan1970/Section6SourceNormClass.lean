@@ -11,20 +11,13 @@ public import DavisKahan.Sources.DavisKahan1970.Proposition61
 public import DavisKahan.Sources.DavisKahan1970.Theorem61
 
 /-!
-# Proposition 6.1 and Theorem 6.1 over the literal source norm class
+# Proposition 6.1 and Theorem 6.1 for normalized Fan-dominant norms
 
-Both are printed for every unitary-invariant norm.  The compiled endpoints are
-stated over `SymmetricNormingFunction`, one model of that class; these are the
-printed statements, over `NormalizedUnitaryInvariantNorm`.
-
-Each is a single application of the Fan-dominance bridge with the printed
-constant on the left -- `δ` for Proposition 6.1, `δ ε` for Theorem 6.1 -- so no
-mathematics is added.  What changes is the quantifier at the public boundary.
-
-The broader `FormBoundedSylvesterGap` hypothesis is kept rather than specialized:
-it is the gap the compiled theorems take, it subsumes the printed interval
-geometry, and narrowing it here would make the façade state *less* than what is
-proved without bringing it closer to the paper.
+These analytic endpoints retain unconditional Fan dominance and conclude ideal
+membership from the bounded perturbation or residual. The full
+`FormBoundedSylvesterGap` includes finite interval and ordered half-infinite
+configurations. The where-defined source comparisons, which do not transfer
+ideal membership, are in `Section456WhereDefinedNorms`.
 -/
 
 public section
@@ -39,7 +32,7 @@ noncomputable section
 
 universe u v
 
-/-- **Davis--Kahan 1970, Proposition 6.1 over the literal source norm class, over
+/-- **Davis--Kahan 1970, Proposition 6.1 for normalized Fan-dominant norms, over
 `ℂ`.**
 
 The symmetric two-sided gap hypothesis and the printed conclusion
@@ -65,7 +58,7 @@ theorem proposition6_1_sourceExact_complex
     N hδ hMem fun M hM =>
       proposition6_1_complex M hA hB hU hV hδ hgapUV hgapVU hM
 
-/-- **Davis--Kahan 1970, Proposition 6.1 over the literal source norm class, over
+/-- **Davis--Kahan 1970, Proposition 6.1 for normalized Fan-dominant norms, over
 `ℝ`.**
 
 The real conclusion is on the source expression
@@ -91,7 +84,36 @@ theorem proposition6_1_sourceExact_real
     N hδ hMem fun M hM =>
       proposition6_1_real M hA hB hU hV hδ hgapUV hgapVU hM
 
-/-- **Davis--Kahan 1970, Theorem 6.1 over the literal source norm class, over
+/-- Proposition 6.1 with common-domain unbounded self-adjoint operators.
+
+The residual is their bounded difference on the common domain. The full form-gap
+hypotheses include the Appendix's ordered half-infinite configurations. The norm
+record retains unconditional Fan dominance; the weaker source boundary is in
+`Section456WhereDefinedNorms`. -/
+theorem proposition6_1_commonDomain_normalizedUIN_rclike
+    {𝕜 : Type u} [RCLike 𝕜]
+    {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜)
+    {A B : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : _root_.LinearPMap.IsReducing A U)
+    (hV : _root_.LinearPMap.IsReducing B V)
+    (Hop : E →L[𝕜] E) (hdomain : A.domain = B.domain)
+    (hperturbation : ∀ (x : E) (hxA : x ∈ A.domain) (hxB : x ∈ B.domain),
+      B ⟨x, hxB⟩ - A ⟨x, hxA⟩ = Hop x)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgapUV : DavisKahan.Sylvester.FormBoundedSylvesterGap
+      (A.restrict hU.isInvariant) (B.restrict hV.orthogonal.isInvariant) δ)
+    (hgapVU : DavisKahan.Sylvester.FormBoundedSylvesterGap
+      (B.restrict hV.isInvariant) (A.restrict hU.orthogonal.isInvariant) δ)
+    (hMem : N.Mem Hop) :
+    N.Mem (DavisKahan.Angle.ambientSinThetaOperator U V) ∧
+      δ * N.gauge (DavisKahan.Angle.ambientSinThetaOperator U V) ≤ N.gauge Hop :=
+  normalizedUnitaryInvariant_of_symmetricNorming N hδ hMem fun M hM =>
+    proposition6_1_commonDomain_presentation_rclike M hA hB hU hV Hop hdomain
+      hperturbation hδ hgapUV hgapVU hM
+
+/-- **Davis--Kahan 1970, Theorem 6.1 for normalized Fan-dominant norms, over
 `ℂ`.**
 
 `delta * epsilon * ‖sin Theta‖ ≤ ‖R‖` for every normalized unitarily invariant
@@ -122,7 +144,7 @@ theorem theorem6_1_sourceExact_complex
     N (by positivity) hR fun M hM =>
       theorem6_1_complex M A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hε hframe hδ hgap S hM
 
-/-- **Davis--Kahan 1970, Theorem 6.1 over the literal source norm class, over
+/-- **Davis--Kahan 1970, Theorem 6.1 for normalized Fan-dominant norms, over
 `ℝ`.**
 
 `delta * epsilon * ‖sin Theta‖ ≤ ‖R‖` for every normalized unitarily invariant

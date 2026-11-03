@@ -1,6 +1,24 @@
 # Davis--Kahan 1970: hostile result-by-result semantic review, 2026-08-31
 
-> **Current correction, 2026-09-09.** `S2-sin-two-theta` is reopened.
+> **Operator- and norm-scope repairs, 2026-11-02.** Theorem 8.2 now has
+> common-domain residual-only endpoints over both scalar fields, retaining
+> the directed inequality and the literal ambient angle below pi/4. A bounded
+> self-adjoint completion is constructed internally; the full difference of
+> the original operators need not be bounded. The separate acute corollaries
+> require no ideal membership. Proposition 6.1 uses common-domain partial
+> operators; Theorem 6.1 uses the full form-gap predicate, including ordered
+> half-infinite gaps. The canonical norm endpoints across Sections 2, 4–6,
+> and 8 now quantify over `NormalizedSymmetricOperatorIdealFamily` and assume
+> membership of both displayed operands. Stronger membership-transfer
+> theorems remain supporting results. Directed tangent endpoints conclude
+> directly on the literal functional-calculus operators, including the real
+> tan(2Θ) operator with a real norm family. The independent audit below and
+> `dev/davis-kahan-1970-unbounded-scope-audit-2026-11-02.md` record the proof
+> route, source comparison, and checks. Result selection and accepted
+> statement boundaries are unchanged.
+
+
+> **Historical correction, 2026-09-09.** `S2-sin-two-theta` is reopened.
 > The selected current conjunction restricts the trial block to a bounded map
 > and requires the whole trial subspace in the exact operator domain. Its
 > ambient conjunct inherits those unnecessary hypotheses. A bounded residual
@@ -308,8 +326,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `directed.complex` | complex | `S2-sin-theta.directed-conclusion` | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex` | **PASS** |
-  | `directed.real` | real | `S2-sin-theta.directed-conclusion` | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real` | **PASS** |
+  | `directed.complex` | complex | `S2-sin-theta.directed-conclusion` | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike` | **PASS** |
+  | `directed.real` | real | `S2-sin-theta.directed-conclusion` | `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_whereDefinedUIN_rclike` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
 
@@ -321,10 +339,10 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `ambient.complex` | complex | `S2-tan-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex` | **PASS** |
-  | `ambient.real` | real | `S2-tan-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real` | **PASS** |
-  | `directed.complex` | complex | `S2-tan-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex` | **PASS** (F9) |
-  | `directed.real` | real | `S2-tan-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real` | **PASS** (F9) |
+  | `ambient.complex` | complex | `S2-tan-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_whereDefinedUIN_complex` | **PASS** |
+  | `ambient.real` | real | `S2-tan-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_whereDefinedUIN_real` | **PASS** |
+  | `directed.complex` | complex | `S2-tan-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_complex` | **PASS** |
+  | `directed.real` | real | `S2-tan-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_real` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
 
@@ -336,10 +354,10 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `directed.residual.complex` | complex | `S2-sin-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` | **PASS** |
-  | `directed.residual.real` | real | `S2-sin-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` | **PASS** |
-  | `ambient.complex` | complex | `S2-sin-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex` | **PASS** |
-  | `ambient.real` | real | `S2-sin-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real` | **PASS** |
+  | `directed.residual.complex` | complex | `S2-sin-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike` | **PASS** |
+  | `directed.residual.real` | real | `S2-sin-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike` | **PASS** |
+  | `ambient.complex` | complex | `S2-sin-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike` | **PASS** |
+  | `ambient.real` | real | `S2-sin-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_commonDomain_whereDefinedUIN_rclike` | **PASS** |
 
 - Correspondence lemmas registered: `TauCeti.DavisKahan.mem_sinTwoAngleOperatorC_iff`, `TauCeti.DavisKahan.gauge_sinTwoAngleOperatorC`, `TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers`, `TauCeti.DavisKahan.mem_sinTwoAngleOperatorRC_iff`, `TauCeti.DavisKahan.gauge_sinTwoAngleOperatorRC`
 - Result-wide scope atoms carried by every clause's own primary: `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
@@ -352,10 +370,10 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `directed.complex` | complex | `S2-tan-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex` | **PASS** (2026-09-02, see the fifth pass) |
-  | `directed.real` | real | `S2-tan-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real` | **PASS** (2026-09-02, see the fifth pass) |
-  | `ambient.complex` | complex | `S2-tan-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex` | **PASS** |
-  | `ambient.real` | real | `S2-tan-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real` | **PASS** |
+  | `directed.complex` | complex | `S2-tan-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_complex` | **PASS** |
+  | `directed.real` | real | `S2-tan-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_real` | **PASS** |
+  | `ambient.complex` | complex | `S2-tan-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_whereDefinedUIN_complex` | **PASS** |
+  | `ambient.real` | real | `S2-tan-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_whereDefinedUIN_real` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
 
@@ -367,7 +385,7 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `existence.rclike` | rclike | `DK-3.1-prop.existence`, `DK-3.1-prop.uniqueness`, `DK-3.1-prop.positive-diagonal-characterization` | `TauCeti.DavisKahan1970.proposition3_1` | **PASS** |
+  | `existence.rclike` | rclike | `DK-3.1-prop.existence`, `DK-3.1-prop.uniqueness`, `DK-3.1-prop.positive-diagonal-characterization` | `TauCeti.DavisKahan1970.proposition3_1_separable` | **PASS** |
 
 
 ### `DK-3.2-prop` — Nonacute existence criterion
@@ -378,8 +396,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `existence-iff-crossing-dimensions.rclike` | rclike | `DK-3.2-prop.existence-iff-crossing-dimensions` | `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent` | **PASS** |
-  | `nonuniqueness.rclike` | rclike | `DK-3.2-prop.nonuniqueness` | `TauCeti.DavisKahan1970.proposition3_2_not_unique` | **PASS** |
+  | `existence-iff-crossing-dimensions.rclike` | rclike | `DK-3.2-prop.existence-iff-crossing-dimensions` | `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_separable` | **PASS** |
+  | `nonuniqueness.rclike` | rclike | `DK-3.2-prop.nonuniqueness` | `TauCeti.DavisKahan1970.proposition3_2_not_unique_separable` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `DK-3.2-prop.eq-3-5`
 
@@ -391,10 +409,10 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `principal-square-root.complex` | complex | `DK-3.3-prop.principal-square-root` | `TauCeti.DavisKahan1970.proposition3_3_complex_forward` | **PASS** |
-  | `square-root-converse.complex` | complex | `DK-3.3-prop.square-root-converse` | `TauCeti.DavisKahan1970.proposition3_3_complex_converse` | **PASS** |
-  | `principal-square-root.real` | real | `DK-3.3-prop.principal-square-root` | `TauCeti.DavisKahan1970.proposition3_3_real_forward` | **PASS** |
-  | `square-root-converse.real` | real | `DK-3.3-prop.square-root-converse` | `TauCeti.DavisKahan1970.proposition3_3_real_converse` | **PASS** |
+  | `principal-square-root.complex` | complex | `DK-3.3-prop.principal-square-root` | `TauCeti.DavisKahan1970.proposition3_3_complex_forward_separable` | **PASS** |
+  | `square-root-converse.complex` | complex | `DK-3.3-prop.square-root-converse` | `TauCeti.DavisKahan1970.proposition3_3_complex_converse_separable` | **PASS** |
+  | `principal-square-root.real` | real | `DK-3.3-prop.principal-square-root` | `TauCeti.DavisKahan1970.proposition3_3_real_forward_separable` | **PASS** |
+  | `square-root-converse.real` | real | `DK-3.3-prop.square-root-converse` | `TauCeti.DavisKahan1970.proposition3_3_real_converse_separable` | **PASS** |
 
 
 ### `DK-3.4-prop` — Square as a direct rotation
@@ -405,8 +423,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `u-square-direct-rotation.complex` | complex | `DK-3.4-prop.u-square-direct-rotation` | `TauCeti.DavisKahan1970.proposition3_4_full_complex` | **PASS** |
-  | `u-square-direct-rotation.real` | real | `DK-3.4-prop.u-square-direct-rotation` | `TauCeti.DavisKahan1970.proposition3_4_full_real` | **PASS** |
+  | `u-square-direct-rotation.complex` | complex | `DK-3.4-prop.u-square-direct-rotation` | `TauCeti.DavisKahan1970.proposition3_4_full_complex_separable` | **PASS** |
+  | `u-square-direct-rotation.real` | real | `DK-3.4-prop.u-square-direct-rotation` | `TauCeti.DavisKahan1970.proposition3_4_full_real_separable` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `S3-standing-scope.crossed-dimension-standing-assumption`
 
@@ -418,9 +436,10 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `complete-invariant.complex` | complex | `DK-3.1-thm.complete-invariant` | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex` | **PASS** |
-  | `complete-invariant.real` | real | `DK-3.1-thm.complete-invariant` | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real` | **PASS** |
-  | `converse-angle-data.rclike` | rclike | `DK-3.1-thm.converse-angle-data` | `TauCeti.DavisKahan1970.theorem3_1_realization` | **PASS** |
+  | `complete-invariant.complex` | complex | `DK-3.1-thm.complete-invariant` | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_complex` | **PASS** |
+  | `complete-invariant.real` | real | `DK-3.1-thm.complete-invariant` | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_sourceAngle_real` | **PASS** |
+  | `converse-angle-data.complex` | complex | `DK-3.1-thm.converse-angle-data` | `TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_complex` | **PASS** |
+  | `converse-angle-data.real` | real | `DK-3.1-thm.converse-angle-data` | `TauCeti.DavisKahan1970.theorem3_1_realization_sourceExact_real` | **PASS** |
 
 
 ### `DK-3.1-cor` — Compact classification by angle eigenvalues
@@ -431,8 +450,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `compact-complete-invariants.rclike` | rclike | `DK-3.1-cor.compact-complete-invariants`, `DK-3.1-cor.theta1-match` | `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification` | **PASS** |
-  | `allowed-angle-sequence.rclike` | rclike | `DK-3.1-cor.allowed-angle-sequence` | `TauCeti.DavisKahan1970.corollary3_1_realization` | **PASS** |
+  | `compact-complete-invariants.rclike` | rclike | `DK-3.1-cor.compact-complete-invariants`, `DK-3.1-cor.theta1-match` | `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_sourceAngleList_classification_separable` | **PASS** |
+  | `allowed-angle-sequence.rclike` | rclike | `DK-3.1-cor.allowed-angle-sequence` | `TauCeti.DavisKahan1970.corollary3_1_realization_zeroMultiplicity_sourceScope` | **PASS** |
 
 
 ### `DK-3.5-prop` — Angle commutation and eigenspace geometry
@@ -443,9 +462,9 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `commutation.rclike` | rclike | `DK-3.5-prop.commutation` | `TauCeti.DavisKahan1970.proposition3_5_commutations` | **PASS** |
-  | `eigenvector-rotation-angle.rclike` | rclike | `DK-3.5-prop.eigenvector-rotation-angle` | `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle` | **PASS** |
-  | `acute-maximal-characterization.rclike` | rclike | `DK-3.5-prop.acute-maximal-characterization` | `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal` | **PASS** |
+  | `commutation.rclike` | rclike | `DK-3.5-prop.commutation` | `TauCeti.DavisKahan1970.proposition3_5_commutations_separable` | **PASS** |
+  | `eigenvector-rotation-angle.rclike` | rclike | `DK-3.5-prop.eigenvector-rotation-angle` | `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_separable` | **PASS** |
+  | `acute-maximal-characterization.rclike` | rclike | `DK-3.5-prop.acute-maximal-characterization` | `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal_separable` | **PASS** |
 
 
 ### `DK-3.2-cor` — Reversal symmetry
@@ -456,7 +475,7 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `swap-invariance.rclike` | rclike | `DK-3.2-cor.swap-invariance` | `TauCeti.DavisKahan1970.corollary3_2` | **PASS** |
+  | `swap-invariance.rclike` | rclike | `DK-3.2-cor.swap-invariance` | `TauCeti.DavisKahan1970.corollary3_2_separable` | **PASS** |
 
 
 ### `DK-4.1-prop` — Pointwise and singular-value extremality of the direct rotation
@@ -467,8 +486,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `orthonormal-angle-lower-bounds.complex` | complex | `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.singular-value-minimality` | `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_complex` | **PASS** |
-  | `orthonormal-angle-lower-bounds.real` | real | `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.singular-value-minimality` | `TauCeti.DavisKahan1970.proposition4_1_compact_nonacute_real` | **PASS** |
+  | `orthonormal-angle-lower-bounds.complex` | complex | `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.singular-value-minimality` | `TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_complex` | **PASS** |
+  | `orthonormal-angle-lower-bounds.real` | real | `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.singular-value-minimality` | `TauCeti.DavisKahan1970.proposition4_1_directRotation_sourceExact_real` | **PASS** |
 
 
 ### `DK-4.1-cor` — UI-norm minimality of direct rotation displacement
@@ -479,8 +498,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `ui-minimality-on-p.complex` | complex | `DK-4.1-cor.ui-minimality-on-p` | `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_complex` | **PASS** |
-  | `ui-minimality-on-p.real` | real | `DK-4.1-cor.ui-minimality-on-p` | `TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_symmetricNorming_real` | **PASS** |
+  | `ui-minimality-on-p.complex` | complex | `DK-4.1-cor.ui-minimality-on-p` | `TauCeti.DavisKahan1970.corollary4_1_directRotation_whereDefinedUIN_complex` | **PASS** |
+  | `ui-minimality-on-p.real` | real | `DK-4.1-cor.ui-minimality-on-p` | `TauCeti.DavisKahan1970.corollary4_1_directRotation_whereDefinedUIN_real` | **PASS** |
 
 
 ### `DK-4.2-prop` — Basis-angle square-sum extremality
@@ -491,8 +510,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `basis-sine-square-lower-bound.complex` | complex | `DK-4.2-prop.basis-sine-square-lower-bound` | `TauCeti.DavisKahan1970.proposition4_2_infiniteDimensional` | **PASS** |
-  | `basis-sine-square-lower-bound.real` | real | `DK-4.2-prop.basis-sine-square-lower-bound` | `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence` | **PASS** |
+  | `basis-sine-square-lower-bound.complex` | complex | `DK-4.2-prop.basis-sine-square-lower-bound` | `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_separable` | **PASS** |
+  | `basis-sine-square-lower-bound.real` | real | `DK-4.2-prop.basis-sine-square-lower-bound` | `TauCeti.DavisKahan1970.proposition4_2_compact_nonacute_real_separable` | **PASS** |
 
 
 ### `DK-4.3-prop` — Squared displacement UI-norm minimality
@@ -503,8 +522,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `squared-displacement-global-minimum.complex` | complex | `DK-4.3-prop.squared-displacement-global-minimum` | `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_complex` | **PASS** |
-  | `squared-displacement-global-minimum.real` | real | `DK-4.3-prop.squared-displacement-global-minimum` | `TauCeti.DavisKahan1970.proposition4_3_compact_nonacute_symmetricNorming_real` | **PASS** |
+  | `squared-displacement-global-minimum.complex` | complex | `DK-4.3-prop.squared-displacement-global-minimum` | `TauCeti.DavisKahan1970.proposition4_3_directRotation_whereDefinedUIN_complex` | **PASS** |
+  | `squared-displacement-global-minimum.real` | real | `DK-4.3-prop.squared-displacement-global-minimum` | `TauCeti.DavisKahan1970.proposition4_3_directRotation_whereDefinedUIN_real` | **PASS** |
 
 
 ### `DK-4.4-prop` — Full-displacement counterexamples and Proposition 4.4 as printed
@@ -527,8 +546,7 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `sylvester-lower-bound.scalar_generic` | scalar_generic | `DK-5.1-thm.sylvester-lower-bound` | `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm` | **PASS** |
-  | `sylvester-lower-bound.complex` | complex | `DK-5.1-thm.sylvester-lower-bound` | `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact` | **PASS** |
+  | `sylvester-lower-bound.rclike` | rclike | `DK-5.1-thm.sylvester-lower-bound` | `TauCeti.DavisKahan1970.theorem5_1_banach_sylvester_banachScope` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `DK-5.1-thm.banach-hypotheses`
 
@@ -540,8 +558,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `hilbert-unbounded-conclusion.complex` | complex | `DK-5.2-thm.hilbert-unbounded-conclusion` | `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex` | **PASS** |
-  | `hilbert-unbounded-conclusion.real` | real | `DK-5.2-thm.hilbert-unbounded-conclusion` | `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real` | **PASS** |
+  | `hilbert-unbounded-conclusion.complex` | complex | `DK-5.2-thm.hilbert-unbounded-conclusion` | `TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_complex` | **PASS** |
+  | `hilbert-unbounded-conclusion.real` | real | `DK-5.2-thm.hilbert-unbounded-conclusion` | `TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_real` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `DK-5.2-thm.hilbert-unbounded-hypotheses`
 
@@ -553,7 +571,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `whole.rclike` | rclike | `DK-5.1-lem.strong-cutoff-convergence` | `TauCeti.DavisKahan1970.lemma5_1` | **PASS** |
+  | `whole.complex` | complex | `DK-5.1-lem.strong-cutoff-convergence` | `TauCeti.DavisKahan1970.lemma5_1_complex` | **PASS** |
+  | `whole.real` | real | `DK-5.1-lem.strong-cutoff-convergence` | `TauCeti.DavisKahan1970.lemma5_1_real` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `DK-5.1-lem.strong-cutoff-convergence`
 
@@ -565,8 +584,10 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `whole.rclike` | rclike | `DK-6.1-lem.ordered-sylvester-forward` | `TauCeti.DavisKahan1970.lemma6_1` | **PASS** |
-  | `whole.rclike.2` | rclike | `DK-6.1-lem.ordered-sylvester-converse` | `TauCeti.DavisKahan1970.lemma6_1_converse` | **PASS** |
+  | `forward.complex` | complex | `DK-6.1-lem.ordered-sylvester-forward` | `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_whereDefinedUIN_complex` | **PASS** |
+  | `forward.real` | real | `DK-6.1-lem.ordered-sylvester-forward` | `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_whereDefinedUIN_real` | **PASS** |
+  | `converse.complex` | complex | `DK-6.1-lem.ordered-sylvester-converse` | `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_whereDefinedUIN_complex` | **PASS** |
+  | `converse.real` | real | `DK-6.1-lem.ordered-sylvester-converse` | `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_whereDefinedUIN_real` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `DK-6.1-lem.ordered-sylvester-forward`, `DK-6.1-lem.ordered-sylvester-converse`
 
@@ -578,7 +599,7 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `whole.rclike` | rclike | `DK-6.2-lem.pinching-contraction` | `TauCeti.DavisKahan1970.lemma6_2` | **PASS** |
+  | `whole.rclike` | rclike | `DK-6.2-lem.pinching-contraction` | `TauCeti.DavisKahan1970.lemma6_2_whereDefinedUIN_rclike` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `DK-6.2-lem.pinching-contraction`
 
@@ -590,8 +611,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `symmetric-sine-theorem.complex` | complex | `DK-6.1-prop.symmetric-sine-theorem` | `TauCeti.DavisKahan1970.proposition6_1_complex` | **PASS** |
-  | `symmetric-sine-theorem.real` | real | `DK-6.1-prop.symmetric-sine-theorem` | `TauCeti.DavisKahan1970.proposition6_1_real` | **PASS** |
+  | `symmetric-sine-theorem.complex` | complex | `DK-6.1-prop.symmetric-sine-theorem` | `TauCeti.DavisKahan1970.proposition6_1_commonDomain_whereDefinedUIN_rclike` | **PASS** |
+  | `symmetric-sine-theorem.real` | real | `DK-6.1-prop.symmetric-sine-theorem` | `TauCeti.DavisKahan1970.proposition6_1_commonDomain_whereDefinedUIN_rclike` | **PASS** |
 
 
 ### `DK-6.1-thm` — Generalized sine theorem
@@ -602,8 +623,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `generalized-sine-conclusion.complex` | complex | `DK-6.1-thm.generalized-sine-conclusion` | `TauCeti.DavisKahan1970.theorem6_1_complex` | **PASS** |
-  | `generalized-sine-conclusion.real` | real | `DK-6.1-thm.generalized-sine-conclusion` | `TauCeti.DavisKahan1970.theorem6_1_real` | **PASS** |
+  | `generalized-sine-conclusion.complex` | complex | `DK-6.1-thm.generalized-sine-conclusion` | `TauCeti.DavisKahan1970.theorem6_1_whereDefinedUIN_complex` | **PASS** |
+  | `generalized-sine-conclusion.real` | real | `DK-6.1-thm.generalized-sine-conclusion` | `TauCeti.DavisKahan1970.theorem6_1_whereDefinedUIN_real` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.unequal-dimension-scope`
 
@@ -615,8 +636,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `second-generalized-sine.complex` | complex | `DK-6.2-thm.second-generalized-sine` | `TauCeti.DavisKahan1970.theorem6_2_complex` | **PASS** |
-  | `second-generalized-sine.real` | real | `DK-6.2-thm.second-generalized-sine` | `TauCeti.DavisKahan1970.theorem6_2_real` | **PASS** |
+  | `second-generalized-sine.complex` | complex | `DK-6.2-thm.second-generalized-sine` | `TauCeti.DavisKahan1970.theorem6_2_vacuity_sourceExact_complex` | **PASS** |
+  | `second-generalized-sine.real` | real | `DK-6.2-thm.second-generalized-sine` | `TauCeti.DavisKahan1970.theorem6_2_vacuity_sourceExact_real` | **PASS** |
 
 
 ### `DK-6.3-thm` — Tangent proof machinery, Example 6.1, and generalized tangent theorem
@@ -627,8 +648,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `generalized-tangent-theorem.complex` | complex | `DK-6.3-thm.generalized-tangent-theorem` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex` | **PASS** |
-  | `generalized-tangent-theorem.real` | real | `DK-6.3-thm.generalized-tangent-theorem` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real` | **PASS** |
+  | `generalized-tangent-theorem.complex` | complex | `DK-6.3-thm.generalized-tangent-theorem` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_complex` | **PASS** |
+  | `generalized-tangent-theorem.real` | real | `DK-6.3-thm.generalized-tangent-theorem` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_real` | **PASS** |
 
 
 ### `DK-6.3-lem` — Finite-rank near-maximizer leakage estimate
@@ -639,8 +660,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `whole.complex` | complex | `DK-6.3-lem.approximation-number-leakage` | `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_complex` | **PASS** |
-  | `whole.real` | real | `DK-6.3-lem.approximation-number-leakage` | `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real` | **PASS** |
+  | `whole.complex` | complex | `DK-6.3-lem.approximation-number-leakage` | `TauCeti.DavisKahan1970.lemma6_3_leakage_separable_complex` | **PASS** |
+  | `whole.real` | real | `DK-6.3-lem.approximation-number-leakage` | `TauCeti.DavisKahan1970.lemma6_3_leakage_separable_real` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `DK-6.3-lem.approximation-number-leakage`
 
@@ -652,22 +673,22 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `existence-correct-q.complex` | complex | `DK-8.1-thm.existence-correct-q` | `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch` | **PASS** |
-  | `existence-correct-q.real` | real | `DK-8.1-thm.existence-correct-q` | `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real` | **PASS** |
-  | `acute-iff-spectral-placement.complex` | complex | `DK-8.1-thm.acute-iff-spectral-placement` | `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn` | **PASS** |
-  | `acute-iff-spectral-placement.real` | real | `DK-8.1-thm.acute-iff-spectral-placement` | `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real` | **PASS** |
-  | `part-i-compression.complex` | complex | `DK-8.1-thm.part-i-compression` | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion` | **PASS** |
-  | `part-i-compression.complex.2` | complex | `DK-8.1-thm.part-i-compression` | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion` | **PASS** |
-  | `part-i-compression.real` | real | `DK-8.1-thm.part-i-compression` | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real` | **PASS** |
-  | `part-i-compression.real.2` | real | `DK-8.1-thm.part-i-compression` | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real` | **PASS** |
-  | `part-ii-eigenvalue.complex` | complex | `DK-8.1-thm.part-ii-eigenvalue` | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion` | **PASS** |
-  | `part-ii-eigenvalue.complex.2` | complex | `DK-8.1-thm.part-ii-eigenvalue` | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion` | **PASS** |
-  | `part-ii-eigenvalue.real` | real | `DK-8.1-thm.part-ii-eigenvalue` | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real` | **PASS** |
-  | `part-ii-eigenvalue.real.2` | real | `DK-8.1-thm.part-ii-eigenvalue` | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real` | **PASS** |
-  | `part-iii-gauge.complex` | complex | `DK-8.1-thm.part-iii-gauge` | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev` | **PASS** |
-  | `part-iii-gauge.complex.2` | complex | `DK-8.1-thm.part-iii-gauge` | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev` | **PASS** |
-  | `part-iii-gauge.real` | real | `DK-8.1-thm.part-iii-gauge` | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real` | **PASS** |
-  | `part-iii-gauge.real.2` | real | `DK-8.1-thm.part-iii-gauge` | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real` | **PASS** |
+  | `existence-correct-q.complex` | complex | `DK-8.1-thm.existence-correct-q` | `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex` | **PASS** |
+  | `existence-correct-q.real` | real | `DK-8.1-thm.existence-correct-q` | `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real` | **PASS** |
+  | `acute-iff-spectral-placement.complex` | complex | `DK-8.1-thm.acute-iff-spectral-placement` | `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_complex` | **PASS** |
+  | `acute-iff-spectral-placement.real` | real | `DK-8.1-thm.acute-iff-spectral-placement` | `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_blockPlacement_unbounded_real` | **PASS** |
+  | `part-i-compression.complex` | complex | `DK-8.1-thm.part-i-compression` | `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_complex` | **PASS** |
+  | `part-i-compression.complex.2` | complex | `DK-8.1-thm.part-i-compression` | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_complex` | **PASS** |
+  | `part-i-compression.real` | real | `DK-8.1-thm.part-i-compression` | `TauCeti.DavisKahan1970.Section8.theorem8_1_exists_branch_withCompression_unbounded_real` | **PASS** |
+  | `part-i-compression.real.2` | real | `DK-8.1-thm.part-i-compression` | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_sourceExact_unbounded_real` | **PASS** |
+  | `part-ii-eigenvalue.complex` | complex | `DK-8.1-thm.part-ii-eigenvalue` | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact` | **PASS** |
+  | `part-ii-eigenvalue.complex.2` | complex | `DK-8.1-thm.part-ii-eigenvalue` | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact` | **PASS** |
+  | `part-ii-eigenvalue.real` | real | `DK-8.1-thm.part-ii-eigenvalue` | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperEigenvalueRepulsion_blockSourceExact_real` | **PASS** |
+  | `part-ii-eigenvalue.real.2` | real | `DK-8.1-thm.part-ii-eigenvalue` | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerEigenvalueRepulsion_blockSourceExact_real` | **PASS** |
+  | `part-iii-gauge.complex` | complex | `DK-8.1-thm.part-iii-gauge` | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact` | **PASS** |
+  | `part-iii-gauge.complex.2` | complex | `DK-8.1-thm.part-iii-gauge` | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact` | **PASS** |
+  | `part-iii-gauge.real` | real | `DK-8.1-thm.part-iii-gauge` | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeEigenvalue_blockSourceExact_real` | **PASS** |
+  | `part-iii-gauge.real.2` | real | `DK-8.1-thm.part-iii-gauge` | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeEigenvalue_blockSourceExact_real` | **PASS** |
 
 
 ### `DK-8.2-thm` — Smallness selects the acute branch
@@ -678,12 +699,14 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `acute-branch-conclusion.complex` | complex | `DK-8.2-thm.acute-branch-conclusion` | `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_maximalAngle_lt_of_crossedDefects` | **PASS** |
-  | `acute-branch-conclusion.real` | real | `DK-8.2-thm.acute-branch-conclusion` | `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects` | **PASS** |
-  | `double-angle-bound-retained.complex` | complex | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming` | **PASS** |
-  | `double-angle-bound-retained.complex.2` | complex | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming` | **PASS** |
-  | `double-angle-bound-retained.real` | real | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming` | **PASS** |
-  | `double-angle-bound-retained.real.2` | real | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_real_symmetricNorming` | **PASS** |
+  | `acute-branch-conclusion.complex.perturbation` | complex | `DK-8.2-thm.acute-branch-conclusion` | `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_whereDefinedUIN_unbounded_complex` | **PASS** |
+  | `acute-branch-conclusion.complex.residual` | complex | `DK-8.2-thm.acute-branch-conclusion` | `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_fullAngle_lt_complex` | **PASS** |
+  | `acute-branch-conclusion.real.perturbation` | real | `DK-8.2-thm.acute-branch-conclusion` | `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_whereDefinedUIN_unbounded_real` | **PASS** |
+  | `acute-branch-conclusion.real.residual` | real | `DK-8.2-thm.acute-branch-conclusion` | `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_fullAngle_lt_real` | **PASS** |
+  | `double-angle-bound-retained.complex` | complex | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_whereDefinedUIN_unbounded_complex` | **PASS** |
+  | `double-angle-bound-retained.complex.2` | complex | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_whereDefinedUIN_complex` | **PASS** |
+  | `double-angle-bound-retained.real` | real | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_whereDefinedUIN_unbounded_real` | **PASS** |
+  | `double-angle-bound-retained.real.2` | real | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_whereDefinedUIN_real` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `DK-8.2-thm.smallness-alternative`, `S3-standing-scope.crossed-dimension-standing-assumption`
 
@@ -864,3 +887,25 @@ Eight tamper tests in `scripts/tests/test_davis_kahan_hostile_certificate.py` co
 the mutations a reviewer would try.
 
 **Disposition.** `S2-tan-two-theta` accepted; obligation closed; 29/29.
+
+## Independent norm-boundary repair (2 November 2026)
+
+2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis.
+
+The source comparison read the original Theorem 8.2 on page 37 and Proposition 6.1 on page 26 with the unbounded extension on page 30. The new 8.2 common-domain completion argument preserves the reference restriction and perturbed blocks. The norm repair changes only the quantifier/where-defined comparison, not the unbounded analytic argument. Lemma 6.1 now quantifies its block premises over the same weaker family. Directed tangent witnesses are produced independently of norm membership, with additional theorems for every prescribed representative; real directed tan2 uses one real norm on its two real operands.
+
+| Result | Selected weaker-boundary declarations |
+| --- | --- |
+| `S2-tan-theta` | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_whereDefinedUIN_complex`; `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_whereDefinedUIN_real`; `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_complex`; `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_real` |
+| `S2-tan-two-theta` | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_whereDefinedUIN_complex`; `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_whereDefinedUIN_real`; `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_complex`; `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_real` |
+| `DK-4.1-cor` | `TauCeti.DavisKahan1970.corollary4_1_directRotation_whereDefinedUIN_complex`; `TauCeti.DavisKahan1970.corollary4_1_directRotation_whereDefinedUIN_real` |
+| `DK-4.3-prop` | `TauCeti.DavisKahan1970.proposition4_3_directRotation_whereDefinedUIN_complex`; `TauCeti.DavisKahan1970.proposition4_3_directRotation_whereDefinedUIN_real` |
+| `DK-5.2-thm` | `TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_complex`; `TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_real` |
+| `DK-6.1-lem` | `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_whereDefinedUIN_complex`; `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_whereDefinedUIN_real`; `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_whereDefinedUIN_complex`; `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_whereDefinedUIN_real` |
+| `DK-6.2-lem` | `TauCeti.DavisKahan1970.lemma6_2_whereDefinedUIN_rclike` |
+| `DK-6.1-prop` | `TauCeti.DavisKahan1970.proposition6_1_commonDomain_whereDefinedUIN_rclike` |
+| `DK-6.1-thm` | `TauCeti.DavisKahan1970.theorem6_1_whereDefinedUIN_complex`; `TauCeti.DavisKahan1970.theorem6_1_whereDefinedUIN_real` |
+| `DK-6.3-thm` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_complex`; `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_real` |
+| `DK-8.2-thm` | `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_fullAngle_lt_complex`; `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_fullAngle_lt_real`; `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_whereDefinedUIN_unbounded_complex`; `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_whereDefinedUIN_complex`; `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_whereDefinedUIN_unbounded_real`; `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_whereDefinedUIN_real` |
+
+The final directed tangent and doubled-tangent selections are literal functional-calculus operators on their original scalar carriers. The real doubled-tangent norm comparison now quantifies over a real normalized symmetric family applied to real operators. The complexification API is supporting evidence; no extension theorem for arbitrary real norm families is assumed.

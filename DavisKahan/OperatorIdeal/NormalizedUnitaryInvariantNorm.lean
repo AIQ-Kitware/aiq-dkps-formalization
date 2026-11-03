@@ -410,7 +410,7 @@ namespace NormalizedUnitaryInvariantNorm
 variable {𝕜 : Type u} [RCLike 𝕜]
 
 /-- Forget unconditional Fan dominance, retaining the normalized symmetric ideal family. -/
-def toNormalizedSymmetricOperatorIdealFamily (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) :
+@[expose] def toNormalizedSymmetricOperatorIdealFamily (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) :
     NormalizedSymmetricOperatorIdealFamily.{u, v} 𝕜 where
   toSymmetricOperatorIdealFamily :=
     N.toSymmetricOperatorIdealFamily
@@ -420,6 +420,24 @@ def toNormalizedSymmetricOperatorIdealFamily (N : NormalizedUnitaryInvariantNorm
     apply OperatorIdealFamily.gauge_le_of_forall_kyFanGauge_le
     intro k
     exact_mod_cast hAB k
+
+/-- Forgetting unconditional Fan dominance preserves the norm's domain. -/
+@[simp] theorem toNormalizedSymmetricOperatorIdealFamily_mem_iff
+    (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜)
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (A : E →L[𝕜] F) :
+    N.toNormalizedSymmetricOperatorIdealFamily.Mem A ↔ N.Mem A := Iff.rfl
+
+/-- Forgetting unconditional Fan dominance preserves each defined norm value. -/
+@[simp] theorem toNormalizedSymmetricOperatorIdealFamily_gaugeReal
+    (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜)
+    {E F : Type v}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    (A : E →L[𝕜] F) :
+    N.toNormalizedSymmetricOperatorIdealFamily.gaugeReal A = N.gauge A := rfl
 
 /-- The forgotten base family satisfies unconditional Fan dominance by the field carried above it. -/
 theorem toNormalizedSymmetricOperatorIdealFamily_hasFanDominance (N : NormalizedUnitaryInvariantNorm.{u, v} 𝕜) :

@@ -18,8 +18,10 @@ public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedAngle
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaDirectedRCLike
 public import DavisKahan.Sources.DavisKahan1970.SinTwoThetaCommonDomain
 public import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
+public import DavisKahan.Sources.DavisKahan1970.TanThetaWhereDefinedNorms
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
+public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaWhereDefinedNorms
 public import DavisKahan.Sources.DavisKahan1970.TanTwoThetaScalarGeneric
 public import DavisKahan.Sources.DavisKahan1970.DirectedTrigonometricPresentation
 
@@ -63,7 +65,7 @@ submission repository under `submodules/` still consumes them.
 
 ## Short names are scalar-generic; the norm boundary is explicit
 
-The public Section 2 names in this module are scalar-generic over `RCLike 𝕜`.  The two
+The generic clause APIs in this module are scalar-generic over `RCLike 𝕜`. The two
 whole-result source names, `sinTheta` and `sinTwoTheta`, retain the where-defined norm
 boundary selected by the result ledger.  For `sinTwoTheta`, the short theorem carries both
 printed clauses under their shared source setup, and its directed and ambient clause APIs are
@@ -74,8 +76,11 @@ The tangent *clause* names `tanTheta_{directed,ambient}` and
 `symmetricNorming` boundary: residual or perturbation ideal membership implies membership of
 the corresponding tangent representative together with the norm inequality.  These are
 stronger implementation APIs, not claims that Davis--Kahan's printed partial-domain norm
-semantics have changed.  The fixed real/complex names remain as compatibility and
-source-audit surfaces.
+semantics have changed.  The existing fixed real/complex names remain compatibility APIs. The fixed-field `*_whereDefinedUIN_{complex,real}` aliases
+below instead expose the weaker source norm boundary for both tangent families.
+Their comparison requires both displayed norms to exist. Directed tangent
+representatives and pole exclusion are constructed independently of those norm
+membership premises.
 
 Which whole-result short names are selected as source-facing ledger endpoints is recorded in
 `section_two_short_names` in the result inventory and in the Section 2 variant index; do not
@@ -119,6 +124,40 @@ the file long enough that the table above was hard to find.
 namespace TauCeti
 namespace DavisKahan1970
 namespace SectionTwo
+
+/-! ## Tangent clauses at the where-defined source norm boundary -/
+
+/-- Directed tangent, complex Hilbert space, with only where-defined Fan comparison. -/
+alias tanTheta_directed_whereDefinedUIN_complex :=
+  DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_complex
+
+/-- Directed tangent, real Hilbert space, with only where-defined Fan comparison. -/
+alias tanTheta_directed_whereDefinedUIN_real :=
+  DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_real
+
+/-- Ambient tangent, complex Hilbert space, where both displayed norms exist. -/
+alias tanTheta_ambient_whereDefinedUIN_complex :=
+  DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_whereDefinedUIN_complex
+
+/-- Ambient tangent, real Hilbert space, where both displayed norms exist. -/
+alias tanTheta_ambient_whereDefinedUIN_real :=
+  DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_whereDefinedUIN_real
+
+/-- Directed double-angle tangent, complex Hilbert space, at the weaker norm boundary. -/
+alias tanTwoTheta_directed_whereDefinedUIN_complex :=
+  DavisKahan1970.tanTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_complex
+
+/-- Directed double-angle tangent on the original real carrier. -/
+alias tanTwoTheta_directed_whereDefinedUIN_real :=
+  DavisKahan1970.tanTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_real
+
+/-- Ambient double-angle tangent, complex Hilbert space, at the weaker norm boundary. -/
+alias tanTwoTheta_ambient_whereDefinedUIN_complex :=
+  DavisKahan1970.tanTwoTheta_ambient_unbounded_whereDefinedUIN_complex
+
+/-- Ambient double-angle tangent, real Hilbert space, at the weaker norm boundary. -/
+alias tanTwoTheta_ambient_whereDefinedUIN_real :=
+  DavisKahan1970.tanTwoTheta_ambient_unbounded_whereDefinedUIN_real
 
 
 /-! ## `sin Θ` -/

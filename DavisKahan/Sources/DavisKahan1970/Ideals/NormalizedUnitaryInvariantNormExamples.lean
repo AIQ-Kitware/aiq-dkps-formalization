@@ -9,26 +9,13 @@ public import DavisKahan.OperatorIdeal.NormalizedUnitaryInvariantNorm
 public import DavisKahan.Sources.DavisKahan1970.Ideals.RankOneNormalization
 
 /-!
-# The source norm class is inhabited
+# Examples of normalized Fan-dominant norms
 
-`NormalizedUnitaryInvariantNorm` is the Lean type for Davis--Kahan's Section 1
-norm class, and every source-exact façade quantifies over it.  A universally
-quantified statement over an *empty* type is vacuous, so the façades mean nothing
-until the class is shown to have members.
-
-Until 2026-09-05 the repository never constructed one.  This module does: the
-`k`-th Ky Fan norm is a member for every `k ≥ 1`, and those are the norms Davis
-and Kahan's own Fan-dominance argument runs over.
-
-**What was and was not missing.**  The layer beneath,
-a native symmetric ideal family with Ky Fan dominance, was already inhabited by
-`OperatorIdealFamily.kyFan`, so this module builds on that rather than
-repeating it.  What had no witness was the *normalized* class: the single extra
-field `gauge_rankOne_eq_one`, which is the source's `‖u v*‖ = ‖u‖ ‖v‖` after
-scaling both vectors to norm one.  It is discharged by
-`approximationSingularValue_rankOne`, which says a norm-one rank-one operator has
-singular values `1, 0, 0, …`, so the Ky Fan sum of the first `k ≥ 1` of them is
-`1`.
+The finite Ky Fan gauges inhabit `NormalizedUnitaryInvariantNorm`. They are
+finite on every bounded operator, and supply the intermediate tests used to
+transfer estimates to the weaker `NormalizedSymmetricOperatorIdealFamily`.
+The latter transfer requires both displayed norms to exist and does not infer
+membership for its input norm family.
 -/
 
 public section

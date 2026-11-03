@@ -959,11 +959,9 @@
       },
       "type_requirements": {
         "must_not_contain": [],
-        "rationale": "The printed scope is every normalized unitary-invariant norm, read together with the paper-wide convention that a result is vacuous when a displayed norm does not exist. The Probe 17--43 audit separates that where-defined comparison from unconditional dominance of an extended ENNReal gauge. `NormalizedSymmetricOperatorIdealFamily` is the direct operator-ideal model of the source-facing boundary: ideal/norm laws, rank-one normalization, and Ky Fan comparison when both displayed norms are defined. `SymmetricNormingFunction` remains the representation-level model used by the existing gauge proofs. `NormalizedUnitaryInvariantNorm` is retained in this syntactic disjunction for the still-unretargeted Section 2 source wrappers; it is a stronger internal class because its unconditional Fan dominance also transfers ideal membership. A theorem at one fixed Ky Fan gauge or only the operator norm does not satisfy this scope atom.",
+        "rationale": "The source asserts the norm inequality where its displayed norms exist. All canonical Section 2 inequalities now quantify over NormalizedSymmetricOperatorIdealFamily: symmetric ideal/norm laws, rank-one normalization, and Fan comparison when both displayed norms are defined. NormalizedUnitaryInvariantNorm and SymmetricNormingFunction remain stronger analytic interfaces and no longer satisfy this source-boundary check by their type names alone. No ideal-membership transfer is part of the source comparison.",
         "must_contain_any": [
-          "SymmetricNormingFunction",
-          "NormalizedSymmetricOperatorIdealFamily",
-          "NormalizedUnitaryInvariantNorm"
+          "NormalizedSymmetricOperatorIdealFamily"
         ]
       }
     },
@@ -1386,11 +1384,9 @@
       },
       "type_requirements": {
         "must_not_contain": [],
-        "rationale": "The printed scope is every normalized unitary-invariant norm, read together with the paper-wide convention that a result is vacuous when a displayed norm does not exist. The Probe 17--43 audit separates that where-defined comparison from unconditional dominance of an extended ENNReal gauge. `NormalizedSymmetricOperatorIdealFamily` is the direct operator-ideal model of the source-facing boundary: ideal/norm laws, rank-one normalization, and Ky Fan comparison when both displayed norms are defined. `SymmetricNormingFunction` remains the representation-level model used by the existing gauge proofs. `NormalizedUnitaryInvariantNorm` is retained in this syntactic disjunction for the still-unretargeted Section 2 source wrappers; it is a stronger internal class because its unconditional Fan dominance also transfers ideal membership. A theorem at one fixed Ky Fan gauge or only the operator norm does not satisfy this scope atom.",
+        "rationale": "The source asserts the norm inequality where its displayed norms exist. All canonical Section 2 inequalities now quantify over NormalizedSymmetricOperatorIdealFamily: symmetric ideal/norm laws, rank-one normalization, and Fan comparison when both displayed norms are defined. NormalizedUnitaryInvariantNorm and SymmetricNormingFunction remain stronger analytic interfaces and no longer satisfy this source-boundary check by their type names alone. No ideal-membership transfer is part of the source comparison.",
         "must_contain_any": [
-          "SymmetricNormingFunction",
-          "NormalizedSymmetricOperatorIdealFamily",
-          "NormalizedUnitaryInvariantNorm"
+          "NormalizedSymmetricOperatorIdealFamily"
         ]
       }
     },

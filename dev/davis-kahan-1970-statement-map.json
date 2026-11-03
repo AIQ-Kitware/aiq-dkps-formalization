@@ -195,7 +195,11 @@
         "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects",
         "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_complex",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real"
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_explicitCompatibility_symmetricNorming_real",
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_complex",
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_normalizedUIN_real",
+        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex",
+        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real"
       ],
       "audit_clauses": [
         {
@@ -308,7 +312,11 @@
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real",
         "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_complex",
-        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real"
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_symmetricNorming_real",
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_complex",
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_normalizedUIN_real",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_complex",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_normalizedUIN_real"
       ],
       "audit_clauses": [
         {
@@ -1011,7 +1019,9 @@
       "review_declarations": [
         "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_complex",
         "TauCeti.DavisKahan1970.corollary4_1_compact_nonacute_real",
-        "TauCeti.DavisKahan1970.corollary4_1_infiniteDimensional_nonacute"
+        "TauCeti.DavisKahan1970.corollary4_1_infiniteDimensional_nonacute",
+        "TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_complex",
+        "TauCeti.DavisKahan1970.corollary4_1_directRotation_sourceExact_real"
       ],
       "audit_clauses": [
         {
@@ -1080,7 +1090,9 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-4.3-prop",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.proposition4_3_infiniteDimensional_idealGauge"
+        "TauCeti.DavisKahan1970.proposition4_3_infiniteDimensional_idealGauge",
+        "TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_complex",
+        "TauCeti.DavisKahan1970.proposition4_3_directRotation_sourceExact_real"
       ],
       "audit_clauses": [
         {
@@ -1285,25 +1297,27 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-5.2-thm",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
+        "TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_complex",
         "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.theorem5_2",
         "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_of_spectra",
-        "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real",
+        "TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_real",
         "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real",
         "TauCeti.DavisKahan1970.theorem5_2_kyFanDominant_real",
         "TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real",
         "TauCeti.DavisKahan.Sylvester.real_unbounded_sylvester_kyFan",
         "TauCeti.DavisKahan1970.symmetricNorming_of_kyFanDominant",
         "TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm",
-        "TauCeti.DavisKahan.Sylvester.directOrderedSylvesterEngine_lowerUpper"
+        "TauCeti.DavisKahan.Sylvester.directOrderedSylvesterEngine_lowerUpper",
+        "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
+        "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real"
       ],
       "audit_clauses": [
         {
           "id": "DK-5.2-thm.bound.complex",
           "description": "Theorem 5.2 over a complex Hilbert space: for semibounded self-adjoint A, B with A >= gamma + delta > gamma >= B and bounded X, C satisfying A X = X B + C, ||C|| >= delta ||X|| for every unitary-invariant norm.  The `_sourceExact_` witness carries the paper's separable ambient scope and the literal normalized unitarily-invariant norm class.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
+            "TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_complex",
             "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex",
             "TauCeti.DavisKahan1970.theorem5_2",
             "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_of_spectra"
@@ -1313,7 +1327,7 @@
           "id": "DK-5.2-thm.bound.real",
           "description": "The same theorem over a real Hilbert space, which the source's real-or-complex ambient scope requires and which is not an instance of the complex statement.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real",
+            "TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_real",
             "TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real",
             "TauCeti.DavisKahan1970.theorem5_2_kyFanDominant_real",
             "TauCeti.DavisKahan1970.theorem5_2_orderedGap_symmetricNorming_real",
@@ -1379,7 +1393,11 @@
       "tex_marker": "DK-6.1-lem",
       "review_declarations": [
         "TauCeti.DavisKahan1970.lemma6_1",
-        "TauCeti.DavisKahan1970.lemma6_1_converse"
+        "TauCeti.DavisKahan1970.lemma6_1_converse",
+        "TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_complex",
+        "TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_real",
+        "TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_complex",
+        "TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_real"
       ],
       "audit_clauses": [
         {
@@ -1410,7 +1428,8 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-6.2-lem",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.lemma6_2"
+        "TauCeti.DavisKahan1970.lemma6_2",
+        "TauCeti.DavisKahan1970.lemma6_2_separable"
       ],
       "audit_clauses": [
         {
@@ -1439,29 +1458,33 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-6.1-prop",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
-        "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real",
+        "TauCeti.DavisKahan1970.proposition6_1_commonDomain_whereDefinedUIN_rclike",
+        "TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_complex",
+        "TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_real",
         "TauCeti.DavisKahan.ExactSinTheta.counterexample_sine_square_norm",
         "TauCeti.DavisKahan.ExactSinTheta.counterexample_perturbation_square_norm",
         "TauCeti.DavisKahan.ExactSinTheta.oneGap_does_not_imply_symmetric_square_estimate",
         "TauCeti.DavisKahan1970.proposition6_1_complex",
         "TauCeti.DavisKahan1970.proposition6_1_real",
         "TauCeti.DavisKahan1970.proposition6_1_commonDomain_complex",
-        "TauCeti.DavisKahan1970.proposition6_1_commonDomain_real"
+        "TauCeti.DavisKahan1970.proposition6_1_commonDomain_real",
+        "TauCeti.DavisKahan1970.proposition6_1_commonDomain_normalizedUIN_rclike"
       ],
       "audit_clauses": [
         {
           "id": "DK-6.1-prop.sylvester-step",
           "description": "Proof step, not a printed result: projecting the residual relation on the complementary exact subspace gives a Sylvester equation, and the sine-theorem interval/exterior gap turns it into (6.1), ||R* F_1|| >= delta ||E_0* F_1||, whose singular values are the directed sines.  The atoms are classified `proof_only` and `non_result`; the mathematics invoked is Theorem 5.2, certified on row DK-5.2-thm, and cited here so the step is not left dangling.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex",
-            "TauCeti.DavisKahan1970.theorem5_2_sourceExact_real"
+            "TauCeti.DavisKahan1970.proposition6_1_commonDomain_whereDefinedUIN_rclike",
+            "TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_complex",
+            "TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_real"
           ]
         },
         {
           "id": "DK-6.1-prop.one-sided-counterexample",
           "description": "The source's explicit warning, with its 2x2 example: the one-sided hypotheses do NOT give delta ||sin Theta|| <= ||H|| for every unitary-invariant norm.  At delta = 2 and theta = pi/4 the square norms are 2 > sqrt 3.",
           "review_declarations": [
+            "TauCeti.DavisKahan1970.proposition6_1_commonDomain_whereDefinedUIN_rclike",
             "TauCeti.DavisKahan.ExactSinTheta.counterexample_sine_square_norm",
             "TauCeti.DavisKahan.ExactSinTheta.counterexample_perturbation_square_norm",
             "TauCeti.DavisKahan.ExactSinTheta.oneGap_does_not_imply_symmetric_square_estimate"
@@ -1471,6 +1494,7 @@
           "id": "DK-6.1-prop.symmetric-replacement",
           "description": "Proposition 6.1 itself: under the sine-theorem separation of width delta for A_0 against Lambda_1 AND the analogous separation for A_1 against Lambda_0, delta ||sin Theta|| <= ||H|| for every unitary-invariant norm.",
           "review_declarations": [
+            "TauCeti.DavisKahan1970.proposition6_1_commonDomain_whereDefinedUIN_rclike",
             "TauCeti.DavisKahan1970.proposition6_1_complex",
             "TauCeti.DavisKahan1970.proposition6_1_real",
             "TauCeti.DavisKahan1970.proposition6_1_commonDomain_complex",
@@ -1499,16 +1523,22 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-6.1-thm",
       "review_declarations": [
+        "TauCeti.DavisKahan1970.theorem6_1_whereDefinedUIN_complex",
+        "TauCeti.DavisKahan1970.theorem6_1_whereDefinedUIN_real",
         "TauCeti.DavisKahan1970.theorem6_1_complex",
         "TauCeti.DavisKahan1970.theorem6_1_real",
         "TauCeti.DavisKahan1970.theorem6_1_real_commonDomain",
-        "TauCeti.DavisKahan1970.theorem6_1_real_commonCore"
+        "TauCeti.DavisKahan1970.theorem6_1_real_commonCore",
+        "TauCeti.DavisKahan1970.theorem6_1_sourceExact_complex",
+        "TauCeti.DavisKahan1970.theorem6_1_sourceExact_real"
       ],
       "audit_clauses": [
         {
           "id": "DK-6.1-thm.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
+            "TauCeti.DavisKahan1970.theorem6_1_whereDefinedUIN_complex",
+            "TauCeti.DavisKahan1970.theorem6_1_whereDefinedUIN_real",
             "TauCeti.DavisKahan1970.theorem6_1_complex",
             "TauCeti.DavisKahan1970.theorem6_1_real",
             "TauCeti.DavisKahan1970.theorem6_1_real_commonDomain",
@@ -1591,7 +1621,9 @@
         "TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_complex",
         "TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_real",
         "TauCeti.DavisKahan1970.Section6Example61.tangent_bound_fails",
-        "TauCeti.DavisKahan1970.Section6Example61.residual_norm"
+        "TauCeti.DavisKahan1970.Section6Example61.residual_norm",
+        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_complex",
+        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_normalizedUIN_real"
       ],
       "audit_clauses": [
         {
@@ -1923,18 +1955,34 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-8.2-thm",
       "review_declarations": [
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_fullAngle_lt_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_fullAngle_lt_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_whereDefinedUIN_unbounded_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_whereDefinedUIN_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_whereDefinedUIN_unbounded_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_whereDefinedUIN_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_real_symmetricNorming",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_symmetricNorming",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_complex"
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_directed_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_normalizedUIN_complex",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_sourceExact_unbounded_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_normalizedUIN_real"
       ],
       "audit_clauses": [
         {
           "id": "DK-8.2-thm.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_fullAngle_lt_complex",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_fullAngle_lt_real",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_whereDefinedUIN_unbounded_complex",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_whereDefinedUIN_complex",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_whereDefinedUIN_unbounded_real",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_whereDefinedUIN_real",
             "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_symmetricNorming",
             "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_real_symmetricNorming",
             "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_directedAngle_symmetricNorming",
@@ -1943,13 +1991,8 @@
         }
       ],
       "source_specification_sha256": "8af6a38667dbf398e65e1b4460763ab627b559607ac519214c35402797c1b48e",
-      "expected_completion_certification": "reopened_mapping",
-      "known_completion_holes": [
-        {
-          "kind": "audit_atomization",
-          "detail": "A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions."
-        }
-      ],
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "audit_warning": "HOSTILE RE-AUDIT REOPENED: A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions.",
       "source_atom_ids": [
         "DK-8.2-thm.smallness-alternative",
