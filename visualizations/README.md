@@ -152,6 +152,64 @@ Current presentations (in addition to the preserved reference decks):
   target-blue, phase-magenta, cutoff-violet and smoothed-steel colors.
 - **`study`**: the earlier long-form curriculum, kept as an independent
   composition. See `briefs/deep-study.md`.
+- **`matching-proof`**: a dedicated 35-slide study of Theorem 5, the finite
+  real trace-norm matching formula. Each slide states an inference and its
+  justification, with longer spoken text in the presenter notes. Includes
+  the derivative, simultaneous invariant blocks, four-dimensional comparison,
+  trace-norm limit, and a worked matching. See `briefs/matching-proof.md`.
+
+### Matching proof: slides, presentation text, and narrated video
+
+Build the slides and export the speech text without contacting a speech service:
+
+```bash
+make matching
+```
+
+Open `renders/matching-proof.standalone.html` for the animated slides, or
+`renders/matching-proof.handout.pdf` for one complete final frame per slide.
+`renders/matching-proof.pdf` is the regular slide export. A draft can be built
+with `make matching QUALITY=l PDF=0`.
+
+The authored script is [narration/matching-proof.md](narration/matching-proof.md).
+Edit it to change both the presenter notes and the speech text. Equations are
+written out for speech. `make matching-text` exports 35 separate `.txt` files,
+a combined `presentation.txt`, and a scene/text manifest into
+`renders/matching-proof-narration/`. Render the slides again after changing
+the script to refresh their embedded presenter notes.
+
+With the local Qwen speech server running on your host, render the complete video:
+
+```bash
+./render_matching_video.sh
+```
+
+This renders the Manim deck at 1080p/30 FPS, submits one complete slide script
+per request to `http://127.0.0.1:11437/v1/audio/speech`, and assembles
+`renders/matching-proof.narrated.mp4`. It uses model
+`qwen-1.7-customvoice-q8-ggml`, voice `ryan`, language `English`, MP3 responses,
+and `stream: false`. It uses the existing `slides` Python extra and FFmpeg;
+no local TTS Python package is needed.
+
+To reuse slides already rendered on this machine:
+
+```bash
+./render_matching_video.sh --skip-render
+```
+
+Each animation plays once. Its final frame holds until the narration finishes,
+followed by a 1.5-second pause. The video includes a chapter per slide, and
+`renders/matching-proof-narrated/timeline.json` records the timings. Individual
+MP3s and narrated slide MP4s are in that same directory. MP3s are cached by
+text and request settings; rerunning after an interruption reuses valid audio.
+Changing a script or voice regenerates the affected audio. Video segments are
+rebuilt from the current slide renders. Use `--pause`, `--voice`, `--model`,
+`--endpoint`, or `--timeout` to override defaults; `--help` lists all options.
+
+The script calls your host's speech service when you run it. Development
+validation used synthetic audio and a temporary mock HTTP service, rather
+than the Qwen model. All rendered media and exported text are gitignored and
+can be regenerated from the tracked scenes and narration.
 
 To build the complete collection at 1080p/30 FPS and generate a **single HTML
 file with embedded videos**, run from this directory:

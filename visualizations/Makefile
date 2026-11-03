@@ -23,6 +23,7 @@
 
 UV      ?= uv
 RUN     := $(UV) run --extra vtk --extra slides --extra test
+MATCHING_RUN := $(UV) run --extra slides
 QUALITY ?= h
 # 1080p renders at 30 fps unless asked for more (FPS=60, or `make final`); drafts keep the quality's own rate.
 FPS     ?= $(if $(filter l m,$(QUALITY)),,30)
@@ -52,13 +53,14 @@ DECK_kitware       := kitware-talk
 DECK_comprehensive := comprehensive
 DECK_study         := study
 DECK_novelty       := novelty-tour
+DECK_matching      := matching-proof
 PARTS             := part1 part2 part3 part4 part5 part6 part7
 WORKING           := kitware comprehensive study novelty
-DECKS      := short full $(PARTS) $(WORKING)
+DECKS      := short full $(PARTS) $(WORKING) matching
 
 .DEFAULT_GOAL := help
 .PHONY: help setup all rebuild working $(DECKS) $(addprefix clean-,$(DECKS)) $(addprefix present-,$(DECKS)) \
-        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean
+        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean matching-text matching-video
 
 help:
 	@awk '/^#/ { sub(/^# ?/, ""); print; next } { exit }' $(firstword $(MAKEFILE_LIST))
@@ -72,6 +74,9 @@ help:
 	@echo '  comprehensive      all unique scenes, ordered by topic; also build standalone HTML'
 	@echo '  study              previous long-form self-study composition'
 	@echo '  novelty            standalone deck for the new optimization mathematics'
+	@echo '  matching           detailed matching proof; standalone HTML, PDF and narration text'
+	@echo '  matching-text      export one plain-text narration file per slide'
+	@echo '  matching-video     render slides, call the local Qwen TTS endpoint, assemble chaptered MP4'
 	@echo '  working            build kitware, comprehensive, study, and novelty'
 	@echo '  part1 ... part7    one part of the full talk, rendered and converted on its own:'
 	@echo '                       1 sin Theta, 2 3D, 3 tan/sin2/tan2 Theta, 4 Prop 4.4, 5 process, 6 summary, 7 notation'
@@ -116,6 +121,16 @@ short study $(PARTS):
 # per CPU, which can be excessive for a presentation full of MathTex labels.
 novelty:
 	$(RUN) python -m dkvis.build_slides $(DECK_$@) $(BUILD_FLAGS) $(if $(JOBS),,--jobs 2)
+
+matching:
+	$(MATCHING_RUN) python -m dkvis.build_slides matching-proof $(BUILD_FLAGS) $(if $(JOBS),,--jobs 2) --one-file --html renders/matching-proof$(SUFFIX).standalone.html
+	$(MAKE) matching-text
+
+matching-text:
+	$(MATCHING_RUN) python -m dkvis.matching_narration --theme $(THEME) --out renders/matching-proof$(SUFFIX)-narration
+
+matching-video:
+	./render_matching_video.sh --quality $(QUALITY) --fps $(if $(FPS),$(FPS),30) --jobs $(if $(JOBS),$(JOBS),2)
 
 # Long and completed talk decks always produce portable, single-file HTML.
 # The comprehensive deck is large: default to a modest two render processes
