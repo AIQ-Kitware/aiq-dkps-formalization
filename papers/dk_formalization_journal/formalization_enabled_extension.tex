@@ -13,6 +13,7 @@ $\like{theta}{\theta_1},\ldots,\like{theta}{\theta_m}\in(0,\pi/2]$ be their posi
 counted with multiplicity.  A matching $\sym{Matching}$ on the angle labels consists
 of disjoint unordered pairs; labels outside the pairs are unmatched.
 Define the singleton and paired costs
+\jonsays{Might be better to say: for each matched indexes $i, j$ define the cost as, ... and then do the same for the singleton. It took me a sec to realize the problem you were setting up, and making the indexes more explcit might help, also we have not defined what \psi is. We cannot use a variable without saying what it is first. The paragraph after this also sets up the motivation for wh a min(..., 2) apears, so we should state that before the definition}
 \begin{equation}\label{eq:nuclear-matching-costs}
  \sym{SingletonCost}(\sym{theta})=\min\{4\sin(\sym{theta}/2),2\},\qquad
  \sym{PairCost}(\sym{theta},\like{theta}{\psi})=4\sin((\sym{theta}+\like{theta}{\psi})/2).
@@ -41,6 +42,7 @@ For equal-dimensional real subspaces $\like{Usource}{K},\like{Vtarget}{L}$ as ab
 Both minima are attained.  The equality includes repeated angles,
 right angles, and common ambient directions; the left side has no
 principal-plane or determinant constraint.
+\jonsays{It is not clear what this figure is showing. A fast reader might think its a representation of the angled planes, but it is not. }
 \end{theorem}
 
 We can solve the matching problem by maximizing the savings from pairing angles.
@@ -67,10 +69,11 @@ with cost $4\sin(37.5^\circ)+2\approx4.4350$.}
 \begin{proof}[Proof outline]
 For $1<p<2$, minimize the displacement cost
 $\like{PowerCost}{\Phi_p}(\sym{Wcompetitor})=\sum_j s_j(I-\sym{Wcompetitor})^p$ over the orthogonal transporters. The feasible
-set is nonempty and compact, so a minimizer exists. The formal proof first
+set is nonempty and compact, so a minimizer exists. \jonsays{Why? by what theorem? Maybe its not easy to say?}. The formal proof first
 reduces such a minimizer to common invariant blocks for the source
 projection, target projection, and transporter, of real dimension two or
 four, together with fixed common directions.
+\jonsays{This is unclear to me}
 
 The reduction uses first variations along $\sym{Wcompetitor}\exp(t\sym{SkewDirection})$. The skew-symmetric
 spectral gradient $\sym{SpectralGradient}$ commutes with $\sym{Wcompetitor}$ and represents this derivative by
