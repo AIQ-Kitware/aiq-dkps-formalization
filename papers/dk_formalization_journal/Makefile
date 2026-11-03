@@ -2,7 +2,7 @@ PYTHON ?= python3
 CUTOFF ?=
 ACCOUNTING_CUTOFF_ARG := $(if $(strip $(CUTOFF)),--cutoff $(CUTOFF),)
 
-.PHONY: all accounting bibliometrics counterexample-figure teaching-figures figures paper-figures paper literature dependency-snapshots clean
+.PHONY: all accounting bibliometrics counterexample-figure teaching-figures figures paper-figures paper matching-study literature dependency-snapshots clean
 
 TEACHING_PGF = figures/sine_theta_residual_geometry.pgf figures/real_nuclear_matching.pgf
 FIGURE_STYLE = scripts/figure_style.py math_symbol_colors.tex
@@ -22,6 +22,10 @@ bibliometrics:
 # The manuscript and editor builds regenerate missing/stale figures offline.
 paper: paper-figures
 	latexmk -pdf paper.tex
+
+# Expanded offline derivations, built separately from the article.
+matching-study:
+	latexmk -pdf matching_proof_study.tex
 
 paper-figures: $(TEACHING_PGF) figures/prop44_displacement_planes.pgf
 
@@ -53,5 +57,6 @@ literature: dependency-snapshots
 
 clean:
 	latexmk -C paper.tex
+	latexmk -C matching_proof_study.tex
 	latexmk -C literature_review.tex
 	rm -rf generated

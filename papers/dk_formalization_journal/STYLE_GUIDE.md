@@ -137,6 +137,14 @@ stationarity, spectral levels, and invariant blocks. State which inequality
 a construction proves and which requires an arbitrary minimizer. Separate
 an auxiliary smooth problem from the limit recovering the stated theorem.
 
+Structure a long argument as short numbered inferences, each followed by its
+justification. State what has been established before explaining why it
+follows, and retain stable step labels for discussion. Distinguish definitions,
+constructions, necessary optimality conditions, and conclusions. Keep the
+article sufficient for a specialist to check; put longer worked algebra and
+rehearsal questions in a separately built study note for offline understanding.
+Do not replace a nontrivial justification by a reference to that note.
+
 ## Match supporting material to the reader's task
 
 A compact result table can use IDs mapped to Lean declarations in the artifact.

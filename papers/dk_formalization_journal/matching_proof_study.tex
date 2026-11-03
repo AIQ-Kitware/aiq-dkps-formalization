@@ -1,0 +1,864 @@
+\documentclass[11pt]{article}
+\pdfvariable minorversion=7\relax
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype,lmodern}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\usepackage[nameinlink]{cleveref}
+\input{math_symbol_colors.tex}
+\setlength{\emergencystretch}{3em}
+\numberwithin{equation}{section}
+\renewcommand{\thesubsection}{\thesection(\alph{subsection})}
+
+% Short wrappers use the paper's symbol registry for glyphs and hover definitions.
+\newcommand{\W}{\sym{Wcompetitor}}
+\newcommand{\Psrc}{\sym{Psource}}
+\newcommand{\Ptgt}{\sym{Qtarget}}
+\newcommand{\Ggrad}{\sym{SpectralGradient}}
+\newcommand{\Jsrc}{\sym{Jreflect}}
+\newcommand{\Fset}{\sym{FeasibleTransport}}
+\newcommand{\Phicost}{\like{PowerCost}{\Phi_p}}
+\newcommand{\fphase}{\sym{MatchingPhaseCost}}
+\newcommand{\Vlevel}{\sym{GradientLevelSpace}}
+\newcommand{\glev}{\sym{GradientLevel}}
+\newcommand{\Icomp}{\sym{GradientComplexStructure}}
+\newcommand{\Ephase}{\sym{GradientPhaseProjection}}
+\newcommand{\Xreal}{\sym{ProjectionRealPart}}
+\newcommand{\Yimag}{\sym{ProjectionImaginaryPart}}
+\newcommand{\lambdablock}{\sym{ProjectionEigenvalue}}
+\newcommand{\etablock}{\sym{ProjectionCoupling}}
+\newcommand{\hmean}{\sym{PairMeanAngle}}
+\newcommand{\dhalf}{\sym{PairHalfDifference}}
+\newcommand{\taupair}{\sym{PairPhaseParameter}}
+\newcommand{\phaseX}{\sym{PairPhaseX}}
+\newcommand{\phaseY}{\sym{PairPhaseY}}
+\newcommand{\Dpair}{\sym{PairDirectRotation}}
+\newcommand{\Cpair}{\sym{PairCosineBlock}}
+\newcommand{\Spair}{\sym{PairSineBlock}}
+\newcommand{\Ufree}[1]{\like{PairFreeOrthogonal}{U_{#1}}}
+\newcommand{\Rplane}[1]{\like{MatchingPlanarRotation}{R_{#1}}}
+\newcommand{\single}[1]{\like{SingletonPowerCost}{a_{#1}(p)}}
+\newcommand{\paired}[2]{\like{PairPowerCost}{b_{#1#2}(p)}}
+\newcommand{\why}{\par\smallskip\noindent\textbf{Justification.} }
+\newcommand{\rehearse}[1]{\par\smallskip\noindent\textit{Explain aloud:} #1\par}
+
+\title{Theorem 5: a worked proof of the real matching formula}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+This note follows the six steps and lettered inferences in the manuscript.
+Each inference states what has been established; its justification gives
+the calculation or theorem that permits it. The longer calculations are
+included here so the argument can be studied offline.
+
+The theorem concerns equal-dimensional subspaces
+$\like{Usource}{K},\like{Vtarget}{L}\subseteq\mathbb R^n$.
+An orthogonal \emph{transporter} is a matrix $\W$ with
+$\W(\like{Usource}{K})=\like{Vtarget}{L}$.
+The objective is its full ambient trace displacement $\|I-\W\|_1$.
+For positive principal angles $\like{theta}{\theta_1},\ldots,
+\like{theta}{\theta_m}$, put
+\[
+ \like{SingletonCost}{s_i}=\min\{4\sin(\like{theta}{\theta_i}/2),2\},
+ \qquad
+ \like{PairCost}{e_{ij}}
+   =4\sin((\like{theta}{\theta_i}+\like{theta}{\theta_j})/2).
+\]
+The theorem states that the minimum displacement is the minimum, over
+matchings $\sym{Matching}$ of the angle labels, of
+\[
+ \like{TraceCost}{C(M)}
+ =\sum_{\{i,j\}\in\sym{Matching}}\like{PairCost}{e_{ij}}
+   +\sum_{i\text{ unmatched}}\like{SingletonCost}{s_i}.
+\]
+
+There are two bounds to prove. Constructing a transporter from a matching
+proves that the unrestricted minimum is \emph{at most} the matching minimum.
+To prove the reverse bound, we must control a minimizer that initially may
+mix any number of principal planes. Steps 2--3 supply that control for a
+differentiable auxiliary cost. Step 6 passes its minimum value to the
+trace-norm limit.
+
+\section{Choose a differentiable cost and a global minimizer}
+
+\subsection{The cost attains a global minimum}
+\textbf{Inference.} For every $1<p<2$, the feasible set and cost
+\[
+ \Fset=\{\W\in\sym{OrthogonalGroup}:
+              \W(\like{Usource}{K})=\like{Vtarget}{L}\},
+ \qquad
+ \Phicost(\W)=\sum_{j=1}^n
+       \like{TransportSingularValues}{s_j}(I-\W)^p
+\]
+have a global minimizer. We fix one and call it $\W$.
+
+\why Equal dimensions let us choose orthonormal bases of the two subspaces,
+extend them to ambient orthonormal bases, and map the first full basis onto
+the second. Thus $\Fset$ is nonempty. Write $\Psrc=P_K$ and $\Ptgt=P_L$
+for the source and target projections. For orthogonal $\W$,
+\[
+ \W(\like{Usource}{K})=\like{Vtarget}{L}
+ \quad\Longleftrightarrow\quad
+ \W\Psrc\W^T=\Ptgt.
+\]
+Indeed, the matrix on the left of the projection equation is the orthogonal
+projection onto $\W(\like{Usource}{K})$.
+The projection equation is closed under limits. The orthogonal group is
+closed because $\W^T\W=I$ is a closed equation, and bounded because every
+column has length one. Hence $\Fset$ is compact by Heine--Borel.
+Singular values vary continuously with a matrix, so $\Phicost$ is continuous.
+The extreme value theorem now gives a minimizer.
+
+The reason for choosing $p>1$ is differentiability, including where a
+displacement singular value is zero. The trace norm at $p=1$ lacks this
+property. Appendix~\ref{sec:study-differentiability} derives the matrix
+derivative used here. We select a minimizer of $\Phicost$ for each $p$;
+we do not assume the trace-norm minimizer also minimizes this other cost.
+The upper bound $p<2$ selects the auxiliary range already formalized in
+Lean. Passing to exponent one only requires such a range immediately
+above one; the particular upper endpoint is not used in the limit.
+
+\subsection{Invariant blocks split the cost and angle data}
+\textbf{Inference.} If an orthogonal decomposition
+$\mathbb R^n=\bigoplus_a\sym{MatchingBlock}$ is preserved by
+$\Psrc,\Ptgt,\W$, its block costs add and its block principal-angle lists
+combine into the original principal-angle list.
+
+\why In an adapted basis these matrices are block diagonal. Thus
+$I-\W$ is block diagonal, and so is $(I-\W)^T(I-\W)$.
+The eigenvalue list of this last matrix is the union, with multiplicity,
+of the block eigenvalue lists. Taking nonnegative square roots and summing
+$p$th powers gives
+\[
+ \Phicost(\W)=\sum_a\Phicost(\W|_{\sym{MatchingBlock}}).
+\]
+Likewise, $\Psrc\Ptgt\Psrc$ is block diagonal. Its restriction to the source
+has eigenvalues $\cos^2\theta_j$, so the block angle lists combine with
+multiplicity. Restricting to the source is necessary: the ambient
+compression also has zeros from source-complement directions.
+
+For comparison, the principal planes of the two subspaces already exist
+before we study $\W$. Choose principal unit vectors $u_i,v_i$ with
+$\langle u_i,v_j\rangle=\delta_{ij}\cos\theta_i$ and, when $\theta_i>0$, set
+\[
+ q_i=\frac{v_i-\cos\theta_i\,u_i}{\sin\theta_i}.
+\]
+The principal-vector inner products give
+$\langle u_i,q_j\rangle=0$ and $\langle q_i,q_j\rangle=\delta_{ij}$.
+Hence $\Pi_i=\operatorname{span}(u_i,q_i)$ are mutually orthogonal planes.
+These planes describe the pair of subspaces. They need not individually
+be preserved by the minimizing transporter. Steps 2--3 find a simultaneous
+decomposition that also preserves that transporter.
+\rehearse{Why does a decomposition of the subspaces alone fail to prove
+that arbitrary mixing cannot improve the minimum?}
+
+\section{Differentiate along feasible rotations}
+
+\subsection{Source-preserving rotations give feasible curves}
+\textbf{Inference.} If $B^T=-B$ and $B\Psrc=\Psrc B$, then
+$\W\exp(tB)\in\Fset$ for every real $t$.
+
+\why Transposition respects the exponential power series, so
+\[
+ \exp(tB)^T=\exp(-tB)=\exp(tB)^{-1}.
+\]
+Thus the exponential is orthogonal. Every power of $B$ commutes with
+$\Psrc$, so its exponential does too. For a source vector $v$,
+\[
+ \Psrc\exp(tB)v=\exp(tB)\Psrc v=\exp(tB)v.
+\]
+Therefore $\exp(tB)$ maps the source into itself. Its inverse $\exp(-tB)$
+does the same, giving equality of the image and source. Composing with
+$\W$ still maps the source onto the target.
+
+Since the selected $\W$ minimizes the cost, the differentiable scalar
+function $t\mapsto\Phicost(\W\exp(tB))$ has a minimum at zero. Its
+derivative there is zero. This necessary condition is stationarity.
+
+\subsection{The first variation is a trace pairing}
+\textbf{Inference.} There is a real skew-symmetric matrix $\Ggrad$ such that,
+for every skew-symmetric $B$, including those that mix the rotation planes,
+\begin{equation}\label{eq:study-first-variation}
+ \left.\frac{d}{dt}\Phicost(\W\exp(tB))\right|_{t=0}
+     =-\operatorname{tr}(\Ggrad B).
+\end{equation}
+
+\why First define the scalar cost and planar quarter-turn
+\[
+ \fphase(\theta)=(2\sin(\theta/2))^p,
+ \quad 0\le\theta\le\pi,
+ \qquad J_0=\begin{pmatrix}0&-1\\1&0\end{pmatrix}.
+\]
+A rotation $\Rplane{\theta}=\cos\theta\,I+\sin\theta\,J_0$ satisfies
+\[
+ (I-\Rplane{\theta})^T(I-\Rplane{\theta})
+       =4\sin^2(\theta/2)I.
+\]
+Its two displacement singular values agree, so its cost is $2\fphase(\theta)$.
+Every real orthogonal matrix admits an orthogonal decomposition into
+rotation planes with $0<\theta<\pi$ and scalar $+1,-1$ lines.
+Define $\Ggrad=\fphase'(\theta)J_0$ on each such plane, and zero on the
+scalar lines. These blocks are skew-symmetric and commute with the
+corresponding blocks of $\W$; hence $\Ggrad^T=-\Ggrad$ and
+$\Ggrad\W=\W\Ggrad$.
+
+We must justify the formula when $B$ mixes these blocks. Let
+\[
+ \mathcal L(B)=
+   \left.\frac{d}{dt}\Phicost(\W\exp(tB))\right|_{t=0}.
+\]
+The derivative of $\W\exp(tB)$ at zero is $\W B$.
+Differentiability of the cost therefore makes $\mathcal L$ a linear
+functional of $B$. Differentiability is the hypothesis that permits the
+averaging argument below; continuity alone would not suffice.
+
+Let $S_\varepsilon$ independently multiply each rotation plane or scalar
+line by a sign $\varepsilon_a\in\{-1,+1\}$. It is orthogonal and commutes
+with $\W$. Consequently,
+\[
+ \W\exp(tS_\varepsilon B S_\varepsilon)
+     =S_\varepsilon\W\exp(tB)S_\varepsilon.
+\]
+Orthogonal conjugation preserves the displacement singular values, so
+$\mathcal L(S_\varepsilon B S_\varepsilon)=\mathcal L(B)$.
+If there are $k$ blocks, the average is
+\[
+ 2^{-k}\sum_\varepsilon S_\varepsilon B S_\varepsilon
+      =\operatorname{diag}(B_{11},\ldots,B_{kk}).
+\]
+An off-diagonal block $B_{ab}$ acquires sign $\varepsilon_a\varepsilon_b$;
+half the choices give each sign. A diagonal block acquires sign one.
+By linearity, the derivative at $B$ equals the derivative at this block
+diagonal average. The averaged curve is used to calculate a derivative;
+it need not preserve the source subspace.
+
+On a rotation plane, a real $2\times2$ skew-symmetric matrix is $bJ_0$.
+The matrices $\Rplane{\theta}$ and $\exp(tbJ_0)$ multiply to
+$\Rplane{\theta+tb}$, so the derivative of the block cost is
+$2b\fphase'(\theta)$. Meanwhile,
+\[
+ -\operatorname{tr}(\fphase'(\theta)J_0\,bJ_0)
+   =-b\fphase'(\theta)\operatorname{tr}(-I_2)
+   =2b\fphase'(\theta).
+\]
+On a scalar line the diagonal block of a skew-symmetric matrix is zero.
+Adding the block derivatives proves \cref{eq:study-first-variation}.
+Since $\Ggrad$ is block diagonal, $\operatorname{tr}(\Ggrad B)$ also
+depends only on the diagonal blocks of $B$.
+\rehearse{What permits averaging the direction? Why may the averaging use
+directions that do not preserve the source? Where does the factor two arise?}
+
+\subsection{Stationarity forces the gradient to be off-diagonal}
+\textbf{Inference.} Relative to source and source complement,
+\[
+ \Ggrad=\begin{pmatrix}0&\sym{GradientOffDiagonal}\\
+                   -\like{GradientOffDiagonal}{G_{01}^T}&0\end{pmatrix},
+ \qquad \Jsrc=2\Psrc-I,
+ \qquad \Jsrc\Ggrad\Jsrc=-\Ggrad.
+\]
+
+\why Choose $B=\Psrc\Ggrad\Psrc$. Transposition gives $B^T=-B$ and
+$\Psrc^2=\Psrc$ gives $B\Psrc=\Psrc B=B$, so Step 2(a) makes the
+variation feasible. Step 2(b) and stationarity give
+$0=-\operatorname{tr}(\Ggrad\Psrc\Ggrad\Psrc)$.
+Cyclicity of trace and $\Psrc^2=\Psrc$ identify this with
+$-\operatorname{tr}(B^2)$: inserting the extra end projection in $B^2$
+does not change the trace. Since $B^T=-B$,
+\[
+ -\operatorname{tr}(B^2)=\operatorname{tr}(B^TB)
+     =\sum_{a,b}B_{ab}^2=\|B\|_F^2.
+\]
+Thus $\Psrc\Ggrad\Psrc=0$. Repeating with $I-\Psrc$ gives the other
+diagonal block zero. In the same source-adapted coordinates,
+$\Jsrc=\operatorname{diag}(I,-I)$; multiplication gives
+$\Jsrc\Ggrad\Jsrc=-\Ggrad$.
+
+There are two decompositions in use. The rotation planes in Step 2(b)
+diagonalize $\W$ and define $\Ggrad$. The source/complement decomposition
+in this step diagonalizes $\Psrc$ and $\Jsrc$. They need not coincide.
+The gradient equations connect them.
+
+\section{Obtain blocks with one or two source directions}
+
+\subsection{Positive gradient levels carry complex coordinates}
+\textbf{Inference.} Each eigenspace $\Vlevel$ of $-\Ggrad^2$ for an
+eigenvalue $\glev^2>0$ is preserved by $\Ggrad,\W,\Jsrc$ and admits
+complex multiplication $\Icomp=\Ggrad/\glev$.
+
+\why Skew-symmetry gives
+\[
+ (-\Ggrad^2)^T=-\Ggrad^2,
+ \qquad \langle-\Ggrad^2x,x\rangle=\|\Ggrad x\|^2\ge0.
+\]
+Thus the real spectral theorem applies. The commutation $\Ggrad\W=\W\Ggrad$
+implies $\Ggrad^2\W=\W\Ggrad^2$, while anticommutation with $\Jsrc$
+implies $\Jsrc\Ggrad^2\Jsrc=\Ggrad^2$. An operator commuting with
+$-\Ggrad^2$ preserves each eigenspace: apply the two commuting operators
+to an eigenvector to check its image has the same eigenvalue.
+
+On $\Vlevel$, $\Icomp^2=-I$ and
+$\Icomp^T\Icomp=-\Ggrad^2/\glev^2=I$. Define
+$(a+ib)x=ax+b\Icomp x$. These identities make it complex scalar
+multiplication compatible with the Euclidean metric. A real plane
+$\operatorname{span}(x,\Icomp x)$ becomes one complex line.
+Commutation makes $\W$ complex-linear and unitary. Anticommutation gives
+\[
+ \Jsrc((a+ib)x)=(a-ib)\Jsrc x.
+\]
+Since $\Jsrc^2=I$ and $\Jsrc$ preserves lengths, it is a conjugation.
+
+To choose coordinates where this is ordinary coordinate conjugation,
+let $F=\{x:\Jsrc x=x\}$. Every $x$ has the unique decomposition
+\[
+ x=\frac{x+\Jsrc x}{2}
+     +\Icomp\left(-\Icomp\frac{x-\Jsrc x}{2}\right).
+\]
+Both parenthesized real components lie in $F$.
+Thus an orthonormal real basis of $F$ supplies a complex orthonormal basis
+of $\Vlevel$. In particular, $F$ has half its original real dimension.
+
+\subsection{There are at most two phases on a positive level}
+\textbf{Inference.} On the complex space $\Vlevel$, the eigenphases of
+$\W$ satisfy $\fphase'(t)=\glev$, $0<t<\pi$, and have at most two values.
+
+\why On an original rotation plane, $\Ggrad=\fphase'(t)J_0$ with
+$\fphase'(t)>0$ for $0<t<\pi$. On its level, $\glev=\fphase'(t)$ and
+$\Icomp=J_0$, so $\W$ acts as multiplication by $e^{it}$.
+Direct differentiation gives
+\[
+ \fphase'(t)=p(2\sin(t/2))^{p-1}\cos(t/2),
+\]
+\[
+ \fphase''(t)=p(2\sin(t/2))^{p-2}
+   \bigl((p-1)\cos^2(t/2)-\sin^2(t/2)\bigr).
+\]
+The second derivative is positive before
+$\tan^2(t/2)=p-1$ and negative after it. The first derivative is
+strictly increasing and then strictly decreasing, so a positive
+horizontal line meets its graph at most twice. The spectral theorem gives
+\[
+ \W|_{\Vlevel}=e^{i\varphi_1}\Ephase+e^{i\varphi_2}(I-\Ephase)
+\]
+for a complex orthogonal projection $\Ephase$. If there is only one phase,
+take both phase values equal and choose $\Ephase=0$.
+Two phase values can have arbitrarily large multiplicities, so a further
+argument is needed to get small real blocks.
+
+\subsection{The phase projection splits into small common blocks}
+\textbf{Inference.} $\Vlevel$ splits orthogonally into real blocks of
+dimension two or four preserved by $\W,\Psrc,\Ptgt$. They carry one or
+two principal-angle entries, respectively.
+
+\why In the conjugation coordinates from Step 3(a), write
+$\Ephase=\Xreal+i\Yimag$ with real matrices. Its adjoint and idempotence
+equations give
+\[
+ \Xreal^T=\Xreal,\quad \Yimag^T=-\Yimag,\quad
+ \Xreal^2-\Yimag^2=\Xreal,\quad
+ \Xreal\Yimag+\Yimag\Xreal=\Yimag.
+\]
+For a real vector $x$, the orthogonal-projection inequality gives
+$0\le\langle\Xreal x,x\rangle
+ =\operatorname{Re}\langle\Ephase x,x\rangle\le\|x\|^2$.
+Thus the eigenvalues of the symmetric matrix $\Xreal$ lie in $[0,1]$.
+
+Choose a unit eigenvector $u$ with eigenvalue $\lambdablock$. Then
+\[
+ \Xreal(\Yimag u)=(1-\lambdablock)\Yimag u,
+ \qquad
+ \Yimag^2u=-\lambdablock(1-\lambdablock)u.
+\]
+For $0<\lambdablock<1$, put
+$\etablock=\sqrt{\lambdablock(1-\lambdablock)}$ and
+$v=\Yimag u/\etablock$. Skew-symmetry gives
+\[
+ \langle u,\Yimag u\rangle=0,
+ \qquad \|\Yimag u\|^2=-\langle u,\Yimag^2u\rangle=\etablock^2.
+\]
+Therefore $u,v$ are orthonormal and
+\[
+ \Xreal u=\lambdablock u,\quad
+ \Xreal v=(1-\lambdablock)v,\quad
+ \Yimag u=\etablock v,\quad \Yimag v=-\etablock u.
+\]
+Their real coordinate plane is preserved by both matrices. At
+$\lambdablock=0$ or $1$, the norm calculation gives $\Yimag u=0$, so
+the coordinate line spanned by $u$ suffices. The case
+$\lambdablock=1/2$ still uses the two-vector construction: $u$ and $v$
+are orthogonal even though they have the same eigenvalue of $\Xreal$.
+
+The orthogonal complement of a chosen coordinate block is preserved too:
+if $x$ is perpendicular to it, test $\langle\Xreal x,z\rangle$ using
+symmetry and $\langle\Yimag x,z\rangle$ using skew-symmetry.
+Finite-dimensional induction exhausts the real coordinate space.
+Complexifying these coordinate lines or planes gives complex dimensions
+one or two, hence original real dimensions two or four. These complex
+spans are preserved by $\Ephase$ and coordinate conjugation $\Jsrc$,
+hence by $\W$ and $\Psrc=(I+\Jsrc)/2$. Orthogonality and invariance
+also give invariance under $\W^T$, so
+$\Ptgt=\W\Psrc\W^T$ preserves them.
+The fixed space of conjugation has half the real dimension. This is the
+source space in the block, so its rank is one or two and its angle list
+has one or two entries.
+\rehearse{Why are two phase values insufficient by themselves? Why does
+a real coordinate plane here become a four-dimensional block in the
+original real space?}
+
+\subsection{The zero-gradient space gives fixed directions and planes}
+\textbf{Inference.} On $\ker\Ggrad$, a minimizing transporter decomposes
+into fixed lines and two-dimensional one-angle blocks.
+
+\why The scalar derivative is strictly positive on $(0,\pi)$ and zero
+at the scalar phases $0,\pi$. Thus the restriction of $\W$ has only
+eigenvalues $+1,-1$ and is a symmetric reflection $I-2N$, where $N$ is
+the orthogonal projection onto its $-1$ eigenspace.
+The two-projection decomposition for $\Psrc,N$ splits the space into
+common invariant lines and planes; it follows from the same principal-vector
+construction used in Step 1(b), allowing unmatched directions when ranks
+differ. On the nontrivial planes the source rank is one. The same blocks
+preserve $\W=I-2N$ and $\Ptgt=\W\Psrc\W^T$.
+
+On an invariant line, $\Psrc$ is either zero or identity, and so is
+$\Ptgt$ with the same choice. Replacing the scalar action $-1$ by $+1$
+therefore preserves transport and lowers the power cost from $2^p$ to zero.
+Global minimality excludes every such $-1$ line.
+
+\section{Calculate the one- and two-angle costs}
+
+\subsection{One angle chooses a rotation or a reflection}
+\textbf{Inference.} The minimum on a real principal plane is
+\[
+ \single{i}=\min\{2\fphase(\theta_i),2^p\}.
+\]
+
+\why A planar rotation carrying an unoriented source line onto its target
+rotates through $\theta_i$ modulo $\pi$. The smaller displacement cost is
+$2\fphase(\theta_i)$ because $0\le\theta_i\le\pi/2$ and
+$\fphase$ is increasing on $[0,\pi]$. The alternative folded angle is
+$\pi-\theta_i\ge\theta_i$. Every planar reflection has eigenvalues
+$1,-1$ and displacement singular values $0,2$, so its cost is $2^p$.
+Reflections carrying the source line onto the target exist, for example
+reflection in an angle-bisecting line. These two determinant classes
+exhaust $O(2)$.
+
+\subsection{A positive-determinant pair reduces to one scalar minimum}
+\textbf{Inference.} Order the two angles so that $\theta_i\ge\theta_j$ and set
+\[
+ \hmean=(\theta_i+\theta_j)/2,\qquad
+ \dhalf=(\theta_i-\theta_j)/2.
+\]
+The positive-determinant minimum on their four-dimensional sum is
+\begin{equation}\label{eq:study-pair-cost}
+ \paired{i}{j}=\min_{\taupair\in[\dhalf,\hmean]}
+       2\bigl(\fphase(\hmean+\taupair)+\fphase(\hmean-\taupair)\bigr).
+\end{equation}
+
+\why We separate the matrix parametrization, its phase calculation,
+the lower bound, and attainment of that bound.
+
+\paragraph{Parametrize every transporter.}
+Use principal coordinates with the two source directions first:
+\[
+ \Dpair=\begin{pmatrix}\Cpair&-\Spair\\\Spair&\Cpair\end{pmatrix},
+ \quad \Cpair=\operatorname{diag}(\cos\theta_i,\cos\theta_j),
+ \quad \Spair=\operatorname{diag}(\sin\theta_i,\sin\theta_j).
+\]
+This direct rotation maps the source onto the target. For any other
+transporter $\W$, the orthogonal matrix $\Dpair^T\W$ preserves the
+source and its complement, so
+\[
+ \W=\Dpair\operatorname{diag}(\Ufree{0},\Ufree{1}),
+ \qquad \Ufree{0},\Ufree{1}\in\like{OrthogonalGroup}{O(2)}.
+\]
+This parametrization includes mixing between the principal planes.
+If $\det\W=1$, the two free factors are both rotations or both reflections.
+
+\paragraph{Calculate the phases.}
+For rotations put $\Ufree{0}=R_{r+s}$ and $\Ufree{1}=R_{r-s}$.
+Define $\phaseX,\phaseY\in[0,\pi]$ by
+\[
+ \cos\phaseX=\cos\hmean\cos s,
+ \qquad \cos\phaseY=\cos\dhalf\cos r.
+\]
+For reflections write $\Ufree{0}=R_{r+s}J_2$,
+$\Ufree{1}=R_{r-s}J_2$, with $J_2=\operatorname{diag}(1,-1)$, and define
+\[
+ \cos\phaseX=-\sin\dhalf\cos r,
+ \qquad \cos\phaseY=\sin\hmean\cos s.
+\]
+In both cases the characteristic polynomial gives eigenvalues
+$e^{\pm i(\phaseX+\phaseY)},e^{\pm i(\phaseX-\phaseY)}$.
+Here is an explicit way to check that matrix calculation. Set
+$u=\cos\phaseX$, $v=\cos\phaseY$. Block multiplication gives
+\[
+ \operatorname{tr}\W=4uv,\qquad
+ \operatorname{tr}(\W^2)=16u^2v^2-8(u^2+v^2)+4.
+\]
+To reproduce the second identity, expand
+\[
+ \operatorname{tr}(\W^2)=
+ \operatorname{tr}((\Cpair\Ufree{0})^2)
+ +\operatorname{tr}((\Cpair\Ufree{1})^2)
+ -2\operatorname{tr}(\Spair\Ufree{1}\Spair\Ufree{0}).
+\]
+For $A=\operatorname{diag}(a,b)$,
+\begin{align*}
+ \operatorname{tr}((AR_\alpha)^2)&=(a+b)^2\cos^2\alpha-2ab,\\
+ \operatorname{tr}((AR_\alpha J_2)^2)&=(a-b)^2\cos^2\alpha+2ab,\\
+ \operatorname{tr}(AR_\beta AR_\alpha)
+   &=(a^2+b^2)\cos\alpha\cos\beta-2ab\sin\alpha\sin\beta,\\
+ \operatorname{tr}(AR_\beta J_2 AR_\alpha J_2)
+   &=(a^2+b^2)\cos\alpha\cos\beta+2ab\sin\alpha\sin\beta.
+\end{align*}
+Substitute $\alpha=r+s$, $\beta=r-s$, the principal cosines or sines,
+and the definitions of $\hmean,\dhalf$. The coefficient of $z^2$ in the
+characteristic polynomial is
+$((\operatorname{tr}\W)^2-\operatorname{tr}(\W^2))/2$.
+Orthogonality and determinant one make the polynomial reciprocal, yielding
+\[
+ \det(zI-\W)=z^4-4uvz^3+
+       \bigl(4(u^2+v^2)-2\bigr)z^2-4uvz+1.
+\]
+Multiplying the two quadratic factors for phases
+$\phaseX+\phaseY$ and $\phaseX-\phaseY$ gives precisely this polynomial.
+These calculations justify the phase formulas without a choice of
+individual eigenvectors.
+
+In the rotation case the cosine bounds give
+\[
+ \hmean\le\phaseX\le\pi-\hmean,
+ \qquad \dhalf\le\phaseY\le\pi-\dhalf.
+\]
+In the reflection case they first give
+$\pi/2-\dhalf\le\phaseX\le\pi/2+\dhalf$ and
+$\pi/2-\hmean\le\phaseY\le\pi/2+\hmean$.
+These intervals lie in the same displayed rectangle because
+$\hmean+\dhalf=\theta_i\le\pi/2$.
+
+\paragraph{Reduce the rectangle to an edge.}
+The displacement cost is
+\[
+ 2\left[\fphase(\min\{\phaseX+\phaseY,2\pi-\phaseX-\phaseY\})
+                    +\fphase(|\phaseX-\phaseY|)\right].
+\]
+Replacing $(\phaseX,\phaseY)$ by $(\pi-\phaseX,\pi-\phaseY)$
+preserves the rectangle and cost, so assume $\phaseX+\phaseY\le\pi$.
+Choose
+\[
+ \taupair=\max\{\dhalf,\hmean-|\phaseX-\phaseY|\}.
+\]
+We have $\dhalf\le\taupair\le\hmean$ and
+$\hmean-\taupair\le|\phaseX-\phaseY|$ by this choice.
+For the other phase, the rectangle gives
+$\hmean+\dhalf\le\phaseX+\phaseY$ and
+\[
+ 2\hmean\le2\max\{\phaseX,\phaseY\}
+              =\phaseX+\phaseY+|\phaseX-\phaseY|.
+\]
+Both candidates for $\hmean+\taupair$ are therefore at most
+$\phaseX+\phaseY$. Monotonicity of $\fphase$ shows that replacing the
+phases by $\hmean+\taupair,\hmean-\taupair$ cannot increase cost.
+
+\paragraph{Attain every point of the edge.}
+For any $\taupair\in[\dhalf,\hmean]$, choose
+\[
+ \Ufree{0}=\Ufree{1}=R_\gamma,
+ \qquad \gamma=\arccos(\cos\taupair/\cos\dhalf).
+\]
+The ratio belongs to $[0,1]$ because
+$0\le\dhalf\le\taupair\le\pi/2$, and its denominator is positive since
+$\dhalf\le\pi/4$. In the rotation parametrization, $r=\gamma$, $s=0$,
+so $\phaseX=\hmean$, $\phaseY=\taupair$.
+The scalar cost is continuous on a compact interval and attains its
+minimum. The rectangle bound and this construction prove
+\cref{eq:study-pair-cost} in both directions.
+
+\subsection{The unrestricted pair also compares two singletons}
+\textbf{Inference.} The minimum over both determinant classes is
+\[
+ \min\{\paired{i}{j},\single{i}+\single{j}\}.
+\]
+
+\why For negative determinant, one free factor is a rotation and the
+other a reflection. With $c_i=\cos\theta_i\le c_j=\cos\theta_j$,
+their contributions to $\operatorname{tr}\W$ have the forms
+$(c_i+c_j)\cos\alpha$ and $(c_i-c_j)\cos\beta$, in either order. Thus
+\[
+ |\operatorname{tr}\W|\le c_i+c_j+|c_i-c_j|=2c_j.
+\]
+A real orthogonal $4\times4$ matrix of determinant $-1$ has eigenvalues
+$1,-1,e^{it},e^{-it}$, allowing $t=0,\pi$ for repeated real eigenvalues.
+Its trace is $2\cos t$, so $t\ge\theta_j$ and its cost is at least
+$2^p+2\fphase(\theta_j)$. Reflecting on the larger-angle principal
+plane and rotating on the smaller-angle plane attains this bound.
+
+There are four choices when the two planes are transported independently:
+two rotations, two reflections, or either mixed choice. The paired
+positive-determinant minimum is at most the first two costs: evaluate
+\cref{eq:study-pair-cost} at $\taupair=\dhalf$ and
+$\taupair=\hmean$, respectively. For the second comparison,
+$2\fphase(\theta_i+\theta_j)\le2\cdot2^p$.
+The cheaper mixed choice is exactly the negative-determinant minimum.
+The minimum of all four independent choices is
+$\single{i}+\single{j}$. Comparing it with $\paired{i}{j}$ therefore
+includes both determinant classes.
+\rehearse{Where did we account for a four-dimensional block that is
+cheaper as two singletons? Why does a paired block sometimes fix two
+directions rather than rotate both principal planes independently?}
+
+\section{Prove equality of the minimum costs}
+
+For a matching $\sym{Matching}$, define
+\[
+ \sym{MatchingPowerCost}(\sym{Matching})
+  =\sum_{\{i,j\}\in\sym{Matching}}\paired{i}{j}
+     +\sum_{i\text{ unmatched}}\single{i}.
+\]
+
+\subsection{A matching constructs a transporter of the same cost}
+\textbf{Inference.}
+$\min_{\W\in\Fset}\Phicost(\W)
+ \le\min_{\sym{Matching}}\sym{MatchingPowerCost}(\sym{Matching})$.
+
+\why Use the mutually orthogonal principal planes from Step 1(b).
+For an edge $\{i,j\}$, use the attaining paired transporter on
+$\Pi_i\oplus\Pi_j$ from Step 4(b). On an unmatched plane, use the
+attaining rotation or reflection from Step 4(a). Use identity on all
+remaining common source/target and ambient directions. A matching uses
+each label at most once, so these blocks are mutually orthogonal.
+Their orthogonal sum is feasible and has exactly the sum of their costs.
+The unrestricted minimum is no larger than the cost of any such
+constructed transporter, hence no larger than the best matching cost.
+
+\subsection{A minimizing transporter constructs a matching of the same cost}
+\textbf{Inference.} The reverse inequality holds, and hence
+\begin{equation}\label{eq:study-power-matching}
+ \min_{\W\in\Fset}\Phicost(\W)
+   =\min_{\sym{Matching}}\sym{MatchingPowerCost}(\sym{Matching}),
+ \qquad 1<p<2.
+\end{equation}
+
+\why Steps 2--3 decompose the chosen global minimizer into fixed
+directions and blocks carrying one or two angle entries. Each restriction
+must minimize its local transport cost. Otherwise replace it by a cheaper
+local transporter: the full map is still orthogonal and feasible, and
+block additivity strictly lowers the global cost, a contradiction.
+Step 4 assigns a singleton to a one-angle block. For a two-angle block,
+choose the paired cost or two singleton costs according to which attains
+its minimum. Step 1(b) identifies these entries with the original angle
+list, including multiplicities. Each occurrence belongs to one block,
+so the selected pairs form a matching.
+
+Zero-angle entries do not lower the cost of a positive entry: their
+singleton cost is zero, while pairing $\theta$ with zero forces
+$\dhalf=\hmean=\theta/2$ and costs $2\fphase(\theta)$, at least the
+singleton minimum. Two zero entries also cost zero. Remove such pairings
+and keep zero-angle directions fixed. If this strictly lowered the cost,
+Step 5(a) would construct a cheaper feasible transporter, contradicting
+global minimality. The result is therefore a matching on exactly
+the original positive labels with the minimizer's cost. Its cost is at
+least the minimum matching cost, proving the reverse inequality.
+
+The decomposition used to extract this matching need not be the same
+basis used to realize it. The equality of the angle lists and the local
+cost formulas are what permit the construction back in the original
+principal coordinates.
+\rehearse{State the two inequalities separately. Which one is proved by
+a construction, and which one uses the structure of a global minimizer?}
+
+\section{Pass to the trace norm and evaluate the weights}
+
+\subsection{The minimum values converge}
+\textbf{Inference.} Both sides of \cref{eq:study-power-matching} converge
+to their corresponding trace-norm minimum values as $p$ approaches $1$
+from above.
+
+\why Every singular value of $I-\W$ lies in $[0,2]$, since
+$\|I-\W\|_{\mathrm{op}}\le\|I\|_{\mathrm{op}}+\|\W\|_{\mathrm{op}}=2$.
+The map $(p,s)\mapsto s^p$, with $0^p=0$, is continuous on
+$[1,3/2]\times[0,2]$, hence uniformly continuous. Therefore
+\[
+ \epsilon_p=n\sup_{0\le s\le2}|s^p-s|\longrightarrow0,
+ \qquad
+ |\Phicost(\W)-\|I-\W\|_1|\le\epsilon_p
+ \quad\text{for every }\W\in\Fset.
+\]
+If two functions on the same nonempty set differ by at most $\epsilon$,
+their attained minima differ by at most $\epsilon$: evaluate each
+function at a minimizer of the other. This proves convergence of the
+left-hand minimum. It also explains why pointwise convergence alone is
+insufficient for this inference.
+
+The singleton costs converge because they are minima of two continuous
+expressions. For each pair, the scalar costs in Step 4(b) converge uniformly
+on the fixed compact interval $[\dhalf,\hmean]$, so the same argument
+gives convergence of their minima. There are finitely many matchings.
+If $C_p(M)\to C(M)$ for each of finitely many $M$, then
+$\max_M|C_p(M)-C(M)|\to0$, and the minimum values converge as well.
+We pass minimum \emph{values} to the limit; no convergence of the chosen
+minimizers is required.
+
+\subsection{The limiting weights are the stated trace costs}
+\textbf{Inference.} At $p=1$,
+\[
+ a_i(1)=\min\{4\sin(\theta_i/2),2\}=s_i,
+ \qquad b_{ij}(1)=4\sin((\theta_i+\theta_j)/2)=e_{ij}.
+\]
+
+\why The singleton formula follows by substitution. For a pair,
+the sum-to-product identity gives
+\begin{align*}
+ 2\bigl(f_1(\hmean+\taupair)+f_1(\hmean-\taupair)\bigr)
+ &=4\bigl(\sin((\hmean+\taupair)/2)
+                   +\sin((\hmean-\taupair)/2)\bigr)\\
+ &=8\sin(\hmean/2)\cos(\taupair/2).
+\end{align*}
+This is nonincreasing for $\dhalf\le\taupair\le\hmean$, so its minimum
+is attained at $\taupair=\hmean$ and equals $4\sin\hmean$.
+The attaining construction has rotational phases $2\hmean$ and zero:
+it rotates one real plane through $\theta_i+\theta_j$ and fixes the
+other real plane. Its displacement has two singular values
+$2\sin\hmean$ and two zeros.
+Together with Step 6(a), this proves the stated trace-norm equality.
+Compactness of $\Fset$ also gives attainment at $p=1$.
+
+Finally, define the all-singleton cost and edge weights
+\[
+ \sym{SingletonBaseline}=\sum_i s_i,
+ \qquad \sym{MatchingEdgeWeight}=s_i+s_j-e_{ij}.
+\]
+Replacing two singleton costs by one paired cost gives
+\[
+ C(M)=\sym{SingletonBaseline}
+       -\sum_{\{i,j\}\in M}\sym{MatchingEdgeWeight}.
+\]
+Thus minimizing displacement is maximum-weight matching on a finite
+general graph. Unmatched vertices remain allowed. A matching of maximum
+cardinality is a different optimization objective.
+\rehearse{Why can the exponent-one theorem follow without differentiating
+the trace norm? What is the logical role of uniform convergence?}
+
+\appendix
+\section{Why the displacement power cost is differentiable}
+\label{sec:study-differentiability}
+
+The first-variation argument uses differentiability to obtain a linear
+functional of the direction $B$. Here is the finite-dimensional matrix
+calculus behind that assertion, including repeated and zero singular values.
+
+\subsection*{A trace derivative for a real symmetric matrix}
+Let $A$ be real symmetric and let $h:\mathbb R\to\mathbb R$ be continuously
+differentiable on a neighborhood of its spectrum. Then
+\[
+ D\bigl[\operatorname{tr}h(A)\bigr](H)
+       =\operatorname{tr}(h'(A)H)
+ \quad\text{for symmetric }H.
+\]
+One way to justify this without differentiating individual eigenvectors
+is to group eigenvalues by their distinct values at $A$.
+Fix such a value $\lambda$, its eigenspace projection $P_\lambda$, and
+multiplicity $m$. For a small symmetric perturbation $H$, Weyl's bound
+places exactly $m$ nearby eigenvalues at $\lambda+O(\|H\|)$.
+This bound follows from the min--max formula because every Rayleigh
+quotient changes by at most $\|H\|$.
+
+Choose orthonormal eigenvectors $v_1,\ldots,v_m$ for that cluster of
+$A+H$. The gap between $\lambda$ and the other distinct eigenvalues of
+$A$ implies $(I-P_\lambda)v_j=O(\|H\|)$: project the eigenvector
+equation onto the complementary space, where $A-\lambda I$ has a
+bounded inverse. Hence
+\[
+ \langle Av_j,v_j\rangle=\lambda+O(\|H\|^2).
+\]
+The cluster projection $P_\lambda(H)=\sum_jv_jv_j^T$ converges to
+$P_\lambda$, as the following identity makes explicit:
+\[
+ \|P_\lambda(H)-P_\lambda\|_F^2
+   =2\sum_{j=1}^m\|(I-P_\lambda)v_j\|^2=O(\|H\|^2).
+\]
+Both projections have rank $m$; expanding the squared Frobenius norm
+gives the identity. Summing the eigenvector equations gives the cluster sum
+\[
+ \sum_{j=1}^m\lambda_j(A+H)
+   =m\lambda+\operatorname{tr}(P_\lambda H)+o(\|H\|).
+\]
+For each eigenvalue, scalar differentiability gives
+$h(\lambda+\delta)=h(\lambda)+h'(\lambda)\delta+o(|\delta|)$.
+The Weyl bound controls all these remainders by $o(\|H\|)$.
+Summing first over a cluster, then over the finitely many distinct
+eigenvalues, proves the trace derivative. If $A$ has just one distinct
+eigenvalue, its cluster is the whole space and no complementary inverse
+is needed. Repeated eigenvalues are handled by the cluster sum.
+
+\subsection*{Apply the trace derivative to a symmetric dilation}
+For a real square matrix $D$, set
+\[
+ \mathcal A(D)=\begin{pmatrix}0&D\\D^T&0\end{pmatrix}.
+\]
+If $D=U\Sigma V^T$ is a singular value decomposition, conjugation by
+$\operatorname{diag}(U,V)$ reduces this matrix to
+$\bigl(\begin{smallmatrix}0&\Sigma\\\Sigma&0\end{smallmatrix}\bigr)$.
+Its eigenvalues are the positive and negative singular values of $D$,
+including zeros. Therefore, with $h(x)=|x|^p$,
+\[
+ F_p(D):=\sum_j s_j(D)^p
+       =\tfrac12\operatorname{tr}h(\mathcal A(D)).
+\]
+For $p>1$, $h$ is continuously differentiable with
+$h'(x)=p\operatorname{sign}(x)|x|^{p-1}$ and $h'(0)=0$.
+The preceding trace derivative applies, even when $D$ is singular.
+The same block diagonalization gives
+\[
+ h'(\mathcal A(D))=
+ p\begin{pmatrix}0&U\Sigma^{p-1}V^T\\
+                       V\Sigma^{p-1}U^T&0\end{pmatrix}.
+\]
+For a matrix direction $H$, the chain rule and block multiplication yield
+\[
+ DF_p(D)[H]
+       =p\operatorname{tr}\bigl((U\Sigma^{p-1}V^T)^T H\bigr).
+\]
+No negative power of a zero singular value occurs.
+Taking $D=I-\W$ and $H=-\W B$ proves that the first variation used in
+Step 2(b) exists and is linear in $B$. The sign-averaging and planar
+calculation there identify it with $-\operatorname{tr}(\Ggrad B)$.
+
+\section{Reconstruct the proof without the text}
+
+Try writing the following chain and supplying a justification for each arrow:
+\[
+ \text{global minimizer}
+ \ \Longrightarrow\ \text{stationarity}
+ \ \Longrightarrow\ \Jsrc\Ggrad\Jsrc=-\Ggrad,
+ \qquad \Ggrad\W=\W\Ggrad;
+\]
+\[
+ \begin{aligned}
+ \text{levels of }-\Ggrad^2
+ &\ \Longrightarrow\ \text{complex coordinates and at most two phases}\\
+ &\ \Longrightarrow\ \text{real blocks of dimension two or four};
+ \end{aligned}
+\]
+\[
+ \begin{aligned}
+ \text{block minima and additive costs}
+ &\ \Longrightarrow\ \text{two matching inequalities}\\
+ &\ \Longrightarrow\ \text{trace-norm limit}.
+ \end{aligned}
+\]
+Be able to identify where each of the following enters: equal subspace
+dimensions, finite ambient dimension, $p>1$, $p<2$, global rather than
+merely stationary optimality, the real scalar field, and uniform convergence.
+
+For a concrete reconstruction, use the three angles $30^\circ,45^\circ,75^\circ$.
+There are four matchings. Their costs are approximately $4.5660$ for no
+pair, $4.4350$ for $\{1,2\}$, $4.7041$ for $\{1,3\}$, and $4.4994$ for
+$\{2,3\}$. Explain why the best construction uses a four-dimensional
+paired block and a two-dimensional reflection, and which part of the proof
+establishes that unrestricted six-dimensional mixing cannot do better.
+
+\end{document}

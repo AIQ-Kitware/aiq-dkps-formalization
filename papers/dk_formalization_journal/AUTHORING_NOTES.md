@@ -261,6 +261,26 @@ supplied at the call site. The subsequent
 not a successful build. The README explains the original-error log and the
 `-g` retry option for unchanged inputs. No editor configuration is changed.
 
+## Inference and justification structure (3 November 2026)
+
+The author needs to reconstruct and explain the proof independently, including
+offline, while keeping the published proof proportional to this paper. The
+supplied `justification-logs.md` illustrates the desired teaching pattern;
+it remains the author's working transcript rather than a mathematical source.
+
+The six manuscript steps now contain lettered inferences with adjacent
+justifications. The first-variation step includes sign averaging to reduce an
+arbitrary skew direction to its rotation-plane diagonal blocks. This supplies
+the missing general argument beyond checking a single planar variation.
+The negative-determinant trace bound is also explained explicitly.
+
+[matching_proof_study.tex](matching_proof_study.tex) follows the same labels,
+expands the block and scalar calculations, derives differentiability using
+symmetric dilation and a spectral-trace derivative, and includes rehearsal
+questions. `make matching-study` builds its ignored PDF separately from the
+article. The study note uses the article's semantic symbol registry. It adds
+no theorem to the source inventory and changes no Lean declaration.
+
 ## Generated artifacts (2 November 2026)
 
 The author requested ignoring regenerable outputs. Figure PGF/PDF/SVG exports,

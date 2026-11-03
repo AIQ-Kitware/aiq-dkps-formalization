@@ -64,6 +64,19 @@ open (these settings affect only the current session):
 :LatexErrors
 ```
 
+## Matching proof study note
+
+`matching_proof_study.tex` expands Theorem 5 using the same six steps and
+lettered inferences as the article. Each inference is followed by its
+justification, with the first-variation derivation, block calculations,
+and prompts for explaining the proof aloud. It is built separately from the
+article.
+
+From this directory, run `make matching-study` to produce
+`build/matching_proof_study.pdf`. The mathematical symbol definitions and hover
+reminders use the article's shared registry. The TeX source is tracked; the
+regenerable PDF is ignored.
+
 ## Manuscript figures
 
 Figure generators and their numerical models are tracked. Generated PGF,
