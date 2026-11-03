@@ -5250,7 +5250,7 @@
       ],
       "current_namespace": "TauCeti.ContinuousLinearMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.CoerciveUnit",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Coercive",
       "ownership_class": "tauceti",
       "roadmap_target": "Coercive bounded operators and the unit-ball criterion used by the form method.",
       "provenance_class": "staged in ForTauCeti",
@@ -5261,7 +5261,8 @@
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": "2026-11-02 prepared independent branch port-ssp-c31-coercive-unit at d4d7722113497e8ad86f27d2d7b65333ad7682b6, base 1a1975037a2bb0a6ee3a1ffdb5a9d1089266b905, ports norm_smul_le_norm_apply_of_coercive and isUnit_of_coercive to root ContinuousLinearMap and adds ContinuousLinearMap.le_re_of_mem_spectrum_of_coercive adapted from DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean:spectrum_re_lower_of_coercive. Source anchor aec34fb9a; CoerciveUnit authors Jon Crall / Claude Fable 5, QuarterAcuteFormGap authors Jon Crall / OpenAI GPT-5.6 Thinking / Claude Opus 5; Kitware 2026 Apache-2.0. The new inverse proof consumes native real Lax–Milgram through scalar restriction instead of reproducing the donor closed-range argument. Norm control requires neither completeness nor positive c; invertibility requires completeness and positive c; the complex spectral bound permits arbitrary real c and no self-adjointness. This supplies direct coercive-invertibility and Lyapunov spectral-half-plane prerequisites of SSP-C31, not its quarter-acute endpoint. Other declarations in this donor remain unported. Packet: tauceti-dkps-campaign/waves/2026-11-02/coercive-unit. Prepared and locally compiled/style-checked, not submitted or integrated; pins/local consumers unchanged pending upstream integration."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -6129,6 +6130,43 @@
       "status": "partially-upstreamed",
       "upstream_pr": "#14501; #13866",
       "migration_note": "November 2 retained-donor comparison: delete the unused continuity facade, the unitary contraction helper and both contraction/unitary gauge wrappers. The Fourier orbit uses native kyFanGauge_comp_linearIsometryEquiv after Mathlib Unitary.linearIsometryEquiv, preserving separate universes, arbitrary dimensions and zero spaces. Native Isometry explicitly credits DKPS adaptation, #13866 integration 7bbe813acf610ee6db4caba078b9c4facf357b90; continuity is native Basic from independent #14501. The Bochner gauge integral inequality and its private seminorm/Hahn--Banach proof remain genuinely unmatched at the exact pins. Pre-retirement source 3b0cfebc5:ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFanBochner.lean. Historical sketch names and proof authorship above are preserved; the maintained pre-retirement header also credits Claude Opus 5. No new submission is claimed."
+    },
+    {
+      "source_module": "DavisKahan.FiniteDimensional.TanTheta.RitzResidual",
+      "source_declarations": [
+        "isTransverse_of_tanThetaIntervalGap",
+        "orthonormal_tanThetaResidualWitness",
+        "tanThetaResidualWitness_scalar",
+        "kyFan_tanTheta0_ritzResidual_le",
+        "tanTheta0_ritzResidual_le",
+        "davisKahan1970_tanTheta0_ritzResidual_le",
+        "davisKahan1970_generalizedTanTheta0_ritzResidual_le"
+      ],
+      "current_namespace": "TauCeti.DavisKahan.FiniteDimensional",
+      "staging_module": "DavisKahan.FiniteDimensional.TanTheta.RitzResidual",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.RitzTangent",
+      "ownership_class": "tauceti",
+      "roadmap_target": "SSP-C28; SSP-C29",
+      "provenance_class": "Explicit DKPS adaptation: Jon Crall / GPT 5.6 High, Kitware 2026, Apache-2.0; Davis–Kahan (1970), equation (6.6).",
+      "direct_dependencies": [
+        "TauCeti.Analysis.InnerProductSpace.Projection.TanTheta",
+        "TauCeti.Analysis.InnerProductSpace.RayleighRitz",
+        "TauCeti.Analysis.InnerProductSpace.PointSpectrum",
+        "TauCeti.Analysis.InnerProductSpace.InvariantSubspace"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "DavisKahan.FiniteDimensional.TanTheta.All",
+        "DavisKahan.FiniteDimensional.TanTheta.CanonicalEmbedding",
+        "DavisKahan.FiniteDimensional.Residual.AngleEmbeddings",
+        "DavisKahan.Sources.DavisKahan1970.TanTheta",
+        "DavisKahan.Sources.DavisKahan1970.Section6Theorem63Presentation",
+        "DavisKahan.Sources.DavisKahan1970.ScalarGenericFinite",
+        "DavisKahan.Sources.DavisKahan1970.PartIII"
+      ],
+      "status": "staged",
+      "upstream_pr": null,
+      "migration_note": "2026-11-02 prepared independent branch port-ssp-c28-c29-ritz-tangent at c2ad4ba50d6eb65c2e5cfc49ec9a8322e0f2c912, base 1a1975037a2bb0a6ee3a1ffdb5a9d1089266b905, from aec34fb9a:DavisKahan/FiniteDimensional/TanTheta/RitzResidual.lean. Final public declarations are Submodule.directedProjectionGap_lt_one_of_pointSpectrumIn_compression and TauCeti.UnitarilyInvariantSeminorm.mul_map_tanThetaMap_le_map_ritzResidual. The genuine witness/scalar/Ky Fan prefix proof is adapted to native tanThetaMap, principal-tangent singular values, PointSpectrumIn form bounds and Rayleigh–Ritz Galerkin orthogonality. Delete temporary port factories and reuse accepted transversality/principal-sine facts. One RCLike-generic finite-dimensional theorem in every rectangular unitarily invariant seminorm covers equal and lower rank without a dimension comparison, nonzero rank, extra completeness or beta <= alpha hypothesis. Right-angle exclusion is proved, not assumed. Packet: tauceti-dkps-campaign/waves/2026-11-02/ritz-tangent. Focused warning-as-error build (5783 jobs) and style checks passed. Prepared and pushed submission branch, not upstream integration; paper wrappers, local math and dependency pins are retained until acceptance/consumption."
     }
   ]
 }
