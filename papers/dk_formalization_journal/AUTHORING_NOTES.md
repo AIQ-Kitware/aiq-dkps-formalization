@@ -112,6 +112,60 @@ preserves the original comments and replies.
   notation appendix for the spectral measure, generic Sylvester equation,
   and matching proof; kept the Manim palette and monochrome control.
 
+## Historical survey clarification (2 November 2026)
+
+The author accepted the two historical-background suggestions. The prose now
+distinguishes Davis and Kahan's assembly of the principal ideas of the
+cosine--sine decomposition from Stewart's later completion and explicit
+formulation, following Paige and Wei (1994). This relationship is stated in
+both the survey overview and the principal-angle discussion.
+
+Simon (2018) is introduced as a historical survey of Kato's work in
+non-relativistic quantum mechanics. Its relevance here is the Sz.-Nagy--Kato
+projection transport, with the precise orthogonal-projection condition
+`||P-Q||op < 1` and the locator `Theorem 5.1` in the later mathematical
+exposition. The opening of Section 2 establishes the history, the scope of
+the existing surveys, and their relationship to the exposition that follows.
+The overview links to our direct-rotation discussion; the projection condition
+and spectral application are developed there, after introducing the spectral
+subspaces and their projections. The theorem
+itself concerns general projections; the unitary assertion uses orthogonal
+projections on a Hilbert space. The resolved review notes are removed; their
+macro definitions remain available.
+
+Böttcher and Spitkovsky's historical contribution is identified explicitly:
+their Remark 1.3 (pp. 1415–1417) compares Halmos's block representation with
+the earlier formulations of Dixmier and Davis and the related Davis–Kahan
+projection results. This passage was read in the
+[full publisher PDF held by William & Mary](https://scholarworks.wm.edu/server/api/core/bitstreams/2f948a85-8996-4351-a490-510f6b58f69e/content).
+The overview cites that remark rather than describing the survey only by its
+mathematical subject.
+
+## Result summary and detailed table (2 November 2026)
+
+The author accepted keeping both tables together in Appendix C: the compact
+Table 3 comes first, followed by the detailed table in subsection C.1.
+`appendix_result_summaries.tex` contains the same 29 IDs with columns for
+assumptions and main conclusions, grouped by mathematical topic, and is
+included from `appendix_process.tex`. There is no separate Appendix D.
+The summaries were checked against the result passages in the distributable
+source specification. Shared conventions preserve domain and norm scope,
+the source's crossed-defect acute condition, and the distinct spectral gap
+hypotheses. The false printed displacement claim and its Q-norm repair remain
+distinct. The source direct rotation has its own glossary key because the
+table also covers the nonacute case.
+
+The [Table 4 Lean audit](TABLE4_LEAN_AUDIT.md) compares all 29 rows with the
+78 registered Lean statements and the supporting declarations needed for
+extensions and representation changes. The correction pass makes norm
+definedness, common domains, nonzero eigenvectors, finite residual rank,
+matched defects, and finite-dimensional spectral-repulsion scope explicit.
+The unbounded symmetric sine row uses the existing common-domain presentation
+theorem in addition to the bounded primary witnesses. No Lean source was changed.
+Validation passed: the full `DavisKahan.All` build, a fresh compiler probe for
+the 78 registered and nine supporting declarations, and the manuscript build
+without warnings or unresolved references.
+
 ## Local evidence index
 
 Paths below are relative to this paper directory. Prefer these existing records

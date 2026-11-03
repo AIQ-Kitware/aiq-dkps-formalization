@@ -29,9 +29,12 @@
 \input{math_symbol_colors.tex}
 \ifDKColoredSymbols\else\DKMathColorsfalse\fi
 
-\DeclareMathOperator{\DKRange}{range}
-\DeclareMathOperator{\DKKernel}{kernel}
-\DeclareMathOperator{\DKDom}{domain}
+%\DeclareMathOperator{\DKRange}{range}
+%\DeclareMathOperator{\DKKernel}{kernel}
+%\DeclareMathOperator{\DKDom}{domain}
+\DeclareMathOperator{\DKRange}{ran}
+\DeclareMathOperator{\DKKernel}{ker}
+\DeclareMathOperator{\DKDom}{dom}
 \usepackage[most]{tcolorbox}
 \usepackage{listings}
 \usepackage{listingsutf8}
@@ -337,12 +340,20 @@ same argument to express several norms. We describe the development of these
 constructions before stating the formalized sine-theta theorem.
 
 Existing historical surveys cover these developments. Paige and Wei trace
-the cosine--sine decomposition from Jordan's subspace
-geometry to its numerical formulations \citep{paige1994history}. \jonsays{Maybe say something like: highlighting the role of Davis and Kahan in the development of CSD?}
-Simon describes the Sz.-Nagy--Kato construction for nearby spectral
-projections \citep[\S5]{simon2018kato}\jonsays{This paper is mostly a history about Kato, but it includes the nearby spectral projection constructions, so we should say what the paper is, and then why we are referencing it here to distinguish it from our historical exposition of Davis and Kahan. It might also help to be slightly more clear about "nearby spectral projection". I don't quite understand what it is, and in fact the paper never uses the word nearby}. B\"ottcher and Spitkovsky survey
-pairs of projections and their operator algebras
-\citep{bottcher2010gentle}. We use these accounts together with the primary
+the cosine--sine decomposition from Jordan's subspace geometry through the
+principal ideas assembled by Davis and Kahan to Stewart's later completion
+and explicit formulation \citep{paige1994history}.
+Simon's historical survey of Kato's work in non-relativistic quantum mechanics
+traces Sz.-Nagy's unitary construction for pairs of projections and Kato's
+later algebraic formulation \citep[\S5]{simon2018kato}.
+We use this account for the history of the projection transport described in
+\cref{sec:related-projections}.
+B\"ottcher and Spitkovsky survey pairs of projections and their operator algebras.
+Their historical discussion relates Halmos's 1969 block representation to the
+earlier formulations of Dixmier (1948) and Davis (1958), and to the related
+projection constructions in Davis and Kahan's 1970 paper
+\citep[Remark~1.3]{bottcher2010gentle}.
+We use these accounts together with the primary
 sources. Table~\ref{tab:historical-lineage} summarizes the mathematical
 constructions used in our formalization.
 
@@ -426,11 +437,12 @@ The blocks of the decomposition contain compatible diagonal cosine and sine
   factors.
 Davis and Kahan describe the geometry using orthogonal projections,
 angle operators, and the direct rotation carrying one subspace onto the other
-\citep[Section~3]{davis1970rotation}. Stewart's 1977 survey develops perturbation bounds for pseudoinverses,
-orthogonal projections onto column spaces, and linear least-squares
-problems \citep{stewart1977perturbation}. Paige and Wei explain how the
-cosine--sine decomposition and direct rotation represent the same principal-angle
-data
+\citep[Section~3]{davis1970rotation}. Their work assembled the principal ideas
+of the cosine--sine decomposition; Stewart completed and explicitly formulated
+the matrix decomposition in 1977
+\citep{stewart1977perturbation,paige1994history}.
+Paige and Wei explain how this decomposition and direct rotation represent
+the same principal-angle data
 \citep{paige1994history}. Our formalization uses projections and functional
 calculus for the Hilbert-space results and principal-plane coordinates for
 the finite-dimensional counterexample.
@@ -557,16 +569,19 @@ principal-plane construction.
 \subsection{Transport between nearby spectral subspaces}
 \label{sec:related-projections}
 
-Spectral perturbation leads naturally to a different question from
-measuring the angle: if the projection $\sym{Psource}$ of an isolated spectral
-cluster changes to $\sym{Qtarget}$, can the two ranges be identified by a unitary
-that depends continuously, or analytically, on the projections?
+A perturbation can change the invariant subspace associated with an isolated
+part of a self-adjoint operator's spectrum. Let $\sym{Psource}$ and
+$\sym{Qtarget}$ be the orthogonal projections onto the corresponding spectral
+subspaces before and after perturbation. To compare these subspaces, we seek
+a unitary carrying $\DKRange(\sym{Psource})$ onto
+$\DKRange(\sym{Qtarget})$ that depends continuously, or analytically, on the
+projections.
 Sz.-Nagy developed the nearby-projection construction in work
 published in 1947 \citep{sznagy1947perturbations,simon2018kato}.  Kato gave a streamlined
 algebraic construction, described in his 1955 report and later in
 \emph{Perturbation Theory for Linear Operators}
 \citep[Chapter~I, \S4.6, equations~(4.33)--(4.42)]{kato1966perturbation};
-see also \citet[\S5]{simon2018kato}.
+see also \citet[Theorem~5.1]{simon2018kato}.
 
 For orthogonal projections the useful intertwiner is
 \begin{equation}

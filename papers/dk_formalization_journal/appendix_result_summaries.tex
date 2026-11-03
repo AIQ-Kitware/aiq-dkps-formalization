@@ -1,0 +1,278 @@
+% Detailed table following the compact summary in Appendix C.
+% Summaries checked against the registered Lean statements and their supporting
+% declarations; see TABLE4_LEAN_AUDIT.md for the row-by-row comparison.
+\subsection{Hypotheses and conclusions}
+\label{app:dk-result-summaries}
+
+Table~\ref{tab:dk-result-summaries} summarizes the hypotheses and main
+conclusions of the \DKResultCount{} results listed in
+Table~\ref{tab:dk-full-inventory}, using the same IDs
+\citep[Sections~2--8]{davis1970rotation}.
+Hilbert spaces are separable and real or complex unless specified otherwise.
+$\sym{NormN}$ denotes an arbitrary unitarily invariant norm on its domain of
+finiteness; each displayed norm is evaluated on an operator in that domain.
+$\|\cdot\|_{\mathrm{op}}$ and $\|\cdot\|_{\mathrm{HS}}$ denote the operator
+and Hilbert--Schmidt norms. Self-adjoint operators may be unbounded:
+operator identities hold on their domains, and residuals or right-hand sides
+in norm estimates have bounded extensions.
+For the ambient tangent bound, the tangent is defined as a bounded operator,
+equivalently $\|\sym{Psource}-\sym{Qtarget}\|_{\mathrm{op}}<1$.
+
+For the geometric results, $\sym{Psource},\sym{Qtarget}$ are orthogonal
+projections, $\sym{SourceDirectRotation}$ is a direct rotation, and
+$\sym{Wcompetitor}$ is any orthogonal or unitary transporter satisfying
+$\sym{Wcompetitor}\sym{Psource}\sym{Wcompetitor}^*=\sym{Qtarget}$.
+Write
+\[
+ D_0=\DKRange(\sym{Psource})\cap\DKKernel(\sym{Qtarget}),\qquad
+ D_1=\DKKernel(\sym{Psource})\cap\DKRange(\sym{Qtarget}).
+\]
+The source's acute condition is $D_0=D_1=\{0\}$.
+For geometric and displacement rows from \path{DK-3.3-prop} onward,
+the ranges and kernels of
+$\sym{Psource},\sym{Qtarget}$ have matching dimensions and
+$\dim D_0=\dim D_1$; the displacement results also assume
+the directed sine block
+$(I-\sym{Qtarget})|_{\DKRange(\sym{Psource})}$ compact.
+$\sym{Theta0},\Theta_1$ are the source and complementary angle operators,
+$\sym{Theta}$ their ambient direct sum, and $\theta_j$ the ordered principal
+angles. In the source decomposition the direct rotation has blocks
+$\bigl(\begin{smallmatrix}C_0&-S_0^*\\S_0&C_1\end{smallmatrix}\bigr)$
+with $C_j\ge0$; $J$ is its skew angle generator, so
+$\sym{SourceDirectRotation}=e^{J\sym{Theta}}$.
+For real unitaries, spectral half-plane conditions refer to their
+complexifications.
+
+For perturbation results, $\sym{A0}$ is the self-adjoint trial operator,
+also the source block of $\sym{A}$ in the reducing decomposition;
+$\sym{A1}$ is its complementary reference block when used.
+The operators $\sym{Lambda0},\sym{Lambda1}$ are the exact blocks of
+$\sym{Acurrent}=\sym{A}+\sym{H}$.
+The maps $\sym{E0},\sym{F0}$ give source and target coordinates,
+$\sym{H0},\sym{H1}$ are the diagonal perturbation blocks, and
+$\sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{A0}$.
+Coordinate maps are isometries except in the two lower-frame rows.
+The exact frames have orthogonal ranges whose sum is the ambient space;
+reducing projections preserve operator domains.
+We abbreviate the two spectral hypotheses, for $\sym{delta}>0$, by
+\begin{align*}
+ \mathcal I_{\sym{delta}}(B,C):\quad&
+ \sigma(B)\subset[\beta,\alpha],\quad
+ \sigma(C)\cap(\beta-\sym{delta},\alpha+\sym{delta})=\varnothing,
+ \quad\text{or the roles interchanged};\\
+ \mathcal O_{\sym{delta}}(B,C):\quad&
+ B\le\alpha I,\quad C\ge(\alpha+\sym{delta})I.
+\end{align*}
+The endpoints satisfy $\beta\le\alpha$ and are chosen for each row;
+the spectral intervals may be
+half-infinite.
+
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.20\linewidth}>{\raggedright\arraybackslash}p{0.34\linewidth}>{\raggedright\arraybackslash}p{\dimexpr0.46\linewidth-4\tabcolsep\relax}@{}}
+\caption{Hypotheses and main conclusions of the \DKResultCount{} Davis--Kahan results.}
+\label{tab:dk-result-summaries}\\
+\toprule
+\textbf{ID} & \textbf{Assumptions} & \textbf{Conclusion}\\
+\midrule
+\endfirsthead
+\multicolumn{3}{@{}l}{\textit{Hypotheses and conclusions (continued)}}\\[2pt]
+\toprule
+\textbf{ID} & \textbf{Assumptions} & \textbf{Conclusion}\\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r@{}}{\textit{Continued on the next page}}\\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{3}{@{}l}{\textbf{Headline perturbation bounds}}\\*\addlinespace[3pt]
+\path{S2-sin-theta} &
+ $\mathcal I_{\sym{delta}}(\sym{A0},\sym{Lambda1})$. &
+ $\sym{delta}\sym{NormN}(\sin\sym{Theta0})\le\sym{NormN}(\sym{R})$.\\\addlinespace
+\path{S2-tan-theta} &
+ $\mathcal O_{\sym{delta}}(\sym{A0},\sym{Lambda1})$;
+ Rayleigh--Ritz condition $\sym{H0}=0$. &
+ $\sym{delta}\sym{NormN}(\tan\sym{Theta0})\le\sym{NormN}(\sym{R})$;
+ $\sym{delta}\sym{NormN}(\tan\sym{Theta})\le\sym{NormN}(\sym{H})$.\\\addlinespace
+\path{S2-sin-two-theta} &
+ $\sym{A},\sym{Acurrent}$ have a common domain;
+ $\sigma(\sym{Lambda0})\subset[\beta,\alpha]$;
+ $\sigma(\sym{Lambda1})$ outside
+ $(\beta-\sym{delta},\alpha+\sym{delta})$. &
+ $\sym{delta}\sym{NormN}(\sin(2\sym{Theta0}))\le2\sym{NormN}(\sym{R})$;
+ $\sym{delta}\sym{NormN}(\sin(2\sym{Theta}))\le2\sym{NormN}(\sym{H})$.\\\addlinespace
+\path{S2-tan-two-theta} &
+ $\mathcal O_{\sym{delta}}(\sym{A0},\sym{A1})$;
+ bounded $\sym{H}$, $\sym{H0}=\sym{H1}=0$. &
+ $\sym{delta}\sym{NormN}(\tan(2\sym{Theta0}))\le2\sym{NormN}(\sym{R})$;
+ $\sym{delta}\sym{NormN}(\tan(2\sym{Theta}))\le2\sym{NormN}(\sym{H})$.\\\addlinespace[5pt]
+\multicolumn{3}{@{}l}{\textbf{Two subspaces and direct rotations}}\\*\addlinespace[3pt]
+\path{DK-3.1-prop} &
+ $D_0=D_1=\{0\}$. &
+ A unique direct rotation exists. Positive diagonal blocks characterize it
+ among transporters.\\\addlinespace
+\path{DK-3.2-prop} &
+ General pair of projections. &
+ A direct rotation exists iff $\dim D_0=\dim D_1$.
+ On $D_0\oplus D_1$, $\sym{SourceDirectRotation}^2=-I$;
+ uniqueness can fail.\\\addlinespace
+\path{DK-3.3-prop} &
+ A direct rotation $\sym{SourceDirectRotation}$; conversely a unitary
+ square root with spectrum in the closed right half-plane that maps
+ $D_0$ onto $D_1$. &
+ $\sym{SourceDirectRotation}^2=(2\sym{Qtarget}-I)(2\sym{Psource}-I)$,
+ and its spectrum lies in the closed right half-plane.
+ Conversely, such a square root is a direct rotation.\\\addlinespace
+\path{DK-3.4-prop} &
+ $C_0^2\ge\tfrac12 I$;
+ $Q_-=(2\sym{Psource}-I)\sym{Qtarget}(2\sym{Psource}-I)$. &
+ $\sym{SourceDirectRotation}^2$ is a direct rotation from
+ $\DKRange(Q_-)$ to $\DKRange(\sym{Qtarget})$.\\\addlinespace
+\path{DK-3.1-thm} &
+ Matching dimensions as above; angle operators
+ $0\le\sym{Theta0},\Theta_1\le\pi/2$. &
+ The four intersection dimensions and the generic angle's spectral
+ multiplicity completely classify pairs up to isometric equivalence.
+ Any angle data with matching nonzero multiplicities
+ and the prescribed total dimension are realizable.\\\addlinespace
+\path{DK-3.1-cor} &
+ Classification hypotheses;
+ $\sym{Psource}(I-\sym{Qtarget})\sym{Psource}$ compact. &
+ Classification reduces to angle eigenvalues with multiplicity:
+ $\theta_j\downarrow0$. The two angle operators may have different
+ zero multiplicities.\\\addlinespace
+\path{DK-3.5-prop} &
+ A direct rotation and its angle operator $\sym{Theta}$; the maximal
+ eigenspace characterization assumes the acute case. &
+ $\sym{Theta}$ commutes with $\sym{Psource},\sym{Qtarget},J,
+ \sym{SourceDirectRotation}$. If $x\ne0$ and
+ $\sym{Theta}x=\theta x$, then
+ $\angle(x,\sym{SourceDirectRotation}x)=\theta$.
+ In the acute case these eigenspaces are the unique maximal reducing
+ subspaces of the prescribed angle.\\\addlinespace
+\path{DK-3.2-cor} &
+ Interchange $\sym{Psource}$ and $\sym{Qtarget}$. &
+ $\sym{Theta}$ is unchanged, $J$ changes to $-J$, and the corresponding
+ direct rotation becomes $\sym{SourceDirectRotation}^*$.\\\addlinespace[5pt]
+\multicolumn{3}{@{}l}{\textbf{Displacement extremality}}\\*\addlinespace[3pt]
+\path{DK-4.1-prop} &
+ Compact angle data; arbitrary transporter $\sym{Wcompetitor}$. &
+ For the positive principal angles, there are orthonormal
+ $v_j\in\DKRange(\sym{Psource})$ with
+ $\angle(v_j,\sym{Wcompetitor}v_j)\ge\theta_j$.
+ Each singular value of restricted displacement is minimized by
+ $\sym{SourceDirectRotation}$, with value $2\sin(\theta_j/2)$.\\\addlinespace
+\path{DK-4.1-cor} &
+ Same displacement setting. &
+ $\sym{NormN}((I-\sym{SourceDirectRotation})\sym{Psource})
+ \le\sym{NormN}((I-\sym{Wcompetitor})\sym{Psource})$.\\\addlinespace
+\path{DK-4.2-prop} &
+ Any orthonormal basis $(v_j)$ of $\DKRange(\sym{Psource})$;
+ arbitrary transporter $\sym{Wcompetitor}$. &
+ $\sum_j\sin^2\angle(v_j,\sym{Wcompetitor}v_j)
+ \ge\sum_j\sin^2\theta_j$, including an infinite right-hand side.\\\addlinespace
+\path{DK-4.3-prop} &
+ Same displacement setting; put
+ $D(W)=(I-W)^*(I-W)$. &
+ $\sym{NormN}(D(\sym{SourceDirectRotation}))
+ \le\sym{NormN}(D(\sym{Wcompetitor}))$:
+ the direct rotation minimizes squared full displacement.\\\addlinespace
+\path{DK-4.4-prop} &
+ Real space; largest principal angle at most $\pi/3$. &
+ The printed assertion that $\sym{SourceDirectRotation}$ minimizes
+ every $\sym{NormN}(I-\sym{Wcompetitor})$ is false.
+ A real four-dimensional trace-norm counterexample is given in
+ \cref{sec:prop44}; the Q-norm repair is stated there separately.\\\addlinespace[5pt]
+\multicolumn{3}{@{}l}{\textbf{Sylvester estimates and spectral cutoffs}}\\*\addlinespace[3pt]
+\path{DK-5.1-thm} &
+ Banach spaces; bounded $C,X,Y$; $BX-XC=Y$;
+ $\|C\|_{\mathrm{op}}\le a$,
+ $\|B^{-1}\|_{\mathrm{op}}\le(a+\sym{delta})^{-1}$, $a\ge0$.
+ The map norm is compatible with these operator norms. &
+ $\sym{delta}\|X\|\le\|Y\|$.
+ The coefficient hypotheses may be interchanged.
+ An unbounded $B$ is closed and densely defined with bounded inverse.\\\addlinespace
+\path{DK-5.2-thm} &
+ Self-adjoint $B\ge(\gamma+\sym{delta})I$,
+ $C\le\gamma I$; bounded $X,Y$;
+ $X\DKDom(C)\subset\DKDom(B)$ and $BX-XC=Y$ there. &
+ $\sym{delta}\sym{NormN}(X)\le\sym{NormN}(Y)$,
+ including unbounded $B,C$.\\\addlinespace
+\path{DK-5.1-lem} &
+ Orthogonal projections $\Omega_t\to I$ strongly; bounded $K$. &
+ $s_j(K\Omega_t)\to s_j(K)$ for each singular-value index $j$.\\\addlinespace[5pt]
+\multicolumn{3}{@{}l}{\textbf{Generalized single-angle bounds}}\\*\addlinespace[3pt]
+\path{DK-6.1-lem} &
+ Each diagonal block of $K$ is dominated by the corresponding block of
+ $L$ in every $\sym{NormN}$. &
+ The same domination holds for their block-diagonal sums.
+ The converse holds if the two $K$ blocks are equisingular and the two
+ $L$ blocks are equisingular.\\\addlinespace
+\path{DK-6.2-lem} &
+ Orthogonal projections $\Omega,\Upsilon$; bounded $K$. &
+ $\sym{NormN}(\Omega K\Upsilon+
+ (I-\Omega)K(I-\Upsilon))\le\sym{NormN}(K)$.\\\addlinespace
+\path{DK-6.1-prop} &
+ $\sym{A},\sym{Acurrent}$ have a common domain and bounded difference
+ $\sym{H}$;
+ both $\mathcal I_{\sym{delta}}(\sym{A0},\sym{Lambda1})$ and
+ $\mathcal I_{\sym{delta}}(\sym{A1},\sym{Lambda0})$. &
+ $\sym{delta}\sym{NormN}(\sin\sym{Theta})\le\sym{NormN}(\sym{H})$.\\\addlinespace
+\path{DK-6.1-thm} &
+ $\sym{E0}^*\sym{E0}\ge\varepsilon^2I$, $\varepsilon>0$;
+ $\mathcal I_{\sym{delta}}(\sym{A0},\sym{Lambda1})$.
+ Source and target dimensions may differ. &
+ $\sym{delta}\varepsilon\sym{NormN}(\sin\sym{Theta0})
+ \le\sym{NormN}(\sym{R})$.
+ The directed sine has the singular values of
+ $\sym{Psource}(I-\sym{Qtarget})$.\\\addlinespace
+\path{DK-6.2-thm} &
+ Same lower-frame condition; only
+ $\operatorname{dist}(\sigma(\sym{A0}),\sigma(\sym{Lambda1}))
+ \ge\sym{delta}$. &
+ $\sym{delta}\varepsilon\|\sin\sym{Theta0}\|_{\mathrm{HS}}
+ \le\|\sym{R}\|_{\mathrm{HS}}$.
+ If $\sym{R}$ has finite rank, also
+ $\sym{delta}\varepsilon\|\sin\sym{Theta0}\|_{\mathrm{op}}
+ \le\|\sym{R}\|_{\mathrm{op}}\sqrt{\operatorname{rank}\sym{R}}$.\\\addlinespace
+\path{DK-6.3-thm} &
+ Isometric Rayleigh--Ritz trial data;
+ $\mathcal O_{\sym{delta}}(\sym{A0},\sym{Lambda1})$.
+ The source dimension may be smaller than the target dimension. &
+ $\sym{delta}\sym{NormN}(\tan\sym{Theta0})
+ \le\sym{NormN}(\sym{R})$.\\\addlinespace
+\path{DK-6.3-lem} &
+ Bounded $K$; projections $\Gamma,\Psi$ of rank at most $n\ge1$;
+ $K\Psi=\Gamma K\Psi$;
+ $\sum_{j\le n}s_j(K\Psi)^2$\newline
+ ${}>\sum_{j\le n}s_j(K)^2-\eta^2$, $\eta>0$. &
+ $\|\Gamma K(I-\Psi)\|_{\mathrm{op}}<\eta$:
+ a nearly maximizing finite-rank compression has small leakage.\\\addlinespace[5pt]
+\multicolumn{3}{@{}l}{\textbf{Spectral selection and repulsion}}\\*\addlinespace[3pt]
+\path{DK-8.1-thm} &
+ Ordered reference gap
+ $\mathcal O_{\sym{delta}}(\sym{A0},\sym{A1})$ with endpoint $\alpha$;
+ bounded $\sym{H}$, $\sym{H0}=\sym{H1}=0$.
+ For the equivalence, $\dim D_0=\dim D_1$. &
+ $\sym{Theta}\le\pi/4$ iff
+ $\sym{Lambda0}\le\alpha I$ and
+ $\sym{Lambda1}\ge(\alpha+\sym{delta})I$; such a reducing target exists.
+ With direct-rotation-aligned exact frames,
+ $\sym{A1}-\alpha I\le C_1(\sym{Lambda1}-\alpha I)C_1$,
+ as quadratic forms, with the lower-block analogue.
+ In finite dimensions there are eigenvalue and symmetric-gauge
+ repulsion inequalities.\\\addlinespace
+\path{DK-8.2-thm} &
+ Double-angle sine hypotheses; bounded $\sym{H}$;
+ $\dim D_0=\dim D_1$; either
+ $\|\sym{H}\|_{\mathrm{op}}<\sym{delta}/2$ or
+ $\|\sym{R}\|_{\mathrm{op}}<\sym{delta}/2$;
+ $\sigma(\sym{A0})\subset
+ [\beta-\sym{delta}/2,\alpha+\sym{delta}/2]$. &
+ The corresponding ambient or directed double-angle sine bound holds
+ on the branch with angles strictly below $\pi/4$.\\
+\end{longtable}
+\endgroup
