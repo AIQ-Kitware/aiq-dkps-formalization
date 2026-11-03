@@ -64,14 +64,43 @@ button:focus-visible, input:focus-visible { outline:3px solid #89b2e4; outline-o
 #projectionCoupled[aria-pressed="true"] { color:var(--teal); }
 .projection-tag { font-variant-numeric:tabular-nums; }
 
+
+/* Every data panel has an accessible, independently collapsible title bar. */
+.card > summary.cardhead { cursor:pointer; user-select:none; min-height:47px; padding-bottom:12px; list-style:none; }
+.card > summary.cardhead::-webkit-details-marker { display:none; }
+.card > summary.cardhead::marker { content:""; }
+.card > summary.cardhead:hover { background:#f6f9fc; }
+.card > summary.cardhead:focus-visible { outline:3px solid #89b2e4; outline-offset:-3px; }
+.card:not([open]) > summary.cardhead { padding-bottom:15px; }
+.card > summary.cardhead .head-actions { display:flex; align-items:center; gap:12px; }
+.chevron { flex-shrink:0; width:9px; height:9px; border-right:2px solid #7c8fa2; border-bottom:2px solid #7c8fa2; transform:rotate(45deg); transition:transform .15s; margin:-4px 4px 0 2px; }
+.card:not([open]) .chevron { transform:rotate(-45deg); }
+.panels2 > .card, .bottom-grid > .card, .projection-grid > .card { align-self:start; }
+.projection-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+.projection-section { margin-top:15px; }
+.projection-section-heading { margin:0 0 9px 2px; display:flex; justify-content:space-between; gap:12px; align-items:baseline; }
+.projection-section-heading h3 { margin:0; font-size:13px; font-weight:750; }
+.projection-section-heading p { margin:0; color:var(--muted); font-size:12px; }
+.projection-card[hidden] { display:none!important; }
+.spatial-canvas { display:block; width:100%; height:188px; }
+.view-chooser { display:flex; align-items:center; flex-wrap:wrap; gap:11px 18px; background:#fff; border:1px solid var(--line); border-radius:13px; padding:10px 14px; margin-top:9px; }
+.view-chooser .chooser-title { font-size:11px; font-weight:760; color:var(--ink); white-space:nowrap; }
+.chooser-options { display:flex; align-items:center; flex:1; gap:7px; flex-wrap:wrap; }
+.chooser-group-name { text-transform:uppercase; color:#8696a7; letter-spacing:.06em; font-size:10px; font-weight:780; margin-left:5px; }
+.view-chip { display:inline-flex; align-items:center; gap:5px; padding:6px 9px; border-radius:8px; border:1px solid #dbe5ed; background:#f7fafc; font-size:11px; font-weight:700; cursor:pointer; user-select:none; }
+.view-chip:has(input:not(:checked)) { color:#98a6b5; background:#fff; border-style:dashed; }
+.view-chip:has(input:checked) { color:#215f70; border-color:#b6d5db; background:#eef7f8; }
+.view-chip input { margin:0; width:13px; height:13px; }
+.chooser-actions { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+.chooser-actions button { min-height:30px; padding:5px 9px; font-size:11px; }
 .time-card .cardhead { padding-bottom:0; }
 .note-row { margin-top:13px; border-left:3px solid #8bb9b3; padding:4px 15px; color:#53677a; font-size:12px; }
 .controls-secondary { display:flex; justify-content:space-between; margin:8px 0 13px; flex-wrap:wrap; gap:10px; color:var(--muted); font-size:12px; }
 input[type=checkbox] { accent-color:var(--teal); cursor:pointer; }
 .controls-secondary label { display:inline-flex; align-items:center; gap:7px; cursor:pointer; }
 .equation { font-family: "Cambria Math", Georgia, serif; font-style:italic; }
-@media(max-width:1080px) { .toolbar { grid-template-columns:1fr 1fr; } .actions { grid-column:1/-1; justify-content:flex-start; } .stat-grid { grid-template-columns:repeat(2,1fr); } .sliderrow { grid-template-columns:135px 1fr 75px; } }
-@media(max-width:720px) { .shell { width:calc(100% - 20px); padding-top:14px; } header { display:block; } .header-note { display:none; } .toolbar { grid-template-columns:1fr; position:relative; top:auto; } .sliderrow { grid-template-columns:124px 1fr 66px; } .actions { grid-column:auto; } .panels2,.bottom-grid { grid-template-columns:1fr; } .time-grid { grid-template-columns:1fr; } .projection-toolbar { flex-wrap:wrap; } .projection-switch { width:100%; } .projection-switch button { flex:1; } .stat-grid { grid-template-columns:repeat(2,1fr); } .big-canvas { height:270px; } }
+@media(max-width:1080px) { .toolbar { grid-template-columns:1fr 1fr; } .actions { grid-column:1/-1; justify-content:flex-start; } .stat-grid { grid-template-columns:repeat(2,1fr); } .sliderrow { grid-template-columns:135px 1fr 75px; } .projection-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:720px) { .shell { width:calc(100% - 20px); padding-top:14px; } header { display:block; } .header-note { display:none; } .toolbar { grid-template-columns:1fr; position:relative; top:auto; } .sliderrow { grid-template-columns:124px 1fr 66px; } .actions { grid-column:auto; } .panels2,.bottom-grid { grid-template-columns:1fr; } .time-grid,.projection-grid { grid-template-columns:1fr; } .projection-toolbar { flex-wrap:wrap; } .projection-switch { width:100%; } .projection-switch button { flex:1; } .stat-grid { grid-template-columns:repeat(2,1fr); } .big-canvas { height:270px; } .projection-section-heading { display:block; } .view-chooser { align-items:flex-start; } .chooser-options { flex-basis:100%; } }
 </style>
 </head>
 <body>
@@ -95,41 +124,66 @@ input[type=checkbox] { accent-color:var(--teal); cursor:pointer; }
   </div>
   <div class="controls-secondary"><label><input type="checkbox" id="decomp">Show the moving/fixed 4D plane shadows</label><span>Orange &amp; purple arrows track the same two input vectors in both panels. Original K is dashed gray.</span></div>
   <section class="panels2" aria-label="Direct and coupled rotations side by side">
-    <div class="card"><div class="cardhead"><h2>Direct rotation R</h2><span class="tag blue">TWO PRINCIPAL PLANES</span></div>
+    <details class="card" open><summary class="cardhead"><h2>Direct rotation R</h2><span class="head-actions"><span class="tag blue">TWO PRINCIPAL PLANES</span><span class="chevron" aria-hidden="true"></span></span></summary>
       <p class="description">Each principal plane rotates by &theta;; four ambient directions move.</p><canvas id="direct3d" class="big-canvas" aria-label="Spatial projection of the direct rotation"></canvas>
       <div class="canvas-footer"><span><i class="swatch" style="background:#e39a3f"></i>Image of e<sub>x</sub></span><span><i class="swatch" style="background:#a66dbc"></i>Image of e<sub>y</sub></span><span><i class="swatch" style="background:#e9a43b"></i>Selected time slice</span></div>
-    </div>
-    <div class="card"><div class="cardhead"><h2>Diagonal coupled rotation W</h2><span class="tag teal">MOVING + FIXED PLANES</span></div>
+    </details>
+    <details class="card" open><summary class="cardhead"><h2>Diagonal coupled rotation W</h2><span class="head-actions"><span class="tag teal">MOVING + FIXED PLANES</span><span class="chevron" aria-hidden="true"></span></span></summary>
       <p class="description">One diagonal plane rotates by twice &theta;; its orthogonal 2D complement stays fixed.</p><canvas id="coupled3d" class="big-canvas" aria-label="Spatial projection of the coupled rotation"></canvas>
       <div class="canvas-footer"><span><i class="swatch" style="background:#e39a3f"></i>Image of e<sub>x</sub></span><span><i class="swatch" style="background:#a66dbc"></i>Image of e<sub>y</sub></span><span><i class="swatch" style="background:#e9a43b"></i>Same slice of the same target</span></div>
-    </div>
+    </details>
   </section>
   <section class="bottom-grid" aria-label="Time slice and displacement spectrum">
-    <div class="card"><div class="cardhead"><h2>Actual 3D time slice</h2><span class="tag teal" id="sliceTag">SAME FOR BOTH MAPS</span></div>
+    <details class="card" open><summary class="cardhead"><h2>Actual 3D time slice</h2><span class="head-actions"><span class="tag teal" id="sliceTag">SAME FOR BOTH MAPS</span><span class="chevron" aria-hidden="true"></span></span></summary>
       <p class="description" id="sliceDescription">Intersection of the target disk with the hyperplane at the selected t.</p>
       <canvas id="slice3d" class="sm-canvas" aria-label="Actual fixed-time three-dimensional slice"></canvas>
-    </div>
-    <div class="card"><div class="cardhead"><h2>Four displacement singular values</h2><span class="tag blue">OPERATOR ON ALL OF R4</span></div>
+    </details>
+    <details class="card" open><summary class="cardhead"><h2>Four displacement singular values</h2><span class="head-actions"><span class="tag blue">OPERATOR ON ALL OF R4</span><span class="chevron" aria-hidden="true"></span></span></summary>
       <p class="description">The nuclear cost adds these four values; the coupled map concentrates displacement into two directions.</p>
       <canvas id="spectrum" class="sm-canvas" aria-label="Displacement singular values of direct and coupled rotations"></canvas>
-    </div>
+    </details>
   </section>
   <div class="projection-toolbar">
     <div class="projection-info">
-      <h2>Coordinate-time projections: choose one transporter</h2>
+      <h2>Two-dimensional projections: choose one transporter</h2>
       <p id="projectionDescription" aria-live="polite">Showing direct R only. Orange and purple arrows track the images of the source basis vectors.</p>
     </div>
-    <div class="projection-switch" role="group" aria-label="Transporter shown in x-t, y-t and z-t views">
-      <button type="button" id="projectionDirect" aria-pressed="true" title="Show direct rotation in all three coordinate-time views (R)">Direct R</button>
-      <button type="button" id="projectionCoupled" aria-pressed="false" title="Show coupled rotation in all three coordinate-time views (W)">Coupled W</button>
+    <div class="projection-switch" role="group" aria-label="Transporter shown in coordinate projections">
+      <button type="button" id="projectionDirect" aria-pressed="true" title="Show direct rotation in all six 2D views (R)">Direct R</button>
+      <button type="button" id="projectionCoupled" aria-pressed="false" title="Show coupled rotation in all six 2D views (W)">Coupled W</button>
     </div>
   </div>
-  <section class="time-grid" aria-label="Coordinate-time projected views">
-    <div class="card time-card"><div class="cardhead"><h3>x-t projection</h3><span class="tag blue projection-tag">DIRECT R</span></div><canvas id="xt" class="time-canvas"></canvas></div>
-    <div class="card time-card"><div class="cardhead"><h3>y-t projection</h3><span class="tag blue projection-tag">DIRECT R</span></div><canvas id="yt" class="time-canvas"></canvas></div>
-    <div class="card time-card"><div class="cardhead"><h3>z-t projection</h3><span class="tag blue projection-tag">DIRECT R</span></div><canvas id="zt" class="time-canvas"></canvas></div>
-  </section>
-  <div class="note-row">The 3D views show spatial projections across <strong>all</strong> values of t; the gold shape is the <strong>actual intersection</strong> at the selected t. The x-t, y-t, and z-t views show just the selected transporter's material-coordinate grid and arrows, across all t. Switch between R and W to see how the same target plane is reached by different pointwise motions. A vector figure for the paper is produced by <code>python3 coupled_rotation_viewer.py --export-figure figure.svg --theta 45</code>.</div>
+  <div class="view-chooser" role="group" aria-label="Select visible two-dimensional projections">
+    <span class="chooser-title">Visible panels</span>
+    <div class="chooser-options">
+      <span class="chooser-group-name">Space</span>
+      <label class="view-chip"><input type="checkbox" data-panel-toggle="xy" checked> X–Y</label>
+      <label class="view-chip"><input type="checkbox" data-panel-toggle="xz" checked> X–Z</label>
+      <label class="view-chip"><input type="checkbox" data-panel-toggle="yz" checked> Y–Z</label>
+      <span class="chooser-group-name">Space–time</span>
+      <label class="view-chip"><input type="checkbox" data-panel-toggle="xt" checked> X–T</label>
+      <label class="view-chip"><input type="checkbox" data-panel-toggle="yt" checked> Y–T</label>
+      <label class="view-chip"><input type="checkbox" data-panel-toggle="zt" checked> Z–T</label>
+    </div>
+    <div class="chooser-actions"><button type="button" id="showAllViews">Show all</button><button type="button" id="collapseAllViews">Collapse all</button><button type="button" id="expandAllViews">Expand all</button></div>
+  </div>
+  <div class="projection-section">
+    <div class="projection-section-heading"><h3>Spatial coordinate views</h3><p>All-time projection onto each coordinate plane; t is hidden.</p></div>
+    <section class="projection-grid" aria-label="Spatial two-dimensional projections">
+      <details class="card projection-card" data-panel="xy" open><summary class="cardhead"><h3>X–Y projection</h3><span class="head-actions"><span class="tag blue projection-tag">DIRECT R</span><span class="chevron" aria-hidden="true"></span></span></summary><canvas id="xy" class="spatial-canvas" aria-label="X-Y coordinate projection"></canvas></details>
+      <details class="card projection-card" data-panel="xz" open><summary class="cardhead"><h3>X–Z projection</h3><span class="head-actions"><span class="tag blue projection-tag">DIRECT R</span><span class="chevron" aria-hidden="true"></span></span></summary><canvas id="xz" class="spatial-canvas" aria-label="X-Z coordinate projection"></canvas></details>
+      <details class="card projection-card" data-panel="yz" open><summary class="cardhead"><h3>Y–Z projection</h3><span class="head-actions"><span class="tag blue projection-tag">DIRECT R</span><span class="chevron" aria-hidden="true"></span></span></summary><canvas id="yz" class="spatial-canvas" aria-label="Y-Z coordinate projection"></canvas></details>
+    </section>
+  </div>
+  <div class="projection-section">
+    <div class="projection-section-heading"><h3>Coordinate–time views</h3><p>Each plot shows a spatial coordinate against the Euclidean fourth coordinate t.</p></div>
+    <section class="projection-grid" aria-label="Coordinate-time projected views">
+      <details class="card projection-card" data-panel="xt" open><summary class="cardhead"><h3>X–T projection</h3><span class="head-actions"><span class="tag blue projection-tag">DIRECT R</span><span class="chevron" aria-hidden="true"></span></span></summary><canvas id="xt" class="time-canvas" aria-label="X-T coordinate projection"></canvas></details>
+      <details class="card projection-card" data-panel="yt" open><summary class="cardhead"><h3>Y–T projection</h3><span class="head-actions"><span class="tag blue projection-tag">DIRECT R</span><span class="chevron" aria-hidden="true"></span></span></summary><canvas id="yt" class="time-canvas" aria-label="Y-T coordinate projection"></canvas></details>
+      <details class="card projection-card" data-panel="zt" open><summary class="cardhead"><h3>Z–T projection</h3><span class="head-actions"><span class="tag blue projection-tag">DIRECT R</span><span class="chevron" aria-hidden="true"></span></span></summary><canvas id="zt" class="time-canvas" aria-label="Z-T coordinate projection"></canvas></details>
+    </section>
+  </div>
+  <div class="note-row">All six 2D views show <strong>only the selected transporter</strong>. The X–Y, X–Z, and Y–Z views hide t; X–T, Y–T, and Z–T show how directions extend through the fourth coordinate. Orange and purple arrows track the images of the same two source vectors, while the target shape is shared by R and W. Gold shows the selected fixed-t intersection, projected into each view. Uncheck a view to hide its box completely; click any panel title to collapse its contents. Save PNG includes only currently visible, expanded panels. The large 3D views project across <strong>all</strong> t rather than showing one instant.</div>
 </div>
 <script>
 'use strict';
@@ -139,7 +193,7 @@ input[type=checkbox] { accent-color:var(--teal); cursor:pointer; }
   const ex=[1,0,0,0],ey=[0,1,0,0],ez=[0,0,1,0],et=[0,0,0,1];
   const u=[1/sqrt2,0,1/sqrt2,0],v=[0,1/sqrt2,0,1/sqrt2],a=[1/sqrt2,0,-1/sqrt2,0],b=[0,1/sqrt2,0,-1/sqrt2];
   const ids={angle:document.getElementById('angleSlider'),time:document.getElementById('timeSlider'),angleOut:document.getElementById('angleOut'),timeOut:document.getElementById('timeOut'),decomp:document.getElementById('decomp'),projectionDirect:document.getElementById('projectionDirect'),projectionCoupled:document.getElementById('projectionCoupled')};
-  const cvs=Object.fromEntries(['direct3d','coupled3d','slice3d','spectrum','xt','yt','zt'].map(id=>[id,document.getElementById(id)]));
+  const cvs=Object.fromEntries(['direct3d','coupled3d','slice3d','spectrum','xy','xz','yz','xt','yt','zt'].map(id=>[id,document.getElementById(id)]));
   const state={theta:45,time:0,playing:false,playingDir:1,cameraYaw:20,cameraElev:-35,zoom:1,decomp:false,projectionMode:'direct',renderCount:0};
   const add=(p,q)=>p.map((x,i)=>x+q[i]),mul=(c,p)=>p.map(x=>c*x),combine=(c,p,d,q)=>p.map((x,i)=>c*x+d*q[i]);
   const dot=(p,q)=>p.reduce((s,x,i)=>s+x*q[i],0), norm=p=>Math.sqrt(dot(p,p));
@@ -255,6 +309,7 @@ input[type=checkbox] { accent-color:var(--teal); cursor:pointer; }
     }
   }
   function drawSpatial(canvas,mode){
+    if(!canvas.getClientRects().length)return;
     const {ctx,w,h}=canvasContext(canvas),rect={w,h};
     const P=v=>spatial(v,rect),origin=P([0,0,0,0]);
     const theta=state.theta,frame=basis(mode,theta),sl=sliceAt(frame,state.time);
@@ -288,6 +343,7 @@ input[type=checkbox] { accent-color:var(--teal); cursor:pointer; }
     if(sl.kind==='empty')label(ctx,'selected t does not intersect the unit disk',13,21,'#c48b2d','600 11px system-ui');
   }
   function drawSlice(canvas){
+    if(!canvas.getClientRects().length)return;
     const {ctx,w,h}=canvasContext(canvas),rect={w,h};
     ctx.fillStyle='#fcfdff';ctx.fillRect(0,0,w,h);
     const P=v=>spatial(v,rect),origin=P([0,0,0,0]);
@@ -307,6 +363,7 @@ input[type=checkbox] { accent-color:var(--teal); cursor:pointer; }
           14,h-13,'#67778a','600 11px system-ui');
   }
   function drawSpectrum(canvas){
+    if(!canvas.getClientRects().length)return;
     const {ctx,w,h}=canvasContext(canvas);ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
     const t=deg(state.theta),d=2*Math.sin(t/2),c=2*Math.sin(t),maxv=2.12;
     const left=45,right=w-16,top=12,bottom=h-35;
@@ -328,42 +385,45 @@ input[type=checkbox] { accent-color:var(--teal); cursor:pointer; }
     label(ctx,'Direct R',left+5,17,C.blue,'700 11px system-ui');
     label(ctx,'Coupled W',left+91,17,C.teal,'700 11px system-ui');
   }
-  function mapTime(q,index,w,h){
-    const s=Math.min(w*.38,h*.36);
-    return [w/2+q[index]*s,h*.54-q[3]*s];
+  const projectionAxes={xy:[0,1],xz:[0,2],yz:[1,2],xt:[0,3],yt:[1,3],zt:[2,3]};
+  const coordinateNames=['x','y','z','t'];
+  function mapCoordinate(q,horizontal,vertical,w,h){
+    const scale=Math.min(w*.38,h*.365);
+    return [w*.5+q[horizontal]*scale,h*.52-q[vertical]*scale];
   }
-  // A single transporter is selected for ALL three coordinate-time panels.
-  // The target disk is geometrically identical for R and W, but its material
-  // coordinate grid and the two tracked basis vectors are different.
-  function drawTimeProjection(canvas,index){
+  // The same target plane is visible in either mode, but the material grid
+  // and transformed source basis vectors disclose the different point maps.
+  function drawCoordinateProjection(canvas,axes){
+    if(!canvas.getClientRects().length)return;
     const {ctx,w,h}=canvasContext(canvas);
     ctx.fillStyle='#fcfdff';ctx.fillRect(0,0,w,h);
-    const P=q=>mapTime(q,index,w,h),mode=state.projectionMode;
-    const frame=basis(mode,state.theta),sl=sliceAt(frame,state.time);
-    const col=mode==='direct'?C.blue:C.teal,ox=P([0,0,0,0]);
-    line(ctx,[[17,ox[1]],[w-15,ox[1]]],C.axes,1);
-    line(ctx,[[ox[0],8],[ox[0],h-15]],C.axes,1);
+    const [horizontal,vertical]=axes,P=q=>mapCoordinate(q,horizontal,vertical,w,h);
+    const mode=state.projectionMode,frame=basis(mode,state.theta),sl=sliceAt(frame,state.time);
+    const col=mode==='direct'?C.blue:C.teal,origin=P([0,0,0,0]);
+    line(ctx,[[15,origin[1]],[w-13,origin[1]]],C.axes,1);
+    line(ctx,[[origin[0],9],[origin[0],h-16]],C.axes,1);
     shape(ctx,ring(frame).map(P),col,.11,col,1.7);
-    gridOnDisk(ctx,frame,P,col,.24);
-    // Display only the selected map's two original source basis vectors.
-    // A projected vector can be zero even when the original 4D vector is not.
-    for(const [ii,color,tag] of [[0,C.orange,'e_x'],[1,C.purple,'e_y']]){
-      const end=P(frame[ii]),dx=end[0]-ox[0],dy=end[1]-ox[1];
-      if(Math.hypot(dx,dy)>3.0){
-        arrow(ctx,ox,end,color,tag);
-      }else{
-        ctx.beginPath();ctx.arc(ox[0],ox[1],4.1,0,Math.PI*2);
-        ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.stroke();
-      }
+    gridOnDisk(ctx,frame,P,col,.27);
+    // A true t-slice is drawn in gold even on the three spatial projections.
+    // Its outline is identical under R and W because their image set agrees.
+    if(vertical===3){
+      const tpoint=P([0,0,0,state.time]);
+      line(ctx,[[13,tpoint[1]],[w-13,tpoint[1]]],C.gold,1.4,[4,4],.76);
     }
-    const timePoint=P([0,0,0,state.time]);
-    line(ctx,[[15,timePoint[1]],[w-14,timePoint[1]]],C.gold,1.4,[4,4],.8);
     if(sl.kind==='line')line(ctx,sl.points.map(P),C.gold,3.3);
     else if(sl.kind==='point'){
-      const [x,y]=P(sl.points[0]);ctx.fillStyle=C.gold;ctx.beginPath();ctx.arc(x,y,3.5,0,7);ctx.fill();
-    } else if(sl.kind==='disk')shape(ctx,sl.points.map(P),C.gold,.1,C.gold,1.4);
-    label(ctx,['x','y','z'][index],w-22,ox[1]-7,C.muted);
-    label(ctx,'t',ox[0]+8,14,C.muted);
+      const [x,y]=P(sl.points[0]);ctx.fillStyle=C.gold;ctx.beginPath();ctx.arc(x,y,3.6,0,Math.PI*2);ctx.fill();
+    } else if(sl.kind==='disk') shape(ctx,sl.points.map(P),C.gold,.09,C.gold,1.3);
+    // In degenerate projections an arrow may project to zero, even though the
+    // four-dimensional source vector always retains its unit length.
+    for(const [i,color,tag] of [[0,C.orange,'e_x'],[1,C.purple,'e_y']]){
+      const end=P(frame[i]);
+      if(Math.hypot(end[0]-origin[0],end[1]-origin[1])>3.0)arrow(ctx,origin,end,color,tag);
+      else{ctx.beginPath();ctx.arc(origin[0],origin[1],4.2,0,Math.PI*2);
+           ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.stroke();}
+    }
+    label(ctx,coordinateNames[horizontal],w-22,origin[1]-7,C.muted);
+    label(ctx,coordinateNames[vertical],origin[0]+8,14,C.muted);
     label(ctx,mode==='direct'?'Showing R only':'Showing W only',9,h-10,col,'700 10px system-ui');
   }
   let renderQueued=false;
@@ -383,7 +443,7 @@ input[type=checkbox] { accent-color:var(--teal); cursor:pointer; }
     renderQueued=false;updateLabels();
     drawSpatial(cvs.direct3d,'direct');drawSpatial(cvs.coupled3d,'coupled');
     drawSlice(cvs.slice3d);drawSpectrum(cvs.spectrum);
-    drawTimeProjection(cvs.xt,0);drawTimeProjection(cvs.yt,1);drawTimeProjection(cvs.zt,2);
+    for(const [name,axes] of Object.entries(projectionAxes))drawCoordinateProjection(cvs[name],axes);
     state.renderCount++;
   }
   function schedule(){if(!renderQueued){renderQueued=true;requestAnimationFrame(render);}}
@@ -404,6 +464,40 @@ input[type=checkbox] { accent-color:var(--teal); cursor:pointer; }
       tag.classList.toggle('teal',mode==='coupled');
     }
     schedule();
+  }
+  // Visibility and collapse controls are independent: a hidden panel retains
+  // its expanded/collapsed choice until explicitly changed.
+  const projectionCards=Object.fromEntries([...document.querySelectorAll('.projection-card')]
+    .map(card=>[card.dataset.panel,card]));
+  const panelInputs=[...document.querySelectorAll('[data-panel-toggle]')];
+  function setPanelVisible(name,visible){
+    const card=projectionCards[name];
+    if(!card)throw Error('Unknown coordinate projection: '+name);
+    card.hidden=!visible;
+    const input=panelInputs.find(input=>input.dataset.panelToggle===name);
+    if(input)input.checked=visible;
+    schedule();
+  }
+  for(const input of panelInputs){
+    input.addEventListener('change',()=>setPanelVisible(input.dataset.panelToggle,input.checked));
+  }
+  document.getElementById('showAllViews').addEventListener('click',()=>{
+    for(const name of Object.keys(projectionCards)){
+      setPanelVisible(name,true);projectionCards[name].open=true;
+    }
+    schedule();
+  });
+  document.getElementById('collapseAllViews').addEventListener('click',()=>{
+    for(const card of Object.values(projectionCards))card.open=false;
+    schedule();
+  });
+  document.getElementById('expandAllViews').addEventListener('click',()=>{
+    for(const card of Object.values(projectionCards))card.open=true;
+    schedule();
+  });
+  // A summary toggled by mouse or keyboard triggers a redraw after expansion.
+  for(const card of document.querySelectorAll('details.card')){
+    card.addEventListener('toggle',schedule);
   }
   ids.projectionDirect.addEventListener('click',()=>setProjectionMode('direct'));
   ids.projectionCoupled.addEventListener('click',()=>setProjectionMode('coupled'));
@@ -438,6 +532,8 @@ input[type=checkbox] { accent-color:var(--teal); cursor:pointer; }
     if(state.playing)togglePlay();
     Object.assign(state,{theta:45,time:0,cameraYaw:20,cameraElev:-35,zoom:1,decomp:false});
     setProjectionMode('direct');
+    for(const name of Object.keys(projectionCards)){setPanelVisible(name,true);projectionCards[name].open=true;}
+    for(const card of document.querySelectorAll('.panels2 > details, .bottom-grid > details'))card.open=true;
     ids.angle.value='45';ids.time.value='0';ids.decomp.checked=false;schedule();
   });
   for(const canvas of [cvs.direct3d,cvs.coupled3d,cvs.slice3d]){
@@ -456,33 +552,54 @@ input[type=checkbox] { accent-color:var(--teal); cursor:pointer; }
     },{passive:false});
   }
   function savePng(){
-    // Create a coherent print-sized page independent of browser CSS scale.
-    const out=document.createElement('canvas');out.width=2400;out.height=1640;
-    const c=out.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,out.width,out.height);
-    c.fillStyle=C.ink;c.font='bold 55px system-ui';c.fillText('Two transports of the same two-plane',72,95);
-    c.font='25px system-ui';c.fillStyle=C.muted;
-    c.fillText('Principal angles: '+state.theta.toFixed(1)+' degrees each. '
-      +'Both maps have exactly the same image subspace.',72,145);
-    const boxes=[
-      [cvs.direct3d,72,235,1100,505,'(a) Direct rotation R'],
-      [cvs.coupled3d,1230,235,1100,505,'(b) Coupled rotation W'],
-      [cvs.slice3d,72,830,720,350,'(c) Actual 3D time slice'],
-      [cvs.spectrum,830,830,1495,350,'(d) Displacement singular values'],
-      [cvs.xt,72,1270,710,260,'x-t'],
-      [cvs.yt,844,1270,710,260,'y-t'],
-      [cvs.zt,1616,1270,710,260,'z-t'],
+    // Export a compact dashboard containing exactly the currently visible,
+    // expanded cards. Hidden/collapsed views are omitted without placeholders.
+    const active=(canvas)=>{
+      const card=canvas.closest('details.card');
+      return Boolean(card && card.open && !card.hidden && canvas.getClientRects().length);
+    };
+    const groups=[
+      {name:'Four-dimensional transports',columns:2,height:480,items:[
+        [cvs.direct3d,'(a) Direct rotation R'],[cvs.coupled3d,'(b) Coupled rotation W']]},
+      {name:'Slices and displacement spectrum',columns:2,height:330,items:[
+        [cvs.slice3d,'Actual 3D time slice'],[cvs.spectrum,'Four displacement singular values']]},
+      {name:'Spatial coordinate projections',columns:3,height:290,items:[
+        [cvs.xy,'X-Y'],[cvs.xz,'X-Z'],[cvs.yz,'Y-Z']]},
+      {name:'Coordinate-time projections',columns:3,height:290,items:[
+        [cvs.xt,'X-T'],[cvs.yt,'Y-T'],[cvs.zt,'Z-T']]},
     ];
-    for(const [can,x,y,w,h,title] of boxes){
-      c.fillStyle=C.ink;c.font='bold 26px system-ui';c.fillText(title,x,y-21);
-      c.strokeStyle='#dee6ed';c.lineWidth=2;c.strokeRect(x,y,w,h);
-      c.drawImage(can,x+2,y+2,w-4,h-4);
+    const selected=groups.map(group=>({...group,items:group.items.filter(item=>active(item[0]))}))
+      .filter(group=>group.items.length);
+    const width=2400,margin=75,gap=44;
+    const rowHeight=group=>Math.ceil(group.items.length/group.columns)*group.height;
+    const height=240+selected.reduce((acc,g)=>acc+rowHeight(g)+88,0)+80;
+    const out=document.createElement('canvas');out.width=width;out.height=height;
+    const c=out.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,width,height);
+    c.fillStyle=C.ink;c.font='bold 53px system-ui';
+    c.fillText('Two transports of the same two-plane',margin,90);
+    c.font='24px system-ui';c.fillStyle=C.muted;
+    c.fillText('Principal angles: '+state.theta.toFixed(1)+' degrees each. '
+      +'Coordinate projections: '+(state.projectionMode==='direct'?'Direct R':'Coupled W')+'.',margin,142);
+    let cursor=229;
+    for(const group of selected){
+      c.fillStyle=C.ink;c.font='bold 29px system-ui';c.fillText(group.name,margin,cursor-25);
+      const colW=(width-2*margin-gap*(group.columns-1))/group.columns;
+      group.items.forEach(([can,title],i)=>{
+        const col=i%group.columns,row=Math.floor(i/group.columns);
+        const x=margin+col*(colW+gap),y=cursor+row*group.height;
+        c.fillStyle=C.ink;c.font='bold 24px system-ui';c.fillText(title,x,y+27);
+        const frameY=y+41,frameH=group.height-48;
+        c.strokeStyle='#dfe6ee';c.lineWidth=2;c.strokeRect(x,frameY,colW,frameH);
+        c.drawImage(can,x+2,frameY+2,colW-4,frameH-4);
+      });
+      cursor+=rowHeight(group)+88;
     }
-    c.fillStyle=C.muted;c.font='22px system-ui';
-    c.fillText('Gold marks selected time t = '+state.time.toFixed(2)+'. '
-      +'Material axes: orange and purple. Coordinates x,y,z,t are Euclidean.',72,1602);
+    c.font='22px system-ui';c.fillStyle=C.muted;
+    c.fillText('Gold: fixed-t intersection, t = '+state.time.toFixed(2)
+      +'. Orange and purple: images of source basis vectors. Euclidean x,y,z,t.',margin,height-39);
     out.toBlob(blob=>{
       if(!blob)return;const url=URL.createObjectURL(blob),link=document.createElement('a');
-      link.href=url;link.download='dkps_direct_vs_coupled_theta_'+state.theta.toFixed(1)+'.png';
+      link.href=url;link.download='dkps_rotation_views_theta_'+state.theta.toFixed(1)+'.png';
       document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
     },'image/png');
   }
@@ -500,6 +617,11 @@ input[type=checkbox] { accent-color:var(--teal); cursor:pointer; }
     const mode=params.get('projection');
     if(mode==='direct'||mode==='coupled')setProjectionMode(mode);
   }
+  // E.g. ?views=xy,xz,yt for a reproducible compact study layout.
+  if(params.has('views')){
+    const wanted=new Set((params.get('views')||'').toLowerCase().split(','));
+    for(const name of Object.keys(projectionCards))setPanelVisible(name,wanted.has(name));
+  }
   function verifyModel(){
     for(const th of [0,15,30,45,75,90]){
       const dr=basis('direct',th),wr=basis('coupled',th),angle=deg(th);
@@ -513,11 +635,11 @@ input[type=checkbox] { accent-color:var(--teal); cursor:pointer; }
     }
     return true;
   }
-  window.__rotationDebug={state,cvs,basis,transform,sliceAt,verifyModel,render,schedule,setProjectionMode};
+  window.__rotationDebug={state,cvs,basis,transform,sliceAt,verifyModel,render,schedule,setProjectionMode,setPanelVisible,projectionCards};
   verifyModel();
   new ResizeObserver(schedule).observe(document.querySelector('.panels2'));
   new ResizeObserver(schedule).observe(document.querySelector('.bottom-grid'));
-  new ResizeObserver(schedule).observe(document.querySelector('.time-grid'));
+  for(const grid of document.querySelectorAll('.projection-grid'))new ResizeObserver(schedule).observe(grid);
   schedule();
 })();
 </script>

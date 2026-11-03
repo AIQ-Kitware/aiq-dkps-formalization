@@ -19,17 +19,28 @@ The script opens `coupled_rotation_explorer.html` in the default browser. The
 HTML file can also be opened directly. Rotate the principal-angle slider,
 change the `t` slice, drag either 3D panel to orbit both views, and use the
 check box to show the four-dimensional invariant-plane decompositions.
-For the x-t, y-t, and z-t projections, choose **Direct R** or **Coupled W**
-using the two-button selector above the plots (or press `R` or `W` on your
-keyboard). Each time-projection plot shows only the selected transporter's
-material-coordinate grid and tracked source-vector arrows. The 3D comparison
-remains side by side. The target subspace and actual time slice are unchanged
-when you switch modes; only the pointwise map changes. The selected mode is
-also respected by the Save PNG dashboard export. For a reproducible browser
-view, append `?projection=direct` or `?projection=coupled` to the HTML URL. The
-Play button smoothly varies the angle. Save PNG captures a coordinated
-high-resolution dashboard. Python's standard library is sufficient for this
-interactive mode.
+All six coordinate projections are synchronized: **X-Y**, **X-Z**, and **Y-Z**
+show spatial-coordinate views with the fourth coordinate hidden, while **X-T**,
+**Y-T**, and **Z-T** show the corresponding coordinate-time views. Choose
+**Direct R** or **Coupled W** using the two-button selector above the plots
+(or press `R` or `W` on your keyboard). Every 2D view shows only the selected
+transporter's material-coordinate grid and tracked source-vector arrows.
+The target subspace and its actual fixed-time intersection are unchanged when
+you switch modes; only the pointwise map changes.
+
+Each plotted card, including the two 3D views, time slice, and singular-value
+plot, can be **collapsed** by clicking its header (the header stays visible).
+The six **Visible panels** checkboxes additionally hide or restore whole 2D
+cards. **Show all** restores and expands all six; **Collapse all** and
+**Expand all** change their open state without changing checkbox selections.
+Hidden or collapsed panels are omitted from **Save PNG**, which arranges the
+remaining active panels in a compact high-resolution dashboard.
+
+For a reproducible browser view, append `?projection=direct` or
+`?projection=coupled` and optionally `?views=xy,xz,yt` to the HTML URL.
+The Play button smoothly varies the principal angle; you can move the time
+slice and orbit the 3D views at any point. Python's standard library is
+sufficient for interactive mode.
 
 For an SVG or PDF figure (requires NumPy and Matplotlib):
 
@@ -103,7 +114,10 @@ how the two maps move *points*. The gold geometry is the true intersection
 with a fixed `t` hyperplane; it can be a disk, chord, point, or empty. By
 contrast, the large 3D views project the entire disk across all times into
 ordinary spatial coordinates. The `x-t`, `y-t`, and `z-t` views show the
-coordinate-time projections of all events.
+coordinate-time projections of all events; the `x-y`, `x-z`, and `y-z` views
+show spatial coordinate projections across all values of t. In all six panels,
+the gold geometry represents the actual selected-time intersection projected
+onto that coordinate pair.
 
 ## Maintenance
 
