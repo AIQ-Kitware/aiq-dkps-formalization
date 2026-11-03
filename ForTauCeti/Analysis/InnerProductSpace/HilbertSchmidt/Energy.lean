@@ -32,7 +32,7 @@ variable {𝕜 E F ι : Type*} [RCLike 𝕜]
 /-- The energy is the supremum of its finite partial sums. -/
 theorem hilbertSchmidtEnergy_eq_iSup_sum (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) :
     T.hilbertSchmidtEnergy b = ⨆ s : Finset ι, ∑ i ∈ s, ‖T (b i)‖ₑ ^ 2 := by
-  rw [hilbertSchmidtEnergy_def, ENNReal.tsum_eq_iSup_sum]
+  rw [hilbertSchmidtEnergy_def, tsum_eq_iSup_sum]
 
 /-- Energy is unchanged by negation. -/
 @[simp] theorem hilbertSchmidtEnergy_neg (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E) :

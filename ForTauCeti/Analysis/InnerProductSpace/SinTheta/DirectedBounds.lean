@@ -12,6 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Sylvester.Pairwise
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import ForTauCeti.Analysis.InnerProductSpace.RectangularSingularValues
@@ -225,15 +226,15 @@ theorem sinTheta_residual_le_of_orderedGap
 
 /-- General disjoint-spectrum residual form.  The `π/2` loss is the
 Bhatia--Davis--McIntosh extension, not the sharp interval/exterior theorem.
-The restriction and projection proof below is complete; the only open input is
-`kyFan_sylvester_le_of_spectralDistance` in the Sylvester layer.
+The restriction and projection reduction consumes the accepted native pairwise
+Sylvester estimate (#24932), independently implemented upstream.
 -/
 theorem sinTheta_residual_le_of_spectralDistance
     (N : UnitarilyInvariantSeminorm 𝕜 F E)
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ)
+    {δ : ℝ} (_hδ : 0 < δ)
     (hgap : PointSpectraSeparated M ⊤ A Uᗮ δ) :
     δ * N (sinThetaEmbedding U X) ≤ (Real.pi / 2) * N (residual A X M) := by
   refine sinTheta_residual_le_of_sylvester (c := Real.pi / 2) N hA hU X
@@ -248,9 +249,16 @@ theorem sinTheta_residual_le_of_spectralDistance
       exact hlam
     have hsep := hgap μ lam hμ hlam'
     simpa [abs_sub_comm] using hsep
-  exact uiNorm_sylvester_le_of_spectralDistance
-    (N.codomainIsometryTransport Uᗮ.subtypeₗᵢ)
-    (hA.restrict_invariant hUperp) hM hδ hgap' hEq
+  have h := UnitarilyInvariantSeminorm.mul_map_le_pi_div_two_mul_map_sylvester_apply
+      (N.codomainIsometryTransport Uᗮ.subtypeₗᵢ)
+      (A := (A.restrict
+        ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hUperp)).toContinuousLinearMap)
+      (B := M.toContinuousLinearMap) (hA.restrict_invariant hUperp) hM
+      (Module.End.pointSpectraSeparated_iff.mpr fun lam hlam μ hμ => hgap' lam μ hlam hμ)
+      Y.toContinuousLinearMap
+  simp only [ContinuousLinearMap.sylvester_apply, ContinuousLinearMap.toLinearMap_sub,
+    ContinuousLinearMap.toLinearMap_comp, LinearMap.coe_toContinuousLinearMap] at h
+  rwa [hEq] at h
 
 /-- **One-sided operator-norm Davis--Kahan `sin Θ` theorem (spectral-hypothesis
 form).**  If `A, B` are symmetric, `U` reduces `A` with `U`-carried spectrum

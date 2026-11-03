@@ -112,7 +112,7 @@ theorem schatten_two_sq_le_mul_smoothedPowerCost (p tau : ℝ)
     (Real.rpow_pos_of_pos (by nlinarith [sq_pos_of_pos htau, sq_nonneg ‖T‖]) _)
   rw [TauCeti.OperatorIdealFamily.gauge_schatten_rpow, smoothedPowerCost,
     ← ENNReal.tsum_mul_left]
-  apply ENNReal.tsum_le_tsum
+  apply tsum_le_tsum
   intro n
   have hs : 0 ≤ (T.singularValue n : ℝ) := NNReal.coe_nonneg _
   have hsM : (T.singularValue n : ℝ) ≤ ‖T‖ := by exact_mod_cast T.singularValue_le_nnnorm n
@@ -135,7 +135,7 @@ theorem smoothedPowerCost_le_mul_schatten_two_sq (p tau : ℝ)
       (TauCeti.OperatorIdealFamily.schatten 𝕜 2 (by norm_num)).gauge T ^ (2 : ℝ) := by
   rw [TauCeti.OperatorIdealFamily.gauge_schatten_rpow, smoothedPowerCost,
     ← ENNReal.tsum_mul_left]
-  apply ENNReal.tsum_le_tsum
+  apply tsum_le_tsum
   intro n
   have hs : 0 ≤ (T.singularValue n : ℝ) := NNReal.coe_nonneg _
   have hsM : (T.singularValue n : ℝ) ≤ ‖T‖ := by exact_mod_cast T.singularValue_le_nnnorm n

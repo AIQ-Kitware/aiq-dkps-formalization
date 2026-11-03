@@ -239,9 +239,11 @@ theorem lowerFramePolarData_nonempty
     exact (ContinuousLinearMap.nonneg_iff_isPositive).2
       (ContinuousLinearMap.isPositive_adjoint_comp_self X)
   have hgram_unit : IsUnit gram := by
-    refine TauCeti.ContinuousLinearMap.isUnit_of_coercive
-      (sq_pos_of_pos hε) ?_
-    simpa [gram] using gram_coercive hX hε.le
+    have hcoer : ∀ z, ε ^ 2 * ‖z‖ ^ 2 ≤ RCLike.re ⟪gram z, z⟫_ℂ := by
+      simpa [gram] using gram_coercive hX hε.le
+    exact _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := ⟨ε ^ 2, sq_nonneg _⟩) (sq_pos_of_pos hε)
+      (fun z => (mul_comm _ _).le.trans ((hcoer z).trans (RCLike.re_le_norm _)))
   let sqrt : F →L[ℂ] F := gram ^ (1 / 2 : ℝ)
   let invSqrt : F →L[ℂ] F := gram ^ (-1 / 2 : ℝ)
   let gramInv : F →L[ℂ] F := Ring.inverse gram

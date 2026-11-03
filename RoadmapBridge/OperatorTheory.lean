@@ -10,7 +10,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge
 public import ForTauCeti.Analysis.Matrix.SpectralProjection
-public import TauCeti.Analysis.Matrix.Eigenvalues
+public import TauCeti.Analysis.Matrix.Eigenvalues.Basic
 public import TauCeti.Analysis.OperatorIdeal.Family.Schatten
 public import TauCeti.Analysis.OperatorIdeal.Family.SymmetricGauge
 

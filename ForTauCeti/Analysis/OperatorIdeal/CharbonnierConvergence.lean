@@ -93,7 +93,7 @@ theorem tendsto_charbonnierCost_of_singularValue_tail_le
   have hsplit (S : E →L[𝕜] F) :
       (∑ k ∈ Finset.range r, ENNReal.ofReal (f S k)) +
         (∑' k, ENNReal.ofReal (f S (k + r))) = S.charbonnierCost tau :=
-    (ENNReal.summable (f := fun k => ENNReal.ofReal (f S (k + r)))).sum_add_tsum_nat_add'
+    (CompleteLattice.summable (f := fun k => ENNReal.ofReal (f S (k + r)))).sum_add_tsum_nat_add'
   change Tendsto (fun n => (∑ k ∈ Finset.range r, ENNReal.ofReal (f (T n) k)) +
     (∑' k, ENNReal.ofReal (f (T n) (k + r)))) l
     (𝓝 ((∑ k ∈ Finset.range r, ENNReal.ofReal (f A k)) +

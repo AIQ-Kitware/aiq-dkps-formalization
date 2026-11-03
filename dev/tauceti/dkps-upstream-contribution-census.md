@@ -4021,3 +4021,78 @@ is between target-Gram eigenvalues, not their squares. Focused compilation of
 both changed modules (5839 jobs) and full header/text style pass. This records
 a pushed repair with unchanged endpoint scope, not upstream acceptance.
 The earlier selected campaign table retains its original observation time.
+
+### November 3: canonical consumption after the next accepted-main update
+
+DKPS now consumes accepted TauCeti `ae590cc45dab074fb3ce5b25574d91e8d7d4ed87`,
+with its exact Mathlib `1b1ccf4b088b32fa3f23f2de1127433254a81e1e` and
+Lean `v4.36.0-rc2` inputs. This is dependency consumption, not a back-copy of
+accepted implementations into the donor layer. The November wave submission
+records above remain submission history; this update does not count those open
+PR branches as accepted APIs.
+
+| Original local API / source at `b9563e518` | Canonical replacement | Disposition and lineage |
+| --- | --- | --- |
+| `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean:TauCeti.ContinuousLinearMap.isUnit_of_coercive` | Mathlib `ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map` in `Analysis/InnerProductSpace/Positive.lean` | Delete the local closed-range proof and forwarding declaration. Every maintained caller uses the native criterion, viewing positive real c in NNReal and using `RCLike.re_le_norm`. Arbitrary RCLike, complete Hilbert space and carrier-universe scope remain. The established paper name `DavisKahan1970.bounded_coercive_isUnit` remains a source-facing theorem with that reduction. Mathlib's criterion was already present at the previous pin; no DKPS proof ancestry is claimed. |
+| `ForTauCeti/Analysis/InnerProductSpace/Sylvester/SpectralDistance.lean:TauCeti.{kyFan_sylvester_le_of_spectralDistance,uiNorm_sylvester_le_of_spectralDistance}` | `ContinuousLinearMap.mul_kyFanSum_le_pi_div_two_mul_kyFanSum_sylvester_apply` and `TauCeti.UnitarilyInvariantSeminorm.mul_map_le_pi_div_two_mul_map_sylvester_apply`, `UnitarilyInvariantSeminorm/Sylvester/Pairwise.lean` | Delete both local foundations; use native rectangular RCLike results directly in the finite-orbit and residual reductions. Native gap predicates and continuous carriers are bridged explicitly. Independent #24932, integration `e87be712e119978b7802ab9f8820d7e727d8264c`; roadmap implemented by others, not acceptance of our closed #19242. |
+| `ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean:TauCeti.sinTheta_perturbation_le_of_spectralDistance` | `TauCeti.UnitarilyInvariantSeminorm.mul_map_starProjection_comp_starProjection_le_pi_div_two_mul_map_sub`, `UnitarilyInvariantSeminorm/SinTheta/Pairwise.lean` | Delete the facade and its domain-transport proof; the YWS Hermitian-dilation consumer applies the native result directly. Same independent #24932 integration. |
+| `DavisKahan/FiniteDimensional/DoubleAngle/SinTheta.lean:TauCeti.UnitarilyInvariantSeminorm.sin_two_theta_starProjection_le` and `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_perturbation_le` | `TauCeti.UnitarilyInvariantSeminorm.mul_map_sinTwoAngleOperator_le_two_mul_map_sub`, `UnitarilyInvariantSeminorm/SinTheta/DoubleAngle.lean` | Preserve the paper-facing formulas, positive-gap assumptions and existing completeness argument; replace their proofs with native applications and explicit scaling. Independent #25082, integration `1f807372cedc313075098a15bcf4feb062506de7`; roadmap implemented by others. |
+
+Original coercive donor attribution is Jon Crall / Claude Fable 5, Kitware
+2026, Apache-2.0; its pre-ForTauCeti anchor is `00ca5e1:ForMathlib` as recorded
+in the maintained header. The Sylvester and sine donors credit Jon Crall /
+GPT 5.6 High, Kitware 2026, Apache-2.0, with the earlier DavisKahan source
+paths retained in the extraction manifest. The double-angle development credits
+Claude Fable 5 and retains its source-facing home and history. Native pairwise
+and double-angle files credit The Tau Ceti contributors, Apache-2.0. Mathlib
+`Positive.lean` credits Anatole Dedecker, copyright 2022, Apache-2.0. Matching
+roadmap obligations do not turn independent proofs into adaptations.
+
+The arbitrary-real coercive lower norm bound, inverse-norm and inverse-algebra
+extras remain. The rectangular finite unitary-orbit certificates now consume the
+native Ky Fan estimate; their finite-certificate conclusions, the coefficient
+identity and sharp constant-one Frobenius bound remain. The coordinate
+reciprocal-multiplier APIs and their distinct certificate/counterexample scope
+are not declared superseded. The sharper mirror/reflection-defect double-angle
+bound remains. Unbounded/domain-aware and incomplete-space results retain their
+original scope. This is not a full-paper completion claim.
+
+Compatibility with the coherent pin also requires using Mathlib's
+`Integrable.exists_boundedContinuous_integral_sub_le` directly in the Borel
+pair approximation, after #22879 replaced the former TauCeti one-measure helper,
+and the generalized `tsum_le_tsum` spelling in place of deprecated
+`ENNReal.tsum_le_tsum`. Neither change adds a theorem or changes a conclusion.
+The obsolete ordinary-Sylvester comparator target is retired; the distinct
+finite-orbit certificate challenge remains.
+
+Additional pin compatibility: consume the generalized trace module at
+`TauCeti.Topology.Algebra.Module.Trace` (#23859, integration
+`a62058f202b1b575eca5f8e91d0518898d4247e3`) and the general eigenvector
+exponential law `ContinuousLinearMap.exp_apply_of_apply_eq_smul` (#25085,
+`38d17e4287b9a4d2fdc68af376fffbd66081adcd`). The projection exponential
+consumer now applies that law to the scaled projection directly. The remaining
+compatibility edits use the generalized extended-real sum APIs, the current
+strong-induction branch name, and remove a tactic that the new simplifier
+already discharges. These are API/linter repairs, not additional roadmap
+completion claims.
+The matrix Weyl-bound regression also follows the `Eigenvalues.Basic` module
+split from #24712 (`72b54088f1f9a0398346f4b3610b67a875f1f3e7`); its tested
+statement and zero-dimensional scope are unchanged.
+
+Validation of this consumption checkpoint (compiler warnings treated as errors):
+focused mathematics build, 7,690 jobs; focused pin-compatibility builds, 7,876
+and 18,728 jobs; full default build, 21,657 jobs; `Challenge`, 19,905 jobs.
+All final builds passed without warnings using `LEAN_NUM_THREADS=8` and CPU
+affinity `0-7`. Final VM logs are `/tmp/dkps-canonical-consume-focused12.log`,
+`/tmp/dkps-canonical-consume-compat-focused.log`,
+`/tmp/dkps-canonical-consume-compat-focused2.log`,
+`/tmp/dkps-canonical-consume-full3.log`, and
+`/tmp/dkps-canonical-consume-challenge1.log`. Earlier attempts diagnosed the
+compatibility failures; they are not green evidence. The affected finite-orbit
+comparator matches the complete type and raw universe signature with
+`--no-build` (`/tmp/dkps-canonical-comparator.log`), and its dependency audit
+reports only `propext`, `Classical.choice`, and `Quot.sound`. No full external
+comparator run is claimed. The import-layer check reports zero violations.
+The static name-drift scan retains the prior 38 external-name/historical-map
+findings; it is not reported green. Source-result boundaries and completion
+certification are unchanged.

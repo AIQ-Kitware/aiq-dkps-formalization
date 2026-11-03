@@ -251,7 +251,9 @@ theorem projection_graphSubspace_formula
     rw [hinner, map_add, inner_self_eq_norm_sq, inner_self_eq_norm_sq]
     nlinarith [sq_nonneg ‖X z‖]
   have hNunit : IsUnit N :=
-    TauCeti.ContinuousLinearMap.isUnit_of_coercive one_pos hNcoer
+    _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := ⟨1, by positivity⟩) one_pos
+      (fun z => (mul_comm _ _).le.trans ((hNcoer z).trans (RCLike.re_le_norm _)))
   have hNR : N * R = 1 := Ring.mul_inverse_cancel N hNunit
   have hRN : R * N = 1 := Ring.inverse_mul_cancel N hNunit
   have hPN : P * N = N * P := by

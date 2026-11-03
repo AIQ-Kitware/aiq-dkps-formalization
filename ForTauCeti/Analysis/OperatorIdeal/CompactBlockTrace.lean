@@ -89,7 +89,7 @@ theorem tsum_singularValue_penalty_withLpProdMap_of_positive
   rw [tsum_singularValue_penalty_eq_tsum_eigenspace _ hSc hS f hf,
     tsum_singularValue_penalty_eq_tsum_eigenspace A hAc hA f hf,
     tsum_singularValue_penalty_eq_tsum_eigenspace B hBc hB f hf,
-    ← ENNReal.tsum_add]
+    ← tsum_add]
   apply tsum_congr
   intro mu
   by_cases hzero : mu = 0

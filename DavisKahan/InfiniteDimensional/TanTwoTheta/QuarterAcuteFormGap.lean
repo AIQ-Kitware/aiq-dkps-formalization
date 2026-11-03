@@ -278,7 +278,9 @@ theorem spectrum_re_lower_of_coercive
     rw [hzinner]
     linarith
   have hunit : IsUnit (T - z • ContinuousLinearMap.id ℂ E) :=
-    TauCeti.ContinuousLinearMap.isUnit_of_coercive hgap hshift
+    _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := ⟨α - z.re, by linarith⟩) hgap
+      (fun z => (mul_comm _ _).le.trans ((hshift z).trans (RCLike.re_le_norm _)))
   rw [spectrum.mem_iff] at hz
   apply hz
   rw [Algebra.algebraMap_eq_smul_one]
@@ -398,7 +400,9 @@ theorem isQuarterAcute_of_orderedFormGap
     rw [ContinuousLinearMap.reApplyInnerSelf_apply]
     exact (mul_nonneg hδ.le (sq_nonneg ‖x‖)).trans (hCcoer x)
   have hCunit : IsUnit C :=
-    TauCeti.ContinuousLinearMap.isUnit_of_coercive hδ hCcoer
+    _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := ⟨δ, by positivity⟩) hδ
+      (fun z => (mul_comm _ _).le.trans ((hCcoer z).trans (RCLike.re_le_norm _)))
   let R : E →L[ℂ] E := C ^ (1 / 2 : ℝ)
   let Rinv : E →L[ℂ] E := C ^ (-1 / 2 : ℝ)
   have hRinvR : Rinv ∘L R = ContinuousLinearMap.id ℂ E := by

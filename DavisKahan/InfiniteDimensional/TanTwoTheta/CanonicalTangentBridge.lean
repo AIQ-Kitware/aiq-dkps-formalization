@@ -359,10 +359,14 @@ private theorem directedTanTwoAngleOperatorC_eq_modulus_ambientGraphTangent
     dsimp [G]
     rw [← ContinuousLinearMap.comp_assoc, hPYstar]
   have hNunit : IsUnit N := by
-    refine TauCeti.ContinuousLinearMap.isUnit_of_coercive one_pos ?_
+    refine _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := 1) one_pos ?_
     intro x
+    apply le_trans ?_ (RCLike.re_le_norm _)
+    change ‖x‖ ^ 2 * 1 ≤ _
+    rw [mul_comm]
     -- Compute the form value first, then conclude numerically.  Doing it with a
-    -- `rw` chain does not work: `isUnit_of_coercive` states its hypothesis with
+    -- `rw` chain does not work: the real-part bound is stated with
     -- `RCLike.re`, `dsimp` collapses that to `Complex.re`, and after the collapse
     -- neither `map_add` (which wants a bundled additive map) nor
     -- `inner_self_eq_norm_sq` (which is stated for `RCLike.re`) can match.

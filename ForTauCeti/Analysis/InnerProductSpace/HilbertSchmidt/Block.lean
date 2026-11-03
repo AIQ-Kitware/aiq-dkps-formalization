@@ -164,7 +164,7 @@ theorem tsum_enorm_sq_blockFun {ι' : Type*} (b : HilbertBasis ι 𝕜 F)
     intro p
     rw [← b.hilbertSchmidtEnergy_columnOperator (blockFun b (P p.1) (Q p.2) f),
       columnOperator_blockFun]
-  rw [tsum_congr hterm, ENNReal.tsum_prod', ENNReal.tsum_comm,
+  rw [tsum_congr hterm, tsum_prod', tsum_comm,
     ← b.hilbertSchmidtEnergy_columnOperator f]
   simpa only [ContinuousLinearMap.comp_assoc] using
     ContinuousLinearMap.tsum_tsum_hilbertSchmidtEnergy_comp (b.columnOperator f) b b P Q hP hQ

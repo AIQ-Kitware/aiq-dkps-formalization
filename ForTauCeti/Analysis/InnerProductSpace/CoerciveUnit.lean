@@ -8,15 +8,27 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 public import Mathlib.Algebra.Group.Semiconj.Units
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
+public import Mathlib.Analysis.InnerProductSpace.Positive
 public import Mathlib.Analysis.Normed.Operator.Banach
 
-/-! # Coercive bounded operators are units
+/-! # Complements to coercive bounded invertibility
 
 For a bounded operator `N` on a Hilbert space over `𝕜 = ℝ, ℂ` whose quadratic
 form is uniformly coercive, `c * ‖z‖ ^ 2 ≤ re ⟪N z, z⟫` with `c > 0`, the
 operator `N` is invertible in `E →L[𝕜] E`.  This is the operator-level
 Lax–Milgram lemma; the inverse is then available through `Ring.inverse` or
 through `IsUnit.unit`.
+
+## Canonical consumption (2026-11-03)
+
+Invertibility now uses Mathlib's
+`ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map` from `Positive` directly,
+with the positive real constant viewed in `ℝ≥0` and `RCLike.re_le_norm`.
+The local `isUnit_of_coercive` facade and its closed-range proof are retired.
+The arbitrary-real coercive norm bound, positive-operator inverse norm, and
+inverse algebra below remain donor mathematics. The original development and
+its authorship are recorded in the provenance below; using Mathlib's criterion
+does not assert that its proof descended from this repository.
 
 ## Staging note
 
@@ -74,55 +86,15 @@ theorem norm_smul_le_norm_apply_of_coercive {N : E →L[𝕜] E} {c : ℝ}
     have h3 : c * ‖z‖ * ‖z‖ ≤ ‖N z‖ * ‖z‖ := by nlinarith
     exact le_of_mul_le_mul_right h3 hzpos
 
-/-- Operator Lax–Milgram: a uniformly coercive bounded operator on a Hilbert
-space is a unit of the algebra of bounded operators. -/
-theorem isUnit_of_coercive {N : E →L[𝕜] E} {c : ℝ} (hc : 0 < c)
-    (hcoer : ∀ z, c * ‖z‖ ^ 2 ≤ RCLike.re ⟪N z, z⟫_𝕜) : IsUnit N := by
-  have hlow := norm_smul_le_norm_apply_of_coercive hcoer
-  rw [ContinuousLinearMap.isUnit_iff_bijective]
-  constructor
-  · intro a b hab
-    have h1 : N (a - b) = 0 := by rw [map_sub, hab, sub_self]
-    have h2 := hlow (a - b)
-    rw [h1, norm_zero] at h2
-    have h3 : ‖a - b‖ ≤ 0 := by nlinarith [norm_nonneg (a - b)]
-    rw [← sub_eq_zero]
-    exact norm_le_zero_iff.mp h3
-  · have hanti : AntilipschitzWith (Real.toNNReal c)⁻¹ N := by
-      refine ContinuousLinearMap.antilipschitz_of_bound N ?_
-      intro x
-      have hcoe : (((Real.toNNReal c)⁻¹ : NNReal) : ℝ) = c⁻¹ := by
-        rw [NNReal.coe_inv, Real.coe_toNNReal c hc.le]
-      rw [hcoe, le_inv_mul_iff₀ hc]
-      exact hlow x
-    have hclosed :
-        IsClosed ((LinearMap.range (N : E →ₗ[𝕜] E) : Submodule 𝕜 E) : Set E) := by
-      rw [LinearMap.coe_range]
-      exact hanti.isClosed_range N.uniformContinuous
-    have : CompleteSpace (LinearMap.range (N : E →ₗ[𝕜] E)) :=
-      hclosed.completeSpace_coe
-    have : (LinearMap.range (N : E →ₗ[𝕜] E)).HasOrthogonalProjection :=
-      Submodule.HasOrthogonalProjection.ofCompleteSpace _
-    have hrange : LinearMap.range (N : E →ₗ[𝕜] E) = ⊤ := by
-      rw [← Submodule.orthogonal_eq_bot_iff, Submodule.eq_bot_iff]
-      intro z hz
-      have h0 : ⟪N z, z⟫_𝕜 = 0 :=
-        (Submodule.mem_orthogonal _ z).mp hz (N z)
-          (LinearMap.mem_range.mpr ⟨z, rfl⟩)
-      have h1 := hcoer z
-      rw [h0, map_zero] at h1
-      have h2 : ‖z‖ ^ 2 ≤ 0 := by nlinarith
-      have h3 : ‖z‖ = 0 :=
-        (pow_eq_zero_iff two_ne_zero).mp (le_antisymm h2 (sq_nonneg _))
-      exact norm_eq_zero.mp h3
-    exact LinearMap.range_eq_top.mp hrange
-
 /-- `1 + W⋆ W` is invertible for every bounded Hilbert-space operator `W`:
 its quadratic form dominates `‖z‖ ^ 2`, so the operator Lax–Milgram lemma
 applies. -/
 theorem isUnit_one_add_star_mul_self (W : E →L[𝕜] E) :
     IsUnit (1 + star W * W) := by
-  refine isUnit_of_coercive one_pos fun z => ?_
+  refine _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+    (c := 1) one_pos fun z => ?_
+  apply le_trans ?_ (RCLike.re_le_norm _)
+  change ‖z‖ ^ 2 * 1 ≤ _
   have h : (1 + star W * W) z = z + star W (W z) := rfl
   rw [h]
   simp only [inner_add_left, map_add, inner_self_eq_norm_sq,
@@ -275,7 +247,9 @@ theorem norm_one_sub_inverse_one_add {B : E →L[𝕜] E} (hB : IsSelfAdjoint B)
     rw [hNz, inner_add_left, map_add, inner_self_eq_norm_sq]
     have := hBpos z
     linarith
-  have hNunit : IsUnit N := isUnit_of_coercive one_pos hNcoer
+  have hNunit : IsUnit N := _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := ⟨1, by positivity⟩) one_pos
+      (fun z => (mul_comm _ _).le.trans ((hNcoer z).trans (RCLike.re_le_norm _)))
   set R : E →L[𝕜] E := Ring.inverse N with hRdef
   have hNR : N * R = 1 := Ring.mul_inverse_cancel N hNunit
   have hRN : R * N = 1 := Ring.inverse_mul_cancel N hNunit

@@ -1513,3 +1513,40 @@ is already supplied in the current pin by independent #20845, integration
 This completes that exact roadmap item. It is not, by itself, evidence that a
 particular broader DKPS PVM transport theorem can be deleted. The item ledger
 and contribution census now record the completion independently of proof descent.
+
+### November 3: implementation of the recorded canonical-consumption candidates
+
+The three candidates immediately above are now implemented against accepted
+TauCeti `ae590cc45dab074fb3ce5b25574d91e8d7d4ed87`, Mathlib
+`1b1ccf4b088b32fa3f23f2de1127433254a81e1e`, Lean `v4.36.0-rc2`.
+The earlier candidate table and pin are the pre-migration comparison checkpoint.
+
+- Delete `TauCeti.ContinuousLinearMap.isUnit_of_coercive` and its closed-range
+  engine; migrate all callers to Mathlib's modulus-inner-product criterion.
+  Keep the established source-facing `bounded_coercive_isUnit` theorem in the
+  paper presentation, with its original coercivity hypothesis and native proof.
+- Delete the local rectangular Ky Fan / arbitrary-UI pairwise Sylvester
+  foundations and square pairwise sine-theta facade. The residual reduction,
+  finite-orbit proof, canonical-consumer example and YWS dilation theorem use
+  accepted #24932 APIs directly, with explicit carrier and gap conversions.
+- Keep the finite double-angle paper statements and prove their ordinary
+  perturbation bounds with independent #25082. Preserve the sharper mirror
+  defect, finite certificates, arbitrary-real coercive norm estimate and
+  broader unbounded/incomplete-space mathematics.
+- Adapt Borel continuous approximation to Mathlib's bounded-continuous API;
+  replace the deprecated ENNReal-specific sum comparison with `tsum_le_tsum`.
+  Retire the displaced ordinary-Sylvester challenge target and its comparator
+  registration; retain the finite-orbit certificate challenge.
+
+The contribution census and existing extraction records give the original
+names/source anchors, final native declarations, authors/license, integrations,
+and independent-proof versus roadmap-origin distinctions. No forwarding
+compatibility declaration is introduced in the donor layer.
+
+Final validation: focused mathematics (7,690 jobs), focused compatibility
+(7,876 and 18,728 jobs), full default (21,657 jobs) and Challenge (19,905 jobs)
+pass with warnings as failures, eight Lean threads and CPU affinity `0-7`.
+The affected finite-orbit comparator's full type/universe signature matches;
+the import policy reports zero violations. See the contribution census for the
+final log paths and the unchanged 38 known static name-drift findings. The full
+external comparator and paper semantic certification were not rerun or claimed.

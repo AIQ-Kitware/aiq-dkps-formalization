@@ -66,12 +66,12 @@ example {A B : E →L[K] E} (hB : B.IsSymmetric)
 
 example [FiniteDimensional K E] [FiniteDimensional K F]
     (N : TauCeti.UnitarilyInvariantSeminorm K E F)
-    {A : F →ₗ[K] F} {B : E →ₗ[K] E} {X C : E →ₗ[K] F}
-    (hA : A.IsSymmetric) (hB : B.IsSymmetric) {delta : Real} (hd : 0 < delta)
-    (hgap : TauCeti.PointSpectraSeparated A ⊤ B ⊤ delta)
-    (hEq : A.comp X - X.comp B = C) :
-    delta * N X ≤ (Real.pi / 2) * N C :=
-  TauCeti.uiNorm_sylvester_le_of_spectralDistance N hA hB hd hgap hEq
+    {A : F →L[K] F} {B : E →L[K] E} (X : E →L[K] F)
+    (hA : (A : F →ₗ[K] F).IsSymmetric) (hB : (B : E →ₗ[K] E).IsSymmetric)
+    {delta : Real} (hgap : Module.End.PointSpectraSeparated
+      (A : F →ₗ[K] F) ⊤ (B : E →ₗ[K] E) ⊤ delta) :
+    delta * N X ≤ (Real.pi / 2) * N (A.sylvester B X) :=
+  N.mul_map_le_pi_div_two_mul_map_sylvester_apply hA hB hgap X
 
 end Hilbert
 
@@ -98,6 +98,10 @@ run_cmd do
       `TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint,
       `TauCeti.RectangularUnitarilyInvariantSeminorm,
       `TauCeti.SquareUnitarilyInvariantSeminorm,
+      `TauCeti.ContinuousLinearMap.isUnit_of_coercive,
+      `TauCeti.kyFan_sylvester_le_of_spectralDistance,
+      `TauCeti.uiNorm_sylvester_le_of_spectralDistance,
+      `TauCeti.sinTheta_perturbation_le_of_spectralDistance,
       `TauCeti.uiNorm_sylvester_le_of_spectralDistance_real,
       `TauCeti.uiNorm_sylvester_le_of_spectralDistance_complex] do
     if env.contains name then

@@ -111,6 +111,6 @@ theorem nuclearENorm_adjoint_comp_self_eq_hilbertSchmidtEnergy_of_compact
     have hcard : Module.finrank 𝕜 (N μ) = Fintype.card (I μ) :=
       Module.finrank_eq_card_basis (e μ).toOrthonormalBasis.toBasis
     rw [hcard, tsum_fintype, Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
-  · exact (ENNReal.tsum_sigma (fun (μ : ℝ≥0) (_ : I μ) => (μ : ℝ≥0∞))).symm
+  · exact (tsum_sigma (fun (μ : ℝ≥0) (_ : I μ) => (μ : ℝ≥0∞))).symm
 
 end ContinuousLinearMap

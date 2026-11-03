@@ -61,7 +61,7 @@ theorem tsum_singularValue_penalty_eq_tsum_eigenspace
       (Module.finrank 𝕜 (Module.End.eigenspace A.toLinearMap ((mu : ℝ) : 𝕜)) : ℝ≥0∞) *
         f mu := by
   classical
-  rw [← ENNReal.tsum_fiberwise (fun n => f (A.singularValue n)) A.singularValue]
+  rw [← tsum_fiberwise (fun n => f (A.singularValue n)) A.singularValue]
   apply tsum_congr
   intro mu
   have hconst : (∑' n : A.singularValue ⁻¹' {mu}, f (A.singularValue n)) =

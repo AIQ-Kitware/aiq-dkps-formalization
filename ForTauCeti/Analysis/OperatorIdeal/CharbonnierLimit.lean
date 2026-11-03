@@ -56,7 +56,7 @@ theorem charbonnierCost_le_nuclear (tau : ℝ) (hτ : 0 ≤ tau) (T : E →L[�
     T.charbonnierCost tau ≤ (TauCeti.OperatorIdealFamily.schatten 𝕜 1 (by norm_num)).gauge T := by
   rw [← T.charbonnierCost_zero]
   unfold charbonnierCost
-  apply ENNReal.tsum_le_tsum
+  apply tsum_le_tsum
   intro n
   apply ENNReal.ofReal_le_ofReal
   rw [zero_pow (by decide : 2 ≠ 0), zero_add, Real.sqrt_sq (NNReal.coe_nonneg _), sub_zero]

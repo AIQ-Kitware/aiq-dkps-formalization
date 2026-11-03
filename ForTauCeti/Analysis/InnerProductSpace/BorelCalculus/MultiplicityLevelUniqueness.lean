@@ -196,7 +196,7 @@ theorem memLp_two_section {ν : ℕ → Measure X} {f : X × ℕ → ℂ} (hm : 
   rw [eLpNorm_two_lt_top_iff_lintegral (ν n) (fun z => f (z, n))
     (hm.comp (measurable_id.prodMk measurable_const)).aestronglyMeasurable]
   rw [lintegral_sliceSum ν (hm.enorm.pow_const 2)] at hf
-  exact (ENNReal.le_tsum n).trans_lt hf
+  exact (le_tsum _ n).trans_lt hf
 
 /-- Every `L²` element admits a genuinely measurable representative with finite quadratic
 Lebesgue integral.  The almost-everywhere representative of the class is only almost
@@ -654,7 +654,7 @@ theorem base_level_diff_eq_zero_of_operatorUnitaryEquiv {D E : MultiplicityDatum
   refine not_spectralGeneratedLE_mulLp_datumSymbol D hSm ?_ htrans
   have hset : (D.level k \ E.level k) ∩ D.level k = D.level k \ E.level k := by
     ext z
-    simp [and_comm]
+    simp
   rw [hset]
   exact hpos
 

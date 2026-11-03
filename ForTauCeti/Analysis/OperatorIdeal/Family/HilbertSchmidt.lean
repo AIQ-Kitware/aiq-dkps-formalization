@@ -55,7 +55,7 @@ theorem hilbertSchmidtEnergy_le_liminf {ι : Type*} (b : HilbertBasis ι 𝕜 E)
       = Filter.liminf (fun n => ∑ i ∈ s, ‖T n (b i)‖ₑ ^ 2) u := hfin.liminf_eq.symm
     _ ≤ Filter.liminf (fun n => (T n).hilbertSchmidtEnergy b) u :=
         Filter.liminf_le_liminf (Filter.Eventually.of_forall fun n => by
-          rw [hilbertSchmidtEnergy_def]; exact ENNReal.sum_le_tsum s)
+          rw [hilbertSchmidtEnergy_def]; exact sum_le_tsum s)
 
 
 omit [CompleteSpace F] in

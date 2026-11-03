@@ -19,7 +19,8 @@ source scope is an unbounded self-adjoint `A` with a bounded residual, so the
 bounded statement is a specialization rather than the theorem.
 
 The bounded proof reaches invertibility of `J (A + H - lam)` through
-`isUnit_of_coercive`, which requires `A` to be everywhere defined.  That is the
+`ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map`,
+which requires `A` to be everywhere defined.  That is the
 one step that does not survive, and
 `TauCeti.LinearPMap.mem_resolventSet_of_coercive_comp` replaces it: coercivity
 against a norm-preserving `J` gives a norm lower bound, and a norm lower bound at

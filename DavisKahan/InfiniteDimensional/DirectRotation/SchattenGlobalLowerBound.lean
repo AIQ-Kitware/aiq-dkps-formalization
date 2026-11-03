@@ -78,7 +78,7 @@ theorem sine_phaseMinimum_sum_le_schatten_transport
       (Real.arcsin ((S (U : E →L[ℂ] E)).singularValue j : ℝ)))) ≤
         Φ.gauge (1 - (U : E →L[ℂ] E)) ^ p.toReal by
     simpa only [← hsin, hmap] using this
-  rw [ENNReal.tsum_eq_iSup_sum]
+  rw [tsum_eq_iSup_sum]
   apply iSup_le
   intro s
   have hterm (j : ℕ) :=
@@ -89,7 +89,7 @@ theorem sine_phaseMinimum_sum_le_schatten_transport
   intro n
   calc
     _ ≤ ∑' j, ENNReal.ofReal (phaseMinimum p.toReal
-        (Real.arcsin ((S (V n : E →L[ℂ] E)).singularValue j : ℝ))) := ENNReal.sum_le_tsum s
+        (Real.arcsin ((S (V n : E →L[ℂ] E)).singularValue j : ℝ))) := sum_le_tsum s
     _ = ∑' j, ENNReal.ofReal (phaseMinimum p.toReal
         (Real.arcsin ((K.sinThetaMap (K.map (V n).toLinearMap)).singularValue j : ℝ))) := by
       rw [← hsin]

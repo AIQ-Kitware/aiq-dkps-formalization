@@ -155,7 +155,9 @@ theorem realSpectrum_add_offDiagonal_subset_exterior_of_form_gap
     exact hkey x
   have hunit : IsUnit (U.reflectionOperator ∘L
       ((A + H) - ((lam : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E)) :=
-    TauCeti.ContinuousLinearMap.isUnit_of_coercive hε hcoer
+    _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := ⟨ε, by positivity⟩) hε
+      (fun z => (mul_comm _ _).le.trans ((hcoer z).trans (RCLike.re_le_norm _)))
   have hJJ : U.reflectionOperator * U.reflectionOperator = 1 :=
     Submodule.reflectionOperator_involutive U
   have hJunit : IsUnit (U.reflectionOperator : E →L[ℂ] E) :=

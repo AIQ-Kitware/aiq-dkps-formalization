@@ -53,7 +53,9 @@ theorem realSpectrum_subset_Iic_of_re_inner_le_generic
       inner_self_eq_norm_sq]
     linarith
   have hunit : IsUnit (((r : ℝ) : 𝕜) • (1 : E →L[𝕜] E) - T) :=
-    TauCeti.ContinuousLinearMap.isUnit_of_coercive (by linarith) hcoer
+    _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := ⟨r - c, by linarith⟩) (show (0 : ℝ) < r - c by linarith)
+      (fun z => (mul_comm _ _).le.trans ((hcoer z).trans (RCLike.re_le_norm _)))
   have hspec : (r : 𝕜) ∈ spectrum 𝕜 T := hr
   rw [spectrum.mem_iff] at hspec
   apply hspec
@@ -78,7 +80,9 @@ theorem realSpectrum_subset_Ici_of_le_re_inner_generic
       inner_self_eq_norm_sq]
     linarith
   have hunit : IsUnit (T - ((r : ℝ) : 𝕜) • (1 : E →L[𝕜] E)) :=
-    TauCeti.ContinuousLinearMap.isUnit_of_coercive (by linarith) hcoer
+    _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := ⟨c - r, by linarith⟩) (show (0 : ℝ) < c - r by linarith)
+      (fun z => (mul_comm _ _).le.trans ((hcoer z).trans (RCLike.re_le_norm _)))
   have hspec : (r : 𝕜) ∈ spectrum 𝕜 T := hr
   rw [spectrum.mem_iff] at hspec
   apply hspec

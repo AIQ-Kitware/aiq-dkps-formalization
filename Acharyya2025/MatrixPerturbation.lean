@@ -43,7 +43,7 @@ public import Acharyya2025.ConfigPerturbation
 public import Acharyya2025.OperatorBridge
 public import Acharyya2025.GramRigidity
 public import Acharyya2025.GramRealization
-public import TauCeti.Analysis.Matrix.Eigenvalues
+public import TauCeti.Analysis.Matrix.Eigenvalues.Basic
 public import ForTauCeti.Analysis.Matrix.SpectralFunctionMeasurable
 
 public section

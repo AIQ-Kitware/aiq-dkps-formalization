@@ -44,7 +44,8 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteS
 
 /-- **A dissipative operator has spectrum in the closed left half-plane.**
 
-The contrapositive of `isUnit_of_coercive`: at a point of the open right
+The contrapositive of `ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map`:
+at a point of the open right
 half-plane the shifted operator is coercive, hence a unit, hence not spectral. -/
 theorem spectrum_re_nonpos_of_dissipative (Z : H →L[ℂ] H)
     (h : ∀ x, RCLike.re ⟪Z x, x⟫_ℂ ≤ 0) :
@@ -63,7 +64,9 @@ theorem spectrum_re_nonpos_of_dissipative (Z : H →L[ℂ] H)
       _root_.ContinuousLinearMap.id_apply, inner_sub_left, map_sub]
     rw [hz']
     linarith
-  have hunit := TauCeti.ContinuousLinearMap.isUnit_of_coercive hnot hcoer
+  have hunit := _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := ⟨z.re, by positivity⟩) hnot
+      (fun z => (mul_comm _ _).le.trans ((hcoer z).trans (RCLike.re_le_norm _)))
   rw [spectrum.mem_iff] at hz
   apply hz
   rw [Algebra.algebraMap_eq_smul_one]
@@ -318,7 +321,9 @@ theorem nonneg_of_lyapunov_nonneg {X G : H →L[ℂ] H}
       rw [hA]
       nlinarith [hb, hnormsq, hβ, hβ1]
     have hAunit : IsUnit A :=
-      TauCeti.ContinuousLinearMap.isUnit_of_coercive (by positivity) hAcoer
+      _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
+      (c := ⟨β / 2, by positivity⟩) (show (0 : ℝ) < β / 2 by positivity)
+      (fun z => (mul_comm _ _).le.trans ((hAcoer z).trans (RCLike.re_le_norm _)))
     have hAnonneg : (0 : H →L[ℂ] H) ≤ A := by
       rw [_root_.ContinuousLinearMap.nonneg_iff_isPositive]
       refine ⟨_root_.ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAsa, fun v => ?_⟩

@@ -30,7 +30,7 @@ warningAsError = true
 [[require]]
 name = "TauCeti"
 git = "https://github.com/TauCetiProject/TauCeti.git"
-rev = "463ab293070d4cb355d0a0e036469464070088bc"
+rev = "ae590cc45dab074fb3ce5b25574d91e8d7d4ed87"
 # END Tau Ceti dependency
 
 # BEGIN authoritative root Mathlib dependency
@@ -39,7 +39,7 @@ rev = "463ab293070d4cb355d0a0e036469464070088bc"
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "2cabef97b63d3275776b8b060d802de6a6fa1055"
+rev = "1b1ccf4b088b32fa3f23f2de1127433254a81e1e"
 # END authoritative root Mathlib dependency
 
 # ForTauCeti: the reusable-mathematics package. Declarations live in their final
