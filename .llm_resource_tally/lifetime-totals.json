@@ -19,16 +19,16 @@
     "non_committing_work": "requires_reconcile",
     "compaction_usage": "measured_signals_only_when_runtime_omits_usage"
   },
-  "through": "2026-11-03T22:16:17.896205+00:00",
-  "ledger_rows": 2893,
-  "commits_accounted": 2667,
-  "turns": 86744,
+  "through": "2026-11-03T23:35:19.613373+00:00",
+  "ledger_rows": 2896,
+  "commits_accounted": 2669,
+  "turns": 86841,
   "tokens": {
-    "input": 70785218,
+    "input": 71167797,
     "cache_write": 209350290,
-    "cache_read": 28629053668,
-    "output": 75726737,
-    "billable_input": 28909189176
+    "cache_read": 28642842212,
+    "output": 75897443,
+    "billable_input": 28923360299
   },
   "by_model": {
     "claude-fable-5": {
@@ -80,10 +80,10 @@
       "output": 26074
     },
     "litellm/qwen3.8-27b-dbirks-hyperqwen-long": {
-      "input": 2587450,
+      "input": 2785077,
       "cache_write": 0,
-      "cache_read": 34876608,
-      "output": 736361
+      "cache_read": 37821888,
+      "output": 840067
     },
     "claude-opus-5-5": {
       "input": 1716,
@@ -104,10 +104,10 @@
       "output": 3078946
     },
     "gpt-6.1-sol": {
-      "input": 39146978,
+      "input": 39331930,
       "cache_write": 0,
-      "cache_read": 3257572224,
-      "output": 10756384
+      "cache_read": 3268415488,
+      "output": 10823384
     },
     "litellm-namek/Qwen/Qwen3.5-0.8B": {
       "input": 0,
@@ -130,10 +130,10 @@
       "output": 10700449
     },
     "unlabeled": {
-      "input": 69936479,
+      "input": 70319058,
       "cache_write": 155791970,
-      "cache_read": 23713877853,
-      "output": 62737483
+      "cache_read": 23727666397,
+      "output": 62908189
     },
     "implementation": {
       "input": 79782,
@@ -156,16 +156,16 @@
       "output": 59452422
     },
     "codex": {
-      "input": 65269888,
+      "input": 65454840,
       "cache_write": 0,
-      "cache_read": 5519203968,
-      "output": 15034653
+      "cache_read": 5530047232,
+      "output": 15101653
     },
     "pi": {
-      "input": 4299298,
+      "input": 4496925,
       "cache_write": 0,
-      "cache_read": 75852096,
-      "output": 1239662
+      "cache_read": 78797376,
+      "output": 1343368
     }
   },
   "server_tool_calls": {
@@ -173,7 +173,7 @@
     "web_fetch": 0
   },
   "time": {
-    "wall_clock_s": 6152120.8
+    "wall_clock_s": 6158651.8
   },
   "compaction_signals": {
     "events": 90,
