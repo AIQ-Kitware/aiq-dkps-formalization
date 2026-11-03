@@ -35,17 +35,27 @@ The paired cost is attained by an orthogonal transporter on the two-plane sum.
 Write $\sym{OrthogonalGroup}$ for the orthogonal group of real
 $n\times n$ matrices, defined by $\sym{Wcompetitor}^T\sym{Wcompetitor}=I$.
 
-\begin{theorem}[Real trace-norm matching reduction]
+% Note:
+% this corresponds to exists_minimizing_real_nuclear_transport_matching
+% in ../../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearMatching.lean
+%  It states that an orthogonal transporter attains the matching cost and
+%  minimizes trace displacement over every orthogonal competitor.
+%  The matching costs are defined in RealMatchingExponent.lean realNuclearMatchingCost
+%  (DavisKahan/FiniteDimensional/DirectRotation/RealMatchingExponent.lean:136).
+%  The endpoint proof uses the 1<p<2 theorem in RealMatchingAttainment.lean:296
+%  (DavisKahan/FiniteDimensional/DirectRotation/RealMatchingAttainment.lean:296)
+%  exists_minimizing_real_schatten_transport_matching
+\begin{theorem}[Real trace-norm matching reduction]%
 \label{thm:real-matching-example}
 For equal-dimensional real subspaces $\like{Usource}{K},\like{Vtarget}{L}$ as above,
 \begin{equation}\label{eq:real-nuclear-match}
 \min_{\substack{\sym{Wcompetitor}\in \sym{OrthogonalGroup}\\\sym{Wcompetitor}(\like{Usource}{K})=\like{Vtarget}{L}}}\|I-\sym{Wcompetitor}\|_1
 =
-\min_{\sym{Matching}\text{ a matching}}
+\min_{\sym{Matching}\text{a matching}}
 \left(
 \sum_{\{i,j\}\in \sym{Matching}}\like{PairCost}{e_{ij}}
 +
-\sum_{i\text{ unmatched}}\like{SingletonCost}{s_i}
+\sum_{i\text{unmatched}}\like{SingletonCost}{s_i}
 \right).
 \end{equation}
 Both minima are attained.  The equality includes repeated angles,
