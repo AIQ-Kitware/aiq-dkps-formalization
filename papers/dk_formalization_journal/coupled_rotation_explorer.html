@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DKPS | Two transports, one target plane</title>
+<style>
+:root { --ink:#1d2f44; --muted:#65768a; --line:#dce4ec; --blue:#376eaf; --teal:#128a84; --gold:#e3a239; --purple:#9760bc; --paper:#fff; --bg:#f1f5f9; }
+* { box-sizing:border-box; }
+html { scrollbar-gutter:stable; }
+body { margin:0; background:var(--bg); color:var(--ink); font-family:Inter, "Segoe UI", system-ui, -apple-system, sans-serif; font-size:14px; line-height:1.5; }
+.shell { width:min(1540px,calc(100% - 40px)); margin:0 auto; padding:25px 0 35px; }
+header { display:flex; justify-content:space-between; gap:20px; align-items:flex-end; margin-bottom:16px; }
+h1 { margin:4px 0 4px; font-size:clamp(23px,2.8vw,34px); line-height:1.18; letter-spacing:-.045em; font-weight:735; }
+.subtitle { margin:0; color:var(--muted); font-size:14px; max-width:850px; }
+.eyebrow { color:var(--teal); font-weight:760; letter-spacing:.13em; font-size:11px; text-transform:uppercase; }
+.header-note { text-align:right; font-size:12px; color:var(--muted); max-width:280px; }
+.toolbar { position:sticky; top:8px; z-index:10; display:grid; grid-template-columns:minmax(210px,2fr) minmax(210px,1.6fr) auto; align-items:center; gap:18px; border:1px solid var(--line); border-radius:15px; padding:15px 18px; background:rgba(255,255,255,.96); box-shadow:0 8px 25px rgba(31,47,68,.065); backdrop-filter:blur(12px); margin-bottom:16px; }
+.sliderrow { display:grid; grid-template-columns:150px 1fr 85px; align-items:center; gap:10px; }
+.sliderrow label { font-size:12px; font-weight:720; letter-spacing:.01em; }
+.sliderrow output { font-variant-numeric:tabular-nums; text-align:right; color:var(--ink); font-size:13px; font-weight:740; }
+input[type=range] { width:100%; accent-color:var(--blue); cursor:pointer; margin:0; }
+#timeSlider { accent-color:var(--gold); }
+.actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+button { border:1px solid var(--line); border-radius:9px; background:#fff; color:var(--ink); font:inherit; font-weight:670; font-size:12px; padding:9px 13px; min-height:36px; cursor:pointer; transition:background .12s,transform .12s; }
+button:hover { background:#edf4fa; }
+button:active { transform:translateY(1px); }
+button.primary { background:var(--ink); border-color:var(--ink); color:#fff; }
+button.primary:hover { background:#31506c; }
+button:focus-visible, input:focus-visible { outline:3px solid #89b2e4; outline-offset:2px; }
+.stat-grid { display:grid; grid-template-columns:1.08fr 1fr 1fr 1.35fr; gap:12px; margin-bottom:14px; }
+.stat { background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:10px 16px; min-height:78px; }
+.stat .kicker { display:block; color:var(--muted); font-size:11px; font-weight:670; letter-spacing:.035em; }
+.stat .big { display:block; font-size:22px; line-height:1.2; font-weight:745; font-variant-numeric:tabular-nums; margin:4px 0 0; letter-spacing:-.025em; }
+.stat small { display:block; font-size:11px; color:var(--muted); }
+.stat.blue { box-shadow:inset 3px 0 var(--blue); }
+.stat.teal { box-shadow:inset 3px 0 var(--teal); }
+.stat.note { background:#eaf5f3; border-color:#d4e8e2; }
+.stat.note .big { font-size:15px; margin-top:5px; color:#146d68; }
+.panels2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.card { background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:0 3px 10px rgba(24,50,75,.025); }
+.cardhead { padding:15px 17px 7px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.card h2, .card h3 { margin:0; font-size:15px; letter-spacing:-.01em; font-weight:735; }
+.cardhead .tag { font-size:11px; letter-spacing:.05em; font-weight:740; border-radius:7px; padding:4px 8px; }
+.tag.blue { color:#265991; background:#e9f2fc; }
+.tag.teal { color:#0c776d; background:#e4f6ef; }
+.card .description { padding:0 17px 13px; margin:0; color:var(--muted); font-size:12px; min-height:34px; }
+.big-canvas { display:block; width:100%; height:296px; touch-action:none; cursor:grab; }
+.big-canvas:active { cursor:grabbing; }
+.sm-canvas { display:block; width:100%; height:218px; }
+.time-canvas { display:block; width:100%; height:176px; }
+.canvas-footer { padding:8px 16px 13px; display:flex; align-items:center; flex-wrap:wrap; gap:14px; color:var(--muted); font-size:11px; border-top:1px solid #f1f3f7; }
+.swatch { display:inline-block; vertical-align:middle; width:10px; height:10px; border-radius:50%; margin-right:4px; }
+.bottom-grid { display:grid; grid-template-columns:.95fr 1.05fr; gap:14px; margin-top:14px; }
+
+.time-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:11px; }
+.projection-toolbar { margin-top:15px; padding:15px 18px; display:flex; justify-content:space-between; align-items:center; gap:18px; background:#fff; border:1px solid var(--line); border-radius:14px; }
+.projection-info h2 { font-size:15px; margin:0 0 2px; letter-spacing:-.01em; }
+.projection-info p { font-size:12px; margin:0; color:var(--muted); }
+.projection-switch { display:flex; flex-wrap:nowrap; gap:3px; padding:4px; border:1px solid #dce4ec; border-radius:11px; background:#f0f4f8; flex-shrink:0; }
+.projection-switch button { border-color:transparent; background:transparent; white-space:nowrap; padding:8px 15px; min-height:37px; transition:background .12s,color .12s,box-shadow .12s; }
+.projection-switch button[aria-pressed="true"] { background:#fff; box-shadow:0 2px 7px rgba(27,46,65,.14); }
+#projectionDirect[aria-pressed="true"] { color:var(--blue); }
+#projectionCoupled[aria-pressed="true"] { color:var(--teal); }
+.projection-tag { font-variant-numeric:tabular-nums; }
+
+.time-card .cardhead { padding-bottom:0; }
+.note-row { margin-top:13px; border-left:3px solid #8bb9b3; padding:4px 15px; color:#53677a; font-size:12px; }
+.controls-secondary { display:flex; justify-content:space-between; margin:8px 0 13px; flex-wrap:wrap; gap:10px; color:var(--muted); font-size:12px; }
+input[type=checkbox] { accent-color:var(--teal); cursor:pointer; }
+.controls-secondary label { display:inline-flex; align-items:center; gap:7px; cursor:pointer; }
+.equation { font-family: "Cambria Math", Georgia, serif; font-style:italic; }
+@media(max-width:1080px) { .toolbar { grid-template-columns:1fr 1fr; } .actions { grid-column:1/-1; justify-content:flex-start; } .stat-grid { grid-template-columns:repeat(2,1fr); } .sliderrow { grid-template-columns:135px 1fr 75px; } }
+@media(max-width:720px) { .shell { width:calc(100% - 20px); padding-top:14px; } header { display:block; } .header-note { display:none; } .toolbar { grid-template-columns:1fr; position:relative; top:auto; } .sliderrow { grid-template-columns:124px 1fr 66px; } .actions { grid-column:auto; } .panels2,.bottom-grid { grid-template-columns:1fr; } .time-grid { grid-template-columns:1fr; } .projection-toolbar { flex-wrap:wrap; } .projection-switch { width:100%; } .projection-switch button { flex:1; } .stat-grid { grid-template-columns:repeat(2,1fr); } .big-canvas { height:270px; } }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div><div class="eyebrow">Davis-Kahan | Geometry Lab</div>
+      <h1>Two transports. One target plane.</h1>
+      <p class="subtitle">Compare the canonical direct rotation with a diagonal coupled rotation in four-dimensional Euclidean space. Both map the same source plane onto the same target plane.</p>
+    </div><div class="header-note">Coordinates: x, y, z, t<br>Fourth coordinate t is Euclidean, not relativistic time.<br>Drag either 3D panel to orbit both views.</div>
+  </header>
+  <div class="toolbar">
+    <div class="sliderrow"><label for="angleSlider">Principal angle &theta;</label><input id="angleSlider" type="range" min="0" max="90" step="0.1" value="45"><output id="angleOut">45.0&deg;</output></div>
+    <div class="sliderrow"><label for="timeSlider">Time slice t</label><input id="timeSlider" type="range" min="-1.1" max="1.1" step="0.01" value="0"><output id="timeOut">0.00</output></div>
+    <div class="actions"><button id="play" class="primary" type="button">&#9654; Play</button><button id="reset" type="button">Reset</button><button id="png" type="button">Save PNG</button></div>
+  </div>
+  <div class="stat-grid">
+    <div class="stat"><span class="kicker">THE TWO PRINCIPAL ANGLES</span><span class="big" id="principalStat">45&deg; and 45&deg;</span><small>The input and output are both 2D.</small></div>
+    <div class="stat blue"><span class="kicker">DIRECT ROTATION / NUCLEAR COST</span><span class="big" id="directCost">3.061</span><small id="directSubtitle">Two 45&deg; principal-plane rotations</small></div>
+    <div class="stat teal"><span class="kicker">DIAGONAL ROTATION / NUCLEAR COST</span><span class="big" id="coupledCost">2.828</span><small id="coupledSubtitle">One 90&deg; rotation; two fixed directions</small></div>
+    <div class="stat note"><span class="kicker">INVARIANT TO NOTICE</span><span class="big">Same target L, different motion</span><small>Material grid and tracked input arrows reveal the difference.</small></div>
+  </div>
+  <div class="controls-secondary"><label><input type="checkbox" id="decomp">Show the moving/fixed 4D plane shadows</label><span>Orange &amp; purple arrows track the same two input vectors in both panels. Original K is dashed gray.</span></div>
+  <section class="panels2" aria-label="Direct and coupled rotations side by side">
+    <div class="card"><div class="cardhead"><h2>Direct rotation R</h2><span class="tag blue">TWO PRINCIPAL PLANES</span></div>
+      <p class="description">Each principal plane rotates by &theta;; four ambient directions move.</p><canvas id="direct3d" class="big-canvas" aria-label="Spatial projection of the direct rotation"></canvas>
+      <div class="canvas-footer"><span><i class="swatch" style="background:#e39a3f"></i>Image of e<sub>x</sub></span><span><i class="swatch" style="background:#a66dbc"></i>Image of e<sub>y</sub></span><span><i class="swatch" style="background:#e9a43b"></i>Selected time slice</span></div>
+    </div>
+    <div class="card"><div class="cardhead"><h2>Diagonal coupled rotation W</h2><span class="tag teal">MOVING + FIXED PLANES</span></div>
+      <p class="description">One diagonal plane rotates by twice &theta;; its orthogonal 2D complement stays fixed.</p><canvas id="coupled3d" class="big-canvas" aria-label="Spatial projection of the coupled rotation"></canvas>
+      <div class="canvas-footer"><span><i class="swatch" style="background:#e39a3f"></i>Image of e<sub>x</sub></span><span><i class="swatch" style="background:#a66dbc"></i>Image of e<sub>y</sub></span><span><i class="swatch" style="background:#e9a43b"></i>Same slice of the same target</span></div>
+    </div>
+  </section>
+  <section class="bottom-grid" aria-label="Time slice and displacement spectrum">
+    <div class="card"><div class="cardhead"><h2>Actual 3D time slice</h2><span class="tag teal" id="sliceTag">SAME FOR BOTH MAPS</span></div>
+      <p class="description" id="sliceDescription">Intersection of the target disk with the hyperplane at the selected t.</p>
+      <canvas id="slice3d" class="sm-canvas" aria-label="Actual fixed-time three-dimensional slice"></canvas>
+    </div>
+    <div class="card"><div class="cardhead"><h2>Four displacement singular values</h2><span class="tag blue">OPERATOR ON ALL OF R4</span></div>
+      <p class="description">The nuclear cost adds these four values; the coupled map concentrates displacement into two directions.</p>
+      <canvas id="spectrum" class="sm-canvas" aria-label="Displacement singular values of direct and coupled rotations"></canvas>
+    </div>
+  </section>
+  <div class="projection-toolbar">
+    <div class="projection-info">
+      <h2>Coordinate-time projections: choose one transporter</h2>
+      <p id="projectionDescription" aria-live="polite">Showing direct R only. Orange and purple arrows track the images of the source basis vectors.</p>
+    </div>
+    <div class="projection-switch" role="group" aria-label="Transporter shown in x-t, y-t and z-t views">
+      <button type="button" id="projectionDirect" aria-pressed="true" title="Show direct rotation in all three coordinate-time views (R)">Direct R</button>
+      <button type="button" id="projectionCoupled" aria-pressed="false" title="Show coupled rotation in all three coordinate-time views (W)">Coupled W</button>
+    </div>
+  </div>
+  <section class="time-grid" aria-label="Coordinate-time projected views">
+    <div class="card time-card"><div class="cardhead"><h3>x-t projection</h3><span class="tag blue projection-tag">DIRECT R</span></div><canvas id="xt" class="time-canvas"></canvas></div>
+    <div class="card time-card"><div class="cardhead"><h3>y-t projection</h3><span class="tag blue projection-tag">DIRECT R</span></div><canvas id="yt" class="time-canvas"></canvas></div>
+    <div class="card time-card"><div class="cardhead"><h3>z-t projection</h3><span class="tag blue projection-tag">DIRECT R</span></div><canvas id="zt" class="time-canvas"></canvas></div>
+  </section>
+  <div class="note-row">The 3D views show spatial projections across <strong>all</strong> values of t; the gold shape is the <strong>actual intersection</strong> at the selected t. The x-t, y-t, and z-t views show just the selected transporter's material-coordinate grid and arrows, across all t. Switch between R and W to see how the same target plane is reached by different pointwise motions. A vector figure for the paper is produced by <code>python3 coupled_rotation_viewer.py --export-figure figure.svg --theta 45</code>.</div>
+</div>
+<script>
+'use strict';
+(() => {
+  const C = { ink:'#1d2f44', muted:'#637488', axes:'#dde6ee', blue:'#376eaf', teal:'#128a84', gold:'#e3a239', purple:'#9760bc', orange:'#e18c34', ghost:'#aab7c6', light:'#f7fafe', grid:'#dfe6ed' };
+  const sqrt2 = Math.sqrt(2);
+  const ex=[1,0,0,0],ey=[0,1,0,0],ez=[0,0,1,0],et=[0,0,0,1];
+  const u=[1/sqrt2,0,1/sqrt2,0],v=[0,1/sqrt2,0,1/sqrt2],a=[1/sqrt2,0,-1/sqrt2,0],b=[0,1/sqrt2,0,-1/sqrt2];
+  const ids={angle:document.getElementById('angleSlider'),time:document.getElementById('timeSlider'),angleOut:document.getElementById('angleOut'),timeOut:document.getElementById('timeOut'),decomp:document.getElementById('decomp'),projectionDirect:document.getElementById('projectionDirect'),projectionCoupled:document.getElementById('projectionCoupled')};
+  const cvs=Object.fromEntries(['direct3d','coupled3d','slice3d','spectrum','xt','yt','zt'].map(id=>[id,document.getElementById(id)]));
+  const state={theta:45,time:0,playing:false,playingDir:1,cameraYaw:20,cameraElev:-35,zoom:1,decomp:false,projectionMode:'direct',renderCount:0};
+  const add=(p,q)=>p.map((x,i)=>x+q[i]),mul=(c,p)=>p.map(x=>c*x),combine=(c,p,d,q)=>p.map((x,i)=>c*x+d*q[i]);
+  const dot=(p,q)=>p.reduce((s,x,i)=>s+x*q[i],0), norm=p=>Math.sqrt(dot(p,p));
+  const deg=x=>x*Math.PI/180;
+  const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+
+  function transform(mode,p,theta){
+    const t=deg(theta), co=Math.cos(t), si=Math.sin(t);
+    if(mode==='direct'){
+      const [x,y,z,w]=p;
+      return [co*x-si*w,co*y+si*z,-si*y+co*z,si*x+co*w];
+    }
+    const ku=dot(u,p),kv=dot(v,p),ka=dot(a,p),kb=dot(b,p);
+    const ct=Math.cos(2*t),st=Math.sin(2*t);
+    const rotatedU=ct*ku-st*kv,rotatedV=st*ku+ct*kv;
+    return [
+      (rotatedU+ka)/sqrt2,(rotatedV+kb)/sqrt2,
+      (rotatedU-ka)/sqrt2,(rotatedV-kb)/sqrt2
+    ];
+  }
+  function basis(mode,theta){return [transform(mode,ex,theta),transform(mode,ey,theta)];}
+  function point(frame,s,t){return combine(s,frame[0],t,frame[1]);}
+  function ring(frame,n=120){const arr=[];for(let i=0;i<=n;i++){const th=i*2*Math.PI/n;arr.push(point(frame,Math.cos(th),Math.sin(th)));}return arr;}
+  const source=[ex,ey];
+  function sliceAt(frame,time){
+    const [c0,c1]=[frame[0][3],frame[1][3]],d2=c0*c0+c1*c1;
+    if(d2<1e-12)return Math.abs(time)<1e-9?{kind:'disk',points:ring(frame)}:{kind:'empty',points:[]};
+    const d=Math.sqrt(d2),distance=time/d;
+    if(Math.abs(distance)>1+1e-9)return {kind:'empty',points:[]};
+    const center=[time*c0/d2,time*c1/d2];
+    const q=[-c1/d,c0/d],half=Math.sqrt(Math.max(0,1-distance*distance));
+    if(half<1e-8)return {kind:'point',points:[point(frame,...center)]};
+    return {kind:'line',points:[point(frame,center[0]-half*q[0],center[1]-half*q[1]),point(frame,center[0]+half*q[0],center[1]+half*q[1])]};
+  }
+  function spatial(q,rect){
+    const yaw=deg(state.cameraYaw),el=deg(state.cameraElev);
+    const rx=Math.cos(yaw)*q[0]+Math.sin(yaw)*q[1];
+    const ry=-Math.sin(yaw)*Math.sin(el)*q[0]+Math.cos(yaw)*Math.sin(el)*q[1]+Math.cos(el)*q[2];
+    const scale=Math.min(rect.w*.25,rect.h*(rect.h<250?.35:.39))*state.zoom;
+    return [rect.w*.5+rx*scale,rect.h*.50-ry*scale];
+  }
+  function canvasContext(canvas){
+    const bounds=canvas.getBoundingClientRect();
+    const w=Math.max(10,bounds.width),h=Math.max(10,bounds.height);
+    const dpr=Math.min(2.25,window.devicePixelRatio||1);
+    const pw=Math.max(1,Math.round(w*dpr)),ph=Math.max(1,Math.round(h*dpr));
+    if(canvas.width!==pw||canvas.height!==ph){canvas.width=pw;canvas.height=ph;}
+    const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.clearRect(0,0,w,h);
+    return {ctx,w,h};
+  }
+  function path(ctx,points,closed=true){
+    if(!points.length)return;
+    ctx.beginPath();ctx.moveTo(points[0][0],points[0][1]);
+    for(let i=1;i<points.length;i++)ctx.lineTo(points[i][0],points[i][1]);
+    if(closed)ctx.closePath();
+  }
+  function line(ctx,points,color,width=1,dash=[],alpha=1){
+    if(!points.length)return;
+    ctx.save();ctx.globalAlpha=alpha;ctx.setLineDash(dash);ctx.strokeStyle=color;ctx.lineWidth=width;
+    ctx.lineJoin='round';ctx.lineCap='round';path(ctx,points,false);ctx.stroke();ctx.restore();
+  }
+  function shape(ctx,points,fill,opacity=1,stroke=null,width=1,dash=[]){
+    ctx.save();ctx.globalAlpha=opacity;ctx.setLineDash(dash);path(ctx,points);
+    if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=width;ctx.stroke();}ctx.restore();
+  }
+  function arrow(ctx,start,end,color,tag){
+    line(ctx,[start,end],color,2.8,[],1);
+    let dx=end[0]-start[0],dy=end[1]-start[1],ang=Math.atan2(dy,dx);
+    const size=10;
+    shape(ctx,[end,[end[0]-size*Math.cos(ang-.42),end[1]-size*Math.sin(ang-.42)],
+                  [end[0]-size*Math.cos(ang+.42),end[1]-size*Math.sin(ang+.42)]],color,1);
+    ctx.save();ctx.fillStyle=color;ctx.font='700 12px system-ui,sans-serif';
+    ctx.fillText(tag,end[0]+9,end[1]-9);ctx.restore();
+  }
+  function label(ctx,s,x,y,color=C.muted,font='11px system-ui,sans-serif'){
+    ctx.save();ctx.fillStyle=color;ctx.font=font;ctx.fillText(s,x,y);ctx.restore();
+  }
+  function gridOnDisk(ctx,frame,P,color,alpha=.35){
+    for(const h of [-.84,-.56,-.28,0,.28,.56,.84]){
+      const lim=Math.sqrt(1-h*h),samples=25;
+      for(let dir=0;dir<2;dir++){
+        const pts=[];for(let i=0;i<=samples;i++){
+          const z=(2*i/samples-1)*lim;
+          pts.push(P(point(frame,dir===0?h:z,dir===0?z:h)));
+        }line(ctx,pts,color,.78,[],alpha);
+      }
+    }
+  }
+  function drawWorldAxes(ctx,P){
+    const zero=P([0,0,0,0]);
+    for(let i=0;i<3;i++){
+      const q=[0,0,0,0];q[i]=1.2;
+      const r=[0,0,0,0];r[i]=-1.2;
+      line(ctx,[P(r),P(q)],C.axes,1.0);
+      const h=P(q);label(ctx,['x','y','z'][i],h[0]+7,h[1]-5,'#91a1b5');
+    }
+    return zero;
+  }
+  function drawDecomposition(ctx,P,mode){
+    if(!state.decomp)return;
+    const pairs= mode==='coupled' ? [[u,v,C.purple],[a,b,C.teal]] :
+                                      [[ex,et,C.purple],[ey,ez,C.blue]];
+    for(const [b0,b1,color] of pairs){
+      const corners=[point([b0,b1],-.84,-.84),point([b0,b1],.84,-.84),
+                     point([b0,b1],.84,.84),point([b0,b1],-.84,.84)];
+      const visible=corners.map(P);
+      shape(ctx,visible,color,.075,color,1.3,[4,4]);
+      for(let i=0;i<4;i++){
+        const v0=visible[i],v1=visible[(i+1)%4];
+        line(ctx,[v0,v1],color,1.1,[5,4],.38);
+      }
+    }
+  }
+  function drawSpatial(canvas,mode){
+    const {ctx,w,h}=canvasContext(canvas),rect={w,h};
+    const P=v=>spatial(v,rect),origin=P([0,0,0,0]);
+    const theta=state.theta,frame=basis(mode,theta),sl=sliceAt(frame,state.time);
+    // Paper-like background grid, intentionally subtle.
+    ctx.fillStyle='#fcfdff';ctx.fillRect(0,0,w,h);
+    drawWorldAxes(ctx,P);drawDecomposition(ctx,P,mode);
+    shape(ctx,ring(source).map(P),'#c7d1dd',.12,'#9cabba',1.2,[5,5]);
+    const color=mode==='direct'?C.blue:C.teal;
+    shape(ctx,ring(frame).map(P),color,.15,color,2.0);
+    gridOnDisk(ctx,frame,P,color,.44);
+    if(sl.kind==='disk')shape(ctx,sl.points.map(P),C.gold,.12,C.gold,2.4);
+    else if(sl.kind==='line'){
+      line(ctx,sl.points.map(P),C.gold,4.2,[],1);
+      for(const p of sl.points){const [x,y]=P(p);ctx.beginPath();ctx.arc(x,y,4.2,0,7);ctx.fillStyle=C.gold;ctx.fill();}
+    }else if(sl.kind==='point'){
+      const [x,y]=P(sl.points[0]);ctx.beginPath();ctx.arc(x,y,5,0,7);ctx.fillStyle=C.gold;ctx.fill();
+    }
+    for(const [vec,idx] of [[ex,0],[ey,1]]){
+      const p=P(frame[idx]),q=P(vec),c=idx===0?C.orange:C.purple;
+      line(ctx,[q,p],c,1.5,[5,4],.46);
+      arrow(ctx,origin,p,c,idx===0?'e_x':'e_y');
+    }
+    if(mode==='coupled'){
+      // The principal-direction basis is drawn faintly: W moves material
+      // axes to combinations of these, rather than mapping ex->y1, ey->y2.
+      const rr=basis('direct',theta);
+      for(const rv of rr)line(ctx,[origin,P(rv)],C.blue,1.4,[3,5],.6);
+    }
+    ctx.beginPath();ctx.arc(origin[0],origin[1],3.2,0,7);ctx.fillStyle=C.ink;ctx.fill();
+    label(ctx,'all-time spatial shadow; t hidden',13,h-13,'#77879a');
+    if(sl.kind==='empty')label(ctx,'selected t does not intersect the unit disk',13,21,'#c48b2d','600 11px system-ui');
+  }
+  function drawSlice(canvas){
+    const {ctx,w,h}=canvasContext(canvas),rect={w,h};
+    ctx.fillStyle='#fcfdff';ctx.fillRect(0,0,w,h);
+    const P=v=>spatial(v,rect),origin=P([0,0,0,0]);
+    drawWorldAxes(ctx,P);
+    if(Math.abs(state.time)<1e-8)shape(ctx,ring(source).map(P),'#adbac9',.08,C.ghost,1.4,[4,4]);
+    const sl=sliceAt(basis('direct',state.theta),state.time);
+    if(sl.kind==='disk')shape(ctx,sl.points.map(P),C.gold,.21,C.gold,2.4);
+    else if(sl.kind==='line'){
+      line(ctx,sl.points.map(P),C.gold,5.2);
+      for(const p of sl.points){let q=P(p);ctx.beginPath();ctx.arc(q[0],q[1],4.2,0,7);ctx.fillStyle=C.gold;ctx.fill();}
+    }else if(sl.kind==='point'){
+      const [x,y]=P(sl.points[0]);ctx.beginPath();ctx.arc(x,y,5.8,0,7);ctx.fillStyle=C.gold;ctx.fill();
+    }else{
+      label(ctx,'No points at the selected t',w/2-86,h*.28,'#b88835','600 12px system-ui');
+    }
+    label(ctx,`t = ${state.time.toFixed(2)}; ${sl.kind==='disk'?'full disk':sl.kind==='line'?'line segment':sl.kind==='point'?'one point':'empty'}`,
+          14,h-13,'#67778a','600 11px system-ui');
+  }
+  function drawSpectrum(canvas){
+    const {ctx,w,h}=canvasContext(canvas);ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
+    const t=deg(state.theta),d=2*Math.sin(t/2),c=2*Math.sin(t),maxv=2.12;
+    const left=45,right=w-16,top=12,bottom=h-35;
+    for(const v of [0,.5,1,1.5,2]){
+      const y=bottom-(v/maxv)*(bottom-top);
+      line(ctx,[[left,y],[right,y]],C.grid,1);
+      label(ctx,v.toFixed(1),10,y+4,'#8191a1','10px system-ui');
+    }
+    const step=(right-left)/4,barw=Math.min(32,step*.26);
+    for(let i=0;i<4;i++){
+      const x=left+(i+.5)*step;
+      for(const [z,val,col] of [[-1,d,C.blue],[1,i<2?c:0,C.teal]]){
+        const bh=(val/maxv)*(bottom-top),xx=x+z*(barw*.57)-barw/2;
+        ctx.fillStyle=col;
+        ctx.fillRect(xx,bottom-bh,barw,Math.max(1.4,bh));
+      }
+      label(ctx,'s'+(i+1),x-6,bottom+19,C.muted,'11px system-ui');
+    }
+    label(ctx,'Direct R',left+5,17,C.blue,'700 11px system-ui');
+    label(ctx,'Coupled W',left+91,17,C.teal,'700 11px system-ui');
+  }
+  function mapTime(q,index,w,h){
+    const s=Math.min(w*.38,h*.36);
+    return [w/2+q[index]*s,h*.54-q[3]*s];
+  }
+  // A single transporter is selected for ALL three coordinate-time panels.
+  // The target disk is geometrically identical for R and W, but its material
+  // coordinate grid and the two tracked basis vectors are different.
+  function drawTimeProjection(canvas,index){
+    const {ctx,w,h}=canvasContext(canvas);
+    ctx.fillStyle='#fcfdff';ctx.fillRect(0,0,w,h);
+    const P=q=>mapTime(q,index,w,h),mode=state.projectionMode;
+    const frame=basis(mode,state.theta),sl=sliceAt(frame,state.time);
+    const col=mode==='direct'?C.blue:C.teal,ox=P([0,0,0,0]);
+    line(ctx,[[17,ox[1]],[w-15,ox[1]]],C.axes,1);
+    line(ctx,[[ox[0],8],[ox[0],h-15]],C.axes,1);
+    shape(ctx,ring(frame).map(P),col,.11,col,1.7);
+    gridOnDisk(ctx,frame,P,col,.24);
+    // Display only the selected map's two original source basis vectors.
+    // A projected vector can be zero even when the original 4D vector is not.
+    for(const [ii,color,tag] of [[0,C.orange,'e_x'],[1,C.purple,'e_y']]){
+      const end=P(frame[ii]),dx=end[0]-ox[0],dy=end[1]-ox[1];
+      if(Math.hypot(dx,dy)>3.0){
+        arrow(ctx,ox,end,color,tag);
+      }else{
+        ctx.beginPath();ctx.arc(ox[0],ox[1],4.1,0,Math.PI*2);
+        ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.stroke();
+      }
+    }
+    const timePoint=P([0,0,0,state.time]);
+    line(ctx,[[15,timePoint[1]],[w-14,timePoint[1]]],C.gold,1.4,[4,4],.8);
+    if(sl.kind==='line')line(ctx,sl.points.map(P),C.gold,3.3);
+    else if(sl.kind==='point'){
+      const [x,y]=P(sl.points[0]);ctx.fillStyle=C.gold;ctx.beginPath();ctx.arc(x,y,3.5,0,7);ctx.fill();
+    } else if(sl.kind==='disk')shape(ctx,sl.points.map(P),C.gold,.1,C.gold,1.4);
+    label(ctx,['x','y','z'][index],w-22,ox[1]-7,C.muted);
+    label(ctx,'t',ox[0]+8,14,C.muted);
+    label(ctx,mode==='direct'?'Showing R only':'Showing W only',9,h-10,col,'700 10px system-ui');
+  }
+  let renderQueued=false;
+  function updateLabels(){
+    const th=state.theta,rad=deg(th),d=8*Math.sin(rad/2),c=4*Math.sin(rad);
+    ids.angleOut.textContent=th.toFixed(1)+' deg';
+    ids.timeOut.textContent=state.time.toFixed(2);
+    document.getElementById('principalStat').textContent=th.toFixed(1)+' deg / '+th.toFixed(1)+' deg';
+    document.getElementById('directCost').textContent=d.toFixed(3);
+    document.getElementById('coupledCost').textContent=c.toFixed(3);
+    document.getElementById('directSubtitle').textContent='Two '+th.toFixed(1)+' degree rotations';
+    document.getElementById('coupledSubtitle').textContent='One '+(2*th).toFixed(1)+' degree rotation; a fixed 2D plane';
+    const sl=sliceAt(basis('direct',th),state.time),desc={disk:'full 2D disk',line:'1D line segment',point:'single point',empty:'no intersection'};
+    document.getElementById('sliceDescription').textContent='At t = '+state.time.toFixed(2)+': '+desc[sl.kind]+'. Identical for R and W.';
+  }
+  function render(){
+    renderQueued=false;updateLabels();
+    drawSpatial(cvs.direct3d,'direct');drawSpatial(cvs.coupled3d,'coupled');
+    drawSlice(cvs.slice3d);drawSpectrum(cvs.spectrum);
+    drawTimeProjection(cvs.xt,0);drawTimeProjection(cvs.yt,1);drawTimeProjection(cvs.zt,2);
+    state.renderCount++;
+  }
+  function schedule(){if(!renderQueued){renderQueued=true;requestAnimationFrame(render);}}
+  ids.angle.addEventListener('input',()=>{state.theta=+ids.angle.value;schedule();});
+  ids.time.addEventListener('input',()=>{state.time=+ids.time.value;schedule();});
+  ids.decomp.addEventListener('change',()=>{state.decomp=ids.decomp.checked;schedule();});
+  function setProjectionMode(mode){
+    if(mode!=='direct'&&mode!=='coupled')throw Error('Invalid transporter: '+mode);
+    state.projectionMode=mode;
+    ids.projectionDirect.setAttribute('aria-pressed',String(mode==='direct'));
+    ids.projectionCoupled.setAttribute('aria-pressed',String(mode==='coupled'));
+    document.getElementById('projectionDescription').textContent=(mode==='direct'
+      ?'Showing direct R only.':'Showing coupled W only.')
+      +' Orange and purple arrows track the same source vectors; the target plane stays the same.';
+    for(const tag of document.querySelectorAll('.projection-tag')){
+      tag.textContent=mode==='direct'?'DIRECT R':'COUPLED W';
+      tag.classList.toggle('blue',mode==='direct');
+      tag.classList.toggle('teal',mode==='coupled');
+    }
+    schedule();
+  }
+  ids.projectionDirect.addEventListener('click',()=>setProjectionMode('direct'));
+  ids.projectionCoupled.addEventListener('click',()=>setProjectionMode('coupled'));
+  document.addEventListener('keydown',event=>{
+    if(event.altKey||event.ctrlKey||event.metaKey||event.repeat)return;
+    if(event.target instanceof HTMLElement && event.target.isContentEditable)return;
+    const key=event.key.toLowerCase();
+    if(key==='r')setProjectionMode('direct');
+    else if(key==='w')setProjectionMode('coupled');
+  });
+  const play=document.getElementById('play');
+  let lastFrame=null;
+  function step(ms){
+    if(!state.playing)return;
+    if(lastFrame!==null){
+      const dt=Math.min(.06,(ms-lastFrame)/1000);
+      state.theta+=state.playingDir*19*dt;
+      if(state.theta>=90){state.theta=90;state.playingDir=-1;}
+      if(state.theta<=0){state.theta=0;state.playingDir=1;}
+      ids.angle.value=state.theta.toFixed(2);schedule();
+    }
+    lastFrame=ms;requestAnimationFrame(step);
+  }
+  function togglePlay(){
+    state.playing=!state.playing;
+    play.textContent=state.playing?'Pause':'\u25b6 Play';
+    play.setAttribute('aria-pressed',String(state.playing));
+    if(state.playing){lastFrame=null;requestAnimationFrame(step);}
+  }
+  play.addEventListener('click',togglePlay);
+  document.getElementById('reset').addEventListener('click',()=>{
+    if(state.playing)togglePlay();
+    Object.assign(state,{theta:45,time:0,cameraYaw:20,cameraElev:-35,zoom:1,decomp:false});
+    setProjectionMode('direct');
+    ids.angle.value='45';ids.time.value='0';ids.decomp.checked=false;schedule();
+  });
+  for(const canvas of [cvs.direct3d,cvs.coupled3d,cvs.slice3d]){
+    let dragging=false,x=0,y=0;
+    canvas.addEventListener('pointerdown',e=>{dragging=true;x=e.clientX;y=e.clientY;canvas.setPointerCapture(e.pointerId);});
+    canvas.addEventListener('pointermove',e=>{
+      if(!dragging)return;
+      const dx=e.clientX-x,dy=e.clientY-y;x=e.clientX;y=e.clientY;
+      state.cameraYaw=(state.cameraYaw+dx*.36)%360;
+      state.cameraElev=clamp(state.cameraElev+dy*.33,-80,80);
+      schedule();
+    });
+    for(const type of ['pointerup','pointercancel'])canvas.addEventListener(type,()=>{dragging=false;});
+    canvas.addEventListener('wheel',e=>{
+      e.preventDefault();state.zoom=clamp(state.zoom*Math.exp(-e.deltaY*.0009),.65,1.6);schedule();
+    },{passive:false});
+  }
+  function savePng(){
+    // Create a coherent print-sized page independent of browser CSS scale.
+    const out=document.createElement('canvas');out.width=2400;out.height=1640;
+    const c=out.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,out.width,out.height);
+    c.fillStyle=C.ink;c.font='bold 55px system-ui';c.fillText('Two transports of the same two-plane',72,95);
+    c.font='25px system-ui';c.fillStyle=C.muted;
+    c.fillText('Principal angles: '+state.theta.toFixed(1)+' degrees each. '
+      +'Both maps have exactly the same image subspace.',72,145);
+    const boxes=[
+      [cvs.direct3d,72,235,1100,505,'(a) Direct rotation R'],
+      [cvs.coupled3d,1230,235,1100,505,'(b) Coupled rotation W'],
+      [cvs.slice3d,72,830,720,350,'(c) Actual 3D time slice'],
+      [cvs.spectrum,830,830,1495,350,'(d) Displacement singular values'],
+      [cvs.xt,72,1270,710,260,'x-t'],
+      [cvs.yt,844,1270,710,260,'y-t'],
+      [cvs.zt,1616,1270,710,260,'z-t'],
+    ];
+    for(const [can,x,y,w,h,title] of boxes){
+      c.fillStyle=C.ink;c.font='bold 26px system-ui';c.fillText(title,x,y-21);
+      c.strokeStyle='#dee6ed';c.lineWidth=2;c.strokeRect(x,y,w,h);
+      c.drawImage(can,x+2,y+2,w-4,h-4);
+    }
+    c.fillStyle=C.muted;c.font='22px system-ui';
+    c.fillText('Gold marks selected time t = '+state.time.toFixed(2)+'. '
+      +'Material axes: orange and purple. Coordinates x,y,z,t are Euclidean.',72,1602);
+    out.toBlob(blob=>{
+      if(!blob)return;const url=URL.createObjectURL(blob),link=document.createElement('a');
+      link.href=url;link.download='dkps_direct_vs_coupled_theta_'+state.theta.toFixed(1)+'.png';
+      document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+    },'image/png');
+  }
+  document.getElementById('png').addEventListener('click',savePng);
+  const params=new URLSearchParams(location.search);
+  if(params.has('theta')){
+    const th=Number(params.get('theta'));
+    if(Number.isFinite(th)){state.theta=clamp(th,0,90);ids.angle.value=state.theta;}
+  }
+  if(params.has('time')){
+    const tm=Number(params.get('time'));
+    if(Number.isFinite(tm)){state.time=clamp(tm,-1.1,1.1);ids.time.value=state.time;}
+  }
+  if(params.has('projection')){
+    const mode=params.get('projection');
+    if(mode==='direct'||mode==='coupled')setProjectionMode(mode);
+  }
+  function verifyModel(){
+    for(const th of [0,15,30,45,75,90]){
+      const dr=basis('direct',th),wr=basis('coupled',th),angle=deg(th);
+      const drwr=dot(dr[0],wr[0]);
+      if(Math.abs(dot(dr[0],dr[1]))>1e-10||Math.abs(dot(wr[0],wr[1]))>1e-10)throw Error('Non-orthogonal basis');
+      if(Math.abs(drwr-Math.cos(angle))>1e-10)throw Error('Wrong target coordinate twist');
+      for(const e of [dr[0],dr[1]]){
+        const projection=combine(dot(e,wr[0]),wr[0],dot(e,wr[1]),wr[1]);
+        if(norm(add(e,mul(-1,projection)))>1e-10)throw Error('Different target subspaces');
+      }
+    }
+    return true;
+  }
+  window.__rotationDebug={state,cvs,basis,transform,sliceAt,verifyModel,render,schedule,setProjectionMode};
+  verifyModel();
+  new ResizeObserver(schedule).observe(document.querySelector('.panels2'));
+  new ResizeObserver(schedule).observe(document.querySelector('.bottom-grid'));
+  new ResizeObserver(schedule).observe(document.querySelector('.time-grid'));
+  schedule();
+})();
+</script>
+</body>
+</html>
