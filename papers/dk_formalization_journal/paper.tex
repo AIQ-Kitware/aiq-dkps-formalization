@@ -247,11 +247,14 @@ eigenvectors difficult to distinguish. Davis--Kahan theory bounds the angles
 between approximate and exact spectral subspaces in terms of a residual or
 perturbation and a separation between the relevant spectra
 \citep{davis1970rotation}.
-For Hermitian matrices, an estimate $\sym{Acurrent}=\sym{A}+\sym{H}$ may be
-available while $\sym{A}$ is unknown. A bound on $\sym{H}$ bounds the residual of an
-eigenspace of $\sym{Acurrent}$ relative to $\sym{A}$. The same theory can therefore
-bound its angle from the desired spectral subspace of $\sym{A}$ without requiring
-that residual to be evaluated.
+
+In applications, one often works with a perturbed operator
+  $\sym{Acurrent}=\sym{A}+\sym{H}$ while the reference operator $\sym{A}$ is
+  unknown.
+Taking an eigenspace of $\sym{Acurrent}$ as a trial subspace for $\sym{A}$, the norm of its
+  residual relative to $\sym{A}$ is bounded by the norm of $\sym{H}$, allowing
+  Davis--Kahan theory to bound the angle between the two subspaces without
+  requiring $\sym{A}$ to be known or its residuals to be evaluated directly.
 
 Our project began with a variant of this bound needed for
 \ifDKAnonymous a spectral-estimation application\else the data kernel
@@ -282,7 +285,8 @@ For the constructed pair, whose two principal angles both equal
 $\sym{theta}$, the competing transporter attains the global trace-norm minimum
 $4\sin\sym{theta}$ for the constructed subspaces. Section~\ref{sec:prop44}
 compares these statements and repairs the optimality claim by restricting
-the norm class to Q-norms. This repair follows from the squared-displacement
+the norm class to Q-norms (N is a Q-norm when $N(T)^2 = M(T^* T)$ for some
+unitarily invariant norm $M$). This repair follows from the squared-displacement
 comparison \citep[Proposition~4.3]{davis1970rotation};
 earlier Q-norm minimization results appear in \citet{bolotnikov2001minimal}.
 
@@ -1034,16 +1038,17 @@ so
   |\sym{S}|=(\sym{S}^*\sym{S})^{1/2}=\sym{sinTheta0}.
   \label{eq:modulus-sine}
 \end{equation}
-Our formal construction defines the directed angle by functional calculus
-and proves \cref{eq:modulus-sine} for its sine. The polar
-decomposition $\sym{S}=\sym{PolarU}|\sym{S}|$ separates the positive modulus
-from a partial isometry. Unitarily invariant ideal norms assign the same
-value to an operator and its modulus, so
-\[
-  \sym{NormN}(\sym{S})=\sym{NormN}(\sym{sinTheta0})
-\]
-whenever the norm is finite. This equality transfers an estimate for the
-complementary block $\sym{S}$ to the positive sine operator.
+% It might be worth noting that our formalization actually defines \sym{Theta0}
+% and proves eq:modulus-sine whereas most treatments of the subject seam to
+% just start from |\sym{S}|. Maybe it's worth enough to put in the paper, but
+% it at least deserves a latex comment!
+The polar decomposition $\sym{S}=\sym{PolarU}|\sym{S}|$ separates the positive
+  modulus from a partial isometry.
+Unitarily invariant ideal norms assign the same value to an operator and its
+  modulus, so \[ \sym{NormN}(\sym{S})=\sym{NormN}(\sym{sinTheta0}) \] whenever
+  the norm is finite.
+This equality transfers an estimate for the complementary block $\sym{S}$ to the
+  positive sine operator.
 
 \subsubsection{Gap geometry and the inequality}
 
@@ -1248,17 +1253,32 @@ include the right-angle defect spaces described in
 its spectral decomposition recovers a sequence of principal angles
 \citep[Section~3]{davis1970rotation}.
 
-The double-angle inequalities also require a spectral choice. Since
-$\sin(2\sym{theta})$ can be small near both $0$ and $\pi/2$, its bound alone does
-not identify the desired subspace. The branch-selection result
-\citep[Theorem~8.1]{davis1970rotation} characterizes the choice
-$\sym{Theta}\leq\pi/4$ by the ordering of the reducing spectral blocks and gives
-the associated spectral-repulsion inequalities. The smallness criterion
-\citep[Theorem~8.2]{davis1970rotation} selects
-$\sym{Theta}<\pi/4$ under the sine-double-angle hypotheses, the additional
-spectral inclusion, and an operator-norm perturbation or residual smaller
-than half the gap. Our proofs use
-the spectral calculus to make this choice in Hilbert space.
+The double-angle theorems for $\sin(2\sym{Theta})$ and $\tan(2\sym{Theta})$
+  require selecting an acute branch.
+Because the function $\sin(2\sym{theta})$ is small both when $\sym{theta}$ is
+  near $0$ and when $\sym{theta}$ is near $\pi/2$, a bound on
+  $\sin(2\sym{Theta})$ alone cannot determine whether an approximate subspace is
+  close to or nearly orthogonal to the target.
+Ensuring that an approximation is accurate requires showing that the angles
+  satisfy the acute condition $\sym{Theta} \leq \pi/4$.
+
+The branch-selection theorem \citep[Theorem~8.1]{davis1970rotation}
+  characterizes this condition: $\sym{Theta} \leq \pi/4$ holds if and only if
+  the perturbed operator has reducing subspaces whose spectra remain separated
+  across the gap, with one component at or below $\sym{alphaEndpoint}$ and the
+  other at or above $\sym{alphaEndpoint} + \sym{delta}$.
+Under this placement, shifted quadratic-form inequalities on the compressed
+  blocks ensure that no spectrum enters the open gap $(\sym{alphaEndpoint},
+  \sym{alphaEndpoint} + \sym{delta})$.
+
+The smallness criterion \citep[Theorem~8.2]{davis1970rotation} supplies an a
+  priori guarantee: whenever the perturbation or residual norm satisfies
+  $\|\sym{H}\|_{\mathrm{op}} < \sym{delta}/2$ or $\|\sym{R}\|_{\mathrm{op}} <
+  \sym{delta}/2$ and the trial spectrum satisfies $\sigma(\sym{A0}) \subseteq
+  [\sym{betaEndpoint} - \sym{delta}/2, \sym{alphaEndpoint} + \sym{delta}/2]$,
+  the strict acute bound $\sym{Theta} < \pi/4$ holds.
+
+We formalized both theorems in Hilbert space using spectral calculus.
 
 \subsection{Approximation numbers and operator-ideal norms}
 
