@@ -5,6 +5,9 @@ Audited 2 November 2026. The target is
 subsection C.1. This checks the table's mathematical summaries against Lean;
 it does not replace the original-paper correspondence reviews.
 
+The initial comparison below predates the operator/norm-scope repairs later
+on the same date. The follow-up at the end records the updated Theorem 8.2 row.
+
 The starting declaration list is the `canonical_evidence` of each of the
 29 results in the
 [result inventory](../../dev/davis-kahan-1970-formalization-result-inventory.json).
@@ -84,7 +87,7 @@ The inventory supplies the full names of the registered witnesses.
 | `DK-6.3-thm` | `TanThetaDirectedUnbounded.lean`, `tanTheta_directed_unboundedRitz_normalizedUIN_complex/real` | Isometric Ritz data, reducing complement, ordered form gap, and bounded residual in the ideal. The output includes strict directed-sine approximation bounds and a tangent representative with the stated norm estimate. |
 | `DK-6.3-lem` | `Section6SourceScope.lean`, `lemma6_3_leakage_separable_complex/real`; [`Section6AppendixLeakage.lean`](../../DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean), `approximationEnergy` | Bounded `K`, positive integer rank bound, positive tolerance, invariance of the selected image, and finite sum of squared approximation numbers. Conclusion is the strict operator-norm leakage bound. |
 | `DK-8.1-thm` | [`Section8/Theorem81SourceUnbounded.lean`](../../DavisKahan/Sources/DavisKahan1970/Section8/Theorem81SourceUnbounded.lean), branch-existence, maximal-angle equivalence and compression witnesses; [`Theorem81BlockEigenvalue.lean`](../../DavisKahan/Sources/DavisKahan1970/Section8/Theorem81BlockEigenvalue.lean), eight real/complex eigenvalue/gauge witnesses | Bounded off-diagonal perturbation and ordered reference gap. The prescribed-target equivalence takes matched crossed defects. Compression conclusions are quadratic-form bounds on domains. All eight eigenvalue/gauge witnesses have an explicit finite-dimensional instance. |
-| `DK-8.2-thm` | [`Section8/Theorem82UnboundedPath.lean`](../../DavisKahan/Sources/DavisKahan1970/Section8/Theorem82UnboundedPath.lean), real/complex branch witnesses; [`Theorem82SourceUnbounded.lean`](../../DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceUnbounded.lean), four real/complex perturbation/residual witnesses | Bounded self-adjoint perturbation, reducing subspaces, exact perturbed interval/exterior placement, expanded reference interval, matched crossed defects and the respective strict smallness condition. Both versions give the full acute-branch conclusion; their norm bounds are ambient and directed respectively. |
+| `DK-8.2-thm` | [`Theorem82WhereDefinedNorms.lean`](../../DavisKahan/Sources/DavisKahan1970/Section8/Theorem82WhereDefinedNorms.lean), real/complex perturbation and common-domain residual witnesses; [`Theorem82CommonDomain.lean`](../../DavisKahan/Sources/DavisKahan1970/Section8/Theorem82CommonDomain.lean), the residual-only operator-scope reduction and norm-free branch corollaries | The perturbation alternative uses bounded self-adjoint H. The residual alternative accepts common-domain unbounded self-adjoint A,T with only a bounded residual on the reference subspace. Both retain exact perturbed interval/exterior placement, expanded reference interval, matched crossed defects, and strict smallness. Their norm inequalities apply where both displayed norms exist, and the full acute-branch conclusion is independent of ideal membership. |
 
 ## Verification
 
@@ -105,3 +108,24 @@ including its shared conventions. `git diff --check` also passed.
 This is a manual comparison document. It adds no checker, CI gate, or new
 mathematical obligation. The table summarizes main conclusions; it does not
 reproduce every conjunct of every source result.
+
+## Follow-up after the operator and norm-scope repairs
+
+The Theorem 8.2 row now distinguishes its alternatives. Only the perturbation
+alternative requires a bounded full perturbation H. The residual alternative
+uses the common-domain self-adjoint A,T setup already specified in the
+double-angle sine row and a bounded residual R. Its smallness hypothesis is
+`||R||op < delta/2`; boundedness of the full difference T-A is unnecessary.
+The spectral band, gap, and crossed-defect assumptions are unchanged.
+
+`Theorem82WhereDefinedNorms.lean` states both alternatives for real and complex
+Hilbert spaces at the weaker where-defined norm boundary. Each retains the
+appropriate ambient/directed double-angle estimate conditional on the two
+displayed norms existing, and concludes the full angle below pi/4 independently
+of ideal membership. The scalar-generic completion/restriction construction in
+`Theorem82CommonDomain.lean` supplies the residual-only reduction.
+
+The table's shared norm convention already requires each displayed norm to be
+defined. The new weaker-boundary declarations in Sections 4–6, tangent, and
+double-angle tangent now support that convention without adding unconditional
+Fan dominance to the input norm family. The source-result selection remains 29.
