@@ -148,8 +148,8 @@ $\sym{Wcompetitor}$ is a minimizer. This is the stationarity condition.
 We use it as a necessary condition on the global minimizer already
 obtained in Step~1.
 
-Let $\sym{SkewDirection}$ be skew-symmetric, meaning
-$\sym{SkewDirection}^T=-\sym{SkewDirection}$.
+Let $\sym{SkewDirection}$ be skew-symmetric (\ie{}
+$\sym{SkewDirection}^T=-\sym{SkewDirection}$).
 For real $t$, its exponential is orthogonal, since
 \[
  \exp(t\sym{SkewDirection})^T
@@ -157,7 +157,7 @@ For real $t$, its exponential is orthogonal, since
  =\exp(t\sym{SkewDirection})^{-1}.
 \]
 If $\sym{SkewDirection}$ commutes with $\like{Psource}{P_K}$, so does its
-exponential. It therefore maps the source onto itself, and
+exponential.\jonsays{Why? Can use parentheticals for obvious things} It therefore maps the source onto itself, and
 $\sym{Wcompetitor}\exp(t\sym{SkewDirection})$ remains in $\sym{FeasibleTransport}$.
 This gives explicit curves on which to test stationarity.
 
@@ -179,7 +179,7 @@ On such a rotation plane, define the skew-symmetric spectral gradient by
  =\sym{MatchingPhaseCost}'(t)
        \begin{pmatrix}0&-1\\1&0\end{pmatrix}.
 \]
-On the $+1$ and $-1$ eigenspaces of the transporter it is zero.
+On the $+1$ and $-1$ eigenspaces of the transporter it is \jonsays{Say what ``it'' is} zero.
 Every real orthogonal matrix splits into these scalar blocks and planar
 rotations: diagonalize over $\mathbb C$ and pair conjugate eigenvectors
 to obtain the real planes. This defines $\sym{SpectralGradient}$ on the
