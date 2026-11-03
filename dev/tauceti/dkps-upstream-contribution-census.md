@@ -4180,3 +4180,25 @@ Challenge (19,921 jobs), without warnings. Final combined-head logs are
 `/tmp/dkps-d16-consume-combined-challenge.log`. The earlier YWS census probe
 remains applicable: the incoming work did not change that package or its
 registered declarations.
+
+## Ritz-residual tangent CI repair — November 3, 2026
+
+[#26822](https://github.com/TauCetiProject/TauCeti/pull/26822), SSP-C28/C29,
+is repaired at `47d0b3c42adffada679fdadc738d2fc862d79c0b`.
+The previous head `af618df07e144de2386ed4e7b744526269d211c4` failed
+[CI run 41554723564](https://github.com/TauCetiProject/TauCeti/actions/runs/41554723564)
+with one new environment-linter violation. A local run of the 13 default
+environment linters identifies `unusedArguments` on the private
+`isTransverse_of_tanThetaIntervalGap`: its `[U.HasOrthogonalProjection]`
+binder is unused. Removing that binder generalizes the private helper;
+the two public tangent/residual and right-angle-exclusion statements are unchanged.
+
+The focused warning-as-error build passed (5783 jobs); all 13 default
+environment linters then passed over 893 imported TauCeti declarations plus
+399 generated declarations. Full header/text style passed. These local checks
+do not certify the entire upstream sandbox/audit pipeline or reviewer approval.
+No public API, proof provenance, DKPS source, or dependency pin changed.
+The existing shared Ritz packet contains the repaired branch bundle, source
+patch, SHA-bound self-review, and before/after lint logs. Upstream CI/review
+on the new head remains pending; this is a repair of an existing submission,
+not accepted integration or another roadmap delivery.
