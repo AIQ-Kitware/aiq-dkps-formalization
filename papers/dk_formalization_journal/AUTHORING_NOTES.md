@@ -215,6 +215,35 @@ projection-block construction follows
 No Lean statement or source-result selection changed. New power-cost and
 complex-structure symbols have glossary reminders and notation-appendix entries.
 
+## Matching terminology and notation review (3 November 2026)
+
+Applied the author's follow-up comments directly and removed the resolved
+comment calls, retaining the review macros. The section now specifies
+maximum-weight matching on a finite general graph. Edge weights are defined
+as the two-singleton cost minus the paired cost; “savings” is no longer the
+reader-facing term. Maximum cardinality is a different objective. No
+infinite-dimensional matching theorem is asserted.
+
+The invalid overlapping-pair example leads with its prohibition. The redundant
+zero-angle sentence before the theorem is removed; the proof retains the
+argument excluding zero angles as cheaper extra partners. The figure caption
+starts with the ambient R6 space, two three-dimensional subspaces with zero
+intersection, and their three positive principal angles. Figure and Manim
+labels use the same edge-weight terminology.
+
+The proof introduction explains why we use the differentiable p > 1 cost
+before taking the trace-norm limit. Step 5 explains the cost-preserving
+construction from matchings and extraction from minimizers without asserting
+a bijection between all transporters and matchings. Terminology is kept
+consistent rather than varied for style.
+
+The orthogonal group is defined before the theorem. Named auxiliary objects
+in the matching proof now use the same semantic registry as the main text,
+with neutral ink and detailed hover reminders. Auxiliary gradient, phase, and
+power-cost rows were removed from the printed notation appendix; the registry
+retains them. The numerical model's internal `savings` dictionary key is left
+unchanged to preserve its existing consumers. No mathematical theorem changed.
+
 ## Generated artifacts (2 November 2026)
 
 The author requested ignoring regenerable outputs. Figure PGF/PDF/SVG exports,

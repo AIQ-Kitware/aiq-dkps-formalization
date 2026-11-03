@@ -109,7 +109,7 @@ def matching():
         chosen = (i,j) in ex['pairs']
         ax.plot(*points[[i,j]].T, color=COST if chosen else GUIDE,
                 linewidth=4 if chosen else 2, linestyle='-' if chosen else '--', zorder=1)
-        ax.text(*label_pos[(i,j)], rf'$\like{{MatchingSaving}}{{{gain:+.4f}}}$', ha='center', va='center',
+        ax.text(*label_pos[(i,j)], rf'$\like{{MatchingEdgeWeight}}{{{gain:+.4f}}}$', ha='center', va='center',
                 fontsize=19, color=COST if chosen else MUTED,
                 bbox={'facecolor':'white','edgecolor':'none','pad':3}, zorder=4)
     for i, ((x,y), theta, single) in enumerate(zip(points, ex['angles_deg'], ex['singleton_costs'])):
@@ -135,7 +135,7 @@ def matching():
     fig.add_artist(plt.Line2D([.5,.5],[.13,.89],transform=fig.transFigure,color=GUIDE,lw=1))
     save(fig, 'real_nuclear_matching',
          'Combinatorial graph on angle labels 30,45,75 degrees; vertex positions are arbitrary. '
-         'Edge savings, all four feasible matchings, '
+         'Edge weights, all four feasible matchings, '
          'and the attaining four-dimensional paired block plus two-dimensional singleton reflection.')
 
 

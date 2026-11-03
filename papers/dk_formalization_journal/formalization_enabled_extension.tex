@@ -2,18 +2,9 @@
 \label{sec:example-transport}
 
 We prove an exact formula for the smallest trace-norm displacement of a real
-  orthogonal map carrying one given subspace onto another.
-The formula is a weighted-matching problem on their principal angles.
-\jonsays{I'd like to use more standard CS-like language here.
-We should refer to the problem as a maximum matching on a general graph.
-Graph matching invokes too many connotations of bipartite matching, so we should
-  be more clear here and elsewhere.
-We can say on general graphs once, and then just "maximum matching" for
-  everything else later on. We also might want to mention that this is a finite case, unless we really do have the more general proof - 
-  I'm actually curious about if a maximum matching can make sense for an infinite dimensional orthogonal transport - it seems like it can - 
-  we should keep this extension for the paper simple though. This has to be the most interesting novel extension that I can pick up and 
-  master in a few days so we can publish. We can work on the general extension paper later.
-  }
+orthogonal map carrying one given subspace onto another in finite dimension.
+The formula reduces this optimization to maximum-weight matching on a finite
+general graph whose vertices label the positive principal angles.
 Its proof uses the principal-angle geometry, real and complex operator
   constructions, and singular-value norms developed for the formalization,
   together with additional optimization arguments.
@@ -24,8 +15,8 @@ counted with multiplicity. A matching $\sym{Matching}$ chooses unordered
 pairs of labels from $\{1,\ldots,m\}$, using each label at most once.
 Labels that are not used in a pair are unmatched.
 For three labels, $\sym{Matching}=\{\{1,2\}\}$ pairs labels $1,2$ and
-leaves $3$ unmatched; adding $\{2,3\}$ would use label $2$ twice and is
-excluded.\jonsays{maybe better to say that this is disallowed, the phrasing feels like its a legal move, start with the fact that we are showing an example of an illegal move and why it is illegal. We don't need to say equal angles have distinct labels, I think that is clear enough already.} Equal angles still have distinct labels.
+leaves $3$ unmatched. The choice $\{\{1,2\},\{2,3\}\}$ is disallowed:
+label $2$ would occur in two pairs.
 
 Each positive principal angle describes a source line and a target line
 in a two-dimensional principal plane. Transporting that plane independently
@@ -40,14 +31,15 @@ cost $\like{SingletonCost}{s_i}$:
  \like{PairCost}{e_{ij}}=4\sin\bigl((\like{theta}{\theta_i}+\like{theta}{\theta_j})/2\bigr),\qquad
  \like{SingletonCost}{s_i}=\min\{4\sin(\like{theta}{\theta_i}/2),2\}.
 \end{equation}
-The paired cost is attained by an orthogonal transporter on the two-plane
-sum. Common zero-angle directions can remain fixed.\jonsays{maybe we don't need to mention the zero-angle case, its reasonably implicit}
+The paired cost is attained by an orthogonal transporter on the two-plane sum.
+Write $\sym{OrthogonalGroup}$ for the orthogonal group of real
+$n\times n$ matrices, defined by $\sym{Wcompetitor}^T\sym{Wcompetitor}=I$.
 
 \begin{theorem}[Real trace-norm matching reduction]
 \label{thm:real-matching-example}
 For equal-dimensional real subspaces $\like{Usource}{K},\like{Vtarget}{L}$ as above,
 \begin{equation}\label{eq:real-nuclear-match}
-\min_{\substack{\sym{Wcompetitor}\in O(n)\\\sym{Wcompetitor}(\like{Usource}{K})=\like{Vtarget}{L}}}\|I-\sym{Wcompetitor}\|_1
+\min_{\substack{\sym{Wcompetitor}\in \sym{OrthogonalGroup}\\\sym{Wcompetitor}(\like{Usource}{K})=\like{Vtarget}{L}}}\|I-\sym{Wcompetitor}\|_1
 =
 \min_{\sym{Matching}\text{ a matching}}
 \left(
@@ -61,25 +53,33 @@ right angles, and common ambient directions; the left side has no
 principal-plane or determinant constraint.
 \end{theorem}
 
-We can solve the matching problem by maximizing the savings from pairing angles.
-\jonsays{The word "savings" is imprecise here}
-Starting from the all-singleton cost $C_0=\sum_i s_i$, pairing $i,j$ saves
-$\like{MatchingSaving}{g_{ij}}=s_i+s_j-e_{ij}$. Thus a matching $\sym{Matching}$ costs
-$\like{TraceCost}{C(M)}=C_0-\sum_{\{i,j\}\in\sym{Matching}}g_{ij}$, and its edges must have disjoint
-endpoints. Figure~\ref{fig:real-nuclear-matching} represents these pairing
-choices as a weighted graph for a three-angle example.
+To express the formula as maximum-weight matching, start from the
+all-singleton cost $\sym{SingletonBaseline}=\sum_i \like{SingletonCost}{s_i}$ and assign each edge $\{i,j\}$ the weight
+\[
+ \sym{MatchingEdgeWeight}=\like{SingletonCost}{s_i}+\like{SingletonCost}{s_j}-\like{PairCost}{e_{ij}}.
+\]
+This weight is the difference between the cost of two singletons and the
+paired cost. Thus a matching $\sym{Matching}$ has cost
+\[
+ \like{TraceCost}{C(M)}=\sym{SingletonBaseline}-
+       \sum_{\{i,j\}\in\sym{Matching}}\sym{MatchingEdgeWeight}.
+\]
+Minimizing this cost is equivalent to maximizing the sum of edge weights.
+The empty matching is allowed, and edges of negative weight can be omitted.
+Figure~\ref{fig:real-nuclear-matching} shows a three-angle example.
 
 \begin{figure}[tb]
 \centering
 \resizebox{\linewidth}{!}{\input{figures/real_nuclear_matching.pgf}}
 \caption{
-    \jonsays{This still does not lead with what this is. This should say: for an example of a R6 ambient space, and two disjoint R3 subspaces, there are 3 non-zero principle angles between the subspaces. This figure shows the graph corresponding to the setup. Maybe start with Graph of principle angle pairing choices corresponding to \ldots and then describe the problem }
-    Graph of pairing choices for principal angles $30^\circ$,
-$45^\circ$, and $75^\circ$. Vertex positions are arbitrary; each vertex
-represents an angle label and each edge a possible pairing. Vertices carry
-singleton costs $s_i$; edge labels give savings $g_{ij}$. The solid edge
+Graph of principal-angle pairing choices for two three-dimensional subspaces
+of $\mathbb R^6$ whose intersection is $\{0\}$ and whose principal angles are
+$30^\circ$, $45^\circ$, and $75^\circ$.
+Vertex positions are arbitrary; each vertex represents an angle label and
+each edge a possible pairing. Vertices carry singleton costs $\like{SingletonCost}{s_i}$;
+edges carry weights $\sym{MatchingEdgeWeight}=\like{SingletonCost}{s_i}+\like{SingletonCost}{s_j}-\like{PairCost}{e_{ij}}$. The solid edge
 pairs labels $1,2$ and leaves label $3$ unmatched. The table lists all four
-matchings; costs and savings are rounded to four decimals. Geometrically,
+matchings; costs and edge weights are rounded to four decimals. Geometrically,
 the selected pair is realized by a four-dimensional transporter and the
 unmatched angle by a two-dimensional reflection. Their orthogonal sum
 attains the minimum on $\mathbb R^6$, with trace displacement
@@ -88,49 +88,48 @@ $4\sin(37.5^\circ)+2\approx4.4350$.}
 \end{figure}
 
 \begin{proof}[Proof and explanation]
-We prove the formula by showing that an attaining transporter can be
-assembled from pieces carrying one or two principal angles. Choosing
-these pieces gives a matching. Conversely, every matching supplies such
-a transporter. The work is to justify the decomposition while allowing
-every orthogonal competitor in the original problem.
-\jonsays{Don't be afraid to repeat words. Using consistent terminology can help ground the reader so they can see patterns and correspondences. You do not have to - and should not - use synonyms to increase word variation}
+The trace norm, corresponding to $p=1$, need not be differentiable.
+We first replace it by a differentiable displacement cost with $1<p<2$.
+At a global minimizer, derivatives along constraint-preserving variations
+vanish. We use these equations to decompose the minimizer into orthogonal
+blocks carrying one or two principal angles. The blocks determine a matching;
+conversely, every matching constructs a transporter with the same cost.
+This proves equality of the two minimum values for $1<p<2$.
+We then let $p$ approach $1$ from above to recover the trace norm.
 
 \emph{Step 1: choose a differentiable cost and a global minimizer.}
 For $1<p<2$, set
 \[
- \mathcal F=\{\sym{Wcompetitor}\in O(n):
+ \sym{FeasibleTransport}=\{\sym{Wcompetitor}\in \sym{OrthogonalGroup}:
                  \sym{Wcompetitor}(\like{Usource}{K})=\like{Vtarget}{L}\},
  \qquad
  \like{PowerCost}{\Phi_p}(\sym{Wcompetitor})
-       =\sum_{j=1}^n s_j(I-\sym{Wcompetitor})^p.
+       =\sum_{j=1}^n \like{TransportSingularValues}{s_j}(I-\sym{Wcompetitor})^p.
 \]
-Here $s_j(T)$ denotes a singular value of $T$. At $p=1$ this sum is the
-trace norm in the theorem. For $p>1$ it is differentiable, including at
-zero displacement singular values, which permits the derivative argument
-below.\jonsays{We should give a bit of a hint or insight into the proof strategy here. I.e. say we are interested in the case where p=1, but we it is not differentiable, so we are going to start with p>1 and then look at limiting cases - assuming I'm saying that correctly.}
+Here $\like{TransportSingularValues}{s_j}(T)$ denotes a singular value of $T$. For $p>1$ this cost is
+differentiable, including at zero displacement singular values.
 
 Write $\like{Psource}{P_K}$ and $\like{Qtarget}{P_L}$ for the orthogonal
 projections onto the source and target. An orthogonal map carrying an
 orthonormal basis of $\like{Usource}{K}$ to one of $\like{Vtarget}{L}$,
-extended to their orthogonal complements, belongs to $\mathcal F$.
-Thus $\mathcal F$ is nonempty. The group $O(n)$ is closed and bounded
-\jonsays{O(n) does not have a sym symbol if we want to modify notation, and is not defined. I think we should avoid adding all the proof details to the notation table in the appendix, as it makes it more clear what the objects we are concerned with in the DK formalization are, but we should still be disciplined about having the ability to create a glossary of all notation used in the paper from a single source of truth. There are many other places where this is a problem}
+extended to their orthogonal complements, belongs to $\sym{FeasibleTransport}$.
+Thus $\sym{FeasibleTransport}$ is nonempty. The group $\sym{OrthogonalGroup}$ is closed and bounded
 in $\mathbb R^{n\times n}$, hence compact by Heine--Borel.
 The equivalent transport equation
 $\sym{Wcompetitor}\like{Psource}{P_K}\sym{Wcompetitor}^T
  =\like{Qtarget}{P_L}$ is a closed constraint.
 Since $\like{PowerCost}{\Phi_p}$ is continuous, the extreme value theorem
-gives a global minimizer $\sym{Wcompetitor}\in\mathcal F$.
+gives a global minimizer $\sym{Wcompetitor}\in\sym{FeasibleTransport}$.
 
 The decomposition we seek is an orthogonal sum
-$\mathbb R^n=\bigoplus_a V_a$ in which each $V_a$ is preserved by
+$\mathbb R^n=\bigoplus_a\sym{MatchingBlock}$ in which each $\sym{MatchingBlock}$ is preserved by
 $\like{Psource}{P_K}$, $\like{Qtarget}{P_L}$, and $\sym{Wcompetitor}$.
 In a basis adapted to this sum all three matrices are block diagonal.
 Consequently, the source and target split as the sums of their
-intersections with the $V_a$, and
+intersections with the $\sym{MatchingBlock}$, and
 \begin{equation}\label{eq:matching-block-additivity}
  \like{PowerCost}{\Phi_p}(\sym{Wcompetitor})
- =\sum_a\like{PowerCost}{\Phi_p}(\sym{Wcompetitor}|_{V_a}).
+ =\sum_a\like{PowerCost}{\Phi_p}(\sym{Wcompetitor}|_{\sym{MatchingBlock}}).
 \end{equation}
 Indeed, the displacement is block diagonal too, and its singular-value
 list is the union of the block singular-value lists. The principal-angle
@@ -142,7 +141,7 @@ These two additivity facts will turn the block decomposition into a
 matching of the original angle labels.
 
 \emph{Step 2: use derivatives along maps that still transport the source.}
-Consider smooth curves $\sym{Wcompetitor}(t)\in\mathcal F$, for real $t$
+Consider smooth curves $\sym{Wcompetitor}(t)\in\sym{FeasibleTransport}$, for real $t$
 near zero, with $\sym{Wcompetitor}(0)=\sym{Wcompetitor}$.
 The cost derivative at zero vanishes along every such curve because
 $\sym{Wcompetitor}$ is a minimizer. This is the stationarity condition.
@@ -159,17 +158,17 @@ For real $t$, its exponential is orthogonal, since
 \]
 If $\sym{SkewDirection}$ commutes with $\like{Psource}{P_K}$, so does its
 exponential. It therefore maps the source onto itself, and
-$\sym{Wcompetitor}\exp(t\sym{SkewDirection})$ remains in $\mathcal F$.
+$\sym{Wcompetitor}\exp(t\sym{SkewDirection})$ remains in $\sym{FeasibleTransport}$.
 This gives explicit curves on which to test stationarity.
 
 To describe the derivative, define the scalar phase cost
 \[
  \sym{MatchingPhaseCost}(t)=(2\sin(t/2))^p,\qquad 0\le t\le\pi.
 \]
-A planar rotation $R_t$ through $t$ satisfies
+A planar rotation $\like{MatchingPlanarRotation}{R_t}$ through $t$ satisfies
 \[
- (I-R_t)^T(I-R_t)
-   =2I-R_t-R_t^T
+ (I-\like{MatchingPlanarRotation}{R_t})^T(I-\like{MatchingPlanarRotation}{R_t})
+   =2I-\like{MatchingPlanarRotation}{R_t}-\like{MatchingPlanarRotation}{R_t}^T
    =4\sin^2(t/2)I.
 \]
 Its two displacement singular values are therefore both $2\sin(t/2)$,
@@ -217,7 +216,7 @@ $\like{Usource}{K}\oplus\like{Usource}{K}^{\perp}$, the gradient and source
 reflection thus have the forms
 \[
  \sym{SpectralGradient}
-  =\begin{pmatrix}0&G_{01}\\-G_{01}^T&0\end{pmatrix},
+  =\begin{pmatrix}0&\sym{GradientOffDiagonal}\\-\sym{GradientOffDiagonal}^T&0\end{pmatrix},
  \qquad
  \sym{Jreflect}=2\like{Psource}{P_K}-I
   =\begin{pmatrix}I&0\\0&-I\end{pmatrix}.
@@ -234,11 +233,11 @@ since
 $\langle-\like{SpectralGradient}{G^2}x,x\rangle
   =\|\sym{SpectralGradient}x\|^2$.
 Decompose the space into its eigenspaces. The gradient, transporter,
-and source reflection all preserve them. On an eigenspace $V_g$
+and source reflection all preserve them. On an eigenspace $\sym{GradientLevelSpace}$
 with positive eigenvalue $\like{GradientLevel}{g^2}$, put
 $\sym{GradientComplexStructure}=\sym{SpectralGradient}/\sym{GradientLevel}$.
 It satisfies $\sym{GradientComplexStructure}^2=-I$ and preserves lengths.
-We can therefore treat $V_g$ as a complex space by defining
+We can therefore treat $\sym{GradientLevelSpace}$ as a complex space by defining
 \[
  (a+ib)x=ax+b\sym{GradientComplexStructure}x.
 \]
@@ -269,49 +268,49 @@ There are at most two such phases. To check this directly,
 The second derivative changes sign once, where
 $\tan^2(t/2)=p-1$. The first derivative therefore increases and then
 decreases, so a positive horizontal level has at most two intersections.
-Writing the two phases as $\varphi_1,\varphi_2$, with equality allowed,
+Writing the two phases as $\like{GradientEigenphase}{\varphi_1},\like{GradientEigenphase}{\varphi_2}$, with equality allowed,
 we obtain
 \[
- \sym{Wcompetitor}|_{V_g}
-   =e^{i\varphi_1}E+e^{i\varphi_2}(I-E),
+ \sym{Wcompetitor}|_{\sym{GradientLevelSpace}}
+   =e^{i\like{GradientEigenphase}{\varphi_1}}\sym{GradientPhaseProjection}+e^{i\like{GradientEigenphase}{\varphi_2}}(I-\sym{GradientPhaseProjection}),
 \]
-where $E$ is the orthogonal projection onto the first phase space.
-A subspace preserved by $E$ is preserved by this transporter.
+where $\sym{GradientPhaseProjection}$ is the orthogonal projection onto the first phase space.
+A subspace preserved by $\sym{GradientPhaseProjection}$ is preserved by this transporter.
 To preserve the source projection as well, we require invariance under
 the conjugation $\sym{Jreflect}$.
 
 Choose complex coordinates in which $\sym{Jreflect}$ is coordinate
-conjugation and write $E=X+iY$ with real matrices $X,Y$.
-The equations $E^*=E$ and $E^2=E$ give
+conjugation and write $\sym{GradientPhaseProjection}=\sym{ProjectionRealPart}+i\sym{ProjectionImaginaryPart}$ with real matrices $\sym{ProjectionRealPart},\sym{ProjectionImaginaryPart}$.
+The equations $\sym{GradientPhaseProjection}^*=\sym{GradientPhaseProjection}$ and $\sym{GradientPhaseProjection}^2=\sym{GradientPhaseProjection}$ give
 \[
- X^T=X,\qquad Y^T=-Y,\qquad
- X^2-Y^2=X,\qquad XY+YX=Y.
+ \sym{ProjectionRealPart}^T=\sym{ProjectionRealPart},\qquad \sym{ProjectionImaginaryPart}^T=-\sym{ProjectionImaginaryPart},\qquad
+ \sym{ProjectionRealPart}^2-\sym{ProjectionImaginaryPart}^2=\sym{ProjectionRealPart},\qquad \sym{ProjectionRealPart}\sym{ProjectionImaginaryPart}+\sym{ProjectionImaginaryPart}\sym{ProjectionRealPart}=\sym{ProjectionImaginaryPart}.
 \]
 For real coordinate vectors $x$,
-$\langle Xx,x\rangle=\operatorname{Re}\langle Ex,x\rangle$
-lies between zero and $\|x\|^2$, so the eigenvalues of $X$ lie in $[0,1]$.
-If $Xu=\lambda u$, the last two identities imply
+$\langle \sym{ProjectionRealPart}x,x\rangle=\operatorname{Re}\langle \sym{GradientPhaseProjection}x,x\rangle$
+lies between zero and $\|x\|^2$, so the eigenvalues of $\sym{ProjectionRealPart}$ lie in $[0,1]$.
+If $\sym{ProjectionRealPart}u=\sym{ProjectionEigenvalue} u$, the last two identities imply
 \[
- X(Yu)=(1-\lambda)Yu,\qquad
- Y^2u=-\lambda(1-\lambda)u.
+ \sym{ProjectionRealPart}(\sym{ProjectionImaginaryPart}u)=(1-\sym{ProjectionEigenvalue})\sym{ProjectionImaginaryPart}u,\qquad
+ \sym{ProjectionImaginaryPart}^2u=-\sym{ProjectionEigenvalue}(1-\sym{ProjectionEigenvalue})u.
 \]
-For a unit $u$ with $0<\lambda<1$, set
-$\eta=\sqrt{\lambda(1-\lambda)}$ and $v=Yu/\eta$.
+For a unit $u$ with $0<\sym{ProjectionEigenvalue}<1$, set
+$\sym{ProjectionCoupling}=\sqrt{\sym{ProjectionEigenvalue}(1-\sym{ProjectionEigenvalue})}$ and $v=\sym{ProjectionImaginaryPart}u/\sym{ProjectionCoupling}$.
 Skew-symmetry shows that $u,v$ are orthonormal, and
 \[
- Xu=\lambda u,\quad Xv=(1-\lambda)v,\quad
- Yu=\eta v,\quad Yv=-\eta u.
+ \sym{ProjectionRealPart}u=\sym{ProjectionEigenvalue} u,\quad \sym{ProjectionRealPart}v=(1-\sym{ProjectionEigenvalue})v,\quad
+ \sym{ProjectionImaginaryPart}u=\sym{ProjectionCoupling} v,\quad \sym{ProjectionImaginaryPart}v=-\sym{ProjectionCoupling} u.
 \]
-Thus their real span is preserved by both $X$ and $Y$.
-This includes $\lambda=1/2$. At $\lambda=0$ or $1$, $Yu=0$ and a
+Thus their real span is preserved by both $\sym{ProjectionRealPart}$ and $\sym{ProjectionImaginaryPart}$.
+This includes $\sym{ProjectionEigenvalue}=1/2$. At $\sym{ProjectionEigenvalue}=0$ or $1$, $\sym{ProjectionImaginaryPart}u=0$ and a
 single eigenvector gives an invariant real line.
-By symmetry of $X$ and skew-symmetry of $Y$, the orthogonal complement
-of each chosen line or plane is again preserved by $X,Y$.
+By symmetry of $\sym{ProjectionRealPart}$ and skew-symmetry of $\sym{ProjectionImaginaryPart}$, the orthogonal complement
+of each chosen line or plane is again preserved by $\sym{ProjectionRealPart},\sym{ProjectionImaginaryPart}$.
 The construction can be repeated until the real
 coordinate space is exhausted.
 
 The complex spans of these lines and planes are invariant under
-$E,\sym{Jreflect}$, and $\sym{Wcompetitor}$. Returning to the original
+$\sym{GradientPhaseProjection},\sym{Jreflect}$, and $\sym{Wcompetitor}$. Returning to the original
 real space gives blocks of dimension two or four. Each is also
 preserved by
 $\like{Psource}{P_K}=(\sym{Jreflect}+I)/2$, hence by
@@ -329,7 +328,7 @@ to $\like{Psource}{P_K}$ and the projection onto its $-1$ eigenspace:
 this gives real lines and planes preserved by both projections and the
 transporter. On an invariant line the source and target are either both
 zero or both the whole line. Replacing a one-dimensional $-1$ block by
-$+1$ preserves them and saves $2^p$ in cost. Such a block cannot
+$+1$ preserves them and decreases the cost by $2^p$. Such a block cannot
 occur at a global minimum. The remaining blocks are fixed directions
 or planes with one source direction.
 This completes the decomposition needed for
@@ -351,70 +350,70 @@ so its cost is $2^p$. The one-angle minimum is
 For two angles, relabel within the pair so that
 $\like{theta}{\theta_i}\ge\like{theta}{\theta_j}$, and set
 \[
- h=(\like{theta}{\theta_i}+\like{theta}{\theta_j})/2,\qquad
- d=(\like{theta}{\theta_i}-\like{theta}{\theta_j})/2.
+ \sym{PairMeanAngle}=(\like{theta}{\theta_i}+\like{theta}{\theta_j})/2,\qquad
+ \sym{PairHalfDifference}=(\like{theta}{\theta_i}-\like{theta}{\theta_j})/2.
 \]
-Then $0\le d\le h$ and $h+d\le\pi/2$.
+Then $0\le \sym{PairHalfDifference}\le \sym{PairMeanAngle}$ and $\sym{PairMeanAngle}+\sym{PairHalfDifference}\le\pi/2$.
 In principal coordinates the direct rotation is
 \[
- D=\begin{pmatrix}C&-S\\S&C\end{pmatrix},\qquad
- C=\operatorname{diag}(\cos\like{theta}{\theta_i},
+ \sym{PairDirectRotation}=\begin{pmatrix}\sym{PairCosineBlock}&-\sym{PairSineBlock}\\\sym{PairSineBlock}&\sym{PairCosineBlock}\end{pmatrix},\qquad
+ \sym{PairCosineBlock}=\operatorname{diag}(\cos\like{theta}{\theta_i},
                       \cos\like{theta}{\theta_j}),\quad
- S=\operatorname{diag}(\sin\like{theta}{\theta_i},
+ \sym{PairSineBlock}=\operatorname{diag}(\sin\like{theta}{\theta_i},
                       \sin\like{theta}{\theta_j}).
 \]
 Every orthogonal transporter on this four-dimensional space is
-$D\operatorname{diag}(U_0,U_1)$ with $U_0,U_1\in O(2)$:
-multiplying by $D^T$ gives an orthogonal map preserving the source
+$\sym{PairDirectRotation}\operatorname{diag}(\like{PairFreeOrthogonal}{U_0},\like{PairFreeOrthogonal}{U_1})$ with $\like{PairFreeOrthogonal}{U_0},\like{PairFreeOrthogonal}{U_1}\in \like{OrthogonalGroup}{O(2)}$:
+multiplying by $\sym{PairDirectRotation}^T$ gives an orthogonal map preserving the source
 and its complement. This parametrization allows mixing between the
 principal planes.
 
-For determinant $+1$, the two matrices $U_0,U_1$ are either both
+For determinant $+1$, the two matrices $\like{PairFreeOrthogonal}{U_0},\like{PairFreeOrthogonal}{U_1}$ are either both
 rotations or both reflections. The planar matrix calculation gives
-phase parameters $x,y$ with
+phase parameters $\sym{PairPhaseX},\sym{PairPhaseY}$ with
 \[
- h\le x\le\pi-h,\qquad d\le y\le\pi-d,
+ \sym{PairMeanAngle}\le \sym{PairPhaseX}\le\pi-\sym{PairMeanAngle},\qquad \sym{PairHalfDifference}\le \sym{PairPhaseY}\le\pi-\sym{PairHalfDifference},
 \]
-and eigenvalues $e^{\pm i(x+y)},e^{\pm i(x-y)}$.
+and eigenvalues $e^{\pm i(\sym{PairPhaseX}+\sym{PairPhaseY})},e^{\pm i(\sym{PairPhaseX}-\sym{PairPhaseY})}$.
 After folding the angles into $[0,\pi]$, the displacement cost is
-$2\bigl(\sym{MatchingPhaseCost}(\min\{x+y,2\pi-x-y\})
-       +\sym{MatchingPhaseCost}(|x-y|)\bigr)$.
-For example, if $U_0,U_1$ rotate through $r+s,r-s$, respectively,
+$2\bigl(\sym{MatchingPhaseCost}(\min\{\sym{PairPhaseX}+\sym{PairPhaseY},2\pi-\sym{PairPhaseX}-\sym{PairPhaseY}\})
+       +\sym{MatchingPhaseCost}(|\sym{PairPhaseX}-\sym{PairPhaseY}|)\bigr)$.
+For example, if $\like{PairFreeOrthogonal}{U_0},\like{PairFreeOrthogonal}{U_1}$ rotate through $\sym{PairRotationR}+\sym{PairRotationS},\sym{PairRotationR}-\sym{PairRotationS}$, respectively,
 these parameters satisfy
-$\cos x=\cos h\cos s$ and $\cos y=\cos d\cos r$.
+$\cos \sym{PairPhaseX}=\cos \sym{PairMeanAngle}\cos \sym{PairRotationS}$ and $\cos \sym{PairPhaseY}=\cos \sym{PairHalfDifference}\cos \sym{PairRotationR}$.
 For two reflections, write
-$U_0=R_{r+s}J_2$ and $U_1=R_{r-s}J_2$ with
-$J_2=\operatorname{diag}(1,-1)$. The calculation gives
-$\cos x=-\sin d\cos r$ and $\cos y=\sin h\cos s$,
-which lie in the same ranges because $h+d\le\pi/2$.
+$\like{PairFreeOrthogonal}{U_0}=\like{MatchingPlanarRotation}{R_{r+s}}\sym{PairPlanarReflection}$ and $\like{PairFreeOrthogonal}{U_1}=\like{MatchingPlanarRotation}{R_{r-s}}\sym{PairPlanarReflection}$ with
+$\sym{PairPlanarReflection}=\operatorname{diag}(1,-1)$. The calculation gives
+$\cos \sym{PairPhaseX}=-\sin \sym{PairHalfDifference}\cos \sym{PairRotationR}$ and $\cos \sym{PairPhaseY}=\sin \sym{PairMeanAngle}\cos \sym{PairRotationS}$,
+which lie in the same ranges because $\sym{PairMeanAngle}+\sym{PairHalfDifference}\le\pi/2$.
 
-We can replace $(x,y)$ by $(\pi-x,\pi-y)$ when $x+y>\pi$ without
-changing this cost. Suppose therefore that $x+y\le\pi$.
-To replace the first parameter by $h$ without increasing the smaller
-phase, we need $h-\tau\le|x-y|$, as well as $\tau\ge d$.
+We can replace $(\sym{PairPhaseX},\sym{PairPhaseY})$ by $(\pi-\sym{PairPhaseX},\pi-\sym{PairPhaseY})$ when $\sym{PairPhaseX}+\sym{PairPhaseY}>\pi$ without
+changing this cost. Suppose therefore that $\sym{PairPhaseX}+\sym{PairPhaseY}\le\pi$.
+To replace the first parameter by $\sym{PairMeanAngle}$ without increasing the smaller
+phase, we need $\sym{PairMeanAngle}-\sym{PairPhaseParameter}\le|\sym{PairPhaseX}-\sym{PairPhaseY}|$, as well as $\sym{PairPhaseParameter}\ge \sym{PairHalfDifference}$.
 Choose the smallest such parameter,
-$\tau=\max\{d,h-|x-y|\}$.
-The identities $x+y+|x-y|=2\max\{x,y\}\ge2h$ and $x+y\ge h+d$
-also give $h+\tau\le x+y$. Thus
+$\sym{PairPhaseParameter}=\max\{\sym{PairHalfDifference},\sym{PairMeanAngle}-|\sym{PairPhaseX}-\sym{PairPhaseY}|\}$.
+The identities $\sym{PairPhaseX}+\sym{PairPhaseY}+|\sym{PairPhaseX}-\sym{PairPhaseY}|=2\max\{\sym{PairPhaseX},\sym{PairPhaseY}\}\ge2\sym{PairMeanAngle}$ and $\sym{PairPhaseX}+\sym{PairPhaseY}\ge \sym{PairMeanAngle}+\sym{PairHalfDifference}$
+also give $\sym{PairMeanAngle}+\sym{PairPhaseParameter}\le \sym{PairPhaseX}+\sym{PairPhaseY}$. Thus
 \[
- d\le\tau\le h,\qquad
- h+\tau\le x+y,\qquad h-\tau\le|x-y|.
+ \sym{PairHalfDifference}\le\sym{PairPhaseParameter}\le \sym{PairMeanAngle},\qquad
+ \sym{PairMeanAngle}+\sym{PairPhaseParameter}\le \sym{PairPhaseX}+\sym{PairPhaseY},\qquad \sym{PairMeanAngle}-\sym{PairPhaseParameter}\le|\sym{PairPhaseX}-\sym{PairPhaseY}|.
 \]
 Since $\sym{MatchingPhaseCost}$ is increasing on $[0,\pi]$, this
 transporter costs at least
-$2\bigl(\sym{MatchingPhaseCost}(h+\tau)+
-        \sym{MatchingPhaseCost}(h-\tau)\bigr)$.
-Every $\tau\in[d,h]$ is attained: take
-$U_0=U_1=R_\gamma$, where
-$\gamma=\arccos(\cos\tau/\cos d)$.
-The denominator is positive since $d\le\pi/4$.
-The preceding phase equations give $x=h,y=\tau$.
+$2\bigl(\sym{MatchingPhaseCost}(\sym{PairMeanAngle}+\sym{PairPhaseParameter})+
+        \sym{MatchingPhaseCost}(\sym{PairMeanAngle}-\sym{PairPhaseParameter})\bigr)$.
+Every $\sym{PairPhaseParameter}\in[\sym{PairHalfDifference},\sym{PairMeanAngle}]$ is attained: take
+$\like{PairFreeOrthogonal}{U_0}=\like{PairFreeOrthogonal}{U_1}=\like{MatchingPlanarRotation}{R_\gamma}$, where
+$\sym{PairAttainingAngle}=\arccos(\cos\sym{PairPhaseParameter}/\cos \sym{PairHalfDifference})$.
+The denominator is positive since $\sym{PairHalfDifference}\le\pi/4$.
+The preceding phase equations give $\sym{PairPhaseX}=\sym{PairMeanAngle},\sym{PairPhaseY}=\sym{PairPhaseParameter}$.
 Thus the positive-determinant pair minimum is
 \begin{equation}\label{eq:matching-pair-power-cost}
  \like{PairPowerCost}{b_{ij}(p)}
- =\min_{\tau\in[d,h]}
-     2\bigl(\sym{MatchingPhaseCost}(h+\tau)+
-             \sym{MatchingPhaseCost}(h-\tau)\bigr).
+ =\min_{\sym{PairPhaseParameter}\in[\sym{PairHalfDifference},\sym{PairMeanAngle}]}
+     2\bigl(\sym{MatchingPhaseCost}(\sym{PairMeanAngle}+\sym{PairPhaseParameter})+
+             \sym{MatchingPhaseCost}(\sym{PairMeanAngle}-\sym{PairPhaseParameter})\bigr).
 \end{equation}
 
 For determinant $-1$, the eigenvalues are $+1,-1$ and a conjugate
@@ -427,8 +426,8 @@ Its least cost is therefore
 $2^p+2\sym{MatchingPhaseCost}(\like{theta}{\theta_j})$.
 It is attained by reflecting on the larger-angle plane and rotating
 on the smaller-angle plane.
-Taking $\tau=d$ bounds the positive-determinant minimum by the cost
-of two rotations. Taking $\tau=h$ bounds it by
+Taking $\sym{PairPhaseParameter}=\sym{PairHalfDifference}$ bounds the positive-determinant minimum by the cost
+of two rotations. Taking $\sym{PairPhaseParameter}=\sym{PairMeanAngle}$ bounds it by
 $2\sym{MatchingPhaseCost}(\like{theta}{\theta_i}+\like{theta}{\theta_j})
  \le2\cdot2^p$, the cost of two reflections.
 The less expensive mixed rotation/reflection choice is the
@@ -443,11 +442,15 @@ four-dimensional minimum is
 A four-dimensional block therefore offers either a paired choice or
 two independent singleton choices.
 
-\emph{Step 5: obtain both bounds in the matching reduction.}
-\jonsays{Is this a reduction in that are we transporting the problem and then transporting the solution back? Or is this more of a correspondence? I suppose its both... not sure what the best wording is.}
+\emph{Step 5: prove equality of the minimum costs and recover a transporter.}
+We construct a transporter from every matching and extract a matching
+from a minimizing transporter, preserving the cost in both constructions.
+Thus solving the matching problem gives the minimum cost and an attaining
+transporter, although individual transporters and matchings need not
+correspond one-to-one.
 For a matching $\sym{Matching}$ define
 \[
- C_p(\sym{Matching})
+ \sym{MatchingPowerCost}(\sym{Matching})
    =\sum_{\{i,j\}\in\sym{Matching}}\like{PairPowerCost}{b_{ij}(p)}
      +\sum_{i\text{ unmatched}}\like{SingletonPowerCost}{a_i(p)}.
 \]
@@ -455,11 +458,11 @@ The principal-angle decomposition gives mutually orthogonal planes
 for the positive angle labels. Choose an attaining two-angle transporter for each selected pair,
 an attaining planar rotation or reflection for each unmatched label,
 and identity on the remaining common directions.
-Their orthogonal sum is an element of $\mathcal F$.
+Their orthogonal sum is an element of $\sym{FeasibleTransport}$.
 By \cref{eq:matching-block-additivity}, its cost is
-$C_p(\sym{Matching})$. Hence
-$\min_{\mathcal F}\like{PowerCost}{\Phi_p}
- \le\min_{\sym{Matching}}C_p(\sym{Matching})$.
+$\sym{MatchingPowerCost}(\sym{Matching})$. Hence
+$\min_{\sym{FeasibleTransport}}\like{PowerCost}{\Phi_p}
+ \le\min_{\sym{Matching}}\sym{MatchingPowerCost}(\sym{Matching})$.
 
 For the reverse bound, use the global minimizer from Step~1 and its
 decomposition from Step~3. Its restriction to each block must minimize
@@ -471,14 +474,14 @@ Each occurrence of an angle belongs to one block, so no label can be used twice.
 This produces a matching with the same total cost as the minimizer.
 
 Zero angles do not supply cheaper extra partners. Their singleton cost
-is zero; pairing an angle $\theta$ with zero forces $d=h=\theta/2$
+is zero; pairing an angle $\theta$ with zero forces $\sym{PairHalfDifference}=\sym{PairMeanAngle}=\theta/2$
 in \cref{eq:matching-pair-power-cost}, giving $2\sym{MatchingPhaseCost}(\theta)$,
 which is at least its singleton cost.
 Thus we can leave zero-angle directions fixed and use only the original
 positive labels. We have proved
 \begin{equation}\label{eq:matching-power-equality}
- \min_{\mathcal F}\like{PowerCost}{\Phi_p}
-   =\min_{\sym{Matching}}C_p(\sym{Matching}),
+ \min_{\sym{FeasibleTransport}}\like{PowerCost}{\Phi_p}
+   =\min_{\sym{Matching}}\sym{MatchingPowerCost}(\sym{Matching}),
  \qquad 1<p<2.
 \end{equation}
 For the matching in \cref{fig:real-nuclear-matching}, this construction
@@ -486,18 +489,18 @@ uses one four-dimensional block for labels $1,2$ and one plane for label~$3$.
 
 \emph{Step 6: pass to the trace norm and evaluate the weights.}
 Every displacement singular value lies in $[0,2]$.
-Since $s^p$ converges uniformly to $s$ on this interval as $p$ approaches $1$ from above,
+Since $\sym{DisplacementSize}^p$ converges uniformly to $\sym{DisplacementSize}$ on this interval as $p$ approaches $1$ from above,
 \[
- \sup_{\sym{Wcompetitor}\in\mathcal F}
+ \sup_{\sym{Wcompetitor}\in\sym{FeasibleTransport}}
    \left|\like{PowerCost}{\Phi_p}(\sym{Wcompetitor})
                   -\|I-\sym{Wcompetitor}\|_1\right|
- \le n\sup_{0\le s\le2}|s^p-s|\ \longrightarrow\ 0.
+ \le n\sup_{0\le\sym{DisplacementSize}\le2}|\sym{DisplacementSize}^p-\sym{DisplacementSize}|\ \longrightarrow\ 0.
 \]
 The minimum values on the left of \cref{eq:matching-power-equality}
 therefore converge to the minimum trace norm.
 The scalar block minima also converge: the one-angle minimum is a
 minimum of two continuous quantities, and the pair minimum is over
-the fixed compact interval $[d,h]$ with a uniformly convergent cost.
+the fixed compact interval $[\sym{PairHalfDifference},\sym{PairMeanAngle}]$ with a uniformly convergent cost.
 There are finitely many matchings, so their minimum values converge too.
 
 At $p=1$ the singleton formula gives
@@ -506,13 +509,13 @@ $\like{SingletonPowerCost}{a_i(1)}
  =\like{SingletonCost}{s_i}$.
 For the paired cost, the scalar expression becomes
 \[
- 2\bigl(\sym{MatchingPhaseCost}(h+\tau)
-          +\sym{MatchingPhaseCost}(h-\tau)\bigr)\big|_{p=1}
- =8\sin(h/2)\cos(\tau/2).
+ 2\bigl(\sym{MatchingPhaseCost}(\sym{PairMeanAngle}+\sym{PairPhaseParameter})
+          +\sym{MatchingPhaseCost}(\sym{PairMeanAngle}-\sym{PairPhaseParameter})\bigr)\big|_{p=1}
+ =8\sin(\sym{PairMeanAngle}/2)\cos(\sym{PairPhaseParameter}/2).
 \]
-It is nonincreasing as $\tau$ runs from $d$ to $h$, so its minimum is at $\tau=h$,
-with value $4\sin h=\like{PairCost}{e_{ij}}$.
-At this endpoint one rotational phase is $2h$ and the other is zero:
+It is nonincreasing as $\sym{PairPhaseParameter}$ runs from $\sym{PairHalfDifference}$ to $\sym{PairMeanAngle}$, so its minimum is at $\sym{PairPhaseParameter}=\sym{PairMeanAngle}$,
+with value $4\sin \sym{PairMeanAngle}=\like{PairCost}{e_{ij}}$.
+At this endpoint one rotational phase is $2\sym{PairMeanAngle}$ and the other is zero:
 the paired transporter fixes two real directions and rotates the other
 two through $\like{theta}{\theta_i}+\like{theta}{\theta_j}$.
 Taking the limit in \cref{eq:matching-power-equality} now gives

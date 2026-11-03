@@ -156,6 +156,8 @@
 }
 
 % Declarations: [optional detailed hover reminder], key, glyph, role, short description.
+% This registry includes local proof notation. The notation appendix selects
+% the symbols useful for reference; registration does not add a printed row.
 % Manim's original symbol keys, now split into semantic subshades.
 % Ambient and perturbed operators (provenance is independent of geometry).
 \dkDeclareSymbol[Reference self-adjoint operator A on the ambient Hilbert space; the perturbed operator is Ahat = A + H. In a single-operator eigenproblem, A itself is the operator being approximated. An unbounded A acts only on domain(A).]
@@ -338,7 +340,7 @@
   {NormQ}{Q}{normaux}{Q-norm: its square is a unitarily invariant norm of the squared modulus.}
 \dkDeclareSymbol[Singleton trace cost s_i = min(4 sin(theta_i/2), 2) for angle label i. It transports one real principal plane independently, choosing a rotation of cost 4 sin(theta_i/2) or a reflection of cost 2.]
   {SingletonCost}{s}{norm}{Minimum trace displacement for one real principal plane: choose a rotation or a reflection.}
-\dkDeclareSymbol[Paired trace cost e_ij = 4 sin((theta_i + theta_j)/2) for distinct angle labels i,j. It is attained by coupling their principal planes in a real four-dimensional block. Its saving relative to independent singleton choices is s_i + s_j - e_ij.]
+\dkDeclareSymbol[Paired trace cost e_ij = 4 sin((theta_i + theta_j)/2) for distinct angle labels i,j. It is attained by coupling their principal planes in a real four-dimensional block. The edge weight s_i + s_j - e_ij is the difference between the cost of two singletons and this paired cost.]
   {PairCost}{e}{norm}{Trace displacement cost of coupling two principal planes in a four-dimensional block.}
 \dkDeclareSymbol[Scalar phase cost f_p(t) = (2 sin(t/2)) to the power p, for 0 <= t <= pi. A real planar rotation through t contributes two copies, so its displacement power cost is 2 f_p(t).]
   {MatchingPhaseCost}{f_p}{norm}{Displacement power cost for one scalar phase.}
@@ -346,10 +348,69 @@
   {SingletonPowerCost}{a}{norm}{Minimum displacement power cost for one angle.}
 \dkDeclareSymbol[Paired power cost b_ij(p) = min over d <= tau <= h of 2(f_p(h+tau) + f_p(h-tau)), where h=(theta_i+theta_j)/2 and d=abs(theta_i-theta_j)/2. This is the positive-determinant pair minimum; unrestricted block optimization also compares two singletons. At p=1 it equals e_ij.]
   {PairPowerCost}{b}{norm}{Positive-determinant displacement power cost for a pair of angles.}
-\dkDeclareSymbol[Matching M on the labels of positive principal angles, counted with multiplicity. Its edges are disjoint unordered pairs; every unmatched label is transported as a singleton. Minimize paired costs plus singleton costs, or maximize the sum of edge savings.]
-  {Matching}{M}{normaux}{Matching of positive principal-angle labels: disjoint pairs, with all remaining labels single.}
+\dkDeclareSymbol[Matching M on the finite general graph of positive principal-angle labels. Each label belongs to at most one edge; unmatched labels use singleton transporters. Minimizing paired and singleton costs is equivalent to maximum-weight matching with edge weights g_ij = s_i + s_j - e_ij. The empty matching is allowed.]
+  {Matching}{M}{normaux}{Matching of positive principal-angle labels: each label is used in at most one pair.}
 \dkDeclareSymbol[Displacement power sum Phi_p(W) = sum_j s_j(I - W)^p. The matching proof first minimizes it for 1 < p < 2, then lets p decrease to 1, where it becomes the trace norm ||I - W||_1.]
   {PowerCost}{\Phi}{norm}{Sum of the p-th powers of displacement singular values.}
+% Auxiliary matching-proof notation: neutral ink, with the same hover registry.
+\dkDeclareSymbol[Off-diagonal gradient block G_01 mapping the source complement K perpendicular into K. Stationarity makes the diagonal blocks of G zero, so G = ((0,G_01),(-G_01 transpose,0)) in the source/complement decomposition.]
+  {GradientOffDiagonal}{G_{01}}{fg}{Complement-to-source block of the skew-symmetric gradient.}
+\dkDeclareSymbol[Orthogonal group O(n): real n by n matrices W satisfying W transpose times W = I. Its elements preserve Euclidean inner products and lengths. The notation O(2) refers to the same group in dimension two.]
+  {OrthogonalGroup}{O(n)}{fg}{Group of real orthogonal matrices.}
+\dkDeclareSymbol[Feasible transporters F = {W in O(n) : W(K) = L}. Equivalently W P_K W transpose = P_L. This nonempty compact set is the optimization domain throughout the matching proof.]
+  {FeasibleTransport}{\mathcal F}{fg}{Orthogonal maps carrying the source subspace onto the target.}
+\dkDeclareSymbol[Singular value s_j(T), the nonnegative square root of an eigenvalue of T transpose times T, counted with multiplicity. Summing s_j(I-W) gives the trace displacement; summing its p-th powers gives Phi_p(W). These singular values differ from the singleton weights s_i.]
+  {TransportSingularValues}{s_j}{fg}{A displacement singular value in the matching proof.}
+\dkDeclareSymbol[Scalar singular-value magnitude s between zero and two for the displacement I-W of an orthogonal matrix. Uniform convergence of s to the power p to s on this interval permits the trace-norm limit. This variable differs from the rotation parameter s used earlier in the proof.]
+  {DisplacementSize}{s}{fg}{Scalar displacement singular-value magnitude in the uniform limit.}
+\dkDeclareSymbol[All-singleton cost C_0 = sum_i s_i, before any two angle labels are paired. A matching has cost C_0 minus the sum of its selected edge weights.]
+  {SingletonBaseline}{C_0}{fg}{Trace displacement when every angle uses its singleton transporter.}
+\dkDeclareSymbol[Matching power cost C_p(M): sum of b_ij(p) over selected pairs plus a_i(p) over unmatched labels. Its minimum equals the minimum of Phi_p over feasible transporters. At p=1 it is C(M).]
+  {MatchingPowerCost}{C_p}{fg}{Total paired and singleton power cost of a matching.}
+\dkDeclareSymbol[Invariant orthogonal block V_a preserved by the source projection, target projection, and minimizing transporter. The displacement cost adds over these blocks, and their principal-angle lists combine into the original list.]
+  {MatchingBlock}{V_a}{fg}{Simultaneous invariant block in the matching proof.}
+\dkDeclareSymbol[Gradient-level space V_g: the eigenspace of -G squared for a positive eigenvalue g squared. It is preserved by G, W, and the source reflection J. Multiplication by i on it is G/g.]
+  {GradientLevelSpace}{V_g}{fg}{Positive gradient-level eigenspace.}
+\dkDeclareSymbol[Eigenphase varphi of W on V_g viewed as a complex space with multiplication by i = G/g. It lies between zero and pi and satisfies f_p prime(varphi) = g. There are at most two such phases.]
+  {GradientEigenphase}{\varphi}{fg}{One of the at most two phases at a positive gradient level.}
+\dkDeclareSymbol[Orthogonal projection E onto the first phase space of W on V_g. Here W = exp(i varphi_1) E + exp(i varphi_2) (I-E). In coordinates where the source reflection is conjugation, E = X + iY.]
+  {GradientPhaseProjection}{E}{fg}{Projection onto the first phase space in a gradient-level space.}
+\dkDeclareSymbol[Real part X of the phase projection E = X + iY. It is a real symmetric matrix with spectrum in the closed interval from zero to one, satisfying X squared - Y squared = X and XY + YX = Y. This X differs from the source-coordinate and Sylvester matrices elsewhere in the paper.]
+  {ProjectionRealPart}{X}{fg}{Real symmetric part of the phase projection.}
+\dkDeclareSymbol[Imaginary part Y of the phase projection E = X + iY. It is a real skew-symmetric matrix. It maps the lambda eigenspace of X to the 1-lambda eigenspace and constructs the small invariant planes.]
+  {ProjectionImaginaryPart}{Y}{fg}{Real skew-symmetric imaginary part of the phase projection.}
+\dkDeclareSymbol[Eigenvalue lambda in the closed interval from zero to one of the real part X of the phase projection. It is local to the block construction and differs from the original operator's spectral parameter.]
+  {ProjectionEigenvalue}{\lambda}{fg}{Eigenvalue of the real part of the phase projection.}
+\dkDeclareSymbol[Plane coupling eta = sqrt(lambda (1-lambda)) for 0 < lambda < 1. If u is a unit lambda eigenvector of X, then v = Yu/eta completes its invariant real plane.]
+  {ProjectionCoupling}{\eta}{fg}{Normalization used to construct an invariant real plane.}
+\dkDeclareSymbol[Pair mean angle h = (theta_i + theta_j)/2. Together with d = (theta_i - theta_j)/2 after ordering theta_i >= theta_j, it parametrizes the two-angle block cost.]
+  {PairMeanAngle}{h}{fg}{Mean of the two ordered principal angles.}
+\dkDeclareSymbol[Pair half-difference d = (theta_i - theta_j)/2 after ordering theta_i >= theta_j. It satisfies 0 <= d <= h and h+d <= pi/2.]
+  {PairHalfDifference}{d}{fg}{Half the difference of the two ordered principal angles.}
+\dkDeclareSymbol[Scalar pair parameter tau in the closed interval from d to h. The paired power cost is the minimum of 2(f_p(h+tau) + f_p(h-tau)) over this interval. At p=1 a minimum is attained at tau=h.]
+  {PairPhaseParameter}{\tau}{fg}{Scalar parameter in the two-angle power-cost minimum.}
+\dkDeclareSymbol[Attaining rotation angle gamma = arccos(cos(tau)/cos(d)). Choosing U_0 = U_1 = R_gamma realizes phase parameters x=h and y=tau in the four-dimensional block.]
+  {PairAttainingAngle}{\gamma}{fg}{Rotation angle realizing a chosen scalar pair parameter.}
+\dkDeclareSymbol[Four-dimensional direct rotation D = ((C,-S),(S,C)) in source and complementary principal coordinates, with C the diagonal principal cosines and S the diagonal principal sines. Every transporter on this block is D diag(U_0,U_1).]
+  {PairDirectRotation}{D}{fg}{Direct rotation on the two principal planes.}
+\dkDeclareSymbol[Diagonal cosine block C = diag(cos(theta_i), cos(theta_j)) in the four-dimensional direct rotation D. This matrix differs from the scalar displacement cost C(M).]
+  {PairCosineBlock}{C}{fg}{Diagonal principal-cosine block.}
+\dkDeclareSymbol[Diagonal sine block S = diag(sin(theta_i), sin(theta_j)) in the four-dimensional direct rotation D. This matrix is local to the matching proof.]
+  {PairSineBlock}{S}{fg}{Diagonal principal-sine block.}
+\dkDeclareSymbol[Free planar orthogonal matrices U_0 and U_1 acting on the two-dimensional source and its two-dimensional complement, respectively. Multiplying D by diag(U_0,U_1) parametrizes every transporter on this four-dimensional block.]
+  {PairFreeOrthogonal}{U}{fg}{Free source or complementary planar orthogonal factor.}
+\dkDeclareSymbol[Phase parameter x in the closed interval from h to pi-h for a positive-determinant four-dimensional transporter. Its eigenvalues are exp(plus or minus i(x+y)) and exp(plus or minus i(x-y)).]
+  {PairPhaseX}{x}{fg}{First phase parameter of a four-dimensional transporter.}
+\dkDeclareSymbol[Phase parameter y in the closed interval from d to pi-d for a positive-determinant four-dimensional transporter. Together with x it gives rotational phases x+y and x-y, folded into the closed interval from zero to pi for the displacement cost.]
+  {PairPhaseY}{y}{fg}{Second phase parameter of a four-dimensional transporter.}
+\dkDeclareSymbol[Rotation parameter r: the two free orthogonal factors use planar rotation angles r+s and r-s. It appears in cos(y) = cos(d) cos(r) for two rotations.]
+  {PairRotationR}{r}{fg}{Half the sum of the two free planar rotation angles.}
+\dkDeclareSymbol[Rotation parameter s: the two free orthogonal factors use planar rotation angles r+s and r-s. It appears in cos(x) = cos(h) cos(s) for two rotations. This scalar differs from the singular values and singleton costs.]
+  {PairRotationS}{s}{fg}{Half the difference of the two free planar rotation angles.}
+\dkDeclareSymbol[Planar reflection J_2 = diag(1,-1). Every two-dimensional orthogonal matrix of determinant -1 can be written as a planar rotation times J_2.]
+  {PairPlanarReflection}{J_2}{fg}{Fixed planar reflection used to parametrize determinant -1 factors.}
+\dkDeclareSymbol[Real planar rotation R_t = ((cos(t),-sin(t)),(sin(t),cos(t))). Its two displacement singular values are both 2 times abs(sin(t/2)). In the matching proof a rotation through t in the closed interval from zero to pi contributes 2 f_p(t).]
+  {MatchingPlanarRotation}{R_t}{fg}{Planar rotation through the indicated angle.}
 % Statistical application / operator provenance.
 \dkDeclareSymbol{Sigma}{\Sigma}{old}{Population covariance matrix.}
 \dkDeclareSymbol{SigmaHat}{\widehat\Sigma}{current}{Estimated or perturbed covariance matrix.}
@@ -379,8 +440,8 @@
   {CounterChordB}{b}{displacement}{Competing-transporter displacement singular value in the counterexample: square root of 2.}
 \dkDeclareSymbol[Singular value s_j(I - T) of the full ambient displacement, ordered from largest to smallest. Each rotating real two-plane contributes two values 2 |sin(phi/2)|; fixed directions contribute zeros. Their sum is the trace cost.]
   {DisplacementSingular}{s_j}{displacement}{An individual singular value of the full displacement from the identity.}
-\dkDeclareSymbol[Edge saving g_ij = s_i + s_j - e_ij, where s_i = min(4 sin(theta_i/2), 2) and e_ij = 4 sin((theta_i + theta_j)/2). A matching has total cost C_0 minus the sum of its edge savings, with C_0 = sum_i s_i.]
-  {MatchingSaving}{g_{ij}}{current}{Saving from pairing two angle labels: the sum of their singleton costs minus their paired cost.}
+\dkDeclareSymbol[Edge weight g_ij = s_i + s_j - e_ij, the difference between the cost of two singletons and the paired cost. A matching has total cost C_0 minus the sum of its edge weights, with C_0 = sum_i s_i. Maximizing this sum gives the minimum transport cost; edges of negative weight may be omitted.]
+  {MatchingEdgeWeight}{g_{ij}}{current}{Edge weight: the cost of two singletons minus their paired cost.}
 \dkDeclareSymbol[Total trace-norm displacement cost. For a transporter W, C(W) = ||I - W||_1, the sum of its displacement singular values. For a matching M, C(M) is the sum of its paired and unmatched singleton costs.]
   {TraceCost}{C}{norm}{Trace-norm displacement cost of the indicated orthogonal transporter or matching.}
 

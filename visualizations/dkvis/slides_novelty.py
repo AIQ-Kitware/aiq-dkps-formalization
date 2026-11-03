@@ -1294,8 +1294,8 @@ class N08NuclearMatching(DeckSlide):
 
 
 class N08MatchingGraph(DeckSlide):
-    title = "Turn block costs into edge savings"
-    kicker = r"Vertices label principal angles; edge weights give pairing savings"
+    title = "Turn block costs into edge weights"
+    kicker = r"Maximum-weight matching on a finite general graph of angle labels"
     section = SECTION
 
     def body(self) -> None:
@@ -1342,10 +1342,10 @@ class N08MatchingGraph(DeckSlide):
             r"C(M)=4\sin(37.5^\circ)+2\approx4.4350", size=32))
         self.add(formula, graph, rows)
         self.say("This is a graph of the pairing choices. Vertex positions are arbitrary; each vertex labels a principal angle. "
-                 "Start with all three angles single. Each edge records the saving from pairing its endpoints. "
+                 "Start with all three angles single. Each edge weight is the cost of its two singletons minus their paired cost. "
                  "The negative edge makes the cost worse. The two positive edges share a vertex, so we cannot take both.")
         self.wait(self.wait_time_between_slides)
-        self.say("Choose the larger positive saving: pair thirty and forty-five degrees. "
+        self.say("Choose the larger positive edge weight: pair thirty and forty-five degrees. "
                  "The remaining seventy-five-degree angle uses a singleton reflection of cost two.")
         self.play(Create(selected), run_time=.7)
         self.add(result)

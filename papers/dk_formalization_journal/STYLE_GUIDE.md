@@ -70,6 +70,17 @@ A short reminder later can help the reader resume a topic. Keep a notation
 appendix useful to the current article rather than accumulating slide symbols
 that the article does not use.
 
+Register named mathematical objects, including local proof notation, in
+`math_symbol_colors.tex` and use their semantic macros for hover reminders.
+Neutral ink is appropriate for auxiliary objects. The printed notation table
+selects the symbols readers need for reference; it need not list every proof
+parameter. Keep definitions and notation changes in the shared registry.
+
+Use the same term for the same object throughout an argument. Repeating
+“block”, “transporter”, or “edge weight” helps readers track the proof.
+For graph optimization, distinguish maximum-weight matching from maximum
+cardinality matching, and state whether the graph is finite and general.
+
 Give hover reminders enough detail to recover the object: its defining formula,
 the spaces it maps between, and its role in the argument where these help.
 Identify conditions on special cases, such as orthogonality of the Rayleigh
