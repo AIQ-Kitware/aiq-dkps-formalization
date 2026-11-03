@@ -294,6 +294,8 @@
   {SpectralGradient}{G}{displacement}{Skew-symmetric spectral gradient of the displacement power sum in the matching proof.}
 \dkDeclareSymbol[Positive spectral level g of the skew-symmetric gradient G: on this invariant subspace, -G squared = g squared I. Consequently G/g squares to -I and supplies the complex structure used in the real matching proof.]
   {GradientLevel}{g}{displacement}{Positive gradient level; the gradient squared is minus this level squared times the identity.}
+\dkDeclareSymbol[Complex structure I_g = G/g on the positive gradient-level space V_g. It is a real isometry with square -I. Multiplication by a+ib means a times identity plus b times I_g; source reflection J reverses I_g and acts as conjugation.]
+  {GradientComplexStructure}{\mathcal I_g}{displacement}{Complex multiplication constructed from a positive gradient level.}
 \dkDeclareSymbol[Real skew-symmetric matrix B, with B transpose = -B, giving the orthogonal variation W exp(tB). If B commutes with the source projection P, this curve preserves the constraint W(U) = V.]
   {SkewDirection}{B}{ambient}{Skew-symmetric direction for a first variation of an orthogonal transporter.}
 % Spectral separation family: gap and original gap are NOT identical.
@@ -338,6 +340,12 @@
   {SingletonCost}{s}{norm}{Minimum trace displacement for one real principal plane: choose a rotation or a reflection.}
 \dkDeclareSymbol[Paired trace cost e_ij = 4 sin((theta_i + theta_j)/2) for distinct angle labels i,j. It is attained by coupling their principal planes in a real four-dimensional block. Its saving relative to independent singleton choices is s_i + s_j - e_ij.]
   {PairCost}{e}{norm}{Trace displacement cost of coupling two principal planes in a four-dimensional block.}
+\dkDeclareSymbol[Scalar phase cost f_p(t) = (2 sin(t/2)) to the power p, for 0 <= t <= pi. A real planar rotation through t contributes two copies, so its displacement power cost is 2 f_p(t).]
+  {MatchingPhaseCost}{f_p}{norm}{Displacement power cost for one scalar phase.}
+\dkDeclareSymbol[Singleton power cost a_i(p) = min(2 f_p(theta_i), 2 to the power p). These are the rotation and reflection choices for one principal plane. At p=1 it equals the trace-cost weight s_i.]
+  {SingletonPowerCost}{a}{norm}{Minimum displacement power cost for one angle.}
+\dkDeclareSymbol[Paired power cost b_ij(p) = min over d <= tau <= h of 2(f_p(h+tau) + f_p(h-tau)), where h=(theta_i+theta_j)/2 and d=abs(theta_i-theta_j)/2. This is the positive-determinant pair minimum; unrestricted block optimization also compares two singletons. At p=1 it equals e_ij.]
+  {PairPowerCost}{b}{norm}{Positive-determinant displacement power cost for a pair of angles.}
 \dkDeclareSymbol[Matching M on the labels of positive principal angles, counted with multiplicity. Its edges are disjoint unordered pairs; every unmatched label is transported as a singleton. Minimize paired costs plus singleton costs, or maximize the sum of edge savings.]
   {Matching}{M}{normaux}{Matching of positive principal-angle labels: disjoint pairs, with all remaining labels single.}
 \dkDeclareSymbol[Displacement power sum Phi_p(W) = sum_j s_j(I - W)^p. The matching proof first minimizes it for 1 < p < 2, then lets p decrease to 1, where it becomes the trace norm ||I - W||_1.]

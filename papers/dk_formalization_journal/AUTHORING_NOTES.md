@@ -189,6 +189,32 @@ and `RealTwoPhaseBlocks.lean` under
 `ForTauCeti/Analysis/InnerProductSpace/Projection/ComplexRealBlocks.lean`.
 Resolved comment calls are removed from this section; macro definitions remain.
 
+## Learning-oriented matching proof (3 November 2026)
+
+The author requested enough detail to follow and learn the matching proof.
+The new note on disjoint pairs is resolved by defining a matching as pairs of
+labels using each label at most once, with a three-label example and explicit
+treatment of equal angle values.
+
+The proof now has six steps: compact attainment for a differentiable cost;
+constraint-preserving variations and the gradient compressions; small real
+blocks; one- and two-angle costs; both matching inequalities; and the trace-norm
+limit. It derives the displacement chord, tests stationarity with the gradient's
+own source compression, explains the complex structure and the two phase roots,
+constructs the projection blocks, and gives the full four-dimensional
+rotation/reflection parametrization and its scalar reduction. It explicitly
+rules out an improvement from using zero angles as extra partners.
+
+The additional scalar explanation follows `RealFourCoordinates.lean`,
+`RealFourPositive.lean`, `RealFourPhaseRectangle.lean`, and
+`RealFourOptimization.lean` under
+`DavisKahan/FiniteDimensional/DirectRotation/`. The gradient explanation follows
+`SchattenRealStationarity.lean` and `SchattenGradientSpectrum.lean`; the explicit
+projection-block construction follows
+`ForTauCeti/Analysis/InnerProductSpace/Projection/ComplexRealBlocks.lean`.
+No Lean statement or source-result selection changed. New power-cost and
+complex-structure symbols have glossary reminders and notation-appendix entries.
+
 ## Generated artifacts (2 November 2026)
 
 The author requested ignoring regenerable outputs. Figure PGF/PDF/SVG exports,

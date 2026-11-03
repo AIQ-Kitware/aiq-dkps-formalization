@@ -10,10 +10,12 @@ additional optimization arguments.
 
 Let $\like{Usource}{K},\like{Vtarget}{L}\subseteq\mathbb R^n$ have the same dimension and let
 $\like{theta}{\theta_1},\ldots,\like{theta}{\theta_m}\in(0,\pi/2]$ be their positive principal angles,
-counted with multiplicity.  A matching $\sym{Matching}$ on the angle labels consists
-of disjoint unordered pairs $\{i,j\}$ from $\{1,\ldots,m\}$;
-labels outside the pairs are unmatched.
-\jonsays{This could be made more clear, instead of saying "disjoint" we say we are picking pairs without replacement, or something more intuitive...}
+counted with multiplicity. A matching $\sym{Matching}$ chooses unordered
+pairs of labels from $\{1,\ldots,m\}$, using each label at most once.
+Labels that are not used in a pair are unmatched.
+For three labels, $\sym{Matching}=\{\{1,2\}\}$ pairs labels $1,2$ and
+leaves $3$ unmatched; adding $\{2,3\}$ would use label $2$ twice and is
+excluded. Equal angles still have distinct labels.
 
 Each positive principal angle describes a source line and a target line
 in a two-dimensional principal plane. Transporting that plane independently
@@ -52,7 +54,7 @@ principal-plane or determinant constraint.
 We can solve the matching problem by maximizing the savings from pairing angles.
 Starting from the all-singleton cost $C_0=\sum_i s_i$, pairing $i,j$ saves
 $\like{MatchingSaving}{g_{ij}}=s_i+s_j-e_{ij}$. Thus a matching $\sym{Matching}$ costs
-$C_0-\sum_{\{i,j\}\in\sym{Matching}}g_{ij}$, and its edges must have disjoint
+$\like{TraceCost}{C(M)}=C_0-\sum_{\{i,j\}\in\sym{Matching}}g_{ij}$, and its edges must have disjoint
 endpoints. Figure~\ref{fig:real-nuclear-matching} represents these pairing
 choices as a weighted graph for a three-angle example.
 
@@ -72,121 +74,441 @@ $4\sin(37.5^\circ)+2\approx4.4350$.}
 \label{fig:real-nuclear-matching}
 \end{figure}
 
-\begin{proof}[Proof outline]
-We first work with $1<p<2$, where the displacement power sum is
-differentiable, and recover the trace norm by a limit. Minimize
-$\like{PowerCost}{\Phi_p}(\sym{Wcompetitor})=\sum_j s_j(I-\sym{Wcompetitor})^p$.
+\begin{proof}[Proof and explanation]
+We prove the formula by showing that an attaining transporter can be
+assembled from pieces carrying one or two principal angles. Choosing
+these pieces gives a matching. Conversely, every matching supplies such
+a transporter. The work is to justify the decomposition while allowing
+every orthogonal competitor in the original problem.
+
+\emph{Step 1: choose a differentiable cost and a global minimizer.}
+For $1<p<2$, set
+\[
+ \mathcal F=\{\sym{Wcompetitor}\in O(n):
+                 \sym{Wcompetitor}(\like{Usource}{K})=\like{Vtarget}{L}\},
+ \qquad
+ \like{PowerCost}{\Phi_p}(\sym{Wcompetitor})
+       =\sum_{j=1}^n s_j(I-\sym{Wcompetitor})^p.
+\]
+Here $s_j(T)$ denotes a singular value of $T$. At $p=1$ this sum is the
+trace norm in the theorem. For $p>1$ it is differentiable, including at
+zero displacement singular values, which permits the derivative argument
+below.
+
 Write $\like{Psource}{P_K}$ and $\like{Qtarget}{P_L}$ for the orthogonal
-projections onto the two subspaces. An orthogonal map carrying an
+projections onto the source and target. An orthogonal map carrying an
 orthonormal basis of $\like{Usource}{K}$ to one of $\like{Vtarget}{L}$,
-and extending to their orthogonal complements, gives a feasible transporter.
-The orthogonal group $O(n)$ is closed and bounded in
-$\mathbb R^{n\times n}$, hence compact by the Heine--Borel theorem.
-The transport constraint
-$\sym{Wcompetitor}\like{Psource}{P_K}\sym{Wcompetitor}^T=\like{Qtarget}{P_L}$
-is closed, and $\like{PowerCost}{\Phi_p}$ is continuous. The extreme value
-theorem therefore gives a minimizer on the nonempty compact feasible set.
+extended to their orthogonal complements, belongs to $\mathcal F$.
+Thus $\mathcal F$ is nonempty. The group $O(n)$ is closed and bounded
+in $\mathbb R^{n\times n}$, hence compact by Heine--Borel.
+The equivalent transport equation
+$\sym{Wcompetitor}\like{Psource}{P_K}\sym{Wcompetitor}^T
+ =\like{Qtarget}{P_L}$ is a closed constraint.
+Since $\like{PowerCost}{\Phi_p}$ is continuous, the extreme value theorem
+gives a global minimizer $\sym{Wcompetitor}\in\mathcal F$.
 
-We next decompose the ambient space into mutually orthogonal subspaces
-$\mathbb R^n=\bigoplus_a V_a$ preserved by
-$\like{Psource}{P_K}$, $\like{Qtarget}{P_L}$, and the minimizing
-$\sym{Wcompetitor}$. Each block $V_a$ will have dimension at most four.
-Preservation by the projections splits the source and target across these
-blocks; preservation by the transporter makes the displacement cost add
-over them. A block containing one positive principal angle gives a
-singleton choice, while a block containing two can give a paired choice.
-We construct this decomposition by considering smooth curves
-$\sym{Wcompetitor}(t)$ of orthogonal maps satisfying
-$\sym{Wcompetitor}(0)=\sym{Wcompetitor}$ and
-$\sym{Wcompetitor}(t)\like{Usource}{K}=\like{Vtarget}{L}$.
-Since $\sym{Wcompetitor}$ minimizes the cost, the derivative of
-$\like{PowerCost}{\Phi_p}(\sym{Wcompetitor}(t))$ at $t=0$ vanishes along
-every such curve. This condition is called stationarity.
+The decomposition we seek is an orthogonal sum
+$\mathbb R^n=\bigoplus_a V_a$ in which each $V_a$ is preserved by
+$\like{Psource}{P_K}$, $\like{Qtarget}{P_L}$, and $\sym{Wcompetitor}$.
+In a basis adapted to this sum all three matrices are block diagonal.
+Consequently, the source and target split as the sums of their
+intersections with the $V_a$, and
+\begin{equation}\label{eq:matching-block-additivity}
+ \like{PowerCost}{\Phi_p}(\sym{Wcompetitor})
+ =\sum_a\like{PowerCost}{\Phi_p}(\sym{Wcompetitor}|_{V_a}).
+\end{equation}
+Indeed, the displacement is block diagonal too, and its singular-value
+list is the union of the block singular-value lists. The principal-angle
+lists also combine in this way: the compression
+$\like{Psource}{P_K}\like{Qtarget}{P_L}\like{Psource}{P_K}$
+is block diagonal, and its restriction to $\like{Usource}{K}$ has the
+squared principal cosines as eigenvalues.
+These two additivity facts will turn the block decomposition into a
+matching of the original angle labels.
 
-Let $\sym{SkewDirection}$ be a real skew-symmetric matrix. Then
-$\sym{Wcompetitor}\exp(t\sym{SkewDirection})$ is orthogonal for every real $t$.
-If $\sym{SkewDirection}$ commutes with $\like{Psource}{P_K}$, its exponential
-preserves the source subspace, so this curve consists of feasible
-transporters. The derivative of the cost is represented by a
-skew-symmetric spectral gradient $\sym{SpectralGradient}$:
+\emph{Step 2: use derivatives along maps that still transport the source.}
+Consider smooth curves $\sym{Wcompetitor}(t)\in\mathcal F$, for real $t$
+near zero, with $\sym{Wcompetitor}(0)=\sym{Wcompetitor}$.
+The cost derivative at zero vanishes along every such curve because
+$\sym{Wcompetitor}$ is a minimizer. This is the stationarity condition.
+We use it as a necessary condition on the global minimizer already
+obtained in Step~1.
+
+Let $\sym{SkewDirection}$ be skew-symmetric, meaning
+$\sym{SkewDirection}^T=-\sym{SkewDirection}$.
+For real $t$, its exponential is orthogonal, since
 \[
- \left.\frac{d}{dt}\like{PowerCost}{\Phi_p}(\sym{Wcompetitor}\exp(t\sym{SkewDirection}))\right|_{t=0}
+ \exp(t\sym{SkewDirection})^T
+ =\exp(-t\sym{SkewDirection})
+ =\exp(t\sym{SkewDirection})^{-1}.
+\]
+If $\sym{SkewDirection}$ commutes with $\like{Psource}{P_K}$, so does its
+exponential. It therefore maps the source onto itself, and
+$\sym{Wcompetitor}\exp(t\sym{SkewDirection})$ remains in $\mathcal F$.
+This gives explicit curves on which to test stationarity.
+
+To describe the derivative, define the scalar phase cost
+\[
+ \sym{MatchingPhaseCost}(t)=(2\sin(t/2))^p,\qquad 0\le t\le\pi.
+\]
+A planar rotation $R_t$ through $t$ satisfies
+\[
+ (I-R_t)^T(I-R_t)
+   =2I-R_t-R_t^T
+   =4\sin^2(t/2)I.
+\]
+Its two displacement singular values are therefore both $2\sin(t/2)$,
+and its contribution is $2\sym{MatchingPhaseCost}(t)$.
+On such a rotation plane, define the skew-symmetric spectral gradient by
+\[
+ \sym{SpectralGradient}
+ =\sym{MatchingPhaseCost}'(t)
+       \begin{pmatrix}0&-1\\1&0\end{pmatrix}.
+\]
+On the $+1$ and $-1$ eigenspaces of the transporter it is zero.
+Every real orthogonal matrix splits into these scalar blocks and planar
+rotations: diagonalize over $\mathbb C$ and pair conjugate eigenvectors
+to obtain the real planes. This defines $\sym{SpectralGradient}$ on the
+whole space and shows that it commutes with $\sym{Wcompetitor}$.
+These rotation planes may mix source and complementary directions;
+stationarity will relate them to $\like{Psource}{P_K}$.
+Differentiating the spectral cost gives
+\begin{equation}\label{eq:matching-first-variation}
+ \left.\frac{d}{dt}
+   \like{PowerCost}{\Phi_p}(\sym{Wcompetitor}\exp(t\sym{SkewDirection}))
+ \right|_{t=0}
  =-\operatorname{tr}(\sym{SpectralGradient}\sym{SkewDirection}).
-\]
-It commutes with $\sym{Wcompetitor}$. At a minimum the derivative vanishes
-for every skew-symmetric matrix preserving the source and its orthogonal
-complement. Taking variations within each of these two subspaces forces
-the two diagonal blocks of $\sym{SpectralGradient}$ to vanish. Equivalently,
-\[
- \sym{Jreflect}\sym{SpectralGradient}\sym{Jreflect}=-\sym{SpectralGradient},
- \qquad \sym{Jreflect}=2\like{Psource}{P_K}-I.
-\]
+\end{equation}
+For example, on a rotation plane with angle $\vartheta$, a direction
+$\sym{SkewDirection}=b\bigl(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\bigr)$
+changes the angle at speed $b$. Both sides of
+\cref{eq:matching-first-variation} are then
+$2b\sym{MatchingPhaseCost}'(\vartheta)$.
 
-Let $V_g$ be an eigenspace of the symmetric matrix
-$-\like{SpectralGradient}{G^2}$ with positive eigenvalue
-$\like{GradientLevel}{g^2}$. On this space,
-$\sym{SpectralGradient}/\sym{GradientLevel}$ squares to $-I$, so it can
-serve as multiplication by $i$. The reflection $\sym{Jreflect}$
-anticommutes with this complex structure and acts as complex conjugation.
-The transporter is complex-linear and unitary in these coordinates.
-For $f_p(t)=(2\sin(t/2))^p$ on $0<t<\pi$, the equation
-$f_p'(t)=\sym{GradientLevel}$ has at most two solutions, say $a,b$
-(allowing $a=b$).
-Thus the transporter has at most two phases on this gradient level and
-can be written
+Now take the particular direction
+$\sym{SkewDirection}=\like{Psource}{P_K}\sym{SpectralGradient}\like{Psource}{P_K}$.
+It is skew-symmetric and commutes with $\like{Psource}{P_K}$, so stationarity
+and cyclicity of trace give
 \[
- \sym{Wcompetitor}|_{V_g}=e^{ia}E+e^{ib}(I-E),
+ 0=-\operatorname{tr}\bigl(
+      (\like{Psource}{P_K}\sym{SpectralGradient}\like{Psource}{P_K})^2
+     \bigr)
+   =\|\like{Psource}{P_K}\sym{SpectralGradient}\like{Psource}{P_K}\|_F^2.
+\]
+The source diagonal block of the gradient is therefore zero.
+Using $I-\like{Psource}{P_K}$ instead gives the same conclusion for the
+complementary diagonal block. Relative to
+$\like{Usource}{K}\oplus\like{Usource}{K}^{\perp}$, the gradient and source
+reflection thus have the forms
+\[
+ \sym{SpectralGradient}
+  =\begin{pmatrix}0&G_{01}\\-G_{01}^T&0\end{pmatrix},
+ \qquad
+ \sym{Jreflect}=2\like{Psource}{P_K}-I
+  =\begin{pmatrix}I&0\\0&-I\end{pmatrix}.
+\]
+Multiplication gives
+$\sym{Jreflect}\sym{SpectralGradient}\sym{Jreflect}
+ =-\sym{SpectralGradient}$.
+This identity is what makes the source projection compatible with the
+decomposition constructed next.
+
+\emph{Step 3: obtain blocks with one or two source directions.}
+The matrix $-\like{SpectralGradient}{G^2}$ is symmetric and nonnegative,
+since
+$\langle-\like{SpectralGradient}{G^2}x,x\rangle
+  =\|\sym{SpectralGradient}x\|^2$.
+Decompose the space into its eigenspaces. The gradient, transporter,
+and source reflection all preserve them. On an eigenspace $V_g$
+with positive eigenvalue $\like{GradientLevel}{g^2}$, put
+$\sym{GradientComplexStructure}=\sym{SpectralGradient}/\sym{GradientLevel}$.
+It satisfies $\sym{GradientComplexStructure}^2=-I$ and preserves lengths.
+We can therefore treat $V_g$ as a complex space by defining
+\[
+ (a+ib)x=ax+b\sym{GradientComplexStructure}x.
+\]
+A real plane spanned by $x,\sym{GradientComplexStructure}x$ becomes one
+complex line. Commutation with the gradient makes the transporter
+complex-linear and unitary in these coordinates.
+The source reflection reverses the complex structure:
+\[
+ \sym{Jreflect}\sym{GradientComplexStructure}
+   =-\sym{GradientComplexStructure}\sym{Jreflect}.
+\]
+Consequently
+$\sym{Jreflect}((a+ib)x)=(a-ib)\sym{Jreflect}x$.
+Together with $\sym{Jreflect}^2=I$, this says that it acts as conjugation.
+
+The definition of the gradient says that an eigenphase $t$ of the
+transporter on this complex space satisfies
+$\sym{MatchingPhaseCost}'(t)=\sym{GradientLevel}$, with $0<t<\pi$.
+There are at most two such phases. To check this directly,
+\[
+ \sym{MatchingPhaseCost}'(t)
+   =p(2\sin(t/2))^{p-1}\cos(t/2),
+ \qquad
+ \sym{MatchingPhaseCost}''(t)
+   =p(2\sin(t/2))^{p-2}
+       \bigl((p-1)\cos^2(t/2)-\sin^2(t/2)\bigr).
+\]
+The second derivative changes sign once, where
+$\tan^2(t/2)=p-1$. The first derivative therefore increases and then
+decreases, so a positive horizontal level has at most two intersections.
+Writing the two phases as $\varphi_1,\varphi_2$, with equality allowed,
+we obtain
+\[
+ \sym{Wcompetitor}|_{V_g}
+   =e^{i\varphi_1}E+e^{i\varphi_2}(I-E),
 \]
 where $E$ is the orthogonal projection onto the first phase space.
+A subspace preserved by $E$ is preserved by this transporter.
+To preserve the source projection as well, we require invariance under
+the conjugation $\sym{Jreflect}$.
 
-The projection $E$ and conjugation $\sym{Jreflect}$ admit common invariant
-complex lines and planes. To see the dimension bound, choose coordinates
-in which $\sym{Jreflect}$ is coordinate conjugation and write $E=X+iY$.
-Since $E$ is an orthogonal projection, $X$ is real symmetric, $Y$ is real
-skew-symmetric, and
+Choose complex coordinates in which $\sym{Jreflect}$ is coordinate
+conjugation and write $E=X+iY$ with real matrices $X,Y$.
+The equations $E^*=E$ and $E^2=E$ give
 \[
+ X^T=X,\qquad Y^T=-Y,\qquad
  X^2-Y^2=X,\qquad XY+YX=Y.
 \]
-The second identity pairs the $\lambda$ and $1-\lambda$ eigenspaces of
-$X$ through $Y$; the first gives
-$Y^2=-\lambda(1-\lambda)I$ on each such eigenspace.
-Choosing orthonormal pairs in these spaces gives real lines and planes
-preserved by $X,Y$, whose complex spans are preserved by $E$ and
-$\sym{Jreflect}$. Viewed in the original real space, these spans have
-dimension two or four. They are preserved by $\sym{Wcompetitor}$ and
-$\like{Psource}{P_K}=(\sym{Jreflect}+I)/2$, hence also by
-$\like{Qtarget}{P_L}=\sym{Wcompetitor}\like{Psource}{P_K}\sym{Wcompetitor}^T$.
-On the zero-gradient space, the transporter has eigenvalues $+1$ and
-$-1$ and is a reflection. The two-projection decomposition for its
-$-1$ eigenspace projection and $\like{Psource}{P_K}$ gives real blocks
-of dimension at most two. A one-dimensional $-1$ block can be replaced
-by $+1$ without changing the transported subspace, so it cannot occur at
-a minimum.
+For real coordinate vectors $x$,
+$\langle Xx,x\rangle=\operatorname{Re}\langle Ex,x\rangle$
+lies between zero and $\|x\|^2$, so the eigenvalues of $X$ lie in $[0,1]$.
+If $Xu=\lambda u$, the last two identities imply
+\[
+ X(Yu)=(1-\lambda)Yu,\qquad
+ Y^2u=-\lambda(1-\lambda)u.
+\]
+For a unit $u$ with $0<\lambda<1$, set
+$\eta=\sqrt{\lambda(1-\lambda)}$ and $v=Yu/\eta$.
+Skew-symmetry shows that $u,v$ are orthonormal, and
+\[
+ Xu=\lambda u,\quad Xv=(1-\lambda)v,\quad
+ Yu=\eta v,\quad Yv=-\eta u.
+\]
+Thus their real span is preserved by both $X$ and $Y$.
+This includes $\lambda=1/2$. At $\lambda=0$ or $1$, $Yu=0$ and a
+single eigenvector gives an invariant real line.
+By symmetry of $X$ and skew-symmetry of $Y$, the orthogonal complement
+of each chosen line or plane is again preserved by $X,Y$.
+The construction can be repeated until the real
+coordinate space is exhausted.
 
-Replacing the transporter on one common invariant block preserves feasibility,
-so a global minimizer restricts to a minimizer on each block.
-Solving the one- and two-angle block problems gives singleton and paired
-costs depending on $p$. A block with one positive angle contributes its
-one-angle minimum; a block with two contributes either two one-angle
-minima or their paired minimum. Blocks with only zero angles can remain fixed.
-Principal-angle multisets and displacement costs add
-over these common blocks, so their choices define a matching. Conversely,
-any matching can be realized by taking the orthogonal sum of the
-corresponding one- and two-plane transporters. This proves the matching
-minimum for $1<p<2$.
+The complex spans of these lines and planes are invariant under
+$E,\sym{Jreflect}$, and $\sym{Wcompetitor}$. Returning to the original
+real space gives blocks of dimension two or four. Each is also
+preserved by
+$\like{Psource}{P_K}=(\sym{Jreflect}+I)/2$, hence by
+$\like{Qtarget}{P_L}
+ =\sym{Wcompetitor}\like{Psource}{P_K}\sym{Wcompetitor}^T$.
+The $+1$ eigenspace of conjugation has half the real dimension.
+Accordingly, a two-dimensional block contains one source direction
+and a four-dimensional block contains two. Their principal-angle lists
+have one and two entries, respectively.
 
-Finally let $p$ decrease to $1$. In fixed finite dimension, $\like{PowerCost}{\Phi_p}(\sym{Wcompetitor})$
-converges uniformly to $\|I-\sym{Wcompetitor}\|_1$ on the compact feasible set. The scalar
-block minima converge to $\like{SingletonCost}{s_i}$ and
-$\like{PairCost}{e_{ij}}$ in \cref{eq:nuclear-matching-costs}, and there
-are only finitely many matchings. Passing to the limit therefore proves
-\cref{eq:real-nuclear-match}. Compactness gives an
-attaining transporter at the endpoint.
+On $\ker\sym{SpectralGradient}$ the transporter has eigenvalues $+1,-1$,
+because these are exactly the phases where the scalar derivative vanishes.
+It is therefore a reflection there. Apply the two-projection decomposition
+to $\like{Psource}{P_K}$ and the projection onto its $-1$ eigenspace:
+this gives real lines and planes preserved by both projections and the
+transporter. On an invariant line the source and target are either both
+zero or both the whole line. Replacing a one-dimensional $-1$ block by
+$+1$ preserves them and saves $2^p$ in cost. Such a block cannot
+occur at a global minimum. The remaining blocks are fixed directions
+or planes with one source direction.
+This completes the decomposition needed for
+\cref{eq:matching-block-additivity}.
+
+\emph{Step 4: calculate the costs on a plane and on two planes.}
+For a principal angle $\like{theta}{\theta_i}$, the least rotation cost
+is $2\sym{MatchingPhaseCost}(\like{theta}{\theta_i})$.
+The alternative rotation sends a source unit vector to the opposite
+target unit vector and turns through $\pi-\like{theta}{\theta_i}$,
+which is at least $\like{theta}{\theta_i}$.
+A planar reflection has eigenvalues $+1,-1$, hence displacement singular values $0,2$,
+so its cost is $2^p$. The one-angle minimum is
+\[
+ \like{SingletonPowerCost}{a_i(p)}
+   =\min\{2\sym{MatchingPhaseCost}(\like{theta}{\theta_i}),\,2^p\}.
+\]
+
+For two angles, relabel within the pair so that
+$\like{theta}{\theta_i}\ge\like{theta}{\theta_j}$, and set
+\[
+ h=(\like{theta}{\theta_i}+\like{theta}{\theta_j})/2,\qquad
+ d=(\like{theta}{\theta_i}-\like{theta}{\theta_j})/2.
+\]
+Then $0\le d\le h$ and $h+d\le\pi/2$.
+In principal coordinates the direct rotation is
+\[
+ D=\begin{pmatrix}C&-S\\S&C\end{pmatrix},\qquad
+ C=\operatorname{diag}(\cos\like{theta}{\theta_i},
+                      \cos\like{theta}{\theta_j}),\quad
+ S=\operatorname{diag}(\sin\like{theta}{\theta_i},
+                      \sin\like{theta}{\theta_j}).
+\]
+Every orthogonal transporter on this four-dimensional space is
+$D\operatorname{diag}(U_0,U_1)$ with $U_0,U_1\in O(2)$:
+multiplying by $D^T$ gives an orthogonal map preserving the source
+and its complement. This parametrization allows mixing between the
+principal planes.
+
+For determinant $+1$, the two matrices $U_0,U_1$ are either both
+rotations or both reflections. The planar matrix calculation gives
+phase parameters $x,y$ with
+\[
+ h\le x\le\pi-h,\qquad d\le y\le\pi-d,
+\]
+and eigenvalues $e^{\pm i(x+y)},e^{\pm i(x-y)}$.
+After folding the angles into $[0,\pi]$, the displacement cost is
+$2\bigl(\sym{MatchingPhaseCost}(\min\{x+y,2\pi-x-y\})
+       +\sym{MatchingPhaseCost}(|x-y|)\bigr)$.
+For example, if $U_0,U_1$ rotate through $r+s,r-s$, respectively,
+these parameters satisfy
+$\cos x=\cos h\cos s$ and $\cos y=\cos d\cos r$.
+For two reflections, write
+$U_0=R_{r+s}J_2$ and $U_1=R_{r-s}J_2$ with
+$J_2=\operatorname{diag}(1,-1)$. The calculation gives
+$\cos x=-\sin d\cos r$ and $\cos y=\sin h\cos s$,
+which lie in the same ranges because $h+d\le\pi/2$.
+
+We can replace $(x,y)$ by $(\pi-x,\pi-y)$ when $x+y>\pi$ without
+changing this cost. Suppose therefore that $x+y\le\pi$.
+To replace the first parameter by $h$ without increasing the smaller
+phase, we need $h-\tau\le|x-y|$, as well as $\tau\ge d$.
+Choose the smallest such parameter,
+$\tau=\max\{d,h-|x-y|\}$.
+The identities $x+y+|x-y|=2\max\{x,y\}\ge2h$ and $x+y\ge h+d$
+also give $h+\tau\le x+y$. Thus
+\[
+ d\le\tau\le h,\qquad
+ h+\tau\le x+y,\qquad h-\tau\le|x-y|.
+\]
+Since $\sym{MatchingPhaseCost}$ is increasing on $[0,\pi]$, this
+transporter costs at least
+$2\bigl(\sym{MatchingPhaseCost}(h+\tau)+
+        \sym{MatchingPhaseCost}(h-\tau)\bigr)$.
+Every $\tau\in[d,h]$ is attained: take
+$U_0=U_1=R_\gamma$, where
+$\gamma=\arccos(\cos\tau/\cos d)$.
+The denominator is positive since $d\le\pi/4$.
+The preceding phase equations give $x=h,y=\tau$.
+Thus the positive-determinant pair minimum is
+\begin{equation}\label{eq:matching-pair-power-cost}
+ \like{PairPowerCost}{b_{ij}(p)}
+ =\min_{\tau\in[d,h]}
+     2\bigl(\sym{MatchingPhaseCost}(h+\tau)+
+             \sym{MatchingPhaseCost}(h-\tau)\bigr).
+\end{equation}
+
+For determinant $-1$, the eigenvalues are $+1,-1$ and a conjugate
+rotational pair $e^{\pm it}$, with $0\le t\le\pi$.
+The planar calculation gives
+$|\operatorname{tr}\sym{Wcompetitor}|\le2\cos\like{theta}{\theta_j}$.
+Since this trace is $2\cos t$, the rotational phase satisfies
+$t\ge\like{theta}{\theta_j}$.
+Its least cost is therefore
+$2^p+2\sym{MatchingPhaseCost}(\like{theta}{\theta_j})$.
+It is attained by reflecting on the larger-angle plane and rotating
+on the smaller-angle plane.
+Taking $\tau=d$ bounds the positive-determinant minimum by the cost
+of two rotations. Taking $\tau=h$ bounds it by
+$2\sym{MatchingPhaseCost}(\like{theta}{\theta_i}+\like{theta}{\theta_j})
+ \le2\cdot2^p$, the cost of two reflections.
+The less expensive mixed rotation/reflection choice is the
+negative-determinant minimum just computed.
+Comparing these four independent choices shows that the unrestricted
+four-dimensional minimum is
+\[
+ \min\{\like{PairPowerCost}{b_{ij}(p)},\,
+         \like{SingletonPowerCost}{a_i(p)}
+          +\like{SingletonPowerCost}{a_j(p)}\}.
+\]
+A four-dimensional block therefore offers either a paired choice or
+two independent singleton choices.
+
+\emph{Step 5: obtain both bounds in the matching reduction.}
+For a matching $\sym{Matching}$ define
+\[
+ C_p(\sym{Matching})
+   =\sum_{\{i,j\}\in\sym{Matching}}\like{PairPowerCost}{b_{ij}(p)}
+     +\sum_{i\text{ unmatched}}\like{SingletonPowerCost}{a_i(p)}.
+\]
+The principal-angle decomposition gives mutually orthogonal planes
+for the positive angle labels. Choose an attaining two-angle transporter for each selected pair,
+an attaining planar rotation or reflection for each unmatched label,
+and identity on the remaining common directions.
+Their orthogonal sum is an element of $\mathcal F$.
+By \cref{eq:matching-block-additivity}, its cost is
+$C_p(\sym{Matching})$. Hence
+$\min_{\mathcal F}\like{PowerCost}{\Phi_p}
+ \le\min_{\sym{Matching}}C_p(\sym{Matching})$.
+
+For the reverse bound, use the global minimizer from Step~1 and its
+decomposition from Step~3. Its restriction to each block must minimize
+the corresponding block problem: otherwise replacing that restriction
+by a cheaper transporter would lower the global cost while retaining
+the same source and target. By Step~4, a plane supplies a singleton,
+and a four-dimensional block supplies a pair or two singletons.
+Each occurrence of an angle belongs to one block, so no label can be used twice.
+This produces a matching with the same total cost as the minimizer.
+
+Zero angles do not supply cheaper extra partners. Their singleton cost
+is zero; pairing an angle $\theta$ with zero forces $d=h=\theta/2$
+in \cref{eq:matching-pair-power-cost}, giving $2\sym{MatchingPhaseCost}(\theta)$,
+which is at least its singleton cost.
+Thus we can leave zero-angle directions fixed and use only the original
+positive labels. We have proved
+\begin{equation}\label{eq:matching-power-equality}
+ \min_{\mathcal F}\like{PowerCost}{\Phi_p}
+   =\min_{\sym{Matching}}C_p(\sym{Matching}),
+ \qquad 1<p<2.
+\end{equation}
+For the matching in \cref{fig:real-nuclear-matching}, this construction
+uses one four-dimensional block for labels $1,2$ and one plane for label~$3$.
+
+\emph{Step 6: pass to the trace norm and evaluate the weights.}
+Every displacement singular value lies in $[0,2]$.
+Since $s^p$ converges uniformly to $s$ on this interval as $p\downarrow1$,
+\[
+ \sup_{\sym{Wcompetitor}\in\mathcal F}
+   \left|\like{PowerCost}{\Phi_p}(\sym{Wcompetitor})
+                  -\|I-\sym{Wcompetitor}\|_1\right|
+ \le n\sup_{0\le s\le2}|s^p-s|\ \longrightarrow\ 0.
+\]
+The minimum values on the left of \cref{eq:matching-power-equality}
+therefore converge to the minimum trace norm.
+The scalar block minima also converge: the one-angle minimum is a
+minimum of two continuous quantities, and the pair minimum is over
+the fixed compact interval $[d,h]$ with a uniformly convergent cost.
+There are finitely many matchings, so their minimum values converge too.
+
+At $p=1$ the singleton formula gives
+$\like{SingletonPowerCost}{a_i(1)}
+ =\min\{4\sin(\like{theta}{\theta_i}/2),2\}
+ =\like{SingletonCost}{s_i}$.
+For the paired cost, the scalar expression becomes
+\[
+ 2\bigl(\sym{MatchingPhaseCost}(h+\tau)
+          +\sym{MatchingPhaseCost}(h-\tau)\bigr)\big|_{p=1}
+ =8\sin(h/2)\cos(\tau/2).
+\]
+It is nonincreasing as $\tau$ runs from $d$ to $h$, so its minimum is at $\tau=h$,
+with value $4\sin h=\like{PairCost}{e_{ij}}$.
+At this endpoint one rotational phase is $2h$ and the other is zero:
+the paired transporter fixes two real directions and rotates the other
+two through $\like{theta}{\theta_i}+\like{theta}{\theta_j}$.
+Taking the limit in \cref{eq:matching-power-equality} now gives
+\cref{eq:real-nuclear-match}. Compactness supplies an attaining transporter
+for the trace norm as well.
 \end{proof}
 % Formal proof locations: RealNuclearMatching.lean (endpoint continuation),
 % SchattenRealDecomposition.lean / SchattenRealRestrictions.lean (block
 % reduction), SchattenRealMatchingWeights.lean / RealMatchingAttainment.lean
-% (matching and attainment), SchattenRealAngleCosts.lean (angle costs).
+% (matching and attainment), SchattenRealAngleCosts.lean (angle costs),
+% RealFourCoordinates.lean / RealFourPositive.lean / RealFourOptimization.lean
+% (all two-angle competitors and the scalar edge reduction).
 % All paths are under DavisKahan/FiniteDimensional/DirectRotation/.
 % See AUTHORING_NOTES.md for the mathematical and provenance evidence.
 

@@ -119,6 +119,13 @@ For the follow-on theorem, explain its optimization objective, matching costs,
 and relation to preceding results sufficiently for this paper to be assessed
 on its own. Keep references to sibling working manuscripts in author notes.
 
+In worked proofs, say what a reduction preserves and why the next step follows.
+For a decomposition, explain how it preserves the constraints, splits the
+angle data, and adds the cost. Include the short calculations that connect
+stationarity, spectral levels, and invariant blocks. State which inequality
+a construction proves and which requires an arbitrary minimizer. Separate
+an auxiliary smooth problem from the limit recovering the stated theorem.
+
 ## Match supporting material to the reader's task
 
 A compact result table can use IDs mapped to Lean declarations in the artifact.
