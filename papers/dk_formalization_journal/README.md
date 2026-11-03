@@ -47,7 +47,14 @@ latexmk -gg -pdf paper.tex
 ```
 
 The project keeps the previous PDF when compilation fails. To diagnose a
-silent LaTeXBox background build, run these commands in Vim with `paper.tex`
+build that says “Nothing to do” but exits with “gave an error in previous
+invocation”, inspect `build/paper.log` for the original LaTeX error. Latexmk
+remembers a failed run even when no inputs have changed. Correct the source
+and run `make` again. To retry unchanged sources after resolving an external
+problem, use `latexmk -g -pdf paper.tex`; this reruns the compiler and still
+reports errors normally.
+
+To diagnose a silent LaTeXBox background build, run these commands in Vim with `paper.tex`
 open (these settings affect only the current session):
 
 ```vim

@@ -244,6 +244,20 @@ power-cost rows were removed from the printed notation appendix; the registry
 retains them. The numerical model's internal `savings` dictionary key is left
 unchanged to preserve its existing consumers. No mathematical theorem changed.
 
+## Feasible-variation clarification and local build repair (3 November 2026)
+
+Resolved the two new comments directly: commutation with the projection passes
+to every matrix power and therefore to the exponential power series; the
+inverse exponential also preserves the source, which gives preservation onto
+the source. The zero value on the transporter's scalar eigenspaces is assigned
+explicitly to the spectral gradient.
+
+The host's failed build log identifies an undefined `\ie{}` command in the
+skew-symmetry definition. Replaced it with “that is,”. The subsequent
+“up-to-date”/previous-error combination is latexmk retaining that failed run,
+not a successful build. The README explains the original-error log and the
+`-g` retry option for unchanged inputs. No editor configuration is changed.
+
 ## Generated artifacts (2 November 2026)
 
 The author requested ignoring regenerable outputs. Figure PGF/PDF/SVG exports,
