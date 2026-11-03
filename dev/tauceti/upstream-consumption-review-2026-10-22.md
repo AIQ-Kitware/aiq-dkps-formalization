@@ -1574,3 +1574,7 @@ identified and prompted correction of 17 names stale from earlier migrations,
 without new aliases or mathematics. The existing census checker/render check
 pass, and import layering has zero violations. The unchanged 38 static
 name-drift findings are recorded separately in the contribution census.
+
+After preserving concurrent remote work through `85ed2b98f`, the combined main
+also passed incremental default (21,673 jobs) and Challenge (19,921 jobs)
+builds without warnings. See the contribution census for these final logs.
