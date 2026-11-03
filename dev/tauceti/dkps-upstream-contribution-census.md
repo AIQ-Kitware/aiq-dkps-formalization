@@ -285,7 +285,7 @@ Both branches independently start from accepted main
 
 | Target and branch commit | Original donor and final declaration(s) | Scope and descent |
 | --- | --- | --- |
-| SSP-D19 left orientation, `8af8fb271a5ab7acde93bf1ad9806bd0de4dc636`, branch `port-ssp-d19-left-population-gap` | DKPS `4138aafdf:YuWangSamworth2015/YuWangSamworth2015/Rectangular/Theorem4.lean`, `yuWangSamworth_leftSingularSubspace_le` and its operator-norm form → `LinearMap.sq_mul_sum_sum_norm_inner_self_comp_adjoint_eigenvectorBasis_sq_le_four_mul_card_mul_sq` in `YuWangSamworth/SingularVectors.lean` | Adapted by target-Gram duality into the exact squared overlap formulation required by D19. Finite-dimensional `RCLike`, independent source/target, arbitrary finite index block, population-only gap, zero gap and zero-dimensional source allowed. The complete target-Gram eigenbases include kernels; this does not confuse them with zero-valued singular vectors. Source authors Jon Crall / GPT 5.6 High, Kitware 2026, Apache-2.0. Focused build: 5839 jobs, no warnings. |
+| SSP-D19 left orientation, `5e7e4d2b2feee29968641a2c4db0b80951b1d501`, branch `port-ssp-d19-left-population-gap` | DKPS `4138aafdf:YuWangSamworth2015/YuWangSamworth2015/Rectangular/Theorem4.lean`, `yuWangSamworth_leftSingularSubspace_le` and its operator-norm form → `LinearMap.sq_mul_sum_sum_norm_inner_self_comp_adjoint_eigenvectorBasis_sq_le_four_mul_card_mul_sq` in `YuWangSamworth/SingularVectors.lean` | Adapted by target-Gram duality into the exact squared overlap formulation required by D19. Finite-dimensional `RCLike`, independent source/target, arbitrary finite index block, population-only gap, zero gap and zero-dimensional source allowed. The complete target-Gram eigenbases include kernels; this does not confuse them with zero-valued singular vectors. Source authors Jon Crall / GPT 5.6 High, Kitware 2026, Apache-2.0. Focused build: 5839 jobs, no warnings. |
 | SSP-D16 arbitrary frames, `8e38c87a53ba48b098477b0986fbef4a3bbb24bc`, branch `port-ssp-d16-arbitrary-eigenframes` | DKPS `4138aafdf:ForTauCeti/Analysis/InnerProductSpace/Spectral/EigenFrame.lean` and `YuWangSamworth2015/YuWangSamworth2015/Core/{Residual,Statistics}.lean`: `span_eq_spanIndices`, `sum_sq_norm_apply_orthonormal_le`, `frameResidual_eq`, `sum_sq_norm_frameResidual_le`, `sum_sq_norm_frameResidual_le_of_opNorm`, `yuWangSamworth_sinTheta_frame_le` → `LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices`, `LinearMap.sum_sq_norm_apply_orthonormal_le`, `LinearMap.IsSymmetric.{frameResidual_eq,sum_sq_norm_frameResidual_le,sum_sq_norm_frameResidual_le_of_opNorm,sinThetaFrobenius_orderedEigenframe_le}` | Adapted to the native eigenframe, Weyl, Hoffman–Wielandt and projection interfaces. Generic compression is generalized to arbitrary rectangular maps, without symmetry or a finite-dimensional target, through native basis extension. The endpoint allows arbitrary sample eigenframes inside repeated eigenspaces and keeps the operator/Frobenius minimum; the accepted canonical-eigenbasis theorem now derives from it. No sample gap, nonzero rank, separate frame representation or unmerged dependency. Source headers: Jon Crall, Claude Opus 5, GPT-6 and GPT 5.6 High as applicable; Kitware 2026, Apache-2.0. Focused build: 5995 jobs, no warnings. |
 
 Two further independent packets were prepared against accepted main
@@ -320,6 +320,12 @@ The first-wave campaign's `manifest.json` and `roadmap_port_index.json`
 record additional target-node detail. An old prepared branch, an unmerged PR,
 or a local verification is not evidence that TauCeti accepted the result.
 
+The next retained-code consumption candidates are recorded in
+[the existing consumption review](upstream-consumption-review-2026-10-22.md#november-3-retained-code-integration-candidates-not-yet-implemented):
+current-pin Mathlib coercive invertibility, then the finite C23/C27 proof
+routes after a coherent dependency update. None has been deleted by this
+planning update; broader theorem scope is explicitly protected.
+
 ## C. Related or independently implemented results: **do not claim as DKPS ports**
 
 These PRs must appear in the census so an eventual narrative can explain
@@ -328,6 +334,7 @@ without assigning donor provenance to independent work.
 
 | Upstream PR | Result / relationship | Current provenance judgment |
 | --- | --- | --- |
+| [#20845](https://github.com/TauCetiProject/TauCeti/pull/20845) | SA-B51 integral change of variables: native `ProjValMeasure.integral_map` and `map_diag`, already in TauCeti pin `463ab293070d4cb355d0a0e036469464070088bc` via integration `7b62c6ac0b3224fcfaba51e714776c6aa505b05d` | Exact roadmap completion by `tauceti-ai-for-science`; the PR explicitly says no external formalization was vendored. Record roadmap delivery without assigning DKPS proof descent or automatically retiring broader local transport. |
 | [#25082](https://github.com/TauCetiProject/TauCeti/pull/25082) | **DKPS-derived roadmap item implemented by others:** SSP-C27 finite-dimensional unitarily invariant `sin 2Θ` theorem; current main commit `1f807372ce` | Counts as delivery of our roadmap contribution. Accepted native two-block quadratic-form gap theorem; no direct donor proof adaptation established in this comparison. |
 | [#24932](https://github.com/TauCetiProject/TauCeti/pull/24932) | **DKPS-derived roadmap item implemented by others:** SSP-C23 pairwise `π/2` sine-theta theorem, plus its invariant-subspace Sylvester prerequisite; verified on current main at `e87be712e119978b7802ab9f8820d7e727d8264c` | Counts as delivery of our roadmap contribution; implementation by `tauceti-ai-for-science`, citing Bhatia–Davis–McIntosh and Bhatia. Separate proof route from DKPS #19242; direct donor proof adaptation not established. Supersedes that submission, which the user closed on 2026-11-02. |
 | [#13247](https://github.com/TauCetiProject/TauCeti/pull/13247) | OG-01–OG-08 Gram rigidity | Independently submitted by `sqrt-of-2`; not a DKPS code port |
@@ -3990,3 +3997,27 @@ Hilbert-space unit/spectral scopes are unchanged. Source theorem spellings,
 authors, source anchors and license above remain provenance records. Fresh
 focused warning-as-error compilation (5511 jobs) and full header/text style
 checks pass; a submitted repair is not upstream acceptance.
+
+### November 3: SA-B51 omission corrected
+
+The item index previously said `needs_mapping`, despite the exact native
+change-of-variables API already being in the consumed pin. Both conclusions
+of the printed target were checked against `integral_map` and `map_diag`.
+GitHub compare confirms integration `7b62c6ac0b3224fcfaba51e714776c6aa505b05d`
+is an ancestor of pin `463ab293070d4cb355d0a0e036469464070088bc` (merge base
+is the integration, behind count zero). This is an independent implementation
+and a roadmap-accounting correction, not a new PR or a dependency update.
+
+### PR #26823 documentation and proof-factoring repair
+
+Repair `5e7e4d2b2feee29968641a2c4db0b80951b1d501` addresses the target-Gram quantity wording and extracted
+pointwise perturbation bound requested in
+[documentation](https://github.com/TauCetiProject/TauCeti/pull/26823#discussion_r4450136100)
+and [proof quality](https://github.com/TauCetiProject/TauCeti/pull/26823#discussion_r4450136304).
+The new helper `LinearMap.norm_self_comp_adjoint_sub_self_comp_adjoint_apply_le`
+lives in `Gram/Perturbation.lean`; it needs a nontrivial source to infer the
+constant signs, and the endpoint keeps its subsingleton-source proof. The gap
+is between target-Gram eigenvalues, not their squares. Focused compilation of
+both changed modules (5839 jobs) and full header/text style pass. This records
+a pushed repair with unchanged endpoint scope, not upstream acceptance.
+The earlier selected campaign table retains its original observation time.

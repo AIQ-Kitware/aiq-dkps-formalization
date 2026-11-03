@@ -1482,3 +1482,34 @@ scanner still reports the same 23 known findings involving imported APIs and
 historical mappings; this checkpoint does not claim that scanner passes. No
 aliases were introduced to satisfy it. Papers, visualizations, coordination
 checkouts and standalone submission submodules were not modified.
+
+### November 3: retained-code integration candidates (not yet implemented)
+
+These comparisons are recorded for the next consumption slices. They are not
+claims that a migration compiled, that the dependency pin moved, or that an
+entire surrounding module can be deleted. Current DKPS inputs remain TauCeti
+`463ab293070d4cb355d0a0e036469464070088bc`, Mathlib
+`2cabef97b63d3275776b8b060d802de6a6fa1055`, Lean v4.36.0-rc1.
+
+| Candidate | Accepted replacement and availability | Scope / required work |
+| --- | --- | --- |
+| `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean:isUnit_of_coercive` | Mathlib `ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map`, already present in the pinned `Analysis/InnerProductSpace/Positive.lean` | Replace the roughly forty-line injectivity/closed-range/surjectivity proof engine and migrate consumers directly to the native criterion, converting positive real c to NNReal and using `re_le_norm`. Arbitrary RCLike and complete Hilbert dimensions agree. Do not keep a forwarding alias as the final migration. This does not retire the module's inverse-norm/Cayley extras or prove that the separate arbitrary-real-c norm estimate is redundant. |
+| Finite pairwise `π/2` sine-theta proof routes in `ForTauCeti/Analysis/InnerProductSpace/SinTheta/{DirectedBounds,Perturbation}.lean` | #24932, integration `e87be712e119978b7802ab9f8820d7e727d8264c`; `TauCeti.UnitarilyInvariantSeminorm.mul_map_starProjection_comp_starProjection_le_pi_div_two_mul_map_sub` and its invariant-subspace Sylvester bound | Requires a forward dependency/toolchain update. Compare the residual form individually; migrate LinearMap/ContinuousLinearMap and local angle-map representations rather than hiding them behind new facades. Keep paper-facing statements and broader unbounded/domain-aware mathematics. |
+| Finite `sin 2Θ` perturbation proof routes in `DavisKahan/FiniteDimensional/DoubleAngle/SinTheta.lean` | #25082, integration `1f807372cedc313075098a15bcf4feb062506de7`; `TauCeti.UnitarilyInvariantSeminorm.mul_map_sinTwoAngleOperator_le_two_mul_map_sub` | Requires the same coherent forward pin update and native double-angle representation migration. The accepted theorem covers finite RCLike, two-block quadratic-form gaps and all square UI seminorms. Do not automatically delete the stronger mirror/reflection-defect statements or their proofs. |
+
+For each future slice: inspect full types at the chosen accepted revision,
+migrate consumers in dependency order, remove displaced foundations, retain
+source-facing wrappers where required, and update manifest/census provenance.
+Use sequential focused, full default and Challenge builds with warnings as
+failures. Do not repeat previous green checkpoints without a regression.
+The four November wave PRs remain separate submissions; this list is not an
+assumption that they have already landed.
+
+**Separate roadmap-accounting correction:** SA-B51 integral change of variables
+is already supplied in the current pin by independent #20845, integration
+`7b62c6ac0b3224fcfaba51e714776c6aa505b05d`.
+`TauCeti.ProjValMeasure.integral_map` gives the pullback integral equality and
+`map_diag` gives the diagonal pushforward equality in `ProjValMeasure/Map.lean`.
+This completes that exact roadmap item. It is not, by itself, evidence that a
+particular broader DKPS PVM transport theorem can be deleted. The item ledger
+and contribution census now record the completion independently of proof descent.
