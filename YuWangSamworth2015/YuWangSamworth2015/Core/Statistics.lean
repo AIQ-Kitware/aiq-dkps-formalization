@@ -5,6 +5,8 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.YuWangSamworth.SinTheta
+
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 public import TauCeti.Analysis.InnerProductSpace.Projection.FrobeniusSine
 public import TauCeti.Analysis.InnerProductSpace.Orthonormal.Overlap
@@ -254,40 +256,8 @@ theorem yuWangSamworth_sinTheta_frame_le
         (Submodule.span 𝕜 (Set.range v)) ≤
       2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
-  classical
-  set U := Submodule.span 𝕜 (Set.range u) with hU
-  set V := Submodule.span 𝕜 (Set.range v) with hV
-  set R := ∑ i, ‖(hA.eigenvalues hn (e i) : 𝕜) • v i - A (v i)‖ ^ 2 with hR
-  have hkey : Δ ^ 2 * Submodule.sinThetaFrobenius U V ^ 2 ≤ R := by
-    rw [hR, sinThetaFrobenius_sq_eq_sum_sq_norm_starProjection_orthogonal
-      (isOrderedEigenframe_iff.mp hu).orthonormal (isOrderedEigenframe_iff.mp hv).orthonormal]
-    exact sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le hA
-      hΔ.le (hu.pointInternalGap_span hΔ hgap) v (fun i => hA.eigenvalues hn (e i))
-      fun i => (isOrderedEigenframe_iff.mp hu).eigenvalue_mem_restrictedPointSpectrum i
-  -- Frobenius branch.
-  have hfrob : Submodule.sinThetaFrobenius U V ≤
-      2 * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) / Δ := by
-    refine le_two_mul_div_of_sq_gap_mul_sq_le hΔ
-      (apply_nonneg (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)) _)
-      (hkey.trans ?_)
-    rw [UnitarilyInvariantSeminorm.sq_frobenius_apply (hA.eigenvectorBasis hn) (B - A)]
-    exact sum_sq_norm_frameResidual_le hA hB hn hv
-  -- Dimension-scaled operator-norm branch.
-  have hop : Submodule.sinThetaFrobenius U V ≤
-      2 * (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖) / Δ := by
-    refine le_two_mul_div_of_sq_gap_mul_sq_le hΔ (by positivity) (hkey.trans ?_)
-    have hres := sum_sq_norm_frameResidual_le_of_opNorm hA hB hn hv
-      (ε := ‖(B - A).toContinuousLinearMap‖)
-      (fun x => by
-        have hx := (B - A).toContinuousLinearMap.le_opNorm x
-        rwa [LinearMap.coe_toContinuousLinearMap'] at hx)
-    refine hres.trans_eq ?_
-    rw [mul_pow, Real.sq_sqrt (Nat.cast_nonneg d)]
-    ring
-  rcases le_total (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-      (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) with hle | hle
-  · rw [min_eq_left hle]; exact hop
-  · rw [min_eq_right hle]; exact hfrob
+  simpa only [Fintype.card_fin] using
+    LinearMap.IsSymmetric.sinThetaFrobenius_orderedEigenframe_le hu hv hΔ hgap
 
 /-- **Theorem 2 for the canonically indexed blocks.**
 

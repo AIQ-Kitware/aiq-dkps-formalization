@@ -4,7 +4,7 @@
 
 **Census family:** `source-census`  
 **Items:** 24  
-**Unique cited Lean declarations:** 203
+**Unique cited Lean declarations:** 202
 
 **Audit revision:**  Revised 2026-09-05 after an independent current-state review: the equation (1) witness was corrected (it cited a Theorem 2 index-block specialization), the Theorem 3 review surface was repointed at the source-shaped SourceTheorem3 capstones, the two frame-producing aligned forms were replaced by the frame-fixing ones, the literal-index-wrapper obstruction was restated correctly, and three stale declaration locations were fixed.
 
@@ -107,11 +107,13 @@ The `importance` field is an external-review priority. `headline` selects the pa
 
 **Lean declarations:**
 
-- `TauCeti.sinThetaFrobenius`
+- `Submodule.sinThetaFrobenius`
 - `YuWangSamworth2015.sinThetaSq_eq_sinThetaFrobenius_sq_of_spans`
 - `YuWangSamworth2015.sinThetaFrobenius_eq_sqrt_sum_cross`
 
 **Notes.** The Lean development defines the sine distance intrinsically on subspaces rather than on a matrix of chosen columns, and then proves it agrees with the span-based form. That is why no basis is a hypothesis anywhere downstream. The bridge lemma `sinThetaFrobenius_eq_sqrt_sum_cross` was `private` until 2026-07-29 and is now public.
+
+November 3 compiler-probe maintenance: earlier migration registrations were stale. Use Submodule Frobenius/principal-sine APIs, native residual identities and bounds with explicit residual expressions, the surviving pointInternalGap_* examples, PointInternalGap applied to the right/left Gram operators, and LinearMap Hermitian-dilation APIs as applicable. The removed residualColumn and singular-gap aliases are not recreated. This corrects references to existing mathematics, not source scope or semantic certification.
 
 **Next action.** None.
 
@@ -219,8 +221,8 @@ Source note added 2026-08-13. The published article prints the mixed separation 
 - `YuWangSamworth2015.DavisKahanTheory.section1SampleData`
 - `YuWangSamworth2015.DavisKahanTheory.section1_mixedSeparation_eq_zero`
 - `YuWangSamworth2015.DavisKahanTheory.section1_populationGap`
-- `YuWangSamworth2015.DavisKahanTheory.internalGap_section1`
-- `YuWangSamworth2015.DavisKahanTheory.internalGap_section1_paperBlock`
+- `YuWangSamworth2015.DavisKahanTheory.pointInternalGap_section1`
+- `YuWangSamworth2015.DavisKahanTheory.pointInternalGap_section1_paperBlock`
 - `YuWangSamworth2015.DavisKahanTheory.opNorm_section1_perturbation`
 
 **Notes.** Inventoried on 2026-08-13 after reading the published article, where it appears immediately after Theorem 1; formalized on 2026-08-13 in `YuWangSamworth2015/YuWangSamworth2015/Symmetric/MixedGap.lean`.
@@ -228,6 +230,8 @@ Source note added 2026-08-13. The published article prints the mixed separation 
 Theorem 1's separation is defined over the two RAYS `(-inf, lambda-hat_{s+1}]` and `[lambda-hat_{r-1}, inf)`, not over the sample eigenvalues themselves, and `mixedSeparation` records exactly that: `sInf {|lambda-hat - lambda| : lambda in [a,b], lambda-hat in Iic lo u Ici hi}`. The article selects the eigenvectors for the second, third and fourth largest eigenvalues, so its block is `r = 2`, `s = 4` (zero-based Lean indices 1..3). The block interval is `[lambda_4, lambda_2] = [20, 40]` and the lower exterior ray is `(-inf, lambda-hat_5] = (-inf, 21]`; they meet, so the infimum is attained at zero and Theorem 1 has no content -- `section1_mixedSeparation_eq_zero`. The population gap at the same block is `min(lambda_1 - lambda_2, lambda_4 - lambda_5) = min(50-40, 20-10) = 10`, both numerically (`section1_populationGap`) and at the operator level (`internalGap_section1_paperBlock`, an `InternalGap` for the diagonal model, so the population-gap theorems genuinely apply to this pair; `internalGap_section1` is the same fact at the singleton block `r = s = 4`). `opNorm_section1_perturbation` records `||E||_op = 11`, which is what row `YWS-S3-applications` uses to show the literature's Weyl-recovery step fails here.
 
 The illustration is motivation rather than a step in any proof, and nothing downstream depends on it; it is formalized because a census that leaves a checkable printed assertion unformalized is recording a smaller claim than it appears to.
+
+November 3 compiler-probe maintenance: earlier migration registrations were stale. Use Submodule Frobenius/principal-sine APIs, native residual identities and bounds with explicit residual expressions, the surviving pointInternalGap_* examples, PointInternalGap applied to the right/left Gram operators, and LinearMap Hermitian-dilation APIs as applicable. The removed residualColumn and singular-gap aliases are not recreated. This corrects references to existing mathematics, not source scope or semantic certification.
 
 **Next action.** None.
 
@@ -239,13 +243,14 @@ The illustration is motivation rather than a step in any proof, and nothing down
 
 **Lean declarations:**
 
-- `Module.End.IsEigenfamily` (accepted TauCeti API, #18942)
-- `LinearMap.IsSymmetric.IsOrderedEigenframe` (accepted TauCeti API, #18942)
-- `LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices` (local gap theorem)
-- `LinearMap.IsSymmetric.IsOrderedEigenframe.pointInternalGap_span` (local gap theorem)
+- `Module.End.IsEigenfamily`
+- `LinearMap.IsSymmetric.IsOrderedEigenframe`
+- `LinearMap.IsSymmetric.IsOrderedEigenframe.span_eq_spanIndices`
+- `LinearMap.IsSymmetric.IsOrderedEigenframe.pointInternalGap_span`
 - `TauCeti.sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le`
-- `YuWangSamworth2015.sum_sq_norm_frameResidual_le`
-- `YuWangSamworth2015.sum_sq_norm_frameResidual_le_of_opNorm`
+- `LinearMap.IsSymmetric.sum_sq_norm_frameResidual_le`
+- `LinearMap.IsSymmetric.sum_sq_norm_frameResidual_le_of_opNorm`
+- `LinearMap.IsSymmetric.sinThetaFrobenius_orderedEigenframe_le`
 - `YuWangSamworth2015.yuWangSamworth_sinTheta_frame_le`
 - `YuWangSamworth2015.yuWangSamworth_sinTheta_le`
 - `YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap`
@@ -264,7 +269,7 @@ The illustration is motivation rather than a step in any proof, and nothing down
 - `YuWangSamworth2015.SourcePopulationGap`
 - `YuWangSamworth2015.sourcePopulationGap_iff`
 - `YuWangSamworth2015.SourcePopulationGap.toPopulationBoundaryGap`
-- `TauCeti.singularValues_sinThetaMap`
+- `Submodule.principalSines_def`
 
 **Curated source/Lean review:**
 
@@ -304,6 +309,10 @@ The wrappers take the source's own variables `r` and `s`, with the frame size ti
 **Exact denominator surface tightened 2026-08-17.** The canonical theorem now assumes `SourcePopulationGap Sigma hSigma r s Delta`, not merely that `Delta` is some lower bound. Outside the full-space endpoint case, `SourcePopulationGap` says that `Delta` is the greatest real satisfying `PopulationBoundaryGap`, hence exactly the printed `min(lambda_{r-1}-lambda_r, lambda_s-lambda_{s+1})` with a missing endpoint omitted. The explicit full-space branch represents the source convention that both exterior gaps are `+inf`; because the theorem is then available for every positive real `Delta`, it captures the infinite-gap limiting case without introducing extended-real arithmetic. `SourcePopulationGap.toPopulationBoundaryGap` forgets exactness and feeds the unchanged implementation theorem. The semantic dictionary also includes `TauCeti.singularValues_sinThetaMap`, closing the displayed `sinThetaFrobenius` quantity to the principal-sine sequence used to define principal angles.
 
 **Readable/auditable norm surface tightened 2026-08-17.** `theorem2_sinTheta` names `sinThetaNorm` explicitly and identifies it by a literal equality hypothesis with the intrinsic Frobenius sine distance. The perturbation term is now written directly as `frobeniusNorm (SigmaHat - Sigma)`, where `frobeniusNorm` is a reducible application-level abbreviation for the existing Frobenius seminorm. Thus the proposition after the colon is closer to the source notation without introducing an opaque scalar parameter.
+
+November 3 upstream consumption: the local ordered-frame residual and compression helpers named in the historical notes above are retired. Their registrations now use the canonical declarations accepted in DKPS-adapted #26824, integration dc24e4e61e56332f931351d15e4821fb2db763f7. The accepted residual laws allow arbitrary finite indices; orthonormal compression also allows rectangular maps and an arbitrary inner-product codomain without completeness. The source-facing Theorem 2 wrapper retains its original signature and now applies LinearMap.IsSymmetric.sinThetaFrobenius_orderedEigenframe_le directly. The paper scope and completion judgement are unchanged.
+
+November 3 compiler-probe maintenance: earlier migration registrations were stale. Use Submodule Frobenius/principal-sine APIs, native residual identities and bounds with explicit residual expressions, the surviving pointInternalGap_* examples, PointInternalGap applied to the right/left Gram operators, and LinearMap Hermitian-dilation APIs as applicable. The removed residualColumn and singular-gap aliases are not recreated. This corrects references to existing mathematics, not source scope or semantic certification.
 
 **Next action.** None.
 
@@ -382,10 +391,9 @@ Corrected 2026-08-13 with `YWS-T2-sinTheta`: the same `CorrespondingEigenblock` 
 
 - `YuWangSamworth2015.yuWangSamworth_sinTheta_le_residual`
 - `YuWangSamworth2015.yuWangSamworth_alignedBasis_le_residual`
-- `YuWangSamworth2015.residualColumn`
-- `YuWangSamworth2015.residualColumn_eq`
-- `YuWangSamworth2015.frameResidual_eq`
-- `YuWangSamworth2015.sq_gap_mul_sum_cross_le_sum_sq_norm_residualColumn`
+- `LinearMap.IsSymmetric.smul_sub_apply_eigenvectorBasis`
+- `LinearMap.IsSymmetric.frameResidual_eq`
+- `LinearMap.IsSymmetric.sq_mul_sum_sum_norm_inner_sq_le_sum_norm_smul_sub_apply_sq`
 - `YuWangSamworth2015.sq_gap_mul_sum_cross_le_of_population_gap`
 - `YuWangSamworth2015.yuWangSamworth_alignedFrame_le_residual`
 - `YuWangSamworth2015.yuWangSamworth_sinTheta_block_le_residual`
@@ -397,6 +405,10 @@ Extended 2026-08-13: the residual forms are now also available with the source's
 
 **Review surface corrected 2026-09-05.** The row cited `yuWangSamworth_alignedBasis_le_residual`, whose conclusion replaces BOTH frames with frames the proof produces, where the paper fixes `V` and rotates only `Vhat`. `yuWangSamworth_alignedFrame_le_residual` is the corrected form and is now the witness.
 
+November 3 upstream consumption: the local ordered-frame residual and compression helpers named in the historical notes above are retired. Their registrations now use the canonical declarations accepted in DKPS-adapted #26824, integration dc24e4e61e56332f931351d15e4821fb2db763f7. The accepted residual laws allow arbitrary finite indices; orthonormal compression also allows rectangular maps and an arbitrary inner-product codomain without completeness. The source-facing Theorem 2 wrapper retains its original signature and now applies LinearMap.IsSymmetric.sinThetaFrobenius_orderedEigenframe_le directly. The paper scope and completion judgement are unchanged.
+
+November 3 compiler-probe maintenance: earlier migration registrations were stale. Use Submodule Frobenius/principal-sine APIs, native residual identities and bounds with explicit residual expressions, the surviving pointInternalGap_* examples, PointInternalGap applied to the right/left Gram operators, and LinearMap Hermitian-dilation APIs as applicable. The removed residualColumn and singular-gap aliases are not recreated. This corrects references to existing mathematics, not source scope or semantic certification.
+
 **Next action.** None.
 
 ### `YWS-T2-opnorm-numerator` — The residual is bounded by 2 sqrt d ‖E‖_op
@@ -407,13 +419,17 @@ Extended 2026-08-13: the residual forms are now also available with the source's
 
 **Lean declarations:**
 
-- `YuWangSamworth2015.sum_sq_norm_residualColumn_le`
-- `YuWangSamworth2015.sum_sq_norm_residualColumn_le_of_opNorm`
+- `LinearMap.IsSymmetric.sum_norm_smul_sub_apply_eigenvectorBasis_sq_le_four_mul_frobenius_sq`
+- `LinearMap.IsSymmetric.sum_norm_smul_sub_apply_eigenvectorBasis_sq_le_four_mul_card_mul_sq`
 - `YuWangSamworth2015.sq_gap_mul_sum_cross_le_of_population_gap_opNorm`
-- `YuWangSamworth2015.sum_sq_norm_frameResidual_le_of_opNorm`
-- `YuWangSamworth2015.sum_sq_norm_apply_orthonormal_le`
+- `LinearMap.IsSymmetric.sum_sq_norm_frameResidual_le_of_opNorm`
+- `LinearMap.sum_sq_norm_apply_orthonormal_le`
 
 **Notes.** This is the half of the proof that produces the `d^{1/2}`, and therefore the half that explains why the paper's numerator is a minimum rather than a single norm. At frame generality the two ingredients are Weyl at the selected INDEX (`e i`, not the chosen eigenvector) and the orthonormal-compression estimate `sum_sq_norm_apply_orthonormal_le`, which is Lemma A1's inequality half stated basis-free in `ForTauCeti`.
+
+November 3 upstream consumption: the local ordered-frame residual and compression helpers named in the historical notes above are retired. Their registrations now use the canonical declarations accepted in DKPS-adapted #26824, integration dc24e4e61e56332f931351d15e4821fb2db763f7. The accepted residual laws allow arbitrary finite indices; orthonormal compression also allows rectangular maps and an arbitrary inner-product codomain without completeness. The source-facing Theorem 2 wrapper retains its original signature and now applies LinearMap.IsSymmetric.sinThetaFrobenius_orderedEigenframe_le directly. The paper scope and completion judgement are unchanged.
+
+November 3 compiler-probe maintenance: earlier migration registrations were stale. Use Submodule Frobenius/principal-sine APIs, native residual identities and bounds with explicit residual expressions, the surviving pointInternalGap_* examples, PointInternalGap applied to the right/left Gram operators, and LinearMap Hermitian-dilation APIs as applicable. The removed residualColumn and singular-gap aliases are not recreated. This corrects references to existing mathematics, not source scope or semantic certification.
 
 **Next action.** None.
 
@@ -430,12 +446,12 @@ Extended 2026-08-13: the residual forms are now also available with the source's
 - `YuWangSamworth2015.DavisKahanTheory.sinThetaFrobenius_orthogonalSharpness`
 - `YuWangSamworth2015.DavisKahanTheory.orthogonal_orthogonalSharpness`
 - `YuWangSamworth2015.DavisKahanTheory.correspondingEigenblock_orthogonalSharpness`
-- `YuWangSamworth2015.DavisKahanTheory.internalGap_orthogonalSharpness`
+- `YuWangSamworth2015.DavisKahanTheory.pointInternalGap_orthogonalSharpness`
 - `YuWangSamworth2015.DavisKahanTheory.opNorm_orthogonalSharpness_perturbation`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_sharpness_middleBlock`
 - `YuWangSamworth2015.DavisKahanTheory.correspondingEigenblock_middleSharpness`
 - `YuWangSamworth2015.DavisKahanTheory.orthogonal_middleSharpness`
-- `YuWangSamworth2015.DavisKahanTheory.internalGap_middleSharpness`
+- `YuWangSamworth2015.DavisKahanTheory.pointInternalGap_middleSharpness`
 - `YuWangSamworth2015.DavisKahanTheory.sinThetaFrobenius_middleSharpness`
 - `YuWangSamworth2015.DavisKahanTheory.dist_middleSharpness_aligned`
 - `YuWangSamworth2015.DavisKahanTheory.opNorm_middleSharpness_perturbation`
@@ -459,6 +475,8 @@ The preprint row is what forced the first `CorrespondingEigenblock` CONSTRUCTOR 
 
 `yuWangSamworth_sharpness_middleBlock` now also concludes the achieved distance `sqrt(2d)` for every aligned orthonormal pair, rather than only the arithmetic value of the bound, so its statement carries the sharpness claim its docstring makes.
 
+November 3 compiler-probe maintenance: earlier migration registrations were stale. Use Submodule Frobenius/principal-sine APIs, native residual identities and bounds with explicit residual expressions, the surviving pointInternalGap_* examples, PointInternalGap applied to the right/left Gram operators, and LinearMap Hermitian-dilation APIs as applicable. The removed residualColumn and singular-gap aliases are not recreated. This corrects references to existing mathematics, not source scope or semantic certification.
+
 **Next action.** None.
 
 ### `YWS-S2-sharpness-planar` — Sharpness example: planar rotation, nearby one-dimensional eigenspaces
@@ -474,7 +492,7 @@ The preprint row is what forced the first `CorrespondingEigenblock` CONSTRUCTOR 
 - `YuWangSamworth2015.DavisKahanTheory.opNorm_planarSharpness_perturbation`
 - `YuWangSamworth2015.DavisKahanTheory.norm_sub_sq_planarSharpness`
 - `YuWangSamworth2015.DavisKahanTheory.correspondingEigenblock_planarSharpness`
-- `YuWangSamworth2015.DavisKahanTheory.internalGap_planarSharpness`
+- `YuWangSamworth2015.DavisKahanTheory.pointInternalGap_planarSharpness`
 - `YuWangSamworth2015.DavisKahanTheory.norm_projection_orthogonal_span_singleton`
 
 **Notes.** Formalized 2026-08-04 in `YuWangSamworth2015/YuWangSamworth2015/Symmetric/PlanarSharpness.lean`. `compiled_generalized`, and the generalization is the interesting part: `Sigma = diag(3,1)` is the operator that is 3 on a line and 1 on its complement -- `TauCeti.twoLevelOperator 1 3 (k * v)` -- and conjugating by a rotation only moves the line. So the pair (Sigma, Sigma-hat) is two two-level models over the same levels, `twoLevelOperator_sub` gives Sigma-hat - Sigma = 2 (P_v-hat - P_v) with no matrix entries, and nothing forces the ambient space to be 2-dimensional: every conclusion holds for two lines in any finite-dimensional space, of which the paper's R^2 is the smallest case. The rotation parameter is replaced by the overlap c = <v, v-hat>, with the paper's eps = sqrt(1 - c^2) the sine.
@@ -482,6 +500,8 @@ The preprint row is what forced the first `CorrespondingEigenblock` CONSTRUCTOR 
 All three displayed quantities are proved: ||sin Theta||_F = eps, ||v-hat - v||^2 = 2 - 2c, and 2||E||_op/(3-1) = 2 eps -- so the sine bound is tight up to *exactly* the factor 2 the paper claims, at every angle. The example is checked against the theorem's own hypotheses (`correspondingEigenblock_planarSharpness`, `internalGap_planarSharpness`).
 
 Source note: the paper prints v-hat = (sqrt(1-eps^2), -eps)^T, which is the leading eigenvector of R_eps^T Sigma R_eps rather than of R_eps Sigma R_eps^T. The sign changes none of the displayed quantities -- all three depend on v-hat only through <v, v-hat> -- so the model fixes the overlap rather than a sign convention. Recorded rather than silently corrected.
+
+November 3 compiler-probe maintenance: earlier migration registrations were stale. Use Submodule Frobenius/principal-sine APIs, native residual identities and bounds with explicit residual expressions, the surviving pointInternalGap_* examples, PointInternalGap applied to the right/left Gram operators, and LinearMap Hermitian-dilation APIs as applicable. The removed residualColumn and singular-gap aliases are not recreated. This corrects references to existing mathematics, not source scope or semantic certification.
 
 **Next action.** None outstanding.
 
@@ -574,12 +594,13 @@ Claim 2, the hidden interval-counting requirement: `section1_sample_crosses_into
 
 **Lean declarations:**
 
-- `LinearMap.rightSingularSubspace` (canonical TauCeti)
+- `LinearMap.rightSingularSubspace`
 - `YuWangSamworth2015.rightSingularSubspace_sinTheta_le`
 - `LinearMap.IsSymmetric.IsOrderedEigenframe`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_frame_le`
 - `YuWangSamworth2015.DavisKahanTheory.CorrespondingRightSingularBlock`
-- `YuWangSamworth2015.DavisKahanTheory.RightSingularInternalGap`
+- `TauCeti.PointInternalGap`
+- `TauCeti.rightGram`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_le`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_opNormCoefficient_le`
 - `YuWangSamworth2015.DavisKahanTheory.sq_singularValues_eq_eigenvalues_rightGram`
@@ -607,14 +628,9 @@ Claim 2, the hidden interval-counting requirement: `section1_sample_crosses_into
 
 **Source-facing surface registered 2026-09-05.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SourceTheorem3.lean` landed on 2026-08-29 and was invisible to this census, to `dev/policy/yu-wang-samworth-grounding.yaml`, and to the distilled source, while the standalone submission repository already cited it. That is the inverse of the rule that this repository is authoritative and the standalone is a mechanical extraction. The capstones are now the row's review witnesses. They carry the printed hypothesis: `IsRightSingularBlock` / `IsLeftSingularBlock` ask only that the frame be an orthonormal block of singular vectors at the consecutive indices, with no separation assumed among the singular values of `Ahat`, and `hrank : s < finrank (range A)` is the printed `1 <= r <= s <= rank(A)` in zero-based form. The superseded `CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` forms remain cited as supporting declarations and must not be used as the row's review surface: they pin both blocks to Mathlib's chosen Gram eigenbases, which assumes away the sample degeneracy the paper's contribution is about.
 
-**Upstream-consumption update (2026-10-21).** The former local `YuWangSamworth2015.rightSingularSubspace` declaration is retired. `YuWangSamworth2015.rightSingularSubspace_sinTheta_le` now uses `LinearMap.rightSingularSubspace`, `Module.End.PointIntervalExteriorGap` and `Submodule.sinThetaMap`, specializing accepted TauCeti PR #19229. This is an API/proof-source migration; it does not change the source correction or the paper-facing Theorem 3 capstone.
+**Upstream-consumption update (2026-10-21).** The former local `YuWangSamworth2015.rightSingularSubspace` declaration is retired. `YuWangSamworth2015.rightSingularSubspace_sinTheta_le` now uses `LinearMap.rightSingularSubspace`, `Module.End.PointIntervalExteriorGap` and `Submodule.sinThetaMap`, specializing accepted TauCeti PR #19229. This changes the support theorem's interface, not the source correction or paper-facing Theorem 3 capstone.
 
-**Canonical-frame consumption (2026-10-22).** The YWS-local
-`IsOrderedRightSingularFrame` wrapper was definitionally identical to the
-accepted `LinearMap.IsSymmetric.IsOrderedEigenframe` at `isSymmetric_rightGram A`.
-The right-frame, consecutive-block, and source-facing consumers now
-use that canonical predicate directly, without changing the source hypothesis
-or the corrected singular-value gap.
+November 3 compiler-probe maintenance: earlier migration registrations were stale. Use Submodule Frobenius/principal-sine APIs, native residual identities and bounds with explicit residual expressions, the surviving pointInternalGap_* examples, PointInternalGap applied to the right/left Gram operators, and LinearMap Hermitian-dilation APIs as applicable. The removed residualColumn and singular-gap aliases are not recreated. This corrects references to existing mathematics, not source scope or semantic certification.
 
 **Next action.** None.
 
@@ -628,12 +644,13 @@ or the corrected singular-value gap.
 
 **Lean declarations:**
 
-- `LinearMap.leftSingularSubspace` (canonical TauCeti)
+- `LinearMap.leftSingularSubspace`
 - `YuWangSamworth2015.leftSingularSubspace_sinTheta_le`
 - `LinearMap.IsSymmetric.IsOrderedEigenframe`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_frame_le`
 - `YuWangSamworth2015.DavisKahanTheory.CorrespondingLeftSingularBlock`
-- `YuWangSamworth2015.DavisKahanTheory.LeftSingularInternalGap`
+- `TauCeti.PointInternalGap`
+- `TauCeti.leftGram`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_le`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_opNormCoefficient_le`
 - `YuWangSamworth2015.DavisKahanTheory.sq_singularValues_eq_eigenvalues_leftGram`
@@ -654,14 +671,9 @@ or the corrected singular-value gap.
 
 **Source-facing surface registered 2026-09-05.** `YuWangSamworth2015/YuWangSamworth2015/Rectangular/SourceTheorem3.lean` landed on 2026-08-29 and was invisible to this census, to `dev/policy/yu-wang-samworth-grounding.yaml`, and to the distilled source, while the standalone submission repository already cited it. That is the inverse of the rule that this repository is authoritative and the standalone is a mechanical extraction. The capstones are now the row's review witnesses. They carry the printed hypothesis: `IsRightSingularBlock` / `IsLeftSingularBlock` ask only that the frame be an orthonormal block of singular vectors at the consecutive indices, with no separation assumed among the singular values of `Ahat`, and `hrank : s < finrank (range A)` is the printed `1 <= r <= s <= rank(A)` in zero-based form. The superseded `CorrespondingRightSingularBlock` / `CorrespondingLeftSingularBlock` forms remain cited as supporting declarations and must not be used as the row's review surface: they pin both blocks to Mathlib's chosen Gram eigenbases, which assumes away the sample degeneracy the paper's contribution is about.
 
-**Upstream-consumption update (2026-10-21).** The former local `YuWangSamworth2015.leftSingularSubspace` declaration is retired. `YuWangSamworth2015.leftSingularSubspace_sinTheta_le` now uses `LinearMap.leftSingularSubspace`, `Module.End.PointIntervalExteriorGap` and `Submodule.sinThetaMap`, specializing accepted TauCeti PR #19229. This is an API/proof-source migration; it does not change the source correction or the paper-facing Theorem 3 capstone.
+**Upstream-consumption update (2026-10-21).** The former local `YuWangSamworth2015.leftSingularSubspace` declaration is retired. `YuWangSamworth2015.leftSingularSubspace_sinTheta_le` now uses `LinearMap.leftSingularSubspace`, `Module.End.PointIntervalExteriorGap` and `Submodule.sinThetaMap`, specializing accepted TauCeti PR #19229. This changes the support theorem's interface, not the source correction or paper-facing Theorem 3 capstone.
 
-**Canonical-frame consumption (2026-10-22).** The YWS-local
-`IsOrderedLeftSingularFrame` wrapper was definitionally identical to the
-accepted `LinearMap.IsSymmetric.IsOrderedEigenframe` at `isSymmetric_leftGram A`.
-The left-frame, consecutive-block, and source-facing consumers now
-use that canonical predicate directly, without changing the source hypothesis
-or the corrected singular-value gap.
+November 3 compiler-probe maintenance: earlier migration registrations were stale. Use Submodule Frobenius/principal-sine APIs, native residual identities and bounds with explicit residual expressions, the surviving pointInternalGap_* examples, PointInternalGap applied to the right/left Gram operators, and LinearMap Hermitian-dilation APIs as applicable. The removed residualColumn and singular-gap aliases are not recreated. This corrects references to existing mathematics, not source scope or semantic certification.
 
 **Next action.** None.
 
@@ -779,12 +791,14 @@ The four `..._frame_...` declarations carry the printed hypothesis: unit eigenve
 
 **Lean declarations:**
 
-- `YuWangSamworth2015.hermitianDilation`
-- `YuWangSamworth2015.isSymmetric_hermitianDilation`
-- `YuWangSamworth2015.hermitianDilation_sq`
+- `LinearMap.hermitianDilation`
+- `LinearMap.isSymmetric_hermitianDilation`
+- `LinearMap.hermitianDilation_comp_self`
 - `YuWangSamworth2015.singularSubspace_dilation_sinTheta_le`
 
 **Notes.** Mathematically equivalent to the paper's route and recorded here explicitly so that nobody attributes it to Yu, Wang and Samworth. The distilled tex's transcription audit makes the same point.
+
+November 3 compiler-probe maintenance: earlier migration registrations were stale. Use Submodule Frobenius/principal-sine APIs, native residual identities and bounds with explicit residual expressions, the surviving pointInternalGap_* examples, PointInternalGap applied to the right/left Gram operators, and LinearMap Hermitian-dilation APIs as applicable. The removed residualColumn and singular-gap aliases are not recreated. This corrects references to existing mathematics, not source scope or semantic certification.
 
 **Next action.** None. Keep the attribution note attached to these declarations.
 
@@ -801,9 +815,11 @@ The four `..._frame_...` declarations carry the printed hypothesis: unit eigenve
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_lemma5_columns`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_lemma5_isometricColumns`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_lemma5_orthonormalColumns`
-- `YuWangSamworth2015.sum_sq_norm_apply_orthonormal_le`
+- `LinearMap.sum_sq_norm_apply_orthonormal_le`
 
 **Notes.** Restated as a two-sided ideal estimate for the rectangular Frobenius norm rather than copied as a matrix-only helper, with bundled linear-isometry wrappers exposing the paper's orthonormal-column hypothesis directly. `YuWangSamworth2015.sum_sq_norm_apply_orthonormal_le` (added 2026-08-13, in `YuWangSamworth2015/YuWangSamworth2015/Core/Residual.lean`, not in `ForTauCeti` as this note said until 2026-09-05) is the column-sum form the Theorem 2 proof actually consumes: `sum_i ||M w_i||^2 <= ||M||_F^2` for an orthonormal family `w`. The published article numbers this Lemma A1; the preprint numbers it Lemma 5, which is what the Lean names predate.
+
+November 3 upstream consumption: the local ordered-frame residual and compression helpers named in the historical notes above are retired. Their registrations now use the canonical declarations accepted in DKPS-adapted #26824, integration dc24e4e61e56332f931351d15e4821fb2db763f7. The accepted residual laws allow arbitrary finite indices; orthonormal compression also allows rectangular maps and an arbitrary inner-product codomain without completeness. The source-facing Theorem 2 wrapper retains its original signature and now applies LinearMap.IsSymmetric.sinThetaFrobenius_orderedEigenframe_le directly. The paper scope and completion judgement are unchanged.
 
 **Next action.** None.
 

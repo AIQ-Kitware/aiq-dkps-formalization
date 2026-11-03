@@ -1550,3 +1550,31 @@ The affected finite-orbit comparator's full type/universe signature matches;
 the import policy reports zero violations. See the contribution census for the
 final log paths and the unchanged 38 known static name-drift findings. The full
 external comparator and paper semantic certification were not rerun or claimed.
+
+### November 3: accepted SSP-D16 port consumed
+
+Consume DKPS-adapted #26824, accepted integration
+`dc24e4e61e56332f931351d15e4821fb2db763f7`, at TauCeti pin
+`ddf6493515728b8f1caee2a41acc40f31644ef08`. Mathlib and Lean rc2 are unchanged.
+Delete the local gap-separated span proof and the four ordered-frame residual /
+compression foundations, together with the private sum helper. Keep the paper
+sine theorem in its established home and apply native
+`LinearMap.IsSymmetric.sinThetaFrobenius_orderedEigenframe_le` directly.
+The native statements preserve arbitrary sample-frame choices and generalize
+the helper index/codomain scopes; no sample gap or nonzero rank is imposed.
+Retain the genuinely distinct intrinsic-gap and sharper residual/alignment
+consequences. The extraction manifest and YWS source census now register the
+canonical declarations; the contribution census records exact source anchors,
+authors/license and integration separately from the old submission snapshot.
+
+Validation passed without warnings: focused (7,116 jobs), full default
+(21,661 jobs), Challenge (19,907 jobs), with eight Lean threads and CPU affinity
+`0-7`. The YWS census probe resolves 202/202 registered declarations; it also
+identified and prompted correction of 17 names stale from earlier migrations,
+without new aliases or mathematics. The existing census checker/render check
+pass, and import layering has zero violations. The unchanged 38 static
+name-drift findings are recorded separately in the contribution census.
+
+After preserving concurrent remote work through `85ed2b98f`, the combined main
+also passed incremental default (21,673 jobs) and Challenge (19,921 jobs)
+builds without warnings. See the contribution census for these final logs.
