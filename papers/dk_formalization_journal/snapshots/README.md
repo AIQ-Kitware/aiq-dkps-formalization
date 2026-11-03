@@ -1,16 +1,18 @@
-# Tracked manuscript snapshots
+# Derived manuscript tables and observation data
 
-This directory contains small, reviewable artifacts generated from repository
-analysis or external bibliometric queries and consumed by the manuscript.
-These files are intentionally tracked in Git so the paper builds offline from a
-stable evidence snapshot.
+Generated TeX tables/macros and CSV views in this directory are gitignored.
+The Python generators and their input evidence remain tracked. The main paper
+does not consume these optional analysis tables. `make literature` regenerates
+the dependency tables used by the literature review.
 
 Detailed working CSV/JSON inventories, diagnostic reports, and raw API responses
-belong under `../generated/` and are gitignored. Refresh snapshots explicitly
-with the corresponding analysis command, review the diff, and commit the small
-artifacts that changed.
+belong under `../generated/` and are also gitignored. The dated
+`openalex_bibliometrics.json` remains tracked as external observation data:
+querying the service again cannot reproduce a past observation.
 
-- `make accounting` refreshes repository-derived TeX macros and tables here.
-- `make bibliometrics` refreshes the compact OpenAlex JSON, citation-trend CSV,
-  citation-trend TeX table, and bibliometric macros here while leaving the raw
-  response under `../generated/`.
+- `make accounting` refreshes ignored repository-derived TeX macros and tables.
+- `make literature` prepares the ignored dependency macros and table.
+- `make bibliometrics` explicitly refreshes the tracked observation JSON and
+  the ignored citation-trend CSV/TeX views and bibliometric macros, while
+  leaving the raw response under `../generated/`. Review changes to the
+  observation data before committing them.

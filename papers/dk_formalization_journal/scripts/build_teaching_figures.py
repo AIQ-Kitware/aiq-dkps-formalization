@@ -4,6 +4,7 @@
 The rank-one construction combines S05Residual with the exact-coordinate
 component geometry of S08Why. The graph example is shared with N08MatchingGraph.
 """
+import argparse
 from pathlib import Path
 import sys
 
@@ -97,8 +98,10 @@ def sine_theta():
 
 def matching():
     ex = nuclear_matching_graph_example()
-    fig = plt.figure(figsize=(12.4, 4.25), facecolor='white')
-    ax = fig.add_axes([.025, .09, .46, .86]); ax.axis('off')
+    fig = plt.figure(figsize=(12.4, 4.65), facecolor='white')
+    fig.text(.25, .97, '(a) Angle-label graph', ha='center', va='top', fontsize=21, color=FG)
+    fig.text(.75, .97, '(b) Matching costs', ha='center', va='top', fontsize=21, color=FG)
+    ax = fig.add_axes([.025, .065, .46, .82]); ax.axis('off')
     ax.set(xlim=(-.30, 4.9), ylim=(-.8, 3.15), aspect='equal')
     points = np.array([[.55, 2.05], [4.05, 2.05], [2.30, -.05]])
     label_pos = {(0, 1):(2.30, 2.21), (0, 2):(.78, .89), (1, 2):(3.90, .89)}
@@ -117,7 +120,7 @@ def matching():
         ax.text(x, y+(.31 if top else -.68), rf'$\like{{SingletonCost}}{{s_{i+1}}}={single:.4f}$',
                 ha='center', va='center', fontsize=17, color=MUTED)
 
-    table = fig.add_axes([.54, .12, .42, .73]); table.axis('off')
+    table = fig.add_axes([.54, .09, .42, .75]); table.axis('off')
     table.set(xlim=(0,1), ylim=(0,1))
     table.text(.01,.94,r'$\sym{Matching}$',fontsize=17,color=MUTED)
     table.text(.99,.94,r'$\like{TraceCost}{C(M)}$',fontsize=17,color=MUTED,ha='right')
@@ -131,15 +134,22 @@ def matching():
         table.text(.99,y,rf'$\like{{TraceCost}}{{{value:.4f}}}$',fontsize=21,color=COST if chosen else FG,ha='right',va='center')
     fig.add_artist(plt.Line2D([.5,.5],[.13,.89],transform=fig.transFigure,color=GUIDE,lw=1))
     save(fig, 'real_nuclear_matching',
-         'Three labeled principal angles 30,45,75 degrees. Edge savings, all four feasible matchings, '
+         'Combinatorial graph on angle labels 30,45,75 degrees; vertex positions are arbitrary. '
+         'Edge savings, all four feasible matchings, '
          'and the attaining four-dimensional paired block plus two-dimensional singleton reflection.')
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--figure', choices=('sine-theta', 'matching'),
+                        help='Generate one figure; the default generates both.')
+    args = parser.parse_args()
     configure()
     (OUT.parent / 'build').mkdir(exist_ok=True)
-    sine_theta()
-    matching()
+    if args.figure in (None, 'sine-theta'):
+        sine_theta()
+    if args.figure in (None, 'matching'):
+        matching()
 
 
 if __name__ == '__main__':

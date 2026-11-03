@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Fetch OpenAlex citation data and refresh tracked manuscript snapshots.
+"""Fetch OpenAlex citation observations and refresh their derived views.
 
 This is an explicit network utility, not part of the normal manuscript build.
 The selected OpenAlex response is written under ``generated/`` and is therefore
-ignored by Git.  Small derived artifacts used by the manuscript are written
-under ``snapshots/`` and are intended to be reviewed and committed.
+ignored by Git. Dated compact observation JSON under ``snapshots/`` is tracked;
+the derived TeX and CSV views there are ignored and can be regenerated.
 
 Authentication is read from ``OPENALEX_API_KEY`` by default.  The key is sent to
 OpenAlex but is never written to either the raw response or tracked snapshots.

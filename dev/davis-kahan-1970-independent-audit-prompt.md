@@ -104,6 +104,12 @@ their union is exactly the source statement at full scope.
 
 ## Pass C — nonlocal source-interpretation audit
 
+Generate the ignored reviewer packet from the current source evidence first:
+
+```bash
+python3 scripts/render_davis_kahan_1970_audit_packet.py
+```
+
 For every result with `local_statement_self_contained = false`, read the
 **NONLOCAL SOURCE-SEMANTICS DEPENDENCY** section of
 `dev/davis-kahan-1970-independent-audit-template.md`. It reproduces the printed

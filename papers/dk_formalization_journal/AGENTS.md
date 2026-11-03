@@ -85,6 +85,13 @@ YWS submission material lives in
 
 ## Validation
 
+Track authored manuscript sources, figure generators, and evidence inputs.
+Generated figure PGF/PDF/SVG files, analysis TeX/CSV views, previews, and LaTeX
+build outputs are gitignored. Do not force-add them. `make paper` and the local
+latexmk configuration prepare the manuscript figures automatically. The two
+authored SVG sources under `figures/` and dated external observation JSON remain
+tracked inputs.
+
 For changed TeX, run `make -C papers/dk_formalization_journal paper` from the
 repository root and inspect the log for errors and unresolved references. The
 PDF is `build/paper.pdf`; the project configuration selects LuaLaTeX for emoji

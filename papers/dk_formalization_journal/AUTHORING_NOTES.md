@@ -166,6 +166,41 @@ Validation passed: the full `DavisKahan.All` build, a fresh compiler probe for
 the 78 registered and nine supporting declarations, and the manuscript build
 without warnings or unresolved references.
 
+## Matching exposition: accepted review applied (2 November 2026)
+
+The author accepted the four comments and their inline responses in
+`formalization_enabled_extension.tex`. The correction pass:
+
+- explains rotation, reflection, and two-plane coupling before defining
+  indexed paired and singleton costs; removes the undeclared auxiliary angle;
+- identifies the figure as a graph of angle labels with arbitrary vertex
+  positions, labels its graph and cost-table panels, and explains the geometric
+  meaning of selected edges and unmatched vertices in the caption;
+- justifies existence using orthonormal basis extension, Heine--Borel, the
+  closed transport constraint, and the extreme value theorem;
+- explains the simultaneous invariant decomposition before the stationarity
+  argument, then separates feasible variations, gradient levels, the two-phase
+  projection, and its real/imaginary decomposition into successive steps.
+
+The existence argument follows `SchattenTransportExistence.lean`. The block
+explanation follows `SchattenRealDecomposition.lean`, `SchattenRealGradientBlocks.lean`,
+and `RealTwoPhaseBlocks.lean` under
+`DavisKahan/FiniteDimensional/DirectRotation/`, together with
+`ForTauCeti/Analysis/InnerProductSpace/Projection/ComplexRealBlocks.lean`.
+Resolved comment calls are removed from this section; macro definitions remain.
+
+## Generated artifacts (2 November 2026)
+
+The author requested ignoring regenerable outputs. Figure PGF/PDF/SVG exports,
+derived analysis TeX/CSV views, previews, and LaTeX auxiliaries are no longer
+tracked. Figure scripts and numerical models remain the sources; the Makefile
+and latexmk configuration regenerate the figures needed by the main paper.
+The two authored SVGs and dated external observation JSON remain tracked inputs.
+The rendered reviewer packet is also ignored and regenerated with
+`scripts/render_davis_kahan_1970_audit_packet.py` from the root.
+Authored semantic reviews, Lean audit wrappers, and source inventories remain
+source evidence rather than disposable outputs.
+
 ## Local evidence index
 
 Paths below are relative to this paper directory. Prefer these existing records

@@ -2,26 +2,41 @@ PYTHON ?= python3
 CUTOFF ?=
 ACCOUNTING_CUTOFF_ARG := $(if $(strip $(CUTOFF)),--cutoff $(CUTOFF),)
 
-.PHONY: all accounting bibliometrics counterexample-figure teaching-figures figures paper literature clean
+.PHONY: all accounting bibliometrics counterexample-figure teaching-figures figures paper-figures paper literature dependency-snapshots clean
+
+TEACHING_PGF = figures/sine_theta_residual_geometry.pgf figures/real_nuclear_matching.pgf
+FIGURE_STYLE = scripts/figure_style.py math_symbol_colors.tex
+FIGURE_MODELS = ../../visualizations/dkvis
 
 all: paper
 
-# Refresh ignored working analyses plus the small tracked manuscript snapshots
-# derived from them. This is explicit so an ordinary paper build never dirties
-# tracked snapshot files.
+# Refresh ignored working analyses and derived tables explicitly.
 accounting:
 	$(PYTHON) scripts/build_all.py $(ACCOUNTING_CUTOFF_ARG)
 
-# Networked, explicit refresh of the OpenAlex raw response and its tracked
-# compact/TeX snapshots. The normal manuscript build never contacts OpenAlex.
+# Networked, explicit refresh of the dated OpenAlex observations and their
+# ignored TeX/CSV views. The normal manuscript build never contacts OpenAlex.
 bibliometrics:
 	$(PYTHON) scripts/fetch_openalex_bibliometrics.py
 
-# Manuscript builds consume the checked-in snapshots and are offline.
-paper:
+# The manuscript and editor builds regenerate missing/stale figures offline.
+paper: paper-figures
 	latexmk -pdf paper.tex
 
-# Optional regeneration; ordinary paper builds use the committed vector figure.
+paper-figures: $(TEACHING_PGF) figures/prop44_displacement_planes.pgf
+
+$(TEACHING_PGF): scripts/build_teaching_figures.py $(FIGURE_STYLE) $(FIGURE_MODELS)/palette.py $(FIGURE_MODELS)/novelty_math.py $(FIGURE_MODELS)/sine_theta_story.py $(FIGURE_MODELS)/sine_theta.py
+
+figures/sine_theta_residual_geometry.pgf:
+	$(PYTHON) scripts/build_teaching_figures.py --figure sine-theta
+
+figures/real_nuclear_matching.pgf:
+	$(PYTHON) scripts/build_teaching_figures.py --figure matching
+
+figures/prop44_displacement_planes.pgf: scripts/build_counterexample_figure.py $(FIGURE_STYLE) $(FIGURE_MODELS)/prop44.py
+	$(PYTHON) scripts/build_counterexample_figure.py
+
+# Explicit refresh also recreates optional standalone PDF/SVG exports.
 counterexample-figure:
 	$(PYTHON) scripts/build_counterexample_figure.py
 
@@ -30,7 +45,10 @@ teaching-figures:
 
 figures: counterexample-figure teaching-figures
 
-literature:
+dependency-snapshots:
+	$(PYTHON) scripts/build_dependency_analysis.py
+
+literature: dependency-snapshots
 	latexmk -pdf literature_review.tex
 
 clean:

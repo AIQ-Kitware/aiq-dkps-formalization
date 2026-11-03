@@ -334,9 +334,9 @@
   {NormM}{M}{normaux}{Auxiliary unitarily invariant norm used to define a Q-norm through the squared modulus.}
 \dkDeclareSymbol[Q-norm property: a unitarily invariant norm N is a Q-norm when N(T) squared = M(T* T) for some unitarily invariant norm M. The Frobenius norm is an example, with M the trace norm; the repaired full-displacement theorem uses this norm class.]
   {NormQ}{Q}{normaux}{Q-norm: its square is a unitarily invariant norm of the squared modulus.}
-\dkDeclareSymbol[Singleton trace cost s(theta) = min(4 sin(theta/2), 2). It transports one real principal plane independently, choosing a rotation of cost 4 sin(theta/2) or a reflection of cost 2.]
+\dkDeclareSymbol[Singleton trace cost s_i = min(4 sin(theta_i/2), 2) for angle label i. It transports one real principal plane independently, choosing a rotation of cost 4 sin(theta_i/2) or a reflection of cost 2.]
   {SingletonCost}{s}{norm}{Minimum trace displacement for one real principal plane: choose a rotation or a reflection.}
-\dkDeclareSymbol[Paired trace cost e(theta, psi) = 4 sin((theta + psi)/2). It is attained by coupling two principal planes in a real four-dimensional block. Its saving relative to independent singleton choices is s(theta) + s(psi) - e(theta, psi).]
+\dkDeclareSymbol[Paired trace cost e_ij = 4 sin((theta_i + theta_j)/2) for distinct angle labels i,j. It is attained by coupling their principal planes in a real four-dimensional block. Its saving relative to independent singleton choices is s_i + s_j - e_ij.]
   {PairCost}{e}{norm}{Trace displacement cost of coupling two principal planes in a four-dimensional block.}
 \dkDeclareSymbol[Matching M on the labels of positive principal angles, counted with multiplicity. Its edges are disjoint unordered pairs; every unmatched label is transported as a singleton. Minimize paired costs plus singleton costs, or maximize the sum of edge savings.]
   {Matching}{M}{normaux}{Matching of positive principal-angle labels: disjoint pairs, with all remaining labels single.}

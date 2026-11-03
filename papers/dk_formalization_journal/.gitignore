@@ -2,10 +2,21 @@
 __pycache__/
 *.py[cod]
 
-# Disposable paper-analysis outputs and raw API responses. These are rebuilt
-# from repository evidence and should never be committed. Small manuscript-facing
-# artifacts live in the tracked snapshots/ directory instead.
+# Disposable paper-analysis outputs and raw API responses.
 generated/
+build/
+
+# Derived analysis tables. Keep the dated external observation JSON as data.
+/snapshots/*.tex
+/snapshots/*.csv
+
+# Rendered figures are regenerated from the tracked Python sources.
+/figures/*.pgf
+/figures/*.svg
+/figures/*.png
+# These two SVG files are authored vector sources, rather than rendered outputs.
+!/figures/complex_phase_chords.svg
+!/figures/sine_theta_rank_one.svg
 
 # LaTeX / latexmk build products.  Source .tex/.bib files remain tracked.
 *.aux
@@ -30,10 +41,6 @@ generated/
 *.vrb
 *.xdv
 *.pdf
-
-# Stable print figure assets used by paper.tex. SVG sources remain editable.
-!/figures/sine_theta_rank_one.pdf
-!/figures/prop44_displacement_planes.pdf
 
 # Editor / OS noise
 *~

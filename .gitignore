@@ -50,3 +50,6 @@ git-of-theseus/
 gitstats-report/
 
 *.zip
+
+# Rendered reviewer packet; inventories and the rendering script are the sources.
+/dev/davis-kahan-1970-independent-audit-template.md

@@ -59,9 +59,12 @@ open (these settings affect only the current session):
 
 ## Manuscript figures
 
-The figures are committed as live PGF sources and standalone vector PDF/SVG.
-The manuscript inputs PGF so its LaTeX fonts, symbol colors, and hover reminders
-also apply inside figures. Slides are rendered separately with Manim.
+Figure generators and their numerical models are tracked. Generated PGF,
+PDF/SVG exports, and previews are gitignored. Both `make paper` and direct
+`latexmk -pdf paper.tex` regenerate missing or stale figures before compiling;
+the latter also supports Vim/LaTeXBox. The manuscript inputs live PGF so its
+LaTeX fonts, symbol colors, and hover reminders apply inside figures.
+Slides are rendered separately with Manim.
 To regenerate the counterexample from the existing checked numerical model in `visualizations/dkvis/prop44.py`, run:
 
 ```bash
@@ -79,8 +82,16 @@ make -C papers/dk_formalization_journal teaching-figures
 ```
 
 Use the `figures` target to regenerate all three manuscript figures. Regeneration
-requires LuaLaTeX and Poppler's `pdftocairo`/`pdftoppm` in addition to Matplotlib
-and NumPy. Ordinary paper builds consume the committed PGF sources.
+requires GNU Make, LuaLaTeX, and Poppler's `pdftocairo`/`pdftoppm`
+in addition to Matplotlib and NumPy. These dependencies are also needed on the
+first paper build. The two authored SVG sources retained under `figures/`
+are independent of the generated figures.
+
+Derived analysis tables under `snapshots/` are also gitignored. Their generators
+are retained; `make accounting` refreshes the optional repository-analysis views,
+and `make literature` prepares its dependency tables before compiling. Dated
+external observation JSON remains tracked as input data. The main paper build
+does not run accounting analyses or contact external services.
 
 ## Draft controls
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Refresh paper-local working analyses and tracked manuscript snapshots."""
+"""Refresh ignored paper-local working analyses and derived manuscript tables."""
 
 from __future__ import annotations
 
