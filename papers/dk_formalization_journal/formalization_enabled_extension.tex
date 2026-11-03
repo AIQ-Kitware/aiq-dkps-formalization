@@ -2,11 +2,21 @@
 \label{sec:example-transport}
 
 We prove an exact formula for the smallest trace-norm displacement of a real
-orthogonal map carrying one given subspace onto another. The formula is a
-weighted-matching problem on their principal angles. Its proof uses the
-principal-angle geometry, real and complex operator constructions, and
-singular-value norms developed for the formalization, together with
-additional optimization arguments.
+  orthogonal map carrying one given subspace onto another.
+The formula is a weighted-matching problem on their principal angles.
+\jonsays{I'd like to use more standard CS-like language here.
+We should refer to the problem as a maximum matching on a general graph.
+Graph matching invokes too many connotations of bipartite matching, so we should
+  be more clear here and elsewhere.
+We can say on general graphs once, and then just "maximum matching" for
+  everything else later on. We also might want to mention that this is a finite case, unless we really do have the more general proof - 
+  I'm actually curious about if a maximum matching can make sense for an infinite dimensional orthogonal transport - it seems like it can - 
+  we should keep this extension for the paper simple though. This has to be the most interesting novel extension that I can pick up and 
+  master in a few days so we can publish. We can work on the general extension paper later.
+  }
+Its proof uses the principal-angle geometry, real and complex operator
+  constructions, and singular-value norms developed for the formalization,
+  together with additional optimization arguments.
 
 Let $\like{Usource}{K},\like{Vtarget}{L}\subseteq\mathbb R^n$ have the same dimension and let
 $\like{theta}{\theta_1},\ldots,\like{theta}{\theta_m}\in(0,\pi/2]$ be their positive principal angles,
@@ -15,7 +25,7 @@ pairs of labels from $\{1,\ldots,m\}$, using each label at most once.
 Labels that are not used in a pair are unmatched.
 For three labels, $\sym{Matching}=\{\{1,2\}\}$ pairs labels $1,2$ and
 leaves $3$ unmatched; adding $\{2,3\}$ would use label $2$ twice and is
-excluded. Equal angles still have distinct labels.
+excluded.\jonsays{maybe better to say that this is disallowed, the phrasing feels like its a legal move, start with the fact that we are showing an example of an illegal move and why it is illegal. We don't need to say equal angles have distinct labels, I think that is clear enough already.} Equal angles still have distinct labels.
 
 Each positive principal angle describes a source line and a target line
 in a two-dimensional principal plane. Transporting that plane independently
@@ -31,7 +41,7 @@ cost $\like{SingletonCost}{s_i}$:
  \like{SingletonCost}{s_i}=\min\{4\sin(\like{theta}{\theta_i}/2),2\}.
 \end{equation}
 The paired cost is attained by an orthogonal transporter on the two-plane
-sum. Common zero-angle directions can remain fixed.
+sum. Common zero-angle directions can remain fixed.\jonsays{maybe we don't need to mention the zero-angle case, its reasonably implicit}
 
 \begin{theorem}[Real trace-norm matching reduction]
 \label{thm:real-matching-example}
@@ -52,6 +62,7 @@ principal-plane or determinant constraint.
 \end{theorem}
 
 We can solve the matching problem by maximizing the savings from pairing angles.
+\jonsays{The word "savings" is imprecise here}
 Starting from the all-singleton cost $C_0=\sum_i s_i$, pairing $i,j$ saves
 $\like{MatchingSaving}{g_{ij}}=s_i+s_j-e_{ij}$. Thus a matching $\sym{Matching}$ costs
 $\like{TraceCost}{C(M)}=C_0-\sum_{\{i,j\}\in\sym{Matching}}g_{ij}$, and its edges must have disjoint
@@ -61,7 +72,9 @@ choices as a weighted graph for a three-angle example.
 \begin{figure}[tb]
 \centering
 \resizebox{\linewidth}{!}{\input{figures/real_nuclear_matching.pgf}}
-\caption{Graph of pairing choices for principal angles $30^\circ$,
+\caption{
+    \jonsays{This still does not lead with what this is. This should say: for an example of a R6 ambient space, and two disjoint R3 subspaces, there are 3 non-zero principle angles between the subspaces. This figure shows the graph corresponding to the setup. Maybe start with Graph of principle angle pairing choices corresponding to \ldots and then describe the problem }
+    Graph of pairing choices for principal angles $30^\circ$,
 $45^\circ$, and $75^\circ$. Vertex positions are arbitrary; each vertex
 represents an angle label and each edge a possible pairing. Vertices carry
 singleton costs $s_i$; edge labels give savings $g_{ij}$. The solid edge
@@ -80,6 +93,7 @@ assembled from pieces carrying one or two principal angles. Choosing
 these pieces gives a matching. Conversely, every matching supplies such
 a transporter. The work is to justify the decomposition while allowing
 every orthogonal competitor in the original problem.
+\jonsays{Don't be afraid to repeat words. Using consistent terminology can help ground the reader so they can see patterns and correspondences. You do not have to - and should not - use synonyms to increase word variation}
 
 \emph{Step 1: choose a differentiable cost and a global minimizer.}
 For $1<p<2$, set
@@ -93,13 +107,14 @@ For $1<p<2$, set
 Here $s_j(T)$ denotes a singular value of $T$. At $p=1$ this sum is the
 trace norm in the theorem. For $p>1$ it is differentiable, including at
 zero displacement singular values, which permits the derivative argument
-below.
+below.\jonsays{We should give a bit of a hint or insight into the proof strategy here. I.e. say we are interested in the case where p=1, but we it is not differentiable, so we are going to start with p>1 and then look at limiting cases - assuming I'm saying that correctly.}
 
 Write $\like{Psource}{P_K}$ and $\like{Qtarget}{P_L}$ for the orthogonal
 projections onto the source and target. An orthogonal map carrying an
 orthonormal basis of $\like{Usource}{K}$ to one of $\like{Vtarget}{L}$,
 extended to their orthogonal complements, belongs to $\mathcal F$.
 Thus $\mathcal F$ is nonempty. The group $O(n)$ is closed and bounded
+\jonsays{O(n) does not have a sym symbol if we want to modify notation, and is not defined. I think we should avoid adding all the proof details to the notation table in the appendix, as it makes it more clear what the objects we are concerned with in the DK formalization are, but we should still be disciplined about having the ability to create a glossary of all notation used in the paper from a single source of truth. There are many other places where this is a problem}
 in $\mathbb R^{n\times n}$, hence compact by Heine--Borel.
 The equivalent transport equation
 $\sym{Wcompetitor}\like{Psource}{P_K}\sym{Wcompetitor}^T
@@ -429,6 +444,7 @@ A four-dimensional block therefore offers either a paired choice or
 two independent singleton choices.
 
 \emph{Step 5: obtain both bounds in the matching reduction.}
+\jonsays{Is this a reduction in that are we transporting the problem and then transporting the solution back? Or is this more of a correspondence? I suppose its both... not sure what the best wording is.}
 For a matching $\sym{Matching}$ define
 \[
  C_p(\sym{Matching})
