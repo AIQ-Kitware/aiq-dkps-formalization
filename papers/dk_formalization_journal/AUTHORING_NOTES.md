@@ -253,7 +253,10 @@ the source. The zero value on the transporter's scalar eigenspaces is assigned
 explicitly to the spectral gradient.
 
 The host's failed build log identifies an undefined `\ie{}` command in the
-skew-symmetry definition. Replaced it with “that is,”. The subsequent
+skew-symmetry definition. At the author's request, `paper.tex` now defines
+`\ie{}` and `\eg{}` as “i.e.” and “e.g.” with ordinary interword spacing;
+the skew-symmetry definition retains `\ie{}`. Surrounding punctuation is
+supplied at the call site. The subsequent
 “up-to-date”/previous-error combination is latexmk retaining that failed run,
 not a successful build. The README explains the original-error log and the
 `-g` retry option for unchanged inputs. No editor configuration is changed.
