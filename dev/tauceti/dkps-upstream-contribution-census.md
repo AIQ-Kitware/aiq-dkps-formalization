@@ -253,7 +253,7 @@ VM build evidence and runs no Lake commands.
 | Target and branch commit | Original donor and final declaration(s) | Scope and descent |
 | --- | --- | --- |
 | SSP-C28/C29, `af618df07e144de2386ed4e7b744526269d211c4`, `port-ssp-c28-c29-ritz-tangent` | `aec34fb9a:DavisKahan/FiniteDimensional/TanTheta/RitzResidual.lean`, `isTransverse_of_tanThetaIntervalGap`, `orthonormal_tanThetaResidualWitness`, `tanThetaResidualWitness_scalar`, `kyFan_tanTheta0_ritzResidual_le`, `tanTheta0_ritzResidual_le` and both rank-specific paper statements → `Submodule.directedProjectionGap_lt_one_of_pointSpectrumIn_compression` and `TauCeti.UnitarilyInvariantSeminorm.mul_map_tanThetaMap_le_map_ritzResidual` in `UnitarilyInvariantSeminorm/SinTheta/RitzTangent.lean` | Explicit witness/scalar/Ky Fan proof adaptation; Jon Crall / GPT 5.6 High, Kitware 2026 Apache-2.0, Davis–Kahan (1970) equation (6.6). Uses native tangent, principal-angle, point-spectrum/form-bound, Galerkin and Fan-dominance APIs. Finite-dimensional `RCLike`, every rectangular UI seminorm, no rank comparison, nonzero rank, extra completeness or `β ≤ α` assumption. The spectral gap proves exclusion of poles. Focused build: 5783 jobs, no warnings; full header/text style passed. |
-| SSP-C31 prerequisite, `14d1e51111524a2a3d8b071c262d1d5758dbc963`, `port-ssp-c31-coercive-unit` | `aec34fb9a:ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean`, `norm_smul_le_norm_apply_of_coercive` and `isUnit_of_coercive`; `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean`, `spectrum_re_lower_of_coercive` → `ContinuousLinearMap.norm_smul_le_norm_apply_of_coercive`, `isUnit_of_coercive`, `le_re_of_mem_spectrum_of_coercive` in `InnerProductSpace/Coercive.lean` | The operator inverse is reproved through native real Lax–Milgram and scalar restriction; the spectral shift argument is adapted. Source authors Jon Crall / Claude Fable 5 and Jon Crall / OpenAI GPT-5.6 Thinking / Claude Opus 5 respectively; Kitware 2026 Apache-2.0. Arbitrary Hilbert dimensions, real/complex scalars, no self-adjointness. Norm control needs neither positive constant nor completeness; the complex spectral half-plane bound permits any real constant. Direct source calls in the reflected centered operator and Lyapunov step establish the prerequisite relation. Focused build: 5305 jobs, no warnings; full header/text style passed. This does not complete C31. |
+| SSP-C31 prerequisite, `339f5b641484cb54b98bf4af0b7c0e199f5e494d`, `port-ssp-c31-coercive-unit` | `aec34fb9a:ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean`, `norm_smul_le_norm_apply_of_coercive` and `isUnit_of_coercive`; `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean`, `spectrum_re_lower_of_coercive` → `ContinuousLinearMap.mul_norm_le_norm_apply_of_coercive`, `isUnit_of_coercive`, `le_re_of_mem_spectrum_of_coercive` in `InnerProductSpace/Coercive.lean` | The operator inverse directly applies native `ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map` from Mathlib `Positive`; the spectral shift argument is adapted. Source authors Jon Crall / Claude Fable 5 and Jon Crall / OpenAI GPT-5.6 Thinking / Claude Opus 5 respectively; Kitware 2026 Apache-2.0. Arbitrary Hilbert dimensions, real/complex scalars, no self-adjointness. Norm control needs neither positive constant nor completeness; the complex spectral half-plane bound permits any real constant. Direct source calls in the reflected centered operator and Lyapunov step establish the prerequisite relation. Focused build: 5511 jobs, no warnings; full header/text style passed. This does not complete C31. |
 
 C31's quarter-acute proof must wait for the coercivity prerequisite to land;
 no dependent PR is stacked. D17/D18 similarly wait for D16. The SA-B05 → E01 →
@@ -3928,3 +3928,20 @@ now uses the finset subtype directly, without reindexing through `Fin`.
 Focused warning-as-error compilation and full source header/text style checks
 pass; this records a submitted repair, not upstream integration or approval
 of the new head. The original donor attribution and license are unchanged.
+
+### PR #26821 coercive API review repair
+
+Repair `339f5b641484cb54b98bf4af0b7c0e199f5e494d` addresses the
+[reuse](https://github.com/TauCetiProject/TauCeti/pull/26821#discussion_r4449785063),
+[placement](https://github.com/TauCetiProject/TauCeti/pull/26821#discussion_r4449785269),
+and [naming](https://github.com/TauCetiProject/TauCeti/pull/26821#discussion_r4449785693)
+findings on `14d1e51111524a2a3d8b071c262d1d5758dbc963`. The inverse proof
+now directly applies Mathlib's stronger
+`ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map`, rather than
+constructing a real Lax–Milgram equivalence. The sole import is `Positive`,
+and the norm bound is renamed `mul_norm_le_norm_apply_of_coercive`, with no
+alias. The arbitrary-real-constant, incomplete-space norm scope and arbitrary
+Hilbert-space unit/spectral scopes are unchanged. Source theorem spellings,
+authors, source anchors and license above remain provenance records. Fresh
+focused warning-as-error compilation (5511 jobs) and full header/text style
+checks pass; a submitted repair is not upstream acceptance.
