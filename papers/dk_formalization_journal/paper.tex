@@ -119,7 +119,6 @@
 \newcommand{\DKResultCount}{29}
 \newcommand{\DKProvedCount}{28}
 \newcommand{\DKRefutedCount}{1}
-\newcommand{\DKSemanticAcceptedCount}{29}
 
 % Usage: \margincomment{Check this formula!}
 %\newcommand{\jonsays}[1]{%
@@ -187,29 +186,36 @@
 \maketitle
 
 \begin{abstract}
-We formalize the Davis--Kahan theory of spectral-subspace perturbations
-from its 1970 primary source in Lean~4.  Of 29 result-level
-statements, 28 are proved under their source hypotheses; the remaining
-statement is refuted \citep[Proposition~4.4]{davis1970rotation}. The development includes the
-sine and tangent theorems, direct rotations, principal-angle operators,
-Sylvester separation, unitarily invariant operator-ideal norms, and
-unbounded self-adjoint operators.  We place these constructions in their
-mathematical lineage, from the geometry of principal angles through
-the theory of projections and the spectral methods underlying Davis
-and Kahan's estimates.
 
-The formalization required reusable operator theory, portions of which
-were subsequently adapted into Tau Ceti, with additional foundations
-adapted from Mathlib and the Spectra project. Examining the full
-displacement assertion produced a real
-four-dimensional counterexample with arbitrarily small positive principal
-angles.  We locate the failed singular-value comparison and prove a
-corrected optimality statement for Q-norms.  The resulting infrastructure
-also supports a later, separately proved theorem reducing trace-norm
-optimal real subspace transport to weighted matching on principal
-angles.  These outcomes show how developing the foundations of a
-classical mathematical theory can support both a source correction and
-new formal research.
+We formalize the Davis--Kahan theory of spectral-subspace perturbations in
+  Lean~4.
+From Davis and Kahan's landmark 1970 paper we identify \DKResultCount{}
+  result-level statements as the targets of the formalization: of these
+  \DKProvedCount{} are verified under their stated hypotheses, and the remaining
+  statement --- as originally written --- is refuted.
+The formal development includes the sine and tangent theorems, direct rotations,
+  principal-angle operators, Sylvester separation, unitarily invariant
+  operator-ideal norms, and unbounded self-adjoint operators.
+We place these constructions in their mathematical lineage, from the geometry of
+  principal angles through the theory of projections and the spectral methods
+  underlying Davis and Kahan's estimates.
+
+
+The refuted statement, \citep[Proposition~4.4]{davis1970rotation}, is concerned
+  with the optimality of direct rotation for all unitarily invariant norm.
+Examining the full displacement assertion produced a real four-dimensional
+  counterexample with arbitrarily small positive principal angles.
+We locate the failed singular-value comparison and prove a corrected optimality
+  statement for Q-norms.
+
+The formalization required reusable operator theory, portions of which were
+  subsequently upstreamed into Tau Ceti, with additional foundations adapted
+  from Mathlib and the Spectra project.
+The resulting infrastructure also supports a new theorem reducing trace-norm
+  optimal real subspace transport to weighted matching on principal angles.
+These outcomes show how formalizing the foundations of a classical mathematical
+  theory can support validating results, identifying historical errors, and
+  developing new formal research.
 
 \end{abstract}
 
@@ -1029,7 +1035,7 @@ so
   \label{eq:modulus-sine}
 \end{equation}
 Our formal construction defines the directed angle by functional calculus
-and proves \cref{eq:modulus-sine} for its literal sine. The polar
+and proves \cref{eq:modulus-sine} for its sine. The polar
 decomposition $\sym{S}=\sym{PolarU}|\sym{S}|$ separates the positive modulus
 from a partial isometry. Unitarily invariant ideal norms assign the same
 value to an operator and its modulus, so
@@ -1209,7 +1215,6 @@ in the sine-theta estimate for this finite-dimensional configuration.
 
 \section{Formalized operator-theoretic foundations}
 \label{sec:foundations}
-\label{sec:dk-rest}
 
 We formalized the geometry of two subspaces, symmetric operator ideals and
 majorization, and Sylvester estimates for unbounded self-adjoint operators.
