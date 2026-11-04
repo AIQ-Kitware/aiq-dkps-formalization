@@ -6253,6 +6253,73 @@
       "status": "staged",
       "upstream_pr": "#26823",
       "migration_note": "Submitted at 8af8fb271a5ab7acde93bf1ad9806bd0de4dc636, source YuWangSamworth2015/YuWangSamworth2015/Rectangular/Theorem4.lean. Final declaration LinearMap.sq_mul_sum_sum_norm_inner_self_comp_adjoint_eigenvectorBasis_sq_le_four_mul_card_mul_sq. Native target-Gram eigenbases include zero eigenspaces; arbitrary finite blocks, RCLike, independent source/target, population-only gap, zero gap and zero dimensions allowed. Accepted #19338 supplies the right orientation separately. Local 5839-job/style validation passed; upstream build in progress at 2026-11-03T02:00:51Z. Open, not integrated; no dependency pin or donor deletion claimed. #26823 repair 5e7e4d2b2feee29968641a2c4db0b80951b1d501: expose LinearMap.norm_self_comp_adjoint_sub_self_comp_adjoint_apply_le in Gram/Perturbation.lean under Nontrivial source, keep the endpoint zero-source branch, and correct the docstring to target-Gram eigenvalues. Fresh focused 5839-job build and full style pass. Pushed, upstream new-head review pending; no local deletion or integration claimed."
+    },
+    {
+      "source_module": "YuWangSamworth2015.Core.Statistics",
+      "source_declarations": [
+        "YuWangSamworth2015.yuWangSamworth_alignedBasis_frame_le"
+      ],
+      "current_namespace": "YuWangSamworth2015",
+      "staging_module": "YuWangSamworth2015.Core.Statistics",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.YuWangSamworth.Alignment",
+      "ownership_class": "tauceti",
+      "roadmap_target": "SSP-D17",
+      "provenance_class": "Jon Crall / GPT 5.6 High; Kitware 2026 Apache-2.0. Explicit donor argument adaptation, using independent accepted Procrustes rather than the donor polar construction.",
+      "direct_dependencies": [
+        "TauCeti.Analysis.InnerProductSpace.YuWangSamworth.SinTheta",
+        "TauCeti.Analysis.InnerProductSpace.Orthonormal.Procrustes"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null,
+      "migration_note": "Prepared November 4 UTC from authoritative DKPS f2c642523de7e991eeb1ae3d83983111baf70141 on independent branch port-ssp-d17-population-alignment at ce5bce7a364740837552d94e7c34a50cba0518e1, accepted base 11a5574886a7b084337236bb1f858406b483c6cc. Final declarations: LinearMap.IsSymmetric.exists_orthonormal_span_eq_sqrt_sum_norm_sub_sq_le_of_orderedEigenframe. RCLike, arbitrary finite index type including empty; supplied population frame fixed, aligned sample frame has the same span; population-only gap, no sample simplicity. Preserve the stronger explicit-coordinate unitary/selected-witness mathematics in Core/Procrustes. Focused warning-as-error compilation, all 13 default environment linters and full header/text style passed. Source inspection/self-review uses the permitted single-agent fallback, not independent/upstream approval. Bundle, source patch, body, exact-head evidence and no-build host submission script are shared in tauceti-dkps-campaign/waves/2026-11-03/d17-alignment. Branch pushed to Erotemic; PR creation is pending the authenticated host live gate. No integration or local donor retirement is claimed for this payload."
+    },
+    {
+      "source_module": "YuWangSamworth2015.Core.Statistics",
+      "source_declarations": [
+        "YuWangSamworth2015.yuWangSamworth_eigenvector_frame_le"
+      ],
+      "current_namespace": "YuWangSamworth2015",
+      "staging_module": "YuWangSamworth2015.Core.Statistics",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.YuWangSamworth.Eigenvector",
+      "ownership_class": "tauceti",
+      "roadmap_target": "SSP-D18",
+      "provenance_class": "Jon Crall / GPT 5.6 High; Kitware 2026 Apache-2.0. Explicit donor adaptation via native rank-one D16 and independent Procrustes.",
+      "direct_dependencies": [
+        "TauCeti.Analysis.InnerProductSpace.YuWangSamworth.SinTheta",
+        "TauCeti.Analysis.InnerProductSpace.Orthonormal.Procrustes"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null,
+      "migration_note": "Prepared November 4 UTC from authoritative DKPS f2c642523de7e991eeb1ae3d83983111baf70141 on independent branch port-ssp-d18-single-eigenvector at 207829169d7f6ba6d9f26ecb6d3d893911f3cccc, accepted base 11a5574886a7b084337236bb1f858406b483c6cc. Final declarations: LinearMap.IsSymmetric.exists_norm_eq_one_and_norm_smul_sub_eigenvector_le. RCLike, arbitrary unit eigenvectors at the same sorted index; only population separation; unit phase/sign with discrepancy at most 2 sqrt(2) times operator perturbation norm divided by the gap. Independent of the new D17 branch. Focused warning-as-error compilation, all 13 default environment linters and full header/text style passed. Source inspection/self-review uses the permitted single-agent fallback, not independent/upstream approval. Bundle, source patch, body, exact-head evidence and no-build host submission script are shared in tauceti-dkps-campaign/waves/2026-11-03/d18-eigenvector. Branch pushed to Erotemic; PR creation is pending the authenticated host live gate. No integration or local donor retirement is claimed for this payload."
+    },
+    {
+      "source_module": "DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap",
+      "source_declarations": [
+        "TauCeti.DavisKahan.reflected_centered_form_lower",
+        "TauCeti.DavisKahan.reflection_anticommutes_of_maps_orthogonal",
+        "TauCeti.DavisKahan.isQuarterAcute_of_orderedFormGap"
+      ],
+      "current_namespace": "TauCeti.DavisKahan",
+      "staging_module": "DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.DoubleAngle.QuarterAcute",
+      "ownership_class": "tauceti",
+      "roadmap_target": "SSP-C31 (complex bounded-operator branch only)",
+      "provenance_class": "Jon Crall / OpenAI GPT-5.6 Thinking / Claude Opus 5; Kitware 2026 Apache-2.0. Explicit Lyapunov/similarity/CFC proof adaptation; accepted API use does not assign its prerequisite proofs DKPS ancestry.",
+      "direct_dependencies": [
+        "TauCeti.Analysis.InnerProductSpace.Coercive",
+        "TauCeti.Analysis.InnerProductSpace.ContinuousFunctionalCalculus",
+        "TauCeti.Analysis.InnerProductSpace.Reflection",
+        "TauCeti.Analysis.InnerProductSpace.QuadraticForm.Reflection"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null,
+      "migration_note": "Prepared November 4 UTC from authoritative DKPS f2c642523de7e991eeb1ae3d83983111baf70141 on independent branch port-ssp-c31-complex-quarter-acute at 2087ee27edc3139a5841200defd1f1e8b1b55017, accepted base 11a5574886a7b084337236bb1f858406b483c6cc. Final declarations: Submodule.projectionGap_lt_sqrt_two_div_two_of_orderedFormGap; Submodule.reflection_centered_form_lower; Submodule.reflection_comp_eq_neg_comp_of_maps_orthogonal. Arbitrary complete complex Hilbert space, including zero; no finite-dimensionality, separability, norm attainment or small perturbation. Full off-diagonality and common ordered form bounds imply projectionGap < sqrt(2)/2. The form estimate is in QuadraticForm/Reflection; anticommutation is in the canonical Reflection module, both RCLike and without completeness. The real-scalar transfer remains separate; do not mark full C31 complete. Focused warning-as-error compilation, all 13 default environment linters and full header/text style passed. Source inspection/self-review uses the permitted single-agent fallback, not independent/upstream approval. Bundle, source patch, body, exact-head evidence and no-build host submission script are shared in tauceti-dkps-campaign/waves/2026-11-03/c31-complex. Branch pushed to Erotemic; PR creation is pending the authenticated host live gate. No integration or local donor retirement is claimed for this payload."
     }
   ]
 }

@@ -85,9 +85,10 @@ by other contributors (#24932 and #25082), with integration ancestry checked
 against main `caaed55334360ea2b92d4549e580c4bbcef41c59`. #19242 is closed
 unmerged. Proof descent and roadmap delivery remain separate classifications.
 
-There are no additional ready submissions in the reviewed source-backed
-frontier. D17/D18 wait for #26824; the full C31 endpoint waits for #26821;
-B05 → E01 → E35 still needs the representation PVM. External open #26244 is
+The November 4 UTC wave below prepares independent D17, D18 and complex C31
+branches using accepted #26824/#26821. They await the host's final live preflight
+and PR creation; the real C31 branch remains separate work. B05 → E01 → E35
+still needs the representation PVM. External open #26244 is
 partial SA-B59 polarization/Borel-operator work, not an accepted PVM or a new
 DKPS port obligation. B16's cited donor does not have the full pairwise scope;
 B12 retains its specification conflict; Gram aliases add no missing theorem.
@@ -4275,3 +4276,48 @@ live observation. D17/D18 now have their accepted D16 prerequisite, and the C31
 complex quarter-angle donor can consume the accepted spectral half-plane API;
 the next wave must distinguish that complex branch from the full real/complex
 roadmap target.
+
+## November 4 UTC: next independent prepared wave
+
+The accepted #26824 and #26821 prerequisites unblock the following source-backed
+ports from authoritative DKPS `f2c642523de7e991eeb1ae3d83983111baf70141`.
+They are prepared/pushed branches with **PR creation pending the host**, not
+new accepted results or already-open PRs. All use accepted base
+`11a5574886a7b084337236bb1f858406b483c6cc`, Mathlib
+`1b1ccf4b088b32fa3f23f2de1127433254a81e1e`, Lean v4.36.0-rc2.
+
+| Scope | Branch / checked head | Original source → canonical declarations | Scope distinctions |
+| --- | --- | --- | --- |
+| SSP-D17 | `port-ssp-d17-population-alignment` / `ce5bce7a364740837552d94e7c34a50cba0518e1` | `YuWangSamworth2015.Core.Statistics` → `LinearMap.IsSymmetric.exists_orthonormal_span_eq_sqrt_sum_norm_sub_sq_le_of_orderedEigenframe` | RCLike, arbitrary finite index type including empty; supplied population frame fixed, aligned sample frame has the same span; population-only gap, no sample simplicity. Preserve the stronger explicit-coordinate unitary/selected-witness mathematics in Core/Procrustes. |
+| SSP-D18 | `port-ssp-d18-single-eigenvector` / `207829169d7f6ba6d9f26ecb6d3d893911f3cccc` | `YuWangSamworth2015.Core.Statistics` → `LinearMap.IsSymmetric.exists_norm_eq_one_and_norm_smul_sub_eigenvector_le` | RCLike, arbitrary unit eigenvectors at the same sorted index; only population separation; unit phase/sign with discrepancy at most 2 sqrt(2) times operator perturbation norm divided by the gap. Independent of the new D17 branch. |
+| SSP-C31 (complex bounded-operator branch only) | `port-ssp-c31-complex-quarter-acute` / `2087ee27edc3139a5841200defd1f1e8b1b55017` | `DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap` → `Submodule.projectionGap_lt_sqrt_two_div_two_of_orderedFormGap; Submodule.reflection_centered_form_lower; Submodule.reflection_comp_eq_neg_comp_of_maps_orthogonal` | Arbitrary complete complex Hilbert space, including zero; no finite-dimensionality, separability, norm attainment or small perturbation. Full off-diagonality and common ordered form bounds imply projectionGap < sqrt(2)/2. The form estimate is in QuadraticForm/Reflection; anticommutation is in the canonical Reflection module, both RCLike and without completeness. The real-scalar transfer remains separate; do not mark full C31 complete. |
+
+D17/D18 preserve the original Statistics.lean names and Jon Crall / GPT 5.6 High,
+Kitware 2026 Apache-2.0 provenance. Their native Procrustes dependency #16047 was
+independently developed; using it does not assign its proof DKPS ancestry.
+C31 retains Jon Crall / OpenAI GPT-5.6 Thinking / Claude Opus 5, Kitware 2026
+Apache-2.0 provenance for the reflected-center, anticommutation and full complex
+Lyapunov/similarity/CFC proof. Its native spectral half-plane/inverse facts are
+from accepted #26821; native reflections, functional calculus and spectrum
+transport are consumed directly. No new reflection factory or private general
+infrastructure is retained in the application.
+
+Each independent endpoint was warning-as-error built (D17: 5999 jobs; D18: 5999;
+complex C31: 6391), then passed the 13 default environment linters and full
+header/text style. Exact-head logs, source patches/bundles, PR bodies and ten
+source-review observations are in `tauceti-dkps-campaign/waves/2026-11-03/`.
+The source review is the permitted sole-agent self-review fallback, not another
+agent or upstream approval. VM structural preflight has one environmental
+blocker only: gh is unavailable. The host runs the live authenticated gate and
+PR creation via `bash waves/2026-11-03/submit.sh --submit`, without Lake builds,
+cache downloads or repeated style checks.
+
+The real C31 transfer remains an obligation after the complex root is accepted;
+this wave does not declare the full real/complex target complete. No local
+paper wrappers, chosen polar witnesses, stronger coordinate API or unmerged
+donor mathematics is retired on the strength of these unaccepted branches.
+The selected live author search still has #20359/#26822/#26823 open; #26821 and
+#26824 are accepted on main. The existing campaign census records both the
+acceptances and the three prepared payloads without inventing future PR numbers.
+No representation-PVM constructor changed in the accepted-pin delta, so the
+B05 → E01 → E35 chain remains blocked; B12/B16 keep their earlier dispositions.
