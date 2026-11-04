@@ -1,0 +1,35 @@
+{
+  "description": "Native, independent theorem-search probes. Structural Loogle queries and semantic queries are intentionally different.",
+  "cases": [
+    {
+      "id": "sin-theta",
+      "loogle_module": "DavisKahan.All",
+      "loogle_query": "sinTheta",
+      "semantic_query": "Davis Kahan sin theta theorem: spectral subspace perturbation bound using an eigenvalue gap"
+    },
+    {
+      "id": "direct-rotation",
+      "loogle_module": "DavisKahan.All",
+      "loogle_query": "directRotation",
+      "semantic_query": "direct rotation between close closed subspaces of a Hilbert space, with an acute angle condition"
+    },
+    {
+      "id": "two-angle",
+      "loogle_module": "DavisKahan.All",
+      "loogle_query": "sinTwoTheta",
+      "semantic_query": "sin two theta operator norm perturbation bound for self-adjoint operators"
+    },
+    {
+      "id": "singular-subspace",
+      "loogle_module": "YuWangSamworth2015",
+      "loogle_query": "singular",
+      "semantic_query": "perturbation of singular subspaces, principal angles, and orthogonal Procrustes alignment"
+    },
+    {
+      "id": "finite-geometry",
+      "loogle_module": "DkpsQuench2026",
+      "loogle_query": "spectral",
+      "semantic_query": "spectral perturbation inequalities for finite-dimensional geometric embeddings"
+    }
+  ]
+}
