@@ -1,6 +1,6 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
-**Status: intentionally incomplete provenance audit; latest integration update 2026-11-03.** This is a
+**Status: intentionally incomplete provenance audit; latest integration update 2026-11-04.** This is a
 maintained *provenance and results* record, not a PR action queue, a theorem
 census, or a claim of exclusive mathematical authorship. Its purpose is to make
 it possible to say exactly which results in TauCeti benefited from the Kitware
@@ -53,9 +53,11 @@ was located on TauCeti `main` on October 21 (not a final-diff/commit audit);
 accepted diff has not yet been compared declaration-by-declaration in this
 census. Evidence is as of 2026-10-21 unless a dated source is given; see the current [consumption review](upstream-consumption-review-2026-10-22.md).
 
-**Latest integration:** #26824 (SSP-D16 arbitrary eigenframes) is accepted
-and consumed; #20359/#26821/#26822/#26823 remain open as individually checked
-on November 3. See the final SSP-D16 integration section below.
+**Latest integration:** #26823 (left target-Gram population overlap) is accepted
+at `da52bf5aeea9c373030f4a29061f8a5dc2658b39` and included in the current
+TauCeti pin `5f78b5307b932e1e2ac7848dc7d4fedc6a52d6c1`, following the consumed
+#26821 and #26824 APIs. #20359/#26822/#27798/#27799/#27804 remain open in the November 4
+selected metadata check. See the final integration section below.
 
 ## Historical submitted-campaign snapshot — 2026-11-03T02:00:51Z
 
@@ -84,9 +86,10 @@ by other contributors (#24932 and #25082), with integration ancestry checked
 against main `caaed55334360ea2b92d4549e580c4bbcef41c59`. #19242 is closed
 unmerged. Proof descent and roadmap delivery remain separate classifications.
 
-There are no additional ready submissions in the reviewed source-backed
-frontier. D17/D18 wait for #26824; the full C31 endpoint waits for #26821;
-B05 → E01 → E35 still needs the representation PVM. External open #26244 is
+The November 4 UTC wave below prepares independent D17, D18 and complex C31
+branches using accepted #26824/#26821. They await the host's final live preflight
+and PR creation; the real C31 branch remains separate work. B05 → E01 → E35
+still needs the representation PVM. External open #26244 is
 partial SA-B59 polarization/Borel-operator work, not an accepted PVM or a new
 DKPS port obligation. B16's cited donor does not have the full pairwise scope;
 B12 retains its specification conflict; Gram aliases add no missing theorem.
@@ -4202,3 +4205,243 @@ The existing shared Ritz packet contains the repaired branch bundle, source
 patch, SHA-bound self-review, and before/after lint logs. Upstream CI/review
 on the new head remains pending; this is a repair of an existing submission,
 not accepted integration or another roadmap delivery.
+
+## Ritz-residual tangent review repairs — November 3, 2026
+
+[#26822](https://github.com/TauCetiProject/TauCeti/pull/26822) is repaired at
+`a6c3d4bfb1ac94a0cc05a04b9207fb11c632d727`, followed by precise helper provenance
+at `eb2a55583073cd896eaff219dc98ffa80254999c`. The four findings reviewed
+`47d0b3c42adffada679fdadc738d2fc862d79c0b`; earlier approvals are not approvals
+of the repaired source.
+
+- [Reuse](https://github.com/TauCetiProject/TauCeti/pull/26822#discussion_r4459519222):
+  use `principalTangents_apply_eq_div` and `Orthonormal.comp` with injective
+  finite-prefix indices, removing the corresponding duplicate arguments.
+- [API design](https://github.com/TauCetiProject/TauCeti/pull/26822#discussion_r4459519564):
+  remove four private helpers from the application and expose them as follows.
+- [Generality](https://github.com/TauCetiProject/TauCeti/pull/26822#discussion_r4459519914):
+  both endpoints and every spectral helper now require only an upper compression
+  bound `PointSpectrumIn ... (Set.Iic α)`; no lower bound `β` is supplied.
+- [Documentation](https://github.com/TauCetiProject/TauCeti/pull/26822#discussion_r4459520280):
+  the Ky Fan root docstring now includes the gap factor `δ`.
+
+| Original helper / donor anchor | Proposed canonical public declaration | Scope / proof descent |
+| --- | --- | --- |
+| `adjoint_comp_ritzResidual_eq_zero`, `ForTauCeti/Analysis/InnerProductSpace/Residual/Ritz.lean` | `LinearMap.adjoint_comp_ritzResidual_eq_zero`, `RayleighRitz.lean` | Finite-dimensional linear-map formulation; the new proof reduces to accepted `ContinuousLinearMap.adjoint_comp_sylvester_compression`, rather than copying the donor's inner-product proof. |
+| `sylvester_sinThetaEmbedding_eq_projectedResidual`, `ForTauCeti/Analysis/InnerProductSpace/Residual/AngleEmbedding.lean` | `LinearMap.IsSymmetric.sylvester_starProjection_orthogonal_comp`, `InvariantSubspace.lean` | Arbitrary source module and linear trial map; no isometry, source inner product or finite-dimensionality. Proof uses invariant-projection commutation. |
+| `singularValues_sinThetaEmbedding_lt_one_of_isTransverse`, `DavisKahan/FiniteDimensional/TanTheta/RitzResidual.lean` | `Submodule.singularValues_starProjection_orthogonal_comp_lt_one_of_disjoint`, `Projection/Acute.lean` | Explicit donor adaptation to native principal-sine APIs, now all natural indices including the padded tail. |
+| `adjoint_apply_sinTheta_leftSingularVector`, same donor module | `Submodule.adjoint_apply_leftSingularVector_starProjection_orthogonal_comp`, `Projection/PrincipalAngle.lean` | Explicit donor adaptation; the trial map is any linear map, including nonisometries, and zero singular values are covered. |
+
+The donor authors/license remain Jon Crall / GPT 5.6 High, Kitware 2026,
+Apache-2.0, with original Tau Ceti module credits preserved. The endpoint's
+normalized-witness/scalar/Ky Fan proof remains adapted donor mathematics; using
+accepted prerequisites does not establish their DKPS proof ancestry.
+Focused warning-as-error compilation (5783 jobs), all 13 default environment
+linters (893 declarations plus 399 generated), and full header/text style pass.
+The shared packet is refreshed with exact-head bundle/patch, source review,
+compiler/lint evidence and the six-declaration/five-file description. The body
+needs the host's `waves/2026-11-02/ritz-tangent/update-pr-body.sh` because the
+connector returns HTTP 403 for body edits. Upstream CI/re-review remains pending;
+this is still a submitted PR, not integration. No local paper-scope theorem or
+DKPS dependency pin is changed by this repair.
+
+## November 4 UTC: accepted coercive API consumption (#26821)
+
+The accepted main-history integration is
+`d6c3a1ba75228691ecd81d6fd8c89ad620b322eb`. Git ancestry and GitHub comparison
+both verify it is reachable from `11a5574886a7b084337236bb1f858406b483c6cc`
+(merge base equals the integration, behind-by zero). GitHub's Bors-closed PR
+metadata has no native merge timestamp; the title alone is not the evidence.
+The DKPS Tau Ceti pin advances to that accepted main; Mathlib remains
+`1b1ccf4b088b32fa3f23f2de1127433254a81e1e`, Lean v4.36.0-rc2.
+
+| Retired declaration and original source | Direct accepted replacement | Scope and provenance |
+| --- | --- | --- |
+| `TauCeti.ContinuousLinearMap.norm_smul_le_norm_apply_of_coercive`, `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean` | `ContinuousLinearMap.mul_norm_le_norm_apply_of_coercive`, `TauCeti/Analysis/InnerProductSpace/Coercive.lean` | Arbitrary real constant, RCLike scalar, no completeness or finite-dimensionality. Explicit donor norm-bound adaptation, Jon Crall / Claude Fable 5, Kitware 2026 Apache-2.0. `FilledTruncation` uses it directly. |
+| `TauCeti.DavisKahan.spectrum_re_lower_of_coercive`, `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean` | `ContinuousLinearMap.le_re_of_mem_spectrum_of_coercive`, same native module | Arbitrary complex Hilbert space and real constant; no self-adjointness. Native result removes the old wrapper's unused positivity argument. The shift proof is adapted from Jon Crall / OpenAI GPT-5.6 Thinking / Claude Opus 5, Kitware 2026 Apache-2.0. |
+
+The accepted `ContinuousLinearMap.isUnit_of_coercive` proof applies Mathlib's
+older `isUnit_of_forall_le_norm_inner_map`; that dependency use does not assign
+Mathlib proof ancestry to DKPS. Existing direct Mathlib consumers already avoid
+the retired local unit facade. The positive inverse-norm and inverse-algebra
+extras remain unmerged donors in CoerciveUnit. The paper's public quarter-acute
+theorem keeps its signature and scope. No compatibility aliases are introduced.
+
+Validation, without warnings: focused build 7474 jobs, full default build
+21675 jobs (`/tmp/dkps-coercive-consume-full.log`), and Challenge 19923 jobs
+(`/tmp/dkps-coercive-consume-challenge.log`). Those logs belong to this VM;
+the shared campaign records the durable results and the exact pins. The root
+`.lake` bind mount remains VM-local ext4; unrelated manuscript work is preserved.
+#26824 was already consumed. #20359/#26822/#26823 are still open in the selected
+live observation. D17/D18 now have their accepted D16 prerequisite, and the C31
+complex quarter-angle donor can consume the accepted spectral half-plane API;
+the next wave must distinguish that complex branch from the full real/complex
+roadmap target.
+
+## November 4 UTC: next independent prepared wave
+
+The accepted #26824 and #26821 prerequisites unblock the following source-backed
+ports from authoritative DKPS `f2c642523de7e991eeb1ae3d83983111baf70141`.
+They are prepared/pushed branches with **PR creation pending the host**, not
+new accepted results or already-open PRs. All use accepted base
+`11a5574886a7b084337236bb1f858406b483c6cc`, Mathlib
+`1b1ccf4b088b32fa3f23f2de1127433254a81e1e`, Lean v4.36.0-rc2.
+
+| Scope | Branch / checked head | Original source → canonical declarations | Scope distinctions |
+| --- | --- | --- | --- |
+| SSP-D17 | `port-ssp-d17-population-alignment` / `ce5bce7a364740837552d94e7c34a50cba0518e1` | `YuWangSamworth2015.Core.Statistics` → `LinearMap.IsSymmetric.exists_orthonormal_span_eq_sqrt_sum_norm_sub_sq_le_of_orderedEigenframe` | RCLike, arbitrary finite index type including empty; supplied population frame fixed, aligned sample frame has the same span; population-only gap, no sample simplicity. Preserve the stronger explicit-coordinate unitary/selected-witness mathematics in Core/Procrustes. |
+| SSP-D18 | `port-ssp-d18-single-eigenvector` / `207829169d7f6ba6d9f26ecb6d3d893911f3cccc` | `YuWangSamworth2015.Core.Statistics` → `LinearMap.IsSymmetric.exists_norm_eq_one_and_norm_smul_sub_eigenvector_le` | RCLike, arbitrary unit eigenvectors at the same sorted index; only population separation; unit phase/sign with discrepancy at most 2 sqrt(2) times operator perturbation norm divided by the gap. Independent of the new D17 branch. |
+| SSP-C31 (complex bounded-operator branch only) | `port-ssp-c31-complex-quarter-acute` / `2087ee27edc3139a5841200defd1f1e8b1b55017` | `DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap` → `Submodule.projectionGap_lt_sqrt_two_div_two_of_orderedFormGap; Submodule.reflection_centered_form_lower; Submodule.reflection_comp_eq_neg_comp_of_maps_orthogonal` | Arbitrary complete complex Hilbert space, including zero; no finite-dimensionality, separability, norm attainment or small perturbation. Full off-diagonality and common ordered form bounds imply projectionGap < sqrt(2)/2. The form estimate is in QuadraticForm/Reflection; anticommutation is in the canonical Reflection module, both RCLike and without completeness. The real-scalar transfer remains separate; do not mark full C31 complete. |
+
+D17/D18 preserve the original Statistics.lean names and Jon Crall / GPT 5.6 High,
+Kitware 2026 Apache-2.0 provenance. Their native Procrustes dependency #16047 was
+independently developed; using it does not assign its proof DKPS ancestry.
+C31 retains Jon Crall / OpenAI GPT-5.6 Thinking / Claude Opus 5, Kitware 2026
+Apache-2.0 provenance for the reflected-center, anticommutation and full complex
+Lyapunov/similarity/CFC proof. Its native spectral half-plane/inverse facts are
+from accepted #26821; native reflections, functional calculus and spectrum
+transport are consumed directly. No new reflection factory or private general
+infrastructure is retained in the application.
+
+Each independent endpoint was warning-as-error built (D17: 5999 jobs; D18: 5999;
+complex C31: 6391), then passed the 13 default environment linters and full
+header/text style. Exact-head logs, source patches/bundles, PR bodies and ten
+source-review observations are in `tauceti-dkps-campaign/waves/2026-11-03/`.
+The source review is the permitted sole-agent self-review fallback, not another
+agent or upstream approval. VM structural preflight has one environmental
+blocker only: gh is unavailable. The host runs the live authenticated gate and
+PR creation via `bash waves/2026-11-03/submit.sh --submit`, without Lake builds,
+cache downloads or repeated style checks.
+
+The real C31 transfer remains an obligation after the complex root is accepted;
+this wave does not declare the full real/complex target complete. No local
+paper wrappers, chosen polar witnesses, stronger coordinate API or unmerged
+donor mathematics is retired on the strength of these unaccepted branches.
+The selected live author search still has #20359/#26822/#26823 open; #26821 and
+#26824 are accepted on main. The existing campaign census records both the
+acceptances and the three prepared payloads without inventing future PR numbers.
+No representation-PVM constructor changed in the accepted-pin delta, so the
+B05 → E01 → E35 chain remains blocked; B12/B16 keep their earlier dispositions.
+
+### 2026-11-04 — accepted SSP-D19 left orientation
+
+[#26823](https://github.com/TauCetiProject/TauCeti/pull/26823) landed as
+`da52bf5aeea9c373030f4a29061f8a5dc2658b39`; GitHub compare and local Git both
+verify its ancestry in main `5f78b5307b932e1e2ac7848dc7d4fedc6a52d6c1`.
+GitHub's native merge timestamp remains null under Bors; closure alone is not
+the evidence. The dependency pin now includes both accepted declarations:
+
+- `LinearMap.norm_self_comp_adjoint_sub_self_comp_adjoint_apply_le` in
+  `Gram/Perturbation.lean`: pointwise target-Gram perturbation, nontrivial source.
+- `LinearMap.sq_mul_sum_sum_norm_inner_self_comp_adjoint_eigenvectorBasis_sq_le_four_mul_card_mul_sq`
+  in `YuWangSamworth/SingularVectors.lean`: squared population-gap overlap,
+  arbitrary finite block, RCLike, independent source/target, including zero gap
+  and zero source via an explicit branch.
+
+These are DKPS adaptations (Kitware 2026, Apache-2.0; original anchors
+`4138aafdf:YuWangSamworth2015/YuWangSamworth2015/Rectangular/Theorem4.lean`,
+Jon Crall / GPT 5.6 High), with the reusable helper extracted in review repair
+`5e7e4d2b2feee29968641a2c4db0b80951b1d501`. The inherited source-Gram helper
+separately retains Jon Crall / Claude Opus 4.8 attribution.
+
+`Core/SingularSubspace.lean` already imports the native module directly.
+No further local proof is displaced: `Rectangular/FrobeniusGram.lean` already
+uses the accepted continuous-linear-map Gram norm estimate, while `Theorem4`
+retains the stronger Frobenius minimum, arbitrary ordered frames, aligned-basis
+conclusions and source-specific rank-boundary correction. A chosen-eigenbasis
+squared-overlap estimate does not replace these conclusions. No forwarding
+alias was added and no broader paper theorem was deleted.
+
+Mathlib stays `1b1ccf4b088b32fa3f23f2de1127433254a81e1e`; Lean stays
+`v4.36.0-rc2`. The prepared D17 alignment branch was submitted as #27798 and
+is still open; #20359 and #26822 also remain open. This is a selected campaign
+metadata/source comparison, not a complete audit of other authors' roadmap work.
+
+The follow-up live open-author query also found #27799 (D18 single-eigenvector
+phase alignment) and #27804 (complex C31 quarter-acute branch), submitted from
+the existing shared packets. All three new wave PRs are open, not accepted;
+retain their local proofs until an actual accepted replacement is available.
+
+Validation at the new pin, serial with `LEAN_NUM_THREADS=8` and CPU affinity
+`0-7`, warnings treated as failures: focused `Core.SingularSubspace` and
+`Rectangular.Theorem4` build (7,156 jobs), full default build (21,675 jobs),
+and `Challenge` (19,923 jobs), all successful without warnings. The accepted
+`Gram.Perturbation` and `YuWangSamworth.SingularVectors` modules were compiled
+by the focused build. `.lake` was verified bind-mounted on VM-local ext4.
+The resource tally hook was installed idempotently and verified armed.
+
+### 2026-11-04 — D18 review repair and partial representation-PVM acceptance
+
+D18 [#27799](https://github.com/TauCetiProject/TauCeti/pull/27799) repair
+`46fb9c359d6b5b7d6c7dea1ff1bb6c1b27a02b99` replaces the local singleton
+orthonormality calculation with Mathlib `orthonormal_subsingleton_iff` and
+removes transient acceptance/parallel-work wording from the module docstring.
+The [reuse](https://github.com/TauCetiProject/TauCeti/pull/27799#discussion_r4469516774)
+and [documentation](https://github.com/TauCetiProject/TauCeti/pull/27799#discussion_r4469517240)
+findings reviewed `207829169d7f6ba6d9f26ecb6d3d893911f3cccc`.
+The exact RCLike unit-eigenvector statement, population-only gap, phase/sign
+alignment, authors/license and source ancestry are unchanged. Fresh focused
+compilation (5,999 jobs), all 13 environment linters and full header/text style
+passed; the fix is pushed, but fresh upstream approval is not claimed.
+
+External [#26244](https://github.com/TauCetiProject/TauCeti/pull/26244) is accepted
+at `9daaf19aa819a5545147cb476eddbff344ee43cc`. Local Git and GitHub compare
+verify its ancestry in main `52f9d081237dadaf6d4eae13629281f7faa37d54`;
+it is also already included in DKPS's existing `5f78b5307b...` dependency pin.
+This is **roadmap implemented by others**, with no DKPS proof adaptation
+established: the PR author is `tauceti-ai-for-science`, source headers credit
+Tau Ceti contributors, copyright 2026, Apache-2.0. DKPS roadmap provenance does
+not assign donor-proof ancestry to this implementation.
+
+The accepted `ProjValMeasure/Representation/PolarizedMeasure.lean` and
+`BorelOperator.lean` provide `StarAlgHom.representationPolarizedMeasure` and
+`StarAlgHom.representationBorelOperator`: polarized finite regular measures,
+a complex-linear bounded Borel operator with a factor-two norm bound, and
+agreement with the continuous representation. They do **not** yet supply the
+weighted matrix-element identity, multiplicativity, contractivity, indicator
+projection/countable-additivity laws or `ProjValMeasure.ofRepresentation`.
+The accepted commit explicitly leaves these next steps open, including the
+change-of-density prerequisite #25747. Exact current sources and the SA-B59 /
+SA-B05 roadmap signatures were compared: B05 → E01 → E35 remains blocked.
+No new unblocked source-backed intent PR was identified; no extra PR was
+created and no local Borel/PVM engine was retired from this partial acceptance.
+The dependency pin and Lean sources here are unchanged by this review update.
+
+### 2026-11-04 — complex C31 review repair
+
+[#27804](https://github.com/TauCetiProject/TauCeti/pull/27804) repair
+`11c98391c9cf41a48679db23875d5437ed41d0cd` addresses the
+[reuse](https://github.com/TauCetiProject/TauCeti/pull/27804#discussion_r4469878801)
+and [proof-quality](https://github.com/TauCetiProject/TauCeti/pull/27804#discussion_r4469879137)
+findings on `2087ee27edc3139a5841200defd1f1e8b1b55017`.
+Six reflection membership calculations now invoke Mathlib directly. Three
+previously local arguments are public preliminary facts in their owning modules:
+
+- `ContinuousLinearMap.coercive_conj_of_lyapunov` in `Coercive`: if `C=R²`,
+  self-adjoint `R` and `Rinv` are two-sided inverses, and `CW+W†C=2B`, a
+  nonnegative form lower bound `δ` for `B` yields `δ/(1+‖R‖²)` for `RWRinv`.
+  This is RCLike-generic, needs completeness, permits the zero space and `δ=0`,
+  and does not assume the chosen factor is positive.
+- `ContinuousLinearMap.nonneg_add_star_sub_smul_of_spectrum_re` in
+  `ContinuousFunctionalCalculus`: a real-part spectral bound `a` for a normal
+  complex bounded operator gives `W+W†≥2aI`, with arbitrary real `a`.
+- `Submodule.reflection_comp_add_comp_reflection` in `Reflection`:
+  `R_V R_U + R_U R_V = 2I - 4(P_U-P_V)²`, RCLike without completeness.
+
+The endpoint now invokes these lemmas and uses named conjugation and
+inverse-equivalence evaluation APIs. Its complex Hilbert-space signature,
+zero-dimensional branch and strict projection-gap conclusion are unchanged;
+full real/complex C31 remains partial. These are extractions/generalizations of
+the same DKPS Lyapunov/similarity/CFC proof, original anchor
+`f2c642523: DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean`,
+Jon Crall / OpenAI GPT-5.6 Thinking / Claude Opus 5, Kitware 2026, Apache-2.0.
+Prior Tau Ceti credits are preserved in the extended canonical modules.
+
+All five changed modules passed focused warning-as-error compilation (6,391
+jobs), all 13 environment linters (234 declarations plus 207 generated) and full
+header/text style (23,975 files). The repair is pushed; fresh upstream approval
+is not claimed. The expanded six-API/five-file PR body is saved in the shared
+campaign packet, but the connector rejected its metadata edit with 403. Run
+`waves/2026-11-03/c31-complex/update-pr-body.sh` from the campaign repository on
+the authenticated host to synchronize it without a build. Root Lean sources
+and dependency pins remain unchanged; no unaccepted donor proof was retired.

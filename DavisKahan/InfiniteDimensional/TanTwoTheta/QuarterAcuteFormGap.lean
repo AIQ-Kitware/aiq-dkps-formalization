@@ -11,6 +11,7 @@ public import DavisKahan.Geometry.Polar.DirectRotation
 public import DavisKahan.InfiniteDimensional.Riccati.BoundedSpectralTransport
 public import DavisKahan.SinTheta.FrameFactorization
 public import ForTauCeti.Analysis.InnerProductSpace.CoerciveUnit
+public import TauCeti.Analysis.InnerProductSpace.Coercive
 public import TauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
 public import DavisKahan.SpectralTheory.OperatorAngle
 
@@ -257,37 +258,6 @@ theorem reflection_anticommutes_of_maps_orthogonal
         rw [hxpm, map_add, hJp, hJm]
         module
       rw [hJx]
-
-/-- A coercive quadratic form bounds the real spectrum below. -/
-theorem spectrum_re_lower_of_coercive
-    (T : E →L[ℂ] E) {α : ℝ} (_hα : 0 < α)
-    (hcoer : ∀ x, α * ‖x‖ ^ 2 ≤ RCLike.re ⟪T x, x⟫_ℂ) :
-    ∀ z ∈ spectrum ℂ T, α ≤ z.re := by
-  intro z hz
-  by_contra hnot
-  have hgap : 0 < α - z.re := sub_pos.mpr (lt_of_not_ge hnot)
-  have hshift : ∀ x,
-      (α - z.re) * ‖x‖ ^ 2 ≤
-        RCLike.re ⟪(T - z • ContinuousLinearMap.id ℂ E) x, x⟫_ℂ := by
-    intro x
-    have hx := hcoer x
-    have hzinner : RCLike.re ⟪z • x, x⟫_ℂ = z.re * ‖x‖ ^ 2 :=
-      re_inner_smul_self z x
-    simp only [sub_apply, smul_apply, ContinuousLinearMap.id_apply,
-      inner_sub_left, map_sub]
-    rw [hzinner]
-    linarith
-  have hunit : IsUnit (T - z • ContinuousLinearMap.id ℂ E) :=
-    _root_.ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map _
-      (c := ⟨α - z.re, by linarith⟩) hgap
-      (fun z => (mul_comm _ _).le.trans ((hshift z).trans (RCLike.re_le_norm _)))
-  rw [spectrum.mem_iff] at hz
-  apply hz
-  rw [Algebra.algebraMap_eq_smul_one]
-  have hneg : z • (1 : E →L[ℂ] E) - T = -(T - z • (1 : E →L[ℂ] E)) := by
-    module
-  rw [hneg]
-  exact hunit.neg
 
 /-- Dimension-free strict quarter-angle branch from the paper's ordered form
 hypotheses and full off-diagonality. -/
@@ -562,7 +532,7 @@ theorem isQuarterAcute_of_orderedFormGap
         _ ≤ δ * ‖y‖ ^ 2 := mul_le_mul_of_nonneg_right hcoef (sq_nonneg ‖y‖)
     exact hscaled.trans hB
   have hspecZ : ∀ z ∈ spectrum ℂ Z, α ≤ z.re :=
-    spectrum_re_lower_of_coercive Z hα hZcoer
+    fun z hz => _root_.ContinuousLinearMap.le_re_of_mem_spectrum_of_coercive Z hZcoer hz
   have hspecWZ : spectrum ℂ W = spectrum ℂ Z := by
     exact spectrum_eq_of_inverse_conjugation W Z Rinv R
       hRRinv hRinvR rfl

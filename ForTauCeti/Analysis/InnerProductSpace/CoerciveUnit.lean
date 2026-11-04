@@ -9,6 +9,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 public import Mathlib.Algebra.Group.Semiconj.Units
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import Mathlib.Analysis.InnerProductSpace.Positive
+public import TauCeti.Analysis.InnerProductSpace.Coercive
 public import Mathlib.Analysis.Normed.Operator.Banach
 
 /-! # Complements to coercive bounded invertibility
@@ -25,8 +26,9 @@ Invertibility now uses Mathlib's
 `ContinuousLinearMap.isUnit_of_forall_le_norm_inner_map` from `Positive` directly,
 with the positive real constant viewed in `ℝ≥0` and `RCLike.re_le_norm`.
 The local `isUnit_of_coercive` facade and its closed-range proof are retired.
-The arbitrary-real coercive norm bound, positive-operator inverse norm, and
-inverse algebra below remain donor mathematics. The original development and
+The arbitrary-real coercive norm bound now uses the accepted Tau Ceti
+`ContinuousLinearMap.mul_norm_le_norm_apply_of_coercive` directly. The positive-operator
+inverse norm and inverse algebra below remain donor mathematics. The original development and
 its authorship are recorded in the provenance below; using Mathlib's criterion
 does not assert that its proof descended from this repository.
 
@@ -69,22 +71,6 @@ open scoped InnerProductSpace
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
-
-omit [CompleteSpace E] in
-/-- A uniformly coercive bounded operator on a Hilbert space is bounded
-below. -/
-theorem norm_smul_le_norm_apply_of_coercive {N : E →L[𝕜] E} {c : ℝ}
-    (hcoer : ∀ z, c * ‖z‖ ^ 2 ≤ RCLike.re ⟪N z, z⟫_𝕜) (z : E) :
-    c * ‖z‖ ≤ ‖N z‖ := by
-  rcases eq_or_ne z 0 with hz | hz
-  · simp [hz]
-  · have h1 : c * ‖z‖ ^ 2 ≤ RCLike.re ⟪N z, z⟫_𝕜 := hcoer z
-    have h2 : RCLike.re ⟪N z, z⟫_𝕜 ≤ ‖N z‖ * ‖z‖ :=
-      calc RCLike.re ⟪N z, z⟫_𝕜 ≤ ‖⟪N z, z⟫_𝕜‖ := RCLike.re_le_norm _
-        _ ≤ ‖N z‖ * ‖z‖ := norm_inner_le_norm _ _
-    have hzpos : (0 : ℝ) < ‖z‖ := norm_pos_iff.mpr hz
-    have h3 : c * ‖z‖ * ‖z‖ ≤ ‖N z‖ * ‖z‖ := by nlinarith
-    exact le_of_mul_le_mul_right h3 hzpos
 
 /-- `1 + W⋆ W` is invertible for every bounded Hilbert-space operator `W`:
 its quadratic form dominates `‖z‖ ^ 2`, so the operator Lax–Milgram lemma

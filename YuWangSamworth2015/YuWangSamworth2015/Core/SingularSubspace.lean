@@ -32,6 +32,12 @@ are spectral subspaces of `AA⋆`, and the Hermitian dilation packages both at
 once.  Reusable singular-subspace and Gram infrastructure lives in
 `ForTauCeti`; this file records the YWS-specific application API built on it.
 
+The accepted target-Gram population overlap theorem (Tau Ceti #26823) is
+available directly from the `SingularVectors` import above. Its squared overlap
+bound uses chosen complete eigenbases and an operator-norm numerator. The
+rectangular paper layer retains its arbitrary-frame and Frobenius-minimum bounds;
+these have a different conclusion and are not replaced by that overlap theorem.
+
 ## Provenance
 
 This application layer was previously staged under
