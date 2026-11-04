@@ -4202,3 +4202,42 @@ The existing shared Ritz packet contains the repaired branch bundle, source
 patch, SHA-bound self-review, and before/after lint logs. Upstream CI/review
 on the new head remains pending; this is a repair of an existing submission,
 not accepted integration or another roadmap delivery.
+
+## Ritz-residual tangent review repairs — November 3, 2026
+
+[#26822](https://github.com/TauCetiProject/TauCeti/pull/26822) is repaired at
+`a6c3d4bfb1ac94a0cc05a04b9207fb11c632d727`, followed by precise helper provenance
+at `eb2a55583073cd896eaff219dc98ffa80254999c`. The four findings reviewed
+`47d0b3c42adffada679fdadc738d2fc862d79c0b`; earlier approvals are not approvals
+of the repaired source.
+
+- [Reuse](https://github.com/TauCetiProject/TauCeti/pull/26822#discussion_r4459519222):
+  use `principalTangents_apply_eq_div` and `Orthonormal.comp` with injective
+  finite-prefix indices, removing the corresponding duplicate arguments.
+- [API design](https://github.com/TauCetiProject/TauCeti/pull/26822#discussion_r4459519564):
+  remove four private helpers from the application and expose them as follows.
+- [Generality](https://github.com/TauCetiProject/TauCeti/pull/26822#discussion_r4459519914):
+  both endpoints and every spectral helper now require only an upper compression
+  bound `PointSpectrumIn ... (Set.Iic α)`; no lower bound `β` is supplied.
+- [Documentation](https://github.com/TauCetiProject/TauCeti/pull/26822#discussion_r4459520280):
+  the Ky Fan root docstring now includes the gap factor `δ`.
+
+| Original helper / donor anchor | Proposed canonical public declaration | Scope / proof descent |
+| --- | --- | --- |
+| `adjoint_comp_ritzResidual_eq_zero`, `ForTauCeti/Analysis/InnerProductSpace/Residual/Ritz.lean` | `LinearMap.adjoint_comp_ritzResidual_eq_zero`, `RayleighRitz.lean` | Finite-dimensional linear-map formulation; the new proof reduces to accepted `ContinuousLinearMap.adjoint_comp_sylvester_compression`, rather than copying the donor's inner-product proof. |
+| `sylvester_sinThetaEmbedding_eq_projectedResidual`, `ForTauCeti/Analysis/InnerProductSpace/Residual/AngleEmbedding.lean` | `LinearMap.IsSymmetric.sylvester_starProjection_orthogonal_comp`, `InvariantSubspace.lean` | Arbitrary source module and linear trial map; no isometry, source inner product or finite-dimensionality. Proof uses invariant-projection commutation. |
+| `singularValues_sinThetaEmbedding_lt_one_of_isTransverse`, `DavisKahan/FiniteDimensional/TanTheta/RitzResidual.lean` | `Submodule.singularValues_starProjection_orthogonal_comp_lt_one_of_disjoint`, `Projection/Acute.lean` | Explicit donor adaptation to native principal-sine APIs, now all natural indices including the padded tail. |
+| `adjoint_apply_sinTheta_leftSingularVector`, same donor module | `Submodule.adjoint_apply_leftSingularVector_starProjection_orthogonal_comp`, `Projection/PrincipalAngle.lean` | Explicit donor adaptation; the trial map is any linear map, including nonisometries, and zero singular values are covered. |
+
+The donor authors/license remain Jon Crall / GPT 5.6 High, Kitware 2026,
+Apache-2.0, with original Tau Ceti module credits preserved. The endpoint's
+normalized-witness/scalar/Ky Fan proof remains adapted donor mathematics; using
+accepted prerequisites does not establish their DKPS proof ancestry.
+Focused warning-as-error compilation (5783 jobs), all 13 default environment
+linters (893 declarations plus 399 generated), and full header/text style pass.
+The shared packet is refreshed with exact-head bundle/patch, source review,
+compiler/lint evidence and the six-declaration/five-file description. The body
+needs the host's `waves/2026-11-02/ritz-tangent/update-pr-body.sh` because the
+connector returns HTTP 403 for body edits. Upstream CI/re-review remains pending;
+this is still a submitted PR, not integration. No local paper-scope theorem or
+DKPS dependency pin is changed by this repair.
