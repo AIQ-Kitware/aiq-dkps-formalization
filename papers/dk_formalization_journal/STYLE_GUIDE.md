@@ -62,8 +62,14 @@ parentheses. Prefer “trace norm” consistently in this article. Use “range�
 Use one convention for the original and perturbed operators across the
 historical account and theorem statements, with an explicit translation to the
 source where needed. Keep the symbol colors aligned with the Manim role
-palette. The residual R and rotation R have different roles and can have
-different colors. Each argument must also remain readable in monochrome.
+palette. Use $P_{\mathrm{ex}}$ for the exact projection in the sine theorem,
+$P,Q$ for transport projections, $R$ for a residual, and $D$ for a direct
+rotation. Distinguish the planar quarter-turn $J_0$ from the source reflection
+$J_{\mathrm{src}}$, and the mixing matrix $H_{\mathrm{mix}}$ from the
+perturbation $H$. Each argument must also remain readable in monochrome.
+Resolve collisions among recurring central objects before renaming ordinary
+local variables. When a glyph changes, update explicit variants, figure labels,
+and hover definitions along with the registry.
 
 Define notation before its substantive use and refer back to nearby definitions.
 A short reminder later can help the reader resume a topic. Keep a notation

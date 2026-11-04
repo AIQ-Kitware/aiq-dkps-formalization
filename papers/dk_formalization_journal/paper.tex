@@ -1,5 +1,5 @@
 \documentclass[11pt]{article}
-% Match the PDF 1.7 figure included in the counterexample section.
+% PDF version used for the manuscript and its symbol annotations.
 \pdfvariable minorversion=7\relax
 
 \usepackage[margin=1in]{geometry}
@@ -190,8 +190,8 @@
 We formalize the Davis--Kahan theory of spectral-subspace perturbations in
   Lean~4.
 From Davis and Kahan's landmark 1970 paper we identify \DKResultCount{}
-  result-level statements as the targets of the formalization: of these
-  \DKProvedCount{} are verified under their stated hypotheses, and the remaining
+  results as the targets of the formalization: of these
+  \DKProvedCount{} are proved in Lean~4 under their stated hypotheses, and the remaining
   statement --- as originally written --- is refuted.
 The formal development includes the sine and tangent theorems, direct rotations,
   principal-angle operators, Sylvester separation, unitarily invariant
@@ -212,7 +212,7 @@ The formalization builds on Mathlib and adapts the Spectra project's
   projection-valued-measure and Borel-calculus constructions.
 Portions of the reusable operator theory developed here were subsequently
   upstreamed into Tau Ceti.
-The resulting infrastructure also supports a new theorem reducing trace-norm
+The resulting infrastructure also supports a theorem reducing trace-norm
   optimal real subspace transport to weighted matching on principal angles.
 These outcomes show how formalizing the foundations of a classical mathematical
   theory can support validating results, identifying historical errors, and
@@ -547,9 +547,15 @@ The full angle operator is
 \]
 For $c>0$, the comparisons $\sym{Theta}\le c$ and $\sym{Theta}<c$ mean that its
 operator norm is at most, or strictly less than, $c$, respectively.
-In finite dimensions this norm is the largest principal angle of the
-two complementary decompositions. Later, isometric frames express these
-angle blocks on coordinate Hilbert spaces.
+In finite dimensions this norm is the largest eigenvalue of either directed
+angle block, comparing the source with the target and their orthogonal
+complements.
+This includes right angles from unmatched directions: if a source vector is
+orthogonal to the target, its cosine compression is zero and its directed
+angle is $\pi/2$. The compression construction applies even when the subspace
+dimensions differ. Target directions orthogonal to the source appear as
+right angles in the complementary block. Later, isometric frames express these angle blocks on
+coordinate Hilbert spaces.
 
 The relative position of two closed subspaces was studied by Dixmier
 in 1948 and by Davis in his 1958 paper \emph{Separation of Two Linear
@@ -630,17 +636,19 @@ The identity
 shows why $\|\sym{Psource}-\sym{Qtarget}\|<1$ is the natural threshold: it makes $\like{IntertwinerT}{T^*}\sym{IntertwinerT}$
 strictly positive and invertible.  Hence
 \begin{equation}
- \like{Rrotation}{U}=\sym{IntertwinerT}\bigl(I-(\sym{Psource}-\sym{Qtarget})^2\bigr)^{-1/2},
- \qquad \like{Rrotation}{U}\sym{Psource}\like{Rrotation}{U^*}=\sym{Qtarget}
+ \sym{Rrotation}=\sym{IntertwinerT}\bigl(I-(\sym{Psource}-\sym{Qtarget})^2\bigr)^{-1/2},
+ \qquad \sym{Rrotation}\sym{Psource}\like{Rrotation}{D^*}=\sym{Qtarget}
  \label{eq:history-kato-unitary}
 \end{equation}
-is unitary. This is the polar decomposition $\sym{IntertwinerT}=\like{Rrotation}{U}|\sym{IntertwinerT}|$, where
+is unitary. This is the polar decomposition $\sym{IntertwinerT}=\sym{Rrotation}|\sym{IntertwinerT}|$, where
 $|\sym{IntertwinerT}|=(\like{IntertwinerT}{T^*}\sym{IntertwinerT})^{1/2}$ is positive. The factor $|\sym{IntertwinerT}|$ describes stretching;
-the unitary factor $\like{Rrotation}{U}$ preserves lengths. Here $\sym{IntertwinerT}$ is invertible, so
-$\like{Rrotation}{U}=\sym{IntertwinerT}|\sym{IntertwinerT}|^{-1}$. In principal-plane coordinates it is the direct rotation through the
+the unitary factor $\sym{Rrotation}$ preserves lengths. Here $\sym{IntertwinerT}$ is invertible, so
+$\sym{Rrotation}=\sym{IntertwinerT}|\sym{IntertwinerT}|^{-1}$. In principal-plane coordinates it is the direct rotation through the
 principal angle, acting trivially on common directions.
 
-Many unitaries satisfy $\like{Rrotation}{U}\sym{Psource}\like{Rrotation}{U^*}=\sym{Qtarget}$.
+The transport equation
+$\sym{Wcompetitor}\sym{Psource}\sym{Wcompetitor}^*=\sym{Qtarget}$
+has many unitary solutions.
 The polar-factor formula selects one determined by the two projections
 and continuously connected to the identity in the acute regime.  That
 choice makes the construction valuable in perturbation theory: the
@@ -784,7 +792,8 @@ separated Sylvester estimates give
 This is the bridge from a spectral-gap assumption to the bound on the
 sine of a subspace angle.
 
-The constant-one inequality uses the ordered or interval/exterior spectral
+The coefficient of $\sym{NormN}(\sym{R})/\sym{delta}$ in this bound is one.
+This coefficient uses the ordered or interval/exterior spectral
 positions specified by Davis and Kahan. Arbitrarily interlaced spectra can
 require a different constant. Our theorem includes both of the source's
 spectral configurations, including ordered cases where both operators are
@@ -987,8 +996,12 @@ theorems \citep[Section~8]{davis1970rotation}. We prove \DKProvedCount{} results
 full-displacement claim \citep[Proposition~4.4]{davis1970rotation}.
 Appendix~\ref{app:dk-inventory} lists these targets.
 
-We state the sine-theta theorem below. Appendix~\ref{app:notation} collects
-its notation and the notation used in the direct-rotation argument.
+We develop the sine-theta theorem and its proof below; the remaining source
+results are summarized in Appendix~\ref{app:dk-inventory}, with hypotheses
+and conclusions in Section~\ref{app:dk-result-summaries}. The main text also
+explains the spectral-selection results needed to interpret the angle bounds.
+Appendix~\ref{app:notation} collects the notation used here and in the
+direct-rotation argument.
 
 \subsection{The sine-theta theorem for self-adjoint operators}
 \label{sec:sine-theta}
@@ -1033,8 +1046,13 @@ complementary spectral block through
 \]
 on its domain. This intertwining identity says that $\sym{Lambda1}$ gives
 the action of $\sym{Acurrent}$ in complementary coordinates. The predicate
-\texttt{IsExactSpectralDecomposition} also states that the two coordinate
-ranges are orthogonal and their sum is the whole ambient space.
+\texttt{IsExactSpectralDecomposition} also requires the domain inclusion
+$\sym{F1}(\DKDom(\sym{Lambda1}))\subseteq\DKDom(\sym{Acurrent})$
+and states orthogonality and completeness through
+\[
+ \like{F0}{F_0^*}\sym{F1}=0,\qquad
+ \sym{F0}\like{F0}{F_0^*}+\sym{F1}\like{F1}{F_1^*}=I.
+\]
 
 \subsubsection{The sine operator and its rectangular representative}
 
@@ -1075,15 +1093,17 @@ This equality transfers an estimate for the complementary block $\sym{S}$ to the
   positive sine operator.
 
 \subsubsection{Gap geometry and the inequality}
+\label{sec:gap-geometry}
 
-Fix $\sym{delta}>0$. The separation hypothesis has the following alternatives.
-For some $\sym{betaEndpoint}\leq\sym{alphaEndpoint}$, one of the two spectra
+Fix $\sym{delta}>0$. There are two geometric forms of separation.
+\emph{Interval/exterior separation:} for some real
+$\sym{betaEndpoint}\leq\sym{alphaEndpoint}$, one of the two spectra
 $\sigma(\sym{A0})$ and $\sigma(\sym{Lambda1})$ lies in $[\sym{betaEndpoint},\sym{alphaEndpoint}]$ and the other
 lies in
 \[
  (-\infty,\sym{betaEndpoint}-\sym{delta}]\;\cup\;[\sym{alphaEndpoint}+\sym{delta},\infty).
 \]
-Alternatively, for some real $b$, the operator forms satisfy either
+\emph{Ordered separation:} for some real $b$, the operator forms satisfy either
 \[
  \sym{A0}\geq (b+\sym{delta})I,\quad \sym{Lambda1}\leq bI,
  \qquad\text{or}\qquad
@@ -1093,9 +1113,14 @@ Each form inequality is asserted on the domain of the corresponding operator;
 for example, $\sym{A0}\geq aI$ means
 $\langle \sym{A0}x,x\rangle\geq a\|x\|^2$ for every
 $x\in\DKDom(\sym{A0})$. For self-adjoint operators, the source's ordered
-hypotheses on half-infinite spectral intervals imply these form bounds. The Lean predicate
-\texttt{FormBoundedSylvesterGap} records precisely the finite-interval
-alternative, in either spectral order, and these two ordered form alternatives.
+hypotheses on half-infinite spectral intervals, such as $(-\infty,b]$ and
+$[b+\sym{delta},\infty)$, imply these form bounds. These cases are included
+in the source's unbounded sine theorem
+\citep[Section~6, discussion of unbounded operators]{davis1970rotation}.
+Write $\sym{SineGap}(\sym{A0},\sym{Lambda1})$ for their union.
+The Lean predicate \texttt{FormBoundedSylvesterGap} has three cases:
+the finite-interval alternative, which includes either spectral order,
+and the two ordered form alternatives.
 
 Both blocks may be unbounded in an ordered configuration. For instance,
 on $\ell^2(\mathbb N_{\geq1})$, take diagonal operators
@@ -1117,8 +1142,17 @@ The residual agrees with the difference on this domain and extends to a
 bounded operator. The formal predicate \texttt{IsTrialResidual} includes the
 domain inclusion and the residual identity.
 
-The norm $\sym{NormN}$ is a normalized symmetric operator-ideal norm. Its
-hypotheses include invariance under isometries and positive modulus, and
+The norm $\sym{NormN}$ is a normalized symmetric operator-ideal norm.
+Normalization means that the rank-one map $uv^*:x\mapsto u\langle v,x\rangle$
+has norm
+\[
+ \sym{NormN}(uv^*)=\|u\|\,\|v\|;
+\]
+in particular, its norm is one when $u,v$ are unit vectors.
+Its hypotheses also include Ky Fan dominance whenever both ideal norms
+are finite: domination of all finite singular-value sums implies domination
+of the ideal norms. This comparison does not assert ideal membership.
+The norm is invariant under isometries and positive modulus, and satisfies
 $\sym{NormN}(BT)\leq\|B\|_{\mathrm{op}}\sym{NormN}(T)$. Trace-class and
 Hilbert--Schmidt operators with their respective norms are examples; the
 operator norm on bounded operators is another. For an ideal norm, both the
@@ -1169,8 +1203,9 @@ defined above.
 Let the scalar field be $\mathbb R$ or $\mathbb C$, let $\sym{Eambient}$ be separable,
 and let $\sym{Acurrent}$, $\sym{A0}$, and $\sym{Lambda1}$ be self-adjoint operators on the
 Hilbert spaces above. Suppose the isometries, domain inclusions, residual
-identity, exact complementary decomposition, and one of the three gap
-configurations hold. Let $\sym{NormN}$ be a normalized symmetric
+identity, exact complementary decomposition, and the separation condition
+$\sym{SineGap}(\sym{A0},\sym{Lambda1})$ of
+Section~\ref{sec:gap-geometry} hold. Let $\sym{NormN}$ be a normalized symmetric
 operator-ideal norm. Whenever $\sym{sinTheta0}$ and $\sym{R}$ belong to its domain,
 \begin{equation}
  \sym{delta}\,\sym{NormN}(\sym{sinTheta0})\leq \sym{NormN}(\sym{R}).
@@ -1181,7 +1216,11 @@ operator-ideal norm. Whenever $\sym{sinTheta0}$ and $\sym{R}$ belong to its doma
 \begin{lstlisting}[style=leanpaper,
   caption={Lean signature for the sine-theta estimate. The surrounding
   scalar-field and Hilbert-space context is omitted.
-  Lean's \texttt{A} denotes $\sym{Acurrent}$ and \texttt{H} denotes $\sym{Hexact}$; the positive trial-coordinate
+  Lean's \texttt{A} denotes $\sym{Acurrent}$;
+  its carrier types \texttt{E}, \texttt{F}, \texttt{G}, \texttt{H} denote
+  $\sym{Eambient}$, $\sym{Ftrial}$, $\sym{Gunwanted}$, $\sym{Hexact}$, respectively,
+  and \texttt{K} is the scalar field. Thus \texttt{H} here is a coordinate
+  space, while $\sym{H}$ in the prose is the perturbation. The positive trial-coordinate
   sine is \texttt{sourceDirectedSinThetaOperator E0 F0};
   \texttt{FormBoundedSylvesterGap} encodes the interval/exterior and ordered
   half-infinite separation hypotheses described above.},
@@ -1231,8 +1270,9 @@ right side. The separated Sylvester estimate gives
 Combining this with $\sym{NormN}(\sym{X})=\sym{NormN}(\sym{S})=\sym{NormN}(\sym{sinTheta0})$ proves the conclusion.
 For unbounded operators, deriving the domain compatibility for $\sym{X}$ is part of
 the argument. The displayed relation holds on $\DKDom(\sym{A0})$ and
-has a bounded right side. The constant-one estimate uses the specified
-interval/exterior or ordered spectral positions.
+has a bounded right side. The specified interval/exterior or ordered
+spectral positions give the factor $1/\sym{delta}$, with no additional
+multiplicative constant.
 
 For a one-dimensional trial space, take
 $\sym{Acurrent}=\operatorname{diag}(0,\sym{delta})$, the trial scalar
@@ -1282,6 +1322,8 @@ its spectral decomposition recovers a sequence of principal angles
 
 The double-angle theorems for $\sin(2\sym{Theta})$ and $\tan(2\sym{Theta})$
   require selecting the branch with angles below a quarter turn.
+Here $\sym{Theta}$ includes both the source and complementary angle blocks;
+$\sym{Theta0}$ alone is the directed angle on source coordinates.
 Because the function $\sin(2\sym{theta})$ is small both when $\sym{theta}$ is
   near $0$ and when $\sym{theta}$ is near $\pi/2$, a bound on
   $\sin(2\sym{Theta})$ alone cannot determine whether an approximate subspace is
@@ -1305,7 +1347,7 @@ These hypotheses imply that $\sym{Acurrent}=\sym{A}+\sym{H}$ has no spectrum
 in $(\sym{alphaEndpoint},\sym{alphaEndpoint}+\sym{delta})$.
 
 Fix a reducing subspace $M$ of $\sym{Acurrent}$, and write
-$\sym{Lambda0},\sym{Lambda1}$ for its blocks on $M,M^\perp$.
+$\sym{Lambda0},\sym{Lambda1}$ for the blocks of $\sym{Acurrent}$ on $M,M^\perp$.
 The full angle $\sym{Theta}$ comparing $\DKRange(\sym{Psource})$ with $M$
 satisfies $\sym{Theta}\le\pi/4$ if and only if
 $\sym{Lambda0}\le\sym{alphaEndpoint}I$ and
@@ -1313,8 +1355,14 @@ $\sym{Lambda1}\ge(\sym{alphaEndpoint}+\sym{delta})I$.
 Such a subspace exists: take the spectral subspace of $\sym{Acurrent}$
 for $(-\infty,\sym{alphaEndpoint}]$. Our formalization also proves that
 it is the unique reducing subspace satisfying this angle bound.
-For this branch, direct-rotation-aligned coordinates give the stronger
-quadratic-form inequality
+
+To compare the reference and perturbed blocks on common coordinate spaces,
+choose isometric frames for $\DKRange(\sym{Psource})$ and
+$\DKKernel(\sym{Psource})$. Apply the direct rotation $\sym{Rrotation}$ to
+these frames to obtain frames for $M$ and $M^\perp$. Express
+$\sym{ReferenceBlock0},\sym{ReferenceBlock1}$ in the original frames and
+$\sym{Lambda0},\sym{Lambda1}$ in the transported frames. In these coordinates
+the branch satisfies the stronger quadratic-form inequality
 \[
  \sym{ReferenceBlock1}-\sym{alphaEndpoint}I
  \le\sym{ComplementCosineBlock}
@@ -1343,9 +1391,12 @@ in $[\sym{betaEndpoint}-\sym{delta}/2,\sym{alphaEndpoint}+\sym{delta}/2]$.
 For an isometric frame $\sym{E0}$ of the reference subspace, its residual
 is $\sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{ReferenceBlock0}$
 on the operator domain, as in \cref{eq:history-residual}.
-Assume the source's standing compatibility condition
-$\dim\sym{CrossedSourceDefect}=\dim\sym{CrossedTargetDefect}$ for this pair
-of projections. If $\|\sym{H}\|_{\mathrm{op}}<\sym{delta}/2$ for a
+Assume
+$\dim\sym{CrossedSourceDefect}=\dim\sym{CrossedTargetDefect}$: the space of source
+vectors orthogonal to the target and the space of target vectors orthogonal
+to the source have equal Hilbert dimension.
+
+If $\|\sym{H}\|_{\mathrm{op}}<\sym{delta}/2$ for a
 bounded self-adjoint perturbation, or $\|\sym{R}\|_{\mathrm{op}}<\sym{delta}/2$
 for the bounded residual on the reference subspace, then
 $\sym{Theta}<\pi/4$. For each ideal norm whose displayed arguments belong

@@ -6,6 +6,8 @@ $\sym{Acurrent}=\sym{A}+\sym{H}$ for the perturbed operator. The
 sine-theta theorem uses coordinate maps for trial and exact subspaces.
 The transport results name the subspaces $\sym{Usource},\sym{Vtarget}$
 and their projections $\sym{Psource},\sym{Qtarget}$ directly.
+The sine-theta projection is $\sym{Pexact}$, the residual is $\sym{R}$,
+and direct rotations are denoted by $\sym{Rrotation}$ throughout.
 
 In the colored version, blue identifies exact or target data, amber trial
 or source data, cyan the exact complementary block, magenta angles, green
@@ -52,10 +54,12 @@ $\DKRange(T),\DKKernel(T),\DKDom(T)$ & Range, kernel, and domain of an operator.
 $\sym{Usource},\sym{Vtarget}$ & Source and target subspaces in the displacement problem.\\
 $\sym{Psource},\sym{Qtarget}$ & Orthogonal projections onto $\sym{Usource},\sym{Vtarget}$ in that problem.\\
 $\sym{Rrotation},\sym{Wcompetitor}$ & Direct rotation and an arbitrary orthogonal or unitary transporter carrying $\sym{Usource}$ onto $\sym{Vtarget}$.\\
+$\sym{PolarU}$ & Partial isometry in a polar decomposition, as in $\sym{S}=\sym{PolarU}|\sym{S}|$.\\
 $\sym{IntertwinerT}$ & The intertwiner $\sym{Qtarget}\sym{Psource}+(I-\sym{Qtarget})(I-\sym{Psource})$, whose unitary polar factor is the acute direct rotation.\\
 $\sym{theta},\like{theta}{\theta_j}$ & Individual principal angles, in $[0,\pi/2]$.\\
 $\sym{Xframe},\sym{Yframe}$ & Orthonormal coordinate matrices for the source and target in the real counterexample.\\
 $\sym{Jturn},\sym{Cturn},\sym{Hmix}$ & Planar quarter-turn, rotation through $2\sym{theta}$, and orthogonal mixing matrix used in that counterexample.\\
+$\sym{Jreflect};\ \sym{AngleGenerator}$ & Source reflection $2\sym{Psource}-I$, with square $I$; skew angle generator of a direct rotation. The quarter-turn $\sym{Jturn}$ has square $-I_2$.\\
 $\sym{CounterPrincipalOne},\sym{CounterPrincipalTwo};\ \sym{CounterMovingPlane},\sym{CounterFixedPlane}$ & Principal planes of the direct rotation and moving/fixed planes of the competitor in \cref{fig:prop44-displacement-planes}.\\
 $\sym{CounterChordA},\sym{CounterChordB}$ & Displacement singular values $\sqrt{2-\sqrt2}$ and $\sqrt2$ in that counterexample.\\
 $\sym{Kdisplacement}=I-\sym{Wcompetitor}$ & Full displacement operator in the failed Ky Fan comparison.\\

@@ -32,6 +32,10 @@ cost $\like{SingletonCost}{s_i}$:
  \like{SingletonCost}{s_i}=\min\{4\sin(\like{theta}{\theta_i}/2),2\}.
 \end{equation}
 The paired cost is attained by an orthogonal transporter on the two-plane sum.
+It fixes two real directions and rotates the other two through
+$\like{theta}{\theta_i}+\like{theta}{\theta_j}$, as the competitor does for
+equal angles in \cref{fig:prop44-displacement-planes}. Step~6 below derives
+this construction and its cost from the block minimum.
 Write $\sym{OrthogonalGroup}$ for the orthogonal group of real
 $n\times n$ matrices, defined by $\sym{Wcompetitor}^T\sym{Wcompetitor}=I$.
 
@@ -193,18 +197,25 @@ A planar rotation $\like{MatchingPlanarRotation}{R_t}$ through $t$ satisfies
 \]
 Its two displacement singular values are therefore both $2\sin(t/2)$,
 and its contribution is $2\sym{MatchingPhaseCost}(t)$.
-On such a rotation plane, define the skew-symmetric spectral gradient by
+On a plane of rotation angle $\vartheta$, use the quarter-turn
+$\sym{Jturn}=\bigl(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\bigr)$
+and define the skew-symmetric spectral gradient by
 \[
- \sym{SpectralGradient}
- =\sym{MatchingPhaseCost}'(t)
-       \begin{pmatrix}0&-1\\1&0\end{pmatrix}.
+ \sym{Wcompetitor}|_{\mathrm{plane}}
+   =\cos\vartheta\,I_2+\sin\vartheta\,\sym{Jturn},
+ \qquad
+ \sym{SpectralGradient}|_{\mathrm{plane}}
+   =\sym{MatchingPhaseCost}'(\vartheta)\sym{Jturn}.
 \]
 On the $+1$ and $-1$ eigenspaces of the transporter, set the spectral
 gradient $\sym{SpectralGradient}$ to zero.
 Every real orthogonal matrix splits into these scalar blocks and planar
 rotations: diagonalize over $\mathbb C$ and pair conjugate eigenvectors
 to obtain the real planes. This defines $\sym{SpectralGradient}$ on the
-whole space and shows that it commutes with $\sym{Wcompetitor}$.
+whole space. On each plane the displayed blocks are combinations of
+$I_2$ and the same $\sym{Jturn}$, so they commute; on the scalar blocks
+the gradient is zero. Thus $\sym{SpectralGradient}\sym{Wcompetitor}
+=\sym{Wcompetitor}\sym{SpectralGradient}$ on the whole space.
 These rotation planes may mix source and complementary directions;
 stationarity will relate them to $\like{Psource}{P_K}$.
 Then for every skew-symmetric $\sym{SkewDirection}$,
@@ -214,16 +225,30 @@ Then for every skew-symmetric $\sym{SkewDirection}$,
  \right|_{t=0}
  =-\operatorname{tr}(\sym{SpectralGradient}\sym{SkewDirection}).
 \end{equation}
-\emph{Justification.} For $p>1$ the first variation is linear in
-$\sym{SkewDirection}$. Independent sign changes on the rotation planes
-and scalar lines commute with $\sym{Wcompetitor}$ and preserve the cost
-by orthogonal conjugation. Averaging over these sign changes removes the
-off-diagonal blocks of $\sym{SkewDirection}$ without changing the derivative.
-On a rotation plane of angle $\vartheta$, its diagonal block is
-$b\bigl(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\bigr)$:
-the angle changes at speed $b$, giving derivative
-$2b\sym{MatchingPhaseCost}'(\vartheta)$, equal to the negative trace
-pairing because the quarter-turn squares to $-I_2$.
+\emph{Justification.} For $p>1$ the cost is differentiable, including at
+zero displacement singular values, and its derivative is linear in
+$\sym{SkewDirection}$. Change the sign on any whole rotation plane or
+scalar line. This orthogonal sign matrix commutes with
+$\sym{Wcompetitor}$, so conjugating $\sym{SkewDirection}$ by it conjugates
+the whole curve and leaves its cost unchanged. Average over these sign
+choices. Linearity of the derivative leaves its value unchanged, while
+every off-diagonal block of $\sym{SkewDirection}$ cancels. This averaging
+computes the derivative for arbitrary skew directions; feasibility is
+imposed afterward, when we apply stationarity.
+
+On a rotation plane of angle $\vartheta$, the diagonal skew block is
+$b\sym{Jturn}$. Since
+$\exp(tb\sym{Jturn})$ is a rotation through $tb$, the phase becomes
+$\vartheta+tb$ and the cost derivative is
+$2b\sym{MatchingPhaseCost}'(\vartheta)$. The trace pairing gives exactly
+the same value:
+\[
+ -\operatorname{tr}\bigl(
+   (\sym{MatchingPhaseCost}'(\vartheta)\sym{Jturn})(b\sym{Jturn})
+  \bigr)
+ =-b\sym{MatchingPhaseCost}'(\vartheta)\operatorname{tr}(-I_2)
+ =2b\sym{MatchingPhaseCost}'(\vartheta).
+\]
 On a scalar line the diagonal skew-symmetric block is zero.
 Summing proves \cref{eq:matching-first-variation}, including directions
 that mix the rotation planes.
@@ -259,6 +284,11 @@ This identity is what makes the source projection compatible with the
 decomposition constructed next.
 
 \emph{Step 3: obtain blocks with one or two source directions.}
+The rotation planes used to define the gradient need not preserve the
+source. We now use the relation between the gradient and the source
+reflection to construct blocks that preserve the source as well as the
+minimizer. Their size will explain why the final optimization needs only
+single labels and pairs.
 \emph{(a) Each positive gradient level carries compatible complex coordinates.}
 \emph{Justification.}
 The matrix $-\like{SpectralGradient}{G^2}$ is symmetric and nonnegative,
@@ -331,7 +361,15 @@ If $\sym{ProjectionRealPart}u=\sym{ProjectionEigenvalue} u$, the last two identi
 \]
 For a unit $u$ with $0<\sym{ProjectionEigenvalue}<1$, set
 $\sym{ProjectionCoupling}=\sqrt{\sym{ProjectionEigenvalue}(1-\sym{ProjectionEigenvalue})}$ and $v=\sym{ProjectionImaginaryPart}u/\sym{ProjectionCoupling}$.
-Skew-symmetry shows that $u,v$ are orthonormal, and
+Skew-symmetry gives
+\[
+ \langle u,\sym{ProjectionImaginaryPart}u\rangle=0,\qquad
+ \|\sym{ProjectionImaginaryPart}u\|^2
+   =-\langle u,\sym{ProjectionImaginaryPart}^2u\rangle
+   =\sym{ProjectionEigenvalue}(1-\sym{ProjectionEigenvalue})
+   =\sym{ProjectionCoupling}^2.
+\]
+Thus $u,v$ are orthonormal. The preceding identities now become
 \[
  \sym{ProjectionRealPart}u=\sym{ProjectionEigenvalue} u,\quad \sym{ProjectionRealPart}v=(1-\sym{ProjectionEigenvalue})v,\quad
  \sym{ProjectionImaginaryPart}u=\sym{ProjectionCoupling} v,\quad \sym{ProjectionImaginaryPart}v=-\sym{ProjectionCoupling} u.
@@ -351,10 +389,14 @@ preserved by
 $\like{Psource}{P_K}=(\sym{Jreflect}+I)/2$, hence by
 $\like{Qtarget}{P_L}
  =\sym{Wcompetitor}\like{Psource}{P_K}\sym{Wcompetitor}^T$.
-The $+1$ eigenspace of conjugation has half the real dimension.
-Accordingly, a two-dimensional block contains one source direction
-and a four-dimensional block contains two. Their principal-angle lists
-have one and two entries, respectively.
+For example, the complex span of $u,v$ is the real span of
+$u,v,\sym{GradientComplexStructure}u,\sym{GradientComplexStructure}v$.
+The first two vectors are fixed by conjugation and hence belong to the
+source; conjugation negates the last two, which belong to its complement.
+This gives a four-dimensional block with two source directions.
+An invariant real coordinate line similarly gives a two-dimensional block
+with one source direction. Their principal-angle lists therefore have
+two and one entries, respectively.
 
 \emph{(d) The zero-gradient space contributes only fixed directions and
 one-angle planes.}
@@ -407,25 +449,75 @@ multiplying by $\sym{PairDirectRotation}^T$ gives an orthogonal map preserving t
 and its complement. This parametrization allows mixing between the
 principal planes.
 
-For determinant $+1$, the two matrices $\like{PairFreeOrthogonal}{U_0},\like{PairFreeOrthogonal}{U_1}$ are either both
-rotations or both reflections. Computing the trace and the trace of the
-square identifies
-phase parameters $\sym{PairPhaseX},\sym{PairPhaseY}$ with
+For determinant $+1$, the free factors are either both rotations or both
+reflections. Write their rotation angles as
+$\sym{PairRotationR}+\sym{PairRotationS}$ and
+$\sym{PairRotationR}-\sym{PairRotationS}$: the parameters
+$\sym{PairRotationR},\sym{PairRotationS}$ are the half-sum and half-difference
+of those angles. Define $\sym{PairPhaseX},\sym{PairPhaseY}\in[0,\pi]$ by
 \[
- \sym{PairMeanAngle}\le \sym{PairPhaseX}\le\pi-\sym{PairMeanAngle},\qquad \sym{PairHalfDifference}\le \sym{PairPhaseY}\le\pi-\sym{PairHalfDifference},
+ \begin{array}{c|cc}
+  &\cos\sym{PairPhaseX}&\cos\sym{PairPhaseY}\\ \hline
+  \text{two rotations}
+    &\cos\sym{PairMeanAngle}\cos\sym{PairRotationS}
+    &\cos\sym{PairHalfDifference}\cos\sym{PairRotationR}\\
+  \text{two reflections}
+    &-\sin\sym{PairHalfDifference}\cos\sym{PairRotationR}
+    &\sin\sym{PairMeanAngle}\cos\sym{PairRotationS}
+ \end{array}
 \]
-and eigenvalues $e^{\pm i(\sym{PairPhaseX}+\sym{PairPhaseY})},e^{\pm i(\sym{PairPhaseX}-\sym{PairPhaseY})}$.
-After folding the angles into $[0,\pi]$, the displacement cost is
-$2\bigl(\sym{MatchingPhaseCost}(\min\{\sym{PairPhaseX}+\sym{PairPhaseY},2\pi-\sym{PairPhaseX}-\sym{PairPhaseY}\})
-       +\sym{MatchingPhaseCost}(|\sym{PairPhaseX}-\sym{PairPhaseY}|)\bigr)$.
-For example, if $\like{PairFreeOrthogonal}{U_0},\like{PairFreeOrthogonal}{U_1}$ rotate through $\sym{PairRotationR}+\sym{PairRotationS},\sym{PairRotationR}-\sym{PairRotationS}$, respectively,
-these parameters satisfy
-$\cos \sym{PairPhaseX}=\cos \sym{PairMeanAngle}\cos \sym{PairRotationS}$ and $\cos \sym{PairPhaseY}=\cos \sym{PairHalfDifference}\cos \sym{PairRotationR}$.
-For two reflections, write
-$\like{PairFreeOrthogonal}{U_0}=\like{MatchingPlanarRotation}{R_{r+s}}\sym{PairPlanarReflection}$ and $\like{PairFreeOrthogonal}{U_1}=\like{MatchingPlanarRotation}{R_{r-s}}\sym{PairPlanarReflection}$ with
-$\sym{PairPlanarReflection}=\operatorname{diag}(1,-1)$. The calculation gives
-$\cos \sym{PairPhaseX}=-\sin \sym{PairHalfDifference}\cos \sym{PairRotationR}$ and $\cos \sym{PairPhaseY}=\sin \sym{PairMeanAngle}\cos \sym{PairRotationS}$,
-which lie in the same ranges because $\sym{PairMeanAngle}+\sym{PairHalfDifference}\le\pi/2$.
+Here a reflection factor is a planar rotation followed by
+$\sym{PairPlanarReflection}=\operatorname{diag}(1,-1)$; for example,
+$\like{PairFreeOrthogonal}{U_0}
+ =\like{MatchingPlanarRotation}{R_{r+s}}\sym{PairPlanarReflection}$.
+The cosine bounds imply
+\[
+ \sym{PairMeanAngle}\le \sym{PairPhaseX}\le\pi-\sym{PairMeanAngle},\qquad
+ \sym{PairHalfDifference}\le \sym{PairPhaseY}\le\pi-\sym{PairHalfDifference}.
+\]
+For reflections, the initial bounds are
+$\pi/2-\sym{PairHalfDifference}\le\sym{PairPhaseX}\le\pi/2+\sym{PairHalfDifference}$
+and $\pi/2-\sym{PairMeanAngle}\le\sym{PairPhaseY}\le\pi/2+\sym{PairMeanAngle}$;
+these lie in the displayed ranges because
+$\sym{PairMeanAngle}+\sym{PairHalfDifference}\le\pi/2$.
+
+To check that these parameters give the actual eigenphases, put
+$\sym{PairPhaseCosineX}=\cos\sym{PairPhaseX}$ and
+$\sym{PairPhaseCosineY}=\cos\sym{PairPhaseY}$. Block multiplication gives
+\begin{align*}
+ \operatorname{tr}\sym{Wcompetitor}
+   &=\operatorname{tr}(\sym{PairCosineBlock}\like{PairFreeOrthogonal}{U_0})
+     +\operatorname{tr}(\sym{PairCosineBlock}\like{PairFreeOrthogonal}{U_1})
+     =4\sym{PairPhaseCosineX}\sym{PairPhaseCosineY},\\
+ \operatorname{tr}(\sym{Wcompetitor}^2)
+   &=\operatorname{tr}((\sym{PairCosineBlock}\like{PairFreeOrthogonal}{U_0})^2)
+     +\operatorname{tr}((\sym{PairCosineBlock}\like{PairFreeOrthogonal}{U_1})^2)
+     -2\operatorname{tr}(\sym{PairSineBlock}\like{PairFreeOrthogonal}{U_1}
+                        \sym{PairSineBlock}\like{PairFreeOrthogonal}{U_0})\\
+   &=16\sym{PairPhaseCosineX}^2\sym{PairPhaseCosineY}^2
+     -8(\sym{PairPhaseCosineX}^2+\sym{PairPhaseCosineY}^2)+4.
+\end{align*}
+The coefficient of $z^2$ in the characteristic polynomial is
+$((\operatorname{tr}\sym{Wcompetitor})^2
+   -\operatorname{tr}(\sym{Wcompetitor}^2))/2$.
+Orthogonality and determinant one make this polynomial reciprocal, so
+\begin{align*}
+ \det(zI-\sym{Wcompetitor})
+   &=z^4-4\sym{PairPhaseCosineX}\sym{PairPhaseCosineY}z^3
+     +\bigl(4(\sym{PairPhaseCosineX}^2+\sym{PairPhaseCosineY}^2)-2\bigr)z^2
+     -4\sym{PairPhaseCosineX}\sym{PairPhaseCosineY}z+1\\
+   &=\prod_{\epsilon=\pm1}
+       \bigl(z^2-2\cos(\sym{PairPhaseX}+\epsilon\sym{PairPhaseY})z+1\bigr).
+\end{align*}
+Its roots are therefore
+$e^{\pm i(\sym{PairPhaseX}+\sym{PairPhaseY})},
+ e^{\pm i(\sym{PairPhaseX}-\sym{PairPhaseY})}$.
+Folding their angles into $[0,\pi]$ gives the displacement cost
+\[
+ 2\bigl(\sym{MatchingPhaseCost}(\min\{\sym{PairPhaseX}+\sym{PairPhaseY},
+                            2\pi-\sym{PairPhaseX}-\sym{PairPhaseY}\})
+       +\sym{MatchingPhaseCost}(|\sym{PairPhaseX}-\sym{PairPhaseY}|)\bigr).
+\]
 
 We can replace $(\sym{PairPhaseX},\sym{PairPhaseY})$ by $(\pi-\sym{PairPhaseX},\pi-\sym{PairPhaseY})$ when $\sym{PairPhaseX}+\sym{PairPhaseY}>\pi$ without
 changing this cost. Suppose therefore that $\sym{PairPhaseX}+\sym{PairPhaseY}\le\pi$.
@@ -593,5 +685,6 @@ Bolotnikov, Li, and Rodman formulate the ambient unitary minimal-distortion
 problem and prove Q-norm and Frobenius optimality results
 \citep[Problem~1.1 and Theorems~3.1, 4.2]{bolotnikov2001minimal}. The formula
 above specifies the unrestricted real trace-norm minimum through singleton
-and paired angle costs. The real field permits pairing between distinct
+and paired angle costs. We did not locate this exact matching formula in
+the sources compared here. The real field permits pairing between distinct
 principal planes, which is why the answer is an optimization over matchings.

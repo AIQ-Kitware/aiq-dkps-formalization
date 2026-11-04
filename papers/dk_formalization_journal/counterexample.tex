@@ -43,10 +43,10 @@ larger.
 For every $0<\sym{theta}<\pi/2$, there are two-dimensional subspaces
 $\sym{Usource},\like{Vtarget}{V_\theta}\subset\mathbb R^4$ and an orthogonal map $\like{Wcompetitor}{W_\theta}$ with
 $\like{Wcompetitor}{W_\theta} \sym{Usource}=\like{Vtarget}{V_\theta}$, such that both principal angles equal $\sym{theta}$ and
-the canonical direct rotation $\like{Rrotation}{R_\theta}$ satisfies
+the canonical direct rotation $\like{Rrotation}{D_\theta}$ satisfies
 \begin{align}
  \|I-\like{Wcompetitor}{W_\theta}\|_1&=4\sin\sym{theta},\label{eq:competitor-trace}\\
- \|I-\like{Rrotation}{R_\theta}\|_1&=8\sin(\sym{theta}/2)>4\sin\sym{theta}.
+ \|I-\like{Rrotation}{D_\theta}\|_1&=8\sin(\sym{theta}/2)>4\sin\sym{theta}.
  \label{eq:direct-trace}
 \end{align}
 \end{theorem}
@@ -91,12 +91,12 @@ The corresponding projections and canonical intertwiner are
 The last block matrix is orthogonal and $\sym{CosAngle}>0$, so $|\sym{IntertwinerT}|=\sym{CosAngle}I_4$ and
 its polar factor is exactly
 \[
- \like{Rrotation}{R_\theta}=\begin{pmatrix}\sym{CosAngle}I_2&\sym{SinAngle}\sym{Jturn}\\\sym{SinAngle}\sym{Jturn}&\sym{CosAngle}I_2\end{pmatrix}.
+ \like{Rrotation}{D_\theta}=\begin{pmatrix}\sym{CosAngle}I_2&\sym{SinAngle}\sym{Jturn}\\\sym{SinAngle}\sym{Jturn}&\sym{CosAngle}I_2\end{pmatrix}.
 \]
 In particular, this calculation identifies the canonical direct rotation
-of the constructed pair. Since $\like{Rrotation}{R_\theta}+\like{Rrotation}{R_\theta}^T=2\sym{CosAngle}I_4$,
+of the constructed pair. Since $\like{Rrotation}{D_\theta}+\like{Rrotation}{D_\theta}^T=2\sym{CosAngle}I_4$,
 \[
- (I-\like{Rrotation}{R_\theta})^T(I-\like{Rrotation}{R_\theta})=(2-2\sym{CosAngle})I_4.
+ (I-\like{Rrotation}{D_\theta})^T(I-\like{Rrotation}{D_\theta})=(2-2\sym{CosAngle})I_4.
 \]
 Consequently all four displacement singular values equal
 $\sqrt{2-2\sym{CosAngle}}=2\sin(\sym{theta}/2)$.
@@ -129,9 +129,9 @@ $\sym{theta}=\min\{\sym{EpsilonAngle}/2,\pi/4\}$.
 
 The competitor rotates a diagonal real two-plane through $2\sym{theta}$ and
 fixes its orthogonal complement; its displacement has rank two, compared
-with rank four for $\like{Rrotation}{R_\theta}$. The operator norm favors the canonical
+with rank four for $\like{Rrotation}{D_\theta}$. The operator norm favors the canonical
 rotation instead:
-$\|I-\like{Rrotation}{R_\theta}\|_{\mathrm{op}}=2\sin(\sym{theta}/2)
+$\|I-\like{Rrotation}{D_\theta}\|_{\mathrm{op}}=2\sin(\sym{theta}/2)
  <2\sin\sym{theta}=\|I-\like{Wcompetitor}{W_\theta}\|_{\mathrm{op}}$.
 The competitor attains the global trace-norm minimum $4\sin\sym{theta}$.
 Indeed, the projection difference has trace norm
@@ -188,29 +188,47 @@ At $\sym{theta}=\pi/4$, the family gives
 The two trace norms are
 \[
  \|I-\like{Wcompetitor}{W_{\pi/4}}\|_1=2\sqrt2
- <4\sqrt{2-\sqrt2}=\|I-\like{Rrotation}{R_{\pi/4}}\|_1.
+ <4\sqrt{2-\sqrt2}=\|I-\like{Rrotation}{D_{\pi/4}}\|_1.
 \]
 
-For $\sym{Kdisplacement}=I-\like{Wcompetitor}{W_{\pi/4}}$, let $\sym{OmegaOne}$ and $\sym{OmegaTwo}$ be the projections onto
+For $\sym{Kdisplacement}=I-\like{Wcompetitor}{W_{\pi/4}}$, the even-index part
+of the published comparison \citep[equation~(4.3)]{davis1970rotation}
+reads, in our notation,
+\[
+ \|\sym{Kdisplacement}\|_{(\nu)}\geq
+ \sum_{k=1}^{\nu/2}\|\sym{Kdisplacement}\Omega_k\|_{(2)},
+ \qquad \nu\ \text{even},
+\]
+where $\|\cdot\|_{(j)}$ is the Ky Fan $j$-norm and $\Omega_k$ projects onto
+the $k$th principal plane. Choose $\nu=4$ and let
+$\sym{OmegaOne}$ and $\sym{OmegaTwo}$ project onto
 $\operatorname{span}\{e_0,e_3\}$ and
 $\operatorname{span}\{e_1,e_2\}$. These are principal planes for the pair.
-The published singular-value comparison \citep[equation~(4.3)]{davis1970rotation},
-applied to this configuration, requires
+The comparison then requires
 \begin{equation}
  \|\sym{Kdisplacement}\|_{(4)}\geq
  \|\sym{Kdisplacement}\sym{OmegaOne}\|_{(2)}+\|\sym{Kdisplacement}\sym{OmegaTwo}\|_{(2)},
  \label{eq:dk43-false}
 \end{equation}
-where $\|\cdot\|_{(j)}$ denotes the Ky Fan $j$-norm.
 The checked calculations give
 \[
  \|\sym{Kdisplacement}\|_{(4)}=2\sqrt2,\qquad
  \|\sym{Kdisplacement}\sym{OmegaOne}\|_{(2)}=\|\sym{Kdisplacement}\sym{OmegaTwo}\|_{(2)}=2.
 \]
 Thus \cref{eq:dk43-false} would imply $2\sqrt2\geq4$.
-The domain planes are orthogonal, but their images under $\sym{Kdisplacement}$ need not be;
-the singular-value sums of these restrictions cannot be added in the
-asserted direction.
+The displayed matrix also gives
+\[
+ \DKRange(\sym{Kdisplacement}\sym{OmegaOne})
+ =\DKRange(\sym{Kdisplacement}\sym{OmegaTwo})
+ =\sym{CounterMovingPlane}
+ =\operatorname{span}\{e_0+e_2,e_1+e_3\}.
+\]
+Both restrictions map onto the same two-dimensional output plane. Each
+has singular values $1,1$, whereas the full displacement has just two
+nonzero singular values, $\sqrt2,\sqrt2$. The proposed sum treats the
+restrictions as independent output blocks. A direct-sum argument would
+require orthogonal images as well as orthogonal domain planes; here the
+images coincide.
 
 \subsection{A Q-norm repair from squared-displacement optimality}
 
@@ -264,11 +282,11 @@ realification. Indeed, under the identification $\mathbb C^2\simeq
 \mathbb R^2\oplus\mathbb R^2$ in which multiplication by $i$ is
 represented by $\sym{Jturn}$ from \cref{eq:wtheta}, the matrices
 \[
- \like{Rrotation}{R_\theta}^{\mathbb C}=
+ \like{Rrotation}{D_\theta}^{\mathbb C}=
  \begin{pmatrix}\sym{CosAngle}&i\sym{SinAngle}\\i\sym{SinAngle}&\sym{CosAngle}\end{pmatrix},\qquad
- \like{Wcompetitor}{W_\theta}^{\mathbb C}=e^{i\sym{theta}}\like{Rrotation}{R_\theta}^{\mathbb C}
+ \like{Wcompetitor}{W_\theta}^{\mathbb C}=e^{i\sym{theta}}\like{Rrotation}{D_\theta}^{\mathbb C}
 \]
-become precisely $\like{Rrotation}{R_\theta}$ and $\like{Wcompetitor}{W_\theta}$ above. Realification doubles
+become precisely $\like{Rrotation}{D_\theta}$ and $\like{Wcompetitor}{W_\theta}$ above. Realification doubles
 the complex singular-value multiplicities. Thus the real short-angle
 restriction in the full-displacement claim
 \citep[Proposition~4.4]{davis1970rotation} does not eliminate the mechanism of the

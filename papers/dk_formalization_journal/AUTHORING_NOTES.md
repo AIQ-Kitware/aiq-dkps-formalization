@@ -326,6 +326,60 @@ The author then authorized the corrections supported by that comparison.
 These are manuscript corrections; no Lean statement, proof, or source-result
 selection changed.
 
+## Validated clarity review (4 November 2026)
+
+The author accepted the ranked review of the second Qwen critique. Applied
+targeted notation changes and proof explanations without changing any Lean
+declaration or the 29-result selection.
+
+- Exact sine-theta projections print as `P_ex`; transport projections remain
+  `P,Q`. Direct rotations print as `D`, including the nonacute source-table
+  rotation; the polar partial isometry is `V_pol`. The quarter-turn, source
+  reflection, angle generator, and mixing matrix have distinct subscripts.
+  Full displacement in the counterexample is `Delta_W`, leaving `K` for the
+  source subspace in the matching theorem. Updated semantic hover reminders,
+  explicit formulas, figure labels, and the notation appendix together.
+- The two gap geometries are enumerated, with both orientations explicit.
+  `G_delta` denotes finite interval/exterior separation or either ordered
+  separation. The detailed table uses this union wherever its former interval
+  convention included half-infinite intervals. The tangent rows retain their
+  specified ordered orientation. The three Lean cases do not contradict the
+  four oriented subcases; no change to a formal hypothesis was needed.
+- Defined rank-one normalization and distinguished it from where-defined
+  Ky Fan dominance. Added all carrier correspondences near the sine theorem
+  signature and wrote out the exact-decomposition identities. Explained the
+  factor `1/delta` without the unexplained phrase “constant one.”
+- The matching proof now shows commutation plane by plane and the sign of the
+  trace derivative. Sign averaging computes the derivative on arbitrary skew
+  directions; it does not require the averaged directions to be feasible.
+  Explained the normalization and invariant span in the small-block argument,
+  and how complex coordinate lines/planes yield one/two source directions.
+  Added the trace and reciprocal characteristic-polynomial calculation for
+  the phase parameters, and previewed the paired moving/fixed geometry.
+- Read the even-index part of the original equation (4.3), on printed page 20,
+  and stated it before specializing to four dimensions. The two restricted
+  displacement images coincide; the explanation now identifies this common
+  output plane and its singular values. The local comparison source is
+  `../../non-distributable/DavisKahan-1970-original.pdf`; no third-party PDF
+  content was added to the repository.
+- The Section 8 discussion identifies the operator whose blocks are used,
+  explains the frames obtained by applying the direct rotation, and states
+  crossed-defect dimension equality directly. Added reminders about directed
+  versus full angles and unmatched right-angle directions.
+- The abstract uses “results” and “proved in Lean 4”; the formalization section
+  states which results receive detailed exposition. Removed the unqualified
+  “new” from the abstract's matching claim. Its closing literature comparison
+  says that we did not locate this exact formula in the sources compared,
+  consistent with `RealNuclearMatching.lean` and the scope document.
+- Moved the unbounded-`B` assumption to the DK-5.1 hypothesis cell and corrected
+  the stale PDF-figure comment. Kept zero-indexed coordinates and `\path`,
+  which is deliberately supplied by the URL package for breakable strings.
+
+Rejected a globally unique alphabet, expansion of all source results into
+main-text proofs, and the claims that the current text omitted the counting
+convention, full-angle definition, or planar-reflection definition. The study
+note remains supplementary; essential new proof explanations are in the article.
+
 ## Generated artifacts (2 November 2026)
 
 The author requested ignoring regenerable outputs. Figure PGF/PDF/SVG exports,

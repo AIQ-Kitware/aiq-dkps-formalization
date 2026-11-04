@@ -38,8 +38,11 @@ $\sym{Theta0},\Theta_1$ are the source and complementary angle operators,
 $\sym{Theta}$ their ambient direct sum, and $\theta_j$ the ordered principal
 angles. In the source decomposition the direct rotation has blocks
 $\bigl(\begin{smallmatrix}C_0&-S_0^*\\S_0&C_1\end{smallmatrix}\bigr)$
-with $C_j\ge0$; $J$ is its skew angle generator, so
-$\sym{SourceDirectRotation}=e^{J\sym{Theta}}$.
+with $C_j\ge0$; $\sym{AngleGenerator}$ is its skew angle generator, so
+$\sym{SourceDirectRotation}=e^{\sym{AngleGenerator}\sym{Theta}}$.
+The symbol $\sym{SourceDirectRotation}$ includes nonacute direct rotations;
+for an acute pair it is the unique rotation denoted by the same letter
+in the main text.
 For real unitaries, spectral half-plane conditions refer to their
 complexifications.
 
@@ -63,9 +66,18 @@ We abbreviate the two spectral hypotheses, for $\sym{delta}>0$, by
  \mathcal O_{\sym{delta}}(B,C):\quad&
  B\le\alpha I,\quad C\ge(\alpha+\sym{delta})I.
 \end{align*}
-The endpoints satisfy $\beta\le\alpha$ and are chosen for each row;
-the spectral intervals may be
-half-infinite.
+The endpoints are real, satisfy $\beta\le\alpha$, and are chosen for each row.
+The ordered condition $\mathcal O_{\sym{delta}}(B,C)$ places the spectra in
+the half-infinite intervals $(-\infty,\alpha]$ and
+$[\alpha+\sym{delta},\infty)$; it allows both operators to be unbounded.
+To include both orientations, set
+\[
+ \sym{SineGap}(B,C)\quad\Longleftrightarrow\quad
+ \mathcal I_{\sym{delta}}(B,C)\quad\text{or}\quad
+ \mathcal O_{\sym{delta}}(B,C)\quad\text{or}\quad
+ \mathcal O_{\sym{delta}}(C,B).
+\]
+This is the separation condition of Section~\ref{sec:gap-geometry}.
 
 \begingroup
 \small
@@ -90,7 +102,7 @@ half-infinite.
 \endlastfoot
 \multicolumn{3}{@{}l}{\textbf{Headline perturbation bounds}}\\*\addlinespace[3pt]
 \path{S2-sin-theta} &
- $\mathcal I_{\sym{delta}}(\sym{A0},\sym{Lambda1})$. &
+ $\sym{SineGap}(\sym{A0},\sym{Lambda1})$. &
  $\sym{delta}\sym{NormN}(\sin\sym{Theta0})\le\sym{NormN}(\sym{R})$.\\\addlinespace
 \path{S2-tan-theta} &
  $\mathcal O_{\sym{delta}}(\sym{A0},\sym{Lambda1})$;
@@ -147,7 +159,7 @@ half-infinite.
 \path{DK-3.5-prop} &
  A direct rotation and its angle operator $\sym{Theta}$; the maximal
  eigenspace characterization assumes the acute case. &
- $\sym{Theta}$ commutes with $\sym{Psource},\sym{Qtarget},J,
+ $\sym{Theta}$ commutes with $\sym{Psource},\sym{Qtarget},\sym{AngleGenerator},
  \sym{SourceDirectRotation}$. If $x\ne0$ and
  $\sym{Theta}x=\theta x$, then
  $\angle(x,\sym{SourceDirectRotation}x)=\theta$.
@@ -155,7 +167,7 @@ half-infinite.
  subspaces of the prescribed angle.\\\addlinespace
 \path{DK-3.2-cor} &
  Interchange $\sym{Psource}$ and $\sym{Qtarget}$. &
- $\sym{Theta}$ is unchanged, $J$ changes to $-J$, and the corresponding
+ $\sym{Theta}$ is unchanged, $\sym{AngleGenerator}$ changes to $-\sym{AngleGenerator}$, and the corresponding
  direct rotation becomes $\sym{SourceDirectRotation}^*$.\\\addlinespace[5pt]
 \multicolumn{3}{@{}l}{\textbf{Displacement extremality}}\\*\addlinespace[3pt]
 \path{DK-4.1-prop} &
@@ -176,9 +188,9 @@ half-infinite.
  \ge\sum_j\sin^2\theta_j$, including an infinite right-hand side.\\\addlinespace
 \path{DK-4.3-prop} &
  Same displacement setting; put
- $D(W)=(I-W)^*(I-W)$. &
- $\sym{NormN}(D(\sym{SourceDirectRotation}))
- \le\sym{NormN}(D(\sym{Wcompetitor}))$:
+ $\sym{SquaredDisplacement}(W)=(I-W)^*(I-W)$. &
+ $\sym{NormN}(\sym{SquaredDisplacement}(\sym{SourceDirectRotation}))
+ \le\sym{NormN}(\sym{SquaredDisplacement}(\sym{Wcompetitor}))$:
  the direct rotation minimizes squared full displacement.\\\addlinespace
 \path{DK-4.4-prop} &
  Real space; largest principal angle at most $\pi/3$. &
@@ -191,10 +203,10 @@ half-infinite.
  Banach spaces; bounded $C,X,Y$; $BX-XC=Y$;
  $\|C\|_{\mathrm{op}}\le a$,
  $\|B^{-1}\|_{\mathrm{op}}\le(a+\sym{delta})^{-1}$, $a\ge0$.
+ If $B$ is unbounded, it is closed and densely defined with bounded inverse.
  The map norm is compatible with these operator norms. &
  $\sym{delta}\|X\|\le\|Y\|$.
- The coefficient hypotheses may be interchanged.
- An unbounded $B$ is closed and densely defined with bounded inverse.\\\addlinespace
+ The coefficient hypotheses may be interchanged.\\\addlinespace
 \path{DK-5.2-thm} &
  Self-adjoint $B\ge(\gamma+\sym{delta})I$,
  $C\le\gamma I$; bounded $X,Y$;
@@ -218,12 +230,12 @@ half-infinite.
 \path{DK-6.1-prop} &
  $\sym{A},\sym{Acurrent}$ have a common domain and bounded difference
  $\sym{H}$;
- both $\mathcal I_{\sym{delta}}(\sym{A0},\sym{Lambda1})$ and
- $\mathcal I_{\sym{delta}}(\sym{A1},\sym{Lambda0})$. &
+ both $\sym{SineGap}(\sym{A0},\sym{Lambda1})$ and
+ $\sym{SineGap}(\sym{A1},\sym{Lambda0})$. &
  $\sym{delta}\sym{NormN}(\sin\sym{Theta})\le\sym{NormN}(\sym{H})$.\\\addlinespace
 \path{DK-6.1-thm} &
  $\sym{E0}^*\sym{E0}\ge\varepsilon^2I$, $\varepsilon>0$;
- $\mathcal I_{\sym{delta}}(\sym{A0},\sym{Lambda1})$.
+ $\sym{SineGap}(\sym{A0},\sym{Lambda1})$.
  Source and target dimensions may differ. &
  $\sym{delta}\varepsilon\sym{NormN}(\sin\sym{Theta0})
  \le\sym{NormN}(\sym{R})$.
@@ -261,7 +273,7 @@ half-infinite.
  $\sym{Theta}\le\pi/4$ iff
  $\sym{Lambda0}\le\sym{alphaEndpoint} I$ and
  $\sym{Lambda1}\ge(\sym{alphaEndpoint}+\sym{delta})I$; such a reducing target exists.
- With direct-rotation-aligned exact frames,
+ With exact frames obtained by applying $\sym{SourceDirectRotation}$ to the reference frames,
  $\sym{ReferenceBlock1}-\sym{alphaEndpoint} I\le\sym{ComplementCosineBlock}(\sym{Lambda1}-\sym{alphaEndpoint} I)\sym{ComplementCosineBlock}$,
  as quadratic forms, with the lower-block analogue.
  In finite dimensions there are eigenvalue and symmetric-gauge

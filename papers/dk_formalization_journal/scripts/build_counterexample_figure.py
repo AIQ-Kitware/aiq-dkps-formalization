@@ -133,9 +133,9 @@ def main():
         fig.text(center, .810, heading, ha='center', fontsize=16, color=FG)
     boxes = [(center - .116, .510, .232, .285) for center in centers]
     plane(fig, boxes[0], model.R, model.direct_plane_bases[0],
-          source_label=r'$\like{SourceVector}{u_1}$', image_label=r'$\like{FigureImage}{Ru_1}$', length_label=r'$\sym{CounterChordA}$', source_color=SOURCE)
+          source_label=r'$\like{SourceVector}{u_1}$', image_label=r'$\like{FigureImage}{Du_1}$', length_label=r'$\sym{CounterChordA}$', source_color=SOURCE)
     plane(fig, boxes[1], model.R, model.direct_plane_bases[1],
-          source_label=r'$\like{SourceVector}{u_2}$', image_label=r'$\like{FigureImage}{Ru_2}$', length_label=r'$\sym{CounterChordA}$', source_color=SOURCE)
+          source_label=r'$\like{SourceVector}{u_2}$', image_label=r'$\like{FigureImage}{Du_2}$', length_label=r'$\sym{CounterChordA}$', source_color=SOURCE)
     plane(fig, boxes[2], model.W, model.competitor_plane_bases[0],
           source_label=r'$\like{FigureInput}{x}$', image_label=r'$\like{FigureImage}{Wx}$', length_label=r'$\sym{CounterChordB}$')
     plane(fig, boxes[3], model.W, model.competitor_plane_bases[1],
