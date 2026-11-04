@@ -4406,3 +4406,42 @@ SA-B05 roadmap signatures were compared: B05 → E01 → E35 remains blocked.
 No new unblocked source-backed intent PR was identified; no extra PR was
 created and no local Borel/PVM engine was retired from this partial acceptance.
 The dependency pin and Lean sources here are unchanged by this review update.
+
+### 2026-11-04 — complex C31 review repair
+
+[#27804](https://github.com/TauCetiProject/TauCeti/pull/27804) repair
+`11c98391c9cf41a48679db23875d5437ed41d0cd` addresses the
+[reuse](https://github.com/TauCetiProject/TauCeti/pull/27804#discussion_r4469878801)
+and [proof-quality](https://github.com/TauCetiProject/TauCeti/pull/27804#discussion_r4469879137)
+findings on `2087ee27edc3139a5841200defd1f1e8b1b55017`.
+Six reflection membership calculations now invoke Mathlib directly. Three
+previously local arguments are public preliminary facts in their owning modules:
+
+- `ContinuousLinearMap.coercive_conj_of_lyapunov` in `Coercive`: if `C=R²`,
+  self-adjoint `R` and `Rinv` are two-sided inverses, and `CW+W†C=2B`, a
+  nonnegative form lower bound `δ` for `B` yields `δ/(1+‖R‖²)` for `RWRinv`.
+  This is RCLike-generic, needs completeness, permits the zero space and `δ=0`,
+  and does not assume the chosen factor is positive.
+- `ContinuousLinearMap.nonneg_add_star_sub_smul_of_spectrum_re` in
+  `ContinuousFunctionalCalculus`: a real-part spectral bound `a` for a normal
+  complex bounded operator gives `W+W†≥2aI`, with arbitrary real `a`.
+- `Submodule.reflection_comp_add_comp_reflection` in `Reflection`:
+  `R_V R_U + R_U R_V = 2I - 4(P_U-P_V)²`, RCLike without completeness.
+
+The endpoint now invokes these lemmas and uses named conjugation and
+inverse-equivalence evaluation APIs. Its complex Hilbert-space signature,
+zero-dimensional branch and strict projection-gap conclusion are unchanged;
+full real/complex C31 remains partial. These are extractions/generalizations of
+the same DKPS Lyapunov/similarity/CFC proof, original anchor
+`f2c642523: DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean`,
+Jon Crall / OpenAI GPT-5.6 Thinking / Claude Opus 5, Kitware 2026, Apache-2.0.
+Prior Tau Ceti credits are preserved in the extended canonical modules.
+
+All five changed modules passed focused warning-as-error compilation (6,391
+jobs), all 13 environment linters (234 declarations plus 207 generated) and full
+header/text style (23,975 files). The repair is pushed; fresh upstream approval
+is not claimed. The expanded six-API/five-file PR body is saved in the shared
+campaign packet, but the connector rejected its metadata edit with 403. Run
+`waves/2026-11-03/c31-complex/update-pr-body.sh` from the campaign repository on
+the authenticated host to synchronize it without a build. Root Lean sources
+and dependency pins remain unchanged; no unaccepted donor proof was retired.
