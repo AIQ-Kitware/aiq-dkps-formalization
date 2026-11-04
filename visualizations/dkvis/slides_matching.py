@@ -4,12 +4,14 @@ from __future__ import annotations
 import numpy as np
 from manim import (
     Arc, Arrow, Axes, Circle, Create, DashedLine, Dot, DOWN, LEFT, Line,
-    Rectangle, RIGHT, Rotate, Transform, UP, VGroup,
+    Rectangle, RIGHT, Rotate, Transform, UP, VGroup, Polygon,
+    ValueTracker, always_redraw, FadeOut, Indicate, TransformFromCopy, ArcBetweenPoints,
 )
 
 from dkvis.matching_math import (
     paired_power_cost, pair_parameters, phase_derivative,
     phase_level_roots, phase_rectangle_edge,
+    source_plane_wiggle,
 )
 from dkvis.matching_narration import read_narration
 from dkvis.novelty_math import nuclear_matching_graph_example
@@ -81,24 +83,64 @@ class MatchingSlide(DeckSlide):
     wait_time_between_slides = .6
 
     def make_chrome(self):
-        self.title = SCRIPTS[type(self).__name__].title
-        return super().make_chrome()
+        script = SCRIPTS[type(self).__name__]
+        self.title, self.kicker = script.title, script.motivation
+        chrome = super().make_chrome()
+        kick = self._head[1]
+        if kick.width > 12.1:
+            kick.scale_to_fit_width(12.1).next_to(self._head[0],DOWN,aligned_edge=LEFT,buff=.18)
+        from dkvis.decks.matching import SCENES
+        at = SCENES.index(type(self).__name__)
+        stage = sum(at >= SCENES.index(name) for name in
+                    ["M06SmoothCost", "M20PairCoordinates", "M27UniformLimit"])
+        labels = ["Build candidates", "Find independent pieces", "Compute their costs", "Return to trace norm"]
+        items = VGroup(*(tex(label,size=17,color=CURRENT if i==stage else MUTED)
+                         for i,label in enumerate(labels))).arrange(RIGHT,buff=.5)
+        items.move_to([0,-3.16,0])
+        chrome.add(items,Line(items[stage].get_left()+DOWN*.13,
+                              items[stage].get_right()+DOWN*.13,color=CURRENT,stroke_width=2))
+        return chrome
+
+    def footer_text(self):
+        return "Goal: the cheapest map carrying K onto L"
+
+    def construct(self):
+        super().construct()
+        if self._beat_index+1 != len(SCRIPTS[type(self).__name__].beats):
+            raise ValueError(f"narration builds do not match animations: {type(self).__name__}")
+
+    def beat(self):
+        self.wait(self.wait_time_between_slides)
+        self._beat_index += 1
+        self.say(SCRIPTS[type(self).__name__].beats[self._beat_index])
 
     def start(self, inference, justification):
-        self.say(SCRIPTS[type(self).__name__].text)
-        top = para(r"\textbf{Inference.} "+inference,width=12.2,size=26)
+        script = SCRIPTS[type(self).__name__]
+        self._beat_index = 0
+        self.say(script.beats[0])
+        key = type(self).__name__ in {
+            "M08CommutingConstruction", "M13InvariantBlocks", "M17ProjectionBlocks", "M27UniformLimit"}
+        label = "Key idea" if key else "Takeaway"
+        top = para(r"\textbf{"+label+r".} "+inference,width=12.2,size=26)
         top.move_to([0,self.content_top-.35,0])
         if top.height > .8:
             raise ValueError(f"inference is too long: {type(self).__name__}")
-        reason = para(r"\textbf{Justification.} "+justification,width=12.2,size=23)
-        if reason.height > .95:
+        if key:
+            self.add(Rectangle(width=12.4,height=max(.56,top.height+.16),
+                               color=CURRENT,stroke_width=2).move_to(top))
+        reason = para(r"\textbf{What this gives us.} "+justification,width=12.2,size=23)
+        if reason.height > .7:
             raise ValueError(f"justification is too long: {type(self).__name__}")
-        reason.move_to([0,-2.76,0])
-        self.add(top,reason)
+        reason.move_to([0,-2.65,0])
+        reminder = tex(script.reminder,size=20,color=MUTED)
+        if reminder.width > 12.1:
+            reminder.scale_to_fit_width(12.1)
+        reminder.move_to([0,-2.06,0])
+        self.add(top,reason,reminder)
 
     def put(self,mob,side="full"):
         width = 12.2 if side=="full" else 5.7
-        factor = min(1,width/mob.width,3.35/mob.height)
+        factor = min(1,width/mob.width,3.1/mob.height)
         if factor < .56:
             raise ValueError(f"content too dense in {type(self).__name__}: {factor:.2f}")
         mob.scale(factor).move_to([{"full":0,"left":-3.23,"right":3.23}[side],-.13,0])
@@ -107,7 +149,6 @@ class MatchingSlide(DeckSlide):
 
 
 class M00Problem(MatchingSlide):
-    kicker = "Goal: a finite real transport problem"
     def body(self):
         self.start("Find the smallest full trace displacement of an orthogonal transporter.",
                    "Only the image subspace is prescribed; all ambient orthogonal competitors are allowed.")
@@ -119,21 +160,20 @@ class M00Problem(MatchingSlide):
 
 
 class M01PrincipalPlanes(MatchingSlide):
-    kicker = "Geometry: decompose the subspaces before studying the optimizer"
     def body(self):
         self.start("Positive principal angles give mutually orthogonal real planes.",
                    "The SVD diagonalizes source--target overlaps. This does not yet constrain the minimizing W.")
         planes=VGroup(principal_plane(.45,"first principal plane"),
                       principal_plane(.9,"second principal plane")).arrange(RIGHT,buff=.65)
         self.put(planes,"left")
-        self.put(column(r"\langle u_i,v_j\rangle=\delta_{ij}\cos\theta_i",
+        self.put(column(r"\langle u_i,v_i\rangle=\cos\theta_i",
+                        r"\langle u_i,v_j\rangle=0\quad(i\ne j)",
                         r"q_i=\frac{v_i-\cos\theta_i\,u_i}{\sin\theta_i}",
                         r"\Pi_i=\operatorname{span}(u_i,q_i)",
                         r"\Pi_i\perp\Pi_j\quad(i\ne j)",size=30),"right")
 
 
 class M02Singleton(MatchingSlide):
-    kicker = "Local construction: one angle, two determinant classes"
     def body(self):
         self.start("A singleton chooses the cheaper of a rotation and a reflection.",
                    "A rotation has two equal displacement singular values; a reflection has values 0 and 2.")
@@ -144,7 +184,6 @@ class M02Singleton(MatchingSlide):
 
 
 class M03PairedBlock(MatchingSlide):
-    kicker = "Local construction: a block diagram of four real dimensions"
     def body(self):
         self.start("Two principal planes can interact within one four-dimensional block.",
                    "The paired construction rotates a different invariant plane and fixes its orthogonal complement.")
@@ -153,14 +192,13 @@ class M03PairedBlock(MatchingSlide):
                     VGroup(card(r"R_{\theta_i+\theta_j}",WANTED),card(r"I_2",MUTED)).arrange(RIGHT,buff=.3),
                     tex("Moving plane + fixed plane",size=26))
         self.put(left,"left")
-        self.put(column(r"s(I-W_{ij})=",
+        self.put(column(tex("Displacement singular values",size=27),
                         r"\bigl(2\sin h,2\sin h,0,0\bigr)",
                         r"h=(\theta_i+\theta_j)/2",
                         card(r"e_{ij}=4\sin h",CURRENT)),"right")
 
 
 class M04Graph(MatchingSlide):
-    kicker = "Finite general graph: each label belongs to at most one edge"
     def body(self):
         self.start("Pair choices form a maximum-weight matching problem.",
                    r"Selecting edge $\{i,j\}$ replaces singleton costs $s_i+s_j$ by $e_{ij}$; shared endpoints are disallowed.")
@@ -175,20 +213,18 @@ class M04Graph(MatchingSlide):
 
 
 class M05TwoBounds(MatchingSlide):
-    kicker = "Proof plan: construction and global optimality are separate"
     def body(self):
-        self.start("We need both inequalities to identify the unrestricted minimum.",
-                   "A block construction gives an upper bound. The converse must rule out improvement by unrestricted mixing.")
-        self.put(column(tex("Construct from a matching",size=28,color=WANTED),
-                        r"M\longmapsto W_M",
-                        card(r"\mathrm{OPT}\le\min_M C(M)",WANTED),size=32),"left")
-        self.put(column(tex("Analyze a global minimizer",size=28,color=TRIAL),
-                        r"W_*\longmapsto\text{small blocks}\longmapsto M_*",
-                        card(r"\mathrm{OPT}\ge\min_M C(M)",TRIAL),size=29),"right")
+        self.start("We have candidates. We still need to rule out profitable many-way mixing.",
+                   "Legal wiggles will reveal why a global minimizer can be split into small pieces.")
+        self.put(column(tex("Already available",size=29,color=WANTED),
+                        r"M\longmapsto W_M",card(r"\mathrm{OPT}\le\min_M C(M)",WANTED)),"left")
+        self.put(column(tex("The geometric work ahead",size=29,color=TRIAL),
+                        tex("Construct legal wiggles",size=29),math(r"\Downarrow"),
+                        tex("Get equations at a minimizer",size=29),math(r"\Downarrow"),
+                        tex("Find independent small pieces",size=29),buff=.12),"right")
 
 
 class M06SmoothCost(MatchingSlide):
-    kicker = "Step 1: work with a differentiable auxiliary objective"
     def body(self):
         self.start("Replace the trace norm by a smooth power cost for $1<p<2$.",
                    "The matrix power sum is differentiable for p>1, including zero singular values; return to p=1 by a limit.")
@@ -205,11 +241,10 @@ class M06SmoothCost(MatchingSlide):
 
 
 class M07Existence(MatchingSlide):
-    kicker = "Step 1(a): compactness permits choosing an actual minimizer"
     def body(self):
         self.start("The smooth cost attains a global minimum on the feasible set.",
                    "Extend orthonormal bases for nonemptiness; use closedness, boundedness, and continuity for attainment.")
-        self.put(column(r"\mathcal F=\{W\in O(n):WPW^T=Q\}",
+        self.put(column(r"\mathcal F=\{W:W^TW=I,\ W(K)=L\}",
                         VGroup(card(r"\mathcal F\ne\varnothing",WANTED),
                                card(r"\mathcal F\ \text{compact}",TRIAL),
                                card(r"\Phi_p\ \text{continuous}",CURRENT)).arrange(RIGHT,buff=.5),
@@ -217,20 +252,37 @@ class M07Existence(MatchingSlide):
 
 
 class M08FeasibleCurves(MatchingSlide):
-    kicker = "Step 2(a): rotate within the source and its complement"
     def body(self):
-        self.start(r"Skew B commuting with P gives a feasible curve $W\exp(tB)$.",
-                   "The exponential and its inverse are orthogonal and preserve K, so composition still carries K onto L.")
-        self.put(column(block_matrix([[r"B_{00}","0"],["0",r"B_{11}"]],color=TRIAL),
-                        tex(r"Coordinates: $K\oplus K^\perp$",size=25)),"left")
-        self.put(column(r"B^T=-B,\qquad BP=PB",
-                        r"\exp(tB)^T=\exp(-tB)",
-                        r"\exp(tB)K=K",
-                        r"W\exp(tB)K=L",size=32),"right")
+        self.start("Pre-rotate inside K; the whole image remains L.",
+                   "This constructs actual competitors for the unknown minimizer.")
+        tracker=ValueTracker(0)
+        screen=np.array([[.9,.15,-.3],[.1,.7,.65]])
+        w,_=source_plane_wiggle(0)
+        centers=[np.array([-3.,0.,0.]),np.array([3.,0.,0.])]
+        def point(vector,center):
+            return center+np.r_[1.15*(screen@vector),0.]
+        for basis,center,label,color in [(np.eye(3)[:,:2],centers[0],"same source K",TRIAL),
+                                         (w[:,:2],centers[1],"same target L",WANTED)]:
+            corners=[point(basis@np.array([a,b]),center) for a,b in [(-1,-1),(1,-1),(1,1),(-1,1)]]
+            self.add(Polygon(*corners,color=color,fill_color=color,fill_opacity=.09),
+                     tex(label,size=27,color=color).move_to(center+UP*1.35))
+        def vectors():
+            fixed,variation=source_plane_wiggle(tracker.get_value())
+            return VGroup(*(Arrow(center,point(matrix[:,j],center),buff=0,color=color,stroke_width=5)
+                            for matrix,center,color in [(variation,centers[0],TRIAL),(fixed@variation,centers[1],WANTED)]
+                            for j in range(2)))
+        arrows=always_redraw(vectors)
+        self.add(arrows,Arrow([-1.2,0,0],[1.2,0,0],buff=.1,color=FG),
+                 math("W",size=31).move_to([0,.45,0]))
+        self.beat()
+        self.play(tracker.animate.set_value(1.1),run_time=2.8)
+        self.add(math(r"V_t(K)=K\quad\Longrightarrow\quad WV_t(K)=L",size=30).move_to([0,-1.48,0]))
+        self.beat()
+        self.play(tracker.animate.set_value(.35),run_time=1.8)
+        self.add(tex("Vectors move",size=23,color=MUTED).move_to([0,-.65,0]))
 
 
 class M09RotationCost(MatchingSlide):
-    kicker = "Step 2(b): a rotation contributes two chord singular values"
     def body(self):
         self.start("A real rotation plane contributes $2f_p(t)$ to the power cost.",
                    "Every unit vector has chord displacement 2 sin(t/2); the plane supplies two singular values.")
@@ -253,177 +305,236 @@ class M09RotationCost(MatchingSlide):
 
 
 class M10SignAverage(MatchingSlide):
-    kicker = "Step 2(b): justify the derivative for directions that mix planes"
     def body(self):
-        self.start("Averaging sign conjugations removes off-diagonal blocks of B without changing the derivative.",
-                   "The first variation is linear; block sign changes commute with W and preserve displacement singular values.")
-        before=block_matrix([[r"B_{00}",r"B_{01}"],[r"B_{10}",r"B_{11}"]])
-        after=block_matrix([[r"B_{00}","0"],["0",r"B_{11}"]])
-        self.put(before,"left")
-        self.put(column(r"S=\operatorname{diag}(I,-I)",
-                        r"\mathcal L(SBS)=\mathcal L(B)",
-                        r"\mathcal L(B)=\mathcal L\left(\frac{B+SBS}{2}\right)",
-                        tex("Repeat signs independently for all blocks",size=24),size=30),"right")
-        after.scale(before.width/after.width).move_to(before)
-        self.play(Transform(before,after),run_time=1.3)
+        self.start("Compare equal cost-change rates; averaging cancels the mixing terms.",
+                   "This extends the rotation-plane derivative calculation to directions that mix the planes.")
+        labels=[[[r"B_{00}",r"B_{01}"],[r"B_{10}",r"B_{11}"]],
+                [[r"B_{00}",r"-B_{01}"],[r"-B_{10}",r"B_{11}"]],
+                [[r"B_{00}","0"],["0",r"B_{11}"]]]
+        matrices=[block_matrix(entries).scale(.78).move_to([x,0,0]) for entries,x in zip(labels,[-4.,0.,4.])]
+        self.add(*matrices[:2],math("B",size=28).move_to([-4,1.15,0]),
+                 math("SBS",size=28).move_to([0,1.15,0]))
+        definition=math(r"\mathrm{rate}(B):=\left.\frac{d}{dt}\Phi_p(We^{tB})\right|_{t=0}",size=28)
+        definition.move_to([0,-1.5,0]); self.add(definition)
+        self.beat()
+        self.add(math(r"\tfrac12(B+SBS)",size=27).move_to([4,1.15,0]))
+        self.play(TransformFromCopy(matrices[0],matrices[2]),run_time=1.5)
+        equal=math(r"\mathrm{rate}(B)=\mathrm{rate}(SBS)=\mathrm{rate}\bigl(\tfrac12(B+SBS)\bigr)",size=26).move_to([0,-.98,0])
+        self.play(Create(equal),run_time=1.2)
+        self.add(tex("S keeps one block and flips the other",size=22,color=MUTED).move_to([0,1.48,0]))
 
 
 class M11TracePairing(MatchingSlide):
-    kicker = "Step 2(b): identify G, including the sign and factor two"
     def body(self):
-        self.start(r"The general first variation is $-\operatorname{tr}(GB)$.",
-                   "After sign averaging, compute on each rotation plane and add; scalar lines have zero diagonal skew direction.")
+        self.start(r"The cost-change rate is $-\operatorname{tr}(GB)$.",
+                   "Add the rotation-plane responses; sign cancellation has already dealt with mixing.")
         self.put(column(r"J_0=\begin{pmatrix}0&-1\\1&0\end{pmatrix}",
-                        r"B_{aa}=bJ_0,\qquad G_{aa}=f'_p(\theta)J_0",
+                        r"B_{aa}=bJ_0,\qquad G_{aa}=f'_p(\varphi)J_0",
                         r"J_0^2=-I_2",size=31),"left")
-        self.put(column(r"\frac{d}{dt}\,2f_p(\theta+tb)\Big|_{t=0}=2bf'_p(\theta)",
-                        r"-\operatorname{tr}(G_{aa}B_{aa})=2bf'_p(\theta)",
+        self.put(column(r"\frac{d}{dt}\,2f_p(\varphi+tb)\Big|_{t=0}=2bf'_p(\varphi)",
+                        r"-\operatorname{tr}(G_{aa}B_{aa})=2bf'_p(\varphi)",
                         card(r"\frac{d}{dt}\Phi_p(We^{tB})\Big|_0=-\operatorname{tr}(GB)",RESID,size=29),size=29),"right")
 
 
 class M12Stationarity(MatchingSlide):
-    kicker = "Step 2(c): test the gradient with its own source compression"
     def body(self):
-        self.start("Stationarity forces both diagonal source blocks of G to vanish.",
-                   "Choose B=PGP; it is feasible and -tr(B squared) is its squared Frobenius norm. Repeat on the complement.")
+        self.start("A surviving internal response would give a legal test that detects it.",
+                   "Both diagonal source blocks of G must vanish; only cross terms remain.")
         grid=block_matrix([[r"G_{00}",r"G_{01}"],[r"-G_{01}^T",r"G_{11}"]])
         self.put(grid,"left")
-        self.put(column(r"B=PGP",
-                        r"0=-\operatorname{tr}(GB)=-\operatorname{tr}(B^2)=\|B\|_F^2",
-                        r"J=2P-I,\qquad JGJ=-G",size=31),"right")
-        zero=block_matrix([["0",r"G_{01}"],[r"-G_{01}^T","0"]])
-        zero.scale(grid.width/zero.width).move_to(grid)
-        self.play(Transform(grid,zero),run_time=1.2)
+        self.add(tex(r"Coordinates: $K\oplus K^\perp$",size=24,color=MUTED).move_to([-3.23,-1.55,0]))
+        right=self.put(column(r"B=PGP=\begin{pmatrix}G_{00}&0\\0&0\end{pmatrix}",
+                              tex("Choose this available internal velocity",size=24),size=29),"right")
+        self.play(Indicate(grid[0:2],color=TRIAL),run_time=.8)
+        self.beat()
+        calculation=column(r"0=-\operatorname{tr}(GB)",r"=-\operatorname{tr}(B^2)=\|B\|_F^2",r"=\sum_{i,j}B_{ij}^2",r"\Longrightarrow\quad G_{00}=0",size=29).move_to(right)
+        self.play(Transform(right,calculation),run_time=1.3)
+        partial=block_matrix([["0",r"G_{01}"],[r"-G_{01}^T",r"G_{11}"]]).move_to(grid)
+        self.play(Transform(grid,partial),run_time=1.)
+        self.beat()
+        zero=block_matrix([["0",r"G_{01}"],[r"-G_{01}^T","0"]]).move_to(grid)
+        final=column(tex("Repeat inside the complement",size=25),r"G_{00}=G_{11}=0",
+                     r"J=2P-I=\begin{pmatrix}I&0\\0&-I\end{pmatrix}",r"JGJ=-G",size=29).move_to(right)
+        self.play(Transform(grid,zero),Transform(right,final),run_time=1.3)
 
 
 class M13TwoDecompositions(MatchingSlide):
-    kicker = "Checkpoint: the two coordinate systems have different jobs"
     def body(self):
         self.start("W's rotation planes and the source decomposition need not coincide.",
                    "The equations GW=WG and JGJ=-G connect them; neither equation assumes W preserves the original principal planes.")
         self.put(column(tex("Rotation-plane coordinates of W",size=28,color=WANTED),
-                        block_matrix([[r"R_{\theta_a}","0"],["0",r"R_{\theta_b}"]],color=WANTED),
-                        r"G_{aa}=f'_p(\theta_a)J_0",size=29),"left")
+                        block_matrix([[r"R_{\varphi_a}","0"],["0",r"R_{\varphi_b}"]],color=WANTED),
+                        r"G_{aa}=f'_p(\varphi_a)J_0,\quad GW=WG",size=29),"left")
         self.put(column(tex("Source coordinates",size=28,color=TRIAL),
                         block_matrix([["0",r"G_{01}"],[r"-G_{01}^T","0"]]),
                         r"K\oplus K^\perp",size=29),"right")
 
 
 class M14GradientLevels(MatchingSlide):
-    kicker = "Step 3(a): first find simultaneous invariant spaces"
     def body(self):
-        self.start("Eigenspaces of $-G^2$ are preserved by W, P, and Q.",
-                   "The square commutes with both W and J; commuting operators preserve its eigenspaces, and Q=WPW transpose.")
-        self.put(column(r"\langle-G^2x,x\rangle=\|Gx\|^2\ge0",
-                        r"GW=WG,\quad JGJ=-G",
-                        r"[G^2,W]=[G^2,J]=0",size=32),"left")
-        self.put(column(VGroup(card(r"V_{g_1}",RESID),card(r"V_{g_2}",RESID),
-                               card(r"\ker G",MUTED)).arrange(RIGHT,buff=.25),
-                        r"-G^2|_{V_g}=g^2I",
-                        r"P=(I+J)/2,\qquad Q=WPW^T",size=30),"right")
+        self.start("Squaring removes the sign reversal and reveals common invariant pieces.",
+                   "We can split by response strength. These pieces may still have many dimensions.")
+        k=card("K",TRIAL).move_to([-4.6,0,0]); comp=card(r"K^\perp",FG).move_to([-1.9,0,0])
+        diagram=VGroup(k,comp,Arrow(k.get_right()+UP*.2,comp.get_left()+UP*.2,buff=.1,color=RESID),
+                 Arrow(comp.get_left()+DOWN*.2,k.get_right()+DOWN*.2,buff=.1,color=RESID),
+                 math("G",size=27,color=RESID).move_to([-3.3,.55,0]),
+                 tex("Twice returns to the same side",size=24).move_to([-3.3,-.8,0]))
+        self.add(diagram)
+        right=self.put(column(r"JGJ=-G\quad\Longrightarrow\quad JG^2J=G^2",
+                              r"A:=-G^2,\quad\langle Ax,x\rangle=\|Gx\|^2",size=28),"right")
+        self.beat()
+        groups=column(card(r"V_{g_1}:\ A=g_1^2I",RESID,size=27),
+                      card(r"V_{g_2}:\ A=g_2^2I",RESID,size=27),
+                      card(r"\ker G",MUTED,size=27),buff=.24)
+        groups.move_to([-3.23,-.13,0])
+        final=column(r"A=-G^2",r"Ax=g^2x,\quad AW=WA",r"A(Wx)=W(Ax)=g^2Wx",
+                     tex("So W x stays in the same group",size=24),
+                     tex("The same holds for P and Q",size=24),size=29).move_to(right)
+        self.play(Transform(diagram,groups),Transform(right,final),run_time=1.4)
 
 
 class M15ComplexCoordinates(MatchingSlide):
-    kicker = "Step 3(a): normalize a positive gradient level"
     def body(self):
-        self.start(r"On $V_g$ with g>0, $\mathcal I_g=G/g$ acts as multiplication by i.",
-                   "Its square is -I and it preserves lengths; W commutes with it, while the source reflection reverses it.")
-        center=Dot(radius=.03,color=FG)
-        x=Arrow([0,0,0],[1.2,0,0],buff=0,color=RESID)
-        guide=VGroup(Circle(radius=1.2,color=FAINT),
-                     Line([-1.4,0,0],[1.4,0,0],color=MUTED),
-                     Line([0,-1.4,0],[0,1.4,0],color=MUTED),center,x)
-        self.put(guide,"left")
-        self.put(column(r"\mathcal I_g^2=-I",
-                        r"(a+ib)x=ax+b\mathcal I_gx",
-                        r"W\mathcal I_g=\mathcal I_gW",
-                        r"J\mathcal I_g=-\mathcal I_gJ",size=31),"right")
-        self.play(Rotate(x,np.pi/2,about_point=center.get_center()),run_time=1.)
-        self.play(Rotate(x,np.pi/2,about_point=center.get_center()),run_time=1.)
+        self.start("A normalized response pairs real directions exactly like multiplication by i.",
+                   "Complex coordinates let us use phases while conjugation still remembers the source.")
+        center=np.array([-3.3,-.1,0.]); arrow=Arrow(center,center+[1.2,0,0],buff=0,color=RESID)
+        self.add(Circle(radius=1.2,color=FAINT).move_to(center),
+                 Line(center+[-1.4,0,0],center+[1.4,0,0],color=TRIAL),
+                 Line(center+[0,-1.4,0],center+[0,1.4,0],color=MUTED),arrow,
+                 math("u",size=28,color=TRIAL).move_to(center+[1.5,-.2,0]))
+        right=self.put(column(r"\mathcal I_g:=G/g",r"\mathcal I_g^2=-I",r"\|\mathcal I_gx\|=\|x\|",size=31),"right")
+        self.beat()
+        self.play(Rotate(arrow,np.pi/2,about_point=center),run_time=1.3)
+        self.add(math(r"\mathcal I_gu=iu",size=27,color=RESID).move_to(center+[-.7,1.45,0]))
+        self.play(Rotate(arrow,np.pi/2,about_point=center),run_time=1.3)
+        next_content=column(r"u,\ \mathcal I_gu\quad\longleftrightarrow\quad1,\ i",
+                            r"(a+ib)x=ax+b\mathcal I_gx",
+                            tex("Same real space, paired coordinates",size=24),size=29).move_to(right)
+        self.play(Transform(right,next_content),run_time=1.)
+        self.beat()
+        final=column(r"W\mathcal I_g=\mathcal I_gW",tex("W is complex-linear",size=25),
+                     r"J(a+ib)=a-ib",tex("J remembers the source half",size=25),size=29).move_to(right)
+        self.play(Transform(right,final),run_time=1.2)
+        self.add(tex("J fixes u; it reverses i u",size=23,color=MUTED).move_to([-3.3,-1.62,0]))
 
 
 class M16TwoPhases(MatchingSlide):
-    kicker = "Step 3(b): a scalar equation limits the possible phases"
     def body(self):
-        self.start("A positive gradient level has at most two eigenphases of W.",
-                   "The derivative f prime rises then falls once, so a positive horizontal level meets it at most twice.")
-        ax=Axes(x_range=[0,np.pi,1],y_range=[0,1.5,.5],x_length=5,y_length=2.5,
+        self.start("A fixed positive response strength allows at most two rotation phases.",
+                   "We still need to split repeated phase spaces while preserving the source structure.")
+        ax=Axes(x_range=[0,np.pi,1],y_range=[0,1.5,.5],x_length=4.7,y_length=2.35,
                 axis_config={"color":MUTED,"include_tip":False})
+        curve=ax.plot(lambda t:float(phase_derivative(t,1.5)),color=RESID)
+        line=DashedLine(ax.c2p(0,.8),ax.c2p(np.pi,.8),color=GAP)
+        picture=VGroup(ax,curve,line,math("t",size=23).next_to(ax.x_axis,RIGHT,buff=.1),
+                       math("g",size=25,color=GAP).next_to(ax.c2p(0,.8),LEFT,buff=.1),
+                       math(r"f'_p(t)",size=24,color=RESID).next_to(ax.y_axis,UP,buff=.1))
+        self.put(picture,"left")
         roots=phase_level_roots(1.5,.8)
-        diagram=VGroup(ax,ax.plot(lambda t:float(phase_derivative(t,1.5)),color=RESID),
-                       DashedLine(ax.c2p(0,.8),ax.c2p(np.pi,.8),color=GAP),
-                       math("t",size=23).next_to(ax.x_axis,RIGHT,buff=.1),
-                       math(r"f'_p(t)",size=23,color=RESID).next_to(ax.y_axis,UP,buff=.1),
-                       math("g",size=23,color=GAP).next_to(ax.c2p(0,.8),LEFT,buff=.12))
-        for t in roots:
-            diagram.add(Dot(ax.c2p(t,.8),color=SINE))
-        self.put(column(diagram,math(r"p=3/2,\quad f'_p(t)=g",size=26)),"left")
-        self.put(column(r"f'_p(t)=p(2\sin(t/2))^{p-1}\cos(t/2)",
-                        r"f''_p(t)=0\ \Longleftrightarrow\ \tan^2(t/2)=p-1",
-                        r"W=e^{i\varphi_1}E+e^{i\varphi_2}(I-E)",
-                        tex("Multiplicity still requires a block argument",size=24),size=29),"right")
+        markers=VGroup(*(Dot(ax.c2p(t,.8),color=SINE) for t in roots))
+        self.play(Create(markers),run_time=1.)
+        right=self.put(column(r"f'_p(t)=p(2\sin(t/2))^{p-1}\cos(t/2)",
+                              r"f''_p(t)=0\ \Longleftrightarrow\ \tan^2(t/2)=p-1",
+                              tex(r"One peak on $0<t<\pi$",size=25),
+                              r"f'_p(t)=g:\quad\varphi_1,\ \varphi_2",size=26),"right")
+        self.beat()
+        next_content=column(r"W=e^{i\varphi_1}E+e^{i\varphi_2}(I-E)",
+                            tex("E selects the first phase space",size=25),
+                            tex("Each phase may repeat many times",size=25,color=SINE),size=29).move_to(right)
+        self.play(Transform(right,next_content),run_time=1.3)
 
 
 class M17ProjectionBlocks(MatchingSlide):
-    kicker = "Step 3(c): preserve the phase projection and conjugation together"
     def body(self):
-        self.start("Real and imaginary parts of E split coordinate space into invariant lines or planes.",
-                   "Y pairs an X-eigenvector at lambda with one at 1-lambda; normalize Yu, then repeat on the orthogonal complement.")
-        nodes=VGroup(card(r"Xu=\lambda u"),card(r"Xv=(1-\lambda)v")).arrange(RIGHT,buff=1.1)
-        arrow=Arrow(nodes[0].get_right(),nodes[1].get_left(),buff=.1,color=RESID)
-        diagram=column(VGroup(nodes,arrow),r"Yu=\eta v,\quad Yv=-\eta u",
-                       r"\eta=\sqrt{\lambda(1-\lambda)}",size=29)
-        self.put(diagram,"left")
-        self.put(column(r"E=X+iY,\quad X^T=X,\quad Y^T=-Y",
-                        r"X^2-Y^2=X,\qquad XY+YX=Y",
-                        r"0<\lambda<1:\ \operatorname{span}_{\mathbb R}(u,v)",
-                        r"\lambda=0,1:\ Yu=0",size=29),"right")
+        self.start("Starting from an X-eigenvector, one partner closes a line or plane.",
+                   "That closed line or plane is the small invariant piece we were looking for.")
+        right=self.put(column(r"E=X+iY,\quad X^T=X,\quad Y^T=-Y",
+                              r"X^2-Y^2=X,\quad XY+YX=Y",
+                              tex("Expand the projection equation E squared = E",size=23),size=28),"right")
+        u=card("u",size=35).move_to([-4.8,0,0]); v=card("v",size=35).move_to([-1.8,0,0])
+        self.add(u,tex("Start with one X-eigenvector",size=24).move_to([-3.3,1.15,0]),
+                 math(r"Xu=\lambda u",size=28).move_to([-4.8,-1.15,0]))
+        self.beat()
+        self.add(v,math(r"Xv=(1-\lambda)v",size=27).move_to([-1.8,-1.15,0]))
+        arrow=Arrow(u.get_right()+UP*.18,v.get_left()+UP*.18,buff=.1,color=RESID)
+        partner=column(r"Xu=\lambda u",
+                       r"Y^2u=(X^2-X)u=-\lambda(1-\lambda)u",
+                       r"X(Yu)=(1-\lambda)Yu",
+                       r"\eta=\|Yu\|=\sqrt{\lambda(1-\lambda)}",size=27).move_to(right)
+        self.play(Create(arrow),Transform(right,partner),run_time=1.2)
+        self.add(math(r"Yu=\eta v",size=27,color=RESID).move_to([-3.3,.6,0]))
+        self.beat()
+        back=Arrow(v.get_left()+DOWN*.18,u.get_right()+DOWN*.18,buff=.1,color=RESID)
+        self.play(Create(back),run_time=1.2)
+        self.add(math(r"Yv=-\eta u",size=27,color=RESID).move_to([-3.3,-.55,0]))
+        self.play(Create(Rectangle(width=4.45,height=1.65,color=CURRENT).move_to([-3.3,0,0])),run_time=.8)
+        final=column(r"\eta=\sqrt{\lambda(1-\lambda)}",
+                     r"Yv=Y^2u/\eta=-\eta u",r"0<\lambda<1:\quad\operatorname{span}(u,v)",
+                     r"\lambda=0,1:\quad Yu=0\quad\text{(one line)}",
+                     tex("No third independent direction is needed",size=24),size=28).move_to(right)
+        self.play(Transform(right,final),run_time=1.2)
 
 
 class M18RealBlocks(MatchingSlide):
-    kicker = "Step 3(c): convert complex-coordinate dimensions back to real dimensions"
     def body(self):
-        self.start("The simultaneous real blocks carry one or two angle entries.",
-                   "Complexifying a real coordinate line or plane gives real dimension two or four; J fixes half the dimensions.")
-        line=VGroup(card(r"\mathbb C",RESID),math(r"\longrightarrow"),
-                    card(r"\mathbb R^2",WANTED),math(r"\longrightarrow"),
-                    card(r"\theta_i",SINE)).arrange(RIGHT,buff=.4)
-        plane=VGroup(card(r"\mathbb C^2",RESID),math(r"\longrightarrow"),
-                     card(r"\mathbb R^4",WANTED),math(r"\longrightarrow"),
-                     card(r"\theta_i,\theta_j",SINE)).arrange(RIGHT,buff=.4)
-        self.put(column(line,plane,r"E,J\ \Longrightarrow\ W,P,Q\ \text{preserve each block}",buff=.42))
+        self.start("One or two complex coordinates give one or two source angle entries.",
+                   "We have recovered singles and pairs from the structure of an unrestricted minimizer.")
+        line=VGroup(card("u",TRIAL,size=32),card("iu",FG,size=32)).arrange(RIGHT,buff=.35)
+        pair=VGroup(card("u",TRIAL,size=32),card("v",TRIAL,size=32),
+                    card("iu",FG,size=32),card("iv",FG,size=32)).arrange(RIGHT,buff=.35)
+        self.put(column(line,tex("One complex coordinate = two real directions",size=25),
+                        pair,tex("Two complex coordinates = four real directions",size=25),buff=.3),"left")
+        right=self.put(column(tex("These are real direction counts",size=27),
+                              tex("Not a picture of a four-dimensional solid",size=23)),"right")
+        self.beat()
+        final=column(r"J(u)=u,\quad J(iu)=-iu",tex("Amber tiles: the source half",size=25,color=TRIAL),
+                     r"\mathbb R^2:\ \text{one source direction}\ \longrightarrow\ \theta_i",
+                     r"\mathbb R^4:\ \text{two source directions}\ \longrightarrow\ \theta_i,\theta_j",size=28).move_to(right)
+        self.play(Transform(right,final),run_time=1.5)
 
 
 class M19ZeroGradient(MatchingSlide):
-    kicker = "Step 3(d): do not divide by the zero level"
     def body(self):
-        self.start("The kernel of G contributes fixed lines and one-angle planes.",
-                   "There W is a reflection. Two-projection geometry gives small blocks; a needless -1 line contradicts global minimality.")
-        self.put(column(r"G=0\ \Longrightarrow\ W=I-2N",
-                        r"N:\text{ projection onto the }-1\text{ eigenspace}",
-                        r"\text{Common blocks for }P,N\text{ also preserve }W,Q",size=29),"left")
-        self.put(column(card(r"W|_\ell=-1\quad\text{cost }2^p",TRIAL),
-                        math(r"\Downarrow"),
-                        card(r"W|_\ell=+1\quad\text{cost }0",WANTED),
-                        tex("Same source and target on this invariant line",size=23)),"right")
+        self.start("On the zero group, reflection geometry supplies the remaining small pieces.",
+                   "A needless negative-one action on an invariant line can be replaced by identity.")
+        origin=np.array([-3.3,-.1,0.]); angle=.65
+        self.add(Line(origin+[-1.5,0,0],origin+[1.5,0,0],color=TRIAL),
+                 Line(origin-1.5*np.array([np.cos(angle),np.sin(angle),0]),
+                      origin+1.5*np.array([np.cos(angle),np.sin(angle),0]),color=WANTED),
+                 DashedLine(origin-1.5*np.array([np.cos(angle/2),np.sin(angle/2),0]),
+                            origin+1.5*np.array([np.cos(angle/2),np.sin(angle/2),0]),color=MUTED),
+                 tex("Reflection carries K onto L",size=25).move_to([-3.3,-1.3,0]))
+        right=self.put(column(r"G=0\quad\Longrightarrow\quad W=I-2N",
+                              tex("Two projections: P and N",size=27),
+                              tex("Their principal lines and planes give pieces",size=23),size=29),"right")
+        self.beat()
+        final=column(r"W|_\ell=-1\quad\text{cost }2^p",math(r"\Downarrow"),
+                     r"W|_\ell=+1\quad\text{cost }0",
+                     tex("Same source and target on this invariant line",size=23),size=29).move_to(right)
+        self.play(Transform(right,final),run_time=1.3)
 
 
 class M20PairCoordinates(MatchingSlide):
-    kicker = "Step 4(b): source-adapted coordinates parametrize all pair competitors"
     def body(self):
-        self.start(r"Every transporter on a two-angle block is $D\operatorname{diag}(U_0,U_1)$.",
-                   "Multiplying by D transpose preserves the source, hence its complement. The free factors may mix principal planes.")
-        self.put(column(block_matrix([["C","-S"],["S","C"]],color=SINE),
-                        r"D,\quad C=\operatorname{diag}(\cos\theta_i,\cos\theta_j)",
-                        r"S=\operatorname{diag}(\sin\theta_i,\sin\theta_j)",size=27),"left")
-        self.put(column(r"W=D\begin{pmatrix}U_0&0\\0&U_1\end{pmatrix}",
-                        r"U_0,U_1\in O(2)",
-                        tex(r"Coordinates: $K$ then $K^\perp$",size=26),
-                        r"\det W=(\det U_0)(\det U_1)",size=31),"right")
+        self.start("Every local transporter is a fixed direct rotation after internal orthogonal changes.",
+                   "The same pre-change geometry now parametrizes every competitor on one pair.")
+        left=self.put(column(card("K",TRIAL),math(r"\xrightarrow{\ D\ }"),card("L",WANTED),
+                             tex("One known reference transporter",size=24)),"left")
+        right=self.put(column(r"D=\begin{pmatrix}C&-S\\S&C\end{pmatrix}",
+                              r"C=\operatorname{diag}(\cos\theta_i,\cos\theta_j)",
+                              r"S=\operatorname{diag}(\sin\theta_i,\sin\theta_j)",size=28),"right")
+        self.beat()
+        next_content=column(r"D^TW(K)=K",r"D^TW=\begin{pmatrix}U_0&0\\0&U_1\end{pmatrix}",
+                            card(r"W=D\operatorname{diag}(U_0,U_1)",CURRENT,size=28),
+                            tex(r"$U_0,U_1$: orthogonal $2\times2$ matrices",size=25),size=29).move_to(right)
+        self.play(Transform(right,next_content),run_time=1.5)
+        reminder=column(card(r"K\xrightarrow{\ U_0\ }K",TRIAL,size=27),
+                        card(r"K^\perp\xrightarrow{\ U_1\ }K^\perp",FG,size=27),
+                        math(r"\xrightarrow{\ D\ }"),card("L",WANTED),buff=.2).move_to(left)
+        self.play(Transform(left,reminder),run_time=1.2)
 
 
 class M20PhaseParameters(MatchingSlide):
-    kicker = "Step 4(b): use half-sums of the free-factor angles"
     def body(self):
         self.start("Both positive-determinant cases have explicit cosine parameters x and y.",
                    "The two free factors have the same determinant: both rotations, or both rotations composed with a reflection.")
@@ -439,7 +550,6 @@ class M20PhaseParameters(MatchingSlide):
 
 
 class M20PhasePolynomial(MatchingSlide):
-    kicker = "Step 4(b): traces identify the eigenphases without choosing eigenvectors"
     def body(self):
         self.start(r"The four eigenvalues are $e^{\pm i(x+y)}$ and $e^{\pm i(x-y)}$.",
                    "Block multiplication gives the two traces; orthogonality and determinant one fix the reciprocal polynomial. Factor it.")
@@ -451,7 +561,6 @@ class M20PhasePolynomial(MatchingSlide):
 
 
 class M20RectangleBounds(MatchingSlide):
-    kicker = "Step 4(b): cosine bounds place both determinant-one cases in one rectangle"
     def body(self):
         self.start(r"Both cases satisfy $h\le x\le\pi-h$ and $d\le y\le\pi-d$.",
                    r"Cosine decreases on $[0,\pi]$. The reflection intervals fit inside the rotation rectangle because $h+d\le\pi/2$.")
@@ -473,7 +582,6 @@ class M20RectangleBounds(MatchingSlide):
 
 
 class M21PhaseRectangle(MatchingSlide):
-    kicker = "Step 4(b): compare both phases with an attainable edge point"
     def body(self):
         self.start(r"Every positive-determinant phase point is no cheaper than a point $(h,\tau)$.",
                    r"Choose $\tau=\max(d,h-|x-y|)$. Both new folded phases are no larger; $f_p$ is increasing on $[0,\pi]$.")
@@ -500,7 +608,6 @@ class M21PhaseRectangle(MatchingSlide):
 
 
 class M22PairMinimum(MatchingSlide):
-    kicker = "Step 4(b): the edge bound is attained by an explicit transporter"
     def body(self):
         self.start("The paired power cost is a minimum over one closed scalar interval.",
                    r"Set $U_0=U_1=R_\gamma$ with $\cos\gamma=\cos\tau/\cos d$; this realizes $x=h$, $y=\tau$ for every $\tau\in[d,h]$.")
@@ -521,7 +628,6 @@ class M22PairMinimum(MatchingSlide):
 
 
 class M23Determinants(MatchingSlide):
-    kicker = "Step 4(c): account for both determinant classes"
     def body(self):
         self.start("An unrestricted pair block chooses a paired cost or two singletons.",
                    "The negative class is minimized by a reflection on the larger-angle plane and rotation on the smaller-angle plane.")
@@ -536,19 +642,19 @@ class M23Determinants(MatchingSlide):
 
 
 class M24BlockOptimality(MatchingSlide):
-    kicker = "Step 5(b): global minimality is stronger than stationarity"
     def body(self):
-        self.start("Every simultaneous invariant block of a global minimizer has minimum local cost.",
-                   "Replacing one block by a cheaper transporter preserves feasibility and strictly lowers the sum of costs.")
-        before=VGroup(card(r"W_1",WANTED),card(r"W_2",TRIAL),card(r"W_3",WANTED)).arrange(RIGHT,buff=.6)
-        self.put(column(before,r"\Phi_p(W)=\Phi_p(W_1)+\Phi_p(W_2)+\Phi_p(W_3)",
-                        r"\Phi_p(\widetilde W_2)<\Phi_p(W_2)\quad\Longrightarrow\quad\text{contradiction}",size=31))
-        cheaper=card(r"\widetilde W_2",CURRENT).move_to(before[1])
-        self.play(Transform(before[1],cheaper),run_time=1.2)
+        self.start("An independent piece of a globally cheapest map must itself be cheapest.",
+                   "Replacing just that piece preserves transport and changes only its contribution to the total cost.")
+        blocks=VGroup(card("W_1",FG),card("W_2",TRIAL),card("W_3",FG)).arrange(RIGHT,buff=.65)
+        self.put(column(blocks,r"\Phi_p(W)=\Phi_p(W_1)+\Phi_p(W_2)+\Phi_p(W_3)",
+                        tex("Source and target split along these same pieces",size=26),size=31))
+        self.beat()
+        cheaper=card(r"\widetilde W_2",CURRENT).move_to(blocks[1])
+        self.play(Transform(blocks[1],cheaper),run_time=1.5)
+        self.add(math(r"\Phi_p(\widetilde W_2)<\Phi_p(W_2)\quad\Longrightarrow\quad\text{a cheaper global map}",size=28).move_to([0,-1.6,0]))
 
 
 class M25MatchingEquality(MatchingSlide):
-    kicker = "Step 5: close both inequalities for $1<p<2$"
     def body(self):
         self.start("The unrestricted smooth minimum equals the finite matching minimum.",
                    "Construct from each matching; extract a matching from the blocks of a global minimizer. Costs agree in both directions.")
@@ -563,7 +669,6 @@ class M25MatchingEquality(MatchingSlide):
 
 
 class M26ZeroAngles(MatchingSlide):
-    kicker = "Step 5: justify using only positive angle labels"
     def body(self):
         self.start("Zero-angle directions cannot provide cheaper extra partners.",
                    "A zero singleton costs zero. Removing a zero pairing cannot increase cost, and strict improvement contradicts minimality.")
@@ -574,9 +679,8 @@ class M26ZeroAngles(MatchingSlide):
 
 
 class M27UniformLimit(MatchingSlide):
-    kicker = "Step 6(a): let p approach one from above"
     def body(self):
-        self.start("Uniform convergence carries the minimum values to the trace norm.",
+        self.start("Pass minimum values to the limit; the minimizing maps need not converge.",
                    "All displacement singular values lie in [0,2]. A uniform error bound also bounds the difference of minimum values.")
         ax=Axes(x_range=[0,2,.5],y_range=[0,3,1],x_length=4.8,y_length=2.7,
                 axis_config={"color":MUTED,"include_tip":False})
@@ -593,7 +697,6 @@ class M27UniformLimit(MatchingSlide):
 
 
 class M28EndpointWeights(MatchingSlide):
-    kicker = "Step 6(b): evaluate the scalar minimum at p=1"
     def body(self):
         self.start(r"The paired trace cost is $4\sin h$, attained at $\tau=h$.",
                    "The sum-to-product identity gives 8 sin(h/2) cos(tau/2), which is nonincreasing as tau runs from d to h.")
@@ -607,7 +710,6 @@ class M28EndpointWeights(MatchingSlide):
 
 
 class M29MatchingAlgorithm(MatchingSlide):
-    kicker = "Recover both the minimum cost and an attaining transporter"
     def body(self):
         self.start("Maximum total edge weight gives minimum trace displacement.",
                    r"Each edge subtracts $s_i+s_j-e_{ij}$ from the all-singleton baseline. Realize the chosen blocks by an orthogonal sum.")
@@ -619,7 +721,6 @@ class M29MatchingAlgorithm(MatchingSlide):
 
 
 class M30WorkedExample(MatchingSlide):
-    kicker = "Three positive angles: 30, 45, and 75 degrees in real dimension six"
     def body(self):
         self.start("Pair labels 1 and 2; reflect on the remaining principal plane.",
                    "The paired four-dimensional block costs 4 sin(37.5 degrees); the unmatched 75-degree singleton costs 2.")
@@ -637,7 +738,6 @@ class M30WorkedExample(MatchingSlide):
 
 
 class M31Rehearsal(MatchingSlide):
-    kicker = "Reconstruct each inference before reading its justification"
     def body(self):
         self.start("Explain the construction, the structural lower bound, and the trace-norm limit.",
                    "The study note expands each step, including differentiability and the four-dimensional characteristic polynomial.")
@@ -647,3 +747,119 @@ class M31Rehearsal(MatchingSlide):
                    "Why may minimum values pass through the limit?"]
         self.put(column(*(para(f"{i}. {q}",width=11.8,size=30)
                           for i,q in enumerate(questions,1)),buff=.32))
+
+
+class M00BlockMeaning(MatchingSlide):
+    def body(self):
+        self.start("Zero cross blocks mean each piece keeps its own vectors.",
+                   "Then a large map is an orthogonal sum of independent smaller maps.")
+        rooms=VGroup()
+        for x,label in [(-1.2,"piece 0"),(1.2,"piece 1")]:
+            center=Dot([x,0,0],radius=.035,color=FG)
+            border=Rectangle(width=1.9,height=2.1,color=MUTED).move_to(center)
+            arrow=Arrow(center.get_center(),center.get_center()+[.65,0,0],buff=0,color=FG)
+            rooms.add(VGroup(border,center,arrow,tex(label,size=25).next_to(border,DOWN,buff=.12)))
+        self.put(rooms,"left")
+        coupling=Arrow(rooms[0][0].get_right()+UP*.4,rooms[1][0].get_left()+UP*.4,buff=.02,color=RESID)
+        self.add(coupling)
+        matrix=block_matrix([["A_{00}","A_{01}"],["A_{10}","A_{11}"]],color=FG)
+        self.put(matrix,"right")
+        self.beat()
+        zero=block_matrix([["A_{00}","0"],["0","A_{11}"]],color=FG).move_to(matrix)
+        self.play(FadeOut(coupling),Transform(matrix,zero),
+                  Rotate(rooms[0][2],np.pi/3,about_point=rooms[0][1].get_center()),run_time=2.)
+        self.add(tex("Motion inside a piece is still allowed",size=23,color=MUTED).next_to(rooms,DOWN,buff=.13))
+
+
+
+
+class M08ProjectionMeaning(MatchingSlide):
+    def body(self):
+        self.start("P keeps the source component and removes the perpendicular one.",
+                   "A change preserving both parts commutes with this keep-or-discard operation.")
+        origin=np.array([-3.5,-.5,0.]); tip=origin+[1.6,1.1,0]
+        self.add(Line(origin+[-1.2,0,0],origin+[2.2,0,0],color=TRIAL),
+                 Line(origin+[0,-.5,0],origin+[0,2.1,0],color=MUTED),
+                 Arrow(origin,tip,buff=0,color=FG),math("x",size=28).next_to(tip,UP,buff=.08),
+                 math("K",size=29,color=TRIAL).move_to(origin+[2.35,0,0]))
+        right=self.put(column(r"x=Px+(I-P)x",tex("Two perpendicular components",size=26)),"right")
+        self.beat()
+        self.play(Create(Arrow(origin,origin+[1.6,0,0],buff=0,color=TRIAL)),
+                  Create(DashedLine(tip,origin+[1.6,0,0],color=MUTED)),run_time=1.2)
+        self.add(math("Px",size=27,color=TRIAL).move_to(origin+[1.6,-.32,0]),
+                 math(r"(I-P)x",size=26,color=MUTED).move_to(origin+[-.55,1.15,0]))
+        new=column(r"x=Px+(I-P)x",r"P=\begin{pmatrix}I_K&0\\0&0\end{pmatrix}",r"Q=P_L,\quad WPW^T=Q",
+                   tex(r"Coordinates: $K\oplus K^\perp$",size=25))
+        new.move_to(right)
+        self.play(Transform(right,new),run_time=1.)
+
+
+
+
+class M08CommutingConstruction(MatchingSlide):
+    def body(self):
+        self.start("Choose internal rotation velocities; BP=PB follows from the construction.",
+                   "A minimizer must resist every such available test; we do not assume a new optimizer property.")
+        left=self.put(column(block_matrix([["B_{00}","0"],["0","B_{11}"]],color=TRIAL),
+                             tex(r"No component crosses $K\leftrightarrow K^\perp$",size=24)),"left")
+        right=self.put(column(r"J_0=\begin{pmatrix}0&-1\\1&0\end{pmatrix}",
+                              r"B_{00}=aJ_0,\quad B_{11}=bJ_0",
+                              tex(r"Skew means $B^T=-B$",size=25),
+                              tex(r"Choose any real speeds $a,b$",size=26),size=30),"right")
+        self.beat()
+        next_content=column(r"P=\begin{pmatrix}I&0\\0&0\end{pmatrix}",
+                            r"BP=PB=\begin{pmatrix}B_{00}&0\\0&0\end{pmatrix}",size=30).move_to(right)
+        self.play(Transform(right,next_content),Indicate(left[0],color=TRIAL),run_time=1.7)
+        self.beat()
+        last=column(r"e^{tB}=\begin{pmatrix}R_{at}&0\\0&R_{bt}\end{pmatrix}",
+                    r"e^{tB}K=K",card(r"We^{tB}K=L",WANTED),size=30).move_to(right)
+        self.play(Transform(right,last),run_time=1.4)
+
+
+
+
+class M08StationaryTests(MatchingSlide):
+    def body(self):
+        self.start("Along every constructed feasible path, the cost has a minimum at zero.",
+                   "Its first derivative must vanish. These necessary equations will reveal structure.")
+        ax=Axes(x_range=[-1.4,1.4,1],y_range=[0,2,1],x_length=4.6,y_length=2.3,
+                axis_config={"color":MUTED,"include_tip":False})
+        curve=ax.plot(lambda t:.65*t*t+.3,color=CURRENT)
+        picture=column(VGroup(ax,curve,math("t",size=24).next_to(ax.x_axis,RIGHT,buff=.1)),
+                       tex("Schematic cost along a legal wiggle",size=23,color=MUTED))
+        self.put(picture,"left")
+        right=self.put(column(r"W_*:\ \text{a global minimizer}",
+                              r"W_*e^{tB}\ \text{is feasible for all }t",size=29),"right")
+        self.beat()
+        tangent=Line(ax.c2p(-.6,.3),ax.c2p(.6,.3),color=RESID,stroke_width=5)
+        self.play(Create(tangent),run_time=1.2)
+        self.add(Dot(ax.c2p(0,.3),color=RESID))
+        final=column(r"\left.\frac{d}{dt}\Phi_p(W_*e^{tB})\right|_{t=0}=0",
+                     tex("For every internal skew direction B",size=24),
+                     tex("Stationary: zero first derivative",size=25,color=RESID),size=29).move_to(right)
+        self.play(Transform(right,final),run_time=1.2)
+
+
+
+
+class M13InvariantBlocks(MatchingSlide):
+    def body(self):
+        self.start("Useful independent pieces are preserved by W, P, and Q together.",
+                   "Then the source, target, and cost split into the same smaller problems.")
+        nodes=VGroup(*(card(rf"e_{i+1}",size=25) for i in range(4)))
+        for node,x in zip(nodes,[-5.4,-4.1,-2.8,-1.5]): node.move_to([x,.25,0])
+        links=always_redraw(lambda:VGroup(ArcBetweenPoints(nodes[0].get_center(),nodes[2].get_center(),angle=-.8,color=RESID),
+                                          ArcBetweenPoints(nodes[1].get_center(),nodes[3].get_center(),angle=.8,color=RESID)))
+        self.add(links,nodes)
+        matrix=self.put(column(r"\begin{pmatrix}c_1&0&-s_1&0\\0&c_2&0&-s_2\\s_1&0&c_1&0\\0&s_2&0&c_2\end{pmatrix}",
+                               tex(r"Order: $e_1,e_2,e_3,e_4$",size=24),
+                               math(r"c_i=\cos\theta_i,\quad s_i=\sin\theta_i",size=23),size=30),"right")
+        self.add(tex("A concrete example: which directions interact?",size=23,color=MUTED).move_to([-3.3,1.2,0]))
+        self.beat()
+        points=[[-4.6,.55,0],[-2.1,.55,0],[-4.6,-.75,0],[-2.1,-.75,0]]
+        final=column(r"\begin{pmatrix}c_1&-s_1&0&0\\s_1&c_1&0&0\\0&0&c_2&-s_2\\0&0&s_2&c_2\end{pmatrix}",
+                     tex(r"Order: $e_1,e_3\;|\;e_2,e_4$",size=24),
+                     math(r"c_i=\cos\theta_i,\quad s_i=\sin\theta_i",size=23),size=30).move_to(matrix)
+        self.play(*(node.animate.move_to(point) for node,point in zip(nodes,points)),Transform(matrix,final),run_time=2.)
+        for x in [-4.6,-2.1]: self.add(Rectangle(width=1.6,height=2.,color=MUTED).move_to([x,-.1,0]))
+        self.add(tex("Same pieces work for P and Q in this example",size=22,color=MUTED).move_to([-3.3,-1.5,0]))

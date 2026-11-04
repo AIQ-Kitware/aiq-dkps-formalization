@@ -20,7 +20,13 @@ SOURCE = ROOT / "narration" / "matching-proof.md"
 @dataclass(frozen=True)
 class Narration:
     title: str
-    text: str
+    motivation: str
+    reminder: str
+    beats: tuple[str, ...]
+
+    @property
+    def text(self) -> str:
+        return "\n\n".join(self.beats)
 
 
 def read_narration(path: Path = SOURCE) -> dict[str, Narration]:
@@ -30,12 +36,23 @@ def read_narration(path: Path = SOURCE) -> dict[str, Narration]:
     for i, match in enumerate(headings):
         name, title = match.groups()
         end = headings[i+1].start() if i+1 < len(headings) else len(source)
-        text = source[match.end():end].strip()
-        if name in result or not text:
+        body = source[match.end():end].strip()
+        why = re.match(r"Why: ([^\n]+)\n", body)
+        if not why:
+            raise ValueError(f"missing learner motivation: {name}")
+        body = body[why.end():].strip()
+        recall = re.match(r"Recall: ([^\n]+)\n", body)
+        if not recall:
+            raise ValueError(f"missing local notation reminder: {name}")
+        body = body[recall.end():].strip()
+        if name in result or not body:
             raise ValueError(f"duplicate or empty narration section: {name}")
         # Preserve paragraph pauses but join source wrapping within each paragraph.
-        text = "\n\n".join(" ".join(p.split()) for p in text.split("\n\n") if p.strip())
-        result[name] = Narration(title, text)
+        beats = tuple("\n\n".join(" ".join(p.split()) for p in beat.split("\n\n") if p.strip())
+                      for beat in body.split("<!-- beat -->"))
+        if not all(beats):
+            raise ValueError(f"empty narration build: {name}")
+        result[name] = Narration(title, why.group(1), recall.group(1), beats)
     if list(result) != SCENES:
         raise ValueError("narration sections must follow the matching-proof scene order")
     return result
@@ -52,13 +69,26 @@ def export(out: Path, *, theme: str = "dark") -> Path:
         if re.fullmatch(r"\d{2}-M\d{2}\w+\.txt", old.name) and old.name not in expected:
             old.unlink()
     entries = []
+    beat_dir = out / "beats"
+    beat_dir.mkdir(exist_ok=True)
+    expected_beats = set()
     suffix = "-light" if theme == "light" else ""
     for number, (scene, script) in enumerate(scripts.items(), 1):
         filename = f"{number:02d}-{scene}.txt"
         (out / filename).write_text(script.text + "\n")
+        beat_files = []
+        for k, text in enumerate(script.beats, 1):
+            beat_name = f"{number:02d}-{scene}-{k:02d}.txt"
+            expected_beats.add(beat_name)
+            (beat_dir / beat_name).write_text(text + "\n")
+            beat_files.append(f"beats/{beat_name}")
         entries.append({"number": number, "scene": scene, "title": script.title,
-                        "text_file": filename,
+                        "motivation": script.motivation, "text_file": filename,
+                        "beat_files": beat_files,
                         "slide_json": f"slides-matching-proof{suffix}/{scene}.json"})
+    for old in beat_dir.glob("*.txt"):
+        if re.fullmatch(r"\d{2}-M\d{2}\w+-\d{2}\.txt", old.name) and old.name not in expected_beats:
+            old.unlink()
     manifest = out / "manifest.json"
     manifest.write_text(json.dumps({"deck": "matching-proof", "theme": theme,
         "source": str(SOURCE.relative_to(ROOT)), "slides": entries}, indent=2) + "\n")

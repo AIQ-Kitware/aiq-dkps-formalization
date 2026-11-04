@@ -2,10 +2,11 @@
 from dkvis.deck_spec import DeckSpec, SlideUse
 
 SCENES = [
-    "M00Problem", "M01PrincipalPlanes", "M02Singleton", "M03PairedBlock",
+    "M00Problem", "M00BlockMeaning", "M01PrincipalPlanes", "M02Singleton", "M03PairedBlock",
     "M04Graph", "M05TwoBounds", "M06SmoothCost", "M07Existence",
-    "M08FeasibleCurves", "M09RotationCost", "M10SignAverage", "M11TracePairing",
-    "M12Stationarity", "M13TwoDecompositions", "M14GradientLevels",
+    "M08FeasibleCurves", "M08ProjectionMeaning", "M08CommutingConstruction", "M08StationaryTests",
+    "M09RotationCost", "M10SignAverage", "M11TracePairing",
+    "M12Stationarity", "M13TwoDecompositions", "M13InvariantBlocks", "M14GradientLevels",
     "M15ComplexCoordinates", "M16TwoPhases", "M17ProjectionBlocks",
     "M18RealBlocks", "M19ZeroGradient", "M20PairCoordinates",
     "M20PhaseParameters", "M20PhasePolynomial", "M20RectangleBounds",
@@ -17,7 +18,7 @@ SCENES = [
 
 MATCHING_PROOF = DeckSpec(
     name="matching-proof",
-    description="Theorem 5, one inference and justification at a time.",
+    description="Learn why the matching proof works: geometry, legal variations, and invariant blocks.",
     footer=r"Real trace-norm matching $\cdot$ proof study",
     slides=tuple(SlideUse("dkvis.slides_matching", name) for name in SCENES),
 )

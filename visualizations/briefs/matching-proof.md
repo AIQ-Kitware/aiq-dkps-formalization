@@ -17,17 +17,38 @@ The strict-exponent theorem used before taking the limit is in
 
 ## Teaching structure
 
-Every slide has an inference, a mathematical diagram or calculation, and a
-short justification. The presenter notes carry the longer explanation, including
-what has not yet been established. The narration follows the inference and
-justification style of the study note. It is written to be understood as speech,
-with formulas read out in words.
+The learner can follow algebra and a two-inequality proof but needs the concepts
+behind the block argument explained. More examples do not repair unexplained
+jargon. Introduce an operation in ordinary language, say why it is useful, then
+name it and introduce its symbol. Keep a local definition visible when that
+symbol is used. Do not make the learner memorize a glossary before watching.
+
+Each slide has a motivating question, a takeaway, a diagram or calculation, and
+an explanation of what the step buys us. The footer keeps the original question
+and the current stage visible. Narration connects each new object to earlier
+ones: E keeps a component just as P did, complex multiplication describes an
+already constructed quarter-turn, and the local factorization reuses the
+source-preserving pre-change construction.
+
+The structural sequence explicitly explains “block,” “feasible,” “commute,”
+“stationary,” “invariant,” “skew-symmetric,” and “phase.” The derivative shorthand
+is written as rate(B), with its definition beside it. G is introduced as a
+matrix collecting cost responses before being used to constrain a minimizer.
+
+Four conceptual moves receive a consistent **Key idea** callout:
+
+1. Construct legal directions first; their commutation with P follows.
+2. Independent pieces must be preserved by W, P, and Q together.
+3. Starting with an X-eigenvector, following Y to its partner and back closes
+   the coordinate plane.
+4. Pass minimum values through the limit; convergence of minimizers is not
+   required.
 
 | Scenes | Purpose |
 | --- | --- |
-| M00–M05 | State the ambient optimization; construct singletons and pairs; explain graph weights and the two inequality directions. |
+| M00–M05 | State the problem; explain the meaning of a block; construct candidates; isolate the remaining question about many-way mixing. |
 | M06–M07 | Step 1: use a differentiable power cost and choose a global minimizer by compactness. |
-| M08–M13 | Step 2: construct feasible curves; derive the general trace pairing, including mixing directions; deduce zero diagonal source blocks of the gradient. |
+| M08–M13 | Step 2: construct source-preserving changes before introducing BP=PB; define P and stationarity; calculate cost-change rates; deduce zero diagonal response blocks; explain what common invariant pieces must do. |
 | M14–M19 | Step 3: square the gradient; introduce complex coordinates on a positive level; split the phase projection; count real block dimensions; handle the zero level separately. |
 | M20–M23 | Step 4: parametrize all four-dimensional competitors; compare the phase rectangle with an attainable edge; include both determinant classes. |
 | M24–M26 | Step 5: use block replacement to recover a matching of the same minimum cost; remove zero-angle partners. |
@@ -47,23 +68,26 @@ scalar comparison. They illustrate the Lean mathematics rather than replace it.
 
 ## Rendering and narration
 
-Run `make matching` from `visualizations/` for the 35-scene deck, portable HTML,
+Run `make matching` from `visualizations/` for the 40-scene deck, portable HTML,
 PDF handout, and plain-text narration exports. `make matching-text` exports text
 without rendering or requesting audio.
 
 [`narration/matching-proof.md`](../narration/matching-proof.md) is the single
-authored source of titles and presenter/speech text. The scene identifiers in
-its headings must match the deck manifest in order. Each exported `.txt` file
-contains one complete slide script. The exported manifest connects those texts
-to the Manim slide JSON files.
+authored source of titles, motivating questions, local definitions, and
+presenter/speech text. The scene identifiers must match the deck manifest in
+order. A `<!-- beat -->` marker starts a new narrated build. `Why:` and `Recall:`
+metadata appear on screen and are excluded from speech. Exports include complete
+slide scripts and a `beats/` directory with one script per narrated build.
 
 [`render_matching_video.sh`](../render_matching_video.sh) renders the deck,
-requests one MP3 per slide from the user's local Qwen speech API, holds the
-final slide frame for the remaining speech, and assembles a chaptered H.264/AAC
-video. `--skip-render` reuses current Manim outputs. Requests use whole slide
-scripts because the user's model works better with longer inputs. Cached audio
-is keyed by the script and speech settings, so a failed run can resume. See the
-README for the exact defaults and output paths.
+requests one MP3 per narrated build from the user's local Qwen speech API.
+Each animation begins with its corresponding explanation, and its final frame
+holds until that explanation finishes. The assembled H.264/AAC video has a
+chapter per complete slide. `--skip-render` checks exact correspondence of clips,
+notes, and speech builds before any audio request; stale narration requires a
+render. Each request is a substantial explanation, not individual symbol names.
+Audio is cached by scene/build, text, and speech settings. See the README for
+the exact defaults and output paths.
 
 ## Mathematical scope
 

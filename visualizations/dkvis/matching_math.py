@@ -14,6 +14,32 @@ def rotation(theta: float) -> np.ndarray:
     return np.array([[c, -s], [s, c]])
 
 
+def source_generator(a: float, b: float) -> np.ndarray:
+    """An explicitly constructed skew direction on K + K-perp, each rank two."""
+    j = np.array([[0., -1.], [1., 0.]])
+    zero = np.zeros((2, 2))
+    return np.block([[a*j, zero], [zero, b*j]])
+
+
+def source_variation(a: float, b: float, t: float) -> np.ndarray:
+    """Its actual exponential: independent rotations within the two spaces."""
+    zero = np.zeros((2, 2))
+    return np.block([[rotation(a*t), zero], [zero, rotation(b*t)]])
+
+
+def source_plane_wiggle(t: float, tilt: float = .65) -> tuple[np.ndarray, np.ndarray]:
+    """Fixed W and a source-preserving V(t) for the three-dimensional picture.
+
+    K is the xy plane; W tilts it about the x axis. W V(t) has the same image
+    plane for every t, although the images of the individual basis vectors move.
+    """
+    w = np.eye(3)
+    w[1:, 1:] = rotation(tilt)
+    v = np.eye(3)
+    v[:2, :2] = rotation(t)
+    return w, v
+
+
 def phase_cost(theta, p: float):
     if p < 1:
         raise ValueError("the study examples use p >= 1")

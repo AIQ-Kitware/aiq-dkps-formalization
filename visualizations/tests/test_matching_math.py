@@ -7,7 +7,29 @@ from dkvis.matching_math import (
     displacement_power, pair_direct_rotation, pair_parameters, pair_transporter,
     paired_power_cost, phase_cost, phase_derivative, phase_level_roots,
     phase_rectangle_edge, rotation, skew_gradient,
+    source_generator, source_variation, source_plane_wiggle,
 )
+
+
+def test_constructed_source_variations_exist_and_keep_the_image_subspace_fixed():
+    p = np.diag([1., 1., 0., 0.])
+    w = pair_direct_rotation(.4, 1.)
+    for a, b in [(1., 0.), (0., 1.), (.3, -.7)]:
+        generator = source_generator(a, b)
+        assert np.allclose(generator.T, -generator)
+        assert np.allclose(generator @ p, p @ generator)
+        eps = 1e-6
+        velocity = (source_variation(a,b,eps)-source_variation(a,b,-eps))/(2*eps)
+        assert np.allclose(velocity, generator, atol=1e-10)
+        for t in [-1.2, 0., .8]:
+            v = source_variation(a,b,t)
+            assert np.allclose(v.T @ v, np.eye(4))
+            assert np.allclose(w @ v @ p @ v.T @ w.T, w @ p @ w.T)
+    p3 = np.diag([1., 1., 0.])
+    for t in np.linspace(-1, 1, 7):
+        w3, v3 = source_plane_wiggle(t)
+        assert np.allclose(v3 @ p3 @ v3.T, p3)
+        assert np.allclose(w3 @ v3 @ p3 @ v3.T @ w3.T, w3 @ p3 @ w3.T)
 
 
 def test_pair_attainers_transport_the_actual_source_and_have_the_stated_power_cost():

@@ -1,8 +1,9 @@
 """Render the matching deck, request local Qwen narration, and assemble a video.
 
-Uses the user's OpenAI-compatible local speech endpoint. Each complete slide
-script is sent in one request. Audio is cached by text and request settings;
-slide video plays once, then holds its final frame until the speech ends.
+Uses the user's OpenAI-compatible local speech endpoint. Each narrated build's
+explanation is sent in one request. Audio is cached by text and request settings.
+Each narrated build plays when its own explanation starts, then holds until
+that explanation ends. Chapters still correspond to complete slides.
 """
 from __future__ import annotations
 
@@ -75,22 +76,20 @@ def concat_list(paths: list[Path], output: Path) -> Path:
     return output
 
 
-def scene_visual(scene: str, folder: Path, work: Path) -> Path:
-    scene_json = folder / f"{scene}.json"
-    if not scene_json.is_file():
-        raise FileNotFoundError(f"Missing {scene_json}; render the deck first or omit --skip-render.")
-    builds = json.loads(scene_json.read_text())["slides"]
-    clips = [ROOT / build["file"] for build in builds]
-    if not clips or not all(path.is_file() for path in clips):
-        raise FileNotFoundError(f"Missing rendered clips for {scene}; rerun without --skip-render.")
-    if len(clips) == 1:
-        return clips[0]
-    listing = concat_list(clips, work / f"{scene}.visuals.txt")
-    video = work / f"{scene}.visual.mp4"
-    subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
-                    "-f", "concat", "-safe", "0", "-i", str(listing),
-                    "-an", "-c:v", "copy", str(video)], check=True)
-    return video
+def narrated_builds(scene: str, folder: Path, script) -> list[tuple[Path, str]]:
+    """Preflight clips and their exact note-to-speech alignment before requests."""
+    path = folder / f"{scene}.json"
+    if not path.is_file():
+        raise FileNotFoundError(f"Missing {path}; rerun without --skip-render.")
+    builds = json.loads(path.read_text())["slides"]
+    if len(builds) != len(script.beats) or any(
+            build.get("notes", "").strip() != text
+            for build, text in zip(builds, script.beats)):
+        raise RuntimeError(f"Stale narration or builds for {scene}; rerun without --skip-render.")
+    result = [(ROOT / build["file"], text) for build, text in zip(builds, script.beats)]
+    if not all(clip.is_file() for clip, _ in result):
+        raise FileNotFoundError(f"Missing clips for {scene}; rerun without --skip-render.")
+    return result
 
 
 def narrated_segment(visual: Path, audio: Path, output: Path, *, pause: float,
@@ -138,12 +137,13 @@ def main():
     parser.add_argument("--jobs", type=int, default=2)
     parser.add_argument("--fps", type=int, default=30)
     parser.add_argument("--pause", type=float, default=1.5, help="seconds to pause after each slide's speech")
+    parser.add_argument("--beat-pause", type=float, default=.35, help="seconds between narrated builds within a slide")
     parser.add_argument("--preset", default="veryfast", choices=["ultrafast","veryfast","fast","medium"])
     parser.add_argument("--skip-render", action="store_true", help="reuse existing Manim slide renders")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    if args.pause < 0 or args.fps <= 0 or args.timeout <= 0 or args.jobs <= 0:
-        parser.error("pause must be nonnegative; fps, timeout, and jobs must be positive")
+    if min(args.pause,args.beat_pause) < 0 or args.fps <= 0 or args.timeout <= 0 or args.jobs <= 0:
+        parser.error("pauses must be nonnegative; fps, timeout, and jobs must be positive")
     name = "matching-proof"+OUTPUT_SUFFIX
     if not args.skip_render:
         subprocess.run([sys.executable, "-m", "dkvis.build_slides", "matching-proof",
@@ -155,24 +155,29 @@ def main():
     work.mkdir(parents=True, exist_ok=True)
     scripts = read_narration()
     # Resolve every clip before making any potentially slow speech requests.
-    visuals = {scene: scene_visual(scene, ROOT / f"slides-{name}", work)
-               for scene in scripts}
+    visuals = {scene: narrated_builds(scene, ROOT / f"slides-{name}", script)
+               for scene, script in scripts.items()}
     segments, entries = [], []
     start = 0.
     for number, (scene, script) in enumerate(scripts.items(), 1):
         print(f"[{number}/{len(scripts)}] {scene}: {script.title}", flush=True)
-        stem = work / f"{number:02d}-{scene}"
-        audio = speech(script.text, stem, endpoint=args.endpoint, model=args.model,
-                       voice=args.voice, language=args.language, timeout=args.timeout)
-        visual = visuals[scene]
-        segment = stem.with_suffix(".mp4")
-        seconds = narrated_segment(visual, audio, segment, pause=args.pause,
-                                    fps=args.fps, preset=args.preset)
+        chapter_start, builds = start, []
+        for k, (visual, text) in enumerate(visuals[scene], 1):
+            print(f"  explanation {k}/{len(visuals[scene])}", flush=True)
+            # Scene/build names keep caches useful when earlier slides are inserted.
+            stem = work / f"{scene}-beat{k:02d}"
+            audio = speech(text, stem, endpoint=args.endpoint, model=args.model,
+                           voice=args.voice, language=args.language, timeout=args.timeout)
+            segment = stem.with_suffix(".mp4")
+            pause = args.pause if k == len(visuals[scene]) else args.beat_pause
+            seconds = narrated_segment(visual, audio, segment, pause=pause,
+                                        fps=args.fps, preset=args.preset)
+            builds.append({"number": k, "start": start, "end": start+seconds,
+                           "audio": str(audio), "segment": str(segment)})
+            start += seconds
+            segments.append(segment)
         entries.append({"number": number, "scene": scene, "title": script.title,
-                        "start": start, "end": start+seconds,
-                        "audio": str(audio), "segment": str(segment)})
-        start += seconds
-        segments.append(segment)
+                        "start": chapter_start, "end": start, "builds": builds})
     listing = concat_list(segments, work / "segments.txt")
     chapters = chapter_metadata(entries, work / "chapters.ffmetadata")
     output = (args.output or ROOT / "renders" / f"{name}.narrated.mp4").resolve()
