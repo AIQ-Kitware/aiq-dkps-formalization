@@ -4369,3 +4369,40 @@ and `Challenge` (19,923 jobs), all successful without warnings. The accepted
 `Gram.Perturbation` and `YuWangSamworth.SingularVectors` modules were compiled
 by the focused build. `.lake` was verified bind-mounted on VM-local ext4.
 The resource tally hook was installed idempotently and verified armed.
+
+### 2026-11-04 — D18 review repair and partial representation-PVM acceptance
+
+D18 [#27799](https://github.com/TauCetiProject/TauCeti/pull/27799) repair
+`46fb9c359d6b5b7d6c7dea1ff1bb6c1b27a02b99` replaces the local singleton
+orthonormality calculation with Mathlib `orthonormal_subsingleton_iff` and
+removes transient acceptance/parallel-work wording from the module docstring.
+The [reuse](https://github.com/TauCetiProject/TauCeti/pull/27799#discussion_r4469516774)
+and [documentation](https://github.com/TauCetiProject/TauCeti/pull/27799#discussion_r4469517240)
+findings reviewed `207829169d7f6ba6d9f26ecb6d3d893911f3cccc`.
+The exact RCLike unit-eigenvector statement, population-only gap, phase/sign
+alignment, authors/license and source ancestry are unchanged. Fresh focused
+compilation (5,999 jobs), all 13 environment linters and full header/text style
+passed; the fix is pushed, but fresh upstream approval is not claimed.
+
+External [#26244](https://github.com/TauCetiProject/TauCeti/pull/26244) is accepted
+at `9daaf19aa819a5545147cb476eddbff344ee43cc`. Local Git and GitHub compare
+verify its ancestry in main `52f9d081237dadaf6d4eae13629281f7faa37d54`;
+it is also already included in DKPS's existing `5f78b5307b...` dependency pin.
+This is **roadmap implemented by others**, with no DKPS proof adaptation
+established: the PR author is `tauceti-ai-for-science`, source headers credit
+Tau Ceti contributors, copyright 2026, Apache-2.0. DKPS roadmap provenance does
+not assign donor-proof ancestry to this implementation.
+
+The accepted `ProjValMeasure/Representation/PolarizedMeasure.lean` and
+`BorelOperator.lean` provide `StarAlgHom.representationPolarizedMeasure` and
+`StarAlgHom.representationBorelOperator`: polarized finite regular measures,
+a complex-linear bounded Borel operator with a factor-two norm bound, and
+agreement with the continuous representation. They do **not** yet supply the
+weighted matrix-element identity, multiplicativity, contractivity, indicator
+projection/countable-additivity laws or `ProjValMeasure.ofRepresentation`.
+The accepted commit explicitly leaves these next steps open, including the
+change-of-density prerequisite #25747. Exact current sources and the SA-B59 /
+SA-B05 roadmap signatures were compared: B05 → E01 → E35 remains blocked.
+No new unblocked source-backed intent PR was identified; no extra PR was
+created and no local Borel/PVM engine was retired from this partial acceptance.
+The dependency pin and Lean sources here are unchanged by this review update.
