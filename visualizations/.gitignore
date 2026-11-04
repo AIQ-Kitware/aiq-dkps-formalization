@@ -8,3 +8,5 @@ renders/
 slides/
 slides-*/
 .venv-*/
+.env
+.env.local

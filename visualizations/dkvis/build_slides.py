@@ -59,6 +59,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from dkvis.decks import DECKS as DECK_REGISTRY, get_deck
+from dkvis.render_timing import timing
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -97,7 +98,9 @@ def _run(*args: str, deck: str | None = None) -> None:
     if deck:
         # Read by DeckSlide: render into slides-<deck>/ and number by this deck's order.
         env["DKVIS_DECK"] = deck
-    subprocess.run(cmd, cwd=ROOT, check=True, env=env)
+    export_format = args[args.index("--to")+1] if "--to" in args else "other"
+    with timing().measure("slides_export", format=export_format, command=cmd):
+        subprocess.run(cmd, cwd=ROOT, check=True, env=env)
 
 
 def _render_scene(deck_name: str, module: str, scene: str, quality: str, fps: float | None) -> float:
@@ -120,11 +123,13 @@ def _render_scene(deck_name: str, module: str, scene: str, quality: str, fps: fl
         "DKVIS_DEPTH": slide_use.depth,
     }
     start = time.monotonic()
-    with open(log, "w") as out:
-        result = subprocess.run(cmd, cwd=ROOT, env=env, stdout=out, stderr=subprocess.STDOUT)
-    if result.returncode:
-        tail = "\n".join(log.read_text(errors="replace").splitlines()[-25:])
-        raise RuntimeError(f"{deck_name}/{scene} failed (log: {log}):\n{tail}")
+    with timing().measure("manim_scene", deck=deck_name, scene=scene,
+                          quality=quality, fps=fps, console_log=str(log)):
+        with open(log, "w") as out:
+            result = subprocess.run(cmd, cwd=ROOT, env=env, stdout=out, stderr=subprocess.STDOUT)
+        if result.returncode:
+            tail = "\n".join(log.read_text(errors="replace").splitlines()[-25:])
+            raise RuntimeError(f"{deck_name}/{scene} failed (log: {log}):\n{tail}")
     return time.monotonic() - start
 
 
@@ -147,8 +152,10 @@ def render(
     for module in dict.fromkeys(module for _, module, _ in tasks):
         mod = importlib.import_module(module)
         if hasattr(mod, "prepare"):
-            mod.prepare(refresh=refresh_assets)
+            with timing().measure("assets_prepare", module=module, refresh=refresh_assets):
+                mod.prepare(refresh=refresh_assets)
     jobs = jobs or os.cpu_count() or 1
+    timing().set_context(render_jobs=jobs,render_quality=quality,render_fps_override=fps)
     print(f"rendering {len(tasks)} scenes, {jobs} at a time", flush=True)
     with ThreadPoolExecutor(jobs) as pool:
         futures = {pool.submit(_render_scene, *task, quality, fps): task for task in tasks}
@@ -189,6 +196,11 @@ def handout_frame_file(slides: list[dict]) -> str:
 
 
 def write_handout(deck_name: str, out: Path) -> None:
+    with timing().measure("handout_export", deck=deck_name, output=str(out)):
+        _write_handout(deck_name, out)
+
+
+def _write_handout(deck_name: str, out: Path) -> None:
     """One PDF page per scene; video-only scenes contribute a movie frame."""
     from PIL import Image
 

@@ -30,6 +30,7 @@ FPS     ?= $(if $(filter l m,$(QUALITY)),,30)
 JOBS    ?=
 PDF     ?= 1
 SCENES  ?=
+TTS_PROFILE ?=
 # dark or light.  Colors come from dkvis/palette.py (per role and theme) and
 # dkvis/notation.py (the role of each symbol).
 THEME   ?= dark
@@ -76,7 +77,7 @@ help:
 	@echo '  novelty            standalone deck for the new optimization mathematics'
 	@echo '  matching           detailed matching proof; standalone HTML, PDF and narration text'
 	@echo '  matching-text      export one plain-text narration file per slide'
-	@echo '  matching-video     render slides, call the local Breeze TTS endpoint, assemble chaptered MP4'
+	@echo '  matching-video     render a narrated video; TTS_PROFILE selects a server from tts.toml'
 	@echo '  working            build kitware, comprehensive, study, and novelty'
 	@echo '  part1 ... part7    one part of the full talk, rendered and converted on its own:'
 	@echo '                       1 sin Theta, 2 3D, 3 tan/sin2/tan2 Theta, 4 Prop 4.4, 5 process, 6 summary, 7 notation'
@@ -130,7 +131,7 @@ matching-text:
 	$(MATCHING_RUN) python -m dkvis.matching_narration --theme $(THEME) --out renders/matching-proof$(SUFFIX)-narration
 
 matching-video:
-	./render_matching_video.sh --quality $(QUALITY) --fps $(if $(FPS),$(FPS),30) --jobs $(if $(JOBS),$(JOBS),2)
+	./render_matching_video.sh --quality $(QUALITY) --fps $(if $(FPS),$(FPS),30) --jobs $(if $(JOBS),$(JOBS),2) $(if $(TTS_PROFILE),--tts-profile $(TTS_PROFILE)) $(if $(SCENES),--scenes $(SCENES))
 
 # Long and completed talk decks always produce portable, single-file HTML.
 # The comprehensive deck is large: default to a modest two render processes

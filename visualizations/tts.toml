@@ -1,0 +1,46 @@
+# Fallback default. Select a machine-local profile in .env (MATCHING_TTS_PROFILE)
+# or override it for one run with --tts-profile NAME.
+profile = "crall"
+
+[defaults]
+timeout_seconds = 600
+# Short, sentence-aware requests avoid the observed 60-second Breeze cutoff.
+max_chars = 420
+max_words = 65
+max_audio_seconds = 60.0
+chunk_pause_seconds = 0.12
+
+[profiles.crall]
+endpoint_env = "CRALL_TTS_ENDPOINT"
+endpoint = "http://127.0.0.1:8821/v1/audio/speech"
+model = "breeze-tts2"
+voice = "crall-math-dk"
+response_format = "wav"
+
+[profiles.breeze]
+endpoint_env = "BREEZE_TTS_ENDPOINT"
+endpoint = "http://127.0.0.1:8812/v1/audio/speech"
+model = "breeze-tts2"
+voice = "ryan"
+response_format = "wav"
+
+[profiles.kokoro]
+# Private host address belongs only in .env.
+endpoint_env = "KOKORO_TTS_ENDPOINT"
+model = "kokoro"
+voice = "af_heart"
+response_format = "wav"
+
+[profiles.qwen]
+endpoint_env = "QWEN_TTS_ENDPOINT"
+endpoint = "http://127.0.0.1:11437/v1/audio/speech"
+model = "qwen-1.7-customvoice-q8-ggml"
+voice = "ryan"
+response_format = "mp3"
+
+[profiles.qwen.request]
+language = "English"
+stream = false
+
+# Add another [profiles.NAME] to configure another server. A [profiles.NAME.request]
+# table can pass model-specific fields such as speed or temperature.

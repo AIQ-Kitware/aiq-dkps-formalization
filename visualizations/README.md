@@ -181,44 +181,109 @@ build scripts under `beats/`, a combined `presentation.txt`, and a manifest into
 `renders/matching-proof-narration/`. Render the slides again after changing
 the script to refresh their embedded presenter notes.
 
-With the local Breeze TTS 2 server running on your host, render the complete video:
+Configure speech servers in [tts.toml](tts.toml). It contains named profiles:
+
+| Profile | Model | Voice | Format |
+| --- | --- | --- | --- |
+| `crall` (default) | `breeze-tts2` | `crall-math-dk` | WAV |
+| `breeze` | `breeze-tts2` | `ryan` | WAV |
+| `kokoro` | `kokoro` | `af_heart` | WAV |
+| `qwen` | `qwen-1.7-customvoice-q8-ggml` | `ryan` | MP3 |
+
+Set `MATCHING_TTS_PROFILE` in the ignored `visualizations/.env` file to change
+this machine's default. The fallback is the `profile` line in `tts.toml`.
+Kokoro reads its full speech URL from `KOKORO_TTS_ENDPOINT` in `.env`, keeping
+private addresses out of Git. For a fresh checkout, copy `.env.example` to
+`.env` and fill in that endpoint. Existing environment variables override the
+file. The Kokoro model/voice defaults follow the
+[Kokoro-FastAPI speech API](https://github.com/remsky/Kokoro-FastAPI).
+
+To list profiles or select a server for one run:
 
 ```bash
-./render_matching_video.sh
+./render_matching_video.sh --list-tts-profiles
+./render_matching_video.sh --skip-render --tts-profile kokoro
 ```
 
-This renders the Manim deck at 1080p/30 FPS, submits one explanation
-per narrated build to `http://127.0.0.1:8821/v1/audio/speech`, and assembles
-`renders/matching-proof.narrated.mp4`. It uses model
-`breeze-tts2`, the user's cloned voice `crall-math-dk`, and WAV responses.
-Requests contain `model`, `input`,
-`voice`, and `response_format`, matching the supplied Breeze request.
-It uses the existing `slides` Python extra and FFmpeg;
-no local TTS Python package is needed.
+Without `--skip-render`, the script first renders the complete Manim deck,
+keeping all source clips at the same quality. `--scenes` selects narrated chapters;
+use it with `--skip-render` for a quick TTS comparison. The complete
+video is `renders/matching-proof.narrated.mp4`. `--endpoint`, `--model`, `--voice`,
+`--response-format`, and `--timeout` override individual profile fields.
+`--tts-config PATH` selects another TOML file. A profile's `[request]` table can
+supply server-specific options such as speed or temperature. Requests preserve
+the narration text; the test/benchmark phrase is not substituted for the script.
 
-To reuse slides already rendered on this machine:
+For a quick comparison using fresh synthesis of the same opening slide:
 
 ```bash
-./render_matching_video.sh --skip-render
+./render_matching_video.sh --skip-render --tts-profile kokoro --scenes M00Problem --refresh-audio
+./render_matching_video.sh --skip-render --tts-profile crall --scenes M00Problem --refresh-audio
 ```
 
-Each build's animation starts with its explanation, plays once, and holds until
-that explanation finishes. Builds have a 0.35-second pause between them;
-complete slides have a 1.5-second pause. The video includes a chapter per slide, and
-`renders/matching-proof-narrated/timeline.json` records the timings. Individual
-WAV files and narrated build MP4s are in that same directory. Audio is cached by
-scene/build, text, and request settings; rerunning after an interruption reuses valid audio.
-Changing a script, endpoint, model, or voice regenerates the affected audio.
-Old Qwen MP3 caches are not used for Breeze requests. Video segments are
-rebuilt from the current slide renders. Exact note/build correspondence is
-checked before any speech requests; rerender after changing the narration.
-Use `--pause`, `--beat-pause`, `--voice`, `--model`,
-`--endpoint`, or `--timeout` to override defaults; `--help` lists all options.
+Previews are written as `renders/matching-proof.<profile>.preview.narrated.mp4`,
+leaving the complete video in place. To render the full video afterward, omit
+`--scenes`. `make matching-video TTS_PROFILE=kokoro` is also supported.
 
-The script calls your host's speech service when you run it. Development
-validation used synthetic audio and a temporary mock HTTP service, rather
-than the host's speech model. All rendered media and exported text are gitignored and
-can be regenerated from the tracked scenes and narration.
+#### Complete speech and caching
+
+Some saved Breeze WAV responses end at exactly 60 seconds while speech is still
+active; their MP4s preserve that audio and add a pause. The missing speech is
+already absent from those server responses. The renderer now breaks each
+narrated build into sentence-aware requests, defaulting to at most 420 characters
+and 65 words. An overlong sentence is divided at word boundaries. Responses
+reaching the configured 60-second limit are rejected and retried with smaller
+pieces. No text is dropped. If even a single-word request reaches the limit,
+the run fails rather than treating incomplete speech as a successful render.
+
+These limits and the 0.12-second pause between speech chunks are editable in
+`tts.toml`. Set `max_audio_seconds` to the actual server limit, or zero to disable
+the guard. Completed chunks are cached by endpoint, model, voice, request options,
+and text. Caches for different settings are retained. Previously capped whole
+responses are not used as completed chunks. `--refresh-audio` bypasses the cache
+when benchmarking or after changing a server behind an unchanged model name.
+
+Chunks are decoded and joined losslessly before encoding the build's audio.
+Audio is normalized to 48 kHz mono for consistent final concatenation. Video
+lengths round up to complete frames and preserve the entire audio plus the pause.
+Each build's animation starts with its explanation and holds its final frame
+until that explanation finishes. Builds pause for 0.35 seconds; complete slides
+pause for 1.5 seconds. `--beat-pause` and `--pause` override these pauses.
+
+Audio chunks and joined speech live under
+`renders/matching-proof-narrated/audio/<profile>/`.
+Each requested chunk keeps its input `.txt` and generation metadata `.json`
+alongside the audio, including rejected responses for diagnosing server limits.
+Encoded builds are under
+`renders/matching-proof-narrated/<profile>/`. The full video's latest timings
+are in `renders/matching-proof-narrated/timeline.json`; profile-specific and
+preview timelines are kept alongside it. Exact note/build correspondence is
+checked before speech requests, so rerender after editing the narration.
+
+#### Render timings
+
+`renders/logs/render-timings.jsonl` is an append-only record of measured wall
+times. Each operation records its UTC timestamp, run ID, machine, settings,
+status, and elapsed seconds. It distinguishes fresh TTS requests, cache hits,
+rejected responses, audio joins, per-build video encoding, and final video
+assembly. The slide builder also records each Manim scene and HTML/PDF/handout
+export. TTS records include input length, returned audio duration, and generation
+time per audio second (smaller is faster). Endpoint hashes identify servers
+without copying private addresses into logged settings.
+TTS request time includes the HTTP round trip and audio download, rather than
+being a measurement of GPU computation alone.
+
+Each video run also prints a timing table and writes
+`renders/logs/render-<run-id>.json` with its settings and stage totals, including
+on failure. Operation totals can overlap or contain other stages; do not add
+all rows to estimate elapsed run time. Use `run_total` for that measurement.
+The previous renderer did not record generation wall times, so those cannot
+be reconstructed reliably from old file timestamps. The one-time cutoff
+inspection is in `renders/logs/audio-cutoff-audit.json` on this checkout.
+
+All rendered media, timing logs, and text exports are gitignored and can be
+regenerated. The host's actual TTS services are separate from the renderer;
+development validation uses synthetic audio and a temporary mock HTTP service.
 
 To build the complete collection at 1080p/30 FPS and generate a **single HTML
 file with embedded videos**, run from this directory:

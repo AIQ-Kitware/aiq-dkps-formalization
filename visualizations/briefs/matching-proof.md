@@ -79,17 +79,25 @@ order. A `<!-- beat -->` marker starts a new narrated build. `Why:` and `Recall:
 metadata appear on screen and are excluded from speech. Exports include complete
 slide scripts and a `beats/` directory with one script per narrated build.
 
-[`render_matching_video.sh`](../render_matching_video.sh) renders the deck,
-requests one WAV per narrated build from the user's local Breeze TTS 2 speech API.
-The default endpoint is port 8821 with model `breeze-tts2` and the user's cloned
-voice `crall-math-dk`.
-Each animation begins with its corresponding explanation, and its final frame
-holds until that explanation finishes. The assembled H.264/AAC video has a
-chapter per complete slide. `--skip-render` checks exact correspondence of clips,
-notes, and speech builds before any audio request; stale narration requires a
-render. Each request is a substantial explanation, not individual symbol names.
-Audio is cached by scene/build, text, and speech settings. See the README for
-the exact defaults and output paths.
+[`render_matching_video.sh`](../render_matching_video.sh) uses named server
+profiles in `tts.toml`. The default remains the cloned `crall-math-dk` voice;
+Kokoro, stock Breeze, and Qwen are alternatives. Private endpoint addresses and
+this machine's profile selection belong in the ignored `.env` file. CLI flags
+can override profiles and individual settings.
+
+Each animation build retains its full spoken explanation. Speech is synthesized
+in bounded sentence-aware pieces to avoid the observed 60-second server cutoff.
+Capped responses are rejected and retried with shorter text, then the complete
+pieces are joined losslessly. Audio caches distinguish request settings and
+retain results across profile changes. `--refresh-audio` measures fresh synthesis.
+`--scenes` produces a short preview for a model/voice comparison.
+
+The final video has a chapter per complete slide. Each build starts with its
+matching explanation and holds until speech ends. `--skip-render` checks exact
+clip/note correspondence before synthesis. Measured TTS, cache, audio-join,
+Manim, export, encoding, and concatenation timings are appended to
+`renders/logs/render-timings.jsonl`; each video run also writes a settings/totals
+summary. See the README for configuration, benchmarking, and output paths.
 
 ## Mathematical scope
 
