@@ -76,7 +76,7 @@ help:
 	@echo '  novelty            standalone deck for the new optimization mathematics'
 	@echo '  matching           detailed matching proof; standalone HTML, PDF and narration text'
 	@echo '  matching-text      export one plain-text narration file per slide'
-	@echo '  matching-video     render slides, call the local Qwen TTS endpoint, assemble chaptered MP4'
+	@echo '  matching-video     render slides, call the local Breeze TTS endpoint, assemble chaptered MP4'
 	@echo '  working            build kitware, comprehensive, study, and novelty'
 	@echo '  part1 ... part7    one part of the full talk, rendered and converted on its own:'
 	@echo '                       1 sin Theta, 2 3D, 3 tan/sin2/tan2 Theta, 4 Prop 4.4, 5 process, 6 summary, 7 notation'

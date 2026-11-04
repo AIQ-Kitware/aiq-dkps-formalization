@@ -1,4 +1,4 @@
-"""Render the matching deck, request local Qwen narration, and assemble a video.
+"""Render the matching deck, request local Breeze narration, and assemble a video.
 
 Uses the user's OpenAI-compatible local speech endpoint. Each narrated build's
 explanation is sent in one request. Audio is cached by text and request settings.
@@ -32,12 +32,14 @@ def duration(path: Path) -> float:
 
 
 def speech(text: str, stem: Path, *, endpoint: str, model: str, voice: str,
-           language: str, timeout: float) -> Path:
+           language: str | None, timeout: float) -> Path:
     payload = {"model": model, "input": text, "voice": voice,
-               "language": language, "response_format": "mp3", "stream": False}
+               "response_format": "wav"}
+    if language:
+        payload["language"] = language
     digest = hashlib.sha256(json.dumps({"endpoint": endpoint, **payload},
                                       sort_keys=True).encode()).hexdigest()
-    audio, metadata = stem.with_suffix(".mp3"), stem.with_suffix(".json")
+    audio, metadata = stem.with_suffix(".wav"), stem.with_suffix(".json")
     if audio.is_file() and metadata.is_file():
         try:
             if json.loads(metadata.read_text())["request_sha256"] == digest:
@@ -48,18 +50,19 @@ def speech(text: str, stem: Path, *, endpoint: str, model: str, voice: str,
             pass
     request = urllib.request.Request(endpoint, data=json.dumps(payload).encode(),
                                      headers={"Content-Type": "application/json"})
-    temporary = audio.with_suffix(".part.mp3")
+    temporary = audio.with_suffix(".part.wav")
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
             if "json" in response.headers.get("Content-Type", ""):
-                raise RuntimeError(f"speech endpoint returned JSON instead of MP3: {response.read(2000)!r}")
+                raise RuntimeError(f"speech endpoint returned JSON instead of WAV: {response.read(2000)!r}")
             with temporary.open("wb") as output:
                 while data := response.read(1024*1024):
                     output.write(data)
         seconds = duration(temporary)
         temporary.replace(audio)
         metadata.write_text(json.dumps({"request_sha256": digest, "model": model,
-            "voice": voice, "language": language, "seconds": seconds}, indent=2)+"\n")
+            "voice": voice, "language": language, "response_format": "wav",
+            "seconds": seconds}, indent=2)+"\n")
     except urllib.error.HTTPError as error:
         raise RuntimeError(f"speech request failed ({error.code}): {error.read(2000).decode(errors='replace')}") from error
     except urllib.error.URLError as error:
@@ -128,10 +131,10 @@ def chapter_metadata(entries: list[dict], path: Path) -> Path:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--endpoint", default="http://127.0.0.1:11437/v1/audio/speech")
-    parser.add_argument("--model", default="qwen-1.7-customvoice-q8-ggml")
+    parser.add_argument("--endpoint", default="http://127.0.0.1:8812/v1/audio/speech")
+    parser.add_argument("--model", default="breeze-tts2")
     parser.add_argument("--voice", default="ryan")
-    parser.add_argument("--language", default="English")
+    parser.add_argument("--language", help="optional language field; omitted from Breeze requests by default")
     parser.add_argument("--timeout", type=float, default=600)
     parser.add_argument("--quality", choices=list("lmhpk"), default="h")
     parser.add_argument("--jobs", type=int, default=2)

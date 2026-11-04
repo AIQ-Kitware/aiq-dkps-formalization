@@ -181,17 +181,18 @@ build scripts under `beats/`, a combined `presentation.txt`, and a manifest into
 `renders/matching-proof-narration/`. Render the slides again after changing
 the script to refresh their embedded presenter notes.
 
-With the local Qwen speech server running on your host, render the complete video:
+With the local Breeze TTS 2 server running on your host, render the complete video:
 
 ```bash
 ./render_matching_video.sh
 ```
 
 This renders the Manim deck at 1080p/30 FPS, submits one explanation
-per narrated build to `http://127.0.0.1:11437/v1/audio/speech`, and assembles
+per narrated build to `http://127.0.0.1:8812/v1/audio/speech`, and assembles
 `renders/matching-proof.narrated.mp4`. It uses model
-`qwen-1.7-customvoice-q8-ggml`, voice `ryan`, language `English`, MP3 responses,
-and `stream: false`. It uses the existing `slides` Python extra and FFmpeg;
+`breeze-tts2`, voice `ryan`, and WAV responses. Requests contain `model`, `input`,
+`voice`, and `response_format`, matching the supplied Breeze request.
+It uses the existing `slides` Python extra and FFmpeg;
 no local TTS Python package is needed.
 
 To reuse slides already rendered on this machine:
@@ -204,9 +205,10 @@ Each build's animation starts with its explanation, plays once, and holds until
 that explanation finishes. Builds have a 0.35-second pause between them;
 complete slides have a 1.5-second pause. The video includes a chapter per slide, and
 `renders/matching-proof-narrated/timeline.json` records the timings. Individual
-MP3s and narrated build MP4s are in that same directory. MP3s are cached by
+WAV files and narrated build MP4s are in that same directory. Audio is cached by
 scene/build, text, and request settings; rerunning after an interruption reuses valid audio.
-Changing a script or voice regenerates the affected audio. Video segments are
+Changing a script, endpoint, model, or voice regenerates the affected audio.
+Old Qwen MP3 caches are not used for Breeze requests. Video segments are
 rebuilt from the current slide renders. Exact note/build correspondence is
 checked before any speech requests; rerender after changing the narration.
 Use `--pause`, `--beat-pause`, `--voice`, `--model`,
@@ -214,7 +216,7 @@ Use `--pause`, `--beat-pause`, `--voice`, `--model`,
 
 The script calls your host's speech service when you run it. Development
 validation used synthetic audio and a temporary mock HTTP service, rather
-than the Qwen model. All rendered media and exported text are gitignored and
+than the host's speech model. All rendered media and exported text are gitignored and
 can be regenerated from the tracked scenes and narration.
 
 To build the complete collection at 1080p/30 FPS and generate a **single HTML

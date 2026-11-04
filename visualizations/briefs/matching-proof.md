@@ -80,7 +80,7 @@ metadata appear on screen and are excluded from speech. Exports include complete
 slide scripts and a `beats/` directory with one script per narrated build.
 
 [`render_matching_video.sh`](../render_matching_video.sh) renders the deck,
-requests one MP3 per narrated build from the user's local Qwen speech API.
+requests one WAV per narrated build from the user's local Breeze TTS 2 speech API.
 Each animation begins with its corresponding explanation, and its final frame
 holds until that explanation finishes. The assembled H.264/AAC video has a
 chapter per complete slide. `--skip-render` checks exact correspondence of clips,
