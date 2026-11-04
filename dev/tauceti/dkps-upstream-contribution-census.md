@@ -53,8 +53,9 @@ was located on TauCeti `main` on October 21 (not a final-diff/commit audit);
 accepted diff has not yet been compared declaration-by-declaration in this
 census. Evidence is as of 2026-10-21 unless a dated source is given; see the current [consumption review](upstream-consumption-review-2026-10-22.md).
 
-**Latest integration:** #26824 (SSP-D16 arbitrary eigenframes) is accepted
-and consumed; #20359/#26821/#26822/#26823 remain open as individually checked
+**Latest integration:** #26821 (coercive norm and spectral bounds) is accepted
+and consumed, following #26824 (SSP-D16 arbitrary eigenframes).
+#20359/#26822/#26823 remain open as individually checked
 on November 3. See the final SSP-D16 integration section below.
 
 ## Historical submitted-campaign snapshot — 2026-11-03T02:00:51Z
@@ -4241,3 +4242,36 @@ needs the host's `waves/2026-11-02/ritz-tangent/update-pr-body.sh` because the
 connector returns HTTP 403 for body edits. Upstream CI/re-review remains pending;
 this is still a submitted PR, not integration. No local paper-scope theorem or
 DKPS dependency pin is changed by this repair.
+
+## November 4 UTC: accepted coercive API consumption (#26821)
+
+The accepted main-history integration is
+`d6c3a1ba75228691ecd81d6fd8c89ad620b322eb`. Git ancestry and GitHub comparison
+both verify it is reachable from `11a5574886a7b084337236bb1f858406b483c6cc`
+(merge base equals the integration, behind-by zero). GitHub's Bors-closed PR
+metadata has no native merge timestamp; the title alone is not the evidence.
+The DKPS Tau Ceti pin advances to that accepted main; Mathlib remains
+`1b1ccf4b088b32fa3f23f2de1127433254a81e1e`, Lean v4.36.0-rc2.
+
+| Retired declaration and original source | Direct accepted replacement | Scope and provenance |
+| --- | --- | --- |
+| `TauCeti.ContinuousLinearMap.norm_smul_le_norm_apply_of_coercive`, `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean` | `ContinuousLinearMap.mul_norm_le_norm_apply_of_coercive`, `TauCeti/Analysis/InnerProductSpace/Coercive.lean` | Arbitrary real constant, RCLike scalar, no completeness or finite-dimensionality. Explicit donor norm-bound adaptation, Jon Crall / Claude Fable 5, Kitware 2026 Apache-2.0. `FilledTruncation` uses it directly. |
+| `TauCeti.DavisKahan.spectrum_re_lower_of_coercive`, `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean` | `ContinuousLinearMap.le_re_of_mem_spectrum_of_coercive`, same native module | Arbitrary complex Hilbert space and real constant; no self-adjointness. Native result removes the old wrapper's unused positivity argument. The shift proof is adapted from Jon Crall / OpenAI GPT-5.6 Thinking / Claude Opus 5, Kitware 2026 Apache-2.0. |
+
+The accepted `ContinuousLinearMap.isUnit_of_coercive` proof applies Mathlib's
+older `isUnit_of_forall_le_norm_inner_map`; that dependency use does not assign
+Mathlib proof ancestry to DKPS. Existing direct Mathlib consumers already avoid
+the retired local unit facade. The positive inverse-norm and inverse-algebra
+extras remain unmerged donors in CoerciveUnit. The paper's public quarter-acute
+theorem keeps its signature and scope. No compatibility aliases are introduced.
+
+Validation, without warnings: focused build 7474 jobs, full default build
+21675 jobs (`/tmp/dkps-coercive-consume-full.log`), and Challenge 19923 jobs
+(`/tmp/dkps-coercive-consume-challenge.log`). Those logs belong to this VM;
+the shared campaign records the durable results and the exact pins. The root
+`.lake` bind mount remains VM-local ext4; unrelated manuscript work is preserved.
+#26824 was already consumed. #20359/#26822/#26823 are still open in the selected
+live observation. D17/D18 now have their accepted D16 prerequisite, and the C31
+complex quarter-angle donor can consume the accepted spectral half-plane API;
+the next wave must distinguish that complex branch from the full real/complex
+roadmap target.

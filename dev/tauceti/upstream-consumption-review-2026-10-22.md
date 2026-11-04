@@ -1578,3 +1578,29 @@ name-drift findings are recorded separately in the contribution census.
 After preserving concurrent remote work through `85ed2b98f`, the combined main
 also passed incremental default (21,673 jobs) and Challenge (19,921 jobs)
 builds without warnings. See the contribution census for these final logs.
+
+### November 4 UTC: consume accepted coercive norm and spectral bounds (#26821)
+
+Accepted integration `d6c3a1ba75228691ecd81d6fd8c89ad620b322eb` is an ancestor
+of `11a5574886a7b084337236bb1f858406b483c6cc`. Mathlib remains
+`1b1ccf4b088b32fa3f23f2de1127433254a81e1e`, Lean v4.36.0-rc2.
+The arbitrary-real lower norm estimate is now
+`ContinuousLinearMap.mul_norm_le_norm_apply_of_coercive`, including incomplete
+spaces; `FilledTruncation` uses it directly and the local forwarding proof is
+deleted. The quarter-acute proof's local `spectrum_re_lower_of_coercive` is
+replaced by native `ContinuousLinearMap.le_re_of_mem_spectrum_of_coercive`.
+That accepted theorem allows arbitrary real coercivity constants; the local
+wrapper's unused positivity argument is gone. The public quarter-acute endpoint
+keeps its signature and arbitrary complex Hilbert-space scope.
+
+The original anchors are `ForTauCeti/Analysis/InnerProductSpace/CoerciveUnit.lean`
+(Jon Crall / Claude Fable 5) and
+`DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean`
+(Jon Crall / OpenAI GPT-5.6 Thinking / Claude Opus 5), Kitware 2026, Apache-2.0.
+The submitted shift proof is adapted donor mathematics; invertibility reduces
+to an existing Mathlib criterion, whose ancestry is not assigned to DKPS.
+The CoerciveUnit donor retains its positive inverse norm and inverse algebra
+extras. No unaccepted local mathematics is deleted to shrink the donor.
+#26824 was already consumed; #20359/#26822/#26823 remain open in the selected
+live observation. Full validation belongs to this slice's contribution-census
+entry rather than the earlier green pin.

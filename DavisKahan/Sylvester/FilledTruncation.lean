@@ -354,7 +354,7 @@ theorem boundedInverseData_of_coercive_direct
   refine ⟨hInv, ?_⟩
   refine ContinuousLinearMap.opNorm_le_bound J (inv_nonneg.mpr ha.le) ?_
   intro y
-  have hlow := TauCeti.ContinuousLinearMap.norm_smul_le_norm_apply_of_coercive
+  have hlow := _root_.ContinuousLinearMap.mul_norm_le_norm_apply_of_coercive A
     hcoer (J y)
   have hJy : A (J y) = y := by
     have h := congrArg (fun T : H →L[𝕜] H => T y) hAJ
