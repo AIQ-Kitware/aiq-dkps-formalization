@@ -1,6 +1,6 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
-**Status: intentionally incomplete provenance audit; latest integration update 2026-11-03.** This is a
+**Status: intentionally incomplete provenance audit; latest integration update 2026-11-04.** This is a
 maintained *provenance and results* record, not a PR action queue, a theorem
 census, or a claim of exclusive mathematical authorship. Its purpose is to make
 it possible to say exactly which results in TauCeti benefited from the Kitware
@@ -53,10 +53,11 @@ was located on TauCeti `main` on October 21 (not a final-diff/commit audit);
 accepted diff has not yet been compared declaration-by-declaration in this
 census. Evidence is as of 2026-10-21 unless a dated source is given; see the current [consumption review](upstream-consumption-review-2026-10-22.md).
 
-**Latest integration:** #26821 (coercive norm and spectral bounds) is accepted
-and consumed, following #26824 (SSP-D16 arbitrary eigenframes).
-#20359/#26822/#26823 remain open as individually checked
-on November 3. See the final SSP-D16 integration section below.
+**Latest integration:** #26823 (left target-Gram population overlap) is accepted
+at `da52bf5aeea9c373030f4a29061f8a5dc2658b39` and included in the current
+TauCeti pin `5f78b5307b932e1e2ac7848dc7d4fedc6a52d6c1`, following the consumed
+#26821 and #26824 APIs. #20359/#26822/#27798/#27799/#27804 remain open in the November 4
+selected metadata check. See the final integration section below.
 
 ## Historical submitted-campaign snapshot — 2026-11-03T02:00:51Z
 
@@ -4321,3 +4322,50 @@ The selected live author search still has #20359/#26822/#26823 open; #26821 and
 acceptances and the three prepared payloads without inventing future PR numbers.
 No representation-PVM constructor changed in the accepted-pin delta, so the
 B05 → E01 → E35 chain remains blocked; B12/B16 keep their earlier dispositions.
+
+### 2026-11-04 — accepted SSP-D19 left orientation
+
+[#26823](https://github.com/TauCetiProject/TauCeti/pull/26823) landed as
+`da52bf5aeea9c373030f4a29061f8a5dc2658b39`; GitHub compare and local Git both
+verify its ancestry in main `5f78b5307b932e1e2ac7848dc7d4fedc6a52d6c1`.
+GitHub's native merge timestamp remains null under Bors; closure alone is not
+the evidence. The dependency pin now includes both accepted declarations:
+
+- `LinearMap.norm_self_comp_adjoint_sub_self_comp_adjoint_apply_le` in
+  `Gram/Perturbation.lean`: pointwise target-Gram perturbation, nontrivial source.
+- `LinearMap.sq_mul_sum_sum_norm_inner_self_comp_adjoint_eigenvectorBasis_sq_le_four_mul_card_mul_sq`
+  in `YuWangSamworth/SingularVectors.lean`: squared population-gap overlap,
+  arbitrary finite block, RCLike, independent source/target, including zero gap
+  and zero source via an explicit branch.
+
+These are DKPS adaptations (Kitware 2026, Apache-2.0; original anchors
+`4138aafdf:YuWangSamworth2015/YuWangSamworth2015/Rectangular/Theorem4.lean`,
+Jon Crall / GPT 5.6 High), with the reusable helper extracted in review repair
+`5e7e4d2b2feee29968641a2c4db0b80951b1d501`. The inherited source-Gram helper
+separately retains Jon Crall / Claude Opus 4.8 attribution.
+
+`Core/SingularSubspace.lean` already imports the native module directly.
+No further local proof is displaced: `Rectangular/FrobeniusGram.lean` already
+uses the accepted continuous-linear-map Gram norm estimate, while `Theorem4`
+retains the stronger Frobenius minimum, arbitrary ordered frames, aligned-basis
+conclusions and source-specific rank-boundary correction. A chosen-eigenbasis
+squared-overlap estimate does not replace these conclusions. No forwarding
+alias was added and no broader paper theorem was deleted.
+
+Mathlib stays `1b1ccf4b088b32fa3f23f2de1127433254a81e1e`; Lean stays
+`v4.36.0-rc2`. The prepared D17 alignment branch was submitted as #27798 and
+is still open; #20359 and #26822 also remain open. This is a selected campaign
+metadata/source comparison, not a complete audit of other authors' roadmap work.
+
+The follow-up live open-author query also found #27799 (D18 single-eigenvector
+phase alignment) and #27804 (complex C31 quarter-acute branch), submitted from
+the existing shared packets. All three new wave PRs are open, not accepted;
+retain their local proofs until an actual accepted replacement is available.
+
+Validation at the new pin, serial with `LEAN_NUM_THREADS=8` and CPU affinity
+`0-7`, warnings treated as failures: focused `Core.SingularSubspace` and
+`Rectangular.Theorem4` build (7,156 jobs), full default build (21,675 jobs),
+and `Challenge` (19,923 jobs), all successful without warnings. The accepted
+`Gram.Perturbation` and `YuWangSamworth.SingularVectors` modules were compiled
+by the focused build. `.lake` was verified bind-mounted on VM-local ext4.
+The resource tally hook was installed idempotently and verified armed.
