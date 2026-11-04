@@ -4525,3 +4525,56 @@ operator alone unblocks consumption of B05 → E01 → E35. The five Erotemic PR
 #20359/#26822/#27798/#27799/#27804 remain open. No PR was created, no Lean
 source or dependency pin changed, and no Lean build was needed for this
 status/provenance refresh.
+
+### 2026-11-04 — two further independent ports prepared
+
+Two branches are compiled and packaged against accepted TauCeti main
+`57ab0f657d7fb33d7c9425bf696bec3045b0fd75`; each has that commit as its
+parent and neither contains the other branch. They are **prepared, not yet
+submitted or integrated**, and do not increase the 699 accepted-target count.
+Shared submission material is in `tauceti-dkps-campaign/waves/2026-11-04/`.
+The host script imports the bundles, checks exact heads, merge compatibility,
+roadmap/API/review evidence and live competing PRs, then pushes and opens PRs.
+It reuses the VM validation without any Lake build, cache download or style run.
+
+| Targets | Branch/head | Native module and adapted mathematics |
+|---|---|---|
+| SA-C84–C85 | `port-sa-c84-c85-spectral-form-bounds`, `1e9b85094c68d3765023e1398c3add79b993c228` | `QuadraticForm/Spectrum.lean`: two global spectral/form inequalities and the native `LowerFormBoundOn`/`UpperFormBoundOn` bridges for an invariant restriction. |
+| SA-E14–E21/E23 | `port-sa-e14-e23-yosida-approximants`, `e274c92c0cd53e939842681a6911574ef2c86524` | `LinearPMap/Yosida.lean`: imaginary-shift approximants and symmetric averages, contraction/norm bounds, adjoint symmetry, self-adjointness, commutation and strong convergence on the domain. |
+
+The spectral slice adapts the current
+`ForTauCeti/Analysis/InnerProductSpace/SpectralOrder.lean` proofs of
+`re_inner_le_of_spectrum_subset_Iic`, `le_re_inner_of_spectrum_subset_Ici`
+and the two restriction-to-form bridges. It retains Jon Crall / Claude Opus
+4.8 / GPT 5.6 High, Kitware 2026, Apache-2.0. The port uses native real
+functional calculus over arbitrary RCLike scalars, operator restriction and
+projection completeness, including zero and infinite-dimensional spaces.
+
+The approximation slice adapts
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/YosidaApproximation.lean`
+from DKPS donor snapshot `0ddd076af551994fe6bf97c106f600820d7d2283`.
+It retains Kitware/Jon Crall/Claude Opus 5 adaptation and explicit Spectra
+Formalization Project/Adam Bornemann ancestry at
+`8dbaaf6728d1342ae16acf79fd7eef7c59b37e63`, Apache-2.0. The port generalizes
+the positive-natural parameter to a signed real shift:
+`A_r=-r²R(ir)-irI`, with symmetric average `(A_r+A_{-r})/2`.
+Native resolvent/adjoint facts and `ContinuousLinearMap.tendsto_apply_of_dense`
+replace duplicated inverse and density proofs. The convergence filter covers
+both signs escaping to infinity; compiler-checked examples recover the positive
+and negative natural-index sequences. Definitions/algebra need no completeness;
+self-adjoint analytic results use complete complex Hilbert spaces. No new group,
+Stone theorem or representation PVM is claimed. SA-E22 and E24 onward remain
+outside this slice.
+
+Final validation, serial with eight Lean threads: spectral focused build
+6,335 jobs, all 13 environment linters on four declarations; approximation
+focused build 5,065 jobs, all 13 linters on 17 declarations plus 7 generated.
+Both pass full repository header/text style checks (24,399 files) and their
+main axiom reports use only `propext`, `Classical.choice`, `Quot.sound`.
+The shared packets contain successful final logs, source patches/bundles,
+exact-head build evidence and source self-review against all ten rubrics.
+Self-review is explicitly distinguished from independent/upstream approval.
+VM structural checks leave only the authenticated host live-listing gate
+pending; it runs automatically before host submission. Both commits are authored
+by `joncrall <erotemic@gmail.com>` with the implementing runtime model trailer.
+The local donor proofs, paper consumers and dependency pins are unchanged.
