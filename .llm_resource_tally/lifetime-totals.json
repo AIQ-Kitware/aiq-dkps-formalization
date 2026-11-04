@@ -19,6 +19,7 @@
     "non_committing_work": "requires_reconcile",
     "compaction_usage": "measured_signals_only_when_runtime_omits_usage"
   },
+<<<<<<< HEAD
   "through": "2026-11-04T18:01:34.675452+00:00",
   "ledger_rows": 2921,
   "commits_accounted": 2692,
@@ -29,6 +30,18 @@
     "cache_read": 28742612516,
     "output": 76422398,
     "billable_input": 29024901265
+=======
+  "through": "2026-11-04T18:40:51.681172+00:00",
+  "ledger_rows": 2905,
+  "commits_accounted": 2680,
+  "turns": 87063,
+  "tokens": {
+    "input": 71452652,
+    "cache_write": 209350290,
+    "cache_read": 28708062564,
+    "output": 75843721,
+    "billable_input": 28988865506
+>>>>>>> bf1b7b4a6 (Publish operator-roadmap refresh resource accounting)
   },
   "by_model": {
     "claude-fable-5": {
@@ -104,10 +117,17 @@
       "output": 3078946
     },
     "gpt-6.1-sol": {
+<<<<<<< HEAD
       "input": 40987993,
       "cache_write": 0,
       "cache_read": 3366612480,
       "output": 11271634
+=======
+      "input": 40039090,
+      "cache_write": 0,
+      "cache_read": 3340438272,
+      "output": 11012617
+>>>>>>> bf1b7b4a6 (Publish operator-roadmap refresh resource accounting)
     },
     "litellm-namek/Qwen/Qwen3.5-0.8B": {
       "input": 0,
@@ -130,10 +150,17 @@
       "output": 10700449
     },
     "unlabeled": {
+<<<<<<< HEAD
       "input": 72089720,
       "cache_write": 155791970,
       "cache_read": 23827436701,
       "output": 63433144
+=======
+      "input": 70603913,
+      "cache_write": 155791970,
+      "cache_read": 23792886749,
+      "output": 62854467
+>>>>>>> bf1b7b4a6 (Publish operator-roadmap refresh resource accounting)
     },
     "implementation": {
       "input": 79782,
@@ -156,10 +183,17 @@
       "output": 59452422
     },
     "codex": {
+<<<<<<< HEAD
       "input": 67110903,
       "cache_write": 0,
       "cache_read": 5628244224,
       "output": 15549903
+=======
+      "input": 66162000,
+      "cache_write": 0,
+      "cache_read": 5602070016,
+      "output": 15290886
+>>>>>>> bf1b7b4a6 (Publish operator-roadmap refresh resource accounting)
     },
     "pi": {
       "input": 4611524,
@@ -173,7 +207,11 @@
     "web_fetch": 0
   },
   "time": {
+<<<<<<< HEAD
     "wall_clock_s": 6305345.9
+=======
+    "wall_clock_s": 6207527.8
+>>>>>>> bf1b7b4a6 (Publish operator-roadmap refresh resource accounting)
   },
   "compaction_signals": {
     "events": 90,
