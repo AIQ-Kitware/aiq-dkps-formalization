@@ -53,3 +53,4 @@ gitstats-report/
 
 # Rendered reviewer packet; inventories and the rendering script are the sources.
 /dev/davis-kahan-1970-independent-audit-template.md
+*.wav
