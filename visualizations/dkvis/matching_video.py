@@ -131,9 +131,9 @@ def chapter_metadata(entries: list[dict], path: Path) -> Path:
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--endpoint", default="http://127.0.0.1:8812/v1/audio/speech")
+    parser.add_argument("--endpoint", default="http://127.0.0.1:8821/v1/audio/speech")
     parser.add_argument("--model", default="breeze-tts2")
-    parser.add_argument("--voice", default="ryan")
+    parser.add_argument("--voice", default="crall-math-dk")
     parser.add_argument("--language", help="optional language field; omitted from Breeze requests by default")
     parser.add_argument("--timeout", type=float, default=600)
     parser.add_argument("--quality", choices=list("lmhpk"), default="h")

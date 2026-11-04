@@ -188,9 +188,10 @@ With the local Breeze TTS 2 server running on your host, render the complete vid
 ```
 
 This renders the Manim deck at 1080p/30 FPS, submits one explanation
-per narrated build to `http://127.0.0.1:8812/v1/audio/speech`, and assembles
+per narrated build to `http://127.0.0.1:8821/v1/audio/speech`, and assembles
 `renders/matching-proof.narrated.mp4`. It uses model
-`breeze-tts2`, voice `ryan`, and WAV responses. Requests contain `model`, `input`,
+`breeze-tts2`, the user's cloned voice `crall-math-dk`, and WAV responses.
+Requests contain `model`, `input`,
 `voice`, and `response_format`, matching the supplied Breeze request.
 It uses the existing `slides` Python extra and FFmpeg;
 no local TTS Python package is needed.
