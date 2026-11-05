@@ -4,6 +4,21 @@ from dkvis.quiz import quiz_uses
 from dkvis.lectures import lecture_path, lecture_decks
 
 
+BASICS = DeckSpec(
+    name='prereq-basics', description='A short review of the linear algebra, geometry, and calculus assumed by the series.',
+    footer='before the series: mathematics refresher', narration=lecture_path('basics'),
+    slides=uses('dkvis.learning.basics.scenes', ['BaTitle'])
+    + uses('dkvis.learning.orientation', ['BaSetup'])
+    + uses('dkvis.learning.basics.scenes', [
+        'BaNumbers', 'BaMatrices', 'BaSpaces', 'BaInner', 'BaAdjoints',
+        'BaTrig', 'BaEigen', 'BaMeasurements', 'BaLimits', 'BaDerivative',
+        'BaIntegral', 'BaRecap', 'BaFacts', 'BaLean', 'BaLeanMinimum',
+    ])
+    + uses('dkvis.learning.basics.scenes', ['BaComputation'], depth='*')
+    + quiz_uses(),
+)
+
+
 PROJECTIONS = DeckSpec(
     name='prereq-projections', description='From nearest points to subspace projections, frames, and commuting blocks.',
     footer='subspaces and projections', narration=lecture_path('projections'),
@@ -79,5 +94,5 @@ VARIATIONS = DeckSpec(
     + quiz_uses(),
 )
 
-_BY_NAME = {d.name: d for d in (PROJECTIONS, COMPLEMENTARY_PROJECTION, SINGULAR_NORMS, MATRIX_EXPONENTIAL, VARIATIONS)}
+_BY_NAME = {d.name: d for d in (BASICS, PROJECTIONS, COMPLEMENTARY_PROJECTION, SINGULAR_NORMS, MATRIX_EXPONENTIAL, VARIATIONS)}
 PREREQUISITES = tuple(_BY_NAME[name] for name in lecture_decks("prerequisites"))

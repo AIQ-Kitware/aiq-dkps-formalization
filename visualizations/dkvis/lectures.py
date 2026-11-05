@@ -158,7 +158,7 @@ def write_catalog(rows, root):
     for key, row in rows.items():
         folder = find_folder(key, root)
         number = folder.name.split('_', 1)[0]
-        parents = ', '.join(f'[{p}](#{p})' for p in row.get('requires', [])) or 'Basic vectors and matrices'
+        parents = ', '.join(f'[{p}](#{p})' for p in row.get('requires', [])) or row.get('background', 'Basic vectors and matrices')
         lines += [f'<a id="{key}"></a>', f'## {number} — {row["title"]}', '',
                   f'Prerequisites: {parents}.', '',
                   f'[Transcript]({folder.name}/lecture.md) · '

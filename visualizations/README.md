@@ -42,6 +42,34 @@ Add `--extra vtk` for the VTK scenes. Manim also needs the host's Cairo, Pango,
 FFmpeg, and LaTeX packages. The [production guide](dkvis/presentation/README.md)
 explains the common commands and TTS configuration.
 
+## Render narrated lectures
+
+From `visualizations/`, start a configured TTS server and render a lecture or
+all registered lectures in dependency order:
+
+```bash
+make video DECK=operators-sylvester TTS_PROFILE=crall
+make lectures-video TTS_PROFILE=crall
+make prerequisites-video TTS_PROFILE=crall  # prerequisite series only
+```
+
+`crall` uses the Breeze voice-cloning profile; `kokoro` uses Kokoro. The
+Kokoro profile requires `KOKORO_TTS_ENDPOINT` in the environment or this
+directory's `.env`. For a local CPU server on port 8881:
+
+```bash
+KOKORO_TTS_ENDPOINT=http://127.0.0.1:8881/v1/audio/speech \
+  make lectures-video TTS_PROFILE=kokoro
+```
+
+See `services/tts/README.md` in the local-ai repository for provisioning
+Breeze and Kokoro. Use `SKIP_RENDER=1` only when the slide visuals
+for all selected lectures already exist; it avoids rebuilding those visuals
+when running another narration profile concurrently. Profiles use separate
+audio and video outputs. Completed speech chunks and video segments are cached,
+so rerunning after interruption reuses matching work; the interrupted request
+must finish again. A batch stops at the first failure and can be rerun.
+
 ## Browse and watch rendered material
 
 From `visualizations/`, start the media library:

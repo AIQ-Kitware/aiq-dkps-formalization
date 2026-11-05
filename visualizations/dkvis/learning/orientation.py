@@ -120,3 +120,13 @@ class CpSetup(OrientationSlide):
              (r'(I-P)x=x-Px','Subtract the projected component from the original vector.'),
              (r'K^\perp','All directions perpendicular to every vector in K.'))
     goal='Goal: see the complementary component, then distinguish projection error from motion displacement.'
+
+
+class BaSetup(OrientationSlide):
+    lesson_deck='prereq-basics'
+    setting='A refresher and a readiness check: recognize the ideas, then decide what to revisit.'
+    symbols=((r'x,\ A','A vector and a matrix: inputs and the rules that transform them.'),
+             (r'\langle x,y\rangle,\ \theta','Inner products and angles: measuring alignment and perpendicularity.'),
+             (r'Av=\lambda v','Eigenvectors: directions a matrix only scales.'),
+             (r'f^\prime(t),\ \int_a^b f(t)\,dt','Derivatives and integrals: rates of change and accumulation.'))
+    goal='Recognize the basic language; the later lectures develop the specialized tools.'

@@ -4865,3 +4865,15 @@ GitHub reports it mergeable. Focused build (6427 jobs), all 13 environment
 linters, the scope example and full style (26286 files) passed. Upstream CI and
 review on the merge head remain pending. The shared campaign packet contains
 the updated branch bundle and a host command for synchronizing its description.
+
+### #28079 domain convergence and imaginary-shift review (2026-11-05)
+
+[#28079](https://github.com/TauCetiProject/TauCeti/pull/28079) repair
+`725864e54f56217421a7ee2bfa5742e322d9ca34` exports the equality between the
+imaginary-shift and generic Yosida approximations. It extracts scalar- and
+filter-general domain convergence without density or uniform normalized-resolvent
+bounds, reuses that theorem in the dense convergence result, and removes the
+unused real-only domain convergence proof. The focused build and real generation
+regression (5923 jobs), all 13 environment linters, external scope examples, and
+full style (24400 files) passed. The PR remains open; upstream CI/review on the
+new head is pending. The shared packet contains the updated branch and description.

@@ -1,12 +1,19 @@
 # Stable IDs, teaching dependencies, and preferred order for independent topics.
 # Numbers and directory paths are inferred, not maintained here.
 lectures:
+  basics:
+    title: Before the series — a mathematics refresher
+    deck: prereq-basics
+    topic: basics
+    series: prerequisites
+    background: School algebra; a refresher rather than a first course
+    requires: []
   projections:
     title: Subspaces and projections
     deck: prereq-projections
     topic: projections
     series: prerequisites
-    requires: []
+    requires: [basics]
   complementary_projection:
     title: Thinking about I minus P
     deck: prereq-complementary-projection
