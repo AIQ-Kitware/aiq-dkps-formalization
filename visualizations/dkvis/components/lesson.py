@@ -2,10 +2,10 @@
 from functools import lru_cache
 
 import numpy as np
-from manim import Arrow, Axes, DOWN, LEFT, Line, Rectangle, RIGHT, VGroup
+from manim import Arrow, Axes, DOWN, LEFT, Line, Rectangle, RIGHT, UP, VGroup
 
 from dkvis.presentation.narration import read_deck_narration
-from dkvis.slide_style import CURRENT, FG, MUTED, DeckSlide, math, mono, para, tex
+from dkvis.slide_style import CURRENT, FG, MUTED, DeckSlide, boxed, math, mono, para, tex
 
 
 @lru_cache
@@ -46,6 +46,7 @@ class LessonSlide(DeckSlide):
     """Topics supply a deck name and scene bodies; content stays in transcripts."""
     lesson_deck = ''
     stage = 0
+    example = False
     wait_time_between_slides = .25
 
     @property
@@ -54,6 +55,8 @@ class LessonSlide(DeckSlide):
 
     def make_chrome(self):
         self.title, self.kicker = self.script.title, self.script.motivation
+        if self.example:
+            self.title = r"\textbf{Example:} " + self.title
         chrome = super().make_chrome()
         if len(self._head) > 1 and self._head[1].width > 12.2:
             self._head[1].scale_to_fit_width(12.2).next_to(
@@ -91,6 +94,8 @@ class LessonSlide(DeckSlide):
         return mob
 
     def takeaway(self, message):
+        if self.example:
+            message = r"\textbf{General tool:} " + message
         label = para(message, width=12, size=25, color=CURRENT)
         if label.height > .63:
             raise ValueError(f'Takeaway too long: {type(self).__name__}')
@@ -121,19 +126,56 @@ class LessonTitle(LessonSlide):
 
 
 class LessonLean(LessonSlide):
-    """Display the checked companion file, with its imports in the source credit."""
+    """Pair symbolic facts with the checked examples applying their Lean APIs."""
     lecture_id = ''
     ownership = ''
     notation = ''
+    symbolic_facts = ()
     stage = 3
 
     def body(self):
+        import re
         from dkvis.lectures import lecture_path
         from dkvis.presentation.paths import ROOT
 
         self.start()
         source = (ROOT / lecture_path(self.lecture_id)).with_name('facts.lean').read_text()
         code = source.split('-- slide-begin\n', 1)[1].split('-- slide-end', 1)[0].strip()
-        self.put(mono(code, size=20), y=.05, height=4.1)
-        self.add(tex(self.ownership, size=19, color=MUTED).move_to([0, -2.25, 0]))
+        starts = [m.start() for m in re.finditer(r'^example\b', code, re.MULTILINE)]
+        examples = [code[start:end].strip() for start, end in
+                    zip(starts, starts[1:]+[len(code)])]
+        if len(examples) != len(self.symbolic_facts):
+            raise ValueError(f'Symbolic/Lean fact mismatch: {type(self).__name__}')
+        def code_block(text, size=18):
+            mob = mono(text, size=size)
+            if mob.width > 8.5:
+                mob.scale_to_fit_width(8.5)
+            return mob
+        context = code_block(code[:starts[0]].strip(), size=16) if starts[0] else None
+        rows = []
+        for i, ((label, statement), example) in enumerate(zip(self.symbolic_facts, examples), 1):
+            formula = boxed(math(statement, size=27), color=CURRENT)
+            if formula.width > 3.7:
+                formula.scale_to_fit_width(3.7)
+            symbolic = VGroup(tex(f'{i}. {label}', size=21), formula).arrange(DOWN, buff=.15)
+            rows.append((symbolic, code_block(example)))
+        height = (context.height+.18 if context is not None else 0) + sum(
+            max(left.height, right.height) for left, right in rows) + .20*(len(rows)-1)
+        scale = min(1, 4.1/height)
+        if scale < .75:
+            raise ValueError(f'Lean comparison too dense: {type(self).__name__}')
+        top = .1 + height*scale/2
+        if context is not None:
+            context.scale(scale).move_to([-2.05, top, 0], aligned_edge=UP+LEFT)
+            self.add(context)
+            top -= context.height+.18*scale
+        for left, right in rows:
+            left.scale(scale); right.scale(scale)
+            row_height = max(left.height, right.height)
+            left.move_to([-4.7, top-row_height/2, 0])
+            right.move_to([-2.05, top-row_height/2, 0], aligned_edge=LEFT)
+            self.add(left, right)
+            top -= row_height+.20*scale
+        self.add(Line([-2.45, 2.1, 0], [-2.45, -2.02, 0], color=MUTED, stroke_width=1),
+                 tex(self.ownership, size=19, color=MUTED).move_to([0, -2.25, 0]))
         self.takeaway(self.notation)

@@ -31,6 +31,7 @@ def projection_picture():
 
 
 class Pr00Question(ProjectionSlide):
+    example = True
     def body(self):
         self.start()
         picture, ax, projected, residual = projection_picture()
@@ -63,6 +64,7 @@ class Pr01History(ProjectionSlide):
 
 
 class Pr02Decomposition(ProjectionSlide):
+    example = True
     stage = 1
 
     def body(self):
@@ -90,6 +92,7 @@ class Pr02Decomposition(ProjectionSlide):
 
 
 class Pr03Projector(ProjectionSlide):
+    example = True
     stage = 1
 
     def body(self):
@@ -105,13 +108,14 @@ class Pr03Projector(ProjectionSlide):
         self.add(math('Px', size=25, color=WANTED).next_to(arrow, DOWN, buff=.18))
         self.beat()
         self.play(Indicate(arrow), run_time=.6)
-        self.put(stack(r'P^2=P,\qquad P^T=P',
+        self.put(stack(boxed(math(r'P^2=P,\qquad P^T=P', size=28), color=CURRENT),
                        r'\operatorname{range}P=K,\quad\ker P=K^\perp',
-                       r'P^\perp:=I-P', size=28, buff=.3), 'right', y=-1.3, height=1.4)
+                       r'P^\perp:=I-P', size=28, buff=.3), 'right', y=-1.2, height=1.6)
         self.takeaway('Idempotence keeps projected vectors fixed; symmetry makes the projection orthogonal.')
 
 
 class Pr04Frames(ProjectionSlide):
+    example = True
     stage = 1
 
     def body(self):
@@ -131,7 +135,7 @@ class Pr04Frames(ProjectionSlide):
         angle = float(np.arctan2(rotated[1, 0], rotated[0, 0]))
         self.play(Rotate(a, angle=angle, about_point=ax.c2p(0, 0)),
                   Rotate(b, angle=angle, about_point=ax.c2p(0, 0)), run_time=1.3)
-        self.put(stack(r'\widetilde E\widetilde E^T=ECC^TE^T=EE^T=P',
+        self.put(stack(boxed(math(r'\widetilde E\widetilde E^T=ECC^TE^T=EE^T=P', size=25), color=CURRENT),
                        tex('Basis vectors moved. The subspace stayed fixed.', size=25), size=27),
                  'right', y=-1.35, height=1.1)
         self.takeaway('A frame is a choice of coordinates; the projector describes the underlying space.')
@@ -176,6 +180,7 @@ class Pr06Commutation(ProjectionSlide):
 
 
 class Pr07Transport(ProjectionSlide):
+    example = True
     stage = 2
 
     def body(self):
@@ -233,5 +238,9 @@ class PrFacts(ProjectionSlide):
 class PrLean(LessonLean):
     lesson_deck = 'prereq-projections'
     lecture_id = 'projections'
+    symbolic_facts = (
+        ('Projection split', r'Px+P^\perp x=x'),
+        ('Block criterion', r'T_{\mathrm{off}}=0\ \Longleftrightarrow\ PT=TP'),
+    )
     ownership = 'Mathlib: projection splitting. Tau Ceti: off-diagonal block criterion.'
     notation = r'\texttt{starProjection} is $P_K$; \texttt{Commute P T} means $PT=TP$.'

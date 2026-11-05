@@ -5,12 +5,12 @@ import Mathlib.LinearAlgebra.Matrix.PosDef
 import Mathlib.Algebra.Order.Star.Real
 
 -- slide-begin
+variable {n : Type*} [Fintype n] [DecidableEq n]
+
 example {f : ℝ → ℝ} {d : ℝ}
     (hmin : IsLocalMin f 0) (hd : HasDerivAt f d 0) :
     d = 0 :=
   hmin.hasDerivAt_eq_zero hd
-
-variable {n : Type*} [Fintype n] [DecidableEq n]
 
 example (C : Matrix n n ℝ) :
     (C.transpose * C).trace = 0 ↔ C = 0 := by

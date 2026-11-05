@@ -1,7 +1,9 @@
 # Lean companions for the prerequisite lectures
 
 Each prerequisite lecture ends with a mathematical facts card followed by the
-same facts in Lean. The order of the examples matches the order of the formulas.
+same facts in Lean. The order of the examples matches the order of the formulas. On the Lean slide,
+each formula is repeated beside its corresponding code, with shared Lean
+assumptions above the rows.
 The code slide reads the `slide-begin` / `slide-end` region of the actual
 `facts.lean` companion; it is not a separately maintained transcription.
 Imports and the noncomputable-section command remain in the copyable file.

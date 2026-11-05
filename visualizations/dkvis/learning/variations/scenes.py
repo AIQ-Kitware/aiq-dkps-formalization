@@ -24,6 +24,7 @@ def unit_circle():
 
 
 class Va00Question(VariationSlide):
+    example = True
     def body(self):
         self.start()
         ax, circle = unit_circle()
@@ -57,6 +58,7 @@ class Va01History(VariationSlide):
 
 
 class Va02Velocity(VariationSlide):
+    example = True
     stage = 1
 
     def body(self):
@@ -72,13 +74,14 @@ class Va02Velocity(VariationSlide):
                        r'0=B^TI+IB=B^T+B', size=31, buff=.45),
                  'right', y=.7, height=2.5)
         self.beat()
-        self.put(stack(r'B^T=-B\quad\text{(skew-symmetric)}',
+        self.put(stack(boxed(math(r'B^T=-B\quad\text{(skew-symmetric)}', size=28), color=CURRENT),
                        r'B=bJ,\qquad J=\begin{pmatrix}0&-1\\1&0\end{pmatrix}',
                        size=29, buff=.3), 'right', y=-1.25, height=1.5)
-        self.takeaway('A skew-symmetric matrix describes the instantaneous velocity of an orthogonal motion.')
+        self.takeaway('Differentiate orthogonality to obtain a skew-symmetric velocity.')
 
 
 class Va03Exponential(VariationSlide):
+    example = True
     stage = 1
 
     def body(self):
@@ -95,12 +98,13 @@ class Va03Exponential(VariationSlide):
                   Rotate(exact, angle=.9, about_point=ax.c2p(0, 0)), run_time=1.2)
         self.beat()
         self.put(stack(r'\exp(tB)^T=\exp(-tB)=\exp(tB)^{-1}',
-                       r'\exp(tB)^T\exp(tB)=I', size=29, buff=.35),
+                       boxed(math(r'\exp(tB)^T\exp(tB)=I', size=29), color=CURRENT), size=29, buff=.35),
                  'right', y=-1.3, height=1.3)
         self.takeaway('The exponential follows an exact orthogonal curve instead of just its tangent approximation.')
 
 
 class Va04SourceMotion(VariationSlide):
+    example = True
     stage = 1
 
     def body(self):
@@ -141,6 +145,7 @@ class Va05Feasible(VariationSlide):
 
 
 class Va06Stationarity(VariationSlide):
+    example = True
     stage = 2
 
     def body(self):
@@ -158,10 +163,11 @@ class Va06Stationarity(VariationSlide):
         maximum = ax.plot(lambda t: np.cos(t), x_range=[-2, 2, .025], color=GAP)
         self.play(Create(maximum), run_time=1)
         self.add(math(r'\text{Circle maximum: }h(t)=\cos t', size=25, color=GAP).move_to([3.25, -1.6, 0]))
-        self.takeaway('Stationarity is necessary for a minimum. A zero first derivative alone does not identify one.')
+        self.takeaway('A differentiable local minimum has zero derivative; the converse need not hold.')
 
 
 class Va07Gradient(VariationSlide):
+    example = True
     stage = 2
 
     def body(self):
@@ -169,7 +175,7 @@ class Va07Gradient(VariationSlide):
         self.put(stack(tex('Define G using every skew velocity B.', size=27),
                        r'D(B)=\left.\frac{d}{dt}\Phi_p(We^{tB})\right|_{t=0}',
                        r'\langle G,B\rangle_F=\operatorname{tr}(G^TB)',
-                       r'G^T=-G\quad\Longrightarrow\quad D(B)=-\operatorname{tr}(GB)',
+                       boxed(math(r'G^T=-G\ \Longrightarrow\ D(B)=-\operatorname{tr}(GB)', size=25), color=CURRENT),
                        size=28, buff=.43), 'left', y=.2)
         self.beat()
         self.put(stack(tex('Check the sign on a rotation plane', size=28),
@@ -255,5 +261,9 @@ class VaFacts(VariationSlide):
 class VaLean(LessonLean):
     lesson_deck = 'prereq-variations'
     lecture_id = 'variations'
+    symbolic_facts = (
+        (r'Stationarity ($f=\phi$)', r'\begin{gathered}0\text{ local min},\ f\text{ differentiable}\\\Longrightarrow\ f\prime(0)=0\end{gathered}'),
+        ('Zero trace square', r'\operatorname{tr}(C^TC)=0\ \Longleftrightarrow\ C=0'),
+    )
     ownership = 'Mathlib: derivative at a local minimum; faithfulness of the matrix trace square.'
     notation = r'\texttt{HasDerivAt f d 0} means $f\prime(0)=d$; \texttt{IsLocalMin f 0} is a local minimum.'

@@ -19,6 +19,7 @@ class NormSlide(LessonSlide):
 
 
 class Sn00Question(NormSlide):
+    example = True
     def body(self):
         self.start()
         reflection, turn = competing_displacements()
@@ -48,6 +49,7 @@ class Sn01History(NormSlide):
 
 
 class Sn02Stretching(NormSlide):
+    example = True
     stage = 1
 
     def body(self):
@@ -68,13 +70,14 @@ class Sn02Stretching(NormSlide):
         self.play(Transform(circle, ellipse),
                   *(Transform(initial[i], vector(ax, singular[i]*u[:, i], WANTED)) for i in range(2)),
                   run_time=1.6)
-        self.put(stack(r'Tv_j=s_j u_j,\qquad s_j\ge0',
+        self.put(stack(boxed(math(r'Tv_j=s_j u_j,\quad s_j\ge0', size=28), color=CURRENT),
                        tex('Perpendicular input and output directions.', size=25), size=30),
                  'right', y=-1.2, height=1.4)
         self.takeaway('Singular values describe stretches; they need not be eigenvalues.')
 
 
 class Sn03Norms(NormSlide):
+    example = True
     stage = 1
 
     def body(self):
@@ -87,11 +90,12 @@ class Sn03Norms(NormSlide):
         self.beat()
         self.add(math(r'T=\operatorname{diag}(-2,1):\quad'
                       r'\operatorname{tr}T=-1,\qquad\|T\|_1=3', size=28).move_to([0, -1.52, 0]),
-                 math(r'\|T\|_1=\operatorname{tr}\sqrt{T^TT}', size=28).move_to([0, -2.08, 0]))
+                 math(r'\|T\|_1=\operatorname{tr}\sqrt{T^TT}', size=28, color=CURRENT).move_to([0, -2.08, 0]))
         self.takeaway('The trace norm sums nonnegative singular values, rather than signed eigenvalues.')
 
 
 class Sn04Invariance(NormSlide):
+    example = True
     stage = 1
 
     def body(self):
@@ -113,6 +117,7 @@ class Sn04Invariance(NormSlide):
 
 
 class Sn05Rotation(NormSlide):
+    example = True
     stage = 2
 
     def body(self):
@@ -143,10 +148,11 @@ class Sn05Rotation(NormSlide):
                                         size=26).move_to(label)), run_time=1.3)
         self.add(tex('Dashed: reflection axis bisecting the source and target lines.',
                      size=23, color=MUTED).move_to([0, -2.05, 0]))
-        self.takeaway('A singleton costs the cheaper of rotation and reflection; the costs tie at 60 degrees.')
+        self.takeaway(r'For one principal plane: compare $4\sin(\theta/2)$ with $2$.')
 
 
 class Sn06SmoothCost(NormSlide):
+    example = True
     stage = 2
 
     def body(self):
@@ -169,6 +175,7 @@ class Sn06SmoothCost(NormSlide):
 
 
 class Sn07BlockCosts(NormSlide):
+    example = True
     stage = 2
 
     def body(self):
@@ -190,6 +197,7 @@ class Sn07BlockCosts(NormSlide):
 
 
 class Sn08Restrictions(NormSlide):
+    example = True
     stage = 2
 
     def body(self):
@@ -249,5 +257,9 @@ class SnFacts(NormSlide):
 class SnLean(LessonLean):
     lesson_deck = 'prereq-singular-norms'
     lecture_id = 'singular_norms'
+    symbolic_facts = (
+        ('Finite Schatten norm', r'N_p(A)=\left(\sum_j s_j(A)^p\right)^{1/p}'),
+        ('Orthogonal coordinates', r's(UAV)=s(A)'),
+    )
     ownership = 'Tau Ceti: Schatten seminorms and singular-value invariance.'
     notation = r'$\to_\ell$ means linear map; $\simeq_\ell^i$ means isometric isomorphism; $\circ_\ell$ is composition.'

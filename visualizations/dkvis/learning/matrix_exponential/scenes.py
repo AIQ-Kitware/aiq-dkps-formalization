@@ -70,6 +70,7 @@ class Ex02Series(ExponentialSlide):
 
 
 class Ex03SmallSteps(ExponentialSlide):
+    example = True
     stage = 1
 
     def body(self):
@@ -93,7 +94,7 @@ class Ex03SmallSteps(ExponentialSlide):
         self.put(stack(tex('Violet: 4 steps. Steel: 32 steps. Blue: exact arc.', size=24),
                        tex('Finite Euler steps drift outward; the limit rotates.', size=25)),
                  'right', y=-1.4, height=1.1)
-        self.takeaway('Repeated local updates approach the exact flow; a finite approximation need not preserve its constraints.')
+        self.takeaway('Repeated local updates approach the exact flow; finite steps may break its constraints.')
 
 
 class Ex04Dynamics(ExponentialSlide):
@@ -112,6 +113,7 @@ class Ex04Dynamics(ExponentialSlide):
 
 
 class Ex05Diagonal(ExponentialSlide):
+    example = True
     stage = 1
 
     def body(self):
@@ -123,7 +125,8 @@ class Ex05Diagonal(ExponentialSlide):
             lambda a: ax.c2p(np.exp(.5*time.get_value())*np.cos(a), np.exp(-.3*time.get_value())*np.sin(a)),
             t_range=[0, 2*np.pi], color=WANTED))
         self.add(curve)
-        self.put(stack(r'A=\operatorname{diag}(0.5,-0.3)',
+        self.put(stack(boxed(math(r'e^{t\operatorname{diag}(\lambda_j)}=\operatorname{diag}(e^{t\lambda_j})', size=26), color=CURRENT),
+                       r'A=\operatorname{diag}(0.5,-0.3)',
                        r'e^{tA}=\operatorname{diag}(e^{0.5t},e^{-0.3t})',
                        tex('Horizontal growth, vertical decay.', size=28),
                        tex('The faint circle is the initial shape.', size=25),
@@ -135,6 +138,7 @@ class Ex05Diagonal(ExponentialSlide):
 
 
 class Ex06Shear(ExponentialSlide):
+    example = True
     stage = 1
 
     def body(self):
@@ -151,12 +155,15 @@ class Ex06Shear(ExponentialSlide):
         transformed = (np.eye(2)+shear_generator()) @ points.T
         self.play(Transform(square, Polygon(*(ax.c2p(*p) for p in transformed.T),
                                             color=WANTED, fill_opacity=.07)), run_time=1.4)
-        self.put(stack(r'(e^{tN})^{-1}=I-tN', tex('This linear formula is exact because the series stops.', size=24)),
-                 'right', y=-1.4, height=1.1)
+        self.put(stack(boxed(math(r'N^2=0\ \Longrightarrow\ e^{tN}=I+tN', size=27), color=CURRENT),
+                       r'(e^{tN})^{-1}=I-tN',
+                       tex('The power series stops exactly.', size=24), buff=.2),
+                 'right', y=-1.4, height=1.4)
         self.takeaway('The generator can be singular while its exponential is always invertible.')
 
 
 class Ex07Rotation(ExponentialSlide):
+    example = True
     stage = 1
 
     def body(self):
@@ -165,13 +172,13 @@ class Ex07Rotation(ExponentialSlide):
         arrow = vector(ax, [1, 0], WANTED)
         self.put(VGroup(ax, circle, arrow), 'left', y=.2)
         self.put(stack(r'J=\begin{pmatrix}0&-1\\1&0\end{pmatrix},\qquad J^2=-I',
-                       r'e^{tJ}=(\cos t)I+(\sin t)J',
+                       boxed(math(r'e^{tJ}=(\cos t)I+(\sin t)J', size=30), color=CURRENT),
                        r'=\begin{pmatrix}\cos t&-\sin t\\\sin t&\cos t\end{pmatrix}',
                        size=31, buff=.5), 'right', y=.5, height=3.2)
         self.beat()
         self.play(Rotate(arrow, angle=np.pi/2, about_point=ax.c2p(0, 0)), run_time=1.5)
         self.add(math(r'e^{tbJ}=R_{bt}\quad\text{(angular speed }b\text{)}', size=29).move_to([3.25, -1.6, 0]))
-        self.takeaway('Even powers give cosine; odd powers give sine. A quarter-turn velocity generates rotation.')
+        self.takeaway('When $J^2=-I$, even powers give cosine and odd powers give sine.')
 
 
 class Ex08Laws(ExponentialSlide):
@@ -190,6 +197,7 @@ class Ex08Laws(ExponentialSlide):
 
 
 class Ex09Noncommuting(ExponentialSlide):
+    example = True
     stage = 2
 
     def body(self):
@@ -277,5 +285,10 @@ class ExFacts(ExponentialSlide):
 class ExLean(LessonLean):
     lesson_deck = 'prereq-matrix-exponential'
     lecture_id = 'matrix_exponential'
+    symbolic_facts = (
+        ('Compose the flow', r'e^{(s+t)A}=e^{sA}e^{tA}'),
+        ('Preserve lengths', r'\begin{gathered}B^*=-B\ \Longrightarrow\\(e^B)^*e^B=e^B(e^B)^*=I\end{gathered}'),
+        ('Preserve the split', r'BP=PB\ \Longrightarrow\ e^BP=Pe^B'),
+    )
     ownership = 'Tau Ceti: exponential flow. Mathlib: skew-adjoint exponential and commutation.'
     notation = r'$\to_L$ means bounded linear map; $\bullet$ is scalar multiplication; real \texttt{unitary} means orthogonal.'

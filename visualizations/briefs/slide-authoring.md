@@ -52,3 +52,22 @@ to fade in, show the content immediately.
 Do not alter checked numerical models merely to improve a picture.  Add a new
 specialization to the model layer and test it if a component needs new numbers.
 Keep claims tied to the Lean/source evidence already recorded in the repository.
+
+
+## Examples and the reusable tool
+
+Label worked cases visibly as examples. In prerequisite lessons, set
+`LessonSlide.example = True` to prefix the title with **Example:** and mark the
+colored takeaway as **General tool:**. Use that takeaway to state the rule the
+case illustrates, with any essential hypothesis. Distinguish particular numbers
+or matrices from the general statement. Where the body has room, box the
+symbolic rule in the existing content column; otherwise emphasize the rule
+without adding another panel. Keep the example values and animation visible.
+
+
+On a Lean companion slide, repeat the symbolic statement beside the code that
+proves it. Match the order of the preceding mathematical facts card. Keep common
+assumptions visible, make the notation correspondence explicit, and wrap code
+lines in the checked companion file rather than shrinking long lines until they
+are unreadable. `LessonLean.symbolic_facts` supplies the paired labels/formulas;
+the code is read from the actual examples in `facts.lean`.
