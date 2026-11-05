@@ -103,7 +103,6 @@ SHORT = DeckSpec(
         "P01Claim", "P02Counterexample", "S14Summary",
     ]),
     description="Reference 15-minute core talk from before the deck/component reorganization.",
-    narration="narration/sine-theta-short.md",
 )
 
 FULL_PARTS = tuple(PART_SCENES)

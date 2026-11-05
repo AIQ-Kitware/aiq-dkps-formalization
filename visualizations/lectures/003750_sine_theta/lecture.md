@@ -1,12 +1,10 @@
 # How far can an eigenvector turn?
 
-A standalone, TTS-ready transcript of the fifteen-minute
-`sine-theta-short` reference deck. The transcript adds standalone
-explanations the live talk leaves implicit, so a full reading runs longer
-than the deck's live pacing; it closes with two study questions kept in
-the companion `sine-theta-short-quiz.yaml` (quiz.yaml format), which the
-narration loader appends as the final spoken scenes when a deck wires in
-both files.
+A standalone, TTS-ready transcript for the numbered `sine-theta-lecture`
+edition of the eighteen-scene `sine-theta-short` reference talk. The expanded
+narration runs longer than the fifteen-minute live presentation. The two
+closing study questions live in `quiz.yaml` and are included by the common
+lecture/video pipeline.
 
 The deck presents the Davis-Kahan sin Theta theorem — its statement, the
 mechanism behind it, and its exact Lean form — plus the project's second
@@ -48,26 +46,19 @@ reference scenes: fifteen of the eighteen scenes in
 commit), and `P01Claim`/`P02Counterexample` in `dkvis/slides_prop44.py`
 (last touched by `bcfe89afb`, 8 October 2026). The deck composition is
 the frozen reference `SHORT` deck in `dkvis/decks/reference.py` (last
-touched by `a3358dd63`, 9 October 2026). This transcript is not wired
-into the rendering pipeline (the deck spec carries no `narration`
-field), and no scene code was changed. One scene, `S00TitleShort`, is
-silent in the current source; the paragraph under it below is a spoken
-opening added for the standalone document. The two study questions that close the spoken presentation live in the
-companion `sine-theta-short-quiz.yaml` (standard quiz format); if this
-deck is ever registered as a numbered lecture, promote them into the
-lecture's `quiz.yaml`.
+touched by `a3358dd63`, 9 October 2026). The numbered edition uses those existing visual bodies with an adapter that
+binds each authored beat to its corresponding animation build. Its title has
+a short spoken opening and the shared robot/model disclosure. The original
+reference composition retains its own visual and presenter-note behavior.
+The integration and the corrections listed in `provenance.yaml` were authored
+by GPT-6.1-Sol; Qwen's transcript and quiz authorship are retained separately.
 
 ## S00TitleShort: How far can an eigenvector turn?
 
 Why: Name the single question that organizes the whole talk.
 Recall: No notation is needed on the title slide.
 
-How far can an eigenvector turn? That is the question. Perturb a
-self-adjoint operator and its eigenvalues are well behaved, but its
-eigenvectors can rotate. In 1970 Davis and Kahan answered the question
-with four theorems. This talk treats the first, the sin Theta theorem:
-what it says, why it is true, its exact Lean statement, and a second
-result in which the formalization found an error in the printed paper.
+How far can an eigenvector turn?
 
 ## S00bSetting: The setting: self-adjoint operators
 
@@ -248,8 +239,8 @@ zero. How should we measure their error?
 
 In this one-dimensional picture, project the trial column E zero onto
 the exact wanted line spanned by F zero. The part left outside that line
-has length sin theta. Written as an operator, sin Theta zero of E zero,
-F zero equals the norm of (I minus F zero F zero star) E zero: F zero F
+has length sin theta. In this one-dimensional case, the error is the norm of
+(I minus F zero F zero star) E zero, which equals sin theta: F zero F
 zero star is the projection onto range F zero, star being transpose in
 the real case and conjugate transpose in the complex case. The formula
 already has the same algebraic form as the operator used in the
@@ -317,7 +308,8 @@ small trial operator A zero: the residual is R equals A hat E zero
 minus E zero A zero. With the Rayleigh-Ritz choice, A zero is E zero
 star A hat E zero; in the perturbation application, A zero instead
 comes from the exact wanted eigensystem of the original A. In either
-case, R measures how much A hat range(E zero) leaves range(E zero). The
+case, R measures how well the trial frame and its chosen operator satisfy
+A hat E zero equals E zero A zero. The
 theorem asks whether a small, directly formed R, together with spectral
 separation, certifies a small angle to the exact frame F zero.
 
@@ -377,7 +369,7 @@ Rearranged: the subspace error is at most the residual norm divided by
 the spectral separation, error at most residual over separation. Notice
 what is absent: there is no original A and no perturbation H in the
 theorem itself. A hat is simply the operator whose exact wanted frame F
-zero we want. On the next slide we add the extra perturbation
+zero we want. After explaining the residual mechanism, we add the perturbation
 structure, A hat equals A plus H.
 
 ## S08Why: Why it is true
@@ -458,15 +450,15 @@ eigenvalue, lambda three.
 <!-- beat -->
 
 Now range E zero is a trial plane, tilted by theta about a line lying in
-range F zero. Two planes in R three always meet in a line, so the
+range F zero. Two distinct planes through the origin in R three meet in a line, so the
 principal angles between them are (theta, zero).
 
 <!-- beat -->
 
-So sin Theta zero has one nonzero singular value: its norm, equal to the
-norm of F one transpose E zero, is sin theta, the pink drop from the
-tilted trial direction down to range F zero. A single singular value
-has the same norm in every unitarily invariant norm.
+So the directed sine has at most one nonzero singular value. Its operator
+norm, equal to the operator norm of F one transpose E zero, is sin theta, the pink drop from the
+tilted trial direction down to range F zero. Other unitarily invariant norms use the same singular-value list; with
+rank-one normalization, they also give sin theta.
 
 <!-- beat -->
 

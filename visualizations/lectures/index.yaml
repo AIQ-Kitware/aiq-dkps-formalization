@@ -56,6 +56,12 @@ lectures:
     topic: operators
     series: operators
     requires: [minmax, matrix_exponential]
+  sine_theta:
+    title: Davis–Kahan sine theta — residuals and spectral separation
+    deck: sine-theta-lecture
+    topic: sine_theta
+    series: spectral_perturbation
+    requires: [sylvester, complementary_projection]
   matching_study:
     title: The matching proof, a learner's walkthrough
     deck: matching-proof

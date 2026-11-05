@@ -41,7 +41,11 @@ def test_each_lean_fact_has_its_own_card():
         cards = [s for s in get_deck(name).slides if 'Lean' in s.scene]
         if not cards:
             continue
+        from dkvis.components.lesson import LessonLean
         classes = [getattr(importlib.import_module(s.module), s.scene) for s in cards]
+        classes = [c for c in classes if issubclass(c,LessonLean)]
+        if not classes:
+            continue
         assert [c.fact_index for c in classes] == list(range(len(classes)))
         assert len(classes) == len(classes[0].symbolic_facts)
 

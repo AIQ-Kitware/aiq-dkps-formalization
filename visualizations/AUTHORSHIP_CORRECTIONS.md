@@ -10,6 +10,9 @@ initial authorship and revisions, with the original source commits/dates and
 the explicit confirmation retained. This includes the lecture slides,
 transcripts, and quizzes. Unknown weights or runtime settings are not inferred.
 Generated covers and future exports use the corrected source attribution.
+This confirmation covers the lectures existing when it was given; subsequently
+imported Qwen narration and older inherited reference scenes retain their own
+explicit source attribution.
 Existing video-generation snapshots still describe what was recorded at export.
 
 The following commits from this session carry the earlier generic model name.

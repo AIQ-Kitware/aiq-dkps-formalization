@@ -357,6 +357,22 @@ against the rendered notes before speech is requested. No matching-specific
 list remains in the production tools. Rendered outputs and audio stay ignored;
 source scenes, scripts, manifests, and source references belong in Git.
 
+## Narrated sine-theta lecture
+
+The numbered course uses **`sine-theta-lecture`** (003750), the narrated edition
+of the short reference visuals with Qwen's transcript and study questions:
+
+```bash
+make video DECK=sine-theta-lecture TTS_PROFILE=crall-math-dk-v2-breeze-tts2
+```
+
+It is also included in `make lectures-video`. The eighteen-scene
+`sine-theta-short` remains the original reference presentation. A separate
+transcript file must be both registered in the course and bound to the animation
+builds before it can produce a narrated course video. See the
+[topic guide](dkvis/learning/sine_theta/README.md) for sources, attribution, and
+incremental render commands.
+
 ## Validation and scene references
 
 Run the tests from `visualizations/`:

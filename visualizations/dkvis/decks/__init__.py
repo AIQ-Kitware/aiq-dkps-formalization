@@ -12,6 +12,7 @@ from dkvis.decks.reference import REFERENCE_DECKS
 from dkvis.decks.study import STUDY
 from dkvis.decks.prerequisites import PREREQUISITES
 from dkvis.decks.operators import OPERATORS
+from dkvis.decks.sine_theta_lecture import SINE_THETA_LECTURE
 
 DECKS: dict[str, DeckSpec] = {
     **REFERENCE_DECKS,
@@ -21,6 +22,7 @@ DECKS: dict[str, DeckSpec] = {
     MATCHING_PROOF.name: MATCHING_PROOF,
     MATCHING_PROOF_TALK.name: MATCHING_PROOF_TALK,
     STUDY.name: STUDY,
+    SINE_THETA_LECTURE.name: SINE_THETA_LECTURE,
     **{deck.name: deck for deck in PREREQUISITES},
     **{deck.name: deck for deck in OPERATORS},
 }

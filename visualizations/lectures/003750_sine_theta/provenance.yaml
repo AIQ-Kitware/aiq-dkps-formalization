@@ -1,0 +1,48 @@
+deck: sine-theta-lecture
+scope: Inherited short-reference visuals, Qwen-authored speech/questions, and the numbered integration.
+slides:
+  initial_source_attribution:
+  - sources:
+    - visualizations/dkvis/slides_sine_theta.py
+    - visualizations/dkvis/slides_sine_theta_3d.py
+    commit: 595e6a9fb
+    models:
+    - unknown
+    basis: Inherited visual revision; this commit does not name its model authors.
+  - source: visualizations/dkvis/slides_prop44.py
+    commit: bcfe89afb
+    models:
+    - GPT-5.6 Sol
+    basis: Model co-author trailer on the inherited visual revision.
+  revisions:
+  - date: '2026-11-05'
+    models:
+    - GPT-6.1-Sol
+    sources:
+    - visualizations/dkvis/learning/sine_theta/scenes.py
+    - visualizations/dkvis/decks/sine_theta_lecture.py
+    scope: Add the numbered narrated composition, short title/credit, and authored-beat adapters; inherit reference
+      visual bodies.
+transcript:
+  initial_source_attribution:
+  - source: visualizations/narration/sine-theta-short.md
+    commit: acebd8294
+    models:
+    - qwen3.8-27b-dbirks-hyperqwen-long (via LiteLLM, pi agent)
+    date: '2026-11-05'
+    basis: Original transcript authoring commit and explicit header.
+  - source: visualizations/narration/sine-theta-short-quiz.yaml
+    commit: 53a7dce6c
+    models:
+    - qwen3.8-27b-dbirks-hyperqwen-long (via LiteLLM, pi agent)
+    date: '2026-11-05'
+    basis: Companion quiz authoring commit.
+  revisions:
+  - date: '2026-11-05'
+    models:
+    - GPT-6.1-Sol
+    sources:
+    - visualizations/lectures/003750_sine_theta/lecture.md
+    - visualizations/lectures/003750_sine_theta/quiz.yaml
+    scope: Move into the course, shorten title narration, fix scalar/operator wording and residual interpretation,
+      qualify the coincident-plane/rank-one cases, and remove a misplaced next-slide transition.
