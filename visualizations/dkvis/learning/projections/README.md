@@ -18,3 +18,10 @@ source-preserving velocities in lecture 3. Equal-dimension orthogonal transport
 is expressed as `Q = W P W^T`; no principal-plane restriction is imposed on W.
 
 Build with `make slides DECK=prereq-projections` from `visualizations/`.
+
+
+The final two slides collect reusable symbolic facts and then show their Lean
+statements with short applications of the library declarations. See the
+[Lean companions](../../../lectures/LEAN_FACTS.md) for copyable files, exact API
+names, assumptions, attribution, and validation details. The code shown on the
+slide is read directly from its companion file.

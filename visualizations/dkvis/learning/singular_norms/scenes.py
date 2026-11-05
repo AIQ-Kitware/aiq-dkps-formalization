@@ -2,7 +2,7 @@
 import numpy as np
 from manim import Arrow, Create, DashedLine, Dot, DOWN, Line, ParametricFunction, RIGHT, Rotate, Transform, UP, VGroup
 
-from dkvis.components.lesson import LessonSlide, LessonTitle, bars, plane, stack, vector
+from dkvis.components.lesson import LessonSlide, LessonTitle, LessonLean, bars, plane, stack, vector
 from dkvis.learning.matching.model import rotation
 from dkvis.learning.singular_norms.model import block_displacement, competing_displacements, ellipse_example, overlapping_restrictions
 from dkvis.slide_style import CURRENT, FAINT, FG, GAP, MUTED, RESID, SINE, TRIAL, WANTED, boxed, math, tex
@@ -228,3 +228,26 @@ class Sn09Recap(NormSlide):
         self.add(math(r'\|T\|_{\mathrm{op}}=4,\qquad\|T\|_F=5,\qquad\|T\|_1=7',
                       size=31, color=CURRENT).move_to([0, -1.9, 0]))
         self.takeaway('Next: construct motions that respect the constraints, then differentiate their cost.')
+
+
+class SnFacts(NormSlide):
+    stage = 3
+
+    def body(self):
+        self.start()
+        self.put(stack(
+            tex(r'Real finite-dimensional $E$; $A:E\to E$; $1\le p<\infty$.', size=27),
+            r'\boxed{N_p(A)=\left(\sum_j s_j(A)^p\right)^{1/p}}',
+            tex(r'$p=1$: add stretches. $p=2$: square, add, take the square root.', size=25),
+            tex(r'For orthogonal coordinate changes $U,V$:', size=27),
+            r'\boxed{s(UAV)=s(A)}',
+            tex('The same stretches give the same cost in every orthonormal coordinate system.', size=25),
+            size=34, buff=.32), y=.2, height=4.0)
+        self.takeaway('Compute in convenient coordinates; the singular values and their Schatten cost do not change.')
+
+
+class SnLean(LessonLean):
+    lesson_deck = 'prereq-singular-norms'
+    lecture_id = 'singular_norms'
+    ownership = 'Tau Ceti: Schatten seminorms and singular-value invariance.'
+    notation = r'$\to_\ell$ means linear map; $\simeq_\ell^i$ means isometric isomorphism; $\circ_\ell$ is composition.'

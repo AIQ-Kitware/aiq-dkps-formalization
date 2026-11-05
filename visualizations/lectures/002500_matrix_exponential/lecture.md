@@ -265,3 +265,17 @@ determinant plus-one component. That is compatible with testing a
 negative-determinant transporter: multiply the transporter by the
 exponential curve. With these distinctions in place, return to feasible
 variations and follow how an exact motion produces a derivative test.
+
+## ExFacts: Three exponential facts to use in a proof
+
+Why: Assemble exact motions with known algebraic properties.
+Recall: A and B are bounded operators on a real Hilbert space; star means adjoint.
+
+These are the three reusable rules behind our motion construction. Exponentials of the same generator compose by adding their times. A skew-adjoint generator exponentiates to an orthogonal map. Finally, an operator that commutes with a projection continues to commute with it after exponentiation. For our feasible curve, apply the last two rules to t times B. Skew-adjointness preserves lengths, and commutation preserves the source decomposition. In finite orthonormal coordinates, the adjoint is just the transpose. The identities on this slide do not require finite dimension, but they do require bounded generators; we are not asserting a theorem about general unbounded operators here.
+
+## ExLean: The same three facts in Lean
+
+Why: Connect the flow and feasibility construction to the library operations.
+Recall: NormedSpace.exp is the operator exponential; the bullet denotes scalar multiplication.
+
+The first example applies Tau Ceti's flow identity. Its comp operation means composition, with the right-hand map applied first. The second example uses Mathlib: membership in skewAdjoint means the adjoint is the negative of the operator, and membership in unitary means both inverse identities hold. On a real inner product space this is an orthogonal operator. The third example is Mathlib's commutation rule for the exponential. It says that exponentiating the left operator preserves its commutation with the right one. Each statement is shown with its assumptions, including completeness of the ambient space. These are bounded-operator results that include the matrices used in this lecture.

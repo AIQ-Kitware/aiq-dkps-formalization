@@ -4,7 +4,7 @@ from manim import (
     Arc, Circle, Create, DOWN, Line, ParametricFunction, Polygon, RIGHT,
     Rotate, Transform, ValueTracker, VGroup, VMobject, always_redraw,
 )
-from dkvis.components.lesson import LessonSlide, LessonTitle, plane, stack, vector
+from dkvis.components.lesson import LessonSlide, LessonTitle, LessonLean, plane, stack, vector
 from dkvis.learning.matrix_exponential.model import euler_path, noncommuting_generators, shear_generator, taylor_exponential
 from dkvis.slide_style import CURRENT, FAINT, GAP, MUTED, RESID, TRIAL, WANTED, boxed, math, tex
 
@@ -256,3 +256,26 @@ class Ex12Recap(ExponentialSlide):
         self.add(tex(r'$I_2$. No reflection: $\det(e^B)=1$. Both signs of $\det W$ remain available.',
                      size=27, color=CURRENT).move_to([0, -1.98, 0]))
         self.takeaway('Next: compose the exact source motion with W and extract information from its first derivative.')
+
+
+class ExFacts(ExponentialSlide):
+    stage = 3
+
+    def body(self):
+        self.start()
+        self.put(stack(
+            tex(r'Bounded operators on a real Hilbert space; $s,t\in\mathbb R$.', size=27),
+            r'\boxed{e^{(s+t)A}=e^{sA}e^{tA}}',
+            tex('One constant velocity gives a flow that composes over time.', size=25),
+            r'\boxed{B^*=-B\ \Longrightarrow\ (e^B)^*e^B=e^B(e^B)^*=I}',
+            r'\boxed{BP=PB\ \Longrightarrow\ e^BP=Pe^B}',
+            tex(r'Apply the last two facts to $tB$: lengths and the source decomposition are preserved.', size=25),
+            size=32, buff=.3), y=.15, height=4.0)
+        self.takeaway('Skew-adjointness preserves lengths; commutation preserves the selected decomposition.')
+
+
+class ExLean(LessonLean):
+    lesson_deck = 'prereq-matrix-exponential'
+    lecture_id = 'matrix_exponential'
+    ownership = 'Tau Ceti: exponential flow. Mathlib: skew-adjoint exponential and commutation.'
+    notation = r'$\to_L$ means bounded linear map; $\bullet$ is scalar multiplication; real \texttt{unitary} means orthogonal.'

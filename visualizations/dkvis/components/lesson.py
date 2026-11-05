@@ -5,7 +5,7 @@ import numpy as np
 from manim import Arrow, Axes, DOWN, LEFT, Line, Rectangle, RIGHT, VGroup
 
 from dkvis.presentation.narration import read_deck_narration
-from dkvis.slide_style import CURRENT, FG, MUTED, DeckSlide, math, para, tex
+from dkvis.slide_style import CURRENT, FG, MUTED, DeckSlide, math, mono, para, tex
 
 
 @lru_cache
@@ -118,3 +118,22 @@ class LessonTitle(LessonSlide):
         self.add(tex('Prerequisite lectures', size=24, color=MUTED).move_to([0, 2.25, 0]),
                  title, Line([-2.1, -.95, 0], [2.1, -.95, 0], color=CURRENT),
                  tex(self.subtitle, size=27, color=MUTED).move_to([0, -1.55, 0]))
+
+
+class LessonLean(LessonSlide):
+    """Display the checked companion file, with its imports in the source credit."""
+    lecture_id = ''
+    ownership = ''
+    notation = ''
+    stage = 3
+
+    def body(self):
+        from dkvis.lectures import lecture_path
+        from dkvis.presentation.paths import ROOT
+
+        self.start()
+        source = (ROOT / lecture_path(self.lecture_id)).with_name('facts.lean').read_text()
+        code = source.split('-- slide-begin\n', 1)[1].split('-- slide-end', 1)[0].strip()
+        self.put(mono(code, size=20), y=.05, height=4.1)
+        self.add(tex(self.ownership, size=19, color=MUTED).move_to([0, -2.25, 0]))
+        self.takeaway(self.notation)

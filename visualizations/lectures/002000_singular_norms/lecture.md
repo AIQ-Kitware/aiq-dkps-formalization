@@ -205,3 +205,17 @@ is four, its Frobenius norm is five, and its trace norm is seven. You can now
 compute the displacement costs that the matching theorem minimizes. The
 remaining question is how a minimizer can reveal useful structure. For that,
 we need variations that remain inside the set of allowed transporters.
+
+## SnFacts: Two singular-value facts to use in a proof
+
+Why: Calculate a displacement cost in whichever orthonormal coordinates are easiest.
+Recall: A acts on a finite-dimensional real inner product space; p is at least one and finite.
+
+The first formula says exactly how a finite Schatten norm is computed from the singular values. Raise each stretch to the power p, add, and take the power one over p. At p equals one, this adds the stretches; at p equals two, it gives the Frobenius norm. The second identity says that orthogonal changes of coordinates on either side leave the complete singular-value list unchanged. Together these facts justify calculating a Schatten cost in convenient coordinates. They do not justify adding the costs of arbitrary domain restrictions. For that, we still need genuinely separate orthogonal input and output blocks, as we saw earlier.
+
+## SnLean: The same two facts in Lean
+
+Why: See the actual Schatten API and its coordinate-invariance theorem.
+Recall: schatten is Tau Ceti's Schatten seminorm; singularValues is the singular-value sequence.
+
+Both facts here use accepted Tau Ceti declarations. The variable p is an extended nonnegative real, so Lean allows infinity as well as finite exponents. The Fact assumption supplies p at least one, and the hypothesis hp excludes infinity for the displayed power formula. The finite singular-value sum ignores the zero tail of the sequence. In the second example, U and V are isometric linear isomorphisms: orthogonal coordinate changes in this real setting. The two rewrite steps remove the left and right coordinate changes. The returned singular-value sequence is therefore exactly the original one. Tau Ceti packages Schatten costs as seminorms and separately proves they vanish only on the zero map.

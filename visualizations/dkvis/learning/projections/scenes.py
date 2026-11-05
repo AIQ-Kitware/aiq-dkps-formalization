@@ -2,7 +2,7 @@
 import numpy as np
 from manim import Arrow, Create, DashedLine, Dot, DOWN, Indicate, Line, RIGHT, Rotate, Transform, UP, VGroup
 
-from dkvis.components.lesson import LessonSlide, LessonTitle, plane, stack, vector
+from dkvis.components.lesson import LessonSlide, LessonTitle, LessonLean, plane, stack, vector
 from dkvis.learning.projections.model import plane_frame, projection_example
 from dkvis.slide_style import CURRENT, FAINT, FG, GAP, MUTED, RESID, TRIAL, WANTED, boxed, math, tex
 
@@ -212,3 +212,26 @@ class Pr08Recap(ProjectionSlide):
         self.add(tex('Yes: T rotates within the complement and never mixes the two pieces.',
                      size=28, color=CURRENT).move_to([0, -1.75, 0]))
         self.takeaway('Next: singular values measure how much an operator moves vectors.')
+
+
+class PrFacts(ProjectionSlide):
+    stage = 3
+
+    def body(self):
+        self.start()
+        self.put(stack(
+            tex(r'$P=P_K$, $P^\perp=P_{K^\perp}$; orthogonal projections on a real Hilbert space.', size=27),
+            r'\boxed{Px+P^\perp x=x}',
+            tex('Split any vector into its two perpendicular components.', size=25),
+            r'T_{\mathrm{off}}=PTP^\perp+P^\perp TP',
+            r'\boxed{T_{\mathrm{off}}=0\ \Longleftrightarrow\ PT=TP}',
+            tex('Commutation is exactly the absence of transfer between the two spaces.', size=25),
+            size=32, buff=.28), y=.2, height=4.0)
+        self.takeaway('Use the first identity to split a calculation; use the second to certify block structure.')
+
+
+class PrLean(LessonLean):
+    lesson_deck = 'prereq-projections'
+    lecture_id = 'projections'
+    ownership = 'Mathlib: projection splitting. Tau Ceti: off-diagonal block criterion.'
+    notation = r'\texttt{starProjection} is $P_K$; \texttt{Commute P T} means $PT=TP$.'

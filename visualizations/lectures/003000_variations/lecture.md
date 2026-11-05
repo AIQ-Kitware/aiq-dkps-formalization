@@ -241,3 +241,17 @@ gradient at a chosen minimizer. You can now return to the matching proof's
 stationarity step and explain why its test directions exist. The next layer
 of that proof uses the gradient and source reflection to construct the
 two- and four-dimensional blocks; it does not assume those blocks at the start.
+
+## VaFacts: Two proof rules behind the stationarity argument
+
+Why: Turn a minimum along a legal motion into a vanishing gradient block.
+Recall: Phi is the objective along a feasible curve; C is a finite real matrix.
+
+There are two reusable rules here. A differentiable real function has zero derivative at a local minimum in the interior of its parameter line. In our application that real function is the cost along a feasible curve. Establishing feasibility is what lets a constrained minimum give a minimum of this real function. The second rule is that the trace of C transpose times C vanishes exactly when C is zero. This trace is the sum of the squared matrix entries. In our argument we choose C to be P G P. The derivative formula and trace rearrangement already derived in the lecture make its trace square zero. The second rule then forces the entire block to vanish. Neither rule says that a stationary point must be a minimum.
+
+## VaLean: The same two proof rules in Lean
+
+Why: Identify the calculus and positivity facts used by the matrix argument.
+Recall: IsLocalMin f 0 is a local minimum; HasDerivAt f d 0 says the derivative is d.
+
+These two building blocks come from Mathlib. The first example takes a local minimum and an actual derivative certificate and concludes that the derivative d is zero. In an application, f is the cost along the feasible curve, not the cost on arbitrary matrices. The second example is the trace-square test for a finite real matrix. Mathlib states the general theorem with a conjugate transpose. For real entries, conjugation does nothing, so the simplification shown converts that statement to the ordinary transpose used in the lecture. This code verifies the two proof rules. The feasible-curve construction and the gradient trace identity remain the steps that connect those rules in the matching argument.

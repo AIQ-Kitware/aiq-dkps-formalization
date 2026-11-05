@@ -20,3 +20,10 @@ These helpers are for teaching, not production numerical recommendations.
 Real finite matrices are the scope; this is not a lesson on unbounded generators.
 
 Build from `visualizations/`: `make slides DECK=prereq-matrix-exponential`.
+
+
+The final two slides collect reusable symbolic facts and then show their Lean
+statements with short applications of the library declarations. See the
+[Lean companions](../../../lectures/LEAN_FACTS.md) for copyable files, exact API
+names, assumptions, attribution, and validation details. The code shown on the
+slide is read directly from its companion file.

@@ -181,3 +181,17 @@ Yes. It fixes the source line and rotates within its complement, so no component
 crosses between them. T can be far from the identity while commuting with P.
 Next we will ask a different question: when a map moves vectors, how should
 we measure the total amount of movement?
+
+## PrFacts: Two projection facts to use in a proof
+
+Why: Keep the geometric split and the block criterion available for calculations.
+Recall: P is the orthogonal projection onto K; P perpendicular projects onto its orthogonal complement.
+
+Here are two facts you can take into another proof. First, any vector is the sum of its two orthogonal projected components. This lets us prove an operator identity by checking its action on the two spaces separately. Second, the off-diagonal part of an operator vanishes exactly when that operator commutes with the projection. The off-diagonal part is the sum of the two blocks that cross between the spaces. This equivalence makes precise our statement that commutation means no transfer between the two pieces. We assume that the orthogonal projection exists; in a Hilbert space, a closed subspace has one.
+
+## PrLean: The same two facts in Lean
+
+Why: Match each reusable identity to an available library declaration.
+Recall: K.starProjection is P; K.offDiagBlock T is the off-diagonal part of T.
+
+The code follows the same order. The first example uses Mathlib's projection-splitting theorem. The second uses Tau Ceti's criterion for a vanishing off-diagonal block. A Submodule is a linear subspace, and the HasOrthogonalProjection assumption supplies its orthogonal projection. The capital L in the arrow says that T is a bounded linear map. Commute is the equation saying the two multiplication orders agree. Each example states a proposition and then applies the named library theorem to prove it. The complete companion file contains the imports and can be checked or copied into a Lean session.

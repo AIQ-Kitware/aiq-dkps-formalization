@@ -2,7 +2,7 @@
 import numpy as np
 from manim import Arc, Arrow, Circle, Create, DashedLine, Dot, DOWN, Line, RIGHT, Rotate, Transform, UP, VGroup
 
-from dkvis.components.lesson import LessonSlide, LessonTitle, plane, stack, vector
+from dkvis.components.lesson import LessonSlide, LessonTitle, LessonLean, plane, stack, vector
 from dkvis.learning.matching.model import source_plane_wiggle
 from dkvis.slide_style import CURRENT, FAINT, FG, GAP, MUTED, RESID, SINE, TRIAL, WANTED, boxed, math, tex
 
@@ -234,3 +234,26 @@ class Va10Recap(VariationSlide):
         self.add(tex('Neither. We derived a necessary condition on the gradient at a chosen minimizer.',
                      size=27, color=CURRENT).move_to([0, -1.95, 0]))
         self.takeaway('Return to matching: legal variations give structure instead of assuming it.')
+
+
+class VaFacts(VariationSlide):
+    stage = 3
+
+    def body(self):
+        self.start()
+        self.put(stack(
+            tex(r'Along a feasible curve, put $\phi(t)=F(W(t))$. If $0$ is a local minimum:', size=26),
+            r'\boxed{\phi\text{ differentiable at }0\ \Longrightarrow\ \phi\prime(0)=0}',
+            tex(r'For a finite real matrix $C$:', size=27),
+            r'\boxed{\operatorname{tr}(C^TC)=0\ \Longleftrightarrow\ C=0}',
+            tex(r'In our test, $C=PGP$: stationarity and the trace identity give', size=26),
+            r'0=\operatorname{tr}((PGP)^T(PGP))\quad\Longrightarrow\quad PGP=0',
+            size=32, buff=.3), y=.15, height=4.0)
+        self.takeaway('First show the curve is feasible; then turn a zero derivative into a zero squared norm.')
+
+
+class VaLean(LessonLean):
+    lesson_deck = 'prereq-variations'
+    lecture_id = 'variations'
+    ownership = 'Mathlib: derivative at a local minimum; faithfulness of the matrix trace square.'
+    notation = r'\texttt{HasDerivAt f d 0} means $f\prime(0)=d$; \texttt{IsLocalMin f 0} is a local minimum.'

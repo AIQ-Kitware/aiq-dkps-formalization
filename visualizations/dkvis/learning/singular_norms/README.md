@@ -19,3 +19,10 @@ with overlapping images explains why separate domain restrictions cannot
 automatically be charged as independent blocks.
 
 Build with `make slides DECK=prereq-singular-norms` from `visualizations/`.
+
+
+The final two slides collect reusable symbolic facts and then show their Lean
+statements with short applications of the library declarations. See the
+[Lean companions](../../../lectures/LEAN_FACTS.md) for copyable files, exact API
+names, assumptions, attribution, and validation details. The code shown on the
+slide is read directly from its companion file.
