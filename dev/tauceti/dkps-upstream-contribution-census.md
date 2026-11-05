@@ -4685,3 +4685,133 @@ coverage in the reviewed ledger, and no remaining source-port task depends on
 A16/#20359. The unrelated B16 source-scope mismatch, B12 specification conflict
 and representation-PVM dependency remain unchanged. This selected update is not
 a fresh semantic audit of all roadmap items or a current author-wide PR count.
+
+
+### November 5: repair open spectral-form and Yosida submissions
+
+Both PRs remain open and have verified pushed heads; neither is integrated.
+[#28078](https://github.com/TauCetiProject/TauCeti/pull/28078) now has
+`a75ba39154f072e75eae114891ac0da3e330fe2f`, addressing the
+[shared scalar-calculation finding](https://github.com/TauCetiProject/TauCeti/pull/28078#discussion_r4476174300)
+on `1e9b85094c68d3765023e1398c3add79b993c228`.
+`ContinuousLinearMap.re_inner_algebraMap_apply` lives in QuadraticForm/Bounds,
+without completeness, and both spectral inequalities use it. The four original
+endpoint signatures are unchanged. The cumulative public API has five new
+declarations in two files. Focused compilation (6335 jobs), all 13 environment
+linters on 15 declarations, standard axioms and full style (24399 files) passed.
+The original SpectralOrder donor authors/license and proof adaptation remain
+as recorded above.
+
+[#28079](https://github.com/TauCetiProject/TauCeti/pull/28079) now has
+`cf0827228f9b42292a16c972567e35223891be8f`, addressing the current-head
+[reuse](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4474721401),
+[generality](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4474770460),
+[documentation](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4474722989)
+and [proof-quality](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4474723722)
+findings on `293950b684316d94690698d0ae876d66314c1374`.
+The existing `TauCeti.Semigroups.norm_yosidaApproximation_le` now works over any
+nontrivially normed field, from `‖λ‖ * ‖R(λ)‖ ≤ 1`, with conclusion
+`‖A_λ‖ ≤ 2 * ‖λ‖` and no positivity hypothesis. The imaginary specialization
+uses this shared bound. The unused specialized factorization wrapper is removed;
+the generic composition theorem supplies it. Symmetric convergence states the
+averaging identity explicitly, and the module lists the general convergence
+criteria alongside their real atTop specializations. Cumulative API: nineteen
+new and six generalized declarations in three files. Focused/real-generation
+regression compilation (5921 jobs), all 13 linters (58 declarations plus 19
+generated), standard axioms, expanded scope examples and full style (24399 files)
+passed. Kitware/DKPS and Spectra ancestry is preserved.
+
+Exact-head bundles, cumulative patches, validation and single-agent source
+self-review are refreshed under campaign `waves/2026-11-04/`. Actual review
+comments retain their reviewed commits; source self-review is not independent or
+upstream approval. Fresh CI/re-review remains pending. GitHub description edits
+returned connector 403; authenticated host
+`bash waves/2026-11-04/update-pr-bodies.sh` updates both descriptions and performs
+no Lean build. Campaign tasks now record these as submitted open PRs instead of
+prepared-only branches. Root pins and local donors are unchanged in this repair.
+
+
+### November 5: lower-level home for shared Yosida theory (#28079)
+
+Placement repair `25ff5e8155bd88e514049bd77eea0ad1477a3e3c` is pushed to
+[#28079](https://github.com/TauCetiProject/TauCeti/pull/28079), addressing
+[the placement finding](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4476646340)
+on `cf0827228f9b42292a16c972567e35223891be8f`.
+The shared definition and eight supporting theorems now live in
+`TauCeti.Analysis.Normed.Operator.LinearPMap.Yosida`, in the root `LinearPMap`
+namespace. Both self-adjoint approximations and real semigroup generation
+consume that module. The old `TauCeti.Semigroups` declarations are deleted;
+no compatibility aliases or forwarding module remain. All real consumers
+are migrated, and theorem hypotheses/conclusions are preserved.
+
+The shared module has three TauCeti modules in its source import closure;
+the self-adjoint consumer has twelve. Neither closure contains a TauCeti
+semigroup module. Focused and real-generation regression compilation passed
+(5923 jobs). All 13 environment linters passed across ten changed modules
+(121 declarations plus 38 generated), along with scope examples, standard
+axioms and full style (24400 files). Formal source notices and mathematical
+references remain intact; earlier DKPS/Spectra ancestry is unchanged.
+
+The exact-head campaign bundle, cumulative patch, description and validation
+are refreshed. GitHub confirms the new head and open state; fresh upstream
+CI/review remains pending. Description editing returned connector 403, so the
+authenticated host must run the packet's `update-pr-body.sh`, which performs
+no Lean build. This is an unmerged PR repair, not integration: root dependency
+pins and retained donor proofs remain unchanged.
+
+
+### November 5: current review repairs for #27804, #28078 and #28079
+
+All three remain open, with verified pushed heads and no new integration claim.
+For [#27804](https://github.com/TauCetiProject/TauCeti/pull/27804), repair
+`9efbcd31f26c3e8064828a2e8b9202b81f99aa9c` addresses the
+[reuse](https://github.com/TauCetiProject/TauCeti/pull/27804#discussion_r4474296512)
+and [proof-quality](https://github.com/TauCetiProject/TauCeti/pull/27804#discussion_r4474296809)
+findings on `69a234a80fe019a260480174f27536e9e4463df9`. Form hypotheses now use
+canonical LowerFormBoundOn/UpperFormBoundOn; positivity uses the native bound
+consequence. Reflection and Lyapunov algebra uniformly use multiplication and
+identity. The two reflection comp names are replaced by
+`reflection_mul_eq_neg_mul_of_maps_orthogonal` and
+`reflection_mul_add_mul_reflection`, without aliases.
+`ContinuousLinearMap.re_inner_star_apply_self` belongs to Adjoint;
+`conj_add_star_of_lyapunov` belongs to Coercive. Shared bounded-reflection
+component evaluations and native orthogonal decomposition eliminate repeated
+coercion/decomposition work. The reflection polynomial uses coe_reflection and
+projection idempotence, and the norm-square step uses Mathlib's adjoint identity.
+Proof comments mark the centering, positive-weight, Lyapunov and spectral stages.
+The external scope example recovers the original raw-inequality endpoint:
+mathematical complex Hilbert scope is preserved, while hypothesis presentation
+changes to the canonical predicates. Focused compilation (6399 jobs), all 13
+linters on eight modules (147 declarations plus 123 generated), standard axioms,
+scope example and full style (23975 files) passed. Cumulative API: seventeen
+declarations in eight files. Existing DKPS/paper and independent dependency
+attribution remains intact; the real C31 branch is not claimed.
+
+For [#28078](https://github.com/TauCetiProject/TauCeti/pull/28078), repair
+`a12afe9ecfa8aeadc942701c5820cb5807cc5d9e` addresses
+[restriction transport](https://github.com/TauCetiProject/TauCeti/pull/28078#discussion_r4476174300)
+on `a75ba39154f072e75eae114891ac0da3e330fe2f`: both bridges explicitly use the
+restriction-application, subspace-inner-product, norm and subtype transport
+lemmas. The four public signatures are unchanged. Focused compilation (6335
+jobs), all 13 environment linters (15 declarations), standard axioms and full
+style (24399 files) passed.
+
+For [#28079](https://github.com/TauCetiProject/TauCeti/pull/28079), repair
+`24d3137c101232863e9bb4c568f0b18aff8f8e9c` addresses the
+[redundant import](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4481580259)
+and [module-boundary documentation](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4481672625)
+on `25ff5e8155bd88e514049bd77eea0ad1477a3e3c`. The semigroup consumer removes
+its direct Dense import and describes only its own real-parameter results in
+Main results, linking imported generic theory to its lower-level home. The
+mathematical API is unchanged. Focused/real-generation regression compilation
+(5923 jobs), all 13 linters (121 declarations plus 38 generated), scope examples,
+standard axioms and full style (24400 files) passed.
+
+Each shared packet has a current-head bundle, cumulative patch, description,
+validation and source self-review. Combined commit-status reads returned no
+contexts on the new heads; fresh upstream CI/review is pending. Actual review
+comments retain the commits they assessed; local source self-review is not
+independent approval. Metadata edits returned connector 403. The authenticated
+host can run `bash waves/2026-11-04/update-pr-bodies.sh` from the campaign
+checkout to synchronize all three descriptions; it verifies heads and runs no
+Lean commands. Root pins and retained donors are unchanged by these repairs.
