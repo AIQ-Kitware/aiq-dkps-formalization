@@ -81,6 +81,13 @@ Proposition 4.4.
 
 ## Lecture authoring
 
+Read the [project vision and history plan](docs/planning/lecture-project-vision-and-history.md)
+when planning lecture coverage. The north star is understanding the full
+Davis–Kahan paper, the repository's extensions, and their prerequisites. Use
+Lean to progressively validate the learning map; do not block obvious useful
+lecture drafts on a complete formal dependency tree. Keep teaching prerequisites,
+proof dependencies, and historical influence distinct.
+
 Before writing or revising a lecture, read
 [LECTURE_STYLE_RULES.md](LECTURE_STYLE_RULES.md). It records the user's directly
 expressed teaching and narration preferences. Keep those rules there rather than

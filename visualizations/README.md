@@ -10,6 +10,12 @@ This directory is not part of the Lean build. It is a companion for developing
 intuition, figures, talks, and manuscript animations. Numerical assertions here
 do not replace the Lean proofs.
 
+The [lecture project vision and history plan](docs/planning/lecture-project-vision-and-history.md)
+sets the north star: the entire Davis–Kahan paper, this project's extensions,
+and the prerequisites needed to understand them, with a learning map progressively
+validated against Lean 4 proofs. Useful lectures can be drafted before that
+formal correspondence is complete.
+
 ## Where to start
 
 | Task | Read or edit |
