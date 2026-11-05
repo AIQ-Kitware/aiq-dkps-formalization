@@ -4758,3 +4758,60 @@ CI/review remains pending. Description editing returned connector 403, so the
 authenticated host must run the packet's `update-pr-body.sh`, which performs
 no Lean build. This is an unmerged PR repair, not integration: root dependency
 pins and retained donor proofs remain unchanged.
+
+
+### November 5: current review repairs for #27804, #28078 and #28079
+
+All three remain open, with verified pushed heads and no new integration claim.
+For [#27804](https://github.com/TauCetiProject/TauCeti/pull/27804), repair
+`9efbcd31f26c3e8064828a2e8b9202b81f99aa9c` addresses the
+[reuse](https://github.com/TauCetiProject/TauCeti/pull/27804#discussion_r4474296512)
+and [proof-quality](https://github.com/TauCetiProject/TauCeti/pull/27804#discussion_r4474296809)
+findings on `69a234a80fe019a260480174f27536e9e4463df9`. Form hypotheses now use
+canonical LowerFormBoundOn/UpperFormBoundOn; positivity uses the native bound
+consequence. Reflection and Lyapunov algebra uniformly use multiplication and
+identity. The two reflection comp names are replaced by
+`reflection_mul_eq_neg_mul_of_maps_orthogonal` and
+`reflection_mul_add_mul_reflection`, without aliases.
+`ContinuousLinearMap.re_inner_star_apply_self` belongs to Adjoint;
+`conj_add_star_of_lyapunov` belongs to Coercive. Shared bounded-reflection
+component evaluations and native orthogonal decomposition eliminate repeated
+coercion/decomposition work. The reflection polynomial uses coe_reflection and
+projection idempotence, and the norm-square step uses Mathlib's adjoint identity.
+Proof comments mark the centering, positive-weight, Lyapunov and spectral stages.
+The external scope example recovers the original raw-inequality endpoint:
+mathematical complex Hilbert scope is preserved, while hypothesis presentation
+changes to the canonical predicates. Focused compilation (6399 jobs), all 13
+linters on eight modules (147 declarations plus 123 generated), standard axioms,
+scope example and full style (23975 files) passed. Cumulative API: seventeen
+declarations in eight files. Existing DKPS/paper and independent dependency
+attribution remains intact; the real C31 branch is not claimed.
+
+For [#28078](https://github.com/TauCetiProject/TauCeti/pull/28078), repair
+`a12afe9ecfa8aeadc942701c5820cb5807cc5d9e` addresses
+[restriction transport](https://github.com/TauCetiProject/TauCeti/pull/28078#discussion_r4476174300)
+on `a75ba39154f072e75eae114891ac0da3e330fe2f`: both bridges explicitly use the
+restriction-application, subspace-inner-product, norm and subtype transport
+lemmas. The four public signatures are unchanged. Focused compilation (6335
+jobs), all 13 environment linters (15 declarations), standard axioms and full
+style (24399 files) passed.
+
+For [#28079](https://github.com/TauCetiProject/TauCeti/pull/28079), repair
+`24d3137c101232863e9bb4c568f0b18aff8f8e9c` addresses the
+[redundant import](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4481580259)
+and [module-boundary documentation](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4481672625)
+on `25ff5e8155bd88e514049bd77eea0ad1477a3e3c`. The semigroup consumer removes
+its direct Dense import and describes only its own real-parameter results in
+Main results, linking imported generic theory to its lower-level home. The
+mathematical API is unchanged. Focused/real-generation regression compilation
+(5923 jobs), all 13 linters (121 declarations plus 38 generated), scope examples,
+standard axioms and full style (24400 files) passed.
+
+Each shared packet has a current-head bundle, cumulative patch, description,
+validation and source self-review. Combined commit-status reads returned no
+contexts on the new heads; fresh upstream CI/review is pending. Actual review
+comments retain the commits they assessed; local source self-review is not
+independent approval. Metadata edits returned connector 403. The authenticated
+host can run `bash waves/2026-11-04/update-pr-bodies.sh` from the campaign
+checkout to synchronize all three descriptions; it verifies heads and runs no
+Lean commands. Root pins and retained donors are unchanged by these repairs.
