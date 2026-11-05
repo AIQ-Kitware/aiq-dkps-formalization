@@ -47,6 +47,7 @@ keys, so earlier audio made without it is not reused for the new style.
 
 ```bash
 make prerequisites-video TTS_PROFILE=crall SKIP_RENDER=1
+make prerequisites-video TTS_PROFILE=kokoro SKIP_RENDER=1
 ```
 
 Use `make lectures-video TTS_PROFILE=crall SKIP_RENDER=1` to include the

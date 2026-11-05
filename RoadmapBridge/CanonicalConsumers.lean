@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 -/
 module
 
+public import TauCeti.Analysis.SpecialFunctions.Exp.Decay
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.All
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
@@ -23,6 +24,20 @@ public section
 namespace RoadmapBridge.CanonicalConsumers
 
 universe u v w
+
+section Decay
+
+example {a : ℝ} (ha : 0 < a) (s : ℝ) :
+    Asymptotics.IsLittleO (Filter.cocompact ℝ)
+      (fun x : ℝ => Real.exp (-(a * |x|))) (fun x : ℝ => |x| ^ s) :=
+  TauCeti.exp_neg_mul_abs_isLittleO_abs_rpow_cocompact ha s
+
+example {a : ℂ} (ha : 0 < a.re) (s : ℝ) :
+    Asymptotics.IsLittleO (Filter.cocompact ℝ)
+      (fun x : ℝ => Complex.exp (-(a * |x|))) (fun x : ℝ => |x| ^ s) :=
+  TauCeti.cexp_neg_mul_abs_isLittleO_abs_rpow_cocompact ha s
+
+end Decay
 
 section Normed
 
