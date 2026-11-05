@@ -4729,3 +4729,32 @@ returned connector 403; authenticated host
 `bash waves/2026-11-04/update-pr-bodies.sh` updates both descriptions and performs
 no Lean build. Campaign tasks now record these as submitted open PRs instead of
 prepared-only branches. Root pins and local donors are unchanged in this repair.
+
+
+### November 5: lower-level home for shared Yosida theory (#28079)
+
+Placement repair `25ff5e8155bd88e514049bd77eea0ad1477a3e3c` is pushed to
+[#28079](https://github.com/TauCetiProject/TauCeti/pull/28079), addressing
+[the placement finding](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4476646340)
+on `cf0827228f9b42292a16c972567e35223891be8f`.
+The shared definition and eight supporting theorems now live in
+`TauCeti.Analysis.Normed.Operator.LinearPMap.Yosida`, in the root `LinearPMap`
+namespace. Both self-adjoint approximations and real semigroup generation
+consume that module. The old `TauCeti.Semigroups` declarations are deleted;
+no compatibility aliases or forwarding module remain. All real consumers
+are migrated, and theorem hypotheses/conclusions are preserved.
+
+The shared module has three TauCeti modules in its source import closure;
+the self-adjoint consumer has twelve. Neither closure contains a TauCeti
+semigroup module. Focused and real-generation regression compilation passed
+(5923 jobs). All 13 environment linters passed across ten changed modules
+(121 declarations plus 38 generated), along with scope examples, standard
+axioms and full style (24400 files). Formal source notices and mathematical
+references remain intact; earlier DKPS/Spectra ancestry is unchanged.
+
+The exact-head campaign bundle, cumulative patch, description and validation
+are refreshed. GitHub confirms the new head and open state; fresh upstream
+CI/review remains pending. Description editing returned connector 403, so the
+authenticated host must run the packet's `update-pr-body.sh`, which performs
+no Lean build. This is an unmerged PR repair, not integration: root dependency
+pins and retained donor proofs remain unchanged.
