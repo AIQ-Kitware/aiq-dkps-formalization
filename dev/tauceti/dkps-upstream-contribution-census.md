@@ -4685,3 +4685,47 @@ coverage in the reviewed ledger, and no remaining source-port task depends on
 A16/#20359. The unrelated B16 source-scope mismatch, B12 specification conflict
 and representation-PVM dependency remain unchanged. This selected update is not
 a fresh semantic audit of all roadmap items or a current author-wide PR count.
+
+
+### November 5: repair open spectral-form and Yosida submissions
+
+Both PRs remain open and have verified pushed heads; neither is integrated.
+[#28078](https://github.com/TauCetiProject/TauCeti/pull/28078) now has
+`a75ba39154f072e75eae114891ac0da3e330fe2f`, addressing the
+[shared scalar-calculation finding](https://github.com/TauCetiProject/TauCeti/pull/28078#discussion_r4476174300)
+on `1e9b85094c68d3765023e1398c3add79b993c228`.
+`ContinuousLinearMap.re_inner_algebraMap_apply` lives in QuadraticForm/Bounds,
+without completeness, and both spectral inequalities use it. The four original
+endpoint signatures are unchanged. The cumulative public API has five new
+declarations in two files. Focused compilation (6335 jobs), all 13 environment
+linters on 15 declarations, standard axioms and full style (24399 files) passed.
+The original SpectralOrder donor authors/license and proof adaptation remain
+as recorded above.
+
+[#28079](https://github.com/TauCetiProject/TauCeti/pull/28079) now has
+`cf0827228f9b42292a16c972567e35223891be8f`, addressing the current-head
+[reuse](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4474721401),
+[generality](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4474770460),
+[documentation](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4474722989)
+and [proof-quality](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4474723722)
+findings on `293950b684316d94690698d0ae876d66314c1374`.
+The existing `TauCeti.Semigroups.norm_yosidaApproximation_le` now works over any
+nontrivially normed field, from `‖λ‖ * ‖R(λ)‖ ≤ 1`, with conclusion
+`‖A_λ‖ ≤ 2 * ‖λ‖` and no positivity hypothesis. The imaginary specialization
+uses this shared bound. The unused specialized factorization wrapper is removed;
+the generic composition theorem supplies it. Symmetric convergence states the
+averaging identity explicitly, and the module lists the general convergence
+criteria alongside their real atTop specializations. Cumulative API: nineteen
+new and six generalized declarations in three files. Focused/real-generation
+regression compilation (5921 jobs), all 13 linters (58 declarations plus 19
+generated), standard axioms, expanded scope examples and full style (24399 files)
+passed. Kitware/DKPS and Spectra ancestry is preserved.
+
+Exact-head bundles, cumulative patches, validation and single-agent source
+self-review are refreshed under campaign `waves/2026-11-04/`. Actual review
+comments retain their reviewed commits; source self-review is not independent or
+upstream approval. Fresh CI/re-review remains pending. GitHub description edits
+returned connector 403; authenticated host
+`bash waves/2026-11-04/update-pr-bodies.sh` updates both descriptions and performs
+no Lean build. Campaign tasks now record these as submitted open PRs instead of
+prepared-only branches. Root pins and local donors are unchanged in this repair.
