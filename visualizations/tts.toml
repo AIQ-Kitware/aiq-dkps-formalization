@@ -1,6 +1,6 @@
 # Fallback default. Select a machine-local profile in .env (DKVIS_TTS_PROFILE)
 # or override it for one run with --tts-profile NAME.
-profile = "crall"
+profile = "crall-math-dk-v2-breeze-tts2"
 
 [defaults]
 timeout_seconds = 600
@@ -24,9 +24,33 @@ attack_ms = 5.0
 release_ms = 180.0
 edge_fade_ms = 8.0
 
+[profiles.crall-math-dk-v2-breeze-tts2]
+# Output identity includes the reference speaker and the actual generation model.
+narrator_voice = "crall-math-dk-v2"
+endpoint_env = "CRALL_TTS_ENDPOINT"
+endpoint = "http://127.0.0.1:8821/v1/audio/speech"
+model = "breeze-tts2"
+voice = "crall-math-dk-v2"
+response_format = "wav"
+record_server_runtime = true
+# Longer passages reduce independent starts. Keep the server cutoff guard:
+# slow or capped responses are still retried in smaller pieces.
+max_chars = 750
+max_words = 110
+
+[profiles.crall-math-dk-v2-breeze-tts2.request]
+instruction = "Speak in a warm, engaging lecture style with clear articulation. Maintain steady conversational loudness and restrained emphasis, including at the beginning of each passage."
+cfg_scale = 2.0
+
+[profiles.crall-math-dk-v2-breeze-tts2.reference]
+source = "local-ai/services/tts/voice-references"
+audio = "crall-math-dk-v2.wav"
+transcript = "crall-math-dk-v2.txt"
+
+# Legacy profile: retains the original reference voice and cache namespace.
 [profiles.crall]
 # Output identity includes the reference speaker and the actual generation model.
-narrator_voice = "crall"
+narrator_voice = "crall-math-dk"
 endpoint_env = "CRALL_TTS_ENDPOINT"
 endpoint = "http://127.0.0.1:8821/v1/audio/speech"
 model = "breeze-tts2"
@@ -42,6 +66,7 @@ instruction = "Speak in a warm, engaging lecture style with clear articulation. 
 cfg_scale = 2.0
 
 [profiles.breeze]
+narrator_voice = "ryan"
 endpoint_env = "BREEZE_TTS_ENDPOINT"
 endpoint = "http://127.0.0.1:8812/v1/audio/speech"
 model = "breeze-tts2"
@@ -49,6 +74,7 @@ voice = "ryan"
 response_format = "wav"
 
 [profiles.kokoro]
+narrator_voice = "af_heart"
 # Private host address belongs only in .env.
 endpoint_env = "KOKORO_TTS_ENDPOINT"
 model = "kokoro"
@@ -56,6 +82,7 @@ voice = "af_heart"
 response_format = "wav"
 
 [profiles.qwen]
+narrator_voice = "ryan"
 endpoint_env = "QWEN_TTS_ENDPOINT"
 endpoint = "http://127.0.0.1:11437/v1/audio/speech"
 model = "qwen-1.7-customvoice-q8-ggml"

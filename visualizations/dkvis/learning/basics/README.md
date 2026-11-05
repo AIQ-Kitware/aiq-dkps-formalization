@@ -19,7 +19,7 @@ From `visualizations/`:
 ```bash
 make slides DECK=prereq-basics
 make text DECK=prereq-basics
-make video DECK=prereq-basics TTS_PROFILE=crall SKIP_RENDER=1
+make video DECK=prereq-basics TTS_PROFILE=crall-math-dk-v2-breeze-tts2 SKIP_RENDER=1
 ```
 
 The transcript, quiz, provenance, and checked `facts.lean` companion live in

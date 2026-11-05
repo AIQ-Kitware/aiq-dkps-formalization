@@ -78,7 +78,7 @@ help:
 	@echo '  list               list all presentations and transcript availability'
 	@echo '  operators          build the three accepted operator-foundation lectures'
 	@echo '  prerequisites      build the ordered prerequisite lectures and speech text'
-	@echo '  prerequisites-video narrate the prerequisite series; TTS_PROFILE=crall selects the lecture voice'
+	@echo '  prerequisites-video narrate the prerequisite series; TTS_PROFILE=crall-math-dk-v2-breeze-tts2 selects the lecture voice'
 	@echo '  lectures-video     narrate every lecture in YAML dependency order'
 	@echo '  slides DECK=name   render a presentation and export its transcript when present'
 	@echo '  text DECK=name     export slide/build speech text without rendering or TTS'

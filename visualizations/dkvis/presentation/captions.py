@@ -73,7 +73,7 @@ def speech_parts(root, audio, seen=None):
         if not text or not math.isfinite(seconds) or seconds<=0:
             return []
         return [dict(text=text,seconds=seconds,generated=path.stat().st_mtime,
-                     model=metadata.get('model'),voice=metadata.get('voice'))]
+                     model=metadata.get('model'),voice=metadata.get('voice'),synthesis=metadata)]
     except (OSError, KeyError, ValueError, TypeError):
         return []
 

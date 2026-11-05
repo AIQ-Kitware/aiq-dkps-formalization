@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+from datetime import datetime, timezone
 import json
 import re
 import subprocess
@@ -45,6 +46,8 @@ def speech(
     max_audio_seconds=60.0,
     profile="custom",
     force=False,
+    reference=None,
+    server_runtime=None,
 ) -> Path:
     payload = {
         **(request_settings or {}),
@@ -162,6 +165,11 @@ def speech(
                         generation_seconds=generation_seconds,
                         realtime_factor=generation_seconds / seconds,
                         profile=profile,
+                        generated_at=datetime.now(timezone.utc).isoformat(),
+                        request_settings=request_settings or {},
+                        reference=reference,
+                        server_runtime=server_runtime,
+                        endpoint_sha256=fields['endpoint_sha256'],
                     ),
                     indent=2,
                 )
@@ -232,6 +240,8 @@ def synthesize_beat(text, label, work, settings):
                     max_audio_seconds=limit,
                     profile=profile,
                     force=settings.get("refresh_audio", False),
+                    reference=settings.get("reference"),
+                    server_runtime=settings.get("server_runtime"),
                 )
             ]
         except AudioLimitError:

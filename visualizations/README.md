@@ -48,12 +48,14 @@ From `visualizations/`, start a configured TTS server and render a lecture or
 all registered lectures in dependency order:
 
 ```bash
-make video DECK=operators-sylvester TTS_PROFILE=crall
-make lectures-video TTS_PROFILE=crall
-make prerequisites-video TTS_PROFILE=crall  # prerequisite series only
+make video DECK=operators-sylvester TTS_PROFILE=crall-math-dk-v2-breeze-tts2
+make lectures-video TTS_PROFILE=crall-math-dk-v2-breeze-tts2
+make prerequisites-video TTS_PROFILE=crall-math-dk-v2-breeze-tts2  # prerequisite series only
 ```
 
-`crall` uses the Breeze voice-cloning profile; `kokoro` uses Kokoro. The
+`crall-math-dk-v2-breeze-tts2` uses the v2 reference sample with Breeze TTS 2;
+`kokoro` uses Kokoro. The web UI labels voices as `<reference>-<model>`
+(for example, `crall-math-dk-v2-breeze-tts2` or `af_heart-kokoro`). The
 Kokoro profile requires `KOKORO_TTS_ENDPOINT` in the environment or this
 directory's `.env`. For a local CPU server on port 8881:
 
@@ -70,6 +72,29 @@ audio and video outputs. Completed speech chunks and video segments are cached,
 so rerunning after interruption reuses matching work; the interrupted request
 must finish again. A batch stops at the first failure and can be rerun.
 
+### Reference identity and generation provenance
+
+Use a reference basename plus model for a cloned-voice profile, such as
+`crall-math-dk-v2-breeze-tts2`. Its request specifies voice `crall-math-dk-v2`
+and model `breeze-tts2`; the server loads `crall-math-dk-v2.wav` and
+`crall-math-dk-v2.txt`. This is the new default in `tts.toml`. The legacy `crall`
+profile still requests the original `crall-math-dk` reference.
+
+New output suffixes and web-UI labels include the actual reference/voice and
+model. A new basename gives v2 separate speech caches and video outputs; it does
+not require `REFRESH_AUDIO=1`. Existing files retain their original names.
+
+Generation sidecars and timeline chunks retain request settings, reference
+filenames, and available server runtime/model revisions. Set
+`DKVIS_TTS_REFERENCE_DIR` in ignored `.env` to a local reference folder to also
+record file sizes, modification dates, and the reference transcript text. Local
+observations are labelled as such; unavailable runtime metadata stays explicit.
+Full TTS configuration and audio-processing settings accompany each new video.
+See the [production guide](dkvis/presentation/README.md#reference-and-generation-records)
+for the distinction between build-time settings and the original synthesis of
+cached chunks. Reference samples are identified by their versioned basenames;
+no reference-file hashing is added.
+
 ### Regenerate audio after changing a voice reference
 
 Replacing the reference recording or reference transcript on the Breeze server
@@ -80,13 +105,13 @@ they do not include the server's reference files.
 From `visualizations/`, force fresh speech and rebuild one narrated video:
 
 ```bash
-make video DECK=prereq-basics TTS_PROFILE=crall SKIP_RENDER=1 REFRESH_AUDIO=1
+make video DECK=prereq-basics TTS_PROFILE=crall-math-dk-v2-breeze-tts2 SKIP_RENDER=1 REFRESH_AUDIO=1
 ```
 
 For every indexed lecture:
 
 ```bash
-make lectures-video TTS_PROFILE=crall SKIP_RENDER=1 REFRESH_AUDIO=1
+make lectures-video TTS_PROFILE=crall-math-dk-v2-breeze-tts2 SKIP_RENDER=1 REFRESH_AUDIO=1
 ```
 
 `SKIP_RENDER=1` reuses existing slide renders; omit it if those also need updating.
@@ -98,7 +123,7 @@ name changes the request key and keeps its raw speech distinct.
 The equivalent direct command is:
 
 ```bash
-./render_video.sh --deck prereq-basics --tts-profile crall --skip-render --refresh-audio
+./render_video.sh --deck prereq-basics --tts-profile crall-math-dk-v2-breeze-tts2 --skip-render --refresh-audio
 ```
 
 ## Browse and watch rendered material
@@ -185,7 +210,7 @@ For a lecture that has already been built, edit the scene and its corresponding
 narration section, then run from `visualizations/`:
 
 ```bash
-make video DECK=prereq-complementary-projection TTS_PROFILE=crall UPDATE_SCENES="CpSplit"
+make video DECK=prereq-complementary-projection TTS_PROFILE=crall-math-dk-v2-breeze-tts2 UPDATE_SCENES="CpSplit"
 ```
 
 This renders only `CpSplit`, exports the complete HTML/PDF/handout, and assembles
@@ -197,7 +222,7 @@ its model badge. Scene selection is explicit rather than an automatic source
 dependency analysis.
 
 For slides alone, use `make slides DECK=... SCENES="CpSplit"`. After that, a
-`make video DECK=... TTS_PROFILE=crall SKIP_RENDER=1` reassembles the current
+`make video DECK=... TTS_PROFILE=crall-math-dk-v2-breeze-tts2 SKIP_RENDER=1` reassembles the current
 pieces. Changing a shared visual style, adding slides, or changing their order
 can affect every scene's chrome and should use a full render instead.
 

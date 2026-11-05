@@ -41,18 +41,18 @@ scripts are linked above. Speech and animated builds use those same texts.
 
 To make videos using the configured TTS service:
 
-Select the `crall` profile for the cloned reference voice. The current model,
+Select `crall-math-dk-v2-breeze-tts2` for the v2 cloned reference voice. The current model,
 voice, delivery instruction, chunk limits, and postprocessing settings live in
 [tts.toml](../../tts.toml); local endpoint overrides live in ignored `.env`.
 The [production guide](../presentation/README.md) explains configuration and
-caching. New Crall video variants are named `crall-breeze-tts2`.
+caching. New video variants are named `crall-math-dk-v2-breeze-tts2`.
 
 ```bash
-make prerequisites-video TTS_PROFILE=crall SKIP_RENDER=1
+make prerequisites-video TTS_PROFILE=crall-math-dk-v2-breeze-tts2 SKIP_RENDER=1
 make prerequisites-video TTS_PROFILE=kokoro SKIP_RENDER=1
 ```
 
-Use `make lectures-video TTS_PROFILE=crall SKIP_RENDER=1` to include the
+Use `make lectures-video TTS_PROFILE=crall-math-dk-v2-breeze-tts2 SKIP_RENDER=1` to include the
 matching study and compact proof talk as well, following the complete YAML index.
 
 This narrates all prerequisite lectures in YAML dependency order using existing

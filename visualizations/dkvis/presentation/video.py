@@ -23,13 +23,13 @@ from dkvis.presentation.narration import export, narrated_decks, read_deck_narra
 from dkvis.decks import get_deck
 from dkvis.presentation.paths import ROOT
 from dkvis.presentation.audio import synthesize_beat
-from dkvis.presentation.audio_quality import fingerprint, ffmpeg_version
+from dkvis.presentation.audio_quality import fingerprint, ffmpeg_version, VERSION as AUDIO_PROCESSING_VERSION
 from dkvis.presentation.captions import read_json, speech_parts
 from dkvis.presentation.media import assemble_narration, concat_list, duration
 from dkvis.palette import OUTPUT_SUFFIX, THEME
 from dkvis.presentation.timing import timing
 from dkvis.lectures import lecture_output_name
-from dkvis.presentation.tts import DEFAULT_CONFIG, load_profiles, resolve_profile, narrator_id
+from dkvis.presentation.tts import DEFAULT_CONFIG, load_profiles, resolve_profile, narrator_id, server_runtime
 
 
 def narrated_builds(scene: str, folder: Path, script) -> list[tuple[Path, str]]:
@@ -209,6 +209,8 @@ def main(argv=None):
     if args.timeout is not None:
         overrides["timeout_seconds"] = args.timeout
     settings = resolve_profile(document, args.tts_profile, overrides)
+    if settings.get('record_server_runtime'):
+        settings['server_runtime'] = server_runtime(settings['endpoint'])
     settings["refresh_audio"] = args.refresh_audio
     if args.language is not None:
         settings["request"] = {**settings.get("request", {}), "language": args.language}
@@ -307,7 +309,9 @@ def main(argv=None):
                     )
                     audio_seconds=duration(audio)
                     spoken_parts=speech_parts(ROOT/'renders',audio) or [dict(
-                        text=text,seconds=audio_seconds,model=settings['model'],voice=settings['voice'])]
+                        text=text,seconds=audio_seconds,model=settings['model'],voice=settings['voice'],
+                        synthesis=dict(reference=settings.get('reference'),request_settings=settings.get('request',{}),
+                                       server_runtime=settings.get('server_runtime')))]
                     builds.append(
                         dict(
                             number=k,
@@ -383,7 +387,9 @@ def main(argv=None):
             from dkvis.presentation.provenance import record
             record(output,args.deck,'video',theme=THEME,profile=profile,
                    model=settings['model'],voice=settings['voice'],fps=args.fps,
-                   preset=args.preset,preview=bool(args.scenes))
+                   preset=args.preset,preview=bool(args.scenes),
+                   tts=safe_settings,pause=args.pause,beat_pause=args.beat_pause,
+                   quality=args.quality,ffmpeg=ffmpeg_version(),audio_processing_version=AUDIO_PROCESSING_VERSION)
             timeline = json.dumps(entries, indent=2) + "\n"
             (work / f'timeline-{profile}{".preview" if args.scenes else ""}.json').write_text(
                 timeline

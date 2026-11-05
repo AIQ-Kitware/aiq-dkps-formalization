@@ -23,7 +23,8 @@ def test_generated_video_retains_speech_and_model_provenance(tmp_path,monkeypatc
         stream.writeframes(b'\0\0'*24000)
     speech='An eigenvalue and an eigenspace are different objects.'
     settings=dict(profile='qa',endpoint='http://unreachable.invalid',model='test-tts',
-                  voice='test-voice',response_format='wav',postprocess={},timeout_seconds=60)
+                  voice='test-voice',response_format='wav',postprocess={'enabled':False},timeout_seconds=60,
+                  reference=dict(audio={'basename':'voice-v2.wav'}),request=dict(cfg_scale=2))
     monkeypatch.setattr(video,'ROOT',tmp_path)
     monkeypatch.setattr(video,'load_profiles',lambda *a:{})
     monkeypatch.setattr(video,'resolve_profile',lambda *a:settings)
@@ -46,6 +47,11 @@ def test_generated_video_retains_speech_and_model_provenance(tmp_path,monkeypatc
     metadata=json.loads(output.with_name(output.name+'.metadata.json').read_text())
     assert metadata['settings']['model']=='test-tts'
     assert metadata['settings']['voice']=='test-voice'
+    assert metadata['settings']['tts']['reference']['audio']['basename']=='voice-v2.wav'
+    assert metadata['settings']['tts']['request']['cfg_scale']==2
+    assert metadata['settings']['tts']['postprocess']=={'enabled':False}
+    assert 'endpoint' not in metadata['settings']['tts']
+    assert timeline[0]['builds'][0]['speech_parts'][0]['synthesis']['reference']['audio']['basename']=='voice-v2.wav'
     assert metadata['generated_at'] and metadata['provenance']['transcript']
     assert 'endpoint' not in metadata['settings']
     audio.unlink()

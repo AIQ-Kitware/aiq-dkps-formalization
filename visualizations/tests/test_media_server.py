@@ -261,3 +261,19 @@ def test_loose_previews_and_orphan_transcripts_are_not_lectures(library):
     # Filtering the library preserves the artifact for direct inspection.
     assert preview.read_bytes()==data
     assert client.get('/files/'+preview.name).status_code==200
+
+
+def test_library_preserves_full_reference_and_model_variant(library):
+    client,root,data=library
+    variant='crall-math-dk-v2-breeze-tts2'
+    filename=f'000010_prereq-basics.{variant}.narrated.mp4'
+    (root/filename).write_bytes(data)
+    settings=dict(profile=variant,model='breeze-tts2',voice='crall-math-dk-v2',
+                  tts=dict(reference=dict(audio=dict(basename='crall-math-dk-v2.wav'),
+                                          transcript=dict(basename='crall-math-dk-v2.txt'))))
+    (root/(filename+'.metadata.json')).write_text(json.dumps(dict(deck='prereq-basics',settings=settings)))
+    rows=client.get('/api/catalog').json()['items']
+    lecture=next(r for r in rows if r['id']=='prereq-basics')
+    selected=next(a for a in lecture['assets'] if a['path']==filename)
+    assert selected['voice']==variant and selected['label']==variant
+    assert selected['render_settings']['tts']['reference']['audio']['basename']=='crall-math-dk-v2.wav'

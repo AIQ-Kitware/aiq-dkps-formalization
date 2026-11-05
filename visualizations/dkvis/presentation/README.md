@@ -107,7 +107,7 @@ Timing records include measurement, processing and remux durations, cache hits,
 and processing settings, alongside the existing speech and video timings. Nested
 operation times overlap and must not be added to estimate wall time.
 
-The Crall profile now allows up to 110 words / 750 characters per request, with
+The cloned-voice profiles allow up to 110 words / 750 characters per request, with
 the existing 60-second cutoff detection and subdivision retained. Its prompt asks
 for warm, clear delivery at steady conversational loudness with restrained
 emphasis. Explicit `cfg_scale = 2.0` reduces the instruction-conditioned server
@@ -120,7 +120,7 @@ repairs measure only the mechanical processing, not the revised prompt.
 
 The client cannot detect a replacement reference recording or reference
 transcript behind an unchanged TTS endpoint/model/voice name. Use
-`make video DECK=prereq-basics TTS_PROFILE=crall SKIP_RENDER=1 REFRESH_AUDIO=1`,
+`make video DECK=prereq-basics TTS_PROFILE=crall-math-dk-v2-breeze-tts2 SKIP_RENDER=1 REFRESH_AUDIO=1`,
 or pass `--refresh-audio` to `render_video.sh`, to bypass cached synthesis.
 The Make variable also propagates through `make lectures-video` and
 `make prerequisites-video`. It resynthesizes every speech chunk in the selected
@@ -136,15 +136,15 @@ are not themselves inputs to the client-side digest.
 ## Render different narrators concurrently
 
 Final videos include the configured narrator identity, for example
-`renders/001000_prereq-projections.crall-breeze-tts2.narrated.mp4` and
-`renders/001000_prereq-projections.kokoro.narrated.mp4`. By default this is the
+`renders/001000_prereq-projections.crall-math-dk-v2-breeze-tts2.narrated.mp4` and
+`renders/001000_prereq-projections.af_heart-kokoro.narrated.mp4`. By default this is the
 profile name; `narrator_voice` combines a reference-speaker label with the model.
 Use separate profiles for separate narrators. A custom `--output` must also be distinct for each run.
 
 Build the shared visual slides once, then narrate them in parallel:
 
 ```bash
-./render_video.sh --deck prereq-projections --tts-profile crall --skip-render &
+./render_video.sh --deck prereq-projections --tts-profile crall-math-dk-v2-breeze-tts2 --skip-render &
 ./render_video.sh --deck prereq-projections --tts-profile kokoro --skip-render &
 wait
 ```
@@ -222,17 +222,19 @@ test pytest -q tests/test_media_server.py`.
 
 ## Narrator names and native captions
 
-The `crall` configuration profile now writes public video, timeline, and
-transcript variants named `crall-breeze-tts2`. Its `narrator_voice = "crall"`
-setting combines the reference-speaker label with the selected model. Changing
-`--model` also changes that public name; overriding `--voice` uses the
-new voice identifier instead of the configured reference-speaker label. For a new reference
-voice, give it its own profile and `narrator_voice` setting.
+The preferred cloned-voice profile is `crall-math-dk-v2-breeze-tts2`: reference
+basename `crall-math-dk-v2`, model `breeze-tts2`. It writes public video, timeline,
+and transcript variants with that same complete name. `narrator_voice` holds the
+reference/voice basename, and `narrator_id` combines it with the model actually
+selected. Overriding `--voice` changes the output name and discards reference
+metadata that described the previous voice.
 
-Keep using `TTS_PROFILE=crall` in commands. Raw audio, processed audio, and encoded
-segment caches retain their existing profile directories; the public rename does
-not itself require new synthesis or encoding. Existing videos keep their old
-filenames and recorded provenance until rebuilt.
+The original `crall` profile is retained for compatibility with its original
+voice/cache namespace. Its new output labels use `crall-math-dk-breeze-tts2`.
+Built-in voice profiles similarly expose both identifiers, such as
+`af_heart-kokoro` and `ryan-breeze-tts2`. Existing artifact names and generation
+snapshots are preserved. The library honors remembered selections; otherwise it
+prefers the most recently generated full video rather than a hard-coded alias.
 
 The visible **CC: off/on** button alongside playback controls toggles captions
 directly and stays synchronized with the native player menu. Native caption
@@ -269,3 +271,34 @@ place. If a file was regenerated after the viewer selected it, saving is rejecte
 rather than attributing the old feedback to the new video; copy the draft before
 refreshing and reviewing the updated lecture. Restart the server after updating
 the Python code; no media rebuild is needed for the feedback UI.
+
+
+## Reference and generation records
+
+`tts.toml` declares portable reference filenames in the profile's `reference`
+table. The server still receives its normal voice ID, not local reference paths.
+`DKVIS_TTS_REFERENCE_DIR` in ignored `.env` optionally supplies a local copy for
+recording basenames, sizes, UTC modification dates, WAV format/duration, and
+reference transcript text.
+No reference audio bytes, absolute host paths, or new reference hashes are saved.
+These observations do not attest that a remote server has byte-identical files.
+Use a new reference basename when recording a new version.
+
+New raw speech sidecars keep their actual generation timestamp, request options
+(instruction, guidance, seed if supplied), reference observations, and optional
+server runtime metadata. Profiles with `record_server_runtime = true` query the
+local-ai `/v1/runtime` endpoint once per video run. Supported fields include model
+and source revisions, backend, dtype, device, sample rate, and fast-mode settings.
+Unreachable or unsupported endpoints are recorded as unavailable and do not block
+synthesis. Server defaults that were not reported remain unknown.
+
+Video sidecars snapshot full build-time TTS settings, postprocessing settings,
+pauses, and FFmpeg version. Timeline `speech_parts[].synthesis` snapshots the
+original raw-chunk records, so cached chunks retain their original reference and
+request settings even if the current configuration has changed. A cache hit
+never relabels old synthesis as a new generation. Older chunks without these
+fields remain unrecorded rather than being backfilled.
+
+The private endpoint URL remains outside artifact metadata; its existing opaque
+cache identifier is retained. The selected video metadata also accompanies saved
+viewer feedback, preserving the reference/model identity that the feedback concerns.

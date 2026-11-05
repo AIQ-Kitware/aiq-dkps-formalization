@@ -3,9 +3,15 @@
 from __future__ import annotations
 
 import os
+import json
+from datetime import datetime, timezone
+import urllib.request
+import urllib.error
+from urllib.parse import urlsplit, urlunsplit
 from pathlib import Path
 import shlex
 import tomllib
+import wave
 
 from dkvis.presentation.paths import ROOT
 DEFAULT_CONFIG = ROOT / "tts.toml"
@@ -45,14 +51,16 @@ def load_profiles(path=DEFAULT_CONFIG):
 def resolve_profile(document, selected=None, overrides=None):
     selected = (
         selected or os.environ.get("DKVIS_TTS_PROFILE")
-        or os.environ.get("MATCHING_TTS_PROFILE") or document.get("profile", "crall")
+        or os.environ.get("MATCHING_TTS_PROFILE") or document.get("profile", "crall-math-dk-v2-breeze-tts2")
     )
     profiles = document.get("profiles", {})
     if selected not in profiles:
         raise ValueError(f'Unknown TTS profile {selected!r}; available: {", ".join(profiles)}')
     result = {**DEFAULTS, **document.get("defaults", {}), **profiles[selected], "profile": selected}
-    if result.get('narrator_voice') and (overrides or {}).get('voice', result.get('voice')) != result.get('voice'):
-        result['narrator_voice'] = overrides['voice']
+    if (overrides or {}).get('voice', result.get('voice')) != result.get('voice'):
+        if result.get('narrator_voice'):
+            result['narrator_voice'] = overrides['voice']
+        result.pop('reference', None)
     result.update(overrides or {})
     result['postprocess'] = {**document.get('postprocess', {}), **result.get('postprocess', {})}
     if result['postprocess']:
@@ -87,6 +95,8 @@ def resolve_profile(document, selected=None, overrides=None):
         or {"input", "model", "voice", "response_format"} & request.keys()
     ):
         raise ValueError("request settings may not replace input, model, voice, or response_format")
+    if result.get('reference'):
+        result['reference'] = reference_snapshot(result['reference'])
     return result
 
 
@@ -98,3 +108,59 @@ def narrator_id(settings):
     """
     speaker = settings.get('narrator_voice')
     return f"{speaker}-{settings['model']}" if speaker else settings['profile']
+
+
+def reference_snapshot(reference):
+    """Keep portable reference names, with optional local file observations.
+
+    These are client-side observations, not an attestation of remote file contents.
+    No audio data, absolute host paths, or reference hashes are stored.
+    """
+    result={'source':reference.get('source'), 'basis':'configured filenames',
+            'observed_at':datetime.now(timezone.utc).isoformat()}
+    directory=os.environ.get('DKVIS_TTS_REFERENCE_DIR')
+    for kind in ['audio','transcript']:
+        name=reference[kind]
+        if not isinstance(name,str) or Path(name).name!=name or name in {'.','..'}:
+            raise ValueError('Reference audio/transcript must be plain basenames')
+        info={'basename':name}
+        if directory:
+            path=Path(directory)/name
+            try:
+                stat=path.stat()
+                info.update(bytes=stat.st_size,modified_at=datetime.fromtimestamp(stat.st_mtime,timezone.utc).isoformat())
+                if kind=='transcript':
+                    info['text']=path.read_text(encoding='utf-8')
+                else:
+                    try:
+                        with wave.open(str(path),'rb') as stream:
+                            info.update(sample_rate=stream.getframerate(),channels=stream.getnchannels(),
+                                        sample_width_bytes=stream.getsampwidth(),
+                                        seconds=stream.getnframes()/stream.getframerate())
+                    except (wave.Error,EOFError):
+                        pass
+                info['observation']='local file snapshot'
+            except (OSError,UnicodeError):
+                info['observation']='local file unavailable'
+        result[kind]=info
+    return result
+
+
+def server_runtime(endpoint):
+    """Best-effort runtime metadata from local-ai; unsupported servers still work."""
+    parsed=urlsplit(endpoint)
+    path=parsed.path.rsplit('/audio/speech',1)[0]+'/runtime'
+    url=urlunsplit((parsed.scheme,parsed.netloc,path,'',''))
+    observed_at=datetime.now(timezone.utc).isoformat()
+    fields=['backend','model_alias','model_revision','source_revision','device',
+            'dtype_policy','effective_dtype','sample_rate','loaded_at_unix',
+            'pipeline','breeze_fast','attention_implementation','torch_version',
+            'cuda_version','cudnn_version','gpu_name','gpu_capability']
+    try:
+        with urllib.request.urlopen(url,timeout=3) as response:
+            data=json.load(response)
+        if not isinstance(data,dict):
+            raise ValueError('Expected runtime object')
+        return dict(status='reported',observed_at=observed_at,details={k:data[k] for k in fields if k in data})
+    except (OSError,ValueError,urllib.error.URLError) as error:
+        return dict(status='unavailable',observed_at=observed_at,reason=type(error).__name__)
