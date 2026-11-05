@@ -101,6 +101,10 @@ stated standard mathematical background without reteaching it. Keep the local
 notation card and its narration synchronized, and define new proof-specific
 objects again when they enter the argument.
 
+Narration must stand alone as an evergreen lecture, not answer an author's
+prompt. Introduce applications locally; prefer the general mathematical reason
+to an unexplained reference to “the proof”. See `AGENTS.md` for the authoring rule.
+
 ## Opening attribution and single-scene edits
 
 Indexed narrated lectures use `LessonTitle` for a short cover. Its robot badge

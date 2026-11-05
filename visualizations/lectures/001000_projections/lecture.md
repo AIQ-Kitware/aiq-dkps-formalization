@@ -31,8 +31,8 @@ Suppose a vector is close to a line, but does not lie on it. Which point on the
 line should represent that vector? The nearest point gives us a useful operation:
 keep the part along the line and remove the perpendicular part. This operation
 is an orthogonal projection. It also describes an entire subspace without
-choosing particular basis vectors. That is why projections appear throughout
-the transport proof. Our goals are to understand their geometry, read their
+choosing particular basis vectors. That is why projections are useful in approximation, optimization, and
+comparisons of subspaces. Our goals are to understand their geometry, read their
 block coordinates, and explain what it means for another map to commute with
 one. We will finish by writing the condition that a map carries one subspace
 onto another.
@@ -48,9 +48,8 @@ problem to matrix approximation. The fitted space has a chosen dimension.
 For a fixed candidate subspace, each data point
 is represented by its nearest point in that subspace. Today we can express
 that operation with a projection matrix. The data point splits into a fitted
-component and an orthogonal error. The same geometry will let us describe
-subspaces in the proof, even when our purpose is transporting spaces rather
-than fitting data. The historical reference gives context; we will derive the
+component and an orthogonal error. The same geometry also describes how linear maps act on subspaces,
+even when the problem involves transporting spaces rather than fitting data. The historical reference gives context; we will derive the
 projection identities directly.
 
 ## Pr02Decomposition: Keep one component and remove the other
@@ -173,7 +172,7 @@ value of the curve parameter.
 
 ## Pr08Recap: Read the space, its coordinates, and its constraint
 
-Why: These three translations remove much of the block notation in the matching proof.
+Why: Translate geometric statements into matrix equations and back.
 Recall: $P=EE^T$; $PT=TP$; $Q=WPW^T$.
 
 Remember three translations. A projector represents a subspace without tying

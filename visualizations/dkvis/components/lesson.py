@@ -69,7 +69,7 @@ class LessonSlide(DeckSlide):
             return chrome
         stages = VGroup(*(tex(label, size=18, color=CURRENT if i == self.stage else MUTED)
                           for i, label in enumerate([
-                              'Question', 'Tools', 'Use in the proof', 'Recap',
+                              'Question', 'Tools', 'Applications', 'Recap',
                           ]))).arrange(RIGHT, buff=.75).move_to([0, -3.15, 0])
         current = stages[self.stage]
         chrome.add(stages, Line(current.get_left()+DOWN*.17,

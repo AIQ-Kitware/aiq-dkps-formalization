@@ -9,6 +9,13 @@ slides:
     commit: 5fdda50fe857ee332757f856dee897edca1f386a
     date: '2026-11-04T19:29:20-05:00'
     basis: Co-authored-by attribution on the first tracked source commit; earlier imported ancestry may exist.
+  revisions:
+  - date: '2026-11-05'
+    models:
+    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    sources:
+    - visualizations/dkvis/learning/singular_norms/scenes.py
+    scope: Make on-slide explanations and recaps independent of an unspecified proof.
 transcript:
   initial_source_attribution:
   - source: visualizations/lectures/002000_singular_norms/lecture.md
@@ -23,5 +30,13 @@ transcript:
     commit: b338f50b622a5de3bcc9cf80cafa8c7151d9917f
     date: '2026-11-04T23:40:53-05:00'
     basis: Co-authored-by attribution on the first tracked source commit; earlier imported ancestry may exist.
+  revisions:
+  - date: '2026-11-05'
+    models:
+    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    sources:
+    - visualizations/lectures/002000_singular_norms/lecture.md
+    scope: Remove prompt-response language and motivate the lecture independently; keep transport connections as
+      explicit applications.
 note: These are recorded model attributions, not claims of mathematical priority or independently verified authorship.
   Unknown variants remain unknown.

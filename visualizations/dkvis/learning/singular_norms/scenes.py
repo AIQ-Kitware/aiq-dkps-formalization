@@ -159,7 +159,7 @@ class Sn06SmoothCost(NormSlide):
         self.start()
         self.put(stack(r'\|T\|_p=\left(\sum_j s_j(T)^p\right)^{1/p}',
                        r'\Phi_p(W)=\|I-W\|_p^p=\sum_j s_j(I-W)^p',
-                       tex('The proof differentiates the power cost.', size=28),
+                       tex('A differentiable power cost supports derivative tests.', size=28),
                        r'p=1:\ \Phi_1(W)=\|I-W\|_1', size=29, buff=.45),
                  'left', y=.15)
         ax = plane(width=4.3, height=2.6, extent=1.3)

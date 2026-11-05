@@ -221,7 +221,7 @@ class Va09Structure(VariationSlide):
                        boxed(math(r'J_{\mathrm{src}}GJ_{\mathrm{src}}=-G', size=33), color=CURRENT),
                        tex('Reflection reverses the remaining off-diagonal blocks.', size=25),
                        size=30, buff=.45), 'right', y=.1)
-        self.takeaway('This gradient identity starts the construction of invariant blocks in the matching proof.')
+        self.takeaway('Stationarity forces zero diagonal gradient blocks in source coordinates.')
 
 
 class Va10Recap(VariationSlide):
@@ -239,7 +239,7 @@ class Va10Recap(VariationSlide):
         self.beat()
         self.add(tex('Neither. We derived a necessary condition on the gradient at a chosen minimizer.',
                      size=27, color=CURRENT).move_to([0, -1.95, 0]))
-        self.takeaway('Return to matching: legal variations give structure instead of assuming it.')
+        self.takeaway('Construct feasible motions, then test the derivative to extract structure.')
 
 
 class VaFacts(VariationSlide):

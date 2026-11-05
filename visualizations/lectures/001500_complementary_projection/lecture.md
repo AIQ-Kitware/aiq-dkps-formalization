@@ -64,17 +64,17 @@ There is a useful trap here. Unless the complementary subspace is zero, the oper
 
 ## CpSineBlock: From ambient error to unwanted coordinates
 
-Why: Identify the projection expression used in the paper.
+Why: Express the same projection error in ambient and complementary coordinates.
 Recall: F zero and F one are orthonormal frames for the wanted space and its complement.
 
 Choose a complete orthonormal decomposition of the ambient space. F zero spans the wanted space K, and F one spans K perpendicular. Then P is F zero times F zero transpose, and identity minus P is F one times F one transpose. E zero is an orthonormal trial frame. The map S equals identity minus P times E zero, so it sends trial coordinates to their geometric error in the ambient space. Now define X as F one transpose times E zero. This records exactly the same error in unwanted-space coordinates. The equation S equals F one times X follows by substitution. Since F one preserves lengths, S a and X a have equal norms for every input a, and their operator norms agree. This explains the two appearances of the sine block. The operator residual R, defined using the studied operator A hat and a trial operator A zero, is a different map; it is not just this geometric error.
 
 ## CpDisplacement: Compare projection error with rotation displacement
 
-Why: Explain which part of the displacement intuition is correct.
+Why: Distinguish complementary projection from displacement under a general map.
 Recall: W rotates the horizontal unit vector u to v through theta.
 
-Your displacement intuition is useful. For any map T, identity minus T sends x to original minus output. In that convention identity minus P is indeed the displacement of the projection P. It also has the extra structure of a complementary projection. Compare it with a rotation W. Here W moves the horizontal unit vector u to the amber unit vector v. The pink projection error of v has length sine theta. The steel arrow goes from the moved tip v back to the original tip u; it is u minus W u. That is a chord of the unit circle, with length twice sine of half theta. Projection drops a perpendicular component, while rotation preserves lengths and moves the entire vector. Thus the formulas look related but measure different geometric operations. For a general W, identity minus W need not be a projection at all.
+For any linear map T on the ambient space, identity minus T sends x to the original vector minus its output. In this sense, identity minus P measures displacement under the projection P. It also has the extra structure of a complementary projection. Compare it with a rotation W. Here W moves the horizontal unit vector u to the amber unit vector v. The pink projection error of v has length sine theta. The steel arrow goes from the moved tip v back to the original tip u; it is u minus W u. That is a chord of the unit circle, with length twice sine of half theta. Projection drops a perpendicular component, while rotation preserves lengths and moves the entire vector. Thus the formulas look related but measure different geometric operations. For a general W, identity minus W need not be a projection at all.
 
 ## CpSummary: The picture to keep
 

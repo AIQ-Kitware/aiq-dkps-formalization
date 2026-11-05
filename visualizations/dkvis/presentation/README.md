@@ -118,11 +118,11 @@ repairs measure only the mechanical processing, not the revised prompt.
 
 ## Render different narrators concurrently
 
-Final videos include the selected TTS profile, for example
-`renders/prereq-projections.crall.narrated.mp4` and
-`renders/prereq-projections.kokoro.narrated.mp4`. This is the profile name, not
-an automatically inferred voice name: use separate profiles for separate
-narrators. A custom `--output` must also be distinct for each run.
+Final videos include the configured narrator identity, for example
+`renders/001000_prereq-projections.crall-breeze-tts2.narrated.mp4` and
+`renders/001000_prereq-projections.kokoro.narrated.mp4`. By default this is the
+profile name; `narrator_voice` combines a reference-speaker label with the model.
+Use separate profiles for separate narrators. A custom `--output` must also be distinct for each run.
 
 Build the shared visual slides once, then narrate them in parallel:
 
@@ -139,8 +139,8 @@ concat lists, chapters, timelines and final videos are profile-specific.
 Preview clips and assembly metadata are also separate from full runs. Two runs
 using the same profile still share its caches and outputs; run those sequentially.
 
-Use `renders/<deck>-narrated/timeline-<profile>.json` for analysis and repair
-(or `timeline-<profile>.preview.json` for a preview). New renders no longer write
+Use `renders/<deck>-narrated/timeline-<narrator>.json` for analysis and repair
+(or `timeline-<narrator>.preview.json` for a preview). New renders no longer write
 the ambiguous `timeline.json` alias. Existing videos and timelines retain their
 old names until explicitly rebuilt; the legacy unsuffixed video is not updated.
 
@@ -194,3 +194,27 @@ server. Position storage includes the file's modification time, so a new render
 does not inherit an old version's timing. The `serve` extra stays independent of
 Manim and TTS dependencies. Run its HTTP tests with `uv run --extra serve --extra
 test pytest -q tests/test_media_server.py`.
+
+
+## Narrator names and native captions
+
+The `crall` configuration profile now writes public video, timeline, and
+transcript variants named `crall-breeze-tts2`. Its `narrator_voice = "crall"`
+setting combines the reference-speaker label with the selected model. Changing
+`--model` also changes that public name; overriding `--voice` uses the
+new voice identifier instead of the configured reference-speaker label. For a new reference
+voice, give it its own profile and `narrator_voice` setting.
+
+Keep using `TTS_PROFILE=crall` in commands. Raw audio, processed audio, and encoded
+segment caches retain their existing profile directories; the public rename does
+not itself require new synthesis or encoding. Existing videos keep their old
+filenames and recorded provenance until rebuilt.
+
+Captions use the browser video player's native CC/subtitles menu, including in
+fullscreen. They start off. Availability and placement of the menu depend on the
+browser; no separate page checkbox is needed. Caption words are the recorded TTS
+input, with approximate timing within each request.
+
+Timestamp buttons seek 50 milliseconds inside the selected passage (less for
+a very short passage). This avoids displaying the preceding video frame when
+an exact boundary falls between frames or browser timestamps are rounded.

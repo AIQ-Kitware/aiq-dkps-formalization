@@ -29,7 +29,7 @@ from dkvis.presentation.media import assemble_narration, concat_list, duration
 from dkvis.palette import OUTPUT_SUFFIX, THEME
 from dkvis.presentation.timing import timing
 from dkvis.lectures import lecture_output_name
-from dkvis.presentation.tts import DEFAULT_CONFIG, load_profiles, resolve_profile
+from dkvis.presentation.tts import DEFAULT_CONFIG, load_profiles, resolve_profile, narrator_id
 
 
 def narrated_builds(scene: str, folder: Path, script) -> list[tuple[Path, str]]:
@@ -229,7 +229,8 @@ def main(argv=None):
         scripts = {name: script for name, script in scripts.items() if name in args.scenes}
     name = args.deck + OUTPUT_SUFFIX
     public = lecture_output_name(args.deck) + OUTPUT_SUFFIX
-    profile = re.sub(r"[^a-zA-Z0-9_-]", "_", settings["profile"])
+    profile = re.sub(r"[^a-zA-Z0-9_-]", "_", narrator_id(settings))
+    cache_profile = re.sub(r"[^a-zA-Z0-9_-]", "_", settings["profile"])
     log = timing()
     safe_settings = {k: v for k, v in settings.items() if k != "endpoint"}
     safe_settings["endpoint_sha256"] = hashlib.sha256(settings["endpoint"].encode()).hexdigest()
@@ -293,7 +294,7 @@ def main(argv=None):
                 for k, (visual, text) in enumerate(visuals[scene], 1):
                     label = f"{scene}-beat{k:02d}"
                     audio = synthesize_beat(text, label, work, settings)
-                    segment_dir = work / profile
+                    segment_dir = work / cache_profile
                     if args.scenes:
                         segment_dir = segment_dir / "preview"
                     segment_dir.mkdir(parents=True, exist_ok=True)

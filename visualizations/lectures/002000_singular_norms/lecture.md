@@ -38,8 +38,8 @@ rotation has two stretches of one point one.
 The worst-direction measurement prefers the rotation: one point one is smaller
 than two. Adding the stretches prefers the reflection: two is smaller than
 two point two. Neither calculation is mistaken. We chose different objectives.
-This lecture explains the stretches, the resulting norms, and the rule that
-lets the matching proof add costs over independent blocks.
+This lecture explains the stretches, the resulting norms, and the rule for
+adding costs over independent blocks.
 
 ## Sn01History: Matrix approximation made the axes useful
 
@@ -109,14 +109,14 @@ operation changes the singular-value list.
 
 Algebraically, multiplying T on the left and right by orthogonal matrices
 leaves each of our three norms unchanged. Over complex scalars the analogous
-coordinate changes are unitary. This invariance is what allows the proof to
-choose convenient coordinates for each block. It does not mean that we may
+coordinate changes are unitary. This invariance lets us
+choose convenient coordinates for a calculation. It does not mean that we may
 replace a given operator by any unrelated matrix with convenient entries;
 we must justify the coordinate changes or compute the same singular values.
 
 ## Sn05Rotation: A rotation moves two independent directions
 
-Why: Compute the singleton costs used by the matching theorem.
+Why: Compare two ways to carry a line onto another line.
 Recall: $R_\theta$ is a planar rotation; a reflection has displacement stretches $2,0$.
 
 For a planar rotation, multiply identity minus R transpose by identity minus R.
@@ -130,18 +130,17 @@ cost is always two.
 
 At thirty degrees, the rotation is cheaper. At ninety degrees, the reflection
 is cheaper. They tie at sixty degrees. Both can carry a source line onto the
-same target line: the reflection axis bisects their angle. This is the
-singleton choice in the matching formula. The two equal rotation singular
+same target line: the reflection axis bisects their angle. This comparison is useful when choosing a motion for a single pair of lines. The two equal rotation singular
 values are important; counting only one would underestimate the full
 displacement cost by a factor of two.
 
 ## Sn06SmoothCost: A power cost makes the first derivative available
 
-Why: The matching proof needs derivatives, while the trace norm can have corners.
+Why: A differentiable cost makes derivative tests available in optimization.
 Recall: $\Phi_p(W)=\sum_j s_j(I-W)^p=\|I-W\|_p^p$.
 
 The Schatten p norm takes the sum of the p-th powers of the singular values,
-then takes a p-th root. The matching proof uses its p-th power, called Phi p,
+then takes a p-th root. For optimization, it is often convenient to use its p-th power, called Phi p,
 so there is no final root. At p equal to one this is the trace norm. For p
 strictly greater than one, the finite-dimensional power cost is differentiable,
 including at zero displacement singular values.
@@ -151,14 +150,15 @@ including at zero displacement singular values.
 The scalar picture explains the issue. Absolute value has a corner at zero,
 whereas absolute value to the power one point five has derivative zero there.
 The matrix differentiability statement uses singular-value calculus; it does
-not follow merely by drawing this scalar graph. In the proof we first use
-p between one and two to obtain stationarity and a decomposition, then let
-p approach one from above. We smooth the objective to reveal structure and
-ultimately recover the original trace-norm minimum.
+not follow merely by drawing this scalar graph. One application is trace-norm transport: first use
+p between one and two to derive stationarity and a decomposition, then let
+p approach one from above to recover the trace-norm minimum. The general
+strategy is to study a smoother family before taking an endpoint limit;
+justifying that limit is a separate step.
 
 ## Sn07BlockCosts: Independent blocks have a combined singular-value list
 
-Why: This is the exact additivity rule behind matching costs.
+Why: Know when a large norm calculation splits into smaller ones.
 Recall: A block diagonal map preserves orthogonal input and output pieces.
 
 Suppose T is block diagonal on an orthogonal decomposition. Then T transpose T
@@ -173,8 +173,7 @@ Be precise about what adds. For the Frobenius norm, the squares add. For the
 operator norm, take the maximum. For the Schatten p norm, the p-th powers
 add; the norm itself generally does not. A rotation of sixty degrees contributes
 singular values one and one, and a reflection contributes two and zero.
-Their orthogonal direct sum has trace cost four. This is the rule used once
-the matching proof has established common invariant blocks.
+Their orthogonal direct sum has trace cost four. The same rule applies to any orthogonal block diagonal decomposition.
 
 ## Sn08Restrictions: Orthogonal inputs alone do not give additive costs
 
@@ -191,8 +190,8 @@ trace norm of the full map.
 But both input directions are sent to the same output line. The full matrix
 has singular values square root of two and zero, so its trace norm is square
 root of two, not two. There is no orthogonal output split making these
-restrictions independent blocks. This is why the proof works to obtain a
-simultaneous invariant decomposition. Writing separate domain restrictions
+restrictions independent blocks. To add such costs, we must first establish an
+orthogonal block decomposition on both sides. Writing separate domain restrictions
 does not by itself justify adding their singular-value costs.
 
 ## Sn09Recap: Read the stretches before comparing the costs
@@ -210,10 +209,11 @@ power of a norm, not the norm itself.
 <!-- beat -->
 
 As a check, take a map with singular values three and four. Its operator norm
-is four, its Frobenius norm is five, and its trace norm is seven. You can now
-compute the displacement costs that the matching theorem minimizes. The
-remaining question is how a minimizer can reveal useful structure. For that,
-we need variations that remain inside the set of allowed transporters.
+is four, its Frobenius norm is five, and its trace norm is seven. These rules let us
+compute displacement costs and check whether a proposed block calculation
+is valid. In optimization, a further question is how to find useful blocks
+without assuming them in advance. Feasible variations provide one way to
+extract that structure from a minimizer.
 
 ## SnFacts: Two singular-value facts to use in a proof
 

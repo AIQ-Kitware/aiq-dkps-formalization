@@ -39,8 +39,8 @@ must keep carrying the source subspace onto the target. We need explicit
 curves that respect both conditions. At a minimizing W, the cost derivative
 along every such curve vanishes. This lecture constructs those curves and
 shows how particular derivative tests force the gradient's diagonal blocks
-to vanish. We will construct the available directions rather than assume
-the existence of an algorithm that knows the answer.
+to vanish. The goal is a necessary condition on a minimizer, obtained from explicitly
+constructed curves.
 
 ## Va01History: Variations turn an optimization problem into equations
 
@@ -151,9 +151,9 @@ for all the allowed B, is stationarity.
 
 The equation is necessary, not sufficient. At the top of the unit circle,
 height also has zero derivative along every tangent motion, but that point
-is a maximum. In the matching proof we already choose a global minimizer
-using compactness. Stationarity extracts information from that chosen
-minimizer. It is not the argument establishing its existence or its global
+is a maximum. For a continuous objective on our compact, nonempty set of transporters,
+a global minimizer exists. Stationarity extracts information from any such
+minimizer at which the objective is differentiable. It is not the argument establishing its existence or its global
 optimality.
 
 ## Va07Gradient: Package the first derivatives as a trace pairing
@@ -168,7 +168,7 @@ will give stationary tests. In this finite-dimensional space, we can represent t
 linear functional by a unique skew-symmetric matrix G using the Frobenius
 inner product. This inner product is trace of G transpose B. Since G is
 skew-symmetric, the pairing is minus trace of G B. This defines the
-right-variation gradient used by the proof.
+right-variation gradient for the objective.
 
 <!-- beat -->
 
@@ -179,9 +179,9 @@ times the quarter-turn J, the angle changes at speed b. The plane's power
 cost is twice f p of phi, so its derivative is twice b f p prime of phi.
 Setting G equal to f p prime of phi times J gives exactly the same value:
 J squared is minus identity, whose two-dimensional trace is minus two.
-This is the source of the negative trace sign. The matching proof constructs
-G on all rotation and scalar blocks; here we need the pairing to perform
-the stationarity tests.
+This is the source of the negative trace sign. A full block formula for G requires the spectral calculus
+of the objective. The stationarity tests below use only this trace pairing
+and skew-symmetry.
 
 ## Va08Test: Use the gradient to construct an admissible test
 
@@ -225,14 +225,14 @@ action on the principal planes.
 The source reflection acts by plus identity on K and minus identity on its
 complement. Multiplying G by that reflection on both sides reverses the
 sign of each remaining off-diagonal block. So the same conclusion is written
-as J source G J source equals minus G. The matching proof combines this
-identity with the spectral construction of G to find common invariant
-blocks. We have now supplied the missing justification for that first
-structural step.
+as J source G J source equals minus G. This identity is a useful structural condition in constrained
+optimization. For trace-norm transport, a separate spectral argument combines
+it with the structure of the objective to obtain smaller invariant blocks.
+That additional argument is beyond this lecture.
 
 ## Va10Recap: Construct the motion, then test the derivative
 
-Why: The proof obtains structure from available variations without restricting $W$.
+Why: Extract a necessary condition using curves that preserve the constraints.
 Recall: Skew velocity, source preservation, feasible curve, gradient test.
 
 The chain of reasoning is constructive. A skew-symmetric velocity exponentiates
@@ -246,10 +246,10 @@ gradient blocks zero.
 
 Check your understanding: does this prove that W commutes with P, or that every
 stationary point is a minimum? Neither. It proves a necessary condition on the
-gradient at a chosen minimizer. You can now return to the matching proof's
-stationarity step and explain why its test directions exist. The next layer
-of that proof uses the gradient and source reflection to construct the
-two- and four-dimensional blocks; it does not assume those blocks at the start.
+gradient at a chosen minimizer. The reusable method is to build a feasible curve, differentiate the
+objective along it, and choose a test direction that turns the derivative
+into a squared norm. This obtains a structural condition without assuming
+a special form for the transporter.
 
 ## VaFacts: Two proof rules behind the stationarity argument
 
@@ -277,4 +277,4 @@ The trace of C transpose C is the sum of the squares of all real matrix entries.
 Why: The same geometry used to test a minimum can guide a numerical search.
 Recall: The starting W is orthogonal and transports K to L; P is the source projection.
 
-As an optional numerical bonus, here is how this mathematical tool is used in computation. These ideas also lead to numerical optimization methods. A gradient, calculated analytically or by automatic differentiation, suggests a direction. We then restrict that direction to the skew matrices that preserve the source decomposition and choose a step size. Multiplication by the exponential gives the exact feasible update shown here. Numerical manifold solvers also use retractions: cheaper local maps that bring a small tangent step back onto the constraint. QR and polar decompositions provide common examples for orthogonal matrices. To keep our additional transport constraint, those updates must operate separately within the source blocks. A solver can monitor cost decrease and the size of the constrained gradient. Finding a small gradient is a numerical stationarity test; it is not by itself a proof of the global matching minimum. Our structural proof supplies information beyond that local test.
+As an optional numerical bonus, here is how this mathematical tool is used in computation. These ideas also lead to numerical optimization methods. A gradient, calculated analytically or by automatic differentiation, suggests a direction. We then restrict that direction to the skew matrices that preserve the source decomposition and choose a step size. Multiplication by the exponential gives the exact feasible update shown here. Numerical manifold solvers also use retractions: cheaper local maps that bring a small tangent step back onto the constraint. QR and polar decompositions provide common examples for orthogonal matrices. To keep our additional transport constraint, those updates must operate separately within the source blocks. A solver can monitor cost decrease and the size of the constrained gradient. Finding a small gradient is a numerical stationarity test; it is not by itself a certificate of a global minimum. A global guarantee requires additional mathematical information about the objective.

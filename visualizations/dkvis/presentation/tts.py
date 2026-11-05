@@ -51,6 +51,8 @@ def resolve_profile(document, selected=None, overrides=None):
     if selected not in profiles:
         raise ValueError(f'Unknown TTS profile {selected!r}; available: {", ".join(profiles)}')
     result = {**DEFAULTS, **document.get("defaults", {}), **profiles[selected], "profile": selected}
+    if result.get('narrator_voice') and (overrides or {}).get('voice', result.get('voice')) != result.get('voice'):
+        result['narrator_voice'] = overrides['voice']
     result.update(overrides or {})
     result['postprocess'] = {**document.get('postprocess', {}), **result.get('postprocess', {})}
     if result['postprocess']:
@@ -86,3 +88,13 @@ def resolve_profile(document, selected=None, overrides=None):
     ):
         raise ValueError("request settings may not replace input, model, voice, or response_format")
     return result
+
+
+def narrator_id(settings):
+    """Name public variants by reference speaker and model when configured.
+
+    The profile remains the stable raw/segment cache namespace, so a clearer
+    public label does not require synthesizing or encoding everything again.
+    """
+    speaker = settings.get('narrator_voice')
+    return f"{speaker}-{settings['model']}" if speaker else settings['profile']

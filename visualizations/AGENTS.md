@@ -109,6 +109,24 @@ eigengap of `A`; never silently identify it with `delta`.  `U,V` may still be
 used when they are genuinely the notation of another statement, such as
 Proposition 4.4.
 
+## Standalone, evergreen narration
+
+Transcripts are lectures for a new viewer, never replies to the author or to a
+prompt. Do not include conversational carryover such as “your displacement
+intuition is useful”, “as you asked”, or “we fixed the missing explanation”.
+State the mathematical idea directly. Addressing the audience with an actual
+study question is fine; assuming they participated in an earlier conversation
+is not.
+
+Motivate each topic through the mathematical question it answers. Define local
+notation and explain the reasoning within the lecture's stated prerequisites.
+Do not assume the viewer is reading this manuscript or watching a particular
+proof. Keep reusable concepts and summaries useful beyond this project.
+Matching and Davis–Kahan are welcome as explicitly introduced applications;
+avoid unexplained references to “the proof”, “the paper”, or an earlier request.
+Review spoken text, slide motivations, recaps, and study questions for these
+issues when editing. Preserve mathematical hypotheses and source attribution.
+
 ## Lecture model provenance
 
 Each indexed lecture has `provenance.yaml` beside its transcript. Maintain slide

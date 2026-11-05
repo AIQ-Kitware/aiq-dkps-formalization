@@ -76,7 +76,7 @@ def test_update_one_scene_reassembles_every_chapter(tmp_path,monkeypatch,isolate
     monkeypatch.setattr(video,'ROOT',tmp_path)
     monkeypatch.setattr(video,'load_profiles',lambda *a:{})
     monkeypatch.setattr(video,'resolve_profile',lambda *a:dict(profile='qa',endpoint='http://unreachable.invalid',
-        model='test-tts',voice='test',response_format='wav',postprocess={},timeout_seconds=60))
+        model='test-tts',voice='test',narrator_voice='test-speaker',response_format='wav',postprocess={},timeout_seconds=60))
     monkeypatch.setattr(video,'read_deck_narration',lambda *a:scripts)
     monkeypatch.setattr(video,'narrated_builds',lambda scene,folder,script:[
         (first if scene=='PrTitle' else second,script.beats[0])])
@@ -98,7 +98,9 @@ def test_update_one_scene_reassembles_every_chapter(tmp_path,monkeypatch,isolate
     monkeypatch.setattr(subprocess,'run',run)
     video.main([*arguments,'--update-scenes','Pr00Question'])
     assert len(renders)==1 and segment.stat().st_mtime_ns==unchanged
-    timeline=json.loads((tmp_path/'renders/prereq-projections-narrated/timeline-qa.json').read_text())
+    timeline=json.loads((tmp_path/'renders/prereq-projections-narrated/timeline-test-speaker-test-tts.json').read_text())
     assert [entry['scene'] for entry in timeline]==list(scripts)
     assert timeline[1]['start']>0 and timeline[1]['end']>timeline[1]['start']
-    assert not json.loads(output.with_name(output.name+'.metadata.json').read_text())['settings']['preview']
+    metadata=json.loads(output.with_name(output.name+'.metadata.json').read_text())['settings']
+    assert not metadata['preview']
+    assert metadata['profile']=='test-speaker-test-tts'

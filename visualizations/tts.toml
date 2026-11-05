@@ -25,6 +25,8 @@ release_ms = 180.0
 edge_fade_ms = 8.0
 
 [profiles.crall]
+# Output identity includes the reference speaker and the actual generation model.
+narrator_voice = "crall"
 endpoint_env = "CRALL_TTS_ENDPOINT"
 endpoint = "http://127.0.0.1:8821/v1/audio/speech"
 model = "breeze-tts2"

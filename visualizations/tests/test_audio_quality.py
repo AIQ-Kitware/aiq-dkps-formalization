@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 
 from dkvis.presentation import audio_quality as aq
-from dkvis.presentation.tts import resolve_profile
+from dkvis.presentation.tts import resolve_profile, narrator_id
 
 
 def test_window_levels_and_short_final_window():
@@ -94,3 +94,14 @@ def test_narration_assembly_preserves_gaps_and_handles_sample_rates(tmp_path):
     assert np.all(result[19200:] == 0)
     with pytest.raises(ValueError, match='refusing to truncate'):
         assemble_narration([dict(builds=[dict(audio=raw, start=0, end=.05)])], tmp_path/'bad.wav')
+
+
+def test_narrator_name_tracks_reference_voice_and_actual_model():
+    doc={'profiles':{'crall':dict(endpoint='http://localhost',model='breeze-tts2',
+         voice='crall-math-dk',narrator_voice='crall',response_format='wav')}}
+    settings=resolve_profile(doc,'crall')
+    assert narrator_id(settings)=='crall-breeze-tts2'
+    assert settings['profile']=='crall'  # stable cache namespace
+    assert narrator_id(resolve_profile(doc,'crall',{'model':'another-model'}))=='crall-another-model'
+    assert narrator_id(resolve_profile(doc,'crall',{'voice':'another-speaker'}))=='another-speaker-breeze-tts2'
+    assert narrator_id(dict(profile='kokoro',model='kokoro',voice='af_heart'))=='kokoro'

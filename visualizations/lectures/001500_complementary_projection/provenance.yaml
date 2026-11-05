@@ -23,5 +23,13 @@ transcript:
     commit: 9b9e0eb08f8b44f967aae43f02ed5f9626790ce9
     date: '2026-11-05T00:28:23-05:00'
     basis: Co-authored-by attribution on the first tracked source commit; earlier imported ancestry may exist.
+  revisions:
+  - date: '2026-11-05'
+    models:
+    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    sources:
+    - visualizations/lectures/001500_complementary_projection/lecture.md
+    scope: Remove prompt-response language and motivate the lecture independently; keep transport connections as
+      explicit applications.
 note: These are recorded model attributions, not claims of mathematical priority or independently verified authorship.
   Unknown variants remain unknown.

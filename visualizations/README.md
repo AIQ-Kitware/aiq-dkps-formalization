@@ -55,7 +55,8 @@ The spoken-transcript panel shows the text used by the selected video, with
 clickable timestamps for replaying a mispronounced passage. It recovers existing
 TTS requests from their raw/processed/joined audio sidecars; it does not substitute
 a newly edited script for old audio. The current authored transcript is a
-separately labelled link. Captions are optional and **off by default**. They use
+separately labelled link. Captions are optional and **off by default**; enable them through the player's
+native CC/subtitles menu (its location depends on the browser). They use
 the same speech text, with approximate timing within each TTS chunk; no ASR or
 new TTS calls are required. If historical speech caches are gone, the panel
 reports missing or partial coverage instead of inventing a transcript.
