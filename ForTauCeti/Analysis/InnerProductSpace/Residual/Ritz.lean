@@ -6,6 +6,7 @@ Authors: Jon Crall, GPT 5.6 High
 module
 
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
+public import TauCeti.Analysis.InnerProductSpace.RayleighRitz
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 
 /-!
@@ -92,24 +93,6 @@ theorem isSymmetric_compression {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
   -- expects, rather than through the bundled map.
   change ⟪X x, X y⟫_𝕜 = ⟪x, y⟫_𝕜
   exact X.inner_map_map x y
-
-/-- The Ritz residual is orthogonal to the trial subspace.
--/
-theorem adjoint_comp_ritzResidual_eq_zero (A : E →ₗ[𝕜] E)
-    (X : F →ₗᵢ[𝕜] E) :
-    X.toLinearMap.adjoint ∘ₗ ritzResidual A X = 0 := by
-  ext x
-  refine ext_inner_right 𝕜 fun y => ?_
-  simp only [LinearMap.comp_apply, ritzResidual, residual, compression,
-    LinearMap.sub_apply, LinearMap.zero_apply, inner_zero_left]
-  rw [LinearMap.adjoint_inner_left, inner_sub_left]
-  -- states the goal as the inner-product identity the isometry/adjoint lemma
-  -- expects, rather than through the bundled map.
-  change ⟪A (X x), X y⟫_𝕜 -
-      ⟪X (X.toLinearMap.adjoint (A (X x))), X y⟫_𝕜 = 0
-  apply sub_eq_zero.mpr
-  exact (LinearMap.adjoint_inner_left X.toLinearMap y (A (X x))).symm |>.trans
-    (X.inner_map_map (X.toLinearMap.adjoint (A (X x))) y).symm
 
 /-- Vanishing Ritz residual is equivalent to invariance of the represented
 subspace.
@@ -220,7 +203,7 @@ theorem residual_frobenius_pythagoras (A : E →ₗ[𝕜] E)
       ‖ritzResidual A X (b i)‖ ^ 2 +
         ‖(compression A X - M) (b i)‖ ^ 2 := by
     intro i
-    have hgal := LinearMap.congr_fun (adjoint_comp_ritzResidual_eq_zero A X) (b i)
+    have hgal := LinearMap.congr_fun (LinearMap.adjoint_comp_ritzResidual_eq_zero A X) (b i)
     -- restates the hypothesis with the definition unfolded, which is the form the
     -- following step matches against.
     change X.toLinearMap.adjoint (ritzResidual A X (b i)) = 0 at hgal

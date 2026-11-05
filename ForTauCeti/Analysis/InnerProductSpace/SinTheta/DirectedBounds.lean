@@ -72,8 +72,8 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 omit [FiniteDimensional 𝕜 F] in
 /-- **The projected Sylvester equation, with the coercions discharged.**
 
-`sylvester_sinThetaEmbedding_eq_projectedResidual` states the identity
-pointwise; this is the operator form the norm estimates use, and both
+`LinearMap.IsSymmetric.sylvester_starProjection_orthogonal_comp` states the identity
+in the ambient space; this is the restricted form the norm estimates use, and both
 `sinTheta_residual_le_of_sylvester` here and
 `frobenius_sinTheta_residual_le_of_spectralDistance` in `Perturbation.lean`
 unfolded it the same way. -/
@@ -86,9 +86,10 @@ theorem sylvester_projectedResidual_eq {A : E →ₗ[𝕜] E} (hA : A.IsSymmetri
       Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M := by
   ext x
   have hx := LinearMap.congr_fun
-    (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) x
-  simpa [sinThetaEmbedding, ContinuousLinearMap.coe_coe,
-    LinearMap.comp_apply] using hx
+    (hA.sylvester_starProjection_orthogonal_comp hU X.toLinearMap M) x
+  change A (Uᗮ.starProjection (X x)) - Uᗮ.starProjection (X (M x)) =
+    Uᗮ.starProjection (A (X x) - X (M x))
+  exact hx
 
 /-- **The residual `sin Θ` reduction, with the Sylvester estimate as a
 hypothesis.**

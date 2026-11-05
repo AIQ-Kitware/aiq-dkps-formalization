@@ -105,70 +105,6 @@ theorem principalTangents_approximateSubspace_apply
   rw [Submodule.principalTangents_apply, Submodule.principalAngles_apply,
     ← singularValues_sinThetaEmbedding U X]
 
-/-- Transversality makes every singular value of the directed sine block strictly less than one. -/
-theorem singularValues_sinThetaEmbedding_lt_one_of_isTransverse
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (X : F →ₗᵢ[𝕜] E)
-    (htrans : Disjoint (approximateSubspace X) Uᗮ)
-    (i : Fin (finrank 𝕜 F)) :
-    (sinThetaEmbedding U X).singularValues i < 1 := by
-  let S := sinThetaEmbedding U X
-  let v := LinearMap.rightSingularBasis S i
-  have hle : S.singularValues i ≤ 1 :=
-    LinearMap.singularValues_le_of_norm_apply_le zero_le_one
-      (by simpa only [one_mul] using sinThetaEmbedding_apply_norm_le U X) i
-  by_contra hlt
-  have hσ : S.singularValues i = 1 := le_antisymm hle (not_lt.mp hlt)
-  have hvnorm : ‖v‖ = 1 := (LinearMap.rightSingularBasis S).orthonormal.norm_eq_one i
-  have hSnorm : ‖S v‖ = 1 := by
-    rw [LinearMap.norm_apply_rightSingularBasis, hσ]
-  have hperpnorm : ‖Uᗮ.starProjection (X v)‖ = 1 := by
-    change ‖Uᗮ.starProjection (X v)‖ = 1 at hSnorm
-    exact hSnorm
-  have hpyth := Submodule.norm_sq_eq_add_norm_sq_starProjection (X v) U
-  have hXnorm : ‖X v‖ = 1 := by rw [X.norm_map, hvnorm]
-  have hprojnorm : ‖U.starProjection (X v)‖ = 0 := by
-    nlinarith [norm_nonneg (U.starProjection (X v))]
-  have hprojzero : U.starProjection (X v) = 0 := norm_eq_zero.mp hprojnorm
-  have hXzero : X v = 0 := (Submodule.disjoint_def.mp htrans) (X v) ⟨v, rfl⟩
-    ((Submodule.starProjection_apply_eq_zero_iff U).mp hprojzero)
-  have : ‖X v‖ = 0 := by rw [hXzero, norm_zero]
-  linarith
-
-
-/-- The ambient adjoint of the trial isometry acts on a nonzero sine left singular vector
-by the same singular relation. -/
-theorem adjoint_apply_sinTheta_leftSingularVector
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (X : F →ₗᵢ[𝕜] E) {i : Fin (finrank 𝕜 F)}
-    (_hi : (sinThetaEmbedding U X).singularValues i ≠ 0) :
-    X.toLinearMap.adjoint
-        (LinearMap.leftSingularVector (sinThetaEmbedding U X) i) =
-      ((((sinThetaEmbedding U X).singularValues i : ℝ) : 𝕜) •
-        LinearMap.rightSingularBasis (sinThetaEmbedding U X) i) := by
-  let S := sinThetaEmbedding U X
-  let y := LinearMap.leftSingularVector S i
-  have hSadj : S.adjoint y = ((S.singularValues i : ℝ) : 𝕜) •
-      LinearMap.rightSingularBasis S i := LinearMap.adjoint_leftSingularVector S i
-  have hyUperp : y ∈ Uᗮ := by
-    dsimp [y]
-    rw [LinearMap.leftSingularVector_def]
-    exact Uᗮ.smul_mem _
-      (Uᗮ.starProjection_apply_mem (X (LinearMap.rightSingularBasis S i)))
-  apply ext_inner_right 𝕜
-  intro z
-  calc
-    ⟪X.toLinearMap.adjoint y, z⟫_𝕜 = ⟪y, X z⟫_𝕜 :=
-      LinearMap.adjoint_inner_left X.toLinearMap z y
-    _ = ⟪y, Uᗮ.starProjection (X z)⟫_𝕜 := by
-      rw [← Uᗮ.inner_starProjection_left_eq_right,
-        Submodule.starProjection_eq_self_iff.mpr hyUperp]
-    _ = ⟪S.adjoint y, z⟫_𝕜 := by
-      rw [LinearMap.adjoint_inner_left]
-      rfl
-    _ = ⟪((S.singularValues i : ℝ) : 𝕜) •
-          LinearMap.rightSingularBasis S i, z⟫_𝕜 := by rw [hSadj]
-
 /-- The normalized residual-side witness attached to a sine singular vector.
 
 At a zero singular value the tangent contribution is zero, so the corresponding Ritz-space
@@ -231,8 +167,8 @@ theorem orthonormal_tanThetaResidualWitness
         _ = 1 := hvv
     · let y := LinearMap.leftSingularVector S i
       have hXadj : X.toLinearMap.adjoint y = ((σ : ℝ) : 𝕜) • v := by
-        simpa [S, σ, v, y] using
-          adjoint_apply_sinTheta_leftSingularVector U X hσ
+        simpa [S, σ, v, y, sinThetaEmbedding] using
+          U.adjoint_apply_leftSingularVector_starProjection_orthogonal_comp X.toLinearMap (i := i)
       have hyy : ⟪y, y⟫_𝕜 = 1 := by
         simpa [y] using
           (orthonormal_iff_ite.mp (LinearMap.orthonormal_leftSingularVector S)
@@ -265,8 +201,8 @@ theorem orthonormal_tanThetaResidualWitness
         ring
       have hσnonneg : 0 ≤ σ := S.singularValues_nonneg i
       have hσlt : σ < 1 := by
-        simpa [S, σ] using
-          singularValues_sinThetaEmbedding_lt_one_of_isTransverse U X htrans i
+        simpa [S, σ, sinThetaEmbedding] using
+          U.singularValues_starProjection_orthogonal_comp_lt_one_of_disjoint X htrans i
       let c := Real.sqrt (1 - σ ^ 2)
       have hcpos : 0 < c := by
         dsimp [c]
@@ -309,8 +245,8 @@ theorem orthonormal_tanThetaResidualWitness
         rw [hwi, hwj, hXX]
       · let yj := LinearMap.leftSingularVector S j
         have hXadjj : X.toLinearMap.adjoint yj = ((σj : ℝ) : 𝕜) • vj := by
-          simpa [S, σj, vj, yj] using
-            adjoint_apply_sinTheta_leftSingularVector U X hj
+          simpa [S, σj, vj, yj, sinThetaEmbedding] using
+            U.adjoint_apply_leftSingularVector_starProjection_orthogonal_comp X.toLinearMap (i := j)
         have hXvi_yj :
             ⟪X.toLinearMap vi, yj⟫_𝕜 = ((σj : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 :=
           inner_apply_right_of_adjoint_eq_smul hXadjj vi
@@ -328,8 +264,8 @@ theorem orthonormal_tanThetaResidualWitness
         rw [hwi, hwj, inner_smul_right, hraw, mul_zero]
     · let yi := LinearMap.leftSingularVector S i
       have hXadji : X.toLinearMap.adjoint yi = ((σi : ℝ) : 𝕜) • vi := by
-        simpa [S, σi, vi, yi] using
-          adjoint_apply_sinTheta_leftSingularVector U X hi
+        simpa [S, σi, vi, yi, sinThetaEmbedding] using
+          U.adjoint_apply_leftSingularVector_starProjection_orthogonal_comp X.toLinearMap (i := i)
       by_cases hj : σj = 0
       · have hyi_Xvj :
             ⟪yi, X.toLinearMap vj⟫_𝕜 = ((σi : ℝ) : 𝕜) * ⟪vi, vj⟫_𝕜 := by
@@ -357,8 +293,8 @@ theorem orthonormal_tanThetaResidualWitness
         rw [hwi, hwj, inner_smul_left, hraw, mul_zero]
       · let yj := LinearMap.leftSingularVector S j
         have hXadjj : X.toLinearMap.adjoint yj = ((σj : ℝ) : 𝕜) • vj := by
-          simpa [S, σj, vj, yj] using
-            adjoint_apply_sinTheta_leftSingularVector U X hj
+          simpa [S, σj, vj, yj, sinThetaEmbedding] using
+            U.adjoint_apply_leftSingularVector_starProjection_orthogonal_comp X.toLinearMap (i := j)
         have hyy : ⟪yi, yj⟫_𝕜 = 0 := by
           simpa [yi, yj, hij] using
             (orthonormal_iff_ite.mp (LinearMap.orthonormal_leftSingularVector S)
@@ -417,17 +353,19 @@ theorem tanThetaResidualWitness_scalar
   have hvnorm : ‖v‖ = 1 := (LinearMap.rightSingularBasis S).orthonormal.norm_eq_one i
   have hσnonneg : 0 ≤ σ := S.singularValues_nonneg i
   have htrans := isTransverse_of_tanThetaIntervalGap hA hU X hδ hgap
-  have hσlt : σ < 1 := singularValues_sinThetaEmbedding_lt_one_of_isTransverse U X htrans i
+  have hσlt : σ < 1 := by
+    simpa only [σ, S, sinThetaEmbedding] using
+      U.singularValues_starProjection_orthogonal_comp_lt_one_of_disjoint X htrans i
   have hcpos : 0 < Real.sqrt (1 - σ ^ 2) := Real.sqrt_pos.2 (by nlinarith)
   have htan_i : tanTheta0.singularValues i = σ / Real.sqrt (1 - σ ^ 2) := by
     calc
       tanTheta0.singularValues i = (approximateSubspace X).principalTangents U i :=
         congrArg (fun z : ℕ →₀ ℝ => z (i : ℕ)) htan
       _ = Real.tan (Real.arcsin σ) := by
-        simpa [S, σ] using principalTangents_approximateSubspace_apply U X (i : ℕ)
+        simpa [S, σ, sinThetaEmbedding] using principalTangents_approximateSubspace_apply U X (i : ℕ)
       _ = σ / Real.sqrt (1 - σ ^ 2) := Real.tan_arcsin σ
   by_cases hσzero : σ = 0
-  · have hgal := LinearMap.congr_fun (adjoint_comp_ritzResidual_eq_zero A X) v
+  · have hgal := LinearMap.congr_fun (LinearMap.adjoint_comp_ritzResidual_eq_zero A X) v
     change X.toLinearMap.adjoint (R v) = 0 at hgal
     have horth : ⟪X.toLinearMap v, R v⟫_𝕜 = 0 := by
       rw [← LinearMap.adjoint_inner_right, hgal, inner_zero_right]
@@ -441,7 +379,7 @@ theorem tanThetaResidualWitness_scalar
     have hynorm : ‖y‖ = 1 := by
       simpa [y] using (LinearMap.orthonormal_leftSingularVector S).norm_eq_one ⟨i, hσzero⟩
     have hSv : S v = ((σ : ℝ) : 𝕜) • y := by
-      simpa [S, σ, v, y] using LinearMap.apply_rightSingularBasis S i
+      simpa [S, σ, v, y, sinThetaEmbedding] using LinearMap.apply_rightSingularBasis S i
     have hSadj : S.adjoint y = ((σ : ℝ) : 𝕜) • v := by
       simpa only [S, σ, v, y] using LinearMap.adjoint_leftSingularVector S i
     have hyUperp : y ∈ Uᗮ := by
@@ -449,8 +387,8 @@ theorem tanThetaResidualWitness_scalar
       rw [LinearMap.leftSingularVector_def]
       exact Uᗮ.smul_mem _ (Uᗮ.starProjection_apply_mem (X v))
     have hXadj : X.toLinearMap.adjoint y = ((σ : ℝ) : 𝕜) • v := by
-      simpa [S, σ, v, y] using
-        adjoint_apply_sinTheta_leftSingularVector U X hσzero
+      simpa [S, σ, v, y, sinThetaEmbedding] using
+        U.adjoint_apply_leftSingularVector_starProjection_orthogonal_comp X.toLinearMap (i := i)
     have hMupper : RCLike.re ⟪M v, v⟫_𝕜 ≤ α := by
       have hTopRed : (⊤ ∈ Module.End.invtSubmodule M) := fun z _ => Submodule.mem_top
       have hspec : Module.End.PointSpectrumIn M ⊤ (Set.Iic α) := by
@@ -468,7 +406,7 @@ theorem tanThetaResidualWitness_scalar
         lowerFormBound_of_pointSpectrumIn hA hUperpRed hgap.2 y hyUperp
       simpa [hynorm] using hbound
     have hSyl := LinearMap.congr_fun
-      (sylvester_sinThetaEmbedding_eq_projectedResidual hA hU X M) v
+      (hA.sylvester_starProjection_orthogonal_comp hU X.toLinearMap M) v
     have hpair :
         RCLike.re ⟪y, R v⟫_𝕜 =
           σ * (RCLike.re ⟪A y, y⟫_𝕜 - RCLike.re ⟪M v, v⟫_𝕜) := by
@@ -478,7 +416,7 @@ theorem tanThetaResidualWitness_scalar
         rw [← Uᗮ.inner_starProjection_left_eq_right,
           Submodule.starProjection_eq_self_iff.mpr hyUperp]
       have hsyl' : A (S v) - S (M v) = Uᗮ.starProjection.toLinearMap (R v) := by
-        simpa [S, M, R, ritzResidual] using hSyl
+        simpa [S, M, R, ritzResidual, residual, sinThetaEmbedding] using hSyl
       have hSM : ⟪y, S (M v)⟫_𝕜 = ⟪S.adjoint y, M v⟫_𝕜 := by
         exact (LinearMap.adjoint_inner_left S (M v) y).symm
       have hpairComplex :
@@ -502,7 +440,7 @@ theorem tanThetaResidualWitness_scalar
     have hpair_lower : δ * σ ≤ RCLike.re ⟪y, R v⟫_𝕜 := by
       rw [hpair]
       nlinarith
-    have hgal := LinearMap.congr_fun (adjoint_comp_ritzResidual_eq_zero A X) v
+    have hgal := LinearMap.congr_fun (LinearMap.adjoint_comp_ritzResidual_eq_zero A X) v
     change X.toLinearMap.adjoint (R v) = 0 at hgal
     have hXorth : ⟪X.toLinearMap v, R v⟫_𝕜 = 0 := by
       rw [← LinearMap.adjoint_inner_right, hgal, inner_zero_right]

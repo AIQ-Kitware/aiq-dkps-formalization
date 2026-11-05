@@ -202,7 +202,8 @@ private theorem moorePenroseInverse_cosThetaMagnitude_apply_rightSingularBasis
   let σ := S.singularValues i
   let c := Real.sqrt (1 - σ ^ 2)
   have hσ1 : σ < 1 :=
-    singularValues_sinThetaEmbedding_lt_one_of_isTransverse U X htrans i
+    (by simpa only [σ, S, sinThetaEmbedding] using
+      U.singularValues_starProjection_orthogonal_comp_lt_one_of_disjoint X htrans i)
   have hσ0 : 0 ≤ σ := S.singularValues_nonneg i
   have hc : 0 < c := Real.sqrt_pos.2 (by nlinarith)
   have hCv : C v = (((c : ℝ) : 𝕜)) • v := by
@@ -260,7 +261,8 @@ theorem singularValues_tanThetaEmbedding
     intro i j hij
     exact tangentScalar_mono (S.singularValues_nonneg j)
       (S.singularValues_antitone (Fin.le_def.mp hij))
-      (singularValues_sinThetaEmbedding_lt_one_of_isTransverse U X htrans i)
+      (by simpa only [S, sinThetaEmbedding] using
+        U.singularValues_starProjection_orthogonal_comp_lt_one_of_disjoint X htrans i)
   let D : F →ₗ[𝕜] F := (Matrix.toLin (b).toBasis (b).toBasis (Matrix.diagonal fun i => ((d) i : _)))
   have hgram : T.adjoint ∘ₗ T = D.adjoint ∘ₗ D := by
     apply b.toBasis.ext
@@ -291,7 +293,9 @@ theorem singularValues_tanThetaEmbedding
     rw [inner_smul_right]
     by_cases hji : j = i
     · subst j
-      have hσ1 := singularValues_sinThetaEmbedding_lt_one_of_isTransverse U X htrans i
+      have hσ1 : S.singularValues i < 1 := by
+        simpa only [S, sinThetaEmbedding] using
+          U.singularValues_starProjection_orthogonal_comp_lt_one_of_disjoint X htrans i
       have hσ0 := S.singularValues_nonneg i
       have hc : 0 < Real.sqrt (1 - S.singularValues i ^ 2) :=
         Real.sqrt_pos.2 (by nlinarith)

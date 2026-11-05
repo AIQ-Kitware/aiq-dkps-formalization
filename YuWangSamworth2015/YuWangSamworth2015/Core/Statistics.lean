@@ -5,7 +5,8 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
-public import TauCeti.Analysis.InnerProductSpace.YuWangSamworth.SinTheta
+public import TauCeti.Analysis.InnerProductSpace.YuWangSamworth.Alignment
+public import TauCeti.Analysis.InnerProductSpace.YuWangSamworth.Eigenvector
 
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 public import TauCeti.Analysis.InnerProductSpace.Projection.FrobeniusSine
@@ -413,26 +414,11 @@ theorem yuWangSamworth_alignedBasis_frame_le
         2 * Real.sqrt 2 *
           min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
             (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
-  obtain ⟨u', v', hu', hv', hspanU, hspanV, hsum⟩ :=
-    exists_aligned_orthonormalBasis
-      (by simpa only [Fintype.card_fin] using hu.finrank_span)
-      (by simpa only [Fintype.card_fin] using hv.finrank_span)
-  refine ⟨u', v', hu', hv', hspanU, hspanV, ?_⟩
-  have hsine := yuWangSamworth_sinTheta_frame_le hu hv hΔ hgap
-  have hsnn : (0 : ℝ) ≤ Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
-      (Submodule.span 𝕜 (Set.range v)) :=
-    Submodule.sinThetaFrobenius_nonneg _ _
-  calc Real.sqrt (∑ i, ‖v' i - u' i‖ ^ 2)
-      ≤ Real.sqrt (2 * Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
-          (Submodule.span 𝕜 (Set.range v)) ^ 2) := Real.sqrt_le_sqrt hsum
-    _ = Real.sqrt 2 * Submodule.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
-          (Submodule.span 𝕜 (Set.range v)) := by
-        rw [Real.sqrt_mul (by norm_num : (0 : ℝ) ≤ 2), Real.sqrt_sq hsnn]
-    _ ≤ Real.sqrt 2 * (2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-          (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ) :=
-        mul_le_mul_of_nonneg_left hsine (Real.sqrt_nonneg 2)
-    _ = 2 * Real.sqrt 2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-          (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by ring
+  obtain ⟨w, hw, hspan, hbound⟩ :=
+    LinearMap.IsSymmetric.exists_orthonormal_span_eq_sqrt_sum_norm_sub_sq_le_of_orderedEigenframe
+      hu hv hΔ hgap
+  exact ⟨u, w, (isOrderedEigenframe_iff.mp hu).orthonormal, hw, rfl, hspan, by
+    simpa only [Fintype.card_fin] using hbound⟩
 
 /-- **The residual-numerator form of the aligned-frame conclusion** — the second
 inequality Yu, Wang and Samworth record as available from their proof:
@@ -698,47 +684,8 @@ theorem yuWangSamworth_eigenvector_frame_le
     (hgap : ∀ k : Fin n, k ≠ j → Δ ≤ |hA.eigenvalues hn j - hA.eigenvalues hn k|) :
     ∃ c : 𝕜, ‖c‖ = 1 ∧
       ‖c • v - u‖ ≤ 2 * Real.sqrt 2 * ‖(B - A).toContinuousLinearMap‖ / Δ := by
-  classical
-  set e : Fin 1 ↪ Fin n := ⟨fun _ => j, fun a b _ => Subsingleton.elim a b⟩ with he
-  have hframeA : IsOrderedEigenframe hA hn e fun _ => u :=
-    isOrderedEigenframe_iff.mpr
-      ⟨orthonormal_const_of_norm_eq_one hu, fun _ => hAu⟩
-  have hframeB : IsOrderedEigenframe hB hn e fun _ => v :=
-    isOrderedEigenframe_iff.mpr
-      ⟨orthonormal_const_of_norm_eq_one hv, fun _ => hBv⟩
-  have hgapIdx : ∀ (i : Fin 1) (k : Fin n), k ∉ Set.range (⇑e) →
-      Δ ≤ |hA.eigenvalues hn (e i) - hA.eigenvalues hn k| := by
-    intro i k hk
-    exact hgap k fun hkj => hk ⟨i, by rw [he]; exact hkj.symm⟩
-  obtain ⟨u', v', hu'on, hv'on, hspanU, hspanV, hbound⟩ :=
-    yuWangSamworth_alignedBasis_frame_le hframeA hframeB hΔ hgapIdx
-  rw [span_range_const] at hspanU
-  rw [span_range_const] at hspanV
-  have hu'mem : u' 0 ∈ Submodule.span 𝕜 {u} := hspanU ▸ Submodule.subset_span ⟨0, rfl⟩
-  have hv'mem : v' 0 ∈ Submodule.span 𝕜 {v} := hspanV ▸ Submodule.subset_span ⟨0, rfl⟩
-  obtain ⟨α, hαnorm, hα⟩ :=
-    exists_unit_smul_eq_of_mem_span_singleton hu (hu'on.norm_eq_one 0) hu'mem
-  obtain ⟨β, hβnorm, hβ⟩ :=
-    exists_unit_smul_eq_of_mem_span_singleton hv (hv'on.norm_eq_one 0) hv'mem
-  have hα0 : α ≠ 0 := by rw [← norm_ne_zero_iff, hαnorm]; norm_num
-  refine ⟨β * α⁻¹, by rw [norm_mul, norm_inv, hαnorm, hβnorm]; norm_num, ?_⟩
-  have hαv : α • ((β * α⁻¹) • v) = v' 0 := by
-    rw [smul_smul, mul_comm β α⁻¹, ← mul_assoc, mul_inv_cancel₀ hα0, one_mul, hβ]
-  have key : ‖(β * α⁻¹) • v - u‖ = ‖v' 0 - u' 0‖ := by
-    have hsub : α • ((β * α⁻¹) • v - u) = v' 0 - u' 0 := by rw [smul_sub, hαv, hα]
-    calc ‖(β * α⁻¹) • v - u‖
-        = ‖α‖ * ‖(β * α⁻¹) • v - u‖ := by rw [hαnorm, one_mul]
-      _ = ‖α • ((β * α⁻¹) • v - u)‖ := by rw [norm_smul]
-      _ = ‖v' 0 - u' 0‖ := by rw [hsub]
-  have hsum1 : Real.sqrt (∑ i : Fin 1, ‖v' i - u' i‖ ^ 2) = ‖v' 0 - u' 0‖ := by
-    rw [Fin.sum_univ_one, Real.sqrt_sq (norm_nonneg _)]
-  rw [key, ← hsum1]
-  refine hbound.trans ?_
-  have hmin : min (Real.sqrt (↑(1 : ℕ)) * ‖(B - A).toContinuousLinearMap‖)
-      (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A))
-      ≤ ‖(B - A).toContinuousLinearMap‖ :=
-    (min_le_left _ _).trans_eq (by rw [Nat.cast_one, Real.sqrt_one, one_mul])
-  gcongr
+  exact LinearMap.IsSymmetric.exists_norm_eq_one_and_norm_smul_sub_eigenvector_le
+    hu hv hAu hBv hΔ hgap
 
 /-! ## Recovering a mixed gap from a population gap
 

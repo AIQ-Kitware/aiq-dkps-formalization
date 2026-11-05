@@ -5,6 +5,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 module
 
 public import TauCeti.Analysis.SpecialFunctions.Exp.Decay
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.RitzTangent
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.All
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
@@ -61,6 +62,17 @@ section Hilbert
 variable {K : Type u} [RCLike K]
   {E : Type v} [NormedAddCommGroup E] [InnerProductSpace K E]
   {F : Type w} [NormedAddCommGroup F] [InnerProductSpace K F]
+
+example [FiniteDimensional K E] {Z U : Submodule K E}
+    [U.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
+    (N : TauCeti.UnitarilyInvariantSeminorm K Z E)
+    {A : E →ₗ[K] E} (hA : A.IsSymmetric) (hU : ∀ x ∈ U, A x ∈ U)
+    {α δ : ℝ} (hδ : 0 < δ)
+    (hM : Module.End.PointSpectrumIn (Z.subtype.adjoint ∘ₗ A ∘ₗ Z.subtype) ⊤ (Set.Iic α))
+    (hperp : Module.End.PointSpectrumIn A Uᗮ (Set.Ici (α + δ))) :
+    δ * N (Z.tanThetaMap U) ≤
+      N (A ∘ₗ Z.subtype - Z.subtype ∘ₗ (Z.subtype.adjoint ∘ₗ A ∘ₗ Z.subtype)) :=
+  N.mul_map_tanThetaMap_le_map_ritzResidual hA hU hδ hM hperp
 
 example (T : E →ₗ.[K] F) :
     T.IsClosed ↔ IsClosed (Set.range fun x : T.domain => ((x : E), T x)) :=

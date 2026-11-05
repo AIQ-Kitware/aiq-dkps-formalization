@@ -287,20 +287,6 @@ theorem cosTwoThetaEmbedding_injective_iff (U : Submodule 𝕜 E)
   rw [← LinearMap.ker_eq_bot, ← LinearMap.ker_eq_bot,
     ker_cosTwoThetaEmbedding U X]
 
-omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
-/-- **The projected-residual (cross-block) Sylvester identity for an isometric
-trial map.**  This is the normalized specialization of
-`sylvester_complementaryTrialBlock_eq_projectedGeneralResidual`. -/
-theorem sylvester_sinThetaEmbedding_eq_projectedResidual
-    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
-    (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F) :
-    A ∘ₗ sinThetaEmbedding U X - sinThetaEmbedding U X ∘ₗ M =
-      Uᗮ.starProjection.toLinearMap ∘ₗ residual A X M := by
-  simpa only [complementaryTrialBlock_toLinearMap, generalResidual_toLinearMap] using
-    sylvester_complementaryTrialBlock_eq_projectedGeneralResidual
-      hA hU X.toLinearMap M
-
 /-- The orthogonal projection onto the range of an isometric embedding is
 `X X⋆`. -/
 theorem projection_approximateSubspace_eq_comp_adjoint (X : F →ₗᵢ[𝕜] E) :
