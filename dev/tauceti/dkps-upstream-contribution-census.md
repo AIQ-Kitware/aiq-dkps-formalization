@@ -4815,3 +4815,41 @@ independent approval. Metadata edits returned connector 403. The authenticated
 host can run `bash waves/2026-11-04/update-pr-bodies.sh` from the campaign
 checkout to synchronize all three descriptions; it verifies heads and runs no
 Lean commands. Root pins and retained donors are unchanged by these repairs.
+
+### Accepted Ritz tangent and Yu–Wang–Samworth alignment (2026-11-05)
+
+The Tau Ceti pin advances to `95f09254dec44b756e90d78f20f93dc4d3572783`,
+with Mathlib `1b1ccf4b088b32fa3f23f2de1127433254a81e1e` and Lean
+`v4.36.0-rc2` unchanged. Main contains the following directly submitted
+integrations, verified by their Source-PR and Accepted-Head trailers:
+
+- [#26822](https://github.com/TauCetiProject/TauCeti/pull/26822), integration
+  `3dd25fa214`, accepted head `eb2a55583073cd896eaff219dc98ffa80254999c`:
+  the canonical finite-dimensional Ritz tangent inequality and gap exclusion,
+  adapted from `DavisKahan/FiniteDimensional/TanTheta/RitzResidual.lean`
+  (Jon Crall / GPT 5.6 High, Kitware 2026, Apache-2.0). Its native Galerkin
+  orthogonality replaces the local duplicate. The projected Sylvester identity,
+  strict singular-value bound and left-singular-vector adjoint identity also
+  replace their local copies with the accepted native declarations. The native endpoint acts on the
+  subspace carrier and canonical tangent map; the local paper theorem and Ky Fan
+  prefix inequality retain arbitrary trial coordinates and tangent representatives.
+- [#27798](https://github.com/TauCetiProject/TauCeti/pull/27798), integration
+  `7391268dbb`, accepted head `ce5bce7a364740837552d94e7c34a50cba0518e1`:
+  ordered eigenframe alignment, adapted from the paper-facing local theorem
+  (Jon Crall / GPT 5.6 High, Kitware 2026, Apache-2.0). Its independent
+  Procrustes dependency is not attributed to DKPS. The paper wrapper retains
+  its two-frame conclusion and applies the stronger fixed-population-frame API.
+- [#27799](https://github.com/TauCetiProject/TauCeti/pull/27799), integration
+  `8095072f93`, accepted head `46fb9c359d6b5b7d6c7dea1ff1bb6c1b27a02b99`:
+  phase-aligned single-eigenvector bound, adapted from the corresponding local
+  paper theorem with the same source attribution. The paper wrapper applies it
+  directly; real sign and rectangular downstream conclusions remain in place.
+
+Bors integrates these PRs via commits even though GitHub reports them closed
+without a conventional merge flag. This integration evidence supersedes the
+older open/CI observations above; those observations describe earlier heads.
+
+Validation: affected tangent, residual and YWS consumers passed their focused
+build; the final default `lake build` passed 21,727 jobs, and `lake build
+Challenge` passed 19,947 jobs. No warnings were reported. Both builds used the
+VM-local ext4 cache and eight Lean threads.

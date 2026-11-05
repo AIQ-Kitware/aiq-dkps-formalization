@@ -69,30 +69,4 @@ general form takes an arbitrary linear map, the specific one an isometry. -/
     (X : F →ₗᵢ[𝕜] E) (M : F →ₗ[𝕜] F) :
     generalResidual A X.toLinearMap M = residual A X M :=
   rfl
-omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
-/-- **The arbitrary-trial-map projected-residual Sylvester identity.**
-
-For a symmetric operator `A`, an `A`-reducing subspace `U`, an arbitrary trial
-map `X`, and an arbitrary coordinate map `M`, the raw complementary block
-`Y = P_{Uᗮ} X` satisfies
-
-`A Y - Y M = P_{Uᗮ} (A X - X M)`.
-
-This statement deliberately assumes no isometry, injectivity, frame bound,
-or symmetry of `M`, and it does not require finite-dimensional trial
-coordinates.  It is the shared algebraic root of the ordinary and generalized
-residual sine bounds and of the graph-operator tangent development. -/
-theorem sylvester_complementaryTrialBlock_eq_projectedGeneralResidual
-    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
-    (X : F →ₗ[𝕜] E) (M : F →ₗ[𝕜] F) :
-    A ∘ₗ complementaryTrialBlock U X - complementaryTrialBlock U X ∘ₗ M =
-      Uᗮ.starProjection.toLinearMap ∘ₗ generalResidual A X M := by
-  ext x
-  simp only [complementaryTrialBlock, generalResidual, LinearMap.comp_apply,
-    LinearMap.sub_apply, map_sub]
-  change A (Uᗮ.starProjection (X x)) - Uᗮ.starProjection (X (M x)) =
-    Uᗮ.starProjection (A (X x)) - Uᗮ.starProjection (X (M x))
-  rw [hA.starProjection_apply_comm (hA.orthogonalComplement_mem_invtSubmodule hU) (X x)]
-
 end TauCeti
