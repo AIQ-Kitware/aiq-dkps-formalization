@@ -110,3 +110,13 @@ class M00Setup(MatchingSetup):
 
 class T00Setup(MatchingSetup):
     lesson_deck='matching-proof-talk'
+
+
+class CpSetup(OrientationSlide):
+    lesson_deck='prereq-complementary-projection'
+    setting='Work in real Euclidean space. P is the orthogonal projection onto a subspace K.'
+    symbols=((r'P^2=P,\ P^T=P','Projecting twice changes nothing; the projection is orthogonal.'),
+             (r'Ix=x','The identity leaves the vector unchanged.'),
+             (r'(I-P)x=x-Px','Subtract the projected component from the original vector.'),
+             (r'K^\perp','All directions perpendicular to every vector in K.'))
+    goal='Goal: see the complementary component, then distinguish projection error from motion displacement.'

@@ -7,6 +7,12 @@ lectures:
     topic: projections
     series: prerequisites
     requires: []
+  complementary_projection:
+    title: Thinking about I minus P
+    deck: prereq-complementary-projection
+    topic: complementary_projection
+    series: prerequisites
+    requires: [projections]
   singular_norms:
     title: Singular values and displacement cost
     deck: prereq-singular-norms

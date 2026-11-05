@@ -16,6 +16,7 @@ the core argument or answer its conceptual questions.
 | Lecture | Companion | Library declarations used |
 | --- | --- | --- |
 | Projections | [facts.lean](001000_projections/facts.lean) | Mathlib `Submodule.starProjection_add_starProjection_orthogonal`; Tau Ceti `Submodule.offDiagBlock_eq_zero_iff` |
+| Complementary projection | [facts.lean](001500_complementary_projection/facts.lean) | Mathlib `Submodule.starProjection_orthogonal` and `sub_starProjection_mem_orthogonal` |
 | Singular-value norms | [facts.lean](002000_singular_norms/facts.lean) | Tau Ceti `schatten_apply_of_ne_top` in `TauCeti.UnitarilyInvariantSeminorm`, and `LinearMap.singularValues_linearIsometryEquiv_comp` / `singularValues_comp_linearIsometryEquiv` |
 | Matrix exponential | [facts.lean](002500_matrix_exponential/facts.lean) | Tau Ceti `ContinuousLinearMap.exp_add_smul`; Mathlib `NormedSpace.exp_mem_unitary_of_mem_skewAdjoint` and `Commute.exp_left` |
 | Variations | [facts.lean](003000_variations/facts.lean) | Mathlib `IsLocalMin.hasDerivAt_eq_zero` and `Matrix.trace_conjTranspose_mul_self_eq_zero_iff` |
@@ -91,3 +92,7 @@ the exact current-pin flow proof in an ignored scratch file, since the cache
 still exposes its older namespace. This does not claim a clean rc2 rebuild.
 The singular-value invariance statement uses a prefix application to keep lines
 short; the variations trace proof uses ordinary simplification of real conjugation.
+
+The complementary-projection companion was checked directly against the available
+rc1 Mathlib cache. It adds applications of the two existing projection facts
+without changing dependency pins or the mathematical library.

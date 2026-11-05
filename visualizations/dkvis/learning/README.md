@@ -8,7 +8,7 @@ and Lean sources; pictures and numerical examples remain explanatory evidence.
 
 ## Current modules and source material
 
-The [four-lecture prerequisite series](PREREQUISITES.md), the matching
+The [five-lecture prerequisite series](PREREQUISITES.md), the matching
 topic, and [three accepted operator-foundation lectures](operators/README.md)
 have complete, synchronized transcripts. Other rows identify existing
 material to draw from when authoring more modules; those rows are not already
@@ -17,6 +17,7 @@ finished narrated lessons.
 | Topic | A learner should be able to… | Prerequisites | Existing material |
 | --- | --- | --- | --- |
 | Subspaces and projections | Translate between a subspace, its orthogonal projection, and adapted coordinates. | Inner products, linear maps | [Lecture 1](projections/README.md): complete narrated module |
+| Complementary projection and error | Read I minus P, its restriction to trial vectors, and its relation to displacement. | Basic vectors; projections introduced locally | [Thinking about I minus P](complementary_projection/README.md): complete narrated module |
 | Principal angles | Interpret the angle list, principal planes, and the directed sine operator. | Subspaces and projections; SVD | `slides_sine_theta.py`, `slides_sine_theta_3d.py`; matching study `M01PrincipalPlanes` |
 | Singular-value norms | Compare full displacement costs in operator, trace, and Schatten norms. | Basic matrix algebra; the SVD is introduced | [Lecture 2](singular_norms/README.md): complete narrated module |
 | Matrix exponential | Turn a constant matrix velocity into a flow; derive exact orthogonal and source-preserving motions. | Matrices, series, differentiation | [Matrix exponential](matrix_exponential/README.md): complete narrated module |

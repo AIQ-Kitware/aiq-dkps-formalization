@@ -49,14 +49,15 @@ still being replaced by a render appear with their new version after refresh.
 ## Learning modules and a shared production pipeline
 
 The [prerequisite lecture series](dkvis/learning/PREREQUISITES.md) contains
-four narrated modules: subspaces and projections, singular values
+five narrated modules: subspaces and projections, complementary projections
+and geometric error, singular values
 and displacement cost, the matrix exponential, and
 feasible variations and stationarity. They have independent introductions, historical context, worked
 visual explanations, summaries, and self-checks. Each indexed lecture now ends
 with two multiple-choice questions: spoken choices, eight seconds to think,
 then a highlighted answer and explanation. Pause for more time when needed.
 The questions and speech live together in each lecture folder’s `quiz.yaml`. `make prerequisites` builds
-all four, including TTS-ready text; it does not contact a speech server.
+all five, including TTS-ready text; it does not contact a speech server.
 
 Every indexed lecture supplies its own local setting and notation. The Lean
 closing section shows one fact per slide: symbolic formula, visible scope,

@@ -183,3 +183,49 @@ def test_operator_lecture_sylvester_solution_and_gap_bound():
     system = np.kron(np.eye(2), a)-np.kron(b.T, np.eye(2))
     reference = np.linalg.solve(system, residual.reshape(-1, order='F')).reshape((2, 2), order='F')
     assert np.allclose(solution, reference)
+
+
+@pytest.mark.parametrize('angle', [0., 1e-5, .3, .9, np.pi/2])
+def test_complementary_projection_is_a_distance_extractor(angle):
+    from dkvis.learning.complementary_projection.model import line_error
+    p,v,fitted,error=line_error(angle)
+    c=np.eye(2)-p
+    assert np.allclose(c.T,c) and np.allclose(c @ c,c)
+    assert np.allclose(p @ c,0)
+    assert np.allclose(v,fitted+error)
+    assert np.dot(fitted,error) == pytest.approx(0,abs=1e-14)
+    assert np.linalg.norm(error) == pytest.approx(abs(np.sin(angle)))
+    assert np.linalg.norm(c,2) == pytest.approx(1)
+    for x_coordinate in [-2., .4, 1.5]:
+        candidate=np.array([x_coordinate,0.])
+        assert np.linalg.norm(v-candidate)**2 == pytest.approx(
+            np.linalg.norm(error)**2+np.linalg.norm(fitted-candidate)**2)
+
+
+def test_trial_error_and_unwanted_coordinates_are_the_same_metric_data():
+    from dkvis.learning.complementary_projection.model import frame_error
+    angles=np.array([0., .2, .8, np.pi/2])
+    p,frame,complement,lifted,coordinates=frame_error(angles)
+    assert np.allclose(frame.T @ frame,np.eye(4))
+    assert np.allclose(complement.T @ complement,np.eye(4))
+    assert np.allclose(complement @ complement.T,np.eye(8)-p)
+    assert np.allclose(lifted,complement @ coordinates)
+    assert np.allclose(np.linalg.svd(lifted,compute_uv=False),
+                       np.sort(np.sin(angles))[::-1])
+    assert np.allclose(np.linalg.svd(lifted,compute_uv=False),
+                       np.linalg.svd(coordinates,compute_uv=False))
+    assert np.allclose(p @ lifted,0)
+
+
+@pytest.mark.parametrize('angle', [.05,.4,1.2])
+def test_rotation_displacement_is_a_chord_not_the_projection_error(angle):
+    from dkvis.learning.complementary_projection.model import line_error,rotation_displacement
+    w,u,v,displacement=rotation_displacement(angle)
+    assert np.allclose(w.T @ w,np.eye(2))
+    assert np.allclose(w @ u,v)
+    assert np.allclose(displacement,u-v)
+    assert np.linalg.norm(displacement) == pytest.approx(2*np.sin(angle/2))
+    assert np.linalg.norm(np.eye(2)-w,2) == pytest.approx(2*np.sin(angle/2))
+    assert not np.allclose((np.eye(2)-w) @ (np.eye(2)-w),np.eye(2)-w)
+    error=line_error(angle)[-1]
+    assert np.linalg.norm(error) < np.linalg.norm(displacement)

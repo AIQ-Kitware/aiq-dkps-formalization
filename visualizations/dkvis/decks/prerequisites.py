@@ -18,6 +18,21 @@ PROJECTIONS = DeckSpec(
     + quiz_uses(),
 )
 
+COMPLEMENTARY_PROJECTION = DeckSpec(
+    name='prereq-complementary-projection',
+    description='Read I minus P as a complementary projection, projection error, and restricted sine block.',
+    footer='Thinking about I minus P', narration=lecture_path('complementary_projection'),
+    slides=uses('dkvis.learning.complementary_projection.scenes', ['CpTitle'])
+    + uses('dkvis.learning.orientation', ['CpSetup'])
+    + uses('dkvis.learning.complementary_projection.scenes', [
+        'CpQuestion', 'CpSplit', 'CpKeep', 'CpAngle', 'CpRestricted',
+        'CpSineBlock', 'CpDisplacement', 'CpSummary', 'CpFacts',
+        'CpLeanOperator', 'CpLeanError',
+    ])
+    + uses('dkvis.learning.complementary_projection.scenes', ['CpComputation'], depth='*')
+    + quiz_uses(),
+)
+
 SINGULAR_NORMS = DeckSpec(
     name='prereq-singular-norms', description='Singular values explain displacement costs, norm choice, and block additivity.',
     footer='singular values and displacement cost', narration=lecture_path('singular_norms'),
@@ -64,5 +79,5 @@ VARIATIONS = DeckSpec(
     + quiz_uses(),
 )
 
-_BY_NAME = {d.name: d for d in (PROJECTIONS, SINGULAR_NORMS, MATRIX_EXPONENTIAL, VARIATIONS)}
+_BY_NAME = {d.name: d for d in (PROJECTIONS, COMPLEMENTARY_PROJECTION, SINGULAR_NORMS, MATRIX_EXPONENTIAL, VARIATIONS)}
 PREREQUISITES = tuple(_BY_NAME[name] for name in lecture_decks("prerequisites"))
