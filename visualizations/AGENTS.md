@@ -121,3 +121,9 @@ rendering infrastructure edits are not authorship of the lecture content.
 Unknown models or variants must stay explicitly unknown. Generation metadata
 snapshots source attribution for future exports; never backfill a historical
 video with today's attribution as if it were recorded when that video was made.
+
+Lecture covers display the model credits from this metadata. If attribution
+changes, include the cover scene in a partial render as well as the edited
+content scene (for example `UPDATE_SCENES="CpTitle CpSplit"`), so the visible
+badge does not retain the previous attribution. Partial rendering selects
+scenes explicitly; it is not an automatic Python/source dependency analyzer.

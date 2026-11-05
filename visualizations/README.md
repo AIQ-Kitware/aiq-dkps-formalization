@@ -88,7 +88,10 @@ make video DECK=prereq-complementary-projection TTS_PROFILE=crall UPDATE_SCENES=
 This renders only `CpSplit`, exports the complete HTML/PDF/handout, and assembles
 the **full lecture**. Multiple names are allowed inside the quotes. The separate
 `SCENES="..."` / `--scenes` video option still makes a selected-scene **preview**.
-Do not combine `UPDATE_SCENES` with `SKIP_RENDER=1`.
+Do not combine `UPDATE_SCENES` with `SKIP_RENDER=1`. If model attribution changes,
+include the cover too, for example `UPDATE_SCENES="CpTitle CpSplit"`, to refresh
+its model badge. Scene selection is explicit rather than an automatic source
+dependency analysis.
 
 For slides alone, use `make slides DECK=... SCENES="CpSplit"`. After that, a
 `make video DECK=... TTS_PROFILE=crall SKIP_RENDER=1` reassembles the current
