@@ -17,7 +17,16 @@ from dkvis.slide_style import (
     DeckSlide, boxed, math, para, tex,
 )
 
+from dkvis.components.lesson import LessonTitle
+
 SCRIPTS = read_deck_narration('matching-proof-talk')
+
+
+class TTitle(LessonTitle):
+    lesson_deck='matching-proof-talk'
+    series_title='Matching theorem'
+    title_lines=('The real trace-norm matching proof',)
+    subtitle='Stationarity, invariant blocks, and an attained matching minimum.'
 
 
 def stack(*items, size=30, buff=.25):

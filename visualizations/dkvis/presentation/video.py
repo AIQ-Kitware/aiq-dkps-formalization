@@ -2,6 +2,8 @@
 
 Uses OpenAI-compatible speech endpoints. Sentence-aware requests avoid server
 duration limits; completed chunks are cached by text and request settings.
+Encoded segments are reused by input content and settings. ``--update-scenes``
+renders named scenes and reassembles the full lecture; ``--scenes`` makes a preview.
 Each narrated build plays when its own explanation starts, then holds until
 that explanation ends. Chapters still correspond to complete slides.
 """
@@ -21,6 +23,8 @@ from dkvis.presentation.narration import export, narrated_decks, read_deck_narra
 from dkvis.decks import get_deck
 from dkvis.presentation.paths import ROOT
 from dkvis.presentation.audio import synthesize_beat
+from dkvis.presentation.audio_quality import fingerprint, ffmpeg_version
+from dkvis.presentation.captions import read_json, speech_parts
 from dkvis.presentation.media import assemble_narration, concat_list, duration
 from dkvis.palette import OUTPUT_SUFFIX, THEME
 from dkvis.presentation.timing import timing
@@ -47,6 +51,23 @@ def narrated_builds(scene: str, folder: Path, script) -> list[tuple[Path, str]]:
 def narrated_segment(
     visual: Path, audio: Path, output: Path, *, pause: float, fps: int, preset: str
 ) -> float:
+    # Paths and scene positions do not determine reuse: the actual visual and
+    # speech bytes, timing and encoder settings do. Existing segments without
+    # a manifest are encoded once to establish trustworthy cache evidence.
+    cache_file=output.with_name(output.name+'.segment-cache.json')
+    with timing().measure('video_segment_cache_check',output=str(output)):
+        # Bump this version if the codec/filter semantics below change.
+        inputs=dict(version=1,visual=fingerprint(visual),audio=fingerprint(audio),
+                    pause=pause,fps=fps,preset=preset,crf=20,ffmpeg=ffmpeg_version(),
+                    pixel_format='yuv420p',sample_rate=48000,channels=1,audio_codec='aac',audio_bitrate='192k')
+        key=hashlib.sha256(json.dumps(inputs,sort_keys=True).encode()).hexdigest()
+        cached=read_json(cache_file,{})
+        if output.is_file() and isinstance(cached,dict) and cached.get('key')==key:
+            seconds=cached.get('seconds',0)
+            if isinstance(seconds,(int,float)) and math.isfinite(seconds) and seconds>0 and cached.get('output_sha256')==fingerprint(output):
+                timing().record('video_segment_cache',0,cache_hit=True,output=str(output),output_seconds=seconds)
+                print(f'  Reusing video segment: {output.name}',flush=True)
+                return seconds
     with timing().measure(
         "video_segment",
         fps=fps,
@@ -113,6 +134,8 @@ def narrated_segment(
             output_seconds=actual,
             bytes=output.stat().st_size,
         )
+        cache_file.write_text(json.dumps(dict(key=key,inputs=inputs,seconds=actual,
+                                             output_sha256=fingerprint(output)),indent=2)+'\n')
         return actual
 
 
@@ -165,9 +188,10 @@ def main(argv=None):
         action="store_true",
         help="measure fresh synthesis even when audio is cached",
     )
-    parser.add_argument(
-        "--scenes", nargs="+", help="render selected chapters only, for quick comparisons"
-    )
+    selected=parser.add_mutually_exclusive_group()
+    selected.add_argument('--scenes',nargs='+',help='make a preview containing only these scenes')
+    selected.add_argument('--update-scenes',nargs='+',
+                          help='render only these changed scenes, then assemble the full lecture')
     parser.add_argument("--output", type=Path)
     args = parser.parse_args(argv)
     if not args.list_tts_profiles and not args.deck:
@@ -193,11 +217,15 @@ def main(argv=None):
         or min(args.fps, args.jobs, settings["timeout_seconds"]) <= 0
     ):
         parser.error("Pauses must be nonnegative; fps, jobs, and timeout must be positive")
+    if args.update_scenes and args.skip_render:
+        parser.error('--update-scenes renders changed scenes; do not combine it with --skip-render')
     scripts = read_deck_narration(args.deck)
-    if args.scenes:
-        unknown = set(args.scenes) - scripts.keys()
+    selected_scenes=args.update_scenes or args.scenes
+    if selected_scenes:
+        unknown=set(selected_scenes)-scripts.keys()
         if unknown:
             parser.error(f'Unknown scenes: {", ".join(sorted(unknown))}')
+    if args.scenes:
         scripts = {name: script for name, script in scripts.items() if name in args.scenes}
     name = args.deck + OUTPUT_SUFFIX
     public = lecture_output_name(args.deck) + OUTPUT_SUFFIX
@@ -238,7 +266,8 @@ def main(argv=None):
                             "--html",
                             str(ROOT / "renders" / f"{public}.standalone.html"),
                             "--handout",
-                        ],
+                            "--pdf",
+                        ] + (["--scenes",*args.update_scenes] if args.update_scenes else []),
                         cwd=ROOT,
                         check=True,
                     )
@@ -275,7 +304,6 @@ def main(argv=None):
                     seconds = narrated_segment(
                         visual, audio, segment, pause=pause, fps=args.fps, preset=args.preset
                     )
-                    from dkvis.presentation.captions import speech_parts
                     audio_seconds=duration(audio)
                     spoken_parts=speech_parts(ROOT/'renders',audio) or [dict(
                         text=text,seconds=audio_seconds,model=settings['model'],voice=settings['voice'])]

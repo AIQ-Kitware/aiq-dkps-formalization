@@ -32,6 +32,7 @@ QUALITY ?= h
 FPS     ?= $(if $(filter l m,$(QUALITY)),,30)
 JOBS    ?=
 PDF     ?= 1
+UPDATE_SCENES ?=
 SCENES  ?=
 TTS_PROFILE ?=
 PORT ?= 8000
@@ -81,6 +82,7 @@ help:
 	@echo '  slides DECK=name   render a presentation and export its transcript when present'
 	@echo '  text DECK=name     export slide/build speech text without rendering or TTS'
 	@echo '  video DECK=name    render and narrate; TTS_PROFILE selects a server from tts.toml'
+	@echo '    UPDATE_SCENES="Scene" renders just that edit and reassembles the full lecture'
 	@echo '  setup              uv sync with the vtk, slides and test extras'
 	@echo '  all                short, every part and full, then standalone HTML for each'
 	@echo '  final              all at the full 1080p60 (all renders 1080p30)'
@@ -169,7 +171,7 @@ text:
 
 video:
 	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))
-	./render_video.sh --deck $(DECK) --quality $(QUALITY) --fps $(if $(FPS),$(FPS),30) --jobs $(if $(JOBS),$(JOBS),2) $(if $(filter 1,$(SKIP_RENDER)),--skip-render) $(if $(TTS_PROFILE),--tts-profile $(TTS_PROFILE)) $(if $(SCENES),--scenes $(SCENES))
+	./render_video.sh --deck $(DECK) --quality $(QUALITY) --fps $(if $(FPS),$(FPS),30) --jobs $(if $(JOBS),$(JOBS),2) $(if $(filter 1,$(SKIP_RENDER)),--skip-render) $(if $(TTS_PROFILE),--tts-profile $(TTS_PROFILE)) $(if $(SCENES),--scenes $(SCENES)) $(if $(UPDATE_SCENES),--update-scenes $(UPDATE_SCENES))
 
 matching matching-talk:
 	$(MAKE) slides DECK=$(DECK_$@)

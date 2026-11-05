@@ -16,8 +16,8 @@ MATCHING_PROOF_TALK = DeckSpec(
     description='A compact proof of the unrestricted finite real trace-norm matching formula.',
     footer=r'Real trace-norm transport $\cdot$ matching proof',
     narration=lecture_path('matching_proof'),
-    slides=uses('dkvis.learning.matching.talk', ['T00Statement'])
+    slides=uses('dkvis.learning.matching.talk', ['TTitle'])
     + uses('dkvis.learning.orientation', ['T00Setup'])
-    + tuple(SlideUse('dkvis.learning.matching.talk', name) for name in SCENES[1:])
+    + tuple(SlideUse('dkvis.learning.matching.talk', name) for name in SCENES)
     + uses('dkvis.learning.matching.bonus', ['MatchingComputation'], depth='*') + quiz_uses(),
 )

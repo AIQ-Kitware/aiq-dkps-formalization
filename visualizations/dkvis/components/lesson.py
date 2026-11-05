@@ -130,6 +130,8 @@ class LessonTitle(LessonSlide):
         self.add(tex(self.series_title, size=24, color=MUTED).move_to([0, 2.25, 0]),
                  title, Line([-2.1, -.95, 0], [2.1, -.95, 0], color=CURRENT),
                  tex(self.subtitle, size=27, color=MUTED).move_to([0, -1.55, 0]))
+        from dkvis.components.llm_credit import llm_credit
+        self.add(llm_credit(self.lesson_deck))
 
 
 class LessonLean(LessonSlide):

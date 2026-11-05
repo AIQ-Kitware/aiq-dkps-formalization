@@ -2,8 +2,9 @@
 
 The author requested an independent, smaller talk for an audience already
 familiar with the standard background. This is `matching-proof-talk`, not a
-revision or subset of the 40-slide `matching-proof` study deck. Its 13 new
-scenes are composed in `dkvis/decks/matching_talk.py`. The frozen Kitware talk,
+revision or subset of the 40-slide `matching-proof` study deck. Its thirteen proof
+scenes, attributed cover, local setup, optional numerical bonus, and review
+questions are composed in `dkvis/decks/matching_talk.py`. The frozen Kitware talk,
 comprehensive deck, and existing study materials retain their scenes and order.
 
 Assume principal angles, singular-value norms, orthogonal spectral

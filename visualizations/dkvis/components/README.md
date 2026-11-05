@@ -25,3 +25,9 @@ under `fonts/`; no system font installation or rendering-time download is needed
 `LessonLean` shows one checked example per slide, its symbolic formula and scope,
 and a separate library-proof highlight. `DKVIS_LEAN_FONT` overrides the font.
 The frozen reference decks keep their existing typography.
+
+`llm_credit.py` supplies the robot/model disclosure for `LessonTitle`. It reads
+recorded source attribution rather than claiming the current renderer authored
+the lecture. Known model/configuration names remain visible; unknown variants
+are stated as unrecorded. Covers use the existing vector robot asset so they do
+not depend on an emoji font.

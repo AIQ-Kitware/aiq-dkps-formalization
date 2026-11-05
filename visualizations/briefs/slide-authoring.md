@@ -100,3 +100,17 @@ to another video for the local setup. A specialist talk can still assume its
 stated standard mathematical background without reteaching it. Keep the local
 notation card and its narration synchronized, and define new proof-specific
 objects again when they enter the argument.
+
+## Opening attribution and single-scene edits
+
+Indexed narrated lectures use `LessonTitle` for a short cover. Its robot badge
+and model labels come from `provenance.yaml`; do not hard-code an imagined model
+variant or replace prior attribution with the current renderer's identity.
+The frozen reference talk remains unchanged.
+
+For an isolated content edit, keep the scene and its narration in sync and use
+`make video DECK=... UPDATE_SCENES="SceneName" TTS_PROFILE=...`. This renders that
+scene and assembles every chapter, reusing other encoded segments by input
+content. `--scenes` retains its selected-chapter preview meaning. Shared-style
+or scene-order changes require a full visual render. Git owns source history;
+do not create a historical-version media archive or selector.

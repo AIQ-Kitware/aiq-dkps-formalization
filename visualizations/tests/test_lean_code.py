@@ -44,3 +44,16 @@ def test_each_lean_fact_has_its_own_card():
         classes = [getattr(importlib.import_module(s.module), s.scene) for s in cards]
         assert [c.fact_index for c in classes] == list(range(len(classes)))
         assert len(classes) == len(classes[0].symbolic_facts)
+
+
+def test_cover_credit_preserves_recorded_models_and_unknown_variants(monkeypatch):
+    from dkvis.components import llm_credit
+    data={'slides':{'initial_source_attribution':[{'models':['Model A (variant high)']}]},
+          'transcript':{'initial_source_attribution':[{'models':['Model B (exact configuration unknown)']}]}}
+    monkeypatch.setattr(llm_credit,'source_provenance',lambda deck:data)
+    label,uncertain=llm_credit.credit_text('example')
+    assert 'Model A (variant high)' in label and 'Model B' in label and uncertain
+    data['transcript']={'initial_source_attribution':[{'models':['Model C']}],
+                        'revisions':[{'models':['Model C']}]}
+    label,uncertain=llm_credit.credit_text('example')
+    assert label.count('Model C')==1 and not uncertain

@@ -76,6 +76,46 @@ organizer renumbers exports. Source attribution lives in each lecture's tracked
 `provenance.yaml`; see [the authoring guide](dkvis/learning/README.md#model-attribution).
 Restart the server after updating its Python code, then refresh the browser.
 
+### Updating one scene
+
+For a lecture that has already been built, edit the scene and its corresponding
+narration section, then run from `visualizations/`:
+
+```bash
+make video DECK=prereq-complementary-projection TTS_PROFILE=crall UPDATE_SCENES="CpSplit"
+```
+
+This renders only `CpSplit`, exports the complete HTML/PDF/handout, and assembles
+the **full lecture**. Multiple names are allowed inside the quotes. The separate
+`SCENES="..."` / `--scenes` video option still makes a selected-scene **preview**.
+Do not combine `UPDATE_SCENES` with `SKIP_RENDER=1`.
+
+For slides alone, use `make slides DECK=... SCENES="CpSplit"`. After that, a
+`make video DECK=... TTS_PROFILE=crall SKIP_RENDER=1` reassembles the current
+pieces. Changing a shared visual style, adding slides, or changing their order
+can affect every scene's chrome and should use a full render instead.
+
+Encoded narration segments are now cached using hashes of the actual visual
+and audio files, plus FPS, pauses, encoder settings and FFmpeg version. Cache
+hits also verify the output bytes. Text/settings-based TTS caches and audio
+processing caches remain separate. Old segments without an input manifest need
+one encoding pass to establish a trustworthy cache. Subsequent runs reuse
+unchanged segments; they still assemble the full lossless narration and final
+MP4 with current chapters and transcript metadata. Hashing reads the files but
+does not rerender or re-encode them.
+
+Lecture covers display the same vector robot used by the Kitware talk, an
+LLM-generated disclosure, and separate recorded slide/transcript model names.
+Missing model variants remain explicitly unrecorded. Matching presentations now
+also have dedicated short covers. The badge is visual; title narration remains
+just the main concept.
+
+Git is the history for authored scenes, transcripts, model attribution, and
+rendering code. For example, `git log --follow -- lectures/001500_complementary_projection/lecture.md`
+from `visualizations/` follows the transcript through renames. Artifact metadata
+continues to record source revisions and generation settings; generated videos
+are not archived as a historical library or committed to Git.
+
 ## Learning modules and a shared production pipeline
 
 The [prerequisite lecture series](dkvis/learning/PREREQUISITES.md) contains
@@ -333,7 +373,7 @@ Current presentations (in addition to the preserved reference decks):
 
 ### Compact matching proof talk
 
-`matching-proof-talk` is a separate presentation with **13 proof slides, a local setup card, a numerical bonus, and two review questions**,
+`matching-proof-talk` is a separate presentation with **13 proof slides, a short attributed cover, a local setup card, a numerical bonus, and two review questions**,
 assuming the usual principal-angle, spectral, and variational background.
 It concentrates on stationarity, common invariant blocks, the unrestricted
 two-angle minimum, and the trace-norm limit. The existing 40-slide learner

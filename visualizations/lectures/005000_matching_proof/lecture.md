@@ -1,6 +1,7 @@
 # Proof of the real trace-norm matching formula
 
-Independent 13-slide presentation, approximately 12–15 minutes. The audience is
+Independent compact presentation with thirteen proof scenes, a short cover,
+local setup, numerical bonus, and study questions. The audience is
 assumed to know principal angles, singular-value norms, orthogonal spectral
 decompositions, and compact variational arguments. The talk introduces its own
 gradient and phase constructions but does not teach those prerequisites.
@@ -17,6 +18,20 @@ Lean endpoint: `exists_minimizing_real_nuclear_transport_matching` in
 
 Numerical reference: https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.matching.max_weight_matching.html
 
+## TTitle: The real trace-norm matching proof
+
+Why: Follow an unrestricted geometric minimum through its matching reduction.
+Recall: The main proof concerns finite real orthogonal transport.
+
+The real trace-norm matching proof.
+
+## T00Setup: Local notation for the matching argument
+
+Why: Read the proof independently of the longer study deck.
+Recall: $W\in O(n)$, $W(K)=L$; $\theta_i$: positive principal angles; $M$: matching.
+
+K and L are equal-dimensional real subspaces, and W ranges over the full orthogonal group, including both determinant signs. The full displacement cost is the sum of the singular values of identity minus W on the ambient space. Positive principal angles are the canonical paired-plane angles between K and L; equivalently, their cosines come from singular values of frame overlap. Repeated angles retain separate labels. A matching is a set of disjoint pairs of these labels, with unmatched vertices allowed. We will use stationarity at a chosen minimizer to derive blocks; we do not assume every feasible map already has that structure. This talk supplies its proof-specific notation locally and assumes the usual spectral and variational background.
+
 ## T00Statement: Exact real trace-norm transport
 
 Why: The unrestricted orthogonal minimum is a finite matching problem.
@@ -30,13 +45,6 @@ cost b sub i j, four times the sine of half their angle sum. Repeated angle valu
 retain distinct labels. Zero angles can be fixed, and right angles are allowed.
 The assertion includes attainment. The main proof question is why arbitrary
 mixing of many principal planes cannot improve this matching value.
-
-## T00Setup: Local notation for the matching argument
-
-Why: Read the proof independently of the longer study deck.
-Recall: $W\in O(n)$, $W(K)=L$; $\theta_i$: positive principal angles; $M$: matching.
-
-K and L are equal-dimensional real subspaces, and W ranges over the full orthogonal group, including both determinant signs. The full displacement cost is the sum of the singular values of identity minus W on the ambient space. Positive principal angles are the canonical paired-plane angles between K and L; equivalently, their cosines come from singular values of frame overlap. Repeated angles retain separate labels. A matching is a set of disjoint pairs of these labels, with unmatched vertices allowed. We will use stationarity at a chosen minimizer to derive blocks; we do not assume every feasible map already has that structure. This talk supplies its proof-specific notation locally and assumes the usual spectral and variational background.
 
 ## T01ProofStrategy: Find the decomposition at a minimizer
 

@@ -23,8 +23,8 @@ MATCHING_PROOF = DeckSpec(
     description="Learn why the matching proof works: geometry, legal variations, and invariant blocks.",
     footer=r"Real trace-norm matching $\cdot$ proof study",
     narration=lecture_path('matching_study'),
-    slides=uses('dkvis.learning.matching.study', ['M00Problem'])
+    slides=uses('dkvis.learning.matching.study', ['MTitle'])
     + uses('dkvis.learning.orientation', ['M00Setup'])
-    + tuple(SlideUse("dkvis.learning.matching.study", name) for name in SCENES[1:])
+    + tuple(SlideUse("dkvis.learning.matching.study", name) for name in SCENES)
     + uses('dkvis.learning.matching.bonus', ['MatchingComputation'], depth='*') + quiz_uses(),
 )

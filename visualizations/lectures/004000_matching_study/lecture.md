@@ -8,6 +8,20 @@ individual build scripts are both exported for offline study and speech.
 
 Numerical reference: https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.matching.max_weight_matching.html
 
+## MTitle: Real trace-norm matching
+
+Why: Follow an unrestricted geometric minimum through its matching reduction.
+Recall: The main proof concerns finite real orthogonal transport.
+
+Real trace-norm matching.
+
+## M00Setup: The objects in this proof
+
+Why: Keep the admissible maps distinct from the finite matching.
+Recall: $K,L$: subspaces; $W$: transporter; $\theta_i$: principal angles; $M$: matching.
+
+Here is a local dictionary for the proof. K and L are subspaces of the same dimension in real Euclidean space. O of n is the group of all length-preserving linear maps, including reflections. The constraint W of K equals L specifies a whole target subspace, not the image of each selected basis vector. The trace norm of identity minus W adds the singular values of the displacement on the entire ambient space. Principal angles are canonical angles between paired source and target directions; their cosines are the singular values of the overlap of orthonormal frames. We use the positive angle labels, including right angles. A matching selects disjoint pairs of labels. Unmatched labels stay single. A matching will encode an attaining construction, not a unique representation of every admissible W.
+
 ## M00Problem: The optimization problem
 
 Why: What freedom do we have when only a whole subspace must reach its destination?
@@ -29,13 +43,6 @@ factors over the whole space, including directions outside K. Theorem five says 
 can obtain this minimum by solving a finite maximum-weight matching problem. Our task is
 to understand why a search over arbitrary orthogonal matrices can reduce to choosing
 pairs of angle labels.
-
-## M00Setup: The objects in this proof
-
-Why: Keep the admissible maps distinct from the finite matching.
-Recall: $K,L$: subspaces; $W$: transporter; $\theta_i$: principal angles; $M$: matching.
-
-Here is a local dictionary for the proof. K and L are subspaces of the same dimension in real Euclidean space. O of n is the group of all length-preserving linear maps, including reflections. The constraint W of K equals L specifies a whole target subspace, not the image of each selected basis vector. The trace norm of identity minus W adds the singular values of the displacement on the entire ambient space. Principal angles are canonical angles between paired source and target directions; their cosines are the singular values of the overlap of orthonormal frames. We use the positive angle labels, including right angles. A matching selects disjoint pairs of labels. Unmatched labels stay single. A matching will encode an attaining construction, not a unique representation of every admissible W.
 
 ## M00BlockMeaning: A block means vectors stay in their own piece
 

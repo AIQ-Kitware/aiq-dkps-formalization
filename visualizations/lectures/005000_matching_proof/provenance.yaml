@@ -15,6 +15,13 @@ slides:
     commit: 3fe7ccab3fcc1cd5a7a09abc2e5e1c1050c0e45c
     date: '2026-11-05T00:16:46-05:00'
     basis: Co-authored-by attribution on the first tracked source commit; earlier imported ancestry may exist.
+  revisions:
+  - models:
+    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    date: '2026-11-05'
+    sources:
+    - visualizations/dkvis/learning/matching/talk.py
+    scope: Add a dedicated opening card with robot/model disclosure.
 transcript:
   initial_source_attribution:
   - source: visualizations/lectures/005000_matching_proof/lecture.md
@@ -29,5 +36,12 @@ transcript:
     commit: b338f50b622a5de3bcc9cf80cafa8c7151d9917f
     date: '2026-11-04T23:40:53-05:00'
     basis: Co-authored-by attribution on the first tracked source commit; earlier imported ancestry may exist.
+  revisions:
+  - models:
+    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    date: '2026-11-05'
+    sources:
+    - visualizations/lectures/005000_matching_proof/lecture.md
+    scope: Add a short spoken cover title; retain the proof narration.
 note: These are recorded model attributions, not claims of mathematical priority or independently verified authorship.
   Unknown variants remain unknown.

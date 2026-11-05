@@ -20,7 +20,16 @@ from dkvis.slide_style import (
     DeckSlide, boxed, math, para, tex,
 )
 
+from dkvis.components.lesson import LessonTitle
+
 SCRIPTS = read_deck_narration('matching-proof')
+
+
+class MTitle(LessonTitle):
+    lesson_deck='matching-proof'
+    series_title='Matching theorem'
+    title_lines=('Real trace-norm matching',)
+    subtitle='A geometric minimum becomes a choice of disjoint pairs.'
 
 
 def column(*items, size=32, buff=.22):
