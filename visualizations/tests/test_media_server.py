@@ -20,7 +20,7 @@ def library(tmp_path):
     work.mkdir()
     (work/'timeline-kokoro.json').write_text(json.dumps([dict(title='Start', start=0), dict(title='Proof', start=42.5)]))
     (work/'timeline-crall.json').write_text(json.dumps([dict(title='Wrong narrator', start=0)]))
-    with TestClient(create_app(tmp_path)) as client:
+    with TestClient(create_app(tmp_path, feedback_directory=tmp_path.parent/(tmp_path.name+'-feedback'))) as client:
         yield client, tmp_path, data
 
 
@@ -181,3 +181,63 @@ def test_explicit_output_name_keeps_deck_identity_and_voice_timeline(library):
     assert any(a['path']==filename and a['voice']=='crall' for a in lecture['assets'])
     assert not any(row['id']=='custom-export' for row in rows)
     assert client.get('/api/chapters',params={'path':filename}).json()[0]['title']=='Right deck'
+
+
+def test_feedback_persists_exact_generation_and_playback_context(library):
+    import hashlib
+    client,root,data=library
+    filename='lecture.kokoro.narrated.mp4'
+    metadata=dict(generated_at='2026-11-05T10:00:00+00:00',source_commit='old-generation',
+                  settings=dict(model='kokoro',voice='af_heart'),provenance={'slides':{'model':'recorded'}})
+    (root/(filename+'.metadata.json')).write_text(json.dumps(metadata))
+    lecture=next(row for row in client.get('/api/catalog').json()['items'] if row['id']=='lecture')
+    asset=next(a for a in lecture['assets'] if a['path']==filename)
+    payload=dict(deck='lecture',path=filename,version=asset['version'],text='The equation is hard to read.',playback_seconds=44.25)
+    first=client.post('/api/feedback',json=payload)
+    second=client.post('/api/feedback',json={**payload,'text':'The next explanation helps.'})
+    assert first.status_code==second.status_code==201
+    assert first.json()['id']!=second.json()['id']
+    folder=root.parent/(root.name+'-feedback')
+    saved=json.loads((folder/(first.json()['id']+'.json')).read_text())
+    assert saved['deck']=='lecture' and saved['text']==payload['text']
+    assert saved['playback_seconds']==44.25 and saved['chapter']['title']=='Proof'
+    assert saved['asset']['sha256']==hashlib.sha256(data).hexdigest()
+    assert saved['asset']['version']==asset['version']
+    assert saved['asset']['source_commit']=='old-generation'
+    assert saved['asset']['provenance']==metadata['provenance']
+    assert saved['timeline']['path']=='lecture-narrated/timeline-kokoro.json'
+    # Replacing a render never rewrites the generation snapshot in old feedback.
+    (root/filename).write_bytes(b'regenerated')
+    assert json.loads((folder/(first.json()['id']+'.json')).read_text())==saved
+    assert client.post('/api/feedback',json=payload).status_code==409
+    assert client.get('/files/../'+folder.name+'/'+first.json()['id']+'.json').status_code==404
+
+
+def test_feedback_supports_documents_and_unrendered_lectures(library):
+    client,root,_=library
+    rows=client.get('/api/catalog').json()['items']
+    document=next(a for row in rows for a in row['assets'] if a['path']=='lecture.handout.pdf')
+    response=client.post('/api/feedback',json=dict(deck='lecture',path=document['path'],version=document['version'],text='PDF feedback'))
+    assert response.status_code==201
+    response=client.post('/api/feedback',json=dict(deck='prereq-projections',path=None,text='Lecture feedback'))
+    assert response.status_code==201
+    folder=root.parent/(root.name+'-feedback')
+    saved=json.loads((folder/(response.json()['id']+'.json')).read_text())
+    assert saved['asset'] is None and saved['playback_seconds'] is None
+
+
+def test_feedback_rejects_invalid_or_misattributed_submissions(library):
+    client,root,_=library
+    lecture=next(row for row in client.get('/api/catalog').json()['items'] if row['id']=='lecture')
+    asset=next(a for a in lecture['assets'] if a['kind']=='video')
+    payload=dict(deck='lecture',path=asset['path'],version=asset['version'],text='Feedback')
+    for changes,status in [({'text':'  '},400),({'text':'x'*10001},400),({'text':[]},400),
+                           ({'deck':'other'},404),({'path':'../private.mp4'},404),
+                           ({'version':'stale'},409),({'playback_seconds':-1},400),
+                           ({'playback_seconds':True},400),({'playback_seconds':'12'},400)]:
+        assert client.post('/api/feedback',json={**payload,**changes}).status_code==status
+    assert client.post('/api/feedback',json=[]).status_code==400
+    assert client.post('/api/feedback',content='{',headers={'content-type':'application/json'}).status_code==400
+    assert client.post('/api/feedback',json=payload,headers={'origin':'http://another-site.invalid'}).status_code==403
+    assert client.post('/api/feedback',data={'text':'form submission'}).status_code==415
+    assert not (root.parent/(root.name+'-feedback')).exists()

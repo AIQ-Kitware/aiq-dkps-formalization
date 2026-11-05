@@ -5,6 +5,10 @@
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
+import hashlib
+import os
+from uuid import uuid4
 import json
 import math
 import re
@@ -13,6 +17,7 @@ import subprocess
 from pathlib import Path
 from urllib.parse import quote
 
+from starlette.concurrency import run_in_threadpool
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
 from starlette.responses import FileResponse, JSONResponse, PlainTextResponse, Response
@@ -104,10 +109,91 @@ def chapters_for(root, media):
     return []
 
 
-def create_app(directory=ROOT/'renders'):
+def create_app(directory=ROOT/'renders', *, feedback_directory=None):
     root = Path(directory).resolve()
     if not root.is_dir():
         raise ValueError(f'Render directory does not exist: {root}')
+
+    # Viewer feedback is authored data, not a disposable render/cache artifact.
+    feedback_root = Path(feedback_directory).resolve() if feedback_directory else root.parent/'feedback'
+    if feedback_root.is_relative_to(root):
+        raise ValueError('Keep feedback outside the publicly served render directory')
+
+    def save_feedback(payload):
+        from dkvis.presentation.library import catalog as deck_catalog
+        if not isinstance(payload, dict):
+            raise HTTPException(400, 'Expected a feedback object.')
+        text = payload.get('text')
+        if not isinstance(text, str) or not text.strip() or len(text) > 10000:
+            raise HTTPException(400, 'Enter feedback between 1 and 10,000 characters.')
+        lecture = next((row for row in deck_catalog(root) if row['id'] == payload.get('deck')), None)
+        if lecture is None:
+            raise HTTPException(404, 'Lecture not found.')
+        record = dict(schema_version=1, id=str(uuid4()), created_at=datetime.now(timezone.utc).isoformat(),
+                      deck=lecture['id'], title=lecture['title'], text=text.strip(),
+                      current_lecture_provenance=lecture['provenance'], asset=None,
+                      playback_seconds=None, chapter=None, timeline=None)
+        if payload.get('path') is not None:
+            selected = next((a for a in lecture['assets'] if a['path'] == payload['path']), None)
+            if selected is None:
+                raise HTTPException(404, 'Selected lecture file not found.')
+            if payload.get('version') != selected['version']:
+                raise HTTPException(409, 'This file has been regenerated. Your text has not been saved; copy it before refreshing the lecture.')
+            media = within(root, selected['path'])
+            before = media.stat()
+            with media.open('rb') as stream:
+                digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+            after = media.stat()
+            if before.st_mtime_ns != after.st_mtime_ns or before.st_size != after.st_size or str(after.st_mtime_ns) != selected['version']:
+                raise HTTPException(409, 'This file changed while saving. Refresh the lecture and try again.')
+            record['asset'] = {**selected, 'sha256': digest}
+            seconds = payload.get('playback_seconds')
+            if seconds is not None:
+                if (selected['kind'] not in {'video', 'audio'} or isinstance(seconds, bool)
+                        or not isinstance(seconds, (float, int)) or not math.isfinite(seconds) or seconds < 0):
+                    raise HTTPException(400, 'Invalid playback timestamp.')
+                record['playback_seconds'] = seconds
+                timeline, entries = timeline_for(root, media)
+                if timeline:
+                    raw = timeline.read_bytes()
+                    record['timeline'] = dict(path=timeline.relative_to(root).as_posix(),
+                                              sha256=hashlib.sha256(raw).hexdigest())
+                record['chapter'] = next((dict(scene=e.get('scene'), title=e.get('title'), start=e['start'])
+                                          for e in reversed(entries) if e.get('start', math.inf) <= seconds), None)
+        feedback_root.mkdir(parents=True, exist_ok=True)
+        target = feedback_root/f'{record["id"]}.json'
+        temporary = target.with_suffix('.tmp')
+        try:
+            with temporary.open('x', encoding='utf-8') as stream:
+                json.dump(record, stream, indent=2, ensure_ascii=False, allow_nan=False)
+                stream.write('\n')
+                stream.flush()
+                os.fsync(stream.fileno())
+            temporary.replace(target)
+        finally:
+            temporary.unlink(missing_ok=True)
+        return dict(id=record['id'], created_at=record['created_at'])
+
+    async def feedback(request):
+        if request.headers.get('content-type', '').split(';')[0].strip() != 'application/json':
+            raise HTTPException(415, 'Send feedback as JSON.')
+        origin = request.headers.get('origin')
+        if origin and origin != f'{request.url.scheme}://{request.url.netloc}':
+            raise HTTPException(403, 'Submit feedback from this lecture library.')
+        body = bytearray()
+        async for chunk in request.stream():
+            body.extend(chunk)
+            if len(body) > 65536:
+                raise HTTPException(413, 'Feedback request is too large.')
+        try:
+            payload = json.loads(body)
+        except (ValueError, UnicodeDecodeError):
+            raise HTTPException(400, 'Invalid feedback JSON.')
+        try:
+            receipt = await run_in_threadpool(save_feedback, payload)
+        except OSError:
+            raise HTTPException(500, 'Could not save feedback on the server. Your text is still in the box; please try again.')
+        return JSONResponse(receipt, status_code=201, headers={'Cache-Control':'no-store'})
 
     async def index(request):
         return FileResponse(PAGE, headers={'Cache-Control': 'no-cache'})
@@ -171,12 +257,14 @@ def create_app(directory=ROOT/'renders'):
                             Route('/api/chapters', chapters), Route('/api/media',media_detail),
                             Route('/api/captions',captions), Route('/api/transcript',transcript),
                             Route('/api/source-transcript',source_transcript),
+                            Route('/api/feedback',feedback,methods=['POST']),
                             Mount('/files', StaticFiles(directory=root, html=True), name='files')])
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--directory', type=Path, default=ROOT/'renders')
+    parser.add_argument('--feedback-directory', type=Path, help='saved viewer feedback; defaults to a feedback directory beside renders')
     parser.add_argument('--host', default='127.0.0.1')
     parser.add_argument('--port', type=int, default=8000)
     args = parser.parse_args(argv)
@@ -184,7 +272,7 @@ def main(argv=None):
         parser.error('port must be between 1 and 65535')
     import uvicorn
     print(f'Lecture library: http://{args.host}:{args.port}/', flush=True)
-    uvicorn.run(create_app(args.directory), host=args.host, port=args.port)
+    uvicorn.run(create_app(args.directory,feedback_directory=args.feedback_directory), host=args.host, port=args.port)
 
 
 if __name__ == '__main__':

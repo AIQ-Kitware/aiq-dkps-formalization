@@ -218,3 +218,28 @@ input, with approximate timing within each request.
 Timestamp buttons seek 50 milliseconds inside the selected passage (less for
 a very short passage). This avoids displaying the preceding video frame when
 an exact boundary falls between frames or browser timestamps are rounded.
+
+
+## Viewer feedback
+
+The lecture library has a feedback box below navigation and above the spoken
+transcript. **Save feedback** stores one JSON record per submission in
+`visualizations/feedback/` by default, outside the disposable `renders/` tree.
+This is viewer-authored data: back it up separately; it is ignored by Git.
+For a custom media directory, feedback defaults to a sibling `feedback/` folder.
+Use `serve --feedback-directory /path/to/feedback` to choose another location
+outside the publicly served media tree.
+
+Records include feedback text, UTC submission time, the stable lecture ID,
+the selected file/narrator, its generation metadata and SHA-256 fingerprint,
+and the playback timestamp and chapter. The timestamp is captured when typing
+starts. Original generation attribution and current lecture source attribution
+are stored separately. HTML and PDF views can receive feedback too; lectures
+with no rendered media receive lecture-level feedback.
+
+Drafts are saved locally in the browser for each selected file generation and
+restored when switching lectures or voices. A failed save leaves the text in
+place. If a file was regenerated after the viewer selected it, saving is rejected
+rather than attributing the old feedback to the new video; copy the draft before
+refreshing and reviewing the updated lecture. Restart the server after updating
+the Python code; no media rebuild is needed for the feedback UI.
