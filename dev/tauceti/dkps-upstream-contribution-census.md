@@ -4877,3 +4877,13 @@ unused real-only domain convergence proof. The focused build and real generation
 regression (5923 jobs), all 13 environment linters, external scope examples, and
 full style (24400 files) passed. The PR remains open; upstream CI/review on the
 new head is pending. The shared packet contains the updated branch and description.
+
+### #28079 normed-space review repair (2026-11-05)
+
+[#28079](https://github.com/TauCetiProject/TauCeti/pull/28079) repair
+`669b77958c667f9e79d86299865b53e3ace10f89` exports the symmetric approximation's
+resolvent formula and generalizes the imaginary and symmetric algebraic
+constructions to complex normed spaces. Self-adjoint results retain their
+complete Hilbert-space hypotheses. Focused build and semigroup regression (5923
+jobs), normed-space examples, all 13 environment linters and full style passed.
+The PR remains open and mergeable; fresh upstream CI/review is pending.
