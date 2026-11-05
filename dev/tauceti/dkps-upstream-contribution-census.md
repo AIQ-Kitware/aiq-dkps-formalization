@@ -4853,3 +4853,15 @@ Validation: affected tangent, residual and YWS consumers passed their focused
 build; the final default `lake build` passed 21,727 jobs, and `lake build
 Challenge` passed 19,947 jobs. No warnings were reported. Both builds used the
 VM-local ext4 cache and eight Lean threads.
+
+### #27804 merge conflict resolved (2026-11-05)
+
+[#27804](https://github.com/TauCetiProject/TauCeti/pull/27804) merge commit
+`c13e4ecdc9b0551d4eeff84bcb9b9e44d970df0f` incorporates accepted main
+`238c3872f4b9be432bb6c5bbb1a0cf1e3675af66`. The conflict in
+`ContinuousFunctionalCalculus.lean` was resolved by retaining both main's
+real-rpow results and the PR's complex half-plane lemma. The PR remains open;
+GitHub reports it mergeable. Focused build (6427 jobs), all 13 environment
+linters, the scope example and full style (26286 files) passed. Upstream CI and
+review on the merge head remain pending. The shared campaign packet contains
+the updated branch bundle and a host command for synchronizing its description.
