@@ -12,6 +12,7 @@ import html
 import json
 import math
 import os
+import shutil
 from pathlib import Path
 import subprocess
 import tempfile
@@ -21,13 +22,13 @@ import wave
 import numpy as np
 
 from dkvis.presentation.paths import ROOT
-from dkvis.presentation.media import duration
+from dkvis.presentation.media import assemble_narration, duration
 from dkvis.presentation.timing import timing
 
 DEFAULTS = dict(enabled=True, target_lufs=-18., peak_db=-1.5, loudness_range=7.,
                 max_gain_db=24., highpass_hz=60., compression=True,
-                threshold_db=-20., ratio=2.5, attack_ms=5., release_ms=180.)
-VERSION = 2
+                threshold_db=-20., ratio=2.5, attack_ms=5., release_ms=180., edge_fade_ms=8.)
+VERSION = 3
 CACHE = ROOT/'renders/audio-quality/cache'
 
 
@@ -46,7 +47,7 @@ def settings(values=None):
     for key, low, high in [('target_lufs', -36, -10), ('peak_db', -9, -.1),
                            ('loudness_range', 1, 30), ('max_gain_db', 0, 36),
                            ('highpass_hz', 0, 500), ('threshold_db', -60, 0),
-                           ('ratio', 1, 20), ('attack_ms', .1, 200), ('release_ms', 1, 2000)]:
+                           ('edge_fade_ms', 0, 50), ('ratio', 1, 20), ('attack_ms', .1, 200), ('release_ms', 1, 2000)]:
         value = float(result[key])
         if not math.isfinite(value) or not low <= value <= high:
             raise ValueError(f'{key} must be between {low} and {high}')
@@ -104,6 +105,8 @@ def signal_summary(samples, rate, gate=-55.):
              if len(head) and len(body) else None)
     peak = float(np.max(np.abs(samples))) if len(samples) else 0.
     return dict(seconds=len(samples)/rate, sample_rate=rate,
+                first_sample=float(samples[0]) if len(samples) else 0.,
+                last_sample=float(samples[-1]) if len(samples) else 0.,
                 sample_peak_dbfs=20*math.log10(max(peak, 1e-12)),
                 rail_samples=int(np.count_nonzero(np.abs(samples) >= .999)),
                 active_gate_dbfs=gate, active_rms_median_dbfs=median(rms[active]),
@@ -171,8 +174,11 @@ def process_chunk(source, directory, config=None):
                                  f'measured_I={measured["input_i"]}:measured_TP={measured["input_tp"]}:'
                                  f'measured_LRA={measured["input_lra"]}:measured_thresh={measured["input_thresh"]}:'
                                  f'offset={measured["target_offset"]}:linear=true')
+            fade = min(cfg['edge_fade_ms']/1000, before['seconds']/2)
+            envelope = (f',afade=t=in:st=0:d={fade},afade=t=out:st={before["seconds"]-fade}:d={fade}'
+                        if fade else '')
             temporary = Path(temp)/'result.wav'
-            run(['ffmpeg', '-v', 'error', '-i', str(prepared), '-af', normalization+f',aresample=48000,asetpts=PTS-STARTPTS,apad,atrim=end_sample={round(before["seconds"]*48000)}',
+            run(['ffmpeg', '-v', 'error', '-i', str(prepared), '-af', normalization+f',aresample=48000,asetpts=PTS-STARTPTS,apad,atrim=end_sample={round(before["seconds"]*48000)}'+envelope,
                  '-ar', '48000', '-ac', '1', '-c:a', 'pcm_s16le', str(temporary)])
             if abs(duration(temporary)-before['seconds']) > .002:
                 raise ValueError(f'Processing changed audio duration: {duration(temporary)} versus {before["seconds"]}')
@@ -240,60 +246,53 @@ def audit(media, timeline=None):
         report['boundaries'].append(dict(time=current['start'], delta_db=delta,
                                          scene=current['scene'], beat=current['beat'], chunk=current['chunk']))
     report['suspect_boundaries'] = [r for r in report['boundaries'] if r['delta_db'] is not None and abs(r['delta_db']) > 6]
+    report['suspect_edges'] = [dict(time=r['start'], scene=r['scene'], beat=r['beat'], chunk=r['chunk'],
+        step=max(abs(r['metrics']['first_sample']), abs(r['metrics']['last_sample'])))
+        for r in report['chunks']
+        if max(abs(r['metrics']['first_sample']), abs(r['metrics']['last_sample'])) > .00316]
     report['suspect_openings'] = [dict(time=r['start'], scene=r['scene'], beat=r['beat'], chunk=r['chunk'],
                                       excess_db=r['metrics']['opening_excess_db']) for r in report['chunks']
                                   if (r['metrics']['opening_excess_db'] or 0) > 6]
     return report
 
 
-def repair(media, timeline, out, config):
-    """Reconstruct speech at original build timestamps, copying video and chapters."""
+def repair(media, timeline, out, config, *, edges_only=False):
+    """Reconstruct speech at original timestamps; copy video and encode audio once."""
     entries = json.loads(Path(timeline).read_text())
     directory = out/'processed'
+    directory.mkdir(parents=True, exist_ok=True)
     repaired_entries = []
     master = out/'leveled.wav'
     rate = 48000
-    cursor = 0
-    def silence(stream, frames):
-        for start in range(0, frames, rate):
-            stream.writeframesraw(b'\0\0'*min(rate, frames-start))
-    with timing().measure('audio_repair', media=str(media), settings=config):
-        with wave.open(str(master), 'wb') as combined:
-            combined.setparams((1, 2, rate, 0, 'NONE', 'not compressed'))
-            for scene in entries:
-                new_scene = {**scene, 'builds': []}
-                repaired_entries.append(new_scene)
-                for build in scene['builds']:
-                    start, end = round(build['start']*rate), round(build['end']*rate)
-                    if start < cursor:
-                        raise ValueError('Timeline overlaps; refusing to trim speech')
-                    silence(combined, start-cursor); cursor = start
-                    sources, pause = parts(build['audio'])
-                    corrected = [process_chunk(p, directory, config) for p in sources]
-                    new_audio = out/f'{scene["scene"]}-beat{build["number"]:02d}.wav'
-                    with wave.open(str(new_audio), 'wb') as beat:
-                        beat.setparams((1, 2, rate, 0, 'NONE', 'not compressed'))
-                        for i, path in enumerate(corrected):
-                            with wave.open(str(path), 'rb') as chunk:
-                                compatible = chunk.getframerate() == rate and chunk.getnchannels() == 1 and chunk.getsampwidth() == 2
-                                frames = chunk.readframes(chunk.getnframes()) if compatible else None
-                            if frames is None:
-                                frames = run(['ffmpeg', '-v', 'error', '-i', str(path), '-ar', str(rate), '-ac', '1', '-f', 's16le', '-']).stdout
-                            beat.writeframesraw(frames)
-                            if i < len(corrected)-1:
-                                silence(beat, round(pause*rate))
-                    new_audio.with_suffix('.parts.json').write_text(json.dumps(dict(inputs=[str(p.resolve()) for p in corrected], pause=pause)))
-                    with wave.open(str(new_audio), 'rb') as beat:
-                        count = beat.getnframes()
-                        if cursor+count > end:
-                            raise ValueError('Corrected speech exceeds the original build; refusing to truncate it')
-                        combined.writeframesraw(beat.readframes(count)); cursor += count
-                    silence(combined, end-cursor); cursor = end
-                    new_scene['builds'].append({**build, 'audio': str(new_audio.resolve())})
-            total = round(duration(media)*rate)
-            if cursor > total+rate*.05:
-                raise ValueError('Timeline extends beyond the source media')
-            silence(combined, max(0, total-cursor))
+    with timing().measure('audio_repair', media=str(media), settings=config, edges_only=edges_only):
+        for scene in entries:
+            new_scene = {**scene, 'builds': []}
+            repaired_entries.append(new_scene)
+            for build in scene['builds']:
+                sources, pause = parts(build['audio'])
+                corrected = []
+                for source in sources:
+                    if edges_only:
+                        target = directory/f'{source.stem}-{fingerprint(source)[:12]}-edges.wav'
+                        assemble_narration([{'builds': [dict(audio=source, start=0., end=measure(source)['seconds'])]}],
+                                           target, fade_ms=config['edge_fade_ms'])
+                    else:
+                        target = process_chunk(source, directory, config)
+                    corrected.append(target)
+                new_audio = out/f'{scene["scene"]}-beat{build["number"]:02d}.wav'
+                with wave.open(str(new_audio), 'wb') as beat:
+                    beat.setparams((1, 2, rate, 0, 'NONE', 'not compressed'))
+                    for i, path in enumerate(corrected):
+                        frames = run(['ffmpeg', '-v', 'error', '-i', str(path), '-ar', str(rate),
+                                      '-ac', '1', '-f', 's16le', '-']).stdout
+                        beat.writeframesraw(frames)
+                        if i < len(corrected)-1:
+                            beat.writeframesraw(b'\0\0'*round(pause*rate))
+                new_audio.with_suffix('.parts.json').write_text(json.dumps(
+                    dict(inputs=[str(p.resolve()) for p in corrected], pause=pause)))
+                new_scene['builds'].append({**build, 'audio': str(new_audio.resolve())})
+        assemble_narration(repaired_entries, master, fade_ms=config['edge_fade_ms'],
+                           total_seconds=duration(media))
         target = out/'leveled.mp4'
         temporary = out/'leveled.part.mp4'
         run(['ffmpeg', '-v', 'error', '-i', str(media), '-i', str(master), '-map', '0:v:0', '-map', '1:a:0',
@@ -325,6 +324,9 @@ def write_report(out, before, after=None):
         openings = ''.join(f'<tr><td><button onclick="seek(\'{player}\',{e["time"]})">{e["time"]:.1f}s</button></td>'
                            f'<td>{html.escape(e["scene"])}, beat {e["beat"]}, chunk {e["chunk"]}</td><td>{e["excess_db"]:+.1f} dB</td></tr>'
                            for e in sorted(report['suspect_openings'], key=lambda x: -x['excess_db']))
+        edge_rows = ''.join(f'<tr><td><button onclick="seek(\'{player}\',{e["time"]})">{e["time"]:.1f}s</button></td>'
+                            f'<td>{html.escape(e["scene"])}, beat {e["beat"]}, chunk {e["chunk"]}</td>'
+                            f'<td>{20*math.log10(e["step"]):.1f} dBFS</td></tr>' for e in report['suspect_edges'])
         sections.append(f'<h2>{label}</h2><video id="{player}" controls src="{source}" width="720"></video>'
                         f'<p>Integrated: {metric["loudness"]["input_i"]} LUFS; true peak: {metric["loudness"]["input_tp"]} dBTP; '
                         f'loudness range: {metric["loudness"]["input_lra"]} LU. '
@@ -334,6 +336,7 @@ def write_report(out, before, after=None):
                         f'<p>100 ms RMS envelope, −65 to 0 dBFS; click to seek. Start/body and boundary flags are level heuristics, not speech recognition or proof of a defect.</p>'
                         f'<p>Boundary levels compare the 90th-percentile active RMS in the last/first two seconds; openings compare the first two seconds with the remaining body. Active windows exceed −55 dBFS.</p>'
                         f'<h3>Candidate boundary jumps</h3><table><tr><th>Time</th><th>Boundary</th><th>Level change</th></tr>{rows}</table>'
+                        f'<h3>Nonzero source edges</h3><p>Request edges above −50 dBFS can click when joined to silence. This measures the source chunks, not an acoustic click classifier.</p><table>{edge_rows}</table>'
                         f'<h3>Candidate loud openings</h3><table><tr><th>Time</th><th>Chunk</th><th>Opening/body excess</th></tr>{openings}</table>')
     (out/'report.html').write_text('<!doctype html><meta charset="utf-8"><title>Lecture audio review</title>'
         '<style>body{font:17px system-ui;max-width:1100px;margin:30px auto}svg{width:100%}td,th{padding:8px;text-align:left}button{cursor:pointer}</style>'
@@ -349,27 +352,37 @@ def main(argv=None):
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--config', type=Path, default=ROOT/'tts.toml')
     parser.add_argument('--profile', default='crall')
+    parser.add_argument('--edges-only', action='store_true', help='fade request edges and rebuild audio without changing loudness/compression')
     args = parser.parse_args(argv)
     if args.operation == 'repair' and args.timeline is None:
         parser.error('repair requires the render timeline to preserve synchronization')
     args.out.mkdir(parents=True, exist_ok=True)
-    if any((args.out/name).exists() for name in ['leveled.mp4', 'leveled.wav']):
+    if any((args.out/name).exists() for name in ['leveled.mp4', 'leveled.wav', 'report.json']):
         parser.error('Choose a fresh --out directory to preserve the previous comparison')
     document = tomllib.loads(args.config.read_text())
     config = settings({**document.get('postprocess', {}),
                        **document.get('profiles', {}).get(args.profile, {}).get('postprocess', {})})
+    # Renderers replace named outputs atomically. Keep the exact input for a
+    # stable comparison even if another render publishes a newer video.
+    snapshot = args.out / ('original'+args.media.suffix)
+    shutil.copy2(args.media, snapshot)
+    timeline_snapshot = None
+    if args.timeline is not None:
+        timeline_snapshot = args.out/'original-timeline.json'
+        shutil.copy2(args.timeline, timeline_snapshot)
     try:
-        before = audit(args.media, args.timeline)
+        before = audit(snapshot, timeline_snapshot)
+        before['source_media'] = str(args.media.resolve())
         write_report(args.out, before)
         after = None
         if args.operation == 'repair':
-            target, timeline = repair(args.media, args.timeline, args.out, config)
+            target, timeline = repair(snapshot, timeline_snapshot, args.out, config, edges_only=args.edges_only)
             after = audit(target, timeline)
             write_report(args.out, before, after)
         for name, report in [('Before', before), ('After', after)]:
             if report:
                 m = report['overall']['loudness']
-                print(name, f'{m["input_i"]} LUFS, {m["input_tp"]} dBTP, {len(report["suspect_boundaries"])} candidate jumps, {len(report["suspect_openings"])} candidate loud openings')
+                print(name, f'{m["input_i"]} LUFS, {m["input_tp"]} dBTP, {len(report["suspect_boundaries"])} candidate jumps, {len(report["suspect_openings"])} candidate loud openings, {len(report["suspect_edges"])} nonzero source edges')
         print(f'Report: {args.out / "report.html"}')
     finally:
         timing().report()

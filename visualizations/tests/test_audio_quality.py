@@ -61,3 +61,36 @@ def test_processing_controls_onset_level_and_preserves_samples(tmp_path, monkeyp
     other = aq.process_chunk(raw, tmp_path/'processed', {'target_lufs': -21})
     assert other != processed
     assert aq.process_chunk(raw, tmp_path/'processed', {'enabled': False}) == raw
+
+
+def test_edge_fades_keep_length_and_body_and_remove_steps():
+    from dkvis.presentation.media import edge_fades
+    samples = np.full(2000, 12000, dtype=np.int16)
+    corrected = edge_fades(samples, 48000, 8)
+    assert len(corrected) == len(samples)
+    assert corrected[0] == corrected[-1] == 0
+    assert corrected[500:1500].tolist() == samples[500:1500].tolist()
+    assert np.max(np.abs(np.diff(corrected.astype(float)))) < 40
+    assert samples[0] == 12000  # input is preserved
+    assert np.array_equal(edge_fades(samples, 48000, 0), samples)
+
+
+@pytest.mark.skipif(not shutil.which('ffmpeg'), reason='requires FFmpeg')
+def test_narration_assembly_preserves_gaps_and_handles_sample_rates(tmp_path):
+    from dkvis.presentation.media import assemble_narration
+    raw = tmp_path/'raw.wav'
+    with wave.open(str(raw), 'wb') as stream:
+        stream.setparams((1, 2, 24000, 0, 'NONE', 'not compressed'))
+        stream.writeframes(np.full(2400, 10000, dtype='<i2').tobytes())
+    builds = [dict(audio=raw, start=.1, end=.3), dict(audio=raw, start=.3, end=.5)]
+    output = assemble_narration([dict(builds=builds)], tmp_path/'assembled.wav', total_seconds=.6)
+    with wave.open(str(output), 'rb') as stream:
+        result = np.frombuffer(stream.readframes(stream.getnframes()), dtype='<i2')
+        assert stream.getframerate() == 48000
+    assert len(result) == 28800
+    assert np.all(result[:4800] == 0)
+    assert result[4800] == result[9599] == result[14400] == result[19199] == 0
+    assert result[6000] == result[16000] == 10000
+    assert np.all(result[19200:] == 0)
+    with pytest.raises(ValueError, match='refusing to truncate'):
+        assemble_narration([dict(builds=[dict(audio=raw, start=0, end=.05)])], tmp_path/'bad.wav')

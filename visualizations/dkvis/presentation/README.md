@@ -142,3 +142,35 @@ Use `renders/<deck>-narrated/timeline-<profile>.json` for analysis and repair
 (or `timeline-<profile>.preview.json` for a preview). New renders no longer write
 the ambiguous `timeline.json` alias. Existing videos and timelines retain their
 old names until explicitly rebuilt; the legacy unsuffixed video is not updated.
+
+
+## Avoid clicks at narration boundaries
+
+The default `postprocess.edge_fade_ms = 8.0` ramps each speech request to and
+from zero over eight milliseconds. The final assembly also ramps the edges of
+individual narrated builds. No samples or slide pauses are removed. Set this
+value to zero to disable the fades.
+
+Final videos now assemble a lossless `narration-<profile>.wav` directly from the
+source speech at the build timestamps, then encode that complete track to AAC
+once. The video stream is still copied. The independently encoded audio in the
+intermediate video clips is not used for the final soundtrack. This avoids
+carrying separate AAC priming/padding boundaries into the full presentation.
+The lossless assembly is profile-specific, including a separate preview variant.
+
+To apply only the boundary treatment to an existing video, preserving its levels
+and compression:
+
+```bash
+uv run python -m dkvis.presentation audio repair \
+  renders/prereq-projections.kokoro.narrated.mp4 \
+  --timeline renders/prereq-projections-narrated/timeline-kokoro.json \
+  --profile kokoro --edges-only --out renders/audio-quality/projections-clicks
+```
+
+As with other repairs, choose a fresh output directory. The report now lists
+nonzero source edges above −50 dBFS. Such an edge can click when joined to
+silence; it is not proof that a listener will hear a click. A fade cannot remove
+an artifact already inside a spoken word. Listen to the comparison before
+replacing a previously rendered video. Originals are preserved. Each report keeps an `original` media snapshot and a
+timeline snapshot so a concurrent new render cannot change its comparison.

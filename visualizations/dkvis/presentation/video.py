@@ -21,7 +21,7 @@ from dkvis.presentation.narration import export, narrated_decks, read_deck_narra
 from dkvis.decks import get_deck
 from dkvis.presentation.paths import ROOT
 from dkvis.presentation.audio import synthesize_beat
-from dkvis.presentation.media import concat_list, duration
+from dkvis.presentation.media import assemble_narration, concat_list, duration
 from dkvis.palette import OUTPUT_SUFFIX, THEME
 from dkvis.presentation.timing import timing
 from dkvis.presentation.tts import DEFAULT_CONFIG, load_profiles, resolve_profile
@@ -296,6 +296,8 @@ def main(argv=None):
             listing = concat_list(segments, work / f"segments-{variant}.txt")
             chapters = chapter_metadata(entries, work / f"chapters-{variant}.ffmetadata",
                                         title=get_deck(args.deck).description or args.deck)
+            narration = assemble_narration(entries, work / f"narration-{variant}.wav",
+                                           fade_ms=settings.get("postprocess", {}).get("edge_fade_ms", 8.))
             suffix = f".{variant}"
             output = (args.output or ROOT / "renders" / f"{name}{suffix}.narrated.mp4").resolve()
             output.parent.mkdir(parents=True, exist_ok=True)
@@ -315,17 +317,23 @@ def main(argv=None):
                         "-i",
                         str(listing),
                         "-i",
+                        str(narration),
+                        "-i",
                         str(chapters),
                         "-map",
                         "0:v:0",
                         "-map",
-                        "0:a:0",
+                        "1:a:0",
                         "-map_metadata",
-                        "1",
+                        "2",
                         "-map_chapters",
-                        "1",
-                        "-c",
+                        "2",
+                        "-c:v",
                         "copy",
+                        "-c:a",
+                        "aac",
+                        "-b:a",
+                        "192k",
                         "-movflags",
                         "+faststart",
                         str(temporary),

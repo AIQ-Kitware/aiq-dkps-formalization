@@ -22,6 +22,7 @@ threshold_db = -20.0
 ratio = 2.5
 attack_ms = 5.0
 release_ms = 180.0
+edge_fade_ms = 8.0
 
 [profiles.crall]
 endpoint_env = "CRALL_TTS_ENDPOINT"
