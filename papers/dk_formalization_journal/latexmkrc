@@ -1,0 +1,4 @@
+# Upload configuration: Overleaf owns its output directory and job name.
+$pdf_mode = 4;
+$pdflatex = 'lualatex -synctex=1 -interaction=nonstopmode -halt-on-error %O %P';
+$lualatex = $pdflatex;
