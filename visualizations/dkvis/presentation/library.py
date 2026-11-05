@@ -83,6 +83,9 @@ def catalog(root):
             continue
         deck,theme=identity(child.name)
         deck=info.get('recorded_deck') or deck
+        # A loose preview or diagnostic render is not a registered lecture.
+        if deck not in DECKS:
+            continue
         theme=info['render_settings'].get('theme',theme)
         info['theme']=theme
         info['voice']=None
@@ -109,6 +112,8 @@ def catalog(root):
         if local_path(root,folder) is None or not folder.is_dir():
             continue
         deck,theme=identity(folder.name.removesuffix('-narration'))
+        if deck not in DECKS:
+            continue
         row=group(deck)
         for path in [folder/'presentation.txt',*folder.glob('*/presentation.txt')]:
             info=asset(root,path,'transcript')

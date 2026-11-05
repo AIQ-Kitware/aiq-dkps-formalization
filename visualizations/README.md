@@ -42,12 +42,15 @@ The server uses an isolated Python environment, so starting it does not change
 the environment used by concurrent render jobs.
 
 The default directory is this project's `renders/`, independent of the current
-working directory. The default address is loopback. Stop with Ctrl+C. The library
-is read-only; playback positions and speeds are stored in the browser. Files
-still being replaced by a render appear with their new version after refresh.
+working directory. The default address is loopback. Stop with Ctrl+C. Playback
+positions and speeds are stored in the browser. The feedback form saves comments
+on the server in the separate, Git-ignored `feedback/` directory. Files still being
+replaced by a render appear with their new version after refresh.
 
-The library has one entry per deck. Select a narration voice or switch to HTML
-slides, PDF slides, or the PDF handout inside that entry. Deck IDs remain stable
+The library has one entry per registered deck. Loose preview and diagnostic
+clips are excluded from the catalog; their files remain available by direct URL.
+Select a narration voice or switch to HTML slides, PDF slides, or the PDF handout
+inside that entry. Deck IDs remain stable
 when the lecture organizer changes an ordering number. Transcript and document
 links open the raw files in another tab.
 

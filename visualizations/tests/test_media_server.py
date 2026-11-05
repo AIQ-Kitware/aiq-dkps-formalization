@@ -9,7 +9,10 @@ from dkvis.presentation.serve import create_app
 
 
 @pytest.fixture
-def library(tmp_path):
+def library(tmp_path,monkeypatch):
+    from dkvis.deck_spec import DeckSpec
+    from dkvis.decks import DECKS
+    monkeypatch.setitem(DECKS,'lecture',DeckSpec('lecture',()))
     data = bytes(range(256))*64
     (tmp_path/'lecture.kokoro.narrated.mp4').write_bytes(data)
     (tmp_path/'lecture.standalone.html').write_text('<h1>Lecture</h1>')
@@ -53,7 +56,8 @@ def test_catalog_groups_formats_under_the_stable_deck_id(library):
     assert {a['kind'] for a in lecture['assets']} == {'video', 'slides', 'pdf'}
     assert not {'lecture.standalone', 'lecture.handout', 'lecture-narrated'} & lectures.keys()
     assert 'notes' not in lectures
-    assert client.get(lectures['space & name']['assets'][0]['url']).status_code == 200
+    assert 'space & name' not in lectures
+    assert client.get('/files/space%20%26%20name.mp4').status_code == 200
     assert client.get('/files/lecture.standalone.html').headers['content-type'].startswith('text/html')
     assert client.get('/files/lecture.handout.pdf').headers['content-type'] == 'application/pdf'
     assert client.get('/').status_code == 200
@@ -241,3 +245,19 @@ def test_feedback_rejects_invalid_or_misattributed_submissions(library):
     assert client.post('/api/feedback',json=payload,headers={'origin':'http://another-site.invalid'}).status_code==403
     assert client.post('/api/feedback',data={'text':'form submission'}).status_code==415
     assert not (root.parent/(root.name+'-feedback')).exists()
+
+
+def test_loose_previews_and_orphan_transcripts_are_not_lectures(library):
+    client,root,data=library
+    preview=root/'matrix-exponential-opening.mp4'
+    preview.write_bytes(data)
+    (root/'unregistered.mp4').write_bytes(data)
+    (root/'unregistered.mp4.metadata.json').write_text(json.dumps(dict(deck='not-registered')))
+    orphan=root/'orphan-narration';orphan.mkdir()
+    (orphan/'presentation.txt').write_text('Preview narration')
+    rows=client.get('/api/catalog').json()['items']
+    assert not {'matrix-exponential-opening','not-registered','orphan'} & {r['id'] for r in rows}
+    assert all(a['path']!=preview.name for row in rows for a in row['assets'])
+    # Filtering the library preserves the artifact for direct inspection.
+    assert preview.read_bytes()==data
+    assert client.get('/files/'+preview.name).status_code==200

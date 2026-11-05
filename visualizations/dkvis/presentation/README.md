@@ -186,7 +186,9 @@ network binding and directory options. Static media uses Starlette's byte-range
 implementation; keep that behavior when modifying the server. HTML asset paths
 remain relative under `/files/`, and PDFs use the browser's built-in viewer.
 
-The catalog scans one selected folder at a time. Lecture titles and ordering
+The catalog scans one selected folder at a time and lists only registered decks.
+Loose preview clips and orphan transcript exports do not become lecture entries.
+Lecture titles and ordering
 come from the existing YAML index. Narrated MP4 names select their own profile's
 timeline; previews use preview timelines, repaired videos use their neighboring
 timeline, and MP4 metadata supplies a fallback. No video is transcoded by this
