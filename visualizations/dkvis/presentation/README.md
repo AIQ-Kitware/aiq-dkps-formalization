@@ -113,3 +113,32 @@ emphasis. Explicit `cfg_scale = 2.0` reduces the instruction-conditioned server
 default of 4.0 observed in the current local Breeze implementation. These are
 starting settings for the next synthesis/listening comparison; the offline
 repairs measure only the mechanical processing, not the revised prompt.
+
+
+## Render different narrators concurrently
+
+Final videos include the selected TTS profile, for example
+`renders/prereq-projections.crall.narrated.mp4` and
+`renders/prereq-projections.kokoro.narrated.mp4`. This is the profile name, not
+an automatically inferred voice name: use separate profiles for separate
+narrators. A custom `--output` must also be distinct for each run.
+
+Build the shared visual slides once, then narrate them in parallel:
+
+```bash
+./render_video.sh --deck prereq-projections --tts-profile crall --skip-render &
+./render_video.sh --deck prereq-projections --tts-profile kokoro --skip-render &
+wait
+```
+
+Run `make slides DECK=prereq-projections` first if the slide clips need rebuilding.
+Concurrent Manim builds of the same deck share visual output paths, so use
+`--skip-render` for both narration runs. Narration exports, audio caches, clips,
+concat lists, chapters, timelines and final videos are profile-specific.
+Preview clips and assembly metadata are also separate from full runs. Two runs
+using the same profile still share its caches and outputs; run those sequentially.
+
+Use `renders/<deck>-narrated/timeline-<profile>.json` for analysis and repair
+(or `timeline-<profile>.preview.json` for a preview). New renders no longer write
+the ambiguous `timeline.json` alias. Existing videos and timelines retain their
+old names until explicitly rebuilt; the legacy unsuffixed video is not updated.

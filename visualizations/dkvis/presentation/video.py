@@ -243,7 +243,7 @@ def main(argv=None):
             else:
                 log.record("slides_reused", 0, cache_hit=True)
             with log.measure("narration_export"):
-                export(ROOT / "renders" / f"{name}-narration", theme=THEME,
+                export(ROOT / "renders" / f"{name}-narration" / profile, theme=THEME,
                        deck_name=args.deck)
             work = ROOT / "renders" / f"{name}-narrated"
             work.mkdir(parents=True, exist_ok=True)
@@ -263,7 +263,9 @@ def main(argv=None):
                     label = f"{scene}-beat{k:02d}"
                     audio = synthesize_beat(text, label, work, settings)
                     segment_dir = work / profile
-                    segment_dir.mkdir(exist_ok=True)
+                    if args.scenes:
+                        segment_dir = segment_dir / "preview"
+                    segment_dir.mkdir(parents=True, exist_ok=True)
                     segment = segment_dir / f"{label}.mp4"
                     pause = args.pause if k == len(visuals[scene]) else args.beat_pause
                     seconds = narrated_segment(
@@ -290,10 +292,11 @@ def main(argv=None):
                         builds=builds,
                     )
                 )
-            listing = concat_list(segments, work / f"segments-{profile}.txt")
-            chapters = chapter_metadata(entries, work / f"chapters-{profile}.ffmetadata",
+            variant = profile + (".preview" if args.scenes else "")
+            listing = concat_list(segments, work / f"segments-{variant}.txt")
+            chapters = chapter_metadata(entries, work / f"chapters-{variant}.ffmetadata",
                                         title=get_deck(args.deck).description or args.deck)
-            suffix = f".{profile}.preview" if args.scenes else ""
+            suffix = f".{variant}"
             output = (args.output or ROOT / "renders" / f"{name}{suffix}.narrated.mp4").resolve()
             output.parent.mkdir(parents=True, exist_ok=True)
             temporary = output.with_suffix(".part.mp4")
@@ -335,8 +338,6 @@ def main(argv=None):
             (work / f'timeline-{profile}{".preview" if args.scenes else ""}.json').write_text(
                 timeline
             )
-            if not args.scenes:
-                (work / "timeline.json").write_text(timeline)
             print(f"Wrote {output} ({start/60:.1f} minutes, {len(entries)} chapters)", flush=True)
     finally:
         log.report()

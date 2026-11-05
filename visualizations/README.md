@@ -272,7 +272,7 @@ To synthesize the shorter talk later with your configured server:
 ```
 
 This reuses the existing `.env`/`tts.toml` configuration, chunking, audio caches,
-and timing logs. Its video is `renders/matching-proof-talk.narrated.mp4`;
+and timing logs. Its video is `renders/matching-proof-talk.<profile>.narrated.mp4`;
 its narration and renders have their own paths.
 
 ### Matching proof study: slides, presentation text, and narrated video
@@ -327,7 +327,7 @@ To list profiles or select a server for one run:
 Without `--skip-render`, the script first renders the complete Manim deck,
 keeping all source clips at the same quality. `--scenes` selects narrated chapters;
 use it with `--skip-render` for a quick TTS comparison. The complete
-video is `renders/matching-proof.narrated.mp4`. `--endpoint`, `--model`, `--voice`,
+video is `renders/matching-proof.<profile>.narrated.mp4`. `--endpoint`, `--model`, `--voice`,
 `--response-format`, and `--timeout` override individual profile fields.
 `--tts-config PATH` selects another TOML file. A profile's `[request]` table can
 supply server-specific options such as speed or temperature. Requests preserve
@@ -375,7 +375,7 @@ Each requested chunk keeps its input `.txt` and generation metadata `.json`
 alongside the audio, including rejected responses for diagnosing server limits.
 Encoded builds are under
 `renders/matching-proof-narrated/<profile>/`. The full video's latest timings
-are in `renders/matching-proof-narrated/timeline.json`; profile-specific and
+are in `renders/matching-proof-narrated/timeline-<profile>.json`; profile-specific and
 preview timelines are kept alongside it. Exact note/build correspondence is
 checked before speech requests, so rerender after editing the narration.
 
