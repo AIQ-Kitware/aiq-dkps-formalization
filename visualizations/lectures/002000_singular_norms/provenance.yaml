@@ -5,14 +5,14 @@ slides:
   initial_source_attribution:
   - source: visualizations/dkvis/learning/singular_norms/scenes.py
     models:
-    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    - GPT-6.1-Sol
     commit: 5fdda50fe857ee332757f856dee897edca1f386a
     date: '2026-11-04T19:29:20-05:00'
-    basis: Co-authored-by attribution on the first tracked source commit; earlier imported ancestry may exist.
+    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see model_identity_confirmation).
   revisions:
   - date: '2026-11-05'
     models:
-    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    - GPT-6.1-Sol
     sources:
     - visualizations/dkvis/learning/singular_norms/scenes.py
     scope: Make on-slide explanations and recaps independent of an unspecified proof.
@@ -20,23 +20,31 @@ transcript:
   initial_source_attribution:
   - source: visualizations/lectures/002000_singular_norms/lecture.md
     models:
-    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    - GPT-6.1-Sol
     commit: 5fdda50fe857ee332757f856dee897edca1f386a
     date: '2026-11-04T19:29:20-05:00'
-    basis: Co-authored-by attribution on the first tracked source commit; earlier imported ancestry may exist.
+    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see model_identity_confirmation).
   - source: visualizations/lectures/002000_singular_norms/quiz.yaml
     models:
-    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    - GPT-6.1-Sol
     commit: b338f50b622a5de3bcc9cf80cafa8c7151d9917f
     date: '2026-11-04T23:40:53-05:00'
-    basis: Co-authored-by attribution on the first tracked source commit; earlier imported ancestry may exist.
+    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see model_identity_confirmation).
   revisions:
   - date: '2026-11-05'
     models:
-    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    - GPT-6.1-Sol
     sources:
     - visualizations/lectures/002000_singular_norms/lecture.md
     scope: Remove prompt-response language and motivate the lecture independently; keep transport connections as
       explicit applications.
-note: These are recorded model attributions, not claims of mathematical priority or independently verified authorship.
-  Unknown variants remain unknown.
+note: Model identity reflects the user's explicit confirmation. Weights and runtime settings were not supplied.
+  Attribution is not a claim of mathematical priority or independently verified authorship.
+model_identity_confirmation:
+  date: '2026-11-05'
+  confirmed_by: user
+  model: GPT-6.1-Sol
+  previously_recorded_model: GPT-6 (Codex; exact model variant and weights/config undetermined)
+  statement: In fact, I know all of the new numbered lectures and transcripts were made via this model.
+  scope: Initial source attribution and recorded revisions for this numbered lecture, including slides, transcript,
+    and quiz.

@@ -138,6 +138,10 @@ Exports snapshot these records with their generation timestamp and source Git
 revision. Existing videos without a snapshot remain explicitly unrecorded;
 the library displays current source attribution separately.
 
+If the user later supplies an exact model identity for existing work, correct
+the source attribution and record the confirmation, scope, and previous label.
+The numbered lectures' correction is documented in
+[AUTHORSHIP_CORRECTIONS.md](../../AUTHORSHIP_CORRECTIONS.md).
 Never backfill an older video's generation record with today's source attribution.
 If attribution changes, include the title scene when partially rendering a deck
 so the visible robot/model credit is updated as well as the edited content.
