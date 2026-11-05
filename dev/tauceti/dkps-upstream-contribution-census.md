@@ -4605,3 +4605,38 @@ returned 403, so the authenticated host must run
 `bash waves/2026-11-03/c31-complex/update-pr-body.sh` from the campaign checkout;
 it edits only the description and runs no Lean build. Root dependency pins and
 local proofs are unchanged; no integration or donor retirement is claimed.
+
+
+### November 4: Yosida submission and shared-API review repair
+
+The SA-E14–E21/E23 prefix is submitted as
+[#28079](https://github.com/TauCetiProject/TauCeti/pull/28079), observed open.
+Pushed repair `293950b684316d94690698d0ae876d66314c1374` addresses the
+[reuse](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4474721401),
+[API](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4474722313),
+[naming](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4474722601),
+[documentation](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4474722989),
+[proof-quality](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4474723722)
+and [generality](https://github.com/TauCetiProject/TauCeti/pull/28079#discussion_r4474770460)
+findings on `e274c92c0cd53e939842681a6911574ef2c86524`.
+The accepted semigroup Yosida factory, composition identities and commutation
+are generalized in place to any nontrivially normed scalar field. The imaginary
+factory specializes it at `I*r`; common filter convergence criteria now serve
+both real semigroups and imaginary shifts. The conditional factorization is
+`LinearPMap.imaginaryYosidaApproximation_apply_eq_smul_resolvent_apply`, with
+resolvent membership alone, even for incomplete spaces. Pointwise normalized
+convergence is `IsSelfAdjoint.tendsto_smul_resolvent_I_mul_apply`. The two
+imaginary-resolvent helpers are in Resolvent; docs and repeated estimates are
+repaired. Prior Kitware/DKPS and Spectra/Adam Bornemann ancestry is preserved.
+
+All three modules and real Yosida/Hille-Yosida generation consumers passed the
+focused warning-as-error build (5921 jobs). All 13 environment linters passed
+(59 declarations plus 20 generated), along with the standard axiom allowlist,
+full style (24399 files), signed natural-index limits and expanded scope checks.
+The twenty-new/five-generalized API packet and bundle are refreshed in
+`tauceti-dkps-campaign/waves/2026-11-04/yosida-approximants`. Source self-review
+is not independent/upstream approval; fresh CI/re-review remains pending.
+The connector returned 403 for the description update; authenticated host
+`update-pr-body.sh` edits metadata without rebuilding. No integration, root pin
+change, donor retirement, later Stone result or fresh author-wide PR census is
+claimed by this selected repair.
