@@ -2,9 +2,15 @@
 import numpy as np
 from manim import Arc, Arrow, Circle, Create, DashedLine, Dot, DOWN, Line, RIGHT, Rotate, Transform, UP, VGroup
 
-from dkvis.components.lesson import LessonSlide, plane, stack, vector
+from dkvis.components.lesson import LessonSlide, LessonTitle, plane, stack, vector
 from dkvis.learning.matching.model import source_plane_wiggle
 from dkvis.slide_style import CURRENT, FAINT, FG, GAP, MUTED, RESID, SINE, TRIAL, WANTED, boxed, math, tex
+
+
+class VaTitle(LessonTitle):
+    lesson_deck = 'prereq-variations'
+    title_lines = ('Feasible variations', 'and stationarity')
+    subtitle = 'Move within the constraints. Test what a minimum requires.'
 
 
 class VariationSlide(LessonSlide):

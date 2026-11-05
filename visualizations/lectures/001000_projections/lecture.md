@@ -6,6 +6,13 @@ multiplication are assumed. The historical anchor is Gale Young,
 It supplies context for least-squares fitting, not a priority claim about
 orthogonal projections. Source links and prerequisites are in README.md.
 
+## PrTitle: Subspaces and projections
+
+Why: From nearest points to subspace coordinates.
+Recall: No notation is needed on the title slide.
+
+Subspaces and projections.
+
 ## Pr00Question: How do we describe a whole subspace?
 
 Why: We want to compare spaces without confusing them with a chosen basis.

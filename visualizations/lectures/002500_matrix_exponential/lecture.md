@@ -8,6 +8,13 @@ and Higham, [The Scaling and Squaring Method for the Matrix Exponential Revisite
 These are context for matrix algebra and numerical computation, not claims
 about who first defined the matrix exponential.
 
+## ExTitle: The exponential of a matrix
+
+Why: From a velocity rule to an exact motion.
+Recall: No notation is needed on the title slide.
+
+The exponential of a matrix.
+
 ## Ex00Question: Turn a velocity rule into an actual motion
 
 Why: The variations proof needs an exact curve, not just a first-order approximation.

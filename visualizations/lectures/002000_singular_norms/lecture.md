@@ -5,6 +5,13 @@ Prerequisite lecture. Historical context:
 This is an application of canonical matrix coordinates, not a claim that the
 paper originated the SVD. See README.md for mathematical sources and scope.
 
+## SnTitle: Singular values and displacement cost
+
+Why: How a list of stretches determines the cost of a motion.
+Recall: No notation is needed on the title slide.
+
+Singular values and displacement cost.
+
 ## Sn00Question: What does it cost to move a whole space?
 
 Why: Two sensible measurements can prefer different maps.

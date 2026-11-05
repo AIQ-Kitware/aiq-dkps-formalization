@@ -2,10 +2,16 @@
 import numpy as np
 from manim import Arrow, Create, DashedLine, Dot, DOWN, Line, ParametricFunction, RIGHT, Rotate, Transform, UP, VGroup
 
-from dkvis.components.lesson import LessonSlide, bars, plane, stack, vector
+from dkvis.components.lesson import LessonSlide, LessonTitle, bars, plane, stack, vector
 from dkvis.learning.matching.model import rotation
 from dkvis.learning.singular_norms.model import block_displacement, competing_displacements, ellipse_example, overlapping_restrictions
 from dkvis.slide_style import CURRENT, FAINT, FG, GAP, MUTED, RESID, SINE, TRIAL, WANTED, boxed, math, tex
+
+
+class SnTitle(LessonTitle):
+    lesson_deck = 'prereq-singular-norms'
+    title_lines = ('Singular values', 'and displacement cost')
+    subtitle = 'How a list of stretches determines the cost of a motion.'
 
 
 class NormSlide(LessonSlide):

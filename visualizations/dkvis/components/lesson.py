@@ -98,3 +98,23 @@ class LessonSlide(DeckSlide):
 
     def source(self, credit):
         self.add(tex(credit, size=19, color=MUTED).move_to([0, -1.99, 0]))
+
+
+class LessonTitle(LessonSlide):
+    """A static opening card with one short, independently authored speech beat."""
+    title_lines = ()
+    subtitle = ''
+
+    def make_chrome(self):
+        return None
+
+    def body(self):
+        self.start()
+        title = VGroup(*(tex(line, size=54) for line in
+                         (self.title_lines or (self.script.title,)))).arrange(DOWN, buff=.22)
+        if title.width > 11.8:
+            title.scale_to_fit_width(11.8)
+        title.move_to([0, .45, 0])
+        self.add(tex('Prerequisite lectures', size=24, color=MUTED).move_to([0, 2.25, 0]),
+                 title, Line([-2.1, -.95, 0], [2.1, -.95, 0], color=CURRENT),
+                 tex(self.subtitle, size=27, color=MUTED).move_to([0, -1.55, 0]))

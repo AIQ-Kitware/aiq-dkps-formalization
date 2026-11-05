@@ -4,9 +4,15 @@ from manim import (
     Arc, Circle, Create, DOWN, Line, ParametricFunction, Polygon, RIGHT,
     Rotate, Transform, ValueTracker, VGroup, VMobject, always_redraw,
 )
-from dkvis.components.lesson import LessonSlide, plane, stack, vector
+from dkvis.components.lesson import LessonSlide, LessonTitle, plane, stack, vector
 from dkvis.learning.matrix_exponential.model import euler_path, noncommuting_generators, shear_generator, taylor_exponential
 from dkvis.slide_style import CURRENT, FAINT, GAP, MUTED, RESID, TRIAL, WANTED, boxed, math, tex
+
+
+class ExTitle(LessonTitle):
+    lesson_deck = 'prereq-matrix-exponential'
+    title_lines = ('The exponential of a matrix',)
+    subtitle = 'From a velocity rule to an exact motion.'
 
 
 class ExponentialSlide(LessonSlide):

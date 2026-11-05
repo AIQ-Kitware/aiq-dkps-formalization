@@ -5,6 +5,13 @@ Prerequisite lecture. Historical context: Euler's
 The connection is the use of variations to obtain necessary conditions;
 no claim is made that Euler proved this matrix transport argument.
 
+## VaTitle: Feasible variations and stationarity
+
+Why: Move within the constraints. Test what a minimum requires.
+Recall: No notation is needed on the title slide.
+
+Feasible variations and stationarity.
+
 ## Va00Question: How do we improve a map without breaking its constraints?
 
 Why: An arbitrary change to a feasible map usually leaves the feasible set.

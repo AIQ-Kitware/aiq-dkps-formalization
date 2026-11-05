@@ -2,9 +2,15 @@
 import numpy as np
 from manim import Arrow, Create, DashedLine, Dot, DOWN, Indicate, Line, RIGHT, Rotate, Transform, UP, VGroup
 
-from dkvis.components.lesson import LessonSlide, plane, stack, vector
+from dkvis.components.lesson import LessonSlide, LessonTitle, plane, stack, vector
 from dkvis.learning.projections.model import plane_frame, projection_example
 from dkvis.slide_style import CURRENT, FAINT, FG, GAP, MUTED, RESID, TRIAL, WANTED, boxed, math, tex
+
+
+class PrTitle(LessonTitle):
+    lesson_deck = 'prereq-projections'
+    title_lines = ('Subspaces and projections',)
+    subtitle = 'From nearest points to subspace coordinates.'
 
 
 class ProjectionSlide(LessonSlide):

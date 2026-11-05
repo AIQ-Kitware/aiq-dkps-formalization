@@ -9,6 +9,7 @@ PROJECTIONS = DeckSpec(
     footer=r'subspaces and projections',
     narration=lecture_path('projections'),
     slides=uses('dkvis.learning.projections.scenes', [
+        'PrTitle',
         'Pr00Question', 'Pr01History', 'Pr02Decomposition', 'Pr03Projector',
         'Pr04Frames', 'Pr05Blocks', 'Pr06Commutation', 'Pr07Transport', 'Pr08Recap',
     ]),
@@ -20,6 +21,7 @@ SINGULAR_NORMS = DeckSpec(
     footer=r'singular values and displacement cost',
     narration=lecture_path('singular_norms'),
     slides=uses('dkvis.learning.singular_norms.scenes', [
+        'SnTitle',
         'Sn00Question', 'Sn01History', 'Sn02Stretching', 'Sn03Norms',
         'Sn04Invariance', 'Sn05Rotation', 'Sn06SmoothCost', 'Sn07BlockCosts',
         'Sn08Restrictions', 'Sn09Recap',
@@ -32,6 +34,7 @@ MATRIX_EXPONENTIAL = DeckSpec(
     footer=r'the matrix exponential',
     narration=lecture_path('matrix_exponential'),
     slides=uses('dkvis.learning.matrix_exponential.scenes', [
+        'ExTitle',
         'Ex00Question', 'Ex01History', 'Ex02Series', 'Ex03SmallSteps',
         'Ex04Dynamics', 'Ex05Diagonal', 'Ex06Shear', 'Ex07Rotation',
         'Ex08Laws', 'Ex09Noncommuting', 'Ex10Orthogonal',
@@ -45,6 +48,7 @@ VARIATIONS = DeckSpec(
     footer=r'feasible variations and stationarity',
     narration=lecture_path('variations'),
     slides=uses('dkvis.learning.variations.scenes', [
+        'VaTitle',
         'Va00Question', 'Va01History', 'Va02Velocity', 'Va03Exponential',
         'Va04SourceMotion', 'Va05Feasible', 'Va06Stationarity',
         'Va07Gradient', 'Va08Test', 'Va09Structure', 'Va10Recap',
