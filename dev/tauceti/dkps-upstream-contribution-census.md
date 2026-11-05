@@ -4887,3 +4887,23 @@ constructions to complex normed spaces. Self-adjoint results retain their
 complete Hilbert-space hypotheses. Focused build and semigroup regression (5923
 jobs), normed-space examples, all 13 environment linters and full style passed.
 The PR remains open and mergeable; fresh upstream CI/review is pending.
+
+### Representation PVM and Cayley construction candidate (2026-11-05)
+
+Independent [#27902](https://github.com/TauCetiProject/TauCeti/pull/27902) is
+accepted in `e87c14a158d920aa4da5e0340f690cb052506152`, already contained in
+DKPS's Tau Ceti pin. Its representation PVM and integral apply to `cfcHom`
+directly; separate SA-B05/B30 forwarding facades would duplicate that accepted
+API. Exact item-level attribution remains to be reviewed.
+
+The construction portion of SA-E01 is prepared on fork branch
+`port-sa-e01-cayley-spectral-pvm`, commit
+`2f582c0f01d06288b8401ced61f6ec030ed6ba34`, based on accepted Tau Ceti main
+`be6518de91d3cd0f039f0011b6b12f84690b0b62`. It adapts the DKPS Cayley
+coordinate and spectral-PVM construction (Jon Crall / Claude Opus 5, Kitware,
+Apache-2.0), using the independent accepted representation PVM and measurable
+map rather than duplicating the old local bounded calculus. It does not prove
+SA-E02 nullity or later resolvent statements. Focused compilation (6515 jobs),
+13 environment linters, scope examples and full style passed. The packet requires
+independent review and live host preflight before any PR; no PR, acceptance or
+local donor retirement is claimed.
