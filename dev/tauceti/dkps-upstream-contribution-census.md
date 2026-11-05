@@ -53,11 +53,12 @@ was located on TauCeti `main` on October 21 (not a final-diff/commit audit);
 accepted diff has not yet been compared declaration-by-declaration in this
 census. Evidence is as of 2026-10-21 unless a dated source is given; see the current [consumption review](upstream-consumption-review-2026-10-22.md).
 
-**Latest integration:** #26823 (left target-Gram population overlap) is accepted
-at `da52bf5aeea9c373030f4a29061f8a5dc2658b39` and included in the current
-TauCeti pin `5f78b5307b932e1e2ac7848dc7d4fedc6a52d6c1`, following the consumed
-#26821 and #26824 APIs. #20359/#26822/#27798/#27799/#27804 remain open in the November 4
-selected metadata check. See the final integration section below.
+**Latest integration (November 5 UTC):** [#20359](https://github.com/TauCetiProject/TauCeti/pull/20359)
+(two-sided exponential decay, SSP-A16) is accepted at
+`85f3eb5579df5ca44ba8cd0921d614b41ab72174`, now the TauCeti dependency pin.
+This follows the consumed #26821/#26823/#26824 APIs. The historical November 4
+open-PR snapshots below retain their dates; #20359 is no longer pending.
+See the final integration section for exact signatures, ancestry and validation.
 
 ## Historical submitted-campaign snapshot — 2026-11-03T02:00:51Z
 
@@ -4640,3 +4641,47 @@ The connector returned 403 for the description update; authenticated host
 `update-pr-body.sh` edits metadata without rebuilding. No integration, root pin
 change, donor retirement, later Stone result or fresh author-wide PR census is
 claimed by this selected repair.
+
+
+### November 5: consume accepted two-sided exponential decay (#20359)
+
+PR [#20359](https://github.com/TauCetiProject/TauCeti/pull/20359) is integrated
+at `85f3eb5579df5ca44ba8cd0921d614b41ab72174`. Fetched non-shallow accepted
+main contains that commit with `Source-PR: TauCetiProject/TauCeti#20359` and
+`Accepted-Head: 8e0e29ab74e5d5f1e6929951a5f4f6a5f952ed48`. GitHub reports
+Bors closure with `merged=false`; acceptance is established by the Git ancestry
+and actual source, not by the title or closure flag alone.
+
+The native real theorem is
+`TauCeti.exp_neg_mul_abs_isLittleO_abs_rpow_cocompact` in
+`TauCeti.Analysis.SpecialFunctions.Pow.Real`: positive real rate, every real
+exponent, and the two-sided cocompact real filter. The stronger complex-rate
+`TauCeti.cexp_neg_mul_abs_isLittleO_abs_rpow_cocompact` in
+`TauCeti.Analysis.SpecialFunctions.Exp.Decay` assumes positive real part.
+Both theorem docstrings explicitly adapt historical DKPS
+`ForTauCeti/Analysis/Fourier/ExponentialAbs.lean` (source before retirement at
+`138bd70b4`; introduced at `f35ffc0`), Jon Crall / GPT 5.6 High, Kitware 2026,
+Apache-2.0. This is explicit proof adaptation, not independent implementation
+of the same roadmap target.
+
+The dependency pin advances from `5f78b5307b932e1e2ac7848dc7d4fedc6a52d6c1`
+to that accepted revision. Mathlib remains
+`1b1ccf4b088b32fa3f23f2de1127433254a81e1e`, Lean v4.36.0-rc2.
+`RoadmapBridge.CanonicalConsumers` directly checks both exact native signatures.
+The old local support file was already retired when Fourier consumers moved to
+HaagerupZsido; no duplicate proof, compatibility alias or new donor deletion is
+introduced by this landing.
+
+Focused compilation passed (11068 jobs), then the full default build (21677
+jobs), then Challenge (19923 jobs), all without warnings. The ext4 bind mount
+and installed resource-accounting hook were verified. Durable integration,
+source-scope, dependency-review and build evidence is saved in the campaign's
+`proof/campaign/reconciliations/2026-11-05-a16.json` and sibling log directory.
+The reviewed per-item census now credits SSP-A16 to Erotemic's accepted PR,
+with proof adaptation ancestry kept separate from PR authorship.
+
+No new PR is unlocked by A16: every other SSP Part A target already has accepted
+coverage in the reviewed ledger, and no remaining source-port task depends on
+A16/#20359. The unrelated B16 source-scope mismatch, B12 specification conflict
+and representation-PVM dependency remain unchanged. This selected update is not
+a fresh semantic audit of all roadmap items or a current author-wide PR count.
