@@ -244,3 +244,19 @@ class PrLean(LessonLean):
     )
     ownership = 'Mathlib: projection splitting. Tau Ceti: off-diagonal block criterion.'
     notation = r'\texttt{starProjection} is $P_K$; \texttt{Commute P T} means $PT=TP$.'
+
+
+class PrComputation(ProjectionSlide):
+    stage = 3
+
+    def body(self):
+        self.start()
+        self.put(stack(
+            tex(r'Given full-column-rank $D$: build an orthonormal frame.', size=29),
+            r'D=QR,\qquad Q^TQ=I\quad\text{(thin QR)}',
+            boxed(math(r'P_Kx=Q(Q^Tx)', size=37), color=CURRENT),
+            tex('Householder QR: compute with the frame, without storing a full projector.', size=28),
+            tex('Uncertain numerical rank: pivoted QR or SVD, with a rank threshold.', size=27),
+            buff=.42), y=.45, height=3.45)
+        self.source('SciPy / LAPACK: scipy.linalg.qr; scipy.linalg.svd.')
+        self.takeaway('An implicit projector needs a basis-sized frame and two matrix-vector products.')

@@ -12,7 +12,7 @@ PROJECTIONS = DeckSpec(
         'PrTitle',
         'Pr00Question', 'Pr01History', 'Pr02Decomposition', 'Pr03Projector',
         'Pr04Frames', 'Pr05Blocks', 'Pr06Commutation', 'Pr07Transport', 'Pr08Recap',
-        'PrFacts', 'PrLean',
+        'PrComputation', 'PrFacts', 'PrLean',
     ]),
 )
 
@@ -26,7 +26,7 @@ SINGULAR_NORMS = DeckSpec(
         'Sn00Question', 'Sn01History', 'Sn02Stretching', 'Sn03Norms',
         'Sn04Invariance', 'Sn05Rotation', 'Sn06SmoothCost', 'Sn07BlockCosts',
         'Sn08Restrictions', 'Sn09Recap',
-        'SnFacts', 'SnLean',
+        'SnComputation', 'SnFacts', 'SnLean',
     ]),
 )
 
@@ -41,7 +41,7 @@ MATRIX_EXPONENTIAL = DeckSpec(
         'Ex04Dynamics', 'Ex05Diagonal', 'Ex06Shear', 'Ex07Rotation',
         'Ex08Laws', 'Ex09Noncommuting', 'Ex10Orthogonal',
         'Ex11SourcePreservation', 'Ex12Recap',
-        'ExFacts', 'ExLean',
+        'ExComputation', 'ExFacts', 'ExLean',
     ]),
 )
 
@@ -55,7 +55,7 @@ VARIATIONS = DeckSpec(
         'Va00Question', 'Va01History', 'Va02Velocity', 'Va03Exponential',
         'Va04SourceMotion', 'Va05Feasible', 'Va06Stationarity',
         'Va07Gradient', 'Va08Test', 'Va09Structure', 'Va10Recap',
-        'VaFacts', 'VaLean',
+        'VaComputation', 'VaFacts', 'VaLean',
     ]),
 )
 

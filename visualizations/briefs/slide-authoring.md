@@ -71,3 +71,19 @@ assumptions visible, make the notation correspondence explicit, and wrap code
 lines in the checked companion file rather than shrinking long lines until they
 are unreadable. `LessonLean.symbolic_facts` supplies the paired labels/formulas;
 the code is read from the actual examples in `facts.lean`.
+
+
+## Mathematical meaning and numerical computation
+
+Give both the mathematical object and its motivating interpretation. For the
+matrix exponential, distinguish the series-defined family `exp(t A)` from a
+trajectory obtained by applying that map to an initial vector. In prerequisite
+flow illustrations, reuse amber for the first coordinate (or scalar output),
+blue for the second coordinate, and violet for time. Label the quantities as well
+as coloring them. Use the same coordinate colors on later plane diagrams.
+
+When a topic has a non-obvious numerical side, include one short computation
+coda near the end, before the mathematical-facts/Lean closing pair. Explain the
+choice of algorithm and desired output, cite primary papers or official library
+documentation, and distinguish a teaching calculation from production numerical
+practice. Avoid claims that one algorithm is universally best.

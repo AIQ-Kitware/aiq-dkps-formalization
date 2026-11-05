@@ -8,6 +8,8 @@ and Higham, [The Scaling and Squaring Method for the Matrix Exponential Revisite
 These are context for matrix algebra and numerical computation, not claims
 about who first defined the matrix exponential.
 
+Computational references: [Al-Mohy and Higham (2009)](https://doi.org/10.1137/09074721X), [Al-Mohy and Higham (2011)](https://doi.org/10.1137/100788860), [SciPy expm](https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.expm.html), and [SciPy expm_multiply](https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.expm_multiply.html).
+
 ## ExTitle: The exponential of a matrix
 
 Why: From a velocity rule to an exact motion.
@@ -15,19 +17,16 @@ Recall: No notation is needed on the title slide.
 
 The exponential of a matrix.
 
-## Ex00Question: Turn a velocity rule into an actual motion
+## Ex00Question: One matrix function, two ways to understand it
 
-Why: The variations proof needs an exact curve, not just a first-order approximation.
-Recall: $A$ is fixed; $x\prime(t)=Ax(t)$ prescribes velocity at the current position.
+Why: Read scalar and vector trajectories at one shared time.
+Recall: Amber is u or x_1; blue is x_2; violet marks the same t on both graphs.
 
-For a scalar, the rule x prime equals a times x produces exponential growth
-or decay. What happens if x has several coordinates, and their velocities
-are mixed by a matrix A? The matrix exponential is the time-evolution map
-for this constant linear rule. Given the initial vector, it tells us where
-the vector is at any time. Our immediate purpose is geometric: a
-skew-symmetric velocity should produce an exact rotation, so that variations
-preserve orthogonality. We will build the exponential, examine stretching,
-shearing, and rotation, and establish the identities needed by that proof.
+First, a purely mathematical viewpoint. The power series defines a matrix for each value of t. Together these matrices form a family of linear maps. No starting vector is needed to define that family. Once we choose a starting vector, applying the map gives a trajectory. The graphs show these outputs, rather than the entries of the exponential matrix itself.
+
+<!-- beat -->
+
+Now let the same time advance on both graphs. On the left, the amber point follows scalar exponential growth, starting at one. On the right, the two by two matrix mixes the two coordinates. The amber point is the first coordinate and the blue point is the second. They start at one and zero, and follow cosine and sine. We will keep amber for the first coordinate and blue for the second when we draw these motions in the plane later. Each violet line marks the same time; its colored dots give the values at that time. The equations below give the velocity interpretation. The formula above gives the power-series interpretation. These are two descriptions of the same exponential, which we will now construct and study.
 
 ## Ex01History: Matrix algebra made functions of a matrix meaningful
 
@@ -265,6 +264,13 @@ determinant plus-one component. That is compatible with testing a
 negative-determinant transporter: multiply the transporter by the
 exponential curve. With these distinctions in place, return to feasible
 variations and follow how an exact motion produces a derivative test.
+
+## ExComputation: Computing an exponential versus applying one
+
+Why: A definition by a series does not prescribe the best numerical evaluation method.
+Recall: A rational approximation is a quotient of polynomials; s controls scaling and squaring.
+
+The power series defines the matrix exponential, but a production numerical routine does more than sum a fixed number of its terms. For a dense matrix, SciPy uses an adaptive Padé approximation with scaling and squaring. First scale t times A down by a power of two. On that smaller input, approximate the exponential by a ratio of matrix polynomials. The displayed equation is solved as a linear system; we do not need to form a matrix inverse explicitly. Repeated squaring then reverses the scaling. The approximation degree and scaling are chosen using error estimates. If we only need the product of the exponential with one or a few vectors, we can instead use an exponential-action algorithm such as expm multiply. That can avoid building a large full exponential, especially for sparse operators. Which method is appropriate depends on the desired output, matrix structure, accuracy, and cost.
 
 ## ExFacts: Three exponential facts to use in a proof
 

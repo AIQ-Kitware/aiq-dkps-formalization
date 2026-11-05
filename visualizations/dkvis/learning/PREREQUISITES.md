@@ -3,17 +3,18 @@
 Four independent narrated lectures introduce the vocabulary for the matching
 proof. Each has a motivating question, a little historical context, worked
 explanations, a recap, and an answered self-check. Each ends with a symbolic
-facts card followed by corresponding Lean examples; see the
+facts card followed by corresponding Lean examples. A short numerical-computation
+coda comes just before that pair. See the
 [Lean companions](../../lectures/LEAN_FACTS.md). The prerequisite graph and
 current teaching order are in [the lecture library](../../lectures/README.md),
 generated from `lectures/index.yaml`.
 
 | Lecture | Goal | Slides | Approximate speech |
 | --- | --- | --- | --- |
-| [Projections](../../lectures/README.md#projections) | Read projections, frames, blocks and transport. | 12 | 10 minutes |
-| [Singular-value norms](../../lectures/README.md#singular_norms) | Compare movement costs and justify block additivity. | 13 | 11 minutes |
-| [Matrix exponential](../../lectures/README.md#matrix_exponential) | Build exact flows from matrix velocities. | 16 | 14 minutes |
-| [Variations](../../lectures/README.md#variations) | Construct legal motions and test stationarity. | 14 | 13 minutes |
+| [Projections](../../lectures/README.md#projections) | Read projections, frames, blocks and transport. | 13 | 11 minutes |
+| [Singular-value norms](../../lectures/README.md#singular_norms) | Compare movement costs and justify block additivity. | 14 | 12 minutes |
+| [Matrix exponential](../../lectures/README.md#matrix_exponential) | Build exact flows from matrix velocities. | 17 | 16 minutes |
+| [Variations](../../lectures/README.md#variations) | Construct legal motions and test stationarity. | 15 | 14 minutes |
 
 Times estimate speech at 140 words per minute, before slide pauses. The lessons
 assume vectors, inner products, matrix products, and basic one-variable calculus.

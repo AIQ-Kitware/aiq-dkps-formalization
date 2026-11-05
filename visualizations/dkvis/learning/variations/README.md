@@ -29,3 +29,9 @@ statements with short applications of the library declarations. See the
 [Lean companions](../../../lectures/LEAN_FACTS.md) for copyable files, exact API
 names, assumptions, attribution, and validation details. The code shown on the
 slide is read directly from its companion file.
+
+
+The computational coda connects exact exponential steps with numerical manifold
+optimization and blockwise QR/polar retractions. The source constraint and the
+difference between stationarity and global optimality stay explicit.
+Primary papers and numerical-library documentation are linked in the transcript.

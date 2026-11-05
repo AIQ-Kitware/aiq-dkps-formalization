@@ -7,7 +7,7 @@ from dkvis.learning.singular_norms.model import (
     block_displacement, competing_displacements, ellipse_example, overlapping_restrictions,
 )
 from dkvis.learning.matrix_exponential.model import (
-    euler_path, noncommuting_generators, shear_generator, taylor_exponential,
+    opening_flow, euler_path, noncommuting_generators, shear_generator, taylor_exponential,
 )
 
 
@@ -119,3 +119,24 @@ def test_different_noncommuting_generators_fail_exponential_factorization():
     assert np.allclose(product, [[2, 1], [1, 1]])
     assert np.allclose(combined, [[np.cosh(1), np.sinh(1)], [np.sinh(1), np.cosh(1)]])
     assert not np.allclose(product, combined)
+
+
+@pytest.mark.parametrize('time', [-.5, 0., .8, 1.5, 2.5])
+def test_opening_flows_match_their_equations_and_matrix_exponential(time):
+    scalar, state = opening_flow(time)
+    generator = np.array([[0., -1.], [1., 0.]])
+    assert scalar == pytest.approx(np.exp(.4*time))
+    assert np.allclose(state, taylor_exponential(generator, time) @ [1., 0.])
+    assert np.linalg.norm(state) == pytest.approx(1.)
+    delta = 1e-6
+    plus, minus = opening_flow(time+delta), opening_flow(time-delta)
+    assert (plus[0]-minus[0])/(2*delta) == pytest.approx(.4*scalar, abs=1e-9)
+    assert np.allclose((plus[1]-minus[1])/(2*delta), generator @ state, atol=1e-9)
+
+
+def test_opening_flow_vectorized_values_and_initial_conditions():
+    scalar, state = opening_flow(np.array([0., .5, 1.]))
+    assert scalar.shape == (3,)
+    assert state.shape == (3, 2)
+    assert scalar[0] == 1
+    assert np.allclose(state[0], [1., 0.])

@@ -5,6 +5,8 @@ Prerequisite lecture. Historical context: Euler's
 The connection is the use of variations to obtain necessary conditions;
 no claim is made that Euler proved this matrix transport argument.
 
+Computational references: [Pymanopt orthogonal-group implementation](https://pymanopt.org/docs/stable/_modules/pymanopt/manifolds/group.html) and [Manopt Stiefel implementation](https://github.com/NicolasBoumal/manopt/blob/master/manopt/manifolds/stiefel/stiefelfactory.m).
+
 ## VaTitle: Feasible variations and stationarity
 
 Why: Move within the constraints. Test what a minimum requires.
@@ -241,6 +243,13 @@ gradient at a chosen minimizer. You can now return to the matching proof's
 stationarity step and explain why its test directions exist. The next layer
 of that proof uses the gradient and source reflection to construct the
 two- and four-dimensional blocks; it does not assume those blocks at the start.
+
+## VaComputation: From feasible curves to numerical optimization
+
+Why: The same geometry used to test a minimum can guide a numerical search.
+Recall: The starting W is orthogonal and transports K to L; P is the source projection.
+
+These ideas also lead to numerical optimization methods. A gradient, calculated analytically or by automatic differentiation, suggests a direction. We then restrict that direction to the skew matrices that preserve the source decomposition and choose a step size. Multiplication by the exponential gives the exact feasible update shown here. Numerical manifold solvers also use retractions: cheaper local maps that bring a small tangent step back onto the constraint. QR and polar decompositions provide common examples for orthogonal matrices. To keep our additional transport constraint, those updates must operate separately within the source blocks. A solver can monitor cost decrease and the size of the constrained gradient. Finding a small gradient is a numerical stationarity test; it is not by itself a proof of the global matching minimum. Our structural proof supplies information beyond that local test.
 
 ## VaFacts: Two proof rules behind the stationarity argument
 

@@ -5,6 +5,8 @@ Prerequisite lecture. Historical context:
 This is an application of canonical matrix coordinates, not a claim that the
 paper originated the SVD. See README.md for mathematical sources and scope.
 
+Computational references: [SciPy dense SVD](https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html) and [partial sparse SVD](https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.svds.html).
+
 ## SnTitle: Singular values and displacement cost
 
 Why: How a list of stretches determines the cost of a motion.
@@ -205,6 +207,13 @@ is four, its Frobenius norm is five, and its trace norm is seven. You can now
 compute the displacement costs that the matching theorem minimizes. The
 remaining question is how a minimizer can reveal useful structure. For that,
 we need variations that remain inside the set of allowed transporters.
+
+## SnComputation: Computing the singular values you actually need
+
+Why: The chosen norm determines how much spectral information a numerical routine must return.
+Recall: The singular-value list determines the Schatten costs introduced in this lecture.
+
+For a dense matrix, numerical libraries call a mature singular value decomposition algorithm. SciPy's default dense driver uses LAPACK's divide and conquer routine. Once the singular values are available, computing the norms is a scalar calculation. For a very large sparse matrix, an iterative partial decomposition can seek only a few singular values. That can suit a task needing the leading stretch, provided the approximation has converged sufficiently. It does not give the full trace norm merely by summing a short leading list: the omitted values may still contribute. The practical question is therefore which part of the singular-value list our objective needs, and how accurately it must be computed.
 
 ## SnFacts: Two singular-value facts to use in a proof
 

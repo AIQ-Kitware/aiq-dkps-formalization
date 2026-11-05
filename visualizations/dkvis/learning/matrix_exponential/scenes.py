@@ -1,11 +1,11 @@
 """Matrix exponentials: definition, constant flow, and exact feasible motions."""
 import numpy as np
 from manim import (
-    Arc, Circle, Create, DOWN, Line, ParametricFunction, Polygon, RIGHT,
+    Arc, Axes, Circle, Create, DecimalNumber, Dot, DOWN, LEFT, Line, ParametricFunction, Polygon, RIGHT, UP, linear,
     Rotate, Transform, ValueTracker, VGroup, VMobject, always_redraw,
 )
 from dkvis.components.lesson import LessonSlide, LessonTitle, LessonLean, plane, stack, vector
-from dkvis.learning.matrix_exponential.model import euler_path, noncommuting_generators, shear_generator, taylor_exponential
+from dkvis.learning.matrix_exponential.model import opening_flow, euler_path, noncommuting_generators, shear_generator, taylor_exponential
 from dkvis.slide_style import CURRENT, FAINT, GAP, MUTED, RESID, TRIAL, WANTED, boxed, math, tex
 
 
@@ -21,20 +21,58 @@ class ExponentialSlide(LessonSlide):
 
 def circle_picture():
     ax = plane(extent=1.8)
+    ax.x_axis.set_color(TRIAL)
+    ax.y_axis.set_color(WANTED)
+    ax.add(math('x_1', size=21, color=TRIAL).next_to(ax.x_axis.get_end(), RIGHT, buff=.08),
+           math('x_2', size=21, color=WANTED).next_to(ax.y_axis.get_end(), UP, buff=.08))
     radius = np.linalg.norm(ax.c2p(1, 0)-ax.c2p(0, 0))
     return ax, Circle(radius=radius, color=FAINT).move_to(ax.c2p(0, 0))
 
 
 class Ex00Question(ExponentialSlide):
+    example = True
+
     def body(self):
         self.start()
-        self.put(stack(tex('Scalar growth', size=33, color=TRIAL),
-                       r'x\prime(t)=a x(t)', r'x(t)=e^{ta}x(0)', buff=.45), 'left')
-        self.put(stack(tex('Coupled coordinates', size=33, color=WANTED),
-                       r'x\prime(t)=Ax(t)',
-                       boxed(math(r'x(t)=\exp(tA)x(0)', size=35), color=CURRENT),
-                       tex('A velocity rule becomes a complete motion.', size=25), buff=.45), 'right')
-        self.takeaway('Our goal: turn a skew-symmetric velocity into an exact orthogonal curve.')
+        time = ValueTracker(0)
+        self.add(boxed(math(r'\textstyle e^{tA}:=\sum_{k=0}^{\infty}\frac{t^k}{k!}A^k'
+                            r'\qquad\text{(a family of linear maps)}', size=27),
+                       color=CURRENT).move_to([0, 2.0, 0]))
+        scalar = Axes(x_range=[0, 3, 1], y_range=[0, 3, 1],
+                      x_length=5.1, y_length=2.3, tips=False,
+                      axis_config={'color': MUTED, 'include_numbers': True, 'font_size': 18})
+        matrix = Axes(x_range=[0, 3, 1], y_range=[-1, 1.5, .5],
+                      x_length=5.1, y_length=2.3, tips=False,
+                      axis_config={'color': MUTED, 'include_numbers': True, 'font_size': 18})
+        scalar.move_to([-3.25, -.45, 0]); matrix.move_to([3.25, -.45, 0])
+        for axes in [scalar, matrix]:
+            axes.x_axis.set_color(GAP)
+            self.add(axes, math('t', size=23, color=GAP).next_to(axes.x_axis.get_end(), RIGHT, buff=.1))
+        self.add(math(r'u(t)=e^{0.4t},\quad u(0)=1', size=26).move_to([-3.25, 1.15, 0]),
+                 math(r'A=\begin{pmatrix}0&-1\\1&0\end{pmatrix},\quad '
+                      r'x(t)=e^{tA}\binom10', size=25).move_to([3.25, 1.15, 0]))
+        self.add(scalar.plot(lambda t: float(opening_flow(t)[0]), x_range=[0, 2.5], color=TRIAL),
+                 matrix.plot(lambda t: float(opening_flow(t)[1][0]), x_range=[0, 2.5], color=TRIAL),
+                 matrix.plot(lambda t: float(opening_flow(t)[1][1]), x_range=[0, 2.5], color=WANTED))
+        def cursor(axes, low, high, coordinate):
+            t = time.get_value()
+            point = coordinate(t)
+            dots = [Dot(axes.c2p(t, value), color=color, radius=.065) for value, color in point]
+            return VGroup(Line(axes.c2p(t, low), axes.c2p(t, high), color=GAP, stroke_width=2), *dots)
+        self.add(always_redraw(lambda: cursor(scalar, 0, 3, lambda t: [(float(opening_flow(t)[0]), TRIAL)])),
+                 always_redraw(lambda: cursor(matrix, -1, 1.5, lambda t: list(zip(opening_flow(t)[1], [TRIAL, WANTED])))))
+        clock = DecimalNumber(0, num_decimal_places=2, font_size=25, color=GAP).move_to([.2, -1.95, 0])
+        clock.add_updater(lambda value: value.set_value(time.get_value()))
+        self.add(clock, math('t=', size=25, color=GAP).next_to(clock, LEFT, buff=.12),
+                 math(r'u^\prime(t)=0.4u(t)', size=24).move_to([-3.25, -1.95, 0]),
+                 math(r'x^\prime(t)=Ax(t)', size=24).move_to([3.25, -1.95, 0]))
+        legend = VGroup(tex(r'Amber: $u$ or $x_1$', size=21, color=TRIAL),
+                        tex(r'Blue: $x_2$', size=21, color=WANTED),
+                        tex(r'Violet: shared time $t$', size=21, color=GAP)).arrange(RIGHT, buff=.6)
+        self.add(legend.move_to([0, -2.3, 0]))
+        self.beat()
+        self.play(time.animate.set_value(2.5), run_time=10, rate_func=linear)
+        self.takeaway(r'The series defines $e^{tA}$; applying that map to $x_0$ gives the trajectory $x(t)$.')
 
 
 class Ex01History(ExponentialSlide):
@@ -292,3 +330,20 @@ class ExLean(LessonLean):
     )
     ownership = 'Tau Ceti: exponential flow. Mathlib: skew-adjoint exponential and commutation.'
     notation = r'$\to_L$ means bounded linear map; $\bullet$ is scalar multiplication; real \texttt{unitary} means orthogonal.'
+
+
+class ExComputation(ExponentialSlide):
+    stage = 3
+
+    def body(self):
+        self.start()
+        self.put(stack(
+            tex(r'Dense $e^{tA}$: adaptive Pad\'{e} approximation with scaling and squaring.', size=27),
+            r'B=2^{-s}tA,\qquad q_m(B)X_0=p_m(B)',
+            boxed(math(r'X_{k+1}=X_k^2\quad(k=0,\ldots,s-1),\qquad X_s\approx e^{tA}', size=29), color=CURRENT),
+            tex(r'\texttt{scipy.linalg.expm}: solve for the rational approximation, then square.', size=26),
+            tex(r'Only need $e^{tA}x_0$? \texttt{expm\_multiply} computes the action directly.', size=27),
+            tex('Large sparse problems can avoid forming the full exponential.', size=27),
+            buff=.34), y=.45, height=3.5)
+        self.source(r'Al-Mohy and Higham (2009, 2011); SciPy expm and expm\_multiply.')
+        self.takeaway('The power series defines the function; the numerical algorithm depends on the output you need.')

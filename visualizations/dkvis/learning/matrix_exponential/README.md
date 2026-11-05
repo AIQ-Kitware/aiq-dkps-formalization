@@ -1,6 +1,6 @@
 # The exponential of a matrix
 
-An independent 13-slide lecture before feasible variations. Find the transcript,
+An independent lecture before feasible variations. Find the transcript,
 slides, and handout in [the lecture library](../../../lectures/README.md#matrix_exponential).
 
 Audience: matrix multiplication, power series, and single-variable calculus.
@@ -27,3 +27,12 @@ statements with short applications of the library declarations. See the
 [Lean companions](../../../lectures/LEAN_FACTS.md) for copyable files, exact API
 names, assumptions, attribution, and validation details. The code shown on the
 slide is read directly from its companion file.
+
+
+Slide 2 connects the power-series family of linear maps with scalar growth and
+a coupled two-coordinate trajectory. A shared violet time cursor moves through
+both graphs; amber is the scalar/first coordinate and blue is the second. The
+later plane pictures use the same coordinate colors. The computational coda
+introduces adaptive Padé scaling and squaring, linear solves, and exponential
+action methods for computing a product without forming the full exponential.
+Primary papers and numerical-library documentation are linked in the transcript.

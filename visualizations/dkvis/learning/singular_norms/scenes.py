@@ -263,3 +263,20 @@ class SnLean(LessonLean):
     )
     ownership = 'Tau Ceti: Schatten seminorms and singular-value invariance.'
     notation = r'$\to_\ell$ means linear map; $\simeq_\ell^i$ means isometric isomorphism; $\circ_\ell$ is composition.'
+
+
+class SnComputation(NormSlide):
+    stage = 3
+
+    def body(self):
+        self.start()
+        self.put(stack(
+            r'T=U\Sigma V^T\quad\Longrightarrow\quad(s_j(T))_j=\operatorname{diag}\Sigma',
+            tex(r'Dense matrices: LAPACK SVD, exposed by \texttt{scipy.linalg.svd}.', size=28),
+            tex('The default dense driver uses divide and conquer.', size=27),
+            boxed(math(r'N_p(T)=\|(s_j(T))_j\|_{\ell^p}', size=34), color=CURRENT),
+            tex(r'Large sparse matrices: partial SVD, e.g.\ \texttt{scipy.sparse.linalg.svds}.', size=26),
+            tex('A few leading singular values do not determine the full trace norm.', size=27),
+            buff=.34), y=.45, height=3.5)
+        self.source('SciPy: scipy.linalg.svd (gesdd); scipy.sparse.linalg.svds.')
+        self.takeaway('Choose whether you need the whole singular-value list or only its leading part.')

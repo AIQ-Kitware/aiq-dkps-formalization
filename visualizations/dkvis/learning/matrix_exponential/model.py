@@ -38,3 +38,13 @@ def shear_generator():
 def noncommuting_generators():
     a = shear_generator()
     return a, a.T
+
+
+def opening_flow(time):
+    """Scalar growth and a coupled two-coordinate flow at the same real time.
+
+    The matrix generator is J = [[0, -1], [1, 0]], with initial state (1, 0).
+    This closed form supplies the graph, independently of Taylor truncation.
+    """
+    time = np.asarray(time, dtype=float)
+    return np.exp(.4*time), np.stack([np.cos(time), np.sin(time)], axis=-1)

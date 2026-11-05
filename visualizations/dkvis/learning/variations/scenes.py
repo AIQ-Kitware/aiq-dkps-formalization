@@ -267,3 +267,20 @@ class VaLean(LessonLean):
     )
     ownership = 'Mathlib: derivative at a local minimum; faithfulness of the matrix trace square.'
     notation = r'\texttt{HasDerivAt f d 0} means $f\prime(0)=d$; \texttt{IsLocalMin f 0} is a local minimum.'
+
+
+class VaComputation(VariationSlide):
+    stage = 3
+
+    def body(self):
+        self.start()
+        self.put(stack(
+            tex('Numerical manifold optimization: choose a direction, then take a legal step.', size=27),
+            r'W^TW=I,\quad W(K)=L,\quad B^T=-B,\quad BP=PB',
+            boxed(math(r'W_{\mathrm{new}}=W\exp(\eta B)', size=36), color=CURRENT),
+            tex(r'Choose $B$ from a gradient; choose the step size $\eta$ by a search.', size=28),
+            tex('QR or polar retractions give alternative local updates.', size=27),
+            tex('Apply them within the source blocks to preserve the transport constraint.', size=26),
+            buff=.34), y=.45, height=3.5)
+        self.source('Manopt / Pymanopt: orthogonal-group optimization; QR and polar retractions.')
+        self.takeaway('A numerical stationary point still needs an optimality argument; stationarity alone is not global.')

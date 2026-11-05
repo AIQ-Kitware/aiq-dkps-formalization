@@ -6,7 +6,7 @@ A lecture in [the prerequisite series](../PREREQUISITES.md).
 **Goal:** translate a subspace into its orthogonal projector, distinguish frames
 from subspaces, read block coordinates, and derive the transport equation.
 
-The nine scenes in `scenes.py` use [lecture.md](../../../lectures/README.md#projections) as their transcript.
+The scenes in `scenes.py` use [lecture.md](../../../lectures/README.md#projections) as their transcript.
 `model.py` supplies the projection and rotating-frame examples. The historical
 opening connects nearest-point geometry to
 [Young's 1937 subspace-fitting paper](https://doi.org/10.1007/BF02287962).
@@ -25,3 +25,8 @@ statements with short applications of the library declarations. See the
 [Lean companions](../../../lectures/LEAN_FACTS.md) for copyable files, exact API
 names, assumptions, attribution, and validation details. The code shown on the
 slide is read directly from its companion file.
+
+
+The computational coda explains applying a projection through a thin QR frame,
+and why selecting numerical rank may require pivoting or an SVD.
+Primary papers and numerical-library documentation are linked in the transcript.

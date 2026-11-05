@@ -6,7 +6,7 @@ A lecture in [the prerequisite series](../PREREQUISITES.md).
 **Goal:** interpret the SVD geometrically, distinguish operator/Frobenius/trace
 norms, compute rotation and reflection costs, and justify block additivity.
 
-The ten scenes in `scenes.py` use [lecture.md](../../../lectures/README.md#singular_norms). `model.py` supplies
+The scenes in `scenes.py` use [lecture.md](../../../lectures/README.md#singular_norms). `model.py` supplies
 the ellipse, competing orthogonal displacements, direct-sum example, and
 overlapping-image counterexample. The short historical context cites
 [Eckart and Young (1936)](https://doi.org/10.1007/BF02288367) for low-rank
@@ -26,3 +26,8 @@ statements with short applications of the library declarations. See the
 [Lean companions](../../../lectures/LEAN_FACTS.md) for copyable files, exact API
 names, assumptions, attribution, and validation details. The code shown on the
 slide is read directly from its companion file.
+
+
+The computational coda connects dense LAPACK SVD and partial sparse SVD with
+the amount of singular-value information each cost needs.
+Primary papers and numerical-library documentation are linked in the transcript.

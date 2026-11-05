@@ -6,6 +6,8 @@ multiplication are assumed. The historical anchor is Gale Young,
 It supplies context for least-squares fitting, not a priority claim about
 orthogonal projections. Source links and prerequisites are in README.md.
 
+Computational references: [SciPy QR](https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.qr.html) and [SciPy SVD](https://docs.scipy.org/doc/scipy/reference/generated/scipy.linalg.svd.html).
+
 ## PrTitle: Subspaces and projections
 
 Why: From nearest points to subspace coordinates.
@@ -181,6 +183,13 @@ Yes. It fixes the source line and rotates within its complement, so no component
 crosses between them. T can be far from the identity while commuting with P.
 Next we will ask a different question: when a map moves vectors, how should
 we measure the total amount of movement?
+
+## PrComputation: Computing a projection through its frame
+
+Why: The projector is an operator, but we can apply it without forming its full matrix.
+Recall: D has linearly independent spanning columns; thin QR produces orthonormal columns Q.
+
+How would we compute this with actual data? A standard route is a thin QR factorization, usually built with Householder reflections. Its Q columns are an orthonormal frame for the same space as the input columns. To project a vector, first compute Q transpose times the vector to get frame coordinates, then multiply those coordinates by Q. This stores a frame rather than a full ambient projector. If the columns are nearly dependent, determining the numerical rank needs care: a pivoted QR or a singular value decomposition and a chosen threshold can help identify the usable directions. The mathematical projection formula remains the same once the subspace has been selected.
 
 ## PrFacts: Two projection facts to use in a proof
 
