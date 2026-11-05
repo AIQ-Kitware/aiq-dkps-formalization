@@ -87,6 +87,7 @@ class MmSummary(MinMaxSlide):
 
 
 class MmComputation(MinMaxSlide):
+    bonus = True
     stage=3
     def body(self):
         self.start()
@@ -111,9 +112,15 @@ class MmFacts(MinMaxSlide):
 
 
 class MmLean(LessonLean):
+    assumptions = 'Symmetric $T$ on an $n$-dimensional real inner product space $E$. Eigenvalues decrease, indexed from zero.'
     lesson_deck='operators-minmax'
     lecture_id='minmax'
-    symbolic_facts=(('Min-max',r'\lambda_k=\sup_{\dim V=k+1}\inf_{x\in V,\ \|x\|=1}\langle Tx,x\rangle'),
+    symbolic_facts=(('Min-max',r'\begin{gathered}\lambda_k(T)=\\\sup_{\dim V=k+1}\ \inf_{x\in V,\ \|x\|=1}\langle Tx,x\rangle\end{gathered}'),
                     ('Weyl stability',r'|\lambda_k(T)-\lambda_k(S)|\le\|T-S\|'))
     ownership='Tau Ceti: CourantFischer; DKPS-derived proof adaptation, PR 13599.'
     notation=r'\texttt{Fin n} indexes $0,\ldots,n-1$; \texttt{IsSymmetric} is self-adjointness here.'
+
+
+class MmLeanWeyl(MmLean):
+    assumptions = r'Symmetric $T,S$ on the same finite real inner product space. Use the same decreasing eigenvalue index $k$.'
+    fact_index = 1

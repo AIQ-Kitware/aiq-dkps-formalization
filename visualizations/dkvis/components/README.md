@@ -19,3 +19,9 @@ When migrating a scene, keep its class name stable until the deck manifests have
 been deliberately updated.  Prefer extracting shared primitives first, then move
 whole conceptual groups.  Do not create `v2`, `final2`, or similar scene names;
 use descriptive alternatives when two explanations are worth comparing.
+
+`lean_code.py` renders Lean 4 syntax using the bundled, licensed JuliaMono font
+under `fonts/`; no system font installation or rendering-time download is needed.
+`LessonLean` shows one checked example per slide, its symbolic formula and scope,
+and a separate library-proof highlight. `DKVIS_LEAN_FONT` overrides the font.
+The frozen reference decks keep their existing typography.

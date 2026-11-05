@@ -236,6 +236,7 @@ class PrFacts(ProjectionSlide):
 
 
 class PrLean(LessonLean):
+    assumptions = 'Real inner product space $E$; $K$ admits an orthogonal projection.'
     lesson_deck = 'prereq-projections'
     lecture_id = 'projections'
     symbolic_facts = (
@@ -247,6 +248,7 @@ class PrLean(LessonLean):
 
 
 class PrComputation(ProjectionSlide):
+    bonus = True
     stage = 3
 
     def body(self):
@@ -260,3 +262,8 @@ class PrComputation(ProjectionSlide):
             buff=.42), y=.45, height=3.45)
         self.source('SciPy / LAPACK: scipy.linalg.qr; scipy.linalg.svd.')
         self.takeaway('An implicit projector needs a basis-sized frame and two matrix-vector products.')
+
+
+class PrLeanBlocks(PrLean):
+    assumptions = r'Real inner product space $E$; $K$ admits an orthogonal projection; $T$ is bounded linear.'
+    fact_index = 1

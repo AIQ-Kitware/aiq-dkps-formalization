@@ -2,19 +2,19 @@
 
 Four independent narrated lectures introduce the vocabulary for the matching
 proof. Each has a motivating question, a little historical context, worked
-explanations, a recap, and an answered self-check. Each ends with a symbolic
-facts card followed by corresponding Lean examples. A short numerical-computation
-coda comes just before that pair. See the
+explanations, a recap, and an answered self-check. Each introduces its own notation and includes a symbolic
+facts card followed by one highlighted Lean statement per slide. A short numerical
+bonus follows the core and Lean cards; the two study questions close the video. See the
 [Lean companions](../../lectures/LEAN_FACTS.md). The prerequisite graph and
 current teaching order are in [the lecture library](../../lectures/README.md),
 generated from `lectures/index.yaml`.
 
 | Lecture | Goal | Slides | Approximate speech |
 | --- | --- | --- | --- |
-| [Projections](../../lectures/README.md#projections) | Read projections, frames, blocks and transport. | 13 | 11 minutes |
-| [Singular-value norms](../../lectures/README.md#singular_norms) | Compare movement costs and justify block additivity. | 14 | 12 minutes |
-| [Matrix exponential](../../lectures/README.md#matrix_exponential) | Build exact flows from matrix velocities. | 17 | 16 minutes |
-| [Variations](../../lectures/README.md#variations) | Construct legal motions and test stationarity. | 15 | 14 minutes |
+| [Projections](../../lectures/README.md#projections) | Read projections, frames, blocks and transport. | 17 | about 12 minutes |
+| [Singular-value norms](../../lectures/README.md#singular_norms) | Compare movement costs and justify block additivity. | 18 | about 14 minutes |
+| [Matrix exponential](../../lectures/README.md#matrix_exponential) | Build exact flows from matrix velocities. | 22 | about 17 minutes |
+| [Variations](../../lectures/README.md#variations) | Construct legal motions and test stationarity. | 19 | about 16 minutes |
 
 Times estimate speech at 140 words per minute, before slide pauses. The lessons
 assume vectors, inner products, matrix products, and basic one-variable calculus.
@@ -34,7 +34,7 @@ make text DECK=prereq-variations
 ```
 
 Each deck exports a combined `presentation.txt`, individual slide text, build
-text under `beats/`, and a manifest into `renders/<deck>-narration/`. Authored
+text under `beats/`, and a manifest into `renders/<number>_<deck>-narration/`. Authored
 scripts are linked above. Speech and animated builds use those same texts.
 
 To make videos using the configured TTS service:
@@ -55,7 +55,7 @@ matching study and compact proof talk as well, following the complete YAML index
 
 This narrates all prerequisite lectures in YAML dependency order using existing
 slides. Omit `SKIP_RENDER=1` to render the visuals first. Final videos are written
-to `renders/<deck>.narrated.mp4`. To select another configured voice instead:
+to `renders/<number>_<deck>.<profile>.narrated.mp4`. To select another configured voice instead:
 
 ```bash
 for deck in prereq-projections prereq-singular-norms prereq-matrix-exponential prereq-variations; do
@@ -65,7 +65,7 @@ done
 
 Change `--tts-profile` or the shared `tts.toml` settings to select another server
 or voice. Private endpoints remain in the ignored `.env`. The four videos
-are `renders/<deck>.narrated.mp4`; generation timings and cache behavior use
+are `renders/<number>_<deck>.<profile>.narrated.mp4`; generation timings and cache behavior use
 the existing shared pipeline. Building the lectures and their text does not
 request speech.
 

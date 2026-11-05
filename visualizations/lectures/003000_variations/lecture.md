@@ -14,6 +14,13 @@ Recall: No notation is needed on the title slide.
 
 Feasible variations and stationarity.
 
+## VaSetup: The constraint and the scalar test
+
+Why: Define legality before varying a candidate minimizer.
+Recall: $K,L$: source and target; $P=P_K$; $W(t)=We^{tB}$.
+
+Our space is finite-dimensional and real. K is a source subspace and L a target subspace of the same dimension. W is a legal transporter when it preserves lengths and carries the whole of K onto L. It may rotate or reflect. P is the orthogonal projection onto K. We will construct a curve W of t equal to W times exponential t B. The exponential is the convergent matrix power series; skew-symmetry of B will preserve lengths, while commutation with P will preserve the source decomposition. These restrictions are on the direction B, not extra restrictions on W. If F is the objective, phi of t means F evaluated on this curve. We can then use ordinary one-variable differentiation to test a minimizer.
+
 ## Va00Question: How do we improve a map without breaking its constraints?
 
 Why: An arbitrary change to a feasible map usually leaves the feasible set.
@@ -244,13 +251,6 @@ stationarity step and explain why its test directions exist. The next layer
 of that proof uses the gradient and source reflection to construct the
 two- and four-dimensional blocks; it does not assume those blocks at the start.
 
-## VaComputation: From feasible curves to numerical optimization
-
-Why: The same geometry used to test a minimum can guide a numerical search.
-Recall: The starting W is orthogonal and transports K to L; P is the source projection.
-
-These ideas also lead to numerical optimization methods. A gradient, calculated analytically or by automatic differentiation, suggests a direction. We then restrict that direction to the skew matrices that preserve the source decomposition and choose a step size. Multiplication by the exponential gives the exact feasible update shown here. Numerical manifold solvers also use retractions: cheaper local maps that bring a small tangent step back onto the constraint. QR and polar decompositions provide common examples for orthogonal matrices. To keep our additional transport constraint, those updates must operate separately within the source blocks. A solver can monitor cost decrease and the size of the constrained gradient. Finding a small gradient is a numerical stationarity test; it is not by itself a proof of the global matching minimum. Our structural proof supplies information beyond that local test.
-
 ## VaFacts: Two proof rules behind the stationarity argument
 
 Why: Turn a minimum along a legal motion into a vanishing gradient block.
@@ -258,9 +258,23 @@ Recall: Phi is the objective along a feasible curve; C is a finite real matrix.
 
 There are two reusable rules here. A differentiable real function has zero derivative at a local minimum in the interior of its parameter line. In our application that real function is the cost along a feasible curve. Establishing feasibility is what lets a constrained minimum give a minimum of this real function. The second rule is that the trace of C transpose times C vanishes exactly when C is zero. This trace is the sum of the squared matrix entries. In our argument we choose C to be P G P. The derivative formula and trace rearrangement already derived in the lecture make its trace square zero. The second rule then forces the entire block to vanish. Neither rule says that a stationary point must be a minimum.
 
-## VaLean: The same two proof rules in Lean
+## VaLean: Scalar stationarity in Lean
 
-Why: Identify the calculus and positivity facts used by the matrix argument.
-Recall: IsLocalMin f 0 is a local minimum; HasDerivAt f d 0 says the derivative is d.
+Why: Locate the one-variable inference used along a feasible curve.
+Recall: 0 local minimum and differentiability imply $f\prime(0)=0$.
 
-Each row pairs the symbolic rule on the left with its Lean application on the right. These two building blocks come from Mathlib. The first example takes a local minimum and an actual derivative certificate and concludes that the derivative d is zero. In an application, f is the cost along the feasible curve, not the cost on arbitrary matrices. The second example is the trace-square test for a finite real matrix. Mathlib states the general theorem with a conjugate transpose. For real entries, conjugation does nothing, so the simplification shown converts that statement to the ordinary transpose used in the lecture. This code verifies the two proof rules. The feasible-curve construction and the gradient trace identity remain the steps that connect those rules in the matching argument.
+This card isolates a scalar fact from the geometric argument. IsLocalMin f zero says that f has a local minimum at zero. HasDerivAt f d zero says its derivative there is d. The conclusion is d equals zero, and the green proof invokes the established theorem. To use this for transport, first construct a legal curve and compute the derivative of the objective on it. The scalar lemma alone does not supply either of those geometric steps.
+
+## VaLeanTrace: A zero trace square in Lean
+
+Why: Justify why the stationarity test forces a matrix to vanish.
+Recall: $\operatorname{tr}(C^TC)=0\iff C=0$.
+
+The trace of C transpose C is the sum of the squares of all real matrix entries. It can vanish exactly when every entry vanishes. The Lean statement expresses that equivalence. The green proof specializes the established conjugate-transpose theorem to the real field, where conjugation is trivial. This is the positivity argument used when a stationarity identity produces a zero trace square; it does not by itself prove a global minimum.
+
+## VaComputation: Bonus: From feasible curves to numerical optimization
+
+Why: The same geometry used to test a minimum can guide a numerical search.
+Recall: The starting W is orthogonal and transports K to L; P is the source projection.
+
+As an optional numerical bonus, here is how this mathematical tool is used in computation. These ideas also lead to numerical optimization methods. A gradient, calculated analytically or by automatic differentiation, suggests a direction. We then restrict that direction to the skew matrices that preserve the source decomposition and choose a step size. Multiplication by the exponential gives the exact feasible update shown here. Numerical manifold solvers also use retractions: cheaper local maps that bring a small tangent step back onto the constraint. QR and polar decompositions provide common examples for orthogonal matrices. To keep our additional transport constraint, those updates must operate separately within the source blocks. A solver can monitor cost decrease and the size of the constrained gradient. Finding a small gradient is a numerical stationarity test; it is not by itself a proof of the global matching minimum. Our structural proof supplies information beyond that local test.

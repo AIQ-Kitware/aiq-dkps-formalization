@@ -5,7 +5,7 @@ import numpy as np
 from manim import Arrow, Axes, DOWN, LEFT, Line, Rectangle, RIGHT, UP, VGroup
 
 from dkvis.presentation.narration import read_deck_narration
-from dkvis.slide_style import CURRENT, FG, MUTED, DeckSlide, boxed, math, mono, para, tex
+from dkvis.slide_style import CURRENT, FG, MUTED, DeckSlide, boxed, math, para, tex
 
 
 @lru_cache
@@ -47,6 +47,7 @@ class LessonSlide(DeckSlide):
     lesson_deck = ''
     stage = 0
     example = False
+    bonus = False
     wait_time_between_slides = .25
 
     @property
@@ -55,12 +56,17 @@ class LessonSlide(DeckSlide):
 
     def make_chrome(self):
         self.title, self.kicker = self.script.title, self.script.motivation
-        if self.example:
+        if self.bonus:
+            self.title = r'\textbf{Bonus:} ' + self.title.removeprefix('Bonus: ')
+        elif self.example:
             self.title = r"\textbf{Example:} " + self.title
         chrome = super().make_chrome()
         if len(self._head) > 1 and self._head[1].width > 12.2:
             self._head[1].scale_to_fit_width(12.2).next_to(
                 self._head[0], DOWN, aligned_edge=LEFT, buff=.18)
+        if self.bonus:
+            chrome.add(tex('Optional numerical considerations', size=21, color=MUTED).move_to([0, -3.15, 0]))
+            return chrome
         stages = VGroup(*(tex(label, size=18, color=CURRENT if i == self.stage else MUTED)
                           for i, label in enumerate([
                               'Question', 'Tools', 'Use in the proof', 'Recap',
@@ -134,10 +140,15 @@ class LessonLean(LessonSlide):
     symbolic_facts = ()
     stage = 3
 
+    fact_index = 0
+    assumptions = ''
+
     def body(self):
         import re
+        from dkvis.components.lean_code import lean_code
         from dkvis.lectures import lecture_path
         from dkvis.presentation.paths import ROOT
+        from dkvis.slide_style import GAP, RESID, FAINT, PANEL
 
         self.start()
         source = (ROOT / lecture_path(self.lecture_id)).with_name('facts.lean').read_text()
@@ -147,36 +158,52 @@ class LessonLean(LessonSlide):
                     zip(starts, starts[1:]+[len(code)])]
         if len(examples) != len(self.symbolic_facts):
             raise ValueError(f'Symbolic/Lean fact mismatch: {type(self).__name__}')
-        def code_block(text, size=18):
-            mob = mono(text, size=size)
-            if mob.width > 8.5:
-                mob.scale_to_fit_width(8.5)
-            return mob
-        context = code_block(code[:starts[0]].strip(), size=16) if starts[0] else None
-        rows = []
-        for i, ((label, statement), example) in enumerate(zip(self.symbolic_facts, examples), 1):
-            formula = boxed(math(statement, size=27), color=CURRENT)
-            if formula.width > 3.7:
-                formula.scale_to_fit_width(3.7)
-            symbolic = VGroup(tex(f'{i}. {label}', size=21), formula).arrange(DOWN, buff=.15)
-            rows.append((symbolic, code_block(example)))
-        height = (context.height+.18 if context is not None else 0) + sum(
-            max(left.height, right.height) for left, right in rows) + .20*(len(rows)-1)
-        scale = min(1, 4.1/height)
-        if scale < .75:
-            raise ValueError(f'Lean comparison too dense: {type(self).__name__}')
-        top = .1 + height*scale/2
-        if context is not None:
-            context.scale(scale).move_to([-2.05, top, 0], aligned_edge=UP+LEFT)
-            self.add(context)
-            top -= context.height+.18*scale
-        for left, right in rows:
-            left.scale(scale); right.scale(scale)
-            row_height = max(left.height, right.height)
-            left.move_to([-4.7, top-row_height/2, 0])
-            right.move_to([-2.05, top-row_height/2, 0], aligned_edge=LEFT)
-            self.add(left, right)
-            top -= row_height+.20*scale
-        self.add(Line([-2.45, 2.1, 0], [-2.45, -2.02, 0], color=MUTED, stroke_width=1),
-                 tex(self.ownership, size=19, color=MUTED).move_to([0, -2.25, 0]))
+        label, statement = self.symbolic_facts[self.fact_index]
+        example = examples[self.fact_index]
+        # Keep the statement separate from the library proof, without altering
+        # a single token of the checked companion.
+        boundary = re.search(r':=\s*(?:by\s*)?\n', example)
+        if boundary is None:
+            raise ValueError(f'Expected a multiline proof in {type(self).__name__}')
+        declaration, proof = example[:boundary.end()].rstrip(), example[boundary.end():].rstrip()
+        declaration_mob = lean_code(declaration, size=23)
+        proof_mob = lean_code(proof, size=23, proof=True)
+        for block in (declaration_mob,):
+            if block.width > 8.35:
+                factor = 8.35/block.width
+                if factor < .78:
+                    raise ValueError(f'Wrap Lean source lines: {type(self).__name__}')
+                block.scale(factor)
+        right = VGroup(tex('Lean statement',size=21,color=GAP), declaration_mob)
+        right.arrange(DOWN, aligned_edge=LEFT, buff=.14)
+        if right.height > 3.0:
+            factor=3.0/right.height
+            if factor < .82:
+                raise ValueError(f'Split Lean context: {type(self).__name__}')
+            right.scale(factor)
+        right.move_to([-2.10,2.1,0],aligned_edge=UP+LEFT)
+        if proof_mob.width>12.1:
+            factor=12.1/proof_mob.width
+            if factor<.82:
+                raise ValueError(f'Wrap Lean proof arguments: {type(self).__name__}')
+            proof_mob.scale(factor)
+        proof_row=VGroup(tex('Library proof',size=19,color=RESID),proof_mob)
+        proof_row.arrange(DOWN,aligned_edge=LEFT,buff=.10)
+        if proof_row.height>1.35:
+            raise ValueError(f'Split Lean proof: {type(self).__name__}')
+        proof_row.move_to([-6.05,-.85,0],aligned_edge=UP+LEFT)
+        formula = boxed(math(statement, size=33),color=CURRENT)
+        if formula.width > 3.75:
+            formula.scale_to_fit_width(3.75)
+        scope=para(self.assumptions,width=3.75,size=22,color=MUTED)
+        left=VGroup(tex(label,size=24),formula,scope,
+                    tex(f'Fact {self.fact_index+1} of {len(examples)}',size=20,color=MUTED))
+        left.arrange(DOWN,buff=.25).move_to([-4.7,.65,0])
+        if left.height>3.8:
+            raise ValueError(f'Lean scope too dense: {type(self).__name__}')
+        backdrop=Rectangle(width=8.65,height=max(2.0,right.height+.30),stroke_color=FAINT,
+                           fill_color=PANEL,fill_opacity=1)
+        backdrop.move_to([2.13,2.25,0],aligned_edge=UP)
+        self.add(backdrop,left,right,proof_row,
+                 tex(self.ownership,size=18,color=MUTED).move_to([0,-2.25,0]))
         self.takeaway(self.notation)

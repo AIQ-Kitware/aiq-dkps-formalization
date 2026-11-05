@@ -259,6 +259,7 @@ class VaFacts(VariationSlide):
 
 
 class VaLean(LessonLean):
+    assumptions = '$f$ is a real scalar function. Local minimum and derivative hypotheses are shown in the code.'
     lesson_deck = 'prereq-variations'
     lecture_id = 'variations'
     symbolic_facts = (
@@ -270,6 +271,7 @@ class VaLean(LessonLean):
 
 
 class VaComputation(VariationSlide):
+    bonus = True
     stage = 3
 
     def body(self):
@@ -284,3 +286,8 @@ class VaComputation(VariationSlide):
             buff=.34), y=.45, height=3.5)
         self.source('Manopt / Pymanopt: orthogonal-group optimization; QR and polar retractions.')
         self.takeaway('A numerical stationary point still needs an optimality argument; stationarity alone is not global.')
+
+
+class VaLeanTrace(VaLean):
+    assumptions = r'$C$ is a real matrix indexed by a finite type $n$. This algebraic fact needs no differentiability.'
+    fact_index = 1

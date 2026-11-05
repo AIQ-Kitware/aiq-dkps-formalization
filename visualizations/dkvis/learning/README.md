@@ -40,6 +40,12 @@ modules before this library covers the full formalization's prerequisites.
 
 ## Authoring a module
 
+Each indexed lesson has a local setting and notation refresher, so viewers can
+start there without decoding symbols in another video. Numerical considerations
+are optional bonus slides after the core and Lean facts, before the study
+questions. Lean facts appear one per card, with a repeated symbolic formula,
+plain-language assumptions, JuliaMono syntax colors and a green library proof.
+
 Keep importable code in a topic directory such as `dkvis/learning/matching/`:
 
 ```text

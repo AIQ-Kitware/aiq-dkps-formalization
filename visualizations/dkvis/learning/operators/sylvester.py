@@ -79,6 +79,7 @@ class SySummary(SylvesterSlide):
 
 
 class SyComputation(SylvesterSlide):
+    bonus = True
     stage=3
     def body(self):
         self.start()
@@ -103,9 +104,14 @@ class SyFacts(SylvesterSlide):
 
 
 class SyLean(LessonLean):
+    assumptions = '$A,B,X$ are bounded real operators on an inner product space $E$. Form hypotheses are explicit below.'
     lesson_deck='operators-sylvester'
     lecture_id='sylvester'
     symbolic_facts=(('Define the linear map',r'\mathcal S_{A,B}(X)=AX-XB'),
                     ('Ordered form gap',r'\delta\|X\|\le\|\mathcal S_{A,B}(X)\|'))
     ownership='Accepted Tau Ceti: bounded Sylvester definition and ordered form-gap estimate.'
     notation=r'$\to_L$ means bounded linear map; $\langle\cdot,\cdot\rangle$ is the real inner product here.'
+
+
+class SyLeanGap(SyLean):
+    fact_index = 1

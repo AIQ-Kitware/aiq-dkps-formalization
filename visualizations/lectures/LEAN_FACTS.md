@@ -1,14 +1,17 @@
 # Lean companions for the lectures
 
-Each prerequisite lecture ends with a mathematical facts card followed by the
-same facts in Lean. The order of the examples matches the order of the formulas. On the Lean slide,
-each formula is repeated beside its corresponding code, with shared Lean
-assumptions above the rows.
-The code slide reads the `slide-begin` / `slide-end` region of the actual
-`facts.lean` companion; it is not a separately maintained transcription.
-Imports and the noncomputable-section command remain in the copyable file.
-Narration explains hypotheses and notation without spelling out every token.
-The earlier recap remains; two multiple-choice review scenes follow the Lean slide.
+Each lesson states its mathematical facts, then gives each corresponding Lean
+statement its own card. The symbolic formula stays beside the code. A short
+plain-language scope statement names the common assumptions; the complete Lean
+context, imports, and examples remain in the copyable `facts.lean` companion.
+The renderer reads each example directly from that file rather than maintaining
+a separate transcription. JuliaMono supplies consistent mathematical glyphs;
+Lean 4 syntax is colored, and the library-proof application is highlighted in
+green beneath the statement. `DKVIS_LEAN_FONT` selects another installed font.
+
+The core is followed by an explicitly optional numerical bonus slide, then the
+two multiple-choice study questions. Numerical details are not needed to follow
+the core argument or answer its conceptual questions.
 
 | Lecture | Companion | Library declarations used |
 | --- | --- | --- |
@@ -16,7 +19,6 @@ The earlier recap remains; two multiple-choice review scenes follow the Lean sli
 | Singular-value norms | [facts.lean](002000_singular_norms/facts.lean) | Tau Ceti `schatten_apply_of_ne_top` in `TauCeti.UnitarilyInvariantSeminorm`, and `LinearMap.singularValues_linearIsometryEquiv_comp` / `singularValues_comp_linearIsometryEquiv` |
 | Matrix exponential | [facts.lean](002500_matrix_exponential/facts.lean) | Tau Ceti `ContinuousLinearMap.exp_add_smul`; Mathlib `NormedSpace.exp_mem_unitary_of_mem_skewAdjoint` and `Commute.exp_left` |
 | Variations | [facts.lean](003000_variations/facts.lean) | Mathlib `IsLocalMin.hasDerivAt_eq_zero` and `Matrix.trace_conjTranspose_mul_self_eq_zero_iff` |
-
 | Min-max | [facts.lean](002666_minmax/facts.lean) | Tau Ceti `LinearMap.IsSymmetric.eigenvalues_eq_iSup_iInf_re_inner` and `abs_eigenvalue_sub_eigenvalue_le_norm` |
 | Polar decomposition | [facts.lean](002833_polar/facts.lean) | Tau Ceti `LinearMap.polarFactor_comp_operatorAbs` and `norm_polarFactor_apply` |
 | Sylvester | [facts.lean](003500_sylvester/facts.lean) | Tau Ceti `ContinuousLinearMap.sylvester_apply` and `mul_norm_le_norm_sylvester_apply_of_le_re_inner_of_re_inner_le` |
@@ -82,3 +84,10 @@ The three operator-lecture companions were inspected against accepted source at
 the same available rc1 dependency cache described above; it is not a clean
 root-toolchain rebuild. Their provenance is detailed in the
 [operator topic guide](../dkvis/learning/operators/README.md).
+
+The November 5 typography revision reflowed the examples and rechecked all seven
+companions against the available rc1 cache. The exponential check again supplied
+the exact current-pin flow proof in an ignored scratch file, since the cache
+still exposes its older namespace. This does not claim a clean rc2 rebuild.
+The singular-value invariance statement uses a prefix application to keep lines
+short; the variations trace proof uses ordinary simplification of real conjugation.

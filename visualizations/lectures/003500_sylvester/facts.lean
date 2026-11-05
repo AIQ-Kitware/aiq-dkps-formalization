@@ -11,8 +11,11 @@ example : A.sylvester B X = A ∘L X - X ∘L B :=
   A.sylvester_apply B X
 
 example (c δ : ℝ)
-    (hA : ∀ x, (c + δ) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℝ)
-    (hB : ∀ y, RCLike.re ⟪B y, y⟫_ℝ ≤ c * ‖y‖ ^ 2) :
+    (hA : ∀ x, (c + δ) * ‖x‖ ^ 2 ≤
+      RCLike.re ⟪A x, x⟫_ℝ)
+    (hB : ∀ y, RCLike.re ⟪B y, y⟫_ℝ ≤
+      c * ‖y‖ ^ 2) :
     δ * ‖X‖ ≤ ‖A.sylvester B X‖ :=
-  A.mul_norm_le_norm_sylvester_apply_of_le_re_inner_of_re_inner_le hA hB X
+  A.mul_norm_le_norm_sylvester_apply_of_le_re_inner_of_re_inner_le
+    hA hB X
 -- slide-end

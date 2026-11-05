@@ -10,6 +10,13 @@ Recall: Know adjoints and orthogonal complements.
 
 Operator absolute value and polar decomposition.
 
+## PoSetup: Modulus, support, and the canonical factor
+
+Why: Fix the kernel convention before stating polar decomposition.
+Recall: $A^*$: adjoint; $|A|$: modulus; $U$: canonical partial isometry.
+
+A is a linear map between finite-dimensional inner product spaces. Real coordinates use transpose; complex coordinates use conjugate transpose. We write either adjoint as A star. A star A is positive, and absolute value A denotes its unique positive square root. This absolute value is an operator, not entrywise absolute values. The kernel of A consists of directions collapsed to zero. Its orthogonal complement is the surviving input space, also called the support here. The canonical polar factor U preserves lengths on that support and is zero on the kernel. We will construct it and prove A equals U times absolute value A. An arbitrary unitary extension is a separate object.
+
 ## PoQuestion: what part of a map changes lengths?
 
 Why: Extend scalar magnitude to operators.
@@ -47,13 +54,6 @@ Recall: A partial isometry is isometric on its initial space.
 
 We separated A into a positive modulus and a canonical partial isometry. The equal-norm identity made the construction possible. In Hilbert spaces the image of the modulus need not be closed, so the isometry is first extended to its closure. Accepted Tau Ceti modules cover both finite maps and bounded Hilbert-space operators. These are accepted independent implementations; their presence in our operator roadmap does not mean their proofs were all adapted from DKPS. The census distinguishes their provenance. Keep the canonical partial factor distinct from any further unitary extension.
 
-## PoComputation: Compute the factors with an SVD
-
-Why: Connect singular-value algorithms to the exact kernel convention.
-Recall: A equals L times Sigma times V adjoint.
-
-An SVD computes the modulus as V Sigma V adjoint. To get the canonical partial factor, put one on every strictly positive singular direction and zero on every zero singular direction, then multiply by L and V adjoint. Numerical software needs a tolerance to decide effective rank; the exact formula uses strict positivity. Be careful with the name polar decomposition in numerical libraries. For square matrices, SciPy's polar routine returns a unitary factor even at singular inputs. That is a unitary extension, and may differ on the kernel from the canonical factor shown here. Check the convention before comparing numerical output with a formal theorem.
-
 ## PoFacts: Two reusable polar facts
 
 Why: Record what holds even when the map is singular.
@@ -61,9 +61,23 @@ Recall: Finite real inner product spaces; A is any linear map.
 
 The first fact is factorization: canonical polar factor composed with operator absolute value equals A. The second says the factor preserves norms on the orthogonal complement of A's kernel. Neither fact requires A to be invertible. The zero-on-kernel convention is part of which factor we are naming. These facts explain why the singular example was a legitimate polar decomposition rather than an exception.
 
-## PoLean: Connect modulus and factor to their Lean names
+## PoLean: Polar factorization in Lean
 
-Why: Read both statements with their symbolic counterparts.
-Recall: Linear maps need not be invertible.
+Why: Read the canonical factorization without an invertibility assumption.
+Recall: $U|A|=A$.
 
-OperatorAbs is the Lean name for modulus and polarFactor for the canonical partial isometry. The first code example applies the accepted factorization theorem. The composition symbol means first apply the modulus, then the factor. The second example assumes x belongs to the orthogonal complement of the kernel and concludes equality of norms. These are finite-dimensional real specializations of accepted Tau Ceti statements. The bounded Hilbert-space API supplies the corresponding infinite-dimensional theory separately.
+A is an arbitrary linear map between finite real inner product spaces. OperatorAbs names its positive modulus and polarFactor its canonical partial isometry. The composition applies the modulus first and then the factor. The green proof invokes the accepted factorization theorem. Invertibility is not assumed. The canonical factor is already defined with its zero-on-kernel convention, so the factorization statement includes singular maps.
+
+## PoLeanSupport: Support isometry in Lean
+
+Why: Identify where the canonical factor preserves norms.
+Recall: $x\in(\ker A)^\perp\Longrightarrow\|Ux\|=\|x\|$.
+
+The hypothesis h x places the input in the orthogonal complement of the kernel of A. On this surviving input space, the canonical polar factor preserves its length. The green proof applies the accepted norm theorem. Without the support hypothesis the statement would fail for a nonzero kernel vector, because the canonical factor sends that vector to zero. This is why a canonical partial isometry must be distinguished from a chosen unitary extension.
+
+## PoComputation: Bonus: Compute the factors with an SVD
+
+Why: Connect singular-value algorithms to the exact kernel convention.
+Recall: A equals L times Sigma times V adjoint.
+
+As an optional numerical bonus, here is how this mathematical tool is used in computation. An SVD computes the modulus as V Sigma V adjoint. To get the canonical partial factor, put one on every strictly positive singular direction and zero on every zero singular direction, then multiply by L and V adjoint. Numerical software needs a tolerance to decide effective rank; the exact formula uses strict positivity. Be careful with the name polar decomposition in numerical libraries. For square matrices, SciPy's polar routine returns a unitary factor even at singular inputs. That is a unitary extension, and may differ on the kernel from the canonical factor shown here. Check the convention before comparing numerical output with a formal theorem.

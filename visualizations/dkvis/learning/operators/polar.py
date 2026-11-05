@@ -85,6 +85,7 @@ class PoSummary(PolarSlide):
 
 
 class PoComputation(PolarSlide):
+    bonus = True
     stage=3
     def body(self):
         self.start()
@@ -109,8 +110,13 @@ class PoFacts(PolarSlide):
 
 
 class PoLean(LessonLean):
+    assumptions = '$A:E\\to F$ is linear. Both spaces are finite real inner product spaces; $U$ is canonical.'
     lesson_deck='operators-polar'
     lecture_id='polar'
     symbolic_facts=(('Factorization',r'U|A|=A'),('Isometry on the support',r'x\in(\ker A)^\perp\Rightarrow\|Ux\|=\|x\|'))
     ownership='Tau Ceti: LinearMap.operatorAbs and LinearMap.polarFactor (accepted finite API).'
     notation=r'\texttt{operatorAbs} is $|A|$; \texttt{polarFactor} is the canonical $U$; $\circ_\ell$ is composition.'
+
+
+class PoLeanSupport(PoLean):
+    fact_index = 1

@@ -184,3 +184,15 @@ def test_existing_public_exports_are_numbered_without_moving_caches(tmp_path):
         assert not (tmp_path/name).exists()
     number_outputs(rows, tmp_path)  # Reapplying preserves outputs and caches.
     assert (cache/'speech.wav').read_bytes() == b'cached speech'
+
+
+def test_each_indexed_lecture_introduces_local_objects_and_separates_numerics():
+    from dkvis.lectures import lecture_decks
+    for name in lecture_decks():
+        slides = get_deck(name).slides
+        setups = [i for i, s in enumerate(slides) if s.module == 'dkvis.learning.orientation']
+        assert setups == [1]
+        bonus = [i for i, s in enumerate(slides) if s.scene.endswith('Computation')]
+        assert bonus == [len(slides)-3]
+        assert slides[bonus[0]].depth == '*'
+        assert all(i < bonus[0] for i, s in enumerate(slides) if 'Lean' in s.scene)

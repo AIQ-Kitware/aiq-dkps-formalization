@@ -321,6 +321,7 @@ class ExFacts(ExponentialSlide):
 
 
 class ExLean(LessonLean):
+    assumptions = 'Complete real inner product space $E$. Operators are bounded; scalar times are real.'
     lesson_deck = 'prereq-matrix-exponential'
     lecture_id = 'matrix_exponential'
     symbolic_facts = (
@@ -333,6 +334,7 @@ class ExLean(LessonLean):
 
 
 class ExComputation(ExponentialSlide):
+    bonus = True
     stage = 3
 
     def body(self):
@@ -347,3 +349,11 @@ class ExComputation(ExponentialSlide):
             buff=.34), y=.45, height=3.5)
         self.source(r'Al-Mohy and Higham (2009, 2011); SciPy expm and expm\_multiply.')
         self.takeaway('The power series defines the function; the numerical algorithm depends on the output you need.')
+
+
+class ExLeanLengths(ExLean):
+    fact_index = 1
+
+
+class ExLeanSplit(ExLean):
+    fact_index = 2

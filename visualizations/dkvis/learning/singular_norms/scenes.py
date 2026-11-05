@@ -255,6 +255,7 @@ class SnFacts(NormSlide):
 
 
 class SnLean(LessonLean):
+    assumptions = r'Finite real inner product space $E$; $A$ is linear; $1\le p<\infty$.'
     lesson_deck = 'prereq-singular-norms'
     lecture_id = 'singular_norms'
     symbolic_facts = (
@@ -266,6 +267,7 @@ class SnLean(LessonLean):
 
 
 class SnComputation(NormSlide):
+    bonus = True
     stage = 3
 
     def body(self):
@@ -280,3 +282,8 @@ class SnComputation(NormSlide):
             buff=.34), y=.45, height=3.5)
         self.source('SciPy: scipy.linalg.svd (gesdd); scipy.sparse.linalg.svds.')
         self.takeaway('Choose whether you need the whole singular-value list or only its leading part.')
+
+
+class SnLeanCoordinates(SnLean):
+    assumptions = r'Finite real inner product space $E$; $A$ is linear; $U,V$ are isometric isomorphisms.'
+    fact_index = 1

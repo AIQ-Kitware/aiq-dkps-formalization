@@ -17,6 +17,13 @@ Recall: No notation is needed on the title slide.
 
 The exponential of a matrix.
 
+## ExSetup: The matrix, the flow, and one trajectory
+
+Why: Separate three objects that are easy to conflate.
+Recall: $A$: fixed matrix; $t$: scalar; $x_0$: initial vector.
+
+A is a fixed real square matrix and t is an ordinary real number. A squared means matrix multiplication, and A to the zero is the identity. Exponential t A is another matrix, defined by a power series in those matrix powers. Once that matrix is applied to one initial vector x zero, it gives a particular trajectory x of t. The matrix flow and the trajectory are different objects. We will connect them to differentiation without assuming you have seen that connection elsewhere. When a generator B has transpose equal to minus B, we call it skew-symmetric; later we will prove that its exponential preserves lengths.
+
 ## Ex00Question: One matrix function, two ways to understand it
 
 Why: Read scalar and vector trajectories at one shared time.
@@ -265,13 +272,6 @@ negative-determinant transporter: multiply the transporter by the
 exponential curve. With these distinctions in place, return to feasible
 variations and follow how an exact motion produces a derivative test.
 
-## ExComputation: Computing an exponential versus applying one
-
-Why: A definition by a series does not prescribe the best numerical evaluation method.
-Recall: A rational approximation is a quotient of polynomials; s controls scaling and squaring.
-
-The power series defines the matrix exponential, but a production numerical routine does more than sum a fixed number of its terms. For a dense matrix, SciPy uses an adaptive Padé approximation with scaling and squaring. First scale t times A down by a power of two. On that smaller input, approximate the exponential by a ratio of matrix polynomials. The displayed equation is solved as a linear system; we do not need to form a matrix inverse explicitly. Repeated squaring then reverses the scaling. The approximation degree and scaling are chosen using error estimates. If we only need the product of the exponential with one or a few vectors, we can instead use an exponential-action algorithm such as expm multiply. That can avoid building a large full exponential, especially for sparse operators. Which method is appropriate depends on the desired output, matrix structure, accuracy, and cost.
-
 ## ExFacts: Three exponential facts to use in a proof
 
 Why: Assemble exact motions with known algebraic properties.
@@ -279,9 +279,30 @@ Recall: A and B are bounded operators on a real Hilbert space; star means adjoin
 
 These are the three reusable rules behind our motion construction. Exponentials of the same generator compose by adding their times. A skew-adjoint generator exponentiates to an orthogonal map. Finally, an operator that commutes with a projection continues to commute with it after exponentiation. For our feasible curve, apply the last two rules to t times B. Skew-adjointness preserves lengths, and commutation preserves the source decomposition. In finite orthonormal coordinates, the adjoint is just the transpose. The identities on this slide do not require finite dimension, but they do require bounded generators; we are not asserting a theorem about general unbounded operators here.
 
-## ExLean: The same three facts in Lean
+## ExLean: Composition of the flow in Lean
 
-Why: Connect the flow and feasibility construction to the library operations.
-Recall: NormedSpace.exp is the operator exponential; the bullet denotes scalar multiplication.
+Why: Connect addition of times to composition of maps.
+Recall: $e^{(s+t)A}=e^{sA}e^{tA}$.
 
-Each row pairs the symbolic rule on the left with its Lean application on the right. The first example applies Tau Ceti's flow identity. Its comp operation means composition, with the right-hand map applied first. The second example uses Mathlib: membership in skewAdjoint means the adjoint is the negative of the operator, and membership in unitary means both inverse identities hold. On a real inner product space this is an orthogonal operator. The third example is Mathlib's commutation rule for the exponential. It says that exponentiating the left operator preserves its commutation with the right one. Each statement is shown with its assumptions, including completeness of the ambient space. These are bounded-operator results that include the matrices used in this lecture.
+The common assumptions specify a complete real inner product space. The copyable companion supplies a local rational-algebra instance for the exponential API; it adds no mathematical restriction on the space. The statement fixes one generator A and composes its flows at times s and t. Dot comp is composition of bounded linear maps. The green proof line applies the accepted Tau Ceti flow theorem. The same generator matters; two arbitrary noncommuting matrices do not satisfy this rule.
+
+## ExLeanLengths: Length preservation in Lean
+
+Why: Recognize the exact hypothesis behind an orthogonal exponential.
+Recall: $B^*=-B\Longrightarrow e^B$ is orthogonal.
+
+SkewAdjoint means the adjoint of B is minus B. Unitary means that the map times its adjoint, in either order, is identity; over the real field this is orthogonality. The statement says that exponentiating a skew-adjoint bounded operator gives such a map. The green proof applies Mathlib directly. For a real time parameter, apply this result to t times B, which is still skew-adjoint.
+
+## ExLeanSplit: Preservation of a split in Lean
+
+Why: Keep commutation distinct from orthogonality.
+Recall: $BP=PB\Longrightarrow e^BP=Pe^B$.
+
+Commute names the equation B P equals P B. The conclusion is the same equation after exponentiating B. The proof line uses the general exponential commutation API. When P is a projection, this says the flow preserves its two subspaces. No skew-adjoint hypothesis appears in this fact: commutation and length preservation are separate conclusions, obtained from separate hypotheses.
+
+## ExComputation: Bonus: Computing an exponential versus applying one
+
+Why: A definition by a series does not prescribe the best numerical evaluation method.
+Recall: A rational approximation is a quotient of polynomials; s controls scaling and squaring.
+
+As an optional numerical bonus, here is how this mathematical tool is used in computation. The power series defines the matrix exponential, but a production numerical routine does more than sum a fixed number of its terms. For a dense matrix, SciPy uses an adaptive Padé approximation with scaling and squaring. First scale t times A down by a power of two. On that smaller input, approximate the exponential by a ratio of matrix polynomials. The displayed equation is solved as a linear system; we do not need to form a matrix inverse explicitly. Repeated squaring then reverses the scaling. The approximation degree and scaling are chosen using error estimates. If we only need the product of the exponential with one or a few vectors, we can instead use an exponential-action algorithm such as expm multiply. That can avoid building a large full exponential, especially for sparse operators. Which method is appropriate depends on the desired output, matrix structure, accuracy, and cost.

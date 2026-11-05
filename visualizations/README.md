@@ -58,6 +58,14 @@ then a highlighted answer and explanation. Pause for more time when needed.
 The questions and speech live together in each lecture folder’s `quiz.yaml`. `make prerequisites` builds
 all four, including TTS-ready text; it does not contact a speech server.
 
+Every indexed lecture supplies its own local setting and notation. The Lean
+closing section shows one fact per slide: symbolic formula, visible scope,
+JuliaMono code with syntax colors, and a green library-proof application. Full
+Lean context and imports stay in the copyable `facts.lean` files. Set
+`DKVIS_LEAN_FONT` to use another installed font. Each lecture's numerical
+considerations are an explicitly optional bonus after the core/Lean material and
+before its study questions.
+
 The [lecture library](lectures/README.md) is indexed by `lectures/index.yaml`.
 Its prerequisites determine a NetworkX topological order. The organizer
 preserves existing six-digit folder numbers and fills gaps for new lessons;
@@ -294,7 +302,7 @@ Current presentations (in addition to the preserved reference decks):
 
 ### Compact matching proof talk
 
-`matching-proof-talk` is a separate presentation with **13 proof slides and two review questions**,
+`matching-proof-talk` is a separate presentation with **13 proof slides, a local setup card, a numerical bonus, and two review questions**,
 assuming the usual principal-angle, spectral, and variational background.
 It concentrates on stationarity, common invariant blocks, the unrestricted
 two-angle minimum, and the trace-norm limit. The existing 40-slide learner

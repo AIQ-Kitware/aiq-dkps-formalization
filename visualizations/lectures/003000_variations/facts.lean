@@ -8,13 +8,13 @@ import Mathlib.Algebra.Order.Star.Real
 variable {n : Type*} [Fintype n] [DecidableEq n]
 
 example {f : ℝ → ℝ} {d : ℝ}
-    (hmin : IsLocalMin f 0) (hd : HasDerivAt f d 0) :
+    (hmin : IsLocalMin f 0)
+    (hd : HasDerivAt f d 0) :
     d = 0 :=
   hmin.hasDerivAt_eq_zero hd
 
 example (C : Matrix n n ℝ) :
     (C.transpose * C).trace = 0 ↔ C = 0 := by
-  simpa only [Matrix.conjTranspose_eq_transpose_of_trivial]
-    using (Matrix.trace_conjTranspose_mul_self_eq_zero_iff
-      (A := C))
+  simpa using
+    (Matrix.trace_conjTranspose_mul_self_eq_zero_iff (A := C))
 -- slide-end

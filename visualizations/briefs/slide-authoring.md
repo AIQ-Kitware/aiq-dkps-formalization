@@ -65,12 +65,13 @@ symbolic rule in the existing content column; otherwise emphasize the rule
 without adding another panel. Keep the example values and animation visible.
 
 
-On a Lean companion slide, repeat the symbolic statement beside the code that
-proves it. Match the order of the preceding mathematical facts card. Keep common
-assumptions visible, make the notation correspondence explicit, and wrap code
-lines in the checked companion file rather than shrinking long lines until they
-are unreadable. `LessonLean.symbolic_facts` supplies the paired labels/formulas;
-the code is read from the actual examples in `facts.lean`.
+Give each Lean fact its own slide. Repeat its symbolic statement beside the
+actual checked example, with its mathematical scope visible in plain language.
+Keep the complete Lean context and imports in `facts.lean`; do not shrink a block
+of repeated typeclass boilerplate onto every card. Use the shared JuliaMono/
+Lean-4 syntax renderer and the green library-proof highlight. Wrap source at valid
+Lean boundaries. `LessonLean.symbolic_facts` supplies paired labels/formulas;
+`fact_index` chooses one actual example from the companion for each card.
 
 
 ## Mathematical meaning and numerical computation
@@ -83,7 +84,19 @@ blue for the second coordinate, and violet for time. Label the quantities as wel
 as coloring them. Use the same coordinate colors on later plane diagrams.
 
 When a topic has a non-obvious numerical side, include one short computation
-coda near the end, before the mathematical-facts/Lean closing pair. Explain the
+**bonus** slide after the core recap, mathematical facts, and Lean cards, before
+the study questions. Mark its `SlideUse.depth` as `"*"` and its scene `bonus=True`;
+the heading and narration must clearly identify its optional status. Explain the
 choice of algorithm and desired output, cite primary papers or official library
 documentation, and distinguish a teaching calculation from production numerical
 practice. Avoid claims that one algorithm is universally best.
+
+## Standalone lessons
+
+Each indexed lecture opens with its own setting, goal, and a compact dictionary
+of the objects used in that lecture. The YAML prerequisite graph recommends a
+learning order; it is not a license to leave symbols undefined or refer viewers
+to another video for the local setup. A specialist talk can still assume its
+stated standard mathematical background without reteaching it. Keep the local
+notation card and its narration synchronized, and define new proof-specific
+objects again when they enter the argument.

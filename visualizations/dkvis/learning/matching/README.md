@@ -4,8 +4,8 @@ Two presentations of the same proof, with different audiences:
 
 | Deck | Audience and purpose | Scenes | Transcript |
 | --- | --- | --- | --- |
-| `matching-proof` | A learner following the geometry, legal variations, and block construction in detail | [study.py](study.py), 40 proof scenes + 2 review questions | [study.md](../../../lectures/README.md#matching_study) |
-| `matching-proof-talk` | A mathematical audience following a compact proof | [talk.py](talk.py), 13 proof scenes + 2 review questions | [proof-talk.md](../../../lectures/README.md#matching_proof) |
+| `matching-proof` | A learner following the geometry, legal variations, and block construction in detail | [study.py](study.py), 40 proof scenes + local setup + numerical bonus + 2 review questions | [study.md](../../../lectures/README.md#matching_study) |
+| `matching-proof-talk` | A mathematical audience following a compact proof | [talk.py](talk.py), 13 proof scenes + local setup + numerical bonus + 2 review questions | [proof-talk.md](../../../lectures/README.md#matching_proof) |
 
 Both use [model.py](model.py) for the checked phase and matrix examples, and
 `dkvis/novelty_math.py` for matching weights and the three-angle example.
@@ -54,3 +54,9 @@ Substitute `matching-proof` for the detailed study. Public outputs now carry
 the older `make matching`, `make matching-talk`, and
 `render_matching_video.sh` commands are preserved. Speech settings stay in
 `tts.toml` and private endpoints in the ignored `.env`.
+
+The local setup cards restate the admissible maps, full displacement norm,
+principal-angle labels, and meaning of a matching. The graph reduction itself
+remains part of the proof; the blossom-based numerical implementation and
+floating-point issues are a separate bonus after the proof. That bonus follows
+[NetworkX's documented conventions](https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.matching.max_weight_matching.html).

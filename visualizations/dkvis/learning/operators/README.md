@@ -2,8 +2,9 @@
 
 Three lectures connect central accepted Tau Ceti results to reusable proof ideas.
 They assume basic linear algebra; each gives motivation, a short historical
-connection, a proof or construction, an example, a recap, a computation coda,
-and paired mathematical/Lean facts. Two multiple-choice questions close each
+connection, a local notation refresher, a proof or construction, an example, a recap,
+and paired mathematical/Lean facts, one Lean statement per card. Numerical
+considerations follow as an optional bonus slide. Two multiple-choice questions close each
 lecture, with a thinking interval before the explained answer.
 
 | Lecture | Proof idea | Prerequisites |

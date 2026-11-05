@@ -10,6 +10,13 @@ Recall: Know operator norms and matrix exponentials.
 
 Sylvester equations and spectral separation.
 
+## SySetup: The equation and the ordered gap
+
+Why: State what is known, what is unknown, and which norm is used.
+Recall: $AX-XB=R$; $A\ge(c+\delta)I$ and $B\le cI$; $\delta>0$.
+
+A and B are known self-adjoint matrices, acting on possibly different spaces. X is the unknown map from the B space to the A space, and R is a known map of the same shape. The norm in this lecture is the operator norm: largest output length on unit inputs. An ordered gap means A is above c plus delta times identity in quadratic forms, while B is below c times identity; delta is positive. A quadratic-form inequality compares the inner products of the two sides with the same vector. Finally, exponential t A is defined by its matrix power series. We use that flow to derive an integral estimate, then explain which part extends to bounded Hilbert-space operators.
+
 ## SyQuestion: Why a residual needs an inverse bound
 
 Why: Relate the matrix equation to scalar division.
@@ -47,13 +54,6 @@ Recall: An ordered form gap is stronger than pairwise noncoincidence.
 
 We learned that the Sylvester map is linear in X. Different spectral configurations and different norms lead to different inverse bounds. The constant-one operator-norm estimate proved here uses an ordered quadratic-form gap. Do not replace that hypothesis by arbitrary noncoincident spectra. Accepted Tau Ceti has bounded-operator results and separate domain-aware partial-map results. The latter retain domain hypotheses for unbounded operators. Their accepted DKPS adaptation and the independently implemented bounded theory have distinct provenance in the census. This finite example is not a proof of all those unbounded claims.
 
-## SyComputation: Solve without building a huge Kronecker matrix
-
-Why: Use structure in the numerical linear equation.
-Recall: Our convention has a minus sign before X B.
-
-For dense matrices, Bartels–Stewart methods use Schur decompositions, solve the resulting triangular matrix equations, then transform back. This avoids explicitly forming the much larger Kronecker system. SciPy's solve_sylvester uses the convention A X plus X B equals Q. To solve our equation, pass minus B as its second argument. Afterwards measure A X minus X B minus R. A small computed residual becomes a solution-error estimate only after a valid inverse bound is available, just as in the motivation.
-
 ## SyFacts: The definition and the gap estimate
 
 Why: Distinguish the operator being inverted from its inverse bound.
@@ -61,9 +61,23 @@ Recall: Use bounded real linear maps and quadratic-form inequalities.
 
 The first reusable statement defines the Sylvester operator at X as A composed with X minus X composed with B. The second gives delta times norm X at most the norm of that result under the displayed ordered form bounds. The accepted bounded-operator lemma is broader than our motivation: it does not need finite dimension and does not require separate self-adjointness hypotheses when these real-part form bounds are supplied. In the lecture we used self-adjoint operators to explain the exponential decay geometrically.
 
-## SyLean: Read the exact accepted form-bound theorem
+## SyLean: The Sylvester definition in Lean
 
-Why: Connect each symbolic expression to its library statement.
-Recall: The arrow with L denotes a bounded linear map.
+Why: Separate the map definition from the inverse estimate.
+Recall: $\mathcal S_{A,B}(X)=AX-XB$.
 
-The first code example expands the accepted Sylvester definition. The second names its two form hypotheses explicitly and applies the norm estimate. The scalar c positions the gap and delta is its width in our positive-gap application. The library inequality is multiplicative, so no division or positivity assumption is needed just to state that lemma. To divide by delta as we did earlier, require delta positive. These are applications of the accepted bounded API, not replacements for the separate domain-aware unbounded theorems.
+A, B, and X are bounded real linear maps. This displayed specialization uses one space for compact notation, although the accepted API also allows two spaces. Sylvester A B is itself a bounded linear map acting on the unknown X. Expanding its definition gives A composed with X minus X composed with B. The green line applies the defining equality. The estimate requires additional form hypotheses, which appear on their own card next.
+
+## SyLeanGap: The ordered-gap estimate in Lean
+
+Why: Read the actual form hypotheses before using the bound.
+Recall: $\delta\|X\|\le\|AX-XB\|$.
+
+The assumptions h A and h B explicitly bound the real parts of the quadratic forms on every vector. Their endpoints are c plus delta and c. Under these conditions, the accepted theorem bounds delta times norm X by the norm of the Sylvester output. It does not require finite dimension or separate self-adjointness assumptions once these form bounds are given. The inequality is multiplicative. For our divided residual-over-gap estimate we additionally require delta positive. The long green theorem name is the library proof of this exact implication.
+
+## SyComputation: Bonus: Solve without building a huge Kronecker matrix
+
+Why: Use structure in the numerical linear equation.
+Recall: Our convention has a minus sign before X B.
+
+As an optional numerical bonus, here is how this mathematical tool is used in computation. For dense matrices, Bartels–Stewart methods use Schur decompositions, solve the resulting triangular matrix equations, then transform back. This avoids explicitly forming the much larger Kronecker system. SciPy's solve_sylvester uses the convention A X plus X B equals Q. To solve our equation, pass minus B as its second argument. Afterwards measure A X minus X B minus R. A small computed residual becomes a solution-error estimate only after a valid inverse bound is available, just as in the motivation.

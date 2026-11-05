@@ -15,6 +15,8 @@ Mathematical source: the matching theorem and proof in
 Lean endpoint: `exists_minimizing_real_nuclear_transport_matching` in
 `DavisKahan/FiniteDimensional/DirectRotation/RealNuclearMatching.lean`.
 
+Numerical reference: https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.matching.max_weight_matching.html
+
 ## T00Statement: Exact real trace-norm transport
 
 Why: The unrestricted orthogonal minimum is a finite matching problem.
@@ -28,6 +30,13 @@ cost b sub i j, four times the sine of half their angle sum. Repeated angle valu
 retain distinct labels. Zero angles can be fixed, and right angles are allowed.
 The assertion includes attainment. The main proof question is why arbitrary
 mixing of many principal planes cannot improve this matching value.
+
+## T00Setup: Local notation for the matching argument
+
+Why: Read the proof independently of the longer study deck.
+Recall: $W\in O(n)$, $W(K)=L$; $\theta_i$: positive principal angles; $M$: matching.
+
+K and L are equal-dimensional real subspaces, and W ranges over the full orthogonal group, including both determinant signs. The full displacement cost is the sum of the singular values of identity minus W on the ambient space. Positive principal angles are the canonical paired-plane angles between K and L; equivalently, their cosines come from singular values of frame overlap. Repeated angles retain separate labels. A matching is a set of disjoint pairs of these labels, with unmatched vertices allowed. We will use stationarity at a chosen minimizer to derive blocks; we do not assume every feasible map already has that structure. This talk supplies its proof-specific notation locally and assumes the usual spectral and variational background.
 
 ## T01ProofStrategy: Find the decomposition at a minimizer
 
@@ -264,3 +273,10 @@ minimal over every ambient orthogonal transporter. The proof rests on
 stationarity, common invariant blocks, unrestricted local minima, and uniform
 continuation to the trace norm. A finite matching supplies both the value and
 an actual attainer.
+
+## MatchingComputation: Bonus: implementing the matching reduction
+
+Why: Separate a numerical graph solver from the proof of the reduction.
+Recall: $a_i$: singleton cost; $b_{ij}$: pair cost; $g_{ij}=a_i+a_j-b_{ij}$.
+
+As an optional numerical bonus, turn the exact reduction into code. On this card, a sub i denotes a singleton cost, and b sub i j denotes the paired cost. The edge saving g sub i j is the sum of the two singleton costs minus the pair cost. Build one vertex per angle label and weight each edge by its pair savings. A general-graph maximum-weight matching algorithm selects disjoint pairs; a bipartite assignment solver would impose an extra restriction. NetworkX exposes a blossom-based implementation. Keep maxcardinality false, because we maximize savings rather than the number of paired labels. Recover the actual orthogonal transporter from the selected local blocks, then verify its constraint and displacement cost. Floating-point weights can select a slightly suboptimal matching near a tie, so precision is part of the numerical implementation, separate from the exact reduction proved in the lecture.

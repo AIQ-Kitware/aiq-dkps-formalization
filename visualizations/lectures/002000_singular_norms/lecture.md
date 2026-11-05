@@ -14,6 +14,13 @@ Recall: No notation is needed on the title slide.
 
 Singular values and displacement cost.
 
+## SnSetup: Our local notation
+
+Why: Distinguish matrix entries, singular values, and norms.
+Recall: $s_j(T)$: singular values; $\|T\|_*$: trace norm.
+
+For this lecture, T is a real matrix. T transpose is its adjoint in real coordinates. Apply T and then its transpose: the resulting square matrix T transpose T has nonnegative eigenvalues. Their nonnegative square roots are the singular values of T, which we write s sub j of T. They describe the stretch factors along suitable orthonormal input directions. The operator norm takes the largest stretch factor. The trace norm adds all of them; the Frobenius norm is the square root of the sum of their squares. We will motivate these choices geometrically. When W is a motion, identity minus W is the displacement map. Its singular values measure movement, not the singular values of W itself.
+
 ## Sn00Question: What does it cost to move a whole space?
 
 Why: Two sensible measurements can prefer different maps.
@@ -208,13 +215,6 @@ compute the displacement costs that the matching theorem minimizes. The
 remaining question is how a minimizer can reveal useful structure. For that,
 we need variations that remain inside the set of allowed transporters.
 
-## SnComputation: Computing the singular values you actually need
-
-Why: The chosen norm determines how much spectral information a numerical routine must return.
-Recall: The singular-value list determines the Schatten costs introduced in this lecture.
-
-For a dense matrix, numerical libraries call a mature singular value decomposition algorithm. SciPy's default dense driver uses LAPACK's divide and conquer routine. Once the singular values are available, computing the norms is a scalar calculation. For a very large sparse matrix, an iterative partial decomposition can seek only a few singular values. That can suit a task needing the leading stretch, provided the approximation has converged sufficiently. It does not give the full trace norm merely by summing a short leading list: the omitted values may still contribute. The practical question is therefore which part of the singular-value list our objective needs, and how accurately it must be computed.
-
 ## SnFacts: Two singular-value facts to use in a proof
 
 Why: Calculate a displacement cost in whichever orthonormal coordinates are easiest.
@@ -222,9 +222,23 @@ Recall: A acts on a finite-dimensional real inner product space; p is at least o
 
 The first formula says exactly how a finite Schatten norm is computed from the singular values. Raise each stretch to the power p, add, and take the power one over p. At p equals one, this adds the stretches; at p equals two, it gives the Frobenius norm. The second identity says that orthogonal changes of coordinates on either side leave the complete singular-value list unchanged. Together these facts justify calculating a Schatten cost in convenient coordinates. They do not justify adding the costs of arbitrary domain restrictions. For that, we still need genuinely separate orthogonal input and output blocks, as we saw earlier.
 
-## SnLean: The same two facts in Lean
+## SnLean: The finite Schatten formula in Lean
 
-Why: See the actual Schatten API and its coordinate-invariance theorem.
-Recall: schatten is Tau Ceti's Schatten seminorm; singularValues is the singular-value sequence.
+Why: Read the hypotheses of the norm formula.
+Recall: $N_p(A)=(\sum_j s_j(A)^p)^{1/p}$.
 
-Each row pairs the symbolic rule on the left with its Lean application on the right. Both facts here use accepted Tau Ceti declarations. The variable p is an extended nonnegative real, so Lean allows infinity as well as finite exponents. The Fact assumption supplies p at least one, and the hypothesis hp excludes infinity for the displayed power formula. The finite singular-value sum ignores the zero tail of the sequence. In the second example, U and V are isometric linear isomorphisms: orthogonal coordinate changes in this real setting. The two rewrite steps remove the left and right coordinate changes. The returned singular-value sequence is therefore exactly the original one. Tau Ceti packages Schatten costs as seminorms and separately proves they vanish only on the zero map.
+The left formula is the finite-exponent Schatten norm. On the right, the finite-dimensional real space and exponent assumptions are explicit. The type allows infinity, so the hypothesis h p excludes it; the typeclass Fact supplies the lower bound one. SingularValues is a sequence with a zero tail. The indexed sum therefore gives the finite singular-value sum. The green proof line applies the accepted formula. This card concerns the value formula; invariance is a separate statement.
+
+## SnLeanCoordinates: Coordinate invariance in Lean
+
+Why: Identify which changes of coordinates preserve the singular values.
+Recall: $s(UAV)=s(A)$ for orthogonal $U,V$.
+
+Here U and V are isometric linear isomorphisms: orthogonal changes of coordinates in the finite real setting. The circled composition symbol means composition of linear maps. The conclusion says that the entire singular-value sequence is unchanged when we compose on the left and right by these isometries. The proof uses the two accepted invariance theorems in succession. Once the sequence is unchanged, every norm defined from that sequence is unchanged as well.
+
+## SnComputation: Bonus: Computing the singular values you actually need
+
+Why: The chosen norm determines how much spectral information a numerical routine must return.
+Recall: The singular-value list determines the Schatten costs introduced in this lecture.
+
+As an optional numerical bonus, here is how this mathematical tool is used in computation. For a dense matrix, numerical libraries call a mature singular value decomposition algorithm. SciPy's default dense driver uses LAPACK's divide and conquer routine. Once the singular values are available, computing the norms is a scalar calculation. For a very large sparse matrix, an iterative partial decomposition can seek only a few singular values. That can suit a task needing the leading stretch, provided the approximation has converged sufficiently. It does not give the full trace norm merely by summing a short leading list: the omitted values may still contribute. The practical question is therefore which part of the singular-value list our objective needs, and how accurately it must be computed.

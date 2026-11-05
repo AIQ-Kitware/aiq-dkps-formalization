@@ -10,6 +10,13 @@ Recall: Symmetric matrices have orthonormal eigenbases.
 
 Rayleigh quotients, min-max, and eigenvalue stability.
 
+## MmSetup: The ordering and the directional measurement
+
+Why: Fix the spectral convention locally.
+Recall: $\lambda_0\ge\cdots\ge\lambda_{n-1}$; $\rho_A(x)=x^TAx$ for unit $x$.
+
+We work with real symmetric matrices of size n. The spectral theorem gives an orthonormal eigenbasis. List the eigenvalues in decreasing order, beginning with index zero; repeated eigenvalues are allowed. For a unit vector x, its Rayleigh quotient is x transpose A x. For a nonunit vector the usual quotient divides this expression by squared length, but every vector in our optimization will be normalized. The operator norm of a perturbation H is its largest output length on unit inputs. V names a candidate subspace, and dimension V equals k plus one will be the key constraint. These definitions are all we need to formulate the variational problem.
+
 ## MmQuestion: Which eigenvalue facts survive a perturbation?
 
 Why: Control eigenvalues without following individual eigenvectors.
@@ -49,13 +56,6 @@ Recall: The spectral theorem supplies an orthonormal eigenbasis.
 
 The chain was directional measurement, weighted average, dimension-forced intersection, and an attaining leading eigenspace. That established the variational characterization. A uniform perturbation bound then passed through its two extrema to give Weyl stability. Courant and Fischer's principle and Weyl's inequality are classical mathematics. The accepted Tau Ceti CourantFischer file includes a proof adaptation from this project's development; the provenance census records that connection precisely.
 
-## MmComputation: How to compute the spectrum
-
-Why: Separate the proof of stability from a numerical algorithm.
-Recall: The variational formula characterizes exact eigenvalues.
-
-For a dense symmetric or Hermitian matrix, use a routine designed for that structure, such as SciPy's eigh. Its implementations reduce the structured problem before solving it; the variational formula is a proof tool, not a prescription to search through all subspaces. Check normalization and the residual of any computed eigenpair. Also check ordering. This lecture and the Lean theorem use decreasing, zero-based eigenvalues. SciPy returns increasing eigenvalues. Reverse the list when comparing corresponding indices. A small residual supports an approximate eigenpair; selecting a particular eigenspace still requires separation information.
-
 ## MmFacts: The two reusable facts
 
 Why: Record exact hypotheses alongside the conclusions.
@@ -63,9 +63,23 @@ Recall: Finite-dimensional real inner product spaces; symmetric operators.
 
 Here are the facts to carry into another proof. First, the k-th decreasing eigenvalue is the supremum, over subspaces of dimension k plus one, of the infimum Rayleigh quotient on their unit vectors. In finite dimensions these extrema are attained. Second, equally ordered eigenvalues of two symmetric operators differ by at most the operator norm of their difference. The field, finite dimension, symmetry, and indexing convention belong to the statement.
 
-## MmLean: The same statements in Lean
+## MmLean: Courant–Fischer in Lean
 
-Why: Connect each symbolic fact to its checked library statement.
-Recall: Fin n indexes zero through n minus one.
+Why: Match the candidate dimensions and unit-vector restrictions.
+Recall: $\lambda_k=\sup_{\dim V=k+1}\inf_{\|x\|=1,x\in V}\langle Tx,x\rangle$.
 
-On the left are the same two formulas. On the right are applications of the accepted Tau Ceti theorems. IsSymmetric states symmetry. The dimension equality supplies the eigenvalue indexing type Fin n. The first statement uses indexed supremum and infimum to express the two variational extrema; its subtype conditions specify the candidate dimensions and unit vectors. The second applies the eigenvalue perturbation theorem directly. These examples consume the library proofs; they do not add new mathematical axioms.
+The assumptions fix a finite real inner product space, symmetric T, and its dimension n. Fin n indexes zero through n minus one. The first supremum ranges over subspaces whose dimension is k plus one. The inner infimum ranges over unit vectors lying in that subspace. These subtype conditions are the exact restrictions in the symbolic formula. The green line applies the accepted Courant–Fischer theorem. The second operator S is part of the shared companion context; it is needed only on the next Weyl card.
+
+## MmLeanWeyl: Weyl stability in Lean
+
+Why: Use the same ordering for the two symmetric operators.
+Recall: $|\lambda_k(T)-\lambda_k(S)|\le\|T-S\|$.
+
+Both T and S are symmetric on the same finite real inner product space. Their eigenvalues use the same dimension witness and decreasing index k. The norm on the difference of bounded linear maps is the operator norm. The displayed conclusion is exactly the eigenvalue stability bound. The green line applies the accepted Tau Ceti theorem. There is no eigengap assumption in this statement; controlling eigenspaces is a different problem.
+
+## MmComputation: Bonus: How to compute the spectrum
+
+Why: Separate the proof of stability from a numerical algorithm.
+Recall: The variational formula characterizes exact eigenvalues.
+
+As an optional numerical bonus, here is how this mathematical tool is used in computation. For a dense symmetric or Hermitian matrix, use a routine designed for that structure, such as SciPy's eigh. Its implementations reduce the structured problem before solving it; the variational formula is a proof tool, not a prescription to search through all subspaces. Check normalization and the residual of any computed eigenpair. Also check ordering. This lecture and the Lean theorem use decreasing, zero-based eigenvalues. SciPy returns increasing eigenvalues. Reverse the list when comparing corresponding indices. A small residual supports an approximate eigenpair; selecting a particular eigenspace still requires separation information.

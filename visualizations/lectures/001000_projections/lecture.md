@@ -15,6 +15,13 @@ Recall: No notation is needed on the title slide.
 
 Subspaces and projections.
 
+## PrSetup: Our local notation
+
+Why: Know what each symbol names before using a projection.
+Recall: $K$: subspace; $P_K$: orthogonal projection; $Q$: frame.
+
+This lecture starts with real vectors, lengths, and perpendicular directions. K names a linear subspace. K perpendicular consists of all vectors perpendicular to every vector of K. The orthogonal projection P sub K keeps the part of a vector lying in K and removes its perpendicular part. A frame Q is a matrix whose columns give an orthonormal basis for K; Q transpose Q equals identity. Later we compare projections with another operator T. Saying P T equals T P means the order of those two operations does not matter. We will explain why this equation expresses preservation of both subspaces.
+
 ## Pr00Question: How do we describe a whole subspace?
 
 Why: We want to compare spaces without confusing them with a chosen basis.
@@ -184,13 +191,6 @@ crosses between them. T can be far from the identity while commuting with P.
 Next we will ask a different question: when a map moves vectors, how should
 we measure the total amount of movement?
 
-## PrComputation: Computing a projection through its frame
-
-Why: The projector is an operator, but we can apply it without forming its full matrix.
-Recall: D has linearly independent spanning columns; thin QR produces orthonormal columns Q.
-
-How would we compute this with actual data? A standard route is a thin QR factorization, usually built with Householder reflections. Its Q columns are an orthonormal frame for the same space as the input columns. To project a vector, first compute Q transpose times the vector to get frame coordinates, then multiply those coordinates by Q. This stores a frame rather than a full ambient projector. If the columns are nearly dependent, determining the numerical rank needs care: a pivoted QR or a singular value decomposition and a chosen threshold can help identify the usable directions. The mathematical projection formula remains the same once the subspace has been selected.
-
 ## PrFacts: Two projection facts to use in a proof
 
 Why: Keep the geometric split and the block criterion available for calculations.
@@ -198,9 +198,23 @@ Recall: P is the orthogonal projection onto K; P perpendicular projects onto its
 
 Here are two facts you can take into another proof. First, any vector is the sum of its two orthogonal projected components. This lets us prove an operator identity by checking its action on the two spaces separately. Second, the off-diagonal part of an operator vanishes exactly when that operator commutes with the projection. The off-diagonal part is the sum of the two blocks that cross between the spaces. This equivalence makes precise our statement that commutation means no transfer between the two pieces. We assume that the orthogonal projection exists; in a Hilbert space, a closed subspace has one.
 
-## PrLean: The same two facts in Lean
+## PrLean: Projection splitting in Lean
 
-Why: Match each reusable identity to an available library declaration.
-Recall: K.starProjection is P; K.offDiagBlock T is the off-diagonal part of T.
+Why: Match the geometric decomposition to its checked equality.
+Recall: $P_Kx+P_{K^\perp}x=x$.
 
-Each row pairs the symbolic rule on the left with its Lean application on the right. The code follows the same order. The first example uses Mathlib's projection-splitting theorem. The second uses Tau Ceti's criterion for a vanishing off-diagonal block. A Submodule is a linear subspace, and the HasOrthogonalProjection assumption supplies its orthogonal projection. The capital L in the arrow says that T is a bounded linear map. Commute is the equation saying the two multiplication orders agree. Each example states a proposition and then applies the named library theorem to prove it. The complete companion file contains the imports and can be checked or copied into a Lean session.
+The formula on the left splits any vector into its projected component and its perpendicular component. On the right, the assumptions name a real inner product space and a subspace with an orthogonal projection. StarProjection is the ambient projection. The statement applies the two complementary projections to x and adds them. The green library-proof line applies the established splitting theorem. The complete checked companion is the source of this code.
+
+## PrLeanBlocks: Commuting blocks in Lean
+
+Why: Connect the block criterion to a proposition with both directions.
+Recall: $T_{\rm off}=0\iff P_KT=TP_K$.
+
+This separate card records the block criterion. OffDiagBlock is the sum of the two crossing blocks relative to K and its orthogonal complement. Its vanishing is equivalent to commutation of T with the projection. The two-headed arrow is an equivalence, so the statement supplies both implications. The green proof invokes the accepted Tau Ceti criterion. Preserving each piece still allows arbitrary action inside each diagonal block.
+
+## PrComputation: Bonus: Computing a projection through its frame
+
+Why: The projector is an operator, but we can apply it without forming its full matrix.
+Recall: D has linearly independent spanning columns; thin QR produces orthonormal columns Q.
+
+As an optional numerical bonus, here is how this mathematical tool is used in computation. How would we compute this with actual data? A standard route is a thin QR factorization, usually built with Householder reflections. Its Q columns are an orthonormal frame for the same space as the input columns. To project a vector, first compute Q transpose times the vector to get frame coordinates, then multiply those coordinates by Q. This stores a frame rather than a full ambient projector. If the columns are nearly dependent, determining the numerical rank needs care: a pivoted QR or a singular value decomposition and a chosen threshold can help identify the usable directions. The mathematical projection formula remains the same once the subspace has been selected.
