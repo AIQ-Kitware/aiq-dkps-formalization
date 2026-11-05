@@ -172,6 +172,8 @@ def test_existing_public_exports_are_numbered_without_moving_caches(tmp_path):
              f'999999_{deck}.standalone.html']
     for name in files:
         (tmp_path/name).write_bytes(name.encode())
+    metadata = tmp_path/(files[0]+'.metadata.json')
+    metadata.write_text('generation provenance')
     cache = tmp_path/f'{deck}-narrated'
     cache.mkdir()
     (cache/'speech.wav').write_bytes(b'cached speech')
@@ -182,6 +184,7 @@ def test_existing_public_exports_are_numbered_without_moving_caches(tmp_path):
         target = tmp_path/(lecture_output_name(deck)+bare[len(deck):])
         assert target.read_bytes() == name.encode()
         assert not (tmp_path/name).exists()
+    assert (tmp_path/(lecture_output_name(deck)+'.kokoro.narrated.mp4.metadata.json')).read_text() == 'generation provenance'
     number_outputs(rows, tmp_path)  # Reapplying preserves outputs and caches.
     assert (cache/'speech.wav').read_bytes() == b'cached speech'
 

@@ -275,12 +275,17 @@ def main(argv=None):
                     seconds = narrated_segment(
                         visual, audio, segment, pause=pause, fps=args.fps, preset=args.preset
                     )
+                    from dkvis.presentation.captions import speech_parts
+                    audio_seconds=duration(audio)
+                    spoken_parts=speech_parts(ROOT/'renders',audio) or [dict(
+                        text=text,seconds=audio_seconds,model=settings['model'],voice=settings['voice'])]
                     builds.append(
                         dict(
                             number=k,
                             start=start,
                             end=start + seconds,
                             audio=str(audio),
+                            text=text, speech_seconds=audio_seconds, speech_parts=spoken_parts,
                             segment=str(segment),
                         )
                     )
@@ -346,6 +351,10 @@ def main(argv=None):
                 )
                 temporary.replace(output)
                 event.update(output_seconds=duration(output), bytes=output.stat().st_size)
+            from dkvis.presentation.provenance import record
+            record(output,args.deck,'video',theme=THEME,profile=profile,
+                   model=settings['model'],voice=settings['voice'],fps=args.fps,
+                   preset=args.preset,preview=bool(args.scenes))
             timeline = json.dumps(entries, indent=2) + "\n"
             (work / f'timeline-{profile}{".preview" if args.scenes else ""}.json').write_text(
                 timeline

@@ -261,7 +261,7 @@ def main(argv=None) -> None:
     renders.mkdir(exist_ok=True)
     out = output_name(args.deck)
     from dkvis.lectures import lecture_output_name
-    from dkvis.palette import OUTPUT_SUFFIX
+    from dkvis.palette import OUTPUT_SUFFIX, THEME
     public = lecture_output_name(args.deck) + OUTPUT_SUFFIX
     html = args.html or renders / f'{public}{".standalone" if args.one_file else ""}.html'
     folder = ["--folder", f"slides-{out}"]
@@ -280,6 +280,14 @@ def main(argv=None) -> None:
         from dkvis.presentation.narration import export
         manifest = export(renders / f"{public}-narration", deck_name=args.deck, theme=THEME)
         print(f"Narration:     {manifest.parent / 'presentation.txt'}")
+    from dkvis.presentation.provenance import record
+    outputs=[html]
+    if args.pdf: outputs.append(renders / f'{public}.pdf')
+    if args.handout: outputs.append(renders / f'{public}.handout.pdf')
+    if args.pptx: outputs.append(renders / f'{public}.pptx')
+    for artifact in outputs:
+        record(artifact,args.deck,'slides',theme=THEME,
+               quality=args.quality,fps=args.fps,scenes_reused=args.no_render)
     print(f"\nPresent live:  manim-slides present --folder slides-{out} {' '.join(names)}")
     print(f"Or open:       {html}")
 

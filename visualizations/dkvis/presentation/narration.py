@@ -112,12 +112,15 @@ def export(out: Path, *, deck_name: str, theme: str = "dark") -> Path:
     for old in beat_dir.glob("*.txt"):
         if re.fullmatch(r"\d{2,}-[A-Za-z_]\w*-\d{2,}\.txt", old.name) and old.name not in expected_beats:
             old.unlink()
+    from dkvis.presentation.provenance import snapshot, record
+    provenance=snapshot(deck_name,"transcript",theme=theme)
     manifest = out / "manifest.json"
     manifest.write_text(json.dumps({"deck": deck_name, "theme": theme,
-        "source": get_deck(deck_name).narration, "slides": entries}, indent=2) + "\n")
+        "source": get_deck(deck_name).narration, "slides": entries, "generation": provenance}, indent=2) + "\n")
     (out / "presentation.txt").write_text("\n\n".join(
         f"Slide {i}: {script.title}\n\n{script.text}"
         for i, script in enumerate(scripts.values(), 1)) + "\n")
+    record(out / "presentation.txt",deck_name,"transcript",theme=theme)
     return manifest
 
 

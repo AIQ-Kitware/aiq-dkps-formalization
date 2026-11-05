@@ -1,0 +1,27 @@
+deck: operators-sylvester
+scope: Attribution for topic-specific source files. Shared renderer and orientation components retain their separate
+  Git histories.
+slides:
+  initial_source_attribution:
+  - source: visualizations/dkvis/learning/operators/sylvester.py
+    models:
+    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    commit: b338f50b622a5de3bcc9cf80cafa8c7151d9917f
+    date: '2026-11-04T23:40:53-05:00'
+    basis: Co-authored-by attribution on the first tracked source commit; earlier imported ancestry may exist.
+transcript:
+  initial_source_attribution:
+  - source: visualizations/lectures/003500_sylvester/lecture.md
+    models:
+    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    commit: b338f50b622a5de3bcc9cf80cafa8c7151d9917f
+    date: '2026-11-04T23:40:53-05:00'
+    basis: Co-authored-by attribution on the first tracked source commit; earlier imported ancestry may exist.
+  - source: visualizations/lectures/003500_sylvester/quiz.yaml
+    models:
+    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    commit: b338f50b622a5de3bcc9cf80cafa8c7151d9917f
+    date: '2026-11-04T23:40:53-05:00'
+    basis: Co-authored-by attribution on the first tracked source commit; earlier imported ancestry may exist.
+note: These are recorded model attributions, not claims of mathematical priority or independently verified authorship.
+  Unknown variants remain unknown.

@@ -15,7 +15,7 @@ from urllib.parse import quote
 
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
-from starlette.responses import FileResponse, JSONResponse
+from starlette.responses import FileResponse, JSONResponse, PlainTextResponse, Response
 from starlette.routing import Mount, Route
 from starlette.staticfiles import StaticFiles
 
@@ -39,8 +39,20 @@ def within(root, relative):
     return path
 
 
-def chapters_for(root, media):
+def timeline_paths(root, media):
     """Prefer the timeline for this narrator; never borrow another profile's."""
+    # An explicitly named output still belongs to its recorded stable deck.
+    try:
+        sidecar=within(root,Path(str(media.relative_to(root))+'.metadata.json'))
+        metadata=json.loads(sidecar.read_text())
+        deck=metadata.get('deck');settings=metadata.get('settings',{})
+        profile=settings.get('profile')
+        if deck and profile and re.fullmatch(r'[A-Za-z0-9_-]+',profile):
+            theme='-light' if settings.get('theme')=='light' else ''
+            work=root/f'{deck}{theme}-narrated'
+            return [work/f'timeline-{profile}{".preview" if settings.get("preview") else ""}.json']
+    except (OSError,ValueError,TypeError,HTTPException):
+        pass
     candidates = [media.parent/'timeline.json']
     if media.name.endswith('.narrated.mp4'):
         stem = media.name.removesuffix('.narrated.mp4')
@@ -51,6 +63,24 @@ def chapters_for(root, media):
         deck = re.sub(r'^\d{6}_', '', deck)
         work = media.parent/f'{deck}-narrated'
         candidates = [work/f'timeline-{profile}{".preview" if preview else ""}.json'] if separator else [work/'timeline.json']
+    return candidates
+
+
+def timeline_for(root, media):
+    for candidate in timeline_paths(root,media):
+        try:
+            candidate=within(root,candidate.relative_to(root))
+            entries=json.loads(candidate.read_text())
+            if isinstance(entries,list):
+                return candidate,entries
+        except (OSError,ValueError,TypeError,HTTPException):
+            continue
+    return None,[]
+
+
+def chapters_for(root, media):
+    """Prefer this video's timeline; fall back to chapters embedded in the movie."""
+    candidates=timeline_paths(root,media)
     for candidate in candidates:
         # Repair timelines live beside their movie; timeline paths themselves must
         # remain in the served tree, including when a directory is a symlink.
@@ -83,35 +113,53 @@ def create_app(directory=ROOT/'renders'):
         return FileResponse(PAGE, headers={'Cache-Control': 'no-cache'})
 
     def catalog(request):
-        folder = within(root, request.query_params.get('folder', ''))
-        if not folder.is_dir():
+        from dkvis.presentation.library import catalog as deck_catalog
+        folder=within(root,request.query_params.get('folder',''))
+        if folder!=root:
             raise HTTPException(404)
-        from dkvis.lectures import load_index, lecture_number
-        titles = {row['deck']: (i, row['title']) for i, row in enumerate(load_index().values())}
-        items = []
-        for child in folder.iterdir():
-            if child.name.startswith('.'):
-                continue
-            try:
-                path = within(root, child.relative_to(root))
-                stat = path.stat()
-            except (OSError, HTTPException):
-                continue  # a render may replace files while the list is loading
-            kind = 'folder' if path.is_dir() else KINDS.get(child.suffix.lower())
-            if not kind:
-                continue
-            relative = child.relative_to(root).as_posix()
-            deck = re.sub(r'^\d{6}_', '', child.name.split('.')[0]).removesuffix('-light')
-            order, title = titles.get(deck, (1000, child.stem.replace('-', ' ')))
-            number = lecture_number(deck)
-            if number:
-                title = f'{number} · {title}'
-            items.append(dict(path=relative, name=child.name, title=title, kind=kind,
-                              order=order, size=stat.st_size, modified=stat.st_mtime,
-                              version=str(stat.st_mtime_ns),
-                              url='/files/'+quote(relative, safe='/')))
-        return JSONResponse(dict(folder=folder.relative_to(root).as_posix(), items=items),
-                            headers={'Cache-Control': 'no-store'})
+        return JSONResponse(dict(items=deck_catalog(root)),headers={'Cache-Control':'no-store'})
+
+    def media_data(request):
+        from dkvis.presentation.captions import transcript_rows
+        media=within(root,request.query_params.get('path',''))
+        if not media.is_file():
+            raise HTTPException(404)
+        timeline,entries=timeline_for(root,media)
+        rows=transcript_rows(root,entries)
+        parts=[part for row in rows for part in row['parts'] if part.get('text')]
+        return dict(chapters=chapters_for(root,media),transcript=rows,
+                    transcript_complete=bool(rows) and all(e.get('builds') for e in entries) and len(rows)==sum(len(e.get('builds',[])) for e in entries),
+                    captions_available=bool(rows),caption_timing='approximate within TTS chunks',
+                    speech_generated=max((p.get('generated',0) for p in parts),default=0) or None,
+                    models=sorted({p['model'] for p in parts if p.get('model')}),
+                    voices=sorted({p['voice'] for p in parts if p.get('voice')}),
+                    timeline_modified=timeline.stat().st_mtime if timeline else None)
+
+    def media_detail(request):
+        return JSONResponse(media_data(request),headers={'Cache-Control':'no-store'})
+
+    def captions(request):
+        from dkvis.presentation.captions import vtt
+        data=media_data(request)
+        if not data['captions_available']:
+            raise HTTPException(404,'No speech-text snapshot or cache is available for this video.')
+        return Response(vtt(data['transcript']),media_type='text/vtt',headers={'Cache-Control':'no-store'})
+
+    def transcript(request):
+        data=media_data(request)
+        if not data['transcript']:
+            raise HTTPException(404,'No rendered transcript is available.')
+        text='\n\n'.join(f'{row["title"]} ({row["start"]:.1f}s)\n\n{row["text"]}' for row in data['transcript'])
+        return PlainTextResponse(text+'\n',headers={'Cache-Control':'no-store'})
+
+    def source_transcript(request):
+        from dkvis.presentation.narration import read_deck_narration
+        try:
+            scripts=read_deck_narration(request.query_params.get('deck',''))
+        except (KeyError,ValueError,FileNotFoundError):
+            raise HTTPException(404)
+        text='\n\n'.join(f'{i}. {s.title}\n\n{s.text}' for i,s in enumerate(scripts.values(),1))
+        return PlainTextResponse(text+'\n',headers={'Cache-Control':'no-store'})
 
     def chapters(request):
         path = within(root, request.query_params.get('path', ''))
@@ -120,7 +168,9 @@ def create_app(directory=ROOT/'renders'):
         return JSONResponse(chapters_for(root, path), headers={'Cache-Control': 'no-store'})
 
     return Starlette(routes=[Route('/', index), Route('/api/catalog', catalog),
-                            Route('/api/chapters', chapters),
+                            Route('/api/chapters', chapters), Route('/api/media',media_detail),
+                            Route('/api/captions',captions), Route('/api/transcript',transcript),
+                            Route('/api/source-transcript',source_transcript),
                             Mount('/files', StaticFiles(directory=root, html=True), name='files')])
 
 

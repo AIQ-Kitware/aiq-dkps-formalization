@@ -46,6 +46,36 @@ working directory. The default address is loopback. Stop with Ctrl+C. The librar
 is read-only; playback positions and speeds are stored in the browser. Files
 still being replaced by a render appear with their new version after refresh.
 
+The library has one entry per deck. Select a narration voice or switch to HTML
+slides, PDF slides, or the PDF handout inside that entry. Deck IDs remain stable
+when the lecture organizer changes an ordering number. Transcript and document
+links open the raw files in another tab.
+
+The spoken-transcript panel shows the text used by the selected video, with
+clickable timestamps for replaying a mispronounced passage. It recovers existing
+TTS requests from their raw/processed/joined audio sidecars; it does not substitute
+a newly edited script for old audio. The current authored transcript is a
+separately labelled link. Captions are optional and **off by default**. They use
+the same speech text, with approximate timing within each TTS chunk; no ASR or
+new TTS calls are required. If historical speech caches are gone, the panel
+reports missing or partial coverage instead of inventing a transcript.
+
+Expand **Generated components and dates** for file links and timestamps. New
+exports record generation dates; older artifacts fall back to file-modification
+times. Speech dates refer to the actual cached chunks used by that narration.
+**Slide and transcript model provenance** separates current source attribution
+from the snapshot recorded when an artifact was generated. Missing historical
+metadata and unknown model variants stay explicitly unknown.
+
+New video timelines retain speech text, chunk boundaries, and durations so captions/transcripts
+survive later audio-cache cleanup. The renderers write ignored
+`<artifact>.metadata.json` sidecars containing generation time, source revision,
+model attribution, and relevant rendering or TTS model/voice settings. Private
+TTS endpoints are excluded. These records accompany their artifacts when the
+organizer renumbers exports. Source attribution lives in each lecture's tracked
+`provenance.yaml`; see [the authoring guide](dkvis/learning/README.md#model-attribution).
+Restart the server after updating its Python code, then refresh the browser.
+
 ## Learning modules and a shared production pipeline
 
 The [prerequisite lecture series](dkvis/learning/PREREQUISITES.md) contains

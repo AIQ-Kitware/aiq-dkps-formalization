@@ -104,6 +104,10 @@ def number_outputs(rows, renders):
                 print(f'keep both: {source.name} (destination {target.name} already exists)')
                 continue
             source.rename(target)
+            sidecar=source.with_name(source.name+'.metadata.json')
+            destination=target.with_name(target.name+'.metadata.json')
+            if sidecar.is_file() and not destination.exists():
+                sidecar.rename(destination)
             print(f'export {source.name} -> {target.name}')
 
 

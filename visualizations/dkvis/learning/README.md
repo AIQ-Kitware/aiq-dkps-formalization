@@ -114,3 +114,22 @@ seconds by default); viewers can also pause. The shared review scenes show the
 question first, then highlight and explain the correct answer. The transcript
 export includes these two scenes automatically. Keep their sections out of
 `lecture.md`; append `quiz_uses()` to the deck's scene list.
+
+## Model attribution
+
+Each numbered lecture folder has `provenance.yaml`. Its `slides` and `transcript`
+components record source-model attribution separately. The initial records cite
+the first tracked source commit found with `git log --follow`, preserving that
+commit's model name and any explicit uncertainty. They do not establish who
+originated every imported line or make a mathematical-priority claim. Shared
+rendering components retain their own Git history.
+
+For subsequent content changes, append a `revisions` entry under the affected
+component with `models`, `date`, `sources`, and `scope`. Use the actual model
+identity, not an identity copied from an earlier agent. Preserve unknown model
+variants as unknown. A rendering-only or library-server change does not make its
+author the author of the existing slide or transcript content.
+
+Exports snapshot these records with their generation timestamp and source Git
+revision. Existing videos without a snapshot remain explicitly unrecorded;
+the library displays current source attribution separately.

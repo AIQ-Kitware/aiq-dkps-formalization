@@ -1,0 +1,27 @@
+deck: prereq-complementary-projection
+scope: Attribution for topic-specific source files. Shared renderer and orientation components retain their separate
+  Git histories.
+slides:
+  initial_source_attribution:
+  - source: visualizations/dkvis/learning/complementary_projection/scenes.py
+    models:
+    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    commit: 9b9e0eb08f8b44f967aae43f02ed5f9626790ce9
+    date: '2026-11-05T00:28:23-05:00'
+    basis: Co-authored-by attribution on the first tracked source commit; earlier imported ancestry may exist.
+transcript:
+  initial_source_attribution:
+  - source: visualizations/lectures/001500_complementary_projection/lecture.md
+    models:
+    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    commit: 9b9e0eb08f8b44f967aae43f02ed5f9626790ce9
+    date: '2026-11-05T00:28:23-05:00'
+    basis: Co-authored-by attribution on the first tracked source commit; earlier imported ancestry may exist.
+  - source: visualizations/lectures/001500_complementary_projection/quiz.yaml
+    models:
+    - GPT-6 (Codex; exact model variant and weights/config undetermined)
+    commit: 9b9e0eb08f8b44f967aae43f02ed5f9626790ce9
+    date: '2026-11-05T00:28:23-05:00'
+    basis: Co-authored-by attribution on the first tracked source commit; earlier imported ancestry may exist.
+note: These are recorded model attributions, not claims of mathematical priority or independently verified authorship.
+  Unknown variants remain unknown.

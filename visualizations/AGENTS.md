@@ -108,3 +108,16 @@ and write `Ahat = A + H`.  Choose the trial pair from original `A`, so
 eigengap of `A`; never silently identify it with `delta`.  `U,V` may still be
 used when they are genuinely the notation of another statement, such as
 Proposition 4.4.
+
+## Lecture model provenance
+
+Each indexed lecture has `provenance.yaml` beside its transcript. Maintain slide
+and transcript attribution separately. When changing their content, append a
+revision with the exact runtime model identification (and variant/config when
+known), date, affected source paths, and a short scope description. Preserve the
+initial Git-backed attribution; do not replace it with the latest editor. Use
+`revisions` entries with a `models` list under the affected component. Shared
+rendering infrastructure edits are not authorship of the lecture content.
+Unknown models or variants must stay explicitly unknown. Generation metadata
+snapshots source attribution for future exports; never backfill a historical
+video with today's attribution as if it were recorded when that video was made.
