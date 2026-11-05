@@ -1,0 +1,25 @@
+questions:
+- title: What does the sin Theta bound say?
+  question: With the certified separation $\delta>0$ in hand, $\delta\,\|\sin\Theta_0(E_0,F_0)\| \le \|R\|$. What is $\|\sin\Theta_0(E_0,F_0)\|$ at most?
+  choices:
+  - $\|R\|/\delta$.
+  - $\delta\,\|R\|$.
+  - $\|R\|^2$.
+  - $\delta$.
+  correct: 0
+  explanation: The theorem states delta times the error at most the residual norm; divide both sides by delta.
+  think_seconds: 8
+  speak_question: First question. In the sin Theta theorem, with the separation certificate delta in hand, what is the norm of sin Theta zero of E zero and F zero, at most? A, the norm of R divided by delta; B, delta times the norm of R; C, the square of the norm of R; or D, delta alone? You have eight seconds to choose. Pause if you want longer.
+  speak_answer: The correct answer is A. The theorem states that delta times the error is at most the norm of R; divide both sides by delta. The other options either multiply where the theorem divides or drop the residual altogether.
+- title: Which norm favors the competitor?
+  question: In the $\mathbb{R}^4$ counterexample both maps send $U$ onto $V$, with both principal angles $\pi/4$. In which norm does the competitor move space less than the direct rotation?
+  choices:
+  - the operator norm
+  - the Frobenius norm
+  - the trace norm
+  - all three agree
+  correct: 2
+  explanation: The trace norm adds all four chord singular values, two of about 1.414 (roughly 2.828) against four of about 0.765 (roughly 3.061). The operator and Frobenius norms favor the direct rotation, so the printed every-unitarily-invariant-norm claim fails exactly at the trace norm.
+  think_seconds: 8
+  speak_question: Second question. In the R four counterexample, both maps carry U onto V, with both principal angles at forty-five degrees. In which norm does the competitor move space less than the direct rotation? A, the operator norm; B, the Frobenius norm; C, the trace norm; or D, all three agree? You have eight seconds to choose. Pause if you want longer.
+  speak_answer: The correct answer is C, the trace norm. It adds all four chord singular values, two chords of about one point four one four giving about two point eight two eight, against four chords of about zero point seven six five giving about three point zero six one. The operator and Frobenius norms both favor the direct rotation, which is exactly why the printed claim, optimality for every unitarily invariant norm, fails.

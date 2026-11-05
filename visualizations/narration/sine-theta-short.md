@@ -1,9 +1,17 @@
 # How far can an eigenvector turn?
 
-A standalone fifteen-minute presentation of the Davis-Kahan sin Theta
-theorem and its machine-checked Lean formalization, plus the project's
-second result: an agent-assisted counterexample to a printed claim in the
-1970 paper.
+A standalone, TTS-ready transcript of the fifteen-minute
+`sine-theta-short` reference deck. The transcript adds standalone
+explanations the live talk leaves implicit, so a full reading runs longer
+than the deck's live pacing; it closes with two study questions kept in
+the companion `sine-theta-short-quiz.yaml` (quiz.yaml format), which the
+narration loader appends as the final spoken scenes when a deck wires in
+both files.
+
+The deck presents the Davis-Kahan sin Theta theorem — its statement, the
+mechanism behind it, and its exact Lean form — plus the project's second
+result: an agent-assisted counterexample to the Proposition four point
+four claim in the 1970 paper.
 
 The audience is a specialist who knows linear algebra and basic numerical
 eigenvalue problems and wants the theorem statement, the mechanism behind
@@ -44,9 +52,10 @@ touched by `a3358dd63`, 9 October 2026). This transcript is not wired
 into the rendering pipeline (the deck spec carries no `narration`
 field), and no scene code was changed. One scene, `S00TitleShort`, is
 silent in the current source; the paragraph under it below is a spoken
-opening added for the standalone document. The two study questions close
-the spoken presentation; if this deck is ever registered as a numbered
-lecture, they should be promoted to the lecture's `quiz.yaml`.
+opening added for the standalone document. The two study questions that close the spoken presentation live in the
+companion `sine-theta-short-quiz.yaml` (standard quiz format); if this
+deck is ever registered as a numbered lecture, promote them into the
+lecture's `quiz.yaml`.
 
 ## S00TitleShort: How far can an eigenvector turn?
 
@@ -583,34 +592,3 @@ unitarily invariant norm. The impact is limited: the direct rotation is
 still optimal for acute pairs and Q norms, including the operator and
 Frobenius norms, over the reals or the complex numbers, without the
 paper's sixty-degree cutoff.
-
-## Study questions: Spoken after the last slide
-
-Why: Let the viewer check understanding of the two results before leaving.
-Recall: the sin Theta bound, and the Proposition 4.4 counterexample in R four.
-
-First question. In the sin Theta theorem, with the separation
-certificate delta in hand, what is the norm of sin Theta zero of E
-zero, F zero, at most? A, the norm of R divided by delta. B, delta
-times the norm of R. C, the square of the norm of R. Or D, delta alone?
-You have eight seconds to choose. Pause if you want longer.
-
-The correct answer is A. The theorem states that delta times the error
-is at most the norm of R; divide both sides by delta. The other options
-either multiply where the theorem divides or drop the residual
-altogether.
-
-<!-- beat -->
-
-Second question. In the R four counterexample, both maps carry U onto V
-with both principal angles at forty-five degrees. In which norm does the
-competitor move space less than the direct rotation? A, the operator
-norm. B, the Frobenius norm. C, the trace norm. Or D, all three agree?
-You have eight seconds to choose. Pause if you want longer.
-
-The correct answer is C, the trace norm. It adds all four chord
-singular values: two chords of about one point four one four give about
-two point eight two eight, against four chords of about zero point
-seven six five giving about three point zero six one. The operator and
-Frobenius norms both favor the direct rotation, which is exactly why the
-printed claim, optimality for every unitarily invariant norm, fails.
