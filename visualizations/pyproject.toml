@@ -10,6 +10,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+serve = [
+  "starlette>=1.5.1",
+  "uvicorn>=0.35",
+]
 vtk = [
   "vtk>=9.3",
 ]
@@ -22,12 +26,16 @@ slides = [
 ]
 test = [
   "pytest>=8",
+  "httpx2>=2.0",
 ]
 all = [
+  "starlette>=1.5.1",
+  "uvicorn>=0.35",
   "vtk>=9.3",
   "manim>=0.19",
   "manim-slides>=5.1",
   "pytest>=8",
+  "httpx2>=2.0",
 ]
 
 [tool.pytest.ini_options]

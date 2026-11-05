@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lecture library</title>
+<style>
+:root{color-scheme:dark;--bg:#10151c;--panel:#19212c;--line:#303d4d;--text:#ecf0f5;--muted:#a5b2c3;--accent:#88c7ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px system-ui,sans-serif}
+header{padding:22px 28px;border-bottom:1px solid var(--line);display:flex;gap:20px;align-items:center;justify-content:space-between}h1{font-size:23px;margin:0 0 5px}p{margin:0;color:var(--muted)}button,input,select{font:inherit;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:9px 11px}button,select{cursor:pointer}button:hover,a:hover{color:var(--accent)}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}a{color:var(--accent)}
+main{display:grid;grid-template-columns:340px minmax(0,1fr);min-height:calc(100vh - 100px)}aside{padding:18px;border-right:1px solid var(--line)}.search{width:100%;margin-bottom:10px}.filters{display:flex;gap:7px;margin-bottom:12px}.filters select{min-width:0;flex:1}nav{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:0 0 12px}nav button{padding:5px 8px}#count{font-size:12px;margin:8px 0}#directories{list-style:none;padding:0;max-height:180px;overflow:auto}summary{cursor:pointer;color:var(--muted);margin-bottom:10px}#items{list-style:none;padding:0;margin:0;max-height:calc(100vh - 300px);overflow:auto}#items button,#directories button{width:100%;text-align:left;margin-bottom:8px;padding:12px;overflow-wrap:anywhere}#items button.selected{border-color:var(--accent);background:#22354b}.name{display:block;font-size:12px;color:var(--muted);margin-top:5px}.meta{display:block;font-size:11px;color:var(--muted);margin-top:6px}.kind{color:var(--accent);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+section{padding:24px;min-width:0}#empty{padding:60px 20px;text-align:center;border:1px dashed var(--line);border-radius:12px}h2{font-size:21px;margin:0 0 5px}#filename{font-size:13px;overflow-wrap:anywhere;margin-bottom:16px}#video{display:block;width:100%;max-height:70vh;aspect-ratio:16/9;background:#080b0f;border-radius:10px}#video.audio{aspect-ratio:auto;height:100px}#document{width:100%;height:77vh;background:white;border:0;border-radius:9px}.controls,.links{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:12px}.links{font-size:13px;margin-bottom:13px}.hint{font-size:12px;margin-top:14px}#status{font-size:13px;margin:12px 0;white-space:pre-wrap;overflow-wrap:anywhere}#chapters{display:flex;gap:7px;flex-wrap:wrap;margin-top:15px}#chapters button{font-size:12px;padding:7px 10px}#chapters .current{border-color:var(--accent);color:var(--accent)}[hidden]{display:none!important}
+@media(max-width:850px){main{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line)}#items{max-height:230px}header{padding:18px}section{padding:18px}#document{height:70vh}}
+</style>
+</head>
+<body>
+<header><div><h1>Lecture library</h1><p>Watch lectures, explore the slides, and read the handouts.</p></div><button id="refresh">Refresh</button></header>
+<main>
+<aside aria-label="Browse renders">
+<input id="search" class="search" type="search" placeholder="Search titles or narrators…" aria-label="Search files">
+<div class="filters"><select id="kind" aria-label="File type"><option value="all">All formats</option><option value="video">Videos</option><option value="slides">HTML slides</option><option value="pdf">PDFs</option><option value="audio">Audio</option></select><select id="sort" aria-label="Sort files"><option value="course">Lecture order</option><option value="newest">Newest first</option><option value="name">Filename</option></select></div>
+<nav id="folders" aria-label="Folder"></nav><details><summary>Browse folders</summary><ul id="directories"></ul></details><p id="count"></p><ul id="items"></ul>
+</aside>
+<section aria-label="Viewer">
+<div id="empty"><h2>Choose something to study</h2><p>Pick a video, slide deck, or PDF from the library.</p></div>
+<div id="viewer" hidden>
+<h2 id="title"></h2><p id="filename"></p>
+<video id="video" controls playsinline preload="metadata" hidden></video>
+<iframe id="document" title="Lecture document" allow="fullscreen" allowfullscreen hidden></iframe>
+<div id="controls" class="controls" hidden><button id="back">−10 seconds</button><button id="toggle">Play / pause</button><button id="forward">+10 seconds</button><label>Speed <select id="speed"><option>.75</option><option selected>1</option><option>1.25</option><option>1.5</option><option>1.75</option><option>2</option></select> ×</label><button id="fullscreen">Fullscreen</button><button id="pip">Picture in picture</button></div>
+<div class="links"><a id="open" target="_blank" rel="noopener">Open file in a new tab</a><a id="download" download>Download</a><button id="share">Copy link</button></div>
+<p id="status" role="status"></p>
+<div id="chapters" aria-label="Chapters"></div>
+<p id="keys" class="hint" hidden>Space or K: play/pause · ←/→: seek 5 seconds · Shift + ←/→: seek 30 seconds · F: fullscreen. Playback position is remembered in this browser.</p>
+</div>
+</section>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id), video=$('video');
+let items=[], folder='', selected=null, chapters=[], lastSaved=0, selectionNumber=0;
+const initial=new URLSearchParams(location.search);
+const stored=(key,fallback=null)=>{try{return localStorage.getItem(key)??fallback}catch{return fallback}};
+const store=(key,value)=>{try{localStorage.setItem(key,value)}catch{}};
+const stamp=seconds=>{seconds=Math.max(0,Math.floor(seconds));return `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`};
+const bytes=size=>size<1048576?`${(size/1024).toFixed(0)} KB`:`${(size/1048576).toFixed(1)} MB`;
+const status=message=>$('status').textContent=message;
+async function getJSON(url){const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error(`Could not load ${url} (${response.status}).`);return response.json()}
+function currentURL(){const url=new URL(location.origin+location.pathname);const parent=selected?selected.path.slice(0,Math.max(0,selected.path.lastIndexOf('/'))):folder;if(parent)url.searchParams.set('folder',parent);if(selected)url.searchParams.set('file',selected.path);return url}
+function renderList(){
+  const query=$('search').value.toLowerCase(),kind=$('kind').value;
+  const visible=items.filter(x=>x.kind==='folder'||((kind==='all'||kind===x.kind)&&`${x.name} ${x.title}`.toLowerCase().includes(query)));
+  visible.sort((a,b)=>a.kind==='folder'&&b.kind!=='folder'?-1:b.kind==='folder'&&a.kind!=='folder'?1:$('sort').value==='newest'?b.modified-a.modified:$('sort').value==='course'?(a.order-b.order||a.name.localeCompare(b.name)):a.name.localeCompare(b.name));
+  $('items').replaceChildren();$('directories').replaceChildren();$('count').textContent=`${visible.filter(x=>x.kind!=='folder').length} files`;
+  for(const item of visible){
+    const li=document.createElement('li'),button=document.createElement('button');
+    button.classList.toggle('selected',selected?.path===item.path);
+    const label=document.createElement('span');label.className='kind';label.textContent=item.kind==='folder'?'Folder':item.kind==='slides'?'HTML slides':item.kind;
+    const name=document.createElement('span');name.textContent=item.kind==='folder'?item.name:item.title;
+    const filename=document.createElement('span');filename.className='name';filename.textContent=item.name;
+    button.append(label,document.createElement('br'),name);if(item.kind!=='folder'){
+      const meta=document.createElement('span');meta.className='meta';meta.textContent=`${bytes(item.size)} · ${new Date(item.modified*1000).toLocaleString()}`;button.append(filename,meta);
+    }
+    button.onclick=()=>item.kind==='folder'?loadFolder(item.path).catch(showError):select(item).catch(showError);
+    li.append(button);$(item.kind==='folder'?'directories':'items').append(li);
+  }
+}
+function showError(error){$('empty').hidden=false;$('empty').querySelector('p').textContent=error.message;status(error.message)}
+async function loadFolder(path){
+  const result=await getJSON('/api/catalog?folder='+encodeURIComponent(path));folder=result.folder==='.'?'':result.folder;items=result.items;
+  $('folders').replaceChildren();
+  const home=document.createElement('button');home.textContent='Library';home.onclick=()=>loadFolder('').catch(showError);$('folders').append(home);
+  let prefix='';for(const part of folder.split('/').filter(Boolean)){prefix+=(prefix?'/':'')+part;const target=prefix,button=document.createElement('button');button.textContent=part;button.onclick=()=>loadFolder(target).catch(showError);$('folders').append(button)}
+  history.replaceState(null,'',currentURL());renderList();
+}
+function seek(delta){if(Number.isFinite(video.duration))video.currentTime=Math.max(0,Math.min(video.duration,video.currentTime+delta))}
+async function toggle(){if(video.paused){try{await video.play()}catch(error){status(error.message)}}else video.pause()}
+async function select(item,at=null){
+  const number=++selectionNumber;video.pause();video.removeAttribute('src');video.load();$('document').removeAttribute('src');
+  selected=item;chapters=[];lastSaved=0;status('');$('chapters').replaceChildren();$('empty').hidden=true;$('viewer').hidden=false;
+  $('title').textContent=item.title;$('filename').textContent=item.path;
+  const url=item.url+'?v='+item.version;
+  $('open').href=url;$('download').href=url;$('download').download=item.name;
+  history.replaceState(null,'',currentURL());renderList();
+  const media=['video','audio'].includes(item.kind);
+  video.hidden=!media;video.classList.toggle('audio',item.kind==='audio');$('document').hidden=media;$('controls').hidden=!media;$('keys').hidden=!media;
+  $('pip').hidden=item.kind!=='video'||!document.pictureInPictureEnabled;
+  if(!media){$('document').src=url;return}
+  video.onloadedmetadata=()=>{
+    if(number!==selectionNumber)return;
+    video.playbackRate=Number($('speed').value);
+    const saved=Number(stored('position:'+item.path+':'+item.version,0));
+    const target=at??(saved<video.duration-2?saved:0);
+    if(Number.isFinite(target)&&target>=0)video.currentTime=Math.min(target,Math.max(0,video.duration-.05));
+  };
+  video.src=url;
+  const result=await getJSON('/api/chapters?path='+encodeURIComponent(item.path));
+  if(number!==selectionNumber)return;chapters=result;
+  for(const chapter of chapters){const button=document.createElement('button');button.textContent=`${stamp(chapter.start)} · ${chapter.title}`;button.onclick=()=>{video.currentTime=chapter.start};$('chapters').append(button)}
+}
+video.addEventListener('timeupdate',()=>{
+  if(!selected||video.hidden||video.readyState<1)return;
+  if(Math.abs(video.currentTime-lastSaved)>2){store('position:'+selected.path+':'+selected.version,video.currentTime);lastSaved=video.currentTime}
+  const index=chapters.findLastIndex(x=>x.start<=video.currentTime);
+  [...$('chapters').children].forEach((button,i)=>button.classList.toggle('current',i===index));
+});
+video.addEventListener('ended',()=>{if(selected)store('position:'+selected.path+':'+selected.version,0)});
+video.addEventListener('error',()=>{if(video.getAttribute('src'))status('This browser could not play the file. Try opening it in a new tab or downloading it.')});
+$('speed').value=stored('playback-speed','1');if(!$('speed').value)$('speed').value='1';
+$('speed').onchange=()=>{video.playbackRate=Number($('speed').value);store('playback-speed',$('speed').value)};
+$('back').onclick=()=>seek(-10);$('forward').onclick=()=>seek(10);$('toggle').onclick=toggle;
+$('fullscreen').onclick=()=>video.requestFullscreen().catch(error=>status(error.message));
+$('pip').onclick=()=>video.requestPictureInPicture().catch(error=>status(error.message));
+$('share').onclick=async()=>{const url=currentURL();if(!video.hidden)url.searchParams.set('t',Math.floor(video.currentTime));try{await navigator.clipboard.writeText(url.href);status('Link copied.')}catch{status(url.href)}};
+$('search').oninput=renderList;$('kind').onchange=renderList;$('sort').onchange=renderList;
+$('refresh').onclick=()=>loadFolder(folder).catch(showError);
+document.addEventListener('keydown',event=>{
+  if(video.hidden||!selected||['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName))return;
+  if(event.key===' '&&document.activeElement.tagName==='BUTTON')return;
+  if([' ','k','ArrowLeft','ArrowRight','f'].includes(event.key))event.preventDefault();
+  if(event.key===' '||event.key==='k')toggle();
+  if(event.key==='ArrowLeft')seek(event.shiftKey?-30:-5);if(event.key==='ArrowRight')seek(event.shiftKey?30:5);
+  if(event.key==='f')$('fullscreen').click();
+});
+(async()=>{const file=initial.get('file');await loadFolder(initial.get('folder')??(file?.includes('/')?file.slice(0,file.lastIndexOf('/')):''));if(file){const item=items.find(x=>x.path===file);if(item){const time=initial.has('t')?Number(initial.get('t')):null;await select(item,time)}else status('The linked file was not found; refresh or browse its folder.')}})().catch(showError);
+</script>
+</body>
+</html>

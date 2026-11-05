@@ -10,6 +10,42 @@ This directory is not part of the Lean build. It is a companion for developing
 intuition, figures, talks, and manuscript animations. Numerical assertions here
 do not replace the Lean proofs.
 
+## Browse and watch rendered material
+
+From `visualizations/`, start the media library:
+
+```bash
+make serve                         # http://127.0.0.1:8000
+make serve PORT=8001                # use another port beside an existing server
+```
+
+The page lists videos by narrator, HTML presentations, and PDF handouts. It has
+native video seeking, playback-speed controls, skip buttons, remembered playback
+positions, links to particular times, and chapters from the matching render
+timeline (or embedded MP4 chapters). HTML and PDFs open in the same viewer or in
+a separate tab. Use **Browse folders** for repair reports and nested outputs;
+**Refresh** discovers new renders. No Manim or speech server is required.
+
+The server supports HTTP byte ranges, so seeking can fetch the needed part of a
+video instead of waiting for a complete download. This uses Starlette's
+[FileResponse support](https://starlette.dev/responses/).
+
+```bash
+uv run --isolated --extra serve python -m dkvis.presentation serve --port 8001
+# Optional: access from another machine on your network.
+make serve HOST=0.0.0.0 PORT=8001
+# Optional: choose another media directory.
+uv run --isolated --extra serve python -m dkvis.presentation serve --directory /path/to/media
+```
+
+The server uses an isolated Python environment, so starting it does not change
+the environment used by concurrent render jobs.
+
+The default directory is this project's `renders/`, independent of the current
+working directory. The default address is loopback. Stop with Ctrl+C. The library
+is read-only; playback positions and speeds are stored in the browser. Files
+still being replaced by a render appear with their new version after refresh.
+
 ## Learning modules and a shared production pipeline
 
 The [prerequisite lecture series](dkvis/learning/PREREQUISITES.md) contains

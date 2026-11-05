@@ -16,6 +16,7 @@
 #   make full THEME=light  # light background; outputs get a -light suffix beside the dark ones
 #   make standalone      # single-file HTML (videos embedded) of every built deck and part
 #   make handout         # one-page-per-scene PDFs of every built deck and part
+#   make serve           # browse videos, slide decks and PDFs with seekable playback
 #
 # Every deck writes renders/<deck>.html (+ .pdf, .handout.pdf, <deck>_assets/) and keeps
 # its rendered scenes in slides-<deck>/ (with THEME=light: <deck>-light).  renders/<deck>.html needs the
@@ -32,6 +33,8 @@ JOBS    ?=
 PDF     ?= 1
 SCENES  ?=
 TTS_PROFILE ?=
+PORT ?= 8000
+HOST ?= 127.0.0.1
 SKIP_RENDER ?= 0
 # dark or light.  Colors come from dkvis/palette.py (per role and theme) and
 # dkvis/notation.py (the role of each symbol).
@@ -64,7 +67,7 @@ DECKS      := short full $(PARTS) $(WORKING) matching matching-talk
 
 .DEFAULT_GOAL := help
 .PHONY: help setup all rebuild working $(DECKS) $(addprefix clean-,$(DECKS)) $(addprefix present-,$(DECKS)) \
-        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean list slides text video prerequisites lectures-video prerequisites-video matching-text matching-video matching-talk-text matching-talk-video
+        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean list slides text video serve prerequisites lectures-video prerequisites-video matching-text matching-video matching-talk-text matching-talk-video
 
 help:
 	@awk '/^#/ { sub(/^# ?/, ""); print; next } { exit }' $(firstword $(MAKEFILE_LIST))
@@ -220,7 +223,7 @@ app:
 	$(RUN) python -m dkvis.vtk_sine_theta_3d
 
 test:
-	$(RUN) pytest -q tests
+	$(RUN) --extra serve pytest -q tests
 
 # manim's partial-movie cache lives in media/videos; removing it forces every
 # animation to re-render.  The LaTeX cache (media/Tex) and the VTK assets
@@ -231,3 +234,8 @@ clean:
 
 distclean: clean
 	rm -rf media .pytest_cache .ruff_cache
+
+
+# Seekable media library, HTML slides and PDFs; no Manim/TTS required.
+serve:
+	$(UV) run --isolated --extra serve python -m dkvis.presentation serve --host $(HOST) --port $(PORT)

@@ -1,6 +1,6 @@
 # Shared presentation production
 
-Use `python -m dkvis.presentation {list,slides,text,video,audio}`. Deck manifests,
+Use `python -m dkvis.presentation {list,slides,text,video,audio,serve}`. Deck manifests,
 not this package, select the mathematics, scenes, and transcript. The package
 can be imported without Manim, VTK, or a speech server; rendering loads those
 dependencies only when needed.
@@ -10,6 +10,7 @@ dependencies only when needed.
 | `build.py` | Manim rendering, asset preparation, HTML/PDF export and final-frame handouts |
 | `narration.py` | Read the manifest-selected transcript; export slide/build text and a manifest |
 | `audio.py` | Speech requests, sentence-aware chunking, cutoff retries, cache keys and lossless joins |
+| `serve.py` / `library.html` | Local media catalog, chapter lookup, embedded viewers and range-capable file serving |
 | `audio_quality.py` | Cached loudness/peak measurements, onset/boundary review reports, compression and two-pass normalization |
 | `video.py` | Check clip/note alignment, synchronize builds with audio, write chapters and assemble the video |
 | `tts.py` | Load `tts.toml`, ignored `.env` and CLI configuration |
@@ -174,3 +175,22 @@ silence; it is not proof that a listener will hear a click. A fade cannot remove
 an artifact already inside a spoken word. Listen to the comparison before
 replacing a previously rendered video. Originals are preserved. Each report keeps an `original` media snapshot and a
 timeline snapshot so a concurrent new render cannot change its comparison.
+
+
+## Local library server
+
+`make serve` (or `python -m dkvis.presentation serve` with the `serve` extra)
+starts the read-only catalog and player for `renders/`. See the
+[quick start](../../README.md#browse-and-watch-rendered-material) for ports,
+network binding and directory options. Static media uses Starlette's byte-range
+implementation; keep that behavior when modifying the server. HTML asset paths
+remain relative under `/files/`, and PDFs use the browser's built-in viewer.
+
+The catalog scans one selected folder at a time. Lecture titles and ordering
+come from the existing YAML index. Narrated MP4 names select their own profile's
+timeline; previews use preview timelines, repaired videos use their neighboring
+timeline, and MP4 metadata supplies a fallback. No video is transcoded by this
+server. Position storage includes the file's modification time, so a new render
+does not inherit an old version's timing. The `serve` extra stays independent of
+Manim and TTS dependencies. Run its HTTP tests with `uv run --extra serve --extra
+test pytest -q tests/test_media_server.py`.
