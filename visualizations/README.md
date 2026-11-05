@@ -70,6 +70,37 @@ audio and video outputs. Completed speech chunks and video segments are cached,
 so rerunning after interruption reuses matching work; the interrupted request
 must finish again. A batch stops at the first failure and can be rerun.
 
+### Regenerate audio after changing a voice reference
+
+Replacing the reference recording or reference transcript on the Breeze server
+under the same voice name does **not** invalidate cached speech. Request keys
+include the speech text, endpoint, model, voice name, and request settings;
+they do not include the server's reference files.
+
+From `visualizations/`, force fresh speech and rebuild one narrated video:
+
+```bash
+make video DECK=prereq-basics TTS_PROFILE=crall SKIP_RENDER=1 REFRESH_AUDIO=1
+```
+
+For every indexed lecture:
+
+```bash
+make lectures-video TTS_PROFILE=crall SKIP_RENDER=1 REFRESH_AUDIO=1
+```
+
+`SKIP_RENDER=1` reuses existing slide renders; omit it if those also need updating.
+`REFRESH_AUDIO=1` resynthesizes all speech in the selected lecture(s), processes
+it, and reassembles the videos. It replaces matching raw speech-cache files.
+Leave the flag off for normal cached builds. Alternatively, a new server voice
+name changes the request key and keeps its raw speech distinct.
+
+The equivalent direct command is:
+
+```bash
+./render_video.sh --deck prereq-basics --tts-profile crall --skip-render --refresh-audio
+```
+
 ## Browse and watch rendered material
 
 From `visualizations/`, start the media library:
@@ -100,6 +131,13 @@ uv run --isolated --extra serve python -m dkvis.presentation serve --directory /
 
 The server uses an isolated Python environment, so starting it does not change
 the environment used by concurrent render jobs.
+
+**After adding a new lecture, restart the server and refresh the browser.**
+The running Python process retains its deck registrations and cached lecture
+index. For example, a server started before `000010` was added cannot discover
+that new deck using the page's Refresh button alone. New or replaced renders
+of an already registered deck do appear after Refresh, without a server restart.
+
 
 The default directory is this project's `renders/`, independent of the current
 working directory. The default address is loopback. Stop with Ctrl+C. Playback

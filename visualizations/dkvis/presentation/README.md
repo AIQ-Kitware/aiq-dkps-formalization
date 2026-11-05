@@ -116,6 +116,23 @@ starting settings for the next synthesis/listening comparison; the offline
 repairs measure only the mechanical processing, not the revised prompt.
 
 
+## Refresh a server-side reference voice
+
+The client cannot detect a replacement reference recording or reference
+transcript behind an unchanged TTS endpoint/model/voice name. Use
+`make video DECK=prereq-basics TTS_PROFILE=crall SKIP_RENDER=1 REFRESH_AUDIO=1`,
+or pass `--refresh-audio` to `render_video.sh`, to bypass cached synthesis.
+The Make variable also propagates through `make lectures-video` and
+`make prerequisites-video`. It resynthesizes every speech chunk in the selected
+lecture(s), replaces matching raw cache files, processes the new audio, and
+reassembles the videos. Processing and encoded-segment caches still compare their
+actual inputs. No cache deletion is required. `SKIP_RENDER=1` requires up-to-date
+visual builds. The flag is off by default; normal runs keep using matching caches.
+
+Changing the voice name changes the request digest, which retains the previous
+raw requests under their old keys. Reference files stored only on the server
+are not themselves inputs to the client-side digest.
+
 ## Render different narrators concurrently
 
 Final videos include the configured narrator identity, for example
@@ -185,6 +202,11 @@ starts the read-only catalog and player for `renders/`. See the
 network binding and directory options. Static media uses Starlette's byte-range
 implementation; keep that behavior when modifying the server. HTML asset paths
 remain relative under `/files/`, and PDFs use the browser's built-in viewer.
+
+Restart the server after registering a new deck or changing the lecture index:
+Python deck definitions and the cached index are loaded into the running
+process. The UI Refresh button rescans generated files for known decks; it is
+not a Python module reload. New renders of existing decks need only Refresh.
 
 The catalog scans one selected folder at a time and lists only registered decks.
 Loose preview clips and orphan transcript exports do not become lecture entries.

@@ -38,6 +38,7 @@ TTS_PROFILE ?=
 PORT ?= 8000
 HOST ?= 127.0.0.1
 SKIP_RENDER ?= 0
+REFRESH_AUDIO ?= 0
 # dark or light.  Colors come from dkvis/palette.py (per role and theme) and
 # dkvis/notation.py (the role of each symbol).
 THEME   ?= dark
@@ -171,7 +172,7 @@ text:
 
 video:
 	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))
-	./render_video.sh --deck $(DECK) --quality $(QUALITY) --fps $(if $(FPS),$(FPS),30) --jobs $(if $(JOBS),$(JOBS),2) $(if $(filter 1,$(SKIP_RENDER)),--skip-render) $(if $(TTS_PROFILE),--tts-profile $(TTS_PROFILE)) $(if $(SCENES),--scenes $(SCENES)) $(if $(UPDATE_SCENES),--update-scenes $(UPDATE_SCENES))
+	./render_video.sh --deck $(DECK) --quality $(QUALITY) --fps $(if $(FPS),$(FPS),30) --jobs $(if $(JOBS),$(JOBS),2) $(if $(filter 1,$(SKIP_RENDER)),--skip-render) $(if $(filter 1,$(REFRESH_AUDIO)),--refresh-audio) $(if $(TTS_PROFILE),--tts-profile $(TTS_PROFILE)) $(if $(SCENES),--scenes $(SCENES)) $(if $(UPDATE_SCENES),--update-scenes $(UPDATE_SCENES))
 
 matching matching-talk:
 	$(MAKE) slides DECK=$(DECK_$@)
