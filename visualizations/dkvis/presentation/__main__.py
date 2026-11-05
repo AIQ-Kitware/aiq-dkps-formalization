@@ -14,7 +14,7 @@ import sys
 
 def main(argv=None):
     args = list(sys.argv[1:] if argv is None else argv)
-    commands = ('list', 'slides', 'text', 'video')
+    commands = ('list', 'slides', 'text', 'video', 'audio')
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('command', choices=commands)
@@ -33,6 +33,9 @@ def main(argv=None):
         run(rest)
     elif command == 'text':
         from dkvis.presentation.narration import main as run
+        run(rest)
+    elif command == 'audio':
+        from dkvis.presentation.audio_quality import main as run
         run(rest)
     else:
         from dkvis.presentation.video import main as run

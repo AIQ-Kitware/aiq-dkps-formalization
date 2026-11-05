@@ -253,6 +253,12 @@ def synthesize_beat(text, label, work, settings):
     for i, chunk in enumerate(chunks, 1):
         print(f"  speech chunk {i}/{len(chunks)} ({len(chunk.split())} words)", flush=True)
         parts.extend(synthesize_piece(chunk))
+    # Keep raw synthesis caches unchanged. Processing has a separate content and
+    # settings cache, so audio can be retuned without another server request.
+    from dkvis.presentation.audio_quality import process_chunk
+    processing = settings.get('postprocess', {})
+    if processing.get('enabled', False):
+        parts = [process_chunk(part, work/'processed'/profile, processing) for part in parts]
     if len(parts) == 1:
         return parts[0]
     pause = settings.get("chunk_pause_seconds", 0.12)
@@ -260,6 +266,9 @@ def synthesize_beat(text, label, work, settings):
         json.dumps(dict(parts=[str(p) for p in parts], pause=pause)).encode()
     ).hexdigest()[:16]
     joined = cache / f"{label}-joined-{key}.wav"
+    # Persist exact request boundaries even when an existing join is reused.
+    joined.with_suffix('.parts.json').write_text(json.dumps(
+        dict(inputs=[str(p.resolve()) for p in parts], pause=pause), indent=2))
     if joined.exists() and not settings.get("refresh_audio", False):
         started = time.perf_counter()
         seconds = duration(joined)

@@ -10,15 +10,33 @@ max_words = 65
 max_audio_seconds = 60.0
 chunk_pause_seconds = 0.12
 
+[postprocess]
+enabled = true
+target_lufs = -18.0
+peak_db = -1.5
+loudness_range = 7.0
+max_gain_db = 24.0
+highpass_hz = 60.0
+compression = true
+threshold_db = -20.0
+ratio = 2.5
+attack_ms = 5.0
+release_ms = 180.0
+
 [profiles.crall]
 endpoint_env = "CRALL_TTS_ENDPOINT"
 endpoint = "http://127.0.0.1:8821/v1/audio/speech"
 model = "breeze-tts2"
 voice = "crall-math-dk"
 response_format = "wav"
+# Longer passages reduce independent starts. Keep the server cutoff guard:
+# slow or capped responses are still retried in smaller pieces.
+max_chars = 750
+max_words = 110
 
 [profiles.crall.request]
-instruction = "Speak in an enthusiastic, engaging lecture style with clear articulation."
+instruction = "Speak in a warm, engaging lecture style with clear articulation. Maintain steady conversational loudness and restrained emphasis, including at the beginning of each passage."
+cfg_scale = 2.0
 
 [profiles.breeze]
 endpoint_env = "BREEZE_TTS_ENDPOINT"

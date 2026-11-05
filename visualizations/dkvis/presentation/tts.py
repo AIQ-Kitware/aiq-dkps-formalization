@@ -52,6 +52,10 @@ def resolve_profile(document, selected=None, overrides=None):
         raise ValueError(f'Unknown TTS profile {selected!r}; available: {", ".join(profiles)}')
     result = {**DEFAULTS, **document.get("defaults", {}), **profiles[selected], "profile": selected}
     result.update(overrides or {})
+    result['postprocess'] = {**document.get('postprocess', {}), **result.get('postprocess', {})}
+    if result['postprocess']:
+        from dkvis.presentation.audio_quality import settings as audio_settings
+        result['postprocess'] = audio_settings(result['postprocess'])
     variable = result.pop("endpoint_env", None)
     if variable:
         if not (overrides or {}).get("endpoint"):
