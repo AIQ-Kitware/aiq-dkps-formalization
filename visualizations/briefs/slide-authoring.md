@@ -1,4 +1,8 @@
-# Slide authoring and component rules
+# Slide implementation notes
+
+For the user's teaching and narration requirements, read
+[LECTURE_STYLE_RULES.md](../LECTURE_STYLE_RULES.md). This file covers the
+repository's implementation conventions, not additional user style rules.
 
 ## Architectural rule
 
@@ -54,67 +58,34 @@ specialization to the model layer and test it if a component needs new numbers.
 Keep claims tied to the Lean/source evidence already recorded in the repository.
 
 
-## Examples and the reusable tool
+## Components used by indexed lectures
 
-Label worked cases visibly as examples. In prerequisite lessons, set
-`LessonSlide.example = True` to prefix the title with **Example:** and mark the
-colored takeaway as **General tool:**. Use that takeaway to state the rule the
-case illustrates, with any essential hypothesis. Distinguish particular numbers
-or matrices from the general statement. Where the body has room, box the
-symbolic rule in the existing content column; otherwise emphasize the rule
-without adding another panel. Keep the example values and animation visible.
+- Covers use `LessonTitle`; `llm_credit.py` reads the robot/model disclosure
+  from the lecture's `provenance.yaml`. Source attribution is maintained as
+  described in `dkvis/learning/README.md`; the frozen reference talk is separate.
+- `LessonSlide.example = True` supplies the **Example:** title and **General
+  tool:** takeaway marker. Keep the symbolic rule in the existing content region.
+- `LessonLean.symbolic_facts` supplies paired labels and formulas; `fact_index`
+  selects the checked example from `facts.lean`. Keep the full Lean imports and
+  context in that companion file. The shared JuliaMono/Lean-4 renderer supplies
+  syntax colors and the library-proof highlight.
+- Computation bonus scenes use `bonus=True` and manifest `SlideUse.depth="*"`.
+  Current decks place them after the mathematical/Lean facts and before the quiz.
+- Flow illustrations use amber for the first coordinate or scalar output, blue
+  for the second coordinate, and violet for time, as implemented in the current
+  matrix-exponential scenes and shared palette.
 
+The transcript section/beat contract and quiz format are documented in the
+[authoring guide](../dkvis/learning/README.md). Keep that guide as the single
+technical reference for new modules.
 
-Give each Lean fact its own slide. Repeat its symbolic statement beside the
-actual checked example, with its mathematical scope visible in plain language.
-Keep the complete Lean context and imports in `facts.lean`; do not shrink a block
-of repeated typeclass boilerplate onto every card. Use the shared JuliaMono/
-Lean-4 syntax renderer and the green library-proof highlight. Wrap source at valid
-Lean boundaries. `LessonLean.symbolic_facts` supplies paired labels/formulas;
-`fact_index` chooses one actual example from the companion for each card.
+## Editing and rendering one scene
 
-
-## Mathematical meaning and numerical computation
-
-Give both the mathematical object and its motivating interpretation. For the
-matrix exponential, distinguish the series-defined family `exp(t A)` from a
-trajectory obtained by applying that map to an initial vector. In prerequisite
-flow illustrations, reuse amber for the first coordinate (or scalar output),
-blue for the second coordinate, and violet for time. Label the quantities as well
-as coloring them. Use the same coordinate colors on later plane diagrams.
-
-When a topic has a non-obvious numerical side, include one short computation
-**bonus** slide after the core recap, mathematical facts, and Lean cards, before
-the study questions. Mark its `SlideUse.depth` as `"*"` and its scene `bonus=True`;
-the heading and narration must clearly identify its optional status. Explain the
-choice of algorithm and desired output, cite primary papers or official library
-documentation, and distinguish a teaching calculation from production numerical
-practice. Avoid claims that one algorithm is universally best.
-
-## Standalone lessons
-
-Each indexed lecture opens with its own setting, goal, and a compact dictionary
-of the objects used in that lecture. The YAML prerequisite graph recommends a
-learning order; it is not a license to leave symbols undefined or refer viewers
-to another video for the local setup. A specialist talk can still assume its
-stated standard mathematical background without reteaching it. Keep the local
-notation card and its narration synchronized, and define new proof-specific
-objects again when they enter the argument.
-
-Narration must stand alone as an evergreen lecture, not answer an author's
-prompt. Introduce applications locally; prefer the general mathematical reason
-to an unexplained reference to “the proof”. See `AGENTS.md` for the authoring rule.
-
-## Opening attribution and single-scene edits
-
-Indexed narrated lectures use `LessonTitle` for a short cover. Its robot badge
-and model labels come from `provenance.yaml`; do not hard-code an imagined model
-variant or replace prior attribution with the current renderer's identity.
-The frozen reference talk remains unchanged.
-
-For an isolated content edit, keep the scene and its narration in sync and use
-`make video DECK=... UPDATE_SCENES="SceneName" TTS_PROFILE=...`. This renders that
-scene and assembles every chapter, reusing other encoded segments by input
-content. `--scenes` retains its selected-chapter preview meaning. Shared-style
-or scene-order changes require a full visual render. Git owns source history;
-do not create a historical-version media archive or selector.
+Keep the scene and its narration synchronized and use
+`make video DECK=... UPDATE_SCENES="SceneName" TTS_PROFILE=...`. This renders the
+selected scene and assembles every chapter, reusing other encoded segments by
+input content. `--scenes` retains its selected-chapter preview meaning.
+Shared-style or scene-order changes require a full visual render. If model
+attribution changes, include the cover in the selected scenes so its visible
+credit stays current. See the [production guide](../dkvis/presentation/README.md)
+for cache behavior and generation records.

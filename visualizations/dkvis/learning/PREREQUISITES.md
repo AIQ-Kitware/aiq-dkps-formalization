@@ -40,11 +40,11 @@ scripts are linked above. Speech and animated builds use those same texts.
 
 To make videos using the configured TTS service:
 
-The `crall` profile uses Breeze TTS 2 at the localhost port 8821 endpoint,
-voice `crall-math-dk`, WAV output, and the instruction:
-"Speak in an enthusiastic, engaging lecture style with clear articulation."
-It applies to every speech chunk. The instruction participates in audio cache
-keys, so earlier audio made without it is not reused for the new style.
+Select the `crall` profile for the cloned reference voice. The current model,
+voice, delivery instruction, chunk limits, and postprocessing settings live in
+[tts.toml](../../tts.toml); local endpoint overrides live in ignored `.env`.
+The [production guide](../presentation/README.md) explains configuration and
+caching. New Crall video variants are named `crall-breeze-tts2`.
 
 ```bash
 make prerequisites-video TTS_PROFILE=crall SKIP_RENDER=1
@@ -56,7 +56,7 @@ matching study and compact proof talk as well, following the complete YAML index
 
 This narrates all prerequisite lectures in YAML dependency order using existing
 slides. Omit `SKIP_RENDER=1` to render the visuals first. Final videos are written
-to `renders/<number>_<deck>.<profile>.narrated.mp4`. To select another configured voice instead:
+to `renders/<number>_<deck>.<narrator>.narrated.mp4`. To select another configured voice instead:
 
 ```bash
 for deck in prereq-projections prereq-complementary-projection prereq-singular-norms prereq-matrix-exponential prereq-variations; do
@@ -66,7 +66,7 @@ done
 
 Change `--tts-profile` or the shared `tts.toml` settings to select another server
 or voice. Private endpoints remain in the ignored `.env`. The five videos
-are `renders/<number>_<deck>.<profile>.narrated.mp4`; generation timings and cache behavior use
+are `renders/<number>_<deck>.<narrator>.narrated.mp4`; generation timings and cache behavior use
 the existing shared pipeline. Building the lectures and their text does not
 request speech.
 

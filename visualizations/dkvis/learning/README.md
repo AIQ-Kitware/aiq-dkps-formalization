@@ -41,6 +41,10 @@ modules before this library covers the full formalization's prerequisites.
 
 ## Authoring a module
 
+Read [LECTURE_STYLE_RULES.md](../../LECTURE_STYLE_RULES.md) first. It is the
+canonical record of the user's lecture preferences; this guide documents the
+source layout, transcript format, and existing component APIs.
+
 Each indexed lesson has a local setting and notation refresher, so viewers can
 start there without decoding symbols in another video. Numerical considerations
 are optional bonus slides after the core and Lean facts, before the study
@@ -78,7 +82,7 @@ A transcript section uses the actual scene class name:
 ```markdown
 ## ProjectionExample: What the projection preserves
 
-Why: Relate the picture to the next step of the proof.
+Why: Connect the nearest-point picture to the projection identity.
 Recall: $P$ is the orthogonal projection onto $K$.
 
 Speak the explanation in ordinary language, spelling out mathematics for TTS.
@@ -133,3 +137,9 @@ author the author of the existing slide or transcript content.
 Exports snapshot these records with their generation timestamp and source Git
 revision. Existing videos without a snapshot remain explicitly unrecorded;
 the library displays current source attribution separately.
+
+Never backfill an older video's generation record with today's source attribution.
+If attribution changes, include the title scene when partially rendering a deck
+so the visible robot/model credit is updated as well as the edited content.
+For example, use `UPDATE_SCENES="CpTitle CpSplit"`. Partial rendering explicitly
+selects scenes; it does not infer Python source dependencies.

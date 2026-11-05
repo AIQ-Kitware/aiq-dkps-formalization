@@ -1,5 +1,8 @@
 # Reusable slide components
 
+Lecture content follows [LECTURE_STYLE_RULES.md](../../LECTURE_STYLE_RULES.md).
+This guide describes reusable rendering components.
+
 This package owns reusable visual primitives. Topic scenes and numerical examples
 live in `dkvis/learning/<topic>/`; transcripts live in numbered `lectures/` folders
 indexed by `lectures/index.yaml`. See
