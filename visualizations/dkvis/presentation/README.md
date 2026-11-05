@@ -212,10 +212,12 @@ segment caches retain their existing profile directories; the public rename does
 not itself require new synthesis or encoding. Existing videos keep their old
 filenames and recorded provenance until rebuilt.
 
-Captions use the browser video player's native CC/subtitles menu, including in
-fullscreen. They start off. Availability and placement of the menu depend on the
-browser; no separate page checkbox is needed. Caption words are the recorded TTS
-input, with approximate timing within each request.
+The visible **CC: off/on** button alongside playback controls toggles captions
+directly and stays synchronized with the native player menu. Native caption
+options remain available, including in fullscreen. Captions start off for each
+selected video. Caption words are the recorded TTS input, with approximate timing
+within each request. The speed selector offers rates up to 4× and remembers the
+selected rate in this browser.
 
 Timestamp buttons seek 50 milliseconds inside the selected passage (less for
 a very short passage). This avoids displaying the preceding video frame when
