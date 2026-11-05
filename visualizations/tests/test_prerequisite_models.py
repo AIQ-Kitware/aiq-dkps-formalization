@@ -140,3 +140,46 @@ def test_opening_flow_vectorized_values_and_initial_conditions():
     assert state.shape == (3, 2)
     assert scalar[0] == 1
     assert np.allclose(state[0], [1., 0.])
+
+
+def test_operator_lecture_rayleigh_range_and_eigenvalue_stability():
+    from dkvis.learning.operators.model import rayleigh_example
+    samples = [rayleigh_example(t) for t in np.linspace(0, 2*np.pi, 101)]
+    eigenvalues = np.linalg.eigvalsh(samples[0][0])
+    for a, x, value in samples:
+        assert np.linalg.norm(x) == pytest.approx(1)
+        assert value == pytest.approx(np.vdot(x, a @ x))
+        assert eigenvalues[0]-1e-12 <= value <= eigenvalues[-1]+1e-12
+    a = samples[0][0]
+    h = np.array([[.04, .03], [.03, -.02]])
+    assert np.max(np.abs(np.linalg.eigvalsh(a+h)-eigenvalues)) <= np.linalg.norm(h, 2)
+
+
+@pytest.mark.parametrize('angle', [0., .6, 2.1])
+def test_operator_lecture_canonical_polar_factor_including_its_kernel(angle):
+    from dkvis.learning.operators.model import polar_example
+    a, modulus, partial = polar_example(angle)
+    left, singular, right = np.linalg.svd(a)
+    canonical = (left * (singular > 1e-12)) @ right
+    assert np.allclose(partial, canonical)
+    assert np.allclose(modulus.T, modulus)
+    assert np.linalg.eigvalsh(modulus).min() >= -1e-12
+    assert np.allclose(modulus @ modulus, a.T @ a)
+    assert np.allclose(partial @ modulus, a)
+    assert np.allclose(partial.T @ partial, np.diag([1., 0.]))
+    assert np.allclose(partial @ [0., 1.], 0)
+    for x in [[.2, -.7], [1., 0.], [0., 1.]]:
+        assert np.linalg.norm(modulus @ x) == pytest.approx(np.linalg.norm(a @ x))
+
+
+def test_operator_lecture_sylvester_solution_and_gap_bound():
+    from dkvis.learning.operators.model import sylvester_example
+    a, b, residual, solution = sylvester_example()
+    assert np.allclose(a @ solution-solution @ b, residual)
+    gap = np.linalg.eigvalsh(a).min()-np.linalg.eigvalsh(b).max()
+    assert gap > 0
+    assert gap*np.linalg.norm(solution, 2) <= np.linalg.norm(residual, 2)
+    # Solve the independent vectorized system, using column-major coordinates.
+    system = np.kron(np.eye(2), a)-np.kron(b.T, np.eye(2))
+    reference = np.linalg.solve(system, residual.reshape(-1, order='F')).reshape((2, 2), order='F')
+    assert np.allclose(solution, reference)

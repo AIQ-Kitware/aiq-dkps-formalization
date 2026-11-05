@@ -11,6 +11,7 @@ from dkvis.decks.matching_talk import MATCHING_PROOF_TALK
 from dkvis.decks.reference import REFERENCE_DECKS
 from dkvis.decks.study import STUDY
 from dkvis.decks.prerequisites import PREREQUISITES
+from dkvis.decks.operators import OPERATORS
 
 DECKS: dict[str, DeckSpec] = {
     **REFERENCE_DECKS,
@@ -21,6 +22,7 @@ DECKS: dict[str, DeckSpec] = {
     MATCHING_PROOF_TALK.name: MATCHING_PROOF_TALK,
     STUDY.name: STUDY,
     **{deck.name: deck for deck in PREREQUISITES},
+    **{deck.name: deck for deck in OPERATORS},
 }
 
 

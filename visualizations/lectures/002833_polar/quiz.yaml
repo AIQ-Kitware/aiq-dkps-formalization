@@ -1,0 +1,34 @@
+questions:
+- title: Keep the kernel convention
+  question: For $A=\operatorname{diag}(2,0)$, what is its canonical polar partial isometry?
+  choices:
+  - $I$
+  - $\operatorname{diag}(1,0)$
+  - $A$
+  - $0$
+  correct: 1
+  explanation: The canonical factor is an isometry on the nonzero direction and vanishes on the kernel.
+    A unitary extension is a different choice.
+  think_seconds: 8
+  speak_question: First question. A is diagonal with entries two and zero. What is the canonical polar
+    partial isometry? A, the identity; B, diagonal one and zero; C, A itself; or D, zero? You have eight
+    seconds to choose an answer. Pause the video if you want longer.
+  speak_answer: The correct answer is B. The canonical factor is an isometry on the nonzero direction
+    and vanishes on the kernel. A unitary extension is a different choice.
+- title: Separate stretch from motion
+  question: Which equality holds for every vector in a polar factorization $A=U|A|$?
+  choices:
+  - $\|Ax\|=\||A|x\|$.
+  - $U$ is always invertible.
+  - $|A|=A$.
+  - $A^*=A$.
+  correct: 0
+  explanation: The modulus has the same length effect as A on each input. The partial isometry supplies
+    the remaining motion on its support.
+  think_seconds: 8
+  speak_question: Second question. In a polar factorization, which claim always holds? A, A and its modulus
+    have the same output norm on every input; B, the partial isometry is invertible; C, the modulus equals
+    A; or D, A is self adjoint? You have eight seconds to choose an answer. Pause the video if you want
+    longer.
+  speak_answer: The correct answer is A. The modulus has the same length effect as A on each input. The
+    partial isometry supplies the remaining motion on its support.

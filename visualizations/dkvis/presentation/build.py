@@ -260,22 +260,25 @@ def main(argv=None) -> None:
     renders = ROOT / "renders"
     renders.mkdir(exist_ok=True)
     out = output_name(args.deck)
-    html = args.html or renders / f"{out}.html"
+    from dkvis.lectures import lecture_output_name
+    from dkvis.palette import OUTPUT_SUFFIX
+    public = lecture_output_name(args.deck) + OUTPUT_SUFFIX
+    html = args.html or renders / f'{public}{".standalone" if args.one_file else ""}.html'
     folder = ["--folder", f"slides-{out}"]
     convert = ["convert", *folder, "--to", "html", *names, str(html), "-cslide_number=true", "-ccontrols=true"]
     if args.one_file:
         convert.insert(1, "--one-file")
     _run(*convert)
     if args.pdf:
-        _run("convert", *folder, "--to", "pdf", *names, str(renders / f"{out}.pdf"))
+        _run("convert", *folder, "--to", "pdf", *names, str(renders / f"{public}.pdf"))
     if args.pptx:
-        _run("convert", *folder, "--to", "pptx", *names, str(renders / f"{out}.pptx"))
+        _run("convert", *folder, "--to", "pptx", *names, str(renders / f"{public}.pptx"))
     if args.handout:
-        write_handout(args.deck, renders / f"{out}.handout.pdf")
+        write_handout(args.deck, renders / f"{public}.handout.pdf")
     if get_deck(args.deck).narration:
         from dkvis.palette import THEME
         from dkvis.presentation.narration import export
-        manifest = export(renders / f"{out}-narration", deck_name=args.deck, theme=THEME)
+        manifest = export(renders / f"{public}-narration", deck_name=args.deck, theme=THEME)
         print(f"Narration:     {manifest.parent / 'presentation.txt'}")
     print(f"\nPresent live:  manim-slides present --folder slides-{out} {' '.join(names)}")
     print(f"Or open:       {html}")

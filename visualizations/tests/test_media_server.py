@@ -82,3 +82,17 @@ def test_paths_stay_within_media_root(library, tmp_path):
         assert client.get('/api/chapters', params={'path': path}).status_code == 404
     assert client.get('/files/outside.txt').status_code == 404
     assert client.get('/files/%2e%2e/private-media-server-test.txt').status_code == 404
+
+
+def test_numbered_video_reuses_stable_chapter_cache(library):
+    client, root, data = library
+    filename = '001000_prereq-projections.kokoro.narrated.mp4'
+    (root/filename).write_bytes(data)
+    cache = root/'prereq-projections-narrated'
+    cache.mkdir()
+    chapters = [dict(title='Question', start=10.)]
+    (cache/'timeline-kokoro.json').write_text(json.dumps(chapters))
+    assert client.get('/api/chapters', params={'path': filename}).json() == chapters
+    entries = client.get('/api/catalog').json()['items']
+    entry = next(row for row in entries if row['name'] == filename)
+    assert entry['title'].startswith('001000')

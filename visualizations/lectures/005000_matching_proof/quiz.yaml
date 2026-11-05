@@ -1,0 +1,35 @@
+questions:
+- title: Read the reduction
+  question: What is the role of the stationarity argument in the lower bound?
+  choices:
+  - Assume every feasible transporter already has small blocks.
+  - Obtain block structure for a chosen minimizer from legal variations.
+  - Restrict the feasible set to the special orthogonal group.
+  - Identify the source correction with an eigenvalue perturbation bound.
+  correct: 1
+  explanation: The structural decomposition is derived at a minimizer. It is not imposed on the full feasible
+    set in advance.
+  think_seconds: 8
+  speak_question: First question. What does stationarity do in the lower bound? A, assume every feasible
+    map already has small blocks; B, derive block structure for a chosen minimizer from legal variations;
+    C, restrict all maps to determinant one; or D, turn the source correction into an eigenvalue perturbation
+    estimate? You have eight seconds to choose an answer. Pause the video if you want longer.
+  speak_answer: The correct answer is B. The structural decomposition is derived at a minimizer. It is
+    not imposed on the full feasible set in advance.
+- title: Select the graph algorithm
+  question: Which graph problem represents the general nuclear matching reduction?
+  choices:
+  - Bipartite assignment with an imposed left-right partition.
+  - A shortest-path problem.
+  - Maximum-weight matching on a general graph, using pair savings.
+  - A matching that must pair every vertex.
+  correct: 2
+  explanation: Angle labels are vertices of a general graph. Positive pair savings compete, and unmatched
+    labels retain their singleton cost.
+  think_seconds: 8
+  speak_question: Second question. Which graph problem represents this reduction? A, bipartite assignment
+    with a fixed left and right partition; B, shortest paths; C, maximum weight matching on a general
+    graph using pair savings; or D, a matching that must pair every vertex? You have eight seconds to
+    choose an answer. Pause the video if you want longer.
+  speak_answer: The correct answer is C. Angle labels are vertices of a general graph. Positive pair savings
+    compete, and unmatched labels retain their singleton cost.

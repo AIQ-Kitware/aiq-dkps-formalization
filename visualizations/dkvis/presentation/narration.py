@@ -21,6 +21,7 @@ class Narration:
     motivation: str
     reminder: str
     beats: tuple[str, ...]
+    pauses: tuple[float, ...] = ()
 
     @property
     def text(self) -> str:
@@ -64,7 +65,20 @@ def read_deck_narration(deck_name: str) -> dict[str, Narration]:
     deck = get_deck(deck_name)
     if deck.narration is None:
         raise ValueError(f"Deck {deck_name!r} has no authored transcript; set DeckSpec.narration first.")
-    return read_narration(ROOT / deck.narration, scenes=deck.scene_names)
+    from dkvis.quiz import SCENES, questions
+    rows = questions(deck_name)
+    authored = [name for name in deck.scene_names if not rows or name not in SCENES]
+    result = read_narration(ROOT / deck.narration, scenes=authored)
+    for i, row in enumerate(rows):
+        result[SCENES[i]] = Narration(
+            f'Study question {i+1}: {row["title"]}',
+            'Choose one answer, then compare the explanation.',
+            'Pause the video if you would like more thinking time.',
+            (row['speak_question'], row['speak_answer']),
+            (row.get('think_seconds', 8), 0))
+    if list(result) != deck.scene_names:
+        raise ValueError(f'Review questions must close the deck: {deck_name}')
+    return result
 
 
 def export(out: Path, *, deck_name: str, theme: str = "dark") -> Path:
@@ -93,7 +107,7 @@ def export(out: Path, *, deck_name: str, theme: str = "dark") -> Path:
             beat_files.append(f"beats/{beat_name}")
         entries.append({"number": number, "scene": scene, "title": script.title,
                         "motivation": script.motivation, "text_file": filename,
-                        "beat_files": beat_files,
+                        "beat_files": beat_files, "pauses": script.pauses,
                         "slide_json": f"slides-{deck_name}{suffix}/{scene}.json"})
     for old in beat_dir.glob("*.txt"):
         if re.fullmatch(r"\d{2,}-[A-Za-z_]\w*-\d{2,}\.txt", old.name) and old.name not in expected_beats:
@@ -114,7 +128,8 @@ def main(argv=None):
     parser.add_argument("--theme", choices=["dark", "light"], default="dark")
     args = parser.parse_args(argv)
     suffix = '-light' if args.theme == 'light' else ''
-    out = args.out or ROOT / 'renders' / f'{args.deck}{suffix}-narration'
+    from dkvis.lectures import lecture_output_name
+    out = args.out or ROOT / 'renders' / f'{lecture_output_name(args.deck)}{suffix}-narration'
     manifest = export(out, theme=args.theme, deck_name=args.deck)
     print(f"Exported {len(read_deck_narration(args.deck))} narration files, presentation.txt, and {manifest}")
 

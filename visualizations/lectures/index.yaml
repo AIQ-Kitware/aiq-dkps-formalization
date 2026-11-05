@@ -19,12 +19,30 @@ lectures:
     topic: matrix_exponential
     series: prerequisites
     requires: [projections]
+  minmax:
+    title: Rayleigh quotients, min-max, and eigenvalue stability
+    deck: operators-minmax
+    topic: operators
+    series: operators
+    requires: [projections, singular_norms]
+  polar:
+    title: Operator absolute value and polar decomposition
+    deck: operators-polar
+    topic: operators
+    series: operators
+    requires: [projections, singular_norms]
   variations:
     title: Feasible variations and stationarity
     deck: prereq-variations
     topic: variations
     series: prerequisites
     requires: [projections, singular_norms, matrix_exponential]
+  sylvester:
+    title: Sylvester equations and spectral separation
+    deck: operators-sylvester
+    topic: operators
+    series: operators
+    requires: [minmax, matrix_exponential]
   matching_study:
     title: The matching proof, a learner's walkthrough
     deck: matching-proof

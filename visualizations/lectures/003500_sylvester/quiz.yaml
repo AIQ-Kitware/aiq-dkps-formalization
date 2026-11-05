@@ -1,0 +1,35 @@
+questions:
+- title: Divide by the right gap
+  question: In scalar form, $3x-x=4$. What is $x$?
+  choices:
+  - $1$
+  - $2$
+  - $4$
+  - $8$
+  correct: 1
+  explanation: The coefficient is the difference three minus one. Dividing the residual four by that gap
+    gives two.
+  think_seconds: 8
+  speak_question: First question. The scalar Sylvester equation is three x minus x equals four. Is x A,
+    one; B, two; C, four; or D, eight? You have eight seconds to choose an answer. Pause the video if
+    you want longer.
+  speak_answer: The correct answer is B. The coefficient is the difference three minus one. Dividing the
+    residual four by that gap gives two.
+- title: Know what norm bound needs
+  question: For a constant-one operator-norm estimate $\delta\|X\|\le\|AX-XB\|$, which hypothesis was
+    used here?
+  choices:
+  - A and B are arbitrary matrices with different entries.
+  - All eigenvalue pairs are unequal, with no further condition.
+  - An ordered quadratic-form gap of size delta.
+  - The residual is positive definite.
+  correct: 2
+  explanation: The ordered form gap supplies the dimension-free constant-one estimate. Scalar solvability
+    alone does not establish that operator-norm bound.
+  think_seconds: 8
+  speak_question: Second question. Which hypothesis supplied our constant one operator norm estimate?
+    A, different matrix entries; B, only that no eigenvalues coincide; C, an ordered quadratic form gap
+    of size delta; or D, a positive definite residual? You have eight seconds to choose an answer. Pause
+    the video if you want longer.
+  speak_answer: The correct answer is C. The ordered form gap supplies the dimension-free constant-one
+    estimate. Scalar solvability alone does not establish that operator-norm bound.

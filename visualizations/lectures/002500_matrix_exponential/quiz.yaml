@@ -1,0 +1,34 @@
+questions:
+- title: Use a terminating series
+  question: If $N^2=0$, what is $e^{tN}$?
+  choices:
+  - $I$
+  - $I+tN$
+  - $tN$
+  - $(e^{tn_{ij}})_{ij}$
+  correct: 1
+  explanation: Every term of degree two or higher vanishes. The identity and linear term remain; exponentiation
+    is not entrywise.
+  think_seconds: 8
+  speak_question: First question. N squared is zero. What is the exponential of t N? A, the identity;
+    B, the identity plus t N; C, t N; or D, the entrywise scalar exponential? You have eight seconds to
+    choose an answer. Pause the video if you want longer.
+  speak_answer: The correct answer is B. Every term of degree two or higher vanishes. The identity and
+    linear term remain; exponentiation is not entrywise.
+- title: Build a legal motion
+  question: $B^T=-B$ and $BP=PB$. Which conclusion is guaranteed?
+  choices:
+  - $B=0$.
+  - $e^{tB}$ preserves lengths and the two spaces selected by $P$.
+  - Every transporter $W$ commutes with $P$.
+  - $e^{tB}=I+tB$ for all $t$.
+  correct: 1
+  explanation: Skew-symmetry gives orthogonality of the exponential. Commutation preserves the source
+    decomposition.
+  think_seconds: 8
+  speak_question: Second question. B is skew symmetric and commutes with P. Which statement follows? A,
+    B must be zero; B, its exponential preserves lengths and the two spaces selected by P; C, every transporter
+    commutes with P; or D, the exponential is always its linear approximation? You have eight seconds
+    to choose an answer. Pause the video if you want longer.
+  speak_answer: The correct answer is B. Skew-symmetry gives orthogonality of the exponential. Commutation
+    preserves the source decomposition.

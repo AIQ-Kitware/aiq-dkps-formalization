@@ -24,6 +24,7 @@ from dkvis.presentation.audio import synthesize_beat
 from dkvis.presentation.media import assemble_narration, concat_list, duration
 from dkvis.palette import OUTPUT_SUFFIX, THEME
 from dkvis.presentation.timing import timing
+from dkvis.lectures import lecture_output_name
 from dkvis.presentation.tts import DEFAULT_CONFIG, load_profiles, resolve_profile
 
 
@@ -199,6 +200,7 @@ def main(argv=None):
             parser.error(f'Unknown scenes: {", ".join(sorted(unknown))}')
         scripts = {name: script for name, script in scripts.items() if name in args.scenes}
     name = args.deck + OUTPUT_SUFFIX
+    public = lecture_output_name(args.deck) + OUTPUT_SUFFIX
     profile = re.sub(r"[^a-zA-Z0-9_-]", "_", settings["profile"])
     log = timing()
     safe_settings = {k: v for k, v in settings.items() if k != "endpoint"}
@@ -234,7 +236,7 @@ def main(argv=None):
                             str(args.jobs),
                             "--one-file",
                             "--html",
-                            str(ROOT / "renders" / f"{name}.standalone.html"),
+                            str(ROOT / "renders" / f"{public}.standalone.html"),
                             "--handout",
                         ],
                         cwd=ROOT,
@@ -243,7 +245,7 @@ def main(argv=None):
             else:
                 log.record("slides_reused", 0, cache_hit=True)
             with log.measure("narration_export"):
-                export(ROOT / "renders" / f"{name}-narration" / profile, theme=THEME,
+                export(ROOT / "renders" / f"{public}-narration" / profile, theme=THEME,
                        deck_name=args.deck)
             work = ROOT / "renders" / f"{name}-narrated"
             work.mkdir(parents=True, exist_ok=True)
@@ -268,6 +270,8 @@ def main(argv=None):
                     segment_dir.mkdir(parents=True, exist_ok=True)
                     segment = segment_dir / f"{label}.mp4"
                     pause = args.pause if k == len(visuals[scene]) else args.beat_pause
+                    if script.pauses:
+                        pause += script.pauses[k-1]
                     seconds = narrated_segment(
                         visual, audio, segment, pause=pause, fps=args.fps, preset=args.preset
                     )
@@ -299,7 +303,7 @@ def main(argv=None):
             narration = assemble_narration(entries, work / f"narration-{variant}.wav",
                                            fade_ms=settings.get("postprocess", {}).get("edge_fade_ms", 8.))
             suffix = f".{variant}"
-            output = (args.output or ROOT / "renders" / f"{name}{suffix}.narrated.mp4").resolve()
+            output = (args.output or ROOT / "renders" / f"{public}{suffix}.narrated.mp4").resolve()
             output.parent.mkdir(parents=True, exist_ok=True)
             temporary = output.with_suffix(".part.mp4")
             with log.measure("video_concat", output=str(output), segments=len(segments)) as event:

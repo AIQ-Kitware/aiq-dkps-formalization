@@ -1,0 +1,34 @@
+questions:
+- title: Prove both inequalities
+  question: Why is constructing one transporter for every matching not enough to prove the minimum formula?
+  choices:
+  - It gives attainable upper bounds, but a lower bound against every transporter is still needed.
+  - It proves that no minimizer exists.
+  - It forces every transporter to preserve the principal planes.
+  - It determines historical priority.
+  correct: 0
+  explanation: Construction proves attainability of candidate costs. The hard comparison must also exclude
+    cheaper unrestricted transporters.
+  think_seconds: 8
+  speak_question: First question. Why is constructing a transporter for each matching not enough? A, it
+    only supplies attainable upper bounds and we still need a lower bound for every transporter; B, it
+    proves there is no minimum; C, it forces every map to preserve the principal planes; or D, it determines
+    historical priority? You have eight seconds to choose an answer. Pause the video if you want longer.
+  speak_answer: The correct answer is A. Construction proves attainability of candidate costs. The hard
+    comparison must also exclude cheaper unrestricted transporters.
+- title: Use the pair weight
+  question: Two equal angles are $\pi/6$. The nuclear pair cost is $4\sin((\theta_1+\theta_2)/2)$. What
+    is it?
+  choices:
+  - $0$
+  - $1$
+  - $2$
+  - $4$
+  correct: 2
+  explanation: The half-sum is pi over six, whose sine is one half. Multiplying by four gives two.
+  think_seconds: 8
+  speak_question: Second question. Two equal angles are pi over six. Their nuclear pair cost is four times
+    the sine of half their sum. Is the answer A, zero; B, one; C, two; or D, four? You have eight seconds
+    to choose an answer. Pause the video if you want longer.
+  speak_answer: The correct answer is C. The half-sum is pi over six, whose sine is one half. Multiplying
+    by four gives two.

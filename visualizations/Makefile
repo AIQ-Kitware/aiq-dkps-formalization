@@ -18,7 +18,8 @@
 #   make handout         # one-page-per-scene PDFs of every built deck and part
 #   make serve           # browse videos, slide decks and PDFs with seekable playback
 #
-# Every deck writes renders/<deck>.html (+ .pdf, .handout.pdf, <deck>_assets/) and keeps
+# Indexed lectures add their six-digit order prefix to public output filenames.
+# Every reference deck writes renders/<deck>.html (+ .pdf, .handout.pdf, <deck>_assets/) and keeps
 # its rendered scenes in slides-<deck>/ (with THEME=light: <deck>-light).  renders/<deck>.html needs the
 # <deck>_assets/ folder beside it; renders/<deck>.standalone.html does not.
 
@@ -67,12 +68,13 @@ DECKS      := short full $(PARTS) $(WORKING) matching matching-talk
 
 .DEFAULT_GOAL := help
 .PHONY: help setup all rebuild working $(DECKS) $(addprefix clean-,$(DECKS)) $(addprefix present-,$(DECKS)) \
-        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean list slides text video serve prerequisites lectures-video prerequisites-video matching-text matching-video matching-talk-text matching-talk-video
+        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean list slides text video serve prerequisites operators lectures-video prerequisites-video matching-text matching-video matching-talk-text matching-talk-video
 
 help:
 	@awk '/^#/ { sub(/^# ?/, ""); print; next } { exit }' $(firstword $(MAKEFILE_LIST))
 	@echo; echo 'Targets:'
 	@echo '  list               list all presentations and transcript availability'
+	@echo '  operators          build the three accepted operator-foundation lectures'
 	@echo '  prerequisites      build the ordered prerequisite lectures and speech text'
 	@echo '  prerequisites-video narrate the prerequisite series; TTS_PROFILE=crall selects the lecture voice'
 	@echo '  lectures-video     narrate every lecture in YAML dependency order'
@@ -91,7 +93,7 @@ help:
 	@echo '  matching           detailed matching proof; standalone HTML, PDF and narration text'
 	@echo '  matching-text      export one plain-text narration file per slide'
 	@echo '  matching-video     render a narrated video; TTS_PROFILE selects a server from tts.toml'
-	@echo '  matching-talk      separate 13-slide proof talk; HTML, PDF, handout, and narration'
+	@echo '  matching-talk      separate proof talk with two review questions; HTML, PDF, handout, and narration'
 	@echo '  matching-talk-text export the compact talk as slide/build TTS text'
 	@echo '  matching-talk-video render the compact talk with the configured TTS profile'
 	@echo '  working            build kitware, comprehensive, study, and novelty'
@@ -146,6 +148,10 @@ prerequisites:
 	@for deck in $$($(UV) run python -c 'from dkvis.decks.prerequisites import PREREQUISITES; print(" ".join(d.name for d in PREREQUISITES))'); do \
 	    $(MAKE) slides DECK=$$deck || exit 1; \
 	done
+operators:
+	@for deck in $$($(UV) run python -c 'from dkvis.decks.operators import OPERATORS; print(" ".join(d.name for d in OPERATORS))'); do \
+	    $(MAKE) slides DECK=$$deck || exit 1; \
+	done
 
 lectures-video prerequisites-video:
 	@decks="$$($(UV) run python -c 'import sys; from dkvis.lectures import lecture_decks; print(" ".join(lecture_decks("prerequisites" if sys.argv[1] == "prerequisites-video" else None)))' $@)" || exit $$?; \
@@ -155,7 +161,7 @@ lectures-video prerequisites-video:
 
 slides:
 	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))
-	$(SLIDES_RUN) python -m dkvis.presentation slides $(DECK) $(BUILD_FLAGS) $(if $(JOBS),,--jobs 2) --one-file --html renders/$(DECK)$(SUFFIX).standalone.html
+	$(SLIDES_RUN) python -m dkvis.presentation slides $(DECK) $(BUILD_FLAGS) $(if $(JOBS),,--jobs 2) --one-file
 
 text:
 	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))
@@ -198,8 +204,9 @@ full:
 	done
 
 $(addprefix clean-,$(DECKS)):
-	rm -rf slides-$(DECK_$(@:clean-%=%))$(SUFFIX) renders/$(DECK_$(@:clean-%=%))$(SUFFIX).* \
-	    renders/$(DECK_$(@:clean-%=%))$(SUFFIX)_assets
+	@public="$$($(SLIDES_RUN) python -c 'from dkvis.lectures import lecture_output_name; print(lecture_output_name("$(DECK_$(@:clean-%=%))"))')" || exit $$?; \
+	    rm -rf slides-$(DECK_$(@:clean-%=%))$(SUFFIX) "renders/$${public}$(SUFFIX)".* \
+	    "renders/$${public}$(SUFFIX)_assets"
 
 $(addprefix present-,$(DECKS)):
 	$(RUN) manim-slides present --folder slides-$(DECK_$(@:present-%=%))$(SUFFIX) \
@@ -208,8 +215,7 @@ $(addprefix present-,$(DECKS)):
 standalone: standalone-short standalone-full $(addprefix standalone-,$(PARTS))
 
 $(addprefix standalone-,$(DECKS)):
-	$(RUN) python -m dkvis.presentation slides $(DECK_$(@:standalone-%=%)) --no-render --one-file \
-	    --html renders/$(DECK_$(@:standalone-%=%))$(SUFFIX).standalone.html
+	$(RUN) python -m dkvis.presentation slides $(DECK_$(@:standalone-%=%)) --no-render --one-file
 
 handout: handout-short handout-full $(addprefix handout-,$(PARTS))
 

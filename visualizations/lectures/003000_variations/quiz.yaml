@@ -1,0 +1,35 @@
+questions:
+- title: Separate direction from transporter
+  question: Which conditions make $We^{tB}$ a legal local variation through an orthogonal transporter
+    $W$?
+  choices:
+  - $WP=PW$ alone.
+  - $B^T=B$ alone.
+  - $B^T=-B$ and $BP=PB$.
+  - $B$ has positive entries.
+  correct: 2
+  explanation: The direction preserves orthogonality and the source. The transporter itself is not required
+    to commute with the source projection.
+  think_seconds: 8
+  speak_question: First question. Which conditions make W times the exponential of t B a legal variation?
+    A, W commutes with P; B, B is symmetric; C, B is skew symmetric and commutes with P; or D, B has positive
+    entries? You have eight seconds to choose an answer. Pause the video if you want longer.
+  speak_answer: The correct answer is C. The direction preserves orthogonality and the source. The transporter
+    itself is not required to commute with the source projection.
+- title: Interpret stationarity
+  question: What does a zero first derivative along every legal direction establish by itself?
+  choices:
+  - A global minimum.
+  - Uniqueness of the minimizer.
+  - A necessary stationarity condition.
+  - That every feasible operator is optimal.
+  correct: 2
+  explanation: Stationarity is necessary at a differentiable minimum. Further structure or comparison
+    is needed to prove global optimality.
+  think_seconds: 8
+  speak_question: Second question. What does a zero first derivative along every legal direction establish
+    on its own? A, a global minimum; B, uniqueness; C, a necessary stationarity condition; or D, that
+    all feasible maps are optimal? You have eight seconds to choose an answer. Pause the video if you
+    want longer.
+  speak_answer: The correct answer is C. Stationarity is necessary at a differentiable minimum. Further
+    structure or comparison is needed to prove global optimality.

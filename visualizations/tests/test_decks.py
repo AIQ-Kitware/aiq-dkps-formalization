@@ -136,3 +136,51 @@ def test_study_and_reference_decks_remain_independent():
     assert "V01VTKFinale" not in study
     assert "V01VTKFinale" not in get_deck("sine-theta-short").scene_names
     assert len(study) > len(get_deck("kitware-talk").scene_names)
+
+
+def test_indexed_lectures_have_two_answerable_review_scenes_and_thinking_time():
+    from dkvis.lectures import lecture_decks
+    from dkvis.presentation.narration import read_deck_narration
+    from dkvis.quiz import SCENES, questions
+    for name in lecture_decks():
+        assert get_deck(name).scene_names[-2:] == list(SCENES)
+        scripts = read_deck_narration(name)
+        for scene, question in zip(SCENES, questions(name)):
+            script = scripts[scene]
+            assert len(script.beats) == 2
+            assert script.pauses == (question['think_seconds'], 0)
+            assert 3 <= len(question['choices']) <= 4
+            assert 0 <= question['correct'] < len(question['choices'])
+            assert question['explanation'].strip()
+
+
+def test_numbered_public_names_leave_deck_and_cache_names_stable():
+    from dkvis.lectures import lecture_decks, lecture_number, lecture_output_name
+    from dkvis.presentation.build import output_name
+    for name in lecture_decks():
+        number = lecture_number(name)
+        assert len(number) == 6 and number.isdigit()
+        assert lecture_output_name(name) == f'{number}_{name}'
+        assert not output_name(name).startswith(number)
+    assert lecture_output_name('kitware-talk') == 'kitware-talk'
+
+
+def test_existing_public_exports_are_numbered_without_moving_caches(tmp_path):
+    from dkvis.lectures import lecture_output_name, number_outputs
+    deck = 'prereq-projections'
+    files = [f'{deck}.kokoro.narrated.mp4', f'{deck}-light.handout.pdf',
+             f'999999_{deck}.standalone.html']
+    for name in files:
+        (tmp_path/name).write_bytes(name.encode())
+    cache = tmp_path/f'{deck}-narrated'
+    cache.mkdir()
+    (cache/'speech.wav').write_bytes(b'cached speech')
+    rows = {'projections': {'deck': deck}}
+    number_outputs(rows, tmp_path)
+    for name in files:
+        bare = name.removeprefix('999999_')
+        target = tmp_path/(lecture_output_name(deck)+bare[len(deck):])
+        assert target.read_bytes() == name.encode()
+        assert not (tmp_path/name).exists()
+    number_outputs(rows, tmp_path)  # Reapplying preserves outputs and caches.
+    assert (cache/'speech.wav').read_bytes() == b'cached speech'

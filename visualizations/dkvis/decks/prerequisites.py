@@ -1,5 +1,6 @@
 """Independent short prerequisite lectures; existing talks remain unchanged."""
 from dkvis.deck_spec import DeckSpec, uses
+from dkvis.quiz import quiz_uses
 from dkvis.lectures import lecture_path, lecture_decks
 
 
@@ -13,7 +14,7 @@ PROJECTIONS = DeckSpec(
         'Pr00Question', 'Pr01History', 'Pr02Decomposition', 'Pr03Projector',
         'Pr04Frames', 'Pr05Blocks', 'Pr06Commutation', 'Pr07Transport', 'Pr08Recap',
         'PrComputation', 'PrFacts', 'PrLean',
-    ]),
+    ]) + quiz_uses(),
 )
 
 SINGULAR_NORMS = DeckSpec(
@@ -27,7 +28,7 @@ SINGULAR_NORMS = DeckSpec(
         'Sn04Invariance', 'Sn05Rotation', 'Sn06SmoothCost', 'Sn07BlockCosts',
         'Sn08Restrictions', 'Sn09Recap',
         'SnComputation', 'SnFacts', 'SnLean',
-    ]),
+    ]) + quiz_uses(),
 )
 
 MATRIX_EXPONENTIAL = DeckSpec(
@@ -42,7 +43,7 @@ MATRIX_EXPONENTIAL = DeckSpec(
         'Ex08Laws', 'Ex09Noncommuting', 'Ex10Orthogonal',
         'Ex11SourcePreservation', 'Ex12Recap',
         'ExComputation', 'ExFacts', 'ExLean',
-    ]),
+    ]) + quiz_uses(),
 )
 
 VARIATIONS = DeckSpec(
@@ -56,7 +57,7 @@ VARIATIONS = DeckSpec(
         'Va04SourceMotion', 'Va05Feasible', 'Va06Stationarity',
         'Va07Gradient', 'Va08Test', 'Va09Structure', 'Va10Recap',
         'VaComputation', 'VaFacts', 'VaLean',
-    ]),
+    ]) + quiz_uses(),
 )
 
 # The YAML prerequisite graph owns course membership and teaching order.

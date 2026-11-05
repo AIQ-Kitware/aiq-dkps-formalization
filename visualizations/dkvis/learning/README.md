@@ -8,8 +8,9 @@ and Lean sources; pictures and numerical examples remain explanatory evidence.
 
 ## Current modules and source material
 
-The [four-lecture prerequisite series](PREREQUISITES.md) and the matching
-topic have complete, synchronized transcripts. Other rows identify existing
+The [four-lecture prerequisite series](PREREQUISITES.md), the matching
+topic, and [three accepted operator-foundation lectures](operators/README.md)
+have complete, synchronized transcripts. Other rows identify existing
 material to draw from when authoring more modules; those rows are not already
 finished narrated lessons.
 
@@ -19,8 +20,10 @@ finished narrated lessons.
 | Principal angles | Interpret the angle list, principal planes, and the directed sine operator. | Subspaces and projections; SVD | `slides_sine_theta.py`, `slides_sine_theta_3d.py`; matching study `M01PrincipalPlanes` |
 | Singular-value norms | Compare full displacement costs in operator, trace, and Schatten norms. | Basic matrix algebra; the SVD is introduced | [Lecture 2](singular_norms/README.md): complete narrated module |
 | Matrix exponential | Turn a constant matrix velocity into a flow; derive exact orthogonal and source-preserving motions. | Matrices, series, differentiation | [Matrix exponential](matrix_exponential/README.md): complete narrated module |
+| Min-max and eigenvalue stability | Prove the variational characterization and derive Weyl stability. | Projections; operator norms | [Accepted operator foundations](operators/README.md) |
+| Operator modulus and polar decomposition | Construct the canonical factor and distinguish its kernel convention. | Projections; singular values | [Accepted operator foundations](operators/README.md) |
 | Residuals and spectral separation | Explain why residual size divided by certified separation bounds the subspace error. | Principal angles; spectra | `slides_sine_theta.py`, `sine_theta_story.py` |
-| Sylvester equations and angle bounds | Follow the residual-to-Sylvester reduction and distinguish the four angle theorems. | Residuals and separation; operator norms | `slides_family.py`, `slides_family_detail.py`, `S09Sylvester` |
+| Sylvester equations and angle bounds | Follow the residual-to-Sylvester reduction and distinguish the four angle theorems. | Residuals and separation; operator norms | [Accepted operator foundations](operators/README.md); `slides_family.py`, `S09Sylvester` |
 | Feasible variations and stationarity | Construct legal variations and derive the gradient compression equations. | Projections, norms, exponential, differentiation and trace | [Variations](variations/README.md): complete narrated module |
 | Real and complex invariant blocks | Follow the complex-structure and phase-projection construction on a real space. | Spectral theorem; projections; stationarity | Matching study `M13TwoDecompositions`–`M19ZeroGradient` |
 | The two-angle minimum | Reduce an unrestricted four-dimensional fiber to an attainable phase edge. | Principal coordinates; orthogonal spectra | Matching study `M20PairCoordinates`–`M23Determinants` |
@@ -93,3 +96,14 @@ know why each construction is introduced and what inference it permits; a
 specialist talk can assume its declared prerequisites without teaching them.
 Do not put authoring instructions or prerequisite checklists on the slides
 unless they serve the audience's understanding.
+
+## End-of-lecture study questions
+
+Every indexed lecture has two questions in its source folder's `quiz.yaml`.
+Author the question, three or four choices, a zero-based correct index, an
+explanation, and ordinary-language `speak_question` / `speak_answer` text.
+`think_seconds` controls the silent interval after the spoken choices (eight
+seconds by default); viewers can also pause. The shared review scenes show the
+question first, then highlight and explain the correct answer. The transcript
+export includes these two scenes automatically. Keep their sections out of
+`lecture.md`; append `quiz_uses()` to the deck's scene list.

@@ -1,4 +1,5 @@
 """A compact proof presentation, independent of the matching study deck."""
+from dkvis.quiz import quiz_uses
 from dkvis.deck_spec import DeckSpec, SlideUse
 from dkvis.lectures import lecture_path
 
@@ -15,5 +16,5 @@ MATCHING_PROOF_TALK = DeckSpec(
     description='A compact proof of the unrestricted finite real trace-norm matching formula.',
     footer=r'Real trace-norm transport $\cdot$ matching proof',
     narration=lecture_path('matching_proof'),
-    slides=tuple(SlideUse('dkvis.learning.matching.talk', name) for name in SCENES),
+    slides=tuple(SlideUse('dkvis.learning.matching.talk', name) for name in SCENES) + quiz_uses(),
 )

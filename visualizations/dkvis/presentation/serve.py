@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -47,6 +48,7 @@ def chapters_for(root, media):
         if preview:
             stem = stem.removesuffix('.preview')
         deck, separator, profile = stem.partition('.')
+        deck = re.sub(r'^\d{6}_', '', deck)
         work = media.parent/f'{deck}-narrated'
         candidates = [work/f'timeline-{profile}{".preview" if preview else ""}.json'] if separator else [work/'timeline.json']
     for candidate in candidates:
@@ -84,7 +86,7 @@ def create_app(directory=ROOT/'renders'):
         folder = within(root, request.query_params.get('folder', ''))
         if not folder.is_dir():
             raise HTTPException(404)
-        from dkvis.lectures import load_index
+        from dkvis.lectures import load_index, lecture_number
         titles = {row['deck']: (i, row['title']) for i, row in enumerate(load_index().values())}
         items = []
         for child in folder.iterdir():
@@ -99,8 +101,11 @@ def create_app(directory=ROOT/'renders'):
             if not kind:
                 continue
             relative = child.relative_to(root).as_posix()
-            deck = child.name.split('.')[0].removesuffix('-light')
+            deck = re.sub(r'^\d{6}_', '', child.name.split('.')[0]).removesuffix('-light')
             order, title = titles.get(deck, (1000, child.stem.replace('-', ' ')))
+            number = lecture_number(deck)
+            if number:
+                title = f'{number} · {title}'
             items.append(dict(path=relative, name=child.name, title=title, kind=kind,
                               order=order, size=stat.st_size, modified=stat.st_mtime,
                               version=str(stat.st_mtime_ns),

@@ -49,10 +49,13 @@ still being replaced by a render appear with their new version after refresh.
 ## Learning modules and a shared production pipeline
 
 The [prerequisite lecture series](dkvis/learning/PREREQUISITES.md) contains
-four narrated modules: subspaces and projections (9 slides), singular values
-and displacement cost (10 slides), the matrix exponential (13 slides), and
-feasible variations and stationarity (11 slides). They have independent introductions, historical context, worked
-visual explanations, summaries, and self-checks. `make prerequisites` builds
+four narrated modules: subspaces and projections, singular values
+and displacement cost, the matrix exponential, and
+feasible variations and stationarity. They have independent introductions, historical context, worked
+visual explanations, summaries, and self-checks. Each indexed lecture now ends
+with two multiple-choice questions: spoken choices, eight seconds to think,
+then a highlighted answer and explanation. Pause for more time when needed.
+The questions and speech live together in each lecture folder’s `quiz.yaml`. `make prerequisites` builds
 all four, including TTS-ready text; it does not contact a speech server.
 
 The [lecture library](lectures/README.md) is indexed by `lectures/index.yaml`.
@@ -66,7 +69,10 @@ uv run python -m dkvis.lectures --apply             # allocate folders; preserve
 uv run python -m dkvis.lectures --rebalance --apply # deliberately renumber
 ```
 
-Python imports, deck IDs, render filenames, and speech caches use stable names.
+Python imports, deck IDs, scene folders, and speech caches use stable names.
+Public HTML, PDF, and video filenames carry their six-digit lecture prefix.
+Applying the organizer also renames existing public exports without rebuilding
+their contents; existing videos need a new video build to include the questions.
 Decks resolve their transcript paths from stable lecture IDs, so folder moves
 do not require editing import statements or hard-coded paths. The generated
 library catalog is refreshed when the organizer is applied.
@@ -77,7 +83,14 @@ run `uv run python -m dkvis.lectures --apply` after cloning to recreate them.
 prerequisites to existing material and documents how to author a module.
 [Real matching](dkvis/learning/matching/README.md) is the first complete topic
 package: its study, proof talk, numerical model, and two transcripts live
-together. Existing presentations retain their content, order, and output names.
+together. Frozen reference presentations retain their content, order, and output names.
+The indexed matching lectures also receive the review questions and public prefixes.
+
+The [accepted operator-foundation series](dkvis/learning/operators/README.md)
+adds min-max/Weyl stability, operator absolute value/polar decomposition, and
+Sylvester equations with ordered spectral separation. `make operators` builds
+all three with speech text; the topic guide links the accepted Tau Ceti modules
+and distinguishes DKPS adaptations from independent implementations.
 
 From this directory:
 
@@ -281,7 +294,7 @@ Current presentations (in addition to the preserved reference decks):
 
 ### Compact matching proof talk
 
-`matching-proof-talk` is a separate **13-slide** presentation of the proof,
+`matching-proof-talk` is a separate presentation with **13 proof slides and two review questions**,
 assuming the usual principal-angle, spectral, and variational background.
 It concentrates on stationarity, common invariant blocks, the unrestricted
 two-angle minimum, and the trace-norm limit. The existing 40-slide learner
@@ -292,12 +305,12 @@ make matching-talk
 make matching-talk-text   # text only; no speech server needed
 ```
 
-The outputs are `renders/matching-proof-talk.standalone.html`,
-`renders/matching-proof-talk.pdf`, and `renders/matching-proof-talk.handout.pdf`.
+The outputs are `renders/005000_matching-proof-talk.standalone.html`,
+`renders/005000_matching-proof-talk.pdf`, and `renders/005000_matching-proof-talk.handout.pdf`.
 The independent authored script is
 [lectures/README.md#matching_proof](lectures/README.md#matching_proof).
 Plain slide and animated-build speech files, a combined `presentation.txt`,
-and a manifest are exported under `renders/matching-proof-talk-narration/`.
+and a manifest are exported under `renders/005000_matching-proof-talk-narration/`.
 See [briefs/matching-proof-talk.md](briefs/matching-proof-talk.md) for scope
 and proof references. `QUALITY=l` gives a fast draft; the default is 1080p.
 
@@ -308,7 +321,7 @@ To synthesize the shorter talk later with your configured server:
 ```
 
 This reuses the existing `.env`/`tts.toml` configuration, chunking, audio caches,
-and timing logs. Its video is `renders/matching-proof-talk.<profile>.narrated.mp4`;
+and timing logs. Its video is `renders/005000_matching-proof-talk.<profile>.narrated.mp4`;
 its narration and renders have their own paths.
 
 ### Matching proof study: slides, presentation text, and narrated video
@@ -319,9 +332,9 @@ Build the slides and export the speech text without contacting a speech service:
 make matching
 ```
 
-Open `renders/matching-proof.standalone.html` for the animated slides, or
-`renders/matching-proof.handout.pdf` for one complete final frame per slide.
-`renders/matching-proof.pdf` is the regular slide export. A draft can be built
+Open `renders/004000_matching-proof.standalone.html` for the animated slides, or
+`renders/004000_matching-proof.handout.pdf` for one complete final frame per slide.
+`renders/004000_matching-proof.pdf` is the regular slide export. A draft can be built
 with `make matching QUALITY=l PDF=0`.
 
 The authored script is [lectures/README.md#matching_study](lectures/README.md#matching_study).
@@ -363,7 +376,7 @@ To list profiles or select a server for one run:
 Without `--skip-render`, the script first renders the complete Manim deck,
 keeping all source clips at the same quality. `--scenes` selects narrated chapters;
 use it with `--skip-render` for a quick TTS comparison. The complete
-video is `renders/matching-proof.<profile>.narrated.mp4`. `--endpoint`, `--model`, `--voice`,
+video is `renders/004000_matching-proof.<profile>.narrated.mp4`. `--endpoint`, `--model`, `--voice`,
 `--response-format`, and `--timeout` override individual profile fields.
 `--tts-config PATH` selects another TOML file. A profile's `[request]` table can
 supply server-specific options such as speed or temperature. Requests preserve
@@ -376,7 +389,7 @@ For a quick comparison using fresh synthesis of the same opening slide:
 ./render_matching_video.sh --skip-render --tts-profile crall --scenes M00Problem --refresh-audio
 ```
 
-Previews are written as `renders/matching-proof.<profile>.preview.narrated.mp4`,
+Previews are written as `renders/004000_matching-proof.<profile>.preview.narrated.mp4`,
 leaving the complete video in place. To render the full video afterward, omit
 `--scenes`. `make matching-video TTS_PROFILE=kokoro` is also supported.
 

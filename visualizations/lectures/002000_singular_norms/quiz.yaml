@@ -1,0 +1,34 @@
+questions:
+- title: Choose the norm
+  question: The singular values are $3$ and $4$. What is the trace norm?
+  choices:
+  - $4$
+  - $5$
+  - $7$
+  - $12$
+  correct: 2
+  explanation: The trace norm adds singular values. The operator norm is four and the Frobenius norm is
+    five.
+  think_seconds: 8
+  speak_question: First question. A matrix has singular values three and four. Is its trace norm A, four;
+    B, five; C, seven; or D, twelve? You have eight seconds to choose an answer. Pause the video if you
+    want longer.
+  speak_answer: The correct answer is C. The trace norm adds singular values. The operator norm is four
+    and the Frobenius norm is five.
+- title: When costs add
+  question: Which situation justifies adding the trace costs of two blocks?
+  choices:
+  - Their input spaces are orthogonal, even if their images overlap.
+  - Their dimensions are equal.
+  - Both input and output pieces form orthogonal block decompositions.
+  - Both matrices have positive entries.
+  correct: 2
+  explanation: A genuine orthogonal direct sum combines the singular-value lists. Orthogonal inputs alone
+    do not ensure this.
+  think_seconds: 8
+  speak_question: Second question. When can we add the trace costs of two blocks? A, whenever the input
+    spaces are orthogonal; B, whenever their dimensions agree; C, when both input and output pieces form
+    orthogonal block decompositions; or D, when all matrix entries are positive? You have eight seconds
+    to choose an answer. Pause the video if you want longer.
+  speak_answer: The correct answer is C. A genuine orthogonal direct sum combines the singular-value lists.
+    Orthogonal inputs alone do not ensure this.

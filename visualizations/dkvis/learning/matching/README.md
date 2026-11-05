@@ -1,11 +1,11 @@
 # Real trace-norm matching
 
-Two unchanged presentations of the same proof, with different audiences:
+Two presentations of the same proof, with different audiences:
 
 | Deck | Audience and purpose | Scenes | Transcript |
 | --- | --- | --- | --- |
-| `matching-proof` | A learner following the geometry, legal variations, and block construction in detail | [study.py](study.py), 40 scenes | [study.md](../../../lectures/README.md#matching_study) |
-| `matching-proof-talk` | A mathematical audience following a compact proof | [talk.py](talk.py), 13 scenes | [proof-talk.md](../../../lectures/README.md#matching_proof) |
+| `matching-proof` | A learner following the geometry, legal variations, and block construction in detail | [study.py](study.py), 40 proof scenes + 2 review questions | [study.md](../../../lectures/README.md#matching_study) |
+| `matching-proof-talk` | A mathematical audience following a compact proof | [talk.py](talk.py), 13 proof scenes + 2 review questions | [proof-talk.md](../../../lectures/README.md#matching_proof) |
 
 Both use [model.py](model.py) for the checked phase and matrix examples, and
 `dkvis/novelty_math.py` for matching weights and the three-angle example.
@@ -49,7 +49,8 @@ make text DECK=matching-proof-talk
 ./render_video.sh --deck matching-proof-talk --skip-render --tts-profile kokoro
 ```
 
-Substitute `matching-proof` for the detailed study. Output names, caches, and
+Substitute `matching-proof` for the detailed study. Public outputs now carry
+`004000_` (study) or `005000_` (talk). Scene and speech caches stay stable;
 the older `make matching`, `make matching-talk`, and
 `render_matching_video.sh` commands are preserved. Speech settings stay in
 `tts.toml` and private endpoints in the ignored `.env`.

@@ -1,4 +1,4 @@
-# Lean companions for the prerequisite lectures
+# Lean companions for the lectures
 
 Each prerequisite lecture ends with a mathematical facts card followed by the
 same facts in Lean. The order of the examples matches the order of the formulas. On the Lean slide,
@@ -8,7 +8,7 @@ The code slide reads the `slide-begin` / `slide-end` region of the actual
 `facts.lean` companion; it is not a separately maintained transcription.
 Imports and the noncomputable-section command remain in the copyable file.
 Narration explains hypotheses and notation without spelling out every token.
-The earlier recap and self-check remain part of each lesson.
+The earlier recap remains; two multiple-choice review scenes follow the Lean slide.
 
 | Lecture | Companion | Library declarations used |
 | --- | --- | --- |
@@ -16,6 +16,10 @@ The earlier recap and self-check remain part of each lesson.
 | Singular-value norms | [facts.lean](002000_singular_norms/facts.lean) | Tau Ceti `schatten_apply_of_ne_top` in `TauCeti.UnitarilyInvariantSeminorm`, and `LinearMap.singularValues_linearIsometryEquiv_comp` / `singularValues_comp_linearIsometryEquiv` |
 | Matrix exponential | [facts.lean](002500_matrix_exponential/facts.lean) | Tau Ceti `ContinuousLinearMap.exp_add_smul`; Mathlib `NormedSpace.exp_mem_unitary_of_mem_skewAdjoint` and `Commute.exp_left` |
 | Variations | [facts.lean](003000_variations/facts.lean) | Mathlib `IsLocalMin.hasDerivAt_eq_zero` and `Matrix.trace_conjTranspose_mul_self_eq_zero_iff` |
+
+| Min-max | [facts.lean](002666_minmax/facts.lean) | Tau Ceti `LinearMap.IsSymmetric.eigenvalues_eq_iSup_iInf_re_inner` and `abs_eigenvalue_sub_eigenvalue_le_norm` |
+| Polar decomposition | [facts.lean](002833_polar/facts.lean) | Tau Ceti `LinearMap.polarFactor_comp_operatorAbs` and `norm_polarFactor_apply` |
+| Sylvester | [facts.lean](003500_sylvester/facts.lean) | Tau Ceti `ContinuousLinearMap.sylvester_apply` and `mul_norm_le_norm_sylvester_apply_of_le_re_inner_of_re_inner_le` |
 
 These are applications of existing APIs, not new mathematical declarations or
 additional Davis–Kahan completion obligations. Attribution identifies the
@@ -72,3 +76,9 @@ sets of examples were accepted with this cache. A clean check with the root's
 Lean 4.36.0-rc2 toolchain still requires refreshing the stale dependency cache;
 the commands above are the intended normal validation. The pin and toolchain
 were not changed for the lectures.
+
+The three operator-lecture companions were inspected against accepted source at
+`85f3eb5579df5ca44ba8cd0921d614b41ab72174`. Their local compiler check uses
+the same available rc1 dependency cache described above; it is not a clean
+root-toolchain rebuild. Their provenance is detailed in the
+[operator topic guide](../dkvis/learning/operators/README.md).

@@ -1,0 +1,34 @@
+questions:
+- title: Read the Rayleigh quotient
+  question: For $A=\operatorname{diag}(5,2)$ and unit $x$, what is the largest possible $x^TAx$?
+  choices:
+  - $2$
+  - $5$
+  - $7$
+  - $25$
+  correct: 1
+  explanation: The quotient is a weighted average of five and two. The first eigenvector attains the maximum,
+    five.
+  think_seconds: 8
+  speak_question: First question. A is diagonal with entries five and two. For a unit vector x, what is
+    the largest Rayleigh quotient? A, two; B, five; C, seven; or D, twenty five? You have eight seconds
+    to choose an answer. Pause the video if you want longer.
+  speak_answer: The correct answer is B. The quotient is a weighted average of five and two. The first
+    eigenvector attains the maximum, five.
+- title: Use Weyl stability
+  question: $A$ and $A+H$ are symmetric and $\|H\|_{\rm op}\le0.1$. What follows for equally ordered eigenvalues?
+  choices:
+  - They are identical.
+  - Each changes by at most 0.1.
+  - All eigenvectors change by at most 0.1.
+  - The eigenvalue gaps all increase.
+  correct: 1
+  explanation: Weyl controls ordered eigenvalue shifts by the perturbation norm. Controlling eigenspaces
+    needs additional gap information.
+  think_seconds: 8
+  speak_question: Second question. A symmetric matrix is perturbed by a symmetric H of operator norm at
+    most one tenth. What follows? A, the eigenvalues are identical; B, each equally ordered eigenvalue
+    changes by at most one tenth; C, every eigenvector changes by at most one tenth; or D, all gaps increase?
+    You have eight seconds to choose an answer. Pause the video if you want longer.
+  speak_answer: The correct answer is B. Weyl controls ordered eigenvalue shifts by the perturbation norm.
+    Controlling eigenspaces needs additional gap information.

@@ -1,0 +1,32 @@
+questions:
+- title: Read a projection
+  question: $P=\operatorname{diag}(1,0)$ and $x=(2,3)$. What is $Px$?
+  choices:
+  - $(2,0)$
+  - $(0,3)$
+  - $(2,3)$
+  - $(0,0)$
+  correct: 0
+  explanation: The projection keeps the component along the first axis and removes the perpendicular component.
+  think_seconds: 8
+  speak_question: First study question. Project the vector two, three onto the first coordinate axis.
+    Is the answer A, two, zero; B, zero, three; C, two, three; or D, zero, zero? You have eight seconds
+    to choose an answer. Pause the video if you want longer.
+  speak_answer: The correct answer is A. The projection keeps the component along the first axis and removes
+    the perpendicular component.
+- title: What commutation means
+  question: If $P$ projects onto $K$, what does $PT=TP$ tell us?
+  choices:
+  - $T$ is the identity.
+  - $T$ preserves both $K$ and $K^\perp$.
+  - $T$ is orthogonal.
+  - $T$ sends every vector into $K$.
+  correct: 1
+  explanation: Commutation removes the two crossing blocks. Each diagonal block can still act nontrivially.
+  think_seconds: 8
+  speak_question: Second question. An operator commutes with the projection onto K. Does this mean A,
+    the operator is the identity; B, it preserves K and its orthogonal complement; C, it is orthogonal;
+    or D, it sends every vector into K? You have eight seconds to choose an answer. Pause the video if
+    you want longer.
+  speak_answer: The correct answer is B. Commutation removes the two crossing blocks. Each diagonal block
+    can still act nontrivially.
