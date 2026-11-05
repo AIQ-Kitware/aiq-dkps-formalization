@@ -8,7 +8,7 @@ and Lean sources; pictures and numerical examples remain explanatory evidence.
 
 ## Current modules and source material
 
-The [five-lecture prerequisite series](PREREQUISITES.md), the matching
+The [six-lecture prerequisite series](PREREQUISITES.md), the matching
 topic, and [three accepted operator-foundation lectures](operators/README.md)
 have complete, synchronized transcripts. Other rows identify existing
 material to draw from when authoring more modules; those rows are not already
@@ -16,6 +16,7 @@ finished narrated lessons.
 
 | Topic | A learner should be able to… | Prerequisites | Existing material |
 | --- | --- | --- | --- |
+| Mathematics refresher | Recognize the basic linear algebra, geometry, and calculus assumed later. | School algebra; review of previously encountered ideas | [Lecture 000010](basics/README.md) |
 | Subspaces and projections | Translate between a subspace, its orthogonal projection, and adapted coordinates. | Inner products, linear maps | [Lecture 1](projections/README.md): complete narrated module |
 | Complementary projection and error | Read I minus P, its restriction to trial vectors, and its relation to displacement. | Basic vectors; projections introduced locally | [Thinking about I minus P](complementary_projection/README.md): complete narrated module |
 | Principal angles | Interpret the angle list, principal planes, and the directed sine operator. | Subspaces and projections; SVD | `slides_sine_theta.py`, `slides_sine_theta_3d.py`; matching study `M01PrincipalPlanes` |

@@ -1,0 +1,22 @@
+deck: prereq-basics
+scope: Authorship of the mathematics refresher, its scenes, transcript, and questions.
+slides:
+  initial_source_attribution:
+  - sources:
+    - visualizations/dkvis/learning/basics/scenes.py
+    - visualizations/dkvis/learning/basics/model.py
+    - visualizations/dkvis/learning/orientation.py
+    models:
+    - GPT-6.1-Sol
+    date: '2026-11-05'
+    basis: Authored in this session; exact model identity supplied by the user.
+transcript:
+  initial_source_attribution:
+  - sources:
+    - visualizations/lectures/000010_basics/lecture.md
+    - visualizations/lectures/000010_basics/quiz.yaml
+    - visualizations/lectures/000010_basics/facts.lean
+    models:
+    - GPT-6.1-Sol
+    date: '2026-11-05'
+    basis: Authored in this session; exact model identity supplied by the user.

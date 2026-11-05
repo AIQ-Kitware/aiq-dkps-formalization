@@ -15,6 +15,7 @@ the core argument or answer its conceptual questions.
 
 | Lecture | Companion | Library declarations used |
 | --- | --- | --- |
+| Mathematics refresher | [facts.lean](000010_basics/facts.lean) | Mathlib `real_inner_self_eq_norm_sq` and `IsLocalMin.hasDerivAt_eq_zero` |
 | Projections | [facts.lean](001000_projections/facts.lean) | Mathlib `Submodule.starProjection_add_starProjection_orthogonal`; Tau Ceti `Submodule.offDiagBlock_eq_zero_iff` |
 | Complementary projection | [facts.lean](001500_complementary_projection/facts.lean) | Mathlib `Submodule.starProjection_orthogonal` and `sub_starProjection_mem_orthogonal` |
 | Singular-value norms | [facts.lean](002000_singular_norms/facts.lean) | Tau Ceti `schatten_apply_of_ne_top` in `TauCeti.UnitarilyInvariantSeminorm`, and `LinearMap.singularValues_linearIsometryEquiv_comp` / `singularValues_comp_linearIsometryEquiv` |

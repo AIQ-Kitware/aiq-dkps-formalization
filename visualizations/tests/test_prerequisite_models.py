@@ -229,3 +229,24 @@ def test_rotation_displacement_is_a_chord_not_the_projection_error(angle):
     assert not np.allclose((np.eye(2)-w) @ (np.eye(2)-w),np.eye(2)-w)
     error=line_error(angle)[-1]
     assert np.linalg.norm(error) < np.linalg.norm(displacement)
+
+
+@pytest.mark.parametrize('angle', [0., .4, 1.2])
+def test_refresher_matrix_action_respects_combinations_and_unit_circle(angle):
+    from dkvis.learning.basics.model import matrix_action,unit_direction,eigen_action
+    u=unit_direction(angle);v=unit_direction(angle+.7)
+    assert np.linalg.norm(u)==pytest.approx(1)
+    assert np.allclose(matrix_action(2*u-3*v),2*matrix_action(u)-3*matrix_action(v))
+    assert np.allclose(matrix_action([1,2]),[4,2])
+    assert np.allclose(eigen_action([1,0]),[2,0])
+    assert np.allclose(eigen_action([0,1]),[0,1])
+    assert 1-1e-12 <= np.linalg.norm(eigen_action(u)) <= 2+1e-12
+
+
+def test_refresher_tangent_is_the_limit_of_secant_slopes():
+    from dkvis.learning.basics.model import square_slope
+    for t in [-1.,0.,.7]:
+        value,slope=square_slope(t)
+        errors=[abs((square_slope(t+h)[0]-value)/h-slope) for h in [.1,.01,.001]]
+        assert errors[2] < errors[1] < errors[0]
+        assert errors[-1] < .0011

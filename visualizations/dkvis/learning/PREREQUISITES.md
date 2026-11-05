@@ -1,6 +1,6 @@
 # Prerequisite lecture series
 
-Five independent narrated lectures introduce the vocabulary for the matching
+Six independent narrated lectures introduce the vocabulary for the matching
 proof. Each has a motivating question, a little historical context, worked
 explanations, a recap, and an answered self-check. Each introduces its own notation and includes a symbolic
 facts card followed by one highlighted Lean statement per slide. A short numerical
@@ -11,14 +11,15 @@ generated from `lectures/index.yaml`.
 
 | Lecture | Goal | Slides | Approximate speech |
 | --- | --- | --- | --- |
+| [Mathematics refresher](../../lectures/README.md#basics) | Identify which basic algebra, geometry, and calculus to revisit. | 20 | about 14 minutes |
 | [Projections](../../lectures/README.md#projections) | Read projections, frames, blocks and transport. | 17 | about 12 minutes |
 | [Thinking about I minus P](../../lectures/README.md#complementary_projection) | Distinguish complementary projection, geometric error, and motion displacement. | 16 | about 12 minutes |
 | [Singular-value norms](../../lectures/README.md#singular_norms) | Compare movement costs and justify block additivity. | 18 | about 14 minutes |
 | [Matrix exponential](../../lectures/README.md#matrix_exponential) | Build exact flows from matrix velocities. | 22 | about 17 minutes |
 | [Variations](../../lectures/README.md#variations) | Construct legal motions and test stationarity. | 19 | about 16 minutes |
 
-Times estimate speech at 140 words per minute, before slide pauses. The lessons
-assume vectors, inner products, matrix products, and basic one-variable calculus.
+Times estimate speech at 140 words per minute, before slide pauses. The opening refresher reviews the vectors, inner products, matrix products, and
+one-variable calculus assumed by the later lessons.
 They introduce their specialized notation locally. The examples are finite and
 real. They explain prerequisites and the first structural step of matching;
 they do not replace the separate matching proof or extend its theorem scope.
@@ -28,8 +29,8 @@ they do not replace the separate matching proof or extend its theorem scope.
 From `visualizations/`:
 
 ```bash
-make prerequisites             # all five, 1080p, HTML/PDF/handout and speech text
-make prerequisites QUALITY=l   # draft all five
+make prerequisites             # all six, 1080p, HTML/PDF/handout and speech text
+make prerequisites QUALITY=l   # draft all six
 make slides DECK=prereq-projections
 make text DECK=prereq-variations
 ```
@@ -59,13 +60,13 @@ slides. Omit `SKIP_RENDER=1` to render the visuals first. Final videos are writt
 to `renders/<number>_<deck>.<narrator>.narrated.mp4`. To select another configured voice instead:
 
 ```bash
-for deck in prereq-projections prereq-complementary-projection prereq-singular-norms prereq-matrix-exponential prereq-variations; do
+for deck in prereq-basics prereq-projections prereq-complementary-projection prereq-singular-norms prereq-matrix-exponential prereq-variations; do
     ./render_video.sh --deck "$deck" --skip-render --tts-profile kokoro || break
 done
 ```
 
 Change `--tts-profile` or the shared `tts.toml` settings to select another server
-or voice. Private endpoints remain in the ignored `.env`. The five videos
+or voice. Private endpoints remain in the ignored `.env`. The six videos
 are `renders/<number>_<deck>.<narrator>.narrated.mp4`; generation timings and cache behavior use
 the existing shared pipeline. Building the lectures and their text does not
 request speech.
