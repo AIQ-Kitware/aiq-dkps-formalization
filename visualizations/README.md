@@ -34,6 +34,8 @@ Python imports, deck IDs, render filenames, and speech caches use stable names.
 Decks resolve their transcript paths from stable lecture IDs, so folder moves
 do not require editing import statements or hard-coded paths. The generated
 library catalog is refreshed when the organizer is applied.
+The catalog and per-lecture navigation READMEs are generated and gitignored;
+run `uv run python -m dkvis.lectures --apply` after cloning to recreate them.
 
 [The module catalog](dkvis/learning/README.md) maps learning goals and
 prerequisites to existing material and documents how to author a module.

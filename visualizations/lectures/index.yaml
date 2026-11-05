@@ -1,0 +1,37 @@
+# Stable IDs, teaching dependencies, and preferred order for independent topics.
+# Numbers and directory paths are inferred, not maintained here.
+lectures:
+  projections:
+    title: Subspaces and projections
+    deck: prereq-projections
+    topic: projections
+    series: prerequisites
+    requires: []
+  singular_norms:
+    title: Singular values and displacement cost
+    deck: prereq-singular-norms
+    topic: singular_norms
+    series: prerequisites
+    requires: [projections]
+  matrix_exponential:
+    title: The exponential of a matrix
+    deck: prereq-matrix-exponential
+    topic: matrix_exponential
+    series: prerequisites
+    requires: [projections]
+  variations:
+    title: Feasible variations and stationarity
+    deck: prereq-variations
+    topic: variations
+    series: prerequisites
+    requires: [projections, singular_norms, matrix_exponential]
+  matching_study:
+    title: The matching proof, a learner's walkthrough
+    deck: matching-proof
+    topic: matching
+    requires: [variations]
+  matching_proof:
+    title: The matching proof, a compact presentation
+    deck: matching-proof-talk
+    topic: matching
+    requires: [variations]
