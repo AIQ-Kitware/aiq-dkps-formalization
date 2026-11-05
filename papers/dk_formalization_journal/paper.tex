@@ -1,8 +1,20 @@
-\documentclass[11pt]{article}
+% One switch: false = journal style; true = colored symbols and author--year citations.
+\newif\ifDKAuthorStyle
+
+%\DKAuthorStylefalse
+\DKAuthorStyletrue
+
+\ifdefined\DKUseAuthorStyle\DKAuthorStyletrue\fi
+\ifdefined\DKJournalStyle\DKAuthorStylefalse\fi
+\ifDKAuthorStyle
+  \PassOptionsToClass{sn-mathphys-ay}{sn-jnl}
+\else
+  \PassOptionsToClass{sn-mathphys-num}{sn-jnl}
+\fi
+\documentclass[pdflatex]{sn-jnl} % PDF engine option; compiled with LuaLaTeX.
 % PDF version used for the manuscript and its symbol annotations.
 \pdfvariable minorversion=7\relax
 
-\usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{booktabs,tabularx,array,longtable}
 \usepackage[section]{placeins}
@@ -10,10 +22,14 @@
 \usepackage{microtype}
 \usepackage{graphicx}
 \usepackage{pgf} % Live vector figures with LaTeX symbol labels and tooltips
-% Editing citations: switch to the venue's numeric style at submission.
-\usepackage[authoryear,round]{natbib}
 \usepackage{xurl}
-\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\ifDKAuthorStyle
+  \setcitestyle{authoryear,round,aysep={,}}
+  \hypersetup{colorlinks=true,allcolors=blue}
+\else
+  \setcitestyle{numbers,square}
+  \hypersetup{hidelinks}
+\fi
 \usepackage[nameinlink]{cleveref}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern} % Scalable LaTeX lettering, shared with the Manim slides
@@ -23,11 +39,12 @@
 \DKAnonymousfalse
 \ifdefined\DKAnonymousReview\DKAnonymoustrue\fi
 \newif\ifDKColoredSymbols
-\DKColoredSymbolstrue
+\ifDKAuthorStyle\DKColoredSymbolstrue\else\DKColoredSymbolsfalse\fi
 \ifdefined\DKMonochromeMath\DKColoredSymbolsfalse\fi
 % The colors retain the Manim glossary's light-theme mathematical roles.
 \input{math_symbol_colors.tex}
 \ifDKColoredSymbols\else\DKMathColorsfalse\fi
+\ifDKAuthorStyle\else\DKSymbolTooltipsfalse\fi
 
 %\DeclareMathOperator{\DKRange}{range}
 %\DeclareMathOperator{\DKKernel}{kernel}
@@ -38,10 +55,14 @@
 \usepackage[most]{tcolorbox}
 \usepackage{listings}
 \usepackage{listingsutf8}
-\usepackage{authblk}
-\usepackage{emoji} % Requires LuaLaTeX compiler
+\usepackage{fontspec}
+\IfFileExists{emoji.sty}{%
+  \IfFontExistsTF{Noto Color Emoji}{\usepackage{emoji}}{}%
+}{}
+\providecommand{\emoji}[1]{\textnormal{[#1]}} % Review notes also work without an emoji font.
 
 \setlength{\emergencystretch}{3em}
+\raggedbottom
 
 % ArXiv-friendly Lean code: no shell escape, minted, or external highlighter.
 \definecolor{leankeyword}{HTML}{243B6B}
@@ -104,6 +125,7 @@
 \Crefname{lstlisting}{Formalization}{Formalizations}
 \renewcommand{\lstlistingname}{Formalization}
 
+\theoremstyle{thmstyleone}
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
@@ -128,12 +150,6 @@
 %  }%
 %}
 
-\geometry{
-  % Keeps your main text layout intact while expanding the side margin box
-  marginparwidth=2.2cm,
-  marginparsep=0.3cm
-}
-
 % Usage: \margincomment{Your comment that now wraps perfectly!}
 \newcommand{\jonsays}[1]{%
   \marginpar{%
@@ -156,84 +172,60 @@
 
 \newcommand{\jonrsp}[1]{{\color{red}\small\textbf{[\emoji{person-raising-hand}: #1]}}}
 
-\title{Formalizing Davis--Kahan Perturbation Theory in Lean 4}
+\title[Formalizing Davis--Kahan Perturbation Theory]{Formalizing Davis--Kahan Perturbation Theory in Lean 4}
 % Additional authors are expected; keep the confirmed ordering below stable.
-
 \ifDKAnonymous
-\author{Anonymous authors}
+  \author{Anonymous authors}
 \else
-\author[1]{Jonathan Crall}
-\author[2]{Edward Wang}
-\author[1]{Brian Hu}
-\author[2]{Carey E. Priebe}
-
-\affil[1]{%
-  Kitware, Inc.\\
-  \texttt{jon.crall@kitware.com},
-  \texttt{brian.hu@kitware.com}
-}
-
-\affil[2]{%
-  Johns Hopkins University\\
-  \texttt{ewang43@jhu.edu},
-  \texttt{cep@jhu.edu}
-}
+  \author*[1]{\fnm{Jonathan} \sur{Crall}}\email{jon.crall@kitware.com}
+  \author[2]{\fnm{Edward} \sur{Wang}}\email{ewang43@jhu.edu}
+  \author[1]{\fnm{Brian} \sur{Hu}}\email{brian.hu@kitware.com}
+  \author[2]{\fnm{Carey E.} \sur{Priebe}}\email{cep@jhu.edu}
+  \affil[1]{\orgname{Kitware, Inc.},
+    \orgaddress{\city{Clifton Park}, \state{NY}, \country{USA}}}
+  \affil[2]{\orgdiv{Department of Applied Mathematics and Statistics},
+    \orgname{Johns Hopkins University},
+    \orgaddress{\city{Baltimore}, \state{MD}, \country{USA}}}
 \fi
 
-\date{28 October 2026}
+\abstract{We formalize the spectral-subspace perturbation theory of Davis and
+Kahan's 1970 paper in Lean~4. Of \DKResultCount{} selected results, we prove
+\DKProvedCount{} under their stated hypotheses and refute the remaining
+printed statement. The development includes the sine and tangent theorems,
+direct rotations, principal-angle operators, Sylvester separation, and
+operator-ideal norms on real and complex Hilbert spaces, including unbounded
+self-adjoint operators. We explain the mathematical lineage connecting these
+constructions. The refuted statement concerns minimization of full ambient
+displacement by direct rotation. We give real four-dimensional counterexamples
+at every prescribed positive acute angle and identify the failed
+singular-value comparison. A corrected optimality statement holds for Q-norms,
+whose squares are unitarily invariant norms of the squared modulus, including
+the Frobenius norm. The formalization builds on Mathlib and adapts Spectra's
+projection-valued-measure and Borel-calculus constructions. Portions of the
+operator theory developed here were subsequently adapted into Tau Ceti.
+These foundations also support an exact reduction of trace-norm optimal real
+subspace transport to weighted matching on principal angles.}
+
+\keywords{Davis--Kahan theory, spectral perturbation, formal verification,
+Lean 4, direct rotation, principal angles}
+\pacs[MSC Classification (2020)]{68V20, 47A55, 15A42}
 
 \begin{document}
 \maketitle
 
-\begin{abstract}
-
-We formalize the Davis--Kahan theory of spectral-subspace perturbations.
-From Davis and Kahan's landmark 1970 paper we identify \DKResultCount{}
-  results as the targets of the formalization: of these
-  \DKProvedCount{} are proved in Lean~4 under their stated hypotheses, and the remaining
-  statement --- as originally written --- is refuted.
-The formal development includes the sine and tangent theorems, direct rotations,
-  principal-angle operators, Sylvester separation, unitarily invariant
-  operator-ideal norms, and unbounded self-adjoint operators.
-We place these constructions in their mathematical lineage, from the geometry of
-  principal angles through the theory of projections and the spectral methods
-  underlying Davis and Kahan's estimates.
-
-
-The refuted statement \citep[Proposition~4.4]{davis1970rotation} concerns
-  minimization of full ambient displacement by direct rotation.
-We construct real four-dimensional examples in which direct rotation fails
-  to minimize the trace norm at every prescribed positive acute angle.
-We locate the failed singular-value comparison and prove a corrected optimality
-  statement for Q-norms, including the Frobenius norm.
-
-The formalization builds on Mathlib and adapts the Spectra project's
-  projection-valued-measure and Borel-calculus constructions.
-Portions of the reusable operator theory developed here were subsequently
-  upstreamed into Tau Ceti.
-The resulting infrastructure also supports a theorem reducing trace-norm
-  optimal real subspace transport to weighted matching on principal angles.
-These outcomes show how formalizing the foundations of a classical mathematical
-  theory can support validating results, identifying historical errors, and
-  developing new formal research.
-
-\end{abstract}
-
-\noindent\textbf{Keywords:} Davis--Kahan theory; spectral perturbation;
-formal verification; Lean 4; operator theory; direct rotation; principal angles.
-
-\smallskip
-
-\noindent\textbf{Mathematics Subject Classification (2020):}
-\href{https://mathscinet.ams.org/msc/msc2020.html?t=68V20}{68V20},
-\href{https://mathscinet.ams.org/msc/msc2020.html?t=47A55}{47A55},
-\href{https://mathscinet.ams.org/msc/msc2020.html?t=15A42}{15A42}.
-
 \ifDKAnonymous\else
-\smallskip
-\noindent\textbf{Corresponding author:} Jonathan Crall
-(\texttt{jon.crall@kitware.com}).
+\enlargethispage{2\baselineskip}
+\vspace{-18pt}
+\noindent\begin{minipage}{\linewidth}\footnotesize
+\noindent\textbf{Acknowledgments.}
+This material is based upon work supported by the Defense Advanced Research
+Projects Agency (DARPA) under Contract No. HR001125CE017. Any opinions, findings
+and conclusions or recommendations expressed in this material are those of the
+author(s) and do not necessarily reflect the views of the Defense Advanced
+Research Projects Agency.
+\end{minipage}
 \fi
+\clearpage
 
 \section{Introduction}
 \label{sec:introduction}
@@ -321,7 +313,7 @@ optimization theorem. In Section~\ref{sec:example-transport}, we prove that
 minimizing trace-norm displacement over all real orthogonal maps carrying
 one subspace onto another reduces to weighted matching on principal angles.
 
-\paragraph{Contributions.}
+\noindent\textbf{Contributions.}
 \begin{enumerate}
 \item \textbf{Davis--Kahan formalization.} We prove 28 of the 29 source
 results and refute the full-displacement assertion
@@ -954,8 +946,10 @@ inequalities with the source's norm generality.
 We formalized principal-angle geometry, symmetric operator ideals, and
 unbounded Sylvester estimates using Lean~4 and Mathlib
 \citep{demoura2021lean4,mathlib2020}. Mathlib supplies the algebraic,
-topological, and Hilbert-space framework and continuous functional calculus
-\citep{dedecker2025cfc}. Our projection-valued-measure and Borel-calculus
+topological, and Hilbert-space framework. Its continuous functional calculus
+is described in the preprint by Anatole Dedecker and Jireh Loreaux
+(\href{https://arxiv.org/abs/2501.15639}{arXiv:2501.15639}).
+Our projection-valued-measure and Borel-calculus
 work also adapts Adam Bornemann's Spectra formalization
 \citep{bornemann2026spectra}.
 
@@ -1169,7 +1163,7 @@ the subspace error.
 
 \begin{figure}[tb]
 \centering
-\resizebox{\linewidth}{!}{\input{figures/sine_theta_residual_geometry.pgf}}
+\resizebox{119mm}{!}{\input{figures/Fig1.pgf}}
 \caption{Rayleigh residual geometry for a one-dimensional trial space in
 $\mathbb R^2$ (the rank-one case). With $\sym{E0}(x)=x\sym{v}$, the residual
 operator satisfies $\sym{R}(x)=x\sym{r}$, where
@@ -1189,7 +1183,7 @@ $\sym{delta}\sin\sym{theta}=\|\sym{PexactPerp}\sym{r}\|_2
 \leq\|\sym{r}\|_2=\|\sym{R}\|_{\mathrm{op}}$.
 The drawing uses $\sym{Acurrent}=\operatorname{diag}(1.9,0.7)$,
 $\sym{theta}=40^\circ$, $\sym{rho}=\langle\sym{v},\sym{Acurrent}\sym{v}\rangle$,
-and $\sym{delta}=\sym{rho}-0.7$.}
+and $\sym{delta}=\sym{rho}-0.7$}
 \label{fig:sine-theta-residual}
 \end{figure}
 
@@ -1529,32 +1523,35 @@ were subsequently adapted into Tau Ceti. Using these foundations, we proved
 an exact weighted-matching formula for the real trace-norm transport
 minimum.
 
-\section*{AI assistance disclosure}
-ChatGPT and Claude assisted with the formalization and manuscript preparation.
-Formalizations were carried out by LLMs with human oversight.
-The new matching result was derived via GPT 6.1 sol and reviewed by the human
-  authors.
+\backmatter
+\section*{Statements and Declarations}
 
-\section*{Code and data availability}
+\subsection*{Funding}
+\ifDKAnonymous
+Funding information is omitted for anonymous review.
+\else
+This work was supported by the Defense Advanced Research Projects Agency
+under Contract No. HR001125CE017.
+\fi
+
+\subsection*{Competing interests}
+The authors declare no competing interests.
+
+\subsection*{Data and code availability}
 \ifDKAnonymous
 Artifact information is omitted for anonymous review.
 \else
-The formalization, result-to-Lean mapping, provenance records, and manuscript
-sources are available at
+The Lean proofs, result-to-Lean mapping, provenance records, figure-generation
+sources, and manuscript sources are available at
 \url{https://github.com/AIQ-Kitware/aiq-dkps-formalization}.
 \fi
 
-\ifDKAnonymous\else
-\section*{Acknowledgments}
+\subsection*{AI assistance}
+ChatGPT and Claude assisted with the formalization and manuscript preparation.
+Formalizations were carried out by large language models with human oversight.
+The matching result was derived using GPT-6.1 Sol and reviewed by the human
+  authors.
 
-This material is based upon work supported by the Defense Advanced Research
-Project Agency (DARPA) under Contract No. HR001125CE017. Any opinions, findings
-and conclusions or recommendations expressed in this material are those of the
-author(s) and do not necessarily reflect the views of the Defense Advanced
-Research Project Agency (DARPA).
-\fi
-
-\bibliographystyle{unsrtnat}
 \bibliography{references}
 
 \clearpage

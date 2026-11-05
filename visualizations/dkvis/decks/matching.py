@@ -1,5 +1,6 @@
 """A separate, detailed walkthrough of the finite real matching theorem."""
 from dkvis.deck_spec import DeckSpec, SlideUse
+from dkvis.lectures import lecture_path
 
 SCENES = [
     "M00Problem", "M00BlockMeaning", "M01PrincipalPlanes", "M02Singleton", "M03PairedBlock",
@@ -20,5 +21,6 @@ MATCHING_PROOF = DeckSpec(
     name="matching-proof",
     description="Learn why the matching proof works: geometry, legal variations, and invariant blocks.",
     footer=r"Real trace-norm matching $\cdot$ proof study",
-    slides=tuple(SlideUse("dkvis.slides_matching", name) for name in SCENES),
+    narration=lecture_path('matching_study'),
+    slides=tuple(SlideUse("dkvis.learning.matching.study", name) for name in SCENES),
 )

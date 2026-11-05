@@ -120,7 +120,7 @@
 }
 \makeatother
 \AtBeginDocument{\ifDKSymbolTooltips\Form[NeedAppearances=false]\fi}
-\AtEndDocument{\endForm}
+\AtEndDocument{\ifDKSymbolTooltips\endForm\fi}
 % Native LuaLaTeX PDF widgets: no navigation action or JavaScript. Avoid
 % pdfcomment's soulpos dependency, which previously broke local Vim builds.
 % Measure in the CURRENT math style, then emit the original expression as-is:

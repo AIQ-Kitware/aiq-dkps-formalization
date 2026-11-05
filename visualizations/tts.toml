@@ -1,4 +1,4 @@
-# Fallback default. Select a machine-local profile in .env (MATCHING_TTS_PROFILE)
+# Fallback default. Select a machine-local profile in .env (DKVIS_TTS_PROFILE)
 # or override it for one run with --tts-profile NAME.
 profile = "crall"
 
@@ -16,6 +16,9 @@ endpoint = "http://127.0.0.1:8821/v1/audio/speech"
 model = "breeze-tts2"
 voice = "crall-math-dk"
 response_format = "wav"
+
+[profiles.crall.request]
+instruction = "Speak in an enthusiastic, engaging lecture style with clear articulation."
 
 [profiles.breeze]
 endpoint_env = "BREEZE_TTS_ENDPOINT"

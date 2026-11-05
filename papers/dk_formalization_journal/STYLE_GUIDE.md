@@ -8,6 +8,13 @@ this paper's current author decisions and evidence locations.
 
 ## Give the abstract and body their own jobs
 
+The default submission format is Research in the Mathematical Sciences using
+the supplied Springer Nature class and numbered square-bracket citations.
+The `\DKAuthorStyle` boolean restores colors, hover reminders, and author--year
+citations together. Keep the same scientific content and filenames in both
+modes. The guideline audit and Overleaf/export instructions belong in author
+documentation, not in the rendered article.
+
 The abstract summarizes the formalization, foundations, correction, and
 follow-on result for a mathematical audience. It can name established theories
 and make broad connections concisely. Define the objects and explain the

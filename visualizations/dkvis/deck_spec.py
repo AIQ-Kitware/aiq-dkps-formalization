@@ -39,6 +39,9 @@ class DeckSpec:
     description: str = ""
     footer: str | None = None
     composite_parts: tuple[str, ...] = ()
+    # Relative to visualizations/. A deck without authored speech remains usable
+    # for slides; video production must not silently invent its narration.
+    narration: str | None = None
 
     def __post_init__(self) -> None:
         if not self.name:

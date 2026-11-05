@@ -23,7 +23,8 @@
 
 UV      ?= uv
 RUN     := $(UV) run --extra vtk --extra slides --extra test
-MATCHING_RUN := $(UV) run --extra slides
+SLIDES_RUN := $(UV) run --extra slides
+DECK ?=
 QUALITY ?= h
 # 1080p renders at 30 fps unless asked for more (FPS=60, or `make final`); drafts keep the quality's own rate.
 FPS     ?= $(if $(filter l m,$(QUALITY)),,30)
@@ -31,6 +32,7 @@ JOBS    ?=
 PDF     ?= 1
 SCENES  ?=
 TTS_PROFILE ?=
+SKIP_RENDER ?= 0
 # dark or light.  Colors come from dkvis/palette.py (per role and theme) and
 # dkvis/notation.py (the role of each symbol).
 THEME   ?= dark
@@ -55,17 +57,25 @@ DECK_comprehensive := comprehensive
 DECK_study         := study
 DECK_novelty       := novelty-tour
 DECK_matching      := matching-proof
+DECK_matching-talk := matching-proof-talk
 PARTS             := part1 part2 part3 part4 part5 part6 part7
 WORKING           := kitware comprehensive study novelty
-DECKS      := short full $(PARTS) $(WORKING) matching
+DECKS      := short full $(PARTS) $(WORKING) matching matching-talk
 
 .DEFAULT_GOAL := help
 .PHONY: help setup all rebuild working $(DECKS) $(addprefix clean-,$(DECKS)) $(addprefix present-,$(DECKS)) \
-        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean matching-text matching-video
+        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean list slides text video prerequisites lectures-video prerequisites-video matching-text matching-video matching-talk-text matching-talk-video
 
 help:
 	@awk '/^#/ { sub(/^# ?/, ""); print; next } { exit }' $(firstword $(MAKEFILE_LIST))
 	@echo; echo 'Targets:'
+	@echo '  list               list all presentations and transcript availability'
+	@echo '  prerequisites      build the ordered prerequisite lectures and speech text'
+	@echo '  prerequisites-video narrate the prerequisite series; TTS_PROFILE=crall selects the lecture voice'
+	@echo '  lectures-video     narrate every lecture in YAML dependency order'
+	@echo '  slides DECK=name   render a presentation and export its transcript when present'
+	@echo '  text DECK=name     export slide/build speech text without rendering or TTS'
+	@echo '  video DECK=name    render and narrate; TTS_PROFILE selects a server from tts.toml'
 	@echo '  setup              uv sync with the vtk, slides and test extras'
 	@echo '  all                short, every part and full, then standalone HTML for each'
 	@echo '  final              all at the full 1080p60 (all renders 1080p30)'
@@ -78,6 +88,9 @@ help:
 	@echo '  matching           detailed matching proof; standalone HTML, PDF and narration text'
 	@echo '  matching-text      export one plain-text narration file per slide'
 	@echo '  matching-video     render a narrated video; TTS_PROFILE selects a server from tts.toml'
+	@echo '  matching-talk      separate 13-slide proof talk; HTML, PDF, handout, and narration'
+	@echo '  matching-talk-text export the compact talk as slide/build TTS text'
+	@echo '  matching-talk-video render the compact talk with the configured TTS profile'
 	@echo '  working            build kitware, comprehensive, study, and novelty'
 	@echo '  part1 ... part7    one part of the full talk, rendered and converted on its own:'
 	@echo '                       1 sin Theta, 2 3D, 3 tan/sin2/tan2 Theta, 4 Prop 4.4, 5 process, 6 summary, 7 notation'
@@ -115,33 +128,58 @@ draft:
 	$(MAKE) all QUALITY=l PDF=0
 
 short study $(PARTS):
-	$(RUN) python -m dkvis.build_slides $(DECK_$@) $(BUILD_FLAGS)
+	$(RUN) python -m dkvis.presentation slides $(DECK_$@) $(BUILD_FLAGS)
 
 # Render a modest number of LaTeX-heavy novelty scenes concurrently unless
 # JOBS is explicitly provided. The generic builder otherwise starts one job
 # per CPU, which can be excessive for a presentation full of MathTex labels.
 novelty:
-	$(RUN) python -m dkvis.build_slides $(DECK_$@) $(BUILD_FLAGS) $(if $(JOBS),,--jobs 2)
+	$(RUN) python -m dkvis.presentation slides $(DECK_$@) $(BUILD_FLAGS) $(if $(JOBS),,--jobs 2)
 
-matching:
-	$(MATCHING_RUN) python -m dkvis.build_slides matching-proof $(BUILD_FLAGS) $(if $(JOBS),,--jobs 2) --one-file --html renders/matching-proof$(SUFFIX).standalone.html
-	$(MAKE) matching-text
+list:
+	$(UV) run python -m dkvis.presentation list
 
-matching-text:
-	$(MATCHING_RUN) python -m dkvis.matching_narration --theme $(THEME) --out renders/matching-proof$(SUFFIX)-narration
+prerequisites:
+	@for deck in $$($(UV) run python -c 'from dkvis.decks.prerequisites import PREREQUISITES; print(" ".join(d.name for d in PREREQUISITES))'); do \
+	    $(MAKE) slides DECK=$$deck || exit 1; \
+	done
 
-matching-video:
-	./render_matching_video.sh --quality $(QUALITY) --fps $(if $(FPS),$(FPS),30) --jobs $(if $(JOBS),$(JOBS),2) $(if $(TTS_PROFILE),--tts-profile $(TTS_PROFILE)) $(if $(SCENES),--scenes $(SCENES))
+lectures-video prerequisites-video:
+	@decks="$$($(UV) run python -c 'import sys; from dkvis.lectures import lecture_decks; print(" ".join(lecture_decks("prerequisites" if sys.argv[1] == "prerequisites-video" else None)))' $@)" || exit $$?; \
+	for deck in $$decks; do \
+	    $(MAKE) video DECK=$$deck || exit 1; \
+	done
+
+slides:
+	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))
+	$(SLIDES_RUN) python -m dkvis.presentation slides $(DECK) $(BUILD_FLAGS) $(if $(JOBS),,--jobs 2) --one-file --html renders/$(DECK)$(SUFFIX).standalone.html
+
+text:
+	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))
+	$(UV) run python -m dkvis.presentation text --deck $(DECK) --theme $(THEME)
+
+video:
+	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))
+	./render_video.sh --deck $(DECK) --quality $(QUALITY) --fps $(if $(FPS),$(FPS),30) --jobs $(if $(JOBS),$(JOBS),2) $(if $(filter 1,$(SKIP_RENDER)),--skip-render) $(if $(TTS_PROFILE),--tts-profile $(TTS_PROFILE)) $(if $(SCENES),--scenes $(SCENES))
+
+matching matching-talk:
+	$(MAKE) slides DECK=$(DECK_$@)
+
+matching-text matching-talk-text:
+	$(MAKE) text DECK=$(DECK_$(@:%-text=%))
+
+matching-video matching-talk-video:
+	$(MAKE) video DECK=$(DECK_$(@:%-video=%))
 
 # Long and completed talk decks always produce portable, single-file HTML.
 # The comprehensive deck is large: default to a modest two render processes
 # rather than starting one Manim/LaTeX/VTK pipeline per CPU. JOBS overrides it.
 kitware:
-	$(RUN) python -m dkvis.build_slides $(DECK_$@) $(BUILD_FLAGS)
+	$(RUN) python -m dkvis.presentation slides $(DECK_$@) $(BUILD_FLAGS)
 	$(MAKE) standalone-kitware THEME=$(THEME)
 
 comprehensive:
-	$(RUN) python -m dkvis.build_slides $(DECK_$@) $(BUILD_FLAGS) $(if $(JOBS),,--jobs 2)
+	$(RUN) python -m dkvis.presentation slides $(DECK_$@) $(BUILD_FLAGS) $(if $(JOBS),,--jobs 2)
 	$(MAKE) standalone-comprehensive THEME=$(THEME)
 
 working: $(WORKING)
@@ -151,9 +189,9 @@ parts: $(PARTS)
 # Render every part's scenes in one parallel pool, assemble the full deck from them,
 # then convert each part to its own HTML (and PDF/handout) without rendering again.
 full:
-	$(RUN) python -m dkvis.build_slides $(DECK_full) $(BUILD_FLAGS)
+	$(RUN) python -m dkvis.presentation slides $(DECK_full) $(BUILD_FLAGS)
 	for part in $(foreach p,$(PARTS),$(DECK_$(p))); do \
-	    $(RUN) python -m dkvis.build_slides $$part --no-render $(if $(filter 1,$(PDF)),--pdf --handout) || exit 1; \
+	    $(RUN) python -m dkvis.presentation slides $$part --no-render $(if $(filter 1,$(PDF)),--pdf --handout) || exit 1; \
 	done
 
 $(addprefix clean-,$(DECKS)):
@@ -162,18 +200,18 @@ $(addprefix clean-,$(DECKS)):
 
 $(addprefix present-,$(DECKS)):
 	$(RUN) manim-slides present --folder slides-$(DECK_$(@:present-%=%))$(SUFFIX) \
-	    $$($(RUN) python -m dkvis.build_slides $(DECK_$(@:present-%=%)) --list)
+	    $$($(RUN) python -m dkvis.presentation slides $(DECK_$(@:present-%=%)) --list)
 
 standalone: standalone-short standalone-full $(addprefix standalone-,$(PARTS))
 
 $(addprefix standalone-,$(DECKS)):
-	$(RUN) python -m dkvis.build_slides $(DECK_$(@:standalone-%=%)) --no-render --one-file \
+	$(RUN) python -m dkvis.presentation slides $(DECK_$(@:standalone-%=%)) --no-render --one-file \
 	    --html renders/$(DECK_$(@:standalone-%=%))$(SUFFIX).standalone.html
 
 handout: handout-short handout-full $(addprefix handout-,$(PARTS))
 
 $(addprefix handout-,$(DECKS)):
-	$(RUN) python -m dkvis.build_slides $(DECK_$(@:handout-%=%)) --no-render --handout
+	$(RUN) python -m dkvis.presentation slides $(DECK_$(@:handout-%=%)) --no-render --handout
 
 assets:
 	$(RUN) python -m dkvis.vtk_sine_theta_3d --slide-assets media/vtk3d$(SUFFIX)

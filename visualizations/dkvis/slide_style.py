@@ -77,7 +77,7 @@ from dkvis.notation import color_nouns, expand, latex_preamble
 from dkvis.palette import OUTPUT_SUFFIX, PALETTE, tint
 
 
-# ``dkvis.build_slides`` renders scenes in parallel processes that share manim's
+# ``dkvis.presentation.build`` renders scenes in parallel processes that share manim's
 # LaTeX and text caches under ``media/``.  manim touches those directories
 # without any locking: after each LaTeX run it deletes every non-SVG file there,
 # including other processes' half-finished ones, and it parses a cached SVG by
@@ -261,7 +261,7 @@ class DeckSlide(Slide):
     wait_time_between_slides = 0.1
 
     def __init__(self, *args, **kwargs) -> None:
-        # ``dkvis.build_slides`` sets DKVIS_DECK so that each deck renders into
+        # ``dkvis.presentation.build`` sets DKVIS_DECK so that each deck renders into
         # its own folder and numbers its slides by its own order.
         deck = os.environ.get("DKVIS_DECK")
         if deck:

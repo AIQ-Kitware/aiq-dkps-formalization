@@ -61,7 +61,7 @@ The phase-rectangle animation compares phase values; it does not assert a
 monotone path of feasible matrices. Rotation-plane coordinates of the minimizer
 are distinguished from source/complement coordinates throughout.
 
-The numerical examples live in `dkvis/matching_math.py` and use the existing
+The numerical examples live in `dkvis/learning/matching/model.py` and use the existing
 three-angle graph in `dkvis/novelty_math.py`. Tests check the actual orthogonal
 attainers, their displacement spectra, mixed-direction derivatives, and the
 scalar comparison. They illustrate the Lean mathematics rather than replace it.
@@ -72,7 +72,7 @@ Run `make matching` from `visualizations/` for the 40-scene deck, portable HTML,
 PDF handout, and plain-text narration exports. `make matching-text` exports text
 without rendering or requesting audio.
 
-[`narration/matching-proof.md`](../narration/matching-proof.md) is the single
+[`lectures/README.md#matching_study`](../lectures/README.md#matching_study) is the single
 authored source of titles, motivating questions, local definitions, and
 presenter/speech text. The scene identifiers must match the deck manifest in
 order. A `<!-- beat -->` marker starts a new narrated build. `Why:` and `Recall:`

@@ -4445,3 +4445,163 @@ campaign packet, but the connector rejected its metadata edit with 403. Run
 `waves/2026-11-03/c31-complex/update-pr-body.sh` from the campaign repository on
 the authenticated host to synchronize it without a build. Root Lean sources
 and dependency pins remain unchanged; no unaccepted donor proof was retired.
+
+### 2026-11-04 — full status capture and roadmap implementations by others
+
+The completed host captures were reconciled with accepted TauCeti main
+`52f9d081237dadaf6d4eae13629281f7faa37d54` (24,442 reachable commits,
+non-shallow). Roadmap main `a0ad405e151ff6e42b3c5e372ac3f24e168ad68f`
+has byte-identical READMEs for all nine operator-theory families compared with
+the previous reviewed pin. The campaign's existing
+`intention_776_ledger.json`, per-item JSON/CSV and
+`docs/INTENTION_776_ATTRIBUTION.md` now record **699 accepted coverage claims
+among 899 atomic targets**. The remaining 200 include open, partial and unmapped
+work, not 200 established mathematical gaps. Six additional compound Toeplitz
+milestones remain unassessed. This is a selected native-type reconciliation,
+not a fresh semantic audit of every target or a full-paper completion claim.
+
+The author split is 99 targets with only Erotemic completion PRs, 593 only
+other contributors' PRs, one with both, and six without verified introducing
+PR attribution (OI-A37, MSS-A01–A03, MSS-B01–B02). Sixteen previously accepted
+items had their introducing PRs resolved; that attribution repair does not
+increase mathematical coverage. The global campaign report previously read a
+frozen October mapping; it now reads the current manually reviewed index.
+The archived mapping is preserved.
+
+All 169 OperatorIdeals targets now have accepted coverage claims. Newly mapped
+existing APIs include approximation-number rank/compactness and adjoint laws,
+finite diagonal attainment and infinite diagonal formulas, Ky Fan elementary
+laws, symmetric gauges and operator-ideal carriers. Their introducing PRs and
+scope distinctions are recorded in the existing campaign reconciliation
+`proof/campaign/reconciliations/2026-11-04-inventory.json`, including independent
+rectangular universes, noncompact decreasing-merge plateaus and the supplied
+ordered diagonal basis. **Roadmap implemented by others** counts as delivery of
+the DKPS-derived roadmap; a common target does not establish donor proof descent.
+
+Selected spectral coverage additions, verified against native types and
+integration ancestry, are:
+
+| Accepted PR | Roadmap coverage recorded | Provenance distinction |
+|---|---|---|
+| [#20112](https://github.com/TauCetiProject/TauCeti/pull/20112) | SA-B46–47: PVM indicator recovery and integral norm bound | Submitted by `tauceti-ai-for-science`; extends the previously mapped B44 integration. |
+| [#20284](https://github.com/TauCetiProject/TauCeti/pull/20284) | SA-C29–33: direct sums of partial maps, domains, evaluation, density and closedness | Submitted by `tauceti-ai-for-science`; native arbitrary-`p` products include Hilbert `p=2`. |
+| [#20712](https://github.com/TauCetiProject/TauCeti/pull/20712) | SA-B50/B52–53: PVM-a.e. invariance, vector norm identity and dominated convergence | Submitted by `tauceti-ai-for-science`; countably generated filters include sequences. |
+| [#20931](https://github.com/TauCetiProject/TauCeti/pull/20931) | SA-B43/B45: diagonal and polarized integral comparisons | Submitted by `roed-math`; native scalar vector measures and multiplication pairing. |
+| [#21002](https://github.com/TauCetiProject/TauCeti/pull/21002), [#19548](https://github.com/TauCetiProject/TauCeti/pull/19548) | SA-B38 and combined B01: continuous embedding, bounded-Borel algebra and measurable pullback | Continuous compatibility is a supporting contribution to B01; one target is counted once across its contributing PRs. |
+| [#21259](https://github.com/TauCetiProject/TauCeti/pull/21259) | SA-D29: self-adjoint C-star norm/spectrum interval equivalence | Submitted by `roed-math`; the printed target explicitly has C-star-algebra scope. |
+| [#21490](https://github.com/TauCetiProject/TauCeti/pull/21490) | SSP-D14: Hermitian-dilation spectral transfer | Submitted by `tauceti-ai-for-science`; includes both Gram spaces, multiplicities and the zero block. Supporting for D15, not a D15 perturbation endpoint. |
+| [#22089](https://github.com/TauCetiProject/TauCeti/pull/22089) | SA-B83: finite absolute-continuity regularity and variation closure | Submitted by `tauceti-ai-for-science`; native R1-space scope covers compact Hausdorff spaces. |
+| [#22522](https://github.com/TauCetiProject/TauCeti/pull/22522), [#22999](https://github.com/TauCetiProject/TauCeti/pull/22999), [#25608](https://github.com/TauCetiProject/TauCeti/pull/25608) | SA-B81/B82/B84: RCLike scalar integration, density comparison and continuous-test uniqueness | Submitted by `tauceti-ai-for-science`; roadmap coverage is separate from proof-descent attribution. |
+| [#22879](https://github.com/TauCetiProject/TauCeti/pull/22879) | SA-B58 and compact-metric specialization B02: simultaneous bounded continuous approximation | **Explicit DKPS proof adaptation**, submitted by `tauceti-ai-for-science`; see below. |
+
+PR #22879 integrated at `37cde422ad6a0704abb674630df2025eec56a947`.
+`TauCeti/MeasureTheory/Function/ContinuousApproximation.lean` explicitly adapts
+the finite-family sum-measure argument from
+`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Polarization.lean`.
+It retains Jon Crall / Claude Opus 5, Kitware 2026, Apache-2.0 attribution.
+The accepted APIs are
+`MeasureTheory.exists_continuous_norm_le_forall_integral_norm_sub_le` and
+`exists_seq_continuous_norm_le_tendsto_integral_norm_sub`: finitely many finite
+weakly regular measures on a normal Borel space, a real normed codomain and the
+same uniform bound. These cover the compact Hausdorff target and its compact
+metric specialization. This adds the explicit descent record to the earlier
+pin-compatibility mention; it does not claim a new local retirement.
+
+The recent-issues capture completed with 86 pages, 8,502 unique entries and
+78 operator-theory candidates; original PR logins, candidate dispositions,
+raw-capture hash and manual findings are saved in the campaign's existing
+snapshot/reconciliation paths. A body or title match alone was not promoted to
+accepted coverage. In particular #20453 supplies the explicit 5x5 example,
+not the whole composite SA-C87 norm/attainment target; SA-B48's exact
+simple-symbol norm and the precise D15 specialization remain review boundaries.
+
+Representation PVM [#27902](https://github.com/TauCetiProject/TauCeti/pull/27902)
+is open, with claims for SA-B59–62/B79. Its extension principle supplies a route
+to multiplicativity without waiting for the separate weighted-measure PR
+[#25747](https://github.com/TauCetiProject/TauCeti/pull/25747), also open.
+Direct-sum operator-family [#26066](https://github.com/TauCetiProject/TauCeti/pull/26066)
+is open as well. Neither open work nor the already accepted linear Borel
+operator alone unblocks consumption of B05 → E01 → E35. The five Erotemic PRs
+#20359/#26822/#27798/#27799/#27804 remain open. No PR was created, no Lean
+source or dependency pin changed, and no Lean build was needed for this
+status/provenance refresh.
+
+### 2026-11-04 — two further independent ports prepared
+
+Two branches are compiled and packaged against accepted TauCeti main
+`57ab0f657d7fb33d7c9425bf696bec3045b0fd75`; each has that commit as its
+parent and neither contains the other branch. They are **prepared, not yet
+submitted or integrated**, and do not increase the 699 accepted-target count.
+Shared submission material is in `tauceti-dkps-campaign/waves/2026-11-04/`.
+The host script imports the bundles, checks exact heads, merge compatibility,
+roadmap/API/review evidence and live competing PRs, then pushes and opens PRs.
+It reuses the VM validation without any Lake build, cache download or style run.
+
+| Targets | Branch/head | Native module and adapted mathematics |
+|---|---|---|
+| SA-C84–C85 | `port-sa-c84-c85-spectral-form-bounds`, `1e9b85094c68d3765023e1398c3add79b993c228` | `QuadraticForm/Spectrum.lean`: two global spectral/form inequalities and the native `LowerFormBoundOn`/`UpperFormBoundOn` bridges for an invariant restriction. |
+| SA-E14–E21/E23 | `port-sa-e14-e23-yosida-approximants`, `e274c92c0cd53e939842681a6911574ef2c86524` | `LinearPMap/Yosida.lean`: imaginary-shift approximants and symmetric averages, contraction/norm bounds, adjoint symmetry, self-adjointness, commutation and strong convergence on the domain. |
+
+The spectral slice adapts the current
+`ForTauCeti/Analysis/InnerProductSpace/SpectralOrder.lean` proofs of
+`re_inner_le_of_spectrum_subset_Iic`, `le_re_inner_of_spectrum_subset_Ici`
+and the two restriction-to-form bridges. It retains Jon Crall / Claude Opus
+4.8 / GPT 5.6 High, Kitware 2026, Apache-2.0. The port uses native real
+functional calculus over arbitrary RCLike scalars, operator restriction and
+projection completeness, including zero and infinite-dimensional spaces.
+
+The approximation slice adapts
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/YosidaApproximation.lean`
+from DKPS donor snapshot `0ddd076af551994fe6bf97c106f600820d7d2283`.
+It retains Kitware/Jon Crall/Claude Opus 5 adaptation and explicit Spectra
+Formalization Project/Adam Bornemann ancestry at
+`8dbaaf6728d1342ae16acf79fd7eef7c59b37e63`, Apache-2.0. The port generalizes
+the positive-natural parameter to a signed real shift:
+`A_r=-r²R(ir)-irI`, with symmetric average `(A_r+A_{-r})/2`.
+Native resolvent/adjoint facts and `ContinuousLinearMap.tendsto_apply_of_dense`
+replace duplicated inverse and density proofs. The convergence filter covers
+both signs escaping to infinity; compiler-checked examples recover the positive
+and negative natural-index sequences. Definitions/algebra need no completeness;
+self-adjoint analytic results use complete complex Hilbert spaces. No new group,
+Stone theorem or representation PVM is claimed. SA-E22 and E24 onward remain
+outside this slice.
+
+Final validation, serial with eight Lean threads: spectral focused build
+6,335 jobs, all 13 environment linters on four declarations; approximation
+focused build 5,065 jobs, all 13 linters on 17 declarations plus 7 generated.
+Both pass full repository header/text style checks (24,399 files) and their
+main axiom reports use only `propext`, `Classical.choice`, `Quot.sound`.
+The shared packets contain successful final logs, source patches/bundles,
+exact-head build evidence and source self-review against all ten rubrics.
+Self-review is explicitly distinguished from independent/upstream approval.
+VM structural checks leave only the authenticated host live-listing gate
+pending; it runs automatically before host submission. Both commits are authored
+by `joncrall <erotemic@gmail.com>` with the implementing runtime model trailer.
+The local donor proofs, paper consumers and dependency pins are unchanged.
+
+
+### November 4: complex quarter-angle second review repair
+
+PR [#27804](https://github.com/TauCetiProject/TauCeti/pull/27804) now has pushed
+repair `69a234a80fe019a260480174f27536e9e4463df9`, addressing the
+[reuse](https://github.com/TauCetiProject/TauCeti/pull/27804#discussion_r4474296512)
+and [proof-quality](https://github.com/TauCetiProject/TauCeti/pull/27804#discussion_r4474296809)
+findings on `11c98391c9cf41a48679db23875d5437ed41d0cd`.
+Native real-part spectral order and reducing-subspace reflection APIs replace
+local proof engines. Shared reflection properties, a positive-Lyapunov spectral
+estimate, a squared-norm operator estimate and a reflection-spectrum gap criterion
+leave the endpoint as assembly. Coercive identities use bundled operator algebra.
+The complex endpoint's exact signature and source scope are unchanged; full
+real/complex SSP-C31 remains unclaimed. Proof adaptation ancestry recorded above
+is preserved; consuming canonical prerequisites is not a new ancestry claim.
+
+Focused warning-as-error compilation passed (6395 jobs), as did all 13 environment
+linters (293 declarations plus 242 generated), the standard endpoint axiom
+allowlist and full header/text style (23975 files). Shared bundle, cumulative
+patch, thirteen-declaration/seven-file body and exact-head evidence are refreshed.
+Single-agent source self-review is not upstream approval. The observed PR head
+matches this commit; fresh CI/re-review remains pending. GitHub metadata editing
+returned 403, so the authenticated host must run
+`bash waves/2026-11-03/c31-complex/update-pr-body.sh` from the campaign checkout;
+it edits only the description and runs no Lean build. Root dependency pins and
+local proofs are unchanged; no integration or donor retirement is claimed.

@@ -1,6 +1,19 @@
 # Agent instructions for `visualizations/`
 
 The visualizations are reusable Manim/VTK scenes composed into several decks.
+Shared slide/transcript/TTS/video production lives in `dkvis/presentation/`.
+Learning scenes and models belong in `dkvis/learning/<topic>/`; authored lecture
+text lives in numbered `lectures/` folders. `lectures/index.yaml` owns stable
+lecture IDs, prerequisites and course membership; `python -m dkvis.lectures`
+previews NetworkX topological ordering, and `--apply` organizes folders.
+Use `lecture_path(ID)` in deck manifests rather than hard-coding numbered paths.
+Ordering keys must not become Python package names or deck identities. Read
+`dkvis/learning/README.md` for the module contract and current catalog.
+`DeckSpec.narration` selects an authored transcript. Do not add topic names,
+scene-name prefixes, or transcript paths to the shared production tools.
+Keep legacy scene files where they are until a conceptual migration is useful.
+Preserve presentation content and ordering during organization-only work.
+
 The completed presentation is now named `kitware-talk`; **do not change its
 scene order or change a scene just to improve the new `comprehensive` deck**.
 The `comprehensive` deck is the editable long presentation and should include

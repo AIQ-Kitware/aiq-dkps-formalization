@@ -29,12 +29,19 @@ of new transport results remains a separate literature question.
 
 ## Build
 
+The manuscript uses the supplied Springer Nature `sn-jnl` class and mathematics
+bibliography styles. Journal mode is the default. At the top of `paper.tex`,
+flip `\DKAuthorStylefalse` to `\DKAuthorStyletrue` for colored symbols,
+hover reminders, and author–year citations. The journal class and mathematical
+content stay the same.
+
 ```bash
 make -C papers/dk_formalization_journal paper
 ```
 
 The PDF is written to `build/paper.pdf`. The build requires `latexmk`,
-LuaLaTeX, BibTeX, and an emoji font such as Noto Color Emoji.
+LuaLaTeX and BibTeX. Noto Color Emoji is optional for review-note icons;
+the notes use text labels when that font is unavailable.
 The project selects LuaLaTeX even for `latexmk -pdf`, including LaTeXBox builds.
 Configure editor builds to use `latexmk`
 from this directory so they read `.latexmkrc`. If an older build mixed
@@ -53,6 +60,41 @@ remembers a failed run even when no inputs have changed. Correct the source
 and run `make` again. To retry unchanged sources after resolving an external
 problem, use `latexmk -g -pdf paper.tex`; this reruns the compiler and still
 reports errors normally.
+
+`make author-paper` builds `build/paper-author.pdf` with the author's style
+without changing the boolean or the main PDF.
+
+## Overleaf and journal packages
+
+From this directory:
+
+```bash
+make overleaf
+make submission
+```
+
+The outputs are `build/dk_formalization_overleaf.zip` and
+`build/dk_formalization_submission.zip`. Upload the first ZIP to Overleaf,
+select **LuaLaTeX**, and use **paper.tex** as the main document.
+
+The Overleaf ZIP preserves this directory's manuscript filenames and `figures/`
+paths. It contains the needed sources, class/styles, generated vector figures,
+and compiled PDF, without the proof repository or figure-generation dependencies.
+Download collaborator edits as an Overleaf source ZIP and overlay the edited
+`.tex`/`.bib` files here, reviewing `git diff` before committing. To send local
+edits back, rebuild and upload the modular Overleaf ZIP. This repository remains
+the primary source; no automatic synchronization or second maintained draft is
+introduced. See [README_OVERLEAF.md](README_OVERLEAF.md) for the editing workflow.
+
+The publisher ZIP is generated from those same sources in journal style. Its
+`paper.tex` expands the included manuscript files into one document and uses
+separate PDF figures; editable PGF and EPS exports are supplied too. It is
+compiled independently before packaging. Do not overlay this flattened export
+back into the source tree.
+
+The requirements audit is in
+[submission/GUIDELINE_AUDIT.md](submission/GUIDELINE_AUDIT.md), alongside the
+unaltered [submission guidelines](submission_guidelines.md).
 
 To diagnose a silent LaTeXBox background build, run these commands in Vim with `paper.tex`
 open (these settings affect only the current session):
@@ -115,7 +157,10 @@ does not run accounting analyses or contact external services.
 
 ## Draft controls
 
-The preamble of `paper.tex` provides independent switches:
+The main switch is `\DKAuthorStyletrue` / `\DKAuthorStylefalse` before
+`\documentclass`. It selects the matching Springer bibliography style,
+mathematical colors, and hover reminders together. The preamble also provides
+independent controls:
 
 - Set `\DKAnonymoustrue` in place of `\DKAnonymousfalse` to omit author and
   affiliation details, identifying artifact links, and acknowledgments.
@@ -127,16 +172,17 @@ The preamble of `paper.tex` provides independent switches:
   tooltips have no navigation action and require viewer support. They cover `\sym` and `\like`
   expressions in text, equations, captions, and the three live PGF figures.
   In Okular, enable **View → Show Forms** to expose the hover regions. Other viewers may enable PDF tooltips automatically.
-- Set `\DKColoredSymbolsfalse` in place of `\DKColoredSymbolstrue` for
-  monochrome mathematical symbols. The mathematical role palette remains the
-  same as the Manim visualizations in the colored version.
+- Set `\DKColoredSymbolsfalse` before the symbol-macro input to override
+  mathematical colors. The palette is shared with the Manim visualizations.
 
 For wrapper builds, defining `\DKNoSymbolTooltips` before `\input{paper.tex}`
 disables the hover annotations. Defining `\DKAnonymousReview` enables
 anonymous mode; `\DKMonochromeMath` enables monochrome symbols. Set these
 wrapper flags before `\input{paper.tex}`.
-Author--year citations are enabled for editing. The final bibliography style
-can be changed to the submission venue's requirements later.
+`\DKUseAuthorStyle` selects author style in a wrapper;
+`\DKJournalStyle` forces journal style. Journal mode uses square-bracket
+numbered citations and disables the hover widgets. The two supplied `.bst`
+files are selected by the class; no manual bibliography-style edit is needed.
 
 The `\jonsays`, `\agentsays`, and `\jonrsp` macros remain defined for the
 next review round; their calls have been removed from the revised manuscript.
@@ -218,6 +264,6 @@ Its annotated dependency table identifies which formal foundations
 realize each historical mathematical component. Primary papers and
 historical surveys are cited in `references.bib`.
 
-The sine-theta and four-dimensional counterexample illustrations are
-kept as independent visualization assets outside the rendered article;
-the paper now gives their calculations directly.
+The three manuscript illustrations are included as `figures/Fig1.pgf`,
+`figures/Fig2.pgf`, and `figures/Fig3.pgf`. Generated files stay ignored in Git
+and are included in export ZIPs so collaborators can compile them directly.

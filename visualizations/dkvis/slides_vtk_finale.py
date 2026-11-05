@@ -41,7 +41,7 @@ class V01VTKFinale(DeckSlide):
 
     def body(self) -> None:
         if not MOVIE.is_file():
-            raise FileNotFoundError("Missing VTK finale video; render through dkvis.build_slides")
+            raise FileNotFoundError("Missing VTK finale video; render through dkvis.presentation.build")
         # src creates the slide directly; never insert a FadeIn before it.
         self.say(
             "The final slide is a VTK rendering of the three-dimensional sine-theta model. "

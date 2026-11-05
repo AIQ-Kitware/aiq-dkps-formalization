@@ -1,7 +1,7 @@
 """Slides: the sine-theta theorem in three dimensions, built on the VTK demo.
 
 Stills and movies come from :mod:`dkvis.vtk_sine_theta_3d` and are written to
-``media/vtk3d/`` by :func:`prepare` (``dkvis.build_slides`` calls it).  Still
+``media/vtk3d/`` by :func:`prepare` (``dkvis.presentation.build`` calls it).  Still
 builds show a VTK render beside LaTeX text; movie builds are full-frame VTK
 videos that loop until the presenter advances.  The same scene runs live::
 

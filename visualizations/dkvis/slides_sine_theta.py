@@ -5,8 +5,8 @@ starts a new build (one click) and carries its presenter notes.  ``SCENES``
 lists the deck in presentation order.  Build and present from
 ``visualizations/`` with::
 
-    uv run --extra slides python -m dkvis.build_slides sine-theta          # render + html
-    uv run --extra slides manim-slides present $(python -m dkvis.build_slides sine-theta --list)
+    uv run --extra slides python -m dkvis.presentation slides sine-theta-short
+    uv run --extra slides manim-slides present $(python -m dkvis.presentation slides sine-theta-short --list)
 
 The story:
 

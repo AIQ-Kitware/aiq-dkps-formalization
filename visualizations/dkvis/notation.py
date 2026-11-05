@@ -73,6 +73,17 @@ SYMBOLS: dict[str, tuple[str, str]] = {
     "Qtarget": (r"Q", "wanted"),
     "Rrotation": (r"R", "wanted"),
     "Wcompetitor": (r"W", "trial"),
+    # Proof-specific roles for the compact matching talk. Historical keys above
+    # keep their glyphs so the reference/study decks remain unchanged.
+    "SpectralGradient": (r"G", "resid"),
+    "GradientLevel": (r"g", "resid"),
+    "Jreflect": (r"J_{\mathrm{src}}", "trial"),
+    "Jturn": (r"J_0", "fg"),
+    "GradientComplexStructure": (r"\mathcal I_g", "resid"),
+    "GradientPhaseProjection": (r"E", "fg"),
+    "MatchingPhaseCost": (r"f_p", "fg"),
+    "PairDirectRotation": (r"D", "wanted"),
+    "PowerCost": (r"\Phi_p", "current"),
     # Exact wanted frame / spectrum.
 
     "F0": (r"F_0", "wanted"),

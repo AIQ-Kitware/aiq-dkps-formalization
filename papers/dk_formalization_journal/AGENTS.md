@@ -72,6 +72,14 @@ YWS submission material lives in
 - Store bibliographic metadata in `references.bib` and use Natbib. Reject
   unresolved citations. Put references before appendices and use explicit
   section references when pointing to supplementary material.
+- Use the supplied Springer Nature class and its mathematics bibliography
+  styles. `\DKAuthorStylefalse` is journal mode; `\DKAuthorStyletrue` selects
+  the author's colors, hover reminders, and author--year citations together.
+  Keep journal requirements and export instructions out of scientific prose.
+- Preserve manuscript filenames across the repository and the modular
+  Overleaf export. The flattened publisher manuscript is generated only;
+  never use it as the source for further edits. Keep the template class and
+  bibliography styles unmodified and retain their attribution.
 - Keep a compact source-result table with an artifact path from IDs to Lean.
   Appendices serve a reader's task; author evidence need not be rendered there.
 - Use the current `paper.tex` inclusion graph as the ground truth. Preserve
@@ -97,6 +105,10 @@ repository root and inspect the log for errors and unresolved references. The
 PDF is `build/paper.pdf`; the project configuration selects LuaLaTeX for emoji
 notes and retains the previous PDF on compilation failure. Build instructions
 and editor troubleshooting are in [README.md](README.md).
+`make author-paper` checks the alternate style. `make overleaf` and
+`make submission` produce ignored upload ZIPs; the latter compiles the
+flattened publisher sources independently. The Overleaf archive must compile
+with only its supplied files and a standard LuaLaTeX installation.
 
 Documentation-only guidance changes require link and consistency review; they
 do not require a Lean build or a manuscript rebuild.

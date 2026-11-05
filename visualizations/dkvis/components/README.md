@@ -1,19 +1,19 @@
 # Reusable slide components
 
-This package is the destination for reusable visualization code.  The first
-reorganization pass deliberately does **not** mechanically move every scene:
-`dkvis.slides_*` remains the reference implementation so the old decks can be
-rendered as a regression baseline while new compositions are built.
+This package owns reusable visual primitives. Topic scenes and numerical examples
+live in `dkvis/learning/<topic>/`; transcripts live in numbered `lectures/` folders
+indexed by `lectures/index.yaml`. See
+`../learning/README.md`. Deck manifests compose those scenes and
+`dkvis/presentation/` supplies the shared production pipeline.
 
-Migrate by concept, not by file size.  A useful target is:
+`dkvis.slides_*` remains working reference material for topics not yet migrated,
+so the old decks can be rendered while new compositions are built.
 
-- `common/`: geometry, layout, readouts and other presentation primitives;
-- `sine_theta/`: motivation, angle, residual/gap, theorem, proof intuition, Lean;
-- `family/`: tan-theta, sin-two-theta and tan-two-theta components;
-- `prop44/`: claim, counterexample, explanation and repair;
-- `process/`: workflow, confidence/evidence and claim-boundary components;
-- `three_d/`: reusable 3D presentation components;
-- `glossary/`: notation/reference components.
+`common/` contains geometry, layout, and readout primitives. Keep reusable
+mathematical explanations in the topic packages, with the numerical model
+separate from its renderers. Existing sine-theta, angle-family, Proposition 4.4,
+process, and 3D scenes can move by concept when that helps an actual lesson;
+the module catalog records the existing material.
 
 When migrating a scene, keep its class name stable until the deck manifests have
 been deliberately updated.  Prefer extracting shared primitives first, then move

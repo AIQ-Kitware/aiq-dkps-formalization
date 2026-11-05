@@ -5,6 +5,8 @@ description = "Executable geometric visualizations for the Davis--Kahan formaliz
 requires-python = ">=3.11,<3.14"
 dependencies = [
   "numpy>=2.0",
+  "networkx>=3.2",
+  "PyYAML>=6.0",
 ]
 
 [project.optional-dependencies]

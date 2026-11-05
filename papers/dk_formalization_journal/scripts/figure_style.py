@@ -17,7 +17,7 @@ def configure():
         'font.family': 'serif', 'font.size': 18,
         'pgf.preamble': (
             r'\usepackage{lmodern,amsmath,amssymb,xcolor,hyperref}'
-            r'\def\DKNoSymbolTooltips{1}\input{'
+            r'\def\DKNoSymbolTooltips{1}\def\DKMonochromeMath{1}\input{'
             + str(PAPER / 'math_symbol_colors.tex') + '}'),
     })
 
@@ -26,6 +26,8 @@ def save(fig, name, description):
     # Semantic macros own label colors; the surrounding formula stays neutral.
     # This also lets the manuscript's monochrome switch affect live labels.
     for label in fig.findobj(Text):
+        # The 8.2-inch canvas is placed at 119 mm: 14--21 pt becomes 8--12 pt.
+        label.set_fontsize(min(21, max(14, label.get_fontsize())))
         if r'\sym' in label.get_text() or r'\like' in label.get_text():
             label.set_color('#1B1F24')
     stem = PAPER / 'figures' / name

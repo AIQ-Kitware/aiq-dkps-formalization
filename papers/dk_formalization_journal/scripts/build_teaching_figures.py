@@ -22,7 +22,7 @@ from dkvis.palette import LIGHT
 from figure_style import configure, save
 
 OUT = Path(__file__).resolve().parents[1] / 'figures'
-FG, MUTED, GUIDE = (LIGHT[key] for key in ('FG', 'MUTED', 'FAINT'))
+FG, MUTED, GUIDE = (LIGHT[key] for key in ('FG', 'MUTED', 'MUTED'))
 TRIAL, WANTED, SINE = (LIGHT[key] for key in ('TRIAL', 'WANTED', 'SINE'))
 RESIDUAL, GAP, COST = (LIGHT[key] for key in ('RESID', 'GAP', 'CURRENT'))
 UNWANTED = LIGHT['UNWANTED']
@@ -39,9 +39,9 @@ def sine_theta():
     ex.verify()
     model = ex.model
     v, pv = model.v, np.array([model.v[0], 0.0])
-    fig = plt.figure(figsize=(12.4, 4.8), facecolor='white')
-    fig.text(.25, .94, '(a) Subspace error', ha='center', fontsize=21, color=FG)
-    fig.text(.75, .94, '(b) Residual triangle', ha='center', fontsize=21, color=FG)
+    fig = plt.figure(figsize=(8.2, 4.8), facecolor='white')
+    fig.text(.25, .94, '(a)', ha='center', fontsize=21, color=FG)
+    fig.text(.75, .94, '(b)', ha='center', fontsize=21, color=FG)
     fig.add_artist(plt.Line2D([.5, .5], [.10, .89], transform=fig.transFigure,
                              color=GUIDE, lw=1))
     axes = []
@@ -90,7 +90,7 @@ def sine_theta():
     ax.text(1.20, .64, r'$\sym{r}$', fontsize=24, color=FG, ha='center')
     ax.text(1.31, 1.04, r'$\sym{Pexact}\sym{r}$', fontsize=20, color=FG, ha='center')
     ax.text(1.65, .68, r'$\sym{PexactPerp}\sym{r}$', fontsize=20, color=FG, ha='center')
-    save(fig, 'sine_theta_residual_geometry',
+    save(fig, 'Fig1',
          'Rayleigh residual triangle from S05Residual, combined with the exact-coordinate '
          'projection geometry of S08Why. Ahat=diag(1.9,0.7), theta=40 degrees; '
          'the residual joins rho*v to Ahat*v and is perpendicular to the trial line.')
@@ -98,9 +98,9 @@ def sine_theta():
 
 def matching():
     ex = nuclear_matching_graph_example()
-    fig = plt.figure(figsize=(12.4, 4.65), facecolor='white')
-    fig.text(.25, .97, '(a) Angle-label graph', ha='center', va='top', fontsize=21, color=FG)
-    fig.text(.75, .97, '(b) Matching costs', ha='center', va='top', fontsize=21, color=FG)
+    fig = plt.figure(figsize=(8.2, 4.65), facecolor='white')
+    fig.text(.25, .97, '(a)', ha='center', va='top', fontsize=21, color=FG)
+    fig.text(.75, .97, '(b)', ha='center', va='top', fontsize=21, color=FG)
     ax = fig.add_axes([.025, .065, .46, .82]); ax.axis('off')
     ax.set(xlim=(-.30, 4.9), ylim=(-.8, 3.15), aspect='equal')
     points = np.array([[.55, 2.05], [4.05, 2.05], [2.30, -.05]])
@@ -133,7 +133,7 @@ def matching():
         table.text(.02,y,label,fontsize=21,color=COST if chosen else FG,va='center')
         table.text(.99,y,rf'$\like{{TraceCost}}{{{value:.4f}}}$',fontsize=21,color=COST if chosen else FG,ha='right',va='center')
     fig.add_artist(plt.Line2D([.5,.5],[.13,.89],transform=fig.transFigure,color=GUIDE,lw=1))
-    save(fig, 'real_nuclear_matching',
+    save(fig, 'Fig3',
          'Combinatorial graph on angle labels 30,45,75 degrees; vertex positions are arbitrary. '
          'Edge weights, all four feasible matchings, '
          'and the attaining four-dimensional paired block plus two-dimensional singleton reflection.')

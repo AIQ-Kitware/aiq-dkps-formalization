@@ -3,7 +3,7 @@ import math
 import numpy as np
 import pytest
 
-from dkvis.matching_math import (
+from dkvis.learning.matching.model import (
     displacement_power, pair_direct_rotation, pair_parameters, pair_transporter,
     paired_power_cost, phase_cost, phase_derivative, phase_level_roots,
     phase_rectangle_edge, rotation, skew_gradient,

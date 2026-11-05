@@ -24,7 +24,7 @@ from figure_style import configure, save
 
 FG = '#1B1F24'
 MUTED = '#6B7280'
-GUIDE = '#D5D9DE'
+GUIDE = '#6B7280'
 SOURCE = '#A66705'
 TARGET = '#1F6FD1'
 ANGLE = '#D12A7B'
@@ -58,7 +58,7 @@ def plane(fig, box, operator, basis, *, source_label, image_label, length_label,
     if fixed:
         ax.plot(*start, 'o', color=TARGET, markersize=5, zorder=6)
         ax.text(0.15, 0.17, image_label, color=TARGET, fontsize=17, ha='left')
-        ax.text(0.18, -0.30, r'$(I-\sym{Wcompetitor})\like{FigureInput}{z}=0$', color=DISPLACEMENT, fontsize=16)
+        ax.text(-0.80, -0.30, r'$(I-\sym{Wcompetitor})\like{FigureInput}{z}=0$', color=DISPLACEMENT, fontsize=14)
     else:
         # The chord points from the image back to the input: (I-T)q.
         arrow(ax, end, start, DISPLACEMENT, width=2.7)
@@ -96,7 +96,7 @@ def spectrum(fig, box, values, positive_label, groups):
     ax.set_xlim(-.55, 3.55)
     ax.set_ylim(0, 1.72)
     ax.set_xticks(x, [rf'$\like{{DisplacementSingular}}{{s_{j+1}}}$' for j in x], fontsize=15)
-    ax.set_yticks([0, .5, 1, 1.5], ['0', '0.5', '1.0', '1.5'], fontsize=13)
+    ax.set_yticks([0, .5, 1, 1.5], ['0', '0.5', '1.0', '1.5'], fontsize=14)
     ax.tick_params(axis='both', length=0, pad=5, colors=MUTED)
     ax.grid(axis='y', color=GUIDE, linewidth=.6, zorder=0)
     ax.spines[['top', 'right', 'left']].set_visible(False)
@@ -113,7 +113,7 @@ def main():
     model.verify()
     a = model.direct_singular_values[0]
     b = model.competitor_singular_values[0]
-    fig = plt.figure(figsize=(12.4, 8.0), facecolor='white')
+    fig = plt.figure(figsize=(8.2, 8.0), facecolor='white')
     fig.text(.5, .964, r'$\sym{Usource}=\mathrm{span}\{e_0,e_1\},\quad\sym{Vtarget}=\sym{Rrotation}(\sym{Usource})=\sym{Wcompetitor}(\sym{Usource}),\quad '
              r'\like{theta}{\theta_1}=\like{theta}{\theta_2}=45^\circ$', ha='center', fontsize=18, color=FG)
     fig.text(.25, .900, r'Direct rotation $\sym{Rrotation}$', ha='center', fontsize=22, color=ROTATION)
@@ -129,8 +129,8 @@ def main():
     headings = [r'$\sym{CounterPrincipalOne}=\mathrm{span}\{e_0,e_3\}$',
                 r'$\sym{CounterPrincipalTwo}=\mathrm{span}\{e_1,e_2\}$',
                 r'$\sym{CounterMovingPlane}=\mathrm{range}(\sym{Wcompetitor}-I)$', r'$\sym{CounterFixedPlane}=\mathrm{ker}(\sym{Wcompetitor}-I)$']
-    for center, heading in zip(centers, headings):
-        fig.text(center, .810, heading, ha='center', fontsize=16, color=FG)
+    for label, center, heading in zip('abcd', centers, headings):
+        fig.text(center, .810, f'({label}) {heading}', ha='center', fontsize=14, color=FG)
     boxes = [(center - .116, .510, .232, .285) for center in centers]
     plane(fig, boxes[0], model.R, model.direct_plane_bases[0],
           source_label=r'$\like{SourceVector}{u_1}$', image_label=r'$\like{FigureImage}{Du_1}$', length_label=r'$\sym{CounterChordA}$', source_color=SOURCE)
@@ -169,7 +169,7 @@ def main():
     fig.text(.75, .045, rf'$\Vert I-\sym{{Wcompetitor}}\Vert_1=2\sym{{CounterChordB}}\approx{model.competitor_trace_displacement:.3f}$',
              ha='center', fontsize=21, color=FG)
 
-    save(fig, 'prop44_displacement_planes',
+    save(fig, 'Fig2',
          'Invariant-plane actions, displacement chords, singular values, and trace norms '
          'for the verified real Proposition 4.4 counterexample.')
 

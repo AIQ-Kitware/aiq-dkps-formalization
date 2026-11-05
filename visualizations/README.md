@@ -1,13 +1,96 @@
 # Davis--Kahan visualizations
 
-Executable geometric visualizations for the formalized Davis--Kahan results.
-The current package contains two source-grounded case studies: the Section 2
-**sine-theta theorem** and the explicit **Proposition 4.4 counterexample**. Each
-case study shares one checked numerical model between VTK and Manim renderers.
+Executable geometric visualizations and narrated learning material for the
+Davis--Kahan formalization and its transport extensions. The library includes
+sine-theta geometry, the other angle bounds, the Proposition 4.4 counterexample
+and repair, and the real matching proof. Numerical examples are shared by the
+renderers rather than reimplemented in individual presentations.
 
 This directory is not part of the Lean build. It is a companion for developing
 intuition, figures, talks, and manuscript animations. Numerical assertions here
 do not replace the Lean proofs.
+
+## Learning modules and a shared production pipeline
+
+The [prerequisite lecture series](dkvis/learning/PREREQUISITES.md) contains
+four narrated modules: subspaces and projections (9 slides), singular values
+and displacement cost (10 slides), the matrix exponential (13 slides), and
+feasible variations and stationarity (11 slides). They have independent introductions, historical context, worked
+visual explanations, summaries, and self-checks. `make prerequisites` builds
+all four, including TTS-ready text; it does not contact a speech server.
+
+The [lecture library](lectures/README.md) is indexed by `lectures/index.yaml`.
+Its prerequisites determine a NetworkX topological order. The organizer
+preserves existing six-digit folder numbers and fills gaps for new lessons;
+an explicit `--rebalance` restores 001000, 002000, 003000, ... spacing.
+
+```bash
+uv run python -m dkvis.lectures                     # preview
+uv run python -m dkvis.lectures --apply             # allocate folders; preserve numbers
+uv run python -m dkvis.lectures --rebalance --apply # deliberately renumber
+```
+
+Python imports, deck IDs, render filenames, and speech caches use stable names.
+Decks resolve their transcript paths from stable lecture IDs, so folder moves
+do not require editing import statements or hard-coded paths. The generated
+library catalog is refreshed when the organizer is applied.
+
+[The module catalog](dkvis/learning/README.md) maps learning goals and
+prerequisites to existing material and documents how to author a module.
+[Real matching](dkvis/learning/matching/README.md) is the first complete topic
+package: its study, proof talk, numerical model, and two transcripts live
+together. Existing presentations retain their content, order, and output names.
+
+From this directory:
+
+```bash
+make list
+make slides DECK=matching-proof-talk
+make text DECK=matching-proof-talk
+make video DECK=matching-proof-talk TTS_PROFILE=kokoro
+```
+
+The same commands work for a new deck once it is registered. `slides` renders
+Manim scenes, exports portable HTML/PDF/handout, and exports any authored
+transcript. `text` needs neither Manim rendering nor a speech server. `video`
+uses the configurable speech server and joins the narration to the animations.
+Only decks declaring a transcript are offered for narration; older decks
+remain available as slides.
+
+The common Python entry point is `python -m dkvis.presentation`:
+
+```bash
+uv run python -m dkvis.presentation list
+uv run python -m dkvis.presentation text --deck matching-proof-talk
+./render_video.sh --deck matching-proof-talk --skip-render --tts-profile kokoro
+```
+
+`make slides` uses the Manim extras. For decks using VTK, install that extra too,
+or run with it explicitly:
+
+```bash
+uv run --extra vtk --extra slides python -m dkvis.presentation slides part2-3d --handout
+```
+
+The code has four responsibilities:
+
+| Location | Owns |
+| --- | --- |
+| `dkvis/learning/<topic>/` | Lesson scenes, transcripts, numerical examples, learning goals and source references |
+| `dkvis/decks/` | Presentation composition, ordering, depth, footer, and transcript selection |
+| `dkvis/components/`, `slide_style.py`, `notation.py`, `palette.py` | Shared visual primitives, layout, notation and colors |
+| `dkvis/presentation/` | Slide export, transcript parsing, TTS configuration, audio/video production, timings and output paths |
+
+The older `slides_*.py`, numerical models, and VTK demos keep their locations
+until a topic is deliberately migrated. They are working source material, not
+duplicate implementations to discard. Old build and matching commands remain
+small compatibility entry points; new content uses the shared pipeline.
+
+Each narrated deck declares `DeckSpec.narration`, a path relative to
+`visualizations/`. Its ordered scene sections and animation beats are checked
+against the rendered notes before speech is requested. No matching-specific
+list remains in the production tools. Rendered outputs and audio stay ignored;
+source scenes, scripts, manifests, and source references belong in Git.
 
 ## What the first sine-theta scenes visualize
 
@@ -158,7 +241,39 @@ Current presentations (in addition to the preserved reference decks):
   the derivative, simultaneous invariant blocks, four-dimensional comparison,
   trace-norm limit, and a worked matching. See `briefs/matching-proof.md`.
 
-### Matching proof: slides, presentation text, and narrated video
+### Compact matching proof talk
+
+`matching-proof-talk` is a separate **13-slide** presentation of the proof,
+assuming the usual principal-angle, spectral, and variational background.
+It concentrates on stationarity, common invariant blocks, the unrestricted
+two-angle minimum, and the trace-norm limit. The existing 40-slide learner
+deck is unchanged.
+
+```bash
+make matching-talk
+make matching-talk-text   # text only; no speech server needed
+```
+
+The outputs are `renders/matching-proof-talk.standalone.html`,
+`renders/matching-proof-talk.pdf`, and `renders/matching-proof-talk.handout.pdf`.
+The independent authored script is
+[lectures/README.md#matching_proof](lectures/README.md#matching_proof).
+Plain slide and animated-build speech files, a combined `presentation.txt`,
+and a manifest are exported under `renders/matching-proof-talk-narration/`.
+See [briefs/matching-proof-talk.md](briefs/matching-proof-talk.md) for scope
+and proof references. `QUALITY=l` gives a fast draft; the default is 1080p.
+
+To synthesize the shorter talk later with your configured server:
+
+```bash
+./render_matching_video.sh --deck matching-proof-talk --skip-render --tts-profile kokoro
+```
+
+This reuses the existing `.env`/`tts.toml` configuration, chunking, audio caches,
+and timing logs. Its video is `renders/matching-proof-talk.narrated.mp4`;
+its narration and renders have their own paths.
+
+### Matching proof study: slides, presentation text, and narrated video
 
 Build the slides and export the speech text without contacting a speech service:
 
@@ -171,7 +286,7 @@ Open `renders/matching-proof.standalone.html` for the animated slides, or
 `renders/matching-proof.pdf` is the regular slide export. A draft can be built
 with `make matching QUALITY=l PDF=0`.
 
-The authored script is [narration/matching-proof.md](narration/matching-proof.md).
+The authored script is [lectures/README.md#matching_study](lectures/README.md#matching_study).
 Edit it to change presenter notes, speech, motivating questions, and local
 notation reminders. Equations are written out for speech. `<!-- beat -->`
 marks where a new narrated animation build begins. `Why:` and `Recall:`
@@ -190,8 +305,10 @@ Configure speech servers in [tts.toml](tts.toml). It contains named profiles:
 | `kokoro` | `kokoro` | `af_heart` | WAV |
 | `qwen` | `qwen-1.7-customvoice-q8-ggml` | `ryan` | MP3 |
 
-Set `MATCHING_TTS_PROFILE` in the ignored `visualizations/.env` file to change
+Set `DKVIS_TTS_PROFILE` in the ignored `visualizations/.env` file to change
 this machine's default. The fallback is the `profile` line in `tts.toml`.
+The older `MATCHING_TTS_PROFILE` variable is still accepted when
+`DKVIS_TTS_PROFILE` is unset.
 Kokoro reads its full speech URL from `KOKORO_TTS_ENDPOINT` in `.env`, keeping
 private addresses out of Git. For a fresh checkout, copy `.env.example` to
 `.env` and fill in that endpoint. Existing environment variables override the
@@ -464,10 +581,10 @@ The underlying commands:
 ```bash
 uv sync --extra vtk --extra slides --extra test   # needs LaTeX and Pango/Cairo headers
 RUN="uv run --extra vtk --extra slides --extra test" # always pass the extras
-$RUN python -m dkvis.build_slides sine-theta-short -q l
-$RUN python -m dkvis.build_slides part3-family --pdf --handout
-$RUN python -m dkvis.build_slides sine-theta-full
-$RUN manim-slides present --folder slides-sine-theta-short $($RUN python -m dkvis.build_slides sine-theta-short --list)
+$RUN python -m dkvis.presentation slides sine-theta-short -q l
+$RUN python -m dkvis.presentation slides part3-family --pdf --handout
+$RUN python -m dkvis.presentation slides sine-theta-full
+$RUN manim-slides present --folder slides-sine-theta-short $($RUN python -m dkvis.presentation slides sine-theta-short --list)
 ```
 
 ### Standalone mathematical novelty tour
@@ -519,7 +636,7 @@ and export a **standalone HTML** and PDF handout in one command:
 cd ~/code/aiq-dkps-formalization/visualizations
 uv run --extra vtk --extra slides --extra test python -m pytest -q \
     tests/test_decks.py tests/test_novelty_latex.py tests/test_novelty_layout.py
-uv run --extra vtk --extra slides --extra test python -m dkvis.build_slides \
+uv run --extra vtk --extra slides --extra test python -m dkvis.presentation slides \
     novelty-tour --quality l --jobs 2 --pdf --handout --one-file \
     --html renders/novelty-tour.standalone.html
 ```
@@ -609,8 +726,8 @@ uv run --extra vtk python -m dkvis.vtk_sine_theta_3d --slide-assets media/vtk3d
 `--refresh-assets` redoes them):
 
 ```bash
-uv run --extra vtk --extra slides python -m dkvis.build_slides part2-3d         # the 3D part alone
-uv run --extra vtk --extra slides python -m dkvis.build_slides sine-theta-full  # every part, 3D as part 2
+uv run --extra vtk --extra slides python -m dkvis.presentation slides part2-3d         # the 3D part alone
+uv run --extra vtk --extra slides python -m dkvis.presentation slides sine-theta-full  # every part, 3D as part 2
 ```
 
 In a talk, the video slides loop until you advance. To go live instead, switch

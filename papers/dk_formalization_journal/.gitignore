@@ -14,6 +14,7 @@ build/
 /figures/*.pgf
 /figures/*.svg
 /figures/*.png
+/figures/*.eps
 # These two SVG files are authored vector sources, rather than rendered outputs.
 !/figures/complex_phase_chords.svg
 !/figures/sine_theta_rank_one.svg

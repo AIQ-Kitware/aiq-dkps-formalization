@@ -382,6 +382,15 @@ note remains supplementary; essential new proof explanations are in the article.
 
 ## Generated artifacts (2 November 2026)
 
+For the current journal exports, figure filenames are `Fig1`--`Fig3` rather
+than the earlier descriptive stems. The Overleaf and single-manuscript publisher
+ZIPs are generated under `build/` and remain ignored. See the 4 November
+[guideline audit](submission/GUIDELINE_AUDIT.md) for the template provenance,
+format requirements, bibliographic updates, and author-supplied affiliations
+and competing-interest declaration. The supplied class and two bibliography
+styles are tracked without modifications. All ordinary manuscript edits stay
+in the modular repository sources; the publisher's flattened TeX is an export.
+
 The author requested ignoring regenerable outputs. Figure PGF/PDF/SVG exports,
 derived analysis TeX/CSV views, previews, and LaTeX auxiliaries are no longer
 tracked. Figure scripts and numerical models remain the sources; the Makefile

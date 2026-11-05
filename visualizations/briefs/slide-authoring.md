@@ -5,10 +5,16 @@
 Reusable scene/component code and presentation composition are different
 layers.
 
-- `dkvis/components/` is for reusable visual primitives and, incrementally,
-  conceptual scene groups.
+- `dkvis/components/` is for reusable visual primitives.
+- `dkvis/learning/<topic>/` groups scenes and checked numerical examples.
+- `lectures/` contains numbered folders with authored transcripts;
+  `lectures/index.yaml` records stable IDs, prerequisites, and course membership.
+  Resolve paths with `lecture_path(ID)`. Use the organizer for numbering;
+  normal insertions use gaps, while `--rebalance` restores 1000-step spacing.
 - `dkvis/decks/` chooses and orders components for a particular purpose.
-- checked numerical models remain outside the presentation layer.
+- `DeckSpec.narration` selects the transcript; `dkvis/presentation/` owns the
+  shared rendering, speech, video, and timing pipeline.
+- checked numerical models have no rendering or TTS dependencies.
 - render/demo code remains separate from both models and deck composition.
 
 Do not put Friday-specific ordering, optionality or backup status on a reusable
@@ -28,6 +34,11 @@ come through a manifest.
 
 Avoid generic framework work that does not make composition, explanation or
 render reliability better.
+
+Use the module layout and transcript format in `dkvis/learning/README.md`.
+New topics must use the common pipeline rather than clone the matching video
+or narration tools. Existing decks without synchronized transcripts remain
+slide presentations until a transcript is authored and reviewed.
 
 ## Animation rule
 

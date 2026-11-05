@@ -6,7 +6,7 @@ Do not assert text, labels, or slide copy. Those are editorial details.
 import ast
 from pathlib import Path
 
-from dkvis.build_slides import handout_frame_file
+from dkvis.presentation.build import handout_frame_file
 from dkvis.decks import get_deck
 
 
