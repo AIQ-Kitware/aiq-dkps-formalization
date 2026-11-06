@@ -54,3 +54,17 @@ the current local Breeze serving path exposes ordinary text. Use the small
 respelling list for that path and prefer native pronunciation controls where
 available. The speech cache records both canonical and synthesis text and
 invalidates affected requests when a tested hint changes.
+
+## 2026-11-06 — Pronunciation remedies need speaker-specific evidence
+
+Jon clarified that the nine reported words fail for some Breeze speakers, not
+all. Only non-negative, ortho-normal and eigen-vectors had reported listening
+improvements. The ortho-normal spelling additionally causes an excessive
+internal pause, so it is now tentative and excluded from the defaults.
+
+The full list and remedy status live in `pronunciations/README.md`. Accepted
+spelling aliases use W3C PLS rather than a new lexicon format. Breeze has a
+limited alias adapter; this does not add native phoneme support or integrate
+Misaki into its text-only inference path. Local per-speaker lexicons and direct
+maps can augment the baseline when new remedies pass listening review. Other
+reported words remain unresolved rather than receiving invented substitutions.

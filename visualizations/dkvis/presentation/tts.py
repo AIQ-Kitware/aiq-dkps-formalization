@@ -46,7 +46,9 @@ def load_env(path=ROOT / ".env"):
 def load_profiles(path=DEFAULT_CONFIG):
     load_env()
     with Path(path).open("rb") as stream:
-        return tomllib.load(stream)
+        document = tomllib.load(stream)
+    document['_config_dir'] = str(Path(path).resolve().parent)
+    return document
 
 
 def resolve_profile(document, selected=None, overrides=None):
@@ -107,8 +109,17 @@ def resolve_profile(document, selected=None, overrides=None):
         raise ValueError("request settings may not replace input, model, voice, or response_format")
     if result.get('reference'):
         result['reference'] = reference_snapshot(result['reference'])
-    from dkvis.presentation.pronunciation import validate_replacements
-    result.setdefault('pronunciation_replacements', document.get('pronunciations', {}).get(result['model'], {}))
+    from dkvis.presentation.pronunciation import validate_replacements, load_pls_aliases
+    result.setdefault('pronunciation_lexicon', document.get('pronunciation_lexicons', {}).get(result['model']))
+    if 'pronunciation_replacements' not in result:
+        lexicon = result['pronunciation_lexicon']
+        if lexicon:
+            path = Path(lexicon).expanduser()
+            if not path.is_absolute():
+                path = Path(document.get('_config_dir', ROOT)) / path
+            result['pronunciation_replacements'] = load_pls_aliases(path)
+        else:
+            result['pronunciation_replacements'] = document.get('pronunciations', {}).get(result['model'], {})
     validate_replacements(result['pronunciation_replacements'])
     return result
 

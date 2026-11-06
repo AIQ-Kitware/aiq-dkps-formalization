@@ -59,3 +59,39 @@ def test_synthesis_cache_and_captions_keep_separate_texts(tmp_path,monkeypatch):
     alias=audio.speech(calls[0]['input'],tmp_path/'clip',pronunciation_replacements={},**common)
     assert alias!=path and alias.with_suffix('.txt').read_text().strip()==calls[0]['input']
     assert speech_parts(tmp_path,path)[0]['text']==text
+
+
+def test_shipped_pls_contains_only_accepted_aliases():
+    from dkvis.presentation.pronunciation import load_pls_aliases
+    from dkvis.presentation.paths import ROOT
+    assert load_pls_aliases(ROOT/'pronunciations/breeze-tested-en-us.pls')=={
+        'nonnegative':'non-negative','eigenvectors':'eigen-vectors'}
+
+
+def test_config_relative_pls_and_local_speaker_override(tmp_path,monkeypatch):
+    from dkvis.presentation import tts
+    monkeypatch.setattr(tts,'load_env',lambda:None)
+    template='''<lexicon version="1.0" xmlns="http://www.w3.org/2005/01/pronunciation-lexicon" xml:lang="en-US"><lexeme><grapheme>orthonormal</grapheme><alias>{}</alias></lexeme></lexicon>'''
+    (tmp_path/'baseline.pls').write_text(template.format('baseline hint'))
+    (tmp_path/'local.pls').write_text(template.format('local hint'))
+    config=tmp_path/'tts.toml'
+    config.write_text('''[profiles.demo]
+endpoint="http://test.invalid"
+model="breeze-tts2"
+voice="demo"
+response_format="wav"
+[pronunciation_lexicons]
+breeze-tts2="baseline.pls"
+''')
+    document=tts.load_profiles(config)
+    assert resolve_profile(document,'demo')['pronunciation_replacements']=={'orthonormal':'baseline hint'}
+    assert resolve_profile(document,'demo',{'pronunciation_lexicon':str(tmp_path/'local.pls')})['pronunciation_replacements']=={'orthonormal':'local hint'}
+    assert resolve_profile(document,'demo',{'pronunciation_replacements':{}})['pronunciation_replacements']=={}
+    assert resolve_profile(document,'demo',{'model':'kokoro'})['pronunciation_replacements']=={}
+
+
+def test_text_adapter_rejects_native_phoneme_entries(tmp_path):
+    from dkvis.presentation.pronunciation import load_pls_aliases
+    path=tmp_path/'phonemes.pls'
+    path.write_text('''<lexicon version="1.0" xmlns="http://www.w3.org/2005/01/pronunciation-lexicon" alphabet="ipa" xml:lang="en-US"><lexeme><grapheme>example</grapheme><phoneme>ɛɡzæmpəl</phoneme></lexeme></lexicon>''')
+    with pytest.raises(ValueError,match='native engine support'):load_pls_aliases(path)

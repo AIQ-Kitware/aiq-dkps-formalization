@@ -245,13 +245,13 @@ The equivalent direct command is:
 
 Spelling hints affect only the text sent to the speech API. Authored lecture
 text, slide notes, transcript exports and captions retain their canonical spelling.
-Model defaults live in `tts.toml` under `[pronunciations.<model>]`. The current
-Breeze TTS 2 defaults are the three substitutions reported to improve pronunciation:
+Model defaults select a W3C PLS spelling-alias file through `tts.toml`
+under `[pronunciation_lexicons]`. The current Breeze TTS 2 defaults are two
+substitutions reported to improve pronunciation for some speakers:
 
 | Written word | Breeze input |
 | --- | --- |
 | nonnegative | non-negative |
-| orthonormal | ortho-normal |
 | eigenvectors | eigen-vectors |
 
 Matches are case-insensitive whole words or phrases, with initial/all-caps case
@@ -263,15 +263,19 @@ A run can replace the entire map through the existing client settings option:
 
 ```bash
 make video DECK=operators-rayleigh-ritz TTS_PROFILE=breeze \
-  TTS_SETTINGS='{"pronunciation_replacements":{"nonnegative":"non-negative","orthonormal":"ortho-normal","eigenvectors":"eigen-vectors"}}'
+  TTS_SETTINGS='{"pronunciation_replacements":{"nonnegative":"non-negative","eigenvectors":"eigen-vectors"}}'
 ```
 
 Use your usual server and voice options with that command. Edit the map values
 to audition other spellings; `TTS_SETTINGS='{"pronunciation_replacements":{}}'`
 disables substitutions. These are client settings, not `TTS_REQUEST` fields.
 Adjoint, Frobenius, Hermitian, Hilbert, Laplacian and matrix still need tested
-hints before adding defaults. A spelling that helps one model or voice may not
-help another.
+hints before adding defaults. `ortho-normal` remains tentative because it can
+introduce an excessive internal pause; it is no longer enabled by default. A
+spelling that helps one model or voice may not help another. The complete
+[problem-word list and lexicon guide](pronunciations/README.md) distinguishes
+confirmed remedies from tentative and unresolved words, and explains local
+per-speaker PLS files selected with `TTS_SETTINGS`.
 
 Each successful raw-speech sidecar records `display_text`, the actual `tts_text`,
 and the pronunciation rules used. Its `.txt` remains canonical for transcript
