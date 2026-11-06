@@ -89,6 +89,15 @@ def test_reference_snapshot_and_voice_override(tmp_path,monkeypatch):
     assert reference['audio']=='crall-math-dk-v2.wav'  # never mutate the profile document
 
 
+@pytest.mark.parametrize('voice', ['default', 'custom'])
+def test_explicit_voice_names_outputs_even_without_a_profile_narrator_label(voice):
+    doc = dict(profiles=dict(breeze=dict(endpoint='http://localhost',
+        model='breeze-tts2', voice='default', response_format='wav')))
+    settings = resolve_profile(doc, 'breeze', dict(voice=voice))
+    assert settings['voice'] == voice
+    assert narrator_id(settings) == f'{voice}-breeze-tts2'
+
+
 def test_speech_cache_retains_its_original_generation_context(tmp_path,monkeypatch):
     monkeypatch.setenv('DKVIS_RENDER_TIMING_LOG',str(tmp_path/'timings.jsonl'))
     monkeypatch.setenv('DKVIS_RENDER_CONTEXT','{}')
@@ -122,6 +131,9 @@ def test_speech_cache_retains_its_original_generation_context(tmp_path,monkeypat
                        **{**common,'voice':'crall-math-dk-v3'})
     assert other!=path and len(requests)==3
     assert requests[0]['voice']=='crall-math-dk-v2'
+    assert requests[-1]['voice']=='crall-math-dk-v3'
+    assert audio.speech('Some lecture words.',tmp_path/'clip',reference=changed,**common)==path
+    assert len(requests)==3  # Switching back reuses the original voice's cache.
     assert 'reference' not in requests[0]  # metadata is not an unsupported API request field
 
 

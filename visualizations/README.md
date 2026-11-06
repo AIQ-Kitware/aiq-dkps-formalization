@@ -120,6 +120,15 @@ voice and model for its narrator label. Arguments are transient; no private
 profile needs to be written into the repository. `VIDEO_ARGS` is shell syntax,
 so quote values within it as you would in a direct `render_video.sh` command.
 
+The renderer prints the effective voice and model before rendering. For example,
+`TTS_PROFILE=breeze TTS_VOICE=myvoice` produces a final filename ending in
+`.myvoice-breeze-tts2.narrated.mp4` and stores encoded scene segments under that
+narrator name. Two voices using the same defaults have separate segment files.
+Raw speech may still live under an `audio/breeze/` cache directory: each chunk's
+hash includes the actual voice, model, text, endpoint, format, and request fields,
+and its metadata records the actual voice. Changing voices does not reuse the
+other voice's speech; returning to a previous voice reuses its cached chunks.
+
 ### Optional private TTS profiles with make
 
 From `visualizations/`, copy the shared configuration to the ignored local file:

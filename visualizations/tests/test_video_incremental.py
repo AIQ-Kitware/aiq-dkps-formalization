@@ -85,7 +85,7 @@ def test_update_one_scene_reassembles_every_chapter(tmp_path,monkeypatch,isolate
     output=tmp_path/'full.mp4'
     arguments=['--deck','prereq-projections','--fps','10','--preset','ultrafast','--output',str(output)]
     video.main([*arguments,'--skip-render'])
-    segment=tmp_path/'renders/prereq-projections-narrated/qa/PrTitle-beat01.mp4'
+    segment=tmp_path/'renders/prereq-projections-narrated/test-speaker-test-tts/PrTitle-beat01.mp4'
     unchanged=segment.stat().st_mtime_ns
     original=subprocess.run;renders=[]
     def run(command,*args,**kwargs):
@@ -104,3 +104,42 @@ def test_update_one_scene_reassembles_every_chapter(tmp_path,monkeypatch,isolate
     metadata=json.loads(output.with_name(output.name+'.metadata.json').read_text())['settings']
     assert not metadata['preview']
     assert metadata['profile']=='test-speaker-test-tts'
+
+
+def test_voice_overrides_keep_separate_outputs_and_reusable_segments(tmp_path, monkeypatch, isolated_timings):
+    visual = tmp_path/'visual.mp4'
+    clip(visual)
+    sounds = {}
+    for speaker, value in [('speaker-a', 0), ('speaker-b', 100)]:
+        sounds[speaker] = tmp_path/f'{speaker}.wav'
+        speech(sounds[speaker], value)
+    # Deliberately omit narrator_voice: even a minimal private profile must
+    # identify an explicit API voice in the output and segment directories.
+    doc = dict(profiles=dict(breeze=dict(endpoint='http://unreachable.invalid',
+        model='test-tts', voice='base', response_format='wav')))
+    scripts = {'PrTitle': Narration('Title', '', '', ('Some narration.',))}
+    monkeypatch.setattr(video, 'ROOT', tmp_path)
+    monkeypatch.setattr(video, 'load_profiles', lambda *a: doc)
+    monkeypatch.setattr(video, 'read_deck_narration', lambda *a: scripts)
+    monkeypatch.setattr(video, 'narrated_builds', lambda *a: [(visual, 'Some narration.')])
+    monkeypatch.setattr(video, 'synthesize_beat', lambda text, label, work, settings: sounds[settings['voice']])
+    monkeypatch.setattr(video, 'export', lambda *a, **kw: None)
+    arguments = ['--deck', 'prereq-projections', '--tts-profile', 'breeze',
+                 '--skip-render', '--fps', '10', '--preset', 'ultrafast']
+    work = tmp_path/'renders/prereq-projections-narrated'
+    video.main([*arguments, '--voice', 'speaker-a'])
+    first = work/'speaker-a-test-tts/PrTitle-beat01.mp4'
+    stamp = first.stat().st_mtime_ns
+    manifest = first.with_name(first.name+'.segment-cache.json').read_bytes()
+    video.main([*arguments, '--voice', 'speaker-b'])
+    second = work/'speaker-b-test-tts/PrTitle-beat01.mp4'
+    assert first != second and second.is_file()
+    assert first.stat().st_mtime_ns == stamp
+    assert first.with_name(first.name+'.segment-cache.json').read_bytes() == manifest
+    for speaker in sounds:
+        output = tmp_path/'renders'/f'{video.lecture_output_name("prereq-projections")}.{speaker}-test-tts.narrated.mp4'
+        metadata = json.loads(output.with_name(output.name+'.metadata.json').read_text())['settings']
+        assert metadata['voice'] == speaker
+        assert metadata['profile'] == f'{speaker}-test-tts'
+    video.main([*arguments, '--voice', 'speaker-a'])
+    assert first.stat().st_mtime_ns == stamp  # Returning to a voice reuses its segment.

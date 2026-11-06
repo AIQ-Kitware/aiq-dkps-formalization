@@ -251,7 +251,8 @@ def main(argv=None):
     name = args.deck + OUTPUT_SUFFIX
     public = lecture_output_name(args.deck) + OUTPUT_SUFFIX
     profile = re.sub(r"[^a-zA-Z0-9_-]", "_", narrator_id(settings))
-    cache_profile = re.sub(r"[^a-zA-Z0-9_-]", "_", settings["profile"])
+    print(f"TTS voice={settings['voice']!r} model={settings['model']!r} "
+          f"defaults={settings['profile']!r} narrator={profile!r}", flush=True)
     log = timing()
     safe_settings = {k: v for k, v in settings.items() if k != "endpoint"}
     safe_settings["endpoint_sha256"] = hashlib.sha256(settings["endpoint"].encode()).hexdigest()
@@ -315,7 +316,7 @@ def main(argv=None):
                 for k, (visual, text) in enumerate(visuals[scene], 1):
                     label = f"{scene}-beat{k:02d}"
                     audio = synthesize_beat(text, label, work, settings)
-                    segment_dir = work / cache_profile
+                    segment_dir = work / profile
                     if args.scenes:
                         segment_dir = segment_dir / "preview"
                     segment_dir.mkdir(parents=True, exist_ok=True)

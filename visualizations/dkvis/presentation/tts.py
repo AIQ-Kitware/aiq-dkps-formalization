@@ -57,10 +57,12 @@ def resolve_profile(document, selected=None, overrides=None):
     if selected not in profiles:
         raise ValueError(f'Unknown TTS profile {selected!r}; available: {", ".join(profiles)}')
     result = {**DEFAULTS, **document.get("defaults", {}), **profiles[selected], "profile": selected}
-    if (overrides or {}).get('voice', result.get('voice')) != result.get('voice'):
-        if result.get('narrator_voice'):
-            result['narrator_voice'] = overrides['voice']
-        result.pop('reference', None)
+    if 'voice' in (overrides or {}):
+        # An explicit API voice must also identify the output, including profiles
+        # without a narrator label and overrides that repeat the default voice.
+        result['narrator_voice'] = overrides['voice']
+        if overrides['voice'] != result.get('voice'):
+            result.pop('reference', None)
     inherited_request = result.get('request', {})
     inherited_postprocess = result.get('postprocess', {})
     result.update(overrides or {})
@@ -109,8 +111,9 @@ def resolve_profile(document, selected=None, overrides=None):
 def narrator_id(settings):
     """Name public variants by reference speaker and model when configured.
 
-    The profile remains the stable raw/segment cache namespace, so a clearer
-    public label does not require synthesizing or encoding everything again.
+    Raw speech retains the base profile's cache directory, with the API voice
+    in each request hash. Encoded scene files use this narrator identity so
+    two voices sharing defaults cannot overwrite one another's segments.
     """
     speaker = settings.get('narrator_voice')
     return f"{speaker}-{settings['model']}" if speaker else settings['profile']
