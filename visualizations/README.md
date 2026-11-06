@@ -216,6 +216,25 @@ it, and reassembles the videos. It replaces matching raw speech-cache files.
 Leave the flag off for normal cached builds. Alternatively, a new server voice
 name changes the request key and keeps its raw speech distinct.
 
+A normal rerun reuses valid speech. For passages of at least 20 words, the
+renderer also rejects audio shorter than would permit 12 words per second.
+This deliberately loose sanity check catches failures such as a server returning
+less than a second for a full paragraph; it does not certify the spoken words.
+Both fresh and cached responses are checked. The normal video renderer retries
+an implausibly short response once with the same request, preserves rejected
+clips as `.too-short*` artifacts for diagnosis, and stops if the retry also fails.
+Only the affected request needs regeneration. The client setting
+`max_speech_words_per_second` changes this bound; zero disables it. Set it via
+`TTS_SETTINGS`, not `TTS_REQUEST`.
+
+Normal video rendering still generates independent chunks within each visual
+build, then joins them. A direction prompt about continuing earlier speech does
+not pass earlier audio to the model. Raising `max_chars` and `max_words` in
+`TTS_SETTINGS` can reduce these joins, within the server's duration limit. The
+separate long-passage experiments align visuals to speech independently of
+build boundaries; they are not the default `make video` path.
+
+
 The equivalent direct command is:
 
 ```bash

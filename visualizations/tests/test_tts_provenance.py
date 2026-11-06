@@ -2,6 +2,7 @@
 import io
 import json
 import importlib
+import shutil
 import urllib.error
 import pytest
 
@@ -154,3 +155,80 @@ def test_runtime_metadata_is_optional_and_filters_host_details(monkeypatch):
     snapshot=server_runtime('http://localhost/v1/audio/speech')
     assert snapshot['status']=='unavailable' and snapshot['reason']=='URLError'
     assert snapshot['observed_at']
+
+
+def test_incomplete_cached_passage_is_retried_without_changing_its_request(tmp_path, monkeypatch):
+    from dkvis.presentation.audio import synthesize_beat
+    monkeypatch.setenv('DKVIS_RENDER_TIMING_LOG', str(tmp_path/'timings.jsonl'))
+    module=importlib.import_module('dkvis.presentation.timing')
+    monkeypatch.setattr(module, '_CURRENT', module.TimingLog())
+    # Only duration is faked; exercise actual request/cache/archive/retry behavior.
+    monkeypatch.setattr(audio, 'duration', lambda path: float(path.read_bytes()))
+    replies=iter([b'0.96', b'24.0']); requests=[]
+    def request(req, **kwargs):
+        requests.append(json.loads(req.data))
+        response=io.BytesIO(next(replies)); response.headers={'Content-Type':'audio/wav'}
+        return response
+    monkeypatch.setattr(audio.urllib.request, 'urlopen', request)
+    text=' '.join(['trial']*60)
+    settings=dict(profile='demo', endpoint='http://test.invalid/speech', model='demo',
+                  voice='demo', response_format='wav', max_chars=1000, max_words=100)
+    stem=tmp_path/'audio/demo/Lecture-beat01'
+    path=audio.speech(text, stem, endpoint=settings['endpoint'], model='demo', voice='demo',
+                      language=None, timeout=2, max_speech_words_per_second=0)
+    repaired=synthesize_beat(text, 'Lecture-beat01', tmp_path, settings)
+    assert repaired==path and repaired.read_bytes()==b'24.0'
+    assert requests[0]==requests[1] and len(requests)==2
+    assert path.with_name(path.stem+'.too-short.wav').read_bytes()==b'0.96'
+    assert synthesize_beat(text, 'Lecture-beat01', tmp_path, settings)==path
+    assert len(requests)==2  # The valid replacement is reused normally.
+
+
+def test_repeated_short_responses_fail_without_publishing_an_accepted_clip(tmp_path, monkeypatch):
+    from dkvis.presentation.audio import synthesize_beat, AudioTooShortError, check_audio_minimum
+    monkeypatch.setenv('DKVIS_RENDER_TIMING_LOG', str(tmp_path/'timings.jsonl'))
+    module=importlib.import_module('dkvis.presentation.timing')
+    monkeypatch.setattr(module, '_CURRENT', module.TimingLog())
+    monkeypatch.setattr(audio, 'duration', lambda path: .96)
+    requests=[]
+    def request(req, **kwargs):
+        requests.append(req)
+        response=io.BytesIO(b'incomplete response'); response.headers={'Content-Type':'audio/wav'}
+        return response
+    monkeypatch.setattr(audio.urllib.request, 'urlopen', request)
+    with pytest.raises(AudioTooShortError, match='60 words'):
+        synthesize_beat(' '.join(['trial']*60), 'Lecture-beat01', tmp_path,
+                        dict(profile='demo', endpoint='http://test.invalid/speech', model='demo',
+                             voice='demo', response_format='wav', max_chars=1000, max_words=100))
+    assert len(requests)==2
+    assert len(list((tmp_path/'audio/demo').glob('*.too-short-*.wav')))==2
+    assert not [p for p in (tmp_path/'audio/demo').glob('*.wav') if '.too-short-' not in p.name]
+    check_audio_minimum('Brief title.', .3)
+    check_audio_minimum(' '.join(['trial']*60), 12)
+
+
+@pytest.mark.skipif(not shutil.which('ffmpeg'), reason='FFmpeg required')
+def test_join_is_invalidated_when_a_regenerated_part_changes_in_place(tmp_path, monkeypatch):
+    import wave
+    from dkvis.presentation.audio import synthesize_beat
+    from dkvis.presentation.media import duration
+    monkeypatch.setenv('DKVIS_RENDER_TIMING_LOG', str(tmp_path/'timings.jsonl'))
+    module=importlib.import_module('dkvis.presentation.timing')
+    monkeypatch.setattr(module, '_CURRENT', module.TimingLog())
+    one=tmp_path/'one.wav'; two=tmp_path/'two.wav'
+    def write(path, seconds):
+        with wave.open(str(path), 'wb') as stream:
+            stream.setparams((1, 2, 24000, 0, 'NONE', 'not compressed'))
+            stream.writeframes(b'\0\0'*round(seconds*24000))
+    write(one, .2);write(two, .2)
+    (tmp_path/'audio/demo').mkdir(parents=True)
+    monkeypatch.setattr(audio, 'speech', lambda text, *args, **kwargs: one if text.startswith('Alpha') else two)
+    settings=dict(profile='demo', endpoint='http://test.invalid/speech', model='demo',
+                  voice='demo', response_format='wav', max_chars=80, max_words=65)
+    text=' '.join(['Alpha']*10)+'. '+' '.join(['Beta']*10)+'.'
+    first=synthesize_beat(text, 'Lecture-beat01', tmp_path, settings)
+    assert duration(first)==pytest.approx(.52, abs=.002)
+    write(one, .4)
+    second=synthesize_beat(text, 'Lecture-beat01', tmp_path, settings)
+    assert first!=second and duration(second)==pytest.approx(.72, abs=.002)
+    assert synthesize_beat(text, 'Lecture-beat01', tmp_path, settings)==second

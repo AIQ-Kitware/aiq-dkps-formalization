@@ -20,6 +20,7 @@ DEFAULTS = dict(
     max_chars=420,
     max_words=65,
     max_audio_seconds=60.0,
+    max_speech_words_per_second=12.0,
     chunk_pause_seconds=0.12,
 )
 
@@ -91,6 +92,7 @@ def resolve_profile(document, selected=None, overrides=None):
         raise ValueError("TTS max_chars must be at least 80 and max_words at least 5")
     if (
         result.get("max_audio_seconds", 60) < 0
+        or result.get('max_speech_words_per_second', 12) < 0
         or result.get("chunk_pause_seconds", 0.12) < 0
         or result.get("timeout_seconds", 600) <= 0
     ):

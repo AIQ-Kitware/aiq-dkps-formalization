@@ -121,6 +121,7 @@ def run_mode(mode, plan, base, original, args, aligner, out):
                    model=base['model'],voice=reference['voice'],language=base.get('language'),
                    timeout=base['timeout_seconds'],response_format=base['response_format'],request_settings=request,
                    max_audio_seconds=base.get('max_audio_seconds',60),profile=narrator_id(base),
+                   max_speech_words_per_second=base.get('max_speech_words_per_second',12),
                    reference=dict(original_voice=base['voice'],conditioning=reference,parent=parent),
                    force=False)
         measured=time.perf_counter()-start

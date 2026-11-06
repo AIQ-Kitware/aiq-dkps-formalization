@@ -5,6 +5,7 @@ import hashlib
 from datetime import datetime, timezone
 import json
 import re
+import shutil
 import subprocess
 import time
 import urllib.error
@@ -17,6 +18,21 @@ from dkvis.presentation.timing import timing
 
 class AudioLimitError(RuntimeError):
     """The server returned audio at its generation limit, possibly mid-sentence."""
+
+
+class AudioTooShortError(RuntimeError):
+    """A response is implausibly short for a substantial passage."""
+
+
+def check_audio_minimum(text, seconds, max_words_per_second=12.0):
+    # A deliberately loose sanity check, not speech recognition. Short titles
+    # and brief formula labels need no minimum-duration heuristic.
+    words = len(text.split())
+    if max_words_per_second and words >= 20 and seconds < words / max_words_per_second:
+        raise AudioTooShortError(
+            f'Suspiciously short TTS response: {words} words in {seconds:g}s '
+            f'(more than {max_words_per_second:g} words/s).'
+        )
 
 
 def request_digest(endpoint, payload):
@@ -44,6 +60,7 @@ def speech(
     response_format="wav",
     request_settings=None,
     max_audio_seconds=60.0,
+    max_speech_words_per_second=12.0,
     profile="custom",
     force=False,
     reference=None,
@@ -75,6 +92,7 @@ def speech(
                     raise FileNotFoundError(audio)
                 seconds = duration(audio)
                 check_audio_limit(seconds, max_audio_seconds)
+                check_audio_minimum(text, seconds, max_speech_words_per_second)
                 log.record(
                     "audio_cache",
                     time.perf_counter() - started,
@@ -86,6 +104,15 @@ def speech(
                     file=str(audio),
                 )
                 return audio
+        except AudioTooShortError:
+            # Keep the failed response for diagnosis before a retry replaces it.
+            rejected = audio.with_name(audio.stem + '.too-short.' + response_format)
+            if audio.exists():
+                shutil.copy2(audio, rejected)
+                shutil.copy2(metadata, rejected.with_suffix('.json'))
+            log.record('audio_cache_rejected', time.perf_counter() - started,
+                       profile=profile, file=str(audio), reason='implausibly_short_audio')
+            raise
         except AudioLimitError:
             log.record(
                 "audio_cache_rejected",
@@ -128,6 +155,18 @@ def speech(
                         output.write(data)
             generation_seconds = time.perf_counter() - request_start
             seconds = duration(temporary)
+            try:
+                check_audio_minimum(text, seconds, max_speech_words_per_second)
+            except AudioTooShortError:
+                rejected = audio.with_name(audio.stem + f'.too-short-{time.time_ns()}.' + response_format)
+                temporary.replace(rejected)
+                event.update(rejected_file=str(rejected), reason='implausibly_short_audio', audio_seconds=seconds)
+                rejected.with_suffix('.json').write_text(json.dumps(dict(
+                    request_sha256=digest, status='too_short', seconds=seconds,
+                    words=len(text.split()), request_settings=request_settings or {},
+                    generation_seconds=generation_seconds,
+                ), indent=2) + '\n')
+                raise
             event.update(
                 audio_seconds=seconds,
                 request_seconds=generation_seconds,
@@ -226,8 +265,8 @@ def synthesize_beat(text, label, work, settings):
 
     def synthesize_piece(piece):
         try:
-            return [
-                speech(
+            def request_piece(force):
+                return speech(
                     piece,
                     cache / label,
                     endpoint=settings["endpoint"],
@@ -238,12 +277,18 @@ def synthesize_beat(text, label, work, settings):
                     response_format=settings["response_format"],
                     request_settings=settings.get("request", {}),
                     max_audio_seconds=limit,
+                    max_speech_words_per_second=settings.get('max_speech_words_per_second', 12.0),
                     profile=profile,
-                    force=settings.get("refresh_audio", False),
+                    force=force,
                     reference=settings.get("reference"),
                     server_runtime=settings.get("server_runtime"),
                 )
-            ]
+            try:
+                return [request_piece(settings.get('refresh_audio', False))]
+            except AudioTooShortError:
+                print('  Incomplete speech response: regenerating this request once.', flush=True)
+                timing().record('audio_short_retry', 0, profile=profile, words=len(piece.split()))
+                return [request_piece(True)]
         except AudioLimitError:
             words = len(piece.split())
             if words < 2:
@@ -265,7 +310,7 @@ def synthesize_beat(text, label, work, settings):
         parts.extend(synthesize_piece(chunk))
     # Keep raw synthesis caches unchanged. Processing has a separate content and
     # settings cache, so audio can be retuned without another server request.
-    from dkvis.presentation.audio_quality import process_chunk
+    from dkvis.presentation.audio_quality import process_chunk, fingerprint
     processing = settings.get('postprocess', {})
     if processing.get('enabled', False):
         parts = [process_chunk(part, work/'processed'/profile, processing) for part in parts]
@@ -273,7 +318,7 @@ def synthesize_beat(text, label, work, settings):
         return parts[0]
     pause = settings.get("chunk_pause_seconds", 0.12)
     key = hashlib.sha256(
-        json.dumps(dict(parts=[str(p) for p in parts], pause=pause)).encode()
+        json.dumps(dict(parts=[dict(path=str(p), sha256=fingerprint(p)) for p in parts], pause=pause)).encode()
     ).hexdigest()[:16]
     joined = cache / f"{label}-joined-{key}.wav"
     # Persist exact request boundaries even when an existing join is reused.
