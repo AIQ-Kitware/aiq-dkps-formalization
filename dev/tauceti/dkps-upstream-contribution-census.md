@@ -5019,3 +5019,13 @@ scope examples and full style passed. The compact-time result strengthens the
 donor's pointwise Cauchy theorem. Submit the two packets with
 `tauceti-dkps-campaign/waves/2026-11-06/submit.sh --submit` on the authenticated
 host; the script runs no Lake command. SA-E25–E27 and SA-E29 are not claimed.
+
+The submissions are now open as
+[#30735](https://github.com/TauCetiProject/TauCeti/pull/30735) and
+[#30736](https://github.com/TauCetiProject/TauCeti/pull/30736). Their respective
+repair heads `b4e098d53b171d60b9c32097ce0151ad2cc26d5e` and
+`b8df55ccd4af8b5aea1b0df69f8d6e2265028127` independently move the existing
+upstream `Yosida.lean` to `Yosida/Basic.lean` and place each new module in that
+directory. Focused builds, all 13 environment linters, scope examples and full
+style checks passed for each head. These are open PRs, not integrations; fresh
+upstream CI and review remain pending.
