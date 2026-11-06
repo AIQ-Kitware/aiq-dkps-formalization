@@ -69,6 +69,12 @@ lectures:
     topic: sine_theta
     series: spectral_perturbation
     requires: [sylvester, complementary_projection]
+  yws:
+    title: Yu–Wang–Samworth — a population-gap perturbation theorem
+    deck: yws-population-gap
+    topic: yws
+    series: spectral_perturbation
+    requires: [sine_theta, singular_norms, minmax]
   matching_study:
     title: The matching proof, a learner's walkthrough
     deck: matching-proof

@@ -130,3 +130,13 @@ class BaSetup(OrientationSlide):
              (r'Av=\lambda v','Eigenvectors: directions a matrix only scales.'),
              (r'f^\prime(t),\ \int_a^b f(t)\,dt','Derivatives and integrals: rates of change and accumulation.'))
     goal='Recognize the basic language; the later lectures develop the specialized tools.'
+
+
+class YsSetup(OrientationSlide):
+    lesson_deck='yws-population-gap'
+    setting='Real symmetric p by p matrices; eigenvalues listed in decreasing order. The theorem is deterministic.'
+    symbols=((r'\widehat A=A+H','Population matrix A, estimated matrix A-hat, perturbation H.'),
+             (r'V,\widehat V\in\mathbb R^{p\times d}','Orthonormal eigenframes at the same ordered positions r through s.'),
+             (r'd=s-r+1','Number of selected eigenvectors; paper indices start at one.'),
+             (r'g>0','Population separation at the exterior boundaries of the selected block.'))
+    goal='Goal: prove a population-gap sine bound, then an orthogonally aligned frame bound.'

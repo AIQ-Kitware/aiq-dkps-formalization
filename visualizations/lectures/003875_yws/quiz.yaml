@@ -1,0 +1,38 @@
+questions:
+- title: Which gap belongs in the denominator?
+  question: For a consecutive population block, which separation is required by Theorem
+    2?
+  choices:
+  - Positive gaps between every pair inside the block.
+  - A positive population gap at the exterior boundaries.
+  - A positive sample gap and no population assumption.
+  - A perturbation smaller than one quarter of the gap.
+  correct: 1
+  explanation: Only the exterior population boundary gap is assumed; internal ties
+    and sample ties are allowed.
+  think_seconds: 8
+  speak_question: 'First question. Which separation is required? A: positive gaps
+    between every pair inside the block. B: a positive population gap at the exterior
+    boundaries. C: a positive sample gap and no population assumption. Or D: a perturbation
+    smaller than one quarter of the gap. Take eight seconds.'
+  speak_answer: B is correct. The selected population block must be separated from
+    the population spectrum outside it. Internal ties and sample ties are allowed,
+    and the theorem has no additional small-perturbation assumption.
+- title: Where do the constants come from?
+  question: Why is the aligned-frame constant $2\sqrt{2}$ rather than $2$?
+  choices:
+  - Weyl contributes the entire constant.
+  - The gap is squared twice.
+  - Alignment adds a factor $\sqrt{2}$ to the sine bound.
+  - The sample frame is assumed to be uniquely determined.
+  correct: 2
+  explanation: Residual upper bounds supply 2; the principal-angle alignment inequality
+    supplies the extra square root two.
+  think_seconds: 8
+  speak_question: 'Second question. Why is the aligned-frame constant two square root
+    two rather than two? A: Weyl contributes the entire constant. B: the gap is squared
+    twice. C: alignment adds square root two to the sine bound. Or D: the sample frame
+    is assumed to be uniquely determined. Take eight seconds.'
+  speak_answer: C is correct. The residual upper bounds produce the factor two. The
+    geometric alignment inequality then multiplies the sine error bound by square
+    root two.

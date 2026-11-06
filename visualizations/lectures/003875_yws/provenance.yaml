@@ -1,0 +1,27 @@
+deck: yws-population-gap
+scope: YWS Theorem 2 proof, corrected Gram-matrix extension, model examples, narration,
+  and review.
+slides:
+  initial_source_attribution:
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-05'
+    sources:
+    - visualizations/dkvis/learning/yws/scenes.py
+    - visualizations/dkvis/learning/yws/model.py
+    - visualizations/dkvis/learning/orientation.py
+    - visualizations/dkvis/decks/yws.py
+    basis: Lecture authored in this session. Mathematical and prior formal-proof authorship
+      remain with their cited sources.
+transcript:
+  initial_source_attribution:
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-05'
+    sources:
+    - visualizations/lectures/003875_yws/lecture.md
+    - visualizations/lectures/003875_yws/quiz.yaml
+    - visualizations/lectures/003875_yws/facts.lean
+    - visualizations/lectures/003875_yws/sources.md
+    basis: Lecture authored in this session. Mathematical and prior formal-proof authorship
+      remain with their cited sources.

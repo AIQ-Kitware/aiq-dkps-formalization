@@ -363,6 +363,18 @@ against the rendered notes before speech is requested. No matching-specific
 list remains in the production tools. Rendered outputs and audio stay ignored;
 source scenes, scripts, manifests, and source references belong in Git.
 
+## YWS population-gap lecture
+
+**`yws-population-gap`** (003875) explains Theorem 2 through a residual sandwich,
+population spectral blocks, and orthogonal frame alignment. It includes checked
+Lean applications and the corrected rectangular extension. See the
+[YWS guide](dkvis/learning/yws/README.md) for the transcript, source correspondence,
+and build commands.
+
+```bash
+make video DECK=yws-population-gap TTS_PROFILE=crall-math-dk-v2-breeze-tts2
+```
+
 ## Historical overview
 
 **`history-overview`** (000505) introduces the people and publications behind
