@@ -4940,3 +4940,15 @@ ledger records #27902 as supporting SA-B59 rather than asserting full coverage.
 The campaign's item-level ledger records the integration commits and the
 distinction between submitter and proof descent. Its earlier complete inventory
 has not been re-audited in full as part of this selected reconciliation.
+
+### Cayley spectral measure review repair (2026-11-06)
+
+The SA-E01 construction is open as
+[#29129](https://github.com/TauCetiProject/TauCeti/pull/29129), not yet
+accepted. Review repair `9ad5b5edcde213e1577fad7f864cafcb89075fc0` proves
+that the inverse coordinate recovers a real parameter, names the partial-map
+measure `IsSelfAdjoint.cayleySpectralPVM`, and leaves the projection and
+diagonal formulas as explicit rewrite lemmas. The focused build, 13
+environment linters, scope example and full style checks passed. Fresh upstream
+CI and review remain pending. The campaign packet has the updated PR description;
+the GitHub app could not edit it, so its host update script remains to be run.
