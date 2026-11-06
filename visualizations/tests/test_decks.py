@@ -138,14 +138,16 @@ def test_study_and_reference_decks_remain_independent():
     assert len(study) > len(get_deck("kitware-talk").scene_names)
 
 
-def test_indexed_lectures_have_two_answerable_review_scenes_and_thinking_time():
+def test_indexed_lectures_have_answerable_review_scenes_and_thinking_time():
     from dkvis.lectures import lecture_decks
     from dkvis.presentation.narration import read_deck_narration
-    from dkvis.quiz import SCENES, questions
+    from dkvis.quiz import REVIEW_SCENES, questions
     for name in lecture_decks():
-        assert get_deck(name).scene_names[-2:] == list(SCENES)
+        rows = questions(name)
+        scenes = REVIEW_SCENES[:len(rows)]
+        assert get_deck(name).scene_names[-len(rows):] == list(scenes)
         scripts = read_deck_narration(name)
-        for scene, question in zip(SCENES, questions(name)):
+        for scene, question in zip(scenes, rows):
             script = scripts[scene]
             assert len(script.beats) == 2
             assert script.pauses == (question['think_seconds'], 0)
@@ -191,6 +193,7 @@ def test_existing_public_exports_are_numbered_without_moving_caches(tmp_path):
 
 def test_native_lessons_introduce_local_objects_and_separate_numerics():
     from dkvis.lectures import lecture_decks
+    from dkvis.quiz import questions
     for name in lecture_decks():
         slides = get_deck(name).slides
         setups = [i for i, s in enumerate(slides) if s.module == 'dkvis.learning.orientation']
@@ -200,7 +203,7 @@ def test_native_lessons_introduce_local_objects_and_separate_numerics():
             continue
         assert setups == [1]
         bonus = [i for i, s in enumerate(slides) if s.scene.endswith('Computation')]
-        assert bonus == [len(slides)-3]
+        assert bonus == [len(slides)-len(questions(name))-1]
         assert slides[bonus[0]].depth == '*'
         assert all(i < bonus[0] for i, s in enumerate(slides) if 'Lean' in s.scene)
 

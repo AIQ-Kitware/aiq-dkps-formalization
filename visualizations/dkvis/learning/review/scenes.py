@@ -35,3 +35,11 @@ class ReviewQuestion1(ReviewSlide):
 
 class ReviewQuestion2(ReviewSlide):
     question_index = 1
+
+
+class ReviewQuestion3(ReviewSlide):
+    question_index = 2
+
+
+class ReviewQuestion4(ReviewSlide):
+    question_index = 3

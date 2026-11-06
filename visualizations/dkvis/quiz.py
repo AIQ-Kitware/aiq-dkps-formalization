@@ -6,6 +6,7 @@ from dkvis.lectures import lecture_path, load_index
 from dkvis.presentation.paths import ROOT
 
 SCENES = ('ReviewQuestion1', 'ReviewQuestion2')
+REVIEW_SCENES = SCENES + ('ReviewQuestion3', 'ReviewQuestion4')
 
 
 def questions(deck):
@@ -16,8 +17,8 @@ def questions(deck):
     if not path.exists():
         return []
     rows = yaml.safe_load(path.read_text())['questions']
-    if len(rows) != len(SCENES):
-        raise ValueError(f'{path}: author exactly {len(SCENES)} review questions')
+    if len(rows) not in (2, 4):
+        raise ValueError(f'{path}: author two legacy or four review questions')
     for row in rows:
         if not 3 <= len(row['choices']) <= 4 or not 0 <= row['correct'] < len(row['choices']):
             raise ValueError(f'{path}: invalid choices or correct-answer index')
@@ -26,5 +27,7 @@ def questions(deck):
     return rows
 
 
-def quiz_uses():
-    return uses('dkvis.learning.review.scenes', SCENES)
+def quiz_uses(count=2):
+    if count not in (2, 4):
+        raise ValueError('Review scenes support two legacy or four questions')
+    return uses('dkvis.learning.review.scenes', REVIEW_SCENES[:count])

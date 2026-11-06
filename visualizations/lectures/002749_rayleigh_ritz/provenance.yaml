@@ -1,0 +1,26 @@
+deck: operators-rayleigh-ritz
+scope: Trial spaces, compression, Ritz vectors, residual geometry, fixed-space model
+  fitting, narration and accepted API examples.
+slides:
+  initial_source_attribution:
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-05'
+    sources:
+    - visualizations/dkvis/learning/rayleigh_ritz/scenes.py
+    - visualizations/dkvis/learning/rayleigh_ritz/model.py
+    - visualizations/dkvis/learning/orientation.py
+    basis: Authored in this session; mathematical sources and formal implementation
+      ancestry are recorded separately in sources.md.
+transcript:
+  initial_source_attribution:
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-05'
+    sources:
+    - visualizations/lectures/002749_rayleigh_ritz/lecture.md
+    - visualizations/lectures/002749_rayleigh_ritz/quiz.yaml
+    - visualizations/lectures/002749_rayleigh_ritz/facts.lean
+    - visualizations/lectures/002749_rayleigh_ritz/sources.md
+    basis: Authored in this session; mathematical sources and formal implementation
+      ancestry are recorded separately in sources.md.

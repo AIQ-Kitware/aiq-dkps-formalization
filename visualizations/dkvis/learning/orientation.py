@@ -150,3 +150,13 @@ class PvSetup(OrientationSlide):
              (r'E(B)','The orthogonal projection onto the components selected by the spectral set B.'),
              (r'\mu_x(B)=\|E(B)x\|^2','The energy of the selected component of this particular vector.'))
     goal='Goal: understand spectral selection, its measure laws, and the operators it defines.'
+
+
+class RrSetup(OrientationSlide):
+    lesson_deck='operators-rayleigh-ritz'
+    setting='A is real symmetric; choose a nonzero k-dimensional trial space in n dimensions.'
+    symbols=((r'\mathcal T=\operatorname{range}Q','The chosen search space, spanned by the orthonormal columns of Q.'),
+             (r'Q^TQ=I_k,\ P=QQ^T','Q maps trial coordinates to ambient vectors; P is the ambient orthogonal projection.'),
+             (r'B=Q^TAQ','The small k by k operator, called the compression.'),
+             (r'By=\theta y,\ u=Qy','A Ritz value and its lifted Ritz vector; theta here is an eigenvalue, not an angle.'))
+    goal='Goal: see what the small problem solves and what its full residual still needs to tell us.'

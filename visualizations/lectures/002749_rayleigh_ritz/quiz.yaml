@@ -1,0 +1,75 @@
+questions:
+- title: What does trial mean?
+  question: Choosing a trial subspace guarantees which statement?
+  choices:
+  - A maps the space into itself.
+  - The space is where we search for approximate eigenvectors.
+  - The space is close to the wanted exact spectral subspace.
+  correct: 1
+  explanation: A trial space is a search choice. Invariance and closeness need separate
+    evidence.
+  think_seconds: 8
+  speak_question: 'First question. Choosing a trial subspace guarantees which statement?
+    A: A maps the space into itself. B: the space is where we search for approximate
+    eigenvectors. Or C: the space is close to the wanted exact spectral subspace.
+    Take eight seconds.'
+  speak_answer: B is correct. Trial describes where we search, not a guarantee of
+    invariance or accuracy.
+- title: What has the small problem solved?
+  question: For a Ritz pair with nonzero full residual r, which statement holds?
+  choices:
+  - The residual is zero inside the trial space, but can point outside it.
+  - The small eigenproblem was solved incorrectly.
+  - The Ritz value must be far from every exact eigenvalue.
+  correct: 0
+  explanation: The projected equation is exact. The full residual lies perpendicular
+    to the trial space; its size needs to be checked.
+  think_seconds: 8
+  speak_question: 'Second question. For a Ritz pair with a nonzero full residual,
+    which statement holds? A: the residual is zero inside the trial space, but can
+    point outside it. B: the small eigenproblem was solved incorrectly. Or C: the
+    Ritz value must be far from every exact eigenvalue. Take eight seconds.'
+  speak_answer: "A is correct. Rayleigh\u2013Ritz solves the projected equation. A\
+    \ nonzero residual can remain in directions outside the chosen space."
+- title: One exact Ritz vector
+  question: Q spans a plane. One Ritz vector has zero residual; the other has a nonzero
+    residual. What follows?
+  choices:
+  - The trial plane is invariant because it contains an exact eigenvector.
+  - One chosen direction is invariant, but the whole trial plane is not.
+  - Changing the small model can make both residuals zero without changing the plane.
+  correct: 1
+  explanation: Zero residual makes that Ritz vector exact. The other residual shows
+    that A sends some vector in the plane outside it; changing an internal model cannot
+    remove this leakage.
+  think_seconds: 15
+  speak_question: 'Third question. Q spans a plane. One Ritz vector has zero residual;
+    the other has a nonzero residual. What follows? A: the plane is invariant because
+    it contains an exact eigenvector. B: one chosen direction is invariant, but the
+    whole trial plane is not. Or C: changing the small model can make both residuals
+    zero without changing the plane. Take fifteen seconds.'
+  speak_answer: B is correct. Invariance must hold for every vector in the plane.
+    One exact direction is insufficient. The nonzero residual witnesses output outside
+    the plane, and an internal model cannot cancel that perpendicular component.
+- title: New coordinates, same trial space
+  question: Replace $Q$ by $QZ$, where $Z$ is a $k\times k$ orthogonal matrix. What
+    happens in exact arithmetic?
+  choices:
+  - The residual becomes smaller because the frame improved.
+  - The compression stays entrywise identical, but the trial subspace changes.
+  - The compression becomes $Z^T B Z$; its eigenvalues and lifted Ritz eigenspaces
+    stay the same.
+  correct: 2
+  explanation: $QZ$ spans the same space. Its compression is $Z^TBZ$ and its residual
+    is $RZ$. Ritz values and ambient eigenspaces are unchanged; repeated values may
+    use different bases.
+  think_seconds: 15
+  speak_question: 'Fourth question. Replace Q by Q Z, with Z a small orthogonal matrix.
+    What happens in exact arithmetic? A: the residual becomes smaller because the
+    frame improved. B: the compression stays entrywise identical, but the trial space
+    changes. Or C: the compression becomes Z transpose B Z, and its eigenvalues and
+    lifted Ritz eigenspaces stay the same. Take fifteen seconds.'
+  speak_answer: C is correct. We changed coordinates, not the search space. The small
+    matrix changes by orthogonal conjugation. Replacing a small eigenvector y by Z
+    transpose y gives the same lifted ambient vector. Within a repeated eigenspace
+    the basis can change, but the space itself is unchanged.

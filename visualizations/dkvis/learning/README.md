@@ -22,6 +22,7 @@ finished narrated lessons.
 | Subspaces and projections | Translate between a subspace, its orthogonal projection, and adapted coordinates. | Inner products, linear maps | [Lecture 1](projections/README.md): complete narrated module |
 | Complementary projection and error | Read I minus P, its restriction to trial vectors, and its relation to displacement. | Basic vectors; projections introduced locally | [Thinking about I minus P](complementary_projection/README.md): complete narrated module |
 | Projection-valued measures | Select spectral components, form scalar energy measures, and distinguish strong limits from operator-norm limits and operator domains. | Projections and eigenvalues, recalled locally | [Lecture 002916](pvm/README.md): complete narrated module |
+| Rayleigh–Ritz | Choose a trial space, compress an operator, lift Ritz pairs, and interpret the orthogonal residual. | Projections and Rayleigh quotients, recalled locally | [Lecture 002749](rayleigh_ritz/README.md): complete narrated module with four review questions |
 | Sine-theta theorem | Relate subspace error to residual and certified separation; read the source correction. | Projections; singular values; Sylvester bounds | [Narrated short-reference edition](sine_theta/README.md) |
 | YWS population-gap theorem | Prove the population-only sine bound, align frames, and recognize the corrected rectangular extension. | Sine theta; norms; min–max/Weyl, recalled locally | [Lecture 003875](yws/README.md): complete proof walkthrough |
 | Principal angles | Interpret the angle list, principal planes, and the directed sine operator. | Subspaces and projections; SVD | `slides_sine_theta.py`, `slides_sine_theta_3d.py`; matching study `M01PrincipalPlanes` |
@@ -116,14 +117,16 @@ unless they serve the audience's understanding.
 
 ## End-of-lecture study questions
 
-Every indexed lecture has two questions in its source folder's `quiz.yaml`.
+New lectures have four questions in their source folder's `quiz.yaml`: two
+basic checks and two application or reasoning questions. Existing lectures may
+retain their two-question reviews.
 Author the question, three or four choices, a zero-based correct index, an
 explanation, and ordinary-language `speak_question` / `speak_answer` text.
 `think_seconds` controls the silent interval after the spoken choices (eight
 seconds by default); viewers can also pause. The shared review scenes show the
 question first, then highlight and explain the correct answer. The transcript
-export includes these two scenes automatically. Keep their sections out of
-`lecture.md`; append `quiz_uses()` to the deck's scene list.
+export includes the review scenes automatically. Keep their sections out of
+`lecture.md`; append `quiz_uses(count=4)` to the new deck's scene list.
 
 ## Model attribution
 

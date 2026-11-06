@@ -431,3 +431,9 @@ spectral windows, scalar energy measures, and integration. Continuous and
 unbounded examples explain strong convergence and operator domains. Three
 accepted Tau Ceti laws appear alongside their symbolic statements. See the
 [PVM guide](dkvis/learning/pvm/README.md) for sources, transcript, and rendering.
+
+**`operators-rayleigh-ritz`** (002749) builds the missing bridge from a chosen
+trial subspace to compression, lifted Ritz pairs, and full residuals. It explains
+Galerkin orthogonality and the retained/escaping output blocks, with accepted
+Tau Ceti companions and four review questions. See the
+[Rayleigh–Ritz guide](dkvis/learning/rayleigh_ritz/README.md).

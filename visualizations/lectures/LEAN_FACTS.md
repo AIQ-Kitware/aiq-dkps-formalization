@@ -10,7 +10,7 @@ Lean 4 syntax is colored, and the library-proof application is highlighted in
 green beneath the statement. `DKVIS_LEAN_FONT` selects another installed font.
 
 The core is followed by an explicitly optional numerical bonus slide, then the
-two multiple-choice study questions. Numerical details are not needed to follow
+study questions (four for new lectures; older lectures retain two). Numerical details are not needed to follow
 the core argument or answer its conceptual questions.
 
 | Lecture | Companion | Library declarations used |
@@ -22,15 +22,18 @@ the core argument or answer its conceptual questions.
 | Matrix exponential | [facts.lean](002500_matrix_exponential/facts.lean) | Tau Ceti `ContinuousLinearMap.exp_add_smul`; Mathlib `NormedSpace.exp_mem_unitary_of_mem_skewAdjoint` and `Commute.exp_left` |
 | Variations | [facts.lean](003000_variations/facts.lean) | Mathlib `IsLocalMin.hasDerivAt_eq_zero` and `Matrix.trace_conjTranspose_mul_self_eq_zero_iff` |
 | Min-max | [facts.lean](002666_minmax/facts.lean) | Tau Ceti `LinearMap.IsSymmetric.eigenvalues_eq_iSup_iInf_re_inner` and `abs_eigenvalue_sub_eigenvalue_le_norm` |
+| Rayleigh–Ritz | [facts.lean](002749_rayleigh_ritz/facts.lean) | Tau Ceti `ContinuousLinearMap.compression_def`, `adjoint_comp_sylvester_compression`, and `sylvester_eq_sylvester_compression_add` |
 | Polar decomposition | [facts.lean](002833_polar/facts.lean) | Tau Ceti `LinearMap.polarFactor_comp_operatorAbs` and `norm_polarFactor_apply` |
 | Sylvester | [facts.lean](003500_sylvester/facts.lean) | Tau Ceti `ContinuousLinearMap.sylvester_apply` and `mul_norm_le_norm_sylvester_apply_of_le_re_inner_of_re_inner_le` |
 
 These are applications of existing APIs, not new mathematical declarations or
 additional Davis–Kahan completion obligations. Attribution identifies the
 library supplying the declaration, not a claim that every declaration originated
-in this project. The Tau Ceti names and signatures above were inspected at the
-repository's pinned revision `5f78b5307b932e1e2ac7848dc7d4fedc6a52d6c1`.
+in this project. The original companion names and signatures were inspected at the
+repository's then-pinned revision `5f78b5307b932e1e2ac7848dc7d4fedc6a52d6c1`.
 Mathlib is pinned at `1b1ccf4b088b32fa3f23f2de1127433254a81e1e`.
+The Rayleigh–Ritz companions were inspected and compiled against Tau Ceti
+`95f09254dec44b756e90d78f20f93dc4d3572783` on 2026-11-05.
 
 ## Reading the code
 

@@ -59,6 +59,12 @@ lectures:
     topic: operators
     series: operators
     requires: [projections, singular_norms]
+  rayleigh_ritz:
+    title: Rayleigh–Ritz — trial spaces, compression, and residuals
+    deck: operators-rayleigh-ritz
+    topic: rayleigh_ritz
+    series: spectral_foundations
+    requires: [projections, minmax]
   polar:
     title: Operator absolute value and polar decomposition
     deck: operators-polar
@@ -88,7 +94,7 @@ lectures:
     deck: sine-theta-lecture
     topic: sine_theta
     series: spectral_perturbation
-    requires: [sylvester, complementary_projection]
+    requires: [sylvester, complementary_projection, rayleigh_ritz]
   yws:
     title: Yu–Wang–Samworth — a population-gap perturbation theorem
     deck: yws-population-gap

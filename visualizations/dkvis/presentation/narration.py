@@ -65,7 +65,7 @@ def read_deck_narration(deck_name: str) -> dict[str, Narration]:
     deck = get_deck(deck_name)
     if deck.narration is None:
         raise ValueError(f"Deck {deck_name!r} has no authored transcript; set DeckSpec.narration first.")
-    from dkvis.quiz import SCENES, questions
+    from dkvis.quiz import REVIEW_SCENES as SCENES, questions
     rows = questions(deck_name)
     authored = [name for name in deck.scene_names if not rows or name not in SCENES]
     result = read_narration(ROOT / deck.narration, scenes=authored)

@@ -106,8 +106,14 @@ core mathematical explanation.
 
 > “Add multiple choice study questions at the end of each video.”
 
-End with multiple-choice questions that let the viewer check their understanding
-of the material taught in the lecture.
+> “The questions at the end of each lecture have been too easy, or contrived.”
+> “Maybe we add 2 more so 4 questions for new slides, that check if the listener understands.”
+
+End new lectures with four multiple-choice questions. The first two can check
+basic attention and terminology. The additional two should test understanding:
+ask the viewer to apply an idea, predict what changes, or distinguish claims in
+a new situation. Avoid contrived distractors and questions answerable solely by
+recognizing a phrase from the narration.
 
 ## Title slides, attribution, and history
 
