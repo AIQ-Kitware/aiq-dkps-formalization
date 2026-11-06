@@ -2,8 +2,9 @@
 
 Planning draft, 5 November 2026. Authored by GPT-6.1-Sol from Jon's direction.
 The overview is now implemented as `history-overview` (000505); see the
-[lecture guide](../../dkvis/learning/history/README.md). The focused follow-up
-episodes remain proposals. Repository references are accepted as validated;
+[lecture guide](../../dkvis/learning/history/README.md). Two people-focused companions now add attributed portraits (000670 and 000835);
+see the [cast and image coverage](history-cast-and-images.md). The other focused
+follow-up episodes remain proposals. Repository references are accepted as validated;
 remaining attribution questions are triaged in the overview’s review notes.
 
 ## North star

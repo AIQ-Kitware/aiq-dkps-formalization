@@ -1,0 +1,96 @@
+sylvester:
+  name: James Joseph Sylvester
+  life: 1814–1897
+  places: London · Cambridge · Baltimore · Oxford
+  human: Denied a Cambridge degree under the religious tests of his time; later worked
+    in insurance, law, and universities.
+  publication: 1884 · Sur l’équation en matrices px = xq · Comptes Rendus 99, 67–71,
+    115–116.
+  role: Sylvester equations connect matrix algebra with later operator estimates.
+  biography: https://mathshistory.st-andrews.ac.uk/Biographies/Sylvester/
+jordan:
+  name: Camille Jordan
+  life: 1838–1922
+  places: Lyon · École Polytechnique · Paris
+  human: Trained and worked as an engineer while pursuing mathematics across algebra,
+    geometry, and analysis.
+  publication: 1875 · Essai sur la géométrie à n dimensions · Bull. Soc. Math. France
+    3, 103–174.
+  role: Principal angles compare higher-dimensional spaces direction by direction.
+  biography: https://mathshistory.st-andrews.ac.uk/Biographies/Jordan/
+rayleigh:
+  name: John William Strutt · Lord Rayleigh
+  life: 1842–1919
+  places: Cambridge · experimental and mathematical physics
+  human: Combined mathematical and experimental physics; Cavendish Professor at Cambridge
+    and 1904 Physics Nobel laureate for argon.
+  publication: 1877 · The Theory of Sound, volume 1 · Macmillan, London.
+  role: Vibrations make eigenvalues, mode shapes, and approximation concrete.
+  biography: https://mathshistory.st-andrews.ac.uk/Biographies/Rayleigh/
+ritz:
+  name: Walter (Walther) Ritz
+  life: 1878–1909
+  places: Sion · Zürich · Göttingen
+  human: Swiss theoretical physicist; studied in Zürich and Göttingen, and died at
+    31 after a short research career.
+  publication: 1909 · A variational approximation method · J. reine angew. Math. 135,
+    1–61.
+  role: A tractable trial family makes a difficult variational problem approachable.
+  biography: https://hls-dhs-dss.ch/de/articles/032001/2010-11-10/
+weyl:
+  name: Hermann Weyl
+  life: 1885–1955
+  places: Göttingen · ETH Zürich · Princeton
+  human: Studied under Hilbert and worked across geometry, analysis, and mathematical
+    physics.
+  publication: 1912 · Eigenvalue distribution and inequalities · Math. Ann. 71, 441–479.
+  role: Eigenvalue stability and eigenvector stability are different questions.
+  biography: https://mathshistory.st-andrews.ac.uk/Biographies/Weyl/
+sznagy:
+  name: Béla Sz.-Nagy
+  life: 1913–1998
+  places: Kolozsvár / Cluj · Szeged
+  human: Also known as Béla Szőkefalvi-Nagy; trained generations of mathematicians
+    in Szeged and wrote functional analysis with Frigyes Riesz.
+  publication: 1947 · Perturbations of self-adjoint transformations · Comment. Math.
+    Helv. 19, 347–366.
+  role: Nearby projections can be compared without choosing arbitrary bases.
+  biography: https://www.nekb.gov.hu/nemzeti-sirkert/szeged/belvarosi-temeto/szokefalvi-nagy-bela
+halmos:
+  name: Paul Richard Halmos
+  life: 1916–2006
+  places: Budapest · United States · several universities
+  human: Immigrated to the United States; became an influential expositor and photographed
+    many mathematicians.
+  publication: 1969 · Two Subspaces · Trans. AMS 144, 381–389.
+  role: Organizing two projections reveals the structure of their subspaces.
+  biography: https://mathshistory.st-andrews.ac.uk/Biographies/Halmos/
+kato:
+  name: Tosio Kato
+  life: 1917–1999
+  places: Tokyo · Berkeley
+  human: Trained in physics, worked through wartime disruption, and became a mathematician
+    at Berkeley.
+  publication: 1966 · Perturbation Theory for Linear Operators · Springer, first edition.
+  role: Spectral projections follow selected parts of a changing operator.
+  biography: https://mathshistory.st-andrews.ac.uk/Biographies/Kato/
+davis:
+  name: Chandler Davis
+  life: 1926–2022
+  places: Michigan · Toronto
+  human: Mathematician, writer, and academic-freedom advocate; dismissed from Michigan
+    after refusing HUAC cooperation and later worked in Toronto.
+  publication: 1958 · Separation of Two Linear Subspaces; 1963 / 1965 · Rotation of
+    Eigenvectors I / II.
+  role: The collaboration grew within Davis’s earlier program on subspace rotation.
+  biography: https://www.utoronto.ca/news/chandler-davis-science-and-social-justice-break-some-rules
+kahan:
+  name: William Morton Kahan
+  life: born 1933
+  places: Toronto · Berkeley
+  human: Numerical analyst and floating-point arithmetic researcher; recipient of
+    the 1989 ACM Turing Award.
+  publication: '1970 · With Chandler Davis: The Rotation of Eigenvectors by a Perturbation.
+    III · SIAM J. Numer. Anal. 7, 1–46.'
+  role: Reliable computation requires understanding sensitivity as well as arithmetic.
+  biography: https://amturing.acm.org/pdf/KahanTuringTranscript.pdf

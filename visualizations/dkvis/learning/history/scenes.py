@@ -12,6 +12,11 @@ from dkvis.slide_style import (
     boxed, math, para, tex,
 )
 
+def prepare(refresh=False):
+    from dkvis.presentation.external_assets import fetch
+    fetch(['sylvester'],refresh=refresh)
+
+
 PUBLICATIONS = yaml.safe_load(Path(__file__).with_name('publications.yaml').read_text())
 
 
@@ -115,6 +120,18 @@ class HiJordan(HistorySlide):
         self.start();self.publications('jordan');angle=self.angles(pairs=True)
         self.beat();self.play(angle.animate.set_value(.45),run_time=3,rate_func=linear)
         self.takeaway('Principal angles describe how two spaces differ, direction by direction.')
+
+
+class HiSylvester(HistorySlide):
+    epoch=1884
+    def body(self):
+        from dkvis.components.attributed_image import add_attributed_image
+        self.start()
+        add_attributed_image(self,'sylvester',center=(-3.45,.95,0),height=2.7,credit_y=-1.15)
+        self.publications('sylvester')
+        self.beat()
+        self.add(math(r'AX-XB=Y',size=35).move_to([3.25,-1.15,0]))
+        self.takeaway('Sylvester supplies the matrix-equation background; later work develops operator estimates.')
 
 
 class HiRayleighRitz(HistorySlide):

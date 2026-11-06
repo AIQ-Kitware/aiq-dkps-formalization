@@ -15,6 +15,20 @@ lectures:
     series: history
     background: Familiarity with vectors and eigenvectors; notation is recalled locally
     requires: []
+  history_people_foundations:
+    title: People behind the mathematics — geometry, sound, and approximation
+    deck: history-people-foundations
+    topic: history_people
+    series: history
+    background: An interest in mathematics; no proofs required
+    requires: []
+  history_people_operators:
+    title: People behind the mathematics — operators and reliable computation
+    deck: history-people-operators
+    topic: history_people
+    series: history
+    background: An interest in mathematics; no earlier lecture required
+    requires: []
   projections:
     title: Subspaces and projections
     deck: prereq-projections

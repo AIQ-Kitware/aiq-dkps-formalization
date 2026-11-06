@@ -1,0 +1,35 @@
+questions:
+- title: What does a portrait date tell us?
+  question: A portrait was published after the mathematical work discussed. What does
+    it establish?
+  choices:
+  - The exact setting in which the earlier theorem was proved.
+  - The identity of the depicted person, not the date of the mathematical work.
+  - That every mathematical claim on the slide is proved.
+  correct: 1
+  explanation: Portrait and publication are distinct sources, with different dates
+    and evidential roles.
+  think_seconds: 8
+  speak_question: 'First question. What does a later portrait establish? A: the exact
+    setting where an earlier theorem was proved. B: the identity of the person, not
+    the date of the work. Or C: that every mathematical claim is proved. Take eight
+    seconds.'
+  speak_answer: B is correct. The portrait identifies the person. The publication
+    separately anchors the mathematical work in time.
+- title: How should we read a shared name?
+  question: What is the responsible way to interpret a mathematical name or a shared
+    topic?
+  choices:
+  - Assume everyone named worked together.
+  - Attribute the whole subject to the best-known later author.
+  - Check the specific publications and documented relationships.
+  correct: 2
+  explanation: A compound name, a later exposition, and a documented collaboration
+    are different things.
+  think_seconds: 8
+  speak_question: 'Second question. How should we interpret a shared mathematical
+    name or topic? A: assume everyone worked together. B: give the whole subject to
+    the best-known later author. Or C: check the specific publications and documented
+    relationships. Take eight seconds.'
+  speak_answer: C is correct. Names guide us toward sources, but do not replace those
+    sources. Distinguish collaboration, separate contributions, and later exposition.

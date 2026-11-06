@@ -375,6 +375,16 @@ and build commands.
 make video DECK=yws-population-gap TTS_PROFILE=crall-math-dk-v2-breeze-tts2
 ```
 
+## People behind the mathematics
+
+Two portrait-based companions introduce careers, publications, and mathematical
+connections: **`history-people-foundations`** (000670) and
+**`history-people-operators`** (000835). See the [people guide](dkvis/learning/history_people/README.md).
+Images carry visible attribution and license/source links; only the
+[selection manifest](dkvis/assets/history-images.yaml) and access logic are
+committed. The [asset-store guide](docs/EXTERNAL_ASSETS.md) explains offline
+rendering and rsync, wormhole, or IPFS transfer of images with their source records.
+
 ## Historical overview
 
 **`history-overview`** (000505) introduces the people and publications behind

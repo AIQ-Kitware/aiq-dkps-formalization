@@ -15,6 +15,7 @@ from dkvis.decks.operators import OPERATORS
 from dkvis.decks.sine_theta_lecture import SINE_THETA_LECTURE
 from dkvis.decks.history import HISTORY_OVERVIEW
 from dkvis.decks.yws import YWS
+from dkvis.decks.history_people import PEOPLE_FOUNDATIONS,PEOPLE_OPERATORS
 
 DECKS: dict[str, DeckSpec] = {
     **REFERENCE_DECKS,
@@ -27,6 +28,8 @@ DECKS: dict[str, DeckSpec] = {
     SINE_THETA_LECTURE.name: SINE_THETA_LECTURE,
     HISTORY_OVERVIEW.name: HISTORY_OVERVIEW,
     YWS.name: YWS,
+    PEOPLE_FOUNDATIONS.name: PEOPLE_FOUNDATIONS,
+    PEOPLE_OPERATORS.name: PEOPLE_OPERATORS,
     **{deck.name: deck for deck in PREREQUISITES},
     **{deck.name: deck for deck in OPERATORS},
 }

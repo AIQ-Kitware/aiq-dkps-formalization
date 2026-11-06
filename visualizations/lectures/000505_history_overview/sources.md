@@ -103,3 +103,11 @@ Ky Fan (1951). *Maximum Properties and Inequalities for the Eigenvalues of Compl
 - [Transport comparisons](../../../dev/spectral-transport-unification.md)
 - [Real matching statements](../../../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearMatching.lean)
 - [Upstream lineage](../../../dev/tauceti/dkps-upstream-contribution-census.md)
+
+## Explicit Sylvester scene and portrait
+
+`HiSylvester` introduces James Joseph Sylvester and the validated bibliography
+entry `sylvester1884equation`. Biography: [MacTutor](https://mathshistory.st-andrews.ac.uk/Biographies/Sylvester/).
+Image creator, collection, source, and public-domain designation are visible on the scene
+and retained in [the external image manifest](../../dkvis/assets/history-images.yaml).
+The modern inhomogeneous equation is distinguished from the historical paper.

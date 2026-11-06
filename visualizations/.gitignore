@@ -18,3 +18,6 @@ slides-*/
 
 # Viewer-authored feedback: private local data, kept outside disposable renders.
 /feedback/
+
+# Downloaded external illustrations and their portable local provenance records.
+/asset-store/

@@ -9,7 +9,7 @@ HISTORY_OVERVIEW = DeckSpec(
     footer='Mathematical history: Davis–Kahan and beyond',
     narration=lecture_path('history_overview'),
     slides=uses('dkvis.learning.history.scenes', [
-        'HiTitle', 'HiQuestion', 'HiJordan', 'HiRayleighRitz', 'HiWeyl',
+        'HiTitle', 'HiQuestion', 'HiJordan', 'HiSylvester', 'HiRayleighRitz', 'HiWeyl',
         'HiHotelling', 'HiProjectionPeople', 'HiKatoHalmos', 'HiRosenblum',
         'HiDavisKahan', 'HiBound', 'HiWedinGolub', 'HiYws', 'HiQuench',
         'HiNormPeople', 'HiCorrection', 'HiMatching', 'HiEvidence', 'HiSummary',

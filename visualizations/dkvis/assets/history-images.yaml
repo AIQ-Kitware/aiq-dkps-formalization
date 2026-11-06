@@ -1,0 +1,151 @@
+images:
+  sylvester:
+    file: history/sylvester.jpg
+    commons_file: File:James Joseph Sylvester by Alfred Edward Emslie.jpg
+    source_page: https://commons.wikimedia.org/wiki/File:James_Joseph_Sylvester_by_Alfred_Edward_Emslie.jpg
+    short_source: commons.wikimedia.org/?curid=9710409
+    url: https://upload.wikimedia.org/wikipedia/commons/0/00/James_Joseph_Sylvester_by_Alfred_Edward_Emslie.jpg
+    creator: Alfred Edward Emslie / Wikimedia Commons
+    license: Public domain
+    license_url: https://creativecommons.org/publicdomain/mark/1.0/
+    upstream_sha1: e9b1b420c893834b5d3a26ea6e3d32764d4d5381
+    upstream_timestamp: '2010-03-11T14:24:59Z'
+    reviewed: '2026-11-05'
+    changes: Displayed proportionally; no new crop.
+    note: Painting; public-domain faithful reproduction. Download retained unchanged.
+  jordan:
+    file: history/jordan.jpg
+    commons_file: File:Camille Jordan 4.jpg
+    source_page: https://commons.wikimedia.org/wiki/File:Camille_Jordan_4.jpg
+    short_source: commons.wikimedia.org/?curid=352081
+    url: https://upload.wikimedia.org/wikipedia/commons/0/0f/Camille_Jordan_4.jpg
+    creator: Unknown photographer; MacTutor / Wikimedia Commons
+    license: Public domain
+    license_url: https://creativecommons.org/publicdomain/mark/1.0/
+    upstream_sha1: f2b0dd25dc6828ce2a1f0aa53a8ac2d683de0bca
+    upstream_timestamp: '2005-10-02T21:45:15Z'
+    reviewed: '2026-11-05'
+    changes: Displayed proportionally; no new crop.
+    note: Original downloaded file retained unchanged.
+  rayleigh:
+    file: history/rayleigh.jpg
+    commons_file: File:John William Strutt.jpg
+    source_page: https://commons.wikimedia.org/wiki/File:John_William_Strutt.jpg
+    short_source: commons.wikimedia.org/?curid=405463
+    url: https://upload.wikimedia.org/wikipedia/commons/2/28/John_William_Strutt.jpg
+    creator: Unknown photographer; Royal Society obituary / Commons
+    license: Public domain
+    license_url: https://creativecommons.org/publicdomain/mark/1.0/
+    upstream_sha1: 57ff66fc8e4b18c6c2d9b3c348617a2f35be498d
+    upstream_timestamp: '2005-11-08T02:34:01Z'
+    reviewed: '2026-11-05'
+    changes: Displayed proportionally; no new crop.
+    note: Original downloaded file retained unchanged.
+  ritz:
+    file: history/ritz.jpg
+    commons_file: File:Walther Ritz.jpg
+    source_page: https://commons.wikimedia.org/wiki/File:Walther_Ritz.jpg
+    short_source: commons.wikimedia.org/?curid=86166792
+    url: https://upload.wikimedia.org/wikipedia/commons/b/b8/Walther_Ritz.jpg
+    creator: Unknown photographer; AIP source / Wikimedia Commons
+    license: Public domain
+    license_url: https://creativecommons.org/publicdomain/mark/1.0/
+    upstream_sha1: c03b6d8b6014b1c314d790b3549cea1d392eb7fc
+    upstream_timestamp: '2020-01-21T17:57:31Z'
+    reviewed: '2026-11-05'
+    changes: Displayed proportionally; no new crop.
+    note: Original downloaded file retained unchanged.
+  weyl:
+    file: history/weyl.jpg
+    commons_file: File:Hermann Weyl ETH-Bib Portr 00890.jpg
+    source_page: https://commons.wikimedia.org/wiki/File:Hermann_Weyl_ETH-Bib_Portr_00890.jpg
+    short_source: commons.wikimedia.org/?curid=8098412
+    url: https://upload.wikimedia.org/wikipedia/commons/7/78/Hermann_Weyl_ETH-Bib_Portr_00890.jpg
+    creator: ETH Zürich / ETH-Bibliothek Bildarchiv
+    license: CC BY-SA 3.0
+    license_url: https://creativecommons.org/licenses/by-sa/3.0/
+    upstream_sha1: 60223dc58da94816d4d280c4b643149135ae85bf
+    upstream_timestamp: '2009-10-16T19:12:48Z'
+    reviewed: '2026-11-05'
+    changes: Displayed proportionally; no new crop.
+    note: Source already cropped on Commons.
+  sznagy:
+    file: history/sznagy.jpg
+    commons_file: File:Béla Szőkefalvi-Nagy (1913-1998) Hungarian mathematician.jpg
+    source_page: https://commons.wikimedia.org/wiki/File:B%C3%A9la_Sz%C5%91kefalvi-Nagy_(1913-1998)_Hungarian_mathematician.jpg
+    short_source: commons.wikimedia.org/?curid=8270747
+    url: https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/B%C3%A9la_Sz%C5%91kefalvi-Nagy_%281913-1998%29_Hungarian_mathematician.jpg/960px-B%C3%A9la_Sz%C5%91kefalvi-Nagy_%281913-1998%29_Hungarian_mathematician.jpg
+    creator: University of Szeged Library (source credit on Commons)
+    license: CC BY-SA 3.0
+    license_url: https://creativecommons.org/licenses/by-sa/3.0/
+    upstream_sha1: 8cf4ee2868451f757ba0ae422bce0b6a33349cbf
+    upstream_timestamp: '2009-10-26T17:03:35Z'
+    reviewed: '2026-11-05'
+    changes: Displayed proportionally; no new crop.
+    note: Original downloaded file retained unchanged.
+    download_sha1: a231aa7b9477656a170ab6ec1eb79a1003a15c33
+    rendition: Wikimedia standard 960px thumbnail; original revision identified separately.
+  davis:
+    file: history/davis.jpg
+    commons_file: File:H. Chandler Davis (Bentley Historical Library Image Bank BL021065).jpg
+    source_page: https://commons.wikimedia.org/wiki/File:H._Chandler_Davis_(Bentley_Historical_Library_Image_Bank_BL021065).jpg
+    short_source: commons.wikimedia.org/?curid=187084675
+    url: https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/H._Chandler_Davis_%28Bentley_Historical_Library_Image_Bank_BL021065%29.jpg/960px-H._Chandler_Davis_%28Bentley_Historical_Library_Image_Bank_BL021065%29.jpg
+    creator: University of Michigan News and Information Services
+    license: CC BY 4.0
+    license_url: https://creativecommons.org/licenses/by/4.0/
+    upstream_sha1: f307316bde6be8f993de0459b096819fc231dba9
+    upstream_timestamp: '2026-03-26T08:33:56Z'
+    reviewed: '2026-11-05'
+    changes: Displayed proportionally; no new crop.
+    note: Original downloaded file retained unchanged.
+    download_sha1: 9692b444b1741655bab0c1f4903b2cc5cc88b1c5
+    rendition: Wikimedia standard 960px thumbnail; original revision identified separately.
+  kato:
+    file: history/kato.jpg
+    commons_file: File:Tosio Kato 1988 (re-scanned).jpg
+    source_page: https://commons.wikimedia.org/wiki/File:Tosio_Kato_1988_(re-scanned).jpg
+    short_source: commons.wikimedia.org/?curid=73971448
+    url: https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Tosio_Kato_1988_%28re-scanned%29.jpg/960px-Tosio_Kato_1988_%28re-scanned%29.jpg
+    creator: George M. Bergman / Oberwolfach Photo Collection
+    license: CC BY-SA 4.0
+    license_url: https://creativecommons.org/licenses/by-sa/4.0/
+    upstream_sha1: 27609d0a05da2cdde7803948494057ce79824c40
+    upstream_timestamp: '2018-10-29T21:59:10Z'
+    reviewed: '2026-11-05'
+    changes: Displayed proportionally; no new crop.
+    note: Original downloaded file retained unchanged.
+    download_sha1: b335ca4a229ae0be622eea3d196a875b88659888
+    rendition: Wikimedia standard 960px thumbnail; original revision identified separately.
+  halmos:
+    file: history/halmos.jpg
+    commons_file: File:Paul Halmos 1986 cropped.jpg
+    source_page: https://commons.wikimedia.org/wiki/File:Paul_Halmos_1986_cropped.jpg
+    short_source: commons.wikimedia.org/?curid=180276883
+    url: https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d8/Paul_Halmos_1986_cropped.jpg/500px-Paul_Halmos_1986_cropped.jpg
+    creator: George M. Bergman / Oberwolfach Photo Collection
+    license: CC BY-SA 4.0
+    license_url: https://creativecommons.org/licenses/by-sa/4.0/
+    upstream_sha1: 16bc3fc69e59cbf2a75cfb61307c15076107277d
+    upstream_timestamp: '2025-12-19T05:33:22Z'
+    reviewed: '2026-11-05'
+    changes: Displayed proportionally; no new crop.
+    note: Source already cropped on Commons.
+    download_sha1: 7e7bffa16d6c8058101123dab761b6c5b7cafdb3
+    rendition: Wikimedia standard 500px thumbnail; original revision identified separately.
+  kahan:
+    file: history/kahan.jpg
+    commons_file: File:William Kahan 2008 (cropped).jpg
+    source_page: https://commons.wikimedia.org/wiki/File:William_Kahan_2008_(cropped).jpg
+    short_source: commons.wikimedia.org/?curid=87565616
+    url: https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f7/William_Kahan_2008_%28cropped%29.jpg/500px-William_Kahan_2008_%28cropped%29.jpg
+    creator: George M. Bergman / Oberwolfach Photo Collection
+    license: CC BY-SA 4.0
+    license_url: https://creativecommons.org/licenses/by-sa/4.0/
+    upstream_sha1: 0985b0b087e6804df66475497f41bf2a07d30c3a
+    upstream_timestamp: '2020-02-29T17:47:01Z'
+    reviewed: '2026-11-05'
+    changes: Displayed proportionally; no new crop.
+    note: Source already cropped on Commons.
+    download_sha1: 0c399599437d268b0dd2671b46159862b7993686
+    rendition: Wikimedia standard 500px thumbnail; original revision identified separately.

@@ -6,8 +6,9 @@ publications, and questions behind principal angles, approximation, operator
 perturbation, Davis–Kahan, statistical use, and the transport work here.
 
 The numbered lecture is **000505**, stable ID `history_overview`, deck
-**`history-overview`**. Its roughly 2,800-word core narration takes about
-19 minutes at 150 words/minute, before animation and question pauses.
+**`history-overview`** now has 22 scenes, including an explicit attributed
+Sylvester portrait. Its roughly 2,900-word core narration takes about
+20 minutes at 150 words/minute, before animation and question pauses.
 
 From `visualizations/`:
 
@@ -37,3 +38,7 @@ historical influence.
 The history lecture has its own question-setting scene and two study questions.
 It has no artificial Lean facts or computation bonus: it teaches historical
 relationships, with concept lectures supplying their own formal companions.
+
+The [people-focused companions](../history_people/README.md) develop the
+biographies with credited portraits. The overview fetches its Sylvester image
+through the same [portable asset store](../../../docs/EXTERNAL_ASSETS.md).

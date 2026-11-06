@@ -33,6 +33,17 @@ Our first landmark is Camille Jordan. In 1875, his Essay on Geometry in n Dimens
 
 The two panels illustrate two different direction pairs. These are schematic views of two principal planes, not two drawings that must occupy the same two-dimensional space. One pair can be close while another is far apart. That is the important geometric lesson. A subspace can change unevenly in different directions. Much later, when an angle theorem controls a whole subspace, it is using this kind of geometry, even if its statement compresses the angle information into a single norm.
 
+## HiSylvester: James Joseph Sylvester: matrix equations
+
+Why: Put the matrix-equation tradition and its author in view before the operator estimates.
+Recall: A matrix equation treats an entire matrix as the unknown.
+
+James Joseph Sylvester lived from 1814 to 1897. His work in algebra and matrix theory belongs to the background of this story. He also worked outside universities, in insurance and law, and held later posts at Johns Hopkins and Oxford. The portrait makes explicit a contributor who should not disappear behind the later operator-equation literature.
+
+<!-- beat -->
+
+His 1884 publication on the equation p x equals x q is our historical anchor. The modern inhomogeneous equation is often written A X minus X B equals Y. Later operator results, including Rosenblum’s, provide separation and inverse estimates. These are related stages of development, not a claim that every modern form of the theorem was already in the original paper.
+
 ## HiRayleighRitz: Rayleigh and Ritz: useful approximations
 
 Why: An approximation becomes more valuable when its error can be assessed.
@@ -199,7 +210,7 @@ The three rows describe different maps. A teaching prerequisite says which expla
 Why: Remember contributions by the questions they made answerable.
 Recall: Geometry, perturbation, statistics, and transport share tools but ask different questions.
 
-Here is the route we have followed. Jordan helps introduce the geometry of several angles. Rayleigh and Ritz represent the search for useful approximations, while eigenvalue theory reminds us that values and directions are different objects. Sz.-Nagy, Davis, Kato, Halmos, and Rosenblum give ways to compare spaces and analyze operators. Davis and Kahan bring the error-and-separation mechanism into quantitative subspace rotation bounds. Wedin, Björck, and Golub illustrate the distinct growth of perturbation theory and computation.
+Here is the route we have followed. Jordan helps introduce the geometry of several angles, and Sylvester makes the matrix-equation tradition explicit. Rayleigh and Ritz represent the search for useful approximations, while eigenvalue theory reminds us that values and directions are different objects. Sz.-Nagy, Davis, Kato, Halmos, and Rosenblum give ways to compare spaces and analyze operators. Davis and Kahan bring the error-and-separation mechanism into quantitative subspace rotation bounds. Wedin, Björck, and Golub illustrate the distinct growth of perturbation theory and computation.
 
 <!-- beat -->
 

@@ -93,3 +93,8 @@ fan:
   year: '1951'
   title: Maximum properties and eigenvalue inequalities
   venue: PNAS 37, 760–766
+sylvester:
+  author: James Joseph Sylvester
+  year: '1884'
+  title: Sur l’équation en matrices px = xq
+  venue: Comptes Rendus 99, 67–71, 115–116

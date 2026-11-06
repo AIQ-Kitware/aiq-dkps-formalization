@@ -120,3 +120,13 @@ name to disclose LLM generation. Track slide and transcript model provenance.
 
 Git is sufficient for historical tracking. The library does not need to present
 all historical versions of the slides or lectures.
+
+## Historical portraits and supporting images
+
+> “Always use images with attribution in slides.”
+> “Do not check images into the repo. We check the logic to access the images into the repo.”
+
+Use suitable Creative Commons or otherwise openly reusable portraits and
+supporting images to put faces to the people. Show attribution in the slides.
+Keep downloaded images outside Git, together with the records needed to transfer
+them between machines. People-focused history can be split into several lectures.

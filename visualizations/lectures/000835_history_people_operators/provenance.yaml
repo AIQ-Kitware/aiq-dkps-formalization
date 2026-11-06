@@ -1,0 +1,25 @@
+deck: history-people-operators
+scope: People-focused historical lecture, transcript, and questions; external image
+  authors remain separately credited.
+slides:
+  initial_source_attribution:
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-05'
+    sources:
+    - visualizations/dkvis/learning/history_people/scenes.py
+    - visualizations/dkvis/learning/history_people/people.yaml
+    - visualizations/dkvis/components/attributed_image.py
+    basis: Authored in this session; external images are original third-party works
+      identified in the separate manifest.
+transcript:
+  initial_source_attribution:
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-05'
+    sources:
+    - visualizations/lectures/000835_history_people_operators/lecture.md
+    - visualizations/lectures/000835_history_people_operators/quiz.yaml
+    - visualizations/lectures/000835_history_people_operators/sources.md
+    basis: Authored in this session; external images are original third-party works
+      identified in the separate manifest.

@@ -12,6 +12,13 @@ slides:
     - visualizations/dkvis/decks/history.py
     basis: Authored in this session; exact model identity supplied by the user. Mathematical
       source authorship is recorded separately in sources.md.
+  revisions:
+  - date: '2026-11-05'
+    models:
+    - GPT-6.1-Sol
+    sources:
+    - visualizations/dkvis/learning/history/scenes.py
+    scope: Add an attributed Sylvester portrait and explicit matrix-equation scene.
 transcript:
   initial_source_attribution:
   - models:
@@ -24,3 +31,10 @@ transcript:
     - visualizations/lectures/000505_history_overview/review-notes.md
     basis: Authored in this session; exact model identity supplied by the user. Mathematical
       source authorship is recorded separately in sources.md.
+  revisions:
+  - date: '2026-11-05'
+    models:
+    - GPT-6.1-Sol
+    sources:
+    - visualizations/lectures/000505_history_overview/lecture.md
+    scope: Introduce Sylvester explicitly and update the closing historical summary.

@@ -16,6 +16,7 @@ finished narrated lessons.
 
 | Topic | A learner should be able to… | Prerequisites | Existing material |
 | --- | --- | --- | --- |
+| People behind the mathematics | Recognize careers, publications, and mathematical connections with attributed portraits. | No proofs required; each episode stands alone | [Two biographical lectures](history_people/README.md) |
 | Mathematical history | Connect people and publications to geometry, perturbation, statistics, and transport. | Familiarity with vectors and eigenvectors; no course prerequisites | [Lecture 000505](history/README.md): standalone historical overview |
 | Mathematics refresher | Recognize the basic linear algebra, geometry, and calculus assumed later. | School algebra; review of previously encountered ideas | [Lecture 000010](basics/README.md) |
 | Subspaces and projections | Translate between a subspace, its orthogonal projection, and adapted coordinates. | Inner products, linear maps | [Lecture 1](projections/README.md): complete narrated module |

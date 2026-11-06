@@ -103,3 +103,12 @@ They specify the separate slide/transcript revision records, runtime model
 identity, and generation-time snapshots. Include the cover when attribution
 changes so its visible model credit is refreshed; see the
 [partial-update instructions](README.md#updating-one-scene).
+
+## External illustrations
+
+Use images with on-slide attribution. Commit selection/access logic and source
+records, not downloaded images. Keep images and their license/provenance
+snapshots in the portable ignored asset store, as described in
+[the asset guide](docs/EXTERNAL_ASSETS.md). Reuse the attributed-image component
+for portraits. Retain original creator credit separately from lecture/model
+authorship; do not silently substitute another image if access fails.
