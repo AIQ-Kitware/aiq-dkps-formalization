@@ -37,3 +37,8 @@ projection laws, repeated eigenvalue selection, and scalar energy masses.
 Abstract PVM laws are accepted upstream; operator-to-PVM donor constructions
 are identified separately in the source notes. Provenance records lecture
 and transcript authorship independently of mathematical proof ancestry.
+
+The 2026-11-06 revision connects the slide-to-slide argument in the spoken
+narration and introduces the principal derivations in stages. The progress
+strip names the lecture's own route. Rebuild slides and narration together;
+old narrated videos retain their original speech and reveal timing.

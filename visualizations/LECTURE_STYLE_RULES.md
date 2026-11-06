@@ -42,6 +42,21 @@ context and end with a summary of what the viewer learned. As the argument
 progresses, keep its bigger picture and the current step in view. Explain why a
 new construction is being introduced and connect it to information already seen.
 
+## Continuity between slides
+
+> “The transition between slides is not very good.”
+> “The important information is very abrupt, and we are failing to establish a coherent thread that ties the entire lecture together.”
+
+Write the lecture as a connected explanation. Carry the current question and
+what has already been established into the next slide, so the learner has a
+reason to follow the next construction. Give important information a lead-in,
+then explain its consequence before moving on. The spoken narration must carry
+this thread; a motivation subtitle alone does not establish it. Introduce key
+formulas as the explanation reaches them, rather than displaying a complete
+derivation immediately. Use the same objects and visual relationships to
+connect successive steps, without filling the narration with generic transition
+phrases.
+
 ## Notation, reasoning, and key ideas
 
 > “Grant might also explain notation too. Like I have no idea what fancy L is.”

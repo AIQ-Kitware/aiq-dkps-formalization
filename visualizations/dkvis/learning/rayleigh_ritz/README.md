@@ -37,3 +37,8 @@ The companion applies existing accepted mathematics. `model.py` and its tests
 supply evidence for the finite diagrams, distinct Ritz residuals, and changes
 of trial coordinates. The matrix explanation does not waive the domain
 conditions of the general unbounded residual theorem.
+
+The 2026-11-06 revision connects the slide-to-slide argument in the spoken
+narration and introduces the principal derivations in stages. The progress
+strip names the lecture's own route. Rebuild slides and narration together;
+old narrated videos retain their original speech and reveal timing.

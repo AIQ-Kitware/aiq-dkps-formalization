@@ -144,19 +144,21 @@ class YsSetup(OrientationSlide):
 
 class PvSetup(OrientationSlide):
     lesson_deck='operators-pvm'
-    setting='A is self-adjoint on a complex Hilbert space; finite real matrix pictures also apply.'
-    symbols=((r'H,\ x\in H','The Hilbert space and an input vector; H may have infinitely many dimensions.'),
-             (r'B\subseteq\mathbb R','A Borel set of spectral values: an interval or countable combination of intervals.'),
-             (r'E(B)','The orthogonal projection onto the components selected by the spectral set B.'),
-             (r'\mu_x(B)=\|E(B)x\|^2','The energy of the selected component of this particular vector.'))
-    goal='Goal: understand spectral selection, its measure laws, and the operators it defines.'
+    stage_labels=('Why select?', 'Build the PVM', 'Use the selection', 'Recap')
+    setting='Begin with a self-adjoint matrix; then extend the selection picture to Hilbert spaces.'
+    symbols=((r'A','The operator whose spectral components we want to select.'),
+             (r'B\subseteq\mathbb R','A region of spectral values: begin with an interval.'),
+             (r'E(B)','The orthogonal projection that keeps the components selected by B.'),
+             (r'\text{select}\ \to\ \text{measure}\ \to\ \text{weight}','Which components? How much of a vector? What operator do the weights build?'))
+    goal='Can we keep a spectral region without relying on an eigenvector list?'
 
 
 class RrSetup(OrientationSlide):
     lesson_deck='operators-rayleigh-ritz'
-    setting='A is real symmetric; choose a nonzero k-dimensional trial space in n dimensions.'
-    symbols=((r'\mathcal T=\operatorname{range}Q','The chosen search space, spanned by the orthonormal columns of Q.'),
-             (r'Q^TQ=I_k,\ P=QQ^T','Q maps trial coordinates to ambient vectors; P is the ambient orthogonal projection.'),
-             (r'B=Q^TAQ','The small k by k operator, called the compression.'),
-             (r'By=\theta y,\ u=Qy','A Ritz value and its lifted Ritz vector; theta here is an eigenvalue, not an angle.'))
-    goal='Goal: see what the small problem solves and what its full residual still needs to tell us.'
+    stage_labels=('Choose the space', 'Build the model', 'Check the error', 'Recap')
+    setting='A small eigenproblem should produce an approximation we can check in the full space.'
+    symbols=((r'A=A^T','The original symmetric matrix, acting on n-dimensional vectors.'),
+             (r'\mathcal T\subseteq\mathbb R^n','The space of vectors we allow in our search.'),
+             (r'Q:\mathbb R^k\to\mathbb R^n','Orthonormal coordinates for those allowed directions.'),
+             (r'\text{choose}\ \to\ \text{model}\ \to\ \text{check}','Choose a search space, build its small problem, and inspect the full error.'))
+    goal='How can a small eigenproblem tell us something reliable about a larger one?'

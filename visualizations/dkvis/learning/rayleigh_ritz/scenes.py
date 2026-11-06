@@ -1,6 +1,6 @@
 """Rayleigh–Ritz as a restricted search, with a geometric residual explanation."""
 import numpy as np
-from manim import Axes, Arrow, Line, RightAngle, ValueTracker, VGroup, DecimalNumber, always_redraw, linear
+from manim import Axes, Arrow, Line, RightAngle, Transform, ValueTracker, VGroup, DecimalNumber, always_redraw, linear
 from dkvis.components.lesson import LessonSlide, LessonTitle, LessonLean, plane, stack, vector
 from dkvis.learning.rayleigh_ritz.model import line_example
 from dkvis.slide_style import CURRENT, TRIAL, RESID, MUTED, boxed, math, tex
@@ -9,9 +9,14 @@ from dkvis.slide_style import CURRENT, TRIAL, RESID, MUTED, boxed, math, tex
 class RitzSlide(LessonSlide):
     lesson_deck = 'operators-rayleigh-ritz'
     stage = 1
+    stage_labels = ('Choose the space', 'Build the model', 'Check the error', 'Recap')
 
-    def card(self, *items, size=32):
-        return self.put(stack(*items, size=size, buff=.38), y=.35, height=3.6)
+    def card(self, *items, size=32, first=None):
+        card = self.put(stack(*items, size=size, buff=.38), y=.35, height=3.6)
+        if first is not None:
+            self.remove(card)
+            self.add(*card[:first])
+        return card
 
 
 class RrTitle(LessonTitle):
@@ -44,41 +49,50 @@ class RrSpace(RitzSlide):
 
 
 class RrFrame(RitzSlide):
+    stage = 0
     def body(self):
         self.start()
-        self.card(r'Q\in\mathbb R^{n\times k},\quad Q^TQ=I_k,\quad\mathcal T=\operatorname{range}Q',
+        card=self.card(r'Q\in\mathbb R^{n\times k},\quad Q^TQ=I_k,\quad\mathcal T=\operatorname{range}Q',
                   boxed(math(r'y\in\mathbb R^k\ \xrightarrow{\ Q\ }\ u=Qy\in\mathcal T,\qquad\|Qy\|=\|y\|',size=31),color=TRIAL),
-                  r'v\in\mathbb R^n\ \xrightarrow{\ Q^T\ }\ Q^Tv\ \xrightarrow{\ Q\ }\ Pv,\quad P=QQ^T')
-        self.beat(); self.takeaway('Q supplies coordinates; P projects ambient vectors. A different frame can span the same trial space.')
+                  r'v\in\mathbb R^n\ \xrightarrow{\ Q^T\ }\ Q^Tv\ \xrightarrow{\ Q\ }\ Pv,\quad P=QQ^T',first=2)
+        self.beat(); self.add(card[2])
+        self.takeaway('Q supplies coordinates; P projects ambient vectors. These are the maps used to build the small model.')
 
 
 class RrCompress(RitzSlide):
     def body(self):
         self.start()
-        self.card(r'y\ \xrightarrow{Q}\ Qy\ \xrightarrow{A}\ AQy\ \xrightarrow{Q^T}\ Q^TAQy',
+        card=self.card(r'y\ \xrightarrow{Q}\ Qy\ \xrightarrow{A}\ AQy',
                   boxed(math(r'B=Q^TAQ\in\mathbb R^{k\times k}',size=42),color=CURRENT),
-                  r'QBy=PAQy')
-        self.beat(); self.takeaway('Compression applies A and projects back; it is a restriction only when the trial space is invariant.')
+                  r'QBy=PAQy',first=1)
+        self.beat()
+        self.play(Transform(card[0],math(r'y\ \xrightarrow{Q}\ Qy\ \xrightarrow{A}\ AQy\ \xrightarrow{Q^T}\ Q^TAQy',size=32).move_to(card[0])))
+        self.add(card[1])
+        self.beat(); self.add(card[2])
+        self.takeaway('Compression keeps the projected output. Does it preserve the directional measurements we need?')
 
 
 class RrQuotient(RitzSlide):
     def body(self):
         self.start()
-        self.card(r'\|y\|=1,\quad u=Qy\quad\Longrightarrow\quad\|u\|=1',
+        card=self.card(r'\|y\|=1,\quad u=Qy\quad\Longrightarrow\quad\|u\|=1',
                   boxed(math(r'u^TAu=y^T(Q^TAQ)y=y^TBy',size=37),color=CURRENT),
-                  r'B^T=Q^TA^TQ=B')
-        self.beat(); self.takeaway('The small problem preserves every Rayleigh quotient on the trial space exactly.')
+                  r'B^T=Q^TA^TQ=B',first=1)
+        self.beat(); self.add(card[1])
+        self.beat(); self.add(card[2])
+        self.takeaway('The quotient is preserved and B is symmetric. We can now solve the small eigenproblem.')
 
 
 class RrSolve(RitzSlide):
     def body(self):
         self.start()
-        self.card(r'By=\theta y,\quad\|y\|=1\quad\Longrightarrow\quad u=Qy,\quad\|u\|=1',
-                  tex('Ritz value: theta. Ritz vector: the lifted vector u.',size=29),
-                  r'PAu=\theta u\qquad\text{(projected equation)}')
+        card=self.card(r'By=\theta y,\quad\|y\|=1',
+                  r'u=Qy,\quad\|u\|=1',
+                  r'PAu=\theta u\qquad\text{(projected equation)}',first=1)
+        self.beat(); self.add(*card[1:])
         self.beat()
         self.put(boxed(math(r'r=Au-\theta u\qquad\text{(full residual)}',size=32),color=RESID),y=-1.55,height=.7)
-        self.takeaway('The projected equation is exact. The full eigenpair equation still has to be checked.')
+        self.takeaway('The small equation holds exactly after projection. What is missing from the full equation?')
 
 
 class RrGeometry(RitzSlide):
@@ -94,74 +108,88 @@ class RrGeometry(RitzSlide):
             return line_example(angle.get_value())
         self.add(always_redraw(lambda:Line(axes.c2p(*(-.2*data()[1])),axes.c2p(*(2.3*data()[1])),color=MUTED)))
         self.add(always_redraw(lambda:vector(axes,data()[1],TRIAL)))
+        legend=self.put(stack(r'A=\operatorname{diag}(1,4)',math(r'q\quad\text{unit input}',size=28,color=TRIAL),
+                       math(r'Aq\quad\text{true output}',size=29,color=CURRENT),
+                       math(r'\theta q\quad\text{projected output}',size=28,color=TRIAL),
+                       math(r'r=Aq-\theta q\quad\perp q',size=29,color=RESID),size=31),'right',y=.7,height=2.6)
+        self.remove(legend); self.add(legend[0],legend[1])
+        self.beat()
         self.add(always_redraw(lambda:vector(axes,data()[0]@data()[1],CURRENT)))
-        self.add(always_redraw(lambda:vector(axes,data()[2]*data()[1],TRIAL)))
+        self.add(always_redraw(lambda:vector(axes,data()[2]*data()[1],TRIAL)),legend[2],legend[3])
+        self.beat()
         self.add(always_redraw(lambda:Arrow(axes.c2p(*(data()[2]*data()[1])),axes.c2p(*(data()[0]@data()[1])),buff=0,color=RESID,stroke_width=6)))
         def perpendicular_mark():
             a,q,theta,r=data()
             foot=theta*q
             return RightAngle(Line(axes.c2p(*foot),axes.c2p(*(foot+.3*q))),
                               Line(axes.c2p(*foot),axes.c2p(*(a@q))),length=.14,color=RESID)
-        self.add(always_redraw(perpendicular_mark))
-        self.put(stack(r'A=\operatorname{diag}(1,4)',math(r'q,\ \theta q\quad\text{on the trial line}',size=28,color=TRIAL),
-                       math(r'Aq\quad\text{true output}',size=29,color=CURRENT),
-                       math(r'r=Aq-\theta q\quad\perp q',size=29,color=RESID),size=31),'right',y=.7,height=2.6)
+        self.add(always_redraw(perpendicular_mark),legend[4])
         label=tex('Residual length:',size=25).move_to([2.5,-1.3,0])
         value=DecimalNumber(np.linalg.norm(data()[3]),num_decimal_places=3,font_size=30,color=RESID).move_to([4.4,-1.3,0])
         value.add_updater(lambda m:m.set_value(np.linalg.norm(data()[3])));self.add(label,value)
         self.beat(); self.play(angle.animate.set_value(np.pi/9),run_time=4,rate_func=linear)
-        self.takeaway('The residual is the output discarded by projection; orthogonal error can still be large.')
+        self.takeaway('The residual is the perpendicular output. Several trial directions give a residual matrix.')
 
 
 class RrExample(RitzSlide):
     example = True
     def body(self):
         self.start()
-        self.card(r'A=\begin{pmatrix}2&1&1\\1&2&-1\\1&-1&5\end{pmatrix},\quad Q=(e_1,e_2),\quad B=\begin{pmatrix}2&1\\1&2\end{pmatrix}',
+        card=self.card(r'A=\begin{pmatrix}2&1&1\\1&2&-1\\1&-1&5\end{pmatrix},\quad Q=(e_1,e_2),\quad B=\begin{pmatrix}2&1\\1&2\end{pmatrix}',
                   r'u_+=\tfrac1{\sqrt2}(1,1,0)^T,\quad\theta_+=3,\quad r_+=0',
-                  r'u_-=\tfrac1{\sqrt2}(1,-1,0)^T,\quad\theta_-=1,\quad r_-=\sqrt2\,e_3',size=31)
-        self.beat(); self.takeaway('One Ritz vector can be exact while the trial space as a whole is not invariant.')
+                  r'u_-=\tfrac1{\sqrt2}(1,-1,0)^T,\quad\theta_-=1,\quad r_-=\sqrt2\,e_3',size=31,first=1)
+        self.beat(); self.add(card[1])
+        self.beat(); self.add(card[2])
+        self.takeaway('Some inputs stay in the trial space; others leave it. Blocks will organize those two outputs.')
 
 
 class RrBlock(RitzSlide):
     def body(self):
         self.start()
-        self.card(r'[Q\ Q_\perp]^TA[Q\ Q_\perp]=\begin{pmatrix}B&C^T\\C&D\end{pmatrix}',
+        card=self.card(r'[Q\ Q_\perp]^TA[Q\ Q_\perp]=\begin{pmatrix}B&C^T\\C&D\end{pmatrix}',
                   tex('First block column: output from an input in the trial space.',size=29),
-                  math(r'B:\ \text{retained output}\qquad C:\ \text{escaping output}',size=31))
+                  math(r'B:\ \text{retained output}\qquad C:\ \text{escaping output}',size=31),first=2)
+        self.beat(); self.add(card[2])
+        self.put(math(r'R=AQ-QB=Q_\perp C',size=31),y=-1.2,height=.5)
         self.beat()
-        self.put(math(r'R=AQ-QB=Q_\perp C,\qquad\mathcal T\text{ invariant}\iff C=0',size=31),y=-1.55,height=.65)
-        self.takeaway('The block C measures failure of invariance; the block form itself assumes no invariance.')
+        self.put(math(r'\mathcal T\text{ invariant}\iff C=0',size=31),y=-1.85,height=.5)
+        self.takeaway('C records exactly the perpendicular output. We can verify this directly without block coordinates.')
 
 
 class RrOrthogonality(RitzSlide):
     def body(self):
         self.start()
-        self.card(r'R=AQ-QB,\qquad B=Q^TAQ',
+        card=self.card(r'R=AQ-QB,\qquad B=Q^TAQ',
                   r'Q^TR=Q^TAQ-Q^TQB=B-B=0',
-                  tex('Each residual column is perpendicular to every trial direction.',size=29))
+                  tex('Each residual column is perpendicular to every trial direction.',size=29),first=1)
+        self.beat(); self.add(*card[1:])
         self.beat()
         self.put(boxed(math(r'R=(I-P)AQ,\qquad r=Ry',size=33),color=RESID),y=-1.55,height=.7)
-        self.takeaway('Galerkin orthogonality says where the error lies, not that the error vanishes.')
+        self.takeaway('The residual lies outside the trial space. Could a different small model remove it?')
 
 
 class RrModel(RitzSlide):
     def body(self):
         self.start()
-        self.card(r'AQ-QM=\underbrace{R}_{\text{outside }\mathcal T}+\underbrace{Q(B-M)}_{\text{inside }\mathcal T}',
+        card=self.card(r'\text{keep }Q\text{ fixed; choose }M:\quad AQ-QM',
+                  r'AQ-QM=\underbrace{R}_{\text{outside }\mathcal T}+\underbrace{Q(B-M)}_{\text{inside }\mathcal T}',
                   tex('The two pieces are orthogonal column by column.',size=28),
-                  r'\|AQ-QM\|_F^2=\|R\|_F^2+\|B-M\|_F^2')
-        self.beat(); self.takeaway('B is the unique best small model in Frobenius norm for fixed Q; the trial space remains a choice.')
+                  r'\|AQ-QM\|_F^2=\|R\|_F^2+\|B-M\|_F^2',first=1)
+        self.beat(); self.add(*card[1:3])
+        self.beat(); self.add(card[3])
+        self.takeaway('B minimizes the residual for this fixed Q. What does the remaining error tell us about exact eigenpairs?')
 
 
 class RrQuality(RitzSlide):
     stage = 2
     def body(self):
         self.start()
-        self.card(r'\|u\|=1,\quad u=\sum_jc_jv_j,\quad Av_j=\lambda_jv_j',
+        card=self.card(r'\|u\|=1,\quad u=\sum_jc_jv_j,\quad Av_j=\lambda_jv_j',
                   r'\|Au-\theta u\|^2=\sum_j|c_j|^2|\lambda_j-\theta|^2',
-                  boxed(math(r'\min_j|\lambda_j-\theta|\le\|r\|',size=35),color=CURRENT))
-        self.beat(); self.takeaway('A small residual locates some eigenvalue. An angle bound to a specified target also needs separation.')
+                  boxed(math(r'\min_j|\lambda_j-\theta|\le\|r\|',size=35),color=CURRENT),first=1)
+        self.beat(); self.add(card[1])
+        self.beat(); self.add(card[2])
+        self.takeaway('A small residual locates some eigenvalue. Identifying a specified target also needs spectral separation.')
 
 
 class RrMinmax(RitzSlide):
@@ -206,6 +234,7 @@ class RrFacts(RitzSlide):
 
 
 class RrLean(LessonLean):
+    stage_labels = RitzSlide.stage_labels
     lesson_deck = 'operators-rayleigh-ritz'
     lecture_id = 'rayleigh_ritz'
     assumptions = 'A is bounded on a real Hilbert space; X maps trial coordinates isometrically into it.'

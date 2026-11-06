@@ -8,9 +8,14 @@ from dkvis.learning.pvm.model import atom_masses, example_vector
 class PvmSlide(LessonSlide):
     lesson_deck='operators-pvm'
     stage=1
+    stage_labels=('Why select?', 'Build the PVM', 'Use the selection', 'Recap')
 
-    def card(self, *items):
-        return self.put(stack(*items, size=33, buff=.38),y=.35,height=3.65)
+    def card(self, *items, first=None):
+        card=self.put(stack(*items, size=33, buff=.38),y=.35,height=3.65)
+        if first is not None:
+            self.remove(card)
+            self.add(*card[:first])
+        return card
 
 class PvTitle(LessonTitle):
     lesson_deck='operators-pvm'
@@ -58,39 +63,57 @@ class PvMatrix(PvmSlide):
 class PvLaws(PvmSlide):
     def body(self):
         self.start()
-        self.card(r'E(B)^*=E(B),\quad E(B)^2=E(B)',r'E(\varnothing)=0,\quad E(\mathbb R)=I',
-                  boxed(math(r'E(B)E(C)=E(B\cap C)',size=38),color=WANTED))
-        self.beat();self.takeaway('Within one PVM: complements give I minus E(B), and disjoint sets give orthogonal ranges.')
+        card=self.card(r'E(B)^*=E(B),\quad E(B)^2=E(B)',r'E(\varnothing)=0,\quad E(\mathbb R)=I',
+                  boxed(math(r'E(B)E(C)=E(B\cap C)',size=38),color=WANTED),first=2)
+        self.beat(); self.add(card[2])
+        self.beat()
+        self.put(math(r'E(B^c)=I-E(B)',size=32),y=-1.5,height=.6)
+        self.takeaway('Disjoint spectral sets select orthogonal components. How does their sum work for infinitely many pieces?')
+
 
 class PvCountable(PvmSlide):
     def body(self):
         self.start()
-        self.card(tex('Disjoint Borel sets: apply the partial sums to a fixed vector.',size=28),
-                  r'E\!\left(\bigcup_{j\ge1}B_j\right)x=\lim_{N\to\infty}\sum_{j=1}^N E(B_j)x',
-                  boxed(math(r'\text{limit in the Hilbert-space norm, for each fixed }x',size=29),color=CURRENT))
-        self.beat();self.takeaway('Countable additivity is strong convergence; operator-norm convergence is not required.')
+        card=self.card(tex('Disjoint Borel sets: add the selected components of a fixed vector.',size=27),
+                  r'S_Nx=\sum_{j=1}^N E(B_j)x',
+                  r'E\!\left(\bigcup_{j\ge1}B_j\right)x=\lim_{N\to\infty}S_Nx',
+                  boxed(math(r'\text{limit in vector norm, for each fixed }x',size=29),color=CURRENT),first=2)
+        self.beat(); self.add(card[2])
+        self.beat(); self.add(card[3])
+        self.takeaway('The components are orthogonal. Their squared lengths give a scalar measure for each input vector.')
+
 
 class PvMass(PvmSlide):
     example=True
     def body(self):
         self.start()
+        flow=self.put(stack(r'x\ \xrightarrow{E(B)}\ E(B)x',
+                            tex('Fix the vector; vary the spectral region.',size=25),size=32),'left',y=.5,height=2)
+        facts=self.put(stack(r'\mu_x(B)=\|E(B)x\|^2',r'\mu_x(\mathbb R)=\|x\|^2',
+                       r'\mu_x(\{2\})=1/2',r'\operatorname{rank}E(\{2\})=2',size=31),'right',y=.3,height=3.3)
+        self.remove(facts); self.add(facts[0])
+        self.beat(); self.add(facts[1])
+        self.beat(); self.remove(flow)
         masses=atom_masses(example_vector())
         group=VGroup()
         for i,(value,mass) in enumerate(zip([1,2,4],masses)):
             bar=Rectangle(width=1,height=mass*4,color=WANTED,fill_opacity=.4).move_to([i*2-2,mass*2,0])
             group.add(bar,math(fr'{mass:g}',size=29).next_to(bar,DOWN),math(str(value),size=28).move_to([i*2-2,-.85,0]))
-        self.put(group,'left',y=.35,height=3)
-        self.put(stack(r'\mu_x(B)=\|E(B)x\|^2',r'\mu_x(\mathbb R)=\|x\|^2',
-                       r'\mu_x(\{2\})=1/2',r'\operatorname{rank}E(\{2\})=2',size=31),'right',y=.3,height=3.3)
-        self.beat();self.takeaway('The scalar measure records this vector\'s energy, rather than the selected subspace dimension.')
+        self.put(group,'left',y=.35,height=3); self.add(*facts[2:])
+        self.takeaway('Selection tells us where the vector lies. Can the same components receive weights beyond zero and one?')
+
 
 class PvIntegral(PvmSlide):
     def body(self):
         self.start()
-        self.card(r'f=\sum_j c_j1_{B_j}\quad\Longrightarrow\quad\int f\,dE=\sum_jc_jE(B_j)',
+        card=self.card(r'f=\sum_j c_j1_{B_j}\qquad(B_j\text{ disjoint})',
+                  r'\int f\,dE=\sum_jc_jE(B_j)',
                   tex('Select each piece, then multiply it by its function value.',size=28),
-                  r'f(A)=\int_{\mathbb R}f(\lambda)\,dE(\lambda)')
-        self.beat();self.takeaway('Spectral integration extends eigenvalue weighting: f(lambda) = lambda squared gives A squared.')
+                  r'f(A)=\int_{\mathbb R}f(\lambda)\,dE(\lambda)',first=1)
+        self.beat(); self.add(*card[1:3])
+        self.beat(); self.add(card[3])
+        self.takeaway('Spectral integration generalizes eigenvalue weighting. Does the selection work without an eigenvector list?')
+
 
 class PvContinuous(PvmSlide):
     example=True
@@ -104,10 +127,12 @@ class PvContinuous(PvmSlide):
                  math(r'E(B)x=1_B',size=27,color=WANTED).move_to([-2.1,2,0]),
                  math('0',size=23).move_to(axes.c2p(0,-.18)),
                  math('1',size=23).move_to(axes.c2p(1,-.18)))
-        self.put(stack(r'H=L^2([0,1]),\quad (Af)(t)=tf(t)',r'(E(B)f)(t)=1_B(t)f(t)',
+        facts=self.put(stack(r'H=L^2([0,1]),\quad (Af)(t)=tf(t)',r'(E(B)f)(t)=1_B(t)f(t)',
                        r'x(t)=1,\quad\mu_x([a,b])=b-a',
                        r'0\le a\le b\le1',size=28),'right',y=.4,height=3)
-        self.beat();self.play(area.animate.stretch(1.5,0,about_edge=np.array([-1,0,0])))
+        self.remove(facts); self.add(*facts[:2])
+        self.beat(); self.add(*facts[2:])
+        self.play(area.animate.stretch(1.5,0,about_edge=np.array([-1,0,0])))
         self.takeaway('Spectral selection still works when no nonzero eigenvectors exist.')
 
 class PvStrong(PvmSlide):
@@ -120,27 +145,34 @@ class PvStrong(PvmSlide):
             bars.add(bar)
         self.add(bars,tex('Infinitely many coordinates continue beyond the picture ...',size=25).move_to([0,-.7,0]))
         self.put(math(r'P_Nx\to x\quad\text{for each fixed }x\in\ell^2',size=33),y=1.95,height=.6)
+        self.play(*(bar.animate.set_color(WANTED) for bar in bars[:5]))
+        self.beat()
         self.put(math(r'\|I-P_N\|_{\rm op}=1\quad\text{(test }e_{N+1}\text{)}',size=33),y=-1.5,height=.7)
-        self.beat();self.play(*(bar.animate.set_color(WANTED) for bar in bars[:5]))
         self.takeaway('A fixed vector loses less tail energy; a new unit vector can always lie beyond the cutoff.')
 
 class PvUnbounded(PvmSlide):
     example=True
     def body(self):
         self.start()
-        self.card(r'(Ax)_n=nx_n,\qquad (E(B)x)_n=1_B(n)x_n',
+        card=self.card(r'(Ax)_n=nx_n,\qquad (E(B)x)_n=1_B(n)x_n',
                   r'\operatorname{Dom}A=\{x\in\ell^2:\sum_{n\ge1}n^2|x_n|^2<\infty\}',
-                  r'x_n=1/n:\quad x\in\ell^2,\quad Ax=(1,1,\ldots)\notin\ell^2')
-        self.beat();self.takeaway('Every spectral projection is bounded; the unbounded spectral integral has a domain condition.')
+                  r'x_n=1/n:\quad x\in\ell^2,\quad Ax=(1,1,\ldots)\notin\ell^2',first=1)
+        self.beat(); self.add(card[1])
+        self.beat(); self.add(card[2])
+        self.takeaway('Unbounded weights create a domain restriction. Can a spectral window bound those weights?')
+
 
 class PvCutoff(PvmSlide):
     stage=2
     def body(self):
         self.start()
-        self.card(r'\operatorname{Dom}A=\{x:\int\lambda^2\,d\mu_x(\lambda)<\infty\}',
+        card=self.card(r'\operatorname{Dom}A=\{x:\int\lambda^2\,d\mu_x(\lambda)<\infty\}',
                   r'B\subseteq[-M,M],\ M\ge0\quad\Longrightarrow\quad E(B)H\subseteq\operatorname{Dom}A',
-                  boxed(math(r'\|AE(B)x\|\le M\|x\|',size=39),color=CURRENT))
-        self.beat();self.takeaway('A bounded spectral window produces vectors on which the operator can safely act.')
+                  boxed(math(r'\|AE(B)x\|\le M\|x\|',size=39),color=CURRENT),first=1)
+        self.beat(); self.add(*card[1:])
+        self.beat()
+        self.takeaway('A bounded spectral window puts the selected space inside the domain, ready for perturbation estimates.')
+
 
 class PvDk(PvmSlide):
     stage=2
@@ -171,6 +203,7 @@ class PvFacts(PvmSlide):
         self.takeaway('These three symbolic facts correspond to the next three checked Lean examples.')
 
 class PvLean(LessonLean):
+    stage_labels = PvmSlide.stage_labels
     lesson_deck='operators-pvm'
     lecture_id='pvm'
     assumptions='P is a PVM on a complex Hilbert space; B and C are measurable spectral sets.'

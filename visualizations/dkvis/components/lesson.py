@@ -46,6 +46,7 @@ class LessonSlide(DeckSlide):
     """Topics supply a deck name and scene bodies; content stays in transcripts."""
     lesson_deck = ''
     stage = 0
+    stage_labels = ('Question', 'Tools', 'Applications', 'Recap')
     example = False
     bonus = False
     wait_time_between_slides = .25
@@ -68,9 +69,7 @@ class LessonSlide(DeckSlide):
             chrome.add(tex('Optional numerical considerations', size=21, color=MUTED).move_to([0, -3.15, 0]))
             return chrome
         stages = VGroup(*(tex(label, size=18, color=CURRENT if i == self.stage else MUTED)
-                          for i, label in enumerate([
-                              'Question', 'Tools', 'Applications', 'Recap',
-                          ]))).arrange(RIGHT, buff=.75).move_to([0, -3.15, 0])
+                          for i, label in enumerate(self.stage_labels))).arrange(RIGHT, buff=.75).move_to([0, -3.15, 0])
         current = stages[self.stage]
         chrome.add(stages, Line(current.get_left()+DOWN*.17,
                                 current.get_right()+DOWN*.17, color=CURRENT))

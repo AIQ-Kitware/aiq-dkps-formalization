@@ -12,6 +12,16 @@ slides:
     - visualizations/dkvis/learning/orientation.py
     basis: Authored in this session; mathematical sources and formal implementation
       ancestry are recorded separately in sources.md.
+  revisions:
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-06'
+    sources:
+    - visualizations/dkvis/learning/rayleigh_ritz/scenes.py
+    - visualizations/dkvis/learning/orientation.py
+    - visualizations/dkvis/components/lesson.py
+    scope: Connect successive questions and conclusions in narration; introduce the
+      main results in synchronized stages and use lecture-specific route labels.
 transcript:
   initial_source_attribution:
   - models:
@@ -24,3 +34,11 @@ transcript:
     - visualizations/lectures/002749_rayleigh_ritz/sources.md
     basis: Authored in this session; mathematical sources and formal implementation
       ancestry are recorded separately in sources.md.
+  revisions:
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-06'
+    sources:
+    - visualizations/lectures/002749_rayleigh_ritz/lecture.md
+    scope: Connect successive questions and conclusions in narration; introduce the
+      main results in synchronized stages and use lecture-specific route labels.

@@ -89,3 +89,13 @@ Shared-style or scene-order changes require a full visual render. If model
 attribution changes, include the cover in the selected scenes so its visible
 credit stays current. See the [production guide](../dkvis/presentation/README.md)
 for cache behavior and generation records.
+
+## Spoken continuity and staged results
+
+`Why:` and `Recall:` are metadata; they are excluded from synthesized speech.
+Put the reasoning needed to cross a slide boundary in the authored speech.
+Use additional transcript beats when a key derivation needs a setup, a result,
+and an interpretation; reveal the corresponding scene content after each
+`beat()`. Keep earlier parts visible so the final build still works as a
+complete handout. `LessonSlide.stage_labels` can name a lecture's own route;
+the default labels remain available for existing compositions.
