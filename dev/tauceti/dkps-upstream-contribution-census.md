@@ -5029,3 +5029,14 @@ upstream `Yosida.lean` to `Yosida/Basic.lean` and place each new module in that
 directory. Focused builds, all 13 environment linters, scope examples and full
 style checks passed for each head. These are open PRs, not integrations; fresh
 upstream CI and review remain pending.
+
+Review follow-ups on the same open PRs: #30735 head
+`f7bfa4287601944a9b143d646931ee8bfccc81e1` uses Tau Ceti's native bounded
+Stone group instead of reimplementing its group laws and unitarity. #30736
+head `a534eff23c536fc0a1571e1e9c42dda9178696b1` uses the native uniform-Cauchy
+density theorem, places reusable bounded exponential estimates in their own
+inner-product-space module, and records the direct DKPS and Spectra ancestry.
+Both focused builds, 13 environment linters, scope checks and full style passed.
+Fresh upstream CI and review remain pending. The GitHub app rejected the PR
+description edits; the campaign's `waves/2026-11-06/update-pr-bodies.sh`
+updates the prepared descriptions on the authenticated host without a build.
