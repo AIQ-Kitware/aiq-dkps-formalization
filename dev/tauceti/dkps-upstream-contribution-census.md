@@ -4999,3 +4999,23 @@ by the full default `lake build` (21,739 jobs) and `lake build Challenge`
 operator-ideal modulus import at the shared approximation-number boundary;
 the affected unbounded Sylvester and double-angle consumers passed focused
 builds. Builds ran serially using the VM-local cache.
+
+### Prepared Yosida flow submissions (2026-11-06)
+
+Two independent branches based on accepted Tau Ceti main
+`a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8` are pushed, but no PR or
+integration is yet claimed:
+
+- SA-E22: `port-sa-e22-yosida-flow`, head
+  `7da4f883bfe38be6ab012e1263536b8b446b6e49`, constructs the native
+  strongly continuous unitary group of each symmetric approximant.
+- SA-E24: `port-sa-e24-yosida-uniform`, head
+  `132a3678a2e7f9ddc9f199b8c6108c5091c77c5c`, proves uniform Cauchy
+  convergence on bounded time intervals; it does not import SA-E22.
+
+Both adapt DKPS proofs with the Spectra ancestry recorded in their source and
+submission packets. Focused warning-as-error builds, 13 environment linters,
+scope examples and full style passed. The compact-time result strengthens the
+donor's pointwise Cauchy theorem. Submit the two packets with
+`tauceti-dkps-campaign/waves/2026-11-06/submit.sh --submit` on the authenticated
+host; the script runs no Lake command. SA-E25–E27 and SA-E29 are not claimed.
