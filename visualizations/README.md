@@ -425,3 +425,9 @@ The [detailed scene reference](SCENE_REFERENCE.md) preserves the mathematical
 walkthroughs, reference-deck commands, and VTK examples formerly included here.
 It is a lookup document; new lectures use the shared authoring and production
 workflow linked above.
+
+**`operators-pvm`** (002916) introduces projection-valued measures through
+spectral windows, scalar energy measures, and integration. Continuous and
+unbounded examples explain strong convergence and operator domains. Three
+accepted Tau Ceti laws appear alongside their symbolic statements. See the
+[PVM guide](dkvis/learning/pvm/README.md) for sources, transcript, and rendering.

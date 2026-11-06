@@ -65,6 +65,12 @@ lectures:
     topic: operators
     series: operators
     requires: [projections, singular_norms]
+  pvm:
+    title: Projection-valued measures — selecting and integrating spectral components
+    deck: operators-pvm
+    topic: pvm
+    series: spectral_foundations
+    requires: [projections, minmax]
   variations:
     title: Feasible variations and stationarity
     deck: prereq-variations

@@ -1,0 +1,37 @@
+questions:
+- title: Which convergence does a PVM require?
+  question: For disjoint measurable sets, how do the partial projection sums converge?
+  choices:
+  - In operator norm for every PVM.
+  - In vector norm after applying them to each fixed vector.
+  - Only entrywise in a chosen finite matrix basis.
+  correct: 1
+  explanation: Strong additivity is vectorwise norm convergence. Operator-norm convergence
+    can fail, as with coordinate cutoffs.
+  think_seconds: 8
+  speak_question: 'First question. How do partial projection sums converge for disjoint
+    measurable sets? A: in operator norm for every PVM. B: in vector norm after applying
+    them to each fixed vector. Or C: only entrywise in a chosen finite matrix basis.
+    Take eight seconds.'
+  speak_answer: 'B is correct. The convergence is strong: fix the vector, then take
+    its norm limit. The coordinate-cutoff example shows why operator-norm convergence
+    cannot be assumed.'
+- title: Projections and operator domains
+  question: A is unbounded and E(B) is a spectral projection. Which statement is correct?
+  choices:
+  - Every vector is automatically in the domain of A.
+  - E(B) is also unbounded whenever B is unbounded.
+  - E(B) is bounded; a bounded spectral window additionally puts its entire range
+    in the domain of A.
+  correct: 2
+  explanation: Every spectral projection is bounded. Bounded spectral support controls
+    the weighted second moment needed for the operator domain.
+  think_seconds: 8
+  speak_question: 'Second question. Which statement about an unbounded A and its spectral
+    projection E of B is correct? A: every vector is automatically in the domain of
+    A. B: the projection is also unbounded whenever B is unbounded. Or C: the projection
+    is bounded, and a bounded spectral window additionally puts its entire range in
+    the domain of A. Take eight seconds.'
+  speak_answer: C is correct. A spectral projection is bounded and everywhere defined.
+    Bounding the selected spectral values also makes every projected vector belong
+    to the domain of A.

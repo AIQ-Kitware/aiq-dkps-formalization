@@ -140,3 +140,13 @@ class YsSetup(OrientationSlide):
              (r'd=s-r+1','Number of selected eigenvectors; paper indices start at one.'),
              (r'g>0','Population separation at the exterior boundaries of the selected block.'))
     goal='Goal: prove a population-gap sine bound, then an orthogonally aligned frame bound.'
+
+
+class PvSetup(OrientationSlide):
+    lesson_deck='operators-pvm'
+    setting='A is self-adjoint on a complex Hilbert space; finite real matrix pictures also apply.'
+    symbols=((r'H,\ x\in H','The Hilbert space and an input vector; H may have infinitely many dimensions.'),
+             (r'B\subseteq\mathbb R','A Borel set of spectral values: an interval or countable combination of intervals.'),
+             (r'E(B)','The orthogonal projection onto the components selected by the spectral set B.'),
+             (r'\mu_x(B)=\|E(B)x\|^2','The energy of the selected component of this particular vector.'))
+    goal='Goal: understand spectral selection, its measure laws, and the operators it defines.'
