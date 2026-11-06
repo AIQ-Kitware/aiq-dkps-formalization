@@ -35,6 +35,9 @@ PDF     ?= 1
 UPDATE_SCENES ?=
 SCENES  ?=
 TTS_PROFILE ?=
+TTS_CONFIG ?=
+# Keep a private config path (including spaces or apostrophes) one shell argument.
+shell_quote = '$(subst ','"'"',$(1))'
 PORT ?= 8000
 HOST ?= 127.0.0.1
 SKIP_RENDER ?= 0
@@ -83,6 +86,7 @@ help:
 	@echo '  slides DECK=name   render a presentation and export its transcript when present'
 	@echo '  text DECK=name     export slide/build speech text without rendering or TTS'
 	@echo '  video DECK=name    render and narrate; TTS_PROFILE selects a server from tts.toml'
+	@echo '                     TTS_CONFIG=tts.local.toml selects an ignored private config instead'
 	@echo '    UPDATE_SCENES="Scene" renders just that edit and reassembles the full lecture'
 	@echo '  setup              uv sync with the vtk, slides and test extras'
 	@echo '  all                short, every part and full, then standalone HTML for each'
@@ -172,7 +176,7 @@ text:
 
 video:
 	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))
-	./render_video.sh --deck $(DECK) --quality $(QUALITY) --fps $(if $(FPS),$(FPS),30) --jobs $(if $(JOBS),$(JOBS),2) $(if $(filter 1,$(SKIP_RENDER)),--skip-render) $(if $(filter 1,$(REFRESH_AUDIO)),--refresh-audio) $(if $(TTS_PROFILE),--tts-profile $(TTS_PROFILE)) $(if $(SCENES),--scenes $(SCENES)) $(if $(UPDATE_SCENES),--update-scenes $(UPDATE_SCENES))
+	./render_video.sh --deck $(DECK) --quality $(QUALITY) --fps $(if $(FPS),$(FPS),30) --jobs $(if $(JOBS),$(JOBS),2) $(if $(filter 1,$(SKIP_RENDER)),--skip-render) $(if $(filter 1,$(REFRESH_AUDIO)),--refresh-audio) $(if $(TTS_CONFIG),--tts-config $(call shell_quote,$(TTS_CONFIG))) $(if $(TTS_PROFILE),--tts-profile $(TTS_PROFILE)) $(if $(SCENES),--scenes $(SCENES)) $(if $(UPDATE_SCENES),--update-scenes $(UPDATE_SCENES))
 
 matching matching-talk:
 	$(MAKE) slides DECK=$(DECK_$@)

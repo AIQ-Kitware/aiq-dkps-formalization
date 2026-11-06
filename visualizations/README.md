@@ -78,6 +78,45 @@ audio and video outputs. Completed speech chunks and video segments are cached,
 so rerunning after interruption reuses matching work; the interrupted request
 must finish again. A batch stops at the first failure and can be rerun.
 
+### Private TTS profiles with make
+
+From `visualizations/`, copy the shared configuration to the ignored local file:
+
+```bash
+cp tts.toml tts.local.toml
+```
+
+Keep the defaults and postprocessing settings, then add your custom profile to
+`tts.local.toml`, substituting the voice name your server accepts:
+
+```toml
+[profiles.myvoice-breeze-tts2]
+endpoint = "http://127.0.0.1:8821/v1/audio/speech"
+model = "breeze-tts2"
+voice = "myvoice"
+narrator_voice = "myvoice"
+response_format = "wav"
+
+[profiles.myvoice-breeze-tts2.request]
+instruction = "Speak in a warm, engaging lecture style with clear articulation. Maintain steady conversational loudness and restrained emphasis, including at the beginning of each passage."
+cfg_scale = 2.0
+```
+
+Select that file and profile with make:
+
+```bash
+make video DECK=operators-rayleigh-ritz TTS_CONFIG=tts.local.toml TTS_PROFILE=myvoice-breeze-tts2
+make lectures-video TTS_CONFIG=tts.local.toml TTS_PROFILE=myvoice-breeze-tts2
+```
+
+`tts.local.toml` is gitignored. Alternatively, use a file outside the repository,
+such as `TTS_CONFIG="$HOME/.config/dkvis/tts.toml"`. This selects a complete
+configuration file rather than merging it with `tts.toml`; copying the shared
+file first preserves its audio processing defaults. `narrator_voice` determines
+the speaker part of the web UI's `<reference>-<model>` label. Add a `reference`
+table like the existing cloned-voice profile if you also want to record the
+reference audio and transcript basenames.
+
 ### Reference identity and generation provenance
 
 Use a reference basename plus model for a cloned-voice profile, such as
