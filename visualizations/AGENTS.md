@@ -112,3 +112,11 @@ snapshots in the portable ignored asset store, as described in
 [the asset guide](docs/EXTERNAL_ASSETS.md). Reuse the attributed-image component
 for portraits. Retain original creator credit separately from lecture/model
 authorship; do not silently substitute another image if access fails.
+
+## Private voice material
+
+Private reference identifiers, recordings, reference transcripts, and personal
+experiment outputs must remain in ignored local storage and out of committed
+examples or documentation. Use only approved reference names in shared
+examples. Raw voice recordings remain untracked even when their basenames
+are approved for documentation.

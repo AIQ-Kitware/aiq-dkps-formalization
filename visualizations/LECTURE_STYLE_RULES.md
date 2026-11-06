@@ -88,6 +88,14 @@ output graphs, use a small matrix such as a two-by-two example, and highlight
 the same changing time t in both views. The velocity interpretation motivates
 the topic, but the pure mathematical viewpoint must also be explained.
 
+> “These slides are all lacking in visualization, animation, and color coding.”
+> “Voice outputs are better when they are longer.”
+
+Build pictures that explain the mathematical construction, rather than relying
+on formulas and text alone. Connect their colors and motion to the narration.
+A visual event does not need its own independent vocal generation: preserve
+coherent spoken passages when planning synchronized animation.
+
 ## Examples and the general tool
 
 > “Make sure the slide says it's an example and highlight the general tool.”

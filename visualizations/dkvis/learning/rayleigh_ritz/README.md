@@ -42,3 +42,17 @@ The 2026-11-06 revision connects the slide-to-slide argument in the spoken
 narration and introduces the principal derivations in stages. The progress
 strip names the lecture's own route. Rebuild slides and narration together;
 old narrated videos retain their original speech and reveal timing.
+
+The visual revision reuses one trial plane through coordinate embedding,
+compression, Ritz vectors, residual columns, block structure, and the direct
+orthogonality calculation. Amber identifies trial quantities, cyan the true
+operator output, and green the residual. A rotating trial direction drives the
+quotient graph; nested spaces drive the extremal-value marker. Numerical
+models supply the data and are tested independently of their drawings.
+
+Narration is written as connected passages. The current production renderer
+still synthesizes its individual visual beats. The forthcoming audio
+experiments can concatenate those authored beats into longer passages and
+align events within them; this content revision does not claim word-level
+speech/animation alignment yet. No speech conditioning experiment is part of
+this slide render.

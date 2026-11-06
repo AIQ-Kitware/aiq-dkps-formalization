@@ -21,183 +21,183 @@ How can a small eigenproblem tell us something reliable about a much larger one?
 Why: A restricted search can be affordable even when the full problem is not.
 Recall: Eigenvectors satisfy A u equals lambda u.
 
-Our plan begins with a choice: which directions will we allow? An eigenproblem asks for directions that A only scales. For a large matrix, searching the entire space can be expensive. We may instead have a small collection of plausible directions: previous iterates, physically meaningful functions, or vectors obtained by repeatedly applying A. Their linear combinations form a smaller space in which we can search.
+An eigenproblem asks for directions that A only scales. The large array represents the original operator. Suppose that applying this operator is possible, but solving its entire eigenproblem would be expensive. We choose a smaller collection of directions and search among their combinations. The amber array represents the small model we would like to construct.
 
 <!-- beat -->
 
-Rayleigh’s work on vibration and Ritz’s variational approximation method are historical landmarks behind this strategy. They were separate contributions, not a joint paper. The mathematical question is how to turn a chosen search space into a useful eigenproblem, and how to check what its answers mean in the original space. We will give that chosen search space a name, while keeping the hoped-for exact answer separate.
+The challenge is deciding what that small model should preserve. We also need to check its answers back in the original space. Rayleigh’s work on vibration and Ritz’s variational approximation method are historical landmarks behind this strategy. We will follow the construction from the chosen directions to the error that remains. First, what exactly have we chosen when we choose a trial space?
 
 ## RrSpace: Trial means chosen for the search
 
 Why: The name describes a role, not an accuracy theorem.
 Recall: A subspace contains every linear combination of its vectors.
 
-The directions just described generate all the vectors we will consider. Choose candidate directions and allow all their linear combinations. That set is the trial subspace. We can choose it before knowing any exact eigenvectors. It might be a line, a plane, or a much higher-dimensional space. Trial does not mean random, and it does not mean already proved close to the answer.
+The amber sheet represents a trial plane, spanned by q one and q two. These two arrows are the directions we chose. The moving arrow shows their linear combinations: change the two coefficients and we obtain another allowed vector in the same plane. Trial space means the entire collection of these combinations, not just the original two arrows. Higher-dimensional trial spaces play the same role.
 
 <!-- beat -->
 
-Three claims must be kept separate. A trial space is where we search. An invariant space is one that A maps into itself. A wanted spectral space is the exact eigenspace or cluster we are trying to approximate. A chosen trial space need not be invariant or close to the wanted space. Those are questions to investigate after the choice. To compute within the chosen space, we need coordinates that preserve its lengths and angles.
+This choice tells us where to search. It does not yet say what A does to those vectors, or whether this plane is close to the wanted exact spectral space. Invariance would mean that applying A always stays inside the plane. Accuracy would require a comparison with our exact target. We will test those properties later. To compute within our chosen plane, we first need coordinates for its vectors.
 
 ## RrFrame: Q supplies coordinates in the trial space
 
 Why: We need a way to move between a small vector and its ambient representative.
 Recall: Q has orthonormal columns: Q transpose Q equals the small identity.
 
-Give our chosen trial directions orthonormal coordinates. Write the trial space as the range of Q. A small coordinate vector y becomes the ambient vector u equals Q y. Orthonormal columns make this map preserve lengths: the norm of Q y equals the norm of y. Conversely, Q transpose u gives the coordinates of a vector already in the trial space.
+The left circle contains unit vectors in the two small coordinates. Q places each one in the trial plane on the right. The moving dots represent the same vector before and after this embedding. Both have norm one; the right circle looks flattened only because the plane is drawn in perspective. Orthonormal columns make Q preserve lengths. The small coordinates y and the ambient vector u equals Q y are two descriptions of that one trial vector.
 
 <!-- beat -->
 
-For an arbitrary ambient vector v, Q transpose v computes its coefficients against those columns. Lifting those coefficients gives Q Q transpose v, the orthogonal projection onto the trial space. Call that ambient projection P. Q and P are different objects: Q changes the size of the coordinate vector; P maps the ambient space to itself. This projection will let us build a small operator even when A sends trial vectors outside their space.
+Now take a cyan vector v outside the plane. Q transpose reads its coefficients along the trial directions. The result is the left-hand coordinate vector; lifting it again gives the point underneath v in the plane. This is the orthogonal projection P equals Q Q transpose. We have two useful operations: Q lifts small coordinates, and Q transpose reads trial coordinates from any ambient vector. Those are exactly the operations needed to build the small model.
 
 ## RrCompress: Apply A, then project back
 
 Why: A trial vector can leave the search space when A acts on it.
 Recall: P equals Q Q transpose; Q transpose Q is the identity.
 
-We have our trial space and its coordinate map Q. The missing ingredient is an operator on the small coordinates. Start with y, lift it to Q y, and apply the original operator A. We reach A Q y. Here is the difficulty: that output can leave the trial space. How can we describe it using only the trial coordinates?
+Keep the same trial plane. Start with one trial input, the amber basis vector q one. Applying A gives the cyan arrow, which leaves the plane. We want a small operator that can describe this action using only the two trial coordinates. The difficulty is now visible: the full output contains a component those coordinates cannot represent.
 
 <!-- beat -->
 
-Use the projection we just constructed. Q transpose reads the trial coefficients of A Q y. The complete round trip is Q transpose A Q y. Give this small operator a name: B equals Q transpose A Q. This is the compression. Each factor has a job: lift, apply A, then read the trial coordinates.
+Read the trial coordinates of that output with Q transpose. For a general coordinate vector y, the complete trip is Q transpose A Q y. Define B to be Q transpose A Q. Each factor has a concrete job: lift the input, apply the original operator, then read the coefficients along the trial directions. This operation is called compression.
 
 <!-- beat -->
 
-Lift the small output back to the full space. Q B y equals P A Q y, the projection of the true output. So we now have a small model, together with a precise description of what it keeps. It discards the perpendicular component. Before solving its eigenproblem, we should check that B retains the directional information we intended to approximate.
+Lift the small answer back into the plane. The amber output Q B y is P A Q y, the projection of the true output. The green arrow completes the trip from that amber output to the cyan one. Compression has retained the in-plane component and discarded this perpendicular component. Before trusting the model’s eigenproblem, we should ask what numerical information it preserves along each allowed direction.
 
 ## RrQuotient: Why this small matrix is the right one
 
 Why: The compression preserves the original directional measurement on every trial vector.
 Recall: For a unit vector u, the Rayleigh quotient is u transpose A u.
 
-To check our compression, choose one trial direction. Write it as u equals Q y, with y a unit vector. Because Q preserves lengths, u is unit too. The original Rayleigh quotient in that direction is u transpose A u. What number does the small matrix assign to the same direction?
+Use the same example. Its compression B has diagonal entries two and off-diagonal entries one. Turn a unit coordinate vector around the trial plane. The graph records its Rayleigh quotient, the scalar measurement u transpose A u. The value varies with direction: it reaches three in the sum direction and one in the difference direction. Does the small matrix assign the same values?
 
 <!-- beat -->
 
-Substitute Q y for u. The quotient becomes y transpose Q transpose A Q y. The middle expression is B, so this is exactly y transpose B y. Every trial direction gets the same quotient in the original and compressed problems. This equality is why the compression represents the restricted search.
+Substitute u equals Q y into the original quotient. It becomes y transpose Q transpose A Q y, which is exactly y transpose B y. So there are not two competing curves here. The full and compressed calculations give the same curve on every trial direction. This identity is the reason the small matrix represents our restricted search.
 
 <!-- beat -->
 
-B also remains symmetric: transpose its definition and use A transpose equals A. We can therefore solve B as an ordinary symmetric eigenproblem. Its extremal eigenvectors optimize the original Rayleigh quotient among our allowed directions. We are ready to take a small eigenvector and see what it means back in the full space.
+Symmetry is preserved too, because transposing B replaces A by A transpose, and A is symmetric. We can solve B with an ordinary symmetric eigensolver. Its extremal eigenvectors identify the highest and lowest points of the quotient curve within our chosen space. Let us lift one of those small eigenvectors and check what it solves in the full problem.
 
 ## RrSolve: Solve small, then lift
 
 Why: Small eigenvectors describe combinations of the trial directions.
 Recall: B y equals theta y is a k-dimensional eigenproblem.
 
-The small model is ready. Solve B y equals theta y, taking y to be unit. Theta is called a Ritz value. It is an eigenvalue of the small matrix we actually solved. We still need to turn its coordinate vector y into an ambient vector.
+The difference direction, with coordinates one and minus one divided by square root of two, is an eigenvector of the small matrix B with eigenvalue one. This is a small eigenproblem we have solved exactly. Its eigenvalue is called a Ritz value, written theta; here theta equals one. We will lift this particular direction so that the relation between the small and full equations remains visible.
 
 <!-- beat -->
 
-Lift y using the same map Q. The vector u equals Q y is the Ritz vector. It is a combination of the trial directions, and its length is one. The small equation implies P A u equals theta u: after projecting back into the trial space, the eigenvector equation holds exactly.
+Apply Q to those coordinates. The amber arrow u lies in the trial plane and is called a Ritz vector. Its norm is one. The projected equation is P A u equals one times u. In this example the projected output lands exactly back on the input arrow: the small model says this direction is only scaled, with scale one.
 
 <!-- beat -->
 
-The original problem asks for A u itself to equal theta u. Subtract those two vectors and call the difference r, the full eigenpair residual. This is the piece the projected equation did not inspect. To understand that gap between the small and full problems, let us draw it for a trial space that is just a line.
+Now apply the full operator. The cyan output leaves the plane. The green difference is r equals A u minus theta u, the full eigenpair residual. We have solved the projected equation and can see the part it did not test. To describe this error for the whole trial space, we need more than one residual vector: we need a residual matrix.
 
-## RrGeometry: The missing component is visible
+## RrGeometry: Collect the discarded outputs in R
 
-Why: Compression removes the part of the output perpendicular to the trial line.
-Recall: This example uses a one-dimensional trial space.
+Why: The residual matrix collects the perpendicular output for every trial input.
+Recall: R acts on trial coordinates; its columns come from the trial basis inputs.
 
-Keep the same construction, but let the trial space be one line. Take A diagonal with entries one and four. The amber unit vector q spans our chosen line. There is only one trial coordinate, so the small matrix B will be a single number theta.
-
-<!-- beat -->
-
-Apply A to q. The cyan output A q leaves the line. Project it back: the amber vector along the line is theta q, with theta equal to q transpose A q. This is the small model doing exactly what the compression formula promised.
+The green residual just came from one trial input. Build the same comparison for every input by defining R equals A Q minus Q B. R takes trial coordinates and returns the discarded part of the full output. We can understand this matrix column by column, using the two basis directions that define our trial plane.
 
 <!-- beat -->
 
-The green arrow completes the trip from theta q to A q. It is r equals A q minus theta q. The right-angle marker shows why the projected equation could be exact while the full equation still had an error. Projection removed precisely this perpendicular component.
+For the first basis coordinate, the green arrow points upward, normal to the plane. Its ambient coordinates are zero, zero, one. Those entries form the first column of R. They say exactly where this particular output escaped from the small model.
 
 <!-- beat -->
 
-Rotate the trial line toward the eigenvector for eigenvalue one. The compression and the green residual change together; the residual shrinks as the line approaches that invariant direction. We have now seen what the discarded output means. With several trial directions, we will collect their discarded outputs in one residual matrix.
+For the second basis coordinate, the green arrow points the other way. Its coordinates are zero, zero, minus one, giving the second column of R. The columns are not arbitrary error labels; each is the discarded output for one coordinate direction. Linear combinations of inputs produce the same linear combinations of these columns.
+
+<!-- beat -->
+
+Choose equal positive input coordinates. The two normal components cancel and the green arrow disappears. For the difference direction they reinforce, as in the previous slide. Thus R acts on every trial input. When y is a small eigenvector, its individual eigenpair residual is R y. We can now inspect the matrix entries behind these pictures and see why one Ritz vector is exact while the other is not.
 
 ## RrExample: A two-dimensional trial space
 
 Why: A small eigenproblem combines candidate directions and reveals different residuals.
 Recall: Use the first two coordinate directions as the trial space.
 
-Move from one trial direction to two. Here A is a three by three symmetric matrix, and Q consists of the first two coordinate vectors. The trial space is their plane. Applying our round trip gives the top-left two by two block B. We can solve this small matrix directly.
+Here is the symmetric operator we have been drawing. The amber top-left block is the compression to the first two coordinate directions. The green entries couple that plane to its normal direction. They are responsible for the upward and downward arrows that formed the columns of R.
 
 <!-- beat -->
 
-Its sum direction has Ritz value three. Lift the normalized sum into the ambient space by appending a zero third coordinate. The couplings into that third coordinate cancel, so its full residual is zero. This Ritz vector happens to be an exact eigenvector.
+The small matrix’s sum direction has Ritz value three. After lifting, its two contributions to the normal component cancel. The cyan true output and amber retained output coincide in the plane, so r plus is zero. This Ritz vector happens to be an exact eigenvector of A.
 
 <!-- beat -->
 
-The difference direction has Ritz value one. Its couplings into the third coordinate reinforce rather than cancel, leaving residual square root of two times e three. Thus one direction stays in the plane while another leaves it. A block picture will organize these two kinds of output without depending on the particular numbers in this example.
+The difference direction has Ritz value one. Subtracting the two input contributions instead reinforces the normal component, leaving square root of two times e three as the residual. One exact direction therefore does not make the entire plane invariant. The next block diagram collects the retained and escaping outputs we have already drawn, so that the same reasoning works without depending on these particular entries.
 
-## RrBlock: The block structure records where the output goes
+## RrBlock: Blocks collect the two outputs
 
 Why: Adapt coordinates to the trial space and its perpendicular complement.
 Recall: Q spans the trial space; Q perpendicular completes an orthonormal basis.
 
-The example separated output inside the trial plane from output perpendicular to it. Do the same for any trial space. Complete Q to an orthonormal basis using Q perpendicular. In these coordinates, the first block column of A describes what happens to an input from the trial space. Its upper block is B, the part retained by compression; its lower block is C, the part that escapes.
+Complete the trial frame Q with coordinates Q perpendicular for the normal space. In this basis, an input from the trial space has only its first block of coordinates nonzero. The first block column of A therefore tells the whole story for such inputs. B gives their retained output in the amber plane; C gives their output in the perpendicular directions.
 
 <!-- beat -->
 
-The full symmetric matrix has the displayed four blocks, with C transpose opposite C. Our approximation uses only the first block column. Subtract the model output Q B from A Q: the retained B component cancels, leaving Q perpendicular times C. This is the residual matrix R. It collects the perpendicular arrows from all the trial directions.
+Look at the two green arrows. The upward coefficient is one and the downward coefficient is minus one. Together they form C, the row shown here. Multiplying by Q perpendicular places those coordinates back into the ambient space, so R equals Q perpendicular C. The same escaping output is described by C in normal coordinates and by R in ambient coordinates. Symmetry supplies C transpose in the opposite block of the full matrix.
 
 <!-- beat -->
 
-If C is zero, no trial input produces output outside the space, so the trial space is invariant. Conversely, invariance forces C to be zero. We did not assume this when drawing the blocks. We have found exactly which block measures its failure. We can verify the same conclusion directly from the original formulas, without choosing complementary coordinates.
+For the entire trial space to be invariant, every one of these perpendicular outputs would have to vanish. That is exactly C equals zero. Our example has C nonzero, although its sum direction cancels the two columns. The block structure has now earned its meaning: it separates where the output goes. Let us verify this directly from the original formulas, without needing complementary coordinates.
 
 ## RrOrthogonality: Derive residual orthogonality
 
 Why: The defining small model removes every residual component inside the trial space.
 Recall: B equals Q transpose A Q, and Q transpose Q equals I.
 
-Let us check the claim suggested by the block picture: every output of R should be perpendicular to the trial space. We know R equals A Q minus Q B, B equals Q transpose A Q, and Q transpose Q equals the identity. To test for a component inside the trial space, apply Q transpose to R.
+The green arrows in the picture lie normal to the trial plane. To express that algebraically, apply Q transpose to R: this reads the trial coordinates of each residual. The picture predicts zero. We know R equals A Q minus Q B and B equals Q transpose A Q. These two definitions are enough to check the prediction.
 
 <!-- beat -->
 
-The first term becomes Q transpose A Q, which is B. The second becomes Q transpose Q B, also B. Their difference is zero. That short cancellation proves Q transpose R equals zero. Every residual column is perpendicular to every trial direction. This is called Galerkin orthogonality.
+Q transpose A Q is B. In the second term, Q transpose Q is the identity, so Q transpose Q B is also B. Subtracting gives zero. This proves Q transpose R equals zero, usually called Galerkin orthogonality. It says that every residual column has zero component in every trial direction.
 
 <!-- beat -->
 
-Equivalently, R equals I minus P, applied to A Q. For a small eigenvector y, the individual residual is R y. This recovers our green arrow without the block coordinates. It also raises a useful question: could a different small model, on this same trial space, remove more of the error?
+The projection formula expresses the same fact as R equals I minus P, applied to A Q. For a small eigenvector y, the full residual is R y. We have located the error entirely outside the search space. Could changing the small matrix B, while keeping the same search space, cancel any of that error?
 
 ## RrModel: A trial space and a small model are separate choices
 
 Why: Rayleigh–Ritz makes a particular model choice after the trial space is fixed.
 Recall: M is any k by k proposed action on trial coordinates.
 
-Keep Q and the trial space fixed. Suppose we replace the compression B by another small matrix M. The full residual is then A Q minus Q M. We want to know whether changing this model can reduce the perpendicular error we just identified.
+Keep the trial space and frame Q fixed, but propose another small model M. Its full residual A Q minus Q M is shown by the cyan arrow for one trial input. We want to know whether the freedom to change M can improve on the compression. Add and subtract the compression’s output Q B to find out.
 
 <!-- beat -->
 
-Add and subtract Q B. The residual splits into R plus Q times B minus M. The first piece is perpendicular to the trial space; the second lies inside it. Changing M can alter only this second piece. It cannot cancel the perpendicular arrow R.
+The residual splits into the green component R and the amber component Q times B minus M. Green lies perpendicular to the trial space; amber lies inside it. The right-angle triangle shows why changing the internal model cannot cancel the escaping component. It can only add or remove an in-plane discrepancy.
 
 <!-- beat -->
 
-Apply Pythagoras to each column and add. The squared Frobenius residual is the squared norm of R plus the squared Frobenius norm of B minus M, because Q preserves lengths. It is smallest, uniquely, when M equals B. We have justified the best model for this fixed space. The next question is what the remaining residual tells us about the exact eigenproblem.
+Apply Pythagoras to each column and add the squared lengths. The squared Frobenius residual is the squared norm of R plus the squared Frobenius norm of B minus M. Q preserves lengths, which removes it from the second term. The unique minimum occurs at M equals B. This chooses the best model for the space already selected. What can the remaining residual tell us about the exact eigenproblem?
 
-## RrQuality: A small residual still needs interpretation
+## RrQuality: Locate an exact eigenvalue
 
 Why: Accuracy of an eigenpair and identification of a wanted spectral target are different questions.
 Recall: A is symmetric and the Ritz vector u has unit norm.
 
-We have measured the error left by our best small model. What does its size certify? Take a unit Ritz vector u and its Ritz value theta. For this argument only, expand u in an exact orthonormal eigenbasis of A. We do not need to compute that basis to use the resulting estimate.
+The white dots are the exact eigenvalues of our three by three example. The amber marker is the Ritz value one. We will use an exact eigenbasis only to reason about the error; the computation does not require finding that basis. Expand the unit Ritz vector in it, with coefficients c j. Their squared magnitudes add to one.
 
 <!-- beat -->
 
-In each eigenvector direction, applying A minus theta multiplies the coefficient by lambda j minus theta. Orthogonality gives the displayed sum for the squared residual. The squared coefficients add to one. Therefore, if every exact eigenvalue were farther from theta than the residual norm, that weighted sum would be too large.
+Applying A minus theta multiplies each coefficient by lambda j minus theta. Orthogonality gives the displayed sum for the squared residual. Consequently, if every exact eigenvalue were farther from theta than the residual norm, this weighted sum would be too large.
 
 <!-- beat -->
 
-Some exact eigenvalue must lie within the residual norm of theta. To identify a specified target, we need more information: the eigenvector for four in our diagonal example has zero residual even if we wanted the eigenvector for one. A gap supplies the additional separation needed for angle control. We also have another way to improve our approximation: enlarge the search space rather than change its small model.
+The green interval has radius equal to that residual norm, square root of two here. At least one exact eigenvalue must lie inside. This tells us proximity to some eigenvalue; identifying a wanted spectral target needs additional separation information. Our other Ritz value, three, is exact but would still be the wrong choice if we wanted the smallest eigenvalue. We can also improve the approximation by enlarging the search space itself.
 
 ## RrMinmax: What enlarging the trial space guarantees
 
 Why: A larger search space improves extremal variational estimates.
 Recall: Compare nested, nonzero trial spaces for the same symmetric matrix.
 
-So far we kept the search space fixed. What changes if we allow more directions? The smallest Ritz value is the minimum Rayleigh quotient over unit vectors in the trial space. It is at least the smallest exact eigenvalue, because we minimize over fewer choices. If we enlarge the trial space, that minimum cannot increase. Dually, the largest Ritz value cannot decrease when the trial space grows.
+Keep the same operator and enlarge the allowed directions: first a coordinate line, then the trial plane, then the full space. The smallest Ritz value minimizes the original Rayleigh quotient over each chosen set of unit vectors. Enlarging the set cannot raise this minimum, because all the old candidates remain available.
 
 <!-- beat -->
 
-These are useful directional guarantees: the smallest estimate moves downward toward the global minimum, and the largest moves upward toward the global maximum. They do not say how fast an arbitrary sequence of spaces converges, and they do not establish that a particular space approximates a chosen interior spectral cluster. The min–max lecture develops the broader variational picture. We can now distinguish improving the space from choosing its internal model. That distinction is also built into the general residual notation.
+In our example the minimum moves from two to one, then to three minus square root of six, the exact smallest eigenvalue. The number-line marker follows that change. The largest Ritz value moves in the opposite direction when the space grows. These are monotone extremal bounds, not a rate of convergence for arbitrary spaces. We can now distinguish improving the search space from optimizing its internal model, which is precisely the distinction used in the general residual notation.
 
 ## RrPaper: Translate the residual notation
 

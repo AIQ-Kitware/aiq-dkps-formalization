@@ -77,10 +77,22 @@ of the present lecture. The companion imports accepted Tau Ceti directly.
 
 ## Numerical illustrations
 
-`model.py` supplies the animated line example for diag(1,4), and the matrix
-with rows (2,1,1), (1,2,-1), (1,-1,5). For Q = (e1,e2), its compression has
+`model.py` supplies the recurring matrix with rows (2,1,1), (1,2,-1),
+(1,-1,5). Its first-two-coordinate trial plane is reused throughout the
+construction. For Q = (e1,e2), its compression has
 Ritz values 1 and 3, with residual norms sqrt(2) and 0. The trial plane is not
 invariant. Tests verify these claims, Galerkin orthogonality, the Frobenius
 splitting, real/complex trial-basis invariance, and eigenvalue inclusion.
+The quotient curve is 2 + sin(2t) on unit trial coordinates (cos t, sin t).
+Nested coordinate spaces give smallest Ritz values 2, 1, and 3 - sqrt(6).
+Tests verify the input/output decomposition, cancellation and reinforcement
+of residual columns, quotient values, and nested extremal bounds.
+
+`visuals.py` maps the 3D trial plane to a perspective drawing. It is a viewing
+projection, not a mathematical isometry: lengths in the picture are
+foreshortened. The coordinate-circle scene explicitly distinguishes that view
+from the actual norm equality for Q. The model-error triangle is a schematic
+of orthogonal components for one input; its side lengths are not numerical
+labels for the matrix example.
 
 The drawings are generated vector graphics and require no downloaded images.

@@ -22,6 +22,17 @@ slides:
     - visualizations/dkvis/components/lesson.py
     scope: Connect successive questions and conclusions in narration; introduce the
       main results in synchronized stages and use lecture-specific route labels.
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-06'
+    sources:
+    - visualizations/dkvis/learning/rayleigh_ritz/scenes.py
+    - visualizations/dkvis/learning/rayleigh_ritz/visuals.py
+    - visualizations/dkvis/learning/rayleigh_ritz/model.py
+    scope: Replace formula cards with a recurring trial-plane construction, linked
+      coordinate/quotient animations, residual-column cancellation, geometric block
+      interpretation, and semantic color coding; rewrite the narration around the
+      same example.
 transcript:
   initial_source_attribution:
   - models:
@@ -42,3 +53,13 @@ transcript:
     - visualizations/lectures/002749_rayleigh_ritz/lecture.md
     scope: Connect successive questions and conclusions in narration; introduce the
       main results in synchronized stages and use lecture-specific route labels.
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-06'
+    sources:
+    - visualizations/lectures/002749_rayleigh_ritz/lecture.md
+    - visualizations/lectures/002749_rayleigh_ritz/sources.md
+    scope: Replace formula cards with a recurring trial-plane construction, linked
+      coordinate/quotient animations, residual-column cancellation, geometric block
+      interpretation, and semantic color coding; rewrite the narration around the
+      same example.

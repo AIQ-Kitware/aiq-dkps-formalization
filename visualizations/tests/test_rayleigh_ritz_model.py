@@ -44,3 +44,24 @@ def test_fixed_space_pythagoras_and_coordinate_independence():
     values, _, residuals = ritz_pairs(a.astype(complex), q@z)
     np.testing.assert_allclose(values, [1, 3])
     np.testing.assert_allclose(np.linalg.norm(residuals, axis=0), [np.sqrt(2), 0], atol=1e-14)
+
+
+def test_picture_components_match_the_trial_plane_and_each_other():
+    from dkvis.learning.rayleigh_ritz.model import trial_action, trial_quotient, nested_extrema
+    for y in [np.array([1., 0.]), np.array([0., 1.]),
+              np.array([1., 1.])/np.sqrt(2), np.array([1., -1.])/np.sqrt(2)]:
+        u, true, retained, escaping = trial_action(y)
+        np.testing.assert_allclose(true, retained+escaping, atol=1e-14)
+        np.testing.assert_allclose(escaping[:2], 0, atol=1e-14)
+        assert retained[2] == u[2] == 0
+        assert abs(retained@escaping) < 1e-14
+    np.testing.assert_allclose(trial_action(np.array([1., 1.])/np.sqrt(2))[3], 0, atol=1e-14)
+    np.testing.assert_allclose(trial_action(np.array([1., -1.])/np.sqrt(2))[3], [0, 0, np.sqrt(2)])
+    for angle, expected in [(0, 2), (np.pi/4, 3), (3*np.pi/4, 1)]:
+        y, u, value = trial_quotient(angle)
+        assert np.isclose(value, expected)
+        assert np.isclose(u@trial_example()[0]@u, value)
+    bounds = np.array(nested_extrema())
+    np.testing.assert_allclose(bounds[:, 0], [2, 1, 3-np.sqrt(6)])
+    assert np.all(np.diff(bounds[:, 0]) <= 0)
+    assert np.all(np.diff(bounds[:, 1]) >= 0)
