@@ -50,9 +50,19 @@ operator output, and green the residual. A rotating trial direction drives the
 quotient graph; nested spaces drive the extremal-value marker. Numerical
 models supply the data and are tested independently of their drawings.
 
-Narration is written as connected passages. The current production renderer
-still synthesizes its individual visual beats. The forthcoming audio
-experiments can concatenate those authored beats into longer passages and
-align events within them; this content revision does not claim word-level
-speech/animation alignment yet. No speech conditioning experiment is part of
-this slide render.
+The question-led revision opens each explanatory section with its mathematical
+problem and develops the next construction as a possible answer. Compression
+begins with a trial input and the question of representable output; its formula
+appears after the output leaves the plane. Residual columns appear as their
+basis inputs are tested, and the block matrix follows the retained/escaping
+output picture. Section endings identify the next unresolved question. The
+recurring colors and the question-based progress strip keep that exploration
+connected to the larger approximation problem.
+
+The authored narration retains coherent passages across visual builds. The
+normal video command uses its existing build-based speech pipeline;
+`make tts-experiment` can instead pack longer passages and align the animation
+with spoken phrases. The local `animation_cues.yaml` is updated with the current
+wording and build numbers. See the [experiment instructions](../../../README.md#long-passage-narration-experiments).
+Rebuild narrated outputs to hear revised speech; earlier generated videos and
+experiment comparisons preserve the wording used to generate them.

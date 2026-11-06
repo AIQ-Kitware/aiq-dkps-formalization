@@ -33,6 +33,16 @@ slides:
       coordinate/quotient animations, residual-column cancellation, geometric block
       interpretation, and semantic color coding; rewrite the narration around the
       same example.
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-06'
+    sources:
+    - visualizations/dkvis/learning/rayleigh_ritz/scenes.py
+    - visualizations/dkvis/learning/orientation.py
+    - visualizations/lectures/002749_rayleigh_ritz/animation_cues.yaml
+    scope: Reframe the lecture as motivated questions and exploratory answers; derive
+      compression from representable output, reveal residual columns and blocks after
+      their geometric motivation, and connect each conclusion to the next question.
 transcript:
   initial_source_attribution:
   - models:
@@ -63,3 +73,11 @@ transcript:
       coordinate/quotient animations, residual-column cancellation, geometric block
       interpretation, and semantic color coding; rewrite the narration around the
       same example.
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-06'
+    sources:
+    - visualizations/lectures/002749_rayleigh_ritz/lecture.md
+    scope: Reframe the lecture as motivated questions and exploratory answers; derive
+      compression from representable output, reveal residual columns and blocks after
+      their geometric motivation, and connect each conclusion to the next question.

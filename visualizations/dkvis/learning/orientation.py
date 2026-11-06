@@ -155,10 +155,10 @@ class PvSetup(OrientationSlide):
 
 class RrSetup(OrientationSlide):
     lesson_deck='operators-rayleigh-ritz'
-    stage_labels=('Choose the space', 'Build the model', 'Check the error', 'Recap')
+    stage_labels=('Where to search?', 'Which model?', 'What error?', 'What remains?')
     setting='A small eigenproblem should produce an approximation we can check in the full space.'
     symbols=((r'A=A^T','The original symmetric matrix, acting on n-dimensional vectors.'),
              (r'\mathcal T\subseteq\mathbb R^n','The space of vectors we allow in our search.'),
              (r'Q:\mathbb R^k\to\mathbb R^n','Orthonormal coordinates for those allowed directions.'),
-             (r'\text{choose}\ \to\ \text{model}\ \to\ \text{check}','Choose a search space, build its small problem, and inspect the full error.'))
+             (r'\text{candidates}\ \to\ \text{model}\ \to\ \text{error}','Where can we search, what can we represent, and what remains unchecked?'))
     goal='How can a small eigenproblem tell us something reliable about a larger one?'

@@ -5,17 +5,17 @@ scenes:
     1:
       - {visual_at: 0, phrase: "The moving dots represent the same vector"}
     2:
-      - {visual_at: 0, phrase: "Now take a cyan vector v"}
+      - {visual_at: 0, phrase: "The cyan vector v illustrates that possibility"}
   RrCompress:
-    1:
-      - {visual_at: 0, phrase: "Applying A gives the cyan arrow"}
     2:
-      - {visual_at: 0, phrase: "Read the trial coordinates of that output"}
+      - {visual_at: 0, phrase: "Applying A gives the cyan arrow"}
     3:
+      - {visual_at: 0, phrase: "Q transpose gives the trial coordinates"}
+    4:
       - {visual_at: 0, phrase: "The green arrow completes the trip"}
   RrQuotient:
     1:
-      - {visual_at: 0, phrase: "Turn a unit coordinate vector around the trial plane"}
+      - {visual_at: 0, phrase: "The unit coordinate vector turns around the trial plane"}
     2:
       - {visual_at: 0, phrase: "The full and compressed calculations give the same curve"}
     3:
@@ -24,31 +24,25 @@ scenes:
     1:
       - {visual_at: 0, phrase: "The difference direction"}
     2:
-      - {visual_at: 0, phrase: "Apply Q to those coordinates"}
+      - {visual_at: 0, phrase: "The amber arrow u equals Q y"}
     3:
-      - {visual_at: 0, phrase: "Now apply the full operator"}
+      - {visual_at: 0, phrase: "The full operator gives the cyan output"}
       - {visual_at: 1.2, phrase: "The green difference"}
   RrGeometry:
-    1:
-      - {visual_at: 0, phrase: "The green residual just came from one trial input"}
     2:
-      - {visual_at: 0, phrase: "For the first basis coordinate"}
+      - {visual_at: 0, phrase: "Its discarded output is the upward green arrow"}
     3:
-      - {visual_at: 0, phrase: "For the second basis coordinate"}
+      - {visual_at: 0, phrase: "Its green arrow points the other way"}
     4:
-      - {visual_at: 0, phrase: "Choose equal positive input coordinates"}
+      - {visual_at: 0, phrase: "Equal positive input coordinates"}
   RrExample:
-    1:
-      - {visual_at: 0, phrase: "Here is the symmetric operator"}
     2:
       - {visual_at: 0, phrase: "After lifting"}
     3:
-      - {visual_at: 0, phrase: "The difference direction has Ritz value one"}
+      - {visual_at: 0, phrase: "Its Ritz value is one"}
   RrBlock:
-    1:
-      - {visual_at: 0, phrase: "Complete the trial frame Q"}
     2:
-      - {visual_at: 0, phrase: "Look at the two green arrows"}
+      - {visual_at: 0, phrase: "The two green arrows supply them"}
       - {visual_at: 2, phrase: "Together they form C"}
     3:
-      - {visual_at: 0, phrase: "For the entire trial space to be invariant"}
+      - {visual_at: 0, phrase: "Every perpendicular output would have to vanish"}

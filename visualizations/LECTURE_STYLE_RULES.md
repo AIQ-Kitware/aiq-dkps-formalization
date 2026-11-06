@@ -42,6 +42,19 @@ context and end with a summary of what the viewer learned. As the argument
 progresses, keep its bigger picture and the current step in view. Explain why a
 new construction is being introduced and connect it to information already seen.
 
+> “It starts the discussion with a command to the listener. This is not desirable.”
+> “It would be better to start these sort of sections off with a question.”
+> “We work to ‘discover’ what we must do in order to answer the question.”
+
+Open an explanatory section with the question it addresses, rather than an
+instruction such as “Keep the same trial plane.” Establish what we are trying
+to find out before presenting a procedure. Develop the construction through
+reasoned exploration: what if we try this, what information would it give us,
+and does that help answer our question? Explain why each move is useful and
+what its answer leaves unresolved. Keep these local questions grounded in the
+lecture's larger goal. A question-shaped heading followed immediately by an
+unmotivated recipe does not supply this discovery thread.
+
 ## Continuity between slides
 
 > “The transition between slides is not very good.”

@@ -13,7 +13,7 @@ from dkvis.slide_style import CURRENT, TRIAL, RESID, MUTED, WANTED, FG, boxed, m
 class RitzSlide(LessonSlide):
     lesson_deck = 'operators-rayleigh-ritz'
     stage = 1
-    stage_labels = ('Choose the space', 'Build the model', 'Check the error', 'Recap')
+    stage_labels = ('Where to search?', 'Which model?', 'What error?', 'What remains?')
 
     def card(self, *items, size=32, first=None):
         card = self.put(stack(*items, size=size, buff=.38), y=.35, height=3.6)
@@ -27,7 +27,7 @@ class RrTitle(LessonTitle):
     lesson_deck = 'operators-rayleigh-ritz'
     series_title = 'Spectral approximation foundations'
     title_lines = ('Rayleigh–Ritz', 'Trial spaces and residuals')
-    subtitle = 'Choose a search space. Solve within it. Check the full error.'
+    subtitle = 'What can a smaller eigenproblem tell us about the original one?'
 
 
 class RrQuestion(RitzSlide):
@@ -40,13 +40,13 @@ class RrQuestion(RitzSlide):
                  math(r'n\times n',size=28,color=CURRENT).next_to(large,DOWN))
         arrow=Arrow([-1.65,.5,0],[1.65,.5,0],color=MUTED,buff=0)
         self.play(GrowArrow(arrow),run_time=1)
-        self.add(tex('choose a search space',size=25).move_to([0,1.1,0]),small,
+        self.add(tex('fewer candidate directions?',size=23).move_to([0,1.1,0]),small,
                  tex('Small model B',size=28,color=TRIAL).next_to(small,UP),
                  math(r'k\times k,\quad k\ll n',size=28,color=TRIAL).next_to(small,DOWN))
         self.beat()
         self.put(tex('What must the small problem preserve, and how do we check its answer?',size=28),y=-1.5,height=.7)
         self.source('Rayleigh (1877); Ritz (1909): variational approximation of eigenproblems.')
-        self.takeaway('Choose directions, build their small model, then return to the full problem to measure the error.')
+        self.takeaway('A smaller problem needs a meaningful link to A and a way to check what it leaves out.')
 
 
 class RrSpace(RitzSlide):
@@ -109,6 +109,9 @@ class RrCompress(RitzSlide):
         actual=view.arrow(true,CURRENT); kept=view.arrow(retained,TRIAL)
         discarded=view.arrow(true,RESID,start=retained)
         self.add(view.arrow(u,TRIAL,width=7))
+        question=self.put(tex('Can the model reproduce the full output?',size=27),'right',y=.65,height=1)
+        self.beat()
+        self.remove(question)
         self.play(GrowArrow(actual),run_time=2)
         self.put(formula(('y',TRIAL),r'\xrightarrow{Q}',('Qy',TRIAL),r'\xrightarrow{A}',('AQy',CURRENT),size=31),'right',y=1.55,height=.7)
         self.put(tex('The true output can leave the plane.',size=26,color=CURRENT),'right',y=.95,height=.5)
@@ -183,13 +186,17 @@ class RrGeometry(RitzSlide):
         self.put(formula(('R',RESID),'=',('AQ',CURRENT),'-',('QB',TRIAL),size=34),'right',y=1.6,height=.7)
         matrix=Matrix([['0','0'],['0','0'],['1','-1']],element_to_mobject=lambda v:math(v,size=29))
         matrix.get_entries().set_color(RESID)
-        self.put(VGroup(math('R=',size=32,color=RESID),matrix).arrange(RIGHT,buff=.15),'right',y=.15,height=2)
+        question=self.put(tex('What does one column record?',size=29),'right',y=.2,height=1)
         self.beat()
+        self.remove(question)
+        matrix.get_columns()[1].set_opacity(0)
+        self.put(VGroup(math('R=',size=32,color=RESID),matrix).arrange(RIGHT,buff=.15),'right',y=.15,height=2)
         first=SurroundingRectangle(matrix.get_columns()[0],color=RESID,buff=.1)
         self.play(Create(first),run_time=.8)
         self.put(tex('Each column is one discarded output.',size=25),'right',y=-1.15,height=.6)
         self.beat()
         self.play(y1.animate.set_value(0),y2.animate.set_value(1),
+                  matrix.get_columns()[1].animate.set_opacity(1),
                   Transform(first,SurroundingRectangle(matrix.get_columns()[1],color=RESID,buff=.1)),run_time=2)
         self.beat()
         self.play(y1.animate.set_value(1/np.sqrt(2)),y2.animate.set_value(1/np.sqrt(2)),
@@ -227,12 +234,15 @@ class RrBlock(RitzSlide):
         self.add(view.arrow(one[1],CURRENT),view.arrow(two[1],CURRENT))
         blocks=Matrix([['B','C^T'],['C','D']],element_to_mobject=lambda v:math(v,size=35))
         for entry,color in zip(blocks.get_entries(),[TRIAL,RESID,RESID,MUTED]):entry.set_color(color)
-        self.put(VGroup(math(r'[Q\ Q_\perp]^TA[Q\ Q_\perp]=',size=26),blocks).arrange(RIGHT,buff=.12),'right',y=1.0,height=2)
-        self.put(tex('First block column: trial input, two kinds of output.',size=25),'right',y=-.25,height=.8)
+        question=self.put(stack(tex('Where does a trial input send its output?',size=25),
+                                formula(('AQ',CURRENT),'=',('QB',TRIAL),'+',('R',RESID),size=34),buff=.45),'right',y=.7,height=2)
         self.beat()
+        self.remove(question)
         retained=VGroup(view.arrow(one[2],TRIAL),view.arrow(two[2],TRIAL))
         escapes=VGroup(view.arrow(one[1],RESID,start=one[2]),view.arrow(two[1],RESID,start=two[2]))
         self.play(Create(retained),Create(escapes),run_time=2)
+        self.put(VGroup(math(r'[Q\ Q_\perp]^TA[Q\ Q_\perp]=',size=26),blocks).arrange(RIGHT,buff=.12),'right',y=1.0,height=2)
+        self.put(tex('First block column: trial input, two output destinations.',size=24),'right',y=-.25,height=.8)
         self.play(Indicate(blocks.get_entries()[2],color=RESID),run_time=1)
         self.put(formula((r'C=(1\ \ -1)',RESID),r',\quad',(r'R=Q_\perp C',RESID),size=30),'right',y=-1.05,height=.6)
         self.beat()
@@ -343,8 +353,8 @@ class RrSummary(RitzSlide):
     stage=3
     def body(self):
         self.start()
-        labels=[('Choose',r'\mathcal T',TRIAL),('Coordinates','Q',TRIAL),('Compress','B=Q^TAQ',TRIAL),
-                ('Solve',r'By=\theta y',TRIAL),('Check',r'r=Au-\theta u',RESID)]
+        labels=[('Search space',r'\mathcal T',TRIAL),('Coordinates','Q',TRIAL),('Small model','B=Q^TAQ',TRIAL),
+                ('Ritz pair',r'By=\theta y',TRIAL),('Full error',r'r=Au-\theta u',RESID)]
         panels=VGroup()
         for i,(title,expression,color) in enumerate(labels):
             x=-5.2+i*2.6
