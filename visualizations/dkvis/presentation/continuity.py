@@ -123,6 +123,7 @@ def run_mode(mode, plan, base, original, args, aligner, out):
                    max_audio_seconds=base.get('max_audio_seconds',60),profile=narrator_id(base),
                    max_speech_words_per_second=base.get('max_speech_words_per_second',12),
                    reference=dict(original_voice=base['voice'],conditioning=reference,parent=parent),
+                   pronunciation_replacements=base.get('pronunciation_replacements'),
                    force=False)
         measured=time.perf_counter()-start
         generation=json.loads(raw.with_suffix('.json').read_text())
@@ -250,6 +251,7 @@ def main(argv=None):
     run_key=hashlib.sha256(json.dumps(dict(plan=plan,voice=base['voice'],model=base['model'],
         request=base.get('request',{}),seed=args.seed,endpoint=base['endpoint'],postprocess=base['postprocess'],
         response_format=base['response_format'],language=base.get('language'),passage_pause=args.passage_pause,
+        pronunciation_replacements=base.get('pronunciation_replacements',{}),
         reference=fingerprint(args.reference_audio),reference_text=args.reference_text.read_text(),
         tail=args.tail_seconds,reference_seconds=args.reference_seconds,version=VERSION),sort_keys=True).encode()).hexdigest()[:16]
     out=(args.output or ROOT/'renders/experiments'/args.deck/run_key).resolve(); out.mkdir(parents=True,exist_ok=True)
@@ -264,6 +266,7 @@ def main(argv=None):
     metadata=dict(version=VERSION,deck=args.deck,scenes=list(scripts),voice=base['voice'],model=base['model'],
         request=base.get('request',{}),seed=args.seed,postprocess=base['postprocess'],reference_crop=crop,
         response_format=base['response_format'],language=base.get('language'),passage_pause=args.passage_pause,
+        pronunciation_replacements=base.get('pronunciation_replacements',{}),
         reference_basename=args.reference_audio.name,reference_sha256=fingerprint(args.reference_audio),
         endpoint_sha256=hashlib.sha256(base['endpoint'].encode()).hexdigest(),
         source=snapshot(args.deck,'video'),plan=plan,run_key=run_key,refresh_requested=args.refresh_audio)

@@ -38,3 +38,19 @@ a rejected request once, preserving the failed audio for diagnosis, and stops
 if the replacement is also implausibly short. This checks a concrete failure
 mode, not pronunciation or completeness in general. Independent TTS chunks can
 still differ in delivery even when their durations are plausible.
+
+## 2026-11-06 — Speech spelling and display spelling are separate
+
+Jon reported pronunciation problems with adjoint, nonnegative, orthonormal,
+Frobenius, eigenvectors, Hermitian, Hilbert, Laplacian and matrix. The spellings
+non-negative, ortho-normal and eigen-vectors improved at least those three.
+They are now configurable speech-only defaults for Breeze TTS 2, while the
+canonical transcript and captions retain their original spellings. Other words
+remain pending listening tests; there are no guessed default pronunciations.
+
+Standard phonemizers produce representations that a synthesis engine must
+understand. Misaki supplies Kokoro-specific pronunciation annotations, whereas
+the current local Breeze serving path exposes ordinary text. Use the small
+respelling list for that path and prefer native pronunciation controls where
+available. The speech cache records both canonical and synthesis text and
+invalidates affected requests when a tested hint changes.

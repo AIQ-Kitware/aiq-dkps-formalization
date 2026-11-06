@@ -107,6 +107,9 @@ def resolve_profile(document, selected=None, overrides=None):
         raise ValueError("request settings may not replace input, model, voice, or response_format")
     if result.get('reference'):
         result['reference'] = reference_snapshot(result['reference'])
+    from dkvis.presentation.pronunciation import validate_replacements
+    result.setdefault('pronunciation_replacements', document.get('pronunciations', {}).get(result['model'], {}))
+    validate_replacements(result['pronunciation_replacements'])
     return result
 
 

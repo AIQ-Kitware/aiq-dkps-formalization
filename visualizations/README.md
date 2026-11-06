@@ -241,6 +241,55 @@ The equivalent direct command is:
 ./render_video.sh --deck prereq-basics --tts-profile crall-math-dk-v2-breeze-tts2 --skip-render --refresh-audio
 ```
 
+## Pronunciation hints without changing the transcript
+
+Spelling hints affect only the text sent to the speech API. Authored lecture
+text, slide notes, transcript exports and captions retain their canonical spelling.
+Model defaults live in `tts.toml` under `[pronunciations.<model>]`. The current
+Breeze TTS 2 defaults are the three substitutions reported to improve pronunciation:
+
+| Written word | Breeze input |
+| --- | --- |
+| nonnegative | non-negative |
+| orthonormal | ortho-normal |
+| eigenvectors | eigen-vectors |
+
+Matches are case-insensitive whole words or phrases, with initial/all-caps case
+preserved. Rules run once, so replacement text cannot trigger another rule.
+Reference transcripts and voice-direction instructions are left untouched.
+Kokoro has no spelling substitutions configured by default.
+
+A run can replace the entire map through the existing client settings option:
+
+```bash
+make video DECK=operators-rayleigh-ritz TTS_PROFILE=breeze \
+  TTS_SETTINGS='{"pronunciation_replacements":{"nonnegative":"non-negative","orthonormal":"ortho-normal","eigenvectors":"eigen-vectors"}}'
+```
+
+Use your usual server and voice options with that command. Edit the map values
+to audition other spellings; `TTS_SETTINGS='{"pronunciation_replacements":{}}'`
+disables substitutions. These are client settings, not `TTS_REQUEST` fields.
+Adjoint, Frobenius, Hermitian, Hilbert, Laplacian and matrix still need tested
+hints before adding defaults. A spelling that helps one model or voice may not
+help another.
+
+Each successful raw-speech sidecar records `display_text`, the actual `tts_text`,
+and the pronunciation rules used. Its `.txt` remains canonical for transcript
+recovery. Cache identity includes the actual API input and distinguishes different
+canonical texts that produce the same spoken spelling. A changed hint regenerates
+only requests whose synthesis text changes; unused rules preserve cache hits.
+Earlier generated audio is unchanged until the lecture is rebuilt.
+
+There are standard pronunciation tools, but they require an engine-compatible
+input path. [Phonemizer](https://bootphon.github.io/phonemizer/) produces phoneme
+strings; [Misaki](https://github.com/hexgrad/misaki) is designed for Kokoro and
+supports explicit pronunciation annotations. [SSML](https://www.w3.org/TR/speech-synthesis11/)
+and [PLS](https://www.w3.org/TR/pronunciation-lexicon/) standardize markup and
+lexicons. The current local Breeze server exposes ordinary text rather than
+these controls, so its hints use a small list of tested respellings. This layer
+implements no general grapheme-to-phoneme conversion. Native pronunciation
+controls should be used when an engine and its serving API support them.
+
 ## Browse and watch rendered material
 
 From `visualizations/`, start the media library:

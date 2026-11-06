@@ -98,3 +98,11 @@ stream = false
 
 # Add another [profiles.NAME] to configure another server. A [profiles.NAME.request]
 # table can pass model-specific fields such as speed or temperature.
+
+# Speech-only spelling hints reported to improve Breeze pronunciation.
+# Canonical transcripts, slides and captions retain their original spelling.
+# Override the map with TTS_SETTINGS; an empty map disables it for that run.
+[pronunciations.breeze-tts2]
+nonnegative = "non-negative"
+orthonormal = "ortho-normal"
+eigenvectors = "eigen-vectors"

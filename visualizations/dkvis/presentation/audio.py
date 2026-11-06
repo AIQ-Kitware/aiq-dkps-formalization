@@ -14,6 +14,7 @@ from pathlib import Path
 
 from dkvis.presentation.media import duration
 from dkvis.presentation.timing import timing
+from dkvis.presentation.pronunciation import speech_text
 
 
 class AudioLimitError(RuntimeError):
@@ -65,11 +66,13 @@ def speech(
     force=False,
     reference=None,
     server_runtime=None,
+    pronunciation_replacements=None,
 ) -> Path:
+    tts_text = speech_text(text, pronunciation_replacements)
     payload = {
         **(request_settings or {}),
         "model": model,
-        "input": text,
+        "input": tts_text,
         "voice": voice,
         "response_format": response_format,
     }
@@ -78,6 +81,10 @@ def speech(
     digest = request_digest(endpoint, payload)
     # Preserve caches from different servers/voices instead of overwriting them.
     stem = stem.with_name(stem.name + "-" + digest[:16])
+    if tts_text != text:
+        # Distinguish canonical transcripts that happen to synthesize to the
+        # same input, so immutable generation sidecars retain the right text.
+        stem = stem.with_name(stem.name + '-' + hashlib.sha256(text.encode()).hexdigest()[:8])
     stem.parent.mkdir(parents=True, exist_ok=True)
     audio, metadata = stem.with_suffix("." + response_format), stem.with_suffix(".json")
     log = timing()
@@ -206,6 +213,9 @@ def speech(
                         profile=profile,
                         generated_at=datetime.now(timezone.utc).isoformat(),
                         request_settings=request_settings or {},
+                        display_text=text,
+                        tts_text=tts_text,
+                        pronunciation_replacements=pronunciation_replacements or {},
                         reference=reference,
                         server_runtime=server_runtime,
                         endpoint_sha256=fields['endpoint_sha256'],
@@ -282,6 +292,7 @@ def synthesize_beat(text, label, work, settings):
                     force=force,
                     reference=settings.get("reference"),
                     server_runtime=settings.get("server_runtime"),
+                    pronunciation_replacements=settings.get('pronunciation_replacements'),
                 )
             try:
                 return [request_piece(settings.get('refresh_audio', False))]
