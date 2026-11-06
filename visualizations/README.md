@@ -78,7 +78,49 @@ audio and video outputs. Completed speech chunks and video segments are cached,
 so rerunning after interruption reuses matching work; the interrupted request
 must finish again. A batch stops at the first failure and can be rerun.
 
-### Private TTS profiles with make
+### Pass TTS settings directly to make
+
+Use a shipped profile as defaults and override the API voice and other settings
+on the command line. The server's voice name does not need to be registered in
+this repository:
+
+```bash
+make video DECK=operators-rayleigh-ritz TTS_PROFILE=breeze \
+  TTS_ENDPOINT=http://127.0.0.1:8821/v1/audio/speech \
+  TTS_MODEL=breeze-tts2 TTS_VOICE=myvoice TTS_RESPONSE_FORMAT=wav \
+  TTS_INSTRUCTION='Speak clearly with steady volume and restrained emphasis.' \
+  TTS_REQUEST='{"cfg_scale": 2.0}'
+```
+
+The same settings work with `make lectures-video` and `make prerequisites-video`.
+
+| Make variable | Setting |
+| --- | --- |
+| `TTS_PROFILE` | Shipped or private profile to use as defaults |
+| `TTS_ENDPOINT`, `TTS_MODEL`, `TTS_VOICE` | Speech API URL, model, and server voice name |
+| `TTS_LANGUAGE`, `TTS_RESPONSE_FORMAT`, `TTS_TIMEOUT` | Language, wav/mp3 format, and timeout in seconds |
+| `TTS_INSTRUCTION` | Speech style instruction |
+| `TTS_REQUEST` | JSON object of additional API fields, merged over profile request settings |
+| `TTS_SETTINGS` | JSON object of client profile overrides, including chunking, postprocessing, and reference metadata |
+| `VIDEO_ARGS` | Other renderer CLI flags, such as `--pause 2 --preset fast` |
+| `TTS_CONFIG` | Optional replacement TOML configuration file |
+
+For example, `TTS_SETTINGS='{"max_chars": 750, "max_words": 110,
+"postprocess": {"target_lufs": -18}}'` adjusts chunking and normalization without
+a config file. Request and postprocessing overrides preserve unspecified
+settings. Explicit named options take precedence over `TTS_SETTINGS`;
+`TTS_REQUEST` overrides its nested request fields, and `TTS_INSTRUCTION` and
+`TTS_LANGUAGE` take precedence over both. Use the named variables for model,
+voice, and format rather than placing those fields inside `TTS_REQUEST`.
+
+The effective settings are recorded in generation provenance. Speech requests
+and processed audio are cached by their relevant inputs and settings.
+With the shipped Breeze defaults, the web UI uses the actual overridden
+voice and model for its narrator label. Arguments are transient; no private
+profile needs to be written into the repository. `VIDEO_ARGS` is shell syntax,
+so quote values within it as you would in a direct `render_video.sh` command.
+
+### Optional private TTS profiles with make
 
 From `visualizations/`, copy the shared configuration to the ignored local file:
 

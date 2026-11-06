@@ -3,9 +3,70 @@ import io
 import json
 import importlib
 import urllib.error
+import pytest
 
 from dkvis.presentation import audio
 from dkvis.presentation.tts import resolve_profile,narrator_id,server_runtime
+
+
+def test_runtime_overrides_merge_without_changing_the_base_profile():
+    doc = dict(postprocess=dict(enabled=True), profiles=dict(breeze=dict(
+        endpoint='http://localhost', model='breeze-tts2', voice='ryan',
+        narrator_voice='ryan', response_format='wav',
+        request=dict(instruction='Base delivery.', cfg_scale=2),
+        postprocess=dict(target_lufs=-20, ratio=3))))
+    settings = resolve_profile(doc, 'breeze', dict(voice='private-voice',
+        request=dict(instruction='Steady delivery.', speed=1.1),
+        postprocess=dict(ratio=2), max_words=100))
+    assert settings['request'] == dict(instruction='Steady delivery.', cfg_scale=2, speed=1.1)
+    assert settings['postprocess']['target_lufs'] == -20
+    assert settings['postprocess']['ratio'] == 2
+    assert settings['max_words'] == 100
+    assert narrator_id(settings) == 'private-voice-breeze-tts2'
+    assert doc['profiles']['breeze']['request']['instruction'] == 'Base delivery.'
+    for key in ['input', 'model', 'voice', 'response_format']:
+        with pytest.raises(ValueError, match='request settings may not replace'):
+            resolve_profile(doc, 'breeze', dict(request={key: 'invalid'}))
+
+
+def test_video_cli_overrides_reach_effective_settings_before_rendering(monkeypatch):
+    from dkvis.presentation import video
+    doc = dict(profiles=dict(breeze=dict(endpoint='http://localhost',
+        model='breeze-tts2', voice='ryan', narrator_voice='ryan', response_format='wav',
+        request=dict(instruction='Base delivery.', cfg_scale=2))))
+    monkeypatch.setattr(video, 'load_profiles', lambda path: doc)
+    captured = {}
+    def resolve(*args):
+        captured.update(resolve_profile(*args))
+        return captured
+    monkeypatch.setattr(video, 'resolve_profile', resolve)
+    class BeforeRendering(Exception):
+        pass
+    def stop(deck):
+        raise BeforeRendering()
+    monkeypatch.setattr(video, 'read_deck_narration', stop)
+    with pytest.raises(BeforeRendering):
+        video.main(['--deck', 'operators-rayleigh-ritz', '--tts-profile', 'breeze',
+            '--tts-settings-json', json.dumps(dict(voice='old-voice', max_words=100,
+                request=dict(speed=1.1, cfg_scale=3))),
+            '--voice', 'private-voice', '--endpoint', 'http://private.invalid/v1/audio/speech',
+            '--request-json', json.dumps(dict(cfg_scale=2.5, instruction='JSON delivery.')),
+            '--instruction', "Don't shout at the start.", '--language', 'English'])
+    assert captured['voice'] == 'private-voice'
+    assert captured['endpoint'] == 'http://private.invalid/v1/audio/speech'
+    assert captured['max_words'] == 100
+    assert captured['request'] == dict(speed=1.1, cfg_scale=2.5,
+        instruction="Don't shout at the start.", language='English')
+    assert narrator_id(captured) == 'private-voice-breeze-tts2'
+
+
+@pytest.mark.parametrize('flag', ['--request-json', '--tts-settings-json'])
+def test_video_cli_rejects_nonobject_json_before_rendering(flag, monkeypatch):
+    from dkvis.presentation import video
+    monkeypatch.setattr(video, 'load_profiles', lambda path: {})
+    with pytest.raises(SystemExit) as error:
+        video.main(['--deck', 'operators-rayleigh-ritz', flag, '[]'])
+    assert error.value.code == 2
 
 
 def test_reference_snapshot_and_voice_override(tmp_path,monkeypatch):

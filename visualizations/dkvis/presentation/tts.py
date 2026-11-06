@@ -61,7 +61,13 @@ def resolve_profile(document, selected=None, overrides=None):
         if result.get('narrator_voice'):
             result['narrator_voice'] = overrides['voice']
         result.pop('reference', None)
+    inherited_request = result.get('request', {})
+    inherited_postprocess = result.get('postprocess', {})
     result.update(overrides or {})
+    if 'request' in (overrides or {}) and isinstance(inherited_request, dict) and isinstance(result['request'], dict):
+        result['request'] = {**inherited_request, **result['request']}
+    if 'postprocess' in (overrides or {}) and isinstance(inherited_postprocess, dict) and isinstance(result['postprocess'], dict):
+        result['postprocess'] = {**inherited_postprocess, **result['postprocess']}
     result['postprocess'] = {**document.get('postprocess', {}), **result.get('postprocess', {})}
     if result['postprocess']:
         from dkvis.presentation.audio_quality import settings as audio_settings

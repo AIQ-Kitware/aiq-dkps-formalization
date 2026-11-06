@@ -36,8 +36,29 @@ UPDATE_SCENES ?=
 SCENES  ?=
 TTS_PROFILE ?=
 TTS_CONFIG ?=
-# Keep a private config path (including spaces or apostrophes) one shell argument.
+TTS_ENDPOINT ?=
+TTS_MODEL ?=
+TTS_VOICE ?=
+TTS_LANGUAGE ?=
+TTS_RESPONSE_FORMAT ?=
+TTS_TIMEOUT ?=
+TTS_INSTRUCTION ?=
+TTS_REQUEST ?=
+TTS_SETTINGS ?=
+VIDEO_ARGS ?=
+# Keep each TTS value (including spaces or apostrophes) one shell argument.
 shell_quote = '$(subst ','"'"',$(1))'
+TTS_FLAGS = $(if $(TTS_CONFIG),--tts-config $(call shell_quote,$(TTS_CONFIG))) \
+            $(if $(TTS_PROFILE),--tts-profile $(call shell_quote,$(TTS_PROFILE))) \
+            $(if $(TTS_ENDPOINT),--endpoint $(call shell_quote,$(TTS_ENDPOINT))) \
+            $(if $(TTS_MODEL),--model $(call shell_quote,$(TTS_MODEL))) \
+            $(if $(TTS_VOICE),--voice $(call shell_quote,$(TTS_VOICE))) \
+            $(if $(TTS_LANGUAGE),--language $(call shell_quote,$(TTS_LANGUAGE))) \
+            $(if $(TTS_RESPONSE_FORMAT),--response-format $(call shell_quote,$(TTS_RESPONSE_FORMAT))) \
+            $(if $(TTS_TIMEOUT),--timeout $(call shell_quote,$(TTS_TIMEOUT))) \
+            $(if $(TTS_INSTRUCTION),--instruction $(call shell_quote,$(TTS_INSTRUCTION))) \
+            $(if $(TTS_REQUEST),--request-json $(call shell_quote,$(TTS_REQUEST))) \
+            $(if $(TTS_SETTINGS),--tts-settings-json $(call shell_quote,$(TTS_SETTINGS)))
 PORT ?= 8000
 HOST ?= 127.0.0.1
 SKIP_RENDER ?= 0
@@ -87,6 +108,9 @@ help:
 	@echo '  text DECK=name     export slide/build speech text without rendering or TTS'
 	@echo '  video DECK=name    render and narrate; TTS_PROFILE selects a server from tts.toml'
 	@echo '                     TTS_CONFIG=tts.local.toml selects an ignored private config instead'
+	@echo '                     TTS_ENDPOINT/MODEL/VOICE/LANGUAGE/RESPONSE_FORMAT/TIMEOUT override its settings'
+	@echo '                     TTS_INSTRUCTION and TTS_REQUEST (JSON) customize API fields; VIDEO_ARGS passes other CLI flags'
+	@echo '                     TTS_SETTINGS (JSON) overrides other client settings, including chunking and postprocessing'
 	@echo '    UPDATE_SCENES="Scene" renders just that edit and reassembles the full lecture'
 	@echo '  setup              uv sync with the vtk, slides and test extras'
 	@echo '  all                short, every part and full, then standalone HTML for each'
@@ -176,7 +200,7 @@ text:
 
 video:
 	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))
-	./render_video.sh --deck $(DECK) --quality $(QUALITY) --fps $(if $(FPS),$(FPS),30) --jobs $(if $(JOBS),$(JOBS),2) $(if $(filter 1,$(SKIP_RENDER)),--skip-render) $(if $(filter 1,$(REFRESH_AUDIO)),--refresh-audio) $(if $(TTS_CONFIG),--tts-config $(call shell_quote,$(TTS_CONFIG))) $(if $(TTS_PROFILE),--tts-profile $(TTS_PROFILE)) $(if $(SCENES),--scenes $(SCENES)) $(if $(UPDATE_SCENES),--update-scenes $(UPDATE_SCENES))
+	./render_video.sh --deck $(DECK) --quality $(QUALITY) --fps $(if $(FPS),$(FPS),30) --jobs $(if $(JOBS),$(JOBS),2) $(if $(filter 1,$(SKIP_RENDER)),--skip-render) $(if $(filter 1,$(REFRESH_AUDIO)),--refresh-audio) $(TTS_FLAGS) $(if $(SCENES),--scenes $(SCENES)) $(if $(UPDATE_SCENES),--update-scenes $(UPDATE_SCENES)) $(VIDEO_ARGS)
 
 matching matching-talk:
 	$(MAKE) slides DECK=$(DECK_$@)

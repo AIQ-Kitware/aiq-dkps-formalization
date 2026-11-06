@@ -171,6 +171,11 @@ def main(argv=None):
     parser.add_argument("--endpoint", help="override the selected profile endpoint")
     parser.add_argument("--model", help="override the selected profile model")
     parser.add_argument("--voice", help="override the selected profile voice")
+    parser.add_argument("--instruction", help="override the speech style instruction")
+    parser.add_argument("--request-json", type=json.loads,
+                        help="JSON object of API fields, merged over profile request settings")
+    parser.add_argument("--tts-settings-json", type=json.loads,
+                        help="JSON object of client profile overrides; named CLI options take precedence")
     parser.add_argument("--language", help="optional request field")
     parser.add_argument("--response-format", choices=["wav", "mp3"])
     parser.add_argument("--timeout", type=float, help="override request timeout in seconds")
@@ -201,19 +206,33 @@ def main(argv=None):
         for name, profile in document["profiles"].items():
             print(f"{name:12s} {profile['model']:30s} {profile['voice']}")
         return
-    overrides = {
+    overrides = args.tts_settings_json if args.tts_settings_json is not None else {}
+    if not isinstance(overrides, dict):
+        parser.error('--tts-settings-json must be a JSON object')
+    overrides.update({
         key: getattr(args, key)
         for key in ["endpoint", "model", "voice", "response_format"]
         if getattr(args, key) is not None
-    }
+    })
     if args.timeout is not None:
         overrides["timeout_seconds"] = args.timeout
+    request = overrides.get('request', {})
+    if not isinstance(request, dict):
+        parser.error('TTS request settings must be a JSON object')
+    if args.request_json is not None:
+        if not isinstance(args.request_json, dict):
+            parser.error('--request-json must be a JSON object')
+        request = {**request, **args.request_json}
+    if args.instruction is not None:
+        request['instruction'] = args.instruction
+    if args.language is not None:
+        request['language'] = args.language
+    if request:
+        overrides['request'] = request
     settings = resolve_profile(document, args.tts_profile, overrides)
     if settings.get('record_server_runtime'):
         settings['server_runtime'] = server_runtime(settings['endpoint'])
     settings["refresh_audio"] = args.refresh_audio
-    if args.language is not None:
-        settings["request"] = {**settings.get("request", {}), "language": args.language}
     if (
         min(args.pause, args.beat_pause) < 0
         or min(args.fps, args.jobs, settings["timeout_seconds"]) <= 0
