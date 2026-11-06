@@ -68,3 +68,17 @@ limited alias adapter; this does not add native phoneme support or integrate
 Misaki into its text-only inference path. Local per-speaker lexicons and direct
 maps can augment the baseline when new remedies pass listening review. Other
 reported words remain unresolved rather than receiving invented substitutions.
+
+## 2026-11-06 — Longer passages for the generic Breeze profile
+
+The 420-character / 65-word defaults were a conservative response to an observed
+60-second server cutoff, not benchmarked optimal passage sizes. The named
+reference-voice Breeze profiles had already moved to 750 characters / 110 words,
+but the generic `breeze` profile still inherited the older limits. Jon requested
+a full Rayleigh–Ritz regeneration with longer passages.
+
+The generic profile now uses 750 / 110 as well. Packing the unchanged 3,818-word
+Rayleigh–Ritz transcript plans 57 speech requests instead of 88. Requests still
+respect visual-build boundaries. Duration-cap splitting and the incomplete-audio
+retry guard remain enabled. Deliberate build/slide pauses are unchanged for this
+comparison; longer requests alone do not eliminate every narration boundary.

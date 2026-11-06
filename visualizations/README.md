@@ -241,6 +241,24 @@ The equivalent direct command is:
 ./render_video.sh --deck prereq-basics --tts-profile crall-math-dk-v2-breeze-tts2 --skip-render --refresh-audio
 ```
 
+The generic `breeze` profile and the named Breeze reference profiles now use
+750 characters / 110 words per request. For Rayleigh–Ritz this reduces the
+initial request plan from 88 chunks to 57 without changing the transcript.
+Packing still occurs within visual builds; it does not combine adjacent slides.
+The 60-second response guard can split a capped passage further when necessary.
+
+To regenerate all Rayleigh–Ritz speech with the current defaults:
+
+```bash
+make video DECK=operators-rayleigh-ritz TTS_PROFILE=breeze SKIP_RENDER=1 REFRESH_AUDIO=1
+```
+
+Include your usual `TTS_ENDPOINT`, `TTS_MODEL`, `TTS_VOICE`, `TTS_INSTRUCTION`,
+and `TTS_REQUEST` options. This reuses slide animations, requests fresh speech
+for every passage, and reassembles the complete video. The default timing still
+adds 0.35 seconds between builds and 1.5 seconds between slides; these can be
+changed separately with `--beat-pause` and `--pause` through `VIDEO_ARGS`.
+
 ## Pronunciation hints without changing the transcript
 
 Spelling hints affect only the text sent to the speech API. Authored lecture

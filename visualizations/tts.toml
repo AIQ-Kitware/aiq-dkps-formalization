@@ -75,6 +75,10 @@ endpoint = "http://127.0.0.1:8812/v1/audio/speech"
 model = "breeze-tts2"
 voice = "ryan"
 response_format = "wav"
+# Match the reference-voice Breeze profiles: prefer coherent passages, while
+# the duration-cap guard retries shorter requests if the server cuts one off.
+max_chars = 750
+max_words = 110
 
 [profiles.kokoro]
 narrator_voice = "af_heart"
