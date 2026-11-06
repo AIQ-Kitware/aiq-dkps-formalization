@@ -363,6 +363,18 @@ against the rendered notes before speech is requested. No matching-specific
 list remains in the production tools. Rendered outputs and audio stay ignored;
 source scenes, scripts, manifests, and source references belong in Git.
 
+## Historical overview
+
+**`history-overview`** (000505) introduces the people and publications behind
+subspace geometry, Davis–Kahan, YWS, and the transport extensions, with a brief
+Quench application. It has a standalone transcript, publication cards, and two
+study questions. See the [history guide](dkvis/learning/history/README.md) for
+source records, concise historical triage, and build commands.
+
+```bash
+make video DECK=history-overview TTS_PROFILE=crall-math-dk-v2-breeze-tts2
+```
+
 ## Narrated sine-theta lecture
 
 The numbered course uses **`sine-theta-lecture`** (003750), the narrated edition

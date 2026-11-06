@@ -16,6 +16,7 @@ finished narrated lessons.
 
 | Topic | A learner should be able to… | Prerequisites | Existing material |
 | --- | --- | --- | --- |
+| Mathematical history | Connect people and publications to geometry, perturbation, statistics, and transport. | Familiarity with vectors and eigenvectors; no course prerequisites | [Lecture 000505](history/README.md): standalone historical overview |
 | Mathematics refresher | Recognize the basic linear algebra, geometry, and calculus assumed later. | School algebra; review of previously encountered ideas | [Lecture 000010](basics/README.md) |
 | Subspaces and projections | Translate between a subspace, its orthogonal projection, and adapted coordinates. | Inner products, linear maps | [Lecture 1](projections/README.md): complete narrated module |
 | Complementary projection and error | Read I minus P, its restriction to trial vectors, and its relation to displacement. | Basic vectors; projections introduced locally | [Thinking about I minus P](complementary_projection/README.md): complete narrated module |

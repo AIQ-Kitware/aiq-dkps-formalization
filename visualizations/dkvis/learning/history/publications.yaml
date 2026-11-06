@@ -1,0 +1,95 @@
+jordan:
+  author: Camille Jordan
+  year: '1875'
+  title: Essai sur la géométrie à n dimensions
+  venue: Bull. Soc. Math. France 3, 103–174
+rayleigh:
+  author: John William Strutt (Lord Rayleigh)
+  year: '1877'
+  title: The Theory of Sound, volume 1
+  venue: Macmillan, London
+ritz:
+  author: Walter Ritz
+  year: '1909'
+  title: A variational approximation method
+  venue: J. reine angew. Math. 135, 1–61
+weyl:
+  author: Hermann Weyl
+  year: '1912'
+  title: Eigenvalue distribution and inequalities
+  venue: Math. Ann. 71, 441–479
+hotelling:
+  author: Harold Hotelling
+  year: '1936'
+  title: Relations Between Two Sets of Variates
+  venue: Biometrika 28, 321–377
+sznagy:
+  author: Béla Sz.-Nagy
+  year: '1947'
+  title: Perturbations of self-adjoint transformations
+  venue: Comment. Math. Helv. 19, 347–366
+davis58:
+  author: Chandler Davis
+  year: '1958'
+  title: Separation of Two Linear Subspaces
+  venue: Acta Sci. Math. (Szeged) 19, 172–187
+kato:
+  author: Tosio Kato
+  year: '1966'
+  title: Perturbation Theory for Linear Operators
+  venue: Springer, first edition
+halmos:
+  author: Paul R. Halmos
+  year: '1969'
+  title: Two Subspaces
+  venue: Trans. AMS 144, 381–389
+rosenblum:
+  author: Marvin Rosenblum
+  year: '1956'
+  title: On the Operator Equation $BX-XA=Q$
+  venue: Duke Math. J. 23, 263–269
+davis63:
+  author: Chandler Davis
+  year: 1963 / 1965
+  title: The Rotation of Eigenvectors by a Perturbation, I / II
+  venue: J. Math. Anal. Appl. 6, 159–173; 11, 20–27
+dk:
+  author: Chandler Davis · William Kahan
+  year: '1970'
+  title: The Rotation of Eigenvectors by a Perturbation. III
+  venue: SIAM J. Numer. Anal. 7, 1–46
+wedin:
+  author: Per-Åke Wedin
+  year: '1972'
+  title: Perturbation Bounds in Connection with Singular Value Decomposition
+  venue: BIT 12, 99–111
+golub:
+  author: Åke Björck · Gene H. Golub
+  year: '1973'
+  title: Numerical Methods for Computing Angles Between Linear Subspaces
+  venue: Math. Comp. 27, 579–594
+yws:
+  author: Yi Yu · Tengyao Wang · Richard J. Samworth
+  year: 2014 preprint / 2015 journal
+  title: A Useful Variant of the Davis–Kahan Theorem for Statisticians
+  venue: Biometrika 102, 315–323
+quench:
+  author: Hayden Helm · Ben Johnson · Carey E. Priebe
+  year: '2026'
+  title: Query-Efficient Model Evaluation Using Cached Responses
+  venue: ICML · PMLR 306, 42691–42706
+vonneumann:
+  author: John von Neumann
+  year: '1937'
+  title: Matrix inequalities and matrix-space metrics
+  venue: Tomsk University Review 1, 286–300
+schatten:
+  author: Robert Schatten
+  year: '1950'
+  title: A Theory of Cross-Spaces
+  venue: Princeton · Annals of Math. Studies 26
+fan:
+  author: Ky Fan
+  year: '1951'
+  title: Maximum properties and eigenvalue inequalities
+  venue: PNAS 37, 760–766

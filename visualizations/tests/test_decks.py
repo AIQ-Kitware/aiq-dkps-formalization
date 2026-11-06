@@ -194,8 +194,9 @@ def test_native_lessons_introduce_local_objects_and_separate_numerics():
     for name in lecture_decks():
         slides = get_deck(name).slides
         setups = [i for i, s in enumerate(slides) if s.module == 'dkvis.learning.orientation']
+        # History has local orientation, and no numerical bonus or formal facts.
         # Imported reference compositions retain their existing local setup.
-        if name == 'sine-theta-lecture':
+        if name in {'sine-theta-lecture', 'history-overview'}:
             continue
         assert setups == [1]
         bonus = [i for i, s in enumerate(slides) if s.scene.endswith('Computation')]

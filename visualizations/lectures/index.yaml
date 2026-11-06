@@ -8,6 +8,13 @@ lectures:
     series: prerequisites
     background: School algebra; a refresher rather than a first course
     requires: []
+  history_overview:
+    title: How eigenvector stability became a subject
+    deck: history-overview
+    topic: history
+    series: history
+    background: Familiarity with vectors and eigenvectors; notation is recalled locally
+    requires: []
   projections:
     title: Subspaces and projections
     deck: prereq-projections

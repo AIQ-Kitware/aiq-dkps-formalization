@@ -1,7 +1,10 @@
 # Lecture project: vision, learning map, and mathematical history
 
 Planning draft, 5 November 2026. Authored by GPT-6.1-Sol from Jon's direction.
-This is a content plan; proposed lectures below are not yet registered or rendered.
+The overview is now implemented as `history-overview` (000505); see the
+[lecture guide](../../dkvis/learning/history/README.md). The focused follow-up
+episodes remain proposals. Repository references are accepted as validated;
+remaining attribution questions are triaged in the overview’s review notes.
 
 ## North star
 

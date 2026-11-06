@@ -1,0 +1,26 @@
+deck: history-overview
+scope: Historical overview, symbolic illustrations, transcript, publication cards,
+  and review questions.
+slides:
+  initial_source_attribution:
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-05'
+    sources:
+    - visualizations/dkvis/learning/history/scenes.py
+    - visualizations/dkvis/learning/history/publications.yaml
+    - visualizations/dkvis/decks/history.py
+    basis: Authored in this session; exact model identity supplied by the user. Mathematical
+      source authorship is recorded separately in sources.md.
+transcript:
+  initial_source_attribution:
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-05'
+    sources:
+    - visualizations/lectures/000505_history_overview/lecture.md
+    - visualizations/lectures/000505_history_overview/quiz.yaml
+    - visualizations/lectures/000505_history_overview/sources.md
+    - visualizations/lectures/000505_history_overview/review-notes.md
+    basis: Authored in this session; exact model identity supplied by the user. Mathematical
+      source authorship is recorded separately in sources.md.

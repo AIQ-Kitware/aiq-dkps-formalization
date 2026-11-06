@@ -1,0 +1,37 @@
+questions:
+- title: Why does YWS use a population gap?
+  question: What makes the YWS separation condition useful in statistics?
+  choices:
+  - It uses only population eigenvalues for the gap.
+  - It makes the sample matrix non-random.
+  - It removes every separation assumption.
+  - It identifies a unique eigenbasis at repeated eigenvalues.
+  correct: 0
+  explanation: The perturbation remains random, but the gap condition uses population
+    eigenvalues.
+  think_seconds: 8
+  speak_question: 'First question. What makes the YWS separation condition useful
+    in statistics? A: it uses only population eigenvalues for the gap. B: it makes
+    the sample matrix non-random. C: it removes every separation assumption. Or D:
+    it identifies a unique eigenbasis at repeated eigenvalues. Take eight seconds.'
+  speak_answer: A is correct. The gap condition uses population eigenvalues. The sample
+    matrix remains random, separation is still needed, and a repeated eigenvalue does
+    not select a unique basis.
+- title: What does the matching result establish?
+  question: Which claim describes the real transport matching theorem presented here?
+  choices:
+  - It improves every Davis–Kahan angle bound.
+  - It replaces a global transport minimum by a matching minimum.
+  - It proves the historical priority of the transport formula.
+  - It verifies an executable blossom algorithm.
+  correct: 1
+  explanation: It proves the minimum-value reduction and attainment; priority and
+    executable algorithm verification are separate.
+  think_seconds: 8
+  speak_question: 'Second question. What does the real transport matching theorem
+    establish? A: an improvement to every Davis–Kahan angle bound. B: a global transport
+    minimum equals a matching minimum. C: historical priority of the formula. Or D:
+    a verified executable blossom algorithm. Take eight seconds.'
+  speak_answer: B is correct. The theorem reduces the unrestricted real transport
+    minimum to a matching minimum and gives attainment. It does not establish a better
+    perturbation bound, a priority claim, or a verified executable matching algorithm.
