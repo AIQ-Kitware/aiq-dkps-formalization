@@ -45,6 +45,12 @@ TTS_TIMEOUT ?=
 TTS_INSTRUCTION ?=
 TTS_REQUEST ?=
 TTS_SETTINGS ?=
+EXPERIMENT_SCENES ?= RrCompress RrQuotient RrSolve
+CONDITIONING_MODES ?= original previous anchored
+VOICE_DIR ?=
+REFERENCE_AUDIO ?= $(VOICE_DIR)/crall-math-dk-v2.wav
+REFERENCE_TEXT ?= $(VOICE_DIR)/crall-math-dk-v2.txt
+EXPERIMENT_ARGS ?=
 VIDEO_ARGS ?=
 # Keep each TTS value (including spaces or apostrophes) one shell argument.
 shell_quote = '$(subst ','"'"',$(1))'
@@ -94,11 +100,12 @@ DECKS      := short full $(PARTS) $(WORKING) matching matching-talk
 
 .DEFAULT_GOAL := help
 .PHONY: help setup all rebuild working $(DECKS) $(addprefix clean-,$(DECKS)) $(addprefix present-,$(DECKS)) \
-        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean list slides text video serve prerequisites operators lectures-video prerequisites-video matching-text matching-video matching-talk-text matching-talk-video
+        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean list slides text video tts-experiment serve prerequisites operators lectures-video prerequisites-video matching-text matching-video matching-talk-text matching-talk-video
 
 help:
 	@awk '/^#/ { sub(/^# ?/, ""); print; next } { exit }' $(firstword $(MAKEFILE_LIST))
 	@echo; echo 'Targets:'
+	@echo '  tts-experiment     compare original/previous/composite references with phrase-aligned visuals'
 	@echo '  list               list all presentations and transcript availability'
 	@echo '  operators          build the three accepted operator-foundation lectures'
 	@echo '  prerequisites      build the ordered prerequisite lectures and speech text'
@@ -197,6 +204,12 @@ slides:
 text:
 	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))
 	$(UV) run python -m dkvis.presentation text --deck $(DECK) --theme $(THEME)
+
+# Long-passage conditioning comparison, with phrase-aligned existing Manim clips.
+tts-experiment:
+	@test -n "$(DECK)" || { echo 'Set DECK to a registered narrated deck'; exit 2; }
+	@test -d $(call shell_quote,$(VOICE_DIR)) || { echo 'Set VOICE_DIR to the server-shared reference directory'; exit 2; }
+	$(UV) run --extra slides --extra align python -m dkvis.presentation experiment --deck $(call shell_quote,$(DECK)) --scenes $(EXPERIMENT_SCENES) --modes $(CONDITIONING_MODES) --voice-dir $(call shell_quote,$(VOICE_DIR)) --reference-audio $(call shell_quote,$(REFERENCE_AUDIO)) --reference-text $(call shell_quote,$(REFERENCE_TEXT)) $(TTS_FLAGS) $(if $(filter 1,$(REFRESH_AUDIO)),--refresh-audio) $(EXPERIMENT_ARGS)
 
 video:
 	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))

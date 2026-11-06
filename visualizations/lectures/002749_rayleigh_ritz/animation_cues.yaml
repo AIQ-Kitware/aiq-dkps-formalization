@@ -1,0 +1,54 @@
+# Source-time offsets split an existing Manim build; phrases anchor each part
+# to the measured recording, without splitting its TTS generation.
+scenes:
+  RrFrame:
+    1:
+      - {visual_at: 0, phrase: "The moving dots represent the same vector"}
+    2:
+      - {visual_at: 0, phrase: "Now take a cyan vector v"}
+  RrCompress:
+    1:
+      - {visual_at: 0, phrase: "Applying A gives the cyan arrow"}
+    2:
+      - {visual_at: 0, phrase: "Read the trial coordinates of that output"}
+    3:
+      - {visual_at: 0, phrase: "The green arrow completes the trip"}
+  RrQuotient:
+    1:
+      - {visual_at: 0, phrase: "Turn a unit coordinate vector around the trial plane"}
+    2:
+      - {visual_at: 0, phrase: "The full and compressed calculations give the same curve"}
+    3:
+      - {visual_at: 0, phrase: "Symmetry is preserved too"}
+  RrSolve:
+    1:
+      - {visual_at: 0, phrase: "The difference direction"}
+    2:
+      - {visual_at: 0, phrase: "Apply Q to those coordinates"}
+    3:
+      - {visual_at: 0, phrase: "Now apply the full operator"}
+      - {visual_at: 1.2, phrase: "The green difference"}
+  RrGeometry:
+    1:
+      - {visual_at: 0, phrase: "The green residual just came from one trial input"}
+    2:
+      - {visual_at: 0, phrase: "For the first basis coordinate"}
+    3:
+      - {visual_at: 0, phrase: "For the second basis coordinate"}
+    4:
+      - {visual_at: 0, phrase: "Choose equal positive input coordinates"}
+  RrExample:
+    1:
+      - {visual_at: 0, phrase: "Here is the symmetric operator"}
+    2:
+      - {visual_at: 0, phrase: "After lifting"}
+    3:
+      - {visual_at: 0, phrase: "The difference direction has Ritz value one"}
+  RrBlock:
+    1:
+      - {visual_at: 0, phrase: "Complete the trial frame Q"}
+    2:
+      - {visual_at: 0, phrase: "Look at the two green arrows"}
+      - {visual_at: 2, phrase: "Together they form C"}
+    3:
+      - {visual_at: 0, phrase: "For the entire trial space to be invariant"}

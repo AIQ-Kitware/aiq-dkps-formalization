@@ -10,6 +10,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+align = [
+  "torch>=2.8,<2.9",
+  "transformers>=4.51,<5",
+  "num2words>=0.5",
+]
 serve = [
   "starlette>=1.5.1",
   "uvicorn>=0.35",
@@ -42,3 +47,12 @@ all = [
 testpaths = ["tests"]
 pythonpath = ["."]
 addopts = "-ra"
+
+# Alignment runs locally on CPU; do not pull a CUDA runtime for this optional task.
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", extra = "align", marker = "sys_platform == 'linux'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

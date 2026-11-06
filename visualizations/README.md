@@ -527,3 +527,86 @@ trial subspace to compression, lifted Ritz pairs, and full residuals. It explain
 Galerkin orthogonality and the retained/escaping output blocks, with accepted
 Tau Ceti companions and four review questions. See the
 [Rayleigh–Ritz guide](dkvis/learning/rayleigh_ritz/README.md).
+
+## Long-passage narration experiments
+
+`make tts-experiment` compares three conditioning strategies without replacing a
+lecture's normal narration: `original` uses the approved reference throughout;
+`previous` uses the preceding generated phrase after the first passage;
+`anchored` combines the original excerpt and preceding phrase **into one reference
+recording**. The last strategy is a composite-reference experiment, not native
+multi-context inference. All variants share the first generation and use the same
+text, instruction, model and seed. A seed does not guarantee deterministic server
+inference.
+
+First render the selected deck's Manim scenes as usual. Then, from this directory:
+
+```bash
+make tts-experiment DECK=operators-rayleigh-ritz \
+  VOICE_DIR=/path/to/server-shared/voice-references \
+  TTS_ENDPOINT="$LECTURE_TTS_ENDPOINT" \
+  TTS_PROFILE=crall-math-dk-v2-breeze-tts2
+```
+
+Set `LECTURE_TTS_ENDPOINT` locally to your server's speech URL. `VOICE_DIR` must
+be a writable directory that the server reads for voice references; the runner
+publishes immutable, content-named `.wav`/`.txt` pairs there. It never replaces the
+original named recording. The default reference files are
+`crall-math-dk-v2.wav` and `crall-math-dk-v2.txt` under that directory. Override
+`REFERENCE_AUDIO` and `REFERENCE_TEXT` together to use another approved pair.
+Keep recordings and personal reference information outside Git.
+
+The pilot selects `RrCompress RrQuotient RrSolve`. Set `EXPERIMENT_SCENES` to
+other scene names, `CONDITIONING_MODES` to a subset of
+`original previous anchored`, and use the usual `TTS_MODEL`, `TTS_VOICE`,
+`TTS_INSTRUCTION`, `TTS_REQUEST` and `TTS_SETTINGS` Make options. Other controls
+pass through `EXPERIMENT_ARGS`, for example:
+
+```bash
+make tts-experiment DECK=operators-rayleigh-ritz \
+  VOICE_DIR=/path/to/server-shared/voice-references \
+  TTS_ENDPOINT="$LECTURE_TTS_ENDPOINT" \
+  EXPERIMENT_ARGS='--max-words 120 --tail-seconds 6 --skip-video'
+```
+
+The optional `align` extra downloads an English Wav2Vec2 acoustic model on first
+use and installs CPU PyTorch on Linux. Models stay in the local Hugging Face
+cache. The experiment runs the model on CPU; it does not need the TTS server's
+GPU. FFmpeg is required. `uv` installs these optional dependencies automatically
+for this Make target. The upstream acoustic model is
+[`facebook/wav2vec2-base-960h`](https://huggingface.co/facebook/wav2vec2-base-960h).
+
+Passages contain complete sentences and can span several visual builds. Forced
+alignment locates the authored words in generated speech. Existing animations
+then wait for their cue, play, and retain their result. Authored phrase cues and
+source animation offsets live in a lecture's `animation_cues.yaml`; see
+[the Rayleigh–Ritz cues](lectures/002749_rayleigh_ritz/animation_cues.yaml).
+Each `phrase` must occur exactly once within its narrated build. `visual_at`
+selects an increasing time offset within the original Manim clip;
+`offset_seconds` optionally adjusts its spoken cue. Missing cue files fall back
+to one animation per build. This estimates timing, **not** pronunciation: review
+low-confidence words and listen to the result. The timing manifest records both
+cue confidence and any animation speed adjustment needed to fit the speech.
+
+Open the printed `renders/experiments/<deck>/<run>/index.html` through the media
+server's `/files/experiments/.../index.html` route. It includes synchronized
+videos, optional captions, speeds up to 4×, raw/processed audio, individual
+passages, join excerpts, generation times, and loudness diagnostics. Captions
+come from the authored transcript; they can therefore conceal a spoken error.
+The experiment is not registered as a separate lecture in the library.
+
+Speech is cached by its actual API request, including endpoint, text, temporary
+conditioning voice, model and settings. A preceding clip's changed audio changes
+the next conditioning voice, invalidating subsequent chained speech. Alignment
+is cached by audio bytes, transcript and acoustic model revision. Visual event
+clips are cached independently by source animation, timing and encoding settings.
+Editing cue timing reassembles video without regenerating speech. `REFRESH_AUDIO=1`
+creates a fresh attempt directory, preserving earlier listening comparisons.
+Generated references remain in the shared local directory for reproducibility;
+remove an experiment's `dkvis-exp-*` pairs only when they are no longer needed
+for replaying its requests. Do not delete ordinary named voice references.
+
+Generation/request settings, reference basenames and fingerprints, conditioning
+lineage, source snapshot, alignment revision and processing measurements accompany
+the output. Detailed stage timings also enter `renders/logs/`. All generated
+media, references, reports and model caches remain untracked.

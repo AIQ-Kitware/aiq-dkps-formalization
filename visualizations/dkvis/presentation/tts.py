@@ -173,3 +173,34 @@ def server_runtime(endpoint):
         return dict(status='reported',observed_at=observed_at,details={k:data[k] for k in fields if k in data})
     except (OSError,ValueError,urllib.error.URLError) as error:
         return dict(status='unavailable',observed_at=observed_at,reason=type(error).__name__)
+
+
+def add_tts_arguments(parser, default_profile=None):
+    """Common direct overrides for production videos and continuity experiments."""
+    parser.add_argument('--tts-config',type=Path,default=DEFAULT_CONFIG,help='TOML server defaults')
+    parser.add_argument('--tts-profile',default=default_profile,help='profile to use as defaults')
+    for name in ['endpoint','model','voice','instruction','language']:
+        parser.add_argument('--'+name,help=f'override the profile {name}')
+    parser.add_argument('--response-format',choices=['wav','mp3'])
+    parser.add_argument('--timeout',type=float,help='request timeout in seconds')
+    parser.add_argument('--request-json',type=json.loads,help='additional speech API fields')
+    parser.add_argument('--tts-settings-json',type=json.loads,help='client profile overrides')
+
+
+def tts_overrides(args):
+    result=args.tts_settings_json if args.tts_settings_json is not None else {}
+    if not isinstance(result,dict):raise ValueError('--tts-settings-json must be a JSON object')
+    result=dict(result)
+    for key in ['endpoint','model','voice','response_format']:
+        if getattr(args,key) is not None:result[key]=getattr(args,key)
+    if args.timeout is not None:result['timeout_seconds']=args.timeout
+    request=result.get('request',{})
+    if not isinstance(request,dict):raise ValueError('TTS request settings must be a JSON object')
+    request=dict(request)
+    if args.request_json is not None:
+        if not isinstance(args.request_json,dict):raise ValueError('--request-json must be a JSON object')
+        request.update(args.request_json)
+    if args.instruction is not None:request['instruction']=args.instruction
+    if args.language is not None:request['language']=args.language
+    if request:result['request']=request
+    return result
