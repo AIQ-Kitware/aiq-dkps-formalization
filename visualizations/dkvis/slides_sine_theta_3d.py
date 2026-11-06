@@ -165,7 +165,7 @@ class D02Tilt(D3Slide):
         lam3 = m3.DEFAULT_EIGENVALUES[2]
         table = math(
             r"\renewcommand{\arraystretch}{1.35}\begin{array}{c|cc|cc}"
-            r"\theta & \like{mu}{\mu_2} & \sym{delta} & \sym{delta}\sym{sintheta} & \norm{\sym{R}}_2\\ \hline"
+            r"\theta & \like{mu}{\mu_2} & \sym{delta} & \sym{delta}\sym{sintheta} & \norm{\sym{R}}_{\rm op}\\ \hline"
             + "".join(rows)
             + r"\end{array}",
             size=34,
@@ -250,7 +250,7 @@ class D04Perturb(D3Slide):
         )
         note = para(
             r"$\sym{E0}=[e_1\ e_2]$ and $\sym{A0}=\operatorname{diag}(\lambda_1,\lambda_2)$ are the \emph{unperturbed} "
-            r"eigenpairs; $\sym{H}$ is a fixed symmetric direction with $\norm{\sym{H}}_2=1$, and $\sym{delta}$ is measured "
+            r"eigenpairs; $\sym{H}$ is a fixed symmetric direction with $\norm{\sym{H}}_{\rm op}=1$, and $\sym{delta}$ is measured "
             r"to the perturbed $\lambda_3(\varepsilon)$.",
             width=TEXT_W,
             size=24,
@@ -259,7 +259,7 @@ class D04Perturb(D3Slide):
         cfg = m3.perturbed(0.8)
         numbers = math(
             rf"\varepsilon=0.8:\quad \cx{{sine}}{{\sin\theta}}={cfg.sin_theta:.3f}\ \le\ "
-            rf"\frac{{\norm{{\sym{{R}}}}_2}}{{\sym{{delta}}}}={cfg.residual_norm_2 / cfg.delta:.3f}",
+            rf"\frac{{\norm{{\sym{{R}}}}_{{\rm op}}}}{{\sym{{delta}}}}={cfg.residual_norm_2 / cfg.delta:.3f}",
             size=30,
         )
         col = VGroup(eq, bound, note, numbers).arrange(DOWN, aligned_edge=LEFT, buff=0.35)

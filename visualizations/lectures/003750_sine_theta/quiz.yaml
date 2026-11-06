@@ -19,7 +19,7 @@ questions:
   - the trace norm
   - all three agree
   correct: 2
-  explanation: The trace norm adds all four chord singular values, two of about 1.414 (roughly 2.828) against four of about 0.765 (roughly 3.061). The operator and Frobenius norms favor the direct rotation, so the printed every-unitarily-invariant-norm claim fails exactly at the trace norm.
+  explanation: The trace norm adds all four chord singular values, two of about 1.414 (roughly 2.828) against four of about 0.765 (roughly 3.061). The operator and Frobenius norms favor the direct rotation, so the printed every-unitarily-invariant-norm claim fails at the trace norm among the three norms compared.
   think_seconds: 8
   speak_question: Second question. In the R four counterexample, both maps carry U onto V, with both principal angles at forty-five degrees. In which norm does the competitor move space less than the direct rotation? A, the operator norm; B, the Frobenius norm; C, the trace norm; or D, all three agree? You have eight seconds to choose. Pause if you want longer.
   speak_answer: The correct answer is C, the trace norm. It adds all four chord singular values, two chords of about one point four one four giving about two point eight two eight, against four chords of about zero point seven six five giving about three point zero six one. The operator and Frobenius norms both favor the direct rotation, which is exactly why the printed claim, optimality for every unitarily invariant norm, fails.

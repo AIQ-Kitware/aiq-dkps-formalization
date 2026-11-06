@@ -32,3 +32,8 @@ check; it does not silently rewrite stale slide metadata.
 `provenance.yaml` distinguishes Qwen's transcript/quiz authorship, inherited
 visual implementations, and GPT-6.1-Sol's integration and limited corrections.
 The original reference composition remains an eighteen-scene slide deck.
+
+The [transcript review](../../../lectures/003750_sine_theta/transcript-review.md)
+records the norm-notation clarification and subsequent mathematical wording
+audit. Regenerate the narrated video after these changes; speech and segment
+caches reuse unchanged inputs.

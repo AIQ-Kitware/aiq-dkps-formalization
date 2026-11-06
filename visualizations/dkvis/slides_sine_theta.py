@@ -457,12 +457,12 @@ class S02Perturb(DeckSlide):
             size=30,
         )
         weyl = tex(
-            rf"Eigenvalues moved by ${pair.eigenvalue_shift:.3f} \le \norm{{\sym{{H}}}}_2 = {eps}$ (Weyl$^{{\ast}}$).",
+            rf"Eigenvalues moved by ${pair.eigenvalue_shift:.3f} \le \norm{{\sym{{H}}}}_{{\rm op}} = {eps}$ (Weyl$^{{\ast}}$).",
             size=26,
         )
         weyl_note = para(
             r"$^{\ast}$\,\textbf{Weyl's inequality:} sort the eigenvalues of $\sym{A}$ and $\sym{Ahat}$; each moves by "
-            r"at most $\norm{\sym{H}}_2$ (the most $\sym{H}$ stretches any unit vector). It holds for every symmetric $\sym{A}$, "
+            r"at most $\norm{\sym{H}}_{\rm op}$ (the most $\sym{H}$ stretches any unit vector). It holds for every symmetric $\sym{A}$, "
             r"with no gap needed. Eigenvectors get no such guarantee.",
             width=RIGHT_COL_W,
             size=20,
@@ -635,7 +635,7 @@ class S03NoGap(DeckSlide):
         rows_l = readout_rows(
             [
                 (r"\sym{g} =", lambda: g.get_value(), FG, 2, None),
-                (r"\norm{\sym{H}}_2 =", lambda: eps, FG, 2, None),
+                (r"\norm{\sym{H}}_{\rm op} =", lambda: eps, FG, 2, None),
             ],
             size=26,
         )
@@ -677,7 +677,7 @@ class S03NoGap(DeckSlide):
         )
         self.play(g.animate.set_value(g_end), run_time=6.0, rate_func=rate_functions.ease_in_out_sine)
         takeaway = para(
-            r"The same small $\sym{H}$ throughout. The eigenvalues move by at most $\norm{\sym{H}}_2=0.12$; "
+            r"The same small $\sym{H}$ throughout. The eigenvalues move by at most $\norm{\sym{H}}_{\rm op}=0.12$; "
             r"the eigenvector turns further and further as the gap closes.",
             width=RIGHT_COL_W - 0.1,
             size=23,
@@ -773,7 +773,7 @@ class S03cUnstable(DeckSlide):
         x0, top = RIGHT_COL_X + 0.55, self.content_top - 0.25
         t_intro = para(
             rf"Both panels use the same rotating perturbation $\sym{{H}}(\phi)$ with "
-            rf"$\norm{{\sym{{H}}}}_2={eps:g}$ throughout. The entries change while its size does not.",
+            rf"$\norm{{\sym{{H}}}}_{{\rm op}}={eps:g}$ throughout. The entries change while its size does not.",
             width=text_w, size=21,
         )
         h_matrix = live_matrix_2x2(
@@ -799,7 +799,7 @@ class S03cUnstable(DeckSlide):
             tex(r"differ by $2\varepsilon$, but their eigenvectors are $\like{theta}{90^\circ}$ apart, for every $\varepsilon>0$", size=20),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         t_rule = para(
-            r"In this $2\times2$ example the switch is at $\norm{\sym{H}}_2=\sym{g}/2$: below it the eigenvector only wobbles, "
+            r"In this $2\times2$ example the switch is at $\norm{\sym{H}}_{\rm op}=\sym{g}/2$: below it the eigenvector only wobbles, "
             r"above it some $\sym{H}$ of that size points it anywhere.",
             width=text_w, size=21, color=MUTED,
         )
@@ -2375,7 +2375,7 @@ class S11Payoff(DeckSlide):
         d_bound = always_redraw(lambda: Dot(axes.c2p(g.get_value(), pair().bound), color=RESID, radius=0.07))
 
         self.say(
-            "Back to the two by two example with epsilon equals 0.12. Pink is the actual angle between range E0, "
+            "Back to the two by two example with epsilon equals 0.12. The pink curve is the sine of the actual angle between range E0, "
             "the original wanted frame, and range F0, the exact wanted frame of A hat. Green dashed is the "
             "general residual-over-separation bound. The horizontal variable g is a different quantity: the original eigengap of A."
         )
@@ -2622,7 +2622,7 @@ class S14Summary(DeckSlide):
             (
                 "1",
                 r"LLMs can formalize substantial mathematics",
-                r"Of the \textbf{29} major results explicitly proved in Davis--Kahan (1970), "
+                r"Of the \textbf{29} counted result statements in Davis--Kahan (1970), "
                 r"\textbf{28 are formalized in Lean}; the remaining proposition was "
                 r"refuted as printed and repaired. This is Hilbert-space functional analysis, "
                 r"including infinite-dimensional and unbounded operators.",

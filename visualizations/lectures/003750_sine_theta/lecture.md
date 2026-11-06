@@ -7,7 +7,7 @@ closing study questions live in `quiz.yaml` and are included by the common
 lecture/video pipeline.
 
 The deck presents the Davis-Kahan sin Theta theorem — its statement, the
-mechanism behind it, and its exact Lean form — plus the project's second
+mechanism behind it, and its exact Lean form — plus another project
 result: an agent-assisted counterexample to the Proposition four point
 four claim in the 1970 paper.
 
@@ -30,9 +30,9 @@ exact unwanted frame, and Lambda one the exact unwanted block, with
 A hat F one equal to F one Lambda one. R, defined as A hat E zero minus
 E zero A zero, is the residual. delta is a certified spectral
 separation, not a generic eigengap; g is the original eigengap in the
-perturbation example. Theta zero of E zero, F zero is the list of
-principal angles between the two frames, and sin Theta zero is its
-directed sine. Star is transpose in the real case and conjugate
+perturbation example. In finite dimensions, Theta zero records the principal angles; in the
+Hilbert-space statement it is an angle operator, not necessarily a finite
+list. Sin Theta zero is its positive directed sine on trial coordinates. Star is transpose in the real case and conjugate
 transpose in the complex case. U and V appear only in the Proposition
 4.4 slides, where that statement itself uses them for the two
 subspaces.
@@ -66,7 +66,10 @@ Why: Fix the class of operators before measuring angles.
 Recall: A hat is the operator under study; in the perturbation slides A is the original operator.
 
 First, the setting. Everything here is about self-adjoint operators:
-the inner product of A x with y equals the inner product of x with A y.
+the inner product of A x with y equals the inner product of x with A y
+for vectors in the domain. For an unbounded operator, self-adjointness
+also requires the operator and its adjoint to have the same domain; the
+inner-product identity alone expresses symmetry.
 For a real matrix that is just a symmetric matrix, the innermost box on
 the slide.
 
@@ -110,8 +113,9 @@ only stretched: A f equals lambda f.
 So the ellipse's axes point along the eigenvectors, and in this example
 the semi-axis lengths are the eigenvalues, two and one. For a general
 symmetric matrix the semi-axes are the absolute values of the
-eigenvalues. In n dimensions the picture is an ellipsoid, and an
-eigenspace is spanned by some of its principal axes.
+eigenvalues. An eigenbasis gives a compatible choice of axes; repeated
+absolute eigenvalues can hide the individual eigendirections in the
+ellipsoid picture. In n dimensions the picture is an ellipsoid.
 
 ## S02Perturb: Perturb the matrix
 
@@ -128,7 +132,9 @@ one two.
 The ellipse of A hat is almost the same ellipse: the eigenvalues barely
 move. Weyl's inequality, in the footnote, says that after sorting the
 eigenvalues of A and of A hat, each one moves by at most the operator
-norm of H, the most H stretches any unit vector. It holds for every
+norm of H, written with the subscript op: the most H stretches any unit
+vector. The Frobenius norm instead takes the square root of the sum of
+squared singular values; it is also called the Schatten two norm. It holds for every
 symmetric A, with no gap needed. Eigenvectors get no such guarantee.
 And indeed the axes turn, by an angle theta.
 
@@ -169,7 +175,7 @@ Recall: g is the original eigengap of A; H is fixed with norm zero point one two
 Set up the experiment. The tan dashed ellipse is the original A; its
 eigenvectors are drawn as the lines they span, because an eigenvector
 only matters up to sign and length, and the dots where the ellipse
-crosses them are the eigenvalues. Below, the same two eigenvalues on a
+crosses them mark the corresponding eigenvalue scales in this positive example. Below, the same two eigenvalues on a
 number line; the violet bracket is the gap g between them. The solid
 steel ellipse is A hat, that is A plus H, for a fixed small H of size
 zero point one two; its top eigenvector, in blue, is turned by theta. On
@@ -206,9 +212,9 @@ eigenvalues in either panel still move by at most zero point one two.
 <!-- beat -->
 
 Here is a concrete flip, as matrices: one, epsilon over epsilon, one,
-versus one, minus epsilon over minus epsilon, one. They differ by two
-epsilon, yet their eigenvectors are the two diagonals, ninety degrees
-apart, for every epsilon greater than zero. In this two-by-two example
+versus one, minus epsilon over minus epsilon, one. Their difference has
+operator norm two epsilon, yet their leading eigendirections are the two
+diagonals, ninety degrees apart, for every epsilon greater than zero. In this two-by-two example
 the switch happens when the size of H passes half the gap: below it the
 eigenvector only wobbles, above it some H of that size points it
 anywhere.
@@ -297,9 +303,11 @@ posteriori information from an eigensolver.
 
 <!-- beat -->
 
-Improve the trial direction, and the angle and the residual shrink
-together. We can monitor the residual; we cannot directly monitor the
-angle to F zero.
+Along the improvement toward the wanted direction shown here, both
+quantities shrink. A small residual alone does not identify that wanted
+direction: the unwanted exact eigenvector also has zero Rayleigh residual.
+We can monitor the residual, but selecting the target requires spectral
+information as well as a small residual.
 
 <!-- beat -->
 
@@ -340,8 +348,9 @@ operator A, while delta measures a clearance between the trial spectrum
 and the exact unwanted spectrum. Second, the hypothesis is an interval,
 not "every pair of eigenvalues is delta apart": if the two spectra
 merely interleave with pairwise separation, the bound with constant one
-survives only in the Frobenius norm, that is Davis-Kahan Theorem six
-point two, and in the operator norm it fails; Section five of the paper
+is still guaranteed in the Hilbert-Schmidt, or finite-dimensional
+Frobenius, norm, as in Davis-Kahan Theorem six point two. Pairwise
+separation alone does not guarantee it in operator norm; Section five of the paper
 gives an explicit two-by-two example.
 
 ## S07Theorem: The sin Theta theorem
@@ -351,10 +360,12 @@ Recall: sin Theta zero of E zero, F zero is the directed sine of the principal a
 
 Now the relationship becomes useful. E zero and A zero are the trial
 data, F zero is the exact wanted frame, and R is the residual, A hat E
-zero minus E zero A zero. If the trial spectrum is separated from the
-exact unwanted spectrum by delta, Davis-Kahan bounds the unknown angle
+zero minus E zero A zero. Under the stated interval/exterior separation, or its ordered half-line
+versions, with positive delta, Davis-Kahan bounds the unknown angle
 to F zero: delta times the norm of sin Theta zero of E zero, F zero, is
-at most the norm of R, in every unitarily invariant norm.
+at most the norm of R, in every unitarily invariant norm where
+the compared norms are finite. The unbounded version also retains the
+domain and bounded-residual hypotheses shown in the Lean statement.
 
 <!-- beat -->
 
@@ -389,7 +400,7 @@ Now the residual. A hat minus rho, applied to v, multiplies each exact
 eigendirection by its eigenvalue minus rho. So the unwanted component
 becomes (lambda one minus rho) sin theta. The separation certificate
 says that factor has magnitude at least delta: lambda one is at least
-delta from rho, which lies near the trial spectrum.
+delta from rho, which is the trial spectrum in this rank-one example.
 
 <!-- beat -->
 
@@ -422,8 +433,9 @@ A zero from the spectrum of Lambda one.
 <!-- beat -->
 
 Back to the two-by-two example with epsilon equal to zero point one
-two. Pink is the actual angle between range E zero, the original wanted
-frame, and range F zero, the exact wanted frame of A hat. Green dashed
+two. The pink curve is the sine of the angle between range E zero, the
+original wanted frame, and range F zero, the exact wanted frame of A hat.
+The pink arc on the ellipse shows the angle itself. Green dashed
 is the general residual-over-separation bound. The horizontal variable
 g is a different quantity: the original eigengap of A.
 
@@ -483,7 +495,7 @@ by token; the point is its shape.
 <!-- beat -->
 
 Reading it: real or complex scalars; separable Hilbert spaces, finite-
-or infinite-dimensional; every unitarily invariant norm; possibly
+or infinite-dimensional; unitarily invariant norms on their domains of finiteness; possibly
 unbounded self-adjoint operators; the paper's residual, spectral
 decomposition, and separation hypotheses; and the conclusion that delta
 times the norm of sin Theta zero of E zero and F zero is at most the
@@ -498,7 +510,7 @@ changing the Lean source text.
 Why: Introduce the printed claim that the formalization refuted, in the same geometric language as the first result.
 Recall: U and V are the two subspaces of this statement; W is an orthogonal map; I minus W is the displacement.
 
-The second result of the project. Take two subspaces, U and V. Many
+Now turn to another result from the project. Take two subspaces, U and V. Many
 orthogonal maps carry U onto V. Davis and Kahan single out the direct
 rotation: it turns by exactly the principal angles and does nothing
 else.
@@ -530,7 +542,8 @@ counterexample.
 Why: Exhibit the explicit maps and the norm in which the printed claim fails.
 Recall: R is the direct rotation, W the competitor; both are orthogonal, both carry U onto V, and both principal angles are pi over four.
 
-Here are both maps, one two-dimensional plane at a time. The direct
+Here are both maps, each shown in its own invariant-plane decomposition.
+These are different decompositions for the two maps. The direct
 rotation turns two planes by forty-five degrees each. The competitor
 turns one plane by ninety degrees and leaves the other fixed. Both
 carry U onto V, and both principal angles are forty-five degrees,
@@ -568,13 +581,12 @@ Why: Close with the three lessons the project supports, with their mathematical 
 Recall: the subspace error is the norm of sin Theta zero of E zero, F zero; R is the residual; delta is the certified separation; a Q norm is a norm whose square is a unitarily invariant norm of the squared modulus.
 
 Three takeaways. First, LLMs can formalize substantial mathematics: of
-the twenty-nine major results explicitly proved by Davis and Kahan in
-nineteen seventy, twenty-eight are formalized in Lean, and the remaining
+the twenty-nine counted result statements in Davis and Kahan’s
+nineteen seventy paper, twenty-eight are formalized in Lean, and the remaining
 proposition was refuted as printed and repaired; the work is Hilbert-
 space functional analysis, including infinite-dimensional and unbounded
-operators. Second, sine theta gives an error bound: when the trial
-eigenvalues are separated from the unwanted exact eigenvalues by a
-positive delta, the subspace error, the norm of sin Theta zero of E
+operators. Second, sine theta gives an error bound: under the stated interval/exterior or ordered half-line gap
+hypotheses, with positive delta and the required domain and norm conditions, the subspace error, the norm of sin Theta zero of E
 zero, F zero, is at most the residual norm divided by that separation;
 it limits how far the trial eigenspace can deviate, even if the exact
 one is unknown. Third, a classical statement was too broad: LLM-assisted

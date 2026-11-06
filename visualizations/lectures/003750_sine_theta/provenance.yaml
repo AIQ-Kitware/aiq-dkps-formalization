@@ -1,5 +1,6 @@
 deck: sine-theta-lecture
-scope: Inherited short-reference visuals, Qwen-authored speech/questions, and the numbered integration.
+scope: Inherited short-reference visuals, Qwen-authored speech/questions, and the
+  numbered integration.
 slides:
   initial_source_attribution:
   - sources:
@@ -21,8 +22,16 @@ slides:
     sources:
     - visualizations/dkvis/learning/sine_theta/scenes.py
     - visualizations/dkvis/decks/sine_theta_lecture.py
-    scope: Add the numbered narrated composition, short title/credit, and authored-beat adapters; inherit reference
-      visual bodies.
+    scope: Add the numbered narrated composition, short title/credit, and authored-beat
+      adapters; inherit reference visual bodies.
+  - date: '2026-11-05'
+    models:
+    - GPT-6.1-Sol
+    sources:
+    - visualizations/dkvis/slides_sine_theta.py
+    - visualizations/dkvis/slides_sine_theta_3d.py
+    scope: Use explicit operator-norm subscripts; distinguish the sine curve from
+      its angle and correct the counted-result wording.
 transcript:
   initial_source_attribution:
   - source: visualizations/narration/sine-theta-short.md
@@ -44,5 +53,15 @@ transcript:
     sources:
     - visualizations/lectures/003750_sine_theta/lecture.md
     - visualizations/lectures/003750_sine_theta/quiz.yaml
-    scope: Move into the course, shorten title narration, fix scalar/operator wording and residual interpretation,
-      qualify the coincident-plane/rank-one cases, and remove a misplaced next-slide transition.
+    scope: Move into the course, shorten title narration, fix scalar/operator wording
+      and residual interpretation, qualify the coincident-plane/rank-one cases, and
+      remove a misplaced next-slide transition.
+  - date: '2026-11-05'
+    models:
+    - GPT-6.1-Sol
+    sources:
+    - visualizations/lectures/003750_sine_theta/lecture.md
+    - visualizations/lectures/003750_sine_theta/quiz.yaml
+    scope: Audit all core narration and questions against scene models and source
+      statements; clarify residual target selection, gap/norm/domain hypotheses, operator
+      versus Frobenius norms, plot semantics, angle-operator scope, and counting.
