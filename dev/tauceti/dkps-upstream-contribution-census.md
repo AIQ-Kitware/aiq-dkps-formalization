@@ -4963,3 +4963,39 @@ The focused quarter-angle build, 13 environment linters, scope example and full
 style check passed. The PR remains open; fresh upstream CI and review are pending.
 The GitHub app could not edit its description; the campaign packet contains the
 corrected body and a host update script.
+
+### Spectral restriction and Yosida integrations (2026-11-06)
+
+Tau Ceti pin `a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8` contains both
+directly submitted, DKPS-adapted integrations. Mathlib remains at
+`1b1ccf4b088b32fa3f23f2de1127433254a81e1e` and Lean at `v4.36.0-rc2`.
+
+- [#28078](https://github.com/TauCetiProject/TauCeti/pull/28078), roadmap
+  SA-C84/C85, integrated as `f51ebb785dd4b3421cbd1442884fba30d5775364`
+  from accepted head `e841af4a6ea1187f79edbac56ec9256c6d02d061`. Its
+  spectral inequalities and restriction form bounds adapt
+  `ForTauCeti/Analysis/InnerProductSpace/SpectralOrder.lean` (Jon Crall,
+  Claude Opus 4.8 and GPT 5.6 High; Kitware, Apache-2.0). Local consumers use
+  those native declarations directly. The separate global form-bound packaging
+  and projector-distance theorem remain local.
+- [#28079](https://github.com/TauCetiProject/TauCeti/pull/28079), roadmap
+  SA-E14–E21 and SA-E23, integrated as
+  `958ea898407ffa3925584ae4cf2a58517097f911` from accepted head
+  `669b77958c667f9e79d86299865b53e3ace10f89`. Its signed-real Yosida
+  approximation and convergence generalize the local positive-natural-index
+  development (Jon Crall and Claude Opus 5; Kitware, Apache-2.0), which itself
+  adapted Spectra's `YosidaHille/Approximation/{Helpers,Defs}.lean` (Adam
+  Bornemann, Spectra Formalization Project, Apache-2.0). Local consumers now
+  use the native approximation, self-adjointness, commutation and convergence;
+  the downstream exponential-flow and Stone arguments remain local.
+
+Both integrations are verified from their `Source-PR` and `Accepted-Head`
+trailers and ancestry in the pinned revision. Bors reports these PRs closed
+without GitHub's conventional merged flag.
+
+Validation: focused spectral-order and Yosida/Stone consumers passed, followed
+by the full default `lake build` (21,739 jobs) and `lake build Challenge`
+(19,959 jobs), without warnings. The newer pin also required an explicit
+operator-ideal modulus import at the shared approximation-number boundary;
+the affected unbounded Sylvester and double-angle consumers passed focused
+builds. Builds ran serially using the VM-local cache.

@@ -462,7 +462,7 @@ theorem re_inner_le_of_spectrumIn_Iic
     ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
   rw [← hAlg] at hσ
   have hb := (ContinuousLinearMap.upperFormBoundOn_iff T W a).mp
-    (SpectralOrder.upperFormBoundOn_of_restriction_spectrum_subset_Iic
+    (ContinuousLinearMap.upperFormBoundOn_of_restriction_spectrum_subset_Iic
       hT h.invariant hσ) y hy
   calc RCLike.re ⟪y, T y⟫_ℂ = RCLike.re ⟪T y, y⟫_ℂ :=
       (congrArg RCLike.re (hT y y)).symm
@@ -484,7 +484,7 @@ theorem le_re_inner_of_spectrumIn_Ici
     ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
   rw [← hAlg] at hσ
   have hb := (ContinuousLinearMap.lowerFormBoundOn_iff T W b).mp
-    (SpectralOrder.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
+    (ContinuousLinearMap.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
       hT h.invariant hσ) y hy
   calc b * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := hb
     _ = RCLike.re ⟪y, T y⟫_ℂ := congrArg RCLike.re (hT y y)

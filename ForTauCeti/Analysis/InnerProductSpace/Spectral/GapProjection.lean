@@ -340,12 +340,12 @@ theorem cfc_eq_starProjection_of_blockGap [CompleteSpace U]
   -- the block spectra become quadratic-form bounds
   have hlow : ∀ x ∈ U, RCLike.re ⟪A x, x⟫_𝕜 ≤ α * ‖x‖ ^ 2 := by
     intro x hx
-    have h := TauCeti.SpectralOrder.re_inner_le_of_spectrum_subset_Iic A₀ hA₀sa hσ₀
+    have h := ContinuousLinearMap.re_inner_le_of_spectrum_subset_Iic A₀ hA₀sa hσ₀
       ⟨x, hx⟩
     simpa [← Submodule.norm_coe, Submodule.coe_inner, coe_block_apply hA₀ ⟨x, hx⟩] using h
   have hhigh : ∀ x ∈ Uᗮ, (α + δ) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜 := by
     intro x hx
-    have h := TauCeti.SpectralOrder.le_re_inner_of_spectrum_subset_Ici A₁ hA₁sa hσ₁
+    have h := ContinuousLinearMap.le_re_inner_of_spectrum_subset_Ici A₁ hA₁sa hσ₁
       ⟨x, hx⟩
     simpa [← Submodule.norm_coe, Submodule.coe_inner, coe_block_apply hA₁ ⟨x, hx⟩] using h
   -- the gap is free of spectrum, so `f` is continuous where the calculus reads it

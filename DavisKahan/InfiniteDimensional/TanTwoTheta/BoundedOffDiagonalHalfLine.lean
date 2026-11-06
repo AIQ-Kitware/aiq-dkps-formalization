@@ -62,7 +62,7 @@ theorem compressOperator_upperFormBound_of_spectrum_subset_Iic
     ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
   rw [← hAlg] at hspec
   intro z
-  exact TauCeti.SpectralOrder.re_inner_le_of_spectrum_subset_Iic
+  exact ContinuousLinearMap.re_inner_le_of_spectrum_subset_Iic
     (compressOperator U A) hcompress hspec z
 
 /-- A lower spectral half-line for a compressed self-adjoint operator gives
@@ -85,7 +85,7 @@ theorem compressOperator_lowerFormBound_of_spectrum_subset_Ici
     ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance
   rw [← hAlg] at hspec
   intro z
-  exact TauCeti.SpectralOrder.le_re_inner_of_spectrum_subset_Ici
+  exact ContinuousLinearMap.le_re_inner_of_spectrum_subset_Ici
     (compressOperator U A) hcompress hspec z
 
 /-- Sharp contractive Riccati inequality for a quarter-acute reducing graph

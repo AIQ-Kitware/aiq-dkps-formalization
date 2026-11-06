@@ -56,24 +56,19 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : Measu
 /-- A spectral projection commutes with the symmetric Yosida approximant, which
 is a linear combination of two resolvents. -/
 theorem specProjection_comm_yosidaApproxSym (n : ℕ+) :
-    Commute (specProjection hA B hB) (yosidaApproximantSym hA n) := by
+    Commute (specProjection hA B hB) (A.symmetricYosidaApproximation (n : ℝ)) := by
   have him : (I * (n : ℂ)).im ≠ 0 := I_mul_pnat_im_ne_zero n
   have hnim : (-I * (n : ℂ)).im ≠ 0 := neg_I_mul_pnat_im_ne_zero n
   have hrootIn : (I * (n : ℂ)) ∈ _root_.LinearPMap.resolventSet A :=
     hA.mem_resolventSet_of_im_ne_zero him
   have hrootNegIn : (-I * (n : ℂ)) ∈ _root_.LinearPMap.resolventSet A :=
     hA.mem_resolventSet_of_im_ne_zero hnim
-  have h1 : Commute (specProjection hA B hB) (resolventAtIn hA n) :=
-    by
-      change Commute (specProjection hA B hB)
-        (_root_.LinearPMap.resolvent A (I * (n : ℂ)))
-      exact specProjection_comm_resolvent' hA him hrootIn B hB
-  have h2 : Commute (specProjection hA B hB) (resolventAtNegIn hA n) :=
-    by
-      change Commute (specProjection hA B hB)
-        (_root_.LinearPMap.resolvent A (-I * (n : ℂ)))
-      exact specProjection_comm_resolvent' hA hnim hrootNegIn B hB
-  rw [yosidaApproximantSym]
+  have h1 : Commute (specProjection hA B hB) (A.resolvent (I * (n : ℂ))) :=
+    specProjection_comm_resolvent' hA him hrootIn B hB
+  have h2 : Commute (specProjection hA B hB) (A.resolvent (-I * (n : ℂ))) :=
+    specProjection_comm_resolvent' hA hnim hrootNegIn B hB
+  rw [A.symmetricYosidaApproximation_def]
+  push_cast
   exact (h1.add_right h2).smul_right (-((n : ℂ) ^ 2 / 2))
 
 /-- A spectral projection commutes with each bounded exponential approximant. -/
