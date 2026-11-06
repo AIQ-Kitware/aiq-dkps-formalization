@@ -4894,7 +4894,7 @@ Independent [#27902](https://github.com/TauCetiProject/TauCeti/pull/27902) is
 accepted in `e87c14a158d920aa4da5e0340f690cb052506152`, already contained in
 DKPS's Tau Ceti pin. Its representation PVM and integral apply to `cfcHom`
 directly; separate SA-B05/B30 forwarding facades would duplicate that accepted
-API. Exact item-level attribution remains to be reviewed.
+API. Its item-level attribution is reconciled below.
 
 The construction portion of SA-E01 is prepared on fork branch
 `port-sa-e01-cayley-spectral-pvm`, commit
@@ -4907,3 +4907,36 @@ SA-E02 nullity or later resolvent statements. Focused compilation (6515 jobs),
 13 environment linters, scope examples and full style passed. The packet requires
 independent review and live host preflight before any PR; no PR, acceptance or
 local donor retirement is claimed.
+
+### Selected roadmap-to-PR reconciliation (2026-11-05)
+
+The following integrations are present in the Tau Ceti pin
+`95f09254dec44b756e90d78f20f93dc4d3572783`. The first three were submitted
+by Erotemic and adapted from this repository; their source attribution and
+local consumption are recorded in the accepted Ritz/Yu–Wang–Samworth section
+above. These are roadmap targets, not additional claims about theorem ancestry.
+
+| Roadmap target | Accepted PR | Result |
+| --- | --- | --- |
+| SSP-C28, SSP-C29 | [#26822](https://github.com/TauCetiProject/TauCeti/pull/26822) | Ritz-residual tangent bound and exclusion of the right-angle pole, without a rank comparison. |
+| SSP-D17 | [#27798](https://github.com/TauCetiProject/TauCeti/pull/27798) | Population-gap aligned eigenframe bound, with the population frame fixed. |
+| SSP-D18 | [#27799](https://github.com/TauCetiProject/TauCeti/pull/27799) | Population-gap single-eigenvector bound with a sign or phase. |
+
+The following accepted work was submitted by `tauceti-ai-for-science`. It
+advances the same operator-theory roadmap and is tracked even where the proof
+was not adapted from DKPS:
+
+| Roadmap target | Accepted PR | Result and provenance |
+| --- | --- | --- |
+| SA-B60–B62, SA-B79 | [#27902](https://github.com/TauCetiProject/TauCeti/pull/27902) | Representation-PVM regularity, recovery, uniqueness and commutant comparison. The PR describes an independently written representation construction and consumes earlier accepted foundations; that does not establish independent ancestry for every dependency. |
+| SA-B64 | [#25747](https://github.com/TauCetiProject/TauCeti/pull/25747) | Weighted scalar-measure and change-of-density calculus. No DKPS proof adaptation is asserted. |
+| SA-B80 | [#26066](https://github.com/TauCetiProject/TauCeti/pull/26066) | Hilbert direct-sum operator laws, building on Mathlib's `lp.mapCLM`. No DKPS proof adaptation is asserted. |
+
+[#27902](https://github.com/TauCetiProject/TauCeti/pull/27902) also supplies
+the representation PVM and an integrated weighted matrix-element identity for
+SA-B59. The roadmap additionally specifies a measure-level `withDensity`
+identity; its exact accepted declaration has not been identified, so this
+ledger records #27902 as supporting SA-B59 rather than asserting full coverage.
+The campaign's item-level ledger records the integration commits and the
+distinction between submitter and proof descent. Its earlier complete inventory
+has not been re-audited in full as part of this selected reconciliation.
