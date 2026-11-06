@@ -4952,3 +4952,14 @@ diagonal formulas as explicit rewrite lemmas. The focused build, 13
 environment linters, scope example and full style checks passed. Fresh upstream
 CI and review remain pending. The campaign packet has the updated PR description;
 the GitHub app could not edit it, so its host update script remains to be run.
+
+### Quarter-angle reflection reuse repair (2026-11-06)
+
+[#27804](https://github.com/TauCetiProject/TauCeti/pull/27804) had a
+successful upstream build but remained awaiting author due to review findings.
+Commit `8ad2edaeb9f74575475138f7b67e8289d00450b0` removes two duplicate
+reflection-evaluation wrappers and applies Mathlib's existing lemmas directly.
+The focused quarter-angle build, 13 environment linters, scope example and full
+style check passed. The PR remains open; fresh upstream CI and review are pending.
+The GitHub app could not edit its description; the campaign packet contains the
+corrected body and a host update script.
