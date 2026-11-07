@@ -1,334 +1,462 @@
-# Proposed course: Spectral theory, geometry, and Davis–Kahan perturbation theory
+# Proposed course: the mathematical foundations of Davis–Kahan theory
 
-**Status:** alternative, transcript-first course proposal. No changes to the existing lecture series, renderer, or journal paper.  
-**Mathematical companion:** `papers/dk_formalization_journal/paper.tex`.  
-**Primary scope:** explain the mathematics of Davis and Kahan's 1970 *Rotation of Eigenvectors by a Perturbation. III*, including the 29 selected source-result targets (28 proved and one refuted), definitions, proof mechanisms, numerical examples, and original questions. Follow with the journal paper's related mathematics. This does not assert exhaustive coverage of Davis–Kahan Parts I and II or subsequent literature.  
-**History:** separately developed, not in this progression.
+**Status:** alternative draft curriculum, not a replacement of the existing Manim lectures, renderer, journal manuscript or Lean modules. **Companion:** `papers/dk_formalization_journal/paper.tex`. **Learner:** familiar with basic finite-dimensional linear algebra and calculus; no prior functional analysis, measure theory, operator ideals, or Lean assumed.
 
-## First understand spaces and operators; only then study spectral stability
+## Purpose and completion standard
 
-Assume fluency with basic linear algebra and calculus, but **not** with functional analysis, spectral theory, operator geometry, or formal proof assistants. Before talking about the stability of an eigenspace, teach the space in which it lives, the operators acting on it, what their spectra mean, and how their subspaces are represented.
+This is **not** a syllabus selected from the first Manim scenes. It is a backward design from the **full mathematical proof obligations** in the original Davis–Kahan theory and in the maintained formalization, including substantial mathematics now housed in, or adapted to, TauCeti. The original journal manuscript gives the companion mathematical claims; the original Davis–Kahan source, selected source-result inventory, mathematical prerequisite trace, and upstream-contribution records define the broader teaching coverage. The historical branch remains separate.
 
-There are **35 proposed foundation lessons** after introduction `000000`. The first stability problem is at `036000`. These are candidate narratives, not a fixed number of videos. Merge or split lessons when it serves understanding; six-digit IDs in increments of 1,000 leave room for insertion.
+**Graduation standard:** a student can reconstruct the important Davis–Kahan proofs from basic linear algebra and calculus by supplying the intermediate analytic lemmas, not simply reciting four theorem statements or reading off Lean's finalized proof. In particular, the student can derive the spectral-subspace angle representations, establish the required Sylvester bound for the actual gap regime, transport the estimate through the appropriate operator ideal, handle unbounded domains, and state exactly where real-to-complex transfer is used. They can also explain the direct-rotation extremal results and the refuted original proposition.
 
-The mathematical dependency chain is deliberately explicit:
+This is a mathematical 'from first principles' standard **relative to the stated starting knowledge**. The course should prove or reconstruct its major functional-analytic tools (spectral theorem routes, projection-valued measures, polar decomposition, majorization, operator ideals and domain-aware estimates), while treating the deepest general-purpose background results as explicitly identified dependencies and proving the versions needed here whenever pedagogically feasible. It does not attempt to rebuild axiomatic set theory or the whole of Mathlib.
 
-1. **Linear spaces, norms, and completeness:** linear maps independently of coordinates; norms, Cauchy sequences and limits; why Banach spaces are the setting for continuous operator theory.
-2. **Hilbert spaces and their geometry:** real/complex inner products; Cauchy–Schwarz, orthogonality, closed subspaces, orthogonal projections and adjoints; which parts need completeness and which do not.
-3. **Isometries, frames, and Gram objects:** norm- and inner-product-preserving maps, orthonormal coordinate embeddings, synthesis and analysis, Gram matrices and Gram operators; the distinction between `V*V` and `VV*`.
-4. **Spectrum and spectral calculus:** eigenvalues, spectrum as failure of invertibility for bounded operators, resolvents, self-adjointness, the finite-dimensional spectral theorem, spectral projections, and functions of operators.
-5. **Operator anatomy and two-subspace geometry:** positivity, square roots, modulus, singular values, symmetric norms, polar decomposition, compression, principal angles, matrix exponentials, and direct rotation.
-6. **Only then perturbation theory:** spectral gaps, residuals, Sylvester equations, four angle theorem families, generalizations, branch selection, optimality/counterexample, Hilbert-space and unbounded versions, numerical demonstration and research questions.
+**Key difference from the previous draft:** the 29-result ledger is an *endpoint coverage* check, **not** an inventory of everything a student must learn. The foundational curriculum is designed around the manuscript's mathematical prerequisite taxonomy, the source-level proof chain, and the DKPS-to-TauCeti provenance map. This explicitly includes Sylvester equations, PVM/Borel calculus, approximation numbers, majorization, operator ideals, real/complex transfer, and closed/unbounded self-adjoint theory.
 
-Finite-dimensional examples remain the computational entry point, but Banach/Hilbert spaces are introduced **before** the spectrum, not tacked on after the main theorems. Later Unit X rigorously develops infinite-dimensional spectral measures and unbounded domains. Early treatment must be truthful about those distinctions without front-loading advanced analytic proofs.
+## Transcript-first drafting contract
 
-## Foundation competency gate before `036000`
+1. `outline.md` is the provisional dependency and coverage map; it may be reordered or split. Its titles are **candidate teaching arcs**, not obligations to make as many short videos as rows. Preserve the six-digit IDs in increments of 1,000, leaving space for inserted lessons. Do not renumber any established lecture in the production tree.
+2. `tts-lectures/NNNNNN-topic.md` is the **primary spoken mathematical explanation**. It must teach without Manim; diagrams and animation should be built after the narrative succeeds on its own. A mathematical lesson should have motivation, calculations, formal statements, nontrivial argument, diagnostic examples, and a reconstruction exercise.
+3. For **substantive mathematical lessons**, retain a final **mathematics-to-Lean bridge**. It should place actual symbols against actual Lean types, hypotheses and statements and explain what the code proves. Use short, verified declarations from current Mathlib/TauCeti/ForTauCeti/DavisKahan sources; do not invent identifiers or quietly assume upstream modules still exist locally. Display code as display-only, while TTS narrates its meaning, not punctuation. The older `visualizations/lectures/*/facts.lean` files are useful exemplars, not the authority for the syllabus.
+4. **The introduction (`000000`) is exempt from the Lean-bridge requirement.** It is orientation, not a detailed mathematics lesson. Other purely transitional/overview lectures may omit it when no mathematical construction is being taught in depth. Do not force a theorem excerpt into an orientation merely to satisfy a template.
+5. A transcript's source map records, separately, (i) mathematical source/result, (ii) retained local donor or wrapper, (iii) accepted upstream declaration if actually checked at the chosen TauCeti pin, and (iv) original or adapted provenance where relevant. The topic is retained even if the source that first proved it locally was deleted after upstreaming. No assumptions about donor authorship follow merely from shared roadmap labels.
+6. Before promoting a mathematical lecture, check hypotheses, domains, angles and branches, norm membership and scalar field, a worked example, proof reconstruction, source fidelity, and TTS listening quality. A student's ability to reconstruct the proof is the core assessment; compilation and source links support it, rather than replacing it.
+7. The staged branch must not overwrite `visualizations/lectures/`, its registry, `ForTauCeti/`, `DavisKahan/`, the journal manuscript, or renderer code.
 
-By the time the listener reaches the first stability lecture, they should be able to work through and explain:
+## Curriculum order and mathematical dependency
 
-- **Banach/Hilbert:** a norm induces a distance; completeness means every Cauchy sequence converges *inside* the space; a Banach space is complete and normed, a Hilbert space complete with a norm from an inner product. Every Hilbert space is Banach, but not conversely. Finite-dimensional normed real/complex spaces are complete.
-- **Bounded maps and adjoints:** bounded linear maps are continuous; the adjoint uses inner products; understand why the expression `A*` is not automatically available on an arbitrary Banach space as a same-space adjoint. Distinguish the Banach dual from the Hilbert adjoint.
-- **Isometries and projections:** a linear isometry preserves lengths (and, over real/complex inner-product spaces, inner products); unitary/orthogonal maps are surjective linear isometries. For an orthonormal coordinate embedding `V`, `V*V=I` on coordinates while `VV*` projects onto its range.
-- **Gram matrices/operators:** for vectors `v_i`, `G_ij=⟨v_i,v_j⟩`; using synthesis `S`, `G=S*S` is positive semidefinite and determines squared lengths of linear combinations. `SS*` acts on the ambient space and is a *frame operator*, not the coefficient-space Gram operator. For a general bounded `A`, `A*A` is positive and feeds modulus and singular-value theory.
-- **Spectral objects:** a self-adjoint matrix has orthogonal spectral projections and can be reconstructed as their eigenvalue-weighted sum. The spectrum of a bounded operator is defined using invertibility, which is more general than eigenvalues in infinite dimensions.
-- **Operator constructions:** `|A|=(A*A)^{1/2}`, with the positive square root; SVD and polar factors; scalar functional calculus and skew-adjoint exponentials produce length-preserving flows.
-- **Subspace comparison:** principal angles, canonical planes, directed projection errors, and direct rotation do not depend on arbitrary choices of orthonormal frames.
+The order below is deliberately **foundations first**. The first explicit spectral **stability** question appears only after the major finite- and infinite-dimensional proof ingredients are developed. Some earlier lessons derive algebraic or analytic inequalities that *will later be used* for stability; those are first presented for their own mathematics, not as premature perturbation lectures.
 
-For every foundation topic, require a worked calculation *and* a short conceptual check. An inventory of terminology is not a substitute for comprehension.
+- Linear/normed/Banach spaces → Hilbert geometry, adjoints, projections → frames and Gram operators.
+- Self-adjoint spectral theory → positivity and functional calculus → modulus, polar factors, exponentials → two-subspace geometry and direct rotations.
+- Min–max, singular values, Ky Fan sums and majorization → symmetric gauge norms → Sylvester operator equations and their gap-sensitive inverses.
+- Measure theory/PVM/Borel calculus → unbounded domains, resolvents, spectral cutoff and one-parameter groups → compact operators/ideals and real/complex transfer.
+- Only then residual geometry → four angle families → generalized/branch results → extremal rotation/correction → original example/questions → follow-on applications.
 
-## Staged authoring contract, including the Lean connection
+### Unit I — Normed spaces, Banach spaces, and bounded maps
 
-1. **Outline and coverage:** use this file as a proposed dependency graph, not the existing Manim catalog as the ordering authority. The original source and journal manuscript determine mathematical coverage.
-2. **Audio-first transcript:** write a fully coherent spoken narrative at `tts-lectures/NNNNNN-topic.md`. It must teach without visuals; do not force the teaching order to fit Manim scene boundaries.
-3. **Mathematical edit and listening pass:** confirm definitions, examples, hypotheses, quantifiers, norm choices, and pronunciation; use a realistic listener's points of confusion to determine depth.
-4. **Mandatory end-of-lecture Lean correspondence:** every mathematical transcript closes with a **spoken explanation of how its principal mathematical symbols appear in Lean**, accompanied by short, source-verified Lean examples that the viewer can read. **Do not relegate this to an optional bibliography or delete it from the lecture.** Start with a side-by-side symbol/type correspondence, show at least one actual library declaration or checked companion example, explain assumptions and typeclass parameters, and distinguish object/definition/theorem/proof. Some purely conceptual bridge lectures may use an existing checked fact rather than invent a theorem.
-5. **Source fidelity:** copy any presented declarations from actual `Mathlib`, `TauCeti`, `ForTauCeti`, or `DavisKahan` source available at the target revision. Check the exact namespace/import, name, statement, field ordering, and hypotheses. Avoid fabricated Lean APIs. A source extract is not a claim that the new draft itself has been compiled; separately compile new code when writing a new `.lean` companion.
-6. **TTS/code separation within the same lesson:** narrate *what the Lean code expresses* using natural language; display raw Lean in fenced blocks/cards, **not** by having TTS pronounce punctuation, Unicode syntax, typeclass brackets, or proof scripts. Keep the end-section in the transcript so code and mathematics remain connected. The future renderer should distinguish spoken prose from display-only code.
-7. **Storyboard derived from transcript:** annotate the already-effective explanation and build Manim visuals around it. A Lean correspondence is one particularly valuable optional-on-screen segment, but need not interrupt the central exposition.
-8. **No promotion by accident:** do not touch `visualizations/lectures/`, its registry, the manuscript, or the production renderer while this alternative is being drafted.
+*Build the analytic language of operators rather than treating an operator as a matrix with infinitely many rows.*
 
-**Lean-bridge source pattern already in this repo:** the older transcripts' end cards and `visualizations/lectures/*/facts.lean` (especially projections, polar decomposition, matrix exponential, Rayleigh–Ritz) should be preserved and improved, not dropped. `visualizations/lectures/LEAN_FACTS.md` documents those connections. The central foundations source `ForTauCeti/Analysis/InnerProductSpace/FiniteFrame.lean` (namespace `TauCeti`) defines `finiteAnalysis`, `finiteSynthesis`, `finiteGramOperator` and proves `finiteGramOperator_isPositive`. `ForTauCeti/Analysis/InnerProductSpace/AlignedBasis.lean` documents `Orthonormal.synthesisMapIsometry`. These are candidate actual code anchors, not assertions that every new lecture's Lean companion already exists.
+**Proof checkpoint:** Explain the connection between completeness, boundedness, invertibility, and the resolvent; derive finite examples and at least one infinite-dimensional counterexample.
 
-## Course outline
-
-Each row names a **teaching arc**, not an obligation to create a video of fixed duration. The first four units are the foundational sequence; the remaining units complete the Davis–Kahan companion and related applications.
-
-### Unit I — Normed, Banach, and Hilbert spaces; maps between them
-
-*The learner already knows finite vectors and matrices. Explain the spaces and maps that make the later operator notation meaningful, and distinguish what holds in any normed space from what needs an inner product or completeness.*
-
-| Slot | Spoken-lecture focus | Central development |
+| ID | Candidate TTS lecture | Mathematical target |
 | --- | --- | --- |
-| `001000` | **Linear maps as mathematical objects** — `001000-linear-maps-as-mathematical-objects.md` | Coordinates are descriptions; a linear map and a matrix representation are not identical objects. |
-| `002000` | **Norms, distance and convergence** — `002000-norms-distance-and-convergence.md` | Vector norms, induced metrics, sequences, equivalence of norms in finite dimension, and simple function-space examples. |
-| `003000` | **Cauchy sequences and completeness** — `003000-cauchy-sequences-and-completeness.md` | Limit points, incomplete normed spaces, and why completing a space matters for analysis. |
-| `004000` | **What is a Banach space?** — `004000-what-is-a-banach-space.md` | Definition and finite/infinite examples; bounded linear operators as the natural continuous maps; distinguish the dual space. |
-| `005000` | **Inner products and perpendicularity** — `005000-inner-products-and-perpendicularity.md` | Cauchy–Schwarz, real versus complex conjugation, norm from inner product, orthogonal families. |
-| `006000` | **What is a Hilbert space?** — `006000-what-is-a-hilbert-space.md` | Complete inner-product spaces; ℝⁿ/ℂⁿ and square-summable sequences; orthonormal expansions and the closed-subspace projection theorem. |
-| `007000` | **Bounded operators and the operator norm** — `007000-bounded-operators-and-the-operator-norm.md` | Continuity ↔ boundedness, Banach spaces of operators and finite-dimensional simplifications. |
-| `008000` | **Adjoints and Riesz representation** — `008000-adjoints-and-riesz-representation.md` | Inner-product definition of the Hilbert adjoint, finite transpose/conjugate transpose, contrast with Banach dual maps. |
-| `009000` | **Isometries, orthogonal and unitary maps** — `009000-isometries-orthogonal-and-unitary-maps.md` | Length preservation, `V*V=I`, surjective versus nonsurjective isometries, and a preview of partial isometries. |
-| `010000` | **Frames, synthesis and analysis** — `010000-frames-synthesis-and-analysis.md` | Turn vectors into a coordinate-to-space map and its adjoint; distinguish orthonormal frames from general spanning families. |
-| `011000` | **Gram matrices, Gram operators and frame operators** — `011000-gram-matrices-gram-operators-and-frame-operators.md` | Derive `G=S*S` from pairwise inner products, the coefficient quadratic form, positivity, `SS*` on the ambient space and frame bounds. |
+| `001000` | **Linear maps independent of coordinates** (`001000-linear-maps-independent-of-coordinates.md`) | Basis changes, composition and why matrix entries are not invariant |
+| `002000` | **Norms, distances, and convergence** (`002000-norms-distances-and-convergence.md`) | Norm axioms, induced metrics, equivalent finite-dimensional norms |
+| `003000` | **Cauchy sequences and Banach spaces** (`003000-cauchy-sequences-and-banach-spaces.md`) | Incomplete normed-space example; completeness and limits of series |
+| `004000` | **Bounded linear maps and the operator norm** (`004000-bounded-linear-maps-and-the-operator-norm.md`) | Continuity equivalence and norm estimates for compositions |
+| `005000` | **The Banach algebra of bounded operators** (`005000-the-banach-algebra-of-bounded-operators.md`) | Identity, products, inverse operators and Neumann series |
+| `006000` | **Linear functionals and dual spaces** (`006000-linear-functionals-and-dual-spaces.md`) | Dual pairing, dual norms, Hahn–Banach statement and uses |
+| `007000` | **Real and complex scalars** (`007000-real-and-complex-scalars.md`) | Why the complex field matters for the spectrum; complexification preview |
+| `008000` | **Resolvents and invertibility** (`008000-resolvents-and-invertibility.md`) | The resolvent identity, open resolvent set, and the analytic definition of spectrum |
 
-### Unit II — Spectrum, eigenvectors, and functional calculus
+### Unit II — Hilbert spaces, orthogonality, and subspace geometry
 
-*Define spectrum only after we know what sort of operator is involved. Use matrices for explicit calculations and keep the infinite-dimensional definition honest.*
+*Add inner products, completeness, projections, adjoints, and the distinction between invariant and reducing subspaces.*
 
-| Slot | Spoken-lecture focus | Central development |
+**Proof checkpoint:** Prove the orthogonal projection characterization and derive identities for self-adjoint projections and block decompositions.
+
+| ID | Candidate TTS lecture | Mathematical target |
 | --- | --- | --- |
-| `012000` | **Eigenvectors and invariant directions** — `012000-eigenvectors-and-invariant-directions.md` | Scalar action on a direction, examples with repeated eigenvalues, and invariant eigenspaces. |
-| `013000` | **What is a spectrum?** — `013000-what-is-a-spectrum.md` | Invertibility of `A−λI` for a bounded operator on a complex Banach space; finite eigenvalues versus approximate/continuous spectrum previews. |
-| `014000` | **Self-adjoint operators in finite dimensions** — `014000-self-adjoint-operators-in-finite-dimensions.md` | Real spectrum, orthogonality, normality, and why the adjoint from Unit I matters. |
-| `015000` | **The finite-dimensional spectral theorem** — `015000-the-finite-dimensional-spectral-theorem.md` | Orthonormal eigenbasis, projection decomposition and reconstructing the operator. |
-| `016000` | **Multiplicity and spectral subspaces** — `016000-multiplicity-and-spectral-subspaces.md` | Distinct eigenvalues versus basis multiplicity; invariant subspaces as intrinsic objects. |
-| `017000` | **Projections as operators** — `017000-projections-as-operators.md` | Idempotent/self-adjoint conditions and projection onto a line or plane; connect back to Hilbert closed-subspace projections. |
-| `018000` | **Spectral projections and resolvents** — `018000-spectral-projections-and-resolvents.md` | Spectral selection by projection sums in the matrix case; the resolvent as the inverse of `A−λI` off the spectrum. |
-| `019000` | **Functions of a self-adjoint operator** — `019000-functions-of-a-self-adjoint-operator.md` | Polynomial functional calculus, square roots and exponentials via spectral projections; proper scope restrictions. |
+| `009000` | **Inner products and polarization** (`009000-inner-products-and-polarization.md`) | Cauchy–Schwarz, the real/complex conventions and the parallelogram law |
+| `010000` | **Hilbert spaces and orthogonal complements** (`010000-hilbert-spaces-and-orthogonal-complements.md`) | Complete inner-product spaces, closed spans, orthonormal families |
+| `011000` | **The projection theorem** (`011000-the-projection-theorem.md`) | Nearest-point argument, existence and uniqueness, Pythagoras |
+| `012000` | **Adjoints and the Riesz representation theorem** (`012000-adjoints-and-the-riesz-representation-theorem.md`) | How inner products convert bounded functionals to vectors; adjoint identities |
+| `013000` | **Self-adjoint, normal, and unitary maps** (`013000-self-adjoint-normal-and-unitary-maps.md`) | Algebraic distinctions, examples, and why commutation matters |
+| `014000` | **Isometries, coisometries, and partial isometries** (`014000-isometries-coisometries-and-partial-isometries.md`) | Initial/final spaces; surjective versus non-surjective isometries |
+| `015000` | **Invariant and reducing subspaces** (`015000-invariant-and-reducing-subspaces.md`) | Why self-adjoint invariance implies reducing; complement conditions |
+| `016000` | **Orthogonal sums and block-operator matrices** (`016000-orthogonal-sums-and-block-operator-matrices.md`) | Derive diagonal/off-diagonal components and their adjoints |
 
-### Unit III — Modulus, singular values, and operator blocks
+### Unit III — Frames, Gram objects, and coordinate-free geometry
 
-*Revisit Gram products as `A*A`: operator modulus now has an existing conceptual foundation rather than appearing as a formal trick.*
+*Connect the notation in the formalization to familiar Gram matrices and move fluently between coordinate and ambient spaces.*
 
-| Slot | Spoken-lecture focus | Central development |
+**Proof checkpoint:** For a synthesis map S, derive G=S* S, show positivity and explain why S S* is a different operator; prove projection identities for orthonormal frames.
+
+| ID | Candidate TTS lecture | Mathematical target |
 | --- | --- | --- |
-| `020000` | **Positive operators and positive square roots** — `020000-positive-operators-and-positive-square-roots.md` | Quadratic forms, `A*A≥0`, spectral construction and uniqueness of the positive square root. |
-| `021000` | **Operator modulus** — `021000-operator-modulus.md` | `|A|=(A*A)^(1/2)` and the difference from entrywise absolute value; connect Gram products to magnitude. |
-| `022000` | **Singular values and SVD** — `022000-singular-values-and-svd.md` | SVD from modulus, left and right singular directions, and the rectangular matrix picture. |
-| `023000` | **Norms built from singular values** — `023000-norms-built-from-singular-values.md` | Operator, Frobenius/Hilbert–Schmidt, Schatten and Ky Fan norms; later operator-ideal subtleties. |
-| `024000` | **Polar decomposition** — `024000-polar-decomposition.md` | Construct the isometric/partial-isometric factor of `A=U|A|`; kernels and orientation. |
-| `025000` | **Invariant and reducing subspaces** — `025000-invariant-and-reducing-subspaces.md` | Internal and crossing operator blocks; self-adjoint block decomposition. |
-| `026000` | **Compression through coordinate isometries** — `026000-compression-through-coordinate-isometries.md` | Derive `V*AV`; what changes with the chosen frame and what is intrinsic to its range. |
+| `017000` | **Analysis and synthesis maps** (`017000-analysis-and-synthesis-maps.md`) | How a family of vectors becomes a map from and to coefficient space |
+| `018000` | **Gram matrices and positive Gram operators** (`018000-gram-matrices-and-positive-gram-operators.md`) | G=S* S; rank, positivity, and quadratic forms |
+| `019000` | **Frame operators and Parseval identities** (`019000-frame-operators-and-parseval-identities.md`) | S S*; tight frames and the orthonormal case |
+| `020000` | **Orthogonal coordinate embeddings** (`020000-orthogonal-coordinate-embeddings.md`) | V* V=I, V V*=P and the meaning of the two domains |
+| `021000` | **Compressions and Rayleigh–Ritz matrices** (`021000-compressions-and-rayleigh-ritz-matrices.md`) | V* A V, compressed forms, and what compression does not preserve |
+| `022000` | **Overlaps, alignment, and Gram rigidity** (`022000-overlaps-alignment-and-gram-rigidity.md`) | Two frames, cross-Gram matrices, unitary changes of coordinates |
+| `023000` | **Gram operators of rectangular maps** (`023000-gram-operators-of-rectangular-maps.md`) | A* A versus A A*, nonzero spectral correspondence |
 
-### Unit IV — Geometry and motion of two subspaces
+### Unit IV — Finite spectral theory and variational foundations
 
-*All operators can remain fixed here. The learner should know how to compare subspaces before considering a perturbation.*
+*Teach what spectra and spectral subspaces are before considering their change.*
 
-| Slot | Spoken-lecture focus | Central development |
+**Proof checkpoint:** Prove the finite self-adjoint spectral theorem and Courant–Fischer; explain when a spectral projection is more intrinsic than chosen eigenvectors.
+
+| ID | Candidate TTS lecture | Mathematical target |
 | --- | --- | --- |
-| `027000` | **The geometry encoded by two projections** — `027000-the-geometry-encoded-by-two-projections.md` | Intersections, orthogonal complements and the projection product. |
-| `028000` | **Directed error and projection differences** — `028000-directed-error-and-projection-differences.md` | `(I−Q)P`, `(I−P)Q`, and norms of projection differences. |
-| `029000` | **Principal angles from overlapping frames** — `029000-principal-angles-from-overlapping-frames.md` | Singular values of `V*W` are cosines of principal angles; Gram matrix of cross-inner-products. |
-| `030000` | **Principal planes and the cosine–sine decomposition** — `030000-principal-planes-and-the-cosine-sine-decomposition.md` | Geometric two-plane decomposition, intersections and defect spaces. |
-| `031000` | **Reflections and orthogonal motions** — `031000-reflections-and-orthogonal-motions.md` | Reflection compositions and double angles; distinguish changes of basis from motion of subspaces. |
-| `032000` | **Matrix exponentials generate rotations** — `032000-matrix-exponentials-generate-rotations.md` | `exp(tK)` for skew-adjoint `K`; derive orthogonality/unitarity and the planar rotation. |
-| `033000` | **Acute direct rotations** — `033000-acute-direct-rotations.md` | Canonical maps from projection geometry, polar factors and principal planes. |
-| `034000` | **Nonacute direct rotations and their defects** — `034000-nonacute-direct-rotations-and-their-defects.md` | Right angles, existence conditions, square identities and examples. |
-| `035000` | **Classifying pairs of subspaces** — `035000-classifying-pairs-of-subspaces.md` | Section 3 classification, realizations and symmetries. |
+| `024000` | **Eigenvalues, eigenspaces, and algebraic multiplicity** (`024000-eigenvalues-eigenspaces-and-algebraic-multiplicity.md`) | Diagonal examples, Jordan contrast and invariant subspaces |
+| `025000` | **Hermitian and self-adjoint matrices** (`025000-hermitian-and-self-adjoint-matrices.md`) | Real eigenvalues, orthogonal eigenvectors, spectral order |
+| `026000` | **The finite spectral theorem** (`026000-the-finite-spectral-theorem.md`) | Spectral decomposition via orthogonal projections, reconstruction |
+| `027000` | **Rayleigh quotients and extrema** (`027000-rayleigh-quotients-and-extrema.md`) | Quadratic-form calculation and stationary eigenvectors |
+| `028000` | **Courant–Fischer min–max** (`028000-courant-fischer-min-max.md`) | Subspace dimension intersection argument and converse construction |
+| `029000` | **Weyl monotonicity and variational eigenvalue inequalities** (`029000-weyl-monotonicity-and-variational-eigenvalue-inequalities.md`) | Eigenvalue order, min–max inequalities and the underlying quadratic-form comparisons |
+| `030000` | **Spectral projections for selected sets** (`030000-spectral-projections-for-selected-sets.md`) | Intervals, eigenvalue clusters, projectors and reducing subspaces |
+| `031000` | **Ordered gaps versus distance gaps** (`031000-ordered-gaps-versus-distance-gaps.md`) | Interlacing, internal and external gaps, block order |
+| `032000` | **Coordinate-free finite functional calculus** (`032000-coordinate-free-finite-functional-calculus.md`) | Polynomial approximation and f(A) from the spectral decomposition |
 
-### Unit V — Now ask the stability question
+### Unit V — Positive operators, modulus, polar factors, and exponentials
 
-*With operators, spectra, projections, angles and rotations already defined, ask what changes under approximation. Introduce algebraic residuals and gaps before the named angle theorems.*
+*Develop the constructions used throughout direct rotations, norm comparison, spectral calculus, and analytic Sylvester solutions.*
 
-| Slot | Spoken-lecture focus | Central development |
+**Proof checkpoint:** Explain not just the definitions but why positive roots, partial isometries, and exponentials exist and satisfy the identities used later.
+
+| ID | Candidate TTS lecture | Mathematical target |
 | --- | --- | --- |
-| `036000` | **When small perturbations turn an eigenvector** — `036000-when-small-perturbations-turn-an-eigenvector.md` | Now revisit the identical-eigenvalue-list two-by-two swap; interpret exactly which spectral objects changed and which did not. |
-| `037000` | **Rayleigh quotients, min-max and Weyl estimates** — `037000-rayleigh-quotients-min-max-and-weyl-estimates.md` | Courant-Fischer, eigenvalue approximation and why eigenvalue movement alone does not control spectral subspaces. |
-| `038000` | **Rayleigh-Ritz and trial spectral subspaces** — `038000-rayleigh-ritz-and-trial-spectral-subspaces.md` | Trial vectors and coordinate frames; Rayleigh quotients, Ritz blocks and what approximating an invariant subspace means. |
-| `039000` | **Residual error versus operator perturbation** — `039000-residual-error-versus-operator-perturbation.md` | Compare A v minus mu v, the residual block, and the difference between A and its approximation; do not conflate these quantities. |
-| `040000` | **What does spectral separation mean?** — `040000-what-does-spectral-separation-mean.md` | Spectral sets, target and complement, ordered/interval gaps versus mere spectral distance; choose hypotheses before dividing by a gap. |
-| `041000` | **Why Sylvester equations appear** — `041000-why-sylvester-equations-appear.md` | Go from scalar ax minus xb equals c to A X minus X B equals C; solve entrywise in diagonal bases to see how spectral separation enters. |
-| `042000` | **Two Sylvester estimates** — `042000-two-sylvester-estimates.md` | Distinguish the Banach-space bounded-inverse estimate and the self-adjoint ordered-gap theorem with their respective hypotheses. |
-| `043000` | **When a spectral gap does not give constant one** — `043000-when-a-spectral-gap-does-not-give-constant-one.md` | Interlaced spectral sets, norm-dependent bounds and a concrete counterexample to an overly strong gap assertion. |
+| `033000` | **Quadratic-form order and positive operators** (`033000-quadratic-form-order-and-positive-operators.md`) | Positivity tests, A ≥ 0, and conjugation order |
+| `034000` | **Positive square roots and their uniqueness** (`034000-positive-square-roots-and-their-uniqueness.md`) | Finite proof by spectral calculus, uniqueness and commutation |
+| `035000` | **The operator modulus |A|** (`035000-the-operator-modulus-a.md`) | |A|=sqrt(A* A), squared-output-length interpretation |
+| `036000` | **Singular-value decomposition** (`036000-singular-value-decomposition.md`) | Singular vectors, rectangular maps, rank and kernel |
+| `037000` | **Polar decomposition** (`037000-polar-decomposition.md`) | A=U|A|, initial and final supports, kernel behavior |
+| `038000` | **Partial isometries and polar uniqueness** (`038000-partial-isometries-and-polar-uniqueness.md`) | When the polar factor is not unitary, restrictions and extension |
+| `039000` | **Matrix exponentials from the power series** (`039000-matrix-exponentials-from-the-power-series.md`) | Why exp(A+B) requires commutation; derivative identities |
+| `040000` | **Skew-adjoint generators and unitary flows** (`040000-skew-adjoint-generators-and-unitary-flows.md`) | Show exp(tK)*exp(tK)=I; planar rotations |
+| `041000` | **Operator trigonometric functions** (`041000-operator-trigonometric-functions.md`) | Cosine, sine, arcsine ranges, and functional-calculus prerequisites |
 
-### Unit VI — The four Davis–Kahan angle theorems
+### Unit VI — Geometry and classification of pairs of subspaces
 
-*Learn the four theorem families in turn, including their geometry, exact assumptions, finite-dimensional proofs and branch distinctions.*
+*Learn how two subspaces sit inside a common Hilbert space without using arbitrary coordinate frames.*
 
-| Slot | Spoken-lecture focus | Central development |
+**Proof checkpoint:** Derive principal-angle identities, two-projection blocks and the direct rotation; state the precise acute and defect hypotheses.
+
+| ID | Candidate TTS lecture | Mathematical target |
 | --- | --- | --- |
-| `044000` | **The rank-one sine estimate** — `044000-the-rank-one-sine-estimate.md` | The residual triangle and the first exact residual-over-gap identity. |
-| `045000` | **The sine-theta theorem** — `045000-the-sine-theta-theorem.md` | A full finite-dimensional block proof and the directed sine operator. |
-| `046000` | **Graph subspaces and tangent angles** — `046000-graph-subspaces-and-tangent-angles.md` | Why tangent asks for a different relationship than sine. |
-| `047000` | **The tangent-theta theorem** — `047000-the-tangent-theta-theorem.md` | Ordered separation, Rayleigh-Ritz structure and proof. |
-| `048000` | **Where the doubled angle comes from** — `048000-where-the-doubled-angle-comes-from.md` | Reflection, off-diagonal perturbations and the sine of twice the angle. |
-| `049000` | **The sine-two-theta theorem** — `049000-the-sine-two-theta-theorem.md` | Precise spectral alternatives and a reflection-based derivation. |
-| `050000` | **The tangent-two-theta theorem** — `050000-the-tangent-two-theta-theorem.md` | Off-diagonal blocks, ordered gaps and a proof of the stronger estimate. |
-| `051000` | **Four bounds, different answers** — `051000-four-bounds-different-answers.md` | Compare constants, assumptions, full versus directed angles, sharpness and branch ambiguity. |
+| `042000` | **Cross-Gram overlap and principal angles** (`042000-cross-gram-overlap-and-principal-angles.md`) | Singular values of V*W, unequal dimensions and canonical angles |
+| `043000` | **Sines, cosines, and cross projections** (`043000-sines-cosines-and-cross-projections.md`) | P,Q, (I-Q)P and the difference of projections |
+| `044000` | **The cosine–sine decomposition** (`044000-the-cosine-sine-decomposition.md`) | Two-dimensional principal planes and full complementary blocks |
+| `045000` | **Halmos two-projection decomposition** (`045000-halmos-two-projection-decomposition.md`) | Common, perpendicular, defect and generic components |
+| `046000` | **Positive cosine and sine operators** (`046000-positive-cosine-and-sine-operators.md`) | Compressing PQP; square roots, angle operator and spectral range |
+| `047000` | **Acute pairs and transversality** (`047000-acute-pairs-and-transversality.md`) | ||P-Q||<1, invertible cosine and when graphs exist |
+| `048000` | **The Sz.-Nagy–Kato intertwiner** (`048000-the-sz-nagy-kato-intertwiner.md`) | Projection algebra, polar factors and unitary transport |
+| `049000` | **Canonical direct rotation** (`049000-canonical-direct-rotation.md`) | Existence, uniqueness, principal square root and adjoint reversal |
+| `050000` | **Nonacute angles and defect matching** (`050000-nonacute-angles-and-defect-matching.md`) | Right-angle components, dimension obstructions and general existence |
+| `051000` | **Compact angle spectra and classification** (`051000-compact-angle-spectra-and-classification.md`) | Finite/compact angle data versus continuous angle spectrum |
 
-### Unit VII — General single-angle estimates
+### Unit VII — Singular-value inequalities and symmetric norms
 
-*Section 6 deserves full coverage: symmetric norm lemmas, dimension mismatch and weaker separation are not footnotes.*
+*Supply the finite-dimensional mathematics behind the norm generality of Davis–Kahan, not only the operator norm.*
 
-| Slot | Spoken-lecture focus | Central development |
+**Proof checkpoint:** Prove rank approximation, Ky Fan bounds, a majorization principle and their consequences for symmetric gauge norms.
+
+| ID | Candidate TTS lecture | Mathematical target |
 | --- | --- | --- |
-| `052000` | **Unitary-invariant norm comparisons for direct sums** — `052000-unitary-invariant-norm-comparisons-for-direct-sums.md` | Section 6.1 lemma: why separate block estimates can be combined carefully. |
-| `053000` | **Pinching and block-diagonal contraction** — `053000-pinching-and-block-diagonal-contraction.md` | Section 6.2 lemma: reflections remove mixed blocks without raising symmetric norms. |
-| `054000` | **The ambient sine estimate** — `054000-the-ambient-sine-estimate.md` | Proposition 6.1 and why the ambient perturbation differs from a directed residual. |
-| `055000` | **Non-isometric trial frames and unequal dimensions** — `055000-non-isometric-trial-frames-and-unequal-dimensions.md` | Theorem 6.1: lower frame bounds and the epsilon factor. |
-| `056000` | **Weak spectral separation and Hilbert-Schmidt control** — `056000-weak-spectral-separation-and-hilbert-schmidt-control.md` | Theorem 6.2: what changes under mere spectral distance, including finite-rank consequences. |
-| `057000` | **The generalized tangent theorem** — `057000-the-generalized-tangent-theorem.md` | Theorem 6.3: Rayleigh-Ritz, unequal dimensions and the full tangent argument. |
+| `052000` | **Min–max principles for singular values** (`052000-min-max-principles-for-singular-values.md`) | Courant–Fischer via modulus; rectangular singular values |
+| `053000` | **Low-rank approximation and Eckart–Young** (`053000-low-rank-approximation-and-eckart-young.md`) | Best rank-k approximants and tail singular-value control |
+| `054000` | **Ky Fan sums and inequalities** (`054000-ky-fan-sums-and-inequalities.md`) | Partial sums, domination, subadditivity |
+| `055000` | **Majorization and weak majorization** (`055000-majorization-and-weak-majorization.md`) | Finite sequences; how partial-sum comparisons control norms |
+| `056000` | **Convexity and majorization descent** (`056000-convexity-and-majorization-descent.md`) | Rearrangement and convex gauge comparisons |
+| `057000` | **Schatten and Frobenius norms** (`057000-schatten-and-frobenius-norms.md`) | Trace, Hilbert–Schmidt, nuclear and operator norm as examples |
+| `058000` | **Unitary-invariant norms and symmetric gauges** (`058000-unitary-invariant-norms-and-symmetric-gauges.md`) | Why changing orthonormal frames leaves the size unchanged |
+| `059000` | **Rectangular invariance and zero padding** (`059000-rectangular-invariance-and-zero-padding.md`) | Singular-value lists for unequal coordinate spaces |
+| `060000` | **Pinching and block direct sums** (`060000-pinching-and-block-direct-sums.md`) | Reflections, block diagonal contraction, majorization-safe recombination |
+| `061000` | **Quadratic-form inequalities and singular values** (`061000-quadratic-form-inequalities-and-singular-values.md`) | Trace and positive-order comparisons; limitations of passing between orders |
 
-### Unit VIII — Selecting the correct spectral branch
+### Unit VIII — Sylvester equations and separated intertwiners
 
-*Solve the ambiguity left by doubled-angle inequalities; include both Section 8 theorem families.*
+*Develop the operator equation that sits underneath the sine-theta proof as mathematics in its own right.*
 
-| Slot | Spoken-lecture focus | Central development |
+**Proof checkpoint:** Solve AX-XB=C in scalar and matrix cases, prove a separated-spectrum estimate and distinguish ordered gaps from mere distance.
+
+| ID | Candidate TTS lecture | Mathematical target |
 | --- | --- | --- |
-| `058000` | **Why a small sine of twice an angle is ambiguous** — `058000-why-a-small-sine-of-twice-an-angle-is-ambiguous.md` | Both near-zero and near-right-angle branches can have small sine-two-theta. |
-| `059000` | **Ordered gaps and the selected spectral branch** — `059000-ordered-gaps-and-the-selected-spectral-branch.md` | Theorem 8.1: off-diagonal perturbations, noncrossing, existence and uniqueness. |
-| `060000` | **Spectral repulsion and quantitative consequences** — `060000-spectral-repulsion-and-quantitative-consequences.md` | Theorem 8.1 block-form, eigenvalue and symmetric-gauge comparisons. |
-| `061000` | **Small-perturbation certification** — `061000-small-perturbation-certification.md` | Theorem 8.2: the norm threshold that places angles below pi over four. |
+| `062000` | **From scalar division to AX−XB=C** (`062000-from-scalar-division-to-ax-xb-c.md`) | Spectral denominators and why gaps appear in an inverse problem |
+| `063000` | **Diagonal matrices and the entrywise solution** (`063000-diagonal-matrices-and-the-entrywise-solution.md`) | When denominators vanish; uniqueness, kernel and resolvent |
+| `064000` | **Kronecker sums and Sylvester invertibility** (`064000-kronecker-sums-and-sylvester-invertibility.md`) | The linear operator X ↦ AX-XB and its spectrum |
+| `065000` | **Ordered spectral separation** (`065000-ordered-spectral-separation.md`) | Gap inequalities and integral solution via exponentials |
+| `066000` | **Unitary and semigroup representations** (`066000-unitary-and-semigroup-representations.md`) | Differentiating e^{tA} C e^{-tB}, generators and integration |
+| `067000` | **Disjoint spectral sets and Rosenblum theory** (`067000-disjoint-spectral-sets-and-rosenblum-theory.md`) | Contours and resolvent-based separated intertwiner arguments |
+| `068000` | **The Banach-space Sylvester lower-bound theorem** (`068000-the-banach-space-sylvester-lower-bound-theorem.md`) | Theorem 5.1: spectral separation, inverse bounds and Banach-space operator norms |
+| `069000` | **Norm dependence of Sylvester bounds** (`069000-norm-dependence-of-sylvester-bounds.md`) | Operator, Frobenius and symmetric-gauge assumptions and constants |
+| `070000` | **Hilbert–Schmidt Sylvester group estimates** (`070000-hilbert-schmidt-sylvester-group-estimates.md`) | Block energy and orthogonal splitting in a Hilbert space of operators |
+| `071000` | **Sylvester identities for compressed blocks** (`071000-sylvester-identities-for-compressed-blocks.md`) | The exact algebraic shape of the future residual-to-angle argument |
 
-### Unit IX — Direct-rotation optimality and its limits
+### Unit IX — Measure theory and spectral calculus beyond matrices
 
-*Investigate Section 4 objectives separately, then prove the precise refutation and surviving statements of Proposition 4.4.*
+*Derive the tools needed when a self-adjoint operator does not possess an eigenvector basis.*
 
-| Slot | Spoken-lecture focus | Central development |
+**Proof checkpoint:** Build the bridge from scalar measures to projection-valued measures and Borel functional calculus, including the reason polarization is required.
+
+| ID | Candidate TTS lecture | Mathematical target |
 | --- | --- | --- |
-| `062000` | **Restricted displacement and principal-angle lower bounds** — `062000-restricted-displacement-and-principal-angle-lower-bounds.md` | Proposition 4.1 and Corollary 4.1: singular values of (I-W)P. |
-| `063000` | **How squared angular errors add up** — `063000-how-squared-angular-errors-add-up.md` | Proposition 4.2: orthonormal basis comparisons. |
-| `064000` | **Squared full displacement and Q-norms** — `064000-squared-full-displacement-and-q-norms.md` | Proposition 4.3 and the norm family for which its conclusion controls displacement. |
-| `065000` | **Why full displacement is a different objective** — `065000-why-full-displacement-is-a-different-objective.md` | Distinguish restricted, squared and unsquared ambient movement. |
-| `066000` | **The four-dimensional refutation of Proposition 4.4** — `066000-the-four-dimensional-refutation-of-proposition-4-4.md` | Trace-norm competitor, singular-value lists and the precise invalid comparison. |
-| `067000` | **What remains true after the correction** — `067000-what-remains-true-after-the-correction.md` | Real versus complex scope, the earlier phase mechanism and the repaired conclusion. |
+| `072000` | **Infinite-dimensional Hilbert examples** (`072000-infinite-dimensional-hilbert-examples.md`) | L2, ell2, multiplication and shift operators; continuous spectrum |
+| `073000` | **Sigma-algebras and Borel sets** (`073000-sigma-algebras-and-borel-sets.md`) | Why measurable spectral sets replace finite eigenvalue lists |
+| `074000` | **Measures, integration and L2** (`074000-measures-integration-and-l2.md`) | Countable additivity, convergence theorems and simple-function approximation |
+| `075000` | **Continuous functional calculus and C-star identities** (`075000-continuous-functional-calculus-and-c-star-identities.md`) | Uniform approximation, spectral mapping, positive functions |
+| `076000` | **Projection-valued measures** (`076000-projection-valued-measures.md`) | Countable orthogonal additivity, spectral projections and integration |
+| `077000` | **Scalar spectral measures and polarization** (`077000-scalar-spectral-measures-and-polarization.md`) | The measure ⟨E(B)x,x⟩ and the complex off-diagonal pairing |
+| `078000` | **Cyclic decompositions and multiplication models** (`078000-cyclic-decompositions-and-multiplication-models.md`) | Why a PVM can be represented on spaces of functions |
+| `079000` | **Bounded Borel functional calculus** (`079000-bounded-borel-functional-calculus.md`) | Defining f(A) by spectral integrals and checking adjoints/products |
+| `080000` | **Measurable spectral restrictions** (`080000-measurable-spectral-restrictions.md`) | Spectral selection, naturality, restriction and commutation |
+| `081000` | **Resolvents from spectral integrals** (`081000-resolvents-from-spectral-integrals.md`) | Recovering the spectrum from inverse bounds and spectral support |
+| `082000` | **Spectral approximation by cutoffs** (`082000-spectral-approximation-by-cutoffs.md`) | Finite partitions and passage to strong limits |
 
-### Unit X — Infinite-dimensional and unbounded operators
+### Unit X — Closed and unbounded self-adjoint operators
 
-*Return to the original setting with spectral measures, domains, operator ideals and the full scope of the angle results.*
+*Replace illegal informal matrix manipulations with domain-correct operator equalities and controlled limits.*
 
-| Slot | Spoken-lecture focus | Central development |
+**Proof checkpoint:** Construct closed-operator, adjoint, resolvent and spectral-cutoff arguments well enough to prove the unbounded Sylvester estimates used in the full source theorem.
+
+| ID | Candidate TTS lecture | Mathematical target |
 | --- | --- | --- |
-| `068000` | **Continuous spectrum beyond finite matrices** — `068000-continuous-spectrum-beyond-finite-matrices.md` | Revisit complete Hilbert spaces and closed invariant subspaces; analyze non-eigenvalue spectral points through examples rather than redefining completeness. |
-| `069000` | **Spectral measures and Borel functional calculus** — `069000-spectral-measures-and-borel-functional-calculus.md` | Projection-valued measures and spectral sets, including half-infinite intervals. |
-| `070000` | **Unbounded self-adjoint operators and domains** — `070000-unbounded-self-adjoint-operators-and-domains.md` | Hellinger-Toeplitz, common domains and bounded residual extensions. |
-| `071000` | **Spectral cutoffs, approximation numbers and finite-rank leakage** — `071000-spectral-cutoffs-approximation-numbers-and-finite-rank-leakage.md` | Section 5.1 and 6.3 lemmas; limits of compressed singular-value data. |
-| `072000` | **Symmetric operator ideals and membership conditions** — `072000-symmetric-operator-ideals-and-membership-conditions.md` | Finite ideal norms, Ky Fan dominance and why membership cannot be assumed. |
-| `073000` | **Sylvester estimates for unbounded operators** — `073000-sylvester-estimates-for-unbounded-operators.md` | Ordered half-infinite gaps, domain-aware AX-XB and spectral cutoff passage. |
-| `074000` | **The full Hilbert-space angle theorems** — `074000-the-full-hilbert-space-angle-theorems.md` | Revisit the four families and the generalized statements with their complete hypotheses. |
-| `075000` | **Infinite-dimensional direct-rotation geometry** — `075000-infinite-dimensional-direct-rotation-geometry.md` | Defect dimensions, continuous angle spectrum and nonacute existence criteria. |
+| `083000` | **Densely defined operators and their graphs** (`083000-densely-defined-operators-and-their-graphs.md`) | Domain as part of the operator; graph norm and closedness |
+| `084000` | **Adjoints of unbounded operators** (`084000-adjoints-of-unbounded-operators.md`) | Symmetric versus self-adjoint; adjoint domains |
+| `085000` | **Hellinger–Toeplitz and common-domain discipline** (`085000-hellinger-toeplitz-and-common-domain-discipline.md`) | Why everywhere-defined self-adjoint maps are bounded |
+| `086000` | **Resolvents, coercivity, and spectral location** (`086000-resolvents-coercivity-and-spectral-location.md`) | Real form bounds, resolvent norms, invertibility |
+| `087000` | **Cayley transforms and graph-level equivalence** (`087000-cayley-transforms-and-graph-level-equivalence.md`) | Turning unbounded self-adjoint operators into bounded unitary data |
+| `088000` | **Unbounded spectral theorem and domain calculus** (`088000-unbounded-spectral-theorem-and-domain-calculus.md`) | Spectral integrals with integrability constraints on vectors |
+| `089000` | **Spectral projections and reducing domains** (`089000-spectral-projections-and-reducing-domains.md`) | When a reducing subspace respects an unbounded domain |
+| `090000` | **Quadratic forms and ordered half-infinite gaps** (`090000-quadratic-forms-and-ordered-half-infinite-gaps.md`) | Semibounded operators, form inequalities and gap alternatives |
+| `091000` | **Yosida approximation and bounded truncations** (`091000-yosida-approximation-and-bounded-truncations.md`) | Regularization while retaining self-adjoint structure |
+| `092000` | **One-parameter unitary groups and their generators** (`092000-one-parameter-unitary-groups-and-their-generators.md`) | Strong continuity and Stone-style generator correspondence |
+| `093000` | **Domain-aware Sylvester identities and cutoffs** (`093000-domain-aware-sylvester-identities-and-cutoffs.md`) | Proof of block identities before estimating their bounded extensions |
+| `094000` | **Unbounded Sylvester estimates** (`094000-unbounded-sylvester-estimates.md`) | Half-infinite ordered gaps, spectral restrictions and limiting arguments |
 
-### Unit XI — The 1970 paper’s worked numerical example
+### Unit XI — Infinite-dimensional operator ideals and real/complex transfer
 
-*Reconstruct the beam/Rayleigh-Ritz calculation of Section 9, not just its headline bounds.*
+*Make the symmetric-norm assertions legal, and cover the real Hilbert statements without presuming every complex theorem transfers automatically.*
 
-| Slot | Spoken-lecture focus | Central development |
+**Proof checkpoint:** Explain why an ideal norm can be undefined outside its domain, how approximation-number inequalities descend, and how real operators can be complexified and recovered.
+
+| ID | Candidate TTS lecture | Mathematical target |
 | --- | --- | --- |
-| `076000` | **The free-beam eigenproblem** — `076000-the-free-beam-eigenproblem.md` | Fourth-derivative operator, boundary conditions and the low-dimensional trial space. |
-| `077000` | **Sine bounds, double-angle bounds and Ky Fan sums** — `077000-sine-bounds-double-angle-bounds-and-ky-fan-sums.md` | Work through the opening numerical estimates and their different interpretations. |
-| `078000` | **Improving the estimates with Rayleigh-Ritz and tangent bounds** — `078000-improving-the-estimates-with-rayleigh-ritz-and-tangent-bounds.md` | Residual reduction, Weinberger comparison and the limitation of unbounded residuals. |
-| `079000` | **From subspace error to individual beam modes** — `079000-from-subspace-error-to-individual-beam-modes.md` | Schur complements, internal eigenvector errors and the use of branch selection. |
+| `095000` | **Compactness and finite-rank approximation** (`095000-compactness-and-finite-rank-approximation.md`) | Compact operators, strong versus norm convergence, approximation |
+| `096000` | **Approximation numbers and singular-value sequences** (`096000-approximation-numbers-and-singular-value-sequences.md`) | Finite matrix analogy and infinite-dimensional definitions |
+| `097000` | **Ky Fan dominance in Hilbert space** (`097000-ky-fan-dominance-in-hilbert-space.md`) | Approximation sequences and norming functions |
+| `098000` | **Symmetric operator ideals and membership** (`098000-symmetric-operator-ideals-and-membership.md`) | Where-defined gauges and why not every bounded map has finite ideal norm |
+| `099000` | **Hilbert–Schmidt and trace-class operators** (`099000-hilbert-schmidt-and-trace-class-operators.md`) | Operator inner products, bases, nuclear traces and finite-rank density |
+| `100000` | **Modulus, polar factors, and ideal invariance** (`100000-modulus-polar-factors-and-ideal-invariance.md`) | Rectangular operator transport without assuming invertibility |
+| `101000` | **Ideal estimates for compressions and block sums** (`101000-ideal-estimates-for-compressions-and-block-sums.md`) | Membership preservation, pinching and direct sums |
+| `102000` | **Real Hilbert complexification** (`102000-real-hilbert-complexification.md`) | Construction, norms and how linear/adjoint operations commute with transfer |
+| `103000` | **Real and complex spectra and functional calculus** (`103000-real-and-complex-spectra-and-functional-calculus.md`) | Transport and descent of self-adjoint spectral assertions |
+| `104000` | **Real versions of unbounded Sylvester bounds** (`104000-real-versions-of-unbounded-sylvester-bounds.md`) | Domains, resolvents and transferred estimates |
+| `105000` | **A full proof-readiness assembly** (`105000-a-full-proof-readiness-assembly.md`) | Reconstruct the analytic lemma stack for a symmetric-norm, unbounded sine estimate |
 
-### Unit XII — Questions left by the 1970 analysis
+### Unit XII — Entering perturbation theory: residual geometry and single angles
 
-*Take all four Section 10 questions seriously, distinguishing their 1970 formulation from later research.*
+*Now ask the stability question, with a full repertoire of spaces, spectral objects, norm systems, and inverse-operator tools.*
 
-| Slot | Spoken-lecture focus | Central development |
+**Proof checkpoint:** Starting from a 2x2 example, derive the complete residual-to-complementary-Sylvester-to-sine chain and its tangent counterpart.
+
+| ID | Candidate TTS lecture | Mathematical target |
 | --- | --- | --- |
-| `080000` | **How much does arbitrary spectral separation suffice** — `080000-how-much-does-arbitrary-spectral-separation-suffice.md` | Source Question 10.1: optimal bounds under a pure distance gap. |
-| `081000` | **Can we control three-way subspace interactions** — `081000-can-we-control-three-way-subspace-interactions.md` | Source Question 10.2: block geometry beyond pairs of subspaces. |
-| `082000` | **Can spectral and angular motion be bounded jointly** — `082000-can-spectral-and-angular-motion-be-bounded-jointly.md` | Source Question 10.3: eigenvalue change alongside rotation. |
-| `083000` | **How stable is a function of an operator** — `083000-how-stable-is-a-function-of-an-operator.md` | Source Question 10.4: f(A+H)-f(A), with spectral projections as an illustrative case. |
+| `106000` | **What changes and what stays invariant** (`106000-what-changes-and-what-stays-invariant.md`) | A two-level counterexample, stable clusters, and the first perturbation question |
+| `107000` | **Trial spaces, exact subspaces and residuals** (`107000-trial-spaces-exact-subspaces-and-residuals.md`) | Trial isometries, compressed operators and A E−E A0 |
+| `108000` | **The complementary-block Sylvester equation** (`108000-the-complementary-block-sylvester-equation.md`) | Exact reducing coordinates and F1*R=Λ1 X−X A0 |
+| `109000` | **Directed sine as a rectangular modulus** (`109000-directed-sine-as-a-rectangular-modulus.md`) | S=(I−P)E, |S|=sin Θ0 and its coordinate independence |
+| `110000` | **The single-angle sine theorem** (`110000-the-single-angle-sine-theorem.md`) | Spectral separation, ideal contraction, membership and full hypotheses |
+| `111000` | **Graph subspaces and tangent geometry** (`111000-graph-subspaces-and-tangent-geometry.md`) | Acute pairs, graph operators and tan Θ |
+| `112000` | **The single-angle tangent theorem** (`112000-the-single-angle-tangent-theorem.md`) | Ordered separation, proof mechanism and limit as angles approach 90 degrees |
+| `113000` | **Sharp examples and norm-class comparisons** (`113000-sharp-examples-and-norm-class-comparisons.md`) | How gaps, residuals and constants can fail or become optimal |
 
-### Unit XIII — Companion-paper mathematics and applications
+### Unit XIII — Double-angle estimates, reflections, and branch choice
 
-*Develop the matching/transport result and modern applications only after the Davis–Kahan core has been taught.*
+*Develop the other two headline theorem families and the selection theory that gives them an interpretable small-angle meaning.*
 
-| Slot | Spoken-lecture focus | Central development |
+**Proof checkpoint:** Use block reflections to derive double-angle expressions; exhibit the ambiguity of sin(2 theta) and prove spectral selection criteria.
+
+| ID | Candidate TTS lecture | Mathematical target |
 | --- | --- | --- |
-| `084000` | **From the Proposition 4.4 failure to transport optimization** — `084000-from-the-proposition-4-4-failure-to-transport-optimization.md` | Why minimizing real trace-norm displacement leads to coupled principal planes. |
-| `085000` | **Real trace-norm transport as weighted matching** — `085000-real-trace-norm-transport-as-weighted-matching.md` | The included follow-on theorem: singleton and pair costs, the global reduction, and proof mechanism. |
-| `086000` | **Rectangular perturbations and modern statistical variants** — `086000-rectangular-perturbations-and-modern-statistical-variants.md` | Wedin and Yu-Wang-Samworth; how their assumptions compare with the original angle theory. |
-| `087000` | **Spectral embeddings and the motivating DKPS application** — `087000-spectral-embeddings-and-the-motivating-dkps-application.md` | A bounded application path through alignment, Gram matrices and representation error. |
+| `114000` | **Off-diagonal perturbations and block reflection** (`114000-off-diagonal-perturbations-and-block-reflection.md`) | P H P=0 and complementary diagonal blocks; anticommutation |
+| `115000` | **Doubled angles from symmetry** (`115000-doubled-angles-from-symmetry.md`) | Why reflection compares geometric data with its transformed copy |
+| `116000` | **The sine-two-theta theorem** (`116000-the-sine-two-theta-theorem.md`) | Full operator-angle interpretation, constants and norms |
+| `117000` | **The tangent-two-theta theorem** (`117000-the-tangent-two-theta-theorem.md`) | Ordered separation, Riccati/graph picture and quarter-turn boundary |
+| `118000` | **Why a small doubled sine proves little alone** (`118000-why-a-small-doubled-sine-proves-little-alone.md`) | Near-zero and near-right-angle branches |
+| `119000` | **Spectral selection and repulsion** (`119000-spectral-selection-and-repulsion.md`) | Theorem 8.1, its block inequalities and unique reducing branch |
+| `120000` | **Small-angle certification** (`120000-small-angle-certification.md`) | Theorem 8.2 and safe branch thresholds |
+| `121000` | **A comparative theorem decision procedure** (`121000-a-comparative-theorem-decision-procedure.md`) | Four bounds, three gap regimes, directed versus full angles |
 
-## Coverage crosswalk for the 29 selected 1970 results
+### Unit XIV — Generalized bounds and source-faithful norm estimates
 
-Source-result IDs are taken from `dev/davis-kahan-1970-formalization-result-inventory.json`; hypotheses and conclusions are reviewed against `papers/dk_formalization_journal/appendix_result_summaries.tex`. Slots below are proposed teaching locations, not claims that lectures or proofs have been created.
+*Complete Section 6 and the auxiliary norm, pinching, and finite-rank results not captured by the four headlines.*
 
-| Original source result ID | Proposed lecture slot(s) |
-| --- | --- |
-| `S2-sin-theta` | `045000, 074000` |
-| `S2-tan-theta` | `047000, 057000, 074000` |
-| `S2-sin-two-theta` | `049000, 074000` |
-| `S2-tan-two-theta` | `050000, 074000` |
-| `DK-3.1-prop` | `033000` |
-| `DK-3.2-prop` | `034000` |
-| `DK-3.3-prop` | `034000` |
-| `DK-3.4-prop` | `034000` |
-| `DK-3.1-thm` | `035000` |
-| `DK-3.1-cor` | `035000, 075000` |
-| `DK-3.5-prop` | `035000` |
-| `DK-3.2-cor` | `035000` |
-| `DK-4.1-prop` | `062000` |
-| `DK-4.1-cor` | `062000` |
-| `DK-4.2-prop` | `063000` |
-| `DK-4.3-prop` | `064000` |
-| `DK-4.4-prop` | `065000–067000` |
-| `DK-5.1-thm` | `042000` |
-| `DK-5.2-thm` | `042000, 073000` |
-| `DK-5.1-lem` | `071000` |
-| `DK-6.1-lem` | `052000` |
-| `DK-6.2-lem` | `053000` |
-| `DK-6.1-prop` | `054000` |
-| `DK-6.1-thm` | `055000` |
-| `DK-6.2-thm` | `056000` |
-| `DK-6.3-thm` | `057000` |
-| `DK-6.3-lem` | `071000` |
-| `DK-8.1-thm` | `059000–060000` |
-| `DK-8.2-thm` | `061000` |
+**Proof checkpoint:** Prove the generalized theorems with dimension mismatch and frame defects; distinguish each original hypothesis from a merely convenient stronger assumption.
 
-### Non-theorem source material that remains in scope
-
-| Original source material | Main teaching location |
-| --- | --- |
-| Section 1: Hilbert-space decompositions, source/exact blocks, angular operators, residuals, symmetric norms | Foundations I–IV; transition V; full operator treatment X |
-| Section 2: four angle bounds, constants, equality cases and hypotheses | VI, then X |
-| Section 3: direct rotation, defects, realization/classification and angle spectrum | IV, then X |
-| Section 4: restricted and ambient displacement, Proposition 4.4 and counterexample | IX |
-| Section 5: Sylvester estimates, spectral positioning and cutoffs | V and X |
-| Section 6: unequal frames, lower frame bounds, symmetric norms and weak gaps | VII and X |
-| Section 7: reflections and double-angle proofs | VI and X |
-| Section 8: branch choice, repulsion and smallness conditions | VIII |
-| Section 9: free beam, estimates (9.1)–(9.11) and Ritz/Weinberger comparisons | XI |
-| Section 10: four original questions | XII |
-| Journal paper's matching theorem and related applications | XIII |
-
-## Explicit prerequisite relationships
-
-- **Norms → Banach completeness → bounded operators.** Explain the setting in which inverses and limits are studied, then why the bounded-operator spectrum has an analytic definition. Use the complex Banach setting for the general spectrum, with real matrices handled through complexification when needed.
-- **Inner products → Hilbert spaces → projections/adjoints → isometries.** An arbitrary Banach space does not supply the same Hilbert adjoint or orthogonal projection theorem. Introduce the dual distinction rather than collapsing these categories.
-- **Analysis/synthesis → Gram `S*S` → positive operators → modulus and singular values.** If `S` maps coefficient space into the ambient Hilbert space, its Gram operator lives on coefficient space; `SS*` is the frame operator on ambient space. Use `V*V=I` and `VV*=P` for orthonormal frames, then overlap `V*W` for principal angles.
-- **Eigenspaces → spectral theorem → spectral projections → functional calculus.** The Hilbert closed-subspace projection construction precedes the spectral one; a spectral projection adds operator dependence and spectral selection.
-- **Isometries/adjoints → skew-adjoint generator → exponential flow → direct rotation.** First derive the continuous isometry and planar example, then introduce the canonical subspace rotation.
-- **Compressed operators and residuals → spectral gaps → Sylvester equations → angle theorems.** The first actual stability problem is `036000`.
-- **Finite geometry → Hilbert spectral measures/ideals/unbounded domains.** Preview genuine distinctions at the outset; revisit with full proofs in Unit X.
-- **Direct rotations + norm objectives → Proposition 4.4 counterexample → matching theorem.** Keep corrected optimality in the original source course and matching in the follow-on unit.
-
-## Lean correspondence crosswalk for early lectures
-
-These are verified file/declaration *anchors* in the supplied repository snapshot, not newly written Lean proofs. For each lecture, inspect the current dependency pin before copying a declaration. The source location should be shown in the end card beside the actual mathematical statement and its Lean counterpart.
-
-| Foundations topic | Mathematical symbol/idea | Source-verified Lean anchor |
+| ID | Candidate TTS lecture | Mathematical target |
 | --- | --- | --- |
-| Banach and Hilbert structure | continuous `A : E → E`, completeness, inner product | `NormedAddCommGroup`, `CompleteSpace`, `InnerProductSpace`; usage in `visualizations/lectures/002749_rayleigh_ritz/facts.lean` |
-| Bounded maps and isometries | `A : E → F`; `‖Vx‖=‖x‖` | `E →L[ℝ] F`, `Isometry X` in the Rayleigh–Ritz companion; `E ≃ₗᵢ[ℝ] E` explained in `visualizations/lectures/LEAN_FACTS.md` |
-| Frames and Gram operators | synthesis `S`, analysis `S*`, `G=S*S` | `TauCeti.finiteSynthesis`, `finiteAnalysis`, `finiteGramOperator`, `finiteGramOperator_eq_selfCompAdjoint`, `finiteGramOperator_isPositive` in `ForTauCeti/Analysis/InnerProductSpace/FiniteFrame.lean` (this module defines the Gram product via *analysis* orientation) |
-| Orthonormal coordinate embeddings | `V*V=I`, `VV*=P` | `Orthonormal.synthesisMapIsometry` referenced in `ForTauCeti/Analysis/InnerProductSpace/AlignedBasis.lean` |
-| Projections and orthogonal splits | `P_K+P_{K⊥}=I` | `K.starProjection_add_starProjection_orthogonal` in `visualizations/lectures/001000_projections/facts.lean` |
-| Compression | `V*AV` | `ContinuousLinearMap.compression_def` in `visualizations/lectures/002749_rayleigh_ritz/facts.lean` |
-| Modulus and polar decomposition | `|A|`, `A=U|A|` | `LinearMap.polarFactor_comp_operatorAbs` in `visualizations/lectures/002833_polar/facts.lean` |
-| Matrix exponential | `exp(tK)` for skew-adjoint `K` | `ContinuousLinearMap.exp_add_smul`, `NormedSpace.exp_mem_unitary_of_mem_skewAdjoint` in `visualizations/lectures/002500_matrix_exponential/facts.lean` |
-| Later angle theory | residual predicate, spectral-gap condition | `IsTrialResidual` and `FormBoundedSylvesterGap`, described in `papers/dk_formalization_journal/paper.tex` and used in `DavisKahan/` source modules |
+| `122000` | **Direct-sum norm comparison** (`122000-direct-sum-norm-comparison.md`) | Lemma 6.1 and rank-safe weak majorization |
+| `123000` | **Pinching through an involution** (`123000-pinching-through-an-involution.md`) | Lemma 6.2 and block-diagonal contraction |
+| `124000` | **Ambient sine from an ambient perturbation** (`124000-ambient-sine-from-an-ambient-perturbation.md`) | Proposition 6.1 versus a directed residual |
+| `125000` | **Non-isometric frames and unequal dimensions** (`125000-non-isometric-frames-and-unequal-dimensions.md`) | Theorem 6.1, lower frame bound and epsilon |
+| `126000` | **Weak spectral gaps and Hilbert–Schmidt estimates** (`126000-weak-spectral-gaps-and-hilbert-schmidt-estimates.md`) | Theorem 6.2 and what fails without ordered separation |
+| `127000` | **The generalized tangent bound** (`127000-the-generalized-tangent-bound.md`) | Theorem 6.3, Rayleigh–Ritz and frame geometry |
+| `128000` | **Spectral cutoff and finite-rank source lemmas** (`128000-spectral-cutoff-and-finite-rank-source-lemmas.md`) | Section 5.1 and 6.3 lemmas; why their hypotheses matter |
+| `129000` | **One complete original-paper proof reconstruction** (`129000-one-complete-original-paper-proof-reconstruction.md`) | Choose one hard result and rederive every analytic dependency |
 
-**Lean lesson design:** (1) present the mathematical identity, (2) give its code type, (3) identify each implicit assumption such as `CompleteSpace`, `FiniteDimensional`, `Isometry`, or a spectral-gap predicate, (4) show the actual sourced example/declaration, (5) narrate *why* the coded equality represents the mathematical one. Do not dump the proof development, falsely claim a code excerpt is independently compilable, or replace explanation with a declaration name. Existing `facts.lean` examples are reusable reference patterns.
+### Unit XV — Direct-rotation extremals and corrected optimality
 
-## Course-scale editorial decisions
+*Treat the rotation optimization mathematics on its own terms, rather than assuming canonical transport is universally optimal.*
 
-- Keep the 29-result crosswalk as the original paper coverage check; new foundations are teaching dependencies, not additional source-results.
-- Audio-first mathematical teaching and the **mandatory final Lean bridge** are compatible: explain the mathematics orally; let exact Lean source appear as a synchronized reading card. A listener should still understand the lecture without seeing the code.
-- Use concrete Gram examples early: nonorthogonal vectors with `G≠I`, an orthonormal frame with `V*V=I`, and a nonsurjective isometry with `VV*≠I`. These prevent several later confusions about principal angles, compressions and residuals.
-- Avoid presenting arbitrary Banach operators as if they had orthogonal spectral projections or Hilbert adjoints. Be explicit about bounded vs unbounded and finite vs infinite dimensions.
-- The first serious spectral instability example belongs at `036000`, not the introduction. History is separate. Keep source attribution to mathematical results where relevant.
-- Draft lecture IDs are not stable public URLs; renumber these candidate rows while the staged branch is new, without modifying production lecture IDs.
+**Proof checkpoint:** Derive exact restricted and squared displacement claims, calculate the counterexample, and isolate the corrected theorem.
 
-## Source anchors
+| ID | Candidate TTS lecture | Mathematical target |
+| --- | --- | --- |
+| `130000` | **Restricted direct-rotation optimality** (`130000-restricted-direct-rotation-optimality.md`) | Proposition 4.1 and Corollary 4.1 via singular-angle inequalities |
+| `131000` | **The squared displacement of orthonormal frames** (`131000-the-squared-displacement-of-orthonormal-frames.md`) | Proposition 4.2 and how errors add |
+| `132000` | **Whole-space squared displacement and Q-norms** (`132000-whole-space-squared-displacement-and-q-norms.md`) | Proposition 4.3 and the exact family of objectives |
+| `133000` | **Unsquared ambient displacement is different** (`133000-unsquared-ambient-displacement-is-different.md`) | The optimization problem printed as Proposition 4.4 |
+| `134000` | **The four-dimensional real counterexample** (`134000-the-four-dimensional-real-counterexample.md`) | Competing rotation, trace norm, singular-value comparison |
+| `135000` | **Corrected scopes and surviving results** (`135000-corrected-scopes-and-surviving-results.md`) | Restricted optimality and valid norm-specific statements |
+| `136000` | **Classification and realizations of direct rotations** (`136000-classification-and-realizations-of-direct-rotations.md`) | Defects, compact angle data and boundary cases revisited |
 
-- `papers/dk_formalization_journal/paper.tex` and `FORMALIZATION_PAPER_SCOPE.md`: companion scope and intended theorem families.
-- `papers/dk_formalization_journal/appendix_result_summaries.tex`: source-result statements and hypotheses.
-- `prose/distilled_literature/DavisKahan1970_part_III.tex`: section-level source reconstruction, including Section 9 and Section 10.
-- `dev/davis-kahan-1970-formalization-result-inventory.json`: 29-result ledger.
-- `visualizations/lectures/`: materials available for adaptation, not the ordering authority.
-- `papers/optimal_spectral_transport/`: related transport mathematics; do not expand the main course to reproduce this whole program.
+### Unit XVI — Worked original-paper calculation and open problems
 
-**First transcript:** `tts-lectures/000000-course-introduction.md` introduces normed/Banach/Hilbert spaces, isometries, Gram geometry, operators and spectra, and closes with a source-grounded spoken Lean bridge. It intentionally postpones the eigenvector-instability calculation and explicit residual-over-gap argument until the learner reaches the stability unit.
+*Apply the theory to the source paper numerical example, then reconstruct its research questions as mathematical problems.*
 
+**Proof checkpoint:** Work through the free-beam model and the bounds instead of quoting a table of numerical constants.
+
+| ID | Candidate TTS lecture | Mathematical target |
+| --- | --- | --- |
+| `137000` | **The free-beam operator and its domain** (`137000-the-free-beam-operator-and-its-domain.md`) | Fourth-order differential operator, boundary conditions and Green identities |
+| `138000` | **Beam Rayleigh–Ritz calculation** (`138000-beam-rayleigh-ritz-calculation.md`) | Trial functions, compressed matrix and residual |
+| `139000` | **Comparing angle and Ky Fan beam estimates** (`139000-comparing-angle-and-ky-fan-beam-estimates.md`) | Source Section 9 numerical inequalities and their improvements |
+| `140000` | **From subspace bounds to individual modes** (`140000-from-subspace-bounds-to-individual-modes.md`) | Internal gaps, complement blocks and Schur-type reductions |
+| `141000` | **How much can a distance-only gap say** (`141000-how-much-can-a-distance-only-gap-say.md`) | Question 10.1 with known cases and counterexamples |
+| `142000` | **Three subspaces and higher-order interactions** (`142000-three-subspaces-and-higher-order-interactions.md`) | Question 10.2 and block geometry |
+| `143000` | **Joint movement of eigenvalues and angles** (`143000-joint-movement-of-eigenvalues-and-angles.md`) | Question 10.3, motivations and obstacles |
+| `144000` | **Stability of functions of operators** (`144000-stability-of-functions-of-operators.md`) | Question 10.4 and the need for functional calculus |
+
+### Unit XVII — Companion formalizations and independent proof mastery
+
+*Use the infrastructure to understand adjacent mathematical consequences without mistaking them for requirements of the original 1970 result census.*
+
+**Proof checkpoint:** Prove a modern singular-subspace or statistical bound and independently reconstruct one full 1970 theorem from stated analytic foundations.
+
+| ID | Candidate TTS lecture | Mathematical target |
+| --- | --- | --- |
+| `145000` | **From rotation counterexample to real transport matching** (`145000-from-rotation-counterexample-to-real-transport-matching.md`) | Trace-norm matching and principal-plane coupling |
+| `146000` | **Rectangular singular-subspace bounds** (`146000-rectangular-singular-subspace-bounds.md`) | Hermitian dilation, Gram perturbation and Wedin-type phenomena |
+| `147000` | **Population-gap spectral statistics** (`147000-population-gap-spectral-statistics.md`) | Yu–Wang–Samworth versus mixed sample/population gap |
+| `148000` | **Procrustes and spectral embeddings** (`148000-procrustes-and-spectral-embeddings.md`) | Aligned eigenframes, Gram rigidity and downstream representation error |
+| `149000` | **Proof practicum: reconstruct the 1970 theory** (`149000-proof-practicum-reconstruct-the-1970-theory.md`) | Write a coherent finite-to-infinite proof pathway; check full source hypotheses |
+
+## Original 1970 source-result coverage (29-result endpoint map)
+
+This crosswalk uses the repository’s selected original-paper result IDs. A row shows the **planned teaching location**, not a claim that the lecture or a new Lean proof exists. The full statement and hypotheses belong in `papers/dk_formalization_journal/appendix_result_summaries.tex`. The 1970 result list must **not** be mistaken for the total mathematical prerequisite set.
+
+| 1970 result | Mathematical statement | Planned lecture slot(s) |
+| --- | --- | --- |
+| `S2-sin-theta` | Single-angle sine theorem | `110000`, `105000` |
+| `S2-tan-theta` | Single-angle tangent theorem | `112000`, `127000` |
+| `S2-sin-two-theta` | Double-angle sine theorem | `116000` |
+| `S2-tan-two-theta` | Double-angle tangent theorem | `117000` |
+| `DK-3.1-prop` | Acute direct rotation existence and uniqueness | `049000` |
+| `DK-3.2-prop` | Nonacute existence criterion | `050000` |
+| `DK-3.3-prop` | Principal square-root characterization | `049000`, `046000` |
+| `DK-3.4-prop` | Square as a direct rotation | `049000` |
+| `DK-3.1-thm` | Classification of pairs of subspaces | `050000` |
+| `DK-3.1-cor` | Compact classification by angle eigenvalues | `051000`, `136000` |
+| `DK-3.5-prop` | Angle commutation and eigenspace geometry | `049000`, `046000` |
+| `DK-3.2-cor` | Reversal symmetry | `049000` |
+| `DK-4.1-prop` | Pointwise and singular-value extremality of the direct rotation | `130000` |
+| `DK-4.1-cor` | UI-norm minimality of direct rotation displacement | `130000` |
+| `DK-4.2-prop` | Basis-angle square-sum extremality | `131000` |
+| `DK-4.3-prop` | Squared displacement UI-norm minimality | `132000` |
+| `DK-4.4-prop` | Full-displacement counterexamples and Proposition 4.4 as printed | `133000`, `134000` |
+| `DK-5.1-thm` | Banach-space Sylvester lower bound | `068000` |
+| `DK-5.2-thm` | Semibounded self-adjoint Sylvester theorem | `094000` |
+| `DK-5.1-lem` | Strong-cutoff convergence of singular values | `082000`, `128000` |
+| `DK-6.1-lem` | Direct-sum UI-norm comparison and converse | `122000` |
+| `DK-6.2-lem` | Reflection-pinch contraction | `123000` |
+| `DK-6.1-prop` | Sine proof, ambient limitation, and symmetric sine theorem | `124000` |
+| `DK-6.1-thm` | Generalized sine theorem | `125000` |
+| `DK-6.2-thm` | Pairwise-gap square-norm sine theorem | `126000` |
+| `DK-6.3-thm` | Tangent proof machinery, Example 6.1, and generalized tangent theorem | `127000` |
+| `DK-6.3-lem` | Finite-rank near-maximizer leakage estimate | `128000` |
+| `DK-8.1-thm` | Branch selection and spectral repulsion | `119000` |
+| `DK-8.2-thm` | Smallness selects the acute branch | `120000` |
+
+## Proof-dependency coverage beyond the 29 original source results
+
+The journal paper's dependency analysis (`papers/dk_formalization_journal/data/formalization_theory_taxonomy_20260817.json`, with source-root/declaration traces) recognizes reusable mathematical foundations not counted as source theorems. The following is a **mathematical** coverage checklist, independent of the present locations of Lean files.
+
+| Required machinery | Course units | Why it is load-bearing | Evidence to consult during drafting |
+| --- | --- | --- | --- |
+| Banach/Hilbert completeness, bounded maps, Riesz, subspaces, adjoints | I–II | Legal operator norms, inverses, adjoints and closed subspaces | Mathlib foundations; `ForTauCeti/Analysis/InnerProductSpace/Basic.lean` |
+| Frame synthesis/analysis, isometries, Gram and cross-Gram operators | II–III | Trial coordinate spaces, compressed blocks and rectangular residuals | `ForTauCeti/Analysis/InnerProductSpace/FiniteFrame.lean`; `.../AlignedBasis.lean` |
+| Self-adjoint spectral theorem, Courant–Fischer, Weyl, Ritz | IV | Exact spectral blocks, ordered gaps and variational estimates | `ForTauCeti/Analysis/InnerProductSpace/Spectral/EigenFrame.lean`; `.../Residual/Ritz.lean`; TauCeti accepted min–max modules (verify pin) |
+| Positive square roots, modulus, polar and partial isometries, operator exponentials | V | Canonical direct rotation, sine-angle modulus, norm invariance, spectral flows | `ForTauCeti/Analysis/CStarAlgebra/PositiveSquareRootCommute.lean`; `ForTauCeti/Analysis/InnerProductSpace/SkewAdjointExponential.lean`; TauCeti polar APIs (verify pin) |
+| Two-projection, cosine/sine and Halmos classification | VI | Full and directed angles, acute/nonacute existence and rotation uniqueness | `DavisKahan/Geometry/Halmos/TwoProjections.lean`; `ForTauCeti/Analysis/InnerProductSpace/AngleGeometry.lean` |
+| Approximation numbers, Ky Fan, majorization, UINs | VII, XI | Every-norm/where-defined interpretation of the original statements | `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/`; `ForTauCeti/Analysis/Convex/Majorization.lean` |
+| Sylvester, Rosenblum, semigroups, ordered and separated gaps | VIII, X | The inverse problem turning a residual into an angle inequality | `ForTauCeti/Analysis/InnerProductSpace/Sylvester/`; `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Sylvester.lean` |
+| Measure theory, PVM, Borel spectral calculus and polarization | IX | Spectral subspaces with continuous spectrum; spectral cutoffs | `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/`; `.../ProjValMeasure/`; TauCeti imported PVM modules (verify pin) |
+| Closed/unbounded self-adjoint domains, resolvents, graph and spectral cutoffs | X | Full unbounded Hilbert-space theorem rather than bounded-matrix substitute | `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean`; `.../YosidaApproximation.lean`; `.../Resolvent.lean` |
+| Complexification and real spectral descent | I, XI | Prove claims for real and complex Hilbert spaces without a silent field restriction | `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Complexification.lean`; `.../RealSpectrumBorelSymbols.lean` |
+| Spectral residuals and full four angle families | XII–XIV | Actual original-paper theorems, assumptions, exact norm scope | `DavisKahan/Sources/DavisKahan1970/`; `DavisKahan/Sylvester/Gap.lean` |
+| Direct-rotation objective and correction | VI, XV, XVII | Distinguish restricted displacement from false full trace-norm minimality | `DavisKahan/FiniteDimensional/DirectRotation/`; `papers/optimal_spectral_transport/` |
+| Free-beam realization and form analysis | X, XVI | Source Section 9 worked example, including an unbounded fourth-order operator | `ForTauCeti/Analysis/Calculus/FourthOrderGreensIdentity.lean`; original Section 9 reconstruction |
+| Rectangular singular-subspaces, population gaps, Procrustes | III, VII, XVII | Companion formalizations and downstream applications | `ForTauCeti/Analysis/InnerProductSpace/Singular/Subspace.lean`; `YuWangSamworth/` source where available |
+
+### Upstream preservation rule
+
+Some foundations were **developed or substantially adapted in this repository** and later consumed from TauCeti. A missing local donor file therefore does **not** imply that the mathematics is irrelevant. The maintained `dev/tauceti/dkps-upstream-contribution-census.md` is the starting point for the lineage audit; `dev/tauceti/roadmap-topic-map.md` identifies the broad families (polar decomposition, orthogonal geometry, majorization, principal angles, ideals, self-adjoint spectral theory, spectral subspace perturbation, and matrix spectral statistics). The provenance record also distinguishes DKPS donors, Spectra ancestry, independent TauCeti proofs, and roadmap-associated work—these are not interchangeable authorship claims.
+
+The independent source is the **mathematical dependency**, not the old import graph, PR count, or whatever module currently owns a declaration. When preparing a lesson, check current dependencies and matched declarations in the target repository; the uploaded snapshot does not include an accessible checkout of every pinned TauCeti source file.
+
+### Deep proof-reconstruction assessments
+
+These are not additional mandated videos. They are summative tasks: students should be able to carry them out with earlier lectures, rather than merely quote a named lemma.
+
+1. **Projection/polar construction:** Starting from closed subspaces and their projections, derive cosine and sine operators, construct the acute direct rotation, and account for defects in a nonacute example.
+2. **Analytic Sylvester construction:** Starting with separated self-adjoint blocks, establish an inverse estimate for `AX-XB=C` in an appropriate norm. Repeat with ordered unbounded form gaps and explain why domains/cutoffs are necessary.
+3. **Spectral calculus:** Starting from scalar measures and the PVM axioms, explain how `f(A)` and a spectral projection are constructed; treat a multiplication operator whose spectrum is not exhausted by eigenvalues.
+4. **Norm generality:** Prove a Ky Fan bound, pass it to a symmetric-gauge inequality under the required assumptions, and state explicitly when ideal membership is needed.
+5. **Full sine-theta proof:** State trial/exact subspaces and domains, derive `F1*R=Λ1 X-XA0`, identify `|X|` as the directed sine, then prove the **where-defined** unitarily invariant inequality. Explain real/complex transfer.
+6. **Other three angle theorems:** Reconstruct the tangent and double-angle arguments, state actual gap hypotheses, and resolve branch ambiguity through spectral selection.
+7. **Original paper closure:** Reprove the Section 3–6 and Section 8 source-result families, analyze Proposition 4.4's counterexample, and reproduce the beam example and Section 10 questions.
+
+## Backward proof-chain map (for course auditing)
+
+A complete sine-theta proof must pass through the following chain; each arrow is a mathematical obligation, *not* automatically established by mentioning an API:
+
+```
+Hilbert/operator foundations + spectral calculus + domains
+        |                          |
+        v                          v
+trial and exact isometries     reducing spectral subspaces
+        |                          |
+        +----> R = A E0 - E0 A0 <--+
+                       |
+                       v
+       F1*R = Lambda1 X - X A0   (domain-aware)
+                       |
+                 spectral gap
+                       |
+                       v
+            delta N(X) <= N(F1*R)
+                       |
+        ideal membership + contraction
+                       |
+                       v
+                <= N(R)
+                       |
+      |X| = sin(Theta0) + modulus invariance
+                       |
+                       v
+            delta N(sin Theta0) <= N(R)
+```
+
+To recover other theorems, add graph/tangent geometry, reflections and double-angle calculus, branch selection, direct-rotation geometry, and (for Section 6) dimension mismatch and pinching. This is the conceptual dependency map the old lecture inventory was not designed to supply.
+
+## Explicit next drafting stages
+
+- **Stage 0 — architecture:** review this expanded mathematical dependency map against the journal paper, the source result summaries, the theory taxonomy, and the recorded upstream ancestry. Preserve the 29-result table but audit proof dependencies beyond it.
+- **Stage 1 — orientation:** use `tts-lectures/000000-course-introduction.md`. It promises the course, establishes expectations and gives a concrete idea of *why* the mathematical machinery is needed. **No Lean excerpt is required and none is included.**
+- **Stage 2 — foundations:** draft Units I–III as a connected audio-first sequence, with actual examples, proof arguments and verified final symbol-to-Lean bridges for substantive topics. Then progress through the remaining foundations before the stability chapter.
+- **Stage 3 — independent readiness checks:** have a reviewer attempt the seven assessments above using only the completed lessons; add missing prerequisites when proof steps cannot be reconstructed.
+- **Stage 4 — visualizations:** storyboard and produce Manim as a derived presentation. Keep a transcript that works without visuals. This alternative proposal does not change the existing lecture registry.
+
+## References and audit starting points
+
+- `papers/dk_formalization_journal/paper.tex`, especially “Foundations used in our formalization,” “Formalized operator-theoretic foundations,” and the Section 2 sine-theta derivation.
+- `papers/dk_formalization_journal/data/formalization_theory_taxonomy_20260817.json` and `.../formalization_theory_evidence_links_20260817.csv` (curated mathematical classification).
+- `papers/what_it_takes_to_prove_davis_kahan/cases/sine_theta.md` (explicit theorem-level proof chain).
+- `dev/davis-kahan-1970-formalization-result-inventory.json` and `papers/dk_formalization_journal/appendix_result_summaries.tex` (29 source results).
+- `dev/tauceti/dkps-upstream-contribution-census.md`, `dev/tauceti/roadmap-topic-map.md`, and `dev/tauceti/spectra-provenance-map.md` (mathematical ancestry and where foundations now reside).
+- `papers/dk_formalization_journal/scripts/build_formalization_prerequisite_trace.py` and `.../build_formalization_theory_graph.py` (compiler-derived proof dependency trace joined to mathematical topic classifications; use the saved artifacts when a live Lean environment is unavailable).
+- `prose/distilled_literature/DavisKahan1970_part_III.tex` (original-paper section reconstruction).
+- `visualizations/lectures/LEAN_FACTS.md` and `visualizations/lectures/*/facts.lean` (legacy Lean-bridge design reference, **not** syllabus authority).
