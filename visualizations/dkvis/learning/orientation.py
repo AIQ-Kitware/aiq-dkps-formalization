@@ -153,12 +153,29 @@ class PvSetup(OrientationSlide):
     goal='Can we keep a spectral region without relying on an eigenvector list?'
 
 
-class RrSetup(OrientationSlide):
+class RrSetup(LessonSlide):
     lesson_deck='operators-rayleigh-ritz'
-    stage_labels=('Where to search?', 'Which model?', 'What error?', 'What remains?')
-    setting='A small eigenproblem should produce an approximation we can check in the full space.'
-    symbols=((r'A=A^T','The original symmetric matrix, acting on n-dimensional vectors.'),
-             (r'\mathcal T\subseteq\mathbb R^n','The space of vectors we allow in our search.'),
-             (r'Q:\mathbb R^k\to\mathbb R^n','Orthonormal coordinates for those allowed directions.'),
-             (r'\text{candidates}\ \to\ \text{model}\ \to\ \text{error}','Where can we search, what can we represent, and what remains unchecked?'))
-    goal='How can a small eigenproblem tell us something reliable about a larger one?'
+    stage_labels=('Search space', 'Small model', 'Full residual', 'Recap')
+
+    def body(self):
+        from manim import Create, Transform, Indicate, SurroundingRectangle
+        from dkvis.learning.rayleigh_ritz.visuals import TrialPlane, matrix_tiles, formula
+        from dkvis.slide_style import TRIAL, MUTED
+        self.start()
+        self.put(tex('A smaller problem must still be checked in the original space.',size=27),y=1.95,height=.6)
+        rows=VGroup()
+        for expression,description,y,color in [
+            ('A=A^T','Original operator: the full eigenproblem.',1.0,CURRENT),
+            (r'\mathcal T\subseteq\mathbb R^n','Trial space: the candidate vectors.',-.2,TRIAL),
+            ('Q^TQ=I','Frame: length-preserving trial coordinates.',-1.4,TRIAL)]:
+            rows.add(self.put(stack(formula((expression,color),size=33),
+                                    tex(description,size=24),buff=.18),'left',y=y,height=.95))
+        tiles=matrix_tiles(4,CURRENT,cell=.24).move_to([3.35,1.1,0])
+        view=TrialPlane(origin=(3.35,-.55,0),scale=.47)
+        basis=view.basis()
+        self.add(tiles,view,basis,tex('A',size=26,color=CURRENT).next_to(tiles,LEFT))
+        self.takeaway('Search space, small model, full residual: three parts of one approximation.')
+        focus=SurroundingRectangle(rows[0],color=CURRENT,buff=.16)
+        self.play(Create(focus),Indicate(tiles,color=CURRENT),run_time=1)
+        self.play(Transform(focus,SurroundingRectangle(rows[1],color=TRIAL,buff=.16)),Indicate(view.plane,color=TRIAL),run_time=1)
+        self.play(Transform(focus,SurroundingRectangle(rows[2],color=TRIAL,buff=.16)),Indicate(basis,color=TRIAL),run_time=1)

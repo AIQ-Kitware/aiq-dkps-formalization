@@ -3,7 +3,7 @@ import numpy as np
 from manim import (Axes, Arrow, Line, RightAngle, Transform, ValueTracker, VGroup,
                    DecimalNumber, always_redraw, linear, UP, DOWN, RIGHT, LEFT,
                    Dot, DashedLine, ParametricFunction, Matrix, GrowArrow, Create,
-                   Indicate, SurroundingRectangle, NumberLine, RoundedRectangle, Circle)
+                   Indicate, SurroundingRectangle, NumberLine, RoundedRectangle, Circle, FadeIn, DashedVMobject)
 from dkvis.components.lesson import LessonSlide, LessonTitle, LessonLean, plane, stack, vector
 from dkvis.learning.rayleigh_ritz.model import trial_example, trial_action, trial_quotient, nested_extrema
 from dkvis.learning.rayleigh_ritz.visuals import TrialPlane, formula, matrix_tiles
@@ -13,7 +13,7 @@ from dkvis.slide_style import CURRENT, TRIAL, RESID, MUTED, WANTED, FG, boxed, m
 class RitzSlide(LessonSlide):
     lesson_deck = 'operators-rayleigh-ritz'
     stage = 1
-    stage_labels = ('Where to search?', 'Which model?', 'What error?', 'What remains?')
+    stage_labels = ('Search space', 'Small model', 'Full residual', 'Recap')
 
     def card(self, *items, size=32, first=None):
         card = self.put(stack(*items, size=size, buff=.38), y=.35, height=3.6)
@@ -89,7 +89,7 @@ class RrFrame(RitzSlide):
                  formula(('u=Qy',TRIAL),size=33).move_to([3.25,1.8,0]),
                  Arrow([-1.3,.7,0],[.6,.7,0],color=TRIAL),math('Q',size=34,color=TRIAL).move_to([-.35,1.15,0]))
         self.play(t.animate.set_value(np.pi/4),run_time=3,rate_func=linear)
-        self.put(formula((r'\|y\|',TRIAL),'=',(r'\|Qy\|',TRIAL),'=1',size=32),y=-1.75,height=.6)
+        self.put(formula((r'\|y\|',TRIAL),'=',(r'\|Qy\|',TRIAL),'=1',size=32),'left',y=-1.75,height=.6)
         self.beat()
         q=np.array([1,1,0])/np.sqrt(2); v=q+np.array([0,0,1])
         self.play(GrowArrow(view.arrow(v,CURRENT)),run_time=1)
@@ -97,7 +97,8 @@ class RrFrame(RitzSlide):
                  math('v',size=28,color=CURRENT).move_to(view.point(v)+RIGHT*.25))
         self.add(Arrow([.6,-.75,0],[-1.3,-.75,0],color=TRIAL),
                  math(r'Q^T',size=31,color=TRIAL).move_to([-.35,-1.1,0]))
-        self.takeaway('Q places coordinates in the trial space; Q transpose reads them. P = QQ transpose projects back.')
+        self.put(formula(('P=QQ^T',TRIAL),size=32),y=-1.75,height=.55)
+        self.takeaway(r'$Q$ lifts coordinates; $Q^T$ reads them. $P=QQ^T$ projects onto the trial space.')
 
 
 class RrCompress(RitzSlide):
@@ -118,7 +119,9 @@ class RrCompress(RitzSlide):
         self.beat()
         self.add(DashedLine(view.point(true),view.point(retained),color=RESID))
         self.put(formula(('By',TRIAL),'=',('Q^TAQy',TRIAL),size=33),'right',y=.3,height=.55)
-        self.put(boxed(formula(('B',TRIAL),'=',('Q^T',TRIAL),('A',CURRENT),('Q',TRIAL),size=38),color=TRIAL),'right',y=-.55,height=.85)
+        self.put(VGroup(tex('Compression',size=23,color=TRIAL),
+                        boxed(formula(('B',TRIAL),'=',('Q^T',TRIAL),('A',CURRENT),('Q',TRIAL),size=38),color=TRIAL)
+                        ).arrange(DOWN,buff=.12),'right',y=-.55,height=1.1)
         self.play(GrowArrow(kept),run_time=1.5)
         self.beat(); self.play(GrowArrow(discarded),run_time=1)
         self.put(formula(('QBy',TRIAL),'=',('PAQy',TRIAL),size=33),'right',y=-1.55,height=.6)
@@ -130,27 +133,41 @@ class RrQuotient(RitzSlide):
     def body(self):
         self.start()
         axes=Axes(x_range=[0,2*np.pi,np.pi/2],y_range=[0,4,1],x_length=5.1,y_length=3,
-                  tips=False,axis_config={'color':MUTED}).move_to([-3.35,.2,0])
-        graph=axes.plot(lambda a:trial_quotient(a)[2],x_range=[0,2*np.pi],color=TRIAL)
+                  tips=False,axis_config={'color':MUTED}).move_to([-3.35,.15,0])
+        original=axes.plot(lambda a:trial_quotient(a)[2],x_range=[0,2*np.pi],color=CURRENT)
+        compressed=DashedVMobject(axes.plot(lambda a:trial_quotient(a)[2],x_range=[0,2*np.pi],
+                                          color=TRIAL,stroke_width=5),num_dashes=65)
         t=ValueTracker(0)
-        dot=always_redraw(lambda:Dot(axes.c2p(t.get_value(),trial_quotient(t.get_value())[2]),color=TRIAL))
-        center=np.array([3.25,0,0])
-        circle=ParametricFunction(lambda angle:center+.55*np.array([np.cos(angle),np.sin(angle),0]),t_range=[0,2*np.pi],color=MUTED)
-        direction=always_redraw(lambda:Arrow(center,center+.55*np.array([np.cos(t.get_value()),np.sin(t.get_value()),0]),buff=0,color=TRIAL,stroke_width=5))
-        self.add(axes,graph,dot,circle,direction,
-                 tex('Rayleigh quotient along the trial directions',size=23).move_to([-3.35,2.0,0]))
+        dot=always_redraw(lambda:Dot(axes.c2p(t.get_value(),trial_quotient(t.get_value())[2]),color=CURRENT))
+        view=TrialPlane(origin=(3.35,.35,0),scale=.46)
+        view.caption.move_to([3.35,-.7,0])
+        direction=always_redraw(lambda:view.arrow(trial_quotient(t.get_value())[1],TRIAL,width=6))
+        label=math('u=Qy(t)',size=27,color=TRIAL).move_to([5.4,.6,0])
+        self.add(axes,original,dot,view,view.basis().set_opacity(.45),direction,label,
+                 formula(('u^TAu',CURRENT),size=29).move_to([-3.35,2,0]))
         for value in [1,2,3]:
             self.add(math(str(value),size=22).move_to(axes.c2p(-.32,value)))
-        self.put(formula((r'B=\begin{pmatrix}2&1\\1&2\end{pmatrix}',TRIAL),size=31),'right',y=1.4,height=1.15)
-        self.put(formula((r'y(t)',TRIAL),'=',r'(\cos t,\sin t)^T',size=28),'right',y=.65,height=.5)
         self.add(tex('Direction angle t',size=23).move_to([-3.35,-1.7,0]))
-        self.play(t.animate.set_value(np.pi/4),run_time=2)
+        numbers=self.put(formula((r'B=\begin{pmatrix}2&1\\1&2\end{pmatrix}',TRIAL),size=29),'right',y=1.7,height=.9)
+        self.play(t.animate.set_value(np.pi/4),run_time=3,rate_func=linear)
         self.beat()
-        self.put(formula(('u^TAu',CURRENT),'=',('y^TBy',TRIAL),size=34),'right',y=-1.05,height=.65)
-        self.play(t.animate.set_value(3*np.pi/4),run_time=3,rate_func=linear)
+        first=self.put(formula(('u^TAu',CURRENT),'=',r'(Qy)^TA(Qy)',size=29),'right',y=-1.2,height=.6)
+        self.remove(first);self.play(FadeIn(first),run_time=1)
+        second=self.put(formula('=',r'y^T(',('Q^TAQ',TRIAL),r')y=',('y^TBy',TRIAL),size=29),'right',y=-1.9,height=.6)
+        self.remove(second);self.play(FadeIn(second),run_time=1)
+        self.play(Create(compressed),run_time=1)
+        self.add(formula(('u^TAu',CURRENT),'=',('y^TBy',TRIAL),size=28).move_to([-3.35,-2.1,0]))
         self.beat()
-        self.put(formula(('B^T',TRIAL),'=',('Q^TA^TQ',TRIAL),'=',('B',TRIAL),size=29),'right',y=-1.8,height=.55)
-        self.takeaway('The compression preserves the whole quotient curve. Its extrema become Ritz values.')
+        self.remove(numbers)
+        symmetry=self.put(formula(('B^T',TRIAL),'=',r'Q^TA^TQ=',('B',TRIAL),size=28),'right',y=1.7,height=.6)
+        self.remove(symmetry);self.play(FadeIn(symmetry),run_time=1)
+        high=Dot(axes.c2p(np.pi/4,3),color=TRIAL)
+        low=Dot(axes.c2p(3*np.pi/4,1),color=TRIAL)
+        high_label=math(r'\max=3',size=23,color=TRIAL).next_to(high,UP,buff=.15)
+        self.play(FadeIn(high),FadeIn(high_label),run_time=1)
+        self.play(t.animate.set_value(3*np.pi/4),run_time=2,rate_func=linear)
+        self.add(low,math(r'\min=1',size=23,color=TRIAL).next_to(low,DOWN,buff=.15))
+        self.takeaway('The full and compressed curves coincide. Their extrema are the Ritz values.')
 
 
 class RrSolve(RitzSlide):
@@ -264,7 +281,7 @@ class RrOrthogonality(RitzSlide):
         self.play(Indicate(green,color=RESID),run_time=1)
         self.beat()
         self.put(formula(('R',RESID),'=',('(I-P)AQ',RESID),r',\quad',('r=Ry',RESID),size=30),'right',y=-1.25,height=.7)
-        self.takeaway('Q transpose reads trial coordinates; every green residual has zero coordinates in that plane.')
+        self.takeaway(r'$Q^T R=0$: every residual is perpendicular to the trial space.')
 
 
 class RrModel(RitzSlide):

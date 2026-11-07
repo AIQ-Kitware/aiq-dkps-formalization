@@ -13,6 +13,7 @@ dependencies only when needed.
 | `serve.py` / `library.html` | Local media catalog, chapter lookup, embedded viewers and range-capable file serving |
 | `audio_quality.py` | Cached loudness/peak measurements, onset/boundary review reports, compression and two-pass normalization |
 | `video.py` | Check clip/note alignment, synchronize builds with audio, write chapters and assemble the video |
+| `alignment.py` / `cue_video.py` | Locate authored words and schedule visual events within unchanged speech passages |
 | `tts.py` | Load `tts.toml`, ignored `.env` and CLI configuration |
 | `media.py` | Media duration and FFmpeg concat-list helpers |
 | `timing.py` | Shared append-only operation timings and per-run summaries |
@@ -302,3 +303,19 @@ fields remain unrecorded rather than being backfilled.
 The private endpoint URL remains outside artifact metadata; its existing opaque
 cache identifier is retained. The selected video metadata also accompanies saved
 viewer feedback, preserving the reference/model identity that the feedback concerns.
+
+## Phrase-timed animations
+
+A transcript-adjacent `animation_cues.yaml` opts its deck into phrase timing for
+normal videos. `video.py` synthesizes each build as before, then asks
+`render_cued_build` to retime its existing animation clip against the aligned
+speech. Cues do not create additional speech chunks. The `align` extra supplies
+CPU inference dependencies; `render_video.sh` includes it. The CLI option
+`--no-align-animations` disables this step. Decks without authored cues retain
+their existing behavior.
+
+Event pieces and their concatenated visual have content-based caches, separate
+from speech and final muxing. Timeline entries retain `visual_source`, `visual`
+and `animation_cues`. The retimed visual's sidecar includes the measured schedule
+and alignment key. Keep cue phrases unique within their build and source offsets
+strictly increasing. Re-render changed scene clips before changing these offsets.

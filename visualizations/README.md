@@ -618,6 +618,23 @@ Galerkin orthogonality and the retained/escaping output blocks, with accepted
 Tau Ceti companions and four review questions. See the
 [Rayleigh–Ritz guide](dkvis/learning/rayleigh_ritz/README.md).
 
+## Narration-timed visual focus
+
+When a lecture has `animation_cues.yaml`, normal `make video` builds now use
+its phrase cues automatically. A CPU forced aligner locates the authored words
+in each complete speech recording; the renderer holds a diagram, plays the
+cued animation, and keeps its result until the next cue. This does not split
+speech or make extra TTS requests. Builds without cues retain their ordinary
+play-then-hold behavior.
+
+The video wrapper installs the `align` extra as well as `slides`. On first use,
+the aligner downloads its English acoustic model into the local Hugging Face
+cache. Cue timing is an estimate, not a pronunciation check. The timeline records
+the source clip, retimed clip and authored cues; the retimed visual's sidecar
+records the alignment key and measured cue scores. Speech and visual caches
+remain independent. `VIDEO_ARGS='--no-align-animations'` restores the previous
+build-start timing; `--align-animations` enables authored cues explicitly.
+
 ## Long-passage narration experiments
 
 `make tts-experiment` compares three conditioning strategies without replacing a

@@ -1,48 +1,83 @@
-# Source-time offsets split an existing Manim build; phrases anchor each part
-# to the measured recording, without splitting its TTS generation.
+# Phrase cues schedule visual events without splitting speech generation.
 scenes:
   RrFrame:
     1:
-      - {visual_at: 0, phrase: "The moving dots represent the same vector"}
+    - visual_at: 0
+      phrase: The moving dots represent the same vector
     2:
-      - {visual_at: 0, phrase: "The cyan vector v illustrates that possibility"}
+    - visual_at: 0
+      phrase: The cyan vector v illustrates that possibility
   RrCompress:
     2:
-      - {visual_at: 0, phrase: "Applying A gives the cyan arrow"}
+    - visual_at: 0
+      phrase: Applying A gives the cyan arrow
     3:
-      - {visual_at: 0, phrase: "Q transpose gives the trial coordinates"}
+    - visual_at: 0
+      phrase: Q transpose gives the trial coordinates
     4:
-      - {visual_at: 0, phrase: "The green arrow completes the trip"}
+    - visual_at: 0
+      phrase: The green arrow completes the trip
   RrQuotient:
     1:
-      - {visual_at: 0, phrase: "The unit coordinate vector turns around the trial plane"}
+    - visual_at: 0
+      phrase: The amber arrow moves through those directions
     2:
-      - {visual_at: 0, phrase: "The full and compressed calculations give the same curve"}
+    - visual_at: 0
+      phrase: Replacing u by Q y
+    - visual_at: 1
+      phrase: The middle factor is B
+    - visual_at: 2
+      phrase: Both calculations give the same curve
     3:
-      - {visual_at: 0, phrase: "Symmetry is preserved too"}
+    - visual_at: 0
+      phrase: Symmetry is preserved too
+    - visual_at: 1
+      phrase: The maximum is three
+    - visual_at: 2
+      phrase: the minimum is one
   RrSolve:
     1:
-      - {visual_at: 0, phrase: "The difference direction"}
+    - visual_at: 0
+      phrase: The difference direction
     2:
-      - {visual_at: 0, phrase: "The amber arrow u equals Q y"}
+    - visual_at: 0
+      phrase: The amber arrow u equals Q y
     3:
-      - {visual_at: 0, phrase: "The full operator gives the cyan output"}
-      - {visual_at: 1.2, phrase: "The green difference"}
+    - visual_at: 0
+      phrase: The full operator gives the cyan output
+    - visual_at: 1.2
+      phrase: The green difference
   RrGeometry:
     2:
-      - {visual_at: 0, phrase: "Its discarded output is the upward green arrow"}
+    - visual_at: 0
+      phrase: Its discarded output is the upward green arrow
     3:
-      - {visual_at: 0, phrase: "Its green arrow points the other way"}
+    - visual_at: 0
+      phrase: Its green arrow points the other way
     4:
-      - {visual_at: 0, phrase: "Equal positive input coordinates"}
+    - visual_at: 0
+      phrase: Equal positive input coordinates
   RrExample:
     2:
-      - {visual_at: 0, phrase: "After lifting"}
+    - visual_at: 0
+      phrase: After lifting
     3:
-      - {visual_at: 0, phrase: "Its Ritz value is one"}
+    - visual_at: 0
+      phrase: Its Ritz value is one
   RrBlock:
     2:
-      - {visual_at: 0, phrase: "The two green arrows supply them"}
-      - {visual_at: 2, phrase: "Together they form C"}
+    - visual_at: 0
+      phrase: The two green arrows supply them
+    - visual_at: 2
+      phrase: Together they form C
     3:
-      - {visual_at: 0, phrase: "Every perpendicular output would have to vanish"}
+    - visual_at: 0
+      phrase: Invariance requires every perpendicular output
+  RrSetup:
+    1:
+    - visual_at: 0
+      phrase: The original operator A
+    - visual_at: 1
+      phrase: The trial space is the collection
+    - visual_at: 2
+      phrase: The frame Q supplies coordinates

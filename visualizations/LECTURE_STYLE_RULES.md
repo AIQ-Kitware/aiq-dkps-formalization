@@ -46,14 +46,22 @@ new construction is being introduced and connect it to information already seen.
 > “It would be better to start these sort of sections off with a question.”
 > “We work to ‘discover’ what we must do in order to answer the question.”
 
-Open an explanatory section with the question it addresses, rather than an
-instruction such as “Keep the same trial plane.” Establish what we are trying
-to find out before presenting a procedure. Develop the construction through
+Introduce an explanatory section through its purpose, rather than an
+instruction such as “Keep the same trial plane.” A motivating question can
+establish what we are trying to find out before presenting a procedure. Develop the construction through
 reasoned exploration: what if we try this, what information would it give us,
 and does that help answer our question? Explain why each move is useful and
 what its answer leaves unresolved. Keep these local questions grounded in the
 lecture's larger goal. A question-shaped heading followed immediately by an
 unmotivated recipe does not supply this discovery thread.
+
+> “It feels like everything starts with a question now.”
+> “Statements of fact can also be pedagogical.”
+
+Use questions at real points of investigation, not as a required opening for
+every slide or paragraph. State established facts directly and let conclusions
+carry the explanation forward. Mix questions, observations and deductions so
+the lecture retains motivation without sounding like a sequence of quizzes.
 
 ## Continuity between slides
 
@@ -86,6 +94,12 @@ the reasoning, rather than merely recognize the final equation.
 
 Visually highlight key ideas and the general tool being learned.
 
+> “It looks like we applied TTS rules to the slides themselves.”
+
+Keep pronunciation hints confined to synthesis input. Typeset mathematics on
+slides normally: for example, use $P=QQ^T$ rather than “P = QQ transpose.”
+Spoken renderings of formulas belong in narration, not in displayed equations.
+
 ## Visual explanations and consistent colors
 
 > “Tying new information back to information we've already seen.”
@@ -108,6 +122,13 @@ Build pictures that explain the mathematical construction, rather than relying
 on formulas and text alone. Connect their colors and motion to the narration.
 A visual event does not need its own independent vocal generation: preserve
 coherent spoken passages when planning synchronized animation.
+
+> “There is no visual cue to tell the student which part of the slide they should be paying attention to wrt to the narration.”
+
+Make the current referent visible through a highlight, pointer, diagram change
+or staged calculation that follows the narration. When a passage discusses
+several mathematical relationships, supply corresponding visuals rather than
+leaving the viewer to infer which part of a static slide is being explained.
 
 ## Examples and the general tool
 

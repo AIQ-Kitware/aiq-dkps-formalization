@@ -37,10 +37,24 @@ def test_generated_video_retains_speech_and_model_provenance(tmp_path,monkeypatc
     monkeypatch.setenv('DKVIS_RENDER_RUN_ID','library-test')
     timing_module=importlib.import_module('dkvis.presentation.timing')
     monkeypatch.setattr(timing_module,'_CURRENT',timing_module.TimingLog())
+    # Authored cue files opt a normal video into retiming without another TTS call.
+    cue_path=(tmp_path/video.get_deck('prereq-projections').narration).with_name('animation_cues.yaml')
+    cue_path.parent.mkdir(parents=True)
+    cue_path.write_text('scenes:\n  PrTitle:\n    1:\n      - {visual_at: 0, phrase: "An eigenvalue"}\n')
+    from dkvis.presentation import alignment
+    class FakeAligner:
+        def align(self, sound, text, cache):
+            assert sound==audio and text==speech
+            return dict(key='fixture',words=[dict(text=w,normalized=w.upper(),start=i*.04,end=i*.04+.03,score=1)
+                                            for i,w in enumerate(speech.split())])
+    monkeypatch.setattr(alignment,'Aligner',FakeAligner)
     output=tmp_path/'lecture.qa.narrated.mp4'
     video.main(['--deck','prereq-projections','--skip-render','--fps','10',
                 '--preset','ultrafast','--output',str(output)])
     timeline=json.loads((tmp_path/'renders/prereq-projections-narrated/timeline-qa.json').read_text())
+    assert timeline[0]['builds'][0]['visual']!=str(visual)
+    assert timeline[0]['builds'][0]['visual_source']==str(visual)
+    assert timeline[0]['builds'][0]['animation_cues'][0]['phrase']=='An eigenvalue'
     assert timeline[0]['builds'][0]['text']==speech
     assert timeline[0]['builds'][0]['speech_seconds']==pytest.approx(.5)
     assert timeline[0]['builds'][0]['speech_parts'][0]['text']==speech

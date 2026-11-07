@@ -50,19 +50,27 @@ operator output, and green the residual. A rotating trial direction drives the
 quotient graph; nested spaces drive the extremal-value marker. Numerical
 models supply the data and are tested independently of their drawings.
 
-The question-led revision opens each explanatory section with its mathematical
-problem and develops the next construction as a possible answer. Compression
+The motivated revision uses questions at genuine points of investigation and
+states definitions and deductions directly. It develops each new construction
+from the problem that calls for it. Compression
 begins with a trial input and the question of representable output; its formula
 appears after the output leaves the plane. Residual columns appear as their
 basis inputs are tested, and the block matrix follows the retained/escaping
 output picture. Section endings identify the next unresolved question. The
-recurring colors and the question-based progress strip keep that exploration
+recurring colors and the progress strip keep that exploration
 connected to the larger approximation problem.
 
-The authored narration retains coherent passages across visual builds. The
-normal video command uses its existing build-based speech pipeline;
-`make tts-experiment` can instead pack longer passages and align the animation
-with spoken phrases. The local `animation_cues.yaml` is updated with the current
-wording and build numbers. See the [experiment instructions](../../../README.md#long-passage-narration-experiments).
-Rebuild narrated outputs to hear revised speech; earlier generated videos and
-experiment comparisons preserve the wording used to generate them.
+Phrase timing uses the completed narration for each visual build, so adding a
+focus change does not create another TTS request. Normal `make video` now uses
+the local `animation_cues.yaml` to align visual changes inside those passages. Slide 2 highlights A,
+the candidate space and Q in turn. Slide 7 connects a rotating trial vector to
+the quotient curve, shows the substitution steps, overlays the compressed curve,
+and marks the two extrema. Displayed formulas use conventional mathematical
+notation; speech-only pronunciation hints never change the slide source.
+See the [production guide](../../presentation/README.md#phrase-timed-animations)
+for dependencies and the timing override.
+
+`make tts-experiment` separately compares long-passage conditioning strategies;
+see the [experiment instructions](../../../README.md#long-passage-narration-experiments).
+Rebuild narrated outputs to hear revised speech and see revised timing; earlier
+generated videos and experiment comparisons preserve their original content.

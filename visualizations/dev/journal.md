@@ -82,3 +82,22 @@ Rayleigh–Ritz transcript plans 57 speech requests instead of 88. Requests stil
 respect visual-build boundaries. Duration-cap splitting and the incomplete-audio
 retry guard remain enabled. Deliberate build/slide pauses are unchanged for this
 comparison; longer requests alone do not eliminate every narration boundary.
+
+## 2026-11-06 — Visible notation, visual focus, and fewer rhetorical questions
+
+The Rayleigh–Ritz review found spoken wording in a visible takeaway: “P = QQ
+transpose” was authored slide text, not a pronunciation transformation. The
+slide now displays the mathematical formula, and the compression box is labeled.
+Motivating questions remain at investigative steps, while definitions,
+observations and deductions use direct statements.
+
+Slide 2 now highlights the original operator, trial space and coordinate frame
+as they are introduced. Slide 7 links the moving trial direction to the quotient
+curve, displays the substitution, overlays the compressed curve and identifies
+the extrema. Normal video rendering now uses the existing forced-alignment and
+phrase-cue machinery for decks with authored cues. Visual timing changes within
+a coherent speech passage rather than requiring more independent TTS clips.
+
+Hermitian and orthonormal were again reported as pronunciation problems. Neither
+has a verified default remedy; ortho-normal remains tentative because of its
+internal pause. No new pronunciation guesses were enabled by this revision.

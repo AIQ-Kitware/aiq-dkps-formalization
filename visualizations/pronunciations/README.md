@@ -8,10 +8,10 @@ works for every speaker. Listening evidence comes from Jon's lecture reviews.
 | --- | --- | --- |
 | adjoint | — | Problem reported; no verified remedy yet. |
 | nonnegative | non-negative | Reported improvement; active Breeze alias. |
-| orthonormal | ortho-normal | Pronunciation improves, but the speaker can pause too much inside the word. Tentative; excluded from defaults. |
+| orthonormal | ortho-normal | Pronunciation improves, but the speaker can pause too much inside the word. Still problematic in the latest Rayleigh–Ritz review. Tentative; excluded from defaults. |
 | Frobenius | — | Problem reported; no verified remedy yet. |
 | eigenvectors | eigen-vectors | Reported improvement; active Breeze alias. |
-| Hermitian | — | Problem reported; no verified remedy yet. |
+| Hermitian | — | Problem confirmed again in the Rayleigh–Ritz review; no verified remedy yet. |
 | Hilbert | — | Problem reported; no verified remedy yet. |
 | Laplacian | — | Problem reported; no verified remedy yet. |
 | matrix | — | Problem reported; no verified remedy yet. |

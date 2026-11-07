@@ -4,8 +4,8 @@ Uses OpenAI-compatible speech endpoints. Sentence-aware requests avoid server
 duration limits; completed chunks are cached by text and request settings.
 Encoded segments are reused by input content and settings. ``--update-scenes``
 renders named scenes and reassembles the full lecture; ``--scenes`` makes a preview.
-Each narrated build plays when its own explanation starts, then holds until
-that explanation ends. Chapters still correspond to complete slides.
+Authored phrase cues align visual events inside coherent speech passages;
+other builds play at the start of their explanation and hold until it ends. Chapters still correspond to complete slides.
 """
 
 from __future__ import annotations
@@ -172,6 +172,8 @@ def main(argv=None):
         "--preset", default="veryfast", choices=["ultrafast", "veryfast", "fast", "medium"]
     )
     parser.add_argument("--skip-render", action="store_true")
+    parser.add_argument('--align-animations',action=argparse.BooleanOptionalAction,default=None,
+                        help='time authored phrase cues to speech; defaults on when a cue file exists')
     parser.add_argument(
         "--refresh-audio",
         action="store_true",
@@ -215,6 +217,15 @@ def main(argv=None):
         scripts = {name: script for name, script in scripts.items() if name in args.scenes}
     name = args.deck + OUTPUT_SUFFIX
     public = lecture_output_name(args.deck) + OUTPUT_SUFFIX
+    cue_path=(ROOT/get_deck(args.deck).narration).with_name('animation_cues.yaml')
+    align_animations=cue_path.is_file() if args.align_animations is None else args.align_animations
+    cue_definitions={}
+    aligner=None
+    if align_animations and cue_path.is_file():
+        import yaml
+        from dkvis.presentation.alignment import Aligner
+        cue_definitions=yaml.safe_load(cue_path.read_text()).get('scenes',{})
+        aligner=Aligner()
     profile = re.sub(r"[^a-zA-Z0-9_-]", "_", narrator_id(settings))
     print(f"TTS voice={settings['voice']!r} model={settings['model']!r} "
           f"defaults={settings['profile']!r} narrator={profile!r}", flush=True)
@@ -232,6 +243,7 @@ def main(argv=None):
         jobs=args.jobs,
         pause=args.pause,
         beat_pause=args.beat_pause,
+        align_animations=bool(cue_definitions),
         theme=THEME,
     )
     try:
@@ -281,6 +293,10 @@ def main(argv=None):
                 for k, (visual, text) in enumerate(visuals[scene], 1):
                     label = f"{scene}-beat{k:02d}"
                     audio = synthesize_beat(text, label, work, settings)
+                    source_visual=visual
+                    if definitions:=cue_definitions.get(scene,{}).get(k):
+                        from dkvis.presentation.cue_video import render_cued_build
+                        visual=render_cued_build(visual,audio,text,definitions,work/'cued-builds',args.fps,aligner)
                     segment_dir = work / profile
                     if args.scenes:
                         segment_dir = segment_dir / "preview"
@@ -305,6 +321,8 @@ def main(argv=None):
                             audio=str(audio),
                             text=text, speech_seconds=audio_seconds, speech_parts=spoken_parts,
                             segment=str(segment),
+                            visual_source=str(source_visual), visual=str(visual),
+                            animation_cues=cue_definitions.get(scene,{}).get(k,[]),
                         )
                     )
                     start += seconds

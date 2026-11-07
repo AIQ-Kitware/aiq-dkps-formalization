@@ -81,6 +81,30 @@ def render_piece(visual, event, cache, fps):
     return output
 
 
+def render_cued_build(visual, audio, text, definitions, cache, fps, aligner):
+    """Retiming one normal narrated build leaves its coherent speech intact."""
+    cache=Path(cache)
+    alignment=aligner.align(audio,text,cache/'alignment')
+    end=math.ceil(max(duration(visual),duration(audio))*fps)/fps
+    events=event_plan(dict(start=0,words=alignment['words']),end,duration(visual),definitions,fps)
+    inputs=dict(version=1,visual=fingerprint(visual),events=events,fps=fps,ffmpeg=ffmpeg_version())
+    key=hashlib.sha256(json.dumps(inputs,sort_keys=True).encode()).hexdigest()
+    output=cache/f'{key}.mp4'; sidecar=output.with_suffix('.json')
+    if output.exists() and sidecar.exists() and json.loads(sidecar.read_text()).get('output_sha256')==fingerprint(output):
+        timing().record('cued_build_cache',0,cache_hit=True,file=str(output))
+        return output
+    clips=[render_piece(visual,event,cache/'pieces',fps) for event in events]
+    listing=concat_list(clips,cache/f'{key}.txt')
+    temporary=output.with_suffix('.part.mp4')
+    with timing().measure('cued_build_assemble',output=str(output)):
+        subprocess.run(['ffmpeg','-v','error','-y','-f','concat','-safe','0','-i',str(listing),
+                        '-an','-c:v','copy','-movflags','+faststart',str(temporary)],check=True)
+        temporary.replace(output)
+    sidecar.write_text(json.dumps(dict(inputs=inputs,alignment_key=alignment['key'],
+        output_sha256=fingerprint(output)),indent=2)+'\n')
+    return output
+
+
 def write_captions(words, path):
     def stamp(t):
         ms=round(t*1000); sec,ms=divmod(ms,1000); minute,sec=divmod(sec,60); hour,minute=divmod(minute,60)
