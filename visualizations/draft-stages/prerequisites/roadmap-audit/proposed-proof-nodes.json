@@ -1,0 +1,554 @@
+{
+  "metadata": {
+    "status": "proposed; not yet merged into lesson-dag.json"
+  },
+  "nodes": [
+    {
+      "id": "R-BAIRE",
+      "title": "Baire category and the three Banach mapping theorems",
+      "lane": "core",
+      "requires": [
+        "003000",
+        "004000",
+        "006000"
+      ],
+      "feeds": [
+        "008000",
+        "086000"
+      ],
+      "why": "Prove (not simply cite) bounded inverse/open mapping, closed graph and uniform boundedness; distinguish theorem prerequisites."
+    },
+    {
+      "id": "R-FINITE-RANK-GRAM",
+      "title": "Rank factorization and uniqueness of positive Gram factorizations",
+      "lane": "core",
+      "requires": [
+        "017000",
+        "018000",
+        "022000",
+        "023000"
+      ],
+      "feeds": [
+        "036000",
+        "042000"
+      ],
+      "why": "Construct factorization and isometries explicitly, including kernels, rank and zero cases."
+    },
+    {
+      "id": "R-MOORE-PENROSE",
+      "title": "Moore–Penrose inverse and the four Penrose equations",
+      "lane": "support",
+      "requires": [
+        "034000",
+        "035000",
+        "036000",
+        "037000",
+        "038000"
+      ],
+      "feeds": [],
+      "why": "Develop from singular systems, including noninvertible rectangular examples and proof of uniqueness."
+    },
+    {
+      "id": "R-SCHUR-HORN",
+      "title": "Doubly stochastic matrices, Birkhoff and Schur–Horn",
+      "lane": "core",
+      "requires": [
+        "026000",
+        "028000",
+        "055000"
+      ],
+      "feeds": [
+        "056000",
+        "058000",
+        "097000"
+      ],
+      "why": "Prove convex combination and diagonal-majorization mechanisms used in spectral norm inequalities."
+    },
+    {
+      "id": "R-KARAMATA-FAN",
+      "title": "Karamata and complete Fan-dominance argument",
+      "lane": "core",
+      "requires": [
+        "054000",
+        "055000",
+        "056000",
+        "R-SCHUR-HORN"
+      ],
+      "feeds": [
+        "058000",
+        "059000",
+        "097000"
+      ],
+      "why": "Prove propagation from singular-value weak majorization to general unitary-invariant seminorms."
+    },
+    {
+      "id": "R-HOFFMAN-DAVIS",
+      "title": "Hoffman–Wielandt and Davis eigenvalue-change bounds",
+      "lane": "core",
+      "requires": [
+        "028000",
+        "029000",
+        "036000",
+        "054000",
+        "R-SCHUR-HORN"
+      ],
+      "feeds": [
+        "113000",
+        "121000"
+      ],
+      "why": "Prove squared eigenvalue differences and matching/permutation controls."
+    },
+    {
+      "id": "R-HS-HILBERT",
+      "title": "Hilbert–Schmidt operators as a Hilbert space and basis independence",
+      "lane": "core",
+      "requires": [
+        "010000",
+        "019000",
+        "057000",
+        "095000"
+      ],
+      "feeds": [
+        "070000",
+        "099000"
+      ],
+      "why": "Construct the column ℓ² model and justify basis independence and infinite sums."
+    },
+    {
+      "id": "R-FOURIER-LAPLACE",
+      "title": "Fourier transform, inverse transforms, Laplace integrals and Fubini",
+      "lane": "core",
+      "requires": [
+        "039000",
+        "074000",
+        "G-MEASURE-REPRESENTATION"
+      ],
+      "feeds": [],
+      "why": "Establish transform conventions, inversion and integrability theorems from examples."
+    },
+    {
+      "id": "R-HZ-POISSON",
+      "title": "Poisson summation and odd-pole expansion for the reciprocal kernel",
+      "lane": "core",
+      "requires": [
+        "R-FOURIER-LAPLACE"
+      ],
+      "feeds": [],
+      "why": "Derive the lattice identity and exact positive integral needed by the π/2 mass."
+    },
+    {
+      "id": "R-HZ-KERNEL",
+      "title": "Haagerup–Zsidó reciprocal kernel, transform identity and exact π/2 mass",
+      "lane": "core",
+      "requires": [
+        "R-FOURIER-LAPLACE",
+        "R-HZ-POISSON"
+      ],
+      "feeds": [
+        "069000",
+        "094000"
+      ],
+      "why": "Reconstruct SSP-A01–A26, in particular integrability, transform and mass."
+    },
+    {
+      "id": "R-BOCHNER",
+      "title": "Bochner integration of operator-valued functions and norm bounds",
+      "lane": "core",
+      "requires": [
+        "003000",
+        "004000",
+        "073000",
+        "074000",
+        "G-SEMIGROUP-INTEGRATION"
+      ],
+      "feeds": [
+        "066000",
+        "069000",
+        "094000"
+      ],
+      "why": "Prove operator-valued integration and interchange of bounded maps with integrals."
+    },
+    {
+      "id": "R-LAX-MILGRAM",
+      "title": "Coercive forms, Lax–Milgram and the ordered Sylvester inverse",
+      "lane": "core",
+      "requires": [
+        "009000",
+        "010000",
+        "012000",
+        "033000",
+        "065000"
+      ],
+      "feeds": [
+        "068000",
+        "094000"
+      ],
+      "why": "Derive coercive inverse estimates and show which gap geometry provides coercivity."
+    },
+    {
+      "id": "R-ROSENBLUM-CONTOUR",
+      "title": "Complex contour calculus and Rosenblum uniqueness",
+      "lane": "core",
+      "requires": [
+        "008000",
+        "G-COMPLEX-ANALYSIS",
+        "062000",
+        "064000"
+      ],
+      "feeds": [
+        "067000"
+      ],
+      "why": "Present contour-based proof and distinguish spectral disjointness from quantitative gap."
+    },
+    {
+      "id": "R-KATO-RELLICH",
+      "title": "Relative boundedness and Kato–Rellich self-adjointness",
+      "lane": "core",
+      "requires": [
+        "083000",
+        "084000",
+        "085000",
+        "086000",
+        "087000"
+      ],
+      "feeds": [
+        "088000",
+        "093000"
+      ],
+      "why": "Control perturbation of unbounded domains, common-domain estimates and self-adjointness."
+    },
+    {
+      "id": "R-CAYLEY-RESOLVENT",
+      "title": "Cayley transforms, resolvent identities and domain transfer",
+      "lane": "core",
+      "requires": [
+        "083000",
+        "084000",
+        "086000",
+        "087000"
+      ],
+      "feeds": [
+        "088000",
+        "093000"
+      ],
+      "why": "Follow graph/domain hypotheses through analytic identities; not only formal matrix equalities."
+    },
+    {
+      "id": "R-STRONG-APPROX",
+      "title": "Strong versus norm convergence and dominated spectral cutoff limits",
+      "lane": "core",
+      "requires": [
+        "074000",
+        "G-OPERATOR-TOPOLOGIES",
+        "076000",
+        "082000"
+      ],
+      "feeds": [
+        "091000",
+        "093000",
+        "094000"
+      ],
+      "why": "Derive convergence routes preserving domains and projections."
+    },
+    {
+      "id": "R-BOREL-PVM-PROOF",
+      "title": "Scalar measure representation, PVM construction and Borel calculus proof",
+      "lane": "core",
+      "requires": [
+        "073000",
+        "074000",
+        "075000",
+        "G-MEASURE-REPRESENTATION"
+      ],
+      "feeds": [
+        "076000",
+        "079000",
+        "088000"
+      ],
+      "why": "Prove countable additivity, projection algebra and uniqueness rather than stopping at a statement."
+    },
+    {
+      "id": "R-IDEAL-GAUGE-DOMAIN",
+      "title": "Symmetric gauges, finite/infinite approximation and ideal membership",
+      "lane": "core",
+      "requires": [
+        "054000",
+        "055000",
+        "057000",
+        "058000",
+        "095000",
+        "096000",
+        "097000"
+      ],
+      "feeds": [
+        "098000",
+        "100000",
+        "101000"
+      ],
+      "why": "Make the ideal-domain and norm-existence conditions explicit."
+    },
+    {
+      "id": "R-UNBOUNDED-SYLVESTER",
+      "title": "Domain-aware Sylvester solution via resolvent and spectral cutoffs",
+      "lane": "core",
+      "requires": [
+        "081000",
+        "086000",
+        "089000",
+        "091000",
+        "093000",
+        "R-BOCHNER",
+        "R-CAYLEY-RESOLVENT"
+      ],
+      "feeds": [
+        "094000",
+        "104000"
+      ],
+      "why": "Assemble full closed operator proof with domain preservation, not just bounded estimates."
+    },
+    {
+      "id": "R-MEASURABLE-PROJECTOR",
+      "title": "Measurability of random-matrix eigenvalues and threshold projectors",
+      "lane": "extension",
+      "requires": [
+        "026000",
+        "030000",
+        "032000",
+        "073000",
+        "074000"
+      ],
+      "feeds": [
+        "147000"
+      ],
+      "why": "Proof-level measurability route for statistical applications."
+    },
+    {
+      "id": "R-MATRIX-CONCENTRATION",
+      "title": "Sample moments, matrix norm comparison and concentration",
+      "lane": "extension",
+      "requires": [
+        "018000",
+        "027000",
+        "028000",
+        "057000",
+        "074000"
+      ],
+      "feeds": [
+        "147000"
+      ],
+      "why": "Prove the probabilistic bounds rather than importing them into the final application."
+    },
+    {
+      "id": "R-STONE-GENERATOR",
+      "title": "Generator domain and Stone theorem through the spectral measure",
+      "lane": "core",
+      "requires": [
+        "092000",
+        "R-BOREL-PVM-PROOF",
+        "083000",
+        "088000"
+      ],
+      "feeds": [
+        "094000"
+      ],
+      "why": "Explain strong continuity, derivative domain and equivalence with self-adjoint generators."
+    },
+    {
+      "id": "R-TOEPLITZ-FOURIER",
+      "title": "Hardy spaces, Fourier series, Toeplitz and Hankel operators",
+      "lane": "extension",
+      "requires": [
+        "019000",
+        "073000",
+        "074000",
+        "075000",
+        "095000",
+        "R-FOURIER-LAPLACE"
+      ],
+      "feeds": [],
+      "why": "An independent track, not a compulsory DK prerequisite."
+    },
+    {
+      "id": "R-FREDHOLM-CALKIN",
+      "title": "Fredholm operators, compact quotients, C*-algebras, winding",
+      "lane": "extension",
+      "requires": [
+        "005000",
+        "008000",
+        "095000",
+        "R-TOEPLITZ-FOURIER"
+      ],
+      "feeds": [],
+      "why": "Needs external C*-algebra, operator K-theory and circle-degree supplier audits."
+    },
+    {
+      "id": "R-TOEPLITZ-FINITE-SECTIONS",
+      "title": "Finite-section method and stable Toeplitz approximation",
+      "lane": "extension",
+      "requires": [
+        "R-TOEPLITZ-FOURIER",
+        "R-FREDHOLM-CALKIN"
+      ],
+      "feeds": [],
+      "why": "Study finite-section stability as a separate advanced branch."
+    }
+  ],
+  "proof_spines": [
+    {
+      "id": "P-SINE-FINITE",
+      "title": "Finite residual sine-angle bound",
+      "lane": "core",
+      "requires": [
+        "017000",
+        "018000",
+        "026000",
+        "030000",
+        "031000",
+        "042000",
+        "043000",
+        "062000",
+        "063000",
+        "065000",
+        "107000",
+        "108000",
+        "109000",
+        "110000"
+      ],
+      "roadmap_obligations": [
+        "PA-A01",
+        "PA-C01",
+        "SSP-C17"
+      ],
+      "proof_task": "Derive the residual identity, identify directed sine as a modulus, prove the relevant Sylvester estimate, combine."
+    },
+    {
+      "id": "P-SYLVESTER-SHARP",
+      "title": "Sharp pairwise π/2 Sylvester estimate",
+      "lane": "core",
+      "requires": [
+        "062000",
+        "065000",
+        "R-FOURIER-LAPLACE",
+        "R-HZ-POISSON",
+        "R-HZ-KERNEL",
+        "R-BOCHNER",
+        "R-IDEAL-GAUGE-DOMAIN",
+        "069000"
+      ],
+      "roadmap_obligations": [
+        "SSP-A23",
+        "SSP-A24",
+        "SSP-B13"
+      ],
+      "proof_task": "Construct reciprocal kernel, prove Fourier identity and exact mass, integrate conjugates and transfer symmetric gauge bounds."
+    },
+    {
+      "id": "P-SINE-UNBOUNDED",
+      "title": "General unbounded and symmetric-ideal sine theorem",
+      "lane": "core",
+      "requires": [
+        "R-BOREL-PVM-PROOF",
+        "R-KATO-RELLICH",
+        "R-CAYLEY-RESOLVENT",
+        "R-UNBOUNDED-SYLVESTER",
+        "R-IDEAL-GAUGE-DOMAIN",
+        "R-HS-HILBERT",
+        "102000",
+        "103000",
+        "104000",
+        "107000",
+        "108000",
+        "109000",
+        "110000"
+      ],
+      "roadmap_obligations": [
+        "SA-C55",
+        "SSP-C17"
+      ],
+      "proof_task": "Track closed domains through residual maps, establish ideal membership/norm and prove the angle-modulus identification."
+    },
+    {
+      "id": "P-TANGENT-DOUBLE",
+      "title": "Tangent and doubled-angle families",
+      "lane": "core",
+      "requires": [
+        "046000",
+        "047000",
+        "049000",
+        "R-CAYLEY-RESOLVENT",
+        "111000",
+        "112000",
+        "114000",
+        "115000",
+        "116000",
+        "117000",
+        "118000",
+        "119000",
+        "120000"
+      ],
+      "roadmap_obligations": [
+        "SSP-C01"
+      ],
+      "proof_task": "Prove graph/Riccati identities, involution symmetry, branch restrictions and sharpness examples."
+    },
+    {
+      "id": "P-DIRECT-OPT",
+      "title": "Direct rotation optimality and countermodel",
+      "lane": "core",
+      "requires": [
+        "037000",
+        "038000",
+        "042000",
+        "044000",
+        "045000",
+        "049000",
+        "052000",
+        "054000",
+        "058000",
+        "R-KARAMATA-FAN",
+        "130000",
+        "131000",
+        "132000",
+        "133000",
+        "134000",
+        "135000"
+      ],
+      "roadmap_obligations": [
+        "PA-A01"
+      ],
+      "proof_task": "Separate restricted from ambient objectives and verify the four-dimensional counterexample."
+    },
+    {
+      "id": "P-ROADMAP-STATISTICS",
+      "title": "Matrix spectral statistics proof branch",
+      "lane": "extension",
+      "requires": [
+        "R-FINITE-RANK-GRAM",
+        "R-MEASURABLE-PROJECTOR",
+        "R-MATRIX-CONCENTRATION",
+        "146000",
+        "147000"
+      ],
+      "roadmap_obligations": [
+        "MSS-A01",
+        "MSS-B12",
+        "MSS-C22"
+      ],
+      "proof_task": "Establish rank factorization, measurable spectral projectors, concentration and statistical gap transfer."
+    },
+    {
+      "id": "P-TOEPLITZ",
+      "title": "Toeplitz and Fredholm extension (not prerequisite to Davis–Kahan)",
+      "lane": "extension",
+      "requires": [
+        "R-TOEPLITZ-FOURIER",
+        "R-FREDHOLM-CALKIN",
+        "R-TOEPLITZ-FINITE-SECTIONS"
+      ],
+      "roadmap_obligations": [],
+      "proof_task": "Requires separate CStarAlgebras/OperatorKTheory/semigroups dependency audit."
+    }
+  ],
+  "combined_graph_topologically_orderable": true,
+  "inconsistent_nodes": []
+}
