@@ -153,7 +153,7 @@ theorem upperFormBound_of_pointSpectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymme
     obtain ⟨x, hxU, hx0, hAx⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam
     exact (Module.End.pointSpectrumIn_iff.mp hSpec) x hxU hx0 lam hAx
   intro x hx
-  exact SpectralOrder.re_inner_le_of_spectrum_subset_Iic _ hsym hspec ⟨x, hx⟩
+  exact ContinuousLinearMap.re_inner_le_of_spectrum_subset_Iic _ hsym hspec ⟨x, hx⟩
 
 /-- Spectral containment gives a lower form bound on an invariant subspace. -/
 theorem lowerFormBound_of_pointSpectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
@@ -169,7 +169,7 @@ theorem lowerFormBound_of_pointSpectrumIn {A : E →ₗ[𝕜] E} (hA : A.IsSymme
     obtain ⟨x, hxU, hx0, hAx⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam
     exact (Module.End.pointSpectrumIn_iff.mp hSpec) x hxU hx0 lam hAx
   intro x hx
-  exact SpectralOrder.le_re_inner_of_spectrum_subset_Ici _ hsym hspec ⟨x, hx⟩
+  exact ContinuousLinearMap.le_re_inner_of_spectrum_subset_Ici _ hsym hspec ⟨x, hx⟩
 
 end SpectralOrder
 

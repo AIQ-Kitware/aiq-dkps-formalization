@@ -4963,3 +4963,80 @@ The focused quarter-angle build, 13 environment linters, scope example and full
 style check passed. The PR remains open; fresh upstream CI and review are pending.
 The GitHub app could not edit its description; the campaign packet contains the
 corrected body and a host update script.
+
+### Spectral restriction and Yosida integrations (2026-11-06)
+
+Tau Ceti pin `a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8` contains both
+directly submitted, DKPS-adapted integrations. Mathlib remains at
+`1b1ccf4b088b32fa3f23f2de1127433254a81e1e` and Lean at `v4.36.0-rc2`.
+
+- [#28078](https://github.com/TauCetiProject/TauCeti/pull/28078), roadmap
+  SA-C84/C85, integrated as `f51ebb785dd4b3421cbd1442884fba30d5775364`
+  from accepted head `e841af4a6ea1187f79edbac56ec9256c6d02d061`. Its
+  spectral inequalities and restriction form bounds adapt
+  `ForTauCeti/Analysis/InnerProductSpace/SpectralOrder.lean` (Jon Crall,
+  Claude Opus 4.8 and GPT 5.6 High; Kitware, Apache-2.0). Local consumers use
+  those native declarations directly. The separate global form-bound packaging
+  and projector-distance theorem remain local.
+- [#28079](https://github.com/TauCetiProject/TauCeti/pull/28079), roadmap
+  SA-E14–E21 and SA-E23, integrated as
+  `958ea898407ffa3925584ae4cf2a58517097f911` from accepted head
+  `669b77958c667f9e79d86299865b53e3ace10f89`. Its signed-real Yosida
+  approximation and convergence generalize the local positive-natural-index
+  development (Jon Crall and Claude Opus 5; Kitware, Apache-2.0), which itself
+  adapted Spectra's `YosidaHille/Approximation/{Helpers,Defs}.lean` (Adam
+  Bornemann, Spectra Formalization Project, Apache-2.0). Local consumers now
+  use the native approximation, self-adjointness, commutation and convergence;
+  the downstream exponential-flow and Stone arguments remain local.
+
+Both integrations are verified from their `Source-PR` and `Accepted-Head`
+trailers and ancestry in the pinned revision. Bors reports these PRs closed
+without GitHub's conventional merged flag.
+
+Validation: focused spectral-order and Yosida/Stone consumers passed, followed
+by the full default `lake build` (21,739 jobs) and `lake build Challenge`
+(19,959 jobs), without warnings. The newer pin also required an explicit
+operator-ideal modulus import at the shared approximation-number boundary;
+the affected unbounded Sylvester and double-angle consumers passed focused
+builds. Builds ran serially using the VM-local cache.
+
+### Prepared Yosida flow submissions (2026-11-06)
+
+Two independent branches based on accepted Tau Ceti main
+`a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8` are pushed, but no PR or
+integration is yet claimed:
+
+- SA-E22: `port-sa-e22-yosida-flow`, head
+  `7da4f883bfe38be6ab012e1263536b8b446b6e49`, constructs the native
+  strongly continuous unitary group of each symmetric approximant.
+- SA-E24: `port-sa-e24-yosida-uniform`, head
+  `132a3678a2e7f9ddc9f199b8c6108c5091c77c5c`, proves uniform Cauchy
+  convergence on bounded time intervals; it does not import SA-E22.
+
+Both adapt DKPS proofs with the Spectra ancestry recorded in their source and
+submission packets. Focused warning-as-error builds, 13 environment linters,
+scope examples and full style passed. The compact-time result strengthens the
+donor's pointwise Cauchy theorem. Submit the two packets with
+`tauceti-dkps-campaign/waves/2026-11-06/submit.sh --submit` on the authenticated
+host; the script runs no Lake command. SA-E25–E27 and SA-E29 are not claimed.
+
+The submissions are now open as
+[#30735](https://github.com/TauCetiProject/TauCeti/pull/30735) and
+[#30736](https://github.com/TauCetiProject/TauCeti/pull/30736). Their respective
+repair heads `b4e098d53b171d60b9c32097ce0151ad2cc26d5e` and
+`b8df55ccd4af8b5aea1b0df69f8d6e2265028127` independently move the existing
+upstream `Yosida.lean` to `Yosida/Basic.lean` and place each new module in that
+directory. Focused builds, all 13 environment linters, scope examples and full
+style checks passed for each head. These are open PRs, not integrations; fresh
+upstream CI and review remain pending.
+
+Review follow-ups on the same open PRs: #30735 head
+`f7bfa4287601944a9b143d646931ee8bfccc81e1` uses Tau Ceti's native bounded
+Stone group instead of reimplementing its group laws and unitarity. #30736
+head `a534eff23c536fc0a1571e1e9c42dda9178696b1` uses the native uniform-Cauchy
+density theorem, places reusable bounded exponential estimates in their own
+inner-product-space module, and records the direct DKPS and Spectra ancestry.
+Both focused builds, 13 environment linters, scope checks and full style passed.
+Fresh upstream CI and review remain pending. The GitHub app rejected the PR
+description edits; the campaign's `waves/2026-11-06/update-pr-bodies.sh`
+updates the prepared descriptions on the authenticated host without a build.

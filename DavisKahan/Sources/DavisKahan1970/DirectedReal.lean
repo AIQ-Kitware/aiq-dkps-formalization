@@ -542,7 +542,7 @@ theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_real
   have hCompressionUpper : ∀ z : Z,
       ⟪compressOperatorReal Z T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2 := by
     intro z
-    exact SpectralOrder.re_inner_le_of_spectrum_subset_Iic
+    exact ContinuousLinearMap.re_inner_le_of_spectrum_subset_Iic
       (compressOperatorReal Z T) hMsa
       (fun r hr => (hCompressionSpectrum' hr).2) z
   have hAlgV : ContinuousLinearMap.realAlgebra (𝕜 := ℝ) (E := Vᗮ) =
@@ -551,7 +551,7 @@ theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_real
   rw [← hAlgV] at hUnwantedSpectrum
   have hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ := by
     exact (ContinuousLinearMap.lowerFormBoundOn_iff T Vᗮ (alpha + delta)).mp
-      (SpectralOrder.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
+      (ContinuousLinearMap.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
         hTsym hV.orthogonal_mem_invtSubmodule hUnwantedSpectrum)
   exact tanTheta_directed_bounded_symmetricNorming_real N T hT V Z hV hdelta hCompressionUpper
     hUnwantedLower hResidual

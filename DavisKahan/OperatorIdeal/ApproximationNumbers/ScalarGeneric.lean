@@ -9,6 +9,7 @@ public import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
 public import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
 public import DavisKahan.OperatorIdeal.CanonicalRealView
 public import TauCeti.Analysis.OperatorIdeal.Family.KyFan.Dominance
+public import TauCeti.Analysis.OperatorIdeal.Family.Modulus
 
 /-!
 # Scalar-generic approximation-number endpoints and ideal families

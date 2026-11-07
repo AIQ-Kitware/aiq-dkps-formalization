@@ -7,7 +7,7 @@ module
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
-public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds
+public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.Spectrum
 public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
@@ -49,51 +49,6 @@ attribute [local instance 100] ContinuousLinearMap.realAlgebra
   ContinuousLinearMap.realIsScalarTower ContinuousLinearMap.continuousFunctionalCalculusReal
   ContinuousLinearMap.instStarOrderedRingRCLike
 
-/-- A spectral upper bound implies a quadratic-form upper bound. -/
-theorem re_inner_le_of_spectrum_subset_Iic
-    (T : H →L[𝕜] H) (hT : IsSelfAdjoint T) {c : ℝ}
-    (hσ : spectrum ℝ T ⊆ Set.Iic c) (x : H) :
-    RCLike.re ⟪T x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
-  have hle : T ≤ algebraMap ℝ (H →L[𝕜] H) c :=
-    le_algebraMap_of_spectrum_le (fun r hr => hσ hr) hT
-  have hpos : (algebraMap ℝ (H →L[𝕜] H) c - T).IsPositive := by
-    rw [← ContinuousLinearMap.nonneg_iff_isPositive]
-    exact sub_nonneg.mpr hle
-  have hx := hpos.re_inner_nonneg_left x
-  have hcOp : algebraMap ℝ (H →L[𝕜] H) c =
-      (algebraMap ℝ 𝕜 c) • (1 : H →L[𝕜] H) := by
-    rw [Algebra.algebraMap_eq_smul_one, ← IsScalarTower.algebraMap_smul 𝕜]
-  have hcx : RCLike.re ⟪(algebraMap ℝ 𝕜 c) • x, x⟫_𝕜 = c * ‖x‖ ^ 2 := by
-    rw [inner_smul_left, RCLike.algebraMap_eq_ofReal, RCLike.conj_ofReal,
-      RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
-  rw [hcOp] at hx
-  simp only [sub_apply, smul_apply, one_apply_eq_self, inner_sub_left, map_sub] at hx
-  rw [hcx] at hx
-  linarith
-
-/-- A spectral lower bound implies a quadratic-form lower bound. -/
-theorem le_re_inner_of_spectrum_subset_Ici
-    (T : H →L[𝕜] H) (hT : IsSelfAdjoint T) {c : ℝ}
-    (hσ : spectrum ℝ T ⊆ Set.Ici c) (x : H) :
-    c * ‖x‖ ^ 2 ≤ RCLike.re ⟪T x, x⟫_𝕜 := by
-  have hle : algebraMap ℝ (H →L[𝕜] H) c ≤ T :=
-    algebraMap_le_of_le_spectrum (fun r hr => hσ hr) hT
-  have hpos : (T - algebraMap ℝ (H →L[𝕜] H) c).IsPositive := by
-    rw [← ContinuousLinearMap.nonneg_iff_isPositive]
-    exact sub_nonneg.mpr hle
-  have hx := hpos.re_inner_nonneg_left x
-  have hcOp : algebraMap ℝ (H →L[𝕜] H) c =
-      (algebraMap ℝ 𝕜 c) • (1 : H →L[𝕜] H) := by
-    rw [Algebra.algebraMap_eq_smul_one, ← IsScalarTower.algebraMap_smul 𝕜]
-  have hcx : RCLike.re ⟪(algebraMap ℝ 𝕜 c) • x, x⟫_𝕜 = c * ‖x‖ ^ 2 := by
-    rw [inner_smul_left, RCLike.algebraMap_eq_ofReal, RCLike.conj_ofReal,
-      RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
-  rw [hcOp] at hx
-  simp only [sub_apply, smul_apply, one_apply_eq_self, inner_sub_left, map_sub] at hx
-  rw [hcx] at hx
-  linarith
-
-
 /-- Spectral upper bound, packaged as a global upper form bound. -/
 theorem upperFormBoundOn_top_of_spectrum_subset_Iic
     (T : H →L[𝕜] H) (hT : IsSelfAdjoint T) {c : ℝ}
@@ -101,7 +56,7 @@ theorem upperFormBoundOn_top_of_spectrum_subset_Iic
     T.UpperFormBoundOn ⊤ c := by
   apply (_root_.ContinuousLinearMap.upperFormBoundOn_iff T ⊤ c).2
   intro x _
-  exact re_inner_le_of_spectrum_subset_Iic T hT hσ x
+  exact ContinuousLinearMap.re_inner_le_of_spectrum_subset_Iic T hT hσ x
 
 /-- Spectral lower bound, packaged as a global lower form bound. -/
 theorem lowerFormBoundOn_top_of_spectrum_subset_Ici
@@ -110,73 +65,7 @@ theorem lowerFormBoundOn_top_of_spectrum_subset_Ici
     T.LowerFormBoundOn ⊤ c := by
   apply (_root_.ContinuousLinearMap.lowerFormBoundOn_iff T ⊤ c).2
   intro x _
-  exact le_re_inner_of_spectrum_subset_Ici T hT hσ x
-
-/-- A spectral upper bound for the actual restriction gives the corresponding
-form bound on the reducing subspace. -/
-theorem re_inner_le_on_subspace_of_restriction_spectrum_subset_Iic
-    {A : H →L[𝕜] H} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
-    (hU : ∀ x ∈ U, A x ∈ U) {c : ℝ}
-    (hσ : spectrum ℝ (A.restrict hU) ⊆ Set.Iic c)
-    {x : H} (hx : x ∈ U) :
-    RCLike.re ⟪A x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 := by
-  let : CompleteSpace U :=
-    completeSpace_coe_iff_isComplete.mpr U.isComplete_coe_of_hasOrthogonalProjection
-  have hres : IsSelfAdjoint (A.restrict hU) :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-      (hA.restrict_invariant hU)
-  have h := re_inner_le_of_spectrum_subset_Iic
-    (A.restrict hU) hres hσ (⟨x, hx⟩ : U)
-  -- restates the hypothesis with the definition unfolded, the form the following
-  -- step matches against.
-  change RCLike.re ⟪A x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 at h
-  exact h
-
-/-- A spectral lower bound for the actual restriction gives the corresponding
-form bound on the reducing subspace. -/
-theorem le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-    {A : H →L[𝕜] H} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
-    (hU : ∀ x ∈ U, A x ∈ U) {c : ℝ}
-    (hσ : spectrum ℝ (A.restrict hU) ⊆ Set.Ici c)
-    {x : H} (hx : x ∈ U) :
-    c * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜 := by
-  let : CompleteSpace U :=
-    completeSpace_coe_iff_isComplete.mpr U.isComplete_coe_of_hasOrthogonalProjection
-  have hres : IsSelfAdjoint (A.restrict hU) :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
-      (hA.restrict_invariant hU)
-  have h := le_re_inner_of_spectrum_subset_Ici
-    (A.restrict hU) hres hσ (⟨x, hx⟩ : U)
-  -- restates the hypothesis with the definition unfolded, the form the following
-  -- step matches against.
-  change c * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜 at h
-  exact h
-
-
-/-- Restriction-spectrum upper bridge, packaged as a subspace form bound. -/
-theorem upperFormBoundOn_of_restriction_spectrum_subset_Iic
-    {A : H →L[𝕜] H} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
-    (hU : ∀ x ∈ U, A x ∈ U) {c : ℝ}
-    (hσ : spectrum ℝ (A.restrict hU) ⊆ Set.Iic c) :
-    A.UpperFormBoundOn U c := by
-  apply (_root_.ContinuousLinearMap.upperFormBoundOn_iff A U c).2
-  intro x hx
-  exact re_inner_le_on_subspace_of_restriction_spectrum_subset_Iic hA hU hσ hx
-
-/-- Restriction-spectrum lower bridge, packaged as a subspace form bound. -/
-theorem lowerFormBoundOn_of_restriction_spectrum_subset_Ici
-    {A : H →L[𝕜] H} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 H} [U.HasOrthogonalProjection]
-    (hU : ∀ x ∈ U, A x ∈ U) {c : ℝ}
-    (hσ : spectrum ℝ (A.restrict hU) ⊆ Set.Ici c) :
-    A.LowerFormBoundOn U c := by
-  apply (_root_.ContinuousLinearMap.lowerFormBoundOn_iff A U c).2
-  intro x hx
-  exact le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici hA hU hσ hx
-
+  exact ContinuousLinearMap.le_re_inner_of_spectrum_subset_Ici T hT hσ x
 
 /-- The sharp projector bound from spectra of the actual restrictions, uniformly over `RCLike`. -/
 theorem opNorm_starProjection_sub_le_of_restriction_spectra
@@ -196,14 +85,16 @@ theorem opNorm_starProjection_sub_le_of_restriction_spectra
   apply Submodule.projectionGap_le_norm_sub_div (c := c) (c' := c)
     U W hA hB hU.mem_invtSubmodule hW.mem_invtSubmodule hg
   · exact (ContinuousLinearMap.lowerFormBoundOn_iff A U (c + g)).mp
-      (lowerFormBoundOn_of_restriction_spectrum_subset_Ici hA hU.mem_invtSubmodule hUhi)
+      (ContinuousLinearMap.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
+        hA hU.mem_invtSubmodule hUhi)
   · exact (ContinuousLinearMap.upperFormBoundOn_iff B Wᗮ c).mp
-      (upperFormBoundOn_of_restriction_spectrum_subset_Iic hB
+      (ContinuousLinearMap.upperFormBoundOn_of_restriction_spectrum_subset_Iic hB
         hW.orthogonal_mem_invtSubmodule hWlo)
   · exact (ContinuousLinearMap.lowerFormBoundOn_iff B W (c + g)).mp
-      (lowerFormBoundOn_of_restriction_spectrum_subset_Ici hB hW.mem_invtSubmodule hWhi)
+      (ContinuousLinearMap.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
+        hB hW.mem_invtSubmodule hWhi)
   · exact (ContinuousLinearMap.upperFormBoundOn_iff A Uᗮ c).mp
-      (upperFormBoundOn_of_restriction_spectrum_subset_Iic hA
+      (ContinuousLinearMap.upperFormBoundOn_of_restriction_spectrum_subset_Iic hA
         hU.orthogonal_mem_invtSubmodule hUlo)
 
 

@@ -186,7 +186,7 @@ The hypotheses are the printed ones: the wanted block's spectrum sits in
 `[left, 0]`, the unwanted block's in `[d, ∞)`, and the coupling is small
 relative to the gap.  The form bounds `sharp_symmetricNormingFunction` wants
 are read off from those spectral containments by
-`SpectralOrder.re_inner_le_of_spectrum_subset_Iic` and its lower
+`ContinuousLinearMap.re_inner_le_of_spectrum_subset_Iic` and its lower
 companion; the interval/exterior shape the Riccati selection wants is the same
 data reassociated.
 
@@ -224,7 +224,7 @@ theorem sharp_symmetricNormingFunction_selectedBranch
   -- the form bounds the sharp endpoint runs on
   have hA0 : ∀ z : E0, RCLike.re ⟪B.A0 z, z⟫_ℂ ≤ 0 := by
     intro z
-    have h := SpectralOrder.re_inner_le_of_spectrum_subset_Iic B.A0
+    have h := ContinuousLinearMap.re_inner_le_of_spectrum_subset_Iic B.A0
       hA0sa (c := 0) (by
         intro r hr
         have hc : (r : ℂ) ∈ spectrum ℂ B.A0 := by
@@ -234,7 +234,7 @@ theorem sharp_symmetricNormingFunction_selectedBranch
         exact (hA0spec (spectrum.of_algebraMap_mem ℂ hc)).2) z
     simpa using h
   have hA1 : ∀ z : E1, d * ‖z‖ ^ 2 ≤ RCLike.re ⟪B.A1 z, z⟫_ℂ :=
-    SpectralOrder.le_re_inner_of_spectrum_subset_Ici B.A1 hA1sa (by
+    ContinuousLinearMap.le_re_inner_of_spectrum_subset_Ici B.A1 hA1sa (by
       intro r hr
       have hc : (r : ℂ) ∈ spectrum ℂ B.A1 := by
         let _ := ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := E1)

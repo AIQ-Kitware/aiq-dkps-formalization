@@ -839,14 +839,15 @@ theorem theorem6_3_infiniteTrial_ideal
   have hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2 := by
     intro z
-    refine SpectralOrder.re_inner_le_of_spectrum_subset_Iic
+    refine ContinuousLinearMap.re_inner_le_of_spectrum_subset_Iic
       (theorem63Compression T Z) hMsa ?_ z
     intro r hr
     exact (hCompressionSpectrum hr).2
   have hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
-    SpectralOrder.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-      hT hV.orthogonal_mem_invtSubmodule hUnwantedSpectrum hy
+    (ContinuousLinearMap.lowerFormBoundOn_iff T Vᗮ (alpha + delta)).mp
+      (ContinuousLinearMap.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
+        hT hV.orthogonal_mem_invtSubmodule hUnwantedSpectrum) y hy
   exact theorem6_3_infiniteTrial_of_formBounds N T hT V Z hV hdelta
     hCompressionUpper hUnwantedLower tanTheta0 htan hResidual
 
@@ -910,14 +911,15 @@ theorem theorem6_3_infiniteTrial_spectral_exists
   have hCompressionUpper : ∀ z : Z,
       RCLike.re ⟪theorem63Compression T Z z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2 := by
     intro z
-    refine SpectralOrder.re_inner_le_of_spectrum_subset_Iic
+    refine ContinuousLinearMap.re_inner_le_of_spectrum_subset_Iic
       (theorem63Compression T Z) hMsa ?_ z
     intro r hr
     exact (hCompressionSpectrum hr).2
   have hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := fun y hy =>
-    SpectralOrder.le_re_inner_on_subspace_of_restriction_spectrum_subset_Ici
-      hT hV.orthogonal_mem_invtSubmodule hUnwantedSpectrum hy
+    (ContinuousLinearMap.lowerFormBoundOn_iff T Vᗮ (alpha + delta)).mp
+      (ContinuousLinearMap.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
+        hT hV.orthogonal_mem_invtSubmodule hUnwantedSpectrum) y hy
   exact theorem6_3_infiniteTrial_of_formBounds_exists N T hT V Z hV hdelta
     hCompressionUpper hUnwantedLower hResidual
 
