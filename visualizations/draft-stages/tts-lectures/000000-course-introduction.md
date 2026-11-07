@@ -1,155 +1,192 @@
-# Course introduction: What survives when a matrix changes?
+# Course introduction: The spaces, operators, and spectra we will study
 
-## The problem
+## Before the big theorems
 
-Suppose we have a mathematical model that tells us something important about a system. Maybe it describes the ways a structure can vibrate. Maybe it describes the dominant patterns in a cloud of measurements. Or maybe it represents the interactions of a network. We analyze the model, find some special directions, and use those directions to understand what the system is doing.
+A matrix is a way to describe a linear transformation. If we know basic linear algebra, we can multiply a matrix by a vector, solve systems of equations, compute determinants, and sometimes find eigenvalues and eigenvectors. But there is a difference between knowing those operations and understanding why spectral theory is organized around them.
 
-Then the model changes. We collect a new batch of measurements, or improve an approximation, or account for a small physical effect we had ignored. The new matrix is close to the old one. Should we expect those special directions to be close as well?
+What information about a linear transformation belongs to the transformation itself, rather than to the coordinates in which we write its matrix? How can a small list of numbers tell us what a matrix does? Why do certain subspaces matter even when there is no preferred basis for them? And how can we take the square root, absolute value, or exponential of a matrix without simply applying the familiar scalar function to every entry?
 
-That question sounds as though it ought to have a simple answer. Small change in, small change out. But for eigenvectors, it is false without additional assumptions. A matrix can change by an arbitrarily small amount while an eigenvector selected by its eigenvalue turns through a right angle.
+These are the questions I want us to understand first.
 
-That does not mean eigenvectors are hopelessly unstable. It means we need to understand what makes a direction identifiable in the first place. Often the answer involves a gap between eigenvalues. Just as importantly, it involves deciding whether we really care about an individual eigenvector or about an entire subspace, a collection of directions considered together.
+This course will eventually develop the Davis–Kahan theory of spectral subspaces, including the mathematics behind a formalization described in our companion journal paper. But we are not going to start with a perturbation theorem. Before spectra, we will learn about the spaces that operators act on: normed spaces, Banach spaces, Hilbert spaces, and the geometry of inner products. Then we will build isometries, coordinate frames, Gram operators, eigenvalues, spectra, and operator constructions. Only after those objects make sense will we ask what happens when an operator changes.
 
-By the end of this introduction, three claims should make sense. Eigenvalues can remain stable while selected eigenvectors do not. Separation from competing eigenvalues can protect a direction or a subspace. And the right mathematical measure of movement depends on what we are trying to preserve.
+We can start with a simple matrix and let it teach us why the subject exists.
 
-The rest of the course will turn those observations into precise statements, proofs, and useful methods. But we can already see the essential problem with a matrix small enough to describe without drawing it.
+## A matrix has an action, not just entries
 
-## A tiny change and a ninety-degree turn
+Imagine a point in the plane, represented by two coordinates. A two-by-two matrix takes those coordinates and produces two new coordinates. We can think of this as moving every point in the plane by the same linear rule.
 
-First, a quick reminder of what an eigenvector is. A matrix acts on a vector and produces another vector. An eigenvector is a nonzero vector whose image points along the same line as the original. The matrix may stretch it, shrink it, or reverse it, but it does not send it off that line. The number describing the stretching is the eigenvalue.
+Consider a diagonal matrix whose first diagonal entry is two and whose second diagonal entry is three. Its off-diagonal entries are zero. Feed this matrix the vector pointing one unit to the right. The output points two units to the right. Feed it the vector pointing one unit upward. The output points three units upward.
 
-Consider a two-by-two diagonal matrix. Its top-left entry is one. Its bottom-right entry is one plus a small positive number, which we will call delta. Its other two entries are zero.
+So the matrix stretches the horizontal axis by a factor of two, and the vertical axis by a factor of three. Every other vector is a combination of those two directions, and linearity tells us what happens to it. A vector with horizontal component one and vertical component one becomes a vector with horizontal component two and vertical component three.
 
-Because the matrix is diagonal, we can read off its eigenvectors. The horizontal coordinate direction has eigenvalue one. The vertical coordinate direction has eigenvalue one plus delta. The smaller eigenvalue belongs to the horizontal direction.
+We can describe this matrix by listing its four entries. But the entries hide a more useful description. There are two special directions, and each of those directions is simply scaled. Once we know the scales and the directions, we know the whole transformation.
 
-Now make another diagonal matrix by exchanging those two diagonal entries. The top-left entry is one plus delta, and the bottom-right entry is one. Again, the other entries are zero.
+Those scales are the eigenvalues. Those directions are eigenvector directions. More precisely, an eigenvector is a nonzero vector that the transformation sends to a scalar multiple of itself. The scalar is its eigenvalue. Saying that the vector does not change direction is slightly informal, because multiplying by a negative scalar reverses its orientation. What matters is that the line through the vector is preserved.
 
-The second matrix has exactly the same two eigenvalues as the first. Not approximately the same; exactly the same. But the direction associated with the smaller eigenvalue has switched. It was horizontal. Now it is vertical. Those directions meet at ninety degrees.
+This already explains why eigenvectors are interesting. They give us directions on which a possibly complicated transformation has a simple action: scalar multiplication.
 
-How different are the two matrices? Their difference is another diagonal matrix, with delta in one diagonal position and negative delta in the other. If we measure a matrix by the greatest amount it can stretch a vector of length one, the size of that difference is delta.
+But they raise another question. What if we use different coordinates? The same transformation might no longer have a diagonal matrix. It might have several nonzero off-diagonal entries. Yet the transformation, as a geometric action, has not changed. So we would like our most important descriptions to survive a change of coordinates.
 
-And delta can be as small as we like.
+Under a change of basis, the matrix changes by a similarity transformation, but the eigenvalues remain the same. The individual coordinate columns used to represent an eigenvector change, yet the invariant direction in the underlying space is the same geometric object. That separation between a mathematical object and a chosen description will run throughout this course.
 
-So here are two matrices, as close as we please in that measurement, with identical eigenvalue lists, whose smallest-eigenvalue directions are perpendicular.
+## What kind of space can an operator act on?
 
-There is no contradiction. Notice what we had to do to make this example work. The two original eigenvalues were separated by only delta. As the matrix change became smaller, the distinction between the two eigenvalues became smaller too. We were asking the matrix to tell us which of two nearly tied directions should come first. A perturbation large enough to reverse that near tie changes the answer completely.
+The plane from our example is a convenient place to begin, but an operator is not required to act on two-dimensional coordinate vectors. It can act on a space of functions, a space of sequences, or another mathematical collection on which addition and scalar multiplication make sense.
 
-This is the first principle of the course: the absolute size of a perturbation is not enough. It has to be compared with the separation that protects the information we care about.
+To study such maps, we need ways to measure vectors and talk about limits. A norm assigns a nonnegative size to a vector. From it we get a distance: the distance between two vectors is the norm of their difference. Once there is a distance, we can talk about a sequence of vectors getting closer and closer to one another.
 
-## The significance of a gap
+Here a question appears that finite-dimensional linear algebra tends to conceal. Suppose the terms of a sequence become arbitrarily close to each other. Must they approach a vector that belongs to the space we started with? Not necessarily. A normed space is called complete when every Cauchy sequence, meaning a sequence whose sufficiently late terms are arbitrarily close together, actually converges to an element of that space. A complete normed vector space is called a Banach space.
 
-Let's call that separation a spectral gap. For now, think of it as the distance between the eigenvalue associated with a direction of interest and the competing eigenvalues. Later we will need more careful definitions, because different theorems require different kinds of spectral separation.
+Why does completeness matter? Because many mathematical constructions are defined by limits. We will define operator inverses, infinite series, and continuous transformations. It matters whether the limit remains inside the space on which the operator is supposed to act. Every finite-dimensional real or complex normed space is complete, which is one reason many of these issues were invisible in our earlier linear algebra courses.
 
-Imagine a second two-by-two diagonal matrix. This time its diagonal entries are zero and ten. The horizontal direction has eigenvalue zero. The vertical direction has eigenvalue ten. There is a substantial difference between what the matrix does along those two directions.
+Now imagine that the space also has an inner product. An inner product gives us not just lengths but angles and orthogonality. A complete inner-product space is called a Hilbert space. Euclidean space is a Hilbert space. So is the space of square-summable sequences, where vectors can have infinitely many coordinates while retaining finite squared length.
 
-Suppose we add a small interaction that mixes the horizontal and vertical coordinates. To be concrete, put a small positive number, epsilon, in both off-diagonal positions. The resulting matrix remains symmetric: the amount by which the horizontal coordinate influences the vertical one is the same as the amount by which the vertical coordinate influences the horizontal one.
+Every Hilbert space is a Banach space, but a Banach space need not have an inner product whose norm is its given norm. This distinction matters: orthogonal projections, self-adjoint operators, and the adjoints we use in spectral geometry rely on inner-product structure. We will build them rather than assume they work in every normed space.
 
-The eigenvectors will usually rotate. But how much?
+A linear operator between normed spaces is bounded if some fixed multiple of the input norm bounds the output norm. For linear operators, this is equivalent to continuity. Every matrix between finite-dimensional normed spaces is bounded. In infinite dimensions, continuity becomes a real restriction, and later we will also encounter important operators that are unbounded and therefore require careful domain conditions.
 
-If epsilon is tiny compared with ten, the rotation is small. The original matrix treats the two coordinate directions very differently, so a weak coupling has difficulty mixing them. If, instead, the diagonal entries are zero and a very small positive number, the same coupling can cause a much larger rotation. The two directions were already almost indistinguishable as far as the original matrix was concerned.
+## Isometries, coordinate frames, and Gram operators
 
-In this particular symmetric two-by-two example, the angle of the lower-eigenvalue direction away from the horizontal has a clean formula. Twice the magnitude of that angle has tangent equal to two epsilon divided by the diagonal gap. The angle is chosen between zero and forty-five degrees when epsilon and the gap are positive.
+An isometry preserves distances. For a linear map between inner-product spaces, preserving norms also means preserving the inner product. An orthogonal matrix or a unitary matrix is a familiar example: it preserves lengths and angles, and it maps the entire space onto itself. But an isometry does not have to be onto. It can place a small coordinate space inside a larger ambient space without changing any geometry.
 
-We do not need to memorize that formula now. What matters is the ratio. Epsilon measures how hard we mix the directions. The gap measures how firmly the original matrix distinguishes them. A weak interaction relative to the gap gives a small rotation. An interaction large relative to the gap can give a substantial rotation.
+Imagine choosing two orthonormal vectors in three-dimensional space. Using them as columns of a matrix gives an isometric map from a two-dimensional coordinate plane into three-dimensional space. If we call the map V, multiplying its adjoint by V gives the two-dimensional identity: V star V equals I. But multiplying V by its adjoint in the opposite order gives the projection onto the selected two-dimensional plane. V V star is not the identity on the entire three-dimensional space. That distinction will matter throughout this course.
 
-There is a useful analogy with two musical notes. When their frequencies are far apart, a weak coupling has one kind of effect. When they are nearly in tune, that same coupling can make their modes strongly mix. The analogy is not a proof, but it points to the right structural question: how far apart are the modes we are trying to tell apart?
+What if the chosen vectors are not perpendicular? We can still use them to construct a linear map from coefficient vectors to their linear combinations. This is called a synthesis map. Its adjoint is the analysis map: it records inner products with the chosen vectors.
 
-We will spend much of the course making this comparison rigorous. The exact constant, the meaning of separation, and even the appropriate function of the angle will depend on the assumptions. Those distinctions are mathematical substance, not bookkeeping.
+The Gram matrix collects all the pairwise inner products of the selected vectors. If the synthesis map is S, the Gram operator on coefficient space is S star S. For a concrete example, choose the plane vectors one comma zero and one comma one. Their Gram matrix has entries one and one in the first row, and one and two in the second. Its diagonal entries tell us the squared lengths of the vectors; its off-diagonal entries tell us their overlap. More generally, if c is a vector of coefficients, the squared length of the linear combination S c is exactly the inner product of c with G c.
 
-## Why eigenvalues tell only part of the story
+That immediately shows the Gram matrix is positive semidefinite: squared length cannot be negative. It also explains why a Gram matrix is meaningful even if our chosen vectors are not an orthonormal basis.
 
-We should distinguish two kinds of stability that are easy to conflate.
+The reverse product, S S star, acts on the ambient space rather than on coefficient space. It is called a frame operator. Both are built from the same map, but they answer different questions. Keeping track of the spaces on which they act will prevent many later confusions.
 
-For real symmetric matrices, the eigenvalues can be arranged from smallest to largest. A fundamental result tells us that changing the matrix by a small amount, measured in the operator norm, changes each eigenvalue in that ordered list by no more than that amount. Eigenvalue stability is a remarkably robust fact in this setting.
+A particularly useful generalization is A star A for an arbitrary operator A. It is positive, it records squared output lengths, and its positive square root will become the operator modulus. So the Gram construction is not a detour. It is one of the main routes from familiar vector geometry into the algebra of operators.
 
-But knowing that the numerical eigenvalues have changed little does not tell us which direction belongs to which one. Our first example made the distinction as stark as possible. The eigenvalue lists did not change at all, while the direction of the smallest eigenvalue switched from horizontal to vertical.
+## From eigenvalues to the spectrum
 
-This matters when eigenvectors have an interpretation. In data analysis, a leading eigenvector of a covariance matrix may represent a dominant direction of variation. In a mechanical model, an eigenvector may describe a vibration mode. In a numerical computation, an eigenvector may be part of a representation that later algorithms use.
+The word 'spectrum' might sound like it must refer to something visible, like the colors of light. In spectral theory, we use it for the set of scalar values associated with an operator in a particular way.
 
-If two eigenvalues are nearly equal, the model may not support a reliable distinction between their individual eigenvectors. It may still support a reliable distinction between the space they span and everything outside that space.
+In finite-dimensional linear algebra, the spectrum of a square matrix is exactly the set of its eigenvalues. So for our diagonal matrix, its spectrum consists of two numbers: two and three.
 
-That is why the next object we need is not a more elaborate formula for individual vectors. It is the idea of a subspace.
+There is a definition of spectrum, however, that works more generally, and understanding that definition is worth the effort. Pick a number, which mathematicians often call lambda. Subtract lambda times the identity matrix from our operator. Ask whether the resulting matrix has an inverse.
 
-## A subspace can be stable when its basis is not
+If it does, lambda is outside the spectrum. If it does not, lambda is in the spectrum.
 
-A subspace is a collection of vectors closed under addition and scalar multiplication. In familiar three-dimensional space, a line through the origin is a one-dimensional subspace. A plane through the origin is a two-dimensional subspace.
+Let's see why this agrees with the eigenvector definition for matrices. If lambda is an eigenvalue, there is a nonzero vector that the original matrix sends to lambda times that vector. Subtract lambda times the identity, and that vector gets sent to zero. A matrix that sends a nonzero vector to zero cannot be invertible. So every eigenvalue belongs to the spectrum.
 
-Now consider a diagonal three-by-three matrix with diagonal entries one, one, and four. It has two independent eigenvectors with eigenvalue one: the first and second coordinate directions. But those two directions are not individually special. Every direction in the plane they span is also an eigenvector with eigenvalue one.
+Conversely, for a square matrix, failure to be invertible means there is some nonzero vector in its kernel. If the matrix we are examining is the original matrix minus lambda times the identity, that kernel equation says exactly that the original matrix sends our vector to lambda times itself. So every spectral value is an eigenvalue. In finite dimensions, the two descriptions agree.
 
-For instance, we could replace the horizontal and vertical coordinate axes by two axes rotated forty degrees within that plane. They would still be perpendicular eigenvectors, and they would still describe the very same matrix. We could make that change of basis without perturbing the matrix at all.
+Why use the definition involving invertibility, then? Because the definition continues to make sense when we leave finite matrices behind. Some operators act on spaces of functions, where the notion of a vector is broader than a short coordinate list. In those settings, an operator can have spectral values even when no nonzero vector is an eigenvector for that value.
 
-If someone tells us that one of those eigenvectors has rotated, have we observed a physical change? Not necessarily. We may only have changed the way we describe an unchanged plane.
+We are not going to prove the infinite-dimensional theory on day one. We will revisit it carefully later. For now, the important point is that 'spectrum' is a precise mathematical term, not merely a synonym for a list returned by an eigenvalue routine. In matrices the two agree; in general operators there is more to understand.
 
-The plane itself is more meaningful. It is the collection of all vectors with third coordinate zero. It is also the full eigenspace associated with eigenvalue one. Its separation from the remaining eigenvalue, four, is three.
+## Why we care about self-adjoint operators
 
-A perturbation that rearranges directions within the plane need not move the plane itself. A perturbation that mixes the plane with the third coordinate may move it, but then the separation between the cluster near one and the value near four becomes important. Under appropriate small-perturbation and spectral-selection assumptions, we can bound the movement of the plane even when its internal eigenvectors are poorly determined.
+Not every matrix has a complete set of eigenvectors that form a basis. Some have complex eigenvalues. Others cannot be diagonalized at all. So the two-axis description we used is not a universal privilege of arbitrary matrices.
 
-This suggests a general strategy. If individual directions are too sensitive, group together the directions that cannot reliably be distinguished. Then ask whether the whole group remains separated from the rest.
+There is, however, a very important class for which a remarkably clean description is available. Over the real numbers these matrices are called symmetric. Over the complex numbers they are called Hermitian, or self-adjoint. If we think of matrices as operators on an inner-product space, being self-adjoint means the operator equals its adjoint.
 
-To do that carefully, we need a way to represent a subspace without choosing a particular basis. An orthogonal projection does exactly that. It keeps the component of a vector lying in the subspace and removes the perpendicular component. Two different orthonormal bases for the same plane produce the same orthogonal projection onto that plane.
+An adjoint is defined by how an operator interacts with the inner product. The inner product measures lengths and angles. Taking the adjoint is the operation that moves a linear transformation from one side of that pairing to the other, in a way that leaves the resulting scalar unchanged. We will derive that more carefully in the first unit, rather than rely on a slogan.
 
-So a projection lets us compare geometric objects rather than arbitrary labels on axes.
+For a real symmetric matrix, the spectral theorem says we can find an orthonormal basis consisting entirely of eigenvectors. Orthonormal means the basis vectors all have length one and meet at right angles. For complex self-adjoint matrices the analogous statement holds with a unitary change of basis.
 
-## Measuring the movement of a whole space
+This is an extraordinary amount of structure. It says that a self-adjoint matrix, however complicated its entries look, can be understood as a collection of perpendicular directions, each with a real scale factor. We can change coordinates so that the matrix becomes diagonal, without distorting lengths or angles.
 
-For two lines, the angle between them is a natural measure of how different they are. With two planes, the situation is richer. One direction in the first plane might line up closely with the second plane, while another might be farther away.
+Think of a mechanical system with several vibration modes, or of a quadratic form measuring energy in different directions. Orthogonal spectral directions provide a way to discuss distinct modes of behavior without having to treat every coordinate interaction separately.
 
-The mathematical answer is a collection of principal angles. They tell us, in a systematic way, how the directions in one subspace can be aligned with directions in another. In simple cases, the geometry decomposes into a collection of two-dimensional rotations. Each rotation has its own angle.
+But there is a complication that will turn out to be equally instructive. Sometimes several eigenvectors share the same eigenvalue.
 
-We can summarize these angles in several ways. We might ask for the largest one, because we care about the worst-aligned direction. We might combine them to measure a total squared error. Or we might use a different cost that assigns a different weight to how each direction moves.
+## Why a subspace is not the same thing as a chosen basis
 
-These measurements are related, but they are not interchangeable. If one theorem controls the largest deviation and another controls an aggregate cost, we should not silently treat them as the same statement. Similarly, the best transformation under one cost need not be the best under another.
+Consider a three-by-three diagonal matrix with diagonal entries one, one, and four. The first two coordinate axes are eigenvector directions with eigenvalue one, while the third coordinate axis has eigenvalue four.
 
-Another subtle point is that an eigenvector can be multiplied by negative one without changing its eigendirection. The vectors point in opposite orientations, but the line they span has not moved. Over complex numbers, multiplying by a complex number of magnitude one creates another version of the same ambiguity. Working with subspaces and projections keeps us focused on geometry rather than arbitrary choices of sign or phase.
+Are the first two coordinate axes the only eigenvector directions with eigenvalue one? No. Any nonzero vector in the plane spanned by those axes is also an eigenvector with eigenvalue one. The matrix acts on that entire plane by simply multiplying every vector by one.
 
-This will eventually lead to a canonical way of rotating one subspace toward another, called the direct rotation. It will also lead to questions about what it means for such a rotation to be optimal. Those questions sound similar but require distinct mathematics.
+We might choose one pair of perpendicular axes within the plane. Or we might rotate that pair by thirty degrees and choose another. Both pairs are equally valid eigenvector bases for the same plane. The operator has not changed; only our description has.
 
-## From approximate equations to an angle bound
+This is why an eigenspace is often more fundamental than an individual eigenvector. The eigenspace is the collection of all vectors belonging to a particular eigenvalue, together with zero. More broadly, we may care about the sum of the eigenspaces whose eigenvalues belong to some chosen part of the spectrum. We call that a spectral subspace.
 
-There is another thread in the story: approximate eigenvectors.
+How can we describe a subspace without committing ourselves to one convenient basis? One answer is with an orthogonal projection. A projection onto a plane keeps the part of a vector that lies in the plane and discards the perpendicular part. The result depends on the plane, not on which pair of axes we happen to draw inside it.
 
-In a real computation, we rarely obtain a perfect eigenvector. Instead, we obtain a candidate vector and a candidate eigenvalue. We can test how well they satisfy the eigenvector equation. Apply the matrix to the candidate vector, then subtract what the candidate eigenvalue says the output should have been. The result is called the residual.
+For our three-by-three example, the projection onto the first two coordinates is a matrix whose first two diagonal entries are one and whose third is zero. Apply it to any vector, and it removes the third coordinate. We get a canonical algebraic representation of the plane.
 
-A small residual means the proposed eigenvector equation is nearly satisfied. But what does that tell us about the direction of the candidate vector?
+If the eigenvalues of a self-adjoint matrix are known, and we have the projections onto each of its eigenspaces, then we can reconstruct the operator. Multiply each spectral projection by its eigenvalue, and add them. This is the finite-dimensional spectral decomposition. Later we will use this idea to define functions of operators and to select a group of spectral values without referring to an arbitrary eigenbasis.
 
-Return to a diagonal two-by-two matrix with diagonal entries zero and a positive number, g. The exact eigenvector for eigenvalue zero is the horizontal direction. Consider a candidate unit vector tilted by an angle theta away from that direction. Its horizontal coordinate is cosine theta, and its vertical coordinate is sine theta.
+Notice what we have accomplished before asking any question about approximation. We now have several distinct objects: an operator, its spectrum, an eigenspace, a spectral subspace, and an orthogonal projection onto that subspace. Each has a mathematical role. They are not interchangeable.
 
-Apply the matrix. Its horizontal coordinate becomes zero; its vertical coordinate becomes g times sine theta. Because the proposed eigenvalue is zero, subtracting the proposed eigenvalue times the vector changes nothing. The residual therefore has length g times the absolute value of sine theta.
+## Taking functions of matrices
 
-We have reached an exact equation in this simple setting: the sine of the angle, in magnitude, is the residual length divided by g.
+Let's return to our first two-by-two diagonal matrix, with diagonal entries two and three. Squaring this matrix gives a diagonal matrix with entries four and nine. Applying the square twice gives a fourth power with entries sixteen and eighty-one. Because multiplication acts independently on the two eigenvector directions, these calculations are simple when expressed in the eigenbasis.
 
-This equation is worth lingering over. The residual tells us how badly the candidate satisfies the eigenvector equation. The gap converts that algebraic error into a geometric error. If g is large, the same residual forces the candidate to be close to the desired direction. If g is small, the same residual provides a much weaker guarantee.
+What if we want to apply a different function, such as a square root or an exponential? For a diagonalizable self-adjoint matrix, the spectral theorem suggests a direct method: apply the scalar function to each eigenvalue, and keep the corresponding spectral directions. A function of the operator is built from the same spectral projections, but with the original eigenvalue replaced by the value of the chosen function at that eigenvalue.
 
-This is not yet the general Davis–Kahan sine-theta theorem. We chose the correct target eigenvalue, used a diagonal two-dimensional matrix, and made the residual especially easy to compute. In a general problem we must say which part of the spectrum is wanted, which is unwanted, which approximate spectral values are being used, and how they are separated from one another. If we choose the wrong eigenvalue, even a zero residual could identify a perfectly valid eigenvector of the wrong eigenspace.
+For instance, the positive square root of the diagonal matrix with entries four and nine has diagonal entries two and three. The square of that new matrix is the original one. The word 'positive' matters: a square root is not necessarily unique without specifying which one we mean. We will investigate positive operators and positive square roots before relying on this construction.
 
-Nevertheless, this little calculation contains the central mechanism of a large family of results. A residual measures an error in an equation. Spectral separation lets us turn that error into control over an angle.
+This leads to an operator that the journal manuscript uses repeatedly: the modulus of an operator. For an ordinary real number, absolute value measures its magnitude without keeping its sign. For a matrix, the analogous object is not obtained by taking the absolute value of every entry.
 
-The rest is the hard, beautiful business of proving exactly how far that idea extends.
+Instead, one first multiplies the adjoint of the operator by the operator itself. That product is positive semidefinite. Then one takes its unique positive square root. The result is called the operator modulus, and it is written as the absolute value of the operator.
 
-## What the course will build
+Why would we do that? Because the operator modulus captures how much the transformation stretches different directions. Its eigenvalues are the singular values of the original matrix. Singular values lead to the operator norm, the Frobenius norm, and many other ways to measure the size or displacement of a transformation. From the modulus we can also build a polar decomposition, which separates the magnitude of a map from an appropriate orientation factor.
 
-The course begins by developing the geometry we have been borrowing in words. We will learn how projections encode subspaces, why a higher-dimensional comparison needs principal angles, and how matrix norms measure different kinds of errors.
+We will not treat these as disconnected vocabulary words. We will work through examples until the sequence makes sense: adjoint, positive product, positive square root, modulus, singular values, and polar decomposition.
 
-We will then study the spectral theory that makes those comparisons quantitative. Rayleigh quotients and min-max principles explain why eigenvalues behave well. Rayleigh–Ritz approximation introduces computed trial subspaces. Residuals tell us what an approximation fails to satisfy. Sylvester equations reveal how separation between spectral values controls the solution of certain operator equations.
+There is another function of a matrix that deserves its own careful development: the exponential.
 
-With these tools in place, we can understand the Davis–Kahan angle bounds. We will encounter the sine-theta and tangent-theta theorems, and two related families involving twice an angle: sine-two-theta and tangent-two-theta. They are not four names for an identical inequality. The different expressions encode different geometric information, and the theorems can require different spectral, structural, and norm assumptions. We will learn both what each theorem says and when it is legitimate to use it.
+## Why a matrix exponential describes motion
 
-We will also ask a question that goes beyond bounding how far a subspace has moved. Suppose we want to construct an orthogonal or unitary transformation that carries one subspace to another. Which transformation should we prefer? Is there a canonical choice? Does that choice minimize how far points move, and under what measurement? The answers lead from direct rotation to optimization problems, counterexamples, and matching.
+You already know the scalar exponential function. Its derivative equals itself, and it turns addition in the exponent into multiplication of values. We can define a matrix exponential by a similar infinite series: the identity, plus the matrix, plus half its square, plus one sixth of its cube, and so on.
 
-So far, our examples have used small real matrices. But the original perturbation theory reaches much further. Hilbert spaces can have infinitely many independent directions. Some operators are not defined on every vector. Spectra need not consist only of isolated eigenvalues. We will extend the picture carefully rather than pretending every matrix argument survives unchanged.
+This is not the same as exponentiating the entries one by one. Matrix multiplication couples those terms, and the exponential describes a new linear transformation.
 
-Finally, we will see why these questions matter outside the development of operator theory. Statistical estimators produce matrices from finite data. Their eigenspaces are used in principal component analysis, multidimensional scaling, spectral embeddings, and related methods. If we can control the error in an estimated matrix, spectral perturbation bounds can help us understand the error in a learned representation. That is often the bridge between an abstract theorem and a useful guarantee about a computational method.
+In a simple planar example, take a matrix that sends a rightward-pointing vector upward and sends an upward-pointing vector leftward. The matrix is skew-symmetric: its transpose equals its negative. The exponential of time times this matrix rotates every vector counterclockwise by that time, measured in radians.
 
-There will be proofs along the way, because the hypotheses are part of the result. But the guiding order will be to understand the problem, discover why a construction helps, and only then derive the most general statement we are ready to justify.
+You can understand the connection even before carrying out the full power-series calculation. At any instant, a vector's velocity points perpendicular to the vector, with the orientation specified by the generator. Perpendicular motion changes direction while preserving length. The exponential packages that continuous motion into a transformation at a chosen time.
+
+When we derive this properly, we will show that exponentiating a skew-adjoint operator produces an orthogonal or unitary transformation. Those transformations preserve inner products. And that gives us a rigorous language for rotating an entire space, not just drawing an arrow that turns in a plane.
+
+There will be a reason to care about this later. Once we know how to describe two subspaces and measure the angles between them, we can ask for a canonical rotation carrying one to the other. The matrix exponential provides one way to understand continuous rotations, while polar decomposition provides another way to construct the appropriate transformation. Both will have been built before we need them.
+
+## The course ahead
+
+Our route begins with Banach and Hilbert spaces, then linear operators, adjoints, isometries, Gram operators, and orthogonal projections. That groundwork will lead us to eigenvalues, spectra, the spectral theorem, and its geometric consequences. We will spend time understanding functions of operators and the constructions behind matrix absolute value and matrix exponential. We will then learn how to compare subspaces using principal angles and direct rotations.
+
+At that point we can ask the question that motivated Davis and Kahan: if an operator, trial space, or numerical representation changes, how much of its spectral structure follows that change? We will no longer be forced to begin by asking, 'Stability of what?' We will have objects whose meaning is already clear.
+
+The mathematical answer is not one theorem. It is a family of sine, tangent, sine-of-double-angle, and tangent-of-double-angle bounds, with distinct assumptions. There is also a geometry of direct rotations and the question of what they optimize. The original nineteen-seventy paper develops more than the four famous estimates; it includes generalizations, subtle issues of spectral selection, a numerical example, and research questions. This course is intended to explain all of that material, and then the related real trace-norm matching theorem described in the companion journal paper.
+
+We will start with matrices, but the story eventually reaches operators on infinite-dimensional Hilbert spaces. There the spectrum need not be a list of eigenvalues, and some operators are not defined on every vector in the space. We will take those issues seriously when the foundations have prepared us for them.
+
+The companion journal paper records formal proofs and also a correction to one printed optimality claim in the original source. It gives us a precise mathematical reference, but it does not dictate how a listener should learn. Our spoken course will begin with intuition, derive the needed language, and then build the proofs at the right level of abstraction. At the end of each mathematical lecture, we will also connect the symbols to their actual Lean representations. That is part of understanding the mathematics, not a separate programming afterthought. Diagrams and animations will come later, in service of explanations that already work when heard aloud.
 
 ## Where we begin
 
-Let's return to the two diagonal matrices from the beginning. Their eigenvalue lists were identical. Their smallest-eigenvalue eigenvectors were perpendicular. The matrices themselves differed by only delta.
+In the first full lesson, we will look at linear maps as geometric actions. We will then build norms, convergence, completeness, inner products, and the structure of Hilbert spaces. Along the way we will see how maps become matrices after we choose coordinates, and which properties belong to the map rather than its matrix representation.
 
-We now know why that example was possible. The distinguishing gap was also delta. There was no strong spectral separation protecting the selected direction. We also know two ways to improve the question. One is to demand enough separation to identify the desired direction reliably. The other is to ask whether a larger invariant subspace remains meaningful even when individual directions within it do not.
+Once we understand what an operator acts on, how it preserves geometry, and how a family of vectors gives a Gram operator, we will be ready for the spectrum. Only after we know what a spectrum is and how it determines spectral subspaces will we ask how those subspaces behave under a change.
 
-And we have seen the basic promise of the theory. In the right setting, the error in an approximate equation, divided by an appropriate separation, controls a geometric angle.
+## Connecting the mathematical symbols to Lean
 
-These are not merely technical details about matrices. They are answers to a recurring question in mathematical modeling: when our representation is imperfect, which conclusions are robust enough to trust?
+There is one last piece of the learning process I want to establish at the outset. As we study each construction, we will end the lesson by looking at how the same mathematical objects appear in the Lean formalization. We will not ask you to learn a proof assistant before you can understand an inner product or a spectral theorem. Instead, we will use the code to make the assumptions and the shapes of the objects precise.
 
-That is the question we will carry into the first full lesson.
+In mathematical speech, I might say that E is a Hilbert space and A is a bounded linear operator on E. Lean expresses the normed additive structure, inner product, and completeness as separate assumptions. This makes it harder to silently use a Hilbert-space property in a theorem that only assumes a normed space. A mathematical map from E to F can be written as a linear map in one setting, and as a continuous linear map in another. The distinction reflects an actual mathematical hypothesis.
+
+When we introduce a coordinate frame, Lean can make the direction of the map explicit: are we sending coefficients into the ambient space, or extracting coefficients from a vector? In the repo's finite-frame development, the synthesis and analysis maps are separate definitions. Their composition on coefficient space is called the finite Gram operator, and the same file proves that it is positive. This is exactly the relationship we just saw: an inner-product matrix built from a family of vectors must yield a nonnegative quadratic form.
+
+The source excerpt displayed below is from the existing project, not new Lean code written for this introduction. The first definition says that the Gram operator goes from Euclidean coefficient space back to that same coefficient space. The equation composes analysis after synthesis. The positivity theorem records the algebraic consequence. It sits under assumptions that the coefficient indices are finite and that the ambient vector space is finite-dimensional with an inner product.
+
+```lean
+-- Source: ForTauCeti/Analysis/InnerProductSpace/FiniteFrame.lean
+-- Namespace: TauCeti; excerpt, requires the source file's context.
+noncomputable def finiteGramOperator (v : ι → E) :
+    EuclideanSpace 𝕜 ι →ₗ[𝕜] EuclideanSpace 𝕜 ι :=
+  (finiteAnalysis 𝕜 v).comp (finiteSynthesis 𝕜 v)
+
+theorem finiteGramOperator_isPositive (v : ι → E) :
+    (finiteGramOperator 𝕜 v).IsPositive := by
+  rw [finiteGramOperator_eq_selfCompAdjoint]
+  exact (finiteAnalysis 𝕜 v).isPositive_self_comp_adjoint
+```
+
+Notice three connections. The arrow marked with the subscript ell describes a linear map. The notation EuclideanSpace specifies where the coefficients live. And IsPositive is a proposition about the resulting operator, not a numerical approximation to it. Later, when we reach projections, we will see the orthogonal decomposition directly in Lean; when we reach polar decomposition, we will see a theorem reconstructing the operator from its polar factor and modulus; and when we reach Davis–Kahan, we will see the full residual and spectral-gap hypotheses.
+
+The code will be displayed rather than read symbol by symbol by the speech synthesizer. The spoken explanation is part of the lecture, and the exact snippet is available for learners who want to connect the mathematics to a checked formulation. This course should develop mathematical intuition and formal precision together.
