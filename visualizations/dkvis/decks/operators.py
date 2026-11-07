@@ -20,14 +20,14 @@ MINMAX = DeckSpec(
 POLAR = DeckSpec(
     name='operators-polar', description='Separate stretching from motion, including the singular and Hilbert-space cases.',
     footer='Operator absolute value and polar decomposition', narration=lecture_path('polar'),
-    slides=uses('dkvis.learning.operators.polar', ['PoTitle'])
+    slides=uses('dkvis.learning.operators.polar', ['PoTitle', 'PoOutcomes', 'PoQuestion'])
     + uses('dkvis.learning.orientation', ['PoSetup'])
     + uses('dkvis.learning.operators.polar', [
-        'PoQuestion', 'PoModulus', 'PoKernel', 'PoExample',
+        'PoModulus', 'PoKernel', 'PoExample',
         'PoSummary', 'PoFacts', 'PoLean', 'PoLeanSupport',
     ])
     + uses('dkvis.learning.operators.polar', ['PoComputation'], depth="*")
-    + quiz_uses(),
+    + quiz_uses(count=4),
 )
 
 SYLVESTER = DeckSpec(

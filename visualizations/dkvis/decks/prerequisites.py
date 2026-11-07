@@ -6,7 +6,7 @@ from dkvis.lectures import lecture_path, lecture_decks
 
 BASICS = DeckSpec(
     name='prereq-basics', description='A short review of the linear algebra, geometry, and calculus assumed by the series.',
-    footer='before the series: mathematics refresher', narration=lecture_path('basics'),
+    footer='Before the Series: Foundations', narration=lecture_path('basics'),
     slides=uses('dkvis.learning.basics.scenes', ['BaTitle'])
     + uses('dkvis.learning.orientation', ['BaSetup'])
     + uses('dkvis.learning.basics.scenes', [

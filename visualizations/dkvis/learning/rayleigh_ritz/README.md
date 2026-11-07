@@ -2,7 +2,7 @@
 
 Lecture **002749**, stable ID `rayleigh_ritz`, deck **`operators-rayleigh-ritz`**.
 A standalone bridge from projections and Rayleigh quotients to the general
-Davis–Kahan trial residual. The 26-scene lecture explains choosing a trial
+Davis–Kahan trial residual. The 28-scene lecture explains choosing a trial
 space, its coordinates, compression versus restriction, lifted Ritz pairs,
 residual geometry and block structure, fixed-space model fitting, and the
 limits of residual information. It includes three accepted Tau Ceti examples,
@@ -74,3 +74,14 @@ for dependencies and the timing override.
 see the [experiment instructions](../../../README.md#long-passage-narration-experiments).
 Rebuild narrated outputs to hear revised speech and see revised timing; earlier
 generated videos and experiment comparisons preserve their original content.
+
+The opening now states three true conclusions and previews the whole
+approximation in one diagram before introducing the coordinate notation.
+The closing summary returns to the identical claims with their equations.
+Names such as lift, Ritz value and residual are attached to operations and
+objects whose roles have already been explained. The block diagram labels
+input columns and output rows; the transpose pairing is derived from A = A^T.
+The error-vector question distinguishes zero trial projection from zero
+original-coordinate entries. All four review pauses are five seconds.
+The real/complex transpose convention belongs to Before the Series: Foundations,
+whose stable deck ID remains `prereq-basics`.

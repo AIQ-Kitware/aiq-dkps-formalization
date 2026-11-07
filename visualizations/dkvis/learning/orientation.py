@@ -78,7 +78,7 @@ class MmSetup(OrientationSlide):
 class PoSetup(OrientationSlide):
     lesson_deck='operators-polar'
     setting='A is a real or complex linear map between finite inner product spaces; singular maps are allowed.'
-    symbols=((r'A^*','The adjoint: transpose in real coordinates, conjugate transpose in complex coordinates.'),
+    symbols=((r'A^*','The adjoint, using the convention from Before the Series: Foundations.'),
              (r'|A|=(A^*A)^{1/2}','Operator modulus: the unique positive square root, not entrywise absolute value.'),
              (r'\ker A,\ (\ker A)^\perp','The collapsed input directions and their perpendicular complement.'),
              (r'A=U|A|','The canonical factor U is isometric on the support and zero on the kernel.'))
@@ -155,7 +155,7 @@ class PvSetup(OrientationSlide):
 
 class RrSetup(LessonSlide):
     lesson_deck='operators-rayleigh-ritz'
-    stage_labels=('Search space', 'Small model', 'Full residual', 'Recap')
+    stage_labels=('Search space', 'Small model', 'Error check', 'Recap')
 
     def body(self):
         from manim import Create, Transform, Indicate, SurroundingRectangle

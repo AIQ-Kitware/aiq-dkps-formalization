@@ -28,7 +28,7 @@ def test_generated_video_retains_speech_and_model_provenance(tmp_path,monkeypatc
     monkeypatch.setattr(video,'ROOT',tmp_path)
     monkeypatch.setattr(video,'load_profiles',lambda *a:{})
     monkeypatch.setattr(video,'resolve_profile',lambda *a:settings)
-    monkeypatch.setattr(video,'read_deck_narration',lambda *a:{'PrTitle':Narration('Title','','',(speech,))})
+    monkeypatch.setattr(video,'read_deck_narration',lambda *a:{'PrTitle':Narration('Title','','',(speech,),(5,))})
     monkeypatch.setattr(video,'narrated_builds',lambda *a:[(visual,speech)])
     monkeypatch.setattr(video,'synthesize_beat',lambda *a:audio)
     monkeypatch.setattr(video,'export',lambda *a,**kw:None)
@@ -57,6 +57,7 @@ def test_generated_video_retains_speech_and_model_provenance(tmp_path,monkeypatc
     assert timeline[0]['builds'][0]['animation_cues'][0]['phrase']=='An eigenvalue'
     assert timeline[0]['builds'][0]['text']==speech
     assert timeline[0]['builds'][0]['speech_seconds']==pytest.approx(.5)
+    assert timeline[0]['end']==pytest.approx(6.0)  # 1s visual + exactly 5s authored pause
     assert timeline[0]['builds'][0]['speech_parts'][0]['text']==speech
     metadata=json.loads(output.with_name(output.name+'.metadata.json').read_text())
     assert metadata['settings']['model']=='test-tts'

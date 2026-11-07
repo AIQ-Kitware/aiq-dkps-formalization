@@ -1,4 +1,4 @@
-# Before the series: a mathematics refresher
+# Before the Series: Foundations
 
 Lecture **000010**, deck `prereq-basics`, is a short review and readiness map.
 It assumes school algebra and is aimed at viewers who have met elementary
@@ -32,3 +32,10 @@ first argument, matching Mathlib's convention.
 Historical context is Cayley's *A Memoir on the Theory of Matrices* (1858),
 with primary links in the transcript. It gives a historical landmark, not a
 priority claim for all the mathematical ideas reviewed here.
+
+The visible title is **Before the Series: Foundations**. The stable lecture ID
+`basics`, deck `prereq-basics`, and folder numbering are preserved. The adjoint
+section shows transpose and conjugate transpose on the same complex matrix,
+then distinguishes self-adjointness from length preservation. This establishes
+the convention once for subsequent lectures. Its revised quiz pauses are five
+seconds; learners can pause playback for longer.

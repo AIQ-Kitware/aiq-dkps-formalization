@@ -101,3 +101,31 @@ a coherent speech passage rather than requiring more independent TTS clips.
 Hermitian and orthonormal were again reported as pronunciation problems. Neither
 has a verified default remedy; ortho-normal remains tentative because of its
 internal pause. No new pronunciation guesses were enabled by this revision.
+
+## 2026-11-06 — State the destination before the details
+
+Jon requested a compact opening view of the true statements a lecture will
+explain, reinforced by the same statements at the end. Rayleigh–Ritz now opens
+with three claims and a whole-construction picture before its notation setup.
+The detailed exposition gives terms concrete roles before naming them, and
+states the conclusion before longer derivations. The residual-vector quiz
+explicitly distinguishes a zero trial-space projection from coordinate entries.
+
+New and revised thinking intervals are five seconds, with no additional build
+pause added to that authored interval. Viewers can pause for more time. The
+entry lecture is renamed Before the Series: Foundations and owns the common
+transpose/conjugate-transpose convention; later lectures state their setting
+without repeatedly reteaching that distinction. Stable deck and folder IDs
+are retained so existing commands and cached artifacts remain identifiable.
+
+### Polar decomposition: geometry before the formula
+
+The saved viewer comments asked for a usable mental picture of the modulus and
+objected to project provenance in spoken mathematical instruction. The revision
+starts from the same-input length identity, illustrates positive directional
+stretch followed by rotation, and derives the square root from squared output
+lengths. The remaining-factor rule is justified before naming its kernel
+convention; a singular example distinguishes the canonical partial factor from
+a unitary extension. Opening conclusions return in the recap. Project/API
+provenance remains in source records and the formal companion, not the spoken
+mathematical overview. Four explicit study questions use five-second pauses.

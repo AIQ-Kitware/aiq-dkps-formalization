@@ -53,6 +53,17 @@ slides:
     scope: Balance motivating questions with statements and deductions; use mathematical
       notation in visible text, label compression, focus the setup objects, and show
       the quotient substitution, coincident curves and extrema with phrase-timed visuals.
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-06'
+    sources:
+    - visualizations/dkvis/learning/rayleigh_ritz/scenes.py
+    - visualizations/dkvis/decks/rayleigh_ritz.py
+    - visualizations/lectures/002749_rayleigh_ritz/quiz.yaml
+    - visualizations/lectures/002749_rayleigh_ritz/animation_cues.yaml
+    scope: Preview the three conclusions and whole construction, introduce names through
+      their mathematical roles, clarify input/output blocks and the error-vector question,
+      reinforce the opening facts, and use five-second thinking intervals.
 transcript:
   initial_source_attribution:
   - models:
@@ -99,3 +110,12 @@ transcript:
     scope: Balance motivating questions with statements and deductions; use mathematical
       notation in visible text, label compression, focus the setup objects, and show
       the quotient substitution, coincident curves and extrema with phrase-timed visuals.
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-06'
+    sources:
+    - visualizations/lectures/002749_rayleigh_ritz/lecture.md
+    - visualizations/lectures/002749_rayleigh_ritz/quiz.yaml
+    scope: Preview the three conclusions and whole construction, introduce names through
+      their mathematical roles, clarify input/output blocks and the error-vector question,
+      reinforce the opening facts, and use five-second thinking intervals.

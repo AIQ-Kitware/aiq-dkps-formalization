@@ -1,0 +1,52 @@
+# Align visual explanations to coherent narration, without extra TTS chunks.
+scenes:
+  PoOutcomes:
+    1:
+    - visual_at: 0
+      phrase: The modulus gives every input
+    - visual_at: 1
+      phrase: A factors into a positive stretch
+    - visual_at: 2
+      phrase: Collapsed inputs require a partial isometry
+  PoQuestion:
+    1:
+    - visual_at: 0
+      phrase: the input circle becomes an amber ellipse
+    2:
+    - visual_at: 0
+      phrase: The blue ellipse is the actual output
+    - visual_at: 2
+      phrase: The amber horizontal output arrow
+  PoModulus:
+    1:
+    - visual_at: 0
+      phrase: Squaring that length
+    - visual_at: 1
+      phrase: Define that root to be the modulus
+    - visual_at: 2
+      phrase: Both output norms are non-negative
+  PoKernel:
+    1:
+    - visual_at: 0
+      phrase: U must send that intermediate output
+    - visual_at: 1
+      phrase: Their difference then has modulus output zero
+    - visual_at: 2
+      phrase: The equal-length identity also proves
+  PoExample:
+    1:
+    - visual_at: 0
+      phrase: Applying U gives the blue arrow
+    2:
+    - visual_at: 0
+      phrase: The canonical convention sets U to zero
+    - visual_at: 1
+      phrase: An orthogonal matrix would have to preserve
+  PoSummary:
+    1:
+    - visual_at: 0
+      phrase: The modulus gives every input
+    - visual_at: 1
+      phrase: The remaining motion exists
+    - visual_at: 2
+      phrase: Finally, collapsed inputs explain

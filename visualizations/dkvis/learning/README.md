@@ -122,7 +122,7 @@ basic checks and two application or reasoning questions. Existing lectures may
 retain their two-question reviews.
 Author the question, three or four choices, a zero-based correct index, an
 explanation, and ordinary-language `speak_question` / `speak_answer` text.
-`think_seconds` controls the silent interval after the spoken choices (eight
+`think_seconds` controls the silent interval after the spoken choices (five
 seconds by default); viewers can also pause. The shared review scenes show the
 question first, then highlight and explain the correct answer. The transcript
 export includes the review scenes automatically. Keep their sections out of

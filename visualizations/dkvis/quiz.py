@@ -22,7 +22,7 @@ def questions(deck):
     for row in rows:
         if not 3 <= len(row['choices']) <= 4 or not 0 <= row['correct'] < len(row['choices']):
             raise ValueError(f'{path}: invalid choices or correct-answer index')
-        if not 0 <= row.get('think_seconds', 8) <= 60:
+        if not 0 <= row.get('think_seconds', 5) <= 60:
             raise ValueError(f'{path}: thinking time must be between 0 and 60 seconds')
     return rows
 

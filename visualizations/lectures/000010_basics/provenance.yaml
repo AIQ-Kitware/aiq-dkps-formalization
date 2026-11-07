@@ -10,6 +10,18 @@ slides:
     - GPT-6.1-Sol
     date: '2026-11-05'
     basis: Authored in this session; exact model identity supplied by the user.
+  revisions:
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-06'
+    sources:
+    - visualizations/dkvis/learning/basics/scenes.py
+    - visualizations/dkvis/decks/prerequisites.py
+    - visualizations/lectures/index.yaml
+    - visualizations/lectures/000010_basics/animation_cues.yaml
+    scope: 'Rename the entry lecture Before the Series: Foundations, teach transpose
+      and conjugate-transpose conventions with an explicit matrix example, and shorten
+      thinking intervals to five seconds.'
 transcript:
   initial_source_attribution:
   - sources:
@@ -20,3 +32,13 @@ transcript:
     - GPT-6.1-Sol
     date: '2026-11-05'
     basis: Authored in this session; exact model identity supplied by the user.
+  revisions:
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-06'
+    sources:
+    - visualizations/lectures/000010_basics/lecture.md
+    - visualizations/lectures/000010_basics/quiz.yaml
+    scope: 'Rename the entry lecture Before the Series: Foundations, teach transpose
+      and conjugate-transpose conventions with an explicit matrix example, and shorten
+      thinking intervals to five seconds.'

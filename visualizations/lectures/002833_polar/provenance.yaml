@@ -1,6 +1,6 @@
 deck: operators-polar
-scope: Attribution for topic-specific source files. Shared renderer and orientation components retain their separate
-  Git histories.
+scope: Attribution for topic-specific source files. Shared renderer and orientation components retain their
+  separate Git histories.
 slides:
   initial_source_attribution:
   - source: visualizations/dkvis/learning/operators/polar.py
@@ -9,6 +9,13 @@ slides:
     commit: b338f50b622a5de3bcc9cf80cafa8c7151d9917f
     date: '2026-11-04T23:40:53-05:00'
     basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see model_identity_confirmation).
+  revisions:
+  - date: '2026-11-06'
+    models:
+    - GPT-6.1-Sol
+    basis: Reworked around same-input output lengths, geometric modulus intuition, construction of the partial
+      factor, and factual opening/recap; removed project provenance from speech and expanded clear five-second
+      study questions.
 transcript:
   initial_source_attribution:
   - source: visualizations/lectures/002833_polar/lecture.md
@@ -23,6 +30,13 @@ transcript:
     commit: b338f50b622a5de3bcc9cf80cafa8c7151d9917f
     date: '2026-11-04T23:40:53-05:00'
     basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see model_identity_confirmation).
+  revisions:
+  - date: '2026-11-06'
+    models:
+    - GPT-6.1-Sol
+    basis: Reworked around same-input output lengths, geometric modulus intuition, construction of the partial
+      factor, and factual opening/recap; removed project provenance from speech and expanded clear five-second
+      study questions.
 note: Model identity reflects the user's explicit confirmation. Weights and runtime settings were not supplied.
   Attribution is not a claim of mathematical priority or independently verified authorship.
 model_identity_confirmation:

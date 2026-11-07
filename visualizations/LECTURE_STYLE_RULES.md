@@ -21,6 +21,13 @@ Give the lecture its own mathematical question and explanation. A connection
 to matching or this formalization is fine as an application, but do not rely on
 an unexplained reference to “the proof” or “the paper” to supply the motivation.
 
+> “Provenance and historical details of the project ... does not belong there.”
+
+Keep project bookkeeping, implementation ancestry, and repository ownership out
+of spoken mathematical lessons. Record those in provenance files and source
+notes. Mathematical history can motivate a construction; project history must
+not interrupt the explanation of that construction.
+
 ## Audience and scope
 
 > “It's the jargon and shorthand for concepts viewers are not familiar with.”
@@ -33,6 +40,16 @@ serve different purposes. The requested specialist proof presentation should
 not reteach background its audience already knows.
 
 ## Introductions, motivation, and summaries
+
+> “Start with the high level true statements we are going to learn.”
+> “A few crash course slides ... give them the entire picture, and then the rest ... are details.”
+
+After the title, give a compact overview of the true conclusions the learner
+will be able to explain. State their setting and limits in accessible terms;
+do not introduce a page of unexplained notation. Use a few connected overview
+slides when the topic needs them, then use those conclusions as the roadmap
+for the detailed explanation. Revisit the same claims at the end so the viewer
+can see what has been justified.
 
 > “Each slide needs some motivation.”
 > “Good intros / motivations / a small bit of historical context / summaries.”
@@ -63,6 +80,12 @@ every slide or paragraph. State established facts directly and let conclusions
 carry the explanation forward. Mix questions, observations and deductions so
 the lecture retains motivation without sounding like a sequence of quizzes.
 
+> “It turns out that <true statement>, let's think about why.”
+
+When a question opens a long derivation, state the result we are working toward
+before unpacking it. Let the viewer know both what is true and why its
+explanation matters. Do not withhold the destination merely to create suspense.
+
 ## Continuity between slides
 
 > “The transition between slides is not very good.”
@@ -86,6 +109,23 @@ phrases.
 Explain notation when introducing it. Do not assume a symbol, block matrix,
 or named condition is familiar just because it has a short label. Build the
 intuition for block structure, not only the algebra that follows from it.
+
+> “It's not enough to just say what it is ... the context ... is primed.”
+
+Introduce the operation or problem in plain language before naming it. For
+example, show how small coefficients describe a vector in the original space
+before using “lift,” and explain why a small-matrix eigenvalue is being proposed
+as a candidate for the original problem before calling it a “Ritz value.” Give
+the term a concrete referent and revisit its role when it is used later.
+Unpack phrases such as “normal-to-normal action” into which input and output
+components are meant. Replace “by symmetry” with the particular symmetry and
+the reason it implies the stated relation when that step is not yet familiar.
+
+> “We don't need to explain the difference between transpose and conjugate transpose ... every time.”
+
+Teach the real/complex transpose and adjoint convention in **Before the Series:
+Foundations**. Later lectures should state their setting once and use that
+convention. Repeat the distinction only when a new argument depends on it.
 
 Spell out why a proof step is available. In the motivating example, requiring
 B to commute with P needs an explanation of how such directions are constructed
@@ -171,6 +211,18 @@ basic attention and terminology. The additional two should test understanding:
 ask the viewer to apply an idea, predict what changes, or distinguish claims in
 a new situation. Avoid contrived distractors and questions answerable solely by
 recognizing a phrase from the narration.
+
+> “Questions should always be very clear about what object they are referring to.”
+> “Let's just have everything take 5 seconds, because we can always pause.”
+
+State the objects, definitions and relevant assumptions needed to answer a
+question. Avoid ambiguous labels such as “full residual” without defining the
+vector. Distinguish a vector's coordinate entries from its projection onto a
+subspace; a zero projection does not mean specific original-coordinate entries
+vanish. The question should test the mathematics, not the learner's ability to
+guess what the wording means. New and revised study questions use a five-second
+thinking pause; viewers can pause playback for longer. Do not lengthen the
+pause for a harder question.
 
 ## Title slides, attribution, and history
 

@@ -75,7 +75,7 @@ def read_deck_narration(deck_name: str) -> dict[str, Narration]:
             'Choose one answer, then compare the explanation.',
             'Pause the video if you would like more thinking time.',
             (row['speak_question'], row['speak_answer']),
-            (row.get('think_seconds', 8), 0))
+            (row.get('think_seconds', 5), 0))
     if list(result) != deck.scene_names:
         raise ValueError(f'Review questions must close the deck: {deck_name}')
     return result

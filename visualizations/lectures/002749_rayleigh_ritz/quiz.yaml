@@ -8,68 +8,74 @@ questions:
   correct: 1
   explanation: A trial space is a search choice. Invariance and closeness need separate
     evidence.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: 'First question. Choosing a trial subspace guarantees which statement?
     A: A maps the space into itself. B: the space is where we search for approximate
     eigenvectors. Or C: the space is close to the wanted exact spectral subspace.
-    Take eight seconds.'
+    Take five seconds.'
   speak_answer: B is correct. Trial describes where we search, not a guarantee of
     invariance or accuracy.
-- title: What has the small problem solved?
-  question: For a Ritz pair with nonzero full residual r, which statement holds?
+- title: An error vector and its projection
+  question: A candidate $(\theta,u)$ has error $r=Au-\theta u\ne0$. The columns of
+    $Q$ form an orthonormal basis of the trial space. What does $Q^Tr=0$ mean?
   choices:
-  - The residual is zero inside the trial space, but can point outside it.
-  - The small eigenproblem was solved incorrectly.
-  - The Ritz value must be far from every exact eigenvalue.
+  - $r$ is perpendicular to every vector in the trial space.
+  - $r$ is the zero vector.
+  - At least one entry of $r$ must be zero in the original coordinates.
   correct: 0
-  explanation: The projected equation is exact. The full residual lies perpendicular
-    to the trial space; its size needs to be checked.
-  think_seconds: 8
-  speak_question: 'Second question. For a Ritz pair with a nonzero full residual,
-    which statement holds? A: the residual is zero inside the trial space, but can
-    point outside it. B: the small eigenproblem was solved incorrectly. Or C: the
-    Ritz value must be far from every exact eigenvalue. Take eight seconds.'
-  speak_answer: "A is correct. Rayleigh\u2013Ritz solves the projected equation. A\
-    \ nonzero residual can remain in directions outside the chosen space."
+  explanation: The projection of $r$ is zero, not $r$ itself. For example, $Q=(1,1)^T/\sqrt2$
+    and $r=(1,-1)^T$ give $Q^Tr=0$ although both entries of $r$ are nonzero.
+  think_seconds: 5
+  speak_question: 'Second question. Our candidate is theta and u. Its nonzero error
+    is r equals A u minus theta u. Q has orthonormal columns spanning the trial space.
+    What does Q transpose r equals zero mean? A: r is perpendicular to every trial
+    vector. B: r is zero. Or C: at least one entry of r must be zero in the original
+    coordinates. Take five seconds.'
+  speak_answer: A is correct. Q transpose r records the components along the trial
+    directions. They are zero, so r is perpendicular to the trial space. This does
+    not force particular entries in the original coordinates to vanish. For example,
+    the line through one, one is perpendicular to the vector one, minus one, even
+    though both entries of that vector are nonzero.
 - title: One exact Ritz vector
-  question: Q spans a plane. One Ritz vector has zero residual; the other has a nonzero
-    residual. What follows?
+  question: Rayleigh–Ritz on a trial plane gives independent candidates $u_1,u_2$
+    with errors $r_i=Au_i-\theta_i u_i$. If $r_1=0$ and $r_2\ne0$, what follows?
   choices:
   - The trial plane is invariant because it contains an exact eigenvector.
-  - One chosen direction is invariant, but the whole trial plane is not.
+  - The first candidate spans an invariant line, but the trial plane is not invariant.
   - Changing the small model can make both residuals zero without changing the plane.
   correct: 1
   explanation: Zero residual makes that Ritz vector exact. The other residual shows
     that A sends some vector in the plane outside it; changing an internal model cannot
     remove this leakage.
-  think_seconds: 15
-  speak_question: 'Third question. Q spans a plane. One Ritz vector has zero residual;
-    the other has a nonzero residual. What follows? A: the plane is invariant because
-    it contains an exact eigenvector. B: one chosen direction is invariant, but the
-    whole trial plane is not. Or C: changing the small model can make both residuals
-    zero without changing the plane. Take fifteen seconds.'
+  think_seconds: 5
+  speak_question: 'Third question. Two independent Ritz vectors span our trial plane.
+    Each has an error r equal to A u minus theta u for its own pair. The first error
+    is zero and the second is nonzero. What follows? A: the plane is invariant because
+    it contains an exact eigenvector. B: the first candidate spans an invariant line,
+    but the plane is not invariant. Or C: changing the small model can make both errors
+    zero without changing the plane. Take five seconds.'
   speak_answer: B is correct. Invariance must hold for every vector in the plane.
     One exact direction is insufficient. The nonzero residual witnesses output outside
     the plane, and an internal model cannot cancel that perpendicular component.
 - title: New coordinates, same trial space
-  question: Replace $Q$ by $QZ$, where $Z$ is a $k\times k$ orthogonal matrix. What
-    happens in exact arithmetic?
+  question: $Q$ has $k$ orthonormal columns and $B=Q^TAQ$. Replace $Q$ by $QZ$ with
+    a $k\times k$ orthogonal matrix $Z$. What changes?
   choices:
-  - The residual becomes smaller because the frame improved.
-  - The compression stays entrywise identical, but the trial subspace changes.
-  - The compression becomes $Z^T B Z$; its eigenvalues and lifted Ritz eigenspaces
-    stay the same.
+  - The trial subspace changes because its basis columns changed.
+  - $B$ remains entrywise identical for every orthogonal $Z$.
+  - The small matrix becomes $Z^TBZ$; its eigenvalues and corresponding eigenspaces
+    in the original space are unchanged.
   correct: 2
-  explanation: $QZ$ spans the same space. Its compression is $Z^TBZ$ and its residual
-    is $RZ$. Ritz values and ambient eigenspaces are unchanged; repeated values may
-    use different bases.
-  think_seconds: 15
-  speak_question: 'Fourth question. Replace Q by Q Z, with Z a small orthogonal matrix.
-    What happens in exact arithmetic? A: the residual becomes smaller because the
-    frame improved. B: the compression stays entrywise identical, but the trial space
-    changes. Or C: the compression becomes Z transpose B Z, and its eigenvalues and
-    lifted Ritz eigenspaces stay the same. Take fifteen seconds.'
+  explanation: '$QZ$ spans the same trial space. Its small matrix is $Z^TBZ$. Replacing
+    $y$ by $Z^Ty$ gives the same original-space vector: $QZ(Z^Ty)=Qy$.'
+  think_seconds: 5
+  speak_question: 'Fourth question. Q has k orthonormal columns, and B equals Q transpose
+    A Q. Replace Q by Q Z, where Z is a k by k orthogonal matrix. What changes? A:
+    the trial subspace changes because its basis columns changed. B: B keeps identical
+    entries for every orthogonal Z. Or C: the small matrix becomes Z transpose B Z,
+    and its eigenvalues and corresponding original-space eigenspaces are unchanged.
+    Take five seconds.'
   speak_answer: C is correct. We changed coordinates, not the search space. The small
     matrix changes by orthogonal conjugation. Replacing a small eigenvector y by Z
-    transpose y gives the same lifted ambient vector. Within a repeated eigenspace
+    transpose y gives the same vector in the original space. Within a repeated eigenspace
     the basis can change, but the space itself is unchanged.

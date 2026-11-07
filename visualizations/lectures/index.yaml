@@ -2,7 +2,7 @@
 # Numbers and directory paths are inferred, not maintained here.
 lectures:
   basics:
-    title: Before the series — a mathematics refresher
+    title: 'Before the Series: Foundations'
     deck: prereq-basics
     topic: basics
     series: prerequisites

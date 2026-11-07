@@ -8,7 +8,7 @@ RAYLEIGH_RITZ = DeckSpec(
     description='Choose a trial space, compress, solve, lift, and interpret Ritz residuals.',
     footer='Rayleigh–Ritz: trial spaces and residuals',
     narration=lecture_path('rayleigh_ritz'),
-    slides=uses('dkvis.learning.rayleigh_ritz.scenes',['RrTitle'])
+    slides=uses('dkvis.learning.rayleigh_ritz.scenes',['RrTitle','RrOutcomes','RrPreview'])
     +uses('dkvis.learning.orientation',['RrSetup'])
     +uses('dkvis.learning.rayleigh_ritz.scenes',[
         'RrQuestion','RrSpace','RrFrame','RrCompress','RrQuotient','RrSolve',
