@@ -247,6 +247,16 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None):
         text='\n\n'.join(f'{i}. {s.title}\n\n{s.text}' for i,s in enumerate(scripts.values(),1))
         return PlainTextResponse(text+'\n',headers={'Cache-Control':'no-store'})
 
+    def learning_companion(request):
+        from dkvis.presentation.resources import learning_resources, companion_html
+        try:
+            data=learning_resources(request.query_params.get('deck',''))
+        except KeyError:
+            raise HTTPException(404)
+        if data is None:
+            raise HTTPException(404)
+        return Response(companion_html(data),media_type='text/html',headers={'Cache-Control':'no-store'})
+
     def chapters(request):
         path = within(root, request.query_params.get('path', ''))
         if not path.is_file():
@@ -257,6 +267,7 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None):
                             Route('/api/chapters', chapters), Route('/api/media',media_detail),
                             Route('/api/captions',captions), Route('/api/transcript',transcript),
                             Route('/api/source-transcript',source_transcript),
+                            Route('/api/learning-resources',learning_companion),
                             Route('/api/feedback',feedback,methods=['POST']),
                             Mount('/files', StaticFiles(directory=root, html=True), name='files')])
 

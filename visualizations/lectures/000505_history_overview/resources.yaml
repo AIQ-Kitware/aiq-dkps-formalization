@@ -1,0 +1,25 @@
+title: How eigenvector stability became a subject
+intro: A historical overview plus accessible explanations of the mathematical questions behind the timeline.
+checked_on: '2026-11-06'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Matrices and determinants — MacTutor, St Andrews
+  url: https://mathshistory.st-andrews.ac.uk/HistTopics/Matrices_and_determinants/
+  kind: History essay
+  why: See how systems of equations and determinants led to matrix algebra before the modern operator
+    viewpoint.
+- title: Angles between flats
+  url: https://en.wikipedia.org/wiki/Angles_between_flats
+  kind: Wikipedia topic page
+  why: Extend the angle between two lines to a list of principal angles between subspaces.
+  focus: Angles between subspaces, the geometric example, and computation by singular values.
+- title: What Is the Sylvester Equation? — Nick Higham
+  url: https://nhigham.com/2020/09/01/what-is-the-sylvester-equation/
+  kind: Short explainer
+  why: Understand AX−XB=C, why overlapping spectra obstruct uniqueness, and why separation matters.
+- title: Notes on matrix perturbation and Davis–Kahan — Daniel Hsu, Columbia
+  url: https://www.cs.columbia.edu/~djhsu/AML/lectures/davis-kahan.pdf
+  kind: University notes · 3 pages
+  why: Follow a compact path from eigenvalue perturbation to eigenspace error and the sine-theta bound.
+  focus: Finite symmetric matrices; compare its spectral-separation assumptions with the configuration
+    used in the lecture.

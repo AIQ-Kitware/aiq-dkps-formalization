@@ -100,7 +100,7 @@ DECKS      := short full $(PARTS) $(WORKING) matching matching-talk
 
 .DEFAULT_GOAL := help
 .PHONY: help setup all rebuild working $(DECKS) $(addprefix clean-,$(DECKS)) $(addprefix present-,$(DECKS)) \
-        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean list slides text video tts-experiment serve prerequisites operators lectures-video prerequisites-video matching-text matching-video matching-talk-text matching-talk-video
+        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean list slides text resources video tts-experiment serve prerequisites operators lectures-video prerequisites-video matching-text matching-video matching-talk-text matching-talk-video
 
 help:
 	@awk '/^#/ { sub(/^# ?/, ""); print; next } { exit }' $(firstword $(MAKEFILE_LIST))
@@ -113,6 +113,7 @@ help:
 	@echo '  lectures-video     narrate every lecture in YAML dependency order'
 	@echo '  slides DECK=name   render a presentation and export its transcript when present'
 	@echo '  text DECK=name     export slide/build speech text without rendering or TTS'
+	@echo '  resources          export all Learn more companions; DECK=name selects one'
 	@echo '  video DECK=name    render and narrate; TTS_PROFILE selects a server from tts.toml'
 	@echo '                     TTS_CONFIG=tts.local.toml selects an ignored private config instead'
 	@echo '                     TTS_ENDPOINT/MODEL/VOICE/LANGUAGE/RESPONSE_FORMAT/TIMEOUT override its settings'
@@ -200,6 +201,9 @@ lectures-video prerequisites-video:
 slides:
 	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))
 	$(SLIDES_RUN) python -m dkvis.presentation slides $(DECK) $(BUILD_FLAGS) $(if $(JOBS),,--jobs 2) --one-file
+
+resources:
+	$(SLIDES_RUN) python -m dkvis.presentation resources $(if $(DECK),--deck $(call shell_quote,$(DECK)))
 
 text:
 	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))

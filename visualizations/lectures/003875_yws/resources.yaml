@@ -1,0 +1,23 @@
+title: Yu–Wang–Samworth — a population-gap perturbation theorem
+intro: Start with Davis–Kahan, then focus on how the statistical variant changes the required gap information.
+checked_on: '2026-11-06'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Notes on matrix perturbation and Davis–Kahan — Daniel Hsu, Columbia
+  url: https://www.cs.columbia.edu/~djhsu/AML/lectures/davis-kahan.pdf
+  kind: University notes · 3 pages
+  why: Follow a compact path from eigenvalue perturbation to eigenspace error and the sine-theta bound.
+  focus: Finite symmetric matrices; compare its spectral-separation assumptions with the configuration
+    used in the lecture.
+- title: Distance between linear subspaces — CMU 36-709, Lecture 22
+  url: https://www.stat.cmu.edu/~arinaldo/Teaching/36709/S19/Scribed_Lectures/Apr9_Yihang.pdf
+  kind: University notes · 4 pages
+  why: Relate canonical angles and projection distances to Davis–Kahan, then the Yu–Wang–Samworth population-gap
+    variant.
+  focus: The YWS statement near the end; distinguish the population eigengap from a gap involving the
+    estimated matrix.
+- title: Angles between flats
+  url: https://en.wikipedia.org/wiki/Angles_between_flats
+  kind: Wikipedia topic page
+  why: Extend the angle between two lines to a list of principal angles between subspaces.
+  focus: Angles between subspaces, the geometric example, and computation by singular values.

@@ -156,3 +156,18 @@ If attribution changes, include the title scene when partially rendering a deck
 so the visible robot/model credit is updated as well as the edited content.
 For example, use `UPDATE_SCENES="CpTitle CpSplit"`. Partial rendering explicitly
 selects scenes; it does not infer Python source dependencies.
+
+### External learning sources
+
+Author `resources.yaml` beside `lecture.md`, with a lecture `title`, a short
+`intro`, a `checked_on` date, a `curated_by` model record, and an ordered
+`resources` list. Each entry has `title`, `url`, `kind`, `why`, and optionally
+`focus` (a section or convention to watch for). Apply the user's selection
+preferences in [LECTURE_STYLE_RULES.md](../../LECTURE_STYLE_RULES.md).
+
+The library reads these files on refresh and provides a standalone companion
+page. `make resources [DECK=...]` exports HTML and Markdown beside the media;
+slide/transcript/video exports also refresh them. A reference deck without an
+authored transcript can set `DeckSpec.learning_resources` to a shared YAML
+path relative to `visualizations/`. Companions belong to the deck and are not
+separate library entries or narration variants.

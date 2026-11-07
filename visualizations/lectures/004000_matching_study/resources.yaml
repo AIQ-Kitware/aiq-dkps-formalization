@@ -1,0 +1,27 @@
+title: The matching proof, a learner's walkthrough
+intro: These teach the geometric, variational, and graph ingredients. They are background companions,
+  not external proofs of the lecture’s transport-to-matching formula.
+checked_on: '2026-11-06'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Angles between flats
+  url: https://en.wikipedia.org/wiki/Angles_between_flats
+  kind: Wikipedia topic page
+  why: Extend the angle between two lines to a list of principal angles between subspaces.
+  focus: Angles between subspaces, the geometric example, and computation by singular values.
+- title: Singular value decomposition — Gilbert Strang, MIT
+  url: https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/resources/lecture-29-singular-value-decomposition/
+  kind: University video
+  why: Learn how two choices of perpendicular coordinates expose a matrix’s directional stretches.
+- title: Orthogonal group
+  url: https://en.wikipedia.org/wiki/Orthogonal_group
+  kind: Wikipedia topic page
+  why: Understand the length-preserving constraint and the skew-symmetric directions that generate feasible
+    motion.
+  focus: Definition and Lie algebra; connect a skew-symmetric generator to exp(tB).
+- title: Maximum-weight matching
+  url: https://en.wikipedia.org/wiki/Maximum_weight_matching
+  kind: Wikipedia topic page
+  why: Understand weighted edges, disjoint pairs, and the objective of maximizing the selected total weight.
+  focus: Definition and algorithms. Our pairing problem uses a general graph; a bipartite assignment algorithm
+    is a different specialization.

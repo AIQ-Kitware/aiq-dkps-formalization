@@ -108,6 +108,7 @@ COMPREHENSIVE_SCENES = [
 ]
 
 COMPREHENSIVE = DeckSpec(
+    learning_resources="lectures/reference-overview.yaml",
     name="comprehensive",
     description=(
         "All distinct Davis--Kahan visualization scenes in a coherent sequence, "

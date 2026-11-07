@@ -121,6 +121,8 @@ def export(out: Path, *, deck_name: str, theme: str = "dark") -> Path:
         f"Slide {i}: {script.title}\n\n{script.text}"
         for i, script in enumerate(scripts.values(), 1)) + "\n")
     record(out / "presentation.txt",deck_name,"transcript",theme=theme)
+    from dkvis.presentation.resources import export_resources
+    export_resources(out.parent, deck_name=deck_name)
     return manifest
 
 

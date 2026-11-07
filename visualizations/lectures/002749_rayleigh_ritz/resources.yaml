@@ -1,0 +1,23 @@
+title: Rayleigh–Ritz — trial spaces, compression, and residuals
+intro: Projection explains the smaller problem; the final note connects its eigenpairs to the residual
+  in the original space.
+checked_on: '2026-11-06'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Projections onto Subspaces — Gilbert Strang, MIT
+  url: https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/least-squares-determinants-and-eigenvalues/projections-onto-subspaces/
+  kind: University video lesson
+  why: Understand why the nearest point in a subspace leaves an error perpendicular to that subspace.
+  focus: The video and its worked projection problem; no need to follow the entire course.
+- title: Rayleigh–Ritz method
+  url: https://en.wikipedia.org/wiki/Rayleigh%E2%80%93Ritz_method
+  kind: Wikipedia topic page
+  why: See how choosing a trial basis turns an eigenvalue problem into a smaller matrix problem.
+  focus: For matrix eigenvalue problems and its example; separate the trial-space choice from solving
+    the compressed problem.
+- title: Large-scale eigensolvers — David Bindel, Cornell
+  url: https://www.cs.cornell.edu/courses/cs6210/2025fa/lec/2025-12-01.html
+  kind: Single university lecture
+  why: Connect the Ritz condition to an error perpendicular to the trial space.
+  focus: Opening paragraphs through the projected problem Qᵀr=0; the later harmonic and refined Ritz methods
+    are optional.

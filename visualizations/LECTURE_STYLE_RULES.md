@@ -224,6 +224,16 @@ guess what the wording means. New and revised study questions use a five-second
 thinking pause; viewers can pause playback for longer. Do not lengthen the
 pause for a harder question.
 
+## External learning companions
+
+> “Focused external sources like a Wikipedia page, not a sprawling textbook or a dense paper.”
+> “Lecture notes from universities or presentations, or YouTube videos on the topic.”
+
+Give each lecture a companion list of external sources that help a learner
+understand its material. Link to the particular topic page, lesson, video, or
+short set of notes. Explain briefly what each item teaches and where to focus.
+Keep this learning list distinct from the research bibliography.
+
 ## Title slides, attribution, and history
 
 > “Don't need to read out the entire thing, just say the main concept.”

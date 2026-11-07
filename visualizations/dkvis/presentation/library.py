@@ -46,6 +46,7 @@ def catalog(root):
     from dkvis.decks import DECKS
     from dkvis.lectures import load_index,lecture_number
     from dkvis.presentation.provenance import source_provenance
+    from dkvis.presentation.resources import learning_resources
     root=Path(root).resolve()
     indexed=load_index()
     titles={row['deck']:(i,row['title']) for i,row in enumerate(indexed.values())}
@@ -58,6 +59,10 @@ def catalog(root):
             groups[deck]=dict(id=deck,title=f'{number} · {title}' if number else title,
                               order=order,kind='lecture',assets=[],modified=0,
                               provenance=source_provenance(deck) if deck in DECKS else dict(status='not recorded'))
+            companion=learning_resources(deck) if deck in DECKS else None
+            if companion:
+                groups[deck]['learning_resources']=companion
+                groups[deck]['learning_resources_url']='/api/learning-resources?deck='+quote(deck)
         return groups[deck]
 
     # Indexed lectures remain visible even if no video has yet been generated.
@@ -76,7 +81,7 @@ def catalog(root):
     except OSError:
         children=[]
     for child in children:
-        if child.name.startswith('.') or child.suffix.lower() not in EXTENSIONS:
+        if child.name.startswith('.') or child.name.endswith('.learn-more.html') or child.suffix.lower() not in EXTENSIONS:
             continue
         info=asset(root,child)
         if not info:

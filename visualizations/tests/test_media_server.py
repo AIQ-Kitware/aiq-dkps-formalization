@@ -63,6 +63,47 @@ def test_catalog_groups_formats_under_the_stable_deck_id(library):
     assert client.get('/').status_code == 200
 
 
+def test_learning_companions_refresh_without_becoming_slide_variants(library, monkeypatch):
+    from dataclasses import replace
+    from dkvis.decks import DECKS
+    from dkvis.presentation.resources import export_resources
+    client, root, _ = library
+    source = root / 'resources.yaml'
+    data = dict(title='A < B', intro='One focused lesson.', checked_on='2026-11-06',
+                resources=[dict(title='Example & explanation', url='https://example.org/lesson?a=1&b=2',
+                                kind='Video', why='Lengths < directions', focus='Opening example.')])
+    # JSON is also valid YAML; no external network calls are needed.
+    source.write_text(json.dumps(data))
+    monkeypatch.setitem(DECKS, 'lecture', replace(DECKS['lecture'], learning_resources=str(source)))
+    paths = export_resources(root, deck_name='lecture')
+    assert {p.suffix for p in paths} == {'.html', '.md'}
+    response = client.get('/api/learning-resources?deck=lecture')
+    assert response.status_code == 200
+    assert response.headers['cache-control'] == 'no-store'
+    assert 'A &lt; B' in response.text and 'Lengths &lt; directions' in response.text
+    assert 'href="https://example.org/lesson?a=1&amp;b=2"' in response.text
+    row = next(r for r in client.get('/api/catalog').json()['items'] if r['id'] == 'lecture')
+    assert row['learning_resources']['resources'][0]['focus'] == 'Opening example.'
+    assert {a['kind'] for a in row['assets']} == {'video', 'slides', 'pdf'}
+    data['resources'][0]['url'] = 'https://example.org/revised'
+    source.write_text(json.dumps(data))
+    assert 'https://example.org/revised' in client.get(row['learning_resources_url']).text
+    assert client.get('/api/learning-resources?deck=../private').status_code == 404
+
+
+def test_learning_companions_reject_active_link_schemes(library, monkeypatch):
+    from dataclasses import replace
+    from dkvis.decks import DECKS
+    from dkvis.presentation.resources import learning_resources
+    _, root, _ = library
+    source = root / 'resources.yaml'
+    source.write_text(json.dumps(dict(resources=[dict(title='Unsafe', url='javascript:alert(1)',
+                                                      kind='Page', why='Example')])))
+    monkeypatch.setitem(DECKS, 'lecture', replace(DECKS['lecture'], learning_resources=str(source)))
+    with pytest.raises(ValueError, match='HTTP or HTTPS'):
+        learning_resources('lecture')
+
+
 def test_chapters_match_narrator_and_preview(library):
     client, root, data = library
     assert client.get('/api/chapters', params={'path': 'lecture.kokoro.narrated.mp4'}).json() == [

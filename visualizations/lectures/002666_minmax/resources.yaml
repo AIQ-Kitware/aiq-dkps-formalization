@@ -1,0 +1,21 @@
+title: Rayleigh quotients, min-max, and eigenvalue stability
+intro: Follow the Rayleigh quotient to eigenvalue bounds, then see why eigenvector stability needs more
+  information.
+checked_on: '2026-11-06'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Eigenvalue Inequalities for Hermitian Matrices — Nick Higham
+  url: https://nhigham.com/2021/03/09/eigenvalue-inequalities-for-hermitian-matrices/
+  kind: Short explainer
+  why: Connect the Rayleigh quotient, Courant–Fischer characterization, Weyl bounds, and interlacing.
+  focus: Quadratic Form, Courant–Fischer Theorem, and Weyl’s Inequalities.
+- title: Positive definite matrices and minima — Gilbert Strang, MIT
+  url: https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/resources/lecture-27-positive-definite-matrices-and-minima/
+  kind: University video
+  why: Relate the sign of a quadratic form to eigenvalues and minimization.
+- title: Notes on matrix perturbation and Davis–Kahan — Daniel Hsu, Columbia
+  url: https://www.cs.columbia.edu/~djhsu/AML/lectures/davis-kahan.pdf
+  kind: University notes · 3 pages
+  why: Follow a compact path from eigenvalue perturbation to eigenspace error and the sine-theta bound.
+  focus: Finite symmetric matrices; compare its spectral-separation assumptions with the configuration
+    used in the lecture.

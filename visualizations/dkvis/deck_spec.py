@@ -42,6 +42,9 @@ class DeckSpec:
     # Relative to visualizations/. A deck without authored speech remains usable
     # for slides; video production must not silently invent its narration.
     narration: str | None = None
+    # Optional shared companion for reference decks. Narrated lectures default
+    # to resources.yaml beside their authored transcript.
+    learning_resources: str | None = None
 
     def __post_init__(self) -> None:
         if not self.name:

@@ -275,6 +275,8 @@ def main(argv=None) -> None:
         _run("convert", *folder, "--to", "pptx", *names, str(renders / f"{public}.pptx"))
     if args.handout:
         write_handout(args.deck, renders / f"{public}.handout.pdf")
+    from dkvis.presentation.resources import export_resources
+    export_resources(renders, deck_name=args.deck)
     if get_deck(args.deck).narration:
         from dkvis.palette import THEME
         from dkvis.presentation.narration import export

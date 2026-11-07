@@ -543,6 +543,28 @@ against the rendered notes before speech is requested. No matching-specific
 list remains in the production tools. Rendered outputs and audio stay ignored;
 source scenes, scripts, manifests, and source references belong in Git.
 
+## External learning companions
+
+Each lecture has a **Learn more** companion: focused videos, illustrated
+explanations, topic pages, and short university notes, with a suggested order
+and a sentence explaining what each source helps teach. The library shows the
+same links for every narration voice, HTML deck, and PDF of that lecture.
+
+The lists live in `lectures/<number>_<topic>/resources.yaml`. Changes appear on
+library refresh; new server code requires one restart. Reference presentations
+select a shared list with `DeckSpec.learning_resources`.
+
+```bash
+make resources                            # export all companions without rendering or TTS
+make resources DECK=operators-polar        # update just one
+```
+
+Exports are `renders/<number>_<deck>.learn-more.html` and `.learn-more.md` (the
+reference decks have no number prefix). Include either file when sharing a
+video or PDF outside the library. Normal slide, text, and video builds refresh
+the companion automatically. Editing links does not invalidate speech or
+animation caches. Generated companions remain ignored; commit the source YAML.
+
 ## YWS population-gap lecture
 
 **`yws-population-gap`** (003875) explains Theorem 2 through a residual sandwich,
