@@ -1,0 +1,58 @@
+questions:
+- title: Changing signs
+  question: One basis vector for a subspace is replaced by its negative. What happens to principal angles?
+  choices:
+  - They stay the same.
+  - They all change sign.
+  - One becomes a straight angle.
+  correct: 0
+  explanation: A sign change is a change of basis within the same space.
+  think_seconds: 5
+  speak_question: Question 1. One basis vector for a subspace is replaced by its negative. What happens
+    to principal angles? A, They stay the same. B, They all change sign. C, One becomes a straight angle.
+    You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is A. A sign change is a change of basis within the same space.
+- title: Two tilts
+  question: Two spaces have principal angles twenty degrees and sixty degrees. Which controls the largest
+    perpendicular error?
+  choices:
+  - Twenty degrees.
+  - Sixty degrees.
+  - Their average.
+  correct: 1
+  explanation: The largest sine gives the worst missed component of a unit input.
+  think_seconds: 5
+  speak_question: Question 2. Two spaces have principal angles twenty degrees and sixty degrees. Which
+    controls the largest perpendicular error? A, Twenty degrees. B, Sixty degrees. C, Their average. You
+    have five seconds. Pause for longer if needed.
+  speak_answer: The answer is B. The largest sine gives the worst missed component of a unit input.
+- title: Same plane, rotated frame
+  question: Two orthonormal frames span exactly the same plane but have different columns. What are their
+    two principal angles?
+  choices:
+  - Both zero.
+  - Both right angles.
+  - They depend on how the columns are labeled.
+  correct: 0
+  explanation: Both overlap singular values are one, even if the overlap matrix is not the identity.
+  think_seconds: 5
+  speak_question: Question 3. Two orthonormal frames span exactly the same plane but have different columns.
+    What are their two principal angles? A, Both zero. B, Both right angles. C, They depend on how the
+    columns are labeled. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is A. Both overlap singular values are one, even if the overlap matrix is not
+    the identity.
+- title: Scaled columns
+  question: A spanning column is multiplied by two before forming a raw overlap matrix. Can its singular
+    values still be read as principal cosines without orthonormalization?
+  choices:
+  - Always.
+  - No; arbitrary column scaling changes the raw overlap.
+  - Only its sign matters.
+  correct: 1
+  explanation: The cosine interpretation uses length-preserving frame coordinates.
+  think_seconds: 5
+  speak_question: Question 4. A spanning column is multiplied by two before forming a raw overlap matrix.
+    Can its singular values still be read as principal cosines without orthonormalization? A, Always.
+    B, No; arbitrary column scaling changes the raw overlap. C, Only its sign matters. You have five seconds.
+    Pause for longer if needed.
+  speak_answer: The answer is B. The cosine interpretation uses length-preserving frame coordinates.

@@ -1,0 +1,19 @@
+title: Trace pairings and matrix gradients
+intro: Start with the first explanation; use the remaining sources to revisit the precise statements.
+checked_on: '2026-11-07'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Frobenius inner product
+  url: https://en.wikipedia.org/wiki/Frobenius_inner_product
+  kind: Wikipedia topic page
+  why: Read the entrywise and trace definitions side by side.
+- title: Matrix Calculus — MIT 6.390
+  url: https://introml.mit.edu/notes/dev/matrix_calculus.html
+  kind: Focused university notes
+  why: Connect scalar-by-matrix derivatives to entrywise partial derivatives.
+  focus: Sections A.2.2 and A.4; inspect matrix shapes before the later applications.
+- title: Georg Frobenius — MacTutor, St Andrews
+  url: https://mathshistory.st-andrews.ac.uk/Biographies/Frobenius/
+  kind: Short historical companion
+  why: Meet the algebraist behind the name without confusing a modern matrix-calculus convention with
+    a claim of original authorship.

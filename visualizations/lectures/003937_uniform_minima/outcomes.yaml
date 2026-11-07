@@ -1,0 +1,4 @@
+facts:
+- A uniform error bound controls every candidate with the same tolerance.
+- Minimum values change by at most that tolerance.
+- Close minimum values do not guarantee close minimizing points.

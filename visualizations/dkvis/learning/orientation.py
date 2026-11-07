@@ -179,3 +179,43 @@ class RrSetup(LessonSlide):
         self.play(Create(focus),Indicate(tiles,color=CURRENT),run_time=1)
         self.play(Transform(focus,SurroundingRectangle(rows[1],color=TRIAL,buff=.16)),Indicate(view.plane,color=TRIAL),run_time=1)
         self.play(Transform(focus,SurroundingRectangle(rows[2],color=TRIAL,buff=.16)),Indicate(basis,color=TRIAL),run_time=1)
+
+
+class IbSetup(OrientationSlide):
+    lesson_deck='prereq-invariant-blocks'
+    setting='T is a linear map on a finite-dimensional real inner product space.'
+    symbols=((r'K,\ K^\perp','A proposed piece and its perpendicular complement.'),
+             (r'T(K)\subseteq K','Inputs in K have outputs in K: invariance.'),
+             (r'P','Orthogonal projection onto K.'),
+             (r'PT=TP','The two orders of application give the same result.'))
+    goal='Track the two transfers before setting either block to zero.'
+
+
+class PaSetup(OrientationSlide):
+    lesson_deck='prereq-principal-angles'
+    setting='K and L have the same dimension k inside a finite-dimensional real inner product space.'
+    symbols=((r'Q,\ Z','Orthonormal frames whose columns span K and L.'),
+             (r'Z^TQ','Coordinates of projected K inputs in the L frame.'),
+             (r'\theta_1\le\cdots\le\theta_k','The geometric angles, from zero to a right angle.'),
+             (r'P_L','Orthogonal projection onto L.'))
+    goal='The spaces stay fixed when their orthonormal frames change.'
+
+
+class TgSetup(OrientationSlide):
+    lesson_deck='prereq-trace-gradients'
+    setting='X and D are finite real matrices of the same shape; F is a differentiable scalar cost.'
+    symbols=((r'\operatorname{tr}(A)','Sum of diagonal entries of a square matrix.'),
+             (r'X+tD','A matrix curve with starting point X and direction D.'),
+             (r'\langle X,D\rangle_F','Sum of products of matching entries: the Frobenius pairing.'),
+             (r'\nabla F(X)','The response matrix for directional derivatives at X.'))
+    goal='Derive the pairing formula before interpreting a gradient condition.'
+
+
+class UmSetup(OrientationSlide):
+    lesson_deck='prereq-uniform-minima'
+    setting='f and g are real-valued costs on the same nonempty candidate set; minima are assumed attained.'
+    symbols=((r'x_*,\ y_*','Minimizers of f and g, respectively; these need not be unique.'),
+             (r'\varepsilon\ge0','One error tolerance, shared by every candidate.'),
+             (r'|g(x)-f(x)|\le\varepsilon','The pointwise inequality required for every x at once.'),
+             (r'\min f','A minimum value, as distinct from a minimizing point.'))
+    goal='Compare values without assuming the minimizing points stay in the same place.'

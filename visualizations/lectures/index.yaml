@@ -1,5 +1,3 @@
-# Stable IDs, teaching dependencies, and preferred order for independent topics.
-# Numbers and directory paths are inferred, not maintained here.
 lectures:
   basics:
     title: 'Before the Series: Foundations'
@@ -34,80 +32,146 @@ lectures:
     deck: prereq-projections
     topic: projections
     series: prerequisites
-    requires: [basics]
+    requires:
+    - basics
+  invariant_blocks:
+    title: Invariant subspaces — why blocks are allowed
+    deck: prereq-invariant-blocks
+    topic: invariant_blocks
+    series: bridges
+    requires:
+    - projections
   complementary_projection:
     title: Thinking about I minus P
     deck: prereq-complementary-projection
     topic: complementary_projection
     series: prerequisites
-    requires: [projections]
+    requires:
+    - projections
   singular_norms:
     title: Singular values and displacement cost
     deck: prereq-singular-norms
     topic: singular_norms
     series: prerequisites
-    requires: [projections]
+    requires:
+    - projections
+  principal_angles:
+    title: Principal angles — comparing whole subspaces
+    deck: prereq-principal-angles
+    topic: principal_angles
+    series: bridges
+    requires:
+    - projections
+    - singular_norms
   matrix_exponential:
     title: The exponential of a matrix
     deck: prereq-matrix-exponential
     topic: matrix_exponential
     series: prerequisites
-    requires: [projections]
+    requires:
+    - projections
   minmax:
     title: Rayleigh quotients, min-max, and eigenvalue stability
     deck: operators-minmax
     topic: operators
     series: operators
-    requires: [projections, singular_norms]
+    requires:
+    - projections
+    - singular_norms
   rayleigh_ritz:
     title: Rayleigh–Ritz — trial spaces, compression, and residuals
     deck: operators-rayleigh-ritz
     topic: rayleigh_ritz
     series: spectral_foundations
-    requires: [projections, minmax]
+    requires:
+    - projections
+    - minmax
+    - invariant_blocks
   polar:
     title: Operator absolute value and polar decomposition
     deck: operators-polar
     topic: operators
     series: operators
-    requires: [projections, singular_norms]
+    requires:
+    - projections
+    - singular_norms
   pvm:
     title: Projection-valued measures — selecting and integrating spectral components
     deck: operators-pvm
     topic: pvm
     series: spectral_foundations
-    requires: [projections, minmax]
+    requires:
+    - projections
+    - minmax
+    - invariant_blocks
+  trace_gradients:
+    title: Trace pairings and matrix gradients
+    deck: prereq-trace-gradients
+    topic: trace_gradients
+    series: bridges
+    requires:
+    - basics
+    - singular_norms
   variations:
     title: Feasible variations and stationarity
     deck: prereq-variations
     topic: variations
     series: prerequisites
-    requires: [projections, singular_norms, matrix_exponential]
+    requires:
+    - projections
+    - singular_norms
+    - matrix_exponential
+    - trace_gradients
+    - invariant_blocks
   sylvester:
     title: Sylvester equations and spectral separation
     deck: operators-sylvester
     topic: operators
     series: operators
-    requires: [minmax, matrix_exponential]
+    requires:
+    - minmax
+    - matrix_exponential
   sine_theta:
     title: Davis–Kahan sine theta — residuals and spectral separation
     deck: sine-theta-lecture
     topic: sine_theta
     series: spectral_perturbation
-    requires: [sylvester, complementary_projection, rayleigh_ritz]
+    requires:
+    - sylvester
+    - complementary_projection
+    - rayleigh_ritz
   yws:
     title: Yu–Wang–Samworth — a population-gap perturbation theorem
     deck: yws-population-gap
     topic: yws
     series: spectral_perturbation
-    requires: [sine_theta, singular_norms, minmax]
+    requires:
+    - sine_theta
+    - singular_norms
+    - minmax
+    - principal_angles
+  uniform_minima:
+    title: Uniform approximation — what happens to a minimum?
+    deck: prereq-uniform-minima
+    topic: uniform_minima
+    series: bridges
+    requires:
+    - basics
   matching_study:
     title: The matching proof, a learner's walkthrough
     deck: matching-proof
     topic: matching
-    requires: [variations]
+    requires:
+    - variations
+    - principal_angles
+    - invariant_blocks
+    - uniform_minima
   matching_proof:
     title: The matching proof, a compact presentation
     deck: matching-proof-talk
     topic: matching
-    requires: [variations]
+    requires:
+    - variations
+    - principal_angles
+    - invariant_blocks
+    - uniform_minima

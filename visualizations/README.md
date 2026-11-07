@@ -543,6 +543,31 @@ against the rendered notes before speech is requested. No matching-specific
 list remains in the production tools. Rendered outputs and audio stay ignored;
 source scenes, scripts, manifests, and source references belong in Git.
 
+## Bridges into the later proofs
+
+Four standalone prerequisites now unpack concepts previously embedded inside
+longer proofs:
+
+| Deck | Topic |
+| --- | --- |
+| `prereq-invariant-blocks` | Why preserved spaces justify triangular and diagonal blocks |
+| `prereq-principal-angles` | How frames and singular values compare whole subspaces |
+| `prereq-trace-gradients` | How a trace pairing represents a directional derivative |
+| `prereq-uniform-minima` | Why uniform objective errors control minimum values |
+
+Each has a transcript, a learning-source companion, checked Lean examples, and
+four study questions. See the [teaching-gap map](docs/planning/bridge-lectures.md).
+Build with the common commands, for example:
+
+```bash
+make slides DECK=prereq-principal-angles
+make video DECK=prereq-principal-angles TTS_PROFILE=crall-math-dk-v2-breeze-tts2
+```
+
+Restart an already running library server after installing the new deck
+registrations, then refresh its catalog. The new numbers use existing gaps;
+no earlier lecture folder is renamed.
+
 ## External learning companions
 
 Each lecture has a **Learn more** companion: focused videos, illustrated

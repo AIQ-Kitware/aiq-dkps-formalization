@@ -1,0 +1,62 @@
+questions:
+- title: The same tolerance
+  question: What does a uniform bound of epsilon on the cost error mean?
+  choices:
+  - Every candidate obeys the same error tolerance.
+  - Each candidate has an unrelated tolerance.
+  - Only minimizers obey the bound.
+  correct: 0
+  explanation: The bound holds simultaneously over the whole candidate set.
+  think_seconds: 5
+  speak_question: Question 1. What does a uniform bound of epsilon on the cost error mean? A, Every candidate
+    obeys the same error tolerance. B, Each candidate has an unrelated tolerance. C, Only minimizers obey
+    the bound. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is A. The bound holds simultaneously over the whole candidate set.
+- title: Minimum values
+  question: Both costs attain minima and their uniform difference is at most zero point one. How far apart
+    can their minimum values be?
+  choices:
+  - At most zero point one.
+  - At most one, regardless of the error.
+  - There is no value bound.
+  correct: 0
+  explanation: The upper and lower comparisons use the same tolerance.
+  think_seconds: 5
+  speak_question: Question 2. Both costs attain minima and their uniform difference is at most zero point
+    one. How far apart can their minimum values be? A, At most zero point one. B, At most one, regardless
+    of the error. C, There is no value bound. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is A. The upper and lower comparisons use the same tolerance.
+- title: A moving dip
+  question: Continuous functions on the interval zero to one converge pointwise to zero, while each has
+    minimum minus one. What must fail?
+  choices:
+  - Uniform convergence to zero.
+  - Continuity of every individual function.
+  - Existence of the individual minima.
+  correct: 0
+  explanation: A minimum of minus one gives a point with error one at every stage, preventing uniform
+    error from tending to zero.
+  think_seconds: 5
+  speak_question: Question 3. Continuous functions on the interval zero to one converge pointwise to zero,
+    while each has minimum minus one. What must fail? A, Uniform convergence to zero. B, Continuity of
+    every individual function. C, Existence of the individual minima. You have five seconds. Pause for
+    longer if needed.
+  speak_answer: The answer is A. A minimum of minus one gives a point with error one at every stage, preventing
+    uniform error from tending to zero.
+- title: Optimizer locations
+  question: Uniformly convergent objectives have convergent minimum values. Must an arbitrarily selected
+    sequence of minimizers converge to one point?
+  choices:
+  - Yes, without any other assumptions.
+  - No; a flat limiting objective can allow moving minimizers.
+  - Only the dimension matters.
+  correct: 1
+  explanation: Location control needs additional information; it does not follow from the value estimate
+    alone.
+  think_seconds: 5
+  speak_question: Question 4. Uniformly convergent objectives have convergent minimum values. Must an
+    arbitrarily selected sequence of minimizers converge to one point? A, Yes, without any other assumptions.
+    B, No; a flat limiting objective can allow moving minimizers. C, Only the dimension matters. You have
+    five seconds. Pause for longer if needed.
+  speak_answer: The answer is B. Location control needs additional information; it does not follow from
+    the value estimate alone.

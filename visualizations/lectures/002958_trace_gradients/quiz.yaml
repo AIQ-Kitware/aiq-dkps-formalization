@@ -1,0 +1,53 @@
+questions:
+- title: Which product?
+  question: X and D are real matrices of the same shape. Which expression is their entrywise dot product?
+  choices:
+  - Trace of X transpose D.
+  - Trace of X plus D.
+  - The product of their traces.
+  correct: 0
+  explanation: The transpose aligns matching entries before summing.
+  think_seconds: 5
+  speak_question: Question 1. X and D are real matrices of the same shape. Which expression is their entrywise
+    dot product? A, Trace of X transpose D. B, Trace of X plus D. C, The product of their traces. You
+    have five seconds. Pause for longer if needed.
+  speak_answer: The answer is A. The transpose aligns matching entries before summing.
+- title: Zero trace
+  question: A real matrix H has trace zero. Must H vanish?
+  choices:
+  - Yes.
+  - No; trace alone is not the sum of squared entries.
+  - Only when H is two by two.
+  correct: 1
+  explanation: The positivity test uses trace of H transpose H, not trace of H.
+  think_seconds: 5
+  speak_question: Question 2. A real matrix H has trace zero. Must H vanish? A, Yes. B, No; trace alone
+    is not the sum of squared entries. C, Only when H is two by two. You have five seconds. Pause for
+    longer if needed.
+  speak_answer: The answer is B. The positivity test uses trace of H transpose H, not trace of H.
+- title: Restricted directions
+  question: Every pairing of H with a diagonal matrix D is zero. What follows?
+  choices:
+  - Every entry of H vanishes.
+  - The diagonal of H vanishes; its off-diagonal entries may remain.
+  - H is the identity.
+  correct: 1
+  explanation: Diagonal test directions only inspect diagonal entries.
+  think_seconds: 5
+  speak_question: Question 3. Every pairing of H with a diagonal matrix D is zero. What follows? A, Every
+    entry of H vanishes. B, The diagonal of H vanishes; its off-diagonal entries may remain. C, H is the
+    identity. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is B. Diagonal test directions only inspect diagonal entries.
+- title: The skew sign
+  question: G is real skew-symmetric. How does its Frobenius pairing with B relate to trace of G B?
+  choices:
+  - It is minus trace of G B.
+  - It is always plus trace of G B.
+  - It has no trace representation.
+  correct: 0
+  explanation: G transpose equals minus G, so the transpose form gives the minus sign.
+  think_seconds: 5
+  speak_question: Question 4. G is real skew-symmetric. How does its Frobenius pairing with B relate to
+    trace of G B? A, It is minus trace of G B. B, It is always plus trace of G B. C, It has no trace representation.
+    You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is A. G transpose equals minus G, so the transpose form gives the minus sign.

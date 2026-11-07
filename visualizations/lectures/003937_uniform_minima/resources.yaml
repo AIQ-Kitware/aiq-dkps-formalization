@@ -1,0 +1,14 @@
+title: Uniform approximation — what happens to a minimum?
+intro: Start with the first explanation; use the remaining sources to revisit the precise statements.
+checked_on: '2026-11-07'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Uniform convergence — Sigurd Angenent, Wisconsin
+  url: https://people.math.wisc.edu/~angenent/521.2017s/UniformConvergence.html
+  kind: Focused university notes
+  why: Compare pointwise tests with a tolerance that works simultaneously for every input.
+- title: Uniform convergence
+  url: https://en.wikipedia.org/wiki/Uniform_convergence
+  kind: Wikipedia topic page
+  why: Review the order of quantifiers and the shrinking-band picture.
+  focus: Definition and examples; the integration and complex-analysis applications are optional.

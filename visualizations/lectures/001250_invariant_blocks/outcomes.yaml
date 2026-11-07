@@ -1,0 +1,4 @@
+facts:
+- An invariant subspace keeps its vectors inside itself under a map.
+- One invariant subspace gives a triangular block structure, not necessarily a diagonal one.
+- Two preserved perpendicular parts give block diagonality and commutation with projection.

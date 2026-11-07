@@ -143,3 +143,26 @@ passage. Four-question reviews use explicit objects, application questions,
 and five-second pauses. Slides and transcript exports are rebuilt separately
 from voice selection: existing narrated videos retain their generation records
 until the corresponding voice is rebuilt.
+
+### Standalone bridges for the later proofs
+
+Added four lectures at existing order gaps: invariant blocks (001250), principal
+angles (002250), trace pairings and gradients (002958), and uniform approximation
+of minima (003937). They separate vector preservation from a drawn block matrix,
+space comparison from arbitrary frame comparison, trace notation from a scalar
+response, and minimum-value convergence from optimizer-location convergence.
+Each has a local setup, motivated visual examples, symbolic/Lean companions,
+four five-second questions, and focused external sources. The teaching-gap map
+records where the new modules help and distinguishes teaching dependencies from
+formal imports. No old lecture folder was renamed.
+
+Lean accepted all four companion files. The cosine companion deliberately uses
+principalCosines rather than conflating the classroom increasing angle list
+with the directed-sine angle convention. The minimum companion uses explicit
+minimizer hypotheses and proves the two comparisons separately. Numerical tests
+cover the uniform band and the moving dip used in the animations.
+
+The source lectures and slide exports are independent of narrator selection.
+Use the existing video target for the desired voice; no voice data or generated
+media is committed. During first-time parallel drafts, one shared TeX temporary
+file collided; its final render was rerun with one scene job.
