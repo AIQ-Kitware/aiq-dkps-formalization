@@ -129,3 +129,17 @@ convention; a singular example distinguishes the canonical partial factor from
 a unitary extension. Opening conclusions return in the recap. Project/API
 provenance remains in source records and the formal companion, not the spoken
 mathematical overview. Four explicit study questions use five-second pauses.
+
+### Broader lecture clarity pass
+
+Revised the fourteen remaining numbered mathematical and historical lectures,
+leaving the sine-theta lecture, the recently revised Foundations/Rayleigh–Ritz/
+polar lectures, and frozen reference compositions unchanged. Each now opens
+with topic-specific conclusions and returns to them in its existing recap.
+Transitions explain what the next calculation will establish; mathematical
+narration no longer interrupts min–max or Sylvester reasoning with project
+provenance. The shared opening component highlights claims during one spoken
+passage. Four-question reviews use explicit objects, application questions,
+and five-second pauses. Slides and transcript exports are rebuilt separately
+from voice selection: existing narrated videos retain their generation records
+until the corresponding voice is rebuilt.

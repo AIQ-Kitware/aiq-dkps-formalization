@@ -11,6 +11,13 @@ Recall: No formulas are needed on the cover.
 
 How eigenvector stability became a subject.
 
+## LectureOutcomes: The ideas to carry away
+
+Why: See the conclusions before the details.
+Recall: Familiarity with vectors and eigenvectors; notation is recalled locally
+
+Subspace geometry and matrix equations grew from different questions. Eigenvalue stability and eigenvector stability require different information. Later statistical and transport problems reuse and refine earlier tools. We will follow people and publications through these intersecting threads. A historical connection can explain how a question developed without being a logical implication or a claim that one author invented every ingredient.
+
 ## HiQuestion: One question, several mathematical traditions
 
 Why: When a matrix changes, what can we still trust?
@@ -210,7 +217,7 @@ The three rows describe different maps. A teaching prerequisite says which expla
 Why: Remember contributions by the questions they made answerable.
 Recall: Geometry, perturbation, statistics, and transport share tools but ask different questions.
 
-Here is the route we have followed. Jordan helps introduce the geometry of several angles, and Sylvester makes the matrix-equation tradition explicit. Rayleigh and Ritz represent the search for useful approximations, while eigenvalue theory reminds us that values and directions are different objects. Sz.-Nagy, Davis, Kato, Halmos, and Rosenblum give ways to compare spaces and analyze operators. Davis and Kahan bring the error-and-separation mechanism into quantitative subspace rotation bounds. Wedin, Björck, and Golub illustrate the distinct growth of perturbation theory and computation.
+Subspace geometry and matrix equations grew from different questions. Eigenvalue stability and eigenvector stability require different information. Later statistical and transport problems reuse and refine earlier tools. These connections organize the stories just introduced. Here is the route we have followed. Jordan helps introduce the geometry of several angles, and Sylvester makes the matrix-equation tradition explicit. Rayleigh and Ritz represent the search for useful approximations, while eigenvalue theory reminds us that values and directions are different objects. Sz.-Nagy, Davis, Kato, Halmos, and Rosenblum give ways to compare spaces and analyze operators. Davis and Kahan bring the error-and-separation mechanism into quantitative subspace rotation bounds. Wedin, Björck, and Golub illustrate the distinct growth of perturbation theory and computation.
 
 <!-- beat -->
 

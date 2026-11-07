@@ -1,0 +1,9 @@
+scenes:
+  LectureOutcomes:
+    1:
+    - visual_at: 0
+      phrase: An optimal orthogonal transporter attains a finite matching value.
+    - visual_at: 1
+      phrase: Stationarity derives the small blocks rather than assuming them.
+    - visual_at: 2
+      phrase: Local block bounds and attaining constructions prove opposite inequalities.

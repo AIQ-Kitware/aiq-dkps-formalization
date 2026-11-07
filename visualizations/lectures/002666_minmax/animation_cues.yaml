@@ -1,0 +1,9 @@
+scenes:
+  LectureOutcomes:
+    1:
+    - visual_at: 0
+      phrase: A unit-vector Rayleigh quotient is a weighted average of eigenvalues.
+    - visual_at: 1
+      phrase: Optimizing over subspaces recovers every ordered eigenvalue.
+    - visual_at: 2
+      phrase: An operator-norm perturbation bounds every ordered eigenvalue shift.

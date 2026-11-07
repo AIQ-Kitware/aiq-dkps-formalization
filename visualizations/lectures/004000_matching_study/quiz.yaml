@@ -9,11 +9,11 @@ questions:
   correct: 0
   explanation: Construction proves attainability of candidate costs. The hard comparison must also exclude
     cheaper unrestricted transporters.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: First question. Why is constructing a transporter for each matching not enough? A, it
     only supplies attainable upper bounds and we still need a lower bound for every transporter; B, it
     proves there is no minimum; C, it forces every map to preserve the principal planes; or D, it determines
-    historical priority? You have eight seconds to choose an answer. Pause the video if you want longer.
+    historical priority? You have five seconds to choose an answer. Pause the video if you want longer.
   speak_answer: The correct answer is A. Construction proves attainability of candidate costs. The hard
     comparison must also exclude cheaper unrestricted transporters.
 - title: Use the pair weight
@@ -26,9 +26,42 @@ questions:
   - $4$
   correct: 2
   explanation: The half-sum is pi over six, whose sine is one half. Multiplying by four gives two.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: Second question. Two equal angles are pi over six. Their nuclear pair cost is four times
-    the sine of half their sum. Is the answer A, zero; B, one; C, two; or D, four? You have eight seconds
+    the sine of half their sum. Is the answer A, zero; B, one; C, two; or D, four? You have five seconds
     to choose an answer. Pause the video if you want longer.
   speak_answer: The correct answer is C. The half-sum is pi over six, whose sine is one half. Multiplying
     by four gives two.
+- title: A repeated angle
+  question: Two principal angles have equal positive values. What happens to their labels in the matching
+    problem?
+  choices:
+  - Merge them into one vertex.
+  - Keep two vertices, because they represent distinct plane directions.
+  - Discard both vertices.
+  correct: 1
+  explanation: A repeated angle value still comes with its multiplicity. Pairing decisions concern distinct
+    labels.
+  think_seconds: 5
+  speak_question: Question 3. Two principal angles have equal positive values. What happens to their labels
+    in the matching problem? A, Merge them into one vertex. B, Keep two vertices, because they represent
+    distinct plane directions. C, Discard both vertices. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is B. A repeated angle value still comes with its multiplicity. Pairing decisions
+    concern distinct labels.
+- title: Why construct an attaining map?
+  question: A lower bound holds for every orthogonal transporter. What is still needed to identify the
+    minimum as the proposed matching value?
+  choices:
+  - A transporter that attains that value.
+  - An assumption that every transporter is block diagonal.
+  - A proof that all stationary points are minima.
+  correct: 0
+  explanation: A lower bound excludes cheaper maps; an attaining construction proves that the bound is
+    the actual minimum.
+  think_seconds: 5
+  speak_question: Question 4. A lower bound holds for every orthogonal transporter. What is still needed
+    to identify the minimum as the proposed matching value? A, A transporter that attains that value.
+    B, An assumption that every transporter is block diagonal. C, A proof that all stationary points are
+    minima. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is A. A lower bound excludes cheaper maps; an attaining construction proves
+    that the bound is the actual minimum.

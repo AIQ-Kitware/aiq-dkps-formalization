@@ -82,8 +82,7 @@ class MmSummary(MinMaxSlide):
             tex('A dimension argument forces every candidate subspace to meet a low spectral sector.',size=27),
             tex('The leading spectral subspace attains the matching lower bound.',size=28),
             tex('Uniform perturbation bounds pass through both variational extrema.',size=28),buff=.45),y=.4,height=3.5)
-        self.source('Tau Ceti CourantFischer; DKPS proof adaptation (PR 13599).')
-        self.takeaway('The theorem is classical; the formalization makes the hypotheses and indexing explicit.')
+        self.takeaway('The same variational formula controls every ordered eigenvalue, including repeated ones.')
 
 
 class MmComputation(MinMaxSlide):

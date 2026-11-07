@@ -17,6 +17,13 @@ Recall: No notation is needed on the title slide.
 
 The exponential of a matrix.
 
+## LectureOutcomes: The ideas to carry away
+
+Why: See the conclusions before the details.
+Recall: The local setup follows this overview.
+
+A matrix power series defines a family of linear maps. Applying that family to an input solves a constant linear differential equation. A skew-symmetric generator produces length-preserving motions. We will connect the series to its trajectories, then prove the identities that make it useful. The graphs will track a chosen input; the exponential matrix itself describes the motion of all inputs.
+
 ## ExSetup: The matrix, the flow, and one trajectory
 
 Why: Separate three objects that are easy to conflate.
@@ -214,7 +221,7 @@ we have not claimed it is necessary for every accidental equality.
 Why: The exponential solves the orthogonality constraint for all times.
 Recall: Let $B^T=-B$ and $V(t)=e^{tB}$.
 
-Now take a skew-symmetric generator B. By the transpose identity,
+We have a family of maps and its inverse. The next result identifies which generators make that family preserve every input length. Now take a skew-symmetric generator B. By the transpose identity,
 V transpose is the exponential of t B transpose. Skew-symmetry makes
 that the exponential of minus t B. By the inverse identity, it is
 V inverse. Therefore V transpose V is identity at every real time.
@@ -255,12 +262,12 @@ lengths; commutation preserves the source. Each hypothesis has a separate job.
 Why: These identities let us differentiate without leaving the feasible set.
 Recall: Series, constant linear flow, inverse, skew-symmetry, and commutation.
 
-The exponential is a matrix power series, not entrywise exponentiation.
+A matrix power series defines a family of linear maps. Applying that family to an input solves a constant linear differential equation. A skew-symmetric generator produces length-preserving motions. Here is how the preceding argument fits those conclusions. The exponential is a matrix power series, not entrywise exponentiation.
 It solves the constant linear equation x prime equals A x. Diagonal
 generators stretch, the nilpotent example shears, and a quarter-turn
 generator rotates. Inverses come from negative time. Skew-symmetry makes
 the flow orthogonal, and commutation with P keeps the source decomposition
-fixed. Those are the facts the variations proof needs.
+fixed. These identities let us construct continuous families of legal motions in constrained optimization.
 
 <!-- beat -->
 
@@ -269,8 +276,7 @@ It is identity, not a matrix of ones. Can an exponential of a real
 skew-symmetric matrix be a reflection? No: this curve remains in the
 determinant plus-one component. That is compatible with testing a
 negative-determinant transporter: multiply the transporter by the
-exponential curve. With these distinctions in place, return to feasible
-variations and follow how an exact motion produces a derivative test.
+exponential curve. Multiplying a given legal map by such a curve lets us test its cost while preserving the constraint. This is the connection to constrained optimization.
 
 ## ExFacts: Three exponential facts to use in a proof
 

@@ -1,6 +1,6 @@
 deck: operators-pvm
-scope: PVM concepts, finite model, spectral integration and domain illustrations,
-  narration, quiz, and accepted-API companions.
+scope: PVM concepts, finite model, spectral integration and domain illustrations, narration, quiz, and
+  accepted-API companions.
 slides:
   initial_source_attribution:
   - models:
@@ -10,8 +10,8 @@ slides:
     - visualizations/dkvis/learning/pvm/scenes.py
     - visualizations/dkvis/learning/pvm/model.py
     - visualizations/dkvis/learning/orientation.py
-    basis: Lecture authored in this session; original mathematical and formal-proof
-      provenance is recorded separately in sources.md.
+    basis: Lecture authored in this session; original mathematical and formal-proof provenance is recorded
+      separately in sources.md.
   revisions:
   - models:
     - GPT-6.1-Sol
@@ -20,8 +20,13 @@ slides:
     - visualizations/dkvis/learning/pvm/scenes.py
     - visualizations/dkvis/learning/orientation.py
     - visualizations/dkvis/components/lesson.py
-    scope: Connect successive questions and conclusions in narration; introduce the
-      main results in synchronized stages and use lecture-specific route labels.
+    scope: Connect successive questions and conclusions in narration; introduce the main results in synchronized
+      stages and use lecture-specific route labels.
+  - date: '2026-11-06'
+    models:
+    - GPT-6.1-Sol
+    basis: Added factual opening outcomes, connected recaps, and precise five-second study questions;
+      clarified local motivation and terminology.
 transcript:
   initial_source_attribution:
   - models:
@@ -32,13 +37,18 @@ transcript:
     - visualizations/lectures/002916_pvm/quiz.yaml
     - visualizations/lectures/002916_pvm/facts.lean
     - visualizations/lectures/002916_pvm/sources.md
-    basis: Lecture authored in this session; original mathematical and formal-proof
-      provenance is recorded separately in sources.md.
+    basis: Lecture authored in this session; original mathematical and formal-proof provenance is recorded
+      separately in sources.md.
   revisions:
   - models:
     - GPT-6.1-Sol
     date: '2026-11-06'
     sources:
     - visualizations/lectures/002916_pvm/lecture.md
-    scope: Connect successive questions and conclusions in narration; introduce the
-      main results in synchronized stages and use lecture-specific route labels.
+    scope: Connect successive questions and conclusions in narration; introduce the main results in synchronized
+      stages and use lecture-specific route labels.
+  - date: '2026-11-06'
+    models:
+    - GPT-6.1-Sol
+    basis: Added factual opening outcomes, connected recaps, and precise five-second study questions;
+      clarified local motivation and terminology.

@@ -1,0 +1,9 @@
+scenes:
+  LectureOutcomes:
+    1:
+    - visual_at: 0
+      phrase: Sylvester and Jordan brought different algebraic and geometric viewpoints.
+    - visual_at: 1
+      phrase: Rayleigh and Ritz had separate careers and publications.
+    - visual_at: 2
+      phrase: Weyl connected spectral questions with wider work in analysis and physics.

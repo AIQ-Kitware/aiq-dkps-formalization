@@ -1,0 +1,9 @@
+scenes:
+  LectureOutcomes:
+    1:
+    - visual_at: 0
+      phrase: A spectral region selects a whole subspace through a projection.
+    - visual_at: 1
+      phrase: A fixed vector turns spectral selection into a scalar energy measure.
+    - visual_at: 2
+      phrase: Weighting spectral components constructs functions of an operator.

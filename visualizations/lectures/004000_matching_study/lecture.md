@@ -15,6 +15,13 @@ Recall: The main proof concerns finite real orthogonal transport.
 
 Real trace-norm matching.
 
+## LectureOutcomes: The ideas to carry away
+
+Why: See the conclusions before the details.
+Recall: The local setup follows this overview.
+
+An optimal orthogonal transporter attains a finite matching value. Stationarity derives the small blocks rather than assuming them. Local block bounds and attaining constructions prove opposite inequalities. The cost is the trace norm of the displacement on the entire real ambient space. We will first see the paired-plane savings, then explain why arbitrary mixing cannot do better. Zero angles can be fixed and right angles are allowed.
+
 ## M00Setup: The objects in this proof
 
 Why: Keep the admissible maps distinct from the finite matching.
@@ -416,7 +423,7 @@ have not claimed that W itself preserves K.
 Why: Which matrix have we simplified, and in which choice of coordinates?
 Recall: $W$: the actual transporter; $G$: its cost response. They are different matrices.
 
-Before continuing, keep track of what each matrix is doing. W is the transporter whose
+The derivative tests have produced structural equations at a minimizer. Their purpose is to find pieces that the relevant maps preserve, so that a global cost can be bounded one piece at a time. Before continuing, keep track of what each matrix is doing. W is the transporter whose
 minimum cost we are studying. G is the cost-response matrix we built from its rotation
 planes. In W's rotation coordinates, G is easy to calculate. In source and complement
 coordinates, legal wiggles force G's diagonal blocks to be zero.
@@ -908,7 +915,7 @@ improve this construction. The two sides of the proof meet in this concrete exam
 Why: Can we explain why every new object was introduced?
 Recall: Legal wiggles reveal structure; common small blocks turn structure into matching.
 
-Try rebuilding the story without the formulas. Why do independent pieces help us? Why
+An optimal orthogonal transporter attains a finite matching value. Stationarity derives the small blocks rather than assuming them. Local block bounds and attaining constructions prove opposite inequalities. Here is how the preceding argument fits those conclusions. Try rebuilding the story without the formulas. Why do independent pieces help us? Why
 can we actually construct changes that keep the image subspace fixed? What does P keep,
 and why does our constructed B commute with it? What does G record, and how do legal
 tests force its within-source response to vanish?

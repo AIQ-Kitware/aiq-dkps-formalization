@@ -9,6 +9,7 @@ YWS = DeckSpec(
     footer='Yu–Wang–Samworth: population gap, residual, alignment',
     narration=lecture_path('yws'),
     slides=uses('dkvis.learning.yws.scenes',['YsTitle'])
+    + uses('dkvis.learning.outcomes', ['LectureOutcomes'])
     + uses('dkvis.learning.orientation',['YsSetup'])
     + uses('dkvis.learning.yws.scenes',[
         'YsMotivation','YsMixedExample','YsGap','YsGeometry','YsTheorem',
@@ -17,5 +18,5 @@ YWS = DeckSpec(
         'YsAlignmentProof','YsRotationExample','YsRectangular','YsRectangularGap',
         'YsSummary','YsFacts','YsLean','YsLeanAligned',
     ]) + uses('dkvis.learning.yws.scenes',['YsComputation'],depth='*')
-    + quiz_uses(),
+    + quiz_uses(count=4),
 )

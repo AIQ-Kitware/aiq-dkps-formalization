@@ -1,0 +1,7 @@
+facts:
+- A unit-vector Rayleigh quotient is a weighted average of eigenvalues.
+- Optimizing over subspaces recovers every ordered eigenvalue.
+- An operator-norm perturbation bounds every ordered eigenvalue shift.
+route: The setting is a real symmetric matrix. We will first measure it in one direction, then in a whole
+  subspace. The same variational description will turn a uniform measurement error into an eigenvalue
+  bound.

@@ -9,11 +9,11 @@ questions:
   correct: 1
   explanation: The structural decomposition is derived at a minimizer. It is not imposed on the full feasible
     set in advance.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: First question. What does stationarity do in the lower bound? A, assume every feasible
     map already has small blocks; B, derive block structure for a chosen minimizer from legal variations;
     C, restrict all maps to determinant one; or D, turn the source correction into an eigenvalue perturbation
-    estimate? You have eight seconds to choose an answer. Pause the video if you want longer.
+    estimate? You have five seconds to choose an answer. Pause the video if you want longer.
   speak_answer: The correct answer is B. The structural decomposition is derived at a minimizer. It is
     not imposed on the full feasible set in advance.
 - title: Select the graph algorithm
@@ -26,10 +26,43 @@ questions:
   correct: 2
   explanation: Angle labels are vertices of a general graph. Positive pair savings compete, and unmatched
     labels retain their singleton cost.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: Second question. Which graph problem represents this reduction? A, bipartite assignment
     with a fixed left and right partition; B, shortest paths; C, maximum weight matching on a general
-    graph using pair savings; or D, a matching that must pair every vertex? You have eight seconds to
-    choose an answer. Pause the video if you want longer.
+    graph using pair savings; or D, a matching that must pair every vertex? You have five seconds to choose
+    an answer. Pause the video if you want longer.
   speak_answer: The correct answer is C. Angle labels are vertices of a general graph. Positive pair savings
     compete, and unmatched labels retain their singleton cost.
+- title: A repeated angle
+  question: Two principal angles have equal positive values. What happens to their labels in the matching
+    problem?
+  choices:
+  - Merge them into one vertex.
+  - Keep two vertices, because they represent distinct plane directions.
+  - Discard both vertices.
+  correct: 1
+  explanation: A repeated angle value still comes with its multiplicity. Pairing decisions concern distinct
+    labels.
+  think_seconds: 5
+  speak_question: Question 3. Two principal angles have equal positive values. What happens to their labels
+    in the matching problem? A, Merge them into one vertex. B, Keep two vertices, because they represent
+    distinct plane directions. C, Discard both vertices. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is B. A repeated angle value still comes with its multiplicity. Pairing decisions
+    concern distinct labels.
+- title: Why construct an attaining map?
+  question: A lower bound holds for every orthogonal transporter. What is still needed to identify the
+    minimum as the proposed matching value?
+  choices:
+  - A transporter that attains that value.
+  - An assumption that every transporter is block diagonal.
+  - A proof that all stationary points are minima.
+  correct: 0
+  explanation: A lower bound excludes cheaper maps; an attaining construction proves that the bound is
+    the actual minimum.
+  think_seconds: 5
+  speak_question: Question 4. A lower bound holds for every orthogonal transporter. What is still needed
+    to identify the minimum as the proposed matching value? A, A transporter that attains that value.
+    B, An assumption that every transporter is block diagonal. C, A proof that all stationary points are
+    minima. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is A. A lower bound excludes cheaper maps; an attaining construction proves
+    that the bound is the actual minimum.

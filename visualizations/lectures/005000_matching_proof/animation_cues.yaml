@@ -1,0 +1,9 @@
+scenes:
+  LectureOutcomes:
+    1:
+    - visual_at: 0
+      phrase: The unrestricted real trace-norm minimum equals a matching value.
+    - visual_at: 1
+      phrase: A smooth auxiliary minimum supplies the invariant-block reduction.
+    - visual_at: 2
+      phrase: A uniform limit and explicit transporters establish the trace endpoint.

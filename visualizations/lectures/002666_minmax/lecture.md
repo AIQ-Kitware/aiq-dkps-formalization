@@ -10,6 +10,13 @@ Recall: Symmetric matrices have orthonormal eigenbases.
 
 Rayleigh quotients, min-max, and eigenvalue stability.
 
+## LectureOutcomes: The ideas to carry away
+
+Why: See the conclusions before the details.
+Recall: The local setup follows this overview.
+
+A unit-vector Rayleigh quotient is a weighted average of eigenvalues. Optimizing over subspaces recovers every ordered eigenvalue. An operator-norm perturbation bounds every ordered eigenvalue shift. The setting is a real symmetric matrix. We will first measure it in one direction, then in a whole subspace. The same variational description will turn a uniform measurement error into an eigenvalue bound.
+
 ## MmSetup: The ordering and the directional measurement
 
 Why: Fix the spectral convention locally.
@@ -22,7 +29,7 @@ We work with real symmetric matrices of size n. The spectral theorem gives an or
 Why: Control eigenvalues without following individual eigenvectors.
 Recall: A is symmetric; its eigenvalues are real.
 
-An eigenvector can change dramatically when two eigenvalues are close. Can we still control the eigenvalues themselves? Yes. Instead of following vectors, measure the quadratic form along every unit direction. The Courant–Fischer variational principle reconstructs each ordered eigenvalue from those measurements. Weyl's perturbation inequality then follows from a uniform bound on the change in those measurements. These are classical results, now available as accepted Tau Ceti theorems. This lecture explains the two inferences behind that connection.
+An eigenvector can change dramatically when two eigenvalues are close. Can we still control the eigenvalues themselves? Yes. Instead of following vectors, measure the quadratic form along every unit direction. The Courant–Fischer variational principle reconstructs each ordered eigenvalue from those measurements. Weyl's perturbation inequality then follows from a uniform bound on the change in those measurements. These are classical results about symmetric matrices. This lecture explains the two inferences behind that connection.
 
 ## MmRayleigh: a directional measurement
 
@@ -54,7 +61,7 @@ Let the perturbation H have operator norm epsilon. Cauchy–Schwarz gives absolu
 Why: Retain the proof mechanism, not only the formula.
 Recall: The spectral theorem supplies an orthonormal eigenbasis.
 
-The chain was directional measurement, weighted average, dimension-forced intersection, and an attaining leading eigenspace. That established the variational characterization. A uniform perturbation bound then passed through its two extrema to give Weyl stability. Courant and Fischer's principle and Weyl's inequality are classical mathematics. The accepted Tau Ceti CourantFischer file includes a proof adaptation from this project's development; the provenance census records that connection precisely.
+A unit-vector Rayleigh quotient is a weighted average of eigenvalues. Optimizing over subspaces recovers every ordered eigenvalue. An operator-norm perturbation bounds every ordered eigenvalue shift. Here is how the preceding argument fits those conclusions. The chain was directional measurement, weighted average, dimension-forced intersection, and an attaining leading eigenspace. That established the variational characterization. A uniform perturbation bound then passed through its two extrema to give Weyl stability. Courant and Fischer's principle and Weyl's inequality are classical mathematics. The proof works because a uniform bound holds for every candidate direction before either optimization is performed.
 
 ## MmFacts: The two reusable facts
 

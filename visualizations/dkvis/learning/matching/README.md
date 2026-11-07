@@ -4,8 +4,8 @@ Two presentations of the same proof, with different audiences:
 
 | Deck | Audience and purpose | Scenes | Transcript |
 | --- | --- | --- | --- |
-| `matching-proof` | A learner following the geometry, legal variations, and block construction in detail | [study.py](study.py), 40 proof scenes + attributed cover + local setup + numerical bonus + 2 review questions | [study.md](../../../lectures/README.md#matching_study) |
-| `matching-proof-talk` | A mathematical audience following a compact proof | [talk.py](talk.py), 13 proof scenes + attributed cover + local setup + numerical bonus + 2 review questions | [proof-talk.md](../../../lectures/README.md#matching_proof) |
+| `matching-proof` | A learner following the geometry, legal variations, and block construction in detail | [study.py](study.py), 40 proof scenes + attributed cover + opening outcomes + local setup + numerical bonus + 4 review questions | [study.md](../../../lectures/README.md#matching_study) |
+| `matching-proof-talk` | A mathematical audience following a compact proof | [talk.py](talk.py), 13 proof scenes + attributed cover + opening outcomes + local setup + numerical bonus + 4 review questions | [proof-talk.md](../../../lectures/README.md#matching_proof) |
 
 Both use [model.py](model.py) for the checked phase and matrix examples, and
 `dkvis/novelty_math.py` for matching weights and the three-angle example.

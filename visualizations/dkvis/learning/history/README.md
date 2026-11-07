@@ -6,7 +6,7 @@ publications, and questions behind principal angles, approximation, operator
 perturbation, Davis–Kahan, statistical use, and the transport work here.
 
 The numbered lecture is **000505**, stable ID `history_overview`, deck
-**`history-overview`** now has 22 scenes, including an explicit attributed
+**`history-overview`** now has 25 scenes, including an explicit attributed
 Sylvester portrait. Its roughly 2,900-word core narration takes about
 20 minutes at 150 words/minute, before animation and question pauses.
 
@@ -35,7 +35,7 @@ landmarks are equally spaced for legibility, not drawn to a numerical scale.
 Parallel traditions are revisited rather than presented as a single chain of
 historical influence.
 
-The history lecture has its own question-setting scene and two study questions.
+The history lecture has its own question-setting scene and four study questions.
 It has no artificial Lean facts or computation bonus: it teaches historical
 relationships, with concept lectures supplying their own formal companions.
 

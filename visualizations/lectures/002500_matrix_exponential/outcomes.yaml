@@ -1,0 +1,6 @@
+facts:
+- A matrix power series defines a family of linear maps.
+- Applying that family to an input solves a constant linear differential equation.
+- A skew-symmetric generator produces length-preserving motions.
+route: We will connect the series to its trajectories, then prove the identities that make it useful.
+  The graphs will track a chosen input; the exponential matrix itself describes the motion of all inputs.

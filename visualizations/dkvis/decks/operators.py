@@ -8,13 +8,14 @@ MINMAX = DeckSpec(
     name='operators-minmax', description='Rayleigh quotients, the two min-max inequalities, and Weyl stability.',
     footer='Rayleigh quotients and eigenvalue stability', narration=lecture_path('minmax'),
     slides=uses('dkvis.learning.operators.minmax', ['MmTitle'])
+    + uses('dkvis.learning.outcomes', ['LectureOutcomes'])
     + uses('dkvis.learning.orientation', ['MmSetup'])
     + uses('dkvis.learning.operators.minmax', [
         'MmQuestion', 'MmRayleigh', 'MmMinMax', 'MmWeyl',
         'MmSummary', 'MmFacts', 'MmLean', 'MmLeanWeyl',
     ])
     + uses('dkvis.learning.operators.minmax', ['MmComputation'], depth="*")
-    + quiz_uses(),
+    + quiz_uses(count=4),
 )
 
 POLAR = DeckSpec(
@@ -34,13 +35,14 @@ SYLVESTER = DeckSpec(
     name='operators-sylvester', description='Solve AX-XB=R and understand exactly what a spectral gap controls.',
     footer='Sylvester equations and spectral separation', narration=lecture_path('sylvester'),
     slides=uses('dkvis.learning.operators.sylvester', ['SyTitle'])
+    + uses('dkvis.learning.outcomes', ['LectureOutcomes'])
     + uses('dkvis.learning.orientation', ['SySetup'])
     + uses('dkvis.learning.operators.sylvester', [
         'SyQuestion', 'SyEntries', 'SyGap', 'SyExample',
         'SySummary', 'SyFacts', 'SyLean', 'SyLeanGap',
     ])
     + uses('dkvis.learning.operators.sylvester', ['SyComputation'], depth="*")
-    + quiz_uses(),
+    + quiz_uses(count=4),
 )
 
 _BY_NAME = {d.name: d for d in (MINMAX, POLAR, SYLVESTER)}

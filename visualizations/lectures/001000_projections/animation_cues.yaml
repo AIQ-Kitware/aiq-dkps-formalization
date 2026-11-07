@@ -1,0 +1,10 @@
+scenes:
+  LectureOutcomes:
+    1:
+    - visual_at: 0
+      phrase: Projection gives the unique nearest point in a subspace.
+    - visual_at: 1
+      phrase: Changing its orthonormal basis does not change the projection.
+    - visual_at: 2
+      phrase: A linear map preserves a subspace and its perpendicular complement exactly when its order
+        with projection does not matter.

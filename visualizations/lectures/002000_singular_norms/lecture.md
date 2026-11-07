@@ -14,12 +14,19 @@ Recall: No notation is needed on the title slide.
 
 Singular values and displacement cost.
 
+## LectureOutcomes: The ideas to carry away
+
+Why: See the conclusions before the details.
+Recall: The local setup follows this overview.
+
+Singular values describe directional stretching. Different norms can prefer different motions between the same spaces. Trace costs add over independent input and output blocks. The question is how much a motion changes the whole space. We will find the stretches of its displacement, choose how to charge for them, and justify when block costs can be added.
+
 ## SnSetup: Our local notation
 
 Why: Distinguish matrix entries, singular values, and norms.
 Recall: $s_j(T)$: singular values; $\|T\|_*$: trace norm.
 
-For this lecture, T is a real matrix. T transpose is its adjoint in real coordinates. Apply T and then its transpose: the resulting square matrix T transpose T has nonnegative eigenvalues. Their nonnegative square roots are the singular values of T, which we write s sub j of T. They describe the stretch factors along suitable orthonormal input directions. The operator norm takes the largest stretch factor. The trace norm adds all of them; the Frobenius norm is the square root of the sum of their squares. We will motivate these choices geometrically. When W is a motion, identity minus W is the displacement map. Its singular values measure movement, not the singular values of W itself.
+For this lecture, T is a real matrix. We use the adjoint convention from Foundations. Apply T and then its transpose: the resulting square matrix T transpose T has nonnegative eigenvalues. Their nonnegative square roots are the singular values of T, which we write s sub j of T. They describe the stretch factors along suitable orthonormal input directions. The operator norm takes the largest stretch factor. The trace norm adds all of them; the Frobenius norm is the square root of the sum of their squares. We will motivate these choices geometrically. When W is a motion, identity minus W is the displacement map. Its singular values measure movement, not the singular values of W itself.
 
 ## Sn00Question: What does it cost to move a whole space?
 
@@ -100,7 +107,7 @@ root of T transpose T. This removes the signs before summing.
 Why: The norm should measure the map rather than the chosen basis.
 Recall: Orthogonal input and output changes preserve singular values.
 
-Rotate the output axes. The ellipse changes orientation, but its semiaxis
+The next useful fact is that changing perpendicular coordinate axes leaves these costs unchanged. Rotating the output axes illustrates why. The ellipse changes orientation, but its semiaxis
 lengths do not change. Rotate the orthonormal input coordinates as well: this
 does not change the set of unit vectors being tested. Consequently, neither
 operation changes the singular-value list.
@@ -161,7 +168,7 @@ justifying that limit is a separate step.
 Why: Know when a large norm calculation splits into smaller ones.
 Recall: A block diagonal map preserves orthogonal input and output pieces.
 
-Suppose T is block diagonal on an orthogonal decomposition. Then T transpose T
+The norm choice is now fixed. Before adding costs from different planes, we need to know what makes those planes independent for the displacement map. Suppose T is block diagonal on an orthogonal decomposition. Then T transpose T
 is block diagonal too. Its eigenvalues combine from the blocks, so the
 singular-value list of T is the union of the block lists, including
 multiplicities. We can therefore add trace costs across the blocks. Likewise,
@@ -199,7 +206,7 @@ does not by itself justify adding their singular-value costs.
 Why: The objective and the block rule determine which transporter is cheapest.
 Recall: Operator norm: maximum; Frobenius norm: quadratic sum; trace norm: sum.
 
-Our main points are these. Singular values describe independent stretches
+Singular values describe directional stretching. Different norms can prefer different motions between the same spaces. Trace costs add over independent input and output blocks. Here is how the preceding argument fits those conclusions. Our main points are these. Singular values describe independent stretches
 after orthonormal input and output changes. Different norms summarize that
 same list differently and may prefer different maps. Trace costs and power
 costs add over genuine orthogonal blocks, but not over arbitrary domain

@@ -9,9 +9,9 @@ questions:
   correct: 1
   explanation: The quotient is a weighted average of five and two. The first eigenvector attains the maximum,
     five.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: First question. A is diagonal with entries five and two. For a unit vector x, what is
-    the largest Rayleigh quotient? A, two; B, five; C, seven; or D, twenty five? You have eight seconds
+    the largest Rayleigh quotient? A, two; B, five; C, seven; or D, twenty five? You have five seconds
     to choose an answer. Pause the video if you want longer.
   speak_answer: The correct answer is B. The quotient is a weighted average of five and two. The first
     eigenvector attains the maximum, five.
@@ -25,10 +25,42 @@ questions:
   correct: 1
   explanation: Weyl controls ordered eigenvalue shifts by the perturbation norm. Controlling eigenspaces
     needs additional gap information.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: Second question. A symmetric matrix is perturbed by a symmetric H of operator norm at
     most one tenth. What follows? A, the eigenvalues are identical; B, each equally ordered eigenvalue
     changes by at most one tenth; C, every eigenvector changes by at most one tenth; or D, all gaps increase?
-    You have eight seconds to choose an answer. Pause the video if you want longer.
+    You have five seconds to choose an answer. Pause the video if you want longer.
   speak_answer: The correct answer is B. Weyl controls ordered eigenvalue shifts by the perturbation norm.
     Controlling eigenspaces needs additional gap information.
+- title: Repeated eigenvalues
+  question: A real symmetric matrix has a repeated eigenvalue. Does the min–max characterization still
+    apply at those ordered positions?
+  choices:
+  - Yes; repeated values are allowed.
+  - No; every eigenvalue must be distinct.
+  - Only if every eigenvalue is zero.
+  correct: 0
+  explanation: The weighted-average and subspace-intersection arguments do not require distinct eigenvalues.
+  think_seconds: 5
+  speak_question: Question 3. A real symmetric matrix has a repeated eigenvalue. Does the min–max characterization
+    still apply at those ordered positions? A, Yes; repeated values are allowed. B, No; every eigenvalue
+    must be distinct. C, Only if every eigenvalue is zero. You have five seconds. Pause for longer if
+    needed.
+  speak_answer: The answer is A. The weighted-average and subspace-intersection arguments do not require
+    distinct eigenvalues.
+- title: Values or directions?
+  question: A symmetric perturbation has operator norm at most epsilon. What does Weyl alone control?
+  choices:
+  - The change in every ordered eigenvalue.
+  - A fixed choice of every eigenvector, even at repeated eigenvalues.
+  - The entries of every eigenbasis matrix.
+  correct: 0
+  explanation: Eigenvalue shifts have a uniform bound. Eigenspace control needs suitable separation; individual
+    basis choices introduce further freedom.
+  think_seconds: 5
+  speak_question: Question 4. A symmetric perturbation has operator norm at most epsilon. What does Weyl
+    alone control? A, The change in every ordered eigenvalue. B, A fixed choice of every eigenvector,
+    even at repeated eigenvalues. C, The entries of every eigenbasis matrix. You have five seconds. Pause
+    for longer if needed.
+  speak_answer: The answer is A. Eigenvalue shifts have a uniform bound. Eigenspace control needs suitable
+    separation; individual basis choices introduce further freedom.

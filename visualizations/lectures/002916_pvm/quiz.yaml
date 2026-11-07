@@ -6,32 +6,61 @@ questions:
   - In vector norm after applying them to each fixed vector.
   - Only entrywise in a chosen finite matrix basis.
   correct: 1
-  explanation: Strong additivity is vectorwise norm convergence. Operator-norm convergence
-    can fail, as with coordinate cutoffs.
-  think_seconds: 8
-  speak_question: 'First question. How do partial projection sums converge for disjoint
-    measurable sets? A: in operator norm for every PVM. B: in vector norm after applying
-    them to each fixed vector. Or C: only entrywise in a chosen finite matrix basis.
-    Take eight seconds.'
-  speak_answer: 'B is correct. The convergence is strong: fix the vector, then take
-    its norm limit. The coordinate-cutoff example shows why operator-norm convergence
-    cannot be assumed.'
+  explanation: Strong additivity is vectorwise norm convergence. Operator-norm convergence can fail, as
+    with coordinate cutoffs.
+  think_seconds: 5
+  speak_question: 'First question. How do partial projection sums converge for disjoint measurable sets?
+    A: in operator norm for every PVM. B: in vector norm after applying them to each fixed vector. Or
+    C: only entrywise in a chosen finite matrix basis. Take five seconds.'
+  speak_answer: 'B is correct. The convergence is strong: fix the vector, then take its norm limit. The
+    coordinate-cutoff example shows why operator-norm convergence cannot be assumed.'
 - title: Projections and operator domains
   question: A is unbounded and E(B) is a spectral projection. Which statement is correct?
   choices:
   - Every vector is automatically in the domain of A.
   - E(B) is also unbounded whenever B is unbounded.
-  - E(B) is bounded; a bounded spectral window additionally puts its entire range
-    in the domain of A.
+  - E(B) is bounded; a bounded spectral window additionally puts its entire range in the domain of A.
   correct: 2
-  explanation: Every spectral projection is bounded. Bounded spectral support controls
-    the weighted second moment needed for the operator domain.
-  think_seconds: 8
-  speak_question: 'Second question. Which statement about an unbounded A and its spectral
-    projection E of B is correct? A: every vector is automatically in the domain of
-    A. B: the projection is also unbounded whenever B is unbounded. Or C: the projection
-    is bounded, and a bounded spectral window additionally puts its entire range in
-    the domain of A. Take eight seconds.'
-  speak_answer: C is correct. A spectral projection is bounded and everywhere defined.
-    Bounding the selected spectral values also makes every projected vector belong
-    to the domain of A.
+  explanation: Every spectral projection is bounded. Bounded spectral support controls the weighted second
+    moment needed for the operator domain.
+  think_seconds: 5
+  speak_question: 'Second question. Which statement about an unbounded A and its spectral projection E
+    of B is correct? A: every vector is automatically in the domain of A. B: the projection is also unbounded
+    whenever B is unbounded. Or C: the projection is bounded, and a bounded spectral window additionally
+    puts its entire range in the domain of A. Take five seconds.'
+  speak_answer: C is correct. A spectral projection is bounded and everywhere defined. Bounding the selected
+    spectral values also makes every projected vector belong to the domain of A.
+- title: Repeated spectral value
+  question: A self-adjoint matrix has a two-dimensional eigenspace for one eigenvalue. A spectral set
+    contains that eigenvalue. What does its spectral projection keep?
+  choices:
+  - One arbitrarily chosen vector from that eigenspace.
+  - The whole eigenspace.
+  - No part of a repeated eigenspace.
+  correct: 1
+  explanation: Spectral selection depends on the spectral value and keeps its entire eigenspace, independent
+    of a chosen basis.
+  think_seconds: 5
+  speak_question: Question 3. A self-adjoint matrix has a two-dimensional eigenspace for one eigenvalue.
+    A spectral set contains that eigenvalue. What does its spectral projection keep? A, One arbitrarily
+    chosen vector from that eigenspace. B, The whole eigenspace. C, No part of a repeated eigenspace.
+    You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is B. Spectral selection depends on the spectral value and keeps its entire
+    eigenspace, independent of a chosen basis.
+- title: Vectorwise versus uniform
+  question: On square-summable sequences, P n keeps the first n coordinates. Which statement holds?
+  choices:
+  - P n converges to identity on every fixed vector, but the operator norm of identity minus P n stays
+    one.
+  - The operator norm of identity minus P n tends to zero.
+  - Some fixed square-summable vector has a tail whose norm never tends to zero.
+  correct: 0
+  explanation: Every fixed vector has a vanishing squared-summable tail, but there is always another unit
+    coordinate vector beyond the cutoff.
+  think_seconds: 5
+  speak_question: Question 4. On square-summable sequences, P n keeps the first n coordinates. Which statement
+    holds? A, P n converges to identity on every fixed vector, but the operator norm of identity minus
+    P n stays one. B, The operator norm of identity minus P n tends to zero. C, Some fixed square-summable
+    vector has a tail whose norm never tends to zero. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is A. Every fixed vector has a vanishing squared-summable tail, but there is
+    always another unit coordinate vector beyond the cutoff.

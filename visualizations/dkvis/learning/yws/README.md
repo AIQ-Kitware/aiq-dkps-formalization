@@ -4,7 +4,7 @@ Lecture **003875**, stable ID `yws`, deck **`yws-population-gap`**.
 The 27-scene presentation states and proves both conclusions of Theorem 2,
 explains the population-coordinate block structure, and derives the corrected
 rectangular Gram-matrix extension. It includes two checked Lean applications,
-a numerical bonus slide, and two study questions. The complete transcript is
+a numerical bonus slide, and four study questions. The complete transcript is
 about 3,200 words, approximately 22 minutes at 150 words/minute before animation
 and thinking pauses.
 

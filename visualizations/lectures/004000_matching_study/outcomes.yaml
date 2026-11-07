@@ -1,0 +1,7 @@
+facts:
+- An optimal orthogonal transporter attains a finite matching value.
+- Stationarity derives the small blocks rather than assuming them.
+- Local block bounds and attaining constructions prove opposite inequalities.
+route: The cost is the trace norm of the displacement on the entire real ambient space. We will first
+  see the paired-plane savings, then explain why arbitrary mixing cannot do better. Zero angles can be
+  fixed and right angles are allowed.

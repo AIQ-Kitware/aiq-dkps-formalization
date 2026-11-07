@@ -9,10 +9,10 @@ questions:
   correct: 1
   explanation: The coefficient is the difference three minus one. Dividing the residual four by that gap
     gives two.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: First question. The scalar Sylvester equation is three x minus x equals four. Is x A,
-    one; B, two; C, four; or D, eight? You have eight seconds to choose an answer. Pause the video if
-    you want longer.
+    one; B, two; C, four; or D, eight? You have five seconds to choose an answer. Pause the video if you
+    want longer.
   speak_answer: The correct answer is B. The coefficient is the difference three minus one. Dividing the
     residual four by that gap gives two.
 - title: Know what norm bound needs
@@ -26,10 +26,40 @@ questions:
   correct: 2
   explanation: The ordered form gap supplies the dimension-free constant-one estimate. Scalar solvability
     alone does not establish that operator-norm bound.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: Second question. Which hypothesis supplied our constant one operator norm estimate?
     A, different matrix entries; B, only that no eigenvalues coincide; C, an ordered quadratic form gap
-    of size delta; or D, a positive definite residual? You have eight seconds to choose an answer. Pause
+    of size delta; or D, a positive definite residual? You have five seconds to choose an answer. Pause
     the video if you want longer.
   speak_answer: The correct answer is C. The ordered form gap supplies the dimension-free constant-one
     estimate. Scalar solvability alone does not establish that operator-norm bound.
+- title: A missing gap
+  question: In the scalar equation with a minus b multiplied by x equals r, suppose a equals b and r is nonzero. What
+    happens?
+  choices:
+  - There is no solution.
+  - There is a unique solution of norm at most r.
+  - Every x is a solution.
+  correct: 0
+  explanation: The left side is zero for every x, so it cannot equal a nonzero residual.
+  think_seconds: 5
+  speak_question: Question 3. In the scalar equation with a minus b multiplied by x equals r, suppose a equals b and
+    r is nonzero. What happens? A, There is no solution. B, There is a unique solution of norm at most
+    r. C, Every x is a solution. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is A. The left side is zero for every x, so it cannot equal a nonzero residual.
+- title: A positive rescaling
+  question: A and B satisfy an ordered gap delta and X solves A X minus X B equals R. Multiply A, B, and
+    R by the same positive number. What happens?
+  choices:
+  - X remains a solution and the norm guarantee is unchanged.
+  - The guaranteed norm of X must increase by that factor.
+  - X must be multiplied by that factor.
+  correct: 0
+  explanation: Both residual size and gap scale by the same factor, so their ratio stays unchanged.
+  think_seconds: 5
+  speak_question: Question 4. A and B satisfy an ordered gap delta and X solves A X minus X B equals R.
+    Multiply A, B, and R by the same positive number. What happens? A, X remains a solution and the norm
+    guarantee is unchanged. B, The guaranteed norm of X must increase by that factor. C, X must be multiplied
+    by that factor. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is A. Both residual size and gap scale by the same factor, so their ratio stays
+    unchanged.

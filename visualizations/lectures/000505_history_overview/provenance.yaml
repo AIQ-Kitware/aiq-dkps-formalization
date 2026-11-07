@@ -1,6 +1,5 @@
 deck: history-overview
-scope: Historical overview, symbolic illustrations, transcript, publication cards,
-  and review questions.
+scope: Historical overview, symbolic illustrations, transcript, publication cards, and review questions.
 slides:
   initial_source_attribution:
   - models:
@@ -10,8 +9,8 @@ slides:
     - visualizations/dkvis/learning/history/scenes.py
     - visualizations/dkvis/learning/history/publications.yaml
     - visualizations/dkvis/decks/history.py
-    basis: Authored in this session; exact model identity supplied by the user. Mathematical
-      source authorship is recorded separately in sources.md.
+    basis: Authored in this session; exact model identity supplied by the user. Mathematical source authorship
+      is recorded separately in sources.md.
   revisions:
   - date: '2026-11-05'
     models:
@@ -19,6 +18,11 @@ slides:
     sources:
     - visualizations/dkvis/learning/history/scenes.py
     scope: Add an attributed Sylvester portrait and explicit matrix-equation scene.
+  - date: '2026-11-06'
+    models:
+    - GPT-6.1-Sol
+    basis: Added factual opening outcomes, connected recaps, and precise five-second study questions;
+      clarified local motivation and terminology.
 transcript:
   initial_source_attribution:
   - models:
@@ -29,8 +33,8 @@ transcript:
     - visualizations/lectures/000505_history_overview/quiz.yaml
     - visualizations/lectures/000505_history_overview/sources.md
     - visualizations/lectures/000505_history_overview/review-notes.md
-    basis: Authored in this session; exact model identity supplied by the user. Mathematical
-      source authorship is recorded separately in sources.md.
+    basis: Authored in this session; exact model identity supplied by the user. Mathematical source authorship
+      is recorded separately in sources.md.
   revisions:
   - date: '2026-11-05'
     models:
@@ -38,3 +42,8 @@ transcript:
     sources:
     - visualizations/lectures/000505_history_overview/lecture.md
     scope: Introduce Sylvester explicitly and update the closing historical summary.
+  - date: '2026-11-06'
+    models:
+    - GPT-6.1-Sol
+    basis: Added factual opening outcomes, connected recaps, and precise five-second study questions;
+      clarified local motivation and terminology.

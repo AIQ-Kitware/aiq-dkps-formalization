@@ -8,9 +8,9 @@ questions:
   - $(0,0)$
   correct: 0
   explanation: The projection keeps the component along the first axis and removes the perpendicular component.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: First study question. Project the vector two, three onto the first coordinate axis.
-    Is the answer A, two, zero; B, zero, three; C, two, three; or D, zero, zero? You have eight seconds
+    Is the answer A, two, zero; B, zero, three; C, two, three; or D, zero, zero? You have five seconds
     to choose an answer. Pause the video if you want longer.
   speak_answer: The correct answer is A. The projection keeps the component along the first axis and removes
     the perpendicular component.
@@ -23,10 +23,43 @@ questions:
   - $T$ sends every vector into $K$.
   correct: 1
   explanation: Commutation removes the two crossing blocks. Each diagonal block can still act nontrivially.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: Second question. An operator commutes with the projection onto K. Does this mean A,
     the operator is the identity; B, it preserves K and its orthogonal complement; C, it is orthogonal;
-    or D, it sends every vector into K? You have eight seconds to choose an answer. Pause the video if
+    or D, it sends every vector into K? You have five seconds to choose an answer. Pause the video if
     you want longer.
   speak_answer: The correct answer is B. Commutation removes the two crossing blocks. Each diagonal block
     can still act nontrivially.
+- title: Same space, new basis
+  question: Two orthonormal frames Q and Z span the same subspace. What changes when Q is replaced by
+    Z?
+  choices:
+  - The projector changes because every basis vector changed.
+  - The projector stays the same, though the coordinate descriptions may change.
+  - Every vector outside the subspace now projects to zero.
+  correct: 1
+  explanation: The projector records the subspace. An orthogonal change of basis cancels in Q times Q
+    transpose.
+  think_seconds: 5
+  speak_question: Question 3. Two orthonormal frames Q and Z span the same subspace. What changes when
+    Q is replaced by Z? A, The projector changes because every basis vector changed. B, The projector
+    stays the same, though the coordinate descriptions may change. C, Every vector outside the subspace
+    now projects to zero. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is B. The projector records the subspace. An orthogonal change of basis cancels
+    in Q times Q transpose.
+- title: What commutation preserves
+  question: P is an orthogonal projection and T commutes with P. Which conclusion follows?
+  choices:
+  - T preserves both the range of P and its perpendicular complement.
+  - T fixes every vector in the range of P.
+  - T must itself be an orthogonal projection.
+  correct: 0
+  explanation: Commutation prevents transfer between the two spaces. The action within each space can
+    still be nontrivial.
+  think_seconds: 5
+  speak_question: Question 4. P is an orthogonal projection and T commutes with P. Which conclusion follows?
+    A, T preserves both the range of P and its perpendicular complement. B, T fixes every vector in the
+    range of P. C, T must itself be an orthogonal projection. You have five seconds. Pause for longer
+    if needed.
+  speak_answer: The answer is A. Commutation prevents transfer between the two spaces. The action within
+    each space can still be nontrivial.

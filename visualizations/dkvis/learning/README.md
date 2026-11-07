@@ -171,3 +171,13 @@ slide/transcript/video exports also refresh them. A reference deck without an
 authored transcript can set `DeckSpec.learning_resources` to a shared YAML
 path relative to `visualizations/`. Companions belong to the deck and are not
 separate library entries or narration variants.
+
+### Opening conclusions
+
+A lecture can place `dkvis.learning.outcomes.LectureOutcomes` immediately after
+its cover. Author its three factual `facts` and a short `route` in
+`outcomes.yaml` beside the transcript. Include the corresponding
+`LectureOutcomes` section in `lecture.md`; it is ordinary authored narration,
+not text generated from slide labels. `animation_cues.yaml` can tie each focus
+change (source times 0, 1, 2) to the spoken claim without splitting the passage
+into separate TTS calls. Return to those claims in the topic's own recap.

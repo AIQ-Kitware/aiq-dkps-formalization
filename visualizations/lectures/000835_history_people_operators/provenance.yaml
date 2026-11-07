@@ -1,6 +1,6 @@
 deck: history-people-operators
-scope: People-focused historical lecture, transcript, and questions; external image
-  authors remain separately credited.
+scope: People-focused historical lecture, transcript, and questions; external image authors remain separately
+  credited.
 slides:
   initial_source_attribution:
   - models:
@@ -10,8 +10,14 @@ slides:
     - visualizations/dkvis/learning/history_people/scenes.py
     - visualizations/dkvis/learning/history_people/people.yaml
     - visualizations/dkvis/components/attributed_image.py
-    basis: Authored in this session; external images are original third-party works
-      identified in the separate manifest.
+    basis: Authored in this session; external images are original third-party works identified in the
+      separate manifest.
+  revisions:
+  - date: '2026-11-06'
+    models:
+    - GPT-6.1-Sol
+    basis: Added factual opening outcomes, connected recaps, and precise five-second study questions;
+      clarified local motivation and terminology.
 transcript:
   initial_source_attribution:
   - models:
@@ -21,5 +27,11 @@ transcript:
     - visualizations/lectures/000835_history_people_operators/lecture.md
     - visualizations/lectures/000835_history_people_operators/quiz.yaml
     - visualizations/lectures/000835_history_people_operators/sources.md
-    basis: Authored in this session; external images are original third-party works
-      identified in the separate manifest.
+    basis: Authored in this session; external images are original third-party works identified in the
+      separate manifest.
+  revisions:
+  - date: '2026-11-06'
+    models:
+    - GPT-6.1-Sol
+    basis: Added factual opening outcomes, connected recaps, and precise five-second study questions;
+      clarified local motivation and terminology.
