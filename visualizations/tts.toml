@@ -1,5 +1,5 @@
-# Fallback default. Select a machine-local profile in .env (DKVIS_TTS_PROFILE)
-# or override it for one run with --tts-profile NAME.
+# Production narration default (video/scene rendering). The /audio reader
+# independently defaults to Kokoro; set DKVIS_AUDIO_TTS_PROFILE to override.
 profile = "crall-math-dk-v2-breeze-tts2"
 
 [defaults]
@@ -81,12 +81,14 @@ max_chars = 750
 max_words = 110
 
 [profiles.kokoro]
+display_name = "Kokoro"
 narrator_voice = "af_heart"
 # Private host address belongs only in .env.
 endpoint_env = "KOKORO_TTS_ENDPOINT"
+endpoint = "http://127.0.0.1:8880/v1/audio/speech"
 model = "kokoro"
 voice = "af_heart"
-response_format = "wav"
+response_format = "mp3"
 
 [profiles.qwen]
 narrator_voice = "ryan"

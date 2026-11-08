@@ -312,13 +312,57 @@ these controls, so its hints use a small list of tested respellings. This layer
 implements no general grapheme-to-phoneme conversion. Native pronunciation
 controls should be used when an engine and its serving API support them.
 
+## Listen to the 150 draft lectures (on-demand speech)
+
+The audio-only lecture library is at `http://127.0.0.1:8001/audio`, or
+`http://<toothbrush-LAN-IP>:8001/audio` from another device. The browser
+reads the 150 staged Markdown transcripts directly from the repository, with
+no pre-rendered presentation required.
+
+```bash
+cd visualizations
+make serve             # LAN-facing on port 8001; Kokoro selected by default
+make serve PORT=8002   # if port 8001 is in use
+```
+
+The **audio reader defaults to Kokoro**, using `KOKORO_TTS_ENDPOINT` from
+`.env` (currently the host's configured `192.168.222.38:8880` endpoint).
+Choose **Crall Math DK v2 (Breeze)** in the TTS profile selector for the
+existing `crall-math-dk-v2-breeze-tts2` profile at `127.0.0.1:8821`.
+This reader default is independent of `DKVIS_TTS_PROFILE`, which continues
+to control the production lecture/video narration workflow.
+
+For an additional voice already supported by one of those servers, open
+**Register a custom voice**, choose the profile, enter its voice ID and an
+optional display label, then click **Register voice**. The reader remembers
+registered voice IDs in `visualizations/audio-cache/registered-voices.json`;
+registration does not install new models or samples on the upstream TTS server.
+To add a new engine or upstream service, define a profile in `tts.toml`.
+The browser never accepts arbitrary server URLs.
+
+The reader shows a live sentence preview and highlights the estimated spoken
+sentence in the transcript. Click a transcript sentence to seek near its
+position; enable **Auto-scroll transcript** if desired. Sentence positions
+are estimated from page playback progress until timestamped TTS alignments
+are supported. Other controls include page selection, native audio seeking,
+independent synthesis and playback speeds, next-page prefetch, and
+**Cache whole lecture**. MP3 pages are reused by profile, voice, speed,
+transcript text, and endpoint.
+
+The local server proxies TTS requests: remote phones and computers need only
+access port 8001. Use `/api/audio-profiles`, `/api/audio-voices?profile=kokoro`,
+and `/api/audio-health?profile=kokoro` to inspect the current reader configuration.
+The canonical `extract_narration.py` excludes mathematical appendices and
+reference metadata from the spoken input; free learning resources appear below
+the transcript.
+
 ## Browse and watch rendered material
 
 From `visualizations/`, start the media library:
 
 ```bash
-make serve                         # http://127.0.0.1:8000
-make serve PORT=8001                # use another port beside an existing server
+make serve                          # http://127.0.0.1:8001
+make serve PORT=8002                # use another port if occupied
 ```
 
 The page lists videos by narrator, HTML presentations, and PDF handouts. It has

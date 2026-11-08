@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DKPS · Audio lectures</title>
+<style>
+:root{color-scheme:dark;--bg:#101419;--side:#151c23;--panel:#1c2731;--border:#334452;--text:#f0f3f6;--muted:#a9bcc8;--accent:#9bd3fb;--button:#23394a;--warm:#f6d4a2}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}a{color:var(--accent)}h1,h2,p{margin:0}h1{font-size:1.36rem;line-height:1.3}h2{font-size:1.25rem}button,input,select{font:inherit}button,select,input[type=search],input[type=text]{background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:9px;padding:10px 12px}button{cursor:pointer}button:hover:not(:disabled){border-color:var(--accent)}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}button:disabled{opacity:.4;cursor:default}.primary{background:var(--button);border-color:#537d9a}.large{font-size:1.05rem;font-weight:650;padding:15px 19px}.subtle{font-size:.86rem;color:var(--muted)}.eyebrow{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.space{justify-content:space-between}.wrap{min-width:0}header{padding:19px clamp(18px,3vw,38px);display:flex;justify-content:space-between;align-items:center;gap:15px;border-bottom:1px solid var(--border)}main{display:grid;grid-template-columns:minmax(245px,330px) minmax(0,1fr);min-height:calc(100vh - 88px)}aside{border-right:1px solid var(--border);background:var(--side);padding:20px;min-width:0}#search{width:100%;margin:17px 0 10px}#list{list-style:none;margin:0;padding:0;overflow-y:auto;max-height:calc(100vh - 210px)}#list button{width:100%;text-align:left;padding:12px;margin:4px 0;background:none}#list button[aria-current="true"]{border-color:var(--accent);background:#203343}#list .number{font-size:.76rem;font-variant-numeric:tabular-nums;color:var(--accent);display:block;margin-bottom:4px}#list .name{display:block;line-height:1.3;font-weight:550}#list .detail{display:block;font-size:.78rem;margin-top:6px;color:var(--muted)}article{padding:22px clamp(18px,4vw,50px);min-width:0;max-width:1250px;width:100%;margin:auto}.audio-head{margin:4px 0 20px}#lectureTitle{font-size:clamp(1.5rem,2vw,2.05rem);margin:8px 0}.reader{background:var(--side);border:1px solid var(--border);border-radius:15px;padding:clamp(16px,3vw,26px);margin:0 0 18px}.page-nav{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}.page-nav button{font-size:1.4rem;min-width:60px}.page-bar{text-align:center;min-width:0}.page-bar strong{display:block;margin-bottom:6px}input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}.playback{display:flex;gap:11px;align-items:center;flex-wrap:wrap;margin:18px 0 8px}#play{min-width:158px}audio{display:block;width:100%;height:46px;margin:12px 0 3px}#status{min-height:22px;color:var(--muted);font-size:.86rem;white-space:pre-wrap}#status.error{color:#ffb9a9}.options{border-top:1px solid var(--border);padding-top:14px;margin-top:14px}.options label{display:inline-flex;gap:7px;align-items:center;font-size:.87rem;color:var(--muted)}.options input[type=text]{width:132px}.options select{min-width:72px}.options input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px}.control-grid{display:flex;gap:11px 20px;flex-wrap:wrap;margin:10px 0 4px}.control-grid label{display:flex;gap:7px;align-items:center}.live-caption{background:#203343;border:1px solid #365974;border-radius:10px;padding:12px 15px;margin:13px 0 4px;min-height:72px}.live-caption p{margin-top:5px;line-height:1.5}.speech-segment{border-radius:3px;cursor:pointer}.speech-segment:hover{background:#233e51}.speech-segment.active{background:#46637a;color:white;box-decoration-break:clone;-webkit-box-decoration-break:clone}.transcript{font-size:1.03rem;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere;padding:12px 0 30px;max-width:74ch}details{border-top:1px solid var(--border);margin-top:12px;padding:18px 0}summary{cursor:pointer;font-weight:650}#references li{margin:12px 0}#references .subtle{display:block;line-height:1.5;margin-top:4px}#loading{margin:80px auto;text-align:center;color:var(--muted)}#empty{text-align:center;padding:90px 20px;color:var(--muted)}[hidden]{display:none!important}@media(max-width:850px){main{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--border);padding:13px 16px}#list{display:flex;gap:10px;overflow-x:auto;max-height:none;padding-bottom:5px}#list li{flex:0 0 205px}#list button{height:100%;margin:0}article{padding:16px}.reader{position:relative}header{padding:16px}#play{flex:1}.page-nav{gap:6px}.page-nav button{min-width:46px;padding:12px 7px}}
+</style>
+</head>
+<body>
+<header><div><div class="eyebrow">Davis–Kahan · Listen</div><h1>Audio lecture library</h1><p class="subtle">150 repository transcripts · speech generated when requested</p></div><a href="/">Presentations &amp; media</a></header>
+<main>
+<aside aria-label="Lecture selection">
+<div class="row space"><strong>Lectures</strong><span id="count" class="subtle"></span></div>
+<input id="search" type="search" aria-label="Filter lectures" placeholder="Find a topic or number…">
+<ul id="list"></ul>
+</aside>
+<article>
+<div id="loading">Loading lecture catalog…</div>
+<div id="empty" hidden>Choose a lecture from the library.</div>
+<div id="content" hidden>
+<div class="audio-head"><div class="eyebrow" id="lectureNumber"></div><h2 id="lectureTitle"></h2><p class="subtle" id="lectureMeta"></p></div>
+<div class="reader">
+<div class="page-nav"><button id="prev" title="Select previous page" aria-label="Previous page">◀</button><div class="page-bar"><strong id="pageLabel">Page 1</strong><input id="pages" type="range" min="1" max="1" value="1" aria-label="Select starting page"></div><button id="next" title="Select next page" aria-label="Next page">▶</button></div>
+<div class="playback"><button class="large primary" id="play">▶ Play page</button><button id="generateAll" title="Generate and cache each page for offline replay from this server">Cache whole lecture</button><span class="subtle" id="cacheCount"></span></div>
+<audio id="audio" controls preload="metadata" aria-label="Lecture audio player"></audio>
+<div class="live-caption" aria-label="Text being read">
+  <div class="row space"><strong>Follow along</strong><span class="subtle" id="readingPosition">Page text</span></div>
+  <p id="liveText" aria-live="off">Select a lecture to read along.</p>
+</div>
+<div id="status" role="status" aria-live="polite">Choose a page, then press Play.</div>
+<div class="options"><div class="control-grid"><label>TTS profile <select id="profile" aria-label="Speech provider and profile"></select></label><label>Voice <input type="text" id="voice" list="voices" spellcheck="false" autocomplete="off"><datalist id="voices"></datalist></label><label>Speech speed <select id="ttsSpeed"><option value="0.75">0.75×</option><option value="0.9">0.9×</option><option value="1" selected>1×</option><option value="1.1">1.1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option></select></label><label>Playback speed <select id="rate"><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="1.75">1.75×</option><option value="2">2×</option></select></label></div><div class="control-grid"><label><input type="checkbox" id="autoNext" checked> Continue to next page</label><label><input type="checkbox" id="prefetch" checked> Prepare next page</label><label><input type="checkbox" id="followText"> Auto-scroll transcript</label></div><div class="subtle">Speech speed changes the cached recording. Playback speed changes how fast the browser plays it.</div>
+<details id="registerPanel"><summary>Register a custom voice</summary>
+<p class="subtle">Use a voice ID already installed on the selected TTS server. This saves it to the reader's voice list; it does not create a voice model.</p>
+<div class="control-grid"><label>Voice ID <input id="registerId" type="text" placeholder="my_voice" maxlength="80" spellcheck="false"></label>
+<label>Display name <input id="registerLabel" type="text" placeholder="Optional name" maxlength="80"></label>
+<button id="registerVoice" type="button">Register voice</button></div><p id="registerMessage" class="subtle" role="status"></p>
+</details></div></div>
+</div>
+<div class="row space"><strong>Transcript · selected page</strong><span id="textCount" class="subtle"></span></div><p class="subtle">Select a sentence to seek within the page. Position is estimated from playback progress.</p><div id="transcript" class="transcript"></div>
+<details id="referencePanel" hidden><summary>Related free learning materials</summary><ul id="references"></ul></details>
+</div>
+</article>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const audio = $('audio');
+const state = {items:[], doc:null, page:0, token:0, audioId:'', cacheJob:0, playing:false, profile:null, voiceRequest:0, segments:[], sentenceNodes:[], activeSentence:-1};
+const saved = (key, fallback) => {try {return JSON.parse(localStorage.getItem('dkps-audio-'+key)) ?? fallback} catch {return fallback}};
+const remember = (key, val) => {try {localStorage.setItem('dkps-audio-'+key, JSON.stringify(val))} catch {}};
+const sleep = ms => new Promise(ok => setTimeout(ok,ms));
+function setStatus(message, error=false){$('status').textContent=message; $('status').classList.toggle('error',error)}
+async function api(path, options){const res=await fetch(path,options); if(!res.ok){let body;try{body=await res.json()}catch{} throw Error(body?.detail || 'HTTP '+res.status)} return res.json()}
+function settings(){return {profile:$('profile').value,voice:$('voice').value.trim(),speed:Number($('ttsSpeed').value)}}
+function query(){const p=new URLSearchParams(settings());return p.toString()}
+function pageUrl(page){return `/api/audio-lectures/${state.doc.id}/pages/${page}`}
+function highlight(){document.querySelectorAll('#list button').forEach(b=>b.setAttribute('aria-current',String(b.dataset.id===state.doc?.id)))}
+function renderList(){const word=$('search').value.trim().toLocaleLowerCase();const rows=state.items.filter(x=>(x.id+' '+x.title).toLocaleLowerCase().includes(word));$('count').textContent=rows.length+'/'+state.items.length;$('list').replaceChildren();for(const row of rows){const li=document.createElement('li');const b=document.createElement('button');b.dataset.id=row.id;for(const [cls,text] of [['number',row.id],['name',row.title],['detail',`${row.page_count} pages · ${row.estimated_minutes} min reading estimate`]]){const span=document.createElement('span');span.className=cls;span.textContent=text;b.append(span)}b.onclick=()=>selectLecture(row.id);li.append(b);$('list').append(li)}highlight()}
+function speechSegments(text){
+  // Keep punctuation and spacing exactly as extracted for TTS.
+  const breaks=/[.!?]["”’)]?\s+(?=[A-Z0-9“"(])|\n\s*\n/g;
+  const segments=[]; let start=0; let match;
+  while((match=breaks.exec(text))!==null){
+    const end=breaks.lastIndex;
+    if(end>start){segments.push(text.slice(start,end));start=end}
+  }
+  if(start<text.length)segments.push(text.slice(start));
+  return segments.length?segments:[text];
+}
+function segmentWeight(text){return Math.max(1,text.replace(/\s+/g,'').length)}
+function showTranscriptPage(text){
+  const root=$('transcript');root.replaceChildren();
+  state.segments=speechSegments(text);state.sentenceNodes=[];state.activeSentence=-1;
+  for(let i=0;i<state.segments.length;i++){
+    const node=document.createElement('span');node.className='speech-segment';
+    node.textContent=state.segments[i];node.dataset.sentence=String(i);
+    node.title='Seek approximately to this sentence';
+    node.onclick=()=>seekSentence(i);
+    root.append(node);state.sentenceNodes.push(node);
+  }
+  updateTranscriptFocus();
+}
+function sentenceAtProgress(progress){
+  const weights=state.segments.map(segmentWeight);
+  const total=weights.reduce((sum,n)=>sum+n,0);
+  let elapsed=Math.min(1,Math.max(0,progress))*total;
+  for(let i=0;i<weights.length;i++){
+    elapsed-=weights[i];if(elapsed<0)return i;
+  }
+  return Math.max(0,weights.length-1);
+}
+function sentenceStartFraction(index){
+  const weights=state.segments.map(segmentWeight),total=weights.reduce((sum,n)=>sum+n,0);
+  return weights.slice(0,index).reduce((sum,n)=>sum+n,0)/total;
+}
+function seekSentence(index){
+  if(!Number.isFinite(audio.duration)||audio.duration<=0){
+    setStatus('Start playing this page before seeking within a sentence.');return;
+  }
+  audio.currentTime=Math.min(audio.duration-0.01,audio.duration*sentenceStartFraction(index));
+  updateTranscriptFocus();
+}
+function updateTranscriptFocus(){
+  if(!state.segments.length)return;
+  const valid=Number.isFinite(audio.duration)&&audio.duration>0;
+  const progress=valid?audio.currentTime/audio.duration:0;
+  const index=sentenceAtProgress(progress);
+  if(index!==state.activeSentence){
+    const previous=state.sentenceNodes[state.activeSentence];if(previous)previous.classList.remove('active');
+    const current=state.sentenceNodes[index];if(current){
+      current.classList.add('active');
+      if($('followText').checked && !audio.paused)current.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+    state.activeSentence=index;
+    $('liveText').textContent=state.segments[index].trim();
+  }
+  $('readingPosition').textContent=valid?`Estimated sentence ${index+1} of ${state.segments.length}`:`Sentence ${index+1} of ${state.segments.length}`;
+}
+function selectPage(index, start=false){if(!state.doc)return;index=Math.max(0,Math.min(state.doc.pages.length-1,index));state.token++;state.page=index;state.playing=false;audio.pause();audio.removeAttribute('src');audio.load();state.audioId='';$('pages').value=String(index+1);$('pageLabel').textContent=`Page ${index+1} of ${state.doc.pages.length}`;$('prev').disabled=index===0;$('next').disabled=index===state.doc.pages.length-1;showTranscriptPage(state.doc.pages[index]);$('textCount').textContent=`${state.doc.pages[index].length} characters`;$('play').textContent='▶ Play page';setStatus('Page selected. Press Play to generate or replay.');remember('page-'+state.doc.id,index);if(start)playPage()}
+async function selectLecture(id){state.token++;state.cacheJob++;$('generateAll').disabled=false;$('cacheCount').textContent='';state.playing=false;audio.pause();audio.removeAttribute('src');audio.load();$('loading').hidden=false;$('content').hidden=true;$('empty').hidden=true;const token=state.token;try{const doc=await api('/api/audio-lectures/'+encodeURIComponent(id));if(token!==state.token)return;state.doc=doc;remember('lecture',id);$('lectureNumber').textContent='Lecture '+id;$('lectureTitle').textContent=doc.title;$('lectureMeta').textContent=`${doc.words.toLocaleString()} words · ${doc.page_count} speech pages · approximately ${doc.estimated_minutes} minutes of narration`;$('pages').max=String(doc.page_count);$('loading').hidden=true;$('content').hidden=false;
+const panel=$('referencePanel'),list=$('references');list.replaceChildren();panel.hidden=!doc.related_resources?.length;
+for(const source of doc.related_resources||[]){const li=document.createElement('li'),link=document.createElement('a');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.title;li.append(link);const why=document.createElement('span');why.className='subtle';why.textContent=source.reason;li.append(why);list.append(li)}
+selectPage(Number(saved('page-'+id,0))||0);highlight();}catch(err){if(token===state.token){$('loading').textContent='Could not load lecture: '+err.message}}}
+async function ensurePage(lectureId, page, config, onStatus=()=>{}){
+  const qs=new URLSearchParams(config).toString(); const target=`/api/audio-lectures/${lectureId}/pages/${page}`;
+  let status=await api(target+'?'+qs);
+  if(status.state==='ready')return status.url;
+  status=await api(target+'/render',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(config)});
+  for(let attempts=0;attempts<500;attempts++){
+    if(status.state==='ready')return status.url;
+    if(status.state==='error')throw Error(status.error||'Speech generation failed');
+    onStatus(status.state);
+    await sleep(700);
+    status=await api(target+'?'+qs);
+  }
+  throw Error('Speech generation has not completed. Try the page again.');
+}
+async function playPage(){if(!state.doc)return;const docId=state.doc.id,index=state.page,config=settings(),token=++state.token;const identifier=JSON.stringify([docId,index,config]);if(state.audioId===identifier && audio.src){try{await audio.play();state.playing=true;$('play').textContent='❚❚ Pause'}catch(err){setStatus('Playback: '+err.message,true)}return}state.playing=true;$('play').disabled=true;setStatus('Preparing speech…');try{const url=await ensurePage(docId,index,config,word=>{if(token===state.token)setStatus(word==='queued'?'Queued for speech generation…':'Generating speech…')});if(token!==state.token||state.doc?.id!==docId)return;audio.src=url;audio.playbackRate=Number($('rate').value);state.audioId=identifier;await audio.play();if(token!==state.token)return;$('play').textContent='❚❚ Pause';setStatus('Playing page '+(index+1));if($('prefetch').checked && index+1<state.doc.pages.length){ensurePage(docId,index+1,config).catch(()=>{});}}catch(err){if(token===state.token){state.playing=false;setStatus(err.message,true);$('play').textContent='▶ Retry page'}}finally{if(token===state.token)$('play').disabled=false}}
+function togglePlay(){if(!state.doc)return;if(!audio.paused&&audio.src){audio.pause();state.playing=false;$('play').textContent='▶ Resume';return}playPage()}
+async function cacheAll(){if(!state.doc)return;const job=++state.cacheJob,doc=state.doc,config=settings();$('generateAll').disabled=true;for(let i=0;i<doc.pages.length;i++){if(job!==state.cacheJob||doc!==state.doc)break;try{await ensurePage(doc.id,i,config);$('cacheCount').textContent=`Cached ${i+1}/${doc.pages.length} pages`;}catch(err){setStatus('Cache operation stopped at page '+(i+1)+': '+err.message,true);break}}if(job===state.cacheJob){$('generateAll').disabled=false;if(!$('status').classList.contains('error'))setStatus('Available pages are cached on this server.')}}
+async function refreshVoices(profile, restore=true){
+  const token=++state.voiceRequest;
+  const result=await api('/api/audio-voices?'+new URLSearchParams({profile}));
+  if(token!==state.voiceRequest || $('profile').value!==profile)return;
+  const list=$('voices');list.replaceChildren();
+  const labels=new Map((result.registered||[]).map(item=>[item.voice,item.label]));
+  for(const name of result.voices){const option=document.createElement('option');option.value=name;option.label=labels.get(name)||name;list.append(option)}
+  $('voice').value=restore?saved('voice-'+profile,result.default_voice):result.default_voice;
+  state.profile=profile;
+  api('/api/audio-health?'+new URLSearchParams({profile})).then(health=>{
+    if($('profile').value===profile&&health.state!=='reachable')setStatus('Speech server unavailable at '+health.upstream+'. Check the selected TTS profile.',true);
+  }).catch(()=>{});
+}
+async function switchProfile(profile){
+  remember('profile',profile);
+  state.cacheJob++;$('generateAll').disabled=false;$('cacheCount').textContent='';
+  if(state.doc)selectPage(state.page);
+  try{await refreshVoices(profile)}catch(err){setStatus('Could not load voices: '+err.message,true)}
+}
+$('profile').onchange=()=>switchProfile($('profile').value);
+$('registerVoice').onclick=async()=>{
+  const button=$('registerVoice'),output=$('registerMessage');button.disabled=true;output.textContent='Registering…';
+  const profile=$('profile').value,voice=$('registerId').value.trim(),label=$('registerLabel').value.trim();
+  try{await api('/api/audio-voices/register',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({profile,voice,label:label||voice})});
+    await refreshVoices(profile,false);$('voice').value=voice;remember('voice-'+profile,voice);
+    output.textContent=`Registered ${voice} with ${profile}.`;
+    if(state.doc)selectPage(state.page);
+  }catch(err){output.textContent=err.message}finally{button.disabled=false}
+};
+$('search').oninput=renderList;$('prev').onclick=()=>selectPage(state.page-1);$('next').onclick=()=>selectPage(state.page+1);$('pages').oninput=()=>selectPage(Number($('pages').value)-1);$('play').onclick=togglePlay;$('generateAll').onclick=cacheAll;
+audio.addEventListener('timeupdate',updateTranscriptFocus);audio.addEventListener('seeked',updateTranscriptFocus);audio.addEventListener('loadedmetadata',updateTranscriptFocus);
+audio.onended=()=>{state.playing=false;$('play').textContent='▶ Play page';if($('autoNext').checked&&state.doc&&state.page<state.doc.pages.length-1){selectPage(state.page+1,true)}else setStatus('Page finished.')};audio.onpause=()=>{if(audio.src&&!audio.ended){$('play').textContent='▶ Resume'}};audio.onplay=()=>{$('play').textContent='❚❚ Pause'};audio.onerror=()=>setStatus('The browser could not play this audio page.',true);
+for(const id of ['voice','ttsSpeed']){$(id).addEventListener('change',()=>{remember(id==='voice'?'voice-'+(state.profile||'default'):id,$(id).value);state.cacheJob++;$('generateAll').disabled=false;$('cacheCount').textContent='';if(state.doc)selectPage(state.page)})}for(const id of ['rate','autoNext','prefetch','followText']){$(id).addEventListener('change',()=>{remember(id,$(id).type==='checkbox'?$(id).checked:$(id).value);if(id==='rate')audio.playbackRate=Number($('rate').value)})}
+async function init(){
+  for(const id of ['ttsSpeed','rate']){$(id).value=saved(id,'1')};
+  for(const id of ['autoNext','prefetch'])$(id).checked=Boolean(saved(id,true));
+  $('followText').checked=Boolean(saved('followText',false));
+  try{
+    const [data,profiles]=await Promise.all([api('/api/audio-lectures'),api('/api/audio-profiles')]);
+    state.items=data.items;
+    const select=$('profile');
+    for(const row of profiles.profiles){const option=document.createElement('option');option.value=row.id;option.textContent=row.label;select.append(option)}
+    const preferred=saved('profile',profiles.default_profile);
+    select.value=profiles.profiles.some(row=>row.id===preferred)?preferred:profiles.default_profile;
+    await refreshVoices(select.value);
+    renderList();$('loading').hidden=true;$('empty').hidden=false;
+    const remembered=saved('lecture',null);
+    if(state.items.length)await selectLecture(state.items.some(x=>x.id===remembered)?remembered:state.items[0].id);
+  }catch(err){$('loading').textContent='Could not load lectures: '+err.message}
+}
+init();
+</script>
+</body>
+</html>
