@@ -6,7 +6,7 @@
 
 # What can two projections tell us about a whole space?
 
-We have learned to compare subspaces by their principal angles., we discovered that genuine intermediate angles live in two-dimensional planes, where both orthogonal projections become simple cosine–sine matrices.
+Principal angles describe how two subspaces overlap in paired directions. For an angle strictly between zero and ninety degrees, the corresponding two-dimensional plane carries simple cosine–sine matrices for the orthogonal projections. Those planes, however, are only part of the geometry of an arbitrary pair of subspaces.
 
 But imagine a pair of subspaces with different dimensions. Some directions might belong to both. Some might belong to the first and be perpendicular to the second. Others might do the reverse. And the ambient space might contain directions belonging to neither subspace.
 
@@ -14,7 +14,7 @@ Those pieces are not captured by a list of strictly intermediate angles. We need
 
 Halmos's two-projection decomposition gives us that organization. It separates the parts where the projections behave in the simplest possible way from the part where there is genuine, nontrivial geometry.
 
-Today we will derive this structure in finite dimensions, describe its operator meaning, and identify the new issues that appear in a general Hilbert space.
+The decomposition separates four elementary intersections from a remaining generic part. In finite dimensions the generic part splits into principal planes; in infinite dimensions it may have continuous angle spectrum, so a list of discrete angles need not describe it.
 
 ## Four places a vector can live
 

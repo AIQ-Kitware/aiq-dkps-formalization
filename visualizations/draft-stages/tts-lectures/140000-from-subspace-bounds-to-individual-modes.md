@@ -82,7 +82,7 @@ Divide that individual residual by the appropriate gap. This yields sharper indi
 
 Those estimates are statements about the angle between each fixed trial vector and the exact low spectral plane. To turn such information into pairing with an individual exact eigenvector, we still need internal spectral separation and the Schur argument. The full eigenvector comparison supplies that extra step by controlling the effective two-by-two coupling relative to the Ritz gap.
 
-The lesson is to keep three angles distinct: the angle of a whole subspace, the angle of one trial vector to that subspace, and the angle between a named trial vector and a named exact eigenvector.
+Three angles occur in this calculation: the angle of a whole subspace, the angle of one trial vector to that subspace, and the angle between a named trial vector and a named exact eigenvector.
 
 ## General method
 

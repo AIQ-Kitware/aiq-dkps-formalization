@@ -6,7 +6,7 @@
 
 # Solve a Sylvester equation without self-adjointness
 
-Our recent Sylvester proofs used self-adjoint operators. That allowed us to talk about real spectra, unitary groups, and ordered semigroups. Today we remove the self-adjoint assumption and replace it with a complex-analytic construction.
+For self-adjoint Sylvester coefficients, an ordered real spectral gap produces an integral of decaying semigroups. Without self-adjointness there is no such spectral order. A complex contour of resolvents provides a different construction that requires only disjoint spectra of bounded operators.
 
 The central question is whether the spectra of two bounded operators are disjoint. For bounded complex operators on Banach spaces, this is enough for the Sylvester operator to have a bounded inverse. The method is associated with Rosenblum, and its engine is a contour integral of resolvents.
 

@@ -12,7 +12,7 @@ Many applications apply a function to an operator rather than asking for a parti
 
 For a self-adjoint finite matrix A, write its spectral decomposition as a sum of eigenvalues times orthogonal spectral projections. To define f of A, keep the projections and apply the scalar function f to the eigenvalues. If A has eigenvalue lambda on a subspace, f of A acts there by multiplication by f of lambda.
 
-The definition is independent of which orthonormal basis we pick inside a repeated eigenspace. In infinite dimensions, bounded Borel functional calculus replaces the finite sum with a spectral integral. We already built that construction in the earlier foundations unit.
+The definition is independent of which orthonormal basis we pick inside a repeated eigenspace. In infinite dimensions, bounded Borel functional calculus replaces the finite sum with a spectral integral. For a bounded self-adjoint operator, the Borel functional calculus integrates the chosen bounded measurable function against the projection-valued spectral measure. It therefore extends the finite eigenvalue formula without requiring an eigenvector basis.
 
 Now perturb A to B, where B equals A plus H. We want to estimate the operator norm of f of B minus f of A, or perhaps a unitarily invariant norm. A naive guess would be: if f is Lipschitz as a scalar function, with constant L, then the operator difference should be at most L times the norm of H.
 
@@ -78,7 +78,7 @@ This explains, at a structural level, why scalar Lipschitz continuity is not the
 
 The original Davis-Kahan paper asks for useful classes of real functions f and estimates comparing f of A with f of a perturbed operator. The projection-valued step function provides one model: its projection identities are rigorous, while a broad perturbation theory for arbitrary function classes is a separate question.
 
-You should leave this lecture able to reproduce three proofs: the polynomial telescoping formula, the resolvent identity, and the step-function identification with spectral projections. Also remember the counterexample at a moving spectral cut and the distinction between scalar and operator Lipschitz behavior.
+The polynomial telescoping identity, the resolvent identity, and the identification of spectral projections as step functions give three concrete comparison tools. Their hypotheses differ, and the moving spectral-cut example shows why scalar Lipschitz regularity alone cannot control every operator function.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -10,7 +10,7 @@ The measure of a spectral set B was the squared length of the projection of x on
 
 But an operator is determined by what happens between two potentially different vectors. If we only know the squared lengths of spectral pieces, can we recover inner products involving an arbitrary pair x and y?
 
-Yes. The key is the polarization identity from the beginning of the course. Today we will reconstruct the missing cross terms, explain why they form complex measures, and see how those measures let us define the Borel functional calculus.
+Yes. The key is the complex polarization identity: inner products can be reconstructed from the squared norms of sums of vectors and their multiples by the imaginary unit. Today we will reconstruct the missing cross terms, explain why they form complex measures, and see how those measures let us define the Borel functional calculus.
 
 ## Begin with the diagonal
 

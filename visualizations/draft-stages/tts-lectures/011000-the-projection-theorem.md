@@ -4,9 +4,9 @@
 
 Suppose you stand above a flat floor and want the point on the floor closest to you. You drop a perpendicular. The nearest point is where that perpendicular meets the floor.
 
-In a Hilbert space, our floor may be an infinite-dimensional subspace, and a vector might be a function or an infinite sequence. We can still ask for the closest point in that subspace. Today we will prove that it exists when the subspace is closed, prove that it is unique, and discover that nearest-point approximation and orthogonality are two descriptions of exactly the same thing.
+In a Hilbert space, our floor may be an infinite-dimensional subspace, and a vector might be a function or an infinite sequence. We can still ask for the closest point in that subspace. For a closed subspace of a Hilbert space, the closest point exists and is unique. Its defining property is orthogonality of the approximation error to the subspace.
 
-This is the projection theorem. We will not treat the result as obvious from the picture, because a picture cannot prove that an infinite-dimensional minimizer exists.
+This is the projection theorem. In infinite dimensions, the existence of a nearest point requires a completeness argument; geometric intuition alone does not establish the minimizer.
 
 ## A small example first
 
@@ -28,11 +28,11 @@ In other words, the best possible error exists as a number, but no allowed appro
 
 Let H be a Hilbert space and M a closed linear subspace. Choose any vector x in H. We want to minimize the distance from x to points in M.
 
-Call the infimum of these distances d. We use infimum rather than minimum because we have not yet proved that an actual closest point exists. Because distances are nonnegative and M contains zero, d is a finite nonnegative number.
+Call the infimum of these distances d. The infimum is defined before we establish that it is attained by a closest point. Because distances are nonnegative and M contains zero, d is a finite nonnegative number.
 
 By the definition of infimum, we can choose a sequence of points in M whose distances to x approach d. Call the points p one, p two, and so on. They are increasingly good approximations. But being good approximations does not automatically mean the points themselves converge. We must establish that.
 
-Here the parallelogram identity from the inner-product lecture becomes decisive.
+Here the parallelogram identity becomes decisive: the squared length of p plus q, added to the squared length of p minus q, equals twice the squared length of p plus twice the squared length of q. Applied to two approximate minimizers, it forces their midpoint behavior to control the distance between them.
 
 Take two of our approximants, p and q. Look at the vectors from each approximant toward x. Their difference is q minus p. Their average is the vector from the midpoint of p and q toward x.
 

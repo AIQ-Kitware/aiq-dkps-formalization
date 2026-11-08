@@ -20,7 +20,7 @@ Starting in E, apply A and then A star. This gives the operator A star A acting 
 
 Starting in F, apply A star and then A. This gives A A star acting on F. We call it the left Gram operator, or the target Gram operator.
 
-The names right and left follow the order of multiplication: A star A has the adjoint on the left and A on the right. But do not let the labels obscure the important point. These operators have different domains. We cannot simply say they are equal.
+The names right and left follow the order of multiplication: A star A has the adjoint on the left and A on the right. The operators act on different spaces, so equality between them is generally not even a well-typed assertion.
 
 Why should we care about two such products? Because they let us study a rectangular map using quadratic forms and eigenvalues, which we already know how to interpret in finite-dimensional spaces.
 
@@ -48,7 +48,7 @@ Calculate A A star. It acts on three-dimensional target space. Its diagonal entr
 
 The matrices have different sizes. Their eigenvalue lists are not identical if we include zeros: the target Gram has one additional zero. But the positive eigenvalues, nine and four, agree perfectly.
 
-You can already guess the underlying length scales. Along the two preferred input directions, A stretches by three and two. The squares of these stretches are nine and four. Later we will call three and two the singular values of A.
+You can already guess the underlying length scales. Along the two preferred input directions, A stretches by three and two. The squares of these stretches are nine and four. These lengths, three and two, are the singular values of A.
 
 That prediction is useful, but today we can prove the key spectral correspondence without relying on singular-value decomposition at all.
 

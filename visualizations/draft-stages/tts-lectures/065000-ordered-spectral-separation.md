@@ -6,7 +6,7 @@
 
 # A spectral gap that makes the solution decay
 
-We now know that different eigenvalues make the Sylvester equation invertible. But knowing an inverse exists does not tell us how large that inverse is. Today a stronger hypothesis will give a particularly clean result.
+For the Sylvester equation A X minus X B equals C, disjoint spectra can guarantee a unique solution, but existence alone gives no quantitative bound on its norm. An ordered positive gap between self-adjoint coefficient operators provides a much stronger conclusion.
 
 Suppose A and B are self-adjoint, and every spectral value of A lies at least delta above every spectral value of B, where delta is positive. This is ordered spectral separation. Under that hypothesis, the solution of A X minus X B equals C can be written as an integral of decaying exponentials, and its operator norm is at most the norm of C divided by delta.
 

@@ -10,7 +10,7 @@ Imagine a flat sheet of material drawn as a circle. Apply a linear transformatio
 
 A general matrix does not tell us those directions just by looking at its entries. It mixes stretching with changes in orientation, and the matrix may be rectangular. But the operator modulus gives us a precise way to find the stretching information.
 
-Today we will construct the singular-value decomposition, usually abbreviated S V D. Rather than starting with a memorized matrix factorization, we will build it from eigenvectors of a Gram operator.
+The singular-value decomposition, or S V D, follows from the spectral theorem for the positive Gram operator. Its eigenvectors identify input directions, and their images determine the corresponding output directions.
 
 ## Start with the source Gram operator
 

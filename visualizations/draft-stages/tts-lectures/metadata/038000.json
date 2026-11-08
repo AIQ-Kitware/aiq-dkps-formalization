@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "lecture_id": "038000",
+  "transcript": "038000-partial-isometries-and-polar-uniqueness.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-svd",
+      "reason": "Finite-dimensional singular-direction intuition; general operator-ideal and infinite-dimensional claims require additional sources."
+    },
+    {
+      "source_id": "higham-polar",
+      "reason": "Alternative polar-factor explanation; distinguish a kernel-zero partial isometry from full unitary extensions."
+    },
+    {
+      "source_id": "axler-open-linear-algebra",
+      "reason": "Consult the proof-led account of linear operators, inner products, adjoints and spectral structure."
+    }
+  ]
+}

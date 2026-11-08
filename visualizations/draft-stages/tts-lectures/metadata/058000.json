@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "lecture_id": "058000",
+  "transcript": "058000-unitary-invariant-norms-and-symmetric-gauges.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-svd",
+      "reason": "Finite-dimensional singular-direction intuition; general operator-ideal and infinite-dimensional claims require additional sources."
+    },
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "higham-unitarily-invariant-norm",
+      "reason": "Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms."
+    },
+    {
+      "source_id": "boyd-stanford-ee263-archive",
+      "reason": "Use the publicly available course-reader slides for block matrices, quadratic forms, or dynamical examples."
+    },
+    {
+      "source_id": "mit-strang-18065-norms",
+      "reason": "Compare vector, operator, Frobenius and nuclear norms in worked matrix calculations."
+    },
+    {
+      "source_id": "bell-trace-ideals",
+      "reason": "Work through trace-ideal and Hilbert-Schmidt definitions and inequalities in Hilbert space."
+    }
+  ]
+}

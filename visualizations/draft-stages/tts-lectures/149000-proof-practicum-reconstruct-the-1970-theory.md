@@ -8,7 +8,7 @@
 
 A rigorous Davis-Kahan perturbation argument begins with explicit self-adjointness, spectral-gap, residual, and norm hypotheses. The goal is to reconstruct the bound from those assumptions, then identify how the same mechanism adapts to Hilbert spaces, norm ideals, and the other angle theorems.
 
-Treat each stage as a proof task. Work through the missing calculation before hearing the verification. The final result is not a list of theorem names. It is an argument in which each hypothesis has a specific job.
+The proof proceeds from geometric data to a residual equation, then uses spectral separation to bound the angle. Each additional norm class or operator setting requires a specific extension of that argument.
 
 ## Stage one: identify the correct geometric data
 
@@ -40,7 +40,7 @@ Integrating gives the operator-norm inequality: delta times the norm of X is at 
 
 If instead we assume only that every eigenvalue of Lambda one is separated from every eigenvalue of A zero by delta, diagonalize the blocks and solve the Sylvester equation entry by entry. Each entry of X is the corresponding entry of F adjoint R divided by an eigenvalue difference. Squaring and summing gives the same constant-one estimate in Frobenius norm.
 
-Do not assert that this entrywise argument proves the constant-one operator-norm estimate. It does not. The distinction between ordered and pairwise gaps, and between operator and Frobenius norms, is part of the theorem's mathematical content.
+The entrywise argument yields a constant-one Frobenius estimate, but not the corresponding operator-norm estimate. The distinction between ordered and pairwise gaps, and between operator and Frobenius norms, is part of the theorem's mathematical content.
 
 ## Stage four: test a sharp two-dimensional case
 
@@ -62,7 +62,7 @@ We need control of the entire singular-value sequence, not just its largest memb
 
 For the ambient sine theorem of Section six, there is another issue. One directed residual equation only controls one crossed block. To control the full ambient sine operator, derive both crossed Sylvester equations. Compare their block singular values, combine the estimates using the direct-sum Ky Fan lemma, and use the reflection-averaging pinching lemma to contract the relevant perturbation blocks.
 
-In infinite dimensions, an arbitrary ideal norm may be infinite on a bounded operator. Thus an honest theorem first establishes ideal membership, or assumes it for the perturbation and proves it for the angle operator, before comparing numerical ideal gauges. The phrase wherever defined is a mathematical condition, not a stylistic qualification.
+In infinite dimensions, an arbitrary ideal norm may be infinite on a bounded operator. An ideal-norm inequality must establish the relevant membership, or assume it for the perturbation and derive it for the angle operator, before comparing finite ideal gauges.
 
 ## Stage six: reconstruct the other three angle families
 
@@ -88,11 +88,11 @@ Finally, treat real and complex Hilbert spaces explicitly. The complex spectral 
 
 The 1970 paper also develops direct rotation and an extremal claim about displacement. Reconstruct the polar intertwiner of two projections, state the crossed-defect matching criterion at right angles, and distinguish the canonical polar rotation from arbitrary unitary transports.
 
-Then separate three objectives: displacement restricted to the source subspace, squared whole-space displacement, and unsquared whole-space displacement. The first two admit the valid optimality theorems studied in this course. The broad unsquared full-space claim of Proposition four point four is false; the explicit real four-dimensional example supplies the counterexample. Do not use the false proposition as a lemma.
+Then separate three objectives: displacement restricted to the source subspace, squared whole-space displacement, and unsquared whole-space displacement. The first two objectives admit valid optimality theorems under their stated hypotheses. The broad unsquared full-space claim of Proposition four point four is false; the explicit real four-dimensional example supplies the counterexample. The false proposition cannot be used in a proof.
 
 The free-beam example is another endpoint test. To reproduce it, construct the fourth-order self-adjoint operator with its boundary conditions, compute the Ritz compression and residual matrices, verify the spectral separation, and apply the angle estimates. Its finite trial matrix does not erase the unbounded operator-domain obligations.
 
-Finally, the original paper's Section ten asks questions that are broader than the results established in the main body. Report the proved cases, available counterexamples, and remaining hypotheses precisely. Do not turn an open question into a theorem by appealing to a plausible analogy.
+Finally, the original paper's Section ten asks questions that are broader than the results established in the main body. The established cases, counterexamples, and open questions must remain distinct; an analogy alone supplies no general theorem.
 
 ## Your final proof certificate
 

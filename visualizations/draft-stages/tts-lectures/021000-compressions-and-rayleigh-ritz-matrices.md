@@ -4,7 +4,7 @@
 
 Let V be an isometric embedding from a coefficient Hilbert space into an ambient Hilbert space. The adjoint V star measures the coordinates along the selected subspace. We have V star V equal to the coefficient identity, while V V star is the orthogonal projection onto the closed range of V. These identities let us compress an ambient operator to the smaller coordinate space.
 
-Today we will put a third operator between those two maps. Given an operator A on ambient space, we will study V star A V.
+Given an operator A on ambient space, the compression V star A V describes its action through a chosen coordinate subspace.
 
 This construction is called compression. It turns a large operator into a smaller one that describes how A looks from inside our selected subspace. It is the basis of the Rayleigh–Ritz method, a standard route to approximate eigenvalues and eigenvectors.
 
@@ -60,7 +60,7 @@ This difference is called the residual. More generally, for an embedding V and t
 
 Think carefully about the two pieces. V B stays in the selected subspace. The residual records what A does that our selected subspace cannot represent.
 
-The residual is not an arbitrary numerical error. It is an exact algebraic quantity defined from A and V. A small residual can become evidence that our selected space is close to an invariant subspace, but that conclusion will later need additional spectral assumptions.
+The residual is not an arbitrary numerical error. It is an exact algebraic quantity defined from A and V. A small residual can become evidence that our selected space is close to an invariant subspace, but an angle estimate requires a spectral separation condition in addition to a small residual.
 
 ## Why every Ritz residual is perpendicular
 

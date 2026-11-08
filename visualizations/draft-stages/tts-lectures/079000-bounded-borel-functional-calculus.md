@@ -88,7 +88,7 @@ We have restricted f to be bounded. A bounded self-adjoint A has bounded spectra
 
 Its multiplication operator may then be unbounded and have a proper domain. One cannot assign it a bounded operator simply by using the same notation.
 
-The theory of unbounded measurable functions requires explicit domains and graph-closedness. That is a later part of this course. For now, every operator produced by the bounded Borel calculus acts on all of H and is bounded.
+The theory of unbounded measurable functions requires explicit domains and graph-closedness. A Borel function that is not bounded may therefore define an unbounded operator with a proper domain; the bounded functional calculus alone does not authorize that operation. For now, every operator produced by the bounded Borel calculus acts on all of H and is bounded.
 
 ## The theorem assembled
 

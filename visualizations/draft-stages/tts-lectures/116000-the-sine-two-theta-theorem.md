@@ -6,7 +6,7 @@
 
 # The sine-two-theta theorem
 
-We have all the ingredients for the sine-two-theta theorem: a two-block spectral gap, a reflection identity for doubled angles, and a bound on the mirror defect of an operator under that reflection.
+A subspace perturbation can be measured by twice its principal angles. Suppose a self-adjoint operator has a reducing subspace with its spectrum ordered above the spectrum on the orthogonal complement. If the operator changes by a self-adjoint perturbation, reflection through a reducing subspace of the perturbed operator turns the angular comparison into a residual with a sharp norm bound.
 
 The conclusion says that the gap times the sine of twice the subspace angle is at most twice the perturbation size. We will derive this estimate carefully, and then explain what it can and cannot tell us about the original angle.
 
@@ -104,7 +104,7 @@ We began with a self-adjoint T whose reducing subspace U lies on one side of a f
 
 The result has a clean constant and accommodates arbitrary angles, but it does not select the near-zero branch.
 
-The maximal angle will stay strictly below forty-five degrees, and the stronger tangent of twice the angle will have its own sharp estimate.
+A bound on the doubled sine alone does not rule out angles close to ninety degrees. To deduce a doubled-tangent bound, one needs additional conditions selecting the spectral branch and keeping every relevant angle strictly below forty-five degrees. Off-diagonal perturbations with appropriately matched spectral subspaces provide one such setting.
 
 <!-- END SPOKEN LECTURE -->
 

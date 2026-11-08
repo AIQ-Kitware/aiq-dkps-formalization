@@ -8,7 +8,7 @@
 
 A matrix acts on every vector in its finite-dimensional coordinate space. But in infinite-dimensional Hilbert space, some of the most important operators cannot act on every vector. Their domain is part of the mathematical data.
 
-Today we will see a concrete example, define closed graphs and the graph norm, and prove why these concepts let us take limits without applying an operator to a vector where its action makes no sense.
+The graph of an operator records its input-output pairs. Closedness and the graph norm let us pass to limits while respecting the operator's domain.
 
 ## A diagonal operator that grows without bound
 
@@ -62,7 +62,7 @@ Its closure is the zero operator on all of ell two. The word closure here means 
 
 Not every densely defined operator is closable. The closure of a graph may contain a pair with zero input and nonzero output, which would violate single-valuedness. To check closability, one useful criterion is this: whenever x N approaches zero and A x N approaches y, we must have y equal to zero. If that condition fails, no extension of A can have a closed graph.
 
-We will soon see that densely defined operators with densely defined adjoints are closable, and that self-adjoint operators are automatically closed.
+A densely defined operator with a densely defined adjoint is closable: the closure of its graph remains the graph of a single-valued operator. Self-adjoint operators are closed, so their spectral and resolvent identities can be passed through graph limits on their specified domains.
 
 ## Why spectral cutoffs fit this framework
 

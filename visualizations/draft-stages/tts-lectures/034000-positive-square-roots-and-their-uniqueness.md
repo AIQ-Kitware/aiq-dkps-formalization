@@ -8,9 +8,9 @@
 
 If I tell you that a real number is nine, finding a square root is easy. Three works, and negative three works. But if I ask for the *nonnegative* square root, there is only one answer.
 
-For matrices, there is a similar distinction. We can sometimes find many matrices whose square equals a given matrix. We want one special square root that is positive in the operator sense. Today we will construct it, prove that it is unique, and explain why this construction is more useful than taking the square roots of matrix entries.
+For matrices, there is a similar distinction. We can sometimes find many matrices whose square equals a given matrix. We want one special square root that is positive in the operator sense. The positive square root is defined through the spectral decomposition. It exists uniquely for a positive matrix, unlike an entrywise square-root construction, which does not respect changes of orthonormal basis.
 
-This is the first step toward two tools we will use throughout the course: the operator modulus and singular-value decomposition.
+Positive square roots define the operator modulus and provide the spectral ingredients for singular-value decomposition.
 
 ## Why entrywise square roots don't work
 

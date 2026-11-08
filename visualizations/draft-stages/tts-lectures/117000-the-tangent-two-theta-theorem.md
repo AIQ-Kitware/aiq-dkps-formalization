@@ -110,7 +110,7 @@ Then cosine twice theta and sine twice theta both equal the square root of two d
 
 As h increases to ten, tangent twice theta equals ten and theta approaches forty-five degrees from below. The doubled sine becomes close to one, while the doubled tangent records the increasing difficulty of maintaining a graph with slope below one.
 
-We will show why a small doubled sine by itself cannot distinguish a nearly correct spectral subspace from a nearly perpendicular one, and why spectral selection is needed before using doubled-angle bounds as error certificates.
+The sharp doubled-tangent estimate is therefore a joint statement about a perturbation and the correctly selected spectral subspace. The spectral branch proof establishes that the cosine of twice every relevant angle is positive; the Riccati estimate then controls its reciprocal effect quantitatively.
 
 <!-- END SPOKEN LECTURE -->
 

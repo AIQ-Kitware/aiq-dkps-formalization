@@ -4,7 +4,7 @@
 
 A Banach space is a normed vector space in which every Cauchy sequence converges. Continuous functions on a compact interval, measured by their maximum absolute value, form one such space. What must a linear map do to preserve the limiting behavior of its inputs?
 
-Linearity alone says that a map respects addition and scaling. It says nothing yet about whether a tiny input produces a tiny output. That missing requirement is the subject of this lecture. We will call it boundedness, explain why it means continuity for a linear map, and turn it into a numerical measurement called the operator norm.
+Linearity alone says that a map respects addition and scaling. It says nothing yet about whether a tiny input produces a tiny output. Boundedness controls how output size depends on input size. For a linear map it is equivalent to continuity, and the best such bound is measured by the operator norm.
 
 ## An operator we can measure
 
@@ -73,7 +73,7 @@ Try two questions before moving on.
 
 First, why is the operator norm of our horizontal-stretching map exactly three, rather than merely at most three? The answer requires both an inequality valid for every vector and an example achieving equality.
 
-Second, suppose you are given a linear map that is continuous at zero. Do not memorize the conclusion that it is bounded. Reconstruct the scaling argument. Take any input, shrink it into the small ball supplied by continuity, and then scale the resulting inequality back up.
+Second, suppose you are given a linear map that is continuous at zero. Its boundedness follows directly from the estimate. Reconstruct the scaling argument. Take any input, shrink it into the small ball supplied by continuity, and then scale the resulting inequality back up.
 
 The central conclusion is that boundedness, continuity, and uniform control of output errors are three faces of the same property for a linear map between normed spaces. The operator norm records the best global amplification bound.
 

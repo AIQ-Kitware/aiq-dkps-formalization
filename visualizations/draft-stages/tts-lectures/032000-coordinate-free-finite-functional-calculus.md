@@ -88,7 +88,7 @@ Infinite-dimensional operators bring a new difficulty. The spectrum may contain 
 
 For a bounded self-adjoint operator, one route begins by approximating a *continuous* real-valued function uniformly by polynomials on an interval containing the spectrum. The operator norm then lets us pass from the polynomial expressions to a limiting operator. We will prove the relevant approximation and convergence statements when we build continuous functional calculus in detail.
 
-Functions with jumps, such as the indicator of a spectral interval, need additional machinery in that setting. This is why projection-valued measures and Borel functional calculus will eventually appear in our course.
+Functions with jumps, such as the indicator of a spectral interval, need additional machinery in that setting. For general self-adjoint operators, projection-valued measures and Borel functional calculus supply the spectral projections of measurable sets even when the spectrum is not a finite eigenvalue list.
 
 For now, the finite construction is complete and fully justified by the finite spectral theorem.
 
@@ -96,9 +96,7 @@ For now, the finite construction is complete and fully justified by the finite s
 
 Suppose every eigenvalue of A is nonnegative. Then f of A is nonnegative in the spectral sense whenever f is nonnegative on the spectrum, because its multipliers on each eigenspace are nonnegative.
 
-This is the key that will allow us to build positive square roots. To take a square root of a positive operator, we will take the nonnegative square root of each eigenvalue and reassemble the operator through the spectral projections.
-
-But before we do that, we need to explain rigorously what it means for an operator itself to be positive.
+For a positive self-adjoint matrix, the spectral definition of its square root is concrete: replace each nonnegative eigenvalue by its nonnegative square root and keep the same spectral projections. The resulting matrix is positive and its square is the original matrix. This construction depends on positivity, meaning that the inner product of A x with x is nonnegative for every vector x.
 
 For a final reconstruction exercise, take a symmetric two-by-two matrix with eigenvalues one and three. Describe the action of its square, inverse, and spectral projector onto the three-eigenspace without writing the original matrix entries. Then prove the multiplication rule for functions of A by testing it on an arbitrary eigenbasis.
 

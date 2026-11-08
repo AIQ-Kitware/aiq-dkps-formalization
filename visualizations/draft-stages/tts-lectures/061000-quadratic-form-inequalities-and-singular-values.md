@@ -6,7 +6,7 @@
 
 # From inequalities on vectors to inequalities on singular values
 
-We have developed two languages for comparing operators. One language compares quadratic forms: for every vector, one operator gives no more energy than another. The second language compares singular values: one map stretches its strongest directions no more than another.
+There are two common ways to compare operators. A quadratic-form inequality controls the value of an operator on every input vector. A singular-value inequality controls its ordered stretching strengths. How can we pass from the first kind of statement to the second?
 
 These languages are connected, but they are not interchangeable without assumptions. Today's goal is to derive the safe implications and identify the tempting steps that fail.
 
@@ -102,7 +102,7 @@ For positive operators, the trace is the nuclear norm. Thus the trace comparison
 
 But trace control by itself does not imply operator-norm control. A matrix can have small total trace concentrated in one direction, while another has larger total trace spread across many directions. We need stronger hypotheses, such as the full form-order relation, to infer all the coordinatewise eigenvalue bounds.
 
-The lesson is to keep track of exactly what has been proved: a scalar trace bound, an inequality on every vector, or a whole sequence of ordered eigenvalue inequalities.
+A trace bound, an inequality of quadratic forms on every vector, and a sequence of ordered eigenvalue inequalities are different assertions. Each requires its own justification.
 
 ## Prepare for the Sylvester equation
 

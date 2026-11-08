@@ -40,7 +40,7 @@ Why is this independent of the chosen orthonormal basis? If we change the basis 
 
 The singular values of T are the sines of the principal angles between U and V. Thus the bound becomes: the sum of sine-squared transport angles over any orthonormal basis of U is at least the sum of sine-squared principal angles.
 
-The source statement is stronger in another direction: it can use an arbitrary Hilbert basis indexed by an infinite set and interpret both sums as extended nonnegative numbers. When the principal sine sequence is not square-summable, the lower bound is infinite, and every admissible transport has infinite total sine-squared error.
+The infinite-dimensional version permits a broader index set: it can use an arbitrary Hilbert basis indexed by an infinite set and interpret both sums as extended nonnegative numbers. When the principal sine sequence is not square-summable, the lower bound is infinite, and every admissible transport has infinite total sine-squared error.
 
 ## A two-dimensional example
 
@@ -66,7 +66,7 @@ There is another useful comparison. For a small angle theta in radians, sine squ
 
 An infinite-dimensional source subspace may have a countable or more general Hilbert basis, depending on the setting. The sum of squared escape norms is naturally a nonnegative extended sum. The positive Gram operator need not be trace class. If the sum diverges, we retain a valid inequality in the extended nonnegative reals rather than claiming a finite Frobenius norm.
 
-The formalized source result uses the principal sine sequence from approximation numbers. It keeps the inherited compactness and crossed-defect hypotheses in its source-shaped wrapper, though the underlying inequality has a stronger derivation that does not require those assumptions. This is an example of separating a theorem's natural generality from the exact hypotheses under which the historical paper presented it.
+For compact-angle pairs, approximation numbers provide the principal-sine sequence. The projection argument establishes the squared-sine inequality more generally; the historical formulation retains additional compactness and crossed-defect assumptions.
 
 ## End of the argument
 

@@ -74,7 +74,7 @@ The adjoint of a densely defined operator is closed. Here is the reason. Let y N
 
 If A star is itself densely defined, A is closable. In that situation, the double adjoint A star star equals the closure of A. For our finite-support diagonal example, taking two adjoints recovers the maximal diagonal operator.
 
-The point is not that taking adjoints is a formal manipulation of symbols. Both steps have hypotheses and domain consequences.
+For unbounded operators, both adjoint identities require domain conditions, and these conditions affect the conclusions.
 
 ## A practical domain test
 
@@ -86,7 +86,7 @@ If the domains are different, the original operator cannot be self-adjoint, even
 
 A self-adjoint operator has a full spectral theory, real spectrum, and nonreal resolvents. A merely symmetric operator might lack these properties because it can have too small a domain.
 
-Later, when we restrict an unbounded operator to a spectral subspace, we will have to check that the restricted operator has the correct domain and that its adjoint does not secretly acquire extra vectors. This is where the distinctions we established today enter directly into the Davis–Kahan proofs.
+The same domain test applies when an unbounded operator is restricted to a reducing spectral subspace. A formal restriction of the differential expression does not suffice; the restricted domain and its adjoint domain must be identified. This is where the distinctions we established today enter directly into the Davis–Kahan proofs.
 
 <!-- END SPOKEN LECTURE -->
 

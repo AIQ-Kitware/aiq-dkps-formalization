@@ -14,7 +14,7 @@ This elementary observation is the seed of the Sylvester equation, a central too
 
 For operators, the corresponding equation has A acting on one side of an unknown map X, and B acting on the other. The known map C is the defect we are trying to explain. Our job today is to understand what this equation asks, why differences of eigenvalues appear, and how separation of spectra controls the inverse problem.
 
-We will not yet assume a general Sylvester theorem. We will derive the mechanism from the scalar case and from the finite spectral theorem.
+The scalar equation and the finite spectral theorem already explain how the Sylvester operator can be inverted under spectral separation.
 
 ## Keep the domains and codomains straight
 

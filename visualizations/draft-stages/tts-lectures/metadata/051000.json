@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "lecture_id": "051000",
+  "transcript": "051000-compact-angle-spectra-and-classification.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-svd",
+      "reason": "Finite-dimensional singular-direction intuition; general operator-ideal and infinite-dimensional claims require additional sources."
+    },
+    {
+      "source_id": "higham-polar",
+      "reason": "Alternative polar-factor explanation; distinguish a kernel-zero partial isometry from full unitary extensions."
+    },
+    {
+      "source_id": "halmos-1969",
+      "reason": "Original treatment of two subspaces and their generic part; complements principal-angle geometry."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "higham-cs-decomposition",
+      "reason": "Use explicit block cosine-sine matrices to interpret principal angles."
+    },
+    {
+      "source_id": "zhu-knyazev-tangent-angles",
+      "reason": "Compare projector and frame formulas for principal-angle cosines, sines, and tangents."
+    }
+  ]
+}

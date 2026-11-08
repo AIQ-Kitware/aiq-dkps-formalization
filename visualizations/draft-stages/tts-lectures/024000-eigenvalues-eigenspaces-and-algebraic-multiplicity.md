@@ -64,7 +64,7 @@ Apply N twice to any vector and you get zero. So N is not zero, but N squared is
 
 The vertical unit vector is an example of a generalized eigenvector for eigenvalue two. It is not killed by A minus two times the identity in one step, but it is killed after two steps. Together with the horizontal eigenvector, it forms what is called a Jordan chain.
 
-We will not need the full Jordan normal form today. The point is that the repeated root of the characteristic polynomial can represent either several honest eigenvector directions or a more entangled action with generalized eigenvectors.
+A repeated root of the characteristic polynomial can correspond either to several independent eigenvectors or to a Jordan chain of generalized eigenvectors.
 
 Our two examples make that distinction visible without any new machinery.
 

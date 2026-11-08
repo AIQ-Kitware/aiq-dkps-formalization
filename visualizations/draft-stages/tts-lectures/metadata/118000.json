@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "lecture_id": "118000",
+  "transcript": "118000-why-a-small-doubled-sine-proves-little-alone.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "halmos-1969",
+      "reason": "Original treatment of two subspaces and their generic part; complements principal-angle geometry."
+    },
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "hsu-dk-notes",
+      "reason": "Brief finite-matrix exposition; not an alternate proof of every general theorem in this lecture."
+    },
+    {
+      "source_id": "tao-eigenvalue-stability",
+      "reason": "Contrast Hermitian spectral stability with nonnormal sensitivity and pseudospectra."
+    },
+    {
+      "source_id": "kostrykin-tan2-theorem",
+      "reason": "Compare the off-diagonal perturbation theorem with a graph/Riccati formulation."
+    },
+    {
+      "source_id": "bindel-eigen-perturbation",
+      "reason": "Study concrete perturbation examples and first-order spectral sensitivity."
+    }
+  ]
+}

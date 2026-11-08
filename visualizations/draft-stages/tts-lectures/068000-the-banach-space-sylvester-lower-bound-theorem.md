@@ -6,9 +6,7 @@
 
 # A constant-one bound from a bounded inverse
 
-We have seen several ways to invert a Sylvester operator. Today we reach an estimate that Davis and Kahan presented as Theorem five point one, a result that does not require a Hilbert space.
-
-Its proof is short once the hypotheses are organized, but we should not skip the organization. The theorem uses a bounded inverse of A, a bound on B, and a compatible norm on the operators that connect their spaces. These hypotheses create a contraction in the Sylvester equation.
+The Sylvester equation asks for an operator X satisfying A X minus X B equals C. In a Banach space, we cannot generally diagonalize A and B, yet we can still estimate X by rearranging the equation whenever one coefficient has a bounded inverse and the other is sufficiently small in comparison. Davis and Kahan state this as Theorem five point one. The theorem uses a bounded inverse of A, a bound on B, and a compatible norm on the operators that connect their spaces. These hypotheses create a contraction in the Sylvester equation.
 
 Our goal is to derive the estimate, explain what compatible means, distinguish the printed statement from a stronger reusable variant, and connect the result to spectral intervals without assuming that mere disjointness is enough.
 

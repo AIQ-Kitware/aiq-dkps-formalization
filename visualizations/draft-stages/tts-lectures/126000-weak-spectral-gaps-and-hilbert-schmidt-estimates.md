@@ -6,7 +6,7 @@
 
 # Weak spectral gaps and Hilbert–Schmidt estimates
 
-A spectral gap can mean two rather different things. The spectra may be separated in one ordered direction, or every point of one spectrum may merely be a positive distance from every point of the other. We studied this distinction for Sylvester equations. Now it becomes the difference between Davis and Kahan's Theorems six point one and six point two.
+A spectral gap can mean two rather different things. The spectra may be separated in one ordered direction, or every point of one spectrum may merely be a positive distance from every point of the other. This distinction also separates the hypotheses of Davis and Kahan’s Theorems six point one and six point two.
 
 Theorem six point two allows the weaker, pairwise-distance condition. The price is that its original general estimate is in the square, or Hilbert–Schmidt, norm. We will prove the underlying multiplier inequality, place it in the trial-frame geometry, and give a counterexample to a tempting stronger claim.
 
@@ -52,7 +52,7 @@ If R is Hilbert–Schmidt, so is its compression F one adjoint R. The square-nor
 
 The result is delta epsilon times the Hilbert–Schmidt norm of the directed sine representative at most the Hilbert–Schmidt norm of R.
 
-Notice that both the spectral and norm hypotheses changed relative to the previous theorem. We weakened separation and simultaneously specialized the norm. This is the mathematical purpose of Theorem six point two.
+Theorem six point two trades stronger spectral separation for a more specialized norm: pairwise spectral distance suffices for a Hilbert–Schmidt estimate under its stated hypotheses.
 
 ## A numerical obstruction in operator norm
 

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "lecture_id": "145000",
+  "transcript": "145000-from-rotation-counterexample-to-real-transport-matching.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "higham-polar",
+      "reason": "Alternative polar-factor explanation; distinguish a kernel-zero partial isometry from full unitary extensions."
+    },
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "wisc-uniform-convergence",
+      "reason": "Review the uniform-control principle used when passing from approximating costs to limiting minima."
+    },
+    {
+      "source_id": "mit-strang-18065-procrustes",
+      "reason": "See an orthogonal transport problem where minimizing displacement becomes a matrix alignment calculation."
+    },
+    {
+      "source_id": "mml-free-text",
+      "reason": "Use analytic-geometry, decomposition or PCA examples to connect the operator calculation to data analysis."
+    }
+  ]
+}

@@ -12,7 +12,7 @@ What happens to the operator's size if we erase those two cross terms?
 
 For an arbitrary norm on a list of matrix entries, there is no universal answer. But for every unitarily invariant norm, the block-diagonal part cannot be larger than the original operator. This operation is called pinching.
 
-Today we will derive pinching from an elementary reflection identity, prove the norm inequality using only convexity and unitary invariance, and connect the result to the singular values of block direct sums. These ideas appear repeatedly when perturbation proofs separate a difficult operator into pieces adapted to spectral subspaces.
+Pinching removes off-diagonal blocks by averaging an operator with its reflection. Convexity and unitary invariance then show that pinching cannot increase a unitarily invariant norm. These ideas appear repeatedly when perturbation proofs separate a difficult operator into pieces adapted to spectral subspaces.
 
 ## The four blocks of an operator
 

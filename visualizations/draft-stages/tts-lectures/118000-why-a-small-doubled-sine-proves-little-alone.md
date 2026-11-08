@@ -8,7 +8,7 @@
 
 The sine-two-theta theorem bounds the sine of twice an angle. It is tempting to conclude that a sufficiently small perturbation forces the two subspaces to be close. That conclusion requires another argument. Sine of twice an angle is small when the angle is near zero, but also when the angle is near ninety degrees.
 
-Today we will identify the exact information that the double-angle estimate loses. We will build matrix examples, prove a quantitative two-branch alternative, and explain why continuity or spectral selection can rule out the wrong branch. This distinction prepares us to read the spectral-repulsion and small-angle theorems without inserting assumptions that the inequalities themselves do not provide.
+A bound on the sine of twice an angle leaves two possible angular branches. Matrix examples exhibit the ambiguity; continuity combined with spectral selection, or a direct small-angle theorem, supplies the additional information needed to select one branch.
 
 ## Begin with the scalar graph
 

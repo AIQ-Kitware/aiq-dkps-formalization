@@ -82,7 +82,7 @@ Second, bounded maps on either side cannot increase an approximation number by m
 
 This will allow singular-value estimates to survive orthogonal projections, coordinate embeddings, and partial-isometry transport.
 
-## Where the sequence leads
+## From approximation numbers to Ky Fan gauges
 
 A single approximation number measures the best rank-constrained error. A sum of the first several approximation numbers measures accumulated size in leading directions.
 

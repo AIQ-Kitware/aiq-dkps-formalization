@@ -6,7 +6,7 @@
 
 # Population-gap spectral statistics
 
-A central statistical task is to estimate an eigenspace from a noisy covariance or similarity matrix. There is a population matrix, which describes the mathematical target, and a sample matrix computed from observations. The sample eigenvectors fluctuate, but the target eigenspace may still be estimable. Today we will connect the Davis–Kahan framework to the population-gap perturbation bounds developed by Yu, Wang, and Samworth, and explain why their formulation is useful for statistical arguments.
+A central statistical task is to estimate an eigenspace from a noisy covariance or similarity matrix. There is a population matrix, which describes the mathematical target, and a sample matrix computed from observations. The sample eigenvectors fluctuate, but the target eigenspace may still be estimable. Population-gap perturbation bounds developed by Yu, Wang, and Samworth control eigenspace error using the population spectrum and the size of the sampling error, without assuming a separate sample gap.
 
 ## Two matrices with different roles
 

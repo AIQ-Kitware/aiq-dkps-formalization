@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "lecture_id": "043000",
+  "transcript": "043000-sines-cosines-and-cross-projections.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-projections",
+      "reason": "Geometric treatment of subspace projections; finite-dimensional starting point."
+    },
+    {
+      "source_id": "mit-strang-svd",
+      "reason": "Finite-dimensional singular-direction intuition; general operator-ideal and infinite-dimensional claims require additional sources."
+    },
+    {
+      "source_id": "halmos-1969",
+      "reason": "Original treatment of two subspaces and their generic part; complements principal-angle geometry."
+    },
+    {
+      "source_id": "higham-cs-decomposition",
+      "reason": "Use explicit block cosine-sine matrices to interpret principal angles."
+    },
+    {
+      "source_id": "intel-principal-angles",
+      "reason": "Compute principal angles numerically from orthonormal bases using QR and SVD."
+    },
+    {
+      "source_id": "zhu-knyazev-tangent-angles",
+      "reason": "Compare projector and frame formulas for principal-angle cosines, sines, and tangents."
+    }
+  ]
+}

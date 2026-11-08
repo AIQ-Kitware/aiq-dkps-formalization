@@ -8,7 +8,7 @@
 
 An infinite-dimensional Hilbert space can contain a sequence of mutually perpendicular unit vectors. No two of those vectors get closer than the square root of two. Consequently, its closed unit ball is not compact. Yet some operators turn that noncompact ball into a set whose closure is compact. Those operators are called compact operators.
 
-Today we will define compactness carefully, prove that finite-rank maps are compact, and establish the converse approximation principle: on Hilbert spaces, a bounded operator is compact exactly when it can be approximated in operator norm by finite-rank maps.
+On Hilbert spaces, a bounded operator is compact exactly when it is an operator-norm limit of finite-rank maps. The two directions of this characterization explain why finite-dimensional approximations describe compact spectral behavior.
 
 This theorem explains why finite matrix methods remain useful in infinite dimensions. But it also tells us precisely when that usefulness stops.
 
@@ -84,7 +84,7 @@ This is why compact operators form a two-sided operator ideal: composing them on
 
 Likewise, sums and scalar multiples of compact operators are compact. And because the class is operator-norm closed, it is a complete normed space with the operator norm.
 
-## What compactness buys us later
+## The singular values of a compact operator
 
 For a compact operator T, the modulus of T is positive and compact. Its positive eigenvalues can be listed with multiplicities, descending toward zero. Those eigenvalues are the nonzero singular values of T.
 

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "lecture_id": "041000",
+  "transcript": "041000-operator-trigonometric-functions.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-exp",
+      "reason": "Matrix-exponential method used in finite dimensions; compare with operator-domain assumptions in the lecture."
+    },
+    {
+      "source_id": "higham-matrix-exponential",
+      "reason": "Contrast the exponential-series perspective with dynamical-system examples."
+    }
+  ]
+}

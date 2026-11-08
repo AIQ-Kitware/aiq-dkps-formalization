@@ -8,7 +8,7 @@
 
 When A and B are diagonal in orthonormal eigenbases, the unknown matrix coefficient between eigenvalues a and b is multiplied by a minus b.
 
-Today we will finish that argument. We will construct the solution entry by entry, prove uniqueness when the spectra are disjoint, characterize the solutions when the spectra overlap, and obtain a sharp Frobenius estimate.
+For diagonal coefficient matrices, the Sylvester equation can be solved entry by entry. The cross-eigenvalue differences determine uniqueness, the available solutions when spectra overlap, and a sharp Frobenius estimate under positive separation.
 
 Along the way, we will connect the entrywise formula to ordinary resolvents and to the coordinate-free language of spectral projections. The goal is to make the finite Sylvester inverse something we can derive rather than a formula we have to remember.
 
@@ -46,7 +46,7 @@ Divide corresponding entries. The solution X has first row two, negative three a
 
 Let's verify directly. A X has first row two, negative three and second row eight, forty. X B has first row zero, negative nine and second row zero, thirty. Subtracting gives first row two, six and second row eight, ten, exactly C.
 
-This verification is worth performing. It forces us to respect the order of multiplication. If we had written X A or B X instead, the denominators would be attached to the wrong row or column.
+The check also fixes the order of multiplication. If we had written X A or B X instead, the denominators would be attached to the wrong row or column.
 
 ## Why uniqueness follows
 

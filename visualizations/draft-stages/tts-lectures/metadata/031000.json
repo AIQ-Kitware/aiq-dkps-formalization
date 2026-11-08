@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "lecture_id": "031000",
+  "transcript": "031000-ordered-gaps-versus-distance-gaps.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-18-06",
+      "reason": "MIT 18.06 lectures 21 and 25–27 cover eigenvectors, spectral structure and positive definite matrices."
+    },
+    {
+      "source_id": "mit-strang-positive",
+      "reason": "Quadratic-form and minimization examples in matrices; see the lecture assumptions for generalization."
+    },
+    {
+      "source_id": "higham-eigen-ineq",
+      "reason": "Concise matrix-level comparison of Rayleigh quotients and eigenvalue inequalities."
+    },
+    {
+      "source_id": "threeblue-eigenvalues",
+      "reason": "Study a two-dimensional eigenvector example before the spectral argument."
+    },
+    {
+      "source_id": "tao-hermitian-matrix-sums",
+      "reason": "Study min-max proofs and eigenvalue inequalities from a matrix-analysis viewpoint."
+    },
+    {
+      "source_id": "tao-eigenvalue-stability",
+      "reason": "Contrast Hermitian spectral stability with nonnormal sensitivity and pseudospectra."
+    },
+    {
+      "source_id": "bindel-eigen-perturbation",
+      "reason": "Study concrete perturbation examples and first-order spectral sensitivity."
+    }
+  ]
+}

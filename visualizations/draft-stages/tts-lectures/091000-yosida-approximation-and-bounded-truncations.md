@@ -8,7 +8,7 @@
 
 Unbounded operators cause a problem whenever a proof uses an ordinary matrix exponential, a power series in operator norm, or differentiation of an operator-valued function. Those operations work naturally for bounded operators. We need a way to approximate an unbounded self-adjoint operator by bounded self-adjoint ones and then recover the original action on its correct domain.
 
-Today we will develop two approximations: spectral truncation and the symmetric Yosida approximation. Their formulas differ, but their purpose is the same. They preserve the self-adjoint structure while approaching the original operator on domain vectors.
+Spectral truncation and symmetric Yosida approximation give two bounded approximations of a self-adjoint operator. Both preserve self-adjointness and converge appropriately on vectors in the operator domain.
 
 ## A first idea: cut off large spectral values
 

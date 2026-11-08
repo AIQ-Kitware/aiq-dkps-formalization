@@ -28,11 +28,11 @@ Finally choose a self-adjoint trial operator A zero on the trial coordinate spac
 
 The residual records the failure of the trial map to intertwine the two operators exactly.
 
-## Do not skip the common-domain hypothesis
+## The common-domain hypothesis
 
 For bounded matrices, the residual is simply A E zero minus E zero A zero. For unbounded A, the expression A E zero x is defined only when E zero x belongs to the domain of A.
 
-The source-paper common-domain condition identifies the set of trial coordinates x for which E zero x belongs to the domain of A with the domain of A zero itself.
+The common-domain condition identifies the coordinates x for which E zero x belongs to the domain of A with the domain of A zero itself.
 
 So the two sides of the residual identity are defined on exactly the same dense subspace. We require the residual to agree there with a bounded operator R defined on the entire trial coordinate Hilbert space.
 
@@ -52,7 +52,7 @@ For the first term, use the reducing decomposition. Because F one intertwines th
 
 We have derived the complementary Sylvester equation: Lambda one X minus X A zero equals F one adjoint R, on the domain of A zero.
 
-This is a proof, not a choice of notation. The equation follows from the residual identity and the exact reducing property. The domain assumptions ensure that every term exists.
+The equation follows from the residual identity and the exact reducing property. The domain assumptions ensure that every term is defined.
 
 ## Apply the right kind of spectral separation
 
@@ -128,7 +128,7 @@ We have reconstructed the entire route: legal unbounded residual, exact compleme
 
 The construction works in real or complex Hilbert spaces when the corresponding ideal and Sylvester hypotheses are available. In real Hilbert spaces, the complexification and Ky Fan descent from the real-to-complex transfer and Ky Fan prefix comparison supply the real estimate.
 
-We have not asserted that arbitrary disjoint spectra yield this sharp bound, nor that every bounded residual belongs to every proper ideal. Those would change the theorem's hypotheses.
+The sharp estimate uses the stated spectral-separation condition, while an ideal-norm estimate also requires the relevant ideal membership. Arbitrary disjoint spectra and mere boundedness of the residual do not supply those conditions.
 
 The mathematical toolkit is now assembled.
 

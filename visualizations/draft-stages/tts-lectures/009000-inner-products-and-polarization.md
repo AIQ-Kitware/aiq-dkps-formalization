@@ -28,7 +28,7 @@ More precisely, the inner product of a vector with itself is nonnegative, and eq
 
 From the inner product we define the norm of a vector as the square root of its inner product with itself. Our familiar Euclidean norm comes from the familiar dot product this way.
 
-We have not yet proved this is a norm in the full sense, because the triangle inequality is not an immediate part of the definition. The Cauchy–Schwarz inequality supplies what we need.
+The triangle inequality does not follow immediately from the definition of inner-product length. The Cauchy–Schwarz inequality provides the missing estimate.
 
 ## Why the complex case needs conjugation
 
@@ -58,7 +58,7 @@ Since squared lengths cannot be negative, that expression must be at least zero.
 
 There is a geometric interpretation too. The selected multiple of y is the component of x along y. Whatever remains is perpendicular, so no component of x along y can be longer than x itself.
 
-Notice that we did not merely quote the inequality. We constructed a perpendicular remainder and used its nonnegative squared length. That proof will reappear when we build orthogonal projections.
+The proof constructs a perpendicular remainder and uses its nonnegative squared length. That proof will reappear when we build orthogonal projections.
 
 ## Deriving the triangle inequality
 

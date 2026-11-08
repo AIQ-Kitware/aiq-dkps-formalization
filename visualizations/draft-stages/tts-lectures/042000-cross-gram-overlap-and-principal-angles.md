@@ -10,7 +10,7 @@ You already know how to measure the angle between two nonzero vectors. Normalize
 
 But what if the objects we want to compare are entire subspaces? A plane contains infinitely many directions. In a higher-dimensional space, two planes can share one direction, disagree in another, and be perpendicular in yet another. One scalar angle cannot describe all of that.
 
-Today we will build a collection of angles that measures the relative geometry of two subspaces. The construction uses almost every ingredient we have prepared: orthonormal frames, adjoints, Gram operators, and singular values.
+Principal angles measure the relative geometry of two subspaces. Orthonormal frames, adjoints, Gram operators, and singular values make the construction explicit.
 
 We will not start by assuming these angles exist. We will derive them.
 
@@ -50,7 +50,7 @@ Suppose we replace the orthonormal basis of U by a different orthonormal basis o
 
 The overlap matrix changes, but only by multiplication on the left and right by orthogonal matrices.
 
-From our singular-value lecture, these changes cannot alter singular values. The singular values are intrinsic to the pair of subspaces, even though the entries of the overlap matrix are not.
+Multiplication on the left or right by a unitary leaves the singular values unchanged, since it preserves the spectrum of the corresponding positive Gram operator. The singular values are intrinsic to the pair of subspaces, even though the entries of the overlap matrix are not.
 
 Now we have a candidate definition. Take the singular values of the cross-Gram matrix, arranged from largest to smallest. For each one, apply arccosine. These are the principal angles, usually arranged from smallest to largest.
 
@@ -126,7 +126,7 @@ The list of principal angles tells us much more than a single worst-case angle. 
 
 For your reconstruction exercise, take two planes in three dimensions that share an axis and meet at angle phi. Write down orthonormal frames, calculate their cross-Gram matrix, take its singular values, and recover zero and phi. Then multiply the overlap matrix by its adjoint and show that the resulting operator is the compression of the second plane's projection to the first plane.
 
-If you can do that, you have constructed the central geometry that the later sine-theta theorem measures.
+The principal sines are the singular values of the complementary overlap. They turn subspace misalignment into a quantitative operator, rather than a choice of coordinate drawings.
 
 <!-- END SPOKEN LECTURE -->
 

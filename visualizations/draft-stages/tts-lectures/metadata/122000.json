@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "lecture_id": "122000",
+  "transcript": "122000-direct-sum-norm-comparison.md",
+  "historical_claims": [
+    {
+      "id": "122000-h01",
+      "anchor": "Davis and Kahan answer this with Lemma six point one. Its basic operation is an orthogonal direct sum. When the two summands act on orthogonal initial spaces and have orthogonal output spaces, their singul",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Lemma 6.1",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "higham-block-matrix",
+      "reason": "Review block multiplication and compression identities in finite matrices."
+    },
+    {
+      "source_id": "higham-unitarily-invariant-norm",
+      "reason": "Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms."
+    },
+    {
+      "source_id": "tao-hermitian-matrix-sums",
+      "reason": "Study min-max proofs and eigenvalue inequalities from a matrix-analysis viewpoint."
+    },
+    {
+      "source_id": "bell-trace-ideals",
+      "reason": "Work through trace-ideal and Hilbert-Schmidt definitions and inequalities in Hilbert space."
+    }
+  ]
+}

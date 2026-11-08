@@ -10,7 +10,7 @@ Suppose someone tells you that two groups of eigenvalues are separated by a gap 
 
 That picture describes one kind of gap. But it does not describe every kind. Two groups can be separated from each other even when their eigenvalues alternate along the number line. The difference matters because different mathematical arguments require different kinds of separation.
 
-Today we will carefully distinguish those possibilities. Nothing is being perturbed yet. We are learning how spectra sit relative to one another, so that later we can recognize exactly what a theorem assumes.
+These forms of spectral separation have different consequences for Sylvester equations and perturbation bounds.
 
 ## First, two sets on a number line
 
@@ -84,7 +84,7 @@ There is a particularly clean additional idea when the spectra are ordered. Supp
 
 When the two spectra interlace, the sign can change from one pair to another. That single integral argument is no longer available in the same form. More elaborate constructions are needed for the general separated case.
 
-We will prove the actual Sylvester estimates in their own lessons. For today, the point is that *the location of the spectral sets*, not merely the size of a number called a gap, decides which proof works.
+For the Sylvester equation A X minus X B equals C, an ordered spectral gap supports a decay-integral estimate with constant one, while an interlaced pairwise gap can require a different bound. The location of the spectral sets, not merely the size of a number called a gap, decides which estimate applies.
 
 ## Ordered gaps and quadratic forms
 

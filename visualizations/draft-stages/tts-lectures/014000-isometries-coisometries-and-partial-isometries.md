@@ -4,7 +4,7 @@
 
 A linear map that preserves every vector length is an isometry, but it need not be onto. Its adjoint describes how the preserved geometry sits inside the target Hilbert space. Related identities distinguish isometries, coisometries, and partial isometries.
 
-There are three names to learn: isometry, coisometry, and partial isometry. We will not just attach names to equations. We will work out what each map does, why the adjoint matters, and how these maps let us transport geometry between spaces of different dimensions.
+There are three names to learn: isometry, coisometry, and partial isometry. The identities characterize how these maps preserve, discard, or transport geometric information, even between spaces of different dimensions.
 
 ## A map that keeps lengths
 
@@ -76,9 +76,9 @@ Pythagoras shows immediately that reflection preserves length. Reflecting twice 
 
 The reflection can be written as twice the orthogonal projection onto the subspace, minus the identity. This formula will be useful when we later compare operators by how they act on a subspace and its complement.
 
-## Where these maps lead
+## Initial and final spaces explain the formulas
 
-When we develop Gram operators, analysis maps, and synthesis maps, one side of an adjoint composition will measure which directions are preserved or lost. When we construct polar decomposition, partial isometries will separate geometry-preserving transport from stretching. Neither construction should feel like a trick once you understand initial and final spaces.
+For a linear map T, the Gram operator T adjoint T records input lengths after T acts. For a partial isometry, this Gram operator is the projection onto its initial space; T T adjoint instead projects onto its final space. Those different projections explain how a map can preserve length on one part of its input while vanishing on another. In polar decomposition, the same distinction separates isometric transport from positive stretching.
 
 To reconstruct today's lesson, explain the difference between the two equations T star T equals identity and T T star equals identity. Then show, for the map sending a, b to zero, a, that T star T and T T star are different projections. Finally, explain why an orthogonal projection is a partial isometry even though it usually is not an isometry on the whole space.
 

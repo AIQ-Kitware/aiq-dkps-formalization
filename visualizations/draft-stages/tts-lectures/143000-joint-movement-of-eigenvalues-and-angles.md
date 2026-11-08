@@ -6,7 +6,7 @@
 
 # Joint movement of eigenvalues and angles
 
-Suppose we perturb a self-adjoint operator. One theorem tells us how much its eigenvalues can shift. Another tells us how far a selected eigenspace can rotate. Davis and Kahan's Question ten point three asks for the best inequalities that treat those changes simultaneously. Today we will explore what a joint bound ought to capture, prove some exact relations, and identify where separate bounds waste information.
+Suppose we perturb a self-adjoint operator. One theorem tells us how much its eigenvalues can shift. Another tells us how far a selected eigenspace can rotate. Davis and Kahan's Question ten point three asks for the best inequalities that treat those changes simultaneously. A joint bound must account for the interaction between eigenvalue shifts and eigenvector rotations. Rayleigh quotient identities provide exact relations, and a two-dimensional model shows when separate worst-case bounds lose information.
 
 ## The two quantities
 
@@ -38,7 +38,7 @@ The Rayleigh quotient of v minus lambda zero is the sum, over the remaining eige
 
 This is a rigorous joint restriction: a unit vector that rotates away from the lowest eigenline must pay Rayleigh-quotient energy, weighted by the gap. The relation becomes equality in the two-level model when all the leaked mass lands in the next eigenspace.
 
-Now let v be an eigenvector of B. Its Rayleigh quotient for A equals mu minus the expectation of H on v. Therefore mu minus lambda zero is at least g sine squared theta minus the operator norm of H. A reverse estimate is available when A has an upper spectral bound on the complementary subspace. The point is not that this formula dominates all other estimates; it shows how angular leakage, spectral location, and diagonal perturbation expectation interact in the same identity.
+Now let v be an eigenvector of B. Its Rayleigh quotient for A equals mu minus the expectation of H on v. Therefore mu minus lambda zero is at least g sine squared theta minus the operator norm of H. A reverse estimate is available when A has an upper spectral bound on the complementary subspace. The identity relates angular leakage, spectral location, and the diagonal expectation of the perturbation.
 
 ## Residuals add further structure
 
@@ -76,7 +76,7 @@ To formulate a best possible joint theorem, we must decide what data are fixed. 
 
 Different answers produce different feasible regions for the pair consisting of eigenvalue shift and angle. A scalar inequality describing that region may be sharp in dimension two but fail when eigenvalues are clustered, because several unwanted directions can share the leakage. For matrix-valued statements, the natural objects are ordered eigenvalue displacements alongside a list of principal angles, possibly compared through a symmetric gauge.
 
-Davis and Kahan did not supply one general sharp theorem settling their Question ten point three. Our two-level equality and Rayleigh identity are proved special cases, not a complete answer. A good research formulation would first solve the two-level extremal problem under specified block norms, then test candidate inequalities in dimension three where several spectral channels interact.
+Question ten point three remains broader than the available estimates. The two-level equality and Rayleigh identity settle particular cases; a general sharp inequality must also account for interactions among several spectral channels, already present in dimension three.
 
 As an exercise, reproduce the two-level eigenvalue and angle formulas without memorizing them. Then prove the Rayleigh lower bound for an extremal eigenvalue and construct the three-level counterexample to Rayleigh-quotient-only identification. Those calculations show why joint perturbation bounds need more than two independent worst-case estimates.
 

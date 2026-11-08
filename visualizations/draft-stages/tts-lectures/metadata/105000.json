@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "lecture_id": "105000",
+  "transcript": "105000-a-full-proof-readiness-assembly.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    }
+  ]
+}

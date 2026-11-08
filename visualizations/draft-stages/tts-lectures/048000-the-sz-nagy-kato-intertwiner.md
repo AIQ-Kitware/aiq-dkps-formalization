@@ -6,7 +6,7 @@
 
 # How do we build a rotation from two projections?
 
-We know how to calculate angles between two subspaces. We know how to build their sine and cosine operators. And we know that when their projection gap is strictly below one, the cosine operator has a bounded inverse.
+Let U and V be two closed subspaces with orthogonal projections P and Q. Suppose the operator norm of P minus Q is strictly below one. This quantitative angle condition prevents either subspace from containing a nonzero direction perpendicular to the other, and it makes the corresponding cosine operator boundedly invertible. Can we turn that geometric compatibility into a single unitary map carrying U onto V?
 
 But an angle is a measurement, not a motion. If we want to carry the first subspace onto the second, we need an operator that actually moves vectors.
 
@@ -86,7 +86,7 @@ That reflection is unitary. So the norm of K minus the identity equals the norm 
 
 If that norm is strictly below one, K is within distance one of the identity in the Banach algebra of bounded operators. Our Neumann-series theorem now applies: K is invertible.
 
-This is not just an analogy to the planar case. The operator-algebra estimate gives a genuine bounded inverse in any Hilbert space, without selecting individual principal vectors.
+The operator-algebra estimate gives a bounded inverse in Hilbert space without selecting individual principal vectors.
 
 ## Remove the stretching by polar decomposition
 

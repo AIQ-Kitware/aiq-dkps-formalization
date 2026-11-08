@@ -6,9 +6,9 @@
 
 # A comparative theorem decision procedure
 
-We now have four familiar perturbation estimates: sine theta, tangent theta, sine two theta, and tangent two theta. Their formulas are similar enough that an incorrect substitution can look plausible. The assumptions are different enough that such a substitution can invalidate a proof.
+Four classical spectral-subspace estimates involve sine theta, tangent theta, sine two theta, and tangent two theta. Their formulas look similar, but they answer different questions about trial residuals, changes of self-adjoint operators, and selected spectral subspaces. Using one theorem with another theorem’s hypotheses can invalidate a proof. The assumptions are different enough that such a substitution can invalidate a proof.
 
-This lecture develops a procedure for selecting the appropriate theorem. We will apply it to three spectral-gap regimes, identify the object whose norm appears on the right side, and use examples to distinguish directed and ambient angles.
+Selecting an angle theorem begins with the available spectral information and the norm to be controlled. We will apply it to three spectral-gap regimes, identify the object whose norm appears on the right side, and use examples to distinguish directed and ambient angles.
 
 ## Start with the question, not the bound
 
@@ -82,7 +82,7 @@ For a bound on a direct sum of two cross-blocks, one must compare their complete
 
 A directed sine map from P into Q perpendicular can be small even if Q contains a large extra perpendicular part not represented in P. In finite dimensions, if P and Q have equal rank, the two lists of nonzero principal sines coincide. Without that rank equality, a bound for one direction does not automatically control the ambient projection difference.
 
-In infinite dimensions, equality of Hilbert-space dimensions is weaker than matching the crossed defects. When applying a source theorem stated on the full angle, preserve its standing subspace convention. When only a directed angle is available, state the bound in that form.
+In infinite dimensions, equality of Hilbert-space dimensions is weaker than matching the crossed defects. A theorem about the full angle uses its stipulated subspace-matching assumptions; a directed-angle estimate controls only the specified direction.
 
 ## A practical decision pass
 
@@ -90,13 +90,13 @@ For every new problem, record the operator pair and their domains, the trial or 
 
 Then ask the sequence of proof questions. Is the Sylvester equation even well-defined on the required domain? Is its inverse bound valid for this gap and norm? Does the operator projection represent the stated sine or tangent? Are both directed components controlled? If a doubled angle appears, what chooses its branch?
 
-These are verification obligations, not paperwork. Each is tied to a distinct mathematical counterexample from the foundations.
+Each condition excludes a concrete failure mode: a wrong spectral gap, an unmatched defect space, an invalid norm comparison, or an ambiguous angular branch.
 
 ## Close the comparison
 
 The single-angle theorems use a residual and a separated unwanted spectrum. The doubled-angle theorems use reflection of a two-block spectral decomposition and a full perturbation. The tangent versions rely on additional graph or spectral-branch information. The available norm bound depends on the gap geometry and on whether all needed singular-value comparisons have been proved.
 
-We will now strengthen the bridge from individual cross-block estimates to ambient norm estimates. Lemma six point one combines orthogonal blocks through their singular-value lists, and Lemma six point two proves that an operator becomes no larger under the appropriate two-sided pinching.
+For a full ambient sine estimate, two crossed residual equations may be needed rather than one. Their singular-value lists can be combined using the Ky Fan direct-sum inequality, while pinching controls the corresponding perturbation blocks by one ambient norm. These steps explain why keeping track of direction, spectral gaps, and norm class is indispensable.
 
 <!-- END SPOKEN LECTURE -->
 

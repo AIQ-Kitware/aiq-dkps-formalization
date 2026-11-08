@@ -78,7 +78,7 @@ For two genuinely unbounded operators, the formal sum A plus B is initially defi
 
 Even identities like A x minus B x require x to belong to both domains. Writing A minus B as though it were automatically bounded on all of H can hide precisely the issue that an unbounded perturbation theorem must solve.
 
-Later we will use estimates involving a perturbation small relative to A, which means controlling the length of V x by a multiple of the length of A x plus a multiple of the length of x. This is a bound in the graph norm. It lets us reason about a perturbation that need not be bounded in the ambient norm, provided it acts on the required domain.
+A perturbation V is relatively A-bounded when the length of V x is controlled by a multiple of the length of A x plus a multiple of the length of x. This is a bound in the graph norm. It lets us reason about a perturbation that need not be bounded in the ambient norm, provided it acts on the required domain.
 
 For Davis–Kahan's unbounded theorems, the common-domain assumption is often the hinge between a valid operator equation and an expression that is not even defined. We will state it before manipulating off-diagonal blocks.
 

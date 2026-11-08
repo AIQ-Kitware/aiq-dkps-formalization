@@ -8,9 +8,9 @@
 
 The Sylvester equation A X minus X B equals C admits different estimates under different spectral-gap assumptions. An ordered gap yields a constant-one operator-norm estimate using decaying exponentials. Mere pairwise separation yields constant one in Hilbert-Schmidt norm; for the bounded self-adjoint operator-norm problem, a Fourier kernel gives a general factor of pi over two. These conclusions require distinct hypotheses.
 
-It is easy to mix these results together. Today we will organize them by asking two questions every time: what spectral geometry is assumed, and which norm measures the unknown operator?
+Two properties determine the available Sylvester bounds: the spectral geometry of the two coefficient operators and the norm used to measure the solution.
 
-We will also work through a two-by-two example from the Davis–Kahan source that proves a constant-one operator-norm estimate cannot hold under pairwise spectral separation alone.
+A two-by-two example shows that pairwise spectral separation alone does not give a constant-one operator-norm estimate.
 
 ## Three operator norms to keep distinct
 
@@ -46,7 +46,7 @@ Thus pairwise separation yields an operator-norm estimate with a rank factor. Th
 
 The rank enters because we changed norms. It is not part of the underlying square-norm theorem.
 
-## The source's two-by-two obstruction
+## A two-by-two obstruction
 
 Now take A diagonal with entries one and negative one. Take B diagonal with entries zero and two. Their spectra are separated pairwise by at least one, so delta equals one.
 
@@ -64,7 +64,7 @@ Since X is symmetric, its operator norm is the larger absolute eigenvalue, two p
 
 The gap is one, so delta times the operator norm of X is about five point one six, strictly larger than the operator norm of C, about four point two four.
 
-That disproves the claim that pairwise spectral separation always implies a constant-one estimate in operator norm. The example is not a numerical accident: the source formalizes the exact singular values, spectral gap, Sylvester equation, and strict inequality.
+That disproves the claim that pairwise spectral separation always implies a constant-one estimate in operator norm. Its exact singular values and spectral gap yield a strict counterexample to the proposed operator-norm inequality.
 
 ## What ordered separation restores
 
@@ -80,7 +80,7 @@ Both configurations are more structured than arbitrary pairwise distance. In one
 
 ## What general separation gives instead
 
-For arbitrary pairwise-separated bounded self-adjoint spectra, the Fourier multiplier representation from lecture sixty-six gives a uniform operator-norm bound. Delta times the operator norm of X is at most pi over two times the operator norm of C.
+For bounded self-adjoint A and B whose spectra have pairwise distance at least a positive delta, a Fourier-multiplier representation of the Sylvester inverse gives a dimension-free operator-norm bound: delta times the norm of X is at most pi over two times the norm of C. This estimate does not require the spectral sets to be ordered.
 
 The pi-over-two factor is the exact integral of the absolute value of the chosen scalar multiplier, after scaling by delta. The proof works because unitary left and right multiplication preserve the operator norm.
 
@@ -88,7 +88,7 @@ Compatible symmetric-gauge norms also admit the same type of bound in finite-dim
 
 This shows where norm compatibility enters. A quantity that can increase under left or right unitary transport, or that lacks the appropriate triangle inequality, cannot inherit the Fourier bound by this argument.
 
-We should distinguish a valid universal upper bound from an assertion of optimality. The present construction proves the pi-over-two upper bound. Establishing best-possible constants in a particular norm and spectral class requires additional examples or extremal arguments.
+The argument gives a universal upper bound with factor pi over two. Whether that factor is optimal in a specified norm and spectral class is a separate extremal question.
 
 ## A compact hierarchy of conclusions
 

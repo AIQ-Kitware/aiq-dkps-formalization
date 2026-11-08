@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "lecture_id": "124000",
+  "transcript": "124000-ambient-sine-from-an-ambient-perturbation.md",
+  "historical_claims": [
+    {
+      "id": "124000-h01",
+      "anchor": "Proposition six point one of Davis and Kahan instead bounds the complete ambient subspace angle from a perturbation between two self-adjoint operators.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Proposition 6.1",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "124000-h02",
+      "anchor": "The original paper states its theorem in a separable ambient Hilbert space and uses interval-versus-exterior crossed gaps.",
+      "kind": "source_scope",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Proposition 6.1",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "hsu-dk-notes",
+      "reason": "Brief finite-matrix exposition; not an alternate proof of every general theorem in this lecture."
+    }
+  ]
+}

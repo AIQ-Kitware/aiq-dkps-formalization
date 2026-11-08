@@ -6,7 +6,7 @@
 
 # Bringing spectral information back to a real Hilbert space
 
-We have complexified a real Hilbert space and shown that bounded operators preserve their norms, adjoints, and algebraic identities under that transfer. We now ask a more delicate question: what happens to the spectrum, and what happens to operators obtained by applying functions to the spectrum?
+To use the complex spectral theorem for a real self-adjoint operator, complexify its Hilbert space and extend the operator complex-linearly. Norms and adjoints behave compatibly under this extension. The subtler question is which spectral statements and operator functions return to the original real Hilbert space.
 
 For a real self-adjoint operator, our goal is to use complex spectral theory and then return to a real spectral assertion. To accomplish that, we will follow an explicit chain: invertibility, spectral location, functional calculus, conjugation symmetry, and descent.
 

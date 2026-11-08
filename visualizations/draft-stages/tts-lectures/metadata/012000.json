@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "lecture_id": "012000",
+  "transcript": "012000-adjoints-and-the-riesz-representation-theorem.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-18-06",
+      "reason": "MIT 18.06: lectures 9–17 on vector spaces, orthogonality, bases and projections; choose the topic matching this recording."
+    },
+    {
+      "source_id": "mit-functional-analysis-videos",
+      "reason": "Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators."
+    },
+    {
+      "source_id": "mit-functional-analysis-notes",
+      "reason": "Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators."
+    },
+    {
+      "source_id": "axler-open-linear-algebra",
+      "reason": "Consult the proof-led account of linear operators, inner products, adjoints and spectral structure."
+    },
+    {
+      "source_id": "hunter-nachtergaele-applied",
+      "reason": "Read the matching open chapter for foundational analytic hypotheses and worked proofs."
+    }
+  ]
+}

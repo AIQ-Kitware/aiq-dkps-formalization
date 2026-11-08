@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "lecture_id": "092000",
+  "transcript": "092000-one-parameter-unitary-groups-and-their-generators.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-exp",
+      "reason": "Matrix-exponential method used in finite dimensions; compare with operator-domain assumptions in the lecture."
+    },
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "higham-matrix-exponential",
+      "reason": "Contrast the exponential-series perspective with dynamical-system examples."
+    },
+    {
+      "source_id": "teschl-qm-free",
+      "reason": "Use the full free text for spectral calculus and domains of unbounded self-adjoint operators."
+    },
+    {
+      "source_id": "bell-unbounded-operators",
+      "reason": "Follow the concrete graph/domain argument and the unbounded adjoint definition."
+    }
+  ]
+}

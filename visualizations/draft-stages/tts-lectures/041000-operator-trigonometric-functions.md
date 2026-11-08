@@ -112,10 +112,10 @@ A single operator equation can therefore describe many planar rotations at once.
 
 There is a boundary condition hidden in that story: J must really act as a quarter-turn on the directions being rotated. If J vanishes on a kernel or only satisfies the square-minus-one law on a support, we must state that restriction. Later direct-rotation proofs handle exactly those support and kernel issues.
 
-## Where we go from here
+## Why the spectral range controls inverse functions
 
 
-Once those angles have been constructed, the operator trigonometric functions will let us turn the angle data into sine, cosine, and eventually a direct rotation.
+If an angle operator has spectrum between zero and ninety degrees, the sine and cosine functional calculus give positive contraction operators representing complementary parts of subspace overlap. The interval matters: inverse trigonometric functions recover their arguments only on the spectral branches where those scalar inverse identities hold.
 
 For now, try three calculations from memory. Given a diagonal self-adjoint matrix, construct its sine and cosine by changing eigenvalues. Given a projection, derive sine and cosine of t times that projection. Finally, explain why arcsine of sine of A may fail to recover A even though the ordinary sine and cosine operator identities work perfectly.
 

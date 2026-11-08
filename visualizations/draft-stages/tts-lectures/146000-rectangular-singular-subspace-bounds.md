@@ -6,7 +6,7 @@
 
 # Rectangular singular-subspace bounds
 
-The original Davis–Kahan theorems concern self-adjoint operators and their spectral subspaces. Many data matrices are rectangular, and their most informative subspaces are spanned by left or right singular vectors instead of eigenvectors of the original map. Today we will build a bridge from the self-adjoint theory to singular-subspace perturbation bounds. Two constructions lead the way: the Hermitian dilation of a rectangular matrix and its positive Gram operators.
+The original Davis–Kahan theorems concern self-adjoint operators and their spectral subspaces. Many data matrices are rectangular, and their most informative subspaces are spanned by left or right singular vectors instead of eigenvectors of the original map. Rectangular singular-subspace perturbation can be reduced to self-adjoint spectral theory in two ways: Hermitian dilation and positive Gram operators.
 
 ## One rectangular map, two subspaces
 
@@ -46,7 +46,7 @@ A rank-boundary gap must be computed in the full ambient right or left Gram spac
 
 Apply the self-adjoint perturbation framework to G and G hat. Under a positive population boundary gap Delta and the hypotheses identifying the selected singular blocks, a Frobenius principal-sine estimate can be written in terms of the Gram perturbation.
 
-The formalized rectangular theorem packages the algebra and spectral argument into a bound with a factor two multiplying the quantity two sigma one plus the norm of D. That quantity is then multiplied by the smaller of square root of the selected block dimension times the operator norm of D, and the Frobenius norm of D, and divided by Delta.
+The resulting rectangular singular-subspace estimate has a factor two multiplying the quantity two sigma one plus the norm of D. That quantity is then multiplied by the smaller of square root of the selected block dimension times the operator norm of D, and the Frobenius norm of D, and divided by Delta.
 
 The constants and the particular gap assumptions belong to the theorem; one should not silently replace the precise ambient boundary gap with a gap involving the perturbed singular values. The bound is useful because it depends only on the original matrix's singular-value separation, plus the size of the perturbation.
 

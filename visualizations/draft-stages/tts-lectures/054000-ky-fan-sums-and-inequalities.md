@@ -6,9 +6,9 @@
 
 # What can the first several singular values tell us?
 
-We have learned to measure a linear map by its largest singular value. That is the operator norm, and it controls the worst output length on a unit input.
+The largest singular value of a linear map is its operator norm: the greatest length its output can have on a unit input. But that single number ignores how much the map stretches its second, third, and other independent directions.
 
-We have also learned to measure the map by adding the squares of all singular values and taking a square root. That is the Frobenius norm.
+The Frobenius norm instead adds the squares of all singular values and takes a square root. It measures their combined squared stretching, while the operator norm only measures the maximum.
 
 There is another natural family of measurements. Choose a positive integer k, and add the first k singular values without squaring them. These are the Ky Fan sums.
 

@@ -10,7 +10,7 @@ The class is called self-adjoint, or, when we are speaking specifically about ma
 
 ## What an adjoint does
 
-Recall that the adjoint of an operator A is the unique operator A star for which the inner product of A x with y agrees with the inner product of x with A star y. We constructed adjoints using the Riesz representation theorem, so this is not just a formal rearrangement of symbols. It expresses a relationship between how A acts on one vector and how its adjoint acts on another.
+Recall that the adjoint of an operator A is the unique operator A star for which the inner product of A x with y agrees with the inner product of x with A star y. The Riesz representation theorem supplies the adjoint, and the identity relates how A acts on one vector to how its adjoint acts on another.
 
 In orthonormal coordinates over the real numbers, the adjoint matrix is the transpose. Rows and columns swap positions. Over the complex numbers, we must also conjugate the entries. The matrix of the adjoint is the conjugate transpose.
 
@@ -88,7 +88,7 @@ For today's finite-dimensional matrices, no such domain difficulty arises. Every
 
 We have proved three important facts. A Hermitian matrix has real eigenvalues. Eigenvectors with distinct eigenvalues are orthogonal. And a nontrivial Jordan chain attached to an eigenvalue is impossible.
 
-What have we *not* proved? We have not yet shown that there are enough eigenvectors to span the entire space. That is the missing step between these structural facts and a complete spectral decomposition.
+To obtain a full spectral decomposition, we also need enough orthogonal eigenvectors to span the space. The structural facts proved here give the orthogonality of eigenspaces, while existence of a complete eigenbasis requires an additional argument.
 
 Three useful reconstructions are these. Show why the conjugate transpose, not the plain transpose, is the complex adjoint. Reproduce the proof that distinct eigenspaces are perpendicular. And explain exactly where the attempted Jordan chain contradicts self-adjointness.
 

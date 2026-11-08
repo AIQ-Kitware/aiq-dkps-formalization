@@ -6,7 +6,7 @@
 
 # A bounded solution from two unbounded operators
 
-We now have the ingredients for a central result: two self-adjoint operators can be unbounded, yet their Sylvester equation may have a bounded solution with a sharp norm estimate.
+The Sylvester equation A X minus X B equals C can have a bounded solution even when the self-adjoint coefficient operators A and B are unbounded. The difficulty is that X must carry the domain of B into the domain of A, while the equation and its norm bound must be proved simultaneously.
 
 The crucial assumption in our first proof is that the spectra are ordered across a positive gap. We will construct the solution by an exponentially decaying integral, verify the unbounded equation on its legal domain, prove uniqueness, and connect the estimate to sine-theta perturbation bounds.
 

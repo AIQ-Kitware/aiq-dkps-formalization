@@ -8,7 +8,7 @@ But the Davis–Kahan theory that motivates this course is often not interested 
 
 The mathematical object that does exactly this is a spectral projection.
 
-Today we will construct it in finite dimensions, prove its basic properties, and see why selecting eigenvalues is different from selecting an arbitrary collection of eigenvectors.
+In finite dimensions, a spectral projection is determined by a selected set of eigenvalues; it cannot be defined by an arbitrary collection of vectors without checking that they form an invariant spectral subspace.
 
 ## Selecting frequencies in a simple analogy
 
@@ -72,7 +72,7 @@ The difference between a closed and an open interval can therefore change the se
 
 If we move a threshold through a region containing no eigenvalues, the projection does not change at all. If it passes an eigenvalue, the projection gains or loses the entire eigenspace associated with that value.
 
-We have not yet asked how these projections behave when the *matrix* changes. That is a later stability question. Today's point is simply to make the selection rule precise.
+The selection rule is defined for a fixed self-adjoint matrix. Stability under perturbations is a separate problem, requiring spectral separation assumptions.
 
 ## What if an eigenvalue repeats?
 
@@ -110,15 +110,15 @@ Selecting the complement of S keeps everything that S discarded, so its projecti
 
 These identities are useful because they let us manipulate spectral regions using operators, without returning to coordinates after every step.
 
-## Looking ahead
+## Spectral selection as an operator function
 
-Later we will define functions of self-adjoint operators. Spectral selection is an early example: we can think of a function that takes the value one on S and zero outside S, then applies that rule to every eigenvalue of A. In finite dimensions, the spectral decomposition makes this construction straightforward.
+Spectral selection is an example of applying a function to a self-adjoint operator. The indicator of a set S takes the value one on S and zero outside S. Applied to a finite-dimensional self-adjoint matrix through its eigenvalue decomposition, this indicator produces the corresponding spectral projection.
 
-In an infinite-dimensional Hilbert space, the spectrum may not be a discrete list of eigenvalues. Then we will need projection-valued measures to carry out the same kind of selection. We will build that theory rather than assume it.
+For an infinite-dimensional self-adjoint operator, the spectrum need not consist of isolated eigenvalues. A projection-valued spectral measure gives the correct extension of the indicator construction to that setting; the finite eigenbasis argument alone does not establish it.
 
 For now, try reconstructing the two-by-two example. Explain why the projectors for three and one add to the identity. Then prove that any selected spectral projection commutes with A. Finally, explain why selecting one line in a repeated eigenspace is not the same as selecting an eigenvalue.
 
-We can now ask that question in terms of clearly defined spectral subspaces and their projections.
+A selected spectral subspace is the range of a projection defined by a spectral set. Its projector commutes with the self-adjoint operator, and repeated eigenvalues must be selected together when the selection is made solely by eigenvalue.
 
 <!-- END SPOKEN LECTURE -->
 

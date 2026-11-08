@@ -6,7 +6,7 @@
 
 # Off-diagonal perturbations and block reflection
 
-The single-angle theorems compared trial spaces with exact reducing spaces. The double-angle theorems study how a reducing subspace rotates when an operator is perturbed. Their main tool is a reflection that changes the sign of the off-diagonal part of an operator while leaving the diagonal part alone.
+Let T be self-adjoint, with a reducing subspace U and a spectral gap between its two diagonal blocks. Perturb T to S and compare U with a reducing subspace of S. A useful tool is reflection through a subspace: it preserves the diagonal blocks of an operator and reverses the off-diagonal blocks. This elementary symmetry explains why perturbation estimates involving twice the principal angles arise.
 
 We will derive this identity entirely from the two-by-two block matrix of an orthogonal splitting.
 
@@ -46,7 +46,7 @@ This identity is stronger than saying H has small norm. It is an exact structura
 
 Because T is block diagonal, J T J equals T. Consequently J S J equals T minus H, while S equals T plus H. Their difference is negative two H. In every unitarily invariant norm, its size is precisely twice the size of H.
 
-We will later reflect through the perturbed subspace instead of the original one. The same algebra gives an estimate by twice the perturbation even when the defect is no longer exactly negative two H.
+There is another useful choice of reflection: the one through a reducing subspace of the perturbed operator S. That reflection gives a bound by twice the perturbation norm without requiring H itself to be off-diagonal.
 
 ## Verify everything in two dimensions
 
@@ -74,11 +74,11 @@ Therefore the same positive lower bound holds for the real part of J times S min
 
 This observation is the starting point for spectral repulsion. For every real point strictly between a and b, we can repeat the midpoint argument with that point as the center and obtain a positive lower bound. In finite dimensions S therefore has no eigenvalue inside the open gap.
 
-We will derive the precise consequences for the selected spectral subspace in the tangent-two-theta lecture.
+The resulting gap protection is one ingredient in selecting a specific perturbed spectral subspace and proving that it lies on the small-angle branch.
 
 ## Distinguish two reflections
 
-We have reflected through U, the original reducing subspace. Later we will let V be a reducing subspace of S and reflect through V instead. Write J V for that reflection.
+The same construction applies to a reducing subspace V of another operator S: write J V for reflection through V.
 
 Since V reduces S, J V commutes with S. Thus J V S J V equals S.
 
@@ -94,7 +94,7 @@ The sine-two-theta theorem does not require the perturbation itself to be off-di
 
 The tangent-two-theta theorem has a stronger geometric conclusion: the selected subspaces remain on the branch strictly below forty-five degrees. The off-diagonal hypothesis is what supplies that conclusion in its classical form.
 
-The result is a line at twice the angle. That elementary fact, expressed through projection operators, is the geometric reason the doubled-angle sine appears in the perturbation estimate.
+In a principal plane, reflecting one line across another doubles the angle between their directions. The block reflection converts that planar identity into an operator estimate for the doubled principal angles; spectral selection is an additional requirement when a tangent bound is sought.
 
 <!-- END SPOKEN LECTURE -->
 

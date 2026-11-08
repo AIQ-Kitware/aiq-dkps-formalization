@@ -72,7 +72,7 @@ Finally, this classification does not restore the false full-displacement optimi
 
 If you need to classify a pair, begin by extracting the four elementary intersection pieces. Match their dimensions. On the generic remainder, compare the cosine-square operators by unitary equivalence. In the compact case, compare their positive eigenvalues with multiplicities. If instead you need a concrete realization, build an orthogonal sum of principal planes and append the elementary pieces. And if you need a direct rotation, check crossed-defect matching and the desired boundedness or acuteness hypotheses before writing a polar formula.
 
-Those operations close our geometric unit.
+Classification, realization, and direct rotation therefore have distinct hypotheses: classification matches the full relative-position data, realization constructs a pair with prescribed data, and rotation additionally requires compatible crossed defects and the chosen transport conditions.
 
 <!-- END SPOKEN LECTURE -->
 

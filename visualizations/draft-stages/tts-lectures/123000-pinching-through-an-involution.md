@@ -68,7 +68,7 @@ Nothing essential requires the same underlying Hilbert space on the left and rig
 
 The conjugate is not necessarily an inner conjugation by one unitary because the left and right spaces can be different. It is nonetheless a left unitary times K times a right unitary, and rectangular unitarily invariant norms are invariant under such transformations.
 
-The source represents the square ambient form with two subspaces of one Hilbert space, but its symmetric-ideal abstractions support rectangular norm comparisons as well.
+The ambient quadratic-form argument concerns two subspaces of one Hilbert space, while the symmetric-ideal norm comparison also applies to rectangular operators.
 
 ## Why does the Ky Fan statement follow?
 

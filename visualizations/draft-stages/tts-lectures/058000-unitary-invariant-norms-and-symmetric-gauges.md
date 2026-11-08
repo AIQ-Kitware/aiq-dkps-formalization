@@ -6,7 +6,7 @@
 
 # Which measurements survive a change of orthonormal coordinates?
 
-Suppose two people measure the same linear map, but one uses a different orthonormal basis for the inputs and a different orthonormal basis for the outputs. They should agree on the map's intrinsic size. The operator, Frobenius, and nuclear norms all have this property. Today we will describe the general principle that unifies them.
+Suppose two people measure the same linear map, but one uses a different orthonormal basis for the inputs and a different orthonormal basis for the outputs. They should agree on the map's intrinsic size. The operator, Frobenius, and nuclear norms all have this property. Their common property is invariance under unitary changes of input and output coordinates.
 
 The statement we are heading toward is that, for a fixed finite matrix shape, an invariant norm can be read from its singular values using a symmetric gauge. Conversely, an appropriate symmetric gauge gives a norm on matrices by applying it to their singular values. The word appropriate matters: the triangle inequality is a theorem that we need to establish, rather than a consequence of merely choosing an arbitrary symmetric function.
 
@@ -50,11 +50,11 @@ Nonnegativity and scaling are straightforward. The size is zero only if all sing
 
 The challenge is the triangle inequality. The singular values of A plus B are generally not the coordinatewise sums of the singular values of A and B. Their singular vectors may point in entirely different directions.
 
-We proved a remedy in the Ky Fan lecture. For every prefix length, the sum of the largest singular values of A plus B is at most the corresponding prefix sum for A plus the corresponding prefix sum for B.
+The Ky Fan inequalities give the needed common comparison across every leading singular-value prefix. For every prefix length, the sum of the largest singular values of A plus B is at most the corresponding prefix sum for A plus the corresponding prefix sum for B.
 
 In other words, the singular-value list of A plus B is weakly majorized by the coordinatewise sum of the two sorted singular-value lists.
 
-In the majorization lectures, we proved that a symmetric gauge is monotone under weak majorization of nonnegative lists. Applying that fact gives an upper bound by the gauge of the coordinatewise sum. Finally, the ordinary triangle inequality for the gauge bounds that by the sum of the two separate gauges.
+A symmetric gauge is monotone under weak majorization of nonnegative lists: if every leading partial sum of one list is bounded by the corresponding sum of another, the first gauge cannot exceed the second. Applying that fact gives an upper bound by the gauge of the coordinatewise sum. Finally, the ordinary triangle inequality for the gauge bounds that by the sum of the two separate gauges.
 
 We have proved the matrix triangle inequality in three moves: Ky Fan comparison, gauge monotonicity, then the gauge's own triangle inequality.
 

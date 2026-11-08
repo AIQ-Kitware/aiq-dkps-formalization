@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "lecture_id": "130000",
+  "transcript": "130000-restricted-direct-rotation-optimality.md",
+  "historical_claims": [
+    {
+      "id": "130000-h01",
+      "anchor": "Proposition four point one of Davis and Kahan answers this question, and Corollary four point one extends the answer to every unitarily invariant norm of the restricted displacement.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Proposition 4.1 / Corollary 4.1",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "130000-h02",
+      "anchor": "The original theorem retains compact-angle and crossed-defect hypotheses in its infinite-dimensional setting.",
+      "kind": "source_scope",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Proposition 4.1 infinite-dimensional scope",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "higham-polar",
+      "reason": "Alternative polar-factor explanation; distinguish a kernel-zero partial isometry from full unitary extensions."
+    },
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "higham-orthogonal-matrix",
+      "reason": "Review orthogonal maps and why they preserve inner products or distances."
+    },
+    {
+      "source_id": "higham-unitarily-invariant-norm",
+      "reason": "Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms."
+    },
+    {
+      "source_id": "mit-strang-18065-procrustes",
+      "reason": "See an orthogonal transport problem where minimizing displacement becomes a matrix alignment calculation."
+    }
+  ]
+}

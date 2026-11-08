@@ -30,9 +30,9 @@ For positive time t, the product of the decaying exponential of minus t times H 
 
 Integrating from zero to infinity produces a bounded X. Differentiate the integrand to verify the Sylvester equation, with the sign chosen for H X minus X L. The norm of the integral is at most the integral of exponential decay, which equals one over delta times N of C.
 
-The lower spectral component is handled by reversing the order and signs. In the interval-versus-exterior case, the two parts of H lie on opposite sides. Treating the two pieces as an operator-norm sum could waste a factor of two. The source instead uses the bounded-inverse formulation of the Sylvester theorem, or an equivalent blockwise spectral argument that preserves the compatible invariant norm. That theorem supplies the constant-one estimate for the complete exterior spectrum.
+The lower spectral component is handled by reversing the order and signs. In the interval-versus-exterior case, the two parts of H lie on opposite sides. Treating the two pieces as an operator-norm sum could waste a factor of two. A bounded-inverse Sylvester estimate, or a blockwise spectral argument compatible with the invariant norm, gives the constant-one estimate for the full exterior spectrum without separately adding two operator-norm bounds.
 
-In this reconstruction we use that established Sylvester inverse result exactly as proved in the earlier Sylvester unit. We will not substitute the pairwise-distance Hilbert–Schmidt theorem, which does not authorize a constant-one estimate for arbitrary invariant norms.
+For the relevant crossed self-adjoint blocks, assume the ordered or interval-versus-exterior separation delta. The corresponding Sylvester estimate bounds each relevant Ky Fan prefix of the solution by one over delta times the same prefix of the forcing term. A pairwise-distance Hilbert–Schmidt estimate does not yield this constant-one conclusion for arbitrary invariant norms.
 
 ## Build the first crossed equation
 
@@ -118,7 +118,7 @@ Now imagine using only the first crossed equation and allowing U to be a line co
 
 The proof rests on four mathematical mechanisms that now have independent justifications. Self-adjoint spectral restrictions and crossed gaps authorize two Sylvester inverses. Projection algebra identifies the ambient sine with two directed singular-value lists. Ky Fan direct-sum comparison merges the two spectral estimates. Reflection averaging contracts the pair of perturbation blocks into the original perturbation.
 
-Tracking ideal membership makes the argument valid beyond matrices. Tracking both gap conditions prevents a directed theorem from being misstated as an ambient one. That is a complete proof architecture for Proposition six point one and a model for the source-faithful perturbation arguments that follow.
+Tracking ideal membership makes the argument valid beyond matrices. Tracking both gap conditions prevents a directed theorem from being misstated as an ambient one. Together, the domain conditions, the two gap assumptions, the Sylvester estimate, and the singular-value comparison establish Proposition six point one.
 
 <!-- END SPOKEN LECTURE -->
 

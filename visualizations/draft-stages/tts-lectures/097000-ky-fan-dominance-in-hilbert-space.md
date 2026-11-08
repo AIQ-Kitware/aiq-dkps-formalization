@@ -10,7 +10,7 @@ For a finite matrix, the sum of its first k singular values is its k-th Ky Fan n
 
 We now have an approximation-number sequence for every bounded operator between Hilbert spaces. That makes it possible to transplant the same idea to an infinite-dimensional setting. But we must be careful: finite prefix sums are always well-defined, while an infinite sum or ideal norm may be infinite.
 
-Today we will construct the Ky Fan approximation gauges, prove their elementary bounds, and formulate exactly what additional dominance principle is needed to infer membership in a symmetric operator ideal.
+Ky Fan approximation gauges sum the largest approximation numbers of an operator. Their inequalities provide finite-prefix control, but ideal membership requires a suitable completeness and dominance principle.
 
 ## Finite prefixes in an infinite space
 
@@ -30,7 +30,7 @@ The finite spectral theorem and the min–max principle give another description
 
 For compact Hilbert-space operators, finite-rank truncations approximate T in operator norm. Each finite truncation has the familiar variational formula. A fixed prefix K sub k changes by at most k times the operator-norm change in T, so we may pass to the limit.
 
-The important point is that a finite prefix asks about only finitely many directions, even if the ambient Hilbert space is infinite-dimensional.
+A finite Ky Fan prefix controls only finitely many singular directions, even in an infinite-dimensional Hilbert space.
 
 ## Prefix sums obey a triangle inequality
 
@@ -54,7 +54,7 @@ Also, domination is relative to a chosen operator pair. It does not say that an 
 
 ## From prefixes to other gauges
 
-In the finite-dimensional majorization lectures, we proved that a symmetric convex gauge respects weak majorization. A key step was to describe a more balanced vector as a succession of transfers and coordinate reductions.
+A symmetric convex gauge on finite nonnegative lists is monotone under weak majorization: when each leading partial sum of one list is at most that of another, the first gauge is at most the second. This follows by expressing the smaller list through coordinate reductions and transfers that make entries more balanced, then using convexity and permutation symmetry.
 
 In infinite dimensions we can first apply that result to a finite initial segment. If an ideal norm is obtained as the supremum or an appropriate limit of such finite symmetric gauges, the finite inequalities can be passed to the limit—provided the norm has the required lower-semicontinuity or completeness property.
 

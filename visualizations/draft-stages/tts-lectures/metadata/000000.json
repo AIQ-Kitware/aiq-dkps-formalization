@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "lecture_id": "000000",
+  "transcript": "000000-course-introduction.md",
+  "historical_claims": [
+    {
+      "id": "000000-h01",
+      "anchor": "Davis and Kahan developed methods for controlling how spectral subspaces move when the underlying operator is perturbed.",
+      "kind": "historical_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Paper abstract",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "000000-h02",
+      "anchor": "Davis and Kahan worked with more general unitarily invariant norms, so we need to understand where those norms come from and when an operator actually belongs to the class on which such a norm is finite.",
+      "kind": "historical_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Norm treatment; check section",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": []
+}

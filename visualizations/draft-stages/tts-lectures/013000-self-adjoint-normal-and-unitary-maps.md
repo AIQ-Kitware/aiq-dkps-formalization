@@ -4,7 +4,7 @@
 
 For a bounded operator T between Hilbert spaces, its adjoint T star is the unique operator satisfying the inner-product identity: pairing T x with y equals pairing x with T star y. If T sends vectors from one Hilbert space to another, T star sends measuring directions backward. It is defined so that measuring T of x against y gives the same answer as measuring x against T star of y.
 
-Today we will use that construction to distinguish three classes of operators: self-adjoint, normal, and unitary. They all involve the adjoint, but they make different claims. By the end, you should be able to test the claims on a simple matrix, explain why the classes overlap without being identical, and see what each claim gives us geometrically.
+The adjoint distinguishes three classes of operators: self-adjoint, normal, and unitary. They all involve the adjoint, but they make different claims. Simple matrices show how the three classes overlap and which geometric properties each identity guarantees.
 
 ## What it means to equal your adjoint
 
@@ -26,7 +26,7 @@ This is a first theorem, not simply a definition: every eigenvalue of a self-adj
 
 We can also see why eigenvectors for distinct eigenvalues are orthogonal. Let v and w be eigenvectors with eigenvalues lambda and mu. Move T between the two slots of their inner product. The result says that lambda times their inner product equals mu times their inner product, because both eigenvalues are real. If lambda differs from mu, their inner product must be zero.
 
-We have not yet shown that a self-adjoint operator has enough eigenvectors to make a basis. That is the subject of the finite spectral theorem later. Today we have established two consequences that any eigenvectors it does possess must satisfy.
+The finite spectral theorem additionally establishes the existence of a complete orthonormal eigenbasis. The adjoint identities here show that any eigenvalues are real and eigenspaces at distinct eigenvalues are orthogonal.
 
 ## Normality asks for commutation
 
@@ -70,11 +70,11 @@ For this right-shift operator, the equation U star U equals the identity holds, 
 
 We have therefore earned the two-sided definition of unitarity. In finite-dimensional spaces of the same dimension, length preservation forces surjectivity. In infinite dimensions, it need not.
 
-## Why these distinctions prepare us for spectral theory
+## What each operator class guarantees
 
-Self-adjoint operators will lead us to real spectra and orthogonal spectral projections. Normal operators will provide a larger class with strong geometric structure. Unitary operators will become our language for exact changes of orthonormal coordinates and rotations of Hilbert space.
+Self-adjoint operators have real spectral data and admit orthogonal spectral projections under the spectral theorem. Normal operators form a larger class that still admits orthogonal spectral geometry over complex Hilbert spaces. Unitary operators provide exact changes of orthonormal coordinates and length-preserving motion.
 
-When we later say that two operators are unitarily equivalent, we will mean that one is obtained from the other by a reversible change of coordinates that preserves inner products. The geometry is the same even though the displayed matrix may change.
+Two operators are unitarily equivalent if conjugation by a unitary changes one into the other. Their matrices in chosen coordinates may differ, but their spectral and geometric properties are carried across by that isometry.
 
 For now, reconstruct three arguments. Why must an eigenvalue of a self-adjoint operator be real? Why does equality of the lengths of T of x and T star of x, for every x, capture normality? And why is the right shift length-preserving but not unitary?
 

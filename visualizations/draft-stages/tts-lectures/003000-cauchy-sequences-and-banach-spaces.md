@@ -6,7 +6,7 @@ A norm supplies a distance between vectors: the distance from x to y is the norm
 
 Often an argument produces a sequence of increasingly accurate approximations, but the object being approximated is not yet available. We need a way to recognize a convergent process from the approximations themselves.
 
-A Cauchy sequence is designed to do exactly that. A Banach space is a normed vector space in which every Cauchy sequence has a limit that belongs to the space. Today we will derive these ideas, prove that some important spaces have the completeness property, and construct an explicit space that does not. That construction will show why completeness is a real mathematical condition rather than an ornamental addition to the definition of a normed space.
+A Cauchy sequence is designed to do exactly that. A Banach space is a normed vector space in which every Cauchy sequence has a limit that belongs to the space. Completeness holds for many familiar normed spaces but fails for others. The distinction becomes concrete through an explicit example of a Cauchy sequence that has no limit within its space.
 
 ## Getting closer without seeing the destination
 
@@ -136,9 +136,9 @@ First, explain why the polynomial example fails to be Banach. The crucial ingred
 
 Second, reconstruct the proof that a uniformly Cauchy sequence of continuous functions has a continuous limit. You need pointwise completeness to define the candidate. Then you need the uniform bound to compare the candidate with one fixed continuous function. Finally, use continuity of that fixed function and a three-part triangle inequality.
 
-These arguments are prototypes. The same pattern will reappear when we build bounded operators as limits, define functions of operators using power series, and pass from finite approximations to infinite-dimensional constructions.
+The same pattern also proves convergence in spaces of bounded operators and in operator power series: build a candidate limit using completeness, then show that it satisfies the required uniform estimate.
 
-A Banach space is not yet a Hilbert space. A Hilbert space has an inner product, which gives notions of angle and perpendicularity, and it is complete under the norm defined by that inner product. We will develop those ideas later. Today we have established the more basic analytic foundation: a norm measures errors, a Cauchy condition measures internal consistency among approximations, and completeness ensures that consistent approximations have an allowed limit.
+A Banach space is not yet a Hilbert space. A Hilbert space has an inner product, which gives notions of angle and perpendicularity, and it is complete under the norm defined by that inner product. The analytic foundation is already precise: a norm measures errors, a Cauchy condition measures internal consistency among approximations, and completeness ensures that consistent approximations have an allowed limit.
 
 <!-- END SPOKEN LECTURE -->
 

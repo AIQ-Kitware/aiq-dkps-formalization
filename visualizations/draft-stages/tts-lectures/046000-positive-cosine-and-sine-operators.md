@@ -10,7 +10,7 @@ Think back to two lines meeting at an angle. The cosine tells us how much of a u
 
 A finite-dimensional pair of subspaces can have several principal angles, one for each independent principal plane. But a list of angles requires choosing principal vectors, and in infinite dimensions there may be no complete list of them. Can we encode the same geometry without first choosing any vectors at all?
 
-Yes. We can build positive operators that behave like cosine and sine, directly from the two orthogonal projections. Today we will construct those operators, prove their central identity, and see why they are the right language on acute pairs and direct rotations.
+Yes. We can build positive operators that behave like cosine and sine, directly from the two orthogonal projections. Their central identity is the operator version of cosine squared plus sine squared equals one. It describes acute subspace pairs and the direct rotations between them.
 
 ## Start with a single tilted line
 
@@ -34,7 +34,7 @@ We also need an upper bound. For two orthogonal projections, the norm of their d
 
 From the positive square-root theorem, D squared has a unique positive square root. We call it the modulus of D, or the ambient sine operator. On our tilted plane, it is just sine theta times the identity.
 
-Why the word ambient? Because this operator acts on the whole Hilbert space. Later we will also study a directed sine operator that acts, in effect, on the source subspace's coordinates. The two are related, but their domains and multiplicities need not match. We should not silently identify them.
+Why the word ambient? Because this operator acts on the whole Hilbert space. A directed sine operator instead acts on coordinates of the source subspace. The two are related, but their domains and multiplicities need not match. We should not silently identify them.
 
 ## Construct the cosine from what remains
 

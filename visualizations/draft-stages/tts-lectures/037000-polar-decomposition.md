@@ -8,7 +8,7 @@
 
 Imagine pulling a rubber sheet over a table. You stretch it more in one direction than another, and then turn it. If I tell you only where each point ends up, can you separate the stretching from the motion that carries the stretched sheet to its final position?
 
-For a linear map, this is exactly what polar decomposition does. And we already have most of its ingredients. The modulus of a map tells us its stretching, and the singular-value decomposition tells us which input and output directions correspond. Today we will assemble those ideas into one factorization, and prove why it works even when directions get crushed to zero.
+For a linear map, this is exactly what polar decomposition does. And we already have most of its ingredients. The modulus of a map tells us its stretching, and the singular-value decomposition tells us which input and output directions correspond. Combining these ideas gives a factorization into a positive stretching operator and a partial isometry. The partial isometry handles the directions on which the map vanishes.
 
 ## Review what the modulus knows
 
@@ -94,11 +94,11 @@ When A has no kernel, the polar factor is an isometric embedding of its entire i
 
 But if A is rectangular, even an injective map need not have an onto unitary factor. It may embed a two-dimensional space in a three-dimensional one.
 
-## Why this matters later
+## What polar decomposition separates
 
-Polar decomposition is not only a way to simplify matrices. It gives us a canonical method for aligning subspaces. When we build direct rotations, we will need to compare coordinate systems without letting arbitrary basis choices dictate the answer.
+Polar decomposition also explains canonical alignment between subspaces: the positive modulus measures how much each direction is stretched, while the polar partial isometry transports the surviving directions without depending on arbitrary orthonormal coordinates.
 
-It also separates two quantities that appear throughout operator theory: the positive operator that records singular values, and the partial isometry that records where surviving vectors go. This separation remains meaningful for bounded operators on Hilbert spaces, although infinite dimensions require closure arguments that we will develop later.
+It also separates two quantities that appear throughout operator theory: the positive operator that records singular values, and the partial isometry that records where surviving vectors go. This separation extends to bounded operators on Hilbert spaces. In infinite dimensions the initial space is the closure of the modulus range, and the polar factor is defined there by continuous extension before being set to zero on its orthogonal complement.
 
 One last reconstruction. Without looking at a formula, explain how to define U on the range of the modulus. Explain why that definition is unambiguous. Explain why it preserves length there. Then explain what happens on the kernel.
 

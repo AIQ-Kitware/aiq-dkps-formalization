@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "lecture_id": "144000",
+  "transcript": "144000-stability-of-functions-of-operators.md",
+  "historical_claims": [
+    {
+      "id": "144000-h01",
+      "anchor": "Davis and Kahan ask which such operations admit useful perturbation bounds, and under what assumptions on the function and the operators.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Question 10.4",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "144000-h02",
+      "anchor": "Davis and Kahan's Question ten point four. The associated sine-theta and tangent-two-theta theorems become functional-calculus perturbation bounds for that step function.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Question 10.4",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "144000-h03",
+      "anchor": "The original Davis-Kahan paper asks for useful classes of real functions f and estimates comparing f of A with f of a perturbed operator.",
+      "kind": "source_scope",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Question 10.4",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "higham-matrix-function",
+      "reason": "Compare the finite-matrix functional calculus with the lecture’s operator calculus."
+    },
+    {
+      "source_id": "higham-frechet-derivative",
+      "reason": "Study first-order changes of matrix functions under perturbations."
+    }
+  ]
+}

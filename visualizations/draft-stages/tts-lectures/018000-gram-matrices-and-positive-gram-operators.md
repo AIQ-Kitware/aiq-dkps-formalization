@@ -112,9 +112,9 @@ That means a Gram matrix determines all pairwise distances among the vectors.
 
 The converse needs some care. Pairwise distances do not remember where the origin was placed. If you translate every point by the same vector, all pairwise distances stay the same, but the Gram matrix of the point positions usually changes.
 
-To recover a Gram matrix from distances, we first need to choose an origin convention, often by centering the points so their average is zero. We will make that construction explicit when the course reaches Gram reconstruction and multidimensional scaling.
+To recover a Gram matrix from distances, we first need to choose an origin convention, often by centering the points so their average is zero. For centered point configurations, the relation between squared distances and inner products can be inverted to reconstruct the Gram matrix. The centering condition fixes the translation ambiguity; without it, distances alone do not locate an origin.
 
-## What comes next
+## Reconstruct the Gram argument
 
 Try to reconstruct four arguments. Why is every Gram operator positive semidefinite? Why does positive definiteness correspond to independence? Why does the Gram kernel equal the synthesis kernel? And why does equality of two Gram matrices give a well-defined isometry between the corresponding spans?
 

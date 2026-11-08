@@ -6,7 +6,7 @@
 
 # Moving operator size without losing it
 
-We have built a theory of symmetric ideal gauges for rectangular operators. Now we will prove a structural identity that makes the theory practical.
+A symmetric operator-ideal norm depends on the singular values of a bounded map, including maps between different Hilbert spaces. Polar decomposition separates such a map into a positive modulus and a partial isometry. The central question is whether this separation changes ideal membership or the ideal norm.
 
 Let T be any bounded map between Hilbert spaces, with no assumption that it is invertible or square. Its modulus is the positive square root of T adjoint T. The polar decomposition writes T as a partial isometry followed by its modulus.
 

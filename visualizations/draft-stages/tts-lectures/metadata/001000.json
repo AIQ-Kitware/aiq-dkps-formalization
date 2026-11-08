@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "lecture_id": "001000",
+  "transcript": "001000-linear-maps-independent-of-coordinates.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-18-06",
+      "reason": "MIT 18.06: lectures 9–17 on vector spaces, orthogonality, bases and projections; choose the topic matching this recording."
+    },
+    {
+      "source_id": "threeblue-linear-transformations",
+      "reason": "Watch a map act on vectors before writing its matrix or changing coordinates."
+    },
+    {
+      "source_id": "threeblue-change-basis",
+      "reason": "See how the same linear map takes different matrix forms in different bases."
+    },
+    {
+      "source_id": "axler-open-linear-algebra",
+      "reason": "Consult the proof-led account of linear operators, inner products, adjoints and spectral structure."
+    }
+  ]
+}

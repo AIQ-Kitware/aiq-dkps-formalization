@@ -74,7 +74,7 @@ Similarly, the modulus of A is the positive square root of A adjoint A. Its eige
 
 This is why the nuclear norm is called the trace norm. For a rectangular map, we take the trace of the positive modulus on the source, not a trace of the rectangular map itself.
 
-These are finite-dimensional formulas. Infinite-dimensional trace class and Hilbert–Schmidt class require convergence conditions that we have not introduced yet.
+These formulas are finite-dimensional. In infinite-dimensional Hilbert space, the Hilbert–Schmidt and trace-class norms require the respective square-summability and summability conditions on the singular values.
 
 ## Why the Schatten measurements are norms
 
@@ -84,7 +84,7 @@ The first properties follow directly from singular values. They are nonnegative.
 
 The triangle inequality is the interesting part.
 
-From the Ky Fan lecture, we know that the singular values of A plus B are weakly majorized by the componentwise sum of the singular-value lists of A and B.
+The Ky Fan inequality states that, for every prefix length k, the sum of the k largest singular values of A plus B is at most the sum of the k largest singular values of A plus the corresponding sum for B. Equivalently, the singular-value list of A plus B is weakly majorized by the componentwise sum of the two individual lists.
 
 A convex symmetric gauge is monotone under weak majorization: if every leading singular-value sum for one list is no larger, the gauge cannot increase. The finite ell-p norm is such a gauge when p is at least one.
 

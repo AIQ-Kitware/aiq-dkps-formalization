@@ -6,7 +6,7 @@
 
 # Ambient sine from an ambient perturbation
 
-In our first sine-theta theorem, we began with a trial subspace and measured a residual. The result controlled the angle in one direction. Proposition six point one of Davis and Kahan asks for something stronger and structurally different. Suppose two self-adjoint operators differ by a perturbation, and we have chosen one reducing subspace of each operator. Can we control the entire ambient difference between those two subspaces by the perturbation itself?
+A residual estimate for a trial subspace controls how far that trial subspace escapes one exact spectral subspace. That directed angle can miss a defect in the reverse direction. Proposition six point one of Davis and Kahan instead bounds the complete ambient subspace angle from a perturbation between two self-adjoint operators. Suppose two self-adjoint operators differ by a perturbation, and we have chosen one reducing subspace of each operator. Can we control the entire ambient difference between those two subspaces by the perturbation itself?
 
 The answer is yes, under spectral separation in both crossed directions. We will derive the two Sylvester equations, combine their singular values, and see exactly why the pinching lemma is needed to recover a constant of one.
 
@@ -90,7 +90,7 @@ In an infinite-dimensional Hilbert space, a symmetric norm may be finite only fo
 
 Controlling every Ky Fan prefix establishes weak majorization. In a symmetric ideal satisfying the required dominance property, the comparison transfers both ideal membership and the norm bound.
 
-The original paper states its theorem in a separable ambient Hilbert space and uses interval-versus-exterior crossed gaps. Stronger modern interfaces sometimes accept a more abstract Sylvester-gap certificate. When we present the original proposition, the printed spectral conditions matter.
+The original paper states its theorem in a separable ambient Hilbert space and uses interval-versus-exterior crossed gaps. An abstract Sylvester-gap condition can support a more general formulation. The original proposition assumes the explicit interval-versus-exterior separation.
 
 ## Close
 

@@ -10,7 +10,7 @@ Our finite-dimensional spectral theorem diagonalized every self-adjoint matrix. 
 
 In infinite dimensions, the same procedure can fail at its first step. A bounded self-adjoint operator can have no nonzero eigenvectors at all. We need to understand a concrete example before replacing matrices with spectral measures.
 
-Today we will visit four models: square-summable sequences, square-integrable functions, multiplication by a coordinate, and the unilateral shift. Each one exposes a feature that finite matrices cannot show.
+Four standard models exhibit these phenomena: square-summable sequences, square-integrable functions, multiplication by a coordinate, and the unilateral shift.
 
 ## The sequence Hilbert space
 
@@ -92,7 +92,7 @@ Two disjoint subsets give orthogonal projections. The projection for a union of 
 
 For a finite diagonal matrix these projections simply select coordinate eigenspaces. For multiplication by x they select the support of a function according to the value of x, even though there are no eigenvectors.
 
-We have not yet established what counts as a well-behaved set or how to sum projections over infinitely many pieces. These are the tools that allow a spectral theorem without an eigenvector basis.
+A spectral theorem without an eigenvector basis requires measurable sets and countably additive projection-valued measures, which supply the appropriate sums of spectral projections.
 
 <!-- END SPOKEN LECTURE -->
 

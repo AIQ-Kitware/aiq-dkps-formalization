@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "lecture_id": "014000",
+  "transcript": "014000-isometries-coisometries-and-partial-isometries.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-18-06",
+      "reason": "MIT 18.06 provides an accessible finite-dimensional counterpart; use the relevant vector-space, matrix, or orthogonality lecture."
+    },
+    {
+      "source_id": "higham-orthogonal-matrix",
+      "reason": "Review orthogonal maps and why they preserve inner products or distances."
+    },
+    {
+      "source_id": "axler-open-linear-algebra",
+      "reason": "Consult the proof-led account of linear operators, inner products, adjoints and spectral structure."
+    }
+  ]
+}

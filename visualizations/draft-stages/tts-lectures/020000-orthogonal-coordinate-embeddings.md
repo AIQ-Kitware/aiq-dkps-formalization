@@ -14,7 +14,7 @@ Call this map V. It takes a pair of coordinates and puts the represented vector 
 
 V is an *embedding*: it remembers its input without collapsing two different inputs into the same output. More specifically, it preserves the length of every vector. The length of the pair a, b is the square root of a squared plus b squared. The length of the three-dimensional vector a, b, zero is exactly the same.
 
-A linear map that preserves lengths is an isometry. We should not automatically call it unitary. The horizontal plane is only part of three-dimensional space, so V is not onto.
+A linear map that preserves lengths is an isometry. It is unitary only when it is also surjective. The horizontal plane is only part of three-dimensional space, so V is not onto.
 
 Notice also that V is not a change of basis for the entire ambient space. It describes a smaller space *inside* the ambient space. We will frequently use this setup when an approximate eigenspace is represented by a small collection of columns.
 
@@ -36,7 +36,7 @@ Start with a coordinate pair, apply V, and then apply V star. You first make a h
 
 Nothing changes. The resulting map on coordinate pairs is the identity.
 
-In symbols we will later write this as V star V equals I, where I means the identity on coefficient space.
+In operator notation, the Gram identity is V star V equals I, the identity on coefficient space.
 
 Why does it hold for *every* linear isometry, rather than just our simple coordinate inclusion?
 

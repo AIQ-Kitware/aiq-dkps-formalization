@@ -4,7 +4,7 @@
 
 For a bounded linear map, the operator norm measures the largest possible amplification of a unit input. Composing bounded maps leads to a space of operators where addition, multiplication by composition, and limits interact.
 
-This is where several ideas from our first three lectures meet. We need linear maps because we want to compose them. We need operator norms because we want quantitative bounds. And we need completeness because we want infinite sums of operators to converge to actual operators.
+Composition lets us multiply linear maps; the operator norm estimates that multiplication; completeness ensures that limits of increasingly accurate operator approximations still define bounded maps. Together these properties make infinite operator series possible, including series that construct inverses.
 
 The result is called a Banach algebra. The name is less important than what the structure lets us do: construct inverses, estimate errors, and make sense of operator power series.
 
@@ -20,7 +20,7 @@ But composition need not be commutative. Imagine one map that stretches horizont
 
 We already know how to bound the size of a product: the norm of a composition is at most the product of the two norms. This is called a submultiplicative norm. It tells us that multiplying operators respects our quantitative notion of size.
 
-For a nonzero Banach space, the identity has operator norm one. Applying it to any unit vector preserves length exactly. In the zero-dimensional space the identity operator is also the zero map, so its norm is zero; that harmless exceptional case is why we should not silently assume every identity has norm one.
+For a nonzero Banach space, the identity has operator norm one. Applying it to any unit vector preserves length exactly. In the zero-dimensional space the identity operator is also the zero map, so its norm is zero; so the assertion that the identity has norm one requires a nonzero space.
 
 ## Why the operator space is complete
 
@@ -64,9 +64,9 @@ For instance, consider a plane transformation that sends the vertical coordinate
 
 Now suppose A already has a bounded two-sided inverse, and H is another bounded operator. Factor A plus H as A composed with identity plus A inverse composed with H. In the order of evaluation, apply the parenthesized operator first and then apply A. If the norm of A inverse composed with H is below one, the Neumann construction proves that A plus H is also invertible.
 
-This is a first quantitative reason that invertibility is stable under sufficiently small operator changes. We have not yet entered spectral perturbation theory; we are establishing an elementary analytic tool that the spectral theory will later need.
+This is a first quantitative reason that invertibility is stable under sufficiently small operator changes. The Neumann series supplies the basic stability principle: a sufficiently small operator perturbation preserves invertibility.
 
-One caution matters. When we say an operator is invertible in this Banach algebra, we mean that its inverse is itself a bounded everywhere-defined operator. A separate theorem will tell us when a bounded bijection between Banach spaces automatically has a bounded inverse. We have not assumed that theorem here.
+One caution matters. When we say an operator is invertible in this Banach algebra, we mean that its inverse is itself a bounded everywhere-defined operator. The bounded inverse theorem establishes that a bounded bijection between Banach spaces automatically has a bounded inverse; the Neumann-series argument here is a direct construction under a norm-smallness assumption.
 
 ## Reconstruction
 
@@ -74,7 +74,7 @@ Can you reconstruct the Neumann inverse without remembering its name? Begin by e
 
 For a second check, explain why we needed E to be complete. We first obtain limiting outputs for each input, and then we use an operator-norm Cauchy estimate to assemble those limits into a bounded operator. Without completeness, the would-be outputs might lie outside E.
 
-We now have a space of operators in which addition, composition, limits, and certain inverses coexist. Such maps are called linear functionals, and they will lead us to dual spaces.
+The bounded operators on a Banach space form a complete normed algebra. The Neumann series gives a concrete consequence: a norm-small correction to the identity has an explicitly constructed inverse. Its convergence relies on completeness and the submultiplicative operator norm; neither ingredient can be dropped from this proof.
 
 <!-- END SPOKEN LECTURE -->
 

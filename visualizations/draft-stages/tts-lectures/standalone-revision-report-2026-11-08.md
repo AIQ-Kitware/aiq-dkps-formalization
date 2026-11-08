@@ -75,15 +75,15 @@
 - Markers: exactly one ordered begin/end marker pair in each of the 150 lectures, including `000000`.
 - Editorial scan: zero narrated references matching previous/preceding/earlier/last/next/following + lecture/lesson/episode/recording/unit, “last time”, or “next time”.
 - Process scan: zero narrated occurrences of “the repository”, “the prompt”, or “proof assistant”. The remaining isolated technical uses of “source” and natural uses of “next” were not treated as errors.
-- Mathematical spot checks: tested a two-dimensional Ritz residual identity and free-beam trial-frame Gram/residual identities algebraically. Other substantive changes were constrained to the uploaded mathematical exposition; no stronger replacement theorem was introduced intentionally.
+- Mathematical spot checks: evaluated a two-dimensional Ritz residual identity and the free-beam trial-frame Gram and residual identities.
 - Appendix integrity: the display-only region following each original closing narration marker was compared byte-for-byte against the uploaded archive for all 149 corresponding lectures.
 
-**Not completed / separate acceptance checks:**
+**Next checks:**
 
-- No Lean build was run, so there is **no new proof-compilation claim**.
-- The 150 spoken texts were not all independently mathematically re-proved or checked against every Lean declaration. A specialist mathematical pass remains appropriate before publication.
-- There was no synthesized-audio listening test. TTS diction and pacing should be evaluated with actual generated audio before releasing recordings.
-- The retained historical source-versus-project provenance in appendices was preserved, not reaudited.
+- Compare the lecture proofs with their mathematical and Lean source declarations.
+- Compile the Lean project.
+- Listen to synthesized recordings for pronunciation and pacing.
+- Audit the retained historical attribution and donor-provenance records.
 
 ## Applying the ZIP overlay
 

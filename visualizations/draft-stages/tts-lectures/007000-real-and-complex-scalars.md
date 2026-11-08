@@ -4,7 +4,7 @@
 
 Real and complex scalars support different kinds of linearity. A real-linear map preserves sums and multiplication by real numbers; a complex-linear map must also preserve multiplication by the imaginary unit. We will see how complexification changes eigenvalue and spectral questions.
 
-This is not a detour. The distinction changes what an eigenvalue can be, what it means for an operator to have an inverse after subtracting a scalar, and eventually how we build a spectral theory that works even when an operator has no eigenvectors at all.
+The scalar field changes what an eigenvalue can be, what it means for an operator to have an inverse after subtracting a scalar, and eventually how we build a spectral theory that works even when an operator has no eigenvectors at all.
 
 The main idea is simple: moving from real to complex scalars allows us to describe rotations in a way that the real numbers alone cannot. But the move has rules. We cannot just put imaginary numbers into an existing calculation and assume that every definition stays unchanged.
 

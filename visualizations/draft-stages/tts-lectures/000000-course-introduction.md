@@ -16,9 +16,9 @@ There is a great deal of interesting mathematics to learn before we ask whether 
 
 ## A course built around understanding and proof
 
-Davis and Kahan developed methods for controlling how spectral subspaces move when the underlying operator is perturbed. The familiar summary is that Davis–Kahan gives bounds on how eigenspaces change. That summary is important, but it leaves out most of the mathematical story.
+Davis and Kahan developed methods for controlling how spectral subspaces move when the underlying operator is perturbed. Davis–Kahan estimates quantify the movement of eigenspaces, but their derivation also develops the geometry of subspaces and the analysis of operator equations.
 
-The complete story involves geometry, spectral theory, operator equations, variational principles, and functional analysis. The original work studies several different ways to measure angles, different assumptions about spectral gaps, canonical rotations of Hilbert spaces, and the behavior of operators that need not be finite matrices. There is also a subtle distinction between a rotation that is naturally defined and a rotation that minimizes a particular notion of displacement. One printed claim about that distinction turns out to be false.
+The proofs involve geometry, spectral theory, operator equations, variational principles, and functional analysis. The original work studies several different ways to measure angles, different assumptions about spectral gaps, canonical rotations of Hilbert spaces, and the behavior of operators that need not be finite matrices. There is also a subtle distinction between a rotation that is naturally defined and a rotation that minimizes a particular notion of displacement. One printed claim about that distinction turns out to be false.
 
 Our goal is not merely to memorize the four famous angle estimates. By the end of this course, you should be able to reconstruct the arguments that establish them, identify their precise hypotheses, and understand the analytical tools that make those proofs possible.
 
@@ -56,7 +56,7 @@ We will also study an equation called the Sylvester equation. Its basic form is 
 
 In infinite dimensions, the analysis becomes more delicate. Some operators are not defined on every vector in their Hilbert space. We must understand their domains, what it means for them to be closed and self-adjoint, and what we are actually allowed to write when manipulating their products. We will build spectral measures, functional calculus, resolvents, spectral cutoffs and the relevant operator ideals with enough care to support the final theorems.
 
-This is the part of the course that is easy to omit when the goal is merely an appealing presentation of a result. We will not omit it. A full proof is only as sound as its foundations.
+Domain conditions and spectral restrictions are essential to a valid infinite-dimensional perturbation proof. An expression involving an unbounded operator must be defined on the vectors to which it is applied.
 
 ## Finally, the Davis–Kahan questions
 

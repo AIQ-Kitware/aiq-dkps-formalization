@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "lecture_id": "084000",
+  "transcript": "084000-adjoints-of-unbounded-operators.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "hunter-nachtergaele-applied",
+      "reason": "Read the matching open chapter for foundational analytic hypotheses and worked proofs."
+    },
+    {
+      "source_id": "teschl-qm-free",
+      "reason": "Use the full free text for spectral calculus and domains of unbounded self-adjoint operators."
+    },
+    {
+      "source_id": "bell-unbounded-operators",
+      "reason": "Follow the concrete graph/domain argument and the unbounded adjoint definition."
+    }
+  ]
+}

@@ -88,7 +88,7 @@ There is a possible confusion that later perturbation theory will punish. Spectr
 
 Take a two-dimensional space. The first operator may have the coordinate axes as eigenspaces. A second operator obtained by rotating the eigenbasis has different rank-one spectral projections. Unless those axes line up in a special way, the selected projections do not commute.
 
-Our direct-rotation and principal-angle lectures studied exactly that noncommutativity. The spectral calculus does not make it disappear.
+Two orthogonal projections for different subspaces need not commute: on a principal plane meeting at an intermediate angle, their two-by-two projection matrices generally have a nonzero commutator. The spectral calculus does not make it disappear.
 
 If we perturb A to A plus a small self-adjoint operator V, it is meaningful to compare the old spectral projection P and the new spectral projection Q. We will need spectral gaps and resolvent estimates to control their difference. The result is not a consequence of a single P V M product law, because P and Q come from distinct measures.
 

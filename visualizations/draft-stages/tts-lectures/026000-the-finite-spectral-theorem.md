@@ -22,7 +22,7 @@ That is the spectral theorem in its most useful finite-dimensional form. Let's p
 
 We'll work first over the complex numbers. Let A be a self-adjoint operator on a nonzero finite-dimensional complex inner-product space.
 
-The characteristic polynomial has positive degree. The fundamental theorem of algebra says that it has at least one complex root. From the eigenvalue lecture, a root corresponds to a nonzero eigenvector. So choose an eigenvalue lambda and a unit eigenvector v.
+The characteristic polynomial has positive degree. The fundamental theorem of algebra says that it has at least one complex root. If lambda is a root of the characteristic polynomial of a finite matrix A, then A minus lambda times the identity is singular. Its kernel therefore contains a nonzero eigenvector. So choose an eigenvalue lambda and a unit eigenvector v.
 
 Since A is self-adjoint, lambda is real. This matters because the restriction of A to the directions perpendicular to v will remain self-adjoint.
 
@@ -52,7 +52,7 @@ By the inductive hypothesis, the complement has an orthonormal eigenbasis for th
 
 We have proved the theorem for the next dimension, and therefore for every finite dimension.
 
-Notice the architecture of the proof. An eigenvalue exists. One eigenvector creates an invariant perpendicular complement. The same problem repeats at smaller dimension. This is why self-adjointness gives more than merely real eigenvalues: it permits the reduction that makes the induction work.
+The proof proceeds by induction: existence of an eigenvalue gives an eigenvector; self-adjointness makes its perpendicular complement invariant; and the argument repeats in smaller dimension. This is why self-adjointness gives more than merely real eigenvalues: it permits the reduction that makes the induction work.
 
 ## What about real symmetric matrices?
 
@@ -102,7 +102,7 @@ But the plane itself has not changed. Its orthogonal projection has not changed 
 
 This is why it is often more informative to speak of a spectral subspace and its projection than to insist on a particular eigenvector. The projection records the whole component associated with the eigenvalue, without making an arbitrary coordinate choice inside it.
 
-Later we will select *clusters* of eigenvalues rather than just one. The projection onto the sum of their eigenspaces will be the central object whose geometry we study.
+For any selected cluster of eigenvalues, the projection onto the sum of their eigenspaces captures the geometry of the cluster.
 
 ## What the theorem does not say
 

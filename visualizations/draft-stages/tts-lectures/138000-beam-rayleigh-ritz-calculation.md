@@ -80,7 +80,7 @@ An estimate that divides the recentered residual by that gap produces an angle o
 
 ## What the calculation does and does not prove
 
-We have established exactly the compression and the residual. We have not yet proved that the Ritz vectors are individual eigenvectors of the perturbed beam. They generally are not. Nor have we identified the exact two-dimensional perturbed eigenspace; that requires the spectral theorem and the gap protecting the low cluster.
+The calculation determines the Rayleigh–Ritz compression and residual. Ritz vectors generally are not exact eigenvectors of the perturbed beam, and identifying its low two-dimensional spectral subspace additionally requires a spectral theorem and a separating gap.
 
 An operator-norm bound controls the largest principal angle, while a Ky Fan bound controls a sum of principal angles. A tangent estimate also uses stronger spectral placement and can improve on the initial sine estimate.
 

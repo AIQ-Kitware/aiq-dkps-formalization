@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "lecture_id": "015000",
+  "transcript": "015000-invariant-and-reducing-subspaces.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-18-06",
+      "reason": "MIT 18.06: lectures 9–17 on vector spaces, orthogonality, bases and projections; choose the topic matching this recording."
+    },
+    {
+      "source_id": "mit-strang-projections",
+      "reason": "Geometric treatment of subspace projections; finite-dimensional starting point."
+    },
+    {
+      "source_id": "higham-invariant-subspace",
+      "reason": "Relate invariant subspaces to an adapted block matrix representation."
+    },
+    {
+      "source_id": "axler-open-linear-algebra",
+      "reason": "Consult the proof-led account of linear operators, inner products, adjoints and spectral structure."
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "lecture_id": "053000",
+  "transcript": "053000-low-rank-approximation-and-eckart-young.md",
+  "historical_claims": [
+    {
+      "id": "053000-h01",
+      "anchor": "Eckart–Young identifies an optimal rank-k approximation for both measurements.",
+      "kind": "historical_attribution",
+      "source_ids": [
+        "eckart-young-1936"
+      ],
+      "source_locator": "Original rank approximation",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-svd",
+      "reason": "Finite-dimensional singular-direction intuition; general operator-ideal and infinite-dimensional claims require additional sources."
+    },
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "eckart-young-1936",
+      "reason": "Original low-rank approximation article; compare the particular error metric and scope."
+    },
+    {
+      "source_id": "higham-svd",
+      "reason": "See matrix singular vectors and singular values in an independent exposition."
+    },
+    {
+      "source_id": "higham-pseudoinverse",
+      "reason": "Explore the SVD approach to rectangular or rank-deficient matrix maps."
+    },
+    {
+      "source_id": "boyd-vandenberghe-applied",
+      "reason": "Work through concrete linear algebra, least-squares or SVD calculations in an applied treatment."
+    },
+    {
+      "source_id": "mit-strang-18065-svd",
+      "reason": "Watch a direct geometric account of singular directions before the formal operator argument."
+    },
+    {
+      "source_id": "mit-strang-18065-low-rank",
+      "reason": "Watch low-rank approximation derived from truncated SVD, then compare the stated norm."
+    },
+    {
+      "source_id": "bell-compact-svd",
+      "reason": "Read an infinite-dimensional account connecting compact SVD, min-max and Schatten classes."
+    },
+    {
+      "source_id": "mml-free-text",
+      "reason": "Use analytic-geometry, decomposition or PCA examples to connect the operator calculation to data analysis."
+    }
+  ]
+}

@@ -58,7 +58,7 @@ This is called a similarity transformation. It describes a single linear map fro
 
 There is a good way to check the order. A new-coordinate input cannot be fed directly into A unless we first convert it into old coordinates. That is why P goes on the right. The output of A is still in old coordinates. That is why P inverse goes on the left.
 
-The formula is not a magical matrix manipulation. It is a record of three coordinate conversions and actions.
+The formula records the coordinate conversion into the original basis, the action of the map, and conversion back.
 
 If the input and output belong to different vector spaces, we may choose one basis for the inputs and another for the outputs. Then there are two conversion matrices. If P converts new input coordinates to old input coordinates, and Q converts new output coordinates to old output coordinates, the new matrix is Q inverse times A times P. Only when the two spaces are the same and we use the same basis change do we obtain the similarity formula.
 
@@ -84,7 +84,7 @@ Here is how the similarity formula preserves an eigenvalue. Start with a vector 
 
 Thus changing the basis preserves the eigenvalues of an endomorphism. That word, endomorphism, just means a linear map from a vector space back to itself. It is a useful name because eigenvalues are defined for maps whose inputs and outputs can be compared as vectors in the same space.
 
-We should be careful not to claim too much. An arbitrary choice of coordinates does not preserve every numerical measurement we make from a matrix. For example, taking the ordinary Euclidean length of coordinate columns after a non-orthogonal basis change can give a misleading comparison. The physical length of a vector depends on an inner product, and the coordinate expression for that inner product also changes. We will return to this when we develop norms and Hilbert spaces.
+An arbitrary change of coordinates does not preserve every numerical measurement made directly from a matrix. For example, taking the ordinary Euclidean length of coordinate columns after a non-orthogonal basis change can give a misleading comparison. The physical length of a vector depends on an inner product, and the coordinate expression for that inner product also changes. We will return to this when we develop norms and Hilbert spaces.
 
 ## Why composition matters
 
@@ -94,7 +94,7 @@ We can establish its linearity directly. The first map respects addition; the se
 
 Matrices represent composition by matrix multiplication once all the domain and codomain bases have been fixed. The dimensions of the matrices enforce the same requirement: the first map's output must fit the second map's input.
 
-This may sound like bookkeeping, but it becomes central in operator theory. Later we will write expressions such as an operator followed by a projection, or a coordinate embedding followed by a compression. The order of composition tells us which space each intermediate vector lives in. Getting that order wrong can produce an invalid mathematical statement even when its symbols look plausible.
+Composition order is essential in operator theory. For example, an operator followed by a projection and a coordinate embedding followed by a compression generally act on different intermediate spaces. The order of composition tells us which space each intermediate vector lives in. Getting that order wrong can produce an invalid mathematical statement even when its symbols look plausible.
 
 ## A short reconstruction
 

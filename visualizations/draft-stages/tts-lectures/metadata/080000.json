@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "lecture_id": "080000",
+  "transcript": "080000-measurable-spectral-restrictions.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "jordan-bell-pvm",
+      "reason": "Work through spectral measures and spectral integrals from their definitions."
+    },
+    {
+      "source_id": "teschl-qm-free",
+      "reason": "Use the full free text for spectral calculus and domains of unbounded self-adjoint operators."
+    }
+  ]
+}

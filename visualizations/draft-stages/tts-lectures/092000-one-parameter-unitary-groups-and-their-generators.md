@@ -10,7 +10,7 @@ In finite dimensions a self-adjoint matrix A produces a unitary motion by expone
 
 For an unbounded self-adjoint operator, the unitary motion still acts on every vector, but the infinitesimal derivative exists only on a particular dense domain. That difference is the core of Stone's theorem and a major tool for unbounded perturbation theory.
 
-Today we will construct the group, prove strong continuity, identify the generator and its domain, and explain why an operator-norm notion of continuity would be too restrictive.
+Strongly continuous unitary groups are determined by self-adjoint generators. Their continuity is measured on each vector rather than uniformly in operator norm, which would exclude important unbounded generators.
 
 ## The definition of a unitary group
 
@@ -86,7 +86,7 @@ One proves that this operator is symmetric by differentiating the inner-product 
 
 The group itself provides the missing resolvents. Consider an exponentially damped integral of U of t over positive times. Its norm is bounded by the integral of the damping exponential. By differentiating suitable orbits and integrating by parts, this integral becomes an inverse for a nonreal shift of the generator. A corresponding integral over negative times supplies the other shift.
 
-Surjectivity at both nonreal shifts is the self-adjointness criterion we met in the domain lecture. It completes the converse and establishes a one-to-one correspondence between self-adjoint generators and strongly continuous unitary groups, once the sign convention is fixed.
+For a densely defined symmetric operator, surjectivity of both shifts by plus and minus the imaginary unit is a criterion for self-adjointness. It ensures that the generator recovered from the unitary group has the required maximal domain. It completes the converse and establishes a one-to-one correspondence between self-adjoint generators and strongly continuous unitary groups, once the sign convention is fixed.
 
 ## Why the group helps with Sylvester equations
 

@@ -6,7 +6,7 @@
 
 # Can a list of angles classify two subspaces?
 
-When we studied two finite-dimensional subspaces, principal angles gave a remarkably efficient description of how they meet. Find their cross-Gram matrix, take its singular values, and turn each singular value into an angle. Record the dimensions of the common directions and the perpendicular pieces, and we can reconstruct the relative geometry in orthogonal blocks.
+In finite-dimensional inner-product spaces, the principal angles of two subspaces come from the singular values of their cross-Gram matrix. Together with the dimensions of their common, crossed-perpendicular, and exterior parts, those angles classify the pair up to an orthogonal or unitary change of coordinates.
 
 But we are working toward results about Hilbert spaces that may be infinite-dimensional. A bounded self-adjoint operator on an infinite-dimensional space need not have an eigenvector basis. So we should not assume that every pair of subspaces comes with a complete list of principal angles.
 
@@ -46,7 +46,7 @@ Recall what compactness means for a bounded operator: it sends every bounded seq
 
 For a positive compact operator A, suppose A is nonzero. Its operator norm equals the maximum possible Rayleigh quotient. Choose unit vectors whose Rayleigh quotients approach that norm.
 
-The unit ball of a Hilbert space is weakly sequentially compact. We can choose a weakly convergent subsequence. Compactness upgrades the images under A to strong convergence. This is enough to show that the maximum is attained by a unit vector. The stationary-point argument from our Rayleigh quotient lecture makes that vector an eigenvector, with eigenvalue equal to the norm.
+The unit ball of a Hilbert space is weakly sequentially compact. We can choose a weakly convergent subsequence. Compactness upgrades the images under A to strong convergence. This is enough to show that the maximum is attained by a unit vector. For a positive compact self-adjoint operator, a unit vector maximizing its Rayleigh quotient is an eigenvector at the top spectral value: the first variation of the quotient in directions perpendicular to that vector vanishes. Compactness ensures that this top value is attained when the operator is nonzero.
 
 Take its orthogonal complement. Self-adjointness makes that complement invariant, so we may repeat. We obtain orthogonal eigenvectors with nonnegative eigenvalues arranged in decreasing order.
 

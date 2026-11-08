@@ -90,7 +90,7 @@ This feature becomes important when a numerical calculation gives us an approxim
 
 Remember the Rayleigh–Ritz construction. We restricted an operator to a smaller trial subspace and obtained a compressed self-adjoint matrix. Every quotient in that compressed problem is an ambient Rayleigh quotient evaluated on a vector from the trial subspace.
 
-The min–max theorem therefore gives a direct route to comparing Ritz values with the full operator's eigenvalues. We can optimize inside fewer available directions, and the constraint changes what maxima and minima are possible. Later we will make that comparison precise.
+The min–max theorem therefore gives a direct route to comparing Ritz values with the full operator's eigenvalues. We can optimize inside fewer available directions, and the constraint changes what maxima and minima are possible. The min–max principle supplies the precise comparison.
 
 For now, the essential result is complete. We can recover every sorted eigenvalue by a competition between choosing subspaces and choosing directions inside them.
 

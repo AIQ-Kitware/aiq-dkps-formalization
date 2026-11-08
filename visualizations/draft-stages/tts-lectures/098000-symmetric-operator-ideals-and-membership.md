@@ -30,7 +30,7 @@ The index spaces matter. A bounded map between two different Hilbert spaces is n
 
 The compact operators form an ideal. The carrier consists of exactly the compact bounded operators, and its gauge can be the ordinary operator norm. This is a complete ideal, because the compact operators form a closed subspace of the bounded maps in operator norm.
 
-The Hilbert–Schmidt class consists of maps whose squared singular values have finite sum. Its gauge is the square root of that sum. We will later obtain a basis formula that avoids explicitly choosing singular vectors.
+The Hilbert–Schmidt class consists of maps whose squared singular values have finite sum. Its gauge is the square root of that sum. For Hilbert–Schmidt operators, an equivalent formula sums the squared output lengths of an arbitrary orthonormal basis; it does not require choosing singular vectors.
 
 The trace class consists of maps whose singular values have finite ordinary sum. Its gauge is the nuclear or trace norm.
 
@@ -58,7 +58,7 @@ The same phenomenon matters when we replace an infinite-dimensional calculation 
 
 ## The ideal inequality from approximation numbers
 
-We can see the composition estimate concretely for Schatten classes. Suppose T has singular values s one, s two, and so on. For bounded A and B, the approximation-number inequality from lecture ninety-six gives each approximation number of A T B at most the operator norms of A and B times the corresponding approximation number of T.
+We can see the composition estimate concretely for Schatten classes. Suppose T has singular values s one, s two, and so on. For bounded A and B, the rank-approximation inequality gives each approximation number of A T B at most the operator norm of A times the operator norm of B times the corresponding approximation number of T. Indeed, composing a rank-constrained approximation to T with A and B does not increase its rank, and the operator-norm error increases by at most those two norm factors.
 
 Raise both sides to the p-th power and sum for p at least one. Taking the p-th root proves the Schatten composition inequality. In particular, multiplication by an orthogonal projection cannot increase a Schatten norm, because the projection's operator norm is at most one.
 

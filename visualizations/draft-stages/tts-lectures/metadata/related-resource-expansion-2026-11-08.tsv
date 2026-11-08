@@ -1,0 +1,150 @@
+lecture_id	transcript	source_id	source_title	relevance
+001000	001000-linear-maps-independent-of-coordinates.md	threeblue-linear-transformations	Linear Transformations and Matrices	Watch a map act on vectors before writing its matrix or changing coordinates.
+001000	001000-linear-maps-independent-of-coordinates.md	threeblue-change-basis	Change of Basis	See how the same linear map takes different matrix forms in different bases.
+002000	002000-norms-distances-and-convergence.md	higham-matrix-norm	What Is a Matrix Norm?	Compare matrix norm definitions with the norm used in the lecture.
+002000	002000-norms-distances-and-convergence.md	mit-functional-analysis-notes	18.102 Introduction to Functional Analysis: Notes and Readings	Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators.
+003000	003000-cauchy-sequences-and-banach-spaces.md	mit-functional-analysis-videos	18.102 Introduction to Functional Analysis: Lecture Videos	Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators.
+003000	003000-cauchy-sequences-and-banach-spaces.md	mit-functional-analysis-notes	18.102 Introduction to Functional Analysis: Notes and Readings	Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators.
+004000	004000-bounded-linear-maps-and-the-operator-norm.md	higham-matrix-norm	What Is a Matrix Norm?	Compare matrix norm definitions with the norm used in the lecture.
+004000	004000-bounded-linear-maps-and-the-operator-norm.md	mit-functional-analysis-videos	18.102 Introduction to Functional Analysis: Lecture Videos	Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators.
+004000	004000-bounded-linear-maps-and-the-operator-norm.md	mit-functional-analysis-notes	18.102 Introduction to Functional Analysis: Notes and Readings	Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators.
+005000	005000-the-banach-algebra-of-bounded-operators.md	higham-matrix-norm	What Is a Matrix Norm?	Compare matrix norm definitions with the norm used in the lecture.
+005000	005000-the-banach-algebra-of-bounded-operators.md	mit-functional-analysis-videos	18.102 Introduction to Functional Analysis: Lecture Videos	Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators.
+006000	006000-linear-functionals-and-dual-spaces.md	mit-functional-analysis-videos	18.102 Introduction to Functional Analysis: Lecture Videos	Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators.
+006000	006000-linear-functionals-and-dual-spaces.md	mit-functional-analysis-notes	18.102 Introduction to Functional Analysis: Notes and Readings	Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators.
+009000	009000-inner-products-and-polarization.md	threeblue-dot-products	Dot Products and Duality	See why inner products encode orthogonal projections and geometric duality.
+010000	010000-hilbert-spaces-and-orthogonal-complements.md	threeblue-dot-products	Dot Products and Duality	See why inner products encode orthogonal projections and geometric duality.
+010000	010000-hilbert-spaces-and-orthogonal-complements.md	mit-functional-analysis-videos	18.102 Introduction to Functional Analysis: Lecture Videos	Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators.
+010000	010000-hilbert-spaces-and-orthogonal-complements.md	mit-functional-analysis-notes	18.102 Introduction to Functional Analysis: Notes and Readings	Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators.
+011000	011000-the-projection-theorem.md	threeblue-dot-products	Dot Products and Duality	See why inner products encode orthogonal projections and geometric duality.
+011000	011000-the-projection-theorem.md	mit-functional-analysis-videos	18.102 Introduction to Functional Analysis: Lecture Videos	Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators.
+011000	011000-the-projection-theorem.md	mit-functional-analysis-notes	18.102 Introduction to Functional Analysis: Notes and Readings	Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators.
+012000	012000-adjoints-and-the-riesz-representation-theorem.md	mit-functional-analysis-videos	18.102 Introduction to Functional Analysis: Lecture Videos	Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators.
+012000	012000-adjoints-and-the-riesz-representation-theorem.md	mit-functional-analysis-notes	18.102 Introduction to Functional Analysis: Notes and Readings	Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators.
+014000	014000-isometries-coisometries-and-partial-isometries.md	higham-orthogonal-matrix	What Is an Orthogonal Matrix?	Review orthogonal maps and why they preserve inner products or distances.
+015000	015000-invariant-and-reducing-subspaces.md	higham-invariant-subspace	What Is an Invariant Subspace?	Relate invariant subspaces to an adapted block matrix representation.
+016000	016000-orthogonal-sums-and-block-operator-matrices.md	threeblue-linear-transformations	Linear Transformations and Matrices	Watch a map act on vectors before writing its matrix or changing coordinates.
+016000	016000-orthogonal-sums-and-block-operator-matrices.md	higham-block-matrix	What Is a Block Matrix?	Review block multiplication and compression identities in finite matrices.
+016000	016000-orthogonal-sums-and-block-operator-matrices.md	higham-invariant-subspace	What Is an Invariant Subspace?	Relate invariant subspaces to an adapted block matrix representation.
+017000	017000-analysis-and-synthesis-maps.md	threeblue-dot-products	Dot Products and Duality	See why inner products encode orthogonal projections and geometric duality.
+017000	017000-analysis-and-synthesis-maps.md	higham-orthogonal-matrix	What Is an Orthogonal Matrix?	Review orthogonal maps and why they preserve inner products or distances.
+018000	018000-gram-matrices-and-positive-gram-operators.md	threeblue-dot-products	Dot Products and Duality	See why inner products encode orthogonal projections and geometric duality.
+019000	019000-frame-operators-and-parseval-identities.md	threeblue-dot-products	Dot Products and Duality	See why inner products encode orthogonal projections and geometric duality.
+020000	020000-orthogonal-coordinate-embeddings.md	threeblue-change-basis	Change of Basis	See how the same linear map takes different matrix forms in different bases.
+020000	020000-orthogonal-coordinate-embeddings.md	higham-orthogonal-matrix	What Is an Orthogonal Matrix?	Review orthogonal maps and why they preserve inner products or distances.
+021000	021000-compressions-and-rayleigh-ritz-matrices.md	higham-block-matrix	What Is a Block Matrix?	Review block multiplication and compression identities in finite matrices.
+022000	022000-overlaps-alignment-and-gram-rigidity.md	threeblue-linear-transformations	Linear Transformations and Matrices	Watch a map act on vectors before writing its matrix or changing coordinates.
+022000	022000-overlaps-alignment-and-gram-rigidity.md	threeblue-change-basis	Change of Basis	See how the same linear map takes different matrix forms in different bases.
+023000	023000-gram-operators-of-rectangular-maps.md	higham-svd	What Is the Singular Value Decomposition?	See matrix singular vectors and singular values in an independent exposition.
+024000	024000-eigenvalues-eigenspaces-and-algebraic-multiplicity.md	threeblue-change-basis	Change of Basis	See how the same linear map takes different matrix forms in different bases.
+024000	024000-eigenvalues-eigenspaces-and-algebraic-multiplicity.md	threeblue-eigenvalues	Eigenvectors and Eigenvalues	Study a two-dimensional eigenvector example before the spectral argument.
+025000	025000-hermitian-and-self-adjoint-matrices.md	threeblue-eigenvalues	Eigenvectors and Eigenvalues	Study a two-dimensional eigenvector example before the spectral argument.
+025000	025000-hermitian-and-self-adjoint-matrices.md	higham-positive-definite	What Is a Symmetric Positive Definite Matrix?	Compare positive-definiteness tests with quadratic-form reasoning.
+026000	026000-the-finite-spectral-theorem.md	threeblue-eigenvalues	Eigenvectors and Eigenvalues	Study a two-dimensional eigenvector example before the spectral argument.
+027000	027000-rayleigh-quotients-and-extrema.md	higham-positive-definite	What Is a Symmetric Positive Definite Matrix?	Compare positive-definiteness tests with quadratic-form reasoning.
+030000	030000-spectral-projections-for-selected-sets.md	higham-invariant-subspace	What Is an Invariant Subspace?	Relate invariant subspaces to an adapted block matrix representation.
+031000	031000-ordered-gaps-versus-distance-gaps.md	threeblue-eigenvalues	Eigenvectors and Eigenvalues	Study a two-dimensional eigenvector example before the spectral argument.
+032000	032000-coordinate-free-finite-functional-calculus.md	higham-matrix-function	What Is a Matrix Function?	Compare the finite-matrix functional calculus with the lecture’s operator calculus.
+033000	033000-quadratic-form-order-and-positive-operators.md	higham-positive-definite	What Is a Symmetric Positive Definite Matrix?	Compare positive-definiteness tests with quadratic-form reasoning.
+034000	034000-positive-square-roots-and-their-uniqueness.md	higham-positive-definite	What Is a Symmetric Positive Definite Matrix?	Compare positive-definiteness tests with quadratic-form reasoning.
+034000	034000-positive-square-roots-and-their-uniqueness.md	higham-matrix-square-root	What Is a Matrix Square Root?	Read matrix square-root examples alongside the positive-operator construction.
+035000	035000-the-operator-modulus-a.md	higham-matrix-square-root	What Is a Matrix Square Root?	Read matrix square-root examples alongside the positive-operator construction.
+035000	035000-the-operator-modulus-a.md	higham-svd	What Is the Singular Value Decomposition?	See matrix singular vectors and singular values in an independent exposition.
+036000	036000-singular-value-decomposition.md	higham-svd	What Is the Singular Value Decomposition?	See matrix singular vectors and singular values in an independent exposition.
+037000	037000-polar-decomposition.md	higham-orthogonal-matrix	What Is an Orthogonal Matrix?	Review orthogonal maps and why they preserve inner products or distances.
+037000	037000-polar-decomposition.md	higham-matrix-square-root	What Is a Matrix Square Root?	Read matrix square-root examples alongside the positive-operator construction.
+039000	039000-matrix-exponentials-from-the-power-series.md	higham-matrix-exponential	What Is the Matrix Exponential?	Contrast the exponential-series perspective with dynamical-system examples.
+040000	040000-skew-adjoint-generators-and-unitary-flows.md	higham-matrix-exponential	What Is the Matrix Exponential?	Contrast the exponential-series perspective with dynamical-system examples.
+041000	041000-operator-trigonometric-functions.md	higham-matrix-exponential	What Is the Matrix Exponential?	Contrast the exponential-series perspective with dynamical-system examples.
+042000	042000-cross-gram-overlap-and-principal-angles.md	higham-cs-decomposition	What Is the CS Decomposition?	Use explicit block cosine-sine matrices to interpret principal angles.
+042000	042000-cross-gram-overlap-and-principal-angles.md	intel-principal-angles	Computing Principal Angles Between Two Subspaces	Compute principal angles numerically from orthonormal bases using QR and SVD.
+043000	043000-sines-cosines-and-cross-projections.md	higham-cs-decomposition	What Is the CS Decomposition?	Use explicit block cosine-sine matrices to interpret principal angles.
+043000	043000-sines-cosines-and-cross-projections.md	intel-principal-angles	Computing Principal Angles Between Two Subspaces	Compute principal angles numerically from orthonormal bases using QR and SVD.
+044000	044000-the-cosine-sine-decomposition.md	higham-cs-decomposition	What Is the CS Decomposition?	Use explicit block cosine-sine matrices to interpret principal angles.
+044000	044000-the-cosine-sine-decomposition.md	intel-principal-angles	Computing Principal Angles Between Two Subspaces	Compute principal angles numerically from orthonormal bases using QR and SVD.
+045000	045000-halmos-two-projection-decomposition.md	higham-cs-decomposition	What Is the CS Decomposition?	Use explicit block cosine-sine matrices to interpret principal angles.
+046000	046000-positive-cosine-and-sine-operators.md	higham-cs-decomposition	What Is the CS Decomposition?	Use explicit block cosine-sine matrices to interpret principal angles.
+046000	046000-positive-cosine-and-sine-operators.md	intel-principal-angles	Computing Principal Angles Between Two Subspaces	Compute principal angles numerically from orthonormal bases using QR and SVD.
+047000	047000-acute-pairs-and-transversality.md	higham-cs-decomposition	What Is the CS Decomposition?	Use explicit block cosine-sine matrices to interpret principal angles.
+050000	050000-nonacute-angles-and-defect-matching.md	higham-cs-decomposition	What Is the CS Decomposition?	Use explicit block cosine-sine matrices to interpret principal angles.
+051000	051000-compact-angle-spectra-and-classification.md	higham-cs-decomposition	What Is the CS Decomposition?	Use explicit block cosine-sine matrices to interpret principal angles.
+052000	052000-min-max-principles-for-singular-values.md	higham-matrix-norm	What Is a Matrix Norm?	Compare matrix norm definitions with the norm used in the lecture.
+052000	052000-min-max-principles-for-singular-values.md	higham-svd	What Is the Singular Value Decomposition?	See matrix singular vectors and singular values in an independent exposition.
+052000	052000-min-max-principles-for-singular-values.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+053000	053000-low-rank-approximation-and-eckart-young.md	higham-svd	What Is the Singular Value Decomposition?	See matrix singular vectors and singular values in an independent exposition.
+053000	053000-low-rank-approximation-and-eckart-young.md	higham-pseudoinverse	What Is the Pseudoinverse of a Matrix?	Explore the SVD approach to rectangular or rank-deficient matrix maps.
+054000	054000-ky-fan-sums-and-inequalities.md	higham-svd	What Is the Singular Value Decomposition?	See matrix singular vectors and singular values in an independent exposition.
+054000	054000-ky-fan-sums-and-inequalities.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+055000	055000-majorization-and-weak-majorization.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+056000	056000-convexity-and-majorization-descent.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+057000	057000-schatten-and-frobenius-norms.md	higham-matrix-norm	What Is a Matrix Norm?	Compare matrix norm definitions with the norm used in the lecture.
+057000	057000-schatten-and-frobenius-norms.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+057000	057000-schatten-and-frobenius-norms.md	higham-matrix-trace	What Is the Trace of a Matrix?	Review trace identities used in norm and displacement calculations.
+058000	058000-unitary-invariant-norms-and-symmetric-gauges.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+059000	059000-rectangular-invariance-and-zero-padding.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+060000	060000-pinching-and-block-direct-sums.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+061000	061000-quadratic-form-inequalities-and-singular-values.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+064000	064000-kronecker-sums-and-sylvester-invertibility.md	higham-kronecker	What Is the Kronecker Product?	See vectorization and the Kronecker construction used to solve matrix equations.
+066000	066000-unitary-and-semigroup-representations.md	higham-matrix-exponential	What Is the Matrix Exponential?	Contrast the exponential-series perspective with dynamical-system examples.
+070000	070000-hilbert-schmidt-sylvester-group-estimates.md	higham-matrix-exponential	What Is the Matrix Exponential?	Contrast the exponential-series perspective with dynamical-system examples.
+071000	071000-sylvester-identities-for-compressed-blocks.md	higham-block-matrix	What Is a Block Matrix?	Review block multiplication and compression identities in finite matrices.
+073000	073000-sigma-algebras-and-borel-sets.md	mit-functional-analysis-videos	18.102 Introduction to Functional Analysis: Lecture Videos	Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators.
+074000	074000-measures-integration-and-l2.md	mit-functional-analysis-videos	18.102 Introduction to Functional Analysis: Lecture Videos	Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators.
+075000	075000-continuous-functional-calculus-and-c-star-identities.md	higham-matrix-function	What Is a Matrix Function?	Compare the finite-matrix functional calculus with the lecture’s operator calculus.
+075000	075000-continuous-functional-calculus-and-c-star-identities.md	jordan-bell-pvm	Projection-Valued Measures and Spectral Integrals	Work through spectral measures and spectral integrals from their definitions.
+076000	076000-projection-valued-measures.md	jordan-bell-pvm	Projection-Valued Measures and Spectral Integrals	Work through spectral measures and spectral integrals from their definitions.
+077000	077000-scalar-spectral-measures-and-polarization.md	jordan-bell-pvm	Projection-Valued Measures and Spectral Integrals	Work through spectral measures and spectral integrals from their definitions.
+078000	078000-cyclic-decompositions-and-multiplication-models.md	jordan-bell-pvm	Projection-Valued Measures and Spectral Integrals	Work through spectral measures and spectral integrals from their definitions.
+079000	079000-bounded-borel-functional-calculus.md	higham-matrix-function	What Is a Matrix Function?	Compare the finite-matrix functional calculus with the lecture’s operator calculus.
+079000	079000-bounded-borel-functional-calculus.md	jordan-bell-pvm	Projection-Valued Measures and Spectral Integrals	Work through spectral measures and spectral integrals from their definitions.
+080000	080000-measurable-spectral-restrictions.md	jordan-bell-pvm	Projection-Valued Measures and Spectral Integrals	Work through spectral measures and spectral integrals from their definitions.
+081000	081000-resolvents-from-spectral-integrals.md	higham-matrix-function	What Is a Matrix Function?	Compare the finite-matrix functional calculus with the lecture’s operator calculus.
+081000	081000-resolvents-from-spectral-integrals.md	jordan-bell-pvm	Projection-Valued Measures and Spectral Integrals	Work through spectral measures and spectral integrals from their definitions.
+082000	082000-spectral-approximation-by-cutoffs.md	higham-matrix-function	What Is a Matrix Function?	Compare the finite-matrix functional calculus with the lecture’s operator calculus.
+082000	082000-spectral-approximation-by-cutoffs.md	jordan-bell-pvm	Projection-Valued Measures and Spectral Integrals	Work through spectral measures and spectral integrals from their definitions.
+088000	088000-unbounded-spectral-theorem-and-domain-calculus.md	higham-matrix-function	What Is a Matrix Function?	Compare the finite-matrix functional calculus with the lecture’s operator calculus.
+088000	088000-unbounded-spectral-theorem-and-domain-calculus.md	jordan-bell-pvm	Projection-Valued Measures and Spectral Integrals	Work through spectral measures and spectral integrals from their definitions.
+090000	090000-quadratic-forms-and-ordered-half-infinite-gaps.md	higham-positive-definite	What Is a Symmetric Positive Definite Matrix?	Compare positive-definiteness tests with quadratic-form reasoning.
+092000	092000-one-parameter-unitary-groups-and-their-generators.md	higham-matrix-exponential	What Is the Matrix Exponential?	Contrast the exponential-series perspective with dynamical-system examples.
+095000	095000-compactness-and-finite-rank-approximation.md	mit-functional-analysis-videos	18.102 Introduction to Functional Analysis: Lecture Videos	Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators.
+095000	095000-compactness-and-finite-rank-approximation.md	mit-functional-analysis-notes	18.102 Introduction to Functional Analysis: Notes and Readings	Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators.
+096000	096000-approximation-numbers-and-singular-value-sequences.md	higham-svd	What Is the Singular Value Decomposition?	See matrix singular vectors and singular values in an independent exposition.
+096000	096000-approximation-numbers-and-singular-value-sequences.md	mit-functional-analysis-videos	18.102 Introduction to Functional Analysis: Lecture Videos	Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators.
+096000	096000-approximation-numbers-and-singular-value-sequences.md	mit-functional-analysis-notes	18.102 Introduction to Functional Analysis: Notes and Readings	Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators.
+097000	097000-ky-fan-dominance-in-hilbert-space.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+098000	098000-symmetric-operator-ideals-and-membership.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+099000	099000-hilbert-schmidt-and-trace-class-operators.md	higham-matrix-trace	What Is the Trace of a Matrix?	Review trace identities used in norm and displacement calculations.
+099000	099000-hilbert-schmidt-and-trace-class-operators.md	mit-functional-analysis-videos	18.102 Introduction to Functional Analysis: Lecture Videos	Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators.
+099000	099000-hilbert-schmidt-and-trace-class-operators.md	mit-functional-analysis-notes	18.102 Introduction to Functional Analysis: Notes and Readings	Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators.
+100000	100000-modulus-polar-factors-and-ideal-invariance.md	higham-matrix-square-root	What Is a Matrix Square Root?	Read matrix square-root examples alongside the positive-operator construction.
+101000	101000-ideal-estimates-for-compressions-and-block-sums.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+107000	107000-trial-spaces-exact-subspaces-and-residuals.md	higham-invariant-subspace	What Is an Invariant Subspace?	Relate invariant subspaces to an adapted block matrix representation.
+107000	107000-trial-spaces-exact-subspaces-and-residuals.md	intel-principal-angles	Computing Principal Angles Between Two Subspaces	Compute principal angles numerically from orthonormal bases using QR and SVD.
+108000	108000-the-complementary-block-sylvester-equation.md	higham-block-matrix	What Is a Block Matrix?	Review block multiplication and compression identities in finite matrices.
+109000	109000-directed-sine-as-a-rectangular-modulus.md	intel-principal-angles	Computing Principal Angles Between Two Subspaces	Compute principal angles numerically from orthonormal bases using QR and SVD.
+113000	113000-sharp-examples-and-norm-class-comparisons.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+122000	122000-direct-sum-norm-comparison.md	higham-block-matrix	What Is a Block Matrix?	Review block multiplication and compression identities in finite matrices.
+122000	122000-direct-sum-norm-comparison.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+123000	123000-pinching-through-an-involution.md	higham-block-matrix	What Is a Block Matrix?	Review block multiplication and compression identities in finite matrices.
+123000	123000-pinching-through-an-involution.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+125000	125000-non-isometric-frames-and-unequal-dimensions.md	higham-pseudoinverse	What Is the Pseudoinverse of a Matrix?	Explore the SVD approach to rectangular or rank-deficient matrix maps.
+125000	125000-non-isometric-frames-and-unequal-dimensions.md	intel-principal-angles	Computing Principal Angles Between Two Subspaces	Compute principal angles numerically from orthonormal bases using QR and SVD.
+130000	130000-restricted-direct-rotation-optimality.md	higham-orthogonal-matrix	What Is an Orthogonal Matrix?	Review orthogonal maps and why they preserve inner products or distances.
+130000	130000-restricted-direct-rotation-optimality.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+131000	131000-the-squared-displacement-of-orthonormal-frames.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+131000	131000-the-squared-displacement-of-orthonormal-frames.md	higham-matrix-trace	What Is the Trace of a Matrix?	Review trace identities used in norm and displacement calculations.
+131000	131000-the-squared-displacement-of-orthonormal-frames.md	mit-matrix-calculus	Appendix A: Matrix Calculus	Compare the lecture’s matrix variations with scalar-by-matrix derivative examples.
+132000	132000-whole-space-squared-displacement-and-q-norms.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+132000	132000-whole-space-squared-displacement-and-q-norms.md	higham-matrix-trace	What Is the Trace of a Matrix?	Review trace identities used in norm and displacement calculations.
+132000	132000-whole-space-squared-displacement-and-q-norms.md	mit-matrix-calculus	Appendix A: Matrix Calculus	Compare the lecture’s matrix variations with scalar-by-matrix derivative examples.
+133000	133000-unsquared-ambient-displacement-is-different.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+134000	134000-the-four-dimensional-real-counterexample.md	higham-unitarily-invariant-norm	What Is a Unitarily Invariant Norm?	Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms.
+143000	143000-joint-movement-of-eigenvalues-and-angles.md	higham-frechet-derivative	What Is a Fréchet Derivative?	Study first-order changes of matrix functions under perturbations.
+143000	143000-joint-movement-of-eigenvalues-and-angles.md	mit-matrix-calculus	Appendix A: Matrix Calculus	Compare the lecture’s matrix variations with scalar-by-matrix derivative examples.
+144000	144000-stability-of-functions-of-operators.md	higham-matrix-function	What Is a Matrix Function?	Compare the finite-matrix functional calculus with the lecture’s operator calculus.
+144000	144000-stability-of-functions-of-operators.md	higham-frechet-derivative	What Is a Fréchet Derivative?	Study first-order changes of matrix functions under perturbations.
+145000	145000-from-rotation-counterexample-to-real-transport-matching.md	wisc-uniform-convergence	Uniform Convergence	Review the uniform-control principle used when passing from approximating costs to limiting minima.
+146000	146000-rectangular-singular-subspace-bounds.md	higham-svd	What Is the Singular Value Decomposition?	See matrix singular vectors and singular values in an independent exposition.
+146000	146000-rectangular-singular-subspace-bounds.md	higham-pseudoinverse	What Is the Pseudoinverse of a Matrix?	Explore the SVD approach to rectangular or rank-deficient matrix maps.
+146000	146000-rectangular-singular-subspace-bounds.md	intel-principal-angles	Computing Principal Angles Between Two Subspaces	Compute principal angles numerically from orthonormal bases using QR and SVD.
+148000	148000-procrustes-and-spectral-embeddings.md	intel-principal-angles	Computing Principal Angles Between Two Subspaces	Compute principal angles numerically from orthonormal bases using QR and SVD.

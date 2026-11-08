@@ -8,7 +8,7 @@
 
 We know how to split a bounded self-adjoint operator into blocks along a spectral subspace. For an unbounded operator we must ask a prior question. If we project a legal input onto the selected subspace, is the result still a legal input? Without that property, even writing a block matrix for the operator may be meaningless.
 
-Today we will define the right conditions, prove that spectral projections satisfy them, and construct the self-adjoint operator obtained by restricting to a spectral subspace. This supplies the precise block operators used in unbounded Davis–Kahan estimates.
+A spectral projection reduces a self-adjoint operator when it preserves the operator domain and commutes with the operator on that domain. The restriction to the projected space is then self-adjoint on its induced domain. This supplies the precise block operators used in unbounded Davis–Kahan estimates.
 
 ## The domain is part of the operator
 

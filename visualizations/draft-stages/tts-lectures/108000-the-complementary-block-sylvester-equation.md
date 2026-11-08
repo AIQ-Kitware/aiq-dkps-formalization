@@ -6,7 +6,7 @@
 
 # The complementary-block Sylvester equation
 
-Let E be an orthonormal frame for a trial subspace, let F zero span the exact selected spectral subspace of a self-adjoint operator A, and let F one span its orthogonal complement. A residual measures the failure of E to describe an invariant space. Projecting that residual through F one adjoint produces a Sylvester equation whose unknown represents the complementary overlap.
+Consider a self-adjoint operator A, an exact reducing subspace U, and an approximate trial subspace V. Represent V by an orthonormal frame E, U by an orthonormal frame F zero, and the complement of U by an orthonormal frame F one. A residual measures how far the action of A on the trial frame disagrees with a chosen trial operator. The component of that residual perpendicular to U satisfies a Sylvester equation; its unknown measures how much of V lies outside U.
 
 This equation is the complementary-block Sylvester equation. Its derivation takes only a few lines of matrix algebra, but understanding the roles of the blocks prevents several errors that would otherwise appear in a perturbation bound.
 
@@ -28,7 +28,7 @@ Define the residual R as A E minus E A zero. This is a map from F into H. If the
 
 We want to measure how much the trial space lies in the exact complement U perpendicular. Define X to be F one adjoint E. For a trial-coordinate vector x, X x tells us its coordinates in that exact complement.
 
-Notice that X is bounded and has norm at most one. It is the product of an adjoint isometry and an isometry. Its norm will later become the largest directed sine of a principal angle.
+Notice that X is bounded and has norm at most one. It is the product of an adjoint isometry and an isometry. Its norm is the largest directed sine of the principal angles from the trial subspace to U, since it measures the complementary component of each unit trial vector.
 
 ## Derive the equation, one factor at a time
 
@@ -80,7 +80,7 @@ In the simplest operator-norm case with an ordered self-adjoint gap, delta times
 
 The result is already a bound on the amount of trial space outside the exact target.
 
-Do not replace the gap hypothesis by the statement that Lambda one and A zero have different eigenvalues. In dimensions greater than one, interlaced spectral sets can have positive pairwise distance and still require a weaker norm constant. We developed those distinctions in the Sylvester unit precisely because the perturbation theorem inherits them.
+Do not replace the gap hypothesis by the statement that Lambda one and A zero have different eigenvalues. In dimensions greater than one, interlaced spectral sets can have positive pairwise distance and still require a weaker norm constant. The distinction follows from the Sylvester inverse itself: ordered self-adjoint spectra admit a sharp constant-one operator-norm estimate, while an arbitrary pairwise gap need not.
 
 ## Restore the domain conditions for unbounded A
 

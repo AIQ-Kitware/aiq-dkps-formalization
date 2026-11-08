@@ -105,6 +105,110 @@ logic, operator domains, theorem correspondence, or voice quality. Keep
 editorial-review disposition, mathematical source checks, compilation checks,
 and synthesized-audio acceptance separate in the completion record.
 
+## Pedagogical structure audit (8 November 2026)
+
+Review the mathematical teaching sequence, not just editorial trigger words.
+For each standalone recording, check that its opening identifies a definite
+mathematical question, its assumptions are supplied before they are needed,
+and its definitions support the examples and proof that actually follow.
+A successful section should explain why the next lemma or construction is
+needed, what it gives, and what remains to be established. End with the
+precise result and any limitation that the recording has justified.
+
+References to another episode can be disguised as names: “lecture seventy-two,” “our pinching lecture,” “the earlier Sylvester unit,” or “as we
+studied.” Detect spelled-out numbers as well as digits, and substitute the
+**applicable mathematical statement**, not merely a generic transition.
+Read the resulting paragraph to ensure that the prerequisite or example data
+has not been lost and that the new opening or conclusion is grammatical.
+
+For perturbation results, keep apart the source and target subspaces,
+spectral clusters, residual operator, gap hypothesis, domain conditions,
+angle branch, scalar field, and norm class. A statement about squared ambient
+displacement does not on its own yield the same statement about unsquared
+trace-norm displacement. Numerical examples require the actual parameters
+and defining calculation, especially when they are reused elsewhere.
+
+Track structural findings in a per-lecture disposition record. Lexical
+heuristics, section counts, and spoken-word estimates are useful *screening*
+signals; they are not grades for mathematical pedagogy, and a lack of a
+phrase such as “for example” does not prove that the lesson has no example.
+Do not rewrite clear mathematics to satisfy a uniform lecture template.
+Distinguish transcript extraction, editorial review, theorem-source checks,
+Lean compilation, and listening to synthesized audio in the validation record.
+
+The current TTS course phase is *lecture structure and narration audit*.
+Visualizations, slide decks, and a companion presentation are future work.
+The present recordings should remain mathematically understandable without
+those aids; do not add slide cues or visual dependencies prematurely.
+
+## Human-lecture voice: remove drafting and validation artifacts (8 November 2026)
+
+Judge the **spoken region only** as a finished mathematical lecture. A listener
+should hear a mathematician developing an argument, not an assistant reporting
+what its author, code repository, or proof assistant did. Keep edit history,
+compilation status, theorem-file provenance, machine-checking details, source
+wrappers, and validation disclaimers in the companion appendix or review report.
+Do not announce those facts in the narration to establish credibility.
+
+Use direct mathematical claims when their hypotheses are satisfied. Avoid
+ritual qualifiers such as "we are not claiming," "it would be wrong to claim,"
+"this is not just an example," "we have not yet validated," "the source
+formalizes," or "the proof is not mere paperwork." Replace each with the
+specific fact: a conclusion under its assumptions, the reason a tempting
+inference fails, or the exact counterexample. Avoid repetitive contrasts of
+the form "not X, but Y" when Y can be stated on its own. Treat phrases such as
+"what matters," "the lesson is," "quietly," "silently," "the payoff," and
+"the machinery" as editing prompts, **not** forbidden vocabulary; retain one
+only when it genuinely helps the explanation.
+
+**Mathematical qualifications stay.** Say what was proved, what remains open,
+and why the hypotheses matter. Distinguish a theorem from an unsupported
+extension; distinguish an explicit counterexample from a merely failed proof;
+retain finite/infinite-dimensional, real/complex, domain, norm-ideal, and
+spectral-gap constraints. Do not remove these distinctions merely because the
+original phrasing sounds defensive. Prefer, for example, "A pairwise spectral
+gap yields the constant-one Hilbert–Schmidt estimate but not the corresponding
+operator-norm estimate" over "We cannot claim the stronger bound."
+
+An ordinary human instructor can say "we will prove" or ask the listener to
+try a calculation. But dozens of episodes opening "Today we will..." and
+closing with prescribed "lessons" sound templated. Vary the rhythm by stating
+the problem, the relevant construction, or a precise result directly. A course
+introduction and a proof practicum may discuss course goals and exercises;
+an ordinary lecture should stay focused on its own subject. Rewrite former
+"yesterday" and "later we will" transitions as local mathematical context.
+
+After an edit, read the **whole paragraph** and its neighbors. Check that
+removing a disclaimer has not made a stronger theorem appear, stranded a
+pronoun, or created an abrupt definition. Treat audit phrase matches as review
+candidates, not automated proof that a sentence is defective.
+
+## Editorial reports and metadata: report facts directly (8 November 2026)
+
+Apply the same human-writing standard to audit reports, completion summaries,
+README files, sidecar descriptions, and recommendations. Describe the change,
+show the result, and identify specific remaining work. Avoid ritual assertions
+about what a review, citation, Lean build, or source locator does *not* prove.
+
+Prefer a compact record such as “150 narration files pass extraction; 49
+historical claims await comparison with the cited passages; Lean compilation
+was not run.” Each item has a useful operational meaning. Do not append
+paragraphs explaining why a bibliographic link cannot certify a theorem, why
+an editorial scan is not a proof, or why a step was not performed unless a
+specific reader decision depends on that distinction.
+
+Report statuses in the audit ledger and validation table. The prose should
+explain substantive findings, corrections, and priorities, without rehearsing
+obvious epistemic limitations. When uncertainty affects a mathematical or
+historical claim, name the exact disputed proposition and the evidence needed.
+Never substitute confident language for accurate scope. Keep real limitations
+where they prevent a misleading concrete conclusion.
+
+**Final editorial check:** delete each sentence whose only contribution is
+“this does not establish X” or “we are not claiming Y,” then see whether any
+specific information was lost. If the information matters, replace the sentence
+with the actual check performed, missing source passage, or affected theorem.
+
 ## Audience and scope
 
 > “It's the jargon and shorthand for concepts viewers are not familiar with.”
@@ -332,3 +436,25 @@ Use suitable Creative Commons or otherwise openly reusable portraits and
 supporting images to put faces to the people. Show attribution in the slides.
 Keep downloaded images outside Git, together with the records needed to transfer
 them between machines. People-focused history can be split into several lectures.
+
+## Historical citations and learning references (8 November 2026)
+
+Keep spoken text as direct mathematical exposition. A claim about a publication
+(its authorship, date, theorem number, stated hypotheses, historical priority,
+reported erratum, or open questions) belongs in a **non-spoken citation sidecar**
+with an exact spoken-text anchor and a primary-source audit status. Do not
+insert bracketed citations, bibliographic notes, links, citation keys, metadata
+tags, source-verification progress, or requests for citations in the narration.
+A source link and a checked source passage are distinct audit stages.
+
+Ordinary mathematical assertions are supported by their proofs and the Lean
+companion; they do not need an external-reference tag merely because a related
+book exists. Add optional further-learning resources separately, describing
+what they explain and any material differences in assumptions or scope.
+Prefer source links already curated in the earlier lectures, verified
+institutional material, and original papers. Those references are displayed
+by the eventual learning system, never spoken. The TTS extractor operates
+exclusively on the original marked spoken region.
+
+For schema, validator, and editing workflow, see
+`draft-stages/tts-lectures/metadata/README.md`.

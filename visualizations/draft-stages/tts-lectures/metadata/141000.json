@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "lecture_id": "141000",
+  "transcript": "141000-how-much-can-a-distance-only-gap-say.md",
+  "historical_claims": [
+    {
+      "id": "141000-h01",
+      "anchor": "Davis and Kahan raise in Question ten point one. It asks how sharply we can control the angle of a trial subspace using a residual if we know only that every trial spectral value is at least delta away fro",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Question 10.1",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "141000-h02",
+      "anchor": "The historical question asks how sharp a residual-to-angle theorem can be under distance-only spectral separation.",
+      "kind": "source_scope",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Question 10.1",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "hsu-dk-notes",
+      "reason": "Brief finite-matrix exposition; not an alternate proof of every general theorem in this lecture."
+    },
+    {
+      "source_id": "tao-eigenvalue-stability",
+      "reason": "Contrast Hermitian spectral stability with nonnormal sensitivity and pseudospectra."
+    },
+    {
+      "source_id": "motovilov-selin-subspace-bounds",
+      "reason": "Contrast ordered-gap and convex-hull gap hypotheses in sharp tangent estimates."
+    },
+    {
+      "source_id": "bindel-eigen-perturbation",
+      "reason": "Study concrete perturbation examples and first-order spectral sensitivity."
+    }
+  ]
+}

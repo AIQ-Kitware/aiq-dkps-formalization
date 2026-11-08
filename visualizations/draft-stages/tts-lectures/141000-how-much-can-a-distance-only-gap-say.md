@@ -10,7 +10,7 @@ The free-beam model separates low and high spectral clusters by an ordered gap. 
 
 This is the question Davis and Kahan raise in Question ten point one. It asks how sharply we can control the angle of a trial subspace using a residual if we know only that every trial spectral value is at least delta away from every complementary exact spectral value.
 
-The Sylvester equation illustrates two distinct difficulties. A single scalar denominator is easy to control. A whole matrix of denominators can behave differently depending on the operator norm we choose. Today we will prove the easy result, disprove a tempting stronger one, and explain the general estimate that survives.
+The Sylvester equation illustrates two distinct difficulties. A single scalar denominator is easy to control. A whole matrix of denominators can behave differently depending on the operator norm we choose. The scalar calculation gives the sharp constant one in an ordered setting. A counterexample shows why pairwise separation alone does not extend that estimate to every operator norm; a more general bound uses a larger constant.
 
 ## The compressed equation returns
 
@@ -72,7 +72,7 @@ The reciprocal Fourier kernel has an integrable absolute value that yields an op
 
 The proof is more delicate than entrywise division. One must construct a Fourier representation of the reciprocal multiplier on the allowed frequency set and bound the integral of conjugations by unitary groups. For unbounded self-adjoint blocks, one also needs the domain-aware Sylvester identity before invoking the formula.
 
-This does not say the constant pi over two is necessarily optimal for every restricted spectral configuration. It gives a general guarantee where the naive constant one fails. If more is known about the arrangement of spectra, stronger bounds can be recovered.
+Optimality of the factor pi over two depends on the specified class of spectral configurations. It gives a general guarantee where the naive constant one fails. If more is known about the arrangement of spectra, stronger bounds can be recovered.
 
 One useful intermediate result involves low rank. If C has rank r, its Frobenius norm is at most square root of r times its operator norm. Combining that with the Frobenius Sylvester estimate and the fact that operator norm is at most Frobenius norm gives delta times the operator norm of X no greater than square root of r times the operator norm of C. It may be weaker than the Fourier bound for large r, but it is elementary and sometimes useful when r is small.
 
@@ -84,7 +84,7 @@ We must also specify which angle we control. X equals the exact complementary pr
 
 Thus four questions accompany any proposed distance-only estimate. Which spectral sets are compared? Does their separation have a common order? Which norm measures the residual and angle? And is the target a directed angle or an ambient angle?
 
-These distinctions lead directly into the next open problem. With two subspaces we could describe all relative geometry using a cosine–sine block. With three reducing subspaces, several off-diagonal overlaps interact, and a pairwise gap theorem may fail to capture their joint structure.
+The same caution becomes stronger for three reducing subspaces: multiple off-diagonal overlaps interact, so separate pairwise spectral gaps need not determine the best joint estimate. Any claimed improvement must identify its three-block hypotheses and the norm in which the interacting overlaps are measured.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -6,7 +6,7 @@
 
 # Turning operators into vectors
 
-We have reached a remarkable difference between the operator norm and the Hilbert–Schmidt norm. When two self-adjoint spectra are separated by a positive distance, even if they interlace, the Hilbert–Schmidt Sylvester inequality has constant one. We saw a counterexample to the same claim in operator norm.
+Consider A X minus X B equals C with self-adjoint coefficients. If every spectral value of A is at least delta away from every spectral value of B, the Hilbert–Schmidt norm obeys the sharp estimate delta times the norm of X at most the norm of C, even when the spectral sets interlace. The same constant-one statement can fail in operator norm. The difference comes from how the two norms combine matrix coefficients.
 
 Today we will explain the mechanism behind this difference. We will treat an operator as a vector in a larger Hilbert space, turn left and right multiplication into a single self-adjoint generator, and measure the Sylvester equation by the spectral gap of that generator. Our route begins with ordinary rectangular matrices and ends with the same idea on infinite-dimensional Hilbert spaces.
 
@@ -72,11 +72,11 @@ Each block has its own Hilbert–Schmidt energy. Orthogonality of spectral proje
 
 This is the step at which the Hilbert-space structure of operators becomes essential. We can reassemble squared norms because distinct spectral blocks are orthogonal. The proof also explains why an operator-norm claim cannot be imported unchanged: operator norm has no comparable orthogonal energy sum.
 
-## The next use of this estimate
+## Turning Sylvester estimates into angle estimates
 
 A subspace perturbation theorem does not initially present us with an arbitrary Sylvester equation. Instead, it presents us with spectral projections for two operators. We must discover which cross-projection block is the unknown X, what the two compressed generators are, and why the perturbation appears as the right-hand side.
 
-Once it is in hand, this lecture's estimate turns a residual bound into control of how far one spectral subspace tilts away from another.
+This estimate converts a residual bound into a bound on the angle between spectral subspaces.
 
 <!-- END SPOKEN LECTURE -->
 

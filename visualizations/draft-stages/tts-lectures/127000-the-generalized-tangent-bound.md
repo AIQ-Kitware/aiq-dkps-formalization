@@ -28,7 +28,7 @@ This is impossible for positive delta. Hence Z has no nonzero vector perpendicul
 
 In finite dimension, the projection from Z into V is therefore injective and bounded below. We can regard Z as a graph over its image in V. Its graph map gives a finite tangent angle operator. No equal-dimension assumption was needed to establish this one-sided transversality.
 
-For infinite-dimensional trial spaces, the absence of an exact perpendicular vector alone does not guarantee a bounded inverse of the projection. The complete source theorem supplies quantitative bounds and an explicit tangent representative; one should not infer closed-range transversality solely from an injectivity argument.
+For infinite-dimensional trial spaces, the absence of an exact perpendicular vector alone does not guarantee a bounded inverse of the projection. A bounded tangent representative requires quantitative control of the projection inverse. Mere injectivity does not ensure its range is closed.
 
 ## A principal-vector calculation
 

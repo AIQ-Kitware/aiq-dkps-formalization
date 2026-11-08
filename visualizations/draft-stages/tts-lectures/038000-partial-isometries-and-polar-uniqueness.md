@@ -8,9 +8,9 @@
 
 Suppose I take a sheet of paper, draw a short arrow on it, and ask you to move that arrow onto another arrow of the same length. You can decide exactly what happens to that arrow. But have I told you how to move every other direction in the plane? Not necessarily.
 
-A similar ambiguity appears in polar decomposition. Yesterday we constructed the part of a linear map that preserves lengths along the directions that survive. Today we will ask which parts of that construction are forced, which parts are choices, and how the adjoint identifies the initial and final spaces of the motion.
+Polar decomposition expresses a linear map as a partial isometry followed by its positive modulus. The modulus determines the isometric action on the complement of its kernel. Extending that action onto unused directions, however, can involve a choice. The adjoint identifies precisely which input and output directions participate.
 
-This matters later when we compare spectral subspaces: a canonical motion on the relevant subspace need not specify a unique motion everywhere else.
+For spectral subspaces, a canonical motion on the relevant directions need not determine a unique unitary motion on the whole ambient space.
 
 ## An isometry on only part of a space
 
@@ -86,7 +86,7 @@ When the kernel is nonzero, that second piece is a choice. In fact, different ch
 
 When A is invertible, the kernel is zero. There is no missing piece, so the polar factor is already a unitary map and is uniquely determined. You can also express it as A followed by the inverse of its modulus.
 
-Do not transfer the finite-dimensional completion claim without checking its hypotheses. A rectangular map between spaces of different dimensions does not have a unitary equivalence between the entire spaces. In infinite dimensions, even a square bounded operator can have unequal dimensions of these missing pieces, preventing a unitary completion. The canonical partial isometry still makes sense.
+Unitary completion depends on the dimensions of the unused initial and final spaces. A rectangular map between spaces of different dimensions does not have a unitary equivalence between the entire spaces. In infinite dimensions, even a square bounded operator can have unequal dimensions of these missing pieces, preventing a unitary completion. The canonical partial isometry still makes sense.
 
 ## Why negative signs and symmetry are informative
 
@@ -96,15 +96,15 @@ The canonical polar factor, on the other hand, changes sign. On the surviving in
 
 This illustrates how the two factors divide the work: the modulus remembers stretching, while the polar factor remembers orientation and alignment of surviving directions.
 
-## Looking ahead to direct rotations
+## What an incomplete transport can determine
 
-When we later construct a direct rotation between subspaces, we will use a related principle: determine a canonical motion on the directions that matter, and identify the freedom or obstruction on complementary directions.
+For a unitary transport between subspaces, a polar factor can determine motion canonically on its initial space. Its action on the complementary directions is a separate extension problem: the unused source and target dimensions must match if a unitary extension is to exist.
 
 If those directions are silently ignored, one can claim a rotation is uniquely determined when it is not, or claim a transformation is unitary when it only preserves length on a subspace. The mathematical distinction affects theorems about existence, uniqueness, and optimality.
 
 Try reconstructing the argument in reverse. Starting with a partial isometry U, show that U adjoint U projects onto its initial space. Starting with a polar factorization, show why the modulus determines the factor only on the modulus's range. Finally, work through the rank-one diagonal example and exhibit two different full orthogonal factors.
 
-The question is not just whether a factorization exists. It is exactly *which part of the factorization the data determine*.
+The modulus determines the polar factor on the closure of its range; the complementary action may remain undetermined.
 
 <!-- END SPOKEN LECTURE -->
 

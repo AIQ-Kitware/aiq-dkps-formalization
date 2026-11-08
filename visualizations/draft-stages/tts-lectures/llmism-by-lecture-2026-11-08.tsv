@@ -1,0 +1,151 @@
+lecture_id	filename	editorial_disposition	narration_word_count	baseline_candidate_counts	remaining_candidate_counts	notes
+000000	000000-course-introduction.md	revised	1563	not_merely:1	not_merely:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+001000	001000-linear-maps-independent-of-coordinates.md	revised	2159	we_should:1; rhetorical_hedge:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+002000	002000-norms-distances-and-convergence.md	revised	2506	we_have_not:2; not_merely:1	we_have_not:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+003000	003000-cauchy-sequences-and-banach-spaces.md	revised	2696	template_today_we_will:1; we_should:1; not_merely:2	we_should:1; not_merely:2	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+004000	004000-bounded-linear-maps-and-the-operator-norm.md	revised	1348	explicit_lecture_meta:1; not_merely:1	not_merely:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+005000	005000-the-banach-algebra-of-bounded-operators.md	revised	1429	we_should:1; we_have_not:2; not_merely:1	not_merely:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+006000	006000-linear-functionals-and-dual-spaces.md	revised	1604	we_should:1; we_have_not:1; not_merely:1	not_merely:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+007000	007000-real-and-complex-scalars.md	revised	1439	we_have_not:1	we_have_not:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+008000	008000-resolvents-and-invertibility.md	revised	1743	template_today_we_will:1; we_have_not:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+009000	009000-inner-products-and-polarization.md	revised	1755	we_have_not:1; not_merely:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+010000	010000-hilbert-spaces-and-orthogonal-complements.md	screened_no_change	1746	-	-	Screened; no targeted narration edit warranted
+011000	011000-the-projection-theorem.md	revised	1634	template_today_we_will:1; we_have_not:1; not_merely:1	not_merely:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+012000	012000-adjoints-and-the-riesz-representation-theorem.md	screened_no_change	1783	not_merely:1	not_merely:1	Screened; no targeted narration edit warranted
+013000	013000-self-adjoint-normal-and-unitary-maps.md	revised	1442	template_today_we_will:1; we_have_not:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+014000	014000-isometries-coisometries-and-partial-isometries.md	revised	1521	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+015000	015000-invariant-and-reducing-subspaces.md	screened_no_change	1836	-	-	Screened; no targeted narration edit warranted
+016000	016000-orthogonal-sums-and-block-operator-matrices.md	revised	1529	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+017000	017000-analysis-and-synthesis-maps.md	screened_no_change	1640	-	-	Screened; no targeted narration edit warranted
+018000	018000-gram-matrices-and-positive-gram-operators.md	screened_no_change	1672	not_merely:2	not_merely:2	Screened; no targeted narration edit warranted
+019000	019000-frame-operators-and-parseval-identities.md	screened_no_change	1629	not_merely:2	not_merely:2	Screened; no targeted narration edit warranted
+020000	020000-orthogonal-coordinate-embeddings.md	revised	1658	we_should:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+021000	021000-compressions-and-rayleigh-ritz-matrices.md	revised	1756	template_today_we_will:1; not_merely:1	not_merely:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+022000	022000-overlaps-alignment-and-gram-rigidity.md	screened_no_change	1516	-	-	Screened; no targeted narration edit warranted
+023000	023000-gram-operators-of-rectangular-maps.md	revised	1496	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+024000	024000-eigenvalues-eigenspaces-and-algebraic-multiplicity.md	revised	1653	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+025000	025000-hermitian-and-self-adjoint-matrices.md	revised	1400	we_have_not:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+026000	026000-the-finite-spectral-theorem.md	revised	1532	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+027000	027000-rayleigh-quotients-and-extrema.md	screened_no_change	1565	template_today_we_will:1; not_merely:1	template_today_we_will:1; not_merely:1	Screened; no targeted narration edit warranted
+028000	028000-courant-fischer-min-max.md	revised	1408	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+029000	029000-weyl-monotonicity-and-variational-eigenvalue-inequalities.md	revised	1433	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+030000	030000-spectral-projections-for-selected-sets.md	revised	1518	template_today_we_will:1; we_have_not:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+031000	031000-ordered-gaps-versus-distance-gaps.md	revised	1527	template_today_we_will:1; not_merely:1; rhetorical_hedge:1	not_merely:1; rhetorical_hedge:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+032000	032000-coordinate-free-finite-functional-calculus.md	screened_no_change	1427	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+033000	033000-quadratic-form-order-and-positive-operators.md	revised	1494	we_should:1; not_merely:1	we_should:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+034000	034000-positive-square-roots-and-their-uniqueness.md	revised	1286	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+035000	035000-the-operator-modulus-a.md	screened_no_change	1346	-	-	Screened; no targeted narration edit warranted
+036000	036000-singular-value-decomposition.md	revised	1583	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+037000	037000-polar-decomposition.md	revised	1391	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+038000	038000-partial-isometries-and-polar-uniqueness.md	revised	1402	episode_or_previous_theorem:1; template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+039000	039000-matrix-exponentials-from-the-power-series.md	revised	1503	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+040000	040000-skew-adjoint-generators-and-unitary-flows.md	revised	1465	explicit_lecture_meta:1; template_today_we_will:1; not_merely:1	not_merely:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+041000	041000-operator-trigonometric-functions.md	screened_no_change	1602	-	-	Screened; no targeted narration edit warranted
+042000	042000-cross-gram-overlap-and-principal-angles.md	revised	1677	template_today_we_will:1; we_should:1	we_should:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+043000	043000-sines-cosines-and-cross-projections.md	screened_no_change	1605	-	-	Screened; no targeted narration edit warranted
+044000	044000-the-cosine-sine-decomposition.md	screened_no_change	1599	-	-	Screened; no targeted narration edit warranted
+045000	045000-halmos-two-projection-decomposition.md	screened_no_change	1754	-	-	Screened; no targeted narration edit warranted
+046000	046000-positive-cosine-and-sine-operators.md	revised	1536	template_today_we_will:1; we_should:1	we_should:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+047000	047000-acute-pairs-and-transversality.md	screened_no_change	1591	we_should:1; not_merely:1	we_should:1; not_merely:1	Screened; no targeted narration edit warranted
+048000	048000-the-sz-nagy-kato-intertwiner.md	revised	1571	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+049000	049000-canonical-direct-rotation.md	screened_no_change	1601	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+050000	050000-nonacute-angles-and-defect-matching.md	screened_no_change	1529	-	-	Screened; no targeted narration edit warranted
+051000	051000-compact-angle-spectra-and-classification.md	screened_no_change	1761	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+052000	052000-min-max-principles-for-singular-values.md	screened_no_change	1420	-	-	Screened; no targeted narration edit warranted
+053000	053000-low-rank-approximation-and-eckart-young.md	screened_no_change	1532	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+054000	054000-ky-fan-sums-and-inequalities.md	screened_no_change	1622	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+055000	055000-majorization-and-weak-majorization.md	revised	1729	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+056000	056000-convexity-and-majorization-descent.md	revised	1855	template_today_we_will:1; we_have_not:1	template_today_we_will:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+057000	057000-schatten-and-frobenius-norms.md	revised	1867	we_have_not:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+058000	058000-unitary-invariant-norms-and-symmetric-gauges.md	revised	1582	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+059000	059000-rectangular-invariance-and-zero-padding.md	revised	1487	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+060000	060000-pinching-and-block-direct-sums.md	revised	1450	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+061000	061000-quadratic-form-inequalities-and-singular-values.md	revised	1515	we_should:1	we_should:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+062000	062000-from-scalar-division-to-ax-xb-c.md	revised	1571	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+063000	063000-diagonal-matrices-and-the-entrywise-solution.md	revised	1654	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+064000	064000-kronecker-sums-and-sylvester-invertibility.md	screened_no_change	1380	-	-	Screened; no targeted narration edit warranted
+065000	065000-ordered-spectral-separation.md	screened_no_change	1440	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+066000	066000-unitary-and-semigroup-representations.md	screened_no_change	1499	we_should:2	we_should:2	Screened; no targeted narration edit warranted
+067000	067000-disjoint-spectral-sets-and-rosenblum-theory.md	screened_no_change	1475	-	-	Screened; no targeted narration edit warranted
+068000	068000-the-banach-space-sylvester-lower-bound-theorem.md	screened_no_change	1685	-	-	Screened; no targeted narration edit warranted
+069000	069000-norm-dependence-of-sylvester-bounds.md	revised	1470	formalization_or_implementation:1; template_today_we_will:1; we_should:1; rhetorical_hedge:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+070000	070000-hilbert-schmidt-sylvester-group-estimates.md	revised	1405	explicit_lecture_meta:1; template_today_we_will:1	template_today_we_will:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+071000	071000-sylvester-identities-for-compressed-blocks.md	revised	1420	we_should:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+072000	072000-infinite-dimensional-hilbert-examples.md	revised	1342	template_today_we_will:1; we_have_not:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+073000	073000-sigma-algebras-and-borel-sets.md	screened_no_change	1384	-	-	Screened; no targeted narration edit warranted
+074000	074000-measures-integration-and-l2.md	screened_no_change	1611	template_today_we_will:1	template_today_we_will:1	Screened; no targeted narration edit warranted
+075000	075000-continuous-functional-calculus-and-c-star-identities.md	revised	1668	template_today_we_will:1; not_merely:1	not_merely:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+076000	076000-projection-valued-measures.md	screened_no_change	1391	we_should:1; not_merely:1	we_should:1; not_merely:1	Screened; no targeted narration edit warranted
+077000	077000-scalar-spectral-measures-and-polarization.md	screened_no_change	1492	template_today_we_will:1; not_merely:1	template_today_we_will:1; not_merely:1	Screened; no targeted narration edit warranted
+078000	078000-cyclic-decompositions-and-multiplication-models.md	screened_no_change	1538	-	-	Screened; no targeted narration edit warranted
+079000	079000-bounded-borel-functional-calculus.md	screened_no_change	1468	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+080000	080000-measurable-spectral-restrictions.md	screened_no_change	1434	-	-	Screened; no targeted narration edit warranted
+081000	081000-resolvents-from-spectral-integrals.md	revised	1467	not_merely:2	not_merely:2	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+082000	082000-spectral-approximation-by-cutoffs.md	revised	1868	template_today_we_will:1; we_have_not:1	we_have_not:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+083000	083000-densely-defined-operators-and-their-graphs.md	revised	1285	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+084000	084000-adjoints-of-unbounded-operators.md	revised	1316	not_merely:1; rhetorical_hedge:1	not_merely:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+085000	085000-hellinger-toeplitz-and-common-domain-discipline.md	revised	1285	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+086000	086000-resolvents-coercivity-and-spectral-location.md	screened_no_change	1313	template_today_we_will:1	template_today_we_will:1	Screened; no targeted narration edit warranted
+087000	087000-cayley-transforms-and-graph-level-equivalence.md	screened_no_change	1362	-	-	Screened; no targeted narration edit warranted
+088000	088000-unbounded-spectral-theorem-and-domain-calculus.md	revised	1382	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+089000	089000-spectral-projections-and-reducing-domains.md	revised	1353	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+090000	090000-quadratic-forms-and-ordered-half-infinite-gaps.md	screened_no_change	1298	-	-	Screened; no targeted narration edit warranted
+091000	091000-yosida-approximation-and-bounded-truncations.md	revised	1278	template_today_we_will:1; we_should:1; not_merely:1	we_should:1; not_merely:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+092000	092000-one-parameter-unitary-groups-and-their-generators.md	revised	1307	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+093000	093000-domain-aware-sylvester-identities-and-cutoffs.md	revised	1340	template_today_we_will:1; not_merely:1	not_merely:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+094000	094000-unbounded-sylvester-estimates.md	screened_no_change	1411	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+095000	095000-compactness-and-finite-rank-approximation.md	revised	1283	template_today_we_will:1; we_should:1	we_should:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+096000	096000-approximation-numbers-and-singular-value-sequences.md	screened_no_change	1225	-	-	Screened; no targeted narration edit warranted
+097000	097000-ky-fan-dominance-in-hilbert-space.md	revised	1279	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+098000	098000-symmetric-operator-ideals-and-membership.md	screened_no_change	1321	not_merely:1	not_merely:1	Screened; no targeted narration edit warranted
+099000	099000-hilbert-schmidt-and-trace-class-operators.md	screened_no_change	1305	-	-	Screened; no targeted narration edit warranted
+100000	100000-modulus-polar-factors-and-ideal-invariance.md	screened_no_change	1343	-	-	Screened; no targeted narration edit warranted
+101000	101000-ideal-estimates-for-compressions-and-block-sums.md	screened_no_change	1504	-	-	Screened; no targeted narration edit warranted
+102000	102000-real-hilbert-complexification.md	screened_no_change	1419	-	-	Screened; no targeted narration edit warranted
+103000	103000-real-and-complex-spectra-and-functional-calculus.md	screened_no_change	1442	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+104000	104000-real-versions-of-unbounded-sylvester-bounds.md	revised	1613	we_have_not:1; not_merely:1	not_merely:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+105000	105000-a-full-proof-readiness-assembly.md	revised	1811	we_have_not:1; rhetorical_hedge:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+106000	106000-what-changes-and-what-stays-invariant.md	screened_no_change	1360	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+107000	107000-trial-spaces-exact-subspaces-and-residuals.md	screened_no_change	1313	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+108000	108000-the-complementary-block-sylvester-equation.md	screened_no_change	1404	-	-	Screened; no targeted narration edit warranted
+109000	109000-directed-sine-as-a-rectangular-modulus.md	screened_no_change	1348	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+110000	110000-the-single-angle-sine-theorem.md	screened_no_change	1528	-	-	Screened; no targeted narration edit warranted
+111000	111000-graph-subspaces-and-tangent-geometry.md	screened_no_change	1365	-	-	Screened; no targeted narration edit warranted
+112000	112000-the-single-angle-tangent-theorem.md	screened_no_change	1501	not_merely:1	not_merely:1	Screened; no targeted narration edit warranted
+113000	113000-sharp-examples-and-norm-class-comparisons.md	screened_no_change	1524	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+114000	114000-off-diagonal-perturbations-and-block-reflection.md	revised	1234	we_have_not:1	we_have_not:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+115000	115000-doubled-angles-from-symmetry.md	revised	1331	formalization_or_implementation:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+116000	116000-the-sine-two-theta-theorem.md	screened_no_change	1446	we_have_not:1	we_have_not:1	Screened; no targeted narration edit warranted
+117000	117000-the-tangent-two-theta-theorem.md	screened_no_change	1635	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+118000	118000-why-a-small-doubled-sine-proves-little-alone.md	revised	1536	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+119000	119000-spectral-selection-and-repulsion.md	screened_no_change	1450	we_should:1; not_merely:1	we_should:1; not_merely:1	Screened; no targeted narration edit warranted
+120000	120000-small-angle-certification.md	screened_no_change	1590	-	-	Screened; no targeted narration edit warranted
+121000	121000-a-comparative-theorem-decision-procedure.md	revised	1572	explicit_lecture_meta:1; rhetorical_hedge:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+122000	122000-direct-sum-norm-comparison.md	screened_no_change	1579	-	-	Screened; no targeted narration edit warranted
+123000	123000-pinching-through-an-involution.md	revised	1368	not_merely:1	not_merely:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+124000	124000-ambient-sine-from-an-ambient-perturbation.md	revised	1431	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+125000	125000-non-isometric-frames-and-unequal-dimensions.md	revised	1396	formalization_or_implementation:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+126000	126000-weak-spectral-gaps-and-hilbert-schmidt-estimates.md	revised	1325	episode_or_previous_theorem:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+127000	127000-the-generalized-tangent-bound.md	revised	1355	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+128000	128000-spectral-cutoff-and-finite-rank-source-lemmas.md	revised	1480	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+129000	129000-one-complete-original-paper-proof-reconstruction.md	revised	1911	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+130000	130000-restricted-direct-rotation-optimality.md	revised	1371	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+131000	131000-the-squared-displacement-of-orthonormal-frames.md	revised	1263	formalization_or_implementation:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+132000	132000-whole-space-squared-displacement-and-q-norms.md	screened_no_change	1396	-	-	Screened; no targeted narration edit warranted
+133000	133000-unsquared-ambient-displacement-is-different.md	revised	1305	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+134000	134000-the-four-dimensional-real-counterexample.md	screened_no_change	1439	we_have_not:1; not_merely:1	we_have_not:1; not_merely:1	Screened; no targeted narration edit warranted
+135000	135000-corrected-scopes-and-surviving-results.md	screened_no_change	1459	-	-	Screened; no targeted narration edit warranted
+136000	136000-classification-and-realizations-of-direct-rotations.md	screened_no_change	1322	we_should:1	we_should:1	Screened; no targeted narration edit warranted
+137000	137000-the-free-beam-operator-and-its-domain.md	screened_no_change	1347	-	-	Screened; no targeted narration edit warranted
+138000	138000-beam-rayleigh-ritz-calculation.md	revised	1493	we_have_not:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+139000	139000-comparing-angle-and-ky-fan-beam-estimates.md	revised	1530	template_today_we_will:1; we_should:1; we_have_not:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+140000	140000-from-subspace-bounds-to-individual-modes.md	revised	1590	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+141000	141000-how-much-can-a-distance-only-gap-say.md	revised	1393	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+142000	142000-three-subspaces-and-higher-order-interactions.md	revised	1423	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+143000	143000-joint-movement-of-eigenvalues-and-angles.md	revised	1625	template_today_we_will:1; not_merely:1; rhetorical_hedge:1	not_merely:1	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+144000	144000-stability-of-functions-of-operators.md	revised	1442	explicit_lecture_meta:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+145000	145000-from-rotation-counterexample-to-real-transport-matching.md	screened_no_change	1379	-	-	Screened; no targeted narration edit warranted
+146000	146000-rectangular-singular-subspace-bounds.md	revised	1539	formalization_or_implementation:1; template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+147000	147000-population-gap-spectral-statistics.md	revised	1508	template_today_we_will:1	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed
+148000	148000-procrustes-and-spectral-embeddings.md	screened_no_change	1705	we_have_not:1	we_have_not:1	Screened; no targeted narration edit warranted
+149000	149000-proof-practicum-reconstruct-the-1970-theory.md	revised	2028	-	-	Changed spoken narration; introductory and mathematical qualifiers retained as needed

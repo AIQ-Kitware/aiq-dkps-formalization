@@ -4,7 +4,7 @@
 
 Consider the quarter-turn operator on the real plane, sending x comma y to negative y comma x. No nonzero real vector is an eigenvector, since the operator rotates every direction by ninety degrees. Over the complex numbers it has eigenvalues i and negative i. Those are exactly the scalar values for which the shifted operator A minus lambda times the identity fails to be invertible.
 
-Today we will turn that second question into a definition. This is the beginning of spectral theory in its general form. Our goal is to understand what a spectrum is, why it is more than a list of eigenvalues, and why an inverse called the resolvent tells us so much about an operator.
+The spectrum is defined by the failure of an appropriate inverse, and the resolvent records where that inverse exists. This definition captures spectral behavior even when no eigenvector is present.
 
 We can do most of this using only what we already know: Banach spaces, bounded operators, inverse maps, and geometric series.
 
@@ -30,7 +30,7 @@ We say that z is in the resolvent set of A if z times the identity minus A has a
 
 The spectrum is the set of complex numbers not in the resolvent set.
 
-There are two requirements in that definition. The map must have a two-sided inverse, and that inverse must respect the norm through a boundedness estimate. In finite dimensions, linear inverses are automatically bounded. There is also a deep theorem, called the bounded inverse theorem, which says that a bijective bounded linear map between Banach spaces has a bounded inverse. We have not proved it yet, so today we keep boundedness visible in the definition. The distinction becomes even more important when we study operators defined only on part of a space.
+There are two requirements in that definition. The map must have a two-sided inverse, and that inverse must respect the norm through a boundedness estimate. In finite dimensions, linear inverses are automatically bounded. There is also a deep theorem, called the bounded inverse theorem, which says that a bijective bounded linear map between Banach spaces has a bounded inverse. Boundedness is explicit in the definition of the resolvent, including when the bounded inverse theorem makes it automatic. The distinction becomes even more important when we study operators defined only on part of a space.
 
 The resolvent operator, when it exists, will be denoted by the letter R with the chosen scalar z as its input. More explicitly, R at z means the inverse of z times the identity minus A.
 

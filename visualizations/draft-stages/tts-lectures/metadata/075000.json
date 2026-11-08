@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "lecture_id": "075000",
+  "transcript": "075000-continuous-functional-calculus-and-c-star-identities.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "higham-matrix-function",
+      "reason": "Compare the finite-matrix functional calculus with the lecture’s operator calculus."
+    },
+    {
+      "source_id": "jordan-bell-pvm",
+      "reason": "Work through spectral measures and spectral integrals from their definitions."
+    },
+    {
+      "source_id": "hunter-nachtergaele-applied",
+      "reason": "Read the matching open chapter for foundational analytic hypotheses and worked proofs."
+    },
+    {
+      "source_id": "teschl-qm-free",
+      "reason": "Use the full free text for spectral calculus and domains of unbounded self-adjoint operators."
+    },
+    {
+      "source_id": "bell-banach-algebras",
+      "reason": "Review the Banach-algebra spectral language behind resolvents and invertibility."
+    }
+  ]
+}

@@ -10,7 +10,7 @@ The answer is yes for bounded operators on Hilbert spaces. But there are two dis
 
 Let E and F be two normed vector spaces, and let T carry vectors from E to F. Think of a measurement on F as a continuous linear functional: a rule that takes an output vector and returns one real or complex number.
 
-We studied such functionals in the dual-space lecture. If we have a measurement on F, we can create a measurement on E simply by composing it with T. For an input x, apply T, then measure the result.
+The collection of continuous linear functionals on a normed space is its continuous dual. If we have a measurement on F, we can create a measurement on E simply by composing it with T. For an input x, apply T, then measure the result.
 
 This process is called pulling a functional back through T. It reverses the direction of the mapping, because it starts with a measurement that knows how to handle outputs and produces one that knows how to handle inputs.
 
@@ -56,7 +56,7 @@ Suppose two vectors w and w prime represent the same functional. Their differenc
 
 For the norm, Cauchy–Schwarz gives the easy inequality: the size of the functional is no greater than the length of w. To obtain the reverse inequality, test the functional on w divided by its length, when w is nonzero. That test vector has length one, and the absolute value of the measurement is exactly the length of w. So the functional norm and the representing-vector norm are equal.
 
-In complex Hilbert spaces, remember a detail from the inner-product lesson. The map from representing vectors to functionals is conjugate-linear, because multiplying the first inner-product input by a complex number conjugates that number. It is a perfect correspondence, but not literally a complex-linear identification of the two spaces under this convention.
+With the inner product linear in the second argument, its first argument is conjugate-linear. The map from representing vectors to functionals is conjugate-linear, because multiplying the first inner-product input by a complex number conjugates that number. It is a perfect correspondence, but not literally a complex-linear identification of the two spaces under this convention.
 
 This will keep the complex signs correct when we build an adjoint.
 
@@ -94,7 +94,7 @@ Applying the adjoint construction twice gives T back. This follows from the defi
 
 Finally, suppose T is followed by another bounded map S. An output measurement must first be pulled back through S, then through T. So the adjoint of S after T is T star after S star. The order reverses. This is the operator version of the reversal we saw for dual maps.
 
-Later, a self-adjoint operator will mean an operator equal to its own adjoint. A unitary operator will have its adjoint as its inverse. And our future Gram operators will have the forms T star T or T T star. These expressions are no longer arbitrary symbols; they describe the geometry of how maps act on vectors and measurements.
+These definitions also explain several common operator classes. A self-adjoint operator equals its own adjoint; a unitary operator has its adjoint as its inverse; and the two Gram operators have the forms T star T and T T star. These expressions are no longer arbitrary symbols; they describe the geometry of how maps act on vectors and measurements.
 
 ## Reconstruction
 

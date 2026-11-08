@@ -8,7 +8,7 @@
 
 A Sylvester estimate can turn a bound on an operator C into a bound on the unknown X. But a subspace perturbation problem is given in a different form. We have two self-adjoint operators and want to compare two subspaces that they preserve. Where is the Sylvester equation hiding?
 
-Today we will derive it by multiplying with spectral projections. The result is an exact identity, before we impose any gap condition. It is the algebraic point at which operator-norm estimates for Sylvester equations become geometric angle estimates.
+Multiplication by the relevant spectral projections produces an exact identity before any gap condition is imposed. The gap enters only when we try to estimate its solution. Keeping those steps separate makes clear which claims are purely algebraic and which depend on spectral separation.
 
 ## Two operators and two invariant subspaces
 
@@ -16,7 +16,7 @@ Let T be a bounded self-adjoint operator on a Hilbert space. Let S equal T plus 
 
 We want to measure how much of a vector in the P subspace falls outside the Q subspace. The relevant map first includes a vector from the P subspace into the ambient Hilbert space, then applies I minus Q. Call this map X.
 
-Its norm is the largest possible length outside Q of a unit vector from P. This is precisely the directed sine error we studied in the principal-angle lectures. Thus our unknown Sylvester operator will have a direct geometric meaning.
+Its norm is the largest possible length outside Q of a unit vector from P. This is the directed sine of the principal angles from the first subspace to the second: projecting a unit vector into the complementary target space measures the sine of its escape angle. Thus our unknown Sylvester operator will have a direct geometric meaning.
 
 Now restrict S to the orthogonal complement of Q; call this restricted operator A. Restrict T to the range of P; call that operator B. Because both original subspaces reduce their respective self-adjoint operators, A and B are self-adjoint on their smaller Hilbert spaces.
 
@@ -74,7 +74,7 @@ Run the same construction with S and T exchanged. The right-hand side is now the
 
 For equal-dimensional finite subspaces, the nontrivial principal angles agree in the two directions. In different dimensions or infinite dimensions, the directed blocks carry different information about defects and right-angle directions. We cannot discard one solely because the other is small unless the geometry supplies an additional identification.
 
-The earlier principal-angle and Halmos lectures tell us how to interpret these two blocks.
+The two crossed blocks encode escape in opposite directions. When dimensions differ, one direction can have a right-angle defect that the other does not; the ambient difference between the two projections records both.
 
 ## The Rayleigh–Ritz version
 
@@ -88,7 +88,7 @@ This version explains the appearance of residual norms in eigenvector and invari
 
 ## Domains in the unbounded setting
 
-We should mark a limitation before generalizing. If T or S is unbounded, its action is defined only on its domain. The expression T applied to a vector in the P subspace is meaningful only if that vector belongs to the domain. The apparent matrix multiplication may be illegal otherwise.
+The extension requires an additional hypothesis. If T or S is unbounded, its action is defined only on its domain. The expression T applied to a vector in the P subspace is meaningful only if that vector belongs to the domain. The apparent matrix multiplication may be illegal otherwise.
 
 The infinite-dimensional source develops bounded spectral cut operators and proves block identities first on dense domains. It then extends the resulting bounded expressions using continuity. Spectral projections commute with the self-adjoint operator in a domain-aware sense, and bounded spectral windows control the terms individually.
 

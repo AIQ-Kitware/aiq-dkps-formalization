@@ -6,7 +6,7 @@
 
 # Trial spaces, exact subspaces and residuals
 
-To make that comparison quantitative, we need two kinds of subspaces and a measure of the trial subspace's failure to be invariant.
+Suppose a self-adjoint operator has an invariant eigenspace that we cannot compute exactly. A numerical method produces a trial subspace instead. To estimate the angle between them, we first need a quantity that measures how far the trial subspace fails to be invariant under the original operator.
 
 The exact subspace is invariant under the operator we want to understand. The trial subspace is the space produced by an algorithm, approximation, measurement, or a nearby operator. The residual will record what the target operator does to trial vectors that the trial space cannot explain internally.
 
@@ -82,7 +82,7 @@ This distinction is essential. That component is the right-hand side of a Sylves
 
 The formulas for projections and compressions remain valid for bounded self-adjoint operators on Hilbert spaces. If A is unbounded, writing A E requires that E send the trial operator's domain into the domain of A. We also need a bounded residual extending the algebraic difference on that common domain.
 
-For an unbounded operator A, the residual expression A E minus E A zero is meaningful only when the frame map E takes the required inputs into the domain of A. Boundedness of that residual and compatibility with the compressed operator require separate checks; a formal operator equation cannot supply missing domain hypotheses.
+For the unbounded case, domain inclusion only makes the difference A E minus E A zero meaningful on the trial-operator domain. We must separately verify that the difference extends boundedly and, when applying a closed-operator Sylvester estimate, that the complementary overlap respects the domain of the unwanted exact block.
 
 For now the finite-dimensional computation is enough to fix the geometry. Trial coordinates E, compressed operator M, residual R, exact coordinates F zero and F one. We have separated these roles, proved Galerkin orthogonality, and identified the residual as an escape from the trial space.
 

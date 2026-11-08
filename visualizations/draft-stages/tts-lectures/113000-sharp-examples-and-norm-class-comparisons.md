@@ -6,7 +6,7 @@
 
 # Sharp examples and norm-class comparisons
 
-We have proved sine and tangent bounds. Now we need a way to judge them. When a theorem has a gap in the denominator and a norm on each side, which factors are inevitable? What does it mean for an estimate to be sharp? And why must we be careful when changing from operator norm to Frobenius norm or a different unitarily invariant norm?
+A sine or tangent perturbation theorem bounds an angular error by a residual divided by a spectral gap. To judge the quality of that theorem, we must test its numerical constant against examples satisfying the exact hypotheses. When a theorem has a gap in the denominator and a norm on each side, which factors are inevitable? What does it mean for an estimate to be sharp? And why must we be careful when changing from operator norm to Frobenius norm or a different unitarily invariant norm?
 
 Our answers will come from matrices small enough to calculate by hand.
 

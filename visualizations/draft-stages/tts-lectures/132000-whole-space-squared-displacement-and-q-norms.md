@@ -44,7 +44,7 @@ Putting these facts together gives, for every k, the Ky Fan k norm of the direct
 
 ## A warning about individual eigenvalues
 
-The conclusion concerns cumulative prefixes, not every individual eigenvalue. A pinched positive matrix may have a smaller total of its largest k eigenvalues while some lower eigenvalue increases. We already saw this phenomenon in our pinching lecture.
+The conclusion concerns cumulative prefixes, not every individual eigenvalue. A pinched positive matrix may have a smaller total of its largest k eigenvalues while some lower eigenvalue increases. For example, pinching the two-by-two matrix with diagonal entries three and off-diagonal entries four removes the cross terms. Its singular values change from seven and one to three and three: the largest decreases while the smaller increases. Thus prefix-sum control is the appropriate general conclusion.
 
 In fact the direct rotation's squared displacement need not have every singular value below the corresponding competitor's value. A four-dimensional example with two equal principal angles has four equal positive eigenvalues for the direct square, while a competing rotation has two large eigenvalues and two zeros. The lower individual eigenvalues favor the competitor, even though every Ky Fan prefix sum favors the direct rotation.
 

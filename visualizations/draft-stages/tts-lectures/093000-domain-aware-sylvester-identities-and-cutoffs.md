@@ -8,7 +8,7 @@
 
 In finite-dimensional perturbation theory we regularly write A X minus X B equals C. Every expression makes sense because all the matrices act on every vector.
 
-For unbounded operators this is no longer automatic. A and B have domains, and even a bounded map X may carry a legal input for B outside the domain of A. Today we will construct the domain-aware Sylvester equation, derive the compressed identity behind sine-theta estimates, and explain what spectral cutoffs can and cannot justify.
+For unbounded operators this is no longer automatic. A and B have domains, and even a bounded map X may carry a legal input for B outside the domain of A. The Sylvester equation for unbounded operators therefore includes a domain-mapping condition, as well as an identity on that domain. The compressed sine-theta equation satisfies both conditions when the reducing subspaces and residual are defined appropriately.
 
 ## The typed Sylvester equation
 
@@ -86,7 +86,7 @@ The filled truncation instead assigns a chosen scalar to the complement. Choosin
 
 The existence of such a family is more useful than a single convenient formula. We need projections that converge strongly to identity, bounded truncations that converge on domain vectors, and uniform gap inequalities that survive the approximation.
 
-A formal interface can record those exact requirements rather than silently assuming that every cutoff has them.
+The cutoff argument must establish each of those requirements. Merely having a sequence of bounded operators is insufficient if the cutoff introduces spectrum inside the needed gap or fails to converge on the original graph domain.
 
 ## Passing from bounded estimates back to unbounded ones
 

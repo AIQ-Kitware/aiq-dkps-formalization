@@ -36,7 +36,7 @@ So this matrix is positive definite, although two entries are negative.
 
 Now take the diagonal matrix with entries negative one and two. Its entries are easy to inspect, but the important test is directional. On the first coordinate direction its quadratic form is negative one. That single vector proves it is not positive semidefinite.
 
-There is an important lesson here: positivity is a claim about all vectors, not a visual pattern in a table of entries.
+Positivity means the quadratic form is nonnegative on every vector, regardless of the signs of individual matrix entries.
 
 ## The spectral criterion
 
@@ -90,11 +90,11 @@ We already constructed Gram operators from linear maps. For any linear map S bet
 
 Evaluate its quadratic form at x. The result is the inner product of S x with itself: the squared norm of S x. Squared lengths are nonnegative. Therefore S adjoint S is positive semidefinite.
 
-This is not merely an example. It is the reason the Gram construction can encode lengths, inner products, and singular values in a self-adjoint operator.
+The Gram construction encodes lengths and inner products in a positive self-adjoint operator, whose spectrum determines the singular values.
 
 The kernel also has a simple interpretation. The quadratic form of S adjoint S vanishes at x exactly when S x is zero. So its zero directions are precisely the kernel of S.
 
-Later we will prove a converse in finite dimensions: every positive semidefinite operator can be factored as S adjoint S. The finite spectral theorem and nonnegative square roots make that possible.
+Conversely, every positive semidefinite operator in finite dimensions can be factored as S adjoint S, using the finite spectral theorem and nonnegative square roots.
 
 ## Why products require care
 

@@ -8,7 +8,7 @@
 
 Let A be the self-adjoint free-beam fourth-derivative operator on the unit interval, on the domain of functions with four square-integrable weak derivatives and with second and third derivatives zero at both endpoints. Its two-dimensional kernel is the affine plane, and the rest of its spectrum lies above five hundred. Let H multiply by epsilon times t, where zero is less than epsilon and epsilon is less than one hundred. An orthonormal basis of the affine trial plane is given by one over square root of two times one minus square root of three times two t minus one, and the corresponding function with a plus sign. We can use their exact residual singular values to compare several subspace perturbation bounds.
 
-Today we will run several Davis–Kahan theorems on the same problem. The comparisons will show that a better residual can matter more than a more elaborate theorem, and that a largest-angle estimate answers a different question from a Ky Fan sum estimate.
+Different Davis–Kahan estimates applied to the same beam model answer different questions. A stronger residual estimate can outweigh the choice of theorem, while largest-angle and Ky Fan bounds quantify different aspects of the subspace error.
 
 ## First use the unrecentered residual
 
@@ -28,7 +28,7 @@ Operator norm sees only the largest singular value. We also know the second sing
 
 Add the two coefficients and divide by five hundred. The result is below point zero zero two one eight times epsilon. So the sum of the sines of the two principal angles is bounded by that quantity. This is the paper's equation nine point three.
 
-It is important to read the conclusion precisely. We have not shown that each sine is less than half the Ky Fan bound. The two angles could contribute unequally. What the inequality controls is their cumulative rotation, measured by the first two singular values of the directed sine map.
+The Ky Fan estimate bounds the sum of the two principal sines, not each sine by half that sum; their contributions can be unequal. What the inequality controls is their cumulative rotation, measured by the first two singular values of the directed sine map.
 
 Why can we make that inference? The Hilbert-space singular-value comparison supports a compatible invariant norm. The Ky Fan two-norm adds the two largest singular values, and both the residual and the sine map have at most two nonzero singular values because their source is two-dimensional.
 
@@ -42,7 +42,7 @@ The ambient sine-two-theta estimate gives sine of twice the largest angle less t
 
 At first sight these coefficients look larger than the single-angle sine coefficient. But the left sides are different functions: sine of twice an angle is approximately twice the sine of that angle for small angles.
 
-We should also remember the branch issue from the double-angle geometry. The sine of twice an angle can be small near zero degrees or near ninety degrees. A separate spectral-selection or small-angle argument is needed before converting it into a unique small-angle certificate. In the beam problem, the low spectral cluster is selected across a large gap, and its continuity under bounded perturbation supplies the intended branch.
+The double-angle estimate has a branch ambiguity. The sine of twice an angle can be small near zero degrees or near ninety degrees. A separate spectral-selection or small-angle argument is needed before converting it into a unique small-angle certificate. In the beam problem, the low spectral cluster is selected across a large gap, and its continuity under bounded perturbation supplies the intended branch.
 
 The doubled-angle theorem is valuable because it uses ambient off-diagonal structure. It is not automatically the sharpest numerical estimate for this particular data.
 
@@ -68,7 +68,7 @@ The corresponding bound for tangent of twice the largest angle has twice the num
 
 This is equation nine point seven. As before, there is a two-term Ky Fan version with the same scalar right-hand side because the residual responsible for the estimate is rank one.
 
-Do not erase the theorem's branch conditions when quoting it. A sharp tangent-two-theta estimate is a statement about selected matched spectral branches under the proper off-diagonal conditions. In this example, those conditions are justified by the low-high spectral split, not by the numerical fraction alone.
+The sharp tangent-two-theta estimate applies to selected matched spectral branches under the required off-diagonal conditions. In this example, those conditions are justified by the low-high spectral split, not by the numerical fraction alone.
 
 ## Comparison at one concrete parameter
 

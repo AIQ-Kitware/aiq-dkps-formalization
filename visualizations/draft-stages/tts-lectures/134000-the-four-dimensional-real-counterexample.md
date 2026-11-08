@@ -6,7 +6,7 @@
 
 # The four-dimensional real counterexample
 
-We will now disprove the printed universal claim of Proposition four point four by a complete calculation in four real dimensions. We need an acute pair of two-dimensional subspaces, an orthogonal transformation taking one onto the other, and a unitarily invariant norm in which that competitor beats the canonical direct rotation. Everything will be exact, including the principal angles and the displacement singular values.
+The printed universal minimization claim of Proposition four point four fails already in a four-dimensional real inner-product space. We will construct two acute two-dimensional subspaces and an orthogonal transporter whose whole-space trace-norm displacement is smaller than that of the canonical direct rotation. Both the principal angles and the displacement singular values will be computed exactly.
 
 ## Start with an orthogonal four-by-four matrix
 
@@ -44,11 +44,11 @@ Now construct the canonical direct rotation D between U and V. Since both princi
 
 Each two-dimensional principal rotation has displacement singular values equal to two sine of twenty-two point five degrees, repeated twice. Across two principal planes, all four singular values of identity minus D equal two sine of twenty-two point five degrees.
 
-Use the half-angle identity. Two sine of twenty-two point five degrees equals the square root of two minus square root of two. This number is approximately point seven six five.
+Use the half-angle identity. Two sine of twenty-two point five degrees equals the square root of the quantity two minus square root of two. This number is approximately point seven six five.
 
 The direct rotation's trace-norm cost is four times that number, or about three point zero six one. The competitor's cost was approximately two point eight two eight. The competitor is strictly better.
 
-The inequality can be checked exactly without decimals. Square the two positive quantities. The direct cost squared is sixteen times two minus square root of two. The competitor cost squared is eight. The direct cost is larger precisely because square root of two is less than three halves, which is an elementary inequality.
+The inequality can be checked exactly without decimals. Square the two positive quantities. The direct cost squared is sixteen times the quantity two minus square root of two. The competitor cost squared is eight. The direct cost is larger precisely because square root of two is less than three halves, which is an elementary inequality.
 
 We have therefore established a complete contradiction to the printed claim for trace norm, despite both principal angles satisfying the stated sixty-degree bound.
 
@@ -86,7 +86,7 @@ Consequently no positive universal angle threshold can repair the printed statem
 
 ## Closing diagnosis
 
-The formal counterexample uses a concrete four-by-four orthogonal matrix, an acute source-target pair, a trace norm represented as a Ky Fan sum, and exact trigonometric calculations. It proves the negation of the universal proposition, not just a gap in an argument.
+The counterexample uses a four-by-four orthogonal matrix, an acute source-target pair, a trace norm represented as a Ky Fan sum, and exact trigonometric calculations. It proves the negation of the universal proposition, not just a gap in an argument.
 
 The physical lesson is about where movement occurs. The canonical direct rotation spreads displacement over two prescribed principal planes. A competing real orthogonal transport can couple the planes and concentrate movement into a different two-plane. For squared cost this is expensive; for trace cost it can be cheaper.
 

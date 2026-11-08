@@ -6,7 +6,7 @@
 
 # The single-angle sine theorem
 
-We are ready to prove the first main Davis–Kahan sine theorem. The statement is simple to remember in words: a spectral gap times a sine-angle error is bounded by the residual that drives the error. But every term has a precise meaning, and the constant depends on a specific spectral separation theorem.
+Suppose A is self-adjoint, U is an exact reducing subspace, and V is a trial subspace whose vectors nearly satisfy the operator equation for a trial operator. How does the failure of that equation control the angle from V to U? The Davis–Kahan sine theorem answers using the residual and the spectral separation between the trial operator and A on the unwanted complement. A sharp constant-one inequality requires a gap hypothesis that supports a corresponding Sylvester bound.
 
 We will state the isometric version first, prove it directly, verify sharpness in the plane, and then explain the more general normalization and unbounded-operator forms.
 
@@ -96,7 +96,7 @@ When A is unbounded, self-adjointness alone does not legitimize the expression A
 
 With those hypotheses, the same Sylvester equation holds as an equality of partially defined operators on the legal domain. The unbounded Sylvester theorem then produces the ideal estimate and membership conclusion. For real Hilbert spaces, the corresponding complexification and descent results supply the real statement.
 
-We have proved the theorem using three exact bridges: residual to Sylvester equation, spectral gap to norm bound, and complementary overlap to directed sine. Each bridge will reappear in later Davis–Kahan theorems.
+We have proved the theorem using three exact bridges: residual to Sylvester equation, spectral gap to norm bound, and complementary overlap to directed sine. The same reasoning applies whenever a residual equation can be converted into a valid Sylvester estimate for the correct complementary angle operator.
 
 <!-- END SPOKEN LECTURE -->
 

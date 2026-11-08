@@ -22,7 +22,7 @@ Proposition four point one proves that the restricted displacement of D has sing
 
 This is a particularly strong theorem because it requires no arbitrary choice of norm in the proof. The principal-chord values, two sine of half the principal angles, serve as a common lower bound for all the singular values.
 
-For compact-angle sequences in a Hilbert space and accounts for matched crossed defects when right-angle components occur. In that setting we need to use approximation numbers and keep the hypotheses that make the source's direct rotation well-defined.
+In infinite-dimensional Hilbert space, the corresponding estimate must account for compact principal-angle sequences and for matched crossed defects when right-angle components occur. Approximation numbers replace finite singular-value lists, and the hypotheses that make the direct rotation well-defined must be retained.
 
 If a competitor belongs to a relevant symmetric operator ideal, ideal membership of the direct displacement is a conclusion obtained through approximation-number domination. We must not write an infinite-dimensional finite-norm inequality without first establishing that membership.
 

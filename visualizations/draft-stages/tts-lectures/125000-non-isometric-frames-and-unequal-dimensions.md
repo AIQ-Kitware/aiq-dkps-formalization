@@ -18,7 +18,7 @@ If E zero is an isometry, the length of every coordinate vector is preserved. Bu
 
 We assume there is a positive epsilon such that the length of E zero x is at least epsilon times the length of x for every coordinate vector x. This says the frame does not collapse any coordinate direction. It also says the inverse on its range has norm at most one over epsilon.
 
-Notice that epsilon is a lower bound on lengths. If an implementation instead stores the smallest eigenvalue of E zero adjoint E zero, then the corresponding length bound is its square root. Mixing these conventions would give an incorrect factor.
+Here epsilon bounds the lengths of trial-frame outputs from below. If lambda-min denotes the smallest eigenvalue of E zero adjoint E zero, the corresponding length bound is the square root of lambda-min. Confusing the length bound with the eigenvalue changes the constant.
 
 ## Obtain orthonormal coordinates by polar decomposition
 
@@ -86,7 +86,7 @@ A positive lower-frame bound does not itself establish spectral separation. A sm
 
 In a symmetric ideal one must also assume the residual belongs to the ideal and prove that the sine representative belongs to it. That membership is part of the conclusion, not a default property of arbitrary bounded operators.
 
-The original Section six theorem uses interval-versus-exterior spectral separation, with either ordering allowed. A modern proof layer may express the same analytic work through a form-bounded gap interface. We distinguish the source hypothesis from the generalization.
+The original Section six theorem uses interval-versus-exterior spectral separation, with either ordering allowed. An equivalent or stronger abstract gap condition may also support the analytic estimate, but the interval-versus-exterior assumption is the one used in the original theorem.
 
 ## Summary
 

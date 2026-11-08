@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "lecture_id": "066000",
+  "transcript": "066000-unitary-and-semigroup-representations.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-exp",
+      "reason": "Matrix-exponential method used in finite dimensions; compare with operator-domain assumptions in the lecture."
+    },
+    {
+      "source_id": "higham-sylvester",
+      "reason": "Matrix Sylvester equation; note the lecture-specific operator norm and spectral-gap conditions."
+    },
+    {
+      "source_id": "higham-matrix-exponential",
+      "reason": "Contrast the exponential-series perspective with dynamical-system examples."
+    },
+    {
+      "source_id": "boyd-stanford-ee263-archive",
+      "reason": "Use the publicly available course-reader slides for block matrices, quadratic forms, or dynamical examples."
+    },
+    {
+      "source_id": "bell-banach-algebras",
+      "reason": "Review the Banach-algebra spectral language behind resolvents and invertibility."
+    }
+  ]
+}

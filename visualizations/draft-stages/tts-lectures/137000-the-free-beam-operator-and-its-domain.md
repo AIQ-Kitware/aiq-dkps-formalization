@@ -22,7 +22,7 @@ For a freely supported end, the bending moment and shear force vanish. In this n
 
 In total we have four scalar conditions: the second derivative at zero is zero, the third derivative at zero is zero, and the same two conditions hold at one. The operator's domain is the appropriate fourth-order Sobolev class satisfying those trace equations. One may also characterize the final operator as the self-adjoint closure of a suitable classical fourth-derivative realization.
 
-Why insist on the domain? Consider a candidate displacement that is square-integrable but whose fourth derivative is not. Writing A of that displacement as if it were a vector in the same Hilbert space would invalidate the residual estimates we learned earlier. The domain will become part of the numerical argument, not a detail hidden behind notation.
+Why insist on the domain? Consider a candidate displacement that is square-integrable but whose fourth derivative is not. Writing A of that displacement as if it were a vector in the same Hilbert space would make an expression such as A E minus E M undefined on some trial vectors, so the corresponding residual estimate could not be applied. The domain will become part of the numerical argument, not a detail hidden behind notation.
 
 ## Green's identity explains symmetry
 

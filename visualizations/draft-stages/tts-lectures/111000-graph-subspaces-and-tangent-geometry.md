@@ -80,7 +80,7 @@ At sixty degrees, the sine is the square root of three over two, approximately z
 
 At eighty-nine degrees, the sine is already extremely close to one. But the tangent is roughly fifty-seven. A sine error bound near one reports that the trial line may be almost perpendicular. A tangent bound records just how steep its graph representation has become.
 
-The tangent theorem will use an ordered gap and an adapted residual to control that slope. We should expect its hypotheses to be more structured than a generic geometric angle comparison.
+To estimate that slope from an operator residual, spectral separation must control the graph map and the projection onto U must be invertible on the trial space. Without transversality, the graph map has no bounded meaning even if the directed sine remains at most one.
 
 ## What a graph tells us beyond an angle
 
@@ -88,7 +88,7 @@ The graph operator gives an explicit way to reconstruct trial vectors from exact
 
 The norm of T bounds that relative complementary error. The largest principal tangent measures the worst slope, while symmetric singular-value norms describe how slopes are distributed across directions.
 
-This information is useful for perturbation theory because a graph can be manipulated algebraically. The invariance of a graph under a block operator leads to a Riccati equation, where the unknown is T. We will reach that connection after proving the single-angle tangent theorem.
+This information is useful for perturbation theory because a graph can be manipulated algebraically. The invariance of a graph under a block operator leads to a Riccati equation, where the unknown is T. Indeed, substituting vectors of the form x plus T x into the invariant-subspace equation produces a Riccati equation, a nonlinear relation for the unknown graph slope T.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "lecture_id": "136000",
+  "transcript": "136000-classification-and-realizations-of-direct-rotations.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "higham-polar",
+      "reason": "Alternative polar-factor explanation; distinguish a kernel-zero partial isometry from full unitary extensions."
+    },
+    {
+      "source_id": "halmos-1969",
+      "reason": "Original treatment of two subspaces and their generic part; complements principal-angle geometry."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "kostrykin-tan2-theorem",
+      "reason": "Compare the off-diagonal perturbation theorem with a graph/Riccati formulation."
+    }
+  ]
+}

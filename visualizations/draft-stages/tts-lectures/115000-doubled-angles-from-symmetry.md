@@ -6,7 +6,7 @@
 
 # Doubled angles from symmetry
 
-We have seen that a reflection changes the sign of an off-diagonal operator block. Now we want to understand what reflecting an entire subspace does to its position relative to another subspace.
+Reflecting across a closed subspace means acting by plus one on that subspace and minus one on its orthogonal complement. Conjugation by this reflection reverses the off-diagonal blocks of an operator. Applied to another subspace, the same reflection produces an angle-doubling identity.
 
 For one line in the plane, the answer is straightforward: reflection across a line at angle theta sends the horizontal axis to a line at angle twice theta. Our task is to express that fact through orthogonal projections, then extend it to many principal-angle planes and even to a Hilbert space without a discrete principal-vector basis.
 
@@ -68,7 +68,7 @@ Independently, expand the square of J P J minus P using only P squared equals P,
 
 Both the sine-two-theta operator and the modulus of the projection difference are positive. They have the same square. By uniqueness of the positive square root, they are equal.
 
-This is the coordinate-free reflection double-angle identity. The source formalizes it directly in the complex Hilbert-space functional calculus and provides compatible real and generic formulations.
+This is the coordinate-free reflection double-angle identity. The functional-calculus identity applies in the complex Hilbert-space setting, with corresponding real formulations.
 
 ## Check the two extreme angles
 

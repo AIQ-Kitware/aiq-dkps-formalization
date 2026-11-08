@@ -72,7 +72,7 @@ A universal minimizing statement must survive one explicit admissible competitor
 
 The simplest potential counterexample should have enough dimensions to mix at least two principal planes. Four real dimensions suffice. We will take two equal acute principal angles. Then we will write a concrete orthogonal competitor, compute its action on the source plane, verify the resulting principal angles, and compute both displacement singular-value lists.
 
-This is stronger than merely observing that the old proof has a gap. It produces a direct numerical contradiction to the stated inequality and can be expressed as a formal theorem asserting the negation of the printed proposition.
+The explicit singular values give a strict numerical contradiction to the printed inequality, so the universal proposition is false.
 
 ## Close
 

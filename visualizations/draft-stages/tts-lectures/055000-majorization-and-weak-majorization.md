@@ -10,7 +10,7 @@ A pair of matrices can defeat a tempting entrywise rule about singular values: t
 
 That observation suggests an ordering on lists of numbers. Instead of comparing the first entries, then the second entries, one at a time, compare their running totals. This is majorization. It is a useful language for stating how one spectrum is more concentrated than another.
 
-Today we will define two versions, work out examples that distinguish them, and prove an elementary principle that makes these comparisons usable in later norm estimates. Our lists will be finite, real, nonnegative, and arranged from largest to smallest. These hypotheses are natural for singular values, and they let us focus on the geometry of the comparison.
+There are two versions of majorization, distinguished by whether the full sum is required to agree. Their prefix inequalities lead directly to weighted comparisons of singular values. Our lists will be finite, real, nonnegative, and arranged from largest to smallest. These hypotheses are natural for singular values, and they let us focus on the geometry of the comparison.
 
 ## Begin with sorted nonnegative lists
 
@@ -48,7 +48,7 @@ Before sorting, the original lists could still differ by a permutation. This is 
 
 Suppose x is weakly majorized by y. Choose another list of weights, also arranged in decreasing order, and assume the weights are nonnegative. We claim that the weighted sum of x is at most the weighted sum of y.
 
-This claim is worth proving. It is often hidden inside longer matrix inequalities.
+The weighted inequality is the step that converts prefix-sum control into many matrix norm bounds.
 
 Write delta k for the prefix sum of y minus the prefix sum of x, through position k. By weak majorization, every delta is nonnegative.
 
@@ -107,7 +107,7 @@ Neither statement asserts that the singular values retain their old order coordi
 
 A weak-majorization comparison must use sorted lists. If you compare unsorted entries in their written order, the running sums depend on how someone happened to label coordinates.
 
-The same finite-length convention matters too. When two operators have different source and target dimensions, we will make their lists comparable by padding with zeros. That becomes a separate technical topic later in the course.
+The same finite-length convention matters too. When two operators have different source and target dimensions, we will make their lists comparable by padding with zeros. Zero padding preserves every original singular value and makes the partial sums comparable; it is the appropriate convention when the rectangular source and target dimensions differ.
 
 And our nonnegativity hypothesis is deliberate. It is automatic for singular values but not for eigenvalues of arbitrary self-adjoint operators. Signed eigenvalue majorization is possible, but its exact hypotheses and consequences differ from the nonnegative weak-majorization setting used here.
 

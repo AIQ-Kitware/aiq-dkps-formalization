@@ -22,7 +22,7 @@ This distinction prevents us from invoking operator-norm continuity without proo
 
 For a bounded operator T, its approximation number at index n is the infimum of the operator norm error over approximants of rank at most n, using zero-based indexing. In finite dimensions these are the usual singular values in descending order. In Hilbert space they provide a useful extension even when T is not compact.
 
-Compose T on the right with an increasing finite-basis projection. The resulting operator has finite rank. The source proves that each fixed approximation singular value of these cutoffs converges to the corresponding approximation singular value of T.
+Compose T on the right with an increasing finite-basis projection. The resulting operator has finite rank. Each fixed approximation singular value of these cutoffs converges to the corresponding approximation singular value of T.
 
 The proof depends on a min–max characterization, not on an invalid assertion of operator-norm convergence of the finite sections. Every cutoff is a contraction, so its approximation numbers never exceed those of T. To prove convergence from below, select a nearly maximizing finite-dimensional test space for the min–max problem. Strong convergence is uniform on that fixed finite-dimensional space, allowing the cutoff to recover its near-optimal lower bound.
 
@@ -44,7 +44,7 @@ The Hilbert–Schmidt energy is the sum of the squares of all approximation sing
 
 For a finite-rank cutoff this is a finite sum and equals the sum of squared lengths of the operator applied to a suitable finite orthonormal basis. As the cutoffs increase, the supremum of their energies equals the full operator energy.
 
-Why is the supremum legitimate? The projection cutoffs give no larger energy than the full operator. Conversely, every finite set of coordinate contributions is eventually included, and the source's basis-energy identity shows that no contribution is permanently missed.
+Why is the supremum legitimate? The projection cutoffs give no larger energy than the full operator. Conversely, every finite set of coordinate contributions is eventually included, and the basis-energy identity shows that no contribution is permanently missed.
 
 The extended-valued formulation is helpful: it states the equality even when the operator is not Hilbert–Schmidt. In that case both sides can grow without finite bound.
 
@@ -104,7 +104,7 @@ For unbounded operators, finite spectral cutoffs also enforce domain legality. O
 
 We now have two distinct ways to pass from infinite Hilbert-space data to finite calculations: fixed-index approximation singular values under strong basis cutoffs, and quantitative control of unwanted finite-rank blocks from near-maximal square energy.
 
-These lemmas will remain available whenever an infinite-dimensional proof needs to justify an infinite-dimensional approximation.
+The conclusion depends on the topology and norm used: strong basis cutoffs preserve fixed-vector information, whereas a square-energy saturation argument controls an unwanted block quantitatively. Neither fact licenses unrestricted operator-norm passage to a limit.
 
 <!-- END SPOKEN LECTURE -->
 

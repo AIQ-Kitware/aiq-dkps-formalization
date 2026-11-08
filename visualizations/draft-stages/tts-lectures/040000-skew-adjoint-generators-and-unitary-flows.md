@@ -8,7 +8,7 @@
 
 A real skew-symmetric two-by-two matrix K with first row zero, negative one and second row one, zero generates rotations. Its exponential at time t is the rotation matrix through angle t. The identity follows from the power series, because K squared is negative identity.
 
-Today we will reverse the question. Suppose we are given a motion that preserves lengths and angles at every moment. What must its instantaneous generator look like? And if we start with a generator of that kind, can we prove that the motion preserves geometry for all time?
+Suppose we are given a motion that preserves lengths and angles at every moment. What must its instantaneous generator look like? And if we start with a generator of that kind, can we prove that the motion preserves geometry for all time?
 
 The proof combines the identity for an adjoint, differentiation of a matrix exponential, and the algebra of its power series. These ingredients also describe continuous rotations between subspaces.
 
@@ -108,7 +108,7 @@ Next, construct the full flow as the exponential of t K. Show that its adjoint i
 
 Finally, run the reasoning backward. Differentiate Q adjoint Q equals the identity at time zero. You will recover the skew-adjoint generator.
 
-That is the central idea of this lecture. A unitary flow is not just a sequence of unrelated matrices. It is continuous motion whose instantaneous rule is constrained by geometry. When we later rotate one spectral subspace toward another, these generators will let us say not only where the subspace ends up, but how the rotation is constructed.
+A unitary flow describes continuous motion whose instantaneous rule preserves the inner-product geometry. For example, a rotation between spectral subspaces can be described by an exponential generator, making the continuous path of length-preserving transformations explicit.
 
 <!-- END SPOKEN LECTURE -->
 

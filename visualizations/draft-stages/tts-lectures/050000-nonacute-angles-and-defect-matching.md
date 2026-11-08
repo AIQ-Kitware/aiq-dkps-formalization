@@ -6,9 +6,7 @@
 
 # What happens at a right angle?
 
-To construct the direct rotation, begin with the operator K, which combines the two orthogonal projections. When the subspaces had no crossed right-angle directions, the polar factor was unitary and determined by positivity.
-
-Now allow an exact right angle. The cosine of ninety degrees is zero, so K sends the corresponding directions to zero. Its polar factor can no longer transport those directions: it simply annihilates them.
+Two closed subspaces can contain directions that meet at exactly ninety degrees. The cosine on such a direction is zero. Consequently, the canonical projection-based intertwiner can have a kernel, and its polar factor is only a partial isometry: it cannot by itself transport those missing directions. To obtain a unitary direct rotation, the right-angle directions lost on one side must be matched with those lost on the other.
 
 That failure poses two questions. Can we supply the missing motion using the right-angle pieces? And if we can, is there still one preferred answer?
 
@@ -16,7 +14,7 @@ The answers depend on the dimensions of two specific subspaces. We will derive t
 
 ## The two crossed defects
 
-Let U and V be closed subspaces, with projections P and Q. Recall the four elementary parts of their Halmos decomposition.
+Let U and V be closed subspaces, with projections P and Q. Their four elementary intersection parts separate the cases where both projections agree from the crossed right-angle defects.
 
 The common part lies in both U and V. The exterior part lies perpendicular to both. Neither causes a problem for transport: on those spaces the direct rotation can act as the identity.
 

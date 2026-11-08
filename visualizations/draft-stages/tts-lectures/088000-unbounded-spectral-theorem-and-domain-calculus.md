@@ -8,7 +8,7 @@
 
 For bounded self-adjoint operators, we learned to integrate functions against spectral projections. The unbounded spectral theorem preserves that idea, but adds one indispensable condition: the vector on which we act must have enough spectral integrability.
 
-Today we will derive the domain condition, recover the operator through bounded cutoffs, and work through explicit examples. The payoff is a calculus where every proposed unbounded expression has a precise legal domain.
+The unbounded spectral theorem defines both the action of an operator and the vectors on which that action exists. Bounded spectral cutoffs recover the operator on its domain.
 
 ## The projection-valued measure
 

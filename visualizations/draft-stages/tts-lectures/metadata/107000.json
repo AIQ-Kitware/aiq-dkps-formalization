@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "lecture_id": "107000",
+  "transcript": "107000-trial-spaces-exact-subspaces-and-residuals.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "higham-eigen-ineq",
+      "reason": "Concise matrix-level comparison of Rayleigh quotients and eigenvalue inequalities."
+    },
+    {
+      "source_id": "cornell-ritz",
+      "reason": "Projection/Ritz perspective and residual orthogonality; advanced sections are optional."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "hsu-dk-notes",
+      "reason": "Brief finite-matrix exposition; not an alternate proof of every general theorem in this lecture."
+    },
+    {
+      "source_id": "higham-invariant-subspace",
+      "reason": "Relate invariant subspaces to an adapted block matrix representation."
+    },
+    {
+      "source_id": "intel-principal-angles",
+      "reason": "Compute principal angles numerically from orthonormal bases using QR and SVD."
+    },
+    {
+      "source_id": "boyd-vandenberghe-applied",
+      "reason": "Work through concrete linear algebra, least-squares or SVD calculations in an applied treatment."
+    },
+    {
+      "source_id": "bindel-eigen-perturbation",
+      "reason": "Study concrete perturbation examples and first-order spectral sensitivity."
+    },
+    {
+      "source_id": "bindel-hermitian-svd",
+      "reason": "Review a computational proof of symmetric eigenvalue and singular-value properties."
+    },
+    {
+      "source_id": "bindel-ritz-eigensolvers",
+      "reason": "Follow Rayleigh-Ritz residual orthogonality and the logic of extracting approximate eigenpairs."
+    },
+    {
+      "source_id": "mml-free-text",
+      "reason": "Use analytic-geometry, decomposition or PCA examples to connect the operator calculation to data analysis."
+    }
+  ]
+}

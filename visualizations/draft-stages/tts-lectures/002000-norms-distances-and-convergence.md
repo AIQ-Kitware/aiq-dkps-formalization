@@ -86,7 +86,7 @@ These two inequalities trap Euclidean length between the maximum norm and a cons
 
 We can now prove that a sequence approaches zero under one of these norms exactly when it approaches zero under the other. If Euclidean lengths tend to zero, the smaller maximum norms do too. If maximum norms tend to zero, their multiples by the fixed number square root of n tend to zero, and Euclidean lengths are bounded by them.
 
-The fact that n is fixed is essential. The constant square root of n grows when the dimension grows. We cannot quietly reuse this argument with one uniform constant across spaces of arbitrarily large dimension.
+The fact that n is fixed is essential. The constant square root of n grows when the dimension grows. The estimate does not provide a dimension-independent constant.
 
 What about an arbitrary norm on the plane, not just one of our three examples? We can prove the same conclusion, but the argument needs one compactness fact from multivariable calculus.
 
@@ -94,7 +94,7 @@ Write a vector as a combination of the usual basis vectors. The triangle inequal
 
 Now restrict this norm to the Euclidean unit sphere: all vectors whose Euclidean length is one. In a fixed finite dimension, that sphere is closed and bounded, hence compact. One meaning of compactness here is that every sequence of points on the sphere has a subsequence converging to another point on the sphere. To see why that is reasonable, use the elementary real-number fact that a bounded sequence has a convergent subsequence. Apply it to the first coordinate, then to the second along the chosen subsequence, and continue through the finitely many coordinates. The closed condition keeps the resulting limit on the sphere. A continuous real-valued function on a compact set attains a minimum; otherwise, points with values approaching its infimum would have a convergent subsequence, forcing that infimum to be attained. The minimum of our norm on that sphere must be strictly positive, because every point on the sphere is nonzero and norms vanish only at zero. Scaling any nonzero vector down to the unit sphere gives a positive constant lower bound for the arbitrary norm in terms of Euclidean length.
 
-Together with the earlier upper bound, this proves that every norm in a fixed finite-dimensional space is equivalent to Euclidean length. We have not merely observed the result in a few examples; we have reconstructed the reason it is true.
+Together with the earlier upper bound, this proves that every norm in a fixed finite-dimensional space is equivalent to Euclidean length. The argument establishes the result for every pair of vectors in the normed space.
 
 ## Why infinite dimension is different
 

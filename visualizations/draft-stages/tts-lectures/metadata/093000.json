@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "lecture_id": "093000",
+  "transcript": "093000-domain-aware-sylvester-identities-and-cutoffs.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "higham-sylvester",
+      "reason": "Matrix Sylvester equation; note the lecture-specific operator norm and spectral-gap conditions."
+    },
+    {
+      "source_id": "rosenblum-1956",
+      "reason": "Primary paper on the operator equation and disjoint spectra; comparison resource, not a verified source check."
+    },
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "teschl-qm-free",
+      "reason": "Use the full free text for spectral calculus and domains of unbounded self-adjoint operators."
+    },
+    {
+      "source_id": "bell-unbounded-operators",
+      "reason": "Follow the concrete graph/domain argument and the unbounded adjoint definition."
+    },
+    {
+      "source_id": "bell-sturm-liouville",
+      "reason": "Relate differential-operator spectra to integral-operator reductions and boundary conditions."
+    }
+  ]
+}

@@ -62,7 +62,7 @@ The reversed ordering is symmetric.
 
 For the interval-versus-exterior branch, we use preservation of the real spectral information and the required resolvent properties. The domain, graph, and real resolvent set have already been transported, so the interval-exterior gap condition survives with the same delta.
 
-Thus the complexified operators satisfy the exact gap hypothesis required by the complex unbounded Sylvester theorem. We have not increased the gap or silently changed its orientation.
+Thus the complexified operators satisfy the exact gap hypothesis required by the complex unbounded Sylvester theorem. The numerical gap and its orientation are preserved under complexification.
 
 ## Apply the complex theorem to one finite prefix
 

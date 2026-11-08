@@ -48,7 +48,7 @@ The dual norm is the greatest absolute output obtainable from an input of norm a
 
 For a finite-dimensional real Euclidean space, a functional is represented by a fixed coefficient vector. Cauchy–Schwarz says that the absolute dot product with an input is at most the coefficient vector's Euclidean length times the input's length. Taking the input parallel to the coefficient vector achieves equality, unless the coefficient vector is zero. Thus the dual norm is exactly the Euclidean norm of those coefficients.
 
-This is a useful model, but do not assume every dual space comes with a coordinate vector of the same sort. We have not yet introduced the inner-product structure needed to identify a functional with a vector. That identification, in Hilbert spaces, is the Riesz representation theorem, and it deserves its own proof later.
+The coordinate-vector model depends on an inner product. In a Hilbert space, the Riesz representation theorem identifies each bounded linear functional with an inner product against a unique vector. A general normed space has no corresponding identification without additional structure.
 
 Here is another structural fact. The continuous dual of any normed space is complete, even if the original space is not. To see the mechanism, take a Cauchy sequence of functionals in the dual norm. At each fixed input, their values form a Cauchy sequence of scalars, which has a limit. Those limits define a linear functional. The dual-norm Cauchy bound passes to the limit and shows that the new functional is bounded, and that the original sequence converges to it in dual norm. This is the same construction we used to prove completeness of bounded operator spaces, with the scalar field as the output space.
 
@@ -70,13 +70,13 @@ Why is that possible? Compare any one lower bound with any one upper bound. Add 
 
 We have extended the functional by one direction without losing the norm bound. For a finite-dimensional space, repeat this step finitely many times to extend from a subspace to the whole space.
 
-For a general infinite-dimensional space, infinitely many extension steps require an additional maximal-extension argument, usually formulated using Zorn's lemma. We have just proved the essential one-direction mechanism; a fully detailed treatment of that maximality principle belongs in our later foundational proof work. We should not confuse this argument with a complete proof of the infinite-dimensional theorem.
+Extending a functional across one additional direction establishes the local step. The infinite-dimensional Hahn–Banach theorem additionally requires a maximal-extension argument, commonly obtained from Zorn's lemma. The one-direction calculation alone does not establish that general theorem.
 
 ## Why this tool will return
 
 Hahn–Banach allows us to extend numerical measurements from a subspace while controlling their norm. One consequence is that bounded linear functionals can distinguish a nonzero vector from zero. Another is that, for a continuous seminorm, we can sometimes select a functional that exactly witnesses the size of a particular vector.
 
-That witness is useful in the formalized operator theory. For example, a later argument bounds the size of an operator-valued integral under a Ky Fan gauge. A well-chosen functional turns the gauge estimate into a scalar integral estimate, where ordinary inequalities can finish the job. The necessary extension step is precisely the kind of operation Hahn–Banach supplies.
+The same principle applies to estimates for operator-valued integrals under Ky Fan gauges. An appropriate bounded linear functional reduces part of the operator estimate to a scalar integral estimate. The necessary extension step is precisely the kind of operation Hahn–Banach supplies.
 
 For now, the reconstruction questions are simpler. Can you prove the midpoint evaluation functional has norm one? Can you explain why differentiation at a point fails to be bounded on our polynomial space? And can you derive the upper and lower restrictions that allow a functional to be extended by one new direction?
 

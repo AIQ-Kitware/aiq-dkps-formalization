@@ -6,7 +6,7 @@
 
 # Reading the spectrum through inverse operators
 
-We began this course by defining the spectrum using invertibility. A complex number z is outside the spectrum of A when A minus z times the identity has a bounded inverse. That inverse is called the resolvent at z.
+The spectrum of an operator is defined by failures of bounded invertibility of its scalar shifts, not merely by the presence of eigenvectors. A complex number z is outside the spectrum of A when A minus z times the identity has a bounded inverse. That inverse is called the resolvent at z.
 
 Now that we have spectral integration, we can write the resolvent explicitly. We will see why its norm is controlled by the distance from z to the spectrum, why resolvents become large near spectral values, and how their matrix elements encode the scalar spectral measures.
 
@@ -96,13 +96,13 @@ For an eigenvector at c, the scalar measure is an atom at c, and the matrix elem
 
 The reciprocal formula is simple for a bounded self-adjoint A because its spectral coordinate is bounded and its resolvent symbol is bounded whenever z avoids the spectrum.
 
-Later we will consider unbounded self-adjoint operators. Their coordinate function is itself unbounded and has a proper domain. Nevertheless, the scalar reciprocal one over lambda minus z is bounded for every nonreal z, since its denominator is at least the magnitude of the imaginary part.
+For an unbounded self-adjoint operator, the corresponding coordinate function is unbounded and the operator has a proper domain. Nevertheless, the scalar reciprocal one over lambda minus z is bounded for every nonreal z, since its denominator is at least the magnitude of the imaginary part.
 
 That observation will allow resolvents to remain bounded even when the original self-adjoint operator is unbounded. The spectral theorem for such operators is constructed with measurable cutoffs and careful domain statements.
 
 We must not treat those domain issues as merely notation. An identity for a bounded resolvent does not automatically make the unbounded operator act on every vector.
 
-## The thread connecting the unit
+## Resolvents connect spectrum and spectral measures
 
 We began with projections assigned to Borel sets. We converted them into scalar and complex measures, used those measures to construct functional calculus, and represented the operator as multiplication on cyclic L two spaces. Restricting to spectral subspaces and inverting scalar functions then became compatible operations.
 

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "lecture_id": "026000",
+  "transcript": "026000-the-finite-spectral-theorem.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-svd",
+      "reason": "Finite-dimensional singular-direction intuition; general operator-ideal and infinite-dimensional claims require additional sources."
+    },
+    {
+      "source_id": "mit-strang-18-06",
+      "reason": "MIT 18.06 lectures 21 and 25–27 cover eigenvectors, spectral structure and positive definite matrices."
+    },
+    {
+      "source_id": "threeblue-eigenvalues",
+      "reason": "Study a two-dimensional eigenvector example before the spectral argument."
+    },
+    {
+      "source_id": "axler-open-linear-algebra",
+      "reason": "Consult the proof-led account of linear operators, inner products, adjoints and spectral structure."
+    },
+    {
+      "source_id": "tao-hermitian-matrix-sums",
+      "reason": "Study min-max proofs and eigenvalue inequalities from a matrix-analysis viewpoint."
+    },
+    {
+      "source_id": "bindel-hermitian-svd",
+      "reason": "Review a computational proof of symmetric eigenvalue and singular-value properties."
+    }
+  ]
+}

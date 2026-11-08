@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "lecture_id": "095000",
+  "transcript": "095000-compactness-and-finite-rank-approximation.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "mit-functional-analysis-videos",
+      "reason": "Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators."
+    },
+    {
+      "source_id": "mit-functional-analysis-notes",
+      "reason": "Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators."
+    },
+    {
+      "source_id": "hunter-nachtergaele-applied",
+      "reason": "Read the matching open chapter for foundational analytic hypotheses and worked proofs."
+    },
+    {
+      "source_id": "bell-compact-banach",
+      "reason": "Compare the Banach-space compactness lemmas with their Hilbert-space specializations."
+    }
+  ]
+}

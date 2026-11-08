@@ -36,7 +36,7 @@ Now average the two lists with equal weights. The result is three, three. By con
 
 So the inequality follows immediately for this elementary equalizing operation.
 
-We have not used any special formula for F. The same argument works for every convex permutation-invariant measurement.
+The argument uses only convexity and permutation invariance, so it applies to every measurement with those properties.
 
 ## Allow a partial transfer
 

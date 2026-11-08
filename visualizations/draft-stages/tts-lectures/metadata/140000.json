@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "lecture_id": "140000",
+  "transcript": "140000-from-subspace-bounds-to-individual-modes.md",
+  "historical_claims": [
+    {
+      "id": "140000-h01",
+      "anchor": "The paper also applies its one-vector tangent theorem directly to each Ritz vector.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Section 9, one-vector tangent estimate",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "cornell-ritz",
+      "reason": "Projection/Ritz perspective and residual orthogonality; advanced sections are optional."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "hsu-dk-notes",
+      "reason": "Brief finite-matrix exposition; not an alternate proof of every general theorem in this lecture."
+    },
+    {
+      "source_id": "bell-sturm-liouville",
+      "reason": "Relate differential-operator spectra to integral-operator reductions and boundary conditions."
+    },
+    {
+      "source_id": "bindel-ritz-eigensolvers",
+      "reason": "Follow Rayleigh-Ritz residual orthogonality and the logic of extracting approximate eigenpairs."
+    }
+  ]
+}

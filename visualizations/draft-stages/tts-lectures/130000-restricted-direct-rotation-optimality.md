@@ -6,7 +6,7 @@
 
 # Restricted direct-rotation optimality
 
-We have used the direct rotation to compare two subspaces. Now we will ask an optimization question. Among all orthogonal or unitary maps taking one subspace onto another, which one moves the vectors of the source subspace the least? Proposition four point one of Davis and Kahan answers this question, and Corollary four point one extends the answer to every unitarily invariant norm. The critical words are **of the source subspace**. Later we will examine what changes when displacement is measured on the entire ambient space.
+For two closed subspaces U and V, a unitary or orthogonal transporter W sends U onto V. There may be many such maps. Which one moves vectors starting in U by the smallest amount? Proposition four point one of Davis and Kahan answers this question, and Corollary four point one extends the answer to every unitarily invariant norm of the restricted displacement. Measuring displacement only on U is a crucial hypothesis: minimizing displacement on the entire ambient space is a different optimization problem.
 
 ## Set up the competitors
 
@@ -34,7 +34,7 @@ That is precisely the kind of lower bound required by the singular-value min–m
 
 ## From quadratic forms to singular values
 
-This is where our Rayleigh–Ritz and Courant–Fischer lectures pay off. The k-th largest singular value of a rectangular map equals the maximum, over all k-dimensional source subspaces, of the minimum output length on their unit spheres. We just exhibited one k-dimensional subspace on which every output of the competitor has length at least two sine of theta-k over two.
+The singular-value min–max theorem says that the k-th largest singular value of a rectangular map is the maximum, over k-dimensional source subspaces, of the minimum output length on their unit spheres. We just exhibited such a subspace on which every unit vector has output length at least two sine of theta-k over two. That lower bound therefore holds for the competitor’s k-th singular value.
 
 Consequently the k-th singular value of the competitor's restricted displacement is at least that principal chord. For the direct rotation the same chord is exactly its k-th singular value. This proves the pointwise singular-value ordering for every k, without asserting a false Gram-operator ordering.
 
@@ -48,7 +48,7 @@ A unitarily invariant norm depends only on the singular values through a symmetr
 
 For the operator norm, the conclusion concerns the largest chord. For the Frobenius norm, square and sum the chords. For the trace norm, add the chords themselves. We do not have to prove separate optimization theorems for those three choices.
 
-In infinite-dimensional Hilbert space we replace finite singular-value lists with approximation numbers, and we must account for ideal membership. If the competitor's restricted displacement belongs to a normalized invariant ideal satisfying the appropriate Ky Fan dominance property, the approximation-number comparison places the direct displacement in the ideal and bounds its gauge. The source theorem keeps the compact-angle and crossed-defect hypotheses inherited from the preceding section. The construction of the chosen defect matching is part of the direct rotation, rather than a new freedom in the objective.
+In infinite-dimensional Hilbert space we replace finite singular-value lists with approximation numbers, and we must account for ideal membership. If the competitor's restricted displacement belongs to a normalized invariant ideal satisfying the appropriate Ky Fan dominance property, the approximation-number comparison places the direct displacement in the ideal and bounds its gauge. The original theorem retains compact-angle and crossed-defect hypotheses in its infinite-dimensional setting. The construction of the chosen defect matching is part of the direct rotation, rather than a new freedom in the objective.
 
 ## Where the proof can be misapplied
 
@@ -62,7 +62,7 @@ Finally, be careful with the meaning of an angle. The principal angle between U 
 
 The argument has four parts. First, the direct rotation chooses the positive cosine geometry of the source-to-target projection. Second, a subspace of the k largest principal-angle directions gives a uniform lower bound on the competitor's output length. Third, singular-value min–max converts that subspace bound into every singular-value inequality. Fourth, symmetric-gauge monotonicity converts that list comparison into universal restricted-norm optimality.
 
-We have established the first of three Section Four optimization objectives.
+This establishes restricted-norm optimality. It does not assert that the same transporter minimizes every unsquared norm of displacement across the entire ambient space.
 
 <!-- END SPOKEN LECTURE -->
 

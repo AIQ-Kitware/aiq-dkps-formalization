@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "lecture_id": "096000",
+  "transcript": "096000-approximation-numbers-and-singular-value-sequences.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "higham-svd",
+      "reason": "See matrix singular vectors and singular values in an independent exposition."
+    },
+    {
+      "source_id": "mit-functional-analysis-videos",
+      "reason": "Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators."
+    },
+    {
+      "source_id": "mit-functional-analysis-notes",
+      "reason": "Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators."
+    },
+    {
+      "source_id": "mit-strang-18065-low-rank",
+      "reason": "Watch low-rank approximation derived from truncated SVD, then compare the stated norm."
+    },
+    {
+      "source_id": "bell-compact-banach",
+      "reason": "Compare the Banach-space compactness lemmas with their Hilbert-space specializations."
+    },
+    {
+      "source_id": "bell-compact-svd",
+      "reason": "Read an infinite-dimensional account connecting compact SVD, min-max and Schatten classes."
+    },
+    {
+      "source_id": "bindel-hermitian-svd",
+      "reason": "Review a computational proof of symmetric eigenvalue and singular-value properties."
+    }
+  ]
+}

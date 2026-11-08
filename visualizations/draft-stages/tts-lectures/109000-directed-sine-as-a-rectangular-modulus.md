@@ -20,7 +20,7 @@ The maps C and S both start in F and end in H. Their ranges are orthogonal, beca
 
 Because E preserves lengths, the sum of the squares of the output lengths of C and S equals the input length squared. In operator language, C adjoint C plus S adjoint S equals the identity on F.
 
-The positive square roots of these two Gram operators are the cosine and sine magnitudes associated with the trial space relative to the exact target. This is the same construction used earlier in our principal-angle unit.
+The positive square roots of these two Gram operators are the cosine and sine magnitudes associated with the trial space relative to the exact target. Their eigenvalues are the squared cosines and squared sines of the directed principal angles, because the two orthogonal components of each unit trial vector have squared lengths summing to one.
 
 ## Construct the sine modulus
 
@@ -92,7 +92,7 @@ For equal finite dimensions the nonzero principal-angle information agrees in th
 
 The ambient projection difference P minus the trial projection is yet another angle representative. Its modulus describes a symmetric subspace gap. It agrees with the largest directed sine in common equal-dimensional acute situations, but we should not identify every list or ideal norm without checking the dimensional and multiplicity conventions.
 
-## Prepare the sine theorem
+## The resulting geometric estimate
 
 We now have both ingredients. The complementary Sylvester equation controls X in terms of the compressed residual. The Gram identity identifies the modulus of X with the directed sine operator. Consequently a suitable Sylvester estimate becomes a principal-angle estimate with no further approximation.
 

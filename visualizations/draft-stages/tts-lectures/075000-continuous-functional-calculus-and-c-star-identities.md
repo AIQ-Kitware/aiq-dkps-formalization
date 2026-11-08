@@ -6,9 +6,9 @@
 
 # Defining a function of an operator without diagonalizing it
 
-Suppose A is a bounded self-adjoint operator on an infinite-dimensional Hilbert space. In finite dimensions, we could diagonalize A and apply a function to its eigenvalues. But the multiplication operator from lecture seventy-two has no eigenvectors at all.
+Suppose A is a bounded self-adjoint operator on an infinite-dimensional Hilbert space. In finite dimensions, we could diagonalize A and apply a function to its eigenvalues. But multiplication by the coordinate on square-integrable functions over the unit interval has continuous spectrum and no nonzero eigenvectors at all.
 
-We still want to make sense of A squared, the exponential of A, the square root of a positive A, and eventually the indicator of a spectral interval. Today we will construct the continuous part of that theory directly from polynomial approximation.
+We still want to make sense of A squared, the exponential of A, the square root of a positive A, and eventually the indicator of a spectral interval. Polynomial approximation provides the continuous functional calculus for bounded self-adjoint operators.
 
 The central idea is to begin with expressions we already know how to evaluate, then use operator-norm limits. A special norm identity, called the C-star identity, ensures the construction is stable.
 

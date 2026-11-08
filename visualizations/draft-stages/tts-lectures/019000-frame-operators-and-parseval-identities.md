@@ -90,7 +90,7 @@ The lower bound says that no nonzero direction is invisible. The upper bound say
 
 In our example, the frame operator stretches horizontal components by two and vertical components by one. Because neither scale factor is zero, we can undo this stretching. If the frame operator is invertible, reconstruction can be corrected: first apply the inverse frame operator, then analyze and synthesize. This gives the original vector back.
 
-We have not yet developed every theorem about invertible positive operators, so treat that construction here as a finite-dimensional observation. Its full operator-theoretic form will become clearer after our spectral theory lectures.
+The inverse-square-root construction here is justified for a positive definite finite matrix by its eigenvalue decomposition. In general Hilbert spaces, a positive operator may have spectrum approaching zero, so its inverse square root need not be bounded. Extending the argument requires a uniform positive lower bound or appropriately specified domains.
 
 ## Redundancy can coexist with a perfect identity
 

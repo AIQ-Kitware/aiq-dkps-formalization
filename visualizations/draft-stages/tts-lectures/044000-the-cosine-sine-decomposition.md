@@ -106,7 +106,7 @@ That simple observation foreshadows the double-angle theorems. They arise in par
 
 There is another payoff. A rotation through theta maps e to v inside a principal plane. Because the planes are perpendicular, we can rotate them independently. Combining those planar rotations is the beginning of the direct rotation between subspaces.
 
-It is crucial, though, to distinguish a canonical choice of motion from the mere existence of some unitary map. We will develop that distinction in its own lectures.
+It is crucial, though, to distinguish a canonical choice of motion from the mere existence of some unitary map. Existence alone does not specify the transport on complementary directions; uniqueness requires an additional selection condition.
 
 ## Reconstruction
 

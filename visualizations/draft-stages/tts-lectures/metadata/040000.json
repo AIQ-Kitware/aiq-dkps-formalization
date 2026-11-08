@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "lecture_id": "040000",
+  "transcript": "040000-skew-adjoint-generators-and-unitary-flows.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-exp",
+      "reason": "Matrix-exponential method used in finite dimensions; compare with operator-domain assumptions in the lecture."
+    },
+    {
+      "source_id": "higham-matrix-exponential",
+      "reason": "Contrast the exponential-series perspective with dynamical-system examples."
+    },
+    {
+      "source_id": "boyd-stanford-ee263-archive",
+      "reason": "Use the publicly available course-reader slides for block matrices, quadratic forms, or dynamical examples."
+    }
+  ]
+}

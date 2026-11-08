@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "lecture_id": "138000",
+  "transcript": "138000-beam-rayleigh-ritz-calculation.md",
+  "historical_claims": [
+    {
+      "id": "138000-h01",
+      "anchor": "Davis and Kahan begin with a simpler comparison operator on the trial space: zero.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Section 9: beam trial calculation",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "138000-h02",
+      "anchor": "the paper's first sine-angle estimate and its Ky Fan two-term estimate.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Section 9: beam sine/Ky Fan estimates",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "cornell-ritz",
+      "reason": "Projection/Ritz perspective and residual orthogonality; advanced sections are optional."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "boyd-vandenberghe-applied",
+      "reason": "Work through concrete linear algebra, least-squares or SVD calculations in an applied treatment."
+    },
+    {
+      "source_id": "bell-sturm-liouville",
+      "reason": "Relate differential-operator spectra to integral-operator reductions and boundary conditions."
+    },
+    {
+      "source_id": "bindel-ritz-eigensolvers",
+      "reason": "Follow Rayleigh-Ritz residual orthogonality and the logic of extracting approximate eigenpairs."
+    }
+  ]
+}

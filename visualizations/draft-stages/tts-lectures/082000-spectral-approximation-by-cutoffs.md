@@ -8,7 +8,7 @@
 
 A spectral integral looks like an infinite version of a diagonal matrix. But to turn that analogy into proofs, we need to know exactly which finite approximations are legitimate, and which notion of convergence each approximation provides.
 
-Today we will build two kinds of approximation. First we approximate bounded functions by functions taking only finitely many values. Then we restrict the spectrum to larger and larger bounded intervals. The first construction can converge in operator norm. The second usually converges only strongly, meaning on each fixed vector.
+Two approximation procedures play different roles. Simple functions approximate bounded measurable functions, while spectral cutoffs restrict an unbounded operator to larger and larger bounded spectral intervals. The first construction can converge in operator norm. The second usually converges only strongly, meaning on each fixed vector.
 
 That difference becomes essential as soon as the operator itself is unbounded.
 

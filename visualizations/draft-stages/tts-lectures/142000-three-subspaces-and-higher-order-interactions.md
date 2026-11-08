@@ -26,7 +26,7 @@ Fix two distinct F columns, j and k. The sum over i of block i,j adjoint times b
 
 There is a matching pair of row equations. For any E row i, the sum of block i,j times its adjoint, over j, is identity on E i. Different E rows are orthogonal after their three contributions are added.
 
-These four identities are the first nonnegotiable constraints on a proposed set of three-way overlaps. Arbitrary collections of pairwise sine angles do not automatically obey them.
+These four identities constrain the three-way overlaps. Arbitrary collections of pairwise sine angles do not automatically obey them.
 
 Let us make that concrete with three one-dimensional pieces. The comparison operator is now an ordinary three-by-three unitary matrix. If its first column has overlap magnitudes one half, one half, and the square root of one half, these magnitudes are impossible because their squares sum to one quarter plus one quarter plus one half, which actually equals one; so that particular list is permitted by the column-length test. But it still may not extend to all three prescribed columns. Orthogonality between columns supplies further constraints. A column-length test is necessary, never sufficient for a complete overlap table.
 
@@ -66,7 +66,7 @@ The example explains why a three-space theorem might strengthen a two-space theo
 
 We have proved the block-unitarity identities and the exact nine Sylvester equations. They are already powerful enough to generate bounds. But a theorem asserting the best simultaneous bounds, based only on prescribed three-block spectral information, requires an optimization over coupled overlap matrices. That is the unresolved problem described by Davis and Kahan in Question ten point two. In their beam calculation, they explicitly deferred an optimality assertion about a three-by-three comparison to this question.
 
-The right goal is therefore precise. Specify the three spectral clusters, the sizes of the perturbation blocks, the target overlap, and the norm in which it is measured. Impose the common unitarity constraints, and then determine whether the resulting bound is attained by an actual triple of reducing subspaces.
+The three-block identities constrain possible overlaps but do not determine the optimal bound. That extremal problem requires additional hypotheses and a construction attaining the proposed bound. A precise formulation must specify the three spectral clusters, the sizes of the perturbation blocks, the target overlap, and the norm in which it is measured. The corresponding extremal problem must also impose the common unitarity constraints and ask whether an actual triple of reducing subspaces attains the proposed bound.
 
 You should now be able to derive the three-block equations yourself, calculate an indirect coupling of order s times t, and explain why independent pairwise angle estimates do not solve a coupled three-subspace optimization problem.
 

@@ -4,7 +4,7 @@
 
 The Courant–Fischer theorem gave us a way to locate any sorted eigenvalue of a self-adjoint operator. Instead of solving the characteristic polynomial, we can optimize its Rayleigh quotient over subspaces of a chosen dimension.
 
-Today we will see why that is so powerful. Suppose we have two self-adjoint matrices, A and B. Their eigenvectors may point in entirely different directions. How could we compare their eigenvalues without finding an alignment between two separate eigenbases?
+Consider two self-adjoint matrices, A and B. Their eigenvectors may point in entirely different directions. How could we compare their eigenvalues without finding an alignment between two separate eigenbases?
 
 The answer is to compare what the operators do to *every* vector. If one quadratic form is everywhere below another, then all its sorted eigenvalues must lie below the corresponding eigenvalues of the other. This is Weyl monotonicity. And if two quadratic forms differ only by a small amount, their corresponding eigenvalues cannot differ by much either.
 
@@ -20,7 +20,7 @@ But the idea is not confined to diagonal matrices. We say that A is below B in t
 
 This is a partial order, not a way to rank every pair of matrices. Sometimes one operator is larger on one direction and smaller on another. Then neither may be below the other.
 
-That limitation is important. We are about to prove a theorem under an actual hypothesis, not announce that all matrices can be ranked.
+Weyl monotonicity therefore requires a genuine quadratic-form ordering hypothesis.
 
 ## Why the order reaches every eigenvalue
 
@@ -68,7 +68,7 @@ The inequality compares *ordered numerical values*. It does not guarantee that t
 
 In fact, if two eigenvalues of A are equal or nearly equal, their associated directions can be highly sensitive to changes. Today's theorem has no hypothesis requiring a spectral gap, because it says nothing about those directions.
 
-That is not a defect. It is a precise statement about the object being controlled. We will spend later parts of the course building the additional geometry needed to control subspaces and angles.
+The theorem controls eigenvalues, not the orientations of their eigenvectors. Controlling a whole spectral subspace requires additional geometric information about its projection and the separation of the chosen cluster, beyond a bound on individual eigenvalues.
 
 ## Comparing the eigenvalues of a sum
 

@@ -80,7 +80,7 @@ That proof is useful because it turns a geometric condition involving every vect
 
 ## Self-adjoint operators make invariance stronger
 
-We can now derive a consequence of the adjoint we built two lectures ago.
+The adjoint of a bounded Hilbert-space operator is defined by transferring inner-product measurements from its output space back to its input space. This definition gives a useful consequence for invariant subspaces of self-adjoint maps.
 
 Suppose T is self-adjoint and M is invariant. Take a vector n perpendicular to M, and any vector m in M. We want to know whether T of n remains perpendicular to M.
 

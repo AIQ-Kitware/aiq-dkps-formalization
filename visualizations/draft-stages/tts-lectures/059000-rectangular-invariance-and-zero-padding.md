@@ -10,7 +10,7 @@ Imagine a linear map that sends a two-dimensional input into three-dimensional o
 
 For the operator, Frobenius, nuclear, and Schatten norms, the answer is no. But this conclusion relies on more than invariance under square unitary changes of coordinates. We must understand isometric embeddings, rectangular singular values, and the precise role of zero padding.
 
-The geometric issue is that changing coordinates within one space and embedding that space into a larger one are different operations. Today we will prove which singular values survive an embedding, then identify what assumptions a consistent cross-dimensional norm family needs.
+The geometric issue is that changing coordinates within one space and embedding that space into a larger one are different operations. An isometric embedding preserves positive singular values, while zero padding changes only the number of zero singular directions. A consistent cross-dimensional norm family must respect these facts.
 
 ## The most direct calculation
 
@@ -94,7 +94,7 @@ For general contractions, singular-value comparisons lead to bounds of the form:
 
 ## Connection to subspace perturbation theory
 
-Later we will compare an operator restricted to a trial subspace with an operator written in the ambient Hilbert space. Or we will transport a rectangular residual from one coordinate chart to another.
+The distinction appears whenever an operator is restricted to a trial subspace or a rectangular residual is transferred between coordinate frames.
 
 Those operations frequently involve isometric inclusions, adjoints of those inclusions, and zero blocks. Without padding invariance, the same residual could acquire different measured sizes merely because we wrote it in a larger ambient space.
 

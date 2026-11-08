@@ -10,7 +10,7 @@ Until now our operators have usually described a transformation in one step. A m
 
 But suppose we want to describe a transformation that unfolds over time. Start at the identity, move a tiny amount, then move again, and keep doing so. We want a family of operators for which the transformation over two successive time intervals agrees with the transformation over their combined duration.
 
-For ordinary numbers, the exponential function has exactly that property. It converts addition into multiplication. Today we will build its matrix analogue from the same power series and see what survives—and what changes—when multiplication no longer commutes.
+For ordinary numbers, the exponential function has exactly that property. It converts addition into multiplication. The matrix exponential is defined by the same power series. It retains the expected differential equation and inversion law, while familiar scalar identities involving sums require care when matrices do not commute.
 
 ## Start with a scalar differential equation
 
@@ -104,13 +104,11 @@ That is a remarkable connection: the trigonometric rotation formula emerges from
 
 And if we change the generator to a times J, the rotation angle after time t is a times t. The generator controls angular speed.
 
-## Why the course needs this construction
+## Exponentials combine rotations on orthogonal planes
 
-Later we will build rotations that act on several perpendicular principal planes at once. Each plane can rotate through a different angle. We will also encounter skew-adjoint operators built from angle data.
+On an orthogonal sum of invariant planes, a skew-symmetric generator can rotate each plane at its own angular speed. Its exponential acts block by block, turning the generator on each plane into a sine-and-cosine rotation. This is how a single exponential represents several compatible planar motions.
 
-Matrix exponentials give us a language for combining those infinitesimal rotations into a single canonical motion. The link between exponential, cosine, and sine will then appear inside direct-rotation formulas.
-
-The same construction extends to bounded operators on a Banach space. Unbounded generators require a different analytic treatment, which we will develop in later parts of the course.
+For bounded operators on a Banach space, the exponential series also converges in operator norm. An unbounded generator requires additional domain and continuity hypotheses; its exponential cannot be defined by an unrestricted operator-norm power series.
 
 For your final reconstruction, start with the exponential power series. Explain why it converges in operator norm. Differentiate it to recover the flow equation. Then prove that a skew-adjoint generator produces a unitary family.
 

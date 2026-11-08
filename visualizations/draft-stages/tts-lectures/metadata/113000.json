@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "lecture_id": "113000",
+  "transcript": "113000-sharp-examples-and-norm-class-comparisons.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "hsu-dk-notes",
+      "reason": "Brief finite-matrix exposition; not an alternate proof of every general theorem in this lecture."
+    },
+    {
+      "source_id": "higham-unitarily-invariant-norm",
+      "reason": "Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms."
+    },
+    {
+      "source_id": "boyd-vandenberghe-applied",
+      "reason": "Work through concrete linear algebra, least-squares or SVD calculations in an applied treatment."
+    },
+    {
+      "source_id": "zhu-knyazev-tangent-angles",
+      "reason": "Compare projector and frame formulas for principal-angle cosines, sines, and tangents."
+    },
+    {
+      "source_id": "bindel-eigen-perturbation",
+      "reason": "Study concrete perturbation examples and first-order spectral sensitivity."
+    },
+    {
+      "source_id": "bindel-hermitian-svd",
+      "reason": "Review a computational proof of symmetric eigenvalue and singular-value properties."
+    },
+    {
+      "source_id": "bindel-ritz-eigensolvers",
+      "reason": "Follow Rayleigh-Ritz residual orthogonality and the logic of extracting approximate eigenpairs."
+    },
+    {
+      "source_id": "mml-free-text",
+      "reason": "Use analytic-geometry, decomposition or PCA examples to connect the operator calculation to data analysis."
+    }
+  ]
+}
