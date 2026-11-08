@@ -66,9 +66,9 @@ The trace norm of X does not satisfy this pattern. Squaring the sum of singular 
 
 ## A plane example and the boundary of the result
 
-Take two real lines meeting at angle theta. The direct rotation through theta has displacement singular values equal to two sine theta over two, repeated twice. A reflecting transporter can have displacement singular values two and zero.
+Take two real lines meeting at angle theta. The direct rotation through theta has displacement singular values equal to twice the sine of half theta, repeated twice. A reflecting transporter can have displacement singular values two and zero.
 
-Under the operator norm, the direct rotation wins because its largest chord is at most square root of two for principal theta at most a right angle. Under the Frobenius norm, its two squared chords sum to a value at most four, tying the reflection at a right angle. Under the trace norm, however, the direct rotation costs four sine theta over two, while the reflection costs two. Above sixty degrees, the reflection wins.
+Under the operator norm, the direct rotation wins because its largest chord is at most square root of two for principal theta at most a right angle. Under the Frobenius norm, its two squared chords sum to a value at most four, tying the reflection at a right angle. Under the trace norm, however, the direct rotation costs four times the sine of half theta, while the reflection costs two. Above sixty degrees, the reflection wins.
 
 Even without mixing principal planes, minimizing the unsquared trace norm can differ from minimizing squared displacement. In four real dimensions, two equal principal angles allow a transporter that reduces the former cost without contradicting the squared-displacement theorem.
 

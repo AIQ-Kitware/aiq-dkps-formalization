@@ -16,7 +16,7 @@ All ordinary real and complex coordinate spaces of finite dimension are Hilbert 
 
 ## An infinite coordinate vector
 
-Think about a vector whose coordinates continue forever. We cannot permit every infinite sequence, because the sum of its squared coordinate magnitudes might diverge. Instead, consider sequences for which that sum is finite. Call this space ell two, pronounced ell two.
+Think about a vector whose coordinates continue forever. We cannot permit every infinite sequence, because the sum of its squared coordinate magnitudes might diverge. Instead, consider sequences for which that sum is finite. Call this space ell two, the space of square-summable sequences.
 
 The first coordinate vector has a one in the first position and zero everywhere else. The second has a one in the second position and zero everywhere else. Continue this way. Each coordinate vector has length one, and any two distinct coordinate vectors are perpendicular.
 
@@ -122,7 +122,9 @@ theorem inner_linearCombination_linearCombination (v : ι → E) (a b : ι →�
   rw [inner_smul_left, inner_smul_right, ← mul_assoc]
 ```
 
-The notation `ι →₀ 𝕜` is a finitely supported family of coefficients. It expresses the **algebraic** span side of our distinction. `Finsupp.linearCombination` constructs the finite sum of scaled vectors. On the right, `a.sum` and `b.sum` perform finite sums, while `starRingEnd` conjugates the first coefficient when needed. Thus the Lean statement is precisely the finite-dimensional Gram expansion \(\langle\sum_i a_iv_i,\sum_j b_jv_jangle=\sum_{i,j}\overline{a_i}b_j\langle v_i,v_jangle\). `E` is the ambient inner-product space, `v` is the indexed vector family, and `𝕜` is the real or complex scalar type.
+The notation `ι →₀ 𝕜` is a finitely supported family of coefficients. It expresses the **algebraic** span side of our distinction. `Finsupp.linearCombination` constructs the finite sum of scaled vectors. On the right, `a.sum` and `b.sum` perform finite sums, while `starRingEnd` conjugates the first coefficient when needed. Thus the Lean statement is precisely the finite-dimensional Gram expansion \(\langle\sum_i a_iv_i,\sum_j b_jv_j
+angle=\sum_{i,j}\overline{a_i}b_j\langle v_i,v_j
+angle\). `E` is the ambient inner-product space, `v` is the indexed vector family, and `𝕜` is the real or complex scalar type.
 
 For a preview of the **geometric** structure, `ForTauCeti/Analysis/InnerProductSpace/OrthogonalFamilyGluing.lean` has the checked declaration `exists_linearIsometryEquiv_of_orthogonal_blocks`. It uses an `OrthogonalFamily`, the supremum `⨆ i, W i` of subspaces, and the condition `(...)=⊤` that the summands span the entire ambient space. Its additional conclusions concern gluing isometries and belong to later lessons. The symbols `W i` describe actual subspaces, not individual vectors.
 

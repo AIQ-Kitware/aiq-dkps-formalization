@@ -56,17 +56,17 @@ A modest correct replacement is therefore: the direct rotation minimizes all Q-n
 
 There is also a useful approximation guarantee. The projection difference is a lower bound for every competitor's full displacement in any unitarily invariant norm.
 
-For a direct rotation with maximal principal angle theta-max, the singular values of its full displacement are the principal chords, repeated on both directions of each principal plane. Those of the projection difference are the corresponding principal sines, also repeated. Their ratio on a nonzero principal angle theta is one divided by cosine theta over two.
+For a direct rotation, the singular values of its full displacement are the principal chords, repeated on both directions of each principal plane. Those of the projection difference are the corresponding principal sines, also repeated. Their ratio on a nonzero principal angle theta is one divided by the cosine of half theta.
 
-Therefore the full displacement of the canonical D has invariant norm at most secant of theta-max over two times the norm of P minus Q. Combining this with the universal lower bound gives an approximation factor relative to **every** competing transporter.
+Therefore the full displacement of the canonical D has invariant norm at most the secant of half the largest principal angle, times the norm of P minus Q. Combining this with the universal lower bound gives an approximation factor relative to **every** competing transporter.
 
-For theta-max at most sixty degrees, cosine theta-max over two is at least square root of three over two. The approximation factor is at most two divided by square root of three, about one point one five five. It is not a claim of exact minimization. The factor can be attained at fixed angles, so this approximation ratio is sharp for the stated class.
+When the largest principal angle is at most sixty degrees, the cosine of half that angle is at least the square root of three divided by two. The approximation factor is at most two divided by square root of three, about one point one five five. It is not a claim of exact minimization. The factor can be attained at fixed angles, so this approximation ratio is sharp for the stated class.
 
 This distinction is useful in applications: a canonical choice can have provably controlled cost without being an optimizer for a given norm.
 
 ## The complex field has additional flexibility
 
-Complex unitaries have phase degrees of freedom absent from real orthogonal matrices. On a single complex principal plane with angle theta, a phase-corrected transporter can have displacement singular values two sine theta and zero, instead of two copies of two sine theta over two.
+Complex unitaries have phase degrees of freedom absent from real orthogonal matrices. On a single complex principal plane with angle theta, a phase-corrected transporter can have displacement singular values two sine theta and zero, instead of two copies of twice the sine of half theta.
 
 Its trace cost is two sine theta, exactly the trace norm of the difference of the two rank-one projections. As a result it attains the universal projection-difference lower bound.
 

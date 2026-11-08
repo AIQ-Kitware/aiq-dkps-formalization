@@ -68,7 +68,7 @@ The precise improvement comes from the order assumption. It provides a common di
 
 For self-adjoint spectra that are disjoint with a positive distance, the inverse Sylvester operator can instead be represented using oscillatory unitary groups and a Fourier kernel. The scalar kernel reproduces the reciprocal of a frequency away from the forbidden gap around zero.
 
-The reciprocal Fourier kernel has an integrable absolute value that yields an operator-norm estimate with a factor of pi over two divided by the gap under the stated separated self-adjoint spectral hypotheses.
+The reciprocal Fourier kernel has an integrable absolute value that yields an operator-norm estimate with the constant pi divided by twice the gap under the stated separated self-adjoint spectral hypotheses.
 
 The proof is more delicate than entrywise division. One must construct a Fourier representation of the reciprocal multiplier on the allowed frequency set and bound the integral of conjugations by unitary groups. For unbounded self-adjoint blocks, one also needs the domain-aware Sylvester identity before invoking the formula.
 

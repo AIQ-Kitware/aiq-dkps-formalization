@@ -6,7 +6,7 @@
 
 # Proof practicum: reconstruct the 1970 theory
 
-A rigorous Davis-Kahan perturbation argument begins with explicit self-adjointness, spectral-gap, residual, and norm hypotheses. The goal is to reconstruct the bound from those assumptions, then identify how the same mechanism adapts to Hilbert spaces, norm ideals, and the other angle theorems.
+A rigorous Davis–Kahan perturbation argument begins with explicit self-adjointness, spectral-gap, residual, and norm hypotheses. The goal is to reconstruct the bound from those assumptions, then identify how the same mechanism adapts to Hilbert spaces, norm ideals, and the other angle theorems.
 
 The proof proceeds from geometric data to a residual equation, then uses spectral separation to bound the angle. Each additional norm class or operator setting requires a specific extension of that argument.
 
@@ -60,7 +60,7 @@ Suppose a theorem claims a bound in every unitarily invariant norm, wherever tha
 
 We need control of the entire singular-value sequence, not just its largest member. In finite dimensions, the useful language is Ky Fan sums: for each positive integer k, sum the largest k singular values. An all-prefix comparison yields weak majorization. Under the hypotheses of the symmetric-gauge theorem, weak majorization gives the desired unitarily invariant norm inequality.
 
-For the ambient sine theorem of Section six, there is another issue. One directed residual equation only controls one crossed block. To control the full ambient sine operator, derive both crossed Sylvester equations. Compare their block singular values, combine the estimates using the direct-sum Ky Fan lemma, and use the reflection-averaging pinching lemma to contract the relevant perturbation blocks.
+For the ambient sine theorem in Section six of the 1970 Davis–Kahan paper, there is another issue. One directed residual equation only controls one crossed block. To control the full ambient sine operator, derive both crossed Sylvester equations. Compare their block singular values, combine the estimates using the direct-sum Ky Fan lemma, and use the reflection-averaging pinching lemma to contract the relevant perturbation blocks.
 
 In infinite dimensions, an arbitrary ideal norm may be infinite on a bounded operator. An ideal-norm inequality must establish the relevant membership, or assume it for the perturbation and derive it for the angle operator, before comparing finite ideal gauges.
 
@@ -68,9 +68,9 @@ In infinite dimensions, an arbitrary ideal norm may be infinite on a bounded ope
 
 Now explain how the proof changes for tangent theta. Represent the trial subspace as a graph over the exact subspace, provided the projection from the trial space to the exact space is invertible with bounded inverse. The graph map is the sine overlap divided by the cosine overlap. Its singular values are the tangents of the principal angles. An ordered Ritz gap and the appropriate residual equation then control the graph map. The invertibility assumption or a theorem deriving it cannot be omitted.
 
-For sine of two theta, introduce the block reflection associated with one subspace. Reflecting the other subspace across it doubles the principal-plane angles, after the appropriate angular functional calculus. Off-diagonal perturbations anticommute with the reference reflection. This produces a doubled-angle residual with a factor of two. The sine-two-theta estimate may be valid without knowing that the original angle is small.
+For the sine-of-twice-theta theorem, introduce the block reflection associated with one subspace. Reflecting the other subspace across it doubles the principal-plane angles, after the appropriate angular functional calculus. Off-diagonal perturbations anticommute with the reference reflection. This produces a doubled-angle residual with a factor of two. The doubled-angle sine estimate may be valid without knowing that the original angle is small.
 
-For tangent of two theta, small-angle branch information matters. Tangent of twice an angle changes sign or becomes singular at forty-five degrees. Under the required ordered-gap, off-diagonal, and spectral-selection conditions, the appropriate reducing subspace stays in the small-angle branch and one obtains the sharp tangent-two-theta inequality. Without that selection argument, a bound on sine of twice an angle could describe an angle near ninety degrees just as well as one near zero.
+For the tangent-of-twice-theta theorem, small-angle branch information matters. Tangent of twice an angle changes sign or becomes singular at forty-five degrees. Under the required ordered-gap, off-diagonal, and spectral-selection conditions, the appropriate reducing subspace stays in the small-angle branch and one obtains the sharp doubled-angle tangent inequality. Without that selection argument, a bound on sine of twice an angle could describe an angle near ninety degrees just as well as one near zero.
 
 These are four theorem families, with different geometry and different gap requirements. A proof that establishes one does not automatically establish the others.
 

@@ -54,7 +54,7 @@ For finite-dimensional U, the singular values of T are the tangents of the princ
 
 Suppose instead we are given an isometric trial map E and want to know whether its range V is a graph over U.
 
-Split E into C equals P_U E and S equals P_{U perpendicular} E. If C is invertible as a map from the trial-coordinate space onto U, then every trial vector has a unique horizontal component. Starting from a horizontal vector x, use C inverse to recover its trial coordinates, and then apply S to find the complementary component.
+Split the trial embedding E into two components: C is its orthogonal projection onto U, and S is its orthogonal projection onto the orthogonal complement of U. If C is invertible as a map from the trial-coordinate space onto U, then every trial vector has a unique horizontal component. Starting from a horizontal vector x, use C inverse to recover its trial coordinates, and then apply S to find the complementary component.
 
 Therefore the graph slope is T equals S C inverse, with the natural identification of C as a map into U.
 
@@ -76,7 +76,7 @@ The distinction also matters near, rather than exactly at, ninety degrees. Even 
 
 Take a line making thirty degrees with the horizontal axis. Its sine is one half, while its tangent is one divided by the square root of three, approximately zero point five seven seven.
 
-At sixty degrees, the sine is the square root of three over two, approximately zero point eight six six. The tangent is the square root of three, approximately one point seven three two.
+At sixty degrees, the sine is the square root of three divided by two, approximately zero point eight six six. The tangent is the square root of three, approximately one point seven three two.
 
 At eighty-nine degrees, the sine is already extremely close to one. But the tangent is roughly fifty-seven. A sine error bound near one reports that the trial line may be almost perpendicular. A tangent bound records just how steep its graph representation has become.
 

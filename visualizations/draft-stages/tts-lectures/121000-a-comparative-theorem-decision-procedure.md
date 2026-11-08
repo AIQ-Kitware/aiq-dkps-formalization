@@ -6,7 +6,7 @@
 
 # A comparative theorem decision procedure
 
-Four classical spectral-subspace estimates involve sine theta, tangent theta, sine two theta, and tangent two theta. Their formulas look similar, but they answer different questions about trial residuals, changes of self-adjoint operators, and selected spectral subspaces. Using one theorem with another theorem’s hypotheses can invalidate a proof. The assumptions are different enough that such a substitution can invalidate a proof.
+Four classical spectral-subspace estimates involve the sine of an angle, the tangent of an angle, the sine of twice an angle, and the tangent of twice an angle. Their formulas look similar, but they answer different questions about trial residuals, changes of self-adjoint operators, and selected spectral subspaces. Using one theorem with another theorem’s hypotheses can invalidate a proof. The assumptions are different enough that such a substitution can invalidate a proof.
 
 Selecting an angle theorem begins with the available spectral information and the norm to be controlled. We will apply it to three spectral-gap regimes, identify the object whose norm appears on the right side, and use examples to distinguish directed and ambient angles.
 

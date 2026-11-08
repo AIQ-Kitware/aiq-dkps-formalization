@@ -74,7 +74,7 @@ Thus the dilation has spectral values equal to positive and negative singular va
 
 The advantage is a perturbation of size D rather than one containing A times D. The complication is that a selected dilation eigenvector mixes left and right singular vectors, and the signed spectrum introduces extra separation conditions. Recovering separate left- and right-side conclusions requires an additional geometric argument.
 
-This is related to Wedin-type sin-theta phenomena. The Gram route and dilation route each expose different constants and gap assumptions; neither should be substituted for the other without checking which subspace is being selected.
+This is related to Wedin-type bounds on the sines of principal angles. The Gram route and dilation route each expose different constants and gap assumptions; neither should be substituted for the other without checking which subspace is being selected.
 
 ## From angles to aligned frames
 

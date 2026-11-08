@@ -18,7 +18,7 @@ Why do we require equal dimensions? An invertible orthogonal map preserves dimen
 
 ## The single principal-angle block
 
-Begin with a single principal angle theta between two lines. In their common real two-dimensional principal plane, an orthogonal rotation through theta maps the first line to the second. Its displacement operator has two equal singular values, each equal to twice sine of theta over two. Therefore its pth power Schatten cost is two times the quantity twice sine theta over two, raised to power p.
+Begin with a single principal angle theta between two lines. In their common real two-dimensional principal plane, an orthogonal rotation through theta maps the first line to the second. Its displacement operator has two equal singular values, each equal to twice the sine of half theta. Therefore its pth power Schatten cost is two times the pth power of twice the sine of half theta.
 
 There is a choice of the sign of the rotation, but its singular values are the same. Reflections can also map one line to the other. Their displacement costs may differ, so the full optimization must allow all orthogonal transports, not just orientation-preserving rotations.
 

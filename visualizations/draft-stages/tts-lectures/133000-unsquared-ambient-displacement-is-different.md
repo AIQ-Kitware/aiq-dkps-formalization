@@ -24,13 +24,13 @@ For two-dimensional lines in the plane, there is little freedom. In four dimensi
 
 Let U and V be real lines meeting at a principal angle theta between zero and ninety degrees. An orthogonal transporter of the plane taking U onto V belongs to an orientation-preserving or orientation-reversing component. Each component has two sign choices for the image of a unit source vector, but the least costly representative has a simple form.
 
-The least-displacing orientation-preserving choice is the direct rotation through theta. Its displacement singular values are both a, where a equals two sine of theta over two.
+The least-displacing orientation-preserving choice is the direct rotation through theta. Its displacement singular values are both a, where a equals twice the sine of half theta.
 
 The orientation-reversing choices are reflections that send the source line onto the target line. Its displacement singular values are two and zero.
 
 A unitarily invariant norm is a symmetric gauge of these singular values. The direct rotation is no worse than the reflection for **every** such gauge exactly when the sorted list a,a is weakly majorized by the list two,zero. The largest-entry condition says a is at most two, always true. The two-entry condition says twice a is at most two, or a is at most one.
 
-Since a equals two sine of theta over two, this becomes theta at most sixty degrees. Thus the threshold is not arbitrary. It follows from an exact two-dimensional singular-value comparison.
+Since a equals twice the sine of half theta, this becomes theta at most sixty degrees. Thus the threshold is not arbitrary. It follows from an exact two-dimensional singular-value comparison.
 
 However, nothing in this argument says that an arbitrary higher-dimensional competitor can be decomposed into independent rotations or reflections on the original principal planes. That would be an extra structural assertion, and it is false.
 

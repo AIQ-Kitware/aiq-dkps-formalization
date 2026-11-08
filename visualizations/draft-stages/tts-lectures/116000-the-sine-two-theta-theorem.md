@@ -50,11 +50,11 @@ This is exactly the reflected overlap given by composing the reflected projectio
 
 ## Put the two inequalities together
 
-The single-angle theorem for the reflected pair yields delta times the norm of sine two theta at most the norm of the mirror defect J T J minus T.
+The single-angle theorem for the reflected pair yields delta times the norm of the sine of twice theta at most the norm of the mirror defect J T J minus T.
 
 The mirror defect bound yields that this norm is at most twice the norm of H.
 
-Combining them gives the result: delta times the unitarily invariant norm of sine two theta is at most two times the unitarily invariant norm of the perturbation.
+Combining them gives the result: delta times the unitarily invariant norm of the sine of twice theta is at most two times the unitarily invariant norm of the perturbation.
 
 For operator norm, this controls the largest value of sine twice a principal angle, not necessarily twice the largest angle itself. For a Frobenius or Ky Fan norm, we must account for the complete singular-value list of the ambient angle operator. The formal theorem does so through the full-space angle representation and the corresponding unitarily invariant norm.
 

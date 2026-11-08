@@ -183,6 +183,23 @@ removing a disclaimer has not made a stronger theorem appear, stranded a
 pronoun, or created an abrupt definition. Treat audit phrase matches as review
 candidates, not automated proof that a sentence is defective.
 
+## Mathematical speech and audit feedback (8 November 2026)
+
+Prefer spoken formulas with explicit grouping. Say “twice the sine of half
+theta” rather than “two sine theta over two” when the latter could mean a
+different expression. Introduce specialized symbols before reading them, and
+keep LaTeX-like projection tokens out of narration. Source Markdown emphasis
+may aid editing, but the TTS extractor removes its asterisk delimiters.
+
+Preserve mathematical distinctions when checking another model's editorial
+feedback. In particular, **ell two** (square-summable sequences) and **L two**
+(square-integrable functions) denote different spaces even though their
+spoken forms can be similar. A difference in vocabulary need not be a
+mistake: “X star” and “X adjoint” can both name an adjoint, and conventional
+eponyms should not be truncated solely on a speculative pronunciation risk.
+Use a listening test for voice-specific pronunciation changes. Record source
+suggestions, decisions, and actual repairs in the non-spoken audit ledger.
+
 ## Editorial reports and metadata: report facts directly (8 November 2026)
 
 Apply the same human-writing standard to audit reports, completion summaries,

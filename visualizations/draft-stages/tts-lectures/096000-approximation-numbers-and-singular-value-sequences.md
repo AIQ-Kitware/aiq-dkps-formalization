@@ -14,9 +14,9 @@ The approximation numbers are the optimal errors of that rank-constrained proble
 
 ## A definition that always makes sense
 
-Let T be a bounded operator from E to F. Define a one of T to be the norm of T. For every positive integer k, define a sub k of T to be the infimum of the operator norms of T minus R, taken over operators R having rank strictly less than k.
+Let T be a bounded operator from E to F. Define a sub one of T to be the norm of T. For every positive integer k, define a sub k of T to be the infimum of the operator norms of T minus R, taken over operators R having rank strictly less than k.
 
-So a one uses rank zero competitors: only the zero map is allowed, and the error is the norm of T. For a two, rank-one maps are permitted. For a three, rank at most two, and so on.
+So a sub one uses rank zero competitors: only the zero map is allowed, and the error is the norm of T. For a sub two, rank-one maps are permitted. For a sub three, rank at most two, and so on.
 
 To avoid an off-by-one error, number approximation values consistently: the first is the best rank-zero approximation error, the second uses rank at most one, and so forth. A different zero-based index convention describes the same sequence after shifting indices.
 

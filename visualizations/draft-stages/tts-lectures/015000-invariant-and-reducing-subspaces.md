@@ -64,7 +64,7 @@ Later, when we say that a perturbation is off-diagonal relative to a spectral su
 
 ## The commutation test
 
-There is a remarkably compact way to express reducing. The subspace M reduces T exactly when T commutes with the orthogonal projection P onto M. In symbols read aloud: T after P equals P after T.
+There is a remarkably compact way to express reducing. The subspace M reduces T exactly when T commutes with the orthogonal projection P onto M. Equivalently, T after P equals P after T.
 
 Let's prove this in both directions.
 

@@ -14,7 +14,7 @@ Ky Fan approximation gauges sum the largest approximation numbers of an operator
 
 ## Finite prefixes in an infinite space
 
-Let a one of T, a two of T, and so forth denote the approximation numbers defined as the distance to operators of lower rank. Define K sub k of T to be the sum of the first k approximation numbers, for any positive integer k. Set K sub zero equal to zero.
+Let a sub one of T, a sub two of T, and so forth denote the approximation numbers defined as the distance to operators of lower rank. Define K sub k of T to be the sum of the first k approximation numbers, for any positive integer k. Set K sub zero equal to zero.
 
 Although there may be infinitely many singular directions, each fixed K sub k is a finite sum. Every approximation number is bounded above by the operator norm of T, so K sub k is at most k times that norm.
 

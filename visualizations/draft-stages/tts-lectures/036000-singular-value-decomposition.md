@@ -64,7 +64,7 @@ Take A from two-dimensional real space to three-dimensional real space. It sends
 
 Its matrix has three rows and two columns. The first row is one, one. The other rows are zero.
 
-For A of x comma y equal to x plus y, zero, zero, the adjoint sends an output triple to the pair consisting of its first coordinate twice. Consequently A adjoint A sends x comma y to x plus y, x plus y. Its two-by-two matrix has all entries one, as can also be checked by taking the dot products of A's two identical columns.
+For A of x comma y equal to x plus y, zero, zero, the adjoint sends an output triple to the pair whose two entries both equal the first coordinate of the triple. Consequently A adjoint A sends x comma y to x plus y, x plus y. Its two-by-two matrix has all entries one, as can also be checked by taking the dot products of A's two identical columns.
 
 There are two perpendicular unit input directions. The first points along equal coordinates: one over square root of two, one over square root of two. Its Gram eigenvalue is two. The second points along opposite coordinates: one over square root of two, negative one over square root of two. Its Gram eigenvalue is zero.
 

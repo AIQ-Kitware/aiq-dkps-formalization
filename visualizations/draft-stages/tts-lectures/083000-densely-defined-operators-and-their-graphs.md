@@ -70,9 +70,7 @@ Recall the spectral projections defined by a bounded spectral cutoff. For a self
 
 If x belongs to the domain, P R x converges to x, and A P R x equals P R A x, which converges to A x. Thus the cutoffs converge in the graph norm. They are legal approximations in both input and output, rather than approximations that control only one side.
 
-This is the discipline we will apply to every unbounded block identity later in Davis–Kahan theory. First state the domain, then establish that each expression is defined, and only then take limits using closedness or graph-norm convergence.
-
-The answer requires a domain of its own.
+For an unbounded block identity, first state the domain, establish that each expression is defined, and only then pass to limits using closedness or graph-norm convergence.
 
 <!-- END SPOKEN LECTURE -->
 

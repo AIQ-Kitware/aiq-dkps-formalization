@@ -32,6 +32,11 @@ def extract(path: pathlib.Path) -> str:
             raise ValueError(f"{path}: non-spoken markup {token!r} within narration")
     # Normal markdown headings are useful in source but unnecessary in speech.
     spoken = re.sub(r"(?m)^#{1,6}\s+", "", spoken)
+    # Markdown emphasis is useful when editing a transcript, but asterisks
+    # are not spoken punctuation. Keep the source formatting in place and
+    # remove only matched, single-line emphasis delimiters from TTS output.
+    spoken = re.sub(r"(?<!\*)\*\*([^\n*]+?)\*\*(?!\*)", r"\1", spoken)
+    spoken = re.sub(r"(?<!\w)(?<!\*)\*([^\n*]+?)\*(?!\w)", r"\1", spoken)
     return spoken + "\n"
 
 

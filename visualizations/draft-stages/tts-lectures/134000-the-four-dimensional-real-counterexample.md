@@ -12,7 +12,7 @@ The printed universal minimization claim of Proposition four point four fails al
 
 Let U be the plane spanned by the first and second standard coordinate vectors in real four-space. Define a matrix W by taking one half of the following four-by-four sign matrix. Its first row is one, minus one, minus one, minus one. Its second row is one, one, one, minus one. Its third row is minus one, minus one, one, minus one. Its fourth row is one, minus one, one, one.
 
-The matrix looks cumbersome when read aloud, but it has a simple property: each row has four entries of magnitude one, and distinct rows have dot product zero. After multiplication by one half, each row has length one. Thus W is orthogonal.
+The matrix is orthogonal for a simple reason: each row has four entries of magnitude one, and distinct rows have dot product zero. After multiplication by one half, each row has length one. Thus W is orthogonal.
 
 Define V to be W of U. By construction W is admissible as a transporter from U to V. We now need to determine the geometric position of V and then compare the costs of W and the canonical direct rotation.
 
@@ -30,9 +30,9 @@ The geometry satisfies every condition relevant to the purported universal small
 
 The special advantage of W is its own spectral decomposition. There is an orthonormal plane on which W makes a quarter-turn and an orthogonal complementary plane on which W acts as the identity. In the chosen standard coordinates, the turning plane is spanned by the normalized sums of the first and third basis vectors and of the second and fourth basis vectors. One can verify directly by applying the matrix to those two vectors that their images form a ninety-degree rotation.
 
-Thus the eigenvalues of W, after allowing complex eigenvalues to describe a real rotation, are positive i, negative i, one, and one. Its displacement operator identity minus W has singular values square root of two, square root of two, zero, and zero.
+The eigenvalues of W, allowing complex eigenvalues to describe the real quarter-turn, are i, negative i, one, and one, where i is the imaginary unit. Its displacement operator identity minus W has singular values square root of two, square root of two, zero, and zero.
 
-Why? For a unitary eigenvalue e to the i phi, the magnitude of one minus that eigenvalue is two times the absolute value of sine phi over two. A quarter-turn has phi ninety degrees and therefore gives square root of two. The fixed directions give zero.
+Why? For a unitary eigenvalue e to the i phi, the magnitude of one minus that eigenvalue is twice the absolute value of the sine of half phi. A quarter-turn has phi ninety degrees and therefore gives square root of two. The fixed directions give zero.
 
 The trace norm of identity minus W, which is the sum of all four singular values, is therefore two square roots of two. Numerically that is about two point eight two eight.
 
@@ -78,9 +78,9 @@ That conclusion is stronger than the bare refutation, and its proof is short onc
 
 The four-dimensional construction extends to every principal angle strictly between zero and ninety degrees: take two equal angles theta and choose a real orthogonal competitor with one rotation through twice theta and two fixed directions. Its singular-value distribution can differ from that of two independent direct rotations.
 
-The competitor's nonzero displacement singular values are two sine theta, twice. Its trace cost is four sine theta. The canonical direct rotation has four singular values equal to two sine theta over two, so its trace cost is eight sine theta over two.
+The competitor's two nonzero displacement singular values are each twice the sine of theta. Its trace cost is four times the sine of theta. The canonical direct rotation has four singular values equal to twice the sine of half theta, so its trace cost is eight times the sine of half theta.
 
-Use sine theta equal two sine theta over two times cosine theta over two. Then four sine theta equals eight sine theta over two times cosine theta over two. Because cosine theta over two is strictly less than one for every positive theta, the competitor is strictly cheaper for every positive angle in the family.
+Use the identity: the sine of theta equals twice the sine of half theta times the cosine of half theta. Then four times the sine of theta equals eight times the sine of half theta times the cosine of half theta. Because the cosine of half theta is strictly less than one for every positive theta, the competitor is strictly cheaper for every positive angle in the family.
 
 Consequently no positive universal angle threshold can repair the printed statement across all real dimensions. The failure persists arbitrarily close to coincident subspaces.
 

@@ -32,7 +32,7 @@ The triangle inequality does not follow immediately from the definition of inner
 
 ## Why the complex case needs conjugation
 
-Recall that a complex number may have an imaginary part. If we naively multiply complex coordinates and add, the dot product of a vector with itself need not be nonnegative or even real. The simplest example is the one-coordinate vector eye. Multiplying eye by itself gives negative one, which cannot represent a squared length.
+Recall that a complex number may have an imaginary part. If we naively multiply complex coordinates and add, the dot product of a vector with itself need not be nonnegative or even real. The simplest example is a one-coordinate vector whose entry is the imaginary unit, denoted i. By definition, i squared is negative one. Multiplying that coordinate by itself therefore gives negative one, which cannot represent a squared length.
 
 The fix is to conjugate one factor. For a complex vector with two coordinates, take the conjugate of the first vector's first coordinate times the second vector's first coordinate, then add the corresponding product for the second coordinate.
 
@@ -100,7 +100,7 @@ So the inner product is one quarter of that difference. This is the real polariz
 
 It tells us that an inner product can be reconstructed from measurements of sums and differences. Even if someone gives us only lengths, we can recover angles and orthogonality, provided those lengths satisfy the special structure of an inner-product norm.
 
-Over complex numbers, there is an additional problem: squared lengths are real, while the inner product may be complex. The real polarization identity recovers only its real part. To recover the imaginary part, we also compare the squared lengths of x plus eye times y and x minus eye times y. With our choice of which argument is linear, this second difference has the opposite sign from four times the imaginary part.
+Over complex numbers, there is an additional problem: squared lengths are real, while the inner product may be complex. The real polarization identity recovers only its real part. To recover the imaginary part, we also compare the squared lengths of x plus the imaginary unit times y and x minus the imaginary unit times y. With our choice of which argument is linear, this second difference has the opposite sign from four times the imaginary part.
 
 Combining the two measurements recovers the entire complex inner product. Conjugation is not an incidental detail here; it determines the correct sign in the complex polarization formula.
 
