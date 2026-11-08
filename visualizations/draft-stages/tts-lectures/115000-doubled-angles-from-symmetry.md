@@ -100,7 +100,7 @@ The key geometric identity is: positive sine of twice the operator angle equals 
 
 It works across the full angle range, including right angles, because the sine is nonnegative on twice that range. It does not, by itself, choose the near-zero branch.
 
-In the next lecture we will combine this identity with a two-block spectral gap. The outcome is the sine-two-theta theorem, with a bound valid even when the permitted geometry has not yet identified which branch of the doubled sine is relevant.
+The outcome is the sine-two-theta theorem, with a bound valid even when the permitted geometry has not yet identified which branch of the doubled sine is relevant.
 
 <!-- END SPOKEN LECTURE -->
 

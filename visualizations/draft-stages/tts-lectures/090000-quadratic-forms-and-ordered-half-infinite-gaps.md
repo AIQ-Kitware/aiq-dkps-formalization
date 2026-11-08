@@ -88,7 +88,7 @@ The gap condition concerns the operator parts after any spectral restriction has
 
 Likewise, if we compress an operator onto an arbitrary trial subspace, the resulting matrix may be bounded and self-adjoint but need not be a reducing restriction of the original unbounded operator. Those are different constructions.
 
-The next lectures will construct bounded approximations and strongly continuous groups, and then return to the Sylvester equation itself. For now we have established the form inequalities and a positive ordered gap that will control its inverse.
+For now we have established the form inequalities and a positive ordered gap that will control its inverse.
 
 <!-- END SPOKEN LECTURE -->
 

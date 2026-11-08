@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-In the previous lecture we learned how to embed a small coordinate space into a larger Hilbert space without distorting lengths. Our embedding was V. Its adjoint, V star, measures coordinates. We proved that V star V is the identity on coordinate space, while V V star is the orthogonal projection onto the represented subspace.
+Let V be an isometric embedding from a coefficient Hilbert space into an ambient Hilbert space. The adjoint V star measures the coordinates along the selected subspace. We have V star V equal to the coefficient identity, while V V star is the orthogonal projection onto the closed range of V. These identities let us compress an ambient operator to the smaller coordinate space.
 
 Today we will put a third operator between those two maps. Given an operator A on ambient space, we will study V star A V.
 
@@ -86,7 +86,7 @@ Conversely, if the residual is zero, A V equals V B. Every output of A V therefo
 
 We have proved an equivalence: the canonical Ritz residual vanishes exactly when the trial subspace is invariant under A.
 
-For a self-adjoint operator, invariance of a closed subspace also implies that its orthogonal complement is invariant. In that case the subspace is reducing, and we can decompose A into separate diagonal blocks. We established that in our earlier lecture on invariant and reducing subspaces.
+For a self-adjoint operator, invariance of a closed subspace also implies that its orthogonal complement is invariant. In that case the subspace is reducing, and we can decompose A into separate diagonal blocks. We established that on invariant and reducing subspaces.
 
 As a simple exact example, take the horizontal axis under our diagonal matrix. A sends horizontal vectors back to the horizontal axis. Compression gives multiplication by one, and the residual is exactly zero. This time the compressed eigenvalue is a genuine ambient eigenvalue.
 
@@ -120,11 +120,10 @@ This is why one must never silently transfer an identity involving products, inv
 
 We can now distinguish three objects. V represents the chosen subspace. B equals V star A V and records the part of A visible within that subspace. The residual A V minus V B records the part escaping it.
 
-These objects will recur throughout our formalization. They let us separate questions of coordinate representation, exact invariance, and approximation error.
+The compression, the off-diagonal residual, and the exact invariant-subspace condition describe three different aspects of an approximate eigenspace. Keeping them distinct prevents coordinate information from being mistaken for invariance.
 
 Try to reconstruct the proof that V star applied to the residual is zero. Then explain why zero residual is equivalent to invariance. Finally, return to the diagonal-line example: why does a Ritz value of two fail to be an eigenvalue even though it is obtained from an exact calculation?
 
-In the next lecture we will compare two different frames using their overlaps. That will help us understand how to align coordinate systems without confusing differences between chosen bases with differences between the subspaces they represent.
 
 <!-- END SPOKEN LECTURE -->
 

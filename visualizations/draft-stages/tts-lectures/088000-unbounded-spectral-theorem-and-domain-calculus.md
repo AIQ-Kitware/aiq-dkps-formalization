@@ -94,7 +94,7 @@ For A squared there is a convenient simplification: the domain of the operator p
 
 Suppose we want to select a spectral band, restrict an unbounded operator to it, and compare it with a perturbed operator. The spectral theorem gives a route: use the projection E of the band, verify preservation of the domain, and approximate domain vectors using bounded cutoffs.
 
-It is only after these steps that we can write the residual block or a Sylvester identity without hiding an undefined term. The next lecture develops reducing subspaces and the precise domain conditions needed to make those restrictions self-adjoint.
+It is only after these steps that we can write the residual block or a Sylvester identity without hiding an undefined term.
 
 The unbounded spectral theorem thus supplies more than a way to compute functions of A. It provides a complete description of which vectors can be acted upon, and it makes graph-level approximation possible.
 

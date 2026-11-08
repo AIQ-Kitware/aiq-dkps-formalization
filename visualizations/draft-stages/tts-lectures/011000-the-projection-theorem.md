@@ -46,7 +46,7 @@ Now let p and q come from sufficiently late positions in our minimizing sequence
 
 Completeness of H now supplies a limit point p. Since M is closed and every approximant lies in M, their limit also lies in M. Continuity of the norm says that the distance from x to p is exactly d. We have constructed a nearest point.
 
-Notice the roles of the ingredients. The parallelogram identity made the approximants Cauchy. Hilbert-space completeness provided a limit. Closedness of M kept that limit inside the permitted subspace. If we remove closedness, our earlier ell-two example shows the conclusion can fail.
+Notice the roles of the ingredients. The parallelogram identity made the approximants Cauchy. Hilbert-space completeness provided a limit. Closedness of M kept that limit inside the permitted subspace. Closedness cannot be dropped. For example, the finitely supported sequences form a dense, nonclosed subspace of ell two. A square-summable sequence with infinitely many nonzero coordinates has distance zero to that subspace but has no nearest point within it.
 
 ## Why the nearest point is unique
 
@@ -84,17 +84,15 @@ If x already lies in M, its nearest point is itself. Projecting twice changes no
 
 And the complementary piece, x minus P of x, is exactly the orthogonal projection onto M perp. Every vector belongs to the sum of M and M perp, and that sum is orthogonal.
 
-We can now close a loop from the last lesson. Take the orthogonal complement of M perp. Because every vector splits into an M part and an M-perp part, a vector perpendicular to M perp must have zero M-perp component. It therefore belongs to M. Thus, for a closed subspace, taking the orthogonal complement twice returns the subspace. For any possibly nonclosed subspace, it returns the closure.
+We can now close a loop. Take the orthogonal complement of M perp. Because every vector splits into an M part and an M-perp part, a vector perpendicular to M perp must have zero M-perp component. It therefore belongs to M. Thus, for a closed subspace, taking the orthogonal complement twice returns the subspace. For any possibly nonclosed subspace, it returns the closure.
 
 ## Reconstructing the proof
 
-The next time you encounter an orthogonal projection, try not to think of it as a black-box matrix. Reconstruct the argument in four steps.
+Reconstruct the argument in four steps.
 
 First, choose a sequence whose errors approach the best possible error. Second, use the parallelogram identity and the midpoint to prove that sequence is Cauchy. Third, apply completeness and closedness to get an actual nearest point. Fourth, vary that point along directions in the subspace to prove its residual is perpendicular.
 
 The final consequences—linearity, boundedness, and projection squared equals projection—follow from that geometry.
-
-Next we will use this decomposition for a different purpose. We will show that every bounded scalar-valued linear measurement on a Hilbert space is represented by one vector. That will give us adjoints, which turn measurements of an operator's outputs into measurements of its inputs.
 
 <!-- END SPOKEN LECTURE -->
 

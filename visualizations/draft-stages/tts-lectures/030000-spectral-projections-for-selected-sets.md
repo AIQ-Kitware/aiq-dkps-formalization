@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-We have spent the last several lectures studying individual eigenvalues: how to find them, how to order them, and how to compare them using Rayleigh quotients.
+Individual eigenvalues of a self-adjoint matrix can be ordered and compared using Rayleigh quotients and min-max characterizations. But many perturbation questions concern an entire selected collection of eigendirections rather than any one eigenvector.
 
 But the Davis–Kahan theory that motivates this course is often not interested in one eigenvector at a time. It asks how a *subspace* associated with a group of eigenvalues behaves. To prepare for that question, we need a way to say: keep the part of a vector associated with these eigenvalues, and discard everything else.
 
@@ -96,7 +96,7 @@ If we first apply A and then project, A multiplies *every* spectral component by
 
 The same selected components survive with the same multipliers in either order. Therefore the spectral projection commutes with A.
 
-That means its range is invariant under A, and so is its perpendicular complement. In the language of our earlier lecture, a spectral subspace is a *reducing* subspace.
+That means its range is invariant under A, and so is its perpendicular complement. By definition, a spectral subspace is a *reducing* subspace.
 
 Conversely, as the repeated-eigenvalue example shows, a reducing subspace need not arise by selecting whole eigenvalues. Commutation is a necessary property of spectral projections, but not a complete characterization of those particular selectors.
 
@@ -118,7 +118,7 @@ In an infinite-dimensional Hilbert space, the spectrum may not be a discrete lis
 
 For now, try reconstructing the two-by-two example. Explain why the projectors for three and one add to the identity. Then prove that any selected spectral projection commutes with A. Finally, explain why selecting one line in a repeated eigenspace is not the same as selecting an eigenvalue.
 
-The next lecture will ask what it means for two groups of eigenvalues to be separated. We can now ask that question in terms of clearly defined spectral subspaces and their projections.
+We can now ask that question in terms of clearly defined spectral subspaces and their projections.
 
 <!-- END SPOKEN LECTURE -->
 

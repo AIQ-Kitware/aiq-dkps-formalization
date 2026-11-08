@@ -10,11 +10,16 @@ IDs are spaced by 1,000 to permit insertions. This folder is a transcript-first
 teaching branch; its narration is not a replacement for the journal sources or
 formal theorem statements.
 
-**Editorial state (2026-11-08):** All 150 drafts exist. The independent-listening
-review in [`standalone-review-2026-11-08.md`](standalone-review-2026-11-08.md)
-found recurring cross-episode language and implementation commentary in spoken
-text. Read it and its candidate-lines ledger before any publication-oriented
-revision. This audit did **not** rewrite the transcripts or verify every proof.
+**Editorial state (2026-11-08 revision):** All 150 drafts were screened for
+standalone narration. The spoken text has been revised where needed, including
+reconstruction of reused examples and the missing extraction markers for
+`000000`. See [`standalone-revision-report-2026-11-08.md`](standalone-revision-report-2026-11-08.md),
+the per-lecture disposition, and the candidate disposition ledger for the
+changes and remaining verification work. The earlier
+[`standalone-review-2026-11-08.md`](standalone-review-2026-11-08.md) is
+retained as the historical pre-revision audit, not as the current task list.
+Editorial validation does not establish Lean compilation or synthesized-audio
+quality.
 
 ## Source format
 
@@ -61,10 +66,9 @@ algebra and calculus but no prior functional analysis.
 
 Judge independence from the **extracted narration alone**. A reader may use the
 preamble's prerequisites and next-lesson links for navigation, but a listener
-must not need them. The course introduction (`000000`) is exempt from needing a
-Lean appendix, **not** from an extractable spoken region; adding its missing
-markers is tracked by the standalone review, and is outside that review's
-no-transcript-edits scope.
+must not need them. The course introduction (`000000`) has an extractable
+spoken region and remains exempt from needing a Lean appendix. The review
+records the historical pre-revision marker defect and its disposition.
 
 ## Transcript review standard
 
@@ -77,7 +81,7 @@ Check independently that:
 5. The spoken region contains no raw code or notation that makes synthetic speech hard to follow.
 6. The listener can answer a new question using the ideas, not just repeat the conclusion.
 
-These files are editorial lecture drafts. Past source-to-Lean correspondence checks
+These files remain editorial lecture drafts. Past source-to-Lean correspondence checks
 were textual and did not constitute proof compilation; the independent-listening
 review has not rechecked those mathematical declarations. Production promotion
 requires separate mathematical and actual synthesized-audio review.

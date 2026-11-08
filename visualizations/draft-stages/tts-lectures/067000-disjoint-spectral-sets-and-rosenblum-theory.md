@@ -92,7 +92,7 @@ What do we do? Use a contour made from several positively oriented loops that to
 
 The same resolvent cancellation identity holds on each loop. Summing their integrals gives the full Riesz projection for A, which is the identity, and the zero projection for B. This proves the general bounded-operator Rosenblum result.
 
-The specific Lean theorem used in our appendix proves existence and uniqueness with a separating circle. That theorem must not be presented as if its hypotheses already express every possible disjoint spectral arrangement. The broader contour extension is the mathematical generalization we have just explained.
+A circle-contour solution is justified when a circle separates the two spectra. More general disjoint spectral configurations require a contour adapted to those spectral sets; the circular case alone does not cover all configurations.
 
 ## Connection to spectral projections
 
@@ -108,7 +108,7 @@ The Sylvester map is invertible for bounded complex Banach-space operators with 
 
 But there is a separate quantitative problem. How can we prove an explicit estimate for the size of a solution in a useful operator norm? When the spectra have additional separation geometry, an elementary inverse-based argument can give a constant-one bound even on Banach spaces.
 
-That is the subject of the next lecture. Before moving on, derive the cancellation identity on paper and evaluate the scalar contour integral. Those two computations are the proof's core.
+Before moving on, derive the cancellation identity on paper and evaluate the scalar contour integral. Those two computations are the proof's core.
 
 <!-- END SPOKEN LECTURE -->
 

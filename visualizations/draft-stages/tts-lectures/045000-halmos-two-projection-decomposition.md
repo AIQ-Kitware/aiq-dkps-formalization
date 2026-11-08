@@ -6,7 +6,7 @@
 
 # What can two projections tell us about a whole space?
 
-We have learned to compare subspaces by their principal angles. In the last lecture, we discovered that genuine intermediate angles live in two-dimensional planes, where both orthogonal projections become simple cosine–sine matrices.
+We have learned to compare subspaces by their principal angles., we discovered that genuine intermediate angles live in two-dimensional planes, where both orthogonal projections become simple cosine–sine matrices.
 
 But imagine a pair of subspaces with different dimensions. Some directions might belong to both. Some might belong to the first and be perpendicular to the second. Others might do the reverse. And the ambient space might contain directions belonging to neither subspace.
 
@@ -78,7 +78,7 @@ We need to justify why the remaining part can be studied independently. It is no
 
 Each elementary part is invariant under P and under Q. In fact, both act there as either identity or zero. Therefore their orthogonal sum is invariant under both projections.
 
-Projections are self-adjoint. From our earlier lecture, an invariant subspace for a self-adjoint operator is automatically reducing: its orthogonal complement is invariant as well.
+Projections are self-adjoint. For a self-adjoint operator, an invariant subspace is automatically reducing, since self-adjointness forces its orthogonal complement to be invariant as well: its orthogonal complement is invariant as well.
 
 Consequently, the generic part is invariant under P and Q. Both projections split into blocks relative to the elementary part and generic part. There is no mixing between them.
 
@@ -92,7 +92,7 @@ The same reasoning applies to the other three intersections. Inside the generic 
 
 This is sometimes called generic position for the restricted pair of subspaces.
 
-In finite dimensions, that means all the principal angles in the generic part lie strictly between zero and ninety degrees. As a result, the generic part splits into the principal planes we constructed in the previous lecture.
+In finite dimensions, that means all the principal angles in the generic part lie strictly between zero and ninety degrees. As a result, the generic part splits into the principal planes we constructed.
 
 Each plane can have its own angle. The complete finite-dimensional picture is therefore: four orthogonal elementary summands, plus a family of orthogonal two-dimensional cosine–sine planes.
 
@@ -140,7 +140,6 @@ Return to our six-dimensional example. Identify all four elementary parts and wr
 
 Next, prove in general that the four elementary parts are mutually orthogonal and that their orthogonal complement is invariant under both projections. Finally, explain why the absence of a ninety-degree eigenvector in infinite dimensions does not by itself produce a uniform bound away from ninety degrees.
 
-The next lecture will construct positive cosine and sine operators explicitly. That will put the geometry into a form that continues to make sense even when we cannot list every angle with an eigenvector.
 
 <!-- END SPOKEN LECTURE -->
 

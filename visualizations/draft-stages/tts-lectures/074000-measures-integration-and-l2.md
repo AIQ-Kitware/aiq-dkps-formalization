@@ -104,15 +104,13 @@ Take pairwise disjoint measurable sets, each of finite positive measure. Divide 
 
 If there are infinitely many such sets, we obtain an infinite orthonormal family. Hence L two cannot be finite-dimensional.
 
-For the interval from zero to one, use the consecutive intervals from one over n plus two to one over n plus one. Each has positive finite length, and they are disjoint. This gives an explicit witness to infinite dimensionality in the Lean source.
+To exhibit infinitely many orthogonal directions, choose disjoint intervals such as those from one over n plus two to one over n plus one. Each has positive finite length. Their normalized indicator functions form an infinite orthonormal family in the square-integrable space.
 
 ## Returning to spectral theory
 
 When a projection-valued measure assigns a projection to each Borel set, each vector will induce a scalar measure: the squared norm of its projected component. Integrals against that scalar measure will define norms of functions of the operator.
 
 Everything we developed today supports that construction. Countable additivity controls disjoint spectral pieces. Simple functions provide initial approximations. Monotone and dominated convergence justify limits. L two and its completeness provide the ambient space in which spectral models live.
-
-Next we will first finish a simpler problem: defining continuous functions of bounded self-adjoint operators. That construction uses only uniform approximation, but its limitations will motivate the fuller measure-based calculus.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -6,7 +6,7 @@
 
 # From rotation counterexample to real transport matching
 
-Earlier we saw that the canonical direct rotation is not always the best orthogonal transporter when the cost is an unsquared, whole-space Schatten norm. The real four-dimensional counterexample was enough to disprove the general printed optimality claim. A counterexample, however, does not solve the minimization problem. Today we will build a more complete model: transport costs can be organized into independent principal-angle labels, with the freedom to couple certain labels in pairs.
+The canonical direct rotation need not minimize an unsquared Schatten norm of whole-space displacement among all real orthogonal maps transporting one subspace onto another. A four-dimensional example with two equal principal angles refutes the broad claim. A useful positive problem remains: characterize the global minimum when the exponent p is strictly between one and two.
 
 ## What are we optimizing?
 
@@ -28,9 +28,9 @@ The missing degree of freedom is a coupling between two principal-angle blocks. 
 
 ## Why a matching appears
 
-The real transport formalization turns that freedom into a finite combinatorial problem. Label the positive principal angles. Each label can remain a singleton, carrying the best permitted one-angle cost, or it can be paired with another label, carrying the best two-angle cost from a four-dimensional block.
+The real transport optimization turns that freedom into a finite combinatorial problem. Label the positive principal angles. Each label can remain a singleton, carrying the best permitted one-angle cost, or it can be paired with another label, carrying the best two-angle cost from a four-dimensional block.
 
-A matching is a collection of disjoint pairs together with unmatched singletons. In Lean it is encoded by an involutive permutation: a fixed point means a singleton, and a two-cycle means a paired block. No angle label can belong to two different pairs.
+A matching consists of disjoint pairs together with unmatched singletons. Represent it by a permutation that equals its own inverse: a fixed point denotes a singleton, and a two-cycle a paired block. No angle label can belong to two different pairs.
 
 The cost of a matching is the sum of singleton weights and complete pair weights. If we sum over all labels rather than over edges, each pair contributes half its full weight at each endpoint, so it is counted exactly once. The minimum over all matchings exists because the set of involutive permutations of finitely many labels is finite.
 
@@ -42,7 +42,7 @@ Suppose the positive principal angles are theta and psi. There are two combinato
 
 The global minimum is the smaller of those two numbers. For p equal two, the squared Frobenius objective is tied directly to the sum of squared displacements, and the canonical direct rotation satisfies the established squared-objective theorem. For exponents strictly between one and two, the paired option can be better.
 
-You must not replace the optimized pair cost with the direct rotation's pair cost. Doing so would rebuild the false optimality claim into the supposed solution. The pair cost is obtained by minimizing over both relevant four-dimensional determinant classes; the source formalization treats that minimization explicitly.
+The optimized cost of a paired block need not equal the cost of the direct rotation acting independently on its two principal planes. The correct pair cost minimizes over both relevant four-dimensional determinant classes. Replacing it with the direct rotation's candidate cost would assert an optimality property that fails for the unsquared objective.
 
 For three positive angles, the finite choices are: three singletons, or one pair and one singleton. For four, we also have two disjoint pairs. In general, the number of matchings grows, but the mathematical structure stays finite and explicit.
 
@@ -54,7 +54,7 @@ The first direction is an extraction theorem. It analyzes an ambient optimizer a
 
 Neither direction can be replaced merely by noting that the minimum of finitely many numbers exists. A combinatorial optimizer might describe no actual geometric operator unless realization is proved. Conversely, a construction of candidate transports does not rule out a more exotic, lower-cost orthogonal matrix.
 
-The repository contains both ingredients for a stated regime: finite-dimensional real subspaces of equal dimension and Schatten exponent p strictly between one and two. It proves the existence of an ambient minimizing orthogonal transporter whose pth power cost equals the matching minimum. It also keeps track of repeated angles and zero angles rather than discarding their coordinate labels by an informal generic-position assumption.
+The result combines two arguments in finite-dimensional real spaces with equal-dimensional subspaces and Schatten exponent p strictly between one and two: a lower bound extracting matching data from every ambient optimizer, and an upper bound constructing an orthogonal transporter from an optimizing matching. Repeated and zero principal angles remain legitimate labeled inputs.
 
 ## Why the exponent matters
 
@@ -64,15 +64,15 @@ This is why one must name the exponent in an optimality theorem. The best operat
 
 There are also delicate endpoint questions. A theorem proved for exponents strictly between one and two should not be quoted as automatically covering p equal one or p equal two. Continuity of an optimized value can help study endpoint costs, but a complete endpoint statement may need its own realization and attainment arguments.
 
-## What the Lean result actually says
+## Scope of the matching theorem
 
-The main named theorem in the present source asserts existence of a minimizing real Schatten transport matching in the regime just stated. It represents the cost using the minimum of positive-angle matching weights and proves that its transporter beats every admissible orthogonal competitor.
+For real finite-dimensional Hilbert spaces with equal-dimensional source and target subspaces, and Schatten exponent p strictly between one and two, there is an orthogonal transporter attaining the matching minimum. Every admissible orthogonal transporter has pth-power displacement cost at least this value, and an optimizing matching can be realized geometrically.
 
 The assumptions include finite dimension, a real inner product, equal source and target dimension, and p strictly between one and two. The conclusion concerns the pth power of the Schatten norm of identity minus the transporter; taking the pth root preserves comparisons because p is positive. The theorem does not state a universal result for arbitrary symmetric gauges or every exponent.
 
 To reconstruct the argument, begin with principal planes, calculate the two equal singular values of a planar rotation, state the optimized one- and two-angle costs, and prove that any matching can be assembled by orthogonal direct sum. Then identify the genuinely difficult converse: ruling out an ambient transport more efficient than every matching. That converse is why this is a mathematical theorem rather than a convenient search heuristic.
 
-The counterexample from Section four has led us to a positive classification of one important optimization problem. Next we leave square self-adjoint matrices and ask how to control singular subspaces of genuinely rectangular maps.
+The matching theorem supplies a positive classification for the stated real Schatten optimization problem. Its assumptions on dimension, rank, and exponent remain part of the claim.
 
 <!-- END SPOKEN LECTURE -->
 

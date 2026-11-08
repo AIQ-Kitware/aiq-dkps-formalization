@@ -73,6 +73,38 @@ other lecture? Is every sentence about the mathematics rather than the
 instructions used to produce the lecture? This editorial test is separate
 from proof verification and from listening to synthesized audio.
 
+## Standalone revision checks (8 November 2026)
+
+Before editing a reference to another recording, identify the mathematical
+antecedent it carries. Restore the operator, matrix, vectors, theorem premises,
+parameter range, or earlier calculation locally **before** removing chronology.
+A cross-episode reference can hide missing mathematics; a text-only substitution
+is insufficient when the proof depends on that data.
+
+Read the first substantive paragraph and the last substantive paragraph after
+editing, not merely the changed sentence. A deleted recap can strand a pronoun
+or leave a leading comma; a deleted sequel announcement can leave an empty or
+fragmentary conclusion. End on a consequence or limitation established in the
+current recording. An invitation to independently reconstruct that proof is
+fine; an announcement about another recording is not.
+
+A series-wide phrase scan must distinguish technical uses of words like
+"source" (domain of a linear map, a source defect subspace) from repository
+or editorial references. Likewise, "next" may describe the next step **within
+the present proof**. Inspect the context rather than blindly deleting all
+matches.
+
+For recurring numerical models, each lecture should introduce the model
+domain, boundary conditions, parameter restrictions, trial space, chosen basis
+when relevant, and the particular residual and gap used. Recompute at least
+one defining step when reusing a Gram matrix or Ritz residual, rather than
+merely asserting a result calculated in another recording.
+
+The narration extractor validates markers and printable input, not prose,
+logic, operator domains, theorem correspondence, or voice quality. Keep
+editorial-review disposition, mathematical source checks, compilation checks,
+and synthesized-audio acceptance separate in the completion record.
+
 ## Audience and scope
 
 > “It's the jargon and shorthand for concepts viewers are not familiar with.”

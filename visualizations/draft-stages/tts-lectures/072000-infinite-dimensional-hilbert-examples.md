@@ -30,7 +30,7 @@ Now consider functions on the interval from zero to one. Keep those for which th
 
 Why identify functions almost everywhere? Because the integral norm cannot detect a difference at a single point. If f and g disagree only at one position, their difference has norm zero. A normed space must regard any vector of norm zero as the zero vector.
 
-The inner product is the integral of the conjugate of f times g. Again Cauchy–Schwarz controls it. In a later lecture we will build the integration tools and explain why this space is complete.
+The inner product is the integral of the conjugate of f times g. Again Cauchy–Schwarz controls it.
 
 There is a useful comparison with ell two. In ell two we sum squared coordinates. In L two we integrate squared values over a continuum. Both are Hilbert spaces, and both have countable orthonormal bases in these standard examples. Yet the most natural operators on them can have very different spectral behavior.
 
@@ -92,7 +92,7 @@ Two disjoint subsets give orthogonal projections. The projection for a union of 
 
 For a finite diagonal matrix these projections simply select coordinate eigenspaces. For multiplication by x they select the support of a function according to the value of x, even though there are no eigenvectors.
 
-We have not yet established what counts as a well-behaved set or how to sum projections over infinitely many pieces. That is why the next lectures begin with sigma-algebras, measures, and integration. These are the tools that allow a spectral theorem without an eigenvector basis.
+We have not yet established what counts as a well-behaved set or how to sum projections over infinitely many pieces. These are the tools that allow a spectral theorem without an eigenvector basis.
 
 <!-- END SPOKEN LECTURE -->
 

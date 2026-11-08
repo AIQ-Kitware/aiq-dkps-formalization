@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-In our last lesson, we considered a quarter-turn rotation. It had no nonzero real eigenvector, but after allowing complex scalars we found two eigenvalues, eye and negative eye. We also found those values by asking when a scalar multiple of the identity, minus the operator, stops being invertible.
+Consider the quarter-turn operator on the real plane, sending x comma y to negative y comma x. No nonzero real vector is an eigenvector, since the operator rotates every direction by ninety degrees. Over the complex numbers it has eigenvalues i and negative i. Those are exactly the scalar values for which the shifted operator A minus lambda times the identity fails to be invertible.
 
 Today we will turn that second question into a definition. This is the beginning of spectral theory in its general form. Our goal is to understand what a spectrum is, why it is more than a list of eigenvalues, and why an inverse called the resolvent tells us so much about an operator.
 
@@ -50,7 +50,7 @@ Let's construct a counterexample without introducing Hilbert spaces yet.
 
 ## A spectral value with no eigenvector
 
-Consider the Banach space of continuous complex-valued functions on the interval from zero to one. We measure a function by its maximum absolute value. We proved earlier that this norm makes the space complete.
+Consider the Banach space of continuous complex-valued functions on the interval from zero to one. We measure a function by its maximum absolute value. This space is complete in the maximum norm: a uniformly Cauchy sequence of continuous functions converges uniformly, and a uniform limit of continuous functions is continuous.
 
 Define the operator M by multiplying a function by its input coordinate. In other words, M of f is the function whose value at t is t times the value of f at t.
 
@@ -72,7 +72,7 @@ This example gives us two independent reasons for concern: the operator is not o
 
 ## Why the resolvent set is open
 
-We learned in the Banach algebra lecture that an operator close enough to the identity has an inverse, supplied by a Neumann series. That fact makes the resolvent set robust.
+A standard Neumann-series argument shows that an operator close enough to the identity has an inverse, supplied by a Neumann series. That fact makes the resolvent set robust.
 
 Suppose z is a resolvent point and let R be the inverse of z times the identity minus A. Now move from z to a nearby complex number w.
 
@@ -116,7 +116,7 @@ Second, explain why multiplication by t on continuous functions has zero in its 
 
 Third, derive the safe-disk condition around a resolvent point using the Neumann series. What role does the norm of the resolvent play?
 
-We now have a definition of spectrum that survives beyond matrices. We also have a warning: spectral values need not be eigenvalues. Next we will add inner products, which let us measure angles and orthogonality as well as lengths. That geometric structure is what will eventually make the spectral theory of self-adjoint operators especially powerful.
+We now have a definition of spectrum that survives beyond matrices. We also have a warning: spectral values need not be eigenvalues.
 
 <!-- END SPOKEN LECTURE -->
 

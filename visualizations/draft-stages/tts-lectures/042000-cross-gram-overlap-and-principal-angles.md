@@ -24,7 +24,7 @@ That distinction already hints at a general rule. When comparing subspaces, we s
 
 Suppose U and S are two subspaces of the same ambient Euclidean space. Choose an orthonormal basis for U and another for S.
 
-Collect the first basis into a coordinate embedding V, and the second into a coordinate embedding W. The letters may sound abstract, but the operations are the same as in our earlier frame lectures: V takes a coordinate vector into U, and W takes a coordinate vector into the other subspace.
+Collect the first basis into a coordinate embedding V, and the second into a coordinate embedding W. The letters may sound abstract, but their roles are concrete: V takes a coordinate vector into U, and W takes a coordinate vector into the other subspace.
 
 Each embedding preserves inner products, so V adjoint V and W adjoint W are identity operators on their respective coordinate spaces.
 
@@ -116,7 +116,7 @@ But there is another legitimate, directed convention. We can measure how each di
 
 The two conventions answer related but different questions. The shorter list pairs as many directions as the smaller subspace allows. The directed list also records unmatched source directions, which become important when the dimensions differ.
 
-When working with the Lean formalization, we will pay attention to which convention a declaration uses, rather than silently assuming that all principal-angle arrays have the same length.
+Principal-angle lists may use different conventions for unequal-dimensional subspaces. The number of recorded angles and the treatment of right-angle defects must be specified before comparing formulas.
 
 ## A final distinction
 
@@ -126,7 +126,7 @@ The list of principal angles tells us much more than a single worst-case angle. 
 
 For your reconstruction exercise, take two planes in three dimensions that share an axis and meet at angle phi. Write down orthonormal frames, calculate their cross-Gram matrix, take its singular values, and recover zero and phi. Then multiply the overlap matrix by its adjoint and show that the resulting operator is the compression of the second plane's projection to the first plane.
 
-If you can do that, you have constructed the central geometry that the later sine-theta theorem measures. The next lesson will make the cosine and sine projection operators explicit, then assemble the individual principal directions into a full two-subspace decomposition.
+If you can do that, you have constructed the central geometry that the later sine-theta theorem measures.
 
 <!-- END SPOKEN LECTURE -->
 

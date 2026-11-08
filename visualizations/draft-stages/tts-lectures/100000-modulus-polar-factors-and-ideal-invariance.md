@@ -94,7 +94,7 @@ This relationship lets us reduce many ideal inequalities to positive operators. 
 
 ## Preparing compression and block estimates
 
-In the next lecture we will compress operators to selected subspaces and combine operators into orthogonal block sums. Both operations involve projections, inclusions, and partial isometries, all of which are contractions.
+Both operations involve projections, inclusions, and partial isometries, all of which are contractions.
 
 Our result tells us exactly how to control those operations in symmetric ideals. A projection can only decrease the gauge under composition. A canonical polar factor preserves it. These are the building blocks for transporting Davis–Kahan sine, tangent, and residual estimates from geometric operators to their positive singular-value representatives.
 

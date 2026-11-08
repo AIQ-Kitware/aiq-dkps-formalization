@@ -62,7 +62,7 @@ That estimate remains conservative: our exact off-diagonal model carries an addi
 
 ## A coupled energy theorem already available
 
-There is also a rigorous predecessor to this question in Chandler Davis's earlier work. Under a particular separation condition between the eigenvalue lists of two self-adjoint matrices, and with an accepted nonzero-overlap matching of their sorted eigenvectors, the repository formalizes a sum-of-squares estimate. Gamma squared times total squared sine-angle energy, plus total squared matched eigenvalue displacement, is bounded by the squared Frobenius norm of the perturbation.
+Chandler Davis established a related sum-of-squares estimate under a particular separation condition on the ordered eigenvalues of two self-adjoint matrices and a compatible nonzero-overlap matching of their eigenvectors. The sum of gap-squared angular errors and squared matched eigenvalue changes is bounded by the Frobenius norm squared of the perturbation. The matching and spectral separation are essential hypotheses.
 
 That is a genuinely joint inequality. It allocates one finite perturbation-energy budget between turning eigenvectors and moving eigenvalues. An estimate formed by taking the worst separate eigenvalue and angle bounds would not express this tradeoff. The theorem requires its stated cross-eigenvalue separation, not merely a gap within each unperturbed cluster. The chosen matching and nonzero-overlap assumption also matter, particularly when eigenvalues are repeated or labels can exchange.
 
@@ -78,7 +78,7 @@ Different answers produce different feasible regions for the pair consisting of 
 
 Davis and Kahan did not supply one general sharp theorem settling their Question ten point three. Our two-level equality and Rayleigh identity are proved special cases, not a complete answer. A good research formulation would first solve the two-level extremal problem under specified block norms, then test candidate inequalities in dimension three where several spectral channels interact.
 
-As an exercise, reproduce the two-level eigenvalue and angle formulas without memorizing them. Then prove the Rayleigh lower bound for an extremal eigenvalue and construct the three-level counterexample to Rayleigh-quotient-only identification. Those calculations show why joint perturbation bounds need more than two independent worst-case estimates. Next we turn from eigenvalues and eigenvectors to the functions we can apply to an entire operator.
+As an exercise, reproduce the two-level eigenvalue and angle formulas without memorizing them. Then prove the Rayleigh lower bound for an extremal eigenvalue and construct the three-level counterexample to Rayleigh-quotient-only identification. Those calculations show why joint perturbation bounds need more than two independent worst-case estimates.
 
 <!-- END SPOKEN LECTURE -->
 

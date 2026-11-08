@@ -6,7 +6,7 @@
 
 # Comparing whole lists without comparing every entry
 
-In the preceding lecture, we met a pair of matrices that defeats a tempting rule about singular values. The second singular value of a sum can exceed the sum of the two second singular values. Nevertheless, every cumulative sum of the largest singular values obeys a triangle inequality.
+A pair of matrices can defeat a tempting entrywise rule about singular values: the second singular value of a sum can exceed the sum of the two second singular values. Nevertheless, every cumulative sum of the largest singular values obeys a triangle inequality.
 
 That observation suggests an ordering on lists of numbers. Instead of comparing the first entries, then the second entries, one at a time, compare their running totals. This is majorization. It is a useful language for stating how one spectrum is more concentrated than another.
 
@@ -88,7 +88,6 @@ A three-coordinate example makes the process less trivial. Start with six, zero,
 
 The converse is a central finite majorization theorem: if two finite lists have equal total and the prefix inequalities point the right way, one can reach the less concentrated list from the more concentrated list by finitely many of these mixing operations, allowing permutations between steps.
 
-We will derive the convexity consequence, and examine why the constructive algorithm terminates, in the next lecture.
 
 ## Apply the definition to singular values
 
@@ -96,7 +95,7 @@ For a linear map A, collect its singular values in decreasing order. Every Ky Fa
 
 So the statement that every Ky Fan sum of A is at most the corresponding Ky Fan sum of B says exactly that the singular-value list of A is weakly majorized by that of B, after appending zeros if necessary.
 
-This gives us a compact mathematical summary of the preceding lecture. For maps A and B of the same size, the singular-value list of A plus B is weakly majorized by the componentwise sum of the singular-value lists of A and B. Both lists on the right are already decreasing, so their componentwise sum is decreasing too.
+This gives us a compact mathematical summary. For maps A and B of the same size, the singular-value list of A plus B is weakly majorized by the componentwise sum of the singular-value lists of A and B. Both lists on the right are already decreasing, so their componentwise sum is decreasing too.
 
 We cannot generally replace that cumulative statement with an inequality at each singular-value position. Our diagonal counterexample already disproved the stronger assertion.
 
@@ -120,7 +119,6 @@ Next, prove the summation-by-parts identity by expanding the coefficients of eac
 
 Then verify the two T-transforms taking six, zero, zero to three, two, one. Finally, restate the Ky Fan triangle inequality as a weak-majorization statement about singular-value lists.
 
-The next lecture will use convexity to turn these cumulative inequalities into comparisons of much broader families of measurements.
 
 <!-- END SPOKEN LECTURE -->
 

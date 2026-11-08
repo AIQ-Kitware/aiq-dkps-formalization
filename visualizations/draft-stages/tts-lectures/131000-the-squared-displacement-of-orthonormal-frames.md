@@ -72,8 +72,6 @@ The formalized source result uses the principal sine sequence from approximation
 
 We proved the inequality without choosing a special competing unitary and without solving a matrix optimization problem. Each transported vector lies in V. Its angular error is at least the energy that its original direction has outside V. Summing that projection energy over an orthonormal basis produces the squared Hilbert–Schmidt norm of the escape map, which is the sum of the squared principal sines.
 
-Next we will return to full ambient displacement, but keep the square inside a positive operator. The resulting norm inequality is much stronger than this basis-energy estimate, and its proof uses block pinching and Ky Fan sums.
-
 <!-- END SPOKEN LECTURE -->
 
 ---

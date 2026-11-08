@@ -6,7 +6,7 @@
 
 # What happens at a right angle?
 
-For the last two lectures we constructed a direct rotation from the operator K, which combines the two orthogonal projections. When the subspaces had no crossed right-angle directions, the polar factor was unitary and determined by positivity.
+To construct the direct rotation, begin with the operator K, which combines the two orthogonal projections. When the subspaces had no crossed right-angle directions, the polar factor was unitary and determined by positivity.
 
 Now allow an exact right angle. The cosine of ninety degrees is zero, so K sends the corresponding directions to zero. Its polar factor can no longer transport those directions: it simply annihilates them.
 
@@ -117,8 +117,6 @@ Third, prove that this quarter-turn is unitary on the defect sum, while the pola
 Fourth, examine the integer-indexed basis example. Why does an ambient unitary exist while a direct rotation fails?
 
 The conclusion is precise. A nonacute direct rotation exists exactly when the two crossed right-angle spaces admit an isometric matching. The choice of matching controls the nonuniqueness.
-
-Our next subject changes focus. Once the elementary defects are recorded, can we classify the remaining relative geometry using a list of principal angles? In finite dimensions yes. In infinite dimensions the answer depends on compactness, and we need to understand why.
 
 <!-- END SPOKEN LECTURE -->
 

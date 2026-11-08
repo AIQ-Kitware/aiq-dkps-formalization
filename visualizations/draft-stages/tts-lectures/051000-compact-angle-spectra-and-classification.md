@@ -32,7 +32,7 @@ Focus on the part of the generic space that lies in the source subspace U. On th
 
 This is the compression of P U times P V times P U. Call it A. Its quadratic form at a source vector x is the squared length of the projection of x onto V. Therefore A is positive, and it cannot exceed the identity.
 
-In finite dimensions, A has eigenvalues cosine squared theta, one for each generic principal angle theta. The common part would give eigenvalue one, and the source defect would give eigenvalue zero, but we have already separated those pieces. The generic block contains neither kind of exact endpoint vector.
+In finite dimensions, A has eigenvalues cosine squared theta, one for each generic principal angle theta. The common part would give eigenvalue one, and the source defect would give eigenvalue zero, but those endpoint pieces are excluded from the generic summand by construction. The generic block contains neither kind of exact endpoint vector.
 
 We can also regard the source generic part as one half of the familiar cosine–sine construction. On it, the operator A and the associated sine operator determine the two projection matrices on the full generic space.
 
@@ -84,7 +84,7 @@ All these angles are less than ninety degrees, but they approach ninety degrees.
 
 We can recover the pair's generic geometry from that sequence, including multiplicities. The accumulation at zero represents a limiting right angle, not an additional eigenvector.
 
-Notice also that the projection gap is one in this example, although neither crossed defect contains a nonzero vector. This recovers our earlier distinction between intersection-based acuteness and a uniform gap.
+Notice also that the projection gap is one in this example, although neither crossed defect contains a nonzero vector. This demonstrates the distinction between having no perpendicular intersection and having a uniform gap from a right angle. The first condition holds here; the second fails because the principal angles approach ninety degrees.
 
 ## A continuous-spectrum example
 
@@ -126,7 +126,7 @@ Third, reproduce the compactness argument showing that nonzero eigenvalues have 
 
 Finally, compare the diagonal sequence example with the multiplication-by-t example. Which one admits a complete numerical list, and why does the other not?
 
-We have completed the classification foundations for two subspaces. Next we will return to singular values, starting with their own min–max characterization. That machinery will later let us measure perturbation and rotation using norms more refined than the operator norm.
+We have completed the classification foundations for two subspaces.
 
 <!-- END SPOKEN LECTURE -->
 

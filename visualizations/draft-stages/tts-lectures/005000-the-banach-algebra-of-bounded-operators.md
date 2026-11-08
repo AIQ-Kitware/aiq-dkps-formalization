@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-In the previous lesson we learned how to measure a bounded linear map. An operator norm tells us how much the map can amplify an input. Now we will put bounded maps together and examine the mathematical structure they form.
+For a bounded linear map, the operator norm measures the largest possible amplification of a unit input. Composing bounded maps leads to a space of operators where addition, multiplication by composition, and limits interact.
 
 This is where several ideas from our first three lectures meet. We need linear maps because we want to compose them. We need operator norms because we want quantitative bounds. And we need completeness because we want infinite sums of operators to converge to actual operators.
 
@@ -74,7 +74,7 @@ Can you reconstruct the Neumann inverse without remembering its name? Begin by e
 
 For a second check, explain why we needed E to be complete. We first obtain limiting outputs for each input, and then we use an operator-norm Cauchy estimate to assemble those limits into a bounded operator. Without completeness, the would-be outputs might lie outside E.
 
-We now have a space of operators in which addition, composition, limits, and certain inverses coexist. In the next lecture we will look at a different way of using a normed space: instead of transforming one vector into another, we will assign a number to each vector. Such maps are called linear functionals, and they will lead us to dual spaces.
+We now have a space of operators in which addition, composition, limits, and certain inverses coexist. Such maps are called linear functionals, and they will lead us to dual spaces.
 
 <!-- END SPOKEN LECTURE -->
 

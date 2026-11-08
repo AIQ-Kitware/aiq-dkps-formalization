@@ -58,7 +58,7 @@ Therefore K preserves the squared length of x, except for the squared length rem
 
 Equivalently, K adjoint times K is the identity minus the square of P minus Q.
 
-That is the cosine-squared operator from our previous lecture.
+That is the cosine-squared operator defined by the overlap of the two projections.
 
 This is a satisfying connection. The operator assembled from projections automatically stretches each principal plane by its cosine. It has the right directions, but the wrong lengths.
 
@@ -120,7 +120,6 @@ The construction was canonical in the sense that we made no basis choices. Given
 
 But the word canonical does not mean that no other unitary can send U onto V. We can compose a transporter with additional motions internal to the subspaces and still carry U onto V.
 
-The next lecture will explain the extra positivity and angle conditions that distinguish the direct rotation and establish its uniqueness under the appropriate hypotheses.
 
 There is also an important boundary. If the projection gap reaches one, C may no longer have a bounded inverse. The formula using C inverse may then fail, even when a polar factor still exists. Nonacute pairs require a more careful analysis of kernels, crossed defects, and possible unitary completions.
 
@@ -134,7 +133,7 @@ Third, derive K minus identity as Q minus P followed by reflection through U. Ex
 
 Finally, show that the modulus C commutes with P, and use that fact to prove that the polar factor W still intertwines P with Q.
 
-When you can reconstruct those four steps, you have built a unitary transport from first principles. Next we will ask what makes this particular transport the direct rotation.
+When you can reconstruct those four steps, you have built a unitary transport from first principles.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -6,7 +6,7 @@
 
 # Directed sine as a rectangular modulus
 
-The previous lecture produced a bounded map X that measures trial vectors in an exact complementary coordinate system. It obeys a Sylvester equation, so a spectral gap can control its norm. We now have to prove that the same map carries the sines of the principal angles between the trial and exact subspaces.
+Let X be the bounded overlap map that takes trial coordinates into the exact complementary spectral coordinates. A residual identity makes X solve a Sylvester equation, so a gap between the trial and complementary spectra controls its norm. The remaining geometric step is to identify the singular values of X with the sines of the directed principal angles.
 
 The main identity is a Gram-operator calculation. It works for real or complex Hilbert spaces, for finite-dimensional or infinite-dimensional trial spaces, and without choosing individual principal vectors.
 
@@ -96,7 +96,6 @@ The ambient projection difference P minus the trial projection is yet another an
 
 We now have both ingredients. The complementary Sylvester equation controls X in terms of the compressed residual. The Gram identity identifies the modulus of X with the directed sine operator. Consequently a suitable Sylvester estimate becomes a principal-angle estimate with no further approximation.
 
-In the next lecture we will state every hypothesis, prove the result step by step, and examine when the coefficient one in the resulting bound is sharp.
 
 <!-- END SPOKEN LECTURE -->
 

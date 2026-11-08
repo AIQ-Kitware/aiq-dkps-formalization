@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-In the previous lecture we built a synthesis map from a family of vectors, and an analysis map that measures inner products against those vectors. We composed them in two orders. Today we will focus on analysis after synthesis: the Gram operator.
+Given vectors v one through v n, the synthesis map S takes coefficients c and returns their linear combination. Its adjoint S star analyzes a vector by taking inner products with the selected vectors. The composite S star S acts on coefficient lists; it is the Gram operator.
 
 It may look like a device for storing a table of inner products. But that table encodes much more. It records lengths, angles, linear dependence, and enough information to reconstruct the geometry of a finite collection of vectors, up to an appropriate change of coordinates.
 
@@ -26,7 +26,7 @@ Over complex scalars, the same construction uses complex inner products. The tab
 
 ## Why the Gram operator is analysis after synthesis
 
-Let's derive the table from last lecture's maps instead of taking it as an isolated definition.
+Let S send a coefficient list c to the linear combination of vectors v indexed by c, and let S star measure the inner products with those vectors. We can derive each Gram-matrix entry from this pair of maps.
 
 Start with coefficients a and b. Synthesis builds a times v one plus b times v two. Analysis measures that synthesized vector against v one and v two.
 
@@ -72,7 +72,7 @@ We can push that argument further.
 
 A coefficient list belongs to the kernel of the Gram operator exactly when it belongs to the kernel of synthesis.
 
-One direction is immediate: if synthesis sends c to zero, then analysis after synthesis also sends c to zero. For the other direction, suppose the Gram operator sends c to zero. Its quadratic form is then zero. But we already proved that quadratic form equals the squared length of synthesis of c. Hence synthesis of c is zero.
+One direction is immediate: if synthesis sends c to zero, then analysis after synthesis also sends c to zero. For the other direction, suppose the Gram operator sends c to zero. Its quadratic form is then zero. By the identity for a Gram operator, that quadratic form equals the squared length of synthesis of c. Hence synthesis of c is zero.
 
 The kernels are identical.
 
@@ -117,8 +117,6 @@ To recover a Gram matrix from distances, we first need to choose an origin conve
 ## What comes next
 
 Try to reconstruct four arguments. Why is every Gram operator positive semidefinite? Why does positive definiteness correspond to independence? Why does the Gram kernel equal the synthesis kernel? And why does equality of two Gram matrices give a well-defined isometry between the corresponding spans?
-
-In the next lecture we will return to synthesis after analysis, the frame operator. We will see how it measures the coverage of a whole space by a chosen family, and why orthonormal families, Parseval identities, and redundant frames all fit into this picture.
 
 <!-- END SPOKEN LECTURE -->
 

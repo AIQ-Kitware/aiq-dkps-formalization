@@ -56,7 +56,7 @@ Why do we call E a spectral measure? Because it allows us to reconstruct the ope
 
 For a simple scalar function, meaning a finite combination of indicator functions, define its operator integral by replacing each indicator with the corresponding projection. If f takes value three on one Borel set and minus one on another disjoint set, its integral is three times the first projection minus the second.
 
-When f is a bounded Borel function, the integral can be obtained by a controlled limit of simple functions. In later lectures we will prove that this gives a bounded operator called f of A.
+When f is a bounded Borel function, the integral can be obtained by a controlled limit of simple functions.
 
 In particular, when E comes from a bounded self-adjoint operator A, integrating the coordinate function lambda against E reproduces A. Symbolically we write A equals the integral of lambda with respect to E. The boundedness of A ensures its spectral measure is supported in a bounded region, so the coordinate is bounded on the relevant support.
 
@@ -66,7 +66,7 @@ One can then reconstruct each spectral projection by integrating the indicator o
 
 There is an important logical direction here. We should not define E by referring to eigenvectors, since multiplication operators may have none.
 
-Start instead with the continuous functional calculus developed last time. For every vector x, the rule that sends a continuous function f to the inner product of x with f of A applied to x is positive and bounded. A measure-representation theorem assigns a finite positive measure mu sub x to that functional.
+Start instead with the continuous functional calculus for bounded self-adjoint operators. For every vector x, the rule that sends a continuous function f to the inner product of x with f of A applied to x is positive and bounded. A measure-representation theorem assigns a finite positive measure mu sub x to that functional.
 
 These diagonal measures describe all quadratic expressions. To recover off-diagonal expressions, use the polarization identity. That produces matrix elements for bounded Borel functions. The Riesz representation theorem then constructs a bounded operator for each such function.
 
@@ -90,7 +90,7 @@ Thus Borel sets are precise inputs, but the effect of changing a set depends on 
 
 A projection-valued measure assigns a compatible orthogonal decomposition of H to every Borel spectral region. Its countable additivity is strong, and each vector converts it into an ordinary finite positive measure.
 
-We have also outlined the construction from continuous calculus through scalar measures, polarization, and Riesz representation. Next we will perform that polarization carefully. It is the step that lets diagonal measurements determine all operator matrix elements and makes the spectral integral into an actual bounded operator.
+We have also outlined the construction from continuous calculus through scalar measures, polarization, and Riesz representation.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -76,7 +76,7 @@ Suppose our final statement uses a Schatten norm. Does the theorem give an estim
 
 A finite Ky Fan inequality is often a flexible intermediate object. If every Ky Fan prefix of the left-side singular values is bounded by the corresponding right-side prefix, then weak majorization allows descent to symmetric norming functions. The passage may also need proof that the target belongs to the ideal whenever the right-hand side does.
 
-For a bound on a direct sum of two cross-blocks, one must compare their complete singular-value lists, not simply add the two operator norms and declare an ideal estimate. The next lecture proves the missing direct-sum comparison.
+For a bound on a direct sum of two cross-blocks, one must compare their complete singular-value lists, not simply add the two operator norms and declare an ideal estimate.
 
 ## Direction and dimension audit
 

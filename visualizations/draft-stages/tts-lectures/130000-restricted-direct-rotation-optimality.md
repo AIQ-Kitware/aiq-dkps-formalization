@@ -62,7 +62,7 @@ Finally, be careful with the meaning of an angle. The principal angle between U 
 
 The argument has four parts. First, the direct rotation chooses the positive cosine geometry of the source-to-target projection. Second, a subspace of the k largest principal-angle directions gives a uniform lower bound on the competitor's output length. Third, singular-value min–max converts that subspace bound into every singular-value inequality. Fourth, symmetric-gauge monotonicity converts that list comparison into universal restricted-norm optimality.
 
-We have established the first of three Section Four optimization objectives. In the next lecture we turn to sums of squared angular errors over orthonormal families, where the choice of basis disappears from the lower bound.
+We have established the first of three Section Four optimization objectives.
 
 <!-- END SPOKEN LECTURE -->
 

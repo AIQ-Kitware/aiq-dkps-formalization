@@ -94,7 +94,7 @@ The sine-two-theta theorem does not require the perturbation itself to be off-di
 
 The tangent-two-theta theorem has a stronger geometric conclusion: the selected subspaces remain on the branch strictly below forty-five degrees. The off-diagonal hypothesis is what supplies that conclusion in its classical form.
 
-In the next lecture we will calculate what a reflection does to a line at angle theta. The result is a line at twice the angle. That elementary fact, expressed through projection operators, is the geometric reason the doubled-angle sine appears in the perturbation estimate.
+The result is a line at twice the angle. That elementary fact, expressed through projection operators, is the geometric reason the doubled-angle sine appears in the perturbation estimate.
 
 <!-- END SPOKEN LECTURE -->
 

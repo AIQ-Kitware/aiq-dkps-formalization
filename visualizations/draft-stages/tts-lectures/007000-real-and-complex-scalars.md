@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-So far, the spaces in our examples have mostly used real numbers. We measured real-valued functions, stretched vectors in the plane, and looked at operators acting on those spaces. Today we will ask what changes when the scalars are complex numbers.
+Real and complex scalars support different kinds of linearity. A real-linear map preserves sums and multiplication by real numbers; a complex-linear map must also preserve multiplication by the imaginary unit. We will see how complexification changes eigenvalue and spectral questions.
 
 This is not a detour. The distinction changes what an eigenvalue can be, what it means for an operator to have an inverse after subtracting a scalar, and eventually how we build a spectral theory that works even when an operator has no eigenvectors at all.
 
@@ -42,7 +42,6 @@ The two complex eigenvectors are not two real directions hiding in the original 
 
 ## Why the scalar field matters to invertibility
 
-There is a second way to see the difference, one that will become our definition of spectrum in the next lecture.
 
 Pick a real number a, subtract the rotation operator R from a times the identity, and ask whether the result has an inverse.
 
@@ -76,7 +75,7 @@ But it is not complex-linear. Conjugating eye times one gives negative eye. On t
 
 In other words, even when a space has complex scalars, not every transformation that looks linear over the real numbers is linear over the complex numbers. We must always say which scalar field we mean.
 
-This matters in the formalization. A Lean type for a real-linear map and a Lean type for a complex-linear map impose different algebraic promises. The choice changes what theorems we are entitled to use.
+The distinction has a mathematical consequence: a map preserving real linear combinations need not preserve multiplication by the complex unit. Complex-linear theorems can only be applied after complex linearity has been established.
 
 ## What to retain
 
@@ -88,7 +87,7 @@ Second, take the product of a times the identity minus R and a times the identit
 
 Third, explain why complex conjugation is real-linear but not complex-linear. Your explanation should use the definition of linearity rather than a slogan about imaginary numbers.
 
-We have learned that the scalar field is not background decoration. It determines which multiples count as scalars and therefore which eigenvalues and inverses we can discuss. Next we will turn the invertibility question into the definition of the spectrum of a bounded operator.
+We have learned that the scalar field is not background decoration. It determines which multiples count as scalars and therefore which eigenvalues and inverses we can discuss.
 
 <!-- END SPOKEN LECTURE -->
 

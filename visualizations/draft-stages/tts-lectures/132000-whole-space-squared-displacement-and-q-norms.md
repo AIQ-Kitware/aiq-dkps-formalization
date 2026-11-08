@@ -6,7 +6,7 @@
 
 # Whole-space squared displacement and Q-norms
 
-The last two lectures studied how unitary transport moves vectors of a source subspace. Proposition four point three moves to the whole ambient space. It considers a positive operator made by squaring the displacement, and shows that the direct rotation minimizes every unitarily invariant norm of that positive operator. This result is valid, but it is easy to extract a false conclusion from it. We will derive the theorem and identify exactly which unsquared norms inherit its optimality.
+An orthogonal or unitary transporter W carries a source subspace U onto a target subspace V. Restricted displacement measures identity minus W only on U. Proposition four point three instead studies squared displacement on the entire ambient space. Its conclusion compares the direct rotation to all such transporters for a norm of this positive squared operator, under the stated hypotheses.
 
 ## The positive displacement square
 
@@ -16,7 +16,7 @@ For any vector x, the quadratic form of this positive operator at x is the squar
 
 Expand the product. Because W is unitary, the result is two times the identity minus W minus W adjoint. The same formula holds with D in place of W.
 
-The positive square has eigenvalues equal to the squared singular values of identity minus W. This is a Gram-operator identity, and it will be the decisive link to the previous lecture.
+The positive square has eigenvalues equal to the squared singular values of identity minus W. This is a Gram-operator identity, and it will be the decisive link to the single-vector angular-energy calculation.
 
 ## Why one restricted comparison is insufficient
 
@@ -32,7 +32,7 @@ That gives the spectral data of two diagonal blocks of the displacement square, 
 
 First recall how Ky Fan sums work for a block diagonal operator. The k largest singular values of a direct sum are obtained by merging the two individual sorted lists. Thus its Ky Fan k sum is the maximum of all possible splits: take i values from the first block and k minus i from the second.
 
-Since the direct restricted squared singular values are bounded term by term on each source block, their merged k-prefix is bounded by the merged k-prefix of the competitor's restricted squared singular values. This is exactly the direct-sum norm comparison from our earlier block-operator lectures.
+The squared singular-value lists on the source subspace and its perpendicular complement are compared separately. A direct-sum inequality then says that domination of every Ky Fan prefix on both orthogonal blocks implies domination of the prefixes after merging the lists. This supplies the required whole-space comparison.
 
 Now let G be the full displacement square of W. Its diagonal blocks relative to U plus U perpendicular are the two Gram operators of the restricted displacements. The off-diagonal blocks are not generally zero.
 
@@ -62,7 +62,7 @@ The same pattern extends to Schatten p norms with p at least two. The square of 
 
 A Q-norm N is a unitarily invariant norm for which there exists another unitarily invariant norm M satisfying N of X squared equals M of X adjoint X, for every X. Once that property is established, Proposition four point three immediately gives optimality of the full displacement for N.
 
-The trace norm of X does not satisfy this pattern. Squaring the sum of singular values introduces cross terms, while the trace of X adjoint X sums squares. There is no generally valid unitarily invariant norm of X adjoint X whose value equals the square of the trace norm of X. The source's compiled counterexample certifies that the trace norm is not a Q-norm.
+The trace norm of X does not satisfy this pattern. Squaring the sum of singular values introduces cross terms, while the trace of X adjoint X sums squares. There is no generally valid unitarily invariant norm of X adjoint X whose value equals the square of the trace norm of X. An explicit counterexample shows that the trace norm cannot be represented as a Q-norm of the squared displacement.
 
 ## A plane example and the boundary of the result
 
@@ -70,13 +70,13 @@ Take two real lines meeting at angle theta. The direct rotation through theta ha
 
 Under the operator norm, the direct rotation wins because its largest chord is at most square root of two for principal theta at most a right angle. Under the Frobenius norm, its two squared chords sum to a value at most four, tying the reflection at a right angle. Under the trace norm, however, the direct rotation costs four sine theta over two, while the reflection costs two. Above sixty degrees, the reflection wins.
 
-This example shows that even without mixing principal planes, the unsquared trace-norm optimization can differ from the squared one. In the next two lectures we will see a four-dimensional failure at angles much smaller than sixty degrees.
+Even without mixing principal planes, minimizing the unsquared trace norm can differ from minimizing squared displacement. In four real dimensions, two equal principal angles allow a transporter that reduces the former cost without contradicting the squared-displacement theorem.
 
 ## Close
 
 The proof of Proposition four point three consists of squared restricted singular-value bounds, a Ky Fan direct-sum argument, and a pinching contraction. Those operations control all unitarily invariant norms of the positive displacement square. They also control full displacement in Q-norms, including operator, Frobenius, and Schatten p norms for p at least two.
 
-They do **not** control arbitrary unitarily invariant norms of identity minus W. That missing implication is the subject of Proposition four point four as printed. We will treat it as a mathematical claim to test rather than a conclusion to inherit automatically.
+Optimality for a norm of squared displacement does not establish optimality for an arbitrary unitarily invariant norm of identity minus W itself. Proposition four point four as printed asserts the latter without a valid general proof; explicit counterexamples show why the distinction is necessary.
 
 <!-- END SPOKEN LECTURE -->
 

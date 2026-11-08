@@ -6,7 +6,7 @@
 
 # Reconstructing the route from residual to sine-angle estimate
 
-This is the final lecture in the advanced foundations sequence. Rather than introduce another isolated theorem, we will assemble a complete perturbation argument using the mathematical tools we have built.
+The full Hilbert-space sine-angle argument combines unbounded operator domains, spectral projections, residual equations, ordered-gap Sylvester estimates, and symmetric operator ideals. We will assemble these mathematical ingredients into one proof and track their hypotheses.
 
 Our target is a symmetric-ideal sine-angle bound for possibly unbounded self-adjoint operators. We will start with a trial map and its residual, pass to coordinates in an exact spectral complement, solve a Sylvester equation, and recover the sine of the angle between the trial space and the exact space.
 
@@ -126,11 +126,11 @@ This calculation checks all three factors. If we accidentally omitted epsilon, t
 
 We have reconstructed the entire route: legal unbounded residual, exact complementary compression, self-adjoint Sylvester gap, membership and gauge estimate, lower-frame normalization, and identification with a directed sine modulus.
 
-The construction works in real or complex Hilbert spaces when the corresponding ideal and Sylvester hypotheses are available. In real Hilbert spaces, the complexification and Ky Fan descent from the previous lecture supply the real estimate.
+The construction works in real or complex Hilbert spaces when the corresponding ideal and Sylvester hypotheses are available. In real Hilbert spaces, the complexification and Ky Fan descent from the real-to-complex transfer and Ky Fan prefix comparison supply the real estimate.
 
 We have not asserted that arbitrary disjoint spectra yield this sharp bound, nor that every bounded residual belongs to every proper ideal. Those would change the theorem's hypotheses.
 
-The mathematical toolkit is now assembled. Next we can begin perturbation theory proper: choose exact and approximate spectral subspaces, calculate their residuals, and determine which spectral separation conditions allow quantitative angle bounds.
+The mathematical toolkit is now assembled.
 
 <!-- END SPOKEN LECTURE -->
 

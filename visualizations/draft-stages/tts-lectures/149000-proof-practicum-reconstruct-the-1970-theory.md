@@ -6,7 +6,7 @@
 
 # Proof practicum: reconstruct the 1970 theory
 
-This is the course's final proof practicum. The goal is to reconstruct a coherent route through the Davis–Kahan theory, using only assumptions we can state and arguments we can justify. We will build a finite-dimensional perturbation theorem from first principles, identify what changes in Hilbert space, and use that foundation to locate the other angle theorems, direct rotation, norm generality, and the original paper's limitations.
+A rigorous Davis-Kahan perturbation argument begins with explicit self-adjointness, spectral-gap, residual, and norm hypotheses. The goal is to reconstruct the bound from those assumptions, then identify how the same mechanism adapts to Hilbert spaces, norm ideals, and the other angle theorems.
 
 Treat each stage as a proof task. Work through the missing calculation before hearing the verification. The final result is not a list of theorem names. It is an argument in which each hypothesis has a specific job.
 
@@ -52,7 +52,7 @@ Calculate the residual's component along the second coordinate. It is delta time
 
 This example teaches two checks. First, never substitute the original eigenvalue gap delta for the actual gap between Lambda one and the Ritz value A zero without verifying the needed inequality. Second, the compressed residual is not automatically the whole residual. In this example the full residual also has a component in the original exact subspace.
 
-If you instead build the standard two-level sharpness model with the theorem's exact admissibility hypotheses, the constant one is optimal. The repository contains explicit model equality theorems for the sine, tangent, and doubled-angle estimates. A numerical example cannot replace verification of the hypotheses in that sharpness statement.
+The standard two-level example, with every admissibility hypothesis checked, attains equality for the sharp sine, tangent, and doubled-angle estimates. Equality under the actual hypotheses proves that their coefficient one cannot be reduced; a numerical coincidence without those checks does not.
 
 ## Stage five: pass from a single angle to norm generality
 
@@ -70,7 +70,7 @@ Now explain how the proof changes for tangent theta. Represent the trial subspac
 
 For sine of two theta, introduce the block reflection associated with one subspace. Reflecting the other subspace across it doubles the principal-plane angles, after the appropriate angular functional calculus. Off-diagonal perturbations anticommute with the reference reflection. This produces a doubled-angle residual with a factor of two. The sine-two-theta estimate may be valid without knowing that the original angle is small.
 
-For tangent of two theta, small-angle branch information matters. Tangent of twice an angle changes sign or becomes singular at forty-five degrees. Under the source's ordered-gap, off-diagonal, and spectral-selection conditions, the appropriate reducing subspace stays in the small-angle branch and one obtains the sharp tangent-two-theta inequality. Without that selection argument, a bound on sine of twice an angle could describe an angle near ninety degrees just as well as one near zero.
+For tangent of two theta, small-angle branch information matters. Tangent of twice an angle changes sign or becomes singular at forty-five degrees. Under the required ordered-gap, off-diagonal, and spectral-selection conditions, the appropriate reducing subspace stays in the small-angle branch and one obtains the sharp tangent-two-theta inequality. Without that selection argument, a bound on sine of twice an angle could describe an angle near ninety degrees just as well as one near zero.
 
 These are four theorem families, with different geometry and different gap requirements. A proof that establishes one does not automatically establish the others.
 
@@ -88,7 +88,7 @@ Finally, treat real and complex Hilbert spaces explicitly. The complex spectral 
 
 The 1970 paper also develops direct rotation and an extremal claim about displacement. Reconstruct the polar intertwiner of two projections, state the crossed-defect matching criterion at right angles, and distinguish the canonical polar rotation from arbitrary unitary transports.
 
-Then separate three objectives: displacement restricted to the source subspace, squared whole-space displacement, and unsquared whole-space displacement. The first two admit the valid optimality theorems studied in this course. The broad unsquared full-space claim of Proposition four point four is false; the formalized real four-dimensional example supplies the counterexample. Do not use the false proposition as a lemma.
+Then separate three objectives: displacement restricted to the source subspace, squared whole-space displacement, and unsquared whole-space displacement. The first two admit the valid optimality theorems studied in this course. The broad unsquared full-space claim of Proposition four point four is false; the explicit real four-dimensional example supplies the counterexample. Do not use the false proposition as a lemma.
 
 The free-beam example is another endpoint test. To reproduce it, construct the fourth-order self-adjoint operator with its boundary conditions, compute the Ritz compression and residual matrices, verify the spectral separation, and apply the angle estimates. Its finite trial matrix does not erase the unbounded operator-domain obligations.
 
@@ -100,7 +100,7 @@ A complete reconstruction should contain, in order: the ambient Hilbert-space an
 
 You should be able to present the finite single-angle proof on a blank page, then explain which pieces must be replaced or strengthened for the ambient, doubled-angle, and infinite-dimensional theorems. You should also be able to point to the direct-rotation correction and the free-beam example without confusing them with the hypotheses of the sine theorem.
 
-That is the course's endpoint. The goal is not to memorize the Davis–Kahan estimates. It is to know how to reconstruct them, test them, and recognize when their assumptions do not apply.
+The resulting inequalities are meaningful only with their spectral and norm hypotheses. A complete reconstruction explains the residual equation, the gap estimate, the geometry of angles, and the exact scope of each norm and optimality claim.
 
 <!-- END SPOKEN LECTURE -->
 

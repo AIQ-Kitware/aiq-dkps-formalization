@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-Last time, we compared two frames using the matrix of their cross-inner-products. Today we will examine a related construction with a new twist: we will start with an arbitrary linear map that goes between spaces of different dimensions.
+An arbitrary rectangular linear map has two associated positive operators: A adjoint A on its input space and A A adjoint on its output space. These Gram operators reveal the same positive singular-value data despite acting on spaces of potentially different dimensions.
 
 A map from a plane into three-dimensional space is represented by a three-by-two matrix. It is not square. So we cannot even ask for its eigenvalues in the ordinary sense, because the equation A of x equals lambda times x would compare vectors living in different spaces.
 
@@ -105,8 +105,6 @@ One more consequence is worth keeping in view. The largest possible ratio of out
 Try to prove these statements from memory: A star A is positive because its quadratic form is a squared norm. The kernels of A star A and A coincide. And a positive-eigenvalue eigenvector of A star A is sent by A to an eigenvector of A A star with the same eigenvalue.
 
 Then test your reasoning on a one-row, two-column matrix that adds its two inputs. Work out the two Gram matrices. One is two-by-two and has eigenvalues two and zero. The other is one-by-one and has only the eigenvalue two. The common positive spectrum is exactly what the proof predicts.
-
-Next we will develop eigenvalues and eigenspaces themselves more carefully, including what it means for an eigenvalue to be repeated. That precision will let us state the finite spectral theorem without confusing repeated algebraic roots with independent geometric directions.
 
 <!-- END SPOKEN LECTURE -->
 

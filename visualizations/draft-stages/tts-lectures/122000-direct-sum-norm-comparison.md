@@ -56,7 +56,7 @@ Under those conditions, the Gram operator of the sum is block diagonal in the in
 
 In the Davis–Kahan setting, projection blocks have exactly this structure. One block maps the source subspace into the target subspace. Its complementary partner maps the orthogonal source complement into the orthogonal target complement. Their sum is isometrically equivalent to a true block direct sum.
 
-The Lean formalization retains both descriptions: an ambient operator obtained by inserting projections and a rectangular compression between the actual subspaces. A singular-value equivalence relates them without incorrectly treating their types as equal.
+One can describe a cross-block map either by compressing between the actual subspaces or by inserting the corresponding ambient projections. These are operators with different source and target spaces. Their nonzero singular values agree by an explicit isometric identification; they should not be equated as typed operators.
 
 ## The converse requires a symmetry
 
@@ -94,7 +94,7 @@ For a compact operator in infinite-dimensional Hilbert space, singular values fo
 
 But a symmetric ideal norm may be finite only on a proper class of compact operators. To claim an ideal estimate, show that the right direct sum lies in the ideal and invoke the ideal's dominance property to place the left direct sum there as well.
 
-This is why the source has an all-Ky-Fan form of the lemma as well as a version quantified over every normalized unitarily invariant norm. They express related claims, but the latter also records membership in the norm's domain.
+The lemma may be stated by controlling every Ky Fan prefix, or by quantifying over an appropriate family of normalized unitarily invariant norms. The latter statement must also specify membership in each norm's domain. The domain condition cannot be omitted.
 
 ## The proof to remember
 
@@ -102,7 +102,6 @@ The entire argument has three steps. Orthogonal blocks yield the union of their 
 
 Under matching singular-value lists, even prefixes of the direct sum are twice the prefixes of a single block, giving the converse.
 
-In the next lecture we will prove the second essential comparison: pinching an arbitrary operator to two compatible diagonal blocks cannot increase a unitarily invariant norm.
 
 <!-- END SPOKEN LECTURE -->
 

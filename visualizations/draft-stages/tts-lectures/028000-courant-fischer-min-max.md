@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-In the previous lecture, we learned that the Rayleigh quotient of a self-adjoint matrix is a weighted average of its eigenvalues. Its largest possible value is the largest eigenvalue, and its smallest possible value is the smallest eigenvalue.
+For a self-adjoint matrix A, the Rayleigh quotient of a nonzero vector x is the inner product of A x with x divided by the squared norm of x. Expressing x in an orthonormal eigenbasis shows that this quotient is a weighted average of the eigenvalues. Its maximum is the largest eigenvalue, and its minimum is the smallest. The Courant-Fischer principle extends this optimization to every eigenvalue in the ordered list.
 
 But that leaves a question. Suppose a matrix has ten eigenvalues. Can we recover the fourth one without first calculating all the eigenvectors? And could we describe that fourth eigenvalue in a way that does not depend on a particular eigenbasis?
 
@@ -96,7 +96,7 @@ For now, the essential result is complete. We can recover every sorted eigenvalu
 
 Try reconstructing the middle-eigenvalue example in three dimensions without formulas. Then explain why two subspaces whose dimensions add to more than the ambient dimension must intersect. Finally, repeat the two halves of the general proof, carefully identifying which spectral subspace produces the upper bound and which one attains equality.
 
-In our next lecture we will use this variational description to compare the eigenvalues of different self-adjoint operators. The comparison will be possible without knowing how their eigenvectors align.
+The min-max characterization allows eigenvalue comparisons of different self-adjoint matrices without requiring their eigenvectors to align.
 
 <!-- END SPOKEN LECTURE -->
 

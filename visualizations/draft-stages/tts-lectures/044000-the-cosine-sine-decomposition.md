@@ -6,7 +6,7 @@
 
 # Can two subspaces be understood one plane at a time?
 
-Last time we built sine and cosine maps from projections. Their squared lengths add to one, but that algebra still describes operators acting in many dimensions at once. Today we will simplify the geometry much further.
+For two subspaces, their cosine and sine overlap operators satisfy a Pythagorean identity: the squared cosine contribution plus the squared sine contribution is the identity on the appropriate coordinates. Principal planes turn this operator relation into simple two-by-two projection matrices.
 
 We will show that, in finite dimensions, a pair of subspaces can be studied through mutually perpendicular two-dimensional planes, together with directions where the projections already agree or are completely opposed.
 
@@ -96,7 +96,7 @@ In these coordinates, P is a block matrix with identity in the upper-left and ze
 
 The zero-angle and right-angle cases can be included in this balanced representation by choosing the unused complementary basis vectors appropriately. But this neat global matrix is not the only form of the cosine–sine decomposition, and its dimension assumptions should not be silently extended to arbitrary pairs.
 
-For unequal dimensions or an ambient space with extra orthogonal directions, we instead retain the smaller principal planes and the remaining one-sided and exterior pieces. We will organize those systematically next time.
+For unequal dimensions or an ambient space with extra orthogonal directions, we instead retain the smaller principal planes and the remaining one-sided and exterior pieces.
 
 ## Why this decomposition is useful
 
@@ -114,7 +114,7 @@ Start with an orthonormal pair e and f, and let v equal cosine theta times e plu
 
 Next, start with a principal pair u and v, and derive f from the component of v perpendicular to U. Explain why different principal pairs produce orthogonal planes. Finally, tell me what goes wrong if you try to divide by sine theta at a zero angle.
 
-If you can do those steps, you have not memorized a cosine–sine block. You have constructed it. Next we will use that construction to classify the entire relationship between two projections, including the cases that do not fit into ordinary tilted planes.
+If you can do those steps, you have not memorized a cosine–sine block. You have constructed it.
 
 <!-- END SPOKEN LECTURE -->
 

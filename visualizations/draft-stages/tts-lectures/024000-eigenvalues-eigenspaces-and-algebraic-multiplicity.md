@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-We have used eigenvalues several times already. We have seen matrices that stretch certain directions without turning them, and we have seen the Gram operators of rectangular maps share positive eigenvalues. But now we need to become more precise about what an eigenvalue actually tells us.
+An eigenvalue of a square linear map A is a scalar lambda for which there is a nonzero vector v satisfying A v equals lambda v. For diagonal or symmetric matrices, eigenvectors can give useful coordinates. A rectangular map instead produces two positive Gram operators whose nonzero eigenvalues are squared singular values. The goal here is to distinguish the eigenspace dimension from the multiplicity of a root of the characteristic polynomial.
 
 Here is the issue. Two matrices can have exactly the same eigenvalues, with exactly the same repetition in their characteristic polynomials, while having very different collections of eigenvectors. One can have a full basis of eigenvectors. The other can have too few.
 
@@ -10,7 +10,7 @@ Why? To answer, we need to distinguish an eigenvalue, its eigenspace, its algebr
 
 ## The eigenvector equation
 
-Let A be a linear operator on a finite-dimensional vector space. Unlike the rectangular maps of the last lecture, A goes from the space back to itself.
+Let A be a linear operator on a finite-dimensional vector space. Unlike a map between two different vector spaces, A goes from the space back to itself.
 
 A nonzero vector v is an eigenvector with eigenvalue lambda when A of v equals lambda times v. The number lambda is an eigenvalue, and the equation says something geometric: A sends the line through v into itself. It may stretch it, shrink it, reverse its direction, or annihilate it if lambda is zero.
 
@@ -94,11 +94,11 @@ For the second two-by-two matrix, every genuine eigenvector lies on the horizont
 
 Why do we care? Because a diagonal operator is much easier to understand. Its powers, exponentials, and many functions act separately on the eigenvector coordinates. If we can diagonalize an operator, we can often reduce a complicated equation to independent scalar calculations.
 
-The next few lectures will explain why self-adjoint matrices have precisely the good behavior that our defective example lacks. Their eigenspaces at distinct eigenvalues are orthogonal, and they admit an orthonormal eigenbasis. That is a theorem we will prove, not an assumption about every matrix.
+Their eigenspaces at distinct eigenvalues are orthogonal, and they admit an orthonormal eigenbasis. That is a theorem we will prove, not an assumption about every matrix.
 
 ## Real matrices may need complex scalars
 
-There is one last qualification. A real matrix can have no real eigenvectors even though it has complex eigenvalues. Recall the quarter-turn rotation from our earlier lecture: it rotates every nonzero real vector by ninety degrees, so no real line is preserved. Over the complex numbers, however, it has two eigenvalues, i and negative i.
+There is one last qualification. A real matrix can have no real eigenvectors even though it has complex eigenvalues. For example, the real quarter-turn rotation has no real eigenvectors: it rotates every nonzero real vector by ninety degrees, so no real line is preserved. Over the complex numbers, however, it has two eigenvalues, i and negative i.
 
 Over the complex numbers, every nonconstant polynomial has a root. Therefore every finite-dimensional complex matrix has at least one eigenvalue. Over the real numbers, that statement fails, as the quarter-turn example shows.
 
@@ -110,7 +110,7 @@ Here is the hierarchy. An eigenvalue is a scalar for which A minus lambda I has 
 
 Try to reconstruct both two-by-two examples without notes. Compute their characteristic polynomials. Compute their eigenspaces. Explain why they have equal algebraic multiplicities but different geometric multiplicities. Then reproduce the block-triangular argument showing that geometric multiplicity cannot exceed algebraic multiplicity.
 
-In the next lecture we will specialize to self-adjoint matrices. Their additional inner-product structure will rule out the kind of defect we just saw and set the stage for a spectral decomposition into orthogonal subspaces.
+Their additional inner-product structure will rule out the kind of defect we just saw and set the stage for a spectral decomposition into orthogonal subspaces.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -24,7 +24,7 @@ This tells us what to preserve: not the table of entries, but the operator's act
 
 Let P be a positive semidefinite, self-adjoint operator on a finite-dimensional real or complex inner-product space.
 
-The finite spectral theorem gives an orthonormal basis of eigenvectors. The positivity criterion from our previous lecture says every eigenvalue of P is nonnegative.
+The finite spectral theorem gives an orthonormal basis of eigenvectors. For a self-adjoint positive matrix P, every eigenvalue is nonnegative, because evaluating its quadratic form on an eigenvector gives that eigenvalue times the squared norm.
 
 Write any vector x as a sum of components along these eigenvectors. On a component corresponding to eigenvalue lambda, P multiplies by lambda.
 
@@ -96,9 +96,9 @@ Now recall a map A that is not necessarily square, self-adjoint, or invertible. 
 
 That new operator will be called the *modulus* of A. It will tell us exactly how much length A produces in each input direction, even when A also rotates, reflects, or embeds those directions somewhere else.
 
-Before the next lecture, try three reconstructions. Explain why entrywise square roots fail under a change of basis. Rebuild the two-by-two example by using the eigenvectors with equal and opposite coordinates. And prove uniqueness starting from an arbitrary positive square root B, rather than assuming that B is already diagonal in your favorite basis for P.
+Three useful reconstructions are these: explain why entrywise square roots fail under a change of basis. Rebuild the two-by-two example by using the eigenvectors with equal and opposite coordinates. And prove uniqueness starting from an arbitrary positive square root B, rather than assuming that B is already diagonal in your favorite basis for P.
 
-Those arguments are enough to justify the construction we will use next.
+The spectral construction produces the unique positive square root, and its uniqueness follows by comparing any positive square root with the original positive operator through functional calculus.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -112,7 +112,7 @@ For a second reconstruction, imagine two coordinate systems but forget the formu
 
 A linear map is characterized by preserving addition and scalar multiplication. A basis lets us encode that map as a matrix, whose columns record the images of basis vectors. Changing basis changes the matrix, but not the map. For a map from a space to itself, the new matrix under a single basis change is P inverse times A times P. Kernel, range dimension, and eigenvalues are properties of the map rather than of one particular coordinate display.
 
-In the next lesson we will ask how to measure the size of a vector and the distance between two vectors. The point will not be to assume the ordinary formula for length is the only possibility. It will be to understand which properties a reasonable notion of size must satisfy, and how those properties let us talk about convergence.
+A basis change never alters the underlying linear transformation. Norms add a separate question: how do we measure vectors without depending on the choice of coordinates?
 
 <!-- END SPOKEN LECTURE -->
 

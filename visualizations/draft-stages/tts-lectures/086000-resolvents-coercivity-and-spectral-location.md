@@ -90,11 +90,9 @@ The Riesz representation theorem turns the form into a bounded positive self-adj
 
 If j embeds V into H, then for an ambient forcing vector f, solve F u equals j star f. The vector u equals F inverse j star f, and the ambient solution operator is j F inverse j star.
 
-That composition is bounded on H. It can serve as the inverse of a suitably realized self-adjoint unbounded operator. The source formalization develops precisely this route for form-defined operators, including free-beam models.
+The resulting composition is bounded on the Hilbert space and can be the inverse of a self-adjoint unbounded operator obtained from a closed, lower-bounded quadratic form. This is one route to a rigorous beam operator, beyond formal integration by parts.
 
 The two methods share their central estimate: a positive lower bound makes an inverse stable. The details of the domain are what determine which operator the bounded inverse belongs to.
-
-Next we turn every nonreal resolvent of a self-adjoint operator into a bounded unitary by a rational transformation. That is the Cayley transform.
 
 <!-- END SPOKEN LECTURE -->
 

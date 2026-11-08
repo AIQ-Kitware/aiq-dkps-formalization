@@ -144,7 +144,6 @@ We now have two precise approximation tools. Bounded Borel symbols can be approx
 
 The domain condition is not a technical footnote. It determines when spectral multiplication by lambda defines a genuine Hilbert-space vector.
 
-Our next lecture will make the domain part of the operator's definition and explain why the graph, rather than a matrix of coefficients, is the right object for closed unbounded operators.
 
 <!-- END SPOKEN LECTURE -->
 

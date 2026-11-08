@@ -32,7 +32,7 @@ There are two things to check before this is a legitimate definition. First, cou
 
 Suppose the modulus sends x and y to the same vector. Then it kills their difference. The kernels of A and its modulus agree, so A also kills their difference. Thus A x and A y are equal. Good: our proposed U does not depend on which input we chose.
 
-Second, does U preserve length? Yes. We proved in the preceding modulus lecture that the length of A x equals the length of modulus of A applied to x. Therefore the proposed U sends every vector in the range of the modulus to a vector with exactly the same length.
+Second, does U preserve length? Yes. The modulus is the positive square root of A adjoint A, so its squared norm on x equals the inner product of x with A adjoint A x, which is exactly the squared norm of A x. Therefore the proposed U sends every vector in the range of the modulus to a vector with exactly the same length.
 
 It is also linear. The range of a linear map is a subspace, and the rule respects sums and scalar multiples because A and the modulus are linear.
 
@@ -102,7 +102,7 @@ It also separates two quantities that appear throughout operator theory: the pos
 
 One last reconstruction. Without looking at a formula, explain how to define U on the range of the modulus. Explain why that definition is unambiguous. Explain why it preserves length there. Then explain what happens on the kernel.
 
-If you can give those four arguments, you can recover the polar decomposition on your own. Next we will examine precisely how unique the factor is, and why the word *partial* matters.
+If you can give those four arguments, you can recover the polar decomposition on your own.
 
 <!-- END SPOKEN LECTURE -->
 

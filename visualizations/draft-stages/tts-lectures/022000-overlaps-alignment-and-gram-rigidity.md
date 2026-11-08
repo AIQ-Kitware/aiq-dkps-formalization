@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-In our last few lectures we built a family of vectors from a coefficient space, measured the inner products between those vectors, and compressed an operator to a selected subspace. Today we want to compare two such families.
+A family of vectors can be represented by its synthesis map, whose Gram operator records inner products among family members. For two families, the cross-Gram matrix records the inner products between one family and the other. Comparing these quantities separates internal coordinate choices from the geometry of their spans.
 
 Here is the question. If two lists of vectors look different, are they describing different geometry? Or have we merely chosen different coordinates for the same geometry?
 
@@ -16,7 +16,7 @@ Now take a pair of perpendicular unit arrows. Rotate the whole pair through any 
 
 This is our first distinction. Equal Gram matrices describe congruent vector configurations, not necessarily identical vectors and not necessarily identical embedded subspaces.
 
-In fact, if the families have equal Gram matrices, we can construct an inner-product-preserving map between their spans. We proved the essential argument in the Gram lecture, but it is worth connecting it to today's problem.
+In fact, if the families have equal Gram matrices, we can construct an inner-product-preserving map between their spans. If the two Gram matrices agree, the coefficient maps have the same inner products; their kernels agree and the correspondence of synthesized vectors is a well-defined isometry of spans.
 
 Suppose the first family synthesizes a coefficient list into a vector, and the second family does the same. Define a map by using the same coefficient list in both families. Why is this well-defined? Because any coefficient list that synthesizes to zero in the first family has zero squared length as computed from its Gram matrix. Equal Gram matrices give zero squared length in the second family too. So no ambiguity arises from two coefficient lists representing the same vector.
 
@@ -84,7 +84,7 @@ Equal internal Gram matrices give an abstract isometry of spans. A unitary cross
 
 To check your understanding, try to answer three questions without looking back. Can two orthonormal frames have identical internal Gram matrices but orthogonal ranges? Why does V V star W equal W when W's range lies inside V's range? And why does that identity imply that V star W is unitary when the frames have the same finite number of columns?
 
-The next lecture will develop another pair of Gram operators, formed from an arbitrary rectangular map rather than from two orthonormal frames. That pair will explain why singular values are shared between two different coordinate spaces.
+That pair will explain why singular values are shared between two different coordinate spaces.
 
 <!-- END SPOKEN LECTURE -->
 

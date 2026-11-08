@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-Last time, we learned why a Banach space is a normed space in which Cauchy sequences have limits. We also saw that the space of continuous functions on an interval, with the maximum norm, is complete. Today we will ask what a linear map must do to interact reliably with those limits.
+A Banach space is a normed vector space in which every Cauchy sequence converges. Continuous functions on a compact interval, measured by their maximum absolute value, form one such space. What must a linear map do to preserve the limiting behavior of its inputs?
 
 Linearity alone says that a map respects addition and scaling. It says nothing yet about whether a tiny input produces a tiny output. That missing requirement is the subject of this lecture. We will call it boundedness, explain why it means continuity for a linear map, and turn it into a numerical measurement called the operator norm.
 
@@ -52,7 +52,6 @@ The operator norm itself obeys the norm rules for bounded linear maps. It is non
 
 There is another property that is especially useful: the norm of a composition is at most the product of the two operator norms. If T amplifies lengths by at most three, and S amplifies lengths by at most four, applying T and then S amplifies lengths by at most twelve. We obtain the general rule by applying the two bounds in succession.
 
-This estimate is a key ingredient for building an algebra of operators in the next lecture.
 
 ## What happens in finite and infinite dimensions
 
@@ -76,7 +75,7 @@ First, why is the operator norm of our horizontal-stretching map exactly three, 
 
 Second, suppose you are given a linear map that is continuous at zero. Do not memorize the conclusion that it is bounded. Reconstruct the scaling argument. Take any input, shrink it into the small ball supplied by continuity, and then scale the resulting inequality back up.
 
-The central conclusion is that boundedness, continuity, and uniform control of output errors are three faces of the same property for a linear map between normed spaces. The operator norm records the best global amplification bound. Next we will discover that, on a Banach space, all bounded operators from the space to itself form another complete mathematical object, with multiplication given by composition.
+The central conclusion is that boundedness, continuity, and uniform control of output errors are three faces of the same property for a linear map between normed spaces. The operator norm records the best global amplification bound.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -38,7 +38,7 @@ Notice what we have proved. A measurable spectral set can be unbounded. The proj
 
 ## Constructing the operator part
 
-Define A restricted to M on the domain consisting of vectors that lie in both D of A and M. Its output is A x. We already proved that this output lies in M.
+Define A restricted to M on the domain consisting of vectors that lie in both D of A and M. Its output is A x. Because the spectral projection commutes with A on its domain, this output lies in M.
 
 The resulting map, call it A M, is densely defined in M. To see this, start with a vector y in M. Because D of A is dense in H, choose domain vectors x n approaching y. Their projections P x n still belong to D of A, now lie in M, and approach P y, which equals y.
 

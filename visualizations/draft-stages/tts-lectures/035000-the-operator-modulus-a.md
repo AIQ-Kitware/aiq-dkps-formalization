@@ -14,7 +14,7 @@ For a real number a, its absolute value tells us how much multiplication by a ch
 
 There is an operator construction with the same purpose. It is called the *modulus* of A, written as vertical bars around A. But it is not the matrix obtained by taking the absolute value of each entry.
 
-We will build it from the Gram operator and the positive square root from the previous lecture.
+We will build it from the Gram operator and the positive square root of the positive Gram matrix.
 
 ## Start with the length of an output
 
@@ -26,7 +26,7 @@ By the defining identity of the adjoint, this is also the inner product of x wit
 
 That is an important observation. The expression A adjoint A acts on the *input* space E, even though A x lives in the output space F. This lets us measure the stretching without moving into the output space.
 
-We have already proved that A adjoint A is positive semidefinite. So it has a unique positive square root.
+The operator A adjoint A is positive semidefinite, since pairing A adjoint A x with x gives the squared norm of A x. So it has a unique positive square root.
 
 **Definition:** the modulus of A is the positive square root of A adjoint A.
 
@@ -110,7 +110,6 @@ What we do not yet know is how to match each input stretching direction with its
 
 Try to reconstruct the chain before moving on: squared length of A x, then the Gram operator A adjoint A, then the positive square root, then equality of output lengths. Explain why the modulus lives on the source space even for a rectangular map. And check the example where A maps x and y to x plus y and zero.
 
-In the next lecture, we will use the eigenvectors of the modulus to find mutually perpendicular input directions, and then show that their nonzero images determine mutually perpendicular output directions.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -28,7 +28,7 @@ Are there other continuous linear functionals that cannot be expressed in this w
 
 This is stronger than a convenient coordinate formula. In an infinite-dimensional space, we cannot write down a finite row vector of coefficients for an arbitrary functional. Riesz tells us that the inner product still gives a complete description of all continuous linear measurements.
 
-Let's prove it, using the projection theorem from the previous lesson.
+The projection theorem says that every vector in a Hilbert space has a unique nearest point in a closed linear subspace, and that the difference is perpendicular to the subspace. We can use that decomposition to prove the adjoint statement.
 
 ## Building the Riesz representing vector
 
@@ -99,8 +99,6 @@ Later, a self-adjoint operator will mean an operator equal to its own adjoint. A
 ## Reconstruction
 
 To check your understanding, reconstruct three things without looking at the formal formulas. First, start with a nonzero continuous functional and use its kernel and an orthogonal projection to build the unique representing vector. Second, explain why the adjoint sends output vectors back to input vectors without being an inverse. Third, compute the adjoint of the real map that sends a pair of numbers to their difference.
-
-Next we will distinguish self-adjoint, normal, and unitary operators. Those are statements about how an operator relates to the adjoint we have just constructed, and they are the gateway to the spectral theory ahead.
 
 <!-- END SPOKEN LECTURE -->
 

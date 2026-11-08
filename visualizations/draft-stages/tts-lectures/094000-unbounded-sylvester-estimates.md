@@ -84,21 +84,21 @@ This example also makes the domain equation explicit: multiplying by A, subtract
 
 If two spectra have positive pairwise distance but interlace, the single decaying semigroup above is no longer available. We cannot choose one sign of time that makes all spectral differences decay simultaneously.
 
-The earlier Sylvester lectures developed a different method: a two-sided Fourier integral of unitary groups against a reciprocal kernel. For bounded self-adjoint operators, this yields the universal pi-over-two factor in an operator-norm estimate under general spectral separation.
+For bounded self-adjoint coefficients with separated spectra, a two-sided Fourier integral of unitary groups against a reciprocal kernel can solve the Sylvester equation. The construction gives an operator-norm estimate with the pi-over-two factor under its precise separation hypotheses. Unlike ordered-gap exponential decay, the method accommodates interlaced spectral sets.
 
 The unbounded extension requires strongly continuous groups and the domain arguments we have just practiced. We should not silently replace a gap based on ordered half-lines by an arbitrary disjoint-spectrum hypothesis while retaining the same constant-one proof.
 
-The source-facing Davis–Kahan theorem also admits carefully structured form-gap alternatives, including interval versus exterior spectral placement and ordered half-lines. Those hypotheses are more specific than merely saying two spectra are disjoint.
+The Davis-Kahan estimate also has variants under ordered half-line separation and interval-versus-exterior spectral placement. These are specific gap configurations; simply assuming the two spectra are disjoint does not automatically justify the same constant.
 
 ## Return to subspace perturbations
 
-Let A and A plus V be the two self-adjoint operators of the previous lecture, with P and Q their selected spectral projections. Their compressed cross map X obeys a domain-aware Sylvester equation whose right side is a compressed part of V.
+Let A and A plus V be the two self-adjoint operators with a bounded perturbation of the original operator, with P and Q their selected spectral projections. Their compressed cross map X obeys a domain-aware Sylvester equation whose right side is a compressed part of V.
 
 If the two restricted spectra are ordered across a positive gap delta, the theorem we proved gives the norm of X at most the norm of V divided by delta.
 
 Because X is identity minus P restricted to Q H, its norm is the largest directed sine of the angle from Q H toward P H. We have therefore converted an unbounded operator perturbation into a geometrical angle estimate.
 
-The next unit will strengthen our tools for compact operators and singular-value sequences, allowing estimates beyond the single largest angle.
+Controlling every singular-value prefix, rather than only the operator norm, allows ideal-norm estimates that account for many angular directions at once.
 
 <!-- END SPOKEN LECTURE -->
 

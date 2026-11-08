@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-In the last lecture, we asked when a subspace is invariant under an operator, and when it is reducing. We saw that a reducing subspace lets an operator act independently on two perpendicular pieces of space. Today we will take that picture apart more carefully. We will learn how to represent *any* operator by four blocks, even when the chosen subspace is not invariant.
+A subspace U is invariant under A if A maps U into itself. It is reducing if its orthogonal complement is invariant too. In a reducing decomposition, A acts independently on two perpendicular summands. A general operator can also be expressed in four blocks, whose off-diagonal entries measure the failure of reduction.
 
 This construction is important because the Davis–Kahan theorems often distinguish a perturbation that acts *within* a spectral subspace from one that moves vectors *between* two spectral subspaces. A block decomposition lets us say exactly what those two effects are. We will not study perturbation bounds yet. First we need to know how the blocks are made.
 
@@ -62,7 +62,7 @@ Adding those parts recovers T exactly. Nothing is discarded.
 
 There is a useful description using projections. Call the projection onto M, P, and the projection onto M perp, Q. The diagonal part applies P, then T, then P again, and adds the analogous Q, T, Q composition. The off-diagonal part is what remains after subtracting the diagonal part from T.
 
-In the DKPS Lean development, the diagonal operation is called *pinch*. That name describes keeping the portions of an operator that stay inside each selected block. The operation that removes those portions is called the off-diagonal part.
+The diagonal block operator obtained by discarding the crossings is called the pinching of an operator. It keeps the parts that act within each selected summand. Subtracting the pinching leaves the off-diagonal part, which exchanges the two summands.
 
 For our numerical example, pinching removes the two threes. The resulting diagonal operator doubles the horizontal component and multiplies the vertical component by five. The remaining off-diagonal operator moves horizontal input vertically by a factor of three and vertical input horizontally by the same factor.
 
@@ -78,7 +78,7 @@ If T is self-adjoint, the diagonal blocks are self-adjoint operators on their re
 
 Return to our operator with entries two, three, three, and five. Its crossing blocks match because the matrix is self-adjoint. If we changed the bottom-left three to four while leaving the top-right three unchanged, we would lose self-adjointness.
 
-This is the block version of a result from the previous lecture: if a self-adjoint operator has zero crossing in one direction, it must have zero crossing in the other. For self-adjoint operators, invariance of one summand therefore forces reduction.
+This illustrates a general self-adjointness fact: if a self-adjoint operator has zero crossing in one direction, it must have zero crossing in the other. For self-adjoint operators, invariance of one summand therefore forces reduction.
 
 ## A reflection that detects crossing
 
@@ -97,8 +97,6 @@ That algebraic identity is a useful piece of future double-angle reasoning. A re
 ## Check that you can reconstruct it
 
 Try three small problems. First, given an operator on the plane and the horizontal axis, determine all four blocks by applying it to one horizontal and one vertical vector. Second, explain why the adjoint swaps the crossing blocks. Third, starting with the reflection that keeps M and reverses M perp, explain why conjugating an operator by the reflection changes exactly the off-diagonal signs.
-
-Our next lecture will describe a different kind of decomposition. Instead of starting with two perpendicular subspaces, we will start with a collection of vectors and learn how to turn coordinates into vectors and vectors back into coefficients. Those are the synthesis and analysis maps. They will lead naturally to Gram operators.
 
 <!-- END SPOKEN LECTURE -->
 

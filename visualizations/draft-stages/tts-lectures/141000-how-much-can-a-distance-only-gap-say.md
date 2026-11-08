@@ -6,11 +6,11 @@
 
 # How much can a distance-only gap say?
 
-We have finished the free-beam calculation, where a low cluster and a high cluster lie on opposite sides of a large spectral gap. The geometry was favorable: all the trial values were below all the complementary values. But what if the spectral sets are separated by a positive distance without being ordered?
+The free-beam model separates low and high spectral clusters by an ordered gap. That configuration supports sharp constant-one Sylvester estimates. What changes when two spectra have a positive pairwise distance but interlace rather than lie on opposite sides of one gap?
 
 This is the question Davis and Kahan raise in Question ten point one. It asks how sharply we can control the angle of a trial subspace using a residual if we know only that every trial spectral value is at least delta away from every complementary exact spectral value.
 
-The source points to two earlier difficulties. A single scalar denominator is easy to control. A whole matrix of denominators can behave differently depending on the operator norm we choose. Today we will prove the easy result, disprove a tempting stronger one, and explain the general estimate that survives.
+The Sylvester equation illustrates two distinct difficulties. A single scalar denominator is easy to control. A whole matrix of denominators can behave differently depending on the operator norm we choose. Today we will prove the easy result, disprove a tempting stronger one, and explain the general estimate that survives.
 
 ## The compressed equation returns
 
@@ -68,7 +68,7 @@ The precise improvement comes from the order assumption. It provides a common di
 
 For self-adjoint spectra that are disjoint with a positive distance, the inverse Sylvester operator can instead be represented using oscillatory unitary groups and a Fourier kernel. The scalar kernel reproduces the reciprocal of a frequency away from the forbidden gap around zero.
 
-Its integrable norm yields a general operator-norm estimate with a larger constant, commonly expressed as pi over two divided by delta in the separated self-adjoint setting addressed by the repository's Fourier argument.
+The reciprocal Fourier kernel has an integrable absolute value that yields an operator-norm estimate with a factor of pi over two divided by the gap under the stated separated self-adjoint spectral hypotheses.
 
 The proof is more delicate than entrywise division. One must construct a Fourier representation of the reciprocal multiplier on the allowed frequency set and bound the integral of conjugations by unitary groups. For unbounded self-adjoint blocks, one also needs the domain-aware Sylvester identity before invoking the formula.
 
@@ -78,7 +78,7 @@ One useful intermediate result involves low rank. If C has rank r, its Frobenius
 
 ## Read Question ten point one precisely
 
-The historical question asks how sharp a residual-to-angle theorem can be under distance-only spectral separation. The source's Theorem six point two already supports constant one for Hilbert–Schmidt control. The broader operator-norm story requires different techniques and constants. Our two-by-two example rules out a universal constant-one result in operator norm.
+The historical question asks how sharp a residual-to-angle theorem can be under distance-only spectral separation. Theorem six point two gives constant-one Hilbert-Schmidt control under its spectral separation assumptions. The broader operator-norm story requires different techniques and constants. Our two-by-two example rules out a universal constant-one result in operator norm.
 
 We must also specify which angle we control. X equals the exact complementary projection composed with the trial inclusion. It records directed sines. If the trial and exact subspaces have unequal dimensions or unmatched defects, an ambient projection-gap conclusion requires more information than one directed Sylvester equation.
 

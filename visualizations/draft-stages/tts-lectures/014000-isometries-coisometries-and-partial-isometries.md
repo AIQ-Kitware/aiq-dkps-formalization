@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-Last time, we distinguished self-adjoint, normal, and unitary operators by asking what happens when an operator is composed with its adjoint. Today we will focus on operators that preserve length, either everywhere or on a carefully chosen part of the space.
+A linear map that preserves every vector length is an isometry, but it need not be onto. Its adjoint describes how the preserved geometry sits inside the target Hilbert space. Related identities distinguish isometries, coisometries, and partial isometries.
 
 There are three names to learn: isometry, coisometry, and partial isometry. We will not just attach names to equations. We will work out what each map does, why the adjoint matters, and how these maps let us transport geometry between spaces of different dimensions.
 
@@ -81,8 +81,6 @@ The reflection can be written as twice the orthogonal projection onto the subspa
 When we develop Gram operators, analysis maps, and synthesis maps, one side of an adjoint composition will measure which directions are preserved or lost. When we construct polar decomposition, partial isometries will separate geometry-preserving transport from stretching. Neither construction should feel like a trick once you understand initial and final spaces.
 
 To reconstruct today's lesson, explain the difference between the two equations T star T equals identity and T T star equals identity. Then show, for the map sending a, b to zero, a, that T star T and T T star are different projections. Finally, explain why an orthogonal projection is a partial isometry even though it usually is not an isometry on the whole space.
-
-Next we will ask a related but different question: when an operator acts on a chosen subspace, does it stay inside that subspace? That leads to invariant and reducing subspaces.
 
 <!-- END SPOKEN LECTURE -->
 

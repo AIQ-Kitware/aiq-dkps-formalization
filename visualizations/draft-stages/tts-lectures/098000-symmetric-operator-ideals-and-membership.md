@@ -10,7 +10,7 @@ In finite dimensions, every matrix has a finite nuclear norm, a finite Frobenius
 
 Infinite-dimensional Hilbert spaces force a change. The identity operator is bounded, but its singular values do not decay. It is not compact, not Hilbert–Schmidt, and not trace class. Assigning it a finite trace norm would contradict the infinite sum of its singular values.
 
-A symmetric operator ideal addresses this by specifying two things together: a collection of admissible operators, called its carrier, and a norm-like gauge on that collection. We will derive the ideal properties, explain the extended gauge used by Lean, and compare the main examples.
+A symmetric operator ideal specifies both the class of admissible operators, called its carrier, and the associated norm. We will compare the ideal laws with the extended-valued gauge, which records nonmembership as an infinite value.
 
 ## What an operator ideal contains
 
@@ -46,7 +46,7 @@ This allows one triangle inequality to be written for all bounded maps. If eithe
 
 But infinity is not a real number. We cannot divide by it or treat it as an ordinary finite norm. To work inside the Banach space of ideal operators, we first establish carrier membership and then use the finite gauge.
 
-The formalization has a precise equivalence: extended gauge not equal to infinity if and only if the operator is in the carrier. This is why a Davis–Kahan conclusion often has the form of a pair of statements: the displacement belongs to the ideal, and its gauge obeys a bound.
+For the extended gauge, finiteness is equivalent to membership in the ideal. An ideal-norm perturbation theorem therefore has two pieces: the angular displacement belongs to that ideal, and its finite norm obeys the required bound.
 
 ## Why finite ideal gauge controls ordinary errors
 
@@ -86,7 +86,6 @@ Let D be diagonal on ell two with coefficients one divided by n. It is compact, 
 
 The same bounded map therefore belongs to two ideals and lies outside a third. Which estimate we can apply depends on the requested ideal, not just on T's ordinary operator norm.
 
-In the next lecture we will derive the Hilbert–Schmidt and trace-class constructions carefully, including basis independence and the existence of a genuine trace.
 
 <!-- END SPOKEN LECTURE -->
 

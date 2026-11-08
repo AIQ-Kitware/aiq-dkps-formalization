@@ -10,7 +10,7 @@ Imagine two lines in the plane. The first is horizontal. The second tilts upward
 
 The lengths of those parts are cosine theta and sine theta. We know this from ordinary right triangles. What matters today is that this is also a statement about linear operators. If we can express those two parts using projections, we will have a way to measure angles between entire subspaces, even when there are several different principal angles.
 
-Last time we found principal angles from singular values of an overlap map. Today we will express their cosines and sines directly through orthogonal projections. Then we will relate those operators to the difference between two projections. That last comparison is one of the geometric ingredients behind Davis–Kahan theory, although we are still studying geometry rather than perturbations.
+We will express their cosines and sines directly through orthogonal projections. Then we will relate those operators to the difference between two projections. That last comparison is one of the geometric ingredients behind Davis–Kahan theory, although we are still studying geometry rather than perturbations.
 
 ## Two ways to split one vector
 
@@ -106,7 +106,7 @@ Here is your reconstruction exercise. Starting only from the identities P square
 
 Then revisit a plane containing a line. Explain why one directional error vanishes while the reverse error does not.
 
-Next time we will use principal directions to build actual two-dimensional blocks. Inside each block, both projections will have simple two-by-two matrices, and sine and cosine will become visible together.
+Inside each block, both projections will have simple two-by-two matrices, and sine and cosine will become visible together.
 
 <!-- END SPOKEN LECTURE -->
 

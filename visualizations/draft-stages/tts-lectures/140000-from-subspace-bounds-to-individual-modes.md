@@ -6,7 +6,7 @@
 
 # From subspace bounds to individual modes
 
-The beam example has given us strong control of a two-dimensional spectral subspace. We know the perturbed low eigenspace stays close to the affine trial plane. But suppose an engineer asks a different question: how close is the lower Ritz vector to the lower true vibration mode? That question cannot be answered by a subspace-angle estimate alone.
+Consider the free-beam fourth-derivative operator on the unit interval on the self-adjoint domain of functions with four square-integrable weak derivatives and free endpoint conditions: the second and third derivatives vanish at both ends. Its kernel is the affine plane and the complementary spectrum lies above five hundred. Perturb it by multiplication by epsilon times t, with epsilon positive and smaller than one hundred. Choose the two normalized affine trial functions given by one over square root of two times one minus square root of three times the expression two t minus one, and one over square root of two times one plus that same expression. They form an orthonormal Ritz basis whose eigenvalues are epsilon over two times one minus one over square root of three and epsilon over two times one plus one over square root of three. Subspace estimates control how far the perturbed low eigenspace lies from this plane. But how close is a particular Ritz vector to a particular exact vibration mode? A subspace-angle estimate alone cannot answer that question.
 
 To see why, consider two orthonormal bases of the same plane, one rotated forty-five degrees from the other. The planes are identical, so their largest principal angle is zero. Yet the corresponding basis vectors are far from identical. We need to track motion within the trial plane as well as motion out of it.
 
@@ -54,9 +54,9 @@ Now substitute the formula for y into the upper equation. The result is an eigen
 
 The effective matrix is the diagonal Ritz matrix plus B star times the inverse of lambda minus the complementary operator times B. Because lambda lies below the complementary spectrum, that correction is negative semidefinite.
 
-The residual is rank one. Its Gram matrix is epsilon squared over thirty times the matrix with diagonal entries one and off-diagonal entries negative one. Consequently the Schur correction is controlled by a scalar multiple of exactly that rank-one matrix.
+The Galerkin residual is rank one, because multiplication by t sends affine functions to quadratics and the component perpendicular to the affine plane occupies just one direction. Its Gram matrix, in the orthonormal Ritz basis, is epsilon squared over thirty times the matrix with diagonal entries one and off-diagonal entries negative one. This can be obtained by computing E star H squared E and subtracting the square of E star H E. Consequently the Schur correction is controlled by a scalar multiple of that rank-one matrix.
 
-Let the scalar be q. Our earlier lower-block estimate gives q no greater than epsilon squared divided by thirty times five hundred minus lambda. The effective two-by-two matrix therefore has diagonal Ritz entries, shifted by a common correction, and an off-diagonal coupling of size q.
+Let the scalar be q. The lower-block spectral estimate gives q no greater than epsilon squared divided by the product of thirty and the quantity five hundred minus lambda. The effective two-by-two matrix therefore has diagonal Ritz entries, shifted by a common correction, and an off-diagonal coupling of size q.
 
 A common diagonal shift does not rotate eigenvectors. The mixing comes from the off-diagonal entry. For a real symmetric two-by-two matrix with diagonal gap Delta and off-diagonal entry q, the eigenvector rotation psi satisfies tangent of twice psi equal to two q divided by Delta, with an appropriate sign convention.
 
@@ -66,7 +66,7 @@ That identifies the internal rotation explicitly. It is also why the Ritz gap ma
 
 ## Combine the errors
 
-The source combines a subspace estimate for eta with this two-by-two bound for psi. One convenient common envelope has coefficient square root of seven over ten, divided by five hundred minus an upper bound on lambda, times epsilon.
+The argument combines a subspace estimate for eta with this two-by-two bound for psi. One convenient common envelope has coefficient square root of seven over ten, divided by five hundred minus an upper bound on lambda, times epsilon.
 
 The two Ritz eigenvalues have different upper bounds: the lower one is about point two one one three times epsilon, and the higher is about point seven eight eight seven times epsilon. Hence the two final eigenvector estimates carry different denominators.
 
@@ -80,7 +80,7 @@ The paper also applies its one-vector tangent theorem directly to each Ritz vect
 
 Divide that individual residual by the appropriate gap. This yields sharper individual tangent bounds with numerator about point zero zero zero three six five two times epsilon. The denominator for the lower vector uses its lower Ritz value, while the upper vector uses the upper Ritz value.
 
-Those estimates are statements about the angle between each fixed trial vector and the exact low spectral plane. To turn such information into pairing with an individual exact eigenvector, we still need internal spectral separation and the Schur argument. The source's final eigenvector comparison supplies that extra step.
+Those estimates are statements about the angle between each fixed trial vector and the exact low spectral plane. To turn such information into pairing with an individual exact eigenvector, we still need internal spectral separation and the Schur argument. The full eigenvector comparison supplies that extra step by controlling the effective two-by-two coupling relative to the Ritz gap.
 
 The lesson is to keep three angles distinct: the angle of a whole subspace, the angle of one trial vector to that subspace, and the angle between a named trial vector and a named exact eigenvector.
 

@@ -8,7 +8,7 @@
 
 A linear map has several natural notions of size. If we care about its largest effect on a unit input, we use the operator norm. If we care about its total squared action on an orthonormal collection of inputs, we use the Frobenius norm. If we want the sum of all singular values, we use the nuclear norm.
 
-These are not isolated constructions. They belong to one family, the Schatten norms. We have now developed enough singular-value theory and majorization theory to derive their formulas, compare them, and explain why they satisfy triangle inequalities.
+Operator norm, Frobenius norm, nuclear norm, and other sums of powers of singular values belong to one family: the Schatten norms. Singular-value decomposition and majorization let us derive their formulas, compare them, and explain their triangle inequalities.
 
 The central idea is simple. A Schatten norm is an ordinary finite-dimensional ell-p norm applied to the singular-value list. But establishing the consequences requires care, especially for rectangular maps and for different exponents.
 
@@ -86,7 +86,7 @@ The triangle inequality is the interesting part.
 
 From the Ky Fan lecture, we know that the singular values of A plus B are weakly majorized by the componentwise sum of the singular-value lists of A and B.
 
-From the previous lecture, any convex symmetric gauge cannot increase under weak majorization. The finite ell-p norm is such a gauge when p is at least one.
+A convex symmetric gauge is monotone under weak majorization: if every leading singular-value sum for one list is no larger, the gauge cannot increase. The finite ell-p norm is such a gauge when p is at least one.
 
 Therefore the ell-p norm of the singular-value list of A plus B is no larger than the ell-p norm of the list obtained by adding the singular values of A and B componentwise.
 
@@ -132,7 +132,7 @@ In Davis–Kahan theory, we want to measure how much a spectral subspace changes
 
 Using several Schatten norms lets us state perturbation estimates at different levels of sensitivity to rank and multiplicity.
 
-Our majorization work says even more: we can often prove an inequality about every Ky Fan sum and then deduce all the Schatten estimates at once. The next lecture will describe that principle for general unitarily invariant norms, without restricting ourselves to a particular power p.
+Our majorization work says even more: we can often prove an inequality about every Ky Fan sum and then deduce all the Schatten estimates at once.
 
 ## What to reconstruct
 

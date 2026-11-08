@@ -6,7 +6,7 @@
 
 # Which sets may a spectral projection select?
 
-In the previous lecture, multiplication by x on L two had an entire interval of spectral values but no eigenvectors. We suggested that its spectral projections should keep a function on selected subsets of the interval and erase it elsewhere.
+On the Hilbert space of square-integrable functions on the interval from zero to one, multiplication by the coordinate x has the whole interval as spectrum but no eigenvectors. A spectral projection associated with a subset of the interval should keep a function on that subset and set it to zero elsewhere.
 
 We now face a foundational question: which subsets can be selected? And why should we insist on a collection closed under infinitely many set operations?
 
@@ -100,9 +100,7 @@ Continuous functional calculus can apply continuous functions to a self-adjoint 
 
 A bounded Borel calculus admits bounded measurable functions as symbols. It includes indicators and therefore spectral projections. It also respects addition, multiplication, and adjoints in the appropriate operator algebra.
 
-The source formalization uses explicit measurable-set hypotheses when a spectral projection is constructed from a set. That is not clerical bookkeeping: it records exactly which selections the calculus supports.
-
-Next we will build measures and integration. With those tools we can make the countable-additivity and convergence statements mathematically precise, and finally return to the spectral projections that motivated this lecture.
+A spectral projection of a set is defined only for sets in the measurable class of the spectral measure, usually the Borel sets. This restriction determines which spectral selections functional calculus supports.
 
 <!-- END SPOKEN LECTURE -->
 

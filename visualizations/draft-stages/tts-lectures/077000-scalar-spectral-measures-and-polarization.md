@@ -6,7 +6,7 @@
 
 # How diagonal spectral measurements determine an operator
 
-Last time we attached a positive measure to each vector x. The measure of a spectral set B was the squared length of the projection of x onto that set. These diagonal measurements are especially natural because they cannot be negative.
+The measure of a spectral set B was the squared length of the projection of x onto that set. These diagonal measurements are especially natural because they cannot be negative.
 
 But an operator is determined by what happens between two potentially different vectors. If we only know the squared lengths of spectral pieces, can we recover inner products involving an arbitrary pair x and y?
 
@@ -76,7 +76,7 @@ The diagonal measures alone did not visibly contain that complex cross term. Pol
 
 ## Extension from continuous to measurable symbols
 
-There is a subtle step in the repository's construction. We already understand continuous functions of A. A bounded Borel function can be approximated by continuous functions in an L one sense against a suitable finite measure, even when uniform approximation is impossible.
+The extension from continuous to bounded Borel functions needs a limiting argument. A bounded Borel function can be approximated in an L-one sense against a suitable finite spectral measure, even when uniform approximation by continuous functions is impossible.
 
 For one fixed pair x and y, we need to control four diagonal measures from the polarization formula. Take their sum. It is another finite positive measure and dominates all four. Approximate the Borel symbol against this single measure. The resulting integrals converge for the four pieces together.
 
@@ -99,8 +99,6 @@ These two cases explain why the Borel calculus is determined by how all scalar s
 ## The bridge to multiplication models
 
 We now have a strong dictionary. A vector supplies a positive measure. Two vectors supply a complex measure. A bounded Borel function supplies an operator whose matrix elements are the integrals of that function against the cross measures.
-
-Our next task is to take that dictionary one step further. Starting with one vector, can we identify all the vectors obtained by applying functions of A with an L two space for its scalar measure? That will produce the cyclic multiplication model and reveal the internal structure of the spectral theorem.
 
 <!-- END SPOKEN LECTURE -->
 

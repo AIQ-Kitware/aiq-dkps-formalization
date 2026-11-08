@@ -34,7 +34,7 @@ There is an important qualification. M equals zero is not the Ritz value unless 
 
 ## A sharp Ritz tangent example
 
-Keep the same A, U, and trial line, but now define M by the Ritz compression. Its value is five sine squared theta. The residual length is five sine theta cosine theta, as we calculated in the previous lecture.
+Keep A diagonal with entries zero and five, U the horizontal axis, and the unit trial vector e equal to cosine theta, sine theta. Its Ritz scalar is the inner product of e with A e, namely five sine squared theta. Subtract M e from A e: the residual has first coordinate negative five sine squared theta cosine theta and second coordinate five sine theta cosine squared theta. Its squared length is twenty-five sine squared theta cosine squared theta, so its length is five sine theta cosine theta.
 
 The spectral distance from M to the unwanted eigenvalue five is five cosine squared theta. This is the ordered Ritz gap. Multiply by tangent theta: the result is five sine theta cosine theta, equal to the residual length.
 
@@ -102,7 +102,7 @@ For a proposed inequality, divide the left side by the right side whenever the d
 
 But a ratio is meaningful only after checking the hypotheses. In particular, a spectral gap cannot be chosen larger than the actual certified separation, and a selected spectral subspace cannot be exchanged for another without justification.
 
-The discipline we have developed will matter in the next unit. Double-angle bounds involve factors of two, reflected operators, and in some cases a strict forty-five-degree branch restriction. We will derive these factors from algebra, then test them against explicit two-by-two models rather than guessing their origin.
+The same discipline applies to doubled-angle estimates. Their factors of two and possible forty-five-degree branch restrictions must follow from the reflection geometry and the exact spectral hypotheses, rather than from numerical guesses.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -70,7 +70,7 @@ The spectrum of a finite self-adjoint matrix is the finite set of its real eigen
 
 Since there are only finitely many pairs, the smallest absolute difference is a positive number. Call it delta.
 
-In this setting, the Sylvester equation has one solution for every right-hand side C. We will build that solution explicitly next time.
+In this setting, the Sylvester equation has one solution for every right-hand side C.
 
 If the spectra overlap, at least one denominator vanishes. On the corresponding pair of eigenspaces, the Sylvester operator cannot recover an arbitrary component of C. A nonzero right-hand-side component there makes the equation inconsistent. A zero component leaves the corresponding part of X undetermined.
 
@@ -80,7 +80,7 @@ For finite self-adjoint matrices, disjoint spectra automatically provide a posit
 
 ## Ordered gaps and mere distance gaps
 
-Remember the distinction from our earlier gap lecture. One hypothesis says every eigenvalue of A lies at least delta above every eigenvalue of B. That is an ordered gap.
+Remember the distinction between ordered spectral sets. One hypothesis says every eigenvalue of A lies at least delta above every eigenvalue of B. That is an ordered gap.
 
 A weaker hypothesis says every eigenvalue of A is at least delta away from every eigenvalue of B, without requiring A to lie entirely above or below B. That is a distance gap, also called pairwise spectral separation.
 

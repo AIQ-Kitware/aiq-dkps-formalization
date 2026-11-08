@@ -100,7 +100,7 @@ The pinching operator is the average of two equally sized operators: K and its r
 
 This is the entire mechanism of Lemma six point two. Its conclusion is both an ideal-membership statement and a norm bound when ideal norms are used.
 
-In the next lecture we will assemble these two block lemmas with Sylvester equations to obtain an ambient sine theorem from a full ambient perturbation. That proof will show exactly why the perturbation norm appears without an avoidable factor of two.
+That proof will show exactly why the perturbation norm appears without an avoidable factor of two.
 
 <!-- END SPOKEN LECTURE -->
 

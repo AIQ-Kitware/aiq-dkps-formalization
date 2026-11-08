@@ -8,9 +8,9 @@
 
 Think back to two lines meeting at an angle. The cosine tells us how much of a unit vector along one line survives when we project it onto the other. The sine tells us how much is lost into the perpendicular direction.
 
-We have already extended this picture to several principal angles. But a list of angles requires choosing principal vectors, and in infinite dimensions there may be no complete list of them. Can we encode the same geometry without first choosing any vectors at all?
+A finite-dimensional pair of subspaces can have several principal angles, one for each independent principal plane. But a list of angles requires choosing principal vectors, and in infinite dimensions there may be no complete list of them. Can we encode the same geometry without first choosing any vectors at all?
 
-Yes. We can build positive operators that behave like cosine and sine, directly from the two orthogonal projections. Today we will construct those operators, prove their central identity, and see why they are the right language for the next lectures on acute pairs and direct rotations.
+Yes. We can build positive operators that behave like cosine and sine, directly from the two orthogonal projections. Today we will construct those operators, prove their central identity, and see why they are the right language on acute pairs and direct rotations.
 
 ## Start with a single tilted line
 
@@ -105,8 +105,6 @@ First, write the two projection matrices for lines meeting at angle theta. Subtr
 Second, use only P squared equals P and Q squared equals Q to show that the square of P minus Q commutes with P and Q. Notice that the statement does not require P and Q to commute.
 
 Third, identify the sine and cosine actions on each of the four elementary Halmos pieces.
-
-Next we will ask a sharper question. If every cosine is positive, does that mean the cosine operator has a bounded inverse? In finite dimensions, perhaps. In infinite dimensions, not necessarily. That distinction is the gateway to acute pairs and transversality.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -6,7 +6,7 @@
 
 # The free-beam operator and its domain
 
-Our next application comes from a beam that can vibrate without its ends being clamped. Davis and Kahan use this model to demonstrate how subspace-angle estimates produce concrete bounds for low-frequency vibration modes. Before we calculate anything numerical, we must construct the operator correctly.
+A beam with free endpoints has vibration modes described by a fourth-order differential operator. Davis and Kahan use this model to illustrate perturbation bounds for low-frequency spectral subspaces. To make the estimates rigorous, we need the operator domain and its boundary conditions, not just a formal fourth derivative.
 
 The word free refers to the boundary conditions. It does not mean that the operator acts on every square-integrable function, and it does not mean that its zero eigenspace is trivial. In fact, the free boundary conditions produce two independent zero modes, and that is exactly what makes the perturbation example interesting.
 
@@ -34,9 +34,9 @@ At each endpoint, both boundary terms vanish because u's second and third deriva
 
 Interchange u and v. The same integral appears, so the operator is symmetric on the stated domain. Moreover, setting v equal to u gives the nonnegative quadratic form: inner product of A u with u equals the integral of the square of u double-prime.
 
-That proves nonnegativity at the formal level. It also identifies the energy form whose closure produces the operator realization. Yet symmetry alone does not prove self-adjointness. Self-adjointness additionally requires equality of the operator and its adjoint, including their domains. The source repository supplies a genuine interval realization through its form method and classical graph-closure construction rather than treating formal integration by parts as sufficient.
+Integration by parts gives the nonnegative beam energy form, the integral of the squared second derivative. This proves symmetry and nonnegativity on the specified domain, but not self-adjointness: equality with the adjoint also requires equality of domains. A rigorous realization uses a closed quadratic form or a proved graph-closure construction.
 
-This is a lesson we have already met for unbounded operators: the domain is part of the theorem.
+For an unbounded operator, specifying the domain is part of specifying the operator itself.
 
 ## Why there are exactly two zero modes
 
@@ -77,8 +77,6 @@ Introduce a positive parameter epsilon, smaller than one hundred. Let H multiply
 Our perturbed operator is A plus H on the same domain as A. Being a bounded self-adjoint perturbation, H does not require us to shrink the domain. The new eigenvalue problem reads: fourth derivative of u plus epsilon t times u equals lambda times u, under the same four free-end boundary conditions.
 
 Since H is nonnegative, the third eigenvalue of the perturbed system cannot lie below the third eigenvalue of the original system. The high-frequency sector remains above five hundred. The two zero modes are pushed into a small low-frequency cluster, while the large gap protects that cluster's subspace from large rotation.
-
-Next we will select two explicit orthonormal affine functions, compute their Ritz matrix exactly, and calculate their residuals. All of that will be legitimate because affine functions belong to the operator domain we have just constructed.
 
 <!-- END SPOKEN LECTURE -->
 

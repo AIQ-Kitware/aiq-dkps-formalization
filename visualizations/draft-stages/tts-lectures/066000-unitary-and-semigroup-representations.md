@@ -6,7 +6,7 @@
 
 # Two ways to transport a matrix through time
 
-In the last lecture we solved a Sylvester equation using an integral of decaying exponentials. That worked because the spectral differences all had the same sign. Today we study a related construction that works when the spectra are separated but their differences may have either sign.
+An ordered spectral gap permits a Sylvester equation to be solved by integrating decaying exponentials. For interlaced but separated spectra, the differences do not all share a sign, so we need a different construction. We study a related construction that works when the spectra are separated but their differences may have either sign.
 
 The key change is to use unitary groups: exponentials with an imaginary unit in the exponent. These produce oscillations rather than decay. Then a scalar Fourier multiplier will turn each oscillation back into the reciprocal of its spectral difference.
 
@@ -46,7 +46,7 @@ Think of the time variable as an input to the Fourier transform. We prescribe th
 
 That freedom matters. The function one over frequency is singular at zero, and its naive inverse Fourier transform cannot be used as an absolutely integrable weight. By modifying the desired transform inside the spectral gap, we can obtain an integrable time-domain multiplier.
 
-The repository uses a scaled reciprocal Fourier kernel with exactly this property. Its integral of absolute values equals pi divided by two delta. We will use that established scalar construction, while making clear how it acts on the operator equation.
+A scaled reciprocal Fourier kernel can be chosen so that its Fourier multiplier equals the inverse of a spectral difference on the separated sets. Its absolute integral equals pi divided by twice the gap, giving the corresponding operator-norm constant.
 
 ## Build the operator inverse
 
@@ -74,7 +74,7 @@ We cannot write an entrywise sum over eigenvalues and pretend it still covers ev
 
 For these finite spectral steps, the multiplier identity applies block by block. The approximations converge in operator norm. Their unitary evolutions converge at each fixed time, and the integrable majorant supplied by mu controls the limit under the integral.
 
-Dominated convergence then passes the reconstruction formula to the original operators. This is the route taken in the source implementation.
+Dominated convergence passes the reconstruction formula from spectral truncations to the original operators. Uniform integrable bounds on the approximating integrands justify taking the limit.
 
 It is important that the approximate spectral representatives remain in the original spectra. Otherwise approximation might accidentally shrink the separation and invalidate the reciprocal-frequency formula.
 

@@ -94,7 +94,7 @@ The theory of unbounded measurable functions requires explicit domains and graph
 
 We have constructed bounded Borel functional calculus using simple spectral integrals and uniform approximation. We proved the unit, product, adjoint, positivity, and uniform norm bound. We also proved strong convergence under uniformly bounded pointwise limits by reducing it to dominated convergence for scalar spectral measures.
 
-These properties are exactly what we need to restrict an operator to a measurable spectral region. Next we will examine that restriction and show how its spectrum and functional calculus relate to the original operator.
+These properties are exactly what we need to restrict an operator to a measurable spectral region.
 
 <!-- END SPOKEN LECTURE -->
 

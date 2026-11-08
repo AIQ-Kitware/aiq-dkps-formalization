@@ -48,7 +48,7 @@ Return to the setup of Theorem six point one. We have a frame E zero, its positi
 
 The residual equation gives Lambda one X minus X A zero equals F one adjoint R. We now assume only that the spectra of Lambda one and A zero have pairwise distance at least delta.
 
-If R is Hilbert–Schmidt, so is its compression F one adjoint R. The square-norm Sylvester inequality then controls X. Normalize E zero by its polar decomposition exactly as in the previous lecture, paying the factor epsilon.
+If R is Hilbert–Schmidt, so is its compression F one adjoint R. The square-norm Sylvester inequality then controls X. Normalize E zero by its polar decomposition by writing the overlap as a polar factor times a positive operator, paying the factor epsilon.
 
 The result is delta epsilon times the Hilbert–Schmidt norm of the directed sine representative at most the Hilbert–Schmidt norm of R.
 
@@ -72,11 +72,11 @@ In the Frobenius norm, the inequality goes in the other direction. The Frobenius
 
 On an infinite-dimensional Hilbert space, some bounded operators are not Hilbert–Schmidt. The identity operator is an immediate example. Its squared singular-value sum diverges.
 
-The paper uses a convention that a norm inequality is vacuous when the norm on the right is undefined. The source-faithful Lean statement can express this without a special verbal exception by using an extended nonnegative gauge that takes the value infinity.
+When the right-hand operator does not belong to an ideal, its extended gauge is infinite, and a gauge inequality gives no finite estimate. If the right-hand gauge is finite, the corresponding membership and norm conclusions become substantive.
 
 If R does not belong to the Hilbert–Schmidt ideal, the extended inequality has infinity on the right and is automatically true. This does not provide a finite bound. For an informative numerical estimate, R must have finite square energy.
 
-The Lean source separates the finite-norm theorem from the extended-valued theorem matching the paper's convention. We should do the same in our reasoning.
+A finite-norm statement and an extended-valued statement are logically different. State which one is intended, including whether ideal membership is a hypothesis or a conclusion.
 
 ## Do not replace the square norm by a favorite gauge
 
@@ -90,7 +90,7 @@ Similarly, the nuclear norm, a general Schatten norm, or an arbitrary symmetric 
 
 The proof is a single idea used carefully: pairwise spectral distance controls every scalar spectral multiplier in squared energy. The lower-frame bound then converts the crossed residual estimate to a directed sine estimate.
 
-Theorem six point two is precisely the place where a weaker gap works because the Hilbert–Schmidt norm has a coordinatewise quadratic structure. Next we will return to an ordered or one-sided gap, but replace sine by tangent and exploit the extra orthogonality of a Rayleigh–Ritz residual.
+Theorem six point two is precisely the place where a weaker gap works because the Hilbert–Schmidt norm has a coordinatewise quadratic structure.
 
 <!-- END SPOKEN LECTURE -->
 

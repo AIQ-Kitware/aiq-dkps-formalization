@@ -6,7 +6,7 @@
 
 # What changes and what stays invariant
 
-We have completed the foundations and can now ask the central perturbation question. Suppose we understand the eigenvalues and eigenspaces of a self-adjoint operator. We change the operator slightly. Which eigenvalues move, which subspaces rotate, and which pieces of information can remain stable?
+Perturbation theory asks how the spectral data of a self-adjoint operator change when the operator is modified. Eigenvalues may shift, eigenspaces may rotate, and individual eigenvectors may lose their identity when eigenvalues coincide. We will formulate the stable objects and the assumptions needed to control them.
 
 There are two separate quantities to track. An eigenvalue is a number. An eigenspace is a geometric object. A numerical bound on moving eigenvalues does not, by itself, control the angle between the eigenspaces. We will see both claims in two-by-two matrices, prove an elementary eigenvalue stability estimate, and discover why spectral separation is indispensable for controlling subspaces.
 
@@ -68,7 +68,7 @@ There is one more quantity to introduce before we state a perturbation theorem. 
 
 In the first two-level example, choose the original horizontal basis vector as a trial vector for the perturbed operator B, and choose mu equal to its Rayleigh quotient, zero. The residual is exactly the vertical unit vector. Its norm is one. Its location in the complementary direction explains why the eigenvector rotates.
 
-The next lectures will replace the single vector by an orthonormal trial frame. We will derive a matrix residual, compress it onto the exact complementary subspace, and turn it into a Sylvester equation. The operator on the other side of that equation will be the directed sine of a principal angle.
+We will derive a matrix residual, compress it onto the exact complementary subspace, and turn it into a Sylvester equation. The operator on the other side of that equation will be the directed sine of a principal angle.
 
 So our question is now precise. Given an exact reducing subspace, a trial subspace, a measurable residual, and an appropriate spectral gap, how large can the subspace angle be? The answer is a quantitative inequality, and we will prove it rather than memorize it.
 

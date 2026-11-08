@@ -32,9 +32,9 @@ If Delta is zero, a small perturbation may cause a large change in which ordered
 
 ## The population-only sine bound
 
-Yu, Wang, and Samworth's symmetric block theorem, as formalized in the repository, gives a Frobenius sine bound involving the population gap alone. In spoken form, it says this: the sine distance is at most twice the smaller of square root of d times the operator norm of the estimation error and the Frobenius norm of that error, divided by Delta.
+For real symmetric population and sample matrices, the Yu-Wang-Samworth block theorem bounds the Frobenius norm of the sine of the selected principal angles by twice the smaller of square root of d times the operator norm of the perturbation and its Frobenius norm, divided by the positive population boundary gap Delta.
 
-The factor of two is part of this source-facing theorem. The selected sample frame is identified by ordered eigenvalue indices, but the theorem does not ask us to separately provide a gap between sample eigenvalues. The perturbation may be large enough to make the bound numerically uninformative, yet the inequality remains valid under its stated finite-dimensional hypotheses.
+The factor of two belongs to this theorem. The sample frame is selected by ordered eigenvalue indices, but no separate sample spectral gap is assumed. The bound may be numerically weak for a large perturbation, while remaining valid under the stated finite-dimensional population-gap hypotheses.
 
 Why are there two numerator options? Since the sine distance is a Frobenius norm of a d-column leakage map, a uniform operator-norm estimate can be multiplied by square root of d. Alternatively, if the full estimation error is well controlled in Frobenius norm, we can use that directly. Taking the smaller exploits whichever norm estimate is sharper in the application.
 
@@ -64,11 +64,11 @@ This separation of tasks is conceptually clean: matrix perturbation theory contr
 
 Statistical work often reports an estimated matrix of eigenvectors rather than only a subspace. But even with zero estimation error, eigenvectors in a repeated block can be rotated orthogonally without changing the population matrix. So comparing V hat directly with V is generally ill-posed.
 
-The appropriate comparison chooses an orthogonal d-by-d matrix O that best aligns the sample frame to the population frame. The Procrustes construction uses the singular value decomposition of their cross-Gram matrix. We studied that geometry in the earlier lectures.
+The appropriate comparison chooses an orthogonal d-by-d matrix O that best aligns the sample frame to the population frame. The Procrustes construction uses the singular value decomposition of their cross-Gram matrix. We studied that geometry.
 
 For orthonormal frames with principal angles theta one through theta d, the optimal squared Frobenius frame discrepancy is twice the sum over j of one minus cosine theta j. The squared Frobenius sine distance is the sum of sine squared theta j. Their ratio is controlled because twice one minus cosine theta equals two sine squared theta divided by one plus cosine theta. Since cosine theta lies between zero and one, that quantity is between sine squared theta and twice sine squared theta.
 
-Therefore the optimal aligned-frame Frobenius error is at most square root of two times the Frobenius sine distance. Combining this geometric fact with the population-gap sine bound gives the source's factor two times square root of two in the aligned-frame estimate.
+Therefore the optimal aligned-frame Frobenius error is at most square root of two times the Frobenius sine distance. Combining this geometric fact with the population-gap sine bound gives the resulting factor two times square root of two in the aligned-frame estimate.
 
 This alignment step is essential when spectral embeddings feed a downstream model. If a basis changes by a harmless orthogonal rotation, comparing its raw columns can report a large error even when the represented subspace has not changed at all.
 
@@ -78,15 +78,13 @@ There are versions of Davis–Kahan bounds that refer to a separation between a 
 
 This does not mean the sample spectrum is irrelevant. The proof relies on ordered eigenvalue comparisons and variational inequalities to control how sample eigenvectors can move. It means the final theorem does not ask the user to assume or estimate a separate sample spectral gap.
 
-There are also source-accuracy details. The repository's grounding audit identifies a missing square in one polynomial identity printed in the Yu–Wang–Samworth paper and exhibits a counterexample to that printed formula. The corrected identity is what the formal theorem proves. Separately, the rectangular extension requires the corrected ambient rank-boundary convention discussed in the previous lecture. Such distinctions are part of a faithful course: a paper's useful main insight should not oblige us to repeat a defective intermediate formula.
+A printed polynomial identity in Yu, Wang, and Samworth has a missing square; the version without the square has a counterexample, while the corrected identity supports the stated spectral argument. For the rectangular extension, a boundary gap must use the actual ambient dimension, including any zero eigenvalues after the rank. These formula-level corrections do not alter the need to check the hypotheses of each perturbation theorem.
 
-## What the Lean endpoint captures
+## Precise scope of the finite-dimensional estimate
 
-The symmetric source-facing theorem has explicit real finite-dimensional matrices, symmetricness assumptions, ordered selected eigenvector blocks, and a positive population boundary gap. It concludes the Frobenius sine estimate. A separate theorem gives the existence of an orthogonal aligning matrix and its aligned-frame error bound.
+For real symmetric finite-dimensional population and sample matrices, select corresponding ordered eigenvector blocks of the same width and assume a positive population boundary gap. The Frobenius sine bound follows, and an orthogonal matrix can be chosen to align the two frames with a corresponding aligned-frame error estimate. The spectral indices and gap are hypotheses, not conclusions.
 
 You should be able to derive the aligned-frame factor from principal angles and write the deterministic population-gap inequality without introducing a sample gap. Then ask the statistical question separately: what concentration statement do we have for the operator or Frobenius norm of Sigma hat minus Sigma? The answer to that question depends on the sampling model, while the perturbation theorem does not.
-
-Next we will push the alignment idea further, from subspaces and eigenframes to concrete spectral embeddings, where preserving geometry under orthogonal changes is often the essential invariant.
 
 <!-- END SPOKEN LECTURE -->
 

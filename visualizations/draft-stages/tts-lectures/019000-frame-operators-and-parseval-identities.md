@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-Last time we built a Gram operator from a collection of vectors. We started with coefficients, synthesized a vector, and analyzed it again. The result lived in coefficient space. Today we will reverse the order. We will start with an actual vector, measure it against the collection, and reconstruct from those measurements. The result lives back in the original space.
+For a family of vectors, the synthesis map S turns coefficients into an ambient vector, and its adjoint S star measures the coefficients of an ambient vector. The composite S star S acts on coefficient space. The reverse composite S S star acts on the ambient space and is called the frame operator.
 
 This new composition is the frame operator. And its behavior tells us whether a family of vectors gives a faithful, incomplete, distorted, or redundant way of describing the space.
 
@@ -12,7 +12,7 @@ There is an important distinction to keep in mind. A collection of vectors can r
 
 Recall our two machines. Synthesis accepts a list of coefficients and returns their weighted sum of selected vectors. Analysis accepts a vector and returns its inner products with the selected vectors. We called synthesis S, and analysis S star, because they are adjoints.
 
-The Gram operator from the previous lecture was S star followed by S, or, said in the usual order of composition, S star times S. It acts on coefficient lists.
+The Gram operator was S star followed by S, or, said in the usual order of composition, S star times S. It acts on coefficient lists.
 
 The frame operator is the other product: S times S star. It acts on ambient vectors.
 
@@ -30,7 +30,7 @@ Our frame operator doubles the horizontal component and leaves the vertical comp
 
 Nothing mysterious happened. We measured the same horizontal direction twice, then added both contributions. Redundancy increased its weight.
 
-Compare that with our previous Gram operator. The Gram operator acts on the three-dimensional coefficient space, even though the physical vectors occupy only a plane. Its matrix has repeated information. The frame operator acts directly on the plane and reveals the different weights assigned to its directions.
+Compare this with the Gram operator, synthesis followed by analysis. It acts on the three-dimensional coefficient space, even though the physical vectors occupy only a plane. Its matrix has repeated information. The frame operator acts directly on the plane and reveals the different weights assigned to its directions.
 
 This example illustrates why the order of composition matters. In general, S star S and S S star are not equal. They may not even act on spaces of the same dimension.
 
@@ -58,7 +58,7 @@ Analysis of the vector with coordinates p and q gives p and q. Synthesis produce
 
 Suppose instead that we keep only the horizontal unit vector. Analysis gives p, and synthesis reconstructs the horizontal vector with coordinate p. The vertical part is lost. The frame operator is not the identity, but it is the orthogonal projection onto the chosen line.
 
-This generalizes to any finite orthonormal family. Analysis followed by synthesis gives the orthogonal projection onto its span. The reason is that the difference between x and its reconstruction has zero inner product with every selected vector, so it is orthogonal to their span. We have already proved that this characterizes orthogonal projection.
+This generalizes to any finite orthonormal family. Analysis followed by synthesis gives the orthogonal projection onto its span. The reason is that the difference between x and its reconstruction has zero inner product with every selected vector, so it is orthogonal to their span. Orthogonality of the error to the closed subspace characterizes its nearest-point projection.
 
 The measurement identity then becomes a Pythagorean statement. The sum of squared inner-product measurements equals the squared length of the projection.
 
@@ -76,7 +76,7 @@ Here, the reconstruction involves a limit of finite partial sums. We do not simp
 
 For a general infinite orthonormal family, the same pattern requires Bessel's inequality and the Hilbert-space completeness developed earlier. The exact statement is that Parseval's identity holds when the closed span of the family is the whole space.
 
-The word closed matters. Finite combinations may only approximate a vector, rather than represent it exactly. We have already seen why closed span is the right concept.
+The word closed matters. Finite combinations may only approximate a vector, rather than represent it exactly. That is why the relevant condition is dense span, not merely a formal infinite list of basis vectors.
 
 ## Frames without orthogonality
 
@@ -107,8 +107,6 @@ That distinction is worth holding onto. Exact reconstruction does not imply uniq
 ## Reconstruct the argument
 
 Before moving on, try to answer four questions without looking at a formula. Why does a frame operator act on the ambient space while a Gram operator acts on coefficient space? Why is the frame operator positive? What precisely gets lost when an orthonormal family is incomplete? And how can a redundant family satisfy Parseval's identity?
-
-Next we will focus on the special case where the selected vectors are orthonormal. Synthesis then becomes a length-preserving embedding of coefficient space into the ambient space. Its adjoint reveals a particularly important pair of identities: the identity on coefficient space and the projection onto the represented subspace.
 
 <!-- END SPOKEN LECTURE -->
 

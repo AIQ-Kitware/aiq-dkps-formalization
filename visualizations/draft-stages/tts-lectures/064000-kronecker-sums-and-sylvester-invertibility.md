@@ -6,7 +6,7 @@
 
 # Turn an equation of matrices into one linear map
 
-In the previous lecture we solved A X minus X B equals C by dividing spectral blocks. Today we will treat the entire left-hand side as a single linear operator. Its input is a matrix X, and its output is the matrix A X minus X B. Once we understand the spectrum of that operator, we can state precisely when the Sylvester equation has a unique solution for every right-hand side.
+For diagonal self-adjoint A and B, the Sylvester equation A X minus X B equals C can be solved entry by entry when every cross-spectral difference is nonzero. Here we treat the entire left-hand side as a single linear operator. Its input is a matrix X, and its output is the matrix A X minus X B. Once we understand the spectrum of that operator, we can state precisely when the Sylvester equation has a unique solution for every right-hand side.
 
 There are two reasons to do this. First, it reveals why the differences of eigenvalues are unavoidable. Second, it separates an algebraic question, invertibility, from a quantitative question, how large the inverse can be.
 
@@ -38,7 +38,7 @@ The first column of X has spectral differences one minus zero and four minus zer
 
 Therefore the four-by-four matrix of S is diagonal with entries one, four, negative two, one. Its determinant is negative eight, so the map is invertible.
 
-For any right-hand side, invert this diagonal matrix by dividing the four coordinates by those entries. This agrees exactly with the entrywise construction from the last lecture.
+For any right-hand side, invert this diagonal matrix by dividing the four coordinates by those entries. This is precisely the entrywise solution: for every matrix coordinate, divide by its corresponding nonzero difference of eigenvalues.
 
 If we change the second eigenvalue of B from three to four, one diagonal entry becomes zero. Then S has a nonzero kernel: a matrix whose only nonzero entry connects the four-eigenspace of A with the four-eigenspace of B. So S is not invertible.
 

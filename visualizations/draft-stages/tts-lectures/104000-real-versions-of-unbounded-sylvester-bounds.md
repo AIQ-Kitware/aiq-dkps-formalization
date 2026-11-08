@@ -8,7 +8,7 @@
 
 Our target today is a real Hilbert-space version of the unbounded Sylvester estimate. We have two possibly unbounded self-adjoint operators, a bounded unknown X between their spaces, and a bounded right-hand side C. Under a suitable spectral-gap hypothesis and a domain-aware equation, we want to control X by C in every symmetric ideal covered by Ky Fan dominance.
 
-We already proved the corresponding complex theorem. But simply writing the word complexification beside an unbounded operator is not enough. Its domain is part of the operator. And even after the equation is transported, we must prove that the ideal gauge returns to the original real space with no change in the constant.
+The complex Hilbert-space Sylvester theorem gives the needed estimate for a domain-aware equation under the prescribed spectral-gap condition. To transfer that estimate, we must complexify the domain as well as the operator formula. We must also show that every finite Ky Fan gauge returns to the original real space with no change in the constant.
 
 The proof will have four stages: complexify the domains, complexify the equation, preserve the spectral gap, and descend finite Ky Fan estimates to the desired real ideal.
 
@@ -22,7 +22,7 @@ For bounded matrices, this is an identity on every vector. For unbounded operato
 
 We also assume a positive gap delta, expressed through the prescribed form-bounded Sylvester gap condition. That condition allows an interval-versus-exterior configuration or either orientation of ordered half-line separation, depending on the branch.
 
-The goal is not to assume that the spectra are merely different sets. Different gap configurations support different norm conclusions, as the earlier Sylvester lectures demonstrated.
+Merely requiring the spectra to be different sets is insufficient. An ordered gap, an interval-versus-exterior gap, and arbitrary pairwise separation support different Sylvester norm estimates, so the gap configuration must be stated before applying a bound.
 
 ## Complexify the domain, not merely the formula
 
@@ -44,7 +44,7 @@ These two facts give the analytic prerequisites for working with closed operator
 
 To transport the adjoint relation, we evaluate the complex inner product coordinatewise. The real and imaginary pairings reduce to the original real adjoint pairings, just as they did for bounded operators.
 
-For an unbounded operator, though, the adjoint includes a domain condition. The proof must show that a vector belongs to the domain of the complexified adjoint exactly when its two coordinates belong to the original adjoint domain. The source formalization establishes that domain identity and then proves that self-adjointness is preserved.
+An unbounded adjoint has its own domain. To commute complexification with adjoints, prove that the complexified adjoint domain consists exactly of pairs whose real coordinates lie in the original adjoint domain. This domain equality then carries self-adjointness to the complexified operator.
 
 Now consider the Sylvester equation. If x and y both lie in the domain of B, then X x and X y lie in the domain of A by assumption. Hence the complexified X maps the complexified domain of B into that of A.
 
@@ -94,7 +94,7 @@ Equivalently, delta times the real gauge of X is at most the real gauge of C.
 
 Membership is a necessary part of the conclusion. If we tried to write the ideal norm of X before proving it belongs, we could be applying a finite-valued norm outside its legal domain.
 
-The proof also explains why we do not merely assert equality of arbitrary real and complex ideal gauges. We proved exact equality of all finite Ky Fan prefixes and used a separate dominance theorem for the requested real ideal. That is precisely what the source-facing real theorem does.
+Equality of real and complex ideal gauges is not automatic. The argument first establishes equality of every finite Ky Fan prefix, then applies the particular dominance theorem required by the real ideal.
 
 ## A diagonal example to test the constants
 
@@ -110,7 +110,7 @@ We have transferred a domain-aware, self-adjoint, form-gap Sylvester equation to
 
 The argument shows why complexification is useful: it lets us reuse a proved complex theorem while keeping the real mathematical statement, its gap constant, and its membership requirements intact.
 
-In the next lecture we will assemble the same ingredients around a subspace residual. That final exercise will reconstruct the full chain from an unbounded residual identity to a symmetric-ideal sine-angle estimate.
+That final exercise will reconstruct the full chain from an unbounded residual identity to a symmetric-ideal sine-angle estimate.
 
 <!-- END SPOKEN LECTURE -->
 

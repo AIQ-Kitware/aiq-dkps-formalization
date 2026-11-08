@@ -100,11 +100,11 @@ This achieves the constant-one bound even though A's spectrum lies on both sides
 
 Read the fixed-point proof again. We used only an operator L satisfying L A equals the identity, and a norm bound on L. We never used A L equals the identity.
 
-Thus the same inequality holds with a bounded left inverse instead of a two-sided inverse. The repository records this as a reusable strengthening, while a separate theorem preserves the paper's printed two-sided inverse assumption.
+The inequality therefore needs only a bounded left inverse in this setting, not a two-sided inverse. When comparing it with a statement formulated using a genuine inverse, keep the hypotheses distinct.
 
 On arbitrary Banach spaces, a lower bound on A by itself need not give an everywhere-defined bounded left inverse. The range of A may fail to be complemented. Therefore the reusable theorem assumes actual left-inverse data rather than silently manufacturing it from an inequality on vectors.
 
-This is an important formalization lesson: strengthening a mathematical conclusion by weakening an assumption is useful only when the precise additional structure is made explicit.
+The lower bound therefore requires the stated left-inverse hypotheses; a norm lower bound alone does not supply that structure on a general Banach space.
 
 ## Does this theorem itself prove existence?
 
@@ -114,15 +114,13 @@ Under the bounded inverse hypotheses, we can also prove existence by a separate 
 
 Starting from A inverse C, sum its successive images under that contraction. The series converges in the complete space of bounded cross-operators, and the sum solves the fixed-point equation. Thus existence follows as an additional argument.
 
-But the source-facing Theorem five point one is specifically the estimate for an already given solution, and it is worth keeping that logical statement precise.
+The estimate attributed to Theorem five point one concerns a solution that is already given. Existence and uniqueness of a solution require additional arguments, and should not be inferred from this inequality alone.
 
 ## Reconstruct the argument
 
 There are only three algebraic moves to remember. First, shift both diagonal blocks by the same scalar when useful. Second, solve for T using a bounded left inverse of A. Third, use the two-sided ideal inequality and collect the T terms.
 
 The final estimate has no dimension factor and no reference to eigenvectors. That is why it is so useful when a perturbation argument passes from a finite matrix to a Banach-space operator setting.
-
-Next we will compare this theorem with the sharp Frobenius bound and the more general pi-over-two operator-norm estimate. Similar-looking spectral gap statements can imply different constants, depending on both the gap geometry and the norm.
 
 <!-- END SPOKEN LECTURE -->
 

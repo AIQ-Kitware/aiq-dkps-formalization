@@ -6,7 +6,7 @@
 
 # One complete original-paper proof reconstruction
 
-We have now learned many results that appear separately in the Davis–Kahan paper: the spectral theorem, operator ideals, Sylvester equations, principal-angle operators, Ky Fan inequalities, and pinching. In this lecture we will assemble them into one complete argument for Proposition six point one, the ambient sine theorem.
+A Davis-Kahan perturbation proof combines several ingredients: spectral projections select invariant subspaces; residual identities generate Sylvester equations; a spectral gap bounds their solutions; principal-angle operators express the resulting geometry; and Ky Fan or pinching inequalities transfer block estimates to broader operator norms. The argument must preserve each hypothesis through the chain.
 
 Our goal is to prove that delta times the unitarily invariant norm of the sine of the ambient angle is at most the norm of the perturbation. We will identify every hypothesis, derive the two Sylvester equations, justify their norm bounds, recover the ambient sine singular values, and transfer the result to a symmetric norm ideal.
 

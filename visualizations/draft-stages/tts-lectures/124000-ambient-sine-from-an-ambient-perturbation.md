@@ -54,7 +54,7 @@ There is no dimension-matching assumption in this identity. If U contains a dire
 
 ## Combine the two inequalities without losing a constant
 
-We want to combine every Ky Fan prefix of X and X prime. The direct-sum comparison from the previous lecture tells us how: if each block's singular-value prefixes are dominated by those of a corresponding perturbation block, their orthogonal direct sum inherits the domination.
+We want to combine every Ky Fan prefix of X and X prime. The direct-sum comparison for block-diagonal sums of maps on orthogonal summands tells us how: if each block's singular-value prefixes are dominated by those of a corresponding perturbation block, their orthogonal direct sum inherits the domination.
 
 The two perturbation blocks have orthogonal input supports, U and U perpendicular, and orthogonal output supports, V perpendicular and V. They can therefore be placed together as a single block-diagonal operator, up to exchanging the order of the target blocks.
 
@@ -88,15 +88,13 @@ This is the precise difference between an ambient perturbation theorem and an ar
 
 In an infinite-dimensional Hilbert space, a symmetric norm may be finite only for operators in a particular ideal. The statement must therefore establish two things: membership of the ambient sine operator when K belongs to the ideal, and the numerical inequality for its ideal norm.
 
-The all-prefix Ky Fan comparisons establish weak majorization. For a supported symmetric ideal with the required dominance property, weak majorization transfers both membership and the norm bound. The source formalization keeps these obligations explicit.
+Controlling every Ky Fan prefix establishes weak majorization. In a symmetric ideal satisfying the required dominance property, the comparison transfers both ideal membership and the norm bound.
 
 The original paper states its theorem in a separable ambient Hilbert space and uses interval-versus-exterior crossed gaps. Stronger modern interfaces sometimes accept a more abstract Sylvester-gap certificate. When we present the original proposition, the printed spectral conditions matter.
 
 ## Close
 
 The entire proof has four stages. Build two crossed Sylvester equations. Estimate both directed escape maps. Recognize the ambient sine as their combined singular-value list. Finally, pinch the common perturbation K to control both right-hand sides by a single norm.
-
-Next we will return to a trial space that may not have orthonormal coordinates and may have a different dimension from the exact subspace. That situation admits a directed sine bound, but it must carry a lower-frame factor.
 
 <!-- END SPOKEN LECTURE -->
 

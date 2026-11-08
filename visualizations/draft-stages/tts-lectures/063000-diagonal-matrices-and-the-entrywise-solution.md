@@ -6,7 +6,7 @@
 
 # Solve every spectral block, then put the answer together
 
-Last time we found the equation hidden inside the Sylvester problem. When A and B are diagonal in orthonormal eigenbases, the unknown matrix coefficient between eigenvalues a and b is multiplied by a minus b.
+When A and B are diagonal in orthonormal eigenbases, the unknown matrix coefficient between eigenvalues a and b is multiplied by a minus b.
 
 Today we will finish that argument. We will construct the solution entry by entry, prove uniqueness when the spectra are disjoint, characterize the solutions when the spectra overlap, and obtain a sharp Frobenius estimate.
 
@@ -100,7 +100,7 @@ Our entrywise proof gives the Frobenius bound immediately. It also gives a weake
 
 For a sharp operator-norm bound, we need an argument adapted to the geometry of the spectra. Under ordered spectral separation, a decaying exponential integral gives a constant-one estimate. For interlaced spectral sets, more elaborate Fourier-kernel techniques enter, and the universal sharp framework has a different constant.
 
-We will derive those ideas in later lessons. For now, keep the simple and correct statement: pairwise separation gives the sharp Frobenius estimate through entrywise orthogonality.
+For now, keep the simple and correct statement: pairwise separation gives the sharp Frobenius estimate through entrywise orthogonality.
 
 ## From diagonal entries to spectral projections
 
@@ -116,7 +116,7 @@ When the spectra are disjoint, construct X by summing each block of C divided by
 
 This formulation handles repeated eigenvalues naturally. A repeated eigenspace is one projection block, and we never have to choose a preferred orthonormal basis inside it.
 
-It is also exactly the style of construction used in the repository's finite spectral-block Sylvester reconstruction. The formal statement records the projections' idempotence, mutual orthogonality, completeness, and the nonvanishing of all cross differences.
+The spectral-block reconstruction is legitimate because the spectral projections are idempotent, mutually orthogonal, and sum to the identity, and because every cross-spectral difference in the denominators is nonzero.
 
 ## A resolvent is a special case
 

@@ -10,7 +10,7 @@ Suppose someone hands us two lines in the plane. We can rotate the first line on
 
 For two subspaces of a Hilbert space, this freedom is much larger. We can move vectors within the source subspace, and within its orthogonal complement, while still sending the source subspace onto the target.
 
-The last lecture constructed a particular unitary transport from the two projections. Today we ask why that choice is the direct rotation, what conditions make it unique, and how its square is connected to a product of reflections.
+A particular unitary transport can be constructed from the two orthogonal projections. We ask why this choice is the direct rotation, what conditions make it unique, and how its square is connected to a product of reflections.
 
 ## Begin with the planar picture
 
@@ -24,7 +24,7 @@ So positivity can help choose between transports. But in higher dimensions, mere
 
 ## Reassemble the two projections
 
-Write P for projection onto U and Q for projection onto V. From the previous lecture, our pre-polar operator K is the sum of Q P and the product of identity minus Q with identity minus P.
+Write P for projection onto U and Q for projection onto V. A natural transport candidate K is the sum of Q P and the product of identity minus Q with identity minus P.
 
 It sends the U component toward V and the U-perpendicular component toward V perpendicular. Its squared modulus is identity minus the square of P minus Q.
 
@@ -113,8 +113,6 @@ Second, explain why vanishing crossed defects makes the polar factor unitary eve
 Third, prove uniqueness: an intertwining unitary with positive diagonal blocks factors K as that unitary times a positive block-diagonal operator. Identify the latter with the modulus of K.
 
 Fourth, verify on an actual plane that two reflections give twice the angle, and explain why the principal half-angle branch fails at minus one.
-
-Next we will enter precisely that boundary case. If a pair has genuine right-angle directions, what must be matched for a direct rotation to exist at all?
 
 <!-- END SPOKEN LECTURE -->
 

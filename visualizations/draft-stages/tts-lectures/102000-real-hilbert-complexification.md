@@ -66,7 +66,7 @@ Apply that identity separately to the real and imaginary coordinates, including 
 
 Combining this with compatibility with composition gives the Gram identity. Complexifying T adjoint T produces the complex adjoint of T complexified, followed by T complexified.
 
-Therefore positivity of the Gram operator and the lengths of singular-value constructions are compatible with transfer. The detailed approximation-number identity requires another argument, because low-rank approximation on complex spaces permits complex subspaces not initially presented as complexified real subspaces. The repository establishes that comparison separately.
+Positivity of the Gram operator and elementary length identities survive complexification. Equality of all approximation numbers requires a further approximation argument: a complex low-rank approximant need not initially be the complexification of a real low-rank approximant.
 
 ## Conjugation tells us which objects come from real space
 
@@ -94,7 +94,7 @@ This example explains why statements about arbitrary real and complex spectra ne
 
 We can now move a real bounded operator into complex Hilbert space without changing its operator norm, adjoint relations, or composition identities. We can recognize which bounded complex operators come back to the real space by checking compatibility with conjugation.
 
-In the next lecture we will apply these facts to spectra and the continuous functional calculus. A spectral projection obtained through a real-valued functional-calculus expression will commute with conjugation and therefore descend. But a projection defined by a discontinuous indicator needs special care at a spectral boundary.
+A spectral projection obtained through a real-valued functional-calculus expression will commute with conjugation and therefore descend. But a projection defined by a discontinuous indicator needs special care at a spectral boundary.
 
 The transferable object is the whole proof, including its hypotheses, not just the final inequality.
 

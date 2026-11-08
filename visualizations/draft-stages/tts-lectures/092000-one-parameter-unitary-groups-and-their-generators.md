@@ -76,7 +76,7 @@ There are two common sign conventions. One writes U of t as the exponential of i
 
 Another convention writes U of t as the exponential of negative imaginary t A and inserts the opposite sign in the generator definition. Both are legitimate. We must keep the definition of the generator synchronized with the exponential used to construct the group.
 
-The Lean development chooses a generator quotient that returns A for its chosen positive-imaginary exponential. Its formal statements make this convention explicit.
+With the convention U of t equals the exponential of positive i times t A, the generator is recovered using division by i. Reversing the sign in the exponential reverses the corresponding generator convention.
 
 ## The converse direction of Stone's theorem
 
@@ -94,7 +94,7 @@ Unitary groups make it possible to compare two self-adjoint operators through bo
 
 An expression such as U A of t, followed by a bounded operator C, followed by U B of negative t is always a bounded operator. We can integrate this expression against a suitable scalar kernel to build a candidate solution of a Sylvester equation.
 
-But when we differentiate such an expression to recover A X minus X B, the domains return. The next lesson develops that obligation explicitly, so the bounded group formula and the unbounded generator equation fit together without a gap in logic.
+But when we differentiate such an expression to recover A X minus X B, the domains return.
 
 <!-- END SPOKEN LECTURE -->
 

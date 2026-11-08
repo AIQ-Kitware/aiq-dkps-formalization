@@ -6,7 +6,7 @@
 
 # Three subspaces and higher-order interactions
 
-The original Davis–Kahan paper finishes by posing research questions. Question ten point two asks what happens when the familiar division into a selected subspace and its orthogonal complement is replaced by a three-way orthogonal decomposition. Our earlier arguments succeeded because the relative geometry of two subspaces could be described by principal angles, complementary projections, and a single Sylvester equation. Today we will see which identities still hold for three pieces, why the pairwise information is no longer enough, and what a satisfactory perturbation theorem would have to control.
+Question ten point two of Davis and Kahan asks what happens when a two-way orthogonal decomposition is replaced by three mutually perpendicular subspaces. A pair of subspaces admits principal angles and a cross-block Sylvester equation. With three blocks, we must examine which identities persist and which estimates need additional hypotheses.
 
 ## The geometric data
 
@@ -68,7 +68,7 @@ We have proved the block-unitarity identities and the exact nine Sylvester equat
 
 The right goal is therefore precise. Specify the three spectral clusters, the sizes of the perturbation blocks, the target overlap, and the norm in which it is measured. Impose the common unitarity constraints, and then determine whether the resulting bound is attained by an actual triple of reducing subspaces.
 
-You should now be able to derive the three-block equations yourself, calculate an indirect coupling of order s times t, and explain why independent pairwise angle estimates do not solve a coupled three-subspace optimization problem. Next we ask a different joint question: can eigenvalues and eigenvectors move be bounded together, rather than separately?
+You should now be able to derive the three-block equations yourself, calculate an indirect coupling of order s times t, and explain why independent pairwise angle estimates do not solve a coupled three-subspace optimization problem.
 
 <!-- END SPOKEN LECTURE -->
 

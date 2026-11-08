@@ -24,7 +24,7 @@ Suppose H zero has operator norm at most epsilon.
 
 Then the maximal angle theta between U and V is strictly less than forty-five degrees, and delta times tangent of twice theta is at most twice epsilon.
 
-This is an operator-norm theorem in the cited classical formalization. We should not automatically promote it to every symmetric ideal norm without using a separately proved result.
+This is an operator-norm theorem under the stated finite-dimensional hypotheses. We should not automatically promote it to every symmetric ideal norm without using a separately proved result.
 
 ## Derive the exact planar formula
 
@@ -82,7 +82,7 @@ Therefore delta times t is at most epsilon times one minus t squared. The sign i
 
 Rearrange and multiply by two. The scalar identity tangent twice theta equals twice tangent theta divided by one minus tangent squared theta now yields delta times tangent twice theta is at most twice epsilon, where theta is the largest principal angle.
 
-This finishes the finite-dimensional operator-norm proof mechanism. The source formalization uses an equivalent sectorial maximal-eigenvector argument for the projection difference, avoiding dependence on a particular graph basis.
+This completes the finite-dimensional operator-norm argument. An equivalent route works with a maximal eigenvector in the permitted angular sector and controls the projection difference directly, avoiding a choice of graph coordinates.
 
 ## Interpret the cosine denominator
 
@@ -110,7 +110,7 @@ Then cosine twice theta and sine twice theta both equal the square root of two d
 
 As h increases to ten, tangent twice theta equals ten and theta approaches forty-five degrees from below. The doubled sine becomes close to one, while the doubled tangent records the increasing difficulty of maintaining a graph with slope below one.
 
-The next lecture will revisit the branch ambiguity explicitly. We will show why a small doubled sine by itself cannot distinguish a nearly correct spectral subspace from a nearly perpendicular one, and why spectral selection is needed before using doubled-angle bounds as error certificates.
+We will show why a small doubled sine by itself cannot distinguish a nearly correct spectral subspace from a nearly perpendicular one, and why spectral selection is needed before using doubled-angle bounds as error certificates.
 
 <!-- END SPOKEN LECTURE -->
 

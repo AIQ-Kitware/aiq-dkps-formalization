@@ -66,13 +66,13 @@ We will soon see that densely defined operators with densely defined adjoints ar
 
 ## Why spectral cutoffs fit this framework
 
-Recall the spectral projections from the previous lecture. For a self-adjoint operator A, let P R select the spectral interval from negative R to positive R. Every vector P R x lies in the domain of A, even when x itself does not.
+Recall the spectral projections defined by a bounded spectral cutoff. For a self-adjoint operator A, let P R select the spectral interval from negative R to positive R. Every vector P R x lies in the domain of A, even when x itself does not.
 
 If x belongs to the domain, P R x converges to x, and A P R x equals P R A x, which converges to A x. Thus the cutoffs converge in the graph norm. They are legal approximations in both input and output, rather than approximations that control only one side.
 
 This is the discipline we will apply to every unbounded block identity later in Davis–Kahan theory. First state the domain, then establish that each expression is defined, and only then take limits using closedness or graph-norm convergence.
 
-The next lecture asks a natural question: if we know how A acts against inner products, which vectors can serve as outputs of its adjoint? The answer requires a domain of its own.
+The answer requires a domain of its own.
 
 <!-- END SPOKEN LECTURE -->
 

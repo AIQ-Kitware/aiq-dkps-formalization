@@ -8,7 +8,7 @@
 
 The cosine of an angle is a number. We learned it first from triangles and circles. But later in spectral theory we will see expressions such as the sine of an operator, or the arcsine of a positive operator.
 
-These are not metaphors, and they are not instructions to apply sine separately to every matrix entry. They are actual operators, defined through constructions we have already earned.
+These are not metaphors, and they are not instructions to apply sine separately to every matrix entry. They are operators defined by spectral or power-series constructions, with the usual matrix entries determined only after choosing a basis.
 
 Our task today is to understand what those constructions mean, why they are well-defined, and what must be checked before using an inverse trigonometric function.
 
@@ -98,7 +98,7 @@ We do not get to write arcsine of an arbitrary operator and assume everything wo
 
 ## Cosine, sine, and rotations
 
-Let's connect this to the previous lecture's unitary flows.
+The same construction describes a unitary flow: a continuously varying family of length-preserving operators with identity at time zero.
 
 Take a real operator J whose square is negative the identity. Suppose J commutes with a self-adjoint operator T. Think of J as a quarter-turn on each of several perpendicular planes, and T as specifying how quickly each plane rotates.
 
@@ -114,7 +114,6 @@ There is a boundary condition hidden in that story: J must really act as a quart
 
 ## Where we go from here
 
-The next lecture will construct principal angles from the overlap between two orthonormal frames. It will not assume that we already know how to rotate one subspace onto another. We will *measure* their relative geometry first.
 
 Once those angles have been constructed, the operator trigonometric functions will let us turn the angle data into sine, cosine, and eventually a direct rotation.
 

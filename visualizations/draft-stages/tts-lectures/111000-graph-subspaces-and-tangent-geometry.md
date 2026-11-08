@@ -90,8 +90,6 @@ The norm of T bounds that relative complementary error. The largest principal ta
 
 This information is useful for perturbation theory because a graph can be manipulated algebraically. The invariance of a graph under a block operator leads to a Riccati equation, where the unknown is T. We will reach that connection after proving the single-angle tangent theorem.
 
-Our next task is to show how the residual and a suitable ordered spectral gap control the graph slope. The sine theorem came from the complementary block X and a Sylvester estimate. The tangent theorem will add an invertible cosine component, then explain how the ordered gap pays for that inverse without losing the desired constant.
-
 <!-- END SPOKEN LECTURE -->
 
 ---

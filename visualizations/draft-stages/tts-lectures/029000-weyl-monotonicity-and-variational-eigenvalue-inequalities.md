@@ -82,7 +82,7 @@ The subspace spanned by eigenvectors i through n of A has dimension n minus i pl
 
 Their intersection has dimension at least n minus i minus j plus two. Every unit vector in the intersection satisfies both bounds, so its quotient for C is at most the sum of the selected eigenvalues.
 
-Now use the *min–max* formula from the previous lecture. To bound the eigenvalue in position i plus j minus one from above, we need a subspace of dimension n minus i minus j plus two on which every quotient is bounded by our proposed value. The intersection gives us at least that many dimensions; if it is larger, choose a subspace of exactly the required dimension inside it.
+Use the min-max formula: the eigenvalue in position j is the extremal Rayleigh quotient over subspaces of the specified dimension, with maximum and minimum exchanged between the equivalent formulations. To bound the eigenvalue in position i plus j minus one from above, we need a subspace of dimension n minus i minus j plus two on which every quotient is bounded by our proposed value. The intersection gives us at least that many dimensions; if it is larger, choose a subspace of exactly the required dimension inside it.
 
 The min–max formula proves the inequality.
 
@@ -95,8 +95,6 @@ There are three related ideas to retain.
 First, a quadratic-form inequality holds in every direction and therefore survives min–max optimization. Second, an operator-norm difference bounds the difference of Rayleigh quotients in every direction; by adding and subtracting a multiple of the identity, that becomes an order comparison. Third, intersecting trailing spectral subspaces gives the more general inequality for eigenvalues of a sum.
 
 Try proving the operator-norm bound on a unit vector before looking at any eigenvalue formula. Then write the two order inequalities and derive Weyl's bound. Finally, check the dimensions in the sum inequality: why is the intersection guaranteed to be large enough for the target eigenvalue index?
-
-Next we will return to one self-adjoint operator and ask how to select *whole groups* of eigenvalues. That leads to spectral projections, the objects whose geometry will eventually carry the Davis–Kahan theory.
 
 <!-- END SPOKEN LECTURE -->
 

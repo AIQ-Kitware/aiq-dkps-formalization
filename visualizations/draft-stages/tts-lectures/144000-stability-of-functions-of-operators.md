@@ -6,7 +6,7 @@
 
 # Stability of functions of operators
 
-Our last lectures measured how eigenvalues move and how eigenspaces rotate. But many applications never request a particular eigenvector. They apply a function to an operator. They may take a square root, solve a resolvent equation, evolve a system using an exponential, or select a spectral cluster with a step function. Davis and Kahan's Question ten point four asks for perturbation bounds on the difference between a function of A plus H and the same function of A. Today we will prove several representative estimates and understand why the answer depends strongly on the function.
+Many applications apply a function to an operator rather than asking for a particular eigenvector. They may take an operator square root, solve a resolvent equation, evolve a system by an exponential, or select a spectral cluster through a step function. Davis and Kahan ask which such operations admit useful perturbation bounds, and under what assumptions on the function and the operators.
 
 ## What a function of an operator means
 
@@ -50,7 +50,7 @@ Therefore the operator difference of the two functions is exactly Q minus P. Its
 
 This is the concrete example inside Davis and Kahan's Question ten point four. The associated sine-theta and tangent-two-theta theorems become functional-calculus perturbation bounds for that step function.
 
-The gap and the precise selection of Q are essential. A reducing projection is not necessarily the spectral projection selected by a given cut. The repository's formalization makes the spectral-selection hypothesis explicit, because the original source's model sentence needs it.
+Both the gap and the spectral selection defining Q are essential. A reducing projection need not be the projection selected by a given spectral cut; the functional-calculus identity uses the specified cut, not an arbitrary reducing subspace.
 
 There is also a simple discontinuity example. Let A be a scalar matrix with a single eigenvalue exactly at the cut. Move that eigenvalue slightly from one side of the cut to the other. The operator norm of the perturbation can be arbitrarily small, while the step-function projection changes by the identity on that eigenspace. No uniform Lipschitz estimate can hold there without a gap.
 
@@ -76,9 +76,9 @@ This explains, at a structural level, why scalar Lipschitz continuity is not the
 
 ## Reading the question precisely
 
-The original paper asks for useful classes of real functions f and corresponding perturbation estimates. It gives the projection-valued step function as a model case, and the repository formalizes its exact projection identities over real and complex Hilbert spaces. Those identities are established results. The request for a general theory covering broad classes of functions is a research question, not something automatically resolved by a single spectral theorem.
+The original Davis-Kahan paper asks for useful classes of real functions f and estimates comparing f of A with f of a perturbed operator. The projection-valued step function provides one model: its projection identities are rigorous, while a broad perturbation theory for arbitrary function classes is a separate question.
 
-You should leave this lecture able to reproduce three proofs: the polynomial telescoping formula, the resolvent identity, and the step-function identification with spectral projections. Also remember the counterexample at a moving spectral cut and the distinction between scalar and operator Lipschitz behavior. Next we turn to an adjacent problem where the choice of a transporting orthogonal map can itself be optimized.
+You should leave this lecture able to reproduce three proofs: the polynomial telescoping formula, the resolvent identity, and the step-function identification with spectral projections. Also remember the counterexample at a moving spectral cut and the distinction between scalar and operator Lipschitz behavior.
 
 <!-- END SPOKEN LECTURE -->
 

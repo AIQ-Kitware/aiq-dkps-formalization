@@ -74,7 +74,7 @@ Davis and Kahan instead use a self-adjoint completion argument. Informally, we b
 
 The operator-theory foundation for this step is the Krein self-adjoint completion theorem. It must preserve both the action on the reference subspace and the required self-adjointness. Simply extending an operator by zero on P perpendicular generally fails to be self-adjoint because it loses the matching adjoint off-diagonal block.
 
-This is why the source formalization records a separate residual bridge and its completion obligations. It is substantive analytic work, not a cosmetic change of variable.
+The residual identity therefore needs a separate domain-aware proof, including its completion step when starting from a dense core. Merely rearranging the bounded formulas does not justify the equality for unbounded operators.
 
 ## The quantitative meaning of the branch
 
@@ -90,7 +90,7 @@ Here is a second qualification that becomes important in infinite dimensions. Th
 
 In finite dimensions, equal rank identifies the two nonzero directed singular-value lists. For Hilbert spaces, equal infinite cardinal dimensions alone do not establish that identity. The original paper's crossed-defect standing assumption supplies the needed compatibility.
 
-The source records the directed conclusion without imposing a dimension count, and then separately provides full-angle forms under the appropriate convention. We should teach and use exactly the version whose hypotheses are available.
+The directed conclusion does not require equal dimensions. A full symmetric-angle form needs the corresponding dimension or angle-counting convention. Apply the version whose rank and gap hypotheses are actually satisfied.
 
 ## Final diagnostic
 
@@ -98,7 +98,7 @@ Suppose you are given an approximate invariant subspace and want to declare that
 
 If the hypotheses hold, the theorem certifies the near-zero branch and makes the doubled-angle estimate interpretable as an error bound. If the hypotheses fail, a small doubled sine may still coexist with a nearly perpendicular subspace.
 
-The next lecture will put these results into a theorem-selection procedure. We will decide which gap notion, residual, angle, and norm belong to each perturbation estimate before doing any arithmetic.
+Any perturbation estimate should be applied only after specifying its gap notion, residual, angle convention, and norm class. Those choices determine the inequality that is actually justified.
 
 <!-- END SPOKEN LECTURE -->
 

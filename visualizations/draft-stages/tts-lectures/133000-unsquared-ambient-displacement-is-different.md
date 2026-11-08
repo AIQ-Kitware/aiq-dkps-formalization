@@ -6,7 +6,7 @@
 
 # Unsquared ambient displacement is different
 
-Davis and Kahan's Section Four contains three valid optimization mechanisms and one printed claim that does not follow from them. We have just proved the restricted displacement theorem and the squared full-displacement theorem. Now we will examine the fourth claim on its own terms: does the direct rotation minimize every unitarily invariant norm of the **unsquared full displacement** when all principal angles are small?
+Section Four of Davis and Kahan investigates how to transport one subspace onto another. Restricted displacement and squared whole-space displacement admit valid direct-rotation optimality statements, but the printed claim about every unitarily invariant norm of unsquared whole-space displacement fails. A four-dimensional construction makes the distinction explicit.
 
 The proposition as printed proposes a threshold of sixty degrees in the real case. Our task is to understand why that threshold looks plausible, why the available proofs cannot establish it, and which piece of the optimization problem changes in higher dimension.
 
@@ -78,7 +78,7 @@ This is stronger than merely observing that the old proof has a gap. It produces
 
 The sixty-degree threshold is correct for the standard two-dimensional real comparison. Proposition four point one remains valid for restricted displacement, and Proposition four point three remains valid for positive squared displacement. Neither theorem authorizes the universal unsquared ambient conclusion in higher dimension.
 
-The source of the failure is extra freedom in the full orthogonal transport fiber, especially the freedom to mix repeated principal-angle directions. Our next lecture will calculate the four-dimensional witness completely, with no reliance on a drawing or a numerical optimizer.
+The source of the failure is extra freedom in the full orthogonal transport fiber, especially the freedom to mix repeated principal-angle directions.
 
 <!-- END SPOKEN LECTURE -->
 

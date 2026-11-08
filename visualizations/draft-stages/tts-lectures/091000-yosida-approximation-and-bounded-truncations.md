@@ -74,7 +74,7 @@ Let U R of t denote the unitary exponential of imaginary t times A R. For a vect
 
 Because the generators commute, we can differentiate an interpolating product of exponentials and integrate the derivative. The resulting Duhamel estimate bounds the length of the difference between the two flows by the absolute value of t times the length of A R x minus A S x.
 
-We have already shown that the approximating generators form a Cauchy sequence when applied to a vector in D of A. The Duhamel estimate therefore makes the approximating flows Cauchy on that dense domain.
+The Yosida approximating generators converge on the domain of A. In particular, their differences applied to a fixed domain vector tend to zero. The Duhamel estimate therefore makes the approximating flows Cauchy on that dense domain.
 
 To extend convergence to an arbitrary vector y in H, approximate y by a domain vector x. Since each flow is unitary, replacing y by x causes an error of at most the distance between y and x. Do it for both flows and use the Cauchy estimate at x. The two approximation errors can be made as small as desired.
 
@@ -86,7 +86,7 @@ The convergence just constructed is in the Hilbert-space norm for each fixed vec
 
 The distinction is visible in the diagonal example. High-frequency coordinates can rotate extremely rapidly under the unitary group. For each fixed vector, their total squared mass becomes small in the tail, so strong convergence and strong continuity remain possible. But a norm estimate that takes the supremum over all unit vectors can always select a rapidly rotating high-frequency basis vector.
 
-The next lecture will build the limiting unitary group and identify its self-adjoint generator exactly. Yosida regularization supplies the bounded approximants that make the construction rigorous.
+Yosida regularization supplies the bounded approximants that make the construction rigorous.
 
 <!-- END SPOKEN LECTURE -->
 

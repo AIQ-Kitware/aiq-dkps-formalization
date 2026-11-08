@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-So far, most of our linear maps have sent vectors to other vectors. Today we will consider a special type of linear map whose output is just a number. We call it a linear functional.
+A linear functional maps vectors to scalars while preserving addition and scalar multiplication. Instead of producing another vector, it returns one number. Continuous linear functionals let us measure vectors using the language of linear maps.
 
 This might sound like a small change, but it gives us a new way to study a space. Instead of asking what an operator does to every vector, we can ask what can be detected by numerical measurements of those vectors. Many operator proofs eventually reduce an abstract claim to inequalities about real or complex numbers. Linear functionals are one of the main ways to make that reduction.
 
@@ -30,7 +30,7 @@ These two functionals extract quite different information. One samples a point; 
 
 ## Why boundedness matters again
 
-We will call a bounded linear functional a continuous linear functional. As we proved for all linear maps between normed spaces, continuity and boundedness are equivalent.
+We will call a bounded linear functional a continuous linear functional. For any linear map between normed spaces, continuity is equivalent to the existence of a constant bounding its output norm by that constant times the input norm.
 
 To see why we must retain that qualification, return to the space of polynomials on the interval from zero to one, still with the maximum norm. Define a functional that takes a polynomial and reports its derivative at zero.
 
@@ -80,7 +80,7 @@ That witness is useful in the formalized operator theory. For example, a later a
 
 For now, the reconstruction questions are simpler. Can you prove the midpoint evaluation functional has norm one? Can you explain why differentiation at a point fails to be bounded on our polynomial space? And can you derive the upper and lower restrictions that allow a functional to be extended by one new direction?
 
-We have learned that a dual space is a space of controlled numerical measurements, not merely a list of row vectors. This gives us a second perspective on a normed space: through the points it contains, and through the bounded linear functionals that observe those points. Next we will ask why the distinction between real and complex scalars matters when we begin to study operators and their spectra.
+We have learned that a dual space is a space of controlled numerical measurements, not merely a list of row vectors. This gives us a second perspective on a normed space: through the points it contains, and through the bounded linear functionals that observe those points.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -60,7 +60,7 @@ Left and right multiplication by bounded operators preserve this class. In parti
 
 For self-adjoint A and B with pairwise spectral separation, the associated Sylvester generator has no spectral values near zero. A spectral gap for that generator gives the same lower bound as in the finite matrix calculation. Applied to a Hilbert–Schmidt right-hand side, the inverse produces a Hilbert–Schmidt solution with constant one.
 
-There is a subtle improvement in the source theorem. Suppose X is already known as a bounded solution, but we know only that C has finite Hilbert–Schmidt energy. The theorem establishes that X is Hilbert–Schmidt as well, then proves the bound. Membership of the solution in the smaller operator ideal is itself a conclusion.
+There is a further conclusion beyond the scalar inequality. Suppose X is already known as a bounded solution, but we know only that C has finite Hilbert–Schmidt energy. The theorem establishes that X is Hilbert–Schmidt as well, then proves the bound. Membership of the solution in the smaller operator ideal is itself a conclusion.
 
 ## Recovering the gap without eigenvectors
 
@@ -76,7 +76,7 @@ This is the step at which the Hilbert-space structure of operators becomes essen
 
 A subspace perturbation theorem does not initially present us with an arbitrary Sylvester equation. Instead, it presents us with spectral projections for two operators. We must discover which cross-projection block is the unknown X, what the two compressed generators are, and why the perturbation appears as the right-hand side.
 
-Next time we will derive that exact block identity. Once it is in hand, this lecture's estimate turns a residual bound into control of how far one spectral subspace tilts away from another.
+Once it is in hand, this lecture's estimate turns a residual bound into control of how far one spectral subspace tilts away from another.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -64,17 +64,17 @@ Our principal-vector proof controlled the largest tangent, hence the operator no
 
 It is not sufficient to apply the operator-norm proof independently to each singular direction. The Ritz compression can mix those directions, and the extremizing subspaces can differ with k. The full proof uses finite-rank variational principles, compression identities, and Ky Fan dominance to control all prefixes simultaneously.
 
-The tangent singular values can be expressed as tangent of arcsine of the singular values of the directed sine block. Their values are finite only if those sines are strictly less than one. The source formalization proves that strict inequality from the spectral-placement hypotheses, then constructs a corresponding tangent representative instead of taking its existence on faith.
+Directed tangent singular values are tangents of the principal angles, equivalently tangents of arcsines of the directed sine singular values. They are finite only when those sine values are strictly below one. The relevant spectral-placement theorem must establish this strict bound before a tangent representative is formed.
 
 This last construction matters in infinite dimensions, where a coordinate map with the right formal name is not enough to establish an actual bounded operator.
 
-## Dimensions and the source theorem
+## Dimensions and the precise tangent theorem
 
 The printed generalized theorem uses a strict dimension inequality between the trial and exact selected coordinate spaces. In the common finite-dimensional situation, a smaller trial space can still be compared with the larger selected exact space through directed principal angles.
 
-The equal-rank tangent theorem is a separate companion, not a consequence of specializing a strict inequality. The modern formalization also provides extensions to arbitrary trial dimension, with explicit transversality and ideal hypotheses where needed.
+The equal-rank tangent theorem is a separate companion, not a consequence of specializing a strict inequality. Extensions to arbitrary trial dimension require explicit transversality and ideal hypotheses and must be stated separately.
 
-When translating from the paper to Lean, distinguish the finite strict-lower-rank theorem, its equal-rank version, and the Hilbert-space extension. The singular values of a directed tangent may be well-defined even when an ambient symmetric tangent between both spaces is not.
+The finite-dimensional strict-lower-rank, equal-rank, and Hilbert-space statements have different assumptions. A directed tangent map may exist even when a symmetric ambient tangent representation of both subspaces does not.
 
 ## Domain and norm requirements
 
@@ -82,13 +82,11 @@ For an unbounded self-adjoint A, the trial subspace must lie in its domain, and 
 
 For a chosen symmetric ideal, finiteness of the residual ideal norm is a hypothesis and finiteness of the tangent ideal norm is part of the conclusion. The Lyapunov or Sylvester steps that lead to the all-prefix bound must respect the same norm class.
 
-The source's generalized tangent theorem is therefore more than an angle identity. It packages a spectral placement, a variational orthogonality property, a transversality conclusion, and a singular-value comparison.
+The generalized tangent theorem therefore involves more than an angle identity. It packages a spectral placement, a variational orthogonality property, a transversality conclusion, and a singular-value comparison.
 
 ## Close
 
 The operator-norm proof is memorable. Compare a principal direction's unwanted spectral energy with its Ritz energy. Use residual orthogonality to gain a cosine factor. Divide to obtain tangent rather than sine. Then extend from the largest principal angle to all singular-value prefixes using the Ky Fan machinery.
-
-Next we will study the finite-rank cutoff arguments and a leakage lemma that make precisely these kinds of infinite-dimensional norm comparisons legitimate.
 
 <!-- END SPOKEN LECTURE -->
 

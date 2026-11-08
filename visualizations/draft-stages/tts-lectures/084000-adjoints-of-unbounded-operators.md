@@ -8,7 +8,7 @@
 
 For a matrix, the adjoint is the conjugate transpose. In infinite dimensions, that formula leaves out a central question: which vectors belong to the adjoint's domain?
 
-Today we will derive that domain from first principles, test it on the diagonal operator from the previous lecture, and distinguish a symmetric operator from a genuinely self-adjoint one.
+We will derive that domain from first principles, test it on the diagonal operator, and distinguish a symmetric operator from a genuinely self-adjoint one.
 
 ## Start with the inner-product identity
 
@@ -50,7 +50,7 @@ This is an inclusion, not necessarily an equality. For A minimal, the inclusion 
 
 An operator is self-adjoint when A equals A star as an operator: the two domains are equal and the actions agree on that common domain.
 
-The maximal diagonal operator from the previous lecture is self-adjoint. To check this, suppose y lies in its adjoint domain. Test again on e N to deduce that the adjoint output must have coordinates N y N. Those coordinates are square summable, forcing y into the maximal domain. Conversely, a maximal-domain vector satisfies the inner-product identity against every domain vector by Cauchy–Schwarz. Hence both domains and actions agree.
+The maximal diagonal operator is self-adjoint. To check this, suppose y lies in its adjoint domain. Test again on e N to deduce that the adjoint output must have coordinates N y N. Those coordinates are square summable, forcing y into the maximal domain. Conversely, a maximal-domain vector satisfies the inner-product identity against every domain vector by Cauchy–Schwarz. Hence both domains and actions agree.
 
 Notice the relationship among the three operators. The finite-support diagonal operator is symmetric but not closed. Its adjoint is the maximal self-adjoint diagonal operator. Its closure is that same maximal operator, because finite truncations approximate every maximal-domain vector in graph norm.
 
@@ -87,8 +87,6 @@ If the domains are different, the original operator cannot be self-adjoint, even
 A self-adjoint operator has a full spectral theory, real spectrum, and nonreal resolvents. A merely symmetric operator might lack these properties because it can have too small a domain.
 
 Later, when we restrict an unbounded operator to a spectral subspace, we will have to check that the restricted operator has the correct domain and that its adjoint does not secretly acquire extra vectors. This is where the distinctions we established today enter directly into the Davis–Kahan proofs.
-
-Next we will prove why an everywhere-defined symmetric operator is necessarily bounded, and why common-domain assumptions cannot be treated as bookkeeping.
 
 <!-- END SPOKEN LECTURE -->
 

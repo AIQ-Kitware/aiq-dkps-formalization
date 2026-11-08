@@ -6,7 +6,7 @@
 
 # Corrected scopes and surviving results
 
-We have completed a direct examination of Davis and Kahan's Section Four extremal claims. One of the printed universal conclusions fails, but several other optimization statements are correct and stronger than they may first appear. In this lecture we will reorganize the theory by the exact object being minimized, the norm being used, and the field over which the transport acts. The goal is a reliable set of conclusions that we can use without accidentally importing the false proposition.
+Davis and Kahan give several extremal statements about transports between subspaces. Restricted displacement and squared whole-space displacement have valid optimality theorems, while the printed universal claim for unsquared displacement is false. We will sort these statements by their precise objective, norm, scalar field, and subspace assumptions.
 
 ## Four distinct quantities
 
@@ -22,7 +22,7 @@ Proposition four point one proves that the restricted displacement of D has sing
 
 This is a particularly strong theorem because it requires no arbitrary choice of norm in the proof. The principal-chord values, two sine of half the principal angles, serve as a common lower bound for all the singular values.
 
-The source treats compact-angle sequences in an arbitrary Hilbert space and accounts for matched crossed defects when right-angle components occur. In that setting we need to use approximation numbers and keep the hypotheses that make the source's direct rotation well-defined.
+For compact-angle sequences in a Hilbert space and accounts for matched crossed defects when right-angle components occur. In that setting we need to use approximation numbers and keep the hypotheses that make the source's direct rotation well-defined.
 
 If a competitor belongs to a relevant symmetric operator ideal, ideal membership of the direct displacement is a conclusion obtained through approximation-number domination. We must not write an infinite-dimensional finite-norm inequality without first establishing that membership.
 
@@ -46,7 +46,7 @@ Importantly, none of these Q-norm conclusions needs a universal sixty-degree ang
 
 ## What fails and why angle restrictions do not fix it
 
-The printed Proposition four point four claimed that, in real spaces with maximal principal angle at most sixty degrees, the direct rotation minimizes **every** invariant norm of unsquared ambient displacement. The four-dimensional witness from the preceding lecture refutes it in trace norm at forty-five degrees. A continuous equal-angle family refutes any proposed positive universal angle threshold.
+The printed Proposition four point four claimed that, in real spaces with maximal principal angle at most sixty degrees, the direct rotation minimizes **every** invariant norm of unsquared ambient displacement. The four-dimensional witness refutes it in trace norm at forty-five degrees. A continuous equal-angle family refutes any proposed positive universal angle threshold.
 
 The failure is compatible with every preceding theorem. Restricted displacement can be optimal while a competitor's action on the complement changes the total trace cost. Squared displacement can be Ky Fan minimal even if the unsquared trace sum is larger. The objective determines which inequalities are valid.
 
@@ -60,7 +60,7 @@ For a direct rotation with maximal principal angle theta-max, the singular value
 
 Therefore the full displacement of the canonical D has invariant norm at most secant of theta-max over two times the norm of P minus Q. Combining this with the universal lower bound gives an approximation factor relative to **every** competing transporter.
 
-For theta-max at most sixty degrees, cosine theta-max over two is at least square root of three over two. The approximation factor is at most two divided by square root of three, about one point one five five. It is not a claim of exact minimization. The source formalizes the factor, and exhibits sharpness at fixed angles.
+For theta-max at most sixty degrees, cosine theta-max over two is at least square root of three over two. The approximation factor is at most two divided by square root of three, about one point one five five. It is not a claim of exact minimization. The factor can be attained at fixed angles, so this approximation ratio is sharp for the stated class.
 
 This distinction is useful in applications: a canonical choice can have provably controlled cost without being an optimizer for a given norm.
 
@@ -70,7 +70,7 @@ Complex unitaries have phase degrees of freedom absent from real orthogonal matr
 
 Its trace cost is two sine theta, exactly the trace norm of the difference of the two rank-one projections. As a result it attains the universal projection-difference lower bound.
 
-For many principal planes, choose these phase-corrected transporters independently and take their orthogonal direct sum. The total trace cost is twice the sum of the principal sines, which equals the trace norm of the projection difference. The repository has a finite-dimensional complex theorem asserting existence of a global trace minimizer with this principal-angle cost.
+For several principal planes, choose the phase-corrected transports separately and take their orthogonal direct sum. The trace cost is twice the sum of the principal sines, equal to the trace norm of the projection difference. This supplies a global trace-minimizing transport in the stated finite-dimensional complex setting.
 
 This does not mean the **canonical direct rotation** is trace optimal in complex space. The phase-corrected map is generally a different transporter. The field changes the feasible family, so claims about real and complex optimizers must be kept separate.
 
@@ -78,9 +78,9 @@ This does not mean the **canonical direct rotation** is trace optimal in complex
 
 For a real line, or a real hyperplane, the ambient transport problem has an exact conventional solution for every invariant norm. The determinant-positive component has the direct-plane rotation as a minimizer. The determinant-negative component has a Householder reflection as a minimizer. The global optimum is the smaller of the two costs, given by singular-value lists consisting of two principal chords or a single two.
 
-Thus the sixty-degree all-gauge threshold really does hold for real lines and hyperplanes. Every proper nonzero equal-dimensional pair in real ambient dimension at most three is of one of those forms. A research note in the supplied repository gives a complete conventional proof of that dimension statement, but explicitly says it is not yet a compiled Lean generalization. We should retain that evidence distinction.
+For real lines and hyperplanes, the sixty-degree all-gauge conclusion holds. Every proper nonzero pair of equal-dimensional subspaces in real ambient dimension at most three has one of these forms, by a finite-dimensional dimension count. This dimension-minimality claim is a separate mathematical argument from the explicit four-dimensional counterexample.
 
-The project's source-verified four-dimensional example then shows why the first failing real ambient dimension is four at the level of the mathematical analysis. The formal counterexample itself is Lean-backed; the general dimension-minimality classification should not be presented as a separate compiled theorem unless that formalization is added.
+An explicit four-dimensional real counterexample refutes the proposed general all-gauge statement. Combined with the line-and-hyperplane analysis in lower ambient dimensions, this identifies four as the first dimension where such a failure can occur. The dimension-minimality deduction uses the stated finite-dimensional classification, rather than only the counterexample calculation.
 
 ## A disciplined theorem-selection checklist
 
@@ -90,9 +90,9 @@ These checks identify the correct theorem. They also reveal when the question is
 
 ## Conclusion
 
-The source's restricted and squared-displacement extremal theorems remain valid. The unsquared full-displacement statement of Proposition four point four is false as printed; the real four-dimensional counterexample proves it directly. Q-norm optimality, projection-distance lower bounds, quantitative approximation factors, and separate complex trace optimizers provide precise replacements.
+The restricted and squared-displacement extremal theorems remain valid. The unsquared full-displacement statement of Proposition four point four is false as printed; the real four-dimensional counterexample proves it directly. Q-norm optimality, projection-distance lower bounds, quantitative approximation factors, and separate complex trace optimizers provide precise replacements.
 
-In the next lecture we will return to the classification of direct rotations themselves, including right-angle defect matching and compact principal-angle data. With the optimization scopes now settled, we can distinguish the geometry of constructing a direct rotation from the separate problem of minimizing a chosen transport cost.
+With the optimization scopes now settled, we can distinguish the geometry of constructing a direct rotation from the separate problem of minimizing a chosen transport cost.
 
 <!-- END SPOKEN LECTURE -->
 

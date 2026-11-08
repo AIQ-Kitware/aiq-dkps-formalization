@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-We now have the language to talk about a Hilbert space, the operators acting on it, and the orthogonal projection onto a closed subspace. Today we will put those ideas together.
+A closed subspace U of a Hilbert space has an orthogonal projection P. An operator A may preserve U, meaning A maps every vector of U back into U. The stronger reducing condition asks for the orthogonal complement to be preserved as well. These conditions control the block structure of A.
 
 Suppose we choose a subspace M of a Hilbert space and apply an operator T to a vector in M. Does the output stay in M, or can it escape into directions perpendicular to M? That question introduces an invariant subspace.
 
@@ -116,7 +116,7 @@ This gives us two equivalent pictures of reduction: one using projection, and an
 
 Try these three tests without notes. First, use the shear matrix to exhibit a subspace that is invariant but not reducing. Second, prove that a subspace reduces T if and only if its orthogonal projection commutes with T. Third, prove that an invariant subspace of a bounded self-adjoint operator is reducing by moving the operator across an inner product.
 
-Our next lectures will introduce analysis maps, synthesis maps, and Gram operators. They let us describe subspaces through collections of vectors and measure how much of a vector lies in a selected family of directions. The invariant-subspace language we developed today will later tell us when those selected directions genuinely describe an independent spectral component.
+They let us describe subspaces through collections of vectors and measure how much of a vector lies in a selected family of directions. Invariance also distinguishes when those selected directions genuinely describe an independent spectral component.
 
 <!-- END SPOKEN LECTURE -->
 

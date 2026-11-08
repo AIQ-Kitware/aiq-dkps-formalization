@@ -6,13 +6,13 @@
 
 # Comparing angle and Ky Fan beam estimates
 
-We now have every numerical ingredient needed for the free-beam perturbation estimates. The low trial plane is two-dimensional. Its unperturbed operator vanishes. The high spectrum begins above five hundred. Multiplication by epsilon times t provides a bounded perturbation. And our two choices of residual have exact singular values.
+Let A be the self-adjoint free-beam fourth-derivative operator on the unit interval, on the domain of functions with four square-integrable weak derivatives and with second and third derivatives zero at both endpoints. Its two-dimensional kernel is the affine plane, and the rest of its spectrum lies above five hundred. Let H multiply by epsilon times t, where zero is less than epsilon and epsilon is less than one hundred. An orthonormal basis of the affine trial plane is given by one over square root of two times one minus square root of three times two t minus one, and the corresponding function with a plus sign. We can use their exact residual singular values to compare several subspace perturbation bounds.
 
 Today we will run several Davis–Kahan theorems on the same problem. The comparisons will show that a better residual can matter more than a more elaborate theorem, and that a largest-angle estimate answers a different question from a Ky Fan sum estimate.
 
 ## First use the unrecentered residual
 
-Start with the reference operator zero on the trial plane. Its residual is epsilon t times each trial function. We found that the top singular value is epsilon times the square root of eleven plus square root of seventy-six, divided by thirty. Its coefficient is a little smaller than point eight one one.
+Start with the reference operator zero on the affine trial plane. Since the unperturbed fourth derivative annihilates both trial functions, the residual is H applied to the frame. For this map the Gram matrix equals epsilon squared over thirty times the symmetric matrix with diagonal entries eleven minus square root of seventy-five and eleven plus square root of seventy-five, and both off-diagonal entries negative one. Its eigenvalues are epsilon squared over thirty times eleven plus or minus square root of seventy-six. Thus the top singular value is epsilon times the square root of the quotient of eleven plus square root of seventy-six by thirty, a little smaller than point eight one one.
 
 The high part of the perturbed beam has spectrum above five hundred. Because the trial reference value is zero, the ordered gap is at least five hundred. The directed sine theorem gives five hundred times the norm of the sine operator no greater than the residual operator norm.
 
@@ -20,7 +20,7 @@ Divide through. The largest sine of a principal angle is smaller than point eigh
 
 Why call it the largest principal angle? In the relevant range, the principal sine increases with the angle. Operator norm selects the largest singular value of the sine operator, hence the largest angle.
 
-The source makes epsilon smaller than one hundred. At epsilon equal to ten, this initial result says sine theta one is below about point zero one six two two. It is a useful certificate, but we can improve it considerably.
+The bound assumes epsilon is positive and below one hundred. At epsilon equal to ten, this initial result says sine theta one is below about point zero one six two two. It is a useful certificate, but we can improve it considerably.
 
 ## What a two-term Ky Fan norm adds
 
@@ -42,15 +42,15 @@ The ambient sine-two-theta estimate gives sine of twice the largest angle less t
 
 At first sight these coefficients look larger than the single-angle sine coefficient. But the left sides are different functions: sine of twice an angle is approximately twice the sine of that angle for small angles.
 
-We should also remember the branch issue from earlier lectures. The sine of twice an angle can be small near zero degrees or near ninety degrees. A separate spectral-selection or small-angle argument is needed before converting it into a unique small-angle certificate. In the beam problem, the low spectral cluster is selected across a large gap, and its continuity under bounded perturbation supplies the intended branch.
+We should also remember the branch issue from the double-angle geometry. The sine of twice an angle can be small near zero degrees or near ninety degrees. A separate spectral-selection or small-angle argument is needed before converting it into a unique small-angle certificate. In the beam problem, the low spectral cluster is selected across a large gap, and its continuity under bounded perturbation supplies the intended branch.
 
 The doubled-angle theorem is valuable because it uses ambient off-diagonal structure. It is not automatically the sharpest numerical estimate for this particular data.
 
 ## Recenter at the Ritz matrix
 
-Now use the actual Rayleigh–Ritz compression instead of zero. The trial matrix is diagonal, with upper Ritz value less than point seven eight eight seven times epsilon. Its recentered residual is rank one, with nonzero singular value epsilon divided by square root of fifteen.
+Now use the actual Rayleigh-Ritz compression rather than zero. Its diagonal entries are epsilon over two times one minus one over square root of three, and epsilon over two times one plus one over square root of three. Subtracting the compressed action from the full action leaves a rank-one residual, whose Gram matrix is epsilon squared over thirty times the matrix with diagonal entries one and off-diagonal entries negative one. The only nonzero singular value is epsilon divided by square root of fifteen.
 
-The separation is no longer the full five hundred because the trial Ritz values are positive. But a valid lower gap is five hundred minus point seven eight eight seven times epsilon. This remains positive for the source's parameter range, since epsilon is below one hundred.
+The separation is no longer the full five hundred because the trial Ritz values are positive. But a valid lower gap is five hundred minus point seven eight eight seven times epsilon. This remains positive for the stipulated parameter range, since epsilon is below one hundred.
 
 Apply the ordered-gap tangent theorem. Tangent of the largest principal angle is bounded by epsilon divided by square root of fifteen, divided again by five hundred minus point seven eight eight seven epsilon.
 
@@ -78,7 +78,7 @@ These are not four numbers measuring an identical quantity. Yet when the angles 
 
 There is one more distinction. All the results so far concern the two-dimensional low spectral subspace relative to the trial plane. They do not tell us which of the two trial functions is closest to which individual perturbed eigenvector. A basis can rotate substantially inside a plane even if the plane itself hardly moves.
 
-Next we will account for that internal rotation using a two-by-two Schur complement. We will then compare the individual-vector estimates from the original paper with the sharper one-vector residual estimates.
+To estimate an individual eigenvector rather than the low spectral plane, an additional in-plane rotation must be controlled. A two-by-two Schur complement separates that rotation from the leakage out of the trial plane.
 
 <!-- END SPOKEN LECTURE -->
 

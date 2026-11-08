@@ -40,7 +40,7 @@ For nonnegative time t, form the operator obtained by applying the exponential o
 
 If A and B are diagonal, the coefficient between eigenvalues a and b is the original coefficient of C times the exponential of negative t times a minus b. Integrating that coefficient gives the coefficient of C divided by a minus b.
 
-Thus the integral recreates the entrywise solution from the previous lecture. But it has two advantages. It does not require a preferred basis, and the norm of each factor can be bounded using the spectral order.
+Thus the integral recreates the entrywise solution obtained by dividing the spectral coefficients. But it has two advantages. It does not require a preferred basis, and the norm of each factor can be bounded using the spectral order.
 
 ## Find a common spectral cut
 
@@ -102,7 +102,7 @@ If the order is reversed, with A entirely below B, we can exchange the direction
 
 Finally, be careful about hypotheses. The exact decay proof used self-adjoint functional calculus and a common ordered cut. Mere nonoverlap of spectral sets does not provide the same semigroup estimate.
 
-Reconstruct the scalar integral first, then the two exponential bounds, then the derivative identity. Those three steps give the existence, uniqueness, and constant-one estimate. In the next lecture we will replace decay by oscillation and see what remains when the spectral sets are separated but interlaced.
+Reconstruct the scalar integral first, then the two exponential bounds, then the derivative identity. Those three steps give the existence, uniqueness, and constant-one estimate.
 
 <!-- END SPOKEN LECTURE -->
 

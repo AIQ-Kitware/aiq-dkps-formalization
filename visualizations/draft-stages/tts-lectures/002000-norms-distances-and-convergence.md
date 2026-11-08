@@ -124,7 +124,7 @@ For a more conceptual exercise, see whether you can reconstruct the reverse tria
 
 A norm is a consistent notion of vector size: it is positive except at zero, scales correctly, and satisfies the triangle inequality. It defines distance by measuring differences, and distance defines convergence. In a fixed finite-dimensional space, all norms agree about convergence even when they disagree about exact sizes. In infinite dimensions, that agreement can fail.
 
-Our next question is whether a sequence that gets progressively closer to itself must approach some vector that belongs to our space. That question leads to Cauchy sequences, completeness, and Banach spaces. It will also explain why infinite sums of vectors or operators sometimes exist and sometimes do not.
+The distance induced by a norm lets us measure whether the terms of a sequence are getting closer. A Cauchy sequence measures its own internal agreement without assuming that a limit already exists; completeness asks whether such sequences actually converge inside the space.
 
 <!-- END SPOKEN LECTURE -->
 

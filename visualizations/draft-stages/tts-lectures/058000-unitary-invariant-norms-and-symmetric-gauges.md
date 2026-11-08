@@ -10,7 +10,7 @@ Suppose two people measure the same linear map, but one uses a different orthono
 
 The statement we are heading toward is that, for a fixed finite matrix shape, an invariant norm can be read from its singular values using a symmetric gauge. Conversely, an appropriate symmetric gauge gives a norm on matrices by applying it to their singular values. The word appropriate matters: the triangle inequality is a theorem that we need to establish, rather than a consequence of merely choosing an arbitrary symmetric function.
 
-We will also distinguish a property of one matrix space from a compatible rule that measures operators between many different spaces. That distinction will become central in the next lecture.
+We will also distinguish a property of one matrix space from a compatible rule that measures operators between many different spaces.
 
 ## Begin with orthonormal changes of coordinates
 
@@ -94,7 +94,7 @@ For example, composing A with a contraction on the output side should not increa
 
 But this compatibility is additional information. Knowing only that each individual matrix space carries some unitarily invariant norm does not ensure consistency when the dimensions change.
 
-The formalization makes this distinction explicit. Its normalized unitarily invariant norm structure includes an underlying family with ideal laws, a rank-one normalization, and a Ky Fan dominance property. Those are stronger requirements than the bare statement that a single norm is invariant under unitary matrices.
+A compatible family of unitarily invariant norms needs more than invariance for one matrix size: it must respect appropriate ideal operations, agree with rank-one normalization, and obey the Ky Fan dominance principle used to transfer singular-value comparisons.
 
 ## Why this matters for perturbations
 
@@ -102,7 +102,7 @@ A perturbation may rotate several mutually orthogonal directions by different am
 
 Our proofs show that the same singular-value comparison can control all these choices. We have converted an apparently open-ended question about norms into concrete inequalities about ordered nonnegative lists.
 
-The next issue is rectangularity. An operator might be represented in a larger output space or with extra zero input directions. Exactly when does adding those zero directions preserve a norm? That is our next lecture.
+The next issue is rectangularity. An operator might be represented in a larger output space or with extra zero input directions. Exactly when does adding those zero directions preserve a norm?
 
 ## What to reconstruct
 

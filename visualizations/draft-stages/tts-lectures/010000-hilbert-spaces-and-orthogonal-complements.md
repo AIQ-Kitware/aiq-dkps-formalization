@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-Last time we learned that an inner product does two jobs. It tells us how long a vector is, and it tells us how one vector sits relative to another. We also proved that an inner product obeys a special version of the Pythagorean theorem: when two vectors are perpendicular, the squared length of their sum is the sum of their squared lengths.
+An inner product supplies lengths and angles. Perpendicular vectors have inner product zero, and the squared length of their sum is the sum of their squared lengths. A Hilbert space is a complete inner-product space, and the geometry of its closed subspaces follows from these facts.
 
 Today we ask what happens when there are infinitely many possible directions. We will build the idea of a Hilbert space, distinguish a span from a closed span, and define the collection of all vectors perpendicular to a given subspace. These distinctions will determine when the geometry of finite-dimensional Euclidean space survives in infinite dimensions.
 
@@ -88,7 +88,7 @@ People sometimes say that an orthonormal system is complete when its closed span
 
 Try reconstructing three arguments. First, why do coordinatewise limits alone not prove convergence in ell two? Second, why is the orthogonal complement of any subspace closed? Third, why do finitely supported sequences have the same orthogonal complement as all of ell two?
 
-Next time, we will prove the result that makes this geometry actionable: every vector has a unique nearest point in a closed subspace. That theorem will turn subspaces and their orthogonal complements into exact decompositions and bounded projection operators.
+For every closed subspace M of a Hilbert space and every x, the projection theorem supplies a unique closest vector in M, with error perpendicular to M. This decomposes x into the sum of its projected and orthogonal parts.
 
 <!-- END SPOKEN LECTURE -->
 

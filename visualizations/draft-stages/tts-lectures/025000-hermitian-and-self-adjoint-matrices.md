@@ -2,9 +2,9 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-In our last lecture, we met two matrices with the same repeated eigenvalue. One had an entire plane of eigenvectors. The other had only a line. It was a warning that eigenvalues by themselves do not promise a good system of coordinates.
+Two matrices can have eigenvalue two with algebraic multiplicity two, yet have different eigenspaces. The diagonal matrix with both diagonal entries two has a whole plane of eigenvectors. The matrix whose rows are two, one and zero, two has only the horizontal eigenvector line. A repeated eigenvalue alone does not guarantee enough eigenvectors to diagonalize a matrix.
 
-Today we investigate a class of matrices where that defect cannot occur. The condition is simple to state, but it has remarkable consequences. These matrices have real eigenvalues. Eigenvectors associated with different eigenvalues are perpendicular. And, as we will prove in the next lecture, the whole space has an orthonormal basis of eigenvectors.
+Self-adjoint matrices cannot have that defect. Their eigenvalues are real, and eigenvectors associated with different eigenvalues are perpendicular. In finite dimensions they admit a complete orthonormal eigenbasis. The inner product explains these properties.
 
 The class is called self-adjoint, or, when we are speaking specifically about matrices, Hermitian. Let's find out why the inner product is doing the work.
 
@@ -62,7 +62,7 @@ This is exactly what we need to combine different eigenspaces into one orthonorm
 
 ## Why Jordan chains disappear
 
-Let's return to the defective matrix from our previous lecture. It had a nonzero eigenvector v and another vector w such that A minus lambda times the identity sent w to v, while sending v to zero. That was the first nontrivial step of a Jordan chain.
+Consider the defective real matrix with first row two, one and second row zero, two. Let v be the horizontal unit vector and w the vertical unit vector. For eigenvalue lambda equal two, A minus lambda times the identity sends w to v and sends v to zero. Thus v is an eigenvector and w is a generalized eigenvector, forming a length-two Jordan chain.
 
 Could such a chain exist for a self-adjoint matrix? No. Here is a short argument.
 
@@ -90,9 +90,9 @@ We have proved three important facts. A Hermitian matrix has real eigenvalues. E
 
 What have we *not* proved? We have not yet shown that there are enough eigenvectors to span the entire space. That is the missing step between these structural facts and a complete spectral decomposition.
 
-Before the next lecture, try three reconstructions. Show why the conjugate transpose, not the plain transpose, is the complex adjoint. Reproduce the proof that distinct eigenspaces are perpendicular. And explain exactly where the attempted Jordan chain contradicts self-adjointness.
+Three useful reconstructions are these. Show why the conjugate transpose, not the plain transpose, is the complex adjoint. Reproduce the proof that distinct eigenspaces are perpendicular. And explain exactly where the attempted Jordan chain contradicts self-adjointness.
 
-Next time we will use these ideas to build an orthonormal eigenbasis. Instead of merely knowing what individual eigenvectors do, we will be able to reconstruct the whole operator from its spectral components.
+These facts provide the ingredients for the finite spectral theorem: a self-adjoint matrix admits an orthonormal eigenbasis, so the operator is reconstructed from its eigenvalues and orthogonal spectral projections.
 
 <!-- END SPOKEN LECTURE -->
 

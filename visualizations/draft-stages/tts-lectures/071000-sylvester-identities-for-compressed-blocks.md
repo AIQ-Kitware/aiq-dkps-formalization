@@ -8,7 +8,7 @@
 
 A Sylvester estimate can turn a bound on an operator C into a bound on the unknown X. But a subspace perturbation problem is given in a different form. We have two self-adjoint operators and want to compare two subspaces that they preserve. Where is the Sylvester equation hiding?
 
-Today we will derive it by multiplying with spectral projections. The result is an exact identity, before we impose any gap condition. It is the algebraic point at which the previous lecture's operator estimates become geometric angle estimates.
+Today we will derive it by multiplying with spectral projections. The result is an exact identity, before we impose any gap condition. It is the algebraic point at which operator-norm estimates for Sylvester equations become geometric angle estimates.
 
 ## Two operators and two invariant subspaces
 
@@ -92,7 +92,7 @@ We should mark a limitation before generalizing. If T or S is unbounded, its act
 
 The infinite-dimensional source develops bounded spectral cut operators and proves block identities first on dense domains. It then extends the resulting bounded expressions using continuity. Spectral projections commute with the self-adjoint operator in a domain-aware sense, and bounded spectral windows control the terms individually.
 
-For now, our bounded derivation is complete. We have identified the unknown cross-projection block, both compressed generators, and the exact residual. The coming measure-theory unit will give us the spectral projections needed for the infinite-dimensional version; later, the unbounded-operator unit will justify the domain steps.
+The exact bounded-operator residual identity identifies the unknown cross-projection block, both compressed generators, and the residual. The Hilbert-space extension requires spectral projections with the right measurability properties; for unbounded generators it additionally requires domain compatibility.
 
 <!-- END SPOKEN LECTURE -->
 

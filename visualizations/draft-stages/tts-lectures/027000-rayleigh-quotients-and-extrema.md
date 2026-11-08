@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-We have just proved that a finite-dimensional self-adjoint operator has an orthonormal eigenbasis. We can split any vector into eigenvector components, act on each component separately, and put the results back together.
+The finite spectral theorem states that every real symmetric or complex Hermitian matrix has an orthonormal eigenbasis. Thus a vector can be split into its eigenvector components, the matrix can act on each separately, and the results can be summed. This gives quantitative information about its quadratic form.
 
 Today we will use that decomposition to answer a different question. Suppose I give you a self-adjoint matrix A and a nonzero vector x. Can a single number describe how strongly A acts along the direction of x?
 
@@ -16,7 +16,7 @@ Start with a real two-dimensional vector. A x may point in a different direction
 
 Dividing by the squared length makes the result independent of scale. Replace x by twice x. The numerator becomes four times as large, and so does the denominator. The quotient stays the same. We are measuring a property of the *direction*, not of the particular length of the vector.
 
-Over the complex numbers we use the complex inner product. For self-adjoint A, this quadratic form is real, as we proved in the Hermitian lecture. So we can compare Rayleigh quotients using ordinary inequalities on real numbers.
+Over the complex numbers we use the complex inner product. For self-adjoint A, this quadratic form is real, because self-adjointness makes the quadratic form equal to its own complex conjugate. So we can compare Rayleigh quotients using ordinary inequalities on real numbers.
 
 If x is an eigenvector with eigenvalue lambda, then A x equals lambda times x. Its Rayleigh quotient is exactly lambda. Every eigenvector direction therefore gives one of the operator's eigenvalues.
 
@@ -24,7 +24,7 @@ What about a vector that is not an eigenvector? Its quotient still exists, but i
 
 ## A rotating direction between two eigenvectors
 
-Take the symmetric matrix with rows two, one and one, two. We know from the previous lecture that its eigenvalues are three and one. Its normalized eigenvectors point along one, one and one, negative one.
+Take the symmetric matrix with rows two, one and one, two. Its eigenvalues are three and one: the characteristic polynomial is lambda squared minus four lambda plus three, which factors as lambda minus one times lambda minus three. Its normalized eigenvectors point along one, one and one, negative one.
 
 Any unit vector in the plane can be written as cosine theta in the horizontal direction and sine theta in the vertical direction. Apply the matrix to that vector, then take the dot product with the original vector.
 
@@ -100,11 +100,10 @@ The smallest and largest eigenvalues are easy to recover by optimizing over all 
 
 The answer will involve optimization over *subspaces*, not just individual vectors. We will ask what happens if we have to choose a whole subspace of a specified dimension, and then face the worst direction inside it. That is the idea behind the Courant–Fischer min–max theorem.
 
-We will develop its dimension argument in the next lecture rather than smuggling it into today's result.
 
 For now, reconstruct these three steps. First, write the Rayleigh quotient as a weighted average of eigenvalues. Second, prove why its endpoints are attained exactly on the extreme eigenspaces. Third, follow the directional derivative until the eigenvector residual appears, and explain why choosing the variation equal to that residual completes the proof.
 
-We now have a bridge from spectral decomposition to optimization. Next time we will cross it using the geometry of intersecting subspaces.
+We now have a bridge from spectral decomposition to optimization.
 
 <!-- END SPOKEN LECTURE -->
 

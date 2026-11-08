@@ -86,7 +86,7 @@ The sharp part of Theorem eight point one is structural: no finite off-diagonal 
 
 For finite-dimensional P and Q, the low spectral branch has the same rank as P. A continuous deformation from zero coupling is one way to see this; the spectral-gap argument prevents an eigenvalue from crossing the separating threshold.
 
-Infinite-dimensional dimension bookkeeping is subtler. Equal infinite cardinal dimensions do not by themselves ensure that both directed projection gaps agree. The full source angle representation uses standing assumptions about compatible subspace dimensions and crossed defects. The formalization therefore maintains separate directed and full-angle statements.
+In infinite dimensions, equal cardinal dimensions do not force the two directed projection gaps to agree. A full symmetric-angle statement needs additional compatibility of the crossed defects or suitable finite-dimensional hypotheses. Otherwise retain the directed conclusion.
 
 For the canonical branch theorem, these issues are addressed in its actual conclusion and hypotheses; one should not import an equal-rank simplification from finite-dimensional matrices into an arbitrary Hilbert space proof.
 
@@ -94,7 +94,7 @@ For the canonical branch theorem, these issues are addressed in its actual concl
 
 We now have a concrete mechanism for identifying the intended spectral subspace: form-separated diagonal blocks plus an off-diagonal self-adjoint perturbation preserve the open gap, define a canonical spectral projection, and keep the selected branch below a quarter turn. The compression identities then yield the eigenvalue and norm inequalities.
 
-Our next lecture changes the hypotheses. It allows more general perturbations, but demands quantitative smallness relative to a spectral gap. We will show how that smallness can certify the correct angular branch.
+It allows more general perturbations, but demands quantitative smallness relative to a spectral gap. We will show how that smallness can certify the correct angular branch.
 
 <!-- END SPOKEN LECTURE -->
 

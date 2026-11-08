@@ -6,7 +6,7 @@
 
 # Beam Rayleigh–Ritz calculation
 
-We have constructed a free-beam operator whose first two eigenvalues are zero, and whose remaining spectrum lies above five hundred. We then added the bounded multiplication perturbation epsilon times t. Our task today is to calculate exactly what this perturbation does to the two-dimensional affine trial space, and what part of its action escapes that space.
+Consider the free-beam operator A on square-integrable functions on the unit interval. It acts as the fourth derivative on the self-adjoint domain of functions with four weak derivatives in the square-integrable class, whose second and third derivatives vanish at both endpoints. Its kernel consists of affine functions, while the remaining spectrum lies above five hundred. Perturb A by the bounded multiplication operator H of u equal to epsilon times t times u, with real epsilon positive and smaller than one hundred. We will compute how this perturbation acts on the two-dimensional affine trial space and how much escapes that space.
 
 This calculation is worth doing by hand. A perturbation estimate cannot tell us anything numerical until we supply a residual and a spectral gap. The beam example provides both using only elementary integrals.
 
@@ -60,7 +60,7 @@ We can do better by allowing the trial coordinates to evolve under their own com
 
 Because A hat equals E star times the perturbed operator times E, the adjoint E star annihilates this new residual. This is Galerkin orthogonality. R hat takes values entirely in the orthogonal complement of the trial plane.
 
-For its Gram matrix, use the identity R hat star R hat equals E star H squared E minus A hat squared. We obtained the first term in our previous calculation. Subtracting the square of the diagonal Ritz matrix cancels most of the diagonal energy.
+For its Gram matrix, use the identity R hat star R hat equals E star H squared E minus A hat squared. The first term can be integrated directly from the trial functions. Its upper-left entry is epsilon squared times eleven thirtieths minus one over twice the square root of three. Its lower-right entry has a plus sign in place of that minus sign. Its two off-diagonal entries are minus epsilon squared over thirty. Subtracting the square of the diagonal Ritz matrix cancels most of the diagonal energy.
 
 The result is strikingly simple: epsilon squared over thirty times the matrix whose diagonal entries are one and whose off-diagonal entries are negative one.
 
@@ -72,7 +72,7 @@ One might be surprised that two distinct trial functions yield a rank-one residu
 
 ## A numerical consistency check
 
-Take epsilon equal to ten, which lies in the source's allowed range. The Ritz values are approximately two point one one three and seven point eight eight seven. The recentered residual's only nonzero singular value is ten divided by square root of fifteen, about two point five eight two.
+Take epsilon equal to ten, which lies in the parameter range zero less than epsilon less than one hundred. The Ritz values are approximately two point one one three and seven point eight eight seven. The recentered residual's only nonzero singular value is ten divided by square root of fifteen, about two point five eight two.
 
 The high modes remain above five hundred. So the gap between our upper Ritz value and the high spectrum is greater than five hundred minus seven point eight eight seven, or approximately four hundred ninety-two point one one three.
 
@@ -82,7 +82,7 @@ An estimate that divides the recentered residual by that gap produces an angle o
 
 We have established exactly the compression and the residual. We have not yet proved that the Ritz vectors are individual eigenvectors of the perturbed beam. They generally are not. Nor have we identified the exact two-dimensional perturbed eigenspace; that requires the spectral theorem and the gap protecting the low cluster.
 
-The next lecture will substitute these finite quantities into several perturbation theorems. Then we will see why an operator-norm bound on the largest angle differs from a Ky Fan bound on the sum of two angles, and why the tangent estimate improves on the initial sine estimate.
+An operator-norm bound controls the largest principal angle, while a Ky Fan bound controls a sum of principal angles. A tangent estimate also uses stronger spectral placement and can improve on the initial sine estimate.
 
 The broader method is reusable: choose trial functions in the operator domain; form their Gram and compressed matrices; orthonormalize; compute the residual Gram operator; and only then invoke a gap theorem. Nothing in this workflow depends on having closed-form eigenfunctions of the perturbed operator.
 

@@ -72,7 +72,7 @@ The Ky Fan one norm is just the operator norm, so it also decreases. The Ky Fan 
 
 But there is a subtler pattern: the leading singular value of the pinch is smaller, yet its second singular value is larger. Three is greater than one. So pinching does not imply a coordinatewise singular-value inequality.
 
-Instead it implies a comparison of partial sums. That is exactly the distinction between weak majorization and entrywise domination developed in the preceding lectures.
+Instead it implies a comparison of partial sums. That is exactly the distinction between weak majorization and entrywise domination defined by comparing leading partial sums.
 
 ## Pinching as a Ky Fan statement
 

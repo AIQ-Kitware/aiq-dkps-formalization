@@ -16,7 +16,7 @@ The right singular vectors live in the input space. The left singular vectors li
 
 Let A hat equal A plus a rectangular perturbation D. We may want the principal angles between selected right singular subspaces of A and A hat. Or we may want the corresponding left-side angles. These two errors are not generally equal, even when they come from the same singular values.
 
-The previous Gram-operator lecture tells us that A adjoint A acts on the input, while A A adjoint acts on the output. Their nonzero eigenvalues are the squared singular values. This converts both singular-subspace problems into self-adjoint eigen-subspace problems, provided we keep track of how the perturbation affects each Gram operator.
+For a rectangular map A, A adjoint A acts on the input, while A A adjoint acts on the output. Their nonzero eigenvalues are the squared singular values. This converts both singular-subspace problems into self-adjoint eigen-subspace problems, provided we keep track of how the perturbation affects each Gram operator.
 
 ## Perturbing the right Gram operator
 
@@ -40,7 +40,7 @@ This may look different from a gap between singular values themselves. It is. Th
 
 We must also handle zero singular values. For a rectangular matrix with rank below the input dimension, the right Gram operator has a genuine zero eigenspace. A selected singular block ending at the last positive singular value is still separated from that zero eigenspace only by the square of the last positive singular value.
 
-This is an important correction to one printed endpoint convention in the later Yu–Wang–Samworth source: it is not legitimate to pretend that the gap immediately past the rank is infinite when the ambient Gram operator still has a zero eigenvalue. The repository's source-facing theorem uses the ambient right or left dimension and the actual zero continuation.
+A rank-boundary gap must be computed in the full ambient right or left Gram space, including zero eigenvalues beyond the positive rank. Treating the next eigenvalue as infinitely separated while an ambient zero eigenvalue remains gives an invalid boundary convention.
 
 ## Passing from Gram perturbation to sine bounds
 
@@ -48,7 +48,7 @@ Apply the self-adjoint perturbation framework to G and G hat. Under a positive p
 
 The formalized rectangular theorem packages the algebra and spectral argument into a bound with a factor two multiplying the quantity two sigma one plus the norm of D. That quantity is then multiplied by the smaller of square root of the selected block dimension times the operator norm of D, and the Frobenius norm of D, and divided by Delta.
 
-The constants and the particular gap assumptions belong to the theorem; one should not silently replace the source's exact boundary gap with a gap involving the perturbed singular values. The bound is useful because it depends only on the original matrix's singular-value separation, plus the size of the perturbation.
+The constants and the particular gap assumptions belong to the theorem; one should not silently replace the precise ambient boundary gap with a gap involving the perturbed singular values. The bound is useful because it depends only on the original matrix's singular-value separation, plus the size of the perturbation.
 
 If the right singular block has dimension d, the sine distance here is the Frobenius norm of its list of principal sines. The operator norm of the sine map instead measures only the largest principal sine. They are related, but their dimension factors differ.
 
@@ -82,9 +82,9 @@ Suppose the selected right singular subspaces have the same dimension and are re
 
 We therefore allow an orthogonal d-by-d matrix O that realigns the perturbed frame. A Procrustes argument bounds the Frobenius difference between V and V hat times O in terms of the Frobenius sine distance. This gives a concrete error guarantee for computed singular-vector coordinates, up to their natural orthogonal ambiguity.
 
-The source-facing rectangular formalization includes both right and left sine bounds and both right and left aligned-frame bounds. It also formalizes the connection between Gram eigenvector equations and paired left-right singular equations at strictly positive singular values.
+The rectangular theory gives both right and left singular-subspace sine bounds and aligned-frame estimates. Positive singular values pair right and left singular vectors through the equations A v equals sigma u and A adjoint u equals sigma v.
 
-The final lesson is to track three choices independently: which side of the rectangular map we study, which squared singular-value boundary gap we use, and whether we measure subspace distance or aligned-frame distance. In our next lecture we will apply this machinery to a statistical problem where the reference gap is defined by population eigenvalues alone.
+Keep three choices independent when applying rectangular perturbation estimates: the left or right singular subspace, the correct ambient squared-singular-value boundary gap, and the distinction between subspace distance and aligned-frame distance.
 
 <!-- END SPOKEN LECTURE -->
 

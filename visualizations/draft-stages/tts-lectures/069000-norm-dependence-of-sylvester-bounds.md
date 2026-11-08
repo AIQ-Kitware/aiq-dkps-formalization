@@ -6,7 +6,7 @@
 
 # Which gap gives which constant?
 
-Over the last six lectures we have encountered several estimates for the same Sylvester equation. Some have constant one. One has a factor of pi over two. A Frobenius estimate needed only pairwise distance, while a Banach-space estimate used an explicitly bounded inverse.
+The Sylvester equation A X minus X B equals C admits different estimates under different spectral-gap assumptions. An ordered gap yields a constant-one operator-norm estimate using decaying exponentials. Mere pairwise separation yields constant one in Hilbert-Schmidt norm; for the bounded self-adjoint operator-norm problem, a Fourier kernel gives a general factor of pi over two. These conclusions require distinct hypotheses.
 
 It is easy to mix these results together. Today we will organize them by asking two questions every time: what spectral geometry is assumed, and which norm measures the unknown operator?
 
@@ -30,7 +30,7 @@ Suppose A and B are finite-dimensional self-adjoint matrices and every left-righ
 
 In orthonormal eigenbases, the Sylvester solution is obtained by dividing each entry of C by its spectral difference. Squaring and summing gives delta times the Frobenius norm of X at most the Frobenius norm of C.
 
-We proved this earlier. No ordering of the spectra is required. The constant one is sharp in the scalar case.
+This follows by diagonalizing the self-adjoint coefficients and estimating each squared matrix coefficient. No ordering of the spectra is required. The constant one is sharp in the scalar case.
 
 Why does the argument work? Because the Frobenius norm sees the matrix entries as coordinates in an inner-product space of operators. The spectral blocks are orthogonal in this square norm, so we can estimate each block separately and add the resulting squared inequalities.
 
@@ -112,7 +112,7 @@ Can we point to a common spectral cut? Can we center a small block and control t
 
 Each answer changes the proof that is permitted.
 
-In the next lecture we will revisit the Hilbert–Schmidt setting in greater depth. By treating operators themselves as vectors in a Hilbert space, we will see why the constant-one estimate survives even for arbitrarily interlaced, self-adjoint spectra. That will be the final step before we use Sylvester equations to control perturbations of spectral subspaces.
+The Hilbert-Schmidt estimate is obtained by treating operators as vectors in a Hilbert space. The scalar cross-spectral differences then give constant-one control even when the spectra interlace, provided their distance is bounded below.
 
 <!-- END SPOKEN LECTURE -->
 

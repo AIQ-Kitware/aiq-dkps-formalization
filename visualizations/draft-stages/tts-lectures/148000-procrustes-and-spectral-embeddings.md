@@ -6,7 +6,7 @@
 
 # Procrustes and spectral embeddings
 
-We have learned to estimate the distance between eigenspaces. But a numerical algorithm rarely hands us an abstract subspace. It hands us a table of eigenvector coordinates. A statistical procedure may pass those coordinates to a clustering algorithm, a classifier, or a geometric embedding. Today we will prove how to turn a bound on subspace angles into a bound on those coordinates, without penalizing arbitrary choices of orthonormal basis. The central tool is orthogonal Procrustes alignment.
+Principal angles compare eigenspaces independently of any chosen orthonormal basis. A numerical algorithm instead returns a table of eigenvector coordinates, which may be fed to clustering, classification, or geometric embedding. Orthogonal Procrustes alignment converts a subspace-angle bound into a coordinate bound while accounting for arbitrary rotations within the selected frame.
 
 ## Two frames and one geometric object
 
@@ -46,7 +46,7 @@ Let's test an intermediate case. Let U consist of the first two coordinate vecto
 
 ## The explicit statistical theorem
 
-Now combine this geometry with the population-gap theorem from the previous lecture. There, the population and sample symmetric matrices have ordered eigenvector frames U and V for the same consecutive block of d indices. The population spectral boundary gap is Delta, strictly positive. Call the sample minus population matrix E.
+Now combine this geometry with the population-gap theorem under the population spectral-gap assumptions. There, the population and sample symmetric matrices have ordered eigenvector frames U and V for the same consecutive block of d indices. The population spectral boundary gap is Delta, strictly positive. Call the sample minus population matrix E.
 
 The population-gap theorem bounds the Frobenius sine distance by two over Delta times the smaller of square root of d times the operator norm of E, and the Frobenius norm of E.
 
@@ -54,7 +54,7 @@ Our Procrustes inequality multiplies that upper bound by square root of two. Con
 
 This conclusion keeps the supplied population frame fixed. It also does not require a separate hypothesis asserting a sample spectral gap. The bound may be weak when the estimation error is large compared with Delta, but it remains a deterministic consequence of the stated assumptions.
 
-The repository formalizes this conclusion twice in useful forms. One theorem describes O as a coordinate-space linear isometry, and another packages the real case as an ordinary orthogonal matrix. A related theorem works with the overlap operator directly, giving a bound on the difference between a coordinate isometry and that overlap operator. Those are alternative interfaces to the same geometry, not interchangeable definitions.
+The alignment operator may be expressed as a coordinate-space isometry, or in real orthonormal coordinates as an orthogonal matrix. Equivalently, one can estimate the difference between the overlap map and its closest coordinate isometry. These are representations of the same alignment geometry.
 
 ## Gram rigidity and why the cross-Gram matters
 
@@ -76,15 +76,13 @@ Now suppose the reference and sample weights differ. Write the aligned sample em
 
 There is a subtlety. In a real eigendecomposition, the sample eigenvalue weights are usually diagonal in the original sample eigenbasis. If we rotate that basis by a general Procrustes matrix, the weight operator must be conjugated into the rotated coordinates. It need not remain diagonal. We cannot simply rotate the eigenvectors, leave their weights unchanged, and claim that we have rotated the original embedding.
 
-For weighted spectral embeddings, then, the complete argument needs three parts: control of the underlying subspace, control of the alignment, and control of the spectral weights in compatible coordinates. Our source's coordinate-map theorem provides a useful bridge for the first two. The eigenvalue perturbation bounds from earlier lectures help with the third.
+A weighted spectral embedding requires three estimates: the underlying subspace deviation, the optimal basis alignment, and the change in spectral weights. Combining them requires compatible coordinates.
 
 ## What you should be able to prove
 
 You should now be able to expand a frame difference into a trace objective, solve that objective using the singular-value decomposition, and express the exact minimum using principal cosines. You should also be able to derive the square-root-of-two comparison with principal sines, and combine it with a population-gap inequality without introducing a sample-gap hypothesis.
 
 Finally, you should be able to explain why identical Gram matrices describe identical internal geometry but do not certify identical ambient subspaces, and why weighted embeddings need more care than unweighted frames.
-
-Our final lecture is a proof practicum. We will use this entire course to reconstruct the route from elementary Hilbert-space geometry to the 1970 Davis–Kahan perturbation theorems, and to check where each hypothesis enters.
 
 <!-- END SPOKEN LECTURE -->
 

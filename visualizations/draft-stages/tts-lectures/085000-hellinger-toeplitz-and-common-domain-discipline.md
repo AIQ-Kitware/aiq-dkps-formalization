@@ -40,7 +40,7 @@ The closed graph theorem and Hellinger–Toeplitz use completeness in a substant
 
 ## Why the diagonal example has a restricted domain
 
-Our diagonal operator sends the N-th coordinate to N times that coordinate. On the basis vector e N it multiplies length by N, so it is unbounded. We have already shown it is self-adjoint on its maximal weighted-square-summability domain.
+Our diagonal operator sends the N-th coordinate to N times that coordinate. On the basis vector e N it multiplies length by N, so it is unbounded. On its maximal weighted-square-summability domain it is self-adjoint: testing its adjoint on individual coordinate basis vectors forces exactly the same domain condition.
 
 Hellinger–Toeplitz tells us that this domain cannot equal all of ell two. The sequence with N-th coordinate one over N is a direct witness: it lies in ell two but not in the operator domain.
 
@@ -81,8 +81,6 @@ Even identities like A x minus B x require x to belong to both domains. Writing 
 Later we will use estimates involving a perturbation small relative to A, which means controlling the length of V x by a multiple of the length of A x plus a multiple of the length of x. This is a bound in the graph norm. It lets us reason about a perturbation that need not be bounded in the ambient norm, provided it acts on the required domain.
 
 For Davis–Kahan's unbounded theorems, the common-domain assumption is often the hinge between a valid operator equation and an expression that is not even defined. We will state it before manipulating off-diagonal blocks.
-
-Next we turn to the resolvent, where careful domain handling becomes a constructive way to obtain bounded inverse operators.
 
 <!-- END SPOKEN LECTURE -->
 

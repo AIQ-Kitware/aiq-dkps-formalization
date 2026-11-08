@@ -98,7 +98,7 @@ Suppose we want a unitary map that carries U onto V. An arbitrary unitary transp
 
 In the uniformly acute case, the positive cosine is invertible, and that will make an explicit algebraic construction possible. But we should not treat uniform acuteness as the only setting where a canonical polar factor can exist. The weaker, no-crossed-defect case deserves separate analysis, and right-angle defects require yet another discussion.
 
-Those are the subjects of the next few lectures.
+Those are the subjects.
 
 ## Reconstruction
 
@@ -110,7 +110,7 @@ Third, reconstruct the graph argument: find the compression P Q P, prove it inve
 
 Finally, explain why the infinite sequence of angles approaching ninety degrees defeats a bounded graph representation without creating a single exact right-angle vector.
 
-The key lesson is that having no direction of complete information loss does not guarantee a uniform limit on information loss. That difference is what makes the next operator construction interesting.
+The distinction is between having no direction with complete information loss and having a uniform positive lower bound on the cosine operator. Only the latter guarantees a bounded inverse on the relevant range.
 
 <!-- END SPOKEN LECTURE -->
 

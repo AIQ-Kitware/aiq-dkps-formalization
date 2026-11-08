@@ -88,7 +88,7 @@ Our dimension argument shows that the kernel of B meets the span of the first j 
 
 So A minus B has operator norm at least sigma j. Every approximation that uses fewer than j independent output directions must make an error of at least sigma j on some unit input.
 
-This is already half of the Eckart–Young theorem. In the next lecture we will explicitly construct the approximation that achieves the bound.
+This is already half of the Eckart–Young theorem.
 
 ## What to reconstruct
 
@@ -98,7 +98,6 @@ Then take a three-dimensional diagonal map with singular values six, three, and 
 
 Finally, prove the kernel argument for a rank-one approximation. Ask yourself precisely where the dimension of the source appears, and why the dimension of the target does not enter the conclusion.
 
-The next lecture will turn that lower bound into an optimal reconstruction procedure.
 
 <!-- END SPOKEN LECTURE -->
 

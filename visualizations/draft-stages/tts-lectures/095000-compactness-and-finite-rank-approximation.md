@@ -90,8 +90,6 @@ For a compact operator T, the modulus of T is positive and compact. Its positive
 
 For a noncompact bounded operator, we can still define approximation numbers, but they need not tend to zero. The identity is the simplest example: no finite-rank approximation gets within operator-norm distance less than one.
 
-We will next measure that distance at every prescribed rank. The resulting sequence will play the role of singular values even before we assume compactness.
-
 <!-- END SPOKEN LECTURE -->
 
 ---

@@ -104,8 +104,6 @@ Second, repeat the kernel-intersection argument against an arbitrary rank-k map.
 
 Third, prove the squared-error result using the projection onto the range of the competitor. Account for the fact that its rank may be smaller than k. Then derive the weighted-allocation bound instead of quoting it.
 
-The next lecture changes the objective. Rather than measuring only the largest singular value or the sum of all squared ones, we will measure the sum of the first several. That leads to Ky Fan norms and the inequalities needed for perturbation estimates.
-
 <!-- END SPOKEN LECTURE -->
 
 ---

@@ -6,7 +6,7 @@
 
 # The single-angle tangent theorem
 
-The preceding lecture described a trial subspace as the graph of an operator over an exact subspace. Its slope has singular values equal to the tangents of principal angles. We now show how a spectral gap controls that slope using a residual. The result is a single-angle tangent theorem.
+A trial subspace transverse to the exact orthogonal complement can be written as the graph of an operator from the exact subspace into its complement. Its slope has singular values equal to the tangents of principal angles. We now show how a spectral gap controls that slope using a residual. The result is a single-angle tangent theorem.
 
 The proof has a similar outline to the sine theorem, but one essential extra step. We must prove that the trial space never points exactly into the unwanted complement. Otherwise the cosine has a kernel and the tangent cannot be recovered from finite graph coordinates.
 
@@ -80,7 +80,7 @@ In operator norm, the result controls the worst principal slope. If the largest 
 
 In Frobenius norm, the squares of all directed tangents add. The theorem limits the aggregate squared slope by the squared residual length after scaling by delta.
 
-For a Ky Fan norm, the estimate bounds the sum of the largest several tangent singular values. General unitarily invariant norms then follow from the symmetric-gauge framework established in earlier lectures.
+For a Ky Fan norm, the estimate bounds the sum of the largest several tangent singular values. General unitarily invariant norms then follow from the symmetric-gauge framework established.
 
 The source's exact theorem assumes an isometric trial frame and the Ritz identity. More general trial frames can be normalized, but the normalization and their lower bounds must be stated, rather than simply reusing the isometric formula.
 
@@ -88,7 +88,7 @@ The source's exact theorem assumes an isometric trial frame and the Ritz identit
 
 It does not state that arbitrary pairwise-separated spectra supply the same constant-one estimate in every norm. It does not identify the graph of V over all of U when the dimensions do not match. And it does not allow a zero cosine to be treated as an ordinary finite tangent just because a Moore–Penrose inverse exists.
 
-In the next lecture we will compare the sharp sine and tangent examples, then move to the more intricate double-angle results. Those results use reflections and a different spectral-gap geometry. Keeping the hypotheses separate is essential to understanding when one angle theorem is stronger than another.
+Doubled-angle bounds instead arise from reflection identities and different spectral-gap configurations. Their conclusions cannot be substituted for the directed tangent estimate without checking the corresponding branch and norm hypotheses.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -6,7 +6,7 @@
 
 # Why spreading mass controls convex measurements
 
-Last time, we learned how to compare two sorted lists by adding their largest entries. One list is weakly majorized by another when all of its leading partial sums are no larger. If the full totals also agree, we call the relation ordinary majorization.
+One list is weakly majorized by another when all of its leading partial sums are no larger. If the full totals also agree, we call the relation ordinary majorization.
 
 Today we will explain why that ordering controls many measurements beyond prefix sums. The mechanism is convexity. When we average different arrangements of the same data, a convex measurement cannot increase. And when we decrease the sizes of coordinates, an appropriate absolute-value-invariant measurement cannot increase either.
 

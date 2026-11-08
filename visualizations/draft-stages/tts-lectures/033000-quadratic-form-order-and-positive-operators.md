@@ -114,7 +114,7 @@ Combine those ideas. If A is positive, all its eigenvalues are nonnegative. We c
 
 The result will be positive, and squaring it will recover A.
 
-But is it the *only* positive operator whose square is A? And can we characterize it without choosing coordinates? Those are the questions of the next lecture.
+But is it the *only* positive operator whose square is A? And can we characterize it without choosing coordinates? Those are the questions.
 
 To test your understanding, explain why the quadratic form of a Gram operator is a squared length, why a negative eigenvalue rules out positivity, and why comparing A with B requires checking every vector. Then prove that compression preserves positivity using only the adjoint identity.
 

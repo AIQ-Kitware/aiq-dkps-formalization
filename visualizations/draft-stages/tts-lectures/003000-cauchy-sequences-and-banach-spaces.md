@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-In the previous lesson, we used a norm to define the distance between vectors. We then said that a sequence converges when its members approach some vector in the space. But there is a difficulty in that definition: it asks us to know, or at least to believe in, the limit before we know whether the limit exists.
+A norm supplies a distance between vectors: the distance from x to y is the norm of their difference. A sequence converges if its members approach a vector in the space. But this definition asks us to know that the limit already exists. A Cauchy sequence offers a way to detect convergence candidates from distances between its own terms.
 
 Often an argument produces a sequence of increasingly accurate approximations, but the object being approximated is not yet available. We need a way to recognize a convergent process from the approximations themselves.
 
@@ -60,7 +60,7 @@ Gather those coordinate limits into one vector. Because there are only finitely 
 
 We have constructed the vector limit using the completeness of the real numbers, one coordinate at a time. The argument works over the complex numbers as well, because complex coordinates have convergent real and imaginary parts.
 
-What if our finite-dimensional space carries a different norm? Last time we proved that every norm in a fixed finite dimension is equivalent to the Euclidean norm. Being Cauchy under either norm is then equivalent to being Cauchy under the other, and convergence under either norm is equivalent to convergence under the other. So completeness transfers from the Euclidean description to every other norm.
+What if a finite-dimensional vector space carries a norm other than the Euclidean one? Every norm in a fixed finite dimension is equivalent to the Euclidean norm: each bounds the other up to a positive constant. Consequently a sequence is Cauchy in one if and only if it is Cauchy in the other, and it converges in one if and only if it converges in the other. Completeness therefore transfers between finite-dimensional norms.
 
 This is why completeness is usually invisible in elementary finite-dimensional linear algebra. Once the scalars are real or complex, every normed finite-dimensional space already has it. Infinite-dimensional spaces will force us to think about it much more carefully.
 
@@ -139,8 +139,6 @@ Second, reconstruct the proof that a uniformly Cauchy sequence of continuous fun
 These arguments are prototypes. The same pattern will reappear when we build bounded operators as limits, define functions of operators using power series, and pass from finite approximations to infinite-dimensional constructions.
 
 A Banach space is not yet a Hilbert space. A Hilbert space has an inner product, which gives notions of angle and perpendicularity, and it is complete under the norm defined by that inner product. We will develop those ideas later. Today we have established the more basic analytic foundation: a norm measures errors, a Cauchy condition measures internal consistency among approximations, and completeness ensures that consistent approximations have an allowed limit.
-
-Our next lesson will focus on linear maps between normed spaces. We will ask when such a map is continuous, how to measure its size, and why its norm can control entire sequences at once.
 
 <!-- END SPOKEN LECTURE -->
 

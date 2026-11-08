@@ -78,7 +78,7 @@ These are called Lagrange interpolation polynomials. Notice that the function do
 
 As a result, every finite-dimensional self-adjoint functional calculus can be expressed by a polynomial in A. That proves, in particular, that f of A commutes with A.
 
-It also gives another way to understand the spectral projectors from our previous lecture. Choose a function that takes value one on selected eigenvalues and zero on the others. Its operator is precisely the spectral projection onto the selected eigenspaces.
+It also gives another way to understand the spectral projectors for a self-adjoint matrix. Choose a function that takes value one on selected eigenvalues and zero on the others. Its operator is precisely the spectral projection onto the selected eigenspaces.
 
 For finite spectra, it does not matter if this selection function jumps abruptly between zero and one on the real line: we can interpolate its values exactly at the finitely many relevant points.
 
@@ -98,7 +98,7 @@ Suppose every eigenvalue of A is nonnegative. Then f of A is nonnegative in the 
 
 This is the key that will allow us to build positive square roots. To take a square root of a positive operator, we will take the nonnegative square root of each eigenvalue and reassemble the operator through the spectral projections.
 
-But before we do that, we need to explain rigorously what it means for an operator itself to be positive. That is the subject of the next lecture.
+But before we do that, we need to explain rigorously what it means for an operator itself to be positive.
 
 For a final reconstruction exercise, take a symmetric two-by-two matrix with eigenvalues one and three. Describe the action of its square, inverse, and spectral projector onto the three-eigenspace without writing the original matrix entries. Then prove the multiplication rule for functions of A by testing it on an arbitrary eigenbasis.
 

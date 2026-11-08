@@ -12,7 +12,7 @@ The important point is that this construction retains the information needed to 
 
 ## Construct the transform
 
-Let A be self-adjoint on a dense domain D in a complex Hilbert space. Choose the imaginary unit, i. The operators A plus i and A minus i both map D bijectively onto H, by the previous lecture.
+Let A be self-adjoint on a dense domain D in a complex Hilbert space. Choose the imaginary unit, i. The operators A plus i and A minus i both map D bijectively onto H, by self-adjointness and the resolvent bound at imaginary spectral parameters.
 
 Define U by first applying the bounded inverse of A plus i, then applying A minus i. At first this looks dangerous: A minus i is unbounded. But the inverse of A plus i sends every input into D, so the composition is legally defined on all of H.
 
@@ -82,11 +82,11 @@ The spectral theorem for bounded unitary operators provides a projection-valued 
 
 The construction must handle the exceptional circle point one. Because the Cayley unitary has no fixed vectors, the spectral projection of that singleton vanishes even if one belongs to the continuous spectrum. Thus no nonzero vector mass is lost when the real-line measure is recovered.
 
-The repository's unbounded spectral-measure construction follows this route. Later Borel functions of A can be defined from the real-line measure, even when the functions grow without bound and therefore act only on a restricted domain.
+The real-line spectral measure then defines Borel functions of the self-adjoint operator. When a Borel function grows without bound, its operator is generally unbounded too and must carry an explicitly defined domain.
 
 The practical lesson is that a bounded unitary can encode a self-adjoint operator's full graph. To recover the original operator, however, we must recover its domain as well as its values.
 
-Next we will formulate the unbounded spectral theorem directly, using scalar spectral integrability to determine exactly which vectors belong to each operator domain.
+An unbounded self-adjoint operator can be reconstructed from its spectral measure only with a domain restriction: for each vector, the squared spectral variable must be integrable against its scalar spectral measure.
 
 <!-- END SPOKEN LECTURE -->
 

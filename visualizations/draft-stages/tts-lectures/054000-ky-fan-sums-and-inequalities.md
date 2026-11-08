@@ -112,7 +112,7 @@ Suppose A has singular values three and three, while B has singular values five 
 
 So every Ky Fan sum of A is at most the corresponding sum for B. Yet the second singular value of A is three, greater than the second singular value of B, which is one.
 
-These are comparisons of cumulative totals, not component-by-component comparisons. The name for this kind of ordering is weak majorization. We will define it and derive its consequences in the next lecture.
+These are comparisons of cumulative totals, not component-by-component comparisons. The name for this kind of ordering is weak majorization.
 
 ## What to reconstruct
 

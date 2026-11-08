@@ -2,11 +2,11 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-We have learned to split a Hilbert space into perpendicular subspaces and to write an operator in blocks. Now we will approach geometry from a different direction. Instead of choosing a subspace first, imagine choosing a list of vectors. What can we do with that list?
+A Hilbert space can be decomposed into perpendicular subspaces, but another way to describe geometry is to choose a family of vectors. Such a family produces maps between coefficient lists and the underlying space. The central question is what those maps preserve and what their compositions reveal.
 
 We can build new vectors from it. We can measure other vectors against it. And we can compare what those two operations do when performed one after the other.
 
-The names for the first two constructions are *synthesis* and *analysis*. They are simple enough to calculate by hand, but they become important machinery for principal angles, Rayleigh–Ritz methods, singular-value theory, and the Davis–Kahan formalization.
+The names for the first two constructions are *synthesis* and *analysis*. They are simple enough to calculate by hand, but they become important machinery for principal angles, Rayleigh–Ritz methods, singular-value theory, and the Davis–Kahan perturbation theory.
 
 ## A collection of vectors as a machine
 
@@ -62,7 +62,7 @@ But that sum is exactly the inner product of the coefficient list c with the lis
 
 That is the defining adjoint identity. Therefore synthesis star equals analysis, and analysis star equals synthesis.
 
-In the real case, this is straightforward transposition. For complex vectors, we must remember which slot of the inner product is linear and where conjugation appears. With the convention used by our Lean sources, the analysis measurement is the inner product of v with x, and it is linear in x. The adjoint identity follows with precisely that ordering.
+In the real case the analysis map uses ordinary transposition. Over complex scalars, the conjugates and the linear argument of the inner product must be placed consistently: taking the inner product of v with x is linear in x under our convention, and the synthesis and analysis maps are adjoints.
 
 Think of this as a reversible change in the *direction of measurement*, not necessarily a reversible reconstruction. Adjoint does not mean inverse.
 
@@ -100,7 +100,6 @@ Now start instead with coefficients a and b. Synthesis produces coordinates a pl
 
 Their numerical matrices happen to be closely related in this example, but their input and output spaces are conceptually different. The Gram operator asks how the chosen vectors relate to one another. The frame operator asks how measurements against the family combine to act on an ambient vector.
 
-We will study the Gram operator next, and give the frame operator a more detailed treatment in the following lecture.
 
 ## Positivity without eigenvalues
 
@@ -118,7 +117,6 @@ We did not need to diagonalize either operator. Their positivity follows directl
 
 There are three ideas worth reconstructing. First, explain why a nonzero coefficient list synthesizing to zero is exactly a linear-dependence relation. Second, prove from the inner-product identity that analysis is the adjoint of synthesis. Third, distinguish analysis after synthesis from synthesis after analysis, and say which space each composition acts on.
 
-In the next lecture we will look inside the Gram operator, find its matrix entries, and discover why it records lengths, angles, dependencies, and a kind of geometric rigidity of a vector family.
 
 <!-- END SPOKEN LECTURE -->
 

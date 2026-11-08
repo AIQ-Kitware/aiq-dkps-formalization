@@ -6,7 +6,7 @@
 
 # Non-isometric frames and unequal dimensions
 
-So far, we have often described a trial subspace using orthonormal columns. But a computational trial frame may be scaled, nonorthogonal, or redundant in its ambient coordinates. What quantity records the error in its coordinate normalization, and how does it enter a sharp sine-angle theorem?
+A trial subspace is often represented by orthonormal columns, but computational trial frames may be scaled, nonorthogonal, or redundant. The Gram operator measures their failure to have orthonormal coordinates, and that error affects how residual estimates are normalized.
 
 Davis and Kahan's Theorem six point one keeps the trial map itself rather than silently replacing it with an isometry. It permits a non-isometric frame and different dimensions of the trial and exact subspaces. Its additional factor, epsilon, comes directly from a lower bound on that frame.
 
@@ -92,7 +92,7 @@ The original Section six theorem uses interval-versus-exterior spectral separati
 
 The result can be reconstructed from three moves. Compress the residual to obtain a Sylvester equation. Bound the crossed operator X by the residual using the spectral gap. Normalize the frame by polar decomposition, paying exactly the inverse lower-frame bound.
 
-The formula is delta epsilon times the directed sine norm at most the residual norm. Next we will relax the type of spectral separation and discover why the square, or Hilbert–Schmidt, norm is the natural setting for that weaker assumption.
+The formula is delta epsilon times the directed sine norm at most the residual norm.
 
 <!-- END SPOKEN LECTURE -->
 

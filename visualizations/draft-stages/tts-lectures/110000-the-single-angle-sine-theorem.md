@@ -20,13 +20,13 @@ Choose a self-adjoint trial operator A zero on F. Define R equal to A E minus E 
 
 Assume a positive spectral-gap parameter delta for the two operators A zero and Lambda one. In the sharp constant-one version we are proving, the gap must satisfy one of the supported separation conditions, such as the form-ordered gap or the specified interval-and-exterior configuration.
 
-For the operator-norm statement, suppose the relevant Sylvester theorem controls the operator norm under that gap. For a symmetric operator ideal, assume additionally that R belongs to the ideal and that the ideal has the Ky Fan dominance and composition properties required by the source theorem.
+For the operator-norm statement, suppose the relevant Sylvester theorem controls the operator norm under that gap. For a symmetric operator ideal, assume additionally that R belongs to the ideal and that the ideal has the Ky Fan dominance and composition properties required by the symmetric-ideal Sylvester estimate.
 
 The conclusion is that delta times the ideal norm of the directed sine of V relative to U is at most the ideal norm of R. The result also asserts that the sine representative belongs to the ideal.
 
 ## First step: derive the complementary equation
 
-Define X equal to F one adjoint E. From the previous lecture we know that X is the complementary overlap map.
+Define X equal to F one adjoint E. The map X measures overlap with the orthogonal complement of the exact subspace: F one adjoint first measures complementary coordinates, then E supplies trial vectors.
 
 Compress the residual with F one adjoint. Since U is reducing, the complementary action of A is Lambda one. Therefore F one adjoint R equals Lambda one X minus X A zero.
 
@@ -97,8 +97,6 @@ When A is unbounded, self-adjointness alone does not legitimize the expression A
 With those hypotheses, the same Sylvester equation holds as an equality of partially defined operators on the legal domain. The unbounded Sylvester theorem then produces the ideal estimate and membership conclusion. For real Hilbert spaces, the corresponding complexification and descent results supply the real statement.
 
 We have proved the theorem using three exact bridges: residual to Sylvester equation, spectral gap to norm bound, and complementary overlap to directed sine. Each bridge will reappear in later Davis–Kahan theorems.
-
-The next development concerns tangents. In the sine theorem an angle approaching ninety degrees has sine approaching one. A tangent, by contrast, becomes arbitrarily large. To handle it we must represent an acute trial subspace as the graph of an operator.
 
 <!-- END SPOKEN LECTURE -->
 

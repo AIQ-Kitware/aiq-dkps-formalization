@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-Last time we proved that a self-adjoint matrix has real eigenvalues and that eigenvectors belonging to different eigenvalues are perpendicular. But we ended with a question. Do we actually have enough eigenvectors to describe every vector in the space?
+A finite-dimensional self-adjoint matrix has real eigenvalues, and eigenvectors belonging to different eigenvalues are orthogonal. But are there enough eigenvectors to span the entire space? The finite spectral theorem answers yes, and its proof constructs an orthonormal eigenbasis.
 
 Today we answer yes. We will prove the finite-dimensional spectral theorem. And then we will take an additional step: instead of describing an operator with a particular collection of eigenvectors, we will describe it using projections onto entire eigenspaces.
 
@@ -36,7 +36,7 @@ We want to show that A w is also perpendicular to v. Move A across the inner pro
 
 So A sends every vector perpendicular to v back into the same perpendicular subspace.
 
-This is the reducing-subspace idea from earlier lectures, now doing concrete proof work. We have split the space into the line along v and its orthogonal complement. And A respects both pieces.
+This is the reducing-subspace idea, now doing concrete proof work. We have split the space into the line along v and its orthogonal complement. And A respects both pieces.
 
 The orthogonal complement has dimension one less than the original space. The restriction of A to that complement is still self-adjoint, because its inner products are computed using the same rule as before.
 
@@ -58,7 +58,7 @@ Notice the architecture of the proof. An eigenvalue exists. One eigenvector crea
 
 We used the fundamental theorem of algebra over the complex numbers, but a real symmetric matrix should have a real orthonormal eigenbasis too.
 
-View a real symmetric matrix as a complex Hermitian matrix. The complex proof gives an eigenvalue, and the previous lecture tells us that the eigenvalue is real.
+View a real symmetric matrix as a complex Hermitian matrix. The complex proof gives an eigenvalue. Because a Hermitian operator satisfies the identity that the inner product of A v with v is real, any eigenvalue at a nonzero eigenvector must be real.
 
 Write a corresponding complex eigenvector as its real part plus i times its imaginary part. Because the matrix and eigenvalue are real, comparing real and imaginary parts shows that each part separately satisfies the same eigenvector equation. At least one part is nonzero, since the complex eigenvector is nonzero.
 
@@ -70,7 +70,7 @@ Let's make the result independent of a particular choice of basis.
 
 For each *distinct* eigenvalue lambda, gather all eigenvectors with that eigenvalue, along with zero, into its eigenspace. Let P lambda mean orthogonal projection onto that eigenspace.
 
-Different eigenspaces are orthogonal, as we proved in the previous lecture. Their direct sum is the entire space, by the spectral theorem we just proved.
+Distinct eigenspaces are orthogonal: self-adjointness equates lambda times the inner product of two eigenvectors with mu times that inner product, forcing it to vanish when lambda and mu differ. Their direct sum is the entire space, by the spectral theorem we just proved.
 
 That gives three properties. First, each P lambda is an orthogonal projection, so applying it twice is the same as applying it once. Second, projections for distinct eigenvalues annihilate one another: a vector lying in one eigenspace has no component in a different one. Third, adding all these spectral projections gives the identity operator, because every vector is the sum of its spectral components.
 
@@ -118,7 +118,7 @@ Try to reproduce the induction without looking back. Where does the first eigenv
 
 Then reconstruct the two-by-two example from its two spectral projections. Explain why changing the eigenbasis within a repeated eigenspace does not change its projection.
 
-Next time we will use the spectral decomposition to answer a quantitative question: how large or small can the quadratic form of a self-adjoint matrix be on a unit vector? That question leads to Rayleigh quotients, and eventually to the variational theory of eigenvalues.
+That question leads to Rayleigh quotients, and eventually to the variational theory of eigenvalues.
 
 <!-- END SPOKEN LECTURE -->
 

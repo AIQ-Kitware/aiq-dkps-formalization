@@ -6,7 +6,7 @@
 
 # Trial spaces, exact subspaces and residuals
 
-Last time we saw why perturbation theory should compare subspaces rather than an arbitrarily selected basis of eigenvectors. To make that comparison quantitative, we need two kinds of subspaces and a measure of the trial subspace's failure to be invariant.
+To make that comparison quantitative, we need two kinds of subspaces and a measure of the trial subspace's failure to be invariant.
 
 The exact subspace is invariant under the operator we want to understand. The trial subspace is the space produced by an algorithm, approximation, measurement, or a nearby operator. The residual will record what the target operator does to trial vectors that the trial space cannot explain internally.
 
@@ -76,17 +76,17 @@ These satisfy F zero F zero adjoint plus F one F one adjoint equals the identity
 
 The residual R, by contrast, is computed from E and A zero. It does not need to lie in the exact complement U perpendicular. Galerkin orthogonality places the Ritz residual in the complement of V, which is usually a different subspace.
 
-This distinction is essential. In the next lecture we apply F one adjoint to the residual, deliberately selecting its component in the exact complementary block. That component is the right-hand side of a Sylvester equation.
+This distinction is essential. That component is the right-hand side of a Sylvester equation.
 
 ## What remains true in infinite dimensions
 
 The formulas for projections and compressions remain valid for bounded self-adjoint operators on Hilbert spaces. If A is unbounded, writing A E requires that E send the trial operator's domain into the domain of A. We also need a bounded residual extending the algebraic difference on that common domain.
 
-In particular, an expression such as A E minus E A zero is not automatically a bounded everywhere-defined operator. The domain work from the preceding foundations lectures supplies the missing hypotheses.
+For an unbounded operator A, the residual expression A E minus E A zero is meaningful only when the frame map E takes the required inputs into the domain of A. Boundedness of that residual and compatibility with the compressed operator require separate checks; a formal operator equation cannot supply missing domain hypotheses.
 
 For now the finite-dimensional computation is enough to fix the geometry. Trial coordinates E, compressed operator M, residual R, exact coordinates F zero and F one. We have separated these roles, proved Galerkin orthogonality, and identified the residual as an escape from the trial space.
 
-Next we will project the residual onto the exact complement. A single algebraic identity will transform it into the equation that drives the sine theorem.
+Projection of the residual onto the exact complementary subspace produces a Sylvester equation. Its solution measures the trial vectors that leak out of the selected spectral subspace, and the spectral gap controls their size.
 
 <!-- END SPOKEN LECTURE -->
 

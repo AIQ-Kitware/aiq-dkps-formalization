@@ -96,7 +96,6 @@ Notice the direction of this argument. Uniform estimates pass through strong lim
 
 For an operator identity we need more: convergence on legal domain vectors, convergence of the operator images, and closedness to identify the limit. Domain conditions must be propagated separately from norm estimates.
 
-The following lecture uses these ingredients to prove the sharp ordered-gap Sylvester bound for unbounded self-adjoint operators, and then turns it into a cross-subspace estimate.
 
 <!-- END SPOKEN LECTURE -->
 

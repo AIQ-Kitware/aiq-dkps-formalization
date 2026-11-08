@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-In the previous lesson, we built the adjoint of an operator. If T sends vectors from one Hilbert space to another, T star sends measuring directions backward. It is defined so that measuring T of x against y gives the same answer as measuring x against T star of y.
+For a bounded operator T between Hilbert spaces, its adjoint T star is the unique operator satisfying the inner-product identity: pairing T x with y equals pairing x with T star y. If T sends vectors from one Hilbert space to another, T star sends measuring directions backward. It is defined so that measuring T of x against y gives the same answer as measuring x against T star of y.
 
 Today we will use that construction to distinguish three classes of operators: self-adjoint, normal, and unitary. They all involve the adjoint, but they make different claims. By the end, you should be able to test the claims on a simple matrix, explain why the classes overlap without being identical, and see what each claim gives us geometrically.
 
@@ -62,7 +62,7 @@ Notice how different the questions are. Self-adjointness asks whether a map equa
 
 ## A subtle distinction in infinite dimensions
 
-Here is a warning that will become the main subject of the next lesson. An operator can preserve every vector's length without being onto.
+Here is a warning that will become the main subject. An operator can preserve every vector's length without being onto.
 
 Consider the space of square-summable sequences. Move every coordinate one place to the right, inserting zero at the beginning. The new sequence has exactly the same sum of squared coordinate magnitudes, so its length is unchanged. Yet no input can produce a sequence whose first coordinate is one. The map misses part of the space.
 
@@ -78,7 +78,6 @@ When we later say that two operators are unitarily equivalent, we will mean that
 
 For now, reconstruct three arguments. Why must an eigenvalue of a self-adjoint operator be real? Why does equality of the lengths of T of x and T star of x, for every x, capture normality? And why is the right shift length-preserving but not unitary?
 
-In the next lesson, we will distinguish isometries, coisometries, and partial isometries. That will make the two products, T star T and T T star, much more concrete.
 
 <!-- END SPOKEN LECTURE -->
 

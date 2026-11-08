@@ -6,11 +6,11 @@
 
 # When does a motion preserve lengths?
 
-Last time we built the exponential of a matrix from its power series. We saw that putting a quarter-turn generator into the exponential produced an ordinary rotation.
+A real skew-symmetric two-by-two matrix K with first row zero, negative one and second row one, zero generates rotations. Its exponential at time t is the rotation matrix through angle t. The identity follows from the power series, because K squared is negative identity.
 
 Today we will reverse the question. Suppose we are given a motion that preserves lengths and angles at every moment. What must its instantaneous generator look like? And if we start with a generator of that kind, can we prove that the motion preserves geometry for all time?
 
-The answer will connect three ideas we have already developed: adjoints, differentiation, and the exponential. It is also the foundation for understanding canonical rotations between subspaces.
+The proof combines the identity for an adjoint, differentiation of a matrix exponential, and the algebra of its power series. These ingredients also describe continuous rotations between subspaces.
 
 ## Begin with an observable quantity
 
@@ -48,7 +48,7 @@ Instead of following one starting vector, package all solutions into a single op
 
 The differential equation for Q is: its derivative equals K times Q, and Q at time zero is the identity.
 
-The exponential from the previous lecture supplies a solution. Q of t is the exponential of t K. Differentiating its power series gives the required differential equation, and plugging in zero gives the identity.
+The matrix exponential supplies a solution: by its power-series definition, the derivative of the exponential of t K is K times that exponential. Q of t is the exponential of t K. Differentiating its power series gives the required differential equation, and plugging in zero gives the identity.
 
 To prove Q is length-preserving, we have two routes. The first applies our derivative-of-length calculation to every starting vector.
 

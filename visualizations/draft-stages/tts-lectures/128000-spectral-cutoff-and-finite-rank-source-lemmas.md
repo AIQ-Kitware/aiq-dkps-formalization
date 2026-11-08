@@ -96,7 +96,7 @@ This example shows that the eta threshold is sharp in the natural scaling.
 
 A finite-rank spectral selection argument may control how much of an operator's leading singular-value energy is captured by a chosen subspace. Lemma six point three converts that energy information into an operator-norm bound on the unwanted cross block.
 
-The source formalization gives a common real/complex engine, with the Hilbert–Schmidt Pythagorean identity proved directly in complex Hilbert space and transferred through complexification in the real case.
+The Hilbert-Schmidt Pythagorean identity can be proved in complex Hilbert space, and its real version follows by complexification with preservation of the squared norm. Other ideal norms need their own dominance argument.
 
 For unbounded operators, finite spectral cutoffs also enforce domain legality. One first proves identities on bounded spectral pieces and then passes to a limit in the topology justified by the hypotheses. That limiting topology may be strong convergence, graph-norm convergence on the domain, or an ideal-gauge convergence, and these are not interchangeable.
 
@@ -104,7 +104,7 @@ For unbounded operators, finite spectral cutoffs also enforce domain legality. O
 
 We now have two distinct ways to pass from infinite Hilbert-space data to finite calculations: fixed-index approximation singular values under strong basis cutoffs, and quantitative control of unwanted finite-rank blocks from near-maximal square energy.
 
-The next lecture will reconstruct a complete original-paper perturbation result, explicitly tracking the Sylvester equations, all-prefix comparisons, two-sided pinching, and ideal membership. These lemmas will remain available whenever a later proof needs to justify an infinite-dimensional approximation.
+These lemmas will remain available whenever an infinite-dimensional proof needs to justify an infinite-dimensional approximation.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -8,7 +8,7 @@
 
 Imagine a flat sheet of material drawn as a circle. Apply a linear transformation. Typically, the circle becomes an ellipse. One direction is stretched most, another least, and in higher dimensions there are several independent stretching directions.
 
-A general matrix does not tell us those directions just by looking at its entries. It mixes stretching with changes in orientation, and the matrix may be rectangular. But the operator modulus from the previous lecture gives us a precise way to find the stretching information.
+A general matrix does not tell us those directions just by looking at its entries. It mixes stretching with changes in orientation, and the matrix may be rectangular. But the operator modulus gives us a precise way to find the stretching information.
 
 Today we will construct the singular-value decomposition, usually abbreviated S V D. Rather than starting with a memorized matrix factorization, we will build it from eigenvectors of a Gram operator.
 
@@ -64,7 +64,7 @@ Take A from two-dimensional real space to three-dimensional real space. It sends
 
 Its matrix has three rows and two columns. The first row is one, one. The other rows are zero.
 
-We computed its source Gram operator in the preceding lecture: the two-by-two matrix with all entries equal to one.
+For A of x comma y equal to x plus y, zero, zero, the adjoint sends an output triple to the pair consisting of its first coordinate twice. Consequently A adjoint A sends x comma y to x plus y, x plus y. Its two-by-two matrix has all entries one, as can also be checked by taking the dot products of A's two identical columns.
 
 There are two perpendicular unit input directions. The first points along equal coordinates: one over square root of two, one over square root of two. Its Gram eigenvalue is two. The second points along opposite coordinates: one over square root of two, negative one over square root of two. Its Gram eigenvalue is zero.
 

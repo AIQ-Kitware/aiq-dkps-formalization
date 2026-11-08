@@ -14,7 +14,7 @@ The key fact is that spectral selection is compatible with restriction. But ther
 
 ## First establish invariance
 
-The projection P, meaning E of B, is a bounded Borel function of A. We proved last time that every Borel function of A commutes with A. Therefore A P equals P A.
+The projection P, meaning E of B, is a bounded Borel function of A. The Borel functional calculus makes a bounded Borel function of A commute with A on the appropriate domain. Therefore A P equals P A.
 
 Let x belong to K. Then P x equals x. Apply P to A x. By commutation, P A x equals A P x, which equals A x. Hence A x lies in K.
 
@@ -100,13 +100,13 @@ Then f sub K of A sub K equals the restriction to K of f of A.
 
 One can prove this from the diagonal measures. For x in K, its scalar measure for the restricted operator agrees with its ambient scalar measure, after viewing the restricted spectrum inside the full spectrum. Therefore the integrals specifying all diagonal matrix elements coincide. Polarization converts the diagonal equality into equality of operators.
 
-That argument is also what the Lean implementation uses to connect compression with the Borel calculus, rather than relying on a selected eigenbasis.
+This compression identity follows from commutation with spectral projections and the Borel functional calculus. No selected eigenbasis is needed.
 
 ## The result to retain
 
 A Borel spectral region defines a closed reducing subspace. Its restricted functional calculus is the ambient calculus restricted to that subspace, and the restricted spectral projection for C is simply the ambient projection for C acting on the selected subspace.
 
-The spectrum of the restriction lies in the original spectrum and in the closure of the selected region, but may include boundary points not contained in the original Borel set. Next we will use spectral integration to construct resolvents, whose norm detects the distance to the full spectral support.
+The spectrum of the restriction lies in the original spectrum and in the closure of the selected region, but may include boundary points not contained in the original Borel set.
 
 <!-- END SPOKEN LECTURE -->
 

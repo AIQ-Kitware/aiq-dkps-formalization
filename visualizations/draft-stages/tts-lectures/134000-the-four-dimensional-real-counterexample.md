@@ -28,7 +28,7 @@ The geometry satisfies every condition relevant to the purported universal small
 
 ## Compute the competitor's displacement
 
-The special advantage of W is its own spectral decomposition. There is an orthonormal plane on which W makes a quarter-turn and an orthogonal complementary plane on which W acts as the identity. In the source's coordinates, the turning plane is spanned by the normalized sums of the first and third basis vectors and of the second and fourth basis vectors. One can verify directly by applying the matrix to those two vectors that their images form a ninety-degree rotation.
+The special advantage of W is its own spectral decomposition. There is an orthonormal plane on which W makes a quarter-turn and an orthogonal complementary plane on which W acts as the identity. In the chosen standard coordinates, the turning plane is spanned by the normalized sums of the first and third basis vectors and of the second and fourth basis vectors. One can verify directly by applying the matrix to those two vectors that their images form a ninety-degree rotation.
 
 Thus the eigenvalues of W, after allowing complex eigenvalues to describe a real rotation, are positive i, negative i, one, and one. Its displacement operator identity minus W has singular values square root of two, square root of two, zero, and zero.
 
@@ -66,7 +66,7 @@ Proposition four point three survives, while Proposition four point four fails. 
 
 ## An equality with the projection lower bound
 
-Our universal bound from the previous lecture says that every admissible W satisfies trace norm of P minus Q no greater than trace norm of identity minus W.
+A universal bound says that every admissible W satisfies trace norm of P minus Q no greater than trace norm of identity minus W.
 
 For each principal angle theta, the projection difference has two singular values equal to sine theta. Here there are two angles, both forty-five degrees. Therefore the four singular values of P minus Q are all one over square root of two, whose sum is two square roots of two.
 
@@ -76,7 +76,7 @@ That conclusion is stronger than the bare refutation, and its proof is short onc
 
 ## The entire acute family
 
-The repository also explains a continuous family, rather than just the forty-five-degree witness. For any theta strictly between zero and ninety degrees, take two equal principal angles theta and choose a real orthogonal competitor with a single rotation through twice theta and two fixed directions.
+The four-dimensional construction extends to every principal angle strictly between zero and ninety degrees: take two equal angles theta and choose a real orthogonal competitor with one rotation through twice theta and two fixed directions. Its singular-value distribution can differ from that of two independent direct rotations.
 
 The competitor's nonzero displacement singular values are two sine theta, twice. Its trace cost is four sine theta. The canonical direct rotation has four singular values equal to two sine theta over two, so its trace cost is eight sine theta over two.
 
@@ -89,8 +89,6 @@ Consequently no positive universal angle threshold can repair the printed statem
 The formal counterexample uses a concrete four-by-four orthogonal matrix, an acute source-target pair, a trace norm represented as a Ky Fan sum, and exact trigonometric calculations. It proves the negation of the universal proposition, not just a gap in an argument.
 
 The physical lesson is about where movement occurs. The canonical direct rotation spreads displacement over two prescribed principal planes. A competing real orthogonal transport can couple the planes and concentrate movement into a different two-plane. For squared cost this is expensive; for trace cost it can be cheaper.
-
-Next we will assemble the corrected landscape: which optimization claims survive in all dimensions, which depend on the norm, and what can be said when the field is complex instead of real.
 
 <!-- END SPOKEN LECTURE -->
 

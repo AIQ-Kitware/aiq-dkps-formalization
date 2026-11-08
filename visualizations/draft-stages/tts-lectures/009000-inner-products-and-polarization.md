@@ -2,7 +2,7 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-We have spent several lessons studying length, distance, limits, and bounded operators. But a norm tells us only how long a vector is. It does not immediately tell us whether two vectors are perpendicular, whether they point mostly in the same direction, or how much of one vector lies along another.
+A norm measures the length of a vector, and the induced distance gives a notion of convergence. But length alone does not tell us whether two vectors are perpendicular, whether they point mainly in the same direction, or how much of one vector lies along another. An inner product adds that geometry.
 
 Today we add a structure that answers those questions: the inner product. In ordinary Euclidean space it is the dot product. In more general spaces it is a rule that measures the relationship between two vectors and recovers their lengths as a special case.
 
@@ -40,7 +40,7 @@ With the same vector on both sides, each term becomes a complex number times its
 
 We will use the convention that the inner product is linear in the second argument and conjugate-linear in the first. Conjugate-linear means that multiplying the first vector by a complex scalar multiplies the inner product by the conjugate of that scalar. Swapping the two input vectors conjugates the answer. These rules are called conjugate symmetry and sesquilinearity.
 
-Over the real numbers, conjugation does nothing, so the complex rules reduce to the ordinary symmetric bilinear dot product. Some books use the opposite convention for which argument is linear. The mathematics works either way, but we must be consistent. In particular, we will state the convention when translating formulas to Lean.
+Over the real numbers, conjugation does nothing, so the complex rules reduce to the ordinary symmetric bilinear dot product. Some books use the opposite convention for which argument is linear. Either convention works, but the placement of conjugates in the adjoint and polarization formulas must be consistent.
 
 ## Proving Cauchy–Schwarz
 
@@ -106,7 +106,7 @@ Combining the two measurements recovers the entire complex inner product. Conjug
 
 ## Why this matters for the course
 
-Our next lesson will introduce Hilbert spaces: inner-product spaces that are complete under the norm we just constructed. Their geometry lets us define perpendicular complements and, eventually, nearest-point projections onto closed subspaces.
+Their geometry lets us define perpendicular complements and, eventually, nearest-point projections onto closed subspaces.
 
 Later, the inner product lets us express a Gram matrix, a matrix of pairwise inner products among vectors. It also supports adjoints, whose defining equation moves an operator from one side of an inner product to the other. Those are among the fundamental constructions needed for the Davis–Kahan theory.
 

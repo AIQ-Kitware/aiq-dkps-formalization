@@ -2,9 +2,9 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-Last time we saw that a family of vectors can describe a space with redundancy, sometimes with perfect reconstruction. Today we will study the especially clean case where the selected vectors are orthonormal. We will package them into a map that preserves lengths, and then discover what happens when we compose that map with its adjoint in either order.
+An orthonormal family can be packaged as an isometric embedding V of a smaller coefficient space into an ambient Hilbert space. Its adjoint V star measures coordinates. Composing V and V star in the two possible orders produces an identity on coefficient space and a projection on ambient space.
 
-The two compositions look nearly identical on the page. But they describe different operations on different spaces. Distinguishing them is one of the most useful habits you can develop for reading the operator expressions in the Davis–Kahan formalization.
+The two compositions look nearly identical on the page. But they describe different operations on different spaces. Distinguishing them is one of the most useful habits you can develop for reading the operator expressions in the Davis–Kahan angle estimates.
 
 ## A smaller coordinate space inside a larger space
 
@@ -58,9 +58,9 @@ This composition is V V star, not V star V. And it acts on ambient space rather 
 
 Let us prove the general claim from the algebra. Write P for V V star. Its adjoint is itself: taking the adjoint reverses the product, and taking two adjoints returns the original map.
 
-Next square P. We get V V star V V star. Group the middle two factors. We already proved V star V is the identity, so the product simplifies to V V star again. Hence P squared equals P.
+Next square P. We get V V star V V star. Group the middle two factors. Because V is an isometry, V star V is the identity, so the product simplifies to V V star again. Hence P squared equals P.
 
-A self-adjoint operator that equals its own square is an orthogonal projection. We proved that characterization in our earlier projection and operator lectures.
+A self-adjoint operator that equals its own square is an orthogonal projection. Indeed, its range and kernel are orthogonal complements: if P squared equals P, then any vector splits as P x plus x minus P x; self-adjointness makes these two pieces perpendicular.
 
 Which subspace does it project onto? Every output of P is in the range of V, because V is its final step. Conversely, if a vector already lies in the range of V, say it equals V of c, then P sends it to V V star V of c, which equals V of c. So P fixes every vector in the range and has no outputs outside it.
 
@@ -94,11 +94,11 @@ We have now justified the existence of the range's orthogonal projection without
 
 ## How this differs from a redundant Parseval frame
 
-In the last lecture we had a Parseval frame with three selected vectors in a plane. The synthesis map went from three coefficients into a two-dimensional ambient space. That synthesis map cannot be injective: there are more coefficient directions than ambient dimensions.
+For comparison, consider a redundant Parseval frame in the real plane: the three vectors are the horizontal unit vector divided by square root of two, a second copy of that same shortened horizontal vector, and the vertical unit vector. For a vector with coordinates p and q, their analysis coefficients are p over square root of two, p over square root of two, and q. Their squared magnitudes add to p squared plus q squared, so synthesis after analysis is the identity on the ambient plane. But synthesis maps three coefficients into a two-dimensional space and cannot be injective.
 
-It satisfied synthesis followed by analysis equals the ambient identity, but analysis followed by synthesis was only a projection on coefficient space.
+Analysis after synthesis is therefore an orthogonal projection on three-dimensional coefficient space, not its identity. This is the reverse of the map V: V embeds a smaller coordinate space isometrically into the larger ambient space.
 
-Today's isometric embedding goes the other way. It starts with a smaller coordinate space and injects it into a larger ambient space. For V, analysis after synthesis is the coordinate identity, while synthesis after analysis is the ambient projection.
+For V, analysis after synthesis is the coordinate identity, while synthesis after analysis is the ambient projection. The domains and codomains of the two composites explain the difference.
 
 Both pictures are useful. The important question is not whether a map is called analysis, synthesis, or frame. The important question is where it starts, where it ends, and which composition equals the identity.
 
@@ -106,11 +106,11 @@ Both pictures are useful. The important question is not whether a map is called 
 
 Suppose later we select an approximate eigenspace of dimension two inside a very large matrix problem. We can use an isometric embedding V to represent that candidate subspace. Then V star V is the identity on two-dimensional coefficient space, and V V star is the ambient orthogonal projection onto the candidate subspace.
 
-This notation lets us move between small matrices, which are easy to compute with, and ambient operators, which carry the full geometry. We have already earned the two fundamental identities rather than simply accepting them.
+This notation lets us move between small matrices, which are easy to compute with, and ambient operators, which carry the full geometry. The two identities follow from length preservation, the adjoint identity, and the characterization of orthogonal projection.
 
 Try to reproduce the proof that V V star is self-adjoint and idempotent, and explain why it has precisely the range of V. Then ask yourself: if two embeddings have the same range, what can change about their coordinate descriptions, and what remains invariant?
 
-Next we will put an ambient operator between V star and V. The result is a smaller operator living on coefficient space. It will tell us what the ambient operator looks like when observed through the selected subspace—and, equally importantly, what information that observation leaves out.
+For any ambient operator A, the compression V star A V acts on the smaller coordinate space. Its entries describe A as seen from the selected subspace, but do not by themselves describe how A sends that subspace into its orthogonal complement.
 
 <!-- END SPOKEN LECTURE -->
 

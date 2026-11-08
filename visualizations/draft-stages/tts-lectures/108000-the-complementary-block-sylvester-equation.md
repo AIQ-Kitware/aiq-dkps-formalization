@@ -6,7 +6,7 @@
 
 # The complementary-block Sylvester equation
 
-We have a trial subspace, an exact invariant subspace, and a residual. The next step is to turn the residual into a linear equation whose unknown measures the trial subspace's component outside the exact subspace.
+Let E be an orthonormal frame for a trial subspace, let F zero span the exact selected spectral subspace of a self-adjoint operator A, and let F one span its orthogonal complement. A residual measures the failure of E to describe an invariant space. Projecting that residual through F one adjoint produces a Sylvester equation whose unknown represents the complementary overlap.
 
 This equation is the complementary-block Sylvester equation. Its derivation takes only a few lines of matrix algebra, but understanding the roles of the blocks prevents several errors that would otherwise appear in a perturbation bound.
 
@@ -78,7 +78,7 @@ Suppose the spectra of Lambda one and A zero satisfy an ordered gap of size delt
 
 In the simplest operator-norm case with an ordered self-adjoint gap, delta times the norm of X is at most the norm of F one adjoint R, hence at most the norm of R.
 
-The result is already a bound on the amount of trial space outside the exact target. Its left side is not yet phrased in the language of principal angles, but that connection will be made in the next lecture.
+The result is already a bound on the amount of trial space outside the exact target.
 
 Do not replace the gap hypothesis by the statement that Lambda one and A zero have different eigenvalues. In dimensions greater than one, interlaced spectral sets can have positive pairwise distance and still require a weaker norm constant. We developed those distinctions in the Sylvester unit precisely because the perturbation theorem inherits them.
 
@@ -90,7 +90,7 @@ Likewise F one must take vectors in the domain of Lambda one to legal vectors in
 
 Then X maps the domain of A zero into the domain of Lambda one, and the Sylvester equation holds there. This is the closed-operator equation to which our unbounded Sylvester estimates apply.
 
-We have completed the algebraic bridge: exact reducing coordinates, trial residual, complementary overlap, and a domain-aware Sylvester equation. The next lecture will prove that the modulus of this overlap is the directed sine of the principal angle, without depending on a choice of trial basis.
+We have completed the algebraic bridge: exact reducing coordinates, trial residual, complementary overlap, and a domain-aware Sylvester equation.
 
 <!-- END SPOKEN LECTURE -->
 

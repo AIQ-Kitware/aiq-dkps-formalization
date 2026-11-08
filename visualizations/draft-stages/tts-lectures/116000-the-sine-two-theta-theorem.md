@@ -46,7 +46,7 @@ The resulting cross-projection norm is bounded by the norm of T prime minus T di
 
 Which cross projection do we obtain? Project from U onto the reflected perpendicular subspace J U perpendicular. In a principal plane, that projection has magnitude sine twice theta, where theta is the angle between U and V.
 
-This is exactly the reflected overlap established in the preceding lecture. The relevant ambient positive operator, after matching the polar and singular-value representations, is sine of twice the angle operator.
+This is exactly the reflected overlap given by composing the reflected projections. The relevant ambient positive operator, after matching the polar and singular-value representations, is sine of twice the angle operator.
 
 ## Put the two inequalities together
 
@@ -58,7 +58,7 @@ Combining them gives the result: delta times the unitarily invariant norm of sin
 
 For operator norm, this controls the largest value of sine twice a principal angle, not necessarily twice the largest angle itself. For a Frobenius or Ky Fan norm, we must account for the complete singular-value list of the ambient angle operator. The formal theorem does so through the full-space angle representation and the corresponding unitarily invariant norm.
 
-The norm statement is valid for the chosen class of finite-dimensional unitarily invariant seminorms. Infinite-dimensional symmetric ideal formulations require additional membership and domain hypotheses, treated elsewhere in the formalization.
+This norm inequality is stated for finite-dimensional unitarily invariant seminorms. In infinite-dimensional symmetric ideals the same conclusion requires the appropriate membership, domain, and spectral-separation hypotheses.
 
 ## Examine a two-by-two perturbation
 
@@ -66,7 +66,7 @@ Take the real plane with T diagonal, having entries negative one and one. Choose
 
 Let H be symmetric with zero diagonal and off-diagonal entries h. The perturbed operator S has rows negative one, h and h, one.
 
-The upper eigenvector of S rotates away from the vertical line through an angle theta satisfying tangent twice theta equals h. We will derive that identity in the next lecture. For now, recall the equivalent relation: sine twice theta equals the absolute value of h divided by the square root of one plus h squared.
+The upper eigenvector of S rotates away from the vertical line through an angle theta satisfying tangent twice theta equals h. For now, recall the equivalent relation: sine twice theta equals the absolute value of h divided by the square root of one plus h squared.
 
 The sine-two-theta inequality reads two times sine twice theta at most twice times the absolute value of h. This holds because the square root of one plus h squared is at least one.
 
@@ -104,7 +104,7 @@ We began with a self-adjoint T whose reducing subspace U lies on one side of a f
 
 The result has a clean constant and accommodates arbitrary angles, but it does not select the near-zero branch.
 
-In the next lecture the off-diagonal hypothesis will give us a more precise conclusion. The maximal angle will stay strictly below forty-five degrees, and the stronger tangent of twice the angle will have its own sharp estimate.
+The maximal angle will stay strictly below forty-five degrees, and the stronger tangent of twice the angle will have its own sharp estimate.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -50,7 +50,7 @@ There is a more abstract proof using uniqueness of the continuous functional cal
 
 Either proof establishes the same property: applying a continuous real-valued function to a conjugation-fixed self-adjoint operator produces another conjugation-fixed operator.
 
-By our previous lecture, such an operator is the complexification of a bounded real operator. This is the descent of the continuous functional calculus.
+A bounded complex-linear operator commuting with conjugation descends to a bounded real operator: restricting it to the real fixed vectors recovers the original action. This is the descent of the continuous functional calculus.
 
 It also preserves positivity. If f is nonnegative on the spectrum, the spectral theorem says f of A is positive. Restricting its quadratic form to real vectors gives positivity of the descended real operator.
 
@@ -92,9 +92,9 @@ That is an example of a transferable inequality whose hypotheses and conclusion 
 
 But spectral separation for two operators is not, by itself, a promise that every operator-norm Sylvester bound has constant one. Earlier we proved that ordering of spectra gives stronger integral estimates than mere pairwise disjointness. Complexification preserves our data; it does not strengthen the gap hypothesis.
 
-## The strategy for the next lecture
+## The strategy
 
-We have proved how to transfer bounded spectral structure. In the next lecture the operators will be unbounded, so we must also transport their domains, closed graphs, adjoint relations, and domain-aware Sylvester equations.
+We have proved how to transfer bounded spectral structure.
 
 Our standard will be the same. State the exact object being transported. Prove that its defining data survive. Then use complex theory and descend the conclusion with the same constants.
 

@@ -6,7 +6,7 @@
 
 # Classification and realizations of direct rotations
 
-Our last lectures compared ways of transporting one subspace onto another. We now return to a more basic question: what data determine a pair of subspaces up to a rigid change of coordinates? Answering that question also tells us exactly what is available when we try to construct a direct rotation.
+What data determine a pair of closed subspaces up to unitary equivalence? Their intersections, crossed defects, and the generic principal-angle geometry all play distinct roles. The same classification determines when a canonical direct rotation can exist.
 
 We will distinguish three problems. Can two pairs of subspaces be identified by a unitary map? Can a particular pair be carried into itself by a direct rotation that sends its first subspace onto its second? And can we prescribe the angles and then build a pair that has them? These problems have related, but different, answers.
 
@@ -72,7 +72,7 @@ Finally, this classification does not restore the false full-displacement optimi
 
 If you need to classify a pair, begin by extracting the four elementary intersection pieces. Match their dimensions. On the generic remainder, compare the cosine-square operators by unitary equivalence. In the compact case, compare their positive eigenvalues with multiplicities. If instead you need a concrete realization, build an orthogonal sum of principal planes and append the elementary pieces. And if you need a direct rotation, check crossed-defect matching and the desired boundedness or acuteness hypotheses before writing a polar formula.
 
-Those operations close our geometric unit. Next we will see why the same abstract machinery becomes useful for a physical differential equation: the vibration modes of a free beam.
+Those operations close our geometric unit.
 
 <!-- END SPOKEN LECTURE -->
 

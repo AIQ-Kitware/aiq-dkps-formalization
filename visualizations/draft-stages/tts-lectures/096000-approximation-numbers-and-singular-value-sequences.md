@@ -18,7 +18,7 @@ Let T be a bounded operator from E to F. Define a one of T to be the norm of T. 
 
 So a one uses rank zero competitors: only the zero map is allowed, and the error is the norm of T. For a two, rank-one maps are permitted. For a three, rank at most two, and so on.
 
-This indexing convention matters. Some sources number the first allowable rank as zero. The Lean singular-value API uses a zero-based index, so its index k corresponds to the spoken a sub k plus one.
+To avoid an off-by-one error, number approximation values consistently: the first is the best rank-zero approximation error, the second uses rank at most one, and so forth. A different zero-based index convention describes the same sequence after shifting indices.
 
 Because each new rank limit admits all competitors from the previous stage, the sequence is nonincreasing. Because norms are nonnegative, every approximation number is nonnegative. And since the zero map is always an admissible competitor, no approximation number exceeds the norm of T.
 
@@ -52,7 +52,7 @@ There is a mild technical point: one can choose the orthogonal complement of the
 
 ## Why compactness is equivalent to decay
 
-From the previous lecture, T is compact exactly when it can be approximated in operator norm by finite-rank maps.
+A bounded operator is compact precisely when it is a norm limit of finite-rank maps, in the Hilbert-space setting considered here.
 
 If T is compact, then for every epsilon there is a finite-rank R within epsilon of T. Let its rank be r. For every k greater than r, R is an admissible competitor, so a sub k of T is smaller than epsilon. Thus the approximation numbers tend to zero.
 
@@ -86,7 +86,7 @@ This will allow singular-value estimates to survive orthogonal projections, coor
 
 A single approximation number measures the best rank-constrained error. A sum of the first several approximation numbers measures accumulated size in leading directions.
 
-Those sums are the infinite-dimensional Ky Fan gauges. In the next lecture we will see how comparisons of every prefix sum control whole families of operator norms, while preserving the distinction between compact membership and arbitrary bounded maps.
+Those sums are the infinite-dimensional Ky Fan gauges.
 
 <!-- END SPOKEN LECTURE -->
 

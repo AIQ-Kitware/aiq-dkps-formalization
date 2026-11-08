@@ -108,7 +108,7 @@ We began with projections assigned to Borel sets. We converted them into scalar 
 
 The resolvent formula completes this chain: outside the spectrum, inversion of A minus z is simply division by lambda minus z inside the spectral integral. Its norm records the exact spectral distance for self-adjoint A.
 
-The next lecture turns from fixed Borel symbols to approximating spectral expressions by finite partitions and cutoffs. That approximation machinery is what we need before introducing unbounded operators with explicit domains.
+That approximation machinery is what we need before introducing unbounded operators with explicit domains.
 
 <!-- END SPOKEN LECTURE -->
 

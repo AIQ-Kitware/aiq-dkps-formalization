@@ -98,9 +98,9 @@ Later we will compare an operator restricted to a trial subspace with an operato
 
 Those operations frequently involve isometric inclusions, adjoints of those inclusions, and zero blocks. Without padding invariance, the same residual could acquire different measured sizes merely because we wrote it in a larger ambient space.
 
-The source formalization contains explicit transport constructions for rectangular unitarily invariant seminorms. It also proves that singular values agree when the source Gram operators agree. The latter theorem is the compact mathematical reason behind the zero-row argument.
+Adding zero coordinates changes neither the positive singular values nor any unitarily invariant measurement determined by those values. Indeed, the source Gram operators before and after zero-padding are the same up to an isometry of coefficient spaces.
 
-The next lecture will go beyond preserving a map inside a larger space. We will actively suppress its off-diagonal blocks by a process called pinching, and prove that this operation cannot increase any unitarily invariant norm compatible with the contraction laws.
+We will actively suppress its off-diagonal blocks by a process called pinching, and prove that this operation cannot increase any unitarily invariant norm compatible with the contraction laws.
 
 ## What to reconstruct
 

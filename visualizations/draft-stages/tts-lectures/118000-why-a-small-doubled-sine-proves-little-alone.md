@@ -48,7 +48,7 @@ That is a meaningful dichotomy. For instance, if eta is one tenth, gamma is just
 
 One additional bit of information can suffice: every angle is strictly less than forty-five degrees. On that branch, the doubled sine is increasing. The same estimate then implies theta at most gamma. Conversely, if all angles are above forty-five degrees, it controls their distance from ninety degrees, which is a different geometric assertion.
 
-The operator tangent-two-theta theorem in the previous lecture proves the relevant branch under strong off-diagonal and ordered-gap hypotheses. It does not obtain the branch by merely inverting a doubled sine inequality.
+The operator tangent-two-theta theorem under the ordered-gap off-diagonal assumptions proves the relevant branch under strong off-diagonal and ordered-gap hypotheses. It does not obtain the branch by merely inverting a doubled sine inequality.
 
 ## Can we use the perturbation continuously?
 
@@ -88,7 +88,6 @@ This is why the formal source distinguishes directed quarter-angle estimates, th
 
 A bound on sine twice theta creates two allowed branches. It does not choose between them. To obtain a perturbation error certificate for a specific spectral subspace, we must supply spectral identification, continuity with a no-crossing guarantee, or a structural theorem proving acuteness.
 
-The next lecture studies that structural theorem. It will show how an off-diagonal perturbation repels the two spectral blocks from the original gap, and why the selected reducing subspace is uniquely determined.
 
 <!-- END SPOKEN LECTURE -->
 

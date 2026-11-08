@@ -1,5 +1,7 @@
 # Course introduction: Learning the mathematics behind Davis–Kahan theory
 
+<!-- BEGIN SPOKEN LECTURE -->
+
 Suppose you have taken a linear algebra course. You can multiply matrices, compute eigenvalues in simple examples, take derivatives, and evaluate integrals. You know that matrices represent linear transformations, and you have seen at least a few ways to factor them.
 
 That is enough background to begin this course. But it is not the same as knowing spectral theory.
@@ -14,13 +16,13 @@ There is a great deal of interesting mathematics to learn before we ask whether 
 
 ## A course built around understanding and proof
 
-This course accompanies our journal manuscript on the formalization of Davis and Kahan's theory. The familiar summary is that Davis–Kahan gives bounds on how eigenspaces change. That summary is important, but it leaves out most of the mathematical story.
+Davis and Kahan developed methods for controlling how spectral subspaces move when the underlying operator is perturbed. The familiar summary is that Davis–Kahan gives bounds on how eigenspaces change. That summary is important, but it leaves out most of the mathematical story.
 
 The complete story involves geometry, spectral theory, operator equations, variational principles, and functional analysis. The original work studies several different ways to measure angles, different assumptions about spectral gaps, canonical rotations of Hilbert spaces, and the behavior of operators that need not be finite matrices. There is also a subtle distinction between a rotation that is naturally defined and a rotation that minimizes a particular notion of displacement. One printed claim about that distinction turns out to be false.
 
 Our goal is not merely to memorize the four famous angle estimates. By the end of this course, you should be able to reconstruct the arguments that establish them, identify their precise hypotheses, and understand the analytical tools that make those proofs possible.
 
-That is why we will take the foundations seriously. We will learn the mathematics required by the proofs, including results that may not have the Davis–Kahan name attached to them. Some of those results were developed as part of this formalization and later became part of broader operator-theory libraries. Their mathematical role remains essential even when their code has moved.
+That is why we will take the foundations seriously. We will learn the mathematics required by the proofs, including results that may not have the Davis–Kahan name attached to them. Some foundational results have value beyond perturbation theory. The course explains their mathematical role, including how they enter the eventual angle estimates.
 
 We assume basic linear algebra and calculus, but we will not assume prior familiarity with Banach spaces, Hilbert spaces, measure theory, or functional calculus. We will construct that understanding as we go, using small examples before moving to general theorems.
 
@@ -62,14 +64,14 @@ Only after we understand the objects and the tools will we ask how they behave w
 
 The central estimates then become natural questions rather than formulas arriving without preparation. What does the residual of an approximate invariant subspace tell us? How does it connect to the part of that subspace that lies outside an exact spectral subspace? Why do certain spectral gaps allow us to convert a residual bound into an angle bound? Under which assumptions can we control the sine of an angle, its tangent, or the sine or tangent of twice that angle?
 
-We will examine the four principal angle-theorem families, their generalizations, the problem of selecting the correct spectral branch, and the direct-rotation theorems. We will work through the source paper's numerical example and take its open questions seriously. We will also study the corrected rotation-optimality picture and related results from our companion formalizations.
+We will examine the four principal angle-theorem families, their generalizations, the problem of selecting the correct spectral branch, and the direct-rotation theorems. We will work through the source paper's numerical example and take its open questions seriously. We will also study the corrected rotation-optimality picture and related subspace-transport results.
 
 Most of all, the course will demand more than recognizing the final inequality. You should understand why each step is legal, what fails when an assumption is removed, and how to build the proof again without having the finished result in front of you.
 
-## How we will learn
+## How proofs will be developed
 
-The spoken explanation is the primary material. Every lesson will be written to make sense when listened to on its own. When a picture or animation helps, it will be built to clarify an explanation that already works, not to dictate the order of the lesson.
+A mathematical explanation should be intelligible without relying on a diagram, a chosen basis, or background material unavailable to the listener. When a picture or animation helps, it will be built to clarify an explanation that already works, not to dictate the order of the lesson.
 
-In most mathematical lessons, we will also end by connecting the notation to the corresponding Lean formalization. These connections matter because they make implicit assumptions visible and show how the mathematical structures and arguments can be made precise. We will not use the proof assistant as a substitute for learning the proof, and we do not need a code demonstration in this introductory conversation about what the course is for. When we reach the actual mathematical constructions, those links will become concrete, with code that can be checked against the maintained sources.
+The emphasis is on mathematical statements and their proofs. For any theorem, we must be able to identify the assumptions, explain the argument, and determine whether a proposed example really satisfies the hypotheses.
 
-We begin next with linear maps. You already know how to multiply matrices. We will use that familiarity to understand what a linear map really is, how coordinates describe it, and which properties survive when our description changes.
+<!-- END SPOKEN LECTURE -->

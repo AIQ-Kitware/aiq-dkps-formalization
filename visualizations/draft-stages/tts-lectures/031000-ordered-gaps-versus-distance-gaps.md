@@ -46,7 +46,7 @@ Notice what a gap is *not*. It is not necessarily the distance between consecuti
 
 An *internal* gap compares two blocks of the same operator, such as a reducing subspace and its orthogonal complement.
 
-A *mixed* gap compares a selected block of one operator with a complementary block of another. We have already learned how to construct those blocks. Later, in the sine-theta theorem, the mixed comparison is exactly what enters a residual equation.
+A *mixed* gap compares a selected block of one operator with a complementary block of another. Those blocks are the ranges of spectral projections obtained by summing the eigenspace projections over the selected eigenvalue sets. Later, in the sine-theta theorem, the mixed comparison is exactly what enters a residual equation.
 
 There is also an interval-versus-exterior description. Suppose one spectral group lies between zero and two. The other must lie outside an enlarged interval extending from negative one to three. Then every value in the first group is at least one unit from every value in the second group.
 
@@ -109,8 +109,6 @@ Second: selected eigenvalues are one and two, and complementary eigenvalues are 
 Third: why does knowing the spectrum of the whole matrix not by itself tell you which gap a theorem is using? Because the theorem may compare *restricted* spectra associated with particular subspaces, or even restrictions belonging to two different operators.
 
 The lesson to carry forward is simple. Before applying a spectral theorem, draw the relevant groups on a number line. Then ask not just how far apart they are, but whether they are ordered, interlaced, or separated as an interval and its exterior.
-
-Next we will learn to construct new operators by applying functions to these spectral values. That will make both spectral selection and positivity part of a larger, coordinate-free mathematical language.
 
 <!-- END SPOKEN LECTURE -->
 

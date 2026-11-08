@@ -14,7 +14,7 @@ Today we will construct the Ky Fan approximation gauges, prove their elementary 
 
 ## Finite prefixes in an infinite space
 
-Let a one of T, a two of T, and so forth denote the approximation numbers from the previous lecture. Define K sub k of T to be the sum of the first k approximation numbers, for any positive integer k. Set K sub zero equal to zero.
+Let a one of T, a two of T, and so forth denote the approximation numbers defined as the distance to operators of lower rank. Define K sub k of T to be the sum of the first k approximation numbers, for any positive integer k. Set K sub zero equal to zero.
 
 Although there may be infinitely many singular directions, each fixed K sub k is a finite sum. Every approximation number is bounded above by the operator norm of T, so K sub k is at most k times that norm.
 
@@ -36,7 +36,7 @@ The important point is that a finite prefix asks about only finitely many direct
 
 Let S and T be bounded maps with the same source and target. We want K sub k of S plus T at most K sub k of S plus K sub k of T.
 
-In finite dimensions this follows from the Ky Fan variational principle. For general bounded Hilbert-space operators, finite-rank restrictions and approximation-number inequalities extend the result. The source formalization contains a direct approximation-number Ky Fan triangle theorem with the necessary finite-restriction hypotheses.
+In finite dimensions the claim follows from the Ky Fan variational principle. For bounded operators on Hilbert space, finite-rank restrictions and approximation-number inequalities supply the extension, provided the limiting restrictions are justified.
 
 We can understand the finite-rank proof. Choose orthonormal source vectors and matching orthonormal target vectors that nearly realize the leading k-value for S plus T. Pair the sum with those vectors. Split it into an S contribution and a T contribution. Each contribution is bounded by its own Ky Fan k-value. Taking the supremum gives the desired inequality.
 
@@ -79,8 +79,6 @@ Suppose P sub N are projections onto the first N coordinates of ell two. Then P 
 This example warns us not to treat strong operator convergence as convergence in a symmetric ideal gauge. Ideal membership and ideal-norm convergence need their own proofs.
 
 We now have the comparison tool needed for the main Davis–Kahan program: control every leading singular-value sum of a displacement or residual, then transfer that control to a chosen symmetric norm, but only within a class where the required domination theorem applies.
-
-Next we will define those classes and explain why their gauges are deliberately allowed to be infinite off the carrier.
 
 <!-- END SPOKEN LECTURE -->
 

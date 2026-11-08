@@ -40,7 +40,7 @@ Likewise, U U adjoint is the orthogonal projection onto the final space. On the 
 
 These are two distinct projections, generally acting on two distinct Hilbert spaces. They tell us where the operator starts and where it lands.
 
-For the example from last time, U sends x and y to y and zero. Its initial space is the vertical axis. Its final space is the horizontal axis. Consequently U adjoint U projects onto the vertical axis, while U U adjoint projects onto the horizontal axis.
+For the real map A sending the vector x comma y to y comma zero, its polar factor U sends x and y to y and zero. Its initial space is the vertical axis. Its final space is the horizontal axis. Consequently U adjoint U projects onto the vertical axis, while U U adjoint projects onto the horizontal axis.
 
 The two products are not equal, but each is a projection. This is a useful warning: a partial isometry need not be normal.
 
