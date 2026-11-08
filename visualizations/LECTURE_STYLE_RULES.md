@@ -28,6 +28,51 @@ of spoken mathematical lessons. Record those in provenance files and source
 notes. Mathematical history can motivate a construction; project history must
 not interrupt the explanation of that construction.
 
+## Standalone transcript-first narration (8 November 2026 update)
+
+The standalone requirement is **literal for every TTS recording**, regardless of its
+place in the course. Write each spoken mathematical lecture as though it may
+be played alone or out of sequence. Do not say “in the previous lecture,”
+“last time,” “we covered this earlier,” “in the next lesson,” or similar
+references to another episode. Do not announce a sequel in the conclusion.
+
+Reminders and concise reviews are welcome **when they state the mathematics**.
+If a proof uses a standard result, give its applicable statement and assumptions,
+then explain how it is used. If an example originated in another lecture,
+reintroduce the actual vectors, matrix, parameter values, or operator needed
+for the current calculation. The listener should never need a prior recording
+just to know what an unnamed object or numerical result refers to.
+
+Keep prompting, authoring instructions, curriculum planning, provenance
+bookkeeping, repository details, proof-assistant implementation, extraction
+instructions, and remarks about what a source file happens to formalize out of
+ordinary spoken mathematics. Preserve true attribution and the theorem's exact
+hypotheses: name the mathematician, theorem, source paper, or mathematical
+construction **when that information actually explains the result**. Put
+Lean names, definitions, source locations, verified declaration excerpts,
+current dependency locations, and original DKPS donor provenance in the
+separate display-only appendix.
+
+For the transcript-first DKPS fundamentals course, the intended listener knows
+basic linear algebra and calculus but has **no assumed prior functional
+analysis or spectral theory**. Introduce jargon and symbols when they first
+matter in the recording. A more advanced slide series may use a different
+audience baseline; do not apply its shorthand to the foundations TTS scripts.
+
+Prefer a clear self-contained mathematical question, followed by the setting,
+argument, example where helpful, and a conclusion about the theorem and its
+limits. Within-lecture callbacks are fine. Don't force every section into the
+same rhetorical pattern; avoid contrived hooks or recitations of the whole
+course plan. Speak equations naturally, keeping exact formulas and Lean
+connections outside the spoken region when necessary for TTS clarity.
+
+**Independent-listening edit test:** extract the narration alone, ignoring
+metadata and appendices. Can a new listener identify every named object,
+assumption, example and conclusion without being told what was said in any
+other lecture? Is every sentence about the mathematics rather than the
+instructions used to produce the lecture? This editorial test is separate
+from proof verification and from listening to synthesized audio.
+
 ## Audience and scope
 
 > “It's the jargon and shorthand for concepts viewers are not familiar with.”

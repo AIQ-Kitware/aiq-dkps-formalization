@@ -4,14 +4,17 @@ These files are an **alternative, additive drafting branch**, following `../outl
 
 ## Draft set
 
-| File | Main learning result | Status |
-| --- | --- | --- |
-| `000000-course-introduction.md` | Course orientation; conceptual only, no mandatory Lean | Earlier staged overlay, not included in this ZIP |
-| `001000-linear-maps-independent-of-coordinates.md` | Coordinate change is not change of operator | First spoken draft |
-| `002000-norms-distances-and-convergence.md` | Norm axioms, induced distance, norm equivalence and its finite-dimensional limitation | First spoken draft |
-| `003000-cauchy-sequences-and-banach-spaces.md` | Completeness; a Cauchy counterexample in polynomials; completeness of continuous functions | First spoken draft |
+The collection currently contains 150 numbered transcript drafts,
+`000000` through `149000`, following the topical sequence in `../outline.md`.
+IDs are spaced by 1,000 to permit insertions. This folder is a transcript-first
+teaching branch; its narration is not a replacement for the journal sources or
+formal theorem statements.
 
-The IDs are the ones already reserved in `../outline.md`, spaced by 1,000 for insertions. No existing lecture sources or their names are modified.
+**Editorial state (2026-11-08):** All 150 drafts exist. The independent-listening
+review in [`standalone-review-2026-11-08.md`](standalone-review-2026-11-08.md)
+found recurring cross-episode language and implementation commentary in spoken
+text. Read it and its candidate-lines ledger before any publication-oriented
+revision. This audit did **not** rewrite the transcripts or verify every proof.
 
 ## Source format
 
@@ -38,6 +41,31 @@ python3 visualizations/draft-stages/tts-lectures/extract_narration.py --check \
 
 The checker validates formatting and the spoken-only boundary. It does not compile Lean, verify theorems, or assess how the narration sounds when synthesized. Mathematical editing and an actual TTS listening pass are required before promotion.
 
+## Independent-listening requirements
+
+**Every narrated lesson must stand by itself.** Do not refer to preceding,
+future, or numbered lectures in spoken material. A recap is allowed, but state
+the relevant theorem or definition directly. For a reused numerical example,
+provide the actual matrix, vector, parameter, and assumptions in the present
+recording. Keep introductions about the problem at hand and endings about what
+this recording establishes, without teasers for the next installment.
+
+Talk about the mathematics and its historical attribution, not about the prompt,
+source-code repository, proof assistant, or how the course was drafted.
+Mathematical claims must still retain their exact hypotheses and proved scope;
+implementation and lineage detail belongs below `<!-- END SPOKEN LECTURE -->`,
+where the display-only Lean companion already lives. The general lecture rules
+in [`../../LECTURE_STYLE_RULES.md`](../../LECTURE_STYLE_RULES.md) give more
+examples, with this transcript-first audience taken to know basic linear
+algebra and calculus but no prior functional analysis.
+
+Judge independence from the **extracted narration alone**. A reader may use the
+preamble's prerequisites and next-lesson links for navigation, but a listener
+must not need them. The course introduction (`000000`) is exempt from needing a
+Lean appendix, **not** from an extractable spoken region; adding its missing
+markers is tracked by the standalone review, and is outside that review's
+no-transcript-edits scope.
+
 ## Transcript review standard
 
 Check independently that:
@@ -49,4 +77,7 @@ Check independently that:
 5. The spoken region contains no raw code or notation that makes synthetic speech hard to follow.
 6. The listener can answer a new question using the ideas, not just repeat the conclusion.
 
-The three new scripts are editorial drafts from the repository source snapshot dated 2026-11-07. The Lean blocks have been checked against that snapshot as text, not compiled in this environment. They do not constitute a new formalization.
+These files are editorial lecture drafts. Past source-to-Lean correspondence checks
+were textual and did not constitute proof compilation; the independent-listening
+review has not rechecked those mathematical declarations. Production promotion
+requires separate mathematical and actual synthesized-audio review.
