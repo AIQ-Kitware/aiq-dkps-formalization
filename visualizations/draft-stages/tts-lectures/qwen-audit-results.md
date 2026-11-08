@@ -1,15 +1,18 @@
 # Qwen TTS audit — transcript-first draft lectures (2026-11-08, re-evaluation)
 
-**Auditor:** Qwen (independent listening-format review)
+**Auditor:** Qwen (independent listening-format review); **adjudicated by
+GPT-6 on 2026-11-08** — see section I, where the GPT review's decisions and
+the guidance it returned to this auditor are recorded, and where this report's
+earlier priority queue is superseded.
 **Subject:** `visualizations/draft-stages/tts-lectures/000000–149000` — the 150
-transcript-first TTS drafts, **in their current state after three revision
-campaigns**: the standalone-listening revision, the pedagogical-structure
-revision, and the LLMism/assistant-style revision (all dated 2026-11-08, each
-distributed as an incremental overlay).
+transcript-first TTS drafts, **in their current state after four passes**: the
+standalone-listening revision, the pedagogical-structure revision, the
+LLMism/assistant-style revision, and the GPT-6 review revisions (all dated
+2026-11-08, each distributed as an incremental overlay).
 **Companion ledger:** [`qwen-audit-candidates-2026-11-08.tsv`](qwen-audit-candidates-2026-11-08.tsv)
-(67 rows; the final column `v2_status` says for each original finding whether
-it is `resolved`, `open`, or `open_moved` in the current tree — **47 open,
-20 resolved**).
+(67 rows; columns: `v2_status` = state at my re-evaluation; `status_post_gpt_review` =
+state after the GPT-6 review revisions; `gpt_review_decision` = the per-row
+adjudication from [`qwen-feedback-disposition-2026-11-08.tsv`](qwen-feedback-disposition-2026-11-08.tsv)).
 
 ## What changed since the first audit, and how the feedback stands
 
@@ -57,7 +60,7 @@ episode references remain" is confirmed by a direct grep (the only remaining
 matches for those patterns are intra-lecture phrases like "an earlier
 contrast" and "first in the bounded setting").
 
-## Overall verdict (re-evaluated)
+## Overall verdict (re-evaluated — superseded by section I)
 
 The series is **ready for a first synthesized-audio pass with a short, well-
 understood edit queue**. What remains is smaller and mostly mechanical:
@@ -187,7 +190,7 @@ synthesizer's per-chunk guards in `tts.toml` are tested on them.
 - `000000` remains exempt from a Lean appendix and now has a valid spoken
   region (verified, unchanged).
 
-## Priority queue (re-evaluated)
+## Priority queue (re-evaluated — superseded by section I)
 
 1. **P1 — remaining mis-hearable math (8 local rewrites):** `111000:51`
    (P_U), `009000` (eye → introduced i), `036000:61`, `096000:11,13` +
@@ -203,3 +206,82 @@ synthesizer's per-chunk guards in `tts.toml` are tested on them.
 
 After these, re-run `python3 extract_narration.py --check [0-9]*.md` (must
 stay 150/150 green) and re-extract before synthesis.
+
+## I. GPT-6 review of this audit (2026-11-08) — final adjudication
+
+GPT-6 reviewed all 67 rows against the transcripts, repaired the confirmed
+defects in 19 transcripts (commit `18b30d9fd`), and recorded its per-row
+decisions in `qwen-feedback-disposition-2026-11-08.tsv`. Disposition:
+
+| Decision | Rows |
+| --- | ---: |
+| Repaired spoken wording | 28 |
+| Already resolved when reviewed | 20 |
+| Extractor repaired (Markdown emphasis) | 1 |
+| Partially revised; conventional theorem labels retained | 1 |
+| **Rejected false positives** | **5** |
+| Retained correct wording | 4 |
+| Requires listening check of the actual voice | 8 |
+
+**Everything I identified as a confirmed mis-hearable defect was accepted and
+fixed** — and in several places better than I proposed: the `111000` raw
+projection tokens became plain component language; the imaginary unit is now
+introduced in `009000`; the `a sub one/two/three` idiom is consistent across
+`096000`–`097000`; the half-angle family is grouped unambiguously throughout
+`130000`–`145000`. The review also caught defects I had missed (a second
+half-angle ambiguity in `134000`'s trace-cost comparison; the `111000`
+"square root of three over two" grouping; the `130000` chord formula) and
+solved the asterisk item more cleanly than my P3 proposal: `extract_narration.py`
+now strips matched `*…*`/`**…**` delimiters from TTS output, leaving the
+source Markdown readable for editing. The guidance has been written into
+`LECTURE_STYLE_RULES.md` ("Mathematical speech and audit feedback").
+
+**My five rejected rows were genuine errors in this audit, and I accept the
+rejection on the merits.** The central one is the one the review emphasizes:
+
+- **`ell two` vs `L two` (4 rows) — a mathematical error, not a style
+  preference.** I pattern-matched a spelling variant and proposed a
+  course-wide substitution without recovering what the tokens denote. They
+denote different spaces — square-summable sequences (ℓ²) and
+  square-integrable functions (L²) — and `072000` deliberately compares them.
+  Executing my suggestion would have created false statements. Lesson
+  absorbed: **distinguish mathematical correctness from superficial textual
+  consistency**; before calling a variation inconsistent, recover the object
+  being denoted (space, norm class, topology, angle branch, field, spectrum),
+  and propose normalization only between different spellings of the *same*
+  concept.
+- **`Sz.-Nagy`** — a conventional surname abbreviation; shortening it to fix a
+  *hypothetical* voice failure would have damaged attribution. A pronunciation
+  concern is an *audio test candidate*, not an editorial defect.
+- **`Hölder`** — same principle: the attribution is correct; the diacritic is
+  a voice-rendering question, not a reason to drop the name.
+- **`X star` vs `X adjoint`** — both are standard readings of X* and each is
+  locally intelligible; a preference for one synonym is not a defect.
+- **Curly quotes** — ordinary punctuation, not raw formula markup; they were
+  wrongly grouped with the `P_U`-class tokens.
+
+**Procedure adopted for any future audit** (per the review's guidance, and as
+emphasized when relaying it): (1) audit the extracted narration in context,
+never the display appendix or metadata sidecars; (2) for any proposed change
+to notation, first state what the notation denotes and check the formula,
+definitions, and hypotheses; (3) classify each finding as `confirmed_defect`,
+`audio_test_candidate`, `style_preference`, `already_resolved`, or
+`no_change` — untested pronunciation concerns belong in `audio_test_candidate`,
+and **stylistic preferences are not defects**; (4) propose the smallest edit
+that preserves the mathematics, quoting the exact current span, and avoid
+blanket normalization; (5) check standalone listening and naturalness of the
+replacement; (6) verify the edited paragraph (grouping, half-angles, norm
+classes, numerical identities, extraction); (7) report only actual defects as
+the actionable queue, keeping listening experiments and style notes in
+separate sections.
+
+**Final state of the queue.** Of the 67 rows: 50 are resolved in the current
+tree (28 repaired by the review, 20 already resolved), 17 remain present in
+the text *by the review's explicit decision* — 5 rejected false positives,
+4 retained correct wordings, 8 audio-check candidates (adjoint, Ky Fan,
+Sz.-Nagy, Hölder, orthonormal, bare *i*). Nothing in that remainder is an
+actionable text defect: the only outstanding work is the **listening session
+with the selected Breeze voice** (a human task), after which any observed
+failures become `audio_test_candidate` fixes and verified aliases in
+`breeze-tested-en-us.pls`. All 150 files still pass `extract_narration.py
+--check` under the updated extractor.
