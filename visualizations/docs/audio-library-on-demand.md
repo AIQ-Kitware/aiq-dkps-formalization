@@ -49,13 +49,31 @@ Additional server profiles are configured in the shared `tts.toml` file.
 ## Follow the text while listening
 
 The player displays the current sentence above its playback controls and
-highlights that sentence in the selected page transcript. Click any sentence
-to seek near that position, or enable **Auto-scroll transcript** to follow
-along in the full text. This is approximate sentence synchronization based on
-word-length weighting and MP3 playback progress; the speech server currently
+highlights the sentence in the **complete lecture transcript**. Every page is
+visible together, with the active page marked. Click a sentence anywhere in
+the lecture to seek near it (generating its audio page if needed), or enable
+**Auto-scroll transcript** to follow along while listening.
+
+The **Entire lecture** timeline shows elapsed time, remaining time, and
+lecture-wide percentage, even while some pages have not yet been synthesized.
+Before all page durations are known, time is estimated from spoken word counts
+and calibrated with the measured durations of played pages. Measured durations
+are remembered for the selected lecture, transcript revision, voice, and speech
+speed; once all pages are known, the full timeline reports measured time.
+The global slider seeks across audio pages, while the native audio slider seeks
+within the selected page. Playback speed affects elapsed/remaining wall time.
+
+The sentence highlight is estimated from
+sentence-length weighting and MP3 playback progress; the speech server currently
 does not supply word or sentence timestamps. The displayed source text is the
 same extracted text sent for speech generation, before voice-specific
 pronunciation replacements are applied.
+
+Speech pages now default to **1,200 characters** (previously 420), so a page
+contains several connected paragraphs before the player advances. Set
+`DKVIS_AUDIO_PAGE_CHARS` in `visualizations/.env` to an integer from 250 through
+1,500 to change the page length, then restart `make serve`. Larger pages reduce
+interruptions but take longer to synthesize on the first play.
 
 The reader supports manual page navigation, browser audio seeking, adjustable
 synthesis/playback speed, optional next-page prefetch, automatic advancement,

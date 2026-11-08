@@ -28,6 +28,28 @@ def test_original_lecture_collection_is_directly_browsable():
         library.close()
 
 
+def test_longer_default_pages_and_environment_override(monkeypatch, tmp_path):
+    monkeypatch.delenv('DKVIS_AUDIO_PAGE_CHARS', raising=False)
+    library = AudioLectureLibrary(cache=tmp_path / 'default-cache')
+    try:
+        assert library.page_chars == 1200
+        doc = library.detail('000000')
+        assert all(0 < len(page) <= 1200 for page in doc['pages'])
+        assert ' '.join(' '.join(doc['pages']).split()) == ' '.join(doc['transcript'].split())
+        # The longer default should break the introduction far less often.
+        assert len(doc['pages']) < len(split_pages(doc['transcript'], max_chars=420))
+    finally:
+        library.close()
+
+    monkeypatch.setenv('DKVIS_AUDIO_PAGE_CHARS', '900')
+    overridden = AudioLectureLibrary(cache=tmp_path / 'override-cache')
+    try:
+        assert overridden.page_chars == 900
+        assert all(len(page) <= 900 for page in overridden.detail('000000')['pages'])
+    finally:
+        overridden.close()
+
+
 def test_paginate_preserves_all_words_and_has_no_empty_pages():
     sample = 'First paragraph. Second sentence.\n\n' + ('Long sentence with many words. ' * 45)
     pages = split_pages(sample, max_chars=160)
@@ -200,7 +222,7 @@ def test_default_audio_reader_uses_crall_profile_and_ignores_kokoro_env(monkeypa
         assert library.model == 'breeze-tts2'
         assert library.default_voice == 'crall-math-dk-v2'
         assert library.response_format == 'wav'
-        assert library.page_chars == 420
+        assert library.page_chars == 1200
     finally:
         library.close()
 
@@ -370,3 +392,15 @@ def test_audio_reader_includes_synchronized_text_controls():
                      "audio.addEventListener('timeupdate',updateTranscriptFocus)",
                      'id="registerVoice"', 'id="profile"']:
         assert required in html
+
+
+def test_browser_timeline_math_and_complete_transcript_dom():
+    """Run DOM-independent JavaScript checks against the actual reader source."""
+    import subprocess
+    node = shutil.which('node')
+    if node is None:
+        pytest.skip('Node.js is unavailable')
+    script = Path(__file__).with_name('test_audio_reader_progress.js')
+    result = subprocess.run([node, str(script)], check=True, text=True,
+                            capture_output=True, timeout=15)
+    assert 'Full transcript and lecture-wide timeline calculations passed' in result.stdout
