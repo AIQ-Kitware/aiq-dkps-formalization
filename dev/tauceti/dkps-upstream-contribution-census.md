@@ -5040,3 +5040,19 @@ Both focused builds, 13 environment linters, scope checks and full style passed.
 Fresh upstream CI and review remain pending. The GitHub app rejected the PR
 description edits; the campaign's `waves/2026-11-06/update-pr-bodies.sh`
 updates the prepared descriptions on the authenticated host without a build.
+
+### Spectral measure review and Yosida roadmap overlap (2026-11-08)
+
+[#29129](https://github.com/TauCetiProject/TauCeti/pull/29129) remains open at
+`f54ce71aba58bdca2a7ca5cf791ed59dc714ef53`: the Cayley spectral measure is
+named `IsSelfAdjoint.spectralPVM`, its coordinate is registered as measurable,
+and a unit-circle right-inverse theorem is proved. Its focused build and 13
+linters passed. This is a submission, not an upstream integration.
+
+[#30735](https://github.com/TauCetiProject/TauCeti/pull/30735) remains open,
+but its current review finds all three proposed declarations redundant. A
+Lean example using accepted `StronglyContinuousGroup.ofBoundedExp`,
+`isUnitary_ofBoundedExp`, and `isSelfAdjoint_symmetricYosidaApproximation`
+proves the SA-E22 unitary-group assertion directly, without the PR's wrappers.
+The PR's disposition is pending; this observation does not attribute the native
+bounded-group implementation to DKPS.
