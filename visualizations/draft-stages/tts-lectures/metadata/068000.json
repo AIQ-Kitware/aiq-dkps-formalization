@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "lecture_id": "068000",
+  "transcript": "068000-the-banach-space-sylvester-lower-bound-theorem.md",
+  "historical_claims": [
+    {
+      "id": "068000-h01",
+      "anchor": "Davis and Kahan state this as Theorem five point one. The theorem uses a bounded inverse of A, a bound on B, and a compatible norm on the operators that connect their spaces. These hypotheses create a cont",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Theorem 5.1",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "068000-h02",
+      "anchor": "The estimate attributed to Theorem five point one concerns a solution that is already given.",
+      "kind": "source_scope",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Theorem 5.1",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "higham-sylvester",
+      "reason": "Matrix Sylvester equation; note the lecture-specific operator norm and spectral-gap conditions."
+    },
+    {
+      "source_id": "rosenblum-1956",
+      "reason": "Primary paper on the operator equation and disjoint spectra; comparison resource, not a verified source check."
+    },
+    {
+      "source_id": "bell-banach-algebras",
+      "reason": "Review the Banach-algebra spectral language behind resolvents and invertibility."
+    }
+  ]
+}

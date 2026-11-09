@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "lecture_id": "128000",
+  "transcript": "128000-spectral-cutoff-and-finite-rank-source-lemmas.md",
+  "historical_claims": [
+    {
+      "id": "128000-h01",
+      "anchor": "Davis and Kahan's source includes results that justify these passages.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Lemma 6.3; finite-rank approximation",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "128000-h02",
+      "anchor": "equals Q K. The latter would also force K to have no leakage from P perpendicular into Q, making the intended conclusion trivial. The paper assumes only the former.",
+      "kind": "source_scope",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Lemma 6.3 assumptions",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "bell-compact-banach",
+      "reason": "Compare the Banach-space compactness lemmas with their Hilbert-space specializations."
+    },
+    {
+      "source_id": "bell-compact-svd",
+      "reason": "Read an infinite-dimensional account connecting compact SVD, min-max and Schatten classes."
+    }
+  ]
+}

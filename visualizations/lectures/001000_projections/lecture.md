@@ -15,6 +15,13 @@ Recall: No notation is needed on the title slide.
 
 Subspaces and projections.
 
+## LectureOutcomes: The ideas to carry away
+
+Why: See the conclusions before the details.
+Recall: The local setup follows this overview.
+
+Projection gives the unique nearest point in a subspace. Changing its orthonormal basis does not change the projection. A linear map preserves a subspace and its perpendicular complement exactly when its order with projection does not matter. We will connect nearest-point geometry to coordinates and then to the action of another linear map. These are three descriptions of the same splitting of space.
+
 ## PrSetup: Our local notation
 
 Why: Know what each symbol names before using a projection.
@@ -116,7 +123,7 @@ the same target subspace.
 Why: Block coordinates describe action on subspaces, not an extra assumption about the map.
 Recall: Write vectors as $(x_K,x_\perp)$ in $K\oplus K^\perp$.
 
-Choose orthonormal coordinates adapted to K and its complement. A vector now
+The frame gave coordinates within one subspace. To describe an arbitrary map, we also need coordinates in its perpendicular complement. Choose orthonormal coordinates adapted to K and its complement. A vector now
 has two components. Every linear map T can be written using four blocks in
 these coordinates. The first column describes inputs from K: the upper block
 is the part of their image that remains in K, and the lower block is the part
@@ -136,7 +143,7 @@ replace the general matrix by one with zero off-diagonal blocks.
 Why: The equation $PT=TP$ has a concrete geometric meaning.
 Recall: In adapted coordinates, $P=\operatorname{diag}(I,0)$.
 
-We can now read the equation P T equals T P. Multiplying by P on the left keeps
+The four blocks name possible transfers between the two spaces. We can now ask exactly when those transfers vanish. We can now read the equation P T equals T P. Multiplying by P on the left keeps
 only the source part of the output. Multiplying by P on the right keeps only
 the source part of the input. Compare the displayed block products. Their
 equality forces the upper-right and lower-left blocks of T to be zero.
@@ -175,7 +182,7 @@ value of the curve parameter.
 Why: Translate geometric statements into matrix equations and back.
 Recall: $P=EE^T$; $PT=TP$; $Q=WPW^T$.
 
-Remember three translations. A projector represents a subspace without tying
+Projection gives the unique nearest point in a subspace. Changing its orthonormal basis does not change the projection. A linear map preserves a subspace and its perpendicular complement exactly when its order with projection does not matter. Here is how the preceding argument fits those conclusions. Remember three translations. A projector represents a subspace without tying
 it to a basis. Commutation with that projector means a map preserves the two
 parts of the source decomposition. Orthogonal transport is expressed by
 conjugating the source projector into the target projector. A block matrix is

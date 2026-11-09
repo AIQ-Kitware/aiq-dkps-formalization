@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "id": "g3-008000-the-sylvester-equation",
+  "title": "The Sylvester equation",
+  "subtitle": "Independent reading companion to G3 008000",
+  "lecture_nodes": [
+    "g3:008000"
+  ],
+  "source_lecture": "draft-stages/tts-paper/008000-the-sylvester-equation.md",
+  "adaptation": "Edited G3 lecture prose restructured into readable slide units; formulas and selected SVG geometric models are authored companion material.",
+  "slides": [
+    {
+      "title": "The central problem",
+      "eyebrow": "G3 lecture 008000 · topic 1/9",
+      "id": "00-00-0",
+      "lead": "Suppose we know a number c and want to recover an unknown number x from the equation a times x minus x times b equals c.",
+      "body": [
+        "Because numbers commute, the left side is a minus b, multiplied by x. If a and b are different, we divide by their difference and obtain one solution. If a and b agree, either there is no solution or there are infinitely many, depending on whether c is zero. This elementary observation is the seed of the Sylvester equation, a central tool in matrix perturbation theory and, eventually, the Davis–Kahan estimates. For operators, the corresponding equation has A acting on one side of an unknown map X, and B acting on the other."
+      ],
+      "layout": "opening"
+    },
+    {
+      "title": "The central problem · further detail",
+      "eyebrow": "G3 lecture 008000 · topic 1/9",
+      "id": "00-00-1",
+      "lead": "The known map C is the defect we are trying to explain.",
+      "body": [
+        "Our job today is to understand what this equation asks, why differences of eigenvalues appear, and how separation of spectra controls the inverse problem. The scalar equation and the finite spectral theorem already explain how the Sylvester operator can be inverted under spectral separation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Keep the domains and codomains straight",
+      "eyebrow": "G3 lecture 008000 · topic 2/9",
+      "id": "01-00-0",
+      "lead": "Let E and F be finite-dimensional inner-product spaces.",
+      "body": [
+        "Let B act from E to E, and let A act from F to F. The unknown X maps E into F, and the known right-hand side C also maps E into F. Then A followed by X is a map from E to F. So is X followed by B. Their difference is well-defined, even when E and F have different dimensions. The Sylvester equation says that A X minus X B equals C. This form of the equation is important."
+      ],
+      "diagram": "sylvester",
+      "formula": "A:F→F,  B:E→E,  X,C:E→F",
+      "mathtex": "A:\\mathcal F\\to\\mathcal F,\\ B:\\mathcal E\\to\\mathcal E,\\quad X,C:\\mathcal E\\to\\mathcal F",
+      "layout": "figure"
+    },
+    {
+      "title": "Keep the domains and codomains straight · further detail",
+      "eyebrow": "G3 lecture 008000 · topic 2/9",
+      "id": "01-00-1",
+      "lead": "The two terms represent different actions: A acts after X in the output space, while B acts before X in the input space.",
+      "body": [
+        "We cannot factor out X as if A and B were scalar numbers living in one commutative algebra."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Keep the domains and codomains straight · continued",
+      "eyebrow": "G3 lecture 008000 · topic 2/9",
+      "id": "01-01",
+      "lead": "Instead, we treat the whole expression as a linear transformation on the vector space of maps from E to F.",
+      "body": [
+        "Call that transformation the Sylvester operator associated with A and B. Because composing with A and B is linear in X, the Sylvester operator is linear. Its invertibility is an ordinary linear-algebra question on a new, larger vector space."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Return to the scalar case",
+      "eyebrow": "G3 lecture 008000 · topic 3/9",
+      "id": "02-00-0",
+      "lead": "Let a equal five and b equal two.",
+      "body": [
+        "If c equals twelve, the equation becomes five x minus two x equals twelve. The difference is three, so x equals four. If c changes to negative six, x becomes negative two. The solution scales linearly with c because the equation itself is linear. Now let a approach b. If their difference is one tenth and c is one, the solution has magnitude ten. If the difference is one hundredth, the solution has magnitude one hundred. We already see the stability issue."
+      ],
+      "diagram": "sylvester",
+      "formula": "(a−b)x = c",
+      "mathtex": "(a-b)x=c",
+      "layout": "figure"
+    },
+    {
+      "title": "Return to the scalar case · further detail",
+      "eyebrow": "G3 lecture 008000 · topic 3/9",
+      "id": "02-00-1",
+      "lead": "Even when the solution is unique, it may be very sensitive to the right-hand side when a and b are close.",
+      "body": [
+        "The quantity one divided by the absolute value of a minus b is the norm of the scalar inverse."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Return to the scalar case · continued",
+      "eyebrow": "G3 lecture 008000 · topic 3/9",
+      "id": "02-01",
+      "lead": "It tells us how large the solution can be relative to the data.",
+      "body": [
+        "If we demand that the absolute difference be at least a positive number delta, we obtain the bound: the magnitude of x is at most the magnitude of c divided by delta. This is the simplest spectral-gap estimate."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Eigenvectors reveal the same denominators",
+      "eyebrow": "G3 lecture 008000 · topic 4/9",
+      "id": "03-00-0",
+      "lead": "Now assume A and B are self-adjoint, so the finite spectral theorem supplies orthonormal eigenbases.",
+      "body": [
+        "Let u be an eigenvector of A with eigenvalue a. Let v be an eigenvector of B with eigenvalue b. We want to understand the component of X that sends v toward u. Take the inner product of the Sylvester equation applied to v with u. For the first term, A X v, self-adjointness lets us move A to u. That produces a times the coefficient of X v along u. For the second term, X B v, the eigenvalue equation B v equals b v."
+      ],
+      "diagram": "sylvester",
+      "formula": "Xᵢⱼ = Cᵢⱼ/(aᵢ−bⱼ)",
+      "mathtex": "X_{ij}=\\frac{C_{ij}}{a_i-b_j}",
+      "layout": "figure"
+    },
+    {
+      "title": "Eigenvectors reveal the same denominators · further detail",
+      "eyebrow": "G3 lecture 008000 · topic 4/9",
+      "id": "03-00-1",
+      "lead": "That produces b times the same coefficient.",
+      "body": [
+        "Thus the component equation is precisely a minus b times the unknown coefficient of X, equal to the corresponding coefficient of C. The scalar denominator reappears for every pair consisting of one eigenvalue of A and one eigenvalue of B. This is the central structural fact. Instead of one division, the matrix equation needs a division for every spectral pair."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "What spectral separation means",
+      "eyebrow": "G3 lecture 008000 · topic 5/9",
+      "id": "04-00-0",
+      "lead": "The spectrum of a finite self-adjoint matrix is the finite set of its real eigenvalues.",
+      "body": [
+        "If A and B have no common eigenvalue, every spectral difference a minus b is nonzero. Since there are only finitely many pairs, the smallest absolute difference is a positive number. Call it delta. In this setting, the Sylvester equation has one solution for every right-hand side C. If the spectra overlap, at least one denominator vanishes. On the corresponding pair of eigenspaces, the Sylvester operator cannot recover an arbitrary component of C. A nonzero right-hand-side component there makes the equation inconsistent."
+      ],
+      "diagram": "spectral-gap",
+      "formula": "σ(A) ∩ σ(B) = ∅",
+      "mathtex": "\\sigma(A)\\cap\\sigma(B)=\\varnothing",
+      "layout": "figure"
+    },
+    {
+      "title": "What spectral separation means · further detail",
+      "eyebrow": "G3 lecture 008000 · topic 5/9",
+      "id": "04-00-1",
+      "lead": "A zero component leaves the corresponding part of X undetermined.",
+      "body": [
+        "So the spectral condition has two logical jobs. Nonzero differences give existence and uniqueness; a uniform positive lower bound on their magnitudes gives quantitative stability. For finite self-adjoint matrices, disjoint spectra automatically provide a positive separation. For infinite spectra, a pair may have no common point and still approach arbitrarily close. There, the existence of a positive gap is genuinely stronger than set disjointness."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Ordered gaps and mere distance gaps",
+      "eyebrow": "G3 lecture 008000 · topic 6/9",
+      "id": "05-00-0",
+      "lead": "Remember the distinction between ordered spectral sets.",
+      "body": [
+        "One hypothesis says every eigenvalue of A lies at least delta above every eigenvalue of B. That is an ordered gap. A weaker hypothesis says every eigenvalue of A is at least delta away from every eigenvalue of B, without requiring A to lie entirely above or below B. That is a distance gap, also called pairwise spectral separation. Either condition makes every scalar denominator nonzero. But the ordered condition also gives those denominators a common sign."
+      ],
+      "diagram": "spectral-gap",
+      "formula": "ordered separation is stronger than disjointness",
+      "layout": "figure"
+    },
+    {
+      "title": "Ordered gaps and mere distance gaps · further detail",
+      "eyebrow": "G3 lecture 008000 · topic 6/9",
+      "id": "05-00-1",
+      "lead": "That sign coherence can support a simple integral formula for the Sylvester inverse: an exponential applied on the left decays while another exponential applied on the right compensates, and their combined decay is governed by delta.",
+      "body": [
+        "With interlaced eigenvalues, the denominators can have opposite signs."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Ordered gaps and mere distance gaps · continued",
+      "eyebrow": "G3 lecture 008000 · topic 6/9",
+      "id": "05-01",
+      "lead": "The entrywise solution still exists, but a single one-sided decaying exponential formula does not capture all terms at once.",
+      "body": [
+        "This distinction will matter when we ask how sharply the operator norm of X is bounded by the operator norm of C. A pairwise gap immediately gives a sharp Frobenius estimate in finite dimensions. A constant-one estimate for the operator norm follows under the stronger ordered-gap hypothesis; it does not follow from entrywise division alone for arbitrary interlaced spectra."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "The new operator on matrices",
+      "eyebrow": "G3 lecture 008000 · topic 7/9",
+      "id": "06-00-0",
+      "lead": "We can represent X by an m-by-n matrix.",
+      "body": [
+        "The entire space of such matrices has dimension m times n. For each pair of eigenvectors u and v, consider the rank-one map that takes an input's component along v and sends it in the direction u. There are m times n such maps, and they form an orthonormal basis of the matrix space when it is equipped with the Frobenius inner product. The Sylvester operator acts on that rank-one map by multiplication by the scalar a minus b. This is because left composition with A contributes a, and right composition with B contributes b."
+      ],
+      "diagram": "block-operator",
+      "formula": "S(X) = AX − XB",
+      "mathtex": "\\mathscr S(X)=AX-XB",
+      "layout": "figure"
+    },
+    {
+      "title": "The new operator on matrices · further detail",
+      "eyebrow": "G3 lecture 008000 · topic 7/9",
+      "id": "06-00-1",
+      "lead": "Therefore the Sylvester operator is diagonal in this natural basis of matrix units.",
+      "body": [
+        "Its eigenvalues are all the pairwise differences between the eigenvalues of A and B, counted with multiplicities coming from the eigenvalue lists. We have turned an operator equation into an ordinary diagonal linear system on the space of matrices. This also makes the kernel transparent. Each zero spectral difference contributes a free matrix coefficient. If there are no zero differences, the Sylvester operator is invertible."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Why we will need this in perturbation theory",
+      "eyebrow": "G3 lecture 008000 · topic 8/9",
+      "id": "07-00",
+      "lead": "Suppose we have two spectral subspaces and want to quantify the extent to which a perturbation couples them.",
+      "body": [
+        "A residual block may measure the failure of an approximate eigenspace to be invariant. The desired correction block often obeys a Sylvester equation. The operators A and B represent restrictions to two spectral regions, and C represents the known residual. If those spectral regions are separated, we can hope to solve for X and bound it in terms of C and the gap. This explains, at a structural level, why spectral separation appears in subspace perturbation estimates. The eigenvalue differences are not decorative assumptions. They are the denominators of the inverse problem. Next we will carry out the entire calculation in diagonal coordinates, including a numerical example, the exact compatibility condition when denominators vanish, and the Frobenius bound."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "What to reconstruct",
+      "eyebrow": "G3 lecture 008000 · topic 9/9",
+      "id": "08-00",
+      "lead": "Begin with the scalar equation and classify the cases a different from b and a equal to b.",
+      "body": [
+        "Verify the domain and codomain of every composition in A X minus X B. Then use orthonormal eigenvectors u and v to derive the scalar coefficient equation. Explain how the spectral difference becomes an eigenvalue of the Sylvester operator acting on rank-one matrix units. Finally, distinguish three claims: the spectra do not intersect, their pairwise distance has a positive lower bound, and they are ordered on opposite sides of a gap. Identify which claim is strongest and why the distinction affects operator-norm estimates."
+      ],
+      "takeaway": "Disjoint spectra give algebraic solvability; the gap geometry controls the norm estimate.",
+      "layout": "reading"
+    }
+  ]
+}

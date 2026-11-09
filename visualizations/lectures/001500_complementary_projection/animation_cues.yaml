@@ -1,0 +1,9 @@
+scenes:
+  LectureOutcomes:
+    1:
+    - visual_at: 0
+      phrase: I minus P keeps exactly the perpendicular component.
+    - visual_at: 1
+      phrase: Restricting the inputs can make a norm-one projection give a small error.
+    - visual_at: 2
+      phrase: Projection error and displacement under a motion are different objects.

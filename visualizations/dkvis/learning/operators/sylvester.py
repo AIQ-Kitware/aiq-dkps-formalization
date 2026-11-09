@@ -72,9 +72,8 @@ class SySummary(SylvesterSlide):
         self.put(stack(tex('The Sylvester map is linear in its unknown.',size=31),
             tex('Spectral separation controls inversion, with hypotheses depending on the norm.',size=28),
             tex('The constant-one estimate here uses an ordered quadratic-form gap.',size=28),
-            tex('Tau Ceti also has separate domain-aware partial-map Sylvester results.',size=28),
+            tex('For unbounded operators, products require explicit domain conditions.',size=28),
             tex('Those results explicitly retain domains; they are not asserted by these matrix examples.',size=26),buff=.43),y=.4,height=3.5)
-        self.source('Accepted Tau Ceti: Sylvester; LinearPMap/Sylvester. See the provenance guide.')
         self.takeaway('State the separation configuration and operator/domain scope before using a gap bound.')
 
 

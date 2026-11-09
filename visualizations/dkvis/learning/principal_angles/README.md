@@ -1,0 +1,12 @@
+# Principal angles
+
+A line-angle picture develops into a two-slice four-dimensional example, overlap singular values, and perpendicular-error norms.
+
+Use the stable deck ID `prereq-principal-angles` with the common
+slide, transcript, and video commands. The source folder is located through
+`lecture_path("principal_angles")`; `sources.md` there records exact scope and Lean
+correspondence. The external learning companion is `resources.yaml`.
+
+The lecture has a title, factual overview, local notation setup, connected
+explanation, recap, two symbolic/Lean companion pairs, an optional numerical
+bonus, and four study questions with five-second pauses.

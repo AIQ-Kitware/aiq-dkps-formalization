@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "lecture_id": "125000",
+  "transcript": "125000-non-isometric-frames-and-unequal-dimensions.md",
+  "historical_claims": [
+    {
+      "id": "125000-h01",
+      "anchor": "Davis and Kahan's Theorem six point one keeps the trial map itself rather than silently replacing it with an isometry.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Theorem 6.1",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "125000-h02",
+      "anchor": "The original Section six theorem uses interval-versus-exterior spectral separation, with either ordering allowed.",
+      "kind": "source_scope",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Theorem 6.1",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "higham-sylvester",
+      "reason": "Matrix Sylvester equation; note the lecture-specific operator norm and spectral-gap conditions."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "hsu-dk-notes",
+      "reason": "Brief finite-matrix exposition; not an alternate proof of every general theorem in this lecture."
+    },
+    {
+      "source_id": "higham-pseudoinverse",
+      "reason": "Explore the SVD approach to rectangular or rank-deficient matrix maps."
+    },
+    {
+      "source_id": "intel-principal-angles",
+      "reason": "Compute principal angles numerically from orthonormal bases using QR and SVD."
+    },
+    {
+      "source_id": "zhu-knyazev-tangent-angles",
+      "reason": "Compare projector and frame formulas for principal-angle cosines, sines, and tangents."
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "lecture_id": "005000",
+  "source_g2": "049000",
+  "related_resources": [
+    {
+      "source_id": "higham-polar",
+      "reason": "Alternative polar-factor explanation; distinguish a kernel-zero partial isometry from full unitary extensions."
+    },
+    {
+      "source_id": "halmos-1969",
+      "reason": "Original treatment of two subspaces and their generic part; complements principal-angle geometry."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "zhu-knyazev-tangent-angles",
+      "reason": "Compare projector and frame formulas for principal-angle cosines, sines, and tangents."
+    }
+  ],
+  "transcript": "005000-canonical-direct-rotation.md",
+  "historical_claims": []
+}

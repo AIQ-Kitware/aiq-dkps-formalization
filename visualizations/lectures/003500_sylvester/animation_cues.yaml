@@ -1,0 +1,9 @@
+scenes:
+  LectureOutcomes:
+    1:
+    - visual_at: 0
+      phrase: Spectral differences control the entries of a Sylvester solution.
+    - visual_at: 1
+      phrase: An ordered gap gives an operator-norm bound for the whole solution.
+    - visual_at: 2
+      phrase: Exponential decay explains both the inverse integral and its constant.

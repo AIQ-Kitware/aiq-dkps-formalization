@@ -1,0 +1,31 @@
+title: 'Before the Series: Foundations'
+intro: Choose the items that cover gaps in your background; these are individual lessons, not a required
+  full course.
+checked_on: '2026-11-06'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Linear transformations and matrices — 3Blue1Brown
+  url: https://www.3blue1brown.com/lessons/linear-transformations/
+  kind: Video and illustrated article
+  why: See a matrix as a rule that moves vectors, with its columns recording where the basis vectors go.
+- title: Dot products and duality — 3Blue1Brown
+  url: https://www.3blue1brown.com/lessons/dot-products/
+  kind: Video and illustrated article
+  why: Connect dot products to projection lengths and perpendicularity.
+- title: Eigenvectors and eigenvalues — 3Blue1Brown
+  url: https://www.3blue1brown.com/lessons/eigenvalues/
+  kind: Video and illustrated article
+  why: Build a geometric picture of directions a matrix scales without leaving their lines.
+- title: Unit circle
+  url: https://en.wikipedia.org/wiki/Unit_circle
+  kind: Wikipedia topic page
+  why: Refresh sine, cosine, radians, and their geometric meaning.
+  focus: Trigonometric functions on the unit circle.
+- title: Complex conjugate
+  url: https://en.wikipedia.org/wiki/Complex_conjugate
+  kind: Wikipedia topic page
+  why: Refresh conjugation before using complex inner products and conjugate transpose.
+- title: The paradox of the derivative — 3Blue1Brown
+  url: https://www.3blue1brown.com/lessons/derivatives/
+  kind: Video and illustrated article
+  why: Refresh derivatives as local rates of change before differentiating a family of matrices.

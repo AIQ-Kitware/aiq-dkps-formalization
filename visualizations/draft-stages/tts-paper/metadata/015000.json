@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "lecture_id": "015000",
+  "source_g2": "114000",
+  "related_resources": [
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "kostrykin-tan2-theorem",
+      "reason": "Compare the off-diagonal perturbation theorem with a graph/Riccati formulation."
+    },
+    {
+      "source_id": "motovilov-selin-subspace-bounds",
+      "reason": "Contrast ordered-gap and convex-hull gap hypotheses in sharp tangent estimates."
+    }
+  ],
+  "transcript": "015000-off-diagonal-perturbations-and-reflection.md",
+  "historical_claims": []
+}

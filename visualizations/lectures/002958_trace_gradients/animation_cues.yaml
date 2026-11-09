@@ -1,0 +1,9 @@
+scenes:
+  LectureOutcomes:
+    1:
+    - visual_at: 0
+      phrase: The Frobenius pairing is a dot product between matching matrix entries.
+    - visual_at: 1
+      phrase: A matrix gradient stores the first-order response to every matrix direction.
+    - visual_at: 2
+      phrase: Testing only legal directions yields only the corresponding gradient conditions.

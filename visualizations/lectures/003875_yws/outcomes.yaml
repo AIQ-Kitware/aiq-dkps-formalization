@@ -1,0 +1,7 @@
+facts:
+- A population eigengap controls subspace error under a matrix perturbation.
+- An orthogonal alignment converts subspace error to frame error.
+- The proof separates a geometric bound from probabilistic noise estimates.
+route: The matrices are real symmetric, with corresponding ordered eigenvector blocks. The gap belongs
+  to the population matrix. We will bound one residual from both sides, then explain the additional cost
+  of comparing bases.

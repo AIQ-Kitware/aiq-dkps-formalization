@@ -91,11 +91,16 @@ PART_DECKS = {
         slides=tuple(ref_use(scene) for scene in scenes),
         description=f"Reference composition: {PART_FOOTERS[name]}",
         footer=PART_FOOTERS[name],
+        learning_resources='lectures/'+{
+            'part4-prop44':'reference-norms',
+            'part5-process':'reference-formalization',
+        }.get(name,'reference-geometry')+'.yaml',
     )
     for name, scenes in PART_SCENES.items()
 }
 
 SHORT = DeckSpec(
+    learning_resources="lectures/reference-core.yaml",
     name="sine-theta-short",
     slides=tuple(ref_use(scene, core=True) for scene in [
         "S00TitleShort", "S00bSetting", "S01Ellipse", "S02Perturb", "S03bWanted", "S03NoGap", "S03cUnstable", "S04Angle", "S05Residual",
@@ -107,6 +112,7 @@ SHORT = DeckSpec(
 
 FULL_PARTS = tuple(PART_SCENES)
 FULL = DeckSpec(
+    learning_resources="lectures/reference-core.yaml",
     name="sine-theta-full",
     slides=tuple(slide for name in FULL_PARTS for slide in PART_DECKS[name].slides),
     description="Reference full talk, assembled from the separately rendered reference parts.",

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "lecture_id": "055000",
+  "transcript": "055000-majorization-and-weak-majorization.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-svd",
+      "reason": "Finite-dimensional singular-direction intuition; general operator-ideal and infinite-dimensional claims require additional sources."
+    },
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "higham-unitarily-invariant-norm",
+      "reason": "Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms."
+    },
+    {
+      "source_id": "tao-hermitian-matrix-sums",
+      "reason": "Study min-max proofs and eigenvalue inequalities from a matrix-analysis viewpoint."
+    },
+    {
+      "source_id": "bell-compact-svd",
+      "reason": "Read an infinite-dimensional account connecting compact SVD, min-max and Schatten classes."
+    },
+    {
+      "source_id": "mml-free-text",
+      "reason": "Use analytic-geometry, decomposition or PCA examples to connect the operator calculation to data analysis."
+    }
+  ]
+}

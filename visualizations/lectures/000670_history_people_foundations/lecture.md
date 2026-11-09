@@ -10,6 +10,13 @@ Recall: No proof background is required.
 
 geometry, sound, and approximation.
 
+## LectureOutcomes: The ideas to carry away
+
+Why: See the conclusions before the details.
+Recall: An interest in mathematics; no proofs required
+
+Sylvester and Jordan brought different algebraic and geometric viewpoints. Rayleigh and Ritz had separate careers and publications. Weyl connected spectral questions with wider work in analysis and physics. Each biography links a life to a mathematical question. We will distinguish personal circumstances, publication dates, and the content of the mathematics rather than treating a theorem name as a complete historical explanation.
+
 ## PfIntro: Meet people, not just theorem labels
 
 Why: A career is larger than the one result named in a textbook.
@@ -84,7 +91,7 @@ Rayleigh and Ritz illustrate why a compound theorem name needs care. The two peo
 Why: Use the people as anchors for the mathematical map.
 Recall: This episode is a selected group, not an exhaustive history.
 
-Remember five different routes into the mathematics. Sylvester links algebra and matrix equations; Jordan brings high-dimensional geometry into view; Rayleigh’s sound and Ritz’s approximation methods motivate eigenproblems; Weyl helps distinguish spectral values from the directions that later angle bounds control. Further episodes can introduce Hotelling, Courant and Fischer, the norm theorists, and the modern statisticians. This group of five is an entry point, not a claim to have exhausted the cast.
+Sylvester and Jordan brought different algebraic and geometric viewpoints. Rayleigh and Ritz had separate careers and publications. Weyl connected spectral questions with wider work in analysis and physics. These connections organize the stories just introduced. Remember five different routes into the mathematics. Sylvester links algebra and matrix equations; Jordan brings high-dimensional geometry into view; Rayleigh’s sound and Ritz’s approximation methods motivate eigenproblems; Weyl helps distinguish spectral values from the directions that later angle bounds control. Further episodes can introduce Hotelling, Courant and Fischer, the norm theorists, and the modern statisticians. This group of five is an entry point, not a claim to have exhausted the cast.
 
 ## PfCreditsOne: Image sources and reuse terms, 1
 

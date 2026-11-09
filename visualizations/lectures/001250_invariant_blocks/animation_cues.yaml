@@ -1,0 +1,9 @@
+scenes:
+  LectureOutcomes:
+    1:
+    - visual_at: 0
+      phrase: An invariant subspace keeps its vectors inside itself under a map.
+    - visual_at: 1
+      phrase: One invariant subspace gives a triangular block structure, not necessarily a diagonal one.
+    - visual_at: 2
+      phrase: Two preserved perpendicular parts give block diagonality and commutation with projection.

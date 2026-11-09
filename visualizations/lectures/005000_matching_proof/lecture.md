@@ -25,6 +25,13 @@ Recall: The main proof concerns finite real orthogonal transport.
 
 The real trace-norm matching proof.
 
+## LectureOutcomes: The ideas to carry away
+
+Why: See the conclusions before the details.
+Recall: The local setup follows this overview.
+
+The unrestricted real trace-norm minimum equals a matching value. A smooth auxiliary minimum supplies the invariant-block reduction. A uniform limit and explicit transporters establish the trace endpoint. This is a specialist proof presentation. Its destination is an equality with attainment, over all orthogonal transporters of the two equal-dimensional spaces. The lower bound must cover arbitrary mixing; the upper bound must construct an actual map.
+
 ## T00Setup: Local notation for the matching argument
 
 Why: Read the proof independently of the longer study deck.
@@ -226,7 +233,7 @@ directions can be fixed, and only the original positive labels are needed.
 Why: Local block minima give exactly the matching minimum for $1<p<2$.
 Recall: $C_p(M)$ adds pair costs on selected edges and singleton costs on unmatched labels.
 
-For any matching, choose an attaining local transporter for each selected pair
+The local estimates are ready. We now assemble them into the lower inequality for an arbitrary minimizing transporter and compare with the explicit matching constructions. For any matching, choose an attaining local transporter for each selected pair
 and each unmatched angle, and use identity on the common directions. The
 orthogonal sum is feasible and has exactly the matching cost. This proves
 that the unrestricted minimum is at most the matching minimum.
@@ -266,7 +273,7 @@ plane and a fixed plane. These are precisely the theorem's trace-norm weights.
 Why: The structural proof becomes an explicit finite optimization and construction.
 Recall: The edge weight is $g_{ij}=a_i+a_j-b_{ij}$; unmatched labels remain allowed.
 
-Subtract each paired cost from its two singleton costs to obtain the edge weight.
+The unrestricted real trace-norm minimum equals a matching value. A smooth auxiliary minimum supplies the invariant-block reduction. A uniform limit and explicit transporters establish the trace endpoint. Here is how the preceding argument fits those conclusions. Subtract each paired cost from its two singleton costs to obtain the edge weight.
 The trace minimum is the all-singleton baseline minus the maximum total weight
 of a matching. For principal angles thirty, forty-five, and seventy-five
 degrees, the maximum-weight edge pairs the first two labels and leaves the

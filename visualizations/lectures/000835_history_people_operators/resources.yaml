@@ -1,0 +1,25 @@
+title: People behind the mathematics — operators and reliable computation
+intro: One focused biographical source for each person introduced in the presentation.
+checked_on: '2026-11-06'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Béla Szőkefalvi-Nagy
+  url: https://en.wikipedia.org/wiki/B%C3%A9la_Sz%C5%91kefalvi-Nagy
+  kind: Wikipedia biographical overview
+  why: Place Sz.-Nagy in the operator-theory tradition and use the article’s short account as an introduction.
+- title: Paul Halmos — MacTutor, St Andrews
+  url: https://mathshistory.st-andrews.ac.uk/Biographies/Halmos/
+  kind: Biography
+  why: Meet an operator theorist also known for mathematical exposition and photographs of mathematicians.
+- title: Tosio Kato — MacTutor, St Andrews
+  url: https://mathshistory.st-andrews.ac.uk/Biographies/Kato/
+  kind: Biography
+  why: Read how mathematical physics and perturbation theory developed together in his career.
+- title: Chandler Davis — Peter Rosenthal, CMS Notes
+  url: https://notes.math.ca/en/article/activist-u-of-t-math-professor-chandler-davis-devoted-himself-to-progressive-causes/
+  kind: Biographical essay
+  why: Learn about Davis’s life, political commitments, and move to Toronto from a personal account.
+- title: William Kahan — UC Berkeley
+  url: https://www2.eecs.berkeley.edu/Faculty/Homepages/kahan.html
+  kind: University biography
+  why: Connect Kahan’s mathematical work with his concern for reliable floating-point computation.

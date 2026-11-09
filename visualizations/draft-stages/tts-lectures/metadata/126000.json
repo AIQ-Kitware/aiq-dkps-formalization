@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "lecture_id": "126000",
+  "transcript": "126000-weak-spectral-gaps-and-hilbert-schmidt-estimates.md",
+  "historical_claims": [
+    {
+      "id": "126000-h01",
+      "anchor": "Davis and Kahan’s Theorems six point one and six point two.",
+      "kind": "source_scope",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Theorems 6.1–6.2",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "higham-sylvester",
+      "reason": "Matrix Sylvester equation; note the lecture-specific operator norm and spectral-gap conditions."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "hsu-dk-notes",
+      "reason": "Brief finite-matrix exposition; not an alternate proof of every general theorem in this lecture."
+    },
+    {
+      "source_id": "bell-trace-ideals",
+      "reason": "Work through trace-ideal and Hilbert-Schmidt definitions and inequalities in Hilbert space."
+    },
+    {
+      "source_id": "bell-compact-svd",
+      "reason": "Read an infinite-dimensional account connecting compact SVD, min-max and Schatten classes."
+    }
+  ]
+}

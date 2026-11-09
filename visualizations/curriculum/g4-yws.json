@@ -1,0 +1,29 @@
+{
+  "id": "g4",
+  "title": "G4 - Yu-Wang-Samworth population-gap path",
+  "summary": "A focused route through finite-dimensional population-gap perturbation bounds, the corrected rectangular case, and statistical applications. Existing recordings are reused; YWS-specific recordings are planned.",
+  "status": "planned",
+  "nodes": [
+    {"id": "g4:overview", "title": "Population gaps: the statistical question", "status": "planned", "source": "visualizations/lectures/003875_yws/lecture.md"},
+    {"id": "g4:mixed-gap", "title": "Mixed gaps versus population gaps", "status": "planned", "source": "visualizations/lectures/003875_yws/lecture.md"},
+    {"id": "g4:residual-proof", "title": "The population-residual argument for Theorem 2", "status": "planned", "source": "YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean"},
+    {"id": "g4:sharpness", "title": "Sharpness and boundary eigengaps", "status": "planned", "source": "YuWangSamworth2015/YuWangSamworth2015/Symmetric/MiddleBlockSharpness.lean"},
+    {"id": "g4:rectangular-correction", "title": "Rectangular extension and the rank-boundary correction", "status": "planned", "source": "YuWangSamworth2015/YuWangSamworth2015/Rectangular/SourceTheorem3.lean"},
+    {"id": "g4:application", "title": "From deterministic subspace bounds to statistics", "status": "planned", "source": "YuWangSamworth2015/YuWangSamworth2015/Core/Statistics.lean"}
+  ],
+  "path": [
+    "g4:overview",
+    "g3:001000",
+    "g3:002000",
+    "g3:003000",
+    "g3:004000",
+    "g4:mixed-gap",
+    "g4:residual-proof",
+    "g4:sharpness",
+    "g2:147000",
+    "g2:148000",
+    "g2:146000",
+    "g4:rectangular-correction",
+    "g4:application"
+  ]
+}

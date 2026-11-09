@@ -10,6 +10,13 @@ Recall: Know operator norms and matrix exponentials.
 
 Sylvester equations and spectral separation.
 
+## LectureOutcomes: The ideas to carry away
+
+Why: See the conclusions before the details.
+Recall: The local setup follows this overview.
+
+Spectral differences control the entries of a Sylvester solution. An ordered gap gives an operator-norm bound for the whole solution. Exponential decay explains both the inverse integral and its constant. In A X minus X B equals R, the matrices A and B are given, and X is the unknown map. We will begin with scalar division, then explain the extra argument needed to bound a matrix norm.
+
 ## SySetup: The equation and the ordered gap
 
 Why: State what is known, what is unknown, and which norm is used.
@@ -22,7 +29,7 @@ A and B are known self-adjoint matrices, acting on possibly different spaces. X 
 Why: Relate the matrix equation to scalar division.
 Recall: A and B are given operators; X is the unknown map.
 
-A small residual alone does not certify a small error. Even in the scalar equation a minus b times x equals r, a small r can hide a large x when a and b nearly coincide. The Sylvester equation, A X minus X B equals R, is the operator version. It has appeared since nineteenth-century matrix theory, and Rosenblum's operator work connects spectral separation to its inversion. We will first solve diagonal examples, then explain why an ordered spectral gap gives an operator-norm estimate. This mechanism is one ingredient behind residual-based angle bounds.
+A small residual alone does not certify a small error. Even in the scalar equation with a minus b multiplied by x equals r, a small r can hide a large x when a and b nearly coincide. The Sylvester equation, A X minus X B equals R, is the operator version. It has appeared since nineteenth-century matrix theory, and Rosenblum's operator work connects spectral separation to its inversion. We will first solve diagonal examples, then explain why an ordered spectral gap gives an operator-norm estimate. This mechanism is one ingredient behind residual-based angle bounds.
 
 ## SyEntries: Solve in eigenbases
 
@@ -36,7 +43,7 @@ The i j entry of A X minus X B is a i minus b j times x i j. If those two eigenv
 Why: Use exponential decay to control every solution.
 Recall: Bounded self-adjoint A and B lie on opposite sides of an ordered gap.
 
-Assume A is at least c plus delta times the identity in quadratic forms, B is at most c times the identity, and delta is positive. Start with any solution X and define Y of t as exponential minus t A, times X, times exponential t B. Differentiate the product. The Sylvester equation gives Y prime equal to minus exponential minus t A, times R, times exponential t B. The spectral bounds give exponential decay of Y at rate delta, so Y tends to zero. This is where the ordered gap enters.
+Scalar division explained the denominators. To control the operator norm, we now prove that an ordered gap makes the entire solution decay under a carefully chosen flow. Assume A is at least c plus delta times the identity in quadratic forms, B is at most c times the identity, and delta is positive. Start with any solution X and define Y of t as exponential minus t A, times X, times exponential t B. Differentiate the product. The Sylvester equation gives Y prime equal to minus exponential minus t A, times R, times exponential t B. The spectral bounds give exponential decay of Y at rate delta, so Y tends to zero. This is where the ordered gap enters.
 <!-- beat -->
 Integrate the derivative from zero to infinity. Since Y starts at X and ends at zero, X equals the integral of the exponentially weighted residual. Take norms inside the integral. The product of the two exponential norm bounds is at most exponential minus delta t. Integrating that scalar decay gives one divided by delta. Thus norm X is at most norm R divided by delta. We started with an arbitrary solution, so this controls every solution. Applying the same bound to a zero residual also proves uniqueness. Convergence of this integral can separately construct a solution.
 
@@ -52,7 +59,7 @@ Take A diagonal with three and four, and B diagonal with zero and one. Their cro
 Why: Prevent a matrix example from silently changing theorem scope.
 Recall: An ordered form gap is stronger than pairwise noncoincidence.
 
-We learned that the Sylvester map is linear in X. Different spectral configurations and different norms lead to different inverse bounds. The constant-one operator-norm estimate proved here uses an ordered quadratic-form gap. Do not replace that hypothesis by arbitrary noncoincident spectra. Accepted Tau Ceti has bounded-operator results and separate domain-aware partial-map results. The latter retain domain hypotheses for unbounded operators. Their accepted DKPS adaptation and the independently implemented bounded theory have distinct provenance in the census. This finite example is not a proof of all those unbounded claims.
+Spectral differences control the entries of a Sylvester solution. An ordered gap gives an operator-norm bound for the whole solution. Exponential decay explains both the inverse integral and its constant. Here is how the preceding argument fits those conclusions. We learned that the Sylvester map is linear in X. Different spectral configurations and different norms lead to different inverse bounds. The estimate with coefficient one proved here uses an ordered quadratic-form gap. Do not replace that hypothesis by arbitrary noncoincident spectra. For bounded self-adjoint operators on Hilbert spaces, the same decay argument gives this estimate. Unbounded operators require additional domain hypotheses: the products must be defined on the vectors to which the equation is applied. Our finite calculation does not supply those domain arguments.
 
 ## SyFacts: The definition and the gap estimate
 

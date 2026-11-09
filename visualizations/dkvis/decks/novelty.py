@@ -34,6 +34,7 @@ SCENES = [
 
 
 NOVELTY_TOUR = DeckSpec(
+    learning_resources="lectures/reference-overview.yaml",
     name="novelty-tour",
     description="Standalone teaching deck for the new spectral-transport mathematics.",
     footer=r"Mathematical novelty review $\cdot$ spectral-penalty transport",

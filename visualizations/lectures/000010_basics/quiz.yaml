@@ -1,34 +1,41 @@
 questions:
 - title: Connect action and geometry
-  question: 'For $A=\operatorname{diag}(2,1)$, $u=(1,0)$, and $v=(0,1)$, which statement is correct?'
+  question: For $A=\operatorname{diag}(2,1)$, $u=(1,0)$, and $v=(0,1)$, which statement
+    is correct?
   choices:
-  - '$u$ and $v$ are perpendicular eigenvectors; $Au=2u$ and $Av=v$.'
-  - '$A$ preserves every vector length because it is symmetric.'
-  - '$u$ and $v$ have inner product one.'
-  - 'Every nonzero vector is an eigenvector of A.'
+  - $u$ and $v$ are perpendicular eigenvectors; $Au=2u$ and $Av=v$.
+  - $A$ preserves every vector length because it is symmetric.
+  - $u$ and $v$ have inner product one.
+  - Every nonzero vector is an eigenvector of A.
   correct: 0
-  explanation: The coordinate vectors have dot product zero. The diagonal matrix scales them separately,
-    by two and one. Symmetry alone does not mean length preservation.
-  think_seconds: 8
-  speak_question: 'First question. A is diagonal with entries two and one. The vectors u and v are the two
-    coordinate unit vectors. Which statement is correct? A, they are perpendicular eigenvectors, scaled
-    by two and one; B, A preserves every length because it is symmetric; C, their inner product is one;
-    or D, every nonzero vector is an eigenvector? You have eight seconds. Pause for more time.'
-  speak_answer: 'The answer is A. Their dot product is zero, and multiplying by the diagonal matrix scales
-    the first by two and the second by one. A symmetric matrix need not preserve lengths.'
+  explanation: The coordinate vectors have dot product zero. The diagonal matrix scales
+    them separately, by two and one. Symmetry alone does not mean length preservation.
+  think_seconds: 5
+  speak_question: First question. A is diagonal with entries two and one. The vectors
+    u and v are the two coordinate unit vectors. Which statement is correct? A, they
+    are perpendicular eigenvectors, scaled by two and one; B, A preserves every length
+    because it is symmetric; C, their inner product is one; or D, every nonzero vector
+    is an eigenvector? You have five seconds. Pause for more time.
+  speak_answer: The answer is A. Their dot product is zero, and multiplying by the
+    diagonal matrix scales the first by two and the second by one. A symmetric matrix
+    need not preserve lengths.
 - title: Read the calculus implication
-  question: 'A real function is differentiable at an interior local minimum at zero. What must follow?'
+  question: A real function is differentiable at an interior local minimum at zero.
+    What must follow?
   choices:
-  - 'Its derivative is zero.'
-  - 'The minimum is global.'
-  - 'Every point with zero derivative is also a local minimum.'
-  - 'Every integral to infinity converges.'
+  - Its derivative is zero.
+  - The minimum is global.
+  - Every point with zero derivative is also a local minimum.
+  - Every integral to infinity converges.
   correct: 0
-  explanation: Differentiability at an interior local minimum forces zero derivative. It does not prove
-    global optimality, a converse implication, or convergence of an unrelated integral.
-  think_seconds: 8
-  speak_question: 'Second question. A real function is differentiable at an interior local minimum at zero.
-    What must follow? A, its derivative is zero; B, the minimum is global; C, every zero derivative gives
-    a local minimum; or D, every integral to infinity converges? You have eight seconds. Pause for more time.'
-  speak_answer: 'The answer is A. The necessary condition is zero derivative. A local minimum need not be
-    global, a zero derivative need not give a minimum, and improper integrals require their own convergence argument.'
+  explanation: Differentiability at an interior local minimum forces zero derivative.
+    It does not prove global optimality, a converse implication, or convergence of
+    an unrelated integral.
+  think_seconds: 5
+  speak_question: Second question. A real function is differentiable at an interior
+    local minimum at zero. What must follow? A, its derivative is zero; B, the minimum
+    is global; C, every zero derivative gives a local minimum; or D, every integral
+    to infinity converges? You have five seconds. Pause for more time.
+  speak_answer: The answer is A. The necessary condition is zero derivative. A local
+    minimum need not be global, a zero derivative need not give a minimum, and improper
+    integrals require their own convergence argument.

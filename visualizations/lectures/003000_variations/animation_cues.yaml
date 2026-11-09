@@ -1,0 +1,9 @@
+scenes:
+  LectureOutcomes:
+    1:
+    - visual_at: 0
+      phrase: A feasible curve stays inside the constraint for every parameter value.
+    - visual_at: 1
+      phrase: At a differentiable minimum, the cost derivative along such a curve is zero.
+    - visual_at: 2
+      phrase: Carefully chosen legal directions force diagonal gradient blocks to vanish.

@@ -19,16 +19,16 @@
     "non_committing_work": "requires_reconcile",
     "compaction_usage": "measured_signals_only_when_runtime_omits_usage"
   },
-  "through": "2026-11-08T21:27:11.400874+00:00",
-  "ledger_rows": 3090,
-  "commits_accounted": 2853,
-  "turns": 90507,
+  "through": "2026-11-09T04:08:05.465559+00:00",
+  "ledger_rows": 3106,
+  "commits_accounted": 2868,
+  "turns": 90991,
   "tokens": {
-    "input": 80256218,
+    "input": 81926526,
     "cache_write": 209350290,
-    "cache_read": 29472670884,
-    "output": 78409041,
-    "billable_input": 29762277392
+    "cache_read": 29558744612,
+    "output": 78780060,
+    "billable_input": 29850021428
   },
   "by_model": {
     "claude-fable-5": {
@@ -92,10 +92,10 @@
       "output": 1129887
     },
     "litellm/qwen3.8-27b-dbirks-hyperqwen-huge": {
-      "input": 865490,
+      "input": 1605569,
       "cache_write": 0,
-      "cache_read": 23541376,
-      "output": 245647
+      "cache_read": 46028288,
+      "output": 418461
     },
     "gpt-6-luna": {
       "input": 15821331,
@@ -104,10 +104,10 @@
       "output": 3078946
     },
     "gpt-6.1-sol": {
-      "input": 46332258,
+      "input": 47132443,
       "cache_write": 0,
-      "cache_read": 3801560192,
-      "output": 12784798
+      "cache_read": 3860198912,
+      "output": 12976971
     },
     "litellm-namek/Qwen/Qwen3.5-0.8B": {
       "input": 0,
@@ -122,10 +122,10 @@
       "output": 257654
     },
     "gpt-6.1-terra": {
-      "input": 1181961,
+      "input": 1312005,
       "cache_write": 0,
-      "cache_read": 283113216,
-      "output": 221881
+      "cache_read": 288061312,
+      "output": 227913
     }
   },
   "by_activity": {
@@ -136,10 +136,10 @@
       "output": 10700449
     },
     "unlabeled": {
-      "input": 79407479,
+      "input": 81077787,
       "cache_write": 155791970,
-      "cache_read": 24557495069,
-      "output": 65419787
+      "cache_read": 24643568797,
+      "output": 65790806
     },
     "implementation": {
       "input": 79782,
@@ -162,16 +162,16 @@
       "output": 59452422
     },
     "codex": {
-      "input": 73637129,
+      "input": 74567358,
       "cache_write": 0,
-      "cache_read": 6346305152,
-      "output": 17284948
+      "cache_read": 6409891968,
+      "output": 17483153
     },
     "pi": {
-      "input": 5403057,
+      "input": 6143136,
       "cache_write": 0,
-      "cache_read": 92368128,
-      "output": 1671671
+      "cache_read": 114855040,
+      "output": 1844485
     }
   },
   "server_tool_calls": {
@@ -179,7 +179,7 @@
     "web_fetch": 0
   },
   "time": {
-    "wall_clock_s": 6862285.0
+    "wall_clock_s": 6930231.4
   },
   "compaction_signals": {
     "events": 90,

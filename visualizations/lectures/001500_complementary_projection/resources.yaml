@@ -1,0 +1,15 @@
+title: Thinking about I minus P
+intro: 'Focus on the perpendicular error left after projection: that is what I−P keeps.'
+checked_on: '2026-11-06'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Projections onto Subspaces — Gilbert Strang, MIT
+  url: https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/least-squares-determinants-and-eigenvalues/projections-onto-subspaces/
+  kind: University video lesson
+  why: Understand why the nearest point in a subspace leaves an error perpendicular to that subspace.
+  focus: The video and its worked projection problem; no need to follow the entire course.
+- title: Projection (linear algebra)
+  url: https://en.wikipedia.org/wiki/Projection_(linear_algebra)
+  kind: Wikipedia topic page
+  why: Look up projection matrices, their ranges and kernels, and the complementary projection I−P.
+  focus: Orthogonal projection and complementarity of image and kernel.

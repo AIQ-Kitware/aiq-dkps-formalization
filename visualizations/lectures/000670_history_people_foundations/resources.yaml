@@ -1,0 +1,25 @@
+title: People behind the mathematics — geometry, sound, and approximation
+intro: One focused biography for each person introduced in the presentation.
+checked_on: '2026-11-06'
+curated_by: GPT-6.1-Sol
+resources:
+- title: James Joseph Sylvester — MacTutor, St Andrews
+  url: https://mathshistory.st-andrews.ac.uk/Biographies/Sylvester/
+  kind: Biography
+  why: Read about his mathematical work and the institutional barriers surrounding his career.
+- title: Camille Jordan — MacTutor, St Andrews
+  url: https://mathshistory.st-andrews.ac.uk/Biographies/Jordan/
+  kind: Biography
+  why: Meet the algebraist behind the name and place his work in its nineteenth-century setting.
+- title: Lord Rayleigh — MacTutor, St Andrews
+  url: https://mathshistory.st-andrews.ac.uk/Biographies/Rayleigh/
+  kind: Biography
+  why: Connect his work on waves and vibration with the approximation viewpoint of the lecture.
+- title: Walther Ritz
+  url: https://en.wikipedia.org/wiki/Walther_Ritz
+  kind: Wikipedia biography
+  why: Read the account of Ritz’s short career and the section on his variational method.
+- title: Hermann Weyl — MacTutor, St Andrews
+  url: https://mathshistory.st-andrews.ac.uk/Biographies/Weyl/
+  kind: Biography
+  why: Follow the connections between analysis, geometry, physics, and spectral questions in his career.

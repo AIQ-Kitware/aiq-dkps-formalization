@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "id": "g3-016000-spectral-selection-and-repulsion",
+  "title": "Spectral selection and repulsion",
+  "subtitle": "Independent reading companion to G3 016000",
+  "lecture_nodes": [
+    "g3:016000"
+  ],
+  "source_lecture": "draft-stages/tts-paper/016000-spectral-selection-and-repulsion.md",
+  "adaptation": "Edited G3 lecture prose restructured into readable slide units; formulas and selected SVG geometric models are authored companion material.",
+  "slides": [
+    {
+      "title": "The central problem",
+      "eyebrow": "G3 lecture 016000 · topic 1/10",
+      "id": "00-00",
+      "lead": "A spectral gap tells us where an operator has no spectrum.",
+      "body": [
+        "An off-diagonal perturbation does something stronger: under the right block-order hypothesis, it cannot push spectral values into the original gap at all. The gap is repelled, and its endpoints provide a canonical way to choose the perturbed subspace. This is the starting point of Davis and Kahan's Theorem eight point one. We will derive the gap protection, identify the selected reducing branch, and explain the cosine factors in the theorem's stronger comparisons."
+      ],
+      "layout": "opening"
+    },
+    {
+      "title": "Build the two-block setting",
+      "eyebrow": "G3 lecture 016000 · topic 2/10",
+      "id": "01-00-0",
+      "lead": "Let A be self-adjoint.",
+      "body": [
+        "Decompose the Hilbert space orthogonally into a subspace P and its perpendicular complement. Suppose P reduces A, so A is block diagonal relative to this decomposition. Assume the spectrum of the first block is at most alpha, while the spectrum of the second block is at least alpha plus delta, where delta is positive. We call P the low subspace and its complement the high subspace. Let H be self-adjoint and off-diagonal: both diagonal compressions of H vanish."
+      ],
+      "diagram": "spectral-gap",
+      "formula": "two ordered spectral blocks separated by δ",
+      "layout": "figure"
+    },
+    {
+      "title": "Build the two-block setting · further detail",
+      "eyebrow": "G3 lecture 016000 · topic 2/10",
+      "id": "01-00-1",
+      "lead": "In block-matrix form, H has zeros on the diagonal and an operator B in the lower-left corner, with B adjoint in the upper-right corner.",
+      "body": [
+        "Define S to be A plus H. No smallness assumption on the norm of H has been made. Off-diagonality is the structural assumption."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Prove the spectral gap survives",
+      "eyebrow": "G3 lecture 016000 · topic 3/10",
+      "id": "02-00-0",
+      "lead": "Choose any real number lambda strictly between alpha and alpha plus delta.",
+      "body": [
+        "We want to prove S minus lambda times the identity is invertible. In a finite-dimensional model, write its diagonal blocks as A low minus lambda and A high minus lambda. The first is strictly negative, and the second strictly positive. Suppose S has an eigenvector with eigenvalue lambda. Write it as a pair x and y in the low and high subspaces."
+      ],
+      "diagram": "spectral-gap",
+      "formula": "off-diagonal coupling preserves a central gap",
+      "layout": "figure"
+    },
+    {
+      "title": "Prove the spectral gap survives · further detail",
+      "eyebrow": "G3 lecture 016000 · topic 3/10",
+      "id": "02-00-1",
+      "lead": "The eigenvalue equations say that A low minus lambda applied to x plus B adjoint applied to y is zero, and B applied to x plus A high minus lambda applied to y is zero.",
+      "body": [
+        "Take the inner product of the first equation with x and of the second with y. Subtract the first real identity from the second."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Prove the spectral gap survives · continued",
+      "eyebrow": "G3 lecture 016000 · topic 3/10",
+      "id": "02-01",
+      "lead": "The real off-diagonal contributions cancel because B and B adjoint have matching pairings.",
+      "body": [
+        "The remainder is the positive quantity associated with lambda minus A low on x, plus the positive quantity associated with A high minus lambda on y. Each term is bounded below by its distance from the corresponding edge of the gap times the squared norm of its vector. Hence both x and y are zero, a contradiction. This excludes eigenvalues in the gap. In infinite-dimensional Hilbert space, simply excluding eigenvectors would not be enough. Instead, use the same coercive estimate with a block-sign reflection to obtain a lower norm bound for S minus lambda. Self-adjointness makes the range dense; bounded below and closed range then make it surjective. Thus lambda lies in the resolvent set. The argument proves full spectral repulsion, not merely absence of point spectrum."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "See the effect in a plane",
+      "eyebrow": "G3 lecture 016000 · topic 4/10",
+      "id": "03-00-0",
+      "lead": "Let A have diagonal entries negative one and one.",
+      "body": [
+        "The gap is the open interval from negative one to one. Add an off-diagonal symmetric perturbation whose two off-diagonal entries are h. The eigenvalues of S are negative and positive square root of one plus h squared. Both move away from zero as h increases. Neither can enter the original gap. For h equal to three, they become approximately negative three point one six two and positive three point one six two. The new low eigenspace rotates, but the gap itself remains protected, no matter how large h becomes."
+      ],
+      "diagram": "doubled-angle",
+      "formula": "[[a,t],[t,b]]",
+      "mathtex": "\\begin{bmatrix}a&t\\\\t&b\\end{bmatrix}",
+      "layout": "figure"
+    },
+    {
+      "title": "See the effect in a plane · further detail",
+      "eyebrow": "G3 lecture 016000 · topic 4/10",
+      "id": "03-00-1",
+      "lead": "This phenomenon is often called spectral repulsion.",
+      "body": [
+        "A diagonal perturbation would destroy the argument. If the original low eigenvalue is shifted upward sufficiently, it can move into the former gap. Thus the hypothesis that H is off-diagonal is doing indispensable work."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Select the canonical branch",
+      "eyebrow": "G3 lecture 016000 · topic 5/10",
+      "id": "04-00-0",
+      "lead": "Since S has no spectrum in the open gap, define Q as its spectral subspace for eigenvalues at most alpha.",
+      "body": [
+        "In a finite-dimensional matrix, Q is the span of all eigenvectors with eigenvalues at most alpha. In Hilbert space it is the range of the bounded Borel spectral projection for the half-line ending at alpha. This definition has no arbitrary eigenbasis or angle choices. The spectral repulsion result shows that the complementary subspace automatically has spectrum at least alpha plus delta. Q and its complement reduce S."
+      ],
+      "diagram": "spectral-gap",
+      "formula": "choose the perturbed spectral branch by order",
+      "layout": "figure"
+    },
+    {
+      "title": "Select the canonical branch · further detail",
+      "eyebrow": "G3 lecture 016000 · topic 5/10",
+      "id": "04-00-1",
+      "lead": "Theorem eight point one goes further: the maximal angle between P and this Q is strictly below forty-five degrees.",
+      "body": [
+        "Consequently the canonical branch is on the correct side of the doubled-angle ambiguity, even for large off-diagonal couplings. The source also proves uniqueness: a reducing subspace with the relevant spectral orientation and the closed quarter-angle characterization must coincide with Q. This is stronger than saying that some nearby subspace exists."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Recover the block compression inequality",
+      "eyebrow": "G3 lecture 016000 · topic 6/10",
+      "id": "05-00-0",
+      "lead": "Why do cosines of principal angles appear in Theorem eight point one's later parts?",
+      "body": [
+        "Decompose the original high subspace using the new low and high spectral projections of S. Write C for the overlap from the original high subspace into the new high subspace. The complementary overlap goes into the new low subspace. Since the original high compression of H is zero, compressing S to the original high subspace gives exactly the original high block of A. Subtract alpha from the corresponding quadratic form. On the new low spectral component, S minus alpha is nonpositive. Dropping that contribution can only increase the form."
+      ],
+      "diagram": "block-operator",
+      "formula": "quadratic form bounds control the selected block",
+      "layout": "figure"
+    },
+    {
+      "title": "Recover the block compression inequality · further detail",
+      "eyebrow": "G3 lecture 016000 · topic 6/10",
+      "id": "05-00-1",
+      "lead": "We are left with an upper bound supplied by the new high component, weighted by the overlap C.",
+      "body": [
+        "Symbolically, this is the inequality that the original high block minus alpha is at most C adjoint times the new high block minus alpha times C. The precise placement of adjoints depends on which coordinate space is used."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Recover the block compression inequality · continued",
+      "eyebrow": "G3 lecture 016000 · topic 6/10",
+      "id": "05-01",
+      "lead": "The lower-block statement follows by the same argument with signs reversed.",
+      "body": [
+        "In a principal-vector basis, the singular values of C are cosines of principal angles. Thus a cosine-squared factor is not an ornamental correction: it records the loss when a vector of the old high block is projected into the new high subspace."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "From forms to eigenvalue comparisons",
+      "eyebrow": "G3 lecture 016000 · topic 7/10",
+      "id": "06-00",
+      "lead": "In finite dimensions, order of positive self-adjoint matrices implies order of their decreasing eigenvalue sequences by Courant–Fischer.",
+      "body": [
+        "Applying this principle to the compression inequality gives repulsion estimates for ordered eigenvalues, with cosine factors. The source also proves dimension-free approximation-number formulations and finite-dimensional inequalities for symmetric gauges. Those conclusions require an additional step: comparing positive compressed operators at the level of singular-value prefixes, then passing from weak majorization to each supported symmetric gauge. We should not jump directly from one scalar operator-norm inequality to every individual eigenvalue comparison. The theorem contains a hierarchy: spectral gap preservation, ordered form inequalities, approximation numbers, and symmetric-gauge inequalities."
+      ],
+      "formula": "use eigenvalue comparison to identify the branch",
+      "layout": "reading"
+    },
+    {
+      "title": "The role of the quarter angle",
+      "eyebrow": "G3 lecture 016000 · topic 8/10",
+      "id": "07-00",
+      "lead": "In the two-by-two model, the low eigenvector of S is rotated from the old low axis by theta satisfying tangent twice theta equal to the magnitude of h.",
+      "body": [
+        "This always puts theta below forty-five degrees. As h tends to infinity, the angle approaches forty-five degrees from below. So the strict threshold does not imply that the subspaces remain extremely close for a large perturbation. It asserts that the canonical low branch cannot exchange roles with the high branch. That is exactly the information a doubled-sine estimate lacks. The sharp part of Theorem eight point one is structural: no finite off-diagonal coupling causes a spectral crossing, and the selected branch remains on the near-zero side of the quarter angle."
+      ],
+      "diagram": "doubled-angle",
+      "layout": "figure"
+    },
+    {
+      "title": "Why dimensions and defects still matter",
+      "eyebrow": "G3 lecture 016000 · topic 9/10",
+      "id": "08-00",
+      "lead": "For finite-dimensional P and Q, the low spectral branch has the same rank as P.",
+      "body": [
+        "A continuous deformation from zero coupling is one way to see this; the spectral-gap argument prevents an eigenvalue from crossing the separating threshold. In infinite dimensions, equal cardinal dimensions do not force the two directed projection gaps to agree. A full symmetric-angle statement needs additional compatibility of the crossed defects or suitable finite-dimensional hypotheses. Otherwise retain the directed conclusion. For the canonical branch theorem, these issues are addressed in its actual conclusion and hypotheses; one should not import an equal-rank simplification from finite-dimensional matrices into an arbitrary Hilbert space proof."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "What to retain",
+      "eyebrow": "G3 lecture 016000 · topic 10/10",
+      "id": "09-00",
+      "lead": "We now have a concrete mechanism for identifying the intended spectral subspace: form-separated diagonal blocks plus an off-diagonal self-adjoint perturbation preserve the open gap, define a canonical spectral projection, and keep the selected branch below a quarter turn.",
+      "body": [
+        "The compression identities then yield the eigenvalue and norm inequalities. It allows more general perturbations, but demands quantitative smallness relative to a spectral gap. We will show how that smallness can certify the correct angular branch."
+      ],
+      "takeaway": "Spectral selection identifies the correct perturbed branch before drawing a small-angle conclusion.",
+      "layout": "reading"
+    }
+  ]
+}

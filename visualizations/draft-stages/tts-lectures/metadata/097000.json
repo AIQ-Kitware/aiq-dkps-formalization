@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "lecture_id": "097000",
+  "transcript": "097000-ky-fan-dominance-in-hilbert-space.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "higham-unitarily-invariant-norm",
+      "reason": "Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms."
+    },
+    {
+      "source_id": "tao-hermitian-matrix-sums",
+      "reason": "Study min-max proofs and eigenvalue inequalities from a matrix-analysis viewpoint."
+    },
+    {
+      "source_id": "bell-trace-ideals",
+      "reason": "Work through trace-ideal and Hilbert-Schmidt definitions and inequalities in Hilbert space."
+    },
+    {
+      "source_id": "bell-compact-banach",
+      "reason": "Compare the Banach-space compactness lemmas with their Hilbert-space specializations."
+    },
+    {
+      "source_id": "bell-compact-svd",
+      "reason": "Read an infinite-dimensional account connecting compact SVD, min-max and Schatten classes."
+    }
+  ]
+}

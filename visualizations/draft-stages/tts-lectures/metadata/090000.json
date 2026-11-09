@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "lecture_id": "090000",
+  "transcript": "090000-quadratic-forms-and-ordered-half-infinite-gaps.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-positive",
+      "reason": "Quadratic-form and minimization examples in matrices; see the lecture assumptions for generalization."
+    },
+    {
+      "source_id": "higham-eigen-ineq",
+      "reason": "Concise matrix-level comparison of Rayleigh quotients and eigenvalue inequalities."
+    },
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "higham-positive-definite",
+      "reason": "Compare positive-definiteness tests with quadratic-form reasoning."
+    },
+    {
+      "source_id": "hunter-nachtergaele-applied",
+      "reason": "Read the matching open chapter for foundational analytic hypotheses and worked proofs."
+    },
+    {
+      "source_id": "teschl-qm-free",
+      "reason": "Use the full free text for spectral calculus and domains of unbounded self-adjoint operators."
+    },
+    {
+      "source_id": "bell-sturm-liouville",
+      "reason": "Relate differential-operator spectra to integral-operator reductions and boundary conditions."
+    }
+  ]
+}

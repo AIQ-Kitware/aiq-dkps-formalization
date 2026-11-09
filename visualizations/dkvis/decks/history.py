@@ -8,10 +8,12 @@ HISTORY_OVERVIEW = DeckSpec(
     description='People and publications behind subspace geometry, Davis–Kahan, statistics, and transport.',
     footer='Mathematical history: Davis–Kahan and beyond',
     narration=lecture_path('history_overview'),
-    slides=uses('dkvis.learning.history.scenes', [
-        'HiTitle', 'HiQuestion', 'HiJordan', 'HiSylvester', 'HiRayleighRitz', 'HiWeyl',
+    slides=uses('dkvis.learning.history.scenes', ['HiTitle'])
+    + uses('dkvis.learning.outcomes', ['LectureOutcomes'])
+    + uses('dkvis.learning.history.scenes', [
+        'HiQuestion', 'HiJordan', 'HiSylvester', 'HiRayleighRitz', 'HiWeyl',
         'HiHotelling', 'HiProjectionPeople', 'HiKatoHalmos', 'HiRosenblum',
         'HiDavisKahan', 'HiBound', 'HiWedinGolub', 'HiYws', 'HiQuench',
         'HiNormPeople', 'HiCorrection', 'HiMatching', 'HiEvidence', 'HiSummary',
-    ])+quiz_uses(),
+    ])+quiz_uses(count=4),
 )

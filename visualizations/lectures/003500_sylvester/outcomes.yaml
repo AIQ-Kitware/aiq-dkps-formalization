@@ -1,0 +1,6 @@
+facts:
+- Spectral differences control the entries of a Sylvester solution.
+- An ordered gap gives an operator-norm bound for the whole solution.
+- Exponential decay explains both the inverse integral and its constant.
+route: In A X minus X B equals R, the matrices A and B are given, and X is the unknown map. We will begin
+  with scalar division, then explain the extra argument needed to bound a matrix norm.

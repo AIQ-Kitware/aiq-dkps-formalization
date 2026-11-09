@@ -9,9 +9,9 @@ questions:
   correct: 1
   explanation: Every term of degree two or higher vanishes. The identity and linear term remain; exponentiation
     is not entrywise.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: First question. N squared is zero. What is the exponential of t N? A, the identity;
-    B, the identity plus t N; C, t N; or D, the entrywise scalar exponential? You have eight seconds to
+    B, the identity plus t N; C, t N; or D, the entrywise scalar exponential? You have five seconds to
     choose an answer. Pause the video if you want longer.
   speak_answer: The correct answer is B. Every term of degree two or higher vanishes. The identity and
     linear term remain; exponentiation is not entrywise.
@@ -25,10 +25,39 @@ questions:
   correct: 1
   explanation: Skew-symmetry gives orthogonality of the exponential. Commutation preserves the source
     decomposition.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: Second question. B is skew symmetric and commutes with P. Which statement follows? A,
     B must be zero; B, its exponential preserves lengths and the two spaces selected by P; C, every transporter
-    commutes with P; or D, the exponential is always its linear approximation? You have eight seconds
-    to choose an answer. Pause the video if you want longer.
+    commutes with P; or D, the exponential is always its linear approximation? You have five seconds to
+    choose an answer. Pause the video if you want longer.
   speak_answer: The correct answer is B. Skew-symmetry gives orthogonality of the exponential. Commutation
     preserves the source decomposition.
+- title: Zero generator
+  question: A is the zero square matrix. What does exponential t A do to an input vector?
+  choices:
+  - It sends every input to zero.
+  - It leaves every input unchanged.
+  - It replaces every coordinate by one.
+  correct: 1
+  explanation: The constant term in the matrix power series is the identity; all higher terms vanish.
+  think_seconds: 5
+  speak_question: Question 3. A is the zero square matrix. What does exponential t A do to an input vector?
+    A, It sends every input to zero. B, It leaves every input unchanged. C, It replaces every coordinate
+    by one. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is B. The constant term in the matrix power series is the identity; all higher
+    terms vanish.
+- title: Which motions are reached?
+  question: B is real skew-symmetric. Can the curve exponential t B starting at identity become a reflection?
+  choices:
+  - Yes, once t is large enough.
+  - No, it stays orthogonal with determinant plus one.
+  - Only if B is invertible.
+  correct: 1
+  explanation: The exponential curve is continuous and starts with determinant plus one. An orthogonal
+    determinant cannot change sign along it.
+  think_seconds: 5
+  speak_question: Question 4. B is real skew-symmetric. Can the curve exponential t B starting at identity
+    become a reflection? A, Yes, once t is large enough. B, No, it stays orthogonal with determinant plus
+    one. C, Only if B is invertible. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is B. The exponential curve is continuous and starts with determinant plus
+    one. An orthogonal determinant cannot change sign along it.

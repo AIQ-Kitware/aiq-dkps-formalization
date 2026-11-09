@@ -1,0 +1,15 @@
+deck: prereq-uniform-minima
+scope: 'Standalone bridge lecture: scenes, transcript, quiz, resources, and checked Lean applications.'
+slides:
+  initial_source_attribution:
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-06'
+    basis: New lecture authored using the stated learner feedback; mathematical sources are identified
+      in sources.md.
+transcript:
+  initial_source_attribution:
+  - models:
+    - GPT-6.1-Sol
+    date: '2026-11-06'
+    basis: New standalone narration and study questions.

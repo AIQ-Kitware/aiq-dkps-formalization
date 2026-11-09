@@ -1,0 +1,28 @@
+digraph DKPS_Course {
+  graph [rankdir=TB, bgcolor="transparent", pad="0.28", nodesep="0.42", ranksep="0.9", splines=polyline, fontname="DejaVu Sans", label="Proof-oriented curriculum: mathematical dependency overview", labelloc=t, fontsize=19];
+  node [shape=box, style="rounded,filled", color="#b1bfce", fillcolor="#eff4f8", fontname="DejaVu Sans", fontsize=11, margin="0.14,0.10"];
+  edge [color="#657a91", arrowsize=0.7, penwidth=1.2];
+  A [label="Banach foundations\nbounded maps · duality"];
+  H [label="Hilbert geometry\nadjoints · projections · isometries"];
+  F [label="Frames & Gram operators\nanalysis · synthesis · compression"];
+  S [label="Finite spectral theory\nmin–max · spectral projections"];
+  C [label="Operator functions\nmodulus · polar · exponentials"];
+  G [label="Two-subspace geometry\nprincipal angles · direct rotation"];
+  N [label="Majorization and norms\nKy Fan · Schatten · UIN"];
+  E [label="Elementary Sylvester theory\nordered/disjoint gaps"];
+  M [label="Measure/PVM calculus\nBorel spectral theory"];
+  U [label="Unbounded operators\ndomains · resolvents · cutoffs"];
+  I [label="Ideals & transfer\napproximation numbers · real/complex"];
+  X [label="Full Sylvester estimates\nideal-valued · unbounded"];
+  R [label="Residuals & angle modulus\ncomplementary block identity"];
+  DK [label="Sine & tangent theorems\nsingle and double angles",fillcolor="#d8eafb",color="#6797c6"];
+  SEL [label="Selection and generalizations\nbranch · frame · gap cases",fillcolor="#d8eafb",color="#6797c6"];
+  OPT [label="Direct-rotation optimality\ncounterexample · matching",fillcolor="#e4eee6",color="#91b69c"];
+  APP [label="Beam + modern applications\nPDE · spectral statistics",fillcolor="#e4eee6",color="#91b69c"];
+  A -> H; A -> S; H -> F; H -> S; S -> C; F -> G; C -> G; S -> G;
+  C -> N; S -> N; S -> E; C -> E; A -> E;
+  H -> M; S -> M; M -> U; A -> U;
+  N -> I; U -> I; E -> X; U -> X; I -> X;
+  F -> R; G -> R; U -> R; R -> DK; X -> DK; G -> DK;
+  DK -> SEL; I -> SEL; G -> OPT; N -> OPT; DK -> APP; U -> APP; SEL -> APP;
+}

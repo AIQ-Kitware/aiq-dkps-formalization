@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "lecture_id": "073000",
+  "transcript": "073000-sigma-algebras-and-borel-sets.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "mit-functional-analysis-videos",
+      "reason": "Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators."
+    },
+    {
+      "source_id": "hunter-nachtergaele-applied",
+      "reason": "Read the matching open chapter for foundational analytic hypotheses and worked proofs."
+    }
+  ]
+}

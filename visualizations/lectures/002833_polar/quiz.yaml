@@ -7,14 +7,14 @@ questions:
   - $A$
   - $0$
   correct: 1
-  explanation: The canonical factor is an isometry on the nonzero direction and vanishes on the kernel.
-    A unitary extension is a different choice.
-  think_seconds: 8
-  speak_question: First question. A is diagonal with entries two and zero. What is the canonical polar
-    partial isometry? A, the identity; B, diagonal one and zero; C, A itself; or D, zero? You have eight
-    seconds to choose an answer. Pause the video if you want longer.
-  speak_answer: The correct answer is B. The canonical factor is an isometry on the nonzero direction
-    and vanishes on the kernel. A unitary extension is a different choice.
+  explanation: The canonical factor is an isometry on the nonzero direction and vanishes on the kernel. A unitary
+    extension is a different choice.
+  think_seconds: 5
+  speak_question: First question. A is diagonal with entries two and zero. What is the canonical polar partial
+    isometry? A, the identity; B, diagonal one and zero; C, A itself; or D, zero? You have five seconds to
+    choose an answer. Pause the video if you want longer.
+  speak_answer: The correct answer is B. The canonical factor is an isometry on the nonzero direction and vanishes
+    on the kernel. A unitary extension is a different choice.
 - title: Separate stretch from motion
   question: Which equality holds for every vector in a polar factorization $A=U|A|$?
   choices:
@@ -23,12 +23,44 @@ questions:
   - $|A|=A$.
   - $A^*=A$.
   correct: 0
-  explanation: The modulus has the same length effect as A on each input. The partial isometry supplies
-    the remaining motion on its support.
-  think_seconds: 8
+  explanation: The modulus has the same length effect as A on each input. The partial isometry supplies the
+    remaining motion on its support.
+  think_seconds: 5
   speak_question: Second question. In a polar factorization, which claim always holds? A, A and its modulus
     have the same output norm on every input; B, the partial isometry is invertible; C, the modulus equals
-    A; or D, A is self adjoint? You have eight seconds to choose an answer. Pause the video if you want
-    longer.
-  speak_answer: The correct answer is A. The modulus has the same length effect as A on each input. The
-    partial isometry supplies the remaining motion on its support.
+    A; or D, A is self adjoint? You have five seconds to choose an answer. Pause the video if you want longer.
+  speak_answer: The correct answer is A. The modulus has the same length effect as A on each input. The partial
+    isometry supplies the remaining motion on its support.
+- title: Same lengths, different directions
+  question: For the planar rotation $A=R_{\pi/2}$, what is $|A|$?
+  choices:
+  - $R_{\pi/2}$
+  - $I$
+  - $0$
+  - $-I$
+  correct: 1
+  explanation: A rotation preserves every input length. Its modulus is the identity; the rotation remains in
+    U.
+  think_seconds: 5
+  speak_question: Third question. A rotates the plane through a right angle. What is its operator modulus?
+    A, the same rotation; B, the identity; C, zero; or D, minus the identity? You have five seconds. Pause
+    for longer if needed.
+  speak_answer: B, the identity. A rotation changes directions while preserving every input length. The modulus
+    keeps that length effect; U supplies the rotation.
+- title: Why the rule is consistent
+  question: If $|A|x=|A|y$, why must $Ax=Ay$?
+  choices:
+  - $A$ is assumed invertible.
+  - $x=y$ always follows.
+  - $\|A(x-y)\|=\||A|(x-y)\|=0$.
+  - $A=|A|$ for every map.
+  correct: 2
+  explanation: The equal-length identity applied to x-y gives zero A-output. The inputs themselves may differ
+    by a kernel vector.
+  think_seconds: 5
+  speak_question: Fourth question. Two inputs x and y have the same modulus output. Why must their A outputs
+    agree? A, A is assumed invertible; B, x and y must be identical; C, the equal-length identity makes the
+    A output of x minus y have norm zero; or D, A always equals its modulus? You have five seconds.
+  speak_answer: C. Apply the equal-length identity to the difference of the inputs. Its modulus output is zero,
+    so its A output is zero. The inputs may differ, but the final outputs agree. This is what makes the rule
+    for U consistent.

@@ -184,7 +184,7 @@ Configure speech servers in [tts.toml](tts.toml). It contains named profiles:
 | --- | --- | --- | --- |
 | `crall` (default) | `breeze-tts2` | `crall-math-dk` | WAV |
 | `breeze` | `breeze-tts2` | `ryan` | WAV |
-| `kokoro` | `kokoro` | `af_heart` | WAV |
+| `kokoro` | `kokoro` | `af_alloy` | MP3 |
 | `qwen` | `qwen-1.7-customvoice-q8-ggml` | `ryan` | MP3 |
 
 Set `DKVIS_TTS_PROFILE` in the ignored `visualizations/.env` file to change

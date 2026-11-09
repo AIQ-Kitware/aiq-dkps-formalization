@@ -11,6 +11,13 @@ Recall: PVM means projection-valued measure.
 
 Projection-valued measures.
 
+## LectureOutcomes: The ideas to carry away
+
+Why: See the conclusions before the details.
+Recall: The local setup follows this overview.
+
+A spectral region selects a whole subspace through a projection. A fixed vector turns spectral selection into a scalar energy measure. Weighting spectral components constructs functions of an operator. We start with a self-adjoint matrix, where every selected component can be drawn. The finite picture will guide the extensions to continuous spectrum, limits, and domains. It does not require a preferred basis inside a repeated eigenspace.
+
 ## PvSetup: The setting and the notation
 
 Why: A set of spectral values will select a subspace.
@@ -86,7 +93,7 @@ The selected vector components are orthogonal, so their squared lengths add, wit
 Why: The scalar measure records how much of this vector lies in a spectral region.
 Recall: x is fixed; B is the measurable set that varies.
 
-The PVM tells us which subspace a set selects. A different question concerns a particular input: how much of this vector lies in that subspace? Fix x and define mu x of B to be the squared norm of E of B applied to x. This assigns a nonnegative number to each spectral region.
+We have an operator that selects a spectral region. To measure how much of one vector it selects, we can take the squared length of that projected vector. The PVM tells us which subspace a set selects. A different question concerns a particular input: how much of this vector lies in that subspace? Fix x and define mu x of B to be the squared norm of E of B applied to x. This assigns a nonnegative number to each spectral region.
 
 <!-- beat -->
 
@@ -101,7 +108,7 @@ Return to our four-coordinate example. Give x spectral coordinates all equal to 
 Why: The integral generalizes a weighted sum of orthogonal spectral pieces.
 Recall: An indicator function is one on its set and zero outside.
 
-So far our spectral filter has assigned only zero or one: discard a component or keep it. Let us allow other weights. Describe a simple function f by values c j on disjoint spectral sets B j. The indicator functions in the formula identify which piece receives each weight.
+Selection keeps or removes components. Weighting those same components instead will construct a new operator. So far our spectral filter has assigned only zero or one: discard a component or keep it. Let us allow other weights. Describe a simple function f by values c j on disjoint spectral sets B j. The indicator functions in the formula identify which piece receives each weight.
 
 <!-- beat -->
 
@@ -179,7 +186,7 @@ The PVM does not by itself prove a perturbation bound. Davis–Kahan supplies qu
 Why: Keep the three roles separate while remembering how they fit together.
 Recall: The measure is projection-valued; a fixed vector produces a scalar measure.
 
-A PVM takes a measurable spectral set and returns an orthogonal projection. Its set operations become compatible operator operations, and disjoint countable unions become vectorwise norm-convergent sums. A fixed vector produces the scalar energy measure mu x. Spectral integration then weights the selected pieces to construct functions of an operator.
+A spectral region selects a whole subspace through a projection. A fixed vector turns spectral selection into a scalar energy measure. Weighting spectral components constructs functions of an operator. Here is how the preceding argument fits those conclusions. A PVM takes a measurable spectral set and returns an orthogonal projection. Its set operations become compatible operator operations, and disjoint countable unions become vectorwise norm-convergent sums. A fixed vector produces the scalar energy measure mu x. Spectral integration then weights the selected pieces to construct functions of an operator.
 
 <!-- beat -->
 

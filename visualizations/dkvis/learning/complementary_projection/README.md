@@ -24,7 +24,7 @@ The main points are:
 The lecture has 16 slides: local setup, geometry and animated angle changes,
 restriction to trial vectors, the paper's sine block, comparison with rotation,
 summary, mathematical facts, two highlighted Lean cards, an optional numerical
-bonus, and two multiple-choice study questions.
+bonus, and four multiple-choice study questions.
 
 ## Sources and scope
 

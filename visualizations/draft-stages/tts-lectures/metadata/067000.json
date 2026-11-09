@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "lecture_id": "067000",
+  "transcript": "067000-disjoint-spectral-sets-and-rosenblum-theory.md",
+  "historical_claims": [
+    {
+      "id": "067000-h01",
+      "anchor": "Rosenblum, and its engine is a contour integral of resolvents.",
+      "kind": "historical_attribution",
+      "source_ids": [
+        "rosenblum-1956"
+      ],
+      "source_locator": "Solvability with disjoint spectra",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "higham-sylvester",
+      "reason": "Matrix Sylvester equation; note the lecture-specific operator norm and spectral-gap conditions."
+    },
+    {
+      "source_id": "rosenblum-1956",
+      "reason": "Primary paper on the operator equation and disjoint spectra; comparison resource, not a verified source check."
+    },
+    {
+      "source_id": "tao-eigenvalue-stability",
+      "reason": "Contrast Hermitian spectral stability with nonnormal sensitivity and pseudospectra."
+    },
+    {
+      "source_id": "bell-spectrum-decomposition",
+      "reason": "Compare spectra and resolvent decomposition beyond diagonal finite matrices."
+    },
+    {
+      "source_id": "bell-banach-algebras",
+      "reason": "Review the Banach-algebra spectral language behind resolvents and invertibility."
+    }
+  ]
+}

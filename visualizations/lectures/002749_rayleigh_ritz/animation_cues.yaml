@@ -67,9 +67,13 @@ scenes:
   RrBlock:
     2:
     - visual_at: 0
-      phrase: The two green arrows supply them
+      phrase: The two green arrows give
     - visual_at: 2
       phrase: Together they form C
+    - visual_at: 3
+      phrase: The D block starts
+    - visual_at: 4
+      phrase: The upper-right block is C transpose
     3:
     - visual_at: 0
       phrase: Invariance requires every perpendicular output
@@ -81,3 +85,33 @@ scenes:
       phrase: The trial space is the collection
     - visual_at: 2
       phrase: The frame Q supplies coordinates
+  RrOutcomes:
+    1:
+    - visual_at: 0
+      phrase: The small model keeps the projected output
+    - visual_at: 1
+      phrase: Its eigenvectors and eigenvalues give candidates
+    - visual_at: 2
+      phrase: The remaining error is perpendicular
+  RrPreview:
+    1:
+    - visual_at: 0
+      phrase: Applying A produces the blue output
+    - visual_at: 1
+      phrase: The amber output is the part retained
+    2:
+    - visual_at: 0
+      phrase: Now suppose the small matrix has an eigenvector
+    - visual_at: 1
+      phrase: This scalar is a Ritz value
+    - visual_at: 2
+      phrase: The green difference r equals
+  RrSummary:
+    1:
+    - visual_at: 0
+      phrase: First the small model keeps the projected output
+    - visual_at: 1
+      phrase: Second the small eigenproblem gives candidates
+    2:
+    - visual_at: 0
+      phrase: Third the remaining error is perpendicular

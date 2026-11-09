@@ -1,0 +1,57 @@
+questions:
+- title: Meaning of invariant
+  question: K is invariant under T. Must every x in K satisfy T x equals x?
+  choices:
+  - Yes.
+  - No; T x only has to remain in K.
+  - Only when K is a line.
+  correct: 1
+  explanation: Invariance preserves membership, not individual vectors.
+  think_seconds: 5
+  speak_question: Question 1. K is invariant under T. Must every x in K satisfy T x equals x? A, Yes.
+    B, No; T x only has to remain in K. C, Only when K is a line. You have five seconds. Pause for longer
+    if needed.
+  speak_answer: The answer is B. Invariance preserves membership, not individual vectors.
+- title: One zero block
+  question: The horizontal axis is invariant under a general two-by-two matrix. Which entry must vanish?
+  choices:
+  - The lower-left entry.
+  - The upper-right entry.
+  - Both diagonal entries.
+  correct: 0
+  explanation: A horizontal input has no vertical output. A vertical input may still acquire a horizontal
+    component.
+  think_seconds: 5
+  speak_question: Question 2. The horizontal axis is invariant under a general two-by-two matrix. Which
+    entry must vanish? A, The lower-left entry. B, The upper-right entry. C, Both diagonal entries. You
+    have five seconds. Pause for longer if needed.
+  speak_answer: The answer is A. A horizontal input has no vertical output. A vertical input may still
+    acquire a horizontal component.
+- title: Using self-adjointness
+  question: A real symmetric map preserves K. What follows for the perpendicular complement?
+  choices:
+  - It is also preserved.
+  - It must be the zero space.
+  - The map must vanish on it.
+  correct: 0
+  explanation: Move the map across the inner product. A vector perpendicular to K pairs to zero with every
+    image of a vector in K.
+  think_seconds: 5
+  speak_question: Question 3. A real symmetric map preserves K. What follows for the perpendicular complement?
+    A, It is also preserved. B, It must be the zero space. C, The map must vanish on it. You have five
+    seconds. Pause for longer if needed.
+  speak_answer: The answer is A. Move the map across the inner product. A vector perpendicular to K pairs
+    to zero with every image of a vector in K.
+- title: Two operators
+  question: A split is block diagonal for T. Must it also be block diagonal for another map S?
+  choices:
+  - Yes, in the same coordinates.
+  - No; S must also preserve the proposed pieces.
+  - Only the block sizes matter.
+  correct: 1
+  explanation: Common blocks require preservation by every relevant map.
+  think_seconds: 5
+  speak_question: Question 4. A split is block diagonal for T. Must it also be block diagonal for another
+    map S? A, Yes, in the same coordinates. B, No; S must also preserve the proposed pieces. C, Only the
+    block sizes matter. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is B. Common blocks require preservation by every relevant map.

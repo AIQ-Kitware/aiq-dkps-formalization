@@ -1,6 +1,6 @@
 deck: matching-proof
-scope: Attribution for topic-specific source files. Shared renderer and orientation components retain their separate
-  Git histories.
+scope: Attribution for topic-specific source files. Shared renderer and orientation components retain
+  their separate Git histories.
 slides:
   initial_source_attribution:
   - source: visualizations/dkvis/learning/matching/study.py
@@ -8,13 +8,15 @@ slides:
     - GPT-6.1-Sol
     commit: 5fdda50fe857ee332757f856dee897edca1f386a
     date: '2026-11-04T19:29:20-05:00'
-    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see model_identity_confirmation).
+    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see
+      model_identity_confirmation).
   - source: visualizations/dkvis/learning/matching/bonus.py
     models:
     - GPT-6.1-Sol
     commit: 3fe7ccab3fcc1cd5a7a09abc2e5e1c1050c0e45c
     date: '2026-11-05T00:16:46-05:00'
-    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see model_identity_confirmation).
+    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see
+      model_identity_confirmation).
   revisions:
   - models:
     - GPT-6.1-Sol
@@ -22,6 +24,11 @@ slides:
     sources:
     - visualizations/dkvis/learning/matching/study.py
     scope: Add a dedicated opening card with robot/model disclosure.
+  - date: '2026-11-06'
+    models:
+    - GPT-6.1-Sol
+    basis: Added factual opening outcomes, connected recaps, and precise five-second study questions;
+      clarified local motivation and terminology.
 transcript:
   initial_source_attribution:
   - source: visualizations/lectures/004000_matching_study/lecture.md
@@ -29,13 +36,15 @@ transcript:
     - GPT-6.1-Sol
     commit: 5fdda50fe857ee332757f856dee897edca1f386a
     date: '2026-11-04T19:29:20-05:00'
-    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see model_identity_confirmation).
+    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see
+      model_identity_confirmation).
   - source: visualizations/lectures/004000_matching_study/quiz.yaml
     models:
     - GPT-6.1-Sol
     commit: b338f50b622a5de3bcc9cf80cafa8c7151d9917f
     date: '2026-11-04T23:40:53-05:00'
-    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see model_identity_confirmation).
+    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see
+      model_identity_confirmation).
   revisions:
   - models:
     - GPT-6.1-Sol
@@ -43,13 +52,18 @@ transcript:
     sources:
     - visualizations/lectures/004000_matching_study/lecture.md
     scope: Add a short spoken cover title; retain the proof narration.
-note: Model identity reflects the user's explicit confirmation. Weights and runtime settings were not supplied.
-  Attribution is not a claim of mathematical priority or independently verified authorship.
+  - date: '2026-11-06'
+    models:
+    - GPT-6.1-Sol
+    basis: Added factual opening outcomes, connected recaps, and precise five-second study questions;
+      clarified local motivation and terminology.
+note: Model identity reflects the user's explicit confirmation. Weights and runtime settings were not
+  supplied. Attribution is not a claim of mathematical priority or independently verified authorship.
 model_identity_confirmation:
   date: '2026-11-05'
   confirmed_by: user
   model: GPT-6.1-Sol
   previously_recorded_model: GPT-6 (Codex; exact model variant and weights/config undetermined)
   statement: In fact, I know all of the new numbered lectures and transcripts were made via this model.
-  scope: Initial source attribution and recorded revisions for this numbered lecture, including slides, transcript,
-    and quiz.
+  scope: Initial source attribution and recorded revisions for this numbered lecture, including slides,
+    transcript, and quiz.

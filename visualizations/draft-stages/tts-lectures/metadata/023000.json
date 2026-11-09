@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "lecture_id": "023000",
+  "transcript": "023000-gram-operators-of-rectangular-maps.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-18-06",
+      "reason": "MIT 18.06: lectures 9–17 on vector spaces, orthogonality, bases and projections; choose the topic matching this recording."
+    },
+    {
+      "source_id": "mit-strang-svd",
+      "reason": "Finite-dimensional singular-direction intuition; general operator-ideal and infinite-dimensional claims require additional sources."
+    },
+    {
+      "source_id": "higham-svd",
+      "reason": "See matrix singular vectors and singular values in an independent exposition."
+    },
+    {
+      "source_id": "mit-strang-18065-svd",
+      "reason": "Watch a direct geometric account of singular directions before the formal operator argument."
+    },
+    {
+      "source_id": "mml-free-text",
+      "reason": "Use analytic-geometry, decomposition or PCA examples to connect the operator calculation to data analysis."
+    }
+  ]
+}

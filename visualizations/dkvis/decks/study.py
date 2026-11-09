@@ -21,6 +21,7 @@ STUDY_SCENES = [
 ]
 
 STUDY = DeckSpec(
+    learning_resources="lectures/reference-core.yaml",
     name="study",
     description="Long-form curriculum for understanding the theorem family, formalization, and evidence in detail.",
     footer=r"Davis--Kahan formalization $\cdot$ study deck",

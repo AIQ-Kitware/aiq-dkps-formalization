@@ -1,0 +1,9 @@
+scenes:
+  LectureOutcomes:
+    1:
+    - visual_at: 0
+      phrase: Principal angles compare subspaces independently of the bases chosen.
+    - visual_at: 1
+      phrase: The singular values of the frame overlap are the cosines of those angles.
+    - visual_at: 2
+      phrase: The largest sine measures the worst perpendicular error of a unit input.

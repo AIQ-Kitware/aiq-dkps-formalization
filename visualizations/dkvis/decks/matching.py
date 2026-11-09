@@ -24,7 +24,8 @@ MATCHING_PROOF = DeckSpec(
     footer=r"Real trace-norm matching $\cdot$ proof study",
     narration=lecture_path('matching_study'),
     slides=uses('dkvis.learning.matching.study', ['MTitle'])
+    + uses('dkvis.learning.outcomes', ['LectureOutcomes'])
     + uses('dkvis.learning.orientation', ['M00Setup'])
     + tuple(SlideUse("dkvis.learning.matching.study", name) for name in SCENES)
-    + uses('dkvis.learning.matching.bonus', ['MatchingComputation'], depth='*') + quiz_uses(),
+    + uses('dkvis.learning.matching.bonus', ['MatchingComputation'], depth='*') + quiz_uses(count=4),
 )

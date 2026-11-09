@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "description": "Curated proof-use relationships, directed from the theorem or construction to the lemma, method, or estimate used in its argument. Unlike listening order these assert mathematical proof usage.",
+  "edges": [
+    [
+      "g2:110000",
+      "proof_depends_on",
+      "g2:071000",
+      "The sine-theorem proof obtains its residual block relation by compressing the Sylvester identity."
+    ],
+    [
+      "g2:110000",
+      "proof_depends_on",
+      "g2:109000",
+      "The directed sine operator is the geometric quantity bounded by the residual estimate."
+    ],
+    [
+      "g2:112000",
+      "proof_depends_on",
+      "g2:111000",
+      "The tangent estimate represents the trial subspace as a graph over the reference subspace."
+    ],
+    [
+      "g2:112000",
+      "proof_depends_on",
+      "g2:071000",
+      "The graph-coordinate equation comes from the complementary block Sylvester identity."
+    ],
+    [
+      "g2:116000",
+      "proof_depends_on",
+      "g2:114000",
+      "The doubled-angle perturbation argument uses the off-diagonal reflection construction."
+    ],
+    [
+      "g2:116000",
+      "proof_depends_on",
+      "g2:115000",
+      "The sine-of-twice-theta estimate uses the doubled-angle identities obtained from symmetry."
+    ],
+    [
+      "g2:117000",
+      "proof_depends_on",
+      "g2:114000",
+      "The tangent-of-twice-theta setup uses the block reflection of an off-diagonal perturbation."
+    ],
+    [
+      "g2:117000",
+      "proof_depends_on",
+      "g2:115000",
+      "The doubled-angle algebra supplies the tangent identity used in the bound."
+    ],
+    [
+      "g2:117000",
+      "proof_depends_on",
+      "g2:111000",
+      "The tangent theorem uses graph-subspace coordinates to express the angle."
+    ],
+    [
+      "g2:120000",
+      "proof_depends_on",
+      "g2:119000",
+      "Small-angle certification uses spectral selection and repulsion to choose the relevant branch."
+    ],
+    [
+      "g2:124000",
+      "proof_depends_on",
+      "g2:123000",
+      "The ambient sine estimate uses pinching through an involution to compare operator blocks."
+    ],
+    [
+      "g2:126000",
+      "proof_depends_on",
+      "g2:070000",
+      "The weak-gap Hilbert–Schmidt estimate uses the Hilbert–Schmidt Sylvester bound."
+    ],
+    [
+      "g2:127000",
+      "proof_depends_on",
+      "g2:111000",
+      "The generalized tangent estimate uses the graph representation of subspace angles."
+    ],
+    [
+      "g2:128000",
+      "proof_depends_on",
+      "g2:091000",
+      "Spectral cutoffs rely on bounded approximants constructed for unbounded operators."
+    ],
+    [
+      "g2:128000",
+      "proof_depends_on",
+      "g2:093000",
+      "The finite-rank cutoff method starts from the domain-aware Sylvester relation."
+    ],
+    [
+      "g2:129000",
+      "proof_depends_on",
+      "g2:128000",
+      "The complete proof reconstruction invokes the spectral-cutoff and finite-rank source lemmas."
+    ],
+    [
+      "g2:129000",
+      "proof_depends_on",
+      "g2:094000",
+      "The complete proof reconstruction uses the unbounded Sylvester estimate."
+    ],
+    [
+      "g2:130000",
+      "proof_depends_on",
+      "g2:049000",
+      "The optimization argument compares other intertwiners with the canonical direct rotation."
+    ],
+    [
+      "g2:131000",
+      "proof_depends_on",
+      "g2:042000",
+      "Squared frame displacement is computed from the principal-angle geometry of orthonormal frames."
+    ],
+    [
+      "g2:132000",
+      "proof_depends_on",
+      "g2:131000",
+      "The whole-space squared comparison uses the frame-level squared-displacement calculation."
+    ],
+    [
+      "g2:133000",
+      "proof_depends_on",
+      "g2:132000",
+      "The unsquared optimization comparison contrasts with the squared-displacement identity."
+    ],
+    [
+      "g2:134000",
+      "proof_depends_on",
+      "g2:133000",
+      "The four-dimensional counterexample targets unsquared ambient displacement rather than the squared quantity."
+    ],
+    [
+      "g2:135000",
+      "proof_depends_on",
+      "g2:134000",
+      "The corrected scope of the matching claim follows from the explicit four-dimensional counterexample."
+    ],
+    [
+      "g2:136000",
+      "proof_depends_on",
+      "g2:045000",
+      "Classification of direct rotations uses the canonical two-projection decomposition."
+    ],
+    [
+      "g2:138000",
+      "proof_depends_on",
+      "g2:137000",
+      "The beam calculation uses the free-beam operator and its boundary-domain definition."
+    ],
+    [
+      "g2:138000",
+      "proof_depends_on",
+      "g2:021000",
+      "The trial-space calculation forms the Rayleigh–Ritz compression of the beam operator."
+    ],
+    [
+      "g2:139000",
+      "proof_depends_on",
+      "g2:138000",
+      "The angle and Ky Fan estimates are evaluated on the computed beam Ritz data."
+    ],
+    [
+      "g2:140000",
+      "proof_depends_on",
+      "g2:139000",
+      "The mode comparison interprets the subspace and Ky Fan estimates for the beam example."
+    ],
+    [
+      "g2:145000",
+      "proof_depends_on",
+      "g2:134000",
+      "The real transport comparison is motivated by the counterexample to unrestricted rotation optimality."
+    ],
+    [
+      "g2:145000",
+      "proof_depends_on",
+      "g2:136000",
+      "The matching construction uses the characterization of admissible real direct rotations."
+    ],
+    [
+      "g2:146000",
+      "proof_depends_on",
+      "g2:036000",
+      "The rectangular singular-subspace argument passes through singular-value decomposition geometry."
+    ],
+    [
+      "g2:147000",
+      "proof_depends_on",
+      "g2:031000",
+      "Population-gap conclusions distinguish ordered gaps from general spectral-set distances."
+    ],
+    [
+      "g2:148000",
+      "proof_depends_on",
+      "g2:042000",
+      "Procrustes alignment is expressed using overlaps and principal angles between spectral frames."
+    ],
+    [
+      "g2:149000",
+      "proof_depends_on",
+      "g2:129000",
+      "The proof practicum reconstructs the earlier complete proof of the original paper."
+    ],
+    [
+      "g3:020000",
+      "proof_depends_on",
+      "g3:009000",
+      "The single-angle sine result applies the Sylvester separation machinery from the focused course."
+    ],
+    [
+      "g3:021000",
+      "proof_depends_on",
+      "g3:011000",
+      "The tangent result uses the graph-subspace coordinates introduced in the focused course."
+    ],
+    [
+      "g3:022000",
+      "proof_depends_on",
+      "g3:014000",
+      "The doubled-sine theorem uses the off-diagonal block-reflection construction."
+    ],
+    [
+      "g3:023000",
+      "proof_depends_on",
+      "g3:015000",
+      "The doubled-tangent result uses the doubled-angle symmetry argument."
+    ],
+    [
+      "g3:024000",
+      "proof_depends_on",
+      "g3:019000",
+      "The Proposition 4.4 counterexample uses the analysis of direct-rotation displacement costs."
+    ],
+    [
+      "g3:025000",
+      "proof_depends_on",
+      "g3:019000",
+      "The real matching result builds on the direct-rotation and transport comparison."
+    ],
+    [
+      "g4:residual-proof",
+      "proof_depends_on",
+      "g3:003000",
+      "The YWS finite-dimensional proof starts from the residual block equation."
+    ],
+    [
+      "g4:rectangular-correction",
+      "proof_depends_on",
+      "g2:146000",
+      "The rectangular YWS formulation uses the singular-subspace argument for rectangular matrices."
+    ]
+  ]
+}

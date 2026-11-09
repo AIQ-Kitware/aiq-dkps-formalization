@@ -201,11 +201,14 @@ def test_native_lessons_introduce_local_objects_and_separate_numerics():
         # Imported reference compositions retain their existing local setup.
         if name == 'sine-theta-lecture' or name in lecture_decks('history'):
             continue
-        assert setups == [1]
+        # A factual preview may precede the notation setup. The setup still
+        # belongs after the cover and before the formal/numerical companions.
+        assert len(setups) == 1 and setups[0] > 0
         bonus = [i for i, s in enumerate(slides) if s.scene.endswith('Computation')]
         assert bonus == [len(slides)-len(questions(name))-1]
         assert slides[bonus[0]].depth == '*'
-        assert all(i < bonus[0] for i, s in enumerate(slides) if 'Lean' in s.scene)
+        assert setups[0] < bonus[0]
+        assert all(setups[0] < i < bonus[0] for i, s in enumerate(slides) if 'Lean' in s.scene)
 
 
 def test_sine_theta_course_edition_preserves_the_reference_core():

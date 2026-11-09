@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "lecture_id": "147000",
+  "transcript": "147000-population-gap-spectral-statistics.md",
+  "historical_claims": [
+    {
+      "id": "147000-h01",
+      "anchor": "Population-gap perturbation bounds developed by Yu, Wang, and Samworth control eigenspace error using the population spectrum and the size of the sampling error, without assuming a separate sample gap.",
+      "kind": "historical_attribution",
+      "source_ids": [
+        "yu-wang-samworth-2015"
+      ],
+      "source_locator": "Theorem 2; rectangular extension",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "hsu-dk-notes",
+      "reason": "Brief finite-matrix exposition; not an alternate proof of every general theorem in this lecture."
+    },
+    {
+      "source_id": "yu-wang-samworth-preprint",
+      "reason": "Accessible population-gap and rectangular singular-subspace treatment."
+    },
+    {
+      "source_id": "mit-strang-18065-clusters",
+      "reason": "See spectral embedding in a concrete graph-clustering application."
+    },
+    {
+      "source_id": "mml-free-text",
+      "reason": "Use analytic-geometry, decomposition or PCA examples to connect the operator calculation to data analysis."
+    }
+  ]
+}

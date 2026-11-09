@@ -1,0 +1,7 @@
+facts:
+- A feasible curve stays inside the constraint for every parameter value.
+- At a differentiable minimum, the cost derivative along such a curve is zero.
+- Carefully chosen legal directions force diagonal gradient blocks to vanish.
+route: Our constraint requires a length-preserving map carrying a source space onto a target. We will
+  construct legal curves before differentiating. The resulting equations are necessary at a minimum; they
+  do not by themselves certify a minimum.

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "lecture_id": "069000",
+  "transcript": "069000-norm-dependence-of-sylvester-bounds.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "higham-sylvester",
+      "reason": "Matrix Sylvester equation; note the lecture-specific operator norm and spectral-gap conditions."
+    },
+    {
+      "source_id": "rosenblum-1956",
+      "reason": "Primary paper on the operator equation and disjoint spectra; comparison resource, not a verified source check."
+    },
+    {
+      "source_id": "tao-eigenvalue-stability",
+      "reason": "Contrast Hermitian spectral stability with nonnormal sensitivity and pseudospectra."
+    },
+    {
+      "source_id": "bell-banach-algebras",
+      "reason": "Review the Banach-algebra spectral language behind resolvents and invertibility."
+    }
+  ]
+}

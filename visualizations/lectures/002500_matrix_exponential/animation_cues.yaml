@@ -1,0 +1,9 @@
+scenes:
+  LectureOutcomes:
+    1:
+    - visual_at: 0
+      phrase: A matrix power series defines a family of linear maps.
+    - visual_at: 1
+      phrase: Applying that family to an input solves a constant linear differential equation.
+    - visual_at: 2
+      phrase: A skew-symmetric generator produces length-preserving motions.

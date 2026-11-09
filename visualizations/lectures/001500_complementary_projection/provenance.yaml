@@ -1,6 +1,6 @@
 deck: prereq-complementary-projection
-scope: Attribution for topic-specific source files. Shared renderer and orientation components retain their separate
-  Git histories.
+scope: Attribution for topic-specific source files. Shared renderer and orientation components retain
+  their separate Git histories.
 slides:
   initial_source_attribution:
   - source: visualizations/dkvis/learning/complementary_projection/scenes.py
@@ -8,7 +8,14 @@ slides:
     - GPT-6.1-Sol
     commit: 9b9e0eb08f8b44f967aae43f02ed5f9626790ce9
     date: '2026-11-05T00:28:23-05:00'
-    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see model_identity_confirmation).
+    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see
+      model_identity_confirmation).
+  revisions:
+  - date: '2026-11-06'
+    models:
+    - GPT-6.1-Sol
+    basis: Added factual opening outcomes, connected recaps, and precise five-second study questions;
+      clarified local motivation and terminology.
 transcript:
   initial_source_attribution:
   - source: visualizations/lectures/001500_complementary_projection/lecture.md
@@ -16,28 +23,35 @@ transcript:
     - GPT-6.1-Sol
     commit: 9b9e0eb08f8b44f967aae43f02ed5f9626790ce9
     date: '2026-11-05T00:28:23-05:00'
-    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see model_identity_confirmation).
+    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see
+      model_identity_confirmation).
   - source: visualizations/lectures/001500_complementary_projection/quiz.yaml
     models:
     - GPT-6.1-Sol
     commit: 9b9e0eb08f8b44f967aae43f02ed5f9626790ce9
     date: '2026-11-05T00:28:23-05:00'
-    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see model_identity_confirmation).
+    basis: First tracked source commit retained; model identity corrected by the user on 2026-11-05 (see
+      model_identity_confirmation).
   revisions:
   - date: '2026-11-05'
     models:
     - GPT-6.1-Sol
     sources:
     - visualizations/lectures/001500_complementary_projection/lecture.md
-    scope: Remove prompt-response language and motivate the lecture independently; keep transport connections as
-      explicit applications.
-note: Model identity reflects the user's explicit confirmation. Weights and runtime settings were not supplied.
-  Attribution is not a claim of mathematical priority or independently verified authorship.
+    scope: Remove prompt-response language and motivate the lecture independently; keep transport connections
+      as explicit applications.
+  - date: '2026-11-06'
+    models:
+    - GPT-6.1-Sol
+    basis: Added factual opening outcomes, connected recaps, and precise five-second study questions;
+      clarified local motivation and terminology.
+note: Model identity reflects the user's explicit confirmation. Weights and runtime settings were not
+  supplied. Attribution is not a claim of mathematical priority or independently verified authorship.
 model_identity_confirmation:
   date: '2026-11-05'
   confirmed_by: user
   model: GPT-6.1-Sol
   previously_recorded_model: GPT-6 (Codex; exact model variant and weights/config undetermined)
   statement: In fact, I know all of the new numbered lectures and transcripts were made via this model.
-  scope: Initial source attribution and recorded revisions for this numbered lecture, including slides, transcript,
-    and quiz.
+  scope: Initial source attribution and recorded revisions for this numbered lecture, including slides,
+    transcript, and quiz.

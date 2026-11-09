@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "lecture_id": "146000",
+  "transcript": "146000-rectangular-singular-subspace-bounds.md",
+  "historical_claims": [
+    {
+      "id": "146000-h01",
+      "anchor": "The original Davis–Kahan theorems concern self-adjoint operators and their spectral subspaces.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "General theorem scope",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "hsu-dk-notes",
+      "reason": "Brief finite-matrix exposition; not an alternate proof of every general theorem in this lecture."
+    },
+    {
+      "source_id": "yu-wang-samworth-preprint",
+      "reason": "Accessible population-gap and rectangular singular-subspace treatment."
+    },
+    {
+      "source_id": "higham-svd",
+      "reason": "See matrix singular vectors and singular values in an independent exposition."
+    },
+    {
+      "source_id": "higham-pseudoinverse",
+      "reason": "Explore the SVD approach to rectangular or rank-deficient matrix maps."
+    },
+    {
+      "source_id": "intel-principal-angles",
+      "reason": "Compute principal angles numerically from orthonormal bases using QR and SVD."
+    },
+    {
+      "source_id": "mit-strang-18065-svd",
+      "reason": "Watch a direct geometric account of singular directions before the formal operator argument."
+    },
+    {
+      "source_id": "bindel-hermitian-svd",
+      "reason": "Review a computational proof of symmetric eigenvalue and singular-value properties."
+    },
+    {
+      "source_id": "mml-free-text",
+      "reason": "Use analytic-geometry, decomposition or PCA examples to connect the operator calculation to data analysis."
+    }
+  ]
+}

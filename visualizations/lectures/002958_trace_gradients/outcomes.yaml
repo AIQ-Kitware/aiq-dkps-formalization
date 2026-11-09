@@ -1,0 +1,4 @@
+facts:
+- The Frobenius pairing is a dot product between matching matrix entries.
+- A matrix gradient stores the first-order response to every matrix direction.
+- Testing only legal directions yields only the corresponding gradient conditions.

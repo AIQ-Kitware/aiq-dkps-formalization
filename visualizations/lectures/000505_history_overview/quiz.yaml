@@ -7,16 +7,14 @@ questions:
   - It removes every separation assumption.
   - It identifies a unique eigenbasis at repeated eigenvalues.
   correct: 0
-  explanation: The perturbation remains random, but the gap condition uses population
-    eigenvalues.
-  think_seconds: 8
-  speak_question: 'First question. What makes the YWS separation condition useful
-    in statistics? A: it uses only population eigenvalues for the gap. B: it makes
-    the sample matrix non-random. C: it removes every separation assumption. Or D:
-    it identifies a unique eigenbasis at repeated eigenvalues. Take eight seconds.'
-  speak_answer: A is correct. The gap condition uses population eigenvalues. The sample
-    matrix remains random, separation is still needed, and a repeated eigenvalue does
-    not select a unique basis.
+  explanation: The perturbation remains random, but the gap condition uses population eigenvalues.
+  think_seconds: 5
+  speak_question: 'First question. What makes the YWS separation condition useful in statistics? A: it
+    uses only population eigenvalues for the gap. B: it makes the sample matrix non-random. C: it removes
+    every separation assumption. Or D: it identifies a unique eigenbasis at repeated eigenvalues. Take
+    five seconds.'
+  speak_answer: A is correct. The gap condition uses population eigenvalues. The sample matrix remains
+    random, separation is still needed, and a repeated eigenvalue does not select a unique basis.
 - title: What does the matching result establish?
   question: Which claim describes the real transport matching theorem presented here?
   choices:
@@ -25,13 +23,45 @@ questions:
   - It proves the historical priority of the transport formula.
   - It verifies an executable blossom algorithm.
   correct: 1
-  explanation: It proves the minimum-value reduction and attainment; priority and
-    executable algorithm verification are separate.
-  think_seconds: 8
-  speak_question: 'Second question. What does the real transport matching theorem
-    establish? A: an improvement to every Davis–Kahan angle bound. B: a global transport
-    minimum equals a matching minimum. C: historical priority of the formula. Or D:
-    a verified executable blossom algorithm. Take eight seconds.'
-  speak_answer: B is correct. The theorem reduces the unrestricted real transport
-    minimum to a matching minimum and gives attainment. It does not establish a better
-    perturbation bound, a priority claim, or a verified executable matching algorithm.
+  explanation: It proves the minimum-value reduction and attainment; priority and executable algorithm
+    verification are separate.
+  think_seconds: 5
+  speak_question: 'Second question. What does the real transport matching theorem establish? A: an improvement
+    to every Davis–Kahan angle bound. B: a global transport minimum equals a matching minimum. C: historical
+    priority of the formula. Or D: a verified executable blossom algorithm. Take five seconds.'
+  speak_answer: B is correct. The theorem reduces the unrestricted real transport minimum to a matching
+    minimum and gives attainment. It does not establish a better perturbation bound, a priority claim,
+    or a verified executable matching algorithm.
+- title: A new use of geometry
+  question: Jordan introduced a way to compare subspaces through angles. Does that alone bound the change
+    of an eigenspace after perturbing a matrix?
+  choices:
+  - Yes, the angle definition supplies a perturbation bound.
+  - No, relating the angle to operator error also requires a theorem with separation hypotheses.
+  - No, principal angles cannot be used for eigenspaces.
+  correct: 1
+  explanation: A way to measure error and a theorem controlling that error answer different questions.
+  think_seconds: 5
+  speak_question: Question 3. Jordan introduced a way to compare subspaces through angles. Does that alone
+    bound the change of an eigenspace after perturbing a matrix? A, Yes, the angle definition supplies
+    a perturbation bound. B, No, relating the angle to operator error also requires a theorem with separation
+    hypotheses. C, No, principal angles cannot be used for eigenspaces. You have five seconds. Pause for
+    longer if needed.
+  speak_answer: The answer is B. A way to measure error and a theorem controlling that error answer different
+    questions.
+- title: A statistical refinement
+  question: What is the role of the population gap in the YWS story?
+  choices:
+  - It replaces a required sample-gap condition with population-side separation.
+  - It removes the need to control the matrix perturbation.
+  - It turns every eigenvector into a uniquely chosen vector.
+  correct: 0
+  explanation: The perturbation still needs a bound. The change concerns where the required spectral-gap
+    information comes from.
+  think_seconds: 5
+  speak_question: Question 4. What is the role of the population gap in the YWS story? A, It replaces
+    a required sample-gap condition with population-side separation. B, It removes the need to control
+    the matrix perturbation. C, It turns every eigenvector into a uniquely chosen vector. You have five
+    seconds. Pause for longer if needed.
+  speak_answer: The answer is A. The perturbation still needs a bound. The change concerns where the required
+    spectral-gap information comes from.

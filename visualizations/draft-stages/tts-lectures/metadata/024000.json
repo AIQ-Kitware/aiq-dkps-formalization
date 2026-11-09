@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "lecture_id": "024000",
+  "transcript": "024000-eigenvalues-eigenspaces-and-algebraic-multiplicity.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-18-06",
+      "reason": "MIT 18.06 lectures 21 and 25–27 cover eigenvectors, spectral structure and positive definite matrices."
+    },
+    {
+      "source_id": "threeblue-change-basis",
+      "reason": "See how the same linear map takes different matrix forms in different bases."
+    },
+    {
+      "source_id": "threeblue-eigenvalues",
+      "reason": "Study a two-dimensional eigenvector example before the spectral argument."
+    },
+    {
+      "source_id": "axler-open-linear-algebra",
+      "reason": "Consult the proof-led account of linear operators, inner products, adjoints and spectral structure."
+    },
+    {
+      "source_id": "tao-eigenvalue-stability",
+      "reason": "Contrast Hermitian spectral stability with nonnormal sensitivity and pseudospectra."
+    },
+    {
+      "source_id": "bindel-eigen-perturbation",
+      "reason": "Study concrete perturbation examples and first-order spectral sensitivity."
+    }
+  ]
+}

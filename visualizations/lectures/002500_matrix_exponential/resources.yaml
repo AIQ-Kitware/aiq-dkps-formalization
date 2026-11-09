@@ -1,0 +1,14 @@
+title: The exponential of a matrix
+intro: Start with the video, then use the examples to connect the series, flow, and rotations.
+checked_on: '2026-11-06'
+curated_by: GPT-6.1-Sol
+resources:
+- title: The Matrix Exponential — Gilbert Strang, MIT
+  url: https://ocw.mit.edu/courses/res-18-009-learn-differential-equations-up-close-with-gilbert-strang-and-cleve-moler-fall-2015/resources/the-matrix-exponential/
+  kind: University video
+  why: Connect the exponential series to the solution of a linear differential equation.
+- title: Matrix exponential
+  url: https://en.wikipedia.org/wiki/Matrix_exponential
+  kind: Wikipedia topic page
+  why: Look up the power-series definition and the diagonal and rotation examples.
+  focus: Definition, elementary properties, and examples; the later computation sections are optional.

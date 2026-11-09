@@ -1,0 +1,16 @@
+title: Projection-valued measures — selecting and integrating spectral components
+intro: Use the overview first. The focused notes supply definitions once the spectral-selection picture
+  is familiar.
+checked_on: '2026-11-06'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Projection-valued measure
+  url: https://en.wikipedia.org/wiki/Projection-valued_measure
+  kind: Wikipedia topic page
+  why: See how a set of spectral values selects a projection and how this enters the spectral theorem.
+  focus: Definition and spectral theorem; begin with finite sums before reading the integrals.
+- title: Projection-valued measures and spectral integrals — Jordan Bell
+  url: https://jordanbell.info/LaTeX/mathematics/pvm/
+  kind: Focused expository notes
+  why: Follow precise definitions of spectral selection and integration in one topic-specific article.
+  focus: 'Sections 6–9. More technical: use after the finite-dimensional picture is clear.'

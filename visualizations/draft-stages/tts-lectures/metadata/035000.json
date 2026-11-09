@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "lecture_id": "035000",
+  "transcript": "035000-the-operator-modulus-a.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-svd",
+      "reason": "Finite-dimensional singular-direction intuition; general operator-ideal and infinite-dimensional claims require additional sources."
+    },
+    {
+      "source_id": "higham-matrix-square-root",
+      "reason": "Read matrix square-root examples alongside the positive-operator construction."
+    },
+    {
+      "source_id": "higham-svd",
+      "reason": "See matrix singular vectors and singular values in an independent exposition."
+    },
+    {
+      "source_id": "axler-open-linear-algebra",
+      "reason": "Consult the proof-led account of linear operators, inner products, adjoints and spectral structure."
+    },
+    {
+      "source_id": "mit-strang-18065-svd",
+      "reason": "Watch a direct geometric account of singular directions before the formal operator argument."
+    },
+    {
+      "source_id": "bindel-hermitian-svd",
+      "reason": "Review a computational proof of symmetric eigenvalue and singular-value properties."
+    }
+  ]
+}

@@ -12,6 +12,13 @@ Recall: P is an orthogonal projection.
 
 Thinking about identity minus a projection.
 
+## LectureOutcomes: The ideas to carry away
+
+Why: See the conclusions before the details.
+Recall: The local setup follows this overview.
+
+I minus P keeps exactly the perpendicular component. Restricting the inputs can make a norm-one projection give a small error. Projection error and displacement under a motion are different objects. We will first inspect one vector, then a whole trial space. That change in which inputs we test explains why a complementary projection can occur in a small-error bound.
+
 ## CpSetup: The identity, the projection, and the complement
 
 Why: Name the objects before subtracting operators.
@@ -42,7 +49,7 @@ The pink arrow runs from the blue projected tip back to the amber original tip. 
 Why: Derive the operator from its action on the two subspaces.
 Recall: Every vector splits uniquely as k plus z, with k in K and z perpendicular to K.
 
-Now use the same reasoning without choosing coordinates. Split x into k plus z, with k in K and z perpendicular to K. P keeps k and kills z. Identity keeps both. Subtracting therefore kills k and keeps z. That proves identity minus P is the orthogonal projection onto K perpendicular. Applying it a second time changes nothing, because z is already perpendicular. Projecting its output back onto K gives zero. These are the equations identity minus P squared equals identity minus P, and P times identity minus P equals zero. They describe a filter for the perpendicular component, not a new motion that preserves every vector's length.
+The coordinate example reflects a general identity. To see why, we can split any vector into its part in K and its perpendicular part. Split x into k plus z, with k in K and z perpendicular to K. P keeps k and kills z. Identity keeps both. Subtracting therefore kills k and keeps z. That proves identity minus P is the orthogonal projection onto K perpendicular. Applying it a second time changes nothing, because z is already perpendicular. Projecting its output back onto K gives zero. These are the equations identity minus P squared equals identity minus P, and P times identity minus P equals zero. They describe a filter for the perpendicular component, not a new motion that preserves every vector's length.
 
 ## CpAngle: Why the sine of an angle appears
 
@@ -67,7 +74,7 @@ There is a useful trap here. Unless the complementary subspace is zero, the oper
 Why: Express the same projection error in ambient and complementary coordinates.
 Recall: F zero and F one are orthonormal frames for the wanted space and its complement.
 
-Choose a complete orthonormal decomposition of the ambient space. F zero spans the wanted space K, and F one spans K perpendicular. Then P is F zero times F zero transpose, and identity minus P is F one times F one transpose. E zero is an orthonormal trial frame. The map S equals identity minus P times E zero, so it sends trial coordinates to their geometric error in the ambient space. Now define X as F one transpose times E zero. This records exactly the same error in unwanted-space coordinates. The equation S equals F one times X follows by substitution. Since F one preserves lengths, S a and X a have equal norms for every input a, and their operator norms agree. This explains the two appearances of the sine block. The operator residual R, defined using the studied operator A hat and a trial operator A zero, is a different map; it is not just this geometric error.
+We have restricted the inputs to a trial space. The same geometric error can now be recorded either in the original space or using coordinates in the perpendicular space. Choose a complete orthonormal decomposition of the ambient space. F zero spans the wanted space K, and F one spans K perpendicular. Then P is F zero times F zero transpose, and identity minus P is F one times F one transpose. E zero is an orthonormal trial frame. The map S equals identity minus P times E zero, so it sends trial coordinates to their geometric error in the ambient space. Now define X as F one transpose times E zero. This records exactly the same error in unwanted-space coordinates. The equation S equals F one times X follows by substitution. Since F one preserves lengths, S a and X a have equal norms for every input a, and their operator norms agree. This explains the two appearances of the sine block. The operator residual R, defined using the studied operator A hat and a trial operator A zero, is a different map; it is not just this geometric error.
 
 ## CpDisplacement: Compare projection error with rotation displacement
 
@@ -81,7 +88,7 @@ For any linear map T on the ambient space, identity minus T sends x to the origi
 Why: Keep the operation, its geometry, and its input restriction separate.
 Recall: P is orthogonal; the error convention is original minus projected.
 
-Read identity minus P applied to x as the part of x that its projection misses. That part lies in K perpendicular, and its length is the distance from x to K. The actual move onto the subspace has the opposite sign. On all inputs, a nonzero complementary projection has norm one. Restricted to a well-aligned trial subspace, its output can be small, giving the sine block. Finally, identity minus W is the same original-minus-output pattern for a general motion, but its displacement does not usually form a complementary projection. Orthogonality of P is essential throughout: an arbitrary idempotent projects along some complement, which need not be perpendicular.
+I minus P keeps exactly the perpendicular component. Restricting the inputs can make a norm-one projection give a small error. Projection error and displacement under a motion are different objects. Here is how the preceding argument fits those conclusions. Read identity minus P applied to x as the part of x that its projection misses. That part lies in K perpendicular, and its length is the distance from x to K. The actual move onto the subspace has the opposite sign. On all inputs, a nonzero complementary projection has norm one. Restricted to a well-aligned trial subspace, its output can be small, giving the sine block. Finally, identity minus W is the same original-minus-output pattern for a general motion, but its displacement does not usually form a complementary projection. Orthogonality of P is essential throughout: an arbitrary idempotent projects along some complement, which need not be perpendicular.
 
 ## CpFacts: Two reusable projection facts
 

@@ -1,0 +1,6 @@
+facts:
+- I minus P keeps exactly the perpendicular component.
+- Restricting the inputs can make a norm-one projection give a small error.
+- Projection error and displacement under a motion are different objects.
+route: We will first inspect one vector, then a whole trial space. That change in which inputs we test
+  explains why a complementary projection can occur in a small-error bound.

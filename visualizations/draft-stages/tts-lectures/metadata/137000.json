@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "lecture_id": "137000",
+  "transcript": "137000-the-free-beam-operator-and-its-domain.md",
+  "historical_claims": [
+    {
+      "id": "137000-h01",
+      "anchor": "Davis and Kahan use this model to illustrate perturbation bounds for low-frequency spectral subspaces.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Section 9: beam example",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "137000-h02",
+      "anchor": "This is the trial subspace Davis and Kahan will use: the two-dimensional affine plane inside the infinite-dimensional Hilbert space.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Section 9: beam trial space",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "hunter-nachtergaele-applied",
+      "reason": "Read the matching open chapter for foundational analytic hypotheses and worked proofs."
+    },
+    {
+      "source_id": "teschl-qm-free",
+      "reason": "Use the full free text for spectral calculus and domains of unbounded self-adjoint operators."
+    },
+    {
+      "source_id": "bell-sturm-liouville",
+      "reason": "Relate differential-operator spectra to integral-operator reductions and boundary conditions."
+    }
+  ]
+}

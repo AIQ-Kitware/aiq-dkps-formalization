@@ -10,6 +10,7 @@ from dkvis.deck_spec import DeckSpec
 from dkvis.decks.reference import ref_use
 
 KITWARE_TALK = DeckSpec(
+    learning_resources="lectures/reference-core.yaml",
     name="kitware-talk",
     description=(
         "The completed 21-scene Davis--Kahan presentation: geometry, the Lean "

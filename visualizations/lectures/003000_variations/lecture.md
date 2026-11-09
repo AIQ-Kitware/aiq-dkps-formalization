@@ -14,6 +14,13 @@ Recall: No notation is needed on the title slide.
 
 Feasible variations and stationarity.
 
+## LectureOutcomes: The ideas to carry away
+
+Why: See the conclusions before the details.
+Recall: The local setup follows this overview.
+
+A feasible curve stays inside the constraint for every parameter value. At a differentiable minimum, the cost derivative along such a curve is zero. Carefully chosen legal directions force diagonal gradient blocks to vanish. Our constraint requires a length-preserving map carrying a source space onto a target. We will construct legal curves before differentiating. The resulting equations are necessary at a minimum; they do not by themselves certify a minimum.
+
 ## VaSetup: The constraint and the scalar test
 
 Why: Define legality before varying a candidate minimizer.
@@ -161,7 +168,7 @@ optimality.
 Why: One matrix lets us evaluate all the derivative tests.
 Recall: $G^T=-G$ and $D\Phi_p(W)[WB]=\langle G,B\rangle_F=-\operatorname{tr}(GB)$.
 
-At a fixed W, the derivative along W exponential t B depends linearly on the
+Stationarity has given a zero derivative along each legal curve. A trace formula will package these many scalar tests into one matrix condition. At a fixed W, the derivative along W exponential t B depends linearly on the
 skew velocity B. To define the gradient, allow every skew-symmetric B, even
 when the curve does not preserve the source. Only source-preserving directions
 will give stationary tests. In this finite-dimensional space, we can represent that
@@ -235,7 +242,7 @@ That additional argument is beyond this lecture.
 Why: Extract a necessary condition using curves that preserve the constraints.
 Recall: Skew velocity, source preservation, feasible curve, gradient test.
 
-The chain of reasoning is constructive. A skew-symmetric velocity exponentiates
+A feasible curve stays inside the constraint for every parameter value. At a differentiable minimum, the cost derivative along such a curve is zero. Carefully chosen legal directions force diagonal gradient blocks to vanish. Here is how the preceding argument fits those conclusions. The chain of reasoning is constructive. A skew-symmetric velocity exponentiates
 to an orthogonal motion. Making that velocity commute with the source
 projection preserves the source subspace. Right composition with W then
 preserves transport. At a minimizing W, every such directional derivative

@@ -101,3 +101,68 @@ a coherent speech passage rather than requiring more independent TTS clips.
 Hermitian and orthonormal were again reported as pronunciation problems. Neither
 has a verified default remedy; ortho-normal remains tentative because of its
 internal pause. No new pronunciation guesses were enabled by this revision.
+
+## 2026-11-06 — State the destination before the details
+
+Jon requested a compact opening view of the true statements a lecture will
+explain, reinforced by the same statements at the end. Rayleigh–Ritz now opens
+with three claims and a whole-construction picture before its notation setup.
+The detailed exposition gives terms concrete roles before naming them, and
+states the conclusion before longer derivations. The residual-vector quiz
+explicitly distinguishes a zero trial-space projection from coordinate entries.
+
+New and revised thinking intervals are five seconds, with no additional build
+pause added to that authored interval. Viewers can pause for more time. The
+entry lecture is renamed Before the Series: Foundations and owns the common
+transpose/conjugate-transpose convention; later lectures state their setting
+without repeatedly reteaching that distinction. Stable deck and folder IDs
+are retained so existing commands and cached artifacts remain identifiable.
+
+### Polar decomposition: geometry before the formula
+
+The saved viewer comments asked for a usable mental picture of the modulus and
+objected to project provenance in spoken mathematical instruction. The revision
+starts from the same-input length identity, illustrates positive directional
+stretch followed by rotation, and derives the square root from squared output
+lengths. The remaining-factor rule is justified before naming its kernel
+convention; a singular example distinguishes the canonical partial factor from
+a unitary extension. Opening conclusions return in the recap. Project/API
+provenance remains in source records and the formal companion, not the spoken
+mathematical overview. Four explicit study questions use five-second pauses.
+
+### Broader lecture clarity pass
+
+Revised the fourteen remaining numbered mathematical and historical lectures,
+leaving the sine-theta lecture, the recently revised Foundations/Rayleigh–Ritz/
+polar lectures, and frozen reference compositions unchanged. Each now opens
+with topic-specific conclusions and returns to them in its existing recap.
+Transitions explain what the next calculation will establish; mathematical
+narration no longer interrupts min–max or Sylvester reasoning with project
+provenance. The shared opening component highlights claims during one spoken
+passage. Four-question reviews use explicit objects, application questions,
+and five-second pauses. Slides and transcript exports are rebuilt separately
+from voice selection: existing narrated videos retain their generation records
+until the corresponding voice is rebuilt.
+
+### Standalone bridges for the later proofs
+
+Added four lectures at existing order gaps: invariant blocks (001250), principal
+angles (002250), trace pairings and gradients (002958), and uniform approximation
+of minima (003937). They separate vector preservation from a drawn block matrix,
+space comparison from arbitrary frame comparison, trace notation from a scalar
+response, and minimum-value convergence from optimizer-location convergence.
+Each has a local setup, motivated visual examples, symbolic/Lean companions,
+four five-second questions, and focused external sources. The teaching-gap map
+records where the new modules help and distinguishes teaching dependencies from
+formal imports. No old lecture folder was renamed.
+
+Lean accepted all four companion files. The cosine companion deliberately uses
+principalCosines rather than conflating the classroom increasing angle list
+with the directed-sine angle convention. The minimum companion uses explicit
+minimizer hypotheses and proves the two comparisons separately. Numerical tests
+cover the uniform band and the moving dip used in the animations.
+
+The source lectures and slide exports are independent of narrator selection.
+Use the existing video target for the desired voice; no voice data or generated
+media is committed. During first-time parallel drafts, one shared TeX temporary
+file collided; its final render was rerun with one scene job.

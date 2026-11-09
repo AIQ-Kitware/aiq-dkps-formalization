@@ -9,9 +9,9 @@ questions:
   correct: 2
   explanation: The trace norm adds singular values. The operator norm is four and the Frobenius norm is
     five.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: First question. A matrix has singular values three and four. Is its trace norm A, four;
-    B, five; C, seven; or D, twelve? You have eight seconds to choose an answer. Pause the video if you
+    B, five; C, seven; or D, twelve? You have five seconds to choose an answer. Pause the video if you
     want longer.
   speak_answer: The correct answer is C. The trace norm adds singular values. The operator norm is four
     and the Frobenius norm is five.
@@ -25,10 +25,44 @@ questions:
   correct: 2
   explanation: A genuine orthogonal direct sum combines the singular-value lists. Orthogonal inputs alone
     do not ensure this.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: Second question. When can we add the trace costs of two blocks? A, whenever the input
     spaces are orthogonal; B, whenever their dimensions agree; C, when both input and output pieces form
-    orthogonal block decompositions; or D, when all matrix entries are positive? You have eight seconds
+    orthogonal block decompositions; or D, when all matrix entries are positive? You have five seconds
     to choose an answer. Pause the video if you want longer.
   speak_answer: The correct answer is C. A genuine orthogonal direct sum combines the singular-value lists.
     Orthogonal inputs alone do not ensure this.
+- title: Does the preferred motion depend on cost?
+  question: Two displacement maps have singular values two and zero, or one point one and one point one.
+    Which comparison is correct?
+  choices:
+  - Both operator and trace norms prefer the second.
+  - Operator norm prefers the second; trace norm prefers the first.
+  - Both norms prefer the first.
+  correct: 1
+  explanation: The largest stretch drops from two to one point one, while the sum increases from two to
+    two point two.
+  think_seconds: 5
+  speak_question: Question 3. Two displacement maps have singular values two and zero, or one point one
+    and one point one. Which comparison is correct? A, Both operator and trace norms prefer the second.
+    B, Operator norm prefers the second; trace norm prefers the first. C, Both norms prefer the first.
+    You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is B. The largest stretch drops from two to one point one, while the sum increases
+    from two to two point two.
+- title: When can costs be added?
+  question: A map is restricted to two perpendicular input planes. Is that alone enough to add the trace
+    norms of the restrictions?
+  choices:
+  - Yes, perpendicular inputs are enough.
+  - No, the corresponding output pieces must also be orthogonal for the direct-sum rule.
+  - No, trace norms never add.
+  correct: 1
+  explanation: The block-additivity rule needs independent input and output pieces. Perpendicular domain
+    planes alone do not establish that structure.
+  think_seconds: 5
+  speak_question: Question 4. A map is restricted to two perpendicular input planes. Is that alone enough
+    to add the trace norms of the restrictions? A, Yes, perpendicular inputs are enough. B, No, the corresponding
+    output pieces must also be orthogonal for the direct-sum rule. C, No, trace norms never add. You have
+    five seconds. Pause for longer if needed.
+  speak_answer: The answer is B. The block-additivity rule needs independent input and output pieces.
+    Perpendicular domain planes alone do not establish that structure.

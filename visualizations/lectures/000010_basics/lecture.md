@@ -1,4 +1,4 @@
-# Before the series: a mathematics refresher
+# Before the Series: Foundations
 
 A short review for someone who has previously met elementary linear algebra,
 trigonometry, and single-variable calculus. This is also a map of what to revisit
@@ -11,12 +11,12 @@ The [Royal Society's contemporary referee report](https://makingscience.royalsoc
 provides a primary historical record. This is context for matrix algebra, not a
 priority claim for the other concepts in this review.
 
-## BaTitle: A mathematics refresher
+## BaTitle: Before the Series: Foundations
 
 Why: Refresh the language needed to understand the lectures that follow.
 Recall: This is a review, not a first course.
 
-A mathematics refresher.
+Before the series: foundations.
 
 ## BaSetup: What to recognize before continuing
 
@@ -62,7 +62,11 @@ For real coordinate vectors, the usual inner product is the sum of the products 
 Why: Distinguish properties that otherwise sound confusingly similar.
 Recall: Transpose exchanges rows and columns; conjugation changes a plus bi to a minus bi.
 
-The adjoint moves a map from one side of an inner product to the other. In standard real coordinates it is the transpose. In standard complex coordinates it is the conjugate transpose, written A star. A map equal to its adjoint is self-adjoint: symmetric over the reals, Hermitian over the complex numbers. A different condition says that Q star times Q is identity. For square matrices this means length and inner-product preservation. Such a matrix is called orthogonal over the reals and unitary over the complex numbers. A symmetric matrix need not preserve length. Orthogonal vectors and an orthogonal matrix also name different, related ideas.
+The transpose exchanges rows and columns. The entry i starts in the upper-right position and moves to the lower-left position. The conjugate transpose does one further thing: it conjugates every entry, so that i becomes minus i. This is the adjoint in the usual complex coordinates, written A star. For real entries, conjugation changes nothing, so A star equals A transpose. Later lectures can state their real or complex setting and use this convention without deriving it again.
+
+<!-- beat -->
+
+The adjoint also moves a map across an inner product, as the displayed equality shows. A self-adjoint map equals its adjoint: this is called symmetric for real matrices and Hermitian for complex matrices. The displayed example does not have that property; A and A star differ. Another condition, Q star Q equals identity, says Q preserves lengths. It also applies to rectangular matrices with perpendicular unit columns. When Q is square, the usual names are orthogonal over the reals and unitary over the complex numbers. Self-adjointness and length preservation are different properties.
 
 ## BaTrig: Read sine and cosine from a circle
 

@@ -25,11 +25,11 @@ class AudioTooShortError(RuntimeError):
     """A response is implausibly short for a substantial passage."""
 
 
-def check_audio_minimum(text, seconds, max_words_per_second=12.0):
+def check_audio_minimum(text, seconds, max_words_per_second=12.0, *, min_words=20):
     # A deliberately loose sanity check, not speech recognition. Short titles
     # and brief formula labels need no minimum-duration heuristic.
     words = len(text.split())
-    if max_words_per_second and words >= 20 and seconds < words / max_words_per_second:
+    if max_words_per_second and words >= min_words and seconds < words / max_words_per_second:
         raise AudioTooShortError(
             f'Suspiciously short TTS response: {words} words in {seconds:g}s '
             f'(more than {max_words_per_second:g} words/s).'

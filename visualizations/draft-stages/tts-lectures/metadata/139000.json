@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "lecture_id": "139000",
+  "transcript": "139000-comparing-angle-and-ky-fan-beam-estimates.md",
+  "historical_claims": [
+    {
+      "id": "139000-h01",
+      "anchor": "t zero zero two one eight times epsilon. So the sum of the sines of the two principal angles is bounded by that quantity. This is the paper's equation nine point three.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Equation (9.3)",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "139000-h02",
+      "anchor": "The paper next applies the sine-two-theta theorem. This theorem compares two reducing subspaces of the unperturbed and perturbed operators, not simply one trial residual. In the beam example the perturbati",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Section 9, sin(2Θ)",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "139000-h03",
+      "anchor": "the paper obtains point zero zero one zero three two eight times epsilon, divided by the same denominator, one minus point zero zero one five seven seven four times epsilon.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Section 9, tan(2Θ)",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "cornell-ritz",
+      "reason": "Projection/Ritz perspective and residual orthogonality; advanced sections are optional."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "hsu-dk-notes",
+      "reason": "Brief finite-matrix exposition; not an alternate proof of every general theorem in this lecture."
+    },
+    {
+      "source_id": "bell-sturm-liouville",
+      "reason": "Relate differential-operator spectra to integral-operator reductions and boundary conditions."
+    },
+    {
+      "source_id": "bindel-ritz-eigensolvers",
+      "reason": "Follow Rayleigh-Ritz residual orthogonality and the logic of extracting approximate eigenpairs."
+    }
+  ]
+}

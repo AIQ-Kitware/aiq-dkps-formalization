@@ -1,35 +1,63 @@
 questions:
 - title: What does a portrait date tell us?
-  question: A portrait was published after the mathematical work discussed. What does
-    it establish?
+  question: A portrait was published after the mathematical work discussed. What does it establish?
   choices:
   - The exact setting in which the earlier theorem was proved.
   - The identity of the depicted person, not the date of the mathematical work.
   - That every mathematical claim on the slide is proved.
   correct: 1
-  explanation: Portrait and publication are distinct sources, with different dates
-    and evidential roles.
-  think_seconds: 8
-  speak_question: 'First question. What does a later portrait establish? A: the exact
-    setting where an earlier theorem was proved. B: the identity of the person, not
-    the date of the work. Or C: that every mathematical claim is proved. Take eight
-    seconds.'
-  speak_answer: B is correct. The portrait identifies the person. The publication
-    separately anchors the mathematical work in time.
+  explanation: Portrait and publication are distinct sources, with different dates and evidential roles.
+  think_seconds: 5
+  speak_question: 'First question. What does a later portrait establish? A: the exact setting where an
+    earlier theorem was proved. B: the identity of the person, not the date of the work. Or C: that every
+    mathematical claim is proved. Take five seconds.'
+  speak_answer: B is correct. The portrait identifies the person. The publication separately anchors the
+    mathematical work in time.
 - title: How should we read a shared name?
-  question: What is the responsible way to interpret a mathematical name or a shared
-    topic?
+  question: What is the responsible way to interpret a mathematical name or a shared topic?
   choices:
   - Assume everyone named worked together.
   - Attribute the whole subject to the best-known later author.
   - Check the specific publications and documented relationships.
   correct: 2
-  explanation: A compound name, a later exposition, and a documented collaboration
-    are different things.
-  think_seconds: 8
-  speak_question: 'Second question. How should we interpret a shared mathematical
-    name or topic? A: assume everyone worked together. B: give the whole subject to
-    the best-known later author. Or C: check the specific publications and documented
-    relationships. Take eight seconds.'
-  speak_answer: C is correct. Names guide us toward sources, but do not replace those
-    sources. Distinguish collaboration, separate contributions, and later exposition.
+  explanation: A compound name, a later exposition, and a documented collaboration are different things.
+  think_seconds: 5
+  speak_question: 'Second question. How should we interpret a shared mathematical name or topic? A: assume
+    everyone worked together. B: give the whole subject to the best-known later author. Or C: check the
+    specific publications and documented relationships. Take five seconds.'
+  speak_answer: C is correct. Names guide us toward sources, but do not replace those sources. Distinguish
+    collaboration, separate contributions, and later exposition.
+- title: Separate people, shared name
+  question: What does the name Rayleigh–Ritz tell us about the two careers described here?
+  choices:
+  - They wrote the method together in one joint paper.
+  - Their separate contributions are associated with a modern method bearing both names.
+  - Ritz supervised Rayleigh.
+  correct: 1
+  explanation: The lecture connects different careers and publications. A compound name is not evidence
+    of direct collaboration.
+  think_seconds: 5
+  speak_question: Question 3. What does the name Rayleigh–Ritz tell us about the two careers described
+    here? A, They wrote the method together in one joint paper. B, Their separate contributions are associated
+    with a modern method bearing both names. C, Ritz supervised Rayleigh. You have five seconds. Pause
+    for longer if needed.
+  speak_answer: The answer is B. The lecture connects different careers and publications. A compound name
+    is not evidence of direct collaboration.
+- title: Which result belongs to which setting?
+  question: Sylvester studied a homogeneous matrix equation. What is needed to move from that history
+    to a quantitative operator-gap estimate?
+  choices:
+  - Only changing the names of the matrices.
+  - Additional mathematical hypotheses and arguments for the later inhomogeneous operator problem.
+  - No additional work, because the modern name is the same.
+  correct: 1
+  explanation: Historical ancestry does not identify the exact scope of a later theorem. Norm estimates
+    and operator domains require their own arguments.
+  think_seconds: 5
+  speak_question: Question 4. Sylvester studied a homogeneous matrix equation. What is needed to move
+    from that history to a quantitative operator-gap estimate? A, Only changing the names of the matrices.
+    B, Additional mathematical hypotheses and arguments for the later inhomogeneous operator problem.
+    C, No additional work, because the modern name is the same. You have five seconds. Pause for longer
+    if needed.
+  speak_answer: The answer is B. Historical ancestry does not identify the exact scope of a later theorem.
+    Norm estimates and operator domains require their own arguments.

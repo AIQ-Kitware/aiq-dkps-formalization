@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "lecture_id": "081000",
+  "transcript": "081000-resolvents-from-spectral-integrals.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "higham-matrix-function",
+      "reason": "Compare the finite-matrix functional calculus with the lecture’s operator calculus."
+    },
+    {
+      "source_id": "jordan-bell-pvm",
+      "reason": "Work through spectral measures and spectral integrals from their definitions."
+    },
+    {
+      "source_id": "teschl-qm-free",
+      "reason": "Use the full free text for spectral calculus and domains of unbounded self-adjoint operators."
+    },
+    {
+      "source_id": "bell-spectrum-decomposition",
+      "reason": "Compare spectra and resolvent decomposition beyond diagonal finite matrices."
+    }
+  ]
+}

@@ -1,0 +1,833 @@
+{
+  "schema_version": 1,
+  "sources": {
+    "davis-kahan-1970": {
+      "title": "The Rotation of Eigenvectors by a Perturbation. III",
+      "authors": [
+        "Chandler Davis",
+        "W. M. Kahan"
+      ],
+      "year": 1970,
+      "kind": "primary_paper",
+      "url": "https://doi.org/10.1137/0707001",
+      "origin": "dev/external-literature-references.md",
+      "notes": "SIAM Journal on Numerical Analysis 7(1), pp. 1-46. Theorem and page locators support the historical-claim audit."
+    },
+    "halmos-1969": {
+      "title": "Two Subspaces",
+      "authors": [
+        "P. R. Halmos"
+      ],
+      "year": 1969,
+      "kind": "primary_paper",
+      "url": "https://doi.org/10.1090/S0002-9947-1969-0251519-5",
+      "origin": "original publisher",
+      "notes": "Transactions of the AMS 144, 381-389; primary account of generic two-subspace representation."
+    },
+    "rosenblum-1956": {
+      "title": "On the Operator Equation BX-XA=Q",
+      "authors": [
+        "Marvin Rosenblum"
+      ],
+      "year": 1956,
+      "kind": "primary_paper",
+      "url": "https://doi.org/10.1215/S0012-7094-56-02324-9",
+      "origin": "bibliographic DOI",
+      "notes": "Duke Mathematical Journal 23, 263-269. Exact passages must be checked against the article."
+    },
+    "eckart-young-1936": {
+      "title": "The Approximation of One Matrix by Another of Lower Rank",
+      "authors": [
+        "Carl Eckart",
+        "Gale Young"
+      ],
+      "year": 1936,
+      "kind": "primary_paper",
+      "url": "https://doi.org/10.1007/BF02288367",
+      "origin": "publisher original-article record",
+      "notes": "Psychometrika 1(3), 211-218; original rank-approximation paper."
+    },
+    "yu-wang-samworth-2015": {
+      "title": "A Useful Variant of the Davis–Kahan Theorem for Statisticians",
+      "authors": [
+        "Yi Yu",
+        "Tengyao Wang",
+        "Richard J. Samworth"
+      ],
+      "year": 2015,
+      "kind": "research_paper",
+      "url": "https://doi.org/10.1093/biomet/asv008",
+      "origin": "publisher and university repository",
+      "notes": "Biometrika 102(2), 315-323; population-only gap and rectangular singular-subspace discussion."
+    },
+    "kato-1995": {
+      "title": "Perturbation Theory for Linear Operators",
+      "authors": [
+        "Tosio Kato"
+      ],
+      "year": 1995,
+      "kind": "textbook",
+      "url": "https://doi.org/10.1007/978-3-642-66282-9",
+      "origin": "publisher",
+      "notes": "Second edition reprint. Book-length alternative on spectral perturbations, operator domains and analytic tools."
+    },
+    "bhatia-1997": {
+      "title": "Matrix Analysis",
+      "authors": [
+        "Rajendra Bhatia"
+      ],
+      "year": 1997,
+      "kind": "textbook",
+      "url": "https://doi.org/10.1007/978-1-4612-0653-8",
+      "origin": "publisher",
+      "notes": "Alternative treatment of matrix inequalities, singular values and invariant norms."
+    },
+    "mit-strang-18-06": {
+      "title": "Linear Algebra: Video Lectures",
+      "authors": [
+        "Gilbert Strang"
+      ],
+      "year": 2010,
+      "kind": "lecture_series",
+      "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/video_galleries/video-lectures/",
+      "origin": "MIT OpenCourseWare",
+      "notes": "1999 recordings republished with the 2010 OCW course; specify the relevant lecture number in the per-lecture annotation."
+    },
+    "mit-strang-projections": {
+      "title": "Projections onto Subspaces",
+      "authors": [
+        "Gilbert Strang"
+      ],
+      "year": 2011,
+      "kind": "lecture_video",
+      "url": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/pages/least-squares-determinants-and-eigenvalues/projections-onto-subspaces/",
+      "origin": "visualizations/lectures/001000_projections/resources.yaml",
+      "notes": "Geometric explanation with worked projection problem."
+    },
+    "mit-strang-svd": {
+      "title": "Lecture 29: Singular Value Decomposition",
+      "authors": [
+        "Gilbert Strang"
+      ],
+      "year": 2010,
+      "kind": "lecture_video",
+      "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/resources/lecture-29-singular-value-decomposition/",
+      "origin": "visualizations/lectures/reference-norms.yaml",
+      "notes": "SVD from orthogonal bases and singular directions."
+    },
+    "mit-strang-positive": {
+      "title": "Lecture 27: Positive Definite Matrices and Minima",
+      "authors": [
+        "Gilbert Strang"
+      ],
+      "year": 2010,
+      "kind": "lecture_video",
+      "url": "https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/resources/lecture-27-positive-definite-matrices-and-minima/",
+      "origin": "visualizations/lectures/002666_minmax/resources.yaml",
+      "notes": "Quadratic forms, positive definiteness, minimization."
+    },
+    "mit-strang-exp": {
+      "title": "The Matrix Exponential",
+      "authors": [
+        "Gilbert Strang",
+        "Cleve Moler"
+      ],
+      "year": 2015,
+      "kind": "lecture_video",
+      "url": "https://ocw.mit.edu/courses/res-18-009-learn-differential-equations-up-close-with-gilbert-strang-and-cleve-moler-fall-2015/resources/the-matrix-exponential/",
+      "origin": "visualizations/lectures/002500_matrix_exponential/resources.yaml",
+      "notes": "Matrix-exponential explanation supporting differential equations and Sylvester integral methods."
+    },
+    "higham-sylvester": {
+      "title": "What Is the Sylvester Equation?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2020,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2020/09/01/what-is-the-sylvester-equation/",
+      "origin": "visualizations/lectures/003500_sylvester/resources.yaml",
+      "notes": "A-X-B equation, spectral separation and solvability in matrices."
+    },
+    "higham-polar": {
+      "title": "What Is the Polar Decomposition?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2020,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2020/07/28/what-is-the-polar-decomposition/",
+      "origin": "visualizations/lectures/reference-core.yaml",
+      "notes": "SVD-based polar factorization; compare conventions on the kernel at singular inputs."
+    },
+    "higham-eigen-ineq": {
+      "title": "Eigenvalue Inequalities for Hermitian Matrices",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2021,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2021/03/09/eigenvalue-inequalities-for-hermitian-matrices/",
+      "origin": "visualizations/lectures/002666_minmax/resources.yaml",
+      "notes": "Rayleigh quotient, Courant-Fischer, Weyl inequalities and interlacing."
+    },
+    "hsu-dk-notes": {
+      "title": "Notes on Matrix Perturbation and Davis–Kahan",
+      "authors": [
+        "Daniel Hsu"
+      ],
+      "year": null,
+      "kind": "university_notes",
+      "url": "https://www.cs.columbia.edu/~djhsu/AML/lectures/davis-kahan.pdf",
+      "origin": "visualizations/lectures/reference-core.yaml",
+      "notes": "Compact alternative derivation for finite symmetric matrices; hypotheses differ from some Hilbert-space cases."
+    },
+    "cornell-ritz": {
+      "title": "Large-scale Eigensolvers",
+      "authors": [
+        "David Bindel"
+      ],
+      "year": 2025,
+      "kind": "university_notes",
+      "url": "https://www.cs.cornell.edu/courses/cs6210/2025fa/lec/2025-12-01.html",
+      "origin": "visualizations/lectures/002749_rayleigh_ritz/resources.yaml",
+      "notes": "Alternative view of projected eigenproblems and Ritz residual orthogonality."
+    },
+    "yu-wang-samworth-preprint": {
+      "title": "A Useful Variant of the Davis–Kahan Theorem for Statisticians (Open Access)",
+      "authors": [
+        "Yi Yu",
+        "Tengyao Wang",
+        "Richard J. Samworth"
+      ],
+      "year": 2014,
+      "kind": "research_preprint",
+      "url": "https://arxiv.org/abs/1405.0680",
+      "origin": "authors’ arXiv preprint",
+      "notes": "Accessible variant of the published 2015 paper, including rectangular extensions."
+    },
+    "threeblue-linear-transformations": {
+      "title": "Linear Transformations and Matrices",
+      "authors": [
+        "Grant Sanderson"
+      ],
+      "year": 2016,
+      "kind": "video_and_article",
+      "url": "https://www.3blue1brown.com/lessons/linear-transformations/",
+      "origin": "visualizations/lectures/000010_basics/resources.yaml",
+      "notes": "Geometric meaning of a linear map and of matrix columns."
+    },
+    "threeblue-dot-products": {
+      "title": "Dot Products and Duality",
+      "authors": [
+        "Grant Sanderson"
+      ],
+      "year": 2016,
+      "kind": "video_and_article",
+      "url": "https://www.3blue1brown.com/lessons/dot-products/",
+      "origin": "visualizations/lectures/000010_basics/resources.yaml",
+      "notes": "Visual account of dot products, projections and linear functionals."
+    },
+    "threeblue-change-basis": {
+      "title": "Change of Basis",
+      "authors": [
+        "Grant Sanderson"
+      ],
+      "year": 2016,
+      "kind": "video_and_article",
+      "url": "https://www.3blue1brown.com/lessons/change-of-basis/",
+      "origin": "visualizations/lectures/001250_invariant_blocks/resources.yaml",
+      "notes": "Coordinates of a fixed transformation in different bases."
+    },
+    "threeblue-eigenvalues": {
+      "title": "Eigenvectors and Eigenvalues",
+      "authors": [
+        "Grant Sanderson"
+      ],
+      "year": 2016,
+      "kind": "video_and_article",
+      "url": "https://www.3blue1brown.com/lessons/eigenvalues/",
+      "origin": "visualizations/lectures/000010_basics/resources.yaml",
+      "notes": "Geometric and algebraic eigenvector examples."
+    },
+    "higham-matrix-norm": {
+      "title": "What Is a Matrix Norm?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2021,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2021/10/12/what-is-a-matrix-norm/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Subordinate and other matrix norms, with distinctions among norm constructions."
+    },
+    "higham-block-matrix": {
+      "title": "What Is a Block Matrix?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2020,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2020/09/22/what-is-a-block-matrix/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Block matrix algebra with compatible dimensions."
+    },
+    "higham-invariant-subspace": {
+      "title": "What Is an Invariant Subspace?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2023,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2023/10/24/what-is-an-invariant-subspace/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Finite-matrix invariance and block structure."
+    },
+    "higham-orthogonal-matrix": {
+      "title": "What Is an Orthogonal Matrix?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2020,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2020/04/07/what-is-an-orthogonal-matrix/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Orthonormal columns, geometric preservation, and orthogonal matrices."
+    },
+    "higham-positive-definite": {
+      "title": "What Is a Symmetric Positive Definite Matrix?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2020,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2020/07/21/what-is-a-symmetric-positive-definite-matrix/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Equivalent positive-definiteness criteria and matrix examples."
+    },
+    "higham-matrix-square-root": {
+      "title": "What Is a Matrix Square Root?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2020,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2020/05/21/what-is-a-matrix-square-root/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Square-root notions and matrix examples; compare with the positive self-adjoint root."
+    },
+    "higham-svd": {
+      "title": "What Is the Singular Value Decomposition?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2020,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2020/10/13/what-is-the-singular-value-decomposition/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Matrix SVD examples and singular-direction interpretation."
+    },
+    "higham-cs-decomposition": {
+      "title": "What Is the CS Decomposition?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2020,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2020/10/27/what-is-the-cs-decomposition/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Cosine-sine block factors and principal-angle relations in finite dimensions."
+    },
+    "higham-unitarily-invariant-norm": {
+      "title": "What Is a Unitarily Invariant Norm?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2021,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2021/02/02/what-is-a-unitarily-invariant-norm/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Singular-value symmetric gauges, Schatten norms, and Ky Fan norms."
+    },
+    "higham-kronecker": {
+      "title": "What Is the Kronecker Product?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2020,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2020/08/25/what-is-the-kronecker-product/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Kronecker algebra and vectorization for matrix equations."
+    },
+    "higham-matrix-exponential": {
+      "title": "What Is the Matrix Exponential?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2020,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2020/05/28/what-is-the-matrix-exponential/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Matrix exponential defined and related to linear systems."
+    },
+    "higham-matrix-function": {
+      "title": "What Is a Matrix Function?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2020,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2020/06/09/what-is-a-matrix-function/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Finite-matrix functional calculus via several equivalent constructions."
+    },
+    "higham-frechet-derivative": {
+      "title": "What Is a Fréchet Derivative?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2020,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2020/06/23/what-is-a-frechet-derivative/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Perturbation and sensitivity of matrix functions."
+    },
+    "higham-matrix-trace": {
+      "title": "What Is the Trace of a Matrix?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2023,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2023/01/24/what-is-the-trace-of-a-matrix/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Trace identities and matrix examples."
+    },
+    "higham-pseudoinverse": {
+      "title": "What Is the Pseudoinverse of a Matrix?",
+      "authors": [
+        "Nicholas J. Higham"
+      ],
+      "year": 2023,
+      "kind": "explainer",
+      "url": "https://nhigham.com/2023/07/25/what-is-the-pseudoinverse-of-a-matrix/",
+      "origin": "Nick Higham: What Is index",
+      "notes": "Rectangular and rank-deficient matrix inverses via singular values."
+    },
+    "mit-functional-analysis-videos": {
+      "title": "18.102 Introduction to Functional Analysis: Lecture Videos",
+      "authors": [
+        "Casey Rodriguez"
+      ],
+      "year": 2021,
+      "kind": "lecture_series",
+      "url": "https://ocw.mit.edu/courses/18-102-introduction-to-functional-analysis-spring-2021/video_galleries/lecture-videos/",
+      "origin": "MIT OpenCourseWare",
+      "notes": "Lectures 1-23: normed spaces, Banach/Hilbert spaces, measure, and compact operators."
+    },
+    "mit-functional-analysis-notes": {
+      "title": "18.102 Introduction to Functional Analysis: Notes and Readings",
+      "authors": [
+        "Casey Rodriguez",
+        "Richard Melrose",
+        "Andrew Lin"
+      ],
+      "year": 2021,
+      "kind": "university_notes",
+      "url": "https://ocw.mit.edu/courses/18-102-introduction-to-functional-analysis-spring-2021/pages/lecture-notes-and-readings/",
+      "origin": "MIT OpenCourseWare",
+      "notes": "Topic-indexed mathematical lecture notes, including compact self-adjoint spectral theory."
+    },
+    "intel-principal-angles": {
+      "title": "Computing Principal Angles Between Two Subspaces",
+      "authors": [
+        "Intel oneMKL Documentation"
+      ],
+      "year": 2024,
+      "kind": "numerical_tutorial",
+      "url": "https://www.intel.com/content/www/us/en/docs/onemkl/cookbook/2024-2/computing-principal-angles-between-two-subspaces.html",
+      "origin": "visualizations/lectures/002250_principal_angles/resources.yaml (newer documentation path)",
+      "notes": "QR and SVD algorithm for principal angles of finite-dimensional subspaces."
+    },
+    "jordan-bell-pvm": {
+      "title": "Projection-Valued Measures and Spectral Integrals",
+      "authors": [
+        "Jordan Bell"
+      ],
+      "year": 2014,
+      "kind": "mathematical_notes",
+      "url": "https://jordanbell.info/LaTeX/mathematics/pvm/",
+      "origin": "visualizations/lectures/002916_pvm/resources.yaml",
+      "notes": "PVM definitions, scalar spectral measures, spectral integrals and theorem statement."
+    },
+    "mit-matrix-calculus": {
+      "title": "Appendix A: Matrix Calculus",
+      "authors": [
+        "MIT 6.390 Course Staff"
+      ],
+      "year": null,
+      "kind": "university_notes",
+      "url": "https://introml.mit.edu/notes/dev/matrix_calculus.html",
+      "origin": "visualizations/lectures/002958_trace_gradients/resources.yaml",
+      "notes": "Scalar-by-matrix derivatives, matrix dimensions and examples."
+    },
+    "wisc-uniform-convergence": {
+      "title": "Uniform Convergence",
+      "authors": [
+        "Sigurd Angenent"
+      ],
+      "year": 2017,
+      "kind": "university_notes",
+      "url": "https://people.math.wisc.edu/~angenent/521.2017s/UniformConvergence.html",
+      "origin": "visualizations/lectures/003937_uniform_minima/resources.yaml",
+      "notes": "Distinguishes pointwise and uniform convergence via examples."
+    },
+    "axler-open-linear-algebra": {
+      "title": "Linear Algebra Done Right, Fourth Edition",
+      "authors": [
+        "Sheldon Axler"
+      ],
+      "year": 2024,
+      "kind": "open_textbook",
+      "url": "https://linear.axler.net/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Free PDF and HTML editions. Proof-led vector-space, duality, spectral-theorem and singular-value treatments.",
+      "access": "free_no_login",
+      "format": "html_and_pdf"
+    },
+    "boyd-vandenberghe-applied": {
+      "title": "Introduction to Applied Linear Algebra",
+      "authors": [
+        "Stephen Boyd",
+        "Lieven Vandenberghe"
+      ],
+      "year": 2018,
+      "kind": "open_textbook",
+      "url": "https://www.web.stanford.edu/~boyd/vmls/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Free complete textbook, slides and videos with concrete least-squares and matrix examples.",
+      "access": "free_no_login",
+      "format": "pdf_slides_video"
+    },
+    "boyd-stanford-ee263-archive": {
+      "title": "EE263: Introduction to Linear Dynamical Systems (Course Archive)",
+      "authors": [
+        "Stephen Boyd"
+      ],
+      "year": 2008,
+      "kind": "university_course",
+      "url": "https://ee263.stanford.edu/archive/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Public course reader, slides, examples and lecture videos. SVD, quadratic forms, matrix exponentials, and linear dynamics.",
+      "access": "free_no_login",
+      "format": "pdf_slides_video"
+    },
+    "mit-strang-18065-svd": {
+      "title": "Lecture 6: Singular Value Decomposition",
+      "authors": [
+        "Gilbert Strang"
+      ],
+      "year": 2018,
+      "kind": "lecture_video",
+      "url": "https://ocw.mit.edu/courses/18-065-matrix-methods-in-data-analysis-signal-processing-and-machine-learning-spring-2018/resources/lecture-6-singular-value-decomposition-svd/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Free lecture on singular directions and factorization, with exercises and transcript.",
+      "access": "free_no_login",
+      "format": "video_and_transcript"
+    },
+    "mit-strang-18065-low-rank": {
+      "title": "Lecture 7: Eckart-Young — Closest Rank-k Matrix",
+      "authors": [
+        "Gilbert Strang"
+      ],
+      "year": 2018,
+      "kind": "lecture_video",
+      "url": "https://ocw.mit.edu/courses/18-065-matrix-methods-in-data-analysis-signal-processing-and-machine-learning-spring-2018/resources/lecture-7-eckart-young-the-closest-rank-k-matrix-to-a/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Low-rank approximation described through truncated singular values.",
+      "access": "free_no_login",
+      "format": "video_and_transcript"
+    },
+    "mit-strang-18065-norms": {
+      "title": "Lecture 8: Norms of Vectors and Matrices",
+      "authors": [
+        "Gilbert Strang"
+      ],
+      "year": 2018,
+      "kind": "lecture_video",
+      "url": "https://ocw.mit.edu/courses/18-065-matrix-methods-in-data-analysis-signal-processing-and-machine-learning-spring-2018/resources/lecture-8-norms-of-vectors-and-matrices/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Video with operator, nuclear, Frobenius and vector norm comparisons.",
+      "access": "free_no_login",
+      "format": "video_and_transcript"
+    },
+    "mit-strang-18065-procrustes": {
+      "title": "Lecture 34: Distance Matrices and Procrustes Problem",
+      "authors": [
+        "Gilbert Strang"
+      ],
+      "year": 2018,
+      "kind": "lecture_video",
+      "url": "https://ocw.mit.edu/courses/18-065-matrix-methods-in-data-analysis-signal-processing-and-machine-learning-spring-2018/resources/lecture-34-distance-matrices-procrustes-problem-first-project/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Explicit orthogonal alignment and distance-matrix application.",
+      "access": "free_no_login",
+      "format": "video_and_transcript"
+    },
+    "mit-strang-18065-clusters": {
+      "title": "Lecture 35: Finding Clusters in Graphs",
+      "authors": [
+        "Gilbert Strang"
+      ],
+      "year": 2018,
+      "kind": "lecture_video",
+      "url": "https://ocw.mit.edu/courses/18-065-matrix-methods-in-data-analysis-signal-processing-and-machine-learning-spring-2018/resources/lecture-35-finding-clusters-in-graphs-second-project-handwriting/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Concrete spectral-embedding application in graph clustering.",
+      "access": "free_no_login",
+      "format": "video_and_transcript"
+    },
+    "tao-hermitian-matrix-sums": {
+      "title": "254A Notes 3a: Eigenvalues and Sums of Hermitian Matrices",
+      "authors": [
+        "Terence Tao"
+      ],
+      "year": 2010,
+      "kind": "expository_notes",
+      "url": "https://terrytao.wordpress.com/2010/01/12/254a-notes-3a-eigenvalues-and-sums-of-hermitian-matrices/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Proofs of variational eigenvalue formulas, Weyl and Lidskii inequalities, and Schatten-norm connections.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "tao-eigenvalue-stability": {
+      "title": "When Are Eigenvalues Stable?",
+      "authors": [
+        "Terence Tao"
+      ],
+      "year": 2008,
+      "kind": "explainer",
+      "url": "https://terrytao.wordpress.com/2008/10/28/when-are-eigenvalues-stable/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Compares normal and nonnormal eigenvalue perturbations via pseudospectra and level repulsion.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "hunter-nachtergaele-applied": {
+      "title": "Applied Analysis — Free Lecture Chapters",
+      "authors": [
+        "John K. Hunter",
+        "Bruno Nachtergaele"
+      ],
+      "year": 2005,
+      "kind": "open_textbook",
+      "url": "https://www.math.ucdavis.edu/~hunter/book/pdfbook.html",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Separate openly available chapters on normed/Banach/Hilbert spaces, bounded spectra, differential operators and variational methods.",
+      "access": "free_no_login",
+      "format": "pdf_chapters"
+    },
+    "teschl-qm-free": {
+      "title": "Mathematical Methods in Quantum Mechanics (Free Online Edition)",
+      "authors": [
+        "Gerald Teschl"
+      ],
+      "year": 2014,
+      "kind": "open_textbook",
+      "url": "https://radon.mat.univie.ac.at/~gerald/ftp/book-schroe/index.html",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "University-hosted free edition developing spectral measures, unbounded self-adjoint operators, Stone theory, and perturbation.",
+      "access": "free_no_login",
+      "format": "pdf"
+    },
+    "bell-trace-ideals": {
+      "title": "Trace Class Operators and Hilbert-Schmidt Operators",
+      "authors": [
+        "Jordan Bell"
+      ],
+      "year": 2016,
+      "kind": "mathematical_notes",
+      "url": "https://jordanbell.info/LaTeX/mathematics/traceclass/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Operator-ideal membership, Hilbert-Schmidt norm, trace class and ideal operations.",
+      "access": "free_no_login",
+      "format": "html_and_pdf"
+    },
+    "bell-unbounded-operators": {
+      "title": "Unbounded Operators in a Hilbert Space and the Trotter Product Formula",
+      "authors": [
+        "Jordan Bell"
+      ],
+      "year": 2015,
+      "kind": "mathematical_notes",
+      "url": "https://jordanbell.info/LaTeX/mathematics/trotter/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Graphs, domains, densely defined adjoints, self-adjointness and semigroup product structure.",
+      "access": "free_no_login",
+      "format": "html_and_pdf"
+    },
+    "bell-compact-banach": {
+      "title": "Compact Operators on Banach Spaces",
+      "authors": [
+        "Jordan Bell"
+      ],
+      "year": null,
+      "kind": "mathematical_notes",
+      "url": "https://jordanbell.info/LaTeX/mathematics/compactbanach/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Compactness, finite-rank approximation and the distinction between Banach and Hilbert settings.",
+      "access": "free_no_login",
+      "format": "html_and_pdf"
+    },
+    "bell-compact-svd": {
+      "title": "The Singular Value Decomposition of Compact Operators on Hilbert Spaces",
+      "authors": [
+        "Jordan Bell"
+      ],
+      "year": 2014,
+      "kind": "mathematical_notes",
+      "url": "https://jordanbell.info/LaTeX/mathematics/SVD/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Detailed compact-operator SVD and sections on Courant min-max, Schatten class and Weyl inequalities.",
+      "access": "free_no_login",
+      "format": "html_and_pdf"
+    },
+    "bell-spectrum-decomposition": {
+      "title": "Decomposition of the Spectrum of a Bounded Linear Operator",
+      "authors": [
+        "Jordan Bell"
+      ],
+      "year": null,
+      "kind": "mathematical_notes",
+      "url": "https://jordanbell.info/LaTeX/mathematics/decomposition/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Operator-spectrum decompositions, complementary to finite eigenvalue computations.",
+      "access": "free_no_login",
+      "format": "html_and_pdf"
+    },
+    "bell-sturm-liouville": {
+      "title": "Spectral Theory, Volterra Integral Operators and the Sturm-Liouville Theorem",
+      "authors": [
+        "Jordan Bell"
+      ],
+      "year": null,
+      "kind": "mathematical_notes",
+      "url": "https://jordanbell.info/LaTeX/mathematics/sturm-liouville/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Differential-operator spectral problem and integral-operator techniques.",
+      "access": "free_no_login",
+      "format": "html_and_pdf"
+    },
+    "bell-banach-algebras": {
+      "title": "Banach Algebras",
+      "authors": [
+        "Jordan Bell"
+      ],
+      "year": null,
+      "kind": "mathematical_notes",
+      "url": "https://jordanbell.info/LaTeX/mathematics/banachalgebras/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Banach-algebra framework for resolvent and spectral arguments.",
+      "access": "free_no_login",
+      "format": "html_and_pdf"
+    },
+    "zhu-knyazev-tangent-angles": {
+      "title": "Angles Between Subspaces and Their Tangents",
+      "authors": [
+        "Peizhen Zhu",
+        "Andrew V. Knyazev"
+      ],
+      "year": 2012,
+      "kind": "open_research_paper",
+      "url": "https://arxiv.org/abs/1209.0523",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "SVD representations for cosines, sines, and tangents of principal angles using frames and projectors.",
+      "access": "free_no_login",
+      "format": "arxiv_full_text"
+    },
+    "kostrykin-tan2-theorem": {
+      "title": "A Generalization of the Tan 2Θ Theorem",
+      "authors": [
+        "Vadim Kostrykin",
+        "Konstantin A. Makarov",
+        "Alexander K. Motovilov"
+      ],
+      "year": 2003,
+      "kind": "open_research_paper",
+      "url": "https://arxiv.org/abs/math/0302020",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Off-diagonal self-adjoint perturbations, reducing graphs, sharp angle bounds and Riccati connections.",
+      "access": "free_no_login",
+      "format": "arxiv_full_text"
+    },
+    "motovilov-selin-subspace-bounds": {
+      "title": "Some Sharp Norm Estimates in the Subspace Perturbation Problem",
+      "authors": [
+        "Alexander K. Motovilov",
+        "Alexei V. Selin"
+      ],
+      "year": 2004,
+      "kind": "open_research_paper",
+      "url": "https://arxiv.org/abs/math/0409558",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Convex-hull gap assumptions, off-diagonal perturbations and a priori tangent bounds.",
+      "access": "free_no_login",
+      "format": "arxiv_full_text"
+    },
+    "bindel-eigen-perturbation": {
+      "title": "Matrix Computations: Perturbation Theory",
+      "authors": [
+        "David Bindel"
+      ],
+      "year": 2025,
+      "kind": "university_notes",
+      "url": "https://www.cs.cornell.edu/courses/cs6210/2025fa/lec/2025-10-22.html",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Worked first-order eigenvalue sensitivity, normal/nonnormal comparison and Gershgorin bounds.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "bindel-hermitian-svd": {
+      "title": "Matrix Computations: Theory for SEP and SVD",
+      "authors": [
+        "David Bindel"
+      ],
+      "year": 2025,
+      "kind": "university_notes",
+      "url": "https://www.cs.cornell.edu/courses/cs6210/2025fa/lec/2025-11-03.html",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Independent development of symmetric eigensolver and SVD spectral theory.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "bindel-ritz-eigensolvers": {
+      "title": "Matrix Computations: Large-Scale Eigensolvers",
+      "authors": [
+        "David Bindel"
+      ],
+      "year": 2025,
+      "kind": "university_notes",
+      "url": "https://www.cs.cornell.edu/courses/cs6210/2025fa/lec/2025-12-01.html",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Rayleigh-Ritz/Galerkin residual orthogonality and refinement of approximate eigenvectors.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "mml-free-text": {
+      "title": "Mathematics for Machine Learning",
+      "authors": [
+        "Marc Peter Deisenroth",
+        "A. Aldo Faisal",
+        "Cheng Soon Ong"
+      ],
+      "year": 2020,
+      "kind": "open_textbook",
+      "url": "https://mml-book.github.io/",
+      "origin": "DKPS free-resource search, 2026-11-08",
+      "notes": "Free full book; different applied explanations of geometry, matrix decomposition, PCA and regression.",
+      "access": "free_no_login",
+      "format": "pdf"
+    }
+  }
+}

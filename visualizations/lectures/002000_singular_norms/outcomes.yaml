@@ -1,0 +1,6 @@
+facts:
+- Singular values describe directional stretching.
+- Different norms can prefer different motions between the same spaces.
+- Trace costs add over independent input and output blocks.
+route: The question is how much a motion changes the whole space. We will find the stretches of its displacement,
+  choose how to charge for them, and justify when block costs can be added.

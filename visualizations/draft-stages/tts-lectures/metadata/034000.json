@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "lecture_id": "034000",
+  "transcript": "034000-positive-square-roots-and-their-uniqueness.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-positive",
+      "reason": "Quadratic-form and minimization examples in matrices; see the lecture assumptions for generalization."
+    },
+    {
+      "source_id": "higham-positive-definite",
+      "reason": "Compare positive-definiteness tests with quadratic-form reasoning."
+    },
+    {
+      "source_id": "higham-matrix-square-root",
+      "reason": "Read matrix square-root examples alongside the positive-operator construction."
+    },
+    {
+      "source_id": "axler-open-linear-algebra",
+      "reason": "Consult the proof-led account of linear operators, inner products, adjoints and spectral structure."
+    }
+  ]
+}

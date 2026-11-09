@@ -1,0 +1,33 @@
+title: Spectral perturbation and transport
+intro: Focused background for the spectral bounds, displacement costs, and matching discussion in this
+  presentation.
+checked_on: '2026-11-06'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Notes on matrix perturbation and Davis–Kahan — Daniel Hsu, Columbia
+  url: https://www.cs.columbia.edu/~djhsu/AML/lectures/davis-kahan.pdf
+  kind: University notes · 3 pages
+  why: Follow a compact path from eigenvalue perturbation to eigenspace error and the sine-theta bound.
+  focus: Finite symmetric matrices; compare its spectral-separation assumptions with the configuration
+    used in the lecture.
+- title: Angles between flats
+  url: https://en.wikipedia.org/wiki/Angles_between_flats
+  kind: Wikipedia topic page
+  why: Extend the angle between two lines to a list of principal angles between subspaces.
+  focus: Angles between subspaces, the geometric example, and computation by singular values.
+- title: Singular value decomposition — Gilbert Strang, MIT
+  url: https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/resources/lecture-29-singular-value-decomposition/
+  kind: University video
+  why: Learn how two choices of perpendicular coordinates expose a matrix’s directional stretches.
+- title: What Is the Polar Decomposition? — Nick Higham
+  url: https://nhigham.com/2020/07/28/what-is-the-polar-decomposition/
+  kind: Short illustrated explainer
+  why: See the positive stretch and remaining motion, and how the SVD produces the factors.
+  focus: The opening definition and example. Higham uses an orthonormal-column factor; at singular inputs
+    this differs from the lecture’s canonical factor that is zero on the kernel.
+- title: Maximum-weight matching
+  url: https://en.wikipedia.org/wiki/Maximum_weight_matching
+  kind: Wikipedia topic page
+  why: Understand weighted edges, disjoint pairs, and the objective of maximizing the selected total weight.
+  focus: Definition and algorithms. Our pairing problem uses a general graph; a bipartite assignment algorithm
+    is a different specialization.

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "lecture_id": "018000",
+  "transcript": "018000-gram-matrices-and-positive-gram-operators.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-18-06",
+      "reason": "MIT 18.06: lectures 9–17 on vector spaces, orthogonality, bases and projections; choose the topic matching this recording."
+    },
+    {
+      "source_id": "threeblue-dot-products",
+      "reason": "See why inner products encode orthogonal projections and geometric duality."
+    },
+    {
+      "source_id": "boyd-vandenberghe-applied",
+      "reason": "Work through concrete linear algebra, least-squares or SVD calculations in an applied treatment."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+title: Singular values, norms, and polar decomposition
+intro: Compare singular-value costs before reading the full-displacement optimality claim. These explain
+  the ingredients, not a proof of the source correction.
+checked_on: '2026-11-06'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Singular value decomposition — Gilbert Strang, MIT
+  url: https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/resources/lecture-29-singular-value-decomposition/
+  kind: University video
+  why: Learn how two choices of perpendicular coordinates expose a matrix’s directional stretches.
+- title: Schatten norm
+  url: https://en.wikipedia.org/wiki/Schatten_norm
+  kind: Wikipedia topic page
+  why: Compare adding singular values with taking their Euclidean length or largest value.
+  focus: 'Special cases: trace/nuclear, Hilbert–Schmidt/Frobenius, and operator norms. Schatten p=2 means
+    Frobenius; numerical matrix 2-norm notation often means the operator norm.'
+- title: What Is the Polar Decomposition? — Nick Higham
+  url: https://nhigham.com/2020/07/28/what-is-the-polar-decomposition/
+  kind: Short illustrated explainer
+  why: See the positive stretch and remaining motion, and how the SVD produces the factors.
+  focus: The opening definition and example. Higham uses an orthonormal-column factor; at singular inputs
+    this differs from the lecture’s canonical factor that is zero on the kernel.

@@ -1,0 +1,14 @@
+title: Invariant subspaces — why blocks are allowed
+intro: Start with the first explanation; use the remaining sources to revisit the precise statements.
+checked_on: '2026-11-07'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Change of basis — 3Blue1Brown
+  url: https://www.3blue1brown.com/lessons/change-of-basis/
+  kind: Video and illustrated article
+  why: Distinguish a map from its coordinate representation.
+- title: Invariant subspace
+  url: https://en.wikipedia.org/wiki/Invariant_subspace
+  kind: Wikipedia topic page
+  why: Connect preserved spaces, triangular structure, and projection commutation.
+  focus: For a single operator and diagonalization via projections.

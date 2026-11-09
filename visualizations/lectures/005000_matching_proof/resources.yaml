@@ -1,0 +1,23 @@
+title: The matching proof, a compact presentation
+intro: Focused background for the compact proof. The sources explain its ingredients, not the specific
+  unrestricted transport reduction.
+checked_on: '2026-11-06'
+curated_by: GPT-6.1-Sol
+resources:
+- title: Angles between flats
+  url: https://en.wikipedia.org/wiki/Angles_between_flats
+  kind: Wikipedia topic page
+  why: Extend the angle between two lines to a list of principal angles between subspaces.
+  focus: Angles between subspaces, the geometric example, and computation by singular values.
+- title: What Is the Polar Decomposition? — Nick Higham
+  url: https://nhigham.com/2020/07/28/what-is-the-polar-decomposition/
+  kind: Short illustrated explainer
+  why: See the positive stretch and remaining motion, and how the SVD produces the factors.
+  focus: The opening definition and example. Higham uses an orthonormal-column factor; at singular inputs
+    this differs from the lecture’s canonical factor that is zero on the kernel.
+- title: Maximum-weight matching
+  url: https://en.wikipedia.org/wiki/Maximum_weight_matching
+  kind: Wikipedia topic page
+  why: Understand weighted edges, disjoint pairs, and the objective of maximizing the selected total weight.
+  focus: Definition and algorithms. Our pairing problem uses a general graph; a bipartite assignment algorithm
+    is a different specialization.

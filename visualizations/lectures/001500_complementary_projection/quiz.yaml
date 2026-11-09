@@ -7,19 +7,62 @@ questions:
   - A rotation of x that always preserves its length.
   - The scalar distance from x to K.
   correct: 1
-  explanation: It is a vector in the orthogonal complement. Its norm, rather than the vector itself, is the distance to K.
-  think_seconds: 8
-  speak_question: First question. P is the orthogonal projection onto K. What is identity minus P applied to x? A, the component in K; B, the component perpendicular to K; C, a length preserving rotation of x; or D, the scalar distance to K? You have eight seconds to choose. Pause if you want longer.
-  speak_answer: The correct answer is B. It is a vector in the orthogonal complement. Its norm, rather than the vector itself, is the distance to K.
+  explanation: It is a vector in the orthogonal complement. Its norm, rather than the vector itself, is
+    the distance to K.
+  think_seconds: 5
+  speak_question: First question. P is the orthogonal projection onto K. What is identity minus P applied
+    to x? A, the component in K; B, the component perpendicular to K; C, a length preserving rotation
+    of x; or D, the scalar distance to K? You have five seconds to choose. Pause if you want longer.
+  speak_answer: The correct answer is B. It is a vector in the orthogonal complement. Its norm, rather
+    than the vector itself, is the distance to K.
 - title: Which norm measures the trial error?
-  question: A unit trial vector v makes angle theta with a proper nonzero subspace K. Which statement is correct?
+  question: A unit trial vector v makes angle theta with a proper nonzero subspace K. Which statement
+    is correct?
   choices:
   - $\|I-P\|_{\rm op}=\sin\theta$.
   - $\|(I-P)v\|=1$ for every theta.
   - $\|I-P\|_{\rm op}=1$, while $\|(I-P)v\|=\sin\theta$.
   - $\|(I-P)v\|=2\sin(\theta/2)$.
   correct: 2
-  explanation: The global norm tests all unit inputs. The trial-vector error tests a particular direction; the half-angle chord formula describes rotation displacement instead.
-  think_seconds: 8
-  speak_question: Second question. A unit trial vector makes angle theta with a proper nonzero subspace. Which is correct? A, the full complementary projection has norm sine theta; B, every trial error has norm one; C, the full operator has norm one while this vector's error has norm sine theta; or D, its error is twice sine of half theta? You have eight seconds to choose. Pause if you want longer.
-  speak_answer: The correct answer is C. The global norm tests all unit inputs. The trial-vector error tests a particular direction; the half-angle chord formula describes rotation displacement instead.
+  explanation: The global norm tests all unit inputs. The trial-vector error tests a particular direction;
+    the half-angle chord formula describes rotation displacement instead.
+  think_seconds: 5
+  speak_question: Second question. A unit trial vector makes angle theta with a proper nonzero subspace.
+    Which is correct? A, the full complementary projection has norm sine theta; B, every trial error has
+    norm one; C, the full operator has norm one while this vector's error has norm sine theta; or D, its
+    error is twice sine of half theta? You have five seconds to choose. Pause if you want longer.
+  speak_answer: The correct answer is C. The global norm tests all unit inputs. The trial-vector error
+    tests a particular direction; the half-angle chord formula describes rotation displacement instead.
+- title: Which inputs are tested?
+  question: A proper nonzero subspace has projection P. A trial line lies inside that subspace. Compare
+    I minus P with its restriction to the trial line.
+  choices:
+  - Both maps have norm one.
+  - The unrestricted map has norm one; the restriction is zero.
+  - Both maps are zero.
+  correct: 1
+  explanation: The complementary projection keeps perpendicular unit vectors, but kills every input from
+    the trial line.
+  think_seconds: 5
+  speak_question: Question 3. A proper nonzero subspace has projection P. A trial line lies inside that
+    subspace. Compare I minus P with its restriction to the trial line. A, Both maps have norm one. B,
+    The unrestricted map has norm one; the restriction is zero. C, Both maps are zero. You have five seconds.
+    Pause for longer if needed.
+  speak_answer: The answer is B. The complementary projection keeps perpendicular unit vectors, but kills
+    every input from the trial line.
+- title: Sign of the move
+  question: P is an orthogonal projection. Which vector is the actual move from x to its nearest point
+    P x?
+  choices:
+  - x minus P x.
+  - P x minus x.
+  - P x.
+  correct: 1
+  explanation: A move is destination minus starting point. The complementary component uses the opposite
+    sign but has the same length.
+  think_seconds: 5
+  speak_question: Question 4. P is an orthogonal projection. Which vector is the actual move from x to
+    its nearest point P x? A, x minus P x. B, P x minus x. C, P x. You have five seconds. Pause for longer
+    if needed.
+  speak_answer: The answer is B. A move is destination minus starting point. The complementary component
+    uses the opposite sign but has the same length.

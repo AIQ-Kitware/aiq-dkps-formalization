@@ -160,7 +160,16 @@ make video DECK=operators-rayleigh-ritz TTS_CONFIG=tts.local.toml TTS_PROFILE=my
 make lectures-video TTS_CONFIG=tts.local.toml TTS_PROFILE=myvoice-breeze-tts2
 ```
 
-`tts.local.toml` is gitignored. Alternatively, use a file outside the repository,
+`tts.local.toml` is also merged automatically into `tts.toml` for the
+`/audio` reader and default profile loading. It can contain only the keys you
+want to change, for example `[profiles.kokoro]` with a local `endpoint`;
+unspecified fields are inherited. A local endpoint takes precedence over an
+inherited `endpoint_env` field, so `.env` cannot override that explicit local
+setting. Video commands that specify `TTS_CONFIG=tts.local.toml` continue to
+use it as a complete standalone configuration (copy `tts.toml` first for that
+use case).
+
+Alternatively, use a file outside the repository,
 such as `TTS_CONFIG="$HOME/.config/dkvis/tts.toml"`. This selects a complete
 configuration file rather than merging it with `tts.toml`; copying the shared
 file first preserves its audio processing defaults. `narrator_voice` determines
@@ -312,13 +321,57 @@ these controls, so its hints use a small list of tested respellings. This layer
 implements no general grapheme-to-phoneme conversion. Native pronunciation
 controls should be used when an engine and its serving API support them.
 
+## Listen to the 150 draft lectures (on-demand speech)
+
+The audio-only lecture library is at `http://127.0.0.1:8001/audio`, or
+`http://<toothbrush-LAN-IP>:8001/audio` from another device. The browser
+reads the 150 staged Markdown transcripts directly from the repository, with
+no pre-rendered presentation required.
+
+```bash
+cd visualizations
+make serve             # LAN-facing on port 8001; Kokoro selected by default
+make serve PORT=8002   # if port 8001 is in use
+```
+
+The **audio reader defaults to Kokoro**, using `KOKORO_TTS_ENDPOINT` from
+`.env` (currently the host's configured `192.168.222.38:8880` endpoint).
+Choose **Crall Math DK v2 (Breeze)** in the TTS profile selector for the
+existing `crall-math-dk-v2-breeze-tts2` profile at `127.0.0.1:8821`.
+This reader default is independent of `DKVIS_TTS_PROFILE`, which continues
+to control the production lecture/video narration workflow.
+
+For an additional voice already supported by one of those servers, open
+**Register a custom voice**, choose the profile, enter its voice ID and an
+optional display label, then click **Register voice**. The reader remembers
+registered voice IDs in `visualizations/audio-cache/registered-voices.json`;
+registration does not install new models or samples on the upstream TTS server.
+To add a new engine or upstream service, define a profile in `tts.toml`.
+The browser never accepts arbitrary server URLs.
+
+The reader shows a live sentence preview and highlights the estimated spoken
+sentence in the transcript. Click a transcript sentence to seek near its
+position; enable **Auto-scroll transcript** if desired. Sentence positions
+are estimated from page playback progress until timestamped TTS alignments
+are supported. Other controls include page selection, native audio seeking,
+independent synthesis and playback speeds, next-page prefetch, and
+**Cache whole lecture**. MP3 pages are reused by profile, voice, speed,
+transcript text, and endpoint.
+
+The local server proxies TTS requests: remote phones and computers need only
+access port 8001. Use `/api/audio-profiles`, `/api/audio-voices?profile=kokoro`,
+and `/api/audio-health?profile=kokoro` to inspect the current reader configuration.
+The canonical `extract_narration.py` excludes mathematical appendices and
+reference metadata from the spoken input; free learning resources appear below
+the transcript.
+
 ## Browse and watch rendered material
 
 From `visualizations/`, start the media library:
 
 ```bash
-make serve                         # http://127.0.0.1:8000
-make serve PORT=8001                # use another port beside an existing server
+make serve                          # http://127.0.0.1:8001
+make serve PORT=8002                # use another port if occupied
 ```
 
 The page lists videos by narrator, HTML presentations, and PDF handouts. It has
@@ -543,6 +596,53 @@ against the rendered notes before speech is requested. No matching-specific
 list remains in the production tools. Rendered outputs and audio stay ignored;
 source scenes, scripts, manifests, and source references belong in Git.
 
+## Bridges into the later proofs
+
+Four standalone prerequisites now unpack concepts previously embedded inside
+longer proofs:
+
+| Deck | Topic |
+| --- | --- |
+| `prereq-invariant-blocks` | Why preserved spaces justify triangular and diagonal blocks |
+| `prereq-principal-angles` | How frames and singular values compare whole subspaces |
+| `prereq-trace-gradients` | How a trace pairing represents a directional derivative |
+| `prereq-uniform-minima` | Why uniform objective errors control minimum values |
+
+Each has a transcript, a learning-source companion, checked Lean examples, and
+four study questions. See the [teaching-gap map](docs/planning/bridge-lectures.md).
+Build with the common commands, for example:
+
+```bash
+make slides DECK=prereq-principal-angles
+make video DECK=prereq-principal-angles TTS_PROFILE=crall-math-dk-v2-breeze-tts2
+```
+
+Restart an already running library server after installing the new deck
+registrations, then refresh its catalog. The new numbers use existing gaps;
+no earlier lecture folder is renamed.
+
+## External learning companions
+
+Each lecture has a **Learn more** companion: focused videos, illustrated
+explanations, topic pages, and short university notes, with a suggested order
+and a sentence explaining what each source helps teach. The library shows the
+same links for every narration voice, HTML deck, and PDF of that lecture.
+
+The lists live in `lectures/<number>_<topic>/resources.yaml`. Changes appear on
+library refresh; new server code requires one restart. Reference presentations
+select a shared list with `DeckSpec.learning_resources`.
+
+```bash
+make resources                            # export all companions without rendering or TTS
+make resources DECK=operators-polar        # update just one
+```
+
+Exports are `renders/<number>_<deck>.learn-more.html` and `.learn-more.md` (the
+reference decks have no number prefix). Include either file when sharing a
+video or PDF outside the library. Normal slide, text, and video builds refresh
+the companion automatically. Editing links does not invalidate speech or
+animation caches. Generated companions remain ignored; commit the source YAML.
+
 ## YWS population-gap lecture
 
 **`yws-population-gap`** (003875) explains Theorem 2 through a residual sandwich,
@@ -717,3 +817,22 @@ Generation/request settings, reference basenames and fingerprints, conditioning
 lineage, source snapshot, alignment revision and processing measurements accompany
 the output. Detailed stage timings also enter `renders/logs/`. All generated
 media, references, reports and model caches remain untracked.
+
+### Three course tracks in the lecture library
+
+The server exposes **G1 Manim** at `/`, **G2 comprehensive audio** at `/audio?track=g2` (150 recordings), and **G3 paper audio** at `/audio?track=g3` (26 recordings). The audio reader provides track selection, complete transcripts, lecture-wide progress, selectable voices, and on-demand TTS. The G3 syllabus and first-draft source mappings are under `draft-stages/tts-paper/`; see `docs/audio-library-on-demand.md`.
+
+### Shared course graph (G1/G2/G3/G4)
+
+Open `/learning-paths` to see all 204 G1–G4 lecture nodes in one interactive graph. Toggle the edge types independently, including `listening_next` (path order) and `proof_depends_on` (a theorem's supporting mathematical result). The full graph is connected under the default edge preset; topic/track filters and local neighborhoods remain available. G4 is a planned Yu–Wang–Samworth path that reuses seven playable G2/G3 recordings and has six YWS-specific lectures to author. For data and relationship definitions, see `docs/interactive-course-graph-2026-11-08.md`.
+
+The graph is generated from the current lecture inventories plus `curriculum/relationships.json` and `curriculum/g4-yws.json`. Run `python -m dkvis.presentation.course_graph` to validate it. The audit and authoring guidance are in `docs/course-graph-audit-2026-11-08.md`.
+
+Interactive curriculum graph: [graph documentation](docs/interactive-course-graph-2026-11-08.md); browse `/learning-paths` for topical clusters and typed mathematical dependencies.
+
+### Companion slide decks (G3 pilot)
+
+The first two G3 audio lectures have independent, text-rich HTML slide decks. Open
+`/audio?track=g3` and select **Show slides** to generate and view a linked deck,
+or use **Standalone view** without audio. Source JSON is in `companion-slides/`;
+the build cache is Git-ignored. See [companion slide documentation](docs/companion-slide-decks.md).

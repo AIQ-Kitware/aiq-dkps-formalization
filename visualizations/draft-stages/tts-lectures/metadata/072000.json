@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "lecture_id": "072000",
+  "transcript": "072000-infinite-dimensional-hilbert-examples.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "hunter-nachtergaele-applied",
+      "reason": "Read the matching open chapter for foundational analytic hypotheses and worked proofs."
+    }
+  ]
+}

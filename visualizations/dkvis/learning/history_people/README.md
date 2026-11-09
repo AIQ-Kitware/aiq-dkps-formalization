@@ -8,7 +8,7 @@ Two standalone biographical companions to the mathematical history overview:
 | 000835 | `history-people-operators` | Sz.-Nagy, Halmos, Kato, Davis, Kahan |
 
 Each has an introduction, one two-beat portrait/publication scene per person,
-connections and summary slides, full image-credit cards, and two study questions.
+connections and summary slides, full image-credit cards, and four study questions.
 They focus on careers and mathematical context rather than proofs. Neither
 requires the earlier overview, and neither claims to cover every contributor.
 

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "lecture_id": "123000",
+  "transcript": "123000-pinching-through-an-involution.md",
+  "historical_claims": [
+    {
+      "id": "123000-h01",
+      "anchor": "Davis and Kahan's Lemma six point two says no. The proof is short, but it is worth deriving carefully because it works for different projections on the input and output sides. Its key device is averaging K",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Lemma 6.2",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "higham-block-matrix",
+      "reason": "Review block multiplication and compression identities in finite matrices."
+    },
+    {
+      "source_id": "higham-unitarily-invariant-norm",
+      "reason": "Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms."
+    },
+    {
+      "source_id": "bell-trace-ideals",
+      "reason": "Work through trace-ideal and Hilbert-Schmidt definitions and inequalities in Hilbert space."
+    }
+  ]
+}

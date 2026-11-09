@@ -1,0 +1,192 @@
+{
+  "disclaimer": "These are verified source-text occurrences, not a checked correspondence to the roadmap result or a compiled declaration dependency graph.",
+  "records": [
+    {
+      "source": "ForTauCeti/Analysis/InnerProductSpace/FiniteFrame.lean",
+      "declarations": [
+        {
+          "identifier_as_written": "finiteAnalysis",
+          "line": 58
+        },
+        {
+          "identifier_as_written": "finiteSynthesis",
+          "line": 69
+        },
+        {
+          "identifier_as_written": "finiteGramOperator",
+          "line": 104
+        },
+        {
+          "identifier_as_written": "finiteGramOperator_isPositive",
+          "line": 136
+        }
+      ],
+      "roadmap_obligation_areas": [
+        "OG-08",
+        "PA-A01",
+        "MSS-A01"
+      ],
+      "teaching_candidates": [
+        "017000",
+        "018000",
+        "022000"
+      ],
+      "status": "confirmed in supplied source text; namespace/type/compiled provenance not yet checked"
+    },
+    {
+      "source": "ForTauCeti/Analysis/Convex/Majorization.lean",
+      "declarations": [
+        {
+          "identifier_as_written": "IsTTransform",
+          "line": 92
+        },
+        {
+          "identifier_as_written": "isTTransform_robinHood",
+          "line": 97
+        }
+      ],
+      "roadmap_obligation_areas": [
+        "MAJ-A03",
+        "MAJ-A01"
+      ],
+      "teaching_candidates": [
+        "055000",
+        "056000"
+      ],
+      "status": "confirmed in supplied source text; namespace/type/compiled provenance not yet checked"
+    },
+    {
+      "source": "ForTauCeti/Analysis/Normed/Operator/SylvesterBoundedInverse.lean",
+      "declarations": [
+        {
+          "identifier_as_written": "eq_leftInverse_comp_add_of_sylvester",
+          "line": 81
+        },
+        {
+          "identifier_as_written": "opNorm_le_of_sylvester_of_leftInverse",
+          "line": 140
+        }
+      ],
+      "roadmap_obligation_areas": [
+        "SSP-B01",
+        "SSP-B13"
+      ],
+      "teaching_candidates": [
+        "068000"
+      ],
+      "status": "confirmed in supplied source text; namespace/type/compiled provenance not yet checked"
+    },
+    {
+      "source": "ForTauCeti/Analysis/InnerProductSpace/Sylvester/Bound.lean",
+      "declarations": [
+        {
+          "identifier_as_written": "gap_mul_opNorm_le_of_comp_sub_comp_eq",
+          "line": 156
+        }
+      ],
+      "roadmap_obligation_areas": [
+        "SSP-B13"
+      ],
+      "teaching_candidates": [
+        "065000",
+        "069000"
+      ],
+      "status": "confirmed in supplied source text; namespace/type/compiled provenance not yet checked"
+    },
+    {
+      "source": "ForTauCeti/Analysis/InnerProductSpace/Rosenblum.lean",
+      "declarations": [
+        {
+          "identifier_as_written": "cayleyCoordFun",
+          "line": 85
+        }
+      ],
+      "roadmap_obligation_areas": [
+        "SSP-B01"
+      ],
+      "teaching_candidates": [
+        "067000"
+      ],
+      "status": "confirmed in supplied source text; namespace/type/compiled provenance not yet checked"
+    },
+    {
+      "source": "ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Sylvester.lean",
+      "declarations": [
+        {
+          "identifier_as_written": "SemiboundedBelow",
+          "line": 37
+        },
+        {
+          "identifier_as_written": "UnboundedBoundedSylvesterEquation",
+          "line": 76
+        }
+      ],
+      "roadmap_obligation_areas": [
+        "SA-C55",
+        "SSP-B13"
+      ],
+      "teaching_candidates": [
+        "093000"
+      ],
+      "status": "confirmed in supplied source text; namespace/type/compiled provenance not yet checked"
+    },
+    {
+      "source": "DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean",
+      "declarations": [
+        {
+          "identifier_as_written": "IsTrialResidual",
+          "line": 93
+        },
+        {
+          "identifier_as_written": "IsExactSpectralDecomposition",
+          "line": 172
+        },
+        {
+          "identifier_as_written": "sourceDirectedSineBlock",
+          "line": 213
+        }
+      ],
+      "roadmap_obligation_areas": [
+        "SSP-C17"
+      ],
+      "teaching_candidates": [
+        "107000",
+        "109000",
+        "110000"
+      ],
+      "status": "confirmed in supplied source text; namespace/type/compiled provenance not yet checked"
+    },
+    {
+      "source": "DavisKahan/Sources/DavisKahan1970/SineTheta/Sharpness.lean",
+      "declarations": [
+        {
+          "identifier_as_written": "sinTheta_constant_one_optimal",
+          "line": 305
+        }
+      ],
+      "roadmap_obligation_areas": [
+        "SSP-C17"
+      ],
+      "teaching_candidates": [
+        "113000"
+      ],
+      "status": "confirmed in supplied source text; namespace/type/compiled provenance not yet checked"
+    },
+    {
+      "source": "DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean",
+      "declarations": [
+        {
+          "identifier_as_written": "tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex",
+          "line": 1267
+        }
+      ],
+      "roadmap_obligation_areas": [
+        "SSP-C01"
+      ],
+      "teaching_candidates": [
+        "117000"
+      ],
+      "status": "confirmed in supplied source text; namespace/type/compiled provenance not yet checked"
+    }
+  ]
+}

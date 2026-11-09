@@ -1,6 +1,6 @@
 """A short, visual review of the mathematics assumed by the learning modules."""
 import numpy as np
-from manim import Arc, Circle, DashedLine, Dot, Line, ValueTracker, VGroup, always_redraw, linear
+from manim import Arc, Circle, DashedLine, Dot, Line, ValueTracker, VGroup, always_redraw, linear, Arrow, UP, DOWN, RIGHT, LEFT, FadeIn, Indicate, Matrix, SurroundingRectangle, Transform, Create
 from dkvis.components.lesson import LessonSlide, LessonTitle, LessonLean, plane, stack, vector
 from dkvis.learning.basics.model import matrix_action, unit_direction, eigen_action, square_slope
 from dkvis.slide_style import CURRENT, FAINT, GAP, MUTED, SINE, TRIAL, WANTED, boxed, math, para, tex
@@ -16,8 +16,8 @@ class BasicsSlide(LessonSlide):
 
 class BaTitle(LessonTitle):
     lesson_deck='prereq-basics'
-    series_title='000010 · Before the series'
-    title_lines=('A mathematics refresher',)
+    series_title='000010 · Mathematical foundations'
+    title_lines=('Before the Series', 'Foundations')
     subtitle='The language of vectors, geometry, and change.'
 
 
@@ -98,17 +98,37 @@ class BaAdjoints(BasicsSlide):
     stage=1
     def body(self):
         self.start()
-        self.put(stack(tex('Move a map across an inner product',size=29),
-            r'\langle Ax,y\rangle=\langle x,A^*y\rangle',
-            r'A^*=\overline A^{\,T}',
-            note('The adjoint is transpose over the reals; conjugate transpose over the complex numbers.'),
-            r'A=A^*:\ \text{self-adjoint}',buff=.34),'left',y=.35,height=3.7)
-        self.put(stack(tex('Preserve lengths and inner products',size=29),
-            r'Q^*Q=I\quad\text{for a square }Q',
-            note('Real: an orthogonal matrix. Complex: a unitary matrix.'),
-            r'\|Qx\|=\|x\|',
-            note('A symmetric real matrix is self-adjoint; it need not preserve lengths.'),buff=.35),'right',y=.35,height=3.7)
-        self.takeaway('Perpendicular vectors, self-adjoint maps, and length-preserving maps are distinct ideas.')
+        entries=[['1','i'],['2','3']]
+        arrays=[entries,[['1','2'],['i','3']],[['1','2'],['-i','3']]]
+        names=['A','A^T',r'A^*=\overline{A}^{\,T}']
+        matrices=VGroup()
+        for x,values,name in zip([-4.3,0,4.3],arrays,names):
+            matrix=Matrix(values,element_to_mobject=lambda v:math(v,size=30))
+            matrix.move_to([x,.8,0]);matrices.add(matrix)
+            self.add(matrix,math(name,size=30,color=CURRENT).move_to([x,1.9,0]))
+        matrices[0].get_entries()[1].set_color(WANTED)
+        matrices[1].get_entries()[2].set_color(WANTED)
+        matrices[2].get_entries()[2].set_color(WANTED)
+        self.add(Arrow([-3,.8,0],[-1.3,.8,0],color=CURRENT),
+                 Arrow([1.3,.8,0],[3,.8,0],color=CURRENT),
+                 tex('swap rows / columns',size=20).move_to([-2.15,1.4,0]),
+                 tex('conjugate entries',size=20).move_to([2.15,1.4,0]))
+        focus=SurroundingRectangle(matrices[0].get_entries()[1],color=WANTED,buff=.12)
+        self.play(Create(focus),run_time=1)
+        self.play(Transform(focus,SurroundingRectangle(matrices[1].get_entries()[2],color=WANTED,buff=.12)),run_time=1)
+        self.play(Transform(focus,SurroundingRectangle(matrices[2].get_entries()[2],color=WANTED,buff=.12)),run_time=1)
+        real_case=self.put(math(r'A\text{ real}:\quad A^*=A^T',size=30),y=-.35,height=.5)
+        self.remove(real_case);self.play(FadeIn(real_case),Transform(focus,SurroundingRectangle(real_case,color=CURRENT,buff=.12)),run_time=1)
+        self.beat()
+        identity=self.put(math(r'\langle Ax,y\rangle=\langle x,A^*y\rangle',size=30),y=-.95,height=.6)
+        self_adjoint=self.put(stack(tex('Self-adjoint condition',size=23),r'A=A^*',
+                       tex('Real: symmetric. Complex: Hermitian.',size=21),buff=.12),'left',y=-1.75,height=.9)
+        isometry=self.put(stack(tex('Length-preserving condition',size=23),r'Q^*Q=I',
+                       tex('Square: orthogonal / unitary.',size=21),buff=.12),'right',y=-1.75,height=.9)
+        self.play(Transform(focus,SurroundingRectangle(identity,color=CURRENT,buff=.12)),run_time=1)
+        self.play(Transform(focus,SurroundingRectangle(self_adjoint,color=CURRENT,buff=.12)),run_time=1)
+        self.play(Transform(focus,SurroundingRectangle(isometry,color=CURRENT,buff=.12)),run_time=1)
+        self.takeaway('Later lectures state their setting and use these transpose/adjoint conventions.')
 
 
 class BaTrig(BasicsSlide):

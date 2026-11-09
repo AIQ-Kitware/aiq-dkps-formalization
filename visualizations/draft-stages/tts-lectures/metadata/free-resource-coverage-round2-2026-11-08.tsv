@@ -1,0 +1,151 @@
+lecture_id	new_free_links	all_related_links	new_source_ids
+000000	0	0	
+001000	1	4	axler-open-linear-algebra
+002000	2	5	mit-strang-18065-norms;hunter-nachtergaele-applied
+003000	1	4	hunter-nachtergaele-applied
+004000	2	6	mit-strang-18065-norms;hunter-nachtergaele-applied
+005000	2	5	hunter-nachtergaele-applied;bell-banach-algebras
+006000	2	5	axler-open-linear-algebra;hunter-nachtergaele-applied
+007000	0	1	
+008000	2	3	bell-spectrum-decomposition;bell-banach-algebras
+009000	2	4	axler-open-linear-algebra;hunter-nachtergaele-applied
+010000	1	5	hunter-nachtergaele-applied
+011000	1	6	hunter-nachtergaele-applied
+012000	2	5	axler-open-linear-algebra;hunter-nachtergaele-applied
+013000	0	1	
+014000	1	3	axler-open-linear-algebra
+015000	1	4	axler-open-linear-algebra
+016000	1	6	boyd-stanford-ee263-archive
+017000	2	5	boyd-vandenberghe-applied;mml-free-text
+018000	1	3	boyd-vandenberghe-applied
+019000	1	3	boyd-stanford-ee263-archive
+020000	2	7	boyd-vandenberghe-applied;mml-free-text
+021000	3	7	boyd-vandenberghe-applied;boyd-stanford-ee263-archive;bindel-ritz-eigensolvers
+022000	1	4	mit-strang-18065-procrustes
+023000	2	5	mit-strang-18065-svd;mml-free-text
+024000	3	6	axler-open-linear-algebra;tao-eigenvalue-stability;bindel-eigen-perturbation
+025000	3	7	axler-open-linear-algebra;tao-hermitian-matrix-sums;bindel-hermitian-svd
+026000	3	6	axler-open-linear-algebra;tao-hermitian-matrix-sums;bindel-hermitian-svd
+027000	6	11	boyd-vandenberghe-applied;boyd-stanford-ee263-archive;tao-hermitian-matrix-sums;bindel-eigen-perturbation;bindel-hermitian-svd;bindel-ritz-eigensolvers
+028000	4	7	tao-hermitian-matrix-sums;bindel-eigen-perturbation;bindel-hermitian-svd;bindel-ritz-eigensolvers
+029000	3	6	tao-hermitian-matrix-sums;bindel-eigen-perturbation;bindel-hermitian-svd
+030000	2	5	tao-eigenvalue-stability;bell-spectrum-decomposition
+031000	3	7	tao-hermitian-matrix-sums;tao-eigenvalue-stability;bindel-eigen-perturbation
+032000	0	2	
+033000	1	4	axler-open-linear-algebra
+034000	1	4	axler-open-linear-algebra
+035000	3	6	axler-open-linear-algebra;mit-strang-18065-svd;bindel-hermitian-svd
+036000	5	7	boyd-vandenberghe-applied;mit-strang-18065-svd;bell-compact-svd;bindel-hermitian-svd;mml-free-text
+037000	1	5	axler-open-linear-algebra
+038000	1	3	axler-open-linear-algebra
+039000	1	3	boyd-stanford-ee263-archive
+040000	1	3	boyd-stanford-ee263-archive
+041000	0	2	
+042000	2	7	zhu-knyazev-tangent-angles;mml-free-text
+043000	1	6	zhu-knyazev-tangent-angles
+044000	1	6	zhu-knyazev-tangent-angles
+045000	1	4	zhu-knyazev-tangent-angles
+046000	1	5	zhu-knyazev-tangent-angles
+047000	1	5	zhu-knyazev-tangent-angles
+048000	1	4	zhu-knyazev-tangent-angles
+049000	1	4	zhu-knyazev-tangent-angles
+050000	1	5	zhu-knyazev-tangent-angles
+051000	1	6	zhu-knyazev-tangent-angles
+052000	9	14	boyd-vandenberghe-applied;mit-strang-18065-svd;mit-strang-18065-low-rank;mit-strang-18065-norms;tao-hermitian-matrix-sums;bell-compact-banach;bell-compact-svd;bindel-hermitian-svd;mml-free-text
+053000	5	10	boyd-vandenberghe-applied;mit-strang-18065-svd;mit-strang-18065-low-rank;bell-compact-svd;mml-free-text
+054000	3	7	mit-strang-18065-norms;tao-hermitian-matrix-sums;bell-compact-svd
+055000	3	6	tao-hermitian-matrix-sums;bell-compact-svd;mml-free-text
+056000	1	4	tao-hermitian-matrix-sums
+057000	4	9	boyd-stanford-ee263-archive;mit-strang-18065-norms;bell-trace-ideals;bell-compact-svd
+058000	3	6	boyd-stanford-ee263-archive;mit-strang-18065-norms;bell-trace-ideals
+059000	1	4	mit-strang-18065-norms
+060000	2	5	tao-hermitian-matrix-sums;bell-trace-ideals
+061000	2	6	tao-hermitian-matrix-sums;bell-trace-ideals
+062000	1	3	boyd-stanford-ee263-archive
+063000	0	2	
+064000	0	3	
+065000	1	3	boyd-stanford-ee263-archive
+066000	2	5	boyd-stanford-ee263-archive;bell-banach-algebras
+067000	3	5	tao-eigenvalue-stability;bell-spectrum-decomposition;bell-banach-algebras
+068000	1	3	bell-banach-algebras
+069000	2	4	tao-eigenvalue-stability;bell-banach-algebras
+070000	0	4	
+071000	0	3	
+072000	1	2	hunter-nachtergaele-applied
+073000	1	3	hunter-nachtergaele-applied
+074000	1	3	hunter-nachtergaele-applied
+075000	3	6	hunter-nachtergaele-applied;teschl-qm-free;bell-banach-algebras
+076000	3	5	hunter-nachtergaele-applied;teschl-qm-free;bell-spectrum-decomposition
+077000	1	3	teschl-qm-free
+078000	1	3	teschl-qm-free
+079000	1	4	teschl-qm-free
+080000	1	3	teschl-qm-free
+081000	2	5	teschl-qm-free;bell-spectrum-decomposition
+082000	2	5	teschl-qm-free;bell-spectrum-decomposition
+083000	3	4	hunter-nachtergaele-applied;teschl-qm-free;bell-unbounded-operators
+084000	3	4	hunter-nachtergaele-applied;teschl-qm-free;bell-unbounded-operators
+085000	2	3	teschl-qm-free;bell-unbounded-operators
+086000	3	4	hunter-nachtergaele-applied;teschl-qm-free;bindel-eigen-perturbation
+087000	2	3	teschl-qm-free;bell-unbounded-operators
+088000	4	7	hunter-nachtergaele-applied;teschl-qm-free;bell-unbounded-operators;bell-sturm-liouville
+089000	3	4	teschl-qm-free;bell-unbounded-operators;bell-sturm-liouville
+090000	3	7	hunter-nachtergaele-applied;teschl-qm-free;bell-sturm-liouville
+091000	2	4	teschl-qm-free;bell-unbounded-operators
+092000	2	5	teschl-qm-free;bell-unbounded-operators
+093000	3	6	teschl-qm-free;bell-unbounded-operators;bell-sturm-liouville
+094000	3	7	teschl-qm-free;bell-unbounded-operators;bell-sturm-liouville
+095000	2	5	hunter-nachtergaele-applied;bell-compact-banach
+096000	4	8	mit-strang-18065-low-rank;bell-compact-banach;bell-compact-svd;bindel-hermitian-svd
+097000	4	6	tao-hermitian-matrix-sums;bell-trace-ideals;bell-compact-banach;bell-compact-svd
+098000	2	4	bell-trace-ideals;bell-compact-svd
+099000	2	6	bell-trace-ideals;bell-compact-svd
+100000	2	5	bell-trace-ideals;bell-compact-svd
+101000	2	4	bell-trace-ideals;bell-compact-svd
+102000	0	1	
+103000	0	1	
+104000	2	5	teschl-qm-free;bell-unbounded-operators
+105000	0	2	
+106000	2	5	bindel-eigen-perturbation;bindel-hermitian-svd
+107000	5	11	boyd-vandenberghe-applied;bindel-eigen-perturbation;bindel-hermitian-svd;bindel-ritz-eigensolvers;mml-free-text
+108000	2	8	bindel-eigen-perturbation;bindel-ritz-eigensolvers
+109000	1	6	zhu-knyazev-tangent-angles
+110000	3	6	motovilov-selin-subspace-bounds;bindel-eigen-perturbation;bindel-ritz-eigensolvers
+111000	2	6	zhu-knyazev-tangent-angles;kostrykin-tan2-theorem
+112000	3	7	zhu-knyazev-tangent-angles;kostrykin-tan2-theorem;motovilov-selin-subspace-bounds
+113000	6	10	boyd-vandenberghe-applied;zhu-knyazev-tangent-angles;bindel-eigen-perturbation;bindel-hermitian-svd;bindel-ritz-eigensolvers;mml-free-text
+114000	2	4	kostrykin-tan2-theorem;motovilov-selin-subspace-bounds
+115000	2	5	kostrykin-tan2-theorem;motovilov-selin-subspace-bounds
+116000	2	5	kostrykin-tan2-theorem;motovilov-selin-subspace-bounds
+117000	2	5	kostrykin-tan2-theorem;motovilov-selin-subspace-bounds
+118000	3	7	tao-eigenvalue-stability;kostrykin-tan2-theorem;bindel-eigen-perturbation
+119000	4	7	tao-eigenvalue-stability;kostrykin-tan2-theorem;motovilov-selin-subspace-bounds;bindel-eigen-perturbation
+120000	3	6	tao-eigenvalue-stability;kostrykin-tan2-theorem;motovilov-selin-subspace-bounds
+121000	1	4	bindel-ritz-eigensolvers
+122000	2	5	tao-hermitian-matrix-sums;bell-trace-ideals
+123000	1	4	bell-trace-ideals
+124000	0	3	
+125000	1	6	zhu-knyazev-tangent-angles
+126000	2	5	bell-trace-ideals;bell-compact-svd
+127000	3	6	zhu-knyazev-tangent-angles;kostrykin-tan2-theorem;motovilov-selin-subspace-bounds
+128000	2	3	bell-compact-banach;bell-compact-svd
+129000	3	5	kostrykin-tan2-theorem;motovilov-selin-subspace-bounds;bindel-ritz-eigensolvers
+130000	1	6	mit-strang-18065-procrustes
+131000	1	7	mit-strang-18065-procrustes
+132000	1	7	mit-strang-18065-procrustes
+133000	1	5	mit-strang-18065-procrustes
+134000	0	4	
+135000	0	3	
+136000	1	4	kostrykin-tan2-theorem
+137000	3	5	hunter-nachtergaele-applied;teschl-qm-free;bell-sturm-liouville
+138000	3	5	boyd-vandenberghe-applied;bell-sturm-liouville;bindel-ritz-eigensolvers
+139000	2	5	bell-sturm-liouville;bindel-ritz-eigensolvers
+140000	2	5	bell-sturm-liouville;bindel-ritz-eigensolvers
+141000	3	5	tao-eigenvalue-stability;motovilov-selin-subspace-bounds;bindel-eigen-perturbation
+142000	0	1	
+143000	2	5	tao-eigenvalue-stability;bindel-eigen-perturbation
+144000	0	4	
+145000	2	5	mit-strang-18065-procrustes;mml-free-text
+146000	3	8	mit-strang-18065-svd;bindel-hermitian-svd;mml-free-text
+147000	2	4	mit-strang-18065-clusters;mml-free-text
+148000	4	7	boyd-vandenberghe-applied;mit-strang-18065-procrustes;mit-strang-18065-clusters;mml-free-text
+149000	0	1	

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "lecture_id": "143000",
+  "transcript": "143000-joint-movement-of-eigenvalues-and-angles.md",
+  "historical_claims": [
+    {
+      "id": "143000-h01",
+      "anchor": "Davis and Kahan's Question ten point three asks for the best inequalities that treat those changes simultaneously.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Question 10.3",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "higham-frechet-derivative",
+      "reason": "Study first-order changes of matrix functions under perturbations."
+    },
+    {
+      "source_id": "mit-matrix-calculus",
+      "reason": "Compare the lecture’s matrix variations with scalar-by-matrix derivative examples."
+    },
+    {
+      "source_id": "tao-eigenvalue-stability",
+      "reason": "Contrast Hermitian spectral stability with nonnormal sensitivity and pseudospectra."
+    },
+    {
+      "source_id": "bindel-eigen-perturbation",
+      "reason": "Study concrete perturbation examples and first-order spectral sensitivity."
+    }
+  ]
+}

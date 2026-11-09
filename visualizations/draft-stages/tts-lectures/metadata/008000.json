@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "lecture_id": "008000",
+  "transcript": "008000-resolvents-and-invertibility.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-18-06",
+      "reason": "MIT 18.06 provides an accessible finite-dimensional counterpart; use the relevant vector-space, matrix, or orthogonality lecture."
+    },
+    {
+      "source_id": "bell-spectrum-decomposition",
+      "reason": "Compare spectra and resolvent decomposition beyond diagonal finite matrices."
+    },
+    {
+      "source_id": "bell-banach-algebras",
+      "reason": "Review the Banach-algebra spectral language behind resolvents and invertibility."
+    }
+  ]
+}

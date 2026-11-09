@@ -10,6 +10,13 @@ Recall: No proof background is required.
 
 operators and reliable computation.
 
+## LectureOutcomes: The ideas to carry away
+
+Why: See the conclusions before the details.
+Recall: An interest in mathematics; no earlier lecture required
+
+Operator theory developed through teaching and exposition as well as research. Davis had an active research program before the joint Davis–Kahan paper. Kahan connected numerical analysis with the reliability of computation. We will meet five people and connect each to a selected mathematical contribution. Their careers intersect, but they did not all work together or approach the subject through the same questions.
+
 ## PoIntro: Meet people, not just theorem labels
 
 Why: A career is larger than the one result named in a textbook.
@@ -84,7 +91,7 @@ The careers just introduced bring together several ways of contributing. Sz.-Nag
 Why: Use the people as anchors for the mathematical map.
 Recall: This episode is a selected group, not an exhaustive history.
 
-The main memory should be a connection between a person and a question, not a list of awards. How can projections identify moving spaces? How can a structural description simplify two subspaces? How do physical problems lead to operator theory? What was already in Davis’s research before the joint paper? Why does numerical reliability require mathematical sensitivity analysis? Those are useful questions to carry into the technical lectures. Rosenblum, Dixmier, the singular-value researchers, and YWS remain visible in our coverage notes and the broader historical overview.
+Operator theory developed through teaching and exposition as well as research. Davis had an active research program before the joint Davis–Kahan paper. Kahan connected numerical analysis with the reliability of computation. These connections organize the stories just introduced. The main memory should be a connection between a person and a question, not a list of awards. How can projections identify moving spaces? How can a structural description simplify two subspaces? How do physical problems lead to operator theory? What was already in Davis’s research before the joint paper? Why does numerical reliability require mathematical sensitivity analysis? Those are useful questions to carry into the technical lectures. Rosenblum, Dixmier, the singular-value researchers, and YWS remain visible in our coverage notes and the broader historical overview.
 
 ## PoCreditsOne: Image sources and reuse terms, 1
 

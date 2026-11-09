@@ -1,0 +1,7 @@
+facts:
+- A spectral region selects a whole subspace through a projection.
+- A fixed vector turns spectral selection into a scalar energy measure.
+- Weighting spectral components constructs functions of an operator.
+route: We start with a self-adjoint matrix, where every selected component can be drawn. The finite picture
+  will guide the extensions to continuous spectrum, limits, and domains. It does not require a preferred
+  basis inside a repeated eigenspace.

@@ -16,7 +16,7 @@
 #   make full THEME=light  # light background; outputs get a -light suffix beside the dark ones
 #   make standalone      # single-file HTML (videos embedded) of every built deck and part
 #   make handout         # one-page-per-scene PDFs of every built deck and part
-#   make serve           # browse videos, slide decks and PDFs with seekable playback
+#   make serve           # browse audio lectures, videos, slides and PDFs
 #
 # Indexed lectures add their six-digit order prefix to public output filenames.
 # Every reference deck writes renders/<deck>.html (+ .pdf, .handout.pdf, <deck>_assets/) and keeps
@@ -65,8 +65,10 @@ TTS_FLAGS = $(if $(TTS_CONFIG),--tts-config $(call shell_quote,$(TTS_CONFIG))) \
             $(if $(TTS_INSTRUCTION),--instruction $(call shell_quote,$(TTS_INSTRUCTION))) \
             $(if $(TTS_REQUEST),--request-json $(call shell_quote,$(TTS_REQUEST))) \
             $(if $(TTS_SETTINGS),--tts-settings-json $(call shell_quote,$(TTS_SETTINGS)))
-PORT ?= 8000
-HOST ?= 127.0.0.1
+PORT ?= 8001
+HOST ?= 0.0.0.0
+AUDIO_TTS_PROFILE ?=
+AUDIO_TTS_ENDPOINT ?=
 SKIP_RENDER ?= 0
 REFRESH_AUDIO ?= 0
 # dark or light.  Colors come from dkvis/palette.py (per role and theme) and
@@ -100,19 +102,22 @@ DECKS      := short full $(PARTS) $(WORKING) matching matching-talk
 
 .DEFAULT_GOAL := help
 .PHONY: help setup all rebuild working $(DECKS) $(addprefix clean-,$(DECKS)) $(addprefix present-,$(DECKS)) \
-        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean list slides text video tts-experiment serve prerequisites operators lectures-video prerequisites-video matching-text matching-video matching-talk-text matching-talk-video
+        $(addprefix standalone-,$(DECKS)) standalone $(addprefix handout-,$(DECKS)) handout parts final draft assets app test clean distclean list slides text resources video tts-experiment serve prerequisites operators lectures-video prerequisites-video matching-text matching-video matching-talk-text matching-talk-video
 
 help:
 	@awk '/^#/ { sub(/^# ?/, ""); print; next } { exit }' $(firstword $(MAKEFILE_LIST))
 	@echo; echo 'Targets:'
 	@echo '  tts-experiment     compare original/previous/composite references with phrase-aligned visuals'
 	@echo '  list               list all presentations and transcript availability'
+	@echo '  serve              browse all 150 audio lectures at /audio plus existing renders'
+	@echo '                     AUDIO_TTS_PROFILE overrides reader default (kokoro); AUDIO_TTS_ENDPOINT overrides its URL; TTS_CONFIG selects an ignored private profile config'
 	@echo '  operators          build the three accepted operator-foundation lectures'
 	@echo '  prerequisites      build the ordered prerequisite lectures and speech text'
 	@echo '  prerequisites-video narrate the prerequisite series; TTS_PROFILE=crall-math-dk-v2-breeze-tts2 selects the lecture voice'
 	@echo '  lectures-video     narrate every lecture in YAML dependency order'
 	@echo '  slides DECK=name   render a presentation and export its transcript when present'
 	@echo '  text DECK=name     export slide/build speech text without rendering or TTS'
+	@echo '  resources          export all Learn more companions; DECK=name selects one'
 	@echo '  video DECK=name    render and narrate; TTS_PROFILE selects a server from tts.toml'
 	@echo '                     TTS_CONFIG=tts.local.toml selects an ignored private config instead'
 	@echo '                     TTS_ENDPOINT/MODEL/VOICE/LANGUAGE/RESPONSE_FORMAT/TIMEOUT override its settings'
@@ -201,6 +206,9 @@ slides:
 	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))
 	$(SLIDES_RUN) python -m dkvis.presentation slides $(DECK) $(BUILD_FLAGS) $(if $(JOBS),,--jobs 2) --one-file
 
+resources:
+	$(SLIDES_RUN) python -m dkvis.presentation resources $(if $(DECK),--deck $(call shell_quote,$(DECK)))
+
 text:
 	$(if $(DECK),,$(error Set DECK to a presentation name; use make list))
 	$(UV) run python -m dkvis.presentation text --deck $(DECK) --theme $(THEME)
@@ -288,4 +296,4 @@ distclean: clean
 
 # Seekable media library, HTML slides and PDFs; no Manim/TTS required.
 serve:
-	$(UV) run --isolated --extra serve python -m dkvis.presentation serve --host $(HOST) --port $(PORT)
+	$(UV) run --isolated --extra serve python -m dkvis.presentation serve --host $(HOST) --port $(PORT) $(if $(AUDIO_TTS_PROFILE),--audio-tts-profile $(call shell_quote,$(AUDIO_TTS_PROFILE))) $(if $(AUDIO_TTS_ENDPOINT),--audio-tts-endpoint $(call shell_quote,$(AUDIO_TTS_ENDPOINT))) $(if $(TTS_CONFIG),--tts-config $(call shell_quote,$(TTS_CONFIG)))

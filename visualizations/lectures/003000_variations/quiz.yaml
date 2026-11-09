@@ -10,10 +10,10 @@ questions:
   correct: 2
   explanation: The direction preserves orthogonality and the source. The transporter itself is not required
     to commute with the source projection.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: First question. Which conditions make W times the exponential of t B a legal variation?
     A, W commutes with P; B, B is symmetric; C, B is skew symmetric and commutes with P; or D, B has positive
-    entries? You have eight seconds to choose an answer. Pause the video if you want longer.
+    entries? You have five seconds to choose an answer. Pause the video if you want longer.
   speak_answer: The correct answer is C. The direction preserves orthogonality and the source. The transporter
     itself is not required to commute with the source projection.
 - title: Interpret stationarity
@@ -26,10 +26,44 @@ questions:
   correct: 2
   explanation: Stationarity is necessary at a differentiable minimum. Further structure or comparison
     is needed to prove global optimality.
-  think_seconds: 8
+  think_seconds: 5
   speak_question: Second question. What does a zero first derivative along every legal direction establish
     on its own? A, a global minimum; B, uniqueness; C, a necessary stationarity condition; or D, that
-    all feasible maps are optimal? You have eight seconds to choose an answer. Pause the video if you
-    want longer.
+    all feasible maps are optimal? You have five seconds to choose an answer. Pause the video if you want
+    longer.
   speak_answer: The correct answer is C. Stationarity is necessary at a differentiable minimum. Further
     structure or comparison is needed to prove global optimality.
+- title: Which matrix commutes?
+  question: A legal curve has the form W times exponential t B, where B commutes with the source projection
+    P. What was required?
+  choices:
+  - W itself must commute with P.
+  - The generator B preserves the source splitting; W need not commute with P.
+  - W must equal identity.
+  correct: 1
+  explanation: The extra restriction constructs legal changes on the source side. It is not an added restriction
+    on the transporter being optimized.
+  think_seconds: 5
+  speak_question: Question 3. A legal curve has the form W times exponential t B, where B commutes with
+    the source projection P. What was required? A, W itself must commute with P. B, The generator B preserves
+    the source splitting; W need not commute with P. C, W must equal identity. You have five seconds.
+    Pause for longer if needed.
+  speak_answer: The answer is B. The extra restriction constructs legal changes on the source side. It
+    is not an added restriction on the transporter being optimized.
+- title: What does a zero derivative prove?
+  question: A differentiable objective has zero derivative along every tested feasible curve at W. What
+    can we conclude from that alone?
+  choices:
+  - W is a global minimum.
+  - W satisfies those necessary stationarity conditions; global optimality still needs an argument.
+  - Every feasible map has the same cost.
+  correct: 1
+  explanation: A zero first derivative can also occur at maxima or other stationary points. The derivative
+    test supplies structure, not a full optimality proof.
+  think_seconds: 5
+  speak_question: Question 4. A differentiable objective has zero derivative along every tested feasible
+    curve at W. What can we conclude from that alone? A, W is a global minimum. B, W satisfies those necessary
+    stationarity conditions; global optimality still needs an argument. C, Every feasible map has the
+    same cost. You have five seconds. Pause for longer if needed.
+  speak_answer: The answer is B. A zero first derivative can also occur at maxima or other stationary
+    points. The derivative test supplies structure, not a full optimality proof.

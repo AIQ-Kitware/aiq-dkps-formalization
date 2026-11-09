@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "lecture_id": "003000",
+  "transcript": "003000-cauchy-sequences-and-banach-spaces.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-18-06",
+      "reason": "MIT 18.06 provides an accessible finite-dimensional counterpart; use the relevant vector-space, matrix, or orthogonality lecture."
+    },
+    {
+      "source_id": "mit-functional-analysis-videos",
+      "reason": "Open the corresponding 18.102 lecture: Banach and Hilbert space foundations, measure, or compact operators."
+    },
+    {
+      "source_id": "mit-functional-analysis-notes",
+      "reason": "Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators."
+    },
+    {
+      "source_id": "hunter-nachtergaele-applied",
+      "reason": "Read the matching open chapter for foundational analytic hypotheses and worked proofs."
+    }
+  ]
+}

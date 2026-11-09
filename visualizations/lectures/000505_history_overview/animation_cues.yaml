@@ -1,0 +1,9 @@
+scenes:
+  LectureOutcomes:
+    1:
+    - visual_at: 0
+      phrase: Subspace geometry and matrix equations grew from different questions.
+    - visual_at: 1
+      phrase: Eigenvalue stability and eigenvector stability require different information.
+    - visual_at: 2
+      phrase: Later statistical and transport problems reuse and refine earlier tools.

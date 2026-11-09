@@ -1,0 +1,7 @@
+facts:
+- Projection gives the unique nearest point in a subspace.
+- Changing its orthonormal basis does not change the projection.
+- A linear map preserves a subspace and its perpendicular complement exactly when its order with projection
+  does not matter.
+route: We will connect nearest-point geometry to coordinates and then to the action of another linear
+  map. These are three descriptions of the same splitting of space.

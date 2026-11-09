@@ -6,7 +6,7 @@ from dkvis.lectures import lecture_path, lecture_decks
 
 BASICS = DeckSpec(
     name='prereq-basics', description='A short review of the linear algebra, geometry, and calculus assumed by the series.',
-    footer='before the series: mathematics refresher', narration=lecture_path('basics'),
+    footer='Before the Series: Foundations', narration=lecture_path('basics'),
     slides=uses('dkvis.learning.basics.scenes', ['BaTitle'])
     + uses('dkvis.learning.orientation', ['BaSetup'])
     + uses('dkvis.learning.basics.scenes', [
@@ -23,6 +23,7 @@ PROJECTIONS = DeckSpec(
     name='prereq-projections', description='From nearest points to subspace projections, frames, and commuting blocks.',
     footer='subspaces and projections', narration=lecture_path('projections'),
     slides=uses('dkvis.learning.projections.scenes', ['PrTitle'])
+    + uses('dkvis.learning.outcomes', ['LectureOutcomes'])
     + uses('dkvis.learning.orientation', ['PrSetup'])
     + uses('dkvis.learning.projections.scenes', [
         'Pr00Question', 'Pr01History', 'Pr02Decomposition', 'Pr03Projector',
@@ -30,7 +31,7 @@ PROJECTIONS = DeckSpec(
         'Pr08Recap', 'PrFacts', 'PrLean', 'PrLeanBlocks',
     ])
     + uses('dkvis.learning.projections.scenes', ['PrComputation'], depth="*")
-    + quiz_uses(),
+    + quiz_uses(count=4),
 )
 
 COMPLEMENTARY_PROJECTION = DeckSpec(
@@ -38,6 +39,7 @@ COMPLEMENTARY_PROJECTION = DeckSpec(
     description='Read I minus P as a complementary projection, projection error, and restricted sine block.',
     footer='Thinking about I minus P', narration=lecture_path('complementary_projection'),
     slides=uses('dkvis.learning.complementary_projection.scenes', ['CpTitle'])
+    + uses('dkvis.learning.outcomes', ['LectureOutcomes'])
     + uses('dkvis.learning.orientation', ['CpSetup'])
     + uses('dkvis.learning.complementary_projection.scenes', [
         'CpQuestion', 'CpSplit', 'CpKeep', 'CpAngle', 'CpRestricted',
@@ -45,13 +47,14 @@ COMPLEMENTARY_PROJECTION = DeckSpec(
         'CpLeanOperator', 'CpLeanError',
     ])
     + uses('dkvis.learning.complementary_projection.scenes', ['CpComputation'], depth='*')
-    + quiz_uses(),
+    + quiz_uses(count=4),
 )
 
 SINGULAR_NORMS = DeckSpec(
     name='prereq-singular-norms', description='Singular values explain displacement costs, norm choice, and block additivity.',
     footer='singular values and displacement cost', narration=lecture_path('singular_norms'),
     slides=uses('dkvis.learning.singular_norms.scenes', ['SnTitle'])
+    + uses('dkvis.learning.outcomes', ['LectureOutcomes'])
     + uses('dkvis.learning.orientation', ['SnSetup'])
     + uses('dkvis.learning.singular_norms.scenes', [
         'Sn00Question', 'Sn01History', 'Sn02Stretching', 'Sn03Norms',
@@ -60,13 +63,14 @@ SINGULAR_NORMS = DeckSpec(
         'SnLeanCoordinates',
     ])
     + uses('dkvis.learning.singular_norms.scenes', ['SnComputation'], depth="*")
-    + quiz_uses(),
+    + quiz_uses(count=4),
 )
 
 MATRIX_EXPONENTIAL = DeckSpec(
     name='prereq-matrix-exponential', description='From a matrix velocity to its exact flow: series, small steps, examples, and orthogonality.',
     footer='the matrix exponential', narration=lecture_path('matrix_exponential'),
     slides=uses('dkvis.learning.matrix_exponential.scenes', ['ExTitle'])
+    + uses('dkvis.learning.outcomes', ['LectureOutcomes'])
     + uses('dkvis.learning.orientation', ['ExSetup'])
     + uses('dkvis.learning.matrix_exponential.scenes', [
         'Ex00Question', 'Ex01History', 'Ex02Series', 'Ex03SmallSteps',
@@ -76,13 +80,14 @@ MATRIX_EXPONENTIAL = DeckSpec(
         'ExLeanSplit',
     ])
     + uses('dkvis.learning.matrix_exponential.scenes', ['ExComputation'], depth="*")
-    + quiz_uses(),
+    + quiz_uses(count=4),
 )
 
 VARIATIONS = DeckSpec(
     name='prereq-variations', description='Construct constraint-preserving curves and use stationarity to test a minimizer.',
     footer='feasible variations and stationarity', narration=lecture_path('variations'),
     slides=uses('dkvis.learning.variations.scenes', ['VaTitle'])
+    + uses('dkvis.learning.outcomes', ['LectureOutcomes'])
     + uses('dkvis.learning.orientation', ['VaSetup'])
     + uses('dkvis.learning.variations.scenes', [
         'Va00Question', 'Va01History', 'Va02Velocity', 'Va03Exponential',
@@ -91,7 +96,7 @@ VARIATIONS = DeckSpec(
         'VaLean', 'VaLeanTrace',
     ])
     + uses('dkvis.learning.variations.scenes', ['VaComputation'], depth="*")
-    + quiz_uses(),
+    + quiz_uses(count=4),
 )
 
 _BY_NAME = {d.name: d for d in (BASICS, PROJECTIONS, COMPLEMENTARY_PROJECTION, SINGULAR_NORMS, MATRIX_EXPONENTIAL, VARIATIONS)}

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "lecture_id": "149000",
+  "transcript": "149000-proof-practicum-reconstruct-the-1970-theory.md",
+  "historical_claims": [
+    {
+      "id": "149000-h01",
+      "anchor": "The 1970 paper also develops direct rotation and an extremal claim about displacement.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Section 4",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "149000-h02",
+      "anchor": "the original paper's Section ten asks questions that are broader than the results established in the main body.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Section 10",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "lecture_id": "002000",
+  "transcript": "002000-norms-distances-and-convergence.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "mit-strang-18-06",
+      "reason": "MIT 18.06 provides an accessible finite-dimensional counterpart; use the relevant vector-space, matrix, or orthogonality lecture."
+    },
+    {
+      "source_id": "higham-matrix-norm",
+      "reason": "Compare matrix norm definitions with the norm used in the lecture."
+    },
+    {
+      "source_id": "mit-functional-analysis-notes",
+      "reason": "Follow the corresponding written 18.102 notes on spaces, duality, projections or compact operators."
+    },
+    {
+      "source_id": "mit-strang-18065-norms",
+      "reason": "Compare vector, operator, Frobenius and nuclear norms in worked matrix calculations."
+    },
+    {
+      "source_id": "hunter-nachtergaele-applied",
+      "reason": "Read the matching open chapter for foundational analytic hypotheses and worked proofs."
+    }
+  ]
+}

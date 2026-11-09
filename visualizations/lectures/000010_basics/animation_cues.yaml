@@ -1,0 +1,18 @@
+scenes:
+  BaAdjoints:
+    1:
+    - visual_at: 0
+      phrase: The entry i starts in the upper-right position
+    - visual_at: 1
+      phrase: moves to the lower-left position
+    - visual_at: 2
+      phrase: i becomes minus i
+    - visual_at: 3
+      phrase: For real entries
+    2:
+    - visual_at: 0
+      phrase: The adjoint also moves a map
+    - visual_at: 1
+      phrase: A self-adjoint map equals its adjoint
+    - visual_at: 2
+      phrase: Another condition Q star Q equals identity

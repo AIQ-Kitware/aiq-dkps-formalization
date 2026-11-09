@@ -1,0 +1,4 @@
+facts:
+- Principal angles compare subspaces independently of the bases chosen.
+- The singular values of the frame overlap are the cosines of those angles.
+- The largest sine measures the worst perpendicular error of a unit input.

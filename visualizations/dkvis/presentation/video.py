@@ -303,8 +303,10 @@ def main(argv=None):
                     segment_dir.mkdir(parents=True, exist_ok=True)
                     segment = segment_dir / f"{label}.mp4"
                     pause = args.pause if k == len(visuals[scene]) else args.beat_pause
-                    if script.pauses:
-                        pause += script.pauses[k-1]
+                    if script.pauses and script.pauses[k-1]:
+                        # An authored thinking interval replaces the ordinary
+                        # transition pause; five seconds means five, not 5.35.
+                        pause = script.pauses[k-1]
                     seconds = narrated_segment(
                         visual, audio, segment, pause=pause, fps=args.fps, preset=args.preset
                     )

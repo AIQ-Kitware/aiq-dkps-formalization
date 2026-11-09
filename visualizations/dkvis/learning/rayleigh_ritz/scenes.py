@@ -7,13 +7,20 @@ from manim import (Axes, Arrow, Line, RightAngle, Transform, ValueTracker, VGrou
 from dkvis.components.lesson import LessonSlide, LessonTitle, LessonLean, plane, stack, vector
 from dkvis.learning.rayleigh_ritz.model import trial_example, trial_action, trial_quotient, nested_extrema
 from dkvis.learning.rayleigh_ritz.visuals import TrialPlane, formula, matrix_tiles
-from dkvis.slide_style import CURRENT, TRIAL, RESID, MUTED, WANTED, FG, boxed, math, tex
+from dkvis.slide_style import CURRENT, TRIAL, RESID, MUTED, WANTED, FG, boxed, math, tex, para
+
+
+LEARNING_FACTS = (
+    ('The small model keeps the projected output.', TRIAL),
+    ('The small eigenproblem gives candidates for the original problem.', TRIAL),
+    ('The remaining error is perpendicular to the chosen space.', RESID),
+)
 
 
 class RitzSlide(LessonSlide):
     lesson_deck = 'operators-rayleigh-ritz'
     stage = 1
-    stage_labels = ('Search space', 'Small model', 'Full residual', 'Recap')
+    stage_labels = ('Search space', 'Small model', 'Error check', 'Recap')
 
     def card(self, *items, size=32, first=None):
         card = self.put(stack(*items, size=size, buff=.38), y=.35, height=3.6)
@@ -22,12 +29,65 @@ class RitzSlide(LessonSlide):
             self.add(*card[:first])
         return card
 
+    def fact_rows(self, width=10):
+        rows=VGroup()
+        for i,(claim,color) in enumerate(LEARNING_FACTS):
+            y=1.2-1.2*i
+            number=math(str(i+1),size=36,color=color).move_to([-6,y,0])
+            text=para(claim,width=width,size=29).move_to([-5.35,y,0],aligned_edge=LEFT)
+            rows.add(VGroup(number,text))
+        self.add(rows)
+        return rows
+
 
 class RrTitle(LessonTitle):
     lesson_deck = 'operators-rayleigh-ritz'
     series_title = 'Spectral approximation foundations'
     title_lines = ('Rayleigh–Ritz', 'Trial spaces and residuals')
     subtitle = 'What can a smaller eigenproblem tell us about the original one?'
+
+
+class RrOutcomes(RitzSlide):
+    stage=0
+    def body(self):
+        self.start()
+        self.put(tex('A real symmetric matrix and a chosen search space.',size=25),y=2,height=.5)
+        rows=self.fact_rows()
+        focus=SurroundingRectangle(rows[0],color=TRIAL,buff=.16)
+        self.play(Create(focus),run_time=1)
+        self.play(Transform(focus,SurroundingRectangle(rows[1],color=TRIAL,buff=.16)),run_time=1)
+        self.play(Transform(focus,SurroundingRectangle(rows[2],color=RESID,buff=.16)),run_time=1)
+        self.takeaway('First the whole picture; then why these three claims hold.')
+
+
+class RrPreview(RitzSlide):
+    stage=0
+    example=True
+    def body(self):
+        self.start()
+        view=TrialPlane(); self.add(view,view.basis())
+        u,true,kept,_=trial_action([1,0])
+        chosen=view.arrow(u,TRIAL,width=7)
+        actual=view.arrow(true,CURRENT)
+        retained=view.arrow(kept,TRIAL)
+        self.add(chosen)
+        self.put(tex('Small coordinates describe a candidate u.',size=26),'right',y=1.6,height=.6)
+        self.play(GrowArrow(actual),run_time=1)
+        self.put(tex('Small model: the projected output.',size=26,color=TRIAL),'right',y=.8,height=.6)
+        self.play(GrowArrow(retained),run_time=1)
+        self.beat()
+        u,true,kept,_=trial_action(np.array([1,-1])/np.sqrt(2))
+        self.play(Transform(chosen,view.arrow(u,TRIAL,width=7)),
+                  Transform(actual,view.arrow(true,CURRENT)),
+                  Transform(retained,view.arrow(kept,TRIAL)),run_time=1)
+        self.put(formula(r'\text{model prediction}=',(r'\theta u',TRIAL),size=30),'right',y=.05,height=.6)
+        meaning=self.put(stack(tex('Ritz value',size=27,color=TRIAL),
+                               tex('Eigenvalue of the small matrix',size=24),buff=.12),'right',y=-.95,height=.8)
+        self.remove(meaning);self.play(FadeIn(meaning),run_time=1)
+        error=self.put(formula(('r',RESID),'=',('Au',CURRENT),'-',(r'\theta u',TRIAL),size=32),'right',y=-1.9,height=.6)
+        self.remove(error)
+        self.play(GrowArrow(view.arrow(true,RESID,start=kept)),FadeIn(error),run_time=1)
+        self.takeaway('An exact small solution can leave a nonzero error in the original problem.')
 
 
 class RrQuestion(RitzSlide):
@@ -66,7 +126,7 @@ class RrSpace(RitzSlide):
         self.play(x.animate.set_value(-1.2),y.animate.set_value(.5),run_time=2)
         self.beat()
         self.put(stack(tex('Trial: where we search.',size=27,color=TRIAL),
-                       tex('Invariant: A always stays inside.',size=27),
+                       tex('Invariant: every output stays inside.',size=27),
                        tex('Wanted: the exact spectral target.',size=27,color=WANTED),buff=.22),'right',y=-1.15,height=1.4)
         self.takeaway('Choosing a trial plane allows these inputs. Its invariance and accuracy still need to be checked.')
 
@@ -167,7 +227,7 @@ class RrQuotient(RitzSlide):
         self.play(FadeIn(high),FadeIn(high_label),run_time=1)
         self.play(t.animate.set_value(3*np.pi/4),run_time=2,rate_func=linear)
         self.add(low,math(r'\min=1',size=23,color=TRIAL).next_to(low,DOWN,buff=.15))
-        self.takeaway('The full and compressed curves coincide. Their extrema are the Ritz values.')
+        self.takeaway('Ritz values are eigenvalues of the small matrix: candidate eigenvalues for A.')
 
 
 class RrSolve(RitzSlide):
@@ -258,13 +318,25 @@ class RrBlock(RitzSlide):
         retained=VGroup(view.arrow(one[2],TRIAL),view.arrow(two[2],TRIAL))
         escapes=VGroup(view.arrow(one[1],RESID,start=one[2]),view.arrow(two[1],RESID,start=two[2]))
         self.play(Create(retained),Create(escapes),run_time=2)
-        self.put(VGroup(math(r'[Q\ Q_\perp]^TA[Q\ Q_\perp]=',size=26),blocks).arrange(RIGHT,buff=.12),'right',y=1.0,height=2)
-        self.put(tex('First block column: trial input, two output destinations.',size=24),'right',y=-.25,height=.8)
+        self.put(blocks,'right',y=.65,height=1.65)
+        # Column labels identify inputs; row labels identify output components.
+        columns=blocks.get_columns(); rows=blocks.get_rows()
+        self.add(tex('Input',size=22).move_to([3.25,2.15,0]),
+                 math(r'\mathcal T',size=24,color=TRIAL).move_to([columns[0].get_center()[0],1.75,0]),
+                 math(r'\mathcal T^\perp',size=24,color=RESID).move_to([columns[1].get_center()[0],1.75,0]),
+                 tex('Output in',size=22).move_to([1.1,1.4,0]),
+                 math(r'\mathcal T',size=24,color=TRIAL).move_to([1.1,rows[0].get_center()[1],0]),
+                 math(r'\mathcal T^\perp',size=24,color=RESID).move_to([1.1,rows[1].get_center()[1],0]))
         self.play(Indicate(blocks.get_entries()[2],color=RESID),run_time=1)
-        self.put(formula((r'C=(1\ \ -1)',RESID),r',\quad',(r'R=Q_\perp C',RESID),size=30),'right',y=-1.05,height=.6)
+        self.put(formula((r'C=(1\ \ -1)',RESID),r',\quad',(r'R=Q_\perp C',RESID),size=30),'right',y=-.75,height=.6)
+        focus=SurroundingRectangle(blocks.get_entries()[3],color=RESID,buff=.12)
+        self.play(Create(focus),run_time=1)
+        self.play(Transform(focus,SurroundingRectangle(blocks.get_entries()[1],color=RESID,buff=.12)),run_time=1)
+        self.put(formula('A^T=A',r'\Longrightarrow',r'\text{paired blocks }C, C^T',size=25),'right',y=-1.4,height=.6)
         self.beat()
-        self.put(formula(r'\mathcal T\text{ invariant}\iff',('C=0',RESID),size=31),'right',y=-1.75,height=.55)
-        self.takeaway('B keeps the in-plane output. C collects the normal components already drawn in green.')
+        self.play(Transform(focus,SurroundingRectangle(blocks.get_entries()[2],color=RESID,buff=.12)),run_time=1)
+        self.put(formula(r'\mathcal T\text{ invariant}\iff',('C=0',RESID),size=31),'right',y=-2.0,height=.5)
+        self.takeaway('For trial inputs, B records the trial-space output and C records the perpendicular output.')
 
 
 class RrOrthogonality(RitzSlide):
@@ -281,7 +353,7 @@ class RrOrthogonality(RitzSlide):
         self.play(Indicate(green,color=RESID),run_time=1)
         self.beat()
         self.put(formula(('R',RESID),'=',('(I-P)AQ',RESID),r',\quad',('r=Ry',RESID),size=30),'right',y=-1.25,height=.7)
-        self.takeaway(r'$Q^T R=0$: every residual is perpendicular to the trial space.')
+        self.takeaway(r'$Q^T r=0$ means a zero trial-space projection; $r$ itself can be nonzero.')
 
 
 class RrModel(RitzSlide):
@@ -370,18 +442,20 @@ class RrSummary(RitzSlide):
     stage=3
     def body(self):
         self.start()
-        labels=[('Search space',r'\mathcal T',TRIAL),('Coordinates','Q',TRIAL),('Small model','B=Q^TAQ',TRIAL),
-                ('Ritz pair',r'By=\theta y',TRIAL),('Full error',r'r=Au-\theta u',RESID)]
-        panels=VGroup()
-        for i,(title,expression,color) in enumerate(labels):
-            x=-5.2+i*2.6
-            panel=RoundedRectangle(width=2.25,height=1.55,corner_radius=.12,color=color,fill_opacity=.06).move_to([x,.65,0])
-            panels.add(panel,tex(title,size=25,color=color).move_to([x,1.05,0]),math(expression,size=25,color=color).move_to([x,.4,0]))
-            if i:self.add(Arrow([x-1.45,.65,0],[x-1.15,.65,0],buff=0,color=MUTED))
-        self.add(panels)
+        rows=self.fact_rows(width=6.2)
+        focus=SurroundingRectangle(rows[0],color=TRIAL,buff=.14)
+        one=self.put(formula(('B=Q^TAQ',TRIAL),size=31),'right',y=1.2,height=.7)
+        self.remove(one);self.play(Create(focus),FadeIn(one),run_time=1)
+        two=self.put(stack(formula((r'By=\theta y',TRIAL),size=29),
+                           formula(('u=Qy',TRIAL),size=29),buff=.12),'right',y=0,height=.85)
+        self.remove(two)
+        self.play(Transform(focus,SurroundingRectangle(rows[1],color=TRIAL,buff=.14)),FadeIn(two),run_time=1)
         self.beat()
-        self.put(formula(('AQ',CURRENT),'=',('QB',TRIAL),'+',('R',RESID),r',\qquad',('Q^TR=0',RESID),size=36),y=-.9,height=.8)
-        self.takeaway('The model keeps the amber component. The green residual records exactly what remains outside.')
+        three=self.put(stack(formula(('r',RESID),'=',('Au',CURRENT),'-',(r'\theta u',TRIAL),size=28),
+                             formula(('Q^Tr=0',RESID),size=29),buff=.12),'right',y=-1.2,height=.85)
+        self.remove(three)
+        self.play(Transform(focus,SurroundingRectangle(rows[2],color=RESID,buff=.14)),FadeIn(three),run_time=1)
+        self.takeaway('The same three opening facts now have definitions, a derivation, and an error check.')
 
 
 class RrFacts(RitzSlide):
@@ -391,7 +465,7 @@ class RrFacts(RitzSlide):
         self.card(formula(('B',TRIAL),'=',('Q^T',TRIAL),('A',CURRENT),('Q',TRIAL),size=39),
                   formula(('Q^TR',RESID),'=0',size=39),
                   formula(('AQ-QM',CURRENT),'=',('R',RESID),'+',('Q(B-M)',TRIAL),size=35),
-                  tex('Q is isometric; R is the Ritz residual.',size=28))
+                  tex('Q preserves lengths; R collects the basis-input errors.',size=27))
         self.takeaway('Compression, orthogonality, and the orthogonal splitting: the three facts to connect to Lean.')
 
 
@@ -399,7 +473,7 @@ class RrLean(LessonLean):
     stage_labels = RitzSlide.stage_labels
     lesson_deck = 'operators-rayleigh-ritz'
     lecture_id = 'rayleigh_ritz'
-    assumptions = 'A is bounded on a real Hilbert space; X maps trial coordinates isometrically into it.'
+    assumptions = 'A is bounded on a real Hilbert space; X places trial coordinates in it and preserves lengths.'
     symbolic_facts = (('Compression',r'B=Q^*AQ'),('Residual orthogonality',r'Q^*R=0'),
                       ('Residual splitting',r'AQ-QM=R+Q(B-M)'))
     ownership = 'Accepted Tau Ceti: Compression and RayleighRitz; exact scope and ancestry in sources.md.'
@@ -423,4 +497,4 @@ class RrComputation(RitzSlide):
                   tex('QR supplies Q. Apply a sparse or implicit A to its columns.',size=28),
                   r'V\text{ not orthonormal:}\quad V^*AVy=\theta(V^*V)y',
                   tex('Krylov and subspace methods build and improve the trial spaces.',size=28))
-        self.takeaway('Check orthogonality and the full lifted residual; a small reduced residual alone is insufficient.')
+        self.takeaway(r'Check $Au-\theta u$ in the original space, as well as the small equation $By=\theta y$.')

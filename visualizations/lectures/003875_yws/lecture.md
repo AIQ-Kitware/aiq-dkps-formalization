@@ -11,6 +11,13 @@ Recall: The main concept is subspace error controlled by a population gap.
 
 A population-gap perturbation theorem.
 
+## LectureOutcomes: The ideas to carry away
+
+Why: See the conclusions before the details.
+Recall: The local setup follows this overview.
+
+A population eigengap controls subspace error under a matrix perturbation. An orthogonal alignment converts subspace error to frame error. The proof separates a geometric bound from probabilistic noise estimates. The matrices are real symmetric, with corresponding ordered eigenvector blocks. The gap belongs to the population matrix. We will bound one residual from both sides, then explain the additional cost of comparing bases.
+
 ## YsSetup: The setting: one matrix, one estimate, one block
 
 Why: Fix the objects before comparing their eigenspaces.
@@ -124,7 +131,7 @@ The second residual term is therefore also at most the Frobenius norm of H. The 
 Why: The spectral theorem supplies the splitting; we are not assuming an algorithm finds it.
 Recall: V perpendicular consists of the population eigenvectors outside the selected block.
 
-Now we need the residual lower bound. Choose the full orthonormal eigenbasis of the real symmetric population matrix A. In these coordinates A is block diagonal: Lambda on the selected population space and Lambda one on its orthogonal complement. The zero off-diagonal blocks follow from the eigenvector equations. They are not extra assumptions about the sample matrix.
+The upper estimate has measured how large the residual can be. The lower estimate must explain why an unwanted component cannot hide behind a small residual. Now we need the residual lower bound. Choose the full orthonormal eigenbasis of the real symmetric population matrix A. In these coordinates A is block diagonal: Lambda on the selected population space and Lambda one on its orthogonal complement. The zero off-diagonal blocks follow from the eigenvector equations. They are not extra assumptions about the sample matrix.
 
 <!-- beat -->
 
@@ -216,14 +223,14 @@ Select positions r through s among the positive population singular values, so s
 
 <!-- beat -->
 
-The repository records and refutes the printed rank-based infinity convention in Theorem Three and proves the corrected ambient-spectrum version. For this lecture, the displayed rectangular bound uses that corrected gap. This is a source correction to state explicitly, rather than silently teaching a false endpoint convention. The aligned-frame bound again has an extra square root two, and the symmetric proof supplies the reason.
+The printed rank-based infinity convention in Theorem Three omits this zero boundary and must be corrected. For this lecture, the displayed rectangular bound uses that corrected gap. This is a source correction to state explicitly, rather than silently teaching a false endpoint convention. The aligned-frame bound again has an extra square root two, and the symmetric proof supplies the reason.
 
 ## YsSummary: What the proof has established
 
 Why: Keep the roles of geometry, perturbation, and probability separate.
 Recall: The theorem is deterministic and its denominator is population-only.
 
-The main proof chose a residual measured against population eigenvalues, bounded it above using either Weyl or Hoffman–Wielandt, and bounded it below using the unwanted population coordinates. That produced the Frobenius sine bound. An orthogonal alignment converted the subspace bound to a frame bound at the cost of square root two. The rectangular extension applies the same theorem to Gram matrices.
+A population eigengap controls subspace error under a matrix perturbation. An orthogonal alignment converts subspace error to frame error. The proof separates a geometric bound from probabilistic noise estimates. Here is how the preceding argument fits those conclusions. The main proof chose a residual measured against population eigenvalues, bounded it above using either Weyl or Hoffman–Wielandt, and bounded it below using the unwanted population coordinates. That produced the Frobenius sine bound. An orthogonal alignment converted the subspace bound to a frame bound at the cost of square root two. The rectangular extension applies the same theorem to Gram matrices.
 
 <!-- beat -->
 

@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import argparse
+from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 import hashlib
 import os
@@ -15,7 +16,7 @@ import re
 import shutil
 import subprocess
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 
 from starlette.concurrency import run_in_threadpool
 from starlette.applications import Starlette
@@ -109,10 +110,36 @@ def chapters_for(root, media):
     return []
 
 
-def create_app(directory=ROOT/'renders', *, feedback_directory=None):
+def create_app(directory=ROOT/'renders', *, feedback_directory=None,
+               audio_source_directory=None, audio_cache_directory=None,
+               audio_tts_endpoint=None, audio_tts_profile=None, audio_tts_config=None,
+               audio_library=None, slide_library=None):
     root = Path(directory).resolve()
     if not root.is_dir():
-        raise ValueError(f'Render directory does not exist: {root}')
+        if root == (ROOT/'renders').resolve():
+            root.mkdir(parents=True, exist_ok=True)
+        else:
+            raise ValueError(f'Render directory does not exist: {root}')
+
+    from dkvis.presentation.audio_library import AudioLectureHub, AUDIO_PAGE
+    from dkvis.presentation.course_graph import build_course_graph, connections
+    from dkvis.presentation.companion_slides import CompanionSlideLibrary
+    companions = slide_library or CompanionSlideLibrary()
+    course_graph = build_course_graph()
+    slides_by_node = {node_id: [] for node_id in course_graph['nodes']}
+    for deck in companions.catalog():
+        for node_id in deck['lecture_nodes']:
+            if node_id not in slides_by_node:
+                raise ValueError(f'Slide deck {deck["id"]} links to missing lecture {node_id}')
+            slides_by_node[node_id].append(deck['id'])
+    for node_id, node in course_graph['nodes'].items():
+        node['companion_slides'] = slides_by_node[node_id]
+    COURSE_GRAPH_PAGE = Path(__file__).with_name('course_graph.html')
+    speech_library = audio_library or AudioLectureHub(
+        sources=audio_source_directory or ROOT/'draft-stages'/'tts-lectures',
+        cache=audio_cache_directory or ROOT/'audio-cache',
+        endpoint=audio_tts_endpoint, profile=audio_tts_profile, config=audio_tts_config,
+    )
 
     # Viewer feedback is authored data, not a disposable render/cache artifact.
     feedback_root = Path(feedback_directory).resolve() if feedback_directory else root.parent/'feedback'
@@ -247,32 +274,346 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None):
         text='\n\n'.join(f'{i}. {s.title}\n\n{s.text}' for i,s in enumerate(scripts.values(),1))
         return PlainTextResponse(text+'\n',headers={'Cache-Control':'no-store'})
 
+    def learning_companion(request):
+        from dkvis.presentation.resources import learning_resources, companion_html
+        try:
+            data=learning_resources(request.query_params.get('deck',''))
+        except KeyError:
+            raise HTTPException(404)
+        if data is None:
+            raise HTTPException(404)
+        return Response(companion_html(data),media_type='text/html',headers={'Cache-Control':'no-store'})
+
     def chapters(request):
         path = within(root, request.query_params.get('path', ''))
         if not path.is_file():
             raise HTTPException(404)
         return JSONResponse(chapters_for(root, path), headers={'Cache-Control': 'no-store'})
 
-    return Starlette(routes=[Route('/', index), Route('/api/catalog', catalog),
-                            Route('/api/chapters', chapters), Route('/api/media',media_detail),
-                            Route('/api/captions',captions), Route('/api/transcript',transcript),
-                            Route('/api/source-transcript',source_transcript),
-                            Route('/api/feedback',feedback,methods=['POST']),
-                            Mount('/files', StaticFiles(directory=root, html=True), name='files')])
+    def audio_error(exc):
+        if isinstance(exc, (KeyError, IndexError, FileNotFoundError)):
+            raise HTTPException(404, 'Lecture or page not found.') from exc
+        if isinstance(exc, ValueError):
+            raise HTTPException(400, str(exc)) from exc
+        if isinstance(exc, OverflowError):
+            raise HTTPException(429, str(exc)) from exc
+        raise exc
+
+    def audio_engine(profile=None, track='g2'):
+        if hasattr(speech_library, 'engine'):
+            return speech_library.engine(profile, track)
+        if track != 'g2':
+            raise ValueError(f'Unknown audio track: {track}')
+        if profile and profile != speech_library.profile:
+            raise ValueError(f'Unknown TTS profile: {profile}')
+        return speech_library
+
+    def audio_settings(request):
+        try:
+            engine = audio_engine(request.query_params.get('profile'), request.query_params.get('track', 'g2'))
+            return engine, engine.settings(request.query_params.get('voice'),
+                                           request.query_params.get('speed'))
+        except ValueError as exc:
+            audio_error(exc)
+
+    def audio_query(engine, settings, *, key=None):
+        track = 'g2' if engine.sources == speech_library.sources else 'g3'
+        query = dict(profile=engine.profile, voice=settings.voice, speed=settings.speed,
+                     track=track)
+        # The audio URL must change when a server-side input changes. In
+        # particular, pagination, voice-profile settings and synthesis version
+        # belong to the cache key, but are not represented by the public query
+        # parameters above. Browser caches previously held an outdated MP3 for
+        # a year at the same URL after page size changed.
+        if key is not None:
+            query['key'] = key
+        return urlencode(query)
+
+    async def learning_paths(request):
+        return FileResponse(COURSE_GRAPH_PAGE, headers={'Cache-Control': 'no-cache'})
+
+    async def course_graph_api(request):
+        return JSONResponse(course_graph, headers={'Cache-Control': 'no-store'})
+
+    async def audio_home(request):
+        return FileResponse(AUDIO_PAGE, headers={'Cache-Control': 'no-cache'})
+
+    async def audio_catalog(request):
+        track = request.query_params.get('track', 'g2')
+        try:
+            items = await run_in_threadpool(speech_library.catalog, track) if hasattr(speech_library, 'course_tracks') else await run_in_threadpool(speech_library.catalog)
+        except ValueError as exc:
+            audio_error(exc)
+        return JSONResponse({'items': items, 'track': track,
+                             'default_voice': speech_library.default_voice,
+                             'model': speech_library.model, 'profile': speech_library.profile}, headers={'Cache-Control': 'no-store'})
+
+    async def audio_lecture(request):
+        try:
+            if hasattr(speech_library, 'course_tracks'):
+                row = await run_in_threadpool(speech_library.detail, request.path_params['lecture_id'], request.query_params.get('track', 'g2'))
+            else:
+                if request.query_params.get('track', 'g2') != 'g2':
+                    raise ValueError('Unknown audio track')
+                row = await run_in_threadpool(speech_library.detail, request.path_params['lecture_id'])
+        except (KeyError, IndexError, ValueError) as exc:
+            audio_error(exc)
+        track = request.query_params.get('track', 'g2')
+        row = dict(row, course_connections=connections(course_graph, f'{track}:{row["id"]}'),
+                   companion_slides=companions.list_for_lecture(f'{track}:{row["id"]}'))
+        return JSONResponse(row, headers={'Cache-Control': 'no-store'})
+
+    async def audio_plain_transcript(request):
+        """Return only spoken narration, for select-all/copy or external TTS."""
+        track = request.query_params.get('track', 'g2')
+        lecture_id = request.path_params['lecture_id']
+        try:
+            if hasattr(speech_library, 'course_tracks'):
+                row = await run_in_threadpool(speech_library.detail, lecture_id, track)
+            else:
+                if track != 'g2':
+                    raise ValueError('Unknown audio track')
+                row = await run_in_threadpool(speech_library.detail, lecture_id)
+        except (KeyError, IndexError, ValueError) as exc:
+            audio_error(exc)
+        return PlainTextResponse(
+            row['transcript'], media_type='text/plain; charset=utf-8',
+            headers={'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff'})
+
+    def slide_status(request):
+        try:
+            return JSONResponse(companions.status(request.path_params['deck_id']),
+                                headers={'Cache-Control': 'no-store'})
+        except KeyError:
+            raise HTTPException(404, 'Unknown slide deck.')
+
+    async def slide_build(request):
+        origin = request.headers.get('origin')
+        if origin and origin != f'{request.url.scheme}://{request.url.netloc}':
+            raise HTTPException(403, 'Build slides from this lecture library.')
+        if request.headers.get('content-length') and int(request.headers['content-length']) > 1024:
+            raise HTTPException(413, 'Build request too large.')
+        try:
+            result = await run_in_threadpool(companions.build, request.path_params['deck_id'])
+        except KeyError:
+            raise HTTPException(404, 'Unknown slide deck.')
+        return JSONResponse(result, headers={'Cache-Control': 'no-store'})
+
+    def slide_html(request):
+        try:
+            path = companions.rendered(request.path_params['deck_id'])
+        except KeyError:
+            raise HTTPException(404, 'Unknown slide deck.')
+        except FileNotFoundError:
+            raise HTTPException(409, 'Build the companion slides before opening them.')
+        return FileResponse(path, media_type='text/html', headers={'Cache-Control':'no-store'})
+
+    def slide_download(request):
+        try:
+            path = companions.rendered(request.path_params['deck_id'])
+        except KeyError:
+            raise HTTPException(404, 'Unknown slide deck.')
+        except FileNotFoundError:
+            raise HTTPException(409, 'Build the companion slides before downloading them.')
+        return FileResponse(path, media_type='text/html', filename=path.name,
+                            content_disposition_type='attachment', headers={'Cache-Control':'no-store'})
+
+    async def slide_catalog(request):
+        return JSONResponse({'items': companions.catalog()},headers={'Cache-Control':'no-store'})
+
+    async def audio_tracks(request):
+        tracks = speech_library.course_tracks() if hasattr(speech_library, 'course_tracks') else [
+            dict(id='g2', label='G2 · Comprehensive audio', kind='audio', url='/audio?track=g2')]
+        tracks = [*tracks, dict(id='g4', label='G4 - YWS population gap', kind='graph',
+                                url='/learning-paths?track=g4', status='planned',
+                                count=len(next(t['path'] for t in course_graph['tracks'] if t['id'] == 'g4')))]
+        return JSONResponse(dict(tracks=tracks, default_track='g2'),
+                            headers={'Cache-Control': 'no-store'})
+
+    async def audio_profiles(request):
+        if hasattr(speech_library, 'profiles'):
+            profiles = speech_library.profiles()
+        else:
+            profiles = [dict(id=speech_library.profile, label=speech_library.profile,
+                             model=speech_library.model, default_voice=speech_library.default_voice)]
+        return JSONResponse(dict(default_profile=speech_library.profile, profiles=profiles),
+                            headers={'Cache-Control': 'no-store'})
+
+    async def audio_health(request):
+        try:
+            engine = audio_engine(request.query_params.get('profile'))
+        except ValueError as exc:
+            audio_error(exc)
+        return JSONResponse(await run_in_threadpool(engine.connection_status),
+                            headers={'Cache-Control': 'no-store'})
+
+    async def audio_voices(request):
+        try:
+            engine = audio_engine(request.query_params.get('profile'))
+            names = await run_in_threadpool(engine.voices)
+            registered = (speech_library.registered_voices(engine.profile)
+                          if hasattr(speech_library, 'registered_voices') else [])
+            names = sorted(set(names) | {item['voice'] for item in registered})
+        except ValueError as exc:
+            audio_error(exc)
+        return JSONResponse(dict(voices=names, registered=registered,
+                                 default_voice=engine.default_voice,
+                                 model=engine.model, profile=engine.profile),
+                            headers={'Cache-Control': 'no-store'})
+
+    async def audio_register_voice(request):
+        if not hasattr(speech_library, 'register_voice'):
+            raise HTTPException(501, 'Voice registration is not configured.')
+        if request.headers.get('content-type', '').split(';')[0].strip() != 'application/json':
+            raise HTTPException(415, 'Send voice registration as JSON.')
+        origin = request.headers.get('origin')
+        if origin and origin != f'{request.url.scheme}://{request.url.netloc}':
+            raise HTTPException(403, 'Register voices from this lecture library.')
+        raw = bytearray()
+        async for chunk in request.stream():
+            raw.extend(chunk)
+            if len(raw) > 2048:
+                raise HTTPException(413, 'Registration request is too large.')
+        try:
+            data = json.loads(raw)
+            if not isinstance(data, dict) or set(data) - {'profile', 'voice', 'label'}:
+                raise ValueError('Only profile, voice, and label may be registered.')
+            record = await run_in_threadpool(speech_library.register_voice,
+                                             data.get('profile'), data.get('voice'), data.get('label'))
+        except (ValueError, TypeError) as exc:
+            audio_error(ValueError(str(exc)))
+        return JSONResponse(record, status_code=201, headers={'Cache-Control': 'no-store'})
+
+    def audio_status_payload(request, result, engine, settings):
+        if result['state'] == 'ready':
+            result['url'] = (f'/api/audio-lectures/{request.path_params["lecture_id"]}'
+                             f'/pages/{request.path_params["page"]}/audio?'
+                             f'{audio_query(engine, settings, key=result["key"])}')
+        return result
+
+    async def audio_page_status(request):
+        try:
+            engine, settings = audio_settings(request)
+            result = await run_in_threadpool(engine.status,
+                request.path_params['lecture_id'], request.path_params['page'], settings)
+        except (KeyError, IndexError, ValueError) as exc:
+            audio_error(exc)
+        return JSONResponse(audio_status_payload(request, result, engine, settings),
+                            headers={'Cache-Control': 'no-store'})
+
+    async def audio_page_render(request):
+        if request.headers.get('content-type', '').split(';')[0].strip() != 'application/json':
+            raise HTTPException(415, 'Send TTS settings as JSON.')
+        origin = request.headers.get('origin')
+        if origin and origin != f'{request.url.scheme}://{request.url.netloc}':
+            raise HTTPException(403, 'Render speech from this lecture library.')
+        raw = bytearray()
+        async for chunk in request.stream():
+            raw.extend(chunk)
+            if len(raw) > 2048:
+                raise HTTPException(413, 'TTS settings request is too large.')
+        try:
+            settings_body = json.loads(raw)
+            if not isinstance(settings_body, dict) or set(settings_body) - {'profile', 'voice', 'speed', 'track'}:
+                raise ValueError('Only track, profile, voice, and speed can be selected.')
+            engine = audio_engine(settings_body.get('profile'), settings_body.get('track', 'g2'))
+            settings = engine.settings(settings_body.get('voice'), settings_body.get('speed'))
+            result = await run_in_threadpool(engine.request,
+                request.path_params['lecture_id'], request.path_params['page'], settings)
+        except (ValueError, IndexError, KeyError, OverflowError, TypeError) as exc:
+            audio_error(exc if not isinstance(exc, TypeError) else ValueError('Invalid TTS settings.'))
+        if result['state'] == 'ready':
+            query = audio_query(engine, settings, key=result['key'])
+            result['url'] = (f'/api/audio-lectures/{request.path_params["lecture_id"]}'
+                             f'/pages/{request.path_params["page"]}/audio?{query}')
+        return JSONResponse(result, status_code=200 if result['state'] == 'ready' else 202,
+                            headers={'Cache-Control': 'no-store'})
+
+    async def audio_page_file(request):
+        try:
+            engine, settings = audio_settings(request)
+            supplied_key = request.query_params.get('key')
+            if supplied_key is not None:
+                # Reject obsolete keyed URLs. An immutable URL must identify
+                # exactly one recording, never the current occupant of a page.
+                status = await run_in_threadpool(engine.status,
+                    request.path_params['lecture_id'], request.path_params['page'], settings)
+                if status['key'] != supplied_key:
+                    raise HTTPException(404, 'Audio cache identity has changed.')
+            path = await run_in_threadpool(engine.audio_file,
+                request.path_params['lecture_id'], request.path_params['page'], settings)
+        except (KeyError, IndexError, FileNotFoundError, ValueError) as exc:
+            audio_error(exc)
+        # Legacy URLs without an artifact key must never be cached. Keyed URLs
+        # are content-addressed and safe for long-lived browser caching.
+        cache_header = ('private, max-age=31536000, immutable' if supplied_key
+                        else 'private, no-store')
+        return FileResponse(path, media_type='audio/mpeg', filename=path.name,
+                            content_disposition_type='inline',
+                            headers={'Cache-Control': cache_header})
+
+    @asynccontextmanager
+    async def lifespan(_app):
+        try:
+            yield
+        finally:
+            speech_library.close()
+
+    app = Starlette(routes=[
+        Route('/', index), Route('/audio', audio_home),
+        Route('/learning-paths', learning_paths), Route('/api/course-graph', course_graph_api),
+        Route('/api/slide-decks', slide_catalog),
+        Route('/api/slide-decks/{deck_id}', slide_status),
+        Route('/api/slide-decks/{deck_id}/build', slide_build, methods=['POST']),
+        Route('/api/slide-decks/{deck_id}/download', slide_download),
+        Route('/slide-decks/{deck_id}', slide_html),
+        Route('/api/audio-lectures', audio_catalog),
+        Route('/api/audio-tracks', audio_tracks),
+        Route('/api/audio-voices', audio_voices),
+        Route('/api/audio-voices/register', audio_register_voice, methods=['POST']),
+        Route('/api/audio-profiles', audio_profiles),
+        Route('/api/audio-health', audio_health),
+        Route('/api/audio-lectures/{lecture_id}', audio_lecture),
+        Route('/api/audio-lectures/{lecture_id}/transcript.txt', audio_plain_transcript),
+        Route('/api/audio-lectures/{lecture_id}/pages/{page:int}', audio_page_status),
+        Route('/api/audio-lectures/{lecture_id}/pages/{page:int}/render', audio_page_render, methods=['POST']),
+        Route('/api/audio-lectures/{lecture_id}/pages/{page:int}/audio', audio_page_file),
+        Route('/api/catalog', catalog), Route('/api/chapters', chapters),
+        Route('/api/media', media_detail), Route('/api/captions', captions),
+        Route('/api/transcript', transcript), Route('/api/source-transcript', source_transcript),
+        Route('/api/learning-resources', learning_companion),
+        Route('/api/feedback', feedback, methods=['POST']),
+        Mount('/files', StaticFiles(directory=root, html=True), name='files'),
+    ], lifespan=lifespan)
+    return app
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--directory', type=Path, default=ROOT/'renders')
     parser.add_argument('--feedback-directory', type=Path, help='saved viewer feedback; defaults to a feedback directory beside renders')
-    parser.add_argument('--host', default='127.0.0.1')
-    parser.add_argument('--port', type=int, default=8000)
+    parser.add_argument('--audio-source-directory', type=Path, help='directory containing the staged Markdown lectures')
+    parser.add_argument('--audio-cache-directory', type=Path, help='persistent MP3 page cache')
+    parser.add_argument('--audio-tts-endpoint', help='override profile speech URL')
+    parser.add_argument('--audio-tts-profile', help='default audio profile (default: kokoro; DKVIS_AUDIO_TTS_PROFILE overrides)')
+    parser.add_argument('--tts-config', type=Path,
+                        help='TTS profile config for the audio reader (default: tts.toml; DKVIS_AUDIO_TTS_CONFIG overrides)')
+    parser.add_argument('--host', default='0.0.0.0')
+    parser.add_argument('--port', type=int, default=8001)
     args = parser.parse_args(argv)
     if not 0 < args.port < 65536:
         parser.error('port must be between 1 and 65535')
     import uvicorn
-    print(f'Lecture library: http://{args.host}:{args.port}/', flush=True)
-    uvicorn.run(create_app(args.directory,feedback_directory=args.feedback_directory), host=args.host, port=args.port)
+    browser_host = '127.0.0.1' if args.host == '0.0.0.0' else args.host
+    print(f'Lecture library: http://{browser_host}:{args.port}/audio (LAN: use this machine\'s IP)', flush=True)
+    tts_config = args.tts_config or (Path(os.environ['DKVIS_AUDIO_TTS_CONFIG'])
+                                     if os.environ.get('DKVIS_AUDIO_TTS_CONFIG') else None)
+    uvicorn.run(create_app(args.directory, feedback_directory=args.feedback_directory,
+                           audio_source_directory=args.audio_source_directory,
+                           audio_cache_directory=args.audio_cache_directory,
+                           audio_tts_endpoint=args.audio_tts_endpoint,
+                           audio_tts_profile=args.audio_tts_profile,
+                           audio_tts_config=tts_config), host=args.host, port=args.port)
 
 
 if __name__ == '__main__':

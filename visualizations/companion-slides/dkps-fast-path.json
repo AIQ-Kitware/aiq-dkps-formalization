@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "id": "dkps-fast-path",
+  "title": "A fast path to Davis–Kahan",
+  "subtitle": "The stability of spectral subspaces and the geometry behind the main theorems",
+  "lecture_nodes": [
+    "g3:000000"
+  ],
+  "slides": [
+    {
+      "id": "01",
+      "title": "The stability question",
+      "lead": "When a symmetric matrix changes, how much can its eigenspaces rotate?",
+      "body": [
+        "Eigenvalues measure stretching along special directions. Invariant subspaces group those directions into geometrically meaningful objects. A perturbation may move those objects even when the matrix changes only slightly.",
+        "Davis–Kahan theory relates subspace rotation to the size of a perturbation or residual and to separation from competing eigenvalues."
+      ],
+      "formula": "perturbation  +  spectral separation   ⟶   quantitative angle bound",
+      "diagram": "angle",
+      "takeaway": "The object of study is a subspace, often represented by its orthogonal projection.",
+      "eyebrow": "The motivating problem",
+      "layout": "opening"
+    },
+    {
+      "id": "02",
+      "title": "A concrete two-mode perturbation",
+      "lead": "Begin with two orthogonal modes whose eigenvalues differ by four.",
+      "body": [
+        "Let A be diagonal with entries 0 and 4. Adding equal off-diagonal entries t couples the two coordinate directions. The eigenvalues of the perturbed matrix are 2 ± √(4 + t²).",
+        "For t ≥ 0, the lower eigenvector makes an acute unsigned angle θ with the first coordinate axis. Diagonalization gives the exact rotation relation shown below."
+      ],
+      "formula": "A = [[0, 0], [0, 4]]      Aₜ = [[0, t], [t, 4]]\ntan(2θ) = t/2        θ ≈ t/4  for small t",
+      "diagram": "rotation",
+      "takeaway": "The first-order rotation is perturbation strength divided by spectral gap.",
+      "mathtex": "\\begin{aligned}A&=\\begin{bmatrix}0&0\\\\0&4\\end{bmatrix},\\quad A_t=\\begin{bmatrix}0&t\\\\t&4\\end{bmatrix}\\\\[3pt]\\tan(2\\theta)&=\\frac{t}{2},\\qquad \\theta\\sim\\frac t4\\ (t\\to0)\\end{aligned}",
+      "layout": "figure"
+    },
+    {
+      "id": "03",
+      "title": "Why the gap controls rotation",
+      "lead": "A small perturbation is meaningful only relative to separated spectral components.",
+      "body": [
+        "Replace 4 by a positive gap δ. The same calculation yields tan(2θ) = 2t/δ. For fixed t, decreasing δ increases the rotation. At δ = 0, the original eigenvalue has multiplicity two, and no particular eigenvector is distinguished.",
+        "This is why perturbation theorems state a gap hypothesis: the gap identifies which directions can be followed stably."
+      ],
+      "formula": "Aδ = diag(0, δ)      tan(2θ) = 2t/δ",
+      "diagram": "spectrum",
+      "takeaway": "Check how the gap is defined: ordered separation and set-to-set distance are different assumptions.",
+      "mathtex": "A_\\delta=\\operatorname{diag}(0,\\delta),\\qquad\\tan(2\\theta)=\\frac{2t}{\\delta}",
+      "layout": "figure"
+    },
+    {
+      "id": "04",
+      "title": "Subspaces are more stable than eigenbases",
+      "lead": "Repeated eigenvalues allow many different orthonormal eigenbases of the same eigenspace.",
+      "body": [
+        "If an eigenvalue has multiplicity two, rotating two orthonormal eigenvectors inside its eigenspace changes the basis but not the eigenspace. It is therefore sensible to measure the movement of an invariant subspace rather than compare basis columns.",
+        "The orthogonal projection P onto the subspace is independent of the chosen orthonormal basis U: P = UU*. An entire cluster of eigenvalues can be selected by summing its spectral projections."
+      ],
+      "formula": "U*U = I         P = UU*         P² = P = P*",
+      "diagram": "projection",
+      "takeaway": "Projection operators express subspace geometry without arbitrary basis choices.",
+      "mathtex": "U^{*}U=I,\\quad P=UU^{*},\\quad P^{2}=P=P^{*}",
+      "layout": "figure"
+    },
+    {
+      "id": "05",
+      "title": "Principal angles measure subspace mismatch",
+      "lead": "For two equal-dimensional subspaces, principal angles generalize the angle between two lines.",
+      "body": [
+        "Choose orthonormal frames U and V for the subspaces. The singular values of U*V are the cosines of the principal angles. The singular values of (I − UU*)V are their sines.",
+        "For unequal dimensions, the directed map matters: the part of V outside the range of U need not capture everything about the opposite direction."
+      ],
+      "formula": "σᵢ(U*V) = cos θᵢ       σᵢ((I − UU*)V) = sin θᵢ",
+      "diagram": "angle",
+      "takeaway": "Sines, cosines, and tangents encode different representatives of the same geometric angles.",
+      "mathtex": "\\begin{aligned}\\sigma_j(U^{*}V)&=\\cos\\theta_j\\\\\\sigma_j((I-UU^{*})V)&=\\sin\\theta_j\\end{aligned}",
+      "layout": "figure"
+    },
+    {
+      "id": "06",
+      "title": "From approximate invariance to a residual",
+      "lead": "Numerical algorithms often return a trial subspace rather than an exact eigenspace.",
+      "body": [
+        "Let U have orthonormal columns and let B describe the intended action of A inside its trial subspace. The residual R compares A applied to the frame with the frame followed by B.",
+        "If R vanishes, the range of U is invariant under A. If R is small, invariance is approximate; a gap estimate turns that information into an angle estimate."
+      ],
+      "formula": "R = AU − UB        R = 0  ⟹  range(U) is A-invariant",
+      "diagram": "residual",
+      "takeaway": "The residual is observable even when the exact target eigenvectors are unknown.",
+      "mathtex": "R=AU-UB,\\qquad R=0\\ \\Longrightarrow\\ \\operatorname{ran}U\\text{ is }A\\text{-invariant}",
+      "layout": "figure"
+    },
+    {
+      "id": "07",
+      "title": "The Sylvester equation is the algebraic bridge",
+      "lead": "An operator equation converts a compressed residual into an unwanted subspace component.",
+      "body": [
+        "Decompose the ambient space into an exact target subspace and its orthogonal complement. Project the residual onto the complementary block. The resulting unknown X describes overlap with the incorrect spectral modes.",
+        "For appropriately ordered, separated self-adjoint spectra, the Sylvester inverse bounds X by the compressed residual divided by the gap. Other separation conditions can require different norm constants."
+      ],
+      "formula": "A⊥X − XB = C        ‖X‖ ≤ ‖C‖/δ  (ordered-gap setting)",
+      "diagram": "sylvester",
+      "takeaway": "Combine the algebraic estimate with the geometry of principal angles to obtain sine bounds.",
+      "mathtex": "A_{\\perp}X-XB=C,\\qquad \\|X\\|\\leq\\frac{\\|C\\|}{\\delta}",
+      "layout": "figure"
+    },
+    {
+      "id": "08",
+      "title": "Four related angle-theorem families",
+      "lead": "The four principal theorem families control different geometric quantities.",
+      "body": [
+        "The sine-theta result controls the complement component of a subspace. A tangent theorem uses a graph representation when the pair has the appropriate graph position.",
+        "With an off-diagonal perturbation, block reflection produces doubled-angle expressions. Selecting the correct spectral branch remains essential: a small sine of twice an angle alone does not certify a small angle."
+      ],
+      "bullets": [
+        "sin θ — complement projection",
+        "tan θ — graph map",
+        "sin(2θ) — block-reflection symmetry",
+        "tan(2θ) — stronger branch-aware control"
+      ],
+      "diagram": "families",
+      "takeaway": "The theorem hypotheses and norm classes determine which estimate applies.",
+      "layout": "figure"
+    },
+    {
+      "id": "09",
+      "title": "What changes in infinite dimensions",
+      "lead": "Spectral projections still organize the theory, but an eigenbasis need not exist.",
+      "body": [
+        "A bounded self-adjoint operator may have continuous spectrum. Projection-valued measures replace finite sums of eigenspace projections by spectral integrals. The geometry of spectral subspaces remains the key object.",
+        "For unbounded self-adjoint operators, domains of definition become part of the theorem: operator products and compressed residuals must be defined on the appropriate common domain."
+      ],
+      "formula": "finite: A = Σ λPλ        general: A = ∫ λ dE(λ)",
+      "diagram": "spectrum",
+      "takeaway": "The finite-dimensional picture motivates, but does not replace, the domain-aware proof.",
+      "mathtex": "A=\\sum_{\\lambda}\\lambda P_\\lambda,\\qquad A=\\int_{\\mathbb R}\\lambda\\,dE(\\lambda)",
+      "layout": "figure"
+    },
+    {
+      "id": "10",
+      "title": "Rotating subspaces optimally",
+      "lead": "An angle bound asks how far a subspace moves; transport asks which orthogonal map moves it.",
+      "body": [
+        "A direct rotation maps one subspace to another by rotating within principal-angle planes. Its displacement singular values are controlled by the chord lengths 2 sin(θᵢ/2).",
+        "Different displacement objectives reward different singular-value patterns. In particular, minimizing a norm of the squared displacement is a different problem from minimizing an unsquared norm."
+      ],
+      "formula": "chord length = 2 sin(θ/2)       displacement = U − I",
+      "diagram": "angle",
+      "takeaway": "Optimality must be stated for a specified norm and class of admissible transports.",
+      "mathtex": "\\|Dx-x\\|=2\\sin\\!\\left(\\frac\\theta2\\right)\\quad\\text{(unit vector in a principal plane)}",
+      "layout": "figure"
+    },
+    {
+      "id": "11",
+      "title": "A false claim and a replacement theorem",
+      "lead": "The original paper’s broad Proposition 4.4 does not hold for every unsquared norm objective.",
+      "body": [
+        "A four-dimensional real orthogonal construction gives a competing transport whose unsquared trace-norm displacement cost beats the proposed direct rotation, despite acute principal angles.",
+        "For a finite-dimensional real setting and Schatten exponent strictly between one and two, a separate matching theorem classifies optimal transports via singleton and paired principal-angle blocks."
+      ],
+      "formula": "1 < p < 2       cost = min over allowed angle matchings",
+      "diagram": "matching",
+      "takeaway": "The counterexample and the positive matching result have distinct hypotheses.",
+      "mathtex": "1<p<2,\\qquad\\inf_{W(K)=L}\\|I-W\\|_p^p",
+      "layout": "figure"
+    },
+    {
+      "id": "12",
+      "title": "The paper-focused learning route",
+      "lead": "The proofs reuse a small group of mathematical tools.",
+      "body": [
+        "First establish finite spectral projections, gap conditions, principal-angle geometry, and residual identities. Then solve the relevant Sylvester estimates and specify norm-class assumptions. After the four angle theorems, study direct rotations and their optimality limits.",
+        "The resulting chain leads from the two-mode example to the principal results, the Proposition 4.4 counterexample, and the real matching theorem."
+      ],
+      "bullets": [
+        "Spectral projections and selected clusters",
+        "Residuals + spectral gap + Sylvester control",
+        "Angle theorems and branch selection",
+        "Direct rotations, counterexamples, matching"
+      ],
+      "diagram": "roadmap",
+      "takeaway": "A perturbation bound always links a geometric quantity to a carefully stated spectral assumption.",
+      "layout": "figure"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "lecture_id": "135000",
+  "transcript": "135000-corrected-scopes-and-surviving-results.md",
+  "historical_claims": [
+    {
+      "id": "135000-h01",
+      "anchor": "Davis and Kahan give several extremal statements about transports between subspaces.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Section 4; Proposition 4.4",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ],
+  "related_resources": [
+    {
+      "source_id": "higham-polar",
+      "reason": "Alternative polar-factor explanation; distinguish a kernel-zero partial isometry from full unitary extensions."
+    },
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    }
+  ]
+}

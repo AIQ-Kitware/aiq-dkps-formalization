@@ -1,0 +1,68 @@
+{
+  "edges": [
+    {
+      "prerequisite": "OrthogonalGeometry",
+      "dependent": "Majorization"
+    },
+    {
+      "prerequisite": "PolarDecomposition",
+      "dependent": "Majorization"
+    },
+    {
+      "prerequisite": "PolarDecomposition",
+      "dependent": "PrincipalAngles"
+    },
+    {
+      "prerequisite": "OrthogonalGeometry",
+      "dependent": "PrincipalAngles"
+    },
+    {
+      "prerequisite": "Majorization",
+      "dependent": "PrincipalAngles"
+    },
+    {
+      "prerequisite": "PolarDecomposition",
+      "dependent": "OperatorIdeals"
+    },
+    {
+      "prerequisite": "Majorization",
+      "dependent": "OperatorIdeals"
+    },
+    {
+      "prerequisite": "PolarDecomposition",
+      "dependent": "MatrixSpectralStatistics"
+    },
+    {
+      "prerequisite": "PrincipalAngles",
+      "dependent": "SpectralSubspacePerturbation"
+    },
+    {
+      "prerequisite": "Majorization",
+      "dependent": "SpectralSubspacePerturbation"
+    },
+    {
+      "prerequisite": "PolarDecomposition",
+      "dependent": "SpectralSubspacePerturbation"
+    },
+    {
+      "prerequisite": "SelfAdjointSpectralTheory",
+      "dependent": "SpectralSubspacePerturbation"
+    },
+    {
+      "prerequisite": "OrthogonalGeometry",
+      "dependent": "SelfAdjointSpectralTheory"
+    }
+  ],
+  "external_suppliers": {
+    "SelfAdjointSpectralTheory": [
+      "OneParameterSemigroups",
+      "BanachSpaceTheory"
+    ],
+    "ToeplitzOperators": [
+      "CStarAlgebras",
+      "OperatorKTheory",
+      "BanachSpaceTheory",
+      "circle-degree/Mathlib Fourier"
+    ]
+  }
+}

@@ -25,7 +25,7 @@ finished narrated lessons.
 | Rayleigh–Ritz | Choose a trial space, compress an operator, lift Ritz pairs, and interpret the orthogonal residual. | Projections and Rayleigh quotients, recalled locally | [Lecture 002749](rayleigh_ritz/README.md): complete narrated module with four review questions |
 | Sine-theta theorem | Relate subspace error to residual and certified separation; read the source correction. | Projections; singular values; Sylvester bounds | [Narrated short-reference edition](sine_theta/README.md) |
 | YWS population-gap theorem | Prove the population-only sine bound, align frames, and recognize the corrected rectangular extension. | Sine theta; norms; min–max/Weyl, recalled locally | [Lecture 003875](yws/README.md): complete proof walkthrough |
-| Principal angles | Interpret the angle list, principal planes, and the directed sine operator. | Subspaces and projections; SVD | `slides_sine_theta.py`, `slides_sine_theta_3d.py`; matching study `M01PrincipalPlanes` |
+| Principal angles | Derive the angle list from overlap singular values and read perpendicular error. | Projections; SVD | [Standalone lecture](principal_angles/README.md) |
 | Singular-value norms | Compare full displacement costs in operator, trace, and Schatten norms. | Basic matrix algebra; the SVD is introduced | [Lecture 2](singular_norms/README.md): complete narrated module |
 | Matrix exponential | Turn a constant matrix velocity into a flow; derive exact orthogonal and source-preserving motions. | Matrices, series, differentiation | [Matrix exponential](matrix_exponential/README.md): complete narrated module |
 | Min-max and eigenvalue stability | Prove the variational characterization and derive Weyl stability. | Projections; operator norms | [Accepted operator foundations](operators/README.md) |
@@ -33,6 +33,9 @@ finished narrated lessons.
 | Residuals and spectral separation | Explain why residual size divided by certified separation bounds the subspace error. | Principal angles; spectra | `slides_sine_theta.py`, `sine_theta_story.py` |
 | Sylvester equations and angle bounds | Follow the residual-to-Sylvester reduction and distinguish the four angle theorems. | Residuals and separation; operator norms | [Accepted operator foundations](operators/README.md); `slides_family.py`, `S09Sylvester` |
 | Feasible variations and stationarity | Construct legal variations and derive the gradient compression equations. | Projections, norms, exponential, differentiation and trace | [Variations](variations/README.md): complete narrated module |
+| Invariant subspaces and justified blocks | Distinguish triangular from diagonal blocks and derive the projection criterion. | Projections | [Standalone lecture](invariant_blocks/README.md) |
+| Trace pairings and matrix gradients | Read scalar responses, cyclicity, and restricted derivative tests. | Matrices; dot products; derivatives | [Standalone lecture](trace_gradients/README.md) |
+| Uniform approximation and minima | Prove value control and distinguish optimizer locations. | Functions; inequalities; limits | [Standalone lecture](uniform_minima/README.md) |
 | Real and complex invariant blocks | Follow the complex-structure and phase-projection construction on a real space. | Spectral theorem; projections; stationarity | Matching study `M13TwoDecompositions`–`M19ZeroGradient` |
 | The two-angle minimum | Reduce an unrestricted four-dimensional fiber to an attainable phase edge. | Principal coordinates; orthogonal spectra | Matching study `M20PairCoordinates`–`M23Determinants` |
 | Real trace-norm matching | Recover both matching inequalities, the trace endpoint, and an attaining map. | The preceding three proof modules; singular-value norms | [Matching study and proof talk](matching/README.md): complete transcripts and Manim scenes |
@@ -122,7 +125,7 @@ basic checks and two application or reasoning questions. Existing lectures may
 retain their two-question reviews.
 Author the question, three or four choices, a zero-based correct index, an
 explanation, and ordinary-language `speak_question` / `speak_answer` text.
-`think_seconds` controls the silent interval after the spoken choices (eight
+`think_seconds` controls the silent interval after the spoken choices (five
 seconds by default); viewers can also pause. The shared review scenes show the
 question first, then highlight and explain the correct answer. The transcript
 export includes the review scenes automatically. Keep their sections out of
@@ -156,3 +159,28 @@ If attribution changes, include the title scene when partially rendering a deck
 so the visible robot/model credit is updated as well as the edited content.
 For example, use `UPDATE_SCENES="CpTitle CpSplit"`. Partial rendering explicitly
 selects scenes; it does not infer Python source dependencies.
+
+### External learning sources
+
+Author `resources.yaml` beside `lecture.md`, with a lecture `title`, a short
+`intro`, a `checked_on` date, a `curated_by` model record, and an ordered
+`resources` list. Each entry has `title`, `url`, `kind`, `why`, and optionally
+`focus` (a section or convention to watch for). Apply the user's selection
+preferences in [LECTURE_STYLE_RULES.md](../../LECTURE_STYLE_RULES.md).
+
+The library reads these files on refresh and provides a standalone companion
+page. `make resources [DECK=...]` exports HTML and Markdown beside the media;
+slide/transcript/video exports also refresh them. A reference deck without an
+authored transcript can set `DeckSpec.learning_resources` to a shared YAML
+path relative to `visualizations/`. Companions belong to the deck and are not
+separate library entries or narration variants.
+
+### Opening conclusions
+
+A lecture can place `dkvis.learning.outcomes.LectureOutcomes` immediately after
+its cover. Author its three factual `facts` and a short `route` in
+`outcomes.yaml` beside the transcript. Include the corresponding
+`LectureOutcomes` section in `lecture.md`; it is ordinary authored narration,
+not text generated from slide labels. `animation_cues.yaml` can tie each focus
+change (source times 0, 1, 2) to the spoken claim without splitting the passage
+into separate TTS calls. Return to those claims in the topic's own recap.

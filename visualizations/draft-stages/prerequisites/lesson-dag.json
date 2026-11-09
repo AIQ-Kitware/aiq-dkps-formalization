@@ -1,0 +1,2358 @@
+{
+  "metadata": {
+    "schema": "dkps-draft-course/mathematical-prerequisites/v1",
+    "status": "human-curated draft; not a compiler-proven proof-dependency extraction",
+    "edge_semantics": "An edge u -> v means a rigorous intended treatment of v relies on an argument or construction taught at u. The full imported Lean dependency DAG is a different graph.",
+    "course_scope": "Formalized Davis–Kahan theory and mathematical support, including upstream TauCeti foundations; history branch excluded.",
+    "basis": [
+      "visualizations/draft-stages/outline.md (full-proof-foundations revision)",
+      "papers/dk_formalization_journal/paper.tex",
+      "papers/dk_formalization_journal/data/formalization_theory_taxonomy_20260817.json",
+      "papers/dk_formalization_journal/data/formalization_trace_manifest_20260817.json",
+      "papers/what_it_takes_to_prove_davis_kahan/cases/sine_theta.md",
+      "dev/tauceti/dkps-upstream-contribution-census.md",
+      "papers/dk_formalization_journal/appendix_result_summaries.tex"
+    ],
+    "starting_knowledge": "basic finite-dimensional linear algebra and calculus",
+    "lecture_ids_are_stable": "six-digit numbers are draft identities; numerical order is a proposal, not part of the prerequisite semantics"
+  },
+  "nodes": [
+    {
+      "id": "000000",
+      "title": "Course introduction",
+      "unit": "Orientation",
+      "status": "outlined",
+      "filename": "000000-course-introduction.md",
+      "requires": [],
+      "recommended": []
+    },
+    {
+      "id": "001000",
+      "title": "Linear maps independent of coordinates",
+      "unit": "I — Normed spaces, Banach spaces, and bounded maps",
+      "status": "outlined",
+      "filename": "001000-linear-maps-independent-of-coordinates.md",
+      "scope": "Basis changes, composition and why matrix entries are not invariant",
+      "requires": [],
+      "recommended": []
+    },
+    {
+      "id": "002000",
+      "title": "Norms, distances, and convergence",
+      "unit": "I — Normed spaces, Banach spaces, and bounded maps",
+      "status": "outlined",
+      "filename": "002000-norms-distances-and-convergence.md",
+      "scope": "Norm axioms, induced metrics, equivalent finite-dimensional norms",
+      "requires": [
+        "001000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "003000",
+      "title": "Cauchy sequences and Banach spaces",
+      "unit": "I — Normed spaces, Banach spaces, and bounded maps",
+      "status": "outlined",
+      "filename": "003000-cauchy-sequences-and-banach-spaces.md",
+      "scope": "Incomplete normed-space example; completeness and limits of series",
+      "requires": [
+        "002000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "004000",
+      "title": "Bounded linear maps and the operator norm",
+      "unit": "I — Normed spaces, Banach spaces, and bounded maps",
+      "status": "outlined",
+      "filename": "004000-bounded-linear-maps-and-the-operator-norm.md",
+      "scope": "Continuity equivalence and norm estimates for compositions",
+      "requires": [
+        "001000",
+        "002000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "005000",
+      "title": "The Banach algebra of bounded operators",
+      "unit": "I — Normed spaces, Banach spaces, and bounded maps",
+      "status": "outlined",
+      "filename": "005000-the-banach-algebra-of-bounded-operators.md",
+      "scope": "Identity, products, inverse operators and Neumann series",
+      "requires": [
+        "003000",
+        "004000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "006000",
+      "title": "Linear functionals and dual spaces",
+      "unit": "I — Normed spaces, Banach spaces, and bounded maps",
+      "status": "outlined",
+      "filename": "006000-linear-functionals-and-dual-spaces.md",
+      "scope": "Dual pairing, dual norms, Hahn–Banach statement and uses",
+      "requires": [
+        "003000",
+        "004000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "007000",
+      "title": "Real and complex scalars",
+      "unit": "I — Normed spaces, Banach spaces, and bounded maps",
+      "status": "outlined",
+      "filename": "007000-real-and-complex-scalars.md",
+      "scope": "Why the complex field matters for the spectrum; complexification preview",
+      "requires": [
+        "001000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "008000",
+      "title": "Resolvents and invertibility",
+      "unit": "I — Normed spaces, Banach spaces, and bounded maps",
+      "status": "outlined",
+      "filename": "008000-resolvents-and-invertibility.md",
+      "scope": "The resolvent identity, open resolvent set, and the analytic definition of spectrum",
+      "requires": [
+        "005000",
+        "007000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "009000",
+      "title": "Inner products and polarization",
+      "unit": "II — Hilbert spaces, orthogonality, and subspace geometry",
+      "status": "outlined",
+      "filename": "009000-inner-products-and-polarization.md",
+      "scope": "Cauchy–Schwarz, the real/complex conventions and the parallelogram law",
+      "requires": [
+        "002000",
+        "007000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "010000",
+      "title": "Hilbert spaces and orthogonal complements",
+      "unit": "II — Hilbert spaces, orthogonality, and subspace geometry",
+      "status": "outlined",
+      "filename": "010000-hilbert-spaces-and-orthogonal-complements.md",
+      "scope": "Complete inner-product spaces, closed spans, orthonormal families",
+      "requires": [
+        "003000",
+        "009000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "011000",
+      "title": "The projection theorem",
+      "unit": "II — Hilbert spaces, orthogonality, and subspace geometry",
+      "status": "outlined",
+      "filename": "011000-the-projection-theorem.md",
+      "scope": "Nearest-point argument, existence and uniqueness, Pythagoras",
+      "requires": [
+        "010000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "012000",
+      "title": "Adjoints and the Riesz representation theorem",
+      "unit": "II — Hilbert spaces, orthogonality, and subspace geometry",
+      "status": "outlined",
+      "filename": "012000-adjoints-and-the-riesz-representation-theorem.md",
+      "scope": "How inner products convert bounded functionals to vectors; adjoint identities",
+      "requires": [
+        "006000",
+        "011000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "013000",
+      "title": "Self-adjoint, normal, and unitary maps",
+      "unit": "II — Hilbert spaces, orthogonality, and subspace geometry",
+      "status": "outlined",
+      "filename": "013000-self-adjoint-normal-and-unitary-maps.md",
+      "scope": "Algebraic distinctions, examples, and why commutation matters",
+      "requires": [
+        "012000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "014000",
+      "title": "Isometries, coisometries, and partial isometries",
+      "unit": "II — Hilbert spaces, orthogonality, and subspace geometry",
+      "status": "outlined",
+      "filename": "014000-isometries-coisometries-and-partial-isometries.md",
+      "scope": "Initial/final spaces; surjective versus non-surjective isometries",
+      "requires": [
+        "011000",
+        "013000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "015000",
+      "title": "Invariant and reducing subspaces",
+      "unit": "II — Hilbert spaces, orthogonality, and subspace geometry",
+      "status": "outlined",
+      "filename": "015000-invariant-and-reducing-subspaces.md",
+      "scope": "Why self-adjoint invariance implies reducing; complement conditions",
+      "requires": [
+        "011000",
+        "013000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "016000",
+      "title": "Orthogonal sums and block-operator matrices",
+      "unit": "II — Hilbert spaces, orthogonality, and subspace geometry",
+      "status": "outlined",
+      "filename": "016000-orthogonal-sums-and-block-operator-matrices.md",
+      "scope": "Derive diagonal/off-diagonal components and their adjoints",
+      "requires": [
+        "014000",
+        "015000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "017000",
+      "title": "Analysis and synthesis maps",
+      "unit": "III — Frames, Gram objects, and coordinate-free geometry",
+      "status": "outlined",
+      "filename": "017000-analysis-and-synthesis-maps.md",
+      "scope": "How a family of vectors becomes a map from and to coefficient space",
+      "requires": [
+        "001000",
+        "012000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "018000",
+      "title": "Gram matrices and positive Gram operators",
+      "unit": "III — Frames, Gram objects, and coordinate-free geometry",
+      "status": "outlined",
+      "filename": "018000-gram-matrices-and-positive-gram-operators.md",
+      "scope": "G=S* S; rank, positivity, and quadratic forms",
+      "requires": [
+        "013000",
+        "017000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "019000",
+      "title": "Frame operators and Parseval identities",
+      "unit": "III — Frames, Gram objects, and coordinate-free geometry",
+      "status": "outlined",
+      "filename": "019000-frame-operators-and-parseval-identities.md",
+      "scope": "S S*; tight frames and the orthonormal case",
+      "requires": [
+        "018000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "020000",
+      "title": "Orthogonal coordinate embeddings",
+      "unit": "III — Frames, Gram objects, and coordinate-free geometry",
+      "status": "outlined",
+      "filename": "020000-orthogonal-coordinate-embeddings.md",
+      "scope": "V* V=I, V V*=P and the meaning of the two domains",
+      "requires": [
+        "014000",
+        "019000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "021000",
+      "title": "Compressions and Rayleigh–Ritz matrices",
+      "unit": "III — Frames, Gram objects, and coordinate-free geometry",
+      "status": "outlined",
+      "filename": "021000-compressions-and-rayleigh-ritz-matrices.md",
+      "scope": "V* A V, compressed forms, and what compression does not preserve",
+      "requires": [
+        "013000",
+        "020000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "022000",
+      "title": "Overlaps, alignment, and Gram rigidity",
+      "unit": "III — Frames, Gram objects, and coordinate-free geometry",
+      "status": "outlined",
+      "filename": "022000-overlaps-alignment-and-gram-rigidity.md",
+      "scope": "Two frames, cross-Gram matrices, unitary changes of coordinates",
+      "requires": [
+        "017000",
+        "020000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "023000",
+      "title": "Gram operators of rectangular maps",
+      "unit": "III — Frames, Gram objects, and coordinate-free geometry",
+      "status": "outlined",
+      "filename": "023000-gram-operators-of-rectangular-maps.md",
+      "scope": "A* A versus A A*, nonzero spectral correspondence",
+      "requires": [
+        "018000",
+        "013000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "024000",
+      "title": "Eigenvalues, eigenspaces, and algebraic multiplicity",
+      "unit": "IV — Finite spectral theory and variational foundations",
+      "status": "outlined",
+      "filename": "024000-eigenvalues-eigenspaces-and-algebraic-multiplicity.md",
+      "scope": "Diagonal examples, Jordan contrast and invariant subspaces",
+      "requires": [
+        "008000",
+        "015000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "025000",
+      "title": "Hermitian and self-adjoint matrices",
+      "unit": "IV — Finite spectral theory and variational foundations",
+      "status": "outlined",
+      "filename": "025000-hermitian-and-self-adjoint-matrices.md",
+      "scope": "Real eigenvalues, orthogonal eigenvectors, spectral order",
+      "requires": [
+        "013000",
+        "024000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "026000",
+      "title": "The finite spectral theorem",
+      "unit": "IV — Finite spectral theory and variational foundations",
+      "status": "outlined",
+      "filename": "026000-the-finite-spectral-theorem.md",
+      "scope": "Spectral decomposition via orthogonal projections, reconstruction",
+      "requires": [
+        "025000",
+        "016000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "027000",
+      "title": "Rayleigh quotients and extrema",
+      "unit": "IV — Finite spectral theory and variational foundations",
+      "status": "outlined",
+      "filename": "027000-rayleigh-quotients-and-extrema.md",
+      "scope": "Quadratic-form calculation and stationary eigenvectors",
+      "requires": [
+        "021000",
+        "026000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "028000",
+      "title": "Courant–Fischer min–max",
+      "unit": "IV — Finite spectral theory and variational foundations",
+      "status": "outlined",
+      "filename": "028000-courant-fischer-min-max.md",
+      "scope": "Subspace dimension intersection argument and converse construction",
+      "requires": [
+        "027000",
+        "011000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "029000",
+      "title": "Weyl monotonicity and variational eigenvalue inequalities",
+      "unit": "IV — Finite spectral theory and variational foundations",
+      "status": "outlined",
+      "filename": "029000-weyl-monotonicity-and-variational-eigenvalue-inequalities.md",
+      "scope": "Eigenvalue order, min–max inequalities and the underlying quadratic-form comparisons",
+      "requires": [
+        "028000",
+        "033000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "030000",
+      "title": "Spectral projections for selected sets",
+      "unit": "IV — Finite spectral theory and variational foundations",
+      "status": "outlined",
+      "filename": "030000-spectral-projections-for-selected-sets.md",
+      "scope": "Intervals, eigenvalue clusters, projectors and reducing subspaces",
+      "requires": [
+        "026000",
+        "015000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "031000",
+      "title": "Ordered gaps versus distance gaps",
+      "unit": "IV — Finite spectral theory and variational foundations",
+      "status": "outlined",
+      "filename": "031000-ordered-gaps-versus-distance-gaps.md",
+      "scope": "Interlacing, internal and external gaps, block order",
+      "requires": [
+        "028000",
+        "030000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "032000",
+      "title": "Coordinate-free finite functional calculus",
+      "unit": "IV — Finite spectral theory and variational foundations",
+      "status": "outlined",
+      "filename": "032000-coordinate-free-finite-functional-calculus.md",
+      "scope": "Polynomial approximation and f(A) from the spectral decomposition",
+      "requires": [
+        "026000",
+        "030000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "033000",
+      "title": "Quadratic-form order and positive operators",
+      "unit": "V — Positive operators, modulus, polar factors, and exponentials",
+      "status": "outlined",
+      "filename": "033000-quadratic-form-order-and-positive-operators.md",
+      "scope": "Positivity tests, A ≥ 0, and conjugation order",
+      "requires": [
+        "013000",
+        "027000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "034000",
+      "title": "Positive square roots and their uniqueness",
+      "unit": "V — Positive operators, modulus, polar factors, and exponentials",
+      "status": "outlined",
+      "filename": "034000-positive-square-roots-and-their-uniqueness.md",
+      "scope": "Finite proof by spectral calculus, uniqueness and commutation",
+      "requires": [
+        "032000",
+        "033000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "035000",
+      "title": "The operator modulus |A|",
+      "unit": "V — Positive operators, modulus, polar factors, and exponentials",
+      "status": "outlined",
+      "filename": "035000-the-operator-modulus-a.md",
+      "scope": "|A|=sqrt(A* A), squared-output-length interpretation",
+      "requires": [
+        "012000",
+        "034000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "036000",
+      "title": "Singular-value decomposition",
+      "unit": "V — Positive operators, modulus, polar factors, and exponentials",
+      "status": "outlined",
+      "filename": "036000-singular-value-decomposition.md",
+      "scope": "Singular vectors, rectangular maps, rank and kernel",
+      "requires": [
+        "026000",
+        "035000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "037000",
+      "title": "Polar decomposition",
+      "unit": "V — Positive operators, modulus, polar factors, and exponentials",
+      "status": "outlined",
+      "filename": "037000-polar-decomposition.md",
+      "scope": "A=U|A|, initial and final supports, kernel behavior",
+      "requires": [
+        "014000",
+        "036000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "038000",
+      "title": "Partial isometries and polar uniqueness",
+      "unit": "V — Positive operators, modulus, polar factors, and exponentials",
+      "status": "outlined",
+      "filename": "038000-partial-isometries-and-polar-uniqueness.md",
+      "scope": "When the polar factor is not unitary, restrictions and extension",
+      "requires": [
+        "014000",
+        "037000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "039000",
+      "title": "Matrix exponentials from the power series",
+      "unit": "V — Positive operators, modulus, polar factors, and exponentials",
+      "status": "outlined",
+      "filename": "039000-matrix-exponentials-from-the-power-series.md",
+      "scope": "Why exp(A+B) requires commutation; derivative identities",
+      "requires": [
+        "003000",
+        "005000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "040000",
+      "title": "Skew-adjoint generators and unitary flows",
+      "unit": "V — Positive operators, modulus, polar factors, and exponentials",
+      "status": "outlined",
+      "filename": "040000-skew-adjoint-generators-and-unitary-flows.md",
+      "scope": "Show exp(tK)*exp(tK)=I; planar rotations",
+      "requires": [
+        "013000",
+        "039000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "041000",
+      "title": "Operator trigonometric functions",
+      "unit": "V — Positive operators, modulus, polar factors, and exponentials",
+      "status": "outlined",
+      "filename": "041000-operator-trigonometric-functions.md",
+      "scope": "Cosine, sine, arcsine ranges, and functional-calculus prerequisites",
+      "requires": [
+        "032000",
+        "034000",
+        "039000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "042000",
+      "title": "Cross-Gram overlap and principal angles",
+      "unit": "VI — Geometry and classification of pairs of subspaces",
+      "status": "outlined",
+      "filename": "042000-cross-gram-overlap-and-principal-angles.md",
+      "scope": "Singular values of V*W, unequal dimensions and canonical angles",
+      "requires": [
+        "022000",
+        "036000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "043000",
+      "title": "Sines, cosines, and cross projections",
+      "unit": "VI — Geometry and classification of pairs of subspaces",
+      "status": "outlined",
+      "filename": "043000-sines-cosines-and-cross-projections.md",
+      "scope": "P,Q, (I-Q)P and the difference of projections",
+      "requires": [
+        "030000",
+        "035000",
+        "042000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "044000",
+      "title": "The cosine–sine decomposition",
+      "unit": "VI — Geometry and classification of pairs of subspaces",
+      "status": "outlined",
+      "filename": "044000-the-cosine-sine-decomposition.md",
+      "scope": "Two-dimensional principal planes and full complementary blocks",
+      "requires": [
+        "036000",
+        "043000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "045000",
+      "title": "Halmos two-projection decomposition",
+      "unit": "VI — Geometry and classification of pairs of subspaces",
+      "status": "outlined",
+      "filename": "045000-halmos-two-projection-decomposition.md",
+      "scope": "Common, perpendicular, defect and generic components",
+      "requires": [
+        "015000",
+        "044000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "046000",
+      "title": "Positive cosine and sine operators",
+      "unit": "VI — Geometry and classification of pairs of subspaces",
+      "status": "outlined",
+      "filename": "046000-positive-cosine-and-sine-operators.md",
+      "scope": "Compressing PQP; square roots, angle operator and spectral range",
+      "requires": [
+        "034000",
+        "041000",
+        "045000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "047000",
+      "title": "Acute pairs and transversality",
+      "unit": "VI — Geometry and classification of pairs of subspaces",
+      "status": "outlined",
+      "filename": "047000-acute-pairs-and-transversality.md",
+      "scope": "||P-Q||<1, invertible cosine and when graphs exist",
+      "requires": [
+        "015000",
+        "046000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "048000",
+      "title": "The Sz.-Nagy–Kato intertwiner",
+      "unit": "VI — Geometry and classification of pairs of subspaces",
+      "status": "outlined",
+      "filename": "048000-the-sz-nagy-kato-intertwiner.md",
+      "scope": "Projection algebra, polar factors and unitary transport",
+      "requires": [
+        "037000",
+        "047000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "049000",
+      "title": "Canonical direct rotation",
+      "unit": "VI — Geometry and classification of pairs of subspaces",
+      "status": "outlined",
+      "filename": "049000-canonical-direct-rotation.md",
+      "scope": "Existence, uniqueness, principal square root and adjoint reversal",
+      "requires": [
+        "040000",
+        "046000",
+        "048000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "050000",
+      "title": "Nonacute angles and defect matching",
+      "unit": "VI — Geometry and classification of pairs of subspaces",
+      "status": "outlined",
+      "filename": "050000-nonacute-angles-and-defect-matching.md",
+      "scope": "Right-angle components, dimension obstructions and general existence",
+      "requires": [
+        "045000",
+        "049000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "051000",
+      "title": "Compact angle spectra and classification",
+      "unit": "VI — Geometry and classification of pairs of subspaces",
+      "status": "outlined",
+      "filename": "051000-compact-angle-spectra-and-classification.md",
+      "scope": "Finite/compact angle data versus continuous angle spectrum",
+      "requires": [
+        "045000",
+        "050000",
+        "G-COMPACT-SPECTRAL"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "052000",
+      "title": "Min–max principles for singular values",
+      "unit": "VII — Singular-value inequalities and symmetric norms",
+      "status": "outlined",
+      "filename": "052000-min-max-principles-for-singular-values.md",
+      "scope": "Courant–Fischer via modulus; rectangular singular values",
+      "requires": [
+        "028000",
+        "035000",
+        "036000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "053000",
+      "title": "Low-rank approximation and Eckart–Young",
+      "unit": "VII — Singular-value inequalities and symmetric norms",
+      "status": "outlined",
+      "filename": "053000-low-rank-approximation-and-eckart-young.md",
+      "scope": "Best rank-k approximants and tail singular-value control",
+      "requires": [
+        "036000",
+        "052000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "054000",
+      "title": "Ky Fan sums and inequalities",
+      "unit": "VII — Singular-value inequalities and symmetric norms",
+      "status": "outlined",
+      "filename": "054000-ky-fan-sums-and-inequalities.md",
+      "scope": "Partial sums, domination, subadditivity",
+      "requires": [
+        "052000",
+        "053000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "055000",
+      "title": "Majorization and weak majorization",
+      "unit": "VII — Singular-value inequalities and symmetric norms",
+      "status": "outlined",
+      "filename": "055000-majorization-and-weak-majorization.md",
+      "scope": "Finite sequences; how partial-sum comparisons control norms",
+      "requires": [
+        "054000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "056000",
+      "title": "Convexity and majorization descent",
+      "unit": "VII — Singular-value inequalities and symmetric norms",
+      "status": "outlined",
+      "filename": "056000-convexity-and-majorization-descent.md",
+      "scope": "Rearrangement and convex gauge comparisons",
+      "requires": [
+        "055000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "057000",
+      "title": "Schatten and Frobenius norms",
+      "unit": "VII — Singular-value inequalities and symmetric norms",
+      "status": "outlined",
+      "filename": "057000-schatten-and-frobenius-norms.md",
+      "scope": "Trace, Hilbert–Schmidt, nuclear and operator norm as examples",
+      "requires": [
+        "036000",
+        "054000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "058000",
+      "title": "Unitary-invariant norms and symmetric gauges",
+      "unit": "VII — Singular-value inequalities and symmetric norms",
+      "status": "outlined",
+      "filename": "058000-unitary-invariant-norms-and-symmetric-gauges.md",
+      "scope": "Why changing orthonormal frames leaves the size unchanged",
+      "requires": [
+        "056000",
+        "057000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "059000",
+      "title": "Rectangular invariance and zero padding",
+      "unit": "VII — Singular-value inequalities and symmetric norms",
+      "status": "outlined",
+      "filename": "059000-rectangular-invariance-and-zero-padding.md",
+      "scope": "Singular-value lists for unequal coordinate spaces",
+      "requires": [
+        "036000",
+        "058000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "060000",
+      "title": "Pinching and block direct sums",
+      "unit": "VII — Singular-value inequalities and symmetric norms",
+      "status": "outlined",
+      "filename": "060000-pinching-and-block-direct-sums.md",
+      "scope": "Reflections, block diagonal contraction, majorization-safe recombination",
+      "requires": [
+        "016000",
+        "055000",
+        "058000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "061000",
+      "title": "Quadratic-form inequalities and singular values",
+      "unit": "VII — Singular-value inequalities and symmetric norms",
+      "status": "outlined",
+      "filename": "061000-quadratic-form-inequalities-and-singular-values.md",
+      "scope": "Trace and positive-order comparisons; limitations of passing between orders",
+      "requires": [
+        "033000",
+        "054000",
+        "055000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "062000",
+      "title": "From scalar division to AX−XB=C",
+      "unit": "VIII — Sylvester equations and separated intertwiners",
+      "status": "outlined",
+      "filename": "062000-from-scalar-division-to-ax-xb-c.md",
+      "scope": "Spectral denominators and why gaps appear in an inverse problem",
+      "requires": [
+        "008000",
+        "024000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "063000",
+      "title": "Diagonal matrices and the entrywise solution",
+      "unit": "VIII — Sylvester equations and separated intertwiners",
+      "status": "outlined",
+      "filename": "063000-diagonal-matrices-and-the-entrywise-solution.md",
+      "scope": "When denominators vanish; uniqueness, kernel and resolvent",
+      "requires": [
+        "026000",
+        "062000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "064000",
+      "title": "Kronecker sums and Sylvester invertibility",
+      "unit": "VIII — Sylvester equations and separated intertwiners",
+      "status": "outlined",
+      "filename": "064000-kronecker-sums-and-sylvester-invertibility.md",
+      "scope": "The linear operator X ↦ AX-XB and its spectrum",
+      "requires": [
+        "063000",
+        "008000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "065000",
+      "title": "Ordered spectral separation",
+      "unit": "VIII — Sylvester equations and separated intertwiners",
+      "status": "outlined",
+      "filename": "065000-ordered-spectral-separation.md",
+      "scope": "Gap inequalities and integral solution via exponentials",
+      "requires": [
+        "031000",
+        "039000",
+        "063000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "066000",
+      "title": "Unitary and semigroup representations",
+      "unit": "VIII — Sylvester equations and separated intertwiners",
+      "status": "outlined",
+      "filename": "066000-unitary-and-semigroup-representations.md",
+      "scope": "Differentiating e^{tA} C e^{-tB}, generators and integration",
+      "requires": [
+        "039000",
+        "040000",
+        "065000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "067000",
+      "title": "Disjoint spectral sets and Rosenblum theory",
+      "unit": "VIII — Sylvester equations and separated intertwiners",
+      "status": "outlined",
+      "filename": "067000-disjoint-spectral-sets-and-rosenblum-theory.md",
+      "scope": "Contours and resolvent-based separated intertwiner arguments",
+      "requires": [
+        "008000",
+        "032000",
+        "064000",
+        "G-COMPLEX-ANALYSIS"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "068000",
+      "title": "The Banach-space Sylvester lower-bound theorem",
+      "unit": "VIII — Sylvester equations and separated intertwiners",
+      "status": "outlined",
+      "filename": "068000-the-banach-space-sylvester-lower-bound-theorem.md",
+      "scope": "Theorem 5.1: spectral separation, inverse bounds and Banach-space operator norms",
+      "requires": [
+        "005000",
+        "008000",
+        "063000",
+        "G-BANACH-PRINCIPLES"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "069000",
+      "title": "Norm dependence of Sylvester bounds",
+      "unit": "VIII — Sylvester equations and separated intertwiners",
+      "status": "outlined",
+      "filename": "069000-norm-dependence-of-sylvester-bounds.md",
+      "scope": "Operator, Frobenius and symmetric-gauge assumptions and constants",
+      "requires": [
+        "058000",
+        "065000",
+        "068000",
+        "098000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "070000",
+      "title": "Hilbert–Schmidt Sylvester group estimates",
+      "unit": "VIII — Sylvester equations and separated intertwiners",
+      "status": "outlined",
+      "filename": "070000-hilbert-schmidt-sylvester-group-estimates.md",
+      "scope": "Block energy and orthogonal splitting in a Hilbert space of operators",
+      "requires": [
+        "065000",
+        "066000",
+        "099000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "071000",
+      "title": "Sylvester identities for compressed blocks",
+      "unit": "VIII — Sylvester equations and separated intertwiners",
+      "status": "outlined",
+      "filename": "071000-sylvester-identities-for-compressed-blocks.md",
+      "scope": "The exact algebraic shape of the future residual-to-angle argument",
+      "requires": [
+        "062000",
+        "107000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "072000",
+      "title": "Infinite-dimensional Hilbert examples",
+      "unit": "IX — Measure theory and spectral calculus beyond matrices",
+      "status": "outlined",
+      "filename": "072000-infinite-dimensional-hilbert-examples.md",
+      "scope": "L2, ell2, multiplication and shift operators; continuous spectrum",
+      "requires": [
+        "010000",
+        "024000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "073000",
+      "title": "Sigma-algebras and Borel sets",
+      "unit": "IX — Measure theory and spectral calculus beyond matrices",
+      "status": "outlined",
+      "filename": "073000-sigma-algebras-and-borel-sets.md",
+      "scope": "Why measurable spectral sets replace finite eigenvalue lists",
+      "requires": [
+        "007000",
+        "072000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "074000",
+      "title": "Measures, integration and L2",
+      "unit": "IX — Measure theory and spectral calculus beyond matrices",
+      "status": "outlined",
+      "filename": "074000-measures-integration-and-l2.md",
+      "scope": "Countable additivity, convergence theorems and simple-function approximation",
+      "requires": [
+        "003000",
+        "073000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "075000",
+      "title": "Continuous functional calculus and C-star identities",
+      "unit": "IX — Measure theory and spectral calculus beyond matrices",
+      "status": "outlined",
+      "filename": "075000-continuous-functional-calculus-and-c-star-identities.md",
+      "scope": "Uniform approximation, spectral mapping, positive functions",
+      "requires": [
+        "005000",
+        "032000",
+        "G-APPROXIMATION"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "076000",
+      "title": "Projection-valued measures",
+      "unit": "IX — Measure theory and spectral calculus beyond matrices",
+      "status": "outlined",
+      "filename": "076000-projection-valued-measures.md",
+      "scope": "Countable orthogonal additivity, spectral projections and integration",
+      "requires": [
+        "074000",
+        "075000",
+        "G-MEASURE-REPRESENTATION"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "077000",
+      "title": "Scalar spectral measures and polarization",
+      "unit": "IX — Measure theory and spectral calculus beyond matrices",
+      "status": "outlined",
+      "filename": "077000-scalar-spectral-measures-and-polarization.md",
+      "scope": "The measure ⟨E(B)x,x⟩ and the complex off-diagonal pairing",
+      "requires": [
+        "009000",
+        "074000",
+        "076000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "078000",
+      "title": "Cyclic decompositions and multiplication models",
+      "unit": "IX — Measure theory and spectral calculus beyond matrices",
+      "status": "outlined",
+      "filename": "078000-cyclic-decompositions-and-multiplication-models.md",
+      "scope": "Why a PVM can be represented on spaces of functions",
+      "requires": [
+        "076000",
+        "077000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "079000",
+      "title": "Bounded Borel functional calculus",
+      "unit": "IX — Measure theory and spectral calculus beyond matrices",
+      "status": "outlined",
+      "filename": "079000-bounded-borel-functional-calculus.md",
+      "scope": "Defining f(A) by spectral integrals and checking adjoints/products",
+      "requires": [
+        "075000",
+        "076000",
+        "077000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "080000",
+      "title": "Measurable spectral restrictions",
+      "unit": "IX — Measure theory and spectral calculus beyond matrices",
+      "status": "outlined",
+      "filename": "080000-measurable-spectral-restrictions.md",
+      "scope": "Spectral selection, naturality, restriction and commutation",
+      "requires": [
+        "015000",
+        "079000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "081000",
+      "title": "Resolvents from spectral integrals",
+      "unit": "IX — Measure theory and spectral calculus beyond matrices",
+      "status": "outlined",
+      "filename": "081000-resolvents-from-spectral-integrals.md",
+      "scope": "Recovering the spectrum from inverse bounds and spectral support",
+      "requires": [
+        "008000",
+        "079000",
+        "080000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "082000",
+      "title": "Spectral approximation by cutoffs",
+      "unit": "IX — Measure theory and spectral calculus beyond matrices",
+      "status": "outlined",
+      "filename": "082000-spectral-approximation-by-cutoffs.md",
+      "scope": "Finite partitions and passage to strong limits",
+      "requires": [
+        "079000",
+        "080000",
+        "G-OPERATOR-TOPOLOGIES"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "083000",
+      "title": "Densely defined operators and their graphs",
+      "unit": "X — Closed and unbounded self-adjoint operators",
+      "status": "outlined",
+      "filename": "083000-densely-defined-operators-and-their-graphs.md",
+      "scope": "Domain as part of the operator; graph norm and closedness",
+      "requires": [
+        "004000",
+        "010000",
+        "072000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "084000",
+      "title": "Adjoints of unbounded operators",
+      "unit": "X — Closed and unbounded self-adjoint operators",
+      "status": "outlined",
+      "filename": "084000-adjoints-of-unbounded-operators.md",
+      "scope": "Symmetric versus self-adjoint; adjoint domains",
+      "requires": [
+        "012000",
+        "083000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "085000",
+      "title": "Hellinger–Toeplitz and common-domain discipline",
+      "unit": "X — Closed and unbounded self-adjoint operators",
+      "status": "outlined",
+      "filename": "085000-hellinger-toeplitz-and-common-domain-discipline.md",
+      "scope": "Why everywhere-defined self-adjoint maps are bounded",
+      "requires": [
+        "084000",
+        "004000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "086000",
+      "title": "Resolvents, coercivity, and spectral location",
+      "unit": "X — Closed and unbounded self-adjoint operators",
+      "status": "outlined",
+      "filename": "086000-resolvents-coercivity-and-spectral-location.md",
+      "scope": "Real form bounds, resolvent norms, invertibility",
+      "requires": [
+        "008000",
+        "084000",
+        "G-BANACH-PRINCIPLES"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "087000",
+      "title": "Cayley transforms and graph-level equivalence",
+      "unit": "X — Closed and unbounded self-adjoint operators",
+      "status": "outlined",
+      "filename": "087000-cayley-transforms-and-graph-level-equivalence.md",
+      "scope": "Turning unbounded self-adjoint operators into bounded unitary data",
+      "requires": [
+        "084000",
+        "086000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "088000",
+      "title": "Unbounded spectral theorem and domain calculus",
+      "unit": "X — Closed and unbounded self-adjoint operators",
+      "status": "outlined",
+      "filename": "088000-unbounded-spectral-theorem-and-domain-calculus.md",
+      "scope": "Spectral integrals with integrability constraints on vectors",
+      "requires": [
+        "079000",
+        "083000",
+        "087000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "089000",
+      "title": "Spectral projections and reducing domains",
+      "unit": "X — Closed and unbounded self-adjoint operators",
+      "status": "outlined",
+      "filename": "089000-spectral-projections-and-reducing-domains.md",
+      "scope": "When a reducing subspace respects an unbounded domain",
+      "requires": [
+        "080000",
+        "088000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "090000",
+      "title": "Quadratic forms and ordered half-infinite gaps",
+      "unit": "X — Closed and unbounded self-adjoint operators",
+      "status": "outlined",
+      "filename": "090000-quadratic-forms-and-ordered-half-infinite-gaps.md",
+      "scope": "Semibounded operators, form inequalities and gap alternatives",
+      "requires": [
+        "033000",
+        "086000",
+        "088000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "091000",
+      "title": "Yosida approximation and bounded truncations",
+      "unit": "X — Closed and unbounded self-adjoint operators",
+      "status": "outlined",
+      "filename": "091000-yosida-approximation-and-bounded-truncations.md",
+      "scope": "Regularization while retaining self-adjoint structure",
+      "requires": [
+        "086000",
+        "088000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "092000",
+      "title": "One-parameter unitary groups and their generators",
+      "unit": "X — Closed and unbounded self-adjoint operators",
+      "status": "outlined",
+      "filename": "092000-one-parameter-unitary-groups-and-their-generators.md",
+      "scope": "Strong continuity and Stone-style generator correspondence",
+      "requires": [
+        "040000",
+        "087000",
+        "G-SEMIGROUP-INTEGRATION"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "093000",
+      "title": "Domain-aware Sylvester identities and cutoffs",
+      "unit": "X — Closed and unbounded self-adjoint operators",
+      "status": "outlined",
+      "filename": "093000-domain-aware-sylvester-identities-and-cutoffs.md",
+      "scope": "Proof of block identities before estimating their bounded extensions",
+      "requires": [
+        "064000",
+        "082000",
+        "089000",
+        "090000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "094000",
+      "title": "Unbounded Sylvester estimates",
+      "unit": "X — Closed and unbounded self-adjoint operators",
+      "status": "outlined",
+      "filename": "094000-unbounded-sylvester-estimates.md",
+      "scope": "Half-infinite ordered gaps, spectral restrictions and limiting arguments",
+      "requires": [
+        "069000",
+        "090000",
+        "091000",
+        "092000",
+        "093000",
+        "098000",
+        "101000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "095000",
+      "title": "Compactness and finite-rank approximation",
+      "unit": "XI — Infinite-dimensional operator ideals and real/complex transfer",
+      "status": "outlined",
+      "filename": "095000-compactness-and-finite-rank-approximation.md",
+      "scope": "Compact operators, strong versus norm convergence, approximation",
+      "requires": [
+        "004000",
+        "072000",
+        "G-OPERATOR-TOPOLOGIES"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "096000",
+      "title": "Approximation numbers and singular-value sequences",
+      "unit": "XI — Infinite-dimensional operator ideals and real/complex transfer",
+      "status": "outlined",
+      "filename": "096000-approximation-numbers-and-singular-value-sequences.md",
+      "scope": "Finite matrix analogy and infinite-dimensional definitions",
+      "requires": [
+        "053000",
+        "095000",
+        "G-COMPACT-SPECTRAL"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "097000",
+      "title": "Ky Fan dominance in Hilbert space",
+      "unit": "XI — Infinite-dimensional operator ideals and real/complex transfer",
+      "status": "outlined",
+      "filename": "097000-ky-fan-dominance-in-hilbert-space.md",
+      "scope": "Approximation sequences and norming functions",
+      "requires": [
+        "054000",
+        "055000",
+        "096000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "098000",
+      "title": "Symmetric operator ideals and membership",
+      "unit": "XI — Infinite-dimensional operator ideals and real/complex transfer",
+      "status": "outlined",
+      "filename": "098000-symmetric-operator-ideals-and-membership.md",
+      "scope": "Where-defined gauges and why not every bounded map has finite ideal norm",
+      "requires": [
+        "058000",
+        "096000",
+        "097000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "099000",
+      "title": "Hilbert–Schmidt and trace-class operators",
+      "unit": "XI — Infinite-dimensional operator ideals and real/complex transfer",
+      "status": "outlined",
+      "filename": "099000-hilbert-schmidt-and-trace-class-operators.md",
+      "scope": "Operator inner products, bases, nuclear traces and finite-rank density",
+      "requires": [
+        "057000",
+        "095000",
+        "096000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "100000",
+      "title": "Modulus, polar factors, and ideal invariance",
+      "unit": "XI — Infinite-dimensional operator ideals and real/complex transfer",
+      "status": "outlined",
+      "filename": "100000-modulus-polar-factors-and-ideal-invariance.md",
+      "scope": "Rectangular operator transport without assuming invertibility",
+      "requires": [
+        "037000",
+        "088000",
+        "098000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "101000",
+      "title": "Ideal estimates for compressions and block sums",
+      "unit": "XI — Infinite-dimensional operator ideals and real/complex transfer",
+      "status": "outlined",
+      "filename": "101000-ideal-estimates-for-compressions-and-block-sums.md",
+      "scope": "Membership preservation, pinching and direct sums",
+      "requires": [
+        "060000",
+        "098000",
+        "099000",
+        "100000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "102000",
+      "title": "Real Hilbert complexification",
+      "unit": "XI — Infinite-dimensional operator ideals and real/complex transfer",
+      "status": "outlined",
+      "filename": "102000-real-hilbert-complexification.md",
+      "scope": "Construction, norms and how linear/adjoint operations commute with transfer",
+      "requires": [
+        "007000",
+        "010000",
+        "012000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "103000",
+      "title": "Real and complex spectra and functional calculus",
+      "unit": "XI — Infinite-dimensional operator ideals and real/complex transfer",
+      "status": "outlined",
+      "filename": "103000-real-and-complex-spectra-and-functional-calculus.md",
+      "scope": "Transport and descent of self-adjoint spectral assertions",
+      "requires": [
+        "079000",
+        "088000",
+        "102000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "104000",
+      "title": "Real versions of unbounded Sylvester bounds",
+      "unit": "XI — Infinite-dimensional operator ideals and real/complex transfer",
+      "status": "outlined",
+      "filename": "104000-real-versions-of-unbounded-sylvester-bounds.md",
+      "scope": "Domains, resolvents and transferred estimates",
+      "requires": [
+        "094000",
+        "102000",
+        "103000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "105000",
+      "title": "A full proof-readiness assembly",
+      "unit": "XI — Infinite-dimensional operator ideals and real/complex transfer",
+      "status": "outlined",
+      "filename": "105000-a-full-proof-readiness-assembly.md",
+      "scope": "Reconstruct the analytic lemma stack for a symmetric-norm, unbounded sine estimate",
+      "requires": [
+        "101000",
+        "104000",
+        "108000",
+        "109000",
+        "110000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "106000",
+      "title": "What changes and what stays invariant",
+      "unit": "XII — Entering perturbation theory: residual geometry and single angles",
+      "status": "outlined",
+      "filename": "106000-what-changes-and-what-stays-invariant.md",
+      "scope": "A two-level counterexample, stable clusters, and the first perturbation question",
+      "requires": [
+        "031000",
+        "042000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "107000",
+      "title": "Trial spaces, exact subspaces and residuals",
+      "unit": "XII — Entering perturbation theory: residual geometry and single angles",
+      "status": "outlined",
+      "filename": "107000-trial-spaces-exact-subspaces-and-residuals.md",
+      "scope": "Trial isometries, compressed operators and A E−E A0",
+      "requires": [
+        "020000",
+        "021000",
+        "030000",
+        "083000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "108000",
+      "title": "The complementary-block Sylvester equation",
+      "unit": "XII — Entering perturbation theory: residual geometry and single angles",
+      "status": "outlined",
+      "filename": "108000-the-complementary-block-sylvester-equation.md",
+      "scope": "Exact reducing coordinates and F1*R=Λ1 X−X A0",
+      "requires": [
+        "071000",
+        "089000",
+        "093000",
+        "107000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "109000",
+      "title": "Directed sine as a rectangular modulus",
+      "unit": "XII — Entering perturbation theory: residual geometry and single angles",
+      "status": "outlined",
+      "filename": "109000-directed-sine-as-a-rectangular-modulus.md",
+      "scope": "S=(I−P)E, |S|=sin Θ0 and its coordinate independence",
+      "requires": [
+        "043000",
+        "046000",
+        "100000",
+        "107000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "110000",
+      "title": "The single-angle sine theorem",
+      "unit": "XII — Entering perturbation theory: residual geometry and single angles",
+      "status": "outlined",
+      "filename": "110000-the-single-angle-sine-theorem.md",
+      "scope": "Spectral separation, ideal contraction, membership and full hypotheses",
+      "requires": [
+        "068000",
+        "069000",
+        "094000",
+        "101000",
+        "104000",
+        "108000",
+        "109000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "111000",
+      "title": "Graph subspaces and tangent geometry",
+      "unit": "XII — Entering perturbation theory: residual geometry and single angles",
+      "status": "outlined",
+      "filename": "111000-graph-subspaces-and-tangent-geometry.md",
+      "scope": "Acute pairs, graph operators and tan Θ",
+      "requires": [
+        "043000",
+        "047000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "112000",
+      "title": "The single-angle tangent theorem",
+      "unit": "XII — Entering perturbation theory: residual geometry and single angles",
+      "status": "outlined",
+      "filename": "112000-the-single-angle-tangent-theorem.md",
+      "scope": "Ordered separation, proof mechanism and limit as angles approach 90 degrees",
+      "requires": [
+        "094000",
+        "108000",
+        "111000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "113000",
+      "title": "Sharp examples and norm-class comparisons",
+      "unit": "XII — Entering perturbation theory: residual geometry and single angles",
+      "status": "outlined",
+      "filename": "113000-sharp-examples-and-norm-class-comparisons.md",
+      "scope": "How gaps, residuals and constants can fail or become optimal",
+      "requires": [
+        "110000",
+        "112000",
+        "069000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "114000",
+      "title": "Off-diagonal perturbations and block reflection",
+      "unit": "XIII — Double-angle estimates, reflections, and branch choice",
+      "status": "outlined",
+      "filename": "114000-off-diagonal-perturbations-and-block-reflection.md",
+      "scope": "P H P=0 and complementary diagonal blocks; anticommutation",
+      "requires": [
+        "016000",
+        "030000",
+        "089000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "115000",
+      "title": "Doubled angles from symmetry",
+      "unit": "XIII — Double-angle estimates, reflections, and branch choice",
+      "status": "outlined",
+      "filename": "115000-doubled-angles-from-symmetry.md",
+      "scope": "Why reflection compares geometric data with its transformed copy",
+      "requires": [
+        "040000",
+        "041000",
+        "045000",
+        "114000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "116000",
+      "title": "The sine-two-theta theorem",
+      "unit": "XIII — Double-angle estimates, reflections, and branch choice",
+      "status": "outlined",
+      "filename": "116000-the-sine-two-theta-theorem.md",
+      "scope": "Full operator-angle interpretation, constants and norms",
+      "requires": [
+        "094000",
+        "101000",
+        "109000",
+        "115000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "117000",
+      "title": "The tangent-two-theta theorem",
+      "unit": "XIII — Double-angle estimates, reflections, and branch choice",
+      "status": "outlined",
+      "filename": "117000-the-tangent-two-theta-theorem.md",
+      "scope": "Ordered separation, Riccati/graph picture and quarter-turn boundary",
+      "requires": [
+        "094000",
+        "111000",
+        "115000",
+        "G-RICCATI"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "118000",
+      "title": "Why a small doubled sine proves little alone",
+      "unit": "XIII — Double-angle estimates, reflections, and branch choice",
+      "status": "outlined",
+      "filename": "118000-why-a-small-doubled-sine-proves-little-alone.md",
+      "scope": "Near-zero and near-right-angle branches",
+      "requires": [
+        "116000",
+        "117000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "119000",
+      "title": "Spectral selection and repulsion",
+      "unit": "XIII — Double-angle estimates, reflections, and branch choice",
+      "status": "outlined",
+      "filename": "119000-spectral-selection-and-repulsion.md",
+      "scope": "Theorem 8.1, its block inequalities and unique reducing branch",
+      "requires": [
+        "028000",
+        "031000",
+        "090000",
+        "097000",
+        "118000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "120000",
+      "title": "Small-angle certification",
+      "unit": "XIII — Double-angle estimates, reflections, and branch choice",
+      "status": "outlined",
+      "filename": "120000-small-angle-certification.md",
+      "scope": "Theorem 8.2 and safe branch thresholds",
+      "requires": [
+        "116000",
+        "118000",
+        "119000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "121000",
+      "title": "A comparative theorem decision procedure",
+      "unit": "XIII — Double-angle estimates, reflections, and branch choice",
+      "status": "outlined",
+      "filename": "121000-a-comparative-theorem-decision-procedure.md",
+      "scope": "Four bounds, three gap regimes, directed versus full angles",
+      "requires": [
+        "110000",
+        "112000",
+        "116000",
+        "117000",
+        "120000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "122000",
+      "title": "Direct-sum norm comparison",
+      "unit": "XIV — Generalized bounds and source-faithful norm estimates",
+      "status": "outlined",
+      "filename": "122000-direct-sum-norm-comparison.md",
+      "scope": "Lemma 6.1 and rank-safe weak majorization",
+      "requires": [
+        "055000",
+        "060000",
+        "097000",
+        "101000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "123000",
+      "title": "Pinching through an involution",
+      "unit": "XIV — Generalized bounds and source-faithful norm estimates",
+      "status": "outlined",
+      "filename": "123000-pinching-through-an-involution.md",
+      "scope": "Lemma 6.2 and block-diagonal contraction",
+      "requires": [
+        "045000",
+        "058000",
+        "060000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "124000",
+      "title": "Ambient sine from an ambient perturbation",
+      "unit": "XIV — Generalized bounds and source-faithful norm estimates",
+      "status": "outlined",
+      "filename": "124000-ambient-sine-from-an-ambient-perturbation.md",
+      "scope": "Proposition 6.1 versus a directed residual",
+      "requires": [
+        "109000",
+        "110000",
+        "114000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "125000",
+      "title": "Non-isometric frames and unequal dimensions",
+      "unit": "XIV — Generalized bounds and source-faithful norm estimates",
+      "status": "outlined",
+      "filename": "125000-non-isometric-frames-and-unequal-dimensions.md",
+      "scope": "Theorem 6.1, lower frame bound and epsilon",
+      "requires": [
+        "018000",
+        "020000",
+        "107000",
+        "122000",
+        "124000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "126000",
+      "title": "Weak spectral gaps and Hilbert–Schmidt estimates",
+      "unit": "XIV — Generalized bounds and source-faithful norm estimates",
+      "status": "outlined",
+      "filename": "126000-weak-spectral-gaps-and-hilbert-schmidt-estimates.md",
+      "scope": "Theorem 6.2 and what fails without ordered separation",
+      "requires": [
+        "070000",
+        "094000",
+        "107000",
+        "122000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "127000",
+      "title": "The generalized tangent bound",
+      "unit": "XIV — Generalized bounds and source-faithful norm estimates",
+      "status": "outlined",
+      "filename": "127000-the-generalized-tangent-bound.md",
+      "scope": "Theorem 6.3, Rayleigh–Ritz and frame geometry",
+      "requires": [
+        "021000",
+        "031000",
+        "111000",
+        "112000",
+        "125000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "128000",
+      "title": "Spectral cutoff and finite-rank source lemmas",
+      "unit": "XIV — Generalized bounds and source-faithful norm estimates",
+      "status": "outlined",
+      "filename": "128000-spectral-cutoff-and-finite-rank-source-lemmas.md",
+      "scope": "Section 5.1 and 6.3 lemmas; why their hypotheses matter",
+      "requires": [
+        "082000",
+        "093000",
+        "096000",
+        "099000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "129000",
+      "title": "One complete original-paper proof reconstruction",
+      "unit": "XIV — Generalized bounds and source-faithful norm estimates",
+      "status": "outlined",
+      "filename": "129000-one-complete-original-paper-proof-reconstruction.md",
+      "scope": "Choose one hard result and rederive every analytic dependency",
+      "requires": [
+        "105000",
+        "120000",
+        "125000",
+        "126000",
+        "127000",
+        "128000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "130000",
+      "title": "Restricted direct-rotation optimality",
+      "unit": "XV — Direct-rotation extremals and corrected optimality",
+      "status": "outlined",
+      "filename": "130000-restricted-direct-rotation-optimality.md",
+      "scope": "Proposition 4.1 and Corollary 4.1 via singular-angle inequalities",
+      "requires": [
+        "049000",
+        "052000",
+        "058000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "131000",
+      "title": "The squared displacement of orthonormal frames",
+      "unit": "XV — Direct-rotation extremals and corrected optimality",
+      "status": "outlined",
+      "filename": "131000-the-squared-displacement-of-orthonormal-frames.md",
+      "scope": "Proposition 4.2 and how errors add",
+      "requires": [
+        "022000",
+        "049000",
+        "057000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "132000",
+      "title": "Whole-space squared displacement and Q-norms",
+      "unit": "XV — Direct-rotation extremals and corrected optimality",
+      "status": "outlined",
+      "filename": "132000-whole-space-squared-displacement-and-q-norms.md",
+      "scope": "Proposition 4.3 and the exact family of objectives",
+      "requires": [
+        "060000",
+        "130000",
+        "131000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "133000",
+      "title": "Unsquared ambient displacement is different",
+      "unit": "XV — Direct-rotation extremals and corrected optimality",
+      "status": "outlined",
+      "filename": "133000-unsquared-ambient-displacement-is-different.md",
+      "scope": "The optimization problem printed as Proposition 4.4",
+      "requires": [
+        "057000",
+        "059000",
+        "132000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "134000",
+      "title": "The four-dimensional real counterexample",
+      "unit": "XV — Direct-rotation extremals and corrected optimality",
+      "status": "outlined",
+      "filename": "134000-the-four-dimensional-real-counterexample.md",
+      "scope": "Competing rotation, trace norm, singular-value comparison",
+      "requires": [
+        "036000",
+        "133000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "135000",
+      "title": "Corrected scopes and surviving results",
+      "unit": "XV — Direct-rotation extremals and corrected optimality",
+      "status": "outlined",
+      "filename": "135000-corrected-scopes-and-surviving-results.md",
+      "scope": "Restricted optimality and valid norm-specific statements",
+      "requires": [
+        "130000",
+        "132000",
+        "134000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "136000",
+      "title": "Classification and realizations of direct rotations",
+      "unit": "XV — Direct-rotation extremals and corrected optimality",
+      "status": "outlined",
+      "filename": "136000-classification-and-realizations-of-direct-rotations.md",
+      "scope": "Defects, compact angle data and boundary cases revisited",
+      "requires": [
+        "050000",
+        "051000",
+        "135000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "137000",
+      "title": "The free-beam operator and its domain",
+      "unit": "XVI — Worked original-paper calculation and open problems",
+      "status": "outlined",
+      "filename": "137000-the-free-beam-operator-and-its-domain.md",
+      "scope": "Fourth-order differential operator, boundary conditions and Green identities",
+      "requires": [
+        "083000",
+        "088000",
+        "090000",
+        "G-SOBOLEV-FOUNDATIONS"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "138000",
+      "title": "Beam Rayleigh–Ritz calculation",
+      "unit": "XVI — Worked original-paper calculation and open problems",
+      "status": "outlined",
+      "filename": "138000-beam-rayleigh-ritz-calculation.md",
+      "scope": "Trial functions, compressed matrix and residual",
+      "requires": [
+        "021000",
+        "027000",
+        "107000",
+        "137000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "139000",
+      "title": "Comparing angle and Ky Fan beam estimates",
+      "unit": "XVI — Worked original-paper calculation and open problems",
+      "status": "outlined",
+      "filename": "139000-comparing-angle-and-ky-fan-beam-estimates.md",
+      "scope": "Source Section 9 numerical inequalities and their improvements",
+      "requires": [
+        "097000",
+        "110000",
+        "122000",
+        "124000",
+        "138000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "140000",
+      "title": "From subspace bounds to individual modes",
+      "unit": "XVI — Worked original-paper calculation and open problems",
+      "status": "outlined",
+      "filename": "140000-from-subspace-bounds-to-individual-modes.md",
+      "scope": "Internal gaps, complement blocks and Schur-type reductions",
+      "requires": [
+        "028000",
+        "031000",
+        "108000",
+        "139000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "141000",
+      "title": "How much can a distance-only gap say",
+      "unit": "XVI — Worked original-paper calculation and open problems",
+      "status": "outlined",
+      "filename": "141000-how-much-can-a-distance-only-gap-say.md",
+      "scope": "Question 10.1 with known cases and counterexamples",
+      "requires": [
+        "031000",
+        "069000",
+        "121000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "142000",
+      "title": "Three subspaces and higher-order interactions",
+      "unit": "XVI — Worked original-paper calculation and open problems",
+      "status": "outlined",
+      "filename": "142000-three-subspaces-and-higher-order-interactions.md",
+      "scope": "Question 10.2 and block geometry",
+      "requires": [
+        "045000",
+        "121000",
+        "136000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "143000",
+      "title": "Joint movement of eigenvalues and angles",
+      "unit": "XVI — Worked original-paper calculation and open problems",
+      "status": "outlined",
+      "filename": "143000-joint-movement-of-eigenvalues-and-angles.md",
+      "scope": "Question 10.3, motivations and obstacles",
+      "requires": [
+        "029000",
+        "121000",
+        "139000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "144000",
+      "title": "Stability of functions of operators",
+      "unit": "XVI — Worked original-paper calculation and open problems",
+      "status": "outlined",
+      "filename": "144000-stability-of-functions-of-operators.md",
+      "scope": "Question 10.4 and the need for functional calculus",
+      "requires": [
+        "079000",
+        "103000",
+        "121000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "145000",
+      "title": "From rotation counterexample to real transport matching",
+      "unit": "XVII — Companion formalizations and independent proof mastery",
+      "status": "outlined",
+      "filename": "145000-from-rotation-counterexample-to-real-transport-matching.md",
+      "scope": "Trace-norm matching and principal-plane coupling",
+      "requires": [
+        "055000",
+        "058000",
+        "134000",
+        "135000",
+        "136000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "146000",
+      "title": "Rectangular singular-subspace bounds",
+      "unit": "XVII — Companion formalizations and independent proof mastery",
+      "status": "outlined",
+      "filename": "146000-rectangular-singular-subspace-bounds.md",
+      "scope": "Hermitian dilation, Gram perturbation and Wedin-type phenomena",
+      "requires": [
+        "023000",
+        "036000",
+        "109000",
+        "110000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "147000",
+      "title": "Population-gap spectral statistics",
+      "unit": "XVII — Companion formalizations and independent proof mastery",
+      "status": "outlined",
+      "filename": "147000-population-gap-spectral-statistics.md",
+      "scope": "Yu–Wang–Samworth versus mixed sample/population gap",
+      "requires": [
+        "029000",
+        "110000",
+        "146000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "148000",
+      "title": "Procrustes and spectral embeddings",
+      "unit": "XVII — Companion formalizations and independent proof mastery",
+      "status": "outlined",
+      "filename": "148000-procrustes-and-spectral-embeddings.md",
+      "scope": "Aligned eigenframes, Gram rigidity and downstream representation error",
+      "requires": [
+        "022000",
+        "049000",
+        "147000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "149000",
+      "title": "Proof practicum: reconstruct the 1970 theory",
+      "unit": "XVII — Companion formalizations and independent proof mastery",
+      "status": "outlined",
+      "filename": "149000-proof-practicum-reconstruct-the-1970-theory.md",
+      "scope": "Write a coherent finite-to-infinite proof pathway; check full source hypotheses",
+      "requires": [
+        "121000",
+        "129000",
+        "135000",
+        "140000",
+        "144000",
+        "145000",
+        "147000",
+        "148000"
+      ],
+      "recommended": []
+    },
+    {
+      "id": "G-BANACH-PRINCIPLES",
+      "title": "Uniform boundedness, open mapping and closed graph principles",
+      "unit": "Proposed prerequisite insertion",
+      "status": "gap",
+      "filename": null,
+      "requires": [
+        "003000",
+        "004000",
+        "006000"
+      ],
+      "recommended": [],
+      "suggested_slot": "006500",
+      "proof_obligation": "Before bounded-inverse/closed-graph arguments and the general Banach Sylvester theorem."
+    },
+    {
+      "id": "G-APPROXIMATION",
+      "title": "Weierstrass/Stone–Weierstrass approximation tools",
+      "unit": "Proposed prerequisite insertion",
+      "status": "gap",
+      "filename": null,
+      "requires": [
+        "005000",
+        "026000",
+        "032000"
+      ],
+      "recommended": [],
+      "suggested_slot": "032500",
+      "proof_obligation": "For a constructive route to continuous functional calculus and function approximation."
+    },
+    {
+      "id": "G-COMPLEX-ANALYSIS",
+      "title": "Complex contour integration and the holomorphic functional calculus",
+      "unit": "Proposed prerequisite insertion",
+      "status": "gap",
+      "filename": null,
+      "requires": [
+        "007000",
+        "008000",
+        "032000"
+      ],
+      "recommended": [],
+      "suggested_slot": "066500",
+      "proof_obligation": "Required only for the contour/resolvent proof route to Rosenblum-style separation; an alternative proof route may avoid it."
+    },
+    {
+      "id": "G-OPERATOR-TOPOLOGIES",
+      "title": "Strong and weak operator convergence; uniform boundedness in limits",
+      "unit": "Proposed prerequisite insertion",
+      "status": "gap",
+      "filename": null,
+      "requires": [
+        "004000",
+        "010000",
+        "072000"
+      ],
+      "recommended": [],
+      "suggested_slot": "072500",
+      "proof_obligation": "For strong spectral cutoffs, finite-rank approximation and strongly continuous operator groups."
+    },
+    {
+      "id": "G-MEASURE-REPRESENTATION",
+      "title": "Representation of positive functionals by scalar measures",
+      "unit": "Proposed prerequisite insertion",
+      "status": "gap",
+      "filename": null,
+      "requires": [
+        "006000",
+        "074000",
+        "075000"
+      ],
+      "recommended": [],
+      "suggested_slot": "075500",
+      "proof_obligation": "One route from bounded functional calculus to projection-valued measures; can be folded into PVM lecture if proved there."
+    },
+    {
+      "id": "G-COMPACT-SPECTRAL",
+      "title": "Compact self-adjoint spectral theorem and compact angle spectra",
+      "unit": "Proposed prerequisite insertion",
+      "status": "gap",
+      "filename": null,
+      "requires": [
+        "026000",
+        "075000",
+        "095000"
+      ],
+      "recommended": [],
+      "suggested_slot": "095500",
+      "proof_obligation": "For singular-value sequences, approximation numbers and compact two-projection classification."
+    },
+    {
+      "id": "G-SEMIGROUP-INTEGRATION",
+      "title": "Strong operator integration and semigroup generator foundations",
+      "unit": "Proposed prerequisite insertion",
+      "status": "gap",
+      "filename": null,
+      "requires": [
+        "039000",
+        "074000",
+        "G-OPERATOR-TOPOLOGIES"
+      ],
+      "recommended": [],
+      "suggested_slot": "091500",
+      "proof_obligation": "Needed for a genuine proof of one-parameter group/semigroup identities, beyond formal matrix exponentials."
+    },
+    {
+      "id": "G-RICCATI",
+      "title": "Invariant graph subspaces and operator Riccati equations",
+      "unit": "Proposed prerequisite insertion",
+      "status": "gap",
+      "filename": null,
+      "requires": [
+        "016000",
+        "047000",
+        "111000"
+      ],
+      "recommended": [],
+      "suggested_slot": "111500",
+      "proof_obligation": "Bridge from graph geometry to the full tangent-two-theta proof mechanism."
+    },
+    {
+      "id": "G-SOBOLEV-FOUNDATIONS",
+      "title": "Weak derivatives, Sobolev spaces and boundary traces",
+      "unit": "Proposed prerequisite insertion",
+      "status": "gap",
+      "filename": null,
+      "requires": [
+        "074000",
+        "083000",
+        "090000"
+      ],
+      "recommended": [],
+      "suggested_slot": "136500",
+      "proof_obligation": "For a first-principles treatment of the fourth-order free-beam example and its operator domain."
+    }
+  ],
+  "proof_targets": {
+    "two_subspace_geometry": [
+      "049000",
+      "050000",
+      "051000"
+    ],
+    "banach_sylvester": [
+      "068000"
+    ],
+    "full_scope_sine": [
+      "110000"
+    ],
+    "other_angle_families": [
+      "112000",
+      "116000",
+      "117000"
+    ],
+    "selection_and_generalizations": [
+      "119000",
+      "120000",
+      "125000",
+      "126000",
+      "127000"
+    ],
+    "direct_rotation_corrected": [
+      "130000",
+      "131000",
+      "132000",
+      "134000",
+      "135000"
+    ],
+    "beam_and_open_problems": [
+      "137000",
+      "138000",
+      "139000",
+      "140000",
+      "141000",
+      "142000",
+      "143000",
+      "144000"
+    ],
+    "complete_formalization_practicum": [
+      "149000"
+    ]
+  },
+  "source_result_coverage": {
+    "S2-sin-theta": [
+      "110000",
+      "105000"
+    ],
+    "S2-tan-theta": [
+      "112000",
+      "127000"
+    ],
+    "S2-sin-two-theta": [
+      "116000"
+    ],
+    "S2-tan-two-theta": [
+      "117000"
+    ],
+    "DK-3.1-prop": [
+      "049000"
+    ],
+    "DK-3.2-prop": [
+      "050000"
+    ],
+    "DK-3.3-prop": [
+      "049000",
+      "046000"
+    ],
+    "DK-3.4-prop": [
+      "049000"
+    ],
+    "DK-3.1-thm": [
+      "050000"
+    ],
+    "DK-3.1-cor": [
+      "051000",
+      "136000"
+    ],
+    "DK-3.5-prop": [
+      "049000",
+      "046000"
+    ],
+    "DK-3.2-cor": [
+      "049000"
+    ],
+    "DK-4.1-prop": [
+      "130000"
+    ],
+    "DK-4.1-cor": [
+      "130000"
+    ],
+    "DK-4.2-prop": [
+      "131000"
+    ],
+    "DK-4.3-prop": [
+      "132000"
+    ],
+    "DK-4.4-prop": [
+      "133000",
+      "134000"
+    ],
+    "DK-5.1-thm": [
+      "068000"
+    ],
+    "DK-5.2-thm": [
+      "094000"
+    ],
+    "DK-5.1-lem": [
+      "082000",
+      "128000"
+    ],
+    "DK-6.1-lem": [
+      "122000"
+    ],
+    "DK-6.2-lem": [
+      "123000"
+    ],
+    "DK-6.1-prop": [
+      "124000"
+    ],
+    "DK-6.1-thm": [
+      "125000"
+    ],
+    "DK-6.2-thm": [
+      "126000"
+    ],
+    "DK-6.3-thm": [
+      "127000"
+    ],
+    "DK-6.3-lem": [
+      "128000"
+    ],
+    "DK-8.1-thm": [
+      "119000"
+    ],
+    "DK-8.2-thm": [
+      "120000"
+    ]
+  }
+}
