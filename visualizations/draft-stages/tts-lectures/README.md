@@ -76,7 +76,7 @@ all anchors and links, run `reference_metadata.py --check`; to build a single
 future-server record with bibliography and offsets, use `--json 053000`.
 See [sidecar documentation](metadata/README.md) and
 [citation audit report](reference-metadata-report-2026-11-08.md).
-The historical claim ledger records all 49 primary-passage comparisons as pending.
+The historical claim ledger and per-lecture sidecars record the current primary-passage comparison statuses.
 
 ## Independent-listening requirements
 

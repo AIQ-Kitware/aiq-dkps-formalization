@@ -15,12 +15,32 @@
     },
     {
       "id": "000000-h02",
-      "anchor": "Davis and Kahan worked with more general unitarily invariant norms, so we need to understand where those norms come from and when an operator actually belongs to the class on which such a norm is finite.",
+      "anchor": "Davis and Kahan also studied unitarily invariant norms, whose value is unchanged by unitary changes of coordinates.",
       "kind": "historical_attribution",
       "source_ids": [
         "davis-kahan-1970"
       ],
       "source_locator": "Norm treatment; check section",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "000000-h03",
+      "anchor": "The original 1970 paper contains a broad claim about unsquared whole-space displacement that is false.",
+      "kind": "source_scope",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Proposition 4.4; compare the corrected four-dimensional counterexample",
+      "audit_status": "pending_primary_passage_comparison"
+    },
+    {
+      "id": "000000-h04",
+      "anchor": "Section ten of the 1970 paper raises questions that reach beyond the estimates established there.",
+      "kind": "source_scope",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Section 10, questions and problems",
       "audit_status": "pending_primary_passage_comparison"
     }
   ],

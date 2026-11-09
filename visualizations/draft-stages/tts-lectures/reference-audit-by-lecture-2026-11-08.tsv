@@ -1,5 +1,5 @@
 lecture_id	transcript	historical_claim_anchors	related_resource_links	primary_passage_comparison_completed	status
-000000	000000-course-introduction.md	2	0	0	pending_primary_audit
+000000	000000-course-introduction.md	4	0	0	pending_primary_audit
 001000	001000-linear-maps-independent-of-coordinates.md	0	1	0	no_historical_candidate_indexed
 002000	002000-norms-distances-and-convergence.md	0	1	0	no_historical_candidate_indexed
 003000	003000-cauchy-sequences-and-banach-spaces.md	0	1	0	no_historical_candidate_indexed

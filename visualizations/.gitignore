@@ -22,3 +22,6 @@ slides-*/
 
 # Downloaded external illustrations and their portable local provenance records.
 /asset-store/
+
+# On-demand server-generated audio is disposable and must not be committed.
+/audio-cache/

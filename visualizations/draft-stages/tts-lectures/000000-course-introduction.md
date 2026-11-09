@@ -1,77 +1,81 @@
-# Course introduction: Learning the mathematics behind Davis–Kahan theory
+# Course introduction: Why spectral subspaces move
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-Suppose you have taken a linear algebra course. You can multiply matrices, compute eigenvalues in simple examples, take derivatives, and evaluate integrals. You know that matrices represent linear transformations, and you have seen at least a few ways to factor them.
+Suppose a symmetric matrix describes a system with two distinct modes. One mode has an eigenvalue of zero, the other an eigenvalue of four, and the two eigenvectors point along perpendicular coordinate axes. What happens if we change the matrix slightly? Will the eigenvalues remain close? Will the eigendirections remain close? And how much separation between the two modes is needed to make either prediction reliable?
 
-That is enough background to begin this course. But it is not the same as knowing spectral theory.
+Those questions lead to the Davis–Kahan theory of spectral subspaces. They also open a path through geometry, linear algebra, and functional analysis. This course develops that path far enough to explain the central perturbation estimates from their hypotheses, rather than treating them as formulas to be remembered.
 
-For example, what is a spectrum? You may remember that the eigenvalues of a square matrix form a collection of special numbers. Why those numbers? What do they tell us about how the transformation acts? And what happens when we replace an ordinary matrix with an operator acting on an entire space of functions?
+## A small change in a matrix
 
-Or consider a subspace. We know how to describe a plane by giving two spanning vectors. But the plane itself does not depend on which pair of vectors we chose. If we rotate those two vectors within the same plane, we have changed the coordinates, not the object. How can we express the geometry of the plane without depending on the particular basis?
+Begin with a two-by-two diagonal matrix whose diagonal entries are zero and four. Its lower eigenspace is the horizontal axis, and its upper eigenspace is the vertical axis. Now put a one in each of the two off-diagonal positions. The new matrix is still symmetric, but it mixes the two coordinate directions.
 
-These sound like questions from different chapters. In the mathematics we will study, they become connected. The spectrum lets us distinguish parts of the action of an operator. Spectral subspaces describe where those parts live. Orthogonal projections describe subspaces without needing arbitrary coordinates. And operators built from those projections let us compare different subspaces and construct precise rotations between them.
+Its eigenvalues are two minus the square root of five and two plus the square root of five. Each has moved by approximately zero point two three six from its original value. Meanwhile, the lower eigenline has rotated by about thirteen point three degrees. To calculate that angle, diagonalize the new matrix: the magnitude of the tangent of twice the rotation angle is one half.
 
-There is a great deal of interesting mathematics to learn before we ask whether any of those objects are stable.
+Two different things have happened. The eigenvalues have moved along the number line, and the eigenvectors have changed direction. We can estimate the first movement without knowing much about the eigendirections. The second depends critically on the gap separating the spectral values. If the two original eigenvalues were almost equal, the same off-diagonal coupling could produce a much larger rotation.
 
-## A course built around understanding and proof
+Now imagine two eigenvalues that are exactly equal. There is no distinguished pair of eigenvectors inside their joint eigenspace. We can rotate an orthonormal basis within that space while leaving the underlying operator and the space itself unchanged. This is why the theory asks about subspaces rather than attempting to track every eigenvector individually. A subspace is an intrinsic geometric object; a basis is one way to describe it.
 
-Davis and Kahan developed methods for controlling how spectral subspaces move when the underlying operator is perturbed. Davis–Kahan estimates quantify the movement of eigenspaces, but their derivation also develops the geometry of subspaces and the analysis of operator equations.
+Davis and Kahan developed methods for controlling how spectral subspaces move when the underlying operator is perturbed. Their work asks for quantitative estimates that depend on the size of a perturbation, a residual, and the relevant separation of spectra. Our task is to understand where those estimates come from and when their hypotheses hold.
 
-The proofs involve geometry, spectral theory, operator equations, variational principles, and functional analysis. The original work studies several different ways to measure angles, different assumptions about spectral gaps, canonical rotations of Hilbert spaces, and the behavior of operators that need not be finite matrices. There is also a subtle distinction between a rotation that is naturally defined and a rotation that minimizes a particular notion of displacement. One printed claim about that distinction turns out to be false.
+## How to measure a moving subspace
 
-Our goal is not merely to memorize the four famous angle estimates. By the end of this course, you should be able to reconstruct the arguments that establish them, identify their precise hypotheses, and understand the analytical tools that make those proofs possible.
+For two lines through the origin, an angle is easy to picture. For two planes in a much larger space, a single angle may not describe the comparison. One direction may agree almost perfectly while another is far apart. Principal angles describe these different degrees of alignment.
 
-That is why we will take the foundations seriously. We will learn the mathematics required by the proofs, including results that may not have the Davis–Kahan name attached to them. Some foundational results have value beyond perturbation theory. The course explains their mathematical role, including how they enter the eventual angle estimates.
+Orthogonal projections provide a way to study subspaces without choosing particular coordinates inside them. A projection keeps the component in a chosen subspace and removes the perpendicular component. From a pair of projections, we can recover the sines and cosines of the principal angles, understand when two subspaces meet at a right angle, and build a canonical rotation that carries one subspace toward the other.
 
-We assume basic linear algebra and calculus, but we will not assume prior familiarity with Banach spaces, Hilbert spaces, measure theory, or functional calculus. We will construct that understanding as we go, using small examples before moving to general theorems.
+This geometry will have several forms. An orthonormal frame gives coordinates for a subspace; a Gram operator records how its vectors overlap; a graph represents a tilted subspace as a map from one component to its perpendicular complement. Those representations are useful for different proofs. They describe the same underlying geometry, but the choice of representation can make a difficult estimate almost immediate.
 
-## The spaces and maps
+The course develops these ideas from linear maps, inner products, adjoints, and orthogonal projections. We begin with familiar finite-dimensional calculations and prove the identities that later let us work without relying on a particular matrix basis.
 
-We will begin by distinguishing a linear transformation from the matrix used to represent it. A change of basis can change every entry of a matrix without changing the underlying transformation. Keeping this distinction clear will make the later theory less mysterious.
+## Why the foundations go beyond matrices
 
-Next we will ask what it means to measure the size of a vector, or the size of a linear operator. A norm gives us a notion of length and therefore of distance. That makes limits possible, and limits introduce the question of completeness. A Banach space is a normed vector space complete under its norm. A Hilbert space adds the familiar geometry of inner products and perpendicularity, together with completeness.
+The starting background is ordinary linear algebra and calculus: matrix multiplication, elementary eigenvalue calculations, derivatives, and integrals. Prior knowledge of Banach spaces, spectral measures, or unbounded operators is not required.
 
-Why introduce infinite-dimensional spaces when matrices are easier to calculate? Because the original theory is not confined to finite-dimensional matrices. Operators on function spaces appear in differential equations, numerical approximations and spectral problems. A proof that works only for diagonal matrices is an excellent place to start, but it is not yet the full theorem.
+A norm tells us how large a vector or an operator is. Completeness tells us when Cauchy approximations actually converge inside the space under study. Banach spaces package these analytic ideas; Hilbert spaces add inner products and orthogonality. Together they provide a setting in which projections, adjoints, limits, and operator equations can be handled rigorously.
 
-Hilbert spaces also give us projections and adjoints. We will see why a linear isometry preserves lengths, why its adjoint need not be its inverse on the entire ambient space, and how a collection of vectors defines a Gram matrix. We will carefully distinguish a Gram operator on coefficient space from a frame operator on the larger space. These are not vocabulary exercises. We will prove identities with them that recur throughout the course.
+Spectral theory begins with eigenvalues but cannot end there. An operator acting on functions may have spectral values without any corresponding eigenvector. A multiplication operator, for example, can have a continuous range of spectral values even when individual points are not eigenvalues. Spectral projections and spectral measures replace the idea that every operator can be diagonalized using a list of eigenvectors.
 
-## The spectrum and the functions we apply to operators
+Functional calculus then lets us apply functions to self-adjoint operators. It explains positive square roots, operator absolute values, and spectral restrictions. From these constructions come singular values and polar decomposition, which separate how an operator stretches from how it moves directions. Matrix exponentials and skew-adjoint generators provide another description of rotations and continuous motions.
 
-After those preparations, we will learn spectral theory itself. We will begin with eigenvalues and eigenvectors, then explain why eigenspaces and spectral projections often matter more than an individually chosen eigenvector.
+The infinite-dimensional case brings a further complication: some important self-adjoint operators are defined only on a dense domain, rather than on every vector. Differential operators are common examples. Multiplying such operators, restricting them to subspaces, or passing to limits requires domain conditions. The course establishes the spectral cutoffs, resolvent arguments, and closed-operator facts needed to carry the finite-dimensional reasoning into this setting.
 
-In an infinite-dimensional space, the spectrum is not always a list of eigenvalues. We will see examples where that familiar picture fails, and we will learn how the definition in terms of invertibility takes its place. For self-adjoint operators, the spectral theorem provides a remarkably powerful description of the operator's action. Instead of thinking only about a collection of eigenvectors, we will learn to think in terms of spectral projections and, eventually, spectral measures.
+## The mechanism behind an angle estimate
 
-One benefit of the spectral theorem is that it tells us how to apply functions to operators. A square root, an absolute value, or an exponential of a matrix is not generally obtained by applying the scalar function separately to its entries.
+Here is the central proof idea. Suppose a self-adjoint operator has an exact invariant subspace, and we have an approximate subspace obtained from a computation or an experiment. The approximate subspace is represented by an orthonormal frame. Apply the operator to that frame, then subtract the part predicted by the operator compressed to the trial subspace. What remains is called the residual.
 
-Take the operator modulus, written as the absolute value of an operator. We will derive it by forming the operator's adjoint times the operator, and then taking the positive square root. We will see why this construction describes stretching and why it leads to singular values and polar decomposition.
+If the residual vanishes, the trial subspace is invariant. If it is small, the trial subspace is approximately invariant. But a small residual alone does not tell us which exact spectral subspace it approximates. We also need spectral separation from the unwanted part of the operator.
 
-Or take the matrix exponential. We will derive the exponential from its power series, understand how it solves differential equations, and see why exponentials of skew-adjoint operators describe continuous length-preserving motions. This will prepare us to understand canonical rotations of subspaces rather than merely drawing rotations in a diagram.
+Projecting the residual into the orthogonal complement of the target subspace produces an operator equation. The unknown in that equation measures how far the trial frame leaks into the complementary space. The equation has the form of a Sylvester equation: one operator multiplied by the unknown, minus the unknown multiplied by a second operator, equals a known residual.
 
-## Beyond the finite-dimensional picture
+In a diagonal matrix, solving the equation amounts to dividing by differences of eigenvalues. The general theory makes that division precise. Under the right spectral-gap hypotheses, a bound for the inverse Sylvester operator becomes a bound for the sine of a subspace angle.
 
-A second layer of foundations will take us from matrices into serious operator analysis. We will study the min–max principle, singular-value inequalities, and ways of comparing entire lists of singular values. The operator norm is only one measure of size. Davis and Kahan worked with more general unitarily invariant norms, so we need to understand where those norms come from and when an operator actually belongs to the class on which such a norm is finite.
+Different spectral gaps support different estimates. If one spectral set lies entirely above another, we have an ordered separation. If the sets are merely a positive distance apart, without an ordering, some of the same arguments require a different norm or a different constant. Knowing exactly which gap is being used is part of constructing a correct proof.
 
-We will also study an equation called the Sylvester equation. Its basic form is this: multiply an unknown operator by one known operator on the left, subtract its product with another operator on the right, and obtain a known residual. Even the scalar version involves division by a difference of numbers. The operator version explains why separating pieces of a spectrum is so important. We will solve finite examples, then learn the analytic estimates needed for the general case.
+There is also more than one way to measure an operator. The operator norm measures its largest stretching factor; the Frobenius or Hilbert–Schmidt norm combines the squares of all singular values. Ky Fan sums and majorization compare entire singular-value lists. Davis and Kahan also studied unitarily invariant norms, whose value is unchanged by unitary changes of coordinates. In infinite dimensions, an estimate in an ideal norm must also account for which operators actually belong to that ideal.
 
-In infinite dimensions, the analysis becomes more delicate. Some operators are not defined on every vector in their Hilbert space. We must understand their domains, what it means for them to be closed and self-adjoint, and what we are actually allowed to write when manipulating their products. We will build spectral measures, functional calculus, resolvents, spectral cutoffs and the relevant operator ideals with enough care to support the final theorems.
+## Four angle families, with different hypotheses
 
-Domain conditions and spectral restrictions are essential to a valid infinite-dimensional perturbation proof. An expression involving an unbounded operator must be defined on the vectors to which it is applied.
+The principal perturbation results control the sine of an angle, the tangent of an angle, the sine of twice an angle, and the tangent of twice an angle. They are related, but they are not interchangeable.
 
-## Finally, the Davis–Kahan questions
+Sine bounds measure how much a trial subspace enters the unwanted orthogonal complement. Tangent bounds become natural when a nearby subspace can be written as a graph over the exact one. A reflection across a subspace can turn an ordinary angle into a doubled-angle problem, especially for off-diagonal perturbations. For a tangent-of-twice-the-angle estimate, the choice of angular branch is essential: a small value of the sine of twice an angle, by itself, does not tell us whether the original angle is close to zero or close to ninety degrees.
 
-Only after we understand the objects and the tools will we ask how they behave when an operator or a trial subspace changes.
+The proofs therefore develop both the estimates and the geometric conditions that allow us to use them. We will distinguish results for a single largest angle from results controlling a whole singular-value list, and finite-dimensional arguments from those that require spectral measures or operator ideals. Real and complex Hilbert spaces also deserve explicit attention, because complex spectral methods sometimes need to be transferred back to the real setting.
 
-The central estimates then become natural questions rather than formulas arriving without preparation. What does the residual of an approximate invariant subspace tell us? How does it connect to the part of that subspace that lies outside an exact spectral subspace? Why do certain spectral gaps allow us to convert a residual bound into an angle bound? Under which assumptions can we control the sine of an angle, its tangent, or the sine or tangent of twice that angle?
+## What happens after the angle estimates
 
-We will examine the four principal angle-theorem families, their generalizations, the problem of selecting the correct spectral branch, and the direct-rotation theorems. We will work through the source paper's numerical example and take its open questions seriously. We will also study the corrected rotation-optimality picture and related subspace-transport results.
+Subspace geometry leads to a second question: when many rotations or unitary maps carry one subspace to another, which one moves the ambient space the least? A canonical direct rotation arises naturally from the geometry of two projections. Its existence and its optimality depend on the setting and on what displacement is being measured.
 
-Most of all, the course will demand more than recognizing the final inequality. You should understand why each step is legal, what fails when an assumption is removed, and how to build the proof again without having the finished result in front of you.
+The original 1970 paper contains a broad claim about unsquared whole-space displacement that is false. A concrete four-dimensional real counterexample separates that claim from valid optimality results for restricted displacement and squared whole-space displacement. Studying the counterexample is part of understanding the geometry, not an aside about historical wording.
 
-## How proofs will be developed
+The theory also meets concrete calculations. A free-beam problem uses a fourth-order differential operator, trial functions, a Rayleigh–Ritz matrix, and residual estimates to study approximate modes. Other applications connect the same subspace ideas to singular-vector perturbations, spectral statistics, and the alignment of numerical embeddings. These settings show which aspects of a proof remain the same when the objects and norms change.
 
-A mathematical explanation should be intelligible without relying on a diagram, a chosen basis, or background material unavailable to the listener. When a picture or animation helps, it will be built to clarify an explanation that already works, not to dictate the order of the lesson.
+Section ten of the 1970 paper raises questions that reach beyond the estimates established there. We will examine the proved results, the counterexamples, and the questions left open by the arguments themselves.
 
-The emphasis is on mathematical statements and their proofs. For any theorem, we must be able to identify the assumptions, explain the argument, and determine whether a proposed example really satisfies the hypotheses.
+## What understanding the theory should mean
+
+By the end, you should be able to take a proposed angle estimate and identify the exact and trial subspaces, the residual, the relevant spectral gap, and the norm in which the estimate is supposed to hold. You should be able to derive the operator equation behind the bound, explain how its inverse is controlled, and recognize when domains, norm-class membership, or angular branch selection require an additional argument.
+
+The course is built from proofs, worked examples, and counterexamples so that these decisions become intelligible. The two-by-two matrix at the beginning is a small instance of the larger problem: spectral information can move under perturbation, and geometry plus spectral separation tells us how much. The goal is to understand that mechanism well enough to reconstruct it in settings where a picture of two rotating lines is no longer sufficient.
 
 <!-- END SPOKEN LECTURE -->
