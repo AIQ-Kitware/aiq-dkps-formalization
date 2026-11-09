@@ -160,7 +160,16 @@ make video DECK=operators-rayleigh-ritz TTS_CONFIG=tts.local.toml TTS_PROFILE=my
 make lectures-video TTS_CONFIG=tts.local.toml TTS_PROFILE=myvoice-breeze-tts2
 ```
 
-`tts.local.toml` is gitignored. Alternatively, use a file outside the repository,
+`tts.local.toml` is also merged automatically into `tts.toml` for the
+`/audio` reader and default profile loading. It can contain only the keys you
+want to change, for example `[profiles.kokoro]` with a local `endpoint`;
+unspecified fields are inherited. A local endpoint takes precedence over an
+inherited `endpoint_env` field, so `.env` cannot override that explicit local
+setting. Video commands that specify `TTS_CONFIG=tts.local.toml` continue to
+use it as a complete standalone configuration (copy `tts.toml` first for that
+use case).
+
+Alternatively, use a file outside the repository,
 such as `TTS_CONFIG="$HOME/.config/dkvis/tts.toml"`. This selects a complete
 configuration file rather than merging it with `tts.toml`; copying the shared
 file first preserves its audio processing defaults. `narrator_voice` determines
@@ -815,8 +824,15 @@ The server exposes **G1 Manim** at `/`, **G2 comprehensive audio** at `/audio?tr
 
 ### Shared course graph (G1/G2/G3/G4)
 
-Open `/learning-paths` on the lecture server to browse typed relationships between lectures and select one of four named paths. G4 is a planned Yu-Wang-Samworth path that currently reuses seven playable G2/G3 recordings and identifies six YWS-specific lectures to author. A lecture's `original_parent` records adaptation provenance; `hard_depends_on` and `soft_depends_on` refer to mathematical background, while `expands_on` and `alternative_presentation` support alternate study routes. No additional audio files are copied to define a path.
+Open `/learning-paths` to see all 204 G1–G4 lecture nodes in one interactive graph. Toggle the edge types independently, including `listening_next` (path order) and `proof_depends_on` (a theorem's supporting mathematical result). The full graph is connected under the default edge preset; topic/track filters and local neighborhoods remain available. G4 is a planned Yu–Wang–Samworth path that reuses seven playable G2/G3 recordings and has six YWS-specific lectures to author. For data and relationship definitions, see `docs/interactive-course-graph-2026-11-08.md`.
 
 The graph is generated from the current lecture inventories plus `curriculum/relationships.json` and `curriculum/g4-yws.json`. Run `python -m dkvis.presentation.course_graph` to validate it. The audit and authoring guidance are in `docs/course-graph-audit-2026-11-08.md`.
 
 Interactive curriculum graph: [graph documentation](docs/interactive-course-graph-2026-11-08.md); browse `/learning-paths` for topical clusters and typed mathematical dependencies.
+
+### Companion slide decks (G3 pilot)
+
+The first two G3 audio lectures have independent, text-rich HTML slide decks. Open
+`/audio?track=g3` and select **Show slides** to generate and view a linked deck,
+or use **Standalone view** without audio. Source JSON is in `companion-slides/`;
+the build cache is Git-ignored. See [companion slide documentation](docs/companion-slide-decks.md).

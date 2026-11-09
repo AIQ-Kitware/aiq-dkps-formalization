@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "id": "g3-013000-symmetric-operator-ideals",
+  "title": "Symmetric operator ideals",
+  "subtitle": "Independent reading companion to G3 013000",
+  "lecture_nodes": [
+    "g3:013000"
+  ],
+  "source_lecture": "draft-stages/tts-paper/013000-symmetric-operator-ideals.md",
+  "adaptation": "Edited G3 lecture prose restructured into readable slide units; formulas and selected SVG geometric models are authored companion material.",
+  "slides": [
+    {
+      "title": "The central problem",
+      "eyebrow": "G3 lecture 013000 · topic 1/9",
+      "id": "00-00",
+      "lead": "In finite dimensions, every matrix has a finite nuclear norm, a finite Frobenius norm, and a finite operator norm.",
+      "body": [
+        "The space of matrices is so forgiving that we can describe all these norms without mentioning which matrices are allowed. Infinite-dimensional Hilbert spaces force a change. The identity operator is bounded, but its singular values do not decay. It is not compact, not Hilbert–Schmidt, and not trace class. Assigning it a finite trace norm would contradict the infinite sum of its singular values. A symmetric operator ideal specifies both the class of admissible operators, called its carrier, and the associated norm. We will compare the ideal laws with the extended-valued gauge, which records nonmembership as an infinite value."
+      ],
+      "layout": "opening"
+    },
+    {
+      "title": "What an operator ideal contains",
+      "eyebrow": "G3 lecture 013000 · topic 2/9",
+      "id": "01-00-0",
+      "lead": "Let E and F be Hilbert spaces.",
+      "body": [
+        "For each compatible source-target pair, an operator ideal selects some bounded maps T from E to F. The selected maps are closed under addition and scalar multiplication. More importantly, if T is in the ideal and A and B are arbitrary bounded operators on either side, then A T B remains in the corresponding ideal. This is the two-sided ideal property. It says that the notion of smallness survives a bounded change of inputs and a bounded change of outputs."
+      ],
+      "diagram": "operator-ideal",
+      "formula": "AXB belongs to the ideal whenever X does",
+      "mathtex": "A\\mathcal I B\\subseteq\\mathcal I\\quad\\text{for every two-sided operator ideal }\\mathcal I",
+      "layout": "figure"
+    },
+    {
+      "title": "What an operator ideal contains · further detail",
+      "eyebrow": "G3 lecture 013000 · topic 2/9",
+      "id": "01-00-1",
+      "lead": "A norm or gauge on the ideal should obey the usual triangle inequality, scalar homogeneity, and a composition estimate: the gauge of A T B is at most the operator norm of A times the gauge of T times the operator norm of B.",
+      "body": [],
+      "layout": "reading"
+    },
+    {
+      "title": "What an operator ideal contains · continued",
+      "eyebrow": "G3 lecture 013000 · topic 2/9",
+      "id": "01-01",
+      "lead": "In the standard normalized setting, the ideal gauge also controls the ordinary operator norm.",
+      "body": [
+        "Thus convergence in ideal norm implies convergence in operator norm. The index spaces matter. A bounded map between two different Hilbert spaces is not a square operator on one space, yet singular values and ideal gauges make sense for it. A useful theory must accommodate such rectangular operators from the beginning."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Three familiar carriers",
+      "eyebrow": "G3 lecture 013000 · topic 3/9",
+      "id": "02-00",
+      "lead": "The compact operators form an ideal.",
+      "body": [
+        "The carrier consists of exactly the compact bounded operators, and its gauge can be the ordinary operator norm. This is a complete ideal, because the compact operators form a closed subspace of the bounded maps in operator norm. The Hilbert–Schmidt class consists of maps whose squared singular values have finite sum. Its gauge is the square root of that sum. For Hilbert–Schmidt operators, an equivalent formula sums the squared output lengths of an arbitrary orthonormal basis; it does not require choosing singular vectors. The trace class consists of maps whose singular values have finite ordinary sum. Its gauge is the nuclear or trace norm. The trace class is contained in the Hilbert–Schmidt class, which is contained in the compact operators."
+      ],
+      "diagram": "operator-ideal",
+      "formula": "Sₚ = {T : Σ σⱼ(T)ᵖ < ∞}",
+      "mathtex": "\\mathcal S_p=\\left\\{T:\\sum_j\\sigma_j(T)^p<\\infty\\right\\}",
+      "layout": "figure"
+    },
+    {
+      "title": "Three familiar carriers · continued",
+      "eyebrow": "G3 lecture 013000 · topic 3/9",
+      "id": "02-01",
+      "lead": "To see why the first inclusion holds, suppose the nonnegative singular values have finite sum.",
+      "body": [
+        "They are bounded, so their squares have finite sum as well. For the second inclusion, a square-summable singular-value sequence tends to zero, which is the compactness criterion. The inclusions are strict in infinite dimensions. On ell two, diagonal coefficients one over n give a Hilbert–Schmidt operator whose trace norm diverges. Coefficients one over the square root of n tend to zero and give a compact operator whose Hilbert–Schmidt sum diverges."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Why the gauge takes an infinite value",
+      "eyebrow": "G3 lecture 013000 · topic 4/9",
+      "id": "03-00-0",
+      "lead": "One convenient formal design assigns an extended nonnegative real number to every bounded operator.",
+      "body": [
+        "If an operator belongs to the ideal, its extended gauge equals its finite norm. If it is outside, its extended gauge is infinity. This allows one triangle inequality to be written for all bounded maps. If either input is outside the carrier, the right-hand side may be infinite, and the inequality remains valid. If both inputs belong, the extended inequality reduces to the ordinary triangle inequality. But infinity is not a real number. We cannot divide by it or treat it as an ordinary finite norm."
+      ],
+      "diagram": "operator-ideal",
+      "formula": "gauge(T) may be +∞ outside its ideal",
+      "layout": "figure"
+    },
+    {
+      "title": "Why the gauge takes an infinite value · further detail",
+      "eyebrow": "G3 lecture 013000 · topic 4/9",
+      "id": "03-00-1",
+      "lead": "To work inside the Banach space of ideal operators, we first establish carrier membership and then use the finite gauge.",
+      "body": [
+        "For the extended gauge, finiteness is equivalent to membership in the ideal. An ideal-norm perturbation theorem therefore has two pieces: the angular displacement belongs to that ideal, and its finite norm obeys the required bound."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Why finite ideal gauge controls ordinary errors",
+      "eyebrow": "G3 lecture 013000 · topic 5/9",
+      "id": "04-00-0",
+      "lead": "Suppose a sequence of trace-class operators converges in trace norm.",
+      "body": [
+        "The ideal norm dominates the ordinary operator norm, so the same sequence converges in operator norm. This means we can identify its limit as a bounded map without ambiguity. But operator-norm convergence alone is insufficient to conclude trace-norm convergence. Consider the diagonal maps that put one divided by N on the first N coordinate positions and zero elsewhere. Their operator norms tend to zero. Each map has finite rank, yet its trace norm equals one for every N. So these operators converge to zero in operator norm but not in trace norm."
+      ],
+      "diagram": "ky-fan",
+      "formula": "‖T‖op ≤ ‖T‖ideal",
+      "mathtex": "\\|T\\|_{\\mathrm{op}}\\leq\\|T\\|_{\\mathcal I}",
+      "layout": "figure"
+    },
+    {
+      "title": "Why finite ideal gauge controls ordinary errors · further detail",
+      "eyebrow": "G3 lecture 013000 · topic 5/9",
+      "id": "04-00-1",
+      "lead": "The same phenomenon matters when we replace an infinite-dimensional calculation with a finite cutoff.",
+      "body": [
+        "One must name the topology in which the approximation converges. A proof in the ordinary operator norm cannot automatically be used as a proof in a stronger ideal norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "The ideal inequality from approximation numbers",
+      "eyebrow": "G3 lecture 013000 · topic 6/9",
+      "id": "05-00-0",
+      "lead": "We can see the composition estimate concretely for Schatten classes.",
+      "body": [
+        "Suppose T has singular values s one, s two, and so on. For bounded A and B, the rank-approximation inequality gives each approximation number of A T B at most the operator norm of A times the operator norm of B times the corresponding approximation number of T. Indeed, composing a rank-constrained approximation to T with A and B does not increase its rank, and the operator-norm error increases by at most those two norm factors. Raise both sides to the p-th power and sum for p at least one."
+      ],
+      "diagram": "ky-fan",
+      "formula": "σₖ(ATB) ≤ ‖A‖op ‖B‖op σₖ(T)",
+      "mathtex": "\\sigma_k(ATB)\\leq\\|A\\|_{\\mathrm{op}}\\,\\|B\\|_{\\mathrm{op}}\\,\\sigma_k(T)",
+      "layout": "figure"
+    },
+    {
+      "title": "The ideal inequality from approximation numbers · further detail",
+      "eyebrow": "G3 lecture 013000 · topic 6/9",
+      "id": "05-00-1",
+      "lead": "Taking the p-th root proves the Schatten composition inequality.",
+      "body": [
+        "In particular, multiplication by an orthogonal projection cannot increase a Schatten norm, because the projection's operator norm is at most one. For a general symmetric ideal, the same contraction rule is part of the defining structure or a theorem proved from it."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Symmetry under isometries and adjoints",
+      "eyebrow": "G3 lecture 013000 · topic 7/9",
+      "id": "06-00",
+      "lead": "A unitary change of coordinates on the source or target preserves singular values.",
+      "body": [
+        "Therefore a symmetric ideal should preserve membership and gauge under such changes. Adjoints are equally important. T and T adjoint have the same positive nonzero singular values, with the appropriate zero-padding convention. Hence a symmetric ideal admits T exactly when it admits T adjoint, and their gauges agree. For two Hilbert spaces of different dimensions, unitary equivalence between the whole spaces may not exist. This is why partial isometries, modulus, and rectangular transport are essential. We will prove that ideal gauges can be moved through these constructions without assuming the operator is invertible."
+      ],
+      "diagram": "operator-ideal",
+      "layout": "figure"
+    },
+    {
+      "title": "Completion and finite-rank density",
+      "eyebrow": "G3 lecture 013000 · topic 8/9",
+      "id": "07-00",
+      "lead": "A well-behaved Banach ideal is complete in its ideal norm.",
+      "body": [
+        "If a sequence of ideal operators is Cauchy in that norm, it converges to another operator in the ideal, not merely to an arbitrary bounded operator outside it. Finite-rank operators are dense in the compact ideal under operator norm. They are also dense in the Schatten p-classes for finite p under their Schatten norms, by truncating singular values and using summability of the tail. Do not generalize finite-rank density to every possible symmetric ideal without checking its definition. A carrier may have a norm in which the finite-rank closure is a proper subideal."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "A test case to remember",
+      "eyebrow": "G3 lecture 013000 · topic 9/9",
+      "id": "08-00",
+      "lead": "Let D be diagonal on ell two with coefficients one divided by n.",
+      "body": [
+        "It is compact, because its coefficients tend to zero. Its Hilbert–Schmidt gauge is finite because the sum of one over n squared converges. Its trace gauge is infinite because the harmonic series diverges. The same bounded map therefore belongs to two ideals and lies outside a third. Which estimate we can apply depends on the requested ideal, not just on T's ordinary operator norm."
+      ],
+      "takeaway": "Ideal membership and the ideal gauge must be retained when passing from finite to infinite dimensions.",
+      "layout": "reading"
+    }
+  ]
+}

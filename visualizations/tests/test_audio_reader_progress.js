@@ -16,7 +16,7 @@ function extract(name) {
   return next ? rest.slice(0, next.index) : rest;
 }
 const state = {
-  doc: {id:'123000',pages:[
+  doc: {id:'123000',page_chars:600,page_count:3,source_modified:123,pages:[
     'An introduction to spectral theory. A first example.',
     'A Sylvester equation describes the middle.',
     'The theorem concludes with an angle bound.'
@@ -25,11 +25,20 @@ const state = {
 const audio = {currentSrc:'',duration:NaN,currentTime:0};
 const fields = {ttsSpeed:{value:'1'},rate:{value:'1'}};
 let jump = null;
-const context = vm.createContext({state,audio,$:id=>fields[id],seekPageFraction:(page,fraction)=>{jump={page,fraction}},console});
-for (const name of ['estimatedPageSeconds','progressModel','clock','seekLectureFraction']) {
+const context = vm.createContext({state,audio,$:id=>fields[id],seekPageFraction:(page,fraction)=>{jump={page,fraction}},selectPage:(page,start,fraction,index)=>{jump={page,start,fraction,index}},console});
+context.settings=()=>({profile:'kokoro',voice:'af_alloy',speed:1});
+for (const name of ['durationKey','estimatedPageSeconds','progressModel','clock','seekLectureFraction']) {
   vm.runInContext(extract(name),context);
 }
 const get = command => vm.runInContext(command,context);
+const durationKey600=get('durationKey()');
+state.doc.page_chars=1200;
+assert.notEqual(get('durationKey()'),durationKey600,'page-size change invalidates measured times');
+state.doc.page_chars=600;
+state.doc.page_count=2;
+assert.notEqual(get('durationKey()'),durationKey600,'page-count change invalidates measured times');
+state.doc.page_count=3;
+assert.equal(get('durationKey()'),durationKey600,'stable page structure preserves measured times');
 assert.equal(get('clock(65)'), '1:05');
 assert.equal(get('clock(3675)'), '1:01:15');
 let model = get('progressModel()');
@@ -82,4 +91,15 @@ assert.deepEqual(rendered,state.doc.pages,'every spoken character must remain vi
 const sentence=transcript.children[2].children[1].children[0];
 sentence.onclick();
 assert.equal(jump.page,2,'clicking a sentence must seek in its own page');
+assert.equal(jump.index,0,'unloaded page seeks must retain the sentence for later chunk alignment');
+
+for (const name of ['segmentWordWeight','wordPositionAtTime','sentenceAtProgress','sentenceAtAudioTime','sentenceStartFraction']) vm.runInContext(extract(name),context);
+state.page=0;state.segments=state.segmentsByPage[0];state.pageTimings={version:1,chunks:[{words:5,start:0,end:15},{words:4,start:16,end:20}]};
+// A long first chunk must not highlight the final sentence simply because a
+// fixed percentage of the page's estimated duration has passed.
+assert.equal(get('sentenceAtAudioTime(10,20)'),0);
+assert.equal(get('sentenceAtAudioTime(18,20)'),1);
+assert.equal(get('sentenceAtAudioTime(19.999,20)'),1);
+state.pageTimings=null;
+assert.equal(get('sentenceAtAudioTime(10,20)'),get('sentenceAtProgress(.5)'));
 console.log('Full transcript and lecture-wide timeline calculations passed');

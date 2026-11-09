@@ -82,12 +82,12 @@ max_words = 110
 
 [profiles.kokoro]
 display_name = "Kokoro"
-narrator_voice = "af_heart"
+narrator_voice = "af_alloy"
 # Private host address belongs only in .env.
 endpoint_env = "KOKORO_TTS_ENDPOINT"
 endpoint = "http://127.0.0.1:8880/v1/audio/speech"
 model = "kokoro"
-voice = "af_heart"
+voice = "af_alloy"
 response_format = "mp3"
 
 [profiles.qwen]

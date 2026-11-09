@@ -54,6 +54,12 @@ def test_course_tracks_and_track_isolation(tmp_path):
         g2 = client.get('/api/audio-lectures/000000?track=g2').json()
         g3 = client.get('/api/audio-lectures/000000?track=g3').json()
         assert g2['title'] != g3['title']
+        for track, doc in (('g2', g2), ('g3', g3)):
+            text_response = client.get('/api/audio-lectures/000000/transcript.txt',
+                                       params={'track': track})
+            assert text_response.status_code == 200
+            assert text_response.text == doc['transcript']
+        assert client.get('/api/audio-lectures/000000/transcript.txt?track=invalid').status_code == 400
         assert 'An eigenvector can change' in g3['transcript']
         assert not any('<!-- END SPOKEN LECTURE -->' in p for p in g3['pages'])
         assert client.get('/api/audio-lectures?track=../../etc').status_code == 400

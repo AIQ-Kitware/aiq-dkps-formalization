@@ -16,7 +16,8 @@ from dkvis.presentation.audio_library import SOURCE_DIRECTORY, PAPER_DIRECTORY
 GRAPH_DIRECTORY = ROOT / 'curriculum'
 RELATION_TYPES = frozenset({
     'hard_depends_on', 'soft_depends_on', 'expands_on', 'original_parent',
-    'alternative_presentation', 'related_to',
+    'alternative_presentation', 'related_to', 'listening_next',
+    'proof_depends_on',
 })
 
 
@@ -63,8 +64,12 @@ def build_course_graph(*, g1_directory=None, g2_directory=None, g3_directory=Non
     # Curated topic relationships are stored separately so the initial audit stays readable.
     topic_relations_path = graph_directory / 'topic-relationships.json'
     topic_relations = _read_json(topic_relations_path) if topic_relations_path.is_file() else {'edges': []}
+    proof_path = graph_directory / 'proof-relationships.json'
+    proof_relations = _read_json(proof_path) if proof_path.is_file() else {'edges': []}
     topic_path = graph_directory / 'topics.json'
     topic_data = _read_json(topic_path) if topic_path.is_file() else None
+    if proof_relations.get('schema_version', 1) != 1:
+        raise ValueError('Unsupported proof relationship schema')
     if topic_relations.get('schema_version', 1) != 1:
         raise ValueError('Unsupported topic relationship schema')
     if topic_data is not None and topic_data.get('schema_version') != 1:
@@ -143,7 +148,7 @@ def build_course_graph(*, g1_directory=None, g2_directory=None, g3_directory=Non
     tracks.append(dict(id='g4', title=g4_plan['title'], status='planned',
                        summary=g4_plan['summary'], path=g4_plan['path']))
 
-    for triple in [*relations['edges'], *topic_relations['edges']]:
+    for triple in [*relations['edges'], *topic_relations['edges'], *proof_relations['edges']]:
         if not isinstance(triple, list) or len(triple) not in (3, 4):
             raise ValueError(f'Expected [source, relation, target, optional reason]: {triple}')
         source, relation, target = triple[:3]
@@ -181,6 +186,22 @@ def build_course_graph(*, g1_directory=None, g2_directory=None, g3_directory=Non
                 raise ValueError(f'Unknown topic for {node_id}: {topic}')
             node['topic'] = topic
 
+    # Listening order is a property of a learning path, not a proof prerequisite.
+    # Deduplicate consecutive pairs shared by G3 and G4, retaining both path labels.
+    listening_pairs = defaultdict(list)
+    for track in tracks:
+        if len(track['path']) != len(set(track['path'])):
+            raise ValueError(f'Duplicate path member in {track["id"]}')
+        for node in track['path']:
+            if node not in nodes:
+                raise ValueError(f'Unknown path member {node} in {track["id"]}')
+        for first, second in zip(track['path'], track['path'][1:]):
+            listening_pairs[(first, second)].append(track['id'].upper())
+    for (first, second), path_names in listening_pairs.items():
+        path_label = ', '.join(path_names)
+        edges.append(dict(from_=first, to=second, type='listening_next',
+                          why=f'Next in the {path_label} course path.'))
+
     seen = set()
     parents = set()
     normalized = []
@@ -199,13 +220,8 @@ def build_course_graph(*, g1_directory=None, g2_directory=None, g3_directory=Non
                 raise ValueError(f'Multiple original parents for {source}')
             parents.add(source)
         normalized.append({'from': source, 'type': relation, 'to': target, **({'why': edge['why']} if edge.get('why') else {})})
-    for track in tracks:
-        if len(track['path']) != len(set(track['path'])):
-            raise ValueError(f'Duplicate path member in {track["id"]}')
-        for node in track['path']:
-            if node not in nodes:
-                raise ValueError(f'Unknown path member {node} in {track["id"]}')
     _check_acyclic(normalized, 'hard_depends_on')
+    _check_acyclic(normalized, 'proof_depends_on')
     _check_acyclic(normalized, 'original_parent')
     for track in tracks:
         track['available_count'] = sum(nodes[node]['status'] == 'available' for node in track['path'])
@@ -217,8 +233,35 @@ def build_course_graph(*, g1_directory=None, g2_directory=None, g3_directory=Non
                 'expands_on': 'More detail on a topic already treated elsewhere.',
                 'original_parent': 'Source adaptation or derivation; records provenance, not a prerequisite.',
                 'alternative_presentation': 'Another way of teaching overlapping mathematics.',
-                'related_to': 'Related mathematics without a claimed dependency.'
+                'related_to': 'Related mathematics without a claimed dependency.',
+                'proof_depends_on': 'A specific proof uses a stated lemma, construction or estimate in the target lecture.',
+                'listening_next': 'Next recording or presentation in a named learning path; this is not a mathematical prerequisite.'
             }}
+
+
+def connected_components(graph, *, relation_types=None, node_ids=None):
+    """Weakly connected components of the selected graph; edges are type-filtered."""
+    ids = set(node_ids if node_ids is not None else graph['nodes'])
+    types = set(relation_types) if relation_types is not None else set(graph['relations'])
+    adjacent = {node: set() for node in ids}
+    for edge in graph['edges']:
+        if edge['type'] in types and edge['from'] in ids and edge['to'] in ids:
+            adjacent[edge['from']].add(edge['to'])
+            adjacent[edge['to']].add(edge['from'])
+    components = []
+    while adjacent:
+        start = next(iter(adjacent))
+        visited = {start}
+        pending = [start]
+        while pending:
+            for node in adjacent[pending.pop()]:
+                if node not in visited:
+                    visited.add(node)
+                    pending.append(node)
+        components.append(sorted(visited))
+        for node in visited:
+            del adjacent[node]
+    return sorted(components, key=lambda nodes: (-len(nodes), nodes[0]))
 
 
 def connections(graph, node_id):

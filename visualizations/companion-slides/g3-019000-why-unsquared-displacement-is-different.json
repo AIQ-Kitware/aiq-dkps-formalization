@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "id": "g3-019000-why-unsquared-displacement-is-different",
+  "title": "Why unsquared displacement is different",
+  "subtitle": "Independent reading companion to G3 019000",
+  "lecture_nodes": [
+    "g3:019000"
+  ],
+  "source_lecture": "draft-stages/tts-paper/019000-why-unsquared-displacement-is-different.md",
+  "adaptation": "Edited G3 lecture prose restructured into readable slide units; formulas and selected SVG geometric models are authored companion material.",
+  "slides": [
+    {
+      "title": "The central problem",
+      "eyebrow": "G3 lecture 019000 · topic 1/8",
+      "id": "00-00",
+      "lead": "Section Four of Davis and Kahan investigates how to transport one subspace onto another.",
+      "body": [
+        "Restricted displacement and squared whole-space displacement admit valid direct-rotation optimality statements, but the printed claim about every unitarily invariant norm of unsquared whole-space displacement fails. A four-dimensional construction makes the distinction explicit. The proposition as printed proposes a threshold of sixty degrees in the real case. Our task is to understand why that threshold looks plausible, why the available proofs cannot establish it, and which piece of the optimization problem changes in higher dimension."
+      ],
+      "layout": "opening"
+    },
+    {
+      "title": "Define the ambient transport problem",
+      "eyebrow": "G3 lecture 019000 · topic 2/8",
+      "id": "01-00-0",
+      "lead": "Take a real Euclidean space and two subspaces U and V of the same dimension.",
+      "body": [
+        "A competitor is an orthogonal matrix W satisfying W U equals V. For a chosen unitarily invariant norm N, measure its cost by N of identity minus W, acting on the entire ambient space. The canonical direct rotation D is one feasible competitor. On each principal plane it turns the source direction into the target direction through the prescribed principal angle, while choosing a compatible action on the perpendicular direction. It therefore has easily computed displacement singular values. The optimization is not over the principal angles."
+      ],
+      "diagram": "rotation-chord",
+      "formula": "min over W: W(U)=V of N(W−I)",
+      "mathtex": "\\inf_{W(\\mathcal U)=\\mathcal V}\\|W-I\\|_{\\Phi}",
+      "layout": "figure"
+    },
+    {
+      "title": "Define the ambient transport problem · further detail",
+      "eyebrow": "G3 lecture 019000 · topic 2/8",
+      "id": "01-00-1",
+      "lead": "The subspaces and their principal angles are fixed.",
+      "body": [
+        "We are varying W among all orthogonal matrices carrying U onto V. Such a W can rotate vectors inside the target subspace, and can act independently on the complement before the canonical transport. Those freedoms can mix principal planes, which changes the spectrum of identity minus W. For two-dimensional lines in the plane, there is little freedom. In four dimensions, there is substantially more."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Why sixty degrees arises in the plane",
+      "eyebrow": "G3 lecture 019000 · topic 3/8",
+      "id": "02-00-0",
+      "lead": "Let U and V be real lines meeting at a principal angle theta between zero and ninety degrees.",
+      "body": [
+        "An orthogonal transporter of the plane taking U onto V belongs to an orientation-preserving or orientation-reversing component. Each component has two sign choices for the image of a unit source vector, but the least costly representative has a simple form. The least-displacing orientation-preserving choice is the direct rotation through theta. Its displacement singular values are both a, where a equals two sine of theta over two. The orientation-reversing choices are reflections that send the source line onto the target line."
+      ],
+      "diagram": "rotation-chord",
+      "formula": "trace norm sums singular values before squaring",
+      "layout": "figure"
+    },
+    {
+      "title": "Why sixty degrees arises in the plane · further detail",
+      "eyebrow": "G3 lecture 019000 · topic 3/8",
+      "id": "02-00-1",
+      "lead": "Its displacement singular values are two and zero.",
+      "body": [
+        "A unitarily invariant norm is a symmetric gauge of these singular values. The direct rotation is no worse than the reflection for every such gauge exactly when the sorted list a,a is weakly majorized by the list two,zero. The largest-entry condition says a is at most two, always true."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Why sixty degrees arises in the plane · continued",
+      "eyebrow": "G3 lecture 019000 · topic 3/8",
+      "id": "02-01",
+      "lead": "The two-entry condition says twice a is at most two, or a is at most one.",
+      "body": [
+        "Since a equals two sine of theta over two, this becomes theta at most sixty degrees. Thus the threshold is not arbitrary. It follows from an exact two-dimensional singular-value comparison. However, nothing in this argument says that an arbitrary higher-dimensional competitor can be decomposed into independent rotations or reflections on the original principal planes. That would be an extra structural assertion, and it is false."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "The hidden assumption in the generalization",
+      "eyebrow": "G3 lecture 019000 · topic 4/8",
+      "id": "03-00",
+      "lead": "Imagine two independent principal planes, both with the same small angle theta.",
+      "body": [
+        "The canonical direct rotation acts as a theta rotation on each of them. We might be tempted to say that any competing transporter must incur at least the same cost plane by plane. But the constraint on W is only that it maps the whole source subspace onto the whole target subspace. It does not require W to match each source principal vector with its canonical target partner. If the two angles coincide, the source and target carry internal rotational freedoms that can be coupled. Those freedoms allow an orthogonal W whose rotation is concentrated into a single different plane, while its action on another two-plane is the identity. The two subspaces still have the prescribed principal angles."
+      ],
+      "diagram": "ky-fan",
+      "formula": "squared displacement and unsquared displacement differ",
+      "layout": "figure"
+    },
+    {
+      "title": "The hidden assumption in the generalization · continued",
+      "eyebrow": "G3 lecture 019000 · topic 4/8",
+      "id": "03-01",
+      "lead": "The eigenphases of W, and therefore the singular values of identity minus W, can be very different from those of D.",
+      "body": [
+        "The trace norm is especially sensitive to this redistribution because it adds displacement singular values linearly. Rotating two planes a little and rotating one plane more can have different trace costs, even if both transformations carry the same subspace to its target."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Compare with Proposition four point three",
+      "eyebrow": "G3 lecture 019000 · topic 5/8",
+      "id": "04-00-0",
+      "lead": "Why does the squared theorem not prohibit this?",
+      "body": [
+        "Consider two lists. The direct rotation may have four equal displacement singular values a. A competing orthogonal map may have two larger singular values b and two zeros. For the positive squares, the lists are four copies of a squared versus two copies of b squared and two zeros. It is possible that every cumulative sum for the squared direct list is no larger than the corresponding cumulative sum for the squared competitor list, while the total unsquared direct sum four a is larger than the competitor's two b. There is no contradiction."
+      ],
+      "diagram": "counterexample",
+      "formula": "Proposition 4.4 requires the correct objective",
+      "layout": "figure"
+    },
+    {
+      "title": "Compare with Proposition four point three · further detail",
+      "eyebrow": "G3 lecture 019000 · topic 5/8",
+      "id": "04-00-1",
+      "lead": "A majorization relation between squared lists does not automatically imply the same relation between the unsquared lists.",
+      "body": [
+        "The square-root function is concave, and it reacts differently to concentrations and spreading. A numerical toy example makes the logical point."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Compare with Proposition four point three · continued",
+      "eyebrow": "G3 lecture 019000 · topic 5/8",
+      "id": "04-01",
+      "lead": "Compare four values each equal to point seven five with the list one point five, one point five, zero, zero.",
+      "body": [
+        "Both unsquared totals equal three, while the sum of squares is larger for the concentrated list. Shift the common small value slightly upward and the unsquared ordering reverses while the squared prefix ordering can still hold. The actual four-dimensional construction makes this exact using trigonometric values."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "A universal lower bound that remains true",
+      "eyebrow": "G3 lecture 019000 · topic 6/8",
+      "id": "05-00-0",
+      "lead": "There is, nevertheless, a lower bound on every full transport.",
+      "body": [
+        "Let P and Q be the source and target orthogonal projections. If W transports U to V, then Q equals W P W adjoint. Introduce the reflections J-P equal two P minus identity and J-Q equal two Q minus identity. Their difference is two times P minus Q. The conjugacy condition says J-Q W equals W J-P. Rearrange this identity. The difference of the two reflections, multiplied by W, is a commutator involving identity minus W and a reflection."
+      ],
+      "diagram": "principal-angle",
+      "formula": "‖P−Q‖ ≤ ‖I−W‖ (appropriate invariant norm)",
+      "mathtex": "\\|P-Q\\|_{\\Phi}\\leq\\|I-W\\|_{\\Phi}",
+      "layout": "figure"
+    },
+    {
+      "title": "A universal lower bound that remains true · further detail",
+      "eyebrow": "G3 lecture 019000 · topic 6/8",
+      "id": "05-00-1",
+      "lead": "By the triangle inequality and unitary invariance, the norm of that commutator is at most twice the norm of identity minus W.",
+      "body": [
+        "Since the reflection difference is twice the projection difference, we conclude N of P minus Q is at most N of identity minus W for every unitarily invariant norm N. This lower bound survives without a small-angle assumption. It applies over real and complex scalars and to every admissible transporter. It does not say that the canonical direct rotation attains the lower bound. Indeed, in the forthcoming example a noncanonical competitor does attain it in trace norm, while the direct rotation does not."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "How to test the printed claim",
+      "eyebrow": "G3 lecture 019000 · topic 7/8",
+      "id": "06-00",
+      "lead": "A universal minimizing statement must survive one explicit admissible competitor and one valid unitarily invariant norm.",
+      "body": [
+        "We can therefore choose trace norm, which is the sum of singular values. The simplest potential counterexample should have enough dimensions to mix at least two principal planes. Four real dimensions suffice. We will take two equal acute principal angles. Then we will write a concrete orthogonal competitor, compute its action on the source plane, verify the resulting principal angles, and compute both displacement singular-value lists. The explicit singular values give a strict numerical contradiction to the printed inequality, so the universal proposition is false."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Close",
+      "eyebrow": "G3 lecture 019000 · topic 8/8",
+      "id": "07-00",
+      "lead": "The sixty-degree threshold is correct for the standard two-dimensional real comparison.",
+      "body": [
+        "Proposition four point one remains valid for restricted displacement, and Proposition four point three remains valid for positive squared displacement. Neither theorem authorizes the universal unsquared ambient conclusion in higher dimension. The source of the failure is extra freedom in the full orthogonal transport fiber, especially the freedom to mix repeated principal-angle directions."
+      ],
+      "takeaway": "Taking square roots of displacement singular values can reverse the ordering of competing norms.",
+      "layout": "reading"
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "id": "g3-015000-off-diagonal-perturbations-and-reflection",
+  "title": "Off-diagonal perturbations and reflection",
+  "subtitle": "Independent reading companion to G3 015000",
+  "lecture_nodes": [
+    "g3:015000"
+  ],
+  "source_lecture": "draft-stages/tts-paper/015000-off-diagonal-perturbations-and-reflection.md",
+  "adaptation": "Edited G3 lecture prose restructured into readable slide units; formulas and selected SVG geometric models are authored companion material.",
+  "slides": [
+    {
+      "title": "The central problem",
+      "eyebrow": "G3 lecture 015000 · topic 1/8",
+      "id": "00-00",
+      "lead": "Let T be self-adjoint, with a reducing subspace U and a spectral gap between its two diagonal blocks.",
+      "body": [
+        "Perturb T to S and compare U with a reducing subspace of S. A useful tool is reflection through a subspace: it preserves the diagonal blocks of an operator and reverses the off-diagonal blocks. This elementary symmetry explains why perturbation estimates involving twice the principal angles arise. We will derive this identity entirely from the two-by-two block matrix of an orthogonal splitting."
+      ],
+      "layout": "opening"
+    },
+    {
+      "title": "Split the ambient space into two components",
+      "eyebrow": "G3 lecture 015000 · topic 2/8",
+      "id": "01-00-0",
+      "lead": "Let H be a real or complex Hilbert space, and let U be a closed subspace.",
+      "body": [
+        "Write P for orthogonal projection onto U, and Q for the complementary projection, identity minus P. Relative to the orthogonal decomposition H equals U plus U perpendicular, every bounded operator T has four blocks. The upper-left block sends U into U; the lower-right sends U perpendicular into itself; and the two off-diagonal blocks cross between the spaces. Suppose T is self-adjoint and U is reducing for T. Then the off-diagonal blocks vanish."
+      ],
+      "diagram": "block-operator",
+      "formula": "H = K ⊕ K⊥",
+      "mathtex": "\\mathcal H=\\mathcal K\\oplus\\mathcal K^{\\perp}",
+      "layout": "figure"
+    },
+    {
+      "title": "Split the ambient space into two components · further detail",
+      "eyebrow": "G3 lecture 015000 · topic 2/8",
+      "id": "01-00-1",
+      "lead": "We may write T as a diagonal block matrix with A plus on U and A minus on U perpendicular.",
+      "body": [
+        "The source's two-block gap hypothesis says the quadratic form of A plus is at least b times squared length, while the form of A minus is at most a times squared length, where b is greater than a. The gap is b minus a. We have not assumed A plus or A minus is a scalar matrix. Each block may have many eigenvalues. Only the uniform form inequalities matter."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Define the reflection",
+      "eyebrow": "G3 lecture 015000 · topic 3/8",
+      "id": "02-00",
+      "lead": "The reflection through U is J equal to P minus Q, or equivalently twice P minus the identity.",
+      "body": [
+        "It acts as plus one on U and minus one on U perpendicular. Because P and Q are orthogonal projections, J is self-adjoint, J squared is the identity, and J preserves all lengths. Thus J is a unitary or orthogonal operator. In the two-by-two block picture, J is diagonal with entries plus identity and minus identity. Conjugate T by J. Its upper-left block is unchanged; its lower-right block is unchanged; and each off-diagonal block changes sign. This is immediate from multiplying by the signs on the left and right. For a general T, subtracting T from J T J therefore removes both diagonal blocks and doubles the negative of the off-diagonal blocks."
+      ],
+      "diagram": "block-reflection",
+      "formula": "J = 2P − I",
+      "mathtex": "J=2P-I",
+      "layout": "figure"
+    },
+    {
+      "title": "Define an off-diagonal perturbation",
+      "eyebrow": "G3 lecture 015000 · topic 4/8",
+      "id": "03-00-0",
+      "lead": "Let S equal T plus H, with H self-adjoint.",
+      "body": [
+        "We call H off-diagonal with respect to U when its two diagonal compressions vanish: P H P equals zero and Q H Q equals zero. Then H maps U into its perpendicular complement and maps that complement back into U. Its matrix has zero diagonal blocks and off-diagonal blocks K and K adjoint. Conjugation gives J H J equals negative H. We say H anticommutes with J, because J H equals negative H J. This identity is stronger than saying H has small norm. It is an exact structural restriction."
+      ],
+      "diagram": "block-reflection",
+      "formula": "V = [[0,B],[B*,0]]",
+      "mathtex": "V=\\begin{bmatrix}0&B\\\\B^{*}&0\\end{bmatrix}",
+      "layout": "figure"
+    },
+    {
+      "title": "Define an off-diagonal perturbation · further detail",
+      "eyebrow": "G3 lecture 015000 · topic 4/8",
+      "id": "03-00-1",
+      "lead": "A perturbation can be arbitrarily large and still be off-diagonal.",
+      "body": [
+        "Because T is block diagonal, J T J equals T. Consequently J S J equals T minus H, while S equals T plus H. Their difference is negative two H."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Define an off-diagonal perturbation · continued",
+      "eyebrow": "G3 lecture 015000 · topic 4/8",
+      "id": "03-01",
+      "lead": "In every unitarily invariant norm, its size is precisely twice the size of H.",
+      "body": [
+        "There is another useful choice of reflection: the one through a reducing subspace of the perturbed operator S. That reflection gives a bound by twice the perturbation norm without requiring H itself to be off-diagonal."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Verify everything in two dimensions",
+      "eyebrow": "G3 lecture 015000 · topic 5/8",
+      "id": "04-00-0",
+      "lead": "Take U to be the horizontal axis.",
+      "body": [
+        "Let T be diagonal with entries three and negative one. The quadratic form gap between the two blocks is four. Let H have zero diagonal entries and equal off-diagonal entries h. Then S has rows three, h and h, negative one. The reflection J is diagonal with entries one and negative one. Multiplying J S J gives a matrix with the same diagonal entries three and negative one, but off-diagonal entries negative h. Subtract S, and the result has zero diagonal entries and off-diagonal entries negative two h."
+      ],
+      "diagram": "block-reflection",
+      "formula": "JVJ = −V",
+      "mathtex": "JVJ=-V",
+      "layout": "figure"
+    },
+    {
+      "title": "Verify everything in two dimensions · further detail",
+      "eyebrow": "G3 lecture 015000 · topic 5/8",
+      "id": "04-00-1",
+      "lead": "Its operator norm is two times the absolute value of h.",
+      "body": [
+        "If h equals zero, the original subspace U remains invariant. If h is nonzero, the new eigenvectors tilt away from the coordinate axes even though the perturbation has zero diagonal compressions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Why this structure affects the spectrum",
+      "eyebrow": "G3 lecture 015000 · topic 6/8",
+      "id": "05-00",
+      "lead": "Set c equal to the midpoint between a and b.",
+      "body": [
+        "Consider J multiplied by T minus c times the identity. On U, both J and T minus c are positive in the sense needed for the quadratic form, because T is at least b. On U perpendicular, both factors change sign: J is negative, and T minus c is at most a minus c, a negative number. Their product is again positive. More precisely, the real part of the inner product of J times T minus c with a vector is at least half the gap times the squared length of that vector. Now add the off-diagonal perturbation H. Since H anticommutes with self-adjoint J, the product J H is skew-adjoint. Its quadratic form has zero real part."
+      ],
+      "diagram": "spectral-gap",
+      "formula": "J(T+V)J = T−V",
+      "mathtex": "J(T+V)J=T-V",
+      "layout": "figure"
+    },
+    {
+      "title": "Why this structure affects the spectrum · continued",
+      "eyebrow": "G3 lecture 015000 · topic 6/8",
+      "id": "05-01",
+      "lead": "Therefore the same positive lower bound holds for the real part of J times S minus c.",
+      "body": [
+        "The off-diagonal perturbation cannot cancel the positive real part that comes from the diagonal block gap. This observation is the starting point for spectral repulsion. For every real point strictly between a and b, we can repeat the midpoint argument with that point as the center and obtain a positive lower bound. In finite dimensions S therefore has no eigenvalue inside the open gap. The resulting gap protection is one ingredient in selecting a specific perturbed spectral subspace and proving that it lies on the small-angle branch."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Distinguish two reflections",
+      "eyebrow": "G3 lecture 015000 · topic 7/8",
+      "id": "06-00-0",
+      "lead": "The same construction applies to a reducing subspace V of another operator S: write J V for reflection through V.",
+      "body": [
+        "Since V reduces S, J V commutes with S. Thus J V S J V equals S. Rearrange S equals T plus H. We obtain J V T J V minus T equals H minus J V H J V. Its norm is at most twice the norm of H, since reflection preserves unitarily invariant norms. The quantity J V T J V minus T is called the mirror defect of T through V. It is small whenever H is small."
+      ],
+      "diagram": "block-reflection",
+      "layout": "figure"
+    },
+    {
+      "title": "Distinguish two reflections · further detail",
+      "eyebrow": "G3 lecture 015000 · topic 7/8",
+      "id": "06-00-1",
+      "lead": "It will provide the right-hand side of the sine-two-theta theorem.",
+      "body": [
+        "This second reflection is the bridge between an operator perturbation and a geometric doubled angle. The first reflection exposed the off-diagonal structure; the second transports an exact reducing subspace across a perturbed symmetry."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Why the distinction matters",
+      "eyebrow": "G3 lecture 015000 · topic 8/8",
+      "id": "07-00",
+      "lead": "The sine-two-theta theorem does not require the perturbation itself to be off-diagonal.",
+      "body": [
+        "It uses a two-block gap and a mirror-defect estimate that works for any self-adjoint perturbation. The tangent-two-theta theorem has a stronger geometric conclusion: the selected subspaces remain on the branch strictly below forty-five degrees. The off-diagonal hypothesis is what supplies that conclusion in its classical form. In a principal plane, reflecting one line across another doubles the angle between their directions. The block reflection converts that planar identity into an operator estimate for the doubled principal angles; spectral selection is an additional requirement when a tangent bound is sought."
+      ],
+      "takeaway": "Block reflection distinguishes off-diagonal perturbations and explains doubled-angle symmetry.",
+      "layout": "reading"
+    }
+  ]
+}

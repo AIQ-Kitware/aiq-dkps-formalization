@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "id": "finite-spectral-picture",
+  "title": "The finite spectral picture",
+  "subtitle": "A complete proof of the finite spectral theorem and its projection formulation",
+  "lecture_nodes": [
+    "g3:001000"
+  ],
+  "slides": [
+    {
+      "id": "01",
+      "title": "The finite spectral theorem",
+      "lead": "Every self-adjoint matrix admits an orthonormal eigenbasis.",
+      "body": [
+        "Self-adjointness is the structural assumption that makes a complete orthogonal decomposition possible. It implies real eigenvalues and preserves the orthogonal complement of each eigendirection.",
+        "The result can be stated without fixing a particular eigenbasis: the matrix is a weighted sum of orthogonal projections onto its distinct eigenspaces."
+      ],
+      "formula": "A = QΛQ*      ⇔      A = Σλ λPλ",
+      "diagram": "spectrum",
+      "takeaway": "The projection formulation is the foundation for studying stable spectral subspaces.",
+      "eyebrow": "The precise theorem",
+      "mathtex": "A=Q\\Lambda Q^{*}\\quad\\Longleftrightarrow\\quad A=\\sum_{\\lambda}\\lambda P_\\lambda",
+      "layout": "opening"
+    },
+    {
+      "id": "02",
+      "title": "Why self-adjointness gives real eigenvalues",
+      "lead": "Assume A* = A over a finite-dimensional real or complex inner-product space.",
+      "body": [
+        "If Av = λv with v ≠ 0, then ⟨Av, v⟩ equals λ⟨v, v⟩. Self-adjointness makes ⟨Av, v⟩ real because it equals ⟨v, Av⟩, its complex conjugate.",
+        "Since ⟨v, v⟩ is positive and real, λ must be real. Distinct eigenvalues likewise produce orthogonal eigenspaces."
+      ],
+      "formula": "Av = λv       A* = A       ⇒       λ ∈ ℝ",
+      "diagram": "angle",
+      "takeaway": "Real eigenvalues are a consequence of adjoint symmetry, not an extra hypothesis.",
+      "mathtex": "Av=\\lambda v,\\quad A^{*}=A\\quad\\Longrightarrow\\quad\\lambda\\in\\mathbb R",
+      "layout": "figure"
+    },
+    {
+      "id": "03",
+      "title": "Find the first eigenvector",
+      "lead": "Over the complex numbers, the characteristic polynomial always has a root.",
+      "body": [
+        "For a nonzero finite-dimensional complex vector space, det(A − λI) is a polynomial of positive degree. The fundamental theorem of algebra supplies a root λ.",
+        "At such a root, A − λI is singular, so its kernel contains a nonzero eigenvector v. Normalize v to unit length. The rest of the argument finds eigenvectors perpendicular to v."
+      ],
+      "formula": "det(A − λI) = 0      ⇒      ∃ v ≠ 0 : Av = λv",
+      "diagram": "spectrum",
+      "takeaway": "The existence step is finite-dimensional and uses complex algebra.",
+      "mathtex": "\\det(A-\\lambda I)=0\\quad\\Longrightarrow\\quad Av=\\lambda v\\ \\text{for some }v\\ne0",
+      "layout": "figure"
+    },
+    {
+      "id": "04",
+      "title": "The key invariant complement",
+      "lead": "Let v be a unit eigenvector of a self-adjoint operator A.",
+      "body": [
+        "Take any w orthogonal to v. Moving A across the inner product gives ⟨Aw, v⟩ = ⟨w, Av⟩. Substituting Av = λv yields zero. Thus Aw is also orthogonal to v.",
+        "The space splits into the line through v and the perpendicular subspace v⊥. Both are invariant, and the restriction to v⊥ remains self-adjoint."
+      ],
+      "formula": "w ⟂ v  ⇒  ⟨Aw, v⟩ = ⟨w, λv⟩ = 0",
+      "diagram": "orthogonal",
+      "takeaway": "Invariant orthogonal complements make the spectral theorem induction possible.",
+      "mathtex": "w\\perp v\\quad\\Longrightarrow\\quad\\langle Aw,v\\rangle=\\langle w,\\lambda v\\rangle=0",
+      "layout": "figure"
+    },
+    {
+      "id": "05",
+      "title": "Complete the proof by induction",
+      "lead": "The restriction to v⊥ is a smaller self-adjoint problem.",
+      "body": [
+        "In dimension one, the conclusion is immediate. For dimension n, choose a unit eigenvector v. The orthogonal complement has dimension n − 1, is invariant, and carries a self-adjoint restriction.",
+        "By induction, v⊥ has an orthonormal eigenbasis. Add v. The resulting list is orthonormal, consists entirely of eigenvectors of A, and spans the full space."
+      ],
+      "formula": "H = span{v} ⊕ v⊥       dim(v⊥) = n − 1",
+      "diagram": "induction",
+      "takeaway": "Existence → invariant complement → induction → complete orthonormal basis.",
+      "mathtex": "\\mathcal H=\\operatorname{span}\\{v\\}\\oplus v^{\\perp},\\quad\\dim v^{\\perp}=n-1",
+      "layout": "figure"
+    },
+    {
+      "id": "06",
+      "title": "The real symmetric case",
+      "lead": "Complex diagonalization does not force us to use complex eigenvectors for a real matrix.",
+      "body": [
+        "Regard a real symmetric matrix as complex Hermitian and obtain an eigenpair (λ, z). Its eigenvalue λ is real. Write z = x + iy, where x and y are real vectors.",
+        "Because A and λ are real, Ax = λx and Ay = λy. At least one of x or y is nonzero. This yields a real eigenvector; the same orthogonal-complement induction works over ℝ."
+      ],
+      "formula": "A(x + iy) = λ(x + iy)  ⇒  Ax = λx,  Ay = λy",
+      "diagram": "orthogonal",
+      "takeaway": "Every real symmetric matrix has a real orthonormal eigenbasis.",
+      "mathtex": "A(x+iy)=\\lambda(x+iy)\\quad\\Longrightarrow\\quad Ax=\\lambda x,\\ Ay=\\lambda y",
+      "layout": "figure"
+    },
+    {
+      "id": "07",
+      "title": "Group equal eigenvalues into eigenspaces",
+      "lead": "Eigenvectors of a repeated eigenvalue are not individually canonical.",
+      "body": [
+        "For each distinct eigenvalue λ, define Eλ = ker(A − λI). These eigenspaces are pairwise orthogonal. Their orthogonal direct sum fills the full space.",
+        "Write Pλ for the orthogonal projection onto Eλ. This projection is uniquely determined by A and λ, regardless of the basis chosen inside the eigenspace."
+      ],
+      "formula": "Eλ = ker(A − λI)       Pλ² = Pλ = Pλ*",
+      "diagram": "projection",
+      "takeaway": "A spectral projector identifies a whole eigenspace, not a chosen set of eigenvectors.",
+      "mathtex": "E_{\\lambda}=\\ker(A-\\lambda I),\\qquad P_{\\lambda}^{2}=P_{\\lambda}=P_{\\lambda}^{*}",
+      "layout": "figure"
+    },
+    {
+      "id": "08",
+      "title": "The spectral decomposition",
+      "lead": "Spectral projections resolve the identity and reconstruct the operator.",
+      "body": [
+        "Projections onto different eigenspaces annihilate one another. Their sum is the identity because every vector splits uniquely into eigenspace components.",
+        "Applying A scales each component by its eigenvalue. Therefore A equals the sum of λPλ over distinct eigenvalues. More generally, any polynomial in A acts by the corresponding polynomial on each eigenspace."
+      ],
+      "formula": "Σλ Pλ = I      PλPμ = 0 (λ ≠ μ)      A = Σλ λPλ",
+      "diagram": "projection",
+      "takeaway": "Spectral decomposition is coordinate-free once the eigenspace projectors are identified.",
+      "mathtex": "\\sum_{\\lambda}P_\\lambda=I,\\quad P_{\\lambda}P_{\\mu}=0\\ (\\lambda\\ne\\mu),\\quad A=\\sum_{\\lambda}\\lambda P_\\lambda",
+      "layout": "figure"
+    },
+    {
+      "id": "09",
+      "title": "Example: a symmetric 2 × 2 matrix",
+      "lead": "Consider A with diagonal entries 2 and off-diagonal entries 1.",
+      "body": [
+        "The vector (1, 1) is an eigenvector with eigenvalue 3. The perpendicular vector (1, −1) has eigenvalue 1. After dividing both by √2, they form an orthonormal basis.",
+        "The corresponding projectors have entries ±½. The next slide checks their identities and reconstructs A explicitly."
+      ],
+      "formula": "A = [[2, 1], [1, 2]]      u₃ = (1, 1)/√2      u₁ = (1, −1)/√2",
+      "diagram": "orthogonal",
+      "takeaway": "Diagonalization exposes two independent modes with distinct eigenvalues.",
+      "mathtex": "A=\\begin{bmatrix}2&1\\\\1&2\\end{bmatrix},\\quad u_3=\\tfrac{1}{\\sqrt2}\\begin{bmatrix}1\\\\1\\end{bmatrix},\\quad u_1=\\tfrac{1}{\\sqrt2}\\begin{bmatrix}1\\\\-1\\end{bmatrix}",
+      "layout": "figure"
+    },
+    {
+      "id": "10",
+      "title": "Verify the projections exactly",
+      "lead": "The spectral theorem can be checked using two small matrices.",
+      "body": [
+        "Projecting onto the line through (1, 1) gives P₃, whose entries are all one half. Projecting onto (1, −1) gives P₁, with positive diagonal and negative off-diagonal entries.",
+        "Their sum is I. Weighting them by their eigenvalues reproduces A. No approximation or choice of a privileged coordinate system is involved."
+      ],
+      "formula": "P₃ = ½[[1,1],[1,1]]      P₁ = ½[[1,−1],[−1,1]]\nP₃ + P₁ = I         3P₃ + P₁ = [[2,1],[1,2]]",
+      "diagram": "projection",
+      "takeaway": "The identity is an operator identity, verified by ordinary matrix multiplication.",
+      "mathtex": "\\begin{aligned}P_3&=\\tfrac12\\begin{bmatrix}1&1\\\\1&1\\end{bmatrix},\\quad P_1=\\tfrac12\\begin{bmatrix}1&-1\\\\-1&1\\end{bmatrix}\\\\[3pt]P_3+P_1&=I,\\qquad 3P_3+P_1=A\\end{aligned}",
+      "layout": "figure"
+    },
+    {
+      "id": "11",
+      "title": "Repeated eigenvalues and selected clusters",
+      "lead": "The projector is stable under a change of basis inside an eigenspace.",
+      "body": [
+        "Suppose λ has a two-dimensional eigenspace. Every orthonormal pair spanning it produces the same projection Pλ. Rotating the pair changes their coordinates but not the subspace.",
+        "For a selected set S of eigenvalues, add the corresponding projections. This produces the spectral projection onto the whole cluster; perturbation theory measures how that selected subspace changes."
+      ],
+      "formula": "Pₛ = Σ(λ∈S) Pλ      Pₛ² = Pₛ = Pₛ*",
+      "diagram": "clusters",
+      "takeaway": "Clusters and their projections are the natural objects for Davis–Kahan bounds.",
+      "mathtex": "P_S=\\sum_{\\lambda\\in S}P_\\lambda,\\qquad P_S^{2}=P_S=P_S^{*}",
+      "layout": "figure"
+    },
+    {
+      "id": "12",
+      "title": "Why the assumptions matter",
+      "lead": "A general square matrix need not possess an eigenbasis.",
+      "body": [
+        "For example, the matrix [[1, 1], [0, 1]] has only one independent eigenvector. It cannot be diagonalized using any basis, let alone an orthonormal one.",
+        "Likewise, an infinite-dimensional bounded self-adjoint operator may have continuous spectrum without an eigenbasis. Spectral integrals replace finite sums in that setting."
+      ],
+      "formula": "[[1,1],[0,1]] has eigenvalue 1 but only a one-dimensional eigenspace",
+      "diagram": "spectrum",
+      "takeaway": "The finite theorem assumes self-adjointness and finite dimension.",
+      "mathtex": "A=\\begin{bmatrix}1&1\\\\0&1\\end{bmatrix}\\quad\\Longrightarrow\\quad\\dim\\ker(A-I)=1",
+      "layout": "figure"
+    },
+    {
+      "id": "13",
+      "title": "A proof you can reconstruct",
+      "lead": "The mathematical argument has four reusable steps.",
+      "body": [
+        "First obtain an eigenvector from the characteristic polynomial. Second prove its eigenvalue is real. Third establish invariance and self-adjointness of the perpendicular complement. Fourth apply induction and collect the projections.",
+        "The same decomposition allows finite functional calculus: for any function defined on the finite spectrum, set f(A) = Σ f(λ)Pλ."
+      ],
+      "formula": "f(A) = Σλ f(λ) Pλ",
+      "bullets": [
+        "Existence of one eigenvector",
+        "Orthogonal complement invariance",
+        "Induction to an orthonormal basis",
+        "Projection-valued reconstruction"
+      ],
+      "diagram": "induction",
+      "takeaway": "A = Σ λPλ is the finite spectral picture used throughout subspace perturbation theory.",
+      "mathtex": "f(A)=\\sum_{\\lambda}f(\\lambda)P_\\lambda",
+      "layout": "figure"
+    }
+  ]
+}

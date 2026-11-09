@@ -11,11 +11,11 @@ a{color:#a9d9ff}button,select,input{font:inherit}button,select,input{color:var(-
 button{cursor:pointer}button:hover,select:hover{border-color:#a5d3e9}button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 header{padding:14px clamp(14px,2vw,32px);display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:space-between;border-bottom:1px solid var(--edge);background:#111d27}
 .brand{font-size:1.17rem;font-weight:680;letter-spacing:-.01em}.brand small{display:block;font-weight:400;font-size:.8rem;color:var(--muted)}nav{display:flex;gap:15px}
-main{display:grid;grid-template-columns:minmax(220px,270px) minmax(360px,1fr) minmax(260px,310px);height:calc(100dvh - 88px);min-height:590px;gap:0}
+main{display:grid;grid-template-columns:minmax(220px,270px) minmax(360px,1fr) minmax(260px,310px);height:calc(100dvh - 88px);min-height:590px;gap:0}main.graph-expanded{grid-template-columns:minmax(0,1fr)}main.graph-expanded aside{display:none}main.graph-expanded #graph-stage{height:100%;min-height:75vh}
 aside{padding:17px;overflow:auto;min-width:0;background:var(--panel)}.left{border-right:1px solid var(--edge)}.right{border-left:1px solid var(--edge)}
 h1,h2,h3,p{margin:0 0 10px}h1{font-size:1.15rem}h2{font-size:1rem}h3{font-size:.89rem;margin:19px 0 7px;color:var(--bright)}.muted,small{color:var(--muted)}.eyebrow{color:var(--bright);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;font-weight:650}
 .field{display:block;margin:14px 0 0}.field span{display:block;font-size:.82rem;color:var(--muted);margin-bottom:5px}select,input[type=search]{width:100%;max-width:100%}
-.relations{display:grid;grid-template-columns:1fr;gap:3px;margin-top:9px}.relations label{display:flex;align-items:center;gap:9px;padding:5px 2px;cursor:pointer;font-size:.83rem}.relations input{accent-color:#a0d8ff}.swatch{width:20px;height:4px;border-radius:6px;display:inline-block;flex-shrink:0}
+.relations{display:grid;grid-template-columns:1fr;gap:3px;margin-top:9px}.relations label{display:flex;align-items:center;gap:9px;padding:5px 2px;cursor:pointer;font-size:.83rem}.relations input{accent-color:#a0d8ff}.edge-actions{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.edge-actions button{padding:5px 8px;font-size:.76rem}.node-options{margin:8px 0 0;font-size:.81rem;display:flex;align-items:center;gap:8px;cursor:pointer}.swatch{width:20px;height:4px;border-radius:6px;display:inline-block;flex-shrink:0}
 .side-list{display:grid;gap:5px;max-height:330px;overflow:auto;margin-top:9px;padding-right:3px}.listbtn{width:100%;text-align:left;background:#122430;padding:9px;font-size:.81rem;line-height:1.35}.listbtn.active{border-color:var(--focus);background:#273a40}.listbtn b{color:var(--bright);font-weight:580}.listbtn span{display:block;color:var(--muted);font-size:.73rem}
 #graph-stage{position:relative;min-width:0;min-height:0;overflow:hidden;background:radial-gradient(circle at 55% 45%,#152a36,#0b151d 75%)}
 #graph{width:100%;height:100%;display:block;cursor:grab;touch-action:none;user-select:none}#graph.dragging{cursor:grabbing}
@@ -25,10 +25,10 @@ h1,h2,h3,p{margin:0 0 10px}h1{font-size:1.15rem}h2{font-size:1rem}h3{font-size:.
 .topic-key{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}.topic-pill{font-size:.73rem;border-radius:30px;padding:4px 7px;border:1px solid #4c5963;color:var(--text)}
 .detail{font-size:.91rem}.node-id{font-size:.78rem;color:var(--bright);font-variant-numeric:tabular-nums}.node-title{font-size:1.19rem;line-height:1.25;margin:7px 0 10px}.status{display:inline-flex;padding:2px 9px;border-radius:20px;background:#263e48;color:#d3e9f0;font-size:.75rem;margin:4px 0}.status.planned{background:#4a3531;color:#ffdbbd}.open{display:inline-block;padding:9px 12px;margin:9px 0;background:#254356;border-radius:8px;text-decoration:none;border:1px solid #6189a0}
 .connection{border-top:1px solid #3b505c;padding:10px 0}.connection button{border:0;background:none;padding:0;color:#c4e8fc;text-align:left;font-size:.86rem}.connection .relation{font-size:.75rem;font-weight:600;margin:0 0 5px}.connection .reason{color:#b3c7d0;font-size:.8rem;margin:4px 0}.connection a{font-size:.76rem}.connection .dir{color:var(--muted);font-weight:400}.empty{padding:12px;color:var(--muted)}
-svg .cluster{fill:#172632;stroke:#34515d;stroke-width:1.3}svg .cluster-name{fill:#d1e7ef;font-size:21px;font-weight:650}svg .cluster-count{fill:#9bb4c3;font-size:16px}svg .relation-line{fill:none;stroke-linecap:round;pointer-events:stroke}svg .graph-node{cursor:pointer}svg .graph-node .dot{stroke:#0c141a;stroke-width:2}svg .graph-node:focus .dot{stroke:var(--focus);stroke-width:5}svg .graph-node .node-label{fill:#ecf5f7;font-size:14px;paint-order:stroke;stroke:#111c24;stroke-width:5px;stroke-linejoin:round}svg .graph-node:hover .dot{stroke:#fff;stroke-width:4}svg .graph-node .node-tag{fill:#111a22;font-size:9px;font-weight:bold;text-anchor:middle;pointer-events:none}
+svg .cluster{fill:#172632;stroke:#34515d;stroke-width:1.3}svg .cluster-name{fill:#d1e7ef;font-size:21px;font-weight:650}svg .cluster-count{fill:#9bb4c3;font-size:16px}svg .relation-line{fill:none;stroke-linecap:round;pointer-events:stroke}svg .graph-node{cursor:pointer}svg .graph-node .dot{stroke:#0c141a;stroke-width:2}svg .graph-node:focus .dot{stroke:var(--focus);stroke-width:5}svg .graph-node .node-label{fill:#ecf5f7;font-size:14px;paint-order:stroke;stroke:#111c24;stroke-width:5px;stroke-linejoin:round}svg .graph-node:hover .dot{stroke:#fff;stroke-width:4}svg .graph-node:hover .node-label{display:block!important}svg .graph-node .node-tag{fill:#111a22;font-size:9px;font-weight:bold;text-anchor:middle;pointer-events:none}
 .footer{font-size:.75rem;color:var(--muted);margin-top:16px}
 @media(max-width:1200px){main{grid-template-columns:225px minmax(350px,1fr)}aside.right{grid-column:1 / -1;border-top:1px solid var(--edge);border-left:0;max-height:38vh}main{height:auto;min-height:0}#graph-stage{height:70vh}.left{height:70vh}}
-@media(max-width:740px){header{padding:12px}nav{width:100%}main{display:flex;flex-direction:column}.left{height:auto;max-height:none;border:0;border-bottom:1px solid var(--edge)}.left .relations{grid-template-columns:1fr 1fr}.left .side-list{max-height:150px}#graph-stage{height:53vh;min-height:365px}.right{max-height:none !important;overflow:visible}.graph-help{font-size:.67rem}.graph-summary{max-width:65%}}
+@media(max-width:740px){main.graph-expanded #graph-stage{height:calc(100dvh - 86px)}header{padding:12px}nav{width:100%}main{display:flex;flex-direction:column}.left{height:auto;max-height:none;border:0;border-bottom:1px solid var(--edge)}.left .relations{grid-template-columns:1fr 1fr}.left .side-list{max-height:150px}#graph-stage{height:53vh;min-height:365px}.right{max-height:none !important;overflow:visible}.graph-help{font-size:.67rem}.graph-summary{max-width:65%}}
 </style>
 </head>
 <body>
@@ -41,16 +41,17 @@ svg .cluster{fill:#172632;stroke:#34515d;stroke-width:1.3}svg .cluster-name{fill
  <h1>Explore the mathematics</h1>
  <label class="field"><span>Learning path</span><select id="track" aria-label="Learning path"><option value="all">All four tracks</option></select></label>
  <label class="field"><span>Topic cluster</span><select id="topic" aria-label="Topic cluster"><option value="all">All topics</option></select></label>
- <label class="field"><span>Graph extent</span><select id="extent" aria-label="Graph extent"><option value="1" selected>One connection away</option><option value="2">Two connections away</option><option value="all">Entire selected path / topic</option></select></label>
+ <label class="field"><span>Graph extent</span><select id="extent" aria-label="Graph extent"><option value="all" selected>All nodes in selected paths / topics</option><option value="1">One connection away</option><option value="2">Two connections away</option></select></label>
+ <h3>Show relationships</h3><div class="edge-actions"><button id="edges-all" type="button">All edges</button><button id="edges-core" type="button" title="Listening order, proof use, and alternative presentations">Core edges</button><button id="edges-none" type="button">No edges</button></div><div id="relations" class="relations" aria-label="Graph relationship filters"></div>
+ <label class="node-options"><input id="node-labels" type="checkbox"> Show all lecture labels</label>
  <label class="field"><span>Find a lecture</span><input id="search" type="search" placeholder="Title, theorem, number..." aria-label="Search lectures"></label>
  <div id="search-results" class="side-list" aria-label="Lecture search results"></div>
- <h3>Show relationships</h3><div id="relations" class="relations" aria-label="Graph relationship filters"></div>
- <div class="footer">An arrow points from a lecture to a supporting topic. Original-parent links record source adaptations; they are not prerequisites.</div>
+ <div class="footer">Listening-order arrows point to the next item in a path. Dependency arrows point toward supporting mathematics. A visible node stays on the map when you hide its edges.</div>
 </aside>
 <section id="graph-stage" aria-label="Interactive course relationship graph">
  <svg id="graph" role="img" aria-label="Interactive lecture graph; select a node for details" xmlns="http://www.w3.org/2000/svg"></svg>
- <div class="graph-header"><div class="graph-summary" id="summary" aria-live="polite"><strong>Loading course graph…</strong></div><div class="tools"><button id="zoom-in" title="Zoom in" aria-label="Zoom in">+</button><button id="zoom-out" title="Zoom out" aria-label="Zoom out">−</button><button id="fit" title="Fit visible graph" aria-label="Fit visible graph">Fit</button></div></div>
- <div class="graph-help">Scroll to zoom · Drag empty space to pan · Select a node to explore</div>
+ <div class="graph-header"><div class="graph-summary" id="summary" aria-live="polite"><strong>Loading course graph…</strong></div><div class="tools"><button id="zoom-in" title="Zoom in" aria-label="Zoom in">+</button><button id="zoom-out" title="Zoom out" aria-label="Zoom out">−</button><button id="fit" title="Fit visible graph" aria-label="Fit visible graph">Fit</button><button id="maximize" title="Expand graph view" aria-label="Expand graph view">Expand</button></div></div>
+ <div class="graph-help">All nodes stay visible when edges are hidden · Scroll to zoom · Drag to pan</div>
 </section>
 <aside class="right" aria-label="Selected lecture details">
  <div class="eyebrow">Selected lecture</div><div id="detail" class="detail"><p class="muted">Select a graph node to inspect its connections.</p></div>
@@ -64,16 +65,19 @@ svg .cluster{fill:#172632;stroke:#34515d;stroke-width:1.3}svg .cluster-name{fill
 const SVG_NS='http://www.w3.org/2000/svg';
 const $=id=>document.getElementById(id);
 const RELATIONS=[
- ['hard_depends_on','Hard prerequisite','#e8a17d',true],
- ['soft_depends_on','Helpful background','#a1c1d5',true],
- ['expands_on','Expands on','#aeb3fa',true],
+ ['listening_next','Next in listening path','#eda54c',true],
+ ['proof_depends_on','Proof uses result','#fc7bc0',true],
+ ['hard_depends_on','Hard prerequisite','#e8a17d',false],
+ ['soft_depends_on','Helpful background','#a1c1d5',false],
+ ['expands_on','Expands on','#aeb3fa',false],
  ['alternative_presentation','Alternative explanation','#8fdbb1',true],
  ['original_parent','Original parent','#d1a4e8',false],
  ['related_to','Conceptual connection','#cabd99',false]
 ];
 const RELMAP=Object.fromEntries(RELATIONS.map(([id,label,color])=>[id,{label,color}]));
-let graph, activeNode='g2:110000', activeTrack='all', activeTopic='all', extent='1';
+let graph, activeNode='g2:110000', activeTrack='all', activeTopic='all', extent='all';
 let enabled=new Set(RELATIONS.filter(x=>x[3]).map(x=>x[0]));
+let showAllLabels=false;
 let currentPositions=new Map(), currentEdges=[], currentIds=new Set(), bounds=null, view=null, pan=null;
 const nodeElement=(tag,content,cls)=>{const x=document.createElement(tag);if(content!==undefined)x.textContent=content;if(cls)x.className=cls;return x};
 const svgEl=(tag,attrs={})=>{const x=document.createElementNS(SVG_NS,tag);for(const [k,v] of Object.entries(attrs))x.setAttribute(k,v);return x};
@@ -107,6 +111,25 @@ function visibleGraph(){
   }
  }
  return {ids,edges:edges.filter(e=>ids.has(e.from)&&ids.has(e.to))};
+}
+function componentCount(ids,edges){
+ const adjacency=new Map([...ids].map(id=>[id,[]]));
+ for(const e of edges){adjacency.get(e.from)?.push(e.to);adjacency.get(e.to)?.push(e.from)}
+ const unseen=new Set(ids);let count=0;
+ while(unseen.size){count++;const start=unseen.values().next().value;unseen.delete(start);const queue=[start];
+  while(queue.length){for(const other of adjacency.get(queue.pop())||[]){if(unseen.delete(other))queue.push(other)}}
+ }
+ return count;
+}
+function setRelationSelection(types){
+ enabled=new Set(types);
+ document.querySelectorAll('input[data-relation]').forEach(input=>{input.checked=enabled.has(input.dataset.relation)});
+ renderGraph(extent!=='all');
+}
+function focusNodeInMap(id){
+ const point=currentPositions.get(id);if(!point||!view)return;
+ const w=Math.min(view.w,870),h=Math.min(view.h,540);
+ setView({x:point.x-w/2,y:point.y-h/2,w,h});
 }
 function topicCells(ids){
  const selected=graph.topics.filter(t=>[...ids].some(id=>graph.nodes[id].topic===t.id));
@@ -186,14 +209,15 @@ function renderGraph(resetView=true){
   const dot=svgEl('circle',{r:radius,fill:colorOf(id),class:'dot',stroke:selected?'#ffe3a0':'#0c141a'});
   if(node.status!=='available'){dot.setAttribute('stroke-dasharray','4 3');dot.setAttribute('stroke-width','3')}
   group.append(dot);
-  if(selected||!small){const tag=svgEl('text',{class:'node-tag',y:3});tag.textContent=node.track.toUpperCase();group.append(tag)}
-  if(selected||!small){const label=svgEl('text',{x:radius+7,y:5,class:'node-label'});const str=node.title.length>27?node.title.slice(0,26)+'…':node.title;label.textContent=str;group.append(label)}
+  if(selected||!small||showAllLabels){const tag=svgEl('text',{class:'node-tag',y:3});tag.textContent=node.track.toUpperCase();group.append(tag)}
+  if(selected||!small||showAllLabels){const label=svgEl('text',{x:radius+7,y:5,class:'node-label'});const str=node.title.length>27?node.title.slice(0,26)+'…':node.title;label.textContent=str;group.append(label)}
   const t=svgEl('title');t.textContent=`${id}: ${node.title}`;group.append(t);
   group.addEventListener('click',()=>chooseNode(id));group.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();chooseNode(id)}});
   nodeGroup.append(group);
  }svg.append(nodeGroup);
  if(resetView)fitView();
- $('summary').replaceChildren(nodeElement('strong',extent==='all'?'Topic map':'Connected lectures'),nodeElement('span',`${ids.size} nodes · ${edges.length} visible links · ${graph.edges.length} total links`));
+ const components=componentCount(ids,edges);
+ $('summary').replaceChildren(nodeElement('strong',extent==='all'?'Complete lecture map':'Lecture neighborhood'),nodeElement('span',`${ids.size} / ${Object.keys(graph.nodes).length} nodes · ${edges.length} visible edges · ${components===1?'connected':`${components} components`}`));
 }
 function populateSearch(){if(!graph)return;const value=$('search').value.trim().toLocaleLowerCase();const candidates=activeTrack==='all'?Object.keys(graph.nodes):selectedTrack().path;
  let matches=candidates.filter(id=>{const n=graph.nodes[id];return !value||`${id} ${n.title} ${topicsById()[n.topic]?.title||''}`.toLocaleLowerCase().includes(value)});
@@ -204,7 +228,7 @@ function populateSearch(){if(!graph)return;const value=$('search').value.trim().
  const container=$('search-results');container.replaceChildren();
  for(const id of matches.slice(0,value?48:14)){
   const n=graph.nodes[id],btn=nodeElement('button',undefined,'listbtn'+(id===activeNode?' active':''));
-  btn.append(nodeElement('b',n.title),nodeElement('span',`${id} · ${n.status}`));btn.onclick=()=>chooseNode(id);container.append(btn);
+  btn.append(nodeElement('b',n.title),nodeElement('span',`${id} · ${n.status}`));btn.onclick=()=>chooseNode(id,true);container.append(btn);
  }
  if(matches.length>(value?48:14))container.append(nodeElement('small',`Showing ${value?48:14} of ${matches.length}; narrow the search to see more.`));
  if(!matches.length)container.append(nodeElement('div','No matching lectures.','empty'));
@@ -220,8 +244,9 @@ function renderDetails(){if(!graph||!graph.nodes[activeNode])return;const n=grap
  $('link-heading').textContent=`Related lectures (${edges.length})`;
  for(const edge of edges){const outgoing=edge.from===activeNode,otherId=outgoing?edge.to:edge.from,other=graph.nodes[otherId];const container=nodeElement('div',undefined,'connection');
   const rel=nodeElement('div',undefined,'relation');rel.style.color=RELMAP[edge.type].color;
-  rel.append(nodeElement('span',RELMAP[edge.type].label),nodeElement('span',outgoing?' · uses':' · used by','dir'));container.append(rel);
-  const btn=nodeElement('button',other.title);btn.onclick=()=>chooseNode(otherId);container.append(btn);
+  const direction=({listening_next:outgoing?' · next':' · previous',proof_depends_on:outgoing?' · uses':' · used to prove',hard_depends_on:outgoing?' · requires':' · supports',soft_depends_on:outgoing?' · background':' · supports',original_parent:outgoing?' · adapted from':' · adapted into'})[edge.type]||'';
+  rel.append(nodeElement('span',RELMAP[edge.type].label),nodeElement('span',direction,'dir'));container.append(rel);
+  const btn=nodeElement('button',other.title);btn.onclick=()=>chooseNode(otherId,true);container.append(btn);
   container.append(nodeElement('div',otherId+' · '+other.status,'muted'));
   if(edge.why)container.append(nodeElement('p',edge.why,'reason'));
   if(other.url){const link=nodeElement('a','Open recording ↗');link.href=other.url;container.append(link)}
@@ -230,7 +255,7 @@ function renderDetails(){if(!graph||!graph.nodes[activeNode])return;const n=grap
  if(!edges.length)con.append(nodeElement('p','No connections recorded.','muted'));
 }
 function urlSync(){try{const q=new URLSearchParams({track:activeTrack,node:activeNode});history.replaceState(null,'',`/learning-paths?${q}`)}catch{}}
-function chooseNode(id){if(!graph?.nodes[id])return;activeNode=id;renderGraph(true);renderDetails();populateSearch();urlSync()}
+function chooseNode(id,focus=false){if(!graph?.nodes[id])return;activeNode=id;renderGraph(extent!=='all');if(focus&&extent==='all')focusNodeInMap(id);renderDetails();populateSearch();urlSync()}
 function chooseTrack(id){if(id!=='all'&&!graph.tracks.some(t=>t.id===id))return;activeTrack=id;$('track').value=id;
  if(id!=='all'&&!selectedTrack().path.includes(activeNode))activeNode=selectedTrack().path[0];
  populateSearch();renderDetails();renderGraph(true);urlSync()}
@@ -243,13 +268,18 @@ function initialize(data){graph=data;
  for(const t of graph.tracks){const opt=nodeElement('option',`${t.id.toUpperCase()} · ${t.title.replace(/^G\d+\s*[-·]\s*/, '')}`);opt.value=t.id;$('track').append(opt)}
  for(const t of graph.topics||[]){const opt=nodeElement('option',t.title);opt.value=t.id;$('topic').append(opt)}
  $('track').value=activeTrack;
- for(const [type,label,color,defaultValue] of RELATIONS){const wrap=nodeElement('label'),check=document.createElement('input');check.type='checkbox';check.checked=defaultValue;check.dataset.relation=type;check.addEventListener('change',()=>{if(check.checked)enabled.add(type);else enabled.delete(type);renderGraph(true)});
-  const swatch=nodeElement('span',undefined,'swatch');swatch.style.background=color;wrap.append(check,swatch,nodeElement('span',label));$('relations').append(wrap)}
+ for(const [type,label,color,defaultValue] of RELATIONS){const wrap=nodeElement('label'),check=document.createElement('input');check.type='checkbox';check.checked=defaultValue;check.dataset.relation=type;check.addEventListener('change',()=>{if(check.checked)enabled.add(type);else enabled.delete(type);renderGraph(extent!=='all')});
+  const swatch=nodeElement('span',undefined,'swatch');swatch.style.background=color;wrap.append(check,swatch,nodeElement('span',`${label} (${graph.edges.filter(e=>e.type===type).length})`));$('relations').append(wrap)}
  for(const t of graph.topics){const pill=nodeElement('button',t.title,'topic-pill');pill.style.borderColor=`rgb(${t.rgb})`;pill.addEventListener('click',()=>chooseTopic(t.id));$('topic-key').append(pill)}
+ $('edges-all').addEventListener('click',()=>setRelationSelection(RELATIONS.map(row=>row[0])));
+ $('edges-none').addEventListener('click',()=>setRelationSelection([]));
+ $('edges-core').addEventListener('click',()=>setRelationSelection(['listening_next','proof_depends_on','alternative_presentation']));
+ $('node-labels').addEventListener('change',()=>{showAllLabels=$('node-labels').checked;renderGraph(false)});
  $('track').addEventListener('change',()=>chooseTrack($('track').value));
  $('topic').addEventListener('change',()=>chooseTopic($('topic').value));
  $('extent').addEventListener('change',()=>{extent=$('extent').value;renderGraph(true)});
  $('search').addEventListener('input',populateSearch);
+ $('maximize').addEventListener('click',()=>{const expanded=document.querySelector('main').classList.toggle('graph-expanded');$('maximize').textContent=expanded?'Restore':'Expand';$('maximize').setAttribute('aria-label',expanded?'Restore side panels':'Expand graph view');fitView()});
  $('fit').addEventListener('click',fitView);$('zoom-in').addEventListener('click',()=>zoom(1.4));$('zoom-out').addEventListener('click',()=>zoom(1/1.4));
  const svg=$('graph');svg.addEventListener('wheel',ev=>{ev.preventDefault();const pt=svgPoint(ev);zoom(ev.deltaY<0?1.19:1/1.19,pt.x,pt.y)},{passive:false});
  svg.addEventListener('pointerdown',ev=>{if(ev.target.closest('.graph-node,.topic-cluster'))return;pan={id:ev.pointerId,x:ev.clientX,y:ev.clientY,view:{...view}};svg.setPointerCapture(ev.pointerId);svg.classList.add('dragging')});

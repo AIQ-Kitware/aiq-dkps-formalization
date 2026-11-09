@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "id": "g3-024000-the-proposition-4-4-counterexample",
+  "title": "The Proposition 4.4 counterexample",
+  "subtitle": "Independent reading companion to G3 024000",
+  "lecture_nodes": [
+    "g3:024000"
+  ],
+  "source_lecture": "draft-stages/tts-paper/024000-the-proposition-4-4-counterexample.md",
+  "adaptation": "Edited G3 lecture prose restructured into readable slide units; formulas and selected SVG geometric models are authored companion material.",
+  "slides": [
+    {
+      "title": "The central problem",
+      "eyebrow": "G3 lecture 024000 · topic 1/9",
+      "id": "00-00",
+      "lead": "The printed universal minimization claim of Proposition four point four fails already in a four-dimensional real inner-product space.",
+      "body": [
+        "We will construct two acute two-dimensional subspaces and an orthogonal transporter whose whole-space trace-norm displacement is smaller than that of the canonical direct rotation. Both the principal angles and the displacement singular values will be computed exactly."
+      ],
+      "layout": "opening"
+    },
+    {
+      "title": "Start with an orthogonal four-by-four matrix",
+      "eyebrow": "G3 lecture 024000 · topic 2/9",
+      "id": "01-00-0",
+      "lead": "The source is the coordinate plane U = span(e₁,e₂); an explicit orthogonal matrix W transports it to V = W(U).",
+      "body": [
+        "The rows of the sign matrix below have squared norm four and mutually zero dot products. Dividing by two makes W orthogonal. Its first two columns form an orthonormal frame of V."
+      ],
+      "diagram": "counterexample",
+      "formula": "W = ½ [[ 1, −1, −1, −1],\n          [ 1,  1,  1, −1],\n          [−1, −1,  1, −1],\n          [ 1, −1,  1,  1]]",
+      "mathtex": "W=\\frac12\\begin{bmatrix}1&-1&-1&-1\\\\1&1&1&-1\\\\-1&-1&1&-1\\\\1&-1&1&1\\end{bmatrix}",
+      "layout": "figure"
+    },
+    {
+      "title": "Start with an orthogonal four-by-four matrix · further detail",
+      "eyebrow": "G3 lecture 024000 · topic 2/9",
+      "id": "01-00-1",
+      "lead": "After multiplication by one half, each row has length one.",
+      "body": [
+        "Thus W is orthogonal. Define V to be W of U. By construction W is admissible as a transporter from U to V. We now need to determine the geometric position of V and then compare the costs of W and the canonical direct rotation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Verify both principal angles",
+      "eyebrow": "G3 lecture 024000 · topic 3/9",
+      "id": "02-00-0",
+      "lead": "Use the first two columns of W as an orthonormal basis of V.",
+      "body": [
+        "Their top two coordinates form the two-by-two matrix whose rows are one half times one, minus one and one half times one, one. This is the cross-Gram matrix between the standard basis of U and our chosen basis of V. Multiply this cross-Gram matrix by its transpose. The result is one half times the two-by-two identity. Hence both singular values of the cross-Gram matrix are one over square root of two. Principal cosines are precisely those singular values. Therefore both principal angles equal forty-five degrees."
+      ],
+      "diagram": "principal-pairs",
+      "formula": "cos θ₁ = cos θ₂ = 1/√2",
+      "mathtex": "\\cos\\theta_1=\\cos\\theta_2=\\frac1{\\sqrt2}",
+      "layout": "figure"
+    },
+    {
+      "title": "Verify both principal angles · further detail",
+      "eyebrow": "G3 lecture 024000 · topic 3/9",
+      "id": "02-00-1",
+      "lead": "They are strictly acute, and forty-five degrees is less than the sixty-degree threshold required by the printed proposition.",
+      "body": [
+        "The geometry satisfies every condition relevant to the purported universal small-angle conclusion. We have not selected a borderline right angle or a nonmatching pair of dimensions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Compute the competitor's displacement",
+      "eyebrow": "G3 lecture 024000 · topic 4/9",
+      "id": "03-00",
+      "lead": "The special advantage of W is its own spectral decomposition.",
+      "body": [
+        "There is an orthonormal plane on which W makes a quarter-turn and an orthogonal complementary plane on which W acts as the identity. In the chosen standard coordinates, the turning plane is spanned by the normalized sums of the first and third basis vectors and of the second and fourth basis vectors. One can verify directly by applying the matrix to those two vectors that their images form a ninety-degree rotation. Thus the eigenvalues of W, after allowing complex eigenvalues to describe a real rotation, are positive i, negative i, one, and one. Its displacement operator identity minus W has singular values square root of two, square root of two, zero, and zero. Why?"
+      ],
+      "diagram": "counterexample",
+      "formula": "σ(I−W) = (√2,√2,0,0)",
+      "mathtex": "\\sigma(I-W)=(\\sqrt2,\\sqrt2,0,0)",
+      "layout": "figure"
+    },
+    {
+      "title": "Compute the competitor's displacement · continued",
+      "eyebrow": "G3 lecture 024000 · topic 4/9",
+      "id": "03-01",
+      "lead": "For a unitary eigenvalue e to the i phi, the magnitude of one minus that eigenvalue is two times the absolute value of sine phi over two.",
+      "body": [
+        "A quarter-turn has phi ninety degrees and therefore gives square root of two. The fixed directions give zero. The trace norm of identity minus W, which is the sum of all four singular values, is therefore two square roots of two. Numerically that is about two point eight two eight. Notice that the competitor moves only one two-dimensional plane. That plane is not one of the two canonical principal planes. The competitor mixes the repeated-angle directions, yet still maps the prescribed U onto the prescribed V."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Compute the direct rotation",
+      "eyebrow": "G3 lecture 024000 · topic 5/9",
+      "id": "04-00-0",
+      "lead": "Now construct the canonical direct rotation D between U and V.",
+      "body": [
+        "Since both principal angles are forty-five degrees, the cosine–sine decomposition tells us that D is a direct sum of two forty-five-degree rotations in orthogonal principal planes. Each two-dimensional principal rotation has displacement singular values equal to two sine of twenty-two point five degrees, repeated twice. Across two principal planes, all four singular values of identity minus D equal two sine of twenty-two point five degrees. Use the half-angle identity. Two sine of twenty-two point five degrees equals the square root of the quantity two minus square root of two."
+      ],
+      "diagram": "principal-pairs",
+      "formula": "σ(I−D) = (c,c,c,c), c = √(2−√2)",
+      "mathtex": "\\sigma(I-D)=(c,c,c,c),\\quad c=\\sqrt{2-\\sqrt2}",
+      "layout": "figure"
+    },
+    {
+      "title": "Compute the direct rotation · further detail",
+      "eyebrow": "G3 lecture 024000 · topic 5/9",
+      "id": "04-00-1",
+      "lead": "The direct rotation costs about 3.061, while the competing transport costs about 2.828.",
+      "body": [
+        "The canonical direct rotation has four equal displacement singular values, each of size c = √(2 − √2). Consequently its nuclear-norm cost is 4c. The competitor W has two singular values √2 and two zeros, for a nuclear-norm cost of 2√2.",
+        "The strict inequality can be established exactly by squaring both positive quantities; it does not rely on rounding."
+      ],
+      "layout": "reading",
+      "mathtex": "\\|I-D\\|_1=4\\sqrt{2-\\sqrt2}\\approx3.061\\;>\\;2\\sqrt2\\approx2.828=\\|I-W\\|_1"
+    },
+    {
+      "title": "Compute the direct rotation · continued",
+      "eyebrow": "G3 lecture 024000 · topic 5/9",
+      "id": "04-01",
+      "lead": "The exact inequality follows from the elementary comparison √2 < 3/2.",
+      "body": [
+        "Square both positive costs. The direct rotation gives 16(2 − √2), while the competitor gives 8. Since √2 < 3/2, the direct cost is strictly larger.",
+        "Both principal angles equal 45°, so the construction contradicts the printed universal trace-norm conclusion even under its acute-angle restriction."
+      ],
+      "layout": "reading",
+      "mathtex": "\\big(4\\sqrt{2-\\sqrt2}\\big)^2=16(2-\\sqrt2)>8=(2\\sqrt2)^2"
+    },
+    {
+      "title": "Why this does not contradict earlier propositions",
+      "eyebrow": "G3 lecture 024000 · topic 6/9",
+      "id": "05-00",
+      "lead": "Let us compute the positive squared displacement and compare its Ky Fan sums.",
+      "body": [
+        "For D, all four squared displacement singular values equal two minus square root of two, approximately point five eight six. For W, the squared displacement singular values are two, two, zero, zero. At the first prefix, point five eight six is less than two. At the second, about one point one seven two is less than four. At the third, about one point seven five seven is less than four. At the fourth, about two point three four three is less than four. Thus the direct rotation really does minimize every Ky Fan sum of the squared displacement in this example. It also minimizes the Frobenius norm of the unsquared displacement, because that norm squares and sums its singular values."
+      ],
+      "diagram": "ky-fan",
+      "formula": "2√2 < 4√(2−√2)",
+      "mathtex": "2\\sqrt2<4\\sqrt{2-\\sqrt2}",
+      "layout": "figure"
+    },
+    {
+      "title": "Why this does not contradict earlier propositions · continued",
+      "eyebrow": "G3 lecture 024000 · topic 6/9",
+      "id": "05-01",
+      "lead": "But the trace-norm totals of the unsquared lists reverse: four copies of about point seven six five sum to more than two copies of square root of two.",
+      "body": [
+        "Square-rooting entries changes their aggregate comparison. Proposition four point three survives, while Proposition four point four fails. This example exposes exactly why one cannot pass from squared Ky Fan dominance to unsquared Ky Fan dominance."
+      ],
+      "layout": "reading",
+      "mathtex": "\\sum_{j=1}^{4}\\sigma_j(I-D)^2=4(2-\\sqrt2)<4=\\sum_{j=1}^{4}\\sigma_j(I-W)^2"
+    },
+    {
+      "title": "An equality with the projection lower bound",
+      "eyebrow": "G3 lecture 024000 · topic 7/9",
+      "id": "06-00-0",
+      "lead": "A universal bound says that every admissible W satisfies trace norm of P minus Q no greater than trace norm of identity minus W.",
+      "body": [
+        "For each principal angle theta, the projection difference has two singular values equal to sine theta. Here there are two angles, both forty-five degrees. Therefore the four singular values of P minus Q are all one over square root of two, whose sum is two square roots of two. That is exactly the trace norm of our competitor's displacement."
+      ],
+      "diagram": "counterexample",
+      "formula": "‖P−Q‖₁ = 2√2",
+      "mathtex": "\\|P-Q\\|_1=2\\sqrt2",
+      "layout": "figure"
+    },
+    {
+      "title": "An equality with the projection lower bound · further detail",
+      "eyebrow": "G3 lecture 024000 · topic 7/9",
+      "id": "06-00-1",
+      "lead": "So the competitor is not merely better than D; it attains the universal lower bound and is a global trace-norm minimizer.",
+      "body": [
+        "That conclusion is stronger than the bare refutation, and its proof is short once the general projection lower bound and the explicit singular-value computation are both available."
+      ],
+      "layout": "reading",
+      "mathtex": "\\|P-Q\\|_1=2\\sqrt2=\\|I-W\\|_1"
+    },
+    {
+      "title": "The entire acute family",
+      "eyebrow": "G3 lecture 024000 · topic 8/9",
+      "id": "07-00-0",
+      "lead": "The four-dimensional construction extends to every principal angle strictly between zero and ninety degrees: take two equal angles theta and choose a real orthogonal competitor with one rotation through twice theta and two fixed directions.",
+      "body": [
+        "Its singular-value distribution can differ from that of two independent direct rotations. The competitor's nonzero displacement singular values are two sine theta, twice. Its trace cost is four sine theta. The canonical direct rotation has four singular values equal to two sine theta over two, so its trace cost is eight sine theta over two. Use sine theta equal two sine theta over two times cosine theta over two. Then four sine theta equals eight sine theta over two times cosine theta over two."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "The entire acute family · further detail",
+      "eyebrow": "G3 lecture 024000 · topic 8/9",
+      "id": "07-00-1",
+      "lead": "Because cosine theta over two is strictly less than one for every positive theta, the competitor is strictly cheaper for every positive angle in the family.",
+      "body": [
+        "Consequently no positive universal angle threshold can repair the printed statement across all real dimensions. The failure persists arbitrarily close to coincident subspaces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Closing diagnosis",
+      "eyebrow": "G3 lecture 024000 · topic 9/9",
+      "id": "08-00",
+      "lead": "The counterexample uses a four-by-four orthogonal matrix, an acute source-target pair, a trace norm represented as a Ky Fan sum, and exact trigonometric calculations.",
+      "body": [
+        "It proves the negation of the universal proposition, not just a gap in an argument. The physical lesson is about where movement occurs. The canonical direct rotation spreads displacement over two prescribed principal planes. A competing real orthogonal transport can couple the planes and concentrate movement into a different two-plane. For squared cost this is expensive; for trace cost it can be cheaper."
+      ],
+      "takeaway": "The real four-dimensional competitor has lower unsquared trace-norm cost than the canonical direct rotation.",
+      "layout": "reading"
+    }
+  ]
+}

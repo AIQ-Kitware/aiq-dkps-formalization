@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "decks": [
+    {
+      "id": "dkps-fast-path",
+      "source": "dkps-fast-path.json",
+      "lecture_nodes": [
+        "g3:000000"
+      ]
+    },
+    {
+      "id": "finite-spectral-picture",
+      "source": "finite-spectral-picture.json",
+      "lecture_nodes": [
+        "g3:001000"
+      ]
+    },
+    {
+      "id": "g3-002000-spectral-separation-and-gap-hypotheses",
+      "source": "g3-002000-spectral-separation-and-gap-hypotheses.json",
+      "lecture_nodes": [
+        "g3:002000"
+      ]
+    },
+    {
+      "id": "g3-003000-trial-subspaces-ritz-values-and-residuals",
+      "source": "g3-003000-trial-subspaces-ritz-values-and-residuals.json",
+      "lecture_nodes": [
+        "g3:003000"
+      ]
+    },
+    {
+      "id": "g3-004000-principal-angle-sine-and-cosine-operators",
+      "source": "g3-004000-principal-angle-sine-and-cosine-operators.json",
+      "lecture_nodes": [
+        "g3:004000"
+      ]
+    },
+    {
+      "id": "g3-005000-canonical-direct-rotation",
+      "source": "g3-005000-canonical-direct-rotation.json",
+      "lecture_nodes": [
+        "g3:005000"
+      ]
+    },
+    {
+      "id": "g3-006000-unitarily-invariant-norms-and-ky-fan-dominance",
+      "source": "g3-006000-unitarily-invariant-norms-and-ky-fan-dominance.json",
+      "lecture_nodes": [
+        "g3:006000"
+      ]
+    },
+    {
+      "id": "g3-007000-block-operators-and-reducing-subspaces",
+      "source": "g3-007000-block-operators-and-reducing-subspaces.json",
+      "lecture_nodes": [
+        "g3:007000"
+      ]
+    },
+    {
+      "id": "g3-008000-the-sylvester-equation",
+      "source": "g3-008000-the-sylvester-equation.json",
+      "lecture_nodes": [
+        "g3:008000"
+      ]
+    },
+    {
+      "id": "g3-009000-ordered-spectral-separation",
+      "source": "g3-009000-ordered-spectral-separation.json",
+      "lecture_nodes": [
+        "g3:009000"
+      ]
+    },
+    {
+      "id": "g3-010000-choosing-the-correct-sylvester-norm-estimate",
+      "source": "g3-010000-choosing-the-correct-sylvester-norm-estimate.json",
+      "lecture_nodes": [
+        "g3:010000"
+      ]
+    },
+    {
+      "id": "g3-011000-the-unbounded-spectral-theorem",
+      "source": "g3-011000-the-unbounded-spectral-theorem.json",
+      "lecture_nodes": [
+        "g3:011000"
+      ]
+    },
+    {
+      "id": "g3-012000-domains-and-unbounded-sylvester-identities",
+      "source": "g3-012000-domains-and-unbounded-sylvester-identities.json",
+      "lecture_nodes": [
+        "g3:012000"
+      ]
+    },
+    {
+      "id": "g3-013000-symmetric-operator-ideals",
+      "source": "g3-013000-symmetric-operator-ideals.json",
+      "lecture_nodes": [
+        "g3:013000"
+      ]
+    },
+    {
+      "id": "g3-014000-graph-subspaces-and-tangent-geometry",
+      "source": "g3-014000-graph-subspaces-and-tangent-geometry.json",
+      "lecture_nodes": [
+        "g3:014000"
+      ]
+    },
+    {
+      "id": "g3-015000-off-diagonal-perturbations-and-reflection",
+      "source": "g3-015000-off-diagonal-perturbations-and-reflection.json",
+      "lecture_nodes": [
+        "g3:015000"
+      ]
+    },
+    {
+      "id": "g3-016000-spectral-selection-and-repulsion",
+      "source": "g3-016000-spectral-selection-and-repulsion.json",
+      "lecture_nodes": [
+        "g3:016000"
+      ]
+    },
+    {
+      "id": "g3-017000-direct-rotation-under-restricted-hypotheses",
+      "source": "g3-017000-direct-rotation-under-restricted-hypotheses.json",
+      "lecture_nodes": [
+        "g3:017000"
+      ]
+    },
+    {
+      "id": "g3-018000-squared-displacement-and-majorization",
+      "source": "g3-018000-squared-displacement-and-majorization.json",
+      "lecture_nodes": [
+        "g3:018000"
+      ]
+    },
+    {
+      "id": "g3-019000-why-unsquared-displacement-is-different",
+      "source": "g3-019000-why-unsquared-displacement-is-different.json",
+      "lecture_nodes": [
+        "g3:019000"
+      ]
+    },
+    {
+      "id": "g3-020000-the-sine-theta-theorem",
+      "source": "g3-020000-the-sine-theta-theorem.json",
+      "lecture_nodes": [
+        "g3:020000"
+      ]
+    },
+    {
+      "id": "g3-021000-the-tangent-theta-theorem",
+      "source": "g3-021000-the-tangent-theta-theorem.json",
+      "lecture_nodes": [
+        "g3:021000"
+      ]
+    },
+    {
+      "id": "g3-022000-the-sine-two-theta-theorem",
+      "source": "g3-022000-the-sine-two-theta-theorem.json",
+      "lecture_nodes": [
+        "g3:022000"
+      ]
+    },
+    {
+      "id": "g3-023000-the-tangent-two-theta-theorem",
+      "source": "g3-023000-the-tangent-two-theta-theorem.json",
+      "lecture_nodes": [
+        "g3:023000"
+      ]
+    },
+    {
+      "id": "g3-024000-the-proposition-4-4-counterexample",
+      "source": "g3-024000-the-proposition-4-4-counterexample.json",
+      "lecture_nodes": [
+        "g3:024000"
+      ]
+    },
+    {
+      "id": "g3-025000-the-real-transport-matching-theorem",
+      "source": "g3-025000-the-real-transport-matching-theorem.json",
+      "lecture_nodes": [
+        "g3:025000"
+      ]
+    }
+  ]
+}

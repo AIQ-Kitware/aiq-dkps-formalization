@@ -25,3 +25,6 @@ slides-*/
 
 # On-demand server-generated audio is disposable and must not be committed.
 /audio-cache/
+
+# On-demand HTML builds of source-controlled companion slide decks
+/companion-slide-cache/

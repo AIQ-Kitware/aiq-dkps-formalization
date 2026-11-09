@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "id": "g3-002000-spectral-separation-and-gap-hypotheses",
+  "title": "Spectral separation and gap hypotheses",
+  "subtitle": "Independent reading companion to G3 002000",
+  "lecture_nodes": [
+    "g3:002000"
+  ],
+  "source_lecture": "draft-stages/tts-paper/002000-spectral-separation-and-gap-hypotheses.md",
+  "adaptation": "Edited G3 lecture prose restructured into readable slide units; formulas and selected SVG geometric models are authored companion material.",
+  "slides": [
+    {
+      "title": "The central problem",
+      "eyebrow": "G3 lecture 002000 · topic 1/8",
+      "id": "00-00",
+      "lead": "Suppose someone tells you that two groups of eigenvalues are separated by a gap of two.",
+      "body": [
+        "What picture comes to mind? Perhaps one group sits to the left on a number line, there is an empty stretch of length two, and the other group sits to the right. That picture describes one kind of gap. But it does not describe every kind. Two groups can be separated from each other even when their eigenvalues alternate along the number line. The difference matters because different mathematical arguments require different kinds of separation. These forms of spectral separation have different consequences for Sylvester equations and perturbation bounds."
+      ],
+      "layout": "opening"
+    },
+    {
+      "title": "First, two sets on a number line",
+      "eyebrow": "G3 lecture 002000 · topic 2/8",
+      "id": "01-00-0",
+      "lead": "Start with two nonempty finite sets of real numbers.",
+      "body": [
+        "Call the first group red and the second group blue. Their distance gap is the smallest absolute difference between one red number and one blue number. Take red numbers negative three and positive three, and a single blue number zero. Every red number is three units away from blue. So the distance gap is three. But could we draw one vertical dividing line so that all red numbers are on one side and all blue numbers are on the other? No. Blue zero lies between the two red values."
+      ],
+      "diagram": "spectral-gap",
+      "formula": "dist(S,T) = min |s − t|",
+      "mathtex": "\\operatorname{dist}(S,T)=\\inf_{s\\in S,\\,t\\in T}|s-t|",
+      "layout": "figure"
+    },
+    {
+      "title": "First, two sets on a number line · further detail",
+      "eyebrow": "G3 lecture 002000 · topic 2/8",
+      "id": "01-00-1",
+      "lead": "The groups are separated in the pairwise-distance sense, but they are not ordered.",
+      "body": [
+        "Now choose red numbers negative two and zero, and blue numbers three and five. Every blue number lies to the right of every red number."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "First, two sets on a number line · continued",
+      "eyebrow": "G3 lecture 002000 · topic 2/8",
+      "id": "01-01",
+      "lead": "The nearest red and blue values are zero and three, so the distance gap is three again.",
+      "body": [
+        "This time we have ordered separation: every blue number exceeds every red number by at least three. The same numerical gap, three, describes two different arrangements. One is a statement about absolute differences. The other is a statement about an ordering of all pairs."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Translating the picture to operators",
+      "eyebrow": "G3 lecture 002000 · topic 3/8",
+      "id": "02-00-0",
+      "lead": "For a self-adjoint matrix, every eigenvalue is real, so the number-line picture applies.",
+      "body": [
+        "But we need to specify which eigenvalues belong to each group. Recall that a spectral projection selects an entire eigenspace for each chosen eigenvalue. If a subspace is reducing, the operator acts on that subspace without sending vectors outside it. We can restrict the operator to the selected subspace and separately to its perpendicular complement. Those restrictions have spectra of their own. For example, take a diagonal operator with entries negative three, zero, and three. Let our selected subspace be the plane spanned by the first and third coordinate directions."
+      ],
+      "diagram": "spectral-gap",
+      "layout": "figure"
+    },
+    {
+      "title": "Translating the picture to operators · further detail",
+      "eyebrow": "G3 lecture 002000 · topic 3/8",
+      "id": "02-00-1",
+      "lead": "The restriction to that plane has eigenvalues negative three and three.",
+      "body": [
+        "The complementary line has eigenvalue zero. So the two restricted spectra have distance gap three. Yet they interlace: the complementary eigenvalue lies between the two selected ones."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Translating the picture to operators · continued",
+      "eyebrow": "G3 lecture 002000 · topic 3/8",
+      "id": "02-01",
+      "lead": "If instead we select the first two coordinate directions of a diagonal operator with entries negative two, zero, and three, the selected spectrum is negative two and zero, while the complement has eigenvalue three.",
+      "body": [
+        "Now the blocks are ordered, with a gap of three. Notice what a gap is not. It is not necessarily the distance between consecutive eigenvalues in the full sorted list. It is a distance between two specifically identified spectral groups. Those groups may be chosen in different ways, and different theorems may compare blocks from different operators."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Internal gaps, external gaps, and mixed gaps",
+      "eyebrow": "G3 lecture 002000 · topic 4/8",
+      "id": "03-00",
+      "lead": "An internal gap compares two blocks of the same operator, such as a reducing subspace and its orthogonal complement.",
+      "body": [
+        "A mixed gap compares a selected block of one operator with a complementary block of another. Those blocks are the ranges of spectral projections obtained by summing the eigenspace projections over the selected eigenvalue sets. Later, in the sine-theta theorem, the mixed comparison is exactly what enters a residual equation. There is also an interval-versus-exterior description. Suppose one spectral group lies between zero and two. The other must lie outside an enlarged interval extending from negative one to three. Then every value in the first group is at least one unit from every value in the second group. But the exterior group might have values on both sides: perhaps negative four and five."
+      ],
+      "diagram": "spectral-gap",
+      "layout": "figure"
+    },
+    {
+      "title": "Internal gaps, external gaps, and mixed gaps · continued",
+      "eyebrow": "G3 lecture 002000 · topic 4/8",
+      "id": "03-01",
+      "lead": "So the interval-versus-exterior condition guarantees distance separation without necessarily putting the groups in a single global order.",
+      "body": [
+        "This is why a theorem that assumes an interval and its enlarged exterior cannot automatically be read as a theorem about two ordered blocks. We have to check the actual statement."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Ordered separation is stronger",
+      "eyebrow": "G3 lecture 002000 · topic 5/8",
+      "id": "04-00",
+      "lead": "Let's prove a simple implication.",
+      "body": [
+        "Suppose every blue eigenvalue is at least delta greater than every red eigenvalue, where delta is nonnegative. Choose any red value and any blue value. Blue minus red is at least delta, so its absolute value is also at least delta. Therefore ordered separation implies pairwise distance separation. The converse fails, as the negative-three, zero, three example demonstrates. Its red and blue spectra are three apart but cannot be put in the demanded order without changing which group is which. This distinction is not a technicality. It changes the type of argument we can use."
+      ],
+      "diagram": "spectral-gap",
+      "formula": "max(S) + δ ≤ min(T)",
+      "mathtex": "\\max S+\\delta\\leq\\min T",
+      "layout": "figure"
+    },
+    {
+      "title": "A first encounter with the Sylvester equation",
+      "eyebrow": "G3 lecture 002000 · topic 6/8",
+      "id": "05-00",
+      "lead": "Consider the scalar equation: a times x, minus x times b, equals c.",
+      "body": [
+        "Because these are numbers, the left side is simply a minus b, multiplied by x. If a and b are different, the unique solution is c divided by a minus b. The absolute difference between a and b tells us how large that division can make x. A small denominator means a potentially large solution; a large denominator limits its size. For diagonal matrices A and B, a matrix equation of the form A X minus X B equals C works entry by entry in exactly the same way. Each entry of X is the corresponding entry of C divided by a difference between an eigenvalue of A and an eigenvalue of B."
+      ],
+      "diagram": "sylvester",
+      "formula": "AX − XB = C",
+      "mathtex": "AX-XB=C",
+      "layout": "figure"
+    },
+    {
+      "title": "A first encounter with the Sylvester equation · continued",
+      "eyebrow": "G3 lecture 002000 · topic 6/8",
+      "id": "05-01",
+      "lead": "This makes the pairwise distance gap look like the natural object: none of those denominators can be smaller in absolute value than the gap.",
+      "body": [
+        "And for a sum-of-squares measure of matrix size, such as the Frobenius norm, the entry-by-entry argument gives an immediate estimate. But not every matrix norm behaves by summing independent squares. For the operator norm, cancellation and the way different entries combine can matter. We cannot claim an identical sharp bound for every norm just because the scalar denominators are large. There is a particularly clean additional idea when the spectra are ordered. Suppose all eigenvalues of A lie below all eigenvalues of B. Then the differences all have the same sign. This allows us, later, to build the inverse of the Sylvester operation using a convergent integral of matrix exponentials, with no conflicting directions of growth."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "A first encounter with the Sylvester equation · continued",
+      "eyebrow": "G3 lecture 002000 · topic 6/8",
+      "id": "05-02",
+      "lead": "When the two spectra interlace, the sign can change from one pair to another.",
+      "body": [
+        "That single integral argument is no longer available in the same form. More elaborate constructions are needed for the general separated case. For the Sylvester equation A X minus X B equals C, an ordered spectral gap supports a decay-integral estimate with constant one, while an interlaced pairwise gap can require a different bound. The location of the spectral sets, not merely the size of a number called a gap, decides which estimate applies."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Ordered gaps and quadratic forms",
+      "eyebrow": "G3 lecture 002000 · topic 7/8",
+      "id": "06-00",
+      "lead": "There is another description of ordered separation that connects back to Rayleigh quotients.",
+      "body": [
+        "Suppose A is self-adjoint, and its selected subspace and complement reduce A. Imagine that every unit vector in the selected subspace has Rayleigh quotient at most one, while every unit vector in the complement has quotient at least four. Then the eigenvalues on the first block lie at or below one, and those on the second block lie at or above four. Their ordered gap is at least three. Why? An eigenvector's Rayleigh quotient equals its eigenvalue. So the bounds on all unit vectors certainly bound all the eigenvalues. Conversely, the spectral theorem expresses any unit-vector Rayleigh quotient as a weighted average of the eigenvalues in its block, so spectral bounds imply those quadratic-form bounds. That is the bridge between a geometric picture of two groups of eigenvalues and inequalities we can verify directly on vectors."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "A diagnostic exercise",
+      "eyebrow": "G3 lecture 002000 · topic 8/8",
+      "id": "07-00",
+      "lead": "Here are three questions to test whether the distinctions are clear.",
+      "body": [
+        "First: selected eigenvalues are negative four and four, and the complement has eigenvalue zero. Is there a positive distance gap? Yes, of size four. Is there a global ordered gap between those two named blocks? No. Second: selected eigenvalues are one and two, and complementary eigenvalues are five and seven. What ordered gap is guaranteed? Three, with the selected group below the complement. Third: why does knowing the spectrum of the whole matrix not by itself tell you which gap a theorem is using? Because the theorem may compare restricted spectra associated with particular subspaces, or even restrictions belonging to two different operators. The lesson to carry forward is simple. Before applying a spectral theorem, draw the relevant groups on a number line. Then ask not just how far apart they are, but whether they are ordered, interlaced, or separated as an interval and its exterior."
+      ],
+      "takeaway": "The location of spectral groups, not only their numerical distance, determines the available perturbation estimate.",
+      "layout": "reading"
+    }
+  ]
+}

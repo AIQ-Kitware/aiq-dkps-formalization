@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "id": "g3-017000-direct-rotation-under-restricted-hypotheses",
+  "title": "Direct rotation under restricted hypotheses",
+  "subtitle": "Independent reading companion to G3 017000",
+  "lecture_nodes": [
+    "g3:017000"
+  ],
+  "source_lecture": "draft-stages/tts-paper/017000-direct-rotation-under-restricted-hypotheses.md",
+  "adaptation": "Edited G3 lecture prose restructured into readable slide units; formulas and selected SVG geometric models are authored companion material.",
+  "slides": [
+    {
+      "title": "The central problem",
+      "eyebrow": "G3 lecture 017000 · topic 1/7",
+      "id": "00-00",
+      "lead": "For two closed subspaces U and V, a unitary or orthogonal transporter W sends U onto V.",
+      "body": [
+        "There may be many such maps. Which one moves vectors starting in U by the smallest amount? Proposition four point one of Davis and Kahan answers this question, and Corollary four point one extends the answer to every unitarily invariant norm of the restricted displacement. Measuring displacement only on U is a crucial hypothesis: minimizing displacement on the entire ambient space is a different optimization problem."
+      ],
+      "layout": "opening"
+    },
+    {
+      "title": "Set up the competitors",
+      "eyebrow": "G3 lecture 017000 · topic 2/7",
+      "id": "01-00",
+      "lead": "Take two finite-dimensional subspaces U and V of the same Hilbert space.",
+      "body": [
+        "For the first proof, suppose there is a canonical direct rotation D taking U to V. In particular, we can choose orthonormal principal vectors u-one through u-r in U and matching vectors v-one through v-r in V. Their inner products are the cosines of the principal angles, each between zero and a right angle. On each principal plane D turns u-j into v-j through the shorter angle and acts canonically on the perpendicular direction. Common directions stay fixed. Let W be any competing unitary taking U onto V. It may rotate inside V after arriving there; it may mix different principal planes; and it may act in any permissible way on the complementary space."
+      ],
+      "diagram": "rotation-chord",
+      "formula": "W(U) = V for each admissible transporter W",
+      "mathtex": "W(\\mathcal U)=\\mathcal V",
+      "layout": "figure"
+    },
+    {
+      "title": "Set up the competitors · continued",
+      "eyebrow": "G3 lecture 017000 · topic 2/7",
+      "id": "01-01",
+      "lead": "We measure its restricted displacement by applying identity minus W only to vectors in U.",
+      "body": [
+        "In matrix notation that is the rectangular map from U to the ambient space sending x to x minus W x. For the direct rotation, call that restricted map T. For the competitor, call it S. We want more than an operator-norm inequality. We will compare their entire decreasing lists of singular values, one coordinate at a time."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "A geometric inequality for one vector",
+      "eyebrow": "G3 lecture 017000 · topic 3/7",
+      "id": "02-00",
+      "lead": "Choose any unit vector x in U.",
+      "body": [
+        "Since W takes U onto V, the vector W x is a unit vector in V. The squared distance from x to W x is two minus twice the real part of their inner product. Because W x lies in V, that real inner product is no greater than the length of the orthogonal projection of x onto V. We therefore get an elementary lower bound: the squared displacement of x under W is at least two minus twice the norm of the V-projection of x. Notice that this estimate only used the destination subspace. It did not assume W respects principal directions. The bound involves the length of the V projection rather than its inner product with x. That distinction is important."
+      ],
+      "diagram": "rotation-chord",
+      "formula": "unit vector → angular displacement bound",
+      "layout": "figure"
+    },
+    {
+      "title": "A geometric inequality for one vector · continued",
+      "eyebrow": "G3 lecture 017000 · topic 3/7",
+      "id": "02-01",
+      "lead": "We cannot replace the projection length by the quadratic form of the positive cosine operator and claim a pointwise ordering of the two displacement Gram operators.",
+      "body": [
+        "Such a quadratic-form ordering is generally false when a competitor mixes principal directions. Instead, keep the norm bound and use a subspace on which it becomes sharp enough. Define the positive cosine operator C on U as the modulus of the projection from U onto V. Its eigenvalues are the principal cosines. Arrange the principal angles in descending order, so the corresponding cosines are ascending. For a chosen index k, take M to be the span of the first k principal vectors, those with the largest angles and smallest cosines. For every unit vector x in M, the norm of its projection onto V equals the norm of C x, and is at most cosine theta-k."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "A geometric inequality for one vector · continued",
+      "eyebrow": "G3 lecture 017000 · topic 3/7",
+      "id": "02-02",
+      "lead": "This follows by expanding x in those principal vectors: each coefficient is multiplied by a cosine no larger than cosine theta-k.",
+      "body": [
+        "Return to the earlier one-vector inequality. For every unit x in M, the squared displacement under W is at least two minus twice cosine theta-k. Therefore the displacement norm is at least two sine of theta-k over two, uniformly on the entire k-dimensional subspace M. That is precisely the kind of lower bound required by the singular-value min–max principle. We do not need the competing displacement to be larger on every individual vector than the direct displacement."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "From quadratic forms to singular values",
+      "eyebrow": "G3 lecture 017000 · topic 4/7",
+      "id": "03-00-0",
+      "lead": "The singular-value min–max theorem says that the k-th largest singular value of a rectangular map is the maximum, over k-dimensional source subspaces, of the minimum output length on their unit spheres.",
+      "body": [
+        "We just exhibited such a subspace on which every unit vector has output length at least two sine of theta-k over two. That lower bound therefore holds for the competitor’s k-th singular value. Consequently the k-th singular value of the competitor's restricted displacement is at least that principal chord. For the direct rotation the same chord is exactly its k-th singular value."
+      ],
+      "diagram": "ky-fan",
+      "formula": "squared displacement yields singular-value comparisons",
+      "layout": "figure"
+    },
+    {
+      "title": "From quadratic forms to singular values · further detail",
+      "eyebrow": "G3 lecture 017000 · topic 4/7",
+      "id": "03-00-1",
+      "lead": "This proves the pointwise singular-value ordering for every k, without asserting a false Gram-operator ordering.",
+      "body": [
+        "To see the direct list explicitly, consider a principal vector u with principal angle theta. Its image under D is the matching vector v."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "From quadratic forms to singular values · continued",
+      "eyebrow": "G3 lecture 017000 · topic 4/7",
+      "id": "03-01",
+      "lead": "Their inner product is cosine theta, so the distance between them is the square root of two minus two cosine theta.",
+      "body": [
+        "The half-angle identity turns this into two times sine of theta over two. Different principal planes are orthogonal; consequently the singular-value list of the restricted displacement of D consists of these principal chords, sorted from largest to smallest, with zeros where appropriate. Here is a numerical example. Take two source directions with principal angles thirty and sixty degrees. The direct restricted displacement has singular values approximately one point zero and zero point five one eight. Any unitary carrying the source plane onto the target must have its first singular value at least one and its second at least zero point five one eight. This conclusion allows the competitor to mix the two directions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Passing to every invariant norm",
+      "eyebrow": "G3 lecture 017000 · topic 5/7",
+      "id": "04-00-0",
+      "lead": "A unitarily invariant norm depends only on the singular values through a symmetric gauge.",
+      "body": [
+        "Every such gauge is monotone under coordinatewise domination of nonnegative sorted singular values. Since we proved the stronger pointwise comparison, the direct rotation minimizes every unitarily invariant norm of the restricted displacement. For the operator norm, the conclusion concerns the largest chord. For the Frobenius norm, square and sum the chords. For the trace norm, add the chords themselves. We do not have to prove separate optimization theorems for those three choices."
+      ],
+      "diagram": "ky-fan",
+      "formula": "Ky Fan dominance → invariant norm comparison",
+      "layout": "figure"
+    },
+    {
+      "title": "Passing to every invariant norm · further detail",
+      "eyebrow": "G3 lecture 017000 · topic 5/7",
+      "id": "04-00-1",
+      "lead": "In infinite-dimensional Hilbert space we replace finite singular-value lists with approximation numbers, and we must account for ideal membership.",
+      "body": [
+        "If the competitor's restricted displacement belongs to a normalized invariant ideal satisfying the appropriate Ky Fan dominance property, the approximation-number comparison places the direct displacement in the ideal and bounds its gauge. The original theorem retains compact-angle and crossed-defect hypotheses in its infinite-dimensional setting. The construction of the chosen defect matching is part of the direct rotation, rather than a new freedom in the objective."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Where the proof can be misapplied",
+      "eyebrow": "G3 lecture 017000 · topic 6/7",
+      "id": "05-00-0",
+      "lead": "There are two different rectangular maps in play.",
+      "body": [
+        "The map x goes to x minus W x with x restricted to U measures the distance the source vectors themselves travel. The full operator identity minus W allows an input vector entirely outside U. Our comparison says nothing pointwise about that additional part. The restricted theorem also does not say the competitor must be the canonical rotation to attain equality. If singular values coincide or some directions are fixed, there may be several optimizers. For a strictly convex objective and nondegenerate angles one can sometimes prove more, but that needs separate hypotheses."
+      ],
+      "diagram": "rotation-chord",
+      "formula": "keep the restricted hypotheses in the conclusion",
+      "layout": "figure"
+    },
+    {
+      "title": "Where the proof can be misapplied · further detail",
+      "eyebrow": "G3 lecture 017000 · topic 6/7",
+      "id": "05-00-1",
+      "lead": "Finally, be careful with the meaning of an angle.",
+      "body": [
+        "The principal angle between U and V is determined by projections, not by the angle between an arbitrary vector x and its image W x. For the direct rotation these quantities coincide along principal vectors. A competing W can move some vectors farther while still arriving at the correct target subspace."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Closing proof map",
+      "eyebrow": "G3 lecture 017000 · topic 7/7",
+      "id": "06-00",
+      "lead": "The argument has four parts.",
+      "body": [
+        "First, the direct rotation chooses the positive cosine geometry of the source-to-target projection. Second, a subspace of the k largest principal-angle directions gives a uniform lower bound on the competitor's output length. Third, singular-value min–max converts that subspace bound into every singular-value inequality. Fourth, symmetric-gauge monotonicity converts that list comparison into universal restricted-norm optimality. This establishes restricted-norm optimality. It does not assert that the same transporter minimizes every unsquared norm of displacement across the entire ambient space."
+      ],
+      "takeaway": "Direct-rotation optimality depends on both the admissible transport class and the norm objective.",
+      "layout": "reading"
+    }
+  ]
+}

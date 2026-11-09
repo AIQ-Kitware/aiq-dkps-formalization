@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "id": "g3-012000-domains-and-unbounded-sylvester-identities",
+  "title": "Domains and unbounded Sylvester identities",
+  "subtitle": "Independent reading companion to G3 012000",
+  "lecture_nodes": [
+    "g3:012000"
+  ],
+  "source_lecture": "draft-stages/tts-paper/012000-domains-and-unbounded-sylvester-identities.md",
+  "adaptation": "Edited G3 lecture prose restructured into readable slide units; formulas and selected SVG geometric models are authored companion material.",
+  "slides": [
+    {
+      "title": "The central problem",
+      "eyebrow": "G3 lecture 012000 · topic 1/7",
+      "id": "00-00",
+      "lead": "In finite-dimensional perturbation theory we regularly write A X minus X B equals C.",
+      "body": [
+        "Every expression makes sense because all the matrices act on every vector. For unbounded operators this is no longer automatic. A and B have domains, and even a bounded map X may carry a legal input for B outside the domain of A. The Sylvester equation for unbounded operators therefore includes a domain-mapping condition, as well as an identity on that domain. The compressed sine-theta equation satisfies both conditions when the reducing subspaces and residual are defined appropriately."
+      ],
+      "layout": "opening"
+    },
+    {
+      "title": "The typed Sylvester equation",
+      "eyebrow": "G3 lecture 012000 · topic 2/7",
+      "id": "01-00-0",
+      "lead": "Let B be a densely defined self-adjoint operator on a Hilbert space F.",
+      "body": [
+        "Let A be a densely defined self-adjoint operator on another Hilbert space E. Let X and C be bounded maps from F into E. We would like the equation A X minus X B equals C to hold. For an input y in D of B, the value B y is defined, and the bounded map X can act on B y. The term X B y therefore makes sense. The first term, A X y, requires another condition: X y must belong to D of A."
+      ],
+      "diagram": "sylvester",
+      "formula": "AX − XB = C on the appropriate domain",
+      "mathtex": "AX-XB=C\\quad\\text{on }D(B)",
+      "layout": "figure"
+    },
+    {
+      "title": "The typed Sylvester equation · further detail",
+      "eyebrow": "G3 lecture 012000 · topic 2/7",
+      "id": "01-00-1",
+      "lead": "Thus the Sylvester equation has two parts.",
+      "body": [
+        "First, X maps D of B into D of A. Second, for every y in D of B, A applied to X y minus X applied to B y equals C y. Both parts are mathematical assertions. The first is not merely a type-checking inconvenience. Without it, the equation itself has no meaning. This is the distinction between a domain-aware equation and an identity of bounded operators. If A and B are unbounded, A X and X B are not automatically continuous maps on all of F."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "A diagonal example where the equation is legal",
+      "eyebrow": "G3 lecture 012000 · topic 3/7",
+      "id": "02-00",
+      "lead": "Take E and F both equal to ell two.",
+      "body": [
+        "Let A multiply coordinate N by N plus two, and let B multiply it by negative N. Both operators are self-adjoint on their weighted square-summability domains. Let C be the identity. Define X to multiply coordinate N by one divided by two N plus two. This X is bounded, since its largest diagonal multiplier occurs at N equal to one and equals one fourth. For any y in D of B, the N-th coordinate of X y has been divided by two N plus two. Applying A afterward multiplies by N plus two. The combined multiplier is at most one, so A X y exists. In fact, X sends every vector in ell two into D of A in this example."
+      ],
+      "diagram": "spectral-cutoff",
+      "formula": "D(B) → D(A) must be verified",
+      "mathtex": "X\\!\\left(D(B)\\right)\\subseteq D(A)",
+      "layout": "figure"
+    },
+    {
+      "title": "A diagonal example where the equation is legal · continued",
+      "eyebrow": "G3 lecture 012000 · topic 3/7",
+      "id": "02-01",
+      "lead": "The N-th coordinate of A X y minus X B y is the N-th coordinate of y: the numerator is N plus two, minus negative N, divided by two N plus two.",
+      "body": [
+        "It equals one. Therefore the Sylvester equation holds on D of B. We have verified both domain membership and the coordinate identity. Now try X equal to the identity instead. The expression A X minus X B would formally multiply coordinate N by two N plus two. That is unbounded. There is no bounded C representing this expression on all inputs. Simply writing down the symbolic matrix difference would hide the failure."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "The cross block from two spectral projections",
+      "eyebrow": "G3 lecture 012000 · topic 4/7",
+      "id": "03-00",
+      "lead": "Now move to the situation that Davis–Kahan theory actually studies.",
+      "body": [
+        "Let A be self-adjoint on H, and let V be a bounded self-adjoint perturbation. Set the perturbed operator equal to A plus V, with exactly the same domain as A. Let P be a spectral projection of A. Let Q be a spectral projection of A plus V, perhaps selecting a nearby cluster of spectral values. By the reducing-domain result, the range of P and its orthogonal complement carry self-adjoint operator restrictions of A. Likewise Q H carries a self-adjoint restriction of the perturbed operator. Define X to take a vector in Q H and project it onto the orthogonal complement of P H. In symbols spoken aloud, X is identity minus P, restricted to Q H."
+      ],
+      "diagram": "block-operator",
+      "formula": "cross-block residual identity",
+      "layout": "figure"
+    },
+    {
+      "title": "The cross block from two spectral projections · continued",
+      "eyebrow": "G3 lecture 012000 · topic 4/7",
+      "id": "03-01",
+      "lead": "The domain of the operator B on Q H consists of Q-vectors that also belong to D of A.",
+      "body": [
+        "Take such a vector y. Since the complementary spectral projection identity minus P preserves D of A, X y belongs to the domain of the restricted A operator on the complement of P H. The first Sylvester requirement holds. Now calculate. Because identity minus P commutes with A on D of A, the complementary A restriction applied to X y equals identity minus P applied to A y. The second term, X B y, is identity minus P applied to A plus V acting on y. Subtract these two expressions. The A contributions cancel, leaving negative identity minus P applied to V y. Thus the precise compressed equation is: complementary A restriction times X, minus X times perturbed restriction, equals the negative complementary projection of V, restricted to Q H."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "The cross block from two spectral projections · continued",
+      "eyebrow": "G3 lecture 012000 · topic 4/7",
+      "id": "03-02",
+      "lead": "The right side is bounded, with norm at most the norm of V.",
+      "body": [
+        "And X is the cross-projection map whose norm measures the directed sine of the subspace angles. This is the bridge from a perturbation V to an angle estimate. The algebra looks like the finite-dimensional proof, but we reached it only after identifying the two restricted domains."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "What a spectral cutoff does",
+      "eyebrow": "G3 lecture 012000 · topic 5/7",
+      "id": "04-00",
+      "lead": "Suppose we want to estimate an unbounded operator equation using a theorem originally proved for bounded operators.",
+      "body": [
+        "Choose spectral cutoffs for A and B. Each cutoff projects into a bounded spectral band. It preserves the corresponding operator domain and commutes with the corresponding generator there. The bounded truncation agrees with the original operator on the selected band. The first temptation is to replace A and B by their truncations, keep X unchanged, and claim that the original Sylvester equation remains valid. That is generally wrong. X need not commute with the two cutoff projections. A safer construction is to cut both the input and output: use a bounded map made by placing the A cutoff on the left of X and the B cutoff on the right."
+      ],
+      "diagram": "spectral-cutoff",
+      "formula": "Pᴿ = E([−R,R])",
+      "mathtex": "P_R=E([-R,R])",
+      "layout": "figure"
+    },
+    {
+      "title": "What a spectral cutoff does · continued",
+      "eyebrow": "G3 lecture 012000 · topic 5/7",
+      "id": "04-01",
+      "lead": "On vectors lying in the B cutoff range, the original domain-aware equation and the commutation rules give a bounded block equation for the truncated operators.",
+      "body": [
+        "The corresponding right side contains the cutoffs of C. At each fixed cutoff radius, every map in this block equation is bounded. We can now apply a bounded Sylvester theorem, provided its spectral gap hypotheses survive the truncation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Why filling the cutoff complement helps",
+      "eyebrow": "G3 lecture 012000 · topic 6/7",
+      "id": "05-00-0",
+      "lead": "An ordinary truncation acts as zero outside its retained band.",
+      "body": [
+        "If the original A spectrum lies above five, a zero complement introduces artificial spectral values below five. This can destroy an ordered spectral gap. The filled truncation instead assigns a chosen scalar to the complement. Choosing that scalar on the correct side of the gap can maintain the necessary form inequality while the retained spectral band expands. The existence of such a family is more useful than a single convenient formula."
+      ],
+      "diagram": "spectral-cutoff",
+      "formula": "bounded cutoff estimate → unbounded limit",
+      "layout": "figure"
+    },
+    {
+      "title": "Why filling the cutoff complement helps · further detail",
+      "eyebrow": "G3 lecture 012000 · topic 6/7",
+      "id": "05-00-1",
+      "lead": "We need projections that converge strongly to identity, bounded truncations that converge on domain vectors, and uniform gap inequalities that survive the approximation.",
+      "body": [
+        "The cutoff argument must establish each of those requirements. Merely having a sequence of bounded operators is insufficient if the cutoff introduces spectrum inside the needed gap or fails to converge on the original graph domain."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Passing from bounded estimates back to unbounded ones",
+      "eyebrow": "G3 lecture 012000 · topic 7/7",
+      "id": "06-00",
+      "lead": "Suppose each cutoff equation yields a uniform bound on the cross map.",
+      "body": [
+        "The cutoffs converge strongly on fixed vectors, so we can pass the estimate to the limit for each vector. Taking the supremum over unit vectors then gives the operator-norm bound for the original X. Notice the direction of this argument. Uniform estimates pass through strong limits, but strong convergence alone does not imply operator-norm convergence of the approximants. For an operator identity we need more: convergence on legal domain vectors, convergence of the operator images, and closedness to identify the limit. Domain conditions must be propagated separately from norm estimates."
+      ],
+      "diagram": "sylvester",
+      "takeaway": "Cutoffs recover domain-aware equations and bounds from bounded approximations.",
+      "layout": "figure"
+    }
+  ]
+}

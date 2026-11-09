@@ -15,6 +15,11 @@ import wave
 
 from dkvis.presentation.paths import ROOT
 DEFAULT_CONFIG = ROOT / "tts.toml"
+# Machine-local add-on config (gitignored): may add or override
+# [profiles.*] and [pronunciation_lexicons] entries without touching any
+# checked-in file. It is merged in only when the default config is loaded;
+# an explicit config path is honored exactly as written.
+LOCAL_CONFIG = ROOT / "tts.local.toml"
 DEFAULTS = dict(
     timeout_seconds=600,
     max_chars=420,
@@ -43,11 +48,70 @@ def load_env(path=ROOT / ".env"):
         os.environ.setdefault(key.strip(), tokens[0] if tokens else "")
 
 
-def load_profiles(path=DEFAULT_CONFIG):
+def load_profiles(path=None):
+    """Load the shared profiles plus local overrides, or an explicit TOML alone."""
     load_env()
-    with Path(path).open("rb") as stream:
+    config_path = DEFAULT_CONFIG if path is None else Path(path)
+    with config_path.open('rb') as stream:
         document = tomllib.load(stream)
-    document['_config_dir'] = str(Path(path).resolve().parent)
+    document['_config_dir'] = str(config_path.resolve().parent)
+    if path is None:
+        merge_local_overlay(document)
+    return document
+
+
+def _merge_tables(base, changes):
+    """Merge TOML tables without dropping unspecified nested profile options."""
+    merged = dict(base)
+    for name, value in changes.items():
+        old = merged.get(name)
+        if isinstance(old, dict) and isinstance(value, dict):
+            merged[name] = _merge_tables(old, value)
+        else:
+            merged[name] = value
+    return merged
+
+
+def merge_local_overlay(document):
+    """Apply the gitignored machine-local settings over the shared profiles.
+
+    A local profile may override only its endpoint, voice, request fields, or
+    other selected settings. Unspecified settings come from tts.toml.
+    Specifying an endpoint in the local file takes precedence over an inherited
+    endpoint_env setting; an explicit local endpoint_env restores env lookup.
+    """
+    if not LOCAL_CONFIG.is_file():
+        return document
+    with LOCAL_CONFIG.open('rb') as stream:
+        overlay = tomllib.load(stream)
+    if 'profile' in overlay:
+        document['profile'] = overlay['profile']
+    for section in ('defaults', 'postprocess', 'pronunciations'):
+        if section in overlay:
+            document[section] = _merge_tables(document.get(section, {}), overlay[section])
+    for model, lexicon in overlay.get('pronunciation_lexicons', {}).items():
+        # Relative private paths are relative to tts.local.toml, not tts.toml.
+        if isinstance(lexicon, str) and lexicon and not Path(lexicon).expanduser().is_absolute():
+            lexicon = str((LOCAL_CONFIG.parent / lexicon).resolve())
+        document.setdefault('pronunciation_lexicons', {})[model] = lexicon
+    for name, patch in overlay.get('profiles', {}).items():
+        if not isinstance(patch, dict):
+            raise ValueError(f'Local TTS profile {name!r} must be a table')
+        patch = dict(patch)
+        if isinstance(patch.get('pronunciation_lexicon'), str):
+            lexicon = Path(patch['pronunciation_lexicon']).expanduser()
+            if not lexicon.is_absolute():
+                patch['pronunciation_lexicon'] = str((LOCAL_CONFIG.parent / lexicon).resolve())
+        current = document.setdefault('profiles', {}).get(name, {})
+        merged = _merge_tables(current, patch)
+        if 'endpoint' in patch and 'endpoint_env' not in patch:
+            # Otherwise KOKORO_TTS_ENDPOINT or CRALL_TTS_ENDPOINT in .env
+            # silently cancels the explicit local URL.
+            merged.pop('endpoint_env', None)
+        if 'voice' in patch and patch['voice'] != current.get('voice') and 'reference' not in patch:
+            # A changed voice cannot inherit a different voice's reference.
+            merged.pop('reference', None)
+        document['profiles'][name] = merged
     return document
 
 
@@ -193,7 +257,7 @@ def server_runtime(endpoint):
 
 def add_tts_arguments(parser, default_profile=None):
     """Common direct overrides for production videos and continuity experiments."""
-    parser.add_argument('--tts-config',type=Path,default=DEFAULT_CONFIG,help='TOML server defaults')
+    parser.add_argument('--tts-config',type=Path,default=None,help='TOML server defaults; explicit path disables automatic local overlay')
     parser.add_argument('--tts-profile',default=default_profile,help='profile to use as defaults')
     for name in ['endpoint','model','voice','instruction','language']:
         parser.add_argument('--'+name,help=f'override the profile {name}')

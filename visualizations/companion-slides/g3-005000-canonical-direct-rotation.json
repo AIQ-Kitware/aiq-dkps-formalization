@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "id": "g3-005000-canonical-direct-rotation",
+  "title": "Canonical direct rotation",
+  "subtitle": "Independent reading companion to G3 005000",
+  "lecture_nodes": [
+    "g3:005000"
+  ],
+  "source_lecture": "draft-stages/tts-paper/005000-canonical-direct-rotation.md",
+  "adaptation": "Edited G3 lecture prose restructured into readable slide units; formulas and selected SVG geometric models are authored companion material.",
+  "slides": [
+    {
+      "title": "The central problem",
+      "eyebrow": "G3 lecture 005000 · topic 1/9",
+      "id": "00-00",
+      "lead": "Suppose someone hands us two lines in the plane.",
+      "body": [
+        "We can rotate the first line onto the second. But even there, the instruction does not specify a unique answer. We might turn through the smaller angle, turn the other way through a larger angle, or first rotate and then reflect along a suitable direction. For two subspaces of a Hilbert space, this freedom is much larger. We can move vectors within the source subspace, and within its orthogonal complement, while still sending the source subspace onto the target. A particular unitary transport can be constructed from the two orthogonal projections. We ask why this choice is the direct rotation, what conditions make it unique, and how its square is connected to a product of reflections."
+      ],
+      "layout": "opening"
+    },
+    {
+      "title": "Begin with the planar picture",
+      "eyebrow": "G3 lecture 005000 · topic 2/9",
+      "id": "01-00-0",
+      "lead": "Let U be the horizontal line and V be the line tilted counterclockwise by theta degrees, with theta strictly between zero and ninety degrees.",
+      "body": [
+        "There is an ordinary rotation through theta. There is also a rotation through theta plus one hundred eighty degrees. Both carry U onto V, because a line has no preferred orientation. But the second motion sends a horizontal unit vector to the negative of the nearest unit vector along V. That difference appears in an inner product. The smaller rotation moves a horizontal unit vector to a vector whose inner product with it is cosine theta, which is positive."
+      ],
+      "diagram": "rotation-chord",
+      "formula": "D maps U onto V by a principal-plane rotation",
+      "mathtex": "D\\mathcal U=\\mathcal V",
+      "layout": "figure"
+    },
+    {
+      "title": "Begin with the planar picture · further detail",
+      "eyebrow": "G3 lecture 005000 · topic 2/9",
+      "id": "01-00-1",
+      "lead": "The larger one gives negative cosine theta.",
+      "body": [
+        "So positivity can help choose between transports. But in higher dimensions, merely asking that one particular inner product be positive is not enough. We need a condition on whole diagonal blocks of the operator, and we must keep track of how the two off-diagonal blocks relate."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Reassemble the two projections",
+      "eyebrow": "G3 lecture 005000 · topic 3/9",
+      "id": "02-00-0",
+      "lead": "Write P for projection onto U and Q for projection onto V.",
+      "body": [
+        "A natural transport candidate K is the sum of Q P and the product of identity minus Q with identity minus P. It sends the U component toward V and the U-perpendicular component toward V perpendicular. Its squared modulus is identity minus the square of P minus Q. Let C be the positive square root of that squared modulus. On a principal plane with angle theta, C multiplies each vector by cosine theta. So K acts there like cosine theta times an ordinary rotation."
+      ],
+      "diagram": "principal-pairs",
+      "formula": "DPD* = Q",
+      "mathtex": "DPD^{*}=Q",
+      "layout": "figure"
+    },
+    {
+      "title": "Reassemble the two projections · further detail",
+      "eyebrow": "G3 lecture 005000 · topic 3/9",
+      "id": "02-00-1",
+      "lead": "If the operator gap between P and Q is strictly below one, C has a bounded inverse.",
+      "body": [
+        "Then the direct rotation W is K times C inverse. The factors give a unitary that intertwines the projections, and each principal plane rotates by its angle. This already proves existence under the strong, uniform gap condition. But we should ask whether invertibility of C is logically necessary."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Acuteness is weaker than a uniform gap",
+      "eyebrow": "G3 lecture 005000 · topic 4/9",
+      "id": "03-00",
+      "lead": "Call a pair acute in the intersection sense when neither subspace contains a nonzero vector perpendicular to the other.",
+      "body": [
+        "More precisely, U intersect V perpendicular is zero, and U perpendicular intersect V is zero. For finite-dimensional pairs, this rules out right-angle principal vectors and gives a positive smallest cosine. In an infinite-dimensional Hilbert space, every individual principal angle may be strictly less than ninety degrees while a sequence approaches ninety degrees. The cosine then has no kernel, yet its inverse is unbounded. We must not confuse these two hypotheses. A projection gap strictly below one implies the intersection-based condition. The converse can fail in infinite dimensions. Now return to K. Its kernel consists exactly of the two crossed intersections we just named. If both vanish, K is injective. The same is true of K adjoint."
+      ],
+      "diagram": "rotation-chord",
+      "layout": "figure"
+    },
+    {
+      "title": "Acuteness is weaker than a uniform gap · continued",
+      "eyebrow": "G3 lecture 005000 · topic 4/9",
+      "id": "03-01",
+      "lead": "For a bounded operator, injectivity of its adjoint means its range is dense.",
+      "body": [
+        "Thus K has zero kernel and dense range, although it need not have a bounded inverse. The polar decomposition K equals W C now has an isometric polar factor W. Because K has dense range, that isometry has dense and closed range, hence it is onto. So W is unitary. This proves existence for the weaker, intersection-based acute condition. We obtained the rotation without ever dividing by a possibly vanishing lower bound for cosine."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "How do we recognize the correct unitary?",
+      "eyebrow": "G3 lecture 005000 · topic 5/9",
+      "id": "04-00-0",
+      "lead": "Suppose T is any unitary that intertwines P and Q.",
+      "body": [
+        "The intertwining identity says T P equals Q T. Consequently T carries U onto V and also carries U perpendicular onto V perpendicular. That alone allows too much freedom. We need a test involving the directions in which T moves the source decomposition. Compress T back to U: project onto U, apply T, and project onto U again. Do the analogous operation on U perpendicular. These are called the two diagonal compressions of T. For the canonical polar factor W, both diagonal compressions are positive operators."
+      ],
+      "diagram": "rotation-chord",
+      "formula": "D* = D⁻¹",
+      "mathtex": "D^{*}=D^{-1}",
+      "layout": "figure"
+    },
+    {
+      "title": "How do we recognize the correct unitary? · further detail",
+      "eyebrow": "G3 lecture 005000 · topic 5/9",
+      "id": "04-00-1",
+      "lead": "Positive means self-adjoint and having nonnegative quadratic form.",
+      "body": [
+        "The self-adjoint requirement is important, especially over real Hilbert spaces: a quadratic form alone may fail to detect an antisymmetric part. On a principal plane, both compressed blocks are multiplication by cosine theta. They are positive precisely because we use the shorter turn. There is also a relation between the crossed blocks: one is the negative adjoint of the other, after taking the appropriate source and target directions. This expresses the geometry of a rotation rather than an arbitrary unitary rearrangement."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Prove uniqueness instead of guessing it",
+      "eyebrow": "G3 lecture 005000 · topic 6/9",
+      "id": "05-00",
+      "lead": "Let T be a unitary intertwiner whose two diagonal compressions are positive.",
+      "body": [
+        "We want to show T equals W when the crossed defects vanish. Define B to be the sum of those two diagonal compressions. Since each is positive, B is positive. And since both are supported in orthogonal pieces, B is block diagonal relative to U and U perpendicular. The projection intertwining identity lets us rewrite our original operator K as T times B. To see the structure, recall that Q equals T P T adjoint. Substitute that identity into both terms defining K. The two terms become T times the two diagonal blocks of T adjoint. But each diagonal block is self-adjoint by positivity, so we may replace T adjoint by T inside those compressions. Their sum is exactly B. Therefore K equals T B."
+      ],
+      "formula": "D rotates without unnecessary phase changes",
+      "layout": "reading"
+    },
+    {
+      "title": "Prove uniqueness instead of guessing it · continued",
+      "eyebrow": "G3 lecture 005000 · topic 6/9",
+      "id": "05-01",
+      "lead": "Take the adjoint and multiply: K adjoint K equals B squared, because T adjoint T is the identity.",
+      "body": [
+        "Since B is positive, it must be the unique positive square root of K adjoint K. Thus B equals C, the modulus of K. We have proved that T C equals K. In the acute case the kernel of C is zero. The uniqueness property of polar decomposition now forces T to be W. Notice what we used. The uniqueness argument did not require a numerical gap below one. It required the absence of crossed defects, together with the positive diagonal blocks."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "A square made from two reflections",
+      "eyebrow": "G3 lecture 005000 · topic 7/9",
+      "id": "06-00-0",
+      "lead": "Every orthogonal projection determines a reflection.",
+      "body": [
+        "Reflect through U by leaving U fixed and reversing U perpendicular. As an operator, this is twice P minus the identity. Define the corresponding reflection through V using Q. On our principal plane, reflecting through U and then reflecting through V is a rotation through twice theta. This is a familiar geometry theorem, and we can now understand it operatorially. Let J U be reflection through U and J V reflection through V. Their product, in that order, is the unitary operator J V after J U."
+      ],
+      "diagram": "block-reflection",
+      "formula": "J = 2P − I,    K = 2Q − I",
+      "mathtex": "J=2P-I,\\qquad K=2Q-I",
+      "layout": "figure"
+    },
+    {
+      "title": "A square made from two reflections · further detail",
+      "eyebrow": "G3 lecture 005000 · topic 7/9",
+      "id": "06-00-1",
+      "lead": "The canonical direct rotation W is the half-angle motion, so on every principal plane W squared equals J V times J U.",
+      "body": [
+        "The identity is also compatible with the common and exterior pieces: both reflections agree there, and their product is the identity. The canonical rotation acts as the identity on those pieces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "A square made from two reflections · continued",
+      "eyebrow": "G3 lecture 005000 · topic 7/9",
+      "id": "06-01",
+      "lead": "For a uniformly acute complex Hilbert-space pair, this also gives a functional-calculus construction.",
+      "body": [
+        "The spectrum of the reflection product avoids negative one, so we can select the principal square-root branch continuously. Applying that branch to the reflection product gives W. Why mention negative one? At a right angle, the reflection product is minus the identity on the corresponding two-dimensional block. The number minus one has two opposite square roots, and no continuous principal choice across the branch cut. That is exactly where the coming defect-matching problem enters."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Reversing the direction",
+      "eyebrow": "G3 lecture 005000 · topic 8/9",
+      "id": "07-00",
+      "lead": "A good transport construction should behave predictably when we interchange the source and target.",
+      "body": [
+        "Rotate from U to V, then rotate back from V to U. Those two motions ought to undo each other. Indeed, swapping P and Q replaces K by K adjoint. The positive polar factors are consequently adjoints of one another. So the canonical direct rotation from V to U is W adjoint, which equals W inverse because W is unitary. The same observation explains why the squared reflection product reverses. Its adjoint is J U followed by J V, precisely the reflection product for the reversed pair. We have therefore obtained more than a means of moving a subspace: we have a transport specified by the pair, positive on the diagonal, compatible with reversal, and geometrically a half-angle of two reflections."
+      ],
+      "layout": "reading"
+    },
+    {
+      "title": "Reconstruction",
+      "eyebrow": "G3 lecture 005000 · topic 9/9",
+      "id": "08-00",
+      "lead": "There are four things to prove for yourself.",
+      "body": [
+        "First, calculate the polar modulus of K and show it is the positive cosine operator. Second, explain why vanishing crossed defects makes the polar factor unitary even when cosine has no bounded inverse. Third, prove uniqueness: an intertwining unitary with positive diagonal blocks factors K as that unitary times a positive block-diagonal operator. Identify the latter with the modulus of K. Fourth, verify on an actual plane that two reflections give twice the angle, and explain why the principal half-angle branch fails at minus one."
+      ],
+      "takeaway": "The canonical direct rotation is determined by the geometry and suitable acuteness assumptions.",
+      "layout": "reading"
+    }
+  ]
+}

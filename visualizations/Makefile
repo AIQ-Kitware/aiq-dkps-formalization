@@ -110,7 +110,7 @@ help:
 	@echo '  tts-experiment     compare original/previous/composite references with phrase-aligned visuals'
 	@echo '  list               list all presentations and transcript availability'
 	@echo '  serve              browse all 150 audio lectures at /audio plus existing renders'
-	@echo '                     AUDIO_TTS_PROFILE overrides reader default (kokoro); AUDIO_TTS_ENDPOINT overrides its URL'
+	@echo '                     AUDIO_TTS_PROFILE overrides reader default (kokoro); AUDIO_TTS_ENDPOINT overrides its URL; TTS_CONFIG selects an ignored private profile config'
 	@echo '  operators          build the three accepted operator-foundation lectures'
 	@echo '  prerequisites      build the ordered prerequisite lectures and speech text'
 	@echo '  prerequisites-video narrate the prerequisite series; TTS_PROFILE=crall-math-dk-v2-breeze-tts2 selects the lecture voice'
@@ -296,4 +296,4 @@ distclean: clean
 
 # Seekable media library, HTML slides and PDFs; no Manim/TTS required.
 serve:
-	$(UV) run --isolated --extra serve python -m dkvis.presentation serve --host $(HOST) --port $(PORT) $(if $(AUDIO_TTS_PROFILE),--audio-tts-profile $(call shell_quote,$(AUDIO_TTS_PROFILE))) $(if $(AUDIO_TTS_ENDPOINT),--audio-tts-endpoint $(call shell_quote,$(AUDIO_TTS_ENDPOINT)))
+	$(UV) run --isolated --extra serve python -m dkvis.presentation serve --host $(HOST) --port $(PORT) $(if $(AUDIO_TTS_PROFILE),--audio-tts-profile $(call shell_quote,$(AUDIO_TTS_PROFILE))) $(if $(AUDIO_TTS_ENDPOINT),--audio-tts-endpoint $(call shell_quote,$(AUDIO_TTS_ENDPOINT))) $(if $(TTS_CONFIG),--tts-config $(call shell_quote,$(TTS_CONFIG)))
