@@ -1,0 +1,85 @@
+# Live audio generation smoke test
+
+The offline unit tests do not establish that the rebuilt Docker container and
+running DKPS reader cooperate correctly on the actual GPU. This test is run on
+the machine hosting both services.
+
+## Prerequisites
+
+- `local-ai` Breeze is rebuilt and reachable at `http://127.0.0.1:8821`.
+- The DKPS reader is running at `http://127.0.0.1:8001/audio`.
+- The shell has `TTS_BENCH_VOICE` set to a voice installed in the local server.
+  The script reads that environment variable; it never prints it. If multiple
+  Breeze profiles are available, set `DKVIS_TTS_PROFILE` locally as well.
+- Use two lectures with missing cached audio. Defaults: `000000` and `001000`.
+- Do not exercise a lecture already being generated elsewhere: the script
+  refuses to cancel a lecture that has pre-existing jobs.
+
+First inspect the running services **without starting any synthesis**:
+
+```bash
+cd /home/joncrall/code/aiq-dkps-formalization
+python3 visualizations/tools/smoke_audio_generation.py
+```
+
+Then opt in to actual speech requests:
+
+```bash
+python3 visualizations/tools/smoke_audio_generation.py \
+  --exercise --pages 3 --cancel-delay 5
+```
+
+The exercise:
+
+1. Requests up to three missing pages of lecture A as background cache work.
+2. Samples the lecture's generation queue, ETA, and paragraph progress.
+3. Requests an uncached page from lecture B at interactive playback priority.
+4. Cancels pending and active work for lecture A.
+5. Polls until lecture B's page is ready or the deadline is reached.
+6. Reports whether the old lecture has outstanding tasks. The script never
+   deletes finished cached audio.
+
+Use `--lecture-a ID --lecture-b ID` to select other lectures, `--track g3`
+for the paper track, or `--timeout 360` on a heavily loaded GPU. The default
+`--timeout` is 240 seconds. Only the `--exercise` form sends synthesis and
+cancellation requests.
+
+The exercise calls the same DKPS endpoints used by the browser, and checks that
+the Breeze server advertises `/v1/audio/jobs`. It does not launch a browser or
+check screen layout.
+
+## Browser verification
+
+Open `/audio`, select the local Breeze profile and voice, then:
+
+1. Choose a partially cached lecture. Confirm the page chips and ready/total
+   counts match the script's read-only inventory.
+2. Click **Cache whole lecture**. Confirm the elapsed time, ETA and paragraph
+   progress update while the page is being synthesized.
+3. Choose a different uncached lecture and click **Play page**. Its request
+   should have playback priority. On the earlier lecture's queue entry, choose
+   **Cancel lecture**, or return to the earlier lecture and click **Stop generation**.
+4. Confirm the new lecture becomes playable, unfinished old jobs disappear,
+   and completed pages remain cached.
+5. Reload `/audio`. Cached status should persist. ETA estimates should be
+   informed by newly completed pages.
+
+**Current browser limitation:** `Cache whole lecture` schedules its pages one
+at a time. The server and DKPS queues support multiple requests, but the
+whole-lecture browser action does not enqueue all pages at once. Switching
+lectures stops that browser loop but does not cancel already submitted work;
+use the explicit cancellation controls for that. The smoke script tests
+multiple pending jobs separately.
+
+## Interpreting failures
+
+- **Missing job API:** the running Docker image is older than the server
+  overlay. Rebuild/restart the Breeze service.
+- **Reader connection refused:** start `make serve` from `visualizations/`.
+- **Profile/voice rejected:** verify the locally configured Breeze profile and
+  `TTS_BENCH_VOICE`. No voice identifier is required in checked-in files.
+- **Old jobs remain in canceling state:** active inference can finish its
+  current passage before the server observes cancellation.
+- **New lecture never reaches ready:** inspect DKPS and Docker logs locally;
+  the smoke-test console deliberately withholds raw server errors, which may
+  contain private configuration values.
