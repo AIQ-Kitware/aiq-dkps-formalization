@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Export a G3 companion-slide source to a 16:9 PowerPoint with vector TeX.
+/** Export a DKPS companion-slide source to a 16:9 PowerPoint with vector TeX.
  *
  * Run from visualizations/:
  *   node tools/build_companion_pptx.js companion-slides/dkps-fast-path.json /tmp/g3-fast.pptx
@@ -96,8 +96,8 @@ async function main() {
       }
       slide.addText(`${index+1} / ${data.slides.length}`,{x:12.00,y:7.18,w:.64,h:.16,fontSize:9,align:'right',color:C.dim,margin:0});
       const sources = [];
-      if (data.source_lecture) sources.push(`G3 lecture source: ${data.source_lecture}`);
-      if (row.diagram) sources.push(`Drawing: companion-slides/figures/${row.diagram}.svg (derived from G1 Manim geometry)`);
+      if (data.source_lecture) sources.push(`Lecture source: ${data.source_lecture}`);
+      if (row.diagram) sources.push(`Drawing: companion-slides/figures/${row.diagram}.svg (source-controlled vector illustration)`);
       if (sources.length) slide.addNotes(`[Sources]\n${sources.join('\n')}\n[/Sources]`);
       if (helpers.warnIfSlideElementsOutOfBounds) helpers.warnIfSlideElementsOutOfBounds(slide,pres);
     }

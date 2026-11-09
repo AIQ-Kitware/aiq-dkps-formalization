@@ -182,6 +182,216 @@
       "lecture_nodes": [
         "g3:025000"
       ]
+    },
+    {
+      "id": "g2-000000-course-introduction",
+      "source": "g2-000000-course-introduction.json",
+      "lecture_nodes": [
+        "g2:000000"
+      ]
+    },
+    {
+      "id": "g2-001000-linear-maps-independent-of-coordinates",
+      "source": "g2-001000-linear-maps-independent-of-coordinates.json",
+      "lecture_nodes": [
+        "g2:001000"
+      ]
+    },
+    {
+      "id": "g2-002000-norms-distances-and-convergence",
+      "source": "g2-002000-norms-distances-and-convergence.json",
+      "lecture_nodes": [
+        "g2:002000"
+      ]
+    },
+    {
+      "id": "g2-003000-cauchy-sequences-and-banach-spaces",
+      "source": "g2-003000-cauchy-sequences-and-banach-spaces.json",
+      "lecture_nodes": [
+        "g2:003000"
+      ]
+    },
+    {
+      "id": "g2-004000-bounded-linear-maps-and-the-operator-norm",
+      "source": "g2-004000-bounded-linear-maps-and-the-operator-norm.json",
+      "lecture_nodes": [
+        "g2:004000"
+      ]
+    },
+    {
+      "id": "g2-005000-the-banach-algebra-of-bounded-operators",
+      "source": "g2-005000-the-banach-algebra-of-bounded-operators.json",
+      "lecture_nodes": [
+        "g2:005000"
+      ]
+    },
+    {
+      "id": "g2-006000-linear-functionals-and-dual-spaces",
+      "source": "g2-006000-linear-functionals-and-dual-spaces.json",
+      "lecture_nodes": [
+        "g2:006000"
+      ]
+    },
+    {
+      "id": "g2-007000-real-and-complex-scalars",
+      "source": "g2-007000-real-and-complex-scalars.json",
+      "lecture_nodes": [
+        "g2:007000"
+      ]
+    },
+    {
+      "id": "g2-008000-resolvents-and-invertibility",
+      "source": "g2-008000-resolvents-and-invertibility.json",
+      "lecture_nodes": [
+        "g2:008000"
+      ]
+    },
+    {
+      "id": "g2-009000-inner-products-and-polarization",
+      "source": "g2-009000-inner-products-and-polarization.json",
+      "lecture_nodes": [
+        "g2:009000"
+      ]
+    },
+    {
+      "id": "g2-010000-hilbert-spaces-and-orthogonal-complements",
+      "source": "g2-010000-hilbert-spaces-and-orthogonal-complements.json",
+      "lecture_nodes": [
+        "g2:010000"
+      ]
+    },
+    {
+      "id": "g2-011000-the-projection-theorem",
+      "source": "g2-011000-the-projection-theorem.json",
+      "lecture_nodes": [
+        "g2:011000"
+      ]
+    },
+    {
+      "id": "g2-012000-adjoints-and-the-riesz-representation-theorem",
+      "source": "g2-012000-adjoints-and-the-riesz-representation-theorem.json",
+      "lecture_nodes": [
+        "g2:012000"
+      ]
+    },
+    {
+      "id": "g2-013000-self-adjoint-normal-and-unitary-maps",
+      "source": "g2-013000-self-adjoint-normal-and-unitary-maps.json",
+      "lecture_nodes": [
+        "g2:013000"
+      ]
+    },
+    {
+      "id": "g2-014000-isometries-coisometries-and-partial-isometries",
+      "source": "g2-014000-isometries-coisometries-and-partial-isometries.json",
+      "lecture_nodes": [
+        "g2:014000"
+      ]
+    },
+    {
+      "id": "g2-015000-invariant-and-reducing-subspaces",
+      "source": "g2-015000-invariant-and-reducing-subspaces.json",
+      "lecture_nodes": [
+        "g2:015000"
+      ]
+    },
+    {
+      "id": "g2-016000-orthogonal-sums-and-block-operator-matrices",
+      "source": "g2-016000-orthogonal-sums-and-block-operator-matrices.json",
+      "lecture_nodes": [
+        "g2:016000"
+      ]
+    },
+    {
+      "id": "g2-017000-analysis-and-synthesis-maps",
+      "source": "g2-017000-analysis-and-synthesis-maps.json",
+      "lecture_nodes": [
+        "g2:017000"
+      ]
+    },
+    {
+      "id": "g2-018000-gram-matrices-and-positive-gram-operators",
+      "source": "g2-018000-gram-matrices-and-positive-gram-operators.json",
+      "lecture_nodes": [
+        "g2:018000"
+      ]
+    },
+    {
+      "id": "g2-019000-frame-operators-and-parseval-identities",
+      "source": "g2-019000-frame-operators-and-parseval-identities.json",
+      "lecture_nodes": [
+        "g2:019000"
+      ]
+    },
+    {
+      "id": "g2-020000-orthogonal-coordinate-embeddings",
+      "source": "g2-020000-orthogonal-coordinate-embeddings.json",
+      "lecture_nodes": [
+        "g2:020000"
+      ]
+    },
+    {
+      "id": "g2-021000-compressions-and-rayleigh-ritz-matrices",
+      "source": "g2-021000-compressions-and-rayleigh-ritz-matrices.json",
+      "lecture_nodes": [
+        "g2:021000"
+      ]
+    },
+    {
+      "id": "g2-022000-overlaps-alignment-and-gram-rigidity",
+      "source": "g2-022000-overlaps-alignment-and-gram-rigidity.json",
+      "lecture_nodes": [
+        "g2:022000"
+      ]
+    },
+    {
+      "id": "g2-023000-gram-operators-of-rectangular-maps",
+      "source": "g2-023000-gram-operators-of-rectangular-maps.json",
+      "lecture_nodes": [
+        "g2:023000"
+      ]
+    },
+    {
+      "id": "g2-024000-eigenvalues-eigenspaces-and-algebraic-multiplicity",
+      "source": "g2-024000-eigenvalues-eigenspaces-and-algebraic-multiplicity.json",
+      "lecture_nodes": [
+        "g2:024000"
+      ]
+    },
+    {
+      "id": "g2-025000-hermitian-and-self-adjoint-matrices",
+      "source": "g2-025000-hermitian-and-self-adjoint-matrices.json",
+      "lecture_nodes": [
+        "g2:025000"
+      ]
+    },
+    {
+      "id": "g2-026000-the-finite-spectral-theorem",
+      "source": "g2-026000-the-finite-spectral-theorem.json",
+      "lecture_nodes": [
+        "g2:026000"
+      ]
+    },
+    {
+      "id": "g2-027000-rayleigh-quotients-and-extrema",
+      "source": "g2-027000-rayleigh-quotients-and-extrema.json",
+      "lecture_nodes": [
+        "g2:027000"
+      ]
+    },
+    {
+      "id": "g2-028000-courant-fischer-min-max",
+      "source": "g2-028000-courant-fischer-min-max.json",
+      "lecture_nodes": [
+        "g2:028000"
+      ]
+    },
+    {
+      "id": "g2-029000-weyl-monotonicity-and-variational-inequalities",
+      "source": "g2-029000-weyl-monotonicity-and-variational-inequalities.json",
+      "lecture_nodes": [
+        "g2:029000"
+      ]
     }
   ]
 }

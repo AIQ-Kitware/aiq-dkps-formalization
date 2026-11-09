@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "id": "g2-018000-gram-matrices-and-positive-gram-operators",
+  "title": "Gram matrices and positive Gram operators",
+  "subtitle": "Independent G2 companion · lecture 018000",
+  "lecture_nodes": [
+    "g2:018000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/018000-gram-matrices-and-positive-gram-operators.md",
+  "adaptation": "Standalone reading slides adapted from the spoken lecture; formulas follow its display-only mathematics appendix. SVG geometric figures are companion illustrations.",
+  "slides": [
+    {
+      "id": "00-00",
+      "title": "The central question",
+      "eyebrow": "G2 · 018000 · The central question",
+      "lead": "Given vectors v one through v n, the synthesis map S takes coefficients c and returns their linear combination.",
+      "body": [
+        "Its adjoint S star analyzes a vector by taking inner products with the selected vectors. The composite S star S acts on coefficient lists; it is the Gram operator.",
+        "It may look like a device for storing a table of inner products. But that table encodes much more. It records lengths, angles, linear dependence, and enough information to reconstruct the geometry of a finite collection of vectors, up to an appropriate change of coordinates.",
+        "We are not assuming a spectral theorem today. We will prove the basic facts directly from inner products, so that when we eventually study eigenvalues of Gram operators, we know exactly what those eigenvalues are describing."
+      ],
+      "diagram": "gram-geometry",
+      "layout": "opening"
+    },
+    {
+      "id": "01-00",
+      "title": "Make the table by measuring each vector against every other",
+      "eyebrow": "G2 · 018000 · Make the table by measuring each vector against every other",
+      "lead": "Take two vectors in the ordinary plane.",
+      "body": [
+        "Let v one point one unit to the right. Let v two point one unit to the right and one unit up.",
+        "We can ask four questions. What is the inner product of v one with itself? What is the inner product of v one with v two? What is the inner product of v two with v one? And what is the inner product of v two with itself?",
+        "The answers are one, one, one, and two, in that order.",
+        "Arrange them in a two-by-two table. Its first row is one, one. Its second row is one, two. This is the Gram matrix of our two vectors.",
+        "The diagonal entries are squared lengths: one and two. The off-diagonal entries measure overlap."
+      ],
+      "mathtex": "G_{ij}=\\langle v_i,v_j\\rangle",
+      "layout": "figure",
+      "diagram": "gram-geometry"
+    },
+    {
+      "id": "01-01",
+      "title": "In a real inner-product space, the overlap between vectors…",
+      "eyebrow": "G2 · 018000 · Make the table by measuring each vector against every other",
+      "lead": "In a real inner-product space, the overlap between vectors of lengths one and square root of two is the product of those lengths times the cosine of the angle between them.",
+      "body": [
+        "Thus a Gram matrix does not merely count vectors or record their coordinates. It records their relationships. A different choice of ambient coordinate axes could change the displayed vectors without changing the Gram matrix.",
+        "Over complex scalars, the same construction uses complex inner products. The table is conjugate-symmetric, rather than necessarily symmetric with real entries. We call that property Hermitian. Its diagonal entries remain real and nonnegative."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-00",
+      "title": "Why the Gram operator is analysis after synthesis",
+      "eyebrow": "G2 · 018000 · Why the Gram operator is analysis after synthesis",
+      "lead": "Let S send a coefficient list c to the linear combination of vectors v indexed by c, and let S star measure the inner products with those vectors.",
+      "body": [
+        "We can derive each Gram-matrix entry from this pair of maps.",
+        "Start with coefficients a and b. Synthesis builds a times v one plus b times v two. Analysis measures that synthesized vector against v one and v two.",
+        "The first measurement is a times the inner product of v one with v one, plus b times the inner product of v one with v two. The second is the corresponding expression with v two as the measuring vector.",
+        "These are precisely the rows of the Gram matrix multiplied by the coefficient list. So the Gram operator is analysis after synthesis.",
+        "This connection matters. The matrix entries are not arbitrary numbers written down by hand. They arise from a composition of two linear maps that are adjoints of each other.",
+        "If S stands for synthesis, and S star is analysis, then the Gram operator is S star times S. This algebraic form explains its positivity."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-00",
+      "title": "Positivity has a physical interpretation",
+      "eyebrow": "G2 · 018000 · Positivity has a physical interpretation",
+      "lead": "Let c be any coefficient list.",
+      "body": [
+        "Form the inner product of c with the Gram operator applied to c.",
+        "Use the definition of the Gram operator. We have the inner product of c with S star S of c. Move S star across the inner product using the adjoint identity. The answer is the squared length of S of c.",
+        "In words: the Gram quadratic form of a coefficient list equals the squared length of the vector those coefficients synthesize.",
+        "A squared length is never negative. Therefore every Gram operator is positive semidefinite.",
+        "Let's check this for our numerical example. Coefficients a and b synthesize the vector whose coordinates are a plus b and b. Its squared length is the square of a plus b, plus the square of b. That expression can never be negative."
+      ],
+      "mathtex": "\\langle c,Gc\\rangle=\\|Sc\\|^2\\geq0",
+      "layout": "equation"
+    },
+    {
+      "id": "03-01",
+      "title": "If we expand it, we get a squared plus…",
+      "eyebrow": "G2 · 018000 · Positivity has a physical interpretation",
+      "lead": "If we expand it, we get a squared plus two a b plus two b squared, which is exactly the quadratic form of the Gram matrix with rows one, one and one, two.",
+      "body": [
+        "The calculation also explains why Gram matrices have a stronger property than just nonnegative entries. A Gram matrix can contain negative off-diagonal entries if the vectors point partly against one another. Positivity means the *whole quadratic form* is nonnegative for every coefficient list. It does not mean that each entry is nonnegative."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-00",
+      "title": "When positivity becomes strict",
+      "eyebrow": "G2 · 018000 · When positivity becomes strict",
+      "lead": "Can that quadratic form equal zero for a nonzero coefficient list?",
+      "body": [
+        "Yes, if different selected vectors cancel. Take two identical unit vectors pointing right. The Gram matrix has one in every entry. Coefficients one and negative one synthesize zero, so the Gram quadratic form is zero even though the coefficient list is not zero.",
+        "This gives a clean characterization. A finite Gram matrix is *positive definite*—meaning its quadratic form is positive for every nonzero coefficient list—exactly when its vectors are linearly independent.",
+        "Here is the proof. If the family is linearly independent, synthesizing a nonzero coefficient list cannot give zero. So its squared length, and therefore the Gram quadratic form, is strictly positive. Conversely, if the family is dependent, there is a nonzero coefficient list that synthesizes zero, and its Gram quadratic form vanishes.",
+        "So the difference between positive semidefinite and positive definite is not merely a numerical detail. It detects whether the selected vectors contain exact redundancy."
+      ],
+      "diagram": "analysis-synthesis",
+      "layout": "figure"
+    },
+    {
+      "id": "05-00",
+      "title": "The kernel and rank",
+      "eyebrow": "G2 · 018000 · The kernel and rank",
+      "lead": "We can push that argument further.",
+      "body": [
+        "A coefficient list belongs to the kernel of the Gram operator exactly when it belongs to the kernel of synthesis.",
+        "One direction is immediate: if synthesis sends c to zero, then analysis after synthesis also sends c to zero. For the other direction, suppose the Gram operator sends c to zero. Its quadratic form is then zero. By the identity for a Gram operator, that quadratic form equals the squared length of synthesis of c. Hence synthesis of c is zero.",
+        "The kernels are identical.",
+        "In finite dimensions, two linear maps with the same domain and the same kernel have the same rank, because rank equals domain dimension minus kernel dimension. Thus the rank of the Gram matrix equals the dimension of the span of the selected vectors."
+      ],
+      "mathtex": "\\ker G=\\ker S",
+      "layout": "equation"
+    },
+    {
+      "id": "05-01",
+      "title": "For our original two vectors, there is no redundancy",
+      "eyebrow": "G2 · 018000 · The kernel and rank",
+      "lead": "For our original two vectors, there is no redundancy.",
+      "body": [
+        "They span the plane, so their Gram matrix has rank two. For two identical vectors, the span has dimension one, so the Gram matrix has rank one.",
+        "Notice how much geometric information has emerged from a matrix whose size is determined by the *number of chosen vectors*, not necessarily by the dimension of the ambient space."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-00",
+      "title": "Same Gram matrix, same geometry",
+      "eyebrow": "G2 · 018000 · Same Gram matrix, same geometry",
+      "lead": "Now for a result that feels almost surprising.",
+      "body": [
+        "Suppose we have two finite families of vectors, perhaps living in different inner-product spaces, and their Gram matrices are exactly equal.",
+        "Does that mean the two configurations have the same geometry? Yes, in a precise sense: there is a length- and inner-product-preserving linear correspondence between their spans that sends each vector in the first family to the matching vector in the second.",
+        "Let's build it rather than just assert it.",
+        "Start with a vector in the span of the first family. It can be synthesized from some coefficient list c. Send it to the vector obtained by synthesizing the *same coefficients* from the second family.",
+        "There is a possible problem: the first vector might have more than one coefficient representation. How do we know the output is independent of which representation we choose?",
+        "Suppose two coefficient lists produce the same first vector. Their difference synthesizes to zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-01",
+      "title": "Its squared length is therefore zero, and that squared…",
+      "eyebrow": "G2 · 018000 · Same Gram matrix, same geometry",
+      "lead": "Its squared length is therefore zero, and that squared length is computed from the first Gram matrix.",
+      "body": [
+        "But the two Gram matrices agree. So synthesizing the same difference from the second family also produces a vector of squared length zero. That vector must be zero.",
+        "Therefore both representations give the same output. Our proposed correspondence is well-defined.",
+        "The same Gram identity shows that it preserves lengths, and by polarization it preserves inner products. Every vector in the span of the second family can be reached, since it has some coefficient representation. We have constructed an isometric isomorphism between the two spans.",
+        "This is called a Gram rigidity principle.",
+        "Do not extend the conclusion too far. We have proved a correspondence between the spans. To extend it to a unitary map of the *entire* ambient spaces, we would also need compatible perpendicular complements. In different-dimensional ambient spaces, such an extension may be impossible."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-00",
+      "title": "Gram matrices and distances",
+      "eyebrow": "G2 · 018000 · Gram matrices and distances",
+      "lead": "A final connection will matter when we study spectral embeddings.",
+      "body": [
+        "The squared distance between two vectors equals the squared length of the first plus the squared length of the second, minus twice the real part of their inner product.",
+        "That means a Gram matrix determines all pairwise distances among the vectors.",
+        "The converse needs some care. Pairwise distances do not remember where the origin was placed. If you translate every point by the same vector, all pairwise distances stay the same, but the Gram matrix of the point positions usually changes.",
+        "To recover a Gram matrix from distances, we first need to choose an origin convention, often by centering the points so their average is zero. For centered point configurations, the relation between squared distances and inner products can be inverted to reconstruct the Gram matrix. The centering condition fixes the translation ambiguity; without it, distances alone do not locate an origin."
+      ],
+      "diagram": "gram-geometry",
+      "layout": "figure"
+    },
+    {
+      "id": "08-00",
+      "title": "Reconstruct the Gram argument",
+      "eyebrow": "G2 · 018000 · Reconstruct the Gram argument",
+      "lead": "Try to reconstruct four arguments.",
+      "body": [
+        "Why is every Gram operator positive semidefinite? Why does positive definiteness correspond to independence? Why does the Gram kernel equal the synthesis kernel? And why does equality of two Gram matrices give a well-defined isometry between the corresponding spans?"
+      ],
+      "layout": "reading"
+    }
+  ]
+}

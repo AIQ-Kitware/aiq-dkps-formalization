@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "id": "g2-005000-the-banach-algebra-of-bounded-operators",
+  "title": "The Banach algebra of bounded operators",
+  "subtitle": "Independent G2 companion · lecture 005000",
+  "lecture_nodes": [
+    "g2:005000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/005000-the-banach-algebra-of-bounded-operators.md",
+  "adaptation": "Standalone reading slides adapted from the spoken lecture; formulas follow its display-only mathematics appendix. SVG geometric figures are companion illustrations.",
+  "slides": [
+    {
+      "id": "00-00",
+      "title": "The central question",
+      "eyebrow": "G2 · 005000 · The central question",
+      "lead": "For a bounded linear map, the operator norm measures the largest possible amplification of a unit input.",
+      "body": [
+        "Composing bounded maps leads to a space of operators where addition, multiplication by composition, and limits interact.",
+        "Composition lets us multiply linear maps; the operator norm estimates that multiplication; completeness ensures that limits of increasingly accurate operator approximations still define bounded maps. Together these properties make infinite operator series possible, including series that construct inverses.",
+        "The result is called a Banach algebra. The name is less important than what the structure lets us do: construct inverses, estimate errors, and make sense of operator power series."
+      ],
+      "diagram": "operator-ball",
+      "layout": "opening"
+    },
+    {
+      "id": "01-00",
+      "title": "An algebra made of transformations",
+      "eyebrow": "G2 · 005000 · An algebra made of transformations",
+      "lead": "Let E be a Banach space.",
+      "body": [
+        "Consider every bounded linear operator that takes E back into E. We can add two such operators by adding their outputs. We can multiply an operator by a scalar. And we can multiply operators with each other by composition: apply one transformation, then the other.",
+        "There is a distinguished operator called the identity. It leaves every vector unchanged. Composing it with another operator, on either side, changes nothing.",
+        "Composition is associative. If we have three operators, we obtain the same result whether we group the first two or the last two, because both groupings apply the same three transformations in the same order.",
+        "But composition need not be commutative. Imagine one map that stretches horizontally and another that rotates the plane. Stretching before rotating generally gives a different result from rotating before stretching."
+      ],
+      "mathtex": "\\mathcal B(E)=\\{T:E\\to E\\mid T\\text{ bounded linear}\\}",
+      "layout": "figure",
+      "diagram": "operator-ball"
+    },
+    {
+      "id": "01-01",
+      "title": "This algebra is not like ordinary multiplication of real…",
+      "eyebrow": "G2 · 005000 · An algebra made of transformations",
+      "lead": "So this algebra is not like ordinary multiplication of real numbers.",
+      "body": [
+        "We already know how to bound the size of a product: the norm of a composition is at most the product of the two norms. This is called a submultiplicative norm. It tells us that multiplying operators respects our quantitative notion of size.",
+        "For a nonzero Banach space, the identity has operator norm one. Applying it to any unit vector preserves length exactly. In the zero-dimensional space the identity operator is also the zero map, so its norm is zero; so the assertion that the identity has norm one requires a nonzero space."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-00",
+      "title": "Why the operator space is complete",
+      "eyebrow": "G2 · 005000 · Why the operator space is complete",
+      "lead": "The missing piece is completeness.",
+      "body": [
+        "Suppose we have a sequence of bounded operators that is Cauchy in operator norm. That means that, sufficiently far along the sequence, any two operators send every input to nearly the same output, with an error bounded by a small constant times the input length.",
+        "Fix one vector x. Apply all the operators to that vector. The resulting sequence of output vectors is Cauchy, because the operator differences are small. Since E is Banach, those output vectors converge to a vector in E.",
+        "Do this for each input x, and define a new map T by taking those limits. Is T linear? Yes. Each approximate operator respects addition and scaling, and the corresponding limits preserve those operations. Thus T is linear.",
+        "Is T bounded? Fix a sufficiently late operator from the sequence. The Cauchy estimate bounds the difference between that operator and every later one, uniformly relative to input length. Let the later operator index tend to infinity."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-01",
+      "title": "The same bound holds between the fixed operator and…",
+      "eyebrow": "G2 · 005000 · Why the operator space is complete",
+      "lead": "The same bound holds between the fixed operator and T.",
+      "body": [
+        "Since the fixed operator is bounded, T must be bounded too.",
+        "That argument gives more than pointwise convergence. It shows that the operator norm of the difference between T and our approximations tends to zero. We have found a limit inside the space of bounded operators.",
+        "So the bounded operators on E, equipped with addition, scalar multiplication, composition, the identity, and the operator norm, form a complete normed algebra: a Banach algebra."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-00",
+      "title": "Inverting by repeated correction",
+      "eyebrow": "G2 · 005000 · Inverting by repeated correction",
+      "lead": "Here is a practical consequence.",
+      "body": [
+        "Suppose T is a bounded operator whose norm is strictly smaller than one. We want to invert the operator that takes a vector x to x minus T of x. In symbols we might call it identity minus T, but keep the action in mind: subtract one application of T from the original vector.",
+        "Start with a very simple example on the plane. Let T halve horizontal coordinates and erase vertical coordinates. Then identity minus T halves the horizontal coordinate but leaves the vertical coordinate unchanged. Its inverse must double the horizontal coordinate and leave the vertical coordinate unchanged.",
+        "Watch what happens if we try to build that inverse by repeated corrections. Start with the identity. Add T. Add T composed with T. Then add T applied three times, and so on."
+      ],
+      "mathtex": "(I-T)^{-1}=\\sum_{n=0}^{\\infty}T^n\\quad (\\|T\\|<1)",
+      "layout": "figure",
+      "diagram": "cauchy-convergence"
+    },
+    {
+      "id": "03-01",
+      "title": "On a horizontal input, these terms contribute one, one…",
+      "eyebrow": "G2 · 005000 · Inverting by repeated correction",
+      "lead": "On a horizontal input, these terms contribute one, one half, one quarter, one eighth, and so forth.",
+      "body": [
+        "Their total is two. On a vertical input, T and all its later powers vanish, leaving one. We recover the inverse exactly.",
+        "Now prove this in general. Because the norm of a product is at most the product of the norms, the norm of T applied n times is at most the nth power of the norm of T. The operator norms of the powers are therefore bounded by an ordinary geometric series with ratio smaller than one.",
+        "That geometric series has a finite sum. Our Banach-algebra completeness theorem tells us that the infinite series of operator powers converges in operator norm. Call its limit S.",
+        "Multiply a finite partial sum by identity minus T."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-02",
+      "title": "All intermediate terms cancel: the first identity remains, and…",
+      "eyebrow": "G2 · 005000 · Inverting by repeated correction",
+      "lead": "All intermediate terms cancel: the first identity remains, and we subtract the final power of T.",
+      "body": [
+        "As we include more terms, that final power tends to zero in operator norm. Passing to the limit gives identity minus T, composed with S, equals the identity.",
+        "The cancellation also works in the opposite multiplication order, because all the terms are powers of the same T. Thus S is a two-sided inverse.",
+        "We have constructed an inverse, not merely asserted that one exists. This is called the Neumann series. It is the operator version of the geometric series you learned in calculus."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-00",
+      "title": "A quantitative estimate and a warning",
+      "eyebrow": "G2 · 005000 · A quantitative estimate and a warning",
+      "lead": "The same geometric sum bounds the inverse norm.",
+      "body": [
+        "The norm of the inverse of identity minus T is at most one divided by one minus the norm of T. As T's norm approaches one from below, this bound becomes large.",
+        "That does not mean the inverse always becomes large. It means the estimate becomes less informative. The condition that T has norm below one is sufficient for the construction; it is not necessary for invertibility.",
+        "For instance, consider a plane transformation that sends the vertical coordinate to ten times that coordinate in the horizontal direction, and sends horizontal vectors to zero. Apply it twice and everything becomes zero. Its norm is ten, yet identity minus this map has inverse identity plus the map, because its square is zero."
+      ],
+      "diagram": "operator-ball",
+      "layout": "figure"
+    },
+    {
+      "id": "04-01",
+      "title": "The Neumann series ends after two nonzero terms even…",
+      "eyebrow": "G2 · 005000 · A quantitative estimate and a warning",
+      "lead": "The Neumann series ends after two nonzero terms even though the simple geometric norm test fails.",
+      "body": [
+        "Now suppose A already has a bounded two-sided inverse, and H is another bounded operator. Factor A plus H as A composed with identity plus A inverse composed with H. In the order of evaluation, apply the parenthesized operator first and then apply A. If the norm of A inverse composed with H is below one, the Neumann construction proves that A plus H is also invertible.",
+        "This is a first quantitative reason that invertibility is stable under sufficiently small operator changes. The Neumann series supplies the basic stability principle: a sufficiently small operator perturbation preserves invertibility.",
+        "One caution matters. When we say an operator is invertible in this Banach algebra, we mean that its inverse is itself a bounded everywhere-defined operator. The bounded inverse theorem establishes that a bounded bijection between Banach spaces automatically has a bounded inverse; the Neumann-series argument here is a direct construction under a norm-smallness assumption."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-00",
+      "title": "Reconstruction",
+      "eyebrow": "G2 · 005000 · Reconstruction",
+      "lead": "Can you reconstruct the Neumann inverse without remembering its name?",
+      "body": [
+        "Begin by expanding the finite sum of the identity and powers of T. Multiply by identity minus T. Observe the cancellation. Then explain exactly where the hypothesis that T has norm below one enters: it makes the tail vanish and guarantees convergence of the operator series.",
+        "For a second check, explain why we needed E to be complete. We first obtain limiting outputs for each input, and then we use an operator-norm Cauchy estimate to assemble those limits into a bounded operator. Without completeness, the would-be outputs might lie outside E.",
+        "The bounded operators on a Banach space form a complete normed algebra. The Neumann series gives a concrete consequence: a norm-small correction to the identity has an explicitly constructed inverse. Its convergence relies on completeness and the submultiplicative operator norm; neither ingredient can be dropped from this proof."
+      ],
+      "layout": "reading"
+    }
+  ]
+}

@@ -21,10 +21,10 @@ def test_first_two_g3_decks_are_readable_source_files():
     lib = CompanionSlideLibrary()
     entries = lib.catalog()
     assert [r['id'] for r in entries[:2]] == ['dkps-fast-path', 'finite-spectral-picture']
-    assert len(entries) == 26
+    assert len(entries) == 56
     assert [r['slide_count'] for r in entries[:2]] == [12, 13]
     assert [r['lecture_nodes'] for r in entries[:2]] == [['g3:000000'], ['g3:001000']]
-    assert {r['lecture_nodes'][0] for r in entries} == {f'g3:{n:03}000' for n in range(26)}
+    assert {r['lecture_nodes'][0] for r in entries[:26]} == {f'g3:{n:03}000' for n in range(26)}
     for entry in entries:
         source = json.loads((SOURCE_DIR/f'{entry["id"]}.json').read_text(encoding='utf-8'))
         assert len({s['id'] for s in source['slides']}) == entry['slide_count']
@@ -33,7 +33,7 @@ def test_first_two_g3_decks_are_readable_source_files():
             assert all(s.get('takeaway') for s in source['slides'])
         else:
             assert 10 <= entry['slide_count'] <= 25
-            assert sum(bool(s.get('diagram')) for s in source['slides']) >= 4
+            assert sum(bool(s.get('diagram')) for s in source['slides']) >= (4 if entry['id'].startswith('g3-') else 2)
         assert all(len((' '.join([s['lead'], *s['body'], *s.get('bullets', []), s.get('takeaway','')])).split()) >= 35 for s in source['slides'])
     intro = (SOURCE_DIR/'dkps-fast-path.json').read_text()
     theorem = (SOURCE_DIR/'finite-spectral-picture.json').read_text()
@@ -84,10 +84,10 @@ def test_companion_api_and_lecture_associations(tmp_path, stub_math_svg):
     with TestClient(create_app(renders, slide_library=lib)) as client:
         response=client.get('/api/slide-decks')
         assert response.status_code==200
-        assert len(response.json()['items'])==26
+        assert len(response.json()['items'])==56
         node=client.get('/api/course-graph').json()['nodes']['g3:000000']
         assert node['companion_slides']==['dkps-fast-path']
-        assert client.get('/api/course-graph').json()['nodes']['g2:000000']['companion_slides']==[]
+        assert len(client.get('/api/course-graph').json()['nodes']['g2:000000']['companion_slides'])==1
         lecture=client.get('/api/audio-lectures/000000?track=g3').json()
         assert lecture['companion_slides'][0]['title']=='A fast path to Davis–Kahan'
         assert not lecture['companion_slides'][0]['built']
@@ -104,7 +104,7 @@ def test_companion_api_and_lecture_associations(tmp_path, stub_math_svg):
         result=client.get('/api/slide-decks/dkps-fast-path/download')
         assert result.status_code==200 and 'attachment' in result.headers['content-disposition']
         assert client.get('/api/audio-lectures/000000?track=g3').json()['companion_slides'][0]['built']
-        assert not client.get('/api/audio-lectures/001000?track=g2').json()['companion_slides']
+        assert client.get('/api/audio-lectures/001000?track=g2').json()['companion_slides']
 
 
 def test_reader_exposes_slide_controls_before_build():
@@ -178,3 +178,51 @@ def test_math_svg_renderer_produces_self_contained_vector_shapes(tmp_path):
     assert '<path' in svg or '<use' in svg
     assert '<script' not in svg
     assert renderer.svg(r'\begin{bmatrix}1&2\\3&4\end{bmatrix}') == svg
+
+
+def test_g2_foundations_are_complete_and_linked_to_lecture_sources(stub_math_svg):
+    from dkvis.presentation.companion_slides import render_html
+    import re
+    lib = CompanionSlideLibrary()
+    entries = [entry for entry in lib.catalog() if entry['lecture_nodes'][0].startswith('g2:')]
+    assert len(entries) == 30
+    assert {r['lecture_nodes'][0] for r in entries} == {f'g2:{n:03}000' for n in range(30)}
+    slide_total = math_total = figure_total = 0
+    for row in entries:
+        deck = json.loads((SOURCE_DIR / (row['id'] + '.json')).read_text(encoding='utf-8'))
+        lecture_path = SOURCE_DIR.parent / deck['source_lecture']
+        lecture = lecture_path.read_text(encoding='utf-8')
+        assert '<!-- BEGIN SPOKEN LECTURE -->' in lecture
+        assert '<!-- END SPOKEN LECTURE -->' in lecture
+        spoken = lecture.split('<!-- BEGIN SPOKEN LECTURE -->')[1].split('<!-- END SPOKEN LECTURE -->')[0]
+        assert 10 <= len(deck['slides']) <= 25
+        assert len({s['id'] for s in deck['slides']}) == len(deck['slides'])
+        assert all(s['title'] and s['lead'] and s['body'] for s in deck['slides'])
+        assert all(len((s['lead']+' '.join(s['body'])).split()) >= 26 for s in deck['slides'])
+        src_words = len(spoken.split())
+        slide_words = sum(len((s['lead'] + ' ' + ' '.join(s['body'])).split()) for s in deck['slides'])
+        assert slide_words >= .93 * src_words, (row['id'], slide_words, src_words)
+        slide_total += len(deck['slides'])
+        math_total += sum('mathtex' in s for s in deck['slides'])
+        figure_total += sum('diagram' in s for s in deck['slides'])
+        html = render_html(deck, math_svg=lambda tex: '<svg class="math-svg"></svg>')
+        assert html.count('<section class="slide slide--') == len(deck['slides'])
+        assert 'class="slide-id">G2 ·' in html
+        assert '<script src=' not in html
+        assert 'G3 ·' not in html
+    assert slide_total >= 390
+    assert math_total >= 70
+    assert figure_total >= 110
+
+def test_g2_deck_api_association(tmp_path, stub_math_svg):
+    lib = CompanionSlideLibrary(SOURCE_DIR, tmp_path / 'slide-cache')
+    with TestClient(create_app(tmp_path, slide_library=lib)) as client:
+        for ident in ['000000','011000','020000','029000']:
+            node = client.get('/api/course-graph').json()['nodes']['g2:' + ident]
+            assert len(node['companion_slides']) == 1
+            meta = client.get('/api/audio-lectures/'+ident+'?track=g2').json()
+            assert meta['companion_slides'][0]['id'] == node['companion_slides'][0]
+            deck = node['companion_slides'][0]
+            assert client.post('/api/slide-decks/'+deck+'/build').status_code==200
+            result = client.get('/slide-decks/'+deck)
+            assert result.status_code==200 and 'G2 ·' in result.text

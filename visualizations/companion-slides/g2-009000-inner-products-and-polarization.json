@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "id": "g2-009000-inner-products-and-polarization",
+  "title": "Inner products and polarization",
+  "subtitle": "Independent G2 companion · lecture 009000",
+  "lecture_nodes": [
+    "g2:009000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/009000-inner-products-and-polarization.md",
+  "adaptation": "Standalone reading slides adapted from the spoken lecture; formulas follow its display-only mathematics appendix. SVG geometric figures are companion illustrations.",
+  "slides": [
+    {
+      "id": "00-00",
+      "title": "The central question",
+      "eyebrow": "G2 · 009000 · The central question",
+      "lead": "A norm measures the length of a vector, and the induced distance gives a notion of convergence.",
+      "body": [
+        "But length alone does not tell us whether two vectors are perpendicular, whether they point mainly in the same direction, or how much of one vector lies along another. An inner product adds that geometry.",
+        "In ordinary Euclidean space it is the dot product. In more general spaces it is a rule that measures the relationship between two vectors and recovers their lengths as a special case.",
+        "We will build the basic rules, prove the Cauchy–Schwarz inequality, see why an inner product gives us geometry that a general norm does not, and learn how the inner product can actually be recovered from the norm by polarization."
+      ],
+      "diagram": "norm-balls",
+      "layout": "opening"
+    },
+    {
+      "id": "01-00",
+      "title": "Start with a dot product",
+      "eyebrow": "G2 · 009000 · Start with a dot product",
+      "lead": "Consider two ordinary vectors in the plane.",
+      "body": [
+        "Let x point three units to the right and four units up. Let y point one unit to the right and zero units up.",
+        "Their dot product is three times one plus four times zero, which is three. Their lengths are five and one. Dividing the dot product by the product of their lengths gives three fifths, the cosine of the angle between them.",
+        "But the dot product contains more than an angle. If y points straight up instead, the dot product becomes four. And if y points four units right and negative three units up, the dot product is zero. The vectors are perpendicular.",
+        "So the dot product knows something that length alone cannot directly express: how two directions interact."
+      ],
+      "diagram": "norm-balls",
+      "layout": "figure"
+    },
+    {
+      "id": "01-01",
+      "title": "In two dimensions we define the dot product by…",
+      "eyebrow": "G2 · 009000 · Start with a dot product",
+      "lead": "In two dimensions we define the dot product by multiplying matching coordinates and adding the results.",
+      "body": [
+        "The same rule works in three dimensions and in any finite-dimensional real Euclidean space. We now want to identify the properties that matter, without depending on a particular coordinate basis."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-00",
+      "title": "The defining rules",
+      "eyebrow": "G2 · 009000 · The defining rules",
+      "lead": "An inner product takes two vectors and returns a scalar.",
+      "body": [
+        "For a real vector space, that scalar is real. We require the rule to be linear in each argument, symmetric when we swap the arguments, and positive when we take the inner product of a vector with itself.",
+        "More precisely, the inner product of a vector with itself is nonnegative, and equals zero only for the zero vector. That last clause prevents a nonzero vector from having zero length.",
+        "From the inner product we define the norm of a vector as the square root of its inner product with itself. Our familiar Euclidean norm comes from the familiar dot product this way.",
+        "The triangle inequality does not follow immediately from the definition of inner-product length. The Cauchy–Schwarz inequality provides the missing estimate."
+      ],
+      "mathtex": "\\langle x,y\\rangle=\\overline{\\langle y,x\\rangle}",
+      "layout": "equation"
+    },
+    {
+      "id": "03-00",
+      "title": "Why the complex case needs conjugation",
+      "eyebrow": "G2 · 009000 · Why the complex case needs conjugation",
+      "lead": "Recall that a complex number may have an imaginary part.",
+      "body": [
+        "If we naively multiply complex coordinates and add, the dot product of a vector with itself need not be nonnegative or even real. The simplest example is a one-coordinate vector whose entry is the imaginary unit, denoted i. By definition, i squared is negative one. Multiplying that coordinate by itself therefore gives negative one, which cannot represent a squared length.",
+        "The fix is to conjugate one factor. For a complex vector with two coordinates, take the conjugate of the first vector's first coordinate times the second vector's first coordinate, then add the corresponding product for the second coordinate.",
+        "With the same vector on both sides, each term becomes a complex number times its conjugate. The sum is real and nonnegative. This produces the squared Euclidean length of the complex vector.",
+        "We will use the convention that the inner product is linear in the second argument and conjugate-linear in the first."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-01",
+      "title": "Conjugate-linear means that multiplying the first vector by a…",
+      "eyebrow": "G2 · 009000 · Why the complex case needs conjugation",
+      "lead": "Conjugate-linear means that multiplying the first vector by a complex scalar multiplies the inner product by the conjugate of that scalar.",
+      "body": [
+        "Swapping the two input vectors conjugates the answer. These rules are called conjugate symmetry and sesquilinearity.",
+        "Over the real numbers, conjugation does nothing, so the complex rules reduce to the ordinary symmetric bilinear dot product. Some books use the opposite convention for which argument is linear. Either convention works, but the placement of conjugates in the adjoint and polarization formulas must be consistent."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-00",
+      "title": "Proving Cauchy–Schwarz",
+      "eyebrow": "G2 · 009000 · Proving Cauchy–Schwarz",
+      "lead": "The Cauchy–Schwarz inequality says that the absolute value of the inner product of x and y is no greater than the product of their lengths.",
+      "body": [
+        "Why should that be true? Imagine trying to remove from x the part that points along y. If y is nonzero, choose a multiple of y so that the remainder is perpendicular to y.",
+        "The required multiple is the inner product of y with x, divided by the squared length of y. Subtract that multiple of y from x. Call the resulting vector r.",
+        "By linearity in the second argument, the inner product of y with r is zero. That is the algebraic definition of orthogonality.",
+        "Now consider the squared length of r. Expand the inner product of r with itself."
+      ],
+      "mathtex": "|\\langle x,y\\rangle|\\leq\\|x\\|\\|y\\|",
+      "layout": "figure",
+      "diagram": "gram-geometry"
+    },
+    {
+      "id": "04-01",
+      "title": "The mixed terms cancel in exactly the right way,…",
+      "eyebrow": "G2 · 009000 · Proving Cauchy–Schwarz",
+      "lead": "The mixed terms cancel in exactly the right way, leaving the squared length of x minus the squared absolute value of the inner product of y with x, divided by the squared length of y.",
+      "body": [
+        "Since squared lengths cannot be negative, that expression must be at least zero. Rearranging gives the Cauchy–Schwarz inequality. If y is zero, the inequality is immediate, so the proof handles all cases.",
+        "There is a geometric interpretation too. The selected multiple of y is the component of x along y. Whatever remains is perpendicular, so no component of x along y can be longer than x itself.",
+        "The proof constructs a perpendicular remainder and uses its nonnegative squared length. That proof will reappear when we build orthogonal projections."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-00",
+      "title": "Deriving the triangle inequality",
+      "eyebrow": "G2 · 009000 · Deriving the triangle inequality",
+      "lead": "We can now prove that the norm induced by an inner product really is a norm.",
+      "body": [
+        "Take the squared length of x plus y and expand. We obtain the squared length of x, plus the squared length of y, plus twice the real part of the inner product of x with y.",
+        "The real part can never exceed the absolute value of a complex number. By Cauchy–Schwarz, that absolute value is at most the length of x times the length of y.",
+        "Therefore the squared length of x plus y is at most the square of the sum of the two lengths. Taking square roots gives the triangle inequality.",
+        "The proof makes the geometry visible: adding two vectors is longest when they point in the same direction, and the cross term measures how closely they align.",
+        "This also gives us the familiar Pythagorean theorem. If x and y are orthogonal, the inner product cross term is zero, so the squared length of their sum equals the sum of their squared lengths."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-00",
+      "title": "The parallelogram law",
+      "eyebrow": "G2 · 009000 · The parallelogram law",
+      "lead": "Let us now turn the direction around.",
+      "body": [
+        "Does every norm come from some inner product?",
+        "An inner-product norm must obey a special identity called the parallelogram law. The sum of the squared lengths of x plus y and x minus y equals twice the squared length of x plus twice the squared length of y.",
+        "To see why, expand both squared lengths. In the first expansion the mixed terms are added; in the second they are subtracted. They cancel, leaving two copies of each squared length.",
+        "Why call it a parallelogram law? If x and y describe two adjacent sides of a parallelogram, then x plus y and x minus y describe its diagonals. The identity relates the squares of the diagonal lengths to the squares of the side lengths.",
+        "Now try a different norm on the plane."
+      ],
+      "mathtex": "\\|x+y\\|^2+\\|x-y\\|^2=2\\|x\\|^2+2\\|y\\|^2",
+      "layout": "equation"
+    },
+    {
+      "id": "06-01",
+      "title": "Measure the vector with coordinates x and y by…",
+      "eyebrow": "G2 · 009000 · The parallelogram law",
+      "lead": "Measure the vector with coordinates x and y by adding the absolute values of its coordinates.",
+      "body": [
+        "This is called the one norm.",
+        "Take one vector along the horizontal axis with length one and another along the vertical axis with length one. Their sum has one-norm two, and so does their difference. The sum of the squares of these lengths is eight. But twice the squared norm of each original vector adds up to only four.",
+        "The parallelogram law fails. Therefore this norm does not come from any inner product. It is a perfectly valid norm; it just does not carry the special geometric structure that an inner product provides."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-00",
+      "title": "Recovering the inner product from lengths",
+      "eyebrow": "G2 · 009000 · Recovering the inner product from lengths",
+      "lead": "Here is the surprising converse idea.",
+      "body": [
+        "If a norm really does come from an inner product, then the lengths alone are sufficient to recover that inner product.",
+        "In a real inner-product space, subtract the squared length of x minus y from the squared length of x plus y. By expanding both expressions, we find that the difference is four times the inner product of x and y.",
+        "So the inner product is one quarter of that difference. This is the real polarization identity.",
+        "It tells us that an inner product can be reconstructed from measurements of sums and differences. Even if someone gives us only lengths, we can recover angles and orthogonality, provided those lengths satisfy the special structure of an inner-product norm."
+      ],
+      "diagram": "norm-balls",
+      "layout": "figure"
+    },
+    {
+      "id": "07-01",
+      "title": "Over complex numbers, there is an additional problem: squared…",
+      "eyebrow": "G2 · 009000 · Recovering the inner product from lengths",
+      "lead": "Over complex numbers, there is an additional problem: squared lengths are real, while the inner product may be complex.",
+      "body": [
+        "The real polarization identity recovers only its real part. To recover the imaginary part, we also compare the squared lengths of x plus the imaginary unit times y and x minus the imaginary unit times y. With our choice of which argument is linear, this second difference has the opposite sign from four times the imaginary part.",
+        "Combining the two measurements recovers the entire complex inner product. Conjugation is not an incidental detail here; it determines the correct sign in the complex polarization formula."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-00",
+      "title": "Why this matters for the course",
+      "eyebrow": "G2 · 009000 · Why this matters for the course",
+      "lead": "Their geometry lets us define perpendicular complements and, eventually, nearest-point projections onto closed subspaces.",
+      "body": [
+        "Later, the inner product lets us express a Gram matrix, a matrix of pairwise inner products among vectors. It also supports adjoints, whose defining equation moves an operator from one side of an inner product to the other. Those are among the fundamental constructions needed for the Davis–Kahan theory.",
+        "But the main idea today is simpler. A norm measures the size of one vector. An inner product measures how two vectors fit together, while also determining their sizes.",
+        "To check that you understand the mechanism, try reconstructing three things. Why is the complex dot product conjugated in one argument? Why does subtracting the component of x along y prove Cauchy–Schwarz? And why does the one norm on the plane fail the parallelogram test?",
+        "If you can answer those, you have the conceptual and algebraic ingredients needed to begin Hilbert-space geometry."
+      ],
+      "layout": "reading"
+    }
+  ]
+}

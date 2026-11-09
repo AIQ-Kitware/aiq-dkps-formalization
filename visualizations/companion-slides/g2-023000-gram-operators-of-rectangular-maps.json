@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "id": "g2-023000-gram-operators-of-rectangular-maps",
+  "title": "Gram operators of rectangular maps",
+  "subtitle": "Independent G2 companion · lecture 023000",
+  "lecture_nodes": [
+    "g2:023000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/023000-gram-operators-of-rectangular-maps.md",
+  "adaptation": "Standalone reading slides adapted from the spoken lecture; formulas follow its display-only mathematics appendix. SVG geometric figures are companion illustrations.",
+  "slides": [
+    {
+      "id": "00-00",
+      "title": "The central question",
+      "eyebrow": "G2 · 023000 · The central question",
+      "lead": "An arbitrary rectangular linear map has two associated positive operators: A adjoint A on its input space and A A adjoint on its output space.",
+      "body": [
+        "These Gram operators reveal the same positive singular-value data despite acting on spaces of potentially different dimensions.",
+        "A map from a plane into three-dimensional space is represented by a three-by-two matrix. It is not square. So we cannot even ask for its eigenvalues in the ordinary sense, because the equation A of x equals lambda times x would compare vectors living in different spaces.",
+        "But there is a way to turn that rectangular map into two square operators. The surprising fact is that both squares reveal the same positive nonzero spectral information, even though they act on different spaces.",
+        "This is the mathematical origin of the two sides of singular-value decomposition."
+      ],
+      "diagram": "gram-geometry",
+      "layout": "opening"
+    },
+    {
+      "id": "01-00",
+      "title": "A map and its adjoint",
+      "eyebrow": "G2 · 023000 · A map and its adjoint",
+      "lead": "Call the starting map A.",
+      "body": [
+        "It takes vectors from a domain space E into a target space F. Both spaces have inner products, so A has an adjoint, A star, going in the reverse direction from F to E.",
+        "We now have two legitimate round trips.",
+        "Starting in E, apply A and then A star. This gives the operator A star A acting on E. We call it the right Gram operator, or the domain Gram operator.",
+        "Starting in F, apply A star and then A. This gives A A star acting on F. We call it the left Gram operator, or the target Gram operator.",
+        "The names right and left follow the order of multiplication: A star A has the adjoint on the left and A on the right."
+      ],
+      "mathtex": "G_R=A^*A,\\qquad G_L=AA^*",
+      "layout": "figure",
+      "diagram": "gram-geometry"
+    },
+    {
+      "id": "01-01",
+      "title": "The operators act on different spaces, so equality between…",
+      "eyebrow": "G2 · 023000 · A map and its adjoint",
+      "lead": "The operators act on different spaces, so equality between them is generally not even a well-typed assertion.",
+      "body": [
+        "Why should we care about two such products? Because they let us study a rectangular map using quadratic forms and eigenvalues, which we already know how to interpret in finite-dimensional spaces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-00",
+      "title": "Why both Gram operators are positive",
+      "eyebrow": "G2 · 023000 · Why both Gram operators are positive",
+      "lead": "Take any vector x in E.",
+      "body": [
+        "Evaluate the quadratic form of A star A at x. Moving the adjoint across the inner product gives the squared length of A of x.",
+        "Squared length is nonnegative. Therefore A star A is positive semidefinite. It is also self-adjoint, because taking its adjoint reverses the factors and returns the same product.",
+        "The same argument works for A A star: for a vector y in F, its quadratic form is the squared length of A star of y. Again, nonnegative and self-adjoint.",
+        "This is stronger than a naming convention. It means the eigenvalues of both Gram operators, in finite dimensions, are real and nonnegative. Their positive eigenvalues describe how much squared length A can create along certain preferred input directions, and how those same effects appear in the target space.",
+        "Notice how much this conclusion cost us. We did not need to assume that A was symmetric, square, invertible, or normal. Only an adjoint was required."
+      ],
+      "mathtex": "\\langle x,G_Rx\\rangle=\\|Ax\\|^2",
+      "layout": "equation"
+    },
+    {
+      "id": "03-00",
+      "title": "A rectangular example you can calculate",
+      "eyebrow": "G2 · 023000 · A rectangular example you can calculate",
+      "lead": "Imagine E is a plane and F is three-dimensional.",
+      "body": [
+        "Define A to send the first coordinate direction to three times the first target direction, and the second coordinate direction to two times the second target direction. The third target direction never receives anything from A.",
+        "The matrix of A has three rows and two columns. Its first row is three, zero. Its second is zero, two. Its third is zero, zero.",
+        "Now calculate A star A. It acts on the two-dimensional input space. Its diagonal entries are nine and four, and its off-diagonal entries are zero.",
+        "Calculate A A star. It acts on three-dimensional target space. Its diagonal entries are nine, four, and zero.",
+        "The matrices have different sizes. Their eigenvalue lists are not identical if we include zeros: the target Gram has one additional zero. But the positive eigenvalues, nine and four, agree perfectly.",
+        "You can already guess the underlying length scales. Along the two preferred input directions, A stretches by three and two."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-01",
+      "title": "The squares of these stretches are nine and four",
+      "eyebrow": "G2 · 023000 · A rectangular example you can calculate",
+      "lead": "The squares of these stretches are nine and four.",
+      "body": [
+        "These lengths, three and two, are the singular values of A.",
+        "That prediction is useful, but today we can prove the key spectral correspondence without relying on singular-value decomposition at all."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-00",
+      "title": "Transporting an eigenvector from one side to the other",
+      "eyebrow": "G2 · 023000 · Transporting an eigenvector from one side to the other",
+      "lead": "Suppose x is a nonzero eigenvector of the right Gram operator A star A, with eigenvalue lambda.",
+      "body": [
+        "So applying A star A to x gives lambda times x.",
+        "First, lambda is nonnegative, because the right Gram is positive. Now suppose lambda is *strictly positive*.",
+        "Apply A to both sides of the eigenvector equation. On the left we get A A star A of x. We can regroup this as A A star applied to A of x. On the right we get lambda times A of x.",
+        "Thus A of x is an eigenvector of the *left* Gram operator with the same eigenvalue lambda. There is one possible objection: perhaps A of x is zero, in which case it would not count as an eigenvector."
+      ],
+      "mathtex": "G_Rx=\\lambda x\\ \\Longrightarrow\\ G_L(Ax)=\\lambda(Ax)",
+      "layout": "figure",
+      "diagram": "analysis-synthesis"
+    },
+    {
+      "id": "04-01",
+      "title": "If A of x were zero, then A star…",
+      "eyebrow": "G2 · 023000 · Transporting an eigenvector from one side to the other",
+      "lead": "But if A of x were zero, then A star A of x would also be zero.",
+      "body": [
+        "Our original equation would say lambda times x is zero. Since lambda is positive and x is nonzero, that is impossible. So the transported vector is genuinely nonzero.",
+        "We have proved that every positive eigenvalue of the right Gram also appears on the left.",
+        "The reverse argument is symmetrical. Begin with a positive-eigenvalue eigenvector y of A A star. Apply A star. This produces a nonzero eigenvector of A star A with the same eigenvalue.",
+        "We have a correspondence in both directions. And more is true: restricted to the eigenspace of a positive lambda, A and A star become inverse transports after a suitable scaling by lambda. Therefore the corresponding positive-eigenvalue eigenspaces have the same dimension.",
+        "That dimension statement will matter when we begin distinguishing eigenvalue multiplicities."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-00",
+      "title": "Why zero is different",
+      "eyebrow": "G2 · 023000 · Why zero is different",
+      "lead": "All of that relied on lambda being positive.",
+      "body": [
+        "Zero is special, and the reason is not a technicality.",
+        "Suppose A star A of x equals zero. Take its inner product with x. The result is the squared length of A of x, so A of x must be zero. Conversely, if A of x is zero, then of course A star A of x is zero.",
+        "Therefore the kernel of A star A is exactly the kernel of A.",
+        "Likewise, the kernel of A A star is exactly the kernel of A star.",
+        "These kernels live in different spaces. Their dimensions can differ. In our three-by-two example, A has no nonzero input vector that it sends to zero, so the right Gram has no zero eigenvalue. But A star kills the third target coordinate direction, so the left Gram has a zero eigenvalue.",
+        "This explains the extra zero without any appeal to coincidence or a matrix calculation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-01",
+      "title": "Different ambient dimensions allow different numbers of directions that…",
+      "eyebrow": "G2 · 023000 · Why zero is different",
+      "lead": "Different ambient dimensions allow different numbers of directions that are invisible to the map or its adjoint.",
+      "body": [
+        "In finite dimensions, the numbers of positive eigenvalues counted with multiplicity agree, and they equal the rank of A. The remaining dimensions contribute zero eigenvalues on each side."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-00",
+      "title": "Connection to the Gram matrices of a vector family",
+      "eyebrow": "G2 · 023000 · Connection to the Gram matrices of a vector family",
+      "lead": "We have seen this structure before.",
+      "body": [
+        "If A is the synthesis map of a family of vectors, then A star A is the Gram matrix on coefficient space. The other product, A A star, is the frame operator on ambient space.",
+        "Those were not unrelated constructions. They are the two Gram operators of the same rectangular map, viewed from opposite sides.",
+        "For an orthonormal frame, A star A is the identity on coefficient space, while A A star is the orthogonal projection onto the frame's range. The positive eigenvalues are all one; the target Gram may also have zeros corresponding to perpendicular directions.",
+        "For an arbitrary finite frame, the positive eigenvalues tell us which combinations of coefficients get amplified more or less strongly. Their square roots give the corresponding length factors.",
+        "One more consequence is worth keeping in view."
+      ],
+      "diagram": "gram-geometry",
+      "layout": "figure"
+    },
+    {
+      "id": "06-01",
+      "title": "The largest possible ratio of output length to input…",
+      "eyebrow": "G2 · 023000 · Connection to the Gram matrices of a vector family",
+      "lead": "The largest possible ratio of output length to input length, which is the operator norm of A, has its square equal to the largest eigenvalue of A star A in finite dimensions.",
+      "body": [
+        "The same maximum is obtained from A A star. We will prove this systematically when we study the spectral theorem and singular values."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-00",
+      "title": "Reconstruct the argument",
+      "eyebrow": "G2 · 023000 · Reconstruct the argument",
+      "lead": "Try to prove these statements from memory: A star A is positive because its quadratic form is a squared norm.",
+      "body": [
+        "The kernels of A star A and A coincide. And a positive-eigenvalue eigenvector of A star A is sent by A to an eigenvector of A A star with the same eigenvalue.",
+        "Then test your reasoning on a one-row, two-column matrix that adds its two inputs. Work out the two Gram matrices. One is two-by-two and has eigenvalues two and zero. The other is one-by-one and has only the eigenvalue two. The common positive spectrum is exactly what the proof predicts."
+      ],
+      "layout": "reading"
+    }
+  ]
+}

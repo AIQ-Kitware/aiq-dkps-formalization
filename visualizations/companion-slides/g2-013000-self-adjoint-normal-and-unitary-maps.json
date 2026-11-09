@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "id": "g2-013000-self-adjoint-normal-and-unitary-maps",
+  "title": "Self-adjoint, normal, and unitary maps",
+  "subtitle": "Independent G2 companion · lecture 013000",
+  "lecture_nodes": [
+    "g2:013000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/013000-self-adjoint-normal-and-unitary-maps.md",
+  "adaptation": "Standalone reading slides adapted from the spoken lecture; formulas follow its display-only mathematics appendix. SVG geometric figures are companion illustrations.",
+  "slides": [
+    {
+      "id": "00-00",
+      "title": "The central question",
+      "eyebrow": "G2 · 013000 · The central question",
+      "lead": "For a bounded operator T between Hilbert spaces, its adjoint T star is the unique operator satisfying the inner-product identity: pairing T x with y equals pairing x with T star y.",
+      "body": [
+        "If T sends vectors from one Hilbert space to another, T star sends measuring directions backward. It is defined so that measuring T of x against y gives the same answer as measuring x against T star of y.",
+        "The adjoint distinguishes three classes of operators: self-adjoint, normal, and unitary. They all involve the adjoint, but they make different claims. Simple matrices show how the three classes overlap and which geometric properties each identity guarantees."
+      ],
+      "diagram": "resolvent-spectrum",
+      "layout": "opening"
+    },
+    {
+      "id": "01-00",
+      "title": "What it means to equal your adjoint",
+      "eyebrow": "G2 · 013000 · What it means to equal your adjoint",
+      "lead": "For the moment, let T map a Hilbert space into itself.",
+      "body": [
+        "Its adjoint then has the same source and target, so we can ask whether T and T star are equal.",
+        "If they are, T is called self-adjoint. The defining inner-product identity now says that the inner product of T of x with y can be moved to the other side without changing the operator. That is an algebraic form of symmetry.",
+        "Consider the real two-by-two matrix that doubles the first coordinate and triples the second. Its transpose is itself, so it is self-adjoint. It stretches the two coordinate directions by different amounts, but it never mixes them.",
+        "Here is a slightly less obvious example. Take the real matrix whose first row is two, one and whose second row is one, two."
+      ],
+      "mathtex": "T=T^*",
+      "layout": "figure",
+      "diagram": "resolvent-spectrum"
+    },
+    {
+      "id": "01-01",
+      "title": "It mixes the coordinates, yet it is symmetric across…",
+      "eyebrow": "G2 · 013000 · What it means to equal your adjoint",
+      "lead": "It mixes the coordinates, yet it is symmetric across its diagonal, and is therefore self-adjoint.",
+      "body": [
+        "Self-adjoint does not mean diagonal in the coordinates we happen to have chosen.",
+        "For a complex matrix, we take the conjugate transpose rather than merely the transpose. A matrix may look symmetric as an array and still fail to be self-adjoint if complex conjugation changes its entries.",
+        "Why should we care about this particular condition? We can already prove something about eigenvalues, even before studying the spectral theorem.",
+        "Suppose T of v equals lambda times v, for some nonzero eigenvector v. Take the inner product of v with T of v. Substituting the eigenvalue equation shows that this quantity equals lambda times the squared length of v."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "01-02",
+      "title": "Self-adjointness also says that the inner product of v…",
+      "eyebrow": "G2 · 013000 · What it means to equal your adjoint",
+      "lead": "But self-adjointness also says that the inner product of v with T of v equals the inner product of T of v with v.",
+      "body": [
+        "One expression has lambda, and the other has the complex conjugate of lambda. Since v has positive squared length, lambda equals its own conjugate. Therefore lambda is real.",
+        "This is a first theorem, not simply a definition: every eigenvalue of a self-adjoint operator is real.",
+        "We can also see why eigenvectors for distinct eigenvalues are orthogonal. Let v and w be eigenvectors with eigenvalues lambda and mu. Move T between the two slots of their inner product. The result says that lambda times their inner product equals mu times their inner product, because both eigenvalues are real. If lambda differs from mu, their inner product must be zero.",
+        "The finite spectral theorem additionally establishes the existence of a complete orthonormal eigenbasis. The adjoint identities here show that any eigenvalues are real and eigenspaces at distinct eigenvalues are orthogonal."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-00",
+      "title": "Normality asks for commutation",
+      "eyebrow": "G2 · 013000 · Normality asks for commutation",
+      "lead": "Now consider a weaker condition.",
+      "body": [
+        "Instead of requiring T to equal T star, ask that T followed by T star give the same operator as T star followed by T. We call T normal when these two compositions agree.",
+        "Why does the order matter? Matrix multiplication is not generally commutative. If T first sends a vector somewhere and T star then acts, the outcome can differ from the reversed order.",
+        "Normality says that this particular pair of operators commutes. It has a direct interpretation using lengths. The squared length of T of x equals the inner product of x with T star T applied to x. The squared length of T star of x equals the inner product of x with T T star applied to x."
+      ],
+      "mathtex": "T^*T=TT^*",
+      "layout": "equation"
+    },
+    {
+      "id": "02-01",
+      "title": "Hence a normal operator satisfies: T and its adjoint…",
+      "eyebrow": "G2 · 013000 · Normality asks for commutation",
+      "lead": "Hence a normal operator satisfies: T and its adjoint give outputs of equal length for every input vector.",
+      "body": [
+        "Conversely, if those lengths agree for every x, the two resulting quadratic forms agree. Their difference is self-adjoint, and polarization tells us that a self-adjoint operator with zero quadratic form is zero. So the length condition also characterizes normality. This is a useful way to remember what the equation means, rather than only remembering the order of its symbols.",
+        "Every self-adjoint operator is normal. If T equals T star, the two products in the definition are automatically the same. But not every normal operator is self-adjoint.",
+        "Take the quarter-turn rotation in the real plane: it sends the vector with coordinates a and b to the vector with coordinates negative b and a. Its adjoint rotates backward by a quarter turn."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-02",
+      "title": "A forward turn followed by a backward turn is…",
+      "eyebrow": "G2 · 013000 · Normality asks for commutation",
+      "lead": "A forward turn followed by a backward turn is the identity, and so is the reverse order.",
+      "body": [
+        "It is normal. But the forward rotation is not equal to the backward rotation. It is not self-adjoint.",
+        "We can also exhibit a map that is not normal. Send a vector with coordinates a and b to the vector with coordinates b and zero. Its matrix has a one above the diagonal and zero elsewhere. Its adjoint sends a and b to zero and a. If you compose the two maps in opposite orders, one keeps the first coordinate and the other keeps the second. The compositions are not equal, so this operator is not normal.",
+        "This example will matter when we later compare diagonalizable matrices, self-adjoint matrices, and matrices that can have nontrivial Jordan blocks. Those distinctions are not just terminology. They constrain how an operator can act."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-00",
+      "title": "Unitary means reversible without changing lengths",
+      "eyebrow": "G2 · 013000 · Unitary means reversible without changing lengths",
+      "lead": "Now strengthen the requirement in a different direction.",
+      "body": [
+        "An operator U is unitary when U star U and U U star are both the identity.",
+        "The first identity says that U preserves inner products. Move U from one side of an inner product to the other; U star U disappears, leaving the original inner product. In particular U preserves lengths and angles.",
+        "The second identity says that U star reverses U everywhere, including on its output space. Thus U is invertible and its inverse is U star.",
+        "A quarter-turn rotation is unitary. So are reflections in lines and planes. Over complex coordinates, multiplying a single coordinate by a complex number of absolute value one is also unitary: it changes phase but not length.",
+        "Every unitary is normal, because its two adjoint products are both the identity."
+      ],
+      "mathtex": "U^*U=UU^*=I",
+      "layout": "figure",
+      "diagram": "orthogonal-projection"
+    },
+    {
+      "id": "03-01",
+      "title": "A unitary need not be self-adjoint, as the quarter-turn…",
+      "eyebrow": "G2 · 013000 · Unitary means reversible without changing lengths",
+      "lead": "A unitary need not be self-adjoint, as the quarter-turn shows.",
+      "body": [
+        "A self-adjoint operator need not be unitary, as the doubling map shows. Some operators are both; a reflection is an example. Its inverse equals itself, and therefore its adjoint equals itself.",
+        "Notice how different the questions are. Self-adjointness asks whether a map equals the operation that pulls back measurements. Normality asks whether this map commutes with that pullback. Unitarity asks whether the pullback is a two-sided inverse."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-00",
+      "title": "A subtle distinction in infinite dimensions",
+      "eyebrow": "G2 · 013000 · A subtle distinction in infinite dimensions",
+      "lead": "Here is a warning that will become the main subject.",
+      "body": [
+        "An operator can preserve every vector's length without being onto.",
+        "Consider the space of square-summable sequences. Move every coordinate one place to the right, inserting zero at the beginning. The new sequence has exactly the same sum of squared coordinate magnitudes, so its length is unchanged. Yet no input can produce a sequence whose first coordinate is one. The map misses part of the space.",
+        "For this right-shift operator, the equation U star U equals the identity holds, but U U star is not the identity. It is the projection that erases the first coordinate. The shift is an isometry, but not a unitary operator.",
+        "We have therefore earned the two-sided definition of unitarity. In finite-dimensional spaces of the same dimension, length preservation forces surjectivity. In infinite dimensions, it need not."
+      ],
+      "diagram": "resolvent-spectrum",
+      "layout": "figure"
+    },
+    {
+      "id": "05-00",
+      "title": "What each operator class guarantees",
+      "eyebrow": "G2 · 013000 · What each operator class guarantees",
+      "lead": "Self-adjoint operators have real spectral data and admit orthogonal spectral projections under the spectral theorem.",
+      "body": [
+        "Normal operators form a larger class that still admits orthogonal spectral geometry over complex Hilbert spaces. Unitary operators provide exact changes of orthonormal coordinates and length-preserving motion.",
+        "Two operators are unitarily equivalent if conjugation by a unitary changes one into the other. Their matrices in chosen coordinates may differ, but their spectral and geometric properties are carried across by that isometry.",
+        "For now, reconstruct three arguments. Why must an eigenvalue of a self-adjoint operator be real? Why does equality of the lengths of T of x and T star of x, for every x, capture normality? And why is the right shift length-preserving but not unitary?"
+      ],
+      "layout": "reading"
+    }
+  ]
+}

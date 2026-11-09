@@ -82,3 +82,31 @@ DKVIS_SLIDE_MATH_RENDERER=latex python -m dkvis.presentation.companion_slides
 ```
 
 To use Manim MathTex explicitly, set `DKVIS_SLIDE_MATH_RENDERER=manim`. The default `auto` uses Manim if importable and otherwise the TeX/Poppler fallback.
+
+## G2 expansion: lectures 000000–029000 (2026-11-09)
+
+The first **30 lectures of G2 — Comprehensive audio** now have standalone
+companion decks, linked to `g2:000000` through `g2:029000`. They cover the
+foundations through Weyl monotonicity and variational eigenvalue inequalities.
+All 26 G3 decks remain available and unchanged. Together the library contains
+56 linked decks.
+
+The G2 slides preserve the mathematical argument and worked examples from each
+lecture's spoken region. Vector `mathtex` statements were checked against the
+lecture's display-only mathematical appendix, and 12 new SVG diagrams illustrate
+norm balls, changes of basis, convergence, projections, linear functionals,
+resolvents, analysis/synthesis, Gram geometry, and Rayleigh quotients. The
+source lecture is recorded in each JSON deck's `source_lecture` field. Editing
+or regenerating a deck has no effect on audio transcripts or speech caches.
+
+A G2 deck can be opened from `/audio?track=g2&lecture=011000` by selecting
+**Show slides**. The same source may be exported using
+`node tools/build_companion_pptx.js companion-slides/g2-011000-the-projection-theorem.json /tmp/g2-projection.pptx`.
+The track label is derived from the deck's graph node rather than hard-coded
+as G3.
+
+These are reading companions, not automatically synchronized subtitles. The
+slide units generally keep complete source sentences together; slide navigation
+is independent of the TTS page boundaries. Further G2 expansion should proceed
+in curriculum-order batches, retaining the vector mathematics and standalone
+proof explanations instead of auto-generating short bullet summaries.

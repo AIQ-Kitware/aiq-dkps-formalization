@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "id": "g2-014000-isometries-coisometries-and-partial-isometries",
+  "title": "Isometries, coisometries, and partial isometries",
+  "subtitle": "Independent G2 companion · lecture 014000",
+  "lecture_nodes": [
+    "g2:014000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/014000-isometries-coisometries-and-partial-isometries.md",
+  "adaptation": "Standalone reading slides adapted from the spoken lecture; formulas follow its display-only mathematics appendix. SVG geometric figures are companion illustrations.",
+  "slides": [
+    {
+      "id": "00-00",
+      "title": "The central question",
+      "eyebrow": "G2 · 014000 · The central question",
+      "lead": "A linear map that preserves every vector length is an isometry, but it need not be onto.",
+      "body": [
+        "Its adjoint describes how the preserved geometry sits inside the target Hilbert space. Related identities distinguish isometries, coisometries, and partial isometries.",
+        "There are three names to learn: isometry, coisometry, and partial isometry. The identities characterize how these maps preserve, discard, or transport geometric information, even between spaces of different dimensions."
+      ],
+      "diagram": "analysis-synthesis",
+      "layout": "opening"
+    },
+    {
+      "id": "01-00",
+      "title": "A map that keeps lengths",
+      "eyebrow": "G2 · 014000 · A map that keeps lengths",
+      "lead": "Start in the ordinary plane.",
+      "body": [
+        "Take the map that sends a point with coordinates a and b to the point with coordinates a, b, and zero in three-dimensional space. Nothing about the lengths changes. The vector that used to lie in a plane now lies in a plane inside three-dimensional space.",
+        "This map is an isometry: a linear map T for which the length of T of x equals the length of x for every x. Since it is linear, it also preserves distances between any two vectors. The distance between T of x and T of y is the length of T applied to their difference, which is the same as the length of the original difference.",
+        "It also preserves inner products. In real spaces, the polarization identity reconstructs the inner product from lengths."
+      ],
+      "mathtex": "T^*T=I_E",
+      "layout": "figure",
+      "diagram": "analysis-synthesis"
+    },
+    {
+      "id": "01-01",
+      "title": "In complex spaces, the complex polarization identity does the…",
+      "eyebrow": "G2 · 014000 · A map that keeps lengths",
+      "lead": "In complex spaces, the complex polarization identity does the same job.",
+      "body": [
+        "Therefore length preservation, together with linearity, gives inner-product preservation.",
+        "There is a short adjoint test. The inner product of T of x with T of y equals the inner product of x with T star T applied to y. So an isometry satisfies T star T equals the identity. Conversely, that identity forces the inner products, and therefore the lengths, to agree.",
+        "Notice what this equation does **not** say. It does not say T T star equals the identity on the output space. Our plane can sit inside three-dimensional space without filling all of it. An isometry is injective, but it need not be surjective."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-00",
+      "title": "Why the two compositions are different",
+      "eyebrow": "G2 · 014000 · Why the two compositions are different",
+      "lead": "Return to the map that inserts a zero as the third coordinate.",
+      "body": [
+        "Its adjoint takes a three-dimensional vector and discards that third coordinate. If we first insert a zero and then discard the last coordinate, we recover our original plane vector. That is T star T equals the identity.",
+        "But suppose we start with a three-dimensional vector that already has a nonzero third coordinate. Discarding it and then inserting zero does not recover the original vector. The operator T T star returns the part of the vector lying in the embedded plane. It is an orthogonal projection, not the identity on all of three-dimensional space.",
+        "In finite dimension, the same picture also explains what happens to an isometry from a space to itself. If domain and codomain have the same finite dimension, an injective linear map is surjective. So a square finite-dimensional isometry is automatically unitary.",
+        "That statement fails in infinite dimensions. Think of ell two, the space of square-summable sequences."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-01",
+      "title": "The right shift inserts a zero before every coordinate…",
+      "eyebrow": "G2 · 014000 · Why the two compositions are different",
+      "lead": "The right shift inserts a zero before every coordinate and moves all the old coordinates one place right.",
+      "body": [
+        "It preserves their squared sum, so it is an isometry. But its image contains only sequences with first coordinate zero. It never reaches the first coordinate direction. The right shift is not unitary.",
+        "Its adjoint is the left shift, which discards the first coordinate and moves the rest left. You can check directly that the left shift after the right shift is the identity, while the right shift after the left shift erases the first coordinate."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-00",
+      "title": "A coisometry looks backward",
+      "eyebrow": "G2 · 014000 · A coisometry looks backward",
+      "lead": "A coisometry is an operator T for which T T star equals the identity on its output space.",
+      "body": [
+        "Equivalently, its adjoint is an isometry. The term is meant to point to the adjoint direction: the map preserves lengths when viewed backward through its adjoint.",
+        "Our coordinate-dropping map from three-dimensional space to the plane is a coisometry. It is onto: every plane vector comes from a three-dimensional vector. But it is not injective, because it sends the vertical direction to zero.",
+        "This is the mirror image of the original embedding. The embedding was injective but not onto. Its adjoint is onto but not injective.",
+        "The left shift on ell two is another coisometry. It can produce any square-summable sequence by inserting an arbitrary first coordinate into a suitable input. But it loses information: different input sequences with different first coordinates lead to the same output.",
+        "A unitary operator is both an isometry and a coisometry. That is why its adjoint is a two-sided inverse rather than only a one-sided inverse."
+      ],
+      "mathtex": "TT^*=I_F",
+      "layout": "equation"
+    },
+    {
+      "id": "04-00",
+      "title": "An operator that is isometric on only part of its input",
+      "eyebrow": "G2 · 014000 · An operator that is isometric on only part of its input",
+      "lead": "Now consider a map from the plane to the plane that takes the first coordinate and places it in the second position, while throwing away the original second coordinate.",
+      "body": [
+        "In words, it sends a, b to zero, a.",
+        "What does it do to lengths? On the horizontal axis, it preserves length exactly. On the vertical axis, it sends every vector to zero. On a general vector, it neither preserves the whole length nor vanishes.",
+        "This is the basic example of a partial isometry. A partial isometry is isometric on the orthogonal complement of its kernel, and zero on its kernel. Recall that the kernel contains the vectors that the operator sends to zero. In our example it is the vertical axis, and its orthogonal complement is the horizontal axis."
+      ],
+      "diagram": "orthogonal-projection",
+      "layout": "figure"
+    },
+    {
+      "id": "04-01",
+      "title": "Because the domain is a Hilbert space, every vector…",
+      "eyebrow": "G2 · 014000 · An operator that is isometric on only part of its input",
+      "lead": "Because the domain is a Hilbert space, every vector can be uniquely decomposed into a component in the kernel and a component perpendicular to the kernel.",
+      "body": [
+        "The map discards the first component and transports the second component without changing its length.",
+        "The perpendicular part of the kernel is called the *initial space*. The range of the operator is called the *final space*. For a partial isometry, that range is closed. One way to see this is to take a convergent sequence of output vectors. Their unique initial-space preimages are Cauchy, because distances are preserved there. The initial space is closed, so the preimages converge inside it. Their images converge to the desired output, which therefore lies in the range.",
+        "Our example carries the horizontal initial space onto the vertical final space. Its adjoint carries the vertical axis back to the horizontal axis."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-00",
+      "title": "The adjoint products become projections",
+      "eyebrow": "G2 · 014000 · The adjoint products become projections",
+      "lead": "Let P be the orthogonal projection onto the initial space, and Q the projection onto the final space.",
+      "body": [
+        "A partial isometry satisfies T star T equals P and T T star equals Q.",
+        "Let's understand the first identity. If x lies in the kernel, both T of x and P of x vanish. If x lies in the initial space, T preserves its inner products with other initial-space vectors. Moving T through the inner product shows that T star T acts as the identity on that space. Thus T star T is exactly the projection that keeps the initial component and erases the kernel component.",
+        "The second identity follows in the same way after exchanging T with its adjoint. On the final space, T T star acts as the identity; on its orthogonal complement, it vanishes."
+      ],
+      "mathtex": "T^*T=P_{(\\ker T)^\\perp}",
+      "layout": "equation"
+    },
+    {
+      "id": "05-01",
+      "title": "These projection identities also give a convenient test for…",
+      "eyebrow": "G2 · 014000 · The adjoint products become projections",
+      "lead": "These projection identities also give a convenient test for partial isometries.",
+      "body": [
+        "In particular, if T star T is an orthogonal projection, then T acts isometrically on that projection's range and vanishes on its orthogonal complement. So it is a partial isometry.",
+        "Orthogonal projections themselves are partial isometries: they are the identity on the selected subspace and zero on its orthogonal complement. Ordinary isometries are partial isometries whose initial space is the entire input space. Coisometries are partial isometries whose final space is the entire output space."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-00",
+      "title": "One more example: reflection",
+      "eyebrow": "G2 · 014000 · One more example: reflection",
+      "lead": "Take a closed subspace and split any vector into its component inside the subspace and its perpendicular component.",
+      "body": [
+        "Keep the first component and reverse the second. That operation is reflection through the subspace.",
+        "Pythagoras shows immediately that reflection preserves length. Reflecting twice returns the original vector. So reflection is a unitary operator, and because it is its own inverse, it is also self-adjoint.",
+        "The reflection can be written as twice the orthogonal projection onto the subspace, minus the identity. This formula will be useful when we later compare operators by how they act on a subspace and its complement."
+      ],
+      "diagram": "analysis-synthesis",
+      "layout": "figure"
+    },
+    {
+      "id": "07-00",
+      "title": "Initial and final spaces explain the formulas",
+      "eyebrow": "G2 · 014000 · Initial and final spaces explain the formulas",
+      "lead": "For a linear map T, the Gram operator T adjoint T records input lengths after T acts.",
+      "body": [
+        "For a partial isometry, this Gram operator is the projection onto its initial space; T T adjoint instead projects onto its final space. Those different projections explain how a map can preserve length on one part of its input while vanishing on another. In polar decomposition, the same distinction separates isometric transport from positive stretching.",
+        "To reconstruct today's lesson, explain the difference between the two equations T star T equals identity and T T star equals identity. Then show, for the map sending a, b to zero, a, that T star T and T T star are different projections. Finally, explain why an orthogonal projection is a partial isometry even though it usually is not an isometry on the whole space."
+      ],
+      "layout": "reading"
+    }
+  ]
+}

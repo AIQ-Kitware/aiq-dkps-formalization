@@ -18,7 +18,7 @@ from dkvis.presentation.slide_math import MathSvgRenderer, MATH_RENDERER_VERSION
 
 SOURCE_DIR = ROOT / 'companion-slides'
 CACHE_DIR = ROOT / 'companion-slide-cache'
-RENDERER_VERSION = '9-composition-'+MATH_RENDERER_VERSION
+RENDERER_VERSION = '11-g2-layout-'+MATH_RENDERER_VERSION
 FIGURE_DIR = SOURCE_DIR / 'figures'
 DECK_ID = re.compile(r'^[a-z][a-z0-9-]{1,63}$')
 
@@ -124,6 +124,15 @@ header{display:flex;align-items:center;gap:13px;flex-wrap:wrap;padding:11px 22px
 .math-stage{color:var(--gold);width:100%;margin:8px auto 20px;display:flex;align-items:center;justify-content:center;height:112px;min-height:112px;overflow:hidden}.math-stage svg{display:block;width:100%;height:100%;color:var(--gold);fill:currentColor}.math-stage--multi{height:154px;min-height:154px}.math-stage svg path:not([style*="fill:none"]),.math-stage svg use{fill:currentColor!important}.slide--math .math-stage{margin-top:9px;margin-bottom:18px}.slide--math.slide--reading .math-stage{max-width:1120px}
 .idea{font-family:'EB Garamond',Georgia,serif;font-size:clamp(21px,2.15vw,34px);font-weight:500;color:var(--gold);border-left:3px solid var(--gold);padding:8px 20px;margin:6px 0 19px;max-width:1000px;line-height:1.2}.takeaway{color:#ebd0a7;border-top:1px solid #45667a;margin-top:18px;padding-top:12px;font-size:clamp(15px,1.09vw,18px);line-height:1.4;max-width:1150px}.takeaway::before{content:'KEY POINT  ';color:var(--aqua);font-size:11px;letter-spacing:.11em;font-weight:700;margin-right:7px}
 .foot{position:absolute;bottom:12px;right:27px;font-size:11px;letter-spacing:.055em;color:#a1bdcd}.slide--figure .figure{align-self:center}
+@media(min-width:1100px){
+.slide--track-g2.slide--reading .slide-stage{min-height:455px}
+.slide--track-g2.slide--opening .slide-stage,.slide--track-g2.slide--figure .slide-stage{min-height:440px}
+.slide--track-g2.slide--opening .figure,.slide--track-g2.slide--figure .figure{min-height:315px}
+.slide--track-g2.slide--equation .slide-stage{min-height:255px}
+.slide--track-g2.slide--equation .narrative{columns:2;column-gap:4.5vw;max-width:none;column-fill:balance}
+.slide--track-g2.slide--equation .narrative p{break-inside:avoid;font-size:clamp(17px,1.24vw,20px);line-height:1.55}
+.slide--track-g2.slide--math .math-stage{min-height:132px;height:132px;margin-top:18px;margin-bottom:22px}
+}
 @media(max-width:1050px){.slide{aspect-ratio:auto;min-height:calc(100vh - 110px);max-height:none;padding:26px 26px 48px}.slide-stage,.slide--opening .slide-stage{grid-template-columns:1fr}.slide--reading .narrative{columns:1}.figure{max-width:680px;min-height:170px;justify-self:center}.figure svg{max-height:340px}.slide h1{font-size:clamp(31px,5.7vw,49px)}.math-stage{max-height:none}.math-stage svg{height:100%}}
 body.embed header{position:sticky;top:0;z-index:10;display:flex;gap:6px;padding:6px 10px}body.embed header strong,body.embed header .muted{display:none}body.embed header button{padding:5px 9px}body.embed header select{flex:1;min-width:110px;max-width:none;padding:5px 6px}body.embed header #current{font-size:12px}body.embed main{padding:0}body.embed .slide{aspect-ratio:auto;min-height:0;max-height:none;overflow:visible;border:0;border-top:4px solid var(--aqua);border-radius:0;padding:25px 30px 48px}body.embed .slide-stage{grid-template-columns:minmax(0,1fr) minmax(240px,1fr)}body.embed .slide--reading .narrative{columns:2}body.embed .slide h1{font-size:clamp(30px,3.1vw,48px)}body.embed .lead{font-size:clamp(17px,1.45vw,22px)}body.embed .figure svg{max-height:290px}
 @media(max-width:850px){body.embed .slide-stage,body.embed .slide--opening .slide-stage{grid-template-columns:1fr}body.embed .slide--reading .narrative{columns:1}body.embed .slide{padding:20px 18px 42px}}
@@ -273,6 +282,8 @@ def render_html(deck, *, math_svg=None):
         import tempfile
         math_svg = MathSvgRenderer(Path(tempfile.gettempdir()) / 'dkps-slide-math-svg').svg
     parts=[]
+    tracks = {node.split(':', 1)[0].upper() for node in deck.get('lecture_nodes', [])}
+    track_label = ' / '.join(sorted(tracks)) if tracks else 'DKPS'
     for index,slide in enumerate(deck['slides']):
         layout=slide.get('layout') or ('figure' if slide.get('diagram') else 'reading')
         body=slide.get('body', [])
@@ -308,11 +319,11 @@ def render_html(deck, *, math_svg=None):
         if layout not in ('figure','reading','opening','equation'):
             raise ValueError(f'Unsupported slide layout {layout}')
         total_chars=sum(map(len,body))
-        classes=('slide slide--'+layout+(' slide--math' if math else '')
+        classes=('slide slide--'+layout+(' slide--track-g2' if 'G2' in tracks else '')+(' slide--math' if math else '')
                  +(' slide--brief' if total_chars<400 else ' slide--long'))
         stage=f'<div class="slide-stage"><div class="narrative">{paragraphs}</div>{figure}</div>'
         parts.append(f'''<section class="{classes}" id="slide-{index+1}" {'hidden' if index else ''}>
-<div class="slide-meta"><div class="kicker">{esc(slide.get('eyebrow') or deck['title'])}</div><div class="slide-id">G3 · {index+1:02d} / {len(deck['slides']):02d}</div></div>
+<div class="slide-meta"><div class="kicker">{esc(slide.get('eyebrow') or deck['title'])}</div><div class="slide-id">{esc(track_label)} · {index+1:02d} / {len(deck['slides']):02d}</div></div>
 <h1>{esc(slide['title'])}</h1><p class="lead">{esc(slide['lead'])}</p>
 {math}{idea}{stage}{takeaway}
 <div class="foot">{esc(deck['title'])} · {index+1} / {len(deck['slides'])}</div></section>''')

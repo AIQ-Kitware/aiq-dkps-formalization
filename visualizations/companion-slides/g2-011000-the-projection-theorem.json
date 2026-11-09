@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "id": "g2-011000-the-projection-theorem",
+  "title": "The projection theorem",
+  "subtitle": "Independent G2 companion · lecture 011000",
+  "lecture_nodes": [
+    "g2:011000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/011000-the-projection-theorem.md",
+  "adaptation": "Standalone reading slides adapted from the spoken lecture; formulas follow its display-only mathematics appendix. SVG geometric figures are companion illustrations.",
+  "slides": [
+    {
+      "id": "00-00",
+      "title": "The central question",
+      "eyebrow": "G2 · 011000 · The central question",
+      "lead": "Suppose you stand above a flat floor and want the point on the floor closest to you.",
+      "body": [
+        "You drop a perpendicular. The nearest point is where that perpendicular meets the floor.",
+        "In a Hilbert space, our floor may be an infinite-dimensional subspace, and a vector might be a function or an infinite sequence. We can still ask for the closest point in that subspace. For a closed subspace of a Hilbert space, the closest point exists and is unique. Its defining property is orthogonality of the approximation error to the subspace.",
+        "This is the projection theorem. In infinite dimensions, the existence of a nearest point requires a completeness argument; geometric intuition alone does not establish the minimizer."
+      ],
+      "diagram": "orthogonal-projection",
+      "layout": "opening"
+    },
+    {
+      "id": "01-00",
+      "title": "A small example first",
+      "eyebrow": "G2 · 011000 · A small example first",
+      "lead": "In the ordinary plane, let M be the horizontal axis.",
+      "body": [
+        "If x has horizontal coordinate three and vertical coordinate four, the closest point in M is the point with horizontal coordinate three and vertical coordinate zero.",
+        "Why? Any other point on the axis differs from x by a horizontal displacement as well as the unavoidable vertical displacement of four. Pythagoras says that its squared distance is sixteen plus a nonnegative horizontal square. The smallest value occurs when that extra term is zero.",
+        "The leftover vector, from the closest point to x, is vertical. It is perpendicular to the whole horizontal axis. This is not a coincidence. It is the essential optimality condition."
+      ],
+      "diagram": "orthogonal-projection",
+      "layout": "figure"
+    },
+    {
+      "id": "02-00",
+      "title": "Why the word closed matters",
+      "eyebrow": "G2 · 011000 · Why the word closed matters",
+      "lead": "Before we prove the theorem, remember the finitely supported sequences inside ell two.",
+      "body": [
+        "This is a subspace, but it is not closed. Take the vector whose coordinates are one, one half, one third, and so on. It lies in ell two but not in that subspace.",
+        "By keeping longer and longer initial segments, we can find finitely supported vectors arbitrarily close to it. So the greatest lower bound on its distance to the subspace is zero. But there is no finitely supported vector at distance zero from it, because that would have to be the vector itself.",
+        "In other words, the best possible error exists as a number, but no allowed approximant attains that error. This is why our theorem needs a closed subspace. A geometric drawing of a line or plane can hide the issue, because finite-dimensional subspaces are automatically closed."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-00",
+      "title": "Finding a candidate without guessing it",
+      "eyebrow": "G2 · 011000 · Finding a candidate without guessing it",
+      "lead": "Let H be a Hilbert space and M a closed linear subspace.",
+      "body": [
+        "Choose any vector x in H. We want to minimize the distance from x to points in M.",
+        "Call the infimum of these distances d. The infimum is defined before we establish that it is attained by a closest point. Because distances are nonnegative and M contains zero, d is a finite nonnegative number.",
+        "By the definition of infimum, we can choose a sequence of points in M whose distances to x approach d. Call the points p one, p two, and so on. They are increasingly good approximations. But being good approximations does not automatically mean the points themselves converge. We must establish that."
+      ],
+      "mathtex": "H=M\\oplus M^\\perp",
+      "layout": "equation"
+    },
+    {
+      "id": "03-01",
+      "title": "Here the parallelogram identity becomes decisive: the squared length…",
+      "eyebrow": "G2 · 011000 · Finding a candidate without guessing it",
+      "lead": "Here the parallelogram identity becomes decisive: the squared length of p plus q, added to the squared length of p minus q, equals twice the squared length of p plus twice the squared length of q.",
+      "body": [
+        "Applied to two approximate minimizers, it forces their midpoint behavior to control the distance between them.",
+        "Take two of our approximants, p and q. Look at the vectors from each approximant toward x. Their difference is q minus p. Their average is the vector from the midpoint of p and q toward x.",
+        "The parallelogram identity tells us that the squared distance between p and q equals twice the squared distance from p to x, plus twice the squared distance from q to x, minus four times the squared distance from their midpoint to x."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-02",
+      "title": "Because M is a linear subspace, the midpoint of…",
+      "eyebrow": "G2 · 011000 · Finding a candidate without guessing it",
+      "lead": "Because M is a linear subspace, the midpoint of p and q still belongs to M.",
+      "body": [
+        "Its distance to x is therefore at least d. Substitute that lower bound into the identity.",
+        "We learn that the squared distance between p and q is no greater than twice the squared distance from p to x, plus twice the squared distance from q to x, minus four times d squared.",
+        "Now let p and q come from sufficiently late positions in our minimizing sequence. Each of their squared distances to x approaches d squared. The right-hand side approaches zero. So the distance between any two late approximants approaches zero. The minimizing sequence is Cauchy.",
+        "Completeness of H now supplies a limit point p. Since M is closed and every approximant lies in M, their limit also lies in M."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-03",
+      "title": "Continuity of the norm says that the distance from…",
+      "eyebrow": "G2 · 011000 · Finding a candidate without guessing it",
+      "lead": "Continuity of the norm says that the distance from x to p is exactly d.",
+      "body": [
+        "We have constructed a nearest point.",
+        "Notice the roles of the ingredients. The parallelogram identity made the approximants Cauchy. Hilbert-space completeness provided a limit. Closedness of M kept that limit inside the permitted subspace. Closedness cannot be dropped. For example, the finitely supported sequences form a dense, nonclosed subspace of ell two. A square-summable sequence with infinitely many nonzero coordinates has distance zero to that subspace but has no nearest point within it."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-00",
+      "title": "Why the nearest point is unique",
+      "eyebrow": "G2 · 011000 · Why the nearest point is unique",
+      "lead": "Suppose both p and q were nearest points.",
+      "body": [
+        "Their distances to x would both equal d. Apply the same parallelogram identity. The midpoint belongs to M and cannot be closer than d. Therefore the squared distance between p and q is at most zero. Since squared distances are nonnegative, p and q must be equal.",
+        "So the closest point is not merely guaranteed to exist. It is uniquely determined by x.",
+        "This matters because it lets us define a function: send each x to its unique closest point in M. We call that function the orthogonal projection onto M."
+      ],
+      "diagram": "orthogonal-projection",
+      "layout": "figure"
+    },
+    {
+      "id": "05-00",
+      "title": "Why nearest-point error is perpendicular",
+      "eyebrow": "G2 · 011000 · Why nearest-point error is perpendicular",
+      "lead": "Let p be the nearest point, and let r be the error vector x minus p.",
+      "body": [
+        "We claim r is perpendicular to every vector v in M.",
+        "Imagine moving the candidate point p a little in the direction v. Since M is a subspace, p plus any scalar multiple of v is still in M. The closest-point property says that none of those moves can decrease the distance to x.",
+        "If v is nonzero, use the scalar that would remove the component of r along v. In the real case, it is the inner product of v with r divided by the squared length of v. In the complex case, use exactly the same expression with the complex inner product linear in its second argument.",
+        "By expanding the squared distance after that move, we find the original squared error minus the squared magnitude of the inner product of v with r, divided by the squared length of v."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-01",
+      "title": "If the inner product were nonzero, this move would…",
+      "eyebrow": "G2 · 011000 · Why nearest-point error is perpendicular",
+      "lead": "If the inner product were nonzero, this move would give a strictly smaller error.",
+      "body": [
+        "That contradicts nearest-point optimality.",
+        "Therefore the inner product must be zero. The error r belongs to the orthogonal complement of M.",
+        "Now prove the reverse direction. Suppose p belongs to M and x minus p is perpendicular to M. For any other point q in M, write x minus q as x minus p plus p minus q. The first part is perpendicular to the second, because p minus q lies in M. Pythagoras says the squared distance to q is the squared distance to p plus the squared norm of p minus q. It cannot be smaller. Thus p is the unique nearest point.",
+        "We have proved an equivalence: a point in a closed subspace is the closest point to x exactly when the residual from that point to x is perpendicular to the subspace."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-00",
+      "title": "The operator hidden in the geometry",
+      "eyebrow": "G2 · 011000 · The operator hidden in the geometry",
+      "lead": "Call the projection operator P.",
+      "body": [
+        "Every vector x now has a unique decomposition: x equals P of x, which lies in M, plus x minus P of x, which lies in M perp.",
+        "This decomposition lets us prove P is linear. Take two vectors and decompose each into its M part and perpendicular part. Add the decompositions. The sum of the M parts remains in M, and the sum of the perpendicular parts remains in M perp. By uniqueness of the decomposition, the M part of the sum is the sum of their projections. The same reasoning works for scalar multiplication, including complex scalars.",
+        "Pythagoras gives another important fact. The squared norm of x is the squared norm of P of x plus the squared norm of the perpendicular remainder. Therefore P of x can never be longer than x."
+      ],
+      "mathtex": "P_M^2=P_M=P_M^*,\\qquad\\ker P_M=M^\\perp",
+      "layout": "figure",
+      "diagram": "orthogonal-projection"
+    },
+    {
+      "id": "06-01",
+      "title": "The projection is bounded, with operator norm at most…",
+      "eyebrow": "G2 · 011000 · The operator hidden in the geometry",
+      "lead": "The projection is bounded, with operator norm at most one.",
+      "body": [
+        "If x already lies in M, its nearest point is itself. Projecting twice changes nothing. This is the idempotence identity: P composed with P equals P.",
+        "And the complementary piece, x minus P of x, is exactly the orthogonal projection onto M perp. Every vector belongs to the sum of M and M perp, and that sum is orthogonal.",
+        "We can now close a loop. Take the orthogonal complement of M perp. Because every vector splits into an M part and an M-perp part, a vector perpendicular to M perp must have zero M-perp component. It therefore belongs to M. Thus, for a closed subspace, taking the orthogonal complement twice returns the subspace. For any possibly nonclosed subspace, it returns the closure."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-00",
+      "title": "Reconstructing the proof",
+      "eyebrow": "G2 · 011000 · Reconstructing the proof",
+      "lead": "Reconstruct the argument in four steps.",
+      "body": [
+        "First, choose a sequence whose errors approach the best possible error. Second, use the parallelogram identity and the midpoint to prove that sequence is Cauchy. Third, apply completeness and closedness to get an actual nearest point. Fourth, vary that point along directions in the subspace to prove its residual is perpendicular.",
+        "The final consequences—linearity, boundedness, and projection squared equals projection—follow from that geometry."
+      ],
+      "layout": "reading"
+    }
+  ]
+}
