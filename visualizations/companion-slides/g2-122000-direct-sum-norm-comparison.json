@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "id": "g2-122000-direct-sum-norm-comparison",
+  "title": "Direct-sum norm comparison",
+  "subtitle": "G2 lecture 122000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:122000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/122000-direct-sum-norm-comparison.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 122000 · first-pass outline",
+      "lead": "An estimate for one corner of a block matrix is often the easy part of a perturbation proof.",
+      "body": [
+        "A full angle between subspaces has two complementary corners. How can we combine bounds for the two corners without losing a constant or miscounting singular values? Davis and Kahan answer this with Lemma six point one. Its basic operation is an orthogonal direct sum. When the two summands act on orthogonal initial spaces and have orthogonal output spaces, their singular values merge into a single ordered list. That list admits a precise Ky Fan comparison."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Begin with ordinary diagonal matrices",
+      "eyebrow": "G2 · 122000 · first-pass outline",
+      "lead": "Take a matrix A with singular values five and two, and a matrix B with singular values four and one.",
+      "body": [
+        "Form their block direct sum. Its nonzero singular values are five, four, two, and one, in decreasing order. The first Ky Fan sum is five. The second is nine. The third is eleven. The fourth is twelve. The point is that the direct sum has a combined singular-value list, not the termwise sum of two lists. In particular, the second Ky Fan sum is not the second Ky Fan sum of A plus the second Ky Fan sum of B: that would give seven plus five, or twelve, while the correct second prefix is nine. To get the first two singular values of the direct sum, we choose how many to take from each block."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Prove the exact prefix formula",
+      "eyebrow": "G2 · 122000 · first-pass outline",
+      "lead": "Let the singular values of A decrease as a one, a two, and so on.",
+      "body": [
+        "Let those of B decrease as b one, b two, and so on. Include trailing zeros after the rank if needed. For a fixed positive integer k, the sum of the k largest singular values of their direct sum is the maximum, over all splits of k into i plus j, of the sum of the i largest a values and the sum of the j largest b values. Why is this formula exact? Every choice of k entries from the merged list takes some number i from the first block and j from the second. For that split, the largest possible selected sum uses the first i values of A and the first j values of B."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Derive the forward comparison",
+      "eyebrow": "G2 · 122000 · first-pass outline",
+      "lead": "Suppose every Ky Fan prefix of A is at most the corresponding prefix of C.",
+      "body": [
+        "Suppose also every Ky Fan prefix of B is at most the corresponding prefix of D. For every split k equal to i plus j, the sum of the first i singular values of A and the first j of B is at most the analogous sum for C and D. Taking the maximum over all splits preserves the inequality. Thus every Ky Fan prefix of A direct sum B is at most the corresponding prefix of C direct sum D. This is exactly a weak-majorization statement for the merged singular-value sequences. It is stronger than a comparison for one selected Schatten norm. It says that every leading partial sum is controlled."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Why orthogonality matters",
+      "eyebrow": "G2 · 122000 · first-pass outline",
+      "lead": "Consider two operators whose ranges overlap and whose domains overlap.",
+      "body": [
+        "Their sum may have cancellations or reinforcing interference. The singular values of the sum need not be the merged lists of their individual singular values. For the direct-sum formula we need the operator to be block diagonal after suitable orthogonal coordinate changes. More precisely, the first block must act on an initial subspace orthogonal to the second block's initial subspace, and their images must lie in orthogonal final subspaces. Under those conditions, the Gram operator of the sum is block diagonal in the initial-space coordinates. Its positive square root therefore has the two block moduli on the diagonal."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "The converse requires a symmetry",
+      "eyebrow": "G2 · 122000 · first-pass outline",
+      "lead": "Can we infer separate bounds on A from a Ky Fan bound for A direct sum B?",
+      "body": [
+        "Not in general. The second block might carry the entire improvement or entire loss, making the combined comparison uninformative about the first block. There is an important exception. Suppose A and B have identical singular-value sequences, and C and D also have identical singular-value sequences. Then the merged singular values of A direct sum B consist of each singular value of A repeated twice. The same holds for C direct sum D. Therefore the sum of the first two k singular values of A direct sum B is exactly twice the sum of the first k singular values of A."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A concrete converse example",
+      "eyebrow": "G2 · 122000 · first-pass outline",
+      "lead": "Let A have singular values three and one, and let B have the same list.",
+      "body": [
+        "Their direct sum has singular values three, three, one, one. At k equal to one, the Ky Fan prefix of A is three, and the Ky Fan prefix at two for the direct sum is six. Let C and D each have singular values four and two. Their direct sum has singular values four, four, two, two. The first two entries sum to eight, twice the first Ky Fan sum of C. The inequality six at most eight recovers three at most four. At even index four, we obtain eight at most twelve, recovering the full singular-value sum four at most six."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Why this appears in subspace perturbation theory",
+      "eyebrow": "G2 · 122000 · first-pass outline",
+      "lead": "Let P and Q be orthogonal projections.",
+      "body": [
+        "An ambient sine operator can be assembled from complementary cross maps. One cross map measures the part of vectors in P that lies outside Q; the other measures the reverse direction from P perpendicular. A spectral Sylvester argument often estimates each cross map against a corresponding projected perturbation. Lemma six point one combines the two inequalities into a comparison for the ambient block sum, preserving all Ky Fan prefixes. The second lemma in this pair then shows that the corresponding perturbation blocks, taken together, have no larger unitarily invariant norm than the original perturbation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Infinity and ideal membership",
+      "eyebrow": "G2 · 122000 · first-pass outline",
+      "lead": "For a compact operator in infinite-dimensional Hilbert space, singular values form a sequence tending to zero.",
+      "body": [
+        "The direct-sum reasoning remains valid through finite Ky Fan prefixes. No infinite sum is required to establish a fixed prefix inequality. But a symmetric ideal norm may be finite only on a proper class of compact operators. To claim an ideal estimate, show that the right direct sum lies in the ideal and invoke the ideal's dominance property to place the left direct sum there as well. The lemma may be stated by controlling every Ky Fan prefix, or by quantifying over an appropriate family of normalized unitarily invariant norms."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "The proof to remember",
+      "eyebrow": "G2 · 122000 · first-pass outline",
+      "lead": "The entire argument has three steps.",
+      "body": [
+        "Orthogonal blocks yield the union of their singular-value lists. The k-th Ky Fan prefix of that union is the maximum of the sums over all splits of k. Componentwise weak majorization controls every one of those splits and therefore the maximum. Under matching singular-value lists, even prefixes of the direct sum are twice the prefixes of a single block, giving the converse."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 122000 · mathematical reference",
+      "lead": "The entire argument has three steps.",
+      "body": [
+        "Orthogonal blocks yield the union of their singular-value lists. The k-th Ky Fan prefix of that union is the maximum of the sums over all splits of k. Componentwise weak majorization controls every one of those splits and therefore the maximum."
+      ],
+      "mathtex": "K_k(A\\oplus B)=\\max_{0\\le i\\le k}\\bigl(K_i(A)+K_{k-i}(B)\\bigr).",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 122000 · conclusion",
+      "lead": "Under matching singular-value lists, even prefixes of the direct sum are twice the prefixes of a single block, giving the converse.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

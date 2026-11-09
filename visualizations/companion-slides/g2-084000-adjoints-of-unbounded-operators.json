@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "g2-084000-adjoints-of-unbounded-operators",
+  "title": "Adjoints of unbounded operators",
+  "subtitle": "G2 lecture 084000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:084000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/084000-adjoints-of-unbounded-operators.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 084000 · first-pass outline",
+      "lead": "For a matrix, the adjoint is the conjugate transpose.",
+      "body": [
+        "In infinite dimensions, that formula leaves out a central question: which vectors belong to the adjoint's domain? We will derive that domain from first principles, test it on the diagonal operator, and distinguish a symmetric operator from a genuinely self-adjoint one."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Start with the inner-product identity",
+      "eyebrow": "G2 · 084000 · first-pass outline",
+      "lead": "Let A be a densely defined linear operator on a complex Hilbert space H, with domain D.",
+      "body": [
+        "For simplicity, say that the inner product is linear in its first argument. Fix a candidate vector y. We would like to find a vector z such that the inner product of A x with y equals the inner product of x with z, for every x in D. This is the familiar adjoint identity. But why should such a z exist? Define a linear functional on D by taking the inner product of A x with y. The functional is defined on D; it need not be bounded with respect to the ordinary Hilbert norm of x."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "A complete diagonal calculation",
+      "eyebrow": "G2 · 084000 · first-pass outline",
+      "lead": "Return to ell two.",
+      "body": [
+        "Let A multiply coordinate N by N, but initially define it only on finite-support sequences. Call this operator A minimal. We can test every proposed adjoint vector y using the finite-support basis vectors. Suppose y is in the adjoint domain, with adjoint output z. Insert x equals e N into the defining identity. On the left we obtain N times the conjugate of the N-th coordinate of y. On the right we obtain the conjugate of the N-th coordinate of z. Therefore z N must equal N y N. Because z belongs to ell two, the sequence of N times y N must be square summable. This proves a necessary condition. It is also sufficient."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Symmetric means equality on the original domain",
+      "eyebrow": "G2 · 084000 · first-pass outline",
+      "lead": "An operator is symmetric if, for all x and y in its domain, the inner product of A x with y equals the inner product of x with A y.",
+      "body": [
+        "For a densely defined symmetric operator, every y in its domain passes the adjoint boundedness test: the functional in x equals the inner product of x with A y, and its size is bounded by the length of A y times the length of x. Thus the original domain sits inside the adjoint domain, and A star agrees with A on the original domain. This is an inclusion, not necessarily an equality. For A minimal, the inclusion is strict. Symmetry alone leaves open the possibility that there are extra vectors on which the adjoint acts."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Boundary conditions can change the answer",
+      "eyebrow": "G2 · 084000 · first-pass outline",
+      "lead": "Consider the differential expression negative i times the derivative on square-integrable functions on an interval.",
+      "body": [
+        "To make sense of the derivative, the domain must consist of sufficiently regular functions. For smooth functions with compact support strictly inside the interval, integration by parts moves the derivative from one function to the other with no boundary contribution. This gives symmetry. Now allow functions whose endpoint values are nonzero. The integration-by-parts identity acquires a boundary term. Different choices of domain can make that term vanish: for example, periodic boundary conditions identify the two endpoint values."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Closedness and the double adjoint",
+      "eyebrow": "G2 · 084000 · first-pass outline",
+      "lead": "The adjoint of a densely defined operator is closed.",
+      "body": [
+        "Here is the reason. Let y N approach y and let A star y N approach z. For any x in the original domain, the adjoint identity gives an equality of inner products. Pass to the limit, using ordinary continuity of inner products. We obtain the identity defining membership of y in the adjoint domain, with adjoint output z. Therefore the adjoint graph is closed. If A star is itself densely defined, A is closable. In that situation, the double adjoint A star star equals the closure of A. For our finite-support diagonal example, taking two adjoints recovers the maximal diagonal operator."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A practical domain test",
+      "eyebrow": "G2 · 084000 · first-pass outline",
+      "lead": "There is a useful procedure to remember.",
+      "body": [
+        "First write down the candidate expression for the adjoint using integration by parts or coordinate calculations. Second determine the largest collection of output vectors for which the resulting inner-product functional is bounded in the ordinary ambient norm. Third compare that collection with the original domain. If the domains are different, the original operator cannot be self-adjoint, even if every formal inner-product manipulation looks symmetric. If the domains match, the same calculation proves self-adjointness. The domain comparison is the decisive step, not the appearance of the formula."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "The relationship with spectral theory",
+      "eyebrow": "G2 · 084000 · first-pass outline",
+      "lead": "A self-adjoint operator has a full spectral theory, real spectrum, and nonreal resolvents.",
+      "body": [
+        "A merely symmetric operator might lack these properties because it can have too small a domain. The same domain test applies when an unbounded operator is restricted to a reducing spectral subspace. A formal restriction of the differential expression does not suffice; the restricted domain and its adjoint domain must be identified. This is where the distinctions we established today enter directly into the Davis–Kahan proofs."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 084000 · conclusion",
+      "lead": "This is where the distinctions we established today enter directly into the Davis–Kahan proofs.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

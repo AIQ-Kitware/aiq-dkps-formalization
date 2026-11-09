@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "id": "g2-139000-comparing-angle-and-ky-fan-beam-estimates",
+  "title": "Comparing angle and Ky Fan beam estimates",
+  "subtitle": "G2 lecture 139000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:139000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/139000-comparing-angle-and-ky-fan-beam-estimates.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 139000 · first-pass outline",
+      "lead": "Let A be the self-adjoint free-beam fourth-derivative operator on the unit interval, on the domain of functions with four square-integrable weak derivatives and with second and third derivatives zero at both endpoints.",
+      "body": [
+        "Its two-dimensional kernel is the affine plane, and the rest of its spectrum lies above five hundred. Let H multiply by epsilon times t, where zero is less than epsilon and epsilon is less than one hundred. An orthonormal basis of the affine trial plane is given by one over square root of two times one minus square root of three times two t minus one, and the corresponding function with a plus sign."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "First use the unrecentered residual",
+      "eyebrow": "G2 · 139000 · first-pass outline",
+      "lead": "Start with the reference operator zero on the affine trial plane.",
+      "body": [
+        "Since the unperturbed fourth derivative annihilates both trial functions, the residual is H applied to the frame. For this map the Gram matrix equals epsilon squared over thirty times the symmetric matrix with diagonal entries eleven minus square root of seventy-five and eleven plus square root of seventy-five, and both off-diagonal entries negative one. Its eigenvalues are epsilon squared over thirty times eleven plus or minus square root of seventy-six. Thus the top singular value is epsilon times the square root of the quotient of eleven plus square root of seventy-six by thirty, a little smaller than point eight one one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "What a two-term Ky Fan norm adds",
+      "eyebrow": "G2 · 139000 · first-pass outline",
+      "lead": "Operator norm sees only the largest singular value.",
+      "body": [
+        "We also know the second singular value of the initial residual. Its coefficient is the square root of eleven minus square root of seventy-six, divided by thirty, about point two seven six. Add the two coefficients and divide by five hundred. The result is below point zero zero two one eight times epsilon. So the sum of the sines of the two principal angles is bounded by that quantity. This is the paper's equation nine point three. The Ky Fan estimate bounds the sum of the two principal sines, not each sine by half that sum; their contributions can be unequal."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "The doubled-angle alternative",
+      "eyebrow": "G2 · 139000 · first-pass outline",
+      "lead": "The paper next applies the sine-two-theta theorem.",
+      "body": [
+        "This theorem compares two reducing subspaces of the unperturbed and perturbed operators, not simply one trial residual. In the beam example the perturbation has norm at most epsilon and the relevant separation is five hundred. The ambient sine-two-theta estimate gives sine of twice the largest angle less than point zero zero four times epsilon. Its two-term Ky Fan version gives the sum of the doubled sines less than point zero zero eight times epsilon. These are equations nine point two and nine point four. At first sight these coefficients look larger than the single-angle sine coefficient."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Recenter at the Ritz matrix",
+      "eyebrow": "G2 · 139000 · first-pass outline",
+      "lead": "Now use the actual Rayleigh-Ritz compression rather than zero.",
+      "body": [
+        "Its diagonal entries are epsilon over two times one minus one over square root of three, and epsilon over two times one plus one over square root of three. Subtracting the compressed action from the full action leaves a rank-one residual, whose Gram matrix is epsilon squared over thirty times the matrix with diagonal entries one and off-diagonal entries negative one. The only nonzero singular value is epsilon divided by square root of fifteen. The separation is no longer the full five hundred because the trial Ritz values are positive. But a valid lower gap is five hundred minus point seven eight eight seven times epsilon."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A recentered doubled-tangent bound",
+      "eyebrow": "G2 · 139000 · first-pass outline",
+      "lead": "There is also a tangent-two-theta estimate.",
+      "body": [
+        "Use the perturbed operator's compression to the complementary trial space. The complement remains above five hundred because the original beam is nonnegative with its high spectrum above five hundred and the perturbation is positive. The corresponding bound for tangent of twice the largest angle has twice the numerator of the tangent estimate. Thus the paper obtains point zero zero one zero three two eight times epsilon, divided by the same denominator, one minus point zero zero one five seven seven four times epsilon. This is equation nine point seven."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Comparison at one concrete parameter",
+      "eyebrow": "G2 · 139000 · first-pass outline",
+      "lead": "With epsilon ten, the initial largest-angle sine bound is about point zero one six two two, while the recentered tangent bound is about point zero zero five two five.",
+      "body": [
+        "The initial doubled-sine bound is point zero four, while the recentered doubled-tangent bound is about point zero one zero five. These are not four numbers measuring an identical quantity. Yet when the angles are small, they give a coherent picture, and the recentered estimates use the information that the Ritz matrix contains. There is one more distinction. All the results so far concern the two-dimensional low spectral subspace relative to the trial plane."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 139000 · mathematical reference",
+      "lead": "With epsilon ten, the initial largest-angle sine bound is about point zero one six two two, while the recentered tangent bound is about point zero zero five two five.",
+      "body": [
+        "The initial doubled-sine bound is point zero four, while the recentered doubled-tangent bound is about point zero one zero five."
+      ],
+      "mathtex": "\\sin\\theta_1<0.001622\\varepsilon,\\qquad\n\\sin\\theta_1+\\sin\\theta_2<0.00218\\varepsilon,",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 139000 · conclusion",
+      "lead": "A two-by-two Schur complement separates that rotation from the leakage out of the trial plane.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

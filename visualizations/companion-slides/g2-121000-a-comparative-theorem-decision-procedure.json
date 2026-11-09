@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "id": "g2-121000-a-comparative-theorem-decision-procedure",
+  "title": "A comparative theorem decision procedure",
+  "subtitle": "G2 lecture 121000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:121000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/121000-a-comparative-theorem-decision-procedure.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 121000 · first-pass outline",
+      "lead": "Four classical spectral-subspace estimates involve the sine of an angle, the tangent of an angle, the sine of twice an angle, and the tangent of twice an angle.",
+      "body": [
+        "Their formulas look similar, but they answer different questions about trial residuals, changes of self-adjoint operators, and selected spectral subspaces. Using one theorem with another theorem’s hypotheses can invalidate a proof. The assumptions are different enough that such a substitution can invalidate a proof. Selecting an angle theorem begins with the available spectral information and the norm to be controlled."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Start with the question, not the bound",
+      "eyebrow": "G2 · 121000 · first-pass outline",
+      "lead": "Ask what is being compared.",
+      "body": [
+        "Do we have a trial subspace and a true spectral subspace? Are we comparing spectral subspaces of two different self-adjoint operators? Or do we have a graph represented by a small slope over a reference subspace? These questions fix the geometry. A trial subspace typically produces a residual, the component of the operator action escaping the trial subspace. A comparison of two spectral operators more naturally produces a full perturbation difference. A graph calculation produces tangent angles because the graph slope equals the tangent of the principal angle. Next identify the angle itself."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Regime one: ordered separation",
+      "eyebrow": "G2 · 121000 · first-pass outline",
+      "lead": "Suppose the unwanted spectrum lies entirely above the trial compression, or entirely below it, with gap delta.",
+      "body": [
+        "This ordered-gap hypothesis is strong enough to apply the Sylvester inverse with a constant-one estimate for the operator norm and appropriate unitarily invariant norms. If the trial map is isometric and R is its residual, the sine theorem gives delta times a directed sine norm at most the residual norm, subject to the stated operator-ideal assumptions. When the trial frame is not isometric, its lower frame bound introduces an additional normalization factor."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Regime two: spectra separated but interlaced",
+      "eyebrow": "G2 · 121000 · first-pass outline",
+      "lead": "Now suppose two spectral sets are disjoint but neither sits entirely above the other.",
+      "body": [
+        "They may be interlaced. We still have a positive minimum pairwise distance delta in finite dimensions, and the Sylvester equation still has a unique solution. The entrywise spectral calculation immediately gives a Frobenius estimate: squared coefficient magnitudes are divided by spectral differences of magnitude at least delta. Summing squares proves delta times the Frobenius norm of the solution is at most the Frobenius norm of the right side. However, the same argument does not yield the constant-one operator-norm inequality."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Regime three: two-block gap and a full perturbation",
+      "eyebrow": "G2 · 121000 · first-pass outline",
+      "lead": "Let T have a reducing decomposition into a low and high block separated by an ordered gap.",
+      "body": [
+        "Let S equal T plus H, with V any reducing subspace of S. In this setting a sine-two-theta theorem bounds the ambient doubled sine by twice the perturbation norm divided by the original gap, under its precise norm hypotheses. The bound is robust to the choice of V because the function sine twice theta treats near-zero and near-right-angle choices alike. Therefore, if the goal is an actual small angle, we must add branch information. We might know V is selected by a spectral projection and the perturbation is small enough to keep its branch connected to the original one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A numerical comparison",
+      "eyebrow": "G2 · 121000 · first-pass outline",
+      "lead": "Take T diagonal with entries negative one and one.",
+      "body": [
+        "Let H have zero diagonal and off-diagonal entries h. Set delta equal two. The selected low eigenspace of S has an angle theta satisfying tangent twice theta equal to h in magnitude. For h equal to one, theta is twenty-two point five degrees. Sine theta is approximately zero point three eight three, tangent theta approximately zero point four one four, sine twice theta about zero point seven zero seven, and tangent twice theta equals one. All four quantities measure different aspects of the same rotation. An estimate controlling sine theta by residual requires the chosen trial and exact spectral complement."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Diagnose a tempting false inference",
+      "eyebrow": "G2 · 121000 · first-pass outline",
+      "lead": "Imagine that an argument establishes sine twice theta at most one tenth.",
+      "body": [
+        "Someone immediately writes theta at most half arcsine one tenth. We can test the inference with theta equal to eighty-eight degrees: sine of one hundred seventy-six degrees is about seven hundredths, so the bound is compatible with a nearly perpendicular subspace. The inference becomes valid if we independently know theta below forty-five degrees. More generally, a selected spectral continuation can serve as the branch certificate when its hypotheses have been checked. The problem is not an inaccurate numerical constant. It is the failure to identify the relevant inverse branch."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Norm-class audit",
+      "eyebrow": "G2 · 121000 · first-pass outline",
+      "lead": "Suppose our final statement uses a Schatten norm.",
+      "body": [
+        "Does the theorem give an estimate in that norm? Check whether its source is stated for the operator norm only, a particular Hilbert–Schmidt norm, finite-dimensional unitarily invariant norms, or an infinite-dimensional symmetric ideal with membership hypotheses. A finite Ky Fan inequality is often a flexible intermediate object. If every Ky Fan prefix of the left-side singular values is bounded by the corresponding right-side prefix, then weak majorization allows descent to symmetric norming functions. The passage may also need proof that the target belongs to the ideal whenever the right-hand side does."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Direction and dimension audit",
+      "eyebrow": "G2 · 121000 · first-pass outline",
+      "lead": "A directed sine map from P into Q perpendicular can be small even if Q contains a large extra perpendicular part not represented in P.",
+      "body": [
+        "In finite dimensions, if P and Q have equal rank, the two lists of nonzero principal sines coincide. Without that rank equality, a bound for one direction does not automatically control the ambient projection difference. In infinite dimensions, equality of Hilbert-space dimensions is weaker than matching the crossed defects. A theorem about the full angle uses its stipulated subspace-matching assumptions; a directed-angle estimate controls only the specified direction."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "A practical decision pass",
+      "eyebrow": "G2 · 121000 · first-pass outline",
+      "lead": "For every new problem, record the operator pair and their domains, the trial or selected subspace, the exact spectral sets, the gap type, the residual or perturbation, the angle orientation, and the norm class.",
+      "body": [
+        "Then ask the sequence of proof questions. Is the Sylvester equation even well-defined on the required domain? Is its inverse bound valid for this gap and norm? Does the operator projection represent the stated sine or tangent? Are both directed components controlled? If a doubled angle appears, what chooses its branch? Each condition excludes a concrete failure mode: a wrong spectral gap, an unmatched defect space, an invalid norm comparison, or an ambiguous angular branch."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "10-overview",
+      "title": "Close the comparison",
+      "eyebrow": "G2 · 121000 · first-pass outline",
+      "lead": "The single-angle theorems use a residual and a separated unwanted spectrum.",
+      "body": [
+        "The doubled-angle theorems use reflection of a two-block spectral decomposition and a full perturbation. The tangent versions rely on additional graph or spectral-branch information. The available norm bound depends on the gap geometry and on whether all needed singular-value comparisons have been proved. For a full ambient sine estimate, two crossed residual equations may be needed rather than one. Their singular-value lists can be combined using the Ky Fan direct-sum inequality, while pinching controls the corresponding perturbation blocks by one ambient norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 121000 · conclusion",
+      "lead": "These steps explain why keeping track of direction, spectral gaps, and norm class is indispensable.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

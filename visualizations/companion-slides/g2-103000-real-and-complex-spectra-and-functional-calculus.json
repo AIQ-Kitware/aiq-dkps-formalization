@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "g2-103000-real-and-complex-spectra-and-functional-calculus",
+  "title": "Real and complex spectra and functional calculus",
+  "subtitle": "G2 lecture 103000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:103000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/103000-real-and-complex-spectra-and-functional-calculus.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 103000 · first-pass outline",
+      "lead": "To use the complex spectral theorem for a real self-adjoint operator, complexify its Hilbert space and extend the operator complex-linearly.",
+      "body": [
+        "Norms and adjoints behave compatibly under this extension. The subtler question is which spectral statements and operator functions return to the original real Hilbert space. For a real self-adjoint operator, our goal is to use complex spectral theory and then return to a real spectral assertion. To accomplish that, we will follow an explicit chain: invertibility, spectral location, functional calculus, conjugation symmetry, and descent."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "First recall what spectrum tests",
+      "eyebrow": "G2 · 103000 · first-pass outline",
+      "lead": "For a bounded operator T and a scalar lambda, the resolvent test asks whether T minus lambda times the identity is invertible with a bounded inverse.",
+      "body": [
+        "The spectrum consists of those scalars for which this test fails. This includes failures of injectivity, surjectivity, and bounded invertibility. In infinite dimensions, eigenvalues alone do not describe the full spectrum. Complexifying a real operator preserves products and the identity. Therefore, if T minus a real scalar is invertible over the reals, its complexification has a bounded inverse obtained by complexifying the original inverse. The converse is more interesting."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Why self-adjointness changes the situation",
+      "eyebrow": "G2 · 103000 · first-pass outline",
+      "lead": "Let A be a bounded real self-adjoint operator.",
+      "body": [
+        "Its complexification is complex self-adjoint because the adjoint commutes with complexification. The spectral theorem for a complex self-adjoint operator says that its spectrum is a compact subset of the real axis. Therefore every spectral parameter of the complexified A is real. Since the real-scalar invertibility test agrees with the complex test, the real spectrum of A and the complex spectrum of its complexification describe the same numerical subset of the real line, after identifying real numbers with complex numbers having zero imaginary part."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Continuous functional calculus preserves conjugation symmetry",
+      "eyebrow": "G2 · 103000 · first-pass outline",
+      "lead": "Now suppose f is a continuous real-valued function on the spectrum of the self-adjoint complexified operator.",
+      "body": [
+        "The functional calculus associates to f an operator f of A. For polynomials with real coefficients, this is easy to understand: every power of the complexified A commutes with conjugation, real scalar coefficients preserve that property, and sums preserve it as well. The continuous functional calculus is obtained by extending these polynomial rules through uniform approximation. Since operator-norm limits of conjugation-commuting operators still commute with conjugation, f of A also commutes with conjugation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "An actual spectral projection requires more care",
+      "eyebrow": "G2 · 103000 · first-pass outline",
+      "lead": "A spectral projection onto a subset S of the spectrum corresponds to the indicator function of S: one on S, zero outside S.",
+      "body": [
+        "Indicators are usually discontinuous. Continuous functional calculus alone cannot evaluate an arbitrary discontinuous indicator. Bounded Borel calculus can, but descending every Borel operation requires additional machinery and the right invariance statements. There is an important case where continuous calculus is enough. Suppose the spectrum is separated into two pieces by an open gap. Then a function may switch continuously from one to zero inside the gap, where there is no spectrum at all."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "What happens at a spectral boundary",
+      "eyebrow": "G2 · 103000 · first-pass outline",
+      "lead": "Consider a self-adjoint multiplication operator whose spectrum fills an interval and choose a threshold in its interior.",
+      "body": [
+        "The indicator of the lower half is discontinuous at that threshold. The bounded Borel spectral projection still exists in complex Hilbert space, but it no longer arises from the same simple continuous function that equals the indicator on the entire spectrum. For special operators, we may prove conjugation invariance of that Borel projection directly, or approximate indicators in a suitable strong topology. Those are additional arguments. It would be incorrect to claim that the continuity proof above automatically handles every Borel set."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Resolvents and gap preservation",
+      "eyebrow": "G2 · 103000 · first-pass outline",
+      "lead": "We can now connect spectra to numerical estimates.",
+      "body": [
+        "If a real self-adjoint A has spectrum at least delta away from a real scalar t, then the complex self-adjoint resolvent has operator norm at most one divided by delta. The resolvent of the real operator is obtained by descent, and complexification preserves operator norm. Therefore the same bound holds on the real Hilbert space, with no extra dimension-dependent constant. That is an example of a transferable inequality whose hypotheses and conclusion survive exactly. But spectral separation for two operators is not, by itself, a promise that every operator-norm Sylvester bound has constant one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "The strategy",
+      "eyebrow": "G2 · 103000 · first-pass outline",
+      "lead": "We have proved how to transfer bounded spectral structure.",
+      "body": [
+        "Our standard will be the same. State the exact object being transported. Prove that its defining data survive. Then use complex theory and descend the conclusion with the same constants. The spectrum of a self-adjoint operator controls its functional calculus. Conjugation symmetry tells us which of the constructed bounded operators are genuinely real. Together, these principles allow complex proofs to produce real spectral projections and resolvent estimates without replacing the underlying real problem."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 103000 · conclusion",
+      "lead": "Together, these principles allow complex proofs to produce real spectral projections and resolvent estimates without replacing the underlying real problem.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

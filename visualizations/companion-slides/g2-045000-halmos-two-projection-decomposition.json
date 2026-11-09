@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "id": "g2-045000-halmos-two-projection-decomposition",
+  "title": "Halmos two-projection decomposition",
+  "subtitle": "G2 lecture 045000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:045000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/045000-halmos-two-projection-decomposition.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 045000 · first-pass outline",
+      "lead": "Principal angles describe how two subspaces overlap in paired directions.",
+      "body": [
+        "For an angle strictly between zero and ninety degrees, the corresponding two-dimensional plane carries simple cosine–sine matrices for the orthogonal projections. Those planes, however, are only part of the geometry of an arbitrary pair of subspaces. But imagine a pair of subspaces with different dimensions. Some directions might belong to both. Some might belong to the first and be perpendicular to the second. Others might do the reverse. And the ambient space might contain directions belonging to neither subspace."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Four places a vector can live",
+      "eyebrow": "G2 · 045000 · first-pass outline",
+      "lead": "Call the subspaces U and V, with projections P and Q.",
+      "body": [
+        "The first distinguished part is their intersection: vectors lying in both U and V. For such a vector, P does nothing and Q does nothing. Both projections return the original vector. We call this the common part. The second part consists of vectors in U but perpendicular to V. P returns the vector, while Q sends it to zero. This is the source defect. It records directions present in U that have no overlap with V. The third part reverses the roles. These vectors lie in V but are perpendicular to U. P sends them to zero and Q returns them. This is the target defect. The fourth part consists of vectors perpendicular to both U and V."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Why we may add these parts orthogonally",
+      "eyebrow": "G2 · 045000 · first-pass outline",
+      "lead": "The four parts are mutually orthogonal.",
+      "body": [
+        "Let us prove one instance rather than take it on faith. Take x in the common part and y in the source defect. Both lie in U, but x lies in V while y lies in V perpendicular. Their inner product must be zero. For another instance, take x in the source defect and y in the target defect. The first lies in U, the second in U perpendicular. Again their inner product is zero. The remaining pairs work the same way: for every pair of distinct elementary parts, one membership condition places the first vector in a subspace and the other in its perpendicular complement. Thus their sum is an orthogonal direct sum."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "A six-dimensional example",
+      "eyebrow": "G2 · 045000 · first-pass outline",
+      "lead": "To see every piece at once, imagine six mutually perpendicular coordinate directions, named first through sixth.",
+      "body": [
+        "Let U be spanned by the first, second, and fifth directions. Let V be spanned by the first direction, the third direction, and a tilted direction made from cosine theta times the fifth plus sine theta times the sixth. Take theta strictly between zero and ninety degrees. Now inspect the four elementary pieces. The first coordinate direction belongs to both subspaces, so it forms the common part. The second belongs to U and is perpendicular to V, so it forms the source defect. The third belongs to V and is perpendicular to U, so it forms the target defect."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Why the generic part is preserved",
+      "eyebrow": "G2 · 045000 · first-pass outline",
+      "lead": "We need to justify why the remaining part can be studied independently.",
+      "body": [
+        "It is not enough simply to name an orthogonal complement. Each elementary part is invariant under P and under Q. In fact, both act there as either identity or zero. Therefore their orthogonal sum is invariant under both projections. Projections are self-adjoint. For a self-adjoint operator, an invariant subspace is automatically reducing, since self-adjointness forces its orthogonal complement to be invariant as well: its orthogonal complement is invariant as well. Consequently, the generic part is invariant under P and Q. Both projections split into blocks relative to the elementary part and generic part."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Why all four intersections disappear on the generic part",
+      "eyebrow": "G2 · 045000 · first-pass outline",
+      "lead": "Suppose a nonzero vector in the generic part lay in both U and V.",
+      "body": [
+        "It would belong to the common part as well. But the generic part is perpendicular to the common part. A nonzero vector cannot lie in a subspace and in its orthogonal complement simultaneously. The same reasoning applies to the other three intersections. Inside the generic part, there are no nonzero common vectors, no source-only perpendicular vectors, no target-only perpendicular vectors, and no vectors perpendicular to both. This is sometimes called generic position for the restricted pair of subspaces. In finite dimensions, that means all the principal angles in the generic part lie strictly between zero and ninety degrees."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A deeper operator description",
+      "eyebrow": "G2 · 045000 · first-pass outline",
+      "lead": "What if the ambient space is an infinite-dimensional Hilbert space?",
+      "body": [
+        "The four elementary pieces can still be defined using intersections and orthogonal complements, provided the projections are onto closed subspaces. Their sum is an orthogonal sum of closed subspaces, and its orthogonal complement gives a generic remainder. Both projections still reduce this remainder. But here an important finite-dimensional shortcut can fail. We cannot always choose an orthonormal basis of individual principal-angle eigenvectors. An operator may have continuous spectrum rather than a complete eigenvector list. To generalize the two-by-two picture, use an operator in place of each scalar cosine."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Why injective does not mean uniformly separated",
+      "eyebrow": "G2 · 045000 · first-pass outline",
+      "lead": "There is a final distinction worth keeping in mind.",
+      "body": [
+        "On the generic part, no nonzero direction lies in any of the four elementary intersections. In particular, the cosine and sine operators do not have actual zero eigenvectors caused by the removed endpoint pieces. In finite dimensions, that often lets us bound both cosine and sine away from zero, because finitely many positive eigenvalues have a positive minimum. In infinite dimensions, injectivity does not imply a positive lower bound. A sequence of directions can have principal angles approaching zero or ninety degrees even when neither endpoint angle has an eigenvector."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "What the classification buys us",
+      "eyebrow": "G2 · 045000 · first-pass outline",
+      "lead": "Consider two projection pairs.",
+      "body": [
+        "If one has a source defect and the other does not, no unitary change of ambient coordinates can transform one pair into the other while respecting which projection is which. The dimensions of the defect spaces cannot be erased by a change of basis. Likewise, if their generic angles differ, their geometry differs even if the elementary dimensions match. So a classification needs both pieces of information: the sizes of the four elementary parts, and the operator describing the generic cosine–sine geometry. In finite dimensions, the latter reduces to the multiset of intermediate principal angles."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "Reconstruction",
+      "eyebrow": "G2 · 045000 · first-pass outline",
+      "lead": "Return to our six-dimensional example.",
+      "body": [
+        "Identify all four elementary parts and write down the projection values on each. Then prove that the plane spanned by the fifth and sixth coordinate directions is reducing for both projections. Next, prove in general that the four elementary parts are mutually orthogonal and that their orthogonal complement is invariant under both projections. Finally, explain why the absence of a ninety-degree eigenvector in infinite dimensions does not by itself produce a uniform bound away from ninety degrees."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 045000 · mathematical reference",
+      "lead": "Return to our six-dimensional example.",
+      "body": [
+        "Identify all four elementary parts and write down the projection values on each. Then prove that the plane spanned by the fifth and sixth coordinate directions is reducing for both projections."
+      ],
+      "mathtex": "H_{11}=U\\cap V,\\quad H_{10}=U\\cap V^\\perp,\\quad\nH_{01}=U^\\perp\\cap V,\\quad H_{00}=U^\\perp\\cap V^\\perp.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 045000 · conclusion",
+      "lead": "Finally, explain why the absence of a ninety-degree eigenvector in infinite dimensions does not by itself produce a uniform bound away from ninety degrees.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

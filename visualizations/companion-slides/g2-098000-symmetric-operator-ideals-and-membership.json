@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "g2-098000-symmetric-operator-ideals-and-membership",
+  "title": "Symmetric operator ideals and membership",
+  "subtitle": "G2 lecture 098000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:098000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/098000-symmetric-operator-ideals-and-membership.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 098000 · first-pass outline",
+      "lead": "In finite dimensions, every matrix has a finite nuclear norm, a finite Frobenius norm, and a finite operator norm.",
+      "body": [
+        "The space of matrices is so forgiving that we can describe all these norms without mentioning which matrices are allowed. Infinite-dimensional Hilbert spaces force a change. The identity operator is bounded, but its singular values do not decay. It is not compact, not Hilbert–Schmidt, and not trace class. Assigning it a finite trace norm would contradict the infinite sum of its singular values."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "What an operator ideal contains",
+      "eyebrow": "G2 · 098000 · first-pass outline",
+      "lead": "Let E and F be Hilbert spaces.",
+      "body": [
+        "For each compatible source-target pair, an operator ideal selects some bounded maps T from E to F. The selected maps are closed under addition and scalar multiplication. More importantly, if T is in the ideal and A and B are arbitrary bounded operators on either side, then A T B remains in the corresponding ideal. This is the two-sided ideal property. It says that the notion of smallness survives a bounded change of inputs and a bounded change of outputs."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Three familiar carriers",
+      "eyebrow": "G2 · 098000 · first-pass outline",
+      "lead": "The compact operators form an ideal.",
+      "body": [
+        "The carrier consists of exactly the compact bounded operators, and its gauge can be the ordinary operator norm. This is a complete ideal, because the compact operators form a closed subspace of the bounded maps in operator norm. The Hilbert–Schmidt class consists of maps whose squared singular values have finite sum. Its gauge is the square root of that sum. For Hilbert–Schmidt operators, an equivalent formula sums the squared output lengths of an arbitrary orthonormal basis; it does not require choosing singular vectors. The trace class consists of maps whose singular values have finite ordinary sum. Its gauge is the nuclear or trace norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Why the gauge takes an infinite value",
+      "eyebrow": "G2 · 098000 · first-pass outline",
+      "lead": "One convenient formal design assigns an extended nonnegative real number to every bounded operator.",
+      "body": [
+        "If an operator belongs to the ideal, its extended gauge equals its finite norm. If it is outside, its extended gauge is infinity. This allows one triangle inequality to be written for all bounded maps. If either input is outside the carrier, the right-hand side may be infinite, and the inequality remains valid. If both inputs belong, the extended inequality reduces to the ordinary triangle inequality. But infinity is not a real number. We cannot divide by it or treat it as an ordinary finite norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Why finite ideal gauge controls ordinary errors",
+      "eyebrow": "G2 · 098000 · first-pass outline",
+      "lead": "Suppose a sequence of trace-class operators converges in trace norm.",
+      "body": [
+        "The ideal norm dominates the ordinary operator norm, so the same sequence converges in operator norm. This means we can identify its limit as a bounded map without ambiguity. But operator-norm convergence alone is insufficient to conclude trace-norm convergence. Consider the diagonal maps that put one divided by N on the first N coordinate positions and zero elsewhere. Their operator norms tend to zero. Each map has finite rank, yet its trace norm equals one for every N. So these operators converge to zero in operator norm but not in trace norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "The ideal inequality from approximation numbers",
+      "eyebrow": "G2 · 098000 · first-pass outline",
+      "lead": "We can see the composition estimate concretely for Schatten classes.",
+      "body": [
+        "Suppose T has singular values s one, s two, and so on. For bounded A and B, the rank-approximation inequality gives each approximation number of A T B at most the operator norm of A times the operator norm of B times the corresponding approximation number of T. Indeed, composing a rank-constrained approximation to T with A and B does not increase its rank, and the operator-norm error increases by at most those two norm factors. Raise both sides to the p-th power and sum for p at least one. Taking the p-th root proves the Schatten composition inequality."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Symmetry under isometries and adjoints",
+      "eyebrow": "G2 · 098000 · first-pass outline",
+      "lead": "A unitary change of coordinates on the source or target preserves singular values.",
+      "body": [
+        "Therefore a symmetric ideal should preserve membership and gauge under such changes. Adjoints are equally important. T and T adjoint have the same positive nonzero singular values, with the appropriate zero-padding convention. Hence a symmetric ideal admits T exactly when it admits T adjoint, and their gauges agree. For two Hilbert spaces of different dimensions, unitary equivalence between the whole spaces may not exist. This is why partial isometries, modulus, and rectangular transport are essential."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Completion and finite-rank density",
+      "eyebrow": "G2 · 098000 · first-pass outline",
+      "lead": "A well-behaved Banach ideal is complete in its ideal norm.",
+      "body": [
+        "If a sequence of ideal operators is Cauchy in that norm, it converges to another operator in the ideal, not merely to an arbitrary bounded operator outside it. Finite-rank operators are dense in the compact ideal under operator norm. They are also dense in the Schatten p-classes for finite p under their Schatten norms, by truncating singular values and using summability of the tail. Do not generalize finite-rank density to every possible symmetric ideal without checking its definition. A carrier may have a norm in which the finite-rank closure is a proper subideal."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "A test case to remember",
+      "eyebrow": "G2 · 098000 · first-pass outline",
+      "lead": "Let D be diagonal on ell two with coefficients one divided by n.",
+      "body": [
+        "It is compact, because its coefficients tend to zero. Its Hilbert–Schmidt gauge is finite because the sum of one over n squared converges. Its trace gauge is infinite because the harmonic series diverges. The same bounded map therefore belongs to two ideals and lies outside a third. Which estimate we can apply depends on the requested ideal, not just on T's ordinary operator norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 098000 · conclusion",
+      "lead": "Which estimate we can apply depends on the requested ideal, not just on T's ordinary operator norm.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

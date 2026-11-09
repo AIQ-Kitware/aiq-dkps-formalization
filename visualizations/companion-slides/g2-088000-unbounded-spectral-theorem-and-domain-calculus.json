@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "g2-088000-unbounded-spectral-theorem-and-domain-calculus",
+  "title": "Unbounded spectral theorem and domain calculus",
+  "subtitle": "G2 lecture 088000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:088000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/088000-unbounded-spectral-theorem-and-domain-calculus.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 088000 · first-pass outline",
+      "lead": "For bounded self-adjoint operators, we learned to integrate functions against spectral projections.",
+      "body": [
+        "The unbounded spectral theorem preserves that idea, but adds one indispensable condition: the vector on which we act must have enough spectral integrability. The unbounded spectral theorem defines both the action of an operator and the vectors on which that action exists. Bounded spectral cutoffs recover the operator on its domain."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "The projection-valued measure",
+      "eyebrow": "G2 · 088000 · first-pass outline",
+      "lead": "Let A be self-adjoint on a complex Hilbert space H.",
+      "body": [
+        "Its spectral theorem provides a projection-valued measure E on the Borel subsets of the real line. For every Borel set B, E of B is an orthogonal projection. Disjoint sets give orthogonal projections, and countable additivity holds in the strong sense: apply the projections to a fixed vector and the partial sums converge in the Hilbert norm. For a fixed vector x, define a positive scalar measure mu x by taking the squared length of E of B applied to x. Its total mass is the squared length of x. This scalar measure tells us how much of x occupies each spectral region."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The domain condition",
+      "eyebrow": "G2 · 088000 · first-pass outline",
+      "lead": "First consider a bounded measurable function f on the real line.",
+      "body": [
+        "The operator f of A is bounded, and its output length squared is the integral of the squared absolute value of f against mu x. Now allow f to be unbounded. We cannot apply f of A to every vector. Instead define its domain as the set of vectors x for which the integral of the squared absolute value of f against mu x is finite. This condition has a concrete meaning. It says the spectral distribution of x decays fast enough, in the regions where f becomes large, that multiplication by f still produces a Hilbert-space vector. The operator f of A is then defined as a limit of bounded spectral integrals."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Recovering A with interval cutoffs",
+      "eyebrow": "G2 · 088000 · first-pass outline",
+      "lead": "Let P R be the projection onto spectral values from negative R to positive R.",
+      "body": [
+        "Every P R x belongs to the domain of A because the function lambda is bounded by R on that interval. Define a bounded operator A R by integrating lambda only over that interval. Its norm is at most R, and its value at x agrees with A applied to P R x. If x is in the domain of A, then P R x approaches x in Hilbert norm. Moreover A P R x equals P R A x. The right side approaches A x, so convergence holds in graph norm. This provides a rigorous construction of A as the graph limit of its bounded spectral pieces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "A diagonal example with two different domains",
+      "eyebrow": "G2 · 088000 · first-pass outline",
+      "lead": "Take the diagonal operator on ell two with N-th eigenvalue N.",
+      "body": [
+        "The scalar spectral measure of a vector x places mass equal to the squared magnitude of x N at the point N. The condition for x to belong to the domain of A becomes convergence of the sum of N squared times the squared magnitudes of x N. Take x N equal to one divided by N squared. This is in ell two, and applying A yields coordinates one divided by N, which are still square summable. Thus x is in the domain of A. But x is not in the domain of A squared. Applying A twice would produce the constant sequence of ones, which is not square summable. Equivalently, the fourth-power spectral moment diverges."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Continuous spectrum without eigenvectors",
+      "eyebrow": "G2 · 088000 · first-pass outline",
+      "lead": "Consider square-integrable functions on the real line.",
+      "body": [
+        "Define A to multiply a function by its coordinate: at t, the output is t times the original function value. The domain consists of functions for which the integral of t squared times the squared magnitude of the function is finite. The spectral projection E of B simply multiplies the function by the indicator of B. A typical nonzero square-integrable function cannot be an eigenvector of A. If t times the function equaled lambda times the function, the function would have to vanish except perhaps at the single point lambda. A singleton has Lebesgue measure zero, so that function represents the zero vector in L two."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Products and the discipline of domains",
+      "eyebrow": "G2 · 088000 · first-pass outline",
+      "lead": "If f and g are unbounded functions, f of A and g of A are both operators with domains.",
+      "body": [
+        "We cannot automatically multiply them on all of H. The composition f of A after g of A is defined only for vectors x that first lie in the domain of g of A and whose g output then lies in the domain of f of A. On that composition domain the product equals the spectral operator for the pointwise product f times g. But the natural domain of the pointwise product may be larger. For instance, if g vanishes where f grows, the product may be tame even though g by itself imposes a separate integrability condition."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Back to Davis–Kahan",
+      "eyebrow": "G2 · 088000 · first-pass outline",
+      "lead": "Suppose we want to select a spectral band, restrict an unbounded operator to it, and compare it with a perturbed operator.",
+      "body": [
+        "The spectral theorem gives a route: use the projection E of the band, verify preservation of the domain, and approximate domain vectors using bounded cutoffs. It is only after these steps that we can write the residual block or a Sylvester identity without hiding an undefined term. The unbounded spectral theorem thus supplies more than a way to compute functions of A. It provides a complete description of which vectors can be acted upon, and it makes graph-level approximation possible."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 088000 · conclusion",
+      "lead": "It provides a complete description of which vectors can be acted upon, and it makes graph-level approximation possible.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

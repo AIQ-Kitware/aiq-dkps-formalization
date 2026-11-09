@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "g2-100000-modulus-polar-factors-and-ideal-invariance",
+  "title": "Modulus, polar factors, and ideal invariance",
+  "subtitle": "G2 lecture 100000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:100000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/100000-modulus-polar-factors-and-ideal-invariance.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 100000 · first-pass outline",
+      "lead": "A symmetric operator-ideal norm depends on the singular values of a bounded map, including maps between different Hilbert spaces.",
+      "body": [
+        "Polar decomposition separates such a map into a positive modulus and a partial isometry. The central question is whether this separation changes ideal membership or the ideal norm. Let T be any bounded map between Hilbert spaces, with no assumption that it is invertible or square. Its modulus is the positive square root of T adjoint T. The polar decomposition writes T as a partial isometry followed by its modulus."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Review the modulus carefully",
+      "eyebrow": "G2 · 100000 · first-pass outline",
+      "lead": "Suppose T maps E to F.",
+      "body": [
+        "Its adjoint maps F back to E. Therefore T adjoint T acts on E, even though T itself need not act on a single space. The operator T adjoint T is positive because its quadratic form at x equals the squared norm of T x. The positive square-root theorem gives a unique positive operator whose square is T adjoint T. We call it the modulus, written absolute T. By construction, applying T and applying absolute T produce outputs with the same length on every input. Indeed, both squared lengths equal the quadratic form of T adjoint T at that input. Consequently, T and its modulus have the same kernel. A direction lost by T is also lost by the modulus, and conversely."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Construct the canonical polar factor",
+      "eyebrow": "G2 · 100000 · first-pass outline",
+      "lead": "On the range of absolute T, define a map by sending absolute T applied to x to T applied to x.",
+      "body": [
+        "Why is this well-defined? If two vectors have the same image under absolute T, their difference belongs to the kernel of absolute T and therefore to the kernel of T. So they also have the same image under T. Why is the map an isometry on this range? The length identity gives the answer: the norm of T x equals the norm of absolute T x. Extend this isometry by continuity to the closure of the range of absolute T. On its orthogonal complement, which is the kernel of T, set the map equal to zero. The resulting bounded operator U from E to F is the canonical polar factor. It is a partial isometry."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "The two-sided gauge comparison",
+      "eyebrow": "G2 · 100000 · first-pass outline",
+      "lead": "Let N be a symmetric operator ideal family, with extended gauge so that the statement also covers operators outside its carrier.",
+      "body": [
+        "The ideal inequality says that composing on the left with a contraction cannot increase the gauge. Because the polar factor U has norm at most one, the factorization T equals U absolute T gives gauge of T at most gauge of absolute T. Now use the reverse identity, absolute T equals U adjoint T. The adjoint of a partial isometry is also a contraction. The same ideal inequality gives gauge of absolute T at most gauge of T. Put the two estimates together. The gauges are equal."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "A two-dimensional example with a kernel",
+      "eyebrow": "G2 · 100000 · first-pass outline",
+      "lead": "Consider the map on the Euclidean plane that sends the second standard basis vector to three times the first and sends the first basis vector to zero.",
+      "body": [
+        "Its matrix has a three in the upper right corner and zeros everywhere else. Its adjoint times itself is the diagonal matrix with entries zero and nine. The modulus is therefore diagonal with entries zero and three. The polar factor sends the second basis vector to the first and annihilates the first. It is not invertible, and it cannot be unitary on the whole plane. Nevertheless, multiplying this polar factor by the modulus reconstructs T. Both T and its modulus have singular values three and zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Why uniqueness uses the zero-kernel convention",
+      "eyebrow": "G2 · 100000 · first-pass outline",
+      "lead": "If T has a nontrivial kernel, a unitary extension of the isometric part may be nonunique, when such an extension exists at all.",
+      "body": [
+        "On the unused directions, different choices can act differently and still reconstruct T after multiplication by its modulus, because the modulus kills those directions. The canonical polar factor avoids that ambiguity. We require it to be zero on the kernel and an isometry on the closure of the modulus range. Those two requirements determine it completely. The ideal-gauge proof therefore uses a canonical contraction and remains valid even when a full unitary extension is impossible."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Rectangular maps and zero padding",
+      "eyebrow": "G2 · 100000 · first-pass outline",
+      "lead": "Suppose instead that E has dimension two and F has dimension three.",
+      "body": [
+        "Let T send one source basis vector to a nonzero target vector and annihilate the other source vector. The modulus still acts on the two-dimensional source E. The polar factor maps E into the three-dimensional target F. There need not be a unitary equivalence between the whole spaces, since their dimensions differ. The polar proof still works because it uses contractions, adjoints, and legal compositions, not a unitary between entire spaces. This is why the formulation is the right one for rectangular operators and for different Hilbert spaces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Compactness and Schatten classes",
+      "eyebrow": "G2 · 100000 · first-pass outline",
+      "lead": "If T is compact, its modulus is compact.",
+      "body": [
+        "One way to see this is via the compact spectral theorem for T adjoint T and continuity of the positive square root. Conversely, T equals U absolute T, and the composition of a compact operator with a bounded operator is compact. The same argument applies to every symmetric ideal satisfying the composition rules. For instance, T is Hilbert–Schmidt exactly when its modulus is, and their Hilbert–Schmidt norms agree. The corresponding trace-class statement is also true. This relationship lets us reduce many ideal inequalities to positive operators."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Preparing compression and block estimates",
+      "eyebrow": "G2 · 100000 · first-pass outline",
+      "lead": "Both operations involve projections, inclusions, and partial isometries, all of which are contractions.",
+      "body": [
+        "Our result tells us exactly how to control those operations in symmetric ideals. A projection can only decrease the gauge under composition. A canonical polar factor preserves it. These are the building blocks for transporting Davis–Kahan sine, tangent, and residual estimates from geometric operators to their positive singular-value representatives. The principle to keep is the pair of factorization identities. One gives an inequality in one direction, and the adjoint factorization gives the reverse inequality. That is the complete proof of modulus invariance."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 100000 · conclusion",
+      "lead": "That is the complete proof of modulus invariance.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

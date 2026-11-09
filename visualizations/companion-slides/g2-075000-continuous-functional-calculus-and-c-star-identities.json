@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "id": "g2-075000-continuous-functional-calculus-and-c-star-identities",
+  "title": "Continuous functional calculus and C-star identities",
+  "subtitle": "G2 lecture 075000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:075000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/075000-continuous-functional-calculus-and-c-star-identities.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 075000 · first-pass outline",
+      "lead": "Suppose A is a bounded self-adjoint operator on an infinite-dimensional Hilbert space.",
+      "body": [
+        "In finite dimensions, we could diagonalize A and apply a function to its eigenvalues. But multiplication by the coordinate on square-integrable functions over the unit interval has continuous spectrum and no nonzero eigenvectors at all. We still want to make sense of A squared, the exponential of A, the square root of a positive A, and eventually the indicator of a spectral interval. Polynomial approximation provides the continuous functional calculus for bounded self-adjoint operators."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Polynomial functions of an operator",
+      "eyebrow": "G2 · 075000 · first-pass outline",
+      "lead": "For a polynomial p, there is no ambiguity about p of A.",
+      "body": [
+        "Replace the scalar variable by A, replace the constant one by the identity operator, and use operator composition for multiplication. For example, if p of x equals x squared minus three x plus two, then p of A equals A composed with A, minus three times A, plus two times the identity. Polynomial evaluation respects addition and multiplication. The product of two polynomial expressions becomes the product of their operator values because every power of the same operator commutes with every other power. If A is self-adjoint, the adjoint of p of A corresponds to conjugating the polynomial coefficients."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The spectrum as the correct domain",
+      "eyebrow": "G2 · 075000 · first-pass outline",
+      "lead": "A bounded self-adjoint operator has a nonempty compact spectrum contained in the real line, apart from the trivial zero-dimensional edge case.",
+      "body": [
+        "Call this compact set K. Our continuous function f need only be defined on K. We do not need to choose an arbitrary extension to the whole real line. Why is K enough? Polynomials evaluated at A cannot distinguish two scalar polynomials that agree on the spectrum. The precise statement comes from the spectral norm formula: for a polynomial p and self-adjoint A, the operator norm of p of A is the maximum of the absolute value of p over K. We can derive the key estimate through the C-star identity, then the spectral radius of a normal operator."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "The C-star identity",
+      "eyebrow": "G2 · 075000 · first-pass outline",
+      "lead": "For any bounded operator T on a Hilbert space, its adjoint times itself is positive.",
+      "body": [
+        "Consider its operator norm. By the definition of an adjoint, the squared length of T applied to x equals the inner product of T adjoint T applied to x with x. This gives the inequality that the norm of T squared is at most the norm of T adjoint T. The reverse inequality follows from submultiplicativity: the norm of T adjoint T is at most the product of the norms of T adjoint and T, which are equal. Thus the norm of T adjoint T equals the square of the norm of T. This is the C-star identity. It ties multiplication, adjoints, and norms together."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "From polynomials to continuous functions",
+      "eyebrow": "G2 · 075000 · first-pass outline",
+      "lead": "A classical approximation theorem says that on a compact subset of the real line, every continuous complex-valued function can be uniformly approximated by complex polynomials.",
+      "body": [
+        "One route is to extend the function to a compact interval, approximate its real and imaginary parts there, and restrict back to K. Choose polynomials p-one, p-two, and so forth that converge uniformly to f on K. The spectral norm formula says the operator norm of p-n of A minus p-m of A equals the maximum of the absolute value of p-n minus p-m on K. Since our polynomial sequence is uniformly Cauchy, the corresponding operator sequence is Cauchy in operator norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Algebraic laws survive the limit",
+      "eyebrow": "G2 · 075000 · first-pass outline",
+      "lead": "Because operator addition, multiplication, scalar multiplication, and adjoints are continuous in operator norm, their polynomial identities pass to continuous functions.",
+      "body": [
+        "Consequently, the function constantly equal to one gives the identity operator. The function x gives A. Addition and multiplication of functions become addition and composition of their operator values. Complex conjugation of the symbol becomes taking the adjoint. This collection of properties makes functional calculus a unital star-algebra homomorphism from the continuous functions on K into the bounded operators. It is also isometric: the operator norm of f of A equals the supremum of the absolute value of f on K."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Spectral mapping and invertibility",
+      "eyebrow": "G2 · 075000 · first-pass outline",
+      "lead": "What is the spectrum of f of A?",
+      "body": [
+        "It is exactly the set of values f takes on K. Here is the mechanism. If a complex number z is not attained by f on K, the function one divided by f minus z is continuous on K. Functional calculus turns it into a bounded inverse for f of A minus z times the identity. Conversely, suppose z equals f of lambda for some lambda in K. Since A is self-adjoint, a spectral point lambda admits unit approximate eigenvectors: vectors whose images under A minus lambda approach zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Positivity and square roots",
+      "eyebrow": "G2 · 075000 · first-pass outline",
+      "lead": "A self-adjoint operator A is positive if its quadratic form is nonnegative on every vector.",
+      "body": [
+        "Equivalently, its spectrum lies in the nonnegative real numbers. If a continuous real function f is nonnegative on K, functional calculus gives a positive operator f of A. One way to see this is to take the continuous square root of f. Its functional-calculus value B satisfies B adjoint B equals f of A. Such an operator has nonnegative quadratic form. For positive A, choose the function square root of x on K. Its value is the positive square root of A."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Uniform approximation has a boundary",
+      "eyebrow": "G2 · 075000 · first-pass outline",
+      "lead": "Can we now construct the projection selecting values of A below one half?",
+      "body": [
+        "Its scalar symbol is the indicator of the interval below one half. On a spectrum containing points on both sides of that threshold and accumulating at the threshold, this indicator is discontinuous. A uniform limit of continuous functions is continuous. Therefore no uniformly convergent polynomial sequence on that spectrum can represent this indicator. There may be ways to approximate the indicator pointwise or in an integrated sense. But those are different modes of convergence. In the multiplication model, continuous approximations can converge strongly as operators even when they cannot converge in operator norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "The bridge to spectral measures",
+      "eyebrow": "G2 · 075000 · first-pass outline",
+      "lead": "Continuous functional calculus already lets us express a bounded self-adjoint operator as a function of its spectrum, even when there are no eigenvectors.",
+      "body": [
+        "It gives exact norm control, multiplication, adjoints, positivity, and spectral mapping. The next step is to replace continuous scalar functions by bounded Borel functions. Indicators then become spectral projections. We will prove how those projections add over countably many disjoint sets and why their convergence is strong rather than uniformly in operator norm. We are now ready to reconstruct the infinite-dimensional spectral theorem in the language appropriate to actual spectral subspaces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 075000 · mathematical reference",
+      "lead": "Continuous functional calculus already lets us express a bounded self-adjoint operator as a function of its spectrum, even when there are no eigenvectors.",
+      "body": [
+        "It gives exact norm control, multiplication, adjoints, positivity, and spectral mapping. The next step is to replace continuous scalar functions by bounded Borel functions."
+      ],
+      "mathtex": "C(K,\\mathbb C)\\longrightarrow\\mathcal B(H),\\qquad f\\mapsto f(A),",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 075000 · conclusion",
+      "lead": "We are now ready to reconstruct the infinite-dimensional spectral theorem in the language appropriate to actual spectral subspaces.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

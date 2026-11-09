@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "id": "g2-124000-ambient-sine-from-an-ambient-perturbation",
+  "title": "Ambient sine from an ambient perturbation",
+  "subtitle": "G2 lecture 124000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:124000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/124000-ambient-sine-from-an-ambient-perturbation.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 124000 · first-pass outline",
+      "lead": "A residual estimate for a trial subspace controls how far that trial subspace escapes one exact spectral subspace.",
+      "body": [
+        "That directed angle can miss a defect in the reverse direction. Proposition six point one of Davis and Kahan instead bounds the complete ambient subspace angle from a perturbation between two self-adjoint operators. Suppose two self-adjoint operators differ by a perturbation, and we have chosen one reducing subspace of each operator. Can we control the entire ambient difference between those two subspaces by the perturbation itself? The answer is yes, under spectral separation in both crossed directions."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Set up the four spectral blocks",
+      "eyebrow": "G2 · 124000 · first-pass outline",
+      "lead": "Let A and B be bounded self-adjoint operators on one Hilbert space.",
+      "body": [
+        "Write K for B minus A. Let U reduce A, and let V reduce B. Denote their orthogonal projections by P and Q. Because U reduces A, the operator A has no blocks connecting U to its orthogonal complement. Likewise B has no blocks connecting V to its complement. But the decompositions need not agree. Their relative orientation is the geometry we want to measure. Form X by projecting first onto U and then onto V perpendicular. It maps vectors of U into V perpendicular. Its operator norm is the maximal sine of a directed angle from U toward V. Form Y by projecting first onto U perpendicular and then onto V."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Derive the first Sylvester equation",
+      "eyebrow": "G2 · 124000 · first-pass outline",
+      "lead": "Take a vector u in U.",
+      "body": [
+        "Since A preserves U, applying the compression of A on U and then X gives the V-perpendicular component of A u. Since B preserves V perpendicular, applying the compression of B there to X u gives the V-perpendicular component of B u. Subtract these two expressions. The result is the V-perpendicular component of B u minus A u. But B minus A equals K. Thus the first Sylvester equation has unknown X, coefficients B on V perpendicular and A on U, and right-hand side the block of K from U into V perpendicular. Suppose the spectrum of A restricted to U is separated from that of B restricted to V perpendicular by a gap delta in the interval-versus-exterior sense."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Derive the complementary equation",
+      "eyebrow": "G2 · 124000 · first-pass outline",
+      "lead": "Now reverse the roles of the selected spaces and their complements.",
+      "body": [
+        "Form X prime, the map that projects from U perpendicular into V. This is the adjoint of Y, so X prime and Y have the same singular values. Because A preserves U perpendicular and B preserves V, a second calculation gives B restricted to V times X prime, minus X prime times A restricted to U perpendicular, equals the block of K from U perpendicular into V. This requires another gap hypothesis: the selected spectrum of B on V must be separated from the spectrum of A on U perpendicular. The first gap does not automatically imply the second. Proposition six point one assumes both. Apply the Sylvester inequality again."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Reassemble the ambient sine",
+      "eyebrow": "G2 · 124000 · first-pass outline",
+      "lead": "We have two rectangular maps and two inequalities.",
+      "body": [
+        "How do they describe a single operator on the ambient Hilbert space? Consider the square of P minus Q. Expand the product, remembering that P squared is P and Q squared is Q. The expression is P plus Q minus P Q minus Q P. Now inspect it using the decomposition U plus U perpendicular. Its off-diagonal blocks vanish. Its U-to-U block is P times one minus Q times P, exactly X adjoint X. Its U-perpendicular block is one minus P times Q times one minus P, exactly Y Y adjoint. Therefore the positive square root of this square has singular values obtained by combining the singular values of X and Y."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Combine the two inequalities without losing a constant",
+      "eyebrow": "G2 · 124000 · first-pass outline",
+      "lead": "We want to combine every Ky Fan prefix of X and X prime.",
+      "body": [
+        "The direct-sum comparison for block-diagonal sums of maps on orthogonal summands tells us how: if each block's singular-value prefixes are dominated by those of a corresponding perturbation block, their orthogonal direct sum inherits the domination. The two perturbation blocks have orthogonal input supports, U and U perpendicular, and orthogonal output supports, V perpendicular and V. They can therefore be placed together as a single block-diagonal operator, up to exchanging the order of the target blocks. This combined operator is the two-sided pinching of K that keeps precisely those two blocks."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Check equality in a two-dimensional example",
+      "eyebrow": "G2 · 124000 · first-pass outline",
+      "lead": "Let A be diagonal with eigenvalues zero and four.",
+      "body": [
+        "Choose U as its zero-eigenspace, the horizontal axis. Rotate both eigenvectors by an angle theta, and let B be the rotation of A by that change of orthonormal basis. Its zero-eigenspace V is the rotated horizontal line. Both crossed spectral gaps equal four: each zero block is separated from the opposite four block. The operator norm of the difference of the two rank-one projections is sine theta. The operator norm of B minus A is four times sine theta. So delta times the ambient sine norm equals the perturbation norm exactly. In Frobenius norm, each projection difference has two nonzero singular values equal to sine theta."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Why an arbitrary residual does not suffice",
+      "eyebrow": "G2 · 124000 · first-pass outline",
+      "lead": "If we start only with a trial residual for U, we control the map from U into V perpendicular.",
+      "body": [
+        "We do not know what happens to a direction in V that lies in U perpendicular. For example, if U is a one-dimensional line inside a two-dimensional V, the directed escape of U from V is zero. Yet P minus Q has norm one because V contains a direction missing from U. Proposition six point one avoids this defect by assuming two operators, two reducing subspaces, and two crossed spectral gaps. These hypotheses generate both directed equations and give access to the same ambient perturbation K on the right."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "The role of operator ideals",
+      "eyebrow": "G2 · 124000 · first-pass outline",
+      "lead": "In an infinite-dimensional Hilbert space, a symmetric norm may be finite only for operators in a particular ideal.",
+      "body": [
+        "The statement must therefore establish two things: membership of the ambient sine operator when K belongs to the ideal, and the numerical inequality for its ideal norm. Controlling every Ky Fan prefix establishes weak majorization. In a symmetric ideal satisfying the required dominance property, the comparison transfers both ideal membership and the norm bound. The original paper states its theorem in a separable ambient Hilbert space and uses interval-versus-exterior crossed gaps. An abstract Sylvester-gap condition can support a more general formulation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "Close",
+      "eyebrow": "G2 · 124000 · first-pass outline",
+      "lead": "The entire proof has four stages.",
+      "body": [
+        "Build two crossed Sylvester equations. Estimate both directed escape maps. Recognize the ambient sine as their combined singular-value list. Finally, pinch the common perturbation K to control both right-hand sides by a single norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 124000 · mathematical reference",
+      "lead": "The entire proof has four stages.",
+      "body": [
+        "Build two crossed Sylvester equations. Estimate both directed escape maps. Recognize the ambient sine as their combined singular-value list. Finally, pinch the common perturbation K to control both right-hand sides by a single norm."
+      ],
+      "mathtex": "X=P_{V^\\perp}P_U,\\qquad X'=P_VP_{U^\\perp}.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 124000 · conclusion",
+      "lead": "Finally, pinch the common perturbation K to control both right-hand sides by a single norm.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

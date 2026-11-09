@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "id": "g2-056000-convexity-and-majorization-descent",
+  "title": "Convexity and majorization descent",
+  "subtitle": "G2 lecture 056000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:056000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/056000-convexity-and-majorization-descent.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 056000 · first-pass outline",
+      "lead": "One list is weakly majorized by another when all of its leading partial sums are no larger.",
+      "body": [
+        "If the full totals also agree, we call the relation ordinary majorization. Today we will explain why that ordering controls many measurements beyond prefix sums. The mechanism is convexity. When we average different arrangements of the same data, a convex measurement cannot increase. And when we decrease the sizes of coordinates, an appropriate absolute-value-invariant measurement cannot increase either."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Convexity as a usable inequality",
+      "eyebrow": "G2 · 056000 · first-pass outline",
+      "lead": "Take a function F on a finite-dimensional real vector space.",
+      "body": [
+        "It is convex if, for any two vectors u and v and any number t between zero and one, the value of F at the weighted average of u and v is no larger than the same weighted average of F at u and F at v. One simple example is Euclidean length. Averaging two vectors cannot produce a length greater than the corresponding average of their lengths. That is a form of the triangle inequality. Another example is the sum of the squares of the coordinates. That function is convex too, although it is not itself a norm, because scaling by two multiplies it by four rather than two. A third example is the largest absolute coordinate."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "What symmetry contributes",
+      "eyebrow": "G2 · 056000 · first-pass outline",
+      "lead": "Call a measurement symmetric if swapping coordinates never changes its value.",
+      "body": [
+        "We also want it to be insensitive to changing the sign of any individual coordinate. For nonnegative singular-value lists, the sign changes are invisible in the inputs, but they become useful in proofs involving coordinate shrinkage. A norm with these two invariances is a symmetric gauge. The Euclidean norm, the sum of absolute coordinates, and the largest absolute coordinate are all examples. Suppose we begin with the list five, one. Swap the two coordinates to get one, five. If F is symmetric, both lists have the same F value. Now average the two lists with equal weights. The result is three, three."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Allow a partial transfer",
+      "eyebrow": "G2 · 056000 · first-pass outline",
+      "lead": "A more general operation averages a list with a copy obtained by swapping two coordinates.",
+      "body": [
+        "We can give the original list weight one minus t and the swapped list weight t, where t lies between zero and one. For two entries a and b, the resulting pair is a weighted mixture of a and b in both positions. The total remains a plus b. If t lies between zero and one half, the larger and smaller entries move toward each other without crossing. If t is greater than one half, they pass each other; this is still a convex mixture with a swap, and the same convexity argument applies. Because the two endpoint lists have equal F value, the mixture cannot have a larger F value."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "The finite transfer descent",
+      "eyebrow": "G2 · 056000 · first-pass outline",
+      "lead": "Suppose x and y are sorted nonnegative lists, x is majorized by y, and their totals agree.",
+      "body": [
+        "We want to begin at y and reach x by finitely many mixing operations. A constructive proof tracks where the current list, call it q, differs from the target x. At the beginning q is y. If q already equals x, we have finished. Otherwise, find a coordinate where q is larger than x and a later coordinate where q is smaller than x. The prefix-sum inequalities ensure that such a surplus and deficit can be paired in a suitable order. Transfer enough mass from the surplus coordinate toward the deficit coordinate to make at least one of the two match its target value exactly."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "What changes for weak majorization?",
+      "eyebrow": "G2 · 056000 · first-pass outline",
+      "lead": "Weak majorization permits loss of total mass.",
+      "body": [
+        "A transfer alone preserves total mass, so it cannot explain the whole theorem. The missing operation is coordinate shrinkage. If one nonnegative list is coordinatewise at most another, an absolute-value-invariant convex gauge cannot increase when we replace the larger list by the smaller one. Let's prove that instead of assuming it. Consider a single coordinate of a vector q, and suppose we want to replace its value by a multiple between zero and one of its current value. We can obtain the desired smaller value by averaging q with the vector obtained by changing just that coordinate's sign."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A familiar numerical consequence",
+      "eyebrow": "G2 · 056000 · first-pass outline",
+      "lead": "Take x equal to three, three, and y equal to five, one.",
+      "body": [
+        "We checked that x is majorized by y. For the Euclidean norm, x has squared length eighteen, while y has squared length twenty-six. So the Euclidean norm of x is smaller. For the sum of absolute coordinates, both values are six. That measurement responds to total mass but does not distinguish different distributions of the same nonnegative total. For the largest absolute coordinate, x has value three and y has value five. This measurement is especially sensitive to concentration in a single coordinate. All three comparisons are consequences of the same majorization relation, even though the measurements look different."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Why convexity cannot be omitted",
+      "eyebrow": "G2 · 056000 · first-pass outline",
+      "lead": "Consider a quantity obtained by taking square roots of nonnegative coordinates, summing them, and then squaring the result.",
+      "body": [
+        "This is the formula that resembles an ell-p gauge with an exponent below one. For three, three, the value is twelve. For five, one, it is six plus two times the square root of five, which is a little under ten and a half. The inequality goes in the opposite direction from what we proved for convex symmetric gauges. That is not a contradiction. This measurement lacks the convexity needed for our theorem. In fact, an equalizing transfer can increase it. Likewise, a convex function that singles out one labeled coordinate is not necessarily invariant under permutations."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Connect the theorem to operators",
+      "eyebrow": "G2 · 056000 · first-pass outline",
+      "lead": "For matrices, a gauge of singular values gives a measurement of the matrix itself.",
+      "body": [
+        "We already know that changing orthonormal input or output coordinates leaves singular values unchanged. So any symmetric gauge applied to singular values automatically has that unitary invariance. The majorization-descent theorem supplies a powerful comparison principle. If every Ky Fan sum of A is at most the corresponding sum for B, then every convex symmetric gauge of the singular values of A is at most the same gauge of B. This explains why the Ky Fan sums are a useful collection of tests."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "What to reconstruct",
+      "eyebrow": "G2 · 056000 · first-pass outline",
+      "lead": "Prove the two-coordinate mixing inequality for a convex permutation-invariant function.",
+      "body": [
+        "Prove the one-coordinate shrinkage inequality using an average with a sign-flipped vector. Then identify the termination measure in the transfer descent: how many coordinates still disagree with the target? Explain why strict decrease matters. Finally, calculate the three gauges of three, three and five, one, and explain the reversed comparison for the exponent below one. We now know how an inequality about all prefix sums can control a broad family of convex spectral measurements."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 056000 · mathematical reference",
+      "lead": "Prove the two-coordinate mixing inequality for a convex permutation-invariant function.",
+      "body": [
+        "Prove the one-coordinate shrinkage inequality using an average with a sign-flipped vector. Then identify the termination measure in the transfer descent: how many coordinates still disagree with the target? Explain why strict decrease matters."
+      ],
+      "mathtex": "F((1-t)q+t\\pi q)\\le (1-t)F(q)+tF(\\pi q)=F(q),\\quad 0\\le t\\le1,",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 056000 · conclusion",
+      "lead": "We now know how an inequality about all prefix sums can control a broad family of convex spectral measurements.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

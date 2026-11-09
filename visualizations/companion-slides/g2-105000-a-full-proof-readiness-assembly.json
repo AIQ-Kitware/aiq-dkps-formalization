@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "g2-105000-a-full-proof-readiness-assembly",
+  "title": "A full proof-readiness assembly",
+  "subtitle": "G2 lecture 105000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:105000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/105000-a-full-proof-readiness-assembly.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 105000 · first-pass outline",
+      "lead": "The full Hilbert-space sine-angle argument combines unbounded operator domains, spectral projections, residual equations, ordered-gap Sylvester estimates, and symmetric operator ideals.",
+      "body": [
+        "We will assemble these mathematical ingredients into one proof and track their hypotheses. Our target is a symmetric-ideal sine-angle bound for possibly unbounded self-adjoint operators. We will start with a trial map and its residual, pass to coordinates in an exact spectral complement, solve a Sylvester equation, and recover the sine of the angle between the trial space and the exact space. Every step will have an explicit hypothesis."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Name the spaces and operators",
+      "eyebrow": "G2 · 105000 · first-pass outline",
+      "lead": "Let H be the ambient Hilbert space.",
+      "body": [
+        "Let A be a possibly unbounded self-adjoint operator on H. Suppose A has an exact reducing decomposition into two orthogonal parts. We represent the first part using an isometric coordinate map F zero from one coordinate Hilbert space into H. We represent the complementary part using an isometric coordinate map F one from another coordinate Hilbert space into H. Their ranges are orthogonal and together span the ambient space. Because the decomposition reduces A, the action of A on the complement is represented by a self-adjoint operator Lambda one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The common-domain hypothesis",
+      "eyebrow": "G2 · 105000 · first-pass outline",
+      "lead": "For bounded matrices, the residual is simply A E zero minus E zero A zero.",
+      "body": [
+        "For unbounded A, the expression A E zero x is defined only when E zero x belongs to the domain of A. The common-domain condition identifies the coordinates x for which E zero x belongs to the domain of A with the domain of A zero itself. So the two sides of the residual identity are defined on exactly the same dense subspace. We require the residual to agree there with a bounded operator R defined on the entire trial coordinate Hilbert space. We also require the complementary coordinate map F one to carry the domain of Lambda one into the domain of A, and to intertwine their actions there."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Compress the residual into the complementary space",
+      "eyebrow": "G2 · 105000 · first-pass outline",
+      "lead": "Define X to be F one adjoint composed with E zero.",
+      "body": [
+        "This map measures how much the trial vectors lie in the exact complementary subspace. It is bounded because both factors are bounded. And on the domain of A zero, the definition of the residual gives A E zero x minus E zero A zero x equals R x. Apply F one adjoint to both sides. The second term becomes X A zero x. The right-hand side becomes F one adjoint R x. For the first term, use the reducing decomposition. Because F one intertwines the complementary operator with A, its adjoint converts the action of A on a legal domain vector into Lambda one applied to that vector's complementary coordinate."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Apply the right kind of spectral separation",
+      "eyebrow": "G2 · 105000 · first-pass outline",
+      "lead": "Assume a positive gap delta between the trial operator A zero and the complementary operator Lambda one, in one of the configurations covered by the unbounded Sylvester theorem.",
+      "body": [
+        "These configurations include an ordered half-line separation and the stated interval-versus-exterior condition. A mere assertion that the two spectra are unequal would not suffice for the same uniform ideal estimate. The unbounded Sylvester theorem controls X by its right-hand side. In a symmetric ideal family with the needed Ky Fan dominance property, membership of F one adjoint R implies membership of X, and delta times the gauge of X is at most the gauge of F one adjoint R."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Remove the trial-frame normalization",
+      "eyebrow": "G2 · 105000 · first-pass outline",
+      "lead": "Use the polar decomposition of E zero.",
+      "body": [
+        "Because E zero has a positive lower frame bound epsilon, its modulus has spectrum bounded below by epsilon. It is therefore invertible, and the inverse has norm at most one divided by epsilon. Write E zero as U times its modulus. Here U is an isometry from the trial coordinate space onto the closed range of E zero. The map U gives orthonormal coordinates for the trial subspace. It is the right object for defining its principal angles with the exact space. Recall X equals F one adjoint E zero. Substitute E zero equals U times its modulus. Then X equals F one adjoint U times the modulus of E zero. Multiply on the right by the inverse modulus."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Identify the sine of the angle",
+      "eyebrow": "G2 · 105000 · first-pass outline",
+      "lead": "Let P be the orthogonal projection onto the range of the exact first coordinate map F zero.",
+      "body": [
+        "Because F zero and F one give a complete orthogonal decomposition, one minus P equals F one F one adjoint. The part of U that escapes the exact first subspace is one minus P applied to U. Its norm measures the largest directed sine of the angle between the trial range and the exact range. Compute its Gram operator. The adjoint of one minus P times U, followed by one minus P times U, equals U adjoint F one F one adjoint U. The Gram operator of F one adjoint U is exactly the same: U adjoint F one F one adjoint U."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Verify the constants in the plane",
+      "eyebrow": "G2 · 105000 · first-pass outline",
+      "lead": "Take the ambient plane with standard basis vectors e one and e two.",
+      "body": [
+        "Let A be diagonal, with eigenvalues zero and five. Choose the exact target subspace to be the first coordinate axis. Its complement is the second axis, and Lambda one is multiplication by five. Choose the trial unit vector u to make an angle of thirty degrees with the first axis. Its first coordinate is the square root of three divided by two, and its second coordinate is one half. Define E zero to send a scalar t to two t times u. The lower frame bound is epsilon equals two. Let A zero be multiplication by zero. The residual is A E zero minus E zero A zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "What the assembly does and does not prove",
+      "eyebrow": "G2 · 105000 · first-pass outline",
+      "lead": "We have reconstructed the entire route: legal unbounded residual, exact complementary compression, self-adjoint Sylvester gap, membership and gauge estimate, lower-frame normalization, and identification with a directed sine modulus.",
+      "body": [
+        "The construction works in real or complex Hilbert spaces when the corresponding ideal and Sylvester hypotheses are available. In real Hilbert spaces, the complexification and Ky Fan descent from the real-to-complex transfer and Ky Fan prefix comparison supply the real estimate. The sharp estimate uses the stated spectral-separation condition, while an ideal-norm estimate also requires the relevant ideal membership."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 105000 · conclusion",
+      "lead": "The mathematical toolkit is now assembled.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

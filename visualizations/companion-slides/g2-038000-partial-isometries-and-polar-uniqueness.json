@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-038000-partial-isometries-and-polar-uniqueness",
+  "title": "Partial isometries and polar uniqueness",
+  "subtitle": "G2 lecture 038000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:038000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/038000-partial-isometries-and-polar-uniqueness.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 038000 · first-pass outline",
+      "lead": "Suppose I take a sheet of paper, draw a short arrow on it, and ask you to move that arrow onto another arrow of the same length.",
+      "body": [
+        "You can decide exactly what happens to that arrow. But have I told you how to move every other direction in the plane? Not necessarily. Polar decomposition expresses a linear map as a partial isometry followed by its positive modulus. The modulus determines the isometric action on the complement of its kernel. Extending that action onto unused directions, however, can involve a choice. The adjoint identifies precisely which input and output directions participate."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "An isometry on only part of a space",
+      "eyebrow": "G2 · 038000 · first-pass outline",
+      "lead": "Recall the definition.",
+      "body": [
+        "A partial isometry is a linear map U that preserves lengths on the orthogonal complement of its kernel, and vanishes on its kernel. The orthogonal complement of the kernel is called its initial space. The range is called its final space. Think of the initial space as the part of the input on which genuine motion takes place. The kernel is not moved elsewhere; it is collapsed to zero. The final space is where the surviving part lands. If there is no kernel, U is an isometry on the whole input. But it still might not be onto. An isometric embedding of a plane into three-dimensional space is not a unitary equivalence between those spaces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Use the adjoint to locate the initial space",
+      "eyebrow": "G2 · 038000 · first-pass outline",
+      "lead": "We can detect these spaces algebraically.",
+      "body": [
+        "Take an input vector and split it into an initial-space part and a kernel part. U discards the second part and preserves the first part's inner products. Apply U adjoint after U. On an initial-space vector, this composition returns the original vector. On a kernel vector, it returns zero. That is precisely the orthogonal projection onto the initial space. In symbols, U adjoint U is that projection. Likewise, U U adjoint is the orthogonal projection onto the final space. On the final space it acts as the identity, and outside that space it acts as zero. These are two distinct projections, generally acting on two distinct Hilbert spaces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "The uniqueness question",
+      "eyebrow": "G2 · 038000 · first-pass outline",
+      "lead": "Recall that the polar decomposition of A takes the form A equals U times the modulus of A.",
+      "body": [
+        "Could some other operator W produce the same factorization? Of course. The equation only asks W to act on vectors that occur as outputs of the modulus. If a direction never appears as an output of the modulus, the factorization cannot constrain W there. But we built U with an extra requirement: U is zero on the kernel of A. I claim that these two conditions uniquely determine U among linear maps: first, U applied after the modulus gives A; second, U kills the kernel of A. To see why, suppose V satisfies the same two requirements."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "A factorization that is not canonical",
+      "eyebrow": "G2 · 038000 · first-pass outline",
+      "lead": "Now remove the rule about vanishing on the kernel, and ask instead for a full unitary factor in a square-matrix factorization.",
+      "body": [
+        "Take the two-by-two diagonal matrix whose first diagonal entry is two and whose second diagonal entry is zero. This A is already positive, so its modulus is A itself. The identity matrix gives a factorization: A is identity times its modulus. But the reflection that keeps the horizontal axis fixed and reverses the vertical axis gives the same factorization. Why? Because the modulus sends every input into the horizontal axis. The reflection agrees with the identity on that axis. What it does to the vertical axis is never tested."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "When can we complete the motion?",
+      "eyebrow": "G2 · 038000 · first-pass outline",
+      "lead": "For a square matrix in finite dimensions, the kernel and the orthogonal complement of the range have the same dimension.",
+      "body": [
+        "That is a consequence of rank-nullity. The canonical polar factor already provides an isometry from the complement of the kernel onto the range. Choose any isometry from the kernel onto the complement of the range and combine the two pieces. The result is a full unitary, or orthogonal, map of the whole space. When the kernel is nonzero, that second piece is a choice. In fact, different choices generally give different unitary completions. When A is invertible, the kernel is zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Why negative signs and symmetry are informative",
+      "eyebrow": "G2 · 038000 · first-pass outline",
+      "lead": "Take any operator A and negate it.",
+      "body": [
+        "Negation reverses every output direction but leaves every output length unchanged. The modulus of negative A is therefore the same as the modulus of A. The canonical polar factor, on the other hand, changes sign. On the surviving input directions, it must send the stretched vector to negative A's output. On the kernel it remains zero. Uniqueness then forces the whole canonical factor to be the negative of the original factor. This illustrates how the two factors divide the work: the modulus remembers stretching, while the polar factor remembers orientation and alignment of surviving directions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "What an incomplete transport can determine",
+      "eyebrow": "G2 · 038000 · first-pass outline",
+      "lead": "For a unitary transport between subspaces, a polar factor can determine motion canonically on its initial space.",
+      "body": [
+        "Its action on the complementary directions is a separate extension problem: the unused source and target dimensions must match if a unitary extension is to exist. If those directions are silently ignored, one can claim a rotation is uniquely determined when it is not, or claim a transformation is unitary when it only preserves length on a subspace. The mathematical distinction affects theorems about existence, uniqueness, and optimality. Try reconstructing the argument in reverse. Starting with a partial isometry U, show that U adjoint U projects onto its initial space."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 038000 · mathematical reference",
+      "lead": "For a unitary transport between subspaces, a polar factor can determine motion canonically on its initial space.",
+      "body": [
+        "Its action on the complementary directions is a separate extension problem: the unused source and target dimensions must match if a unitary extension is to exist."
+      ],
+      "mathtex": "U^*U=P_{(\\ker A)^\\perp},\\qquad UU^*=P_{\\operatorname{ran}A}.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 038000 · conclusion",
+      "lead": "The modulus determines the polar factor on the closure of its range; the complementary action may remain undetermined.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "id": "g2-138000-beam-rayleigh-ritz-calculation",
+  "title": "Beam Rayleigh–Ritz calculation",
+  "subtitle": "G2 lecture 138000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:138000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/138000-beam-rayleigh-ritz-calculation.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 138000 · first-pass outline",
+      "lead": "Consider the free-beam operator A on square-integrable functions on the unit interval.",
+      "body": [
+        "It acts as the fourth derivative on the self-adjoint domain of functions with four weak derivatives in the square-integrable class, whose second and third derivatives vanish at both endpoints. Its kernel consists of affine functions, while the remaining spectrum lies above five hundred. Perturb A by the bounded multiplication operator H of u equal to epsilon times t times u, with real epsilon positive and smaller than one hundred."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Orthonormal coordinates for the affine kernel",
+      "eyebrow": "G2 · 138000 · first-pass outline",
+      "lead": "Put x equal to two t minus one.",
+      "body": [
+        "Then x ranges from minus one to one, symmetrically about zero. Averaging over the original unit interval gives mean x equal to zero and mean x squared equal to one third. Choose our first trial function to be one over square root of two times one minus square root of three times x. Choose the second with a plus sign instead of a minus sign. Let us verify normalization. Squaring either trial function gives one half times one plus three x squared, plus a mixed term whose average is zero. The mean is one half times one plus three times one third, which equals one. For their cross inner product, multiply the plus and minus expressions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Compute the perturbed compression",
+      "eyebrow": "G2 · 138000 · first-pass outline",
+      "lead": "The perturbation H multiplies by epsilon t.",
+      "body": [
+        "Hence the compressed operator is epsilon times the matrix whose entries are integrals of t times products of the trial functions. Rather than multiply four polynomials independently, use centered moments. The average of t equals one half. The average of t times x equals one sixth. And the average of t times x squared equals one sixth. These follow immediately from t equals one half times x plus one and the first three centered moments. Substitute the two trial functions. The off-diagonal compressed entry is the average of t times one half times one minus three x squared."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "First residual: comparing against zero",
+      "eyebrow": "G2 · 138000 · first-pass outline",
+      "lead": "Davis and Kahan begin with a simpler comparison operator on the trial space: zero.",
+      "body": [
+        "Because A E equals zero, its residual is simply H E. Its two columns are epsilon t times the two trial functions. Compute the Gram matrix of this residual. The entry in row i and column j is epsilon squared times the integral of t squared times the product of trial functions i and j. The centered moments now needed are the mean of t squared, equal to one third; the mean of t squared times x, equal to one sixth; and the mean of t squared times x squared, equal to two fifteenths. They are simple polynomial integrals on the unit interval."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Recenter at the Ritz matrix",
+      "eyebrow": "G2 · 138000 · first-pass outline",
+      "lead": "We can do better by allowing the trial coordinates to evolve under their own compressed matrix.",
+      "body": [
+        "Let A hat be the diagonal Ritz matrix. Define the recentered residual R hat to be the perturbed operator applied to E, minus E followed by A hat. Because A hat equals E star times the perturbed operator times E, the adjoint E star annihilates this new residual. This is Galerkin orthogonality. R hat takes values entirely in the orthogonal complement of the trial plane. For its Gram matrix, use the identity R hat star R hat equals E star H squared E minus A hat squared. The first term can be integrated directly from the trial functions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A numerical consistency check",
+      "eyebrow": "G2 · 138000 · first-pass outline",
+      "lead": "Take epsilon equal to ten, which lies in the parameter range zero less than epsilon less than one hundred.",
+      "body": [
+        "The Ritz values are approximately two point one one three and seven point eight eight seven. The recentered residual's only nonzero singular value is ten divided by square root of fifteen, about two point five eight two. The high modes remain above five hundred. So the gap between our upper Ritz value and the high spectrum is greater than five hundred minus seven point eight eight seven, or approximately four hundred ninety-two point one one three. An estimate that divides the recentered residual by that gap produces an angle of only about five thousandths in tangent units."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "What the calculation does and does not prove",
+      "eyebrow": "G2 · 138000 · first-pass outline",
+      "lead": "The calculation determines the Rayleigh–Ritz compression and residual.",
+      "body": [
+        "Ritz vectors generally are not exact eigenvectors of the perturbed beam, and identifying its low two-dimensional spectral subspace additionally requires a spectral theorem and a separating gap. An operator-norm bound controls the largest principal angle, while a Ky Fan bound controls a sum of principal angles. A tangent estimate also uses stronger spectral placement and can improve on the initial sine estimate. The broader method is reusable: choose trial functions in the operator domain; form their Gram and compressed matrices; orthonormalize; compute the residual Gram operator; and only then invoke a gap theorem."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 138000 · mathematical reference",
+      "lead": "The calculation determines the Rayleigh–Ritz compression and residual.",
+      "body": [
+        "Ritz vectors generally are not exact eigenvectors of the perturbed beam, and identifying its low two-dimensional spectral subspace additionally requires a spectral theorem and a separating gap."
+      ],
+      "mathtex": "E^*TE=\\frac\\varepsilon2\\operatorname{diag}(1-1/\\sqrt3,1+1/\\sqrt3),",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 138000 · conclusion",
+      "lead": "Nothing in this workflow depends on having closed-form eigenfunctions of the perturbed operator.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

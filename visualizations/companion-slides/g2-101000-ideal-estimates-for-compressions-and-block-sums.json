@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "id": "g2-101000-ideal-estimates-for-compressions-and-block-sums",
+  "title": "Ideal estimates for compressions and block sums",
+  "subtitle": "G2 lecture 101000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:101000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/101000-ideal-estimates-for-compressions-and-block-sums.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 101000 · first-pass outline",
+      "lead": "Suppose a bounded operator maps one Hilbert space into another, and suppose its symmetric ideal gauge is finite.",
+      "body": [
+        "We want to look at the operator only on selected source and target subspaces. Can we guarantee that the resulting block still belongs to the same ideal? And if several such blocks are put together, which inequalities survive? These questions will matter for subspace perturbation. The sine of an angle will appear as a rectangular block of a projection or of a coordinate map. We need to know that passing from a full operator to such a block does not introduce a larger ideal gauge."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Begin with source and target projections",
+      "eyebrow": "G2 · 101000 · first-pass outline",
+      "lead": "Let T map a Hilbert space E into a Hilbert space F.",
+      "body": [
+        "Let P be an orthogonal projection on E, and Q an orthogonal projection on F. The map Q T P first discards the source component outside P, then applies T, then discards the output component outside Q. Think of it as the upper-left rectangle in a block matrix whose rows refer to target subspaces and whose columns refer to source subspaces. Orthogonal projections are contractions. Their operator norms are at most one. The defining ideal inequality therefore gives the gauge of Q T P at most the gauge of T. Here is the proof in two moves. First, composing T with P on the right cannot increase its gauge."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Cutting all four corners",
+      "eyebrow": "G2 · 101000 · first-pass outline",
+      "lead": "Decompose the input into the range of P and its orthogonal complement.",
+      "body": [
+        "Decompose the output using Q and its complement. Then T is the sum of four maps: Q T P, Q T times one minus P, one minus Q times T P, and one minus Q times T times one minus P. Each map has gauge at most the gauge of T. But do not add those four inequalities and conclude that the gauge of T is the sum of the block gauges. The triangle inequality gives one direction. It does not assert additivity, and cancellation or overlap can make the sum much larger. A more useful construction retains just the two diagonal blocks. Define D to be Q T P plus one minus Q times T times one minus P."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Orthogonal sums are a different operation",
+      "eyebrow": "G2 · 101000 · first-pass outline",
+      "lead": "Now take two independent maps, A from E zero to F zero, and B from E one to F one.",
+      "body": [
+        "Their orthogonal direct sum sends the pair x zero, x one to A x zero, B x one. This operator does not discard off-diagonal pieces of an existing map. It puts two maps next to each other on orthogonal input and output spaces. In finite dimensions, the singular values of the direct sum are exactly the two singular-value lists merged into one descending list. To see why, compute its Gram operator. The adjoint of the direct sum times the direct sum is block diagonal, with A adjoint A in the first block and B adjoint B in the second. Each block contributes its positive eigenvalues."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "What different norms do with direct sums",
+      "eyebrow": "G2 · 101000 · first-pass outline",
+      "lead": "The exact merge rule explains several familiar formulas.",
+      "body": [
+        "For operator norm, the norm of the direct sum is the larger of the norms of A and B. For Hilbert–Schmidt norm, the square of the direct-sum norm is the sum of the squares of the two Hilbert–Schmidt norms. For trace norm, the direct-sum norm is the sum of the two trace norms, provided both maps belong to trace class. These are three different combination laws. None should be treated as the general rule for an arbitrary symmetric ideal gauge. The Ky Fan prefix formula is more fundamental: it records the full singular-value distribution, from which many norm comparisons can be derived using dominance properties."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Dominance persists under adding blocks",
+      "eyebrow": "G2 · 101000 · first-pass outline",
+      "lead": "Suppose every Ky Fan prefix of A is at most the corresponding prefix of C.",
+      "body": [
+        "Also suppose every Ky Fan prefix of B is at most the corresponding prefix of D. For each possible allocation of k slots, add the two corresponding inequalities. The allocation sum for A and B is at most the allocation sum for C and D. Taking the maximum over all allocations preserves the inequality. Therefore every Ky Fan prefix of the direct sum of A and B is at most that of the direct sum of C and D. If a symmetric ideal has Ky Fan dominance, and the larger direct sum belongs to the ideal, then the smaller direct sum belongs too, with a gauge no larger. That final step uses the ideal's dominance hypothesis."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Why the distinction will recur",
+      "eyebrow": "G2 · 101000 · first-pass outline",
+      "lead": "We now have three tools.",
+      "body": [
+        "A compression is bounded by the whole operator through contractive composition. A diagonal pinching is bounded by the whole operator through reflection averaging. An orthogonal direct sum has a Ky Fan prefix determined by the maximum over allocations between the blocks. In a perturbation proof, we will cut a residual into coordinates associated with a trial subspace and an exact spectral complement. Contractive factors will control its ideal size. Direct-sum formulas will reassemble estimates when several spectral pieces must be treated separately. The critical habit is to specify which operation we are performing."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 101000 · mathematical reference",
+      "lead": "We now have three tools.",
+      "body": [
+        "A compression is bounded by the whole operator through contractive composition. A diagonal pinching is bounded by the whole operator through reflection averaging. An orthogonal direct sum has a Ky Fan prefix determined by the maximum over allocations between the blocks."
+      ],
+      "mathtex": "QTP+(I-Q)T(I-P)=\\tfrac12(T+U_QTU_P),\\qquad U_Q=2Q-I,\\quad U_P=2P-I.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 101000 · conclusion",
+      "lead": "Their estimates are related, but their proofs are not interchangeable.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

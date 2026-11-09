@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "g2-090000-quadratic-forms-and-ordered-half-infinite-gaps",
+  "title": "Quadratic forms and ordered half-infinite gaps",
+  "subtitle": "G2 lecture 090000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:090000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/090000-quadratic-forms-and-ordered-half-infinite-gaps.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 090000 · first-pass outline",
+      "lead": "A bounded self-adjoint matrix has a smallest and a largest eigenvalue.",
+      "body": [
+        "We used those extremes to compare operators through quadratic forms. But many operators appearing in analysis are unbounded. A self-adjoint operator can have a lower spectral bound without having any upper bound at all. That is enough for an important branch of Davis–Kahan theory. We will derive form inequalities from the spectral theorem and use them to recognize ordered gaps between two operators, even when their spectra extend indefinitely in opposite directions."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "What a quadratic form measures",
+      "eyebrow": "G2 · 090000 · first-pass outline",
+      "lead": "For a self-adjoint operator A and a vector x in its domain, consider the real number obtained by taking the inner product of A x with x.",
+      "body": [
+        "Call this the quadratic form of A at x. If A is bounded, the form exists for every x. If A is unbounded, its initial expression is defined only on D of A. Suppose A is bounded below by a real number a. This means that for every x in D of A, the form is at least a times the squared length of x. Geometrically, all directions have energy at least a per unit squared length. The statement says nothing about how large the energy can become. Consider the diagonal operator on ell two that multiplies coordinate N by N plus two."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Deriving the form inequality from a spectral half-line",
+      "eyebrow": "G2 · 090000 · first-pass outline",
+      "lead": "Let A be self-adjoint, and suppose its spectrum lies in the half-line beginning at a and extending to positive infinity.",
+      "body": [
+        "For a legal vector x, the spectral theorem represents its quadratic form as the integral of lambda against the scalar spectral measure of x. Every lambda receiving spectral mass is at least a. Subtract a inside the integral. Since lambda minus a is nonnegative on the spectral support, its integral is nonnegative. Therefore the form of A at x is at least a times the squared norm of x. This proves the lower form inequality. The upper inequality follows in exactly the same way when the spectrum lies below b. We can also see the argument by finite cutoffs."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "The larger form domain",
+      "eyebrow": "G2 · 090000 · first-pass outline",
+      "lead": "For a positive self-adjoint operator A, there is a second quadratic-form viewpoint that extends beyond D of A.",
+      "body": [
+        "Its positive square root has its own domain, D of the square root of A. On that domain define the form by the squared norm of the square root applied to x. For x in D of A, this equals the inner product of A x with x. But the square-root domain can be larger. Return to the diagonal operator with eigenvalues N. If the N-th coordinate of x is N to the power negative three halves, then the weighted sum with one factor of N converges. Therefore x belongs to the square-root domain. The weighted sum with N squared diverges, so x does not belong to D of A."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "An ordered gap between two operators",
+      "eyebrow": "G2 · 090000 · first-pass outline",
+      "lead": "Now let A act on one Hilbert space and B on another.",
+      "body": [
+        "Suppose A has lower form bound a, and B has upper form bound b, with a strictly greater than b. Define delta as a minus b. It is positive. Every spectral value of A lies at least a, and every spectral value of B lies at most b. Their separation is therefore at least delta, and the ordering is fixed: all of B lies below all of A. For example, let A have diagonal eigenvalues N plus two, and let B have diagonal eigenvalues negative N, with both indices beginning at one. The smallest value of A is three. The largest value of B is negative one. The gap is four, even though neither operator is bounded in both directions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Exponential semigroups from the spectral theorem",
+      "eyebrow": "G2 · 090000 · first-pass outline",
+      "lead": "If A is bounded below by a, then for nonnegative t the function lambda mapped to the exponential of negative t times lambda is bounded on the spectrum.",
+      "body": [
+        "The spectral calculus defines a bounded operator which we call the exponential of negative t A. Its operator norm is at most the exponential of negative t times a. This is true even when A itself is unbounded. Similarly, if B is bounded above by b, the exponential of t B is bounded for nonnegative t, with norm at most the exponential of t times b. Take any bounded map C between the Hilbert spaces. The operator obtained by composing these two exponentials with C has norm at most the product of the three norms."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Reading the hypotheses correctly",
+      "eyebrow": "G2 · 090000 · first-pass outline",
+      "lead": "The lower form inequality belongs to A and its domain.",
+      "body": [
+        "The upper form inequality belongs to B and its domain. Their Hilbert spaces need not have equal dimensions, and they need not be the same space. The gap condition concerns the operator parts after any spectral restriction has been made. If we replace A by a restriction to a reducing spectral subspace, we must verify that its actual spectral support still lies above a. Likewise, if we compress an operator onto an arbitrary trial subspace, the resulting matrix may be bounded and self-adjoint but need not be a reducing restriction of the original unbounded operator. Those are different constructions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 090000 · conclusion",
+      "lead": "For now we have established the form inequalities and a positive ordered gap that will control its inverse.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

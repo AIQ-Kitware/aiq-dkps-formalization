@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "id": "g2-083000-densely-defined-operators-and-their-graphs",
+  "title": "Densely defined operators and their graphs",
+  "subtitle": "G2 lecture 083000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:083000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/083000-densely-defined-operators-and-their-graphs.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 083000 · first-pass outline",
+      "lead": "A matrix acts on every vector in its finite-dimensional coordinate space.",
+      "body": [
+        "But in infinite-dimensional Hilbert space, some of the most important operators cannot act on every vector. Their domain is part of the mathematical data. The graph of an operator records its input-output pairs. Closedness and the graph norm let us pass to limits while respecting the operator's domain."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "A diagonal operator that grows without bound",
+      "eyebrow": "G2 · 083000 · first-pass outline",
+      "lead": "Take the Hilbert space ell two: the sequences of complex numbers whose squared magnitudes have finite sum.",
+      "body": [
+        "The length of a sequence is the square root of that sum. Define A by multiplying the first coordinate by one, the second by two, the third by three, and the N-th by N. Formally, the output coordinates are N times the input coordinates. It would be tempting to write that formula for every square-summable sequence. That is incorrect. Consider the sequence whose N-th entry is one divided by N. Its squares form a convergent series, so the sequence belongs to ell two. But multiplying by N produces the constant sequence of ones, which does not belong to ell two."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The graph records both input and output",
+      "eyebrow": "G2 · 083000 · first-pass outline",
+      "lead": "For any operator A with domain D, form its graph: the set of ordered pairs, x together with A x, for x in D.",
+      "body": [
+        "This is a linear subspace of the product Hilbert space H times H. The product norm of a graph pair is the square root of the squared length of x plus the squared length of A x. We call that the graph norm of x. An operator is closed when its graph is a closed subset of this product space. Equivalently, take a sequence of domain vectors x N that converges to x in H, and suppose A x N converges to y in H. Closedness says that x actually belongs to the domain and A x equals y. That is exactly the limit passage needed for unbounded operators."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Complete in the right norm",
+      "eyebrow": "G2 · 083000 · first-pass outline",
+      "lead": "The graph norm provides another characterization of closedness.",
+      "body": [
+        "Give the domain D the graph norm, even when D is not closed in the ordinary Hilbert-space norm. Suppose A is closed and x N is a Cauchy sequence in graph norm. The definition says both x N and A x N are Cauchy in H. Since H is complete, they have limits x and y. Closedness puts x in the domain and identifies y with A x. Both pieces converge, so x N converges in graph norm. The domain is complete in its graph norm. Conversely, suppose the domain is complete in graph norm. If x N approaches x and A x N approaches y in H, then the pairs are Cauchy, so x N is graph-norm Cauchy."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Dense does not imply closed",
+      "eyebrow": "G2 · 083000 · first-pass outline",
+      "lead": "Take the zero operator but define it only on finite-support sequences.",
+      "body": [
+        "The formula is as harmless as possible: every allowed input maps to zero. Its domain is dense. Its graph is not closed, though. Take finite truncations of the sequence one over N. They converge in ell two to a sequence not having finite support. Their zero outputs converge to zero. The limiting pair does not belong to the graph. So this densely defined zero operator is not closed. Its closure is the zero operator on all of ell two. The word closure here means the operator whose graph is the closure of the original graph, provided that closed set is still the graph of a function."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Why spectral cutoffs fit this framework",
+      "eyebrow": "G2 · 083000 · first-pass outline",
+      "lead": "Recall the spectral projections defined by a bounded spectral cutoff.",
+      "body": [
+        "For a self-adjoint operator A, let P R select the spectral interval from negative R to positive R. Every vector P R x lies in the domain of A, even when x itself does not. If x belongs to the domain, P R x converges to x, and A P R x equals P R A x, which converges to A x. Thus the cutoffs converge in the graph norm. They are legal approximations in both input and output, rather than approximations that control only one side. For an unbounded block identity, first state the domain, establish that each expression is defined, and only then pass to limits using closedness or graph-norm convergence."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 083000 · conclusion",
+      "lead": "For an unbounded block identity, first state the domain, establish that each expression is defined, and only then pass to limits using closedness or graph-norm convergence.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

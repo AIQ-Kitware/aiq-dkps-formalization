@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "id": "g2-080000-measurable-spectral-restrictions",
+  "title": "Measurable spectral restrictions",
+  "subtitle": "G2 lecture 080000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:080000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/080000-measurable-spectral-restrictions.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 080000 · first-pass outline",
+      "lead": "In finite-dimensional linear algebra, selecting several eigenspaces and restricting a self-adjoint matrix to their direct sum is routine.",
+      "body": [
+        "We now know how to make a similar selection even when the operator has no eigenvectors. Take a bounded self-adjoint A and choose a Borel set B of real numbers. Its spectral projection E of B gives us a closed subspace K, namely the range of that projection. We want to study the operator that A induces on K, and to understand how its spectral calculus relates to the original one. The key fact is that spectral selection is compatible with restriction."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "First establish invariance",
+      "eyebrow": "G2 · 080000 · first-pass outline",
+      "lead": "The projection P, meaning E of B, is a bounded Borel function of A.",
+      "body": [
+        "The Borel functional calculus makes a bounded Borel function of A commute with A on the appropriate domain. Therefore A P equals P A. Let x belong to K. Then P x equals x. Apply P to A x. By commutation, P A x equals A P x, which equals A x. Hence A x lies in K. Now take y in the orthogonal complement of K. Because P is orthogonal, P y equals zero. Again P A y equals A P y, which is zero. Thus A y stays in the orthogonal complement. So K reduces A. The restriction A sub K acts on a complete Hilbert space in its own right, since K is a closed subspace of H. Self-adjointness passes to the restriction."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Spectral projections inside the subspace",
+      "eyebrow": "G2 · 080000 · first-pass outline",
+      "lead": "Suppose C is another Borel set.",
+      "body": [
+        "The spectral projection E of C preserves K because it commutes with P. Its restriction to K is again an orthogonal projection. What projection does it represent for A sub K? It represents the portion of the restricted spectrum lying in C. In the notation of spectral measures, E sub K of C is E of C restricted to K. Here is the proof mechanism. For a simple scalar symbol, the functional calculus is a finite linear combination of spectral projections. Restricting that combination to K clearly agrees with the same finite combination of restricted projections. Uniformly approximate a bounded Borel symbol by simple symbols and pass to the operator-norm limit."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "What the range projection means",
+      "eyebrow": "G2 · 080000 · first-pass outline",
+      "lead": "A useful identity follows immediately from the product rule: E of C applied to a vector in K equals E of B intersect C applied to that vector.",
+      "body": [
+        "Indeed, write a vector x in K as P x, and then E of C P x equals E of B intersect C applied to x. If C is disjoint from B, this is zero. Thus the restriction has no spectral weight in any Borel set disjoint from B. But be careful. This statement about spectral weight does not imply that every point of the restricted spectrum lies in B itself. It implies containment in the closure of B intersected with the original spectrum, provided K is nonzero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "The open-interval boundary example",
+      "eyebrow": "G2 · 080000 · first-pass outline",
+      "lead": "Take A to be multiplication by t on L two of the unit interval.",
+      "body": [
+        "Let B be the open interval from zero to one half. The range of E of B consists of functions supported in that interval, up to equality almost everywhere. On this subspace, A still multiplies by t. What is the spectrum of the restriction? It is the closed interval from zero to one half, not the open interval. The endpoints belong to the spectrum because there are normalized functions supported in very short intervals approaching zero or one half. On such vectors, multiplication by t is arbitrarily close to multiplication by the endpoint value. Yet neither endpoint has a nonzero eigenvector in this model."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Why the restricted spectrum cannot invent a new point",
+      "eyebrow": "G2 · 080000 · first-pass outline",
+      "lead": "For a reducing subspace K, A decomposes as a block diagonal operator A sub K and A sub its complement.",
+      "body": [
+        "If a complex number z lies outside the spectrum of A, the full operator A minus z has a bounded inverse. Because the projection onto K commutes with A, it also commutes with that inverse. We can therefore restrict the inverse to K and obtain an inverse of A sub K minus z. So every point of the restricted spectrum was already in the spectrum of A. There can be loss of spectral values, but not new ones. This proof is valid for bounded reducing restrictions. It is more robust than trying to track individual eigenvectors, which might not exist."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Restriction and composition under a unitary change of coordinates",
+      "eyebrow": "G2 · 080000 · first-pass outline",
+      "lead": "Suppose U is a unitary map and another operator T is obtained by transporting A through U.",
+      "body": [
+        "Applying any bounded Borel symbol to T gives the transported version of f of A. The reason is again simple-function approximation. Spectral projections transport under unitary conjugation, and finite combinations inherit that property. The uniform limit preserves it. This naturality is useful when we choose a cyclic multiplication model. A spectral restriction can be performed before or after moving to the L two coordinates. In the multiplication model, restricting to B simply keeps functions supported on B."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Two different operators are different",
+      "eyebrow": "G2 · 080000 · first-pass outline",
+      "lead": "There is a possible confusion that later perturbation theory will punish.",
+      "body": [
+        "Spectral projections of the same self-adjoint operator commute. Projections associated with different self-adjoint operators generally do not. Take a two-dimensional space. The first operator may have the coordinate axes as eigenspaces. A second operator obtained by rotating the eigenbasis has different rank-one spectral projections. Unless those axes line up in a special way, the selected projections do not commute. Two orthogonal projections for different subspaces need not commute: on a principal plane meeting at an intermediate angle, their two-by-two projection matrices generally have a nonzero commutator."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Restricting a bounded Borel symbol",
+      "eyebrow": "G2 · 080000 · first-pass outline",
+      "lead": "Suppose f is bounded and measurable on the spectrum of A.",
+      "body": [
+        "Let f sub K denote the same scalar function restricted to the spectrum of A sub K. Since that spectrum is contained in the original one, this restriction makes sense. Then f sub K of A sub K equals the restriction to K of f of A. One can prove this from the diagonal measures. For x in K, its scalar measure for the restricted operator agrees with its ambient scalar measure, after viewing the restricted spectrum inside the full spectrum. Therefore the integrals specifying all diagonal matrix elements coincide. Polarization converts the diagonal equality into equality of operators."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "The result to retain",
+      "eyebrow": "G2 · 080000 · first-pass outline",
+      "lead": "A Borel spectral region defines a closed reducing subspace.",
+      "body": [
+        "Its restricted functional calculus is the ambient calculus restricted to that subspace, and the restricted spectral projection for C is simply the ambient projection for C acting on the selected subspace. The spectrum of the restriction lies in the original spectrum and in the closure of the selected region, but may include boundary points not contained in the original Borel set."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 080000 · conclusion",
+      "lead": "The spectrum of the restriction lies in the original spectrum and in the closure of the selected region, but may include boundary points not contained in the original Borel set.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

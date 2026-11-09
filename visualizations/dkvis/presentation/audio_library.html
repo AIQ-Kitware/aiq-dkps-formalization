@@ -6,19 +6,6 @@
 <style>
 :root{color-scheme:dark;--bg:#101419;--side:#151c23;--panel:#1c2731;--border:#334452;--text:#f0f3f6;--muted:#a9bcc8;--accent:#9bd3fb;--button:#23394a;--warm:#f6d4a2}
 *{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}a{color:var(--accent)}h1,h2,p{margin:0}h1{font-size:1.36rem;line-height:1.3}h2{font-size:1.25rem}button,input,select{font:inherit}button,select,input[type=search],input[type=text]{background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:9px;padding:10px 12px}button{cursor:pointer}button:hover:not(:disabled){border-color:var(--accent)}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}button:disabled{opacity:.4;cursor:default}.primary{background:var(--button);border-color:#537d9a}.large{font-size:1.05rem;font-weight:650;padding:15px 19px}.subtle{font-size:.86rem;color:var(--muted)}.eyebrow{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.space{justify-content:space-between}.wrap{min-width:0}.course-tracks{display:flex;gap:8px;flex-wrap:wrap;padding:12px clamp(18px,3vw,38px);border-bottom:1px solid var(--border);background:var(--side)}.course-tracks button,.course-tracks a{font-size:.89rem;border:1px solid var(--border);border-radius:8px;padding:8px 12px;text-decoration:none;color:var(--text);background:var(--panel)}.course-tracks [aria-current="page"]{border-color:var(--accent);color:var(--accent);background:#203343}header{padding:19px clamp(18px,3vw,38px);display:flex;justify-content:space-between;align-items:center;gap:15px;border-bottom:1px solid var(--border)}main{display:grid;grid-template-columns:minmax(245px,330px) minmax(0,1fr);min-height:calc(100vh - 88px)}aside{border-right:1px solid var(--border);background:var(--side);padding:20px;min-width:0}#search{width:100%;margin:17px 0 10px}#list{list-style:none;margin:0;padding:0;overflow-y:auto;max-height:calc(100vh - 210px)}#list button{width:100%;text-align:left;padding:12px;margin:4px 0;background:none}#list button[aria-current="true"]{border-color:var(--accent);background:#203343}#list .number{font-size:.76rem;font-variant-numeric:tabular-nums;color:var(--accent);display:block;margin-bottom:4px}#list .name{display:block;line-height:1.3;font-weight:550}#list .detail{display:block;font-size:.78rem;margin-top:6px;color:var(--muted)}article{padding:22px clamp(18px,4vw,50px);min-width:0;max-width:1250px;width:100%;margin:auto}.audio-head{margin:4px 0 20px}#lectureTitle{font-size:clamp(1.5rem,2vw,2.05rem);margin:8px 0}.reader{background:var(--side);border:1px solid var(--border);border-radius:15px;padding:clamp(16px,3vw,26px);margin:0 0 18px}.page-nav{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}.page-nav button{font-size:1.4rem;min-width:60px}.page-bar{text-align:center;min-width:0}.page-bar strong{display:block;margin-bottom:6px}input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}.playback{display:flex;gap:11px;align-items:center;flex-wrap:wrap;margin:18px 0 8px}#play{min-width:158px}audio{display:block;width:100%;height:46px;margin:12px 0 3px}#status{min-height:22px;color:var(--muted);font-size:.86rem;white-space:pre-wrap}#status.error{color:#ffb9a9}.options{border-top:1px solid var(--border);padding-top:14px;margin-top:14px}.options label{display:inline-flex;gap:7px;align-items:center;font-size:.87rem;color:var(--muted)}.options input[type=text]{width:132px}.options select{min-width:72px}.options input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px}.control-grid{display:flex;gap:11px 20px;flex-wrap:wrap;margin:10px 0 4px}.control-grid label{display:flex;gap:7px;align-items:center}.live-caption{background:#203343;border:1px solid #365974;border-radius:10px;padding:12px 15px;margin:13px 0 4px;min-height:72px}.live-caption p{margin-top:5px;line-height:1.5}.transcript-page{padding:10px 0 16px;scroll-margin-top:20px}.transcript-page+.transcript-page{border-top:1px solid var(--border)}.transcript-page.current-page{border-left:3px solid var(--accent);padding-left:12px}.transcript-page-label{display:block;color:var(--muted);font-size:.77rem;letter-spacing:.03em;padding:0 0 8px}.whole-progress{margin:17px 0 8px}.whole-progress input{margin:8px 0 4px}.timeline-note{font-variant-numeric:tabular-nums}.speech-segment{border-radius:3px;cursor:pointer}.speech-segment:hover{background:#233e51}.speech-segment.active{background:#46637a;color:white;box-decoration-break:clone;-webkit-box-decoration-break:clone}.learning-layout{display:block}.learning-layout.has-slides{display:flex;flex-direction:column;gap:22px}.slides-panel{position:static;width:100%;min-width:0;padding:15px;background:var(--side);border:1px solid var(--border);border-radius:12px}.slides-panel .row{margin-bottom:10px}.slides-panel iframe{display:block;width:100%;height:auto;aspect-ratio:16/9;border:1px solid var(--border);background:#101923;border-radius:6px;min-height:0}.slides-panel select{max-width:230px}.transcript-col{width:100%;min-width:0}.learning-layout:not(.has-slides) .slides-panel{margin-bottom:16px}.learning-layout:not(.has-slides) .slides-panel iframe{display:none}article:has(.learning-layout.has-slides){max-width:none;padding-left:clamp(14px,2vw,30px);padding-right:clamp(14px,2vw,30px)}@media(max-width:600px){.slides-panel iframe{min-height:70vh}}.transcript{font-size:1.03rem;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere;padding:12px 0 30px;max-width:74ch}details{border-top:1px solid var(--border);margin-top:12px;padding:18px 0}summary{cursor:pointer;font-weight:650}#references li{margin:12px 0}#references .subtle{display:block;line-height:1.5;margin-top:4px}#loading{margin:80px auto;text-align:center;color:var(--muted)}#empty{text-align:center;padding:90px 20px;color:var(--muted)}[hidden]{display:none!important}@media(max-width:850px){main{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--border);padding:13px 16px}#list{display:flex;gap:10px;overflow-x:auto;max-height:none;padding-bottom:5px}#list li{flex:0 0 205px}#list button{height:100%;margin:0}article{padding:16px}.reader{position:relative}header{padding:16px}#play{flex:1}.page-nav{gap:6px}.page-nav button{min-width:46px;padding:12px 7px}}
-
-.cache-panel{border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:12px 0;background:#18212a}
-.cache-panel .row{margin:5px 0}.cache-progress{height:10px;width:100%;background:#2d3b46;overflow:hidden;border-radius:12px;margin:10px 0}
-.cache-progress > div{height:100%;width:0;background:#7db9dd;transition:width .25s}
-.page-cache{display:flex;flex-wrap:wrap;gap:5px;margin:12px 0}
-.page-cache button{font-size:.76rem;min-width:31px;padding:3px 7px;border-radius:6px}
-.page-cache .ready{border-color:#7eaf9d;color:#bee0d4}
-.page-cache .rendering,.page-cache .queued{border-color:#c6a677;color:#f3dba9}
-.page-cache .error{border-color:#bf7e81;color:#ffc1c3}
-.queue-list{list-style:none;padding:0;margin:8px 0 0}
-.queue-list li{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap;border-top:1px solid var(--border);padding:9px 0}
-.queue-list li button{padding:5px 9px;font-size:.82rem}
-#stopGeneration{padding:6px 10px;font-size:.84rem}
 </style>
 </head>
 <body>
@@ -38,15 +25,7 @@
 <div class="reader">
 <div class="page-nav"><button id="prev" title="Select previous page" aria-label="Previous page">◀</button><div class="page-bar"><strong id="pageLabel">Page 1</strong><input id="pages" type="range" min="1" max="1" value="1" aria-label="Select starting page"></div><button id="next" title="Select next page" aria-label="Next page">▶</button></div>
 <div class="whole-progress" aria-label="Lecture-wide playback progress"><div class="row space"><strong>Entire lecture</strong><span class="subtle timeline-note" id="lecturePercent">0.0%</span></div><input id="lectureProgress" type="range" min="0" max="10000" step="1" value="0" aria-label="Seek through entire lecture"><div class="row space"><span id="lecturePosition" class="subtle timeline-note">0:00 / 0:00</span><span id="lectureRemaining" class="subtle timeline-note">Estimated time remaining</span></div></div>
-<div class="playback"><button class="large primary" id="play">▶ Play page</button><button id="generateAll" title="Generate and cache each page for offline replay from this server">Cache whole lecture</button><button id="stopGeneration" disabled title="Cancel unfinished speech jobs for this lecture">Stop generation</button><span class="subtle" id="cacheCount"></span></div>
-<div class="cache-panel" aria-label="Audio generation queue and cache status">
-<div class="row space"><strong>Audio preparation</strong><span class="subtle" id="cacheSummary" aria-live="polite">Checking cache…</span></div>
-<div class="cache-progress" role="progressbar" aria-label="Cached speech pages" id="cacheProgress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="cacheFill"></div></div>
-<div id="pageCache" class="page-cache" aria-label="Speech page readiness"></div>
-<div class="row space"><strong class="subtle">Generation queue</strong><span class="subtle" id="queueSummary">No jobs</span></div>
-<ul id="queueList" class="queue-list"></ul>
-<p class="subtle" id="etaExplanation">ETAs are approximate and learn from completed audio pages.</p>
-</div>
+<div class="playback"><button class="large primary" id="play">▶ Play page</button><button id="generateAll" title="Generate and cache each page for offline replay from this server">Cache whole lecture</button><span class="subtle" id="cacheCount"></span></div>
 <audio id="audio" controls preload="metadata" aria-label="Lecture audio player"></audio>
 <div class="live-caption" aria-label="Text being read">
   <div class="row space"><strong>Follow along</strong><span class="subtle" id="readingPosition">Page text</span></div>
@@ -79,7 +58,7 @@
 'use strict';
 const $ = id => document.getElementById(id);
 const audio = $('audio');
-const state = {track:'g2', items:[], doc:null, page:0, token:0, audioId:'', cacheJob:0, playing:false, profile:null, voiceRequest:0, segments:[], sentenceNodes:[], segmentsByPage:[], nodesByPage:[], pageSections:[], activeSentence:-1, durations:[], pendingSeekFraction:null, scrubbing:false, companionDecks:[], slideBusy:false, slideToken:0, pageTimings:null, pendingSeekSentence:null, inventoryBusy:false, inventoryToken:0, catalogToken:0, cacheCatalog:new Map(), catalogFetched:0};
+const state = {track:'g2', items:[], doc:null, page:0, token:0, audioId:'', cacheJob:0, playing:false, profile:null, voiceRequest:0, segments:[], sentenceNodes:[], segmentsByPage:[], nodesByPage:[], pageSections:[], activeSentence:-1, durations:[], pendingSeekFraction:null, scrubbing:false, companionDecks:[], slideBusy:false, slideToken:0, pageTimings:null, pendingSeekSentence:null};
 const saved = (key, fallback) => {try {return JSON.parse(localStorage.getItem('dkps-audio-'+key)) ?? fallback} catch {return fallback}};
 const remember = (key, val) => {try {localStorage.setItem('dkps-audio-'+key, JSON.stringify(val))} catch {}};
 const sleep = ms => new Promise(ok => setTimeout(ok,ms));
@@ -89,15 +68,7 @@ function settings(){return {track:state.track,profile:$('profile').value,voice:$
 function query(){const p=new URLSearchParams(settings());return p.toString()}
 function pageUrl(page){return `/api/audio-lectures/${state.doc.id}/pages/${page}`}
 function highlight(){document.querySelectorAll('#list button').forEach(b=>b.setAttribute('aria-current',String(b.dataset.id===state.doc?.id)))}
-function cacheLabel(id){
-  const entry=state.cacheCatalog.get(id);
-  if(!entry)return '';
-  if(entry.ready===entry.total)return 'Ready to play · ';
-  if(entry.preparing)return `Preparing · ${entry.ready}/${entry.total} cached · `;
-  if(!entry.ready)return 'Not cached · ';
-  return `Partial ${Math.round(100*entry.ready/entry.total)}% (${entry.ready}/${entry.total}) · `;
-}
-function renderList(){const word=$('search').value.trim().toLocaleLowerCase();const rows=state.items.filter(x=>(x.id+' '+x.title).toLocaleLowerCase().includes(word));$('count').textContent=rows.length+'/'+state.items.length;$('list').replaceChildren();for(const row of rows){const li=document.createElement('li');const b=document.createElement('button');b.dataset.id=row.id;for(const [cls,text] of [['number',row.id],['name',row.title],['detail',`${cacheLabel(row.id)}${row.page_count} pages · ${row.estimated_minutes} min reading estimate`]]){const span=document.createElement('span');span.className=cls;span.textContent=text;b.append(span)}b.onclick=()=>selectLecture(row.id);li.append(b);$('list').append(li)}highlight()}
+function renderList(){const word=$('search').value.trim().toLocaleLowerCase();const rows=state.items.filter(x=>(x.id+' '+x.title).toLocaleLowerCase().includes(word));$('count').textContent=rows.length+'/'+state.items.length;$('list').replaceChildren();for(const row of rows){const li=document.createElement('li');const b=document.createElement('button');b.dataset.id=row.id;for(const [cls,text] of [['number',row.id],['name',row.title],['detail',`${row.page_count} pages · ${row.estimated_minutes} min reading estimate`]]){const span=document.createElement('span');span.className=cls;span.textContent=text;b.append(span)}b.onclick=()=>selectLecture(row.id);li.append(b);$('list').append(li)}highlight()}
 function speechSegments(text){
   // Keep punctuation and spacing exactly as extracted for TTS.
   const breaks=/[.!?]["”’)]?\s+(?=[A-Z0-9“"(])|\n\s*\n/g;
@@ -312,7 +283,7 @@ function showCompanionLinks(deck){
   const has=Boolean(deck&&deck.built);
   $('slidesOpen').hidden=!has;$('slidesDownload').hidden=!has;
   if(has){$('slidesOpen').href=deck.url;$('slidesDownload').href=deck.download_url}
-  $('slidesInfo').textContent=deck?`${deck.slide_count} slides${deck.built?' · built':' · source ready'}`:'';
+  $('slidesInfo').textContent=deck?`${deck.slide_count} slides${deck.built?' · built':' · source ready'}${deck.needs_expansion?' · outline: needs expansion':' · expanded companion'}`:'';
 }
 function resetSlides(doc){
   state.slideToken++;state.companionDecks=doc.companion_slides||[];
@@ -320,9 +291,9 @@ function resetSlides(doc){
   $('learningLayout').classList.remove('has-slides');
   $('slidesFrame').removeAttribute('src');$('toggleSlides').textContent='Show slides';
   const selector=$('slideDeckSelect');selector.replaceChildren();
-  for(const deck of state.companionDecks){const option=document.createElement('option');option.value=deck.id;option.textContent=deck.title;selector.append(option)}
+  for(const deck of state.companionDecks){const option=document.createElement('option');option.value=deck.id;option.textContent=deck.title+(deck.needs_expansion?' · needs expansion':'');selector.append(option)}
   showCompanionLinks(activeDeck());
-  $('slidesStatus').textContent=state.companionDecks.length?'Slides can be read independently; build and show them here.':'';
+  $('slidesStatus').textContent=state.companionDecks.length?(activeDeck()?.needs_expansion?'Baseline reading slides are available; this deck is marked for editorial expansion.':'Slides can be read independently; build and show them here.'):'';
 }
 async function ensureSlides(force=false){
   const deck=activeDeck();if(!deck||state.slideBusy)return null;
@@ -351,132 +322,29 @@ async function toggleCompanionSlides(){
 $('toggleSlides').onclick=toggleCompanionSlides;
 $('buildSlides').onclick=async()=>{const deck=await ensureSlides(true);if(deck&&$('learningLayout').classList.contains('has-slides'))$('slidesFrame').src=deck.url};
 $('slideDeckSelect').onchange=()=>{const deck=activeDeck();showCompanionLinks(deck);if($('learningLayout').classList.contains('has-slides')){$('slidesFrame').removeAttribute('src');$('learningLayout').classList.remove('has-slides');$('toggleSlides').textContent='Show slides'}};
-async function selectLecture(id){state.inventoryToken++;state.token++;state.cacheJob++;$('generateAll').disabled=false;$('cacheCount').textContent='';state.playing=false;audio.pause();audio.removeAttribute('src');audio.load();$('loading').hidden=false;$('content').hidden=true;$('empty').hidden=true;const token=state.token;try{const doc=await api('/api/audio-lectures/'+encodeURIComponent(id)+'?'+new URLSearchParams({track:state.track}));if(token!==state.token)return;state.doc=doc;$('plainTranscript').href='/api/audio-lectures/'+encodeURIComponent(id)+'/transcript.txt?'+new URLSearchParams({track:state.track});remember('lecture-'+state.track,id);try{history.replaceState(null,'','/audio?'+new URLSearchParams({track:state.track,lecture:id}))}catch{}loadDurations();showFullTranscript(doc);resetSlides(doc);$('lectureNumber').textContent='Lecture '+id;$('lectureTitle').textContent=doc.title;$('lectureMeta').textContent=`${doc.words.toLocaleString()} words · ${doc.page_count} speech pages · approximately ${doc.estimated_minutes} minutes of narration`;$('pages').max=String(doc.page_count);$('loading').hidden=true;$('content').hidden=false;
+async function selectLecture(id){state.token++;state.cacheJob++;$('generateAll').disabled=false;$('cacheCount').textContent='';state.playing=false;audio.pause();audio.removeAttribute('src');audio.load();$('loading').hidden=false;$('content').hidden=true;$('empty').hidden=true;const token=state.token;try{const doc=await api('/api/audio-lectures/'+encodeURIComponent(id)+'?'+new URLSearchParams({track:state.track}));if(token!==state.token)return;state.doc=doc;$('plainTranscript').href='/api/audio-lectures/'+encodeURIComponent(id)+'/transcript.txt?'+new URLSearchParams({track:state.track});remember('lecture-'+state.track,id);try{history.replaceState(null,'','/audio?'+new URLSearchParams({track:state.track,lecture:id}))}catch{}loadDurations();showFullTranscript(doc);resetSlides(doc);$('lectureNumber').textContent='Lecture '+id;$('lectureTitle').textContent=doc.title;$('lectureMeta').textContent=`${doc.words.toLocaleString()} words · ${doc.page_count} speech pages · approximately ${doc.estimated_minutes} minutes of narration`;$('pages').max=String(doc.page_count);$('loading').hidden=true;$('content').hidden=false;
 const panel=$('referencePanel'),list=$('references');list.replaceChildren();panel.hidden=!doc.related_resources?.length;
 for(const source of doc.related_resources||[]){const li=document.createElement('li'),link=document.createElement('a');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.title;li.append(link);const why=document.createElement('span');why.className='subtle';why.textContent=source.reason;li.append(why);list.append(li)}
 const graphList=$('connections'),graphPanel=$('connectionPanel');graphList.replaceChildren();graphPanel.hidden=!doc.course_connections?.length;
 for(const connection of doc.course_connections||[]){const li=document.createElement('li');const label=document.createElement('span');label.textContent=`${connection.direction==='incoming'?'Referenced by':'Relation'}: ${connection.type.replaceAll('_',' ')} - `;li.append(label);const link=document.createElement('a');link.textContent=connection.title+' ('+connection.node_id+')';link.href=connection.url||('/learning-paths?'+new URLSearchParams({track:connection.node_id.split(':')[0],node:connection.node_id}));li.append(link);graphList.append(li)}
-selectPage(Number(saved('page-'+state.track+'-'+id,0))||0);highlight();refreshInventory();}catch(err){if(token===state.token){$('loading').textContent='Could not load lecture: '+err.message}}}
-function formatGenerationStatus(status){
-  if(!status)return 'Preparing speech…';
-  const stateName=status.state==='rendering'?
-    (status.progress?.upstream_state==='queued'?'Waiting for Breeze GPU'
-      :status.progress?.upstream_state==='ready'?'Finalizing audio':'Generating'):
-    status.state==='queued'?'Queued':status.state;
-  const eta=Number.isFinite(status.eta_seconds)?` · approximately ${clock(status.eta_seconds)} remaining`
-    :Number.isFinite(status.estimate_exceeded_seconds)
-      ?` · estimate exceeded by ${clock(status.estimate_exceeded_seconds)} (still working)`
-      :'';
-  const progress=status.progress;
-  const part=progress?.current_passage && progress?.phase==='synthesizing'
-    ?` · passage ${progress.current_passage}/${progress.total_passages||'?'} synthesizing`
-    :progress?.total_passages?` · ${progress.completed_passages||0}/${progress.total_passages} passages`:'';
-  const position=status.queued_position?` · queue position ${status.queued_position}`:'';
-  return stateName+part+position+eta;
-}
-async function refreshCacheCatalog(){
-  if(!state.items.length)return;
-  const context={...settings()},token=++state.catalogToken;
-  try{
-    const result=await api('/api/audio-generation/catalog?'+new URLSearchParams(context));
-    if(token!==state.catalogToken || state.track!==context.track || JSON.stringify(context)!==JSON.stringify(settings()))return;
-    state.cacheCatalog=new Map(result.items.map(item=>[item.id,item]));state.catalogFetched=Date.now();renderList();
-  }catch(err){console.warn('Cache catalog unavailable:',err.message)}
-}
-async function stopJobsForLecture(lectureId, config=settings()){
-  if(!lectureId)return;
-  try{
-    const result=await api('/api/audio-generation/cancel',{method:'POST',
-      headers:{'Content-Type':'application/json'},body:JSON.stringify({...config,lecture_id:lectureId})});
-    if(state.doc?.id===lectureId){state.cacheJob++;$('generateAll').disabled=false;
-      setStatus(`Cancellation requested for ${result.count} unfinished job(s).`)}
-    await refreshInventory();
-  }catch(err){setStatus('Could not cancel generation: '+err.message,true)}
-}
-function renderInventory(result){
-  $('cacheSummary').textContent=`${result.ready}/${result.total} pages ready · ${result.percent.toFixed(0)}%`;
-  $('cacheFill').style.width=result.percent+'%';
-  $('cacheProgress').setAttribute('aria-valuenow',String(result.percent));
-  const current=state.cacheCatalog.get(result.lecture_id)||{id:result.lecture_id,total:result.total,ready:0};
-  if(current.ready!==result.ready){state.cacheCatalog.set(result.lecture_id,{...current,ready:result.ready});renderList()}
-  const grid=$('pageCache');grid.replaceChildren();
-  result.states.forEach((status,index)=>{
-    const chip=document.createElement('button');chip.type='button';chip.className=status;
-    chip.textContent=String(index+1);chip.title=`Page ${index+1}: ${status}`;
-    chip.setAttribute('aria-label',chip.title);chip.onclick=()=>selectPage(index);
-    if(index===state.page)chip.setAttribute('aria-current','page');grid.append(chip);
-  });
-  const rows=$('queueList');rows.replaceChildren();
-  $('queueSummary').textContent=result.queue.length?`${result.queue.length} unfinished job(s)`:'Idle';
-  const preparation=result.preparation;
-  const isPreparing=preparation && ['running','canceling'].includes(preparation.state);
-  $('generateAll').disabled=Boolean(isPreparing);
-  $('stopGeneration').disabled=!(isPreparing || result.queue.some(job=>job.lecture_id===result.lecture_id));
-  $('cacheCount').textContent=isPreparing
-    ?`Preparing lecture · ${result.ready}/${result.total} ready · ${preparation.submitted} submitted${preparation.state==='canceling'?' · stopping':''}`
-    :preparation?.state==='finished_with_errors'
-      ?`Finished with ${preparation.failed} failed page(s); select Cache whole lecture to retry`
-      :'';
-  for(const job of result.queue){
-    const li=document.createElement('li'),info=document.createElement('span');
-    info.className='subtle';
-    info.textContent=`Lecture ${job.lecture_id} · page ${job.page+1} · ${job.kind} · ${formatGenerationStatus(job)}`;
-    li.append(info);
-    const button=document.createElement('button');button.textContent='Cancel lecture';
-    button.title='Cancel unfinished jobs for lecture '+job.lecture_id;
-    button.onclick=()=>stopJobsForLecture(job.lecture_id);
-    li.append(button);rows.append(li);
-  }
-  $('etaExplanation').textContent=result.estimate_source==='observed'
-    ?`ETA based on ${result.estimate_samples} completed page(s) with this speech configuration. Passage progress is reported by the Breeze server.`
-    :'ETA is a preliminary estimate until this voice/configuration has completed pages.';
-}
-async function refreshInventory(){
-  if(!state.doc||state.inventoryBusy)return;
-  const doc=state.doc,context={...settings()},token=state.inventoryToken;
-  state.inventoryBusy=true;
-  try{
-    const result=await api('/api/audio-generation/inventory?'+
-      new URLSearchParams({...context,lecture_id:doc.id}));
-    if(state.doc===doc&&token===state.inventoryToken&&JSON.stringify(context)===JSON.stringify(settings()))renderInventory(result);
-  }catch(err){$('cacheSummary').textContent='Cache status unavailable: '+err.message}
-  finally{state.inventoryBusy=false}
-}
-
-async function ensurePage(lectureId, page, config, onStatus=()=>{}, purpose='playback', shouldContinue=()=>true){
-  if(!shouldContinue())throw Error('Page request superseded');
+selectPage(Number(saved('page-'+state.track+'-'+id,0))||0);highlight();}catch(err){if(token===state.token){$('loading').textContent='Could not load lecture: '+err.message}}}
+async function ensurePage(lectureId, page, config, onStatus=()=>{}){
   const qs=new URLSearchParams(config).toString(); const target=`/api/audio-lectures/${lectureId}/pages/${page}`;
   let status=await api(target+'?'+qs);
   if(status.state==='ready')return status;
-  status=await api(target+'/render',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...config,purpose})});
-  for(let attempts=0;attempts<1800;attempts++){
-    if(!shouldContinue())throw Error('Page request superseded');
+  status=await api(target+'/render',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(config)});
+  for(let attempts=0;attempts<500;attempts++){
     if(status.state==='ready')return status;
-    if(['error','cancelled','canceling'].includes(status.state))throw Error(status.error||'Speech generation '+status.state);
-    onStatus(status);
+    if(status.state==='error')throw Error(status.error||'Speech generation failed');
+    onStatus(status.state);
     await sleep(700);
-    if(!shouldContinue())throw Error('Page request superseded');
     status=await api(target+'?'+qs);
   }
   throw Error('Speech generation has not completed. Try the page again.');
 }
-async function playPage(){if(!state.doc)return;const docId=state.doc.id,index=state.page,config=settings(),token=++state.token;const identifier=JSON.stringify([docId,index,config]);if(state.audioId===identifier && audio.src){try{await audio.play();state.playing=true;$('play').textContent='❚❚ Pause'}catch(err){setStatus('Playback: '+err.message,true)}return}state.playing=true;$('play').disabled=true;setStatus('Preparing speech…');try{const result=await ensurePage(docId,index,config,status=>{if(token===state.token)setStatus(formatGenerationStatus(status))},'playback',()=>token===state.token);if(token!==state.token||state.doc?.id!==docId)return;state.pageTimings=result.timings||null;audio.src=result.url;audio.playbackRate=Number($('rate').value);state.audioId=identifier;await audio.play();if(token!==state.token)return;$('play').textContent='❚❚ Pause';setStatus('Playing page '+(index+1));if($('prefetch').checked && index+1<state.doc.pages.length){ensurePage(docId,index+1,config,()=>{},'prefetch',()=>docId===state.doc?.id&&token===state.token).catch(()=>{});}}catch(err){if(token===state.token){state.playing=false;setStatus(err.message,true);$('play').textContent='▶ Retry page'}}finally{if(token===state.token)$('play').disabled=false}}
+async function playPage(){if(!state.doc)return;const docId=state.doc.id,index=state.page,config=settings(),token=++state.token;const identifier=JSON.stringify([docId,index,config]);if(state.audioId===identifier && audio.src){try{await audio.play();state.playing=true;$('play').textContent='❚❚ Pause'}catch(err){setStatus('Playback: '+err.message,true)}return}state.playing=true;$('play').disabled=true;setStatus('Preparing speech…');try{const result=await ensurePage(docId,index,config,word=>{if(token===state.token)setStatus(word==='queued'?'Queued for speech generation…':'Generating speech…')});if(token!==state.token||state.doc?.id!==docId)return;state.pageTimings=result.timings||null;audio.src=result.url;audio.playbackRate=Number($('rate').value);state.audioId=identifier;await audio.play();if(token!==state.token)return;$('play').textContent='❚❚ Pause';setStatus('Playing page '+(index+1));if($('prefetch').checked && index+1<state.doc.pages.length){ensurePage(docId,index+1,config).catch(()=>{});}}catch(err){if(token===state.token){state.playing=false;setStatus(err.message,true);$('play').textContent='▶ Retry page'}}finally{if(token===state.token)$('play').disabled=false}}
 function togglePlay(){if(!state.doc)return;if(!audio.paused&&audio.src){audio.pause();state.playing=false;$('play').textContent='▶ Resume';return}playPage()}
-async function cacheAll(){
-  if(!state.doc)return;
-  const lectureId=state.doc.id,config=settings();
-  $('generateAll').disabled=true;
-  try{
-    await api('/api/audio-generation/prepare',{method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({...config,lecture_id:lectureId})});
-    if(state.doc?.id===lectureId){setStatus('Preparing lecture in the server queue; you can switch lectures.');
-      refreshInventory();}
-    refreshCacheCatalog();
-  }catch(err){setStatus('Could not start lecture preparation: '+err.message,true);
-    if(state.doc?.id===lectureId)$('generateAll').disabled=false;
-  }
-}
+async function cacheAll(){if(!state.doc)return;const job=++state.cacheJob,doc=state.doc,config=settings();$('generateAll').disabled=true;for(let i=0;i<doc.pages.length;i++){if(job!==state.cacheJob||doc!==state.doc)break;try{await ensurePage(doc.id,i,config);$('cacheCount').textContent=`Cached ${i+1}/${doc.pages.length} pages`;}catch(err){setStatus('Cache operation stopped at page '+(i+1)+': '+err.message,true);break}}if(job===state.cacheJob){$('generateAll').disabled=false;if(!$('status').classList.contains('error'))setStatus('Available pages are cached on this server.')}}
 async function refreshVoices(profile, restore=true){
   const token=++state.voiceRequest;
   const result=await api('/api/audio-voices?'+new URLSearchParams({profile}));
@@ -492,8 +360,8 @@ async function refreshVoices(profile, restore=true){
 }
 async function switchProfile(profile){
   remember('profile',profile);
-  state.cacheJob++;state.inventoryToken++;state.cacheCatalog=new Map();$('generateAll').disabled=false;$('cacheCount').textContent='';
-  try{await refreshVoices(profile);if(state.doc){loadDurations();selectPage(state.page);refreshInventory();refreshCacheCatalog()}}catch(err){setStatus('Could not load voices: '+err.message,true)}
+  state.cacheJob++;$('generateAll').disabled=false;$('cacheCount').textContent='';
+  try{await refreshVoices(profile);if(state.doc){loadDurations();selectPage(state.page)}}catch(err){setStatus('Could not load voices: '+err.message,true)}
 }
 $('profile').onchange=()=>switchProfile($('profile').value);
 $('registerVoice').onclick=async()=>{
@@ -510,7 +378,7 @@ $('lectureProgress').oninput=()=>{state.scrubbing=true;const pos=progressModel()
 $('lectureProgress').onchange=()=>{const fraction=Number($('lectureProgress').value)/10000;state.scrubbing=false;seekLectureFraction(fraction)};
 async function switchTrack(track){
   if(track!=='g2'&&track!=='g3')return;
-  state.track=track;state.inventoryToken++;state.catalogToken++;state.cacheCatalog=new Map();state.token++;state.cacheJob++;state.doc=null;state.items=[];state.audioId='';
+  state.track=track;state.token++;state.cacheJob++;state.doc=null;state.items=[];state.audioId='';
   audio.pause();audio.removeAttribute('src');audio.load();$('content').hidden=true;$('empty').hidden=true;
   $('loading').hidden=false;$('loading').textContent='Loading '+track.toUpperCase()+' lectures…';
   document.querySelectorAll('[data-track]').forEach(b=>b.setAttribute('aria-current',b.dataset.track===track?'page':'false'));
@@ -524,16 +392,14 @@ async function switchTrack(track){
     const remembered=saved('lecture-'+track,null);
     if(state.items.length)await selectLecture(state.items.some(x=>x.id===requestedLecture)?requestedLecture:(state.items.some(x=>x.id===remembered)?remembered:state.items[0].id));
     else $('empty').hidden=false;
-    refreshCacheCatalog();
   }catch(err){$('loading').textContent='Could not load '+track.toUpperCase()+' lectures: '+err.message}
 }
 $('g2Track').onclick=()=>switchTrack('g2');
 $('g3Track').onclick=()=>switchTrack('g3');
-$('stopGeneration').onclick=()=>stopJobsForLecture(state.doc?.id);
 $('search').oninput=renderList;$('prev').onclick=()=>selectPage(state.page-1);$('next').onclick=()=>selectPage(state.page+1);$('pages').oninput=()=>selectPage(Number($('pages').value)-1);$('play').onclick=togglePlay;$('generateAll').onclick=cacheAll;
 audio.addEventListener('timeupdate',updateTranscriptFocus);audio.addEventListener('seeked',updateTranscriptFocus);audio.addEventListener('loadedmetadata',()=>{recordPageDuration();if(Number.isFinite(audio.duration)&&audio.duration>0){if(state.pendingSeekSentence!==null){state.pendingSeekFraction=sentenceStartFraction(state.pendingSeekSentence);state.pendingSeekSentence=null;}if(state.pendingSeekFraction!==null){audio.currentTime=Math.min(audio.duration-.01,audio.duration*state.pendingSeekFraction);state.pendingSeekFraction=null;}}updateTranscriptFocus()});
 audio.onended=()=>{if(!audio.ended||!state.audioId||!state.doc)return;updateLectureProgress();state.playing=false;$('play').textContent='▶ Play page';if($('autoNext').checked&&state.page<state.doc.pages.length-1){selectPage(state.page+1,true)}else setStatus('Page finished.')};audio.onpause=()=>{if(audio.src&&!audio.ended){$('play').textContent='▶ Resume'}};audio.onplay=()=>{$('play').textContent='❚❚ Pause'};audio.onerror=()=>setStatus('The browser could not play this audio page.',true);
-for(const id of ['voice','ttsSpeed']){$(id).addEventListener('change',()=>{remember(id==='voice'?'voice-'+(state.profile||'default'):id,$(id).value);state.cacheJob++;$('generateAll').disabled=false;$('cacheCount').textContent='';if(state.doc){state.inventoryToken++;loadDurations();selectPage(state.page);refreshInventory();refreshCacheCatalog()}})}for(const id of ['rate','autoNext','prefetch','followText']){$(id).addEventListener('change',()=>{remember(id,$(id).type==='checkbox'?$(id).checked:$(id).value);if(id==='rate'){audio.playbackRate=Number($('rate').value);updateLectureProgress()}})}
+for(const id of ['voice','ttsSpeed']){$(id).addEventListener('change',()=>{remember(id==='voice'?'voice-'+(state.profile||'default'):id,$(id).value);state.cacheJob++;$('generateAll').disabled=false;$('cacheCount').textContent='';if(state.doc){loadDurations();selectPage(state.page)}})}for(const id of ['rate','autoNext','prefetch','followText']){$(id).addEventListener('change',()=>{remember(id,$(id).type==='checkbox'?$(id).checked:$(id).value);if(id==='rate'){audio.playbackRate=Number($('rate').value);updateLectureProgress()}})}
 async function init(){
   for(const id of ['ttsSpeed','rate']){$(id).value=saved(id,'1')};
   for(const id of ['autoNext','prefetch'])$(id).checked=Boolean(saved(id,true));
@@ -550,10 +416,6 @@ async function init(){
     select.value=profiles.profiles.some(row=>row.id===preferred)?preferred:profiles.default_profile;
     await refreshVoices(select.value);
     await switchTrack(desired);
-    window.setInterval(()=>{
-      if(state.doc)refreshInventory();
-      if(state.items.length&&Date.now()-state.catalogFetched>20000)refreshCacheCatalog();
-    },2500);
   }catch(err){$('loading').textContent='Could not load lectures: '+err.message}
 }
 init();

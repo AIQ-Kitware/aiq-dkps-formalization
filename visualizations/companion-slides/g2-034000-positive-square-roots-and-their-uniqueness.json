@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-034000-positive-square-roots-and-their-uniqueness",
+  "title": "Positive square roots and their uniqueness",
+  "subtitle": "G2 lecture 034000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:034000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/034000-positive-square-roots-and-their-uniqueness.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 034000 · first-pass outline",
+      "lead": "If I tell you that a real number is nine, finding a square root is easy.",
+      "body": [
+        "Three works, and negative three works. But if I ask for the nonnegative square root, there is only one answer. For matrices, there is a similar distinction. We can sometimes find many matrices whose square equals a given matrix. We want one special square root that is positive in the operator sense. The positive square root is defined through the spectral decomposition. It exists uniquely for a positive matrix, unlike an entrywise square-root construction, which does not respect changes of orthonormal basis."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Why entrywise square roots don't work",
+      "eyebrow": "G2 · 034000 · first-pass outline",
+      "lead": "Consider a matrix with two diagonal entries, nine and one, and zeros elsewhere.",
+      "body": [
+        "Its positive square root is the diagonal matrix with entries three and one. So far, this looks like taking ordinary square roots. But now imagine describing the very same operator using a different orthonormal basis. Its matrix might acquire nonzero off-diagonal entries. Taking an entrywise square root would not respect this change of coordinates, and there is no reason the resulting matrix should square back to the original. This tells us what to preserve: not the table of entries, but the operator's action on its eigenspaces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Building the square root",
+      "eyebrow": "G2 · 034000 · first-pass outline",
+      "lead": "Let P be a positive semidefinite, self-adjoint operator on a finite-dimensional real or complex inner-product space.",
+      "body": [
+        "The finite spectral theorem gives an orthonormal basis of eigenvectors. For a self-adjoint positive matrix P, every eigenvalue is nonnegative, because evaluating its quadratic form on an eigenvector gives that eigenvalue times the squared norm. Write any vector x as a sum of components along these eigenvectors. On a component corresponding to eigenvalue lambda, P multiplies by lambda. Define a new operator S by doing the same thing, but multiplying that component by the ordinary nonnegative square root of lambda."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "A matrix we can check by hand",
+      "eyebrow": "G2 · 034000 · first-pass outline",
+      "lead": "Consider the symmetric two-by-two matrix whose diagonal entries are five and whose off-diagonal entries are four.",
+      "body": [
+        "The direction with equal coordinates is an eigenvector with eigenvalue nine. The direction with opposite coordinates is an eigenvector with eigenvalue one. Those two directions are perpendicular. Our construction says that the square root must multiply the equal-coordinate direction by three and the opposite-coordinate direction by one. When we express that operation back in ordinary coordinates, we get a matrix with two on the diagonal and one in each off-diagonal position. Check its square. The upper-left entry is two times two plus one times one, giving five."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Why positivity gives uniqueness",
+      "eyebrow": "G2 · 034000 · first-pass outline",
+      "lead": "We have found a positive square root.",
+      "body": [
+        "Could there be a different positive operator B whose square is also P? Start with B, not with P. Because B is positive and self-adjoint, the finite spectral theorem gives an orthonormal eigenbasis for B. Every eigenvalue of B is a nonnegative real number. Choose one of those eigenvectors. Suppose B multiplies it by a number called beta. Since B squared is P, applying P to this eigenvector multiplies it by beta squared. And because beta is nonnegative, beta is precisely the nonnegative square root of beta squared. What does the square-root construction applied directly to P do to that same eigenvector?"
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "What happens on zero eigenspaces?",
+      "eyebrow": "G2 · 034000 · first-pass outline",
+      "lead": "Suppose P has a zero eigenvalue.",
+      "body": [
+        "Our positive square root uses square root of zero, which is zero. So S vanishes on exactly the same eigendirections as P. In fact their kernels are equal. If P kills a vector, expand that vector in an eigenbasis and observe that it lies entirely in the zero-eigenspace, which S also kills. Conversely, if S kills a vector, then P, being S squared, kills it too. If P is invertible, it has no zero eigenvalues. Then S is also invertible, with inverse formed by taking the reciprocals of its positive eigenvalues. If P is not invertible, its positive square root still exists. We have no need to divide by zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Two rules worth remembering",
+      "eyebrow": "G2 · 034000 · first-pass outline",
+      "lead": "First, taking the positive square root is compatible with an orthonormal change of coordinates.",
+      "body": [
+        "If we rotate or otherwise unitarily change the coordinate system, the new matrix for S is simply the transformed matrix for the original S. That follows because both matrices represent the same construction on the corresponding eigenspaces. Second, S commutes with P. We can see this directly: both operators multiply the same eigenspace components by scalar values. The order of those multiplications does not matter. In fact, S also commutes with any polynomial in P. But do not conclude that the square root of a product is always the product of the square roots."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Why this construction matters",
+      "eyebrow": "G2 · 034000 · first-pass outline",
+      "lead": "We have learned how to turn a positive operator P into a unique positive operator S with S squared equal to P.",
+      "body": [
+        "Now recall a map A that is not necessarily square, self-adjoint, or invertible. Its source Gram operator, A adjoint times A, is always positive. So it always has a positive square root. That new operator will be called the modulus of A. It will tell us exactly how much length A produces in each input direction, even when A also rotates, reflects, or embeds those directions somewhere else. Three useful reconstructions are these: explain why entrywise square roots fail under a change of basis."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 034000 · mathematical reference",
+      "lead": "We have learned how to turn a positive operator P into a unique positive operator S with S squared equal to P.",
+      "body": [
+        "Now recall a map A that is not necessarily square, self-adjoint, or invertible. Its source Gram operator, A adjoint times A, is always positive. So it always has a positive square root. That new operator will be called the modulus of A."
+      ],
+      "mathtex": "P^{1/2}=\\sum_{\\lambda\\in\\sigma(P)}\\sqrt\\lambda\\,P_\\lambda.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 034000 · conclusion",
+      "lead": "The spectral construction produces the unique positive square root, and its uniqueness follows by comparing any positive square root with the original positive operator through functional calculus.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "g2-097000-ky-fan-dominance-in-hilbert-space",
+  "title": "Ky Fan dominance in Hilbert space",
+  "subtitle": "G2 lecture 097000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:097000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/097000-ky-fan-dominance-in-hilbert-space.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 097000 · first-pass outline",
+      "lead": "For a finite matrix, the sum of its first k singular values is its k-th Ky Fan norm.",
+      "body": [
+        "We proved that comparisons of all such sums can control many other unitarily invariant norms. We now have an approximation-number sequence for every bounded operator between Hilbert spaces. That makes it possible to transplant the same idea to an infinite-dimensional setting. But we must be careful: finite prefix sums are always well-defined, while an infinite sum or ideal norm may be infinite. Ky Fan approximation gauges sum the largest approximation numbers of an operator."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Finite prefixes in an infinite space",
+      "eyebrow": "G2 · 097000 · first-pass outline",
+      "lead": "Let a sub one of T, a sub two of T, and so forth denote the approximation numbers defined as the distance to operators of lower rank.",
+      "body": [
+        "Define K sub k of T to be the sum of the first k approximation numbers, for any positive integer k. Set K sub zero equal to zero. Although there may be infinitely many singular directions, each fixed K sub k is a finite sum. Every approximation number is bounded above by the operator norm of T, so K sub k is at most k times that norm. If T is compact, we may interpret these terms as the largest k singular values, with zeros inserted when the operator has finite rank."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The finite-rank picture returns",
+      "eyebrow": "G2 · 097000 · first-pass outline",
+      "lead": "Suppose T is compact and positive, with eigenvalues five, two, one, and then zero.",
+      "body": [
+        "For k equal to two, K sub two equals seven. For k equal to three, K sub three equals eight. The finite spectral theorem and the min–max principle give another description: K sub k is the maximum of sums of k suitable diagonal contributions when k orthonormal input vectors and corresponding output directions are chosen to align with the largest singular directions. In finite dimensions, we proved this by the singular-value decomposition and an orthonormal-frame variational principle. For compact Hilbert-space operators, finite-rank truncations approximate T in operator norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Prefix sums obey a triangle inequality",
+      "eyebrow": "G2 · 097000 · first-pass outline",
+      "lead": "Let S and T be bounded maps with the same source and target.",
+      "body": [
+        "We want K sub k of S plus T at most K sub k of S plus K sub k of T. In finite dimensions the claim follows from the Ky Fan variational principle. For bounded operators on Hilbert space, finite-rank restrictions and approximation-number inequalities supply the extension, provided the limiting restrictions are justified. We can understand the finite-rank proof. Choose orthonormal source vectors and matching orthonormal target vectors that nearly realize the leading k-value for S plus T. Pair the sum with those vectors. Split it into an S contribution and a T contribution. Each contribution is bounded by its own Ky Fan k-value."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Weak majorization between operators",
+      "eyebrow": "G2 · 097000 · first-pass outline",
+      "lead": "Say T is weakly dominated by S in approximation-number prefixes if K sub k of T is at most K sub k of S for every positive integer k.",
+      "body": [
+        "This relation compares the cumulative size of singular directions, not the values one by one. For example, compare the finite lists three, one, zero with two, two, zero. Both have total four. The first has a larger leading singular value, so the list two, two, zero is weakly dominated by three, one, zero. The reverse comparison fails at the first prefix. Do not replace weak prefix domination by coordinatewise domination. The first relation is weaker and is the one naturally preserved by averaging and pinching."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "From prefixes to other gauges",
+      "eyebrow": "G2 · 097000 · first-pass outline",
+      "lead": "A symmetric convex gauge on finite nonnegative lists is monotone under weak majorization: when each leading partial sum of one list is at most that of another, the first gauge is at most the second.",
+      "body": [
+        "This follows by expressing the smaller list through coordinate reductions and transfers that make entries more balanced, then using convexity and permutation symmetry. In infinite dimensions we can first apply that result to a finite initial segment. If an ideal norm is obtained as the supremum or an appropriate limit of such finite symmetric gauges, the finite inequalities can be passed to the limit—provided the norm has the required lower-semicontinuity or completeness property."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Why membership is part of the theorem",
+      "eyebrow": "G2 · 097000 · first-pass outline",
+      "lead": "Consider the Schatten two class, also called the Hilbert–Schmidt class.",
+      "body": [
+        "Its norm is the square root of the sum of squared singular values. If the singular-value list of S is square-summable and the approximation-number prefixes of T are weakly dominated by those of S, majorization and monotone passage to the limit give square-summability for T and the norm inequality. The result has two parts. First, T is in the Hilbert–Schmidt class. Second, its Hilbert–Schmidt norm is bounded by the norm of S. The second statement has no finite real meaning before the first is established. For comparison, take the diagonal operator with entries one divided by n."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Strong approximation does not supply ideal convergence",
+      "eyebrow": "G2 · 097000 · first-pass outline",
+      "lead": "Suppose P sub N are projections onto the first N coordinates of ell two.",
+      "body": [
+        "Then P sub N converges strongly to the identity. But each P sub N has finite rank, and its trace norm equals N. Their ideal norms diverge. They cannot converge to the identity in trace norm, because the identity does not belong to the trace class. This example warns us not to treat strong operator convergence as convergence in a symmetric ideal gauge. Ideal membership and ideal-norm convergence need their own proofs."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 097000 · conclusion",
+      "lead": "We now have the comparison tool needed for the main Davis–Kahan program: control every leading singular-value sum of a displacement or residual, then transfer that control to a chosen symmetric norm, but only within a class where the required domination theorem applies.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

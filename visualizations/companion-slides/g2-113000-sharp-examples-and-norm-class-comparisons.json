@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "id": "g2-113000-sharp-examples-and-norm-class-comparisons",
+  "title": "Sharp examples and norm-class comparisons",
+  "subtitle": "G2 lecture 113000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:113000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/113000-sharp-examples-and-norm-class-comparisons.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 113000 · first-pass outline",
+      "lead": "A sine or tangent perturbation theorem bounds an angular error by a residual divided by a spectral gap.",
+      "body": [
+        "To judge the quality of that theorem, we must test its numerical constant against examples satisfying the exact hypotheses. When a theorem has a gap in the denominator and a norm on each side, which factors are inevitable? What does it mean for an estimate to be sharp? And why must we be careful when changing from operator norm to Frobenius norm or a different unitarily invariant norm? Our answers will come from matrices small enough to calculate by hand."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Three separate questions about any bound",
+      "eyebrow": "G2 · 113000 · first-pass outline",
+      "lead": "Suppose a theorem reads: delta times an angular error norm is at most a constant times a residual norm.",
+      "body": [
+        "We should ask three questions independently. First, are the hypotheses satisfied, including the exact spectral gap? Second, is the constant valid for the specified norm? Third, is that constant the smallest possible over the full permitted class of examples? A numerical example can demonstrate equality and therefore prove that the constant cannot be improved for a theorem that includes it. An example can also refute a proposed constant by producing a strict failure. But a sample with a large margin proves neither optimality nor failure."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "A sharp sine example",
+      "eyebrow": "G2 · 113000 · first-pass outline",
+      "lead": "Let A be diagonal with entries zero and five, and let U be its zero-eigenspace, the horizontal line.",
+      "body": [
+        "Choose the unit trial vector e with coordinates cosine theta and sine theta. First take a trial operator M equal to zero, without requiring it to be the Ritz compression. The residual equals A e, the vertical vector of length five sine theta. The unwanted eigenvalue equals five, so the gap between M and the unwanted block is five. The sine of the angle is sine theta. Thus the theorem's two sides are both five sine theta. Equality holds for every angle between zero and ninety degrees. This proves the coefficient one in the sine theorem cannot be decreased under those assumptions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "A sharp Ritz tangent example",
+      "eyebrow": "G2 · 113000 · first-pass outline",
+      "lead": "Keep A diagonal with entries zero and five, U the horizontal axis, and the unit trial vector e equal to cosine theta, sine theta.",
+      "body": [
+        "Its Ritz scalar is the inner product of e with A e, namely five sine squared theta. Subtract M e from A e: the residual has first coordinate negative five sine squared theta cosine theta and second coordinate five sine theta cosine squared theta. Its squared length is twenty-five sine squared theta cosine squared theta, so its length is five sine theta cosine theta. The spectral distance from M to the unwanted eigenvalue five is five cosine squared theta. This is the ordered Ritz gap."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Why the gap must move with the trial space",
+      "eyebrow": "G2 · 113000 · first-pass outline",
+      "lead": "Imagine holding five as the gap while switching from the fixed trial operator to the Ritz operator.",
+      "body": [
+        "Then we would claim that five tangent theta is bounded by five sine theta cosine theta. Dividing by positive sine theta gives one over cosine theta at most cosine theta, which is false for every nonzero angle. The error is easy to locate. Five was the separation between zero and the unwanted eigenvalue. After choosing the Ritz operator, the relevant separation is five cosine squared theta. This illustrates a general audit rule. A residual, a trial operator, and a gap form a linked set of data. We cannot exchange just one member while pretending the other two are unchanged."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Why a pairwise gap may not give the same constant",
+      "eyebrow": "G2 · 113000 · first-pass outline",
+      "lead": "Consider the Sylvester equation A X minus X B equals C.",
+      "body": [
+        "Take A diagonal with entries one and negative one, and B diagonal with entries zero and two. Every cross-spectral distance is at least one. Take X with rows three, negative three and negative three, one. Direct multiplication gives C with rows three, three and three, negative three. The operator norm of X is two plus the square root of ten, about five point one six. The operator norm of C is three times the square root of two, about four point two four. So a pairwise gap of one does not imply the operator-norm estimate norm X at most norm C. The constant one fails even with symmetric diagonal coefficient matrices."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Learn the three familiar norm classes from singular values",
+      "eyebrow": "G2 · 113000 · first-pass outline",
+      "lead": "Take the diagonal matrix with entries one and one.",
+      "body": [
+        "Its singular values are one and one. The operator norm is one, the Frobenius norm is the square root of two, and the nuclear norm is two. For a diagonal matrix with m ones, these values become one, square root of m, and m. Thus changing norms can introduce dimension factors. A bound established in one norm cannot automatically be copied with the same numerical values into another norm. If the proof is compatible with every unitarily invariant norm, it can be specialized separately to each one. That is stronger than observing an inequality in operator norm and changing the labels afterward."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Duplicate a sharp example in independent blocks",
+      "eyebrow": "G2 · 113000 · first-pass outline",
+      "lead": "Now take m mutually orthogonal copies of the sharp planar sine example.",
+      "body": [
+        "Put their operators and trial frames in block-diagonal form, all at the same angle and gap. The sine representative has m identical nonzero singular values. Its operator norm is their common value. Its Frobenius norm is square root of m times that value. Its nuclear norm is m times that value. The corresponding residual singular values scale by the same gap, so equality persists in each of these norms when the direct-sum construction satisfies the theorem's hypotheses. This is the reason operator ideals and symmetric gauges enter the Davis–Kahan development."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "The role of Ky Fan inequalities",
+      "eyebrow": "G2 · 113000 · first-pass outline",
+      "lead": "Suppose we can establish that, for every positive integer k, the sum of the k largest singular values of an angular operator is at most a constant times the sum of the k largest residual singular values.",
+      "body": [
+        "That is weak majorization. The symmetric-gauge descent machinery turns it into bounds for every unitarily invariant norm in the supported class. The proof works because every permitted gauge is monotone under this prefix-sum relation. Conversely, a proof controlling only the largest singular value says nothing by itself about the entire sum of singular values. A family could have one small maximum but thousands of comparable directions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "Ratios that reveal the correct constant",
+      "eyebrow": "G2 · 113000 · first-pass outline",
+      "lead": "For a proposed inequality, divide the left side by the right side whenever the denominator is nonzero.",
+      "body": [
+        "An example with ratio one proves sharpness for a coefficient one. An example with ratio greater than one disproves that coefficient. Under parameter limits, a ratio approaching one can also prove optimality even if equality is never attained. But a ratio is meaningful only after checking the hypotheses. In particular, a spectral gap cannot be chosen larger than the actual certified separation, and a selected spectral subspace cannot be exchanged for another without justification. The same discipline applies to doubled-angle estimates."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 113000 · conclusion",
+      "lead": "Their factors of two and possible forty-five-degree branch restrictions must follow from the reflection geometry and the exact spectral hypotheses, rather than from numerical guesses.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

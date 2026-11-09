@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-148000-procrustes-and-spectral-embeddings",
+  "title": "Procrustes and spectral embeddings",
+  "subtitle": "G2 lecture 148000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:148000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/148000-procrustes-and-spectral-embeddings.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 148000 · first-pass outline",
+      "lead": "Principal angles compare eigenspaces independently of any chosen orthonormal basis.",
+      "body": [
+        "A numerical algorithm instead returns a table of eigenvector coordinates, which may be fed to clustering, classification, or geometric embedding. Orthogonal Procrustes alignment converts a subspace-angle bound into a coordinate bound while accounting for arbitrary rotations within the selected frame."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Two frames and one geometric object",
+      "eyebrow": "G2 · 148000 · first-pass outline",
+      "lead": "Start with two real matrices U and V, each with d orthonormal columns in an ambient Euclidean space.",
+      "body": [
+        "They represent two d-dimensional subspaces. Orthonormality means U transpose U and V transpose V are both the d-by-d identity. Here is a simple warning. Take a plane and choose the standard first and second coordinate vectors as its basis. Now exchange the two vectors and reverse the sign of one. The resulting frame V has the same span as U. Nevertheless, the two frames can have a substantial Frobenius difference. That difference reports the choice of coordinates, even though the two subspaces agree perfectly."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Derive the minimizer from the cross-Gram matrix",
+      "eyebrow": "G2 · 148000 · first-pass outline",
+      "lead": "Let M be U transpose times V.",
+      "body": [
+        "This d-by-d cross-Gram matrix contains every pairwise overlap between reference and candidate vectors. Its singular values are the cosines of the principal angles between the two subspaces. Now expand the squared Frobenius distance. It equals the squared Frobenius norm of U, plus the squared Frobenius norm of V O, minus twice the trace of U transpose V O. Both frame norms squared equal d, because their columns are orthonormal. Therefore the objective equals two d minus twice the trace of M O. So minimizing distance is equivalent to maximizing that trace over orthogonal O. Take a singular-value decomposition of M."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Compare the exact error with principal sines",
+      "eyebrow": "G2 · 148000 · first-pass outline",
+      "lead": "Davis–Kahan estimates usually control principal sines, rather than one minus principal cosines.",
+      "body": [
+        "We therefore need a comparison. For any angle between zero and ninety degrees, its cosine c lies between zero and one. Twice one minus c equals two times one minus c squared, divided by one plus c. That fraction is between one and two times one minus c squared. In ordinary words, twice one minus cosine lies between sine squared and twice sine squared. Sum these inequalities over all principal angles. The optimal aligned squared Frobenius error lies between the sum of squared principal sines and twice that sum."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "The explicit statistical theorem",
+      "eyebrow": "G2 · 148000 · first-pass outline",
+      "lead": "Now combine this geometry with the population-gap theorem under the population spectral-gap assumptions.",
+      "body": [
+        "There, the population and sample symmetric matrices have ordered eigenvector frames U and V for the same consecutive block of d indices. The population spectral boundary gap is Delta, strictly positive. Call the sample minus population matrix E. The population-gap theorem bounds the Frobenius sine distance by two over Delta times the smaller of square root of d times the operator norm of E, and the Frobenius norm of E. Our Procrustes inequality multiplies that upper bound by square root of two."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Gram rigidity and why the cross-Gram matters",
+      "eyebrow": "G2 · 148000 · first-pass outline",
+      "lead": "Recall that U transpose U and V transpose V both equal the identity.",
+      "body": [
+        "So their individual Gram matrices are identical. Does that prove the subspaces coincide? Of course not. Any orthonormal frame has identity Gram matrix, regardless of where its span lies in the ambient space. More generally, suppose two finite families of vectors have the same Gram matrix. Their linear combinations have the same squared lengths because a squared length is a quadratic form in the Gram matrix. Therefore sending one family's linear combinations to the corresponding combinations of the other family is a well-defined linear isometry between their spans."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "When spectral embeddings carry weights",
+      "eyebrow": "G2 · 148000 · first-pass outline",
+      "lead": "A spectral embedding may consist of eigenvectors alone, but often each eigenvector is scaled by a function of its eigenvalue.",
+      "body": [
+        "Classical multidimensional scaling, for example, uses square roots of positive eigenvalues as coordinate weights. Spectral clustering may apply other normalizations. Suppose for now that a common coordinate weight matrix W is applied after alignment. The difference between V O W and U W equals V O minus U, multiplied on the right by W. Its Frobenius norm is at most the Frobenius norm of V O minus U times the operator norm of W. We therefore obtain a weighted coordinate-error bound immediately from Procrustes alignment."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "What you should be able to prove",
+      "eyebrow": "G2 · 148000 · first-pass outline",
+      "lead": "You should now be able to expand a frame difference into a trace objective, solve that objective using the singular-value decomposition, and express the exact minimum using principal cosines.",
+      "body": [
+        "You should also be able to derive the square-root-of-two comparison with principal sines, and combine it with a population-gap inequality without introducing a sample-gap hypothesis. Finally, you should be able to explain why identical Gram matrices describe identical internal geometry but do not certify identical ambient subspaces, and why weighted embeddings need more care than unweighted frames."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 148000 · mathematical reference",
+      "lead": "You should now be able to expand a frame difference into a trace objective, solve that objective using the singular-value decomposition, and express the exact minimum using principal cosines.",
+      "body": [
+        "You should also be able to derive the square-root-of-two comparison with principal sines, and combine it with a population-gap inequality without introducing a sample-gap hypothesis."
+      ],
+      "mathtex": "\\min_{O^*O=I}\\|VO-U\\|_F^2=2d-2\\sum_{i=1}^d\\sigma_i(M)\n=2\\sum_{i=1}^d(1-\\cos\\theta_i).",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 148000 · conclusion",
+      "lead": "Finally, you should be able to explain why identical Gram matrices describe identical internal geometry but do not certify identical ambient subspaces, and why weighted embeddings need more care than unweighted frames.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

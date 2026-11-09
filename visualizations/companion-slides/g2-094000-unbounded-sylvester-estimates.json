@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-094000-unbounded-sylvester-estimates",
+  "title": "Unbounded Sylvester estimates",
+  "subtitle": "G2 lecture 094000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:094000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/094000-unbounded-sylvester-estimates.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 094000 · first-pass outline",
+      "lead": "The Sylvester equation A X minus X B equals C can have a bounded solution even when the self-adjoint coefficient operators A and B are unbounded.",
+      "body": [
+        "The difficulty is that X must carry the domain of B into the domain of A, while the equation and its norm bound must be proved simultaneously. The crucial assumption in our first proof is that the spectra are ordered across a positive gap. We will construct the solution by an exponentially decaying integral, verify the unbounded equation on its legal domain, prove uniqueness, and connect the estimate to sine-theta perturbation bounds."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Set up the ordered equation",
+      "eyebrow": "G2 · 094000 · first-pass outline",
+      "lead": "Let A be self-adjoint on a Hilbert space E, and B self-adjoint on a Hilbert space F.",
+      "body": [
+        "Suppose A is bounded below by a real number a and B is bounded above by a real number b, where a is strictly greater than b. Set delta equal to a minus b. It is positive. Let C be any bounded map from F into E. We seek a bounded map X such that X sends D of B into D of A, and A X y minus X B y equals C y for every y in D of B. Observe that the two source and target spaces need not be the same. We cannot assume either A or B has a finite operator norm. Only C and the desired solution X are required to be bounded."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Construct the solution by an integral",
+      "eyebrow": "G2 · 094000 · first-pass outline",
+      "lead": "For nonnegative time t, let the left semigroup be the exponential of negative t A, and the right semigroup the exponential of t B.",
+      "body": [
+        "Both are bounded by the spectral calculus. Define X y, for each y in F, as the integral from zero to infinity of the left semigroup, followed by C, followed by the right semigroup, applied to y. The earlier form estimates show that the norm of this integrand is bounded by the norm of C times the exponential of negative delta times t, multiplied by the norm of y. Because delta is positive, this scalar function is integrable over the positive half-line. The integral therefore defines a vector X y, and the inequality shows that X is a bounded linear map."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "The equation requires an additional proof",
+      "eyebrow": "G2 · 094000 · first-pass outline",
+      "lead": "The integral estimate tells us that X is bounded.",
+      "body": [
+        "It does not yet prove that X y belongs to D of A when y belongs to D of B. To establish the operator equation, take y in D of B and a test vector x in D of A. Consider the scalar inner product between x and the integrand at time t. We may differentiate this scalar function. On the left, self-adjointness moves A from the potentially illegal output onto the test vector x, where A is defined. On the right, y belongs to D of B, so differentiating the B semigroup is legitimate. The derivative is the negative pairing with A x plus the pairing involving B y. Integrate from zero to a finite time T."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Uniqueness of a bounded solution",
+      "eyebrow": "G2 · 094000 · first-pass outline",
+      "lead": "Suppose X and Y are two bounded solutions with the same C, both satisfying the domain-mapping condition.",
+      "body": [
+        "Their difference Z solves the homogeneous equation A Z minus Z B equals zero on D of B. The ordered semigroup identity now implies that the function of t given by the exponential of negative t A, followed by Z, followed by the exponential of t B is constant in t. To see this, differentiate pairings with domain test vectors. The derivative contains negative A Z plus Z B, which vanishes by the homogeneous equation. Density extends the result to every test vector. At time zero the value is Z."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Sharpness on a diagonal model",
+      "eyebrow": "G2 · 094000 · first-pass outline",
+      "lead": "Return to ell two.",
+      "body": [
+        "Let A have eigenvalues N plus two and B have eigenvalues negative N, with N starting at one. Their ordered spectral gap is four. Take C to be the identity map. The integral defining X acts coordinatewise. On coordinate N, the integrand is the exponential of negative two N plus two times t. Its integral is one divided by two N plus two. Thus X is diagonal with coefficients one divided by two N plus two. Its largest coefficient is one fourth, attained on the first basis vector. The norm of C is one, the gap is four, and the norm of X is exactly one fourth. So the bound is attained. The constant one cannot be improved in this class of ordered-gap problems."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "What changes for spectra separated but not ordered",
+      "eyebrow": "G2 · 094000 · first-pass outline",
+      "lead": "If two spectra have positive pairwise distance but interlace, the single decaying semigroup above is no longer available.",
+      "body": [
+        "We cannot choose one sign of time that makes all spectral differences decay simultaneously. For bounded self-adjoint coefficients with separated spectra, a two-sided Fourier integral of unitary groups against a reciprocal kernel can solve the Sylvester equation. The construction gives an operator-norm estimate with the pi-over-two factor under its precise separation hypotheses. Unlike ordered-gap exponential decay, the method accommodates interlaced spectral sets. The unbounded extension requires strongly continuous groups and the domain arguments we have just practiced."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Return to subspace perturbations",
+      "eyebrow": "G2 · 094000 · first-pass outline",
+      "lead": "Let A and A plus V be the two self-adjoint operators with a bounded perturbation of the original operator, with P and Q their selected spectral projections.",
+      "body": [
+        "Their compressed cross map X obeys a domain-aware Sylvester equation whose right side is a compressed part of V. If the two restricted spectra are ordered across a positive gap delta, the theorem we proved gives the norm of X at most the norm of V divided by delta. Because X is identity minus P restricted to Q H, its norm is the largest directed sine of the angle from Q H toward P H. We have therefore converted an unbounded operator perturbation into a geometrical angle estimate."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 094000 · mathematical reference",
+      "lead": "Let A and A plus V be the two self-adjoint operators with a bounded perturbation of the original operator, with P and Q their selected spectral projections.",
+      "body": [
+        "Their compressed cross map X obeys a domain-aware Sylvester equation whose right side is a compressed part of V."
+      ],
+      "mathtex": "Xy=\\int_0^\\infty e^{-tA}C e^{tB}y\\,dt",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 094000 · conclusion",
+      "lead": "Controlling every singular-value prefix, rather than only the operator norm, allows ideal-norm estimates that account for many angular directions at once.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

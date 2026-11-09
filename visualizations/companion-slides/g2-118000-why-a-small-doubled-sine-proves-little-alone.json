@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "id": "g2-118000-why-a-small-doubled-sine-proves-little-alone",
+  "title": "Why a small doubled sine proves little alone",
+  "subtitle": "G2 lecture 118000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:118000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/118000-why-a-small-doubled-sine-proves-little-alone.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 118000 · first-pass outline",
+      "lead": "The sine-two-theta theorem bounds the sine of twice an angle.",
+      "body": [
+        "It is tempting to conclude that a sufficiently small perturbation forces the two subspaces to be close. That conclusion requires another argument. Sine of twice an angle is small when the angle is near zero, but also when the angle is near ninety degrees. A bound on the sine of twice an angle leaves two possible angular branches. Matrix examples exhibit the ambiguity; continuity combined with spectral selection, or a direct small-angle theorem, supplies the additional information needed to select one branch."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Begin with the scalar graph",
+      "eyebrow": "G2 · 118000 · first-pass outline",
+      "lead": "Imagine an angle between zero and ninety degrees.",
+      "body": [
+        "Double it, then take its sine. The graph starts at zero, reaches one at forty-five degrees, and returns to zero at ninety degrees. Reflection about forty-five degrees leaves its value unchanged. Thus an angle of ten degrees and one of eighty degrees give the same doubled sine. Suppose we know only that sine of twice theta is at most eta, with eta strictly between zero and one. Let gamma be half of arcsine eta. Since arcsine eta lies between zero and ninety degrees, gamma lies between zero and forty-five degrees. The inequality now admits two possibilities: theta is at most gamma, or theta is at least ninety degrees minus gamma."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The most decisive counterexample",
+      "eyebrow": "G2 · 118000 · first-pass outline",
+      "lead": "Take the plane and let P project onto the horizontal axis.",
+      "body": [
+        "Let Q project onto the vertical axis. Their unique principal angle is ninety degrees. Their projection difference has operator norm one, so the subspaces are maximally separated by that metric. Nevertheless, sine of twice their principal angle is zero. Both endpoints of the angle interval are annihilated by the doubled sine. We can make this example fit the basic framework of a two-block perturbation statement without using any perturbation at all. Let T be diagonal with a low eigenvalue on the horizontal axis and a high eigenvalue on the vertical axis. Set S equal to T. Then the perturbation is zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Extend the ambiguity to more than one angle",
+      "eyebrow": "G2 · 118000 · first-pass outline",
+      "lead": "For two subspaces of equal finite dimension, there is a list of principal angles.",
+      "body": [
+        "A unitarily invariant norm of the doubled sine is a symmetric function of the values sine twice theta one, sine twice theta two, and so on. Replacing any individual theta by ninety degrees minus theta preserves the corresponding value. Consequently, even knowing the complete singular-value list of sine twice the angle operator need not recover the original angle list. The loss occurs before a norm is applied. An operator norm loses the individual coordinates again by taking their maximum. A Frobenius norm sums their squares. Neither operation restores a branch choice that the scalar sine already discarded."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "What a small bound does prove",
+      "eyebrow": "G2 · 118000 · first-pass outline",
+      "lead": "Although it does not prove closeness alone, the inequality is useful.",
+      "body": [
+        "It establishes a forbidden interval of intermediate angles. If the doubled sine is below eta, every angle stays outside the band between gamma and ninety degrees minus gamma. That is a meaningful dichotomy. For instance, if eta is one tenth, gamma is just under three degrees. Every angle is then near zero or near ninety degrees. What remains is to show that the actual subspaces follow the near-zero option. One additional bit of information can suffice: every angle is strictly less than forty-five degrees. On that branch, the doubled sine is increasing. The same estimate then implies theta at most gamma."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Can we use the perturbation continuously?",
+      "eyebrow": "G2 · 118000 · first-pass outline",
+      "lead": "Often the operator is varied along a path, from T at time zero to T plus H at time one.",
+      "body": [
+        "At time zero the intended spectral projection equals the reference projection, so all principal angles are zero. If the selected spectral projection varies continuously and a uniform double-angle estimate keeps its angles away from forty-five degrees, the angles cannot jump from the near-zero component to the near-ninety component. Any continuous path of angles between those regions would have to pass through forty-five degrees, where the doubled sine equals one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Spectral labels instead of paths",
+      "eyebrow": "G2 · 118000 · first-pass outline",
+      "lead": "There is another route.",
+      "body": [
+        "If the perturbed operator has a spectral gap, define V as its spectral subspace below a specified threshold. That construction removes the freedom to pick the high subspace as V. Spectral repulsion may then show that the threshold stays in the resolvent set, making the selected subspace canonical. For a self-adjoint operator this means taking the range of a spectral indicator, not choosing an arbitrary reducing subspace. In finite dimensions, select every eigenvector whose eigenvalue lies below the threshold, with its entire eigenspace when multiplicities occur. This avoids basis dependence. Even after spectral selection, an angle bound still requires work."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "A two-by-two diagnostic",
+      "eyebrow": "G2 · 118000 · first-pass outline",
+      "lead": "Take T diagonal with entries negative one and one, and perturb it by a symmetric off-diagonal coupling h.",
+      "body": [
+        "The low spectral branch of the perturbed matrix rotates from the horizontal axis through an angle theta satisfying tangent of twice theta equals the absolute value of h. At every finite h this selected angle lies below forty-five degrees. As h grows, it approaches forty-five from below. The other perturbed eigenspace remains perpendicular to the selected low eigenspace; measured against the original low axis, its angle is ninety degrees minus theta. Both these choices have the same sine of twice their angle."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Why the issue persists in infinite dimensions",
+      "eyebrow": "G2 · 118000 · first-pass outline",
+      "lead": "In Hilbert space, a right-angle component may arise from a crossed defect: vectors lying in one subspace and perpendicular to the other.",
+      "body": [
+        "Even if a directed overlap map behaves well, the opposite directed map can still detect an unmatched defect unless additional dimension or defect-matching conditions are imposed. This is why the formal source distinguishes directed quarter-angle estimates, the full source angle operator, equal-rank hypotheses in finite dimensions, and equivalence of crossed defects in general Hilbert spaces. Treating all of these as interchangeable would produce incorrect conclusions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "The conclusion",
+      "eyebrow": "G2 · 118000 · first-pass outline",
+      "lead": "A bound on sine twice theta creates two allowed branches.",
+      "body": [
+        "It does not choose between them. To obtain a perturbation error certificate for a specific spectral subspace, we must supply spectral identification, continuity with a no-crossing guarantee, or a structural theorem proving acuteness."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 118000 · mathematical reference",
+      "lead": "A bound on sine twice theta creates two allowed branches.",
+      "body": [
+        "It does not choose between them. To obtain a perturbation error certificate for a specific spectral subspace, we must supply spectral identification, continuity with a no-crossing guarantee, or a structural theorem proving acuteness."
+      ],
+      "mathtex": "\\sin(2\\theta)\\le\\eta\\iff \\theta\\in[0,\\tfrac12\\arcsin\\eta]\\cup[\\tfrac\\pi2-\\tfrac12\\arcsin\\eta,\\tfrac\\pi2].",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 118000 · conclusion",
+      "lead": "To obtain a perturbation error certificate for a specific spectral subspace, we must supply spectral identification, continuity with a no-crossing guarantee, or a structural theorem proving acuteness.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

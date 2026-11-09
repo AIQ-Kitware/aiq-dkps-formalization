@@ -110,3 +110,35 @@ slide units generally keep complete source sentences together; slide navigation
 is independent of the TTS page boundaries. Further G2 expansion should proceed
 in curriculum-order batches, retaining the vector mathematics and standalone
 proof explanations instead of auto-generating short bullet summaries.
+
+## Complete available-lecture coverage and editorial status (2026-11-09)
+
+The companion-slide library now includes a linked deck for every available
+G2 and G3 audio lecture. The 22 available G1 lectures already have native
+Manim presentations. The six proposed G4-specific lecture nodes are planned,
+not currently available lectures; G4's path also reuses existing G3 lectures.
+
+The new G2 `030000–149000` decks are explicitly marked **baseline · needs
+expansion**. Each is a compact, source-derived reading outline with one slide
+per substantive lecture section, a concluding statement, and a vector formula
+from the display-only mathematical appendix when a suitable one exists. They
+provide immediate slide coverage without claiming to be polished mathematical
+presentations. Existing G2 `000000–029000` and all 26 G3 decks retain the
+**expanded** status. G1 remains **native presentation**.
+
+Editorial state belongs in `companion-slides/manifest.json` under
+`editorial_stage: "baseline" | "expanded"`. The audio reader and slide-deck API
+expose `editorial_stage` and `needs_expansion`; a baseline deck is clearly
+labeled in its standalone HTML and in the reader's slide selector. Promoting a
+deck requires improving its source slides and changing its manifest stage.
+An editorial-stage change invalidates the cached HTML without modifying TTS
+content or speech caches.
+
+`docs/companion-slide-coverage.md` is the generated, per-lecture expansion
+checklist. Use `python tools/audit_companion_coverage.py --check` to assert
+that all available lectures retain visual coverage, and `--write-report` to
+refresh the inventory after an expansion batch. The bootstrap utility
+`tools/seed_companion_slides.py --write` only creates missing G2 decks and
+never overwrites a registered, authored deck. No automated outline is promoted
+merely by regeneration; the expansion checklist requires precise mathematical
+proofs, examples, topic-specific diagrams, and layout verification.

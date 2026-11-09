@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "g2-091000-yosida-approximation-and-bounded-truncations",
+  "title": "Yosida approximation and bounded truncations",
+  "subtitle": "G2 lecture 091000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:091000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/091000-yosida-approximation-and-bounded-truncations.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 091000 · first-pass outline",
+      "lead": "Unbounded operators cause a problem whenever a proof uses an ordinary matrix exponential, a power series in operator norm, or differentiation of an operator-valued function.",
+      "body": [
+        "Those operations work naturally for bounded operators. We need a way to approximate an unbounded self-adjoint operator by bounded self-adjoint ones and then recover the original action on its correct domain. Spectral truncation and symmetric Yosida approximation give two bounded approximations of a self-adjoint operator. Both preserve self-adjointness and converge appropriately on vectors in the operator domain."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "A first idea: cut off large spectral values",
+      "eyebrow": "G2 · 091000 · first-pass outline",
+      "lead": "Let A be self-adjoint.",
+      "body": [
+        "For a positive radius R, let P R project onto spectral values between negative R and positive R. Define T R to act as A on that band and as zero outside the band. Since its spectral multiplier is bounded by R, T R is a bounded self-adjoint operator on the entire Hilbert space. If x belongs to D of A, the spectral theorem shows that T R x approaches A x. The squared norm of the difference is the integral of lambda squared over the spectral region outside the band. Because x is in D of A, that integrand is integrable, and its tail tends to zero. But this convergence is strong on D of A."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "A smoother regularization",
+      "eyebrow": "G2 · 091000 · first-pass outline",
+      "lead": "Instead of deleting high spectral frequencies abruptly, apply the scalar function f n of lambda defined as N squared times lambda, divided by N squared plus lambda squared.",
+      "body": [
+        "For each fixed positive N, this function is real and bounded. Its absolute value is at most N divided by two, since twice N times the absolute value of lambda cannot exceed N squared plus lambda squared. The functional calculus therefore gives a bounded self-adjoint operator A N. Every input vector is legal for A N. For a fixed spectral value lambda, the multiplier approaches lambda as N grows. Moreover its absolute value never exceeds the absolute value of lambda."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "A diagonal worked example",
+      "eyebrow": "G2 · 091000 · first-pass outline",
+      "lead": "Let A multiply the N-th coordinate of an ell-two sequence by N.",
+      "body": [
+        "To avoid confusing the coordinate index with the approximation parameter, call the approximation parameter R. On coordinate N, the regularized eigenvalue is R squared times N divided by R squared plus N squared. For N much smaller than R, this is close to N. For N much larger than R, it becomes small, approximately R squared divided by N. The regularizer preserves low-frequency behavior while controlling the extreme high-frequency part. Choose a vector with N-th coordinate one divided by N squared. This vector lies in D of A, because the coordinates of A x are one divided by N, which are square summable."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Why self-adjointness survives",
+      "eyebrow": "G2 · 091000 · first-pass outline",
+      "lead": "The symmetric Yosida multiplier is a real function of a self-adjoint operator.",
+      "body": [
+        "Applying real-valued bounded functional calculus gives a self-adjoint bounded operator automatically. That property is not an incidental convenience. For every real time t, multiply A R by the imaginary unit and by t, then exponentiate. The result is unitary, because its exponent is skew-adjoint. We can use the bounded exponential power series and the group law without having to confront the unbounded operator exponential directly. Each R produces a complete one-parameter unitary group. There is a second benefit: any two Yosida approximants are functions of the same operator A. Therefore they commute."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Controlling the difference between flows",
+      "eyebrow": "G2 · 091000 · first-pass outline",
+      "lead": "Let U R of t denote the unitary exponential of imaginary t times A R.",
+      "body": [
+        "For a vector x, compare U R of t x with U S of t x for two regularization parameters R and S. Because the generators commute, we can differentiate an interpolating product of exponentials and integrate the derivative. The resulting Duhamel estimate bounds the length of the difference between the two flows by the absolute value of t times the length of A R x minus A S x. The Yosida approximating generators converge on the domain of A. In particular, their differences applied to a fixed domain vector tend to zero. The Duhamel estimate therefore makes the approximating flows Cauchy on that dense domain."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Strong limits versus norm limits",
+      "eyebrow": "G2 · 091000 · first-pass outline",
+      "lead": "The convergence just constructed is in the Hilbert-space norm for each fixed vector.",
+      "body": [
+        "This is strong operator convergence. We should not upgrade it to operator-norm convergence without a separate argument. The distinction is visible in the diagonal example. High-frequency coordinates can rotate extremely rapidly under the unitary group. For each fixed vector, their total squared mass becomes small in the tail, so strong convergence and strong continuity remain possible. But a norm estimate that takes the supremum over all unit vectors can always select a rapidly rotating high-frequency basis vector. Yosida regularization supplies the bounded approximants that make the construction rigorous."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 091000 · conclusion",
+      "lead": "Yosida regularization supplies the bounded approximants that make the construction rigorous.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

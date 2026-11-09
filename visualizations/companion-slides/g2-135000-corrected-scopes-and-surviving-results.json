@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "id": "g2-135000-corrected-scopes-and-surviving-results",
+  "title": "Corrected scopes and surviving results",
+  "subtitle": "G2 lecture 135000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:135000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/135000-corrected-scopes-and-surviving-results.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 135000 · first-pass outline",
+      "lead": "Davis and Kahan give several extremal statements about transports between subspaces.",
+      "body": [
+        "Restricted displacement and squared whole-space displacement have valid optimality theorems, while the printed universal claim for unsquared displacement is false. We will sort these statements by their precise objective, norm, scalar field, and subspace assumptions."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Four distinct quantities",
+      "eyebrow": "G2 · 135000 · first-pass outline",
+      "lead": "Fix subspaces U and V, and consider orthogonal or unitary transporters W satisfying W U equals V.",
+      "body": [
+        "Let D denote a source-defined direct rotation, when one exists. The first quantity is the restricted displacement: identity minus W, applied only to U. The second is the sum of squared sine-angle errors of an orthonormal basis of U. The third is the positive squared full displacement: identity minus W adjoint multiplied by identity minus W. The fourth is the unsquared full displacement identity minus W, measured by some unitarily invariant norm. The first three have source-backed theorems with precisely stated hypotheses. The fourth is a separate optimization problem."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Restricted displacement remains universally minimal",
+      "eyebrow": "G2 · 135000 · first-pass outline",
+      "lead": "Proposition four point one proves that the restricted displacement of D has singular values no larger than those of any competitor, pointwise by index.",
+      "body": [
+        "Corollary four point one then says D minimizes every unitarily invariant norm of the restricted displacement. This is a particularly strong theorem because it requires no arbitrary choice of norm in the proof. The principal-chord values, two sine of half the principal angles, serve as a common lower bound for all the singular values. In infinite-dimensional Hilbert space, the corresponding estimate must account for compact principal-angle sequences and for matched crossed defects when right-angle components occur."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Orthonormal-frame angular energy remains bounded below",
+      "eyebrow": "G2 · 135000 · first-pass outline",
+      "lead": "Proposition four point two concerns sine squared of the angle between each basis vector and its transported image.",
+      "body": [
+        "Every such error dominates the squared escape norm into V perpendicular. Summing over an orthonormal basis gives the sum of squared principal sines. This result does not select a particular unsquared displacement norm, and it does not compare every vector's Euclidean displacement with its direct-rotation displacement. It is an energy inequality derived from the Gram operator of the projection escape map. The infinite-dimensional theorem interprets the sum as an extended nonnegative value. This makes the statement meaningful even without a trace-class hypothesis."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Squared ambient displacement remains universally minimal",
+      "eyebrow": "G2 · 135000 · first-pass outline",
+      "lead": "Proposition four point three compares the positive displacement squares.",
+      "body": [
+        "The direct rotation minimizes all Ky Fan prefix sums of the squared displacement, and therefore every unitarily invariant norm of that positive operator. The proof combines the restricted result on U and U perpendicular, squares the singular values, and uses pinching to control the full competitor. The critical conclusion is prefix dominance, not pointwise dominance of every individual squared singular value. The result also gives optimality of the unsquared full displacement in the operator norm and in Hilbert–Schmidt norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "What fails and why angle restrictions do not fix it",
+      "eyebrow": "G2 · 135000 · first-pass outline",
+      "lead": "The printed Proposition four point four claimed that, in real spaces with maximal principal angle at most sixty degrees, the direct rotation minimizes every invariant norm of unsquared ambient displacement.",
+      "body": [
+        "The four-dimensional witness refutes it in trace norm at forty-five degrees. A continuous equal-angle family refutes any proposed positive universal angle threshold. The failure is compatible with every preceding theorem. Restricted displacement can be optimal while a competitor's action on the complement changes the total trace cost. Squared displacement can be Ky Fan minimal even if the unsquared trace sum is larger. The objective determines which inequalities are valid."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A quantitative comparison when the norm is arbitrary",
+      "eyebrow": "G2 · 135000 · first-pass outline",
+      "lead": "There is also a useful approximation guarantee.",
+      "body": [
+        "The projection difference is a lower bound for every competitor's full displacement in any unitarily invariant norm. For a direct rotation, the singular values of its full displacement are the principal chords, repeated on both directions of each principal plane. Those of the projection difference are the corresponding principal sines, also repeated. Their ratio on a nonzero principal angle theta is one divided by the cosine of half theta. Therefore the full displacement of the canonical D has invariant norm at most the secant of half the largest principal angle, times the norm of P minus Q."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "The complex field has additional flexibility",
+      "eyebrow": "G2 · 135000 · first-pass outline",
+      "lead": "Complex unitaries have phase degrees of freedom absent from real orthogonal matrices.",
+      "body": [
+        "On a single complex principal plane with angle theta, a phase-corrected transporter can have displacement singular values two sine theta and zero, instead of two copies of twice the sine of half theta. Its trace cost is two sine theta, exactly the trace norm of the difference of the two rank-one projections. As a result it attains the universal projection-difference lower bound. For several principal planes, choose the phase-corrected transports separately and take their orthogonal direct sum. The trace cost is twice the sum of the principal sines, equal to the trace norm of the projection difference."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "What the real low-dimensional analysis adds",
+      "eyebrow": "G2 · 135000 · first-pass outline",
+      "lead": "For a real line, or a real hyperplane, the ambient transport problem has an exact conventional solution for every invariant norm.",
+      "body": [
+        "The determinant-positive component has the direct-plane rotation as a minimizer. The determinant-negative component has a Householder reflection as a minimizer. The global optimum is the smaller of the two costs, given by singular-value lists consisting of two principal chords or a single two. For real lines and hyperplanes, the sixty-degree all-gauge conclusion holds. Every proper nonzero pair of equal-dimensional subspaces in real ambient dimension at most three has one of these forms, by a finite-dimensional dimension count."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "A disciplined theorem-selection checklist",
+      "eyebrow": "G2 · 135000 · first-pass outline",
+      "lead": "When presented with a new two-subspace optimization problem, first identify whether the input is restricted to U or ranges over the whole ambient space.",
+      "body": [
+        "Next decide whether the objective measures an angular sine, a squared Gram displacement, or an unsquared chord. Then identify the norm: operator, Frobenius, a Q-norm, trace norm, or a general invariant gauge. Finally check real versus complex scalars, compactness and defect matching, and ideal membership in infinite dimension. These checks identify the correct theorem. They also reveal when the question is a new optimization problem rather than an immediate consequence of a known extremal principle."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "10-overview",
+      "title": "Conclusion",
+      "eyebrow": "G2 · 135000 · first-pass outline",
+      "lead": "The restricted and squared-displacement extremal theorems remain valid.",
+      "body": [
+        "The unsquared full-displacement statement of Proposition four point four is false as printed; the real four-dimensional counterexample proves it directly. Q-norm optimality, projection-distance lower bounds, quantitative approximation factors, and separate complex trace optimizers provide precise replacements. With the optimization scopes now settled, we can distinguish the geometry of constructing a direct rotation from the separate problem of minimizing a chosen transport cost."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 135000 · conclusion",
+      "lead": "With the optimization scopes now settled, we can distinguish the geometry of constructing a direct rotation from the separate problem of minimizing a chosen transport cost.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

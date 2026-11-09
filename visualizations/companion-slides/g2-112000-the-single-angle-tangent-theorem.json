@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-112000-the-single-angle-tangent-theorem",
+  "title": "The single-angle tangent theorem",
+  "subtitle": "G2 lecture 112000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:112000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/112000-the-single-angle-tangent-theorem.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 112000 · first-pass outline",
+      "lead": "A trial subspace transverse to the exact orthogonal complement can be written as the graph of an operator from the exact subspace into its complement.",
+      "body": [
+        "Its slope has singular values equal to the tangents of principal angles. We now show how a spectral gap controls that slope using a residual. The result is a single-angle tangent theorem. The proof has a similar outline to the sine theorem, but one essential extra step. We must prove that the trial space never points exactly into the unwanted complement. Otherwise the cosine has a kernel and the tangent cannot be recovered from finite graph coordinates."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Fix the setting",
+      "eyebrow": "G2 · 112000 · first-pass outline",
+      "lead": "Let A be a self-adjoint operator on a finite-dimensional real or complex inner-product space H.",
+      "body": [
+        "Let U be an A-invariant subspace. Because A is self-adjoint, its orthogonal complement is also invariant. Let E be an isometry from a trial-coordinate space F into H. Write V for its range. Compress A to F to form the Ritz operator M, equal to E adjoint A E. Define the Ritz residual R by A E minus E M. Galerkin orthogonality says E adjoint R is zero. We assume the spectrum of M and the spectrum of A restricted to the unwanted complement are separated in an ordered way."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Why the ordered gap matters",
+      "eyebrow": "G2 · 112000 · first-pass outline",
+      "lead": "Recall the complementary coordinate maps.",
+      "body": [
+        "C extracts the component of a trial vector inside U, and S extracts its component in U perpendicular. Since E is an isometry, the squared moduli satisfy cosine squared plus sine squared equals the identity on F. The source's coordinate tangent is S followed by the inverse of the positive cosine magnitude. In finite dimensions one can define a Moore–Penrose inverse even when the cosine is singular. But totalizing a formula does not make a ninety-degree angle finite. We need to establish that the cosine magnitude has no kernel. Suppose a nonzero trial vector E y lies entirely in U perpendicular."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "The residual equation is still present",
+      "eyebrow": "G2 · 112000 · first-pass outline",
+      "lead": "Let F one be an isometric coordinate map onto U perpendicular, and let Lambda one represent A on that space.",
+      "body": [
+        "Define X equal to F one adjoint E. Exactly as in the sine theorem, the complementary residual equation is Lambda one X minus X M equals F one adjoint R. An ordered spectral gap allows a constant-one Sylvester estimate on X. That immediately bounds the sine, since X has the same positive modulus as S. But the tangent is larger than the sine. Dividing by cosine without another argument would create an uncontrolled factor. Here is the decisive calculation for the operator norm. Choose a unit trial-coordinate vector y that is a right singular vector of S."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Watch the theorem become equality in the plane",
+      "eyebrow": "G2 · 112000 · first-pass outline",
+      "lead": "Take A diagonal with entries zero and five.",
+      "body": [
+        "Let U be the horizontal axis, and take a trial unit vector with coordinates cosine theta and sine theta, where theta is strictly between zero and ninety degrees. The Ritz value M is five sine squared theta. The unwanted complementary eigenvalue is five. Therefore the actual ordered gap is five cosine squared theta. Apply A to the trial vector. Subtract the Ritz value times the same vector. The resulting Ritz residual is five sine theta cosine theta times a unit vector perpendicular to the trial line. Its length is five sine theta cosine theta. The directed tangent is tangent theta."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "The behavior near a right angle",
+      "eyebrow": "G2 · 112000 · first-pass outline",
+      "lead": "As theta approaches ninety degrees, the tangent tends to infinity.",
+      "body": [
+        "Does that contradict a bounded residual? No. In our example the Ritz eigenvalue approaches five, the unwanted eigenvalue. Thus the ordered gap tends to zero at the same time. The theorem's product remains equal to the residual. We cannot hold the old gap of five fixed while allowing the Ritz value to move toward five. This also explains why a uniform positive ordered gap implies transversality. If the cosine vanished in any direction, the corresponding Ritz quotient would enter the unwanted spectral region. The gap excludes that possibility."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Operator norms, Frobenius norms, and arbitrary gauges",
+      "eyebrow": "G2 · 112000 · first-pass outline",
+      "lead": "In operator norm, the result controls the worst principal slope.",
+      "body": [
+        "If the largest tangent is at most rho divided by delta, every principal angle is at most the arctangent of rho over delta. This angle bound remains strictly below ninety degrees for every finite rho. In Frobenius norm, the squares of all directed tangents add. The theorem limits the aggregate squared slope by the squared residual length after scaling by delta. For a Ky Fan norm, the estimate bounds the sum of the largest several tangent singular values. General unitarily invariant norms then follow from the symmetric-gauge framework established. The source's exact theorem assumes an isometric trial frame and the Ritz identity."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "What this theorem does not say",
+      "eyebrow": "G2 · 112000 · first-pass outline",
+      "lead": "It does not state that arbitrary pairwise-separated spectra supply the same constant-one estimate in every norm.",
+      "body": [
+        "It does not identify the graph of V over all of U when the dimensions do not match. And it does not allow a zero cosine to be treated as an ordinary finite tangent just because a Moore–Penrose inverse exists. Doubled-angle bounds instead arise from reflection identities and different spectral-gap configurations. Their conclusions cannot be substituted for the directed tangent estimate without checking the corresponding branch and norm hypotheses."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 112000 · mathematical reference",
+      "lead": "It does not state that arbitrary pairwise-separated spectra supply the same constant-one estimate in every norm.",
+      "body": [
+        "It does not identify the graph of V over all of U when the dimensions do not match. And it does not allow a zero cosine to be treated as an ordinary finite tangent just because a Moore–Penrose inverse exists."
+      ],
+      "mathtex": "\\delta\\,N(\\mathrm{tanThetaEmbedding}(U,E))\\leq N(R).",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 112000 · conclusion",
+      "lead": "Their conclusions cannot be substituted for the directed tangent estimate without checking the corresponding branch and norm hypotheses.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

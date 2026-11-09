@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-070000-hilbert-schmidt-sylvester-group-estimates",
+  "title": "Hilbert–Schmidt Sylvester group estimates",
+  "subtitle": "G2 lecture 070000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:070000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/070000-hilbert-schmidt-sylvester-group-estimates.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 070000 · first-pass outline",
+      "lead": "Consider A X minus X B equals C with self-adjoint coefficients.",
+      "body": [
+        "If every spectral value of A is at least delta away from every spectral value of B, the Hilbert–Schmidt norm obeys the sharp estimate delta times the norm of X at most the norm of C, even when the spectral sets interlace. The same constant-one statement can fail in operator norm. The difference comes from how the two norms combine matrix coefficients. Today we will explain the mechanism behind this difference."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "A Hilbert space whose vectors are matrices",
+      "eyebrow": "G2 · 070000 · first-pass outline",
+      "lead": "Consider a two-by-three complex matrix Z.",
+      "body": [
+        "Its Hilbert–Schmidt norm is the square root of the sum of the squared absolute values of its six entries. Now introduce an inner product on matrices: multiply the conjugate of each entry of Z by the matching entry of W, and sum. Its induced norm is exactly the Frobenius norm. A matrix can therefore be a point in a six-dimensional complex inner-product space. The original matrices act on vectors in two different spaces, but we can study all rectangular maps together as a third space. This matters because orthogonality is now available between distinct matrix blocks."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The Sylvester operator becomes one linear map",
+      "eyebrow": "G2 · 070000 · first-pass outline",
+      "lead": "Let A be a self-adjoint operator on the output space and B a self-adjoint operator on the input space.",
+      "body": [
+        "Define S of Z to be A times Z minus Z times B. For now, assume the spaces are finite-dimensional. The Hilbert–Schmidt inner product shows that S is itself self-adjoint. To check this, move A across the inner product using its adjoint, which equals A. Do the same for B. The two minus signs match. Consequently, the inner product of S of Z with W equals the inner product of Z with S of W. Choose orthonormal eigenvectors for A and B. From one left eigenvector u and one right eigenvector v, construct the rank-one map taking an input x to u times the inner product of v with x."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "The square-norm inequality",
+      "eyebrow": "G2 · 070000 · first-pass outline",
+      "lead": "Suppose every such difference has absolute value at least delta, with delta positive.",
+      "body": [
+        "Expand Z in our rank-one basis. Applying S multiplies every coefficient by a number of absolute value at least delta. Square its Hilbert–Schmidt norm. Each squared coefficient is multiplied by at least delta squared. Add the inequalities. Taking a square root proves that the Hilbert–Schmidt norm of S of Z is at least delta times the Hilbert–Schmidt norm of Z. If S of X equals C, this is precisely delta times the Hilbert–Schmidt norm of X at most that of C. There is no factor counting how many entries the matrices have, and no need to put the spectra in any particular order."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "The time-dependent group",
+      "eyebrow": "G2 · 070000 · first-pass outline",
+      "lead": "There is a second perspective that survives without an eigenvector basis.",
+      "body": [
+        "Exponentiate the self-adjoint operators with imaginary time. For each real time t, define a transformation of Z by multiplying on the left by the exponential of i times t times A, and on the right by the exponential of negative i times t times B. Both exponential factors are unitary. Consequently, this transformation preserves the Hilbert–Schmidt inner product. The family of transformations is a one-parameter unitary group: time zero acts as the identity, and composing two times adds them. Differentiate the trajectory at time zero. Its derivative is i times A Z minus Z B."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "What changes in infinite dimensions",
+      "eyebrow": "G2 · 070000 · first-pass outline",
+      "lead": "Let the original input and output spaces have countably infinite orthonormal bases.",
+      "body": [
+        "A bounded map Z need not be Hilbert–Schmidt: the identity on an infinite-dimensional space has infinitely many columns of length one, so the sum of squared column lengths diverges. The Hilbert–Schmidt maps form their own complete Hilbert space. We may measure a map by summing squared column lengths in any orthonormal basis; the answer is independent of the basis. Left and right multiplication by bounded operators preserve this class. In particular, unitary multiplication preserves its norm. So the same Sylvester group acts by unitaries on the Hilbert space of Hilbert–Schmidt maps."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Recovering the gap without eigenvectors",
+      "eyebrow": "G2 · 070000 · first-pass outline",
+      "lead": "How can we prove the gap if neither A nor B has an eigenbasis?",
+      "body": [
+        "Replace individual eigenspaces by narrow spectral bands. Divide the spectra into small measurable pieces, and cut an operator on the left and right with the corresponding spectral projections. On one block, A is close to multiplication by a chosen scalar a, and B is close to multiplication by a chosen scalar b. Hence the Sylvester operator is close to multiplication by a minus b. If all possible spectral differences have magnitude at least delta, the scalar part is large compared with sufficiently narrow correction terms. Each block has its own Hilbert–Schmidt energy."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Turning Sylvester estimates into angle estimates",
+      "eyebrow": "G2 · 070000 · first-pass outline",
+      "lead": "A subspace perturbation theorem does not initially present us with an arbitrary Sylvester equation.",
+      "body": [
+        "Instead, it presents us with spectral projections for two operators. We must discover which cross-projection block is the unknown X, what the two compressed generators are, and why the perturbation appears as the right-hand side. This estimate converts a residual bound into a bound on the angle between spectral subspaces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 070000 · mathematical reference",
+      "lead": "A subspace perturbation theorem does not initially present us with an arbitrary Sylvester equation.",
+      "body": [
+        "Instead, it presents us with spectral projections for two operators. We must discover which cross-projection block is the unknown X, what the two compressed generators are, and why the perturbation appears as the right-hand side."
+      ],
+      "mathtex": "\\langle Z,W\\rangle_{HS}=\\operatorname{tr}(Z^*W),\\qquad\n\\mathscr S(Z)=AZ-ZB.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 070000 · conclusion",
+      "lead": "This estimate converts a residual bound into a bound on the angle between spectral subspaces.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

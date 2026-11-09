@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "id": "g2-065000-ordered-spectral-separation",
+  "title": "Ordered spectral separation",
+  "subtitle": "G2 lecture 065000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:065000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/065000-ordered-spectral-separation.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 065000 · first-pass outline",
+      "lead": "For the Sylvester equation A X minus X B equals C, disjoint spectra can guarantee a unique solution, but existence alone gives no quantitative bound on its norm.",
+      "body": [
+        "An ordered positive gap between self-adjoint coefficient operators provides a much stronger conclusion. Suppose A and B are self-adjoint, and every spectral value of A lies at least delta above every spectral value of B, where delta is positive. This is ordered spectral separation. Under that hypothesis, the solution of A X minus X B equals C can be written as an integral of decaying exponentials, and its operator norm is at most the norm of C divided by delta."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "What ordered separation says",
+      "eyebrow": "G2 · 065000 · first-pass outline",
+      "lead": "Imagine the real number line.",
+      "body": [
+        "Put the spectrum of B entirely to the left. Leave an empty interval of positive length delta. Then put the spectrum of A to the right. For example, B may have eigenvalues zero and one, while A has eigenvalues three and five. The smallest difference between an eigenvalue of A and an eigenvalue of B is two. So we can take delta equal to two. The condition is stronger than the assertion that the spectra do not overlap. If A has eigenvalues negative three and positive three, while B has eigenvalue zero, the spectra are separated by distance three, but A lies on both sides of B. The ordered condition fails. Why should order make a difference?"
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The scalar integral behind the proof",
+      "eyebrow": "G2 · 065000 · first-pass outline",
+      "lead": "Take real numbers a and b with a greater than b.",
+      "body": [
+        "Consider the scalar function of time that is the exponential of negative t times a minus b. As time increases, this function decays. Integrating from zero to infinity gives one divided by a minus b. We can prove it without quoting an integral table. The derivative of the exponential of negative t times the difference is negative that difference times the same exponential. Divide by the difference and evaluate the antiderivative between zero and a large time T. The upper endpoint goes to zero, leaving the reciprocal. This is exactly the denominator we encountered in the diagonal Sylvester formula."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Two exponentials, one Sylvester solution",
+      "eyebrow": "G2 · 065000 · first-pass outline",
+      "lead": "Let A act on an output Hilbert space and B act on an input Hilbert space.",
+      "body": [
+        "Both are bounded and self-adjoint. Let C map the input space to the output space. For nonnegative time t, form the operator obtained by applying the exponential of negative t A, then C, then the exponential of positive t B. Call this the integrand. If A and B are diagonal, the coefficient between eigenvalues a and b is the original coefficient of C times the exponential of negative t times a minus b. Integrating that coefficient gives the coefficient of C divided by a minus b. Thus the integral recreates the entrywise solution obtained by dividing the spectral coefficients. But it has two advantages."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Find a common spectral cut",
+      "eyebrow": "G2 · 065000 · first-pass outline",
+      "lead": "Because the spectra are compact in the bounded self-adjoint setting, there is a real number c such that all spectral values of B are at most c, while all spectral values of A are at least c plus delta.",
+      "body": [
+        "For our example, take c equal to one. B lies at or below one. A lies at or above three. Since delta is two, the required difference is exact. For nonnegative time, the norm of the exponential of negative t A is at most the exponential of negative t times c plus delta. That is because the spectrum of the exponential consists of the exponentials of the original spectral values, and the largest such value corresponds to the smallest eigenvalue of A."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Integrate the norm bound",
+      "eyebrow": "G2 · 065000 · first-pass outline",
+      "lead": "Since delta is positive, the exponential of negative delta times t is integrable over nonnegative times.",
+      "body": [
+        "Its integral is one over delta. The norm of an operator-valued integral is at most the integral of the operator norms. Therefore the norm of the proposed solution is at most the norm of C divided by delta. This statement is independent of the dimension. Nothing in the decay estimate counts eigenvectors or matrix entries. It works on infinite-dimensional Hilbert spaces as long as A and B are bounded self-adjoint operators and the ordered separation holds. We also obtain convergence of the integral. The scalar exponential provides an integrable dominating function."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Verify the equation by differentiation",
+      "eyebrow": "G2 · 065000 · first-pass outline",
+      "lead": "We should not trust an integral formula merely because it works on diagonal matrices.",
+      "body": [
+        "Let us prove that it solves the operator equation. Call the integrand F of t. Differentiate the exponential on the left. This contributes negative A times F. Differentiate the exponential on the right. This contributes F times B. The generators commute with their own exponentials, so the derivative is negative A F plus F B. Equivalently, A F minus F B equals negative the derivative of F. Now integrate both sides over time from zero to a large T. The Sylvester operator can pass through the integral because composition by bounded operators is continuous and linear."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "A numerical check",
+      "eyebrow": "G2 · 065000 · first-pass outline",
+      "lead": "Return to A diagonal with entries three and five and B diagonal with entries zero and one.",
+      "body": [
+        "Let C be the two-by-two matrix whose entries are all one. Every coefficient of the solution is the corresponding coefficient of C divided by its spectral difference. The first row is one third and one half. The second row is one fifth and one fourth. We can check the first row: multiplying by A gives one and three halves; multiplying on the right by B gives zero and one half; subtraction yields one and one. The second row works the same way: five times one fifth is one, and five times one fourth minus one fourth is one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Sharpness and reversed order",
+      "eyebrow": "G2 · 065000 · first-pass outline",
+      "lead": "The constant one is optimal.",
+      "body": [
+        "Take one-dimensional spaces. Let A multiply by delta, B multiply by zero, and C multiply by one. Then X multiplies by one over delta, so the bound is an equality. If the order is reversed, with A entirely below B, we can exchange the direction of time and the sign of the formula, or apply the result after swapping A and B. The same norm estimate holds. What matters is consistent ordering, not which operator is above. Finally, be careful about hypotheses. The exact decay proof used self-adjoint functional calculus and a common ordered cut. Mere nonoverlap of spectral sets does not provide the same semigroup estimate."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 065000 · mathematical reference",
+      "lead": "The constant one is optimal.",
+      "body": [
+        "Take one-dimensional spaces. Let A multiply by delta, B multiply by zero, and C multiply by one. Then X multiplies by one over delta, so the bound is an equality."
+      ],
+      "mathtex": "X=\\int_0^\\infty e^{-tA}Ce^{tB}\\,dt,\\qquad AX-XB=C,\n\\qquad \\|X\\|\\le \\frac{\\|C\\|}{\\delta}.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 065000 · conclusion",
+      "lead": "Those three steps give the existence, uniqueness, and constant-one estimate.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

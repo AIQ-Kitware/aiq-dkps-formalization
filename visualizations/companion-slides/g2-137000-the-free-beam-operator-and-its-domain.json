@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "id": "g2-137000-the-free-beam-operator-and-its-domain",
+  "title": "The free-beam operator and its domain",
+  "subtitle": "G2 lecture 137000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:137000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/137000-the-free-beam-operator-and-its-domain.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 137000 · first-pass outline",
+      "lead": "A beam with free endpoints has vibration modes described by a fourth-order differential operator.",
+      "body": [
+        "Davis and Kahan use this model to illustrate perturbation bounds for low-frequency spectral subspaces. To make the estimates rigorous, we need the operator domain and its boundary conditions, not just a formal fourth derivative. The word free refers to the boundary conditions. It does not mean that the operator acts on every square-integrable function, and it does not mean that its zero eigenspace is trivial."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Why a fourth derivative appears",
+      "eyebrow": "G2 · 137000 · first-pass outline",
+      "lead": "Imagine a thin elastic beam occupying the interval from zero to one.",
+      "body": [
+        "In a simplified linear bending model, the energy associated with a displacement u is proportional to the integral of the square of its second derivative. The second derivative measures bending curvature in the small-deflection approximation. Oscillation modes are governed by the fourth derivative. We choose the Hilbert space of real square-integrable functions on the unit interval. Its inner product is the integral of u times v. Define the formal differential expression A of u to be the fourth derivative of u. But a formal expression is not yet an operator on a Hilbert space."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Green's identity explains symmetry",
+      "eyebrow": "G2 · 137000 · first-pass outline",
+      "lead": "Take smooth functions u and v in the free-end domain.",
+      "body": [
+        "Start with the integral of the fourth derivative of u times v. Integrate by parts once. The boundary term involves the third derivative of u times v, and the integral now involves the third derivative of u times the first derivative of v, with a minus sign. Integrate the remaining integral by parts again. The new boundary term involves the second derivative of u times the first derivative of v, and the interior integral becomes the integral of u double-prime times v double-prime. At each endpoint, both boundary terms vanish because u's second and third derivatives vanish there."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Why there are exactly two zero modes",
+      "eyebrow": "G2 · 137000 · first-pass outline",
+      "lead": "Suppose u belongs to the operator domain and A u equals zero.",
+      "body": [
+        "Then its bending energy is zero. The integral of the square of u double-prime vanishes, so u double-prime is zero almost everywhere. Consequently u is affine: a constant plus a multiple of t. Both the second and third derivatives of every affine function vanish identically, so all affine functions satisfy the free boundary conditions and lie in the kernel. Thus the kernel has dimension two. One direction translates the whole beam up or down without bending it. The other gives a uniform tilt, which also produces no curvature."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Find the positive frequencies",
+      "eyebrow": "G2 · 137000 · first-pass outline",
+      "lead": "Now look for a nonzero eigenvalue lambda.",
+      "body": [
+        "The eigenvalue equation says the fourth derivative of u equals lambda times u. Because A is nonnegative, any such lambda is positive. Write lambda as beta to the fourth power, with beta positive. The general classical solution is a linear combination of cosine beta t, sine beta t, hyperbolic cosine beta t, and hyperbolic sine beta t. There are four coefficients because this is a fourth-order differential equation. Apply the two free conditions at the left endpoint. They impose two linear relations among the coefficients. After those are used, only two free parameters remain. Apply the two free conditions at the right endpoint."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Why the spectral picture is complete",
+      "eyebrow": "G2 · 137000 · first-pass outline",
+      "lead": "We still need to know that no unexpected continuous spectrum lies between these eigenvalues.",
+      "body": [
+        "For a bounded interval, the relevant Sobolev embedding is compact. Roughly, a family of functions with uniformly controlled square-integrable displacement and bending derivatives cannot keep producing arbitrarily fine independent oscillations without a convergent subsequence in L two. More formally, the graph or form-domain embedding underlying the free-beam realization is compact. A shifted inverse of the operator is then compact and self-adjoint. The compact spectral theorem gives an orthonormal eigenbasis and a discrete set of eigenvalues, with no finite accumulation of positive frequencies."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Turn on a bounded perturbation",
+      "eyebrow": "G2 · 137000 · first-pass outline",
+      "lead": "Introduce a positive parameter epsilon, smaller than one hundred.",
+      "body": [
+        "Let H multiply a function by epsilon times t. This is a bounded self-adjoint operator on L two, because t lies between zero and one. Its operator norm is at most epsilon, and its quadratic form is nonnegative. Our perturbed operator is A plus H on the same domain as A. Being a bounded self-adjoint perturbation, H does not require us to shrink the domain. The new eigenvalue problem reads: fourth derivative of u plus epsilon t times u equals lambda times u, under the same four free-end boundary conditions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 137000 · mathematical reference",
+      "lead": "Introduce a positive parameter epsilon, smaller than one hundred.",
+      "body": [
+        "Let H multiply a function by epsilon times t. This is a bounded self-adjoint operator on L two, because t lies between zero and one. Its operator norm is at most epsilon, and its quadratic form is nonnegative. Our perturbed operator is A plus H on the same domain as A."
+      ],
+      "mathtex": "\\langle Au,v\\rangle=\\int_0^1u''(t)v''(t)\\,dt=\\langle u,Av\\rangle.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 137000 · conclusion",
+      "lead": "The two zero modes are pushed into a small low-frequency cluster, while the large gap protects that cluster's subspace from large rotation.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

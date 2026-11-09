@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "g2-089000-spectral-projections-and-reducing-domains",
+  "title": "Spectral projections and reducing domains",
+  "subtitle": "G2 lecture 089000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:089000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/089000-spectral-projections-and-reducing-domains.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 089000 · first-pass outline",
+      "lead": "We know how to split a bounded self-adjoint operator into blocks along a spectral subspace.",
+      "body": [
+        "For an unbounded operator we must ask a prior question. If we project a legal input onto the selected subspace, is the result still a legal input? Without that property, even writing a block matrix for the operator may be meaningless. A spectral projection reduces a self-adjoint operator when it preserves the operator domain and commutes with the operator on that domain. The restriction to the projected space is then self-adjoint on its induced domain."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "The domain is part of the operator",
+      "eyebrow": "G2 · 089000 · first-pass outline",
+      "lead": "Let A be self-adjoint on a complex Hilbert space H.",
+      "body": [
+        "Its domain, which we call D of A, is dense in H but need not equal H. Let P be an orthogonal projection, and M its range. If A were bounded, we could write A as four blocks using P and its complement. In particular, the upper-left block would take x in M to P A x. For an unbounded A, A x is defined only if x is in D of A. A formula such as P A P x is valid only after verifying that P x lies in D of A. We therefore require that P carry D of A into itself. That is the first reducing-domain condition. The second is that A applied to P x equals P applied to A x, for every x in D of A."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Why spectral projections pass the domain test",
+      "eyebrow": "G2 · 089000 · first-pass outline",
+      "lead": "Let E of B be the spectral projection of A onto a Borel set B of real spectral values.",
+      "body": [
+        "Write P for this projection. The spectral theorem describes A by integration against E. It also describes its domain through a square-integrability condition: a vector x is legal precisely when its spectral measure has a finite second moment. Projecting x onto B discards all spectral contributions outside B. It cannot increase that nonnegative integral. Therefore, if x belongs to D of A, so does P x. Next, compare A P x with P A x. The first action multiplies the spectral values in B by lambda. The second first multiplies all spectral values by lambda and then discards those outside B."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Constructing the operator part",
+      "eyebrow": "G2 · 089000 · first-pass outline",
+      "lead": "Define A restricted to M on the domain consisting of vectors that lie in both D of A and M.",
+      "body": [
+        "Its output is A x. Because the spectral projection commutes with A on its domain, this output lies in M. The resulting map, call it A M, is densely defined in M. To see this, start with a vector y in M. Because D of A is dense in H, choose domain vectors x n approaching y. Their projections P x n still belong to D of A, now lie in M, and approach P y, which equals y. The operator A M is symmetric because A is symmetric. The remaining question is whether it is self-adjoint. Symmetry alone does not settle that question for unbounded operators. Here the resolvent makes the proof clean."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "A concrete infinite-dimensional split",
+      "eyebrow": "G2 · 089000 · first-pass outline",
+      "lead": "Return to ell two, the space of square-summable sequences.",
+      "body": [
+        "Let A multiply the N-th coordinate by N, with N starting at one. Its domain consists of sequences for which the sum of N squared times the squared coordinate magnitudes is finite. Let P keep even-numbered coordinates and erase odd-numbered coordinates. This is a spectral projection, since the eigenvalues of A are precisely the positive integers. If a sequence x is in the domain, its even-coordinate subsequence is also in the domain. Applying A before or after discarding odd coordinates gives the same result. The restriction to even coordinates is an unbounded self-adjoint operator on the even-coordinate subspace."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Resolvents and the spectrum of a restriction",
+      "eyebrow": "G2 · 089000 · first-pass outline",
+      "lead": "Because the restricted resolvent is simply the original resolvent restricted to M, spectral values of A M must lie in the spectral region selected by P.",
+      "body": [
+        "More precisely, the spectrum of the restriction lies in the closed support of the spectral measure on that subspace. Do not identify the selected Borel set itself with the restricted spectrum. A set B might contain points that carry no spectral mass, and it may omit limit points that nevertheless belong to the spectrum of the restriction. The spectrum is closed, while a Borel set need not be. Consider a multiplication operator on square-integrable functions over the real line, and select the open interval from zero to one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Why this prepares a sine-theta proof",
+      "eyebrow": "G2 · 089000 · first-pass outline",
+      "lead": "Imagine comparing A with a bounded perturbation, A plus V.",
+      "body": [
+        "A spectral projection P of A reduces A, and a spectral projection Q of the perturbed operator reduces A plus V. Because V is bounded, both unbounded operators have the same domain. The cross map from Q H into the complement of P H is bounded. To obtain its Sylvester equation, however, we must first check that domain vectors in Q H are carried into the domain of the restricted operator on the complement of P H. The spectral-domain facts proved today make that possible. Only after constructing the two self-adjoint restrictions can we apply a spectral separation estimate to the cross map. That order of operations is the main lesson."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 089000 · conclusion",
+      "lead": "All three are required for the perturbation bounds that follow.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

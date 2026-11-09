@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "g2-095000-compactness-and-finite-rank-approximation",
+  "title": "Compactness and finite-rank approximation",
+  "subtitle": "G2 lecture 095000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:095000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/095000-compactness-and-finite-rank-approximation.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 095000 · first-pass outline",
+      "lead": "An infinite-dimensional Hilbert space can contain a sequence of mutually perpendicular unit vectors.",
+      "body": [
+        "No two of those vectors get closer than the square root of two. Consequently, its closed unit ball is not compact. Yet some operators turn that noncompact ball into a set whose closure is compact. Those operators are called compact operators. On Hilbert spaces, a bounded operator is compact exactly when it is an operator-norm limit of finite-rank maps. The two directions of this characterization explain why finite-dimensional approximations describe compact spectral behavior."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "What compactness asks",
+      "eyebrow": "G2 · 095000 · first-pass outline",
+      "lead": "Let T be a bounded linear map from a Hilbert space E to a Hilbert space F.",
+      "body": [
+        "The operator T is compact if the image of the closed unit ball has compact closure. Equivalently, whenever we choose a bounded sequence of input vectors, their output vectors have a norm-convergent subsequence. We need to distinguish this from ordinary boundedness. A bounded operator merely sends bounded inputs to bounded outputs. Compactness supplies convergent subsequences of outputs, even if the original inputs have no convergent subsequence. Consider ell two, the space of square-summable sequences, with standard unit vectors e one, e two, and so on. The identity operator maps each e n to itself."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Why finite rank guarantees compactness",
+      "eyebrow": "G2 · 095000 · first-pass outline",
+      "lead": "An operator has finite rank if all its outputs lie in a fixed finite-dimensional subspace.",
+      "body": [
+        "Suppose T has finite rank and the input sequence is bounded. Since T is bounded, its outputs form a bounded sequence in that finite-dimensional range. The finite-dimensional Bolzano–Weierstrass theorem provides a convergent subsequence. The range is closed, so its limit belongs to the range. Thus T is compact. The argument uses two ingredients: finite-dimensional balls are compact, and a bounded map sends a bounded set into a bounded set. It applies equally to real and complex Hilbert spaces. What about the converse? We should not expect a compact operator to have literally finite rank."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Truncating the diagonal example",
+      "eyebrow": "G2 · 095000 · first-pass outline",
+      "lead": "Define D sub N to retain only the first N diagonal entries of D and set all later entries to zero.",
+      "body": [
+        "This operator has rank N. For any unit vector x, the squared norm of D x minus D sub N x is the sum over n greater than N of the squared absolute values of x n divided by n squared. Every denominator is at least N plus one, so the norm of the difference is at most one divided by N plus one. Taking x equal to e sub N plus one shows the bound is exact. Therefore the operator norm of D minus D sub N equals one divided by N plus one, which tends to zero. Every D sub N is compact. We will soon prove that an operator-norm limit of compact operators is compact. Thus D is compact, as promised."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Compact operators form an operator-norm closed class",
+      "eyebrow": "G2 · 095000 · first-pass outline",
+      "lead": "Suppose T sub n are compact and converge in operator norm to T.",
+      "body": [
+        "We want to show T is compact. Take any bounded sequence x sub j. First choose a compact approximation T sub n so close to T that its output error on every x sub j is small. Because T sub n is compact, its output sequence has a convergent subsequence. There is a subtlety: the subsequence may depend on n. To handle every desired accuracy, select successively smaller errors, passing to subsequences each time, and then take a diagonal subsequence. On that diagonal subsequence, the outputs of T are Cauchy: they are uniformly close to the outputs of a compact approximation, which are Cauchy sufficiently far along."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "The converse: compactness produces finite-rank approximations",
+      "eyebrow": "G2 · 095000 · first-pass outline",
+      "lead": "Assume T is compact.",
+      "body": [
+        "Fix a positive error epsilon. The closure of the image of the unit ball is compact, so finitely many small balls cover it. Choose centers y one through y m in F, each within epsilon of some relevant outputs. Let W be the finite-dimensional span of those centers and let Q denote the orthogonal projection onto W. For every unit vector x, the output T x is within epsilon of a center in W. Because Q T x is the nearest point in W, the distance from T x to Q T x is at most epsilon. Take the supremum over all unit vectors. We get that the operator norm of T minus Q T is at most epsilon. Since Q T has range in W, it has finite rank."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Compactness survives multiplication",
+      "eyebrow": "G2 · 095000 · first-pass outline",
+      "lead": "If T is compact and A and B are bounded maps of compatible types, then A T B is compact.",
+      "body": [
+        "To see this, start with any bounded sequence of inputs. Applying B gives a bounded sequence. Compactness of T provides a subsequence whose T B outputs converge in norm. Continuity of A preserves that convergence. This is why compact operators form a two-sided operator ideal: composing them on either side with arbitrary bounded operators stays within the compact class. Likewise, sums and scalar multiples of compact operators are compact. And because the class is operator-norm closed, it is a complete normed space with the operator norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "The singular values of a compact operator",
+      "eyebrow": "G2 · 095000 · first-pass outline",
+      "lead": "For a compact operator T, the modulus of T is positive and compact.",
+      "body": [
+        "Its positive eigenvalues can be listed with multiplicities, descending toward zero. Those eigenvalues are the nonzero singular values of T. For a noncompact bounded operator, we can still define approximation numbers, but they need not tend to zero. The identity is the simplest example: no finite-rank approximation gets within operator-norm distance less than one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 095000 · conclusion",
+      "lead": "The identity is the simplest example: no finite-rank approximation gets within operator-norm distance less than one.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

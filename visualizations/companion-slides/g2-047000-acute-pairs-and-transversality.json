@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-047000-acute-pairs-and-transversality",
+  "title": "Acute pairs and transversality",
+  "subtitle": "G2 lecture 047000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:047000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/047000-acute-pairs-and-transversality.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 047000 · first-pass outline",
+      "lead": "Suppose two lines are almost at a right angle.",
+      "body": [
+        "Their cosine is positive, but extremely small. A projection from one line onto the other loses almost all of a vector's length. Now imagine not one angle, but infinitely many independent angles, each closer to a right angle than the last. None is exactly a right angle. Nonetheless, projection can lose arbitrarily large fractions of the length of vectors chosen from farther and farther along the sequence. That example raises today's question: what should it mean for two subspaces to be acute?"
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Three ways to express an angle condition",
+      "eyebrow": "G2 · 047000 · first-pass outline",
+      "lead": "Start with two closed subspaces U and V of a Hilbert space, and let P and Q be their orthogonal projections.",
+      "body": [
+        "In finite dimensions, a pair of equally dimensional subspaces has a finite collection of principal angles. If all those angles are strictly less than ninety degrees, then their largest angle is less than ninety degrees by some definite margin. The smallest principal cosine is positive. In infinite dimensions, there need not be a largest angle. A sequence of angles can approach ninety degrees without ever reaching it. Thus the sentence, no direction makes an exact right angle, is weaker than the sentence, all angles stay uniformly below a right angle."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Why the uniform condition gives an inverse",
+      "eyebrow": "G2 · 047000 · first-pass outline",
+      "lead": "We just constructed a positive ambient cosine operator whose square is identity minus the square of P minus Q.",
+      "body": [
+        "Suppose d is less than one. For every vector x, the norm of the difference applied to x is at most d times the norm of x. Therefore the squared norm of the cosine applied to x is at least one minus d squared, times the squared norm of x. That means the cosine cannot shrink a unit vector below the positive number square root of one minus d squared. In particular it has no kernel. But a bounded lower estimate is stronger than merely having no kernel. Since the cosine is self-adjoint, its range is dense whenever its kernel is zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Viewing V as a graph over U",
+      "eyebrow": "G2 · 047000 · first-pass outline",
+      "lead": "Now for a more geometric consequence.",
+      "body": [
+        "If U and V are close enough, we ought to be able to describe V by starting with a point in U and adding a perpendicular correction. A graph over U has precisely this form: take each u in U and attach an element L of u in U perpendicular. The resulting vectors, u plus L of u, make up a subspace of the ambient direct sum of U and its perpendicular complement. We want to prove that the uniformly acute V really is such a graph, with L bounded. First, take v in V. Since Q v equals v, the part of v perpendicular to U is exactly the difference between Q and P applied to v. Its norm is at most d times the norm of v."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "The two-line example again",
+      "eyebrow": "G2 · 047000 · first-pass outline",
+      "lead": "Return to the plane, with U horizontal and V tilted through theta.",
+      "body": [
+        "A point on V can be written as a horizontal coordinate together with a vertical coordinate. The vertical coordinate equals tangent theta times the horizontal coordinate. So the graph map is multiplication by tangent theta. This matches our bound exactly: sine theta divided by cosine theta equals tangent theta. The sine controls how far a vector strays perpendicular to U. The cosine tells us how reliably we can recover its U coordinate. The tangent measures the correction relative to that coordinate. This is why tangent bounds arise naturally in perturbation theory."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A counterexample in an infinite Hilbert space",
+      "eyebrow": "G2 · 047000 · first-pass outline",
+      "lead": "We now build the promised distinction.",
+      "body": [
+        "Take countably many mutually orthogonal two-dimensional planes. In the nth plane choose a horizontal unit vector e number n and a vertical unit vector f number n. Let U be the closed subspace generated by all the horizontal vectors. Let V be the closed subspace generated by one tilted unit vector in each plane. Choose its horizontal component to have length one divided by n plus one. Its vertical component is the positive square root of one minus that number squared. Every horizontal component is positive. Thus no nonzero vector of V is perpendicular to U. Likewise no nonzero vector of U is perpendicular to V. There are no crossed defect vectors."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Why this matters for rotations",
+      "eyebrow": "G2 · 047000 · first-pass outline",
+      "lead": "Suppose we want a unitary map that carries U onto V.",
+      "body": [
+        "An arbitrary unitary transporter might rotate unrelated directions unnecessarily. The direct rotation is a special choice tied to the relative geometry of the two projections. In the uniformly acute case, the positive cosine is invertible, and that will make an explicit algebraic construction possible. But we should not treat uniform acuteness as the only setting where a canonical polar factor can exist. The weaker, no-crossed-defect case deserves separate analysis, and right-angle defects require yet another discussion. Those are the subjects."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Reconstruction",
+      "eyebrow": "G2 · 047000 · first-pass outline",
+      "lead": "First, prove that norm of P minus Q less than one forces both crossed intersections to vanish.",
+      "body": [
+        "Second, show why an operator bounded below by a positive constant has closed range, and why a self-adjoint operator with zero kernel has dense range. Third, reconstruct the graph argument: find the compression P Q P, prove it invertible on U, and use it to recover one vector of V for every coordinate in U. Finally, explain why the infinite sequence of angles approaching ninety degrees defeats a bounded graph representation without creating a single exact right-angle vector."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 047000 · mathematical reference",
+      "lead": "First, prove that norm of P minus Q less than one forces both crossed intersections to vanish.",
+      "body": [
+        "Second, show why an operator bounded below by a positive constant has closed range, and why a self-adjoint operator with zero kernel has dense range."
+      ],
+      "mathtex": "V=\\{u+Lu:u\\in U\\},\\qquad \\|L\\|\\le \\frac{d}{\\sqrt{1-d^2}}.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 047000 · conclusion",
+      "lead": "Only the latter guarantees a bounded inverse on the relevant range.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

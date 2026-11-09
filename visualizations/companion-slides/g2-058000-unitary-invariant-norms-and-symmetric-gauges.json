@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "id": "g2-058000-unitary-invariant-norms-and-symmetric-gauges",
+  "title": "Unitary-invariant norms and symmetric gauges",
+  "subtitle": "G2 lecture 058000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:058000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/058000-unitary-invariant-norms-and-symmetric-gauges.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 058000 · first-pass outline",
+      "lead": "Suppose two people measure the same linear map, but one uses a different orthonormal basis for the inputs and a different orthonormal basis for the outputs.",
+      "body": [
+        "They should agree on the map's intrinsic size. The operator, Frobenius, and nuclear norms all have this property. Their common property is invariance under unitary changes of input and output coordinates. The statement we are heading toward is that, for a fixed finite matrix shape, an invariant norm can be read from its singular values using a symmetric gauge. Conversely, an appropriate symmetric gauge gives a norm on matrices by applying it to their singular values."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Begin with orthonormal changes of coordinates",
+      "eyebrow": "G2 · 058000 · first-pass outline",
+      "lead": "Let A send an input space of dimension n to an output space of dimension m.",
+      "body": [
+        "Choose orthonormal bases. The resulting matrix has m rows and n columns. Changing the output basis multiplies the matrix on the left by a unitary matrix. Changing the input basis multiplies it on the right by a unitary matrix, with an adjoint depending on which direction the coordinate change is written. So the mathematical question is whether a norm of A stays the same after multiplying by arbitrary unitaries on both sides. Call a matrix norm unitarily invariant if it does. For the operator norm, the reason is immediate. A unitary maps the unit sphere onto itself and preserves the length of every output vector."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Use the singular-value decomposition",
+      "eyebrow": "G2 · 058000 · first-pass outline",
+      "lead": "The singular-value decomposition says that A can be expressed as a unitary change of output coordinates, followed by a rectangular diagonal matrix of singular values, followed by a unitary change of input coordinates.",
+      "body": [
+        "Because our norm is invariant under the two unitary factors, its value on A equals its value on that rectangular diagonal matrix. Every singular value is nonnegative. We can arrange them from largest to smallest. There are at most the smaller of m and n positive values, and we include zeros to get a fixed-length list. Thus a unitarily invariant norm is determined by a function of this list. But which functions are possible?"
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Construct an invariant norm from a gauge",
+      "eyebrow": "G2 · 058000 · first-pass outline",
+      "lead": "Now begin with a symmetric gauge on lists of length equal to the smaller matrix dimension.",
+      "body": [
+        "Define the size of A to be the gauge of A's singular-value list. Nonnegativity and scaling are straightforward. The size is zero only if all singular values are zero, which happens exactly when A is the zero map. Unitary invariance follows from singular-value invariance. The challenge is the triangle inequality. The singular values of A plus B are generally not the coordinatewise sums of the singular values of A and B. Their singular vectors may point in entirely different directions. The Ky Fan inequalities give the needed common comparison across every leading singular-value prefix."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Compare the gauges with an example",
+      "eyebrow": "G2 · 058000 · first-pass outline",
+      "lead": "Take a square diagonal matrix with singular values four, two, and one.",
+      "body": [
+        "The operator norm gives four, since it retains the largest entry. The nuclear norm gives seven, since it adds all entries. The Frobenius norm gives the square root of sixteen plus four plus one, which is the square root of twenty-one. The Ky Fan two norm gives six, the sum of the two largest singular values. Do not confuse that with the Schatten two norm, which is Frobenius. The two names both contain the number two, but one counts how many leading singular values we add, while the other specifies a power. For this same diagonal matrix, all four measurements are invariant if we rotate the input and output bases."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A general comparison theorem",
+      "eyebrow": "G2 · 058000 · first-pass outline",
+      "lead": "Suppose the singular values of A are weakly majorized by those of B.",
+      "body": [
+        "Then every symmetric gauge gives A no larger a value than B. The proof is the same majorization principle used in the triangle inequality. It gives a way to move from finitely many scalar prefix inequalities to a whole family of norm inequalities. The converse is visible through the Ky Fan gauges. If all invariant gauges make A no larger than B, in particular each Ky Fan gauge does. Those Ky Fan comparisons are precisely the defining prefix inequalities of weak majorization. Thus the Ky Fan sums capture the common order information seen by all unitarily invariant norms in a fixed finite matrix shape."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "An operator ideal is an additional structure",
+      "eyebrow": "G2 · 058000 · first-pass outline",
+      "lead": "So far, A and B have had one fixed matrix shape.",
+      "body": [
+        "In infinite-dimensional analysis, we may want to measure maps between many Hilbert spaces and restrict the domain to operators on which the chosen measurement is finite. Then the norm is part of a family, often called an operator ideal norm. In addition to ordinary norm laws, the family is required to behave predictably under composing with bounded operators on the left and right. For example, composing A with a contraction on the output side should not increase its ideal norm. The same is expected for a contraction on the input side. In the finite-dimensional setting, singular-value inequalities explain these facts for standard gauges."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Why this matters for perturbations",
+      "eyebrow": "G2 · 058000 · first-pass outline",
+      "lead": "A perturbation may rotate several mutually orthogonal directions by different amounts.",
+      "body": [
+        "An operator-norm estimate captures only the worst direction. A Frobenius estimate aggregates squared effects. A nuclear estimate sums their magnitudes. A general unitarily invariant norm lets us decide which aggregate is appropriate for the application. Our proofs show that the same singular-value comparison can control all these choices. We have converted an apparently open-ended question about norms into concrete inequalities about ordered nonnegative lists. The next issue is rectangularity. An operator might be represented in a larger output space or with extra zero input directions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "What to reconstruct",
+      "eyebrow": "G2 · 058000 · first-pass outline",
+      "lead": "Start with a unitarily invariant norm on matrices of one fixed shape.",
+      "body": [
+        "Use the singular-value decomposition to derive its symmetric gauge. Prove the reverse triangle inequality using weak majorization and the gauge triangle inequality. Then calculate the operator, nuclear, Frobenius, and Ky Fan two values of the diagonal example with singular values four, two, and one. Finally, explain why invariance in one dimension does not yet guarantee consistency with another matrix dimension."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 058000 · mathematical reference",
+      "lead": "Start with a unitarily invariant norm on matrices of one fixed shape.",
+      "body": [
+        "Use the singular-value decomposition to derive its symmetric gauge. Prove the reverse triangle inequality using weak majorization and the gauge triangle inequality."
+      ],
+      "mathtex": "\\sigma(A+B)\\prec_w\\sigma(A)+\\sigma(B),\\qquad\n\\phi(\\sigma(A+B))\\le\\phi(\\sigma(A)+\\sigma(B))\\le\\phi(\\sigma(A))+\\phi(\\sigma(B)).",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 058000 · conclusion",
+      "lead": "Finally, explain why invariance in one dimension does not yet guarantee consistency with another matrix dimension.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

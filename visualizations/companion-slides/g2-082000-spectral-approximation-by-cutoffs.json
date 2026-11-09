@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "id": "g2-082000-spectral-approximation-by-cutoffs",
+  "title": "Spectral approximation by cutoffs",
+  "subtitle": "G2 lecture 082000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:082000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/082000-spectral-approximation-by-cutoffs.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 082000 · first-pass outline",
+      "lead": "A spectral integral looks like an infinite version of a diagonal matrix.",
+      "body": [
+        "But to turn that analogy into proofs, we need to know exactly which finite approximations are legitimate, and which notion of convergence each approximation provides. Two approximation procedures play different roles. Simple functions approximate bounded measurable functions, while spectral cutoffs restrict an unbounded operator to larger and larger bounded spectral intervals. The first construction can converge in operator norm. The second usually converges only strongly, meaning on each fixed vector."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Finite spectral partitions",
+      "eyebrow": "G2 · 082000 · first-pass outline",
+      "lead": "Let A be a bounded self-adjoint operator on a complex Hilbert space, and write E of B for its spectral projection on a Borel set B.",
+      "body": [
+        "Suppose the spectrum has been divided into finitely many disjoint Borel regions. Call them B one through B m. Choose a scalar c j for each region. The simple function s takes the value c j on region B j. Its operator is a finite sum: c one times E of B one, plus the corresponding terms for the remaining regions. Why is this construction well behaved? The projections of disjoint regions are orthogonal, and their sum is the identity when the regions cover the spectrum. Any vector x splits into orthogonal pieces, one for each region."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Approximating a bounded symbol",
+      "eyebrow": "G2 · 082000 · first-pass outline",
+      "lead": "Now let f be any bounded Borel function on the spectrum.",
+      "body": [
+        "Choose a small positive tolerance, epsilon. The values of f lie in a bounded region of the complex plane. Divide that region into finitely many small squares, each of diameter less than epsilon. For each square, take the set of spectral points whose f-values fall in that square. These preimages are Borel sets because f is measurable. Choose one representative value in each square. This produces a simple function s whose value differs from f by less than epsilon at every spectral point."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "A concrete matrix calculation",
+      "eyebrow": "G2 · 082000 · first-pass outline",
+      "lead": "Consider a diagonal matrix with eigenvalues minus two, zero, and three.",
+      "body": [
+        "Suppose we want to approximate its absolute-value operator. Partition the spectrum into the singleton sets containing those three values. Choose the corresponding function values two, zero, and three. The resulting finite spectral sum is exactly the diagonal matrix with entries two, zero, and three. Now replace the selected values by two point one, zero, and two point nine. The new operator differs from the absolute-value operator by a diagonal matrix whose nonzero entries are plus point one and minus point one. Its operator norm is point one. The same calculation works when a spectral region has many dimensions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Bounded functions can converge strongly without converging in norm",
+      "eyebrow": "G2 · 082000 · first-pass outline",
+      "lead": "Operator-norm approximation is powerful, but it is not the only limit we need.",
+      "body": [
+        "Let A be multiplication by t on L two of the interval from zero to one. For each positive integer n, let f n be the indicator of the open interval from zero to one over n. For each fixed t in the interval, f n of t eventually becomes zero. The functions are uniformly bounded by one. Dominated convergence shows that for every fixed square-integrable vector x, the length of f n of A applied to x tends to zero. So these operators converge strongly to zero. But every f n of A still has operator norm one. We can choose a unit vector supported entirely inside the small interval where f n equals one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Expanding spectral bands",
+      "eyebrow": "G2 · 082000 · first-pass outline",
+      "lead": "We now allow A to be an unbounded self-adjoint operator.",
+      "body": [
+        "The word unbounded means that A is defined only on a specified dense domain, and no uniform constant controls the length of A x by the length of x over that domain. For each nonnegative radius R, let P R be the spectral projection onto the closed interval from minus R to R. The projections P R increase as R increases, because their spectral regions are nested. Their ranges are orthogonal spectral subspaces. These are called spectral cutoffs. Fix any vector x in the Hilbert space, whether or not x lies in the domain of A. The squared length of x minus P R x is the scalar spectral mass of x outside that interval."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Why a bounded band belongs to the operator domain",
+      "eyebrow": "G2 · 082000 · first-pass outline",
+      "lead": "Here is the first payoff from the cutoff construction.",
+      "body": [
+        "Take an arbitrary vector x and form y equal to P R x. Its scalar spectral measure is supported in the interval from minus R to R. The integral of lambda squared against that measure is at most R squared times the squared length of y. In the unbounded spectral theorem, finiteness of that integral is exactly the condition for y to belong to the domain of A. Therefore every cutoff vector lies in the domain of A, even if the original x does not. Moreover, the length of A y is at most R times the length of y. A may be unbounded on its full domain, but its restriction to a fixed bounded spectral band is bounded."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Commutation and convergence in the graph norm",
+      "eyebrow": "G2 · 082000 · first-pass outline",
+      "lead": "Because P R comes from the spectral measure of A, it commutes with A wherever applying A makes sense.",
+      "body": [
+        "More precisely, if x is already in the domain of A, then P R x is in that domain, and A applied to P R x equals P R applied to A x. We already know P R x tends to x. Apply the strong convergence theorem again, this time to the vector A x. It gives P R A x tending to A x. By commutation, A P R x tends to A x as well. Thus cutoff vectors approximate every domain vector in both ordinary length and the length of its image under A. The graph norm combines these two quantities: its square is the squared length of x plus the squared length of A x."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "A diagonal example showing the domain obstruction",
+      "eyebrow": "G2 · 082000 · first-pass outline",
+      "lead": "Take the Hilbert space of square-summable sequences.",
+      "body": [
+        "Let A multiply the n-th coordinate by n. Its domain consists of sequences for which the sum of n squared times the squared magnitude of the n-th coordinate is finite. Consider the sequence whose n-th coordinate is one divided by n. That sequence is square-summable, since the sum of reciprocal squares converges. But it is not in the domain of A: multiplying by n produces a sequence of ones, which is not square-summable. The radius-N cutoff keeps the first N coordinates and removes all later ones. These cutoff vectors converge in Hilbert-space norm to our original sequence."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "What finite rank does and does not mean",
+      "eyebrow": "G2 · 082000 · first-pass outline",
+      "lead": "One final distinction will matter when we return to singular values.",
+      "body": [
+        "A finite spectral partition contains finitely many projection terms, but those projections need not have finite rank. On L two of a continuum, a spectral interval ordinarily supports infinitely many independent vectors. Likewise, an expanding cutoff P R need not be finite rank. Finite partitions, bounded spectral bands, and finite-rank approximations are three different ideas. There is, however, a useful bridge. If K is compact and P R converges strongly to the identity, then P R K converges to K in operator norm. The reason is that a compact operator sends the unit ball to a set with compact closure."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "10-overview",
+      "title": "The bridge to unbounded operator theory",
+      "eyebrow": "G2 · 082000 · first-pass outline",
+      "lead": "We now have two precise approximation tools.",
+      "body": [
+        "Bounded Borel symbols can be approximated in operator norm by finite spectral sums. For an unbounded self-adjoint operator, bounded spectral cutoffs converge strongly to the identity and approximate domain vectors in graph norm. The domain condition is not a technical footnote. It determines when spectral multiplication by lambda defines a genuine Hilbert-space vector."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 082000 · mathematical reference",
+      "lead": "We now have two precise approximation tools.",
+      "body": [
+        "Bounded Borel symbols can be approximated in operator norm by finite spectral sums. For an unbounded self-adjoint operator, bounded spectral cutoffs converge strongly to the identity and approximate domain vectors in graph norm. The domain condition is not a technical footnote."
+      ],
+      "mathtex": "\\|x-P_Rx\\|^2=\\mu_x(\\mathbb R\\setminus[-R,R])\\longrightarrow0.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 082000 · conclusion",
+      "lead": "It determines when spectral multiplication by lambda defines a genuine Hilbert-space vector.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

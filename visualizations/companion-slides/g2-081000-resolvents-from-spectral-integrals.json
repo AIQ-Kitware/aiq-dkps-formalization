@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "g2-081000-resolvents-from-spectral-integrals",
+  "title": "Resolvents from spectral integrals",
+  "subtitle": "G2 lecture 081000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:081000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/081000-resolvents-from-spectral-integrals.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 081000 · first-pass outline",
+      "lead": "The spectrum of an operator is defined by failures of bounded invertibility of its scalar shifts, not merely by the presence of eigenvectors.",
+      "body": [
+        "A complex number z is outside the spectrum of A when A minus z times the identity has a bounded inverse. That inverse is called the resolvent at z. Now that we have spectral integration, we can write the resolvent explicitly. We will see why its norm is controlled by the distance from z to the spectrum, why resolvents become large near spectral values, and how their matrix elements encode the scalar spectral measures."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Inverting pointwise on the spectrum",
+      "eyebrow": "G2 · 081000 · first-pass outline",
+      "lead": "Choose a complex number z outside the spectrum.",
+      "body": [
+        "The scalar function g of lambda equals one divided by lambda minus z. Because the denominator never vanishes on the compact spectrum, g is continuous and bounded there. We may therefore apply the continuous functional calculus, or equivalently the bounded Borel calculus, to obtain g of A. Multiply g of lambda by lambda minus z. At every spectral point, the product is one. Functional calculus preserves products and the constant-one function, so g of A times A minus z times the identity equals the identity. The reverse product is also the identity because both factors belong to the same commutative functional calculus."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The distance estimate",
+      "eyebrow": "G2 · 081000 · first-pass outline",
+      "lead": "Let d be the distance from z to the spectrum of A.",
+      "body": [
+        "Because z is outside that compact set, d is positive. The modulus of one divided by lambda minus z is at most one over d on the spectrum. The operator norm estimate for functional calculus therefore gives the resolvent norm at most one over d. For a bounded self-adjoint operator, this is an equality. The continuous functional calculus is isometric: the norm of a continuous function of A equals its maximum absolute value on the spectrum. The reciprocal symbol attains its maximum at a spectral point nearest to z, so the resolvent norm equals one divided by the distance."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "An explicit two-level example",
+      "eyebrow": "G2 · 081000 · first-pass outline",
+      "lead": "Take the matrix with diagonal entries minus two and three.",
+      "body": [
+        "Choose z equal to i, the imaginary unit. The resolvent is diagonal, with entries one divided by minus two minus i, and one divided by three minus i. The magnitudes of these entries are one over the square root of five and one over the square root of ten. The operator norm is their maximum, one over the square root of five. The distance from i to the spectrum consisting of minus two and three is the square root of five, exactly as the formula predicts. If z approaches minus two along the imaginary direction, say z equals minus two plus i times eta with eta positive, one denominator has magnitude eta."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Why spectral points prevent a bounded inverse",
+      "eyebrow": "G2 · 081000 · first-pass outline",
+      "lead": "We have shown that every z outside the spectrum has the displayed inverse.",
+      "body": [
+        "Can we recognize the converse using spectral projections? Take a real spectral point c. For every positive epsilon, the interval of radius epsilon around c must have a nonzero spectral projection. If some such interval had zero projection, the reciprocal of lambda minus c could be defined as a bounded Borel function on the remaining spectral support, and would produce a bounded inverse. That would contradict c being spectral. Choose a unit vector x sub epsilon in the range of the projection onto that small interval."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "The resolvent identity",
+      "eyebrow": "G2 · 081000 · first-pass outline",
+      "lead": "There is an algebraic identity connecting resolvents at two points z and w, both outside the spectrum.",
+      "body": [
+        "Subtract the scalar reciprocal functions. One divided by lambda minus z, minus one divided by lambda minus w, equals z minus w divided by the product of those two denominators. Apply functional calculus. We obtain that the resolvent at z minus the resolvent at w equals z minus w times the product of the two resolvents. Because these resolvents are functions of the same A, they commute. The identity can also be proved abstractly by multiplying out inverses, so it is valid for general bounded operators at points of their resolvent sets. Taking norms yields a local continuity estimate."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Matrix elements are scalar integral transforms",
+      "eyebrow": "G2 · 081000 · first-pass outline",
+      "lead": "Fix a vector x.",
+      "body": [
+        "The diagonal matrix element of the resolvent is the integral of one over lambda minus z against the positive spectral measure mu sub x. This is often called a Cauchy transform or Stieltjes transform of the measure. It connects an operator-valued inverse to an ordinary scalar integral. Let z have real part u and positive imaginary part eta. The imaginary part of the scalar reciprocal one over lambda minus u minus i eta is eta divided by the sum of the square of lambda minus u and eta squared. Consequently, the imaginary part of the diagonal resolvent matrix element is the integral of this nonnegative kernel against mu sub x. It is nonnegative."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Cutoffs and the approach to unbounded theory",
+      "eyebrow": "G2 · 081000 · first-pass outline",
+      "lead": "The reciprocal formula is simple for a bounded self-adjoint A because its spectral coordinate is bounded and its resolvent symbol is bounded whenever z avoids the spectrum.",
+      "body": [
+        "For an unbounded self-adjoint operator, the corresponding coordinate function is unbounded and the operator has a proper domain. Nevertheless, the scalar reciprocal one over lambda minus z is bounded for every nonreal z, since its denominator is at least the magnitude of the imaginary part. That observation will allow resolvents to remain bounded even when the original self-adjoint operator is unbounded. The spectral theorem for such operators is constructed with measurable cutoffs and careful domain statements."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Resolvents connect spectrum and spectral measures",
+      "eyebrow": "G2 · 081000 · first-pass outline",
+      "lead": "We began with projections assigned to Borel sets.",
+      "body": [
+        "We converted them into scalar and complex measures, used those measures to construct functional calculus, and represented the operator as multiplication on cyclic L two spaces. Restricting to spectral subspaces and inverting scalar functions then became compatible operations. The resolvent formula completes this chain: outside the spectrum, inversion of A minus z is simply division by lambda minus z inside the spectral integral. Its norm records the exact spectral distance for self-adjoint A. That approximation machinery is what we need before introducing unbounded operators with explicit domains."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 081000 · conclusion",
+      "lead": "That approximation machinery is what we need before introducing unbounded operators with explicit domains.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

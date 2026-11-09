@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-140000-from-subspace-bounds-to-individual-modes",
+  "title": "From subspace bounds to individual modes",
+  "subtitle": "G2 lecture 140000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:140000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/140000-from-subspace-bounds-to-individual-modes.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 140000 · first-pass outline",
+      "lead": "Consider the free-beam fourth-derivative operator on the unit interval on the self-adjoint domain of functions with four square-integrable weak derivatives and free endpoint conditions: the second and third derivatives vanish at both ends.",
+      "body": [
+        "Its kernel is the affine plane and the complementary spectrum lies above five hundred. Perturb it by multiplication by epsilon times t, with epsilon positive and smaller than one hundred."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Separate the two angle contributions",
+      "eyebrow": "G2 · 140000 · first-pass outline",
+      "lead": "Take one normalized exact low eigenvector, call it f.",
+      "body": [
+        "Project it orthogonally onto the trial plane. If the projection is nonzero, normalize it to obtain g. Let eta be the angle from f to the trial plane, equivalently the angle from f to g. Now choose the Ritz vector e that we expect to approximate f. Let psi be the angle between g and e, both of which lie in the trial plane. Finally, let omega be the total angle between e and f. Because e lies in the plane, its inner product with f equals its inner product with the projection of f. The projection has length cosine eta and direction g. Thus the absolute inner product between e and f equals cosine eta times cosine psi."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Express the eigenproblem in blocks",
+      "eyebrow": "G2 · 140000 · first-pass outline",
+      "lead": "Use the orthogonal decomposition of the Hilbert space into the trial plane and its perpendicular complement.",
+      "body": [
+        "The perturbed beam operator becomes a two-by-two operator matrix in block form. The upper-left block is the diagonal two-by-two Ritz matrix. The lower-right block is the perturbed beam compressed to the complementary space. The lower-left block sends a trial vector into its Galerkin residual, and the upper-right block is its adjoint. Write our exact eigenvector as a pair of coordinates: x in the trial plane and y in the complement. The eigenvalue equation gives two coupled relations."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Solve for the out-of-plane coordinate",
+      "eyebrow": "G2 · 140000 · first-pass outline",
+      "lead": "The complementary operator has quadratic-form lower bound greater than five hundred, while our low eigenvalue is below five hundred.",
+      "body": [
+        "The lower equation can be rearranged so that the shifted lower block, lambda minus the complementary operator, acts on y and gives the residual block applied to x. That shifted block has a bounded inverse on the appropriate space. Formally, y equals that inverse applied to B x, where B denotes the residual block. To prove a bound, we do not even need to write the inverse. Take the inner product of the lower equation with y. The form lower bound gives five hundred times the squared norm of y. The lambda term subtracts lambda times that squared norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Substitute back into the trial equation",
+      "eyebrow": "G2 · 140000 · first-pass outline",
+      "lead": "Now substitute the formula for y into the upper equation.",
+      "body": [
+        "The result is an eigenvalue problem entirely on the two-dimensional trial plane, but with an extra correction term. The effective matrix is the diagonal Ritz matrix plus B star times the inverse of lambda minus the complementary operator times B. Because lambda lies below the complementary spectrum, that correction is negative semidefinite. The Galerkin residual is rank one, because multiplication by t sends affine functions to quadratics and the component perpendicular to the affine plane occupies just one direction."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Combine the errors",
+      "eyebrow": "G2 · 140000 · first-pass outline",
+      "lead": "The argument combines a subspace estimate for eta with this two-by-two bound for psi.",
+      "body": [
+        "One convenient common envelope has coefficient square root of seven over ten, divided by five hundred minus an upper bound on lambda, times epsilon. The two Ritz eigenvalues have different upper bounds: the lower one is about point two one one three times epsilon, and the higher is about point seven eight eight seven times epsilon. Hence the two final eigenvector estimates carry different denominators. In the printed numerical form, the lower eigenvector angle omega one is below approximately point zero zero zero five three epsilon divided by one minus point zero zero zero four three epsilon."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "The alternative one-vector route",
+      "eyebrow": "G2 · 140000 · first-pass outline",
+      "lead": "The paper also applies its one-vector tangent theorem directly to each Ritz vector.",
+      "body": [
+        "Each recentered residual column has norm epsilon divided by square root of thirty, smaller than the norm of the full rank-one residual map. Divide that individual residual by the appropriate gap. This yields sharper individual tangent bounds with numerator about point zero zero zero three six five two times epsilon. The denominator for the lower vector uses its lower Ritz value, while the upper vector uses the upper Ritz value. Those estimates are statements about the angle between each fixed trial vector and the exact low spectral plane."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "General method",
+      "eyebrow": "G2 · 140000 · first-pass outline",
+      "lead": "When you want individual modes rather than a low-frequency cluster, proceed in two stages.",
+      "body": [
+        "First estimate the leakage of the entire cluster into its orthogonal complement. Then construct an effective operator on the cluster using a Schur complement. Control its off-diagonal entries relative to the internal Ritz gap. If the internal gap closes, even a perfectly stable subspace may have unstable individual eigenvectors. The beam calculation makes this distinction measurable, and it prepares us for the open questions about what spectral separation assumptions really suffice."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 140000 · mathematical reference",
+      "lead": "When you want individual modes rather than a low-frequency cluster, proceed in two stages.",
+      "body": [
+        "First estimate the leakage of the entire cluster into its orthogonal complement. Then construct an effective operator on the cluster using a Schur complement. Control its off-diagonal entries relative to the internal Ritz gap."
+      ],
+      "mathtex": "B x+A_1 y=\\lambda y,\\qquad\n(\\beta-\\lambda)\\|y\\|\\le\\|Bx\\|,",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 140000 · conclusion",
+      "lead": "The beam calculation makes this distinction measurable, and it prepares us for the open questions about what spectral separation assumptions really suffice.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

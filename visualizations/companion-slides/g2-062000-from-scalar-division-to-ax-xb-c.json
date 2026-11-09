@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "id": "g2-062000-from-scalar-division-to-ax-xb-c",
+  "title": "From scalar division to AX−XB=C",
+  "subtitle": "G2 lecture 062000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:062000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/062000-from-scalar-division-to-ax-xb-c.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 062000 · first-pass outline",
+      "lead": "Suppose we know a number c and want to recover an unknown number x from the equation a times x minus x times b equals c.",
+      "body": [
+        "Because numbers commute, the left side is a minus b, multiplied by x. If a and b are different, we divide by their difference and obtain one solution. If a and b agree, either there is no solution or there are infinitely many, depending on whether c is zero. This elementary observation is the seed of the Sylvester equation, a central tool in matrix perturbation theory and, eventually, the Davis–Kahan estimates."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Keep the domains and codomains straight",
+      "eyebrow": "G2 · 062000 · first-pass outline",
+      "lead": "Let E and F be finite-dimensional inner-product spaces.",
+      "body": [
+        "Let B act from E to E, and let A act from F to F. The unknown X maps E into F, and the known right-hand side C also maps E into F. Then A followed by X is a map from E to F. So is X followed by B. Their difference is well-defined, even when E and F have different dimensions. The Sylvester equation says that A X minus X B equals C. This form of the equation is important. The two terms represent different actions: A acts after X in the output space, while B acts before X in the input space. We cannot factor out X as if A and B were scalar numbers living in one commutative algebra."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Return to the scalar case",
+      "eyebrow": "G2 · 062000 · first-pass outline",
+      "lead": "Let a equal five and b equal two.",
+      "body": [
+        "If c equals twelve, the equation becomes five x minus two x equals twelve. The difference is three, so x equals four. If c changes to negative six, x becomes negative two. The solution scales linearly with c because the equation itself is linear. Now let a approach b. If their difference is one tenth and c is one, the solution has magnitude ten. If the difference is one hundredth, the solution has magnitude one hundred. We already see the stability issue. Even when the solution is unique, it may be very sensitive to the right-hand side when a and b are close. The quantity one divided by the absolute value of a minus b is the norm of the scalar inverse."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Eigenvectors reveal the same denominators",
+      "eyebrow": "G2 · 062000 · first-pass outline",
+      "lead": "Now assume A and B are self-adjoint, so the finite spectral theorem supplies orthonormal eigenbases.",
+      "body": [
+        "Let u be an eigenvector of A with eigenvalue a. Let v be an eigenvector of B with eigenvalue b. We want to understand the component of X that sends v toward u. Take the inner product of the Sylvester equation applied to v with u. For the first term, A X v, self-adjointness lets us move A to u. That produces a times the coefficient of X v along u. For the second term, X B v, the eigenvalue equation B v equals b v. That produces b times the same coefficient. Thus the component equation is precisely a minus b times the unknown coefficient of X, equal to the corresponding coefficient of C."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "What spectral separation means",
+      "eyebrow": "G2 · 062000 · first-pass outline",
+      "lead": "The spectrum of a finite self-adjoint matrix is the finite set of its real eigenvalues.",
+      "body": [
+        "If A and B have no common eigenvalue, every spectral difference a minus b is nonzero. Since there are only finitely many pairs, the smallest absolute difference is a positive number. Call it delta. In this setting, the Sylvester equation has one solution for every right-hand side C. If the spectra overlap, at least one denominator vanishes. On the corresponding pair of eigenspaces, the Sylvester operator cannot recover an arbitrary component of C. A nonzero right-hand-side component there makes the equation inconsistent. A zero component leaves the corresponding part of X undetermined."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Ordered gaps and mere distance gaps",
+      "eyebrow": "G2 · 062000 · first-pass outline",
+      "lead": "Remember the distinction between ordered spectral sets.",
+      "body": [
+        "One hypothesis says every eigenvalue of A lies at least delta above every eigenvalue of B. That is an ordered gap. A weaker hypothesis says every eigenvalue of A is at least delta away from every eigenvalue of B, without requiring A to lie entirely above or below B. That is a distance gap, also called pairwise spectral separation. Either condition makes every scalar denominator nonzero. But the ordered condition also gives those denominators a common sign."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "The new operator on matrices",
+      "eyebrow": "G2 · 062000 · first-pass outline",
+      "lead": "We can represent X by an m-by-n matrix.",
+      "body": [
+        "The entire space of such matrices has dimension m times n. For each pair of eigenvectors u and v, consider the rank-one map that takes an input's component along v and sends it in the direction u. There are m times n such maps, and they form an orthonormal basis of the matrix space when it is equipped with the Frobenius inner product. The Sylvester operator acts on that rank-one map by multiplication by the scalar a minus b. This is because left composition with A contributes a, and right composition with B contributes b. Therefore the Sylvester operator is diagonal in this natural basis of matrix units."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Why we will need this in perturbation theory",
+      "eyebrow": "G2 · 062000 · first-pass outline",
+      "lead": "Suppose we have two spectral subspaces and want to quantify the extent to which a perturbation couples them.",
+      "body": [
+        "A residual block may measure the failure of an approximate eigenspace to be invariant. The desired correction block often obeys a Sylvester equation. The operators A and B represent restrictions to two spectral regions, and C represents the known residual. If those spectral regions are separated, we can hope to solve for X and bound it in terms of C and the gap. This explains, at a structural level, why spectral separation appears in subspace perturbation estimates. The eigenvalue differences are not decorative assumptions. They are the denominators of the inverse problem."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "What to reconstruct",
+      "eyebrow": "G2 · 062000 · first-pass outline",
+      "lead": "Begin with the scalar equation and classify the cases a different from b and a equal to b.",
+      "body": [
+        "Verify the domain and codomain of every composition in A X minus X B. Then use orthonormal eigenvectors u and v to derive the scalar coefficient equation. Explain how the spectral difference becomes an eigenvalue of the Sylvester operator acting on rank-one matrix units. Finally, distinguish three claims: the spectra do not intersect, their pairwise distance has a positive lower bound, and they are ordered on opposite sides of a gap. Identify which claim is strongest and why the distinction affects operator-norm estimates."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 062000 · mathematical reference",
+      "lead": "Begin with the scalar equation and classify the cases a different from b and a equal to b.",
+      "body": [
+        "Verify the domain and codomain of every composition in A X minus X B. Then use orthonormal eigenvectors u and v to derive the scalar coefficient equation."
+      ],
+      "mathtex": "\\langle u_i,\\mathcal S_{A,B}(X)v_j\\rangle=(a_i-b_j)\\langle u_i,Xv_j\\rangle.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 062000 · conclusion",
+      "lead": "Identify which claim is strongest and why the distinction affects operator-norm estimates.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

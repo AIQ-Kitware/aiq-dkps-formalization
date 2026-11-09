@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "id": "g2-142000-three-subspaces-and-higher-order-interactions",
+  "title": "Three subspaces and higher-order interactions",
+  "subtitle": "G2 lecture 142000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:142000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/142000-three-subspaces-and-higher-order-interactions.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 142000 · first-pass outline",
+      "lead": "Question ten point two of Davis and Kahan asks what happens when a two-way orthogonal decomposition is replaced by three mutually perpendicular subspaces.",
+      "body": [
+        "A pair of subspaces admits principal angles and a cross-block Sylvester equation. With three blocks, we must examine which identities persist and which estimates need additional hypotheses."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "The geometric data",
+      "eyebrow": "G2 · 142000 · first-pass outline",
+      "lead": "Take a finite-dimensional Hilbert space and divide it into three mutually orthogonal subspaces, called E zero, E one, and E two.",
+      "body": [
+        "Their projections sum to the identity. Take a second division into F zero, F one, and F two, whose projections also sum to the identity. The same construction works for finite orthogonal sums of closed Hilbert subspaces. Choose an isometric coordinate map for each piece. The adjoint of the coordinate map extracts coordinates in that piece. If we place the three E maps side by side, we get a unitary coordinate map from the direct sum of three coordinate spaces onto the entire ambient space. Do the same for the F family. Now compare the two coordinate systems."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "What unitarity already proves",
+      "eyebrow": "G2 · 142000 · first-pass outline",
+      "lead": "Because the comparison operator is unitary, its blocks obey two families of equations.",
+      "body": [
+        "Fix an F column, say column j. The sum over i of block i,j adjoint times block i,j equals the identity on F j. Every unit vector in F j has its squared length divided among the three E spaces; those fractions sum to one. Fix two distinct F columns, j and k. The sum over i of block i,j adjoint times block i,k equals zero. This says the columns remain orthogonal after all three contributions are added. No individual cross term has to vanish. There is a matching pair of row equations. For any E row i, the sum of block i,j times its adjoint, over j, is identity on E i."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Why an intermediate block matters",
+      "eyebrow": "G2 · 142000 · first-pass outline",
+      "lead": "Now imagine that the first coordinate direction is rotated toward the second by a small angle a, and then the second coordinate direction is rotated toward the third by a small angle b.",
+      "body": [
+        "Relative to the original basis, the resulting third direction acquires a first-coordinate component proportional to sine a times sine b. This is a second-order effect in small angles. Neither elementary rotation directly mixed the first and third axes. Nevertheless their composition does. To verify this, start with the third basis vector. Rotate it into a combination of the second and third vectors, with second-coordinate coefficient sine b. Then rotate the first-second plane."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "The three-block perturbation equation",
+      "eyebrow": "G2 · 142000 · first-pass outline",
+      "lead": "The spectral setting makes this geometry more structured.",
+      "body": [
+        "Let the first decomposition reduce a self-adjoint operator A. Let the second decomposition reduce a nearby self-adjoint operator B, which equals A plus H. Write A i for the compression of A to E i, and B j for the compression of B to F j. Let X i,j be the overlap map from F j to E i. Use the reducing identities: A applied to E i equals E i applied to A i, while B applied to F j equals F j applied to B j. Calculate A i times X i,j minus X i,j times B j. Moving both maps back to the ambient space shows that this difference is minus E i adjoint times H times F j. So every overlap block solves a Sylvester equation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A controlled three-by-three example",
+      "eyebrow": "G2 · 142000 · first-pass outline",
+      "lead": "Suppose A is diagonal with three distinct eigenvalues: minus g, zero, and g, where g is positive.",
+      "body": [
+        "Perturb it by a symmetric matrix having a small coupling s between the first two coordinates and another small coupling t between the last two. There is no direct first-to-third perturbation entry. A first-order eigenvector correction to the lowest eigenvector points toward the middle coordinate with size proportional to s divided by g. The correction to the highest eigenvector points toward the middle with size proportional to t divided by g."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "What has and has not been established",
+      "eyebrow": "G2 · 142000 · first-pass outline",
+      "lead": "We have proved the block-unitarity identities and the exact nine Sylvester equations.",
+      "body": [
+        "They are already powerful enough to generate bounds. But a theorem asserting the best simultaneous bounds, based only on prescribed three-block spectral information, requires an optimization over coupled overlap matrices. That is the unresolved problem described by Davis and Kahan in Question ten point two. In their beam calculation, they explicitly deferred an optimality assertion about a three-by-three comparison to this question. The three-block identities constrain possible overlaps but do not determine the optimal bound."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 142000 · mathematical reference",
+      "lead": "We have proved the block-unitarity identities and the exact nine Sylvester equations.",
+      "body": [
+        "They are already powerful enough to generate bounds. But a theorem asserting the best simultaneous bounds, based only on prescribed three-block spectral information, requires an optimization over coupled overlap matrices."
+      ],
+      "mathtex": "\\sum_i W_{ij}^*W_{ik}=\\delta_{jk}I,\\qquad \\sum_j W_{ij}W_{kj}^*=\\delta_{ik}I.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 142000 · conclusion",
+      "lead": "You should now be able to derive the three-block equations yourself, calculate an indirect coupling of order s times t, and explain why independent pairwise angle estimates do not solve a coupled three-subspace optimization problem.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

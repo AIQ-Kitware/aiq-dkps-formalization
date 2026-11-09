@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-037000-polar-decomposition",
+  "title": "Polar decomposition",
+  "subtitle": "G2 lecture 037000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:037000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/037000-polar-decomposition.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 037000 · first-pass outline",
+      "lead": "Imagine pulling a rubber sheet over a table.",
+      "body": [
+        "You stretch it more in one direction than another, and then turn it. If I tell you only where each point ends up, can you separate the stretching from the motion that carries the stretched sheet to its final position? For a linear map, this is exactly what polar decomposition does. And we already have most of its ingredients. The modulus of a map tells us its stretching, and the singular-value decomposition tells us which input and output directions correspond. Combining these ideas gives a factorization into a positive stretching operator and a partial isometry."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Review what the modulus knows",
+      "eyebrow": "G2 · 037000 · first-pass outline",
+      "lead": "Let A be a linear map from one finite-dimensional inner-product space, E, to another, F.",
+      "body": [
+        "The spaces may have different dimensions. The modulus of A is the positive square root of A adjoint times A. We proved that the modulus and A give the same output length for every input. We also proved that they have the same kernel: a vector is killed by A exactly when it is killed by the modulus. So the modulus tells us how much the map stretches a vector. It does not tell us where the output points. We want a second operator, call it U, that restores that missing directional information. Our goal is to apply the modulus first, then U, and obtain A."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Construct U where its action is determined",
+      "eyebrow": "G2 · 037000 · first-pass outline",
+      "lead": "Start with a vector of the form modulus of A applied to x.",
+      "body": [
+        "Define U on that vector by declaring that its output is A applied to x. There are two things to check before this is a legitimate definition. First, could the same vector be written as modulus of A applied to two different inputs? If so, must the proposed output agree? Suppose the modulus sends x and y to the same vector. Then it kills their difference. The kernels of A and its modulus agree, so A also kills their difference. Thus A x and A y are equal. Good: our proposed U does not depend on which input we chose. Second, does U preserve length? Yes."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "What happens to the kernel?",
+      "eyebrow": "G2 · 037000 · first-pass outline",
+      "lead": "Here is the step that makes the construction canonical.",
+      "body": [
+        "The range of the positive self-adjoint modulus is the orthogonal complement of its kernel, in finite dimensions. And that kernel is the kernel of A. So the input space splits into two perpendicular pieces: the directions that survive, and the directions that A kills. On the surviving directions, U has already been determined. On the kernel, define U to be zero. For any input vector, split it into a surviving component and a kernel component. Apply the length-preserving rule to the first, and zero to the second. That gives a linear map U from E to F."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "A two-dimensional example",
+      "eyebrow": "G2 · 037000 · first-pass outline",
+      "lead": "Take a map on the real plane that sends the vector with coordinates x and y to the vector with coordinates two y and zero.",
+      "body": [
+        "It ignores the first coordinate. It doubles the second coordinate and places the result on the horizontal axis. Its matrix has first row zero, two, and second row zero, zero. The adjoint-times-A matrix is diagonal, with entries zero and four. Its positive square root is diagonal with entries zero and two. So the modulus leaves the first direction collapsed and doubles the vertical direction. The missing step is to take that stretched vertical direction and lay it along the horizontal axis."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Relation to singular-value decomposition",
+      "eyebrow": "G2 · 037000 · first-pass outline",
+      "lead": "The singular-value decomposition chooses perpendicular input directions, one for each singular value.",
+      "body": [
+        "For a positive singular value, A sends its input direction to the associated output direction, multiplied by that singular value. The modulus performs the multiplication by the singular value while staying in the input space. U then carries that input direction to its corresponding output direction, without additional stretching. For a zero singular value, the modulus kills the input direction, and the canonical U kills it too. Thus polar decomposition is what remains of the singular-value decomposition after we stop insisting on choosing complete coordinate bases."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A nonsingular example",
+      "eyebrow": "G2 · 037000 · first-pass outline",
+      "lead": "Consider a diagonal map that multiplies the first coordinate by negative three and the second by two.",
+      "body": [
+        "Its modulus multiplies the first coordinate by three and the second by two. Its polar factor reverses the first coordinate and leaves the second alone. Here U preserves lengths on the whole plane. It is an orthogonal transformation: a reflection. The original operator is a reflection followed by positive stretching. When A has no kernel, the polar factor is an isometric embedding of its entire input space. If A is an invertible square matrix, that factor is actually unitary—or orthogonal in the real case. But if A is rectangular, even an injective map need not have an onto unitary factor."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "What polar decomposition separates",
+      "eyebrow": "G2 · 037000 · first-pass outline",
+      "lead": "Polar decomposition also explains canonical alignment between subspaces: the positive modulus measures how much each direction is stretched, while the polar partial isometry transports the surviving directions without depending on arbitrary orthonormal coordinates.",
+      "body": [
+        "It also separates two quantities that appear throughout operator theory: the positive operator that records singular values, and the partial isometry that records where surviving vectors go. This separation extends to bounded operators on Hilbert spaces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 037000 · mathematical reference",
+      "lead": "Polar decomposition also explains canonical alignment between subspaces: the positive modulus measures how much each direction is stretched, while the polar partial isometry transports the surviving directions without depending on arbitrary orthonormal coordinates.",
+      "body": [
+        "It also separates two quantities that appear throughout operator theory: the positive operator that records singular values, and the partial isometry that records where surviving vectors go."
+      ],
+      "mathtex": "A=U|A|,\\qquad \\ker U=\\ker A,\\qquad\nU^*U=P_{(\\ker A)^\\perp},\\qquad UU^*=P_{\\operatorname{ran}A}.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 037000 · conclusion",
+      "lead": "If you can give those four arguments, you can recover the polar decomposition on your own.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

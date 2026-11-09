@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "id": "g2-042000-cross-gram-overlap-and-principal-angles",
+  "title": "Cross-Gram overlap and principal angles",
+  "subtitle": "G2 lecture 042000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:042000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/042000-cross-gram-overlap-and-principal-angles.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 042000 · first-pass outline",
+      "lead": "You already know how to measure the angle between two nonzero vectors.",
+      "body": [
+        "Normalize them, take their inner product, and use the cosine to recover an angle. But what if the objects we want to compare are entire subspaces? A plane contains infinitely many directions. In a higher-dimensional space, two planes can share one direction, disagree in another, and be perpendicular in yet another. One scalar angle cannot describe all of that. Principal angles measure the relative geometry of two subspaces. Orthonormal frames, adjoints, Gram operators, and singular values make the construction explicit."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "A vector's angle is a measurement of overlap",
+      "eyebrow": "G2 · 042000 · first-pass outline",
+      "lead": "Begin with two unit vectors u and v in a real inner-product space.",
+      "body": [
+        "Their inner product is cosine of the angle between their oriented directions. For lines rather than oriented vectors, flipping either vector changes the sign of the inner product but not the line. So the acute angle between the lines is determined by the absolute value of the inner product. That distinction already hints at a general rule. When comparing subspaces, we should be measuring geometry that does not change just because we picked different orthonormal bases. Suppose U and S are two subspaces of the same ambient Euclidean space. Choose an orthonormal basis for U and another for S."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The one-dimensional case",
+      "eyebrow": "G2 · 042000 · first-pass outline",
+      "lead": "Let U be the horizontal axis in the plane.",
+      "body": [
+        "Let the second subspace be the line at forty-five degrees above the horizontal axis. Choose a unit vector along each line. Their cross-Gram matrix has only one entry: cosine of forty-five degrees, which is one divided by the square root of two. The singular value of a one-by-one matrix is the absolute value of its entry. So its singular value is also one divided by the square root of two. Taking arccosine gives forty-five degrees. In this simplest case, the singular-value construction reproduces exactly the line angle we wanted. But singular values are more general than absolute values of individual entries."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Why singular values give basis-independent answers",
+      "eyebrow": "G2 · 042000 · first-pass outline",
+      "lead": "Suppose we replace the orthonormal basis of U by a different orthonormal basis of the same subspace.",
+      "body": [
+        "This multiplies V on the right by an orthogonal matrix. Do the same for W, using another orthogonal matrix. The overlap matrix changes, but only by multiplication on the left and right by orthogonal matrices. Multiplication on the left or right by a unitary leaves the singular values unchanged, since it preserves the spectrum of the corresponding positive Gram operator. The singular values are intrinsic to the pair of subspaces, even though the entries of the overlap matrix are not. Now we have a candidate definition."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "A pair of planes in three dimensions",
+      "eyebrow": "G2 · 042000 · first-pass outline",
+      "lead": "Consider the plane spanned by the first and second coordinate axes in three-dimensional space.",
+      "body": [
+        "Call it U. Now consider a second plane containing the first coordinate axis, but tilted around that axis. We can describe it using the first axis together with a unit direction formed from cosine phi times the second axis plus sine phi times the third axis. Take phi between zero and ninety degrees. Choose the natural orthonormal frames for these planes. The cross-Gram matrix is diagonal. Its first diagonal entry is one, because the planes share the first coordinate axis. Its second diagonal entry is cosine phi, because the remaining frame directions meet at angle phi."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Principal vectors and the singular-value decomposition",
+      "eyebrow": "G2 · 042000 · first-pass outline",
+      "lead": "The singular values are only the beginning.",
+      "body": [
+        "The singular-value decomposition of the cross-Gram matrix gives two orthonormal coordinate bases, one on each side. Use the coordinate embeddings to move those singular vectors back into the ambient space. We obtain pairs of unit vectors, one in the first subspace and one in the second. Each matched pair has inner product equal to its singular value. Distinct matched pairs have zero cross-inner-product. In other words, after choosing the right orthonormal directions, the pattern of overlap becomes diagonal. These matched directions are called principal vectors. For the two tilted planes, the first pair can be the shared axis."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Where the projection operator reappears",
+      "eyebrow": "G2 · 042000 · first-pass outline",
+      "lead": "We can express the same construction without displaying both coordinate bases.",
+      "body": [
+        "Let Q be orthogonal projection onto the second subspace. Because W has orthonormal columns, Q is W times W adjoint. Take the cross-Gram matrix C, multiply it by its adjoint, and regroup the factors. We get V adjoint Q V. This is a positive operator on the coordinate space of the first subspace. Its eigenvalues are the squares of the singular values of C. Therefore they are the squared cosines of the principal angles, together with any required zero padding on the first coordinate space. That identity is important because it connects principal angles to projections, not to a particular pair of coordinate frames."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "What if the dimensions differ?",
+      "eyebrow": "G2 · 042000 · first-pass outline",
+      "lead": "Suppose the first subspace has three dimensions and the second only two.",
+      "body": [
+        "The cross-Gram matrix is rectangular. Its usual principal-angle list has the smaller dimension's number of entries, which is two. But there is another legitimate, directed convention. We can measure how each direction in the three-dimensional source projects into the two-dimensional target. Since that projection has a nontrivial kernel, at least one direction is perpendicular to the target. In an extended, source-indexed angle list, this appears as an additional ninety-degree angle. The two conventions answer related but different questions. The shorter list pairs as many directions as the smaller subspace allows."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "A final distinction",
+      "eyebrow": "G2 · 042000 · first-pass outline",
+      "lead": "An angle of zero tells us that some direction lies in both subspaces.",
+      "body": [
+        "An angle of ninety degrees tells us that a direction of one subspace is perpendicular to the other. Angles strictly between those values describe genuine tilted pairs. The list of principal angles tells us much more than a single worst-case angle. It can distinguish one badly aligned direction from many mildly misaligned directions. That difference will eventually matter when we use operator norms, Frobenius norms, and more general singular-value-based norms. For your reconstruction exercise, take two planes in three dimensions that share an axis and meet at angle phi."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 042000 · mathematical reference",
+      "lead": "An angle of zero tells us that some direction lies in both subspaces.",
+      "body": [
+        "An angle of ninety degrees tells us that a direction of one subspace is perpendicular to the other. Angles strictly between those values describe genuine tilted pairs. The list of principal angles tells us much more than a single worst-case angle."
+      ],
+      "mathtex": "0\\le\\sigma_i(C)\\le1,\\quad \\theta_i=\\arccos\\sigma_i(C)\\in[0,\\pi/2],\n\\quad CC^*=V^*QV,\n\\quad V^*(I-Q)V=I-CC^*.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 042000 · conclusion",
+      "lead": "They turn subspace misalignment into a quantitative operator, rather than a choice of coordinate drawings.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

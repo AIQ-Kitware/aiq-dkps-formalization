@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "id": "g2-149000-proof-practicum-reconstruct-the-1970-theory",
+  "title": "Proof practicum: reconstruct the 1970 theory",
+  "subtitle": "G2 lecture 149000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:149000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/149000-proof-practicum-reconstruct-the-1970-theory.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 149000 · first-pass outline",
+      "lead": "A rigorous Davis–Kahan perturbation argument begins with explicit self-adjointness, spectral-gap, residual, and norm hypotheses.",
+      "body": [
+        "The goal is to reconstruct the bound from those assumptions, then identify how the same mechanism adapts to Hilbert spaces, norm ideals, and the other angle theorems. The proof proceeds from geometric data to a residual equation, then uses spectral separation to bound the angle. Each additional norm class or operator setting requires a specific extension of that argument."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Stage one: identify the correct geometric data",
+      "eyebrow": "G2 · 149000 · first-pass outline",
+      "lead": "Let H be a finite-dimensional real or complex inner product space.",
+      "body": [
+        "Let A be self-adjoint, and let U be an A-invariant subspace. Because A is self-adjoint, U's orthogonal complement is invariant as well. Write P for orthogonal projection onto U, and Q for projection onto a trial subspace V of dimension d. Choose an orthonormal coordinate embedding E from d-dimensional coordinate space into H, with range V. Choose an orthonormal embedding F into the exact orthogonal complement of U. The columns of F need to span that complement. We can then write F times F adjoint for the projection onto U perpendicular. Your first task is to express the directed sine-angle operator using E and F."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Stage two: derive the residual equation",
+      "eyebrow": "G2 · 149000 · first-pass outline",
+      "lead": "Form the Rayleigh–Ritz compression A zero, equal to E adjoint A E.",
+      "body": [
+        "Define the residual R to be A E minus E A zero. Since E adjoint R equals zero, R is orthogonal to the trial space. That is Galerkin orthogonality. It does not mean R is orthogonal to the exact subspace. Define Lambda one as F adjoint A F, the restriction of A to U perpendicular expressed in orthonormal coordinates. Calculate F adjoint R. First, F adjoint R equals F adjoint A E minus F adjoint E A zero. Because U perpendicular reduces A, the first term equals Lambda one times F adjoint E. Put X in both places. You obtain the complementary Sylvester equation: Lambda one X minus X A zero equals F adjoint R."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Stage three: choose and prove the gap estimate",
+      "eyebrow": "G2 · 149000 · first-pass outline",
+      "lead": "Suppose the spectrum of A zero is entirely below a real number a, while the spectrum of Lambda one is at least delta above a.",
+      "body": [
+        "Here delta is strictly positive. This is an ordered spectral separation hypothesis, stronger than merely requiring every cross-pair of eigenvalues to have distance at least delta. Can you derive a bound on X? For bounded self-adjoint matrices, write the Sylvester inverse as an integral. If Lambda one lies above and A zero below, then X equals the integral from zero to infinity of the exponential of negative t Lambda one, times F adjoint R, times the exponential of t A zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Stage four: test a sharp two-dimensional case",
+      "eyebrow": "G2 · 149000 · first-pass outline",
+      "lead": "Take A diagonal with entries zero and delta.",
+      "body": [
+        "Let the exact subspace U be the first coordinate axis. Take the trial unit vector E to have coordinates cosine theta and sine theta, for an angle strictly between zero and ninety degrees. The compressed Rayleigh quotient A zero is delta times sine squared theta. The exact complementary block Lambda one is delta. The difference between their spectral values is delta times cosine squared theta. The complementary overlap X equals sine theta. Calculate the residual's component along the second coordinate. It is delta times sine theta times cosine squared theta."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Stage five: pass from a single angle to norm generality",
+      "eyebrow": "G2 · 149000 · first-pass outline",
+      "lead": "Suppose a theorem claims a bound in every unitarily invariant norm, wherever that norm is defined.",
+      "body": [
+        "What must we prove beyond the operator-norm case? We need control of the entire singular-value sequence, not just its largest member. In finite dimensions, the useful language is Ky Fan sums: for each positive integer k, sum the largest k singular values. An all-prefix comparison yields weak majorization. Under the hypotheses of the symmetric-gauge theorem, weak majorization gives the desired unitarily invariant norm inequality. For the ambient sine theorem in Section six of the 1970 Davis–Kahan paper, there is another issue. One directed residual equation only controls one crossed block."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Stage six: reconstruct the other three angle families",
+      "eyebrow": "G2 · 149000 · first-pass outline",
+      "lead": "Now explain how the proof changes for tangent theta.",
+      "body": [
+        "Represent the trial subspace as a graph over the exact subspace, provided the projection from the trial space to the exact space is invertible with bounded inverse. The graph map is the sine overlap divided by the cosine overlap. Its singular values are the tangents of the principal angles. An ordered Ritz gap and the appropriate residual equation then control the graph map. The invertibility assumption or a theorem deriving it cannot be omitted. For the sine-of-twice-theta theorem, introduce the block reflection associated with one subspace."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Stage seven: restore the unbounded Hilbert-space machinery",
+      "eyebrow": "G2 · 149000 · first-pass outline",
+      "lead": "In a Hilbert space, A may be self-adjoint and unbounded.",
+      "body": [
+        "Before writing A E, you must state that every trial vector lies in the domain of A. The exact reducing projection must preserve the domain, and the restricted operators have their own domains. For a Sylvester equation involving two unbounded blocks, the domain of X's input and the requirement that its image land in the other block's domain are essential. Use bounded spectral cutoffs to make each intermediate calculation legal. Prove that cutoff vectors converge strongly, and that the operator images converge on vectors in the graph domain."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Stage eight: close the original paper faithfully",
+      "eyebrow": "G2 · 149000 · first-pass outline",
+      "lead": "The 1970 paper also develops direct rotation and an extremal claim about displacement.",
+      "body": [
+        "Reconstruct the polar intertwiner of two projections, state the crossed-defect matching criterion at right angles, and distinguish the canonical polar rotation from arbitrary unitary transports. Then separate three objectives: displacement restricted to the source subspace, squared whole-space displacement, and unsquared whole-space displacement. The first two objectives admit valid optimality theorems under their stated hypotheses. The broad unsquared full-space claim of Proposition four point four is false; the explicit real four-dimensional example supplies the counterexample."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "Your final proof certificate",
+      "eyebrow": "G2 · 149000 · first-pass outline",
+      "lead": "Your final proof certificate is the next step of the argument.",
+      "body": [
+        "A complete reconstruction should contain, in order: the ambient Hilbert-space and scalar-field assumptions; the domains of all operators; the exact and trial subspaces; the residual and compressed blocks; the correct spectral-gap predicate; the Sylvester inverse and its norm class; the Gram identity identifying the angle; and the ideal membership and cutoff arguments where needed.",
+        "You should be able to present the finite single-angle proof on a blank page, then explain which pieces must be replaced or strengthened for the ambient, doubled-angle, and infinite-dimensional theorems."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 149000 · mathematical reference",
+      "lead": "A complete reconstruction should contain, in order: the ambient Hilbert-space and scalar-field assumptions; the domains of all operators; the exact and trial subspaces; the residual and compressed blocks; the correct spectral-gap predicate; the Sylvester inverse and its norm class; the Gram identity identifying the angle; and the ideal membership and cutoff arguments where needed.",
+      "body": [
+        "You should be able to present the finite single-angle proof on a blank page, then explain which pieces must be replaced or strengthened for the ambient, doubled-angle, and infinite-dimensional theorems."
+      ],
+      "mathtex": "A_0=E^*AE,\\quad R=AE-EA_0,\\quad\n\\Lambda_1=F^*AF,\\quad X=F^*E.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 149000 · conclusion",
+      "lead": "A complete reconstruction explains the residual equation, the gap estimate, the geometry of angles, and the exact scope of each norm and optimality claim.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

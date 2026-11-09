@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "g2-087000-cayley-transforms-and-graph-level-equivalence",
+  "title": "Cayley transforms and graph-level equivalence",
+  "subtitle": "G2 lecture 087000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:087000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/087000-cayley-transforms-and-graph-level-equivalence.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 087000 · first-pass outline",
+      "lead": "An unbounded self-adjoint operator has a difficult domain, but we have just shown that its nonreal resolvents are bounded everywhere-defined maps.",
+      "body": [
+        "The Cayley transform uses one of those resolvents to build a unitary operator. The important point is that this construction retains the information needed to recover the original graph. We will prove both directions."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Construct the transform",
+      "eyebrow": "G2 · 087000 · first-pass outline",
+      "lead": "Let A be self-adjoint on a dense domain D in a complex Hilbert space.",
+      "body": [
+        "Choose the imaginary unit, i. The operators A plus i and A minus i both map D bijectively onto H, by self-adjointness and the resolvent bound at imaginary spectral parameters. Define U by first applying the bounded inverse of A plus i, then applying A minus i. At first this looks dangerous: A minus i is unbounded. But the inverse of A plus i sends every input into D, so the composition is legally defined on all of H. Algebra simplifies it. Since A minus i equals A plus i minus two i, we get U equals the identity minus two i times the resolvent at negative i. Both terms are bounded."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Why the point one is special",
+      "eyebrow": "G2 · 087000 · first-pass outline",
+      "lead": "Suppose U y equals y.",
+      "body": [
+        "Write y as A plus i applied to x. The equality says A minus i applied to x equals A plus i applied to x. Subtracting gives two i times x equals zero. Therefore x, and then y, are zero. So U has no nonzero fixed vector. In spectral language, one is not an eigenvalue of U. But one may still belong to the spectrum of U. For an unbounded A, high spectral values of A are carried by the scalar Cayley transformation close to one. A sequence of approximate eigenvectors can therefore have Cayley eigenvalues approaching one, without any vector being fixed exactly. This distinction is essential."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Recover the domain from the unitary",
+      "eyebrow": "G2 · 087000 · first-pass outline",
+      "lead": "Compute one minus U.",
+      "body": [
+        "From the formula above it equals two i times the inverse of A plus i. The range of that resolvent is exactly D, since A plus i is a bijection from D onto H. Multiplying by the nonzero scalar two i does not change the range. We have proved a concrete identity: the domain of A is the range of the bounded operator one minus U. This is how the domain is encoded by a bounded unitary. The map one minus U is bounded and defined everywhere, but it need not be onto H. Its image is the proper dense domain of A. Now take x in that range, so x equals one minus U applied to some y. The preimage y is unique because U has no nonzero fixed vector."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "The converse correspondence",
+      "eyebrow": "G2 · 087000 · first-pass outline",
+      "lead": "Now begin instead with a unitary U having no nonzero fixed vector.",
+      "body": [
+        "Set D equal to the range of one minus U. This range is dense: if z is orthogonal to it, then the adjoint of one minus U annihilates z, meaning U star z equals z. Applying U shows U z equals z, so z is zero. Define A on this dense range by A applied to one minus U of y equals i times one plus U of y. Uniqueness of y makes the definition unambiguous. One can verify symmetry by expanding inner products and using U star U equals the identity. More decisively, the formulas for A plus i and A minus i show that both shifts are onto H."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "The scalar geometry",
+      "eyebrow": "G2 · 087000 · first-pass outline",
+      "lead": "For a real scalar lambda, the Cayley symbol is lambda minus i divided by lambda plus i.",
+      "body": [
+        "Its magnitude is one because the numerator and denominator have equal absolute value. As lambda ranges over the real line, the symbol travels along the unit circle, never reaching one at a finite lambda. The inverse relation recovers lambda as i times one plus w divided by one minus w. This is real whenever w lies on the unit circle and differs from one. The point one represents the spectral behavior near arbitrarily large absolute values."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A diagonal Cayley example",
+      "eyebrow": "G2 · 087000 · first-pass outline",
+      "lead": "For the diagonal operator with eigenvalues one, two, three, and so on, the basis vector e N is also an eigenvector of U.",
+      "body": [
+        "Its Cayley eigenvalue is N minus i divided by N plus i. Every such number lies on the unit circle, and none equals one. But as N grows, the ratio approaches one. So one belongs to the spectrum of U as a limit point even though it has no eigenvector. The operator one minus U is injective, but its inverse cannot be bounded on all of H. If it were, the diagonal values of that inverse would remain uniformly bounded, whereas their magnitudes grow with N. That is exactly how the unboundedness of A is remembered by its bounded Cayley transform."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Compatibility with spectral measures",
+      "eyebrow": "G2 · 087000 · first-pass outline",
+      "lead": "The spectral theorem for bounded unitary operators provides a projection-valued measure on the unit circle.",
+      "body": [
+        "By pushing that measure back through the inverse Cayley coordinate, we obtain a projection-valued measure on the real line for A. The construction must handle the exceptional circle point one. Because the Cayley unitary has no fixed vectors, the spectral projection of that singleton vanishes even if one belongs to the continuous spectrum. Thus no nonzero vector mass is lost when the real-line measure is recovered. The real-line spectral measure then defines Borel functions of the self-adjoint operator."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 087000 · conclusion",
+      "lead": "An unbounded self-adjoint operator can be reconstructed from its spectral measure only with a domain restriction: for each vector, the squared spectral variable must be integrable against its scalar spectral measure.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

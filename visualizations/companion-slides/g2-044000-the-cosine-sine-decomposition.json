@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "g2-044000-the-cosine-sine-decomposition",
+  "title": "The cosine–sine decomposition",
+  "subtitle": "G2 lecture 044000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:044000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/044000-the-cosine-sine-decomposition.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 044000 · first-pass outline",
+      "lead": "For two subspaces, their cosine and sine overlap operators satisfy a Pythagorean identity: the squared cosine contribution plus the squared sine contribution is the identity on the appropriate coordinates.",
+      "body": [
+        "Principal planes turn this operator relation into simple two-by-two projection matrices. We will show that, in finite dimensions, a pair of subspaces can be studied through mutually perpendicular two-dimensional planes, together with directions where the projections already agree or are completely opposed. On each tilted plane, the entire relationship reduces to an ordinary angle theta."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Begin with one tilted pair",
+      "eyebrow": "G2 · 044000 · first-pass outline",
+      "lead": "Let U be the horizontal axis in a two-dimensional plane.",
+      "body": [
+        "Choose unit vectors e along U and f perpendicular to U. Let V be the line making an angle theta with e, where theta lies strictly between zero and ninety degrees. Choose its unit direction v to be cosine theta times e plus sine theta times f. The orthogonal projection P onto U takes the e component of a vector and discards the f component. Its matrix in the ordered basis e, f has one in the upper-left corner and zeros everywhere else. To project onto V, take the inner product with v and multiply by v."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Where does the paired plane come from?",
+      "eyebrow": "G2 · 044000 · first-pass outline",
+      "lead": "For a single tilted line, we simply drew the perpendicular vector f.",
+      "body": [
+        "In higher dimensions we must show that suitable vectors f exist and remain orthogonal across different pairs. Start with two subspaces U and V of a finite-dimensional Hilbert space. Let u be a unit principal vector in U and v its matched unit principal vector in V, with principal angle theta strictly between zero and ninety degrees. We know from the singular-value construction that the projection of v onto U equals cosine theta times u. This is a defining property of a correctly matched principal pair. Subtract that projection from v. The result is perpendicular to U."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Why the different planes do not interfere",
+      "eyebrow": "G2 · 044000 · first-pass outline",
+      "lead": "Principal vectors come from a singular-value decomposition.",
+      "body": [
+        "We can choose the u vectors to be orthonormal within U and the v vectors to be orthonormal within V. Their cross-inner-products vanish for distinct indices. Each f vector is formed by subtracting cosine theta times its matched u vector from v, then dividing by sine theta. For two distinct nontrivial indices, expand the inner product of the corresponding f vectors. The inner product of the v vectors is zero. The cross-inner-products vanish. The inner product of the u vectors is zero. Thus the f vectors are orthogonal. And by construction every f lies in U perpendicular, so every f is perpendicular to every u."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Two independent angles",
+      "eyebrow": "G2 · 044000 · first-pass outline",
+      "lead": "Picture two perpendicular copies of our tilted-line example, sitting inside four-dimensional space.",
+      "body": [
+        "In the first plane, let the target line tilt by thirty degrees. In the second, let it tilt by sixty degrees. The first subspace U is spanned by the first coordinate direction in each plane. The second subspace V is spanned by the corresponding tilted directions. If we order the ambient basis by principal plane, P has two copies of the simple diagonal projection block. Q has one cosine–sine block for thirty degrees and another for sixty degrees. Suppose we take a unit vector in U supported entirely in the first plane."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "What about zero and ninety degrees?",
+      "eyebrow": "G2 · 044000 · first-pass outline",
+      "lead": "The neat two-dimensional tilted blocks require genuine intermediate angles.",
+      "body": [
+        "A complete decomposition must also account for the endpoints. An angle of zero describes a direction shared by U and V. On that direction both projections equal identity. No two-dimensional rotation is needed. A right angle describes a direction in one subspace perpendicular to the other. On a source direction of that kind P equals identity while Q equals zero. If the opposite subspace has an unmatched perpendicular direction, the projection values are reversed. Directions perpendicular to both U and V are also possible. On those, both projections equal zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A balanced complete block theorem",
+      "eyebrow": "G2 · 044000 · first-pass outline",
+      "lead": "There is a particularly clean case.",
+      "body": [
+        "Suppose U and V have the same finite dimension, and the ambient space has exactly twice that dimension. Then U and U perpendicular have matching dimensions. We can choose a complete orthonormal basis for U and a complete orthonormal basis for its complement so that the target vectors take the form cosine theta times a source vector plus sine theta times the matching complement vector. In these coordinates, P is a block matrix with identity in the upper-left and zero in the other three blocks. Q has diagonal matrices of cosine squared and sine squared on its diagonal, and cosine-times-sine diagonal matrices in its crossing blocks."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Why this decomposition is useful",
+      "eyebrow": "G2 · 044000 · first-pass outline",
+      "lead": "Look again at the off-diagonal entry of Q on one principal plane.",
+      "body": [
+        "It is cosine theta times sine theta. From elementary trigonometry, twice that product is sine of twice theta. That simple observation foreshadows the double-angle theorems. They arise in part because the off-diagonal blocks of projection operators naturally contain sine theta times cosine theta. There is another payoff. A rotation through theta maps e to v inside a principal plane. Because the planes are perpendicular, we can rotate them independently. Combining those planar rotations is the beginning of the direct rotation between subspaces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Reconstruction",
+      "eyebrow": "G2 · 044000 · first-pass outline",
+      "lead": "Start with an orthonormal pair e and f, and let v equal cosine theta times e plus sine theta times f.",
+      "body": [
+        "Derive the complete matrix of the projection onto v, directly from the rank-one projection formula. Verify its square equals itself. Next, start with a principal pair u and v, and derive f from the component of v perpendicular to U. Explain why different principal pairs produce orthogonal planes. Finally, tell me what goes wrong if you try to divide by sine theta at a zero angle. If you can do those steps, you have not memorized a cosine–sine block. You have constructed it."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 044000 · conclusion",
+      "lead": "You have constructed it.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

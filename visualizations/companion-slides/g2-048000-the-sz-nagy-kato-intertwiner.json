@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "id": "g2-048000-the-sz-nagy-kato-intertwiner",
+  "title": "The Sz.-Nagy–Kato intertwiner",
+  "subtitle": "G2 lecture 048000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:048000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/048000-the-sz-nagy-kato-intertwiner.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 048000 · first-pass outline",
+      "lead": "Let U and V be two closed subspaces with orthogonal projections P and Q.",
+      "body": [
+        "Suppose the operator norm of P minus Q is strictly below one. This quantitative angle condition prevents either subspace from containing a nonzero direction perpendicular to the other, and it makes the corresponding cosine operator boundedly invertible. Can we turn that geometric compatibility into a single unitary map carrying U onto V? But an angle is a measurement, not a motion. If we want to carry the first subspace onto the second, we need an operator that actually moves vectors."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Assemble the map one piece at a time",
+      "eyebrow": "G2 · 048000 · first-pass outline",
+      "lead": "Let P be projection onto U and Q projection onto V.",
+      "body": [
+        "We can split any vector x into its U component, P x, and its component perpendicular to U, identity minus P applied to x. We want the first piece to land in V. So we apply Q to P x. We want the perpendicular piece to land in V perpendicular. So we apply identity minus Q to identity minus P applied to x. Add the two outputs. Call the resulting operator K. In words, K of x equals the projection onto V of the U part of x, plus the projection onto V perpendicular of the U-perpendicular part of x. In symbols, if we are writing rather than speaking, K is Q P plus the product of identity minus Q and identity minus P. This is not yet a rotation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The intertwining identity",
+      "eyebrow": "G2 · 048000 · first-pass outline",
+      "lead": "Let us test K on a vector from U.",
+      "body": [
+        "Its U-perpendicular component is zero, so K sends it into V. That says K after P equals Q after K. Let us verify the algebra. Multiply K by P on the right. The second term disappears, because P followed by identity minus P is zero. The first term becomes Q P. Now multiply K by Q on the left. The first term becomes Q P again, because Q squared is Q. The second term disappears, because Q followed by identity minus Q is zero. Both products are the same. This equation is called an intertwining identity. K need not commute with P, because P and Q are not necessarily equal. Instead, it converts the action of P before transport into the action of Q after transport."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "A surprising norm identity",
+      "eyebrow": "G2 · 048000 · first-pass outline",
+      "lead": "We can determine exactly how K changes lengths.",
+      "body": [
+        "Its two output pieces lie in orthogonal subspaces: V and V perpendicular. So their squared lengths add. Take a vector x. The squared norm of Q P x is the squared norm of P x minus the squared norm of its part perpendicular to V. Similarly, the squared norm of the complementary output is the squared norm of the U-perpendicular part of x minus the squared norm of its part inside V. Adding the two expressions, the first two original squared norms add to the squared norm of x. What did we subtract? Exactly the squared norm of P minus Q applied to x."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "The planar calculation",
+      "eyebrow": "G2 · 048000 · first-pass outline",
+      "lead": "Return to two lines in the plane meeting at angle theta.",
+      "body": [
+        "U is horizontal and V is tilted counterclockwise. On the horizontal axis, K sends the unit vector to its projection onto V. That vector has length cosine theta and points along V. On the vertical axis, K sends the unit vector to its projection onto the line perpendicular to V. That vector also has length cosine theta. In the acute range, both outputs are the ordinary rotated basis vectors, multiplied by cosine theta. Thus K equals cosine theta times the rotation through theta. What would we do to recover the rotation? Divide by cosine theta."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Why a gap below one makes K invertible",
+      "eyebrow": "G2 · 048000 · first-pass outline",
+      "lead": "There is a second quick identity.",
+      "body": [
+        "Expand K minus the identity. After simplifying with P squared equal to P, the result is P replaced by Q, multiplied by the reflection through U. More precisely, K minus the identity equals Q minus P, followed by the reflection that acts as plus one on U and minus one on U perpendicular. That reflection is unitary. So the norm of K minus the identity equals the norm of Q minus P. If that norm is strictly below one, K is within distance one of the identity in the Banach algebra of bounded operators. Our Neumann-series theorem now applies: K is invertible."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Remove the stretching by polar decomposition",
+      "eyebrow": "G2 · 048000 · first-pass outline",
+      "lead": "Write the polar decomposition of K.",
+      "body": [
+        "Its positive modulus is the square root of K adjoint times K. We have just shown that this equals the positive square root of the identity minus the square of the difference between P and Q. In other words, it is exactly the cosine operator constructed earlier. Call this positive modulus C. In the uniformly acute case C is invertible. Define W by K followed by the inverse of C. Now calculate W adjoint times W. Since C is the positive square root of K adjoint times K, the factors cancel to the identity. So W is an isometry. Because K and C are invertible, W is invertible as well. An invertible isometry is unitary."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "The intertwining identity survives",
+      "eyebrow": "G2 · 048000 · first-pass outline",
+      "lead": "We already know K P equals Q K.",
+      "body": [
+        "We also know K adjoint times K commutes with P. To see this, take the adjoint of the intertwining identity and combine it with the original equation. The middle Q factors simplify because Q is a projection. Since K adjoint times K commutes with P, so does its positive square root C, and so does C inverse. Now take W P. Replace W by K C inverse, commute C inverse past P, and then use K P equals Q K. We obtain W P equals Q W. That is the desired intertwining identity for the unitary operator itself. If x belongs to U, P x equals x, so Q W x equals W x. Therefore W x belongs to V."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "What is special about this transport?",
+      "eyebrow": "G2 · 048000 · first-pass outline",
+      "lead": "The construction was canonical in the sense that we made no basis choices.",
+      "body": [
+        "Given P and Q, it specified K, took its positive modulus, and used the polar factor. But the word canonical does not mean that no other unitary can send U onto V. We can compose a transporter with additional motions internal to the subspaces and still carry U onto V. There is also an important boundary. If the projection gap reaches one, C may no longer have a bounded inverse. The formula using C inverse may then fail, even when a polar factor still exists. Nonacute pairs require a more careful analysis of kernels, crossed defects, and possible unitary completions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "Reconstruction",
+      "eyebrow": "G2 · 048000 · first-pass outline",
+      "lead": "First, derive K P equals Q K directly from the projection identities.",
+      "body": [
+        "Second, use orthogonality of the two output pieces to prove that K adjoint K equals identity minus the square of P minus Q. Third, derive K minus identity as Q minus P followed by reflection through U. Explain why a projection gap below one permits the Neumann series. Finally, show that the modulus C commutes with P, and use that fact to prove that the polar factor W still intertwines P with Q. When you can reconstruct those four steps, you have built a unitary transport from first principles."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 048000 · mathematical reference",
+      "lead": "First, derive K P equals Q K directly from the projection identities.",
+      "body": [
+        "Second, use orthogonality of the two output pieces to prove that K adjoint K equals identity minus the square of P minus Q. Third, derive K minus identity as Q minus P followed by reflection through U. Explain why a projection gap below one permits the Neumann series."
+      ],
+      "mathtex": "KP=QK,\\quad K(I-P)=(I-Q)K,\\quad\nK^*K=I-(P-Q)^2,\\quad K-I=(Q-P)(2P-I).",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 048000 · conclusion",
+      "lead": "When you can reconstruct those four steps, you have built a unitary transport from first principles.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "g2-076000-projection-valued-measures",
+  "title": "Projection-valued measures",
+  "subtitle": "G2 lecture 076000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:076000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/076000-projection-valued-measures.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 076000 · first-pass outline",
+      "lead": "In the finite spectral theorem, a self-adjoint matrix splits the space into mutually orthogonal eigenspaces.",
+      "body": [
+        "We assigned a projection to each eigenvalue. If we selected several eigenvalues, we added their projections, and the result was again a projection. That procedure was the finite prototype of a projection-valued measure. Now imagine the multiplication operator on square-integrable functions over the unit interval. The operator sends a function of t to t times that function. There are no ordinary eigenvectors, yet we can still select spectral values between one quarter and one half."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "The definition",
+      "eyebrow": "G2 · 076000 · first-pass outline",
+      "lead": "Let H be a complex Hilbert space.",
+      "body": [
+        "A projection-valued measure, abbreviated P V M, assigns to each Borel subset B of the real line a bounded operator E of B on H. Three requirements control the assignment. First, every E of B is an orthogonal projection: it is self-adjoint and its square equals itself. Second, E of the whole real line is the identity operator. Third, for pairwise disjoint Borel sets B-one, B-two, and so forth, E of their union is the sum of the individual projections, where the infinite sum converges strongly. Strongly means the following. Choose any one vector x. The partial sums of E of B-n applied to x converge in norm to E of the union applied to x."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Why strong convergence is the right requirement",
+      "eyebrow": "G2 · 076000 · first-pass outline",
+      "lead": "Consider the Hilbert space of square-summable sequences.",
+      "body": [
+        "Let E of the singleton containing n project onto the n-th coordinate axis, with the spectrum indexed by positive integers. The projection onto the first N coordinates is the sum of the first N singleton projections. For a fixed square-summable sequence, the squared norm of the discarded tail approaches zero. Hence these partial sums converge strongly to the identity. But their operator-norm distance from the identity is always one: a unit vector supported in coordinate N plus one is completely missed by the partial sum. So operator-norm convergence fails at every finite stage. This is not a pathology."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Scalar measures hidden inside a P V M",
+      "eyebrow": "G2 · 076000 · first-pass outline",
+      "lead": "Fix a vector x in H.",
+      "body": [
+        "Define a nonnegative number for every Borel B by taking the inner product of E of B applied to x with x. Because E of B is an orthogonal projection, this number is exactly the squared length of E of B applied to x. Call the resulting set function mu sub x. Its total mass is the squared norm of x, because E of the whole line is the identity. For disjoint Borel sets, the projected pieces are orthogonal. The Pythagorean theorem then gives countable additivity by passing to the strong limit. Thus mu sub x is a finite positive measure. This scalar measure answers a concrete question: how much of the squared length of x lies in each spectral region?"
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Recovering a self-adjoint operator",
+      "eyebrow": "G2 · 076000 · first-pass outline",
+      "lead": "Why do we call E a spectral measure?",
+      "body": [
+        "Because it allows us to reconstruct the operator by integration. For a simple scalar function, meaning a finite combination of indicator functions, define its operator integral by replacing each indicator with the corresponding projection. If f takes value three on one Borel set and minus one on another disjoint set, its integral is three times the first projection minus the second. When f is a bounded Borel function, the integral can be obtained by a controlled limit of simple functions. In particular, when E comes from a bounded self-adjoint operator A, integrating the coordinate function lambda against E reproduces A."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Constructing the projections from functional calculus",
+      "eyebrow": "G2 · 076000 · first-pass outline",
+      "lead": "There is an important logical direction here.",
+      "body": [
+        "We should not define E by referring to eigenvectors, since multiplication operators may have none. Start instead with the continuous functional calculus for bounded self-adjoint operators. For every vector x, the rule that sends a continuous function f to the inner product of x with f of A applied to x is positive and bounded. A measure-representation theorem assigns a finite positive measure mu sub x to that functional. These diagonal measures describe all quadratic expressions. To recover off-diagonal expressions, use the polarization identity. That produces matrix elements for bounded Borel functions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A boundary example",
+      "eyebrow": "G2 · 076000 · first-pass outline",
+      "lead": "Take again multiplication by t on the unit interval.",
+      "body": [
+        "Consider the intervals from zero up to, but not including, one half, and from zero through one half, including the endpoint. As subsets of the real line they differ. Yet on ordinary Lebesgue L two, they produce the same spectral projection, because a single point has measure zero. Both simply keep the function on the left half, up to equality almost everywhere. This does not mean all endpoints can be ignored. If the operator has an eigenvector with eigenvalue one half, the scalar spectral measure of that eigenvector has a nonzero atom there. Including the endpoint then adds an entire eigenspace."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "What we have constructed",
+      "eyebrow": "G2 · 076000 · first-pass outline",
+      "lead": "A projection-valued measure assigns a compatible orthogonal decomposition of H to every Borel spectral region.",
+      "body": [
+        "Its countable additivity is strong, and each vector converts it into an ordinary finite positive measure. We have also outlined the construction from continuous calculus through scalar measures, polarization, and Riesz representation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 076000 · conclusion",
+      "lead": "We have also outlined the construction from continuous calculus through scalar measures, polarization, and Riesz representation.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

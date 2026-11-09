@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "g2-096000-approximation-numbers-and-singular-value-sequences",
+  "title": "Approximation numbers and singular-value sequences",
+  "subtitle": "G2 lecture 096000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:096000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/096000-approximation-numbers-and-singular-value-sequences.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 096000 · first-pass outline",
+      "lead": "Imagine compressing an operator into a map with only a limited number of independent output directions.",
+      "body": [
+        "How accurately can you reproduce its behavior on every unit input? For a finite matrix, the Eckart–Young theorem answered that question: keep its largest singular directions and discard the rest. In an infinite-dimensional Hilbert space, we can define the same approximation problem without assuming an infinite singular-value decomposition exists. The approximation numbers are the optimal errors of that rank-constrained problem."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "A definition that always makes sense",
+      "eyebrow": "G2 · 096000 · first-pass outline",
+      "lead": "Let T be a bounded operator from E to F.",
+      "body": [
+        "Define a sub one of T to be the norm of T. For every positive integer k, define a sub k of T to be the infimum of the operator norms of T minus R, taken over operators R having rank strictly less than k. So a sub one uses rank zero competitors: only the zero map is allowed, and the error is the norm of T. For a sub two, rank-one maps are permitted. For a sub three, rank at most two, and so on. To avoid an off-by-one error, number approximation values consistently: the first is the best rank-zero approximation error, the second uses rank at most one, and so forth."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The diagonal calculation",
+      "eyebrow": "G2 · 096000 · first-pass outline",
+      "lead": "Consider a diagonal operator on ell two with coefficients four, two, one, one half, one quarter, and so on.",
+      "body": [
+        "Its largest singular directions are the coordinate axes. If we retain the first k minus one coordinates, the remaining diagonal tail has norm equal to the k-th coefficient. Thus a k is at most that coefficient. For the reverse inequality, take any competitor R of rank less than k. On the k-dimensional span of the first k basis vectors, R must have a nonzero kernel vector. Normalize that vector to unit length. On this span, the original diagonal operator has norm at least the k-th coefficient times the norm of every vector."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "A minimax characterization",
+      "eyebrow": "G2 · 096000 · first-pass outline",
+      "lead": "The same argument suggests another description: a sub k of T equals the infimum, over all subspaces M of dimension strictly less than k, of the norm of T restricted to the orthogonal complement of M.",
+      "body": [
+        "For the easy direction, choose the orthogonal projection P onto M. The operator T P has rank less than k, and the error T minus T P is T followed by projection onto the complement. Its norm is exactly the norm of T restricted to that complement. For the converse, take any rank-less-than-k map R. Its kernel has codimension at most k minus one. Therefore we can find a subspace of that small codimension on which R vanishes."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Why compactness is equivalent to decay",
+      "eyebrow": "G2 · 096000 · first-pass outline",
+      "lead": "A bounded operator is compact precisely when it is a norm limit of finite-rank maps, in the Hilbert-space setting considered here.",
+      "body": [
+        "If T is compact, then for every epsilon there is a finite-rank R within epsilon of T. Let its rank be r. For every k greater than r, R is an admissible competitor, so a sub k of T is smaller than epsilon. Thus the approximation numbers tend to zero. Conversely, suppose a sub k tends to zero. By the definition of an infimum, for each desired positive error we can choose a sufficiently large k and a rank-less-than-k operator R whose distance to T is below that error. Therefore T is a norm limit of finite-rank maps and is compact."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Connecting approximation numbers to eigenvalues",
+      "eyebrow": "G2 · 096000 · first-pass outline",
+      "lead": "Suppose now that T is compact.",
+      "body": [
+        "Its Gram operator, T adjoint T, is positive and compact. The positive square root, called the modulus of T, is also compact. The compact self-adjoint spectral theorem provides orthonormal singular directions with nonzero singular values decreasing to zero, repeated according to multiplicity. Truncating to the first k minus one singular directions gives a rank-less-than-k approximation with error equal to the k-th singular value. A dimension argument gives the reverse inequality. Hence our approximation number a sub k agrees with the k-th singular value."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Two stability estimates",
+      "eyebrow": "G2 · 096000 · first-pass outline",
+      "lead": "First, approximation numbers are stable under operator-norm perturbation.",
+      "body": [
+        "For any fixed rank bound and any competitor R, the triangle inequality gives the distance from S to R at most the distance from T to R plus the norm of S minus T. Taking infima proves a sub k of S is at most a sub k of T plus the perturbation norm. Exchanging S and T yields the absolute difference bound. Second, bounded maps on either side cannot increase an approximation number by more than their operator norms. If R approximates T with small rank, then A R B approximates A T B; its rank is no greater, and its error is bounded by the product of the three operator norms. Taking infima gives the ideal estimate."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "From approximation numbers to Ky Fan gauges",
+      "eyebrow": "G2 · 096000 · first-pass outline",
+      "lead": "A single approximation number measures the best rank-constrained error.",
+      "body": [
+        "A sum of the first several approximation numbers measures accumulated size in leading directions. Those sums are the infinite-dimensional Ky Fan gauges."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 096000 · conclusion",
+      "lead": "Those sums are the infinite-dimensional Ky Fan gauges.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

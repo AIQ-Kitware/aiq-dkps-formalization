@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "g2-079000-bounded-borel-functional-calculus",
+  "title": "Bounded Borel functional calculus",
+  "subtitle": "G2 lecture 079000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:079000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/079000-bounded-borel-functional-calculus.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 079000 · first-pass outline",
+      "lead": "We know how to evaluate a continuous function at a bounded self-adjoint operator.",
+      "body": [
+        "We also know that an operator can be represented as multiplication by the spectral coordinate on a suitable collection of L two spaces. Now we will combine these ideas to handle a much larger class of functions: every bounded Borel measurable function. This extension is needed for perturbation theory. A spectral region such as an interval is selected by an indicator function, and indicators are typically discontinuous."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Begin with simple functions",
+      "eyebrow": "G2 · 079000 · first-pass outline",
+      "lead": "A simple function takes finitely many values.",
+      "body": [
+        "Write it as a sum of scalar coefficients times indicators of pairwise disjoint Borel sets. For each indicator of B, we already have a projection E of B. Define the operator assigned to the simple function as the corresponding finite linear combination of these projections. We should check that the answer does not depend on the representation of the simple function. If we divide the underlying sets into a common finite partition, both expressions agree cell by cell. The finite additivity of E then gives the same operator. Multiplication is similarly concrete."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Extend to bounded Borel functions",
+      "eyebrow": "G2 · 079000 · first-pass outline",
+      "lead": "Every bounded Borel complex-valued function admits a sequence of simple Borel functions converging uniformly to it.",
+      "body": [
+        "One explicit construction partitions a bounded square in the complex plane into progressively finer cells and replaces each function value by a representative of its cell. The preimage of each cell is Borel, and the approximation error decreases uniformly. Let f-n be such simple functions. By the norm estimate, the operator difference between f-n of A and f-m of A is bounded by the uniform difference of the symbols. The sequence of operators is therefore Cauchy in operator norm and converges to a bounded operator. Define that limit to be f of A."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "The algebraic laws",
+      "eyebrow": "G2 · 079000 · first-pass outline",
+      "lead": "Addition, multiplication, scalar multiplication, and taking adjoints all commute with the operator-norm limits just used.",
+      "body": [
+        "Their identities for simple functions therefore extend to bounded Borel functions. Thus the constant-one symbol yields the identity. The product of two symbols yields the composition of their operators. Complex conjugation yields the adjoint. If the symbols are real-valued, their operators are self-adjoint. Every two operators obtained from the same Borel calculus commute, because their scalar symbols commute pointwise. In particular, every f of A commutes with A itself. For a nonnegative real symbol f, its square root is again bounded and Borel."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "A norm estimate and what it does not say",
+      "eyebrow": "G2 · 079000 · first-pass outline",
+      "lead": "If the absolute value of f is everywhere bounded by M, then the norm of f of A is at most M.",
+      "body": [
+        "For multiplication operators this follows immediately from integrating the squared magnitude of f times a vector. There is a sharper statement: the norm is the essential supremum of f relative to the projection-valued measure. That means we ignore sets B for which E of B is zero. We must not automatically use the ordinary pointwise maximum of a Borel function on the entire spectrum. Consider multiplication by t on L two of the unit interval. Let f be zero everywhere except at t equal to one half, where f equals a million. As a pointwise function on the spectrum its supremum is a million."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Strong convergence under bounded pointwise limits",
+      "eyebrow": "G2 · 079000 · first-pass outline",
+      "lead": "Suppose f-n are Borel functions bounded in magnitude by the same constant M, and f-n converges pointwise to f.",
+      "body": [
+        "Do their operators converge in operator norm? Generally, no. But they do converge strongly. Fix a vector x. The squared norm of the difference, f-n of A minus f of A, applied to x equals the integral of the squared absolute difference between f-n and f against mu sub x. That integrand converges pointwise to zero and is bounded by four M squared. The scalar measure mu sub x is finite. Dominated convergence therefore shows that this squared norm tends to zero. Since x was arbitrary, the operators converge strongly."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Indicators and spectral projections",
+      "eyebrow": "G2 · 079000 · first-pass outline",
+      "lead": "The indicator of a Borel set B yields precisely E of B.",
+      "body": [
+        "Hence every spectral projection belongs to the Borel calculus. The indicator of an intersection yields the product of the projections, and the complement yields the identity minus the original projection. This gives a precise language for selecting a spectral cluster. Suppose A has spectrum in two separated closed intervals, one below zero and the other above two. Choosing the indicator of the lower interval gives the orthogonal projection onto the lower spectral subspace. That selection does not require selecting eigenvectors or assuming finite-dimensionality."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Bounded and unbounded symbols",
+      "eyebrow": "G2 · 079000 · first-pass outline",
+      "lead": "We have restricted f to be bounded.",
+      "body": [
+        "A bounded self-adjoint A has bounded spectral support, so the coordinate function itself is bounded there. But even for bounded A, a measurable scalar function may be unbounded near some point of the spectrum. Its multiplication operator may then be unbounded and have a proper domain. One cannot assign it a bounded operator simply by using the same notation. The theory of unbounded measurable functions requires explicit domains and graph-closedness. A Borel function that is not bounded may therefore define an unbounded operator with a proper domain; the bounded functional calculus alone does not authorize that operation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "The theorem assembled",
+      "eyebrow": "G2 · 079000 · first-pass outline",
+      "lead": "We have constructed bounded Borel functional calculus using simple spectral integrals and uniform approximation.",
+      "body": [
+        "We proved the unit, product, adjoint, positivity, and uniform norm bound. We also proved strong convergence under uniformly bounded pointwise limits by reducing it to dominated convergence for scalar spectral measures. These properties are exactly what we need to restrict an operator to a measurable spectral region."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 079000 · conclusion",
+      "lead": "These properties are exactly what we need to restrict an operator to a measurable spectral region.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

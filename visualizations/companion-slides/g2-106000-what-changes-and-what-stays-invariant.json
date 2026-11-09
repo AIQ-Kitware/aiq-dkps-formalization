@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "g2-106000-what-changes-and-what-stays-invariant",
+  "title": "What changes and what stays invariant",
+  "subtitle": "G2 lecture 106000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:106000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/106000-what-changes-and-what-stays-invariant.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 106000 · first-pass outline",
+      "lead": "Perturbation theory asks how the spectral data of a self-adjoint operator change when the operator is modified.",
+      "body": [
+        "Eigenvalues may shift, eigenspaces may rotate, and individual eigenvectors may lose their identity when eigenvalues coincide. We will formulate the stable objects and the assumptions needed to control them. There are two separate quantities to track. An eigenvalue is a number. An eigenspace is a geometric object. A numerical bound on moving eigenvalues does not, by itself, control the angle between the eigenspaces."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Begin with two energy levels",
+      "eyebrow": "G2 · 106000 · first-pass outline",
+      "lead": "Take the plane with coordinates e one and e two.",
+      "body": [
+        "Let the original operator A multiply the first coordinate by zero and the second by four. Its lower eigenspace is the horizontal axis. Its upper eigenspace is the vertical axis. The spectral gap is four. Now add a symmetric perturbation H whose diagonal entries are zero and whose off-diagonal entries are both one. The new operator B has diagonal entries zero and four and off-diagonal entries one. To see how its eigenspaces rotate, take a unit vector that makes an angle theta with the horizontal axis. Its coordinates are cosine theta and sine theta."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Prove the elementary eigenvalue bound",
+      "eyebrow": "G2 · 106000 · first-pass outline",
+      "lead": "For a unit vector x, the difference between the Rayleigh quotients of A and B is its inner product with H x.",
+      "body": [
+        "Cauchy–Schwarz gives an absolute value at most the operator norm of H. Apply that observation to the min–max characterization of the kth eigenvalue. Every minimum over subspaces and every maximum over unit vectors shifts by at most the same number. Consequently, when the ordered eigenvalues of A and B are paired in increasing order, the kth eigenvalue of B differs from the kth eigenvalue of A by at most the norm of H. That is a version of Weyl's perturbation inequality. It makes no claim that the individual eigenvectors associated with those ordered numbers remain close."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Watch a gap close and an eigenspace swap",
+      "eyebrow": "G2 · 106000 · first-pass outline",
+      "lead": "Now change only the diagonal entries.",
+      "body": [
+        "Let A again be diagonal with entries zero and four. For a parameter t between zero and one, add t times the diagonal matrix with entries five and negative five. The resulting eigenvalues, before ordering, are five t and four minus five t. At t equals zero, the lower eigenspace is the horizontal axis. At t equals one, the lower eigenspace is the vertical axis. Those two lines are perpendicular. Where does the change occur? Set five t equal to four minus five t. The equality occurs at t equals two fifths. At that parameter the operator is a scalar multiple of the identity, so every line is an eigenspace."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Stable clusters are more intrinsic than individual eigenvectors",
+      "eyebrow": "G2 · 106000 · first-pass outline",
+      "lead": "Suppose an operator has a cluster containing two eigenvalues, perhaps repeated or nearly equal, and another cluster far away.",
+      "body": [
+        "Inside the first cluster the eigenvectors may mix freely. If those first two eigenvalues become equal, any orthonormal basis of their joint eigenspace is legitimate. Tracking a particular eigenvector therefore depends on a choice that the mathematics does not always specify. Tracking the whole invariant subspace is more robust. Its orthogonal projection is independent of the basis chosen inside it. For example, consider a three-dimensional diagonal operator with diagonal entries zero, zero, and ten. Its first two coordinates form a two-dimensional eigenspace."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "What separation must be maintained?",
+      "eyebrow": "G2 · 106000 · first-pass outline",
+      "lead": "Imagine a selected interval containing the target eigenvalues of A and separated from the rest of its spectrum by a positive distance.",
+      "body": [
+        "Weyl's bound tells us that eigenvalues of B cannot travel farther than the perturbation norm. In finite dimensions, if the perturbation is sufficiently small relative to that separating distance, a contour or interval boundary can still isolate the corresponding number of eigenvalues of B. That statement helps identify the appropriate perturbed cluster. But there are several different gap conditions in the literature. An ordered gap means one spectral set lies wholly to one side of another."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "The residual previews the answer",
+      "eyebrow": "G2 · 106000 · first-pass outline",
+      "lead": "There is one more quantity to introduce before we state a perturbation theorem.",
+      "body": [
+        "Let u be a unit trial vector and let mu be a proposed eigenvalue. Its residual is A u minus mu times u. If that residual vanishes, u is an exact eigenvector with eigenvalue mu. If it is small, u is approximately invariant, but its angle to a particular eigenspace can still be large unless mu is spectrally separated from the unwanted eigenvalues. In the first two-level example, choose the original horizontal basis vector as a trial vector for the perturbed operator B, and choose mu equal to its Rayleigh quotient, zero. The residual is exactly the vertical unit vector. Its norm is one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 106000 · conclusion",
+      "lead": "The answer is a quantitative inequality, and we will prove it rather than memorize it.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

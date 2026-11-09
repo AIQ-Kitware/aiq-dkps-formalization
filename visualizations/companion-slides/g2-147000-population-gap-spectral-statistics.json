@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "id": "g2-147000-population-gap-spectral-statistics",
+  "title": "Population-gap spectral statistics",
+  "subtitle": "G2 lecture 147000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:147000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/147000-population-gap-spectral-statistics.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 147000 · first-pass outline",
+      "lead": "A central statistical task is to estimate an eigenspace from a noisy covariance or similarity matrix.",
+      "body": [
+        "There is a population matrix, which describes the mathematical target, and a sample matrix computed from observations. The sample eigenvectors fluctuate, but the target eigenspace may still be estimable. Population-gap perturbation bounds developed by Yu, Wang, and Samworth control eigenspace error using the population spectrum and the size of the sampling error, without assuming a separate sample gap."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Two matrices with different roles",
+      "eyebrow": "G2 · 147000 · first-pass outline",
+      "lead": "Let Sigma be a real symmetric p-by-p population matrix, with eigenvalues sorted from largest to smallest.",
+      "body": [
+        "Let Sigma hat be a sample estimate of Sigma. Their difference, call it E, is the estimation error. Choose consecutive population eigenvectors, indexed from r through s, and collect them as an orthonormal frame V. The selected block has dimension d, equal to s minus r plus one. Collect the sample eigenvectors with the same ordered indices into V hat. We want to bound the principal angles between the spans of V and V hat. If these spaces coincide, the sine distance is zero, even if an eigensolver returns different bases inside a repeated population eigenspace."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Define the gap carefully",
+      "eyebrow": "G2 · 147000 · first-pass outline",
+      "lead": "For a selected population block, compare its upper endpoint to the preceding population eigenvalue and its lower endpoint to the following population eigenvalue.",
+      "body": [
+        "The population boundary gap Delta is the smaller positive separation, ignoring a boundary that lies outside the ambient index range. For the largest d eigenvalues, there is only a lower boundary. If the dth eigenvalue is separated from the next one by g, Delta is g. For an interior block, both boundaries matter. No separation among eigenvalues inside the selected block is required; repeated eigenvalues inside it are permitted. This matters for principal component analysis."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "The population-only sine bound",
+      "eyebrow": "G2 · 147000 · first-pass outline",
+      "lead": "The population-only sine bound is the next step of the argument.",
+      "body": [
+        "For real symmetric population and sample matrices, the Yu-Wang-Samworth block theorem bounds the Frobenius norm of the sine of the selected principal angles by twice the smaller of square root of d times the operator norm of the perturbation and its Frobenius norm, divided by the positive population boundary gap Delta.",
+        "The factor of two belongs to this theorem. The sample frame is selected by ordered eigenvalue indices, but no separate sample spectral gap is assumed. The bound may be numerically weak for a large perturbation, while remaining valid under the stated finite-dimensional population-gap hypotheses. Why are there two numerator options?"
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "A two-by-two check",
+      "eyebrow": "G2 · 147000 · first-pass outline",
+      "lead": "Take a population matrix with eigenvalues four and one, and choose its leading eigenvector as the target.",
+      "body": [
+        "The population gap is three. Rotate its eigenbasis by an angle theta without changing the eigenvalues, producing Sigma hat. The sample leading eigenvector rotates by theta, so the principal sine is the absolute value of sine theta. The perturbation matrix Sigma hat minus Sigma has operator norm three times the absolute value of sine theta. That follows from the same two-by-two projection-difference computation we used for operator functional calculus. Our population-gap theorem, with selected dimension one, gives a bound of two times the absolute value of sine theta."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "What if the sample eigenvalues cross?",
+      "eyebrow": "G2 · 147000 · first-pass outline",
+      "lead": "Suppose estimation error is large enough that two sample eigenvalues exchange their order relative to the population eigenvalues.",
+      "body": [
+        "Then the sample frame defined by sorted index can correspond to a very different direction. The sine distance can approach its maximal value. The theorem has not failed. The perturbation norm must be at least comparable to the population separation for such an exchange, and the right-hand side can then exceed one. The inequality becomes vacuous exactly where the data no longer determine a stable ordered block. For small estimation error relative to Delta, the bound becomes informative and yields a consistency statement if the error-to-gap ratio tends to zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Aligning estimated eigenvectors",
+      "eyebrow": "G2 · 147000 · first-pass outline",
+      "lead": "Statistical work often reports an estimated matrix of eigenvectors rather than only a subspace.",
+      "body": [
+        "But even with zero estimation error, eigenvectors in a repeated block can be rotated orthogonally without changing the population matrix. So comparing V hat directly with V is generally ill-posed. The appropriate comparison chooses an orthogonal d-by-d matrix O that best aligns the sample frame to the population frame. The Procrustes construction uses the singular value decomposition of their cross-Gram matrix. We studied that geometry."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Population gaps versus mixed gaps",
+      "eyebrow": "G2 · 147000 · first-pass outline",
+      "lead": "There are versions of Davis–Kahan bounds that refer to a separation between a population cluster and sample eigenvalues outside the cluster.",
+      "body": [
+        "Such a mixed gap can be harder to verify, and its value depends on the random sample. The Yu–Wang–Samworth population-gap theorem replaces it with a gap stated entirely using the population matrix. This does not mean the sample spectrum is irrelevant. The proof relies on ordered eigenvalue comparisons and variational inequalities to control how sample eigenvectors can move. It means the final theorem does not ask the user to assume or estimate a separate sample spectral gap."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Precise scope of the finite-dimensional estimate",
+      "eyebrow": "G2 · 147000 · first-pass outline",
+      "lead": "For real symmetric finite-dimensional population and sample matrices, select corresponding ordered eigenvector blocks of the same width and assume a positive population boundary gap.",
+      "body": [
+        "The Frobenius sine bound follows, and an orthogonal matrix can be chosen to align the two frames with a corresponding aligned-frame error estimate. The spectral indices and gap are hypotheses, not conclusions. You should be able to derive the aligned-frame factor from principal angles and write the deterministic population-gap inequality without introducing a sample gap."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 147000 · mathematical reference",
+      "lead": "For real symmetric finite-dimensional population and sample matrices, select corresponding ordered eigenvector blocks of the same width and assume a positive population boundary gap.",
+      "body": [
+        "The Frobenius sine bound follows, and an orthogonal matrix can be chosen to align the two frames with a corresponding aligned-frame error estimate."
+      ],
+      "mathtex": "\\|\\sin\\Theta(V,\\widehat V)\\|_F\\le\n\\frac{2\\min(\\sqrt d\\,\\|E\\|_{op},\\|E\\|_F)}{\\Delta}.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 147000 · conclusion",
+      "lead": "The answer to that question depends on the sampling model, while the perturbation theorem does not.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

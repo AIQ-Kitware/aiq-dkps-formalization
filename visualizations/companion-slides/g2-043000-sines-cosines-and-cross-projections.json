@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-043000-sines-cosines-and-cross-projections",
+  "title": "Sines, cosines, and cross projections",
+  "subtitle": "G2 lecture 043000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:043000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/043000-sines-cosines-and-cross-projections.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 043000 · first-pass outline",
+      "lead": "Imagine two lines in the plane.",
+      "body": [
+        "The first is horizontal. The second tilts upward at an angle theta. A unit arrow along the first line has two parts relative to the second: a part that lands on the second line when projected, and a part that remains perpendicular to it. The lengths of those parts are cosine theta and sine theta. We know this from ordinary right triangles. What matters today is that this is also a statement about linear operators. If we can express those two parts using projections, we will have a way to measure angles between entire subspaces, even when there are several different principal angles."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Two ways to split one vector",
+      "eyebrow": "G2 · 043000 · first-pass outline",
+      "lead": "Call our subspaces U and V, and call their orthogonal projections P and Q.",
+      "body": [
+        "The letter P always projects onto U; Q always projects onto V. Take a vector x that already belongs to U. Then P of x is just x. Now decompose it relative to V. The component inside V is Q of x. The component perpendicular to V is x minus Q of x, or equivalently, identity minus Q applied to x. Those two pieces are perpendicular. Therefore the square of the length of x equals the square of the length of Q x plus the square of the length of identity minus Q applied to x. This is Pythagoras, but it is also an operator identity."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "A one-line calculation that matters",
+      "eyebrow": "G2 · 043000 · first-pass outline",
+      "lead": "Work with the unit horizontal vector in the plane.",
+      "body": [
+        "Let the target line make an angle theta with it. The target unit direction has horizontal component cosine theta and vertical component sine theta. Projecting the horizontal vector onto the target multiplies that target direction by cosine theta. Its resulting length is cosine theta. Subtract that projection from the original vector. The remaining component has length sine theta. So, on this particular source direction, the two operators reproduce exactly the two sides of the right triangle. Notice a subtlety. The output of the cosine map lies in V, not in U. The sine map's output lies in V perpendicular."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "From one angle to many",
+      "eyebrow": "G2 · 043000 · first-pass outline",
+      "lead": "Let us return to two higher-dimensional subspaces.",
+      "body": [
+        "Choose an orthonormal coordinate embedding for U; call it E. It sends a short coordinate vector into the ambient space without changing its length. The target projection Q composed with E tells us how a source coordinate vector overlaps V. Its singular values are the cosines of the directed principal angles, when counted on the source coordinate space. Now consider identity minus Q composed with E. This is the complementary, or sine, map. Its singular values are the sines of those same directed angles, with the correct ordering matched through a common orthonormal source basis. Why should they have matching directions?"
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "What changes when dimensions differ?",
+      "eyebrow": "G2 · 043000 · first-pass outline",
+      "lead": "Suppose U is a plane but V is a line inside that plane.",
+      "body": [
+        "One direction of U is perfectly aligned with V. The other direction of U is perpendicular to V. From the perspective of U, the directed angles are zero and ninety degrees. From the shorter, paired principal-angle convention, there is only one angle, which is zero. Both descriptions are valid, but they answer different questions. The rectangular sine map keeps track of the unpaired source direction. If our goal is to measure everything that escapes from U, dropping that direction would lose essential information. This is why we must always ask what space a principal-angle operator acts on, and which direction the comparison goes."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "The difference between two projections",
+      "eyebrow": "G2 · 043000 · first-pass outline",
+      "lead": "There is another natural geometric quantity: the operator P minus Q.",
+      "body": [
+        "It takes any ambient vector and compares its two projected versions. At first it may seem that the difference should be identical to the sine map. But they have different domains and outputs. The sine map, identity minus Q followed by P, measures the escape of U into V perpendicular. The difference P minus Q also sees directions starting outside U, including how much V escapes U. We can relate them exactly. Square P minus Q. Expand as though these were matrices, but do not interchange P and Q. The result is P plus Q minus P Q minus Q P. Now reorganize that expression into two pieces. One is P times identity minus Q times P."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A forty-five-degree check",
+      "eyebrow": "G2 · 043000 · first-pass outline",
+      "lead": "Take U as the horizontal line in the plane, and V as the line tilted by forty-five degrees.",
+      "body": [
+        "The projection P sends a vector to its horizontal part. The projection Q sends it to its component along the tilted line. For the horizontal unit vector, identity minus Q leaves a perpendicular component of length one over the square root of two. The reverse cross projection has the same norm. Our formula predicts that P minus Q has operator norm one over the square root of two as well. You can verify this directly from the two-by-two projection matrices. In this equal-dimensional line example, the two directional errors are balanced."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "What we have built",
+      "eyebrow": "G2 · 043000 · first-pass outline",
+      "lead": "We now have three complementary measurements.",
+      "body": [
+        "A cosine map tells us what remains inside a target subspace. A sine map tells us what escapes it. The difference of projections measures the larger of the two directional escapes. All three are constructed using operators we already know. None requires us to invent coordinates beyond those needed for a worked example. And the Gram identity tells us why the cosine and sine measurements come from the same principal directions. Here is your reconstruction exercise. Starting only from the identities P squared equals P, Q squared equals Q, and the fact that both projections equal their adjoints, derive the formula for the square of P minus Q."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 043000 · mathematical reference",
+      "lead": "We now have three complementary measurements.",
+      "body": [
+        "A cosine map tells us what remains inside a target subspace. A sine map tells us what escapes it. The difference of projections measures the larger of the two directional escapes. All three are constructed using operators we already know."
+      ],
+      "mathtex": "C=QE,\\quad S=(I-Q)E,\\quad C^*C=E^*QE,\\quad S^*S=E^*(I-Q)E=I-C^*C.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 043000 · conclusion",
+      "lead": "Inside each block, both projections will have simple two-by-two matrices, and sine and cosine will become visible together.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

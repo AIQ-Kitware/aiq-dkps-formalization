@@ -18,7 +18,7 @@ from dkvis.presentation.slide_math import MathSvgRenderer, MATH_RENDERER_VERSION
 
 SOURCE_DIR = ROOT / 'companion-slides'
 CACHE_DIR = ROOT / 'companion-slide-cache'
-RENDERER_VERSION = '11-g2-layout-'+MATH_RENDERER_VERSION
+RENDERER_VERSION = '12-coverage-stage-'+MATH_RENDERER_VERSION
 FIGURE_DIR = SOURCE_DIR / 'figures'
 DECK_ID = re.compile(r'^[a-z][a-z0-9-]{1,63}$')
 
@@ -118,7 +118,7 @@ header{display:flex;align-items:center;gap:13px;flex-wrap:wrap;padding:11px 22px
 .slide{background:radial-gradient(ellipse at 100% 4%,#183348 0%,transparent 46%),linear-gradient(130deg,#132737,#0e1c29 70%);border:1px solid #3b5970;aspect-ratio:16/9;min-height:610px;max-height:calc(100vh - 100px);overflow:auto;position:relative;padding:clamp(25px,2.8vw,52px) clamp(31px,3.4vw,62px) 48px;border-top:4px solid #7fcde3}.slide[hidden]{display:none}
 .slide-meta{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:9px}.kicker{font-size:12px;color:var(--aqua);font-weight:680;letter-spacing:.115em;text-transform:uppercase}.slide-id{font:12px/1.3 system-ui,sans-serif;letter-spacing:.11em;color:#8aafc4}
 .slide h1{font-family:'EB Garamond',Georgia,'Times New Roman',serif;font-size:clamp(32px,3.65vw,57px);font-weight:500;line-height:1.08;max-width:1260px;margin:0 0 12px;letter-spacing:-.021em;color:var(--ink)}.lead{font-size:clamp(17px,1.42vw,23px);line-height:1.38;color:#bfe3ef;max-width:1100px;margin:0 0 20px;font-weight:420}
-.slide-stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,1fr);gap:clamp(20px,3.4vw,60px);align-items:center}.slide-stage:not(:has(.figure)){grid-template-columns:1fr}.slide--reading .slide-stage{max-width:1220px;min-height:330px;margin-left:auto;margin-right:auto;align-items:center}.slide--reading .narrative{columns:2;column-gap:5vw;column-fill:balance}.slide--reading .narrative p{break-inside:avoid}.slide--reading .argument-beat{font-size:clamp(18px,1.33vw,23px);font-weight:400;line-height:1.56;margin:0 0 23px;padding-left:15px;border-left:2px solid #4d788b}.slide--reading.slide--long .argument-beat{font-size:clamp(16px,1.15vw,20px)}.slide--opening .slide-stage{grid-template-columns:1fr 1.05fr}.slide--opening h1{font-size:clamp(40px,4.3vw,70px)}
+.slide-stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,1fr);gap:clamp(20px,3.4vw,60px);align-items:center}.slide-stage:not(:has(.figure)){grid-template-columns:1fr}.slide--reading .slide-stage{max-width:1220px;min-height:330px;margin-left:auto;margin-right:auto;align-items:center}.slide--reading .narrative{columns:2;column-gap:5vw;column-fill:balance}.slide--reading .narrative p{break-inside:avoid}.slide--reading .argument-beat{font-size:clamp(18px,1.33vw,23px);font-weight:400;line-height:1.56;margin:0 0 23px;padding-left:15px;border-left:2px solid #4d788b}.slide--reading.slide--long .argument-beat{font-size:clamp(16px,1.15vw,20px)}.slide--opening .slide-stage{grid-template-columns:1fr 1.05fr}.slide--opening .slide-stage:not(:has(.figure)){grid-template-columns:minmax(0,1fr);max-width:1130px;align-items:start;min-height:0;margin-top:24px}.slide--opening .slide-stage:not(:has(.figure)) .narrative p{max-width:88ch;font-size:clamp(18px,1.26vw,22px);line-height:1.6}.slide--opening h1{font-size:clamp(40px,4.3vw,70px)}
 .narrative{min-width:0}.narrative p{margin:0 0 13px;font-size:clamp(15px,1.07vw,18px);line-height:1.53;color:var(--body);max-width:72ch}.narrative p:first-child::first-letter{font-feature-settings:'kern'}.narrative ul{list-style:none;padding:0;margin:9px 0}.narrative li{padding:7px 0 8px 21px;position:relative;color:var(--body);font-size:clamp(15px,1.05vw,18px);line-height:1.45}.narrative li:before{content:'•';position:absolute;left:0;color:var(--gold)}
 .figure{margin:0;min-width:0;max-width:none;background:linear-gradient(145deg,#172e40,#122332);border:1px solid #345369;border-radius:5px;padding:clamp(14px,1.6vw,27px);display:grid;align-items:center;justify-items:center;min-height:220px}.figure svg{display:block;width:100%;height:auto;max-height:325px;overflow:visible}.slide--opening .figure svg{max-height:370px}
 .math-stage{color:var(--gold);width:100%;margin:8px auto 20px;display:flex;align-items:center;justify-content:center;height:112px;min-height:112px;overflow:hidden}.math-stage svg{display:block;width:100%;height:100%;color:var(--gold);fill:currentColor}.math-stage--multi{height:154px;min-height:154px}.math-stage svg path:not([style*="fill:none"]),.math-stage svg use{fill:currentColor!important}.slide--math .math-stage{margin-top:9px;margin-bottom:18px}.slide--math.slide--reading .math-stage{max-width:1120px}
@@ -185,6 +185,8 @@ class CompanionSlideLibrary:
                 raise ValueError('Slide source filenames must match stable deck IDs')
             if not isinstance(entry.get('lecture_nodes'), list):
                 raise ValueError('Slide deck requires lecture-node associations')
+            if entry.get('editorial_stage') not in {'expanded', 'baseline'}:
+                raise ValueError(f'Missing editorial stage for deck {key}')
             result[key] = entry
         return result
 
@@ -196,6 +198,9 @@ class CompanionSlideLibrary:
         data = json.loads(raw)
         if data.get('schema_version') != 1 or data.get('id') != key:
             raise ValueError(f'Invalid source for {key}')
+        if data.get('editorial_stage', entry['editorial_stage']) != entry['editorial_stage']:
+            raise ValueError(f'Editorial stage mismatch for {key}')
+        data['editorial_stage'] = entry['editorial_stage']
         if data.get('lecture_nodes') != entry['lecture_nodes']:
             raise ValueError(f'Mismatched lecture links for {key}')
         slides = data.get('slides')
@@ -216,7 +221,7 @@ class CompanionSlideLibrary:
                 raise ValueError('Invalid MathTex equation')
             if len(json.dumps(page)) > 12000:
                 raise ValueError('Slide content exceeds maximum length')
-        digest = hashlib.sha256(RENDERER_VERSION.encode() + raw)
+        digest = hashlib.sha256(RENDERER_VERSION.encode() + entry['editorial_stage'].encode() + raw)
         for diagram in sorted({slide.get('diagram') for slide in slides if slide.get('diagram')}):
             if not DECK_ID.fullmatch(diagram):
                 raise ValueError('Invalid diagram identifier')
@@ -232,6 +237,7 @@ class CompanionSlideLibrary:
     def status(self, key):
         data, stamp = self._read(key)
         return dict(id=key, title=data['title'], subtitle=data['subtitle'],
+                    editorial_stage=data['editorial_stage'], needs_expansion=data['editorial_stage']=='baseline',
                     slide_count=len(data['slides']), lecture_nodes=data['lecture_nodes'],
                     built=self._path(key, stamp).is_file(),
                     url=f'/slide-decks/{key}',
@@ -284,6 +290,8 @@ def render_html(deck, *, math_svg=None):
     parts=[]
     tracks = {node.split(':', 1)[0].upper() for node in deck.get('lecture_nodes', [])}
     track_label = ' / '.join(sorted(tracks)) if tracks else 'DKPS'
+    baseline = deck.get('editorial_stage') == 'baseline'
+    stage_label = 'BASELINE · NEEDS EXPANSION' if baseline else ''
     for index,slide in enumerate(deck['slides']):
         layout=slide.get('layout') or ('figure' if slide.get('diagram') else 'reading')
         body=slide.get('body', [])
@@ -323,14 +331,14 @@ def render_html(deck, *, math_svg=None):
                  +(' slide--brief' if total_chars<400 else ' slide--long'))
         stage=f'<div class="slide-stage"><div class="narrative">{paragraphs}</div>{figure}</div>'
         parts.append(f'''<section class="{classes}" id="slide-{index+1}" {'hidden' if index else ''}>
-<div class="slide-meta"><div class="kicker">{esc(slide.get('eyebrow') or deck['title'])}</div><div class="slide-id">{esc(track_label)} · {index+1:02d} / {len(deck['slides']):02d}</div></div>
+<div class="slide-meta"><div class="kicker">{esc(slide.get('eyebrow') or deck['title'])}</div><div class="slide-id">{esc(stage_label + ' · ' if baseline else '')}{esc(track_label)} · {index+1:02d} / {len(deck['slides']):02d}</div></div>
 <h1>{esc(slide['title'])}</h1><p class="lead">{esc(slide['lead'])}</p>
 {math}{idea}{stage}{takeaway}
 <div class="foot">{esc(deck['title'])} · {index+1} / {len(deck['slides'])}</div></section>''')
     options=''.join(f'<option value="{i}">{i+1}. {esc(slide["title"])}</option>' for i,slide in enumerate(deck['slides']))
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(deck['title'])} · DKPS companion slides</title><style>{STYLE}</style></head>
-<body><header><strong>{esc(deck['title'])}</strong><span class="muted">Standalone mathematics · arrow keys navigate</span>
+<body><header><strong>{esc(deck['title'])}</strong><span class="muted">{esc('Baseline outline · needs expansion' if baseline else 'Standalone mathematics')} · arrow keys navigate</span>
 <button id="prev" aria-label="Previous slide">◀</button><select id="jump" aria-label="Select slide">{options}</select>
 <span id="current" aria-live="polite">1 / {len(deck['slides'])}</span><button id="next" aria-label="Next slide">▶</button>
 <button onclick="window.print()" aria-label="Print or save as PDF">Print / PDF</button></header>

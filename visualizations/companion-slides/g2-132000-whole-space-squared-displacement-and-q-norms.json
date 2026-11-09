@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-132000-whole-space-squared-displacement-and-q-norms",
+  "title": "Whole-space squared displacement and Q-norms",
+  "subtitle": "G2 lecture 132000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:132000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/132000-whole-space-squared-displacement-and-q-norms.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 132000 · first-pass outline",
+      "lead": "An orthogonal or unitary transporter W carries a source subspace U onto a target subspace V.",
+      "body": [
+        "Restricted displacement measures identity minus W only on U. Proposition four point three instead studies squared displacement on the entire ambient space. Its conclusion compares the direct rotation to all such transporters for a norm of this positive squared operator, under the stated hypotheses."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "The positive displacement square",
+      "eyebrow": "G2 · 132000 · first-pass outline",
+      "lead": "Let U and V be two closed subspaces that admit a direct rotation D.",
+      "body": [
+        "Let W be any other unitary satisfying W U equals V. Define the full displacement of W as identity minus W. Its positive displacement square is the adjoint of identity minus W multiplied by identity minus W. For any vector x, the quadratic form of this positive operator at x is the squared length of x minus W x. It is therefore a natural measure of displacement energy. But our theorem will compare unitarily invariant norms of the positive operator, not simply the energy at one chosen vector. Expand the product. Because W is unitary, the result is two times the identity minus W minus W adjoint."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Why one restricted comparison is insufficient",
+      "eyebrow": "G2 · 132000 · first-pass outline",
+      "lead": "The source-restricted theorem compared identity minus D and identity minus W on U.",
+      "body": [
+        "For the full displacement square we must control behavior on both U and U perpendicular. Those are orthogonal source blocks. The direct rotation has a compatibility property: interchanging U with U perpendicular and V with V perpendicular gives the same direct rotation. Therefore Proposition four point one can be applied a second time, now to the complementary subspaces. On U, the restricted displacement of D has singular values no larger than those of W. On U perpendicular, the same comparison holds for the complementary restricted maps."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Combine the squared singular values",
+      "eyebrow": "G2 · 132000 · first-pass outline",
+      "lead": "First recall how Ky Fan sums work for a block diagonal operator.",
+      "body": [
+        "The k largest singular values of a direct sum are obtained by merging the two individual sorted lists. Thus its Ky Fan k sum is the maximum of all possible splits: take i values from the first block and k minus i from the second. The squared singular-value lists on the source subspace and its perpendicular complement are compared separately. A direct-sum inequality then says that domination of every Ky Fan prefix on both orthogonal blocks implies domination of the prefixes after merging the lists. This supplies the required whole-space comparison. Now let G be the full displacement square of W."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "A warning about individual eigenvalues",
+      "eyebrow": "G2 · 132000 · first-pass outline",
+      "lead": "The conclusion concerns cumulative prefixes, not every individual eigenvalue.",
+      "body": [
+        "A pinched positive matrix may have a smaller total of its largest k eigenvalues while some lower eigenvalue increases. For example, pinching the two-by-two matrix with diagonal entries three and off-diagonal entries four removes the cross terms. Its singular values change from seven and one to three and three: the largest decreases while the smaller increases. Thus prefix-sum control is the appropriate general conclusion. In fact the direct rotation's squared displacement need not have every singular value below the corresponding competitor's value."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Which unsquared norms follow?",
+      "eyebrow": "G2 · 132000 · first-pass outline",
+      "lead": "Suppose we are interested in a norm of identity minus W itself.",
+      "body": [
+        "Can we take square roots of the squared-displacement inequality? For the operator norm, yes. The norm of X adjoint X equals the square of the norm of X. Therefore minimizing the operator norm of the positive square also minimizes the operator norm of X. For the Frobenius or Hilbert–Schmidt norm, also yes. The trace norm of X adjoint X equals the square of the Hilbert–Schmidt norm of X. Because Proposition four point three applies to the trace norm of the positive square, it gives the Frobenius comparison for unsquared displacement. The same pattern extends to Schatten p norms with p at least two."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A plane example and the boundary of the result",
+      "eyebrow": "G2 · 132000 · first-pass outline",
+      "lead": "Take two real lines meeting at angle theta.",
+      "body": [
+        "The direct rotation through theta has displacement singular values equal to twice the sine of half theta, repeated twice. A reflecting transporter can have displacement singular values two and zero. Under the operator norm, the direct rotation wins because its largest chord is at most square root of two for principal theta at most a right angle. Under the Frobenius norm, its two squared chords sum to a value at most four, tying the reflection at a right angle. Under the trace norm, however, the direct rotation costs four times the sine of half theta, while the reflection costs two. Above sixty degrees, the reflection wins."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Close",
+      "eyebrow": "G2 · 132000 · first-pass outline",
+      "lead": "The proof of Proposition four point three consists of squared restricted singular-value bounds, a Ky Fan direct-sum argument, and a pinching contraction.",
+      "body": [
+        "Those operations control all unitarily invariant norms of the positive displacement square. They also control full displacement in Q-norms, including operator, Frobenius, and Schatten p norms for p at least two. Optimality for a norm of squared displacement does not establish optimality for an arbitrary unitarily invariant norm of identity minus W itself. Proposition four point four as printed asserts the latter without a valid general proof; explicit counterexamples show why the distinction is necessary."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 132000 · mathematical reference",
+      "lead": "The proof of Proposition four point three consists of squared restricted singular-value bounds, a Ky Fan direct-sum argument, and a pinching contraction.",
+      "body": [
+        "Those operations control all unitarily invariant norms of the positive displacement square."
+      ],
+      "mathtex": "\\sum_{j=1}^k s_j(G_D)\\le \\sum_{j=1}^k s_j(G_W)\\quad(k\\ge1),",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 132000 · conclusion",
+      "lead": "Proposition four point four as printed asserts the latter without a valid general proof; explicit counterexamples show why the distinction is necessary.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

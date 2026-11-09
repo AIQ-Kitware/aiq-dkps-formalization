@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-041000-operator-trigonometric-functions",
+  "title": "Operator trigonometric functions",
+  "subtitle": "G2 lecture 041000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:041000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/041000-operator-trigonometric-functions.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 041000 · first-pass outline",
+      "lead": "The cosine of an angle is a number.",
+      "body": [
+        "We learned it first from triangles and circles. But later in spectral theory we will see expressions such as the sine of an operator, or the arcsine of a positive operator. These are not metaphors, and they are not instructions to apply sine separately to every matrix entry. They are operators defined by spectral or power-series constructions, with the usual matrix entries determined only after choosing a basis. Our task today is to understand what those constructions mean, why they are well-defined, and what must be checked before using an inverse trigonometric function."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Begin with diagonal matrices",
+      "eyebrow": "G2 · 041000 · first-pass outline",
+      "lead": "Suppose A is a diagonal real matrix with diagonal entries zero and sixty degrees expressed in radians.",
+      "body": [
+        "In other words, the second entry is pi divided by three. Because A is diagonal, it acts independently along the two coordinate axes. On the first axis its eigenvalue is zero. On the second its eigenvalue is pi over three. What should cosine of A do? The natural answer is to multiply the first coordinate by cosine zero, which is one, and the second by cosine pi over three, which is one half. So cosine of A is the diagonal operator with entries one and one half. Sine of A is diagonal too, with entries zero and the square root of three divided by two."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Rebuild sine and cosine from series",
+      "eyebrow": "G2 · 041000 · first-pass outline",
+      "lead": "There is another route that doesn't begin with eigenvectors.",
+      "body": [
+        "In our study of exponentials, the even and odd terms of a power series gave ordinary cosine and sine. We can repeat that construction for a bounded operator A. Cosine of A is the identity minus A squared divided by two factorial, plus A to the fourth divided by four factorial, and so on with alternating signs. Sine of A is A minus A cubed divided by three factorial, plus A to the fifth divided by five factorial, and so on. Why do the sums converge? The operator norm of any power A to the n is bounded by the norm of A raised to the n. Each operator series is dominated by a convergent numerical factorial series."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Recover a trigonometric identity",
+      "eyebrow": "G2 · 041000 · first-pass outline",
+      "lead": "For ordinary numbers, sine squared plus cosine squared equals one.",
+      "body": [
+        "Does the same identity hold for operators? Yes, when sine and cosine are defined by these power series for one bounded operator. To see the idea without doing an enormous expansion, remember that the scalar power series satisfy the identity, and finite spectral calculus transfers it eigenvalue by eigenvalue for a self-adjoint matrix. In each eigendirection of A, the square of sine of A plus the square of cosine of A multiplies by sine squared lambda plus cosine squared lambda. That equals one. Since the eigendirections form a basis, the operator sum is the identity."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "What about inverse trigonometric functions?",
+      "eyebrow": "G2 · 041000 · first-pass outline",
+      "lead": "Now we come to a subtlety.",
+      "body": [
+        "To apply a function of an operator, that function must be defined at every spectral value we intend to use. The real arcsine is defined on numbers from negative one to one. So if A is self-adjoint and all its eigenvalues lie in that interval, we may define arcsine of A by applying arcsine to each eigenvalue. The result is self-adjoint, because its eigenvalues are real and it has the same orthogonal spectral projections. But arcsine does not undo sine on every real angle. For instance, sine of thirty degrees equals sine of one hundred fifty degrees. The inverse sine chooses its principal output between negative ninety and positive ninety degrees."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "The angle operator will use a safe range",
+      "eyebrow": "G2 · 041000 · first-pass outline",
+      "lead": "Consider a positive self-adjoint contraction S.",
+      "body": [
+        "Positive means its eigenvalues are nonnegative; contraction means they are no larger than one in magnitude. Consequently, every eigenvalue lies between zero and one. We can apply arcsine to S without ambiguity about its domain. The resulting operator has eigenvalues between zero and ninety degrees, and is positive. That construction is exactly the kind of thing we will need for principal angles between subspaces. Those angles are conventionally chosen between zero and a right angle. Their sines belong to zero through one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Cosine, sine, and rotations",
+      "eyebrow": "G2 · 041000 · first-pass outline",
+      "lead": "The same construction describes a unitary flow: a continuously varying family of length-preserving operators with identity at time zero.",
+      "body": [
+        "Take a real operator J whose square is negative the identity. Suppose J commutes with a self-adjoint operator T. Think of J as a quarter-turn on each of several perpendicular planes, and T as specifying how quickly each plane rotates. Then the exponential of J times T splits into two pieces: cosine of T, plus J times sine of T. The reason is the same even-and-odd power calculation that produced the ordinary rotation matrix. The even powers of J contribute alternating signs. The odd powers leave one factor of J."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Why the spectral range controls inverse functions",
+      "eyebrow": "G2 · 041000 · first-pass outline",
+      "lead": "If an angle operator has spectrum between zero and ninety degrees, the sine and cosine functional calculus give positive contraction operators representing complementary parts of subspace overlap.",
+      "body": [
+        "The interval matters: inverse trigonometric functions recover their arguments only on the spectral branches where those scalar inverse identities hold. For now, try three calculations from memory. Given a diagonal self-adjoint matrix, construct its sine and cosine by changing eigenvalues. Given a projection, derive sine and cosine of t times that projection. Finally, explain why arcsine of sine of A may fail to recover A even though the ordinary sine and cosine operator identities work perfectly."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 041000 · mathematical reference",
+      "lead": "If an angle operator has spectrum between zero and ninety degrees, the sine and cosine functional calculus give positive contraction operators representing complementary parts of subspace overlap.",
+      "body": [
+        "The interval matters: inverse trigonometric functions recover their arguments only on the spectral branches where those scalar inverse identities hold."
+      ],
+      "mathtex": "\\sin A=\\sum_j\\sin(\\lambda_j)P_j,\\qquad\n\\cos A=\\sum_j\\cos(\\lambda_j)P_j,\\qquad\n(\\sin A)^2+(\\cos A)^2=I.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 041000 · conclusion",
+      "lead": "The answers all come from one principle: a function of an operator must be interpreted through the operator's algebra and spectrum, not through its printed matrix entries.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

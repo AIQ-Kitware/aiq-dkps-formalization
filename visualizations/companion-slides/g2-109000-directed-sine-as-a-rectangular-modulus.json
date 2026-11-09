@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "g2-109000-directed-sine-as-a-rectangular-modulus",
+  "title": "Directed sine as a rectangular modulus",
+  "subtitle": "G2 lecture 109000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:109000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/109000-directed-sine-as-a-rectangular-modulus.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 109000 · first-pass outline",
+      "lead": "Let X be the bounded overlap map that takes trial coordinates into the exact complementary spectral coordinates.",
+      "body": [
+        "A residual identity makes X solve a Sylvester equation, so a gap between the trial and complementary spectra controls its norm. The remaining geometric step is to identify the singular values of X with the sines of the directed principal angles. The main identity is a Gram-operator calculation. It works for real or complex Hilbert spaces, for finite-dimensional or infinite-dimensional trial spaces, and without choosing individual principal vectors."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Define the two projections",
+      "eyebrow": "G2 · 109000 · first-pass outline",
+      "lead": "Let U be the exact target subspace of a Hilbert space H.",
+      "body": [
+        "Write P for the orthogonal projection onto U. Let E be an isometry from a trial-coordinate Hilbert space F into H. Its range is the trial subspace V. Split E into two parts. The component inside the target space is C equals P E. The component outside is S equals the identity minus P, composed with E. The maps C and S both start in F and end in H. Their ranges are orthogonal, because one lands in U and the other in U perpendicular. Their sum is E. Because E preserves lengths, the sum of the squares of the output lengths of C and S equals the input length squared."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Construct the sine modulus",
+      "eyebrow": "G2 · 109000 · first-pass outline",
+      "lead": "Consider S adjoint S.",
+      "body": [
+        "Since S equals the identity minus P times E, and the complementary projection is self-adjoint and idempotent, S adjoint S equals E adjoint times the identity minus P times E. This is a positive operator on the trial-coordinate space F. Its unique positive square root is the modulus of S, written absolute value of S. For a unit coordinate vector x, the squared norm of S x is the amount of the trial vector E x that lies outside U. The largest such amount is the square of the operator norm of S. In finite dimensions, diagonalize S adjoint S. Its eigenvalues lie between zero and one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Replace ambient escape with exact complementary coordinates",
+      "eyebrow": "G2 · 109000 · first-pass outline",
+      "lead": "Now choose an isometric coordinate map F one whose range is U perpendicular.",
+      "body": [
+        "The projection onto U perpendicular is F one F one adjoint. Define X equal to F one adjoint E, the same map as in the complementary Sylvester equation. It sends trial coordinates to coordinates in U perpendicular. Compute X adjoint X. It equals E adjoint F one F one adjoint E. Replace F one F one adjoint by the identity minus P. We get E adjoint times the identity minus P times E. That is exactly S adjoint S. Therefore X and S have the same Gram operator, the same positive modulus, and the same singular values where those are defined. The directed sine operator on F is their common modulus."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Work out the plane",
+      "eyebrow": "G2 · 109000 · first-pass outline",
+      "lead": "Let U be the horizontal axis in the real plane.",
+      "body": [
+        "Choose a unit trial vector u with coordinates cosine theta and sine theta. The trial-coordinate space is one-dimensional, so E sends a scalar t to t times u. The complementary projection removes the horizontal coordinate. Therefore S applied to one is sine theta times the vertical basis vector. If F one identifies the complement with the real line, X applied to one is the scalar sine theta. The maps have different outputs, a plane vector versus a scalar, but they have the same modulus: multiplication by the absolute value of sine theta. At thirty degrees, that modulus is one half. At ninety degrees, it is one. At zero degrees, it is zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A two-dimensional trial space can have two different directed angles",
+      "eyebrow": "G2 · 109000 · first-pass outline",
+      "lead": "Now work in three-dimensional space.",
+      "body": [
+        "Let the exact target U be the plane spanned by the first two coordinate axes. Let the trial space V be the plane spanned by the first and third axes. Choose E whose columns are the first and third basis vectors. The first trial vector lies entirely in U, so its escape under the complementary projection is zero. The second trial vector lies perpendicular to U, so its escape has length one. The singular values of S are therefore one and zero, or equivalently the directed principal angles are ninety and zero degrees, in descending sine order. This example illustrates why an operator or an entire list of sines is often more informative than a single angle."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Prove trial-basis independence",
+      "eyebrow": "G2 · 109000 · first-pass outline",
+      "lead": "Suppose we change the orthonormal trial coordinates by a unitary map W.",
+      "body": [
+        "The new trial map is E W. Its escape map becomes S W. Its complementary-coordinate map becomes X W. The new Gram operator is W adjoint S adjoint S W. The positive square root transforms in the same way, by the uniqueness of the positive square root or functional calculus. Thus the new sine modulus is W adjoint absolute value of S times W. Unitary conjugation changes the matrix representation on the trial-coordinate space, but not its spectrum, singular values, or unitarily invariant norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Distinguish directed from symmetric angles",
+      "eyebrow": "G2 · 109000 · first-pass outline",
+      "lead": "The construction starts from V and measures its escape from U.",
+      "body": [
+        "Reversing the direction means starting with an isometric frame for U and measuring escape from V. These directional maps can have different numbers of singular values and different zero or right-angle multiplicities when dimensions differ. For equal finite dimensions the nonzero principal-angle information agrees in the usual paired convention. But the source-indexed rectangular operator retains the correct multiplicities for the direction actually used by a residual theorem. The ambient projection difference P minus the trial projection is yet another angle representative. Its modulus describes a symmetric subspace gap."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "The resulting geometric estimate",
+      "eyebrow": "G2 · 109000 · first-pass outline",
+      "lead": "We now have both ingredients.",
+      "body": [
+        "The complementary Sylvester equation controls X in terms of the compressed residual. The Gram identity identifies the modulus of X with the directed sine operator. Consequently a suitable Sylvester estimate becomes a principal-angle estimate with no further approximation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 109000 · conclusion",
+      "lead": "Consequently a suitable Sylvester estimate becomes a principal-angle estimate with no further approximation.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

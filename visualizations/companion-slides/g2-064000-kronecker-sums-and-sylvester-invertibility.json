@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-064000-kronecker-sums-and-sylvester-invertibility",
+  "title": "Kronecker sums and Sylvester invertibility",
+  "subtitle": "G2 lecture 064000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:064000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/064000-kronecker-sums-and-sylvester-invertibility.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 064000 · first-pass outline",
+      "lead": "For diagonal self-adjoint A and B, the Sylvester equation A X minus X B equals C can be solved entry by entry when every cross-spectral difference is nonzero.",
+      "body": [
+        "Here we treat the entire left-hand side as a single linear operator. Its input is a matrix X, and its output is the matrix A X minus X B. Once we understand the spectrum of that operator, we can state precisely when the Sylvester equation has a unique solution for every right-hand side. There are two reasons to do this. First, it reveals why the differences of eigenvalues are unavoidable."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "A linear operator on a space of matrices",
+      "eyebrow": "G2 · 064000 · first-pass outline",
+      "lead": "Let A be an m-by-m matrix and B an n-by-n matrix.",
+      "body": [
+        "The unknown X has m rows and n columns. The space of possible X matrices is a vector space of dimension m times n. Define a map S by the rule: S applied to X equals A X minus X B. Multiplication distributes over sums, so S is linear. Solving the Sylvester equation means solving S of X equals C. Why bother naming this map? Because we can ask ordinary questions about its kernel, eigenvalues, determinant, and inverse. The unknown is itself a matrix, but the problem is now a familiar linear system with m times n scalar unknowns."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Stacking columns into a vector",
+      "eyebrow": "G2 · 064000 · first-pass outline",
+      "lead": "Take a matrix with two rows and two columns.",
+      "body": [
+        "Stack its first column above its second. We obtain a vector with four entries. This operation is often called vectorization. For general m and n, it identifies matrices with vectors having m times n coordinates. What happens to left multiplication by A? Each column of X is transformed by the same matrix A. Thus, in the stacked representation, A appears in n identical diagonal blocks. What happens to right multiplication by B? It mixes the columns of X according to B's coefficients. The resulting matrix is described using the Kronecker product: the matrix of S is identity of size n tensor A, minus the transpose of B tensor identity of size m."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "A diagonal example",
+      "eyebrow": "G2 · 064000 · first-pass outline",
+      "lead": "Take A diagonal with entries one and four, and B diagonal with entries zero and three.",
+      "body": [
+        "Use column-stacking order. The first column of X has spectral differences one minus zero and four minus zero. Those are one and four. The second column has differences one minus three and four minus three. Those are negative two and one. Therefore the four-by-four matrix of S is diagonal with entries one, four, negative two, one. Its determinant is negative eight, so the map is invertible. For any right-hand side, invert this diagonal matrix by dividing the four coordinates by those entries."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Why all eigenvalue differences occur",
+      "eyebrow": "G2 · 064000 · first-pass outline",
+      "lead": "The diagonal calculation proves the claim for diagonal matrices.",
+      "body": [
+        "But the spectrum of S is determined by cross differences even when A and B are not self-adjoint or diagonalizable, provided we work with finite complex matrices. Here is a route to the general statement. Every complex square matrix has an eigenvector. Starting with that eigenvector and extending to a basis puts the matrix into upper block-triangular form. Repeat on the remaining block. Induction gives an upper-triangular matrix, even when no eigenbasis exists. Apply this procedure separately to A and B."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Invertibility and disjoint spectra",
+      "eyebrow": "G2 · 064000 · first-pass outline",
+      "lead": "A finite square matrix is invertible exactly when zero is not an eigenvalue.",
+      "body": [
+        "For S, zero occurs as an eigenvalue precisely when an eigenvalue of A equals an eigenvalue of B. We have proved the finite-dimensional Sylvester invertibility criterion: S is invertible if and only if A and B have no eigenvalue in common. Notice what it does not require. The eigenvalues do not have to be arranged in order. A could have eigenvalues negative two and positive two while B has eigenvalue zero. Every cross difference remains nonzero, so the Sylvester map is invertible. Nor does it require A and B to be diagonalizable. Triangularization was enough for the invertibility criterion."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Being invertible is not the same as being well conditioned",
+      "eyebrow": "G2 · 064000 · first-pass outline",
+      "lead": "Now suppose A is the two-by-two upper-triangular matrix with ones on its diagonal and a large positive number M in its upper-right corner.",
+      "body": [
+        "Let B be the one-by-one zero matrix. Then X is a two-entry column and the Sylvester map is simply multiplication by A. Both eigenvalues of A are one, and B's only eigenvalue is zero. The spectral distance is one, independent of M. But the inverse of A has ones on its diagonal and negative M in its upper-right corner. Apply it to the second standard basis vector. The result has entries negative M and one, whose length is the square root of M squared plus one. Therefore the norm of the inverse grows without bound as M grows. This example is a warning."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Connecting back to the coordinate-free equation",
+      "eyebrow": "G2 · 064000 · first-pass outline",
+      "lead": "In the bounded-operator setting, S acts on a space of bounded linear maps between two Banach spaces.",
+      "body": [
+        "It is still linear, and it is bounded because the triangle inequality gives the norm of S applied to X at most the sum of the norms of A and B times the norm of X. In finite dimensions, disjoint spectra guarantee invertibility of S by our triangularization argument. In infinite-dimensional Banach spaces, that same general conclusion requires a deeper theorem: the Sylvester–Rosenblum result, which uses resolvents and contour integration. We will prove its mechanism after studying exponential representations. For now, rebuild the vectorization formula by examining one entry at a time."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 064000 · mathematical reference",
+      "lead": "In the bounded-operator setting, S acts on a space of bounded linear maps between two Banach spaces.",
+      "body": [
+        "It is still linear, and it is bounded because the triangle inequality gives the norm of S applied to X at most the sum of the norms of A and B times the norm of X."
+      ],
+      "mathtex": "\\operatorname{vec}(AX-XB)=\\bigl(I_n\\otimes A-B^{\\mathsf T}\\otimes I_m\\bigr)\\operatorname{vec}(X).",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 064000 · conclusion",
+      "lead": "We will use all three in the perturbation theory to come.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "g2-111000-graph-subspaces-and-tangent-geometry",
+  "title": "Graph subspaces and tangent geometry",
+  "subtitle": "G2 lecture 111000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:111000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/111000-graph-subspaces-and-tangent-geometry.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 111000 · first-pass outline",
+      "lead": "The sine theorem controls how far trial vectors escape an exact subspace.",
+      "body": [
+        "The tangent theorem asks a more demanding question. Can we describe the entire trial subspace as a graph over the exact subspace, and control the slope of that graph? The slope is an operator. Its singular values are tangents of principal angles. This viewpoint explains both the strength of tangent bounds and their breakdown as angles approach ninety degrees."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Start with the geometry of a sloping line",
+      "eyebrow": "G2 · 111000 · first-pass outline",
+      "lead": "In the plane, take the exact target subspace U to be the horizontal axis.",
+      "body": [
+        "A different line V through the origin is spanned by a vector with coordinates one and t, for some real number t. Every vector in V has the form x in the horizontal direction plus t x in the vertical direction. We say V is the graph of the scalar map x goes to t x. The angle theta between V and the horizontal axis has tangent equal to the absolute value of t. The cosine of theta is one divided by the square root of one plus t squared. The sine is the absolute value of t divided by that same square root. If t equals one, the angle is forty-five degrees. If t is the square root of three, the angle is sixty degrees."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Graphs over a Hilbert subspace",
+      "eyebrow": "G2 · 111000 · first-pass outline",
+      "lead": "Now let H split orthogonally as U plus U perpendicular.",
+      "body": [
+        "Take a bounded linear map T from U into U perpendicular. Its graph is the collection of vectors x plus T x, for x in U. The graph is a linear subspace. It is closed because T is bounded: if graph vectors converge, their U components converge, and continuity of T carries those components to the limiting complementary components. The map that sends x to x plus T x is an injective coordinate map for the graph. It is generally not isometric. Its squared output length is the squared length of x plus the squared length of T x, by orthogonality. In operator notation the Gram operator of the graph map is the identity plus T adjoint T."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Compute the graph sine and cosine",
+      "eyebrow": "G2 · 111000 · first-pass outline",
+      "lead": "Project E onto U.",
+      "body": [
+        "Its horizontal component is the inverse square root of the identity plus T adjoint T. This is the cosine coordinate map C. Project E onto U perpendicular. Its vertical component is T composed with that same inverse square root. This is the sine coordinate map S. The positive cosine magnitude equals the inverse square root of the identity plus T adjoint T. The positive sine magnitude is the square root of T adjoint T times the inverse square root of the identity plus T adjoint T. Why can the factors be rearranged in the sine formula? Both are functions of the same positive operator T adjoint T. Functional calculus makes them commute."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Recover the graph slope from a trial frame",
+      "eyebrow": "G2 · 111000 · first-pass outline",
+      "lead": "Suppose instead we are given an isometric trial map E and want to know whether its range V is a graph over U.",
+      "body": [
+        "Split the trial embedding E into two components: C is its orthogonal projection onto U, and S is its orthogonal projection onto the orthogonal complement of U. If C is invertible as a map from the trial-coordinate space onto U, then every trial vector has a unique horizontal component. Starting from a horizontal vector x, use C inverse to recover its trial coordinates, and then apply S to find the complementary component. Therefore the graph slope is T equals S C inverse, with the natural identification of C as a map into U. This formula looks like sine divided by cosine, and it is."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Why right-angle directions obstruct a tangent",
+      "eyebrow": "G2 · 111000 · first-pass outline",
+      "lead": "If V contains a nonzero vector lying in U perpendicular, its projection onto U is zero.",
+      "body": [
+        "Then C has a nontrivial kernel and cannot be inverted. In terms of principal angles, there is a ninety-degree direction, with cosine zero. The corresponding tangent would require division by zero. A Moore–Penrose inverse can be used to define a totalized algebraic expression, but the resulting map should not be called an ordinary finite tangent on that direction. This is why the source's finite-dimensional tangent theorem carries a transversality proof. The theorem first establishes that the cosine magnitude is injective."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Compare two angles numerically",
+      "eyebrow": "G2 · 111000 · first-pass outline",
+      "lead": "Take a line making thirty degrees with the horizontal axis.",
+      "body": [
+        "Its sine is one half, while its tangent is one divided by the square root of three, approximately zero point five seven seven. At sixty degrees, the sine is the square root of three divided by two, approximately zero point eight six six. The tangent is the square root of three, approximately one point seven three two. At eighty-nine degrees, the sine is already extremely close to one. But the tangent is roughly fifty-seven. A sine error bound near one reports that the trial line may be almost perpendicular. A tangent bound records just how steep its graph representation has become."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "What a graph tells us beyond an angle",
+      "eyebrow": "G2 · 111000 · first-pass outline",
+      "lead": "The graph operator gives an explicit way to reconstruct trial vectors from exact-subspace coordinates.",
+      "body": [
+        "If T is small, each trial vector x plus T x differs only slightly from its exact horizontal component. The norm of T bounds that relative complementary error. The largest principal tangent measures the worst slope, while symmetric singular-value norms describe how slopes are distributed across directions. This information is useful for perturbation theory because a graph can be manipulated algebraically. The invariance of a graph under a block operator leads to a Riccati equation, where the unknown is T."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 111000 · conclusion",
+      "lead": "Indeed, substituting vectors of the form x plus T x into the invariant-subspace equation produces a Riccati equation, a nonlinear relation for the unknown graph slope T.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

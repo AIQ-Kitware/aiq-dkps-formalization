@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "g2-104000-real-versions-of-unbounded-sylvester-bounds",
+  "title": "Real versions of unbounded Sylvester bounds",
+  "subtitle": "G2 lecture 104000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:104000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/104000-real-versions-of-unbounded-sylvester-bounds.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 104000 · first-pass outline",
+      "lead": "Our target today is a real Hilbert-space version of the unbounded Sylvester estimate.",
+      "body": [
+        "We have two possibly unbounded self-adjoint operators, a bounded unknown X between their spaces, and a bounded right-hand side C. Under a suitable spectral-gap hypothesis and a domain-aware equation, we want to control X by C in every symmetric ideal covered by Ky Fan dominance. The complex Hilbert-space Sylvester theorem gives the needed estimate for a domain-aware equation under the prescribed spectral-gap condition. To transfer that estimate, we must complexify the domain as well as the operator formula."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "State the real problem precisely",
+      "eyebrow": "G2 · 104000 · first-pass outline",
+      "lead": "Let A be self-adjoint on a real Hilbert space E, and B self-adjoint on another real Hilbert space F.",
+      "body": [
+        "Either may be unbounded. Let X and C be bounded real-linear maps from F into E. The Sylvester equation is A X minus X B equals C. For bounded matrices, this is an identity on every vector. For unbounded operators it must be interpreted on the domain of B. We require X to send every vector in the domain of B into the domain of A. Only then is A X x defined for such an input x. On that domain, the equation asserts that A X x minus X B x equals C x. We also assume a positive gap delta, expressed through the prescribed form-bounded Sylvester gap condition."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Complexify the domain, not merely the formula",
+      "eyebrow": "G2 · 104000 · first-pass outline",
+      "lead": "A real unbounded operator A has a domain D of A, a linear subspace of E.",
+      "body": [
+        "Construct the complexification of that domain by taking all x plus i y such that both x and y belong to D of A. Define the complexified operator by applying A coordinatewise. It sends x plus i y to A x plus i A y. Why do we need both coordinate conditions? Because an arbitrary complex scalar mixes real and imaginary components. If we allowed only the real component to lie in the domain, multiplication by i would send a legal vector to one with an illegal real component. Requiring both coordinates restores a complex-linear domain."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Transfer self-adjointness and the equation",
+      "eyebrow": "G2 · 104000 · first-pass outline",
+      "lead": "To transport the adjoint relation, we evaluate the complex inner product coordinatewise.",
+      "body": [
+        "The real and imaginary pairings reduce to the original real adjoint pairings, just as they did for bounded operators. An unbounded adjoint has its own domain. To commute complexification with adjoints, prove that the complexified adjoint domain consists exactly of pairs whose real coordinates lie in the original adjoint domain. This domain equality then carries self-adjointness to the complexified operator. Now consider the Sylvester equation. If x and y both lie in the domain of B, then X x and X y lie in the domain of A by assumption."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Preserve the gap hypothesis",
+      "eyebrow": "G2 · 104000 · first-pass outline",
+      "lead": "Consider ordered separation first.",
+      "body": [
+        "Suppose the quadratic form of A is bounded below by a real threshold, while the quadratic form of B is bounded above by a lower threshold, leaving a positive gap. The quadratic form of the complexified A at x plus i y is the sum of the real quadratic forms at x and y. The squared norm of the complex vector is likewise the sum of the two squared real norms. Therefore the same lower form bound holds on the complexified operator. The upper bound for B transfers by the same argument. The reversed ordering is symmetric. For the interval-versus-exterior branch, we use preservation of the real spectral information and the required resolvent properties."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Apply the complex theorem to one finite prefix",
+      "eyebrow": "G2 · 104000 · first-pass outline",
+      "lead": "Fix a positive integer k.",
+      "body": [
+        "Consider the sum of the first k approximation singular values of a bounded operator. This is its k-th Ky Fan gauge. The complex unbounded Sylvester theorem applies to this finite Ky Fan ideal. It gives delta times the k-th Ky Fan gauge of complexified X at most the k-th Ky Fan gauge of complexified C. Our task is to remove the word complexified from both sides. For finite-dimensional matrices this is immediate from their singular values. In arbitrary Hilbert spaces, it requires an actual theorem about approximation numbers. One direction is straightforward. A real rank-at-most-k approximant can be complexified without changing its rank bound or approximation error."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Why finite prefixes are not the final conclusion",
+      "eyebrow": "G2 · 104000 · first-pass outline",
+      "lead": "We now have a family of inequalities, one for every finite k.",
+      "body": [
+        "But the desired conclusion concerns an arbitrary real symmetric ideal family, and such an ideal may not contain every bounded operator. We assume the ideal has the Ky Fan dominance property. We also assume C belongs to that ideal. Apply the dominance principle to the scaled prefix inequality. Since delta is positive, the prefixes of X are bounded by those of C divided by delta. The dominance principle then proves both that X belongs to the ideal and that its real gauge is at most the real gauge of C divided by delta. Equivalently, delta times the real gauge of X is at most the real gauge of C."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "A diagonal example to test the constants",
+      "eyebrow": "G2 · 104000 · first-pass outline",
+      "lead": "Take E and F to be real two-dimensional spaces.",
+      "body": [
+        "Let A have diagonal entries three and five, while B has entries minus one and minus two. The smallest difference between an A eigenvalue and a B eigenvalue is four, so the ordered gap delta may be taken as four. The Sylvester equation says that each entry of X equals the corresponding entry of C divided by the difference between the chosen diagonal eigenvalues. The smallest denominator is four. For example, if C has a single one in the upper-left corner, X has one quarter in that corner and zeros elsewhere. The bound is attained in operator norm, Hilbert–Schmidt norm, and trace norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "The completed real theorem",
+      "eyebrow": "G2 · 104000 · first-pass outline",
+      "lead": "We have transferred a domain-aware, self-adjoint, form-gap Sylvester equation to complex space, obtained all finite Ky Fan inequalities there, and descended them exactly.",
+      "body": [
+        "With real Ky Fan dominance and membership of C, we conclude membership of X and the sharp scaled gauge inequality. The argument shows why complexification is useful: it lets us reuse a proved complex theorem while keeping the real mathematical statement, its gap constant, and its membership requirements intact. That final exercise will reconstruct the full chain from an unbounded residual identity to a symmetric-ideal sine-angle estimate."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 104000 · conclusion",
+      "lead": "That final exercise will reconstruct the full chain from an unbounded residual identity to a symmetric-ideal sine-angle estimate.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

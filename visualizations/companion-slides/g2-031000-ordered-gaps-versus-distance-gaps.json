@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "g2-031000-ordered-gaps-versus-distance-gaps",
+  "title": "Ordered gaps versus distance gaps",
+  "subtitle": "G2 lecture 031000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:031000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/031000-ordered-gaps-versus-distance-gaps.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 031000 · first-pass outline",
+      "lead": "Suppose someone tells you that two groups of eigenvalues are separated by a gap of two.",
+      "body": [
+        "What picture comes to mind? Perhaps one group sits to the left on a number line, there is an empty stretch of length two, and the other group sits to the right. That picture describes one kind of gap. But it does not describe every kind. Two groups can be separated from each other even when their eigenvalues alternate along the number line. The difference matters because different mathematical arguments require different kinds of separation."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "First, two sets on a number line",
+      "eyebrow": "G2 · 031000 · first-pass outline",
+      "lead": "Start with two nonempty finite sets of real numbers.",
+      "body": [
+        "Call the first group red and the second group blue. Their distance gap is the smallest absolute difference between one red number and one blue number. Take red numbers negative three and positive three, and a single blue number zero. Every red number is three units away from blue. So the distance gap is three. But could we draw one vertical dividing line so that all red numbers are on one side and all blue numbers are on the other? No. Blue zero lies between the two red values. The groups are separated in the pairwise-distance sense, but they are not ordered. Now choose red numbers negative two and zero, and blue numbers three and five."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Translating the picture to operators",
+      "eyebrow": "G2 · 031000 · first-pass outline",
+      "lead": "For a self-adjoint matrix, every eigenvalue is real, so the number-line picture applies.",
+      "body": [
+        "But we need to specify which eigenvalues belong to each group. Recall that a spectral projection selects an entire eigenspace for each chosen eigenvalue. If a subspace is reducing, the operator acts on that subspace without sending vectors outside it. We can restrict the operator to the selected subspace and separately to its perpendicular complement. Those restrictions have spectra of their own. For example, take a diagonal operator with entries negative three, zero, and three. Let our selected subspace be the plane spanned by the first and third coordinate directions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Internal gaps, external gaps, and mixed gaps",
+      "eyebrow": "G2 · 031000 · first-pass outline",
+      "lead": "An internal gap compares two blocks of the same operator, such as a reducing subspace and its orthogonal complement.",
+      "body": [
+        "A mixed gap compares a selected block of one operator with a complementary block of another. Those blocks are the ranges of spectral projections obtained by summing the eigenspace projections over the selected eigenvalue sets. Later, in the sine-theta theorem, the mixed comparison is exactly what enters a residual equation. There is also an interval-versus-exterior description. Suppose one spectral group lies between zero and two. The other must lie outside an enlarged interval extending from negative one to three."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Ordered separation is stronger",
+      "eyebrow": "G2 · 031000 · first-pass outline",
+      "lead": "Let's prove a simple implication.",
+      "body": [
+        "Suppose every blue eigenvalue is at least delta greater than every red eigenvalue, where delta is nonnegative. Choose any red value and any blue value. Blue minus red is at least delta, so its absolute value is also at least delta. Therefore ordered separation implies pairwise distance separation. The converse fails, as the negative-three, zero, three example demonstrates. Its red and blue spectra are three apart but cannot be put in the demanded order without changing which group is which. This distinction is not a technicality. It changes the type of argument we can use."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A first encounter with the Sylvester equation",
+      "eyebrow": "G2 · 031000 · first-pass outline",
+      "lead": "Consider the scalar equation: a times x, minus x times b, equals c.",
+      "body": [
+        "Because these are numbers, the left side is simply a minus b, multiplied by x. If a and b are different, the unique solution is c divided by a minus b. The absolute difference between a and b tells us how large that division can make x. A small denominator means a potentially large solution; a large denominator limits its size. For diagonal matrices A and B, a matrix equation of the form A X minus X B equals C works entry by entry in exactly the same way. Each entry of X is the corresponding entry of C divided by a difference between an eigenvalue of A and an eigenvalue of B."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Ordered gaps and quadratic forms",
+      "eyebrow": "G2 · 031000 · first-pass outline",
+      "lead": "There is another description of ordered separation that connects back to Rayleigh quotients.",
+      "body": [
+        "Suppose A is self-adjoint, and its selected subspace and complement reduce A. Imagine that every unit vector in the selected subspace has Rayleigh quotient at most one, while every unit vector in the complement has quotient at least four. Then the eigenvalues on the first block lie at or below one, and those on the second block lie at or above four. Their ordered gap is at least three. Why? An eigenvector's Rayleigh quotient equals its eigenvalue. So the bounds on all unit vectors certainly bound all the eigenvalues."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "A diagnostic exercise",
+      "eyebrow": "G2 · 031000 · first-pass outline",
+      "lead": "Here are three questions to test whether the distinctions are clear.",
+      "body": [
+        "First: selected eigenvalues are negative four and four, and the complement has eigenvalue zero. Is there a positive distance gap? Yes, of size four. Is there a global ordered gap between those two named blocks? No. Second: selected eigenvalues are one and two, and complementary eigenvalues are five and seven. What ordered gap is guaranteed? Three, with the selected group below the complement. Third: why does knowing the spectrum of the whole matrix not by itself tell you which gap a theorem is using?"
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 031000 · conclusion",
+      "lead": "Then ask not just how far apart they are, but whether they are ordered, interlaced, or separated as an interval and its exterior.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-143000-joint-movement-of-eigenvalues-and-angles",
+  "title": "Joint movement of eigenvalues and angles",
+  "subtitle": "G2 lecture 143000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:143000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/143000-joint-movement-of-eigenvalues-and-angles.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 143000 · first-pass outline",
+      "lead": "Suppose we perturb a self-adjoint operator.",
+      "body": [
+        "One theorem tells us how much its eigenvalues can shift. Another tells us how far a selected eigenspace can rotate. Davis and Kahan's Question ten point three asks for the best inequalities that treat those changes simultaneously. A joint bound must account for the interaction between eigenvalue shifts and eigenvector rotations. Rayleigh quotient identities provide exact relations, and a two-dimensional model shows when separate worst-case bounds lose information."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "The two quantities",
+      "eyebrow": "G2 · 143000 · first-pass outline",
+      "lead": "Start in finite dimensions.",
+      "body": [
+        "Let A be self-adjoint, and let B equal A plus a self-adjoint perturbation H. Imagine A has a simple eigenvalue lambda zero and a normalized eigenvector u. Let v be a normalized eigenvector of B with eigenvalue mu, chosen as the continuation of the same isolated spectral cluster. Our scalar quantities are the eigenvalue displacement, mu minus lambda zero, and the angle theta between u and v. The sine of theta measures how much v escapes the line through u. The cosine measures the overlap between the two directions. The familiar Weyl bound gives the absolute eigenvalue displacement at most the operator norm of H, once the eigenvalues are matched by order."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The exact two-level model",
+      "eyebrow": "G2 · 143000 · first-pass outline",
+      "lead": "Let A be a real two-by-two diagonal matrix, with entries minus g over two and plus g over two, where g is positive.",
+      "body": [
+        "Let H have zero diagonal and equal off-diagonal entries t. Then B has entries minus g over two, t, t, and plus g over two. Compute the characteristic polynomial. Its roots are plus and minus the square root of g squared over four plus t squared. The lower eigenvalue moves downward by the amount equal to that square root minus g over two. The eigenvectors rotate by an angle theta satisfying tangent of twice theta equals two t over g, taking the acute branch with theta below forty-five degrees when t is positive. These two formulas can be combined. Write a for g over two."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Rayleigh quotients measure angle with spectral weights",
+      "eyebrow": "G2 · 143000 · first-pass outline",
+      "lead": "There is a useful exact identity for a general self-adjoint A.",
+      "body": [
+        "Suppose u is a lowest-eigenvalue vector with eigenvalue lambda zero. Expand an arbitrary unit vector v in an orthonormal eigenbasis beginning with u. Let its coefficient along u have magnitude cosine theta. The remaining coefficients have squared magnitudes summing to sine squared theta. The Rayleigh quotient of v minus lambda zero is the sum, over the remaining eigenvectors, of each spectral distance above lambda zero times the corresponding squared coefficient. If every other eigenvalue is at least lambda zero plus g, that difference is at least g times sine squared theta."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Residuals add further structure",
+      "eyebrow": "G2 · 143000 · first-pass outline",
+      "lead": "For an approximate eigenvector v and candidate eigenvalue mu, consider the residual A v minus mu v.",
+      "body": [
+        "Expand v in the eigenbasis of A. Each coefficient is multiplied by its spectral difference from mu. The squared residual norm is the sum of squared differences times coefficient energies. If mu is isolated from every unwanted eigenvalue by a distance delta, then the unwanted squared coefficient mass is at most residual squared divided by delta squared. Thus the sine of the relevant subspace angle is at most residual norm divided by delta. This is the scalar instance of the complementary Sylvester argument. But notice the requirement that we know which eigenvalue is intended."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A gap measured at the moving eigenvalue",
+      "eyebrow": "G2 · 143000 · first-pass outline",
+      "lead": "There is a second useful bound.",
+      "body": [
+        "Project the equation Bv equals mu v onto the orthogonal complement of u. Since B equals A plus H, the unwanted component of v satisfies an equation involving A restricted to that complement minus mu. The right-hand side is minus the complementary component of H v. If mu lies at least delta away from the complementary spectrum of A, the inverse of that restricted operator has norm at most one over delta. Hence sine theta is at most the norm of H divided by delta. This gap is measured from the moving eigenvalue mu, rather than automatically from lambda zero. Weyl's theorem can relate the two distances."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A coupled energy theorem already available",
+      "eyebrow": "G2 · 143000 · first-pass outline",
+      "lead": "Chandler Davis established a related sum-of-squares estimate under a particular separation condition on the ordered eigenvalues of two self-adjoint matrices and a compatible nonzero-overlap matching of their eigenvectors.",
+      "body": [
+        "The sum of gap-squared angular errors and squared matched eigenvalue changes is bounded by the Frobenius norm squared of the perturbation. The matching and spectral separation are essential hypotheses. That is a genuinely joint inequality. It allocates one finite perturbation-energy budget between turning eigenvectors and moving eigenvalues. An estimate formed by taking the worst separate eigenvalue and angle bounds would not express this tradeoff."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "What the optimization question really asks",
+      "eyebrow": "G2 · 143000 · first-pass outline",
+      "lead": "To formulate a best possible joint theorem, we must decide what data are fixed.",
+      "body": [
+        "Is the perturbation bounded only in operator norm? Do we know its diagonal and off-diagonal blocks separately? Is the selected eigenvalue extremal, interior, simple, or part of a cluster? Are we allowed to choose an arbitrary nearby eigenvector, or must we follow a specified spectral projection? Different answers produce different feasible regions for the pair consisting of eigenvalue shift and angle. A scalar inequality describing that region may be sharp in dimension two but fail when eigenvalues are clustered, because several unwanted directions can share the leakage."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 143000 · mathematical reference",
+      "lead": "To formulate a best possible joint theorem, we must decide what data are fixed.",
+      "body": [
+        "Is the perturbation bounded only in operator norm? Do we know its diagonal and off-diagonal blocks separately? Is the selected eigenvalue extremal, interior, simple, or part of a cluster?"
+      ],
+      "mathtex": "\\mu_{\\pm}=\\pm\\sqrt{g^2/4+t^2},\\qquad \\tan(2\\theta)=2t/g,\\qquad \\Delta\\mu=t\\tan\\theta.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 143000 · conclusion",
+      "lead": "Those calculations show why joint perturbation bounds need more than two independent worst-case estimates.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

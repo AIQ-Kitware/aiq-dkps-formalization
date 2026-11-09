@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "g2-110000-the-single-angle-sine-theorem",
+  "title": "The single-angle sine theorem",
+  "subtitle": "G2 lecture 110000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:110000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/110000-the-single-angle-sine-theorem.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 110000 · first-pass outline",
+      "lead": "Suppose A is self-adjoint, U is an exact reducing subspace, and V is a trial subspace whose vectors nearly satisfy the operator equation for a trial operator.",
+      "body": [
+        "How does the failure of that equation control the angle from V to U? The Davis–Kahan sine theorem answers using the residual and the spectral separation between the trial operator and A on the unwanted complement. A sharp constant-one inequality requires a gap hypothesis that supports a corresponding Sylvester bound."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "State the spaces and assumptions",
+      "eyebrow": "G2 · 110000 · first-pass outline",
+      "lead": "Let H be a real or complex Hilbert space, and let A be self-adjoint on H.",
+      "body": [
+        "Choose an exact reducing subspace U with orthogonal projection P. Let F zero and F one be isometric coordinate maps for U and its orthogonal complement, respectively. On the exact complement, A acts as a self-adjoint operator Lambda one. Choose an isometric trial map E from another Hilbert space F into H. Its range V is the approximate subspace. Choose a self-adjoint trial operator A zero on F. Define R equal to A E minus E A zero, first in the bounded setting. The trial operator may be the Ritz compression, but the theorem also permits a separately chosen operator."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "First step: derive the complementary equation",
+      "eyebrow": "G2 · 110000 · first-pass outline",
+      "lead": "Define X equal to F one adjoint E.",
+      "body": [
+        "The map X measures overlap with the orthogonal complement of the exact subspace: F one adjoint first measures complementary coordinates, then E supplies trial vectors. Compress the residual with F one adjoint. Since U is reducing, the complementary action of A is Lambda one. Therefore F one adjoint R equals Lambda one X minus X A zero. We have reached the exact Sylvester equation. Its unknown is X, its right-hand side is the complementary part of the residual, and the two coefficient operators are precisely the operators in the spectral-gap hypothesis. This is the critical connection between residual geometry and spectral separation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Second step: use spectral separation",
+      "eyebrow": "G2 · 110000 · first-pass outline",
+      "lead": "Apply the Sylvester estimate appropriate to the stated gap.",
+      "body": [
+        "In the operator-norm case, delta times the norm of X is at most the norm of F one adjoint R. In a symmetric ideal, the conclusion includes membership of X and an analogous gauge inequality. We cannot omit the membership assumption: a bounded residual need not belong to trace class, for example, and a trace-class bound has no finite meaning without membership. Because F one is an isometry, F one adjoint is a contraction. Therefore the ideal norm of F one adjoint R is at most the ideal norm of R. In particular, delta times the ideal norm of X is at most the ideal norm of R."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Third step: identify the angle",
+      "eyebrow": "G2 · 110000 · first-pass outline",
+      "lead": "Write S equal to the identity minus P, composed with E.",
+      "body": [
+        "For every trial-coordinate vector, S extracts the part of its ambient trial vector outside U. The Gram identity gives S adjoint S equals X adjoint X. Consequently S and X have identical positive moduli and identical nonzero singular-value information. Their common modulus is the directed sine operator associated with the trial subspace relative to U. For the operator norm, the norms of S and X are equal immediately because their output lengths agree on every input. For a suitable rectangular unitarily invariant ideal, modulus and singular-value invariance give equality of the corresponding gauges and transfer membership."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Prove the constant cannot be improved",
+      "eyebrow": "G2 · 110000 · first-pass outline",
+      "lead": "Take the real plane.",
+      "body": [
+        "Let A be diagonal with eigenvalues zero and five. Choose the exact target U to be the horizontal axis, so Lambda one is the scalar five. For an angle theta between zero and ninety degrees, choose the trial unit vector u with coordinates cosine theta and sine theta. Let E map a scalar to that scalar times u. Choose A zero equal to zero. Then the residual is A u, which equals five sine theta times the vertical basis vector. Its norm is five sine theta. The distance from A zero to Lambda one is exactly five. The directed sine of the angle from the trial line to U is sine theta. So the theorem reads five times sine theta is at most five times sine theta."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Specialize to Ritz trial spaces",
+      "eyebrow": "G2 · 110000 · first-pass outline",
+      "lead": "Suppose A zero does equal E adjoint A E.",
+      "body": [
+        "Then E adjoint R is zero, by Galerkin orthogonality. The proof still works, because it never required an arbitrary internal trial discrepancy. The advantage of Ritz residuals is that they measure only the escape of A from V. The spectral separation must now compare the Ritz spectrum of A zero to the exact complementary spectrum of Lambda one. If the Ritz values approach unwanted eigenvalues, the gap decreases, and the angle bound weakens accordingly. In practice the theorem is valuable when numerical approximations provide both a small residual and a certified spectral separation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "General trial frames and the epsilon factor",
+      "eyebrow": "G2 · 110000 · first-pass outline",
+      "lead": "So far E has been isometric.",
+      "body": [
+        "Suppose instead E is bounded below by a positive constant epsilon. This means every output E x has length at least epsilon times the length of x. Write E as U times its positive modulus, where U is an isometry onto the trial range. The inverse modulus has norm at most one divided by epsilon. The complementary block for E differs from the complementary block for U by the modulus factor. When we normalize the frame, the ideal estimate acquires that inverse factor. Multiplying through, the conclusion becomes delta times epsilon times the directed sine gauge is at most the residual gauge. That epsilon is required for scaling."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Restore the unbounded version",
+      "eyebrow": "G2 · 110000 · first-pass outline",
+      "lead": "When A is unbounded, self-adjointness alone does not legitimize the expression A E.",
+      "body": [
+        "The trial map must carry the domain of A zero into the domain of A; the residual identity must hold on that common domain and extend to a bounded operator. The complementary coordinate map must respect the domain of Lambda one and intertwine its action with A. With those hypotheses, the same Sylvester equation holds as an equality of partially defined operators on the legal domain. The unbounded Sylvester theorem then produces the ideal estimate and membership conclusion. For real Hilbert spaces, the corresponding complexification and descent results supply the real statement."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 110000 · conclusion",
+      "lead": "The same reasoning applies whenever a residual equation can be converted into a valid Sylvester estimate for the correct complementary angle operator.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

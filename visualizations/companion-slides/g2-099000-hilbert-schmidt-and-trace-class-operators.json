@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "g2-099000-hilbert-schmidt-and-trace-class-operators",
+  "title": "Hilbert–Schmidt and trace-class operators",
+  "subtitle": "G2 lecture 099000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:099000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/099000-hilbert-schmidt-and-trace-class-operators.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 099000 · first-pass outline",
+      "lead": "In finite dimensions, the Frobenius norm of a matrix can be calculated in two ways.",
+      "body": [
+        "We can square and sum every matrix entry, or square and sum its singular values. Those totals agree because orthonormal changes of coordinates preserve squared length. The Hilbert–Schmidt construction extends this to infinite-dimensional Hilbert spaces. It lets us measure the total squared output length of an operator on an orthonormal basis, and the result is independent of which basis we choose. We will prove that independence, connect the formula to singular values, then distinguish Hilbert–Schmidt operators from trace-class operators."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Start with an orthonormal basis",
+      "eyebrow": "G2 · 099000 · first-pass outline",
+      "lead": "Let T map a Hilbert space E boundedly into another Hilbert space F.",
+      "body": [
+        "Choose an orthonormal basis e one, e two, and so on, assuming for illustration that E is separable. Form the sum of the squared lengths of T e n. Every term is nonnegative, so the sum is well-defined as an extended nonnegative real value, possibly infinity. We call this the Hilbert–Schmidt energy of T. If it is finite, T is Hilbert–Schmidt, and the square root of the energy is its Hilbert–Schmidt norm. For a diagonal operator on ell two with coefficients t n, the energy is simply the sum of squared absolute values of t n. Take t n equal to one divided by n. The sum of one over n squared converges."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Why the basis does not matter",
+      "eyebrow": "G2 · 099000 · first-pass outline",
+      "lead": "Choose an orthonormal basis f j of the output space as well.",
+      "body": [
+        "By Parseval's identity, the squared norm of T e n equals the sum over j of the squared absolute values of the inner products between T e n and f j. Summing over n produces a double sum of nonnegative terms. Since nonnegative sums can be rearranged, interchange the order of the two indices. By the defining identity of the adjoint, the inner product between T e n and f j equals the corresponding inner product between e n and T adjoint f j, up to the usual conjugation convention. Their absolute values are equal. Apply Parseval again, now in the input space. Summing over n yields the squared norm of T adjoint f j."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "The operator inner product",
+      "eyebrow": "G2 · 099000 · first-pass outline",
+      "lead": "For two Hilbert–Schmidt operators S and T with the same input and output spaces, define their Hilbert–Schmidt pairing by summing the inner products of S e n with T e n over an orthonormal input basis.",
+      "body": [
+        "The Cauchy–Schwarz inequality for series bounds the absolute value of the sum by the product of their Hilbert–Schmidt norms. It therefore converges absolutely and defines an inner product on the Hilbert–Schmidt class. Its squared norm agrees with the energy we just defined. The Hilbert–Schmidt class is complete under this norm, so it is itself a Hilbert space. In finite dimensions, this pairing is the familiar trace of S adjoint T."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Trace class is a stronger condition",
+      "eyebrow": "G2 · 099000 · first-pass outline",
+      "lead": "If T is compact, list its singular values s one, s two, and so on.",
+      "body": [
+        "T is trace class when the sum of these singular values is finite. Its trace norm is that sum. Every trace-class operator is Hilbert–Schmidt: since the singular values have a finite sum, they are bounded and their squares also have a finite sum. But the reverse fails. The diagonal with t n equal to one divided by n is Hilbert–Schmidt, while its trace norm would be the divergent harmonic series. For a positive trace-class operator, the trace is the sum of its nonnegative eigenvalues, counted with multiplicity. The trace norm and trace agree in this positive case."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Why two Hilbert–Schmidt factors make a trace-class product",
+      "eyebrow": "G2 · 099000 · first-pass outline",
+      "lead": "Suppose S maps E to F and T maps F to E, and both are Hilbert–Schmidt.",
+      "body": [
+        "The composition T S maps E to itself. Intuitively, each factor loses enough singular-value mass that their product has summable singular values. More precisely, the Schatten Hölder inequality gives the trace norm of T S at most the Hilbert–Schmidt norm of T times the Hilbert–Schmidt norm of S. One route to the inequality uses finite-rank approximations. First prove it for matrices by singular-value inequalities and Cauchy–Schwarz, then approximate S and T in their Hilbert–Schmidt norms by finite-rank maps."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "An example of the product estimate",
+      "eyebrow": "G2 · 099000 · first-pass outline",
+      "lead": "On ell two, let both factors be diagonal with entries one over n.",
+      "body": [
+        "Each is Hilbert–Schmidt because the sum of squared entries converges. Their product has diagonal entries one over n squared, whose ordinary sum is finite. Thus the product is trace class. This example makes the exponent arithmetic visible: multiplying two square-summable sequences gives a summable product by Cauchy–Schwarz. The operator theorem generalizes that estimate to maps that cannot be simultaneously diagonalized."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Cyclicity with a bounded factor",
+      "eyebrow": "G2 · 099000 · first-pass outline",
+      "lead": "If T is trace class and B is bounded, both B T and T B are trace class when the compositions are square.",
+      "body": [
+        "The trace satisfies trace of B T equals trace of T B. The finite-dimensional proof expands entries and rearranges a finite sum. In infinite dimensions we justify cyclicity using finite-rank approximations and continuity of the trace in trace norm. Without the trace-class hypothesis, the two displayed traces might fail to exist. This caveat prevents a common error: the ordinary operator trace is not defined on every bounded operator, and cyclic rearrangement cannot rescue a divergent sum."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Spectral truncation in ideal norm",
+      "eyebrow": "G2 · 099000 · first-pass outline",
+      "lead": "For a Hilbert–Schmidt compact operator, truncate its singular-value expansion after N terms.",
+      "body": [
+        "The squared Hilbert–Schmidt norm of the remainder is the sum of squares of singular values beyond N, which tends to zero by summability. For a trace-class operator, the trace norm of the same remainder is the tail sum of singular values, which also tends to zero. This proves finite-rank density in both norms and provides the bridge from finite matrix proofs to the infinite-dimensional ideal theorems we need later. The central distinction to retain is that different summability conditions define different classes."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 099000 · conclusion",
+      "lead": "Those require their own ideal estimates.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

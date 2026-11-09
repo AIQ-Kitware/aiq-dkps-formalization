@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "g2-086000-resolvents-coercivity-and-spectral-location",
+  "title": "Resolvents, coercivity, and spectral location",
+  "subtitle": "G2 lecture 086000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:086000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/086000-resolvents-coercivity-and-spectral-location.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 086000 · first-pass outline",
+      "lead": "A resolvent turns a possibly unbounded operator into a bounded one.",
+      "body": [
+        "But that construction is legal only when the shifted operator is one-to-one, onto, and has an inverse defined on the entire Hilbert space. Today we will prove these properties for nonreal shifts of a self-adjoint operator, then use coercivity to locate real intervals in the resolvent set. The same estimates will later control the spectral gaps in Davis–Kahan theory."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "What a resolvent has to accomplish",
+      "eyebrow": "G2 · 086000 · first-pass outline",
+      "lead": "Let A be a densely defined self-adjoint operator with domain D in a complex Hilbert space.",
+      "body": [
+        "Choose a complex number z. The shifted operator A minus z is defined on D. The statement that z belongs to the resolvent set means the shift maps D bijectively onto H and its inverse is a bounded, everywhere-defined operator from H back into H. The image of that inverse actually lies in D. Its inverse is written as A minus z, all inverted. Some authors instead use z minus A inverted. The two conventions differ by a minus sign. The spectrum itself does not depend on that choice. For a self-adjoint operator, all nonreal numbers lie in the resolvent set."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "A coercive estimate away from the real axis",
+      "eyebrow": "G2 · 086000 · first-pass outline",
+      "lead": "Let z have nonzero imaginary part, and take a vector x in D.",
+      "body": [
+        "Expand the inner product of the shifted output with x. Because A is symmetric, the inner product of A x with x is real. Its imaginary part vanishes. The imaginary part of the shift term is therefore the imaginary part of negative z times the squared length of x. The magnitude of the imaginary part of the whole inner product is the absolute value of the imaginary part of z times the squared length of x. But the magnitude of any inner product is at most the product of the lengths, by Cauchy–Schwarz."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Closed range plus density gives surjectivity",
+      "eyebrow": "G2 · 086000 · first-pass outline",
+      "lead": "Since A is self-adjoint, it is closed.",
+      "body": [
+        "The shifted operator is also closed: if x N and the shifted outputs converge, add z times x N to the outputs and invoke closedness of A. Now take a convergent sequence of outputs of A minus z. The lower bound shows the corresponding input sequence is Cauchy. Its limit belongs to the domain by closedness, and the output limit belongs to the range. So the range is closed. We next prove that the range is dense. Suppose y is orthogonal to every shifted output. That means the inner product of A x with y equals the inner product of x with the conjugate shift times y, for every x in D."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Real shifts and lower form bounds",
+      "eyebrow": "G2 · 086000 · first-pass outline",
+      "lead": "A similar argument works for real shifts that lie below a uniformly lower-bounded self-adjoint operator.",
+      "body": [
+        "Suppose there is a real number a such that, for every x in D, the inner product of A x with x is at least a times the squared length of x. Choose a real lambda strictly less than a. Then the inner product of A minus lambda applied to x with x is at least a minus lambda times the squared length of x. Cauchy–Schwarz again gives a lower bound for the shifted output length, now with constant a minus lambda. The shift is injective and has closed range. Its orthogonal complement is again the kernel of the adjoint shift. Since A is self-adjoint, the same lower bound applies to that kernel."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A diagonal example and the exact distance",
+      "eyebrow": "G2 · 086000 · first-pass outline",
+      "lead": "For the diagonal operator on ell two, A multiplies coordinate N by N.",
+      "body": [
+        "Its spectrum is the positive integers, starting with one. The inverse of A minus z multiplies coordinate N by one divided by N minus z. For a nonreal z, every denominator is nonzero. More generally, whenever z is not one of the positive integers, the denominators have a positive minimum distance from zero. The resolvent is bounded, with norm equal to the reciprocal of the distance from z to the spectrum. The general self-adjoint spectral theorem gives that exact distance formula. Our elementary coercive argument has already proved the coarser but universally useful bound using the imaginary part of z."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Coercive forms produce inverses another way",
+      "eyebrow": "G2 · 086000 · first-pass outline",
+      "lead": "There is a second route that will be important for differential operators.",
+      "body": [
+        "Instead of beginning with an operator on H, begin with a Hilbert space V of admissible form vectors, continuously and densely embedded into H. Suppose a bounded symmetric form on V satisfies a coercivity inequality: its energy on a vector controls a positive constant times that vector's squared V norm. The Riesz representation theorem turns the form into a bounded positive self-adjoint operator F on V. Coercivity makes F invertible: the same lower-bound, closed-range, and orthogonal-complement argument applies in V. If j embeds V into H, then for an ambient forcing vector f, solve F u equals j star f."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 086000 · conclusion",
+      "lead": "The details of the domain are what determine which operator the bounded inverse belongs to.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

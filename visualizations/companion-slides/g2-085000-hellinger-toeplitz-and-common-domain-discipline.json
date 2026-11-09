@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "id": "g2-085000-hellinger-toeplitz-and-common-domain-discipline",
+  "title": "Hellinger–Toeplitz and common-domain discipline",
+  "subtitle": "G2 lecture 085000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:085000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/085000-hellinger-toeplitz-and-common-domain-discipline.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 085000 · first-pass outline",
+      "lead": "There is a theorem that sounds surprising when first encountered: if a linear operator is defined on every vector of a Hilbert space and is symmetric, then it must be bounded.",
+      "body": [
+        "This is the Hellinger–Toeplitz theorem. We will prove it, explain the closed graph theorem behind it, and then use it to understand why operator sums and perturbation identities require explicit common-domain hypotheses."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "The Hellinger–Toeplitz argument",
+      "eyebrow": "G2 · 085000 · first-pass outline",
+      "lead": "Let T act on every vector of a Hilbert space H.",
+      "body": [
+        "Assume T is symmetric, meaning that for any x and y, the inner product of T x with y equals the inner product of x with T y. Take any sequence x N converging to x, and suppose T x N converges to some y. We want to show that y equals T x. Fix an arbitrary test vector z. By continuity of the inner product, the inner product of y with z equals the limit of the inner products of T x N with z. Symmetry changes each of those terms into the inner product of x N with T z. Since T z is one fixed vector, we may pass to the limit again. The result is the inner product of x with T z. Apply symmetry in reverse: it equals the inner product of T x with z."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Why the closed graph theorem is plausible",
+      "eyebrow": "G2 · 085000 · first-pass outline",
+      "lead": "The closed graph theorem is a consequence of completeness, and it is worth understanding the mechanism rather than treating its name as an incantation.",
+      "body": [
+        "Equip the graph of a closed operator T with the product norm. It is a closed subspace of the Banach space H times H, so it is itself complete. Projection from the graph onto its first coordinate is continuous. If T is everywhere defined, that projection is a bijection from the graph onto H. The bounded inverse theorem says a continuous linear bijection between Banach spaces has a continuous inverse."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Why the diagonal example has a restricted domain",
+      "eyebrow": "G2 · 085000 · first-pass outline",
+      "lead": "Our diagonal operator sends the N-th coordinate to N times that coordinate.",
+      "body": [
+        "On the basis vector e N it multiplies length by N, so it is unbounded. On its maximal weighted-square-summability domain it is self-adjoint: testing its adjoint on individual coordinate basis vectors forces exactly the same domain condition. Hellinger–Toeplitz tells us that this domain cannot equal all of ell two. The sequence with N-th coordinate one over N is a direct witness: it lies in ell two but not in the operator domain. There is no contradiction with symmetry. The operator is symmetric on its domain, not everywhere defined."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Adding a bounded perturbation",
+      "eyebrow": "G2 · 085000 · first-pass outline",
+      "lead": "Let A be self-adjoint with domain D, and let V be an everywhere-defined bounded self-adjoint operator.",
+      "body": [
+        "Define B by B x equals A x plus V x, for x in D. The domain of B is exactly D. We can prove that B is self-adjoint. First observe the adjoint domain of B. A vector y lies in that domain when the functional in x given by the inner product of A x plus V x with y is bounded by a constant times the length of x, for x in D. The contribution from V is already bounded: by the adjoint identity for bounded V, it equals the inner product of x with V y. Subtracting this term shows that the whole functional is bounded if and only if the A functional is bounded."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Comparing graph norms on a common domain",
+      "eyebrow": "G2 · 085000 · first-pass outline",
+      "lead": "The graph norm for A involves the lengths of x and A x.",
+      "body": [
+        "The graph norm for B involves x and A x plus V x. The triangle inequality gives the length of B x at most the length of A x plus the operator norm of V times the length of x. Therefore the graph norm of B is bounded above by a constant times the graph norm of A. Reverse the relation by writing A x equals B x minus V x. The same reasoning gives an upper bound for the graph norm of A in terms of that of B. So the two graph norms are equivalent on the same domain. They generate the same notion of graph-norm convergence, although their numerical values need not agree."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "What goes wrong without a common domain",
+      "eyebrow": "G2 · 085000 · first-pass outline",
+      "lead": "For two genuinely unbounded operators, the formal sum A plus B is initially defined only on the intersection of their domains.",
+      "body": [
+        "That intersection may not have the properties one wants, and the sum need not be self-adjoint merely because each summand is self-adjoint. Even identities like A x minus B x require x to belong to both domains. Writing A minus B as though it were automatically bounded on all of H can hide precisely the issue that an unbounded perturbation theorem must solve. A perturbation V is relatively A-bounded when the length of V x is controlled by a multiple of the length of A x plus a multiple of the length of x. This is a bound in the graph norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 085000 · conclusion",
+      "lead": "We will state it before manipulating off-diagonal blocks.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

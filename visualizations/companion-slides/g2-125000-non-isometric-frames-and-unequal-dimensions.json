@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "id": "g2-125000-non-isometric-frames-and-unequal-dimensions",
+  "title": "Non-isometric frames and unequal dimensions",
+  "subtitle": "G2 lecture 125000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:125000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/125000-non-isometric-frames-and-unequal-dimensions.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 125000 · first-pass outline",
+      "lead": "A trial subspace is often represented by orthonormal columns, but computational trial frames may be scaled, nonorthogonal, or redundant.",
+      "body": [
+        "The Gram operator measures their failure to have orthonormal coordinates, and that error affects how residual estimates are normalized. Davis and Kahan's Theorem six point one keeps the trial map itself rather than silently replacing it with an isometry. It permits a non-isometric frame and different dimensions of the trial and exact subspaces. Its additional factor, epsilon, comes directly from a lower bound on that frame."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Distinguish a frame from its range",
+      "eyebrow": "G2 · 125000 · first-pass outline",
+      "lead": "Let F be a coordinate Hilbert space and H the ambient Hilbert space.",
+      "body": [
+        "A trial frame E zero is a bounded linear map from F to H. Its range is the trial subspace, assuming it has closed range as guaranteed here by a positive lower bound. If E zero is an isometry, the length of every coordinate vector is preserved. But for a general frame that is false. The same ambient trial subspace can be described by many different frames, such as an orthonormal frame multiplied by an invertible matrix. We assume there is a positive epsilon such that the length of E zero x is at least epsilon times the length of x for every coordinate vector x. This says the frame does not collapse any coordinate direction."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Obtain orthonormal coordinates by polar decomposition",
+      "eyebrow": "G2 · 125000 · first-pass outline",
+      "lead": "Take the positive modulus of E zero, the square root of E zero adjoint E zero.",
+      "body": [
+        "The lower-frame hypothesis implies this modulus is bounded below by epsilon and therefore has a bounded inverse. Write the polar decomposition of E zero as W times its modulus. Because E zero is injective with closed range, W is an isometry of F onto the trial subspace. This is a canonical way to normalize the frame without changing its range. If the smallest singular value of E zero is epsilon, then the inverse of its modulus has operator norm at most one over epsilon. That one inequality will explain the entire normalization penalty."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Choose exact spectral coordinates",
+      "eyebrow": "G2 · 125000 · first-pass outline",
+      "lead": "Let A be a possibly unbounded self-adjoint operator on H.",
+      "body": [
+        "Choose an exact reducing spectral decomposition with an exact selected component and its orthogonal complement. Let F one be an isometric coordinate map into that complementary component, and let Lambda one denote the restricted operator there. Choose a self-adjoint trial coordinate operator A zero on F. Suppose E zero maps the trial coordinates into the domain of A and satisfies the residual equation: A applied to E zero equals E zero followed by A zero, plus a bounded residual map R. The domain clause is necessary if A is unbounded. We cannot even write the residual for all coordinates unless E zero lands in the domain."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Compress the residual equation",
+      "eyebrow": "G2 · 125000 · first-pass outline",
+      "lead": "Apply F one adjoint to the residual identity.",
+      "body": [
+        "Because F one identifies the exact complementary reducing space, F one adjoint A E zero becomes Lambda one applied to F one adjoint E zero. Define X as F one adjoint E zero. The remaining term is X A zero. Thus we obtain the Sylvester equation: Lambda one X minus X A zero equals F one adjoint R. The spectral hypothesis is a genuine ordered or interval-versus-exterior Sylvester gap of size delta between A zero and Lambda one. Under that hypothesis, the applicable ideal estimate gives delta times the ideal norm of X no greater than the ideal norm of R. Projection by F one adjoint does not increase the relevant singular values."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Remove the scaling, and find epsilon",
+      "eyebrow": "G2 · 125000 · first-pass outline",
+      "lead": "Replace E zero by its polar factorization W times the modulus.",
+      "body": [
+        "Then X equals F one adjoint W followed by that modulus. The map F one adjoint W is the directed escape from the normalized trial space into the exact complementary space. Its singular values are the directed sines. Let us call it S. We have X equals S times the modulus. Multiply on the right by the inverse modulus. Then S equals X times that inverse. Since the inverse has norm at most one over epsilon, every supported unitarily invariant ideal norm obeys epsilon times the norm of S at most the norm of X. Combine this with the Sylvester bound."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Check the constant in one dimension",
+      "eyebrow": "G2 · 125000 · first-pass outline",
+      "lead": "Take the ambient plane with A diagonal, with eigenvalues zero and d, where d is positive.",
+      "body": [
+        "Choose the exact selected subspace as the horizontal axis and its complement as the vertical axis. Let the trial coordinate space be one-dimensional. Map the unit coordinate to epsilon times the unit vector at angle theta above the horizontal axis. Take the trial coordinate operator A zero to be zero. The residual is simply A applied to the trial vector, which has length epsilon d sine theta. Here the cross operator X has length epsilon sine theta and the normalized directed sine has value sine theta. The gap delta between the trial zero and the complementary eigenvalue d is exactly d."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Unequal dimensions require a direction",
+      "eyebrow": "G2 · 125000 · first-pass outline",
+      "lead": "Now consider a line U inside a plane V in three-dimensional space.",
+      "body": [
+        "The directed sine from U toward V is zero because every vector of U lies in V. But the reverse directed sine from V toward U is one, since V contains a direction perpendicular to U. An ambient projection difference registers that missing direction and has norm one. A theorem based only on the trial map E zero and the complementary part of the exact decomposition generally controls the first directed sine, not the entire ambient projection difference. Theorem six point one therefore allows the trial and exact selected coordinates to have different dimensions without pretending that both directed angles are equal."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "What the theorem does and does not promise",
+      "eyebrow": "G2 · 125000 · first-pass outline",
+      "lead": "A positive lower-frame bound does not itself establish spectral separation.",
+      "body": [
+        "A small residual does not determine which exact cluster to compare against. The theorem needs the self-adjoint coordinate operators, exact spectral decomposition, domain-aware residual, positive frame bound, and a legitimate Sylvester gap. In a symmetric ideal one must also assume the residual belongs to the ideal and prove that the sine representative belongs to it. That membership is part of the conclusion, not a default property of arbitrary bounded operators. The original Section six theorem uses interval-versus-exterior spectral separation, with either ordering allowed."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "Summary",
+      "eyebrow": "G2 · 125000 · first-pass outline",
+      "lead": "The result can be reconstructed from three moves.",
+      "body": [
+        "Compress the residual to obtain a Sylvester equation. Bound the crossed operator X by the residual using the spectral gap. Normalize the frame by polar decomposition, paying exactly the inverse lower-frame bound. The formula is delta epsilon times the directed sine norm at most the residual norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 125000 · mathematical reference",
+      "lead": "The result can be reconstructed from three moves.",
+      "body": [
+        "Compress the residual to obtain a Sylvester equation. Bound the crossed operator X by the residual using the spectral gap. Normalize the frame by polar decomposition, paying exactly the inverse lower-frame bound. The formula is delta epsilon times the directed sine norm at most the residual norm."
+      ],
+      "mathtex": "\\delta\\,\\varepsilon\\,N(S)\\le N(R).",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 125000 · conclusion",
+      "lead": "The formula is delta epsilon times the directed sine norm at most the residual norm.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

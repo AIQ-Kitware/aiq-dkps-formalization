@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "id": "g2-068000-the-banach-space-sylvester-lower-bound-theorem",
+  "title": "The Banach-space Sylvester lower-bound theorem",
+  "subtitle": "G2 lecture 068000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:068000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/068000-the-banach-space-sylvester-lower-bound-theorem.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 068000 · first-pass outline",
+      "lead": "The Sylvester equation asks for an operator X satisfying A X minus X B equals C.",
+      "body": [
+        "In a Banach space, we cannot generally diagonalize A and B, yet we can still estimate X by rearranging the equation whenever one coefficient has a bounded inverse and the other is sufficiently small in comparison. Davis and Kahan state this as Theorem five point one. The theorem uses a bounded inverse of A, a bound on B, and a compatible norm on the operators that connect their spaces. These hypotheses create a contraction in the Sylvester equation."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Set up two Banach spaces",
+      "eyebrow": "G2 · 068000 · first-pass outline",
+      "lead": "Let X and Y be complex or real Banach spaces.",
+      "body": [
+        "The letter X here names the input space, so to avoid confusion call the unknown operator T. It maps X into Y. Let A be a bounded linear operator on Y, and B a bounded linear operator on X. Let C also map X to Y. We want to solve A T minus T B equals C. Assume there are real numbers gamma and delta, with gamma nonnegative and delta strictly positive. Suppose the norm of B is at most gamma. Now assume A has a bounded two-sided inverse, with inverse norm at most one divided by gamma plus delta. Those inequalities encode an asymmetry."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "What a compatible operator norm means",
+      "eyebrow": "G2 · 068000 · first-pass outline",
+      "lead": "The standard operator norm of T is the largest possible output norm on an input of norm one.",
+      "body": [
+        "But the theorem is designed to work for more general sizes of cross-space operators. Call such a size N of T. It must obey the norm-like rules: it is nonnegative, zero only at zero, homogeneous under scalar multiplication, and subadditive under addition. The additional condition is compatibility with contractions. If L acts on Y and R acts on X, and both have operator norm at most one, then composing T as L T R cannot increase N of T. This one condition implies the general two-sided ideal inequality."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Rearrange the Sylvester equation",
+      "eyebrow": "G2 · 068000 · first-pass outline",
+      "lead": "Start from A T minus T B equals C.",
+      "body": [
+        "Move the second term to the right: A T equals C plus T B. Now apply the bounded inverse of A on the left. Because that inverse cancels A, we get an exact fixed-point identity: T equals A inverse C plus A inverse T B. This identity says that T is a fixed point of an affine map. One part depends only on C; the other sends T to A inverse T B. We can estimate its effect using compatibility. The size of A inverse C is at most the norm of A inverse times N of C. The size of A inverse T B is at most the inverse norm times N of T times the norm of B. Apply the triangle inequality to the fixed-point identity."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Why the hypothesis is stronger than spectral disjointness",
+      "eyebrow": "G2 · 068000 · first-pass outline",
+      "lead": "The existence theorem we just studied needed disjoint spectra, but it did not impose a size bound on the resolvents that enter its contour formula.",
+      "body": [
+        "Here we demand a specific bound on the inverse of A and on the norm of B. This is much more quantitative. For arbitrary Banach operators, knowing that zero lies some distance away from A's spectrum does not in general imply that the norm of A inverse is the reciprocal of that distance. Nonnormal behavior can make inverses much larger. Thus we cannot derive the current theorem solely from a picture of two separated spectra. In a self-adjoint Hilbert setting, the spectral theorem does give the needed inverse norm bounds."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Move the spectral picture by a common shift",
+      "eyebrow": "G2 · 068000 · first-pass outline",
+      "lead": "An important trick is that the Sylvester expression does not change if we subtract the same scalar c from both A and B.",
+      "body": [
+        "Expand the shifted equation. On the left, A minus c identity, applied to T, gives A T minus c T. On the right, T followed by B minus c identity gives T B minus c T. Subtracting cancels the two scalar terms. So A T minus T B equals the same expression built from A minus c identity and B minus c identity. Suppose B is self-adjoint with spectrum inside the interval from c minus gamma to c plus gamma. Then the norm of B minus c identity is at most gamma. Suppose A is self-adjoint and its spectrum lies outside the larger open interval centered at c with radius gamma plus delta."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A simple example where order is absent",
+      "eyebrow": "G2 · 068000 · first-pass outline",
+      "lead": "Let B be the scalar zero operator and A the diagonal matrix with entries negative two and positive two.",
+      "body": [
+        "Choose gamma equal to zero and delta equal to two. B has norm zero. The inverse of A is diagonal with entries negative one half and positive one half, so its operator norm is one half. That equals one divided by gamma plus delta. If C is any column with two entries, the solution is simply A inverse C. Its norm is exactly half the norm of C, because both diagonal entries of A inverse have absolute value one half. This achieves the constant-one bound even though A's spectrum lies on both sides of B's spectrum. Ordered separation was not needed; a suitably bounded inverse was enough."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "A one-sided inverse is sufficient for the estimate",
+      "eyebrow": "G2 · 068000 · first-pass outline",
+      "lead": "Read the fixed-point proof again.",
+      "body": [
+        "We used only an operator L satisfying L A equals the identity, and a norm bound on L. We never used A L equals the identity. The inequality therefore needs only a bounded left inverse in this setting, not a two-sided inverse. When comparing it with a statement formulated using a genuine inverse, keep the hypotheses distinct. On arbitrary Banach spaces, a lower bound on A by itself need not give an everywhere-defined bounded left inverse. The range of A may fail to be complemented. Therefore the reusable theorem assumes actual left-inverse data rather than silently manufacturing it from an inequality on vectors."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Does this theorem itself prove existence?",
+      "eyebrow": "G2 · 068000 · first-pass outline",
+      "lead": "The inequality we have derived applies to any T and C satisfying the Sylvester equation.",
+      "body": [
+        "It proves a lower bound for the Sylvester operator and, in particular, uniqueness: if C is zero, the estimate forces T to be zero. Under the bounded inverse hypotheses, we can also prove existence by a separate Neumann-series argument. Define the linear map that sends T to A inverse T B. Its operator norm is at most gamma divided by gamma plus delta, strictly less than one. Repeated application therefore produces a convergent geometric series. Starting from A inverse C, sum its successive images under that contraction."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "Reconstruct the argument",
+      "eyebrow": "G2 · 068000 · first-pass outline",
+      "lead": "There are only three algebraic moves to remember.",
+      "body": [
+        "First, shift both diagonal blocks by the same scalar when useful. Second, solve for T using a bounded left inverse of A. Third, use the two-sided ideal inequality and collect the T terms. The final estimate has no dimension factor and no reference to eigenvectors. That is why it is so useful when a perturbation argument passes from a finite matrix to a Banach-space operator setting."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 068000 · mathematical reference",
+      "lead": "There are only three algebraic moves to remember.",
+      "body": [
+        "First, shift both diagonal blocks by the same scalar when useful. Second, solve for T using a bounded left inverse of A. Third, use the two-sided ideal inequality and collect the T terms. The final estimate has no dimension factor and no reference to eigenvectors."
+      ],
+      "mathtex": "\\gamma\\ge0,\\quad\\delta>0,\\quad\\|B\\|\\le\\gamma,\\quad\nA^{-1}\\in\\mathcal B(Y),\\quad\\|A^{-1}\\|\\le(\\gamma+\\delta)^{-1}.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 068000 · conclusion",
+      "lead": "That is why it is so useful when a perturbation argument passes from a finite matrix to a Banach-space operator setting.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

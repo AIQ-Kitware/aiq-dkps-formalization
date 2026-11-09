@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "id": "g2-063000-diagonal-matrices-and-the-entrywise-solution",
+  "title": "Diagonal matrices and the entrywise solution",
+  "subtitle": "G2 lecture 063000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:063000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/063000-diagonal-matrices-and-the-entrywise-solution.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 063000 · first-pass outline",
+      "lead": "When A and B are diagonal in orthonormal eigenbases, the unknown matrix coefficient between eigenvalues a and b is multiplied by a minus b.",
+      "body": [
+        "For diagonal coefficient matrices, the Sylvester equation can be solved entry by entry. The cross-eigenvalue differences determine uniqueness, the available solutions when spectra overlap, and a sharp Frobenius estimate under positive separation. Along the way, we will connect the entrywise formula to ordinary resolvents and to the coordinate-free language of spectral projections."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Write the matrix equation in coordinates",
+      "eyebrow": "G2 · 063000 · first-pass outline",
+      "lead": "Let A be a diagonal matrix with m diagonal entries, and B a diagonal matrix with n diagonal entries.",
+      "body": [
+        "Let X and C be rectangular matrices with m rows and n columns. We want to solve A X minus X B equals C. What is the entry in row i and column j of A X? Because A is diagonal, it is the i-th diagonal entry of A multiplied by the corresponding entry of X. What about X B? Because B is diagonal, its entry in that position is the entry of X multiplied by the j-th diagonal entry of B. Subtracting, the coefficient of X is the i-th eigenvalue of A minus the j-th eigenvalue of B."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "A complete two-by-two example",
+      "eyebrow": "G2 · 063000 · first-pass outline",
+      "lead": "Let A have diagonal entries one and four.",
+      "body": [
+        "Let B have diagonal entries zero and three. The difference associated with the first row and first column is one minus zero, which is one. For the first row and second column it is one minus three, which is negative two. For the second row and first column it is four minus zero, which is four. And for the second row and second column it is four minus three, which is one. Thus the matrix of denominators, read row by row, is one, negative two, four, one. Let C have first row two, six and second row eight, ten. Divide corresponding entries. The solution X has first row two, negative three and second row two, ten. Let's verify directly."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Why uniqueness follows",
+      "eyebrow": "G2 · 063000 · first-pass outline",
+      "lead": "Suppose X and Y both solve the same equation.",
+      "body": [
+        "Subtract their equations. The difference Z, defined as X minus Y, satisfies A Z minus Z B equals zero. For every entry, the corresponding spectral difference times the entry of Z is zero. If all differences are nonzero, every entry of Z must vanish. Therefore X equals Y. This is the entire uniqueness proof in diagonal coordinates. Equivalently, the homogeneous Sylvester operator has trivial kernel. Since it acts on a finite-dimensional space of m times n matrix entries, injectivity implies surjectivity. But the explicit division formula already gives surjectivity constructively. The proof works whether the spectra are ordered or interlaced."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "What if a denominator vanishes?",
+      "eyebrow": "G2 · 063000 · first-pass outline",
+      "lead": "Suppose A has an eigenvalue three and B has an eigenvalue three.",
+      "body": [
+        "On the corresponding row and column, the equation becomes zero times an unknown entry equals the matching entry of C. If that entry of C is nonzero, no solution exists. The left side can never produce it. If the entry of C is zero, every choice of the corresponding entry of X satisfies that scalar equation. So the solution is not unique. This gives a complete compatibility criterion in diagonal coordinates: every entry of C that joins equal eigenvalues must vanish. For all other entries, divide as usual. At positions joining equal eigenvalues, choose arbitrary values of X."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A sharp Frobenius estimate",
+      "eyebrow": "G2 · 063000 · first-pass outline",
+      "lead": "Assume now that the eigenvalues of A and B are separated by a positive distance delta.",
+      "body": [
+        "That means every absolute spectral difference is at least delta. For each entry, the solution formula gives the magnitude of X's entry at most the magnitude of C's entry divided by delta. Square this inequality for each row and column, and add over all entries. The sum of squared magnitudes of X is at most one over delta squared times the corresponding sum for C. These sums are the squares of the Frobenius norms. Taking square roots gives the bound: the Frobenius norm of X is at most the Frobenius norm of C divided by delta. The constant one is sharp."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Why this does not prove the same operator-norm bound",
+      "eyebrow": "G2 · 063000 · first-pass outline",
+      "lead": "It is tempting to use the same argument for the ordinary operator norm.",
+      "body": [
+        "Every entry of X is bounded in magnitude by the corresponding entry of C divided by delta, so perhaps the operator norm of X is at most the operator norm of C divided by delta. That conclusion does not follow from entrywise inequalities. The operator norm is not monotone under entrywise absolute-value comparison for arbitrary matrices. Changing signs and arrangements of matrix entries can change how they combine when acting on a vector. Our entrywise proof gives the Frobenius bound immediately. It also gives a weaker operator-norm bound through the inequality between Frobenius and operator norms, with a dimension factor."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "From diagonal entries to spectral projections",
+      "eyebrow": "G2 · 063000 · first-pass outline",
+      "lead": "The formula is not tied to any particular choice of eigenvectors.",
+      "body": [
+        "Let P for each distinct eigenvalue of A denote its orthogonal spectral projection. Let Q for each distinct eigenvalue of B denote the corresponding projection. Every map C can be decomposed into rectangular spectral blocks by placing a projection P on the left and a projection Q on the right. Summing all of these pieces recovers C because the spectral projections on each side sum to the identity. On one such block, the Sylvester operator multiplies by the scalar eigenvalue of A minus the scalar eigenvalue of B. This is the coordinate-free version of the entrywise calculation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "A resolvent is a special case",
+      "eyebrow": "G2 · 063000 · first-pass outline",
+      "lead": "Suppose B is a scalar multiple of the identity, with scalar b.",
+      "body": [
+        "Then X B equals b times X. The equation becomes A X minus b X equals C, or A minus b identity, followed by X, equals C. If b is not an eigenvalue of A, the operator A minus b identity is invertible. Therefore X is obtained by applying its inverse to C on the left. That inverse is a resolvent operator, up to the conventional sign used when defining a resolvent. In diagonal coordinates, it divides each spectral component by a minus b. For self-adjoint A, its operator norm equals the reciprocal of the distance from b to the spectrum of A. That is the one-parameter version of our spectral denominator story."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "What to reconstruct",
+      "eyebrow": "G2 · 063000 · first-pass outline",
+      "lead": "Solve the two-by-two example and verify by direct multiplication.",
+      "body": [
+        "Prove the uniqueness statement by subtracting two solutions. Then classify existence and free parameters when A and B share an eigenvalue of multiplicities r and s. Derive the Frobenius bound from the coefficient formula, and produce a one-entry example attaining equality. Finally, write the spectral-projection formula for the solution and show why it is independent of the chosen bases inside repeated eigenspaces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 063000 · mathematical reference",
+      "lead": "Solve the two-by-two example and verify by direct multiplication.",
+      "body": [
+        "Prove the uniqueness statement by subtracting two solutions. Then classify existence and free parameters when A and B share an eigenvalue of multiplicities r and s. Derive the Frobenius bound from the coefficient formula, and produce a one-entry example attaining equality."
+      ],
+      "mathtex": "(AX-XB)_{ij}=(a_i-b_j)X_{ij},\\qquad\nX_{ij}=\\frac{C_{ij}}{a_i-b_j}\\quad\\text{if }a_i\\ne b_j.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 063000 · conclusion",
+      "lead": "Finally, write the spectral-projection formula for the solution and show why it is independent of the chosen bases inside repeated eigenspaces.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

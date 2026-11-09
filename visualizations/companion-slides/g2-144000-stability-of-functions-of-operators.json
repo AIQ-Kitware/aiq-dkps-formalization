@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-144000-stability-of-functions-of-operators",
+  "title": "Stability of functions of operators",
+  "subtitle": "G2 lecture 144000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:144000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/144000-stability-of-functions-of-operators.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 144000 · first-pass outline",
+      "lead": "Many applications apply a function to an operator rather than asking for a particular eigenvector.",
+      "body": [
+        "They may take an operator square root, solve a resolvent equation, evolve a system by an exponential, or select a spectral cluster through a step function. Davis and Kahan ask which such operations admit useful perturbation bounds, and under what assumptions on the function and the operators."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "What a function of an operator means",
+      "eyebrow": "G2 · 144000 · first-pass outline",
+      "lead": "For a self-adjoint finite matrix A, write its spectral decomposition as a sum of eigenvalues times orthogonal spectral projections.",
+      "body": [
+        "To define f of A, keep the projections and apply the scalar function f to the eigenvalues. If A has eigenvalue lambda on a subspace, f of A acts there by multiplication by f of lambda. The definition is independent of which orthonormal basis we pick inside a repeated eigenspace. In infinite dimensions, bounded Borel functional calculus replaces the finite sum with a spectral integral. For a bounded self-adjoint operator, the Borel functional calculus integrates the chosen bounded measurable function against the projection-valued spectral measure."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Polynomials and the telescoping identity",
+      "eyebrow": "G2 · 144000 · first-pass outline",
+      "lead": "For the function f of x equals x squared, compare B squared and A squared.",
+      "body": [
+        "Expand B as A plus H. The difference is A H plus H A plus H squared. Equivalently it is B H plus H A. These two expressions are exactly equal, whether or not A and H commute. Using submultiplicativity, the difference norm is at most the sum of the norms of B and A times the norm of H. Thus if both operators have norm at most M, the square-function difference is at most two M times the perturbation norm. For an integer power n, the difference B to the n minus A to the n is a sum of n terms, each with some powers of B to the left, exactly one H in the middle, and powers of A to the right."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Resolvents are stable away from spectrum",
+      "eyebrow": "G2 · 144000 · first-pass outline",
+      "lead": "Consider the resolvent function, the reciprocal of x minus z, where z is a complex number outside the spectra of A and B.",
+      "body": [
+        "Its operator value is the inverse of A minus z times the identity. There is an exact resolvent identity. The resolvent of B minus the resolvent of A equals minus the resolvent of B, followed by H, followed by the resolvent of A. This is just the inverse-difference formula, and it requires no commutation. Take norms. The resolvent difference is bounded by the product of the two resolvent norms times the perturbation norm. If A and B are self-adjoint and z stays at least distance d from both spectra, each resolvent norm is at most one over d."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "A step function becomes a spectral projection",
+      "eyebrow": "G2 · 144000 · first-pass outline",
+      "lead": "Now consider a function that equals one below a specified spectral cut and zero above it.",
+      "body": [
+        "Suppose the spectra of both A and B avoid a neighborhood of that cut. Then the function of A is the spectral projection P onto eigenvalues below the cut. The function of B is the analogous projection Q. Therefore the operator difference of the two functions is exactly Q minus P. Its operator norm measures the ambient sine of the maximal principal angle between the selected subspaces. The directed difference, applied to the original selected frame, measures the directed sine. This is the concrete example inside Davis and Kahan's Question ten point four."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A worked rotation example",
+      "eyebrow": "G2 · 144000 · first-pass outline",
+      "lead": "Take A to be the diagonal matrix with entries minus one and plus one.",
+      "body": [
+        "Rotate its eigenbasis by an angle theta to produce B. The eigenvalues of B have not changed at all. Yet the negative-eigenvalue projection has rotated. The norm of the difference of those projections is the absolute value of sine theta. What about the perturbation? A direct two-by-two calculation gives the norm of B minus A equal to two times the absolute value of sine theta. In this example the step-projection change is exactly half the perturbation norm. The ratio is not universal. It reflects the gap of two between the eigenvalues. If we shrink that gap, the same rotation can be produced by a smaller perturbation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Why divided differences appear",
+      "eyebrow": "G2 · 144000 · first-pass outline",
+      "lead": "For commuting diagonal matrices, the change in f acts coordinatewise.",
+      "body": [
+        "Each coordinate has scalar quotient: f of mu minus f of lambda, divided by mu minus lambda, when the denominator is nonzero. For noncommuting matrices, the same quotient appears between different eigenvectors. One can write a matrix-level formula using the spectral projections of A and B. The contribution between an A eigenvalue lambda and a B eigenvalue mu is the scalar divided difference multiplied by the corresponding cross projection and by H. This follows from the identity that the cross projection of H equals the spectral difference times the cross projection of the identity."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Reading the question precisely",
+      "eyebrow": "G2 · 144000 · first-pass outline",
+      "lead": "The original Davis-Kahan paper asks for useful classes of real functions f and estimates comparing f of A with f of a perturbed operator.",
+      "body": [
+        "The projection-valued step function provides one model: its projection identities are rigorous, while a broad perturbation theory for arbitrary function classes is a separate question. The polynomial telescoping identity, the resolvent identity, and the identification of spectral projections as step functions give three concrete comparison tools. Their hypotheses differ, and the moving spectral-cut example shows why scalar Lipschitz regularity alone cannot control every operator function."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 144000 · mathematical reference",
+      "lead": "The original Davis-Kahan paper asks for useful classes of real functions f and estimates comparing f of A with f of a perturbed operator.",
+      "body": [
+        "The projection-valued step function provides one model: its projection identities are rigorous, while a broad perturbation theory for arbitrary function classes is a separate question."
+      ],
+      "mathtex": "B^n-A^n=\\sum_{k=0}^{n-1}B^{n-1-k}HA^k,",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 144000 · conclusion",
+      "lead": "Their hypotheses differ, and the moving spectral-cut example shows why scalar Lipschitz regularity alone cannot control every operator function.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

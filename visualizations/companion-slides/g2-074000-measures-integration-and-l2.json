@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "id": "g2-074000-measures-integration-and-l2",
+  "title": "Measures, integration and L2",
+  "subtitle": "G2 lecture 074000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:074000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/074000-measures-integration-and-l2.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 074000 · first-pass outline",
+      "lead": "A sigma-algebra tells us which sets can be used in countable constructions.",
+      "body": [
+        "But it does not assign a size to those sets. To integrate functions, measure lengths and probabilities, or build a Hilbert space of square-integrable functions, we need a measure. Today we will take the sequence from measurable sets to countably additive measures, from simple functions to integration, and from squared integrals to the complete Hilbert space L two. We will also see why three convergence theorems are needed for infinite-dimensional spectral theory."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "What a measure supplies",
+      "eyebrow": "G2 · 074000 · first-pass outline",
+      "lead": "A measure assigns a number between zero and infinity, including possibly infinity, to each measurable set.",
+      "body": [
+        "The empty set has measure zero. If we have countably many pairwise disjoint measurable sets, the measure of their union equals the sum of their measures. That last requirement is called countable additivity. It strengthens the familiar rule that two disjoint intervals have combined length equal to the sum of their lengths. For Lebesgue measure on the real line, an interval receives its ordinary length. A single point has measure zero. Countable sets have measure zero because they are countable unions of zero-measure singletons."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Three consequences of countable additivity",
+      "eyebrow": "G2 · 074000 · first-pass outline",
+      "lead": "First comes monotonicity.",
+      "body": [
+        "If E is contained in F, split F into E and the part outside E. Since the second part has nonnegative measure, the measure of E is no larger than that of F. Second comes continuity from below. If E-one is contained in E-two, then E-three, and so on, the measure of their union equals the limit of their measures. To prove this, divide the union into the disjoint increments appearing at each stage and use countable additivity. Third comes continuity from above when the first set has finite measure. If the sets decrease, the measure of their intersection is the limit of their measures."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Integrating the simplest functions",
+      "eyebrow": "G2 · 074000 · first-pass outline",
+      "lead": "Take a nonnegative simple function: it has finitely many values and can be written as a sum of positive constants multiplied by indicators of disjoint measurable sets.",
+      "body": [
+        "Define its integral by multiplying each value by the measure of the corresponding set and adding. If a simple function equals three on a set of measure two and one on a disjoint set of measure five, its integral is six plus five, namely eleven. For a general nonnegative measurable function, consider all nonnegative simple functions bounded above by it. Define the integral as the supremum of their integrals."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Why approximation works",
+      "eyebrow": "G2 · 074000 · first-pass outline",
+      "lead": "Every nonnegative measurable function can be approximated from below by an increasing sequence of nonnegative simple functions.",
+      "body": [
+        "Here is the construction idea. For each positive integer n, round function values downward to multiples of one over two to the n, and cap the values at n. This gives a finite-valued measurable approximation. As n grows, the grid becomes finer and the cap becomes larger. With a suitable choice of partitions, the approximations increase pointwise to the original function. The monotone convergence theorem says that their integrals increase to the integral of the limit function."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Two more convergence principles",
+      "eyebrow": "G2 · 074000 · first-pass outline",
+      "lead": "Fatou's lemma says that the integral of the pointwise lower limit of nonnegative measurable functions is no larger than the lower limit of their integrals.",
+      "body": [
+        "A convenient proof applies monotone convergence to the increasing sequence obtained by taking, at each stage, the infimum of the functions from that stage onward. The dominated convergence theorem gives a different kind of limit interchange. Suppose functions converge almost everywhere to f, and their absolute values are all bounded by one common integrable function g. Then their integrals converge to the integral of f. Why is domination necessary? Consider functions that equal n on an interval of length one over n, and zero elsewhere."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "The L two norm",
+      "eyebrow": "G2 · 074000 · first-pass outline",
+      "lead": "Define L two to consist of measurable complex functions whose squared absolute values have finite integral, identifying functions equal almost everywhere.",
+      "body": [
+        "The squared norm of f is the integral of squared absolute value. For two such functions, define their inner product by integrating the complex conjugate of the first times the second. The integral exists by the Cauchy–Schwarz inequality for integrals: the absolute value of the inner product is bounded by the product of the two L two norms. One way to prove that inequality is to integrate the nonnegative square of f minus a scalar multiple of g. Choose the scalar so the resulting quadratic expression is minimized."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Why we identify functions almost everywhere",
+      "eyebrow": "G2 · 074000 · first-pass outline",
+      "lead": "Consider the function that equals one at a single point of the unit interval and zero everywhere else.",
+      "body": [
+        "Under Lebesgue measure, the integral of its squared absolute value is zero. Without identifying almost-everywhere-equal functions, this nonzero function would have zero norm. After taking equivalence classes, a vector in L two is not a particular pointwise formula. Its values on sets of measure zero are irrelevant. This distinction is especially important when defining a multiplication operator: changing its symbol on a null set produces the same operator on L two. For the unit interval, the constant function one has norm one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Completeness of L two",
+      "eyebrow": "G2 · 074000 · first-pass outline",
+      "lead": "The most important analytic claim is that every Cauchy sequence in the L two norm converges to a vector of L two.",
+      "body": [
+        "Here is a proof outline that shows where integration is needed. From a Cauchy sequence, choose a subsequence whose successive L two distances are smaller than one over two to the n. The sum of these distances is finite. Use the integral triangle inequality to show that the series of absolute successive differences is integrable in an appropriate limit sense and finite almost everywhere. At almost every point, the selected subsequence therefore converges pointwise. Call its limit f."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "Infinite orthogonality from disjoint sets",
+      "eyebrow": "G2 · 074000 · first-pass outline",
+      "lead": "Take pairwise disjoint measurable sets, each of finite positive measure.",
+      "body": [
+        "Divide each indicator by the square root of its measure. The resulting L two vectors have norm one. Their pairwise inner products vanish because the sets do not overlap. If there are infinitely many such sets, we obtain an infinite orthonormal family. Hence L two cannot be finite-dimensional. To exhibit infinitely many orthogonal directions, choose disjoint intervals such as those from one over n plus two to one over n plus one. Each has positive finite length. Their normalized indicator functions form an infinite orthonormal family in the square-integrable space."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "10-overview",
+      "title": "Returning to spectral theory",
+      "eyebrow": "G2 · 074000 · first-pass outline",
+      "lead": "When a projection-valued measure assigns a projection to each Borel set, each vector will induce a scalar measure: the squared norm of its projected component.",
+      "body": [
+        "Integrals against that scalar measure will define norms of functions of the operator. Everything we developed today supports that construction. Countable additivity controls disjoint spectral pieces. Simple functions provide initial approximations. Monotone and dominated convergence justify limits. L two and its completeness provide the ambient space in which spectral models live."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 074000 · conclusion",
+      "lead": "L two and its completeness provide the ambient space in which spectral models live.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

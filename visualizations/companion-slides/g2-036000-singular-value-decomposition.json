@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "id": "g2-036000-singular-value-decomposition",
+  "title": "Singular-value decomposition",
+  "subtitle": "G2 lecture 036000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:036000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/036000-singular-value-decomposition.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 036000 · first-pass outline",
+      "lead": "Imagine a flat sheet of material drawn as a circle.",
+      "body": [
+        "Apply a linear transformation. Typically, the circle becomes an ellipse. One direction is stretched most, another least, and in higher dimensions there are several independent stretching directions. A general matrix does not tell us those directions just by looking at its entries. It mixes stretching with changes in orientation, and the matrix may be rectangular. But the operator modulus gives us a precise way to find the stretching information. The singular-value decomposition, or S V D, follows from the spectral theorem for the positive Gram operator."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Start with the source Gram operator",
+      "eyebrow": "G2 · 036000 · first-pass outline",
+      "lead": "Let A be a linear map from a finite-dimensional real or complex inner-product space E to another such space F.",
+      "body": [
+        "The source Gram operator, A adjoint A, acts on E. It is positive and self-adjoint. Therefore the finite spectral theorem supplies an orthonormal basis of E consisting of its eigenvectors. Call these vectors v one, v two, and so on. Each has a nonnegative eigenvalue, since a Gram operator is positive. For each eigenvalue, take its nonnegative square root. Call that number the corresponding singular value. We conventionally arrange the singular values from largest to smallest, counting multiplicity. Why take square roots?"
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Construct the output directions",
+      "eyebrow": "G2 · 036000 · first-pass outline",
+      "lead": "Consider an eigenvector v with a positive Gram eigenvalue.",
+      "body": [
+        "Its image A v is nonzero. We can normalize it by dividing by its singular value. Call the resulting unit vector u. In words, u equals A v divided by sigma, where sigma is the positive singular value. Then A v equals sigma times u. We have a unit input direction, a nonnegative stretching factor, and a unit output direction. Now the crucial question: if two input eigenvectors are orthogonal, are their corresponding output directions orthogonal? Take two eigenvectors v i and v j with positive eigenvalues. Compute the inner product of A v i and A v j. Move A from the first slot to the second using the adjoint identity."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "What happens when a singular value is zero?",
+      "eyebrow": "G2 · 036000 · first-pass outline",
+      "lead": "We cannot divide by zero, and we do not need to.",
+      "body": [
+        "A zero Gram eigenvalue means the squared length of A v is zero. So A v is the zero vector. Those zero-eigenvalue input vectors form an orthonormal basis for the kernel of A. They are exactly the directions that disappear under the map. For every positive singular value, we get a unit output direction. Since those output directions are orthonormal, we can extend them to an orthonormal basis of the entire output space F. The additional output vectors do not need matching nonzero input directions; they simply complete the coordinate system. This handles rectangular maps and rank-deficient maps in one construction."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "A complete example",
+      "eyebrow": "G2 · 036000 · first-pass outline",
+      "lead": "Take A from two-dimensional real space to three-dimensional real space.",
+      "body": [
+        "It sends the vector with coordinates x and y to the three-coordinate vector x plus y, zero, zero. Its matrix has three rows and two columns. The first row is one, one. The other rows are zero. For A of x comma y equal to x plus y, zero, zero, the adjoint sends an output triple to the pair whose two entries both equal the first coordinate of the triple. Consequently A adjoint A sends x comma y to x plus y, x plus y. Its two-by-two matrix has all entries one, as can also be checked by taking the dot products of A's two identical columns. There are two perpendicular unit input directions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Putting the pieces into a factorization",
+      "eyebrow": "G2 · 036000 · first-pass outline",
+      "lead": "Let V be the matrix whose columns are the orthonormal input eigenvectors we constructed.",
+      "body": [
+        "Let U be the matrix whose columns form the orthonormal output basis. These are unitary matrices in complex coordinates, or orthogonal matrices in real coordinates. Between them, place a rectangular diagonal matrix called Sigma. Along its diagonal are the singular values, in decreasing order. The remaining entries are zero. The transformation A can then be written as U times Sigma times V adjoint. Read that formula from right to left. First, V adjoint expresses the input in the special input basis."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "What is intrinsic, and what can vary?",
+      "eyebrow": "G2 · 036000 · first-pass outline",
+      "lead": "The ordered singular values are determined by A.",
+      "body": [
+        "They do not depend on which orthonormal bases we used to represent it. They are the eigenvalues of the modulus, with the appropriate zero-padding convention for rectangular matrices. The singular vectors are less rigid. If two positive singular values are equal, we can choose different orthonormal bases within their shared eigenspace and get different, equally valid singular vectors. Even for an isolated singular value, multiplying a complex singular vector by a unit-modulus phase changes its coordinates without changing the underlying decomposition when the corresponding output vector changes compatibly."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "The two Gram operators and rank",
+      "eyebrow": "G2 · 036000 · first-pass outline",
+      "lead": "The source Gram operator A adjoint A and the output Gram operator A A adjoint live on different spaces.",
+      "body": [
+        "Yet they have the same positive eigenvalues, counted with multiplicity. We can now see why. Every positive singular value sigma yields an input vector v and output vector u satisfying A v equals sigma u. Applying A adjoint to u gives sigma v. It follows that A A adjoint acts on u by sigma squared, just as A adjoint A acts on v. The reverse construction works too for every nonzero eigenvalue, so the positive eigenspaces match in dimension. Their zero eigenspaces can have different dimensions because E and F need not have equal dimensions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "The bridge to polar decomposition",
+      "eyebrow": "G2 · 036000 · first-pass outline",
+      "lead": "The modulus tells us the stretching factors.",
+      "body": [
+        "The S V D also tells us how to carry each nonzero input stretching direction to its output direction without changing length. That second operation can be assembled into a partial isometry. Composing the modulus with that partial isometry recovers A. We will construct this factorization next, including what happens on the kernel and why the partial isometry is not always a unitary operator. For now, reconstruct the proof that positive Gram eigenvectors produce orthonormal output directions. Explain why division by a singular value requires that it be positive."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 036000 · mathematical reference",
+      "lead": "The modulus tells us the stretching factors.",
+      "body": [
+        "The S V D also tells us how to carry each nonzero input stretching direction to its output direction without changing length. That second operation can be assembled into a partial isometry. Composing the modulus with that partial isometry recovers A."
+      ],
+      "mathtex": "A=U\\Sigma V^*,\\qquad |A|=V(\\Sigma^*\\Sigma)^{1/2}V^*,",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 036000 · conclusion",
+      "lead": "You have built it.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

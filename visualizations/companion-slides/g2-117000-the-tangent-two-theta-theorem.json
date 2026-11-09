@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-117000-the-tangent-two-theta-theorem",
+  "title": "The tangent-two-theta theorem",
+  "subtitle": "G2 lecture 117000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:117000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/117000-the-tangent-two-theta-theorem.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 117000 · first-pass outline",
+      "lead": "The sine-two-theta theorem controls an operator that vanishes both at zero angle and at ninety degrees.",
+      "body": [
+        "To recover a stronger geometric conclusion, we need to know which branch of that function we occupy. For a self-adjoint operator with an ordered two-block gap, an off-diagonal perturbation gives us exactly that information. The selected upper spectral subspace remains at angles strictly less than forty-five degrees from the original upper subspace. On that branch, the tangent of twice the angle is finite and can be controlled sharply."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "State the strong hypotheses",
+      "eyebrow": "G2 · 117000 · first-pass outline",
+      "lead": "Let T be self-adjoint on a finite-dimensional Hilbert space H.",
+      "body": [
+        "Let U reduce T. Assume the quadratic form of T on U is at least b times squared length, and its form on U perpendicular is at most a times squared length, with b greater than a. Write delta for b minus a. Perturb T by a self-adjoint operator H zero whose diagonal compressions onto U and onto U perpendicular both vanish. Denote the new operator by S. Let V be the upper reducing subspace selected from S. To make the theorem precise, assume the quadratic form of S on V is at least b, and on V perpendicular at most a."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Derive the exact planar formula",
+      "eyebrow": "G2 · 117000 · first-pass outline",
+      "lead": "Take T diagonal with entries b and a, where b is greater than a.",
+      "body": [
+        "Let the perturbation H zero have zero diagonal and off-diagonal entries h. Then S has rows b, h and h, a. Consider an eigenvector for the upper eigenvalue, making an angle theta from the first coordinate axis. To diagonalize S, use an ordinary plane rotation. The off-diagonal entry in the rotated matrix is h times cosine twice theta minus half of b minus a times sine twice theta, with the sign depending on the orientation of the rotation. Setting that entry equal to zero gives tangent twice theta equal to two h divided by delta, with an appropriate choice of oriented theta."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "How do we know the upper space stays on the correct branch?",
+      "eyebrow": "G2 · 117000 · first-pass outline",
+      "lead": "We need a reason that does not depend on diagonalizing a two-by-two matrix.",
+      "body": [
+        "Let P be projection onto U and let J equal twice P minus the identity. Center T at the midpoint c of a and b. The form-gap hypothesis gives a coercive inequality: the real part of the inner product of J times T minus c with x is at least half delta times the squared norm of x. Because the perturbation is off-diagonal, J H zero is skew-adjoint. Its quadratic form has zero real part. So the same coercive lower bound holds with S in place of T. This bound first proves spectral repulsion: no eigenvector of S can have an eigenvalue in the open gap."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Derive the sharp graph inequality",
+      "eyebrow": "G2 · 117000 · first-pass outline",
+      "lead": "Represent V as the graph of an operator Z from U into U perpendicular.",
+      "body": [
+        "The strict branch conclusion gives operator norm Z less than one. Its singular values are tangents of the principal angles. Relative to U plus U perpendicular, write T as diagonal blocks A plus and A minus. Write the off-diagonal perturbation using K and K adjoint. Thus S has upper-right block K adjoint and lower-left block K. A graph vector has components u and Z u. The condition that its image under S remains on the graph yields a Riccati equation. In words: K plus A minus Z equals Z A plus plus Z K adjoint Z. This equation contains both linear Sylvester terms and a quadratic correction from the off-diagonal coupling."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Interpret the cosine denominator",
+      "eyebrow": "G2 · 117000 · first-pass outline",
+      "lead": "The difference between the doubled sine and doubled tangent is the denominator cosine twice theta.",
+      "body": [
+        "For angles below forty-five degrees, cosine twice theta is positive. We can therefore pass from a bound on sine twice theta to a bound on tangent twice theta only if we can control that denominator. The off-diagonal spectral structure supplies the required positivity, and the graph argument obtains the sharp quantitative comparison. At forty-five degrees the denominator vanishes. The theorem says that no finite off-diagonal perturbation satisfying its hypotheses reaches that angle. A family can approach it as the coupling grows, but never attain it at finite size."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Compare the two double-angle theorems",
+      "eyebrow": "G2 · 117000 · first-pass outline",
+      "lead": "The sine-two-theta theorem needs a two-block gap for T and reducing subspaces for T and S.",
+      "body": [
+        "It allows a general self-adjoint perturbation and gives delta times a doubled-sine norm at most twice the perturbation norm. The tangent-two-theta theorem adds off-diagonality, matching upper and lower spectral bounds for the selected perturbed subspace, and an operator-norm control. It gives both an angle strictly below forty-five degrees and the sharp doubled-tangent inequality. The stronger conclusion costs stronger hypotheses. It cannot be obtained simply by dividing the sine estimate by cosine twice theta without proving the branch and controlling that cosine."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "A final numerical check",
+      "eyebrow": "G2 · 117000 · first-pass outline",
+      "lead": "Let delta equal two and let the coupling h equal one.",
+      "body": [
+        "The formula gives tangent twice theta equal one, so theta is twenty-two point five degrees. Then cosine twice theta and sine twice theta both equal the square root of two divided by two. The sine-two-theta estimate gives two times approximately zero point seven zero seven at most two. The tangent-two-theta estimate gives two times one at most two, with equality. As h increases to ten, tangent twice theta equals ten and theta approaches forty-five degrees from below. The doubled sine becomes close to one, while the doubled tangent records the increasing difficulty of maintaining a graph with slope below one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 117000 · mathematical reference",
+      "lead": "Let delta equal two and let the coupling h equal one.",
+      "body": [
+        "The formula gives tangent twice theta equal one, so theta is twenty-two point five degrees. Then cosine twice theta and sine twice theta both equal the square root of two divided by two. The sine-two-theta estimate gives two times approximately zero point seven zero seven at most two."
+      ],
+      "mathtex": "t^2<\\tfrac12,\\qquad \\delta\\,2t\\sqrt{1-t^2}\\le 2\\varepsilon(1-2t^2).",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 117000 · conclusion",
+      "lead": "The spectral branch proof establishes that the cosine of twice every relevant angle is positive; the Riccati estimate then controls its reciprocal effect quantitatively.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

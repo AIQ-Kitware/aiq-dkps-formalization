@@ -6,392 +6,1408 @@
       "source": "dkps-fast-path.json",
       "lecture_nodes": [
         "g3:000000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "finite-spectral-picture",
       "source": "finite-spectral-picture.json",
       "lecture_nodes": [
         "g3:001000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-002000-spectral-separation-and-gap-hypotheses",
       "source": "g3-002000-spectral-separation-and-gap-hypotheses.json",
       "lecture_nodes": [
         "g3:002000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-003000-trial-subspaces-ritz-values-and-residuals",
       "source": "g3-003000-trial-subspaces-ritz-values-and-residuals.json",
       "lecture_nodes": [
         "g3:003000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-004000-principal-angle-sine-and-cosine-operators",
       "source": "g3-004000-principal-angle-sine-and-cosine-operators.json",
       "lecture_nodes": [
         "g3:004000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-005000-canonical-direct-rotation",
       "source": "g3-005000-canonical-direct-rotation.json",
       "lecture_nodes": [
         "g3:005000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-006000-unitarily-invariant-norms-and-ky-fan-dominance",
       "source": "g3-006000-unitarily-invariant-norms-and-ky-fan-dominance.json",
       "lecture_nodes": [
         "g3:006000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-007000-block-operators-and-reducing-subspaces",
       "source": "g3-007000-block-operators-and-reducing-subspaces.json",
       "lecture_nodes": [
         "g3:007000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-008000-the-sylvester-equation",
       "source": "g3-008000-the-sylvester-equation.json",
       "lecture_nodes": [
         "g3:008000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-009000-ordered-spectral-separation",
       "source": "g3-009000-ordered-spectral-separation.json",
       "lecture_nodes": [
         "g3:009000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-010000-choosing-the-correct-sylvester-norm-estimate",
       "source": "g3-010000-choosing-the-correct-sylvester-norm-estimate.json",
       "lecture_nodes": [
         "g3:010000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-011000-the-unbounded-spectral-theorem",
       "source": "g3-011000-the-unbounded-spectral-theorem.json",
       "lecture_nodes": [
         "g3:011000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-012000-domains-and-unbounded-sylvester-identities",
       "source": "g3-012000-domains-and-unbounded-sylvester-identities.json",
       "lecture_nodes": [
         "g3:012000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-013000-symmetric-operator-ideals",
       "source": "g3-013000-symmetric-operator-ideals.json",
       "lecture_nodes": [
         "g3:013000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-014000-graph-subspaces-and-tangent-geometry",
       "source": "g3-014000-graph-subspaces-and-tangent-geometry.json",
       "lecture_nodes": [
         "g3:014000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-015000-off-diagonal-perturbations-and-reflection",
       "source": "g3-015000-off-diagonal-perturbations-and-reflection.json",
       "lecture_nodes": [
         "g3:015000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-016000-spectral-selection-and-repulsion",
       "source": "g3-016000-spectral-selection-and-repulsion.json",
       "lecture_nodes": [
         "g3:016000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-017000-direct-rotation-under-restricted-hypotheses",
       "source": "g3-017000-direct-rotation-under-restricted-hypotheses.json",
       "lecture_nodes": [
         "g3:017000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-018000-squared-displacement-and-majorization",
       "source": "g3-018000-squared-displacement-and-majorization.json",
       "lecture_nodes": [
         "g3:018000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-019000-why-unsquared-displacement-is-different",
       "source": "g3-019000-why-unsquared-displacement-is-different.json",
       "lecture_nodes": [
         "g3:019000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-020000-the-sine-theta-theorem",
       "source": "g3-020000-the-sine-theta-theorem.json",
       "lecture_nodes": [
         "g3:020000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-021000-the-tangent-theta-theorem",
       "source": "g3-021000-the-tangent-theta-theorem.json",
       "lecture_nodes": [
         "g3:021000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-022000-the-sine-two-theta-theorem",
       "source": "g3-022000-the-sine-two-theta-theorem.json",
       "lecture_nodes": [
         "g3:022000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-023000-the-tangent-two-theta-theorem",
       "source": "g3-023000-the-tangent-two-theta-theorem.json",
       "lecture_nodes": [
         "g3:023000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-024000-the-proposition-4-4-counterexample",
       "source": "g3-024000-the-proposition-4-4-counterexample.json",
       "lecture_nodes": [
         "g3:024000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g3-025000-the-real-transport-matching-theorem",
       "source": "g3-025000-the-real-transport-matching-theorem.json",
       "lecture_nodes": [
         "g3:025000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-000000-course-introduction",
       "source": "g2-000000-course-introduction.json",
       "lecture_nodes": [
         "g2:000000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-001000-linear-maps-independent-of-coordinates",
       "source": "g2-001000-linear-maps-independent-of-coordinates.json",
       "lecture_nodes": [
         "g2:001000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-002000-norms-distances-and-convergence",
       "source": "g2-002000-norms-distances-and-convergence.json",
       "lecture_nodes": [
         "g2:002000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-003000-cauchy-sequences-and-banach-spaces",
       "source": "g2-003000-cauchy-sequences-and-banach-spaces.json",
       "lecture_nodes": [
         "g2:003000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-004000-bounded-linear-maps-and-the-operator-norm",
       "source": "g2-004000-bounded-linear-maps-and-the-operator-norm.json",
       "lecture_nodes": [
         "g2:004000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-005000-the-banach-algebra-of-bounded-operators",
       "source": "g2-005000-the-banach-algebra-of-bounded-operators.json",
       "lecture_nodes": [
         "g2:005000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-006000-linear-functionals-and-dual-spaces",
       "source": "g2-006000-linear-functionals-and-dual-spaces.json",
       "lecture_nodes": [
         "g2:006000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-007000-real-and-complex-scalars",
       "source": "g2-007000-real-and-complex-scalars.json",
       "lecture_nodes": [
         "g2:007000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-008000-resolvents-and-invertibility",
       "source": "g2-008000-resolvents-and-invertibility.json",
       "lecture_nodes": [
         "g2:008000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-009000-inner-products-and-polarization",
       "source": "g2-009000-inner-products-and-polarization.json",
       "lecture_nodes": [
         "g2:009000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-010000-hilbert-spaces-and-orthogonal-complements",
       "source": "g2-010000-hilbert-spaces-and-orthogonal-complements.json",
       "lecture_nodes": [
         "g2:010000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-011000-the-projection-theorem",
       "source": "g2-011000-the-projection-theorem.json",
       "lecture_nodes": [
         "g2:011000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-012000-adjoints-and-the-riesz-representation-theorem",
       "source": "g2-012000-adjoints-and-the-riesz-representation-theorem.json",
       "lecture_nodes": [
         "g2:012000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-013000-self-adjoint-normal-and-unitary-maps",
       "source": "g2-013000-self-adjoint-normal-and-unitary-maps.json",
       "lecture_nodes": [
         "g2:013000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-014000-isometries-coisometries-and-partial-isometries",
       "source": "g2-014000-isometries-coisometries-and-partial-isometries.json",
       "lecture_nodes": [
         "g2:014000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-015000-invariant-and-reducing-subspaces",
       "source": "g2-015000-invariant-and-reducing-subspaces.json",
       "lecture_nodes": [
         "g2:015000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-016000-orthogonal-sums-and-block-operator-matrices",
       "source": "g2-016000-orthogonal-sums-and-block-operator-matrices.json",
       "lecture_nodes": [
         "g2:016000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-017000-analysis-and-synthesis-maps",
       "source": "g2-017000-analysis-and-synthesis-maps.json",
       "lecture_nodes": [
         "g2:017000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-018000-gram-matrices-and-positive-gram-operators",
       "source": "g2-018000-gram-matrices-and-positive-gram-operators.json",
       "lecture_nodes": [
         "g2:018000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-019000-frame-operators-and-parseval-identities",
       "source": "g2-019000-frame-operators-and-parseval-identities.json",
       "lecture_nodes": [
         "g2:019000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-020000-orthogonal-coordinate-embeddings",
       "source": "g2-020000-orthogonal-coordinate-embeddings.json",
       "lecture_nodes": [
         "g2:020000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-021000-compressions-and-rayleigh-ritz-matrices",
       "source": "g2-021000-compressions-and-rayleigh-ritz-matrices.json",
       "lecture_nodes": [
         "g2:021000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-022000-overlaps-alignment-and-gram-rigidity",
       "source": "g2-022000-overlaps-alignment-and-gram-rigidity.json",
       "lecture_nodes": [
         "g2:022000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-023000-gram-operators-of-rectangular-maps",
       "source": "g2-023000-gram-operators-of-rectangular-maps.json",
       "lecture_nodes": [
         "g2:023000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-024000-eigenvalues-eigenspaces-and-algebraic-multiplicity",
       "source": "g2-024000-eigenvalues-eigenspaces-and-algebraic-multiplicity.json",
       "lecture_nodes": [
         "g2:024000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-025000-hermitian-and-self-adjoint-matrices",
       "source": "g2-025000-hermitian-and-self-adjoint-matrices.json",
       "lecture_nodes": [
         "g2:025000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-026000-the-finite-spectral-theorem",
       "source": "g2-026000-the-finite-spectral-theorem.json",
       "lecture_nodes": [
         "g2:026000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-027000-rayleigh-quotients-and-extrema",
       "source": "g2-027000-rayleigh-quotients-and-extrema.json",
       "lecture_nodes": [
         "g2:027000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-028000-courant-fischer-min-max",
       "source": "g2-028000-courant-fischer-min-max.json",
       "lecture_nodes": [
         "g2:028000"
-      ]
+      ],
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-029000-weyl-monotonicity-and-variational-inequalities",
       "source": "g2-029000-weyl-monotonicity-and-variational-inequalities.json",
       "lecture_nodes": [
         "g2:029000"
-      ]
+      ],
+      "editorial_stage": "expanded"
+    },
+    {
+      "id": "g2-030000-spectral-projections-for-selected-sets",
+      "source": "g2-030000-spectral-projections-for-selected-sets.json",
+      "lecture_nodes": [
+        "g2:030000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-031000-ordered-gaps-versus-distance-gaps",
+      "source": "g2-031000-ordered-gaps-versus-distance-gaps.json",
+      "lecture_nodes": [
+        "g2:031000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-032000-coordinate-free-finite-functional-calculus",
+      "source": "g2-032000-coordinate-free-finite-functional-calculus.json",
+      "lecture_nodes": [
+        "g2:032000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-033000-quadratic-form-order-and-positive-operators",
+      "source": "g2-033000-quadratic-form-order-and-positive-operators.json",
+      "lecture_nodes": [
+        "g2:033000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-034000-positive-square-roots-and-their-uniqueness",
+      "source": "g2-034000-positive-square-roots-and-their-uniqueness.json",
+      "lecture_nodes": [
+        "g2:034000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-035000-the-operator-modulus-a",
+      "source": "g2-035000-the-operator-modulus-a.json",
+      "lecture_nodes": [
+        "g2:035000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-036000-singular-value-decomposition",
+      "source": "g2-036000-singular-value-decomposition.json",
+      "lecture_nodes": [
+        "g2:036000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-037000-polar-decomposition",
+      "source": "g2-037000-polar-decomposition.json",
+      "lecture_nodes": [
+        "g2:037000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-038000-partial-isometries-and-polar-uniqueness",
+      "source": "g2-038000-partial-isometries-and-polar-uniqueness.json",
+      "lecture_nodes": [
+        "g2:038000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-039000-matrix-exponentials-from-the-power-series",
+      "source": "g2-039000-matrix-exponentials-from-the-power-series.json",
+      "lecture_nodes": [
+        "g2:039000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-040000-skew-adjoint-generators-and-unitary-flows",
+      "source": "g2-040000-skew-adjoint-generators-and-unitary-flows.json",
+      "lecture_nodes": [
+        "g2:040000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-041000-operator-trigonometric-functions",
+      "source": "g2-041000-operator-trigonometric-functions.json",
+      "lecture_nodes": [
+        "g2:041000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-042000-cross-gram-overlap-and-principal-angles",
+      "source": "g2-042000-cross-gram-overlap-and-principal-angles.json",
+      "lecture_nodes": [
+        "g2:042000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-043000-sines-cosines-and-cross-projections",
+      "source": "g2-043000-sines-cosines-and-cross-projections.json",
+      "lecture_nodes": [
+        "g2:043000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-044000-the-cosine-sine-decomposition",
+      "source": "g2-044000-the-cosine-sine-decomposition.json",
+      "lecture_nodes": [
+        "g2:044000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-045000-halmos-two-projection-decomposition",
+      "source": "g2-045000-halmos-two-projection-decomposition.json",
+      "lecture_nodes": [
+        "g2:045000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-046000-positive-cosine-and-sine-operators",
+      "source": "g2-046000-positive-cosine-and-sine-operators.json",
+      "lecture_nodes": [
+        "g2:046000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-047000-acute-pairs-and-transversality",
+      "source": "g2-047000-acute-pairs-and-transversality.json",
+      "lecture_nodes": [
+        "g2:047000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-048000-the-sz-nagy-kato-intertwiner",
+      "source": "g2-048000-the-sz-nagy-kato-intertwiner.json",
+      "lecture_nodes": [
+        "g2:048000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-049000-canonical-direct-rotation",
+      "source": "g2-049000-canonical-direct-rotation.json",
+      "lecture_nodes": [
+        "g2:049000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-050000-nonacute-angles-and-defect-matching",
+      "source": "g2-050000-nonacute-angles-and-defect-matching.json",
+      "lecture_nodes": [
+        "g2:050000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-051000-compact-angle-spectra-and-classification",
+      "source": "g2-051000-compact-angle-spectra-and-classification.json",
+      "lecture_nodes": [
+        "g2:051000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-052000-min-max-principles-for-singular-values",
+      "source": "g2-052000-min-max-principles-for-singular-values.json",
+      "lecture_nodes": [
+        "g2:052000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-053000-low-rank-approximation-and-eckart-young",
+      "source": "g2-053000-low-rank-approximation-and-eckart-young.json",
+      "lecture_nodes": [
+        "g2:053000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-054000-ky-fan-sums-and-inequalities",
+      "source": "g2-054000-ky-fan-sums-and-inequalities.json",
+      "lecture_nodes": [
+        "g2:054000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-055000-majorization-and-weak-majorization",
+      "source": "g2-055000-majorization-and-weak-majorization.json",
+      "lecture_nodes": [
+        "g2:055000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-056000-convexity-and-majorization-descent",
+      "source": "g2-056000-convexity-and-majorization-descent.json",
+      "lecture_nodes": [
+        "g2:056000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-057000-schatten-and-frobenius-norms",
+      "source": "g2-057000-schatten-and-frobenius-norms.json",
+      "lecture_nodes": [
+        "g2:057000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-058000-unitary-invariant-norms-and-symmetric-gauges",
+      "source": "g2-058000-unitary-invariant-norms-and-symmetric-gauges.json",
+      "lecture_nodes": [
+        "g2:058000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-059000-rectangular-invariance-and-zero-padding",
+      "source": "g2-059000-rectangular-invariance-and-zero-padding.json",
+      "lecture_nodes": [
+        "g2:059000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-060000-pinching-and-block-direct-sums",
+      "source": "g2-060000-pinching-and-block-direct-sums.json",
+      "lecture_nodes": [
+        "g2:060000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-061000-quadratic-form-inequalities-and-singular-values",
+      "source": "g2-061000-quadratic-form-inequalities-and-singular-values.json",
+      "lecture_nodes": [
+        "g2:061000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-062000-from-scalar-division-to-ax-xb-c",
+      "source": "g2-062000-from-scalar-division-to-ax-xb-c.json",
+      "lecture_nodes": [
+        "g2:062000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-063000-diagonal-matrices-and-the-entrywise-solution",
+      "source": "g2-063000-diagonal-matrices-and-the-entrywise-solution.json",
+      "lecture_nodes": [
+        "g2:063000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-064000-kronecker-sums-and-sylvester-invertibility",
+      "source": "g2-064000-kronecker-sums-and-sylvester-invertibility.json",
+      "lecture_nodes": [
+        "g2:064000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-065000-ordered-spectral-separation",
+      "source": "g2-065000-ordered-spectral-separation.json",
+      "lecture_nodes": [
+        "g2:065000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-066000-unitary-and-semigroup-representations",
+      "source": "g2-066000-unitary-and-semigroup-representations.json",
+      "lecture_nodes": [
+        "g2:066000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-067000-disjoint-spectral-sets-and-rosenblum-theory",
+      "source": "g2-067000-disjoint-spectral-sets-and-rosenblum-theory.json",
+      "lecture_nodes": [
+        "g2:067000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-068000-the-banach-space-sylvester-lower-bound-theorem",
+      "source": "g2-068000-the-banach-space-sylvester-lower-bound-theorem.json",
+      "lecture_nodes": [
+        "g2:068000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-069000-norm-dependence-of-sylvester-bounds",
+      "source": "g2-069000-norm-dependence-of-sylvester-bounds.json",
+      "lecture_nodes": [
+        "g2:069000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-070000-hilbert-schmidt-sylvester-group-estimates",
+      "source": "g2-070000-hilbert-schmidt-sylvester-group-estimates.json",
+      "lecture_nodes": [
+        "g2:070000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-071000-sylvester-identities-for-compressed-blocks",
+      "source": "g2-071000-sylvester-identities-for-compressed-blocks.json",
+      "lecture_nodes": [
+        "g2:071000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-072000-infinite-dimensional-hilbert-examples",
+      "source": "g2-072000-infinite-dimensional-hilbert-examples.json",
+      "lecture_nodes": [
+        "g2:072000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-073000-sigma-algebras-and-borel-sets",
+      "source": "g2-073000-sigma-algebras-and-borel-sets.json",
+      "lecture_nodes": [
+        "g2:073000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-074000-measures-integration-and-l2",
+      "source": "g2-074000-measures-integration-and-l2.json",
+      "lecture_nodes": [
+        "g2:074000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-075000-continuous-functional-calculus-and-c-star-identities",
+      "source": "g2-075000-continuous-functional-calculus-and-c-star-identities.json",
+      "lecture_nodes": [
+        "g2:075000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-076000-projection-valued-measures",
+      "source": "g2-076000-projection-valued-measures.json",
+      "lecture_nodes": [
+        "g2:076000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-077000-scalar-spectral-measures-and-polarization",
+      "source": "g2-077000-scalar-spectral-measures-and-polarization.json",
+      "lecture_nodes": [
+        "g2:077000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-078000-cyclic-decompositions-and-multiplication-models",
+      "source": "g2-078000-cyclic-decompositions-and-multiplication-models.json",
+      "lecture_nodes": [
+        "g2:078000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-079000-bounded-borel-functional-calculus",
+      "source": "g2-079000-bounded-borel-functional-calculus.json",
+      "lecture_nodes": [
+        "g2:079000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-080000-measurable-spectral-restrictions",
+      "source": "g2-080000-measurable-spectral-restrictions.json",
+      "lecture_nodes": [
+        "g2:080000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-081000-resolvents-from-spectral-integrals",
+      "source": "g2-081000-resolvents-from-spectral-integrals.json",
+      "lecture_nodes": [
+        "g2:081000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-082000-spectral-approximation-by-cutoffs",
+      "source": "g2-082000-spectral-approximation-by-cutoffs.json",
+      "lecture_nodes": [
+        "g2:082000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-083000-densely-defined-operators-and-their-graphs",
+      "source": "g2-083000-densely-defined-operators-and-their-graphs.json",
+      "lecture_nodes": [
+        "g2:083000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-084000-adjoints-of-unbounded-operators",
+      "source": "g2-084000-adjoints-of-unbounded-operators.json",
+      "lecture_nodes": [
+        "g2:084000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-085000-hellinger-toeplitz-and-common-domain-discipline",
+      "source": "g2-085000-hellinger-toeplitz-and-common-domain-discipline.json",
+      "lecture_nodes": [
+        "g2:085000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-086000-resolvents-coercivity-and-spectral-location",
+      "source": "g2-086000-resolvents-coercivity-and-spectral-location.json",
+      "lecture_nodes": [
+        "g2:086000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-087000-cayley-transforms-and-graph-level-equivalence",
+      "source": "g2-087000-cayley-transforms-and-graph-level-equivalence.json",
+      "lecture_nodes": [
+        "g2:087000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-088000-unbounded-spectral-theorem-and-domain-calculus",
+      "source": "g2-088000-unbounded-spectral-theorem-and-domain-calculus.json",
+      "lecture_nodes": [
+        "g2:088000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-089000-spectral-projections-and-reducing-domains",
+      "source": "g2-089000-spectral-projections-and-reducing-domains.json",
+      "lecture_nodes": [
+        "g2:089000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-090000-quadratic-forms-and-ordered-half-infinite-gaps",
+      "source": "g2-090000-quadratic-forms-and-ordered-half-infinite-gaps.json",
+      "lecture_nodes": [
+        "g2:090000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-091000-yosida-approximation-and-bounded-truncations",
+      "source": "g2-091000-yosida-approximation-and-bounded-truncations.json",
+      "lecture_nodes": [
+        "g2:091000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-092000-one-parameter-unitary-groups-and-their-generators",
+      "source": "g2-092000-one-parameter-unitary-groups-and-their-generators.json",
+      "lecture_nodes": [
+        "g2:092000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-093000-domain-aware-sylvester-identities-and-cutoffs",
+      "source": "g2-093000-domain-aware-sylvester-identities-and-cutoffs.json",
+      "lecture_nodes": [
+        "g2:093000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-094000-unbounded-sylvester-estimates",
+      "source": "g2-094000-unbounded-sylvester-estimates.json",
+      "lecture_nodes": [
+        "g2:094000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-095000-compactness-and-finite-rank-approximation",
+      "source": "g2-095000-compactness-and-finite-rank-approximation.json",
+      "lecture_nodes": [
+        "g2:095000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-096000-approximation-numbers-and-singular-value-sequences",
+      "source": "g2-096000-approximation-numbers-and-singular-value-sequences.json",
+      "lecture_nodes": [
+        "g2:096000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-097000-ky-fan-dominance-in-hilbert-space",
+      "source": "g2-097000-ky-fan-dominance-in-hilbert-space.json",
+      "lecture_nodes": [
+        "g2:097000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-098000-symmetric-operator-ideals-and-membership",
+      "source": "g2-098000-symmetric-operator-ideals-and-membership.json",
+      "lecture_nodes": [
+        "g2:098000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-099000-hilbert-schmidt-and-trace-class-operators",
+      "source": "g2-099000-hilbert-schmidt-and-trace-class-operators.json",
+      "lecture_nodes": [
+        "g2:099000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-100000-modulus-polar-factors-and-ideal-invariance",
+      "source": "g2-100000-modulus-polar-factors-and-ideal-invariance.json",
+      "lecture_nodes": [
+        "g2:100000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-101000-ideal-estimates-for-compressions-and-block-sums",
+      "source": "g2-101000-ideal-estimates-for-compressions-and-block-sums.json",
+      "lecture_nodes": [
+        "g2:101000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-102000-real-hilbert-complexification",
+      "source": "g2-102000-real-hilbert-complexification.json",
+      "lecture_nodes": [
+        "g2:102000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-103000-real-and-complex-spectra-and-functional-calculus",
+      "source": "g2-103000-real-and-complex-spectra-and-functional-calculus.json",
+      "lecture_nodes": [
+        "g2:103000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-104000-real-versions-of-unbounded-sylvester-bounds",
+      "source": "g2-104000-real-versions-of-unbounded-sylvester-bounds.json",
+      "lecture_nodes": [
+        "g2:104000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-105000-a-full-proof-readiness-assembly",
+      "source": "g2-105000-a-full-proof-readiness-assembly.json",
+      "lecture_nodes": [
+        "g2:105000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-106000-what-changes-and-what-stays-invariant",
+      "source": "g2-106000-what-changes-and-what-stays-invariant.json",
+      "lecture_nodes": [
+        "g2:106000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-107000-trial-spaces-exact-subspaces-and-residuals",
+      "source": "g2-107000-trial-spaces-exact-subspaces-and-residuals.json",
+      "lecture_nodes": [
+        "g2:107000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-108000-the-complementary-block-sylvester-equation",
+      "source": "g2-108000-the-complementary-block-sylvester-equation.json",
+      "lecture_nodes": [
+        "g2:108000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-109000-directed-sine-as-a-rectangular-modulus",
+      "source": "g2-109000-directed-sine-as-a-rectangular-modulus.json",
+      "lecture_nodes": [
+        "g2:109000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-110000-the-single-angle-sine-theorem",
+      "source": "g2-110000-the-single-angle-sine-theorem.json",
+      "lecture_nodes": [
+        "g2:110000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-111000-graph-subspaces-and-tangent-geometry",
+      "source": "g2-111000-graph-subspaces-and-tangent-geometry.json",
+      "lecture_nodes": [
+        "g2:111000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-112000-the-single-angle-tangent-theorem",
+      "source": "g2-112000-the-single-angle-tangent-theorem.json",
+      "lecture_nodes": [
+        "g2:112000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-113000-sharp-examples-and-norm-class-comparisons",
+      "source": "g2-113000-sharp-examples-and-norm-class-comparisons.json",
+      "lecture_nodes": [
+        "g2:113000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-114000-off-diagonal-perturbations-and-block-reflection",
+      "source": "g2-114000-off-diagonal-perturbations-and-block-reflection.json",
+      "lecture_nodes": [
+        "g2:114000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-115000-doubled-angles-from-symmetry",
+      "source": "g2-115000-doubled-angles-from-symmetry.json",
+      "lecture_nodes": [
+        "g2:115000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-116000-the-sine-two-theta-theorem",
+      "source": "g2-116000-the-sine-two-theta-theorem.json",
+      "lecture_nodes": [
+        "g2:116000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-117000-the-tangent-two-theta-theorem",
+      "source": "g2-117000-the-tangent-two-theta-theorem.json",
+      "lecture_nodes": [
+        "g2:117000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-118000-why-a-small-doubled-sine-proves-little-alone",
+      "source": "g2-118000-why-a-small-doubled-sine-proves-little-alone.json",
+      "lecture_nodes": [
+        "g2:118000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-119000-spectral-selection-and-repulsion",
+      "source": "g2-119000-spectral-selection-and-repulsion.json",
+      "lecture_nodes": [
+        "g2:119000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-120000-small-angle-certification",
+      "source": "g2-120000-small-angle-certification.json",
+      "lecture_nodes": [
+        "g2:120000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-121000-a-comparative-theorem-decision-procedure",
+      "source": "g2-121000-a-comparative-theorem-decision-procedure.json",
+      "lecture_nodes": [
+        "g2:121000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-122000-direct-sum-norm-comparison",
+      "source": "g2-122000-direct-sum-norm-comparison.json",
+      "lecture_nodes": [
+        "g2:122000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-123000-pinching-through-an-involution",
+      "source": "g2-123000-pinching-through-an-involution.json",
+      "lecture_nodes": [
+        "g2:123000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-124000-ambient-sine-from-an-ambient-perturbation",
+      "source": "g2-124000-ambient-sine-from-an-ambient-perturbation.json",
+      "lecture_nodes": [
+        "g2:124000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-125000-non-isometric-frames-and-unequal-dimensions",
+      "source": "g2-125000-non-isometric-frames-and-unequal-dimensions.json",
+      "lecture_nodes": [
+        "g2:125000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-126000-weak-spectral-gaps-and-hilbert-schmidt-estimates",
+      "source": "g2-126000-weak-spectral-gaps-and-hilbert-schmidt-estimates.json",
+      "lecture_nodes": [
+        "g2:126000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-127000-the-generalized-tangent-bound",
+      "source": "g2-127000-the-generalized-tangent-bound.json",
+      "lecture_nodes": [
+        "g2:127000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-128000-spectral-cutoff-and-finite-rank-source-lemmas",
+      "source": "g2-128000-spectral-cutoff-and-finite-rank-source-lemmas.json",
+      "lecture_nodes": [
+        "g2:128000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-129000-one-complete-original-paper-proof-reconstruction",
+      "source": "g2-129000-one-complete-original-paper-proof-reconstruction.json",
+      "lecture_nodes": [
+        "g2:129000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-130000-restricted-direct-rotation-optimality",
+      "source": "g2-130000-restricted-direct-rotation-optimality.json",
+      "lecture_nodes": [
+        "g2:130000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-131000-the-squared-displacement-of-orthonormal-frames",
+      "source": "g2-131000-the-squared-displacement-of-orthonormal-frames.json",
+      "lecture_nodes": [
+        "g2:131000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-132000-whole-space-squared-displacement-and-q-norms",
+      "source": "g2-132000-whole-space-squared-displacement-and-q-norms.json",
+      "lecture_nodes": [
+        "g2:132000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-133000-unsquared-ambient-displacement-is-different",
+      "source": "g2-133000-unsquared-ambient-displacement-is-different.json",
+      "lecture_nodes": [
+        "g2:133000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-134000-the-four-dimensional-real-counterexample",
+      "source": "g2-134000-the-four-dimensional-real-counterexample.json",
+      "lecture_nodes": [
+        "g2:134000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-135000-corrected-scopes-and-surviving-results",
+      "source": "g2-135000-corrected-scopes-and-surviving-results.json",
+      "lecture_nodes": [
+        "g2:135000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-136000-classification-and-realizations-of-direct-rotations",
+      "source": "g2-136000-classification-and-realizations-of-direct-rotations.json",
+      "lecture_nodes": [
+        "g2:136000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-137000-the-free-beam-operator-and-its-domain",
+      "source": "g2-137000-the-free-beam-operator-and-its-domain.json",
+      "lecture_nodes": [
+        "g2:137000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-138000-beam-rayleigh-ritz-calculation",
+      "source": "g2-138000-beam-rayleigh-ritz-calculation.json",
+      "lecture_nodes": [
+        "g2:138000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-139000-comparing-angle-and-ky-fan-beam-estimates",
+      "source": "g2-139000-comparing-angle-and-ky-fan-beam-estimates.json",
+      "lecture_nodes": [
+        "g2:139000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-140000-from-subspace-bounds-to-individual-modes",
+      "source": "g2-140000-from-subspace-bounds-to-individual-modes.json",
+      "lecture_nodes": [
+        "g2:140000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-141000-how-much-can-a-distance-only-gap-say",
+      "source": "g2-141000-how-much-can-a-distance-only-gap-say.json",
+      "lecture_nodes": [
+        "g2:141000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-142000-three-subspaces-and-higher-order-interactions",
+      "source": "g2-142000-three-subspaces-and-higher-order-interactions.json",
+      "lecture_nodes": [
+        "g2:142000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-143000-joint-movement-of-eigenvalues-and-angles",
+      "source": "g2-143000-joint-movement-of-eigenvalues-and-angles.json",
+      "lecture_nodes": [
+        "g2:143000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-144000-stability-of-functions-of-operators",
+      "source": "g2-144000-stability-of-functions-of-operators.json",
+      "lecture_nodes": [
+        "g2:144000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-145000-from-rotation-counterexample-to-real-transport-matchi",
+      "source": "g2-145000-from-rotation-counterexample-to-real-transport-matchi.json",
+      "lecture_nodes": [
+        "g2:145000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-146000-rectangular-singular-subspace-bounds",
+      "source": "g2-146000-rectangular-singular-subspace-bounds.json",
+      "lecture_nodes": [
+        "g2:146000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-147000-population-gap-spectral-statistics",
+      "source": "g2-147000-population-gap-spectral-statistics.json",
+      "lecture_nodes": [
+        "g2:147000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-148000-procrustes-and-spectral-embeddings",
+      "source": "g2-148000-procrustes-and-spectral-embeddings.json",
+      "lecture_nodes": [
+        "g2:148000"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-149000-proof-practicum-reconstruct-the-1970-theory",
+      "source": "g2-149000-proof-practicum-reconstruct-the-1970-theory.json",
+      "lecture_nodes": [
+        "g2:149000"
+      ],
+      "editorial_stage": "baseline"
     }
   ]
 }

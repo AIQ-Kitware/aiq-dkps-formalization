@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "g2-054000-ky-fan-sums-and-inequalities",
+  "title": "Ky Fan sums and inequalities",
+  "subtitle": "G2 lecture 054000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:054000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/054000-ky-fan-sums-and-inequalities.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 054000 · first-pass outline",
+      "lead": "The largest singular value of a linear map is its operator norm: the greatest length its output can have on a unit input.",
+      "body": [
+        "But that single number ignores how much the map stretches its second, third, and other independent directions. The Frobenius norm instead adds the squares of all singular values and takes a square root. It measures their combined squared stretching, while the operator norm only measures the maximum. There is another natural family of measurements. Choose a positive integer k, and add the first k singular values without squaring them. These are the Ky Fan sums."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Define the partial sums carefully",
+      "eyebrow": "G2 · 054000 · first-pass outline",
+      "lead": "Let A be a linear map between finite-dimensional inner-product spaces.",
+      "body": [
+        "Write its singular values in decreasing order, starting with the largest. If necessary, append zeros beyond the rank. For k equal to one, the Ky Fan sum is the largest singular value. For k equal to two, it is the sum of the two largest. Continue until k reaches the smaller of the input and output dimensions. After that point, adding more zeros changes nothing. For a diagonal map with singular values five, two, and one, the first Ky Fan sum is five, the second is seven, and the third is eight. Compare this with the Frobenius norm, which is the square root of twenty-five plus four plus one. The Ky Fan sums add lengths."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "An orthonormal-frame experiment",
+      "eyebrow": "G2 · 054000 · first-pass outline",
+      "lead": "Assume k is no larger than either the source dimension or the target dimension.",
+      "body": [
+        "Choose k mutually orthonormal input vectors. Independently, choose k mutually orthonormal output vectors. Apply A to the first input vector and take its inner product with the first output vector. Repeat for every corresponding pair, take the real parts, and add the results. What is the largest value this sum can have, as we vary both orthonormal families? The answer is the sum of the first k singular values. First prove the lower bound. Choose the input vectors to be the first k right singular vectors and the output vectors to be the corresponding left singular vectors."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Why arbitrary pairings cannot exceed the top k sum",
+      "eyebrow": "G2 · 054000 · first-pass outline",
+      "lead": "Expand A in its singular-value decomposition.",
+      "body": [
+        "Each term is a singular value times a rank-one map from a right singular vector to a left singular vector. When we insert this expansion into our sum of k inner products, the contribution from singular direction j is sigma j multiplied by a sum of products of two sets of coefficients: how strongly our chosen input vectors overlap the j-th right singular vector, and how strongly the chosen output vectors overlap its left singular vector. By Cauchy–Schwarz, the magnitude of that coefficient sum is at most the product of two square roots. Each square root measures total squared overlap with one singular vector across a chosen orthonormal k-frame."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Derive the triangle inequality",
+      "eyebrow": "G2 · 054000 · first-pass outline",
+      "lead": "Let A and B have the same source and target.",
+      "body": [
+        "Take any two orthonormal k-frames, one in the source and one in the target. The pairing sum for A plus B splits into the pairing sum for A and the pairing sum for B. By the variational theorem, the first is at most the k-th Ky Fan sum of A, and the second is at most the corresponding sum for B. This bound holds for every choice of frames. Maximize the left side over the frames. We obtain the triangle inequality: the k-th Ky Fan sum of A plus B is at most the sum of the k-th Ky Fan sums of A and B. The proof has an important shape. We used the same test frames for A and B, and only then maximized."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Why adding singular values one at a time is wrong",
+      "eyebrow": "G2 · 054000 · first-pass outline",
+      "lead": "Consider two diagonal two-by-two matrices.",
+      "body": [
+        "Let A have diagonal entries three and zero. Let B have diagonal entries zero and three. Each matrix has singular values three and zero. Their sum is three times the identity, with singular values three and three. Look at the second singular value. For A plus B it is three, while the second singular value of A plus the second singular value of B is zero. So a coordinate-by-coordinate triangle inequality for singular values is false. But look at the Ky Fan sums. The first sum of A plus B is three, which is at most three plus three. The second is six, exactly equal to the second Ky Fan sum of A plus that of B."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Pinching discards off-diagonal blocks",
+      "eyebrow": "G2 · 054000 · first-pass outline",
+      "lead": "There is another consequence worth proving now.",
+      "body": [
+        "Suppose A acts on one inner-product space, and P is an orthogonal projection. Relative to the decomposition into the range of P and its perpendicular complement, we can write A as a two-by-two block operator. Pinching A means keeping its two diagonal blocks and deleting both off-diagonal blocks. In symbols expressed verbally, the result is P A P plus the complementary projection, followed by A, followed by that complementary projection. Define a reflection J that acts as plus one on the range of P and minus one on its perpendicular complement. J is unitary."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Toward majorization",
+      "eyebrow": "G2 · 054000 · first-pass outline",
+      "lead": "Suppose A has singular values three and three, while B has singular values five and one.",
+      "body": [
+        "The first Ky Fan sum of A is three, at most five. The second Ky Fan sums are equal at six. So every Ky Fan sum of A is at most the corresponding sum for B. Yet the second singular value of A is three, greater than the second singular value of B, which is one. These are comparisons of cumulative totals, not component-by-component comparisons. The name for this kind of ordering is weak majorization."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "What to reconstruct",
+      "eyebrow": "G2 · 054000 · first-pass outline",
+      "lead": "First, start from the singular-value decomposition and derive the orthonormal-pairing upper bound.",
+      "body": [
+        "Write down the overlap weights and prove both their individual upper bounds and their total upper bound. Second, use that variational characterization to prove the triangle inequality, carefully distinguishing the test frames from the maximizing frames. Third, calculate the two-by-two diagonal counterexample and explain exactly which false inequality it disproves. Finally, derive the pinching identity by multiplying the two-by-two block matrices. From that one identity, recover Ky Fan contraction under pinching."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 054000 · conclusion",
+      "lead": "We now have the ingredients for a theory that compares whole spectra by their partial sums.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

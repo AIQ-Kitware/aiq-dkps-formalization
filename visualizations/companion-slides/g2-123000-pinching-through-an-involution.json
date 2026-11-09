@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "id": "g2-123000-pinching-through-an-involution",
+  "title": "Pinching through an involution",
+  "subtitle": "G2 lecture 123000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:123000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/123000-pinching-through-an-involution.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 123000 · first-pass outline",
+      "lead": "Suppose we know the size of an operator K.",
+      "body": [
+        "We insert orthogonal projections on both sides, retain two matching diagonal blocks, and discard the other two blocks. Can the remaining operator be larger than K in a unitarily invariant norm? Davis and Kahan's Lemma six point two says no. The proof is short, but it is worth deriving carefully because it works for different projections on the input and output sides. Its key device is averaging K with its reflection through a pair of subspaces."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Start with a two-by-two block matrix",
+      "eyebrow": "G2 · 123000 · first-pass outline",
+      "lead": "Let the input Hilbert space be decomposed as V plus V perpendicular, and the output as U plus U perpendicular.",
+      "body": [
+        "In these coordinates, K has four rectangular blocks. The first block maps V into U. The second maps V perpendicular into U. The third maps V into U perpendicular. The fourth maps V perpendicular into U perpendicular. The pinched operator keeps the first and fourth blocks and replaces the two off-diagonal blocks by zero. In projection notation, it is P U times K times P V, plus P U perpendicular times K times P V perpendicular. The projections on the two sides need not be equal. This is a two-sided pinching, designed for the cross-block geometry of comparing two different subspaces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Construct the reflections",
+      "eyebrow": "G2 · 123000 · first-pass outline",
+      "lead": "Define J U to equal twice P U minus the identity.",
+      "body": [
+        "This operator acts as positive one on U and negative one on U perpendicular. Likewise define J V using V. Each J is self-adjoint and unitary. Squaring it gives the identity, since P squared equals P. Thus each J is an involution. Its operator norm is one. Now compute J U times K times J V in the four-block coordinates. A block whose input and output have the same sign keeps its sign. A block connecting opposite signs changes sign. Therefore the first and fourth blocks are unchanged, while the two off-diagonal blocks are negated. Add K to J U K J V. The off-diagonal blocks cancel and the two diagonal blocks double."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Prove norm contraction",
+      "eyebrow": "G2 · 123000 · first-pass outline",
+      "lead": "Let N be any unitarily invariant norm for which K is in the relevant normed class.",
+      "body": [
+        "By the triangle inequality, twice the norm of the pinching is at most the norm of K plus the norm of J U K J V. Because J U and J V are unitaries, the second norm equals the first. Therefore twice the norm of the pinching is at most twice the norm of K. Divide by two. We have proved that the pinched operator has norm at most the original operator's norm. Notice the strength of this argument. It did not inspect individual entries. It did not choose eigenvectors or singular vectors. It did not depend on a dimension count. It used only the reflection identity, unitary invariance, and the triangle inequality."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Test the result on matrices",
+      "eyebrow": "G2 · 123000 · first-pass outline",
+      "lead": "Take the two-by-two matrix with every entry equal to one.",
+      "body": [
+        "With U and V both the first coordinate axis, pinching removes the off-diagonal entries, leaving the identity matrix. The original rank-one matrix has singular values two and zero. The pinched identity has singular values one and one. Its operator norm decreases from two to one, and its Frobenius norm decreases from two to the square root of two. Its nuclear norm stays two. The example also shows why an individual singular value need not decrease. The second singular value has increased from zero to one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Distinguish two-sided from one-sided compression",
+      "eyebrow": "G2 · 123000 · first-pass outline",
+      "lead": "A simple compression P K P also contracts many norms, since the factors have operator norm at most one.",
+      "body": [
+        "But the two-block pinching is not merely a single compression. It keeps two separated pieces, each occupying a different diagonal corner. Bounding them individually by the norm of K and then using the triangle inequality would give the wasteful estimate twice the norm of K. Reflection averaging recovers the sharp constant one. This constant is important in the symmetric sine-theta proof. If we lose a factor of two here, the final perturbation estimate will not retain the expected normalization."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Generalize to rectangular spaces",
+      "eyebrow": "G2 · 123000 · first-pass outline",
+      "lead": "Nothing essential requires the same underlying Hilbert space on the left and right.",
+      "body": [
+        "Let the domain carry its own orthogonal decomposition and the codomain a different one. Define a sign reflection on each space. The same identity holds: diagonal block selection equals the average of K and its left-right conjugate by the two reflections. The conjugate is not necessarily an inner conjugation by one unitary because the left and right spaces can be different. It is nonetheless a left unitary times K times a right unitary, and rectangular unitarily invariant norms are invariant under such transformations."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Why does the Ky Fan statement follow?",
+      "eyebrow": "G2 · 123000 · first-pass outline",
+      "lead": "For each positive integer k, the Ky Fan k norm is the sum of the first k singular values.",
+      "body": [
+        "It is unitarily invariant and obeys the triangle inequality. Applying the reflection-averaging proof at that norm gives a comparison of every finite singular-value prefix. Consequently the singular-value sequence of the pinched operator is weakly majorized by that of K. This formulation is useful because later proofs can combine it with Lemma six point one's direct-sum comparison before passing to another symmetric gauge. The two lemmas fit together without changing norm classes. Lemma six point one combines prefix inequalities for orthogonal blocks."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Cross-block geometry in the sine theorem",
+      "eyebrow": "G2 · 123000 · first-pass outline",
+      "lead": "Suppose P and Q are the projections onto two spectral subspaces.",
+      "body": [
+        "The ambient difference P minus Q can be expressed using cross projections. One term measures vectors in P that land in Q perpendicular. Another measures vectors in P perpendicular that land in Q. A Sylvester argument gives a norm estimate for each cross term separately. The right-hand sides involve corresponding off-diagonal pieces of the perturbation, which can be placed into two compatible diagonal blocks by choosing their source and target decompositions correctly. Lemma six point one combines the left-side cross terms."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "The role of self-adjointness",
+      "eyebrow": "G2 · 123000 · first-pass outline",
+      "lead": "The pinching lemma itself does not require K to be self-adjoint.",
+      "body": [
+        "It is a statement about bounded operators and unitary invariance. Self-adjointness enters elsewhere in the spectral perturbation argument, where it guarantees reducing decompositions, real spectra, and adjoint relations between the off-diagonal blocks. Keeping those logical dependencies separate helps generalize the lemma. We can use it for arbitrary rectangular maps, even though our immediate application is to self-adjoint perturbations."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "10-overview",
+      "title": "What to remember",
+      "eyebrow": "G2 · 123000 · first-pass outline",
+      "lead": "The pinching operator is the average of two equally sized operators: K and its reflection-transformed copy.",
+      "body": [
+        "Unitary invariance makes their norms equal, and convexity of the norm makes the average no larger. This is the entire mechanism of Lemma six point two. Its conclusion is both an ideal-membership statement and a norm bound when ideal norms are used. That proof will show exactly why the perturbation norm appears without an avoidable factor of two."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 123000 · mathematical reference",
+      "lead": "The pinching operator is the average of two equally sized operators: K and its reflection-transformed copy.",
+      "body": [
+        "Unitary invariance makes their norms equal, and convexity of the norm makes the average no larger. This is the entire mechanism of Lemma six point two."
+      ],
+      "mathtex": "\\mathcal P_{U,V}(K)=P_UKP_V+(I-P_U)K(I-P_V)=\\tfrac12(K+J_UKJ_V).",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 123000 · conclusion",
+      "lead": "That proof will show exactly why the perturbation norm appears without an avoidable factor of two.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

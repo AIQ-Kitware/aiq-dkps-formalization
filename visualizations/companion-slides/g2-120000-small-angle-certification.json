@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "id": "g2-120000-small-angle-certification",
+  "title": "Small-angle certification",
+  "subtitle": "G2 lecture 120000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:120000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/120000-small-angle-certification.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 120000 · first-pass outline",
+      "lead": "Theorem eight point one protects a two-block gap from an off-diagonal perturbation of arbitrary size.",
+      "body": [
+        "But not every perturbation is off-diagonal. A general self-adjoint perturbation can move the diagonal blocks, so the original gap may shrink. How small must such a perturbation be to identify a corresponding subspace and certify an angle below forty-five degrees? This question leads to Davis and Kahan's Theorem eight point two. The result has two alternative smallness conditions: one on the full perturbation and one on a residual. Both are compared with half of a specified spectral gap."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Identify the spectra precisely",
+      "eyebrow": "G2 · 120000 · first-pass outline",
+      "lead": "Let A be self-adjoint, and let K be a bounded self-adjoint perturbation.",
+      "body": [
+        "The perturbed operator is S equal to A plus K. Choose real endpoints beta and alpha with beta at most alpha. Let Q reduce S and have its spectrum in the closed interval from beta to alpha. Suppose the spectrum of S on Q perpendicular lies outside the expanded interval from beta minus delta to alpha plus delta, where delta is positive. Thus Q is an isolated spectral cluster of S, separated from the remaining spectrum by at least delta on each side that exists. Note that Q is selected for S, the perturbed operator."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "State the two alternatives",
+      "eyebrow": "G2 · 120000 · first-pass outline",
+      "lead": "The first smallness alternative is that the operator norm of K is strictly less than delta divided by two.",
+      "body": [
+        "The second is that a particular residual is smaller than delta divided by two. Form the inclusion of P into the Hilbert space. Compute S applied to that inclusion, then subtract the inclusion followed by the compression of A onto P. Because P reduces A, the compression of A reproduces A on P. Therefore this residual is simply K restricted to P. This is worth calculating. It means the residual alternative asks only how strongly the perturbation acts on vectors in the reference subspace, rather than on every vector in the Hilbert space."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "What is the conclusion?",
+      "eyebrow": "G2 · 120000 · first-pass outline",
+      "lead": "Under either smallness alternative and the spectral-placement hypotheses, the theorem certifies that the appropriately directed subspace gap is strictly less than the sine of forty-five degrees, namely the square root of two divided by two.",
+      "body": [
+        "When the source's dimension or crossed-defect conventions identify the directed and full gaps, this yields the literal full-angle conclusion: every principal angle is strictly below forty-five degrees. The theorem also carries the corresponding sine-two-theta perturbation and residual estimates."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Why half a gap is natural",
+      "eyebrow": "G2 · 120000 · first-pass outline",
+      "lead": "Suppose a self-adjoint matrix has an eigenvalue in an isolated cluster and another eigenvalue at least delta away.",
+      "body": [
+        "A perturbation of operator norm epsilon shifts any ordered eigenvalue by at most epsilon. If each of two neighboring spectral edges can shift toward the other, a separation of delta has a worst-case remaining width of delta minus twice epsilon. Hence epsilon smaller than delta over two is the familiar condition ensuring that a middle boundary does not close under a path of perturbations. It is a conservative, easy-to-check sufficient condition. For a concrete example, let A be diagonal with eigenvalues zero and three. Take beta and alpha both zero, and delta equal three."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "The path argument and the angle barrier",
+      "eyebrow": "G2 · 120000 · first-pass outline",
+      "lead": "Consider the path of operators A plus t times K as t runs from zero to one.",
+      "body": [
+        "At time zero the selected spectral subspace agrees with P. If we can exhibit a common separating contour along the path, the spectral projection onto the target cluster depends continuously on t. The operator resolvent identity supplies a quantitative tool. For complex z outside the spectrum of A plus tK, the difference of resolvents at two nearby times equals their product with the bounded difference in operators. Integrating this resolvent over the separating contour gives a norm estimate for the corresponding spectral projection difference. But no bound on a single resolvent is enough by itself."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Why the residual alternative is harder",
+      "eyebrow": "G2 · 120000 · first-pass outline",
+      "lead": "Suppose the residual norm on P is small but K itself is large.",
+      "body": [
+        "The direct homotopy A plus tK may have poor spectral-control estimates on the complement of P. We cannot replace the global perturbation norm by its restriction to P in the ordinary resolvent estimate. Davis and Kahan instead use a self-adjoint completion argument. Informally, we build an auxiliary self-adjoint perturbation that has the same action on P as K but whose global norm is controlled by the residual size. With that replacement, the small-perturbation branch theorem can be applied to a problem that preserves the relevant trial information."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "The quantitative meaning of the branch",
+      "eyebrow": "G2 · 120000 · first-pass outline",
+      "lead": "Once we know theta is below forty-five degrees, the doubled sine can be inverted monotonically.",
+      "body": [
+        "If the sine-two-theta estimate gives sine twice theta at most eta, where eta is below one, then theta is at most half arcsine eta. That last step has a strict order. First establish the acute branch. Then invert the doubled sine. In particular, eta may be too large for a useful inverse bound, even though a separate branch theorem still asserts theta below forty-five degrees. Do not confuse the half-gap hypothesis with a universal statement that every sine-two-theta bound has a right-hand side below one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Directed angles and the standing convention",
+      "eyebrow": "G2 · 120000 · first-pass outline",
+      "lead": "Here is a second qualification that becomes important in infinite dimensions.",
+      "body": [
+        "The explicitly derived smallness and continuation argument can control the directed gap from P to Q. A full ambient projection difference also measures the opposite directed gap. In finite dimensions, equal rank identifies the two nonzero directed singular-value lists. For Hilbert spaces, equal infinite cardinal dimensions alone do not establish that identity. The original paper's crossed-defect standing assumption supplies the needed compatibility. The directed conclusion does not require equal dimensions. A full symmetric-angle form needs the corresponding dimension or angle-counting convention."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "Final diagnostic",
+      "eyebrow": "G2 · 120000 · first-pass outline",
+      "lead": "Suppose you are given an approximate invariant subspace and want to declare that its angle from a selected spectral cluster is small.",
+      "body": [
+        "Check four things: the spectral interval and its complement, the residual or perturbation norm, whether the half-gap inequality is strict, and whether your angle is directed or full. If the hypotheses hold, the theorem certifies the near-zero branch and makes the doubled-angle estimate interpretable as an error bound. If the hypotheses fail, a small doubled sine may still coexist with a nearly perpendicular subspace. Any perturbation estimate should be applied only after specifying its gap notion, residual, angle convention, and norm class."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 120000 · conclusion",
+      "lead": "Those choices determine the inequality that is actually justified.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

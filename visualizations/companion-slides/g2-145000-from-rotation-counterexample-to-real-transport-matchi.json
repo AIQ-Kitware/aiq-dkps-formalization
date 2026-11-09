@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "g2-145000-from-rotation-counterexample-to-real-transport-matchi",
+  "title": "From rotation counterexample to real transport matching",
+  "subtitle": "G2 lecture 145000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:145000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/145000-from-rotation-counterexample-to-real-transport-matching.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 145000 · first-pass outline",
+      "lead": "The canonical direct rotation need not minimize an unsquared Schatten norm of whole-space displacement among all real orthogonal maps transporting one subspace onto another.",
+      "body": [
+        "A four-dimensional example with two equal principal angles refutes the broad claim. A useful positive problem remains: characterize the global minimum when the exponent p is strictly between one and two."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "What are we optimizing?",
+      "eyebrow": "G2 · 145000 · first-pass outline",
+      "lead": "Take two subspaces K and L of equal finite dimension inside a real Euclidean space.",
+      "body": [
+        "Consider every orthogonal operator U that maps K onto L. Measure its displacement from the identity using a Schatten p norm. Concretely, take every singular value of the difference between U and the identity, raise it to power p, add, and then take the pth root. For p equal two, this is the Frobenius norm. For p equal one, it is the nuclear or trace norm. When p lies strictly between one and two, the contribution of a set of singular values differs from its squared-energy contribution. That is precisely where the direct rotation can lose optimality. Why do we require equal dimensions?"
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The single principal-angle block",
+      "eyebrow": "G2 · 145000 · first-pass outline",
+      "lead": "Begin with a single principal angle theta between two lines.",
+      "body": [
+        "In their common real two-dimensional principal plane, an orthogonal rotation through theta maps the first line to the second. Its displacement operator has two equal singular values, each equal to twice the sine of half theta. Therefore its pth power Schatten cost is two times the pth power of twice the sine of half theta. There is a choice of the sign of the rotation, but its singular values are the same. Reflections can also map one line to the other. Their displacement costs may differ, so the full optimization must allow all orthogonal transports, not just orientation-preserving rotations."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Why a matching appears",
+      "eyebrow": "G2 · 145000 · first-pass outline",
+      "lead": "The real transport optimization turns that freedom into a finite combinatorial problem.",
+      "body": [
+        "Label the positive principal angles. Each label can remain a singleton, carrying the best permitted one-angle cost, or it can be paired with another label, carrying the best two-angle cost from a four-dimensional block. A matching consists of disjoint pairs together with unmatched singletons. Represent it by a permutation that equals its own inverse: a fixed point denotes a singleton, and a two-cycle a paired block. No angle label can belong to two different pairs. The cost of a matching is the sum of singleton weights and complete pair weights."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "An exact two-angle test",
+      "eyebrow": "G2 · 145000 · first-pass outline",
+      "lead": "Suppose the positive principal angles are theta and psi.",
+      "body": [
+        "There are two combinatorial candidates. One leaves both labels unmatched. Its cost is the sum of the two singleton costs. The other pairs them, and its cost is a single optimized four-dimensional value. The global minimum is the smaller of those two numbers. For p equal two, the squared Frobenius objective is tied directly to the sum of squared displacements, and the canonical direct rotation satisfies the established squared-objective theorem. For exponents strictly between one and two, the paired option can be better."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "The two directions of an optimality proof",
+      "eyebrow": "G2 · 145000 · first-pass outline",
+      "lead": "A formula for the minimum needs two distinct inequalities.",
+      "body": [
+        "First, every admissible real orthogonal transporter must have a displacement cost at least the matching minimum. Second, every candidate matching, or at least an optimal matching, must be realizable by a genuine orthogonal transporter with exactly the assigned cost. The first direction is an extraction theorem. It analyzes an ambient optimizer and shows that its cost is represented by suitable singleton and paired blocks, preserving the original principal-angle labels. The second direction is a realization theorem. It assembles orthogonal blocks into an ambient transporter with the required action on the source subspace."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Why the exponent matters",
+      "eyebrow": "G2 · 145000 · first-pass outline",
+      "lead": "The nuclear norm is the sum of singular values, and the Frobenius norm comes from their squared sum.",
+      "body": [
+        "A cost that is additive in squared singular values rewards a different distribution than a cost that is additive in singular values themselves. Between powers one and two, changing the singular-value distribution by mixing principal planes can be advantageous. This is why one must name the exponent in an optimality theorem. The best operator for one Schatten norm need not minimize another. The direct rotation's optimality for a squared objective does not imply its optimality for an unsquared objective, even though the underlying pair of subspaces is identical."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Scope of the matching theorem",
+      "eyebrow": "G2 · 145000 · first-pass outline",
+      "lead": "For real finite-dimensional Hilbert spaces with equal-dimensional source and target subspaces, and Schatten exponent p strictly between one and two, there is an orthogonal transporter attaining the matching minimum.",
+      "body": [
+        "Every admissible orthogonal transporter has pth-power displacement cost at least this value, and an optimizing matching can be realized geometrically. The assumptions include finite dimension, a real inner product, equal source and target dimension, and p strictly between one and two. The conclusion concerns the pth power of the Schatten norm of identity minus the transporter; taking the pth root preserves comparisons because p is positive."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 145000 · conclusion",
+      "lead": "Its assumptions on dimension, rank, and exponent remain part of the claim.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

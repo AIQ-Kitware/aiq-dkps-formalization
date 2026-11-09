@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "g2-072000-infinite-dimensional-hilbert-examples",
+  "title": "Infinite-dimensional Hilbert examples",
+  "subtitle": "G2 lecture 072000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:072000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/072000-infinite-dimensional-hilbert-examples.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 072000 · first-pass outline",
+      "lead": "Our finite-dimensional spectral theorem diagonalized every self-adjoint matrix.",
+      "body": [
+        "We selected eigenvectors, built orthogonal projections, and then defined functions of the matrix by changing its eigenvalues. In infinite dimensions, the same procedure can fail at its first step. A bounded self-adjoint operator can have no nonzero eigenvectors at all. We need to understand a concrete example before replacing matrices with spectral measures. Four standard models exhibit these phenomena: square-summable sequences, square-integrable functions, multiplication by a coordinate, and the unilateral shift."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "The sequence Hilbert space",
+      "eyebrow": "G2 · 072000 · first-pass outline",
+      "lead": "Start with an infinite list of complex numbers: x-zero, x-one, and so on.",
+      "body": [
+        "Retain only sequences whose squared absolute values add to a finite number. This is the space called ell two. The inner product of two such sequences is the sum of the conjugate of one coordinate times the corresponding coordinate of the other. Cauchy–Schwarz guarantees convergence. The norm is the square root of the sum of squared absolute values. The familiar coordinate vectors, with one entry equal to one and the rest zero, form an orthonormal basis. But a general vector is an infinite sum of these basis directions, converging in norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Square-integrable functions",
+      "eyebrow": "G2 · 072000 · first-pass outline",
+      "lead": "Now consider functions on the interval from zero to one.",
+      "body": [
+        "Keep those for which the integral of squared absolute value is finite. Identify two functions if they differ only on a set of measure zero. We call the resulting space L two. Why identify functions almost everywhere? Because the integral norm cannot detect a difference at a single point. If f and g disagree only at one position, their difference has norm zero. A normed space must regard any vector of norm zero as the zero vector. The inner product is the integral of the conjugate of f times g. Again Cauchy–Schwarz controls it. There is a useful comparison with ell two. In ell two we sum squared coordinates."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Multiplication by the coordinate",
+      "eyebrow": "G2 · 072000 · first-pass outline",
+      "lead": "Define an operator M on L two by sending a function f to the function x times f of x.",
+      "body": [
+        "Its norm is at most one because the magnitude of x is at most one on the interval. In fact its operator norm equals one: choose unit functions supported very close to the right endpoint, where multiplication by x almost preserves their lengths. M is self-adjoint. To check this, move the real scalar x between the two factors in the inner-product integral. This is the direct analogue of a real diagonal matrix. Now ask whether M has an eigenvector. If M f equals lambda times f, then x times f of x equals lambda times f of x for almost every x. So f can be nonzero only where x equals lambda."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "The spectrum still has content",
+      "eyebrow": "G2 · 072000 · first-pass outline",
+      "lead": "Perhaps the operator has no spectrum at all?",
+      "body": [
+        "No. Its spectrum is the entire interval from zero to one. First take a complex number lambda outside that interval. The function one divided by x minus lambda is bounded on the interval. Multiplication by this reciprocal gives a bounded inverse to M minus lambda times the identity. Such lambda lie outside the spectrum. Now choose lambda inside the interval. Around lambda, take a tiny subinterval and a function supported there, normalized to have L two norm one. On that support, x is close to lambda. The norm of M f minus lambda f is therefore as small as the width of the subinterval. So M minus lambda cannot have a bounded inverse."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A diagonal model with infinitely many eigenvalues",
+      "eyebrow": "G2 · 072000 · first-pass outline",
+      "lead": "Contrast M with a diagonal operator D on ell two.",
+      "body": [
+        "Let D multiply coordinate n by one divided by n plus one. Every coordinate vector is an eigenvector, and the corresponding eigenvalues approach zero. Zero belongs to the spectrum because the unit coordinate vectors far out in the sequence have images with norms tending to zero. There is no bounded inverse for D. Yet zero is not an eigenvalue: no nonzero coordinate can be supported where the diagonal entry vanishes, since every entry is positive. Here the spectrum consists of the listed positive eigenvalues together with their limit point zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "The unilateral shift",
+      "eyebrow": "G2 · 072000 · first-pass outline",
+      "lead": "A final example reminds us why self-adjointness matters.",
+      "body": [
+        "On ell two define the forward shift U by placing a zero at the beginning of a sequence and moving every entry one position to the right. U preserves the norm exactly, so U adjoint times U equals the identity. But U is not onto: no vector in its range has a nonzero first coordinate. Therefore U times U adjoint is the projection onto the subspace with first coordinate zero, rather than the identity. In finite dimensions, an isometry of a space into itself must be surjective. In infinite dimensions, this implication fails. Its adjoint is the backward shift, which discards the first coordinate."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "What replaces the finite eigenbasis",
+      "eyebrow": "G2 · 072000 · first-pass outline",
+      "lead": "The continuous multiplication model suggests the answer.",
+      "body": [
+        "For a measurable subset of the interval, define a projection that keeps the values of a function on that subset and sets it to zero elsewhere. Two disjoint subsets give orthogonal projections. The projection for a union of disjoint subsets combines their contributions. Instead of one projection per eigenvalue, we have one projection for each sufficiently well-behaved set of spectral values. For a finite diagonal matrix these projections simply select coordinate eigenspaces. For multiplication by x they select the support of a function according to the value of x, even though there are no eigenvectors."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 072000 · conclusion",
+      "lead": "A spectral theorem without an eigenvector basis requires measurable sets and countably additive projection-valued measures, which supply the appropriate sums of spectral projections.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

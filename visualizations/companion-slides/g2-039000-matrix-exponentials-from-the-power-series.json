@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "id": "g2-039000-matrix-exponentials-from-the-power-series",
+  "title": "Matrix exponentials from the power series",
+  "subtitle": "G2 lecture 039000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:039000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/039000-matrix-exponentials-from-the-power-series.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 039000 · first-pass outline",
+      "lead": "Until now our operators have usually described a transformation in one step.",
+      "body": [
+        "A matrix acts on a vector, and we compare the input with the output. But suppose we want to describe a transformation that unfolds over time. Start at the identity, move a tiny amount, then move again, and keep doing so. We want a family of operators for which the transformation over two successive time intervals agrees with the transformation over their combined duration. For ordinary numbers, the exponential function has exactly that property. It converts addition into multiplication. The matrix exponential is defined by the same power series."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Start with a scalar differential equation",
+      "eyebrow": "G2 · 039000 · first-pass outline",
+      "lead": "Consider the simplest possible growth rule.",
+      "body": [
+        "A quantity changes at a rate proportional to its present value. The solution is an exponential. If the growth rate is a constant number a, and the initial quantity is one, the result at time t is the exponential of a times t. Why? The derivative is a times the function, and at time zero the value is one. Now replace the number a with a square matrix B. Ask for a time-dependent vector whose derivative is B applied to the current vector. We expect the same idea to work, but now multiplication is matrix multiplication. The expression we want is the exponential of t B. We will not define it entry by entry."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Construct the exponential",
+      "eyebrow": "G2 · 039000 · first-pass outline",
+      "lead": "Recall the scalar power series for the exponential: one plus the argument, plus its square divided by two factorial, plus its cube divided by three factorial, and so on.",
+      "body": [
+        "For a square matrix B, use the same pattern. The constant term is the identity matrix. The first-order term is B. The second-order term is B squared divided by two factorial. The next is B cubed divided by three factorial. Multiply B by the time t before putting it into the series. That is the definition of the matrix exponential at time t. Why does this infinite sum converge? Choose the operator norm. The norm of B to the power n is at most the norm of B raised to the power n."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "A matrix whose square is zero",
+      "eyebrow": "G2 · 039000 · first-pass outline",
+      "lead": "Let N be the two-by-two matrix with a one above the diagonal and zeros elsewhere.",
+      "body": [
+        "It sends the vector with coordinates x and y to y and zero. Apply it twice. The first application puts everything on the horizontal axis. The second application kills that axis. So N squared is zero. That makes its exponential easy. Every term beyond the linear term vanishes. The exponential of t N is simply the identity plus t N. Acting on x and y, it produces x plus t y as the first coordinate, and y as the second. It shears the plane. This example proves something worth remembering: exponentiating a matrix is not the same as exponentiating each entry."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Verify the differential equation",
+      "eyebrow": "G2 · 039000 · first-pass outline",
+      "lead": "Differentiate the series for the exponential of t B, term by term.",
+      "body": [
+        "In finite dimensions, its absolute convergence is uniform when t stays in a bounded interval, so the differentiation can be justified by the usual power-series argument. The derivative of the n-th nonconstant term brings down n and cancels part of the factorial. When we reindex what remains, we get B multiplied by the original exponential series. Because B commutes with every power of B, the same derivative also equals the exponential multiplied by B. So the time derivative of the exponential of t B is B times the exponential of t B. At time zero, the exponential is the identity."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Combining time intervals",
+      "eyebrow": "G2 · 039000 · first-pass outline",
+      "lead": "If we run the flow for time s and then time t, do we get the flow for time s plus t?",
+      "body": [
+        "Yes, because both operators are exponentials of scalar multiples of the same B. Those multiples commute. The power series can be multiplied and regrouped using the binomial theorem for commuting factors. We obtain the exponential of s B times the exponential of t B equals the exponential of the sum of their arguments, which is the exponential of open parenthesis s plus t close parenthesis B. In particular, taking s equal to negative t shows that the exponential of t B is always invertible. Its inverse is the exponential of negative t B. But do not generalize this to arbitrary matrices A and B."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Which generators preserve length?",
+      "eyebrow": "G2 · 039000 · first-pass outline",
+      "lead": "A particularly important case occurs when B adjoint equals negative B.",
+      "body": [
+        "Such an operator is called skew-adjoint. Over the real numbers, we also say skew-symmetric. Let Q of t be the exponential of t B. We can compute its adjoint by taking the adjoint of the power series term by term. The adjoint of a power of B is the same power of B adjoint. Therefore the adjoint of Q of t is the exponential of t times B adjoint. If B is skew-adjoint, that is the exponential of negative t B, which is the inverse of Q of t. Thus Q adjoint times Q equals the identity, and Q times Q adjoint equals the identity as well. The exponential is unitary—or orthogonal in the real case."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Recover the ordinary rotation matrix",
+      "eyebrow": "G2 · 039000 · first-pass outline",
+      "lead": "Take the real two-by-two operator J that sends x and y to negative y and x.",
+      "body": [
+        "It rotates every vector by a quarter turn counterclockwise. J squared is negative the identity. Its adjoint equals negative J, so it is skew-symmetric. Now examine the exponential of t J. The even powers of J alternate between the identity and its negative. The odd powers alternate between J and its negative. If we group the even powers of the exponential series, we get cosine of t times the identity. If we group the odd powers, we get sine of t times J. So the exponential of t J equals cosine t times the identity, plus sine t times J. Applied to a vector, this is the ordinary rotation through angle t."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Exponentials combine rotations on orthogonal planes",
+      "eyebrow": "G2 · 039000 · first-pass outline",
+      "lead": "On an orthogonal sum of invariant planes, a skew-symmetric generator can rotate each plane at its own angular speed.",
+      "body": [
+        "Its exponential acts block by block, turning the generator on each plane into a sine-and-cosine rotation. This is how a single exponential represents several compatible planar motions. For bounded operators on a Banach space, the exponential series also converges in operator norm. An unbounded generator requires additional domain and continuity hypotheses; its exponential cannot be defined by an unrestricted operator-norm power series. For your final reconstruction, start with the exponential power series. Explain why it converges in operator norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 039000 · mathematical reference",
+      "lead": "On an orthogonal sum of invariant planes, a skew-symmetric generator can rotate each plane at its own angular speed.",
+      "body": [
+        "Its exponential acts block by block, turning the generator on each plane into a sine-and-cosine rotation. This is how a single exponential represents several compatible planar motions."
+      ],
+      "mathtex": "e^{tB}=\\sum_{n=0}^\\infty\\frac{t^n B^n}{n!},\\qquad\n\\frac{d}{dt}e^{tB}=Be^{tB}=e^{tB}B.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 039000 · conclusion",
+      "lead": "And if you want one concrete calculation to keep in mind, work out the even and odd powers of J until you can derive the sine-and-cosine rotation formula without looking it up.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

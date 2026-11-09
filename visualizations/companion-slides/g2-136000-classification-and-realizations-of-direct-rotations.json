@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "id": "g2-136000-classification-and-realizations-of-direct-rotations",
+  "title": "Classification and realizations of direct rotations",
+  "subtitle": "G2 lecture 136000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:136000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/136000-classification-and-realizations-of-direct-rotations.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 136000 · first-pass outline",
+      "lead": "What data determine a pair of closed subspaces up to unitary equivalence?",
+      "body": [
+        "Their intersections, crossed defects, and the generic principal-angle geometry all play distinct roles. The same classification determines when a canonical direct rotation can exist. We will distinguish three problems. Can two pairs of subspaces be identified by a unitary map? Can a particular pair be carried into itself by a direct rotation that sends its first subspace onto its second? And can we prescribe the angles and then build a pair that has them? These problems have related, but different, answers."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Four elementary pieces",
+      "eyebrow": "G2 · 136000 · first-pass outline",
+      "lead": "Take two closed subspaces, U and V, of a Hilbert space.",
+      "body": [
+        "Split the ambient space according to their intersections. The common part belongs to both. The source defect belongs to U and is perpendicular to V. The target defect belongs to V and is perpendicular to U. The exterior part is perpendicular to both. Every vector in one of these pieces has an immediately understood relationship to the two subspaces. Common vectors need no movement. Source-defect vectors sit at a right angle to every vector of V. Target-defect vectors are the corresponding right-angle directions from the other side. Exterior vectors should remain outside both."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The generic cosine operator",
+      "eyebrow": "G2 · 136000 · first-pass outline",
+      "lead": "On the generic part, write the pair using Halmos's two-projection construction.",
+      "body": [
+        "In suitable coordinates, the first projection picks out the first factor. The second has a block whose upper-left entry is cosine squared, whose off-diagonal entries are cosine times sine, and whose lower-right entry is sine squared. These are positive commuting operators, and their squares add to the identity. Think of them as many simultaneous principal planes, but without assuming that a basis of individual planes exists. The cosine operator contains the relative position data. If it is diagonalizable, its eigenvalues are cosines of principal angles."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Why compactness simplifies the answer",
+      "eyebrow": "G2 · 136000 · first-pass outline",
+      "lead": "Now suppose the relevant generic cosine operator is compact.",
+      "body": [
+        "The spectral theorem for compact positive operators says its positive spectral data consist of eigenvalues of finite multiplicity, with only zero available as an accumulation point. We can record the positive eigenvalues as a decreasing sequence, repeated according to multiplicity, or equivalently record the dimension of the eigenspace for each positive eigenvalue. Both describe the same compact operator up to unitary equivalence, provided the kernel information is handled too. For this application, remember that elementary zero-angle and right-angle multiplicities live in separate summands."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Building a prescribed angle sequence",
+      "eyebrow": "G2 · 136000 · first-pass outline",
+      "lead": "We can run the process backward.",
+      "body": [
+        "Suppose we choose angles theta one, theta two, and so on between zero and ninety degrees. For simplicity first assume each lies strictly between those endpoints. Take an orthogonal sum of two-dimensional coordinate planes. In each plane, let U use the horizontal axis, and let V use the unit line with horizontal component cosine theta and vertical component sine theta. The projection onto U has matrix with entries one, zero, zero, zero. The projection onto V has entries cosine squared, cosine sine, cosine sine, sine squared. Assembled as a direct sum, these give the prescribed principal-angle blocks."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Acuteness, uniformity, and uniqueness",
+      "eyebrow": "G2 · 136000 · first-pass outline",
+      "lead": "There remains an infinite-dimensional subtlety.",
+      "body": [
+        "It is possible for every angle to be strictly less than ninety degrees while a sequence of angles approaches ninety degrees. In that case, no individual perpendicular vector exists, but the largest-angle supremum is still ninety degrees. The polar construction of the canonical intertwiner is tied to the cosine operator and its kernel. When both crossed defects vanish, the canonical partial-isometry construction has the appropriate unitary extension."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Final reconstruction",
+      "eyebrow": "G2 · 136000 · first-pass outline",
+      "lead": "If you need to classify a pair, begin by extracting the four elementary intersection pieces.",
+      "body": [
+        "Match their dimensions. On the generic remainder, compare the cosine-square operators by unitary equivalence. In the compact case, compare their positive eigenvalues with multiplicities. If instead you need a concrete realization, build an orthogonal sum of principal planes and append the elementary pieces. And if you need a direct rotation, check crossed-defect matching and the desired boundedness or acuteness hypotheses before writing a polar formula."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 136000 · mathematical reference",
+      "lead": "If you need to classify a pair, begin by extracting the four elementary intersection pieces.",
+      "body": [
+        "Match their dimensions. On the generic remainder, compare the cosine-square operators by unitary equivalence. In the compact case, compare their positive eigenvalues with multiplicities."
+      ],
+      "mathtex": "H_{11}=U\\cap V,\\quad H_{10}=U\\cap V^\\perp,\\quad\nH_{01}=U^\\perp\\cap V,\\quad H_{00}=U^\\perp\\cap V^\\perp.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 136000 · conclusion",
+      "lead": "Classification, realization, and direct rotation therefore have distinct hypotheses: classification matches the full relative-position data, realization constructs a pair with prescribed data, and rotation additionally requires compatible crossed defects and the chosen transport conditions.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

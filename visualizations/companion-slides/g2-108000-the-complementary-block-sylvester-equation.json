@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "g2-108000-the-complementary-block-sylvester-equation",
+  "title": "The complementary-block Sylvester equation",
+  "subtitle": "G2 lecture 108000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:108000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/108000-the-complementary-block-sylvester-equation.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 108000 · first-pass outline",
+      "lead": "Consider a self-adjoint operator A, an exact reducing subspace U, and an approximate trial subspace V.",
+      "body": [
+        "Represent V by an orthonormal frame E, U by an orthonormal frame F zero, and the complement of U by an orthonormal frame F one. A residual measures how far the action of A on the trial frame disagrees with a chosen trial operator. The component of that residual perpendicular to U satisfies a Sylvester equation; its unknown measures how much of V lies outside U. This equation is the complementary-block Sylvester equation."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Start with an exact reducing decomposition",
+      "eyebrow": "G2 · 108000 · first-pass outline",
+      "lead": "Let A be a self-adjoint operator on an ambient Hilbert space H.",
+      "body": [
+        "Choose a reducing subspace U and its orthogonal complement. Represent U by an isometric coordinate map F zero, and its complement by an isometric coordinate map F one. Because these two coordinate ranges form an orthogonal decomposition of H, the sum of their range projections equals the identity. In symbols spoken aloud, F zero F zero adjoint plus F one F one adjoint is the identity. On the exact target subspace, the operator A is represented by a self-adjoint block Lambda zero. On the complement it is represented by a self-adjoint block Lambda one. In the corresponding exact coordinates, A is block diagonal."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Introduce the trial map and residual",
+      "eyebrow": "G2 · 108000 · first-pass outline",
+      "lead": "Let E be an isometric trial map from coordinate space F into H.",
+      "body": [
+        "Let A zero be a self-adjoint operator on F. It might be the Ritz compression E adjoint A E, but the algebra does not require that choice. Define the residual R as A E minus E A zero. This is a map from F into H. If the trial vectors were exact eigenvectors, with A zero giving their eigenvalues, R would vanish. We want to measure how much the trial space lies in the exact complement U perpendicular. Define X to be F one adjoint E. For a trial-coordinate vector x, X x tells us its coordinates in that exact complement. Notice that X is bounded and has norm at most one. It is the product of an adjoint isometry and an isometry."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Derive the equation, one factor at a time",
+      "eyebrow": "G2 · 108000 · first-pass outline",
+      "lead": "Start with R equals A E minus E A zero.",
+      "body": [
+        "Apply F one adjoint on the left. Then F one adjoint R equals F one adjoint A E minus F one adjoint E A zero. The second term is simply X A zero, by the definition of X. For the first term, use the exact reducing decomposition. Applying A and then taking complementary coordinates is equivalent to taking complementary coordinates first and then applying Lambda one. Thus F one adjoint A E equals Lambda one F one adjoint E, which equals Lambda one X. Combining the terms gives F one adjoint R equals Lambda one X minus X A zero. This is a Sylvester equation. The unknown is X, the complementary overlap of the trial frame."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Why the compression is part of the proof",
+      "eyebrow": "G2 · 108000 · first-pass outline",
+      "lead": "The residual R is ambient-valued.",
+      "body": [
+        "The Sylvester unknown X is complementary-coordinate-valued. These maps do not even have the same target space, so they cannot be substituted for one another. The factor F one adjoint sends the ambient residual into the correct target coordinates. Since F one is an isometry, its adjoint is a contraction. Consequently, the norm of F one adjoint R is at most the norm of R. The same contraction statement holds for compatible symmetric operator ideals, provided their membership and composition hypotheses are in force. This is the first of two inequalities in the sine theorem."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A worked diagonal model",
+      "eyebrow": "G2 · 108000 · first-pass outline",
+      "lead": "Let A be diagonal on the plane, with entries zero and five.",
+      "body": [
+        "Take the exact target U to be the horizontal axis and the exact complement to be the vertical axis. Therefore Lambda one is the scalar five. Choose the trial unit vector u with coordinates cosine theta and sine theta. E sends one to u. The complementary overlap X sends one to sine theta. First choose A zero to be the scalar zero. Then the residual A u minus zero times u is five sine theta times the vertical basis vector. Its complementary coordinate is five sine theta. The Sylvester equation becomes five times sine theta minus sine theta times zero equals five sine theta. Both sides agree."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Apply a genuine Sylvester bound",
+      "eyebrow": "G2 · 108000 · first-pass outline",
+      "lead": "Suppose the spectra of Lambda one and A zero satisfy an ordered gap of size delta, or another separation condition covered by the appropriate Sylvester theorem.",
+      "body": [
+        "Then the Sylvester inverse controls X by F one adjoint R. In the simplest operator-norm case with an ordered self-adjoint gap, delta times the norm of X is at most the norm of F one adjoint R, hence at most the norm of R. The result is already a bound on the amount of trial space outside the exact target. Do not replace the gap hypothesis by the statement that Lambda one and A zero have different eigenvalues."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Restore the domain conditions for unbounded A",
+      "eyebrow": "G2 · 108000 · first-pass outline",
+      "lead": "For unbounded self-adjoint A, the line A E minus E A zero is not automatically a globally defined bounded map.",
+      "body": [
+        "We require E to carry the domain of A zero into the domain of A, and R to be the bounded extension of the corresponding difference. Likewise F one must take vectors in the domain of Lambda one to legal vectors in the domain of A. To justify applying the complementary block, one uses the reducing property together with the corresponding adjoint intertwining identity on the relevant domains. Then X maps the domain of A zero into the domain of Lambda one, and the Sylvester equation holds there. This is the closed-operator equation to which our unbounded Sylvester estimates apply."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 108000 · conclusion",
+      "lead": "We have completed the algebraic bridge: exact reducing coordinates, trial residual, complementary overlap, and a domain-aware Sylvester equation.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

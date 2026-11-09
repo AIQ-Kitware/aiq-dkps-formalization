@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "g2-059000-rectangular-invariance-and-zero-padding",
+  "title": "Rectangular invariance and zero padding",
+  "subtitle": "G2 lecture 059000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:059000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/059000-rectangular-invariance-and-zero-padding.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 059000 · first-pass outline",
+      "lead": "Imagine a linear map that sends a two-dimensional input into three-dimensional output space.",
+      "body": [
+        "Suppose we add a fourth output coordinate, but the map always puts zero in that new coordinate. The map has not changed how it stretches any input. Should its norm change? For the operator, Frobenius, nuclear, and Schatten norms, the answer is no. But this conclusion relies on more than invariance under square unitary changes of coordinates. We must understand isometric embeddings, rectangular singular values, and the precise role of zero padding."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "The most direct calculation",
+      "eyebrow": "G2 · 059000 · first-pass outline",
+      "lead": "Let A take real two-dimensional inputs to real three-dimensional outputs.",
+      "body": [
+        "It sends the first input basis vector to four times the first output basis vector, and the second to two times the second output basis vector. It never uses the third output coordinate. The matrix has three rows and two columns, with four and two on the first two diagonal positions and zeros everywhere else. Its adjoint followed by itself is a two-by-two diagonal matrix with entries sixteen and four. Its singular values are therefore four and two. Its self-composition with the adjoint, in the other order, is a three-by-three diagonal matrix with entries sixteen, four, and zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Isometric embeddings preserve the input Gram operator",
+      "eyebrow": "G2 · 059000 · first-pass outline",
+      "lead": "Let J be a linear isometric embedding from an output space F into a larger output space G.",
+      "body": [
+        "Saying that J is an isometry means that the length of J y equals the length of y for every y in F. For inner-product spaces, this implies that the adjoint of J followed by J is the identity on F. We can prove it directly: preserving all lengths also preserves inner products by polarization. The defining property of the adjoint then gives J adjoint J equal to the identity. Form the new operator J followed by A. Its Gram operator is A adjoint followed by J adjoint, then J, then A. Because J adjoint J is the identity, the middle factors cancel. We recover A adjoint A exactly."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "What happens when the input space grows?",
+      "eyebrow": "G2 · 059000 · first-pass outline",
+      "lead": "Padding columns is related, but the direction of the construction changes.",
+      "body": [
+        "Suppose E is included isometrically in a larger input space H. We want a map from H to F that agrees with A on the old input subspace and sends every orthogonal new direction to zero. The natural formula is A followed by the adjoint of the inclusion. The inclusion's adjoint takes a vector in H and extracts its component in E. The resulting map uses exactly the old input coordinates and discards the new ones. Relative to the orthogonal splitting of H into the included copy of E and its orthogonal complement, the new Gram operator has two diagonal blocks: A adjoint A on the old part, and zero on the new part."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "A short proof using the singular-value decomposition",
+      "eyebrow": "G2 · 059000 · first-pass outline",
+      "lead": "There is a second route to the same result.",
+      "body": [
+        "Start with the singular-value decomposition of A. It gives orthonormal right singular vectors, orthonormal left singular vectors for the positive singular values, and a diagonal list of stretching factors. Embedding the output sends every left singular vector to another orthonormal vector, because the embedding preserves inner products. The right singular vectors and singular values can remain unchanged. Enlarging the input and adding zero action contributes extra right singular directions with stretching factor zero. Thus the positive singular blocks remain exactly the same. Both perspectives are useful."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A warning about invariance in each dimension",
+      "eyebrow": "G2 · 059000 · first-pass outline",
+      "lead": "Here is a tempting but incorrect argument: if a norm is unitarily invariant on every matrix space, adding zero rows or columns must preserve its value.",
+      "body": [
+        "It need not. For example, define a separate norm on matrices with m rows and n columns by multiplying their ordinary operator norm by m plus n. For each fixed shape, this is a valid unitarily invariant norm. But padding a zero row changes m, so it changes the assigned value even though the nonzero singular values remain unchanged. Thus separate invariance within each matrix space does not force compatibility between different matrix shapes."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Padding is not compression",
+      "eyebrow": "G2 · 059000 · first-pass outline",
+      "lead": "There is another operation that looks superficially similar: project an operator's outputs onto a smaller subspace, discarding a component that was previously nonzero.",
+      "body": [
+        "That is compression or contraction, not mere padding. It generally decreases singular values or their aggregate norms, and can decrease them strictly. Take the map from two-dimensional input to two-dimensional output that stretches the first direction by four and the second by two. Project all outputs onto the first coordinate axis. The second singular value becomes zero. The operator norm stays four, but the Frobenius norm drops from the square root of twenty to four, and the nuclear norm drops from six to four."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Connection to subspace perturbation theory",
+      "eyebrow": "G2 · 059000 · first-pass outline",
+      "lead": "The distinction appears whenever an operator is restricted to a trial subspace or a rectangular residual is transferred between coordinate frames.",
+      "body": [
+        "Those operations frequently involve isometric inclusions, adjoints of those inclusions, and zero blocks. Without padding invariance, the same residual could acquire different measured sizes merely because we wrote it in a larger ambient space. Adding zero coordinates changes neither the positive singular values nor any unitarily invariant measurement determined by those values. Indeed, the source Gram operators before and after zero-padding are the same up to an isometry of coefficient spaces."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "What to reconstruct",
+      "eyebrow": "G2 · 059000 · first-pass outline",
+      "lead": "Compute both Gram operators for the three-by-two example.",
+      "body": [
+        "Then append a zero output row and verify that the source Gram operator does not change. Append a zero input column and identify the extra zero eigenvalue of the new source Gram operator. Prove the identity J adjoint J equals the identity for an isometric embedding. Use it to prove equality of nonzero singular values under output inclusion. Finally, construct a dimension-dependent invariant norm that fails zero-padding invariance, and explain exactly which cross-dimensional compatibility property is missing."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 059000 · conclusion",
+      "lead": "Finally, construct a dimension-dependent invariant norm that fails zero-padding invariance, and explain exactly which cross-dimensional compatibility property is missing.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

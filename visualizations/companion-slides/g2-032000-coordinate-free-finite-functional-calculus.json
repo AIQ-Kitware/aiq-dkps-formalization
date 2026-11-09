@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-032000-coordinate-free-finite-functional-calculus",
+  "title": "Coordinate-free finite functional calculus",
+  "subtitle": "G2 lecture 032000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:032000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/032000-coordinate-free-finite-functional-calculus.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 032000 · first-pass outline",
+      "lead": "We know how to square a matrix.",
+      "body": [
+        "We multiply it by itself. We know how to form a polynomial in a matrix: take combinations of its powers and the identity. But what could the square root of a matrix mean? Or the exponential? Or even a function that is one on some eigenvalues and zero on others? It would be easy to misunderstand the phrase “apply a function to a matrix” as applying that function separately to every entry. Generally, that is not what we mean. The correct construction is about what the matrix does as an operator, and the spectral theorem supplies the key."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Start with one eigenvector",
+      "eyebrow": "G2 · 032000 · first-pass outline",
+      "lead": "Suppose A has an eigenvector v with eigenvalue three.",
+      "body": [
+        "Applying A to v multiplies it by three. Applying A twice multiplies it by nine. Applying A three times multiplies it by twenty-seven. Now take a polynomial, say the function that maps a number t to t squared plus one. The operator A squared plus the identity sends v to ten times v, because three squared plus one is ten. For every eigenvector, the polynomial expression acts by evaluating the polynomial at its eigenvalue. This is our clue. Rather than calculating a function entry by entry, we should ask what it does to each eigenspace."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "From eigenvectors to spectral projections",
+      "eyebrow": "G2 · 032000 · first-pass outline",
+      "lead": "The finite spectral theorem tells us that a self-adjoint operator has mutually orthogonal eigenspaces whose direct sum is the whole space.",
+      "body": [
+        "Let the distinct eigenvalues be the numbers in a finite set, and let each eigenvalue have its orthogonal spectral projection. We can recover A by multiplying each spectral projection by its eigenvalue and adding the results. Now suppose f is a real-valued function defined on those eigenvalues. Define f of A in the same way, except replace each eigenvalue by its value under f. If a vector belongs to the eigenspace for three, f of A multiplies it by f of three."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "A concrete two-dimensional calculation",
+      "eyebrow": "G2 · 032000 · first-pass outline",
+      "lead": "Consider the symmetric matrix with two on both diagonal entries and one in each off-diagonal entry.",
+      "body": [
+        "You can think of it as taking a vector, doubling its coordinates, and adding the other coordinate to each one. Its eigenvector in the direction one, one has eigenvalue three. Its eigenvector in the direction one, negative one has eigenvalue one. Take the function f of t equals t squared. Our definition says f of A multiplies the first eigendirection by nine and the second by one. If we instead multiply the original matrix by itself, we get a matrix with five on the diagonal and four off the diagonal."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Why the algebra works",
+      "eyebrow": "G2 · 032000 · first-pass outline",
+      "lead": "Let's prove some of the main rules, rather than taking them as convenient notation.",
+      "body": [
+        "Suppose f and g are two real-valued functions on the spectrum. Consider an eigenvector of A with eigenvalue lambda. The operator f of A acts on that vector by f of lambda. The operator g of A acts by g of lambda. So their sum acts by f of lambda plus g of lambda. That is exactly how the function f plus g acts on lambda. Therefore the sum of the two operators equals the operator associated with f plus g. Similarly, applying g of A and then f of A multiplies the same eigendirection by g of lambda and then f of lambda. The result is the product of those two numbers."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Can any function be represented by a polynomial?",
+      "eyebrow": "G2 · 032000 · first-pass outline",
+      "lead": "In finite dimensions, for self-adjoint A, yes—as far as its action on A is concerned.",
+      "body": [
+        "Suppose A has three distinct eigenvalues. We can build a polynomial that equals any requested set of three values at those three points. The standard construction makes one polynomial for each eigenvalue. It equals one at that chosen eigenvalue and zero at the other two. A weighted sum of those polynomials then matches any requested function values on the spectrum. These are called Lagrange interpolation polynomials. Notice that the function does not need to be a polynomial everywhere on the real line. We only require agreement on the finite list of eigenvalues."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Where continuity enters later",
+      "eyebrow": "G2 · 032000 · first-pass outline",
+      "lead": "Infinite-dimensional operators bring a new difficulty.",
+      "body": [
+        "The spectrum may contain infinitely many points or an entire interval. We can no longer assume a polynomial can match an arbitrary function at every spectral point. For a bounded self-adjoint operator, one route begins by approximating a continuous real-valued function uniformly by polynomials on an interval containing the spectrum. The operator norm then lets us pass from the polynomial expressions to a limiting operator. We will prove the relevant approximation and convergence statements when we build continuous functional calculus in detail."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "A function can reveal a property of the operator",
+      "eyebrow": "G2 · 032000 · first-pass outline",
+      "lead": "Suppose every eigenvalue of A is nonnegative.",
+      "body": [
+        "Then f of A is nonnegative in the spectral sense whenever f is nonnegative on the spectrum, because its multipliers on each eigenspace are nonnegative. For a positive self-adjoint matrix, the spectral definition of its square root is concrete: replace each nonnegative eigenvalue by its nonnegative square root and keep the same spectral projections. The resulting matrix is positive and its square is the original matrix. This construction depends on positivity, meaning that the inner product of A x with x is nonnegative for every vector x. For a final reconstruction exercise, take a symmetric two-by-two matrix with eigenvalues one and three."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 032000 · mathematical reference",
+      "lead": "Suppose every eigenvalue of A is nonnegative.",
+      "body": [
+        "Then f of A is nonnegative in the spectral sense whenever f is nonnegative on the spectrum, because its multipliers on each eigenspace are nonnegative."
+      ],
+      "mathtex": "f(A)=\\sum_{\\lambda\\in\\sigma(A)} f(\\lambda)P_\\lambda.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 032000 · conclusion",
+      "lead": "If you can do that, you understand why functional calculus is a property of the operator rather than of its chosen coordinates.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

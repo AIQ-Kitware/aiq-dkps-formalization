@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-071000-sylvester-identities-for-compressed-blocks",
+  "title": "Sylvester identities for compressed blocks",
+  "subtitle": "G2 lecture 071000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:071000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/071000-sylvester-identities-for-compressed-blocks.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 071000 · first-pass outline",
+      "lead": "A Sylvester estimate can turn a bound on an operator C into a bound on the unknown X.",
+      "body": [
+        "But a subspace perturbation problem is given in a different form. We have two self-adjoint operators and want to compare two subspaces that they preserve. Where is the Sylvester equation hiding? Multiplication by the relevant spectral projections produces an exact identity before any gap condition is imposed. The gap enters only when we try to estimate its solution. Keeping those steps separate makes clear which claims are purely algebraic and which depend on spectral separation."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Two operators and two invariant subspaces",
+      "eyebrow": "G2 · 071000 · first-pass outline",
+      "lead": "Let T be a bounded self-adjoint operator on a Hilbert space.",
+      "body": [
+        "Let S equal T plus a perturbation E, also self-adjoint. Choose an orthogonal projection P whose range is invariant under T. Choose another orthogonal projection Q whose range is invariant under S. For spectral projections, invariance is automatic and the orthogonal complements are invariant as well. We want to measure how much of a vector in the P subspace falls outside the Q subspace. The relevant map first includes a vector from the P subspace into the ambient Hilbert space, then applies I minus Q. Call this map X. Its norm is the largest possible length outside Q of a unit vector from P."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Derivation one line at a time",
+      "eyebrow": "G2 · 071000 · first-pass outline",
+      "lead": "Take a vector p in the range of P.",
+      "body": [
+        "The value X of p is the component of p orthogonal to the range of Q. Apply A to X of p. Since S preserves the complement of Q, the result is I minus Q applied to S of p. We used commutation of S with Q to remove an unnecessary second projection. Next apply X to B of p. Since B is simply T restricted to the P subspace, and T preserves that subspace, the result is I minus Q applied to T of p. Subtract. We get I minus Q applied to S of p minus T of p. Since S minus T equals E, the answer is I minus Q applied to E of p."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "A two-dimensional calculation",
+      "eyebrow": "G2 · 071000 · first-pass outline",
+      "lead": "Let T be diagonal with entries zero and two.",
+      "body": [
+        "Its zero eigenspace is the horizontal coordinate axis, and P projects onto that axis. Let S be the matrix with every entry equal to one. It has eigenvalue zero on the line spanned by the vector one, negative one, and eigenvalue two on the line spanned by one, one. Let Q project onto the zero eigenspace of S. The perturbation E is S minus T. Its first column is one, one, while its second column is one, negative one. The Q complement is the line spanned by the normalized vector one, one. The vector e-one, which generates the P subspace, has projection onto that line of length one over the square root of two."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "What the gap does and does not compare",
+      "eyebrow": "G2 · 071000 · first-pass outline",
+      "lead": "Notice which spectra appear: the selected spectral part of T, and the complementary spectral part of S.",
+      "body": [
+        "In this example they were the eigenvalues zero and two. A gap between the entire spectra of T and S would be irrelevant and often impossible to assume. Both operators may have eigenvalues in the same region. The useful condition separates the target cluster of one operator from the exterior cluster of the other. The identity alone gives no angle bound if those two restricted spectra meet. When A and B share a value, the Sylvester operator may have a kernel, so a small residual need not imply a small cross-projection block."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "The companion directed block",
+      "eyebrow": "G2 · 071000 · first-pass outline",
+      "lead": "There is a second directed error, obtained by starting with a vector in Q and measuring how much lies outside P.",
+      "body": [
+        "Its operator maps the Q subspace to the complement of P. Run the same construction with S and T exchanged. The right-hand side is now the corresponding projection of negative E. Its norm obeys the same elementary estimate because replacing E by negative E does not change norm. For equal-dimensional finite subspaces, the nontrivial principal angles agree in the two directions. In different dimensions or infinite dimensions, the directed blocks carry different information about defects and right-angle directions."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "The Rayleigh–Ritz version",
+      "eyebrow": "G2 · 071000 · first-pass outline",
+      "lead": "The same algebra works when the P subspace is only a trial subspace and need not be invariant.",
+      "body": [
+        "Let V be an isometric embedding of the trial coordinate space. Form the compressed matrix M by applying V adjoint, then T, then V. Its residual R is T V minus V M. Let Q now be a genuine reducing spectral projection of T. The cross map X is I minus Q applied to V. Let A be T restricted to the Q complement. Multiply X by A, subtract X M, and use commutation of Q with T. The result is I minus Q applied to R. The proof takes the same three lines as before. We obtain a Sylvester equation whose right-hand side is the portion of the Rayleigh–Ritz residual outside the exact spectral subspace."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Domains in the unbounded setting",
+      "eyebrow": "G2 · 071000 · first-pass outline",
+      "lead": "The extension requires an additional hypothesis.",
+      "body": [
+        "If T or S is unbounded, its action is defined only on its domain. The expression T applied to a vector in the P subspace is meaningful only if that vector belongs to the domain. The apparent matrix multiplication may be illegal otherwise. The infinite-dimensional source develops bounded spectral cut operators and proves block identities first on dense domains. It then extends the resulting bounded expressions using continuity. Spectral projections commute with the self-adjoint operator in a domain-aware sense, and bounded spectral windows control the terms individually."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 071000 · mathematical reference",
+      "lead": "The extension requires an additional hypothesis.",
+      "body": [
+        "If T or S is unbounded, its action is defined only on its domain. The expression T applied to a vector in the P subspace is meaningful only if that vector belongs to the domain. The apparent matrix multiplication may be illegal otherwise."
+      ],
+      "mathtex": "X=(I-Q)|_{H_P}:H_P\\to H_{Q^\\perp},\\quad\nA=S|_{H_{Q^\\perp}},\\quad B=T|_{H_P}.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 071000 · conclusion",
+      "lead": "The Hilbert-space extension requires spectral projections with the right measurability properties; for unbounded generators it additionally requires domain compatibility.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

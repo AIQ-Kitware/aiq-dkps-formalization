@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "id": "g2-049000-canonical-direct-rotation",
+  "title": "Canonical direct rotation",
+  "subtitle": "G2 lecture 049000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:049000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/049000-canonical-direct-rotation.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 049000 · first-pass outline",
+      "lead": "Suppose someone hands us two lines in the plane.",
+      "body": [
+        "We can rotate the first line onto the second. But even there, the instruction does not specify a unique answer. We might turn through the smaller angle, turn the other way through a larger angle, or first rotate and then reflect along a suitable direction. For two subspaces of a Hilbert space, this freedom is much larger. We can move vectors within the source subspace, and within its orthogonal complement, while still sending the source subspace onto the target. A particular unitary transport can be constructed from the two orthogonal projections."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Begin with the planar picture",
+      "eyebrow": "G2 · 049000 · first-pass outline",
+      "lead": "Let U be the horizontal line and V be the line tilted counterclockwise by theta degrees, with theta strictly between zero and ninety degrees.",
+      "body": [
+        "There is an ordinary rotation through theta. There is also a rotation through theta plus one hundred eighty degrees. Both carry U onto V, because a line has no preferred orientation. But the second motion sends a horizontal unit vector to the negative of the nearest unit vector along V. That difference appears in an inner product. The smaller rotation moves a horizontal unit vector to a vector whose inner product with it is cosine theta, which is positive. The larger one gives negative cosine theta. So positivity can help choose between transports."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Reassemble the two projections",
+      "eyebrow": "G2 · 049000 · first-pass outline",
+      "lead": "Write P for projection onto U and Q for projection onto V.",
+      "body": [
+        "A natural transport candidate K is the sum of Q P and the product of identity minus Q with identity minus P. It sends the U component toward V and the U-perpendicular component toward V perpendicular. Its squared modulus is identity minus the square of P minus Q. Let C be the positive square root of that squared modulus. On a principal plane with angle theta, C multiplies each vector by cosine theta. So K acts there like cosine theta times an ordinary rotation. If the operator gap between P and Q is strictly below one, C has a bounded inverse. Then the direct rotation W is K times C inverse."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Acuteness is weaker than a uniform gap",
+      "eyebrow": "G2 · 049000 · first-pass outline",
+      "lead": "Call a pair acute in the intersection sense when neither subspace contains a nonzero vector perpendicular to the other.",
+      "body": [
+        "More precisely, U intersect V perpendicular is zero, and U perpendicular intersect V is zero. For finite-dimensional pairs, this rules out right-angle principal vectors and gives a positive smallest cosine. In an infinite-dimensional Hilbert space, every individual principal angle may be strictly less than ninety degrees while a sequence approaches ninety degrees. The cosine then has no kernel, yet its inverse is unbounded. We must not confuse these two hypotheses. A projection gap strictly below one implies the intersection-based condition."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "How do we recognize the correct unitary?",
+      "eyebrow": "G2 · 049000 · first-pass outline",
+      "lead": "Suppose T is any unitary that intertwines P and Q.",
+      "body": [
+        "The intertwining identity says T P equals Q T. Consequently T carries U onto V and also carries U perpendicular onto V perpendicular. That alone allows too much freedom. We need a test involving the directions in which T moves the source decomposition. Compress T back to U: project onto U, apply T, and project onto U again. Do the analogous operation on U perpendicular. These are called the two diagonal compressions of T. For the canonical polar factor W, both diagonal compressions are positive operators. Positive means self-adjoint and having nonnegative quadratic form."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Prove uniqueness instead of guessing it",
+      "eyebrow": "G2 · 049000 · first-pass outline",
+      "lead": "Let T be a unitary intertwiner whose two diagonal compressions are positive.",
+      "body": [
+        "We want to show T equals W when the crossed defects vanish. Define B to be the sum of those two diagonal compressions. Since each is positive, B is positive. And since both are supported in orthogonal pieces, B is block diagonal relative to U and U perpendicular. The projection intertwining identity lets us rewrite our original operator K as T times B. To see the structure, recall that Q equals T P T adjoint. Substitute that identity into both terms defining K. The two terms become T times the two diagonal blocks of T adjoint."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A square made from two reflections",
+      "eyebrow": "G2 · 049000 · first-pass outline",
+      "lead": "Every orthogonal projection determines a reflection.",
+      "body": [
+        "Reflect through U by leaving U fixed and reversing U perpendicular. As an operator, this is twice P minus the identity. Define the corresponding reflection through V using Q. On our principal plane, reflecting through U and then reflecting through V is a rotation through twice theta. This is a familiar geometry theorem, and we can now understand it operatorially. Let J U be reflection through U and J V reflection through V. Their product, in that order, is the unitary operator J V after J U. The canonical direct rotation W is the half-angle motion, so on every principal plane W squared equals J V times J U."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Reversing the direction",
+      "eyebrow": "G2 · 049000 · first-pass outline",
+      "lead": "A good transport construction should behave predictably when we interchange the source and target.",
+      "body": [
+        "Rotate from U to V, then rotate back from V to U. Those two motions ought to undo each other. Indeed, swapping P and Q replaces K by K adjoint. The positive polar factors are consequently adjoints of one another. So the canonical direct rotation from V to U is W adjoint, which equals W inverse because W is unitary. The same observation explains why the squared reflection product reverses. Its adjoint is J U followed by J V, precisely the reflection product for the reversed pair."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Reconstruction",
+      "eyebrow": "G2 · 049000 · first-pass outline",
+      "lead": "There are four things to prove for yourself.",
+      "body": [
+        "First, calculate the polar modulus of K and show it is the positive cosine operator. Second, explain why vanishing crossed defects makes the polar factor unitary even when cosine has no bounded inverse. Third, prove uniqueness: an intertwining unitary with positive diagonal blocks factors K as that unitary times a positive block-diagonal operator. Identify the latter with the modulus of K. Fourth, verify on an actual plane that two reflections give twice the angle, and explain why the principal half-angle branch fails at minus one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 049000 · mathematical reference",
+      "lead": "There are four things to prove for yourself.",
+      "body": [
+        "First, calculate the polar modulus of K and show it is the positive cosine operator. Second, explain why vanishing crossed defects makes the polar factor unitary even when cosine has no bounded inverse."
+      ],
+      "mathtex": "K=QP+(I-Q)(I-P),\\qquad C=|K|=\\bigl(I-(P-Q)^2\\bigr)^{1/2}.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 049000 · conclusion",
+      "lead": "Fourth, verify on an actual plane that two reflections give twice the angle, and explain why the principal half-angle branch fails at minus one.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

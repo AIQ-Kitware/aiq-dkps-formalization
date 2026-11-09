@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-115000-doubled-angles-from-symmetry",
+  "title": "Doubled angles from symmetry",
+  "subtitle": "G2 lecture 115000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:115000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/115000-doubled-angles-from-symmetry.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 115000 · first-pass outline",
+      "lead": "Reflecting across a closed subspace means acting by plus one on that subspace and minus one on its orthogonal complement.",
+      "body": [
+        "Conjugation by this reflection reverses the off-diagonal blocks of an operator. Applied to another subspace, the same reflection produces an angle-doubling identity. For one line in the plane, the answer is straightforward: reflection across a line at angle theta sends the horizontal axis to a line at angle twice theta. Our task is to express that fact through orthogonal projections, then extend it to many principal-angle planes and even to a Hilbert space without a discrete principal-vector basis."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Reflect the horizontal axis across a tilted line",
+      "eyebrow": "G2 · 115000 · first-pass outline",
+      "lead": "Start in the real plane.",
+      "body": [
+        "Let U be the horizontal axis. Let V be the line making an angle theta counterclockwise from U, with theta between zero and ninety degrees. A reflection across V fixes the vectors along V and reverses the perpendicular vectors. We can derive its matrix by choosing the unit vector v with coordinates cosine theta and sine theta. Projection onto V is the rank-one matrix formed from v times its transpose. Its entries are cosine squared theta, sine theta cosine theta, and sine squared theta in the familiar symmetric pattern. The reflection is twice that projection minus the identity."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Turn the geometry into a difference of projections",
+      "eyebrow": "G2 · 115000 · first-pass outline",
+      "lead": "Let P be the orthogonal projection onto U, and let J be reflection through V.",
+      "body": [
+        "The projection onto the reflected subspace J U is J P J, because J is an isometry and its inverse equals itself. Define the projection difference D equal to J P J minus P. It is self-adjoint. In the two-dimensional principal plane, the eigenvalues of D are plus sine twice theta and minus sine twice theta. One way to see this without solving a characteristic polynomial is to square D. Direct multiplication using the reflection matrix gives D squared equal to sine squared twice theta times the identity. The modulus of D is the positive square root of D squared."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Repeat the calculation using a cosine–sine block",
+      "eyebrow": "G2 · 115000 · first-pass outline",
+      "lead": "In a principal plane for two subspaces U and V, the projection P onto U has matrix with one on the first diagonal entry and zero on the second.",
+      "body": [
+        "The projection Q onto V has entries cosine squared theta, sine theta cosine theta in the two off-diagonal positions, and sine squared theta. The reflection J equals twice Q minus the identity. Multiply J P J. The resulting projection is the one onto the line spanned by the vector with coordinates cosine twice theta and sine twice theta. The eigenvalues of the difference J P J minus P are therefore plus and minus sine twice theta. This verifies the reflection identity directly from the cosine–sine decomposition."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "A coordinate-free operator identity",
+      "eyebrow": "G2 · 115000 · first-pass outline",
+      "lead": "The same result can be proved without choosing a principal-vector basis.",
+      "body": [
+        "Let S be the positive sine-angle operator, the modulus of P minus Q. Its spectrum lies between zero and one. The positive angle operator Theta can be defined by applying arcsine to S. Now apply the scalar function sine of twice the angle to Theta. Since the spectrum of Theta lies between zero and pi over two, this produces a positive operator. The scalar identity says that sine squared of twice theta equals four times sine squared theta times one minus sine squared theta. On the operator side, the square of the sine-two-theta operator is therefore four times S squared minus four times S to the fourth power."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Check the two extreme angles",
+      "eyebrow": "G2 · 115000 · first-pass outline",
+      "lead": "If theta is zero, U and V coincide.",
+      "body": [
+        "Reflection through V leaves U unchanged, so the displaced projection is zero. Sine of zero is zero, as expected. If theta is ninety degrees, V is perpendicular to U. Reflection through V sends a vector of U to its negative, which spans the same line U. Again the displaced projection is zero. Sine of one hundred eighty degrees is zero. At forty-five degrees, the reflected horizontal line is vertical. The projection difference has norm one, and sine twice theta equals one. The three tests show that the doubled sine is not a monotone measure of the original angle across the entire interval from zero to ninety degrees."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Why reflection helps a perturbation theorem",
+      "eyebrow": "G2 · 115000 · first-pass outline",
+      "lead": "Suppose T is self-adjoint and U reduces T.",
+      "body": [
+        "Suppose S equals T plus H, and V reduces S. Reflection through V commutes with S, even though it need not commute with T. The mirror defect J V T J V minus T equals H minus J V H J V. Its norm is at most twice the norm of H in any compatible unitarily invariant norm. The reflected operator J V T J V has a reducing subspace J V U, because U reduces T. We can now apply a single-angle sine comparison to T and its reflected copy, provided the spectral separation hypotheses match. But the angle between U and the reflected U is encoded by the sine-two-theta operator we have just constructed."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "What to retain",
+      "eyebrow": "G2 · 115000 · first-pass outline",
+      "lead": "The key geometric identity is: positive sine of twice the operator angle equals the modulus of the difference between the projection onto U and the projection onto U reflected through V.",
+      "body": [
+        "It works across the full angle range, including right angles, because the sine is nonnegative on twice that range. It does not, by itself, choose the near-zero branch. The outcome is the sine-two-theta theorem, with a bound valid even when the permitted geometry has not yet identified which branch of the doubled sine is relevant."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 115000 · mathematical reference",
+      "lead": "The key geometric identity is: positive sine of twice the operator angle equals the modulus of the difference between the projection onto U and the projection onto U reflected through V.",
+      "body": [
+        "It works across the full angle range, including right angles, because the sine is nonnegative on twice that range."
+      ],
+      "mathtex": "\\sin(2\\Theta)=|J_V P J_V-P|=|P_{J_VU}-P_U|.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 115000 · conclusion",
+      "lead": "The outcome is the sine-two-theta theorem, with a bound valid even when the permitted geometry has not yet identified which branch of the doubled sine is relevant.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

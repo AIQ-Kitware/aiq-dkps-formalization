@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "id": "g2-077000-scalar-spectral-measures-and-polarization",
+  "title": "Scalar spectral measures and polarization",
+  "subtitle": "G2 lecture 077000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:077000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/077000-scalar-spectral-measures-and-polarization.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 077000 · first-pass outline",
+      "lead": "The measure of a spectral set B was the squared length of the projection of x onto that set.",
+      "body": [
+        "These diagonal measurements are especially natural because they cannot be negative. But an operator is determined by what happens between two potentially different vectors. If we only know the squared lengths of spectral pieces, can we recover inner products involving an arbitrary pair x and y? Yes. The key is the complex polarization identity: inner products can be reconstructed from the squared norms of sums of vectors and their multiples by the imaginary unit."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Begin with the diagonal",
+      "eyebrow": "G2 · 077000 · first-pass outline",
+      "lead": "Let A be bounded and self-adjoint on a complex Hilbert space, and let E denote its projection-valued measure.",
+      "body": [
+        "For each vector x, write mu sub x of B for the inner product of x with E of B applied to x. Because E of B is an orthogonal projection, mu sub x of B is the squared norm of E of B applied to x. It is a nonnegative finite measure, and its total mass is the squared norm of x. In a diagonal three-by-three example, say A has diagonal entries minus two, zero, and five. If x has coordinates one, two, and three, the spectral masses are one at minus two, four at zero, and nine at five. Their sum is fourteen, the squared norm of x."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "The four-vector polarization trick",
+      "eyebrow": "G2 · 077000 · first-pass outline",
+      "lead": "Consider any bounded operator T and the expression obtained by pairing x with T applied to x.",
+      "body": [
+        "Call this its diagonal quadratic expression. If T is self-adjoint, it is real-valued, but the complex polarization identity works more generally for the sesquilinear form obtained from T. Evaluate that diagonal expression at four vectors: x plus y, x minus y, x plus i times y, and x minus i times y. Expanding the inner products gives a system of four equations. The diagonal contributions cancel when we take the appropriate signed combination. What remains is the desired cross term involving x and T applied to y. The exact signs depend on which inner-product argument is complex-linear."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Why the cross term is a measure",
+      "eyebrow": "G2 · 077000 · first-pass outline",
+      "lead": "A complex measure is countably additive but may take complex values.",
+      "body": [
+        "Positivity is no longer expected for two different vectors. We need to know that the sum over disjoint sets converges and behaves correctly. The polarization formula expresses each cross set function as a fixed finite linear combination of four positive finite measures. A finite linear combination of finite complex measures is a finite complex measure. Countable additivity therefore follows directly. Alternatively, look at the projections. If B-one, B-two, and so forth are disjoint, the sum of the projected pieces of y converges in norm to the projection of the union applied to y."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Spectral integrals as matrix elements",
+      "eyebrow": "G2 · 077000 · first-pass outline",
+      "lead": "Let f be a bounded Borel function on the real line.",
+      "body": [
+        "For each pair x and y, integrate f against the complex measure mu sub x comma y. Call the resulting number B sub f of x and y. The map is sesquilinear in the two vectors. Its magnitude is bounded by the supremum of the absolute value of f times the norms of x and y. This is a bounded sesquilinear form. Now fix y. The map from x to this complex number is a bounded linear or conjugate-linear functional according to our inner-product convention. The Riesz representation theorem supplies a unique vector z with the required inner products against every x. Define f of A applied to y to be z."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Working with a two-level operator",
+      "eyebrow": "G2 · 077000 · first-pass outline",
+      "lead": "Take a two-dimensional space with A diagonal, having eigenvalues zero and two.",
+      "body": [
+        "Let x have coordinates one and i, and let y have coordinates one and one. The spectral measure on the eigenvalue zero depends only on the first coordinates. Its cross term is the inner product of the first component of x with the first component of y. The measure on two depends only on the second coordinates and may be complex because of i. For the symbol f with f of zero equal to seven and f of two equal to minus one, the integral of f against the cross measure equals the matrix element of the diagonal operator with entries seven and minus one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Extension from continuous to measurable symbols",
+      "eyebrow": "G2 · 077000 · first-pass outline",
+      "lead": "The extension from continuous to bounded Borel functions needs a limiting argument.",
+      "body": [
+        "A bounded Borel function can be approximated in an L-one sense against a suitable finite spectral measure, even when uniform approximation by continuous functions is impossible. For one fixed pair x and y, we need to control four diagonal measures from the polarization formula. Take their sum. It is another finite positive measure and dominates all four. Approximate the Borel symbol against this single measure. The resulting integrals converge for the four pieces together. When proving an identity involving finitely many vectors and finitely many symbols, use one dominating finite measure for all of them."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "What happens at an atom",
+      "eyebrow": "G2 · 077000 · first-pass outline",
+      "lead": "Suppose x is an eigenvector with eigenvalue c.",
+      "body": [
+        "The scalar measure mu sub x is concentrated entirely at c, with total mass equal to the squared norm of x. Integrating f against that measure gives f of c times the squared norm of x. The same polarization calculation implies that f of A sends x to f of c times x. By contrast, for the multiplication operator on the interval with Lebesgue measure, a single point has zero spectral mass for every vector. Changing f at one such point does not change f of A. These two cases explain why the Borel calculus is determined by how all scalar spectral measures see a function, rather than by bare pointwise equality on a formal parameter set."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "The bridge to multiplication models",
+      "eyebrow": "G2 · 077000 · first-pass outline",
+      "lead": "We now have a strong dictionary.",
+      "body": [
+        "A vector supplies a positive measure. Two vectors supply a complex measure. A bounded Borel function supplies an operator whose matrix elements are the integrals of that function against the cross measures."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 077000 · conclusion",
+      "lead": "A bounded Borel function supplies an operator whose matrix elements are the integrals of that function against the cross measures.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

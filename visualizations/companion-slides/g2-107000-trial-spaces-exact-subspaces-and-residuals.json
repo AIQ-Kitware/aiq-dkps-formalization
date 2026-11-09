@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "id": "g2-107000-trial-spaces-exact-subspaces-and-residuals",
+  "title": "Trial spaces, exact subspaces and residuals",
+  "subtitle": "G2 lecture 107000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:107000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/107000-trial-spaces-exact-subspaces-and-residuals.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 107000 · first-pass outline",
+      "lead": "Suppose a self-adjoint operator has an invariant eigenspace that we cannot compute exactly.",
+      "body": [
+        "A numerical method produces a trial subspace instead. To estimate the angle between them, we first need a quantity that measures how far the trial subspace fails to be invariant under the original operator. The exact subspace is invariant under the operator we want to understand. The trial subspace is the space produced by an algorithm, approximation, measurement, or a nearby operator. The residual will record what the target operator does to trial vectors that the trial space cannot explain internally."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Choose orthonormal coordinates for the trial space",
+      "eyebrow": "G2 · 107000 · first-pass outline",
+      "lead": "Let A be a self-adjoint operator on an ambient finite-dimensional Hilbert space H.",
+      "body": [
+        "Let F be a lower-dimensional coordinate space. Choose an isometric linear map E from F into H. Its columns are orthonormal trial vectors, and the range of E is the trial subspace V. The equation E adjoint E equals the identity says that E preserves the lengths and inner products of trial-coordinate vectors. The ambient projection onto V is P equals E E adjoint. For any ambient vector z, E adjoint z contains the trial coordinates of its projection. Applying E again returns the component of z inside V. Thus P z equals E E adjoint z. The complementary projection is the identity minus P."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Compress A to obtain the Ritz operator",
+      "eyebrow": "G2 · 107000 · first-pass outline",
+      "lead": "Define the compressed or Ritz operator M as E adjoint A E.",
+      "body": [
+        "This is an operator on F. Because A is self-adjoint, M is self-adjoint too. The compression answers a limited question: if we start with a trial vector E x, apply A, then retain only the component in V, which trial coordinates do we obtain? The answer is M x. We should not confuse this compression with the whole action of A. The vector A E x can have a component outside V. Exactly that missing component is the residual. Define R to be A E minus E M. Its input is a trial-coordinate vector x and its output is an ambient vector. In a matrix representation, its columns are the eigen-equation defects of the chosen trial basis."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Derive the residual's projection formula",
+      "eyebrow": "G2 · 107000 · first-pass outline",
+      "lead": "Since M equals E adjoint A E, substitute it into the definition of R.",
+      "body": [
+        "The result is A E minus E E adjoint A E. Factor out A E on the right. We get R equals the identity minus P, composed with A E. Thus the residual is simply the part of A E that escapes V. In particular, R vanishes exactly when A maps every vector in V back into V. For a self-adjoint operator, that means V is reducing: its orthogonal complement is invariant as well. This gives a concrete diagnostic for approximate invariant subspaces. Instead of inspecting every vector in V, compute the norm of the residual map. The operator norm of R is the largest escape length among unit trial-coordinate inputs."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "A worked two-dimensional example",
+      "eyebrow": "G2 · 107000 · first-pass outline",
+      "lead": "Consider the real symmetric matrix with first row zero, one, and second row one, three.",
+      "body": [
+        "Choose the horizontal axis as our one-dimensional trial space. E sends a scalar t to t times the first basis vector. The Ritz operator is multiplication by the upper-left matrix entry, which is zero. But A applied to the horizontal unit vector is the vertical unit vector. Therefore R sends one to the vertical unit vector. Its norm is one. The trial space is not invariant. Importantly, the residual is orthogonal to the trial line as Galerkin orthogonality predicts. If we instead choose a normalized eigenvector of A as our trial vector, the compressed scalar equals its exact eigenvalue and R becomes zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A residual depends on the chosen trial operator",
+      "eyebrow": "G2 · 107000 · first-pass outline",
+      "lead": "The Ritz operator is natural, but sometimes the numerical method supplies a separate self-adjoint trial operator A zero.",
+      "body": [
+        "Then we may define a more general residual R zero equals A E minus E A zero. Insert and subtract E M. We obtain a decomposition into two terms: the perpendicular escape R, and the trial-space discrepancy E times M minus A zero. The two terms are orthogonal on every trial vector. The first lies in V perpendicular, while the second lies in V. Pythagoras therefore gives a sum-of-squares formula for the residual's output length. If A zero equals M, the internal discrepancy disappears."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Make the exact subspace explicit",
+      "eyebrow": "G2 · 107000 · first-pass outline",
+      "lead": "Now let U be the exact target subspace.",
+      "body": [
+        "Its orthogonal projection is Q. Because A is self-adjoint and U is reducing, we may choose orthonormal coordinate maps F zero for U and F one for its orthogonal complement. These satisfy F zero F zero adjoint plus F one F one adjoint equals the identity. They give the two exact blocks of A. The residual R, by contrast, is computed from E and A zero. It does not need to lie in the exact complement U perpendicular. Galerkin orthogonality places the Ritz residual in the complement of V, which is usually a different subspace. This distinction is essential. That component is the right-hand side of a Sylvester equation."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "What remains true in infinite dimensions",
+      "eyebrow": "G2 · 107000 · first-pass outline",
+      "lead": "The formulas for projections and compressions remain valid for bounded self-adjoint operators on Hilbert spaces.",
+      "body": [
+        "If A is unbounded, writing A E requires that E send the trial operator's domain into the domain of A. We also need a bounded residual extending the algebraic difference on that common domain. For the unbounded case, domain inclusion only makes the difference A E minus E A zero meaningful on the trial-operator domain. We must separately verify that the difference extends boundedly and, when applying a closed-operator Sylvester estimate, that the complementary overlap respects the domain of the unwanted exact block."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 107000 · conclusion",
+      "lead": "Its solution measures the trial vectors that leak out of the selected spectral subspace, and the spectral gap controls their size.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "g2-146000-rectangular-singular-subspace-bounds",
+  "title": "Rectangular singular-subspace bounds",
+  "subtitle": "G2 lecture 146000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:146000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/146000-rectangular-singular-subspace-bounds.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 146000 · first-pass outline",
+      "lead": "The original Davis–Kahan theorems concern self-adjoint operators and their spectral subspaces.",
+      "body": [
+        "Many data matrices are rectangular, and their most informative subspaces are spanned by left or right singular vectors instead of eigenvectors of the original map. Rectangular singular-subspace perturbation can be reduced to self-adjoint spectral theory in two ways: Hermitian dilation and positive Gram operators."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "One rectangular map, two subspaces",
+      "eyebrow": "G2 · 146000 · first-pass outline",
+      "lead": "Let A map a q-dimensional input space to a p-dimensional output space.",
+      "body": [
+        "Its singular-value decomposition pairs a right singular vector v with a left singular vector u and a nonnegative singular value sigma. The defining equations say that applying A to v gives sigma times u, and applying the adjoint of A to u gives sigma times v. The right singular vectors live in the input space. The left singular vectors live in the output space. If the two spaces have different dimensions, even their ambient geometries differ. We must therefore choose explicitly which subspace error we want to estimate. Let A hat equal A plus a rectangular perturbation D."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Perturbing the right Gram operator",
+      "eyebrow": "G2 · 146000 · first-pass outline",
+      "lead": "Write G for A adjoint A and G hat for A hat adjoint A hat.",
+      "body": [
+        "Expand A hat as A plus D. Then G hat minus G equals A adjoint D plus D adjoint A plus D adjoint D. Take operator norms. The first two terms are at most the product of the norms of A and D. The last is at most the square of the norm of D. Consequently the Gram perturbation norm is bounded by two times the norm of A, plus the norm of D, all multiplied by the norm of D. If the largest singular value of A is sigma one, its operator norm is sigma one. Thus the bound is the quantity two sigma one plus perturbation norm, multiplied by perturbation norm. The same calculation works for the left Gram operator."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "The squared spectral gap",
+      "eyebrow": "G2 · 146000 · first-pass outline",
+      "lead": "Suppose we select a consecutive block of singular values, from index r through index s.",
+      "body": [
+        "They correspond to an eigenvalue block of G consisting of their squares. To separate the selected block from the other right Gram eigenvalues, we need gaps at its upper and lower boundaries. The natural denominator is the smaller of these two squared-singular-value gaps. For example, if the singular values are five, three, and one, and we select the middle one, the squared eigenvalues are twenty-five, nine, and one. The upper squared gap is sixteen, and the lower gap is eight. The relevant boundary separation is eight. This may look different from a gap between singular values themselves. It is."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Passing from Gram perturbation to sine bounds",
+      "eyebrow": "G2 · 146000 · first-pass outline",
+      "lead": "Apply the self-adjoint perturbation framework to G and G hat.",
+      "body": [
+        "Under a positive population boundary gap Delta and the hypotheses identifying the selected singular blocks, a Frobenius principal-sine estimate can be written in terms of the Gram perturbation. The resulting rectangular singular-subspace estimate has a factor two multiplying the quantity two sigma one plus the norm of D. That quantity is then multiplied by the smaller of square root of the selected block dimension times the operator norm of D, and the Frobenius norm of D, and divided by Delta."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "A concrete two-by-three calculation",
+      "eyebrow": "G2 · 146000 · first-pass outline",
+      "lead": "Take a two-by-three matrix whose first row is three, zero, zero, and whose second row is zero, one, zero.",
+      "body": [
+        "Its nonzero singular values are three and one. The right Gram operator is diagonal with eigenvalues nine, one, and zero. The left Gram operator is diagonal with eigenvalues nine and one. Now perturb only the entry in the first row and second column by a small epsilon. This is a rectangular change of operator norm equal to the absolute value of epsilon. Compute the new right Gram matrix. Its first two coordinates have entries nine, three epsilon, three epsilon, and one plus epsilon squared. The third coordinate remains zero."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "The Hermitian dilation gives another route",
+      "eyebrow": "G2 · 146000 · first-pass outline",
+      "lead": "There is a second construction.",
+      "body": [
+        "Form a square self-adjoint block operator on output plus input space, with zero diagonal blocks, A in the upper-right block, and A adjoint in the lower-left block. This is the Hermitian dilation of A. For each positive singular triple, the vector formed from u and v, normalized by square root of two, is an eigenvector of the dilation with eigenvalue sigma. The vector formed from u and minus v has eigenvalue minus sigma. Remaining null directions have eigenvalue zero. Thus the dilation has spectral values equal to positive and negative singular values, together with zeros."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "From angles to aligned frames",
+      "eyebrow": "G2 · 146000 · first-pass outline",
+      "lead": "Suppose the selected right singular subspaces have the same dimension and are represented by orthonormal frames V and V hat.",
+      "body": [
+        "The principal sines measure subspace distance but not basis alignment. A repeated singular value permits arbitrary rotations inside its eigenspace. We therefore allow an orthogonal d-by-d matrix O that realigns the perturbed frame. A Procrustes argument bounds the Frobenius difference between V and V hat times O in terms of the Frobenius sine distance. This gives a concrete error guarantee for computed singular-vector coordinates, up to their natural orthogonal ambiguity."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 146000 · mathematical reference",
+      "lead": "Suppose the selected right singular subspaces have the same dimension and are represented by orthonormal frames V and V hat.",
+      "body": [
+        "The principal sines measure subspace distance but not basis alignment. A repeated singular value permits arbitrary rotations inside its eigenspace."
+      ],
+      "mathtex": "\\widehat G-G=A^*D+D^*A+D^*D,\\qquad\n\\|\\widehat G-G\\|\\le(2\\|A\\|+\\|D\\|)\\|D\\|.",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 146000 · conclusion",
+      "lead": "Keep three choices independent when applying rectangular perturbation estimates: the left or right singular subspace, the correct ambient squared-singular-value boundary gap, and the distinction between subspace distance and aligned-frame distance.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

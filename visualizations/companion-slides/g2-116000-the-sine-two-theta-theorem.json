@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "id": "g2-116000-the-sine-two-theta-theorem",
+  "title": "The sine-two-theta theorem",
+  "subtitle": "G2 lecture 116000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:116000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/116000-the-sine-two-theta-theorem.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 116000 · first-pass outline",
+      "lead": "A subspace perturbation can be measured by twice its principal angles.",
+      "body": [
+        "Suppose a self-adjoint operator has a reducing subspace with its spectrum ordered above the spectrum on the orthogonal complement. If the operator changes by a self-adjoint perturbation, reflection through a reducing subspace of the perturbed operator turns the angular comparison into a residual with a sharp norm bound. The conclusion says that the gap times the sine of twice the subspace angle is at most twice the perturbation size. We will derive this estimate carefully, and then explain what it can and cannot tell us about the original angle."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Set up the operators and reducing subspaces",
+      "eyebrow": "G2 · 116000 · first-pass outline",
+      "lead": "Work first in a finite-dimensional real or complex inner-product space.",
+      "body": [
+        "Let T be self-adjoint, and let U be a reducing subspace for T. Assume there are real numbers a and b, with a less than b, such that T is at least b in quadratic-form order on U and at most a on U perpendicular. This places its two diagonal blocks on opposite sides of an ordered gap delta equal to b minus a. Now perturb T to another self-adjoint operator S equal to T plus H. Choose a reducing subspace V for S. At this stage, we do not need to assume that H is off-diagonal relative to U."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Reflect through the perturbed reducing space",
+      "eyebrow": "G2 · 116000 · first-pass outline",
+      "lead": "Let J be the reflection through V, equal to twice its orthogonal projection minus the identity.",
+      "body": [
+        "Because V reduces S and S is self-adjoint, J commutes with S. Thus J S J equals S. Replace S by T plus H. We obtain J T J plus J H J equals T plus H. Rearranging gives J T J minus T equal to H minus J H J. The norm of J H J equals the norm of H in every unitarily invariant norm because J is unitary. The triangle inequality therefore yields that the norm of J T J minus T is at most twice the norm of H. This is the mirror defect bound. It is the only place where the perturbation appears on the right side of our proof."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "What is the reflected spectral subspace?",
+      "eyebrow": "G2 · 116000 · first-pass outline",
+      "lead": "Define T prime as J T J.",
+      "body": [
+        "Since J is an isometry and U reduces T, the reflected subspace J U also reduces T prime. The reflected complement J U perpendicular reduces T prime as well. Furthermore, the quadratic-form spectral bounds are preserved by this unitary conjugation. T prime has the same upper and lower block spectra as T, merely transported by J. Thus the single-angle sine theorem can be applied to a suitable crossed pair of reducing subspaces: one belonging to T and the other to T prime. One block lies above b, the other below a, so the gap remains delta. The resulting cross-projection norm is bounded by the norm of T prime minus T divided by delta."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Put the two inequalities together",
+      "eyebrow": "G2 · 116000 · first-pass outline",
+      "lead": "The single-angle theorem for the reflected pair yields delta times the norm of the sine of twice theta at most the norm of the mirror defect J T J minus T.",
+      "body": [
+        "The mirror defect bound yields that this norm is at most twice the norm of H. Combining them gives the result: delta times the unitarily invariant norm of the sine of twice theta is at most two times the unitarily invariant norm of the perturbation. For operator norm, this controls the largest value of sine twice a principal angle, not necessarily twice the largest angle itself. For a Frobenius or Ky Fan norm, we must account for the complete singular-value list of the ambient angle operator."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Examine a two-by-two perturbation",
+      "eyebrow": "G2 · 116000 · first-pass outline",
+      "lead": "Take the real plane with T diagonal, having entries negative one and one.",
+      "body": [
+        "Choose U to be the upper eigenspace, the vertical line. Then the quadratic-form gap is two. Let H be symmetric with zero diagonal and off-diagonal entries h. The perturbed operator S has rows negative one, h and h, one. The upper eigenvector of S rotates away from the vertical line through an angle theta satisfying tangent twice theta equals h. For now, recall the equivalent relation: sine twice theta equals the absolute value of h divided by the square root of one plus h squared. The sine-two-theta inequality reads two times sine twice theta at most twice times the absolute value of h."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "A different example shows the branch ambiguity",
+      "eyebrow": "G2 · 116000 · first-pass outline",
+      "lead": "Take two perpendicular lines U and V in the same plane.",
+      "body": [
+        "Their principal angle is ninety degrees. Sine twice that angle is zero. So the doubled-sine operator vanishes even though the projection difference has norm one, the maximum possible value. The theorem therefore cannot by itself certify that V is close to U. A small right-hand side may indicate closeness, but without information selecting the relevant branch, the same small doubled sine is consistent with an almost perpendicular pair. This is a statement about the information carried by the left-hand side, not a defect in the proof."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "Compare with the single-angle sine theorem",
+      "eyebrow": "G2 · 116000 · first-pass outline",
+      "lead": "The single-angle sine theorem typically uses a residual and a gap between a trial operator and the unwanted exact spectrum.",
+      "body": [
+        "Its angle is directed from the trial space toward the exact subspace. The sine-two-theta theorem uses a two-block form gap for one exact operator and a perturbation difference between two self-adjoint operators. Its angle is the ambient angle between two reducing subspaces. The formulas can look similar, but their inputs are different. One cannot simply substitute a residual in place of the full perturbation or replace the two-block gap with an arbitrary pairwise distance."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "The theorem we have proved",
+      "eyebrow": "G2 · 116000 · first-pass outline",
+      "lead": "We began with a self-adjoint T whose reducing subspace U lies on one side of a form gap, and a self-adjoint perturbation S with reducing subspace V.",
+      "body": [
+        "Reflection through V turned T into a nearby operator with a reflected reducing subspace. The ordinary sine theorem controlled that reflected overlap. The reflection identity identified it with the sine of twice the original angle. The result has a clean constant and accommodates arbitrary angles, but it does not select the near-zero branch. A bound on the doubled sine alone does not rule out angles close to ninety degrees."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 116000 · mathematical reference",
+      "lead": "We began with a self-adjoint T whose reducing subspace U lies on one side of a form gap, and a self-adjoint perturbation S with reducing subspace V.",
+      "body": [
+        "Reflection through V turned T into a nearby operator with a reflected reducing subspace. The ordinary sine theorem controlled that reflected overlap."
+      ],
+      "mathtex": "(b-a)\\,N(\\sin(2\\Theta(U,V)))\\le 2N(S-T).",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 116000 · conclusion",
+      "lead": "Off-diagonal perturbations with appropriately matched spectral subspaces provide one such setting.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

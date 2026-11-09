@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "id": "g2-134000-the-four-dimensional-real-counterexample",
+  "title": "The four-dimensional real counterexample",
+  "subtitle": "G2 lecture 134000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:134000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/134000-the-four-dimensional-real-counterexample.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 134000 · first-pass outline",
+      "lead": "The printed universal minimization claim of Proposition four point four fails already in a four-dimensional real inner-product space.",
+      "body": [
+        "We will construct two acute two-dimensional subspaces and an orthogonal transporter whose whole-space trace-norm displacement is smaller than that of the canonical direct rotation. Both the principal angles and the displacement singular values will be computed exactly."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "Start with an orthogonal four-by-four matrix",
+      "eyebrow": "G2 · 134000 · first-pass outline",
+      "lead": "Let U be the plane spanned by the first and second standard coordinate vectors in real four-space.",
+      "body": [
+        "Define a matrix W by taking one half of the following four-by-four sign matrix. Its first row is one, minus one, minus one, minus one. Its second row is one, one, one, minus one. Its third row is minus one, minus one, one, minus one. Its fourth row is one, minus one, one, one. The matrix is orthogonal for a simple reason: each row has four entries of magnitude one, and distinct rows have dot product zero. After multiplication by one half, each row has length one. Thus W is orthogonal. Define V to be W of U. By construction W is admissible as a transporter from U to V."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "Verify both principal angles",
+      "eyebrow": "G2 · 134000 · first-pass outline",
+      "lead": "Use the first two columns of W as an orthonormal basis of V.",
+      "body": [
+        "Their top two coordinates form the two-by-two matrix whose rows are one half times one, minus one and one half times one, one. This is the cross-Gram matrix between the standard basis of U and our chosen basis of V. Multiply this cross-Gram matrix by its transpose. The result is one half times the two-by-two identity. Hence both singular values of the cross-Gram matrix are one over square root of two. Principal cosines are precisely those singular values. Therefore both principal angles equal forty-five degrees."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Compute the competitor's displacement",
+      "eyebrow": "G2 · 134000 · first-pass outline",
+      "lead": "The special advantage of W is its own spectral decomposition.",
+      "body": [
+        "There is an orthonormal plane on which W makes a quarter-turn and an orthogonal complementary plane on which W acts as the identity. In the chosen standard coordinates, the turning plane is spanned by the normalized sums of the first and third basis vectors and of the second and fourth basis vectors. One can verify directly by applying the matrix to those two vectors that their images form a ninety-degree rotation. The eigenvalues of W, allowing complex eigenvalues to describe the real quarter-turn, are i, negative i, one, and one, where i is the imaginary unit."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Compute the direct rotation",
+      "eyebrow": "G2 · 134000 · first-pass outline",
+      "lead": "Now construct the canonical direct rotation D between U and V.",
+      "body": [
+        "Since both principal angles are forty-five degrees, the cosine–sine decomposition tells us that D is a direct sum of two forty-five-degree rotations in orthogonal principal planes. Each two-dimensional principal rotation has displacement singular values equal to two sine of twenty-two point five degrees, repeated twice. Across two principal planes, all four singular values of identity minus D equal two sine of twenty-two point five degrees. Use the half-angle identity. Two sine of twenty-two point five degrees equals the square root of the quantity two minus square root of two. This number is approximately point seven six five."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Why this does not contradict earlier propositions",
+      "eyebrow": "G2 · 134000 · first-pass outline",
+      "lead": "Let us compute the positive squared displacement and compare its Ky Fan sums.",
+      "body": [
+        "For D, all four squared displacement singular values equal two minus square root of two, approximately point five eight six. For W, the squared displacement singular values are two, two, zero, zero. At the first prefix, point five eight six is less than two. At the second, about one point one seven two is less than four. At the third, about one point seven five seven is less than four. At the fourth, about two point three four three is less than four. Thus the direct rotation really does minimize every Ky Fan sum of the squared displacement in this example."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "An equality with the projection lower bound",
+      "eyebrow": "G2 · 134000 · first-pass outline",
+      "lead": "A universal bound says that every admissible W satisfies trace norm of P minus Q no greater than trace norm of identity minus W.",
+      "body": [
+        "For each principal angle theta, the projection difference has two singular values equal to sine theta. Here there are two angles, both forty-five degrees. Therefore the four singular values of P minus Q are all one over square root of two, whose sum is two square roots of two. That is exactly the trace norm of our competitor's displacement. So the competitor is not merely better than D; it attains the universal lower bound and is a global trace-norm minimizer."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "The entire acute family",
+      "eyebrow": "G2 · 134000 · first-pass outline",
+      "lead": "The four-dimensional construction extends to every principal angle strictly between zero and ninety degrees: take two equal angles theta and choose a real orthogonal competitor with one rotation through twice theta and two fixed directions.",
+      "body": [
+        "Its singular-value distribution can differ from that of two independent direct rotations. The competitor's two nonzero displacement singular values are each twice the sine of theta. Its trace cost is four times the sine of theta. The canonical direct rotation has four singular values equal to twice the sine of half theta, so its trace cost is eight times the sine of half theta."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Closing diagnosis",
+      "eyebrow": "G2 · 134000 · first-pass outline",
+      "lead": "The counterexample uses a four-by-four orthogonal matrix, an acute source-target pair, a trace norm represented as a Ky Fan sum, and exact trigonometric calculations.",
+      "body": [
+        "It proves the negation of the universal proposition, not just a gap in an argument. The physical lesson is about where movement occurs. The canonical direct rotation spreads displacement over two prescribed principal planes. A competing real orthogonal transport can couple the planes and concentrate movement into a different two-plane. For squared cost this is expensive; for trace cost it can be cheaper."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "reference-equation",
+      "title": "The mathematical relationship",
+      "eyebrow": "G2 · 134000 · mathematical reference",
+      "lead": "The counterexample uses a four-by-four orthogonal matrix, an acute source-target pair, a trace norm represented as a Ky Fan sum, and exact trigonometric calculations.",
+      "body": [
+        "It proves the negation of the universal proposition, not just a gap in an argument. The physical lesson is about where movement occurs."
+      ],
+      "mathtex": "s(I-W)=(\\sqrt2,\\sqrt2,0,0),\\qquad\ns(I-D)=(\\sqrt{2-\\sqrt2},\\sqrt{2-\\sqrt2},\\sqrt{2-\\sqrt2},\\sqrt{2-\\sqrt2}).",
+      "layout": "equation"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 134000 · conclusion",
+      "lead": "For squared cost this is expensive; for trace cost it can be cheaper.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}

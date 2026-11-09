@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "id": "g2-078000-cyclic-decompositions-and-multiplication-models",
+  "title": "Cyclic decompositions and multiplication models",
+  "subtitle": "G2 lecture 078000 · baseline companion · needs expansion",
+  "editorial_stage": "baseline",
+  "lecture_nodes": [
+    "g2:078000"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/078000-cyclic-decompositions-and-multiplication-models.md",
+  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "slides": [
+    {
+      "id": "00-overview",
+      "title": "The problem and its setting",
+      "eyebrow": "G2 · 078000 · first-pass outline",
+      "lead": "The spectral theorem describes a self-adjoint operator through a projection-valued measure.",
+      "body": [
+        "There is also a concrete coordinate model: on a suitable space of square-integrable functions, the operator acts by multiplication by the spectral variable. The measure determines which functions and which multipliers are allowed. For example, multiplication by t on the square-integrable functions over the unit interval has continuous spectrum and no eigenvectors. The multiplication-operator model extends to general self-adjoint operators when one allows an orthogonal sum of suitable L two spaces."
+      ],
+      "layout": "opening"
+    },
+    {
+      "id": "01-overview",
+      "title": "The spectral orbit of one vector",
+      "eyebrow": "G2 · 078000 · first-pass outline",
+      "lead": "Fix a vector x in H.",
+      "body": [
+        "Consider all vectors of the form f of A applied to x, where f ranges over bounded Borel functions. Take the closure of their linear span. Call the resulting closed subspace K sub x. It contains x because the constant-one function acts as the identity. It is invariant under every bounded Borel function of A: applying g of A to f of A times x gives the vector associated with the product g times f. Because the calculus is closed under complex conjugation, K sub x is also invariant under adjoints of all these operators. Thus it is a reducing subspace. Both the subspace and its orthogonal complement are preserved by A and by its Borel calculus. Why does closure matter?"
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "02-overview",
+      "title": "A natural map from functions to vectors",
+      "eyebrow": "G2 · 078000 · first-pass outline",
+      "lead": "The vector x has a finite positive scalar spectral measure mu sub x.",
+      "body": [
+        "Take a bounded Borel function f and map it to f of A applied to x. Compute the squared norm of this vector. Using the adjoint law and the product law of functional calculus, the squared norm equals the inner product of x with the operator corresponding to the squared magnitude of f, applied to x. The spectral-integral formula turns that inner product into the integral of the squared magnitude of f against mu sub x. But that integral is precisely the squared L two norm of f. So our map from bounded Borel functions to H preserves norms, provided functions that agree almost everywhere for mu sub x are identified."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "03-overview",
+      "title": "Completing the map",
+      "eyebrow": "G2 · 078000 · first-pass outline",
+      "lead": "Bounded measurable functions are dense in L two of a finite measure.",
+      "body": [
+        "To verify this, first truncate the absolute magnitude of an arbitrary L two function at a large finite threshold. The truncated functions converge in L two by dominated convergence, since their squared errors are bounded by the original integrable squared magnitude. Therefore our isometry on bounded symbols extends uniquely by completeness to an isometric linear map from all of L two of mu sub x into H. The range of an isometry from a complete space is closed. The range contains every f of A times x for bounded Borel f, and those vectors are dense in the cyclic subspace by definition."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "04-overview",
+      "title": "Intertwining the operator",
+      "eyebrow": "G2 · 078000 · first-pass outline",
+      "lead": "An isometry of spaces would be interesting by itself, but we need it to preserve the operator's action.",
+      "body": [
+        "Under the map sending f to f of A times x, what does A do? Since the function lambda represents A under functional calculus, A applied to f of A times x equals the vector associated with lambda times f. Thus the model of A on L two is multiplication by lambda. For a bounded A, the spectral coordinate lambda is bounded on the spectral support, so multiplication by lambda is a bounded operator on L two. The map intertwines the original operator with multiplication: apply A after moving from L two to H, or multiply by lambda first and then move to H, and the results agree."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "05-overview",
+      "title": "Why one vector may not suffice",
+      "eyebrow": "G2 · 078000 · first-pass outline",
+      "lead": "Take A to be the identity on a two-dimensional Hilbert space.",
+      "body": [
+        "For any nonzero x, every f of A applied to x equals f of one times x. The cyclic subspace generated by x is only its one-dimensional span. No single vector generates the whole two-dimensional space. This is not a failure of the construction. It tells us that the eigenvalue one occurs with multiplicity two, and one copy of a scalar L two space cannot record both independent directions. A second orthogonal cyclic vector supplies a second copy. The whole space becomes the orthogonal sum of two one-dimensional multiplication models, with both copies multiplying by one."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "06-overview",
+      "title": "Constructing orthogonal cyclic pieces",
+      "eyebrow": "G2 · 078000 · first-pass outline",
+      "lead": "How do we decompose an arbitrary Hilbert space into such pieces?",
+      "body": [
+        "Start with one nonzero vector and its closed cyclic subspace. Because that subspace reduces A, its orthogonal complement also reduces A. If the complement is nonzero, choose another vector there and construct its cyclic subspace. Continue. In a finite-dimensional space this process terminates. In a separable infinite-dimensional space, an orthogonal family of nonzero closed subspaces must be countable. A careful maximality argument guarantees that choosing cyclic subspaces until no more are available gives a dense orthogonal sum. Without separability, the family of summands may have an arbitrary index set."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "07-overview",
+      "title": "The global model",
+      "eyebrow": "G2 · 078000 · first-pass outline",
+      "lead": "Each cyclic component is isometric to an L two space over its scalar spectral measure.",
+      "body": [
+        "Putting the component isometries together produces an isometric equivalence between H and a Hilbert direct sum of these L two spaces. Under this equivalence, A is coordinatewise multiplication by the spectral variable. Its spectral projections multiply each component by the indicator of the selected set. Its bounded Borel functions multiply by their scalar symbols. This is the infinite-dimensional analogue of diagonalizing a matrix. The matrix diagonal entries have become a measurable coordinate, and repeated eigenvalues have become multiple L two summands."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "08-overview",
+      "title": "Two forms of spectral multiplicity",
+      "eyebrow": "G2 · 078000 · first-pass outline",
+      "lead": "There is a distinction between an eigenvalue with several eigenvectors and a continuously distributed spectrum with several independent copies.",
+      "body": [
+        "In both cases, multiplicity counts how many independent channels carry the same spectral behavior. An atom of a scalar measure represents an eigenvalue in its cyclic component. An absolutely continuous part can represent continuum spectral mass without eigenvectors. Singular continuous behavior is also possible; the multiplication model accommodates it because the measure need not have a density. Therefore the model does not secretly assume every normal operator has an eigenbasis."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "09-overview",
+      "title": "A last calculation",
+      "eyebrow": "G2 · 078000 · first-pass outline",
+      "lead": "Return to multiplication by t on L two of the unit interval.",
+      "body": [
+        "Choose x to be the constant-one function. Its scalar spectral measure is ordinary Lebesgue measure. If f is bounded, f of A applied to x is just the function f of t. Bounded functions are dense in L two, so x is cyclic and this one component is the entire Hilbert space. This is the simplest possible instance of our theorem. Now choose x to be a function that vanishes on the left half. Its scalar spectral measure ignores that half. Every f of A applied to x still vanishes there. The cyclic subspace generated by x cannot reach functions supported on the left half."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "10-overview",
+      "title": "The multiplicative spectral model",
+      "eyebrow": "G2 · 078000 · first-pass outline",
+      "lead": "We have proved the norm-preserving correspondence between spectral symbols and a cyclic L two space, extended it by completeness, and explained the orthogonal decomposition of a general Hilbert space into cyclic pieces.",
+      "body": [
+        "The multiplication model makes the rules of bounded Borel functional calculus concrete: multiplying two spectral symbols corresponds to composing their operators, complex conjugation corresponds to taking adjoints, and essential supremum controls operator norm. Convergence requires an appropriate bounded pointwise or dominated-convergence hypothesis on the spectral-measure side; pointwise convergence alone must not be confused with convergence in operator norm."
+      ],
+      "layout": "reading"
+    },
+    {
+      "id": "closing-perspective",
+      "title": "What to retain",
+      "eyebrow": "G2 · 078000 · conclusion",
+      "lead": "Convergence requires an appropriate bounded pointwise or dominated-convergence hypothesis on the spectral-measure side; pointwise convergence alone must not be confused with convergence in operator norm.",
+      "body": [],
+      "layout": "reading"
+    }
+  ]
+}
