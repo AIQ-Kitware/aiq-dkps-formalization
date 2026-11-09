@@ -5054,5 +5054,6 @@ but its current review finds all three proposed declarations redundant. A
 Lean example using accepted `StronglyContinuousGroup.ofBoundedExp`,
 `isUnitary_ofBoundedExp`, and `isSelfAdjoint_symmetricYosidaApproximation`
 proves the SA-E22 unitary-group assertion directly, without the PR's wrappers.
-The PR's disposition is pending; this observation does not attribute the native
-bounded-group implementation to DKPS.
+The user authorized closing the PR as already covered. The connected GitHub
+app rejected the close request (403), so authenticated host closure is pending.
+This observation does not attribute the native bounded-group implementation to DKPS.
