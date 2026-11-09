@@ -818,3 +818,5 @@ The server exposes **G1 Manim** at `/`, **G2 comprehensive audio** at `/audio?tr
 Open `/learning-paths` on the lecture server to browse typed relationships between lectures and select one of four named paths. G4 is a planned Yu-Wang-Samworth path that currently reuses seven playable G2/G3 recordings and identifies six YWS-specific lectures to author. A lecture's `original_parent` records adaptation provenance; `hard_depends_on` and `soft_depends_on` refer to mathematical background, while `expands_on` and `alternative_presentation` support alternate study routes. No additional audio files are copied to define a path.
 
 The graph is generated from the current lecture inventories plus `curriculum/relationships.json` and `curriculum/g4-yws.json`. Run `python -m dkvis.presentation.course_graph` to validate it. The audit and authoring guidance are in `docs/course-graph-audit-2026-11-08.md`.
+
+Interactive curriculum graph: [graph documentation](docs/interactive-course-graph-2026-11-08.md); browse `/learning-paths` for topical clusters and typed mathematical dependencies.

@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 from collections import defaultdict
 from pathlib import Path
+from urllib.parse import quote
 
 from dkvis.presentation.paths import ROOT
 from dkvis.presentation.audio_library import SOURCE_DIRECTORY, PAPER_DIRECTORY
@@ -59,6 +60,15 @@ def build_course_graph(*, g1_directory=None, g2_directory=None, g3_directory=Non
     g3_plan = _read_json(g3_directory / 'track.json')
     g4_plan = _read_json(graph_directory / 'g4-yws.json')
     relations = _read_json(graph_directory / 'relationships.json')
+    # Curated topic relationships are stored separately so the initial audit stays readable.
+    topic_relations_path = graph_directory / 'topic-relationships.json'
+    topic_relations = _read_json(topic_relations_path) if topic_relations_path.is_file() else {'edges': []}
+    topic_path = graph_directory / 'topics.json'
+    topic_data = _read_json(topic_path) if topic_path.is_file() else None
+    if topic_relations.get('schema_version', 1) != 1:
+        raise ValueError('Unsupported topic relationship schema')
+    if topic_data is not None and topic_data.get('schema_version') != 1:
+        raise ValueError('Unsupported course topic schema')
     if relations.get('schema_version') != 1:
         raise ValueError('Unsupported course graph schema')
 
@@ -72,13 +82,27 @@ def build_course_graph(*, g1_directory=None, g2_directory=None, g3_directory=Non
             raise ValueError(f'Duplicate course node: {node_id}')
         nodes[node_id] = node
 
+    from dkvis.lectures import load_index
+    g1_index = load_index()
     g1 = []
+    g1_keys = {}
     for folder in sorted(p for p in g1_directory.iterdir() if p.is_dir() and (p/'lecture.md').is_file()):
         node_id = 'g1:' + folder.name
+        key = folder.name.split('_', 1)[-1]
+        deck = g1_index.get(key, {}).get('deck')
         insert(dict(id=node_id, title=_title_from_file(folder/'lecture.md'),
-                    track='g1', status='available', kind='presentation', url='/',
+                    track='g1', status='available', kind='presentation',
+                    url='/?deck=' + quote(deck) if deck else '/',
                     source='visualizations/lectures/' + folder.name + '/lecture.md'))
         g1.append(node_id)
+        g1_keys[key] = node_id
+    # Reuse the organizer's authored prerequisite list for the Manim presentations.
+    # They are suggested preparatory lectures, not hard dependencies on listening order.
+    for key, node_id in g1_keys.items():
+        for parent in g1_index.get(key, {}).get('requires', []):
+            if parent in g1_keys:
+                edges.append(dict(from_=node_id, to=g1_keys[parent], type='soft_depends_on',
+                                  why='The Manim syllabus recommends this background presentation.'))
     tracks.append(dict(id='g1', title='G1 - Manim presentations', status='available',
                        summary='Visual lecture presentations', path=g1))
 
@@ -119,11 +143,43 @@ def build_course_graph(*, g1_directory=None, g2_directory=None, g3_directory=Non
     tracks.append(dict(id='g4', title=g4_plan['title'], status='planned',
                        summary=g4_plan['summary'], path=g4_plan['path']))
 
-    for triple in relations['edges']:
-        if not isinstance(triple, list) or len(triple) != 3:
-            raise ValueError(f'Expected [source, relation, target]: {triple}')
-        source, relation, target = triple
-        edges.append(dict(from_=source, to=target, type=relation))
+    for triple in [*relations['edges'], *topic_relations['edges']]:
+        if not isinstance(triple, list) or len(triple) not in (3, 4):
+            raise ValueError(f'Expected [source, relation, target, optional reason]: {triple}')
+        source, relation, target = triple[:3]
+        reason = triple[3] if len(triple) == 4 else None
+        if reason is not None and (not isinstance(reason, str) or not reason.strip()):
+            raise ValueError(f'Invalid relationship explanation: {triple}')
+        edges.append(dict(from_=source, to=target, type=relation, why=reason))
+
+    topics = []
+    if topic_data is not None:
+        topics = topic_data['topics']
+        topic_ids = {topic['id'] for topic in topics}
+        if len(topic_ids) != len(topics):
+            raise ValueError('Duplicate course topic')
+        assigned = topic_data['g2_assignments']
+        if set(assigned) != {node_id for node_id in nodes if node_id.startswith('g2:')}:
+            raise ValueError('Topic assignments must cover every G2 lecture')
+        g1_assigned = topic_data['g1_assignments']
+        if set(g1_assigned) != {node_id for node_id in nodes if node_id.startswith('g1:')}:
+            raise ValueError('Topic assignments must cover every G1 presentation')
+        for node_id, node in nodes.items():
+            if node['track'] == 'g2':
+                topic = assigned[node_id]
+            elif node['track'] == 'g1':
+                topic = g1_assigned[node_id]
+            elif node['track'] == 'g3':
+                topic = topic_data.get('g3_overrides', {}).get(node_id)
+                if topic is None:
+                    parent = next((e['to'] for e in edges
+                                   if e['from_'] == node_id and e['type'] == 'original_parent'), None)
+                    topic = assigned[parent] if parent else 'orientation'
+            else:
+                topic = topic_data['g4_topic']
+            if topic not in topic_ids:
+                raise ValueError(f'Unknown topic for {node_id}: {topic}')
+            node['topic'] = topic
 
     seen = set()
     parents = set()
@@ -142,7 +198,7 @@ def build_course_graph(*, g1_directory=None, g2_directory=None, g3_directory=Non
             if source in parents:
                 raise ValueError(f'Multiple original parents for {source}')
             parents.add(source)
-        normalized.append({'from': source, 'type': relation, 'to': target})
+        normalized.append({'from': source, 'type': relation, 'to': target, **({'why': edge['why']} if edge.get('why') else {})})
     for track in tracks:
         if len(track['path']) != len(set(track['path'])):
             raise ValueError(f'Duplicate path member in {track["id"]}')
@@ -154,7 +210,7 @@ def build_course_graph(*, g1_directory=None, g2_directory=None, g3_directory=Non
     for track in tracks:
         track['available_count'] = sum(nodes[node]['status'] == 'available' for node in track['path'])
         track['planned_count'] = sum(nodes[node]['status'] != 'available' for node in track['path'])
-    return {'schema_version': 1, 'nodes': nodes, 'edges': normalized, 'tracks': tracks,
+    return {'schema_version': 1, 'nodes': nodes, 'edges': normalized, 'tracks': tracks, 'topics': topics,
             'relations': {
                 'hard_depends_on': 'Required mathematical background for the proof; the lecture still defines what it uses.',
                 'soft_depends_on': 'Helpful preparation, not required listening.',
@@ -176,7 +232,8 @@ def connections(graph, node_id):
         other = edge['to'] if edge['from'] == node_id else edge['from']
         result.append(dict(type=edge['type'], direction='outgoing' if edge['from'] == node_id else 'incoming',
                            node_id=other, title=graph['nodes'][other]['title'],
-                           status=graph['nodes'][other]['status'], url=graph['nodes'][other]['url']))
+                           status=graph['nodes'][other]['status'], url=graph['nodes'][other]['url'],
+                           **({'why': edge['why']} if edge.get('why') else {})))
     return result
 
 if __name__ == '__main__':

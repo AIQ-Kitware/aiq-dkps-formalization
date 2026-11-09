@@ -1,0 +1,1668 @@
+{
+  "schema_version": 1,
+  "description": "Individually curated mathematical prerequisite and concept links; four-column rows include the reason for each edge. Dependency arrows point from the topic using a concept to the supporting topic.",
+  "edges": [
+    [
+      "g2:001000",
+      "soft_depends_on",
+      "g2:000000",
+      "Linear maps supply the coordinate-free operator language of perturbation theory"
+    ],
+    [
+      "g2:002000",
+      "soft_depends_on",
+      "g2:001000",
+      "Operator estimates use norms on the domain and codomain"
+    ],
+    [
+      "g2:003000",
+      "hard_depends_on",
+      "g2:002000",
+      "The Cauchy property is expressed using the metric induced by the norm"
+    ],
+    [
+      "g2:004000",
+      "hard_depends_on",
+      "g2:001000",
+      "Bounded linear operators are linear maps between normed spaces"
+    ],
+    [
+      "g2:004000",
+      "hard_depends_on",
+      "g2:002000",
+      "The operator norm requires norms on both spaces"
+    ],
+    [
+      "g2:005000",
+      "hard_depends_on",
+      "g2:004000",
+      "The bounded-operator algebra uses composition and the operator norm"
+    ],
+    [
+      "g2:006000",
+      "hard_depends_on",
+      "g2:004000",
+      "Continuous functionals are bounded linear maps to the scalar field"
+    ],
+    [
+      "g2:007000",
+      "soft_depends_on",
+      "g2:001000",
+      "Complex scalars change the meaning of linearity and spectral assertions"
+    ],
+    [
+      "g2:008000",
+      "hard_depends_on",
+      "g2:005000",
+      "The resolvent is an inverse in the bounded-operator algebra"
+    ],
+    [
+      "g2:009000",
+      "hard_depends_on",
+      "g2:007000",
+      "Complex polarization uses scalar conjugation"
+    ],
+    [
+      "g2:010000",
+      "hard_depends_on",
+      "g2:009000",
+      "Hilbert geometry is built from inner products"
+    ],
+    [
+      "g2:010000",
+      "soft_depends_on",
+      "g2:003000",
+      "The Hilbert-space definition includes completeness"
+    ],
+    [
+      "g2:011000",
+      "hard_depends_on",
+      "g2:010000",
+      "Orthogonal projection uses completeness and orthogonal complements"
+    ],
+    [
+      "g2:012000",
+      "hard_depends_on",
+      "g2:006000",
+      "Riesz representation converts bounded functionals to vectors"
+    ],
+    [
+      "g2:012000",
+      "hard_depends_on",
+      "g2:010000",
+      "The adjoint is defined through the inner product"
+    ],
+    [
+      "g2:013000",
+      "hard_depends_on",
+      "g2:012000",
+      "Self-adjointness and normality use operator adjoints"
+    ],
+    [
+      "g2:014000",
+      "hard_depends_on",
+      "g2:013000",
+      "Isometry and coisometry identities use the adjoint"
+    ],
+    [
+      "g2:015000",
+      "hard_depends_on",
+      "g2:013000",
+      "Reducing subspaces are invariant for both an operator and its adjoint"
+    ],
+    [
+      "g2:016000",
+      "hard_depends_on",
+      "g2:011000",
+      "Block decompositions use orthogonal projections"
+    ],
+    [
+      "g2:016000",
+      "soft_depends_on",
+      "g2:015000",
+      "Reducing subspaces make operator blocks diagonal"
+    ],
+    [
+      "g2:017000",
+      "hard_depends_on",
+      "g2:012000",
+      "Analysis and synthesis maps are adjoints of one another"
+    ],
+    [
+      "g2:018000",
+      "hard_depends_on",
+      "g2:017000",
+      "Gram operators are compositions of analysis and synthesis maps"
+    ],
+    [
+      "g2:019000",
+      "hard_depends_on",
+      "g2:018000",
+      "The frame operator is built from Gram and synthesis maps"
+    ],
+    [
+      "g2:020000",
+      "hard_depends_on",
+      "g2:011000",
+      "Coordinate embeddings of a subspace rely on orthogonal projection"
+    ],
+    [
+      "g2:020000",
+      "soft_depends_on",
+      "g2:019000",
+      "Parseval identities explain the frame isometry"
+    ],
+    [
+      "g2:021000",
+      "hard_depends_on",
+      "g2:020000",
+      "The Rayleigh-Ritz compression needs an isometric trial-space embedding"
+    ],
+    [
+      "g2:022000",
+      "hard_depends_on",
+      "g2:018000",
+      "Overlaps between frames are represented by cross-Gram operators"
+    ],
+    [
+      "g2:023000",
+      "hard_depends_on",
+      "g2:018000",
+      "The rectangular Gram construction yields positive operators on each side"
+    ],
+    [
+      "g2:024000",
+      "hard_depends_on",
+      "g2:001000",
+      "Eigenvectors and eigenspaces are defined through a linear map"
+    ],
+    [
+      "g2:025000",
+      "hard_depends_on",
+      "g2:024000",
+      "Hermitian eigenanalysis uses eigenvectors and eigenvalues"
+    ],
+    [
+      "g2:025000",
+      "hard_depends_on",
+      "g2:013000",
+      "Self-adjointness is the Hilbert-space form of Hermitian symmetry"
+    ],
+    [
+      "g2:026000",
+      "hard_depends_on",
+      "g2:025000",
+      "The finite spectral theorem diagonalizes Hermitian matrices"
+    ],
+    [
+      "g2:027000",
+      "hard_depends_on",
+      "g2:026000",
+      "Rayleigh quotients decompose against spectral eigenspaces"
+    ],
+    [
+      "g2:028000",
+      "hard_depends_on",
+      "g2:027000",
+      "Courant-Fischer characterizes eigenvalues using extrema of Rayleigh quotients"
+    ],
+    [
+      "g2:029000",
+      "hard_depends_on",
+      "g2:028000",
+      "Weyl inequalities use eigenvalue min-max characterizations"
+    ],
+    [
+      "g2:030000",
+      "hard_depends_on",
+      "g2:026000",
+      "Spectral projections are sums of eigenspace projections"
+    ],
+    [
+      "g2:031000",
+      "hard_depends_on",
+      "g2:030000",
+      "Separated spectral sets define the invariant subspaces being compared"
+    ],
+    [
+      "g2:031000",
+      "soft_depends_on",
+      "g2:029000",
+      "Eigenvalue perturbation inequalities help distinguish ordered gaps"
+    ],
+    [
+      "g2:032000",
+      "hard_depends_on",
+      "g2:026000",
+      "Finite functional calculus applies scalar functions to eigenvalues"
+    ],
+    [
+      "g2:033000",
+      "hard_depends_on",
+      "g2:009000",
+      "Quadratic form positivity is defined using inner products"
+    ],
+    [
+      "g2:033000",
+      "soft_depends_on",
+      "g2:013000",
+      "Positive operators are self-adjoint"
+    ],
+    [
+      "g2:034000",
+      "hard_depends_on",
+      "g2:033000",
+      "The positive square root uses operator positivity"
+    ],
+    [
+      "g2:035000",
+      "hard_depends_on",
+      "g2:034000",
+      "Operator modulus is the positive square root of the adjoint product"
+    ],
+    [
+      "g2:036000",
+      "hard_depends_on",
+      "g2:035000",
+      "Singular values are the eigenvalues of the operator modulus"
+    ],
+    [
+      "g2:036000",
+      "soft_depends_on",
+      "g2:026000",
+      "An SVD is obtained from spectral eigenvectors"
+    ],
+    [
+      "g2:037000",
+      "hard_depends_on",
+      "g2:036000",
+      "Polar decomposition separates singular magnitudes from a partial isometry"
+    ],
+    [
+      "g2:038000",
+      "hard_depends_on",
+      "g2:037000",
+      "Polar uniqueness depends on support and kernel matching"
+    ],
+    [
+      "g2:039000",
+      "hard_depends_on",
+      "g2:005000",
+      "The exponential is defined by a norm-convergent operator power series"
+    ],
+    [
+      "g2:040000",
+      "hard_depends_on",
+      "g2:039000",
+      "Skew-adjoint generators yield unitary exponentials"
+    ],
+    [
+      "g2:040000",
+      "hard_depends_on",
+      "g2:013000",
+      "Skew-adjointness is expressed using adjoints"
+    ],
+    [
+      "g2:041000",
+      "hard_depends_on",
+      "g2:039000",
+      "Operator sine and cosine are defined from power series"
+    ],
+    [
+      "g2:042000",
+      "hard_depends_on",
+      "g2:022000",
+      "The cross-Gram matrix records overlaps of orthonormal frames"
+    ],
+    [
+      "g2:042000",
+      "hard_depends_on",
+      "g2:036000",
+      "Principal angles are recovered from singular values"
+    ],
+    [
+      "g2:043000",
+      "hard_depends_on",
+      "g2:042000",
+      "Cosine and sine operators encode the principal-angle spectrum"
+    ],
+    [
+      "g2:043000",
+      "hard_depends_on",
+      "g2:011000",
+      "Cross projections separate in-subspace and orthogonal components"
+    ],
+    [
+      "g2:044000",
+      "hard_depends_on",
+      "g2:043000",
+      "The cosine-sine decomposition extends principal-angle blocks"
+    ],
+    [
+      "g2:045000",
+      "hard_depends_on",
+      "g2:044000",
+      "The two-projection decomposition splits generic two-plane blocks"
+    ],
+    [
+      "g2:046000",
+      "hard_depends_on",
+      "g2:045000",
+      "Positive cosine and sine operators arise from the Halmos blocks"
+    ],
+    [
+      "g2:047000",
+      "hard_depends_on",
+      "g2:043000",
+      "Acuteness is controlled by the maximal principal angle"
+    ],
+    [
+      "g2:048000",
+      "hard_depends_on",
+      "g2:047000",
+      "The intertwiners require an acute pair of projections"
+    ],
+    [
+      "g2:049000",
+      "hard_depends_on",
+      "g2:048000",
+      "Canonical direct rotation is constructed from the intertwining unitary"
+    ],
+    [
+      "g2:050000",
+      "hard_depends_on",
+      "g2:045000",
+      "Nonacute projection pairs carry defect spaces"
+    ],
+    [
+      "g2:050000",
+      "soft_depends_on",
+      "g2:049000",
+      "The canonical construction is first defined in the acute case"
+    ],
+    [
+      "g2:051000",
+      "hard_depends_on",
+      "g2:050000",
+      "Classification includes the right-angle defect spaces"
+    ],
+    [
+      "g2:051000",
+      "soft_depends_on",
+      "g2:036000",
+      "Compactness quantizes the nonzero angle singular spectrum"
+    ],
+    [
+      "g2:052000",
+      "hard_depends_on",
+      "g2:036000",
+      "Singular-value min-max principles operate on the singular spectrum"
+    ],
+    [
+      "g2:052000",
+      "soft_depends_on",
+      "g2:028000",
+      "They parallel the Hermitian eigenvalue min-max argument"
+    ],
+    [
+      "g2:053000",
+      "hard_depends_on",
+      "g2:052000",
+      "Best low-rank approximation is controlled by the tail singular values"
+    ],
+    [
+      "g2:054000",
+      "hard_depends_on",
+      "g2:052000",
+      "Ky Fan norms sum the leading singular values"
+    ],
+    [
+      "g2:055000",
+      "hard_depends_on",
+      "g2:054000",
+      "Weak majorization compares every leading Ky Fan sum"
+    ],
+    [
+      "g2:056000",
+      "hard_depends_on",
+      "g2:055000",
+      "Convex symmetric functions descend through majorization"
+    ],
+    [
+      "g2:057000",
+      "hard_depends_on",
+      "g2:036000",
+      "Schatten norms aggregate singular values"
+    ],
+    [
+      "g2:058000",
+      "hard_depends_on",
+      "g2:055000",
+      "Unitarily invariant norm bounds follow weak majorization"
+    ],
+    [
+      "g2:058000",
+      "soft_depends_on",
+      "g2:057000",
+      "Schatten norms give important norm-class examples"
+    ],
+    [
+      "g2:059000",
+      "hard_depends_on",
+      "g2:058000",
+      "Rectangular unitary invariance uses singular-value padding"
+    ],
+    [
+      "g2:060000",
+      "hard_depends_on",
+      "g2:058000",
+      "Pinching estimates are unitarily invariant norm inequalities"
+    ],
+    [
+      "g2:060000",
+      "soft_depends_on",
+      "g2:016000",
+      "Pinching acts on block operator decompositions"
+    ],
+    [
+      "g2:061000",
+      "hard_depends_on",
+      "g2:033000",
+      "Quadratic form comparisons yield singular-value comparisons"
+    ],
+    [
+      "g2:061000",
+      "hard_depends_on",
+      "g2:052000",
+      "The comparison is formulated through singular-value min-max bounds"
+    ],
+    [
+      "g2:062000",
+      "hard_depends_on",
+      "g2:004000",
+      "Sylvester equations are identities among bounded operators"
+    ],
+    [
+      "g2:063000",
+      "hard_depends_on",
+      "g2:062000",
+      "Diagonalization reduces Sylvester equations to scalar divisions"
+    ],
+    [
+      "g2:063000",
+      "soft_depends_on",
+      "g2:026000",
+      "Eigendecompositions make entrywise solutions explicit"
+    ],
+    [
+      "g2:064000",
+      "hard_depends_on",
+      "g2:063000",
+      "Kronecker sums encode the entrywise Sylvester operator"
+    ],
+    [
+      "g2:065000",
+      "hard_depends_on",
+      "g2:062000",
+      "Ordered spectra produce a Sylvester inverse estimate"
+    ],
+    [
+      "g2:065000",
+      "hard_depends_on",
+      "g2:031000",
+      "The order hypothesis is stronger than disjoint spectra"
+    ],
+    [
+      "g2:066000",
+      "hard_depends_on",
+      "g2:040000",
+      "Unitary groups support integral representations of operator equations"
+    ],
+    [
+      "g2:067000",
+      "hard_depends_on",
+      "g2:062000",
+      "Disjoint spectral sets imply Sylvester invertibility"
+    ],
+    [
+      "g2:067000",
+      "soft_depends_on",
+      "g2:008000",
+      "Resolvents are used to represent spectral separation"
+    ],
+    [
+      "g2:068000",
+      "hard_depends_on",
+      "g2:067000",
+      "The lower-bound theorem quantifies a Sylvester inverse under separation"
+    ],
+    [
+      "g2:069000",
+      "hard_depends_on",
+      "g2:068000",
+      "The optimal constant depends on the chosen norm class"
+    ],
+    [
+      "g2:069000",
+      "soft_depends_on",
+      "g2:058000",
+      "Unitarily invariant norms differ from the operator norm"
+    ],
+    [
+      "g2:070000",
+      "hard_depends_on",
+      "g2:066000",
+      "The Hilbert-Schmidt estimate integrates a unitary group representation"
+    ],
+    [
+      "g2:070000",
+      "hard_depends_on",
+      "g2:057000",
+      "Hilbert-Schmidt geometry supplies a Hilbert norm on operators"
+    ],
+    [
+      "g2:071000",
+      "hard_depends_on",
+      "g2:062000",
+      "Spectral compression produces a Sylvester identity for off-diagonal blocks"
+    ],
+    [
+      "g2:071000",
+      "hard_depends_on",
+      "g2:021000",
+      "The compressed Ritz map appears as one Sylvester coefficient"
+    ],
+    [
+      "g2:072000",
+      "hard_depends_on",
+      "g2:010000",
+      "Infinite-dimensional examples distinguish sequence and function Hilbert spaces"
+    ],
+    [
+      "g2:073000",
+      "soft_depends_on",
+      "g2:072000",
+      "Measure theory provides the language for function-space spectral models"
+    ],
+    [
+      "g2:074000",
+      "hard_depends_on",
+      "g2:073000",
+      "Integration and L2 depend on measurable sets and functions"
+    ],
+    [
+      "g2:075000",
+      "hard_depends_on",
+      "g2:032000",
+      "Continuous functional calculus extends the finite eigenvalue recipe"
+    ],
+    [
+      "g2:075000",
+      "soft_depends_on",
+      "g2:074000",
+      "The function-space model motivates continuous spectra"
+    ],
+    [
+      "g2:076000",
+      "hard_depends_on",
+      "g2:075000",
+      "Projection-valued measures extend spectral projections to Borel sets"
+    ],
+    [
+      "g2:076000",
+      "hard_depends_on",
+      "g2:073000",
+      "Measurable sets index spectral projections"
+    ],
+    [
+      "g2:077000",
+      "hard_depends_on",
+      "g2:076000",
+      "Scalar measures come from testing a projection-valued measure against vectors"
+    ],
+    [
+      "g2:078000",
+      "hard_depends_on",
+      "g2:077000",
+      "Cyclic spectral decompositions rely on scalar measures"
+    ],
+    [
+      "g2:078000",
+      "soft_depends_on",
+      "g2:072000",
+      "Multiplication operators supply the model"
+    ],
+    [
+      "g2:079000",
+      "hard_depends_on",
+      "g2:076000",
+      "Borel functional calculus integrates scalar functions against the spectral measure"
+    ],
+    [
+      "g2:080000",
+      "hard_depends_on",
+      "g2:079000",
+      "Measurable restrictions are formed using Borel spectral projections"
+    ],
+    [
+      "g2:081000",
+      "hard_depends_on",
+      "g2:079000",
+      "Resolvents are spectral integrals of scalar reciprocal functions"
+    ],
+    [
+      "g2:082000",
+      "hard_depends_on",
+      "g2:080000",
+      "Spectral truncations approximate unbounded behavior with bounded restrictions"
+    ],
+    [
+      "g2:083000",
+      "hard_depends_on",
+      "g2:010000",
+      "Unbounded operators require a dense-domain Hilbert-space setting"
+    ],
+    [
+      "g2:084000",
+      "hard_depends_on",
+      "g2:083000",
+      "The adjoint of an unbounded operator has its own domain"
+    ],
+    [
+      "g2:085000",
+      "hard_depends_on",
+      "g2:084000",
+      "The Hellinger-Toeplitz theorem explains why domain discipline is unavoidable"
+    ],
+    [
+      "g2:086000",
+      "hard_depends_on",
+      "g2:083000",
+      "Coercivity and resolvent bounds apply on the correct operator domain"
+    ],
+    [
+      "g2:086000",
+      "soft_depends_on",
+      "g2:081000",
+      "The bounded spectral integral offers an analogous resolvent calculation"
+    ],
+    [
+      "g2:087000",
+      "hard_depends_on",
+      "g2:086000",
+      "Cayley transforms use resolvent shifts"
+    ],
+    [
+      "g2:087000",
+      "soft_depends_on",
+      "g2:040000",
+      "Unitary transforms emerge from self-adjointness"
+    ],
+    [
+      "g2:088000",
+      "hard_depends_on",
+      "g2:087000",
+      "The unbounded spectral theorem follows the Cayley/functional-calculus construction"
+    ],
+    [
+      "g2:088000",
+      "hard_depends_on",
+      "g2:079000",
+      "Borel spectral calculus explains the spectral representation"
+    ],
+    [
+      "g2:089000",
+      "hard_depends_on",
+      "g2:088000",
+      "Reducing domains are defined using the unbounded spectral projections"
+    ],
+    [
+      "g2:090000",
+      "hard_depends_on",
+      "g2:089000",
+      "Spectral restrictions give ordered half-line bounds"
+    ],
+    [
+      "g2:090000",
+      "soft_depends_on",
+      "g2:033000",
+      "Quadratic form inequalities encode spectral order"
+    ],
+    [
+      "g2:091000",
+      "hard_depends_on",
+      "g2:088000",
+      "Yosida approximations use bounded functional calculus of unbounded operators"
+    ],
+    [
+      "g2:092000",
+      "hard_depends_on",
+      "g2:088000",
+      "Stone generators are self-adjoint unbounded operators"
+    ],
+    [
+      "g2:092000",
+      "soft_depends_on",
+      "g2:066000",
+      "Unitary-group calculus supplies motivation"
+    ],
+    [
+      "g2:093000",
+      "hard_depends_on",
+      "g2:089000",
+      "Domain-aware Sylvester identities rely on spectral cutoffs"
+    ],
+    [
+      "g2:093000",
+      "hard_depends_on",
+      "g2:071000",
+      "The block Sylvester identity survives with domain bookkeeping"
+    ],
+    [
+      "g2:094000",
+      "hard_depends_on",
+      "g2:093000",
+      "Unbounded Sylvester estimates extend domain-aware identities"
+    ],
+    [
+      "g2:094000",
+      "soft_depends_on",
+      "g2:070000",
+      "Group estimates control the Hilbert-Schmidt variant"
+    ],
+    [
+      "g2:095000",
+      "hard_depends_on",
+      "g2:036000",
+      "Compact approximation is described through singular-value behavior"
+    ],
+    [
+      "g2:096000",
+      "hard_depends_on",
+      "g2:095000",
+      "Approximation numbers quantify finite-rank approximation errors"
+    ],
+    [
+      "g2:097000",
+      "hard_depends_on",
+      "g2:096000",
+      "Infinite-dimensional Ky Fan inequalities compare approximation numbers"
+    ],
+    [
+      "g2:097000",
+      "soft_depends_on",
+      "g2:055000",
+      "The finite-dimensional analogue is weak majorization"
+    ],
+    [
+      "g2:098000",
+      "hard_depends_on",
+      "g2:097000",
+      "Symmetric ideals use Ky Fan dominance and singular sequences"
+    ],
+    [
+      "g2:099000",
+      "hard_depends_on",
+      "g2:098000",
+      "Hilbert-Schmidt and trace class are operator ideals"
+    ],
+    [
+      "g2:099000",
+      "soft_depends_on",
+      "g2:057000",
+      "Their norms extend the finite-dimensional Schatten norms"
+    ],
+    [
+      "g2:100000",
+      "hard_depends_on",
+      "g2:099000",
+      "Polar factors preserve ideal membership"
+    ],
+    [
+      "g2:100000",
+      "hard_depends_on",
+      "g2:037000",
+      "Polar decomposition supplies the partial isometry"
+    ],
+    [
+      "g2:101000",
+      "hard_depends_on",
+      "g2:098000",
+      "Ideal norm bounds apply to compressions and block sums"
+    ],
+    [
+      "g2:101000",
+      "soft_depends_on",
+      "g2:060000",
+      "Pinching illustrates these estimates in matrices"
+    ],
+    [
+      "g2:102000",
+      "hard_depends_on",
+      "g2:010000",
+      "Complexification embeds a real Hilbert space into a complex Hilbert space"
+    ],
+    [
+      "g2:103000",
+      "hard_depends_on",
+      "g2:102000",
+      "The spectral calculus of real operators is compared through complexification"
+    ],
+    [
+      "g2:103000",
+      "soft_depends_on",
+      "g2:079000",
+      "Complex Borel functional calculus supplies the model"
+    ],
+    [
+      "g2:104000",
+      "hard_depends_on",
+      "g2:103000",
+      "Real unbounded Sylvester estimates transfer via complexification"
+    ],
+    [
+      "g2:104000",
+      "hard_depends_on",
+      "g2:094000",
+      "The underlying estimate is the unbounded Sylvester bound"
+    ],
+    [
+      "g2:105000",
+      "soft_depends_on",
+      "g2:104000",
+      "Proof readiness includes real and complex scalar cases"
+    ],
+    [
+      "g2:105000",
+      "soft_depends_on",
+      "g2:101000",
+      "Ideal estimates complete the operator-norm comparison toolbox"
+    ],
+    [
+      "g2:106000",
+      "soft_depends_on",
+      "g2:105000",
+      "The theorem overview assembles the available perturbation techniques"
+    ],
+    [
+      "g2:107000",
+      "hard_depends_on",
+      "g2:021000",
+      "Trial and Ritz operators are the source of the residual"
+    ],
+    [
+      "g2:107000",
+      "hard_depends_on",
+      "g2:030000",
+      "Exact spectral subspaces are selected using projections"
+    ],
+    [
+      "g2:108000",
+      "hard_depends_on",
+      "g2:107000",
+      "The off-diagonal residual becomes a Sylvester right-hand side"
+    ],
+    [
+      "g2:108000",
+      "hard_depends_on",
+      "g2:071000",
+      "The complementary block identity supplies the algebra"
+    ],
+    [
+      "g2:109000",
+      "hard_depends_on",
+      "g2:043000",
+      "Directed sine is the norm of a cross-projection"
+    ],
+    [
+      "g2:109000",
+      "soft_depends_on",
+      "g2:023000",
+      "Its rectangular modulus can be obtained from Gram operators"
+    ],
+    [
+      "g2:110000",
+      "hard_depends_on",
+      "g2:108000",
+      "Sine-theta bounds apply a Sylvester estimate to the residual block"
+    ],
+    [
+      "g2:110000",
+      "hard_depends_on",
+      "g2:109000",
+      "The resulting operator norm is a directed principal-angle sine"
+    ],
+    [
+      "g2:111000",
+      "hard_depends_on",
+      "g2:047000",
+      "Graph parametrization uses transversality of subspaces"
+    ],
+    [
+      "g2:111000",
+      "hard_depends_on",
+      "g2:043000",
+      "Tangent angles arise from sine and cosine operators"
+    ],
+    [
+      "g2:112000",
+      "hard_depends_on",
+      "g2:111000",
+      "Tangent bounds use graph subspace geometry"
+    ],
+    [
+      "g2:112000",
+      "hard_depends_on",
+      "g2:108000",
+      "The residual block gives the governing Sylvester equation"
+    ],
+    [
+      "g2:113000",
+      "soft_depends_on",
+      "g2:110000",
+      "Sharpness examples test sine-theta constants"
+    ],
+    [
+      "g2:113000",
+      "soft_depends_on",
+      "g2:112000",
+      "Norm-class comparisons separate the tangent theorem"
+    ],
+    [
+      "g2:114000",
+      "hard_depends_on",
+      "g2:016000",
+      "Off-diagonal perturbations are block operator matrices"
+    ],
+    [
+      "g2:114000",
+      "hard_depends_on",
+      "g2:030000",
+      "The block reflection is defined relative to a spectral projection"
+    ],
+    [
+      "g2:115000",
+      "hard_depends_on",
+      "g2:114000",
+      "Reflection symmetry produces doubled-angle identities"
+    ],
+    [
+      "g2:115000",
+      "soft_depends_on",
+      "g2:041000",
+      "Operator trigonometric identities express doubled angles"
+    ],
+    [
+      "g2:116000",
+      "hard_depends_on",
+      "g2:115000",
+      "The sine-two-theta theorem uses block-reflection symmetry"
+    ],
+    [
+      "g2:116000",
+      "hard_depends_on",
+      "g2:109000",
+      "The angle side is a sine operator"
+    ],
+    [
+      "g2:117000",
+      "hard_depends_on",
+      "g2:115000",
+      "The tangent-two-theta theorem uses block-reflection symmetry"
+    ],
+    [
+      "g2:117000",
+      "hard_depends_on",
+      "g2:111000",
+      "Tangent geometry controls the graph branch"
+    ],
+    [
+      "g2:118000",
+      "hard_depends_on",
+      "g2:116000",
+      "Sine of twice an angle does not uniquely determine the angle branch"
+    ],
+    [
+      "g2:119000",
+      "hard_depends_on",
+      "g2:118000",
+      "Spectral selection resolves branch ambiguity"
+    ],
+    [
+      "g2:119000",
+      "hard_depends_on",
+      "g2:031000",
+      "The selection requires a spectral gap statement"
+    ],
+    [
+      "g2:120000",
+      "hard_depends_on",
+      "g2:119000",
+      "Small-angle certification uses spectral selection"
+    ],
+    [
+      "g2:120000",
+      "soft_depends_on",
+      "g2:047000",
+      "Acute principal-angle pairs avoid the complementary branch"
+    ],
+    [
+      "g2:121000",
+      "soft_depends_on",
+      "g2:110000",
+      "Compare sine-theta hypotheses with alternative theorem families"
+    ],
+    [
+      "g2:121000",
+      "soft_depends_on",
+      "g2:117000",
+      "Compare tangent-two-theta hypotheses with alternatives"
+    ],
+    [
+      "g2:122000",
+      "hard_depends_on",
+      "g2:058000",
+      "Whole-space norm bounds require direct-sum comparison"
+    ],
+    [
+      "g2:123000",
+      "hard_depends_on",
+      "g2:060000",
+      "Pinching through an involution is a block norm inequality"
+    ],
+    [
+      "g2:123000",
+      "hard_depends_on",
+      "g2:114000",
+      "The reflection gives the involution"
+    ],
+    [
+      "g2:124000",
+      "hard_depends_on",
+      "g2:122000",
+      "Ambient bounds compare block and whole-space norms"
+    ],
+    [
+      "g2:124000",
+      "hard_depends_on",
+      "g2:110000",
+      "The sine theorem supplies the subspace estimate"
+    ],
+    [
+      "g2:125000",
+      "hard_depends_on",
+      "g2:023000",
+      "Non-isometric frames require rectangular Gram operators"
+    ],
+    [
+      "g2:125000",
+      "hard_depends_on",
+      "g2:036000",
+      "Singular values control frame conditioning"
+    ],
+    [
+      "g2:126000",
+      "hard_depends_on",
+      "g2:070000",
+      "Weak-gap estimates use Hilbert-Schmidt Sylvester geometry"
+    ],
+    [
+      "g2:126000",
+      "hard_depends_on",
+      "g2:109000",
+      "The conclusion is a directed sine quantity"
+    ],
+    [
+      "g2:127000",
+      "hard_depends_on",
+      "g2:111000",
+      "The generalized tangent bound uses graph parametrization"
+    ],
+    [
+      "g2:127000",
+      "hard_depends_on",
+      "g2:125000",
+      "Unequal-dimensional frames require careful conditioning"
+    ],
+    [
+      "g2:128000",
+      "hard_depends_on",
+      "g2:082000",
+      "Spectral cutoff lemmas approximate unbounded operators"
+    ],
+    [
+      "g2:128000",
+      "soft_depends_on",
+      "g2:095000",
+      "Finite-rank approximations supply compact source lemmas"
+    ],
+    [
+      "g2:129000",
+      "hard_depends_on",
+      "g2:110000",
+      "The proof reconstruction assembles the single-angle sine argument"
+    ],
+    [
+      "g2:129000",
+      "hard_depends_on",
+      "g2:128000",
+      "The source-level argument uses cutoff lemmas"
+    ],
+    [
+      "g2:130000",
+      "hard_depends_on",
+      "g2:049000",
+      "Direct rotation is the candidate displacement minimizer"
+    ],
+    [
+      "g2:130000",
+      "hard_depends_on",
+      "g2:058000",
+      "The assertion depends on the chosen unitarily invariant norm"
+    ],
+    [
+      "g2:131000",
+      "hard_depends_on",
+      "g2:130000",
+      "Squared frame displacement can be compared with direct rotation"
+    ],
+    [
+      "g2:131000",
+      "hard_depends_on",
+      "g2:042000",
+      "Principal angles determine frame overlap"
+    ],
+    [
+      "g2:132000",
+      "hard_depends_on",
+      "g2:131000",
+      "Whole-space squared cost extends the frame calculation"
+    ],
+    [
+      "g2:132000",
+      "hard_depends_on",
+      "g2:054000",
+      "Ky Fan norms compare the displacement spectrum"
+    ],
+    [
+      "g2:133000",
+      "hard_depends_on",
+      "g2:132000",
+      "Unsquared ambient displacement does not follow from the squared comparison"
+    ],
+    [
+      "g2:134000",
+      "hard_depends_on",
+      "g2:133000",
+      "The four-dimensional counterexample distinguishes unsquared objectives"
+    ],
+    [
+      "g2:134000",
+      "hard_depends_on",
+      "g2:049000",
+      "The direct rotation is compared with a competing orthogonal map"
+    ],
+    [
+      "g2:135000",
+      "hard_depends_on",
+      "g2:134000",
+      "Correct theorem scopes follow from the counterexample"
+    ],
+    [
+      "g2:135000",
+      "soft_depends_on",
+      "g2:130000",
+      "Restricted optimality remains valid"
+    ],
+    [
+      "g2:136000",
+      "hard_depends_on",
+      "g2:050000",
+      "Classifying all direct rotations requires defect-space matching"
+    ],
+    [
+      "g2:136000",
+      "soft_depends_on",
+      "g2:135000",
+      "Corrected optimization statements use the classification"
+    ],
+    [
+      "g2:137000",
+      "hard_depends_on",
+      "g2:088000",
+      "The free beam is an unbounded self-adjoint differential operator"
+    ],
+    [
+      "g2:137000",
+      "hard_depends_on",
+      "g2:083000",
+      "Its boundary conditions define the operator domain"
+    ],
+    [
+      "g2:138000",
+      "hard_depends_on",
+      "g2:137000",
+      "Rayleigh-Ritz trial functions approximate beam modes"
+    ],
+    [
+      "g2:138000",
+      "hard_depends_on",
+      "g2:107000",
+      "Ritz residuals control the quality of the trial space"
+    ],
+    [
+      "g2:139000",
+      "hard_depends_on",
+      "g2:138000",
+      "Angle and Ky Fan beam estimates use the same numerical trial space"
+    ],
+    [
+      "g2:139000",
+      "soft_depends_on",
+      "g2:097000",
+      "Ky Fan dominance controls multi-angle error"
+    ],
+    [
+      "g2:140000",
+      "hard_depends_on",
+      "g2:139000",
+      "Individual beam modes are recovered from subspace estimates"
+    ],
+    [
+      "g2:140000",
+      "soft_depends_on",
+      "g2:029000",
+      "The eigenvalue gap bounds mode separation"
+    ],
+    [
+      "g2:141000",
+      "hard_depends_on",
+      "g2:069000",
+      "Distance-only spectral gaps exhibit norm-class limitations"
+    ],
+    [
+      "g2:141000",
+      "soft_depends_on",
+      "g2:031000",
+      "Ordered gaps give stronger hypotheses"
+    ],
+    [
+      "g2:142000",
+      "hard_depends_on",
+      "g2:042000",
+      "Three-subspace interactions extend pairwise principal-angle geometry"
+    ],
+    [
+      "g2:143000",
+      "hard_depends_on",
+      "g2:029000",
+      "Eigenvalue and angle perturbations are coupled"
+    ],
+    [
+      "g2:143000",
+      "soft_depends_on",
+      "g2:110000",
+      "Sine-theta bounds compare the associated subspaces"
+    ],
+    [
+      "g2:144000",
+      "hard_depends_on",
+      "g2:079000",
+      "Functional calculus stability compares functions of perturbed operators"
+    ],
+    [
+      "g2:144000",
+      "soft_depends_on",
+      "g2:143000",
+      "Joint eigenvalue motion provides spectral intuition"
+    ],
+    [
+      "g2:145000",
+      "hard_depends_on",
+      "g2:134000",
+      "The failed ambient claim motivates the real transport matching question"
+    ],
+    [
+      "g2:145000",
+      "hard_depends_on",
+      "g2:136000",
+      "Direct-rotation classification identifies admissible transports"
+    ],
+    [
+      "g2:146000",
+      "hard_depends_on",
+      "g2:036000",
+      "Rectangular singular-subspace perturbations require an SVD"
+    ],
+    [
+      "g2:146000",
+      "hard_depends_on",
+      "g2:109000",
+      "Directed sine extends to unequal-dimensional singular subspaces"
+    ],
+    [
+      "g2:147000",
+      "hard_depends_on",
+      "g2:031000",
+      "Population-only gap estimates use an unperturbed spectral gap"
+    ],
+    [
+      "g2:147000",
+      "hard_depends_on",
+      "g2:107000",
+      "The statistical result bounds a residual term"
+    ],
+    [
+      "g2:148000",
+      "hard_depends_on",
+      "g2:147000",
+      "Spectral embeddings inherit population-gap subspace guarantees"
+    ],
+    [
+      "g2:149000",
+      "hard_depends_on",
+      "g2:129000",
+      "Proof reconstruction assembles the original paper results"
+    ],
+    [
+      "g2:149000",
+      "soft_depends_on",
+      "g2:145000",
+      "Matching requires a separate optimization discussion"
+    ],
+    [
+      "g2:110000",
+      "hard_depends_on",
+      "g2:065000",
+      "The strongest sine bound needs an ordered Sylvester separation"
+    ],
+    [
+      "g2:112000",
+      "hard_depends_on",
+      "g2:065000",
+      "Tangent estimates use the correct spectral separation"
+    ],
+    [
+      "g2:116000",
+      "soft_depends_on",
+      "g2:119000",
+      "A selected angle branch can be required to interpret doubled-angle data"
+    ],
+    [
+      "g2:117000",
+      "soft_depends_on",
+      "g2:120000",
+      "Small-angle conditions select the tangent branch"
+    ],
+    [
+      "g2:124000",
+      "hard_depends_on",
+      "g2:123000",
+      "Pinching transfers component norm bounds to the ambient operator"
+    ],
+    [
+      "g2:125000",
+      "soft_depends_on",
+      "g2:059000",
+      "Zero-padding clarifies rectangular norm comparisons"
+    ],
+    [
+      "g2:126000",
+      "soft_depends_on",
+      "g2:094000",
+      "The infinite-dimensional Sylvester estimate supplies the general case"
+    ],
+    [
+      "g2:127000",
+      "hard_depends_on",
+      "g2:067000",
+      "Disjoint-spectral Sylvester theory supports the generalized bound"
+    ],
+    [
+      "g2:128000",
+      "soft_depends_on",
+      "g2:093000",
+      "Domain-aware spectral cutoffs justify limiting arguments"
+    ],
+    [
+      "g2:130000",
+      "soft_depends_on",
+      "g2:055000",
+      "Majorization compares the candidate's singular displacement data"
+    ],
+    [
+      "g2:131000",
+      "hard_depends_on",
+      "g2:022000",
+      "Cross-Gram overlap controls the sum of squared frame distances"
+    ],
+    [
+      "g2:132000",
+      "hard_depends_on",
+      "g2:122000",
+      "Whole-space blocks require an invariant norm sum comparison"
+    ],
+    [
+      "g2:133000",
+      "soft_depends_on",
+      "g2:058000",
+      "General invariant norms need not preserve unsquared minimization"
+    ],
+    [
+      "g2:134000",
+      "soft_depends_on",
+      "g2:056000",
+      "Convexity alone does not rescue the false norm-class claim"
+    ],
+    [
+      "g2:137000",
+      "soft_depends_on",
+      "g2:090000",
+      "Quadratic forms describe the beam's spectral lower bounds"
+    ],
+    [
+      "g2:138000",
+      "soft_depends_on",
+      "g2:021000",
+      "Ritz matrices encode the trial approximation"
+    ],
+    [
+      "g2:139000",
+      "soft_depends_on",
+      "g2:124000",
+      "Ambient sine estimates give a complementary error measure"
+    ],
+    [
+      "g2:141000",
+      "soft_depends_on",
+      "g2:067000",
+      "Disjoint spectral sets motivate the distance-only bound"
+    ],
+    [
+      "g2:142000",
+      "soft_depends_on",
+      "g2:055000",
+      "Majorization is a candidate language for multi-subspace angles"
+    ],
+    [
+      "g2:143000",
+      "soft_depends_on",
+      "g2:120000",
+      "Angle control can require branch selection"
+    ],
+    [
+      "g2:144000",
+      "soft_depends_on",
+      "g2:081000",
+      "Resolvents relate operator functions to spectral shifts"
+    ],
+    [
+      "g2:145000",
+      "soft_depends_on",
+      "g2:131000",
+      "Squared cost comparisons inform matching objectives"
+    ],
+    [
+      "g2:146000",
+      "soft_depends_on",
+      "g2:125000",
+      "Rectangular conditioning matters at rank boundaries"
+    ],
+    [
+      "g2:147000",
+      "soft_depends_on",
+      "g2:146000",
+      "Population gaps also have a rectangular counterpart"
+    ],
+    [
+      "g2:148000",
+      "soft_depends_on",
+      "g2:125000",
+      "Alignment may use nonorthonormal frames and conditioning"
+    ],
+    [
+      "g2:149000",
+      "soft_depends_on",
+      "g2:134000",
+      "The proposition counterexample is a separate paper result"
+    ],
+    [
+      "g2:048000",
+      "soft_depends_on",
+      "g2:014000",
+      "The intertwiner is an isometric construction on subspaces"
+    ],
+    [
+      "g2:050000",
+      "soft_depends_on",
+      "g2:014000",
+      "Defect matching concerns partial isometries"
+    ],
+    [
+      "g2:060000",
+      "soft_depends_on",
+      "g2:055000",
+      "Ky Fan sums offer an alternative pinching proof"
+    ],
+    [
+      "g2:064000",
+      "soft_depends_on",
+      "g2:023000",
+      "Matrix vectorization uses rectangular operator shapes"
+    ],
+    [
+      "g2:070000",
+      "soft_depends_on",
+      "g2:099000",
+      "Hilbert-Schmidt inner-product structure extends to operators"
+    ],
+    [
+      "g2:071000",
+      "soft_depends_on",
+      "g2:042000",
+      "The Sylvester off-diagonal block is a subspace overlap"
+    ],
+    [
+      "g2:079000",
+      "soft_depends_on",
+      "g2:074000",
+      "Borel spectral integrals require measurable function integration"
+    ],
+    [
+      "g2:091000",
+      "soft_depends_on",
+      "g2:082000",
+      "Spectral cutoffs are one approximation strategy"
+    ],
+    [
+      "g2:093000",
+      "soft_depends_on",
+      "g2:091000",
+      "Bounded approximants control domain-limited identities"
+    ],
+    [
+      "g2:108000",
+      "soft_depends_on",
+      "g2:063000",
+      "The elementary diagonal solution illustrates the block case"
+    ],
+    [
+      "g2:109000",
+      "soft_depends_on",
+      "g2:059000",
+      "Rectangular modulus and zero-padding preserve angle singular values"
+    ],
+    [
+      "g3:020000",
+      "alternative_presentation",
+      "g2:110000",
+      "A shorter statement and proof route for the sine-theta theorem"
+    ],
+    [
+      "g3:021000",
+      "alternative_presentation",
+      "g2:112000",
+      "A paper-focused treatment of the single-angle tangent theorem"
+    ],
+    [
+      "g3:022000",
+      "alternative_presentation",
+      "g2:116000",
+      "Paper-focused treatment of the doubled-sine theorem"
+    ],
+    [
+      "g3:023000",
+      "alternative_presentation",
+      "g2:117000",
+      "Paper-focused treatment of the doubled-tangent theorem"
+    ],
+    [
+      "g3:024000",
+      "alternative_presentation",
+      "g2:134000",
+      "A short route through the four-dimensional counterexample"
+    ],
+    [
+      "g3:025000",
+      "alternative_presentation",
+      "g2:145000",
+      "A short route to the real transport matching result"
+    ],
+    [
+      "g4:overview",
+      "related_to",
+      "g2:147000",
+      "Population-gap statistical perturbation is the YWS entry point"
+    ],
+    [
+      "g4:rectangular-correction",
+      "expands_on",
+      "g2:146000",
+      "The YWS rectangular result requires its rank-boundary qualification"
+    ],
+    [
+      "g4:application",
+      "expands_on",
+      "g2:148000",
+      "The statistical applications extend spectral embedding and Procrustes examples"
+    ],
+    [
+      "g1:003875_yws",
+      "alternative_presentation",
+      "g4:residual-proof",
+      "The animated explanation covers the same population-residual mechanism"
+    ],
+    [
+      "g3:003000",
+      "alternative_presentation",
+      "g2:107000",
+      "The short trial-space discussion uses the same residual construction"
+    ],
+    [
+      "g3:004000",
+      "alternative_presentation",
+      "g2:043000",
+      "The short principal-angle discussion covers the same sine and cosine operators"
+    ]
+  ]
+}

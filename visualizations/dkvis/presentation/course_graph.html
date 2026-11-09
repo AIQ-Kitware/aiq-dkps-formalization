@@ -1,57 +1,264 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DKPS learning paths</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DKPS · Course graph</title>
 <style>
-:root{color-scheme:dark;--bg:#101419;--card:#19252f;--line:#354a58;--text:#edf2f5;--muted:#b2c5ce;--accent:#a4d5fa}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,sans-serif}a{color:var(--accent)}header{padding:24px clamp(18px,4vw,48px);border-bottom:1px solid var(--line)}h1,h2,h3,p{margin:0 0 10px}h1{font-size:1.6rem}main{padding:24px clamp(18px,4vw,48px);max-width:1500px;margin:auto}.hint{color:var(--muted)}.tracks{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 20px}.tracks button,.nodes button{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px;text-align:left;cursor:pointer}.tracks button[aria-pressed=true],.nodes button[aria-pressed=true]{border-color:var(--accent);background:#243f51}.tracks button:hover,.nodes button:hover{border-color:var(--accent)}.layout{display:grid;grid-template-columns:minmax(260px,1fr) minmax(320px,1.15fr);gap:22px}.panel{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:18px;min-width:0}.nodes{list-style:none;padding:0;margin:15px 0;max-height:72vh;overflow:auto}.nodes li{margin:6px 0}.nodes button{width:100%}.number,.relation{display:block;font-size:.79rem;color:var(--accent)}.status{font-size:.8rem;color:var(--muted)}.edge{border-top:1px solid var(--line);padding:12px 0}.edge a{display:inline-block;margin-left:5px}.edge button{border:0;padding:0;background:none;color:var(--accent);text-align:left;font:inherit;cursor:pointer}.edge small{display:block;color:var(--muted)}.search{width:100%;padding:12px;background:#101a22;border:1px solid var(--line);border-radius:8px;color:var(--text)}.pill{display:inline-block;border:1px solid var(--line);border-radius:100px;padding:3px 9px;margin:3px;font-size:.82rem}.foot{margin:24px 0;color:var(--muted);font-size:.88rem}@media(max-width:860px){.layout{grid-template-columns:1fr}.nodes{max-height:350px}}
+:root{color-scheme:dark;--bg:#0d151d;--panel:#15212b;--panel-alt:#192a34;--edge:#38505d;--text:#e7f1f5;--muted:#abc0ca;--bright:#d0ecff;--focus:#ffe3a0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
+a{color:#a9d9ff}button,select,input{font:inherit}button,select,input{color:var(--text);background:#0f202c;border:1px solid var(--edge);border-radius:8px;padding:8px 10px}
+button{cursor:pointer}button:hover,select:hover{border-color:#a5d3e9}button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+header{padding:14px clamp(14px,2vw,32px);display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:space-between;border-bottom:1px solid var(--edge);background:#111d27}
+.brand{font-size:1.17rem;font-weight:680;letter-spacing:-.01em}.brand small{display:block;font-weight:400;font-size:.8rem;color:var(--muted)}nav{display:flex;gap:15px}
+main{display:grid;grid-template-columns:minmax(220px,270px) minmax(360px,1fr) minmax(260px,310px);height:calc(100dvh - 88px);min-height:590px;gap:0}
+aside{padding:17px;overflow:auto;min-width:0;background:var(--panel)}.left{border-right:1px solid var(--edge)}.right{border-left:1px solid var(--edge)}
+h1,h2,h3,p{margin:0 0 10px}h1{font-size:1.15rem}h2{font-size:1rem}h3{font-size:.89rem;margin:19px 0 7px;color:var(--bright)}.muted,small{color:var(--muted)}.eyebrow{color:var(--bright);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;font-weight:650}
+.field{display:block;margin:14px 0 0}.field span{display:block;font-size:.82rem;color:var(--muted);margin-bottom:5px}select,input[type=search]{width:100%;max-width:100%}
+.relations{display:grid;grid-template-columns:1fr;gap:3px;margin-top:9px}.relations label{display:flex;align-items:center;gap:9px;padding:5px 2px;cursor:pointer;font-size:.83rem}.relations input{accent-color:#a0d8ff}.swatch{width:20px;height:4px;border-radius:6px;display:inline-block;flex-shrink:0}
+.side-list{display:grid;gap:5px;max-height:330px;overflow:auto;margin-top:9px;padding-right:3px}.listbtn{width:100%;text-align:left;background:#122430;padding:9px;font-size:.81rem;line-height:1.35}.listbtn.active{border-color:var(--focus);background:#273a40}.listbtn b{color:var(--bright);font-weight:580}.listbtn span{display:block;color:var(--muted);font-size:.73rem}
+#graph-stage{position:relative;min-width:0;min-height:0;overflow:hidden;background:radial-gradient(circle at 55% 45%,#152a36,#0b151d 75%)}
+#graph{width:100%;height:100%;display:block;cursor:grab;touch-action:none;user-select:none}#graph.dragging{cursor:grabbing}
+.graph-header{position:absolute;left:13px;top:12px;right:13px;display:flex;gap:9px;justify-content:space-between;pointer-events:none}
+.graph-summary,.tools{background:#0b1924e8;border:1px solid #3a5564;border-radius:10px;padding:8px 11px;pointer-events:auto}.graph-summary{font-size:.8rem;max-width:60%}.graph-summary strong{display:block;font-size:.95rem}.tools{display:flex;gap:5px}.tools button{min-width:31px;padding:4px 7px}
+.graph-help{position:absolute;bottom:12px;left:13px;padding:7px 10px;color:#b5cad3;background:#0c1b25e8;border:1px solid #35515e;border-radius:8px;font-size:.72rem;pointer-events:none}
+.topic-key{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}.topic-pill{font-size:.73rem;border-radius:30px;padding:4px 7px;border:1px solid #4c5963;color:var(--text)}
+.detail{font-size:.91rem}.node-id{font-size:.78rem;color:var(--bright);font-variant-numeric:tabular-nums}.node-title{font-size:1.19rem;line-height:1.25;margin:7px 0 10px}.status{display:inline-flex;padding:2px 9px;border-radius:20px;background:#263e48;color:#d3e9f0;font-size:.75rem;margin:4px 0}.status.planned{background:#4a3531;color:#ffdbbd}.open{display:inline-block;padding:9px 12px;margin:9px 0;background:#254356;border-radius:8px;text-decoration:none;border:1px solid #6189a0}
+.connection{border-top:1px solid #3b505c;padding:10px 0}.connection button{border:0;background:none;padding:0;color:#c4e8fc;text-align:left;font-size:.86rem}.connection .relation{font-size:.75rem;font-weight:600;margin:0 0 5px}.connection .reason{color:#b3c7d0;font-size:.8rem;margin:4px 0}.connection a{font-size:.76rem}.connection .dir{color:var(--muted);font-weight:400}.empty{padding:12px;color:var(--muted)}
+svg .cluster{fill:#172632;stroke:#34515d;stroke-width:1.3}svg .cluster-name{fill:#d1e7ef;font-size:21px;font-weight:650}svg .cluster-count{fill:#9bb4c3;font-size:16px}svg .relation-line{fill:none;stroke-linecap:round;pointer-events:stroke}svg .graph-node{cursor:pointer}svg .graph-node .dot{stroke:#0c141a;stroke-width:2}svg .graph-node:focus .dot{stroke:var(--focus);stroke-width:5}svg .graph-node .node-label{fill:#ecf5f7;font-size:14px;paint-order:stroke;stroke:#111c24;stroke-width:5px;stroke-linejoin:round}svg .graph-node:hover .dot{stroke:#fff;stroke-width:4}svg .graph-node .node-tag{fill:#111a22;font-size:9px;font-weight:bold;text-anchor:middle;pointer-events:none}
+.footer{font-size:.75rem;color:var(--muted);margin-top:16px}
+@media(max-width:1200px){main{grid-template-columns:225px minmax(350px,1fr)}aside.right{grid-column:1 / -1;border-top:1px solid var(--edge);border-left:0;max-height:38vh}main{height:auto;min-height:0}#graph-stage{height:70vh}.left{height:70vh}}
+@media(max-width:740px){header{padding:12px}nav{width:100%}main{display:flex;flex-direction:column}.left{height:auto;max-height:none;border:0;border-bottom:1px solid var(--edge)}.left .relations{grid-template-columns:1fr 1fr}.left .side-list{max-height:150px}#graph-stage{height:53vh;min-height:365px}.right{max-height:none !important;overflow:visible}.graph-help{font-size:.67rem}.graph-summary{max-width:65%}}
 </style>
 </head>
 <body>
-<header><div><a href="/audio?track=g2">Audio reader</a> / <a href="/">Manim library</a></div><h1>DKPS learning paths</h1><p class="hint">A shared lecture graph. Paths reuse recordings; edges describe mathematics, alternative explanations, and provenance.</p></header>
+<header>
+ <div class="brand">DKPS · Course graph<small>Mathematical dependencies, alternative explanations, and source lineage</small></div>
+ <nav><a href="/audio?track=g2">Audio library</a><a href="/">Manim library</a></nav>
+</header>
 <main>
-<div class="tracks" id="tracks" aria-label="Select learning path"></div>
-<div class="layout">
-<section class="panel"><h2 id="pathTitle">Loading paths...</h2><p class="hint" id="pathSummary"></p><input id="search" class="search" type="search" placeholder="Find a lecture or topic" aria-label="Filter nodes"><ol class="nodes" id="pathNodes"></ol></section>
-<section class="panel" aria-label="Selected lecture and relationships"><h2 id="nodeTitle">Choose a lecture</h2><div class="hint" id="nodeMeta"></div><p id="nodeSource" class="hint"></p><p id="nodeLink"></p><h3>Connections</h3><div id="connections"></div></section>
-</div>
-<p class="foot">Hard dependence records mathematics needed for a proof, not a required listening order. Original parent records source adaptation. Planned G4 recordings are listed alongside reusable G2/G3 material; they are not yet playable.</p>
+<aside class="left" aria-label="Graph filters and learning paths">
+ <h1>Explore the mathematics</h1>
+ <label class="field"><span>Learning path</span><select id="track" aria-label="Learning path"><option value="all">All four tracks</option></select></label>
+ <label class="field"><span>Topic cluster</span><select id="topic" aria-label="Topic cluster"><option value="all">All topics</option></select></label>
+ <label class="field"><span>Graph extent</span><select id="extent" aria-label="Graph extent"><option value="1" selected>One connection away</option><option value="2">Two connections away</option><option value="all">Entire selected path / topic</option></select></label>
+ <label class="field"><span>Find a lecture</span><input id="search" type="search" placeholder="Title, theorem, number..." aria-label="Search lectures"></label>
+ <div id="search-results" class="side-list" aria-label="Lecture search results"></div>
+ <h3>Show relationships</h3><div id="relations" class="relations" aria-label="Graph relationship filters"></div>
+ <div class="footer">An arrow points from a lecture to a supporting topic. Original-parent links record source adaptations; they are not prerequisites.</div>
+</aside>
+<section id="graph-stage" aria-label="Interactive course relationship graph">
+ <svg id="graph" role="img" aria-label="Interactive lecture graph; select a node for details" xmlns="http://www.w3.org/2000/svg"></svg>
+ <div class="graph-header"><div class="graph-summary" id="summary" aria-live="polite"><strong>Loading course graph…</strong></div><div class="tools"><button id="zoom-in" title="Zoom in" aria-label="Zoom in">+</button><button id="zoom-out" title="Zoom out" aria-label="Zoom out">−</button><button id="fit" title="Fit visible graph" aria-label="Fit visible graph">Fit</button></div></div>
+ <div class="graph-help">Scroll to zoom · Drag empty space to pan · Select a node to explore</div>
+</section>
+<aside class="right" aria-label="Selected lecture details">
+ <div class="eyebrow">Selected lecture</div><div id="detail" class="detail"><p class="muted">Select a graph node to inspect its connections.</p></div>
+ <h3 id="link-heading">Related lectures</h3><div id="connections"></div>
+ <h3>Topics</h3><div id="topic-key" class="topic-key"></div>
+</aside>
 </main>
 <script>
 'use strict';
+// No external graph library: stable topic clustering and focused radial neighborhoods.
+const SVG_NS='http://www.w3.org/2000/svg';
 const $=id=>document.getElementById(id);
-let graph=null, currentTrack='g4',currentNode=null;
-function el(tag,text){const node=document.createElement(tag);if(text!==undefined)node.textContent=text;return node}
-function chooseTrack(id){const track=graph.tracks.find(x=>x.id===id);if(!track)return;currentTrack=id;
-  $('pathTitle').textContent=track.title;$('pathSummary').textContent=`${track.summary} (${track.available_count} available, ${track.planned_count} planned)`;
-  document.querySelectorAll('#tracks button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.track===id)));
-  renderPath();if(!track.path.includes(currentNode))chooseNode(track.path[0]);
-  try{history.replaceState(null,'','/learning-paths?'+new URLSearchParams({track:id,node:currentNode}))}catch{}
+const RELATIONS=[
+ ['hard_depends_on','Hard prerequisite','#e8a17d',true],
+ ['soft_depends_on','Helpful background','#a1c1d5',true],
+ ['expands_on','Expands on','#aeb3fa',true],
+ ['alternative_presentation','Alternative explanation','#8fdbb1',true],
+ ['original_parent','Original parent','#d1a4e8',false],
+ ['related_to','Conceptual connection','#cabd99',false]
+];
+const RELMAP=Object.fromEntries(RELATIONS.map(([id,label,color])=>[id,{label,color}]));
+let graph, activeNode='g2:110000', activeTrack='all', activeTopic='all', extent='1';
+let enabled=new Set(RELATIONS.filter(x=>x[3]).map(x=>x[0]));
+let currentPositions=new Map(), currentEdges=[], currentIds=new Set(), bounds=null, view=null, pan=null;
+const nodeElement=(tag,content,cls)=>{const x=document.createElement(tag);if(content!==undefined)x.textContent=content;if(cls)x.className=cls;return x};
+const svgEl=(tag,attrs={})=>{const x=document.createElementNS(SVG_NS,tag);for(const [k,v] of Object.entries(attrs))x.setAttribute(k,v);return x};
+const topicsById=()=>Object.fromEntries((graph.topics||[]).map(x=>[x.id,x]));
+const colorOf=id=>{const topic=topicsById()[graph.nodes[id]?.topic];return topic?`rgb(${topic.rgb})`:'#a4bec9'};
+const byTopic=(a,b)=>{const aa=graph.nodes[a],bb=graph.nodes[b];const i=graph.topics.findIndex(t=>t.id===aa.topic),j=graph.topics.findIndex(t=>t.id===bb.topic);return i-j||a.localeCompare(b)};
+const relationEdges=()=>graph.edges.filter(e=>enabled.has(e.type));
+const selectedTrack=()=>graph.tracks.find(t=>t.id===activeTrack);
+const pathsFor=id=>graph.tracks.filter(t=>t.path.includes(id)).map(t=>t.id.toUpperCase()).join(' · ');
+const matchingScope=()=>{
+ let ids=activeTrack==='all'?Object.keys(graph.nodes):selectedTrack().path.slice();
+ if(activeTopic!=='all')ids=ids.filter(id=>graph.nodes[id].topic===activeTopic);
+ return new Set(ids);
+};
+function visibleGraph(){
+ const edges=relationEdges(),scope=matchingScope();
+ const depth=extent==='all'?0:Number(extent);
+ let ids;
+ if(extent==='all'){ids=new Set(scope);if(!ids.has(activeNode))ids.add(activeNode)}
+ else{
+  ids=new Set([activeNode]);let frontier=new Set(ids);
+  for(let i=0;i<depth;i++){
+    const next=new Set();
+    for(const e of edges){if(frontier.has(e.from)&&!ids.has(e.to))next.add(e.to);if(frontier.has(e.to)&&!ids.has(e.from))next.add(e.from)}
+    for(const id of next)ids.add(id);frontier=next;
+  }
+  // Topic/path filters restrict exploration but never hide the selected node.
+  if(activeTopic!=='all'||activeTrack!=='all'){
+   ids=new Set([...ids].filter(id=>id===activeNode||scope.has(id)||
+     edges.some(e=>(e.from===activeNode&&e.to===id)||(e.to===activeNode&&e.from===id))));
+  }
+ }
+ return {ids,edges:edges.filter(e=>ids.has(e.from)&&ids.has(e.to))};
 }
-function renderPath(){const track=graph.tracks.find(x=>x.id===currentTrack);const q=$('search').value.toLocaleLowerCase();$('pathNodes').replaceChildren();
-  for(const [i,id] of track.path.entries()){const node=graph.nodes[id];if(!(`${id} ${node.title}`).toLocaleLowerCase().includes(q))continue;
-    const li=el('li');const b=el('button');b.dataset.node=id;b.setAttribute('aria-pressed',String(id===currentNode));
-    b.append(el('span',`${i+1}. ${id} - ${node.status}`));b.append(el('div',node.title));b.onclick=()=>chooseNode(id);li.append(b);$('pathNodes').append(li)}
+function topicCells(ids){
+ const selected=graph.topics.filter(t=>[...ids].some(id=>graph.nodes[id].topic===t.id));
+ const cols=Math.min(4,Math.max(1,Math.ceil(Math.sqrt(selected.length*1.4))));
+ return selected.map((topic,i)=>({topic,x:(i%cols)*730,y:Math.floor(i/cols)*585}));
 }
-function chooseNode(id){if(!graph.nodes[id])return;currentNode=id;const node=graph.nodes[id];$('nodeTitle').textContent=node.title;
- $('nodeMeta').textContent=`${id} - ${node.kind} - ${node.status}`;$('nodeSource').textContent=`Source: ${node.source}`;
- $('nodeLink').replaceChildren();if(node.url){const a=el('a','Open available lecture');a.href=node.url;$('nodeLink').append(a)}else $('nodeLink').textContent='Audio recording planned';
- $('connections').replaceChildren();const rows=graph.edges.filter(e=>e.from===id||e.to===id);
- if(!rows.length)$('connections').append(el('p','No curated connections yet.'));
- for(const edge of rows){const outgoing=edge.from===id;const neighbor=outgoing?edge.to:edge.from;const other=graph.nodes[neighbor];const box=el('div');box.className='edge';
- const label=el('strong',(outgoing?'': 'Inverse: ')+edge.type.replaceAll('_',' '));label.className='relation';box.append(label);
- const btn=el('button',`${other.title} (${neighbor})`);btn.onclick=()=>chooseNode(neighbor);box.append(btn);
- if(other.url){const link=el('a','Open');link.href=other.url;box.append(link)}
- box.append(el('small',graph.relations[edge.type]));$('connections').append(box)}
- renderPath();try{history.replaceState(null,'','/learning-paths?'+new URLSearchParams({track:currentTrack,node:id}))}catch{}
+function globalLayout(ids){
+ const positions=new Map(),cellW=730,cellH=585;
+ for(const {topic,x,y} of topicCells(ids)){
+  const members=[...ids].filter(id=>graph.nodes[id].topic===topic.id).sort();
+  const count=members.length,cols=Math.min(7,Math.max(2,Math.ceil(Math.sqrt(count*1.4))));
+  const cx=x+cellW/2,cy=y+cellH/2;
+  const spacingX=85,spacingY=67;
+  members.forEach((id,i)=>positions.set(id,{x:cx+(i%cols-(cols-1)/2)*spacingX,y:cy+(Math.floor(i/cols)-(Math.ceil(count/cols)-1)/2)*spacingY}));
+ }
+ return positions;
 }
-$('search').oninput=renderPath;
-fetch('/api/course-graph').then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(data=>{graph=data;
- for(const track of graph.tracks){const b=el('button',track.title);b.dataset.track=track.id;b.onclick=()=>chooseTrack(track.id);$('tracks').append(b)}
- const params=new URLSearchParams(location.search);const target=graph.tracks.find(x=>x.id===params.get('track'))?.id||'g4';
- const selected=graph.nodes[params.get('node')]?params.get('node'):graph.tracks.find(x=>x.id===target).path[0];currentNode=selected;chooseTrack(target);chooseNode(selected);
-}).catch(err=>{$('pathTitle').textContent='Could not load course graph';$('pathSummary').textContent=err.message});
+function localLayout(ids,edges){
+ const pos=new Map([[activeNode,{x:0,y:0}]]),dist=new Map([[activeNode,0]]);
+ let frontier=[activeNode];for(let step=1;step<=3;step++){
+  const next=[];for(const id of frontier)for(const e of edges){const to=e.from===id?e.to:e.to===id?e.from:null;if(to&&ids.has(to)&&!dist.has(to)){dist.set(to,step);next.push(to)}}frontier=next;
+ }
+ for(const id of ids)if(!dist.has(id))dist.set(id,3);
+ const rings=[...new Set([...dist.values()].filter(i=>i>0))].sort();
+ for(const level of rings){const members=[...ids].filter(id=>dist.get(id)===level).sort(byTopic);
+  const radius=level===1?Math.max(260,members.length*27):Math.max(610,members.length*21);
+  members.forEach((id,i)=>{const angle=-Math.PI/2+2*Math.PI*(i+.15)/members.length;pos.set(id,{x:Math.cos(angle)*radius,y:Math.sin(angle)*radius})});
+ }
+ return pos;
+}
+function updateBounds(){
+ const points=[...currentPositions.values()];if(!points.length){bounds={x:-200,y:-180,w:400,h:360};return}
+ const xs=points.map(p=>p.x),ys=points.map(p=>p.y);
+ if(extent==='all')for(const cell of topicCells(currentIds)){
+  xs.push(cell.x+8,cell.x+722);ys.push(cell.y+8,cell.y+575);
+ }
+ const x=Math.min(...xs),y=Math.min(...ys);
+ bounds={x:x-95,y:y-95,w:Math.max(380,Math.max(...xs)-x+190),h:Math.max(360,Math.max(...ys)-y+190)};
+}
+function setView(v){view=v;$('graph').setAttribute('viewBox',`${v.x} ${v.y} ${v.w} ${v.h}`)}
+function fitView(){if(bounds)setView({...bounds})}
+function zoom(factor,xx=.5,yy=.5){if(!view)return;const w=view.w/factor,h=view.h/factor;setView({x:view.x+(view.w-w)*xx,y:view.y+(view.h-h)*yy,w,h})}
+function svgPoint(ev){const rect=$('graph').getBoundingClientRect();return {x:(ev.clientX-rect.left)/rect.width,y:(ev.clientY-rect.top)/rect.height}}
+function renderGraph(resetView=true){
+ if(!graph)return;
+ const {ids,edges}=visibleGraph();currentIds=ids;currentEdges=edges;
+ currentPositions=extent==='all'?globalLayout(ids):localLayout(ids,edges);updateBounds();
+ const svg=$('graph');svg.replaceChildren();
+ const defs=svgEl('defs');for(const [type,,color] of RELATIONS){const marker=svgEl('marker',{id:`arrow-${type}`,viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:5,markerHeight:5,orient:'auto-start-reverse'});marker.append(svgEl('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:color}));defs.append(marker)}svg.append(defs);
+ const background=svgEl('g');
+ if(extent==='all'){
+  topicCells(ids).forEach(({topic,x,y})=>{
+   const idsIn=[...ids].filter(id=>graph.nodes[id].topic===topic.id);
+   const cluster=svgEl('g',{class:'topic-cluster',role:'button',tabindex:0,'aria-label':`Explore ${topic.title}`});
+   cluster.style.cursor='pointer';
+   cluster.append(svgEl('rect',{x:x+8,y:y+8,width:714,height:567,rx:22,class:'cluster'}));
+   const label=svgEl('text',{x:x+34,y:y+47,class:'cluster-name'});label.textContent=topic.title;cluster.append(label);
+   const count=svgEl('text',{x:x+34,y:y+72,class:'cluster-count'});count.textContent=`${idsIn.length} lecture${idsIn.length!==1?'s':''}`;cluster.append(count);
+   cluster.addEventListener('click',()=>{extent='all';$('extent').value='all';chooseTopic(topic.id)});
+   cluster.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();extent='all';$('extent').value='all';chooseTopic(topic.id)}});
+   background.append(cluster);
+  });
+ }
+ svg.append(background);
+ const lineGroup=svgEl('g');for(const e of edges){const from=currentPositions.get(e.from),to=currentPositions.get(e.to);if(!from||!to)continue;
+  const dist=Math.hypot(to.x-from.x,to.y-from.y)||1;
+  const ux=(to.x-from.x)/dist,uy=(to.y-from.y)/dist;
+  const x1=from.x+ux*15,y1=from.y+uy*15,x2=to.x-ux*21,y2=to.y-uy*21;
+  const strong=e.from===activeNode||e.to===activeNode;
+  const path=svgEl('path',{d:`M ${x1} ${y1} L ${x2} ${y2}`,stroke:RELMAP[e.type].color,'stroke-width':strong?2.8:1.55,'stroke-opacity':strong?.89:.34,'marker-end':`url(#arrow-${e.type})`,class:'relation-line'});
+  path.setAttribute('data-edge',`${e.from}|${e.type}|${e.to}`);
+  const title=svgEl('title');title.textContent=`${graph.nodes[e.from].title} → ${graph.nodes[e.to].title}\n${RELMAP[e.type].label}${e.why?' · '+e.why:''}`;path.append(title);lineGroup.append(path);
+ }svg.append(lineGroup);
+ const nodeGroup=svgEl('g');for(const id of ids){const node=graph.nodes[id],p=currentPositions.get(id),selected=id===activeNode,small=extent==='all'&&ids.size>65;
+  const radius=selected?19:small?9:14;
+  const group=svgEl('g',{transform:`translate(${p.x} ${p.y})`,class:'graph-node',tabindex:0,role:'button','aria-label':`${node.title}, ${id}, ${node.status}`,'data-node':id});
+  const dot=svgEl('circle',{r:radius,fill:colorOf(id),class:'dot',stroke:selected?'#ffe3a0':'#0c141a'});
+  if(node.status!=='available'){dot.setAttribute('stroke-dasharray','4 3');dot.setAttribute('stroke-width','3')}
+  group.append(dot);
+  if(selected||!small){const tag=svgEl('text',{class:'node-tag',y:3});tag.textContent=node.track.toUpperCase();group.append(tag)}
+  if(selected||!small){const label=svgEl('text',{x:radius+7,y:5,class:'node-label'});const str=node.title.length>27?node.title.slice(0,26)+'…':node.title;label.textContent=str;group.append(label)}
+  const t=svgEl('title');t.textContent=`${id}: ${node.title}`;group.append(t);
+  group.addEventListener('click',()=>chooseNode(id));group.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();chooseNode(id)}});
+  nodeGroup.append(group);
+ }svg.append(nodeGroup);
+ if(resetView)fitView();
+ $('summary').replaceChildren(nodeElement('strong',extent==='all'?'Topic map':'Connected lectures'),nodeElement('span',`${ids.size} nodes · ${edges.length} visible links · ${graph.edges.length} total links`));
+}
+function populateSearch(){if(!graph)return;const value=$('search').value.trim().toLocaleLowerCase();const candidates=activeTrack==='all'?Object.keys(graph.nodes):selectedTrack().path;
+ let matches=candidates.filter(id=>{const n=graph.nodes[id];return !value||`${id} ${n.title} ${topicsById()[n.topic]?.title||''}`.toLocaleLowerCase().includes(value)});
+ if(!value&&activeTrack==='all'){
+  const close=graph.edges.filter(e=>e.from===activeNode||e.to===activeNode).map(e=>e.from===activeNode?e.to:e.from);
+  matches=[...new Set([activeNode,...close,...matches])];
+ }
+ const container=$('search-results');container.replaceChildren();
+ for(const id of matches.slice(0,value?48:14)){
+  const n=graph.nodes[id],btn=nodeElement('button',undefined,'listbtn'+(id===activeNode?' active':''));
+  btn.append(nodeElement('b',n.title),nodeElement('span',`${id} · ${n.status}`));btn.onclick=()=>chooseNode(id);container.append(btn);
+ }
+ if(matches.length>(value?48:14))container.append(nodeElement('small',`Showing ${value?48:14} of ${matches.length}; narrow the search to see more.`));
+ if(!matches.length)container.append(nodeElement('div','No matching lectures.','empty'));
+}
+function renderDetails(){if(!graph||!graph.nodes[activeNode])return;const n=graph.nodes[activeNode],detail=$('detail');detail.replaceChildren();
+ detail.append(nodeElement('div',activeNode+' · '+pathsFor(activeNode),'node-id'),nodeElement('div',n.title,'node-title'));
+ const topic=topicsById()[n.topic];if(topic)detail.append(nodeElement('p',topic.title,'muted'));
+ detail.append(nodeElement('span',n.status,n.status==='available'?'status':'status planned'));
+ if(n.url){const link=nodeElement('a','Open lecture ↗','open');link.href=n.url;detail.append(link)}
+ else detail.append(nodeElement('p','Recording planned.','muted'));
+ const con=$('connections');con.replaceChildren();const edges=graph.edges.filter(e=>e.from===activeNode||e.to===activeNode);
+ const order=Object.fromEntries(RELATIONS.map((x,i)=>[x[0],i]));edges.sort((a,b)=>order[a.type]-order[b.type]);
+ $('link-heading').textContent=`Related lectures (${edges.length})`;
+ for(const edge of edges){const outgoing=edge.from===activeNode,otherId=outgoing?edge.to:edge.from,other=graph.nodes[otherId];const container=nodeElement('div',undefined,'connection');
+  const rel=nodeElement('div',undefined,'relation');rel.style.color=RELMAP[edge.type].color;
+  rel.append(nodeElement('span',RELMAP[edge.type].label),nodeElement('span',outgoing?' · uses':' · used by','dir'));container.append(rel);
+  const btn=nodeElement('button',other.title);btn.onclick=()=>chooseNode(otherId);container.append(btn);
+  container.append(nodeElement('div',otherId+' · '+other.status,'muted'));
+  if(edge.why)container.append(nodeElement('p',edge.why,'reason'));
+  if(other.url){const link=nodeElement('a','Open recording ↗');link.href=other.url;container.append(link)}
+  con.append(container);
+ }
+ if(!edges.length)con.append(nodeElement('p','No connections recorded.','muted'));
+}
+function urlSync(){try{const q=new URLSearchParams({track:activeTrack,node:activeNode});history.replaceState(null,'',`/learning-paths?${q}`)}catch{}}
+function chooseNode(id){if(!graph?.nodes[id])return;activeNode=id;renderGraph(true);renderDetails();populateSearch();urlSync()}
+function chooseTrack(id){if(id!=='all'&&!graph.tracks.some(t=>t.id===id))return;activeTrack=id;$('track').value=id;
+ if(id!=='all'&&!selectedTrack().path.includes(activeNode))activeNode=selectedTrack().path[0];
+ populateSearch();renderDetails();renderGraph(true);urlSync()}
+function chooseTopic(id){activeTopic=id;$('topic').value=id;
+ if(id!=='all'&&graph.nodes[activeNode].topic!==id){const target=(activeTrack==='all'?Object.keys(graph.nodes):selectedTrack().path).find(x=>graph.nodes[x].topic===id);if(target)activeNode=target}
+ renderDetails();populateSearch();renderGraph(true);urlSync()}
+function initialize(data){graph=data;
+ const params=new URLSearchParams(location.search),track=params.get('track');if(track==='all'||graph.tracks.some(t=>t.id===track))activeTrack=track;
+ const node=params.get('node');if(node&&graph.nodes[node])activeNode=node;
+ for(const t of graph.tracks){const opt=nodeElement('option',`${t.id.toUpperCase()} · ${t.title.replace(/^G\d+\s*[-·]\s*/, '')}`);opt.value=t.id;$('track').append(opt)}
+ for(const t of graph.topics||[]){const opt=nodeElement('option',t.title);opt.value=t.id;$('topic').append(opt)}
+ $('track').value=activeTrack;
+ for(const [type,label,color,defaultValue] of RELATIONS){const wrap=nodeElement('label'),check=document.createElement('input');check.type='checkbox';check.checked=defaultValue;check.dataset.relation=type;check.addEventListener('change',()=>{if(check.checked)enabled.add(type);else enabled.delete(type);renderGraph(true)});
+  const swatch=nodeElement('span',undefined,'swatch');swatch.style.background=color;wrap.append(check,swatch,nodeElement('span',label));$('relations').append(wrap)}
+ for(const t of graph.topics){const pill=nodeElement('button',t.title,'topic-pill');pill.style.borderColor=`rgb(${t.rgb})`;pill.addEventListener('click',()=>chooseTopic(t.id));$('topic-key').append(pill)}
+ $('track').addEventListener('change',()=>chooseTrack($('track').value));
+ $('topic').addEventListener('change',()=>chooseTopic($('topic').value));
+ $('extent').addEventListener('change',()=>{extent=$('extent').value;renderGraph(true)});
+ $('search').addEventListener('input',populateSearch);
+ $('fit').addEventListener('click',fitView);$('zoom-in').addEventListener('click',()=>zoom(1.4));$('zoom-out').addEventListener('click',()=>zoom(1/1.4));
+ const svg=$('graph');svg.addEventListener('wheel',ev=>{ev.preventDefault();const pt=svgPoint(ev);zoom(ev.deltaY<0?1.19:1/1.19,pt.x,pt.y)},{passive:false});
+ svg.addEventListener('pointerdown',ev=>{if(ev.target.closest('.graph-node,.topic-cluster'))return;pan={id:ev.pointerId,x:ev.clientX,y:ev.clientY,view:{...view}};svg.setPointerCapture(ev.pointerId);svg.classList.add('dragging')});
+ svg.addEventListener('pointermove',ev=>{if(!pan||ev.pointerId!==pan.id)return;const r=svg.getBoundingClientRect();setView({x:pan.view.x-(ev.clientX-pan.x)*pan.view.w/r.width,y:pan.view.y-(ev.clientY-pan.y)*pan.view.h/r.height,w:pan.view.w,h:pan.view.h})});
+ const stopPan=ev=>{if(pan?.id===ev.pointerId){pan=null;svg.classList.remove('dragging')}};svg.addEventListener('pointerup',stopPan);svg.addEventListener('pointercancel',stopPan);
+ if(activeTrack!=='all'&&!selectedTrack().path.includes(activeNode))activeNode=selectedTrack().path[0];
+ populateSearch();renderDetails();renderGraph(true);urlSync();
+}
+fetch('/api/course-graph').then(r=>{if(!r.ok)throw Error(`HTTP ${r.status}`);return r.json()}).then(initialize).catch(err=>{$('summary').textContent=`Unable to load course graph: ${err.message}`});
 </script>
 </body>
 </html>
