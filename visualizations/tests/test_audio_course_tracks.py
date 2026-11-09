@@ -43,7 +43,7 @@ def test_course_tracks_and_track_isolation(tmp_path):
     renders.mkdir()
     with TestClient(create_app(renders, audio_library=hub)) as client:
         tracks = client.get('/api/audio-tracks').json()['tracks']
-        assert [r['id'] for r in tracks] == ['g1', 'g2', 'g3']
+        assert [r['id'] for r in tracks] == ['g1', 'g2', 'g3', 'g4']
         assert tracks[0]['url'] == '/'
         assert tracks[1]['count'] == 150
         assert tracks[2]['count'] == 26

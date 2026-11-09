@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DKPS learning paths</title>
+<style>
+:root{color-scheme:dark;--bg:#101419;--card:#19252f;--line:#354a58;--text:#edf2f5;--muted:#b2c5ce;--accent:#a4d5fa}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,sans-serif}a{color:var(--accent)}header{padding:24px clamp(18px,4vw,48px);border-bottom:1px solid var(--line)}h1,h2,h3,p{margin:0 0 10px}h1{font-size:1.6rem}main{padding:24px clamp(18px,4vw,48px);max-width:1500px;margin:auto}.hint{color:var(--muted)}.tracks{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 20px}.tracks button,.nodes button{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px;text-align:left;cursor:pointer}.tracks button[aria-pressed=true],.nodes button[aria-pressed=true]{border-color:var(--accent);background:#243f51}.tracks button:hover,.nodes button:hover{border-color:var(--accent)}.layout{display:grid;grid-template-columns:minmax(260px,1fr) minmax(320px,1.15fr);gap:22px}.panel{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:18px;min-width:0}.nodes{list-style:none;padding:0;margin:15px 0;max-height:72vh;overflow:auto}.nodes li{margin:6px 0}.nodes button{width:100%}.number,.relation{display:block;font-size:.79rem;color:var(--accent)}.status{font-size:.8rem;color:var(--muted)}.edge{border-top:1px solid var(--line);padding:12px 0}.edge a{display:inline-block;margin-left:5px}.edge button{border:0;padding:0;background:none;color:var(--accent);text-align:left;font:inherit;cursor:pointer}.edge small{display:block;color:var(--muted)}.search{width:100%;padding:12px;background:#101a22;border:1px solid var(--line);border-radius:8px;color:var(--text)}.pill{display:inline-block;border:1px solid var(--line);border-radius:100px;padding:3px 9px;margin:3px;font-size:.82rem}.foot{margin:24px 0;color:var(--muted);font-size:.88rem}@media(max-width:860px){.layout{grid-template-columns:1fr}.nodes{max-height:350px}}
+</style>
+</head>
+<body>
+<header><div><a href="/audio?track=g2">Audio reader</a> / <a href="/">Manim library</a></div><h1>DKPS learning paths</h1><p class="hint">A shared lecture graph. Paths reuse recordings; edges describe mathematics, alternative explanations, and provenance.</p></header>
+<main>
+<div class="tracks" id="tracks" aria-label="Select learning path"></div>
+<div class="layout">
+<section class="panel"><h2 id="pathTitle">Loading paths...</h2><p class="hint" id="pathSummary"></p><input id="search" class="search" type="search" placeholder="Find a lecture or topic" aria-label="Filter nodes"><ol class="nodes" id="pathNodes"></ol></section>
+<section class="panel" aria-label="Selected lecture and relationships"><h2 id="nodeTitle">Choose a lecture</h2><div class="hint" id="nodeMeta"></div><p id="nodeSource" class="hint"></p><p id="nodeLink"></p><h3>Connections</h3><div id="connections"></div></section>
+</div>
+<p class="foot">Hard dependence records mathematics needed for a proof, not a required listening order. Original parent records source adaptation. Planned G4 recordings are listed alongside reusable G2/G3 material; they are not yet playable.</p>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+let graph=null, currentTrack='g4',currentNode=null;
+function el(tag,text){const node=document.createElement(tag);if(text!==undefined)node.textContent=text;return node}
+function chooseTrack(id){const track=graph.tracks.find(x=>x.id===id);if(!track)return;currentTrack=id;
+  $('pathTitle').textContent=track.title;$('pathSummary').textContent=`${track.summary} (${track.available_count} available, ${track.planned_count} planned)`;
+  document.querySelectorAll('#tracks button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.track===id)));
+  renderPath();if(!track.path.includes(currentNode))chooseNode(track.path[0]);
+  try{history.replaceState(null,'','/learning-paths?'+new URLSearchParams({track:id,node:currentNode}))}catch{}
+}
+function renderPath(){const track=graph.tracks.find(x=>x.id===currentTrack);const q=$('search').value.toLocaleLowerCase();$('pathNodes').replaceChildren();
+  for(const [i,id] of track.path.entries()){const node=graph.nodes[id];if(!(`${id} ${node.title}`).toLocaleLowerCase().includes(q))continue;
+    const li=el('li');const b=el('button');b.dataset.node=id;b.setAttribute('aria-pressed',String(id===currentNode));
+    b.append(el('span',`${i+1}. ${id} - ${node.status}`));b.append(el('div',node.title));b.onclick=()=>chooseNode(id);li.append(b);$('pathNodes').append(li)}
+}
+function chooseNode(id){if(!graph.nodes[id])return;currentNode=id;const node=graph.nodes[id];$('nodeTitle').textContent=node.title;
+ $('nodeMeta').textContent=`${id} - ${node.kind} - ${node.status}`;$('nodeSource').textContent=`Source: ${node.source}`;
+ $('nodeLink').replaceChildren();if(node.url){const a=el('a','Open available lecture');a.href=node.url;$('nodeLink').append(a)}else $('nodeLink').textContent='Audio recording planned';
+ $('connections').replaceChildren();const rows=graph.edges.filter(e=>e.from===id||e.to===id);
+ if(!rows.length)$('connections').append(el('p','No curated connections yet.'));
+ for(const edge of rows){const outgoing=edge.from===id;const neighbor=outgoing?edge.to:edge.from;const other=graph.nodes[neighbor];const box=el('div');box.className='edge';
+ const label=el('strong',(outgoing?'': 'Inverse: ')+edge.type.replaceAll('_',' '));label.className='relation';box.append(label);
+ const btn=el('button',`${other.title} (${neighbor})`);btn.onclick=()=>chooseNode(neighbor);box.append(btn);
+ if(other.url){const link=el('a','Open');link.href=other.url;box.append(link)}
+ box.append(el('small',graph.relations[edge.type]));$('connections').append(box)}
+ renderPath();try{history.replaceState(null,'','/learning-paths?'+new URLSearchParams({track:currentTrack,node:id}))}catch{}
+}
+$('search').oninput=renderPath;
+fetch('/api/course-graph').then(r=>{if(!r.ok)throw Error('HTTP '+r.status);return r.json()}).then(data=>{graph=data;
+ for(const track of graph.tracks){const b=el('button',track.title);b.dataset.track=track.id;b.onclick=()=>chooseTrack(track.id);$('tracks').append(b)}
+ const params=new URLSearchParams(location.search);const target=graph.tracks.find(x=>x.id===params.get('track'))?.id||'g4';
+ const selected=graph.nodes[params.get('node')]?params.get('node'):graph.tracks.find(x=>x.id===target).path[0];currentNode=selected;chooseTrack(target);chooseNode(selected);
+}).catch(err=>{$('pathTitle').textContent='Could not load course graph';$('pathSummary').textContent=err.message});
+</script>
+</body>
+</html>

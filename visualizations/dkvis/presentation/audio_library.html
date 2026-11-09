@@ -10,7 +10,7 @@
 </head>
 <body>
 <header><div><div class="eyebrow">Davis–Kahan · Listen</div><h1>Audio lecture library</h1><p class="subtle" id="trackDescription">Choose a course track · speech generated when requested</p></div><a href="/">Presentations &amp; media</a></header>
-<nav class="course-tracks" aria-label="Course tracks"><a href="/" id="g1Link">G1 · Manim presentations</a><button type="button" id="g2Track" data-track="g2">G2 · Comprehensive audio</button><button type="button" id="g3Track" data-track="g3">G3 · Paper audio</button></nav>
+<nav class="course-tracks" aria-label="Course tracks"><a href="/" id="g1Link">G1 · Manim presentations</a><button type="button" id="g2Track" data-track="g2">G2 · Comprehensive audio</button><button type="button" id="g3Track" data-track="g3">G3 · Paper audio</button><a href="/learning-paths?track=g4">G4 · YWS path</a><a href="/learning-paths">Course map</a></nav>
 <main>
 <aside aria-label="Lecture selection">
 <div class="row space"><strong>Lectures</strong><span id="count" class="subtle"></span></div>
@@ -41,6 +41,7 @@
 </details></div></div>
 </div>
 <div class="row space"><strong>Complete lecture transcript</strong><span id="textCount" class="subtle"></span></div><p class="subtle">Every speech page appears below. Select a sentence to start near that point in the lecture. The current sentence is highlighted as audio plays.</p><div id="transcript" class="transcript"></div>
+<details id="connectionPanel" hidden><summary>Course graph connections</summary><ul id="connections"></ul></details>
 <details id="referencePanel" hidden><summary>Related free learning materials</summary><ul id="references"></ul></details>
 </div>
 </article>
@@ -222,9 +223,11 @@ function selectPage(index,start=false,fraction=0){
   updateTranscriptFocus();
   if(start)playPage();
 }
-async function selectLecture(id){state.token++;state.cacheJob++;$('generateAll').disabled=false;$('cacheCount').textContent='';state.playing=false;audio.pause();audio.removeAttribute('src');audio.load();$('loading').hidden=false;$('content').hidden=true;$('empty').hidden=true;const token=state.token;try{const doc=await api('/api/audio-lectures/'+encodeURIComponent(id)+'?'+new URLSearchParams({track:state.track}));if(token!==state.token)return;state.doc=doc;remember('lecture-'+state.track,id);loadDurations();showFullTranscript(doc);$('lectureNumber').textContent='Lecture '+id;$('lectureTitle').textContent=doc.title;$('lectureMeta').textContent=`${doc.words.toLocaleString()} words · ${doc.page_count} speech pages · approximately ${doc.estimated_minutes} minutes of narration`;$('pages').max=String(doc.page_count);$('loading').hidden=true;$('content').hidden=false;
+async function selectLecture(id){state.token++;state.cacheJob++;$('generateAll').disabled=false;$('cacheCount').textContent='';state.playing=false;audio.pause();audio.removeAttribute('src');audio.load();$('loading').hidden=false;$('content').hidden=true;$('empty').hidden=true;const token=state.token;try{const doc=await api('/api/audio-lectures/'+encodeURIComponent(id)+'?'+new URLSearchParams({track:state.track}));if(token!==state.token)return;state.doc=doc;remember('lecture-'+state.track,id);try{history.replaceState(null,'','/audio?'+new URLSearchParams({track:state.track,lecture:id}))}catch{}loadDurations();showFullTranscript(doc);$('lectureNumber').textContent='Lecture '+id;$('lectureTitle').textContent=doc.title;$('lectureMeta').textContent=`${doc.words.toLocaleString()} words · ${doc.page_count} speech pages · approximately ${doc.estimated_minutes} minutes of narration`;$('pages').max=String(doc.page_count);$('loading').hidden=true;$('content').hidden=false;
 const panel=$('referencePanel'),list=$('references');list.replaceChildren();panel.hidden=!doc.related_resources?.length;
 for(const source of doc.related_resources||[]){const li=document.createElement('li'),link=document.createElement('a');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.title;li.append(link);const why=document.createElement('span');why.className='subtle';why.textContent=source.reason;li.append(why);list.append(li)}
+const graphList=$('connections'),graphPanel=$('connectionPanel');graphList.replaceChildren();graphPanel.hidden=!doc.course_connections?.length;
+for(const connection of doc.course_connections||[]){const li=document.createElement('li');const label=document.createElement('span');label.textContent=`${connection.direction==='incoming'?'Referenced by':'Relation'}: ${connection.type.replaceAll('_',' ')} - `;li.append(label);const link=document.createElement('a');link.textContent=connection.title+' ('+connection.node_id+')';link.href=connection.url||('/learning-paths?'+new URLSearchParams({track:connection.node_id.split(':')[0],node:connection.node_id}));li.append(link);graphList.append(li)}
 selectPage(Number(saved('page-'+state.track+'-'+id,0))||0);highlight();}catch(err){if(token===state.token){$('loading').textContent='Could not load lecture: '+err.message}}}
 async function ensurePage(lectureId, page, config, onStatus=()=>{}){
   const qs=new URLSearchParams(config).toString(); const target=`/api/audio-lectures/${lectureId}/pages/${page}`;
@@ -281,13 +284,14 @@ async function switchTrack(track){
   $('loading').hidden=false;$('loading').textContent='Loading '+track.toUpperCase()+' lectures…';
   document.querySelectorAll('[data-track]').forEach(b=>b.setAttribute('aria-current',b.dataset.track===track?'page':'false'));
   $('trackDescription').textContent=track==='g3'?'26 paper-focused recordings · four angle theorems, counterexample, and matching theorem':'150 comprehensive recordings · complete foundations and theorem development';
+  const queryParams=new URLSearchParams(location.search);const requestedLecture=queryParams.get('track')===track?queryParams.get('lecture'):null;
   try{history.replaceState(null,'','/audio?'+new URLSearchParams({track}));}catch{}
   try{
     const data=await api('/api/audio-lectures?'+new URLSearchParams({track}));
     if(track!==state.track)return;
     state.items=data.items;renderList();$('loading').hidden=true;
     const remembered=saved('lecture-'+track,null);
-    if(state.items.length)await selectLecture(state.items.some(x=>x.id===remembered)?remembered:state.items[0].id);
+    if(state.items.length)await selectLecture(state.items.some(x=>x.id===requestedLecture)?requestedLecture:(state.items.some(x=>x.id===remembered)?remembered:state.items[0].id));
     else $('empty').hidden=false;
   }catch(err){$('loading').textContent='Could not load '+track.toUpperCase()+' lectures: '+err.message}
 }

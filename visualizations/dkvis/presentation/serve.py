@@ -121,6 +121,9 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None,
             raise ValueError(f'Render directory does not exist: {root}')
 
     from dkvis.presentation.audio_library import AudioLectureHub, AUDIO_PAGE
+    from dkvis.presentation.course_graph import build_course_graph, connections
+    course_graph = build_course_graph()
+    COURSE_GRAPH_PAGE = Path(__file__).with_name('course_graph.html')
     speech_library = audio_library or AudioLectureHub(
         sources=audio_source_directory or ROOT/'draft-stages'/'tts-lectures',
         cache=audio_cache_directory or ROOT/'audio-cache',
@@ -306,6 +309,12 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None,
         track = 'g2' if engine.sources == speech_library.sources else 'g3'
         return urlencode(dict(profile=engine.profile, voice=settings.voice, speed=settings.speed, track=track))
 
+    async def learning_paths(request):
+        return FileResponse(COURSE_GRAPH_PAGE, headers={'Cache-Control': 'no-cache'})
+
+    async def course_graph_api(request):
+        return JSONResponse(course_graph, headers={'Cache-Control': 'no-store'})
+
     async def audio_home(request):
         return FileResponse(AUDIO_PAGE, headers={'Cache-Control': 'no-cache'})
 
@@ -329,11 +338,16 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None,
                 row = await run_in_threadpool(speech_library.detail, request.path_params['lecture_id'])
         except (KeyError, IndexError, ValueError) as exc:
             audio_error(exc)
+        track = request.query_params.get('track', 'g2')
+        row = dict(row, course_connections=connections(course_graph, f'{track}:{row["id"]}'))
         return JSONResponse(row, headers={'Cache-Control': 'no-store'})
 
     async def audio_tracks(request):
         tracks = speech_library.course_tracks() if hasattr(speech_library, 'course_tracks') else [
             dict(id='g2', label='G2 · Comprehensive audio', kind='audio', url='/audio?track=g2')]
+        tracks = [*tracks, dict(id='g4', label='G4 - YWS population gap', kind='graph',
+                                url='/learning-paths?track=g4', status='planned',
+                                count=len(next(t['path'] for t in course_graph['tracks'] if t['id'] == 'g4')))]
         return JSONResponse(dict(tracks=tracks, default_track='g2'),
                             headers={'Cache-Control': 'no-store'})
 
@@ -455,6 +469,7 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None,
 
     app = Starlette(routes=[
         Route('/', index), Route('/audio', audio_home),
+        Route('/learning-paths', learning_paths), Route('/api/course-graph', course_graph_api),
         Route('/api/audio-lectures', audio_catalog),
         Route('/api/audio-tracks', audio_tracks),
         Route('/api/audio-voices', audio_voices),
