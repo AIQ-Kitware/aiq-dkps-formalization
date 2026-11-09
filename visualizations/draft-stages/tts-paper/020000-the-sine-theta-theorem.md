@@ -1,0 +1,138 @@
+# 020000 — The sine-theta theorem
+
+**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 110000. **Section:** result. **Audience:** prior linear algebra and basic analysis.
+
+<!-- BEGIN SPOKEN LECTURE -->
+
+# The single-angle sine theorem
+
+Suppose A is self-adjoint, U is an exact reducing subspace, and V is a trial subspace whose vectors nearly satisfy the operator equation for a trial operator. How does the failure of that equation control the angle from V to U? The Davis–Kahan sine theorem answers using the residual and the spectral separation between the trial operator and A on the unwanted complement. A sharp constant-one inequality requires a gap hypothesis that supports a corresponding Sylvester bound.
+
+We will state the isometric version first, prove it directly, verify sharpness in the plane, and then explain the more general normalization and unbounded-operator forms.
+
+## State the spaces and assumptions
+
+Let H be a real or complex Hilbert space, and let A be self-adjoint on H. Choose an exact reducing subspace U with orthogonal projection P. Let F zero and F one be isometric coordinate maps for U and its orthogonal complement, respectively.
+
+On the exact complement, A acts as a self-adjoint operator Lambda one. Choose an isometric trial map E from another Hilbert space F into H. Its range V is the approximate subspace.
+
+Choose a self-adjoint trial operator A zero on F. Define R equal to A E minus E A zero, first in the bounded setting. The trial operator may be the Ritz compression, but the theorem also permits a separately chosen operator.
+
+Assume a positive spectral-gap parameter delta for the two operators A zero and Lambda one. In the sharp constant-one version we are proving, the gap must satisfy one of the supported separation conditions, such as the form-ordered gap or the specified interval-and-exterior configuration.
+
+For the operator-norm statement, suppose the relevant Sylvester theorem controls the operator norm under that gap. For a symmetric operator ideal, assume additionally that R belongs to the ideal and that the ideal has the Ky Fan dominance and composition properties required by the symmetric-ideal Sylvester estimate.
+
+The conclusion is that delta times the ideal norm of the directed sine of V relative to U is at most the ideal norm of R. The result also asserts that the sine representative belongs to the ideal.
+
+## First step: derive the complementary equation
+
+Define X equal to F one adjoint E. The map X measures overlap with the orthogonal complement of the exact subspace: F one adjoint first measures complementary coordinates, then E supplies trial vectors.
+
+Compress the residual with F one adjoint. Since U is reducing, the complementary action of A is Lambda one. Therefore F one adjoint R equals Lambda one X minus X A zero.
+
+We have reached the exact Sylvester equation. Its unknown is X, its right-hand side is the complementary part of the residual, and the two coefficient operators are precisely the operators in the spectral-gap hypothesis.
+
+This is the critical connection between residual geometry and spectral separation. A small residual alone does not identify a small angle to an arbitrary exact subspace. The gap supplies the information about which complementary modes the residual must overcome.
+
+## Second step: use spectral separation
+
+Apply the Sylvester estimate appropriate to the stated gap. In the operator-norm case, delta times the norm of X is at most the norm of F one adjoint R.
+
+In a symmetric ideal, the conclusion includes membership of X and an analogous gauge inequality. We cannot omit the membership assumption: a bounded residual need not belong to trace class, for example, and a trace-class bound has no finite meaning without membership.
+
+Because F one is an isometry, F one adjoint is a contraction. Therefore the ideal norm of F one adjoint R is at most the ideal norm of R. In particular, delta times the ideal norm of X is at most the ideal norm of R.
+
+Note that the sharp factor one came from the chosen Sylvester separation theorem. A mere positive pairwise distance between two interlaced spectral sets does not automatically supply the same operator-norm constant. That distinction survives unchanged when we translate the equation into geometry.
+
+## Third step: identify the angle
+
+Write S equal to the identity minus P, composed with E. For every trial-coordinate vector, S extracts the part of its ambient trial vector outside U.
+
+The Gram identity gives S adjoint S equals X adjoint X. Consequently S and X have identical positive moduli and identical nonzero singular-value information. Their common modulus is the directed sine operator associated with the trial subspace relative to U.
+
+For the operator norm, the norms of S and X are equal immediately because their output lengths agree on every input. For a suitable rectangular unitarily invariant ideal, modulus and singular-value invariance give equality of the corresponding gauges and transfer membership.
+
+Substitute this equality into the Sylvester estimate. We obtain the sine theorem: delta times the size of the directed sine is bounded by the size of the residual.
+
+In operator norm this means that the sine of the largest directed principal angle is at most residual norm divided by delta. A useful consequence is that if residual norm is strictly smaller than delta, the largest directed angle is strictly less than ninety degrees.
+
+The latter conclusion concerns the direction from the trial space toward the exact subspace. Without matching dimensions and related hypotheses, it should not be silently converted into a symmetric projection-gap bound.
+
+## Prove the constant cannot be improved
+
+Take the real plane. Let A be diagonal with eigenvalues zero and five. Choose the exact target U to be the horizontal axis, so Lambda one is the scalar five.
+
+For an angle theta between zero and ninety degrees, choose the trial unit vector u with coordinates cosine theta and sine theta. Let E map a scalar to that scalar times u. Choose A zero equal to zero.
+
+Then the residual is A u, which equals five sine theta times the vertical basis vector. Its norm is five sine theta.
+
+The distance from A zero to Lambda one is exactly five. The directed sine of the angle from the trial line to U is sine theta. So the theorem reads five times sine theta is at most five times sine theta. Equality holds at every such angle.
+
+This example is a genuine sharpness witness. Any smaller universal constant in front of the residual would fail for the same family.
+
+Notice that A zero is not the Ritz compression unless theta is zero. That is permitted by the theorem, and it is why the residual is the full vertical vector. For a Ritz residual, the compressed eigenvalue and spectral gap change. We must not combine the smaller Ritz residual with the larger, unrelated gap.
+
+## Specialize to Ritz trial spaces
+
+Suppose A zero does equal E adjoint A E. Then E adjoint R is zero, by Galerkin orthogonality. The proof still works, because it never required an arbitrary internal trial discrepancy.
+
+The advantage of Ritz residuals is that they measure only the escape of A from V. The spectral separation must now compare the Ritz spectrum of A zero to the exact complementary spectrum of Lambda one. If the Ritz values approach unwanted eigenvalues, the gap decreases, and the angle bound weakens accordingly.
+
+In practice the theorem is valuable when numerical approximations provide both a small residual and a certified spectral separation. Those two pieces of information together bound the error in the computed invariant subspace.
+
+## General trial frames and the epsilon factor
+
+So far E has been isometric. Suppose instead E is bounded below by a positive constant epsilon. This means every output E x has length at least epsilon times the length of x.
+
+Write E as U times its positive modulus, where U is an isometry onto the trial range. The inverse modulus has norm at most one divided by epsilon. The complementary block for E differs from the complementary block for U by the modulus factor.
+
+When we normalize the frame, the ideal estimate acquires that inverse factor. Multiplying through, the conclusion becomes delta times epsilon times the directed sine gauge is at most the residual gauge.
+
+That epsilon is required for scaling. Multiplying E by a positive scalar multiplies its residual and lower frame bound by that scalar, but leaves its range and principal angles unchanged.
+
+## Restore the unbounded version
+
+When A is unbounded, self-adjointness alone does not legitimize the expression A E. The trial map must carry the domain of A zero into the domain of A; the residual identity must hold on that common domain and extend to a bounded operator. The complementary coordinate map must respect the domain of Lambda one and intertwine its action with A.
+
+With those hypotheses, the same Sylvester equation holds as an equality of partially defined operators on the legal domain. The unbounded Sylvester theorem then produces the ideal estimate and membership conclusion. For real Hilbert spaces, the corresponding complexification and descent results supply the real statement.
+
+We have proved the theorem using three exact bridges: residual to Sylvester equation, spectral gap to norm bound, and complementary overlap to directed sine. The same reasoning applies whenever a residual equation can be converted into a valid Sylvester estimate for the correct complementary angle operator.
+
+<!-- END SPOKEN LECTURE -->
+
+---
+
+## Companion: mathematics and Lean correspondence (display only)
+
+Given a self-adjoint ambient `A`, a reducing exact decomposition `F₀,F₁`, an isometric trial `E`, self-adjoint `A₀,Λ₁`, a bounded residual `R` extending `AE−EA₀` on its common domain, an admissible `δ>0` `FormBoundedSylvesterGap A₀ Λ₁ δ`, and a Ky-Fan-dominant symmetric ideal `N` with `N.Mem R`, the isometric theorem gives `N.Mem((I−F₀F₀*)E)` and `δ N.gaugeReal((I−F₀F₀*)E) ≤ N.gaugeReal R`. Nonisometric trial maps with lower frame bound `ε>0` give `δε` on the left. For `A=diag(0,δ)`, `A₀=0`, `E=(cosθ,sinθ)`, equality holds.
+
+### Source declaration excerpts
+
+`DavisKahan/Sources/DavisKahan1970/SineTheta/ScalarGeneric.lean` — `sinTheta_unbounded_formGap_idealFamily_rclike` (exact declaration header; body omitted):
+
+```lean
+theorem sinTheta_unbounded_formGap_idealFamily_rclike
+    (N : TauCeti.SymmetricOperatorIdealFamily 𝕜)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
+    (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
+```
+
+`DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61.lean` — `result` (exact declaration header; body omitted):
+
+```lean
+theorem result
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
+    (P : GeneralSinThetaRepresentativeProblem (E := E) (F := F)
+```
+
+`DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem61.lean` — `result` (exact declaration header; body omitted):
+
+```lean
+theorem result
+    (N : TauCeti.SymmetricOperatorIdealFamily ℂ)
+    [N.toOperatorIdealFamily.IsKyFanDominant]
+    (P : IsometricSinThetaRepresentativeProblem (E := E) (F := F)
+```
+
+**Mapping.** `ScalarGeneric.sinTheta_unbounded_formGap_idealFamily_rclike` states the canonical isometric result for `UnboundedSinThetaData` and a `SymmetricOperatorIdealFamily` with `IsKyFanDominant`. `Theorem61.GeneralSinThetaRepresentativeProblem.result` carries the nonisometric `frameLowerBound` and `gap` factors, and transfers to a paper-facing representative with matching singular-value data. The general paper-facing theorem's gap and domain hypotheses are contained in its `problem` data; one cannot infer them from the displayed result type alone.

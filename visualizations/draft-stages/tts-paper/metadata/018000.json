@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "lecture_id": "018000",
+  "source_g2": "131000",
+  "related_resources": [
+    {
+      "source_id": "higham-polar",
+      "reason": "Alternative polar-factor explanation; distinguish a kernel-zero partial isometry from full unitary extensions."
+    },
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "higham-unitarily-invariant-norm",
+      "reason": "Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms."
+    },
+    {
+      "source_id": "higham-matrix-trace",
+      "reason": "Review trace identities used in norm and displacement calculations."
+    },
+    {
+      "source_id": "mit-matrix-calculus",
+      "reason": "Compare the lecture’s matrix variations with scalar-by-matrix derivative examples."
+    },
+    {
+      "source_id": "mit-strang-18065-procrustes",
+      "reason": "See an orthogonal transport problem where minimizing displacement becomes a matrix alignment calculation."
+    }
+  ],
+  "transcript": "018000-squared-displacement-and-majorization.md",
+  "historical_claims": [
+    {
+      "id": "018000-h01",
+      "anchor": "the historical formulation retains additional compactness and crossed-defect assumptions.",
+      "kind": "source_scope",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Section 4, squared-displacement statement",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ]
+}

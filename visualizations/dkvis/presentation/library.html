@@ -9,7 +9,7 @@
 </style>
 </head>
 <body>
-<header><div><h1>Lecture library</h1><p>Choose a lecture, then its narration or slide format.</p></div><button id="refresh">Refresh</button></header>
+<header><div><h1>Lecture library</h1><p>Choose a lecture, then its narration or slide format.</p></div><div style="display:flex;gap:12px;align-items:center"><a href="/audio?track=g2">G2 · Comprehensive audio</a><a href="/audio?track=g3">G3 · Paper audio</a><button id="refresh">Refresh</button></div></header>
 <main><aside aria-label="Lectures">
 <input id="search" type="search" placeholder="Search lectures or narration voices…" aria-label="Search lectures">
 <div class="filters"><select id="kind" aria-label="Available format"><option value="all">All lectures</option><option value="video">With video</option><option value="slides">With HTML slides</option><option value="pdf">With PDF</option></select><select id="sort" aria-label="Sort lectures"><option value="course">Lecture order</option><option value="newest">Recently generated</option><option value="name">Title</option></select></div>

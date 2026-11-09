@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "lecture_id": "024000",
+  "source_g2": "134000",
+  "related_resources": [
+    {
+      "source_id": "higham-polar",
+      "reason": "Alternative polar-factor explanation; distinguish a kernel-zero partial isometry from full unitary extensions."
+    },
+    {
+      "source_id": "bhatia-1997",
+      "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original Section 4 statements on transport minimization, including Proposition 4.4."
+    },
+    {
+      "source_id": "higham-unitarily-invariant-norm",
+      "reason": "Connect singular-value inequalities with symmetric gauges, Schatten and Ky Fan norms."
+    }
+  ],
+  "transcript": "024000-the-proposition-4-4-counterexample.md",
+  "historical_claims": [
+    {
+      "id": "024000-h01",
+      "anchor": "The printed universal minimization claim of Proposition four point four fails already in a four-dimensional real inner-product space.",
+      "kind": "source_scope",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Proposition 4.4",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ]
+}

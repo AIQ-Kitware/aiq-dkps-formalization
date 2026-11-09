@@ -115,3 +115,11 @@ python3 draft-stages/tts-lectures/extract_narration.py --check \
 Production smoke test: play the first Kokoro page from `/audio`, then select
 **Crall Math DK v2 (Breeze)** and play the same page. Verify that the browser
 uses the two distinct cached MP3s and the live transcript follows seeking.
+
+## Course tracks
+
+The reader offers three routes. **G1 · Manim** opens the existing presentation/video browser at `/`. **G2 · Comprehensive audio** opens `/audio?track=g2`, with all 150 standalone lectures. **G3 · Paper audio** opens `/audio?track=g3`, with 26 paper-focused lectures and its own introduction. G3 starts with a fast spectral-geometry crash course, develops the supporting proofs, and ends with six result-focused recordings: the four angle theorems, Proposition 4.4's counterexample, and real transport matching.
+
+Both audio tracks share playback controls, Kokoro/Crall profiles, custom voices, and non-spoken learning references. They have separate transcript directories and audio caches. Switching tracks preserves G2's original identifiers and cached audio. Track selection uses a fixed server-side allowlist rather than arbitrary filesystem paths.
+
+The G3 sequence and its G2 source correspondence are in `draft-stages/tts-paper/track.json`; the course is documented in `draft-stages/tts-paper/README.md`. The first G3 draft reuses 25 edited G2 recordings and adds a newly written paper-track introduction.

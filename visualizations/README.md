@@ -808,3 +808,7 @@ Generation/request settings, reference basenames and fingerprints, conditioning
 lineage, source snapshot, alignment revision and processing measurements accompany
 the output. Detailed stage timings also enter `renders/logs/`. All generated
 media, references, reports and model caches remain untracked.
+
+### Three course tracks in the lecture library
+
+The server exposes **G1 Manim** at `/`, **G2 comprehensive audio** at `/audio?track=g2` (150 recordings), and **G3 paper audio** at `/audio?track=g3` (26 recordings). The audio reader provides track selection, complete transcripts, lecture-wide progress, selectable voices, and on-demand TTS. The G3 syllabus and first-draft source mappings are under `draft-stages/tts-paper/`; see `docs/audio-library-on-demand.md`.

@@ -183,23 +183,6 @@ removing a disclaimer has not made a stronger theorem appear, stranded a
 pronoun, or created an abrupt definition. Treat audit phrase matches as review
 candidates, not automated proof that a sentence is defective.
 
-## Mathematical speech and audit feedback (8 November 2026)
-
-Prefer spoken formulas with explicit grouping. Say “twice the sine of half
-theta” rather than “two sine theta over two” when the latter could mean a
-different expression. Introduce specialized symbols before reading them, and
-keep LaTeX-like projection tokens out of narration. Source Markdown emphasis
-may aid editing, but the TTS extractor removes its asterisk delimiters.
-
-Preserve mathematical distinctions when checking another model's editorial
-feedback. In particular, **ell two** (square-summable sequences) and **L two**
-(square-integrable functions) denote different spaces even though their
-spoken forms can be similar. A difference in vocabulary need not be a
-mistake: “X star” and “X adjoint” can both name an adjoint, and conventional
-eponyms should not be truncated solely on a speculative pronunciation risk.
-Use a listening test for voice-specific pronunciation changes. Record source
-suggestions, decisions, and actual repairs in the non-spoken audit ledger.
-
 ## Editorial reports and metadata: report facts directly (8 November 2026)
 
 Apply the same human-writing standard to audit reports, completion summaries,
@@ -475,3 +458,11 @@ exclusively on the original marked spoken region.
 
 For schema, validator, and editing workflow, see
 `draft-stages/tts-lectures/metadata/README.md`.
+
+## Course tracks (G1, G2, G3)
+
+G1 presents the existing Manim material. G2 is the comprehensive 150-lecture audio curriculum. G3 is the shorter, 26-lecture paper-focused audio curriculum. G3 assumes linear algebra, singular values, and elementary measure theory and ends with six result-focused lectures: the sine-theta, tangent-theta, sine-two-theta, and tangent-two-theta theorems, the Proposition 4.4 counterexample, and the real transport matching theorem.
+
+Keep each track's lecture identifiers, transcript files, sidecars, and audio cache independent. Common mathematics may be reused, but each recording must stand alone for listening. Record reused G2 material in G3's `track.json`; edit G3 narration separately as the short curriculum is refined. Citation metadata stays outside the narrated region.
+
+For G3, prioritize the hypotheses needed to prove the 1970 paper-facing results. Preserve distinctions among ordered gaps, distance gaps, self-adjoint domains, operator ideals, and squared versus unsquared displacement. Use the same direct, mathematically precise, non-defensive style as G2.

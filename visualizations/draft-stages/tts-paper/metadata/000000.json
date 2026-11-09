@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "lecture_id": "000000",
+  "source_g2": null,
+  "related_resources": [
+    {
+      "source_id": "bindel-eigen-perturbation",
+      "reason": "Finite-dimensional eigenvector perturbations and first-order scaling with the spectral gap."
+    },
+    {
+      "source_id": "higham-sylvester",
+      "reason": "Independent explanation of the matrix Sylvester equation used in sine-theta proofs."
+    },
+    {
+      "source_id": "higham-unitarily-invariant-norm",
+      "reason": "How singular values control matrix norm comparisons and transport costs."
+    },
+    {
+      "source_id": "mit-strang-18065-procrustes",
+      "reason": "Orthogonal transport and alignment from an applied linear algebra viewpoint."
+    }
+  ],
+  "transcript": "000000-a-fast-path-to-davis-kahan.md",
+  "historical_claims": [
+    {
+      "id": "000000-h01",
+      "anchor": "the original paper's broad Proposition four point four is false for an unsquared trace-norm objective.",
+      "kind": "source_scope",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Proposition 4.4",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ]
+}

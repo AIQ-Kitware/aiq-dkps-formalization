@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "lecture_id": "016000",
+  "source_g2": "119000",
+  "related_resources": [
+    {
+      "source_id": "kato-1995",
+      "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
+    },
+    {
+      "source_id": "davis-kahan-1970",
+      "reason": "Original 1970 source for comparison; use exact source passage and stated hypotheses for historical audits."
+    },
+    {
+      "source_id": "hsu-dk-notes",
+      "reason": "Brief finite-matrix exposition; not an alternate proof of every general theorem in this lecture."
+    },
+    {
+      "source_id": "tao-eigenvalue-stability",
+      "reason": "Contrast Hermitian spectral stability with nonnormal sensitivity and pseudospectra."
+    },
+    {
+      "source_id": "kostrykin-tan2-theorem",
+      "reason": "Compare the off-diagonal perturbation theorem with a graph/Riccati formulation."
+    },
+    {
+      "source_id": "motovilov-selin-subspace-bounds",
+      "reason": "Contrast ordered-gap and convex-hull gap hypotheses in sharp tangent estimates."
+    },
+    {
+      "source_id": "bindel-eigen-perturbation",
+      "reason": "Study concrete perturbation examples and first-order spectral sensitivity."
+    }
+  ],
+  "transcript": "016000-spectral-selection-and-repulsion.md",
+  "historical_claims": [
+    {
+      "id": "016000-h01",
+      "anchor": "Davis and Kahan's Theorem eight point one. We will derive the gap protection, identify the selected reducing branch, and explain the cosine factors in the theorem's stronger comparisons.",
+      "kind": "source_attribution",
+      "source_ids": [
+        "davis-kahan-1970"
+      ],
+      "source_locator": "Theorem 8.1",
+      "audit_status": "pending_primary_passage_comparison"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "lecture_id": "009000",
+  "source_g2": "065000",
+  "related_resources": [
+    {
+      "source_id": "higham-sylvester",
+      "reason": "Matrix Sylvester equation; note the lecture-specific operator norm and spectral-gap conditions."
+    },
+    {
+      "source_id": "rosenblum-1956",
+      "reason": "Primary paper on the operator equation and disjoint spectra; comparison resource, not a verified source check."
+    },
+    {
+      "source_id": "boyd-stanford-ee263-archive",
+      "reason": "Use the publicly available course-reader slides for block matrices, quadratic forms, or dynamical examples."
+    }
+  ],
+  "transcript": "009000-ordered-spectral-separation.md",
+  "historical_claims": []
+}

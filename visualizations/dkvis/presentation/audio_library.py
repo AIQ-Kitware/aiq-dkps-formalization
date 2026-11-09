@@ -25,6 +25,7 @@ from uuid import uuid4
 from dkvis.presentation.paths import ROOT
 
 SOURCE_DIRECTORY = ROOT / 'draft-stages' / 'tts-lectures'
+PAPER_DIRECTORY = ROOT / 'draft-stages' / 'tts-paper'
 EXTRACTOR = SOURCE_DIRECTORY / 'extract_narration.py'
 AUDIO_PAGE = Path(__file__).with_name('audio_library.html')
 LECTURE_NAME = re.compile(r'^(\d{6})-.*\.md$')
@@ -45,7 +46,8 @@ class SpeechSettings:
 
 def narration_extractor(path: Path):
     """Call the canonical spoken-region extractor, including future refinements."""
-    module_path = path.parent / 'extract_narration.py'
+    # Both audio tracks use the same canonical spoken-region extractor.
+    module_path = EXTRACTOR
     spec = importlib.util.spec_from_file_location('dkps_staged_narration_extractor', module_path)
     if spec is None or spec.loader is None:
         raise RuntimeError(f'Cannot load narration extractor: {module_path}')
@@ -54,7 +56,7 @@ def narration_extractor(path: Path):
     return module.extract(path).strip()
 
 
-def split_pages(text: str, *, max_chars: int = 850) -> list[str]:
+def split_pages(text: str, *, max_chars: int = 1200) -> list[str]:
     """Keep paragraphs together when possible; split long ones at sentences/words."""
     if max_chars < 100:
         raise ValueError('max_chars must be at least 100')
@@ -127,7 +129,7 @@ class AudioLectureLibrary:
         if not self.endpoint.startswith(('http://', 'https://')):
             raise ValueError('TTS endpoint must use HTTP or HTTPS')
         self.page_chars = int(page_chars if page_chars is not None else
-                              os.environ.get('DKVIS_AUDIO_PAGE_CHARS', '420'))
+                              os.environ.get('DKVIS_AUDIO_PAGE_CHARS', '1200'))
         if not 250 <= self.page_chars <= 1500:
             raise ValueError('Speech page size must be 250–1500 characters')
         if not VOICE_PATTERN.fullmatch(self.default_voice):
@@ -172,6 +174,8 @@ class AudioLectureLibrary:
         pages = split_pages(spoken, max_chars=self.page_chars)
         heading = path.read_text(encoding='utf-8').splitlines()[0]
         title = heading.removeprefix('# ').strip() if heading.startswith('# ') else path.stem[7:].replace('-', ' ').title()
+        # Lecture number is already displayed separately in the reader.
+        title = re.sub(r'^\d{6}\s*[—–-]\s*', '', title)
         record = dict(id=path.name[:6], title=title, words=len(spoken.split()),
                       page_count=len(pages), source_modified=path.stat().st_mtime,
                       estimated_minutes=round(len(spoken.split()) / 145, 1))
@@ -186,7 +190,11 @@ class AudioLectureLibrary:
         metadata = self.sources / 'metadata'
         try:
             sidecar = json.loads((metadata / f'{lecture_id}.json').read_text(encoding='utf-8'))
-            sources = json.loads((metadata / 'sources.json').read_text(encoding='utf-8'))['sources']
+            # G3 reuses the non-spoken G2 source catalog without copying it.
+            source_catalog = metadata / 'sources.json'
+            if not source_catalog.is_file():
+                source_catalog = SOURCE_DIRECTORY / 'metadata' / 'sources.json'
+            sources = json.loads(source_catalog.read_text(encoding='utf-8'))['sources']
         except (OSError, ValueError, KeyError, TypeError):
             return []
         result = []
@@ -378,6 +386,9 @@ class AudioLectureHub:
         self._endpoint_override = endpoint
         self._sender = sender
         self._page_chars = page_chars
+        self.tracks = {'g2': self.sources}
+        if self.sources == SOURCE_DIRECTORY.resolve() and PAPER_DIRECTORY.is_dir():
+            self.tracks['g3'] = PAPER_DIRECTORY.resolve()
         self._engines = {}
         self._lock = threading.RLock()
         self._voice_registry = self.cache / 'registered-voices.json'
@@ -391,17 +402,22 @@ class AudioLectureHub:
     def model(self):
         return self.engine(self.profile).model
 
-    def engine(self, profile=None):
+    def engine(self, profile=None, track='g2'):
         profile = profile or self.profile
+        if track not in self.tracks:
+            raise ValueError(f'Unknown audio track: {track}')
         if not isinstance(profile, str) or profile not in self.document.get('profiles', {}):
             raise ValueError(f'Unknown TTS profile: {profile}')
         with self._lock:
-            if profile not in self._engines:
-                self._engines[profile] = AudioLectureLibrary(
-                    sources=self.sources, cache=self.cache, profile=profile,
+            key = (profile, track)
+            if key not in self._engines:
+                # G2 preserves preexisting cache locations; G3 remains isolated.
+                cache = self.cache if track == 'g2' else self.cache / track
+                self._engines[key] = AudioLectureLibrary(
+                    sources=self.tracks[track], cache=cache, profile=profile,
                     endpoint=self._endpoint_override if profile == self.profile else None,
                     page_chars=self._page_chars, sender=self._sender)
-            return self._engines[profile]
+            return self._engines[key]
 
     def profiles(self):
         names = list(self.document.get('profiles', {}))
@@ -415,11 +431,24 @@ class AudioLectureHub:
                      default_voice=self.document['profiles'][name].get('voice'))
                 for name in names]
 
-    def catalog(self):
-        return self.engine(self.profile).catalog()
+    def catalog(self, track='g2'):
+        return self.engine(self.profile, track).catalog()
 
-    def detail(self, lecture_id):
-        return self.engine(self.profile).detail(lecture_id)
+    def detail(self, lecture_id, track='g2'):
+        return self.engine(self.profile, track).detail(lecture_id)
+
+    def course_tracks(self):
+        return [
+            dict(id='g1', label='G1 · Manim', kind='presentation', url='/',
+                 summary='Original animated presentations and media'),
+            dict(id='g2', label='G2 · Comprehensive audio', kind='audio', url='/audio?track=g2',
+                 count=len(self.engine(self.profile, 'g2')._files()),
+                 summary='Complete foundations and theorem development'),
+            *([dict(id='g3', label='G3 · Paper audio', kind='audio', url='/audio?track=g3',
+                    count=len(self.engine(self.profile, 'g3')._files()),
+                    summary='Shorter path to four angle theorems, counterexample, and matching theorem')]
+              if 'g3' in self.tracks else []),
+        ]
 
     def _read_registry(self):
         try:

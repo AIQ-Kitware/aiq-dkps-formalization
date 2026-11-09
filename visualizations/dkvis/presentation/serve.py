@@ -285,38 +285,57 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None,
             raise HTTPException(429, str(exc)) from exc
         raise exc
 
-    def audio_engine(profile=None):
+    def audio_engine(profile=None, track='g2'):
         if hasattr(speech_library, 'engine'):
-            return speech_library.engine(profile)
+            return speech_library.engine(profile, track)
+        if track != 'g2':
+            raise ValueError(f'Unknown audio track: {track}')
         if profile and profile != speech_library.profile:
             raise ValueError(f'Unknown TTS profile: {profile}')
         return speech_library
 
     def audio_settings(request):
         try:
-            engine = audio_engine(request.query_params.get('profile'))
+            engine = audio_engine(request.query_params.get('profile'), request.query_params.get('track', 'g2'))
             return engine, engine.settings(request.query_params.get('voice'),
                                            request.query_params.get('speed'))
         except ValueError as exc:
             audio_error(exc)
 
     def audio_query(engine, settings):
-        return urlencode(dict(profile=engine.profile, voice=settings.voice, speed=settings.speed))
+        track = 'g2' if engine.sources == speech_library.sources else 'g3'
+        return urlencode(dict(profile=engine.profile, voice=settings.voice, speed=settings.speed, track=track))
 
     async def audio_home(request):
         return FileResponse(AUDIO_PAGE, headers={'Cache-Control': 'no-cache'})
 
     async def audio_catalog(request):
-        return JSONResponse({'items': await run_in_threadpool(speech_library.catalog),
+        track = request.query_params.get('track', 'g2')
+        try:
+            items = await run_in_threadpool(speech_library.catalog, track) if hasattr(speech_library, 'course_tracks') else await run_in_threadpool(speech_library.catalog)
+        except ValueError as exc:
+            audio_error(exc)
+        return JSONResponse({'items': items, 'track': track,
                              'default_voice': speech_library.default_voice,
                              'model': speech_library.model, 'profile': speech_library.profile}, headers={'Cache-Control': 'no-store'})
 
     async def audio_lecture(request):
         try:
-            row = await run_in_threadpool(speech_library.detail, request.path_params['lecture_id'])
+            if hasattr(speech_library, 'course_tracks'):
+                row = await run_in_threadpool(speech_library.detail, request.path_params['lecture_id'], request.query_params.get('track', 'g2'))
+            else:
+                if request.query_params.get('track', 'g2') != 'g2':
+                    raise ValueError('Unknown audio track')
+                row = await run_in_threadpool(speech_library.detail, request.path_params['lecture_id'])
         except (KeyError, IndexError, ValueError) as exc:
             audio_error(exc)
         return JSONResponse(row, headers={'Cache-Control': 'no-store'})
+
+    async def audio_tracks(request):
+        tracks = speech_library.course_tracks() if hasattr(speech_library, 'course_tracks') else [
+            dict(id='g2', label='G2 · Comprehensive audio', kind='audio', url='/audio?track=g2')]
+        return JSONResponse(dict(tracks=tracks, default_track='g2'),
+                            headers={'Cache-Control': 'no-store'})
 
     async def audio_profiles(request):
         if hasattr(speech_library, 'profiles'):
@@ -401,9 +420,9 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None,
                 raise HTTPException(413, 'TTS settings request is too large.')
         try:
             settings_body = json.loads(raw)
-            if not isinstance(settings_body, dict) or set(settings_body) - {'profile', 'voice', 'speed'}:
-                raise ValueError('Only profile, voice, and speed can be selected.')
-            engine = audio_engine(settings_body.get('profile'))
+            if not isinstance(settings_body, dict) or set(settings_body) - {'profile', 'voice', 'speed', 'track'}:
+                raise ValueError('Only track, profile, voice, and speed can be selected.')
+            engine = audio_engine(settings_body.get('profile'), settings_body.get('track', 'g2'))
             settings = engine.settings(settings_body.get('voice'), settings_body.get('speed'))
             result = await run_in_threadpool(engine.request,
                 request.path_params['lecture_id'], request.path_params['page'], settings)
@@ -437,6 +456,7 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None,
     app = Starlette(routes=[
         Route('/', index), Route('/audio', audio_home),
         Route('/api/audio-lectures', audio_catalog),
+        Route('/api/audio-tracks', audio_tracks),
         Route('/api/audio-voices', audio_voices),
         Route('/api/audio-voices/register', audio_register_voice, methods=['POST']),
         Route('/api/audio-profiles', audio_profiles),
