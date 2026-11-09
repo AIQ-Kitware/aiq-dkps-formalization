@@ -20,6 +20,10 @@ class SmokeError(RuntimeError):
     pass
 
 
+PUBLIC_PROFILE = 'crall-math-dk-v2-breeze-tts2'
+PUBLIC_VOICE = 'crall-math-dk-v2'
+
+
 class ReaderClient:
     def __init__(self, base, timeout=12):
         self.base = base.rstrip('/')
@@ -57,6 +61,8 @@ def select_profile(data, wanted):
         if not any(row.get('id') == wanted for row in profiles):
             raise SmokeError('Selected profile is not advertised by DKPS')
         return wanted
+    if any(row.get('id') == PUBLIC_PROFILE for row in profiles):
+        return PUBLIC_PROFILE
     possible = [row['id'] for row in profiles
                 if 'breeze' in str(row.get('id', '')).lower()
                 or 'breeze' in str(row.get('model', '')).lower()]
@@ -76,7 +82,10 @@ def state_line(label, row):
          if job.get('lecture_id') == row.get('lecture_id')]
     paragraphs = sum(item.get('progress', {}).get('completed_passages', 0) for item in q)
     etas = [item['eta_seconds'] for item in q if isinstance(item.get('eta_seconds'), (float, int))]
-    eta = f' · ETA ~{max(etas)}s' if etas else ''
+    exceeded = [job['estimate_exceeded_seconds'] for job in q
+                if isinstance(job.get('estimate_exceeded_seconds'), (int, float))]
+    eta = (f' · ETA ~{max(etas)}s' if etas
+           else f' · estimate exceeded by {max(exceeded)}s' if exceeded else '')
     return (f'{label}: cached {row["ready"]}/{row["total"]} · '
             f'active {counts.get("rendering", 0)} · queued {counts.get("queued", 0)} · '
             f'canceling {counts.get("canceling", 0)} · completed passages {paragraphs}{eta}')
@@ -110,13 +119,19 @@ def main(argv=None):
     if args.lecture_a == args.lecture_b:
         p.error('lecture A and lecture B must be different')
 
-    voice = os.environ.get('TTS_BENCH_VOICE', '').strip()
-    if not voice:
-        raise SmokeError('Set TTS_BENCH_VOICE locally; the script will not display its value')
     reader = ReaderClient(args.reader_url)
     jobs = validate_server(args.breeze_url)
     print(f'Breeze job API available ({jobs.get("workers", "?")} worker(s))')
-    profile = select_profile(reader.get('/api/audio-profiles'), os.environ.get('DKVIS_TTS_PROFILE'))
+    profiles = reader.get('/api/audio-profiles')
+    profile = select_profile(profiles, os.environ.get('DKVIS_TTS_PROFILE'))
+    advertised = next(row for row in profiles['profiles'] if row.get('id') == profile)
+    # Do not require two separate environment variables: use the selected
+    # profile's advertised default voice when the operator hasn't overridden it.
+    voice = (os.environ.get('TTS_BENCH_VOICE', '').strip()
+             or advertised.get('default_voice')
+             or (PUBLIC_VOICE if profile == PUBLIC_PROFILE else ''))
+    if not voice:
+        raise SmokeError('Selected profile has no default voice; set TTS_BENCH_VOICE locally')
     settings = dict(track=args.track, profile=profile, voice=voice, speed=args.speed)
     a = reader.get('/api/audio-generation/inventory', {**settings, 'lecture_id': args.lecture_a})
     b = reader.get('/api/audio-generation/inventory', {**settings, 'lecture_id': args.lecture_b})

@@ -8,9 +8,11 @@ the machine hosting both services.
 
 - `local-ai` Breeze is rebuilt and reachable at `http://127.0.0.1:8821`.
 - The DKPS reader is running at `http://127.0.0.1:8001/audio`.
-- The shell has `TTS_BENCH_VOICE` set to a voice installed in the local server.
-  The script reads that environment variable; it never prints it. If multiple
-  Breeze profiles are available, set `DKVIS_TTS_PROFILE` locally as well.
+- The checked-in public Breeze profile and its advertised voice are used by
+  default (`crall-math-dk-v2-breeze-tts2` and `crall-math-dk-v2`). Set
+  `DKVIS_TTS_PROFILE` and/or `TTS_BENCH_VOICE` only to override them. The script
+  does not print voice identifiers. An explicitly selected profile with no
+  advertised default voice requires `TTS_BENCH_VOICE`.
 - Use two lectures with missing cached audio. Defaults: `000000` and `001000`.
 - Do not exercise a lecture already being generated elsewhere: the script
   refuses to cancel a lecture that has pre-existing jobs.

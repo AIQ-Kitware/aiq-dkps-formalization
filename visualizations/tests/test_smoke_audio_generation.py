@@ -63,6 +63,8 @@ class TestSmoke(unittest.TestCase):
         data = {'profiles': [{'id': 'breeze-lecture', 'model': 'breeze-tts2'},
                              {'id': 'other', 'model': 'kokoro'}]}
         self.assertEqual(smoke.select_profile(data, None), 'breeze-lecture')
+        public = {'profiles': [*data['profiles'], {'id': smoke.PUBLIC_PROFILE, 'model': 'breeze-tts2'}]}
+        self.assertEqual(smoke.select_profile(public, None), smoke.PUBLIC_PROFILE)
         self.assertEqual(smoke.select_profile(data, 'other'), 'other')
         with self.assertRaises(smoke.SmokeError):
             smoke.select_profile({'profiles': data['profiles'][:1] * 2}, None)
@@ -97,9 +99,30 @@ class TestSmoke(unittest.TestCase):
         self.assertIn('PASS:', output.getvalue())
         self.assertNotIn('foobar', output.getvalue())
 
-    def test_missing_voice_does_not_attempt_connection(self):
-        with patch.dict(os.environ, {}, clear=True):
-            with self.assertRaisesRegex(smoke.SmokeError, 'Set TTS_BENCH_VOICE'):
+    def test_public_profile_and_voice_are_selected_without_environment(self):
+        class PublicReader(FakeReader):
+            def get(self, path, query=None):
+                if path == '/api/audio-profiles':
+                    return {'profiles': [{'id': smoke.PUBLIC_PROFILE, 'model': 'breeze-tts2',
+                                          'default_voice': smoke.PUBLIC_VOICE},
+                                         {'id': 'other-breeze', 'model': 'breeze-tts2'}],
+                            'default_profile': smoke.PUBLIC_PROFILE}
+                return super().get(path, query)
+
+        PublicReader.instances.clear()
+        with patch.object(smoke, 'ReaderClient', PublicReader), \
+             patch.object(smoke, 'validate_server', lambda *a, **kw: {'workers': 1}), \
+             patch.dict(os.environ, {}, clear=True), \
+             contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(smoke.main([]), 0)
+        self.assertEqual(PublicReader.instances[-1].calls, [])
+
+    def test_missing_voice_rejected_for_unconfigured_profile(self):
+        with patch.object(smoke, 'ReaderClient', FakeReader), \
+             patch.object(smoke, 'validate_server', lambda *a, **kw: {'workers': 1}), \
+             patch.dict(os.environ, {}, clear=True), \
+             contextlib.redirect_stdout(io.StringIO()):
+            with self.assertRaisesRegex(smoke.SmokeError, 'no default voice'):
                 smoke.main([])
 
 

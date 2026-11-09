@@ -5,8 +5,8 @@ pipeline. Only audio bytes are generated/cached here; manuscripts are read-only.
 """
 from __future__ import annotations
 
-from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import dataclass
+import time
 import hashlib
 import importlib.util
 import json
@@ -24,6 +24,8 @@ import urllib.request
 from uuid import uuid4
 
 from dkvis.presentation.paths import ROOT
+from dkvis.presentation.audio_jobs import SpeechQueue, GenerationCancelled, PRIORITY
+from dkvis.presentation.audio_metrics import AudioMetrics
 
 SOURCE_DIRECTORY = ROOT / 'draft-stages' / 'tts-lectures'
 PAPER_DIRECTORY = ROOT / 'draft-stages' / 'tts-paper'
@@ -176,6 +178,13 @@ class AudioLectureLibrary:
         self.default_voice = config['voice']
         self.response_format = config['response_format']
         self.request_settings = config.get('request', {})
+        # The Breeze server owns paragraph-oriented synthesis and joins when
+        # this capability is enabled. Other speech backends retain the
+        # existing small-request client-side fallback.
+        self.server_long_form = (
+            self.model.lower() == 'breeze-tts2'
+            and os.environ.get('DKVIS_AUDIO_BREEZE_LONG_FORM', '1') != '0'
+        )
         self.language = config.get('language')
         self.pronunciation_replacements = config.get('pronunciation_replacements', {})
         self.timeout = config['timeout_seconds']
@@ -214,10 +223,11 @@ class AudioLectureLibrary:
         if not VOICE_PATTERN.fullmatch(self.default_voice):
             raise ValueError('Invalid default TTS voice')
         self._sender = sender or self._send_speech
-        self._executor = ThreadPoolExecutor(max_workers=workers, thread_name_prefix='dkps-speech')
-        self._lock = threading.Lock()
-        self._jobs: dict[str, Future] = {}
-        self._max_queued = 8
+        self._native_sender = sender is None
+        self._queue = SpeechQueue(workers=workers, limit=8)
+        self._metrics = AudioMetrics(self.cache)
+        self.server_jobs = (self.server_long_form and
+                            os.environ.get('DKVIS_AUDIO_BREEZE_JOB_API', '1') != '0')
 
     def connection_status(self):
         """Probe upstream and show effective reader bounds (no private config paths)."""
@@ -225,9 +235,11 @@ class AudioLectureLibrary:
         port = parsed.port or (443 if parsed.scheme == 'https' else 80)
         details = dict(profile=self.profile, model=self.model, voice=self.default_voice,
                        upstream=f'{parsed.hostname}:{port}', page_chars=self.page_chars,
-                       speech_max_chars=self.speech_max_chars,
-                       speech_max_words=self.speech_max_words,
-                       speech_max_seconds=self.max_audio_seconds)
+                       speech_max_chars=None if self.server_long_form else self.speech_max_chars,
+                       speech_max_words=110 if self.server_long_form else self.speech_max_words,
+                       speech_target_words=80 if self.server_long_form else None,
+                       speech_max_seconds=None if self.server_long_form else self.max_audio_seconds,
+                       speech_policy='paragraph80-v1' if self.server_long_form else 'client-bounded-v4')
         try:
             with socket.create_connection((parsed.hostname, port), timeout=1.5):
                 return dict(state='reachable', **details)
@@ -236,7 +248,7 @@ class AudioLectureLibrary:
                         error=f'{type(exc).__name__}: {exc}')
 
     def close(self):
-        self._executor.shutdown(wait=False, cancel_futures=True)
+        self._queue.close()
 
     def _files(self):
         if not self.sources.is_dir():
@@ -315,7 +327,11 @@ class AudioLectureLibrary:
         lecture = self.detail(lecture_id)
         if page_index < 0 or page_index >= lecture['page_count']:
             raise IndexError(page_index)
-        text = lecture['pages'][page_index]
+        # Cache synthesis versions (including bounded-v4) live in _target_from_text.
+        return self._target_from_text(lecture_id, page_index, settings,
+                                      lecture['pages'][page_index])
+
+    def _target_from_text(self, lecture_id, page_index, settings, text):
         # Page size and pagination are inputs to the audio artifact, even if
         # a particular page's text happens to be unchanged after a resize.
         # Include the page address to keep in-flight jobs distinct when two
@@ -331,7 +347,8 @@ class AudioLectureLibrary:
         if settings.model.lower() != 'kokoro':
             # Breeze-specific synthesis parameters also distinguish recordings
             # made before the bounded-generation safeguards.
-            identity.update(synthesis='bounded-v4',
+            identity.update(synthesis=('server-paragraph80-v1' if self.server_long_form
+                                       else 'bounded-v4'),
                             synthesis_chars=self.speech_max_chars,
                             synthesis_words=self.speech_max_words,
                             max_audio_seconds=self.max_audio_seconds,
@@ -342,6 +359,9 @@ class AudioLectureLibrary:
         return self.cache / lecture_id / f'{page_index:03d}-{digest}.mp3', text, digest
 
     def _send_speech(self, text: str, settings: SpeechSettings, destination: Path):
+        if self.server_long_form and settings.model.lower() == 'breeze-tts2':
+            self._send_server_paragraph_speech(text, settings, destination)
+            return
         if settings.model.lower() != 'kokoro':
             self._send_bounded_speech(text, settings, destination)
             return
@@ -401,6 +421,157 @@ class AudioLectureLibrary:
         finally:
             if needs_conversion:
                 source.unlink(missing_ok=True)
+
+    @staticmethod
+    def _read_longform_response(response, source):
+        if response.headers.get('X-Local-AI-Speech-Policy') != 'paragraph80-v1':
+            raise SpeechServiceError('Breeze server does not advertise paragraph80-v1; rebuild/restart local-ai')
+        media_type = response.headers.get('Content-Type', '').lower()
+        if 'audio/wav' not in media_type and 'audio/x-wav' not in media_type:
+            raise SpeechServiceError('Breeze long-form server did not return WAV')
+        try:
+            timing = json.loads(response.headers['X-Local-AI-Speech-Timings'])
+        except (KeyError, ValueError) as exc:
+            raise SpeechServiceError('Breeze server omitted passage timings') from exc
+        with source.open('xb') as output:
+            size = 0
+            while block := response.read(256 * 1024):
+                size += len(block)
+                if size > 32 * 1024 * 1024:
+                    raise SpeechServiceError('Breeze long-form response exceeds 32 MB')
+                output.write(block)
+        claimed = response.headers.get('Content-Length')
+        if claimed is not None and int(claimed) != size:
+            raise SpeechServiceError(f'Speech response ended early: expected {claimed} bytes, got {size}')
+        return timing
+
+    def _receive_speech_job(self, payload, source, task):
+        """Poll server-managed generation and cancel between passages on demand."""
+        base = self.endpoint.removesuffix('/v1/audio/speech')
+        url = base + '/v1/audio/jobs'
+        body = {**payload, 'job_priority': PRIORITY[task.kind] if task else 0}
+        submission = urllib.request.Request(url, data=json.dumps(body).encode('utf-8'),
+                         headers={'Content-Type': 'application/json'}, method='POST')
+        try:
+            with urllib.request.urlopen(submission, timeout=15) as response:
+                submitted = json.load(response)
+        except urllib.error.HTTPError as exc:
+            if exc.code in (404, 501):
+                raise SpeechServiceError(
+                    'Breeze server lacks /v1/audio/jobs; deploy the updated local-ai server '
+                    'or set DKVIS_AUDIO_BREEZE_JOB_API=0 temporarily') from exc
+            raise
+        job_id = submitted.get('id', '')
+        if not re.fullmatch(r'[0-9a-f]{32}', job_id):
+            raise SpeechServiceError('Breeze server returned an invalid speech job ID')
+        job_url = f'{url}/{job_id}'
+        deadline = time.monotonic() + max(900, self.timeout)
+        try:
+            while True:
+                if task is not None:
+                    task.check_cancelled()
+                with urllib.request.urlopen(job_url, timeout=10) as response:
+                    state = json.load(response)
+                if task is not None:
+                    task.progress = {key: state[key] for key in (
+                        'completed_words', 'total_words', 'completed_passages',
+                        'total_passages', 'elapsed_seconds', 'queued_position') if key in state}
+                    task.progress['upstream_state'] = state.get('state')
+                if state.get('state') == 'ready':
+                    break
+                if state.get('state') in ('error', 'cancelled'):
+                    raise SpeechServiceError('Breeze job ' + state['state'] + ': ' + state.get('error', ''))
+                if time.monotonic() > deadline:
+                    raise SpeechServiceError('Breeze speech job exceeded request deadline')
+                time.sleep(.65)
+            if task is not None:
+                task.check_cancelled()
+            with urllib.request.urlopen(job_url + '/audio', timeout=35) as response:
+                return self._read_longform_response(response, source)
+        except BaseException:
+            try:
+                cancel_request = urllib.request.Request(job_url, method='DELETE')
+                urllib.request.urlopen(cancel_request, timeout=3).close()
+            except (OSError, ValueError):
+                pass
+            raise
+
+    def _send_server_paragraph_speech(self, text: str, settings: SpeechSettings,
+                                      destination: Path, task=None):
+        """Request complete page narration from a paragraph80-capable server.
+
+        Always request PCM WAV, verify the advertised server policy and timing,
+        then produce an independently seekable MP3. A server that silently
+        ignores the extension cannot be mistaken for a successful render.
+        """
+        from dkvis.presentation.media import duration
+        from dkvis.presentation.pronunciation import speech_text
+
+        if not shutil.which('ffmpeg') or not shutil.which('ffprobe'):
+            raise SpeechServiceError('Server paragraph narration requires FFmpeg and FFprobe')
+        spoken = speech_text(text, self.pronunciation_replacements)
+        payload = dict(self.request_settings)
+        # Preserve the selected voice, reference transcript override, and seed,
+        # but don't inherit an instruction/CFG template incompatible with the
+        # plain-clone paragraph80 policy.
+        for key in ('instruction', 'voice_direction', 'direction'):
+            payload.pop(key, None)
+        payload.update(model=settings.model, voice=settings.voice, input=spoken,
+                       response_format='wav', cfg_scale=1.0, long_form=True)
+        if self.language:
+            payload['language'] = self.language
+        source = destination.with_name(destination.name + '.source.wav')
+        try:
+            try:
+                if self.server_jobs:
+                    timing = self._receive_speech_job(payload, source, task)
+                else:
+                    request = urllib.request.Request(
+                        self.endpoint, data=json.dumps(payload).encode('utf-8'),
+                        headers={'Content-Type': 'application/json'}, method='POST')
+                    with urllib.request.urlopen(request, timeout=min(180, self.timeout)) as response:
+                        timing = self._read_longform_response(response, source)
+            except urllib.error.HTTPError as exc:
+                detail = exc.read(350).decode('utf-8', errors='replace').strip()
+                raise SpeechServiceError(f'Breeze server HTTP {exc.code}: {detail}') from exc
+            except (urllib.error.URLError, TimeoutError) as exc:
+                raise SpeechServiceError(f'Cannot connect to Breeze server at {self.endpoint}: {exc}') from exc
+            if (timing.get('version') != 1 or timing.get('policy') != 'paragraph80-v1'
+                    or not isinstance(timing.get('chunks'), list) or not timing['chunks']
+                    or sum(item.get('words', 0) for item in timing['chunks']) != len(spoken.split())):
+                raise SpeechServiceError('Breeze server returned invalid passage coverage metadata')
+            if source.stat().st_size < 256:
+                raise SpeechServiceError('Breeze server returned empty long-form WAV')
+            input_seconds = duration(source)
+            if abs(input_seconds - timing['duration']) > 0.05:
+                raise SpeechServiceError('Breeze server passage metadata disagrees with WAV duration')
+            command = ['ffmpeg', '-nostdin', '-y', '-loglevel', 'error', '-i', str(source), '-vn']
+            if settings.speed != 1.0:
+                command += ['-filter:a', f'atempo={settings.speed:g}']
+            command += ['-codec:a', 'libmp3lame', '-q:a', '3', '-f', 'mp3', str(destination)]
+            try:
+                result = subprocess.run(command, capture_output=True, text=True, timeout=180)
+            except (OSError, subprocess.TimeoutExpired) as exc:
+                raise SpeechServiceError(f'FFmpeg long-form encoding failed: {exc}') from exc
+            if result.returncode:
+                raise SpeechServiceError(f'FFmpeg long-form encoding failed: {result.stderr[-350:]}')
+            output_seconds = duration(destination)
+            target_seconds = input_seconds / settings.speed
+            if abs(output_seconds - target_seconds) > max(0.35, target_seconds * .015):
+                raise SpeechServiceError(
+                    f'Long-form audio assembly duration mismatch: expected {target_seconds:.2f}s, '
+                    f'got {output_seconds:.2f}s')
+            scale = output_seconds / input_seconds
+            chunks = [dict(words=item['words'],
+                           start=round(item['start'] * scale, 4),
+                           end=round(item['end'] * scale, 4))
+                      for item in timing['chunks']]
+            sidecar = destination.with_name(destination.name + '.timings.json')
+            sidecar.write_text(json.dumps(dict(version=1, chunks=chunks,
+                                               duration=output_seconds), indent=2) + '\n',
+                               encoding='utf-8')
+        finally:
+            source.unlink(missing_ok=True)
 
     def _send_bounded_speech(self, text: str, settings: SpeechSettings, destination: Path):
         """Assemble a whole page from verified, bounded local-TTS requests.
@@ -578,58 +749,114 @@ class AudioLectureLibrary:
                                                duration=output_seconds), indent=2) + '\n',
                                encoding='utf-8')
 
-    def _generate(self, target, text, settings):
+    def _config_key(self, settings):
+        return AudioMetrics.key(dict(profile=self.profile, endpoint=self.endpoint,
+                                     model=settings.model, voice=settings.voice,
+                                     speed=settings.speed, policy=('paragraph80-v1' if self.server_long_form
+                                                                  else 'legacy'),
+                                     request=self.request_settings))
+
+    def _generate(self, target, text, settings, task=None):
+        if task is None:  # Retain direct-generation API for standalone tools/tests.
+            from types import SimpleNamespace
+            task = SimpleNamespace(check_cancelled=lambda: None,
+                                   config_key=self._config_key(settings),
+                                   words=len(text.split()), kind='playback', progress={})
+        task.check_cancelled()
         target.parent.mkdir(parents=True, exist_ok=True)
         temporary = target.with_name(f'.{target.stem}-{uuid4().hex}.tmp')
+        started = time.monotonic()
         try:
-            self._sender(text, settings, temporary)
+            if self._native_sender and self.server_long_form:
+                self._send_server_paragraph_speech(text, settings, temporary, task=task)
+            else:
+                self._sender(text, settings, temporary)
+            task.check_cancelled()
             if not temporary.is_file() or temporary.stat().st_size < 256:
                 raise SpeechServiceError('Speech endpoint returned incomplete audio')
             temporary_timing = temporary.with_name(temporary.name + '.timings.json')
+            task.check_cancelled()
             if temporary_timing.is_file():
                 os.replace(temporary_timing, target.with_name(target.name + '.timings.json'))
             os.replace(temporary, target)
+            self._metrics.record(task.config_key, task.words, time.monotonic() - started)
         finally:
             temporary.unlink(missing_ok=True)
             temporary.with_name(temporary.name + '.timings.json').unlink(missing_ok=True)
 
+    def _ready(self, target, digest):
+        if not target.is_file() or target.stat().st_size < 256:
+            return None
+        result = dict(state='ready', key=digest, bytes=target.stat().st_size)
+        timing_file = target.with_name(target.name + '.timings.json')
+        try:
+            timing = json.loads(timing_file.read_text(encoding='utf-8'))
+            if isinstance(timing, dict) and timing.get('version') == 1:
+                result['timings'] = timing
+        except (OSError, ValueError):
+            pass
+        return result
+
     def status(self, lecture_id, page_index, settings):
         target, _text, digest = self._target(lecture_id, page_index, settings)
-        if target.is_file() and target.stat().st_size >= 256:
-            result = dict(state='ready', key=digest, bytes=target.stat().st_size)
-            timing_file = target.with_name(target.name + '.timings.json')
-            try:
-                timing = json.loads(timing_file.read_text(encoding='utf-8'))
-                if isinstance(timing, dict) and timing.get('version') == 1:
-                    result['timings'] = timing
-            except (OSError, ValueError):
-                pass
-            return result
-        with self._lock:
-            job = self._jobs.get(digest)
-            if job is None:
-                return dict(state='missing', key=digest)
-            if job.done():
-                error = job.exception()
-                if error:
-                    return dict(state='error', key=digest, error=str(error))
-                return dict(state='missing', key=digest)
-            return dict(state='rendering' if job.running() else 'queued', key=digest)
+        ready = self._ready(target, digest)
+        if ready:
+            return ready
+        task = self._queue.task(digest)
+        if task is None:
+            return dict(state='missing', key=digest)
+        rate = self._metrics.estimate(task.config_key)
+        row = self._queue.describe(task, seconds_per_word=rate['seconds_per_word'])
+        row['key'] = digest
+        row['estimate_source'] = rate['source']
+        row['estimate_samples'] = rate['sample_count']
+        return row
 
-    def request(self, lecture_id, page_index, settings):
+    def request(self, lecture_id, page_index, settings, kind='playback'):
         target, text, digest = self._target(lecture_id, page_index, settings)
-        if target.is_file() and target.stat().st_size >= 256:
-            return self.status(lecture_id, page_index, settings)
-        with self._lock:
-            running = self._jobs.get(digest)
-            if running is None or running.done():
-                in_flight = sum(1 for job in self._jobs.values() if not job.done())
-                if in_flight >= self._max_queued:
-                    raise OverflowError('Audio generation queue is full; retry shortly')
-                # Retire finished jobs; cached files, not futures, are durable.
-                self._jobs = {key: job for key, job in self._jobs.items() if not job.done()}
-                self._jobs[digest] = self._executor.submit(self._generate, target, text, settings)
+        ready = self._ready(target, digest)
+        if ready:
+            return ready
+        config_key = self._config_key(settings)
+        self._queue.submit(digest, lambda task: self._generate(target, text, settings, task),
+                           kind=kind, lecture_id=lecture_id, page=page_index,
+                           words=len(text.split()), config_key=config_key)
         return self.status(lecture_id, page_index, settings)
+
+    def cancel(self, lecture_id, settings):
+        self._lecture_path(lecture_id)
+        return self._queue.cancel(lecture_id=lecture_id, config_key=self._config_key(settings))
+
+    def inventory(self, lecture_id, settings):
+        lecture = self.detail(lecture_id)
+        states = []
+        for index, text in enumerate(lecture['pages']):
+            target, _, key = self._target_from_text(lecture_id, index, settings, text)
+            if self._ready(target, key):
+                states.append('ready')
+            else:
+                task = self._queue.task(key)
+                states.append(self._queue.describe(task)['state'] if task else 'missing')
+        counts = {name: states.count(name) for name in
+                  ('ready', 'missing', 'queued', 'rendering', 'canceling', 'cancelled', 'error')}
+        rate = self._metrics.estimate(self._config_key(settings))
+        queue = self._queue.snapshot(config_key=self._config_key(settings),
+                                     seconds_per_word=rate['seconds_per_word'])
+        return dict(lecture_id=lecture_id, total=len(states), ready=counts['ready'],
+                    percent=round(100*counts['ready']/max(1,len(states)), 1),
+                    states=states, counts=counts, queue=queue,
+                    estimate_source=rate['source'], estimate_samples=rate['sample_count'])
+
+    def catalog_inventory(self, settings):
+        items = []
+        for path in self._files():
+            record = self._record(path, True)
+            cached = 0
+            for index, text in enumerate(record['pages']):
+                target, _, digest = self._target_from_text(record['id'], index, settings, text)
+                cached += bool(target.is_file() and target.stat().st_size >= 256)
+            items.append(dict(id=record['id'], ready=cached, total=record['page_count']))
+        return items
 
     def audio_file(self, lecture_id, page_index, settings):
         target, _text, _digest = self._target(lecture_id, page_index, settings)
@@ -673,12 +900,15 @@ class AudioLectureHub:
         self.document = load_profiles(config)
         self.sources = Path(sources).resolve()
         self.cache = Path(cache or (ROOT / 'audio-cache')).resolve()
-        # The standard reader default stays Kokoro; a private config without
-        # Kokoro falls back to its own declared default profile.
+        # The public Breeze profile is the normal reader default. Machine-local
+        # overrides still take precedence; preserve alternate configs that do
+        # not include that public profile.
         profiles = self.document.get('profiles', {})
+        default_profile = ('crall-math-dk-v2-breeze-tts2'
+                           if 'crall-math-dk-v2-breeze-tts2' in profiles
+                           else self.document.get('profile', 'kokoro'))
         self.profile = (profile or os.environ.get('DKVIS_AUDIO_TTS_PROFILE')
-                        or ('kokoro' if 'kokoro' in profiles
-                            else self.document.get('profile', 'kokoro')))
+                        or os.environ.get('DKVIS_TTS_PROFILE') or default_profile)
         if self.profile not in profiles:
             raise ValueError(f'Unknown audio profile: {self.profile}')
         self._endpoint_override = endpoint

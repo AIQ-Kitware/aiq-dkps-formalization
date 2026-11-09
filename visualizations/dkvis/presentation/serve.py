@@ -484,6 +484,50 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None,
             audio_error(ValueError(str(exc)))
         return JSONResponse(record, status_code=201, headers={'Cache-Control': 'no-store'})
 
+    async def audio_inventory(request):
+        try:
+            engine, settings = audio_settings(request)
+            lecture_id = request.query_params.get('lecture_id')
+            if not lecture_id:
+                raise ValueError('lecture_id is required')
+            result = await run_in_threadpool(engine.inventory, lecture_id, settings)
+        except (ValueError, IndexError, KeyError) as exc:
+            audio_error(exc)
+        return JSONResponse(result, headers={'Cache-Control': 'no-store'})
+
+    async def audio_cache_catalog(request):
+        try:
+            engine, settings = audio_settings(request)
+            result = await run_in_threadpool(engine.catalog_inventory, settings)
+        except (ValueError, IndexError, KeyError) as exc:
+            audio_error(exc)
+        return JSONResponse(dict(items=result), headers={'Cache-Control': 'no-store'})
+
+    async def audio_cancel_generation(request):
+        if request.headers.get('content-type', '').split(';')[0].strip() != 'application/json':
+            raise HTTPException(415, 'Send cancellation settings as JSON.')
+        origin = request.headers.get('origin')
+        if origin and origin != f'{request.url.scheme}://{request.url.netloc}':
+            raise HTTPException(403, 'Cancel speech from this lecture library.')
+        raw = bytearray()
+        async for chunk in request.stream():
+            raw.extend(chunk)
+            if len(raw) > 2048:
+                raise HTTPException(413, 'Cancellation request is too large.')
+        try:
+            body = json.loads(raw)
+            if not isinstance(body, dict) or set(body) - {'profile', 'voice', 'speed', 'track', 'lecture_id'}:
+                raise ValueError('Invalid cancellation fields')
+            engine = audio_engine(body.get('profile'), body.get('track', 'g2'))
+            settings = engine.settings(body.get('voice'), body.get('speed'))
+            if not isinstance(body.get('lecture_id'), str):
+                raise ValueError('lecture_id is required')
+            affected = await run_in_threadpool(engine.cancel, body['lecture_id'], settings)
+        except (ValueError, IndexError, KeyError, TypeError) as exc:
+            audio_error(exc)
+        return JSONResponse(dict(cancelled=affected, count=len(affected)),
+                            headers={'Cache-Control': 'no-store'})
+
     def audio_status_payload(request, result, engine, settings):
         if result['state'] == 'ready':
             result['url'] = (f'/api/audio-lectures/{request.path_params["lecture_id"]}'
@@ -514,12 +558,15 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None,
                 raise HTTPException(413, 'TTS settings request is too large.')
         try:
             settings_body = json.loads(raw)
-            if not isinstance(settings_body, dict) or set(settings_body) - {'profile', 'voice', 'speed', 'track'}:
+            if not isinstance(settings_body, dict) or set(settings_body) - {'profile', 'voice', 'speed', 'track', 'purpose'}:
                 raise ValueError('Only track, profile, voice, and speed can be selected.')
             engine = audio_engine(settings_body.get('profile'), settings_body.get('track', 'g2'))
             settings = engine.settings(settings_body.get('voice'), settings_body.get('speed'))
+            purpose = settings_body.get('purpose', 'playback')
+            if purpose not in ('playback', 'cache', 'prefetch'):
+                raise ValueError('Invalid generation purpose')
             result = await run_in_threadpool(engine.request,
-                request.path_params['lecture_id'], request.path_params['page'], settings)
+                request.path_params['lecture_id'], request.path_params['page'], settings, purpose)
         except (ValueError, IndexError, KeyError, OverflowError, TypeError) as exc:
             audio_error(exc if not isinstance(exc, TypeError) else ValueError('Invalid TTS settings.'))
         if result['state'] == 'ready':
@@ -573,6 +620,9 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None,
         Route('/api/audio-voices/register', audio_register_voice, methods=['POST']),
         Route('/api/audio-profiles', audio_profiles),
         Route('/api/audio-health', audio_health),
+        Route('/api/audio-generation/inventory', audio_inventory),
+        Route('/api/audio-generation/catalog', audio_cache_catalog),
+        Route('/api/audio-generation/cancel', audio_cancel_generation, methods=['POST']),
         Route('/api/audio-lectures/{lecture_id}', audio_lecture),
         Route('/api/audio-lectures/{lecture_id}/transcript.txt', audio_plain_transcript),
         Route('/api/audio-lectures/{lecture_id}/pages/{page:int}', audio_page_status),
@@ -595,7 +645,7 @@ def main(argv=None):
     parser.add_argument('--audio-source-directory', type=Path, help='directory containing the staged Markdown lectures')
     parser.add_argument('--audio-cache-directory', type=Path, help='persistent MP3 page cache')
     parser.add_argument('--audio-tts-endpoint', help='override profile speech URL')
-    parser.add_argument('--audio-tts-profile', help='default audio profile (default: kokoro; DKVIS_AUDIO_TTS_PROFILE overrides)')
+    parser.add_argument('--audio-tts-profile', help='default audio profile (public Breeze; DKVIS_AUDIO_TTS_PROFILE or DKVIS_TTS_PROFILE overrides)')
     parser.add_argument('--tts-config', type=Path,
                         help='TTS profile config for the audio reader (default: tts.toml; DKVIS_AUDIO_TTS_CONFIG overrides)')
     parser.add_argument('--host', default='0.0.0.0')

@@ -110,7 +110,7 @@ help:
 	@echo '  tts-experiment     compare original/previous/composite references with phrase-aligned visuals'
 	@echo '  list               list all presentations and transcript availability'
 	@echo '  serve              browse all 150 audio lectures at /audio plus existing renders'
-	@echo '                     AUDIO_TTS_PROFILE overrides reader default (kokoro); AUDIO_TTS_ENDPOINT overrides its URL; TTS_CONFIG selects an ignored private profile config'
+	@echo '                     AUDIO_TTS_PROFILE overrides reader default (public Breeze); AUDIO_TTS_ENDPOINT overrides its URL; TTS_CONFIG selects an ignored private profile config'
 	@echo '  operators          build the three accepted operator-foundation lectures'
 	@echo '  prerequisites      build the ordered prerequisite lectures and speech text'
 	@echo '  prerequisites-video narrate the prerequisite series; TTS_PROFILE=crall-math-dk-v2-breeze-tts2 selects the lecture voice'
