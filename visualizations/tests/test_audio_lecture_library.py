@@ -1333,3 +1333,109 @@ def test_paragraph_job_http_protocol_generates_cached_mp3(tmp_path, monkeypatch)
         server.shutdown()
         server.server_close()
         thread.join(timeout=2)
+
+
+def test_background_prepare_http_survives_unrelated_requests(audio_site):
+    """The browser no longer owns the whole-lecture caching loop."""
+    client, _lecture, library, calls = audio_site
+    payload = dict(track='g2', lecture_id='123000', voice='af_alloy', speed=1)
+    started = client.post('/api/audio-generation/prepare', json=payload)
+    assert started.status_code == 202, started.text
+    assert started.json()['total'] == library.detail('123000')['page_count']
+    duplicate = client.post('/api/audio-generation/prepare', json=payload)
+    assert duplicate.status_code == 202
+    # Unrelated browsing does not stop the background queue.
+    assert client.get('/api/audio-lectures').status_code == 200
+    deadline = time.monotonic() + 8
+    while time.monotonic() < deadline:
+        inventory = client.get('/api/audio-generation/inventory',
+                               params=payload).json()
+        if inventory['preparation']['state'] == 'finished':
+            break
+        time.sleep(.025)
+    assert inventory['preparation']['state'] == 'finished'
+    assert inventory['ready'] == inventory['total']
+    assert len(calls) == inventory['total']
+    catalog = client.get('/api/audio-generation/catalog',
+                         params={'voice': 'af_alloy', 'speed': 1}).json()['items']
+    assert next(item for item in catalog if item['id'] == '123000')['ready'] == inventory['total']
+    # Re-requesting a completed preparation uses cached pages, not re-synthesis.
+    assert client.post('/api/audio-generation/prepare', json=payload).status_code == 202
+    deadline = time.monotonic() + 4
+    while time.monotonic() < deadline:
+        prep = client.get('/api/audio-generation/inventory', params=payload).json()['preparation']
+        if prep['state'] == 'finished':
+            break
+        time.sleep(.025)
+    assert prep['state'] == 'finished'
+    assert len(calls) == inventory['total']
+
+
+def test_cancel_background_preparation_prevents_further_pages(audio_site):
+    import threading
+    client, _lecture, library, _calls = audio_site
+    entered = threading.Event()
+    release = threading.Event()
+    invoked = []
+
+    def blocked_sender(text, settings, target):
+        invoked.append(text)
+        entered.set()
+        release.wait(3)
+        target.write_bytes(b'ID3' + b'\x00' * 4096)
+
+    library._sender = blocked_sender
+    payload = dict(track='g2', lecture_id='123000', voice='af_alloy', speed=1)
+    try:
+        assert client.post('/api/audio-generation/prepare', json=payload).status_code == 202
+        assert entered.wait(3)
+        cancelled = client.post('/api/audio-generation/cancel', json=payload)
+        assert cancelled.status_code == 200
+        already_started = len(invoked)
+        release.set()
+        deadline = time.monotonic() + 5
+        while time.monotonic() < deadline:
+            status = client.get('/api/audio-generation/inventory', params=payload).json()
+            if status['preparation']['state'] == 'cancelled' and not status['queue']:
+                break
+            time.sleep(.02)
+        assert status['preparation']['state'] == 'cancelled'
+        assert not status['queue']
+        assert status['ready'] < status['total']
+        assert len(invoked) == already_started  # No later queued synthesis started.
+    finally:
+        release.set()
+
+
+def test_audio_reader_has_background_preparation_controls(audio_site):
+    client, _lecture, _lib, _calls = audio_site
+    html = client.get('/audio').text
+    assert '/api/audio-generation/prepare' in html
+    assert 'Preparing lecture in the server queue' in html
+    assert 'passage ${progress.current_passage}' in html
+
+
+def test_reader_status_preserves_upstream_wait_estimate_source(audio_site, monkeypatch):
+    import threading
+    client, _lecture, library, _calls = audio_site
+    entered = threading.Event()
+    release = threading.Event()
+
+    def waiting_sender(text, settings, target):
+        entered.set()
+        release.wait(3)
+        target.write_bytes(b'ID3' + b'\x00' * 4096)
+
+    library._sender = waiting_sender
+    params = {'voice': 'af_alloy', 'speed': 1}
+    try:
+        result = client.post('/api/audio-lectures/123000/pages/0/render', json=params)
+        assert result.status_code == 202
+        assert entered.wait(3)
+        task = library._queue.task(result.json()['key'])
+        task.progress.update(upstream_state='queued', elapsed_seconds=0)
+        status = client.get('/api/audio-lectures/123000/pages/0', params=params).json()
+        assert status['estimate_source'] == 'waiting_for_gpu'
+        assert 'eta_seconds' not in status
+    finally:
+        release.set()

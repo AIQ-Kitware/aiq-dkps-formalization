@@ -66,12 +66,13 @@ Open `/audio`, select the local Breeze profile and voice, then:
 5. Reload `/audio`. Cached status should persist. ETA estimates should be
    informed by newly completed pages.
 
-**Current browser limitation:** `Cache whole lecture` schedules its pages one
-at a time. The server and DKPS queues support multiple requests, but the
-whole-lecture browser action does not enqueue all pages at once. Switching
-lectures stops that browser loop but does not cancel already submitted work;
-use the explicit cancellation controls for that. The smoke script tests
-multiple pending jobs separately.
+**Background preparation:** `Cache whole lecture` now starts a server-owned
+campaign that submits a bounded number of pages to the priority queue and
+continues when you switch lectures or close the tab. The API reports its
+status through `GET /api/audio-generation/inventory`. Stop the campaign with
+**Stop generation** or **Cancel lecture**. Campaigns are in-memory; restart a
+campaign after restarting the DKPS server. Existing completed pages are reused.
+The smoke script also tests multiple pending jobs independently.
 
 ## Interpreting failures
 

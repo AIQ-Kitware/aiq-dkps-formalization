@@ -78,7 +78,10 @@ class SpeechQueue:
                 return previous
             count = sum(not task.future.done() and not task.cancel_event.is_set()
                         for task in self.tasks.values())
-            if count >= self.limit:
+            # Keep one admission slot for an interactive page even when
+            # multiple background lecture preparations are filling the queue.
+            capacity = self.limit if kind == 'playback' else max(1, self.limit - 1)
+            if count >= capacity:
                 raise OverflowError('Audio generation queue is full; cancel an old job or retry')
             self.sequence += 1
             task = SpeechTask(key, callback, kind, lecture_id, page, words, config_key, self.sequence)
@@ -149,10 +152,18 @@ class SpeechQueue:
                 result['progress'] = dict(task.progress)
             if seconds_per_word is not None and result['state'] in ('queued', 'rendering', 'canceling'):
                 elapsed = result.get('elapsed_seconds', 0)
+                # A DKPS worker can be active while its Breeze job is queued
+                # behind another GPU request. Do not count that queue wait as
+                # speech synthesis time or display a fictitious ETA countdown.
+                upstream_state = task.progress.get('upstream_state')
+                if upstream_state == 'queued' and result['state'] == 'rendering':
+                    result['estimate_source'] = 'waiting_for_gpu'
+                    return result
+                synthesis_elapsed = task.progress.get('elapsed_seconds', elapsed)
                 completed = max(0, min(task.words, task.progress.get('completed_words', 0)))
                 remaining = (task.words - completed) * seconds_per_word
                 if not completed:
-                    remaining = task.words * seconds_per_word - elapsed
+                    remaining = task.words * seconds_per_word - synthesis_elapsed
                 # No reliable time remains estimate once a running request
                 # exceeds its forecast (or after its last word has been
                 # generated but its audio is still being encoded/published).

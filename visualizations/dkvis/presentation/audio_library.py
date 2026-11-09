@@ -26,6 +26,7 @@ from uuid import uuid4
 from dkvis.presentation.paths import ROOT
 from dkvis.presentation.audio_jobs import SpeechQueue, GenerationCancelled, PRIORITY
 from dkvis.presentation.audio_metrics import AudioMetrics
+from dkvis.presentation.audio_preparation import PreparationManager
 
 SOURCE_DIRECTORY = ROOT / 'draft-stages' / 'tts-lectures'
 PAPER_DIRECTORY = ROOT / 'draft-stages' / 'tts-paper'
@@ -226,6 +227,7 @@ class AudioLectureLibrary:
         self._native_sender = sender is None
         self._queue = SpeechQueue(workers=workers, limit=8)
         self._metrics = AudioMetrics(self.cache)
+        self._preparations = PreparationManager(max_inflight=3)
         self.server_jobs = (self.server_long_form and
                             os.environ.get('DKVIS_AUDIO_BREEZE_JOB_API', '1') != '0')
 
@@ -248,6 +250,7 @@ class AudioLectureLibrary:
                         error=f'{type(exc).__name__}: {exc}')
 
     def close(self):
+        self._preparations.close()
         self._queue.close()
 
     def _files(self):
@@ -475,7 +478,8 @@ class AudioLectureLibrary:
                 if task is not None:
                     task.progress = {key: state[key] for key in (
                         'completed_words', 'total_words', 'completed_passages',
-                        'total_passages', 'elapsed_seconds', 'queued_position') if key in state}
+                        'total_passages', 'elapsed_seconds', 'queued_position',
+                        'current_passage', 'current_passage_words', 'phase') if key in state}
                     task.progress['upstream_state'] = state.get('state')
                 if state.get('state') == 'ready':
                     break
@@ -808,7 +812,7 @@ class AudioLectureLibrary:
         rate = self._metrics.estimate(task.config_key)
         row = self._queue.describe(task, seconds_per_word=rate['seconds_per_word'])
         row['key'] = digest
-        row['estimate_source'] = rate['source']
+        row.setdefault('estimate_source', rate['source'])
         row['estimate_samples'] = rate['sample_count']
         return row
 
@@ -823,9 +827,23 @@ class AudioLectureLibrary:
                            words=len(text.split()), config_key=config_key)
         return self.status(lecture_id, page_index, settings)
 
+    def prepare_lecture(self, lecture_id, settings):
+        """Continue caching a lecture independently of any browser connection.
+
+        Reuses existing valid pages and feeds a bounded number of cache-priority
+        requests into the ordinary speech queue. Playback remains higher priority.
+        """
+        detail = self.detail(lecture_id)
+        return self._preparations.start(
+            lecture_id, self._config_key(settings), len(detail['pages']),
+            lambda page: self.request(lecture_id, page, settings, 'cache'),
+            lambda page: self.status(lecture_id, page, settings))
+
     def cancel(self, lecture_id, settings):
         self._lecture_path(lecture_id)
-        return self._queue.cancel(lecture_id=lecture_id, config_key=self._config_key(settings))
+        config_key = self._config_key(settings)
+        self._preparations.cancel(lecture_id, config_key)
+        return self._queue.cancel(lecture_id=lecture_id, config_key=config_key)
 
     def inventory(self, lecture_id, settings):
         lecture = self.detail(lecture_id)
@@ -842,9 +860,10 @@ class AudioLectureLibrary:
         rate = self._metrics.estimate(self._config_key(settings))
         queue = self._queue.snapshot(config_key=self._config_key(settings),
                                      seconds_per_word=rate['seconds_per_word'])
+        preparation = self._preparations.status(lecture_id, self._config_key(settings))
         return dict(lecture_id=lecture_id, total=len(states), ready=counts['ready'],
                     percent=round(100*counts['ready']/max(1,len(states)), 1),
-                    states=states, counts=counts, queue=queue,
+                    states=states, counts=counts, queue=queue, preparation=preparation,
                     estimate_source=rate['source'], estimate_samples=rate['sample_count'])
 
     def catalog_inventory(self, settings):
@@ -855,7 +874,9 @@ class AudioLectureLibrary:
             for index, text in enumerate(record['pages']):
                 target, _, digest = self._target_from_text(record['id'], index, settings, text)
                 cached += bool(target.is_file() and target.stat().st_size >= 256)
-            items.append(dict(id=record['id'], ready=cached, total=record['page_count']))
+            prep = self._preparations.status(record['id'], self._config_key(settings))
+            items.append(dict(id=record['id'], ready=cached, total=record['page_count'],
+                              preparing=bool(prep and prep['state'] in ('running', 'canceling'))))
         return items
 
     def audio_file(self, lecture_id, page_index, settings):

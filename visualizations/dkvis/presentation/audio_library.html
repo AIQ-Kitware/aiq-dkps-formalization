@@ -93,6 +93,7 @@ function cacheLabel(id){
   const entry=state.cacheCatalog.get(id);
   if(!entry)return '';
   if(entry.ready===entry.total)return 'Ready to play · ';
+  if(entry.preparing)return `Preparing · ${entry.ready}/${entry.total} cached · `;
   if(!entry.ready)return 'Not cached · ';
   return `Partial ${Math.round(100*entry.ready/entry.total)}% (${entry.ready}/${entry.total}) · `;
 }
@@ -358,13 +359,18 @@ for(const connection of doc.course_connections||[]){const li=document.createElem
 selectPage(Number(saved('page-'+state.track+'-'+id,0))||0);highlight();refreshInventory();}catch(err){if(token===state.token){$('loading').textContent='Could not load lecture: '+err.message}}}
 function formatGenerationStatus(status){
   if(!status)return 'Preparing speech…';
-  const stateName=status.state==='rendering'?(status.progress?.upstream_state==='queued'?'Waiting for Breeze GPU':'Generating'):status.state==='queued'?'Queued':status.state;
+  const stateName=status.state==='rendering'?
+    (status.progress?.upstream_state==='queued'?'Waiting for Breeze GPU'
+      :status.progress?.upstream_state==='ready'?'Finalizing audio':'Generating'):
+    status.state==='queued'?'Queued':status.state;
   const eta=Number.isFinite(status.eta_seconds)?` · approximately ${clock(status.eta_seconds)} remaining`
     :Number.isFinite(status.estimate_exceeded_seconds)
       ?` · estimate exceeded by ${clock(status.estimate_exceeded_seconds)} (still working)`
       :'';
   const progress=status.progress;
-  const part=progress?.total_passages?` · ${progress.completed_passages||0}/${progress.total_passages} passages`:'';
+  const part=progress?.current_passage && progress?.phase==='synthesizing'
+    ?` · passage ${progress.current_passage}/${progress.total_passages||'?'} synthesizing`
+    :progress?.total_passages?` · ${progress.completed_passages||0}/${progress.total_passages} passages`:'';
   const position=status.queued_position?` · queue position ${status.queued_position}`:'';
   return stateName+part+position+eta;
 }
@@ -402,7 +408,15 @@ function renderInventory(result){
   });
   const rows=$('queueList');rows.replaceChildren();
   $('queueSummary').textContent=result.queue.length?`${result.queue.length} unfinished job(s)`:'Idle';
-  $('stopGeneration').disabled=!result.queue.some(job=>job.lecture_id===result.lecture_id);
+  const preparation=result.preparation;
+  const isPreparing=preparation && ['running','canceling'].includes(preparation.state);
+  $('generateAll').disabled=Boolean(isPreparing);
+  $('stopGeneration').disabled=!(isPreparing || result.queue.some(job=>job.lecture_id===result.lecture_id));
+  $('cacheCount').textContent=isPreparing
+    ?`Preparing lecture · ${result.ready}/${result.total} ready · ${preparation.submitted} submitted${preparation.state==='canceling'?' · stopping':''}`
+    :preparation?.state==='finished_with_errors'
+      ?`Finished with ${preparation.failed} failed page(s); select Cache whole lecture to retry`
+      :'';
   for(const job of result.queue){
     const li=document.createElement('li'),info=document.createElement('span');
     info.className='subtle';
@@ -448,7 +462,21 @@ async function ensurePage(lectureId, page, config, onStatus=()=>{}, purpose='pla
 }
 async function playPage(){if(!state.doc)return;const docId=state.doc.id,index=state.page,config=settings(),token=++state.token;const identifier=JSON.stringify([docId,index,config]);if(state.audioId===identifier && audio.src){try{await audio.play();state.playing=true;$('play').textContent='❚❚ Pause'}catch(err){setStatus('Playback: '+err.message,true)}return}state.playing=true;$('play').disabled=true;setStatus('Preparing speech…');try{const result=await ensurePage(docId,index,config,status=>{if(token===state.token)setStatus(formatGenerationStatus(status))},'playback',()=>token===state.token);if(token!==state.token||state.doc?.id!==docId)return;state.pageTimings=result.timings||null;audio.src=result.url;audio.playbackRate=Number($('rate').value);state.audioId=identifier;await audio.play();if(token!==state.token)return;$('play').textContent='❚❚ Pause';setStatus('Playing page '+(index+1));if($('prefetch').checked && index+1<state.doc.pages.length){ensurePage(docId,index+1,config,()=>{},'prefetch',()=>docId===state.doc?.id&&token===state.token).catch(()=>{});}}catch(err){if(token===state.token){state.playing=false;setStatus(err.message,true);$('play').textContent='▶ Retry page'}}finally{if(token===state.token)$('play').disabled=false}}
 function togglePlay(){if(!state.doc)return;if(!audio.paused&&audio.src){audio.pause();state.playing=false;$('play').textContent='▶ Resume';return}playPage()}
-async function cacheAll(){if(!state.doc)return;const job=++state.cacheJob,doc=state.doc,config=settings();$('generateAll').disabled=true;for(let i=0;i<doc.pages.length;i++){if(job!==state.cacheJob||doc!==state.doc)break;try{await ensurePage(doc.id,i,config,()=>{},'cache',()=>job===state.cacheJob&&doc===state.doc);$('cacheCount').textContent=`Cached ${i+1}/${doc.pages.length} pages`;}catch(err){if(job===state.cacheJob&&doc===state.doc)setStatus('Cache operation stopped at page '+(i+1)+': '+err.message,true);break}}if(job===state.cacheJob){refreshInventory();refreshCacheCatalog();$('generateAll').disabled=false;if(!$('status').classList.contains('error'))setStatus('Available pages are cached on this server.')}}
+async function cacheAll(){
+  if(!state.doc)return;
+  const lectureId=state.doc.id,config=settings();
+  $('generateAll').disabled=true;
+  try{
+    await api('/api/audio-generation/prepare',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({...config,lecture_id:lectureId})});
+    if(state.doc?.id===lectureId){setStatus('Preparing lecture in the server queue; you can switch lectures.');
+      refreshInventory();}
+    refreshCacheCatalog();
+  }catch(err){setStatus('Could not start lecture preparation: '+err.message,true);
+    if(state.doc?.id===lectureId)$('generateAll').disabled=false;
+  }
+}
 async function refreshVoices(profile, restore=true){
   const token=++state.voiceRequest;
   const result=await api('/api/audio-voices?'+new URLSearchParams({profile}));

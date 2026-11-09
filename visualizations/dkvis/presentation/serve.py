@@ -503,6 +503,31 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None,
             audio_error(exc)
         return JSONResponse(dict(items=result), headers={'Cache-Control': 'no-store'})
 
+    async def audio_prepare_lecture(request):
+        """Start a bounded server-side cache campaign; independent of browser navigation."""
+        if request.headers.get('content-type', '').split(';')[0].strip() != 'application/json':
+            raise HTTPException(415, 'Send preparation settings as JSON.')
+        origin = request.headers.get('origin')
+        if origin and origin != f'{request.url.scheme}://{request.url.netloc}':
+            raise HTTPException(403, 'Prepare speech from this lecture library.')
+        raw = bytearray()
+        async for chunk in request.stream():
+            raw.extend(chunk)
+            if len(raw) > 2048:
+                raise HTTPException(413, 'Preparation settings are too large.')
+        try:
+            body = json.loads(raw)
+            if not isinstance(body, dict) or set(body) - {'profile', 'voice', 'speed', 'track', 'lecture_id'}:
+                raise ValueError('Invalid preparation fields')
+            engine = audio_engine(body.get('profile'), body.get('track', 'g2'))
+            settings = engine.settings(body.get('voice'), body.get('speed'))
+            if not isinstance(body.get('lecture_id'), str):
+                raise ValueError('lecture_id is required')
+            result = await run_in_threadpool(engine.prepare_lecture, body['lecture_id'], settings)
+        except (ValueError, IndexError, KeyError, TypeError) as exc:
+            audio_error(exc)
+        return JSONResponse(result, status_code=202, headers={'Cache-Control': 'no-store'})
+
     async def audio_cancel_generation(request):
         if request.headers.get('content-type', '').split(';')[0].strip() != 'application/json':
             raise HTTPException(415, 'Send cancellation settings as JSON.')
@@ -622,6 +647,7 @@ def create_app(directory=ROOT/'renders', *, feedback_directory=None,
         Route('/api/audio-health', audio_health),
         Route('/api/audio-generation/inventory', audio_inventory),
         Route('/api/audio-generation/catalog', audio_cache_catalog),
+        Route('/api/audio-generation/prepare', audio_prepare_lecture, methods=['POST']),
         Route('/api/audio-generation/cancel', audio_cancel_generation, methods=['POST']),
         Route('/api/audio-lectures/{lecture_id}', audio_lecture),
         Route('/api/audio-lectures/{lecture_id}/transcript.txt', audio_plain_transcript),

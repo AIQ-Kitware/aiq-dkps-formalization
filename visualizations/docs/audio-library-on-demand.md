@@ -262,16 +262,22 @@ page counts for the selected track, profile, voice, and synthesis speed. A
 recording generated for a different cache identity is not counted as ready.
 
 Press **Play page** for interactive priority, **Cache whole lecture** for
-background generation, or enable prefetch for lowest priority. These requests
-share the existing per-profile DKPS worker queue (two workers, maximum eight
-outstanding jobs). The Breeze server maintains its own one-worker queue across
+background generation, or enable prefetch for lowest priority. **Cache whole
+lecture** starts a server-owned preparation campaign. It feeds up to three pages
+at a time to the scheduler and keeps working when the browser navigates to a
+different lecture or closes. Cached pages survive restarts; a running campaign
+is in-memory and must be started again after restarting DKPS. A repeated start
+reuses the active campaign, and already cached pages are skipped. These
+requests share the existing per-profile DKPS worker queue (two workers,
+maximum eight outstanding jobs, with one queue slot reserved for playback). The Breeze server maintains its own one-worker queue across
 clients. Its passage counts are returned during generation and displayed in
 the reader. Explicit playback is prioritized ahead of queued prefetch and
 background cache jobs; a passage already running on the GPU is not preempted.
 
 **Stop generation** cancels unfinished jobs belonging to the selected lecture.
 Individual queue entries also provide **Cancel lecture** for an older lecture.
-Queued DKPS work is removed immediately. Running paragraph80 work forwards a
+Cancellation also stops a background campaign from submitting further
+pages. Queued DKPS work is removed immediately. Running paragraph80 work forwards a
 `DELETE` request to the local-ai job API; the server stops between passages.
 Already cached pages remain available. Pausing playback does not, by itself,
 cancel generation.
@@ -280,8 +286,9 @@ The backend records wall time per successfully generated page in
 `audio-cache/generation-times.sqlite3` and estimates remaining work using the
 median seconds per word of recent recordings made with matching settings.
 Until enough samples exist, it uses a preliminary 0.6 s/word estimate. ETAs
-include an approximate queue wait and can change if the model retries a
-passage. A running job that outlasts its estimate reports the elapsed overrun,
+include an approximate local queue wait and can change if the model retries a
+passage. A page waiting inside the Breeze GPU queue displays that state without
+counting the wait against its synthesis ETA. A running job that outlasts its estimate reports the elapsed overrun,
 not a misleading zero-second ETA. The database stores hashes of synthesis settings, word counts, and
 wall times; it does not store voice identifiers or transcript text.
 
@@ -293,6 +300,10 @@ Reader endpoints (all configured-profile lookups):
   ready/total counts for the lecture list.
 - `POST /api/audio-lectures/{id}/pages/{page}/render`: existing API accepts
   optional `purpose` (`playback`, `cache`, or `prefetch`).
+- `POST /api/audio-generation/prepare`: accepts `track`, `profile`, `voice`,
+  `speed`, and `lecture_id`; starts or resumes a background lecture preparation
+  using the current synthesis cache identity. The inventory response includes
+  the campaign status, submission count, and failures.
 - `POST /api/audio-generation/cancel`: accepts `track`, `profile`, `voice`,
   `speed`, and `lecture_id`, and cancels unfinished work for that lecture and
   synthesis configuration.
@@ -303,3 +314,8 @@ previous blocking Breeze synthesis API while keeping DKPS status and cache
 inventory, set `DKVIS_AUDIO_BREEZE_JOB_API=0` and restart the reader. That
 compatibility mode cannot interrupt an HTTP synthesis already underway; it
 still cancels queued jobs and refuses to publish cancelled pages.
+
+The Breeze server exposes the currently synthesizing passage index even when
+it is the only passage in the page. Passage completion counts are real completed
+inferences; there is no fractional percentage available while the model runs.
+The browser shows that inference as active until it completes.
