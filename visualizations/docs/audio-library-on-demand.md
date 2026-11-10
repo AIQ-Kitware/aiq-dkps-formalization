@@ -15,22 +15,24 @@ service to the public Internet.
 
 ## Speech profile and voice selection
 
-**Kokoro with `af_alloy` is the default for the audio reader.** It uses
-`KOKORO_TTS_ENDPOINT` from `.env`; on the supplied machine that is
-`http://192.168.222.38:8880/v1/audio/speech`. The fixed profile fallback
-is `http://127.0.0.1:8880/v1/audio/speech`.
-
-**Crall Math DK v2 (Breeze)** is another built-in profile; it uses
+**Crall Math DK v2 (Breeze)** is the default for the audio reader. Its
+profile ID is `crall-math-dk-v2-breeze-tts2`, and the voice ID sent to the
+server is `crall-math-dk-v2`. It uses
 `CRALL_TTS_ENDPOINT` or falls back to
 `http://127.0.0.1:8821/v1/audio/speech`, matching the existing Breeze
 container's published port. Its native WAV responses are converted to MP3
 using FFmpeg. Other `tts.toml` profiles are listed as available options.
 
-The reader's selection does not change `DKVIS_TTS_PROFILE` or
-`MATCHING_TTS_PROFILE`, which remain the production narration settings.
-An optional `DKVIS_AUDIO_TTS_PROFILE` changes the *initial reader default*;
-`make serve AUDIO_TTS_PROFILE=...` does the same for one run. Browsers
-remember their selected profile and voice separately.
+**Kokoro (`af_alloy`)** remains an available option through
+`KOKORO_TTS_ENDPOINT` (falling back to
+`http://127.0.0.1:8880/v1/audio/speech`).
+
+The reader uses the public profile unless overridden, in order, by the
+`--audio-tts-profile` / `make serve AUDIO_TTS_PROFILE=...` argument,
+`DKVIS_AUDIO_TTS_PROFILE`, or `DKVIS_TTS_PROFILE`. The browser's profile
+selection does not modify environment variables. Browsers remember explicitly
+selected profiles and voices; change the profile dropdown if a previous
+selection is retained.
 
 ### Register a custom voice
 
@@ -72,8 +74,9 @@ endpoint = "http://127.0.0.1:8880/v1/audio/speech"
 ```
 
 New names appear in the profile dropdown after restarting `make serve`.
-The reader defaults to Kokoro with the `af_alloy` voice. A voice previously chosen in the browser stays selected until changed. `TTS_CONFIG` instead selects a complete,
-independent TOML file (no automatic overlay).
+The reader defaults to the public Breeze profile. A voice previously chosen in
+the browser stays selected until changed. `TTS_CONFIG` instead selects a
+complete, independent TOML file (no automatic overlay).
 
 ## Follow the text while listening
 
@@ -102,8 +105,24 @@ pronunciation replacements are applied.
 Speech pages now default to **600 characters** (previously 1,200). The paginator preserves whole sentences when they fit and prefers paragraph boundaries; only an individual sentence longer than the configured limit must be divided at word breaks. Changing the pagination algorithm revision invalidates the audio cache and the browser’s stored duration estimates. Set
 `DKVIS_AUDIO_PAGE_CHARS` in `visualizations/.env` to an integer from 250 through
 1,500 to change the page length, then restart `make serve`. Larger pages reduce interruptions but take longer to synthesize on the first play.
-For Breeze and other non-Kokoro endpoints, each page is independently synthesized
-from short **12-word / 140-character** requests. Each accepted request is also
+For Breeze TTS 2, the reader now requests server-managed **paragraph80**
+long-form synthesis by default. It sends the complete page, with the existing
+sentence-aware pagination and paragraph breaks, to the updated local-ai
+server. The server groups intact sentences toward 80 words, with a 110-word
+hard maximum, uses CFG 1.0 without a delivery instruction, and joins verified
+PCM passages with boundary-aware pauses. The reader confirms the server's
+`paragraph80-v1` response policy and keeps measured passage timing markers
+for transcript playback. Existing cached recordings from the previous short
+request policy are invalidated by a distinct synthesis cache key.
+
+**Upgrade the local-ai Breeze container before using the updated DKPS reader.**
+The reader rejects a Breeze response that lacks the long-form policy header,
+so an old server cannot silently generate or cache truncated long requests.
+To temporarily revert the DKPS reader to its former short-request behavior,
+set `DKVIS_AUDIO_BREEZE_LONG_FORM=0` and restart `make serve`.
+
+For other non-Kokoro endpoints, or Breeze with the opt-out setting, each page
+is independently synthesized from short **12-word / 140-character** requests. In that legacy mode, each accepted request is also
 limited to at most **12 seconds** of audio before retrying at smaller sizes,
 subject to any lower service limit. The page audio is assembled only after
 all requests finish. Set `DKVIS_AUDIO_SEGMENT_WORDS=6` in `.env` for an
@@ -233,3 +252,70 @@ minute, especially for a slow custom narrator; the 12-second synthesis limit
 is enforced **per request segment**, not on the assembled page. A page that
 stops mid-sentence still indicates missing speech and needs further diagnosis
 at the segment level.
+
+## Generation queue, estimated completion, and cached-page inventory
+
+The `/audio` reader displays readiness for every page of the current lecture,
+a percent of cached **pages** (not a percent of generated audio duration),
+and active/queued speech jobs. The lecture selector also displays ready/total
+page counts for the selected track, profile, voice, and synthesis speed. A
+recording generated for a different cache identity is not counted as ready.
+
+Press **Play page** for interactive priority, **Cache whole lecture** for
+background generation, or enable prefetch for lowest priority. **Cache whole
+lecture** starts a server-owned preparation campaign. It feeds up to three pages
+at a time to the scheduler and keeps working when the browser navigates to a
+different lecture or closes. Cached pages survive restarts; a running campaign
+is in-memory and must be started again after restarting DKPS. A repeated start
+reuses the active campaign, and already cached pages are skipped. These
+requests share the existing per-profile DKPS worker queue (two workers,
+maximum eight outstanding jobs, with one queue slot reserved for playback). The Breeze server maintains its own one-worker queue across
+clients. Its passage counts are returned during generation and displayed in
+the reader. Explicit playback is prioritized ahead of queued prefetch and
+background cache jobs; a passage already running on the GPU is not preempted.
+
+**Stop generation** cancels unfinished jobs belonging to the selected lecture.
+Individual queue entries also provide **Cancel lecture** for an older lecture.
+Cancellation also stops a background campaign from submitting further
+pages. Queued DKPS work is removed immediately. Running paragraph80 work forwards a
+`DELETE` request to the local-ai job API; the server stops between passages.
+Already cached pages remain available. Pausing playback does not, by itself,
+cancel generation.
+
+The backend records wall time per successfully generated page in
+`audio-cache/generation-times.sqlite3` and estimates remaining work using the
+median seconds per word of recent recordings made with matching settings.
+Until enough samples exist, it uses a preliminary 0.6 s/word estimate. ETAs
+include an approximate local queue wait and can change if the model retries a
+passage. A page waiting inside the Breeze GPU queue displays that state without
+counting the wait against its synthesis ETA. A running job that outlasts its estimate reports the elapsed overrun,
+not a misleading zero-second ETA. The database stores hashes of synthesis settings, word counts, and
+wall times; it does not store voice identifiers or transcript text.
+
+Reader endpoints (all configured-profile lookups):
+
+- `GET /api/audio-generation/inventory?track=g2&profile=...&voice=...&speed=1&lecture_id=000000`:
+  exact cached-page states, queue items, cache percentage, and ETA information.
+- `GET /api/audio-generation/catalog?track=g2&profile=...&voice=...&speed=1`:
+  ready/total counts for the lecture list.
+- `POST /api/audio-lectures/{id}/pages/{page}/render`: existing API accepts
+  optional `purpose` (`playback`, `cache`, or `prefetch`).
+- `POST /api/audio-generation/prepare`: accepts `track`, `profile`, `voice`,
+  `speed`, and `lecture_id`; starts or resumes a background lecture preparation
+  using the current synthesis cache identity. The inventory response includes
+  the campaign status, submission count, and failures.
+- `POST /api/audio-generation/cancel`: accepts `track`, `profile`, `voice`,
+  `speed`, and `lecture_id`, and cancels unfinished work for that lecture and
+  synthesis configuration.
+
+For paragraph80, this integration requires a local-ai Breeze server supporting
+`/v1/audio/jobs`. Deploy the server overlay first. To temporarily retain the
+previous blocking Breeze synthesis API while keeping DKPS status and cache
+inventory, set `DKVIS_AUDIO_BREEZE_JOB_API=0` and restart the reader. That
+compatibility mode cannot interrupt an HTTP synthesis already underway; it
+still cancels queued jobs and refuses to publish cancelled pages.
+
+The Breeze server exposes the currently synthesizing passage index even when
+it is the only passage in the page. Passage completion counts are real completed
+inferences; there is no fractional percentage available while the model runs.
+The browser shows that inference as active until it completes.

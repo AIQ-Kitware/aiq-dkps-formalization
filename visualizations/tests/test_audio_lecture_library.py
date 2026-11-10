@@ -21,6 +21,9 @@ def _local_tts_overlay_disabled(tmp_path, monkeypatch):
     for setting in ('DKVIS_AUDIO_SEGMENT_WORDS', 'DKVIS_AUDIO_SEGMENT_CHARS',
                     'DKVIS_AUDIO_SEGMENT_SECONDS'):
         monkeypatch.delenv(setting, raising=False)
+    # Existing bounded-requests tests explicitly exercise the legacy fallback.
+    monkeypatch.setenv('DKVIS_AUDIO_BREEZE_LONG_FORM', '0')
+    monkeypatch.setenv('DKVIS_AUDIO_BREEZE_JOB_API', '0')
 
 
 def test_original_lecture_collection_is_directly_browsable():
@@ -446,7 +449,7 @@ def test_server_defaults_bind_lan_and_nonconflicting_port(monkeypatch):
     assert seen == dict(host='0.0.0.0', port=8001)
 
 
-def test_reader_defaults_to_kokoro_independent_of_production_profile(tmp_path, monkeypatch):
+def test_reader_defaults_to_public_breeze_with_kokoro_available(tmp_path, monkeypatch):
     from dkvis.presentation.audio_library import AudioLectureHub
     monkeypatch.setenv('DKVIS_TTS_PROFILE', 'crall-math-dk-v2-breeze-tts2')
     monkeypatch.setenv('MATCHING_TTS_PROFILE', 'crall-math-dk-v2-breeze-tts2')
@@ -454,7 +457,7 @@ def test_reader_defaults_to_kokoro_independent_of_production_profile(tmp_path, m
     monkeypatch.setenv('KOKORO_TTS_ENDPOINT', 'http://192.168.222.38:8880/v1/audio/speech')
     hub = AudioLectureHub(cache=tmp_path/'cache')
     try:
-        assert hub.profile == 'kokoro'
+        assert hub.profile == 'crall-math-dk-v2-breeze-tts2'
         assert hub.engine('kokoro').model == 'kokoro'
         assert hub.engine('kokoro').endpoint == 'http://192.168.222.38:8880/v1/audio/speech'
         assert hub.engine('kokoro').default_voice == 'af_alloy'
@@ -462,7 +465,60 @@ def test_reader_defaults_to_kokoro_independent_of_production_profile(tmp_path, m
         assert crall.model == 'breeze-tts2'
         assert crall.default_voice == 'crall-math-dk-v2'
         assert crall.endpoint.endswith(':8821/v1/audio/speech')
-        assert hub.profiles()[0]['id'] == 'kokoro'
+        assert hub.profiles()[0]['id'] == 'crall-math-dk-v2-breeze-tts2'
+    finally:
+        hub.close()
+
+
+def test_running_job_ETA_expires_without_reporting_zero(tmp_path):
+    from dkvis.presentation.audio_jobs import SpeechQueue
+    import time
+    import threading
+
+    started = threading.Event()
+    release = threading.Event()
+    queue = SpeechQueue(workers=1, limit=3)
+    try:
+        def generate(task):
+            started.set()
+            release.wait(timeout=2)
+            return 'ok'
+
+        task = queue.submit('example', generate, kind='playback', lecture_id='000000',
+                            page=0, words=10, config_key='some-hash')
+        assert started.wait(timeout=1)
+        task.started_at = time.monotonic() - 30
+        state = queue.describe(task, seconds_per_word=0.6)
+        assert state['state'] == 'rendering'
+        assert 'eta_seconds' not in state
+        assert state['estimate_exceeded_seconds'] >= 23
+        task.progress = {'completed_words': 10, 'total_passages': 1, 'completed_passages': 1}
+        state = queue.describe(task, seconds_per_word=0.6)
+        assert 'eta_seconds' not in state
+        assert state['estimate_source'] == 'overdue'
+    finally:
+        release.set()
+        queue.close()
+
+
+def test_reader_explicit_and_environment_overrides_take_precedence(tmp_path, monkeypatch):
+    from dkvis.presentation.audio_library import AudioLectureHub
+    monkeypatch.setenv('DKVIS_TTS_PROFILE', 'kokoro')
+    monkeypatch.delenv('DKVIS_AUDIO_TTS_PROFILE', raising=False)
+    hub = AudioLectureHub(cache=tmp_path/'shared')
+    try:
+        assert hub.profile == 'kokoro'
+    finally:
+        hub.close()
+    monkeypatch.setenv('DKVIS_AUDIO_TTS_PROFILE', 'crall-math-dk-v2-breeze-tts2')
+    hub = AudioLectureHub(cache=tmp_path/'override')
+    try:
+        assert hub.profile == 'crall-math-dk-v2-breeze-tts2'
+    finally:
+        hub.close()
+    hub = AudioLectureHub(cache=tmp_path/'explicit', profile='kokoro')
+    try:
+        assert hub.profile == 'kokoro'
     finally:
         hub.close()
 
@@ -486,11 +542,11 @@ def test_local_tts_config_adds_reader_profile_without_replacing_defaults(tmp_pat
     monkeypatch.setattr(tts, 'LOCAL_CONFIG', overlay)
     hub = AudioLectureHub(cache=tmp_path / 'cache')
     try:
-        # The checked-in reader default stays Kokoro; the local profile is an
-        # extra option, not a replacement for the checked-in profiles.
-        assert hub.profile == 'kokoro'
+        # Local profiles are additional options. The checked-in public Breeze
+        # profile remains the reader default unless the operator overrides it.
+        assert hub.profile == 'crall-math-dk-v2-breeze-tts2'
         ids = [row['id'] for row in hub.profiles()]
-        assert ids[0] == 'kokoro'
+        assert ids[0] == 'crall-math-dk-v2-breeze-tts2'
         assert 'private-voice-breeze-tts2' in ids
         engine = hub.engine('private-voice-breeze-tts2')
         assert engine.model == 'breeze-tts2'
@@ -529,7 +585,7 @@ def test_profile_selection_voice_registration_and_cache_isolation(tmp_path, monk
     with TestClient(create_app(renders, audio_library=hub)) as client:
         response=client.get('/api/audio-profiles')
         assert response.status_code == 200
-        assert response.json()['default_profile']=='kokoro'
+        assert response.json()['default_profile']=='crall-math-dk-v2-breeze-tts2'
         profiles = {row['id'] for row in response.json()['profiles']}
         assert {'kokoro', 'crall-math-dk-v2-breeze-tts2'} <= profiles
         assert client.get('/api/audio-voices',params={'profile':'kokoro'}).json()['default_voice']=='af_alloy'
@@ -623,7 +679,7 @@ endpoint = "http://127.0.0.1:8877/v1/audio/speech"
     assert doc['profiles']['crall-math-dk-v2-breeze-tts2']['request']['instruction'] == 'Local mathematical narration.'
     hub = AudioLectureHub(cache=tmp_path / 'cache')
     try:
-        assert hub.profile == 'kokoro'
+        assert hub.profile == 'crall-math-dk-v2-breeze-tts2'
         assert hub.engine('kokoro').endpoint == 'http://127.0.0.1:8899/v1/audio/speech'
         assert hub.engine('local-voice').endpoint == 'http://127.0.0.1:8877/v1/audio/speech'
         # All engines use the hub's one configuration snapshot.
@@ -997,3 +1053,389 @@ cfg_scale = 2.0
         assert foobar.max_audio_seconds == 12
     finally:
         hub.close()
+
+
+def test_breeze_server_paragraph80_renders_one_page_and_retimes_chunks(tmp_path, monkeypatch):
+    """New Breeze mode sends an intact page and requires a policy-aware server."""
+    import io
+    import wave
+    import urllib.request
+    from dkvis.presentation.audio_library import SpeechSettings
+    from dkvis.presentation.media import duration
+
+    monkeypatch.setenv('DKVIS_AUDIO_BREEZE_LONG_FORM', '1')
+    requests = []
+
+    class FakeResponse(io.BytesIO):
+        def __init__(self, data, headers):
+            super().__init__(data)
+            self.headers = headers
+
+    text = ('The operator has a spectral gap. It controls perturbations of the subspace.\n\n'
+            'A separate argument gives the direct rotation estimate.')
+    words = len(text.split())
+
+    def fake_open(request, timeout):
+        payload = json.loads(request.data)
+        requests.append(payload)
+        audio = io.BytesIO()
+        with wave.open(audio, 'wb') as out:
+            out.setnchannels(1)
+            out.setsampwidth(2)
+            out.setframerate(24000)
+            out.writeframes(b'\0\0' * 48000)
+        timings = {'version': 1, 'policy': 'paragraph80-v1', 'duration': 2.0,
+                   'chunks': [{'words': words, 'start': 0.0, 'end': 2.0}]}
+        return FakeResponse(audio.getvalue(), {
+            'Content-Type': 'audio/wav',
+            'Content-Length': str(len(audio.getvalue())),
+            'X-Local-AI-Speech-Policy': 'paragraph80-v1',
+            'X-Local-AI-Speech-Timings': json.dumps(timings),
+        })
+
+    monkeypatch.setattr(urllib.request, 'urlopen', fake_open)
+    library = AudioLectureLibrary(cache=tmp_path/'cache',
+                                  profile='crall-math-dk-v2-breeze-tts2')
+    library.request_settings = {'cfg_scale': 2.0, 'instruction': 'Use a different speaking style.',
+                                'seed': 13}
+    try:
+        assert library.server_long_form
+        destination = tmp_path/'page.mp3'
+        library._send_speech(text, SpeechSettings('breeze-tts2', 'foobar', 1.25), destination)
+        assert len(requests) == 1
+        assert requests[0]['long_form'] is True
+        assert requests[0]['input'] == text
+        assert requests[0]['cfg_scale'] == 1.0
+        assert 'instruction' not in requests[0]
+        assert requests[0]['seed'] == 13
+        assert requests[0]['response_format'] == 'wav'
+        assert requests[0]['voice'] == 'foobar'
+        assert 1.5 < duration(destination) < 1.7
+        timing = json.loads((tmp_path/'page.mp3.timings.json').read_text())
+        assert timing['version'] == 1
+        assert timing['chunks'][0]['words'] == words
+        assert abs(timing['chunks'][0]['end'] - duration(destination)) < 0.05
+    finally:
+        library.close()
+
+
+def test_server_paragraph80_rejects_old_server_and_uses_distinct_cache(tmp_path, monkeypatch):
+    import io
+    import urllib.request
+    from dkvis.presentation.audio_library import SpeechSettings, SpeechServiceError
+
+    monkeypatch.setenv('DKVIS_AUDIO_BREEZE_LONG_FORM', '1')
+
+    class OldResponse(io.BytesIO):
+        headers = {'Content-Type': 'audio/wav'}
+
+    monkeypatch.setattr(urllib.request, 'urlopen',
+                        lambda request, timeout: OldResponse(b'RIFF' + b'\0' * 1024))
+    enabled = AudioLectureLibrary(cache=tmp_path/'cache',
+                                  profile='crall-math-dk-v2-breeze-tts2')
+    try:
+        settings = SpeechSettings('breeze-tts2', 'foobar', 1)
+        _, _, new_key = enabled._target('000000', 0, settings)
+        with pytest.raises(SpeechServiceError, match='rebuild/restart local-ai'):
+            enabled._generate(tmp_path/'page.mp3', 'One complete sentence.', settings)
+        assert not (tmp_path/'page.mp3').exists()
+    finally:
+        enabled.close()
+    monkeypatch.setenv('DKVIS_AUDIO_BREEZE_LONG_FORM', '0')
+    monkeypatch.setenv('DKVIS_AUDIO_BREEZE_JOB_API', '0')
+    disabled = AudioLectureLibrary(cache=tmp_path/'cache',
+                                   profile='crall-math-dk-v2-breeze-tts2')
+    try:
+        _, _, old_key = disabled._target('000000', 0, settings)
+        assert not disabled.server_long_form
+        assert old_key != new_key
+    finally:
+        disabled.close()
+
+
+def test_breeze_paragraph80_default_without_opt_out(tmp_path, monkeypatch):
+    monkeypatch.delenv('DKVIS_AUDIO_BREEZE_LONG_FORM', raising=False)
+    library = AudioLectureLibrary(cache=tmp_path/'cache',
+                                  profile='crall-math-dk-v2-breeze-tts2')
+    try:
+        assert library.server_long_form
+        assert library.connection_status()['speech_policy'] == 'paragraph80-v1'
+    finally:
+        library.close()
+
+
+def test_cache_catalog_and_page_inventory_reflect_exact_voice_and_progress(audio_site):
+    client, _, lib, _calls = audio_site
+    config = {'profile': lib.profile, 'voice': 'af_alloy', 'speed': 1, 'track': 'g2'}
+    endpoint = '/api/audio-generation/inventory'
+    inventory = client.get(endpoint, params={**config, 'lecture_id':'123000'})
+    assert inventory.status_code == 200
+    before = inventory.json()
+    assert before['ready'] == 0 and len(before['states']) == before['total']
+    assert before['percent'] == 0
+    assert before['estimate_source'] == 'initial'
+    assert client.get('/api/audio-generation/catalog', params=config).json()['items'][0]['ready'] == 0
+    ready(client, voice='af_alloy')
+    after = client.get(endpoint, params={**config,'lecture_id':'123000'}).json()
+    assert after['ready'] == 1 and after['states'][0] == 'ready'
+    assert after['percent'] > 0
+    assert client.get('/api/audio-generation/catalog', params=config).json()['items'][0]['ready'] == 1
+    assert client.get(endpoint, params={**config, 'voice': 'am_adam', 'lecture_id':'123000'}).json()['ready'] == 0
+    assert client.get(endpoint, params={**config, 'lecture_id': '999999'}).status_code == 404
+    assert client.get(endpoint, params=config).status_code == 400
+    assert client.get('/audio').text.find('Stop generation') > 0
+
+
+def test_generation_history_estimates_and_avoids_persisting_voice_name(audio_site):
+    client, _, lib, _calls = audio_site
+    config = {'profile':lib.profile, 'voice':'af_alloy', 'speed':1, 'track':'g2'}
+    ready(client, voice='af_alloy')
+    history = lib._metrics.estimate(lib._config_key(lib.settings('af_alloy', 1)))
+    assert history['sample_count'] == 1
+    assert history['source'] == 'observed'
+    import sqlite3
+    with sqlite3.connect(lib._metrics.path) as conn:
+        rows = conn.execute('SELECT config_hash, words, seconds FROM completed').fetchall()
+    assert len(rows) == 1 and len(rows[0][0]) == 64
+    assert 'af_alloy' not in str(rows)
+
+
+def test_priority_scheduler_queued_cancel_and_browser_api(tmp_path, monkeypatch):
+    import threading
+    from dkvis.presentation.audio_jobs import SpeechQueue
+    from dkvis.presentation.audio_library import AudioLectureLibrary
+    from dkvis.presentation.serve import create_app
+    src = tmp_path / 'lectures'
+    src.mkdir()
+    shutil.copyfile(ROOT / 'draft-stages' / 'tts-lectures' / 'extract_narration.py',
+                    src / 'extract_narration.py')
+    (src / '123000-test.md').write_text('# Test\n\n<!-- BEGIN SPOKEN LECTURE -->\n\n'
+               + 'First complete sentence with ample mathematical context. ' * 42
+               + '\n\n<!-- END SPOKEN LECTURE -->\n', encoding='utf-8')
+    started = threading.Event()
+    release = threading.Event()
+    calls = []
+    def slow_speech(text, settings, target):
+        calls.append(text)
+        started.set()
+        release.wait(3)
+        target.write_bytes(b'ID3' + b'\0' * 2048)
+    lib = AudioLectureLibrary(sources=src, cache=tmp_path/'cache', sender=slow_speech,
+                              page_chars=250, workers=1)
+    renders = tmp_path/'renders'
+    renders.mkdir()
+    try:
+        with TestClient(create_app(renders, audio_library=lib)) as client:
+            params = dict(profile=lib.profile, voice=lib.default_voice, speed=1, track='g2')
+            target = '/api/audio-lectures/123000/pages/'
+            response = client.post(target+'0/render', json={**params, 'purpose':'cache'})
+            assert response.status_code == 202
+            assert started.wait(2)
+            client.post(target+'1/render', json={**params, 'purpose':'prefetch'})
+            queued = client.get(target+'1', params=params).json()
+            assert queued['state'] == 'queued' and queued['queued_position'] == 1
+            assert queued['eta_seconds'] >= 0
+            # Re-requesting same page for immediate playback promotes the queue item.
+            client.post(target+'1/render', json={**params, 'purpose':'playback'})
+            inv = client.get('/api/audio-generation/inventory', params={**params,
+                             'lecture_id':'123000'}).json()
+            active = [job for job in inv['queue'] if job['page'] == 1][0]
+            assert active['kind'] == 'playback'
+            cancelled = client.post('/api/audio-generation/cancel',
+                                    json={**params, 'lecture_id':'123000'}).json()
+            assert cancelled['count'] == 2
+            assert client.get(target+'1', params=params).json()['state'] == 'cancelled'
+            release.set()
+            for _ in range(100):
+                if client.get(target+'0', params=params).json()['state'] == 'cancelled':
+                    break
+                time.sleep(.01)
+            assert client.get(target+'0', params=params).json()['state'] == 'cancelled'
+            assert lib.inventory('123000', lib.settings())['ready'] == 0
+            assert client.post('/api/audio-generation/cancel', json={**params, 'lecture_id':'x'}).status_code == 404
+            assert client.post('/api/audio-generation/cancel', json={**params, 'lecture_id':'123000',
+                   'unknown':'x'}).status_code == 400
+    finally:
+        release.set()
+        lib.close()
+
+
+def test_paragraph_job_http_protocol_generates_cached_mp3(tmp_path, monkeypatch):
+    """DKPS must talk to server jobs, poll progress, and download verified WAV."""
+    import io
+    import threading
+    import wave
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+    monkeypatch.setenv('DKVIS_AUDIO_BREEZE_LONG_FORM', '1')
+    monkeypatch.setenv('DKVIS_AUDIO_BREEZE_JOB_API', '1')
+    requests = []
+    input_text = 'This is the sentence we will speak about a mathematical operator.'
+    rate, seconds = 24000, 3
+    pcm = io.BytesIO()
+    with wave.open(pcm, 'wb') as file:
+        file.setnchannels(1)
+        file.setsampwidth(2)
+        file.setframerate(rate)
+        file.writeframes(b'\0\0' * (rate * seconds))
+    wav_bytes = pcm.getvalue()
+
+    class Handler(BaseHTTPRequestHandler):
+        def log_message(self, *args):
+            pass
+        def send(self, code, body, content_type='application/json', extras=None):
+            self.send_response(code)
+            self.send_header('Content-Type', content_type)
+            self.send_header('Content-Length', str(len(body)))
+            for key, value in (extras or {}).items():
+                self.send_header(key, value)
+            self.end_headers()
+            self.wfile.write(body)
+        def do_POST(self):
+            assert self.path == '/v1/audio/jobs'
+            body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
+            requests.append(body)
+            self.send(202, json.dumps({'id':'a'*32,'state':'queued'}).encode())
+        def do_GET(self):
+            if self.path.endswith('/audio'):
+                words = len(requests[-1]['input'].split())
+                timing = json.dumps(dict(version=1, policy='paragraph80-v1', duration=seconds,
+                                         chunks=[dict(words=words, start=0, end=seconds)]))
+                self.send(200, wav_bytes, 'audio/wav',
+                          {'X-Local-AI-Speech-Policy':'paragraph80-v1',
+                           'X-Local-AI-Speech-Timings':timing})
+            else:
+                self.send(200, json.dumps(dict(state='ready', completed_words=len(requests[-1]['input'].split()),
+                                                total_passages=1,completed_passages=1)).encode())
+        def do_DELETE(self):
+            self.send(200, b'{}')
+    server = ThreadingHTTPServer(('127.0.0.1',0), Handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        lib = AudioLectureLibrary(cache=tmp_path/'cache',
+              endpoint=f'http://127.0.0.1:{server.server_port}/v1/audio/speech',
+              profile='crall-math-dk-v2-breeze-tts2')
+        try:
+            settings = lib.settings(voice='foobar')
+            assert lib.server_long_form and lib.server_jobs
+            target = tmp_path/'generated.mp3'
+            lib._generate(target, input_text, settings)
+            assert target.stat().st_size > 256
+            timing = json.loads((tmp_path/'generated.mp3.timings.json').read_text())
+            assert timing['chunks'][0]['words'] == len(input_text.split())
+            assert timing['duration'] > 2.8
+            assert requests[0]['long_form'] is True
+            assert requests[0]['cfg_scale'] == 1
+            assert requests[0]['voice'] == 'foobar'
+        finally:
+            lib.close()
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=2)
+
+
+def test_background_prepare_http_survives_unrelated_requests(audio_site):
+    """The browser no longer owns the whole-lecture caching loop."""
+    client, _lecture, library, calls = audio_site
+    payload = dict(track='g2', lecture_id='123000', voice='af_alloy', speed=1)
+    started = client.post('/api/audio-generation/prepare', json=payload)
+    assert started.status_code == 202, started.text
+    assert started.json()['total'] == library.detail('123000')['page_count']
+    duplicate = client.post('/api/audio-generation/prepare', json=payload)
+    assert duplicate.status_code == 202
+    # Unrelated browsing does not stop the background queue.
+    assert client.get('/api/audio-lectures').status_code == 200
+    deadline = time.monotonic() + 8
+    while time.monotonic() < deadline:
+        inventory = client.get('/api/audio-generation/inventory',
+                               params=payload).json()
+        if inventory['preparation']['state'] == 'finished':
+            break
+        time.sleep(.025)
+    assert inventory['preparation']['state'] == 'finished'
+    assert inventory['ready'] == inventory['total']
+    assert len(calls) == inventory['total']
+    catalog = client.get('/api/audio-generation/catalog',
+                         params={'voice': 'af_alloy', 'speed': 1}).json()['items']
+    assert next(item for item in catalog if item['id'] == '123000')['ready'] == inventory['total']
+    # Re-requesting a completed preparation uses cached pages, not re-synthesis.
+    assert client.post('/api/audio-generation/prepare', json=payload).status_code == 202
+    deadline = time.monotonic() + 4
+    while time.monotonic() < deadline:
+        prep = client.get('/api/audio-generation/inventory', params=payload).json()['preparation']
+        if prep['state'] == 'finished':
+            break
+        time.sleep(.025)
+    assert prep['state'] == 'finished'
+    assert len(calls) == inventory['total']
+
+
+def test_cancel_background_preparation_prevents_further_pages(audio_site):
+    import threading
+    client, _lecture, library, _calls = audio_site
+    entered = threading.Event()
+    release = threading.Event()
+    invoked = []
+
+    def blocked_sender(text, settings, target):
+        invoked.append(text)
+        entered.set()
+        release.wait(3)
+        target.write_bytes(b'ID3' + b'\x00' * 4096)
+
+    library._sender = blocked_sender
+    payload = dict(track='g2', lecture_id='123000', voice='af_alloy', speed=1)
+    try:
+        assert client.post('/api/audio-generation/prepare', json=payload).status_code == 202
+        assert entered.wait(3)
+        cancelled = client.post('/api/audio-generation/cancel', json=payload)
+        assert cancelled.status_code == 200
+        already_started = len(invoked)
+        release.set()
+        deadline = time.monotonic() + 5
+        while time.monotonic() < deadline:
+            status = client.get('/api/audio-generation/inventory', params=payload).json()
+            if status['preparation']['state'] == 'cancelled' and not status['queue']:
+                break
+            time.sleep(.02)
+        assert status['preparation']['state'] == 'cancelled'
+        assert not status['queue']
+        assert status['ready'] < status['total']
+        assert len(invoked) == already_started  # No later queued synthesis started.
+    finally:
+        release.set()
+
+
+def test_audio_reader_has_background_preparation_controls(audio_site):
+    client, _lecture, _lib, _calls = audio_site
+    html = client.get('/audio').text
+    assert '/api/audio-generation/prepare' in html
+    assert 'Preparing lecture in the server queue' in html
+    assert 'passage ${progress.current_passage}' in html
+
+
+def test_reader_status_preserves_upstream_wait_estimate_source(audio_site, monkeypatch):
+    import threading
+    client, _lecture, library, _calls = audio_site
+    entered = threading.Event()
+    release = threading.Event()
+
+    def waiting_sender(text, settings, target):
+        entered.set()
+        release.wait(3)
+        target.write_bytes(b'ID3' + b'\x00' * 4096)
+
+    library._sender = waiting_sender
+    params = {'voice': 'af_alloy', 'speed': 1}
+    try:
+        result = client.post('/api/audio-lectures/123000/pages/0/render', json=params)
+        assert result.status_code == 202
+        assert entered.wait(3)
+        task = library._queue.task(result.json()['key'])
+        task.progress.update(upstream_state='queued', elapsed_seconds=0)
+        status = client.get('/api/audio-lectures/123000/pages/0', params=params).json()
+        assert status['estimate_source'] == 'waiting_for_gpu'
+        assert 'eta_seconds' not in status
+    finally:
+        release.set()

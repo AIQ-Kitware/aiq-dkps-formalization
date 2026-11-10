@@ -1,5 +1,5 @@
-# Production narration default (video/scene rendering). The /audio reader
-# independently defaults to Kokoro; set DKVIS_AUDIO_TTS_PROFILE to override.
+# Production narration and /audio reader default. Override with
+# DKVIS_TTS_PROFILE, or DKVIS_AUDIO_TTS_PROFILE for the reader only.
 profile = "crall-math-dk-v2-breeze-tts2"
 
 [defaults]
