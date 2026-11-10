@@ -8,7 +8,11 @@ about ordinary prose that might legitimately contain temporal language.
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
 from dkvis.presentation.audio_library import PAPER_DIRECTORY, narration_extractor
 from dkvis.presentation.companion_slides import CompanionSlideLibrary
