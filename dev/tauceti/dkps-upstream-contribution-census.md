@@ -5057,3 +5057,62 @@ proves the SA-E22 unitary-group assertion directly, without the PR's wrappers.
 The user authorized closing the PR as already covered. The connected GitHub
 app rejected the close request (403), so authenticated host closure is pending.
 This observation does not attribute the native bounded-group implementation to DKPS.
+
+
+### November 9: consume native bounded Yosida flows
+
+At the unchanged accepted Tau Ceti pin
+`a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8`, every bounded approximating
+flow now directly uses
+`StronglyContinuousGroup.ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ))`.
+This consumes the existing coverage of SA-E22 that motivated the authorized
+covered disposition of [#30735](https://github.com/TauCetiProject/TauCeti/pull/30735).
+GitHub verification on November 9 confirms #30735 is closed and unmerged;
+[#30736](https://github.com/TauCetiProject/TauCeti/pull/30736) remains open
+and unmerged. This is a local integration of accepted APIs, not a claim that
+#30735 merged or that the native bounded-group proofs descended from DKPS.
+
+The retired local declarations are `yosidaApproximantSymSA`, `expApprox`,
+`expApprox_zero`, `expApprox_add`, `inner_expApprox`, `expApprox_eq_expTime`, and
+`norm_expApprox`. Their callers use native zero/addition laws,
+`isUnitary_ofBoundedExp`, `IsUnitary.norm_map`, `IsUnitary.inner_map_map`, and
+`IsUnitary.map_smul` directly. No bounded Yosida-flow adapter or re-export
+replaces them. `continuous_expApprox_apply` is also retired in favor of native
+`continuous_orbit`.
+
+The remaining mathematics has the following current names:
+
+| Historical DKPS declaration | Current declaration and scope |
+| --- | --- |
+| `norm_expApprox_sub_le` | `LinearPMap.norm_yosidaFlow_sub_le`, commuting Duhamel bound for the two native approximating groups |
+| `norm_expApprox_sub_self_le` | `LinearPMap.norm_yosidaFlow_sub_self_le`, the domain continuity bound |
+| `cauchySeq_expApprox_of_mem_domain` / `cauchySeq_expApprox` | `LinearPMap.cauchySeq_yosidaFlow_of_mem_domain` / `cauchySeq_yosidaFlow`, pointwise Cauchy convergence |
+| `integral_expApprox` | `LinearPMap.integral_yosidaFlow`, native bounded-flow integral identity; the unused self-adjointness parameter is removed |
+| `specProjection_comm_expApprox` | `LinearPMap.specProjection_comm_yosidaFlow`, pointwise commutation of the spectral projection with the native bounded flow |
+
+All original complete complex Hilbert-space scopes are preserved, including
+zero-dimensional and nonseparable spaces. The Duhamel support now consumes
+native bounded Stone unitarity instead of maintaining an adjoint/norm proof
+engine. Its unused `IsSkewAdjointCLM`, `isSkewAdjointCLM_I_smul`,
+`commute_expTime`, and `real_smul_I_smul` declarations are retired. The
+commuting Duhamel estimate and the pointwise strong-limit construction remain
+local mathematics; neither is labeled an accepted upstream theorem by this
+change. The separate legacy unbounded unitary-group carrier and its Stone
+proofs remain to be migrated to the native group/generator representation.
+
+Historical source anchors are DKPS `303682284`,
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/YosidaApproximation.lean`,
+`StoneUniqueness.lean`, `SpectralProjectionGroup.lean`, and
+`ForTauCeti/Analysis/InnerProductSpace/SkewAdjointExponential.lean`.
+Copyright 2026 Kitware, Jon Crall/Claude Opus 5, Apache-2.0; the Yosida and
+Duhamel donors preserve Spectra Formalization Project/Adam Bornemann ancestry
+at `8dbaaf6728d1342ae16acf79fd7eef7c59b37e63`. The native API source anchors
+are `TauCeti/Analysis/Semigroups/Group/{Basic,Unitary,Stone/Basic}.lean` at the
+accepted pin above. Existing provenance notices are retained.
+
+Validation for this slice: focused Yosida/Stone/projection consumers passed,
+followed serially by the full default `lake build` (21773 jobs) and
+`lake build Challenge` (19999 jobs), with no warnings. Final logs are
+`.lake/migration/yosida-focused.log`, `full.log`, and `challenge.log`.
+The static declaration-name checker reports 41 unrelated existing findings;
+its baseline is retained for comparison during the native-carrier migration.

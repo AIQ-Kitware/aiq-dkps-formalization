@@ -70,6 +70,7 @@ second-order Duhamel estimate brings in `‖Aₙ² ψ‖`, which blows up with `
 public section
 
 open scoped InnerProductSpace
+open TauCeti.Semigroups.StronglyContinuousGroup (ofBoundedExp)
 open Filter Topology Complex MeasureTheory intervalIntegral
 
 namespace TauCeti
@@ -103,25 +104,21 @@ theorem integral_expTime_apply (B : H →L[ℂ] H) (ψ : H) (t : ℝ) :
 /-! ### Passing the identity to the limit -/
 
 /-- The identity, for the Yosida approximants. -/
-theorem integral_expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (ψ : H) (t : ℝ) :
-    (∫ s in (0 : ℝ)..t, (I : ℂ) • expApprox hA n s (A.symmetricYosidaApproximation (n : ℝ) ψ))
-      = expApprox hA n t ψ - ψ := by
+theorem integral_yosidaFlow (n : ℕ+) (ψ : H) (t : ℝ) :
+    (∫ s in (0 : ℝ)..t, (I : ℂ) • ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) s
+      (A.symmetricYosidaApproximation (n : ℝ) ψ))
+      = ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t ψ - ψ := by
   have h := integral_expTime_apply ((I : ℂ) • A.symmetricYosidaApproximation (n : ℝ)) ψ t
-  simp only [smul_apply, map_smul, ← expApprox_eq_expTime hA n] at h
-  exact h
-
-/-- `s ↦ expApprox hA n s w` is continuous. -/
-@[simp]
-theorem continuous_expApprox_apply (hA : IsSelfAdjoint A) (n : ℕ+) (w : H) :
-    Continuous fun s : ℝ => expApprox hA n s w := by
-  simp only [expApprox_eq_expTime]
-  exact continuous_expTime_apply _ w
+  simp only [Semigroups.StronglyContinuousGroup.ofBoundedExp_apply,
+    ContinuousLinearMap.coe_restrictScalars']
+  simpa only [expTime_def, Complex.coe_smul, smul_apply, map_smul] using h
 
 /-- **The integral identity for the limit flow.**  The approximants converge
 pointwise in `s` and are bounded by a constant, because a convergent sequence of
-vectors is bounded and each `expApprox` is unitary. -/
+vectors is bounded and each native bounded flow is unitary. -/
 theorem integral_expLimit (hA : IsSelfAdjoint A) {ψ : H} (hψ : ψ ∈ A.domain) (t : ℝ) :
     (∫ s in (0 : ℝ)..t, (I : ℂ) • expLimit hA s (A ⟨ψ, hψ⟩)) = expLimit hA t ψ - ψ := by
+  let V (n : ℕ+) := ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ))
   have hconv :=
     ((hA.tendsto_symmetricYosidaApproximation_apply ⟨ψ, hψ⟩).mono_left
       atTop_le_cocompact).comp
@@ -135,57 +132,69 @@ theorem integral_expLimit (hA : IsSelfAdjoint A) {ψ : H} (hψ : ψ ∈ A.domain
     hnorm.eventually_le_const (by rw [hCdef]; linarith)
   -- the integrands converge pointwise
   have hlim : ∀ s : ℝ, Tendsto
-      (fun n : ℕ+ => (I : ℂ) • expApprox hA n s (A.symmetricYosidaApproximation (n : ℝ) ψ)) atTop
+      (fun n : ℕ+ => (I : ℂ) • V n s
+        (A.symmetricYosidaApproximation (n : ℝ) ψ)) atTop
       (𝓝 ((I : ℂ) • expLimit hA s (A ⟨ψ, hψ⟩))) := by
     intro s
     refine Filter.Tendsto.const_smul ?_ (I : ℂ)
     rw [tendsto_iff_norm_sub_tendsto_zero]
     have hsplit : ∀ n : ℕ+,
-        ‖expApprox hA n s (A.symmetricYosidaApproximation (n : ℝ) ψ) - expLimit hA s (A ⟨ψ, hψ⟩)‖
+        ‖V n s (A.symmetricYosidaApproximation
+          (n : ℝ) ψ) - expLimit hA s (A ⟨ψ, hψ⟩)‖
           ≤ ‖A.symmetricYosidaApproximation (n : ℝ) ψ - A ⟨ψ, hψ⟩‖
-            + ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := by
+            + ‖V n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := by
       intro n
-      calc ‖expApprox hA n s (A.symmetricYosidaApproximation (n : ℝ) ψ) - expLimit hA s (A ⟨ψ, hψ⟩)‖
-          = ‖expApprox hA n s (A.symmetricYosidaApproximation (n : ℝ) ψ - A ⟨ψ, hψ⟩)
-              + (expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩))‖ := by
+      calc ‖V n s
+            (A.symmetricYosidaApproximation (n : ℝ) ψ) - expLimit hA s (A ⟨ψ, hψ⟩)‖
+          = ‖V n s
+            (A.symmetricYosidaApproximation (n : ℝ) ψ - A ⟨ψ, hψ⟩)
+              + (V n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩))‖ := by
             rw [map_sub]; congr 1; abel
-        _ ≤ ‖expApprox hA n s (A.symmetricYosidaApproximation (n : ℝ) ψ - A ⟨ψ, hψ⟩)‖
-              + ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := norm_add_le _ _
+        _ ≤ ‖V n s
+          (A.symmetricYosidaApproximation (n : ℝ) ψ - A ⟨ψ, hψ⟩)‖
+              + ‖V n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := norm_add_le _ _
         _ = ‖A.symmetricYosidaApproximation (n : ℝ) ψ - A ⟨ψ, hψ⟩‖
-              + ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := by
-            rw [norm_expApprox]
+              + ‖V n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := by
+            rw [(Semigroups.StronglyContinuousGroup.isUnitary_ofBoundedExp _
+      (hA.isSelfAdjoint_symmetricYosidaApproximation _)).norm_map]
     refine squeeze_zero (fun n => norm_nonneg _) hsplit ?_
     have h1 : Tendsto (fun n : ℕ+ => ‖A.symmetricYosidaApproximation (n : ℝ) ψ - A ⟨ψ, hψ⟩‖)
         atTop (𝓝 0) :=
       tendsto_iff_norm_sub_tendsto_zero.mp hconv
     have h2 : Tendsto
-        (fun n : ℕ+ => ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖)
+        (fun n : ℕ+ => ‖V n s (A ⟨ψ, hψ⟩) -
+          expLimit hA s (A ⟨ψ, hψ⟩)‖)
         atTop (𝓝 0) :=
       tendsto_iff_norm_sub_tendsto_zero.mp (tendsto_expLimitFun hA s (A ⟨ψ, hψ⟩))
     simpa using h1.add h2
   -- dominated convergence
   have hint : Tendsto
       (fun n : ℕ+ => ∫ s in (0 : ℝ)..t,
-        (I : ℂ) • expApprox hA n s (A.symmetricYosidaApproximation (n : ℝ) ψ))
+        (I : ℂ) • V n s
+          (A.symmetricYosidaApproximation (n : ℝ) ψ))
       atTop (𝓝 (∫ s in (0 : ℝ)..t, (I : ℂ) • expLimit hA s (A ⟨ψ, hψ⟩))) := by
     refine intervalIntegral.tendsto_integral_filter_of_dominated_convergence
       (fun _ => C) ?_ ?_ ?_ ?_
     · exact Eventually.of_forall fun n =>
-        (((continuous_expApprox_apply hA n (A.symmetricYosidaApproximation (n : ℝ) ψ)).const_smul
+        ((((V n).continuous_orbit
+          (A.symmetricYosidaApproximation (n : ℝ) ψ)).const_smul
           (I : ℂ)).aestronglyMeasurable)
     · filter_upwards [hCle] with n hn
       refine Eventually.of_forall fun s _ => ?_
-      rw [norm_smul, Complex.norm_I, one_mul, norm_expApprox]
+      rw [norm_smul, Complex.norm_I, one_mul,
+        (Semigroups.StronglyContinuousGroup.isUnitary_ofBoundedExp _
+      (hA.isSelfAdjoint_symmetricYosidaApproximation _)).norm_map]
       exact hn
     · exact intervalIntegrable_const
     · exact Eventually.of_forall fun s _ => hlim s
   -- and the right-hand sides converge too
-  have hrhs : Tendsto (fun n : ℕ+ => expApprox hA n t ψ - ψ) atTop
+  have hrhs : Tendsto (fun n : ℕ+ => V n t ψ -
+    ψ) atTop
       (𝓝 (expLimit hA t ψ - ψ)) :=
     (tendsto_expLimitFun hA t ψ).sub tendsto_const_nhds
   refine tendsto_nhds_unique hint ?_
   refine hrhs.congr fun n => ?_
-  exact (integral_expApprox hA n ψ t).symm
+  exact (integral_yosidaFlow n ψ t).symm
 
 /-- The difference quotient of the limit flow converges to `A ψ` on the domain:
 the integral identity turns it into the *average* of a continuous integrand. -/
