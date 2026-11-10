@@ -2,112 +2,147 @@
   "schema_version": 1,
   "id": "g2-035000-the-operator-modulus-a",
   "title": "The operator modulus |A|",
-  "subtitle": "G2 lecture 035000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 035000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:035000"
   ],
   "source_lecture": "draft-stages/tts-lectures/035000-the-operator-modulus-a.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Expanded companion deck developed from the spoken lecture and display-only mathematical appendix. Adds explicit mathematical formulas, worked examples, and topic-specific diagrams while remaining standalone.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 035000 · first-pass outline",
-      "lead": "A linear map can do several things at once.",
+      "id": "00-00",
+      "title": "Measuring output length without output direction",
+      "layout": "opening",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 035000 · Output length without direction",
+      "lead": "For a general linear map A, the modulus |A| captures how large the outputs are while forgetting where they point.",
       "body": [
-        "It can stretch some vectors, shrink others, rotate directions, or send a space into a higher-dimensional one. Sometimes it sends a nonzero vector to zero. What if we want to separate the information about length change from everything else? For a real number a, its absolute value tells us how much multiplication by a changes length. Multiplying by negative three reverses a direction and triples its length; the absolute value, three, remembers only the length change. There is an operator construction with the same purpose."
+        "The map A may not be self-adjoint, so it need not admit a spectral theorem of the same form. But A* A is always positive, and therefore it has a unique positive square root.",
+        "That square root is called the modulus of A. It is the positive operator that will feed both singular-value theory and polar decomposition."
       ],
-      "layout": "opening"
+      "takeaway": "The modulus extracts the stretching behavior of A from the positive Gram operator A* A."
     },
     {
-      "id": "01-overview",
-      "title": "Start with the length of an output",
-      "eyebrow": "G2 · 035000 · first-pass outline",
-      "lead": "Let A map one finite-dimensional inner-product space E into another space F.",
+      "id": "01-00",
+      "title": "Definition of the modulus",
+      "layout": "equation",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 035000 · Definition",
+      "lead": "The modulus is defined by taking the positive square root of the Gram operator.",
+      "mathtex": "|A| = (A^*A)^{1/2}",
       "body": [
-        "The two spaces do not have to have the same dimension. Choose a vector x in E. We know that the squared length of A x is the inner product of A x with itself. By the defining identity of the adjoint, this is also the inner product of x with A adjoint A x. So the squared output length is determined entirely by the source Gram operator, A adjoint A. That is an important observation. The expression A adjoint A acts on the input space E, even though A x lives in the output space F. This lets us measure the stretching without moving into the output space."
+        "Because A* A is positive, the previous lecture guarantees that this definition makes sense and determines a unique positive operator on the source space of A.",
+        "The modulus lives on the input side. Even when A maps E to F with E and F different spaces, |A| is an operator on E."
       ],
-      "layout": "reading"
+      "takeaway": "|A| is always positive and always acts on the domain of A."
     },
     {
-      "id": "02-overview",
-      "title": "Why the modulus preserves the output lengths",
-      "eyebrow": "G2 · 035000 · first-pass outline",
-      "lead": "Call the modulus M for a moment.",
+      "id": "02-00",
+      "title": "Why it preserves output lengths",
+      "layout": "equation",
+      "eyebrow": "G2 · 035000 · The key identity",
+      "lead": "The squared norm of |A|x equals the squared norm of Ax for every input vector x.",
+      "mathtex": "\\||A|x\\|^2 = \\langle A^*A x,x\\rangle = \\|Ax\\|^2",
       "body": [
-        "Since M is positive, it is self-adjoint. And by construction, M squared is A adjoint A. Now compute the squared length of M x. Using the adjoint identity, this equals the inner product of x with M adjoint M x. But M adjoint is M, so M adjoint M is M squared, which is A adjoint A. We are back to the squared length of A x. Thus M x and A x always have the same length. In spoken terms: the modulus of A stretches every input vector by exactly the same amount as A does. This does not mean they produce the same output vector. They may not even live in the same space. A x lies in F, while M x lies in E."
+        "This identity says that |A| records exactly the same output lengths as A, but does so through a positive self-adjoint operator on the input space. All directional information has been converted into an intrinsic stretching operator.",
+        "As a consequence, |A| and A have the same operator norm and the same singular values."
       ],
-      "layout": "reading"
+      "takeaway": "The modulus is the positive operator with exactly the same length profile as A."
     },
     {
-      "id": "03-overview",
+      "id": "03-00",
       "title": "A two-dimensional example",
-      "eyebrow": "G2 · 035000 · first-pass outline",
-      "lead": "Let A take the vector with coordinates x and y and output the vector whose first coordinate is x plus y and whose second coordinate is zero.",
+      "layout": "figure",
+      "diagram": "basis-change",
+      "eyebrow": "G2 · 035000 · A concrete example",
+      "lead": "Take A(x,y) = (2y,0). Then A* A is diagonal and the modulus is easy to compute.",
+      "mathtex": "A^*A=\\begin{bmatrix}0&0\\\\[2pt]0&4\\end{bmatrix},\\qquad |A|=\\begin{bmatrix}0&0\\\\[2pt]0&2\\end{bmatrix}",
       "body": [
-        "The matrix of A has first row one, one and second row zero, zero. What happens to lengths? The output has length equal to the absolute value of x plus y. The input direction with equal coordinates survives and gets stretched. The direction with opposite coordinates disappears completely. Compute A adjoint A. Because we are using real coordinates, adjoint means transpose. The result is the two-by-two matrix with every entry equal to one."
+        "The map ignores the first coordinate and doubles the second. The modulus does exactly the same amount of stretching, but keeps everything inside the original input space: it kills the horizontal direction and doubles the vertical direction.",
+        "Later the polar factor will restore the missing information that the doubled vertical direction is sent onto the horizontal output axis."
       ],
-      "layout": "reading"
+      "takeaway": "The modulus keeps the amount of stretching but not the final output direction."
     },
     {
-      "id": "04-overview",
-      "title": "Three examples that test the definition",
-      "eyebrow": "G2 · 035000 · first-pass outline",
-      "lead": "First, suppose A is itself a positive operator on E.",
+      "id": "04-00",
+      "title": "Three sanity checks",
+      "layout": "reading",
+      "diagram": "operator-ball",
+      "eyebrow": "G2 · 035000 · Sanity checks",
+      "lead": "The definition agrees with familiar cases.",
       "body": [
-        "It is already the unique positive square root of A squared. Because A adjoint equals A, the modulus of A equals A. A positive operator has no sign or orientation change for the modulus to remove. Second, suppose A is a unitary operator, or more generally an isometric embedding. Every input length is preserved. The defining adjoint identity for an isometry is A adjoint A equals the identity on E. The positive square root of the identity is the identity. Therefore the modulus of any isometry is simply the identity on its input space. Third, suppose A is self-adjoint but has both positive and negative eigenvalues."
+        "If A is already positive, then A* A = A² and the positive square root gives |A| = A. If A is unitary or orthogonal, then A* A = I, so |A| = I because such maps preserve lengths exactly. If A is diagonal with entries d_i, then |A| is diagonal with entries |d_i|.",
+        "These examples justify the name “modulus” by matching the scalar absolute-value picture."
       ],
-      "layout": "reading"
+      "takeaway": "The operator modulus generalizes ordinary absolute value and the notion of pure stretching."
     },
     {
-      "id": "05-overview",
-      "title": "Kernels and directions that disappear",
-      "eyebrow": "G2 · 035000 · first-pass outline",
-      "lead": "We can now prove a useful kernel identity.",
+      "id": "05-00",
+      "title": "Kernel information survives",
+      "layout": "equation",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 035000 · Kernels",
+      "lead": "A vector is killed by A exactly when it is killed by |A|.",
+      "mathtex": "\\ker |A| = \\ker A",
       "body": [
-        "If A kills x, its output length is zero. The modulus produces an output of exactly the same length, so the modulus also kills x. Conversely, if the modulus kills x, the output length of A x must also be zero. Thus A kills x. So A and its modulus have precisely the same kernel. The kernel marks the input directions that disappear. The orthogonal complement of the kernel consists of directions on which there is no complete collapse. Later, the partial isometry in the polar decomposition will preserve lengths on that orthogonal complement and vanish on the kernel. Notice that none of this required A to be invertible."
+        "If Ax = 0, then the norm identity gives |||A|x|| = 0, so |A|x = 0. Conversely, if |A|x = 0, then ||Ax|| = 0 and therefore Ax = 0.",
+        "So the modulus forgets output direction, but it does not forget which input directions vanish completely."
       ],
-      "layout": "reading"
+      "takeaway": "The disappearing directions of A are encoded perfectly in the modulus."
     },
     {
-      "id": "06-overview",
-      "title": "Modulus and the operator norm",
-      "eyebrow": "G2 · 035000 · first-pass outline",
-      "lead": "Recall that the operator norm of A is the largest output length among inputs of length one.",
+      "id": "06-00",
+      "title": "The norm of A is the top eigenvalue of |A|",
+      "layout": "equation",
+      "diagram": "spectral-cutoff",
+      "eyebrow": "G2 · 035000 · Norm and singular values",
+      "lead": "Because |A| is positive, its spectral theory turns operator norms into eigenvalue statements.",
+      "mathtex": "\\|A\\| = \\||A|\\| = \\max \\sigma(|A|)",
       "body": [
-        "Because A and its modulus produce equal lengths on every input, their operator norms are equal. The modulus has an extra advantage: it is positive and self-adjoint, so the finite spectral theorem applies. Its operator norm is its largest eigenvalue. Consequently, the largest possible stretching factor of A can be found by inspecting the eigenvalues of its modulus. The complete ordered list of these nonnegative eigenvalues will become the singular values of A. So singular values are not mysterious numbers attached to an arbitrary rectangular matrix."
+        "The eigenvalues of |A| are the singular values of A. The largest singular value is the operator norm, and the full list of singular values describes how strongly A stretches in optimally chosen orthogonal directions.",
+        "Thus the modulus is the bridge from arbitrary linear maps to a positive operator whose spectrum measures stretching."
       ],
-      "layout": "reading"
+      "takeaway": "Singular values are simply the spectral values of the modulus."
     },
     {
-      "id": "07-overview",
-      "title": "What we have and what is still missing",
-      "eyebrow": "G2 · 035000 · first-pass outline",
-      "lead": "We now know how to construct a canonical positive operator that captures the lengths produced by A.",
+      "id": "07-00",
+      "title": "What the modulus forgets",
+      "layout": "figure",
+      "diagram": "complex-rotation",
+      "eyebrow": "G2 · 035000 · What is missing",
+      "lead": "Two different operators can have the same modulus if they stretch by the same amounts but send directions to different places.",
       "body": [
-        "We know its square, its kernel, and its largest eigenvalue interpretation. What we do not yet know is how to match each input stretching direction with its corresponding direction in the output space. That relationship is what singular-value decomposition will provide. Try to reconstruct the chain before moving on: squared length of A x, then the Gram operator A adjoint A, then the positive square root, then equality of output lengths. Explain why the modulus lives on the source space even for a rectangular map. And check the example where A maps x and y to x plus y and zero."
+        "A pure rotation and the identity both satisfy A* A = I, so both have modulus I. The modulus therefore does not encode where surviving vectors land; it only encodes how much length each input direction carries into the output.",
+        "Recovering that missing directional information is exactly the job of the polar factor in the next lecture."
       ],
-      "layout": "reading"
+      "takeaway": "The modulus measures stretching, not orientation or output placement."
     },
     {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 035000 · mathematical reference",
-      "lead": "We now know how to construct a canonical positive operator that captures the lengths produced by A.",
+      "id": "08-00",
+      "title": "Why |A| is the right precursor to polar decomposition",
+      "layout": "reading",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 035000 · Preparing for polar decomposition",
+      "lead": "Once the stretching part is isolated, what remains should preserve lengths on the surviving directions.",
       "body": [
-        "We know its square, its kernel, and its largest eigenvalue interpretation. What we do not yet know is how to match each input stretching direction with its corresponding direction in the output space."
+        "The identity ||Ax|| = |||A|x|| suggests that A should factor as a length-preserving map composed after |A|. That is the idea of polar decomposition: write A = U|A|, where U is a partial isometry.",
+        "The modulus therefore provides the positive part of the decomposition, while the polar factor carries the geometric direction data."
       ],
-      "mathtex": "|A|=(A^*A)^{1/2}:E\\to E,\\qquad |A|^2=A^*A,",
-      "layout": "equation"
+      "takeaway": "The modulus is the positive half of polar decomposition."
     },
     {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 035000 · conclusion",
-      "lead": "And check the example where A maps x and y to x plus y and zero.",
-      "body": [],
-      "layout": "reading"
+      "id": "09-00",
+      "title": "What to remember",
+      "layout": "reading",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 035000 · What to remember",
+      "lead": "The modulus repackages a general linear map into a positive stretching operator.",
+      "body": [
+        "Define |A| as the positive square root of A* A. Then |A| preserves the output lengths of A, has the same kernel as A, and has singular values equal to its eigenvalues. It lives on the input space and forgets only the final output direction.",
+        "That is exactly the information we need before building the polar factor."
+      ],
+      "takeaway": "|A| is the canonical positive record of how A stretches vectors."
     }
   ]
 }

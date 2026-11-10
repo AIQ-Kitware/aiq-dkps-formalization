@@ -2,122 +2,147 @@
   "schema_version": 1,
   "id": "g2-033000-quadratic-form-order-and-positive-operators",
   "title": "Quadratic-form order and positive operators",
-  "subtitle": "G2 lecture 033000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 033000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:033000"
   ],
   "source_lecture": "draft-stages/tts-lectures/033000-quadratic-form-order-and-positive-operators.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Expanded companion deck developed from the spoken lecture and display-only mathematical appendix. Adds explicit mathematical formulas, worked examples, and topic-specific diagrams while remaining standalone.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 033000 · first-pass outline",
-      "lead": "For an ordinary number, positivity is straightforward.",
+      "id": "00-00",
+      "title": "Energy as a quadratic form",
+      "layout": "opening",
+      "diagram": "operator-ball",
+      "eyebrow": "G2 · 033000 · Energy as a quadratic form",
+      "lead": "A self-adjoint operator is called positive when it never assigns negative energy to a vector.",
       "body": [
-        "Three is positive, negative two is not, and zero sits at the boundary. For a matrix, it cannot mean that all its entries are positive. A matrix can have negative entries and still be positive in the sense used in operator theory. Conversely, a matrix with all positive entries need not satisfy that operator-theoretic condition. What we need is a definition that survives a change of orthonormal coordinates and tells us how the operator acts on every direction."
+        "For a self-adjoint matrix A, the scalar ⟨Ax,x⟩ is the quadratic form determined by A. Positivity means this scalar is at least zero for every vector x.",
+        "Thinking in terms of quadratic forms is more flexible than staring at entries. It behaves well under changes of basis, compression to subspaces, and spectral decomposition."
       ],
-      "layout": "opening"
+      "takeaway": "Positivity is a geometric property of the quadratic form, not a statement about entrywise signs."
     },
     {
-      "id": "01-overview",
-      "title": "A matrix as a measurement of energy",
-      "eyebrow": "G2 · 033000 · first-pass outline",
-      "lead": "Take a real symmetric matrix A and a vector x.",
+      "id": "01-00",
+      "title": "Definition of positivity",
+      "layout": "equation",
+      "eyebrow": "G2 · 033000 · Definition",
+      "lead": "For self-adjoint A, positivity is tested on every vector.",
+      "mathtex": "A\\ge 0\\quad\\Longleftrightarrow\\quad \\langle Ax,x\\rangle\\ge 0\\ \\text{for all }x",
       "body": [
-        "Form the number obtained by multiplying x by A and taking the inner product of x with the result. This number is called the quadratic form of A at x. You have already met its normalized version: the Rayleigh quotient. Here we keep the length of x in the expression instead of dividing by it. We call A positive semidefinite when its quadratic form is never negative, no matter which vector we choose. In the complex setting, we use self-adjoint operators and their real-valued quadratic forms. Why require self-adjointness? Because we want an order on operators with the same geometric behavior as the order on real numbers."
+        "The definition makes sense because self-adjointness guarantees the quadratic form is real-valued. If A were not self-adjoint, ⟨Ax,x⟩ could be complex and the inequality would not even be meaningful.",
+        "Later the notation A ≤ B will mean B − A ≥ 0, so positivity is the basic building block of operator order."
       ],
-      "layout": "reading"
+      "takeaway": "Quadratic-form inequalities require self-adjoint operators from the start."
     },
     {
-      "id": "02-overview",
-      "title": "A matrix with negative entries can be positive",
-      "eyebrow": "G2 · 033000 · first-pass outline",
-      "lead": "Look at the symmetric matrix with two on both diagonal entries and negative one in both off-diagonal positions.",
+      "id": "02-00",
+      "title": "Negative entries can still produce a positive operator",
+      "layout": "figure",
+      "diagram": "gram-geometry",
+      "eyebrow": "G2 · 033000 · Entries can mislead",
+      "lead": "Entrywise signs do not decide positivity.",
+      "mathtex": "\\begin{bmatrix}1&-1\\\\[2pt]-1&1\\end{bmatrix}\\ge 0",
       "body": [
-        "Choose a vector with real coordinates x and y. Its quadratic form is two x squared, minus two x times y, plus two y squared. Rewrite that as the square of x minus y, plus x squared, plus y squared. Each term is nonnegative. Therefore the entire expression is nonnegative for every vector. In fact, it is strictly positive for every nonzero vector. So this matrix is positive definite, although two entries are negative. Now take the diagonal matrix with entries negative one and two. Its entries are easy to inspect, but the important test is directional."
+        "For x = (u,v), the quadratic form equals u² − 2uv + v² = (u−v)², which is always nonnegative. So a matrix with negative off-diagonal entries may still be positive.",
+        "This example is a warning: positivity is about the entire quadratic expression, not about every individual coefficient being nonnegative."
       ],
-      "layout": "reading"
+      "takeaway": "The quadratic form sees cancellation that entrywise inspection can miss."
     },
     {
-      "id": "03-overview",
-      "title": "The spectral criterion",
-      "eyebrow": "G2 · 033000 · first-pass outline",
-      "lead": "We can test positivity using the finite spectral theorem.",
+      "id": "03-00",
+      "title": "Spectral criterion for positivity",
+      "layout": "equation",
+      "diagram": "spectral-cutoff",
+      "eyebrow": "G2 · 033000 · Spectral criterion",
+      "lead": "For self-adjoint operators, positivity is equivalent to spectral nonnegativity.",
+      "mathtex": "A\\ge 0\\quad\\Longleftrightarrow\\quad \\sigma(A)\\subseteq [0,\\infty)",
       "body": [
-        "Suppose A is self-adjoint, with an orthonormal basis of eigenvectors. Write a vector as a sum of components along those directions. Its quadratic form is the sum of each eigenvalue multiplied by the squared length of the corresponding component. If every eigenvalue is nonnegative, each term in that sum is nonnegative. Therefore the operator is positive semidefinite. Conversely, if an eigenvalue is negative, choose a unit eigenvector for it. Its quadratic form equals that negative eigenvalue. So the operator cannot be positive semidefinite."
+        "If A has an orthonormal eigenbasis, then ⟨Ax,x⟩ becomes a weighted average of the eigenvalues with nonnegative weights |c_i|². So all eigenvalues nonnegative implies positivity.",
+        "Conversely, an eigenvector for a negative eigenvalue would make the quadratic form negative on that vector. Thus positivity and nonnegative spectrum coincide in finite dimensions."
       ],
-      "layout": "reading"
+      "takeaway": "The spectral theorem turns positivity into a simple statement about eigenvalues."
     },
     {
-      "id": "04-overview",
+      "id": "04-00",
       "title": "Ordering two operators",
-      "eyebrow": "G2 · 033000 · first-pass outline",
-      "lead": "Now we can compare matrices using an analogue of the usual number-line order.",
+      "layout": "equation",
+      "diagram": "operator-ball",
+      "eyebrow": "G2 · 033000 · Operator order",
+      "lead": "Once positivity is defined, comparison is defined by subtraction.",
+      "mathtex": "A\\le B\\quad\\Longleftrightarrow\\quad B-A\\ge 0",
       "body": [
-        "For two self-adjoint operators A and B on the same space, say that A is less than or equal to B when B minus A is positive semidefinite. Equivalently, for every vector x, the quadratic form of A at x is at most the quadratic form of B at x. This is sometimes called the Loewner order, or quadratic-form order. Notice that it is a partial order. Some pairs of operators cannot be compared in either direction. For example, consider A with diagonal entries one and zero, and B with diagonal entries zero and one. On the first coordinate vector, A gives the larger quadratic form. On the second, B gives the larger one."
+        "This means ⟨Ax,x⟩ ≤ ⟨Bx,x⟩ for every vector x. The order is partial, not total: two self-adjoint operators need not be comparable.",
+        "Still, this order is powerful because it lets us convert spectral placement, compressions, and Gram constructions into inequalities that are valid on every vector."
       ],
-      "layout": "reading"
+      "takeaway": "Operator order means uniform quadratic-form domination over all vectors."
     },
     {
-      "id": "05-overview",
+      "id": "05-00",
       "title": "Order survives changes of coordinates and compression",
-      "eyebrow": "G2 · 033000 · first-pass outline",
-      "lead": "There is a particularly useful rule.",
+      "layout": "figure",
+      "diagram": "basis-change",
+      "eyebrow": "G2 · 033000 · Stable operations",
+      "lead": "Positive operators stay positive under natural geometric operations.",
       "body": [
-        "If A is less than or equal to B, and C is any linear map into their space, then C adjoint times A times C is less than or equal to C adjoint times B times C. Let's prove it with one vector. Choose any input vector y for C. The quadratic form of C adjoint A C at y is exactly the quadratic form of A at the vector C y. By our assumption, that is no greater than the quadratic form of B at C y. Rewrite this as the quadratic form of C adjoint B C at y. Since the inequality holds for every y, the operator inequality follows. If C is unitary, this is simply a change of orthonormal coordinates. Positivity must survive because the geometry has not changed."
+        "If U is unitary, then U*AU has the same quadratic form values after a change of coordinates, so positivity is preserved. Likewise, compressing A to a subspace keeps positivity because the restricted quadratic form is still nonnegative there.",
+        "These closure properties explain why positivity is the right language for invariant subspaces, blocks, and projections."
       ],
-      "layout": "reading"
+      "takeaway": "Positivity is intrinsic and survives standard coordinate-free constructions."
     },
     {
-      "id": "06-overview",
+      "id": "06-00",
       "title": "Gram operators are automatically positive",
-      "eyebrow": "G2 · 033000 · first-pass outline",
-      "lead": "We already constructed Gram operators from linear maps.",
+      "layout": "equation",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 033000 · The model example",
+      "lead": "For any linear map T, the operator T* T is positive.",
+      "mathtex": "\\langle T^*T x,x\\rangle = \\|Tx\\|^2 \\ge 0",
       "body": [
-        "For any linear map S between finite-dimensional inner-product spaces, its source Gram operator is S adjoint times S. Evaluate its quadratic form at x. The result is the inner product of S x with itself: the squared norm of S x. Squared lengths are nonnegative. Therefore S adjoint S is positive semidefinite. The Gram construction encodes lengths and inner products in a positive self-adjoint operator, whose spectrum determines the singular values. The kernel also has a simple interpretation. The quadratic form of S adjoint S vanishes at x exactly when S x is zero. So its zero directions are precisely the kernel of S."
+        "This is the prototypical positivity argument. The quadratic form of T* T is literally a squared norm, so nonnegativity is automatic.",
+        "Later, square roots of T* T give the modulus |T|, and the singular values of T are the square roots of the eigenvalues of this positive Gram operator."
       ],
-      "layout": "reading"
+      "takeaway": "Many important positive operators arise because they are Gram operators T* T."
     },
     {
-      "id": "07-overview",
-      "title": "Why products require care",
-      "eyebrow": "G2 · 033000 · first-pass outline",
-      "lead": "It is tempting to say that the product of two positive operators is always positive, just as the product of two nonnegative numbers is nonnegative.",
+      "id": "07-00",
+      "title": "Products require care",
+      "layout": "reading",
+      "diagram": "block-operator",
+      "eyebrow": "G2 · 033000 · A common trap",
+      "lead": "Even if A and B are positive, the product AB need not be positive.",
       "body": [
-        "That is false unless we impose additional structure. Take the projection A onto the first coordinate axis. Take B to be the matrix with every entry equal to one. Both are positive semidefinite. But the product A B has first row one, one and second row zero, zero. It is not symmetric, so it is not a positive operator in our sense. When positive operators commute, they can be diagonalized together in finite dimensions, and their product is again positive. Without commutation, even self-adjointness of the product can fail."
+        "The reason is that AB may fail to be self-adjoint unless A and B commute. Without self-adjointness, positivity is not even defined in the same way. If A and B do commute, then simultaneous diagonalization shows AB is positive because it multiplies nonnegative spectral values.",
+        "So positivity behaves well under products only under an additional compatibility hypothesis."
       ],
-      "layout": "reading"
+      "takeaway": "Positivity is not closed under arbitrary multiplication; commutation matters."
     },
     {
-      "id": "08-overview",
-      "title": "Toward positive square roots",
-      "eyebrow": "G2 · 033000 · first-pass outline",
-      "lead": "We have learned to detect positivity through quadratic forms and through eigenvalues.",
+      "id": "08-00",
+      "title": "Why we care: square roots and modulus",
+      "layout": "reading",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 033000 · Toward later constructions",
+      "lead": "Positive operators are exactly the ones on which canonical square roots make sense.",
       "body": [
-        "We have also learned how to apply functions to self-adjoint operators. Combine those ideas. If A is positive, all its eigenvalues are nonnegative. We can take the ordinary nonnegative square root of each eigenvalue, then reassemble an operator using the same spectral projections. The result will be positive, and squaring it will recover A. But is it the only positive operator whose square is A? And can we characterize it without choosing coordinates? Those are the questions."
+        "If A ≥ 0, then the scalar function t ↦ √t is defined on its spectrum, so the functional calculus produces a positive square root. For a general map T, positivity of T* T gives the modulus |T| = (T* T)^{1/2}.",
+        "That is why positivity is not merely a side topic. It is the gateway to the operator constructions needed for singular values and polar decomposition."
       ],
-      "layout": "reading"
+      "takeaway": "Positivity is the doorway to canonical square roots, moduli, and singular-value theory."
     },
     {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 033000 · mathematical reference",
-      "lead": "We have learned to detect positivity through quadratic forms and through eigenvalues.",
+      "id": "09-00",
+      "title": "What to remember",
+      "layout": "reading",
+      "diagram": "operator-ball",
+      "eyebrow": "G2 · 033000 · What to remember",
+      "lead": "Keep the quadratic-form viewpoint in front of you.",
       "body": [
-        "We have also learned how to apply functions to self-adjoint operators. Combine those ideas. If A is positive, all its eigenvalues are nonnegative."
+        "A positive operator is a self-adjoint operator whose quadratic form is never negative. The spectral theorem turns that into the condition σ(A) ⊆ [0,∞). Operator order is defined by positivity of differences, and Gram operators T* T are the canonical examples.",
+        "These ideas feed directly into positive square roots and the modulus of an operator."
       ],
-      "mathtex": "A\\succeq0\\iff \\langle Ax,x\\rangle\\ge0\\quad\\forall x\n\\iff \\sigma(A)\\subseteq[0,\\infty),",
-      "layout": "equation"
-    },
-    {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 033000 · conclusion",
-      "lead": "That reconstruction gives us the tools we will need for positive square roots, the operator modulus, and eventually polar decomposition.",
-      "body": [],
-      "layout": "reading"
+      "takeaway": "Quadratic-form order is the right language for comparing self-adjoint operators."
     }
   ]
 }

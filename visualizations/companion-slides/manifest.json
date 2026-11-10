@@ -455,7 +455,7 @@
       "lecture_nodes": [
         "g2:030000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-031000-ordered-gaps-versus-distance-gaps",
@@ -463,7 +463,7 @@
       "lecture_nodes": [
         "g2:031000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-032000-coordinate-free-finite-functional-calculus",
@@ -471,7 +471,7 @@
       "lecture_nodes": [
         "g2:032000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-033000-quadratic-form-order-and-positive-operators",
@@ -479,7 +479,7 @@
       "lecture_nodes": [
         "g2:033000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-034000-positive-square-roots-and-their-uniqueness",
@@ -487,7 +487,7 @@
       "lecture_nodes": [
         "g2:034000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-035000-the-operator-modulus-a",
@@ -495,7 +495,7 @@
       "lecture_nodes": [
         "g2:035000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-036000-singular-value-decomposition",
@@ -503,7 +503,7 @@
       "lecture_nodes": [
         "g2:036000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-037000-polar-decomposition",
@@ -511,7 +511,7 @@
       "lecture_nodes": [
         "g2:037000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-038000-partial-isometries-and-polar-uniqueness",

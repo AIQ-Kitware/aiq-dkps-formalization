@@ -2,132 +2,148 @@
   "schema_version": 1,
   "id": "g2-030000-spectral-projections-for-selected-sets",
   "title": "Spectral projections: selecting whole pieces of an operator",
-  "subtitle": "G2 lecture 030000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 030000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:030000"
   ],
   "source_lecture": "draft-stages/tts-lectures/030000-spectral-projections-for-selected-sets.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Expanded companion deck developed from the spoken lecture and display-only mathematical appendix. Adds explicit mathematical formulas, worked examples, and topic-specific diagrams while remaining standalone.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 030000 · first-pass outline",
-      "lead": "Individual eigenvalues of a self-adjoint matrix can be ordered and compared using Rayleigh quotients and min-max characterizations.",
+      "id": "00-00",
+      "title": "The central construction",
+      "layout": "opening",
+      "diagram": "spectral-cutoff",
+      "eyebrow": "G2 · 030000 · The central construction",
+      "lead": "Davis–Kahan asks about whole spectral subspaces, not one eigenvector at a time.",
       "body": [
-        "But many perturbation questions concern an entire selected collection of eigendirections rather than any one eigenvector. But the Davis–Kahan theory that motivates this course is often not interested in one eigenvector at a time. It asks how a subspace associated with a group of eigenvalues behaves. To prepare for that question, we need a way to say: keep the part of a vector associated with these eigenvalues, and discard everything else."
+        "For a finite-dimensional self-adjoint matrix, the spectral theorem splits the space into orthogonal eigenspaces. A spectral projection is the operator that keeps the components whose eigenvalues lie in a chosen set and discards the rest.",
+        "This gives a coordinate-free way to say “keep the part of the vector belonging to this spectral cluster.” Later, perturbation theorems compare these selected subspaces before and after a perturbation."
       ],
-      "layout": "opening"
+      "takeaway": "A spectral projection is the canonical selector for a set of eigenvalues."
     },
     {
-      "id": "01-overview",
-      "title": "Selecting frequencies in a simple analogy",
-      "eyebrow": "G2 · 030000 · first-pass outline",
-      "lead": "Imagine a musical chord.",
+      "id": "01-00",
+      "title": "Projecting onto one eigenspace",
+      "layout": "figure",
+      "diagram": "orthogonal-projection",
+      "eyebrow": "G2 · 030000 · Projecting onto one eigenspace",
+      "lead": "Start with a single eigenvalue λ and its eigenspace E_λ.",
+      "mathtex": "P_\\lambda^2=P_\\lambda,\\qquad P_\\lambda^*=P_\\lambda,\\qquad \\operatorname{ran} P_\\lambda = E_\\lambda",
       "body": [
-        "It contains several pitches mixed together. If we could separate the chord into its pitch components, we might choose to keep only the notes above a certain frequency. For a self-adjoint matrix, the finite spectral theorem gives an exact decomposition of every vector into orthogonal components belonging to distinct eigenvalues. We can select some of those components and suppress the others. The analogy is imperfect: an eigenvalue need not be a frequency, and an operator need not describe sound. But the operation of selecting components is precisely the same kind of bookkeeping. Let's build it from the eigenbasis rather than starting with a formula to memorize."
+        "Because E_λ is a closed subspace in finite dimensions, there is an orthogonal projection P_λ onto it. Applying P_λ keeps the E_λ component of a vector and removes everything perpendicular to E_λ.",
+        "Idempotence says that projecting twice changes nothing after the first step. Self-adjointness records that this is an orthogonal, not oblique, projection."
       ],
-      "layout": "reading"
+      "takeaway": "Each eigenspace comes with its own orthogonal selector P_λ."
     },
     {
-      "id": "02-overview",
-      "title": "The projector for one eigenspace",
-      "eyebrow": "G2 · 030000 · first-pass outline",
-      "lead": "Suppose A is self-adjoint.",
+      "id": "02-00",
+      "title": "Selecting a whole set S",
+      "layout": "equation",
+      "diagram": "spectral-cutoff",
+      "eyebrow": "G2 · 030000 · Selecting a whole set",
+      "lead": "Now choose any set S of real numbers and keep exactly the eigenspaces whose eigenvalues lie in S.",
+      "mathtex": "P_S = \\sum_{\\lambda \\in \\sigma(A)\\cap S} P_\\lambda",
       "body": [
-        "Pick one of its eigenvalues, say lambda. All the vectors that A multiplies by lambda form the corresponding eigenspace. Because the space is finite-dimensional, there is an orthogonal projection onto that eigenspace. Call it P lambda. Applying P lambda to a vector keeps the component in that eigenspace and removes all perpendicular components. If we apply P lambda twice, the second application changes nothing. That is the defining behavior of a projection. If we take its adjoint, we get the same operator, because this is an orthogonal projection. What happens if we project onto one eigenspace, then onto an eigenspace for a different eigenvalue? The result is zero."
+        "Numbers of S that are not eigenvalues do nothing. Only actual spectral components contribute. Because distinct eigenspaces of a self-adjoint operator are orthogonal, the sum is again an orthogonal projection.",
+        "Its range is the direct sum of the selected eigenspaces. That range is called the spectral subspace associated with S."
       ],
-      "layout": "reading"
+      "takeaway": "Spectral selection is determined by the operator and the set S, not by an arbitrary basis choice."
     },
     {
-      "id": "03-overview",
-      "title": "Selecting a set of eigenvalues",
-      "eyebrow": "G2 · 030000 · first-pass outline",
-      "lead": "Now choose any set S of real numbers.",
+      "id": "03-00",
+      "title": "A two-by-two calculation",
+      "layout": "figure",
+      "diagram": "basis-change",
+      "eyebrow": "G2 · 030000 · A two-by-two calculation",
+      "lead": "Take A = [[2,1],[1,2]], whose eigenvalues are 3 and 1 with diagonal and antidiagonal eigendirections.",
+      "mathtex": "P_{(2,\\infty)} = \\tfrac12\\begin{bmatrix}1&1\\\\[2pt]1&1\\end{bmatrix},\\qquad P_{[0,2]} = \\tfrac12\\begin{bmatrix}1&-1\\\\[2pt]-1&1\\end{bmatrix}",
       "body": [
-        "It might be a finite list, a closed interval, an open interval, or all numbers above a threshold. For each eigenvalue belonging to S, keep its spectral projection. Add those projections together. Ignore the eigenvalues outside S. The resulting operator is the spectral projection of A onto S. The set S itself can contain numbers that are not eigenvalues. Those extra numbers have no effect: there is no eigenspace component for them to select. To calculate this projection on a vector, decompose the vector into eigenspace components, keep exactly the ones whose eigenvalues lie in S, and add them back together."
+        "If S = (2,∞), only the eigenvalue 3 is selected, so we keep the diagonal direction. Applied to the vector (4,0), the projection returns (2,2).",
+        "If S = [0,2], only the eigenvalue 1 survives, and the output on (4,0) is (2,-2). Adding the two outputs recovers the original vector because the two selected pieces are orthogonal and complementary."
       ],
-      "layout": "reading"
+      "takeaway": "A spectral projection literally decomposes a vector into orthogonal spectral pieces."
     },
     {
-      "id": "04-overview",
-      "title": "A calculation we can hear",
-      "eyebrow": "G2 · 030000 · first-pass outline",
-      "lead": "Consider the symmetric two-by-two matrix with rows two, one and one, two.",
+      "id": "04-00",
+      "title": "Endpoints can change the answer",
+      "layout": "reading",
+      "diagram": "spectral-gap",
+      "eyebrow": "G2 · 030000 · Endpoints can change the answer",
+      "lead": "Open and closed intervals behave differently whenever an eigenvalue sits on the boundary.",
       "body": [
-        "We have used it before. Its eigenvalues are three and one. Its eigenvectors lie along the lines one, one and one, negative one. Suppose S contains all real numbers greater than two. Only the eigenvalue three is selected. Projection onto its normalized eigenvector produces a matrix with one-half in each of its four entries. Apply that projection to the vector with coordinates four and zero. We get the vector two, two. The component along the diagonal line is preserved; the perpendicular component is removed. Now select the interval from zero through two instead."
+        "For the same matrix, the rule “keep eigenvalues greater than or equal to 1” selects both eigenspaces and gives the identity. The rule “keep eigenvalues strictly greater than 1” excludes the eigenspace for 1 and keeps only the eigenspace for 3.",
+        "If we move a threshold through a region containing no eigenvalues, the projection stays constant. It changes only when the threshold crosses an eigenvalue, at which moment an entire eigenspace is gained or lost."
       ],
-      "layout": "reading"
+      "takeaway": "Boundary conventions matter exactly when the spectrum touches the boundary."
     },
     {
-      "id": "05-overview",
-      "title": "Why endpoints matter",
-      "eyebrow": "G2 · 030000 · first-pass outline",
-      "lead": "Now imagine a selection rule that keeps eigenvalues greater than or equal to one.",
+      "id": "05-00",
+      "title": "Repeated eigenvalues are selected all at once",
+      "layout": "figure",
+      "diagram": "spectral-cutoff",
+      "eyebrow": "G2 · 030000 · Repeated eigenvalues",
+      "lead": "A set of eigenvalues cannot distinguish directions inside one repeated eigenspace.",
       "body": [
-        "Our matrix has an eigenvalue exactly equal to one, so it is included. The projector is the identity. Change just one word: keep eigenvalues strictly greater than one. Now the eigenspace for one is excluded, and only the eigenspace for three remains. The difference between a closed and an open interval can therefore change the selected spectral subspace immediately when an eigenvalue lies on the boundary. If we move a threshold through a region containing no eigenvalues, the projection does not change at all."
+        "If A = diag(4,4,1), then selecting the eigenvalue 4 keeps the entire two-dimensional eigenspace for 4. The associated spectral projection is diag(1,1,0).",
+        "You may project onto one line inside that plane, and such a line may even be invariant, but that line projection is not the spectral projection determined solely by the set {4}. Spectral selection includes or excludes a repeated eigenspace as a whole."
       ],
-      "layout": "reading"
+      "takeaway": "Spectral projections depend only on eigenvalues, so repeated eigenspaces are indivisible."
     },
     {
-      "id": "06-overview",
-      "title": "What if an eigenvalue repeats?",
-      "eyebrow": "G2 · 030000 · first-pass outline",
-      "lead": "Suppose A has diagonal entries four, four, and one.",
+      "id": "06-00",
+      "title": "Why P_S commutes with A",
+      "layout": "equation",
+      "diagram": "block-operator",
+      "eyebrow": "G2 · 030000 · Commutation and reduction",
+      "lead": "Applying A before or after the selector produces the same selected components.",
+      "mathtex": "A P_S = P_S A",
       "body": [
-        "The eigenspace for four is a plane, and the eigenspace for one is a line perpendicular to it. Selecting eigenvalue four keeps the entire plane. The spectral projection has diagonal entries one, one, and zero. Could we instead select just one of the two coordinate axes in that plane? We could certainly project onto that line. Since A acts as four times the identity on the whole plane, the line projection would even commute with A. But it would not be a spectral projection defined by a set of eigenvalues. The selection rule cannot distinguish two directions that carry exactly the same eigenvalue."
+        "Write a vector as the sum of its selected and unselected spectral components. If we project first and then apply A, every surviving component is multiplied by its eigenvalue. If we apply A first and then project, the same components survive with the same multipliers.",
+        "Therefore the range of P_S is invariant under A, and so is its orthogonal complement. A spectral subspace is therefore a reducing subspace."
       ],
-      "layout": "reading"
+      "takeaway": "Commutation is the operator-theoretic shadow of spectral selection."
     },
     {
-      "id": "07-overview",
-      "title": "Why a spectral projection commutes with the operator",
-      "eyebrow": "G2 · 030000 · first-pass outline",
-      "lead": "Take any vector x.",
+      "id": "07-00",
+      "title": "Selections obey set algebra",
+      "layout": "equation",
+      "eyebrow": "G2 · 030000 · Set algebra",
+      "lead": "The projection identities mirror ordinary set operations.",
+      "mathtex": "P_S P_T = P_{S\\cap T},\\qquad P_{S\\cup T}=P_S+P_T\\ \\text{if } S\\cap T=\\varnothing,\\qquad P_{S^c}=I-P_S",
       "body": [
-        "Split it into its selected spectral components and its unselected spectral components. If we first apply the projection and then apply A, each selected component gets multiplied by its eigenvalue. If we first apply A and then project, A multiplies every spectral component by its eigenvalue, but the projection removes the unselected ones afterward. The same selected components survive with the same multipliers in either order. Therefore the spectral projection commutes with A. That means its range is invariant under A, and so is its perpendicular complement. By definition, a spectral subspace is a reducing subspace."
+        "A spectral component survives two consecutive selections exactly when its eigenvalue belongs to both sets, giving the intersection rule. Disjoint selections keep orthogonal families of eigenspaces, so the union projector is the sum.",
+        "Selecting the complement means keeping everything discarded by S, which gives I − P_S. These identities let us manipulate spectral regions at the operator level rather than restarting from coordinates each time."
       ],
-      "layout": "reading"
+      "takeaway": "Set operations on spectral regions become algebraic identities among projections."
     },
     {
-      "id": "08-overview",
-      "title": "Combining selections",
-      "eyebrow": "G2 · 030000 · first-pass outline",
-      "lead": "The selection rules obey simple algebra.",
+      "id": "08-00",
+      "title": "A first example of functional calculus",
+      "layout": "equation",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 030000 · Indicator functions",
+      "lead": "A spectral projection is what you get by applying an indicator function to the operator.",
+      "mathtex": "P_S = \\mathbf 1_S(A)",
       "body": [
-        "Selecting S and then selecting T is the same as selecting their intersection, because a component survives both steps exactly when its eigenvalue belongs to both sets. If S and T are disjoint, their selected subspaces are orthogonal and the projection for their union is the sum of their projections. Selecting the complement of S keeps everything that S discarded, so its projection is the identity minus the projection for S. These identities are useful because they let us manipulate spectral regions using operators, without returning to coordinates after every step."
+        "The indicator of S equals 1 on S and 0 outside. When applied through the spectral decomposition, it multiplies the λ-eigenspace by 1 if λ lies in S and by 0 otherwise.",
+        "That viewpoint places spectral projections inside the functional calculus. The next lecture makes this relation explicit for general functions f, not only indicators."
       ],
-      "layout": "reading"
+      "takeaway": "Spectral projections are the simplest nontrivial operator functions."
     },
     {
-      "id": "09-overview",
-      "title": "Spectral selection as an operator function",
-      "eyebrow": "G2 · 030000 · first-pass outline",
-      "lead": "Spectral selection is an example of applying a function to a self-adjoint operator.",
+      "id": "09-00",
+      "title": "What to remember",
+      "layout": "reading",
+      "diagram": "spectral-cutoff",
+      "eyebrow": "G2 · 030000 · What to remember",
+      "lead": "Reconstruct the operator from its spectral selectors before moving on.",
       "body": [
-        "The indicator of a set S takes the value one on S and zero outside S. Applied to a finite-dimensional self-adjoint matrix through its eigenvalue decomposition, this indicator produces the corresponding spectral projection. For an infinite-dimensional self-adjoint operator, the spectrum need not consist of isolated eigenvalues. A projection-valued spectral measure gives the correct extension of the indicator construction to that setting; the finite eigenbasis argument alone does not establish it. For now, try reconstructing the two-by-two example."
+        "For each eigenvalue, first understand the orthogonal projection onto its eigenspace. Then group those projections according to a chosen set S. The sum is an orthogonal projection whose range is the selected spectral subspace.",
+        "It commutes with A, respects set algebra, and changes only when the selection boundary crosses an eigenvalue. Those are precisely the facts later perturbation bounds will exploit."
       ],
-      "layout": "reading"
-    },
-    {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 030000 · mathematical reference",
-      "lead": "Spectral selection is an example of applying a function to a self-adjoint operator.",
-      "body": [
-        "The indicator of a set S takes the value one on S and zero outside S. Applied to a finite-dimensional self-adjoint matrix through its eigenvalue decomposition, this indicator produces the corresponding spectral projection."
-      ],
-      "mathtex": "P_A(S\\cap T)=P_A(S)P_A(T),\\qquad\nP_A(S^c)=I-P_A(S).",
-      "layout": "equation"
-    },
-    {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 030000 · conclusion",
-      "lead": "Its projector commutes with the self-adjoint operator, and repeated eigenvalues must be selected together when the selection is made solely by eigenvalue.",
-      "body": [],
-      "layout": "reading"
+      "takeaway": "A spectral projection keeps exactly the spectral pieces chosen by S and packages them as a reducing subspace."
     }
   ]
 }

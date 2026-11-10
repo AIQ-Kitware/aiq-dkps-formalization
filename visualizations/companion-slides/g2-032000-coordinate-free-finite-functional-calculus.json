@@ -2,112 +2,146 @@
   "schema_version": 1,
   "id": "g2-032000-coordinate-free-finite-functional-calculus",
   "title": "Coordinate-free finite functional calculus",
-  "subtitle": "G2 lecture 032000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 032000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:032000"
   ],
   "source_lecture": "draft-stages/tts-lectures/032000-coordinate-free-finite-functional-calculus.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Expanded companion deck developed from the spoken lecture and display-only mathematical appendix. Adds explicit mathematical formulas, worked examples, and topic-specific diagrams while remaining standalone.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 032000 · first-pass outline",
-      "lead": "We know how to square a matrix.",
+      "id": "00-00",
+      "title": "Turning functions into operators",
+      "layout": "opening",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 032000 · Turning functions into operators",
+      "lead": "Once a self-adjoint matrix is spectrally decomposed, any scalar function f can act on its eigenvalues.",
       "body": [
-        "We multiply it by itself. We know how to form a polynomial in a matrix: take combinations of its powers and the identity. But what could the square root of a matrix mean? Or the exponential? Or even a function that is one on some eigenvalues and zero on others? It would be easy to misunderstand the phrase “apply a function to a matrix” as applying that function separately to every entry. Generally, that is not what we mean. The correct construction is about what the matrix does as an operator, and the spectral theorem supplies the key."
+        "The finite functional calculus packages this idea without tying it to one diagonalizing basis. If A has eigenspace projections P_λ, then f(A) should scale each λ-eigenspace by the scalar f(λ).",
+        "This single construction explains spectral projections, square roots, matrix exponentials, and many later operator functions as instances of the same mechanism."
       ],
-      "layout": "opening"
+      "takeaway": "Functional calculus means applying a scalar rule to each spectral component of A."
     },
     {
-      "id": "01-overview",
-      "title": "Start with one eigenvector",
-      "eyebrow": "G2 · 032000 · first-pass outline",
-      "lead": "Suppose A has an eigenvector v with eigenvalue three.",
+      "id": "01-00",
+      "title": "Begin with one eigenvector",
+      "layout": "equation",
+      "eyebrow": "G2 · 032000 · Begin with one eigenvector",
+      "lead": "If A v = λ v, the natural requirement is that f(A) should send v to f(λ) v.",
+      "mathtex": "A v = \\lambda v\\quad\\Longrightarrow\\quad f(A)v = f(\\lambda) v",
       "body": [
-        "Applying A to v multiplies it by three. Applying A twice multiplies it by nine. Applying A three times multiplies it by twenty-seven. Now take a polynomial, say the function that maps a number t to t squared plus one. The operator A squared plus the identity sends v to ten times v, because three squared plus one is ten. For every eigenvector, the polynomial expression acts by evaluating the polynomial at its eigenvalue. This is our clue. Rather than calculating a function entry by entry, we should ask what it does to each eigenspace."
+        "This requirement says the new operator keeps the same eigendirections but changes the scale attached to each eigenspace. For indicator functions we recover spectral projections, while for f(t)=t we recover A itself.",
+        "The challenge is to define f(A) on the whole space in a way that does not depend on the accidental choice of an eigenbasis inside repeated eigenspaces."
       ],
-      "layout": "reading"
+      "takeaway": "The calculus is determined by how it acts on spectral pieces, not on coordinates."
     },
     {
-      "id": "02-overview",
-      "title": "From eigenvectors to spectral projections",
-      "eyebrow": "G2 · 032000 · first-pass outline",
-      "lead": "The finite spectral theorem tells us that a self-adjoint operator has mutually orthogonal eigenspaces whose direct sum is the whole space.",
+      "id": "02-00",
+      "title": "Spectral projections give the formula",
+      "layout": "equation",
+      "diagram": "spectral-cutoff",
+      "eyebrow": "G2 · 032000 · The basis-free formula",
+      "lead": "The orthogonal projections onto eigenspaces let us write the operator directly.",
+      "mathtex": "f(A)=\\sum_{\\lambda\\in\\sigma(A)} f(\\lambda) P_\\lambda",
       "body": [
-        "Let the distinct eigenvalues be the numbers in a finite set, and let each eigenvalue have its orthogonal spectral projection. We can recover A by multiplying each spectral projection by its eigenvalue and adding the results. Now suppose f is a real-valued function defined on those eigenvalues. Define f of A in the same way, except replace each eigenvalue by its value under f. If a vector belongs to the eigenspace for three, f of A multiplies it by f of three."
+        "Each P_λ extracts the λ-eigenspace component of a vector, and the coefficient f(λ) rescales that component. Summing over the distinct eigenvalues reassembles the result.",
+        "Because the projections depend only on the operator, not on a diagonalizing basis, the formula is coordinate-free even though it is motivated by diagonalization."
       ],
-      "layout": "reading"
+      "takeaway": "Spectral projections are the stable scaffolding for finite functional calculus."
     },
     {
-      "id": "03-overview",
+      "id": "03-00",
       "title": "A concrete two-dimensional calculation",
-      "eyebrow": "G2 · 032000 · first-pass outline",
-      "lead": "Consider the symmetric matrix with two on both diagonal entries and one in each off-diagonal entry.",
+      "layout": "figure",
+      "diagram": "basis-change",
+      "eyebrow": "G2 · 032000 · A two-dimensional calculation",
+      "lead": "For A = [[2,1],[1,2]] with eigenvalues 3 and 1, apply f(t)=t².",
+      "mathtex": "f(A)=3^2 P_3 + 1^2 P_1 = 9P_3 + P_1 = \\begin{bmatrix}5&4\\\\[2pt]4&5\\end{bmatrix}",
       "body": [
-        "You can think of it as taking a vector, doubling its coordinates, and adding the other coordinate to each one. Its eigenvector in the direction one, one has eigenvalue three. Its eigenvector in the direction one, negative one has eigenvalue one. Take the function f of t equals t squared. Our definition says f of A multiplies the first eigendirection by nine and the second by one. If we instead multiply the original matrix by itself, we get a matrix with five on the diagonal and four off the diagonal."
+        "Diagonalizing A gives the same answer, but the projector formula avoids carrying the basis change explicitly through every computation. The result equals A², as it must when f(t)=t².",
+        "Choosing instead f = 1_(2,∞) would return P_3, and choosing f(t)=\\sqrt t would return the positive square root once the eigenvalues are nonnegative."
       ],
-      "layout": "reading"
+      "takeaway": "Different functions produce different operators from the same spectral decomposition."
     },
     {
-      "id": "04-overview",
+      "id": "04-00",
       "title": "Why the algebra works",
-      "eyebrow": "G2 · 032000 · first-pass outline",
-      "lead": "Let's prove some of the main rules, rather than taking them as convenient notation.",
+      "layout": "equation",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 032000 · Algebraic rules",
+      "lead": "Orthogonality of the spectral projections makes the calculus behave like ordinary pointwise algebra.",
+      "mathtex": "(f+g)(A)=f(A)+g(A),\\qquad (fg)(A)=f(A)g(A),\\qquad \\overline f(A)=f(A)^*",
       "body": [
-        "Suppose f and g are two real-valued functions on the spectrum. Consider an eigenvector of A with eigenvalue lambda. The operator f of A acts on that vector by f of lambda. The operator g of A acts by g of lambda. So their sum acts by f of lambda plus g of lambda. That is exactly how the function f plus g acts on lambda. Therefore the sum of the two operators equals the operator associated with f plus g. Similarly, applying g of A and then f of A multiplies the same eigendirection by g of lambda and then f of lambda. The result is the product of those two numbers."
+        "The key relation is P_λ P_μ = 0 when λ ≠ μ, while P_λ² = P_λ. Expanding products and collecting terms reproduces the pointwise products f(λ)g(λ).",
+        "Hence polynomial identities become operator identities after evaluation at A. This is why the functional calculus is so powerful: it preserves the algebraic structure of functions."
       ],
-      "layout": "reading"
+      "takeaway": "Pointwise algebra on the spectrum becomes operator algebra through orthogonal projections."
     },
     {
-      "id": "05-overview",
-      "title": "Can any function be represented by a polynomial?",
-      "eyebrow": "G2 · 032000 · first-pass outline",
-      "lead": "In finite dimensions, for self-adjoint A, yes—as far as its action on A is concerned.",
+      "id": "05-00",
+      "title": "Polynomial interpolation explains uniqueness",
+      "layout": "reading",
+      "diagram": "spectral-cutoff",
+      "eyebrow": "G2 · 032000 · Why polynomials already suffice",
+      "lead": "On a finite spectrum, many functions agree because only their values on finitely many eigenvalues matter.",
       "body": [
-        "Suppose A has three distinct eigenvalues. We can build a polynomial that equals any requested set of three values at those three points. The standard construction makes one polynomial for each eigenvalue. It equals one at that chosen eigenvalue and zero at the other two. A weighted sum of those polynomials then matches any requested function values on the spectrum. These are called Lagrange interpolation polynomials. Notice that the function does not need to be a polynomial everywhere on the real line. We only require agreement on the finite list of eigenvalues."
+        "If the distinct eigenvalues are λ₁, …, λ_k, then Lagrange interpolation produces a polynomial p with p(λ_i)=f(λ_i) for every i. Consequently p(A) already equals f(A).",
+        "This shows that the functional calculus is uniquely determined by the spectral values alone. Two scalar functions that agree on σ(A) produce exactly the same operator."
       ],
-      "layout": "reading"
+      "takeaway": "In finite dimensions, the functional calculus depends only on the values of f on the finite spectrum."
     },
     {
-      "id": "06-overview",
-      "title": "Where continuity enters later",
-      "eyebrow": "G2 · 032000 · first-pass outline",
-      "lead": "Infinite-dimensional operators bring a new difficulty.",
+      "id": "06-00",
+      "title": "Coordinate-free does not mean basis-free proofs are impossible",
+      "layout": "figure",
+      "diagram": "hilbert-coordinates",
+      "eyebrow": "G2 · 032000 · Concept versus computation",
+      "lead": "A diagonalizing basis is still useful for proofs and calculations, but it is not part of the final definition.",
       "body": [
-        "The spectrum may contain infinitely many points or an entire interval. We can no longer assume a polynomial can match an arbitrary function at every spectral point. For a bounded self-adjoint operator, one route begins by approximating a continuous real-valued function uniformly by polynomials on an interval containing the spectrum. The operator norm then lets us pass from the polynomial expressions to a limiting operator. We will prove the relevant approximation and convergence statements when we build continuous functional calculus in detail."
+        "One may compute f(A) by diagonalizing A, applying f to the diagonal entries, and conjugating back. The projector formula proves that the result is independent of the chosen orthonormal basis inside repeated eigenspaces.",
+        "So “coordinate-free” means the operator itself is intrinsic, even if coordinates are temporarily introduced along the way."
       ],
-      "layout": "reading"
+      "takeaway": "Coordinates are a tool for derivation, not part of the mathematical object being defined."
     },
     {
-      "id": "07-overview",
-      "title": "A function can reveal a property of the operator",
-      "eyebrow": "G2 · 032000 · first-pass outline",
-      "lead": "Suppose every eigenvalue of A is nonnegative.",
+      "id": "07-00",
+      "title": "A function can reveal a property of A",
+      "layout": "reading",
+      "diagram": "operator-ball",
+      "eyebrow": "G2 · 032000 · Choosing informative functions",
+      "lead": "Functional calculus is useful because carefully chosen functions expose structure.",
       "body": [
-        "Then f of A is nonnegative in the spectral sense whenever f is nonnegative on the spectrum, because its multipliers on each eigenspace are nonnegative. For a positive self-adjoint matrix, the spectral definition of its square root is concrete: replace each nonnegative eigenvalue by its nonnegative square root and keep the same spectral projections. The resulting matrix is positive and its square is the original matrix. This construction depends on positivity, meaning that the inner product of A x with x is nonnegative for every vector x. For a final reconstruction exercise, take a symmetric two-by-two matrix with eigenvalues one and three."
+        "Take f(t)=1_{[0,∞)}(t): then f(A) is the spectral projection onto the nonnegative spectral subspace. Take f(t)=|t|: then f(A) gives the modulus of a self-adjoint operator. Take f(t)=\\sqrt t on [0,∞): then f(A) gives the positive square root of a positive operator.",
+        "In each case, one scalar function packages an entire operator-theoretic construction."
       ],
-      "layout": "reading"
+      "takeaway": "Useful operator constructions often amount to choosing the right scalar function."
     },
     {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 032000 · mathematical reference",
-      "lead": "Suppose every eigenvalue of A is nonnegative.",
+      "id": "08-00",
+      "title": "What changes in infinite dimensions",
+      "layout": "reading",
+      "diagram": "resolvent-spectrum",
+      "eyebrow": "G2 · 032000 · Preview of the spectral theorem",
+      "lead": "The finite formula is only the first case of a much broader theory.",
       "body": [
-        "Then f of A is nonnegative in the spectral sense whenever f is nonnegative on the spectrum, because its multipliers on each eigenspace are nonnegative."
+        "For a general self-adjoint operator on a Hilbert space, the spectrum need not be a finite list of eigenvalues, and there may be no eigenbasis at all. Then one replaces the finite sum by an integral against a projection-valued measure.",
+        "The finite-dimensional lecture remains essential because the same conceptual roles survive: spectral pieces, scalar functions, and reassembly into an operator."
       ],
-      "mathtex": "f(A)=\\sum_{\\lambda\\in\\sigma(A)} f(\\lambda)P_\\lambda.",
-      "layout": "equation"
+      "takeaway": "Finite functional calculus is the discrete model of the general spectral calculus."
     },
     {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 032000 · conclusion",
-      "lead": "If you can do that, you understand why functional calculus is a property of the operator rather than of its chosen coordinates.",
-      "body": [],
-      "layout": "reading"
+      "id": "09-00",
+      "title": "What to remember",
+      "layout": "reading",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 032000 · What to remember",
+      "lead": "Rebuild the whole construction from spectral projections alone.",
+      "body": [
+        "Take the finite spectral decomposition of A, replace each eigenvalue λ by f(λ), and keep the same orthogonal projections P_λ. The resulting operator is f(A). It respects sums, products, and adjoints because the spectral projections are mutually orthogonal idempotents.",
+        "That perspective unifies spectral selectors, square roots, and later exponentials under one piece of mathematics."
+      ],
+      "takeaway": "The finite functional calculus is the template for many later operator constructions."
     }
   ]
 }

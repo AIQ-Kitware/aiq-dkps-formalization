@@ -2,112 +2,146 @@
   "schema_version": 1,
   "id": "g2-037000-polar-decomposition",
   "title": "Polar decomposition",
-  "subtitle": "G2 lecture 037000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 037000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:037000"
   ],
   "source_lecture": "draft-stages/tts-lectures/037000-polar-decomposition.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Expanded companion deck developed from the spoken lecture and display-only mathematical appendix. Adds explicit mathematical formulas, worked examples, and topic-specific diagrams while remaining standalone.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 037000 · first-pass outline",
-      "lead": "Imagine pulling a rubber sheet over a table.",
+      "id": "00-00",
+      "title": "Stretch first, then place the result",
+      "layout": "opening",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 037000 · Stretch first, then place the result",
+      "lead": "Polar decomposition separates a linear map into a positive stretch and a partial isometry.",
       "body": [
-        "You stretch it more in one direction than another, and then turn it. If I tell you only where each point ends up, can you separate the stretching from the motion that carries the stretched sheet to its final position? For a linear map, this is exactly what polar decomposition does. And we already have most of its ingredients. The modulus of a map tells us its stretching, and the singular-value decomposition tells us which input and output directions correspond. Combining these ideas gives a factorization into a positive stretching operator and a partial isometry."
+        "The modulus |A| = (A* A)^{1/2} already tells us how much A stretches each input direction. What remains is to restore the output direction information in a length-preserving way wherever there is nonzero output to preserve.",
+        "This yields the factorization A = U|A|, where U is a partial isometry."
       ],
-      "layout": "opening"
+      "takeaway": "Polar decomposition is the canonical separation of amount-of-stretch from direction-of-output."
     },
     {
-      "id": "01-overview",
-      "title": "Review what the modulus knows",
-      "eyebrow": "G2 · 037000 · first-pass outline",
-      "lead": "Let A be a linear map from one finite-dimensional inner-product space, E, to another, F.",
+      "id": "01-00",
+      "title": "Review the modulus",
+      "layout": "equation",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 037000 · Review the modulus",
+      "lead": "The construction begins with the positive operator |A| on the source space.",
+      "mathtex": "|A|=(A^*A)^{1/2},\\qquad \\||A|x\\|=\\|Ax\\|",
       "body": [
-        "The spaces may have different dimensions. The modulus of A is the positive square root of A adjoint times A. We proved that the modulus and A give the same output length for every input. We also proved that they have the same kernel: a vector is killed by A exactly when it is killed by the modulus. So the modulus tells us how much the map stretches a vector. It does not tell us where the output points. We want a second operator, call it U, that restores that missing directional information. Our goal is to apply the modulus first, then U, and obtain A."
+        "The norm identity says that |A| already accounts for all length changes caused by A. Therefore any remaining factor should preserve lengths on the subspace where |A| is nonzero.",
+        "The kernel of |A| equals the kernel of A, so the directions annihilated by A are already completely identified before U is defined."
       ],
-      "layout": "reading"
+      "takeaway": "The modulus determines both the stretching data and the null directions of A."
     },
     {
-      "id": "02-overview",
-      "title": "Construct U where its action is determined",
-      "eyebrow": "G2 · 037000 · first-pass outline",
-      "lead": "Start with a vector of the form modulus of A applied to x.",
+      "id": "02-00",
+      "title": "Define U on the range of |A|",
+      "layout": "equation",
+      "eyebrow": "G2 · 037000 · Defining the polar factor",
+      "lead": "The obvious formula is to tell U what to do to a vector of the form |A|x.",
+      "mathtex": "U(|A|x)=Ax",
       "body": [
-        "Define U on that vector by declaring that its output is A applied to x. There are two things to check before this is a legitimate definition. First, could the same vector be written as modulus of A applied to two different inputs? If so, must the proposed output agree? Suppose the modulus sends x and y to the same vector. Then it kills their difference. The kernels of A and its modulus agree, so A also kills their difference. Thus A x and A y are equal. Good: our proposed U does not depend on which input we chose. Second, does U preserve length? Yes."
+        "This says: first recover which input x produced the stretched vector |A|x, then send it to the actual output Ax. If the rule is well defined, it will satisfy U|A| = A by construction.",
+        "So the main work is to prove that the output does not depend on which x we use to represent a point of ran|A|."
       ],
-      "layout": "reading"
+      "takeaway": "The polar factor is forced on the range of the modulus."
     },
     {
-      "id": "03-overview",
-      "title": "What happens to the kernel?",
-      "eyebrow": "G2 · 037000 · first-pass outline",
-      "lead": "Here is the step that makes the construction canonical.",
+      "id": "03-00",
+      "title": "Why this rule is well defined",
+      "layout": "reading",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 037000 · Well definedness",
+      "lead": "Suppose |A|x = |A|y. Then x − y lies in the kernel of |A|.",
       "body": [
-        "The range of the positive self-adjoint modulus is the orthogonal complement of its kernel, in finite dimensions. And that kernel is the kernel of A. So the input space splits into two perpendicular pieces: the directions that survive, and the directions that A kills. On the surviving directions, U has already been determined. On the kernel, define U to be zero. For any input vector, split it into a surviving component and a kernel component. Apply the length-preserving rule to the first, and zero to the second. That gives a linear map U from E to F."
+        "Because ker|A| = ker A, the difference x − y also lies in ker A. Hence Ax = Ay. Therefore the formula U(|A|x)=Ax does not depend on the chosen representative x.",
+        "Linearity follows immediately because both A and |A| are linear. So U is a linear map from ran|A| into the target space."
       ],
-      "layout": "reading"
+      "takeaway": "Equality of kernels is exactly what makes the defining rule unambiguous."
     },
     {
-      "id": "04-overview",
-      "title": "A two-dimensional example",
-      "eyebrow": "G2 · 037000 · first-pass outline",
-      "lead": "Take a map on the real plane that sends the vector with coordinates x and y to the vector with coordinates two y and zero.",
+      "id": "04-00",
+      "title": "Why U preserves lengths there",
+      "layout": "equation",
+      "eyebrow": "G2 · 037000 · Isometry on the support",
+      "lead": "On ran|A|, the map U is length preserving.",
+      "mathtex": "\\|U(|A|x)\\| = \\|Ax\\| = \\||A|x\\|",
       "body": [
-        "It ignores the first coordinate. It doubles the second coordinate and places the result on the horizontal axis. Its matrix has first row zero, two, and second row zero, zero. The adjoint-times-A matrix is diagonal, with entries zero and four. Its positive square root is diagonal with entries zero and two. So the modulus leaves the first direction collapsed and doubles the vertical direction. The missing step is to take that stretched vertical direction and lay it along the horizontal axis."
+        "The norm identity for the modulus shows that U does not add or remove any further stretching on the surviving part of the space. It only changes direction.",
+        "Thus U is an isometry from ran|A| onto ran A. In finite dimensions, ran|A| = (ker A)^⊥, so the support of the isometry is exactly the orthogonal complement of the kernel."
       ],
-      "layout": "reading"
+      "takeaway": "On the support of A, the polar factor is pure motion with no extra stretching."
     },
     {
-      "id": "05-overview",
-      "title": "Relation to singular-value decomposition",
-      "eyebrow": "G2 · 037000 · first-pass outline",
-      "lead": "The singular-value decomposition chooses perpendicular input directions, one for each singular value.",
+      "id": "05-00",
+      "title": "Extend by zero on the kernel",
+      "layout": "equation",
+      "diagram": "orthogonal-projection",
+      "eyebrow": "G2 · 037000 · Partial isometry",
+      "lead": "Define U to vanish on ker A and keep the isometry on (ker A)^⊥.",
+      "mathtex": "A=U|A|,\\qquad U^*U=P_{(\\ker A)^\\perp}",
       "body": [
-        "For a positive singular value, A sends its input direction to the associated output direction, multiplied by that singular value. The modulus performs the multiplication by the singular value while staying in the input space. U then carries that input direction to its corresponding output direction, without additional stretching. For a zero singular value, the modulus kills the input direction, and the canonical U kills it too. Thus polar decomposition is what remains of the singular-value decomposition after we stop insisting on choosing complete coordinate bases."
+        "This produces a linear map on the whole source space. It is not an isometry everywhere, because kernel vectors are sent to zero. But it is an isometry on the initial space (ker A)^⊥.",
+        "That is exactly what the phrase partial isometry means: isometric on one subspace, zero on its orthogonal complement."
       ],
-      "layout": "reading"
+      "takeaway": "The canonical polar factor is a partial isometry, not necessarily a full unitary map."
     },
     {
-      "id": "06-overview",
-      "title": "A nonsingular example",
-      "eyebrow": "G2 · 037000 · first-pass outline",
-      "lead": "Consider a diagonal map that multiplies the first coordinate by negative three and the second by two.",
+      "id": "06-00",
+      "title": "A concrete example",
+      "layout": "figure",
+      "diagram": "basis-change",
+      "eyebrow": "G2 · 037000 · A concrete example",
+      "lead": "For A(x,y) = (2y,0), the modulus stretches the vertical direction and the polar factor places it on the horizontal axis.",
+      "mathtex": "|A|=\\begin{bmatrix}0&0\\\\[2pt]0&2\\end{bmatrix},\\qquad U=\\begin{bmatrix}0&1\\\\[2pt]0&0\\end{bmatrix}",
       "body": [
-        "Its modulus multiplies the first coordinate by three and the second by two. Its polar factor reverses the first coordinate and leaves the second alone. Here U preserves lengths on the whole plane. It is an orthogonal transformation: a reflection. The original operator is a reflection followed by positive stretching. When A has no kernel, the polar factor is an isometric embedding of its entire input space. If A is an invertible square matrix, that factor is actually unitary—or orthogonal in the real case. But if A is rectangular, even an injective map need not have an onto unitary factor."
+        "The modulus kills the horizontal axis and doubles the vertical axis. The partial isometry U then sends the stretched vertical direction to the horizontal output direction and kills the kernel direction.",
+        "Composing them gives exactly A. This example makes the slogan literal: |A| stretches, U places."
       ],
-      "layout": "reading"
+      "takeaway": "In examples, the modulus and the polar factor play visibly different geometric roles."
     },
     {
-      "id": "07-overview",
-      "title": "What polar decomposition separates",
-      "eyebrow": "G2 · 037000 · first-pass outline",
-      "lead": "Polar decomposition also explains canonical alignment between subspaces: the positive modulus measures how much each direction is stretched, while the polar partial isometry transports the surviving directions without depending on arbitrary orthonormal coordinates.",
+      "id": "07-00",
+      "title": "Relation to the singular-value decomposition",
+      "layout": "reading",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 037000 · Relation to the SVD",
+      "lead": "If A = Σ σ_i u_i v_i^*, then |A| acts by σ_i on v_i and U sends v_i to u_i for positive singular values.",
       "body": [
-        "It also separates two quantities that appear throughout operator theory: the positive operator that records singular values, and the partial isometry that records where surviving vectors go. This separation extends to bounded operators on Hilbert spaces."
+        "Thus the SVD already contains the polar decomposition. The positive operator is |A| = Σ σ_i v_i v_i^*, while the polar factor is the partial isometry Σ_{σ_i>0} u_i v_i^* on the support.",
+        "The advantage of the polar decomposition is that it is canonical even when singular vectors inside repeated singular-value spaces are not uniquely chosen."
       ],
-      "layout": "reading"
+      "takeaway": "Polar decomposition is the invariant core hidden inside the SVD."
     },
     {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 037000 · mathematical reference",
-      "lead": "Polar decomposition also explains canonical alignment between subspaces: the positive modulus measures how much each direction is stretched, while the polar partial isometry transports the surviving directions without depending on arbitrary orthonormal coordinates.",
+      "id": "08-00",
+      "title": "When U becomes unitary or orthogonal",
+      "layout": "reading",
+      "diagram": "complex-rotation",
+      "eyebrow": "G2 · 037000 · The nonsingular case",
+      "lead": "If A is injective on a square space, the polar factor preserves lengths on the whole space.",
       "body": [
-        "It also separates two quantities that appear throughout operator theory: the positive operator that records singular values, and the partial isometry that records where surviving vectors go."
+        "When ker A = {0}, the initial space of the partial isometry is the entire domain, so U becomes an isometry everywhere. If, in addition, the domain and codomain have the same finite dimension, that isometry is unitary in the complex case or orthogonal in the real case.",
+        "So invertible matrices factor as a unitary or orthogonal motion followed by a positive stretching operator."
       ],
-      "mathtex": "A=U|A|,\\qquad \\ker U=\\ker A,\\qquad\nU^*U=P_{(\\ker A)^\\perp},\\qquad UU^*=P_{\\operatorname{ran}A}.",
-      "layout": "equation"
+      "takeaway": "For invertible square matrices, polar decomposition is the operator analogue of magnitude times phase."
     },
     {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 037000 · conclusion",
-      "lead": "If you can give those four arguments, you can recover the polar decomposition on your own.",
-      "body": [],
-      "layout": "reading"
+      "id": "09-00",
+      "title": "What to remember",
+      "layout": "reading",
+      "diagram": "analysis-synthesis",
+      "eyebrow": "G2 · 037000 · What to remember",
+      "lead": "Reconstruct the proof from four steps.",
+      "body": [
+        "First define |A| = (A* A)^{1/2}. Second define U on ran|A| by U(|A|x)=Ax. Third prove this is well defined and isometric there using ker|A|=ker A and |||A|x||=||Ax||. Fourth extend U by zero on ker A. Then A = U|A|.",
+        "Those steps are the whole polar decomposition argument in finite dimensions."
+      ],
+      "takeaway": "Well definedness, isometry on the support, and zero extension are the proof skeleton."
     }
   ]
 }
