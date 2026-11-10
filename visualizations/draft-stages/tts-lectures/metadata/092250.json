@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "lecture_id": "092250",
+  "transcript": "092250-hille-yosida-and-contraction-semigroups.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "bell-unbounded-operators",
+      "reason": "For unbounded generators, strong continuity, and semigroup constructions."
+    },
+    {
+      "source_id": "teschl-qm-free",
+      "reason": "For the contrast with self-adjoint generators and unitary groups."
+    }
+  ]
+}

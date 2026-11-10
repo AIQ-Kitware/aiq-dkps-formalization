@@ -121,7 +121,7 @@ def build_course_graph(*, g1_directory=None, g2_directory=None, g3_directory=Non
                     source=f'visualizations/draft-stages/tts-lectures/{path.name}'))
         g2.append(node_id)
     tracks.append(dict(id='g2', title='G2 - Comprehensive audio', status='available',
-                       summary='Full 150-lecture path', path=g2))
+                       summary=f'Full {len(g2)}-lecture path', path=g2))
 
     g3 = []
     for row in g3_plan['lectures']:

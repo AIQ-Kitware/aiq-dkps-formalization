@@ -9,6 +9,7 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+from dkvis.presentation.companion_figures import figure_svg
 from dkvis.presentation.companion_slides import CompanionSlideLibrary, SOURCE_DIR
 from tools import promote_g2_062000_069000 as promotion
 
@@ -37,17 +38,15 @@ def test_g2_sylvester_decks_have_complete_math_and_local_figures():
             assert 'first-pass outline' not in slide['eyebrow']
             if name:=slide.get('diagram'):
                 figures.add(name)
-                path=SOURCE_DIR/'figures'/f'{name}.svg'
-                assert path.is_file(),(node,name)
-                assert ET.parse(path).getroot().tag.endswith('svg')
+                assert ET.fromstring(figure_svg(name)).tag.endswith('svg'),(node,name)
         math_count+=sum(bool(row.get('mathtex')) for row in deck['slides'])
     assert math_count >=70
     assert len(figures)==15
 
 
 def test_g2_sylvester_slides_are_standalone_and_render_locally(tmp_path,monkeypatch):
-    from dkvis.presentation.slide_math import MathSvgRenderer
-    monkeypatch.setattr(MathSvgRenderer,'svg', lambda self,tex:'<svg class="math-svg"><path d="M0 0L1 1"/></svg>')
+    from dkvis.presentation import companion_slides as renderer
+    monkeypatch.setattr(renderer, 'render_slide_png', lambda deck, slide, index, count, cache_dir=None: b'PNG')
     lib=CompanionSlideLibrary(SOURCE_DIR,tmp_path/'rendered')
     for node in G2_SYLVESTER_NODES:
         key=next(x['id'] for x in lib.catalog() if node in x['lecture_nodes'])
@@ -57,7 +56,7 @@ def test_g2_sylvester_slides_are_standalone_and_render_locally(tmp_path,monkeypa
         assert html.count('<section class="slide slide--')==10
         assert 'BASELINE · NEEDS EXPANSION' not in html
         assert '<script src=' not in html
-        assert '<svg' in html
+        assert 'data:image/png;base64,' in html
         deck=json.loads((SOURCE_DIR/(key+'.json')).read_text(encoding='utf8'))
         prose=' '.join(' '.join([s['lead'],*s['body']]) for s in deck['slides']).lower()
         for dangling in ['in the previous lecture','later lecture', 'we met spectral projections earlier',

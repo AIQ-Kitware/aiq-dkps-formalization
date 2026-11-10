@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Export a DKPS companion-slide source to a 16:9 PowerPoint with vector TeX.
+/** Export a G3 companion-slide source to a 16:9 PowerPoint with vector TeX.
  *
  * Run from visualizations/:
  *   node tools/build_companion_pptx.js companion-slides/dkps-fast-path.json /tmp/g3-fast.pptx
@@ -31,18 +31,26 @@ async function main() {
   if (!source || !output) throw Error('Usage: node build_companion_pptx.js <source.json> <output.pptx>');
   const data = JSON.parse(fs.readFileSync(source, 'utf8'));
   if (data.schema_version !== 1 || !Array.isArray(data.slides)) throw Error('Invalid companion slide data');
-  const figureRoot = path.join(path.dirname(source), 'figures');
   const visualizationsRoot = path.resolve(__dirname, '..');
   const work = fs.mkdtempSync(path.join(os.tmpdir(), 'dkps-companion-ppt-'));
   let mathAssets = {};
+  let figureAssets = {};
   try {
+    const py = process.env.PYTHON || 'python';
+    const environment = {...process.env, PYTHONPATH: visualizationsRoot + (process.env.PYTHONPATH ? path.delimiter + process.env.PYTHONPATH : '')};
     if (data.slides.some(s => s.mathtex)) {
-      const py = process.env.PYTHON || 'python';
-      const environment = {...process.env, PYTHONPATH: visualizationsRoot + (process.env.PYTHONPATH ? path.delimiter + process.env.PYTHONPATH : '')};
       const res = spawnSync(py, ['-m', 'dkvis.presentation.slide_math', path.resolve(source), work],
         {cwd: visualizationsRoot, env:environment, encoding:'utf8', maxBuffer:10*1024*1024});
       if (res.status !== 0) throw Error('Vector equation build failed: ' + (res.stderr || res.stdout));
       mathAssets = JSON.parse(res.stdout.trim().split('\n').at(-1));
+    }
+    const figureIds = [...new Set(data.slides.map(s => s.diagram).filter(Boolean))];
+    if (figureIds.length) {
+      const figureDir = path.join(work, 'figures');
+      const res = spawnSync(py, ['-m', 'dkvis.presentation.companion_figures', '--output-dir', figureDir, ...figureIds],
+        {cwd: visualizationsRoot, env:environment, encoding:'utf8', maxBuffer:10*1024*1024});
+      if (res.status !== 0) throw Error('Vector figure build failed: ' + (res.stderr || res.stdout));
+      figureAssets = JSON.parse(res.stdout.trim().split('\n').at(-1));
     }
     const pres = new pptxgen();
     pres.layout = 'LAYOUT_WIDE';
@@ -82,7 +90,7 @@ async function main() {
       slide.addText(prose,{x:.79,y:startY,w:bodyW,h:bottom-startY,fontFace:'Aptos',color:C.body,margin:0,
         breakLine:false,valign:'top',paraSpaceAfterPt:10,...bodyOpts});
       if (hasFigure) {
-        const figPath=path.join(figureRoot,`${row.diagram}.svg`);
+        const figPath=figureAssets[row.diagram];
         slide.addShape(SH.rect,{x:7.25,y:startY-0.04,w:5.37,h:bottom-startY+.12,fill:{color:C.pane},line:{color:C.edge,width:.7}});
         if (fs.existsSync(figPath)) {
           slide.addImage({path:figPath,...fitImage(figPath,7.38,startY+.08,5.11,bottom-startY-.12)});
@@ -96,8 +104,8 @@ async function main() {
       }
       slide.addText(`${index+1} / ${data.slides.length}`,{x:12.00,y:7.18,w:.64,h:.16,fontSize:9,align:'right',color:C.dim,margin:0});
       const sources = [];
-      if (data.source_lecture) sources.push(`Lecture source: ${data.source_lecture}`);
-      if (row.diagram) sources.push(`Drawing: companion-slides/figures/${row.diagram}.svg (source-controlled vector illustration)`);
+      if (data.source_lecture) sources.push(`G3 lecture source: ${data.source_lecture}`);
+      if (row.diagram) sources.push(`Drawing: generated from dkvis.presentation.companion_figures (${row.diagram})`);
       if (sources.length) slide.addNotes(`[Sources]\n${sources.join('\n')}\n[/Sources]`);
       if (helpers.warnIfSlideElementsOutOfBounds) helpers.warnIfSlideElementsOutOfBounds(slide,pres);
     }

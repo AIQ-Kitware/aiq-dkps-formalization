@@ -5,6 +5,7 @@ import subprocess
 import sys
 from xml.etree import ElementTree
 
+from dkvis.presentation.companion_figures import figure_svg
 from dkvis.presentation.companion_slides import CompanionSlideLibrary, SOURCE_DIR
 
 BATCH3_NODES=tuple(f'g2:{n:03d}000' for n in range(46,54))
@@ -29,14 +30,12 @@ def test_g2_batch3_curated_mathematics_and_provenance():
             assert len(' '.join([slide['lead'],*slide['body']]).split())>=38
             assert 'first-pass outline' not in slide['eyebrow']
             if kind:=slide.get('diagram'):
-                figure=SOURCE_DIR/'figures'/f'{kind}.svg'
-                assert figure.is_file(),(node,kind)
-                assert ElementTree.parse(figure).getroot().tag.endswith('svg')
+                assert ElementTree.fromstring(figure_svg(kind)).tag.endswith('svg'),(node,kind)
 
 
 def test_g2_batch3_self_contained_render(tmp_path,monkeypatch):
-    from dkvis.presentation.slide_math import MathSvgRenderer
-    monkeypatch.setattr(MathSvgRenderer,'svg',lambda self,tex:'<svg class="math-svg"><path d="M0,0L1,1"/></svg>')
+    from dkvis.presentation import companion_slides as renderer
+    monkeypatch.setattr(renderer, 'render_slide_png', lambda deck, slide, index, count, cache_dir=None: b'PNG')
     lib=CompanionSlideLibrary(SOURCE_DIR,tmp_path/'rendered')
     for node in BATCH3_NODES:
         entry=next(e for e in lib.catalog() if node in e['lecture_nodes'])
@@ -44,7 +43,7 @@ def test_g2_batch3_self_contained_render(tmp_path,monkeypatch):
         html=lib.rendered(entry['id']).read_text(encoding='utf8')
         assert html.count('<section class="slide slide--')==result['slide_count']
         assert 'BASELINE · NEEDS EXPANSION' not in html
-        assert 'class="math-svg"' in html
+        assert 'data:image/png;base64,' in html
         assert '<script src=' not in html
 
 

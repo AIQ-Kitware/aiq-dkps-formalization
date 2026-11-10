@@ -116,7 +116,7 @@ def validate_lecture(path: Path, sources: dict, metadata_dir: Path = METADATA) -
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('--check', action='store_true', help='validate all 150 sidecars and their narration anchors')
+    group.add_argument('--check', action='store_true', help='validate the lecture sidecars and their narration anchors')
     group.add_argument('--json', metavar='LECTURE_ID', help='emit a validated future-server record as JSON')
     args = parser.parse_args()
     try:
@@ -124,8 +124,8 @@ def main() -> int:
         paths = sorted(HERE.glob('[0-9]*-*.md'))
         if args.check:
             sidecars = sorted(METADATA.glob('[0-9]*.json'))
-            if len(paths) != 150 or len(sidecars) != len(paths):
-                raise ValueError(f'Expected 150 transcripts and matching sidecars; found {len(paths)} and {len(sidecars)}')
+            if len(paths) < 150 or len(sidecars) != len(paths):
+                raise ValueError(f'Expected at least 150 transcripts and matching sidecars; found {len(paths)} and {len(sidecars)}')
             parsed = [validate_lecture(path, sources) for path in paths]
             expected = {d['lecture_id']+'.json' for d in parsed}
             if {path.name for path in sidecars} != expected:

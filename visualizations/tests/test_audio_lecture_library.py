@@ -30,7 +30,7 @@ def test_original_lecture_collection_is_directly_browsable():
     library = AudioLectureLibrary()
     try:
         items = library.catalog()
-        assert len(items) == 150
+        assert len(items) >= 154
         assert items[0]['id'] == '000000' and items[-1]['id'] == '149000'
         page = library.detail('021000')
         assert page['page_count'] > 5

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "lecture_id": "091500",
+  "transcript": "091500-strong-resolvent-convergence-and-spectral-limits.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "teschl-qm-free",
+      "reason": "For strong resolvent convergence, spectral measures, and the distinction from norm resolvent convergence."
+    },
+    {
+      "source_id": "bell-unbounded-operators",
+      "reason": "For domain and graph convergence background."
+    }
+  ]
+}

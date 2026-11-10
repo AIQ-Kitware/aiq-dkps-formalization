@@ -7,6 +7,7 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+from dkvis.presentation.companion_figures import figure_svg
 from dkvis.presentation.companion_slides import CompanionSlideLibrary, SOURCE_DIR
 
 G2_BATCH4_NODES = tuple(f'g2:{n:03d}000' for n in range(54,62))
@@ -35,17 +36,15 @@ def test_g2_batch4_decks_have_authored_proofs_math_and_figures():
             assert len(' '.join([slide['lead'], *slide['body']]).split())>=43
             if figname:=slide.get('diagram'):
                 all_figures.add(figname)
-                figure=SOURCE_DIR/'figures'/f'{figname}.svg'
-                assert figure.is_file(),(node,figname)
-                assert ET.parse(figure).getroot().tag.endswith('svg')
+                assert ET.fromstring(figure_svg(figname)).tag.endswith('svg'),(node,figname)
         total_math+=sum('mathtex' in slide for slide in deck['slides'])
     assert total_math>=50
     assert len(all_figures)>=12
 
 
 def test_g2_batch4_decks_render_without_external_web_assets(tmp_path,monkeypatch):
-    from dkvis.presentation.slide_math import MathSvgRenderer
-    monkeypatch.setattr(MathSvgRenderer,'svg',lambda self,tex:'<svg class="math-svg"><path d="M0 0L1 1"/></svg>')
+    from dkvis.presentation import companion_slides as renderer
+    monkeypatch.setattr(renderer, 'render_slide_png', lambda deck, slide, index, count, cache_dir=None: b'PNG')
     library=CompanionSlideLibrary(SOURCE_DIR,tmp_path/'rendered')
     for node in G2_BATCH4_NODES:
         deck=next(row['id'] for row in library.catalog() if node in row['lecture_nodes'])
@@ -54,7 +53,7 @@ def test_g2_batch4_decks_render_without_external_web_assets(tmp_path,monkeypatch
         assert result['built'] and result['slide_count']==10
         assert html.count('<section class="slide slide--')==10
         assert 'BASELINE · NEEDS EXPANSION' not in html
-        assert 'class="math-svg"' in html
+        assert 'data:image/png;base64,' in html
         assert '<script src=' not in html
 
 

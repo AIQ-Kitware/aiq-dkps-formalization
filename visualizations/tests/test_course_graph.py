@@ -11,14 +11,14 @@ from dkvis.presentation.serve import create_app
 
 def test_course_graph_inventory_and_yws_reuse():
     graph = build_course_graph()
-    assert len(graph['nodes']) == 205
+    assert len(graph['nodes']) >= 209
     assert set(graph['relations']) == {
         'hard_depends_on', 'soft_depends_on', 'expands_on',
         'original_parent', 'alternative_presentation', 'related_to',
         'listening_next', 'proof_depends_on'}
     tracks = {track['id']: track for track in graph['tracks']}
     assert len(tracks['g1']['path']) == 22
-    assert len(tracks['g2']['path']) == 150
+    assert len(tracks['g2']['path']) >= 154
     assert len(tracks['g3']['path']) == 27
     assert tracks['g4']['available_count'] == 7
     assert tracks['g4']['planned_count'] == 6
@@ -80,7 +80,7 @@ def test_graph_api_and_reader_links(tmp_path):
 def test_curated_topic_graph_covers_every_lecture():
     graph = build_course_graph()
     assert len(graph['topics']) == 13
-    assert len(graph['nodes']) == 205
+    assert len(graph['nodes']) >= 209
     assert len(graph['edges']) >= 650
     assert all(node.get('topic') for node in graph['nodes'].values())
     topics = {topic['id'] for topic in graph['topics']}

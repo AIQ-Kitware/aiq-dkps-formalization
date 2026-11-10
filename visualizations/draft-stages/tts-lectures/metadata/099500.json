@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "lecture_id": "099500",
+  "transcript": "099500-smoothed-singular-value-energies.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "bell-trace-ideals",
+      "reason": "For Hilbert-Schmidt summability and the relationship with trace-class operators."
+    },
+    {
+      "source_id": "higham-unitarily-invariant-norm",
+      "reason": "For the matrix singular-value perspective that motivates spectral penalties."
+    }
+  ]
+}

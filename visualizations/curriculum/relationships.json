@@ -2,74 +2,384 @@
   "schema_version": 1,
   "description": "Curated conceptual relationships; track ordering and original parent mappings are loaded from source inventories.",
   "edges": [
-    ["g3:002000", "soft_depends_on", "g3:001000"],
-    ["g3:003000", "hard_depends_on", "g3:001000"],
-    ["g3:004000", "hard_depends_on", "g3:001000"],
-    ["g3:005000", "hard_depends_on", "g3:004000"],
-    ["g3:006000", "soft_depends_on", "g3:001000"],
-    ["g3:007000", "soft_depends_on", "g3:001000"],
-    ["g3:008000", "hard_depends_on", "g3:007000"],
-    ["g3:009000", "hard_depends_on", "g3:008000"],
-    ["g3:010000", "hard_depends_on", "g3:008000"],
-    ["g3:010000", "soft_depends_on", "g3:006000"],
-    ["g3:012000", "hard_depends_on", "g3:011000"],
-    ["g3:012000", "hard_depends_on", "g3:008000"],
-    ["g3:013000", "soft_depends_on", "g3:006000"],
-    ["g3:014000", "hard_depends_on", "g3:004000"],
-    ["g3:015000", "soft_depends_on", "g3:007000"],
-    ["g3:016000", "soft_depends_on", "g3:002000"],
-    ["g3:017000", "hard_depends_on", "g3:005000"],
-    ["g3:018000", "hard_depends_on", "g3:006000"],
-    ["g3:019000", "hard_depends_on", "g3:017000"],
-    ["g3:020000", "hard_depends_on", "g3:003000"],
-    ["g3:020000", "hard_depends_on", "g3:004000"],
-    ["g3:020000", "hard_depends_on", "g3:009000"],
-    ["g3:021000", "hard_depends_on", "g3:014000"],
-    ["g3:021000", "hard_depends_on", "g3:009000"],
-    ["g3:022000", "hard_depends_on", "g3:015000"],
-    ["g3:023000", "hard_depends_on", "g3:015000"],
-    ["g3:023000", "hard_depends_on", "g3:014000"],
-    ["g3:024000", "hard_depends_on", "g3:019000"],
-    ["g3:025000", "hard_depends_on", "g3:019000"],
-    ["g3:025000", "soft_depends_on", "g3:018000"],
-    ["g3:018500", "hard_depends_on", "g3:017000", "The squared ambient comparison uses restricted singular-value optimality."],
-    ["g3:018500", "hard_depends_on", "g3:018000", "Squared transport requires the distinction between sine-angle energy and full chord displacement."],
-    ["g3:019000", "hard_depends_on", "g3:018500", "The unsquared counterexample compares with the valid squared-displacement inequality."],
-    ["g3:024000", "hard_depends_on", "g3:018500", "The comparison explicitly verifies the Proposition 4.3 Ky Fan prefixes."],
-    ["g2:110000", "soft_depends_on", "g2:108000"],
-    ["g2:112000", "soft_depends_on", "g2:111000"],
-    ["g2:116000", "soft_depends_on", "g2:114000"],
-    ["g2:117000", "soft_depends_on", "g2:114000"],
-    ["g2:134000", "soft_depends_on", "g2:133000"],
-    ["g2:145000", "soft_depends_on", "g2:134000"],
-    ["g2:147000", "hard_depends_on", "g2:043000"],
-    ["g2:147000", "soft_depends_on", "g2:031000"],
-    ["g2:148000", "hard_depends_on", "g2:042000"],
-    ["g2:148000", "soft_depends_on", "g2:147000"],
-    ["g2:146000", "soft_depends_on", "g2:036000"],
-    ["g1:000010_basics", "alternative_presentation", "g2:000000"],
-    ["g1:001000_projections", "alternative_presentation", "g2:011000"],
-    ["g1:002000_singular_norms", "alternative_presentation", "g2:036000"],
-    ["g1:002250_principal_angles", "alternative_presentation", "g2:042000"],
-    ["g1:002666_minmax", "alternative_presentation", "g2:028000"],
-    ["g1:002749_rayleigh_ritz", "alternative_presentation", "g2:021000"],
-    ["g1:003500_sylvester", "alternative_presentation", "g2:062000"],
-    ["g1:003750_sine_theta", "alternative_presentation", "g2:110000"],
-    ["g1:003875_yws", "alternative_presentation", "g2:147000"],
-    ["g1:004000_matching_study", "alternative_presentation", "g2:134000"],
-    ["g1:005000_matching_proof", "alternative_presentation", "g2:145000"],
-    ["g2:147000", "expands_on", "g3:002000"],
-    ["g2:148000", "expands_on", "g3:004000"],
-    ["g4:overview", "alternative_presentation", "g1:003875_yws"],
-    ["g4:mixed-gap", "hard_depends_on", "g3:002000"],
-    ["g4:residual-proof", "hard_depends_on", "g3:003000"],
-    ["g4:residual-proof", "hard_depends_on", "g3:004000"],
-    ["g4:residual-proof", "hard_depends_on", "g4:mixed-gap"],
-    ["g4:residual-proof", "expands_on", "g2:147000"],
-    ["g4:sharpness", "hard_depends_on", "g4:residual-proof"],
-    ["g4:rectangular-correction", "hard_depends_on", "g2:146000"],
-    ["g4:rectangular-correction", "soft_depends_on", "g4:residual-proof"],
-    ["g4:application", "hard_depends_on", "g4:residual-proof"],
-    ["g4:application", "soft_depends_on", "g2:148000"]
+    [
+      "g3:002000",
+      "soft_depends_on",
+      "g3:001000"
+    ],
+    [
+      "g3:003000",
+      "hard_depends_on",
+      "g3:001000"
+    ],
+    [
+      "g3:004000",
+      "hard_depends_on",
+      "g3:001000"
+    ],
+    [
+      "g3:005000",
+      "hard_depends_on",
+      "g3:004000"
+    ],
+    [
+      "g3:006000",
+      "soft_depends_on",
+      "g3:001000"
+    ],
+    [
+      "g3:007000",
+      "soft_depends_on",
+      "g3:001000"
+    ],
+    [
+      "g3:008000",
+      "hard_depends_on",
+      "g3:007000"
+    ],
+    [
+      "g3:009000",
+      "hard_depends_on",
+      "g3:008000"
+    ],
+    [
+      "g3:010000",
+      "hard_depends_on",
+      "g3:008000"
+    ],
+    [
+      "g3:010000",
+      "soft_depends_on",
+      "g3:006000"
+    ],
+    [
+      "g3:012000",
+      "hard_depends_on",
+      "g3:011000"
+    ],
+    [
+      "g3:012000",
+      "hard_depends_on",
+      "g3:008000"
+    ],
+    [
+      "g3:013000",
+      "soft_depends_on",
+      "g3:006000"
+    ],
+    [
+      "g3:014000",
+      "hard_depends_on",
+      "g3:004000"
+    ],
+    [
+      "g3:015000",
+      "soft_depends_on",
+      "g3:007000"
+    ],
+    [
+      "g3:016000",
+      "soft_depends_on",
+      "g3:002000"
+    ],
+    [
+      "g3:017000",
+      "hard_depends_on",
+      "g3:005000"
+    ],
+    [
+      "g3:018000",
+      "hard_depends_on",
+      "g3:006000"
+    ],
+    [
+      "g3:019000",
+      "hard_depends_on",
+      "g3:017000"
+    ],
+    [
+      "g3:020000",
+      "hard_depends_on",
+      "g3:003000"
+    ],
+    [
+      "g3:020000",
+      "hard_depends_on",
+      "g3:004000"
+    ],
+    [
+      "g3:020000",
+      "hard_depends_on",
+      "g3:009000"
+    ],
+    [
+      "g3:021000",
+      "hard_depends_on",
+      "g3:014000"
+    ],
+    [
+      "g3:021000",
+      "hard_depends_on",
+      "g3:009000"
+    ],
+    [
+      "g3:022000",
+      "hard_depends_on",
+      "g3:015000"
+    ],
+    [
+      "g3:023000",
+      "hard_depends_on",
+      "g3:015000"
+    ],
+    [
+      "g3:023000",
+      "hard_depends_on",
+      "g3:014000"
+    ],
+    [
+      "g3:024000",
+      "hard_depends_on",
+      "g3:019000"
+    ],
+    [
+      "g3:025000",
+      "hard_depends_on",
+      "g3:019000"
+    ],
+    [
+      "g3:025000",
+      "soft_depends_on",
+      "g3:018000"
+    ],
+    [
+      "g3:018500",
+      "hard_depends_on",
+      "g3:017000",
+      "The squared ambient comparison uses restricted singular-value optimality."
+    ],
+    [
+      "g3:018500",
+      "hard_depends_on",
+      "g3:018000",
+      "Squared transport requires the distinction between sine-angle energy and full chord displacement."
+    ],
+    [
+      "g3:019000",
+      "hard_depends_on",
+      "g3:018500",
+      "The unsquared counterexample compares with the valid squared-displacement inequality."
+    ],
+    [
+      "g3:024000",
+      "hard_depends_on",
+      "g3:018500",
+      "The comparison explicitly verifies the Proposition 4.3 Ky Fan prefixes."
+    ],
+    [
+      "g2:110000",
+      "soft_depends_on",
+      "g2:108000"
+    ],
+    [
+      "g2:112000",
+      "soft_depends_on",
+      "g2:111000"
+    ],
+    [
+      "g2:116000",
+      "soft_depends_on",
+      "g2:114000"
+    ],
+    [
+      "g2:117000",
+      "soft_depends_on",
+      "g2:114000"
+    ],
+    [
+      "g2:134000",
+      "soft_depends_on",
+      "g2:133000"
+    ],
+    [
+      "g2:145000",
+      "soft_depends_on",
+      "g2:134000"
+    ],
+    [
+      "g2:147000",
+      "hard_depends_on",
+      "g2:043000"
+    ],
+    [
+      "g2:147000",
+      "soft_depends_on",
+      "g2:031000"
+    ],
+    [
+      "g2:148000",
+      "hard_depends_on",
+      "g2:042000"
+    ],
+    [
+      "g2:148000",
+      "soft_depends_on",
+      "g2:147000"
+    ],
+    [
+      "g2:146000",
+      "soft_depends_on",
+      "g2:036000"
+    ],
+    [
+      "g1:000010_basics",
+      "alternative_presentation",
+      "g2:000000"
+    ],
+    [
+      "g1:001000_projections",
+      "alternative_presentation",
+      "g2:011000"
+    ],
+    [
+      "g1:002000_singular_norms",
+      "alternative_presentation",
+      "g2:036000"
+    ],
+    [
+      "g1:002250_principal_angles",
+      "alternative_presentation",
+      "g2:042000"
+    ],
+    [
+      "g1:002666_minmax",
+      "alternative_presentation",
+      "g2:028000"
+    ],
+    [
+      "g1:002749_rayleigh_ritz",
+      "alternative_presentation",
+      "g2:021000"
+    ],
+    [
+      "g1:003500_sylvester",
+      "alternative_presentation",
+      "g2:062000"
+    ],
+    [
+      "g1:003750_sine_theta",
+      "alternative_presentation",
+      "g2:110000"
+    ],
+    [
+      "g1:003875_yws",
+      "alternative_presentation",
+      "g2:147000"
+    ],
+    [
+      "g1:004000_matching_study",
+      "alternative_presentation",
+      "g2:134000"
+    ],
+    [
+      "g1:005000_matching_proof",
+      "alternative_presentation",
+      "g2:145000"
+    ],
+    [
+      "g2:147000",
+      "expands_on",
+      "g3:002000"
+    ],
+    [
+      "g2:148000",
+      "expands_on",
+      "g3:004000"
+    ],
+    [
+      "g4:overview",
+      "alternative_presentation",
+      "g1:003875_yws"
+    ],
+    [
+      "g4:mixed-gap",
+      "hard_depends_on",
+      "g3:002000"
+    ],
+    [
+      "g4:residual-proof",
+      "hard_depends_on",
+      "g3:003000"
+    ],
+    [
+      "g4:residual-proof",
+      "hard_depends_on",
+      "g3:004000"
+    ],
+    [
+      "g4:residual-proof",
+      "hard_depends_on",
+      "g4:mixed-gap"
+    ],
+    [
+      "g4:residual-proof",
+      "expands_on",
+      "g2:147000"
+    ],
+    [
+      "g4:sharpness",
+      "hard_depends_on",
+      "g4:residual-proof"
+    ],
+    [
+      "g4:rectangular-correction",
+      "hard_depends_on",
+      "g2:146000"
+    ],
+    [
+      "g4:rectangular-correction",
+      "soft_depends_on",
+      "g4:residual-proof"
+    ],
+    [
+      "g4:application",
+      "hard_depends_on",
+      "g4:residual-proof"
+    ],
+    [
+      "g4:application",
+      "soft_depends_on",
+      "g2:148000"
+    ],
+    [
+      "g2:091250",
+      "hard_depends_on",
+      "g2:081000",
+      "The resolvent construction uses bounded inverses of nonreal or positive shifts."
+    ],
+    [
+      "g2:091250",
+      "hard_depends_on",
+      "g2:083000",
+      "The domain and closedness hypotheses matter for resolvent inversion."
+    ],
+    [
+      "g2:091500",
+      "hard_depends_on",
+      "g2:091250",
+      "Strong resolvent convergence is illustrated with the Yosida approximation."
+    ],
+    [
+      "g2:092250",
+      "hard_depends_on",
+      "g2:091250",
+      "The contraction-semigroup construction starts from Yosida resolvent approximants."
+    ],
+    [
+      "g2:099500",
+      "hard_depends_on",
+      "g2:099000",
+      "The smoothing-domain theorem uses the Hilbert-Schmidt and trace-class distinction."
+    ]
   ]
 }

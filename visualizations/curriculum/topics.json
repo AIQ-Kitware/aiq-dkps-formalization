@@ -231,7 +231,11 @@
     "g2:144000": "applications",
     "g2:146000": "statistics",
     "g2:147000": "statistics",
-    "g2:148000": "statistics"
+    "g2:148000": "statistics",
+    "g2:091250": "unbounded",
+    "g2:091500": "unbounded",
+    "g2:092250": "unbounded",
+    "g2:099500": "operator-ideals"
   },
   "g1_assignments": {
     "g1:000010_basics": "orientation",

@@ -1,10 +1,10 @@
 # Transcript-first TTS drafts
 
-These 150 transcript-first drafts follow `../outline.md` and are separate from the `visualizations/lectures` Manim scene plan. The journal manuscript and formal proof sources provide the mathematical scope.
+These transcript-first drafts follow `../outline.md` and are separate from the `visualizations/lectures` Manim scene plan. The journal manuscript and formal proof sources provide the mathematical scope.
 
 ## Draft set
 
-The collection currently contains 150 numbered transcript drafts,
+The original collection contains 150 numbered transcript drafts, with additional mathematical lectures inserted between them,
 `000000` through `149000`, following the topical sequence in `../outline.md`.
 IDs are spaced by 1,000 to permit insertions. The sequence follows mathematical dependencies.
 

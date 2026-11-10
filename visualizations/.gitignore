@@ -28,3 +28,7 @@ slides-*/
 
 # On-demand HTML builds of source-controlled companion slide decks
 /companion-slide-cache/
+
+# Derived companion-slide vector exports.
+/companion-figure-cache/
+/companion-slides/figures/*.svg

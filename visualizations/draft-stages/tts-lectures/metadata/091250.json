@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "lecture_id": "091250",
+  "transcript": "091250-resolvents-and-yosida-regularization.md",
+  "historical_claims": [],
+  "related_resources": [
+    {
+      "source_id": "teschl-qm-free",
+      "reason": "For resolvent bounds, unbounded domains, and the self-adjoint spectral theorem."
+    },
+    {
+      "source_id": "bell-unbounded-operators",
+      "reason": "For an independent treatment of closed operators and semigroup foundations."
+    }
+  ]
+}
