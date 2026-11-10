@@ -1,7 +1,8 @@
 # DkpsQuench2026
 
-Formalization of the 2026 Quench query-efficiency theorem family and its fully
-grounded finite and compact-infinite strengthenings.
+Formalization of the 2026 Quench query-efficiency theorem family: Theorem 2 at the
+paper's own general model-class scope, and its finite and compact-infinite
+strengthenings.
 
 The directory is organized by mathematical subject.  Names such as `Perfect`,
 `Bridge`, and `EndToEnd` are intentionally absent: they describe development
@@ -29,13 +30,36 @@ literal tie-averaged nearest-neighbor estimator built from raw cached responses,
 with the representation concentration derived through the CMDS/Davis--Kahan
 chain rather than taken as a hypothesis.
 
+**At the paper's scope** -- an arbitrary model distribution, the mean squared error
+averaged over the target model, and the source replicate rate `r = omega(n ^ 3)`:
+
 ```lean
 -- "for any e > 0 there exists (n,m,r) such that MSE(y_NN) <= e with high probability"
-DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE
-DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE
+DkpsQuench2026.QueryEfficiency.generalFixedSubsetMSE
 
 -- "y_NN is query-efficient relative to y_Q with high probability", for a fixed
 -- query subset and then at the paper's full quantifier level over every m < M
+DkpsQuench2026.QueryEfficiency.generalFixedSubset
+DkpsQuench2026.QueryEfficiency.generalAllQueries
+```
+
+Their hypotheses, `GeneralSubsetAssumptions`, are the paper's Assumptions 1--2, the
+printed score range `[0, 1]`, and the setting and "technical assumptions" of the
+imported Theorem 1, plus measurability of the perspective map and the raw
+responses.  The proof controls one target at a time and integrates over the target
+with `DkpsQuench2026.highProb_mse_le_of_targetwise` (Tonelli, dominated convergence
+and Markov), which is the rigorous form of the printed step from a pointwise error
+bound to the MSE bound.  No finiteness, compactness, or response regularity of the
+model class is assumed.  The estimator follows the classical-MDS reading of
+Eq. (1), explained in the header of `DkpsQuench2026.Geometry.AugmentedCMDS`.
+
+**Strengthenings** that bound the error uniformly over all targets on a single
+high-probability event, at the price of a finite model class, or of a compact
+perspective range with pathwise response regularity:
+
+```lean
+DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE
+DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE
 DkpsQuench2026.QueryEfficiency.finiteFixedSubset
 DkpsQuench2026.QueryEfficiency.infiniteFixedSubset
 DkpsQuench2026.QueryEfficiency.finiteAllQueries
@@ -47,21 +71,22 @@ conclusions with the concentration event as an explicit premise.  They are the
 reusable seams the capstones factor through, not the paper-facing results; the
 `ASSUMPTION DISCLOSURE` note in `Paper/Theorem2.lean` says which is which.
 
-Two hypotheses still exceed the source and are tracked as census gaps: the
-replicate schedule `safeEntropyReplicates d n = (n + 1) ^ (4 + d)` against the
-paper's `r = omega(n ^ 3)`, and the population nondegeneracy floor.
+The finite and general routes run at the source rate (`SourceReplicateRate`).
+Only the compact-infinite strengthening needs a larger replicate budget
+(`NetReplicateRate`), whose excess is exactly the exponent of the perspective net
+used to make the bound uniform over targets.
 
-The schedule was `(n + 1) ^ (6 + 2 * d)` until the spectral certificate began
-reporting the population Gram floor at its true scale.  The Gram matrix of `n`
+The compact schedule was `(n + 1) ^ (6 + 2 * d)` until the spectral certificate
+began reporting the population Gram floor at its true scale.  The Gram matrix of `n`
 centered points is `n` times an empirical covariance, so its leading eigenvalues
-grow linearly, exactly as the compactness ceiling `4(n+1)B^2` does; reporting a
-constant floor against a growing ceiling inflated the conditioning ratio in the
-Davis--Kahan configuration bound by a factor `n`.  With the floor at scale, every
-term of that bound vanishes for a merely bounded batch-scaled perturbation, so
-the response tolerance loosened from `(n+1)^-2` to `(n+1)^-1`, the perspective
-net shrank from `O((n+1)^(2d))` to `O((n+1)^d)`, and the replicate budget fell by
-`d + 2` powers.  At `d = 2` and `n = 100` that is 1.1e12 cached responses per
-model rather than 1.1e20.
+grow linearly, exactly as the ceiling `4(n+1)B^2` does; reporting a constant floor
+against a growing ceiling inflated the conditioning ratio in the Davis--Kahan
+configuration bound by a factor `n`.  With the floor at scale, every term of that
+bound vanishes for a merely bounded batch-scaled perturbation, so the response
+tolerance loosened from `(n+1)^-2` to `(n+1)^-1`, the perspective net shrank from
+`O((n+1)^(2d))` to `O((n+1)^d)`, and the replicate budget fell by `d + 2` powers.
+At `d = 2` and `n = 100` that is 1.1e12 cached responses per model rather than
+1.1e20.
 
 ## Theory--practice OLS bridge
 
@@ -121,6 +146,7 @@ DkpsQuench2026.QueryEfficiency.FiniteSubsetData
 DkpsQuench2026.QueryEfficiency.FiniteSubsetAssumptions
 DkpsQuench2026.QueryEfficiency.InfiniteSubsetData
 DkpsQuench2026.QueryEfficiency.InfiniteSubsetAssumptions
+DkpsQuench2026.QueryEfficiency.GeneralSubsetAssumptions
 ```
 
 ## Acharyya concentration bridge

@@ -104,6 +104,14 @@ def PerspectiveFullSupport
     (Pf : Measure (Model Q X)) (ψ : Model Q X → Vec d) : Prop :=
   ∀ f ρ, 0 < ρ → 0 < Pf (perspectiveBall ψ f ρ)
 
+/-- Under full support, every positive-radius perspective ball centered at a model
+has positive probability. -/
+theorem PerspectiveFullSupport.measure_pos
+    {Pf : Measure (Model Q X)} {ψ : Model Q X → Vec d}
+    (h : PerspectiveFullSupport Pf ψ) (f : Model Q X) {ρ : ℝ} (hρ : 0 < ρ) :
+    0 < Pf (perspectiveBall ψ f ρ) :=
+  h f ρ hρ
+
 /-- The finite-dimensional joint-law formulation of iid reference sampling.
 For every stage and every measurable family of coordinate events, the
 probability that all references land in their assigned events is the product
@@ -129,6 +137,19 @@ def referenceMisses
     (f_ref : ∀ n, Ω → Fin n → Model Q X)
     (s : Set (Model Q X)) (n : ℕ) : Set Ω :=
   {ω | ∀ i : Fin n, f_ref n ω i ∉ s}
+
+/-- Membership in the reference-hit event. -/
+@[simp] lemma mem_referenceHits
+    {f_ref : ∀ n, Ω → Fin n → Model Q X}
+    {s : Set (Model Q X)} {n : ℕ} {ω : Ω} :
+    ω ∈ referenceHits f_ref s n ↔ ∃ i : Fin n, f_ref n ω i ∈ s :=
+  Iff.rfl
+
+/-- Membership in a perspective ball. -/
+@[simp] lemma mem_perspectiveBall
+    {ψ : Model Q X → Vec d} {f g : Model Q X} {ρ : ℝ} :
+    g ∈ perspectiveBall ψ f ρ ↔ ‖ψ g - ψ f‖ < ρ :=
+  Iff.rfl
 
 lemma referenceHits_compl
     (f_ref : ∀ n, Ω → Fin n → Model Q X)

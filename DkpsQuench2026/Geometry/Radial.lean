@@ -79,6 +79,15 @@ noncomputable def radialTieAverageNN
       radialTieAverage hn (rhat n ω f) (fun i => y (f_ref n ω i)) := by
   simp [radialTieAverageNN, hn]
 
+/-- At stage zero there are no references and the estimate is `0`. -/
+@[simp] theorem radialTieAverageNN_of_not_pos
+    (rhat : ∀ n, Ω → Model Q X → Fin n → Real)
+    (f_ref : ∀ n, Ω → Fin n → Model Q X)
+    (y : Model Q X → Real)
+    (n : Nat) (ω : Ω) (f : Model Q X) (hn : ¬ n > 0) :
+    radialTieAverageNN rhat f_ref y n ω f = 0 := by
+  simp [radialTieAverageNN, hn]
+
 lemma radialIndex_isArgmin {n : Nat} (hn : n > 0) (rhat : Fin n → Real) :
     IsArgmin rhat (radialIndex hn rhat) := by
   unfold radialIndex

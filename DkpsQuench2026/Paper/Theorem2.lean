@@ -15,6 +15,11 @@ relative to the subset baseline `ŷ_Q` (`yQ`), wrapping the abstract engine in
 The concentration event is *assumed* here; it is discharged from the Acharyya2025
 spectral chain in `DkpsQuench2026.Geometry.AlignedCMDS`.
 
+These are conditional interfaces: the embedding concentration is a hypothesis.  The
+end-to-end Theorem 2 at the paper's scope, with the concentration derived from raw
+cached responses and an arbitrary model distribution, is
+`DkpsQuench2026.QueryEfficiency.generalFixedSubset` (and `generalAllQueries`).
+
 The estimated perspectives `ψHat` are abstract in this file.  Every Quench theorem
 that constructs them follows the classical-MDS reading of the paper's Eq. (1), not
 the literal raw-stress reading; the choice and the alternative are explained in the

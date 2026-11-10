@@ -10,7 +10,7 @@
     ]
   },
   "scope": "The inherited concentration theorem, the DKPS definition, query-efficiency definitions, the nearest-neighbor estimator, Assumptions 1--2, and Theorem 2 including the raw-response realizations that discharge its representation-error premise. Empirical result claims are not theorem obligations; the OLS bridge is tracked as an extension.",
-  "audit_revision": "2026-08-27 working tree at commit 6f11665f; statuses, cited declarations and gap texts revised throughout this pass, including an adversarial self-review that corrected two overstated statuses and strengthened two counterexamples.",
+  "audit_revision": "2026-11-10: general-model-class Theorem 2 added (Q26-RAW-GEN); Q26-T2A/T2B reclassified. Previous: 2026-08-27 working tree at commit 6f11665f; statuses, cited declarations and gap texts revised throughout this pass, including an adversarial self-review that corrected two overstated statuses and strengthened two counterexamples.",
   "status_definitions": {
     "compiled_exact": "The source claim is represented by a compiled source-facing theorem with the same mathematical content.",
     "compiled_equivalent": "The source claim is compiled under a semantically equivalent encoding; representation changes are documented.",
@@ -59,7 +59,7 @@
     "raw-response-explicit-assumptions": {
       "kind": "source_audit",
       "title": "Raw-response capstones make the sampling and regularity interface explicit -- itemized against the printed text",
-      "detail": "The paper imports a representation concentration theorem and leaves reference/response randomness mostly prose-level. The end-to-end formal capstones separate iid reference sampling, raw-response concentration, measurability, compactness or finite population, and a population nondegeneracy floor.\n\nItemized. Every field of the two assumption structures, with its printed provenance:\n\nFiniteSubsetAssumptions:\n  - full_support -- Assumption 2 (Model Distribution Support). PRINTED.\n  - score_lipschitz -- Assumption 1 (Lipschitz Score Function). PRINTED.\n  - raw (RawIIDResponseModel with a variance bound) -- the setting's iid embedded responses g(f_i(q_j)_k) ~ F_ij, and Theorem 1's sup_ij trace(Cov(F_ij)) = O(1). PRINTED.\n  - response_realization -- the population means realize the perspectives, which is the definition of the DKPS. PRINTED (definitional).\n  - nondegenerate -- Acharyya 2025's Assumption 2, which is what Quench's Theorem 1 imports as 'technical assumptions'. PRINTED by reference; see technical-assumptions-are-acharyya-1-and-2.\n  - baseline_pos -- Theorem 2's own statement, 'for m < M such that MSE(yhat_Q) > 0'. PRINTED. It is not used by the MSE conclusion at all.\n  - perspective_measurable -- IMPLICIT, beyond the paper. The standard measurability the paper leaves unstated.\n  - [Fintype (Model Q X)] -- BEYOND the paper, a scope restriction: the source's model space F is not assumed finite. The compact-infinite route is the one that answers the printed scope.\n  - SourceReplicateRate -- Theorem 1's r = omega(n^3). PRINTED.\n\nInfiniteSubsetAssumptions adds, over the finite one:\n  - compact_range -- BEYOND the paper. Assumption 2 speaks of compact subsets of F but does not make the perspective range compact.\n  - raw_lipschitz -- BEYOND the paper. Pathwise Lipschitz regularity of the raw response embedding over the perspective range, which is what buys uniformity over an infinite model class.\n  - NetReplicateRate rather than SourceReplicateRate -- BEYOND the paper by the exponent of the perspective net; see replicate-schedule-exceeds-source-rate.\n\nSo the finite route's excess over the printed text is exactly measurability plus finiteness of the model class, and the infinite route's is measurability plus compactness, raw-response Lipschitz regularity, and the net's share of the replicate budget. Nothing else on the list is an addition.\n\nOn measurability specifically. Assumption 2 writes P_f(B_delta(f)) >= epsilon, a probability of an event defined through the model space, and Theorem 2's conclusion is an MSE, an integral against P_f of a function of the perspective. Both require the perspective map to be measurable for the printed statements to denote anything at all. So perspective_measurable is arguably a well-definedness condition of the source rather than a hypothesis added to it. The rows keep it on the excess list because that is the conservative reading and because the source never states it; the argument for the other reading is recorded here so the choice is visible rather than silent.\n\nThat leaves finiteness of the model class as the finite route's only substantive addition -- and it is a scope restriction the compact-infinite route exists to lift -- and compactness plus raw-response Lipschitz regularity plus the net's share of the replicate budget as the infinite route's. Those three are what buy uniformity over an infinite model class, and removing them means the continuum treatment recorded on the Acharyya 2024 side, not a tightening of constants."
+      "detail": "The paper imports a representation concentration theorem and leaves reference/response randomness mostly prose-level. The end-to-end formal capstones separate iid reference sampling, raw-response concentration, measurability, compactness or finite population, and a population nondegeneracy floor.\n\nItemized. Every field of the two assumption structures, with its printed provenance:\n\nFiniteSubsetAssumptions:\n  - full_support -- Assumption 2 (Model Distribution Support). PRINTED.\n  - score_lipschitz -- Assumption 1 (Lipschitz Score Function). PRINTED.\n  - raw (RawIIDResponseModel with a variance bound) -- the setting's iid embedded responses g(f_i(q_j)_k) ~ F_ij, and Theorem 1's sup_ij trace(Cov(F_ij)) = O(1). PRINTED.\n  - response_realization -- the population means realize the perspectives, which is the definition of the DKPS. PRINTED (definitional).\n  - nondegenerate -- Acharyya 2025's Assumption 2, which is what Quench's Theorem 1 imports as 'technical assumptions'. PRINTED by reference; see technical-assumptions-are-acharyya-1-and-2.\n  - baseline_pos -- Theorem 2's own statement, 'for m < M such that MSE(yhat_Q) > 0'. PRINTED. It is not used by the MSE conclusion at all.\n  - perspective_measurable -- IMPLICIT, beyond the paper. The standard measurability the paper leaves unstated.\n  - [Fintype (Model Q X)] -- BEYOND the paper, a scope restriction: the source's model space F is not assumed finite. The compact-infinite route is the one that answers the printed scope.\n  - SourceReplicateRate -- Theorem 1's r = omega(n^3). PRINTED.\n\nInfiniteSubsetAssumptions adds, over the finite one:\n  - compact_range -- BEYOND the paper. Assumption 2 speaks of compact subsets of F but does not make the perspective range compact.\n  - raw_lipschitz -- BEYOND the paper. Pathwise Lipschitz regularity of the raw response embedding over the perspective range, which is what buys uniformity over an infinite model class.\n  - NetReplicateRate rather than SourceReplicateRate -- BEYOND the paper by the exponent of the perspective net; see replicate-schedule-exceeds-source-rate.\n\nSo the finite route's excess over the printed text is exactly measurability plus finiteness of the model class, and the infinite route's is measurability plus compactness, raw-response Lipschitz regularity, and the net's share of the replicate budget. Nothing else on the list is an addition.\n\nOn measurability specifically. Assumption 2 writes P_f(B_delta(f)) >= epsilon, a probability of an event defined through the model space, and Theorem 2's conclusion is an MSE, an integral against P_f of a function of the perspective. Both require the perspective map to be measurable for the printed statements to denote anything at all. So perspective_measurable is arguably a well-definedness condition of the source rather than a hypothesis added to it. The rows keep it on the excess list because that is the conservative reading and because the source never states it; the argument for the other reading is recorded here so the choice is visible rather than silent.\n\nThat leaves finiteness of the model class as the finite route's only substantive addition -- and it is a scope restriction the compact-infinite route exists to lift -- and compactness plus raw-response Lipschitz regularity plus the net's share of the replicate budget as the infinite route's. Those three are what buy uniformity over an infinite model class, and removing them means the continuum treatment recorded on the Acharyya 2024 side, not a tightening of constants.\n\nGeneralSubsetAssumptions (2026-11-10), the paper-scope interface. Hypotheses of the general-model-class theorem, itemized against the paper: full support (Assumption 2, repaired), score Lipschitz (Assumption 1), score in [0,1] (the printed typing of y), iid embedded responses with a variance bound (Theorem 1's setting and sup trace Cov = O(1)), response realization (the DKPS definition), the covariance floor (Theorem 1's 'technical assumptions', Acharyya 2025 Assumptions 1-2), r = omega(n^3) (SourceReplicateRate), and MSE(yhat_Q) > 0 (Theorem 2's own condition). Beyond the printed Quench text: measurability of the perspective map and of the raw responses, which are well-definedness conditions of the printed probabilities; and a bound on the population response means, which is weaker than the bounded-support setting of the imported Acharyya 2025 theorem ('In reality, F_ij is supported on a bounded subset of R^p'). No finiteness, compactness, or response regularity in the model is assumed."
     },
     "ols-theory-practice": {
       "kind": "not_proof_debt",
@@ -69,7 +69,7 @@
     "replicate-schedule-exceeds-source-rate": {
       "kind": "source_audit",
       "title": "Replicate schedule: the finite route now runs at the source rate; the infinite route pays for its net",
-      "detail": "Theorem 1 needs only r = omega(n^3); the capstones fix safeEntropyReplicates d n = (n+1)^(4+d), reduced from (n+1)^(6+2d) once the spectral certificate began reporting the population Gram floor at its true scale n(kappa/2) rather than as the constant kappa/2. The remaining excess is structural, not slack: the paper applies Theorem 1 to a fixed set of n reference models, while Theorem 2's proof also needs the bound for the target model, and making it uniform over an infinite model class costs a union bound over a perspective net of size (n+1)^d against a tolerance whose square is (n+1)^2. No schedule below (n+1)^(2+d) can work for that quantifier, so omega(n^3) is reachable only at the fixed finite scope Theorem 1 actually addresses. See theorem1-rate-not-instantiated.\n\nRESOLVED for the finite route. The schedule is no longer hardcoded: FiniteSubsetData is parameterized by the replicate budget and finiteFixedSubsetMSE takes SourceReplicateRate, which is exactly the source's r = omega(n^3). That is what the concentration ratio needs -- the ratio is a constant divided by r n / (n+1)^3 -- so nothing above the source rate is required. The old (n+1)^4 schedule is recovered as one instance via sourceReplicateRate_safeFiniteReplicates.\n\nFor the compact-infinite route the excess is now named and bounded rather than hidden in a constant. NetReplicateRate asks for r n / (n+1)^(2 + entropyPower) -> infinity, where entropyPower is the polynomial exponent of the shrinking perspective net. The gap to the source rate is therefore exactly the price of the net, and closing it means removing the net -- the continuum treatment recorded under Acharyya 2024's continuous-MDS gap. **That reference needs a caveat, added 2026-09-05.** Acharyya 2024's `continuous-MDS-lp` gap is now titled RESOLVED and says the chain is complete end to end, and Quench references no Acharyya 2024 theorem at all -- its only qualified uses are the vocabulary `Mat`, `DisMat`, `Config`, `ConfigError`, `HighProbAtTop`, `responseDist` plus `HighProbAtTop.mono_eventually`, and nothing from `ContinuousMDS.lean` or `Consistency.lean`. The two developments also do not meet: Acharyya 2024's population route is raw-stress with an L^p(P x P) pairwise-distance functional, while Quench's chain is classical MDS with a uniform per-model event, and this census's own gap `dkps-definition-raw-stress-vs-cmds` records that `Acharyya2024.rawStress` is not connected to the Quench chain. So the resolved continuum treatment is not directly importable: a raw-stress-to-classical-MDS step would have to be proved first, and naming that step is part of this action -- not tuning constants. The previous hardcoded schedule had two further powers of slack, which are gone."
+      "detail": "Theorem 1 needs only r = omega(n^3); the capstones fix safeEntropyReplicates d n = (n+1)^(4+d), reduced from (n+1)^(6+2d) once the spectral certificate began reporting the population Gram floor at its true scale n(kappa/2) rather than as the constant kappa/2. The remaining excess is structural, not slack: the paper applies Theorem 1 to a fixed set of n reference models, while Theorem 2's proof also needs the bound for the target model, and making it uniform over an infinite model class costs a union bound over a perspective net of size (n+1)^d against a tolerance whose square is (n+1)^2. No schedule below (n+1)^(2+d) can work for that quantifier, so omega(n^3) is reachable only at the fixed finite scope Theorem 1 actually addresses. See theorem1-rate-not-instantiated.\n\nRESOLVED for the finite route. The schedule is no longer hardcoded: FiniteSubsetData is parameterized by the replicate budget and finiteFixedSubsetMSE takes SourceReplicateRate, which is exactly the source's r = omega(n^3). That is what the concentration ratio needs -- the ratio is a constant divided by r n / (n+1)^3 -- so nothing above the source rate is required. The old (n+1)^4 schedule is recovered as one instance via sourceReplicateRate_safeFiniteReplicates.\n\nFor the compact-infinite route the excess is now named and bounded rather than hidden in a constant. NetReplicateRate asks for r n / (n+1)^(2 + entropyPower) -> infinity, where entropyPower is the polynomial exponent of the shrinking perspective net. The gap to the source rate is therefore exactly the price of the net, and closing it means removing the net -- the continuum treatment recorded under Acharyya 2024's continuous-MDS gap. **That reference needs a caveat, added 2026-09-05.** Acharyya 2024's `continuous-MDS-lp` gap is now titled RESOLVED and says the chain is complete end to end, and Quench references no Acharyya 2024 theorem at all -- its only qualified uses are the vocabulary `Mat`, `DisMat`, `Config`, `ConfigError`, `HighProbAtTop`, `responseDist` plus `HighProbAtTop.mono_eventually`, and nothing from `ContinuousMDS.lean` or `Consistency.lean`. The two developments also do not meet: Acharyya 2024's population route is raw-stress with an L^p(P x P) pairwise-distance functional, while Quench's chain is classical MDS with a uniform per-model event, and this census's own gap `dkps-definition-raw-stress-vs-cmds` records that `Acharyya2024.rawStress` is not connected to the Quench chain. So the resolved continuum treatment is not directly importable: a raw-stress-to-classical-MDS step would have to be proved first, and naming that step is part of this action -- not tuning constants. The previous hardcoded schedule had two further powers of slack, which are gone.\n\nRESOLVED for the paper scope (2026-11-10). The general-model-class theorem needs the bound only for the n references and one target at a time, so it runs at SourceReplicateRate, the source's r = omega(n^3). The net exponent is the price of uniformity over targets, which the paper's MSE conclusion does not require; it remains only on the compact-infinite strengthening."
     },
     "dkps-definition-raw-stress-vs-cmds": {
       "kind": "source_audit",
@@ -79,7 +79,7 @@
     "theorem1-rate-not-instantiated": {
       "kind": "source_audit",
       "title": "Theorem 1's rate theorem is not the input the Quench chain uses",
-      "detail": "Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate is stated for a fixed collection of n models with the asymptotics in the replicate index. Quench needs the perspective error at every stage of a growing reference sample with the target augmented into the matrix, so the capstones re-derive the concentration in that regime from the same Acharyya2025.ConfigPerturbation machinery rather than instantiating the rate theorem. Two of Q26-T1's three registered declarations are consumed; the rate endpoint is not. The paper's own proof has the same shape -- it applies Theorem 1 to the n reference models and then silently uses the same bound for the target model, whose perspective is not among them."
+      "detail": "Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate is stated for a fixed collection of n models with the asymptotics in the replicate index. Quench needs the perspective error at every stage of a growing reference sample with the target augmented into the matrix, so the capstones re-derive the concentration in that regime from the same Acharyya2025.ConfigPerturbation machinery rather than instantiating the rate theorem. Two of Q26-T1's three registered declarations are consumed; the rate endpoint is not. The paper's own proof has the same shape -- it applies Theorem 1 to the n reference models and then silently uses the same bound for the target model, whose perspective is not among them.\n\nUpdate 2026-11-10. The general-model-class theorem applies the concentration to the target-augmented batch of n references plus the current target, which is exactly the silent step of the printed proof made explicit, one target at a time."
     },
     "dissimilarity-normalisation-mismatch": {
       "kind": "source_audit",
@@ -424,7 +424,7 @@
       "source_kind": "theorem",
       "title": "Nearest-neighbor MSE can be made arbitrarily small with high probability",
       "source_claim": "For every epsilon>0 there are sufficiently large sampling/model budgets for which MSE(yhat_NN)<=epsilon with high probability.",
-      "status": "compiled_stronger_hypotheses",
+      "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
         "document": "HelmJohnsonPriebe2026",
@@ -437,8 +437,10 @@
       "lean_declarations": [
         "DkpsQuench2026.NetReplicateRate",
         "DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE",
+        "DkpsQuench2026.QueryEfficiency.generalFixedSubsetMSE",
         "DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE",
         "DkpsQuench2026.SourceReplicateRate",
+        "DkpsQuench2026.highProb_mse_le_of_targetwise",
         "highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport",
         "highProb_mse_nn_le",
         "highProb_mse_nn_le_of_subevent",
@@ -449,18 +451,20 @@
       ],
       "planned_declarations": [],
       "gap_refs": [
+        "dkps-definition-raw-stress-vs-cmds",
         "raw-response-explicit-assumptions",
         "replicate-schedule-exceeds-source-rate",
+        "support-wording-repair",
         "technical-assumptions-are-acharyya-1-and-2",
         "theorem1-rate-not-instantiated",
         "tie-display-proof-mismatch"
       ],
       "semantic_alignment": {
-        "classification": "stronger_hypotheses",
-        "detail": "infiniteFixedSubsetMSE and finiteFixedSubsetMSE prove the printed conclusion end to end for the literal tie-averaged estimator built from raw cached responses: the representation concentration is derived through the CMDS/Davis--Kahan chain rather than assumed. They are stronger than the source only in hypotheses -- an explicit population nondegeneracy floor and a replicate schedule above the source rate. The remaining rows are the conditional intermediates that take the concentration event as a premise. Update: the eigenvalue floor is the paper's own 'technical assumptions' named -- Quench imports Acharyya 2025 Theorem 2 with that phrase, and Assumption 2 is that floor -- so it is not an excess. The replicate schedule is no longer an excess either for the finite route, which now runs on any budget meeting the source's r = omega(n^3)."
+        "classification": "source_repair",
+        "detail": "infiniteFixedSubsetMSE and finiteFixedSubsetMSE prove the printed conclusion end to end for the literal tie-averaged estimator built from raw cached responses: the representation concentration is derived through the CMDS/Davis--Kahan chain rather than assumed. They are stronger than the source only in hypotheses -- an explicit population nondegeneracy floor and a replicate schedule above the source rate. The remaining rows are the conditional intermediates that take the concentration event as a premise. Update: the eigenvalue floor is the paper's own 'technical assumptions' named -- Quench imports Acharyya 2025 Theorem 2 with that phrase, and Assumption 2 is that floor -- so it is not an excess. The replicate schedule is no longer an excess either for the finite route, which now runs on any budget meeting the source's r = omega(n^3). Update 2026-11-10: the general-model-class theorem (Q26-RAW-GEN) proves this conclusion at the paper's own scope, with no finiteness, compactness, or response regularity in the model and at the source rate r = omega(n^3). Hypotheses of the general-model-class theorem, itemized against the paper: full support (Assumption 2, repaired), score Lipschitz (Assumption 1), score in [0,1] (the printed typing of y), iid embedded responses with a variance bound (Theorem 1's setting and sup trace Cov = O(1)), response realization (the DKPS definition), the covariance floor (Theorem 1's 'technical assumptions', Acharyya 2025 Assumptions 1-2), r = omega(n^3) (SourceReplicateRate), and MSE(yhat_Q) > 0 (Theorem 2's own condition). Beyond the printed Quench text: measurability of the perspective map and of the raw responses, which are well-definedness conditions of the printed probabilities; and a bound on the population response means, which is weaker than the bounded-support setting of the imported Acharyya 2025 theorem ('In reality, F_ij is supported on a bounded subset of R^p'). No finiteness, compactness, or response regularity in the model is assumed. The status is therefore source_repair rather than stronger_hypotheses; the finite and compact-infinite declarations remain listed as strengthenings."
       },
       "notes": "The end-to-end declarations are the canonical realization; the conditional forms remain listed because they are the reusable interfaces the capstones factor through.",
-      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side."
+      "next_action": "None; the paper-scope theorem is Q26-RAW-GEN."
     },
     {
       "id": "Q26-T2B",
@@ -470,7 +474,7 @@
       "source_kind": "theorem",
       "title": "Eventual high-probability improvement over subset-score baseline",
       "source_claim": "When m<M and the subset-score baseline has positive MSE, nearest-neighbor DKPS prediction is query-efficient with high probability.",
-      "status": "compiled_stronger_hypotheses",
+      "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
         "document": "HelmJohnsonPriebe2026",
@@ -484,6 +488,8 @@
         "DkpsQuench2026.NetReplicateRate",
         "DkpsQuench2026.QueryEfficiency.finiteAllQueries",
         "DkpsQuench2026.QueryEfficiency.finiteFixedSubset",
+        "DkpsQuench2026.QueryEfficiency.generalAllQueries",
+        "DkpsQuench2026.QueryEfficiency.generalFixedSubset",
         "DkpsQuench2026.QueryEfficiency.infiniteAllQueries",
         "DkpsQuench2026.QueryEfficiency.infiniteFixedSubset",
         "DkpsQuench2026.SourceReplicateRate",
@@ -495,17 +501,19 @@
       ],
       "planned_declarations": [],
       "gap_refs": [
+        "dkps-definition-raw-stress-vs-cmds",
         "raw-response-explicit-assumptions",
         "replicate-schedule-exceeds-source-rate",
+        "support-wording-repair",
         "technical-assumptions-are-acharyya-1-and-2",
         "theorem1-rate-not-instantiated"
       ],
       "semantic_alignment": {
-        "classification": "stronger_hypotheses",
-        "detail": "infiniteAllQueries and finiteAllQueries conclude HighProbQueryEfficient, the paper's full predicate quantified over every budget below the benchmark cardinality, for the raw-response estimator with concentration derived rather than assumed. The fixed-subset capstones are the Q-level statement they quantify. The excess over the source is in hypotheses only, as recorded in the referenced gaps. Update: the eigenvalue floor is the paper's own 'technical assumptions' named. The replicate schedule is now an explicit rate condition rather than a hardcoded polynomial, and the remaining excess over the source rate is exactly the exponent of the perspective net."
+        "classification": "source_repair",
+        "detail": "infiniteAllQueries and finiteAllQueries conclude HighProbQueryEfficient, the paper's full predicate quantified over every budget below the benchmark cardinality, for the raw-response estimator with concentration derived rather than assumed. The fixed-subset capstones are the Q-level statement they quantify. The excess over the source is in hypotheses only, as recorded in the referenced gaps. Update: the eigenvalue floor is the paper's own 'technical assumptions' named. The replicate schedule is now an explicit rate condition rather than a hardcoded polynomial, and the remaining excess over the source rate is exactly the exponent of the perspective net. Update 2026-11-10: the general-model-class theorem (Q26-RAW-GEN) proves this conclusion at the paper's own scope, with no finiteness, compactness, or response regularity in the model and at the source rate r = omega(n^3). Hypotheses of the general-model-class theorem, itemized against the paper: full support (Assumption 2, repaired), score Lipschitz (Assumption 1), score in [0,1] (the printed typing of y), iid embedded responses with a variance bound (Theorem 1's setting and sup trace Cov = O(1)), response realization (the DKPS definition), the covariance floor (Theorem 1's 'technical assumptions', Acharyya 2025 Assumptions 1-2), r = omega(n^3) (SourceReplicateRate), and MSE(yhat_Q) > 0 (Theorem 2's own condition). Beyond the printed Quench text: measurability of the perspective map and of the raw responses, which are well-definedness conditions of the printed probabilities; and a bound on the population response means, which is weaker than the bounded-support setting of the imported Acharyya 2025 theorem ('In reality, F_ij is supported on a bounded subset of R^p'). No finiteness, compactness, or response regularity in the model is assumed. The status is therefore source_repair rather than stronger_hypotheses; the finite and compact-infinite declarations remain listed as strengthenings."
       },
       "notes": "The end-to-end declarations are the canonical realization; the certificate and subevent forms remain listed as the reusable interfaces they factor through.",
-      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side."
+      "next_action": "None; the paper-scope theorem is Q26-RAW-GEN."
     },
     {
       "id": "Q26-RAW-FIN",
@@ -546,7 +554,7 @@
         "detail": "The finite realization of Theorem 2. Previously classified as an extension beyond the paper theorem surface, which inverted the layering: the conditional forms assume what the paper proves, and these discharge it. The excess over the source is the explicit sampling/regularity interface and the replicate schedule. Update: the eigenvalue floor is the paper's own 'technical assumptions' named -- Quench imports Acharyya 2025 Theorem 2 with that phrase, and Assumption 2 is that floor -- so it is not an excess. The replicate schedule is no longer an excess either for the finite route, which now runs on any budget meeting the source's r = omega(n^3)."
       },
       "notes": "No additional note.",
-      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side."
+      "next_action": "None for paper fidelity: Q26-RAW-GEN proves Theorem 2 at the paper's general scope. This route is kept as a strengthening (error bound uniform over targets on one event)."
     },
     {
       "id": "Q26-RAW-INF",
@@ -587,7 +595,51 @@
         "detail": "The compact-infinite realization of Theorem 2. Previously classified as an extension beyond the paper theorem surface, which inverted the layering: the conditional forms assume what the paper proves, and these discharge it. The excess over the source is the explicit sampling/regularity interface and the replicate schedule. Update: the eigenvalue floor is the paper's own 'technical assumptions' named. The replicate schedule is now an explicit rate condition rather than a hardcoded polynomial, and the remaining excess over the source rate is exactly the exponent of the perspective net."
       },
       "notes": "No additional note.",
-      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side."
+      "next_action": "None for paper fidelity: Q26-RAW-GEN proves Theorem 2 at the paper's general scope. This route is kept as a strengthening (error bound uniform over targets on one event)."
+    },
+    {
+      "id": "Q26-RAW-GEN",
+      "importance": "major",
+      "section": "3",
+      "source_anchor": "Theorem 2 and its proof, at the paper's general model-class scope",
+      "source_kind": "theorem",
+      "title": "End-to-end raw-response query efficiency over a general model class",
+      "source_claim": "Theorem 2 at the paper's own scope: an arbitrary model distribution P_f, MSE averaged over the target model, with the representation error derived from Theorem 1.",
+      "status": "compiled_source_repair",
+      "verification": "proved_in_build",
+      "source_locator": {
+        "document": "HelmJohnsonPriebe2026",
+        "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+        "lines": [
+          163,
+          236
+        ]
+      },
+      "lean_declarations": [
+        "DkpsQuench2026.QueryEfficiency.GeneralSubsetAssumptions",
+        "DkpsQuench2026.QueryEfficiency.FiniteSubsetData",
+        "DkpsQuench2026.QueryEfficiency.generalFixedSubsetMSE",
+        "DkpsQuench2026.QueryEfficiency.generalFixedSubset",
+        "DkpsQuench2026.QueryEfficiency.generalAllQueries",
+        "DkpsQuench2026.highProb_mse_le_of_targetwise",
+        "DkpsQuench2026.mse_le_add_measure_compl",
+        "DkpsQuench2026.SourceReplicateRate"
+      ],
+      "planned_declarations": [],
+      "gap_refs": [
+        "raw-response-explicit-assumptions",
+        "technical-assumptions-are-acharyya-1-and-2",
+        "support-wording-repair",
+        "dkps-definition-raw-stress-vs-cmds",
+        "dissimilarity-normalisation-mismatch",
+        "tie-display-proof-mismatch"
+      ],
+      "semantic_alignment": {
+        "classification": "source_repair",
+        "detail": "The paper-scope realization of Theorem 2 (2026-11-10). The finite and compact-infinite routes bound the error for every target on one event, which is what forced a finite model class or a compact perspective range with pathwise response regularity. This route controls one target at a time: for each target the good event asks that the n+1 response means of the references and the target are close (a finite union bound at the source rate), that the augmented population CMDS matrix meets the spectral floor and ceiling, and that some reference covers the target. The paper's [0,1] score then turns these into a high-probability MSE bound by Tonelli, dominated convergence and Markov (highProb_mse_le_of_targetwise), which is the rigorous form of the proof's step from a pointwise error bound to the MSE bound. Hypotheses of the general-model-class theorem, itemized against the paper: full support (Assumption 2, repaired), score Lipschitz (Assumption 1), score in [0,1] (the printed typing of y), iid embedded responses with a variance bound (Theorem 1's setting and sup trace Cov = O(1)), response realization (the DKPS definition), the covariance floor (Theorem 1's 'technical assumptions', Acharyya 2025 Assumptions 1-2), r = omega(n^3) (SourceReplicateRate), and MSE(yhat_Q) > 0 (Theorem 2's own condition). Beyond the printed Quench text: measurability of the perspective map and of the raw responses, which are well-definedness conditions of the printed probabilities; and a bound on the population response means, which is weaker than the bounded-support setting of the imported Acharyya 2025 theorem ('In reality, F_ij is supported on a bounded subset of R^p'). No finiteness, compactness, or response regularity in the model is assumed. The remaining differences from the printed text are the source repairs the referenced gaps record: Assumption 2's wording, the classical-MDS reading of Eq. (1), the dissimilarity normalisation, and the tie-averaged estimator."
+      },
+      "notes": "This is the canonical Theorem 2 realization. The finite and compact-infinite routes remain as strengthenings: they give the error bound uniformly over targets on one event.",
+      "next_action": "None."
     },
     {
       "id": "Q26-OLS",
@@ -620,5 +672,5 @@
       "next_action": "None for Theorem 2 source fidelity."
     }
   ],
-  "notes": "The four Theorem 2 rows carry hypotheses beyond the printed text, and the list is itemized against the paper rather than summarized. Most of what an earlier audit listed turns out to be printed: Assumption 1 is the score-Lipschitz field, Assumption 2 the full-support field, the iid embedded responses and Theorem 1's variance bound the raw field, the DKPS definition the realization field, Theorem 1's 'technical assumptions' the nondegeneracy field -- those are Acharyya 2025's Assumptions 1 and 2, so the eigenvalue floor is the paper's own phrase named -- and Theorem 2's own 'for m < M such that MSE(yhat_Q) > 0' the baseline field, which the MSE conclusion does not use.\n\nWhat is actually beyond the paper: on the finite route, measurability of the perspective map and finiteness of the model class; on the compact-infinite route, measurability, compactness of the perspective range, pathwise Lipschitz regularity of the raw response embedding, and the perspective net's share of the replicate budget. The finite route now runs at the source's own r = omega(n^3).\n\nThe argument that measurability is a well-definedness condition of the printed statements rather than an added hypothesis is recorded under raw-response-explicit-assumptions; the rows keep the conservative reading."
+  "notes": "Update 2026-11-10: the general-model-class route (Q26-RAW-GEN) proves Theorem 2 at the paper's scope; the headline rows Q26-T2A and Q26-T2B move from stronger_hypotheses to source_repair, and its hypotheses are itemized in raw-response-explicit-assumptions. The four Theorem 2 rows carry hypotheses beyond the printed text, and the list is itemized against the paper rather than summarized. Most of what an earlier audit listed turns out to be printed: Assumption 1 is the score-Lipschitz field, Assumption 2 the full-support field, the iid embedded responses and Theorem 1's variance bound the raw field, the DKPS definition the realization field, Theorem 1's 'technical assumptions' the nondegeneracy field -- those are Acharyya 2025's Assumptions 1 and 2, so the eigenvalue floor is the paper's own phrase named -- and Theorem 2's own 'for m < M such that MSE(yhat_Q) > 0' the baseline field, which the MSE conclusion does not use.\n\nWhat is actually beyond the paper: on the finite route, measurability of the perspective map and finiteness of the model class; on the compact-infinite route, measurability, compactness of the perspective range, pathwise Lipschitz regularity of the raw response embedding, and the perspective net's share of the replicate budget. The finite route now runs at the source's own r = omega(n^3).\n\nThe argument that measurability is a well-definedness condition of the printed statements rather than an added hypothesis is recorded under raw-response-explicit-assumptions; the rows keep the conservative reading."
 }

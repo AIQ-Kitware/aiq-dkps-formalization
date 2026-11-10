@@ -40,8 +40,11 @@ variable {Q : Type u} [DecidableEq Q]
 variable {X : Type v} [MeasurableSpace X]
 variable {Ωref : Type wr} [MeasurableSpace Ωref]
 variable {Ωresp : Type wy} [MeasurableSpace Ωresp]
-/-- Raw data needed to run the conservative finite-model raw-response Quench
-pipeline for one query subset. -/
+/-- Raw data for the raw-response Quench pipeline on one query subset.
+
+Nothing in this data is finite: it is shared by the finite-model theorem
+(`finiteFixedSubset`) and the general-model-class theorem (`generalFixedSubset`),
+which differ only in their assumption structures. -/
 structure FiniteSubsetData (replicates : Nat → Nat) (d m p : Nat) where
   perspective : Model Q X → Vec d
   rawResponse : ∀ n, Model Q X → Fin (replicates n) →
@@ -85,7 +88,9 @@ structure FiniteSubsetAssumptions
       D.lipschitzConstant * ‖D.perspective f - D.perspective g‖
   baseline_pos : 0 < MSE Pf (yFull score Qstar) (yQ score Qsub)
 
-/-- Literal finite-model raw-response Quench estimator for one query subset. -/
+/-- The literal tie-averaged nearest-neighbor Quench estimator for one query subset,
+built from raw cached responses; shared by the finite-model and general-model-class
+theorems. -/
 @[expose]
 noncomputable def finiteEstimator
     {d m p : Nat}

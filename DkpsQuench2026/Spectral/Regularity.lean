@@ -6,7 +6,7 @@ and ceiling for every reference-sampling outcome.  That is stronger than the
 probabilistic setting warrants.  This module replaces those global assumptions
 by a high-probability spectral event derived from:
 
-* compact bounded perspectives;
+* a bounded perspective range;
 * iid reference sampling;
 * one population covariance nondegeneracy condition.
 
@@ -162,12 +162,12 @@ theorem map_referenceCoordinate_eq
 
 /-- Scalar weak law for one perspective coordinate mean.
 -/
-theorem highProb_referenceCoordinateMean_of_compact_iid
+theorem highProb_referenceCoordinateMean_of_bounded_iid
     {d : Nat}
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
     (μref : Nat → Measure Ωref) (hμref : ∀ n, IsProbabilityMeasure (μref n))
     (ψ : Model Q X → Vec d) (hψ : Measurable ψ)
-    (hcompact : IsCompact (Set.range ψ))
+    (hbdd : Bornology.IsBounded (Set.range ψ))
     (f_ref : ∀ n, Ωref → Fin n → Model Q X)
     (hiid : IIDReferenceSampler Pf μref f_ref)
     (a : Fin d) {ε : Real} (hε : 0 < ε) :
@@ -177,7 +177,7 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
   have hmap : ∀ (n : Nat) (i : Fin n),
       (μref n).map (fun ωref => f_ref n ωref i) = Pf :=
     map_referenceCoordinate_eq Pf μref f_ref hiid
-  obtain ⟨rB, hrB⟩ := hcompact.isBounded.subset_closedBall 0
+  obtain ⟨rB, hrB⟩ := hbdd.subset_closedBall 0
   set B := max 0 rB with hBdef
   have hB0 : 0 ≤ B := le_max_left _ _
   have hBbound : ∀ f, ‖ψ f‖ ≤ B := fun f => by
@@ -370,12 +370,12 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
 /-- Scalar weak law for one perspective-coordinate product mean.
 
 -/
-theorem highProb_referenceCoordinateProductMean_of_compact_iid
+theorem highProb_referenceCoordinateProductMean_of_bounded_iid
     {d : Nat}
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
     (μref : Nat → Measure Ωref) (hμref : ∀ n, IsProbabilityMeasure (μref n))
     (ψ : Model Q X → Vec d) (hψ : Measurable ψ)
-    (hcompact : IsCompact (Set.range ψ))
+    (hbdd : Bornology.IsBounded (Set.range ψ))
     (f_ref : ∀ n, Ωref → Fin n → Model Q X)
     (hiid : IIDReferenceSampler Pf μref f_ref)
     (a b : Fin d) {ε : Real} (hε : 0 < ε) :
@@ -385,7 +385,7 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
   have hmap : ∀ (n : Nat) (i : Fin n),
       (μref n).map (fun ωref => f_ref n ωref i) = Pf :=
     map_referenceCoordinate_eq Pf μref f_ref hiid
-  obtain ⟨rB, hrB⟩ := hcompact.isBounded.subset_closedBall 0
+  obtain ⟨rB, hrB⟩ := hbdd.subset_closedBall 0
   set B := max 0 rB with hBdef
   have hB0 : 0 ≤ B := le_max_left _ _
   have hBbound : ∀ f, ‖ψ f‖ ≤ B := fun f => by
@@ -607,18 +607,27 @@ def referenceCovarianceEvent
     (referenceEmpiricalCovariance ψ f_ref n ωref)
     (perspectiveCovarianceMatrix Pf ψ center) ε}
 
+/-- A bounded perspective range gives a uniform norm envelope.
+-/
+theorem exists_perspective_norm_bound_of_isBounded_range
+    {d : Nat}
+    (ψ : Model Q X → Vec d)
+    (hbdd : Bornology.IsBounded (Set.range ψ)) :
+    ∃ B : Real, 0 ≤ B ∧ ∀ f, ‖ψ f‖ ≤ B := by
+  obtain ⟨r, hr⟩ := hbdd.subset_closedBall 0
+  refine ⟨max 0 r, le_max_left _ _, fun f => ?_⟩
+  have hmem : ψ f ∈ Metric.closedBall (0 : Vec d) r := hr ⟨f, rfl⟩
+  rw [Metric.mem_closedBall, dist_eq_norm, sub_zero] at hmem
+  exact hmem.trans (le_max_right _ _)
+
 /-- Compactness of the perspective range gives a uniform norm envelope.
 -/
 theorem exists_perspective_norm_bound_of_isCompact_range
     {d : Nat}
     (ψ : Model Q X → Vec d)
     (hcompact : IsCompact (Set.range ψ)) :
-    ∃ B : Real, 0 ≤ B ∧ ∀ f, ‖ψ f‖ ≤ B := by
-  obtain ⟨r, hr⟩ := hcompact.isBounded.subset_closedBall 0
-  refine ⟨max 0 r, le_max_left _ _, fun f => ?_⟩
-  have hmem : ψ f ∈ Metric.closedBall (0 : Vec d) r := hr ⟨f, rfl⟩
-  rw [Metric.mem_closedBall, dist_eq_norm, sub_zero] at hmem
-  exact hmem.trans (le_max_right _ _)
+    ∃ B : Real, 0 ≤ B ∧ ∀ f, ‖ψ f‖ ≤ B :=
+  exists_perspective_norm_bound_of_isBounded_range ψ hcompact.isBounded
 
 /-- One scalar empirical-covariance entry event is measurable.
 
@@ -688,20 +697,20 @@ theorem measurableSet_referenceCovarianceEvent
 /-- Scalar weak law for one empirical covariance entry.
 
 For fixed coordinates `a,b`, combine
-`highProb_referenceCoordinateMean_of_compact_iid` for both coordinates with
-`highProb_referenceCoordinateProductMean_of_compact_iid`, then rewrite using
+`highProb_referenceCoordinateMean_of_bounded_iid` for both coordinates with
+`highProb_referenceCoordinateProductMean_of_bounded_iid`, then rewrite using
 `referenceEmpiricalCovariance_entry_eq_product_sub_mean_mul_mean`.  Use
 `hcenter` to identify the resulting population expression with
 `perspectiveCovarianceMatrix`; without this mean-zero condition the statement
 would be false for an arbitrary center.  The result remains pointwise in
 `a,b`; the next theorem performs the fixed finite intersection.
 -/
-theorem highProb_referenceCovarianceEntry_of_compact_iid
+theorem highProb_referenceCovarianceEntry_of_bounded_iid
     {d : Nat}
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
     (μref : Nat → Measure Ωref) (hμref : ∀ n, IsProbabilityMeasure (μref n))
     (ψ : Model Q X → Vec d) (hψ : Measurable ψ)
-    (hcompact : IsCompact (Set.range ψ))
+    (hbdd : Bornology.IsBounded (Set.range ψ))
     (f_ref : ∀ n, Ωref → Fin n → Model Q X)
     (hiid : IIDReferenceSampler Pf μref f_ref)
     (center : Vec d)
@@ -710,7 +719,7 @@ theorem highProb_referenceCovarianceEntry_of_compact_iid
     HighProbAtTop μref hμref (fun n => {ωref |
       |referenceEmpiricalCovariance ψ f_ref n ωref a b -
         perspectiveCovarianceMatrix Pf ψ center a b| ≤ ε}) := by
-  obtain ⟨B, hB0, hBbound⟩ := exists_perspective_norm_bound_of_isCompact_range ψ hcompact
+  obtain ⟨B, hB0, hBbound⟩ := exists_perspective_norm_bound_of_isBounded_range ψ hbdd
   have hcma : Measurable (fun f => ψ f a) :=
     ((EuclideanSpace.proj a).continuous.measurable).comp hψ
   have hcmb : Measurable (fun f => ψ f b) :=
@@ -763,12 +772,12 @@ theorem highProb_referenceCovarianceEntry_of_compact_iid
     ring
   set δ := min 1 (ε / (2 * (1 + B))) with hδdef
   have hδpos : 0 < δ := lt_min one_pos (by positivity)
-  have hprod := highProb_referenceCoordinateProductMean_of_compact_iid Pf μref hμref ψ hψ
-    hcompact f_ref hiid a b hδpos
-  have hma := highProb_referenceCoordinateMean_of_compact_iid Pf μref hμref ψ hψ
-    hcompact f_ref hiid a hδpos
-  have hmb := highProb_referenceCoordinateMean_of_compact_iid Pf μref hμref ψ hψ
-    hcompact f_ref hiid b hδpos
+  have hprod := highProb_referenceCoordinateProductMean_of_bounded_iid Pf μref hμref ψ hψ
+    hbdd f_ref hiid a b hδpos
+  have hma := highProb_referenceCoordinateMean_of_bounded_iid Pf μref hμref ψ hψ
+    hbdd f_ref hiid a hδpos
+  have hmb := highProb_referenceCoordinateMean_of_bounded_iid Pf μref hμref ψ hψ
+    hbdd f_ref hiid b hδpos
   have hmeasProd : ∀ n, MeasurableSet {ωref |
       |referenceCoordinateProductMean ψ f_ref n ωref a b - ∫ f, ψ f a * ψ f b ∂Pf| ≤ δ} := by
     intro n
@@ -876,12 +885,12 @@ theorem highProb_referenceCovarianceEvent_of_entries
 /-- Fixed-dimensional weak law for all covariance entries simultaneously.
 
 -/
-theorem highProb_referenceCovarianceEvent_of_compact_iid
+theorem highProb_referenceCovarianceEvent_of_bounded_iid
     {d : Nat}
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
     (μref : Nat → Measure Ωref) (hμref : ∀ n, IsProbabilityMeasure (μref n))
     (ψ : Model Q X → Vec d) (hψ : Measurable ψ)
-    (hcompact : IsCompact (Set.range ψ))
+    (hbdd : Bornology.IsBounded (Set.range ψ))
     (f_ref : ∀ n, Ωref → Fin n → Model Q X)
     (hiid : IIDReferenceSampler Pf μref f_ref)
     (center : Vec d)
@@ -890,8 +899,8 @@ theorem highProb_referenceCovarianceEvent_of_compact_iid
     HighProbAtTop μref hμref
       (referenceCovarianceEvent Pf ψ f_ref center ε) :=
   highProb_referenceCovarianceEvent_of_entries Pf μref hμref ψ f_ref center
-    (fun a b => highProb_referenceCovarianceEntry_of_compact_iid Pf μref hμref ψ hψ
-      hcompact f_ref hiid center hcenter a b hε)
+    (fun a b => highProb_referenceCovarianceEntry_of_bounded_iid Pf μref hμref ψ hψ
+      hbdd f_ref hiid center hcenter a b hε)
     (fun a b n => measurableSet_referenceCovarianceEntryEvent Pf ψ hψ f_ref
       hiid.measurable center ε n a b)
 
@@ -1069,14 +1078,14 @@ eventually true and needed by the augmentation floor.  On the event, the
 `augmented_centeredGram_floor_of_reference_floor`, then rewrites the augmented
 centered Gram matrix to the population CMDS matrix via
 `centeredAugmentedPerspectiveConfig_gram_eq`.  The `ceiling_bound` field is
-`eigenvalues₀_augmented_centeredGram_upper` with the compactness envelope
+`eigenvalues₀_augmented_centeredGram_upper` with the perspective norm envelope
 `B`, giving `ceiling n := 4(n+1)B²`. -/
-theorem exists_growingSpectralSubevents_of_compact_iid_nondegenerate
+theorem exists_growingSpectralSubevents_of_bounded_iid_nondegenerate
     {d m p : Nat}
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
     (μref : Nat → Measure Ωref) (hμref : ∀ n, IsProbabilityMeasure (μref n))
     (ψ : Model Q X → Vec d) (hψ : Measurable ψ)
-    (hcompact : IsCompact (Set.range ψ))
+    (hbdd : Bornology.IsBounded (Set.range ψ))
     (f_ref : ∀ n, Ωref → Fin n → Model Q X)
     (hiid : IIDReferenceSampler Pf μref f_ref)
     (μbar : ∀ n, Ωref → Model Q X → Fin (n + 1) → Acharyya2024.Mat m p)
@@ -1090,7 +1099,7 @@ theorem exists_growingSpectralSubevents_of_compact_iid_nondegenerate
           ψ f_ref μbar hrealize)
         (fun n => max ((n : Real)) 1 * (κ / 2))
         (fun n => 4 * ((n + 1 : Nat) : Real) * B ^ 2)) := by
-  obtain ⟨B, hB0, hBbound⟩ := exists_perspective_norm_bound_of_isCompact_range ψ hcompact
+  obtain ⟨B, hB0, hBbound⟩ := exists_perspective_norm_bound_of_isBounded_range ψ hbdd
   refine ⟨B, hB0, hBbound, ?_⟩
   have hε : 0 < covarianceEntryTolerance d κ := by
     have := Hnondeg.kappa_pos
@@ -1108,7 +1117,7 @@ theorem exists_growingSpectralSubevents_of_compact_iid_nondegenerate
     fun n => MeasurableSet.const _
   have hcovHP : HighProbAtTop μref hμref
       (referenceCovarianceEvent Pf ψ f_ref center ε) :=
-    highProb_referenceCovarianceEvent_of_compact_iid Pf μref hμref ψ hψ hcompact
+    highProb_referenceCovarianceEvent_of_bounded_iid Pf μref hμref ψ hψ hbdd
       f_ref hiid center Hnondeg.center_is_mean hε
   have hgateHP : HighProbAtTop μref hμref
       (fun n => ({_ωref | d ≤ n ∧ 0 < n} : Set Ωref)) := by
@@ -1174,5 +1183,29 @@ theorem exists_growingSpectralSubevents_of_compact_iid_nondegenerate
       (augmentedPerspectiveConfig ψ f_ref n ωref f) hB0 hpoints i
     convert hupper using 2
     exact hmat n ωref f
+
+/-- The spectral certificate for a compact perspective range; compactness is used
+only through boundedness (`exists_growingSpectralSubevents_of_bounded_iid_nondegenerate`). -/
+theorem exists_growingSpectralSubevents_of_compact_iid_nondegenerate
+    {d m p : Nat}
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μref : Nat → Measure Ωref) (hμref : ∀ n, IsProbabilityMeasure (μref n))
+    (ψ : Model Q X → Vec d) (hψ : Measurable ψ)
+    (hcompact : IsCompact (Set.range ψ))
+    (f_ref : ∀ n, Ωref → Fin n → Model Q X)
+    (hiid : IIDReferenceSampler Pf μref f_ref)
+    (μbar : ∀ n, Ωref → Model Q X → Fin (n + 1) → Acharyya2024.Mat m p)
+    (hrealize : PerspectiveResponseRealization ψ f_ref μbar)
+    {κ : Real} (Hnondeg : PerspectiveNondegeneracy Pf ψ κ) :
+    ∃ B : Real, 0 ≤ B ∧ (∀ f, ‖ψ f‖ ≤ B) ∧
+      Nonempty (GrowingSpectralSubevents μref hμref
+        (fun n ωref f => responseDist (μbar n ωref f))
+        (centeredAugmentedPerspectiveConfig ψ f_ref)
+        (centeredAugmentedPerspectiveConfig_gram_eq
+          ψ f_ref μbar hrealize)
+        (fun n => max ((n : Real)) 1 * (κ / 2))
+        (fun n => 4 * ((n + 1 : Nat) : Real) * B ^ 2)) :=
+  exists_growingSpectralSubevents_of_bounded_iid_nondegenerate Pf μref hμref ψ hψ
+    hcompact.isBounded f_ref hiid μbar hrealize Hnondeg
 
 end DkpsQuench2026

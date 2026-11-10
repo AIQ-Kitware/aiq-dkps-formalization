@@ -49,6 +49,69 @@ variable {Q : Type u} [DecidableEq Q]
 variable {X : Type v} [MeasurableSpace X]
 variable {Ω : Type w} [MeasurableSpace Ω]
 
+/-- **Radial accuracy for one target.**
+
+At a stage where the dimension gate and the configuration-rate bound hold, entrywise
+closeness of the sample and population CMDS matrices for the target `f`, together
+with the spectral floor and ceiling of the population matrix for `f`, makes every
+estimated reference-to-target distance accurate to `2 · bound n`.  Nothing here
+quantifies over other targets. -/
+theorem abs_augmentedSpectralRadialDistance_sub_le
+    {d : Nat}
+    (ψ : Model Q X → Vec d)
+    (f_ref : ∀ n, Ω → Fin n → Model Q X)
+    (Dhat D : ∀ n, Ω → Model Q X → DisMat (n + 1))
+    (hsym : ∀ n ω f,
+      (disMatToMatrix (classicalMDSMatrix (Dhat n ω f))).IsHermitian)
+    (z : ∀ n, Ω → Model Q X → Config (n + 1) d)
+    (hzGram : ∀ n ω f i j,
+      (∑ k, z n ω f i k * z n ω f j k) =
+        classicalMDSMatrix (D n ω f) i j)
+    (hzRadial : ∀ n ω f (i : Fin n),
+      ‖z n ω f i.castSucc - z n ω f (Fin.last n)‖ =
+        ‖ψ (f_ref n ω i) - ψ f‖)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
+    {ceiling entryRate : Nat → Real}
+    (Hrate : GrowingConfigControl (fun n => n + 1) d α ceiling entryRate)
+    {n : Nat} {ω : Ω} {f : Model Q X}
+    (hdim : d ≤ n + 1)
+    (hbound : configFrobBound d (α n) (ceiling n)
+      (((n + 1 : Nat) : Real) * entryRate n) ≤ Hrate.bound n)
+    (hentry : EntrywiseClose
+      (classicalMDSMatrix (Dhat n ω f))
+      (classicalMDSMatrix (D n ω f)) (entryRate n))
+    (hfloor : ∀ i : Fin (Fintype.card (Fin (n + 1))), (i : Nat) < d →
+      α n ≤ (populationPosSemidefOfGram D z hzGram n ω f).isHermitian.eigenvalues₀ i)
+    (hceiling : ∀ i : Fin (Fintype.card (Fin (n + 1))),
+      (populationPosSemidefOfGram D z hzGram n ω f).isHermitian.eigenvalues₀ i ≤
+        ceiling n)
+    (i : Fin n) :
+    |augmentedSpectralRadialDistance (d := d) Dhat hsym n ω f i -
+        ‖ψ (f_ref n ω i) - ψ f‖| ≤ 2 * Hrate.bound n := by
+  have hpair :=
+    abs_pairwiseDistance_spectralConfig_sub_le_two_configFrobBound
+      hdim
+      (disMatToMatrix (classicalMDSMatrix (D n ω f)))
+      (disMatToMatrix (classicalMDSMatrix (Dhat n ω f)))
+      (populationPosSemidefOfGram D z hzGram n ω f)
+      (hsym n ω f)
+      (populationRankLeOfGram D z hzGram n ω f)
+      (hα n) (Hrate.entry_nonneg n) hfloor hceiling
+      hentry (z n ω f) (hzGram n ω f)
+      i.castSucc (Fin.last n)
+  have hraw : rawAugmentedSpectralConfig (d := d) Dhat hsym n ω f =
+      spectralConfig
+        (Matrix.toEuclideanLin
+          (disMatToMatrix (classicalMDSMatrix (Dhat n ω f))))
+        (TauCeti.Matrix.opSym (hsym n ω f)) hdim :=
+    rawAugmentedSpectralConfig_of_dimension Dhat hsym n ω f hdim
+  change
+    |‖rawAugmentedSpectralConfig (d := d) Dhat hsym n ω f i.castSucc -
+          rawAugmentedSpectralConfig (d := d) Dhat hsym n ω f (Fin.last n)‖ -
+        ‖ψ (f_ref n ω i) - ψ f‖| ≤ 2 * Hrate.bound n
+  rw [hraw, ← hzRadial n ω f i]
+  exact hpair.trans (mul_le_mul_of_nonneg_left hbound (by norm_num))
+
 /-- **Paper Theorem 2, first conclusion, from a growing spectral certificate.**
 
 For every target accuracy the tie-averaged nearest-neighbor mean squared error is
@@ -136,32 +199,9 @@ theorem highProb_mse_tieAverage_of_growing_augmented_cmds_spectralSubevents
           ‖ψ (f_ref n ω i) - ψ f‖| ≤ radialRate n} := by
     intro n ω hω f i
     rcases hω with ⟨⟨hentryEvent, hspectralEvent⟩, hdim, hbound⟩
-    have hentry := hEsub n hentryEvent f
-    have hfloor := Hspectral.floor n ω hspectralEvent f
-    have hceiling := Hspectral.ceiling_bound n ω hspectralEvent f
-    have hpair :=
-      abs_pairwiseDistance_spectralConfig_sub_le_two_configFrobBound
-        hdim
-        (disMatToMatrix (classicalMDSMatrix (D n ω f)))
-        (disMatToMatrix (classicalMDSMatrix (Dhat n ω f)))
-        (populationPosSemidefOfGram D z hzGram n ω f)
-        (hsym n ω f)
-        (populationRankLeOfGram D z hzGram n ω f)
-        (hα n) (Hrate.entry_nonneg n) hfloor hceiling
-        hentry (z n ω f) (hzGram n ω f)
-        i.castSucc (Fin.last n)
-    have hraw : rawAugmentedSpectralConfig (d := d) Dhat hsym n ω f =
-        spectralConfig
-          (Matrix.toEuclideanLin
-            (disMatToMatrix (classicalMDSMatrix (Dhat n ω f))))
-          (TauCeti.Matrix.opSym (hsym n ω f)) hdim :=
-      rawAugmentedSpectralConfig_of_dimension Dhat hsym n ω f hdim
-    change
-      |‖rawAugmentedSpectralConfig (d := d) Dhat hsym n ω f i.castSucc -
-            rawAugmentedSpectralConfig (d := d) Dhat hsym n ω f (Fin.last n)‖ -
-          ‖ψ (f_ref n ω i) - ψ f‖| ≤ 2 * Hrate.bound n
-    rw [hraw, ← hzRadial n ω f i]
-    exact hpair.trans (mul_le_mul_of_nonneg_left hbound (by norm_num))
+    exact abs_augmentedSpectralRadialDistance_sub_le ψ f_ref Dhat D hsym z hzGram hzRadial
+      hα Hrate hdim hbound (hEsub n hentryEvent f)
+      (Hspectral.floor n ω hspectralEvent f) (Hspectral.ceiling_bound n ω hspectralEvent f) i
   exact highProb_mse_radialTieAverage_of_compact_iid_fullSupport
     Pf μ hμ ψ hψmeas hcompact hfull
     (augmentedSpectralRadialDistance (d := d) Dhat hsym)

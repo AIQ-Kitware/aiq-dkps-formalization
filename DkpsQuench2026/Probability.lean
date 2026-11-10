@@ -1,4 +1,5 @@
 module
 
 public import DkpsQuench2026.Probability.Coverage
+public import DkpsQuench2026.Probability.TargetIntegration
 public import DkpsQuench2026.Probability.UniformConcentration
