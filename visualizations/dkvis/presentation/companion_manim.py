@@ -8,11 +8,15 @@ slides.
 from __future__ import annotations
 
 from pathlib import Path
+import hashlib
+import json
+import os
 import re
 import textwrap
+from tempfile import NamedTemporaryFile
 
 from dkvis.palette import PALETTE, tint
-from dkvis.presentation.companion_figures import figure_svg
+from dkvis.presentation.companion_geometry import build_companion_geometry
 
 
 _SENTENCE_BREAK = re.compile(r'(?<=[.!?])\s+(?=[A-Z])')
@@ -43,7 +47,6 @@ def render_slide_png(deck: dict, slide: dict, index: int, count: int, *, cache_d
             Rectangle,
             RoundedRectangle,
             Scene,
-            SVGMobject,
             SurroundingRectangle,
             Text,
             VGroup,
@@ -60,8 +63,24 @@ def render_slide_png(deck: dict, slide: dict, index: int, count: int, *, cache_d
 
     cache_dir = Path(cache_dir or Path.cwd() / '.companion-manim-cache').resolve()
     cache_dir.mkdir(parents=True, exist_ok=True)
-    figure_dir = cache_dir / 'figures'
-    figure_dir.mkdir(parents=True, exist_ok=True)
+    cache_seed = json.dumps((deck['id'], slide, index, count, os.environ.get('DKVIS_THEME', 'dark')),
+                            sort_keys=True, ensure_ascii=False).encode('utf8')
+    stamp = hashlib.sha256(cache_seed).hexdigest()[:24]
+    cached_frame = cache_dir / f'{deck["id"]}-{index + 1:03d}-{stamp}.png'
+    if cached_frame.exists():
+        return cached_frame.read_bytes()
+
+    def publish_manim_frame(data: bytes) -> bytes:
+        # Concurrent library requests may build the same source revision.
+        # Publish a complete frame atomically so neither reader sees partial PNG.
+        with NamedTemporaryFile('wb', dir=cache_dir, prefix='.frame-', delete=False) as stream:
+            temporary = Path(stream.name)
+            stream.write(data)
+        try:
+            os.replace(temporary, cached_frame)
+        finally:
+            temporary.unlink(missing_ok=True)
+        return data
 
     bg = PALETTE['BG']
     fg = PALETTE['FG']
@@ -71,12 +90,6 @@ def render_slide_png(deck: dict, slide: dict, index: int, count: int, *, cache_d
     wanted = PALETTE['WANTED']
     trial = PALETTE['TRIAL']
     sine = PALETTE['SINE']
-
-    def _materialize_diagram(kind: str) -> Path:
-        path = figure_dir / f'{kind}.svg'
-        if not path.exists():
-            path.write_text(figure_svg(kind), encoding='utf-8')
-        return path
 
     def _wrap(text: str, width: int) -> list[str]:
         raw = ' '.join(text.split())
@@ -237,7 +250,7 @@ def render_slide_png(deck: dict, slide: dict, index: int, count: int, *, cache_d
                 text_group.move_to([left_edge, content_top, 0], aligned_edge=UL)
                 self.add(text_group)
 
-                figure = SVGMobject(str(_materialize_diagram(slide['diagram'])))
+                figure = build_companion_geometry(slide['diagram'])
                 figure.scale_to_fit_width(figure_width)
                 if figure.height > content_height:
                     figure.scale_to_fit_height(content_height)
@@ -314,8 +327,10 @@ def render_slide_png(deck: dict, slide: dict, index: int, count: int, *, cache_d
             scene.render()
             image_path = getattr(scene.renderer.file_writer, 'image_file_path', None)
             if image_path and Path(image_path).is_file():
-                return Path(image_path).read_bytes()
+                data = Path(image_path).read_bytes()
+                return publish_manim_frame(data)
             matches = sorted(media_dir.rglob('*.png'))
             if matches:
-                return matches[-1].read_bytes()
+                data = matches[-1].read_bytes()
+                return publish_manim_frame(data)
     raise RuntimeError(f'Unable to locate rendered PNG for {deck["id"]}:{slide.get("id", index)}')

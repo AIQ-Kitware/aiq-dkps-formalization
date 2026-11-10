@@ -3,9 +3,8 @@ import json
 from pathlib import Path
 import subprocess
 import sys
-from xml.etree import ElementTree
 
-from dkvis.presentation.companion_figures import figure_svg
+from dkvis.presentation.companion_geometry import companion_figure_kind
 from dkvis.presentation.companion_slides import CompanionSlideLibrary, SOURCE_DIR
 
 
@@ -29,7 +28,7 @@ def test_g2_batch2_math_figures_and_sources():
         assert all(len(' '.join((s['lead'], *s['body'])).split()) >= 38 for s in deck['slides'])
         for slide in deck['slides']:
             if fig := slide.get('diagram'):
-                assert ElementTree.fromstring(figure_svg(fig)).tag.endswith('svg'), (node, fig)
+                assert companion_figure_kind(fig), (node, fig)
 
 
 def test_g2_batch2_renders_independently(tmp_path, monkeypatch):

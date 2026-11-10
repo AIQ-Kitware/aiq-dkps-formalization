@@ -4,10 +4,9 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
-import xml.etree.ElementTree as ET
 from pathlib import Path
 
-from dkvis.presentation.companion_figures import figure_svg
+from dkvis.presentation.companion_geometry import companion_figure_kind
 from dkvis.presentation.companion_slides import CompanionSlideLibrary, SOURCE_DIR
 
 G2_BATCH4_NODES = tuple(f'g2:{n:03d}000' for n in range(54,62))
@@ -36,7 +35,7 @@ def test_g2_batch4_decks_have_authored_proofs_math_and_figures():
             assert len(' '.join([slide['lead'], *slide['body']]).split())>=43
             if figname:=slide.get('diagram'):
                 all_figures.add(figname)
-                assert ET.fromstring(figure_svg(figname)).tag.endswith('svg'),(node,figname)
+                assert companion_figure_kind(figname),(node,figname)
         total_math+=sum('mathtex' in slide for slide in deck['slides'])
     assert total_math>=50
     assert len(all_figures)>=12

@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "id": "g2-091250-resolvents-and-yosida-regularization",
+  "title": "Resolvents and Yosida regularization",
+  "subtitle": "Bounded approximants for generators and self-adjoint operators",
+  "lecture_nodes": [
+    "g2:091250"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/091250-resolvents-and-yosida-regularization.md",
+  "adaptation": "Mathematical companion outlining the definitions, argument, worked cases, and scope of the source lecture.",
+  "editorial_stage": "baseline",
+  "slides": [
+    {
+      "id": "00-00",
+      "eyebrow": "G2 091250 · 1/10",
+      "title": "A bounded substitute for an unbounded map",
+      "lead": "Begin with a closed operator on a Hilbert space. Its domain may be smaller than the whole space.",
+      "body": [
+        "The resolvent solves a shifted equation on that domain. A bounded inverse lets us study an unbounded generator using ordinary bounded operators."
+      ],
+      "mathtex": "R_\\lambda=(\\lambda I-G)^{-1}",
+      "diagram": "resolvent-spectrum",
+      "layout": "figure"
+    },
+    {
+      "id": "01-00",
+      "eyebrow": "G2 091250 · 2/10",
+      "title": "What dissipativity contributes",
+      "lead": "A dissipative generator cannot instantaneously increase squared norm.",
+      "body": [
+        "Taking a real inner product with a solution to the shifted equation gives a lower estimate. The range condition is still required to make the inverse everywhere defined."
+      ],
+      "mathtex": "\\Re\\langle Gy,y\\rangle\\le0,\\quad\\|(\\lambda I-G)y\\|\\ge\\lambda\\|y\\|",
+      "diagram": "operator-ball",
+      "layout": "figure"
+    },
+    {
+      "id": "02-00",
+      "eyebrow": "G2 091250 · 3/10",
+      "title": "From resolvent to contraction",
+      "lead": "Multiplication by the positive shift creates a bounded contraction.",
+      "body": [
+        "The inverse solves the domain problem, and the resolvent inequality gives the norm bound. A shifted resolvent is the building block of the classical approximant."
+      ],
+      "mathtex": "J_\\lambda=\\lambda R_\\lambda,\\qquad\\|J_\\lambda\\|\\le1",
+      "diagram": "analysis-synthesis",
+      "layout": "figure"
+    },
+    {
+      "id": "03-00",
+      "eyebrow": "G2 091250 · 4/10",
+      "title": "The classical Yosida approximant",
+      "lead": "The bounded generator shares the dissipativity of the original one.",
+      "body": [
+        "Form the difference between the resolvent contraction and the identity. For each fixed positive lambda it acts on every vector, unlike G."
+      ],
+      "mathtex": "G_\\lambda=\\lambda(J_\\lambda-I)=GJ_\\lambda",
+      "diagram": "g2-decay-flow",
+      "layout": "figure"
+    },
+    {
+      "id": "04-00",
+      "eyebrow": "G2 091250 · 5/10",
+      "title": "Convergence is a domain statement",
+      "lead": "The original action is recovered on legal domain vectors.",
+      "body": [
+        "For x in the domain of G, the resolvent identity gives both statements directly. Strong convergence of J extends from the dense domain by uniform boundedness."
+      ],
+      "mathtex": "J_\\lambda x-x=R_\\lambda Gx,\\quad G_\\lambda x=J_\\lambda Gx\\to Gx",
+      "diagram": "spectral-cutoff",
+      "layout": "figure"
+    },
+    {
+      "id": "05-00",
+      "eyebrow": "G2 091250 · 6/10",
+      "title": "Diagonal example: rates capped by lambda",
+      "lead": "Let G multiply the n-th coordinate by negative n.",
+      "body": [
+        "The approximant caps the size of arbitrarily fast decay rates: it is bounded for each lambda, but its n-th eigenvalue converges to -n for each fixed n."
+      ],
+      "mathtex": "G e_n=-ne_n,\\qquad G_\\lambda e_n=-\\frac{\\lambda n}{\\lambda+n}e_n",
+      "diagram": "g2-decay-flow",
+      "layout": "figure"
+    },
+    {
+      "id": "06-00",
+      "eyebrow": "G2 091250 · 7/10",
+      "title": "Why the domain matters",
+      "lead": "Square summability of a sequence is not the same as square summability after multiplying by n.",
+      "body": [
+        "For x_n=1/n^2 the generator is defined, whereas for x_n=1/n it is not. Every bounded G_lambda still acts on both sequences. This does not establish convergence to Gx outside the domain."
+      ],
+      "mathtex": "D(G)=\\{x\\in\\ell^2:(nx_n)_n\\in\\ell^2\\}",
+      "diagram": "spectral-cutoff",
+      "layout": "figure"
+    },
+    {
+      "id": "07-00",
+      "eyebrow": "G2 091250 · 8/10",
+      "title": "Symmetric approximation for self-adjoint A",
+      "lead": "Unitary evolution calls for a real, symmetric spectral cutoff.",
+      "body": [
+        "The bounded scalar function fixes any finite spectral value asymptotically while suppressing the tails symmetrically. It produces a bounded self-adjoint operator."
+      ],
+      "mathtex": "f_R(s)=\\frac{R^2s}{R^2+s^2},\\quad A_R=f_R(A)",
+      "diagram": "resolvent-spectrum",
+      "layout": "figure"
+    },
+    {
+      "id": "08-00",
+      "eyebrow": "G2 091250 · 9/10",
+      "title": "The symmetric formula is resolvent-based",
+      "lead": "The two imaginary shifts combine to give the same bounded spectral function.",
+      "body": [
+        "Because the terms are conjugate on the real line, their sum is real. The pair of imaginary resolvents is the self-adjoint counterpart to the positive real resolvent used for dissipative generators."
+      ],
+      "mathtex": "A_R=\\frac{R^2}{2}\\left((A-iRI)^{-1}+(A+iRI)^{-1}\\right)",
+      "diagram": "resolvent-spectrum",
+      "layout": "figure"
+    },
+    {
+      "id": "09-00",
+      "eyebrow": "G2 091250 · 10/10",
+      "title": "The exact convergence claim",
+      "lead": "Strong convergence on D(A) is sufficient to recover the original action.",
+      "body": [
+        "Norm convergence cannot approach an unbounded operator. The right theorem states that the bounded approximants recover Ax for each x on which A is defined."
+      ],
+      "mathtex": "A_Rx\\longrightarrow Ax\\qquad(x\\in D(A))",
+      "takeaway": "Two resolvent constructions serve related but different dynamics.",
+      "layout": "equation"
+    }
+  ]
+}

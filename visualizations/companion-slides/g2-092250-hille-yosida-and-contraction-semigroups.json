@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "id": "g2-092250-hille-yosida-and-contraction-semigroups",
+  "title": "Hille–Yosida and contraction semigroups",
+  "subtitle": "When an unbounded operator generates time evolution",
+  "lecture_nodes": [
+    "g2:092250"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/092250-hille-yosida-and-contraction-semigroups.md",
+  "adaptation": "Mathematical companion outlining the definitions, argument, worked cases, and scope of the source lecture.",
+  "editorial_stage": "baseline",
+  "slides": [
+    {
+      "id": "00-00",
+      "eyebrow": "G2 092250 · 1/10",
+      "title": "From a generator to forward time",
+      "lead": "Heat flow loses energy; unitary flow preserves it.",
+      "body": [
+        "A strongly continuous contraction semigroup acts for nonnegative time, satisfies the composition rule, and has norm at most one. A generator is its derivative at zero on the vectors where it exists."
+      ],
+      "mathtex": "S(0)=I,\\quad S(t+s)=S(t)S(s),\\quad\\|S(t)\\|\\le1",
+      "diagram": "g2-decay-flow",
+      "layout": "figure"
+    },
+    {
+      "id": "01-00",
+      "eyebrow": "G2 092250 · 2/10",
+      "title": "Dissipativity is the infinitesimal inequality",
+      "lead": "Every differentiable contractive trajectory starts with non-increasing norm.",
+      "body": [
+        "Differentiate the squared norm along the trajectory at time zero. Dissipativity follows as a necessary condition on the generator."
+      ],
+      "mathtex": "\\left.\\frac{d}{dt}\\|S(t)x\\|^2\\right|_{t=0}=2\\Re\\langle Gx,x\\rangle\\le0",
+      "diagram": "g2-skew-flow",
+      "layout": "figure"
+    },
+    {
+      "id": "02-00",
+      "eyebrow": "G2 092250 · 3/10",
+      "title": "The range condition is essential",
+      "lead": "Dissipativity estimates solutions but does not create them.",
+      "body": [
+        "For a densely defined closed operator, one needs (lambda I - G) to map its domain onto the whole space for some positive lambda. This makes the inverse everywhere defined."
+      ],
+      "mathtex": "\\operatorname{ran}(\\lambda I-G)=H\\quad(\\lambda>0)",
+      "diagram": "resolvent-spectrum",
+      "layout": "figure"
+    },
+    {
+      "id": "03-00",
+      "eyebrow": "G2 092250 · 4/10",
+      "title": "The resolvent bound",
+      "lead": "Contractivity is encoded in a reciprocal spectral estimate.",
+      "body": [
+        "If y=(lambda I-G)^{-1}x, use dissipativity and Cauchy-Schwarz to get lambda||y||² <= ||x|| ||y||. The resolvent norm is therefore bounded by 1/lambda."
+      ],
+      "mathtex": "\\|(\\lambda I-G)^{-1}\\|\\le\\frac1\\lambda",
+      "diagram": "operator-ball",
+      "layout": "figure"
+    },
+    {
+      "id": "04-00",
+      "eyebrow": "G2 092250 · 5/10",
+      "title": "Lumer–Phillips in Hilbert space",
+      "lead": "Maximal dissipativity characterizes contraction semigroup generators.",
+      "body": [
+        "In the closed, densely defined case, dissipativity plus the full-range condition gives exactly the operator needed to generate a strongly continuous contraction semigroup."
+      ],
+      "mathtex": "G\\text{ maximally dissipative}\\iff G\\text{ generates }S(t)",
+      "diagram": "analysis-synthesis",
+      "layout": "figure"
+    },
+    {
+      "id": "05-00",
+      "eyebrow": "G2 092250 · 6/10",
+      "title": "Hille–Yosida as a resolvent criterion",
+      "lead": "Every positive shift must admit a controlled inverse.",
+      "body": [
+        "For a densely defined closed operator, the contraction-semigroup generation criterion asks for the entire positive real half-line in the resolvent set and uniform bounds on its powers."
+      ],
+      "mathtex": "\\|(\\lambda I-G)^{-n}\\|\\le\\lambda^{-n}\\quad(n\\ge1)",
+      "diagram": "resolvent-spectrum",
+      "layout": "figure"
+    },
+    {
+      "id": "06-00",
+      "eyebrow": "G2 092250 · 7/10",
+      "title": "Bounded Yosida generators",
+      "lead": "Resolvent contractions lead to ordinary bounded exponentials.",
+      "body": [
+        "Define J_lambda=lambda(lambda I-G)^(-1) and G_lambda=lambda(J_lambda-I). This generator is bounded and dissipative, so its exponential is a contraction for positive times."
+      ],
+      "mathtex": "S_\\lambda(t)=e^{tG_\\lambda},\\qquad\\|S_\\lambda(t)\\|\\le1",
+      "diagram": "g2-matrix-flow",
+      "layout": "figure"
+    },
+    {
+      "id": "07-00",
+      "eyebrow": "G2 092250 · 8/10",
+      "title": "Construct the limiting semigroup",
+      "lead": "Control errors on the dense domain, then extend to all of H.",
+      "body": [
+        "The Yosida generators converge on the original domain. A Duhamel comparison controls their exponentials on bounded time intervals. Contractivity lets the convergence extend to arbitrary input vectors."
+      ],
+      "mathtex": "S(t)x=\\lim_{\\lambda\\to\\infty}e^{tG_\\lambda}x",
+      "diagram": "g2-decay-flow",
+      "layout": "figure"
+    },
+    {
+      "id": "08-00",
+      "eyebrow": "G2 092250 · 9/10",
+      "title": "Heat equation: high modes decay faster",
+      "lead": "Dirichlet Laplacians provide concrete dissipative generators.",
+      "body": [
+        "On the unit interval, the Dirichlet Laplacian has sine eigenmodes with eigenvalues -π²n². Each mode decays at that rate, and higher frequencies decay faster."
+      ],
+      "mathtex": "S(t)e_n=e^{-\\pi^2 n^2t}e_n\\qquad\\text{on }(0,1)",
+      "diagram": "spectral-cutoff",
+      "layout": "figure"
+    },
+    {
+      "id": "09-00",
+      "eyebrow": "G2 092250 · 10/10",
+      "title": "Contrast groups and semigroups",
+      "lead": "Reversibility requires stronger symmetry than dissipativity.",
+      "body": [
+        "A skew-adjoint generator defines a unitary group for both time directions. Maximal dissipativity generally supplies only a forward contraction semigroup; backward heat flow is not bounded on all L² data."
+      ],
+      "mathtex": "\\|U(t)x\\|=\\|x\\|\\quad(t\\in\\mathbb R)",
+      "takeaway": "The sign of the generator decides whether high modes decay or grow.",
+      "layout": "equation"
+    }
+  ]
+}

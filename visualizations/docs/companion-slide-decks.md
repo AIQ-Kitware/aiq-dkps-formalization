@@ -1,59 +1,91 @@
-# Independent companion slides for the DKPS learning library
+# Companion slides: Manim as the single composition engine
 
-Companion slides are separate, source-controlled educational resources linked to course-graph lecture nodes. Their text is complete enough to read without listening to the recording. Showing, hiding, navigating, and rebuilding the slides has no effect on TTS generation or lecture playback.
+Companion-slide content is stored in readable JSON decks under
+`visualizations/companion-slides/`, associated with G2/G3 lecture nodes through
+`manifest.json`. This text content is independent of TTS speech extraction.
 
-## Visual policy
+## Rendering architecture
 
-Companion decks are now **Manim-rendered slide decks**, not HTML-composed pseudo-slides. The JSON files under `visualizations/companion-slides/` remain the editable content source, but a build renders every slide as a fresh Manim scene:
+The slide frame, heading, equations, diagram, argument text, and summary are
+all composed into a fixed **16:9 Manim scene**:
 
-- prose is laid out in a fixed 16:9 slide frame,
-- equations use the same MathTex / TeX toolchain as the main DKPS visual decks,
-- reusable DKPS figures are imported from repository-owned Python/SVG sources, and
-- the standalone deck viewer is only a thin HTML wrapper around the rendered slide images.
+- `dkvis.presentation.companion_manim` builds the slide composition, using
+  `MathTex`, `Text`, and native Manim objects.
+- `dkvis.presentation.companion_geometry` builds diagrams using native Manim
+  primitives. Its explicit registry covers every diagram used in the deck
+  inventory. New identifiers require an implementation, rather than a fallback
+  picture from another topic.
+- `dkvis.presentation.companion_slides` renders Manim frames and packages them
+  in a self-contained HTML deck for the browser and offline sharing. It embeds
+  each PNG as a data URI so no external assets are required to view slides.
+- `dkvis.presentation.companion_export` supplies the **same cached PNG frames**
+  to the PowerPoint exporter. The exporter no longer lays out a separate slide
+  with PowerPoint text boxes and SVG illustrations.
 
-This keeps the authoring workflow lightweight while making the exported slides visually consistent with the rest of the Manim presentation stack.
-
-## Pilot decks
-
-- `dkps-fast-path`: G3 `000000`, *A fast path to Davis–Kahan*, 12 slides. Two-mode perturbation, gaps, principal angles, residual and Sylvester mechanism, angle theorem families, and transport.
-- `finite-spectral-picture`: G3 `001000`, *The finite spectral picture*, 13 slides. Complete finite spectral theorem proof, real symmetric reduction, projection formulation, and worked 2-by-2 example.
-
-The source directory is `visualizations/companion-slides/`. Each deck has its own JSON source file; `manifest.json` associates persistent deck identifiers with one or more course-graph lecture nodes. A deck may be linked to additional tracks later without copying its contents. Audio scripts, speech pages, and citation sidecars are unchanged.
+Manim is required for generating new frames. Rendering does not fall back to
+HTML or raw SVG drawing. Generated PNG, HTML, SVG, and PowerPoint outputs are
+build artifacts and should remain outside Git. Content source files, Python
+scene code, and manifest entries are committed.
 
 ## Browser workflow
 
-1. Open `/audio?track=g3&lecture=000000` or any other G3 lecture with a linked deck.
-2. Select **Show slides** to build from source if necessary and display the deck at full content width above the complete transcript. The **Build / refresh** button can also rebuild the current source.
-3. The full-width slide viewer appears above the transcript. Scroll down to read or select any transcript sentence; the audio player and its progress timeline remain independent of the slides. Navigate slides independently with the slide buttons or arrow keys. **Standalone view** opens them without the audio player. **Download HTML** saves the standalone viewer; **Print / PDF** emits the rendered slide images page by page.
-4. The generated HTML is cached under `visualizations/companion-slide-cache/` and is ignored by Git. Edits to a source JSON or a companion figure automatically make its previous build stale; rebuild it from the UI.
+Open an audio lecture in the local library, choose **Show slides**, and the
+companion deck will render (or reuse cached frames). Slides remain separate
+from audio timing. Arrow keys navigate the deck. The standalone HTML is fully
+self-contained and can be printed to PDF.
 
-The served HTML is self-contained: no CDN, remote font, network math service, or external asset URL. Every slide image is embedded directly into the built HTML as a data URI, so the downloaded deck remains portable.
+An edit to deck JSON or the figure/scene source invalidates its cached deck.
+The HTML and PowerPoint exporter share the same per-slide PNG cache.
 
-## Build command
+## Build and export
+
+From `visualizations/` in the project's Manim environment:
 
 ```bash
-cd /home/joncrall/code/aiq-dkps-formalization/visualizations
-python -m dkvis.presentation.companion_slides
+python -m dkvis.presentation.companion_slides dkps-fast-path
+python -m dkvis.presentation.companion_export \
+  companion-slides/dkps-fast-path.json /tmp/dkps-companion-frames --limit 2
+node tools/build_companion_pptx.js \
+  companion-slides/dkps-fast-path.json /tmp/dkps-fast-path.pptx
 ```
 
-That command renders each slide through `dkvis.presentation.companion_manim` and writes a standalone HTML viewer to `visualizations/companion-slide-cache/`.
+The `--limit 2` command is a small real-Manim smoke test. PowerPoint exports
+are image-based so that their appearance exactly matches the Manim and HTML
+slides. They are therefore not individually editable PowerPoint text/shape
+objects; edit the JSON and Manim source to make changes.
 
-Companion-slide builds now require the local Manim environment used by the rest of the visualizations package. There is no longer a separate HTML-layout renderer or Node-based pseudo-slide export path.
+For a fast QA check of the PowerPoint packaging independently of Manim,
+`build_companion_pptx.js` also accepts `--frames-dir <directory>`, containing
+`frame-001.png`, `frame-002.png`, and so on. This is intended for diagnostics;
+normal builds always call Manim.
 
-## Extension conventions
+## Authoring policy
 
-- Add a stable deck ID and a source JSON file; link it to one or more existing course-graph nodes in `manifest.json`.
-- Each slide should have a substantive title, self-contained lead, explanatory paragraphs, and a mathematical conclusion or takeaway; figures supplement the text.
-- Prefer complete worked examples and hypotheses over telegraphic bullet-only slides. Avoid lecture-number callbacks and authoring commentary.
-- Cross-lecture reuse belongs in the manifest, not in duplicate slide files.
-- Audio/slide timeline synchronization is deliberately deferred. Future explicit transcript anchors can live in non-spoken metadata.
+- A slide should explain a mathematical step or worked example without audio.
+- Prefer meaningful geometry tied to the mathematical claim. No SVG source
+  drawings and no generic fallback diagrams.
+- Use exact `mathtex` for formulas; keep hypotheses and mathematical scope in
+  accompanying prose.
+- Do not introduce project/tool nomenclature in spoken narration.
+- Preserve stable lecture IDs, existing graph relationships, and the shared
+  manifest while extending the course.
+- Source-level baseline status means that a deck exists but awaits a visual
+  editorial review. It is not a final-quality certification.
 
-## G3 expansion: lectures 002000–025000
+## Previous migration and four new G2 lectures
 
-All 26 G3 lecture nodes now have a companion deck. The 24 additional sources use stable `g3-<number>-<slug>` identifiers and preserve the existing audio transcripts. The original two handcrafted pilot decks are unchanged.
+The four added audio-first G2 mathematics lectures `091250`, `091500`,
+`092250`, and `099500` have ten-slide baseline companions. These should receive
+Manim visual QA and eventual editorial expansion in the same manner as the
+existing G2 baseline decks.
 
-The new reading decks reorganize complete prose from the **current revised G3 transcript sections** into navigable, labeled slides. Where a proof needs multiple steps, the explanation continues over multiple slides instead of squeezing the argument into one formula-heavy graphic. Highlighted formulas provide a quick visual index to the derivation.
+The previous tracked figures under `companion-slides/figures/*.svg` are
+obsolete. After applying the repair overlay, run:
 
-Sixteen shared companion figures remain reusable across the lecture set, but the source of truth is `dkvis.presentation.companion_figures`, not tracked SVG files under `companion-slides/figures/`.
+```bash
+python visualizations/tools/finish_companion_manim_migration.py --write
+```
 
-Run `python -m dkvis.presentation.companion_slides` to prebuild all decks or open any G3 audio lecture and select **Show slides** to build only its deck. A deck source edit or a figure-source edit changes its content digest and will cause the cached HTML to refresh on the next build.
+That removes only their Git index entries; SVG files remain on disk. It also
+removes the old Python SVG drawing module if its contents match the reviewed
+snapshot, so unknown local edits are preserved.

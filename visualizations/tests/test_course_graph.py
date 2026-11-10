@@ -141,7 +141,8 @@ def test_all_nodes_connected_by_navigation_and_real_cross_track_relationships():
     # Course order alone connects each path, not the different tracks.
     order_only = connected_components(graph, relation_types={'listening_next'})
     assert len(order_only) == 2
-    assert sorted(map(len, order_only)) == [22, 183]
+    g1_count = len(next(track['path'] for track in graph['tracks'] if track['id'] == 'g1'))
+    assert sorted(map(len, order_only)) == sorted([g1_count, len(graph['nodes']) - g1_count])
     # Actual alternative presentations tie G1 to the audio tracks.
     overview_types = {'listening_next', 'proof_depends_on', 'alternative_presentation'}
     assert len(connected_components(graph, relation_types=overview_types)) == 1
@@ -152,7 +153,12 @@ def test_all_nodes_connected_by_navigation_and_real_cross_track_relationships():
 def test_listening_order_is_explicit_and_not_a_mathematical_dependency():
     graph = build_course_graph()
     path_edges = {(e['from'], e['to']): e for e in graph['edges'] if e['type'] == 'listening_next'}
-    assert len(path_edges) == 204  # Shared pairs in G3 and G4 appear once.
+    expected_pairs = {
+        (first, second)
+        for track in graph['tracks']
+        for first, second in zip(track['path'], track['path'][1:])
+    }
+    assert set(path_edges) == expected_pairs  # Shared pairs are counted once.
     for track in graph['tracks']:
         for first, second in zip(track['path'], track['path'][1:]):
             row = path_edges[first, second]

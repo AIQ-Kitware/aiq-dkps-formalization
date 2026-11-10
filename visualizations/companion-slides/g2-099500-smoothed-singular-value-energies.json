@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "id": "g2-099500-smoothed-singular-value-energies",
+  "title": "Smoothed singular-value energies",
+  "subtitle": "Quadratic behavior, Hilbert–Schmidt domains and gradients",
+  "lecture_nodes": [
+    "g2:099500"
+  ],
+  "source_lecture": "draft-stages/tts-lectures/099500-smoothed-singular-value-energies.md",
+  "adaptation": "Mathematical companion outlining the definitions, argument, worked cases, and scope of the source lecture.",
+  "editorial_stage": "baseline",
+  "slides": [
+    {
+      "id": "00-00",
+      "eyebrow": "G2 099500 · 1/10",
+      "title": "Smooth a nuclear-type penalty",
+      "lead": "A smooth scalar cost can change the finite-energy operator ideal.",
+      "body": [
+        "Subtracting tau from the square root normalizes the cost to vanish at zero. Its quadratic behavior for small singular values determines the domain of the infinite sum."
+      ],
+      "mathtex": "\\phi_\\tau(s)=\\sqrt{\\tau^2+s^2}-\\tau",
+      "diagram": "g2-schatten-profile",
+      "layout": "figure"
+    },
+    {
+      "id": "01-00",
+      "eyebrow": "G2 099500 · 2/10",
+      "title": "Rationalization exposes the domain",
+      "lead": "The algebraic identity separates near-zero and large-s behavior.",
+      "body": [
+        "Multiplying by the conjugate sum shows that the cost is quadratic for s much smaller than tau and approximately linear for s much larger than tau."
+      ],
+      "mathtex": "\\phi_\\tau(s)=\\frac{s^2}{\\sqrt{\\tau^2+s^2}+\\tau}",
+      "diagram": "g2-norm-hierarchy",
+      "layout": "figure"
+    },
+    {
+      "id": "02-00",
+      "eyebrow": "G2 099500 · 3/10",
+      "title": "Smooth and convex",
+      "lead": "The scalar penalty has a zero derivative at the origin.",
+      "body": [
+        "Its first derivative is bounded by one, and its strictly positive second derivative makes it convex. Smoothing removes the sharp cusp of the absolute-value penalty."
+      ],
+      "mathtex": "\\phi_\\tau'(s)=\\frac{s}{\\sqrt{\\tau^2+s^2}},\\quad\\phi_\\tau''(s)=\\frac{\\tau^2}{(\\tau^2+s^2)^{3/2}}",
+      "diagram": "g2-convex-transfer",
+      "layout": "figure"
+    },
+    {
+      "id": "03-00",
+      "eyebrow": "G2 099500 · 4/10",
+      "title": "Uniform quadratic comparison on bounded spectra",
+      "lead": "Every singular value lies below the operator norm M.",
+      "body": [
+        "Rationalization gives lower and upper multiples of s squared. The constants depend on tau and M but are positive and finite for each fixed tau>0."
+      ],
+      "mathtex": "\\frac{s^2}{\\sqrt{\\tau^2+M^2}+\\tau}\\le\\phi_\\tau(s)\\le\\frac{s^2}{2\\tau}",
+      "diagram": "g2-schatten-profile",
+      "layout": "figure"
+    },
+    {
+      "id": "04-00",
+      "eyebrow": "G2 099500 · 5/10",
+      "title": "Finiteness means Hilbert–Schmidt",
+      "lead": "The infinite-dimensional domain follows by summing the bounds.",
+      "body": [
+        "For a compact operator, the smoothed singular-value energy is finite exactly when its squared singular values are summable: the Hilbert–Schmidt class."
+      ],
+      "mathtex": "\\sum_j\\phi_\\tau(s_j(T))<\\infty\\iff\\sum_j s_j(T)^2<\\infty",
+      "diagram": "g2-frobenius-columns",
+      "layout": "figure"
+    },
+    {
+      "id": "05-00",
+      "eyebrow": "G2 099500 · 6/10",
+      "title": "A separating diagonal example",
+      "lead": "One operator belongs to S₂ but not S₁.",
+      "body": [
+        "Let the diagonal singular values be 1/n. The squared series converges and the ordinary singular-value sum diverges, but the smoothed energy is finite for every fixed positive tau."
+      ],
+      "mathtex": "s_n(T)=\\frac1n,\\quad T\\in S_2\\setminus S_1",
+      "diagram": "g2-rank-truncation",
+      "layout": "figure"
+    },
+    {
+      "id": "06-00",
+      "eyebrow": "G2 099500 · 7/10",
+      "title": "The zero-smoothing limit can diverge",
+      "lead": "Pointwise scalar convergence does not control infinite sums automatically.",
+      "body": [
+        "As tau decreases, the smoothed penalties grow monotonically to each singular value. For the 1/n example, the cost tends to infinity by monotone convergence."
+      ],
+      "mathtex": "\\phi_\\tau(s)\\uparrow s\\ (\\tau\\downarrow0),\\quad\\Phi_\\tau(T)\\uparrow\\infty",
+      "diagram": "g2-schatten-profile",
+      "layout": "figure"
+    },
+    {
+      "id": "07-00",
+      "eyebrow": "G2 099500 · 8/10",
+      "title": "Why the cost is not a norm",
+      "lead": "The small-value behavior is quadratic, so homogeneity fails.",
+      "body": [
+        "For small s, doubling s roughly quadruples its cost. A norm would double instead. It is better to call the construction a spectral energy."
+      ],
+      "mathtex": "\\phi_\\tau(2s)\\approx4\\phi_\\tau(s)\\quad(s\\ll\\tau)",
+      "diagram": "g2-norm-hierarchy",
+      "layout": "figure"
+    },
+    {
+      "id": "08-00",
+      "eyebrow": "G2 099500 · 9/10",
+      "title": "Finite-matrix gradient",
+      "lead": "The gradient does not divide by any singular value.",
+      "body": [
+        "For a rectangular matrix, differentiate the trace of the shifted matrix square root. The positive tau gives a bounded inverse square root even at rank deficiency."
+      ],
+      "mathtex": "\\nabla\\Phi_\\tau(T)=T(T^*T+\\tau^2I)^{-1/2}",
+      "diagram": "g2-polar-support",
+      "layout": "figure"
+    },
+    {
+      "id": "09-00",
+      "eyebrow": "G2 099500 · 10/10",
+      "title": "A useful three-part checklist",
+      "lead": "A scalar penalty, its natural ideal, and its limiting topology are separate choices.",
+      "body": [
+        "A smooth formula does not by itself guarantee a finite trace on every bounded operator. Check summability at small singular values before differentiating or passing to a smoothing limit."
+      ],
+      "mathtex": "T\\in S_2\\quad\\text{is the finite-cost condition for }\\tau>0",
+      "takeaway": "The small-singular-value asymptotics determine the ideal.",
+      "layout": "equation"
+    }
+  ]
+}

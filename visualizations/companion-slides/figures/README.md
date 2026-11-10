@@ -1,19 +1,14 @@
-# Companion-slide figure policy
+# Generated companion figure directory (legacy)
 
-This directory is no longer the source of truth for companion-slide drawings.
+This directory no longer contains source graphics for companion slides. All
+companion diagrams are constructed with native Manim shapes in
+`visualizations/dkvis/presentation/companion_geometry.py` and composed with
+Manim MathTex and text in `companion_manim.py`.
 
-Companion-slide figures should be authored as **source-owned Python renderers**
-under `visualizations/dkvis/presentation/companion_figures.py`, then embedded
-inline into the self-contained HTML decks or exported on demand for PPTX.
-Exported SVG files are build products and should stay git-ignored.
+The former SVG files may remain on your local disk after running
+`finish_companion_manim_migration.py --write`: that command uses
+`git rm --cached` on tracked SVG exports so **local copies are preserved**,
+but Git stops tracking them. The existing `.gitignore` prevents re-adding them.
 
-Why this policy:
-
-- slide sources should track authored structure, not disposable render outputs;
-- companion-slide figures should be reproducible at build time, like MathTex;
-- the repository should not accumulate hand-managed exported SVG assets.
-
-Near-term transition note: a few figure definitions in
-`companion_figures.py` still wrap legacy redrawings while we migrate toward
-cleaner Manim-backed geometric builders. Even during that transition, the repo
-tracks the Python figure source, not exported SVG files.
+New diagrams must be authored in Python as Manim geometry, rather than by
+editing or committing exported SVG files.

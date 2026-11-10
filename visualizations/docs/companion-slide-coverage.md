@@ -5,14 +5,14 @@ The `baseline` label means a source-derived reading outline is available **and n
 The `expanded` label means a separately developed companion deck exists; it is not a final visual-quality certification.
 G1 already consists of native Manim visual presentations. G4 is still planned.
 
-**Available lecture coverage: 198/198.**
+**Available lecture coverage: 199/203.**
 
 | Stage | Lectures | Expansion needed |
 |---|---:|---|
 | Native G1 presentations | 22 | No companion required |
-| Expanded G2/G3 companions | 56 | Optional editorial refinement |
-| G2 baseline companions | 120 | **Yes** |
-| Available lectures missing slides | 0 | Urgent |
+| Expanded G2/G3 companions | 97 | Optional editorial refinement |
+| G2 baseline companions | 80 | **Yes** |
+| Available lectures missing slides | 4 | Urgent |
 | Planned G4 nodes | 6 | Not available yet |
 
 ## Baseline companions requiring expansion
@@ -20,51 +20,8 @@ G1 already consists of native Manim visual presentations. G4 is still planned.
 Prioritize specific high-value proofs and examples rather than rewriting the entire course at once.
 Each item below already has a readable outline; expand it with exact typeset mathematics, worked cases, topic-specific diagrams, and slide-by-slide layout review.
 
-### G2 030000–059000 (30 baseline decks)
+### G2 060000–089000 (20 baseline decks)
 
-- [ ] `g2:030000` — Spectral projections: selecting whole pieces of an operator (`g2-030000-spectral-projections-for-selected-sets`)
-- [ ] `g2:031000` — Ordered gaps versus distance gaps (`g2-031000-ordered-gaps-versus-distance-gaps`)
-- [ ] `g2:032000` — Coordinate-free finite functional calculus (`g2-032000-coordinate-free-finite-functional-calculus`)
-- [ ] `g2:033000` — Quadratic-form order and positive operators (`g2-033000-quadratic-form-order-and-positive-operators`)
-- [ ] `g2:034000` — Positive square roots and their uniqueness (`g2-034000-positive-square-roots-and-their-uniqueness`)
-- [ ] `g2:035000` — The operator modulus |A| (`g2-035000-the-operator-modulus-a`)
-- [ ] `g2:036000` — Singular-value decomposition (`g2-036000-singular-value-decomposition`)
-- [ ] `g2:037000` — Polar decomposition (`g2-037000-polar-decomposition`)
-- [ ] `g2:038000` — Partial isometries and polar uniqueness (`g2-038000-partial-isometries-and-polar-uniqueness`)
-- [ ] `g2:039000` — Matrix exponentials from the power series (`g2-039000-matrix-exponentials-from-the-power-series`)
-- [ ] `g2:040000` — Skew-adjoint generators and unitary flows (`g2-040000-skew-adjoint-generators-and-unitary-flows`)
-- [ ] `g2:041000` — Operator trigonometric functions (`g2-041000-operator-trigonometric-functions`)
-- [ ] `g2:042000` — Cross-Gram overlap and principal angles (`g2-042000-cross-gram-overlap-and-principal-angles`)
-- [ ] `g2:043000` — Sines, cosines, and cross projections (`g2-043000-sines-cosines-and-cross-projections`)
-- [ ] `g2:044000` — The cosine–sine decomposition (`g2-044000-the-cosine-sine-decomposition`)
-- [ ] `g2:045000` — Halmos two-projection decomposition (`g2-045000-halmos-two-projection-decomposition`)
-- [ ] `g2:046000` — Positive cosine and sine operators (`g2-046000-positive-cosine-and-sine-operators`)
-- [ ] `g2:047000` — Acute pairs and transversality (`g2-047000-acute-pairs-and-transversality`)
-- [ ] `g2:048000` — The Sz.-Nagy–Kato intertwiner (`g2-048000-the-sz-nagy-kato-intertwiner`)
-- [ ] `g2:049000` — Canonical direct rotation (`g2-049000-canonical-direct-rotation`)
-- [ ] `g2:050000` — Nonacute angles and defect matching (`g2-050000-nonacute-angles-and-defect-matching`)
-- [ ] `g2:051000` — Compact angle spectra and classification (`g2-051000-compact-angle-spectra-and-classification`)
-- [ ] `g2:052000` — Min–max principles for singular values (`g2-052000-min-max-principles-for-singular-values`)
-- [ ] `g2:053000` — Low-rank approximation and Eckart–Young (`g2-053000-low-rank-approximation-and-eckart-young`)
-- [ ] `g2:054000` — Ky Fan sums and inequalities (`g2-054000-ky-fan-sums-and-inequalities`)
-- [ ] `g2:055000` — Majorization and weak majorization (`g2-055000-majorization-and-weak-majorization`)
-- [ ] `g2:056000` — Convexity and majorization descent (`g2-056000-convexity-and-majorization-descent`)
-- [ ] `g2:057000` — Schatten and Frobenius norms (`g2-057000-schatten-and-frobenius-norms`)
-- [ ] `g2:058000` — Unitary-invariant norms and symmetric gauges (`g2-058000-unitary-invariant-norms-and-symmetric-gauges`)
-- [ ] `g2:059000` — Rectangular invariance and zero padding (`g2-059000-rectangular-invariance-and-zero-padding`)
-
-### G2 060000–089000 (30 baseline decks)
-
-- [ ] `g2:060000` — Pinching and block direct sums (`g2-060000-pinching-and-block-direct-sums`)
-- [ ] `g2:061000` — Quadratic-form inequalities and singular values (`g2-061000-quadratic-form-inequalities-and-singular-values`)
-- [ ] `g2:062000` — From scalar division to AX−XB=C (`g2-062000-from-scalar-division-to-ax-xb-c`)
-- [ ] `g2:063000` — Diagonal matrices and the entrywise solution (`g2-063000-diagonal-matrices-and-the-entrywise-solution`)
-- [ ] `g2:064000` — Kronecker sums and Sylvester invertibility (`g2-064000-kronecker-sums-and-sylvester-invertibility`)
-- [ ] `g2:065000` — Ordered spectral separation (`g2-065000-ordered-spectral-separation`)
-- [ ] `g2:066000` — Unitary and semigroup representations (`g2-066000-unitary-and-semigroup-representations`)
-- [ ] `g2:067000` — Disjoint spectral sets and Rosenblum theory (`g2-067000-disjoint-spectral-sets-and-rosenblum-theory`)
-- [ ] `g2:068000` — The Banach-space Sylvester lower-bound theorem (`g2-068000-the-banach-space-sylvester-lower-bound-theorem`)
-- [ ] `g2:069000` — Norm dependence of Sylvester bounds (`g2-069000-norm-dependence-of-sylvester-bounds`)
 - [ ] `g2:070000` — Hilbert–Schmidt Sylvester group estimates (`g2-070000-hilbert-schmidt-sylvester-group-estimates`)
 - [ ] `g2:071000` — Sylvester identities for compressed blocks (`g2-071000-sylvester-identities-for-compressed-blocks`)
 - [ ] `g2:072000` — Infinite-dimensional Hilbert examples (`g2-072000-infinite-dimensional-hilbert-examples`)
@@ -151,6 +108,13 @@ Each item below already has a readable outline; expand it with exact typeset mat
 - [ ] `g2:147000` — Population-gap spectral statistics (`g2-147000-population-gap-spectral-statistics`)
 - [ ] `g2:148000` — Procrustes and spectral embeddings (`g2-148000-procrustes-and-spectral-embeddings`)
 - [ ] `g2:149000` — Proof practicum: reconstruct the 1970 theory (`g2-149000-proof-practicum-reconstruct-the-1970-theory`)
+
+## Available lectures with no visual coverage
+
+- `g2:091250` — Resolvents and Yosida regularization
+- `g2:091500` — Strong resolvent convergence and spectral limits
+- `g2:092250` — Hille–Yosida and contraction semigroups
+- `g2:099500` — Smoothed singular-value energies
 
 ## Promotion checklist
 

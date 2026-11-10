@@ -3,9 +3,8 @@ import json
 from pathlib import Path
 import subprocess
 import sys
-from xml.etree import ElementTree
 
-from dkvis.presentation.companion_figures import figure_svg
+from dkvis.presentation.companion_geometry import companion_figure_kind
 from dkvis.presentation.companion_slides import CompanionSlideLibrary, SOURCE_DIR
 
 BATCH3_NODES=tuple(f'g2:{n:03d}000' for n in range(46,54))
@@ -30,7 +29,7 @@ def test_g2_batch3_curated_mathematics_and_provenance():
             assert len(' '.join([slide['lead'],*slide['body']]).split())>=38
             assert 'first-pass outline' not in slide['eyebrow']
             if kind:=slide.get('diagram'):
-                assert ElementTree.fromstring(figure_svg(kind)).tag.endswith('svg'),(node,kind)
+                assert companion_figure_kind(kind),(node,kind)
 
 
 def test_g2_batch3_self_contained_render(tmp_path,monkeypatch):

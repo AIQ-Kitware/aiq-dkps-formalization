@@ -16,11 +16,11 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 
 from dkvis.presentation.paths import ROOT
-from dkvis.presentation.companion_figures import figure_bytes
+from dkvis.presentation.companion_geometry import companion_figure_kind
 
 SOURCE_DIR = ROOT / 'companion-slides'
 CACHE_DIR = ROOT / 'companion-slide-cache'
-RENDERER_VERSION = '11-manim-image-decks'
+RENDERER_VERSION = '12-native-manim-diagrams'
 DECK_ID = re.compile(r'^[a-z][a-z0-9-]{1,63}$')
 
 
@@ -123,10 +123,15 @@ class CompanionSlideLibrary:
             if len(json.dumps(page)) > 12000:
                 raise ValueError('Slide content exceeds maximum length')
         digest = hashlib.sha256(RENDERER_VERSION.encode() + raw)
+        digest.update(os.environ.get('DKVIS_THEME', 'dark').encode())
+        for name in ('companion_manim.py', 'companion_geometry.py'):
+            digest.update(Path(__file__).with_name(name).read_bytes())
+        for name in ('palette.py', 'slide_style.py'):
+            digest.update(Path(__file__).resolve().parents[1].joinpath(name).read_bytes())
         for diagram in sorted({slide.get('diagram') for slide in slides if slide.get('diagram')}):
             if not DECK_ID.fullmatch(diagram):
                 raise ValueError('Invalid diagram identifier')
-            digest.update(figure_bytes(diagram))
+            companion_figure_kind(diagram)  # A missing diagram must fail before rendering.
         stamp = digest.hexdigest()[:20]
         return data, stamp
 
@@ -167,7 +172,7 @@ class CompanionSlideLibrary:
         target = self._path(key, stamp)
         if target.is_file():
             return self.status(key)
-        content = render_html(data, cache_dir=self.cache).encode('utf8')
+        content = render_html(data, cache_dir=self.cache / 'frames' / stamp).encode('utf8')
         self.cache.mkdir(parents=True, exist_ok=True)
         with NamedTemporaryFile('wb', dir=self.cache, prefix='.building-', delete=False) as f:
             temp = Path(f.name)

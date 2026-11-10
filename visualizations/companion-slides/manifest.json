@@ -1416,6 +1416,38 @@
         "g2:149000"
       ],
       "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-091250-resolvents-and-yosida-regularization",
+      "source": "g2-091250-resolvents-and-yosida-regularization.json",
+      "lecture_nodes": [
+        "g2:091250"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-091500-strong-resolvent-convergence-and-spectral-limits",
+      "source": "g2-091500-strong-resolvent-convergence-and-spectral-limits.json",
+      "lecture_nodes": [
+        "g2:091500"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-092250-hille-yosida-and-contraction-semigroups",
+      "source": "g2-092250-hille-yosida-and-contraction-semigroups.json",
+      "lecture_nodes": [
+        "g2:092250"
+      ],
+      "editorial_stage": "baseline"
+    },
+    {
+      "id": "g2-099500-smoothed-singular-value-energies",
+      "source": "g2-099500-smoothed-singular-value-energies.json",
+      "lecture_nodes": [
+        "g2:099500"
+      ],
+      "editorial_stage": "baseline"
     }
   ]
 }

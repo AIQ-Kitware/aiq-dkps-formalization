@@ -6,10 +6,9 @@ import math
 import shutil
 import subprocess
 import sys
-import xml.etree.ElementTree as ET
 from pathlib import Path
 
-from dkvis.presentation.companion_figures import figure_svg
+from dkvis.presentation.companion_geometry import companion_figure_kind
 from dkvis.presentation.companion_slides import CompanionSlideLibrary, SOURCE_DIR
 from tools import promote_g2_062000_069000 as promotion
 
@@ -38,7 +37,7 @@ def test_g2_sylvester_decks_have_complete_math_and_local_figures():
             assert 'first-pass outline' not in slide['eyebrow']
             if name:=slide.get('diagram'):
                 figures.add(name)
-                assert ET.fromstring(figure_svg(name)).tag.endswith('svg'),(node,name)
+                assert companion_figure_kind(name),(node,name)
         math_count+=sum(bool(row.get('mathtex')) for row in deck['slides'])
     assert math_count >=70
     assert len(figures)==15
