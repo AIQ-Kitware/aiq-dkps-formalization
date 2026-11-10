@@ -2,101 +2,151 @@
   "schema_version": 1,
   "id": "g2-053000-low-rank-approximation-and-eckart-young",
   "title": "Low-rank approximation and Eckart–Young",
-  "subtitle": "G2 lecture 053000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
   "lecture_nodes": [
     "g2:053000"
   ],
   "source_lecture": "draft-stages/tts-lectures/053000-low-rank-approximation-and-eckart-young.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "subtitle": "G2 lecture 053000 · expanded mathematical companion",
+  "editorial_stage": "expanded",
+  "adaptation": "Standalone companion adapted from the source spoken lecture and display-only mathematics appendix. Explicit hypotheses, stepwise proofs, worked examples, and local vector diagrams; no narration edits.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 053000 · first-pass outline",
-      "lead": "Suppose A is a linear map represented by a large matrix.",
+      "title": "The best approximation with only k directions",
+      "lead": "A rank-k map can send every input into at most a k-dimensional output subspace.",
       "body": [
-        "We would like to replace it by something simpler: a map whose outputs all lie in a space of dimension at most k. That is what rank at most k means. It is a constraint on how many independent output directions the approximation can use. We now want to choose the replacement that minimizes error. There are at least two reasonable ways to measure error. Operator norm asks for the worst error over all unit inputs. A second measurement adds up the squared errors over a complete orthonormal input basis."
+        "Given A:E→F, we want the best such approximation in either operator norm or Frobenius norm. The singular-value decomposition gives a canonical candidate by retaining the k largest singular-value terms.",
+        "The Eckart–Young theorem proves this truncation is optimal even among competitors that choose completely different source and output directions."
       ],
-      "layout": "opening"
+      "diagram": "g2-rank-truncation",
+      "takeaway": "Keep the strongest singular directions to minimize either worst-case or total squared error.",
+      "layout": "opening",
+      "id": "00-expanded",
+      "eyebrow": "G2 · 053000 · The best approximation with only k directions"
     },
     {
-      "id": "01-overview",
-      "title": "Rebuild the map one singular direction at a time",
-      "eyebrow": "G2 · 053000 · first-pass outline",
-      "lead": "Let A map a finite-dimensional inner-product space E into another space F.",
+      "title": "Truncate the singular-value decomposition",
+      "lead": "Write A=∑σ_i u_i v_i* with descending positive singular values.",
       "body": [
-        "Let its positive singular values be sigma one, sigma two, and so on, in decreasing order. A has an orthonormal family of right singular vectors, and their images, after dividing by the corresponding positive singular values, form an orthonormal family of left singular vectors. For an arbitrary input x, A x is the sum of its contributions along these singular directions. The first contribution is sigma one times the coefficient of x along the first right singular vector, multiplied by the first left singular vector. The second contribution is the analogous term involving sigma two."
+        "Define A_k by keeping only the first k terms. Its rank is at most k because its range lies in span(u₁,…,u_k). The error A−A_k is the sum of all discarded singular pieces.",
+        "Orthogonality of the singular vectors lets us compute both error norms directly from the omitted values."
       ],
-      "layout": "reading"
+      "mathtex": "A_k=\\sum_{i=1}^{k}\\sigma_i u_i v_i^*",
+      "diagram": "g2-rank-truncation",
+      "takeaway": "The truncated SVD is an explicit rank-k competitor with computable error.",
+      "layout": "equation",
+      "id": "01-expanded",
+      "eyebrow": "G2 · 053000 · Truncate the singular-value decomposition"
     },
     {
-      "id": "02-overview",
-      "title": "Prove that nobody can do better",
-      "eyebrow": "G2 · 053000 · first-pass outline",
-      "lead": "Take any other map B of rank at most k.",
+      "title": "Worst-case error of the truncation",
+      "lead": "The operator norm measures the largest error over unit input vectors.",
       "body": [
-        "We cannot assume that B preserves the singular directions. It may choose any output subspace and may mix all the input coordinates. But its kernel has codimension at most k. The span of the first k plus one right singular vectors has dimension k plus one. Therefore that leading span and the kernel of B share a nonzero vector. Choose a unit vector x in their intersection. Since B x is zero, the error on x is A x. And since x is made entirely from the first k plus one right singular directions, the length of A x is at least sigma k plus one. Thus every rank-k B has operator-norm error at least sigma k plus one."
+        "The discarded part has singular values σ_{k+1},σ_{k+2},…; hence its operator norm is the largest discarded value σ_{k+1}.",
+        "To prove optimality, let B have rank at most k. Its kernel intersects the span of the first k+1 right singular vectors nontrivially. On a unit vector in that intersection, Bx=0 and ‖Ax‖≥σ_{k+1}."
       ],
-      "layout": "reading"
+      "mathtex": "\\min_{\\operatorname{rank}B\\le k}\\|A-B\\|_{\\mathrm{op}}=\\sigma_{k+1}(A)",
+      "diagram": "g2-rank-truncation",
+      "takeaway": "Every rank-k map misses an input with stretch at least σ_{k+1}.",
+      "layout": "equation",
+      "id": "02-expanded",
+      "eyebrow": "G2 · 053000 · Worst-case error of the truncation"
     },
     {
-      "id": "03-overview",
-      "title": "Measure the total squared error",
-      "eyebrow": "G2 · 053000 · first-pass outline",
-      "lead": "The operator norm looks at the worst unit input.",
+      "title": "The Frobenius error",
+      "lead": "The Frobenius norm measures the total squared output lengths over an orthonormal input basis.",
       "body": [
-        "The Frobenius norm instead measures the sum of squared output lengths on an orthonormal basis of the source. Choose any orthonormal basis and apply the error map to each basis vector. Square each output length and add. A calculation with inner products shows that the sum does not depend on which orthonormal basis we chose. In matrix coordinates it is simply the sum of the squares of the absolute values of all entries. For the truncated singular-value expansion, use the right singular basis. Each retained direction has zero error. Each discarded direction with singular value sigma j has error length sigma j."
+        "The rank-one singular pieces are orthogonal in the Frobenius inner product. Therefore the squared norm of the discarded tail is the sum of the squares of the discarded singular values.",
+        "For the truncated SVD the error is exactly the square root of that sum. The difficulty is showing an arbitrary rank-k competitor cannot improve it."
       ],
-      "layout": "reading"
+      "mathtex": "\\|A-A_k\\|_F^2=\\sum_{i>k}\\sigma_i^2",
+      "diagram": "g2-rank-truncation",
+      "takeaway": "Squared Frobenius error adds the energy of every discarded singular direction.",
+      "layout": "equation",
+      "id": "03-expanded",
+      "eyebrow": "G2 · 053000 · The Frobenius error"
     },
     {
-      "id": "04-overview",
-      "title": "Prove the squared-error lower bound",
-      "eyebrow": "G2 · 053000 · first-pass outline",
-      "lead": "Let B be any rank-k competitor.",
+      "title": "Why an arbitrary rank-k map cannot do better",
+      "lead": "Let R=ran B for any competitor B with rank at most k, and let P_R be its orthogonal projection.",
       "body": [
-        "Call R its range, and let P be the orthogonal projection onto R. Every output of B lies in R. For any input x, decompose the error A x minus B x into two perpendicular parts. One part is the component of A x outside R. The other part lies inside R and equals P A x minus B x. The Pythagorean theorem says the squared error is the sum of the squared lengths of those two parts. It is therefore at least the squared length of the component of A x outside R. Apply this to every right singular vector and add. We obtain a lower bound equal to the sum, over j, of sigma j squared times one minus the squared length of P applied to the corresponding left singular vector."
+        "For every input x, the error A x−B x contains a perpendicular component (I−P_R)Ax, so its squared norm is at least that component’s squared norm.",
+        "Summing over an orthonormal input basis gives ‖A−B‖_F²≥‖(I−P_R)A‖_F². The latter is minimized by choosing R to capture the k strongest left singular directions."
       ],
-      "layout": "reading"
+      "mathtex": "\\|A-B\\|_F^2\\ge\\|(I-P_R)A\\|_F^2",
+      "diagram": "g2-rank-truncation",
+      "takeaway": "Projection onto the competitor’s range isolates error that no rank-k output can remove.",
+      "layout": "equation",
+      "id": "04-expanded",
+      "eyebrow": "G2 · 053000 · Why an arbitrary rank-k map cannot do better"
     },
     {
-      "id": "05-overview",
-      "title": "Work an example in both norms",
-      "eyebrow": "G2 · 053000 · first-pass outline",
-      "lead": "Take the diagonal three-by-three map with diagonal entries five, two, and one.",
+      "title": "Finish the squared-error lower bound",
+      "lead": "For any output projector P_R of rank at most k, the captured squared Frobenius energy is bounded by the top k singular squares.",
       "body": [
-        "Its singular values are five, two, and one. If we keep only the largest singular direction, our approximation has diagonal entries five, zero, and zero. The error has diagonal entries zero, two, and one. The operator-norm error is two, because the largest error on a unit input occurs along the second coordinate. The squared Frobenius error is four plus one, which is five. Its Frobenius norm is the square root of five. These answers differ because the two norms ask different questions. If we keep the two largest singular directions, the error consists only of the third diagonal entry. Both errors are one."
+        "Indeed ‖P_R A‖_F²=tr(P_R A A*) and Ky Fan’s maximum principle bounds this trace by ∑_{i≤k}σ_i².",
+        "Subtract from the total energy ∑_iσ_i². The resulting residual is at least ∑_{i>k}σ_i², and the truncated SVD attains equality."
       ],
-      "layout": "reading"
+      "mathtex": "\\min_{\\operatorname{rank}B\\le k}\\|A-B\\|_F=\\Big(\\sum_{i>k}\\sigma_i^2\\Big)^{1/2}",
+      "diagram": "g2-rank-truncation",
+      "takeaway": "Ky Fan energy capture gives the matching Frobenius lower bound.",
+      "layout": "equation",
+      "id": "05-expanded",
+      "eyebrow": "G2 · 053000 · Finish the squared-error lower bound"
     },
     {
-      "id": "06-overview",
-      "title": "What happens when singular values tie?",
-      "eyebrow": "G2 · 053000 · first-pass outline",
-      "lead": "The truncated singular-value expansion is an optimal solution, but an optimal solution need not be unique.",
+      "title": "A three-by-three numerical example",
+      "lead": "Let A=diag(5,2,1), and keep only its largest singular value.",
       "body": [
-        "Consider a map whose two largest singular values are both three. Suppose we are allowed to keep only one direction. The map treats that two-dimensional leading singular subspace symmetrically. We can choose different unit directions within it and obtain different rank-one truncations with the same optimal errors. When there is a strict gap between the k-th and k-plus-one-st singular values, the leading singular subspaces are more tightly determined."
+        "The rank-one truncation A₁=diag(5,0,0) leaves diag(0,2,1). Its operator-norm error is 2; its Frobenius error is √(4+1)=√5.",
+        "For rank two, A₂=diag(5,2,0) leaves error 1 in both norms. These examples show why operator and Frobenius errors can differ while sharing the same optimal truncated SVD."
       ],
-      "layout": "reading"
+      "mathtex": "\\|A-A_1\\|_{\\mathrm{op}}=2,\\qquad\\|A-A_1\\|_F=\\sqrt5",
+      "diagram": "g2-rank-truncation",
+      "takeaway": "Operator error is the largest omitted singular value; Frobenius error adds all omitted squares.",
+      "layout": "equation",
+      "id": "06-expanded",
+      "eyebrow": "G2 · 053000 · A three-by-three numerical example"
     },
     {
-      "id": "07-overview",
-      "title": "What to reconstruct",
-      "eyebrow": "G2 · 053000 · first-pass outline",
-      "lead": "First, write out the truncated expansion and show that its operator-norm error is the largest discarded singular value.",
+      "title": "Tied singular values and nonuniqueness",
+      "lead": "An optimal rank-k approximation may not be unique when the truncation boundary lies inside a repeated singular-value space.",
       "body": [
-        "Second, repeat the kernel-intersection argument against an arbitrary rank-k map. Third, prove the squared-error result using the projection onto the range of the competitor. Account for the fact that its rank may be smaller than k. Then derive the weighted-allocation bound instead of quoting it."
+        "For A=diag(3,3,1) and k=1, keeping either of the first two coordinate directions yields the same operator-norm error 3 and the same Frobenius error √10.",
+        "More generally, rotations within a repeated singular-value subspace can produce distinct optimal truncations. The optimal error values remain intrinsic even when the approximating map is not unique."
       ],
-      "layout": "reading"
+      "mathtex": "\\sigma_k=\\sigma_{k+1}\\quad\\Longrightarrow\\quad\\text{optimal truncation may vary}",
+      "diagram": "g2-rank-truncation",
+      "takeaway": "Degeneracy affects the optimizer but does not change the best achievable error.",
+      "layout": "equation",
+      "id": "07-expanded",
+      "eyebrow": "G2 · 053000 · Tied singular values and nonuniqueness"
     },
     {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 053000 · conclusion",
-      "lead": "Then derive the weighted-allocation bound instead of quoting it.",
-      "body": [],
-      "layout": "reading"
+      "title": "Rectangular and exact-rank cases",
+      "lead": "The theorem applies to any finite-dimensional linear map, not just square matrices.",
+      "body": [
+        "A rectangular A:E→F still has an SVD with source singular vectors and output singular vectors. Truncating to k nonzero terms gives a map of rank at most k with the same error formulas.",
+        "If k≥rank A, the truncation equals A and the optimal error is zero. Thus the theorem is consistent with exact reconstruction when all nonzero singular directions are retained."
+      ],
+      "mathtex": "k\\ge\\operatorname{rank}A\\quad\\Longrightarrow\\quad A_k=A",
+      "diagram": "g2-rank-truncation",
+      "takeaway": "Eckart–Young handles rectangular maps and vanishing tails automatically.",
+      "layout": "equation",
+      "id": "08-expanded",
+      "eyebrow": "G2 · 053000 · Rectangular and exact-rank cases"
+    },
+    {
+      "title": "Rebuild both optimality arguments",
+      "lead": "The proofs use different measurements but one shared candidate: the truncated SVD.",
+      "body": [
+        "For operator norm, intersect ker B with the top k+1 right singular span and obtain a worst-case unit vector. For Frobenius norm, project A onto ran B and use Ky Fan’s trace bound for captured energy.",
+        "The two lower bounds match the explicit errors of A_k. This proves optimality without restricting competitors to share A’s singular bases."
+      ],
+      "diagram": "g2-rank-truncation",
+      "takeaway": "The candidate comes from the SVD; dimension counting and energy capture prove no competitor does better.",
+      "layout": "figure",
+      "id": "09-expanded",
+      "eyebrow": "G2 · 053000 · Rebuild both optimality arguments"
     }
   ]
 }

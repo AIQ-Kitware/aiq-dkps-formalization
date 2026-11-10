@@ -2,122 +2,150 @@
   "schema_version": 1,
   "id": "g2-046000-positive-cosine-and-sine-operators",
   "title": "Positive cosine and sine operators",
-  "subtitle": "G2 lecture 046000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
   "lecture_nodes": [
     "g2:046000"
   ],
   "source_lecture": "draft-stages/tts-lectures/046000-positive-cosine-and-sine-operators.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "subtitle": "G2 lecture 046000 · expanded mathematical companion",
+  "editorial_stage": "expanded",
+  "adaptation": "Standalone companion adapted from the source spoken lecture and display-only mathematics appendix. Explicit hypotheses, stepwise proofs, worked examples, and local vector diagrams; no narration edits.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 046000 · first-pass outline",
-      "lead": "Think back to two lines meeting at an angle.",
+      "title": "An angle becomes an operator",
+      "lead": "For a single pair of lines, cosine measures retained length and sine measures perpendicular loss.",
       "body": [
-        "The cosine tells us how much of a unit vector along one line survives when we project it onto the other. The sine tells us how much is lost into the perpendicular direction. A finite-dimensional pair of subspaces can have several principal angles, one for each independent principal plane. But a list of angles requires choosing principal vectors, and in infinite dimensions there may be no complete list of them. Can we encode the same geometry without first choosing any vectors at all? Yes."
+        "For two closed subspaces U and V, there can be many independent principal angles. Orthogonal projections P and Q encode all of them without choosing principal vectors or even assuming a discrete spectrum.",
+        "We seek positive operators that behave like cosine and sine on each principal plane. Their construction comes from the projection difference and the positive functional calculus."
       ],
-      "layout": "opening"
+      "diagram": "g2-angle-operators",
+      "takeaway": "The pair (P,Q) contains a full operator-valued angle description.",
+      "layout": "opening",
+      "id": "00-expanded",
+      "eyebrow": "G2 · 046000 · An angle becomes an operator"
     },
     {
-      "id": "01-overview",
-      "title": "Start with a single tilted line",
-      "eyebrow": "G2 · 046000 · first-pass outline",
-      "lead": "Take the ordinary plane.",
+      "title": "The one-angle model",
+      "lead": "Place U on the horizontal axis and let V be a line tilted by an angle θ between zero and ninety degrees.",
       "body": [
-        "Call its horizontal axis U. Call the line tilted counterclockwise by angle theta V. We assume theta lies between zero and ninety degrees. Project a horizontal unit vector onto V. Its projection has length cosine theta. The part perpendicular to V has length sine theta. Squaring the two lengths and adding them gives one, by the Pythagorean theorem. Now remember the two projection matrices from our cosine–sine decomposition. Projection onto U keeps the horizontal coordinate and discards the vertical one. Projection onto V has cosine squared in the upper left, sine squared in the lower right, and cosine times sine in the two off-diagonal positions."
+        "The component of a unit vector in U that lies along V has norm cos θ. The component perpendicular to V has norm sin θ. These are two orthogonal parts of the same vector.",
+        "A matrix of two projections makes this quantitative: the norm of their difference equals sin θ. This is the scalar identity the ambient sine operator will reproduce on each principal block."
       ],
-      "layout": "reading"
+      "mathtex": "\\|P_U-P_V\\|=\\sin\\theta\\qquad(\\dim U=\\dim V=1)",
+      "diagram": "g2-angle-operators",
+      "takeaway": "Projection difference measures the sine of an angle between lines.",
+      "layout": "equation",
+      "id": "01-expanded",
+      "eyebrow": "G2 · 046000 · The one-angle model"
     },
     {
-      "id": "02-overview",
-      "title": "From a squared difference to the sine operator",
-      "eyebrow": "G2 · 046000 · first-pass outline",
-      "lead": "Return to a Hilbert space.",
+      "title": "Define the positive sine and cosine",
+      "lead": "Let D=P−Q. The square D² is positive and bounded by the identity.",
       "body": [
-        "Let P be the orthogonal projection onto U and Q the orthogonal projection onto V. We will assume the subspaces are closed, so their orthogonal projections exist. Call their difference D: P minus Q. Because each projection is self-adjoint, D is self-adjoint as well. Its square is therefore positive: taking the inner product of D squared x with x gives the squared norm of D x. We also need an upper bound. For two orthogonal projections, the norm of their difference is at most one. Here is a proof. Split x into its part in U and its part perpendicular to U."
+        "Taking positive square roots gives S=|D| and C=(I−D²)^{1/2}. Since 0≤D²≤I, both square roots are defined and positive. They are functions of the same self-adjoint operator.",
+        "On a principal plane with angle θ, S acts by sin θ and C by cos θ. On an exact common direction the values are 0 and 1; on a crossed right-angle defect they are 1 and 0."
       ],
-      "layout": "reading"
+      "mathtex": "S=((P-Q)^2)^{1/2},\\quad C=(I-(P-Q)^2)^{1/2}",
+      "diagram": "g2-angle-operators",
+      "takeaway": "The sine and cosine operators are canonical positive functions of P−Q.",
+      "layout": "equation",
+      "id": "02-expanded",
+      "eyebrow": "G2 · 046000 · Define the positive sine and cosine"
     },
     {
-      "id": "03-overview",
-      "title": "Construct the cosine from what remains",
-      "eyebrow": "G2 · 046000 · first-pass outline",
-      "lead": "The sine operator squared is D squared.",
+      "title": "An operator Pythagorean identity",
+      "lead": "The basic trigonometric identity holds as an exact operator equality.",
       "body": [
-        "If sine squared plus cosine squared is to equal the identity, the natural cosine squared is the identity minus D squared. This operator is positive, since D squared is at most the identity. Take its unique positive square root. Call that the ambient cosine operator. We have now constructed both pieces without choosing a basis. The sine is the positive square root of D squared. The cosine is the positive square root of the identity minus D squared. Their squares add to the identity by construction. Both are positive. And they commute, because both are obtained by applying functions to the same self-adjoint operator D squared."
+        "By construction S²=D² and C²=I−D². Adding the two equations gives S²+C²=I. Since both are functions of D², S and C commute.",
+        "This is more than a mnemonic: it means the same spectral decomposition can be used for both. Each singular-angle direction receives complementary cosine and sine factors."
       ],
-      "layout": "reading"
+      "mathtex": "S^2+C^2=I,\\qquad SC=CS",
+      "diagram": "g2-angle-operators",
+      "takeaway": "The operator sine and cosine share one positive spectral geometry.",
+      "layout": "equation",
+      "id": "03-expanded",
+      "eyebrow": "G2 · 046000 · An operator Pythagorean identity"
     },
     {
-      "id": "04-overview",
-      "title": "Why the operators respect both subspaces",
-      "eyebrow": "G2 · 046000 · first-pass outline",
-      "lead": "There is a second identity hiding in the projection algebra.",
+      "title": "Why they preserve each side of the pair",
+      "lead": "Although P and Q need not commute, D² commutes with both of them.",
       "body": [
-        "Expand D squared. It equals P plus Q minus P Q minus Q P. Multiply that expression by P on the left. Then multiply it by P on the right. The results are the same, because P squared equals P. The same argument works with Q. So D squared commutes with P and Q. Functions of D squared, including its positive square roots, also commute with both projections. This has a geometric consequence: sine and cosine preserve U and its orthogonal complement, and they also preserve V and its orthogonal complement. Each can be studied in smaller blocks, even when P and Q themselves fail to commute."
+        "Expand the square: D²=P+Q−PQ−QP. Direct multiplication and P²=P, Q²=Q show PD²=D²P and QD²=D²Q.",
+        "Therefore every continuous function of D², including S and C, also commutes with P and Q. The same positive angle operators act compatibly on U, U⊥, V, and V⊥."
       ],
-      "layout": "reading"
+      "mathtex": "(P-Q)^2=P+Q-PQ-QP",
+      "diagram": "g2-angle-operators",
+      "takeaway": "Projection algebra forces the positive angle functions to respect both subspaces.",
+      "layout": "equation",
+      "id": "04-expanded",
+      "eyebrow": "G2 · 046000 · Why they preserve each side of the pair"
     },
     {
-      "id": "05-overview",
-      "title": "A second cosine, seen from U",
-      "eyebrow": "G2 · 046000 · first-pass outline",
-      "lead": "Let us now look only at vectors inside U.",
+      "title": "Cosine seen from within U",
+      "lead": "For x in U, the projection Qx is the part of x retained by V.",
       "body": [
-        "Take a vector x in U and project it onto V. Its squared projected length is the inner product of Q x with x. Because P x equals x, this is also the quadratic form of P Q P restricted to U. Thus P Q P on U records the squares of the projection lengths. In a principal direction making angle theta with V, it acts by cosine squared theta. Taking its positive square root on U produces a positive cosine operator intrinsic to U. The corresponding sine comes from the positive square root of P times the identity minus Q times P, restricted to U. These source-side operators are useful because their singular values are indexed by directions in U."
+        "Because Px=x and Q is orthogonal, the squared retained length is ⟨Qx,x⟩=⟨PQP x,x⟩. The compression PQP on U is positive and has spectral values cos² θ.",
+        "The complementary squared escape into V⊥ is ⟨(I−Q)x,x⟩. This gives the same Pythagorean decomposition directly from projections and makes the cross-Gram interpretation visible."
       ],
-      "layout": "reading"
+      "mathtex": "\\|Qx\\|^2=\\langle PQP x,x\\rangle\\qquad(x\\in U)",
+      "diagram": "g2-cosine-compression",
+      "takeaway": "The positive compression PQP records squared cosines on the source subspace.",
+      "layout": "equation",
+      "id": "05-expanded",
+      "eyebrow": "G2 · 046000 · Cosine seen from within U"
     },
     {
-      "id": "06-overview",
-      "title": "Zero and right angles without guessing",
-      "eyebrow": "G2 · 046000 · first-pass outline",
-      "lead": "The Halmos decomposition tells us exactly what the endpoint angles do.",
+      "title": "Three endpoint behaviors",
+      "lead": "Exact overlap and exact orthogonality are distinguished by the spectrum, not by the appearance of a diagram.",
       "body": [
-        "On a direction common to U and V, P and Q agree, so D is zero. The sine operator is zero, and the cosine is the identity. That is angle zero. On a direction belonging to U but perpendicular to V, P acts as one and Q as zero. There D has magnitude one. The sine operator acts as one and cosine as zero. That is a right angle. The same happens for a target-only defect direction. On a direction perpendicular to both subspaces, P and Q again agree, so the ambient sine is zero and cosine is one."
+        "If x lies in U∩V, then Px=Qx=x, so Sx=0 and Cx=x. If x lies in U∩V⊥, then Px=x and Qx=0, so Sx=x and Cx=0.",
+        "On a generic principal plane with angle strictly between zero and ninety degrees, both factors are positive. In infinite dimensions, C may still have values approaching zero without ever having a kernel."
       ],
-      "layout": "reading"
+      "diagram": "g2-cosine-compression",
+      "takeaway": "Zero, interior, and right-angle spectral behaviors must remain distinct.",
+      "layout": "figure",
+      "id": "06-expanded",
+      "eyebrow": "G2 · 046000 · Three endpoint behaviors"
     },
     {
-      "id": "07-overview",
-      "title": "The actual angle operator",
-      "eyebrow": "G2 · 046000 · first-pass outline",
-      "lead": "We can go one step further.",
+      "title": "From sine to the angle operator",
+      "lead": "A positive contraction S supports the functional calculus function arcsine.",
       "body": [
-        "Since the positive sine operator has spectral values between zero and one, we may apply the arcsine function by functional calculus. The result is a self-adjoint angle operator whose spectrum lies between zero and a right angle. Applying sine to it recovers the sine operator. Applying cosine produces the positive cosine operator. So we have an exact operator analogue of saying theta is an angle, rather than merely a number whose sine we happen to know. The construction is especially valuable when there is no complete basis of principal-angle eigenvectors. Functional calculus still makes sense of sine, cosine, and arcsine on the operator as a whole."
+        "Define Θ=arcsin S by applying arcsine to the spectrum of S, which lies in [0,1]. Then S=sin Θ and C=cos Θ, where Θ is positive with spectrum in [0,π/2].",
+        "This construction also handles continuous angle spectra. No enumeration of principal vectors is necessary, so it provides an ambient definition even when infinitely many angles accumulate."
       ],
-      "layout": "reading"
+      "mathtex": "\\Theta=\\arcsin S,\\quad S=\\sin\\Theta,\\quad C=\\cos\\Theta",
+      "diagram": "g2-angle-operators",
+      "takeaway": "Functional calculus converts operator sine values into a canonical nonnegative angle operator.",
+      "layout": "equation",
+      "id": "07-expanded",
+      "eyebrow": "G2 · 046000 · From sine to the angle operator"
     },
     {
-      "id": "08-overview",
-      "title": "Reconstruction",
-      "eyebrow": "G2 · 046000 · first-pass outline",
-      "lead": "There are three calculations worth doing before moving on.",
+      "title": "A diagonal-plane example",
+      "lead": "A direct sum of two independent principal planes has two independently chosen angles.",
       "body": [
-        "First, write the two projection matrices for lines meeting at angle theta. Subtract them and square the result. Check that sine squared theta appears on both diagonal entries. Second, use only P squared equals P and Q squared equals Q to show that the square of P minus Q commutes with P and Q. Notice that the statement does not require P and Q to commute. Third, identify the sine and cosine actions on each of the four elementary Halmos pieces."
+        "Let each plane carry two lines meeting at θ₁ and θ₂. Then the projection difference acts on the first block with sine magnitude sin θ₁ and on the second with sin θ₂.",
+        "Consequently the operator norm of P−Q is the larger of those sine values. The corresponding ambient C and S act blockwise, recording the full list rather than only the maximum."
       ],
-      "layout": "reading"
+      "mathtex": "\\|P-Q\\|=\\max\\{\\sin\\theta_1,\\sin\\theta_2\\}",
+      "diagram": "g2-cosine-compression",
+      "takeaway": "The operator norm remembers the largest angle; the operators remember every angle.",
+      "layout": "equation",
+      "id": "08-expanded",
+      "eyebrow": "G2 · 046000 · A diagonal-plane example"
     },
     {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 046000 · mathematical reference",
-      "lead": "There are three calculations worth doing before moving on.",
+      "title": "Rebuild the identities",
+      "lead": "The construction can be checked without naming a principal-angle basis.",
       "body": [
-        "First, write the two projection matrices for lines meeting at angle theta. Subtract them and square the result. Check that sine squared theta appears on both diagonal entries."
+        "Start from P²=P, Q²=Q and expand (P−Q)². Prove that this square commutes with each projection. Then define its positive square root and the complementary positive root.",
+        "Verify S²+C²=I and examine common, crossed, and generic directions. These computations are the algebraic core behind more advanced direct-rotation constructions."
       ],
-      "mathtex": "S=|D|=(D^2)^{1/2},\\qquad C=(I-D^2)^{1/2}.",
-      "layout": "equation"
-    },
-    {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 046000 · conclusion",
-      "lead": "Third, identify the sine and cosine actions on each of the four elementary Halmos pieces.",
-      "body": [],
-      "layout": "reading"
+      "diagram": "g2-angle-operators",
+      "takeaway": "Projection algebra plus positive square roots gives the full operator-trigonometric package.",
+      "layout": "figure",
+      "id": "09-expanded",
+      "eyebrow": "G2 · 046000 · Rebuild the identities"
     }
   ]
 }

@@ -2,112 +2,150 @@
   "schema_version": 1,
   "id": "g2-047000-acute-pairs-and-transversality",
   "title": "Acute pairs and transversality",
-  "subtitle": "G2 lecture 047000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
   "lecture_nodes": [
     "g2:047000"
   ],
   "source_lecture": "draft-stages/tts-lectures/047000-acute-pairs-and-transversality.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "subtitle": "G2 lecture 047000 · expanded mathematical companion",
+  "editorial_stage": "expanded",
+  "adaptation": "Standalone companion adapted from the source spoken lecture and display-only mathematics appendix. Explicit hypotheses, stepwise proofs, worked examples, and local vector diagrams; no narration edits.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 047000 · first-pass outline",
-      "lead": "Suppose two lines are almost at a right angle.",
+      "title": "Almost perpendicular versus uniformly separated",
+      "lead": "Every principal angle may be strictly below ninety degrees while some approach it arbitrarily closely.",
       "body": [
-        "Their cosine is positive, but extremely small. A projection from one line onto the other loses almost all of a vector's length. Now imagine not one angle, but infinitely many independent angles, each closer to a right angle than the last. None is exactly a right angle. Nonetheless, projection can lose arbitrarily large fractions of the length of vectors chosen from farther and farther along the sequence. That example raises today's question: what should it mean for two subspaces to be acute?"
+        "For two closed subspaces U and V, distinguish the absence of an exact perpendicular intersection from a quantitative lower bound on cosine. In finite dimensions they coincide, but infinite-dimensional spaces can separate them.",
+        "That distinction controls whether a projection between subspaces has a bounded inverse and whether V is the graph of a bounded operator over U."
       ],
-      "layout": "opening"
+      "diagram": "g2-acute-vs-uniform",
+      "takeaway": "No right-angle vector does not imply a uniform bound away from a right angle.",
+      "layout": "opening",
+      "id": "00-expanded",
+      "eyebrow": "G2 · 047000 · Almost perpendicular versus uniformly separated"
     },
     {
-      "id": "01-overview",
-      "title": "Three ways to express an angle condition",
-      "eyebrow": "G2 · 047000 · first-pass outline",
-      "lead": "Start with two closed subspaces U and V of a Hilbert space, and let P and Q be their orthogonal projections.",
+      "title": "The two crossed intersections",
+      "lead": "The most direct obstruction comes from vectors that lie in one subspace and are perpendicular to the other.",
       "body": [
-        "In finite dimensions, a pair of equally dimensional subspaces has a finite collection of principal angles. If all those angles are strictly less than ninety degrees, then their largest angle is less than ninety degrees by some definite margin. The smallest principal cosine is positive. In infinite dimensions, there need not be a largest angle. A sequence of angles can approach ninety degrees without ever reaching it. Thus the sentence, no direction makes an exact right angle, is weaker than the sentence, all angles stay uniformly below a right angle."
+        "If U∩V⊥ contains a nonzero vector, then projection from U to V destroys that direction completely. The analogous defect in the other direction is U⊥∩V.",
+        "Call the pair acute in the intersection sense when both crossed intersections vanish. This is a qualitative statement: it detects exact right-angle directions, not sequences of almost-right angles."
       ],
-      "layout": "reading"
+      "mathtex": "U\\cap V^{\\perp}=\\{0\\},\\qquad U^{\\perp}\\cap V=\\{0\\}",
+      "diagram": "g2-acute-vs-uniform",
+      "takeaway": "Acuteness excludes exact crossed-perpendicular directions on both sides.",
+      "layout": "equation",
+      "id": "01-expanded",
+      "eyebrow": "G2 · 047000 · The two crossed intersections"
     },
     {
-      "id": "02-overview",
-      "title": "Why the uniform condition gives an inverse",
-      "eyebrow": "G2 · 047000 · first-pass outline",
-      "lead": "We just constructed a positive ambient cosine operator whose square is identity minus the square of P minus Q.",
+      "title": "A stronger uniform gap",
+      "lead": "The operator-norm condition d=‖P−Q‖<1 bounds every principal angle at once.",
       "body": [
-        "Suppose d is less than one. For every vector x, the norm of the difference applied to x is at most d times the norm of x. Therefore the squared norm of the cosine applied to x is at least one minus d squared, times the squared norm of x. That means the cosine cannot shrink a unit vector below the positive number square root of one minus d squared. In particular it has no kernel. But a bounded lower estimate is stronger than merely having no kernel. Since the cosine is self-adjoint, its range is dense whenever its kernel is zero."
+        "The positive cosine C=(I−(P−Q)²)^{1/2} then satisfies C²≥(1−d²)I. Its spectrum stays uniformly above zero, so C has a bounded inverse.",
+        "On each principal plane d is the largest sine. The estimate gives the quantitative smallest cosine needed for stable graph coordinates."
       ],
-      "layout": "reading"
+      "mathtex": "d=\\|P-Q\\|<1\\ \\Longrightarrow\\ C\\ge\\sqrt{1-d^2}\\,I",
+      "diagram": "g2-acute-vs-uniform",
+      "takeaway": "Uniform separation gives bounded invertibility; qualitative acuteness alone does not.",
+      "layout": "equation",
+      "id": "02-expanded",
+      "eyebrow": "G2 · 047000 · A stronger uniform gap"
     },
     {
-      "id": "03-overview",
-      "title": "Viewing V as a graph over U",
-      "eyebrow": "G2 · 047000 · first-pass outline",
-      "lead": "Now for a more geometric consequence.",
+      "title": "Why the cross-projection is invertible",
+      "lead": "The map P restricted to V sends a target vector to its U-coordinate.",
       "body": [
-        "If U and V are close enough, we ought to be able to describe V by starting with a point in U and adding a perpendicular correction. A graph over U has precisely this form: take each u in U and attach an element L of u in U perpendicular. The resulting vectors, u plus L of u, make up a subspace of the ambient direct sum of U and its perpendicular complement. We want to prove that the uniformly acute V really is such a graph, with L bounded. First, take v in V. Since Q v equals v, the part of v perpendicular to U is exactly the difference between Q and P applied to v. Its norm is at most d times the norm of v."
+        "For v∈V the uniform gap gives ‖(I−P)v‖≤d‖v‖. Orthogonality then yields ‖Pv‖≥√(1−d²)‖v‖: the coordinate map cannot collapse any nonzero vector.",
+        "The complementary gap condition on U rules out a missing target direction, making P|V a bounded bijection from V onto U. Its inverse has norm at most (1−d²)^{-1/2}."
       ],
-      "layout": "reading"
+      "mathtex": "\\|Pv\\|\\ge\\sqrt{1-d^2}\\,\\|v\\|\\quad(v\\in V)",
+      "diagram": "g2-acute-vs-uniform",
+      "takeaway": "A uniform lower bound gives stable coordinates between the two subspaces.",
+      "layout": "equation",
+      "id": "03-expanded",
+      "eyebrow": "G2 · 047000 · Why the cross-projection is invertible"
     },
     {
-      "id": "04-overview",
-      "title": "The two-line example again",
-      "eyebrow": "G2 · 047000 · first-pass outline",
-      "lead": "Return to the plane, with U horizontal and V tilted through theta.",
+      "title": "Express V as a graph",
+      "lead": "Every v in V splits uniquely into an U-component and an U⊥-component.",
       "body": [
-        "A point on V can be written as a horizontal coordinate together with a vertical coordinate. The vertical coordinate equals tangent theta times the horizontal coordinate. So the graph map is multiplication by tangent theta. This matches our bound exactly: sine theta divided by cosine theta equals tangent theta. The sine controls how far a vector strays perpendicular to U. The cosine tells us how reliably we can recover its U coordinate. The tangent measures the correction relative to that coordinate. This is why tangent bounds arise naturally in perturbation theory."
+        "When P|V is invertible, prescribe the first component u∈U and recover the unique v with Pv=u. Define Lu=(I−P)v; then V is exactly the graph of L over U.",
+        "The perpendicular component has norm at most d‖v‖ while the retained one has norm at least √(1−d²)‖v‖. Their ratio bounds the graph slope."
       ],
-      "layout": "reading"
+      "mathtex": "V=\\{u+Lu:u\\in U\\},\\quad\\|L\\|\\le\\frac d{\\sqrt{1-d^2}}",
+      "diagram": "g2-graph-transversality",
+      "takeaway": "A uniform angle gap makes the target a bounded graph over the source.",
+      "layout": "equation",
+      "id": "04-expanded",
+      "eyebrow": "G2 · 047000 · Express V as a graph"
     },
     {
-      "id": "05-overview",
-      "title": "A counterexample in an infinite Hilbert space",
-      "eyebrow": "G2 · 047000 · first-pass outline",
-      "lead": "We now build the promised distinction.",
+      "title": "One line: the tangent is the slope",
+      "lead": "For lines in the plane, the graph map sends the horizontal coordinate x to x tan θ vertically.",
       "body": [
-        "Take countably many mutually orthogonal two-dimensional planes. In the nth plane choose a horizontal unit vector e number n and a vertical unit vector f number n. Let U be the closed subspace generated by all the horizontal vectors. Let V be the closed subspace generated by one tilted unit vector in each plane. Choose its horizontal component to have length one divided by n plus one. Its vertical component is the positive square root of one minus that number squared. Every horizontal component is positive. Thus no nonzero vector of V is perpendicular to U. Likewise no nonzero vector of U is perpendicular to V. There are no crossed defect vectors."
+        "The norm of L is |tan θ|, while d=|sin θ|. Substituting into d/√(1−d²) recovers |tan θ| exactly for angles below ninety degrees.",
+        "This equality is the scalar geometry behind the operator graph bound. The denominator becomes small near a right angle, explaining why graph coordinates become poorly conditioned."
       ],
-      "layout": "reading"
+      "mathtex": "\\|L\\|=\\tan\\theta=\\frac{\\sin\\theta}{\\cos\\theta}",
+      "diagram": "g2-graph-transversality",
+      "takeaway": "The tangent of the angle is exactly the graph slope in the planar model.",
+      "layout": "equation",
+      "id": "05-expanded",
+      "eyebrow": "G2 · 047000 · One line: the tangent is the slope"
     },
     {
-      "id": "06-overview",
-      "title": "Why this matters for rotations",
-      "eyebrow": "G2 · 047000 · first-pass outline",
-      "lead": "Suppose we want a unitary map that carries U onto V.",
+      "title": "An infinite direct sum with no right angle",
+      "lead": "Take infinitely many orthogonal planes and rotate the source line in plane n by θₙ approaching π/2.",
       "body": [
-        "An arbitrary unitary transporter might rotate unrelated directions unnecessarily. The direct rotation is a special choice tied to the relative geometry of the two projections. In the uniformly acute case, the positive cosine is invertible, and that will make an explicit algebraic construction possible. But we should not treat uniform acuteness as the only setting where a canonical polar factor can exist. The weaker, no-crossed-defect case deserves separate analysis, and right-angle defects require yet another discussion. Those are the subjects."
+        "Choose cos θₙ=1/(n+2). Each angle is strictly acute, so there is no nonzero vector in either crossed intersection. But sin θₙ tends to one.",
+        "Thus ‖P−Q‖=1 and the graph slopes tan θₙ grow without bound. The two subspaces are acute in the intersection sense, yet V is not the graph of a bounded everywhere-defined map over U."
       ],
-      "layout": "reading"
+      "mathtex": "\\cos\\theta_n=\\frac1{n+2}>0,\\quad\\sup_n\\sin\\theta_n=1",
+      "diagram": "g2-acute-vs-uniform",
+      "takeaway": "A sequence of near-right angles defeats uniform transversality without creating a defect vector.",
+      "layout": "equation",
+      "id": "06-expanded",
+      "eyebrow": "G2 · 047000 · An infinite direct sum with no right angle"
     },
     {
-      "id": "07-overview",
-      "title": "Reconstruction",
-      "eyebrow": "G2 · 047000 · first-pass outline",
-      "lead": "First, prove that norm of P minus Q less than one forces both crossed intersections to vanish.",
+      "title": "Which hypothesis does a theorem need?",
+      "lead": "A theorem about existence of a polar direct rotation can often use qualitative acuteness.",
       "body": [
-        "Second, show why an operator bounded below by a positive constant has closed range, and why a self-adjoint operator with zero kernel has dense range. Third, reconstruct the graph argument: find the compression P Q P, prove it invertible on U, and use it to recover one vector of V for every coordinate in U. Finally, explain why the infinite sequence of angles approaching ninety degrees defeats a bounded graph representation without creating a single exact right-angle vector."
+        "If the construction uses a bounded inverse C^{-1} or bounded graph coordinates, it needs the stronger d<1 condition. The projection-based intertwiner K can have dense range but fail to be boundedly invertible when cosine values approach zero.",
+        "Check whether a proof genuinely divides by a uniform positive cosine. If it does, absence of a kernel by itself is not sufficient."
       ],
-      "layout": "reading"
+      "diagram": "g2-acute-vs-uniform",
+      "takeaway": "Inspect whether the argument requires injectivity or a uniform inverse bound.",
+      "layout": "figure",
+      "id": "07-expanded",
+      "eyebrow": "G2 · 047000 · Which hypothesis does a theorem need?"
     },
     {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 047000 · mathematical reference",
-      "lead": "First, prove that norm of P minus Q less than one forces both crossed intersections to vanish.",
+      "title": "From graph geometry to rotation",
+      "lead": "Stable graph coordinates are especially convenient for comparing nearby invariant subspaces.",
       "body": [
-        "Second, show why an operator bounded below by a positive constant has closed range, and why a self-adjoint operator with zero kernel has dense range."
+        "A bound on ‖L‖ yields a bound on the maximal principal angle through tan θ. A bounded graph also makes analytic perturbation estimates possible without choosing separate bases in U and V.",
+        "For larger angles the polar decomposition of the canonical intertwiner gives a more robust existence theory, whereas a graph parametrization may fail as the uniform gap approaches one."
       ],
-      "mathtex": "V=\\{u+Lu:u\\in U\\},\\qquad \\|L\\|\\le \\frac{d}{\\sqrt{1-d^2}}.",
-      "layout": "equation"
+      "mathtex": "\\theta_{\\max}\\le\\arctan\\|L\\|\\quad\\text{(graph pair)}",
+      "diagram": "g2-graph-transversality",
+      "takeaway": "Graph operators turn angle control into operator-norm slope control.",
+      "layout": "equation",
+      "id": "08-expanded",
+      "eyebrow": "G2 · 047000 · From graph geometry to rotation"
     },
     {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 047000 · conclusion",
-      "lead": "Only the latter guarantees a bounded inverse on the relevant range.",
-      "body": [],
-      "layout": "reading"
+      "title": "Reconstruct the counterexample",
+      "lead": "The distinction between acute and uniformly acute is tested by an orthogonal sum of simple planar blocks.",
+      "body": [
+        "Write the projections for two lines with cosine 1/(n+2) in each block. Show that the crossed defects vanish in every block and therefore in the whole Hilbert direct sum.",
+        "Then calculate sup sin θₙ=1 and sup tan θₙ=∞. The example proves that the strong graph condition cannot be inferred from qualitative acuteness."
+      ],
+      "diagram": "g2-acute-vs-uniform",
+      "takeaway": "Exact right angles and limiting right angles produce different operator phenomena.",
+      "layout": "figure",
+      "id": "09-expanded",
+      "eyebrow": "G2 · 047000 · Reconstruct the counterexample"
     }
   ]
 }

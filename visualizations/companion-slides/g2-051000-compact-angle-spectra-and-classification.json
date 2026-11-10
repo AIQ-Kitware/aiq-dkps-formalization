@@ -2,122 +2,149 @@
   "schema_version": 1,
   "id": "g2-051000-compact-angle-spectra-and-classification",
   "title": "Compact angle spectra and classification",
-  "subtitle": "G2 lecture 051000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
   "lecture_nodes": [
     "g2:051000"
   ],
   "source_lecture": "draft-stages/tts-lectures/051000-compact-angle-spectra-and-classification.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "subtitle": "G2 lecture 051000 · expanded mathematical companion",
+  "editorial_stage": "expanded",
+  "adaptation": "Standalone companion adapted from the source spoken lecture and display-only mathematics appendix. Explicit hypotheses, stepwise proofs, worked examples, and local vector diagrams; no narration edits.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 051000 · first-pass outline",
-      "lead": "In finite-dimensional inner-product spaces, the principal angles of two subspaces come from the singular values of their cross-Gram matrix.",
+      "title": "When does an angle list classify a pair?",
+      "lead": "Two ordered pairs of subspaces can be compared up to a unitary change of coordinates.",
       "body": [
-        "Together with the dimensions of their common, crossed-perpendicular, and exterior parts, those angles classify the pair up to an orthogonal or unitary change of coordinates. But we are working toward results about Hilbert spaces that may be infinite-dimensional. A bounded self-adjoint operator on an infinite-dimensional space need not have an eigenvector basis. So we should not assume that every pair of subspaces comes with a complete list of principal angles."
+        "In finite dimensions, the four elementary intersection dimensions and the principal angles with multiplicities describe the complete relative geometry. In infinite dimensions, a numerical angle list is sufficient only under additional spectral hypotheses.",
+        "Compactness lets a positive cosine operator be reconstructed from discrete eigenvalues. Continuous spectral components require a richer unitary-equivalence invariant."
       ],
-      "layout": "opening"
+      "diagram": "g2-compact-angle-spectrum",
+      "takeaway": "Classification needs endpoint dimensions plus the full generic cosine geometry.",
+      "layout": "opening",
+      "id": "00-expanded",
+      "eyebrow": "G2 · 051000 · When does an angle list classify a pair?"
     },
     {
-      "id": "01-overview",
-      "title": "What exactly are we classifying?",
-      "eyebrow": "G2 · 051000 · first-pass outline",
-      "lead": "Imagine two ordered pairs of closed subspaces.",
+      "title": "First record the four exact intersection spaces",
+      "lead": "The Halmos decomposition isolates the parts where two projections agree or disagree completely.",
       "body": [
-        "One pair lives in a Hilbert space H, and the other pair lives in a possibly different Hilbert space G. We will call the pairs equivalent if there is a linear isometric equivalence from H onto G that carries the first source subspace onto the second source subspace and, simultaneously, carries the first target onto the second target. The word simultaneously is essential. It would be easy to match the source spaces separately and the target spaces separately. The challenge is to find one ambient unitary that respects both choices at once. Any such unitary preserves inner products, orthogonality, and projections."
+        "The spaces U∩V, U∩V⊥, U⊥∩V, and U⊥∩V⊥ are invariant under both projections, with each projection acting by zero or identity.",
+        "A unitary carrying one ordered pair to another must carry each corresponding intersection space onto its counterpart. Therefore their Hilbert-space dimensions are unavoidable classification data."
       ],
-      "layout": "reading"
+      "mathtex": "U\\cap V,\\quad U\\cap V^\\perp,\\quad U^\\perp\\cap V,\\quad U^\\perp\\cap V^\\perp",
+      "diagram": "g2-compact-angle-spectrum",
+      "takeaway": "The four endpoint spaces are discrete invariants of every ordered subspace pair.",
+      "layout": "equation",
+      "id": "01-expanded",
+      "eyebrow": "G2 · 051000 · First record the four exact intersection spaces"
     },
     {
-      "id": "02-overview",
-      "title": "The generic cosine block",
-      "eyebrow": "G2 · 051000 · first-pass outline",
-      "lead": "Focus on the part of the generic space that lies in the source subspace U.",
+      "title": "The generic cosine-square operator",
+      "lead": "Remove the four elementary pieces and study the remaining generic block.",
       "body": [
-        "On that space consider the operator obtained by projecting into V and then back into U. This is the compression of P U times P V times P U. Call it A. Its quadratic form at a source vector x is the squared length of the projection of x onto V. Therefore A is positive, and it cannot exceed the identity. In finite dimensions, A has eigenvalues cosine squared theta, one for each generic principal angle theta. The common part would give eigenvalue one, and the source defect would give eigenvalue zero, but those endpoint pieces are excluded from the generic summand by construction."
+        "On the U-half of this block the compression A=P_U P_V P_U is positive and bounded by the identity. A principal direction with angle θ gives eigenvalue cos² θ.",
+        "A describes how strongly U-vectors survive projection into V. Its unitary-equivalence class determines the remaining geometry through the cosine–sine reconstruction."
       ],
-      "layout": "reading"
+      "mathtex": "A=P_UP_VP_U\\big|_{U_{\\mathrm{generic}}},\\quad \\lambda=\\cos^2\\theta",
+      "diagram": "g2-cosine-compression",
+      "takeaway": "Generic principal-angle data live in a positive contraction, not merely a list of numbers.",
+      "layout": "equation",
+      "id": "02-expanded",
+      "eyebrow": "G2 · 051000 · The generic cosine-square operator"
     },
     {
-      "id": "03-overview",
-      "title": "Why compactness supplies eigenvectors",
-      "eyebrow": "G2 · 051000 · first-pass outline",
-      "lead": "Recall what compactness means for a bounded operator: it sends every bounded sequence to a sequence with a convergent subsequence of images.",
+      "title": "Compactness changes what spectral data can do",
+      "lead": "A positive compact operator has an orthonormal basis for the closure of its range made from eigenvectors.",
       "body": [
-        "For a positive compact operator A, suppose A is nonzero. Its operator norm equals the maximum possible Rayleigh quotient. Choose unit vectors whose Rayleigh quotients approach that norm. The unit ball of a Hilbert space is weakly sequentially compact. We can choose a weakly convergent subsequence. Compactness upgrades the images under A to strong convergence. This is enough to show that the maximum is attained by a unit vector."
+        "Each nonzero eigenvalue has finite multiplicity, and if there are infinitely many distinct positive eigenvalues, they can accumulate only at zero.",
+        "Thus the multiset of nonzero eigenvalues, including multiplicities, determines a positive compact operator up to unitary equivalence once its zero eigenspace is also accounted for."
       ],
-      "layout": "reading"
+      "mathtex": "A\\ge0,\\ A\\text{ compact}\\ \\Longrightarrow\\ \\lambda_n(A)\\to0\\ \\text{if infinite}",
+      "diagram": "g2-compact-angle-spectrum",
+      "takeaway": "Compact positive operators admit complete discrete spectral descriptions.",
+      "layout": "equation",
+      "id": "03-expanded",
+      "eyebrow": "G2 · 051000 · Compactness changes what spectral data can do"
     },
     {
-      "id": "04-overview",
-      "title": "The angle list and its multiplicities",
-      "eyebrow": "G2 · 051000 · first-pass outline",
-      "lead": "Assume the generic cosine operator is compact.",
+      "title": "What the angle multiplicities record",
+      "lead": "If cos² θ occurs on a three-dimensional eigenspace, the angle θ has multiplicity three.",
       "body": [
-        "Its positive eigenvalues are numbers between zero and one. They represent cosine squared of the generic principal angles. Suppose the same eigenvalue occurs on a three-dimensional eigenspace. That is one angle with multiplicity three. We must record that multiplicity, because three independent principal planes carry more geometric information than one. It is often convenient to record a function: for each possible eigenvalue, give the dimension of its eigenspace. Equivalently, arrange the positive eigenvalues in decreasing order and repeat each according to its multiplicity."
+        "Counting an eigenvalue only once loses the number of independent principal planes carrying that angle. Classification must match the dimension of each nonzero eigenspace.",
+        "On the generic Halmos block, exact zero and one eigenvectors have been removed as endpoint pieces. Zero can still occur as a spectral accumulation point without being an eigenvalue."
       ],
-      "layout": "reading"
+      "mathtex": "m(\\lambda)=\\dim\\ker(A-\\lambda I)\\quad(\\lambda>0)",
+      "diagram": "g2-compact-angle-spectrum",
+      "takeaway": "The spectrum must be counted with multiplicity, and spectral limits are not new defect vectors.",
+      "layout": "equation",
+      "id": "04-expanded",
+      "eyebrow": "G2 · 051000 · What the angle multiplicities record"
     },
     {
-      "id": "05-overview",
-      "title": "A diagonal infinite-dimensional example",
-      "eyebrow": "G2 · 051000 · first-pass outline",
-      "lead": "Take a Hilbert space of square-summable sequences, with orthonormal basis indexed by the nonnegative integers.",
+      "title": "An infinite diagonal example",
+      "lead": "On ℓ²(N), set Ce_n=(n+2)^{-1}e_n, and define S=(I−C²)^{1/2}.",
       "body": [
-        "Define a cosine operator C that multiplies the coordinate with index n by one over n plus two. Its eigenvalues are one half, one third, one fourth, and so on. The operator is compact, because its finite-coordinate truncations converge to it in operator norm. Now define a sine operator S by taking the positive square root of identity minus C squared. Since C and S are diagonal, they commute, and their squares add to the identity. On a doubled sequence space, take U to be the first coordinate copy. Construct V as the image of the isometric map sending x to the pair C x, S x."
+        "In the doubled Hilbert space, let U be the first copy and V consist of pairs (Cx,Sx). Each coordinate gives a principal plane with cosine 1/(n+2).",
+        "The cosine-square operator C² is compact because its diagonal values tend to zero. No angle equals ninety degrees, but the angles approach that limit. The projection gap is still one."
       ],
-      "layout": "reading"
+      "mathtex": "\\cos\\theta_n=\\frac1{n+2},\\qquad\\cos^2\\theta_n=\\frac1{(n+2)^2}",
+      "diagram": "g2-compact-angle-spectrum",
+      "takeaway": "A compact angle spectrum can approach a right angle without an exact crossed defect.",
+      "layout": "equation",
+      "id": "05-expanded",
+      "eyebrow": "G2 · 051000 · An infinite diagonal example"
     },
     {
-      "id": "06-overview",
-      "title": "A continuous-spectrum example",
-      "eyebrow": "G2 · 051000 · first-pass outline",
-      "lead": "Now replace the sequence space by the space of square-integrable functions on the interval from zero to one.",
+      "title": "A multiplication operator with no eigenvectors",
+      "lead": "On L²(0,1), define C by (Cf)(t)=t f(t), then S by multiplication with √(1−t²).",
       "body": [
-        "Let C multiply a function by its input coordinate t. Let S multiply by the square root of one minus t squared. Again, C squared plus S squared is the identity, and both operators are positive and commute. Construct U and V in the doubled function space exactly as before: U is the first copy, and V consists of pairs C f, S f. What are the eigenvectors of C? An eigenvector with eigenvalue lambda would be a nonzero square-integrable function supported where t equals lambda. But a single point has measure zero. So that function must be zero. C has no eigenvectors at all."
+        "The doubled-space construction U={(f,0)} and V={(Cf,Sf)} again gives two closed subspaces with a meaningful angle geometry.",
+        "But C has no nonzero eigenvectors: an eigenvector at λ would be supported at the single point t=λ, a measure-zero set. The spectrum is [0,1], so an eigenvalue list misses the geometry entirely."
       ],
-      "layout": "reading"
+      "mathtex": "(Cf)(t)=tf(t),\\qquad\\sigma(C)=[0,1]",
+      "diagram": "g2-continuous-angle",
+      "takeaway": "Continuous-spectrum geometry cannot be classified by point-eigenvalue multiplicities.",
+      "layout": "equation",
+      "id": "06-expanded",
+      "eyebrow": "G2 · 051000 · A multiplication operator with no eigenvectors"
     },
     {
-      "id": "07-overview",
-      "title": "The compact classification statement",
-      "eyebrow": "G2 · 051000 · first-pass outline",
-      "lead": "We can now state a useful version of the classification theorem.",
+      "title": "Compact-pair classification theorem",
+      "lead": "Assume for each ordered pair that the ambient triple projection P_U P_V P_U is compact.",
       "body": [
-        "Consider two ordered pairs of closed subspaces. Suppose, for each pair, the ambient operator P U P V P U is compact. Then the associated generic cosine block is compact as well. The pairs are unitarily equivalent as ordered pairs if and only if their four elementary Halmos summands are isometrically equivalent, and the generic cosine-square eigenvalues have matching multiplicities at every eigenvalue. To see necessity, let an ambient unitary carry one pair to the other. It carries all four elementary pieces, and it intertwines the two cosine-square operators. Intertwining preserves eigenspaces and their dimensions."
+        "Then the generic cosine block is compact. Two ordered pairs are unitarily equivalent exactly when their four elementary intersection spaces are isometrically equivalent and the generic nonzero cosine-square eigenspaces have the same dimensions at each eigenvalue.",
+        "The ambient compactness assumption is important. Without it one must retain the full operator-equivalence class of the generic cosine contraction, including continuous spectrum."
       ],
-      "layout": "reading"
+      "diagram": "g2-compact-angle-spectrum",
+      "takeaway": "With compactness, endpoint multiplicities plus the generic angle multiplicities classify the pair.",
+      "layout": "figure",
+      "id": "07-expanded",
+      "eyebrow": "G2 · 051000 · Compact-pair classification theorem"
     },
     {
-      "id": "08-overview",
-      "title": "Reconstruction",
-      "eyebrow": "G2 · 051000 · first-pass outline",
-      "lead": "First, explain why an ambient equivalence must preserve each of the four elementary Halmos parts.",
+      "title": "Why the classification theorem works",
+      "lead": "Necessity follows because an ambient intertwining unitary preserves every projection polynomial and every Halmos intersection.",
       "body": [
-        "Second, derive positivity of the generic compression of P U P V P U, and interpret each of its eigenvalues as cosine squared of a principal angle. Third, reproduce the compactness argument showing that nonzero eigenvalues have finite multiplicity and can accumulate only at zero. Finally, compare the diagonal sequence example with the multiplication-by-t example. Which one admits a complete numerical list, and why does the other not? We have completed the classification foundations for two subspaces."
+        "It therefore preserves the spectrum and eigenspace dimensions of the generic cosine block. For sufficiency, choose matching isometries on the four elementary spaces.",
+        "The compact positive spectral theorem matches eigenbases on the generic source halves. The cosine–sine block construction then extends those matches to the generic complement halves, assembling a unitary of the ambient spaces."
       ],
-      "layout": "reading"
+      "diagram": "g2-compact-angle-spectrum",
+      "takeaway": "Match elementary spaces directly and generic pieces by the compact spectral theorem.",
+      "layout": "figure",
+      "id": "08-expanded",
+      "eyebrow": "G2 · 051000 · Why the classification theorem works"
     },
     {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 051000 · mathematical reference",
-      "lead": "First, explain why an ambient equivalence must preserve each of the four elementary Halmos parts.",
+      "title": "Do not confuse a limit with a defect",
+      "lead": "A right-angle defect is a nonzero vector annihilated by the generic cosine, while a limiting right angle need not produce one.",
       "body": [
-        "Second, derive positivity of the generic compression of P U P V P U, and interpret each of its eigenvalues as cosine squared of a principal angle."
+        "In the diagonal example every cosine is strictly positive, so the generic cosine is injective even though its spectrum contains zero as an accumulation point.",
+        "In the multiplication example zero is again in the spectrum but not an eigenvalue. The two examples show why classification must distinguish exact kernel dimensions, discrete multiplicities, and continuous spectral behavior."
       ],
-      "mathtex": "U\\cap V,\\quad U\\cap V^\\perp,\\quad U^\\perp\\cap V,\\quad U^\\perp\\cap V^\\perp.",
-      "layout": "equation"
-    },
-    {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 051000 · conclusion",
-      "lead": "We have completed the classification foundations for two subspaces.",
-      "body": [],
-      "layout": "reading"
+      "diagram": "g2-continuous-angle",
+      "takeaway": "An angle limit belongs to the spectrum, but need not correspond to any principal vector.",
+      "layout": "figure",
+      "id": "09-expanded",
+      "eyebrow": "G2 · 051000 · Do not confuse a limit with a defect"
     }
   ]
 }

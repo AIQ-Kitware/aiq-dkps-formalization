@@ -591,7 +591,7 @@
       "lecture_nodes": [
         "g2:046000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-047000-acute-pairs-and-transversality",
@@ -599,7 +599,7 @@
       "lecture_nodes": [
         "g2:047000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-048000-the-sz-nagy-kato-intertwiner",
@@ -607,7 +607,7 @@
       "lecture_nodes": [
         "g2:048000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-049000-canonical-direct-rotation",
@@ -615,7 +615,7 @@
       "lecture_nodes": [
         "g2:049000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-050000-nonacute-angles-and-defect-matching",
@@ -623,7 +623,7 @@
       "lecture_nodes": [
         "g2:050000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-051000-compact-angle-spectra-and-classification",
@@ -631,7 +631,7 @@
       "lecture_nodes": [
         "g2:051000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-052000-min-max-principles-for-singular-values",
@@ -639,7 +639,7 @@
       "lecture_nodes": [
         "g2:052000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-053000-low-rank-approximation-and-eckart-young",
@@ -647,7 +647,7 @@
       "lecture_nodes": [
         "g2:053000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-054000-ky-fan-sums-and-inequalities",
