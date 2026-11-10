@@ -7,7 +7,7 @@ const vm = require('node:vm');
 const html = fs.readFileSync(path.join(__dirname, '..', 'dkvis', 'presentation', 'audio_library.html'), 'utf8');
 const js = html.split('<script>')[1].split('</script>')[0];
 function extract(name) {
-  const pattern = new RegExp('^function ' + name + '\\(', 'm');
+  const pattern = new RegExp('^(?:async )?function ' + name + '\\(', 'm');
   const found = pattern.exec(js);
   assert.ok(found, `missing ${name}`);
   const start = found.index;
@@ -103,3 +103,61 @@ assert.equal(get('sentenceAtAudioTime(19.999,20)'),1);
 state.pageTimings=null;
 assert.equal(get('sentenceAtAudioTime(10,20)'),get('sentenceAtProgress(.5)'));
 console.log('Full transcript and lecture-wide timeline calculations passed');
+
+// Exercise the reader's actual queue actions: a phone submits one server-owned
+// preparation, and revisiting the lecture renders the server's cached progress.
+const queueFields = Object.fromEntries([
+  'generateAll','stopGeneration','cacheCount','cacheSummary','cacheFill',
+  'cacheProgress','pageCache','queueList','queueSummary','etaExplanation'
+].map(id=>[id,new MockElement()]));
+queueFields.cacheFill.style={};
+const queueState={doc:{id:'123000'},cacheCatalog:new Map()};
+const requests=[];
+let inventoryRefreshes=0,catalogRefreshes=0,selectedPage=null;
+const queueContext=vm.createContext({
+  state:queueState,$:id=>queueFields[id],
+  document:{createElement:tag=>new MockElement(tag)},
+  settings:()=>({track:'g3',profile:'breeze',voice:'narrator',speed:1}),
+  api:async(url,options)=>{requests.push({url,...options});return {}},
+  setStatus:()=>{},renderList:()=>{},
+  refreshInventory:()=>{inventoryRefreshes++},
+  refreshCacheCatalog:()=>{catalogRefreshes++},
+  selectPage:index=>{selectedPage=index},
+  clock:seconds=>String(seconds),Number,String,Boolean
+});
+for(const name of ['cacheAll','renderInventory','formatGenerationStatus']) {
+  vm.runInContext(extract(name),queueContext);
+}
+(async()=>{
+  await vm.runInContext('cacheAll()',queueContext);
+  assert.equal(requests.length,1,'whole lecture needs one server request');
+  assert.equal(requests[0].url,'/api/audio-generation/prepare');
+  assert.equal(requests[0].method,'POST');
+  assert.deepEqual(JSON.parse(requests[0].body),{
+    track:'g3',profile:'breeze',voice:'narrator',speed:1,lecture_id:'123000'
+  });
+  assert.equal(inventoryRefreshes,1);
+  assert.equal(catalogRefreshes,1);
+  queueContext.inventory={lecture_id:'123000',ready:1,total:3,percent:33.3,
+    states:['ready','rendering','missing'],estimate_source:'initial',queue:[
+      {lecture_id:'123000',page:1,kind:'cache',state:'rendering'}
+    ],preparation:{state:'running',submitted:2}};
+  vm.runInContext('renderInventory(inventory)',queueContext);
+  assert.equal(queueFields.cacheFill.style.width,'33.3%');
+  assert.equal(queueFields.cacheProgress['aria-valuenow'],'33.3');
+  assert.deepEqual(queueFields.pageCache.children.map(chip=>chip.className),
+    ['ready','rendering','missing']);
+  queueFields.pageCache.children[2].onclick();
+  assert.equal(selectedPage,2);
+  assert.equal(queueFields.generateAll.disabled,true);
+  assert.equal(queueFields.stopGeneration.disabled,false);
+  assert.equal(queueFields.queueList.children.length,1);
+  queueContext.inventory={...queueContext.inventory,ready:3,percent:100,
+    states:['ready','ready','ready'],queue:[],preparation:{state:'finished'}};
+  vm.runInContext('renderInventory(inventory)',queueContext);
+  assert.equal(queueFields.cacheFill.style.width,'100%');
+  assert.equal(queueFields.generateAll.disabled,false);
+  assert.equal(queueFields.stopGeneration.disabled,true);
+  assert.equal(queueFields.queueList.children.length,0);
+  console.log('Server-owned lecture preparation and cache progress passed');
+})().catch(error=>{console.error(error);process.exitCode=1});
