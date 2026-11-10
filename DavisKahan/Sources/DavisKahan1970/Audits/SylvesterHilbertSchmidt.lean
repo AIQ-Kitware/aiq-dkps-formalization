@@ -46,8 +46,8 @@ namespace ExactSinTheta
 #check hilbertSchmidtNorm_toOperator
 #check TauCeti.HilbertSchmidt.sylvesterGroup
 #check TauCeti.HilbertSchmidt.generator_sylvesterGroup_apply
-#check TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator
-#check TauCeti.LinearPMap.generator_genToGroup
+#check TauCeti.Semigroups.StronglyContinuousGroup.isSelfAdjoint_stoneGenerator
+#check TauCeti.LinearPMap.stoneGenerator_genToGroup
 #check TauCeti.HilbertSchmidt.isSelfAdjoint_generator_sylvesterGroup
 #check TauCeti.LinearPMap.apply_gapInverse
 #check TauCeti.LinearPMap.eq_zero_of_intertwines_of_disjoint_spectrum
@@ -62,8 +62,8 @@ namespace ExactSinTheta
 #print axioms approximationNumberEnergy_ne_top_iff_existsUnique_tensor
 #print axioms hilbertSchmidtNorm_toOperator
 #print axioms TauCeti.HilbertSchmidt.generator_sylvesterGroup_apply
-#print axioms TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator
-#print axioms TauCeti.LinearPMap.generator_genToGroup
+#print axioms TauCeti.Semigroups.StronglyContinuousGroup.isSelfAdjoint_stoneGenerator
+#print axioms TauCeti.LinearPMap.stoneGenerator_genToGroup
 #print axioms TauCeti.HilbertSchmidt.isSelfAdjoint_generator_sylvesterGroup
 #print axioms TauCeti.LinearPMap.apply_gapInverse
 #print axioms TauCeti.LinearPMap.eq_zero_of_intertwines_of_disjoint_spectrum

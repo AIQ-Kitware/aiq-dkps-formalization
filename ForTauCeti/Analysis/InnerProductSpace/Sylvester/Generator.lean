@@ -15,13 +15,15 @@ unitary group on the Hilbert–Schmidt space and that its generator is
 self-adjoint.  This module identifies what that generator *is*.
 
 `generator_sylvesterGroup_apply` — if `z` lies in the domain of
-`generator (sylvesterGroup U V b)` and `x` lies in the domain of `generator V`,
-then `Z x` lies in the domain of `generator U`, and
+`(sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property` and `x` lies in the
+      domain of `(V.val.stoneGenerator V.property)`,
+then `Z x` lies in the domain of `(U.val.stoneGenerator U.property)`, and
 
 `A (Z x) - Z (B x) = C x`
 
 where `Z` is the operator represented by `z`, `C` the one represented by
-`generator (sylvesterGroup U V b) z`, and `A`, `B` the generators of `U`, `V`.
+`(sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property z`, and `A`, `B` the
+      generators of `U`, `V`.
 
 ## Only one direction, on purpose
 
@@ -70,13 +72,14 @@ signature, proof, attribute, declaration name or namespace changed.
 
 public section
 
+open TauCeti.Semigroups.StronglyContinuousGroup (stoneDiffQuot_apply complexOperator_apply)
+
 open scoped ENNReal NNReal
 open Filter Topology Complex
 
 namespace TauCeti
 namespace HilbertSchmidt
 
-open TauCeti.OneParameterUnitaryGroup
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {ι : Type*} {E F : Type*}
@@ -88,39 +91,20 @@ section Sylvester
 variable {ι : Type*} {E F : Type*}
 variable [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-variable (U : OneParameterUnitaryGroup E) (V : OneParameterUnitaryGroup F)
+variable (U : {G : TauCeti.Semigroups.StronglyContinuousGroup E // G.IsUnitary}) (V : {G :
+      TauCeti.Semigroups.StronglyContinuousGroup F // G.IsUnitary})
 variable (b : HilbertBasis ι ℂ F)
 
-/-- A convergent family carried along a strongly continuous unitary group, with
-the time going to zero, converges to the same limit. -/
-@[simp]
-theorem tendsto_U_apply {α : Type*} {l : Filter α} (τ : α → ℝ)
-    (hτ : Tendsto τ l (𝓝 0)) (w : α → E) (w₀ : E) (hw : Tendsto w l (𝓝 w₀)) :
-    Tendsto (fun a => U.U (τ a) (w a)) l (𝓝 w₀) := by
-  have hgroup : Tendsto (fun a => U.U (τ a) w₀) l (𝓝 w₀) := by
-    have hcont : Continuous fun t : ℝ => U.U t w₀ := U.strong_continuous w₀
-    have h0 : Tendsto (fun t : ℝ => U.U t w₀) (𝓝 (0 : ℝ)) (𝓝 (U.U 0 w₀)) := hcont.tendsto 0
-    rw [show U.U (0 : ℝ) w₀ = w₀ by rw [U.identity]; rfl] at h0
-    exact h0.comp hτ
-  have hsum : Tendsto (fun a => ‖w a - w₀‖ + ‖U.U (τ a) w₀ - w₀‖) l (𝓝 0) := by
-    simpa using (tendsto_iff_norm_sub_tendsto_zero.mp hw).add
-      (tendsto_iff_norm_sub_tendsto_zero.mp hgroup)
-  rw [tendsto_iff_norm_sub_tendsto_zero]
-  refine squeeze_zero (fun a => norm_nonneg _) (fun a => ?_) hsum
-  calc ‖U.U (τ a) (w a) - w₀‖
-      = ‖U.U (τ a) (w a - w₀) + (U.U (τ a) w₀ - w₀)‖ := by rw [map_sub]; congr 1; abel
-    _ ≤ ‖U.U (τ a) (w a - w₀)‖ + ‖U.U (τ a) w₀ - w₀‖ := norm_add_le _ _
-    _ = ‖w a - w₀‖ + ‖U.U (τ a) w₀ - w₀‖ := by rw [norm_preserving]
-
 /-- The negated, time-reversed difference quotient converges to the generator. -/
-theorem tendsto_genDiffQuot_neg_time (x : (generator V).domain) :
-    Tendsto (fun t : ℝ => ((I * (t : ℂ))⁻¹) • (V.U (-t) (x : F) - (x : F)))
-      (𝓝[≠] (0 : ℝ)) (𝓝 (-(generator V x))) := by
+theorem tendsto_stoneDiffQuot_neg_time (x : ((V.val.stoneGenerator V.property)).domain) :
+    Tendsto (fun t : ℝ => ((I * (t : ℂ))⁻¹) • (V.val.complexOperator V.property (-t) (x : F) - (x
+          : F)))
+      (𝓝[≠] (0 : ℝ)) (𝓝 (-((V.val.stoneGenerator V.property) x))) := by
   have hneg : Tendsto (fun t : ℝ => -t) (𝓝[≠] (0 : ℝ)) (𝓝[≠] (0 : ℝ)) := by
     exact (continuous_neg.tendsto' 0 0 neg_zero).inf
       (tendsto_principal_principal.2 fun t ht => by simpa using ht)
-  refine (((generator_tendsto V x).comp hneg).neg).congr fun t => ?_
-  rw [Function.comp_apply, genDiffQuot_apply, ← neg_smul]
+  refine (((V.val.tendsto_stoneDiffQuot V.property x).comp hneg).neg).congr fun t => ?_
+  rw [Function.comp_apply, stoneDiffQuot_apply, ← neg_smul]
   congr 1
   push_cast
   rw [mul_neg, inv_neg, neg_neg]
@@ -128,7 +112,8 @@ theorem tendsto_genDiffQuot_neg_time (x : (generator V).domain) :
 /-- **The generator of the Sylvester flow satisfies the Sylvester equation.**
 
 If `z` is in the domain of the flow's generator and `x` is in the domain of
-`generator V`, then `Z x` is in the domain of `generator U` and
+`(V.val.stoneGenerator V.property)`, then `Z x` is in the domain of `(U.val.stoneGenerator
+      U.property)` and
 
 `A (Z x) - Z (B x) = C x`,
 
@@ -136,57 +121,72 @@ with `Z` and `C` the operators represented by `z` and by the generator applied
 to `z`.  The domain membership is a *conclusion*, not a hypothesis. -/
 @[simp]
 theorem generator_sylvesterGroup_apply
-    (z : (generator (sylvesterGroup U V b)).domain) (x : (generator V).domain) :
-    ∃ hmem : b.columnOperator (z : lp (fun _ : ι => E) 2) (x : F) ∈ (generator U).domain,
-      generator U ⟨b.columnOperator (z : lp (fun _ : ι => E) 2) (x : F), hmem⟩
-          - b.columnOperator (z : lp (fun _ : ι => E) 2) (generator V x)
-        = b.columnOperator (generator (sylvesterGroup U V b) z) (x : F) := by
+    (z : ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property).domain) (x :
+          ((V.val.stoneGenerator V.property)).domain) :
+    ∃ hmem : b.columnOperator (z : lp (fun _ : ι => E) 2) (x : F) ∈ ((U.val.stoneGenerator
+          U.property)).domain,
+      (U.val.stoneGenerator U.property) ⟨b.columnOperator (z : lp (fun _ : ι => E) 2) (x : F), hmem⟩
+          - b.columnOperator (z : lp (fun _ : ι => E) 2) ((V.val.stoneGenerator V.property) x)
+        = b.columnOperator ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V
+              b).property z) (x : F) := by
   set Z := b.columnOperator (z : lp (fun _ : ι => E) 2) with hZ
-  set C := b.columnOperator (generator (sylvesterGroup U V b) z) with hC
+  set C := b.columnOperator ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V
+        b).property z) with hC
   -- (1) the flow's difference quotient, evaluated at `x`, converges to `C x`
   have hquot : Tendsto
       (fun t : ℝ =>
-        b.columnOperator (genDiffQuot (sylvesterGroup U V b) (z : lp (fun _ : ι => E) 2) t) (x : F))
+        b.columnOperator ((sylvesterGroup U V b).val.stoneDiffQuot (z : lp (fun _ : ι => E) 2) t)
+              (x : F))
       (𝓝[≠] (0 : ℝ)) (𝓝 (C (x : F))) := by
     have hc : Continuous (fun f : lp (fun _ : ι => E) 2 =>
         b.columnOperator f (x : F)) :=
       b.columnOperator.continuous.clm_apply continuous_const
-    exact (hc.tendsto _).comp (generator_tendsto (sylvesterGroup U V b) z)
+    exact (hc.tendsto _).comp ((sylvesterGroup U V b).val.tendsto_stoneDiffQuot (sylvesterGroup U
+          V b).property z)
   -- (2) that quotient splits into the two pieces of the Sylvester expression
   have hsplit : ∀ t : ℝ,
-      b.columnOperator (genDiffQuot (sylvesterGroup U V b) (z : lp (fun _ : ι => E) 2) t) (x : F)
-        = U.U t (Z (((I * (t : ℂ))⁻¹) • (V.U (-t) (x : F) - (x : F))))
-          + genDiffQuot U (Z (x : F)) t := by
+      b.columnOperator ((sylvesterGroup U V b).val.stoneDiffQuot (z : lp (fun _ : ι => E) 2) t) (x
+            : F)
+        = U.val.complexOperator U.property t (Z (((I * (t : ℂ))⁻¹) • (V.val.complexOperator
+              V.property (-t) (x : F) - (x : F))))
+          + U.val.stoneDiffQuot (Z (x : F)) t := by
     intro t
-    simp only [genDiffQuot_apply, map_smul, map_sub, sylvesterGroup_apply, sylvesterOp_apply,
-      columnOperator_sylvesterFun, conjOp, genDiffQuot_apply]
-    simp only [smul_apply, sub_apply, ContinuousLinearMap.comp_apply, ← hZ]
+    simp only [stoneDiffQuot_apply, map_smul, map_sub, sylvesterGroup_apply,
+      columnOperator_sylvesterFun, conjOp, complexOperator_apply]
+    simp only [smul_apply, sub_apply, ContinuousLinearMap.comp_apply,
+      complexOperator_apply, ← hZ]
     rw [← smul_add]
     congr 1
     abel
   -- (3) the first piece converges to `-Z (B x)`
   have hfirst : Tendsto
-      (fun t : ℝ => U.U t (Z (((I * (t : ℂ))⁻¹) • (V.U (-t) (x : F) - (x : F)))))
-      (𝓝[≠] (0 : ℝ)) (𝓝 (-(Z (generator V x)))) := by
-    refine tendsto_U_apply U (fun t : ℝ => t) ?_ _ _ ?_
-    · exact tendsto_id.mono_left nhdsWithin_le_nhds
-    · have h := (Z.continuous.tendsto (-(generator V x))).comp (tendsto_genDiffQuot_neg_time V x)
-      simpa [Function.comp_def, map_neg] using h
+      (fun t : ℝ => U.val.complexOperator U.property t (Z (((I * (t : ℂ))⁻¹) •
+            (V.val.complexOperator V.property (-t) (x : F) - (x : F)))))
+      (𝓝[≠] (0 : ℝ)) (𝓝 (-(Z ((V.val.stoneGenerator V.property) x)))) := by
+    have hw := (Z.continuous.tendsto (-((V.val.stoneGenerator V.property) x))).comp
+      (tendsto_stoneDiffQuot_neg_time V x)
+    have h := U.val.tendsto_apply (tendsto_id.mono_left nhdsWithin_le_nhds) hw
+    simpa only [U.val.map_zero_apply, Function.comp_def, id_eq, map_neg,
+      complexOperator_apply] using h
   -- (4) hence the second piece converges, which is the domain membership
-  have hsecond : Tendsto (fun t : ℝ => genDiffQuot U (Z (x : F)) t) (𝓝[≠] (0 : ℝ))
-      (𝓝 (C (x : F) + Z (generator V x))) := by
+  have hsecond : Tendsto (fun t : ℝ => U.val.stoneDiffQuot (Z (x : F)) t) (𝓝[≠] (0 : ℝ))
+      (𝓝 (C (x : F) + Z ((V.val.stoneGenerator V.property) x))) := by
     have hdiff : Tendsto (fun t : ℝ =>
-        b.columnOperator (genDiffQuot (sylvesterGroup U V b) (z : lp (fun _ : ι => E) 2) t) (x : F)
-          - U.U t (Z (((I * (t : ℂ))⁻¹) • (V.U (-t) (x : F) - (x : F)))))
-        (𝓝[≠] (0 : ℝ)) (𝓝 (C (x : F) + Z (generator V x))) := by
-      simpa [sub_neg_eq_add] using hquot.sub hfirst
+        b.columnOperator ((sylvesterGroup U V b).val.stoneDiffQuot (z : lp (fun _ : ι => E) 2) t)
+              (x : F)
+          - U.val.complexOperator U.property t (Z (((I * (t : ℂ))⁻¹) • (V.val.complexOperator
+                V.property (-t) (x : F) - (x : F)))))
+        (𝓝[≠] (0 : ℝ)) (𝓝 (C (x : F) + Z ((V.val.stoneGenerator V.property) x))) := by
+      simpa only [sub_neg_eq_add] using hquot.sub hfirst
     refine hdiff.congr fun t => ?_
     rw [hsplit t]
     abel
-  have hmem : Z (x : F) ∈ (generator U).domain := ⟨_, hsecond⟩
+  have hmem : Z (x : F) ∈ (U.val.stoneGenerator U.property).domain :=
+    U.val.mem_stoneGenerator_domain_of_tendsto U.property hsecond
   refine ⟨hmem, ?_⟩
-  have hval : generator U ⟨Z (x : F), hmem⟩ = C (x : F) + Z (generator V x) :=
-    tendsto_nhds_unique (generator_tendsto U ⟨Z (x : F), hmem⟩) hsecond
+  have hval : (U.val.stoneGenerator U.property) ⟨Z (x : F), hmem⟩ = C (x : F) + Z
+        ((V.val.stoneGenerator V.property) x) :=
+    tendsto_nhds_unique (U.val.tendsto_stoneDiffQuot U.property ⟨Z (x : F), hmem⟩) hsecond
   rw [hval]
   abel
 

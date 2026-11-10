@@ -49,7 +49,6 @@ signature, proof, attribute, declaration name or namespace changed.
 public section
 
 open scoped InnerProductSpace
-open TauCeti.OneParameterUnitaryGroup (generator)
 
 namespace TauCeti
 namespace HilbertSchmidt
@@ -81,31 +80,32 @@ theorem norm_blockFun_one_left (b : HilbertBasis ι ℂ F) (Q : F →L[ℂ] F)
 operator is within `rA + rB` of the scalar `λ - α`, relative to the block's own
 norm. -/
 theorem norm_sylvester_block_sub_smul_le
-    (U : TauCeti.OneParameterUnitaryGroup E) (V : TauCeti.OneParameterUnitaryGroup F)
+    (U : {G : TauCeti.Semigroups.StronglyContinuousGroup E // G.IsUnitary}) (V : {G :
+          TauCeti.Semigroups.StronglyContinuousGroup F // G.IsUnitary})
     (b : HilbertBasis ι ℂ F)
     {A : E →ₗ.[ℂ] E} {Bop : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
-    (hUA : generator U = A) (hVB : generator V = Bop)
+    (hUA : (U.val.stoneGenerator U.property) = A) (hVB : (V.val.stoneGenerator V.property) = Bop)
     {SA SB : Set ℝ} (hSA : MeasurableSet SA) (hSB : MeasurableSet SB)
     {MA lam rA : ℝ} (hbndA : ∀ s ∈ SA, |s| ≤ MA) (hrA : 0 ≤ rA)
     (hcrA : ∀ s ∈ SA, |s - lam| ≤ rA)
     {MB alp rB : ℝ} (hbndB : ∀ s ∈ SB, |s| ≤ MB) (hrB : 0 ≤ rB)
     (hcrB : ∀ s ∈ SB, |s - alp| ≤ rB)
-    (z : (generator (sylvesterGroup U V b)).domain)
+    (z : ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property).domain)
     (hZP : (TauCeti.LinearPMap.specProjection hA SA hSA).comp
         (b.columnOperator (z : lp (fun _ : ι => E) 2)) =
         b.columnOperator (z : lp (fun _ : ι => E) 2))
     (hZQ : (b.columnOperator (z : lp (fun _ : ι => E) 2)).comp
         (TauCeti.LinearPMap.specProjection hB SB hSB)
         = b.columnOperator (z : lp (fun _ : ι => E) 2)) :
-    ‖generator (sylvesterGroup U V b) z
+    ‖(sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property z
         - ((lam : ℂ) - (alp : ℂ)) • (z : lp (fun _ : ι => E) 2)‖
       ≤ (rA + rB) * ‖(z : lp (fun _ : ι => E) 2)‖ := by
   set Z := b.columnOperator (z : lp (fun _ : ι => E) 2) with hZdef
   set cutA := TauCeti.LinearPMap.specCutOp hA SA hSA hrA hcrA with hcutA
   set cutB := TauCeti.LinearPMap.specCutOp hB SB hSB hrB hcrB with hcutB
   -- the difference is the difference of two one-sided blocks
-  have hsplit : generator (sylvesterGroup U V b) z
+  have hsplit : (sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property z
       - ((lam : ℂ) - (alp : ℂ)) • (z : lp (fun _ : ι => E) 2)
       = blockFun b cutA (1 : F →L[ℂ] F) (z : lp (fun _ : ι => E) 2)
         - blockFun b (1 : E →L[ℂ] E) cutB (z : lp (fun _ : ι => E) 2) := by

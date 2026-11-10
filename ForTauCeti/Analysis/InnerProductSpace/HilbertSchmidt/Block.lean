@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Group
-public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant
+public import ForTauCeti.Analysis.Semigroups.Group.ComplexOperator
 public import TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras
 
 /-!
@@ -18,7 +18,7 @@ public import TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras
 That is the cutting step of the block argument for the Sylvester spectral gap:
 `P` and `Q` are spectral projections of the two generators, so they commute with
 their own groups, hence the block map commutes with the flow, hence — by
-`OneParameterUnitaryGroup.generator_commute` — it preserves the generator's
+native complex-generator commutation, with the Stone normalization — it preserves the generator's
 domain and commutes with the generator.  A block of a vector in `dom 𝒮` is then
 again in `dom 𝒮`, with `𝒮` acting blockwise, which is what lets the per-block
 estimate be applied and the blocks reassembled.
@@ -175,10 +175,13 @@ its own group. -/
 theorem blockCLM_comm_sylvesterGroup {ι : Type*} {E F : Type*}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    (U : TauCeti.OneParameterUnitaryGroup E) (V : TauCeti.OneParameterUnitaryGroup F)
+    (U : {G : TauCeti.Semigroups.StronglyContinuousGroup E // G.IsUnitary}) (V : {G :
+          TauCeti.Semigroups.StronglyContinuousGroup F // G.IsUnitary})
     (b : HilbertBasis ι ℂ F) (P : E →L[ℂ] E) (Q : F →L[ℂ] F)
-    (hP : ∀ t : ℝ, ∀ y : E, P (U.U t y) = U.U t (P y))
-    (hQ : ∀ t : ℝ, ∀ y : F, Q (V.U t y) = V.U t (Q y))
+    (hP : ∀ t : ℝ, ∀ y : E, P (U.val.complexOperator U.property t y) = U.val.complexOperator
+          U.property t (P y))
+    (hQ : ∀ t : ℝ, ∀ y : F, Q (V.val.complexOperator V.property t y) = V.val.complexOperator
+          V.property t (Q y))
     (t : ℝ) (f : lp (fun _ : ι => E) 2) :
     blockCLM b P Q (sylvesterFun U V b t f) = sylvesterFun U V b t (blockCLM b P Q f) := by
   refine b.columnOperator_injective ?_

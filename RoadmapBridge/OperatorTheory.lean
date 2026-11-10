@@ -8,7 +8,7 @@ public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact
 public import TauCeti.Analysis.OperatorIdeal.ApproximationNumber.EckartYoung
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
-public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge
+public import TauCeti.Analysis.Semigroups.Group.Unitary
 public import ForTauCeti.Analysis.Matrix.SpectralProjection
 public import TauCeti.Analysis.Matrix.Eigenvalues.Basic
 public import TauCeti.Analysis.OperatorIdeal.Family.Schatten
@@ -120,8 +120,10 @@ section Groups
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-example (U : OneParameterUnitaryGroup H) (t : NNReal) : ‖U.toSemigroup t‖ ≤ 1 :=
-  U.norm_toSemigroup_le t
+omit [CompleteSpace H] in
+example (U : TauCeti.Semigroups.StronglyContinuousGroup H) (hU : U.IsUnitary)
+    (t : NNReal) : ‖U.toSemigroup t‖ ≤ 1 := by
+  simpa only [U.toSemigroup_apply] using hU.opNorm_le_one (t : ℝ)
 
 end Groups
 

@@ -19,7 +19,7 @@ public import Mathlib.Algebra.Star.Unitary
 public import Mathlib.Analysis.CStarAlgebra.Exponential
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 public import ForTauCeti.Analysis.InnerProductSpace.SkewAdjointExponential
-public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic
+public import ForTauCeti.Analysis.Semigroups.Group.ComplexOperator
 
 /-!
 # The Yosida approximation of a self-adjoint operator
@@ -373,14 +373,16 @@ theorem continuous_expLimit (hA : IsSelfAdjoint A) (ψ : H) :
 /-- **Stone's theorem, the construction half.**  A self-adjoint operator
 generates a one-parameter unitary group. -/
 @[expose]
-noncomputable def genToGroup (hA : IsSelfAdjoint A) : TauCeti.OneParameterUnitaryGroup H where
-  U := expLimit hA
-  unitary := inner_expLimit hA
-  group_law := expLimit_add hA
-  identity := by
-    rw [expLimit_zero]
-    rfl
-  strong_continuous := continuous_expLimit hA
+noncomputable def genToGroup (hA : IsSelfAdjoint A) :
+    {G : Semigroups.StronglyContinuousGroup H // G.IsUnitary} where
+  val :=
+    { toFun := fun t => (expLimit hA t).restrictScalars ℝ
+      map_zero' := by ext x; simp [expLimit_zero]
+      map_add' s t := by
+        ext x
+        exact DFunLike.congr_fun (expLimit_add hA s t) x
+      continuousAt_zero' x := (continuous_expLimit hA x).continuousAt }
+  property := Semigroups.StronglyContinuousGroup.IsUnitary.intro (inner_expLimit hA)
 
 end LinearPMap
 end TauCeti
