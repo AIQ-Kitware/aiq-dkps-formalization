@@ -2,122 +2,146 @@
   "schema_version": 1,
   "id": "g2-039000-matrix-exponentials-from-the-power-series",
   "title": "Matrix exponentials from the power series",
-  "subtitle": "G2 lecture 039000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 039000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:039000"
   ],
   "source_lecture": "draft-stages/tts-lectures/039000-matrix-exponentials-from-the-power-series.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Individually authored from the spoken lecture and its display-only mathematical appendix. Includes stepwise constructions, explicit hypotheses, worked examples and topic-specific vector figures; all slide prose is independent of audio.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 039000 · first-pass outline",
-      "lead": "Until now our operators have usually described a transformation in one step.",
+      "title": "How to build a continuous linear motion",
+      "lead": "We seek a family of maps that starts at the identity and evolves under one fixed linear rule.",
       "body": [
-        "A matrix acts on a vector, and we compare the input with the output. But suppose we want to describe a transformation that unfolds over time. Start at the identity, move a tiny amount, then move again, and keep doing so. We want a family of operators for which the transformation over two successive time intervals agrees with the transformation over their combined duration. For ordinary numbers, the exponential function has exactly that property. It converts addition into multiplication. The matrix exponential is defined by the same power series."
+        "A constant matrix B specifies a velocity field x′(t)=Bx(t). The exponential e^{tB} packages the solution for every initial vector simultaneously: x(t)=e^{tB}x(0).",
+        "This provides the basic language of linear dynamical systems, flows, shears, and rotations. For a fixed generator the flow for time s followed by time t equals the flow for time s+t."
       ],
-      "layout": "opening"
+      "diagram": "g2-matrix-flow",
+      "takeaway": "The matrix exponential converts a time-independent generator into a one-parameter flow.",
+      "layout": "opening",
+      "id": "00-authored",
+      "eyebrow": "G2 · 039000 · How to build a continuous linear motion"
     },
     {
-      "id": "01-overview",
-      "title": "Start with a scalar differential equation",
-      "eyebrow": "G2 · 039000 · first-pass outline",
-      "lead": "Consider the simplest possible growth rule.",
+      "title": "The series definition",
+      "lead": "Replace the scalar exponential series by matrix powers.",
       "body": [
-        "A quantity changes at a rate proportional to its present value. The solution is an exponential. If the growth rate is a constant number a, and the initial quantity is one, the result at time t is the exponential of a times t. Why? The derivative is a times the function, and at time zero the value is one. Now replace the number a with a square matrix B. Ask for a time-dependent vector whose derivative is B applied to the current vector. We expect the same idea to work, but now multiplication is matrix multiplication. The expression we want is the exponential of t B. We will not define it entry by entry."
+        "In finite dimensions, the power series converges absolutely in any matrix norm because ||Bⁿ|| ≤ ||B||ⁿ. It therefore defines an operator for every real t, with I as its constant term.",
+        "Each higher-order term records repeated applications of the generator. One can differentiate the series term by term on compact time intervals, just as for the scalar exponential."
       ],
-      "layout": "reading"
+      "mathtex": "e^{tB}=\\sum_{n=0}^{\\infty}\\frac{t^nB^n}{n!}",
+      "takeaway": "Absolute norm convergence makes the power series a legitimate matrix definition.",
+      "layout": "equation",
+      "id": "01-authored",
+      "eyebrow": "G2 · 039000 · The series definition"
     },
     {
-      "id": "02-overview",
-      "title": "Construct the exponential",
-      "eyebrow": "G2 · 039000 · first-pass outline",
-      "lead": "Recall the scalar power series for the exponential: one plus the argument, plus its square divided by two factorial, plus its cube divided by three factorial, and so on.",
+      "title": "A nilpotent generator produces a shear",
+      "lead": "Consider N(x,y)=(y,0). A second application of N is zero.",
       "body": [
-        "For a square matrix B, use the same pattern. The constant term is the identity matrix. The first-order term is B. The second-order term is B squared divided by two factorial. The next is B cubed divided by three factorial. Multiply B by the time t before putting it into the series. That is the definition of the matrix exponential at time t. Why does this infinite sum converge? Choose the operator norm. The norm of B to the power n is at most the norm of B raised to the power n."
+        "Every term of degree two or higher vanishes, so e^{tN}=I+tN. It sends (x,y) to (x+ty,y): horizontal displacement increases linearly with the vertical coordinate.",
+        "For t=1, the square with corners (0,0),(1,0),(0,1),(1,1) becomes a parallelogram. The mapping is invertible even though N itself is singular."
       ],
-      "layout": "reading"
+      "mathtex": "N=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix},\\ N^2=0,\\ e^{tN}=\\begin{bmatrix}1&t\\\\0&1\\end{bmatrix}",
+      "diagram": "g2-matrix-flow",
+      "takeaway": "Exponentiating a nilpotent map produces an invertible shear.",
+      "layout": "equation",
+      "id": "02-authored",
+      "eyebrow": "G2 · 039000 · A nilpotent generator produces a shear"
     },
     {
-      "id": "03-overview",
-      "title": "A matrix whose square is zero",
-      "eyebrow": "G2 · 039000 · first-pass outline",
-      "lead": "Let N be the two-by-two matrix with a one above the diagonal and zeros elsewhere.",
+      "title": "Differentiate the flow",
+      "lead": "The series solves the differential equation with the correct initial condition.",
       "body": [
-        "It sends the vector with coordinates x and y to y and zero. Apply it twice. The first application puts everything on the horizontal axis. The second application kills that axis. So N squared is zero. That makes its exponential easy. Every term beyond the linear term vanishes. The exponential of t N is simply the identity plus t N. Acting on x and y, it produces x plus t y as the first coordinate, and y as the second. It shears the plane. This example proves something worth remembering: exponentiating a matrix is not the same as exponentiating each entry."
+        "Differentiating tⁿBⁿ/n! gives tⁿ⁻¹Bⁿ/(n−1)!, and reindexing yields B times the original series. Since B commutes with every power of itself, multiplication on the other side agrees.",
+        "At t=0 only the constant term remains, so the initial operator is I. Uniqueness of the linear initial-value problem then identifies this construction as the flow generated by B."
       ],
-      "layout": "reading"
+      "mathtex": "\\frac{d}{dt}e^{tB}=Be^{tB}=e^{tB}B,\\qquad e^{0B}=I",
+      "takeaway": "The derivative identity explains why e^{tB} transports all initial data.",
+      "layout": "equation",
+      "id": "03-authored",
+      "eyebrow": "G2 · 039000 · Differentiate the flow"
     },
     {
-      "id": "04-overview",
-      "title": "Verify the differential equation",
-      "eyebrow": "G2 · 039000 · first-pass outline",
-      "lead": "Differentiate the series for the exponential of t B, term by term.",
+      "title": "Composition and inverse",
+      "lead": "Running a fixed flow for two successive time intervals adds their durations.",
       "body": [
-        "In finite dimensions, its absolute convergence is uniform when t stays in a bounded interval, so the differentiation can be justified by the usual power-series argument. The derivative of the n-th nonconstant term brings down n and cancels part of the factorial. When we reindex what remains, we get B multiplied by the original exponential series. Because B commutes with every power of B, the same derivative also equals the exponential multiplied by B. So the time derivative of the exponential of t B is B times the exponential of t B. At time zero, the exponential is the identity."
+        "The matrices sB and tB commute. Multiplying their exponential series and collecting terms by total degree gives the binomial coefficients for (s+t)B.",
+        "Taking the second interval to be −t shows that e^{tB} has inverse e^{−tB}. The generator need not be invertible; the exponential is invertible anyway."
       ],
-      "layout": "reading"
+      "mathtex": "e^{sB}e^{tB}=e^{(s+t)B},\\qquad (e^{tB})^{-1}=e^{-tB}",
+      "takeaway": "A single matrix generator yields a one-parameter group of invertible transformations.",
+      "layout": "equation",
+      "id": "04-authored",
+      "eyebrow": "G2 · 039000 · Composition and inverse"
     },
     {
-      "id": "05-overview",
-      "title": "Combining time intervals",
-      "eyebrow": "G2 · 039000 · first-pass outline",
-      "lead": "If we run the flow for time s and then time t, do we get the flow for time s plus t?",
+      "title": "Why we cannot combine arbitrary exponentials",
+      "lead": "The composition identity only used commuting matrices.",
       "body": [
-        "Yes, because both operators are exponentials of scalar multiples of the same B. Those multiples commute. The power series can be multiplied and regrouped using the binomial theorem for commuting factors. We obtain the exponential of s B times the exponential of t B equals the exponential of the sum of their arguments, which is the exponential of open parenthesis s plus t close parenthesis B. In particular, taking s equal to negative t shows that the exponential of t B is always invertible. Its inverse is the exponential of negative t B. But do not generalize this to arbitrary matrices A and B."
+        "For two different matrices B and C, the mixed products BC and CB may differ. Then the coefficient of t² in e^{tB}e^{tC} is not generally the coefficient of t² in e^{t(B+C)}.",
+        "The formula e^B e^C = e^{B+C} holds when B and C commute, but it is unsafe without that condition. This distinction matters for rotations about different axes."
       ],
-      "layout": "reading"
+      "mathtex": "BC=CB\\quad\\Longrightarrow\\quad e^Be^C=e^{B+C}",
+      "takeaway": "The exponential combines generators by addition only under commutation.",
+      "layout": "equation",
+      "id": "05-authored",
+      "eyebrow": "G2 · 039000 · Why we cannot combine arbitrary exponentials"
     },
     {
-      "id": "06-overview",
-      "title": "Which generators preserve length?",
-      "eyebrow": "G2 · 039000 · first-pass outline",
-      "lead": "A particularly important case occurs when B adjoint equals negative B.",
+      "title": "A skew-adjoint generator preserves lengths",
+      "lead": "Suppose B* = −B. Then e^{tB} is unitary (orthogonal in the real case).",
       "body": [
-        "Such an operator is called skew-adjoint. Over the real numbers, we also say skew-symmetric. Let Q of t be the exponential of t B. We can compute its adjoint by taking the adjoint of the power series term by term. The adjoint of a power of B is the same power of B adjoint. Therefore the adjoint of Q of t is the exponential of t times B adjoint. If B is skew-adjoint, that is the exponential of negative t B, which is the inverse of Q of t. Thus Q adjoint times Q equals the identity, and Q times Q adjoint equals the identity as well. The exponential is unitary—or orthogonal in the real case."
+        "Taking the adjoint of the exponential series gives (e^{tB})*=e^{tB*}=e^{−tB}. The inverse identity then shows (e^{tB})*e^{tB}=I.",
+        "Thus every vector keeps its norm under the flow. This is the operator form of a rotation or another length-preserving linear motion."
       ],
-      "layout": "reading"
+      "mathtex": "B^*=-B\\quad\\Longrightarrow\\quad (e^{tB})^*e^{tB}=I",
+      "diagram": "g2-skew-flow",
+      "takeaway": "Skew-adjoint infinitesimal motion exponentiates to a unitary flow.",
+      "layout": "equation",
+      "id": "06-authored",
+      "eyebrow": "G2 · 039000 · A skew-adjoint generator preserves lengths"
     },
     {
-      "id": "07-overview",
-      "title": "Recover the ordinary rotation matrix",
-      "eyebrow": "G2 · 039000 · first-pass outline",
-      "lead": "Take the real two-by-two operator J that sends x and y to negative y and x.",
+      "title": "The planar rotation generator",
+      "lead": "Take J(x,y)=(−y,x), a quarter-turn counterclockwise.",
       "body": [
-        "It rotates every vector by a quarter turn counterclockwise. J squared is negative the identity. Its adjoint equals negative J, so it is skew-symmetric. Now examine the exponential of t J. The even powers of J alternate between the identity and its negative. The odd powers alternate between J and its negative. If we group the even powers of the exponential series, we get cosine of t times the identity. If we group the odd powers, we get sine of t times J. So the exponential of t J equals cosine t times the identity, plus sine t times J. Applied to a vector, this is the ordinary rotation through angle t."
+        "Because J²=−I, even powers in the exponential series contribute the cosine series and odd powers contribute the sine series times J.",
+        "The resulting flow rotates every vector counterclockwise through angle t. This gives a derivation of the rotation matrix directly from the series, rather than assuming its trigonometric form."
       ],
-      "layout": "reading"
+      "mathtex": "e^{tJ}=\\cos t\\,I+\\sin t\\,J=\\begin{bmatrix}\\cos t&-\\sin t\\\\\\sin t&\\cos t\\end{bmatrix}",
+      "diagram": "g2-skew-flow",
+      "takeaway": "The familiar rotation matrix is an exponential of a skew-symmetric generator.",
+      "layout": "equation",
+      "id": "07-authored",
+      "eyebrow": "G2 · 039000 · The planar rotation generator"
     },
     {
-      "id": "08-overview",
-      "title": "Exponentials combine rotations on orthogonal planes",
-      "eyebrow": "G2 · 039000 · first-pass outline",
-      "lead": "On an orthogonal sum of invariant planes, a skew-symmetric generator can rotate each plane at its own angular speed.",
+      "title": "Several independent rotation planes",
+      "lead": "A block-diagonal generator can rotate different orthogonal planes at different rates.",
       "body": [
-        "Its exponential acts block by block, turning the generator on each plane into a sine-and-cosine rotation. This is how a single exponential represents several compatible planar motions. For bounded operators on a Banach space, the exponential series also converges in operator norm. An unbounded generator requires additional domain and continuity hypotheses; its exponential cannot be defined by an unrestricted operator-norm power series. For your final reconstruction, start with the exponential power series. Explain why it converges in operator norm."
+        "If B acts as ω₁J on one invariant plane and ω₂J on another, then e^{tB} restricts to rotations through angles ω₁t and ω₂t on those planes.",
+        "The construction scales beyond the plane: find invariant blocks, exponentiate within each block, and reassemble. It also prepares us to discuss unitary flows and operator-valued trigonometric functions."
       ],
-      "layout": "reading"
+      "mathtex": "B=\\operatorname{diag}(\\omega_1J,\\omega_2J)\\ \\Longrightarrow\\ e^{tB}=\\operatorname{diag}(R(\\omega_1t),R(\\omega_2t))",
+      "takeaway": "An orthogonal decomposition turns one flow into independent plane rotations.",
+      "layout": "equation",
+      "id": "08-authored",
+      "eyebrow": "G2 · 039000 · Several independent rotation planes"
     },
     {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 039000 · mathematical reference",
-      "lead": "On an orthogonal sum of invariant planes, a skew-symmetric generator can rotate each plane at its own angular speed.",
+      "title": "Reconstruct the two examples",
+      "lead": "The shear and rotation expose different behaviors of the same series definition.",
       "body": [
-        "Its exponential acts block by block, turning the generator on each plane into a sine-and-cosine rotation. This is how a single exponential represents several compatible planar motions."
+        "Compute e^{tN} from N²=0 and e^{tJ} from J²=−I. Verify their time-composition laws by multiplying the resulting two-by-two matrices.",
+        "Then explain why one family changes lengths but preserves area, while the other preserves lengths. The difference is the generator: N is nilpotent; J is skew-adjoint."
       ],
-      "mathtex": "e^{tB}=\\sum_{n=0}^\\infty\\frac{t^n B^n}{n!},\\qquad\n\\frac{d}{dt}e^{tB}=Be^{tB}=e^{tB}B.",
-      "layout": "equation"
-    },
-    {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 039000 · conclusion",
-      "lead": "And if you want one concrete calculation to keep in mind, work out the even and odd powers of J until you can derive the sine-and-cosine rotation formula without looking it up.",
-      "body": [],
-      "layout": "reading"
+      "diagram": "g2-matrix-flow",
+      "takeaway": "The generator determines the type of continuous motion.",
+      "layout": "figure",
+      "id": "09-authored",
+      "eyebrow": "G2 · 039000 · Reconstruct the two examples"
     }
   ]
 }

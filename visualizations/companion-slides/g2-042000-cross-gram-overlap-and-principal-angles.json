@@ -2,122 +2,150 @@
   "schema_version": 1,
   "id": "g2-042000-cross-gram-overlap-and-principal-angles",
   "title": "Cross-Gram overlap and principal angles",
-  "subtitle": "G2 lecture 042000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 042000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:042000"
   ],
   "source_lecture": "draft-stages/tts-lectures/042000-cross-gram-overlap-and-principal-angles.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Individually authored from the spoken lecture and its display-only mathematical appendix. Includes stepwise constructions, explicit hypotheses, worked examples and topic-specific vector figures; all slide prose is independent of audio.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 042000 · first-pass outline",
-      "lead": "You already know how to measure the angle between two nonzero vectors.",
+      "title": "Measuring overlap between subspaces",
+      "lead": "Principal angles measure the best possible directional alignment between two subspaces.",
       "body": [
-        "Normalize them, take their inner product, and use the cosine to recover an angle. But what if the objects we want to compare are entire subspaces? A plane contains infinitely many directions. In a higher-dimensional space, two planes can share one direction, disagree in another, and be perpendicular in yet another. One scalar angle cannot describe all of that. Principal angles measure the relative geometry of two subspaces. Orthonormal frames, adjoints, Gram operators, and singular values make the construction explicit."
+        "Choose isometric frames E and F whose columns form orthonormal bases of subspaces U and V. The cross-Gram matrix C=E*F records all pairwise inner products between the chosen frame vectors.",
+        "The entries change when we change bases, but the singular values do not. That invariance makes the singular values natural candidates for intrinsic overlap measurements."
       ],
-      "layout": "opening"
+      "diagram": "g2-principal-overlap",
+      "takeaway": "Cross-Gram singular values measure overlap independently of the chosen orthonormal frames.",
+      "layout": "opening",
+      "id": "00-authored",
+      "eyebrow": "G2 · 042000 · Measuring overlap between subspaces"
     },
     {
-      "id": "01-overview",
-      "title": "A vector's angle is a measurement of overlap",
-      "eyebrow": "G2 · 042000 · first-pass outline",
-      "lead": "Begin with two unit vectors u and v in a real inner-product space.",
+      "title": "One-dimensional overlap",
+      "lead": "For unit vectors u and v, their acute line angle is determined by the magnitude of their inner product.",
       "body": [
-        "Their inner product is cosine of the angle between their oriented directions. For lines rather than oriented vectors, flipping either vector changes the sign of the inner product but not the line. So the acute angle between the lines is determined by the absolute value of the inner product. That distinction already hints at a general rule. When comparing subspaces, we should be measuring geometry that does not change just because we picked different orthonormal bases. Suppose U and S are two subspaces of the same ambient Euclidean space. Choose an orthonormal basis for U and another for S."
+        "The orthogonal projection of v onto span(u) has length |⟨u,v⟩|. If the lines meet at acute angle θ, that length is cos θ.",
+        "Changing the sign or phase of a chosen basis vector cannot change the angle between the underlying lines. The absolute value removes this irrelevant coordinate choice."
       ],
-      "layout": "reading"
+      "mathtex": "\\cos\\theta=|\\langle u,v\\rangle|,\\qquad 0\\le\\theta\\le\\tfrac\\pi2",
+      "diagram": "principal-angle",
+      "takeaway": "Cosine is the length of the projected unit direction.",
+      "layout": "equation",
+      "id": "01-authored",
+      "eyebrow": "G2 · 042000 · One-dimensional overlap"
     },
     {
-      "id": "02-overview",
-      "title": "The one-dimensional case",
-      "eyebrow": "G2 · 042000 · first-pass outline",
-      "lead": "Let U be the horizontal axis in the plane.",
+      "title": "Why the singular values are intrinsic",
+      "lead": "Changing orthonormal frames changes C by unitary factors on the left and right.",
       "body": [
-        "Let the second subspace be the line at forty-five degrees above the horizontal axis. Choose a unit vector along each line. Their cross-Gram matrix has only one entry: cosine of forty-five degrees, which is one divided by the square root of two. The singular value of a one-by-one matrix is the absolute value of its entry. So its singular value is also one divided by the square root of two. Taking arccosine gives forty-five degrees. In this simplest case, the singular-value construction reproduces exactly the line angle we wanted. But singular values are more general than absolute values of individual entries."
+        "If E is replaced by EA and F by FB for unitary A and B, the new overlap matrix is A*C B. Left and right multiplication by unitaries preserves all singular values.",
+        "Therefore the singular values of E*F depend only on U and V. Their arccosines, ordered between 0 and π/2, are the principal angles."
       ],
-      "layout": "reading"
+      "mathtex": "C=E^*F,\\quad \\sigma_i(C)=\\cos\\theta_i,\\quad 0\\le\\theta_i\\le\\tfrac\\pi2",
+      "takeaway": "Principal angles survive every orthonormal change of coordinates.",
+      "layout": "equation",
+      "id": "02-authored",
+      "eyebrow": "G2 · 042000 · Why the singular values are intrinsic",
+      "diagram": "basis-change"
     },
     {
-      "id": "03-overview",
-      "title": "Why singular values give basis-independent answers",
-      "eyebrow": "G2 · 042000 · first-pass outline",
-      "lead": "Suppose we replace the orthonormal basis of U by a different orthonormal basis of the same subspace.",
-      "body": [
-        "This multiplies V on the right by an orthogonal matrix. Do the same for W, using another orthogonal matrix. The overlap matrix changes, but only by multiplication on the left and right by orthogonal matrices. Multiplication on the left or right by a unitary leaves the singular values unchanged, since it preserves the spectrum of the corresponding positive Gram operator. The singular values are intrinsic to the pair of subspaces, even though the entries of the overlap matrix are not. Now we have a candidate definition."
-      ],
-      "layout": "reading"
-    },
-    {
-      "id": "04-overview",
       "title": "A pair of planes in three dimensions",
-      "eyebrow": "G2 · 042000 · first-pass outline",
-      "lead": "Consider the plane spanned by the first and second coordinate axes in three-dimensional space.",
+      "lead": "Let U=span(e₁,e₂), and tilt only its e₂ direction toward e₃.",
       "body": [
-        "Call it U. Now consider a second plane containing the first coordinate axis, but tilted around that axis. We can describe it using the first axis together with a unit direction formed from cosine phi times the second axis plus sine phi times the third axis. Take phi between zero and ninety degrees. Choose the natural orthonormal frames for these planes. The cross-Gram matrix is diagonal. Its first diagonal entry is one, because the planes share the first coordinate axis. Its second diagonal entry is cosine phi, because the remaining frame directions meet at angle phi."
+        "Set V=span(e₁, cos φ e₂+sin φ e₃), where 0<φ<π/2. With those displayed orthonormal frames the cross-Gram matrix is diag(1, cos φ).",
+        "The first principal angle is zero because the planes share e₁. The second is φ: the e₂ direction must tilt out of U by φ to reach V."
       ],
-      "layout": "reading"
+      "mathtex": "C=\\begin{bmatrix}1&0\\\\0&\\cos\\varphi\\end{bmatrix}\\quad\\Longrightarrow\\quad (\\theta_1,\\theta_2)=(0,\\varphi)",
+      "diagram": "g2-principal-overlap",
+      "takeaway": "Shared directions give zero angles; tilted directions give positive angles.",
+      "layout": "equation",
+      "id": "03-authored",
+      "eyebrow": "G2 · 042000 · A pair of planes in three dimensions"
     },
     {
-      "id": "05-overview",
-      "title": "Principal vectors and the singular-value decomposition",
-      "eyebrow": "G2 · 042000 · first-pass outline",
-      "lead": "The singular values are only the beginning.",
+      "title": "Paired principal vectors",
+      "lead": "An SVD of the cross-Gram matrix constructs optimal pairs of aligned directions.",
       "body": [
-        "The singular-value decomposition of the cross-Gram matrix gives two orthonormal coordinate bases, one on each side. Use the coordinate embeddings to move those singular vectors back into the ambient space. We obtain pairs of unit vectors, one in the first subspace and one in the second. Each matched pair has inner product equal to its singular value. Distinct matched pairs have zero cross-inner-product. In other words, after choosing the right orthonormal directions, the pattern of overlap becomes diagonal. These matched directions are called principal vectors. For the two tilted planes, the first pair can be the shared axis."
+        "Choose orthonormal vectors u_i in U and v_i in V so that ⟨u_i,v_j⟩=0 when i≠j and |⟨u_i,v_i⟩|=cos θ_i. A convenient phase choice makes each paired overlap nonnegative.",
+        "For each pair, the component of v_i along u_i has length cos θ_i; its perpendicular component has length sin θ_i. This is the geometric seed of the cosine–sine decomposition."
       ],
-      "layout": "reading"
+      "mathtex": "\\langle u_i,v_j\\rangle=\\delta_{ij}\\cos\\theta_i",
+      "diagram": "principal-pairs",
+      "takeaway": "SVD turns many overlapping directions into independent principal pairs.",
+      "layout": "equation",
+      "id": "04-authored",
+      "eyebrow": "G2 · 042000 · Paired principal vectors"
     },
     {
-      "id": "06-overview",
-      "title": "Where the projection operator reappears",
-      "eyebrow": "G2 · 042000 · first-pass outline",
-      "lead": "We can express the same construction without displaying both coordinate bases.",
+      "title": "Projector formula for overlap",
+      "lead": "The overlap Gram operator is itself a compression of the target projection.",
       "body": [
-        "Let Q be orthogonal projection onto the second subspace. Because W has orthonormal columns, Q is W times W adjoint. Take the cross-Gram matrix C, multiply it by its adjoint, and regroup the factors. We get V adjoint Q V. This is a positive operator on the coordinate space of the first subspace. Its eigenvalues are the squares of the singular values of C. Therefore they are the squared cosines of the principal angles, together with any required zero padding on the first coordinate space. That identity is important because it connects principal angles to projections, not to a particular pair of coordinate frames."
+        "Write Q=FF* for the orthogonal projection onto V. Then CC*=E*FF*E=E*QE. This is a positive contraction: every unit x in U has projection length at most one.",
+        "Its eigenvalues are the squared cosines of the principal angles, so the cross-Gram singular values lie in [0,1]."
       ],
-      "layout": "reading"
+      "mathtex": "CC^*=E^*QE,\\qquad 0\\le CC^*\\le I",
+      "diagram": "gram-geometry",
+      "takeaway": "The cosine-squared operator is the projection Q viewed in U coordinates.",
+      "layout": "equation",
+      "id": "05-authored",
+      "eyebrow": "G2 · 042000 · Projector formula for overlap"
     },
     {
-      "id": "07-overview",
-      "title": "What if the dimensions differ?",
-      "eyebrow": "G2 · 042000 · first-pass outline",
-      "lead": "Suppose the first subspace has three dimensions and the second only two.",
+      "title": "Complementary escape gives the sine",
+      "lead": "Any framed vector splits into its Q component and its perpendicular remainder.",
       "body": [
-        "The cross-Gram matrix is rectangular. Its usual principal-angle list has the smaller dimension's number of entries, which is two. But there is another legitimate, directed convention. We can measure how each direction in the three-dimensional source projects into the two-dimensional target. Since that projection has a nontrivial kernel, at least one direction is perpendicular to the target. In an extended, source-indexed angle list, this appears as an additional ninety-degree angle. The two conventions answer related but different questions. The shorter list pairs as many directions as the smaller subspace allows."
+        "Because E*E=I and Q is a projection, E*(I−Q)E=I−CC*. The eigenvalues of this positive operator are 1−cos²θ_i=sin²θ_i.",
+        "Hence the same principal vectors diagonalize overlap and escape. This orthogonal complement identity is the bridge from principal angles to sine-theta perturbation bounds."
       ],
-      "layout": "reading"
+      "mathtex": "E^*(I-Q)E=I-CC^*,\\qquad 1-\\cos^2\\theta_i=\\sin^2\\theta_i",
+      "diagram": "g2-directed-sine",
+      "takeaway": "Cosine and sine are two complementary views of the same frame.",
+      "layout": "equation",
+      "id": "06-authored",
+      "eyebrow": "G2 · 042000 · Complementary escape gives the sine"
     },
     {
-      "id": "08-overview",
-      "title": "A final distinction",
-      "eyebrow": "G2 · 042000 · first-pass outline",
-      "lead": "An angle of zero tells us that some direction lies in both subspaces.",
+      "title": "Unequal dimensions require a convention",
+      "lead": "A rectangular cross-Gram matrix has only min(dim U, dim V) paired principal angles.",
       "body": [
-        "An angle of ninety degrees tells us that a direction of one subspace is perpendicular to the other. Angles strictly between those values describe genuine tilted pairs. The list of principal angles tells us much more than a single worst-case angle. It can distinguish one badly aligned direction from many mildly misaligned directions. That difference will eventually matter when we use operator norms, Frobenius norms, and more general singular-value-based norms. For your reconstruction exercise, take two planes in three dimensions that share an axis and meet at angle phi."
+        "If U is a plane and V a line contained in U, the one paired angle is zero. But a direction in U perpendicular to V also exists and has escape angle π/2.",
+        "Both descriptions are legitimate: the shorter principal-angle list records paired overlap; the U-directed list also records unpaired directions. State which convention a theorem uses."
       ],
-      "layout": "reading"
+      "diagram": "g2-principal-overlap",
+      "takeaway": "The number of angles depends on whether unmatched dimensions are included.",
+      "layout": "figure",
+      "id": "07-authored",
+      "eyebrow": "G2 · 042000 · Unequal dimensions require a convention"
     },
     {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 042000 · mathematical reference",
-      "lead": "An angle of zero tells us that some direction lies in both subspaces.",
+      "title": "The two directional overlap maps",
+      "lead": "The overlap map and its adjoint contain the same paired cosine values.",
       "body": [
-        "An angle of ninety degrees tells us that a direction of one subspace is perpendicular to the other. Angles strictly between those values describe genuine tilted pairs. The list of principal angles tells us much more than a single worst-case angle."
+        "The matrix C=E*F maps target-frame coordinates to source-frame coordinates; its adjoint C*=F*E reverses that direction. Their nonzero singular values agree, by the singular-value decomposition.",
+        "What differs between the two directions is the number of unmatched zero singular values when the frame dimensions are unequal. This explains why a directed angular description may need more information than the list of paired principal angles."
       ],
-      "mathtex": "0\\le\\sigma_i(C)\\le1,\\quad \\theta_i=\\arccos\\sigma_i(C)\\in[0,\\pi/2],\n\\quad CC^*=V^*QV,\n\\quad V^*(I-Q)V=I-CC^*.",
+      "mathtex": "C=E^*F,\\quad C^*=F^*E,\\quad \\sigma_{\\mathrm{paired}}(C)=\\sigma_{\\mathrm{paired}}(C^*)",
+      "diagram": "g2-principal-overlap",
+      "takeaway": "Paired cosine values are symmetric, but unpaired directions are directional.",
+      "id": "09-authored-extra",
+      "eyebrow": "G2 · 042000 · The two directional overlap maps",
       "layout": "equation"
     },
     {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 042000 · conclusion",
-      "lead": "They turn subspace misalignment into a quantitative operator, rather than a choice of coordinate drawings.",
-      "body": [],
-      "layout": "reading"
+      "title": "A full calculation to retain",
+      "lead": "Rebuild the tilted-plane example without referring to a drawing.",
+      "body": [
+        "Construct E=[e₁,e₂] and F=[e₁,cosφ e₂+sinφ e₃]. Compute C=E*F, its singular values, and the two angles.",
+        "Then compute E*(I−Q)E directly and confirm that its diagonal entries are 0 and sin²φ. This checks both cosine and sine from one transparent example."
+      ],
+      "diagram": "g2-principal-overlap",
+      "takeaway": "Cross-Gram SVD and complementary projection agree on the principal angles.",
+      "layout": "figure",
+      "id": "08-authored",
+      "eyebrow": "G2 · 042000 · A full calculation to retain"
     }
   ]
 }

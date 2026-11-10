@@ -527,7 +527,7 @@
       "lecture_nodes": [
         "g2:038000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-039000-matrix-exponentials-from-the-power-series",
@@ -535,7 +535,7 @@
       "lecture_nodes": [
         "g2:039000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-040000-skew-adjoint-generators-and-unitary-flows",
@@ -543,7 +543,7 @@
       "lecture_nodes": [
         "g2:040000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-041000-operator-trigonometric-functions",
@@ -551,7 +551,7 @@
       "lecture_nodes": [
         "g2:041000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-042000-cross-gram-overlap-and-principal-angles",
@@ -559,7 +559,7 @@
       "lecture_nodes": [
         "g2:042000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-043000-sines-cosines-and-cross-projections",
@@ -567,7 +567,7 @@
       "lecture_nodes": [
         "g2:043000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-044000-the-cosine-sine-decomposition",
@@ -575,7 +575,7 @@
       "lecture_nodes": [
         "g2:044000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-045000-halmos-two-projection-decomposition",
@@ -583,7 +583,7 @@
       "lecture_nodes": [
         "g2:045000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-046000-positive-cosine-and-sine-operators",

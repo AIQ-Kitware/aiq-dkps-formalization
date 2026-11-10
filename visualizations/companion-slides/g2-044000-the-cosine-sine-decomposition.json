@@ -2,111 +2,147 @@
   "schema_version": 1,
   "id": "g2-044000-the-cosine-sine-decomposition",
   "title": "The cosine–sine decomposition",
-  "subtitle": "G2 lecture 044000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 044000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:044000"
   ],
   "source_lecture": "draft-stages/tts-lectures/044000-the-cosine-sine-decomposition.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Individually authored from the spoken lecture and its display-only mathematical appendix. Includes stepwise constructions, explicit hypotheses, worked examples and topic-specific vector figures; all slide prose is independent of audio.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 044000 · first-pass outline",
-      "lead": "For two subspaces, their cosine and sine overlap operators satisfy a Pythagorean identity: the squared cosine contribution plus the squared sine contribution is the identity on the appropriate coordinates.",
+      "title": "Understand two subspaces one principal plane at a time",
+      "lead": "In finite dimensions, principal vectors reduce the interaction of two projections to two-by-two blocks.",
       "body": [
-        "Principal planes turn this operator relation into simple two-by-two projection matrices. We will show that, in finite dimensions, a pair of subspaces can be studied through mutually perpendicular two-dimensional planes, together with directions where the projections already agree or are completely opposed. On each tilted plane, the entire relationship reduces to an ordinary angle theta."
+        "A tilted pair of lines spans a plane on which the projections have explicit cosine–sine matrices. Different principal pairs give orthogonal planes, so their contributions decouple.",
+        "Shared directions and right-angle defects sit in separate endpoint blocks. This decomposition turns geometric questions about subspaces into simple matrix calculations."
       ],
-      "layout": "opening"
+      "diagram": "g2-cs-block",
+      "takeaway": "The cosine–sine decomposition separates the geometry into independent principal planes.",
+      "layout": "opening",
+      "id": "00-authored",
+      "eyebrow": "G2 · 044000 · Understand two subspaces one principal plane at a time"
     },
     {
-      "id": "01-overview",
-      "title": "Begin with one tilted pair",
-      "eyebrow": "G2 · 044000 · first-pass outline",
-      "lead": "Let U be the horizontal axis in a two-dimensional plane.",
+      "title": "One tilted pair",
+      "lead": "Take unit vectors e and f perpendicular to one another, and let v=c e+s f.",
       "body": [
-        "Choose unit vectors e along U and f perpendicular to U. Let V be the line making an angle theta with e, where theta lies strictly between zero and ninety degrees. Choose its unit direction v to be cosine theta times e plus sine theta times f. The orthogonal projection P onto U takes the e component of a vector and discards the f component. Its matrix in the ordered basis e, f has one in the upper-left corner and zeros everywhere else. To project onto V, take the inner product with v and multiply by v."
+        "Here c=cosθ and s=sinθ with 0<θ<π/2. The projector P onto span(e) has matrix diag(1,0) in the basis (e,f).",
+        "The projector Q onto span(v) is vv*: multiplying the two-component vector (c,s) by its transpose gives the full two-by-two block."
       ],
-      "layout": "reading"
+      "mathtex": "P=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix},\\quad Q=\\begin{bmatrix}c^2&cs\\\\cs&s^2\\end{bmatrix}",
+      "diagram": "g2-cs-block",
+      "takeaway": "Every nontrivial principal angle produces the same basic projection block.",
+      "layout": "equation",
+      "id": "01-authored",
+      "eyebrow": "G2 · 044000 · One tilted pair"
     },
     {
-      "id": "02-overview",
-      "title": "Where does the paired plane come from?",
-      "eyebrow": "G2 · 044000 · first-pass outline",
-      "lead": "For a single tilted line, we simply drew the perpendicular vector f.",
+      "title": "Check that Q really is a projection",
+      "lead": "The block formula is valid because c²+s²=1.",
       "body": [
-        "In higher dimensions we must show that suitable vectors f exist and remain orthogonal across different pairs. Start with two subspaces U and V of a finite-dimensional Hilbert space. Let u be a unit principal vector in U and v its matched unit principal vector in V, with principal angle theta strictly between zero and ninety degrees. We know from the singular-value construction that the projection of v onto U equals cosine theta times u. This is a defining property of a correctly matched principal pair. Subtract that projection from v. The result is perpendicular to U."
+        "Multiplying Q by itself produces (c²+s²)Q=Q. Its transpose equals itself, so it is an orthogonal projector.",
+        "This local calculation is enough to verify the algebra of every nontrivial principal plane in the full decomposition."
       ],
-      "layout": "reading"
+      "mathtex": "Q^2=Q,\\qquad Q^*=Q,\\qquad c^2+s^2=1",
+      "takeaway": "Idempotence and self-adjointness come directly from scalar trigonometry.",
+      "layout": "equation",
+      "id": "02-authored",
+      "eyebrow": "G2 · 044000 · Check that Q really is a projection"
     },
     {
-      "id": "03-overview",
-      "title": "Why the different planes do not interfere",
-      "eyebrow": "G2 · 044000 · first-pass outline",
-      "lead": "Principal vectors come from a singular-value decomposition.",
+      "title": "Build the perpendicular partner",
+      "lead": "Given a principal pair u in U and v in V, extract the part of v perpendicular to U.",
       "body": [
-        "We can choose the u vectors to be orthonormal within U and the v vectors to be orthonormal within V. Their cross-inner-products vanish for distinct indices. Each f vector is formed by subtracting cosine theta times its matched u vector from v, then dividing by sine theta. For two distinct nontrivial indices, expand the inner product of the corresponding f vectors. The inner product of the v vectors is zero. The cross-inner-products vanish. The inner product of the u vectors is zero. Thus the f vectors are orthogonal. And by construction every f lies in U perpendicular, so every f is perpendicular to every u."
+        "Write c=⟨u,v⟩=cosθ>0 and s=sinθ>0. Set f=(v−cu)/s. Then f is a unit vector in U⊥ and v=cu+sf.",
+        "The normalization works because the squared perpendicular residual has length 1−c²=s². This construction explains where the second basis vector in each principal plane comes from."
       ],
-      "layout": "reading"
+      "mathtex": "f=\\frac{v-\\cos\\theta\\,u}{\\sin\\theta},\\qquad v=\\cos\\theta\\,u+\\sin\\theta\\,f",
+      "diagram": "g2-cs-block",
+      "takeaway": "A principal plane is generated by a principal vector and its normalized perpendicular residual.",
+      "layout": "equation",
+      "id": "03-authored",
+      "eyebrow": "G2 · 044000 · Build the perpendicular partner"
     },
     {
-      "id": "04-overview",
-      "title": "Two independent angles",
-      "eyebrow": "G2 · 044000 · first-pass outline",
-      "lead": "Picture two perpendicular copies of our tilted-line example, sitting inside four-dimensional space.",
+      "title": "Why different principal planes are orthogonal",
+      "lead": "The SVD of the overlap map supplies paired principal vectors with vanishing cross terms.",
       "body": [
-        "In the first plane, let the target line tilt by thirty degrees. In the second, let it tilt by sixty degrees. The first subspace U is spanned by the first coordinate direction in each plane. The second subspace V is spanned by the corresponding tilted directions. If we order the ambient basis by principal plane, P has two copies of the simple diagonal projection block. Q has one cosine–sine block for thirty degrees and another for sixty degrees. Suppose we take a unit vector in U supported entirely in the first plane."
+        "Choose the u_i and v_i so that their inner products vanish across different indices. Then f_i=(v_i−c_i u_i)/s_i is orthogonal to u_j and f_j for j≠i.",
+        "Consequently each span(u_i,f_i) is orthogonal to the other principal planes, and both projections preserve every plane. Their matrices may be studied independently."
       ],
-      "layout": "reading"
+      "diagram": "g2-principal-overlap",
+      "takeaway": "The SVD construction makes the principal-plane blocks mutually noninteracting.",
+      "layout": "figure",
+      "id": "04-authored",
+      "eyebrow": "G2 · 044000 · Why different principal planes are orthogonal"
     },
     {
-      "id": "05-overview",
-      "title": "What about zero and ninety degrees?",
-      "eyebrow": "G2 · 044000 · first-pass outline",
-      "lead": "The neat two-dimensional tilted blocks require genuine intermediate angles.",
+      "title": "Two angles in four dimensions",
+      "lead": "Take two orthogonal principal planes with angles thirty and sixty degrees.",
       "body": [
-        "A complete decomposition must also account for the endpoints. An angle of zero describes a direction shared by U and V. On that direction both projections equal identity. No two-dimensional rotation is needed. A right angle describes a direction in one subspace perpendicular to the other. On a source direction of that kind P equals identity while Q equals zero. If the opposite subspace has an unmatched perpendicular direction, the projection values are reversed. Directions perpendicular to both U and V are also possible. On those, both projections equal zero."
+        "Each plane carries its own P and Q block with its own cosine and sine. The full matrices are block diagonal, not coupled.",
+        "A vector whose components lie in both planes is projected by applying the thirty-degree formula on one block and the sixty-degree formula on the other. No cross-term appears."
       ],
-      "layout": "reading"
+      "mathtex": "P=P_1\\oplus P_2,\\qquad Q=Q(\\pi/6)\\oplus Q(\\pi/3)",
+      "diagram": "g2-cs-block",
+      "takeaway": "Multiple principal angles correspond to independent two-dimensional blocks.",
+      "layout": "equation",
+      "id": "05-authored",
+      "eyebrow": "G2 · 044000 · Two angles in four dimensions"
     },
     {
-      "id": "06-overview",
-      "title": "A balanced complete block theorem",
-      "eyebrow": "G2 · 044000 · first-pass outline",
-      "lead": "There is a particularly clean case.",
+      "title": "The endpoint cases",
+      "lead": "The formula for f divides by sinθ, so θ=0 must be treated separately.",
       "body": [
-        "Suppose U and V have the same finite dimension, and the ambient space has exactly twice that dimension. Then U and U perpendicular have matching dimensions. We can choose a complete orthonormal basis for U and a complete orthonormal basis for its complement so that the target vectors take the form cosine theta times a source vector plus sine theta times the matching complement vector. In these coordinates, P is a block matrix with identity in the upper-left and zero in the other three blocks. Q has diagonal matrices of cosine squared and sine squared on its diagonal, and cosine-times-sine diagonal matrices in its crossing blocks."
+        "When θ=0, the direction is common to both subspaces and P=Q=1 on that line. When θ=π/2, source and target directions are orthogonal, and P and Q are complementary on the paired plane.",
+        "If dimensions differ, extra unpaired right-angle directions may remain. A complete decomposition includes these fixed endpoint blocks rather than forcing them into the nontrivial-angle formula."
       ],
-      "layout": "reading"
+      "diagram": "g2-cs-block",
+      "takeaway": "Common directions and defects are genuine summands, not limiting generic blocks.",
+      "layout": "figure",
+      "id": "06-authored",
+      "eyebrow": "G2 · 044000 · The endpoint cases"
     },
     {
-      "id": "07-overview",
-      "title": "Why this decomposition is useful",
-      "eyebrow": "G2 · 044000 · first-pass outline",
-      "lead": "Look again at the off-diagonal entry of Q on one principal plane.",
+      "title": "Why doubled angles appear",
+      "lead": "The off-diagonal part of the tilted projection is c s.",
       "body": [
-        "It is cosine theta times sine theta. From elementary trigonometry, twice that product is sine of twice theta. That simple observation foreshadows the double-angle theorems. They arise in part because the off-diagonal blocks of projection operators naturally contain sine theta times cosine theta. There is another payoff. A rotation through theta maps e to v inside a principal plane. Because the planes are perpendicular, we can rotate them independently. Combining those planar rotations is the beginning of the direct rotation between subspaces."
+        "Since 2cs=sin(2θ), block-off-diagonal quantities naturally contain a doubled angle. This is one geometric source of the sine-two-theta expressions in perturbation theory.",
+        "The identity does not by itself prove a perturbation theorem; it exposes the precise algebraic pattern that later spectral gap estimates control."
       ],
-      "layout": "reading"
+      "mathtex": "2cs=\\sin(2\\theta),\\qquad Q_{12}=cs",
+      "diagram": "g2-cs-block",
+      "takeaway": "Double-angle functions arise from the mixed blocks of a projection.",
+      "layout": "equation",
+      "id": "07-authored",
+      "eyebrow": "G2 · 044000 · Why doubled angles appear"
     },
     {
-      "id": "08-overview",
-      "title": "Reconstruction",
-      "eyebrow": "G2 · 044000 · first-pass outline",
-      "lead": "Start with an orthonormal pair e and f, and let v equal cosine theta times e plus sine theta times f.",
+      "title": "The balanced block theorem",
+      "lead": "When U and V both have dimension n inside a 2n-dimensional space, the blocks can be paired globally.",
       "body": [
-        "Derive the complete matrix of the projection onto v, directly from the rank-one projection formula. Verify its square equals itself. Next, start with a principal pair u and v, and derive f from the component of v perpendicular to U. Explain why different principal pairs produce orthogonal planes. Finally, tell me what goes wrong if you try to divide by sine theta at a zero angle. If you can do those steps, you have not memorized a cosine–sine block. You have constructed it."
+        "Under this balanced rank hypothesis, suitable orthonormal bases for U and U⊥ place the pair into a block form with diagonal C² and S² and mixed CS. The operators C and S are commuting nonnegative diagonal operators, with C²+S²=I.",
+        "If the subspace dimensions or endpoint multiplicities differ, extra blocks must be kept separately; the general Halmos decomposition records them rather than asserting a globally balanced representation."
       ],
-      "layout": "reading"
+      "mathtex": "Q=\\begin{bmatrix}C^2&CS\\\\CS&S^2\\end{bmatrix},\\qquad C^2+S^2=I",
+      "takeaway": "The scalar principal-plane picture lifts to commuting operator blocks.",
+      "layout": "equation",
+      "id": "08-authored",
+      "eyebrow": "G2 · 044000 · The balanced block theorem"
     },
     {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 044000 · conclusion",
-      "lead": "You have constructed it.",
-      "body": [],
-      "layout": "reading"
+      "title": "Reconstruct one block",
+      "lead": "Start with v=cosθ e+sinθ f, then derive the rank-one projection onto v.",
+      "body": [
+        "Check Q²=Q, compute its off-diagonal entry, and explain why that entry contains sin(2θ)/2. Then repeat the construction on two orthogonal principal planes.",
+        "Finally list what the formulas miss when θ is zero, θ is ninety degrees, or the subspaces have different dimensions."
+      ],
+      "diagram": "g2-cs-block",
+      "takeaway": "The C–S decomposition is a geometric construction with an explicit two-by-two model.",
+      "layout": "figure",
+      "id": "09-authored",
+      "eyebrow": "G2 · 044000 · Reconstruct one block"
     }
   ]
 }

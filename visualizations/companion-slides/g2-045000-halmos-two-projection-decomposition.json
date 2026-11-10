@@ -2,132 +2,147 @@
   "schema_version": 1,
   "id": "g2-045000-halmos-two-projection-decomposition",
   "title": "Halmos two-projection decomposition",
-  "subtitle": "G2 lecture 045000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 045000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:045000"
   ],
   "source_lecture": "draft-stages/tts-lectures/045000-halmos-two-projection-decomposition.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Individually authored from the spoken lecture and its display-only mathematical appendix. Includes stepwise constructions, explicit hypotheses, worked examples and topic-specific vector figures; all slide prose is independent of audio.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 045000 · first-pass outline",
-      "lead": "Principal angles describe how two subspaces overlap in paired directions.",
+      "title": "The full geometry of two projections",
+      "lead": "Principal planes describe tilted pairs, but arbitrary subspaces also have common and unmatched directions.",
       "body": [
-        "For an angle strictly between zero and ninety degrees, the corresponding two-dimensional plane carries simple cosine–sine matrices for the orthogonal projections. Those planes, however, are only part of the geometry of an arbitrary pair of subspaces. But imagine a pair of subspaces with different dimensions. Some directions might belong to both. Some might belong to the first and be perpendicular to the second. Others might do the reverse. And the ambient space might contain directions belonging to neither subspace."
+        "Let P and Q project orthogonally onto closed subspaces U and V. Halmos’s decomposition first extracts four elementary intersections on which P and Q are each either I or 0.",
+        "Their orthogonal complement is the generic part where neither projection has a trivial common or defect direction. Both projections preserve that remainder."
       ],
-      "layout": "opening"
+      "diagram": "g2-halmos-blocks",
+      "takeaway": "Classifying two projections begins by separating four endpoint spaces from the generic part.",
+      "layout": "opening",
+      "id": "00-authored",
+      "eyebrow": "G2 · 045000 · The full geometry of two projections"
     },
     {
-      "id": "01-overview",
-      "title": "Four places a vector can live",
-      "eyebrow": "G2 · 045000 · first-pass outline",
-      "lead": "Call the subspaces U and V, with projections P and Q.",
+      "title": "The four elementary spaces",
+      "lead": "Label a direction by whether it belongs to U and whether it belongs to V.",
       "body": [
-        "The first distinguished part is their intersection: vectors lying in both U and V. For such a vector, P does nothing and Q does nothing. Both projections return the original vector. We call this the common part. The second part consists of vectors in U but perpendicular to V. P returns the vector, while Q sends it to zero. This is the source defect. It records directions present in U that have no overlap with V. The third part reverses the roles. These vectors lie in V but are perpendicular to U. P sends them to zero and Q returns them. This is the target defect. The fourth part consists of vectors perpendicular to both U and V."
+        "H₁₁=U∩V is common to both. H₁₀=U∩V⊥ belongs only to U. H₀₁=U⊥∩V belongs only to V. H₀₀=U⊥∩V⊥ belongs to neither.",
+        "On these spaces the projector pair (P,Q) acts respectively as (1,1), (1,0), (0,1), and (0,0). This completely determines both projections on their elementary sum."
       ],
-      "layout": "reading"
+      "mathtex": "H_{11}=U\\cap V,\\quad H_{10}=U\\cap V^\\perp,\\quad H_{01}=U^\\perp\\cap V,\\quad H_{00}=U^\\perp\\cap V^\\perp",
+      "diagram": "g2-halmos-blocks",
+      "takeaway": "Each elementary space records a distinct membership pattern.",
+      "layout": "equation",
+      "id": "01-authored",
+      "eyebrow": "G2 · 045000 · The four elementary spaces"
     },
     {
-      "id": "02-overview",
-      "title": "Why we may add these parts orthogonally",
-      "eyebrow": "G2 · 045000 · first-pass outline",
-      "lead": "The four parts are mutually orthogonal.",
+      "title": "Why those spaces are orthogonal",
+      "lead": "Every two different membership patterns disagree in at least one orthogonality condition.",
       "body": [
-        "Let us prove one instance rather than take it on faith. Take x in the common part and y in the source defect. Both lie in U, but x lies in V while y lies in V perpendicular. Their inner product must be zero. For another instance, take x in the source defect and y in the target defect. The first lies in U, the second in U perpendicular. Again their inner product is zero. The remaining pairs work the same way: for every pair of distinct elementary parts, one membership condition places the first vector in a subspace and the other in its perpendicular complement. Thus their sum is an orthogonal direct sum."
+        "For example, H₁₁ and H₁₀ both lie in U, but one lies in V and the other in V⊥. Therefore they are orthogonal. H₁₀ and H₀₁ are orthogonal because the first lies in U and the second in U⊥.",
+        "The remaining pairs are analogous. Thus the sum of all four spaces is an orthogonal direct sum, not merely an algebraic sum."
       ],
-      "layout": "reading"
+      "diagram": "orthogonal-projection",
+      "takeaway": "The four intersections are pairwise orthogonal because their membership conditions conflict.",
+      "layout": "figure",
+      "id": "02-authored",
+      "eyebrow": "G2 · 045000 · Why those spaces are orthogonal"
     },
     {
-      "id": "03-overview",
       "title": "A six-dimensional example",
-      "eyebrow": "G2 · 045000 · first-pass outline",
-      "lead": "To see every piece at once, imagine six mutually perpendicular coordinate directions, named first through sixth.",
+      "lead": "Let U=span(e₁,e₂,e₅) and V=span(e₁,e₃,cosθ e₅+sinθ e₆).",
       "body": [
-        "Let U be spanned by the first, second, and fifth directions. Let V be spanned by the first direction, the third direction, and a tilted direction made from cosine theta times the fifth plus sine theta times the sixth. Take theta strictly between zero and ninety degrees. Now inspect the four elementary pieces. The first coordinate direction belongs to both subspaces, so it forms the common part. The second belongs to U and is perpendicular to V, so it forms the source defect. The third belongs to V and is perpendicular to U, so it forms the target defect."
+        "Here 0<θ<π/2. The common space H₁₁ is span(e₁), the U-only space H₁₀ is span(e₂), the V-only space H₀₁ is span(e₃), and H₀₀ is span(e₄).",
+        "The two remaining directions e₅,e₆ form one generic tilted plane. We can now read the whole pair of projections directly from elementary one-dimensional blocks plus one two-dimensional C–S block."
       ],
-      "layout": "reading"
+      "diagram": "g2-halmos-six-space",
+      "takeaway": "The decomposition makes the whole six-dimensional projection pair explicit.",
+      "layout": "figure",
+      "id": "03-authored",
+      "eyebrow": "G2 · 045000 · A six-dimensional example"
     },
     {
-      "id": "04-overview",
-      "title": "Why the generic part is preserved",
-      "eyebrow": "G2 · 045000 · first-pass outline",
-      "lead": "We need to justify why the remaining part can be studied independently.",
+      "title": "The generic remainder is reducing",
+      "lead": "Take G to be the orthogonal complement of the elementary sum.",
       "body": [
-        "It is not enough simply to name an orthogonal complement. Each elementary part is invariant under P and under Q. In fact, both act there as either identity or zero. Therefore their orthogonal sum is invariant under both projections. Projections are self-adjoint. For a self-adjoint operator, an invariant subspace is automatically reducing, since self-adjointness forces its orthogonal complement to be invariant as well: its orthogonal complement is invariant as well. Consequently, the generic part is invariant under P and Q. Both projections split into blocks relative to the elementary part and generic part."
+        "Each H_ab is invariant under P and Q because each projection acts there as either I or 0. Their sum therefore is invariant under both projections.",
+        "Since P and Q are self-adjoint, the orthogonal complement of an invariant subspace is invariant too. Hence G is reducing for both operators."
       ],
-      "layout": "reading"
+      "mathtex": "H=(H_{11}\\oplus H_{10}\\oplus H_{01}\\oplus H_{00})\\oplus G",
+      "diagram": "block-operator",
+      "takeaway": "The generic part can be studied independently of every endpoint intersection.",
+      "layout": "equation",
+      "id": "04-authored",
+      "eyebrow": "G2 · 045000 · The generic remainder is reducing"
     },
     {
-      "id": "05-overview",
-      "title": "Why all four intersections disappear on the generic part",
-      "eyebrow": "G2 · 045000 · first-pass outline",
-      "lead": "Suppose a nonzero vector in the generic part lay in both U and V.",
+      "title": "Why the generic part contains no endpoint directions",
+      "lead": "All four elementary intersections disappear when restricted to G.",
       "body": [
-        "It would belong to the common part as well. But the generic part is perpendicular to the common part. A nonzero vector cannot lie in a subspace and in its orthogonal complement simultaneously. The same reasoning applies to the other three intersections. Inside the generic part, there are no nonzero common vectors, no source-only perpendicular vectors, no target-only perpendicular vectors, and no vectors perpendicular to both. This is sometimes called generic position for the restricted pair of subspaces. In finite dimensions, that means all the principal angles in the generic part lie strictly between zero and ninety degrees."
+        "Suppose x in G also belongs to U∩V. Then x belongs to H₁₁, but G is perpendicular to H₁₁; consequently x=0. The same argument applies to the other three intersections.",
+        "The generic part therefore has no common direction and no nonzero source-only, target-only, or neither-only direction."
       ],
-      "layout": "reading"
+      "diagram": "g2-halmos-blocks",
+      "takeaway": "Generic position means the four membership intersections are all trivial.",
+      "layout": "figure",
+      "id": "05-authored",
+      "eyebrow": "G2 · 045000 · Why the generic part contains no endpoint directions"
     },
     {
-      "id": "06-overview",
-      "title": "A deeper operator description",
-      "eyebrow": "G2 · 045000 · first-pass outline",
-      "lead": "What if the ambient space is an infinite-dimensional Hilbert space?",
+      "title": "The generic C–S block",
+      "lead": "In finite dimensions, G decomposes into principal planes with angles strictly between 0 and π/2.",
       "body": [
-        "The four elementary pieces can still be defined using intersections and orthogonal complements, provided the projections are onto closed subspaces. Their sum is an orthogonal sum of closed subspaces, and its orthogonal complement gives a generic remainder. Both projections still reduce this remainder. But here an important finite-dimensional shortcut can fail. We cannot always choose an orthonormal basis of individual principal-angle eigenvectors. An operator may have continuous spectrum rather than a complete eigenvector list. To generalize the two-by-two picture, use an operator in place of each scalar cosine."
+        "On each plane, P is diag(1,0) and Q has the [[c²,cs],[cs,s²]] form. All elementary 0- and 90-degree directions were removed before these blocks were introduced.",
+        "Thus the Halmos picture consists of four easy endpoint spaces and a collection of genuinely tilted cosine–sine blocks."
       ],
-      "layout": "reading"
+      "mathtex": "P_G=\\begin{bmatrix}I&0\\\\0&0\\end{bmatrix},\\quad Q_G=\\begin{bmatrix}C^2&CS\\\\CS&S^2\\end{bmatrix}",
+      "diagram": "g2-cs-block",
+      "takeaway": "On the generic part, the only remaining geometry is the principal-angle geometry.",
+      "layout": "equation",
+      "id": "06-authored",
+      "eyebrow": "G2 · 045000 · The generic C–S block"
     },
     {
-      "id": "07-overview",
-      "title": "Why injective does not mean uniformly separated",
-      "eyebrow": "G2 · 045000 · first-pass outline",
-      "lead": "There is a final distinction worth keeping in mind.",
+      "title": "Infinite-dimensional caution: no uniform gap from injectivity",
+      "lead": "An operator can have no zero eigenvector and still fail to be bounded below.",
       "body": [
-        "On the generic part, no nonzero direction lies in any of the four elementary intersections. In particular, the cosine and sine operators do not have actual zero eigenvectors caused by the removed endpoint pieces. In finite dimensions, that often lets us bound both cosine and sine away from zero, because finitely many positive eigenvalues have a positive minimum. In infinite dimensions, injectivity does not imply a positive lower bound. A sequence of directions can have principal angles approaching zero or ninety degrees even when neither endpoint angle has an eigenvector."
+        "For example, consider independent generic principal planes whose angles θ_n approach π/2 without ever reaching it. Every cosθ_n is positive, so no paired cosine direction vanishes.",
+        "Yet inf cosθ_n=0. The cosine operator is injective but has no bounded inverse on its range. This is why infinite-dimensional angle results need careful spectral and closed-range hypotheses."
       ],
-      "layout": "reading"
+      "mathtex": "\\cos\\theta_n>0\\ (\\forall n),\\qquad \\inf_n\\cos\\theta_n=0",
+      "takeaway": "No right-angle eigenvector does not imply a uniform acute-angle bound.",
+      "layout": "equation",
+      "id": "07-authored",
+      "eyebrow": "G2 · 045000 · Infinite-dimensional caution: no uniform gap from injectivity",
+      "diagram": "g2-halmos-angle-limit"
     },
     {
-      "id": "08-overview",
-      "title": "What the classification buys us",
-      "eyebrow": "G2 · 045000 · first-pass outline",
-      "lead": "Consider two projection pairs.",
+      "title": "Defect dimensions are invariants",
+      "lead": "A unitary change of ambient coordinates preserves the dimensions of all four elementary spaces.",
       "body": [
-        "If one has a source defect and the other does not, no unitary change of ambient coordinates can transform one pair into the other while respecting which projection is which. The dimensions of the defect spaces cannot be erased by a change of basis. Likewise, if their generic angles differ, their geometry differs even if the elementary dimensions match. So a classification needs both pieces of information: the sizes of the four elementary parts, and the operator describing the generic cosine–sine geometry. In finite dimensions, the latter reduces to the multiset of intermediate principal angles."
+        "If one projection pair has a nonzero U-only defect and another does not, no simultaneous unitary equivalence of the pairs can erase that difference.",
+        "The generic angles also matter: two pairs with the same elementary dimensions but different principal-angle data need not be unitarily equivalent."
       ],
-      "layout": "reading"
+      "diagram": "g2-halmos-six-space",
+      "takeaway": "Endpoint multiplicities and generic angle data are part of the geometry of a projection pair.",
+      "layout": "figure",
+      "id": "08-authored",
+      "eyebrow": "G2 · 045000 · Defect dimensions are invariants"
     },
     {
-      "id": "09-overview",
-      "title": "Reconstruction",
-      "eyebrow": "G2 · 045000 · first-pass outline",
-      "lead": "Return to our six-dimensional example.",
+      "title": "Reconstruct the six-dimensional pair",
+      "lead": "Identify all four elementary subspaces, then derive the final generic block.",
       "body": [
-        "Identify all four elementary parts and write down the projection values on each. Then prove that the plane spanned by the fifth and sixth coordinate directions is reducing for both projections. Next, prove in general that the four elementary parts are mutually orthogonal and that their orthogonal complement is invariant under both projections. Finally, explain why the absence of a ninety-degree eigenvector in infinite dimensions does not by itself produce a uniform bound away from ninety degrees."
+        "For U=span(e₁,e₂,e₅) and V=span(e₁,e₃,c e₅+s e₆), compute the values of P and Q on e₁ through e₄. Show that span(e₅,e₆) is reducing and calculate the Q block there.",
+        "Finally explain why an infinite-dimensional generic pair may have strictly positive individual cosines without a uniform lower bound."
       ],
-      "layout": "reading"
-    },
-    {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 045000 · mathematical reference",
-      "lead": "Return to our six-dimensional example.",
-      "body": [
-        "Identify all four elementary parts and write down the projection values on each. Then prove that the plane spanned by the fifth and sixth coordinate directions is reducing for both projections."
-      ],
-      "mathtex": "H_{11}=U\\cap V,\\quad H_{10}=U\\cap V^\\perp,\\quad\nH_{01}=U^\\perp\\cap V,\\quad H_{00}=U^\\perp\\cap V^\\perp.",
-      "layout": "equation"
-    },
-    {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 045000 · conclusion",
-      "lead": "Finally, explain why the absence of a ninety-degree eigenvector in infinite dimensions does not by itself produce a uniform bound away from ninety degrees.",
-      "body": [],
-      "layout": "reading"
+      "diagram": "g2-halmos-six-space",
+      "takeaway": "Halmos’s decomposition is a complete bookkeeping system for two orthogonal projections.",
+      "layout": "figure",
+      "id": "09-authored",
+      "eyebrow": "G2 · 045000 · Reconstruct the six-dimensional pair"
     }
   ]
 }
