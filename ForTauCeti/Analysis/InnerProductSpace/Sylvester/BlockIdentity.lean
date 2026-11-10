@@ -55,7 +55,6 @@ signature, proof, attribute, declaration name or namespace changed.
 public section
 
 open scoped InnerProductSpace
-open TauCeti.OneParameterUnitaryGroup (generator)
 
 namespace TauCeti
 namespace HilbertSchmidt
@@ -69,33 +68,35 @@ bounded by the block radii, so this converts the pointwise Sylvester equation
 into something the Hilbert–Schmidt ideal properties can consume.
 
 The self-adjointness proofs are taken as *arguments*, together with the
-identifications `generator U = A` and `generator V = B`, rather than being
+identifications `(U.val.stoneGenerator U.property) = A` and `(V.val.stoneGenerator V.property) =
+      B`, rather than being
 manufactured internally from `isSelfAdjoint_generator`.  That is deliberate: the
 consumer has a given `hA : IsSelfAdjoint A` and works with projections of `A`,
 and `isSelfAdjoint_generator U` proves a different proposition — equal only
-across `generator U = A`.  Since `specProjection` takes the proof as an
+across `(U.val.stoneGenerator U.property) = A`.  Since `specProjection` takes the proof as an
 argument, manufacturing it here would push a dependent rewrite through every
 projection, domain membership and cut operator at the call site.  Taking it as a
 hypothesis does the transport once, here. -/
 theorem sylvester_block_identity
-    (U : TauCeti.OneParameterUnitaryGroup E) (V : TauCeti.OneParameterUnitaryGroup F)
+    (U : {G : TauCeti.Semigroups.StronglyContinuousGroup E // G.IsUnitary}) (V : {G :
+          TauCeti.Semigroups.StronglyContinuousGroup F // G.IsUnitary})
     (b : HilbertBasis ι ℂ F)
     {A : E →ₗ.[ℂ] E} {Bop : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
-    (hUA : generator U = A) (hVB : generator V = Bop)
+    (hUA : (U.val.stoneGenerator U.property) = A) (hVB : (V.val.stoneGenerator V.property) = Bop)
     {SA SB : Set ℝ} (hSA : MeasurableSet SA) (hSB : MeasurableSet SB)
     {MA lam rA : ℝ} (hbndA : ∀ s ∈ SA, |s| ≤ MA) (hrA : 0 ≤ rA)
     (hcrA : ∀ s ∈ SA, |s - lam| ≤ rA)
     {MB alp rB : ℝ} (hbndB : ∀ s ∈ SB, |s| ≤ MB) (hrB : 0 ≤ rB)
     (hcrB : ∀ s ∈ SB, |s - alp| ≤ rB)
-    (z : (generator (sylvesterGroup U V b)).domain)
+    (z : ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property).domain)
     (hZP : (TauCeti.LinearPMap.specProjection hA SA hSA).comp
         (b.columnOperator (z : lp (fun _ : ι => E) 2)) =
         b.columnOperator (z : lp (fun _ : ι => E) 2))
     (hZQ : (b.columnOperator (z : lp (fun _ : ι => E) 2)).comp
         (TauCeti.LinearPMap.specProjection hB SB hSB)
         = b.columnOperator (z : lp (fun _ : ι => E) 2)) :
-    b.columnOperator (generator (sylvesterGroup U V b) z)
+    b.columnOperator ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property z)
         - ((lam : ℂ) - (alp : ℂ)) • b.columnOperator (z : lp (fun _ : ι => E) 2)
       = (TauCeti.LinearPMap.specCutOp hA SA hSA hrA hcrA).comp
           (b.columnOperator (z : lp (fun _ : ι => E) 2))
@@ -104,10 +105,12 @@ theorem sylvester_block_identity
   set Z := b.columnOperator (z : lp (fun _ : ι => E) 2) with hZ
   set P := TauCeti.LinearPMap.specProjection hA SA hSA with hP
   set Q := TauCeti.LinearPMap.specProjection hB SB hSB with hQ
-  have hdomV : (generator V).domain = Bop.domain := congrArg LinearPMap.domain hVB
-  have hdense : Dense ((generator V).domain : Set F) := by
+  have hdomV : ((V.val.stoneGenerator V.property)).domain = Bop.domain := congrArg
+        LinearPMap.domain hVB
+  have hdense : Dense (((V.val.stoneGenerator V.property)).domain : Set F) := by
     rw [hdomV]; exact hB.dense_domain
-  refine ContinuousLinearMap.ext_on (R₁ := ℂ) (s := ((generator V).domain : Set F))
+  refine ContinuousLinearMap.ext_on (R₁ := ℂ) (s := (((V.val.stoneGenerator V.property)).domain :
+        Set F))
     (by rwa [Submodule.span_eq]) ?_
   intro x hx
   have hx' : x ∈ Bop.domain := (le_of_eq hdomV) hx
@@ -123,9 +126,9 @@ theorem sylvester_block_identity
       = A ⟨Z x, hZxdom⟩ - (lam : ℂ) • Z x :=
     TauCeti.LinearPMap.specCutOp_apply hA SA hSA hbndA hrA hcrA hZx hZxdom
   -- transport the generator values across the identifications
-  have hUval : generator U ⟨Z x, hmem⟩ = A ⟨Z x, hZxdom⟩ :=
+  have hUval : (U.val.stoneGenerator U.property) ⟨Z x, hmem⟩ = A ⟨Z x, hZxdom⟩ :=
     (LinearPMap.ext_iff.mp hUA).2 (x := Z x) (hf := hmem) (hg := hZxdom)
-  have hVval : generator V ⟨x, hx⟩ = Bop ⟨x, hx'⟩ :=
+  have hVval : (V.val.stoneGenerator V.property) ⟨x, hx⟩ = Bop ⟨x, hx'⟩ :=
     (LinearPMap.ext_iff.mp hVB).2 (x := x) (hf := hx) (hg := hx')
   -- the right factor, valid at every vector
   obtain ⟨hQx, hright⟩ :=
@@ -138,7 +141,8 @@ theorem sylvester_block_identity
     have := congrArg (fun T : F →L[ℂ] E => T y) hZQ
     simpa [hQ] using this
   -- assemble
-  have heq' : (b.columnOperator (generator (sylvesterGroup U V b) z)) x
+  have heq' : (b.columnOperator ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V
+        b).property z)) x
       = A ⟨Z x, hZxdom⟩ - Z (Bop ⟨x, hx'⟩) := by
     rw [← heq, hUval, hVval]
   have hcut : TauCeti.LinearPMap.specCutOp hB SB hSB hrB hcrB x

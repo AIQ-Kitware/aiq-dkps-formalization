@@ -51,7 +51,6 @@ signature, proof, attribute, declaration name or namespace changed.
 public section
 
 open scoped InnerProductSpace ENNReal
-open TauCeti.OneParameterUnitaryGroup (generator)
 
 namespace TauCeti
 namespace HilbertSchmidt
@@ -87,8 +86,10 @@ noncomputable def gridProj (hA : IsSelfAdjoint A) (ε : ℝ) (k : ℤ) : E →L[
 
 /-- The grid projections commute with the group they were built from. -/
 private theorem gridProj_comm (hA : IsSelfAdjoint A) (ε : ℝ) (k : ℤ) (t : ℝ) (y : E) :
-    gridProj hA ε k ((TauCeti.LinearPMap.genToGroup hA).U t y)
-      = (TauCeti.LinearPMap.genToGroup hA).U t (gridProj hA ε k y) :=
+    gridProj hA ε k ((TauCeti.LinearPMap.genToGroup hA).val.complexOperator
+          (TauCeti.LinearPMap.genToGroup hA).property t y)
+      = (TauCeti.LinearPMap.genToGroup hA).val.complexOperator (TauCeti.LinearPMap.genToGroup
+            hA).property t (gridProj hA ε k y) :=
   TauCeti.LinearPMap.specProjection_expLimit_apply hA _ _ t y
 
 /-- **The per-block bound, with the shift.**  On a block whose two projections
@@ -98,33 +99,40 @@ projection is zero, where the bound is vacuous.
 
 The group is a parameter rather than `genToGroup hA` so that no `set` has to
 rewrite inside the type of `z`. -/
-theorem norm_block_ge (U : TauCeti.OneParameterUnitaryGroup E)
-    (V : TauCeti.OneParameterUnitaryGroup F)
+theorem norm_block_ge (U : {G : TauCeti.Semigroups.StronglyContinuousGroup E // G.IsUnitary})
+    (V : {G : TauCeti.Semigroups.StronglyContinuousGroup F // G.IsUnitary})
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
-    (hUA : generator U = A) (hVB : generator V = Bop)
+    (hUA : (U.val.stoneGenerator U.property) = A) (hVB : (V.val.stoneGenerator V.property) = Bop)
     (b : HilbertBasis ι ℂ F) {δ ε : ℝ} (hε : 0 < ε)
     (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ _root_.LinearPMap.spectrum A →
       ∀ alp : ℝ, (alp : ℂ) ∈ _root_.LinearPMap.spectrum Bop → δ ≤ |lam - alp|)
     (s : ℝ) (k l : ℤ)
-    (hUcomm : ∀ (t : ℝ) (y : E), gridProj hA ε k (U.U t y) = U.U t (gridProj hA ε k y))
-    (hVcomm : ∀ (t : ℝ) (y : F), gridProj hB ε l (V.U t y) = V.U t (gridProj hB ε l y))
-    (z : (generator (sylvesterGroup U V b)).domain) :
+    (hUcomm : ∀ (t : ℝ) (y : E), gridProj hA ε k (U.val.complexOperator U.property t y) =
+          U.val.complexOperator U.property t (gridProj hA ε k y))
+    (hVcomm : ∀ (t : ℝ) (y : F), gridProj hB ε l (V.val.complexOperator V.property t y) =
+          V.val.complexOperator V.property t (gridProj hB ε l y))
+    (z : ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property).domain) :
     (δ - |s| - 4 * ε)
         * ‖blockCLM b (gridProj hA ε k) (gridProj hB ε l) (z : lp (fun _ : ι => E) 2)‖
       ≤ ‖blockCLM b (gridProj hA ε k) (gridProj hB ε l)
-          (generator (sylvesterGroup U V b) z - (s : ℂ) • (z : lp (fun _ : ι => E) 2))‖ := by
+          ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property z - (s : ℂ) •
+                (z : lp (fun _ : ι => E) 2))‖ := by
   have hT : ∀ (t : ℝ) (y : lp (fun _ : ι => E) 2),
-      blockCLM b (gridProj hA ε k) (gridProj hB ε l) ((sylvesterGroup U V b).U t y)
-        = (sylvesterGroup U V b).U t (blockCLM b (gridProj hA ε k) (gridProj hB ε l) y) := by
+      blockCLM b (gridProj hA ε k) (gridProj hB ε l) ((sylvesterGroup U V b).val.complexOperator
+            (sylvesterGroup U V b).property t y)
+        = (sylvesterGroup U V b).val.complexOperator (sylvesterGroup U V b).property t (blockCLM b
+              (gridProj hA ε k) (gridProj hB ε l) y) := by
     intro t y
     simpa using blockCLM_comm_sylvesterGroup U V b (gridProj hA ε k) (gridProj hB ε l)
       hUcomm hVcomm t y
-  obtain ⟨hmemW, hcommW⟩ := TauCeti.OneParameterUnitaryGroup.generator_commute
-    (sylvesterGroup U V b) (blockCLM b (gridProj hA ε k) (gridProj hB ε l)) hT z
+  obtain ⟨hmemW, hcommW⟩ := (sylvesterGroup U V b).val.stoneGenerator_commute
+    (sylvesterGroup U V b).property (blockCLM b (gridProj hA ε k) (gridProj hB ε l)) hT z
   set W := blockCLM b (gridProj hA ε k) (gridProj hB ε l) (z : lp (fun _ : ι => E) 2) with hW
   have hrewrite : blockCLM b (gridProj hA ε k) (gridProj hB ε l)
-      (generator (sylvesterGroup U V b) z - (s : ℂ) • (z : lp (fun _ : ι => E) 2))
-      = generator (sylvesterGroup U V b) ⟨W, hmemW⟩ - (s : ℂ) • W := by
+      ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property z - (s : ℂ) • (z
+            : lp (fun _ : ι => E) 2))
+      = (sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property ⟨W, hmemW⟩ - (s
+            : ℂ) • W := by
     rw [map_sub, map_smul, hcommW]
   rw [hrewrite]
   by_cases hPz : gridProj hA ε k = 0
@@ -191,13 +199,15 @@ theorem norm_block_ge (U : TauCeti.OneParameterUnitaryGroup E)
       simpa using h
     linarith
   have htri : |(k : ℝ) * ε - (l : ℝ) * ε - s| * ‖W‖
-      ≤ ‖generator (sylvesterGroup U V b) ⟨W, hmemW⟩ - (s : ℂ) • W‖
-        + ‖generator (sylvesterGroup U V b) ⟨W, hmemW⟩
+      ≤ ‖(sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property ⟨W, hmemW⟩ - (s
+            : ℂ) • W‖
+        + ‖(sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property ⟨W, hmemW⟩
             - ((((k : ℝ) * ε : ℝ) : ℂ) - (((l : ℝ) * ε : ℝ) : ℂ)) • W‖ := by
     rw [← hscal]
     have hid : ((((k : ℝ) * ε : ℝ) : ℂ) - (((l : ℝ) * ε : ℝ) : ℂ) - (s : ℂ)) • W
-        = (generator (sylvesterGroup U V b) ⟨W, hmemW⟩ - (s : ℂ) • W)
-          - (generator (sylvesterGroup U V b) ⟨W, hmemW⟩
+        = ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property ⟨W, hmemW⟩ -
+              (s : ℂ) • W)
+          - ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property ⟨W, hmemW⟩
               - ((((k : ℝ) * ε : ℝ) : ℂ) - (((l : ℝ) * ε : ℝ) : ℂ)) • W) := by
       module
     rw [hid]
@@ -216,15 +226,21 @@ theorem norm_sub_smul_ge_of_grid (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
     (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ _root_.LinearPMap.spectrum A →
       ∀ alp : ℝ, (alp : ℂ) ∈ _root_.LinearPMap.spectrum Bop → δ ≤ |lam - alp|)
     (s : ℝ)
-    (z : (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
-      (TauCeti.LinearPMap.genToGroup hB) b)).domain) :
+    (z : ((sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
+      (TauCeti.LinearPMap.genToGroup hB) b).val.stoneGenerator (sylvesterGroup
+            (TauCeti.LinearPMap.genToGroup hA)
+      (TauCeti.LinearPMap.genToGroup hB) b).property).domain) :
     (δ - |s| - 4 * ε) * ‖(z : lp (fun _ : ι => E) 2)‖
-      ≤ ‖generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
-          (TauCeti.LinearPMap.genToGroup hB) b) z
+      ≤ ‖(sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
+          (TauCeti.LinearPMap.genToGroup hB) b).val.stoneGenerator (sylvesterGroup
+                (TauCeti.LinearPMap.genToGroup hA)
+          (TauCeti.LinearPMap.genToGroup hB) b).property z
           - (s : ℂ) • (z : lp (fun _ : ι => E) 2)‖ := by
   obtain ⟨w, c, -⟩ := exists_hilbertBasis ℂ E
-  set y := generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
-    (TauCeti.LinearPMap.genToGroup hB) b) z
+  set y := (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
+    (TauCeti.LinearPMap.genToGroup hB) b).val.stoneGenerator (sylvesterGroup
+          (TauCeti.LinearPMap.genToGroup hA)
+    (TauCeti.LinearPMap.genToGroup hB) b).property z
     - (s : ℂ) • (z : lp (fun _ : ι => E) 2) with hy
   -- the block family splits norms
   have hsplit : ∀ g : lp (fun _ : ι => E) 2,
@@ -241,7 +257,8 @@ theorem norm_sub_smul_ge_of_grid (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
     intro p
     have hreal := norm_block_ge (TauCeti.LinearPMap.genToGroup hA)
       (TauCeti.LinearPMap.genToGroup hB) hA hB
-      (TauCeti.LinearPMap.generator_genToGroup hA) (TauCeti.LinearPMap.generator_genToGroup hB)
+      (TauCeti.LinearPMap.stoneGenerator_genToGroup hA)
+            (TauCeti.LinearPMap.stoneGenerator_genToGroup hB)
       b hε hgap s p.1 p.2 (gridProj_comm hA ε p.1) (gridProj_comm hB ε p.2) z
     rw [hy]
     rcases le_or_gt 0 (δ - |s| - 4 * ε) with hc | hc
@@ -272,8 +289,10 @@ theorem hasVectorSpectralGap_sylvesterGroup (hA : IsSelfAdjoint A) (hB : IsSelfA
     (TauCeti.LinearPMap.genToGroup hB) b with hSdef
   -- every real point inside the gap is a resolvent point
   have hres : ∀ s ∈ Set.Ioo (-δ) δ, (s : ℂ) ∈ _root_.LinearPMap.resolventSet
-      (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
-        (TauCeti.LinearPMap.genToGroup hB) b)) := by
+      ((sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
+        (TauCeti.LinearPMap.genToGroup hB) b).val.stoneGenerator (sylvesterGroup
+              (TauCeti.LinearPMap.genToGroup hA)
+        (TauCeti.LinearPMap.genToGroup hB) b).property) := by
     intro s hs
     have hsabs : |s| < δ := abs_lt.mpr ⟨hs.1, hs.2⟩
     refine hS.mem_resolventSet_of_norm_le (c := δ - |s|) (by linarith) ?_

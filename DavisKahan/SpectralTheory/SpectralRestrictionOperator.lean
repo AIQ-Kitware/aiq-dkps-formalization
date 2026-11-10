@@ -98,7 +98,8 @@ theorem selfAdjointSpectralRestriction_inclusion_intertwines
 noncomputable def selfAdjointSpectralSubspaceUnitaryGroup
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B) :
-    TauCeti.OneParameterUnitaryGroup (selfAdjointSpectralSubspace A hA B hB) :=
+    {G : TauCeti.Semigroups.StronglyContinuousGroup
+      (selfAdjointSpectralSubspace A hA B hB) // G.IsUnitary} :=
   TauCeti.LinearPMap.genToGroup
     (TauCeti.LinearPMap.isSelfAdjoint_specRestrict hA B hB)
 

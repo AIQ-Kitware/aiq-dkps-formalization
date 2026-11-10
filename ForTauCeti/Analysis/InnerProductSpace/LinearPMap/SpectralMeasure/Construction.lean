@@ -9,7 +9,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
 public import Mathlib.MeasureTheory.Integral.DominatedConvergence
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
-public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjoint
 
 /-!
 # The spectral measure of an unbounded self-adjoint operator: construction
@@ -810,8 +810,8 @@ theorem dense_specRestrict_domain :
 self-adjoint.**  Symmetry is inherited; the two surjectivities come from the
 resolvent, which preserves the range because it commutes with the projection. -/
 theorem isSelfAdjoint_specRestrict : IsSelfAdjoint (specRestrict hA B hB) := by
-  refine TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_of_surjective_addSub _
-    (isFormalAdjoint_specRestrict hA B hB) (dense_specRestrict_domain hA B hB) ?_ ?_
+  refine _root_.LinearPMap.isSelfAdjoint_of_surjective_addSub _
+    (isFormalAdjoint_specRestrict hA B hB) ?_ ?_
   -- the canonical resolvent solves `z • ψ - T ψ = φ`; the surjectivity criterion wants
   -- `T ψ ± i • ψ = φ`, so solve at `-φ` and negate
   · intro φ

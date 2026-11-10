@@ -76,3 +76,25 @@ The retired source contained a small number of DKPS-added modules with no live
 counterpart. Their contents remain recoverable from that patch. Whether any such
 mathematics deserves a future `ForTauCeti` implementation is a new API decision,
 not unfinished Spectra migration work.
+
+
+## Native unitary groups and Stone generators (2026-11-09)
+
+The local `OneParameterUnitaryGroup/{Basic,SemigroupBridge,Stone,Commutant}.lean`
+stack is retired. Current Yosida and Hilbert–Schmidt Sylvester consumers use
+native Tau Ceti groups and `stoneGenerator`; the concrete Yosida strong-limit
+analysis remains local. Accepted integration
+`69f07fb7230ae5b6f99b87ac83c898043bc903c7` (#13869) explicitly credits the
+DKPS commutant, normalization and shifted-surjectivity sources. Its native
+`LinearPMap/SelfAdjoint.lean` also preserves the Basic module's Spectra
+ancestry; this is not an origin claim for all of Tau Ceti's group framework.
+
+The direct complex-adjoint adaptation now lives in
+[`ComplexOperator.lean`](../../ForTauCeti/Analysis/Semigroups/Group/ComplexOperator.lean).
+Its header preserves the original Spectra snapshot, copyright 2026 Spectra
+Formalization Project, author Adam Bornemann, Apache-2.0, and the intervening
+Kitware/Jon Crall/Claude Opus 5 attribution. Before retirement the four local
+modules are recoverable at DKPS `7327e26f4`. The Yosida and Duhamel donor
+headers remain intact. See the contribution census's November 9 entries for
+the exact native declarations, carrier/normalization distinctions and retained
+local mathematics.

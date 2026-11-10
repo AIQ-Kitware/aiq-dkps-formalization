@@ -23,7 +23,7 @@ analysis is required at any step:
   (`specProjection_comm_resolvent'`);
 * the symmetric Yosida approximant is a linear combination of two resolvents,
   so it commutes too;
-* an exponential of a commuting operator commutes (`commute_expTime_of_commute`);
+* an exponential of a commuting operator commutes (`Commute.exp_right`);
 * and `expLimit` is the strong limit of those exponentials, so commutation
   survives — a projection is continuous, and limits are unique.
 
@@ -45,6 +45,8 @@ open _root_.LinearPMap (
   resolvent)
 
 open scoped InnerProductSpace
+open TauCeti.Semigroups.StronglyContinuousGroup (ofBoundedExp)
+
 open Complex Filter Topology
 
 namespace TauCeti
@@ -71,12 +73,14 @@ theorem specProjection_comm_yosidaApproxSym (n : ℕ+) :
   push_cast
   exact (h1.add_right h2).smul_right (-((n : ℂ) ^ 2 / 2))
 
-/-- A spectral projection commutes with each bounded exponential approximant. -/
-theorem specProjection_comm_expApprox (n : ℕ+) (t : ℝ) :
-    Commute (specProjection hA B hB) (expApprox hA n t) := by
-  rw [expApprox_eq_expTime]
-  exact commute_expTime_of_commute
-    ((specProjection_comm_yosidaApproxSym hA B hB n).smul_right (Complex.I)).symm t
+/-- A spectral projection commutes with each native bounded Yosida flow. -/
+theorem specProjection_comm_yosidaFlow (n : ℕ+) (t : ℝ) (ψ : H) :
+    specProjection hA B hB (ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t ψ) =
+      ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t (specProjection hA B hB ψ) := by
+  rw [Semigroups.StronglyContinuousGroup.ofBoundedExp_apply]
+  have h := (((specProjection_comm_yosidaApproxSym hA B hB n).smul_right I).smul_right
+    (t : ℂ)).exp_right
+  exact congrArg (fun T : H →L[ℂ] H => T ψ) h.eq
 
 /-- **Spectral projections commute with the unitary group.**  Commutation with
 the bounded approximants survives the strong limit. -/
@@ -84,16 +88,16 @@ the bounded approximants survives the strong limit. -/
 theorem specProjection_expLimit_apply (t : ℝ) (ψ : H) :
     specProjection hA B hB (expLimit hA t ψ) = expLimit hA t (specProjection hA B hB ψ) := by
   have hstep : ∀ n : ℕ+,
-      specProjection hA B hB (expApprox hA n t ψ)
-        = expApprox hA n t (specProjection hA B hB ψ) := by
+      specProjection hA B hB (ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t ψ)
+        = ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t (specProjection hA B hB ψ) := by
     intro n
-    have h := congrArg (fun T : H →L[ℂ] H => T ψ)
-      (specProjection_comm_expApprox hA B hB n t)
-    simpa only [_root_.mul_apply_eq_comp] using h
-  have hleft : Tendsto (fun n : ℕ+ => specProjection hA B hB (expApprox hA n t ψ))
+    exact specProjection_comm_yosidaFlow hA B hB n t ψ
+  have hleft : Tendsto (fun n : ℕ+ => specProjection hA B hB (ofBoundedExp
+    (A.symmetricYosidaApproximation (n : ℝ)) t ψ))
       atTop (𝓝 (specProjection hA B hB (expLimit hA t ψ))) :=
     ((specProjection hA B hB).continuous.tendsto _).comp (tendsto_expLimitFun hA t ψ)
-  have hright : Tendsto (fun n : ℕ+ => expApprox hA n t (specProjection hA B hB ψ))
+  have hright : Tendsto (fun n : ℕ+ => ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t
+    (specProjection hA B hB ψ))
       atTop (𝓝 (expLimit hA t (specProjection hA B hB ψ))) :=
     tendsto_expLimitFun hA t (specProjection hA B hB ψ)
   exact tendsto_nhds_unique (by simpa only [hstep] using hleft) hright

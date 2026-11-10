@@ -5054,5 +5054,147 @@ but its current review finds all three proposed declarations redundant. A
 Lean example using accepted `StronglyContinuousGroup.ofBoundedExp`,
 `isUnitary_ofBoundedExp`, and `isSelfAdjoint_symmetricYosidaApproximation`
 proves the SA-E22 unitary-group assertion directly, without the PR's wrappers.
-The PR's disposition is pending; this observation does not attribute the native
-bounded-group implementation to DKPS.
+The user authorized closing the PR as already covered. The connected GitHub
+app rejected the close request (403), so authenticated host closure is pending.
+This observation does not attribute the native bounded-group implementation to DKPS.
+
+
+### November 9: consume native bounded Yosida flows
+
+At the unchanged accepted Tau Ceti pin
+`a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8`, every bounded approximating
+flow now directly uses
+`StronglyContinuousGroup.ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ))`.
+This consumes the existing coverage of SA-E22 that motivated the authorized
+covered disposition of [#30735](https://github.com/TauCetiProject/TauCeti/pull/30735).
+GitHub verification on November 9 confirms #30735 is closed and unmerged;
+[#30736](https://github.com/TauCetiProject/TauCeti/pull/30736) remains open
+and unmerged. This is a local integration of accepted APIs, not a claim that
+#30735 merged or that the native bounded-group proofs descended from DKPS.
+
+The retired local declarations are `yosidaApproximantSymSA`, `expApprox`,
+`expApprox_zero`, `expApprox_add`, `inner_expApprox`, `expApprox_eq_expTime`, and
+`norm_expApprox`. Their callers use native zero/addition laws,
+`isUnitary_ofBoundedExp`, `IsUnitary.norm_map`, `IsUnitary.inner_map_map`, and
+`IsUnitary.map_smul` directly. No bounded Yosida-flow adapter or re-export
+replaces them. `continuous_expApprox_apply` is also retired in favor of native
+`continuous_orbit`.
+
+The remaining mathematics has the following current names:
+
+| Historical DKPS declaration | Current declaration and scope |
+| --- | --- |
+| `norm_expApprox_sub_le` | `LinearPMap.norm_yosidaFlow_sub_le`, commuting Duhamel bound for the two native approximating groups |
+| `norm_expApprox_sub_self_le` | `LinearPMap.norm_yosidaFlow_sub_self_le`, the domain continuity bound |
+| `cauchySeq_expApprox_of_mem_domain` / `cauchySeq_expApprox` | `LinearPMap.cauchySeq_yosidaFlow_of_mem_domain` / `cauchySeq_yosidaFlow`, pointwise Cauchy convergence |
+| `integral_expApprox` | `LinearPMap.integral_yosidaFlow`, native bounded-flow integral identity; the unused self-adjointness parameter is removed |
+| `specProjection_comm_expApprox` | `LinearPMap.specProjection_comm_yosidaFlow`, pointwise commutation of the spectral projection with the native bounded flow |
+
+All original complete complex Hilbert-space scopes are preserved, including
+zero-dimensional and nonseparable spaces. The Duhamel support now consumes
+native bounded Stone unitarity instead of maintaining an adjoint/norm proof
+engine. Its unused `IsSkewAdjointCLM`, `isSkewAdjointCLM_I_smul`,
+`commute_expTime`, and `real_smul_I_smul` declarations are retired. The
+commuting Duhamel estimate and the pointwise strong-limit construction remain
+local mathematics; neither is labeled an accepted upstream theorem by this
+change. The separate legacy unbounded unitary-group carrier and its Stone
+proofs remain to be migrated to the native group/generator representation.
+
+Historical source anchors are DKPS `303682284`,
+`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/YosidaApproximation.lean`,
+`StoneUniqueness.lean`, `SpectralProjectionGroup.lean`, and
+`ForTauCeti/Analysis/InnerProductSpace/SkewAdjointExponential.lean`.
+Copyright 2026 Kitware, Jon Crall/Claude Opus 5, Apache-2.0; the Yosida and
+Duhamel donors preserve Spectra Formalization Project/Adam Bornemann ancestry
+at `8dbaaf6728d1342ae16acf79fd7eef7c59b37e63`. The native API source anchors
+are `TauCeti/Analysis/Semigroups/Group/{Basic,Unitary,Stone/Basic}.lean` at the
+accepted pin above. Existing provenance notices are retained.
+
+Validation for this slice: focused Yosida/Stone/projection consumers passed,
+followed serially by the full default `lake build` (21773 jobs) and
+`lake build Challenge` (19999 jobs), with no warnings. Final logs are
+`.lake/migration/yosida-focused.log`, `full.log`, and `challenge.log`.
+The static declaration-name checker reports 41 unrelated existing findings;
+its baseline is retained for comparison during the native-carrier migration.
+
+
+### November 9: retire the parallel unitary-group and generator stack
+
+The maintained Yosida and Hilbert–Schmidt Sylvester constructions now produce
+native `TauCeti.Semigroups.StronglyContinuousGroup` objects with the native
+`IsUnitary` property. All consumers use their native `stoneGenerator`, whose
+normalization is `-i` times `complexGenerator`; the corresponding real orbit
+derivative is `i` times the Stone generator. The separate
+`TauCeti.OneParameterUnitaryGroup` record, generator-domain construction,
+chosen-limit generator, semigroup bridge, and forward Stone proof are deleted.
+No replacement group or generator record is introduced.
+
+The accepted integration is
+[`69f07fb7230ae5b6f99b87ac83c898043bc903c7`](https://github.com/TauCetiProject/TauCeti/commit/69f07fb7230ae5b6f99b87ac83c898043bc903c7),
+which is verified to be an ancestor of the unchanged Tau Ceti pin
+`a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8`.
+[#13869](https://github.com/TauCetiProject/TauCeti/pull/13869) was submitted
+directly by Erotemic. Its fresh Bors success notice and accepted-main
+integration establish acceptance; GitHub's `merged = false` flag is not used
+to deny that integration, and its closed state alone is not used as evidence.
+
+| Retired DKPS module | Native mathematics consumed | Roadmap and provenance |
+| --- | --- | --- |
+| `OneParameterUnitaryGroup/Basic.lean` | `StronglyContinuousGroup`, `stoneGenerator`, its domain/application formulas, reflection and native orbit differentiation; `LinearPMap.isSelfAdjoint_of_surjective_addSub` | SA-A21/A22: #13869 explicitly adapts the DKPS normalization and shifted-surjectivity criteria; this does not attribute the entire pre-existing native group framework to DKPS |
+| `OneParameterUnitaryGroup/SemigroupBridge.lean` | native `toSemigroup`, group/semigroup generator identification and `complexGenerator_restrictScalars` | #13869's generator source explicitly credits the DKPS bridge for delegation to the forward semigroup |
+| `OneParameterUnitaryGroup/Stone.lean` | native `isSelfAdjoint_stoneGenerator`; native `LinearPMap.dense_domain_of_surjective_add_I` | SA-A21/A22: native `Group/Unitary.lean` and `LinearPMap/SelfAdjoint.lean` disclose the DKPS adaptation |
+| `OneParameterUnitaryGroup/Commutant.lean` | native `IsUnitary.complexGenerator_commute`, normalized by `-i` for Stone consumers | SA-A13/A14: #13869 explicitly adapts the DKPS bounded-commutant argument and generalizes it through complex-linear semigroups |
+
+The spectral restriction now applies the accepted shifted-surjectivity
+criterion directly; it no longer imports the legacy group layer or supplies
+a redundant separate density hypothesis. The native joint-continuity theorem
+`tendsto_apply` also replaces the local Sylvester `tendsto_U_apply` proof.
+
+`ForTauCeti/Analysis/Semigroups/Group/ComplexOperator.lean` is the remaining
+small donor bridge. It packages native complex linearity as a complex
+continuous linear map for operator composition/adjoints, and derives the
+Stone-normalized two-sided quotient and commutant properties from native
+orbit differentiation and complex-generator commutation. It defines neither
+a group carrier nor a generator/domain. Its complex-adjoint identity retains
+the old DKPS/Spectra ancestry; the other bridges are direct applications of
+native APIs, not copied generator constructions. These bridge declarations
+are not claimed to be accepted upstream.
+
+The concrete Yosida-limit recovery is now
+`TauCeti.LinearPMap.stoneGenerator_genToGroup`, with supporting
+`tendsto_stoneDiffQuot_genToGroup`. The Hilbert–Schmidt identification remains
+`generator_sylvesterGroup_apply`, now stated directly with native Stone
+generators, and its negative-time helper is
+`tendsto_stoneDiffQuot_neg_time`. Its conclusion is still the domain-aware
+self-adjoint Sylvester equation `K Z = A Z - Z B`; no factor of `i`, sign,
+or domain hypothesis is silently changed. The source-facing consumers and
+explicit axiom audit are migrated in the same slice.
+
+All original complete complex Hilbert-space scopes are preserved, including
+zero spaces, nonseparable spaces and independent source/target universes.
+The `lp` group uses the real scalar structure obtained from its complex
+Hilbert space, matching the native unitary-group API. The pointwise Yosida
+convergence, explicit limit, and their integral/generator recovery remain
+local; abstract native Stone existence does not by itself identify that
+particular approximating sequence. Open #30736 is not counted as integrated.
+
+Historical source anchors before retirement: DKPS `7327e26f4`, the four
+`ForTauCeti/Analysis/InnerProductSpace/OneParameterUnitaryGroup/` modules.
+Kitware 2026, Jon Crall/Claude Opus 5, Apache-2.0; preserve the Basic module's
+Spectra Formalization Project/Adam Bornemann ancestry at
+`8dbaaf6728d1342ae16acf79fd7eef7c59b37e63`. The new bridge credits those
+notices and OpenAI gpt-6.1-sol for the current native reductions. Native
+source provenance is in `Group/{Generator,Unitary}.lean` and
+`InnerProductSpace/LinearPMap/SelfAdjoint.lean` at the accepted pin above.
+
+
+Final validation: focused native-generator/Sylvester consumers passed (6700
+jobs), followed by spectral-gap, paper, roadmap and explicit axiom-audit
+consumers (7484 jobs). The final bridge build passed (5906 jobs). The full
+default `lake build` passed (21767 jobs), then serially `lake build Challenge`
+passed (19993 jobs), with no warnings. Logs are local under
+`.lake/migration/native-{groups-focused,consumers-focused,bridge-final,full,challenge}.log`.
+Retired-module build products were removed before the final full build.
+The static name-drift check has exactly the same 41 findings as its saved
+pre-migration baseline, with no added finding. The repository cache remains
+bind-mounted on VM-local ext4; dependency pins are unchanged.

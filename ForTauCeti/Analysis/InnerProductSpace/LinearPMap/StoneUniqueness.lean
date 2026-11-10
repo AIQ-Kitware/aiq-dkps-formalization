@@ -7,20 +7,23 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal
-public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone
+public import ForTauCeti.Analysis.Semigroups.Group.ComplexOperator
 
 /-!
-# Stone's theorem, the uniqueness half
+# The native Stone generator of the Yosida limit group
 
-`genToGroup hA` builds the unitary group of a self-adjoint `A`.  This module
-proves that its generator is `A` again.
+`genToGroup hA` constructs a native strongly continuous unitary group from the
+explicit Yosida strong limit. This module proves that its native Stone
+generator is `A`. Tau Ceti already supplies abstract Stone existence and group
+uniqueness; the analysis here identifies the generator of this particular
+limit, using its integral identity.
 
 ## Why only one inclusion has to be proved
 
-`generator (genToGroup hA)` is self-adjoint by
-`OneParameterUnitaryGroup.isSelfAdjoint_generator` (Stone's forward direction),
+`(genToGroup hA).val.stoneGenerator (genToGroup hA).property` is self-adjoint by
+`StronglyContinuousGroup.isSelfAdjoint_stoneGenerator` (Stone's forward direction),
 and `eq_of_le_of_isSelfAdjoint` says a self-adjoint operator has no proper
-self-adjoint extension.  So `A ≤ generator (genToGroup hA)` already gives
+self-adjoint extension. The inclusion of `A` in that native Stone generator gives
 equality, and the reverse inclusion — which would need a description of the
 generator's domain — is never required.
 
@@ -58,10 +61,10 @@ second-order Duhamel estimate brings in `‖Aₙ² ψ‖`, which blows up with `
   No third-party code is incorporated, so no donor notice is carried.
 * **Extraction class:** *authored in place*, for upstreaming to Tau Ceti.
 * **Relation to existing libraries:** the uniqueness half of Stone's theorem for
-  a self-adjoint `LinearPMap`. Neither Mathlib nor the retired Spectra snapshot
-  carries it. Only one inclusion is proved: the generator of `genToGroup hA` is
+  the explicit Yosida limit of a self-adjoint `LinearPMap`. The native Stone
+  theorem now supplies self-adjointness. Only one inclusion is proved: its generator is
   self-adjoint by the forward direction, and a self-adjoint operator admits no
-  proper self-adjoint extension, so `A ≤ generator (genToGroup hA)` already
+  proper self-adjoint extension, so the forward graph inclusion already
   gives equality — the reverse inclusion, which would need a description of the
   generator's domain, is never required.
 * **Semantic differences from a donor:** not applicable.
@@ -70,6 +73,7 @@ second-order Duhamel estimate brings in `‖Aₙ² ψ‖`, which blows up with `
 public section
 
 open scoped InnerProductSpace
+open TauCeti.Semigroups.StronglyContinuousGroup (ofBoundedExp stoneDiffQuot_apply)
 open Filter Topology Complex MeasureTheory intervalIntegral
 
 namespace TauCeti
@@ -103,25 +107,21 @@ theorem integral_expTime_apply (B : H →L[ℂ] H) (ψ : H) (t : ℝ) :
 /-! ### Passing the identity to the limit -/
 
 /-- The identity, for the Yosida approximants. -/
-theorem integral_expApprox (hA : IsSelfAdjoint A) (n : ℕ+) (ψ : H) (t : ℝ) :
-    (∫ s in (0 : ℝ)..t, (I : ℂ) • expApprox hA n s (A.symmetricYosidaApproximation (n : ℝ) ψ))
-      = expApprox hA n t ψ - ψ := by
+theorem integral_yosidaFlow (n : ℕ+) (ψ : H) (t : ℝ) :
+    (∫ s in (0 : ℝ)..t, (I : ℂ) • ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) s
+      (A.symmetricYosidaApproximation (n : ℝ) ψ))
+      = ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t ψ - ψ := by
   have h := integral_expTime_apply ((I : ℂ) • A.symmetricYosidaApproximation (n : ℝ)) ψ t
-  simp only [smul_apply, map_smul, ← expApprox_eq_expTime hA n] at h
-  exact h
-
-/-- `s ↦ expApprox hA n s w` is continuous. -/
-@[simp]
-theorem continuous_expApprox_apply (hA : IsSelfAdjoint A) (n : ℕ+) (w : H) :
-    Continuous fun s : ℝ => expApprox hA n s w := by
-  simp only [expApprox_eq_expTime]
-  exact continuous_expTime_apply _ w
+  simp only [Semigroups.StronglyContinuousGroup.ofBoundedExp_apply,
+    ContinuousLinearMap.coe_restrictScalars']
+  simpa only [expTime_def, Complex.coe_smul, smul_apply, map_smul] using h
 
 /-- **The integral identity for the limit flow.**  The approximants converge
 pointwise in `s` and are bounded by a constant, because a convergent sequence of
-vectors is bounded and each `expApprox` is unitary. -/
+vectors is bounded and each native bounded flow is unitary. -/
 theorem integral_expLimit (hA : IsSelfAdjoint A) {ψ : H} (hψ : ψ ∈ A.domain) (t : ℝ) :
     (∫ s in (0 : ℝ)..t, (I : ℂ) • expLimit hA s (A ⟨ψ, hψ⟩)) = expLimit hA t ψ - ψ := by
+  let V (n : ℕ+) := ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ))
   have hconv :=
     ((hA.tendsto_symmetricYosidaApproximation_apply ⟨ψ, hψ⟩).mono_left
       atTop_le_cocompact).comp
@@ -135,62 +135,74 @@ theorem integral_expLimit (hA : IsSelfAdjoint A) {ψ : H} (hψ : ψ ∈ A.domain
     hnorm.eventually_le_const (by rw [hCdef]; linarith)
   -- the integrands converge pointwise
   have hlim : ∀ s : ℝ, Tendsto
-      (fun n : ℕ+ => (I : ℂ) • expApprox hA n s (A.symmetricYosidaApproximation (n : ℝ) ψ)) atTop
+      (fun n : ℕ+ => (I : ℂ) • V n s
+        (A.symmetricYosidaApproximation (n : ℝ) ψ)) atTop
       (𝓝 ((I : ℂ) • expLimit hA s (A ⟨ψ, hψ⟩))) := by
     intro s
     refine Filter.Tendsto.const_smul ?_ (I : ℂ)
     rw [tendsto_iff_norm_sub_tendsto_zero]
     have hsplit : ∀ n : ℕ+,
-        ‖expApprox hA n s (A.symmetricYosidaApproximation (n : ℝ) ψ) - expLimit hA s (A ⟨ψ, hψ⟩)‖
+        ‖V n s (A.symmetricYosidaApproximation
+          (n : ℝ) ψ) - expLimit hA s (A ⟨ψ, hψ⟩)‖
           ≤ ‖A.symmetricYosidaApproximation (n : ℝ) ψ - A ⟨ψ, hψ⟩‖
-            + ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := by
+            + ‖V n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := by
       intro n
-      calc ‖expApprox hA n s (A.symmetricYosidaApproximation (n : ℝ) ψ) - expLimit hA s (A ⟨ψ, hψ⟩)‖
-          = ‖expApprox hA n s (A.symmetricYosidaApproximation (n : ℝ) ψ - A ⟨ψ, hψ⟩)
-              + (expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩))‖ := by
+      calc ‖V n s
+            (A.symmetricYosidaApproximation (n : ℝ) ψ) - expLimit hA s (A ⟨ψ, hψ⟩)‖
+          = ‖V n s
+            (A.symmetricYosidaApproximation (n : ℝ) ψ - A ⟨ψ, hψ⟩)
+              + (V n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩))‖ := by
             rw [map_sub]; congr 1; abel
-        _ ≤ ‖expApprox hA n s (A.symmetricYosidaApproximation (n : ℝ) ψ - A ⟨ψ, hψ⟩)‖
-              + ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := norm_add_le _ _
+        _ ≤ ‖V n s
+          (A.symmetricYosidaApproximation (n : ℝ) ψ - A ⟨ψ, hψ⟩)‖
+              + ‖V n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := norm_add_le _ _
         _ = ‖A.symmetricYosidaApproximation (n : ℝ) ψ - A ⟨ψ, hψ⟩‖
-              + ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := by
-            rw [norm_expApprox]
+              + ‖V n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖ := by
+            rw [(Semigroups.StronglyContinuousGroup.isUnitary_ofBoundedExp _
+      (hA.isSelfAdjoint_symmetricYosidaApproximation _)).norm_map]
     refine squeeze_zero (fun n => norm_nonneg _) hsplit ?_
     have h1 : Tendsto (fun n : ℕ+ => ‖A.symmetricYosidaApproximation (n : ℝ) ψ - A ⟨ψ, hψ⟩‖)
         atTop (𝓝 0) :=
       tendsto_iff_norm_sub_tendsto_zero.mp hconv
     have h2 : Tendsto
-        (fun n : ℕ+ => ‖expApprox hA n s (A ⟨ψ, hψ⟩) - expLimit hA s (A ⟨ψ, hψ⟩)‖)
+        (fun n : ℕ+ => ‖V n s (A ⟨ψ, hψ⟩) -
+          expLimit hA s (A ⟨ψ, hψ⟩)‖)
         atTop (𝓝 0) :=
       tendsto_iff_norm_sub_tendsto_zero.mp (tendsto_expLimitFun hA s (A ⟨ψ, hψ⟩))
     simpa using h1.add h2
   -- dominated convergence
   have hint : Tendsto
       (fun n : ℕ+ => ∫ s in (0 : ℝ)..t,
-        (I : ℂ) • expApprox hA n s (A.symmetricYosidaApproximation (n : ℝ) ψ))
+        (I : ℂ) • V n s
+          (A.symmetricYosidaApproximation (n : ℝ) ψ))
       atTop (𝓝 (∫ s in (0 : ℝ)..t, (I : ℂ) • expLimit hA s (A ⟨ψ, hψ⟩))) := by
     refine intervalIntegral.tendsto_integral_filter_of_dominated_convergence
       (fun _ => C) ?_ ?_ ?_ ?_
     · exact Eventually.of_forall fun n =>
-        (((continuous_expApprox_apply hA n (A.symmetricYosidaApproximation (n : ℝ) ψ)).const_smul
+        ((((V n).continuous_orbit
+          (A.symmetricYosidaApproximation (n : ℝ) ψ)).const_smul
           (I : ℂ)).aestronglyMeasurable)
     · filter_upwards [hCle] with n hn
       refine Eventually.of_forall fun s _ => ?_
-      rw [norm_smul, Complex.norm_I, one_mul, norm_expApprox]
+      rw [norm_smul, Complex.norm_I, one_mul,
+        (Semigroups.StronglyContinuousGroup.isUnitary_ofBoundedExp _
+      (hA.isSelfAdjoint_symmetricYosidaApproximation _)).norm_map]
       exact hn
     · exact intervalIntegrable_const
     · exact Eventually.of_forall fun s _ => hlim s
   -- and the right-hand sides converge too
-  have hrhs : Tendsto (fun n : ℕ+ => expApprox hA n t ψ - ψ) atTop
+  have hrhs : Tendsto (fun n : ℕ+ => V n t ψ -
+    ψ) atTop
       (𝓝 (expLimit hA t ψ - ψ)) :=
     (tendsto_expLimitFun hA t ψ).sub tendsto_const_nhds
   refine tendsto_nhds_unique hint ?_
   refine hrhs.congr fun n => ?_
-  exact (integral_expApprox hA n ψ t).symm
+  exact (integral_yosidaFlow n ψ t).symm
 
 /-- The difference quotient of the limit flow converges to `A ψ` on the domain:
 the integral identity turns it into the *average* of a continuous integrand. -/
-theorem tendsto_genDiffQuot_genToGroup (hA : IsSelfAdjoint A) {ψ : H} (hψ : ψ ∈ A.domain) :
-    Tendsto (TauCeti.OneParameterUnitaryGroup.genDiffQuot (genToGroup hA) ψ)
+theorem tendsto_stoneDiffQuot_genToGroup (hA : IsSelfAdjoint A) {ψ : H} (hψ : ψ ∈ A.domain) :
+    Tendsto ((genToGroup hA).val.stoneDiffQuot ψ)
       (𝓝[≠] (0 : ℝ)) (𝓝 (A ⟨ψ, hψ⟩)) := by
   set g : ℝ → H := fun s => (I : ℂ) • expLimit hA s (A ⟨ψ, hψ⟩) with hg
   have hgcont : Continuous g := (continuous_expLimit hA (A ⟨ψ, hψ⟩)).const_smul (I : ℂ)
@@ -210,7 +222,7 @@ theorem tendsto_genDiffQuot_genToGroup (hA : IsSelfAdjoint A) {ψ : H} (hψ : ψ
   refine hres.congr fun t => ?_
   have hf0 : expLimit hA 0 ψ - ψ = 0 := by rw [expLimit_zero]; simp
   simp only [slope_def_module, hf0, sub_zero,
-    TauCeti.OneParameterUnitaryGroup.genDiffQuot_apply]
+    stoneDiffQuot_apply, genToGroup]
   have hcast : (t⁻¹ : ℝ) • ((expLimit hA t) ψ - ψ)
       = (((t : ℂ))⁻¹) • ((expLimit hA t) ψ - ψ) := by
     rw [RCLike.real_smul_eq_coe_smul (K := ℂ) (t⁻¹ : ℝ) ((expLimit hA t) ψ - ψ)]
@@ -222,20 +234,20 @@ theorem tendsto_genDiffQuot_genToGroup (hA : IsSelfAdjoint A) {ψ : H} (hψ : ψ
 
 /-- **Stone's theorem, uniqueness half.**  The generator of the unitary group of
 a self-adjoint operator is that operator again. -/
-theorem generator_genToGroup (hA : IsSelfAdjoint A) :
-    TauCeti.OneParameterUnitaryGroup.generator (genToGroup hA) = A := by
+theorem stoneGenerator_genToGroup (hA : IsSelfAdjoint A) :
+    (genToGroup hA).val.stoneGenerator (genToGroup hA).property = A := by
   refine (_root_.LinearPMap.eq_of_le_of_isSelfAdjoint hA
-    (TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_generator (genToGroup hA)) ?_).symm
+    ((genToGroup hA).val.isSelfAdjoint_stoneGenerator (genToGroup hA).property) ?_).symm
   refine ⟨fun ψ hψ => ?_, ?_⟩
   · -- the domain inclusion, which is the same limit computation
-    refine ⟨A ⟨ψ, hψ⟩, ?_⟩
-    exact tendsto_genDiffQuot_genToGroup hA hψ
+    exact (genToGroup hA).val.mem_stoneGenerator_domain_of_tendsto
+      (genToGroup hA).property (tendsto_stoneDiffQuot_genToGroup hA hψ)
   · rintro ⟨ψ, hψ⟩ ⟨ψ', hψ'⟩ hEq
     simp only at hEq
     subst hEq
     exact (tendsto_nhds_unique
-      (TauCeti.OneParameterUnitaryGroup.generator_tendsto (genToGroup hA) ⟨ψ, hψ'⟩)
-      (tendsto_genDiffQuot_genToGroup hA hψ)).symm
+      ((genToGroup hA).val.tendsto_stoneDiffQuot (genToGroup hA).property ⟨ψ, hψ'⟩)
+      (tendsto_stoneDiffQuot_genToGroup hA hψ)).symm
 
 end LinearPMap
 end TauCeti

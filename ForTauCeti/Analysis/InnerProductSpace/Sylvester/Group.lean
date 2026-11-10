@@ -7,7 +7,7 @@ module
 
 public import TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Columns
 public import TauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Isometry
-public import ForTauCeti.Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone
+public import ForTauCeti.Analysis.Semigroups.Group.ComplexOperator
 
 /-!
 # Strong continuity of a conjugation flow on the Hilbert–Schmidt space
@@ -173,24 +173,30 @@ theorem energy_sub_comp_ne_top (b : HilbertBasis ι 𝕜 F) (S : F →L[𝕜] E)
 
 section Sylvester
 
-open TauCeti.OneParameterUnitaryGroup
 
 variable {ι : Type*} {E F : Type*}
 variable [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
 variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-variable (U : OneParameterUnitaryGroup E) (V : OneParameterUnitaryGroup F)
+variable (U : {G : TauCeti.Semigroups.StronglyContinuousGroup E // G.IsUnitary}) (V : {G :
+      TauCeti.Semigroups.StronglyContinuousGroup F // G.IsUnitary})
 variable (b : HilbertBasis ι ℂ F)
 
+-- Match the real structure used by the native unitary-group API.
+noncomputable local instance : NormedSpace ℝ (lp (fun _ : ι => E) 2) := NormedSpace.complexToReal
+
+
 /-- The adjoint of a reversed group element is the forward one. -/
-theorem adjoint_U_neg (t : ℝ) : (V.U (-t)).adjoint = V.U t := by
-  have h := inverse_eq_adjoint V (-t)
+theorem adjoint_U_neg (t : ℝ) : (V.val.complexOperator V.property (-t)).adjoint =
+      V.val.complexOperator V.property t := by
+  have h := V.val.complexOperator_neg_eq_adjoint V.property (-t)
   rw [neg_neg] at h
   exact h.symm
 
 /-- The Sylvester flow on operators: `Z ↦ U t ∘ Z ∘ (V t)⋆`. -/
 @[expose]
 noncomputable def conjOp (t : ℝ) (f : lp (fun _ : ι => E) 2) : F →L[ℂ] E :=
-  ((U.U t).comp (b.columnOperator f)).comp (V.U (-t))
+  ((U.val.complexOperator U.property t).comp (b.columnOperator f)).comp (V.val.complexOperator
+        V.property (-t))
 
 /-- **The Sylvester flow preserves Hilbert--Schmidt energy.**  Both conjugating factors are
 isometries, and the energy is invariant under composition with an isometry on either side.  This
@@ -199,8 +205,9 @@ theorem energy_conjOp (t : ℝ) (f : lp (fun _ : ι => E) 2) :
     (conjOp U V b t f).hilbertSchmidtEnergy b = (b.columnOperator f).hilbertSchmidtEnergy b := by
   rw [conjOp]
   exact ContinuousLinearMap.hilbertSchmidtEnergy_isometry_comp_coisometry
-    (U.U t) (norm_preserving U t) (b.columnOperator f) (V.U (-t))
-    (fun x => by rw [adjoint_U_neg]; exact norm_preserving V t x) b b
+    (U.val.complexOperator U.property t) (U.property.norm_map t) (b.columnOperator f)
+          (V.val.complexOperator V.property (-t))
+    (fun x => by rw [adjoint_U_neg]; exact V.property.norm_map t x) b b
 
 /-- The flow keeps the energy finite, so its image stays inside the Hilbert--Schmidt class. -/
 theorem energy_conjOp_ne_top (t : ℝ) (f : lp (fun _ : ι => E) 2) :
@@ -224,9 +231,11 @@ theorem norm_sylvesterFun (t : ℝ) (f : lp (fun _ : ι => E) 2) :
   by
     rw [← b.hilbertSchmidtNorm_columnOperator (sylvesterFun U V b t f),
       columnOperator_sylvesterFun, conjOp]
-    rw [ContinuousLinearMap.hilbertSchmidtNorm_comp_coisometry _ (V.U (-t))
-      (fun x => by rw [adjoint_U_neg]; exact norm_preserving V t x),
-      ContinuousLinearMap.hilbertSchmidtNorm_isometry_comp (U.U t) (norm_preserving U t),
+    rw [ContinuousLinearMap.hilbertSchmidtNorm_comp_coisometry _ (V.val.complexOperator V.property
+          (-t))
+      (fun x => by rw [adjoint_U_neg]; exact V.property.norm_map t x),
+      ContinuousLinearMap.hilbertSchmidtNorm_isometry_comp (U.val.complexOperator U.property t)
+            (U.property.norm_map t),
       b.hilbertSchmidtNorm_columnOperator]
 
 /-- The Sylvester flow is additive. -/
@@ -253,7 +262,8 @@ theorem sylvesterFun_smul (t : ℝ) (c : ℂ) (f : lp (fun _ : ι => E) 2) :
 theorem sylvesterFun_zero (f : lp (fun _ : ι => E) 2) : sylvesterFun U V b 0 f = f := by
   refine b.columnOperator_injective ?_
   rw [columnOperator_sylvesterFun]
-  simp only [conjOp, neg_zero, U.identity, V.identity]
+  simp only [conjOp, neg_zero, U.val.complexOperator_zero U.property, V.val.complexOperator_zero
+        V.property]
   ext x
   simp
 
@@ -264,7 +274,8 @@ theorem sylvesterFun_add_time (s t : ℝ) (f : lp (fun _ : ι => E) 2) :
   refine b.columnOperator_injective ?_
   rw [columnOperator_sylvesterFun, columnOperator_sylvesterFun]
   simp only [conjOp, columnOperator_sylvesterFun]
-  rw [U.group_law s t, show -(s + t) = -t + -s by ring, V.group_law (-t) (-s)]
+  rw [U.val.complexOperator_add U.property s t, show -(s + t) = -t + -s by ring,
+        V.val.complexOperator_add V.property (-t) (-s)]
   ext x
   simp
 
@@ -298,23 +309,31 @@ theorem tendsto_norm_sylvesterFun_sub_zero (f : lp (fun _ : ι => E) 2) :
     rw [ContinuousLinearMap.hilbertSchmidtEnergy_adjoint T b c]; exact hTtop
   -- the two pieces of the displacement
   have h1top : ∀ r : ℝ,
-      (((U.U r).comp T - T).comp (V.U (-r))).hilbertSchmidtEnergy b ≠ ⊤ := by
+      (((U.val.complexOperator U.property r).comp T - T).comp (V.val.complexOperator V.property
+            (-r))).hilbertSchmidtEnergy b ≠ ⊤ := by
     intro r
-    rw [ContinuousLinearMap.hilbertSchmidtEnergy_comp_coisometry _ (V.U (-r))
-      (fun x => by rw [adjoint_U_neg]; exact norm_preserving V r x) b b]
-    exact energy_sub_comp_ne_top b T (U.U r) (norm_preserving U r) hTtop
-  have h2top : ∀ r : ℝ, (T.comp (V.U (-r)) - T).hilbertSchmidtEnergy b ≠ ⊤ := by
+    rw [ContinuousLinearMap.hilbertSchmidtEnergy_comp_coisometry _ (V.val.complexOperator
+          V.property (-r))
+      (fun x => by rw [adjoint_U_neg]; exact V.property.norm_map r x) b b]
+    exact energy_sub_comp_ne_top b T (U.val.complexOperator U.property r) (U.property.norm_map r)
+          hTtop
+  have h2top : ∀ r : ℝ, (T.comp (V.val.complexOperator V.property (-r)) - T).hilbertSchmidtEnergy
+        b ≠ ⊤ := by
     intro r
     rw [← ContinuousLinearMap.hilbertSchmidtEnergy_adjoint _ b c, map_sub,
       ContinuousLinearMap.adjoint_comp, adjoint_U_neg]
-    exact energy_sub_comp_ne_top c T.adjoint (V.U r) (norm_preserving V r) hTadjtop
+    exact energy_sub_comp_ne_top c T.adjoint (V.val.complexOperator V.property r)
+          (V.property.norm_map r) hTadjtop
   set g₁ : ℝ → lp (fun _ : ι => E) 2 :=
-    fun r => ⟨fun i => (((U.U r).comp T - T).comp (V.U (-r))) (b i),
-      (((((U.U r).comp T - T).comp (V.U (-r))).hilbertSchmidtEnergy_ne_top_iff_memℓp b).mp
+    fun r => ⟨fun i => (((U.val.complexOperator U.property r).comp T - T).comp
+          (V.val.complexOperator V.property (-r))) (b i),
+      (((((U.val.complexOperator U.property r).comp T - T).comp (V.val.complexOperator V.property
+            (-r))).hilbertSchmidtEnergy_ne_top_iff_memℓp b).mp
         (h1top r))⟩ with hg₁
   set g₂ : ℝ → lp (fun _ : ι => E) 2 :=
-    fun r => ⟨fun i => (T.comp (V.U (-r)) - T) (b i),
-      ((T.comp (V.U (-r)) - T).hilbertSchmidtEnergy_ne_top_iff_memℓp b).mp
+    fun r => ⟨fun i => (T.comp (V.val.complexOperator V.property (-r)) - T) (b i),
+      ((T.comp (V.val.complexOperator V.property (-r)) - T).hilbertSchmidtEnergy_ne_top_iff_memℓp
+            b).mp
         (h2top r)⟩ with hg₂
   have hsplit : ∀ r : ℝ, sylvesterFun U V b r f - f = g₁ r + g₂ r := by
     intro r
@@ -327,69 +346,67 @@ theorem tendsto_norm_sylvesterFun_sub_zero (f : lp (fun _ : ι => E) 2) :
   have h1 : Tendsto (fun r : ℝ => ‖g₁ r‖) (𝓝 0) (𝓝 0) := by
     refine tendsto_norm_of_tendsto_energy b g₁ ?_
     have hrw : ∀ r : ℝ, (b.columnOperator (g₁ r)).hilbertSchmidtEnergy b
-        = ∑' i, ‖U.U r (T (b i)) - T (b i)‖ₑ ^ 2 := by
+        = ∑' i, ‖U.val.complexOperator U.property r (T (b i)) - T (b i)‖ₑ ^ 2 := by
       intro r
       rw [hg₁, HilbertBasis.columnOperator_mk,
-        ContinuousLinearMap.hilbertSchmidtEnergy_comp_coisometry _ (V.U (-r))
-        (fun x => by rw [adjoint_U_neg]; exact norm_preserving V r x) b b, energy_sub_comp_eq]
+        ContinuousLinearMap.hilbertSchmidtEnergy_comp_coisometry _ (V.val.complexOperator
+              V.property (-r))
+        (fun x => by rw [adjoint_U_neg]; exact V.property.norm_map r x) b b, energy_sub_comp_eq]
     simp_rw [hrw]
-    exact tendsto_energy_sub_comp b T hTtop (fun r => U.U r) (fun r => norm_preserving U r)
-      (fun x => U.strong_continuous x) (fun x => by rw [U.identity]; rfl)
+    exact tendsto_energy_sub_comp b T hTtop (fun r => U.val.complexOperator U.property r) (fun r
+          => U.property.norm_map r)
+      (fun x => U.val.continuous_orbit x) (fun x => U.val.map_zero_apply x)
   have h2 : Tendsto (fun r : ℝ => ‖g₂ r‖) (𝓝 0) (𝓝 0) := by
     refine tendsto_norm_of_tendsto_energy b g₂ ?_
     have hrw : ∀ r : ℝ, (b.columnOperator (g₂ r)).hilbertSchmidtEnergy b
-        = ∑' j, ‖V.U r (T.adjoint (c j)) - T.adjoint (c j)‖ₑ ^ 2 := by
+        = ∑' j, ‖V.val.complexOperator V.property r (T.adjoint (c j)) - T.adjoint (c j)‖ₑ ^ 2 := by
       intro r
       rw [hg₂, HilbertBasis.columnOperator_mk,
         ← ContinuousLinearMap.hilbertSchmidtEnergy_adjoint _ b c]
       simp only [map_sub, ContinuousLinearMap.adjoint_comp, adjoint_U_neg]
       exact energy_sub_comp_eq _ _ _
     simp_rw [hrw]
-    exact tendsto_energy_sub_comp c T.adjoint hTadjtop (fun r => V.U r)
-      (fun r => norm_preserving V r) (fun x => V.strong_continuous x)
-      (fun x => by rw [V.identity]; rfl)
+    exact tendsto_energy_sub_comp c T.adjoint hTadjtop (fun r => V.val.complexOperator V.property r)
+      (fun r => V.property.norm_map r) (fun x => V.val.continuous_orbit x)
+      (fun x => V.val.map_zero_apply x)
   refine squeeze_zero (fun r => norm_nonneg _) (fun r => ?_) (by simpa using h1.add h2)
   rw [hsplit r]
   exact norm_add_le _ _
 
 /-- **The Sylvester conjugation flow is a one-parameter unitary group** on the
 Hilbert–Schmidt space. -/
-noncomputable def sylvesterGroup : OneParameterUnitaryGroup (lp (fun _ : ι => E) 2) where
-  U := sylvesterOp U V b
-  unitary t := by
-    refine (LinearMap.norm_map_iff_inner_map_map (sylvesterOp U V b t).toLinearMap).mp ?_
-    intro x
-    exact norm_sylvesterFun U V b t x
-  group_law s t := ContinuousLinearMap.ext fun f => by
-    simp only [ContinuousLinearMap.coe_comp, Function.comp_apply, sylvesterOp_apply]
-    exact sylvesterFun_add_time U V b s t f
-  identity := ContinuousLinearMap.ext fun f => by
-    simp [sylvesterOp_apply, sylvesterFun_zero]
-  strong_continuous f := by
-    refine continuous_iff_continuousAt.mpr fun s => ?_
-    rw [ContinuousAt, tendsto_iff_norm_sub_tendsto_zero]
-    have hshift : ∀ t : ℝ, ‖sylvesterOp U V b t f - sylvesterOp U V b s f‖
-        = ‖sylvesterFun U V b (t - s) f - f‖ := by
-      intro t
-      have hts : sylvesterFun U V b t f = sylvesterFun U V b s (sylvesterFun U V b (t - s) f) := by
-        rw [← sylvesterFun_add_time]
-        congr 1
-        ring
-      have hlin : sylvesterFun U V b s (sylvesterFun U V b (t - s) f) - sylvesterFun U V b s f
-          = sylvesterFun U V b s (sylvesterFun U V b (t - s) f - f) := by
-        simpa using (map_sub (sylvesterOp U V b s) (sylvesterFun U V b (t - s) f) f).symm
-      rw [sylvesterOp_apply, sylvesterOp_apply, hts, hlin]
-      exact norm_sylvesterFun U V b s _
-    simp_rw [hshift]
-    have hsub : Tendsto (fun t : ℝ => t - s) (𝓝 s) (𝓝 0) := by
-      have h : Tendsto (fun t : ℝ => t - s) (𝓝 s) (𝓝 (s - s)) :=
-        Filter.Tendsto.sub tendsto_id tendsto_const_nhds
-      simpa using h
-    exact (tendsto_norm_sylvesterFun_sub_zero U V b f).comp hsub
+@[expose]
+noncomputable def sylvesterGroup :
+    {G : TauCeti.Semigroups.StronglyContinuousGroup (lp (fun _ : ι => E) 2) // G.IsUnitary} where
+  val :=
+    { toFun := fun t => (sylvesterOp U V b t).restrictScalars ℝ
+      map_zero' := by
+        apply ContinuousLinearMap.ext
+        intro f
+        change sylvesterOp U V b 0 f = f
+        rw [sylvesterOp_apply, sylvesterFun_zero]
+      map_add' s t := by
+        apply ContinuousLinearMap.ext
+        intro f
+        change sylvesterOp U V b (s + t) f =
+          sylvesterOp U V b s (sylvesterOp U V b t f)
+        simp only [sylvesterOp_apply]
+        exact sylvesterFun_add_time U V b s t f
+      continuousAt_zero' f := by
+        change ContinuousAt (fun t => sylvesterOp U V b t f) 0
+        rw [ContinuousAt, tendsto_iff_norm_sub_tendsto_zero]
+        simpa only [sylvesterOp_apply, sylvesterFun_zero] using
+          tendsto_norm_sylvesterFun_sub_zero U V b f }
+  property := TauCeti.Semigroups.StronglyContinuousGroup.IsUnitary.intro fun t x y => by
+    have hn : ∀ f, ‖sylvesterOp U V b t f‖ = ‖f‖ := by
+      intro f
+      exact norm_sylvesterFun U V b t f
+    exact ((LinearMap.norm_map_iff_inner_map_map (sylvesterOp U V b t).toLinearMap).mp hn) x y
 
-/-- The bundled group acts as the Sylvester operator at each time. -/
-@[simp] theorem sylvesterGroup_apply (t : ℝ) :
-    (sylvesterGroup U V b).U t = sylvesterOp U V b t := (rfl)
+/-- The native group acts as the Sylvester flow at each time. -/
+@[simp] theorem sylvesterGroup_apply (t : ℝ) (f : lp (fun _ : ι => E) 2) :
+    (sylvesterGroup U V b).val t f = sylvesterFun U V b t f :=
+  sylvesterOp_apply U V b t f
 
 /-- **The generator of the Sylvester flow is self-adjoint.**
 
@@ -399,8 +416,8 @@ sharp `δ⁻¹` bound be applied to the Sylvester equation.  It is immediate fro
 Stone's theorem once the flow is known to be a one-parameter unitary group,
 which is the content of everything above. -/
 theorem isSelfAdjoint_generator_sylvesterGroup :
-    IsSelfAdjoint (generator (sylvesterGroup U V b)) :=
-  isSelfAdjoint_generator _
+    IsSelfAdjoint ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property) :=
+  (sylvesterGroup U V b).val.isSelfAdjoint_stoneGenerator (sylvesterGroup U V b).property
 
 end Sylvester
 

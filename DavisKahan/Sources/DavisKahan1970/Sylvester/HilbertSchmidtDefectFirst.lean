@@ -1,5 +1,6 @@
 /-
-Copyright (c) 2026 Kitware, Inc. All rights reserved.Released under Apache 2.0 license as described in the file LICENSE.Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
+Copyright (c) 2026 Kitware, Inc. All rights reserved.Released under Apache 2.0 license as
+      described in the file LICENSE.Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
 module
 
@@ -36,10 +37,10 @@ inputs came from Spectra's Born-rule stack.  Both are now native:
 
 * the space is Mathlib `lp`, with the accepted `HilbertBasis.columnOperator`;
 * the flow is `TauCeti.HilbertSchmidt.sylvesterGroup`, whose generator is
-  self-adjoint by Stone's theorem (`…/OneParameterUnitaryGroup/Stone.lean`) and
+  self-adjoint by Stone's theorem (`TauCeti/Analysis/Semigroups/Group/Unitary.lean`) and
   satisfies the Sylvester equation by `generator_sylvesterGroup_apply`;
 * the gap inverse is `TauCeti.LinearPMap.gapInverse`, with the sharp `δ⁻¹`;
-* `generator (genToGroup hA) = A` is Stone's uniqueness half
+* `(genToGroup hA).val.stoneGenerator (genToGroup hA).property = A` is Stone's uniqueness half
   (`…/LinearPMap/StoneUniqueness.lean`), which is what lets a statement about
   the *flow* be read as a statement about `A` and `B`.
 -/
@@ -50,7 +51,6 @@ namespace ExactSinTheta
 
 open scoped InnerProductSpace
 open TauCeti.HilbertSchmidt
-open TauCeti.OneParameterUnitaryGroup (generator)
 
 noncomputable section
 
@@ -63,19 +63,27 @@ variable {E F : Type v}
 private theorem hasClosedSylvesterEquation_of_generator
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
-    (z : (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
-      (TauCeti.LinearPMap.genToGroup hB) (hSBasis F))).domain) :
+    (z : ((sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
+      (TauCeti.LinearPMap.genToGroup hB) (hSBasis F)).val.stoneGenerator (sylvesterGroup
+            (TauCeti.LinearPMap.genToGroup hA)
+      (TauCeti.LinearPMap.genToGroup hB) (hSBasis F)).property).domain) :
     _root_.LinearPMap.SylvesterEquation A B
       ((hSBasis F).columnOperator (z : lp (fun _ : HSIndex F => E) 2))
-      ((hSBasis F).columnOperator (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
-        (TauCeti.LinearPMap.genToGroup hB) (hSBasis F)) z)) := by
-  have hAU : generator (TauCeti.LinearPMap.genToGroup hA) = A :=
-    TauCeti.LinearPMap.generator_genToGroup hA
-  have hBV : generator (TauCeti.LinearPMap.genToGroup hB) = B :=
-    TauCeti.LinearPMap.generator_genToGroup hB
-  have hdomA : (generator (TauCeti.LinearPMap.genToGroup hA)).domain = A.domain :=
+      ((hSBasis F).columnOperator ((sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
+        (TauCeti.LinearPMap.genToGroup hB) (hSBasis F)).val.stoneGenerator (sylvesterGroup
+              (TauCeti.LinearPMap.genToGroup hA)
+        (TauCeti.LinearPMap.genToGroup hB) (hSBasis F)).property z)) := by
+  have hAU : (TauCeti.LinearPMap.genToGroup hA).val.stoneGenerator (TauCeti.LinearPMap.genToGroup
+        hA).property = A :=
+    TauCeti.LinearPMap.stoneGenerator_genToGroup hA
+  have hBV : (TauCeti.LinearPMap.genToGroup hB).val.stoneGenerator (TauCeti.LinearPMap.genToGroup
+        hB).property = B :=
+    TauCeti.LinearPMap.stoneGenerator_genToGroup hB
+  have hdomA : ((TauCeti.LinearPMap.genToGroup hA).val.stoneGenerator
+        (TauCeti.LinearPMap.genToGroup hA).property).domain = A.domain :=
     congrArg LinearPMap.domain hAU
-  have hdomB : (generator (TauCeti.LinearPMap.genToGroup hB)).domain = B.domain :=
+  have hdomB : ((TauCeti.LinearPMap.genToGroup hB).val.stoneGenerator
+        (TauCeti.LinearPMap.genToGroup hB).property).domain = B.domain :=
     congrArg LinearPMap.domain hBV
   refine ⟨?_, ?_⟩
   · intro x

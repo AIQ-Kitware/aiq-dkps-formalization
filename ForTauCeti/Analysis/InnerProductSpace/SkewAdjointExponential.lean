@@ -11,6 +11,7 @@ Adapted from: Spectra (https://github.com/adambornemann-glitch/Spectra),
 -/
 module
 
+public import TauCeti.Analysis.Semigroups.Group.Stone.Basic
 public import Mathlib.Analysis.SpecialFunctions.Exponential
 public import Mathlib.Analysis.CStarAlgebra.Exponential
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
@@ -55,7 +56,7 @@ is followed for the presentation.
      (`expBounded_eq_exp`), so nothing is lost; what *is* saved is the 576 lines
      of `ExpBounded/{Helpers,Adjoint,Unitary}` establishing summability, the
      group law and unitarity, all of which Mathlib already has.
-  2. Unitarity comes from `selfAdjoint.expUnitary`, and the derivative from
+  2. Unitarity now comes from Tau Ceti's `isUnitary_ofBoundedExp`, and the derivative from
      `hasDerivAt_exp_smul_const` — Mathlib's derivative of `t ↦ exp (t • x)` in a
      *non-commutative* algebra.
 -/
@@ -68,18 +69,6 @@ open Complex NormedSpace
 open scoped InnerProductSpace
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-
-/-- `B` is skew-adjoint: `B⋆ = -B`. -/
-def IsSkewAdjointCLM (B : H →L[ℂ] H) : Prop :=
-  ContinuousLinearMap.adjoint B = -B
-
-/-- `I • S` is skew-adjoint when `S` is self-adjoint. -/
-theorem isSkewAdjointCLM_I_smul {S : H →L[ℂ] H} (hS : IsSelfAdjoint S) :
-    IsSkewAdjointCLM (I • S) := by
-  have : ContinuousLinearMap.adjoint (I • S) = (starRingEnd ℂ) I • ContinuousLinearMap.adjoint S :=
-    ContinuousLinearMap.adjoint.map_smulₛₗ I S
-  rw [IsSkewAdjointCLM, this, Complex.conj_I,
-    (ContinuousLinearMap.isSelfAdjoint_iff'.mp hS), neg_smul]
 
 /-- The exponential of a bounded operator scaled by a real time. -/
 noncomputable def expTime (B : H →L[ℂ] H) (t : ℝ) : H →L[ℂ] H :=
@@ -103,10 +92,6 @@ theorem hasDerivAt_expTime (B : H →L[ℂ] H) (t : ℝ) :
     HasDerivAt (expTime B) (expTime B t * B) t :=
   hasDerivAt_exp_smul_const (𝕂 := ℝ) B t
 
-/-- `B` commutes with its own exponential. -/
-theorem commute_expTime (B : H →L[ℂ] H) (t : ℝ) : Commute B (expTime B t) :=
-  ((Commute.refl B).smul_right t).exp_right
-
 /-- Commuting operators have commuting exponentials. -/
 theorem commute_expTime_of_commute {B C : H →L[ℂ] H} (h : Commute B C) (t : ℝ) :
     Commute C (expTime B t) :=
@@ -114,36 +99,14 @@ theorem commute_expTime_of_commute {B C : H →L[ℂ] H} (h : Commute B C) (t : 
 
 /-! ### Unitarity -/
 
-omit [CompleteSpace H] in
-/-- `t • (I • S) = I • ((t : ℂ) • S)`: the real and complex scalings agree. -/
-theorem real_smul_I_smul (S : H →L[ℂ] H) (t : ℝ) :
-    t • (I • S) = I • ((t : ℂ) • S) := by
-  rw [smul_comm]
-  congr 1
-
 /-- For self-adjoint `S`, `exp (t • (I • S))` is unitary, hence norm-preserving. -/
 theorem norm_expTime_I_smul (S : H →L[ℂ] H) (hS : IsSelfAdjoint S) (t : ℝ) (ψ : H) :
     ‖expTime (I • S) t ψ‖ = ‖ψ‖ := by
-  have hsa : ((t : ℂ) • S) ∈ selfAdjoint (H →L[ℂ] H) := by
-    rw [selfAdjoint.mem_iff, star_smul, hS.star_eq, Complex.star_def, Complex.conj_ofReal]
-  have hval : expTime (I • S) t = (selfAdjoint.expUnitary ⟨(t : ℂ) • S, hsa⟩ : H →L[ℂ] H) := by
-    rw [expTime, real_smul_I_smul]
-    rfl
-  have hstar : (ContinuousLinearMap.adjoint (expTime (I • S) t)) * expTime (I • S) t = 1 := by
-    rw [hval]
-    have := Unitary.coe_star_mul_self (selfAdjoint.expUnitary ⟨(t : ℂ) • S, hsa⟩)
-    rwa [ContinuousLinearMap.star_eq_adjoint] at this
-  have hinner : ⟪expTime (I • S) t ψ, expTime (I • S) t ψ⟫_ℂ = ⟪ψ, ψ⟫_ℂ := by
-    calc ⟪expTime (I • S) t ψ, expTime (I • S) t ψ⟫_ℂ
-        = ⟪(ContinuousLinearMap.adjoint (expTime (I • S) t)) (expTime (I • S) t ψ), ψ⟫_ℂ := by
-          rw [ContinuousLinearMap.adjoint_inner_left]
-      _ = ⟪((ContinuousLinearMap.adjoint (expTime (I • S) t)) * expTime (I • S) t) ψ, ψ⟫_ℂ := rfl
-      _ = ⟪ψ, ψ⟫_ℂ := by rw [hstar]; rfl
-  -- take real parts: `re ⟪x, x⟫ = ‖x‖ ^ 2`
-  have h1 : ‖expTime (I • S) t ψ‖ ^ 2 = ‖ψ‖ ^ 2 := by
-    rw [← @inner_self_eq_norm_sq ℂ, ← @inner_self_eq_norm_sq ℂ, hinner]
-  have h2 := congrArg Real.sqrt h1
-  rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)] at h2
+  have h := Semigroups.StronglyContinuousGroup.isUnitary_ofBoundedExp S hS
+  have hn := h.norm_map t ψ
+  rw [Semigroups.StronglyContinuousGroup.ofBoundedExp_apply] at hn
+  change ‖NormedSpace.exp ((t : ℂ) • (I • S)) ψ‖ = ‖ψ‖ at hn
+  simpa only [expTime, Complex.coe_smul] using hn
 
 /-! ### The Duhamel estimate -/
 
