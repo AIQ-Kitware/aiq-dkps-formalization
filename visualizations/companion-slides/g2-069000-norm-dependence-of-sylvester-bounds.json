@@ -2,111 +2,152 @@
   "schema_version": 1,
   "id": "g2-069000-norm-dependence-of-sylvester-bounds",
   "title": "Norm dependence of Sylvester bounds",
-  "subtitle": "G2 lecture 069000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 069000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:069000"
   ],
   "source_lecture": "draft-stages/tts-lectures/069000-norm-dependence-of-sylvester-bounds.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Expanded, source-grounded mathematical companion: independent derivations, worked examples, vector MathTex, reusable diagrams. Spoken source unchanged.",
   "slides": [
     {
-      "id": "00-overview",
+      "id": "00-expanded",
       "title": "The problem and its setting",
-      "eyebrow": "G2 · 069000 · first-pass outline",
+      "eyebrow": "G2 · 069000 · The problem and its setting",
       "lead": "The Sylvester equation A X minus X B equals C admits different estimates under different spectral-gap assumptions.",
       "body": [
-        "An ordered gap yields a constant-one operator-norm estimate using decaying exponentials. Mere pairwise separation yields constant one in Hilbert-Schmidt norm; for the bounded self-adjoint operator-norm problem, a Fourier kernel gives a general factor of pi over two. These conclusions require distinct hypotheses. Two properties determine the available Sylvester bounds: the spectral geometry of the two coefficient operators and the norm used to measure the solution."
+        "An ordered gap yields a constant-one operator-norm estimate using decaying exponentials. Mere pairwise separation yields constant one in Hilbert-Schmidt norm; for the bounded self-adjoint operator-norm problem, a Fourier kernel gives a general factor of pi over two.",
+        "These conclusions require distinct hypotheses. Two properties determine the available Sylvester bounds: the spectral geometry of the two coefficient operators and the norm used to measure the solution."
       ],
+      "takeaway": "Spectral geometry and norm class both determine the Sylvester constant.",
+      "diagram": "g2-norm-hierarchy",
       "layout": "opening"
     },
     {
-      "id": "01-overview",
+      "id": "01-expanded",
       "title": "Three operator norms to keep distinct",
-      "eyebrow": "G2 · 069000 · first-pass outline",
+      "eyebrow": "G2 · 069000 · Three operator norms to keep distinct",
       "lead": "Start with a finite matrix X.",
       "body": [
-        "Its operator norm is the largest length of X applied to a unit vector. By the singular-value decomposition, this is its largest singular value. Its Frobenius norm is the square root of the sum of the squares of all singular values. In an orthonormal matrix coordinate system, it is also the square root of the sum of squared absolute entries. Its nuclear norm is the sum of all singular values. More generally, the Schatten p norm takes the p-th powers of singular values, adds them, and takes the p-th root. Every Schatten norm and every symmetric-gauge norm is unitarily invariant in finite dimensions."
+        "Its operator norm is the largest length of X applied to a unit vector. By the singular-value decomposition, this is its largest singular value. Its Frobenius norm is the square root of the sum of the squares of all singular values.",
+        "In an orthonormal matrix coordinate system, it is also the square root of the sum of squared absolute entries. Its nuclear norm is the sum of all singular values. More generally, the Schatten p norm takes the p-th powers of singular values, adds them, and takes the p-th root."
       ],
-      "layout": "reading"
+      "takeaway": "Operator, Hilbert–Schmidt, and nuclear norms measure different phenomena.",
+      "diagram": "g2-norm-hierarchy",
+      "layout": "equation",
+      "mathtex": "\\|X\\|_{\\mathrm{op}}=\\sigma_1(X),\\quad\\|X\\|_{S_2}^2=\\sum_i\\sigma_i(X)^2"
     },
     {
-      "id": "02-overview",
+      "id": "02-expanded",
       "title": "Pairwise separation gives a sharp square-norm estimate",
-      "eyebrow": "G2 · 069000 · first-pass outline",
+      "eyebrow": "G2 · 069000 · Pairwise separation gives a sharp square-norm estimate",
       "lead": "Suppose A and B are finite-dimensional self-adjoint matrices and every left-right eigenvalue difference has absolute value at least delta.",
       "body": [
-        "In orthonormal eigenbases, the Sylvester solution is obtained by dividing each entry of C by its spectral difference. Squaring and summing gives delta times the Frobenius norm of X at most the Frobenius norm of C. This follows by diagonalizing the self-adjoint coefficients and estimating each squared matrix coefficient. No ordering of the spectra is required. The constant one is sharp in the scalar case. Why does the argument work? Because the Frobenius norm sees the matrix entries as coordinates in an inner-product space of operators."
+        "In orthonormal eigenbases, the Sylvester solution is obtained by dividing each entry of C by its spectral difference. Squaring and summing gives delta times the Frobenius norm of X at most the Frobenius norm of C.",
+        "This follows by diagonalizing the self-adjoint coefficients and estimating each squared matrix coefficient. No ordering of the spectra is required. The constant one is sharp in the scalar case. Why does the argument work? Because the Frobenius norm sees the matrix entries as coordinates in an inner-product space of operators."
       ],
-      "layout": "reading"
+      "takeaway": "Pairwise differences give the sharp constant-one Hilbert–Schmidt bound.",
+      "diagram": "g2-sylvester-grid",
+      "layout": "equation",
+      "mathtex": "\\delta\\|X\\|_{S_2}\\le\\|AX-XB\\|_{S_2}"
     },
     {
-      "id": "03-overview",
+      "id": "03-expanded",
       "title": "From the square norm to the operator norm",
-      "eyebrow": "G2 · 069000 · first-pass outline",
+      "eyebrow": "G2 · 069000 · From the square norm to the operator norm",
       "lead": "Every finite matrix has operator norm at most its Frobenius norm.",
       "body": [
-        "If C has rank r, its Frobenius norm is at most the square root of r times its operator norm, because it has at most r nonzero singular values and none exceeds the largest. Combine those comparisons with the sharp square-norm Sylvester estimate. First, delta times the operator norm of X is at most delta times the Frobenius norm of X. Next, that is at most the Frobenius norm of C. Finally, it is at most square root of r times the operator norm of C. Thus pairwise separation yields an operator-norm estimate with a rank factor. This is a valid consequence, but it is not usually the most effective general operator-norm estimate."
+        "If C has rank r, its Frobenius norm is at most the square root of r times its operator norm, because it has at most r nonzero singular values and none exceeds the largest. Combine those comparisons with the sharp square-norm Sylvester estimate.",
+        "First, delta times the operator norm of X is at most delta times the Frobenius norm of X. Next, that is at most the Frobenius norm of C. Finally, it is at most square root of r times the operator norm of C."
       ],
-      "layout": "reading"
+      "takeaway": "A rank bound turns Frobenius control into a weaker operator-norm result.",
+      "diagram": "g2-norm-hierarchy",
+      "layout": "equation",
+      "mathtex": "\\delta\\|X\\|_{\\mathrm{op}}\\le\\sqrt{\\operatorname{rank}C}\\,\\|C\\|_{\\mathrm{op}}"
     },
     {
-      "id": "04-overview",
+      "id": "04-expanded",
       "title": "A two-by-two obstruction",
-      "eyebrow": "G2 · 069000 · first-pass outline",
-      "lead": "Now take A diagonal with entries one and negative one.",
+      "eyebrow": "G2 · 069000 · A two-by-two obstruction",
+      "lead": "A two-by-two example disproves constant one for arbitrary pairwise gaps.",
       "body": [
-        "Take B diagonal with entries zero and two. Their spectra are separated pairwise by at least one, so delta equals one. Let X have first row three, negative three, and second row negative three, one. This is a symmetric two-by-two matrix. Compute C as A X minus X B. Multiplying on the left by A preserves the first row and reverses the second. Multiplying on the right by B sets the first column to zero and doubles the second. Subtract the results. C has first row three, three, and second row three, negative three. The columns of C are orthogonal, each with length three times the square root of two."
+        "Take A=diag(1,−1), B=diag(0,2) and X with rows (3,−3),(−3,1). Then C=AX−XB has rows (3,3),(3,−3), and the cross-spectral distance is δ=1.",
+        "The operator norms are ||X||=2+√10≈5.162 and ||C||=3√2≈4.243, so δ||X||>||C||. The Frobenius constant-one inequality remains valid."
       ],
-      "layout": "reading"
+      "takeaway": "The two-by-two obstruction rules out constant one for arbitrary pairwise gaps.",
+      "diagram": "g2-counterexample-norm",
+      "layout": "equation",
+      "mathtex": "\\|X\\|_{\\mathrm{op}}=2+\\sqrt{10},\\qquad\\|C\\|_{\\mathrm{op}}=3\\sqrt2"
     },
     {
-      "id": "05-overview",
+      "id": "05-expanded",
       "title": "What ordered separation restores",
-      "eyebrow": "G2 · 069000 · first-pass outline",
+      "eyebrow": "G2 · 069000 · What ordered separation restores",
       "lead": "If every spectral value of A lies at least delta above every spectral value of B, our exponential semigroup formula gives the stronger estimate: delta times the operator norm of X is at most the operator norm of C.",
       "body": [
-        "The key is a single decay estimate for the entire transported operator. It does not depend on how different entries interact in the operator norm. The same argument works for compatible operator ideal norms whenever the integral is defined in that norm. The interval-versus-exterior configuration also admits a constant-one conclusion under the bounded-inverse hypotheses of Theorem five point one."
+        "The key is a single decay estimate for the entire transported operator. It does not depend on how different entries interact in the operator norm. The same argument works for compatible operator ideal norms whenever the integral is defined in that norm.",
+        "The interval-versus-exterior configuration also admits a constant-one conclusion under the bounded-inverse hypotheses of Theorem five point one."
       ],
-      "layout": "reading"
+      "takeaway": "Ordered separation restores constant one in operator norm.",
+      "diagram": "g2-decay-flow",
+      "layout": "equation",
+      "mathtex": "\\delta\\|X\\|_{\\mathrm{op}}\\le\\|C\\|_{\\mathrm{op}}\\quad\\text{(ordered gap)}"
     },
     {
-      "id": "06-overview",
+      "id": "06-expanded",
       "title": "What general separation gives instead",
-      "eyebrow": "G2 · 069000 · first-pass outline",
+      "eyebrow": "G2 · 069000 · What general separation gives instead",
       "lead": "For bounded self-adjoint A and B whose spectra have pairwise distance at least a positive delta, a Fourier-multiplier representation of the Sylvester inverse gives a dimension-free operator-norm bound: delta times the norm of X is at most pi over two times the norm of C.",
       "body": [
-        "This estimate does not require the spectral sets to be ordered. The pi-over-two factor is the exact integral of the absolute value of the chosen scalar multiplier, after scaling by delta. The proof works because unitary left and right multiplication preserve the operator norm. Compatible symmetric-gauge norms also admit the same type of bound in finite-dimensional settings."
+        "This estimate does not require the spectral sets to be ordered. The pi-over-two factor is the exact integral of the absolute value of the chosen scalar multiplier, after scaling by delta. The proof works because unitary left and right multiplication preserve the operator norm.",
+        "Compatible symmetric-gauge norms also admit the same type of bound in finite-dimensional settings."
       ],
-      "layout": "reading"
+      "takeaway": "For general pairwise gaps, a Fourier kernel yields a pi-over-two bound.",
+      "diagram": "g2-unitary-orbit",
+      "layout": "equation",
+      "mathtex": "\\delta\\|X\\|_{\\mathrm{op}}\\le\\frac\\pi2\\|C\\|_{\\mathrm{op}}\\quad\\text{(pairwise gap)}"
     },
     {
-      "id": "07-overview",
+      "id": "07-expanded",
       "title": "A compact hierarchy of conclusions",
-      "eyebrow": "G2 · 069000 · first-pass outline",
-      "lead": "Let's organize the statements verbally.",
+      "eyebrow": "G2 · 069000 · A compact hierarchy of conclusions",
+      "lead": "List each conclusion together with the norm and geometry that justify it.",
       "body": [
-        "First: for self-adjoint A and B with a positive pairwise gap, the Hilbert–Schmidt solution satisfies a constant-one estimate in the square norm. Second: under the same pairwise gap, an operator-norm estimate with a square-root rank factor follows if the right-hand side has finite rank. An independent Fourier argument gives a dimension-free pi-over-two bound. Third: under ordered spectral separation, a decaying semigroup gives the constant-one operator-norm bound, and similarly for compatible ideal norms."
+        "For pairwise gaps, Hilbert–Schmidt has the constant-one estimate. With finite rank C, comparison to the Hilbert–Schmidt norm gives a √rank(C) factor for the operator norm. Fourier inversion supplies π/2 without a rank factor.",
+        "An ordered gap yields the constant-one operator-norm bound and compatible ideal estimates. These statements are related but none should be substituted for another without checking the hypotheses."
       ],
-      "layout": "reading"
+      "takeaway": "The conclusions form a hierarchy with different hypotheses.",
+      "diagram": "g2-norm-hierarchy",
+      "layout": "equation",
+      "mathtex": "\\|X\\|_{S_2}\\le\\delta^{-1}\\|C\\|_{S_2}"
     },
     {
-      "id": "08-overview",
+      "id": "08-expanded",
       "title": "A test for any new Sylvester estimate",
-      "eyebrow": "G2 · 069000 · first-pass outline",
+      "eyebrow": "G2 · 069000 · A test for any new Sylvester estimate",
       "lead": "Whenever someone presents a perturbation inequality that contains a spectral gap in the denominator, ask what theorem supplies it.",
       "body": [
-        "Can we point to a common spectral cut? Can we center a small block and control the other block's inverse? Are we only given pairwise spectral distance? Are the operators self-adjoint or possibly nonnormal? Is the relevant norm operator, Frobenius, or another invariant ideal norm? Each answer changes the proof that is permitted. The Hilbert-Schmidt estimate is obtained by treating operators as vectors in a Hilbert space. The scalar cross-spectral differences then give constant-one control even when the spectra interlace, provided their distance is bounded below."
+        "Can we point to a common spectral cut? Can we center a small block and control the other block's inverse? Are we only given pairwise spectral distance? Are the operators self-adjoint or possibly nonnormal? Is the relevant norm operator, Frobenius, or another invariant ideal norm?",
+        "Each answer changes the proof that is permitted. The Hilbert-Schmidt estimate is obtained by treating operators as vectors in a Hilbert space. The scalar cross-spectral differences then give constant-one control even when the spectra interlace, provided their distance is bounded below."
       ],
-      "layout": "reading"
+      "takeaway": "Before quoting a gap bound, name the hypotheses and the norm.",
+      "diagram": "g2-sylvester-gap",
+      "layout": "equation",
+      "mathtex": "\\delta=\\operatorname{dist}(\\sigma(A),\\sigma(B))"
     },
     {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 069000 · conclusion",
-      "lead": "The scalar cross-spectral differences then give constant-one control even when the spectra interlace, provided their distance is bounded below.",
-      "body": [],
-      "layout": "reading"
+      "id": "09-synthesis",
+      "title": "Choose the constant only after choosing the setting",
+      "eyebrow": "G2 · 069000 · Reconstruction",
+      "lead": "Pairwise gap, ordered gap, and inverse-dominated gap are distinct hypotheses.",
+      "body": [
+        "Pairwise gaps yield the sharp Hilbert–Schmidt constant one; an operator-norm estimate with π/2 comes from Fourier inversion. A rank-sensitive estimate follows from comparing Frobenius and operator norms. Ordered self-adjoint spectra instead give constant one by semigroup decay.",
+        "The explicit two-by-two counterexample prevents treating these bounds as interchangeable."
+      ],
+      "takeaway": "Use the correct implication rather than a universal gap-only formula.",
+      "diagram": "g2-norm-hierarchy",
+      "layout": "equation",
+      "mathtex": "\\text{gap geometry}+\\text{norm class}\\ \\Longrightarrow\\ \\text{correct constant}"
     }
   ]
 }

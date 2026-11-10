@@ -2,132 +2,151 @@
   "schema_version": 1,
   "id": "g2-063000-diagonal-matrices-and-the-entrywise-solution",
   "title": "Diagonal matrices and the entrywise solution",
-  "subtitle": "G2 lecture 063000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 063000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:063000"
   ],
   "source_lecture": "draft-stages/tts-lectures/063000-diagonal-matrices-and-the-entrywise-solution.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Expanded, source-grounded mathematical companion: independent derivations, worked examples, vector MathTex, reusable diagrams. Spoken source unchanged.",
   "slides": [
     {
-      "id": "00-overview",
+      "id": "00-expanded",
       "title": "The problem and its setting",
-      "eyebrow": "G2 · 063000 · first-pass outline",
+      "eyebrow": "G2 · 063000 · The problem and its setting",
       "lead": "When A and B are diagonal in orthonormal eigenbases, the unknown matrix coefficient between eigenvalues a and b is multiplied by a minus b.",
       "body": [
-        "For diagonal coefficient matrices, the Sylvester equation can be solved entry by entry. The cross-eigenvalue differences determine uniqueness, the available solutions when spectra overlap, and a sharp Frobenius estimate under positive separation. Along the way, we will connect the entrywise formula to ordinary resolvents and to the coordinate-free language of spectral projections."
+        "For diagonal coefficient matrices, the Sylvester equation can be solved entry by entry. The cross-eigenvalue differences determine uniqueness, the available solutions when spectra overlap, and a sharp Frobenius estimate under positive separation. The entrywise formula also connects directly to resolvents and to coordinate-free spectral projections."
       ],
+      "takeaway": "Diagonal coefficient matrices reduce Sylvester inversion to independent divisions.",
+      "diagram": "g2-sylvester-grid",
       "layout": "opening"
     },
     {
-      "id": "01-overview",
+      "id": "01-expanded",
       "title": "Write the matrix equation in coordinates",
-      "eyebrow": "G2 · 063000 · first-pass outline",
+      "eyebrow": "G2 · 063000 · Write the matrix equation in coordinates",
       "lead": "Let A be a diagonal matrix with m diagonal entries, and B a diagonal matrix with n diagonal entries.",
       "body": [
-        "Let X and C be rectangular matrices with m rows and n columns. We want to solve A X minus X B equals C. What is the entry in row i and column j of A X? Because A is diagonal, it is the i-th diagonal entry of A multiplied by the corresponding entry of X. What about X B? Because B is diagonal, its entry in that position is the entry of X multiplied by the j-th diagonal entry of B. Subtracting, the coefficient of X is the i-th eigenvalue of A minus the j-th eigenvalue of B."
+        "Let X and C be rectangular matrices with m rows and n columns. We want to solve A X minus X B equals C. What is the entry in row i and column j of A X?",
+        "Because A is diagonal, it is the i-th diagonal entry of A multiplied by the corresponding entry of X. What about X B? Because B is diagonal, its entry in that position is the entry of X multiplied by the j-th diagonal entry of B."
       ],
-      "layout": "reading"
+      "takeaway": "The row index comes from A; the column index comes from B.",
+      "diagram": "g2-sylvester-grid",
+      "layout": "equation",
+      "mathtex": "(AX-XB)_{ij}=(a_i-b_j)X_{ij}"
     },
     {
-      "id": "02-overview",
+      "id": "02-expanded",
       "title": "A complete two-by-two example",
-      "eyebrow": "G2 · 063000 · first-pass outline",
-      "lead": "Let A have diagonal entries one and four.",
+      "eyebrow": "G2 · 063000 · A complete two-by-two example",
+      "lead": "A complete calculation with four distinct denominators.",
       "body": [
-        "Let B have diagonal entries zero and three. The difference associated with the first row and first column is one minus zero, which is one. For the first row and second column it is one minus three, which is negative two. For the second row and first column it is four minus zero, which is four. And for the second row and second column it is four minus three, which is one. Thus the matrix of denominators, read row by row, is one, negative two, four, one. Let C have first row two, six and second row eight, ten. Divide corresponding entries. The solution X has first row two, negative three and second row two, ten. Let's verify directly."
+        "Let A=diag(1,4), B=diag(0,3), and C have rows (2,6) and (8,10). The denominator matrix has rows (1,−2) and (4,1), so entrywise division gives X with rows (2,−3) and (2,10).",
+        "Direct verification gives AX with rows (2,−3),(8,40) and XB with rows (0,−9),(0,30). Subtraction recovers the stated C exactly."
       ],
-      "layout": "reading"
+      "takeaway": "Multiplying the computed X verifies all four Sylvester coefficients.",
+      "diagram": "g2-entry-solution",
+      "layout": "equation",
+      "mathtex": "\\begin{gathered}A=\\operatorname{diag}(1,4),\\ B=\\operatorname{diag}(0,3)\\\\ C=\\begin{bmatrix}2&6\\\\8&10\\end{bmatrix},\\quad X=\\begin{bmatrix}2&-3\\\\2&10\\end{bmatrix}\\end{gathered}"
     },
     {
-      "id": "03-overview",
+      "id": "03-expanded",
       "title": "Why uniqueness follows",
-      "eyebrow": "G2 · 063000 · first-pass outline",
+      "eyebrow": "G2 · 063000 · Why uniqueness follows",
       "lead": "Suppose X and Y both solve the same equation.",
       "body": [
-        "Subtract their equations. The difference Z, defined as X minus Y, satisfies A Z minus Z B equals zero. For every entry, the corresponding spectral difference times the entry of Z is zero. If all differences are nonzero, every entry of Z must vanish. Therefore X equals Y. This is the entire uniqueness proof in diagonal coordinates. Equivalently, the homogeneous Sylvester operator has trivial kernel. Since it acts on a finite-dimensional space of m times n matrix entries, injectivity implies surjectivity. But the explicit division formula already gives surjectivity constructively. The proof works whether the spectra are ordered or interlaced."
+        "Subtract their equations. The difference Z, defined as X minus Y, satisfies A Z minus Z B equals zero. For every entry, the corresponding spectral difference times the entry of Z is zero. If all differences are nonzero, every entry of Z must vanish.",
+        "Therefore X equals Y. This is the entire uniqueness proof in diagonal coordinates. Equivalently, the homogeneous Sylvester operator has trivial kernel. Since it acts on a finite-dimensional space of m times n matrix entries, injectivity implies surjectivity. But the explicit division formula already gives surjectivity constructively."
       ],
-      "layout": "reading"
+      "takeaway": "Uniqueness is the absence of a nonzero homogeneous matrix block.",
+      "diagram": "g2-sylvester-grid",
+      "layout": "equation",
+      "mathtex": "\\mathcal S_{A,B}(Z)=0\\ \\Longrightarrow\\ Z=0\\quad(\\sigma(A)\\cap\\sigma(B)=\\varnothing)"
     },
     {
-      "id": "04-overview",
+      "id": "04-expanded",
       "title": "What if a denominator vanishes?",
-      "eyebrow": "G2 · 063000 · first-pass outline",
-      "lead": "Suppose A has an eigenvalue three and B has an eigenvalue three.",
+      "eyebrow": "G2 · 063000 · What if a denominator vanishes?",
+      "lead": "A zero denominator gives a compatibility condition rather than a division.",
       "body": [
-        "On the corresponding row and column, the equation becomes zero times an unknown entry equals the matching entry of C. If that entry of C is nonzero, no solution exists. The left side can never produce it. If the entry of C is zero, every choice of the corresponding entry of X satisfies that scalar equation. So the solution is not unique. This gives a complete compatibility criterion in diagonal coordinates: every entry of C that joins equal eigenvalues must vanish. For all other entries, divide as usual. At positions joining equal eigenvalues, choose arbitrary values of X."
+        "If aᵢ=bⱼ, the corresponding equation is 0·Xᵢⱼ=Cᵢⱼ. A nonzero right-hand side makes the whole equation unsolvable. If Cᵢⱼ=0, that entry of X is free.",
+        "When the shared eigenvalue has multiplicities r for A and s for B, the homogeneous solutions include an arbitrary r-by-s block, contributing rs free scalar parameters."
       ],
-      "layout": "reading"
+      "takeaway": "Coincident eigenvalues create explicit compatibility conditions and free entries.",
+      "diagram": "g2-zero-denominator",
+      "layout": "equation",
+      "mathtex": "a_i=b_j\\quad\\Rightarrow\\quad C_{ij}=0\\ \\text{is necessary}"
     },
     {
-      "id": "05-overview",
+      "id": "05-expanded",
       "title": "A sharp Frobenius estimate",
-      "eyebrow": "G2 · 063000 · first-pass outline",
+      "eyebrow": "G2 · 063000 · A sharp Frobenius estimate",
       "lead": "Assume now that the eigenvalues of A and B are separated by a positive distance delta.",
       "body": [
-        "That means every absolute spectral difference is at least delta. For each entry, the solution formula gives the magnitude of X's entry at most the magnitude of C's entry divided by delta. Square this inequality for each row and column, and add over all entries. The sum of squared magnitudes of X is at most one over delta squared times the corresponding sum for C. These sums are the squares of the Frobenius norms. Taking square roots gives the bound: the Frobenius norm of X is at most the Frobenius norm of C divided by delta. The constant one is sharp."
+        "That means every absolute spectral difference is at least delta. For each entry, the solution formula gives the magnitude of X's entry at most the magnitude of C's entry divided by delta. Square this inequality for each row and column, and add over all entries.",
+        "The sum of squared magnitudes of X is at most one over delta squared times the corresponding sum for C. These sums are the squares of the Frobenius norms."
       ],
-      "layout": "reading"
+      "takeaway": "Frobenius orthogonality gives constant one under pairwise separation.",
+      "diagram": "g2-sylvester-grid",
+      "layout": "equation",
+      "mathtex": "\\|X\\|_{S_2}^2=\\sum_{i,j}\\frac{|C_{ij}|^2}{|a_i-b_j|^2}\\le\\frac{\\|C\\|_{S_2}^2}{\\delta^2}"
     },
     {
-      "id": "06-overview",
+      "id": "06-expanded",
       "title": "Why this does not prove the same operator-norm bound",
-      "eyebrow": "G2 · 063000 · first-pass outline",
+      "eyebrow": "G2 · 063000 · Why this does not prove the same operator-norm bound",
       "lead": "It is tempting to use the same argument for the ordinary operator norm.",
       "body": [
-        "Every entry of X is bounded in magnitude by the corresponding entry of C divided by delta, so perhaps the operator norm of X is at most the operator norm of C divided by delta. That conclusion does not follow from entrywise inequalities. The operator norm is not monotone under entrywise absolute-value comparison for arbitrary matrices. Changing signs and arrangements of matrix entries can change how they combine when acting on a vector. Our entrywise proof gives the Frobenius bound immediately. It also gives a weaker operator-norm bound through the inequality between Frobenius and operator norms, with a dimension factor."
+        "Every entry of X is bounded in magnitude by the corresponding entry of C divided by delta, so perhaps the operator norm of X is at most the operator norm of C divided by delta. That conclusion does not follow from entrywise inequalities.",
+        "The operator norm is not monotone under entrywise absolute-value comparison for arbitrary matrices. Changing signs and arrangements of matrix entries can change how they combine when acting on a vector. Our entrywise proof gives the Frobenius bound immediately."
       ],
-      "layout": "reading"
+      "takeaway": "Entrywise division alone does not yield the same operator-norm constant.",
+      "diagram": "g2-mixed-gap",
+      "layout": "equation",
+      "mathtex": "\\|X\\|_{\\mathrm{op}}\\le\\|X\\|_{S_2}\\le\\delta^{-1}\\|C\\|_{S_2}"
     },
     {
-      "id": "07-overview",
+      "id": "07-expanded",
       "title": "From diagonal entries to spectral projections",
-      "eyebrow": "G2 · 063000 · first-pass outline",
+      "eyebrow": "G2 · 063000 · From diagonal entries to spectral projections",
       "lead": "The formula is not tied to any particular choice of eigenvectors.",
       "body": [
-        "Let P for each distinct eigenvalue of A denote its orthogonal spectral projection. Let Q for each distinct eigenvalue of B denote the corresponding projection. Every map C can be decomposed into rectangular spectral blocks by placing a projection P on the left and a projection Q on the right. Summing all of these pieces recovers C because the spectral projections on each side sum to the identity. On one such block, the Sylvester operator multiplies by the scalar eigenvalue of A minus the scalar eigenvalue of B. This is the coordinate-free version of the entrywise calculation."
+        "Let P for each distinct eigenvalue of A denote its orthogonal spectral projection. Let Q for each distinct eigenvalue of B denote the corresponding projection. Every map C can be decomposed into rectangular spectral blocks by placing a projection P on the left and a projection Q on the right.",
+        "Summing all of these pieces recovers C because the spectral projections on each side sum to the identity. On one such block, the Sylvester operator multiplies by the scalar eigenvalue of A minus the scalar eigenvalue of B."
       ],
-      "layout": "reading"
+      "takeaway": "Spectral projectors recover the formula without a privileged eigenbasis.",
+      "diagram": "g2-sylvester-grid",
+      "layout": "equation",
+      "mathtex": "X=\\sum_{i,j}\\frac{P_iCQ_j}{a_i-b_j}"
     },
     {
-      "id": "08-overview",
+      "id": "08-expanded",
       "title": "A resolvent is a special case",
-      "eyebrow": "G2 · 063000 · first-pass outline",
+      "eyebrow": "G2 · 063000 · A resolvent is a special case",
       "lead": "Suppose B is a scalar multiple of the identity, with scalar b.",
       "body": [
-        "Then X B equals b times X. The equation becomes A X minus b X equals C, or A minus b identity, followed by X, equals C. If b is not an eigenvalue of A, the operator A minus b identity is invertible. Therefore X is obtained by applying its inverse to C on the left. That inverse is a resolvent operator, up to the conventional sign used when defining a resolvent. In diagonal coordinates, it divides each spectral component by a minus b. For self-adjoint A, its operator norm equals the reciprocal of the distance from b to the spectrum of A. That is the one-parameter version of our spectral denominator story."
+        "Then X B equals b times X. The equation becomes A X minus b X equals C, or A minus b identity, followed by X, equals C. If b is not an eigenvalue of A, the operator A minus b identity is invertible.",
+        "Therefore X is obtained by applying its inverse to C on the left. That inverse is a resolvent operator, up to the conventional sign used when defining a resolvent. In diagonal coordinates, it divides each spectral component by a minus b."
       ],
-      "layout": "reading"
+      "takeaway": "Scalar B reduces the equation to a familiar resolvent inverse.",
+      "diagram": "g2-scalar-gap",
+      "layout": "equation",
+      "mathtex": "B=bI\\quad\\Rightarrow\\quad X=(A-bI)^{-1}C"
     },
     {
-      "id": "09-overview",
-      "title": "What to reconstruct",
-      "eyebrow": "G2 · 063000 · first-pass outline",
-      "lead": "Solve the two-by-two example and verify by direct multiplication.",
+      "id": "09-synthesis",
+      "title": "Reassemble the inverse",
+      "eyebrow": "G2 · 063000 · Reconstruction",
+      "lead": "The diagonal division rule is independent of the basis chosen within each eigenspace.",
       "body": [
-        "Prove the uniqueness statement by subtracting two solutions. Then classify existence and free parameters when A and B share an eigenvalue of multiplicities r and s. Derive the Frobenius bound from the coefficient formula, and produce a one-entry example attaining equality. Finally, write the spectral-projection formula for the solution and show why it is independent of the chosen bases inside repeated eigenspaces."
+        "Select a spectral block PᵢCQⱼ, divide by the difference aᵢ−bⱼ, and sum. The orthogonal block decomposition makes the Frobenius estimate immediate and sharp. If a difference vanishes, require the corresponding block of C to be zero and retain that block as a free parameter.",
+        "Check the concrete 2×2 matrix by multiplication, then distinguish the Frobenius estimate from operator-norm estimates."
       ],
-      "layout": "reading"
-    },
-    {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 063000 · mathematical reference",
-      "lead": "Solve the two-by-two example and verify by direct multiplication.",
-      "body": [
-        "Prove the uniqueness statement by subtracting two solutions. Then classify existence and free parameters when A and B share an eigenvalue of multiplicities r and s. Derive the Frobenius bound from the coefficient formula, and produce a one-entry example attaining equality."
-      ],
-      "mathtex": "(AX-XB)_{ij}=(a_i-b_j)X_{ij},\\qquad\nX_{ij}=\\frac{C_{ij}}{a_i-b_j}\\quad\\text{if }a_i\\ne b_j.",
-      "layout": "equation"
-    },
-    {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 063000 · conclusion",
-      "lead": "Finally, write the spectral-projection formula for the solution and show why it is independent of the chosen bases inside repeated eigenspaces.",
-      "body": [],
-      "layout": "reading"
+      "takeaway": "Every mathematical claim can be checked one spectral coefficient at a time.",
+      "diagram": "g2-entry-solution",
+      "layout": "equation",
+      "mathtex": "X_{ij}=\\frac{C_{ij}}{a_i-b_j}\\quad(a_i\\ne b_j)"
     }
   ]
 }

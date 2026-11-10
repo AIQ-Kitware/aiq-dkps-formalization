@@ -2,122 +2,152 @@
   "schema_version": 1,
   "id": "g2-066000-unitary-and-semigroup-representations",
   "title": "Unitary and semigroup representations",
-  "subtitle": "G2 lecture 066000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 066000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:066000"
   ],
   "source_lecture": "draft-stages/tts-lectures/066000-unitary-and-semigroup-representations.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Expanded, source-grounded mathematical companion: independent derivations, worked examples, vector MathTex, reusable diagrams. Spoken source unchanged.",
   "slides": [
     {
-      "id": "00-overview",
+      "id": "00-expanded",
       "title": "The problem and its setting",
-      "eyebrow": "G2 · 066000 · first-pass outline",
+      "eyebrow": "G2 · 066000 · The problem and its setting",
       "lead": "An ordered spectral gap permits a Sylvester equation to be solved by integrating decaying exponentials.",
       "body": [
-        "For interlaced but separated spectra, the differences do not all share a sign, so we need a different construction. We study a related construction that works when the spectra are separated but their differences may have either sign. The key change is to use unitary groups: exponentials with an imaginary unit in the exponent. These produce oscillations rather than decay. Then a scalar Fourier multiplier will turn each oscillation back into the reciprocal of its spectral difference."
+        "For interlaced but separated spectra, the differences do not all share a sign, so we need a different construction. We study a related construction that works when the spectra are separated but their differences may have either sign.",
+        "The key change is to use unitary groups: exponentials with an imaginary unit in the exponent. These produce oscillations rather than decay. Then a scalar Fourier multiplier will turn each oscillation back into the reciprocal of its spectral difference."
       ],
+      "takeaway": "Unitary transport replaces decay when the spectral differences change sign.",
+      "diagram": "g2-unitary-orbit",
       "layout": "opening"
     },
     {
-      "id": "01-overview",
+      "id": "01-expanded",
       "title": "The Sylvester orbit",
-      "eyebrow": "G2 · 066000 · first-pass outline",
+      "eyebrow": "G2 · 066000 · The Sylvester orbit",
       "lead": "Let A and B be bounded self-adjoint operators on complex Hilbert spaces.",
       "body": [
-        "Let C be a bounded map from the space on which B acts into the space on which A acts. For each real time t, define an operator U of t by exponentiating i times t times A. Define V of t using B the same way. Because the generators are self-adjoint, U and V are unitary: they preserve lengths and have their adjoints as inverses. Now transport C by applying U of t on the left and the inverse of V of t on the right. Call the result F of t. At time zero, both unitary maps are identities, so F of zero equals C. At any other time, F describes how C looks after a left and right unitary evolution."
+        "Let C be a bounded map from the space on which B acts into the space on which A acts. For each real time t, define an operator U of t by exponentiating i times t times A.",
+        "Define V of t using B the same way. Because the generators are self-adjoint, U and V are unitary: they preserve lengths and have their adjoints as inverses. Now transport C by applying U of t on the left and the inverse of V of t on the right. Call the result F of t."
       ],
-      "layout": "reading"
+      "takeaway": "Two unitary groups move the unknown map by conjugate left/right actions.",
+      "diagram": "g2-unitary-orbit",
+      "layout": "equation",
+      "mathtex": "U_A(t)=e^{itA},\\qquad U_B(t)=e^{itB}"
     },
     {
-      "id": "02-overview",
+      "id": "02-expanded",
       "title": "Check the orbit in diagonal coordinates",
-      "eyebrow": "G2 · 066000 · first-pass outline",
+      "eyebrow": "G2 · 066000 · Check the orbit in diagonal coordinates",
       "lead": "Assume for the moment that A and B are diagonal, with real eigenvalues a and b in the corresponding positions.",
       "body": [
-        "On the matrix entry joining a to b, left unitary evolution multiplies by the exponential of i t a. Right inverse evolution multiplies by the exponential of negative i t b. The product is the exponential of i t times a minus b. Each matrix coefficient therefore oscillates with frequency equal to its spectral difference. Different entries can oscillate clockwise or counterclockwise depending on the sign of the difference. Unlike the ordered semigroup, there is no single exponential decay envelope."
+        "On the matrix entry joining a to b, left unitary evolution multiplies by the exponential of i t a. Right inverse evolution multiplies by the exponential of negative i t b. The product is the exponential of i t times a minus b.",
+        "Each matrix coefficient therefore oscillates with frequency equal to its spectral difference. Different entries can oscillate clockwise or counterclockwise depending on the sign of the difference. Unlike the ordered semigroup, there is no single exponential decay envelope."
       ],
-      "layout": "reading"
+      "takeaway": "Each spectral coefficient oscillates with its eigenvalue difference.",
+      "diagram": "g2-sylvester-grid",
+      "layout": "equation",
+      "mathtex": "\\mathcal T_t(X)=e^{itA}Xe^{-itB}"
     },
     {
-      "id": "03-overview",
+      "id": "03-expanded",
       "title": "A scalar reciprocal multiplier",
-      "eyebrow": "G2 · 066000 · first-pass outline",
-      "lead": "Suppose every absolute difference between a spectral value of A and one of B is at least a positive number delta.",
+      "eyebrow": "G2 · 066000 · A scalar reciprocal multiplier",
+      "lead": "Reciprocal differences can be represented by an integrable Fourier kernel.",
       "body": [
-        "We want an integrable complex-valued function of time, call it mu, with this property: integrate mu of t times the exponential of i t omega over all real times, and the result is one over omega whenever the absolute value of omega is at least delta. Think of the time variable as an input to the Fourier transform. We prescribe the transform of mu away from a forbidden interval around zero. Inside that interval, we have freedom, because no spectral difference we need to invert can occur there. That freedom matters."
+        "Assume A and B are bounded self-adjoint and every cross-spectral difference ω satisfies |ω|≥δ>0. There is an integrable scalar kernel whose Fourier transform agrees with 1/ω on this separated frequency set.",
+        "The reciprocal can then be applied to the operator-valued unitary orbit. The norm of the kernel, not the number of eigenvalues, controls the resulting inverse."
       ],
-      "layout": "reading"
+      "takeaway": "An L1 Fourier kernel reproduces reciprocal values outside the forbidden gap.",
+      "diagram": "g2-unitary-orbit",
+      "layout": "equation",
+      "mathtex": "\\mathcal T_t(u_iv_j^*)=e^{it(a_i-b_j)}u_iv_j^*"
     },
     {
-      "id": "04-overview",
+      "id": "04-expanded",
       "title": "Build the operator inverse",
-      "eyebrow": "G2 · 066000 · first-pass outline",
+      "eyebrow": "G2 · 066000 · Build the operator inverse",
       "lead": "Return to the operator orbit of C.",
       "body": [
-        "Multiply it by mu of t and integrate over all real t. Call the resulting operator Y. In diagonal coordinates, the entry of Y joining eigenvalues a and b is the entry of C times the integral of mu of t times the exponential of i t times a minus b. The multiplier property evaluates this integral as one divided by a minus b. Therefore the entry of Y is the entry of C divided by the spectral difference. We have reconstructed the unique entrywise Sylvester solution. This is more than a compact notation for the finite calculation. The expression is basis independent, and its integrand is defined directly in the space of bounded operators."
+        "Multiply it by mu of t and integrate over all real t. Call the resulting operator Y. In diagonal coordinates, the entry of Y joining eigenvalues a and b is the entry of C times the integral of mu of t times the exponential of i t times a minus b.",
+        "The multiplier property evaluates this integral as one divided by a minus b. Therefore the entry of Y is the entry of C divided by the spectral difference. We have reconstructed the unique entrywise Sylvester solution."
       ],
-      "layout": "reading"
+      "takeaway": "Integrating the unitary orbit constructs the Sylvester inverse.",
+      "diagram": "g2-unitary-orbit",
+      "layout": "equation",
+      "mathtex": "\\widehat\\mu_\\delta(\\omega)=\\omega^{-1}\\quad(|\\omega|\\ge\\delta)"
     },
     {
-      "id": "05-overview",
+      "id": "05-expanded",
       "title": "Why the infinite-dimensional argument needs care",
-      "eyebrow": "G2 · 066000 · first-pass outline",
-      "lead": "In finite dimensions we checked every coefficient in eigenbases.",
+      "eyebrow": "G2 · 066000 · Why the infinite-dimensional argument needs care",
+      "lead": "Use unitary invariance before integrating.",
       "body": [
-        "But a bounded self-adjoint operator on an infinite-dimensional Hilbert space may have continuous spectrum and no orthonormal basis of eigenvectors. We cannot write an entrywise sum over eigenvalues and pretend it still covers every operator. Instead, the spectral theorem lets us approximate each self-adjoint operator by a finite spectral step operator: a finite linear combination of spectral projections, with coefficients chosen from the original spectrum. For these finite spectral steps, the multiplier identity applies block by block. The approximations converge in operator norm."
+        "Both e^(itA) and e^(−itB) are unitary. Hence their left/right multiplication does not increase the operator norm of C. Taking the norm inside the Bochner integral bounds X by ||μδ||₁·||C||.",
+        "For the kernel used in this lecture, ||μδ||₁=π/(2δ). This gives a dimension-independent bound even when the spectral sets are interlaced."
       ],
-      "layout": "reading"
+      "takeaway": "Unitary factors preserve operator norms, so only the kernel L1 norm remains.",
+      "diagram": "g2-unitary-orbit",
+      "layout": "equation",
+      "mathtex": "X=\\int_{\\mathbb R}\\mu_\\delta(t)e^{itA}Ce^{-itB}\\,dt"
     },
     {
-      "id": "06-overview",
+      "id": "06-expanded",
       "title": "How the semigroup and unitary methods differ",
-      "eyebrow": "G2 · 066000 · first-pass outline",
+      "eyebrow": "G2 · 066000 · How the semigroup and unitary methods differ",
       "lead": "Let us compare the two integral constructions.",
       "body": [
-        "When A is entirely above B by delta, the semigroup integrand decays as the exponential of negative delta times time. We integrate only over nonnegative times, and the mass of the scalar envelope is one over delta. For general pairwise-separated spectra, some spectral differences are positive and others negative. A single decaying semigroup cannot treat them all. The unitary representation works with both signs by oscillating over all real times and inserting a Fourier multiplier. The multiplier's absolute mass produces pi over two delta."
+        "When A is entirely above B by delta, the semigroup integrand decays as the exponential of negative delta times time. We integrate only over nonnegative times, and the mass of the scalar envelope is one over delta.",
+        "For general pairwise-separated spectra, some spectral differences are positive and others negative. A single decaying semigroup cannot treat them all. The unitary representation works with both signs by oscillating over all real times and inserting a Fourier multiplier. The multiplier's absolute mass produces pi over two delta."
       ],
-      "layout": "reading"
+      "takeaway": "Semigroup and Fourier solutions exploit distinct spectral geometry.",
+      "diagram": "g2-mixed-gap",
+      "layout": "equation",
+      "mathtex": "\\|X\\|\\le\\|\\mu_\\delta\\|_1\\|C\\|=\\frac{\\pi}{2\\delta}\\|C\\|"
     },
     {
-      "id": "07-overview",
+      "id": "07-expanded",
       "title": "An example with both signs",
-      "eyebrow": "G2 · 066000 · first-pass outline",
+      "eyebrow": "G2 · 066000 · An example with both signs",
       "lead": "Let A be diagonal with entries negative one and positive one, and B the one-dimensional zero operator.",
       "body": [
-        "Let C be the column with entries two and three. The spectral differences are negative one and positive one, so delta equals one. The Sylvester solution has entries negative two and positive three. For the first coefficient, the unitary orbit oscillates with frequency negative one; for the second, with frequency positive one. The scalar multiplier returns negative one for the first reciprocal and positive one for the second, producing exactly the required signs. No single choice of positive-time exponential decay using the same orientation can handle both entries."
+        "Let C be the column with entries two and three. The spectral differences are negative one and positive one, so delta equals one. The Sylvester solution has entries negative two and positive three. For the first coefficient, the unitary orbit oscillates with frequency negative one; for the second, with frequency positive one.",
+        "The scalar multiplier returns negative one for the first reciprocal and positive one for the second, producing exactly the required signs. No single choice of positive-time exponential decay using the same orientation can handle both entries."
       ],
-      "layout": "reading"
+      "takeaway": "Interlaced spectra separate from zero without admitting one ordered cut.",
+      "diagram": "g2-mixed-gap",
+      "layout": "equation",
+      "mathtex": "\\int_0^\\infty e^{-tA}Ce^{tB}\\,dt\\quad\\text{needs ordered spectra}"
     },
     {
-      "id": "08-overview",
+      "id": "08-expanded",
       "title": "The generator viewpoint",
-      "eyebrow": "G2 · 066000 · first-pass outline",
+      "eyebrow": "G2 · 066000 · The generator viewpoint",
       "lead": "There is a broader interpretation.",
       "body": [
-        "The maps sending X to U of t X V of negative t form a one-parameter unitary group on the Hilbert space of Hilbert–Schmidt operators. Its generator is multiplication by i times the Sylvester operator. In that Hilbert–Schmidt setting, the entire spectral calculation can be understood as functional calculus for a self-adjoint generator. This will later yield a sharper estimate in the square-summable operator norm. For now, reconstruct the derivative of the orbit, verify the opposite-frequency example, and derive the norm estimate from the integral's absolute majorant."
+        "The maps sending X to U of t X V of negative t form a one-parameter unitary group on the Hilbert space of Hilbert–Schmidt operators. Its generator is multiplication by i times the Sylvester operator. In that Hilbert–Schmidt setting, the entire spectral calculation can be understood as functional calculus for a self-adjoint generator.",
+        "In Hilbert–Schmidt norm, spectral coefficients can also be estimated directly by orthogonal summation. For now, reconstruct the derivative of the orbit, verify the opposite-frequency example, and derive the norm estimate from the integral's absolute majorant."
       ],
-      "layout": "reading"
+      "takeaway": "The Sylvester operator generates the entire transport orbit.",
+      "diagram": "g2-unitary-orbit",
+      "layout": "equation",
+      "mathtex": "\\sigma(A)=\\{-2,2\\},\\quad\\sigma(B)=\\{0\\}"
     },
     {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 066000 · mathematical reference",
-      "lead": "There is a broader interpretation.",
+      "id": "09-synthesis",
+      "title": "The Fourier method in one derivation",
+      "eyebrow": "G2 · 066000 · Reconstruction",
+      "lead": "An ordered gap allows a decaying semigroup; a pairwise gap permits oscillatory unitary transport.",
       "body": [
-        "The maps sending X to U of t X V of negative t form a one-parameter unitary group on the Hilbert space of Hilbert–Schmidt operators. Its generator is multiplication by i times the Sylvester operator."
+        "Every spectral coefficient of e^(itA)Ce^(−itB) oscillates with frequency aᵢ−bⱼ. Choose an integrable scalar kernel whose Fourier multiplier equals 1/ω outside the gap, and integrate the orbit. The result divides each coefficient by its frequency difference.",
+        "Unitary invariance bounds the result by the kernel’s L1 norm, π/(2δ), with no dimension factor."
       ],
-      "mathtex": "\\frac d{dt}\\bigl(U_A(t)XU_B(-t)\\bigr)\n=iU_A(t)(AX-XB)U_B(-t).",
-      "layout": "equation"
-    },
-    {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 066000 · conclusion",
-      "lead": "Those steps prepare us for another solution method that does not require self-adjointness at all: contour integration of resolvents.",
-      "body": [],
-      "layout": "reading"
+      "takeaway": "An analytic multiplier replaces scalar division for mixed-sign differences.",
+      "diagram": "g2-unitary-orbit",
+      "layout": "equation",
+      "mathtex": "\\frac d{dt}\\mathcal T_t(X)=i\\mathcal T_t(AX-XB)"
     }
   ]
 }

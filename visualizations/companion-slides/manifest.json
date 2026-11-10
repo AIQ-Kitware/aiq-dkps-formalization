@@ -719,7 +719,7 @@
       "lecture_nodes": [
         "g2:062000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-063000-diagonal-matrices-and-the-entrywise-solution",
@@ -727,7 +727,7 @@
       "lecture_nodes": [
         "g2:063000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-064000-kronecker-sums-and-sylvester-invertibility",
@@ -735,7 +735,7 @@
       "lecture_nodes": [
         "g2:064000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-065000-ordered-spectral-separation",
@@ -743,7 +743,7 @@
       "lecture_nodes": [
         "g2:065000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-066000-unitary-and-semigroup-representations",
@@ -751,7 +751,7 @@
       "lecture_nodes": [
         "g2:066000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-067000-disjoint-spectral-sets-and-rosenblum-theory",
@@ -759,7 +759,7 @@
       "lecture_nodes": [
         "g2:067000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-068000-the-banach-space-sylvester-lower-bound-theorem",
@@ -767,7 +767,7 @@
       "lecture_nodes": [
         "g2:068000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-069000-norm-dependence-of-sylvester-bounds",
@@ -775,7 +775,7 @@
       "lecture_nodes": [
         "g2:069000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-070000-hilbert-schmidt-sylvester-group-estimates",

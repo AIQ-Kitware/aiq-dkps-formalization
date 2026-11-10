@@ -2,132 +2,152 @@
   "schema_version": 1,
   "id": "g2-067000-disjoint-spectral-sets-and-rosenblum-theory",
   "title": "Disjoint spectral sets and Rosenblum theory",
-  "subtitle": "G2 lecture 067000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 067000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:067000"
   ],
   "source_lecture": "draft-stages/tts-lectures/067000-disjoint-spectral-sets-and-rosenblum-theory.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Expanded, source-grounded mathematical companion: independent derivations, worked examples, vector MathTex, reusable diagrams. Spoken source unchanged.",
   "slides": [
     {
-      "id": "00-overview",
+      "id": "00-expanded",
       "title": "The problem and its setting",
-      "eyebrow": "G2 · 067000 · first-pass outline",
+      "eyebrow": "G2 · 067000 · The problem and its setting",
       "lead": "For self-adjoint Sylvester coefficients, an ordered real spectral gap produces an integral of decaying semigroups.",
       "body": [
-        "Without self-adjointness there is no such spectral order. A complex contour of resolvents provides a different construction that requires only disjoint spectra of bounded operators. The central question is whether the spectra of two bounded operators are disjoint. For bounded complex operators on Banach spaces, this is enough for the Sylvester operator to have a bounded inverse. The method is associated with Rosenblum, and its engine is a contour integral of resolvents."
+        "Without self-adjointness there is no such spectral order. A complex contour of resolvents provides a different construction that requires only disjoint spectra of bounded operators. The central question is whether the spectra of two bounded operators are disjoint.",
+        "For bounded complex operators on Banach spaces, this is enough for the Sylvester operator to have a bounded inverse. The method is associated with Rosenblum, and its engine is a contour integral of resolvents."
       ],
+      "takeaway": "Resolvent contours solve Sylvester equations without normality assumptions.",
+      "diagram": "g2-rosenblum-contour",
       "layout": "opening"
     },
     {
-      "id": "01-overview",
+      "id": "01-expanded",
       "title": "Recall the resolvent",
-      "eyebrow": "G2 · 067000 · first-pass outline",
+      "eyebrow": "G2 · 067000 · Recall the resolvent",
       "lead": "Let A be a bounded operator.",
       "body": [
-        "For a complex number z outside its spectrum, the operator z times the identity minus A has a bounded inverse. We call that inverse the resolvent of A at z. The resolvent is a function of z. It is analytic away from the spectrum, and integrating it around a closed contour can select spectral components of the operator. For a one-by-one matrix consisting of scalar a, the resolvent is just one over z minus a. Its integral around a positively oriented circle is two pi i if the circle encloses a and zero otherwise, after dividing by the usual normalization. Thus contour integration can detect whether a spectral value lies inside a curve."
+        "For a complex number z outside its spectrum, the operator z times the identity minus A has a bounded inverse. We call that inverse the resolvent of A at z. The resolvent is a function of z.",
+        "It is analytic away from the spectrum, and integrating it around a closed contour can select spectral components of the operator. For a one-by-one matrix consisting of scalar a, the resolvent is just one over z minus a."
       ],
-      "layout": "reading"
+      "takeaway": "The resolvent is analytic off the spectrum and detects enclosed spectral parts.",
+      "diagram": "g2-rosenblum-contour",
+      "layout": "equation",
+      "mathtex": "R_A(z)=(zI-A)^{-1}\\qquad(z\\notin\\sigma(A))"
     },
     {
-      "id": "02-overview",
+      "id": "02-expanded",
       "title": "The two-resolvent integrand",
-      "eyebrow": "G2 · 067000 · first-pass outline",
+      "eyebrow": "G2 · 067000 · The two-resolvent integrand",
       "lead": "Let A act on a Banach space Y and B act on another Banach space X.",
       "body": [
-        "Our right-hand side C maps X to Y. For a complex number z outside both spectra, form the resolvent of A at z, followed by C, followed by the resolvent of B at z. Call this operator K of z. Notice the order. The right resolvent acts first on a vector in X, C sends that vector into Y, and the left resolvent then acts on Y. Every composition is type-correct even though the two Banach spaces need not be the same. The proposed solution is the contour integral of K, divided by two pi i, over a positively oriented closed contour that encloses all of A's spectrum and none of B's spectrum."
+        "Our right-hand side C maps X to Y. For a complex number z outside both spectra, form the resolvent of A at z, followed by C, followed by the resolvent of B at z. Call this operator K of z.",
+        "Notice the order. The right resolvent acts first on a vector in X, C sends that vector into Y, and the left resolvent then acts on Y. Every composition is type-correct even though the two Banach spaces need not be the same."
       ],
-      "layout": "reading"
+      "takeaway": "The two-resolvent product is a correctly typed map between Banach spaces.",
+      "diagram": "g2-sylvester-types",
+      "layout": "equation",
+      "mathtex": "K(z)=R_A(z)C R_B(z)"
     },
     {
-      "id": "03-overview",
+      "id": "03-expanded",
       "title": "The cancellation identity",
-      "eyebrow": "G2 · 067000 · first-pass outline",
-      "lead": "Write R A for the resolvent of A and R B for the resolvent of B, evaluated at the same z.",
+      "eyebrow": "G2 · 067000 · The cancellation identity",
+      "lead": "The resolvent identity cancels the unwanted middle terms.",
       "body": [
-        "Because z identity minus A multiplied by R A is the identity, we can rearrange to obtain A R A equals z R A minus the identity. Similarly, R B multiplied by B equals z R B minus the identity. These identities do not require A or B to be self-adjoint. Apply the Sylvester operator to K of z. The first term is A R A C R B. The second is R A C R B B. Substitute the resolvent identities. The first becomes z R A C R B minus C R B. The second becomes z R A C R B minus R A C. Subtracting cancels the z-dependent terms. What remains is R A C minus C R B. That is the key cancellation."
+        "With R_A(z)=(zI−A)⁻¹ and R_B(z)=(zI−B)⁻¹, use AR_A=zR_A−I and R_BB=zR_B−I. Expanding A(R_ACR_B)−(R_ACR_B)B cancels the two zR_ACR_B terms.",
+        "The remaining expression R_AC−CR_B integrates to C around a contour enclosing σ(A) and excluding σ(B). This is the algebraic core of Rosenblum inversion."
       ],
-      "layout": "reading"
+      "takeaway": "A cancellation identity turns a product of resolvents into a difference.",
+      "diagram": "g2-rosenblum-contour",
+      "layout": "equation",
+      "mathtex": "A K(z)-K(z)B=R_A(z)C-CR_B(z)"
     },
     {
-      "id": "04-overview",
+      "id": "04-expanded",
       "title": "Integrate around the spectra",
-      "eyebrow": "G2 · 067000 · first-pass outline",
+      "eyebrow": "G2 · 067000 · Integrate around the spectra",
       "lead": "Assume first that a single circle contains all of A's spectrum strictly inside and contains no spectral value of B even in its closed disk.",
       "body": [
-        "Integrate the cancellation identity around that circle and divide by two pi i. The integral of the A resolvent becomes the identity operator, because the circle encloses all of A's spectrum. The integral of the B resolvent becomes zero, because B has no spectrum inside the circle. Hence the integral of R A C minus C R B equals C. Because bounded composition commutes with the operator-valued contour integral, we obtain A times the proposed solution minus the proposed solution times B equals C. Existence is proved."
+        "Integrate the cancellation identity around that circle and divide by two pi i. The integral of the A resolvent becomes the identity operator, because the circle encloses all of A's spectrum. The integral of the B resolvent becomes zero, because B has no spectrum inside the circle.",
+        "Hence the integral of R A C minus C R B equals C. Because bounded composition commutes with the operator-valued contour integral, we obtain A times the proposed solution minus the proposed solution times B equals C. Existence is proved."
       ],
-      "layout": "reading"
+      "takeaway": "The contour encloses the A spectrum but excludes the B spectrum.",
+      "diagram": "g2-rosenblum-contour",
+      "layout": "equation",
+      "mathtex": "X=\\frac1{2\\pi i}\\oint_\\Gamma R_A(z)CR_B(z)\\,dz"
     },
     {
-      "id": "05-overview",
+      "id": "05-expanded",
       "title": "Why uniqueness comes from the same computation",
-      "eyebrow": "G2 · 067000 · first-pass outline",
+      "eyebrow": "G2 · 067000 · Why uniqueness comes from the same computation",
       "lead": "Suppose an arbitrary map X is given and let its Sylvester residual be A X minus X B.",
       "body": [
-        "Insert that residual into the same two-resolvent integrand. Using the resolvent identities in the opposite direction, one finds that R A times the residual times R B equals R A X minus X R B. Integrate. The first term gives identity times X, and the second gives X times zero. The result is X itself. Thus the contour construction is a left inverse of the Sylvester map as well as a right inverse. It follows that every C has exactly one solution. The Sylvester operator is an isomorphism of Banach spaces, because the contour integral defines a bounded linear map of C."
+        "Insert that residual into the same two-resolvent integrand. Using the resolvent identities in the opposite direction, one finds that R A times the residual times R B equals R A X minus X R B. Integrate.",
+        "The first term gives identity times X, and the second gives X times zero. The result is X itself. Thus the contour construction is a left inverse of the Sylvester map as well as a right inverse. It follows that every C has exactly one solution."
       ],
-      "layout": "reading"
+      "takeaway": "The same contour reconstructs any X from its Sylvester residual.",
+      "diagram": "g2-rosenblum-contour",
+      "layout": "equation",
+      "mathtex": "\\frac1{2\\pi i}\\oint_\\Gamma R_A(z)(AX-XB)R_B(z)\\,dz=X"
     },
     {
-      "id": "06-overview",
+      "id": "06-expanded",
       "title": "Check the scalar case",
-      "eyebrow": "G2 · 067000 · first-pass outline",
+      "eyebrow": "G2 · 067000 · Check the scalar case",
       "lead": "Let A multiply by a and B multiply by b, with a different from b.",
       "body": [
-        "Choose a circle containing a and excluding b. The integrand is C divided by the product of z minus a and z minus b. The integrand has a simple pole at a inside the contour. Its residue is C divided by a minus b. The normalized contour integral therefore gives exactly that value. We have recovered the scalar equation a X minus X b equals C, solved by division by a minus b. The contour formula is the complex-analytic version of that division. For a diagonal matrix, the same residue calculation can be performed in every spectral block."
+        "Choose a circle containing a and excluding b. The integrand is C divided by the product of z minus a and z minus b. The integrand has a simple pole at a inside the contour. Its residue is C divided by a minus b.",
+        "The normalized contour integral therefore gives exactly that value. We have recovered the scalar equation a X minus X b equals C, solved by division by a minus b. The contour formula is the complex-analytic version of that division."
       ],
-      "layout": "reading"
+      "takeaway": "The scalar residue equals the expected reciprocal eigenvalue difference.",
+      "diagram": "g2-scalar-gap",
+      "layout": "equation",
+      "mathtex": "\\operatorname{Res}_{z=a}\\frac{c}{(z-a)(z-b)}=\\frac{c}{a-b}"
     },
     {
-      "id": "07-overview",
+      "id": "07-expanded",
       "title": "When one circle is not enough",
-      "eyebrow": "G2 · 067000 · first-pass outline",
-      "lead": "A careful distinction is needed here.",
+      "eyebrow": "G2 · 067000 · When one circle is not enough",
+      "lead": "Disjoint spectra do not always fit inside one separating circle.",
       "body": [
-        "Disjoint compact spectra do not always admit one circle that encloses all of A's spectrum while excluding all of B's spectrum. For example, let A have eigenvalues negative two and positive two, and let B have eigenvalue zero. The spectra are disjoint. Any closed disk containing both endpoints contains their midpoint zero, by convexity. So no single circle can contain all of A's spectrum inside its disk while excluding B's spectral value. What do we do? Use a contour made from several positively oriented loops that together enclose A's spectral pieces but avoid B's spectrum."
+        "Take σ(A)={−2,2} and σ(B)={0}. Every disk containing both points −2 and 2 also contains their midpoint 0, so no single circle can enclose the whole spectrum of A while excluding B.",
+        "Separate loops around −2 and 2 work. The circle-specific Lean theorem has stronger hypotheses; the general bounded-operator argument allows suitable multiple contour components."
       ],
-      "layout": "reading"
+      "takeaway": "Disjoint compact spectra may require several contour components.",
+      "diagram": "g2-rosenblum-multiloop",
+      "layout": "equation",
+      "mathtex": "\\sigma(A)=\\{-2,2\\},\\qquad\\sigma(B)=\\{0\\}"
     },
     {
-      "id": "08-overview",
+      "id": "08-expanded",
       "title": "Connection to spectral projections",
-      "eyebrow": "G2 · 067000 · first-pass outline",
-      "lead": "We met spectral projections earlier by selecting eigenspaces of a self-adjoint matrix.",
+      "eyebrow": "G2 · 067000 · Connection to spectral projections",
+      "lead": "For a finite self-adjoint matrix, selecting eigenspaces produces orthogonal spectral projections.",
       "body": [
-        "Riesz projections generalize that selection to operators with possibly complex spectra and nontrivial Jordan structure. A Riesz projection associated with a contour is the normalized integral of the resolvent around that contour. It commutes with the original operator and projects onto the spectral component enclosed by the contour. Unlike an orthogonal spectral projection, it need not be self-adjoint for a nonnormal operator. This explains why the Rosenblum proof is so flexible. It needs analytic resolvents and projection identities, not orthogonal eigenvectors or Hilbert geometry."
+        "Riesz projections generalize that selection to operators with possibly complex spectra and nontrivial Jordan structure. A Riesz projection associated with a contour is the normalized integral of the resolvent around that contour. It commutes with the original operator and projects onto the spectral component enclosed by the contour.",
+        "Unlike an orthogonal spectral projection, it need not be self-adjoint for a nonnormal operator. This explains why the Rosenblum proof is so flexible. It needs analytic resolvents and projection identities, not orthogonal eigenvectors or Hilbert geometry."
       ],
-      "layout": "reading"
+      "takeaway": "Riesz projections need not be orthogonal when the operator is nonnormal.",
+      "diagram": "g2-rosenblum-multiloop",
+      "layout": "equation",
+      "mathtex": "P_\\Gamma=\\frac1{2\\pi i}\\oint_\\Gamma(zI-A)^{-1}\\,dz"
     },
     {
-      "id": "09-overview",
-      "title": "What this lesson establishes",
-      "eyebrow": "G2 · 067000 · first-pass outline",
-      "lead": "The Sylvester map is invertible for bounded complex Banach-space operators with disjoint spectra.",
+      "id": "09-synthesis",
+      "title": "Existence, uniqueness, and a contour caveat",
+      "eyebrow": "G2 · 067000 · Reconstruction",
+      "lead": "Rosenblum inversion needs disjoint complex spectra and bounded operators.",
       "body": [
-        "The proof is based on resolvent cancellation, contour spectral projections, and the recovery of any unknown map from its own residual. But there is a separate quantitative problem. How can we prove an explicit estimate for the size of a solution in a useful operator norm? When the spectra have additional separation geometry, an elementary inverse-based argument can give a constant-one bound even on Banach spaces. Before moving on, derive the cancellation identity on paper and evaluate the scalar contour integral. Those two computations are the proof's core."
+        "The resolvent cancellation identity proves that a contour separating the spectra gives a solution. Applying the same contour to the residual of an arbitrary X recovers X, establishing uniqueness. For nonnormal operators the contour inverse remains bounded, but its norm depends on resolvent behavior.",
+        "A single circle suffices only when one disk can separate the spectra. Multiple loops may be necessary."
       ],
-      "layout": "reading"
-    },
-    {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 067000 · mathematical reference",
-      "lead": "The Sylvester map is invertible for bounded complex Banach-space operators with disjoint spectra.",
-      "body": [
-        "The proof is based on resolvent cancellation, contour spectral projections, and the recovery of any unknown map from its own residual. But there is a separate quantitative problem."
-      ],
-      "mathtex": "A\\bigl(R_A(z)CR_B(z)\\bigr)-\\bigl(R_A(z)CR_B(z)\\bigr)B\n=R_A(z)C-CR_B(z).",
-      "layout": "equation"
-    },
-    {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 067000 · conclusion",
-      "lead": "Those two computations are the proof's core.",
-      "body": [],
-      "layout": "reading"
+      "takeaway": "Existence and uniqueness come from contour algebra, not a sharp distance bound.",
+      "diagram": "g2-rosenblum-contour",
+      "layout": "equation",
+      "mathtex": "\\sigma(A)\\cap\\sigma(B)=\\varnothing\\ \\Rightarrow\\ \\mathcal S_{A,B}^{-1}\\ \\text{exists}"
     }
   ]
 }

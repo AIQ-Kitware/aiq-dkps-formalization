@@ -2,112 +2,151 @@
   "schema_version": 1,
   "id": "g2-064000-kronecker-sums-and-sylvester-invertibility",
   "title": "Kronecker sums and Sylvester invertibility",
-  "subtitle": "G2 lecture 064000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 064000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:064000"
   ],
   "source_lecture": "draft-stages/tts-lectures/064000-kronecker-sums-and-sylvester-invertibility.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Expanded, source-grounded mathematical companion: independent derivations, worked examples, vector MathTex, reusable diagrams. Spoken source unchanged.",
   "slides": [
     {
-      "id": "00-overview",
+      "id": "00-expanded",
       "title": "The problem and its setting",
-      "eyebrow": "G2 · 064000 · first-pass outline",
+      "eyebrow": "G2 · 064000 · The problem and its setting",
       "lead": "For diagonal self-adjoint A and B, the Sylvester equation A X minus X B equals C can be solved entry by entry when every cross-spectral difference is nonzero.",
       "body": [
-        "Here we treat the entire left-hand side as a single linear operator. Its input is a matrix X, and its output is the matrix A X minus X B. Once we understand the spectrum of that operator, we can state precisely when the Sylvester equation has a unique solution for every right-hand side. There are two reasons to do this. First, it reveals why the differences of eigenvalues are unavoidable."
+        "Here we treat the entire left-hand side as a single linear operator. Its input is a matrix X, and its output is the matrix A X minus X B. Once we understand the spectrum of that operator, we can state precisely when the Sylvester equation has a unique solution for every right-hand side.",
+        "There are two reasons to do this. First, it reveals why the differences of eigenvalues are unavoidable."
       ],
+      "takeaway": "View the Sylvester equation as a single linear problem in mn variables.",
+      "diagram": "g2-kron-map",
       "layout": "opening"
     },
     {
-      "id": "01-overview",
+      "id": "01-expanded",
       "title": "A linear operator on a space of matrices",
-      "eyebrow": "G2 · 064000 · first-pass outline",
+      "eyebrow": "G2 · 064000 · A linear operator on a space of matrices",
       "lead": "Let A be an m-by-m matrix and B an n-by-n matrix.",
       "body": [
-        "The unknown X has m rows and n columns. The space of possible X matrices is a vector space of dimension m times n. Define a map S by the rule: S applied to X equals A X minus X B. Multiplication distributes over sums, so S is linear. Solving the Sylvester equation means solving S of X equals C. Why bother naming this map? Because we can ask ordinary questions about its kernel, eigenvalues, determinant, and inverse. The unknown is itself a matrix, but the problem is now a familiar linear system with m times n scalar unknowns."
+        "The unknown X has m rows and n columns. The space of possible X matrices is a vector space of dimension m times n. Define a map S by the rule: S applied to X equals A X minus X B.",
+        "Multiplication distributes over sums, so S is linear. Solving the Sylvester equation means solving S of X equals C. Why bother naming this map? Because we can ask ordinary questions about its kernel, eigenvalues, determinant, and inverse."
       ],
-      "layout": "reading"
+      "takeaway": "Linearization moves from matrix entries to the vector space of matrices.",
+      "diagram": "g2-kron-map",
+      "layout": "equation",
+      "mathtex": "\\mathcal S_{A,B}:\\mathbb C^{m\\times n}\\to\\mathbb C^{m\\times n},\\quad X\\mapsto AX-XB"
     },
     {
-      "id": "02-overview",
+      "id": "02-expanded",
       "title": "Stacking columns into a vector",
-      "eyebrow": "G2 · 064000 · first-pass outline",
-      "lead": "Take a matrix with two rows and two columns.",
+      "eyebrow": "G2 · 064000 · Stacking columns into a vector",
+      "lead": "Column stacking produces an explicit mn-by-mn matrix.",
       "body": [
-        "Stack its first column above its second. We obtain a vector with four entries. This operation is often called vectorization. For general m and n, it identifies matrices with vectors having m times n coordinates. What happens to left multiplication by A? Each column of X is transformed by the same matrix A. Thus, in the stacked representation, A appears in n identical diagonal blocks. What happens to right multiplication by B? It mixes the columns of X according to B's coefficients. The resulting matrix is described using the Kronecker product: the matrix of S is identity of size n tensor A, minus the transpose of B tensor identity of size m."
+        "For an m-by-n unknown X, column vectorization sends AX to (Iₙ⊗A)vec(X), while XB becomes (Bᵀ⊗Iₘ)vec(X). Their difference is a single linear system in mn scalar coordinates.",
+        "The transpose arises because right multiplication combines columns; ignoring it is a common mistake when writing the Kronecker representation."
       ],
-      "layout": "reading"
+      "takeaway": "The Kronecker sum is the matrix of the Sylvester operator in vec coordinates.",
+      "diagram": "g2-kron-map",
+      "layout": "equation",
+      "mathtex": "\\operatorname{vec}(AX-XB)=(I_n\\otimes A-B^{\\mathsf T}\\otimes I_m)\\operatorname{vec}(X)"
     },
     {
-      "id": "03-overview",
+      "id": "03-expanded",
       "title": "A diagonal example",
-      "eyebrow": "G2 · 064000 · first-pass outline",
+      "eyebrow": "G2 · 064000 · A diagonal example",
       "lead": "Take A diagonal with entries one and four, and B diagonal with entries zero and three.",
       "body": [
-        "Use column-stacking order. The first column of X has spectral differences one minus zero and four minus zero. Those are one and four. The second column has differences one minus three and four minus three. Those are negative two and one. Therefore the four-by-four matrix of S is diagonal with entries one, four, negative two, one. Its determinant is negative eight, so the map is invertible. For any right-hand side, invert this diagonal matrix by dividing the four coordinates by those entries."
+        "Use column-stacking order. The first column of X has spectral differences one minus zero and four minus zero. Those are one and four. The second column has differences one minus three and four minus three. Those are negative two and one.",
+        "Therefore the four-by-four matrix of S is diagonal with entries one, four, negative two, one. Its determinant is negative eight, so the map is invertible. For any right-hand side, invert this diagonal matrix by dividing the four coordinates by those entries."
       ],
-      "layout": "reading"
+      "takeaway": "Matrix units become eigenvectors when the coefficients are diagonal.",
+      "diagram": "g2-sylvester-grid",
+      "layout": "equation",
+      "mathtex": "\\mathcal S(E_{ij})=(a_i-b_j)E_{ij}"
     },
     {
-      "id": "04-overview",
+      "id": "04-expanded",
       "title": "Why all eigenvalue differences occur",
-      "eyebrow": "G2 · 064000 · first-pass outline",
+      "eyebrow": "G2 · 064000 · Why all eigenvalue differences occur",
       "lead": "The diagonal calculation proves the claim for diagonal matrices.",
       "body": [
-        "But the spectrum of S is determined by cross differences even when A and B are not self-adjoint or diagonalizable, provided we work with finite complex matrices. Here is a route to the general statement. Every complex square matrix has an eigenvector. Starting with that eigenvector and extending to a basis puts the matrix into upper block-triangular form. Repeat on the remaining block. Induction gives an upper-triangular matrix, even when no eigenbasis exists. Apply this procedure separately to A and B."
+        "But the spectrum of S is determined by cross differences even when A and B are not self-adjoint or diagonalizable, provided we work with finite complex matrices. Here is a route to the general statement. Every complex square matrix has an eigenvector.",
+        "Starting with that eigenvector and extending to a basis puts the matrix into upper block-triangular form. Repeat on the remaining block. Induction gives an upper-triangular matrix, even when no eigenbasis exists. Apply this procedure separately to A and B."
       ],
-      "layout": "reading"
+      "takeaway": "All cross-eigenvalue differences appear in the Sylvester operator spectrum.",
+      "diagram": "g2-kron-map",
+      "layout": "equation",
+      "mathtex": "\\sigma(\\mathcal S_{A,B})=\\{a_i-b_j\\}_{i,j}"
     },
     {
-      "id": "05-overview",
+      "id": "05-expanded",
       "title": "Invertibility and disjoint spectra",
-      "eyebrow": "G2 · 064000 · first-pass outline",
-      "lead": "A finite square matrix is invertible exactly when zero is not an eigenvalue.",
+      "eyebrow": "G2 · 064000 · Invertibility and disjoint spectra",
+      "lead": "The spectrum of the Sylvester map contains every left-right difference.",
       "body": [
-        "For S, zero occurs as an eigenvalue precisely when an eigenvalue of A equals an eigenvalue of B. We have proved the finite-dimensional Sylvester invertibility criterion: S is invertible if and only if A and B have no eigenvalue in common. Notice what it does not require. The eigenvalues do not have to be arranged in order. A could have eigenvalues negative two and positive two while B has eigenvalue zero. Every cross difference remains nonzero, so the Sylvester map is invertible. Nor does it require A and B to be diagonalizable. Triangularization was enough for the invertibility criterion."
+        "In a diagonal basis each matrix unit Eᵢⱼ satisfies S(Eᵢⱼ)=(aᵢ−bⱼ)Eᵢⱼ. In the general complex finite-dimensional case, triangularizing A and B produces the same diagonal differences.",
+        "Thus the Sylvester map is invertible precisely when the coefficient spectra have no common point. The argument does not require A or B to be invertible."
       ],
-      "layout": "reading"
+      "takeaway": "The spectra must be disjoint for the Sylvester map to be invertible.",
+      "diagram": "g2-sylvester-gap",
+      "layout": "equation",
+      "mathtex": "\\mathcal S_{A,B}\\text{ invertible}\\iff\\sigma(A)\\cap\\sigma(B)=\\varnothing"
     },
     {
-      "id": "06-overview",
+      "id": "06-expanded",
       "title": "Being invertible is not the same as being well conditioned",
-      "eyebrow": "G2 · 064000 · first-pass outline",
-      "lead": "Now suppose A is the two-by-two upper-triangular matrix with ones on its diagonal and a large positive number M in its upper-right corner.",
+      "eyebrow": "G2 · 064000 · Being invertible is not the same as being well conditioned",
+      "lead": "Disjoint spectra guarantee invertibility, but nonnormal matrices can make the inverse very large.",
       "body": [
-        "Let B be the one-by-one zero matrix. Then X is a two-entry column and the Sylvester map is simply multiplication by A. Both eigenvalues of A are one, and B's only eigenvalue is zero. The spectral distance is one, independent of M. But the inverse of A has ones on its diagonal and negative M in its upper-right corner. Apply it to the second standard basis vector. The result has entries negative M and one, whose length is the square root of M squared plus one. Therefore the norm of the inverse grows without bound as M grows. This example is a warning."
+        "Let A have rows (1,M) and (0,1), while B is the scalar zero operator. Both eigenvalues of A equal one, so the spectral distance from B is always one, whatever the value of M.",
+        "But A is nonnormal for nonzero M. Its inverse has rows (1,−M) and (0,1). Applied to the second standard basis vector, the inverse produces (−M,1), with norm √(M²+1). Thus the inverse norm grows without changing the eigenvalue gap."
       ],
-      "layout": "reading"
+      "takeaway": "The spectral gap controls conditioning directly for normal coefficients, not for arbitrary nonnormal matrices.",
+      "diagram": "g2-scalar-gap",
+      "layout": "equation",
+      "mathtex": "\\begin{gathered}A=\\begin{bmatrix}1&M\\\\0&1\\end{bmatrix},\\quad B=0,\\\\[2pt]\\|\\mathcal S_{A,B}^{-1}\\|_{S_2\\to S_2}\\ge\\sqrt{M^2+1}\\end{gathered}"
     },
     {
-      "id": "07-overview",
-      "title": "Connecting back to the coordinate-free equation",
-      "eyebrow": "G2 · 064000 · first-pass outline",
+      "id": "07-expanded",
+      "title": "The same coordinate-free operator",
+      "eyebrow": "G2 · 064000 · Coordinate-free operator",
       "lead": "In the bounded-operator setting, S acts on a space of bounded linear maps between two Banach spaces.",
       "body": [
-        "It is still linear, and it is bounded because the triangle inequality gives the norm of S applied to X at most the sum of the norms of A and B times the norm of X. In finite dimensions, disjoint spectra guarantee invertibility of S by our triangularization argument. In infinite-dimensional Banach spaces, that same general conclusion requires a deeper theorem: the Sylvester–Rosenblum result, which uses resolvents and contour integration. We will prove its mechanism after studying exponential representations. For now, rebuild the vectorization formula by examining one entry at a time."
+        "It is still linear, and it is bounded because the triangle inequality gives the norm of S applied to X at most the sum of the norms of A and B times the norm of X.",
+        "For finite-dimensional coefficients, disjoint spectra give invertibility via triangularization. For bounded operators on complex Banach spaces, the analogous result follows by a contour integral of resolvents. Both arguments concern the same coordinate-free Sylvester map."
       ],
-      "layout": "reading"
+      "takeaway": "Unitary diagonalization changes coordinates without changing the map.",
+      "diagram": "g2-sylvester-types",
+      "layout": "equation",
+      "mathtex": "\\mathcal S_{U^*AU,V^*BV}(U^*XV)=U^*\\mathcal S_{A,B}(X)V"
     },
     {
-      "id": "reference-equation",
+      "id": "08-expanded",
       "title": "The mathematical relationship",
-      "eyebrow": "G2 · 064000 · mathematical reference",
+      "eyebrow": "G2 · 064000 · The mathematical relationship",
       "lead": "In the bounded-operator setting, S acts on a space of bounded linear maps between two Banach spaces.",
       "body": [
         "It is still linear, and it is bounded because the triangle inequality gives the norm of S applied to X at most the sum of the norms of A and B times the norm of X."
       ],
-      "mathtex": "\\operatorname{vec}(AX-XB)=\\bigl(I_n\\otimes A-B^{\\mathsf T}\\otimes I_m\\bigr)\\operatorname{vec}(X).",
-      "layout": "equation"
+      "takeaway": "Kronecker form and spectral blocks describe the same operator.",
+      "diagram": "g2-kron-map",
+      "layout": "equation",
+      "mathtex": "I_n\\otimes A-B^{\\mathsf T}\\otimes I_m"
     },
     {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 064000 · conclusion",
-      "lead": "We will use all three in the perturbation theory to come.",
-      "body": [],
-      "layout": "reading"
+      "id": "09-synthesis",
+      "title": "Invertibility versus numerical stability",
+      "eyebrow": "G2 · 064000 · Reconstruction",
+      "lead": "The Kronecker matrix shows where the Sylvester spectrum comes from.",
+      "body": [
+        "Triangularization gives the eigenvalues aᵢ−bⱼ of the mn-dimensional Sylvester map. Disjoint spectra are exactly the finite-dimensional invertibility criterion. A tiny nonzero spectral difference produces a large inverse in Hilbert–Schmidt norm for normal coefficients.",
+        "The form I⊗A−Bᵀ⊗I is useful for computation; the map X↦AX−XB remains the coordinate-free definition."
+      ],
+      "takeaway": "Solve linear systems on the matrix space, not by separately inverting A and B.",
+      "diagram": "g2-kron-map",
+      "layout": "equation",
+      "mathtex": "\\ker\\mathcal S_{A,B}=\\{X:AX=XB\\}"
     }
   ]
 }
