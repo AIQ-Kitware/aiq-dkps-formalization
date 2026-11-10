@@ -74,7 +74,7 @@
     "dkps-definition-raw-stress-vs-cmds": {
       "kind": "source_audit",
       "title": "Eq. (1) defines DKPS by raw stress; the cited concentration theorem is classical MDS",
-      "detail": "Equation (1) defines the perspectives as a raw-stress (metric MDS) minimizer, while Theorem 1 imports an Acharyya 2025 classical-MDS concentration bound and the proof of Theorem 2 uses that bound for the same psi-hat. The two estimators are not known to agree. The formalization follows the classical-MDS reading, which is the one Theorem 2's proof actually needs; Acharyya2024.rawStress carries the Eq. (1) estimator and is not connected to the Quench chain."
+      "detail": "Equation (1) defines the perspectives as a raw-stress (metric MDS) minimizer, while Theorem 1 imports an Acharyya 2025 classical-MDS concentration bound and the proof of Theorem 2 uses that bound for the same psi-hat. The two estimators are not known to agree. The formalization follows the classical-MDS reading, which is the one Theorem 2's proof actually needs; Acharyya2024.rawStress carries the Eq. (1) estimator and is not connected to the Quench chain.\n\nADJUDICATED 2026-11-10 (jon). The classical-MDS reading is the formalization's reading of Eq. (1): it is the only reading under which the printed proof of Theorem 2 goes through, because it is the estimator Theorem 1 covers. The raw-stress reading is recorded, not pursued: proving Theorem 2 under it needs a finite-sample raw-stress concentration rate over the growing target-augmented collection, which neither the paper nor its citations supply (Acharyya 2024 gives only fixed-n, set-valued consistency). Both readings are explained in the header of DkpsQuench2026/Geometry/AugmentedCMDS.lean."
     },
     "theorem1-rate-not-instantiated": {
       "kind": "source_audit",
@@ -244,8 +244,8 @@
         "classification": "proof_replaced",
         "detail": "The printed definition is a raw-stress minimizer, formalized as Acharyya2024.rawStress with its minimizer set Acharyya2024.MDS. Every Quench theorem instead uses the classical-MDS perspectives, because the Theorem 1 bound that the Theorem 2 proof consumes is a classical-MDS result. The source does not establish that the two agree, so the divergence is recorded rather than assumed away."
       },
-      "notes": "No Quench module references rawStress; the connection is a source-level open question, not a Lean gap.",
-      "next_action": "None; recorded as a source-fidelity divergence."
+      "notes": "No Quench module references rawStress. ADJUDICATED 2026-11-10 (jon): the classical-MDS reading is adopted, and the raw-stress alternative is documented in the DkpsQuench2026.Geometry.AugmentedCMDS module header rather than formalized.",
+      "next_action": "None; the reading is adjudicated and both readings are documented at the estimator's definition site."
     },
     {
       "id": "Q26-INFER",

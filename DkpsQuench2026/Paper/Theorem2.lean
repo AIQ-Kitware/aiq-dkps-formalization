@@ -14,6 +14,11 @@ relative to the subset baseline `ŷ_Q` (`yQ`), wrapping the abstract engine in
 
 The concentration event is *assumed* here; it is discharged from the Acharyya2025
 spectral chain in `DkpsQuench2026.Geometry.AlignedCMDS`.
+
+The estimated perspectives `ψHat` are abstract in this file.  Every Quench theorem
+that constructs them follows the classical-MDS reading of the paper's Eq. (1), not
+the literal raw-stress reading; the choice and the alternative are explained in the
+header of `DkpsQuench2026.Geometry.AugmentedCMDS`.
 -/
 module
 

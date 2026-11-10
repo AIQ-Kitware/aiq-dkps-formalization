@@ -7,6 +7,33 @@ factorization.  At stage `n`, each target is adjoined to the `n` sampled
 reference models, producing an `(n+1)`-point CMDS problem.  Quench uses only the
 sample target-to-reference distances.  The choice-free pairwise-distance theorem
 in `Acharyya2025.GrowingPipeline` controls those distances directly.
+
+## Which DKPS estimator: the classical-MDS reading
+
+Quench's Eq. (1) defines the estimated perspectives as a raw-stress (metric MDS)
+minimizer, `argmin_z Σ (‖z_i − z_{i'}‖ − D_{ii'})²`.  Its Theorem 1, which the
+proof of Theorem 2 consumes for the same `ψ̂`, is Acharyya et al. (2025) Theorem 2,
+a concentration bound for *classical* MDS.  The two estimators are not known to
+agree, so the paper cannot be read literally at both places.
+
+This formalization adopts the **classical-MDS reading** (adjudicated by jon,
+2026-11-10): `ψ̂` is the spectral CMDS configuration of the doubly centered
+dissimilarity matrix, as defined below.  It is the only reading under which the
+printed proof of Theorem 2 goes through, because it is the estimator Theorem 1
+actually covers.
+
+The alternative, **raw-stress reading** takes Eq. (1) literally.  Its estimator is
+`Acharyya2024.rawStress` with minimizer set `Acharyya2024.MDS`, and it is not
+connected to the Quench chain.  Proving Theorem 2 under it would need a raw-stress
+counterpart of Theorem 1: a finite-sample concentration rate for a nonconvex,
+non-unique minimizer over the growing target-augmented collection.  Neither the
+paper nor its citations supply one; Acharyya et al. (2024) give only fixed-`n`,
+set-valued consistency without a rate.  That is new mathematics rather than
+formalization, so the reading is recorded here and in the Quench source census
+(gap `dkps-definition-raw-stress-vs-cmds`) instead of being pursued.  Anyone who
+does pursue it can obtain a measurable raw-stress estimator from Tau Ceti's
+`Continuous.exists_measurable_isMinOn`, applied over centered configurations, where
+the minimum is attained.
 -/
 
 module
