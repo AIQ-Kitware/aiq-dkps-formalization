@@ -25,11 +25,6 @@ __pycache__
 # Local reference clones of external Lean repos (not vendored; see dev/external-lean-references.md)
 dev/reference-repos/
 
-# Optional editable Tau Ceti checkout. `external/TauCeti` used to be a tracked
-# gitlink; it is now a local-only compatibility path discovered by
-# scripts/_external_checkouts.py. Tracked coordination repositories live under
-# `submodules/` and are not build dependencies; see external/README.md.
-/external/TauCeti/
 *.toc
 *.tar.gz
 *.gz

@@ -6,15 +6,16 @@ The ordinary DKPS build does not depend on any checkout under `external/` or
 worktree and the tracked roadmap/review coordination repositories are optional
 inputs for export, provenance, and review tooling only.
 
-Resolution order is explicit argument, environment variable, conventional local or
-coordination path, then -- for read-only Tau Ceti uses only -- the Lake package
-checkout. A checker whose optional external input is absent must report
-`SKIP` / `UNAVAILABLE` honestly.
+Tau Ceti resolves from an explicit argument, then `TAUCETI_ROOT`, then -- for
+read-only uses only -- the Lake package checkout. There is no conventional local
+path: Tau Ceti is consumed as the pinned Lake dependency, and an editable worktree
+(needed only by an actual export) must be named explicitly. The roadmap and review
+checkouts resolve from an explicit argument, the environment variable, then their
+`submodules/` coordination path. A checker whose optional external input is absent
+must report `SKIP` / `UNAVAILABLE` honestly.
 
-`external/TauCeti` is retained as an untracked compatibility path for developers who
-already keep an editable checkout there. `submodules/TauCetiRoadmap` and
-`submodules/TauCetiReview` may be tracked coordination checkouts, but nothing in the
-ordinary build requires them initialized.
+`submodules/TauCetiRoadmap` and `submodules/TauCetiReview` may be tracked
+coordination checkouts, but nothing in the ordinary build requires them initialized.
 """
 from __future__ import annotations
 
@@ -32,8 +33,7 @@ TAUCETI_ENV = "TAUCETI_ROOT"
 ROADMAP_ENV = "TAUCETI_ROADMAP_ROOT"
 REVIEW_ENV = "TAUCETI_REVIEW_ROOT"
 
-#: Conventional optional checkout paths. The names are retained for compatibility.
-LEGACY_TAUCETI = ROOT / "external/TauCeti"
+#: Conventional coordination checkout paths. The names are retained for compatibility.
 LEGACY_ROADMAP = ROOT / "submodules/TauCetiRoadmap"
 LEGACY_REVIEW = ROOT / "submodules/TauCetiReview"
 
@@ -69,7 +69,6 @@ def tauceti_root(
     env = os.environ.get(TAUCETI_ENV)
     if env:
         candidates.append(pathlib.Path(env).expanduser().resolve())
-    candidates.append(LEGACY_TAUCETI)
     if not require_editable:
         candidates.append(LAKE_TAUCETI)
 

@@ -32,8 +32,9 @@ These operations accept explicit paths or environment variables:
 | `aiq-lean source roadmap` | `--roadmap-root` | — |
 
 `scripts/_external_checkouts.py` resolves explicit arguments first, then environment
-variables, then conventional local/coordination paths, and finally -- for read-only
-Tau Ceti use -- `.lake/packages/TauCeti`.
+variables. For Tau Ceti the only fallback is `.lake/packages/TauCeti`, and only for
+read-only use; the roadmap and review checkouts fall back to their `submodules/`
+coordination paths.
 
 An export refuses the Lake package copy because it is a cache, not an editable
 working tree. A checker that requires an absent optional checkout reports
@@ -43,11 +44,14 @@ Current coordination checkouts such as `submodules/TauCetiRoadmap` and
 `submodules/TauCetiReview` are allowed because the build does not require them.
 See [`../submodules/README.md`](../submodules/README.md) for repository roles.
 
-## Historical `external/TauCeti`
+## Retired `external/TauCeti`
 
-`external/TauCeti` was formerly a Git submodule. It is no longer tracked. A developer
-may still keep an untracked editable clone at that path; the resolver accepts it for
-compatibility with existing worktrees.
+`external/TauCeti` was formerly a Git submodule, then an untracked compatibility
+clone. It is retired (jon, 2026-11-10): Tau Ceti is consumed only as the pinned Lake
+dependency, the resolver no longer looks at that path, and it is no longer ignored, so
+a stale clone left there shows up in `git status` instead of being silently read.
+Read upstream source at `.lake/packages/TauCeti`; for an actual export, clone Tau Ceti
+anywhere outside this repository and pass it with `--tauceti-root` / `TAUCETI_ROOT`.
 
 ## Spectra -- removed 2026-07-29
 

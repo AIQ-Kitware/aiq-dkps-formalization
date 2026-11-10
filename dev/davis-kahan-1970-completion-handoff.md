@@ -35,7 +35,7 @@ Concrete operating principles:
 * **`LinearPMap` is the canonical carrier for unbounded operators, and now the only one.** The bundled `ClosedOperator` record and its compatibility layer were deleted on 2026-08-28. New foundational work strengthens `LinearPMap`; do not introduce a second carrier.
 * **Complexification is a proof technique, not the default architecture.** First determine whether the proof is already scalar-generic. If an essential ingredient is genuinely complex-only, transport the smallest necessary portion and descend the actual mathematical object, not an arbitrary existential witness.
 * **Mission boundaries are planning boundaries, not architectural walls.** It is correct to repair a missing reusable theorem immediately below the current source theorem. It is not necessary to implement an unrelated adjacent roadmap item.
-* **Do not modify `external/TauCeti/` or the roadmap checkout from this repository.** They are references. Reusable mathematics needed here lives in `ForTauCeti/`.
+* **Do not modify the Tau Ceti dependency (`.lake/packages/TauCeti`) or the roadmap checkout from this repository.** They are references. Reusable mathematics needed here lives in `ForTauCeti/`.
 * **Do not frame code as "work to push upstream".** Make it good mathematics locally. Other projects decide what they consume.
 * **Prefer one canonical spelling.** A compatibility alias may be useful during migration, but the end state should not contain two independent representations of the same operator-theory concept.
 
@@ -1067,7 +1067,7 @@ For any mission:
 1. inspect `git status --short` and recent commits;
 2. read the exact census row, including the **latest** notes, not just `next_action`;
 3. inspect the source transcription for the precise hypothesis/conclusion and nearby proof;
-4. search declaration names and concepts repository-wide, including `external/TauCeti/` and `ForTauCeti/`;
+4. search declaration names and concepts repository-wide, including the pinned Tau Ceti dependency (`.lake/packages/TauCeti/`) and `ForTauCeti/`;
 5. inspect the current variable blocks/signatures of candidate lemmas;
 6. identify the lowest reusable mathematical seam;
 7. prove that seam without weakening the source theorem;

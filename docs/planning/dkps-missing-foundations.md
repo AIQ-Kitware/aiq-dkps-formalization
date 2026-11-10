@@ -149,7 +149,8 @@ hypotheses appears to have no source at all.
 
 ## What TauCeti already provides (checked 2026-08-27)
 
-`external/TauCeti` is a build input, so anything here is directly importable. Searched all
+Tau Ceti is a pinned Lake dependency (`.lake/packages/TauCeti`), so anything here is directly
+importable. (The search below was run against the former `external/TauCeti` clone.) Searched all
 12,360 modules for each foundation.
 
 **Materially changes F1.** TauCeti has the measure-theoretic layer the continuum MDS

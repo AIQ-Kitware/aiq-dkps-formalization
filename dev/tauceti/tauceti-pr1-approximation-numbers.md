@@ -201,7 +201,8 @@ older files is not sufficient.
 ## Safe push command
 
 Do not push or open a PR without explicit instruction. Re-read the current
-`external/TauCeti/COORDINATION.md`, fetch `origin/main`, record its exact head,
+`COORDINATION.md` in an editable Tau Ceti clone (passed as `--tauceti-root` /
+`TAUCETI_ROOT`), fetch `origin/main`, record its exact head,
 create a fresh branch from that head, and use the coordination-prescribed
 force-with-lease form. Do not reuse the July 24 observed base SHA as an expected
 current value.
