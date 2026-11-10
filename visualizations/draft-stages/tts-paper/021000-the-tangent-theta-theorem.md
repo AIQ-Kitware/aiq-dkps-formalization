@@ -1,6 +1,6 @@
 # 021000 — The tangent-theta theorem
 
-**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 112000. **Section:** result. **Audience:** prior linear algebra and basic analysis.
+**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 112000. **Section:** angle-theorems. **Audience:** prior linear algebra and basic analysis.
 
 <!-- BEGIN SPOKEN LECTURE -->
 

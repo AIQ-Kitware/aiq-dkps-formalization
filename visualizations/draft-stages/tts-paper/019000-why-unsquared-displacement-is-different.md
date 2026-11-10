@@ -1,12 +1,12 @@
 # 019000 — Why unsquared displacement is different
 
-**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 133000. **Section:** optimization. **Audience:** prior linear algebra and basic analysis.
+**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 133000. **Section:** section4-transport. **Audience:** prior linear algebra and basic analysis.
 
 <!-- BEGIN SPOKEN LECTURE -->
 
 # Unsquared ambient displacement is different
 
-Section Four of Davis and Kahan investigates how to transport one subspace onto another. Restricted displacement and squared whole-space displacement admit valid direct-rotation optimality statements, but the printed claim about every unitarily invariant norm of unsquared whole-space displacement fails. A four-dimensional construction makes the distinction explicit.
+Section Four of Davis and Kahan investigates how to transport one subspace onto another. Restricted displacement and squared whole-space displacement admit valid direct-rotation optimality statements. A further printed claim asserts the corresponding optimality for every unitarily invariant norm of unsquared whole-space displacement. We will test that stronger assertion using a four-dimensional construction.
 
 The proposition as printed proposes a threshold of sixty degrees in the real case. Our task is to understand why that threshold looks plausible, why the available proofs cannot establish it, and which piece of the optimization problem changes in higher dimension.
 
@@ -64,7 +64,7 @@ Rearrange this identity. The difference of the two reflections, multiplied by W,
 
 Since the reflection difference is twice the projection difference, we conclude N of P minus Q is at most N of identity minus W for every unitarily invariant norm N.
 
-This lower bound survives without a small-angle assumption. It applies over real and complex scalars and to every admissible transporter. It does **not** say that the canonical direct rotation attains the lower bound. Indeed, in the forthcoming example a noncanonical competitor does attain it in trace norm, while the direct rotation does not.
+This lower bound survives without a small-angle assumption. It applies over real and complex scalars and to every admissible transporter. It does **not** say that the canonical direct rotation attains the lower bound. The lower bound can be attained by noncanonical transporters. That fact alone does not make the canonical direct rotation optimal.
 
 ## How to test the printed claim
 
@@ -72,13 +72,13 @@ A universal minimizing statement must survive one explicit admissible competitor
 
 The simplest potential counterexample should have enough dimensions to mix at least two principal planes. Four real dimensions suffice. We will take two equal acute principal angles. Then we will write a concrete orthogonal competitor, compute its action on the source plane, verify the resulting principal angles, and compute both displacement singular-value lists.
 
-The explicit singular values give a strict numerical contradiction to the printed inequality, so the universal proposition is false.
+That explicit calculation will decide the claim without assuming that arbitrary higher-dimensional transports preserve the original principal-plane decomposition.
 
 ## Close
 
-The sixty-degree threshold is correct for the standard two-dimensional real comparison. Proposition four point one remains valid for restricted displacement, and Proposition four point three remains valid for positive squared displacement. Neither theorem authorizes the universal unsquared ambient conclusion in higher dimension.
+The sixty-degree threshold is correct for the standard two-dimensional real comparison. Proposition four point one concerns restricted displacement, while Proposition four point three concerns positive squared displacement. Neither theorem supplies a universal conclusion for unsquared ambient displacement.
 
-The source of the failure is extra freedom in the full orthogonal transport fiber, especially the freedom to mix repeated principal-angle directions.
+The remaining question is concrete: can the freedom to mix repeated principal-angle directions actually reduce an unsquared ambient norm? A four-dimensional construction gives a decisive test.
 
 <!-- END SPOKEN LECTURE -->
 

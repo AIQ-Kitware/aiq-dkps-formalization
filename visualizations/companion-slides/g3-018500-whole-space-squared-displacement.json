@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "id": "g3-018500-whole-space-squared-displacement",
+  "title": "Whole-space squared displacement (Proposition 4.3)",
+  "subtitle": "G3 · Section 4 · positive squared displacement, Ky Fan dominance, and Q-norms",
+  "editorial_stage": "expanded",
+  "lecture_nodes": [
+    "g3:018500"
+  ],
+  "source_lecture": "draft-stages/tts-paper/018500-whole-space-squared-displacement-proposition-4-3.md",
+  "adaptation": "Standalone mathematical companion to the G3 narration. Structured around the exact restricted-displacement, direct-sum, pinching, and Q-norm argument. Figure is an original locally authored SVG.",
+  "slides": [
+    {
+      "title": "What Proposition 4.3 actually compares",
+      "layout": "opening",
+      "diagram": "principal-pairs",
+      "lead": "The optimization acts on the entire ambient space, but its objective is the positive square of the displacement.",
+      "body": [
+        "Let U and V be compatible subspaces with a canonical direct rotation D. A competitor W is unitary and carries U onto V. Both move vectors in the ambient Hilbert space, including vectors outside U.",
+        "Proposition 4.3 compares the Ky Fan prefixes of the squared displacement operators. It establishes an invariant-norm inequality for those positive operators; the same statement cannot simply be transferred to every norm of the unsquared displacement."
+      ],
+      "takeaway": "The object compared is (I−W)*(I−W), not I−W itself.",
+      "id": "00-g3-043",
+      "eyebrow": "G3 · 018500 · Proposition 4.3 · 01/12"
+    },
+    {
+      "title": "The positive displacement square",
+      "layout": "equation",
+      "diagram": "rotation-chord",
+      "lead": "A unitary displacement becomes a positive operator when multiplied by its adjoint.",
+      "mathtex": "G_W=(I-W)^*(I-W)=2I-W-W^*\\succeq0",
+      "body": [
+        "For every vector x, the quadratic form of G_W is ‖x−Wx‖². Its nonnegative eigenvalues are precisely the squared singular values of I−W.",
+        "The direct rotation D has an analogous square G_D. Proposition 4.3 controls all Ky Fan prefix sums of the spectra of these two positive operators."
+      ],
+      "takeaway": "Positive displacement energy exposes the singular-value squares.",
+      "id": "01-g3-043",
+      "eyebrow": "G3 · 018500 · Proposition 4.3 · 02/12"
+    },
+    {
+      "title": "Restricted optimality: the input theorem",
+      "layout": "figure",
+      "diagram": "principal-angle",
+      "lead": "The principal angles give a pointwise singular-value lower bound for every restricted competitor.",
+      "mathtex": "s_k\\bigl((I-D)|_U\\bigr)\\le s_k\\bigl((I-W)|_U\\bigr)",
+      "body": [
+        "On a principal vector of angle θ, the canonical rotation moves by the chord 2 sin(θ/2). For an arbitrary competitor W, projection onto V gives a lower bound for ‖x−Wx‖.",
+        "The span of the k largest-angle principal vectors has projection length at most cos(θ_k) on its unit sphere. Singular-value min–max then gives the kth restricted displacement inequality even if W mixes principal directions."
+      ],
+      "takeaway": "The restricted theorem is a singular-value inequality, not a pointwise Gram-operator comparison.",
+      "id": "02-g3-043",
+      "eyebrow": "G3 · 018500 · Proposition 4.3 · 03/12"
+    },
+    {
+      "title": "A second restriction: the orthogonal complement",
+      "layout": "figure",
+      "diagram": "block-operator",
+      "lead": "Controlling the source subspace alone does not control the whole ambient displacement.",
+      "body": [
+        "Split the ambient space into U and U⊥. The canonical direct rotation also sends U⊥ onto V⊥ and is the direct rotation for that complementary pair.",
+        "Apply the same restricted singular-value comparison to U⊥. Squaring preserves both lists of nonnegative singular values, producing separate Ky Fan comparisons for the two diagonal compressions of the squared displacement."
+      ],
+      "takeaway": "The complement supplies the second half of the whole-space comparison.",
+      "id": "03-g3-043",
+      "eyebrow": "G3 · 018500 · Proposition 4.3 · 04/12"
+    },
+    {
+      "title": "Ky Fan sums combine the two blocks",
+      "layout": "equation",
+      "diagram": "ky-fan",
+      "lead": "The kth Ky Fan sum of a block diagonal positive operator is obtained by merging two sorted eigenvalue lists.",
+      "mathtex": "K_k(B\\oplus C)=\\max_{i+j=k}\\bigl(K_i(B)+K_j(C)\\bigr)",
+      "body": [
+        "Take the sorted eigenvalue lists of the two restrictions. A prefix of the merged list takes i values from one block and k−i from the other, for the maximizing split.",
+        "Because the direct rotation is no larger on every restricted prefix, it is no larger after the two lists are merged. This proves a Ky Fan comparison for the diagonal blocks combined."
+      ],
+      "takeaway": "Merging ranked lists preserves the two separate prefix inequalities.",
+      "id": "04-g3-043",
+      "eyebrow": "G3 · 018500 · Proposition 4.3 · 05/12"
+    },
+    {
+      "title": "Pinching removes a competitor’s cross blocks",
+      "layout": "figure",
+      "diagram": "block-reflection",
+      "lead": "A competing transporter can mix U and U⊥, so its displacement square need not be block diagonal.",
+      "mathtex": "\\mathcal P(G)=\\tfrac12\\bigl(G+JGJ\\bigr),\\qquad J=P_U-P_{U^\\perp}",
+      "body": [
+        "The reflection J equals +1 on U and −1 on U⊥. Averaging G with JGJ cancels off-diagonal blocks while preserving the two diagonal compressions.",
+        "Each Ky Fan norm is convex and invariant under unitary conjugation. Consequently the pinched operator has no larger Ky Fan prefixes than G itself. For the direct rotation, G_D is already block diagonal, so pinching leaves it unchanged."
+      ],
+      "takeaway": "The key middle inequality is K_k(P(G_W)) ≤ K_k(G_W).",
+      "id": "05-g3-043",
+      "eyebrow": "G3 · 018500 · Proposition 4.3 · 06/12"
+    },
+    {
+      "title": "Proposition 4.3: the valid conclusion",
+      "layout": "equation",
+      "diagram": "squared-displacement-prefix",
+      "lead": "Compose restricted optimality, the direct-sum comparison, and pinching.",
+      "mathtex": "\\sum_{j=1}^{k}s_j(G_D)\\le\\sum_{j=1}^{k}s_j(G_W)\\quad(k\\ge1)",
+      "body": [
+        "The direct squared displacement is no larger in every Ky Fan prefix. Ky Fan dominance extends this to all unitarily invariant norms applied to the positive squares.",
+        "The conclusion concerns sums of the largest eigenvalues. It does not assert that every individual eigenvalue of G_D is smaller than the corresponding eigenvalue of G_W."
+      ],
+      "takeaway": "The whole-space theorem is precisely a weak-majorization statement for squared singular values.",
+      "id": "06-g3-043",
+      "eyebrow": "G3 · 018500 · Proposition 4.3 · 07/12"
+    },
+    {
+      "title": "A positive pinching example",
+      "layout": "equation",
+      "diagram": "ky-fan",
+      "lead": "Pinching can decrease the largest eigenvalue while increasing a smaller eigenvalue.",
+      "mathtex": "\\begin{bmatrix}3&2\\\\2&3\\end{bmatrix}\\longmapsto\\begin{bmatrix}3&0\\\\0&3\\end{bmatrix}",
+      "body": [
+        "The first matrix is positive, with eigenvalues 5 and 1. The pinched matrix is positive with eigenvalues 3 and 3.",
+        "Its largest eigenvalue decreases from 5 to 3 while its smaller eigenvalue increases from 1 to 3. Prefix sums are still controlled: 3 ≤ 5 and 3+3 = 5+1."
+      ],
+      "takeaway": "Weak majorization is weaker than entrywise eigenvalue comparison.",
+      "id": "07-g3-043",
+      "eyebrow": "G3 · 018500 · Proposition 4.3 · 08/12"
+    },
+    {
+      "title": "Which unsquared norms follow?",
+      "layout": "equation",
+      "diagram": "operator-ideal",
+      "lead": "A Q-norm squares through a unitarily invariant norm of the positive Gram operator.",
+      "mathtex": "N(X)^2=M(X^*X),\\qquad \\|X\\|_{S_p}^{2}=\\|X^*X\\|_{S_{p/2}}\\ (p\\ge2)",
+      "body": [
+        "Operator and Frobenius norms satisfy this property, as do the Schatten p norms with p ≥ 2. The exponent p/2 is then at least 1, so the right-hand side is again a unitarily invariant norm.",
+        "Applying the squared-displacement theorem to M proves N(I−D) ≤ N(I−W) for these Q-norms. Extra ideal-membership hypotheses are required for infinite-dimensional finite-gauge claims."
+      ],
+      "takeaway": "The squared theorem gives full-displacement optimality for Q-norms.",
+      "id": "08-g3-043",
+      "eyebrow": "G3 · 018500 · Proposition 4.3 · 09/12"
+    },
+    {
+      "title": "Why the unsquared trace norm is different",
+      "layout": "figure",
+      "diagram": "squared-displacement-prefix",
+      "lead": "The trace norm adds singular values; the squared theorem adds squares before applying a symmetric gauge.",
+      "body": [
+        "For a direct rotation with four equal displacement singular values a and a competitor with values b,b,0,0, the squared prefixes may favor the direct rotation while 4a exceeds 2b.",
+        "Taking square roots can reverse the order of total sums because square root is concave. Therefore the squared-displacement theorem does not establish universal unsquared trace-norm optimality."
+      ],
+      "takeaway": "A valid squared comparison cannot be read as an arbitrary unsquared comparison.",
+      "id": "09-g3-043",
+      "eyebrow": "G3 · 018500 · Proposition 4.3 · 10/12"
+    },
+    {
+      "title": "Real planar comparison at sixty degrees",
+      "layout": "equation",
+      "diagram": "rotation-chord",
+      "lead": "Already in one real principal plane, competing orientation types have different displacement lists.",
+      "mathtex": "\\sigma(I-D)=(2\\sin\\tfrac\\theta2,2\\sin\\tfrac\\theta2),\\quad \\sigma(I-W_{\\rm refl})=(2,0)",
+      "body": [
+        "Direct rotation minimizes both the operator and squared Frobenius norms in the usual acute planar setting. For trace norm its cost is 4 sin(θ/2), while reflection costs 2.",
+        "They tie at θ = 60°. Above that angle the reflection has smaller trace cost. In higher dimensions, mixing between principal planes creates additional competitors even below this planar threshold."
+      ],
+      "takeaway": "The planar threshold does not establish a global higher-dimensional statement.",
+      "id": "10-g3-043",
+      "eyebrow": "G3 · 018500 · Proposition 4.3 · 11/12"
+    },
+    {
+      "title": "Proof map and exact scope",
+      "layout": "reading",
+      "diagram": "principal-pairs",
+      "lead": "The whole proof depends on keeping the measured operator and its hypotheses fixed.",
+      "body": [
+        "Prove restricted singular-value optimality on U and U⊥. Square the restricted lists. Merge them by Ky Fan direct-sum comparison. Pinch away the competitor’s cross blocks. Since the direct square is block diagonal, conclude Ky Fan dominance for G_D.",
+        "This argument gives every unitarily invariant norm of the positive squared operator and, through Q-norm identities, selected norms of the unsquared displacement. The historical infinite-dimensional statement includes compact-angle and crossed-defect assumptions; the acute finite-dimensional setting avoids those additional existence issues."
+      ],
+      "takeaway": "Proposition 4.3 survives; the broader unsquared assertion needs a separate test.",
+      "id": "11-g3-043",
+      "eyebrow": "G3 · 018500 · Proposition 4.3 · 12/12"
+    }
+  ]
+}

@@ -17,7 +17,8 @@
       "body": [
         "Suppose a self-adjoint operator has a reducing subspace with its spectrum ordered above the spectrum on the orthogonal complement. If the operator changes by a self-adjoint perturbation, reflection through a reducing subspace of the perturbed operator turns the angular comparison into a residual with a sharp norm bound. The conclusion says that the gap times the sine of twice the subspace angle is at most twice the perturbation size. We will derive this estimate carefully, and then explain what it can and cannot tell us about the original angle."
       ],
-      "layout": "opening"
+      "layout": "opening",
+      "bullets": []
     },
     {
       "title": "Set up the operators and reducing subspaces",
@@ -29,7 +30,8 @@
       ],
       "diagram": "block-reflection",
       "formula": "P and Q are reducing projections for T and S",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "Set up the operators and reducing subspaces · further detail",
@@ -39,7 +41,8 @@
       "body": [
         "The theorem bounds the ambient positive sine-two-theta operator between U and V, measured in any supported unitarily invariant norm, by twice the norm of H divided by delta. Notice what is not in the hypotheses."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Set up the operators and reducing subspaces · continued",
@@ -49,7 +52,8 @@
       "body": [
         "We have not assumed the principal angles are below forty-five degrees. The theorem's conclusion uses a function of the angle that makes sense over the entire interval from zero to ninety degrees."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Reflect through the perturbed reducing space",
@@ -62,7 +66,8 @@
       "diagram": "block-reflection",
       "formula": "J = 2Q − I",
       "mathtex": "J=2Q-I",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "Reflect through the perturbed reducing space · further detail",
@@ -72,7 +77,8 @@
       "body": [
         "This is the mirror defect bound. It is the only place where the perturbation appears on the right side of our proof."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "What is the reflected spectral subspace?",
@@ -84,7 +90,8 @@
       ],
       "diagram": "doubled-angle",
       "formula": "reflect S across Q to compare ± perturbations",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "What is the reflected spectral subspace? · continued",
@@ -94,7 +101,8 @@
       "body": [
         "This is exactly the reflected overlap given by composing the reflected projections. The relevant ambient positive operator, after matching the polar and singular-value representations, is sine of twice the angle operator."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Put the two inequalities together",
@@ -107,7 +115,8 @@
       "diagram": "sine-theta",
       "formula": "δ‖sin(2Θ)‖ ≤ 2‖V‖",
       "mathtex": "\\delta\\|\\sin(2\\Theta)\\|\\leq2\\|V\\|",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "Put the two inequalities together · further detail",
@@ -117,7 +126,8 @@
       "body": [
         "The formal theorem does so through the full-space angle representation and the corresponding unitarily invariant norm. This norm inequality is stated for finite-dimensional unitarily invariant seminorms. In infinite-dimensional symmetric ideals the same conclusion requires the appropriate membership, domain, and spectral-separation hypotheses."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Examine a two-by-two perturbation",
@@ -130,7 +140,8 @@
       "diagram": "doubled-angle",
       "formula": "sin(2θ) = 2 sin θ cos θ",
       "mathtex": "\\sin(2\\theta)=2\\sin\\theta\\cos\\theta",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "Examine a two-by-two perturbation · further detail",
@@ -140,7 +151,8 @@
       "body": [
         "This holds because the square root of one plus h squared is at least one. For small h, the ratio between the two sides approaches one."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Examine a two-by-two perturbation · continued",
@@ -150,7 +162,8 @@
       "body": [
         "At h equal to one, theta equals twenty-two point five degrees. Sine twice theta is the square root of two divided by two. The left side is the square root of two and the right side is two. As the coupling becomes larger, theta approaches forty-five degrees and sine twice theta approaches one. The estimate becomes less restrictive, because its right-hand side grows without bound."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "A different example shows the branch ambiguity",
@@ -158,11 +171,12 @@
       "id": "06-00",
       "lead": "Take two perpendicular lines U and V in the same plane.",
       "body": [
-        "Their principal angle is ninety degrees. Sine twice that angle is zero. So the doubled-sine operator vanishes even though the projection difference has norm one, the maximum possible value. The theorem therefore cannot by itself certify that V is close to U. A small right-hand side may indicate closeness, but without information selecting the relevant branch, the same small doubled sine is consistent with an almost perpendicular pair. This is a statement about the information carried by the left-hand side, not a defect in the proof. The function sine twice theta loses the distinction between angles near zero and angles near ninety degrees. Later spectral-selection results will supply conditions that choose the intended branch."
+        "Their principal angle is ninety degrees. Sine twice that angle is zero. So the doubled-sine operator vanishes even though the projection difference has norm one, the maximum possible value. The theorem therefore cannot by itself certify that V is close to U. A small right-hand side may indicate closeness, but without information selecting the relevant branch, the same small doubled sine is consistent with an almost perpendicular pair. This is a statement about the information carried by the left-hand side, not a defect in the proof. The function sine twice theta loses the distinction between angles near zero and angles near ninety degrees. For a self-adjoint off-diagonal perturbation with a two-block form gap, the designated perturbed spectral projection stays on the branch below forty-five degrees. That structural condition resolves the doubled-sine ambiguity."
       ],
       "diagram": "doubled-angle",
       "formula": "sin(2θ) alone does not select a small angle",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "Compare with the single-angle sine theorem",
@@ -172,7 +186,8 @@
       "body": [
         "Its angle is directed from the trial space toward the exact subspace. The sine-two-theta theorem uses a two-block form gap for one exact operator and a perturbation difference between two self-adjoint operators. Its angle is the ambient angle between two reducing subspaces. The formulas can look similar, but their inputs are different. One cannot simply substitute a residual in place of the full perturbation or replace the two-block gap with an arbitrary pairwise distance. In the special off-diagonal setting, the two-block structure has an additional consequence: it prevents the selected spectral subspace from rotating beyond forty-five degrees. That extra information makes it possible to divide the doubled sine by a positive doubled cosine and obtain a tangent theorem."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "The theorem we have proved",
@@ -183,7 +198,8 @@
         "Reflection through V turned T into a nearby operator with a reflected reducing subspace. The ordinary sine theorem controlled that reflected overlap. The reflection identity identified it with the sine of twice the original angle. The result has a clean constant and accommodates arbitrary angles, but it does not select the near-zero branch. A bound on the doubled sine alone does not rule out angles close to ninety degrees. To deduce a doubled-tangent bound, one needs additional conditions selecting the spectral branch and keeping every relevant angle strictly below forty-five degrees. Off-diagonal perturbations with appropriately matched spectral subspaces provide one such setting."
       ],
       "takeaway": "The doubled-sine estimate alone does not identify the acute spectral branch.",
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     }
   ]
 }

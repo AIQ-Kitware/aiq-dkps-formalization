@@ -1,6 +1,6 @@
 # 017000 — Direct rotation under restricted hypotheses
 
-**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 130000. **Section:** optimization. **Audience:** prior linear algebra and basic analysis.
+**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 130000. **Section:** section4-transport. **Audience:** prior linear algebra and basic analysis.
 
 <!-- BEGIN SPOKEN LECTURE -->
 

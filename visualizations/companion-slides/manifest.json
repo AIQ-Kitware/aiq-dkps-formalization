@@ -154,6 +154,14 @@
       "editorial_stage": "expanded"
     },
     {
+      "id": "g3-018500-whole-space-squared-displacement",
+      "source": "g3-018500-whole-space-squared-displacement.json",
+      "lecture_nodes": [
+        "g3:018500"
+      ],
+      "editorial_stage": "expanded"
+    },
+    {
       "id": "g3-019000-why-unsquared-displacement-is-different",
       "source": "g3-019000-why-unsquared-displacement-is-different.json",
       "lecture_nodes": [

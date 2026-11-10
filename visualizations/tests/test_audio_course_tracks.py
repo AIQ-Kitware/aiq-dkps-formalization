@@ -9,16 +9,18 @@ from dkvis.presentation.audio_library import AudioLectureHub, SOURCE_DIRECTORY, 
 from dkvis.presentation.serve import create_app
 
 
-def test_g3_syllabus_has_26_complete_spoken_lectures():
+def test_g3_syllabus_has_27_complete_spoken_lectures():
     plan = json.loads((PAPER_DIRECTORY / 'track.json').read_text())
     rows = plan['lectures']
-    assert len(rows) == 26
-    assert len({row['id'] for row in rows}) == 26
-    assert len(list(PAPER_DIRECTORY.glob('[0-9]' * 6 + '-*.md'))) == 26
+    assert len(rows) == 27
+    assert len({row['id'] for row in rows}) == 27
+    assert len(list(PAPER_DIRECTORY.glob('[0-9]' * 6 + '-*.md'))) == 27
     assert rows[0]['section'] == 'orientation'
-    assert [row['section'] for row in rows[-6:]] == ['result'] * 6
+    assert [row['section'] for row in rows[-6:]] == ['section4-transport'] * 6
+    assert [row['id'] for row in rows[-6:]] == [
+        '017000','018000','018500','019000','024000','025000']
     assert [row['source_g2'] for row in rows[-6:]] == [
-        '110000', '112000', '116000', '117000', '134000', '145000']
+        '130000', '131000', '132000', '133000', '134000', '145000']
     for row in rows:
         path = PAPER_DIRECTORY / row['file']
         raw = path.read_text()
@@ -46,9 +48,9 @@ def test_course_tracks_and_track_isolation(tmp_path):
         assert [r['id'] for r in tracks] == ['g1', 'g2', 'g3', 'g4']
         assert tracks[0]['url'] == '/'
         assert tracks[1]['count'] == 150
-        assert tracks[2]['count'] == 26
+        assert tracks[2]['count'] == 27
         assert len(client.get('/api/audio-lectures').json()['items']) == 150
-        assert len(client.get('/api/audio-lectures?track=g3').json()['items']) == 26
+        assert len(client.get('/api/audio-lectures?track=g3').json()['items']) == 27
         assert client.get('/api/audio-lectures?track=g2').json()['items'][0]['id'] == '000000'
         assert client.get('/api/audio-lectures?track=g3').json()['items'][0]['id'] == '000000'
         g2 = client.get('/api/audio-lectures/000000?track=g2').json()

@@ -1,7 +1,7 @@
 {
   "id": "g3",
   "title": "G3 · Audio paper track",
-  "summary": "A 26-lecture path from spectral geometry to the four angle theorems, the Proposition 4.4 counterexample, and real transport matching.",
+  "summary": "A 27-lecture path through the four Davis–Kahan angle theorems and the contiguous Section 4 sequence from restricted transport through Proposition 4.3, the Proposition 4.4 counterexample, and real matching.",
   "assumed_background": [
     "linear algebra",
     "singular values",
@@ -13,8 +13,9 @@
     "geometry",
     "norms",
     "machinery",
-    "optimization",
-    "result"
+    "reflection-selection",
+    "angle-theorems",
+    "section4-transport"
   ],
   "lectures": [
     {
@@ -24,7 +25,7 @@
       "file": "000000-a-fast-path-to-davis-kahan.md",
       "source_g2": null,
       "draft_status": "new_draft",
-      "spoken_words": 1272
+      "spoken_words": 1271
     },
     {
       "id": "001000",
@@ -33,7 +34,7 @@
       "file": "001000-the-finite-spectral-picture.md",
       "source_g2": "026000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1532
+      "spoken_words": 1522
     },
     {
       "id": "002000",
@@ -42,7 +43,7 @@
       "file": "002000-spectral-separation-and-gap-hypotheses.md",
       "source_g2": "031000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1527
+      "spoken_words": 1519
     },
     {
       "id": "003000",
@@ -51,7 +52,7 @@
       "file": "003000-trial-subspaces-ritz-values-and-residuals.md",
       "source_g2": "107000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1313
+      "spoken_words": 1305
     },
     {
       "id": "004000",
@@ -60,7 +61,7 @@
       "file": "004000-principal-angle-sine-and-cosine-operators.md",
       "source_g2": "043000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1605
+      "spoken_words": 1597
     },
     {
       "id": "005000",
@@ -68,8 +69,8 @@
       "section": "geometry",
       "file": "005000-canonical-direct-rotation.md",
       "source_g2": "049000",
-      "draft_status": "adapted_draft",
-      "spoken_words": 1601
+      "draft_status": "adapted_revised",
+      "spoken_words": 1606
     },
     {
       "id": "006000",
@@ -78,7 +79,7 @@
       "file": "006000-unitarily-invariant-norms-and-ky-fan-dominance.md",
       "source_g2": "058000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1582
+      "spoken_words": 1573
     },
     {
       "id": "007000",
@@ -87,7 +88,7 @@
       "file": "007000-block-operators-and-reducing-subspaces.md",
       "source_g2": "016000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1529
+      "spoken_words": 1522
     },
     {
       "id": "008000",
@@ -96,7 +97,7 @@
       "file": "008000-the-sylvester-equation.md",
       "source_g2": "062000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1571
+      "spoken_words": 1562
     },
     {
       "id": "009000",
@@ -105,7 +106,7 @@
       "file": "009000-ordered-spectral-separation.md",
       "source_g2": "065000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1440
+      "spoken_words": 1431
     },
     {
       "id": "010000",
@@ -114,7 +115,7 @@
       "file": "010000-choosing-the-correct-sylvester-norm-estimate.md",
       "source_g2": "069000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1470
+      "spoken_words": 1461
     },
     {
       "id": "011000",
@@ -123,7 +124,7 @@
       "file": "011000-the-unbounded-spectral-theorem.md",
       "source_g2": "088000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1382
+      "spoken_words": 1374
     },
     {
       "id": "012000",
@@ -132,7 +133,7 @@
       "file": "012000-domains-and-unbounded-sylvester-identities.md",
       "source_g2": "093000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1340
+      "spoken_words": 1333
     },
     {
       "id": "013000",
@@ -141,115 +142,124 @@
       "file": "013000-symmetric-operator-ideals.md",
       "source_g2": "098000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1321
+      "spoken_words": 1312
     },
     {
       "id": "014000",
       "title": "Graph subspaces and tangent geometry",
-      "section": "geometry",
+      "section": "reflection-selection",
       "file": "014000-graph-subspaces-and-tangent-geometry.md",
       "source_g2": "111000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1365
+      "spoken_words": 1357
     },
     {
       "id": "015000",
       "title": "Off-diagonal perturbations and reflection",
-      "section": "geometry",
+      "section": "reflection-selection",
       "file": "015000-off-diagonal-perturbations-and-reflection.md",
       "source_g2": "114000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1234
+      "spoken_words": 1226
     },
     {
       "id": "016000",
       "title": "Spectral selection and repulsion",
-      "section": "machinery",
+      "section": "reflection-selection",
       "file": "016000-spectral-selection-and-repulsion.md",
       "source_g2": "119000",
-      "draft_status": "adapted_draft",
-      "spoken_words": 1450
-    },
-    {
-      "id": "017000",
-      "title": "Direct rotation under restricted hypotheses",
-      "section": "optimization",
-      "file": "017000-direct-rotation-under-restricted-hypotheses.md",
-      "source_g2": "130000",
-      "draft_status": "adapted_draft",
-      "spoken_words": 1371
-    },
-    {
-      "id": "018000",
-      "title": "Squared displacement and majorization",
-      "section": "optimization",
-      "file": "018000-squared-displacement-and-majorization.md",
-      "source_g2": "131000",
-      "draft_status": "adapted_draft",
-      "spoken_words": 1263
-    },
-    {
-      "id": "019000",
-      "title": "Why unsquared displacement is different",
-      "section": "optimization",
-      "file": "019000-why-unsquared-displacement-is-different.md",
-      "source_g2": "133000",
-      "draft_status": "adapted_draft",
-      "spoken_words": 1305
+      "draft_status": "adapted_revised",
+      "spoken_words": 1490
     },
     {
       "id": "020000",
       "title": "The sine-theta theorem",
-      "section": "result",
+      "section": "angle-theorems",
       "file": "020000-the-sine-theta-theorem.md",
       "source_g2": "110000",
-      "draft_status": "adapted_draft",
-      "spoken_words": 1528
+      "draft_status": "adapted_revised",
+      "spoken_words": 1536
     },
     {
       "id": "021000",
       "title": "The tangent-theta theorem",
-      "section": "result",
+      "section": "angle-theorems",
       "file": "021000-the-tangent-theta-theorem.md",
       "source_g2": "112000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1501
+      "spoken_words": 1493
     },
     {
       "id": "022000",
       "title": "The sine-two-theta theorem",
-      "section": "result",
+      "section": "angle-theorems",
       "file": "022000-the-sine-two-theta-theorem.md",
       "source_g2": "116000",
-      "draft_status": "adapted_draft",
-      "spoken_words": 1446
+      "draft_status": "adapted_revised",
+      "spoken_words": 1476
     },
     {
       "id": "023000",
       "title": "The tangent-two-theta theorem",
-      "section": "result",
+      "section": "angle-theorems",
       "file": "023000-the-tangent-two-theta-theorem.md",
       "source_g2": "117000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1635
+      "spoken_words": 1627
+    },
+    {
+      "id": "017000",
+      "title": "Direct rotation under restricted hypotheses",
+      "section": "section4-transport",
+      "file": "017000-direct-rotation-under-restricted-hypotheses.md",
+      "source_g2": "130000",
+      "draft_status": "adapted_draft",
+      "spoken_words": 1364
+    },
+    {
+      "id": "018000",
+      "title": "The squared sine-angle bound (Proposition 4.2)",
+      "section": "section4-transport",
+      "file": "018000-squared-displacement-and-majorization.md",
+      "source_g2": "131000",
+      "draft_status": "adapted_revised",
+      "spoken_words": 1269
+    },
+    {
+      "id": "018500",
+      "title": "Whole-space squared displacement (Proposition 4.3)",
+      "section": "section4-transport",
+      "file": "018500-whole-space-squared-displacement-proposition-4-3.md",
+      "source_g2": "132000",
+      "draft_status": "adapted_revised",
+      "spoken_words": 1536
+    },
+    {
+      "id": "019000",
+      "title": "Why unsquared displacement is different",
+      "section": "section4-transport",
+      "file": "019000-why-unsquared-displacement-is-different.md",
+      "source_g2": "133000",
+      "draft_status": "adapted_revised",
+      "spoken_words": 1301
     },
     {
       "id": "024000",
       "title": "The Proposition 4.4 counterexample",
-      "section": "result",
+      "section": "section4-transport",
       "file": "024000-the-proposition-4-4-counterexample.md",
       "source_g2": "134000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1439
+      "spoken_words": 1430
     },
     {
       "id": "025000",
       "title": "The real transport matching theorem",
-      "section": "result",
+      "section": "section4-transport",
       "file": "025000-the-real-transport-matching-theorem.md",
       "source_g2": "145000",
       "draft_status": "adapted_draft",
-      "spoken_words": 1379
+      "spoken_words": 1371
     }
   ]
 }

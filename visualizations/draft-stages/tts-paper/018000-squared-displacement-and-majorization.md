@@ -1,10 +1,10 @@
-# 018000 — Squared displacement and majorization
+# 018000 — The squared sine-angle bound (Proposition 4.2)
 
-**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 131000. **Section:** optimization. **Audience:** prior linear algebra and basic analysis.
+**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 131000. **Section:** section4-transport. **Audience:** prior linear algebra and basic analysis.
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# The squared displacement of orthonormal frames
+# The squared sine-angle bound for orthonormal frames
 
 Proposition four point two asks what happens when we select an orthonormal family in the source subspace, transport every vector by the same unitary, and add up their angular errors. We will prove the lower bound from orthogonal projections and the trace of a positive operator. Along the way we must distinguish the square of a sine from the square of a Euclidean chord.
 
@@ -36,7 +36,7 @@ Choose an orthonormal basis u-one through u-r of U. Apply the preceding inequali
 
 Define T as the rectangular projection map from U into V perpendicular. The sum on the right is the squared Frobenius norm of T. Equivalently, it is the trace of T adjoint T, its positive Gram operator.
 
-Why is this independent of the chosen orthonormal basis? If we change the basis by a unitary coordinate transformation, the trace of the Gram operator does not change. More concretely, the sum of squared output lengths of T over an orthonormal basis equals the sum of its squared singular values. That identity was the starting point of our Hilbert–Schmidt lectures.
+Why is this independent of the chosen orthonormal basis? If we change the basis by a unitary coordinate transformation, the trace of the Gram operator does not change. More concretely, the sum of squared output lengths of T over an orthonormal basis equals the sum of its squared singular values. This is the defining computation behind the Hilbert–Schmidt norm: a sum of squared output lengths that does not depend on the orthonormal basis.
 
 The singular values of T are the sines of the principal angles between U and V. Thus the bound becomes: the sum of sine-squared transport angles over any orthonormal basis of U is at least the sum of sine-squared principal angles.
 

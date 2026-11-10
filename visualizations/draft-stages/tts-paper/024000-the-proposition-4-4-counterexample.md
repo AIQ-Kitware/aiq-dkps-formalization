@@ -1,6 +1,6 @@
 # 024000 — The Proposition 4.4 counterexample
 
-**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 134000. **Section:** result. **Audience:** prior linear algebra and basic analysis.
+**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 134000. **Section:** section4-transport. **Audience:** prior linear algebra and basic analysis.
 
 <!-- BEGIN SPOKEN LECTURE -->
 

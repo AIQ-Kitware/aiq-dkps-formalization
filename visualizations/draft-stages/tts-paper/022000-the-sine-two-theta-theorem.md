@@ -1,6 +1,6 @@
 # 022000 — The sine-two-theta theorem
 
-**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 116000. **Section:** result. **Audience:** prior linear algebra and basic analysis.
+**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 116000. **Section:** angle-theorems. **Audience:** prior linear algebra and basic analysis.
 
 <!-- BEGIN SPOKEN LECTURE -->
 
@@ -86,7 +86,7 @@ The theorem therefore cannot by itself certify that V is close to U. A small rig
 
 This is a statement about the information carried by the left-hand side, not a defect in the proof. The function sine twice theta loses the distinction between angles near zero and angles near ninety degrees.
 
-Later spectral-selection results will supply conditions that choose the intended branch.
+For a perturbation that is off-diagonal relative to two form-separated spectral blocks, the spectral projection onto the designated side of the surviving gap selects the branch below forty-five degrees. That structural selection resolves the ambiguity of the doubled sine; no numerical bound on the doubled sine alone can do it.
 
 ## Compare with the single-angle sine theorem
 

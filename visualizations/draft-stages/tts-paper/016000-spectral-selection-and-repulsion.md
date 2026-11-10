@@ -1,12 +1,12 @@
 # 016000 — Spectral selection and repulsion
 
-**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 119000. **Section:** machinery. **Audience:** prior linear algebra and basic analysis.
+**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 119000. **Section:** reflection-selection. **Audience:** prior linear algebra and basic analysis.
 
 <!-- BEGIN SPOKEN LECTURE -->
 
 # Spectral selection and repulsion
 
-A spectral gap tells us where an operator has no spectrum. An off-diagonal perturbation does something stronger: under the right block-order hypothesis, it cannot push spectral values into the original gap at all. The gap is repelled, and its endpoints provide a canonical way to choose the perturbed subspace.
+An off-diagonal perturbation preserves the form gap between two ordered diagonal blocks. The block-sign reflection makes the reason visible: it gives a positive coercive form even when the off-diagonal coupling is arbitrarily large. We will turn that estimate into a spectral theorem, not merely an argument excluding eigenvectors, and identify the canonical perturbed spectral subspace.
 
 This is the starting point of Davis and Kahan's Theorem eight point one. We will derive the gap protection, identify the selected reducing branch, and explain the cosine factors in the theorem's stronger comparisons.
 
@@ -68,7 +68,7 @@ In a principal-vector basis, the singular values of C are cosines of principal a
 
 ## From forms to eigenvalue comparisons
 
-In finite dimensions, order of positive self-adjoint matrices implies order of their decreasing eigenvalue sequences by Courant–Fischer. Applying this principle to the compression inequality gives repulsion estimates for ordered eigenvalues, with cosine factors.
+For a finite-dimensional self-adjoint matrix, Courant–Fischer characterizes its k-th largest eigenvalue by maximizing, over k-dimensional subspaces, the smallest Rayleigh quotient on that subspace. Consequently, a quadratic-form inequality between self-adjoint matrices implies the corresponding order of their decreasing eigenvalue lists. Applying this min–max principle to the compression inequality gives repulsion estimates for ordered eigenvalues, with cosine factors.
 
 The source also proves dimension-free approximation-number formulations and finite-dimensional inequalities for symmetric gauges. Those conclusions require an additional step: comparing positive compressed operators at the level of singular-value prefixes, then passing from weak majorization to each supported symmetric gauge.
 
@@ -94,7 +94,7 @@ For the canonical branch theorem, these issues are addressed in its actual concl
 
 We now have a concrete mechanism for identifying the intended spectral subspace: form-separated diagonal blocks plus an off-diagonal self-adjoint perturbation preserve the open gap, define a canonical spectral projection, and keep the selected branch below a quarter turn. The compression identities then yield the eigenvalue and norm inequalities.
 
-It allows more general perturbations, but demands quantitative smallness relative to a spectral gap. We will show how that smallness can certify the correct angular branch.
+The strict quarter-angle branch comes from off-diagonal structure and the ordered form gap, even for an arbitrarily large finite coupling. Smallness of the perturbation relative to the gap is useful when one wants a small numerical angle bound; it is not a prerequisite for selecting the branch.
 
 <!-- END SPOKEN LECTURE -->
 

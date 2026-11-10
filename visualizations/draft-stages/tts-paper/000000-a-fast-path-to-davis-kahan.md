@@ -1,6 +1,6 @@
 # 000000 — A fast path to Davis–Kahan
 
-**Track:** G3 audio paper track. **Assumed background:** eigenvalues, inner products, basic singular values, and familiarity with limits and integrals. **Format:** standalone spoken lecture with display-only mathematical companion.
+**Track:** G3 audio paper track. **Section:** orientation. **Assumed background:** eigenvalues, inner products, basic singular values, and familiarity with limits and integrals. **Format:** standalone spoken lecture with display-only mathematical companion.
 
 <!-- BEGIN SPOKEN LECTURE -->
 

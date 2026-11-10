@@ -382,7 +382,7 @@ async function switchTrack(track){
   audio.pause();audio.removeAttribute('src');audio.load();$('content').hidden=true;$('empty').hidden=true;
   $('loading').hidden=false;$('loading').textContent='Loading '+track.toUpperCase()+' lectures…';
   document.querySelectorAll('[data-track]').forEach(b=>b.setAttribute('aria-current',b.dataset.track===track?'page':'false'));
-  $('trackDescription').textContent=track==='g3'?'26 paper-focused recordings · four angle theorems, counterexample, and matching theorem':'150 comprehensive recordings · complete foundations and theorem development';
+  $('trackDescription').textContent=track==='g3'?'27 paper-focused recordings · four angle theorems, counterexample, and matching theorem':'150 comprehensive recordings · complete foundations and theorem development';
   const queryParams=new URLSearchParams(location.search);const requestedLecture=queryParams.get('track')===track?queryParams.get('lecture'):null;
   try{history.replaceState(null,'','/audio?'+new URLSearchParams({track}));}catch{}
   try{

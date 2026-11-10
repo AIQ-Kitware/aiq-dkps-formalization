@@ -256,7 +256,18 @@ class AudioLectureLibrary:
     def _files(self):
         if not self.sources.is_dir():
             return []
-        return sorted(p for p in self.sources.iterdir() if p.is_file() and LECTURE_NAME.fullmatch(p.name))
+        files = sorted(p for p in self.sources.iterdir()
+                       if p.is_file() and LECTURE_NAME.fullmatch(p.name))
+        if self.sources != PAPER_DIRECTORY.resolve():
+            return files
+        # G3 has a deliberately curated listening order independent of its
+        # permanent numeric IDs. Use exactly the course-graph source order.
+        plan = json.loads((self.sources / 'track.json').read_text(encoding='utf-8'))
+        paths = {path.name: path for path in files}
+        names = [row['file'] for row in plan['lectures']]
+        if len(names) != len(set(names)) or set(names) != set(paths):
+            raise ValueError('G3 listening path and transcript inventory differ')
+        return [paths[name] for name in names]
 
     def _lecture_path(self, lecture_id):
         if not re.fullmatch(r'\d{6}', lecture_id):

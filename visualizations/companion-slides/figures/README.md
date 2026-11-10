@@ -15,3 +15,9 @@ G2 course. They depict geometric relationships discussed in the source lectures:
 `hilbert-coordinates.svg`, `norm-balls.svg`, `operator-ball.svg`,
 `orthogonal-projection.svg`, `rayleigh-quotient.svg`, and
 `resolvent-spectrum.svg`. They contain no external imagery or runtime assets.
+
+### G3 Proposition 4.3 proof figure (2026-11-09)
+
+`squared-displacement-prefix.svg` shows the exact ranked squared displacement values in the
+real four-dimensional comparison. Heights are schematic and the mathematical values
+are written on the figure. This is a locally authored, editable SVG.

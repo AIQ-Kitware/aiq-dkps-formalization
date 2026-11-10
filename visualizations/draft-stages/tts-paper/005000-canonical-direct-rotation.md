@@ -90,7 +90,7 @@ The canonical direct rotation W is the half-angle motion, so on every principal 
 
 For a uniformly acute complex Hilbert-space pair, this also gives a functional-calculus construction. The spectrum of the reflection product avoids negative one, so we can select the principal square-root branch continuously. Applying that branch to the reflection product gives W.
 
-Why mention negative one? At a right angle, the reflection product is minus the identity on the corresponding two-dimensional block. The number minus one has two opposite square roots, and no continuous principal choice across the branch cut. That is exactly where the coming defect-matching problem enters.
+Why mention negative one? At a right angle, the reflection product is minus the identity on the corresponding two-dimensional block. The number minus one has two opposite square roots, and no continuous principal choice across the branch cut. In the nonacute case, additional choices are needed to match the crossed defect spaces; the half-angle branch alone no longer determines the transport.
 
 ## Reversing the direction
 

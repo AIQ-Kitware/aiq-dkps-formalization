@@ -17,7 +17,8 @@
       "body": [
         "An off-diagonal perturbation does something stronger: under the right block-order hypothesis, it cannot push spectral values into the original gap at all. The gap is repelled, and its endpoints provide a canonical way to choose the perturbed subspace. This is the starting point of Davis and Kahan's Theorem eight point one. We will derive the gap protection, identify the selected reducing branch, and explain the cosine factors in the theorem's stronger comparisons."
       ],
-      "layout": "opening"
+      "layout": "opening",
+      "bullets": []
     },
     {
       "title": "Build the two-block setting",
@@ -29,7 +30,8 @@
       ],
       "diagram": "spectral-gap",
       "formula": "two ordered spectral blocks separated by δ",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "Build the two-block setting · further detail",
@@ -39,7 +41,8 @@
       "body": [
         "Define S to be A plus H. No smallness assumption on the norm of H has been made. Off-diagonality is the structural assumption."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Prove the spectral gap survives",
@@ -51,7 +54,8 @@
       ],
       "diagram": "spectral-gap",
       "formula": "off-diagonal coupling preserves a central gap",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "Prove the spectral gap survives · further detail",
@@ -61,7 +65,8 @@
       "body": [
         "Take the inner product of the first equation with x and of the second with y. Subtract the first real identity from the second."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Prove the spectral gap survives · continued",
@@ -71,7 +76,8 @@
       "body": [
         "The remainder is the positive quantity associated with lambda minus A low on x, plus the positive quantity associated with A high minus lambda on y. Each term is bounded below by its distance from the corresponding edge of the gap times the squared norm of its vector. Hence both x and y are zero, a contradiction. This excludes eigenvalues in the gap. In infinite-dimensional Hilbert space, simply excluding eigenvectors would not be enough. Instead, use the same coercive estimate with a block-sign reflection to obtain a lower norm bound for S minus lambda. Self-adjointness makes the range dense; bounded below and closed range then make it surjective. Thus lambda lies in the resolvent set. The argument proves full spectral repulsion, not merely absence of point spectrum."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "See the effect in a plane",
@@ -84,7 +90,8 @@
       "diagram": "doubled-angle",
       "formula": "[[a,t],[t,b]]",
       "mathtex": "\\begin{bmatrix}a&t\\\\t&b\\end{bmatrix}",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "See the effect in a plane · further detail",
@@ -94,7 +101,8 @@
       "body": [
         "A diagonal perturbation would destroy the argument. If the original low eigenvalue is shifted upward sufficiently, it can move into the former gap. Thus the hypothesis that H is off-diagonal is doing indispensable work."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Select the canonical branch",
@@ -106,7 +114,8 @@
       ],
       "diagram": "spectral-gap",
       "formula": "choose the perturbed spectral branch by order",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "Select the canonical branch · further detail",
@@ -116,7 +125,8 @@
       "body": [
         "Consequently the canonical branch is on the correct side of the doubled-angle ambiguity, even for large off-diagonal couplings. The source also proves uniqueness: a reducing subspace with the relevant spectral orientation and the closed quarter-angle characterization must coincide with Q. This is stronger than saying that some nearby subspace exists."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Recover the block compression inequality",
@@ -128,7 +138,8 @@
       ],
       "diagram": "block-operator",
       "formula": "quadratic form bounds control the selected block",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "Recover the block compression inequality · further detail",
@@ -138,7 +149,8 @@
       "body": [
         "Symbolically, this is the inequality that the original high block minus alpha is at most C adjoint times the new high block minus alpha times C. The precise placement of adjoints depends on which coordinate space is used."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Recover the block compression inequality · continued",
@@ -148,7 +160,8 @@
       "body": [
         "In a principal-vector basis, the singular values of C are cosines of principal angles. Thus a cosine-squared factor is not an ornamental correction: it records the loss when a vector of the old high block is projected into the new high subspace."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "From forms to eigenvalue comparisons",
@@ -159,7 +172,8 @@
         "Applying this principle to the compression inequality gives repulsion estimates for ordered eigenvalues, with cosine factors. The source also proves dimension-free approximation-number formulations and finite-dimensional inequalities for symmetric gauges. Those conclusions require an additional step: comparing positive compressed operators at the level of singular-value prefixes, then passing from weak majorization to each supported symmetric gauge. We should not jump directly from one scalar operator-norm inequality to every individual eigenvalue comparison. The theorem contains a hierarchy: spectral gap preservation, ordered form inequalities, approximation numbers, and symmetric-gauge inequalities."
       ],
       "formula": "use eigenvalue comparison to identify the branch",
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "The role of the quarter angle",
@@ -170,7 +184,8 @@
         "This always puts theta below forty-five degrees. As h tends to infinity, the angle approaches forty-five degrees from below. So the strict threshold does not imply that the subspaces remain extremely close for a large perturbation. It asserts that the canonical low branch cannot exchange roles with the high branch. That is exactly the information a doubled-sine estimate lacks. The sharp part of Theorem eight point one is structural: no finite off-diagonal coupling causes a spectral crossing, and the selected branch remains on the near-zero side of the quarter angle."
       ],
       "diagram": "doubled-angle",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "Why dimensions and defects still matter",
@@ -180,7 +195,8 @@
       "body": [
         "A continuous deformation from zero coupling is one way to see this; the spectral-gap argument prevents an eigenvalue from crossing the separating threshold. In infinite dimensions, equal cardinal dimensions do not force the two directed projection gaps to agree. A full symmetric-angle statement needs additional compatibility of the crossed defects or suitable finite-dimensional hypotheses. Otherwise retain the directed conclusion. For the canonical branch theorem, these issues are addressed in its actual conclusion and hypotheses; one should not import an equal-rank simplification from finite-dimensional matrices into an arbitrary Hilbert space proof."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "What to retain",
@@ -188,10 +204,11 @@
       "id": "09-00",
       "lead": "We now have a concrete mechanism for identifying the intended spectral subspace: form-separated diagonal blocks plus an off-diagonal self-adjoint perturbation preserve the open gap, define a canonical spectral projection, and keep the selected branch below a quarter turn.",
       "body": [
-        "The compression identities then yield the eigenvalue and norm inequalities. It allows more general perturbations, but demands quantitative smallness relative to a spectral gap. We will show how that smallness can certify the correct angular branch."
+        "The compression identities then yield the eigenvalue and norm inequalities. Off-diagonal structure preserves the gap and selects the branch below forty-five degrees for any finite coupling. Smallness relative to the gap controls the numerical size of the angle, rather than selecting its branch."
       ],
       "takeaway": "Spectral selection identifies the correct perturbed branch before drawing a small-angle conclusion.",
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     }
   ]
 }

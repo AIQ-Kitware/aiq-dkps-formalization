@@ -1,6 +1,6 @@
 # 015000 — Off-diagonal perturbations and reflection
 
-**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 114000. **Section:** geometry. **Audience:** prior linear algebra and basic analysis.
+**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 114000. **Section:** reflection-selection. **Audience:** prior linear algebra and basic analysis.
 
 <!-- BEGIN SPOKEN LECTURE -->
 

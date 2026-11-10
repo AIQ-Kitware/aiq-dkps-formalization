@@ -15,9 +15,10 @@
       "id": "00-00",
       "lead": "Section Four of Davis and Kahan investigates how to transport one subspace onto another.",
       "body": [
-        "Restricted displacement and squared whole-space displacement admit valid direct-rotation optimality statements, but the printed claim about every unitarily invariant norm of unsquared whole-space displacement fails. A four-dimensional construction makes the distinction explicit. The proposition as printed proposes a threshold of sixty degrees in the real case. Our task is to understand why that threshold looks plausible, why the available proofs cannot establish it, and which piece of the optimization problem changes in higher dimension."
+        "Restricted displacement and squared whole-space displacement admit valid direct-rotation optimality statements. A further printed claim asserts the corresponding optimality for every unitarily invariant norm of unsquared whole-space displacement. We will test that stronger assertion using a four-dimensional construction. The proposition as printed proposes a threshold of sixty degrees in the real case. Our task is to understand why that threshold looks plausible, why the available proofs cannot establish it, and which piece of the optimization problem changes in higher dimension."
       ],
-      "layout": "opening"
+      "layout": "opening",
+      "bullets": []
     },
     {
       "title": "Define the ambient transport problem",
@@ -30,7 +31,8 @@
       "diagram": "rotation-chord",
       "formula": "min over W: W(U)=V of N(W−I)",
       "mathtex": "\\inf_{W(\\mathcal U)=\\mathcal V}\\|W-I\\|_{\\Phi}",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "Define the ambient transport problem · further detail",
@@ -40,7 +42,8 @@
       "body": [
         "We are varying W among all orthogonal matrices carrying U onto V. Such a W can rotate vectors inside the target subspace, and can act independently on the complement before the canonical transport. Those freedoms can mix principal planes, which changes the spectrum of identity minus W. For two-dimensional lines in the plane, there is little freedom. In four dimensions, there is substantially more."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Why sixty degrees arises in the plane",
@@ -52,7 +55,8 @@
       ],
       "diagram": "rotation-chord",
       "formula": "trace norm sums singular values before squaring",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "Why sixty degrees arises in the plane · further detail",
@@ -62,7 +66,8 @@
       "body": [
         "A unitarily invariant norm is a symmetric gauge of these singular values. The direct rotation is no worse than the reflection for every such gauge exactly when the sorted list a,a is weakly majorized by the list two,zero. The largest-entry condition says a is at most two, always true."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Why sixty degrees arises in the plane · continued",
@@ -72,7 +77,8 @@
       "body": [
         "Since a equals two sine of theta over two, this becomes theta at most sixty degrees. Thus the threshold is not arbitrary. It follows from an exact two-dimensional singular-value comparison. However, nothing in this argument says that an arbitrary higher-dimensional competitor can be decomposed into independent rotations or reflections on the original principal planes. That would be an extra structural assertion, and it is false."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "The hidden assumption in the generalization",
@@ -84,7 +90,8 @@
       ],
       "diagram": "ky-fan",
       "formula": "squared displacement and unsquared displacement differ",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "The hidden assumption in the generalization · continued",
@@ -94,7 +101,8 @@
       "body": [
         "The trace norm is especially sensitive to this redistribution because it adds displacement singular values linearly. Rotating two planes a little and rotating one plane more can have different trace costs, even if both transformations carry the same subspace to its target."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Compare with Proposition four point three",
@@ -106,7 +114,8 @@
       ],
       "diagram": "counterexample",
       "formula": "Proposition 4.4 requires the correct objective",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "Compare with Proposition four point three · further detail",
@@ -116,7 +125,8 @@
       "body": [
         "The square-root function is concave, and it reacts differently to concentrations and spreading. A numerical toy example makes the logical point."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Compare with Proposition four point three · continued",
@@ -126,7 +136,8 @@
       "body": [
         "Both unsquared totals equal three, while the sum of squares is larger for the concentrated list. Shift the common small value slightly upward and the unsquared ordering reverses while the squared prefix ordering can still hold. The actual four-dimensional construction makes this exact using trigonometric values."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "A universal lower bound that remains true",
@@ -139,7 +150,8 @@
       "diagram": "principal-angle",
       "formula": "‖P−Q‖ ≤ ‖I−W‖ (appropriate invariant norm)",
       "mathtex": "\\|P-Q\\|_{\\Phi}\\leq\\|I-W\\|_{\\Phi}",
-      "layout": "figure"
+      "layout": "figure",
+      "bullets": []
     },
     {
       "title": "A universal lower bound that remains true · further detail",
@@ -147,9 +159,10 @@
       "id": "05-00-1",
       "lead": "By the triangle inequality and unitary invariance, the norm of that commutator is at most twice the norm of identity minus W.",
       "body": [
-        "Since the reflection difference is twice the projection difference, we conclude N of P minus Q is at most N of identity minus W for every unitarily invariant norm N. This lower bound survives without a small-angle assumption. It applies over real and complex scalars and to every admissible transporter. It does not say that the canonical direct rotation attains the lower bound. Indeed, in the forthcoming example a noncanonical competitor does attain it in trace norm, while the direct rotation does not."
+        "Since the reflection difference is twice the projection difference, we conclude N of P minus Q is at most N of identity minus W for every unitarily invariant norm N. This lower bound survives without a small-angle assumption. It applies over real and complex scalars and to every admissible transporter. It does not say that the canonical direct rotation attains the lower bound. The lower bound can be attained by noncanonical transporters. That fact alone does not make the canonical direct rotation optimal."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "How to test the printed claim",
@@ -157,9 +170,10 @@
       "id": "06-00",
       "lead": "A universal minimizing statement must survive one explicit admissible competitor and one valid unitarily invariant norm.",
       "body": [
-        "We can therefore choose trace norm, which is the sum of singular values. The simplest potential counterexample should have enough dimensions to mix at least two principal planes. Four real dimensions suffice. We will take two equal acute principal angles. Then we will write a concrete orthogonal competitor, compute its action on the source plane, verify the resulting principal angles, and compute both displacement singular-value lists. The explicit singular values give a strict numerical contradiction to the printed inequality, so the universal proposition is false."
+        "We can therefore choose trace norm, which is the sum of singular values. The simplest potential counterexample should have enough dimensions to mix at least two principal planes. Four real dimensions suffice. The construction takes two equal acute principal angles and an explicit orthogonal competitor. Its action on the source plane determines the principal angles, and its displacement singular values can be computed directly. The calculation determines whether the printed inequality survives an unrestricted, higher-dimensional transporter."
       ],
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     },
     {
       "title": "Close",
@@ -167,10 +181,11 @@
       "id": "07-00",
       "lead": "The sixty-degree threshold is correct for the standard two-dimensional real comparison.",
       "body": [
-        "Proposition four point one remains valid for restricted displacement, and Proposition four point three remains valid for positive squared displacement. Neither theorem authorizes the universal unsquared ambient conclusion in higher dimension. The source of the failure is extra freedom in the full orthogonal transport fiber, especially the freedom to mix repeated principal-angle directions."
+        "Proposition four point one remains valid for restricted displacement, and Proposition four point three remains valid for positive squared displacement. Neither theorem authorizes the universal unsquared ambient conclusion in higher dimension. What remains to be tested is whether extra freedom in the ambient transport, especially mixing repeated principal-angle directions, permits a smaller unsquared cost."
       ],
       "takeaway": "Taking square roots of displacement singular values can reverse the ordering of competing norms.",
-      "layout": "reading"
+      "layout": "reading",
+      "bullets": []
     }
   ]
 }

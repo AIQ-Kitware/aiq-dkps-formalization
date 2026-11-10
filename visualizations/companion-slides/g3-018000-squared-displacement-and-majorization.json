@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "id": "g3-018000-squared-displacement-and-majorization",
-  "title": "Squared displacement and majorization",
-  "subtitle": "Independent reading companion to G3 018000",
+  "title": "The squared sine-angle bound (Proposition 4.2)",
+  "subtitle": "G3 · Proposition 4.2 · squared sine-angle error for orthonormal frames",
   "lecture_nodes": [
     "g3:018000"
   ],
@@ -82,7 +82,7 @@
       "id": "03-00-1",
       "lead": "If we change the basis by a unitary coordinate transformation, the trace of the Gram operator does not change.",
       "body": [
-        "More concretely, the sum of squared output lengths of T over an orthonormal basis equals the sum of its squared singular values. That identity was the starting point of our Hilbert–Schmidt lectures."
+        "More concretely, the sum of squared output lengths of T over an orthonormal basis equals the sum of its squared singular values. This is the defining identity behind the Hilbert–Schmidt norm, independent of the chosen orthonormal basis."
       ],
       "layout": "reading"
     },
@@ -145,7 +145,7 @@
       "title": "Why squared sine is convenient · further detail",
       "eyebrow": "G3 lecture 018000 · topic 6/8",
       "id": "05-00-1",
-      "lead": "Later, the counterexample to unsquared ambient displacement will exploit the fact that changing phases and mixing directions can reduce the sum of chords.",
+      "lead": "For unsquared ambient displacement, changing phases and mixing directions can reduce the sum of chords.",
       "body": [
         "There is another useful comparison. For a small angle theta in radians, sine squared theta is approximately theta squared, and the squared chord two minus two cosine theta is also approximately theta squared. But those are only approximations near zero. At a right angle, sine squared theta equals one, while the squared chord equals two. A proof involving one expression cannot be silently relabeled as a proof about the other."
       ],

@@ -11,7 +11,7 @@ from dkvis.presentation.serve import create_app
 
 def test_course_graph_inventory_and_yws_reuse():
     graph = build_course_graph()
-    assert len(graph['nodes']) == 204
+    assert len(graph['nodes']) == 205
     assert set(graph['relations']) == {
         'hard_depends_on', 'soft_depends_on', 'expands_on',
         'original_parent', 'alternative_presentation', 'related_to',
@@ -19,7 +19,7 @@ def test_course_graph_inventory_and_yws_reuse():
     tracks = {track['id']: track for track in graph['tracks']}
     assert len(tracks['g1']['path']) == 22
     assert len(tracks['g2']['path']) == 150
-    assert len(tracks['g3']['path']) == 26
+    assert len(tracks['g3']['path']) == 27
     assert tracks['g4']['available_count'] == 7
     assert tracks['g4']['planned_count'] == 6
     assert tracks['g4']['path'].count('g3:003000') == 1
@@ -27,7 +27,7 @@ def test_course_graph_inventory_and_yws_reuse():
     assert graph['nodes']['g2:147000']['url'].startswith('/audio?track=g2')
     assert graph['nodes']['g3:003000']['url'].startswith('/audio?track=g3')
     original = [e for e in graph['edges'] if e['type'] == 'original_parent']
-    assert len(original) == 25
+    assert len(original) == 26
     assert {'from': 'g3:020000', 'to': 'g2:110000', 'type': 'original_parent'} in original
     assert all(graph['nodes'][e['from']]['track'] == 'g3' for e in original)
     assert any(e['type'] == 'hard_depends_on' and e['to'] == 'g3:003000'
@@ -80,7 +80,7 @@ def test_graph_api_and_reader_links(tmp_path):
 def test_curated_topic_graph_covers_every_lecture():
     graph = build_course_graph()
     assert len(graph['topics']) == 13
-    assert len(graph['nodes']) == 204
+    assert len(graph['nodes']) == 205
     assert len(graph['edges']) >= 650
     assert all(node.get('topic') for node in graph['nodes'].values())
     topics = {topic['id'] for topic in graph['topics']}
@@ -141,7 +141,7 @@ def test_all_nodes_connected_by_navigation_and_real_cross_track_relationships():
     # Course order alone connects each path, not the different tracks.
     order_only = connected_components(graph, relation_types={'listening_next'})
     assert len(order_only) == 2
-    assert sorted(map(len, order_only)) == [22, 182]
+    assert sorted(map(len, order_only)) == [22, 183]
     # Actual alternative presentations tie G1 to the audio tracks.
     overview_types = {'listening_next', 'proof_depends_on', 'alternative_presentation'}
     assert len(connected_components(graph, relation_types=overview_types)) == 1
@@ -152,7 +152,7 @@ def test_all_nodes_connected_by_navigation_and_real_cross_track_relationships():
 def test_listening_order_is_explicit_and_not_a_mathematical_dependency():
     graph = build_course_graph()
     path_edges = {(e['from'], e['to']): e for e in graph['edges'] if e['type'] == 'listening_next'}
-    assert len(path_edges) == 203  # Shared pairs in G3 and G4 appear once.
+    assert len(path_edges) == 204  # Shared pairs in G3 and G4 appear once.
     for track in graph['tracks']:
         for first, second in zip(track['path'], track['path'][1:]):
             row = path_edges[first, second]

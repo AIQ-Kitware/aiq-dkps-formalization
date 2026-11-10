@@ -21,10 +21,10 @@ def test_first_two_g3_decks_are_readable_source_files():
     lib = CompanionSlideLibrary()
     entries = lib.catalog()
     assert [r['id'] for r in entries[:2]] == ['dkps-fast-path', 'finite-spectral-picture']
-    assert len(entries) == 176
+    assert len(entries) == 177
     assert [r['slide_count'] for r in entries[:2]] == [12, 13]
     assert [r['lecture_nodes'] for r in entries[:2]] == [['g3:000000'], ['g3:001000']]
-    assert {r['lecture_nodes'][0] for r in entries[:26]} == {f'g3:{n:03}000' for n in range(26)}
+    assert {r['lecture_nodes'][0] for r in entries[:27]} == ({f'g3:{n:03}000' for n in range(26)} | {'g3:018500'})
     for entry in entries:
         source = json.loads((SOURCE_DIR/f'{entry["id"]}.json').read_text(encoding='utf-8'))
         assert len({s['id'] for s in source['slides']}) == entry['slide_count']
@@ -90,7 +90,7 @@ def test_companion_api_and_lecture_associations(tmp_path, stub_math_svg):
     with TestClient(create_app(renders, slide_library=lib)) as client:
         response=client.get('/api/slide-decks')
         assert response.status_code==200
-        assert len(response.json()['items'])==176
+        assert len(response.json()['items'])==177
         node=client.get('/api/course-graph').json()['nodes']['g3:000000']
         assert node['companion_slides']==['dkps-fast-path']
         assert len(client.get('/api/course-graph').json()['nodes']['g2:000000']['companion_slides'])==1
@@ -241,13 +241,13 @@ def test_every_available_lecture_has_visual_coverage_and_backlog_is_explicit(stu
     rows = audit()
     counts = Counter(r['stage'] for r in rows)
     assert counts['native-presentation'] == 22
-    assert counts['expanded']+counts['baseline'] == 176
+    assert counts['expanded']+counts['baseline'] == 177
     assert counts['missing'] == 0
-    assert len(rows) == 204
+    assert len(rows) == 205
     assert all(r['deck_ids'] for r in rows if r['track'] in {'g2','g3'})
     assert all(r['needs_expansion'] == (r['stage']=='baseline') for r in rows)
     text=report(rows)
-    assert '198/198' in text
+    assert '199/199' in text
     for row in rows:
         if row['needs_expansion']:
             assert row['node'] in text
@@ -281,4 +281,4 @@ def test_seed_tool_never_replaces_authored_decks(tmp_path):
     shutil.copy(SOURCE_DIR/'manifest.json',dest/'manifest.json')
     # All G2 lectures are already registered, so the generator is idempotent.
     assert seed(SOURCE_DIR.parent/'draft-stages/tts-lectures',dest,write=True)==[]
-    assert len(json.loads((dest/'manifest.json').read_text())['decks'])==176
+    assert len(json.loads((dest/'manifest.json').read_text())['decks'])==177

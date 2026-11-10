@@ -1,6 +1,6 @@
 # 025000 — The real transport matching theorem
 
-**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 145000. **Section:** result. **Audience:** prior linear algebra and basic analysis.
+**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 145000. **Section:** section4-transport. **Audience:** prior linear algebra and basic analysis.
 
 <!-- BEGIN SPOKEN LECTURE -->
 

@@ -1,6 +1,6 @@
 # 020000 — The sine-theta theorem
 
-**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 110000. **Section:** result. **Audience:** prior linear algebra and basic analysis.
+**Track:** G3 audio paper track. **Draft:** adapted from G2 lecture 110000. **Section:** angle-theorems. **Audience:** prior linear algebra and basic analysis.
 
 <!-- BEGIN SPOKEN LECTURE -->
 
@@ -84,7 +84,7 @@ In practice the theorem is valuable when numerical approximations provide both a
 
 So far E has been isometric. Suppose instead E is bounded below by a positive constant epsilon. This means every output E x has length at least epsilon times the length of x.
 
-Write E as U times its positive modulus, where U is an isometry onto the trial range. The inverse modulus has norm at most one divided by epsilon. The complementary block for E differs from the complementary block for U by the modulus factor.
+Factor the trial map E as W times its positive modulus, where W is an isometry onto the trial range V. This W is a polar factor, distinct from the exact reducing subspace U. The inverse modulus has norm at most one divided by epsilon. The complementary block for E differs from the complementary block for W by the modulus factor.
 
 When we normalize the frame, the ideal estimate acquires that inverse factor. Multiplying through, the conclusion becomes delta times epsilon times the directed sine gauge is at most the residual gauge.
 
