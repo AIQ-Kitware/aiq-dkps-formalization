@@ -2,111 +2,151 @@
   "schema_version": 1,
   "id": "g2-061000-quadratic-form-inequalities-and-singular-values",
   "title": "Quadratic-form inequalities and singular values",
-  "subtitle": "G2 lecture 061000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 061000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:061000"
   ],
   "source_lecture": "draft-stages/tts-lectures/061000-quadratic-form-inequalities-and-singular-values.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Standalone slide treatment of the spoken lecture and display-only mathematical appendix; authored derivations, worked calculations and local SVG diagrams.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 061000 · first-pass outline",
-      "lead": "There are two common ways to compare operators.",
+      "title": "From quadratic forms to ordered singular values",
+      "lead": "A pointwise inequality on vectors can control an entire singular-value list.",
       "body": [
-        "A quadratic-form inequality controls the value of an operator on every input vector. A singular-value inequality controls its ordered stretching strengths. How can we pass from the first kind of statement to the second? These languages are connected, but they are not interchangeable without assumptions. Today's goal is to derive the safe implications and identify the tempting steps that fail. Our main route will be through the Gram operator. Its quadratic form is exactly the squared output length of the original map."
+        "For self-adjoint operators H,K, the Loewner order H≼K means ⟨Hx,x⟩≤⟨Kx,x⟩ for every vector. When both are positive, the ordered eigenvalues are also ordered.",
+        "For rectangular maps A and B with the same source, compare their squared output lengths instead. That inequality is exactly the Loewner comparison of their source Gram operators."
       ],
-      "layout": "opening"
+      "diagram": "g2-gram-order",
+      "takeaway": "Uniform output-length comparison is Gram-operator order.",
+      "layout": "opening",
+      "id": "00-00",
+      "eyebrow": "G2 · 061000 · From quadratic forms to ordered singular values"
     },
     {
-      "id": "01-overview",
-      "title": "Recall the positive-operator order",
-      "eyebrow": "G2 · 061000 · first-pass outline",
-      "lead": "A self-adjoint operator H is positive semidefinite when its quadratic form is nonnegative on every vector.",
+      "title": "Positive operator order and min–max",
+      "lead": "Suppose 0≼H≼K are positive self-adjoint operators on the same finite-dimensional space.",
       "body": [
-        "That means the inner product of H x with x is at least zero for every x. For two self-adjoint operators H and K, we write H less than or equal to K in the Loewner order when K minus H is positive semidefinite. Equivalently, H's quadratic form is at most K's quadratic form on every vector. In the finite-dimensional self-adjoint setting, the min–max principle says that the ordered eigenvalues of H are at most the corresponding ordered eigenvalues of K whenever H is below K in this form order. Why? Choose any fixed trial subspace."
+        "For every nonzero vector, the Rayleigh quotient of H is no larger than the corresponding quotient of K. The Courant–Fischer formula computes each ordered eigenvalue by taking the same max-over-subspaces of a minimum Rayleigh quotient.",
+        "Because the pointwise inequality survives both optimization steps, λⱼ(H)≤λⱼ(K) for every j."
       ],
-      "layout": "reading"
+      "mathtex": "0\\preceq H\\preceq K\\ \\Longrightarrow\\ \\lambda_j(H)\\le\\lambda_j(K)",
+      "diagram": "g2-gram-order",
+      "takeaway": "Courant–Fischer transports form order to every eigenvalue.",
+      "layout": "equation",
+      "id": "01-00",
+      "eyebrow": "G2 · 061000 · Positive operator order and min–max"
     },
     {
-      "id": "02-overview",
-      "title": "Positive operators give singular-value comparisons",
-      "eyebrow": "G2 · 061000 · first-pass outline",
-      "lead": "Now suppose H and K are not just self-adjoint but both positive, with H less than or equal to K.",
+      "title": "Why positivity is essential",
+      "lead": "A positive operator has singular values equal to its nonnegative eigenvalues.",
       "body": [
-        "A positive operator's singular values equal its nonnegative eigenvalues, counted with multiplicity and arranged in decreasing order. The previous min–max argument therefore gives each singular value of H no larger than the corresponding singular value of K. Consequently all Ky Fan sums of H are no larger than those of K. Every symmetric gauge, and hence every unitarily invariant norm, gives H no larger a value than K. Notice the two positive hypotheses in the statement."
+        "Consequently the preceding eigenvalue monotonicity immediately gives σⱼ(H)≤σⱼ(K) when 0≼H≼K. For arbitrary self-adjoint matrices with negative eigenvalues, ordering the eigenvalues does not order their absolute values.",
+        "This is why the same statement cannot be applied blindly to singular values of indefinite self-adjoint matrices."
       ],
-      "layout": "reading"
+      "mathtex": "0\\preceq H\\preceq K\\ \\Longrightarrow\\ \\sigma_j(H)\\le\\sigma_j(K)",
+      "diagram": "g2-gram-order",
+      "takeaway": "Nonnegative spectrum connects eigenvalue order to singular-value order.",
+      "layout": "equation",
+      "id": "02-00",
+      "eyebrow": "G2 · 061000 · Why positivity is essential"
     },
     {
-      "id": "03-overview",
-      "title": "Apply the idea to rectangular maps",
-      "eyebrow": "G2 · 061000 · first-pass outline",
-      "lead": "Let A and B have the same finite-dimensional input space, but perhaps different output spaces.",
+      "title": "Apply the theorem to rectangular maps",
+      "lead": "Maps A:E→F and B:E→G may have different codomains; their Gram operators still act on the same source E.",
       "body": [
-        "We cannot compare A and B directly in a Loewner order because they may not even be square or self-adjoint. We can, however, compare their source Gram operators, A adjoint A and B adjoint B. Those are both positive endomorphisms of the same input space. Suppose that for every input vector x, the squared length of A x is at most the squared length of B x. By the adjoint identity, these squared lengths are the quadratic forms of A adjoint A and B adjoint B. Therefore the Gram operator of A is below the Gram operator of B in Loewner order. Apply the min–max theorem to the two positive Gram operators."
+        "If every input satisfies ||Ax||²≤||Bx||², then A*A≼B*B. Courant–Fischer orders the eigenvalues of these positive Gram matrices, and taking square roots orders their singular values.",
+        "No common output space or choice of output frames is needed to state the result."
       ],
-      "layout": "reading"
+      "mathtex": "A^*A\\preceq B^*B\\quad\\Longrightarrow\\quad\\sigma_j(A)\\le\\sigma_j(B)",
+      "diagram": "g2-gram-order",
+      "takeaway": "Gram order compares singular values even when target dimensions differ.",
+      "layout": "equation",
+      "id": "03-00",
+      "eyebrow": "G2 · 061000 · Apply the theorem to rectangular maps"
     },
     {
-      "id": "04-overview",
-      "title": "A rectangular numerical example",
-      "eyebrow": "G2 · 061000 · first-pass outline",
-      "lead": "Take A from two-dimensional space to three-dimensional space with first output column of length three along the first coordinate axis, and second column of length one along the second output axis.",
+      "title": "A rectangular numerical calculation",
+      "lead": "Let A:ℝ²→ℝ³ have orthogonal output columns of lengths three and one.",
       "body": [
-        "Take B to be a map with output lengths four and two on those same orthogonal input directions. Their source Gram matrices are diagonal: nine and one for A, sixteen and four for B. The difference is diagonal with entries seven and three, so it is positive. Therefore A adjoint A is below B adjoint B. The singular values of A are three and one. Those of B are four and two. The inequalities hold individually, and hence also for the operator, Frobenius, nuclear, and Ky Fan norms."
+        "Let B:ℝ²→ℝ⁴ have orthogonal output columns of lengths four and two. Then A*A=diag(9,1) and B*B=diag(16,4), so the difference is diag(7,3), which is positive.",
+        "The singular-value lists are (3,1) and (4,2), and the theorem gives both inequalities simultaneously."
       ],
-      "layout": "reading"
+      "mathtex": "\\operatorname{diag}(9,1)\\preceq\\operatorname{diag}(16,4),\\quad (3,1)\\le(4,2)",
+      "diagram": "g2-gram-order",
+      "takeaway": "The comparison works through a shared source even for different codomains.",
+      "layout": "equation",
+      "id": "04-00",
+      "eyebrow": "G2 · 061000 · A rectangular numerical calculation"
     },
     {
-      "id": "05-overview",
-      "title": "Why squaring a form inequality can fail",
-      "eyebrow": "G2 · 061000 · first-pass outline",
-      "lead": "There is another plausible but incorrect maneuver.",
+      "title": "Squaring a Loewner inequality can fail",
+      "lead": "For positive semidefinite matrices, H≼K does not generally imply H²≼K².",
       "body": [
-        "Suppose positive operators H and K satisfy H less than or equal to K. Can we square both sides and conclude H squared is below K squared? In general, no. Matrix multiplication is sensitive to noncommutativity, and the scalar observation that smaller nonnegative numbers have smaller squares does not automatically extend to noncommuting operators. We can make this failure completely explicit. Let H be the two-by-two diagonal matrix with entries one and zero. Let K have first row two, one, and second row one, one. First check positivity. H is positive."
+        "Take H=diag(1,0) and K=[[2,1],[1,1]]. The difference K−H=[[1,1],[1,1]] is positive, so H≼K. But K²−H²=[[4,3],[3,2]] has determinant 8−9=−1 and therefore is indefinite.",
+        "The failure comes from noncommutativity: scalar squaring does not preserve Loewner order for arbitrary positive matrices."
       ],
-      "layout": "reading"
+      "mathtex": "H\\preceq K\\quad\\not\\!\\Longrightarrow\\quad H^2\\preceq K^2",
+      "diagram": "g2-loewner-square",
+      "takeaway": "Do not square positive operator inequalities without an appropriate additional theorem.",
+      "layout": "equation",
+      "id": "05-00",
+      "eyebrow": "G2 · 061000 · Squaring a Loewner inequality can fail"
     },
     {
-      "id": "06-overview",
-      "title": "Trace inequalities versus singular-value inequalities",
-      "eyebrow": "G2 · 061000 · first-pass outline",
-      "lead": "If H and K are positive and H is below K, their difference is positive.",
+      "title": "Why the square-root method is legitimate",
+      "lead": "The rectangular singular-value comparison does not require squaring an arbitrary operator inequality.",
       "body": [
-        "The trace of a positive matrix is nonnegative, so trace H is at most trace K. This scalar trace inequality follows immediately from positivity and linearity. It is weaker than the complete eigenvalue comparison we obtained by min–max. For positive operators, the trace is the nuclear norm. Thus the trace comparison is one instance of an invariant-norm comparison. But trace control by itself does not imply operator-norm control. A matrix can have small total trace concentrated in one direction, while another has larger total trace spread across many directions."
+        "Instead, it starts with A*A≼B*B, applies eigenvalue min–max to those already-positive Gram operators, and then takes scalar square roots of the ordered nonnegative eigenvalues.",
+        "The scalar function t↦√t is increasing on nonnegative numbers. That elementary final step is safe and suffices for singular-value monotonicity."
       ],
-      "layout": "reading"
+      "mathtex": "\\lambda_j(A^*A)\\le\\lambda_j(B^*B)\\Longrightarrow\\sqrt{\\lambda_j(A^*A)}\\le\\sqrt{\\lambda_j(B^*B)}",
+      "diagram": "g2-gram-order",
+      "takeaway": "Scalar monotonicity after min–max is different from squaring matrices in Loewner order.",
+      "layout": "equation",
+      "id": "06-00",
+      "eyebrow": "G2 · 061000 · Why the square-root method is legitimate"
     },
     {
-      "id": "07-overview",
-      "title": "Prepare for the Sylvester equation",
-      "eyebrow": "G2 · 061000 · first-pass outline",
-      "lead": "Soon we will meet an operator equation that asks us to recover an unknown map from a difference of two compositions.",
+      "title": "A trace inequality is weaker information",
+      "lead": "If 0≼H≼K, the trace of K−H is nonnegative, so tr H≤tr K.",
       "body": [
-        "A spectral-gap assumption will allow us to bound that unknown by the known defect. The estimates will involve norms, including Frobenius and general unitarily invariant norms. To manipulate them safely, we must recognize when a hypothesis controls a quadratic form, when it controls singular values, and when a separate argument is required for an operator-norm bound. Today's Gram and min–max argument is one standard bridge between these languages. It is powerful precisely because its hypotheses and conclusions are explicit."
+        "This yields only one aggregate scalar comparison. Eigenvalue monotonicity is stronger: it controls every ordered eigenvalue separately and therefore all singular-value prefixes as well.",
+        "A proof that establishes only the trace inequality cannot automatically be cited as an entrywise eigenvalue theorem; Courant–Fischer provides the missing information."
       ],
-      "layout": "reading"
+      "mathtex": "H\\preceq K\\Longrightarrow\\operatorname{tr}H\\le\\operatorname{tr}K",
+      "diagram": "g2-gram-order",
+      "takeaway": "Trace comparison summarizes size, while min–max preserves each ordered spectral value.",
+      "layout": "equation",
+      "id": "07-00",
+      "eyebrow": "G2 · 061000 · A trace inequality is weaker information"
     },
     {
-      "id": "08-overview",
-      "title": "What to reconstruct",
-      "eyebrow": "G2 · 061000 · first-pass outline",
-      "lead": "Prove the eigenvalue monotonicity statement directly from Courant–Fischer.",
+      "title": "Where gap estimates enter later",
+      "lead": "Quadratic-form inequalities and singular values are tools for solving operator equations under spectral separation.",
       "body": [
-        "Then apply it to A adjoint A and B adjoint B to derive singular-value domination from inequalities of squared output lengths. Compute the singular values in the rectangular example. Verify every step in the two-by-two counterexample, including the positive difference K minus H and the negative determinant after squaring. Finally, explain why the negative-identity example defeats singular-value monotonicity for self-adjoint operators that are not positive."
+        "A Sylvester equation has the form AX−XB=C. A separation condition on the spectral sets of A and B creates a gap that allows us to bound X by C.",
+        "The same proof toolkit—positive operators, form order, and singular-value comparison—will transfer operator inequalities into norm bounds on spectral-subspace motion."
       ],
-      "layout": "reading"
+      "mathtex": "AX-XB=C",
+      "diagram": "g2-sylvester-bridge",
+      "takeaway": "Form order is one route from spectral separation to quantitative operator estimates.",
+      "layout": "equation",
+      "id": "08-00",
+      "eyebrow": "G2 · 061000 · Where gap estimates enter later"
     },
     {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 061000 · conclusion",
-      "lead": "Finally, explain why the negative-identity example defeats singular-value monotonicity for self-adjoint operators that are not positive.",
-      "body": [],
-      "layout": "reading"
+      "title": "Reconstruct both the theorem and the warning",
+      "lead": "Start from an inequality ||Ax||²≤||Bx||² holding for every common input.",
+      "body": [
+        "Translate it into source Gram order, apply Courant–Fischer, and take scalar square roots to obtain singular-value domination. Check the steps using the rectangular example with Gram matrices diag(9,1) and diag(16,4).",
+        "Then multiply out H=diag(1,0) and K=[[2,1],[1,1]] to see why the apparently similar operation of squaring a Loewner inequality fails."
+      ],
+      "diagram": "g2-loewner-square",
+      "takeaway": "A valid min–max comparison and an invalid operator squaring step must remain distinct.",
+      "layout": "figure",
+      "id": "09-00",
+      "eyebrow": "G2 · 061000 · Reconstruct both the theorem and the warning"
     }
   ]
 }

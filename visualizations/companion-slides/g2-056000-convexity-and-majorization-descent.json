@@ -2,132 +2,150 @@
   "schema_version": 1,
   "id": "g2-056000-convexity-and-majorization-descent",
   "title": "Convexity and majorization descent",
-  "subtitle": "G2 lecture 056000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 056000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:056000"
   ],
   "source_lecture": "draft-stages/tts-lectures/056000-convexity-and-majorization-descent.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Standalone slide treatment of the spoken lecture and display-only mathematical appendix; authored derivations, worked calculations and local SVG diagrams.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 056000 · first-pass outline",
-      "lead": "One list is weakly majorized by another when all of its leading partial sums are no larger.",
+      "title": "From list order to a norm inequality",
+      "lead": "Majorization is useful because convex symmetric measurements cannot increase when mass is redistributed more evenly.",
       "body": [
-        "If the full totals also agree, we call the relation ordinary majorization. Today we will explain why that ordering controls many measurements beyond prefix sums. The mechanism is convexity. When we average different arrangements of the same data, a convex measurement cannot increase. And when we decrease the sizes of coordinates, an appropriate absolute-value-invariant measurement cannot increase either."
+        "Let F be a convex function on real coordinate lists, unchanged by permutations. A two-coordinate averaging step replaces a vector by a convex combination of it and a coordinate swap.",
+        "Convexity bounds F at the average by the corresponding average of its endpoint values. Symmetry makes both endpoint values equal, so the averaging step cannot increase F."
       ],
-      "layout": "opening"
+      "diagram": "g2-convex-transfer",
+      "takeaway": "Convexity and symmetry make every coordinate-mixing step non-expansive.",
+      "layout": "opening",
+      "id": "00-00",
+      "eyebrow": "G2 · 056000 · From list order to a norm inequality"
     },
     {
-      "id": "01-overview",
-      "title": "Convexity as a usable inequality",
-      "eyebrow": "G2 · 056000 · first-pass outline",
-      "lead": "Take a function F on a finite-dimensional real vector space.",
+      "title": "The two-coordinate transfer",
+      "lead": "Fix a pair of entries and interchange them with a swap π.",
       "body": [
-        "It is convex if, for any two vectors u and v and any number t between zero and one, the value of F at the weighted average of u and v is no larger than the same weighted average of F at u and F at v. One simple example is Euclidean length. Averaging two vectors cannot produce a length greater than the corresponding average of their lengths. That is a form of the triangle inequality. Another example is the sum of the squares of the coordinates. That function is convex too, although it is not itself a norm, because scaling by two multiplies it by four rather than two. A third example is the largest absolute coordinate."
+        "For 0≤t≤1, the vector (1−t)q+tπq preserves the pair’s sum. Choosing t=1/2 replaces both entries by their mean. Each mixed entry lies between the original two values.",
+        "For example (5,1) averages with (1,5) to give (3,3). This keeps total mass at six while decreasing the quadratic spread from 26 to 18."
       ],
-      "layout": "reading"
+      "mathtex": "\\tfrac12(5,1)+\\tfrac12(1,5)=(3,3)",
+      "diagram": "g2-majorization-transfer",
+      "takeaway": "A T-transform is a convex combination of a list and a two-coordinate swap.",
+      "layout": "equation",
+      "id": "01-00",
+      "eyebrow": "G2 · 056000 · The two-coordinate transfer"
     },
     {
-      "id": "02-overview",
-      "title": "What symmetry contributes",
-      "eyebrow": "G2 · 056000 · first-pass outline",
-      "lead": "Call a measurement symmetric if swapping coordinates never changes its value.",
+      "title": "Why repeated transfers suffice",
+      "lead": "Suppose x is majorized by y and their totals agree.",
       "body": [
-        "We also want it to be insensitive to changing the sign of any individual coordinate. For nonnegative singular-value lists, the sign changes are invisible in the inputs, but they become useful in proofs involving coordinate shrinkage. A norm with these two invariances is a symmetric gauge. The Euclidean norm, the sum of absolute coordinates, and the largest absolute coordinate are all examples. Suppose we begin with the list five, one. Swap the two coordinates to get one, five. If F is symmetric, both lists have the same F value. Now average the two lists with equal weights. The result is three, three."
+        "A constructive finite-dimensional proof chooses the first coordinate where a current list differs from x, mixes it with a suitable later coordinate, and makes that entry agree while maintaining the relevant prefix bounds.",
+        "Each step can reduce the number of mismatched coordinates. After finitely many steps the current list reaches x; since F never increases along a step, F(x)≤F(y)."
       ],
-      "layout": "reading"
+      "mathtex": "x\\prec y\\quad\\Longrightarrow\\quad F(x)\\le F(y)",
+      "diagram": "g2-convex-transfer",
+      "takeaway": "Finite transfer descent converts majorization into convex-function domination.",
+      "layout": "equation",
+      "id": "02-00",
+      "eyebrow": "G2 · 056000 · Why repeated transfers suffice"
     },
     {
-      "id": "03-overview",
-      "title": "Allow a partial transfer",
-      "eyebrow": "G2 · 056000 · first-pass outline",
-      "lead": "A more general operation averages a list with a copy obtained by swapping two coordinates.",
+      "title": "Weak majorization needs one more operation",
+      "lead": "Averaging coordinates preserves total mass, but weak majorization permits a smaller total.",
       "body": [
-        "We can give the original list weight one minus t and the swapped list weight t, where t lies between zero and one. For two entries a and b, the resulting pair is a weighted mixture of a and b in both positions. The total remains a plus b. If t lies between zero and one half, the larger and smaller entries move toward each other without crossing. If t is greater than one half, they pass each other; this is still a convex mixture with a swap, and the same convexity argument applies. Because the two endpoint lists have equal F value, the mixture cannot have a larger F value."
+        "When x≺_w y, one can first reach an intermediate nonnegative list by permitted mixing and then shrink some coordinates to reach the smaller target list. The new operation must also be non-expansive for F.",
+        "Permutation symmetry alone does not control shrinking. An absolute or sign symmetry, combined with convexity, supplies the missing inequality."
       ],
-      "layout": "reading"
+      "diagram": "g2-convex-transfer",
+      "takeaway": "Weak majorization adds coordinate shrinking to mass-preserving transfers.",
+      "layout": "figure",
+      "id": "03-00",
+      "eyebrow": "G2 · 056000 · Weak majorization needs one more operation"
     },
     {
-      "id": "04-overview",
-      "title": "The finite transfer descent",
-      "eyebrow": "G2 · 056000 · first-pass outline",
-      "lead": "Suppose x and y are sorted nonnegative lists, x is majorized by y, and their totals agree.",
+      "title": "Sign symmetry proves coordinate-shrink monotonicity",
+      "lead": "Let q’ be obtained from q by changing one coordinate t·qⱼ for 0≤t≤1.",
       "body": [
-        "We want to begin at y and reach x by finitely many mixing operations. A constructive proof tracks where the current list, call it q, differs from the target x. At the beginning q is y. If q already equals x, we have finished. Otherwise, find a coordinate where q is larger than x and a later coordinate where q is smaller than x. The prefix-sum inequalities ensure that such a surplus and deficit can be paired in a suitable order. Transfer enough mass from the surplus coordinate toward the deficit coordinate to make at least one of the two match its target value exactly."
+        "The shrunk list is a convex combination of q and the list with the jth sign flipped, with weights (1+t)/2 and (1−t)/2.",
+        "If F is convex and invariant under that sign flip, its value cannot increase. Applying this one coordinate at a time proves monotonicity on the nonnegative orthant."
       ],
-      "layout": "reading"
+      "mathtex": "tq_j=\\tfrac{1+t}{2}q_j+\\tfrac{1-t}{2}(-q_j)",
+      "diagram": "g2-convex-transfer",
+      "takeaway": "Sign symmetry is exactly what makes coordinate shrinkage non-expansive.",
+      "layout": "equation",
+      "id": "04-00",
+      "eyebrow": "G2 · 056000 · Sign symmetry proves coordinate-shrink monotonicity"
     },
     {
-      "id": "05-overview",
-      "title": "What changes for weak majorization?",
-      "eyebrow": "G2 · 056000 · first-pass outline",
-      "lead": "Weak majorization permits loss of total mass.",
+      "title": "The weak-majorization comparison theorem",
+      "lead": "Combine T-transform descent with shrinking to cover all weakly majorized nonnegative lists.",
       "body": [
-        "A transfer alone preserves total mass, so it cannot explain the whole theorem. The missing operation is coordinate shrinkage. If one nonnegative list is coordinatewise at most another, an absolute-value-invariant convex gauge cannot increase when we replace the larger list by the smaller one. Let's prove that instead of assuming it. Consider a single coordinate of a vector q, and suppose we want to replace its value by a multiple between zero and one of its current value. We can obtain the desired smaller value by averaging q with the vector obtained by changing just that coordinate's sign."
+        "For a convex function invariant under coordinate permutations and sign changes, any list x weakly majorized by y satisfies F(x)≤F(y). Symmetric gauges are norms with precisely these invariances.",
+        "The theorem is the reason that control of every Ky Fan sum automatically controls every unitarily invariant norm of a matrix."
       ],
-      "layout": "reading"
+      "mathtex": "x\\prec_w y\\quad\\Longrightarrow\\quad\\phi(x)\\le\\phi(y)",
+      "diagram": "g2-majorization-bars",
+      "takeaway": "Every symmetric gauge respects weak majorization.",
+      "layout": "equation",
+      "id": "05-00",
+      "eyebrow": "G2 · 056000 · The weak-majorization comparison theorem"
     },
     {
-      "id": "06-overview",
-      "title": "A familiar numerical consequence",
-      "eyebrow": "G2 · 056000 · first-pass outline",
-      "lead": "Take x equal to three, three, and y equal to five, one.",
+      "title": "A numerical convexity check",
+      "lead": "Consider x=(3,3) and y=(5,1); the two lists have equal totals.",
       "body": [
-        "We checked that x is majorized by y. For the Euclidean norm, x has squared length eighteen, while y has squared length twenty-six. So the Euclidean norm of x is smaller. For the sum of absolute coordinates, both values are six. That measurement responds to total mass but does not distinguish different distributions of the same nonnegative total. For the largest absolute coordinate, x has value three and y has value five. This measurement is especially sensitive to concentration in a single coordinate. All three comparisons are consequences of the same majorization relation, even though the measurements look different."
+        "The Euclidean norms satisfy ||x||₂=√18 and ||y||₂=√26. The nuclear-style ℓ₁ sum equals six on both. The ℓ∞ values are three and five.",
+        "Different symmetric convex gauges measure different aspects of the spread, but all agree on the direction of the majorization comparison."
       ],
-      "layout": "reading"
+      "mathtex": "\\|(3,3)\\|_2=\\sqrt{18}<\\sqrt{26}=\\|(5,1)\\|_2",
+      "diagram": "g2-majorization-transfer",
+      "takeaway": "Convex symmetric norms can respond differently while preserving the same ordering.",
+      "layout": "equation",
+      "id": "06-00",
+      "eyebrow": "G2 · 056000 · A numerical convexity check"
     },
     {
-      "id": "07-overview",
-      "title": "Why convexity cannot be omitted",
-      "eyebrow": "G2 · 056000 · first-pass outline",
-      "lead": "Consider a quantity obtained by taking square roots of nonnegative coordinates, summing them, and then squaring the result.",
+      "title": "Convexity cannot be dropped",
+      "lead": "For exponent p below one, the expression (Σ|xᵢ|ᵖ)^{1/p} is not a norm.",
       "body": [
-        "This is the formula that resembles an ell-p gauge with an exponent below one. For three, three, the value is twelve. For five, one, it is six plus two times the square root of five, which is a little under ten and a half. The inequality goes in the opposite direction from what we proved for convex symmetric gauges. That is not a contradiction. This measurement lacks the convexity needed for our theorem. In fact, an equalizing transfer can increase it. Likewise, a convex function that singles out one labeled coordinate is not necessarily invariant under permutations."
+        "Take p=1/2. For (3,3), the resulting quantity is (2√3)²=12. For (5,1), it is (√5+1)²≈10.47, reversing the desired comparison despite (3,3)≺(5,1).",
+        "The counterexample pinpoints why the convexity assumption in the gauge-dominance theorem is substantive."
       ],
-      "layout": "reading"
+      "mathtex": "(2\\sqrt3)^2=12>(\\sqrt5+1)^2",
+      "diagram": "g2-convex-transfer",
+      "takeaway": "A symmetric non-convex measurement may reverse majorization inequalities.",
+      "layout": "equation",
+      "id": "07-00",
+      "eyebrow": "G2 · 056000 · Convexity cannot be dropped"
     },
     {
-      "id": "08-overview",
-      "title": "Connect the theorem to operators",
-      "eyebrow": "G2 · 056000 · first-pass outline",
-      "lead": "For matrices, a gauge of singular values gives a measurement of the matrix itself.",
+      "title": "Transfer the result to matrix norms",
+      "lead": "A unitarily invariant matrix norm is a symmetric gauge applied to the singular values.",
       "body": [
-        "We already know that changing orthonormal input or output coordinates leaves singular values unchanged. So any symmetric gauge applied to singular values automatically has that unitary invariance. The majorization-descent theorem supplies a powerful comparison principle. If every Ky Fan sum of A is at most the corresponding sum for B, then every convex symmetric gauge of the singular values of A is at most the same gauge of B. This explains why the Ky Fan sums are a useful collection of tests."
+        "If σ(A)≺_w σ(B), the gauge comparison gives ||A||Φ≤||B||Φ. We no longer need to prove the bound separately for Frobenius, nuclear, operator, and every Ky Fan norm.",
+        "This is the key bridge from singular-value prefix estimates to the family of norms in Davis–Kahan perturbation theorems."
       ],
-      "layout": "reading"
+      "mathtex": "\\sigma(A)\\prec_w\\sigma(B)\\ \\Longrightarrow\\ \\|A\\|_\\Phi\\le\\|B\\|_\\Phi",
+      "diagram": "g2-majorization-bars",
+      "takeaway": "One prefix-sum proof can dominate an entire invariant-norm family.",
+      "layout": "equation",
+      "id": "08-00",
+      "eyebrow": "G2 · 056000 · Transfer the result to matrix norms"
     },
     {
-      "id": "09-overview",
-      "title": "What to reconstruct",
-      "eyebrow": "G2 · 056000 · first-pass outline",
-      "lead": "Prove the two-coordinate mixing inequality for a convex permutation-invariant function.",
+      "title": "Rebuild the descent argument",
+      "lead": "Prove the comparison by checking the two allowed elementary operations.",
       "body": [
-        "Prove the one-coordinate shrinkage inequality using an average with a sign-flipped vector. Then identify the termination measure in the transfer descent: how many coordinates still disagree with the target? Explain why strict decrease matters. Finally, calculate the three gauges of three, three and five, one, and explain the reversed comparison for the exponent below one. We now know how an inequality about all prefix sums can control a broad family of convex spectral measurements."
+        "For a coordinate swap π, apply convexity to the mixture with πq. For a coordinate shrink, write it as a mixture with a sign-flipped vector. Each operation reduces or preserves the gauge.",
+        "A finite sequence of these operations realizes weak majorization and yields the general inequality. The constructive proof explains the assumptions and their separate roles."
       ],
-      "layout": "reading"
-    },
-    {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 056000 · mathematical reference",
-      "lead": "Prove the two-coordinate mixing inequality for a convex permutation-invariant function.",
-      "body": [
-        "Prove the one-coordinate shrinkage inequality using an average with a sign-flipped vector. Then identify the termination measure in the transfer descent: how many coordinates still disagree with the target? Explain why strict decrease matters."
-      ],
-      "mathtex": "F((1-t)q+t\\pi q)\\le (1-t)F(q)+tF(\\pi q)=F(q),\\quad 0\\le t\\le1,",
-      "layout": "equation"
-    },
-    {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 056000 · conclusion",
-      "lead": "We now know how an inequality about all prefix sums can control a broad family of convex spectral measurements.",
-      "body": [],
-      "layout": "reading"
+      "diagram": "g2-convex-transfer",
+      "takeaway": "Convexity, permutation symmetry, and sign symmetry each handle a precise step.",
+      "layout": "figure",
+      "id": "09-00",
+      "eyebrow": "G2 · 056000 · Rebuild the descent argument"
     }
   ]
 }

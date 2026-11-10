@@ -2,122 +2,148 @@
   "schema_version": 1,
   "id": "g2-055000-majorization-and-weak-majorization",
   "title": "Majorization and weak majorization",
-  "subtitle": "G2 lecture 055000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 055000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:055000"
   ],
   "source_lecture": "draft-stages/tts-lectures/055000-majorization-and-weak-majorization.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Standalone slide treatment of the spoken lecture and display-only mathematical appendix; authored derivations, worked calculations and local SVG diagrams.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 055000 · first-pass outline",
-      "lead": "A pair of matrices can defeat a tempting entrywise rule about singular values: the second singular value of a sum can exceed the sum of the two second singular values.",
+      "title": "Comparing sorted lists",
+      "lead": "Majorization compares the distribution of mass across a list rather than asking for componentwise domination.",
       "body": [
-        "Nevertheless, every cumulative sum of the largest singular values obeys a triangle inequality. That observation suggests an ordering on lists of numbers. Instead of comparing the first entries, then the second entries, one at a time, compare their running totals. This is majorization. It is a useful language for stating how one spectrum is more concentrated than another."
+        "Sort x and y into decreasing nonnegative order and pad with zeros to the same finite length. A weak-majorization comparison asks that every prefix of x has no more mass than the corresponding prefix of y.",
+        "This is exactly the language naturally produced by Ky Fan inequalities for singular values. It lets two lists be compared even when some individual coordinates move in opposite directions."
       ],
-      "layout": "opening"
+      "diagram": "g2-majorization-bars",
+      "takeaway": "Weak majorization is a family of sorted partial-sum inequalities.",
+      "layout": "opening",
+      "id": "00-00",
+      "eyebrow": "G2 · 055000 · Comparing sorted lists"
     },
     {
-      "id": "01-overview",
-      "title": "Begin with sorted nonnegative lists",
-      "eyebrow": "G2 · 055000 · first-pass outline",
-      "lead": "Take two lists, each containing n numbers, called x and y.",
+      "title": "Ordinary majorization also preserves the total",
+      "lead": "Adding equality of the full totals strengthens weak majorization to majorization.",
       "body": [
-        "Sort each in decreasing order. If the lists originally had different lengths, append zeros to the shorter one. Adding zero singular values does not change a linear map's existing singular values or its positive Ky Fan sums. For any positive integer k up to n, add the first k entries of x. Call the result the k-th prefix sum of x. Do the same for y. We say x is weakly majorized by y when every prefix sum of x is at most the corresponding prefix sum of y. Notice the word every. Comparing only the first entry checks the largest value, but it does not control how many large values appear."
+        "The example x=(3,3,0) and y=(5,1,0) satisfies prefix comparisons 3≤5, 6=6, and 6=6. Thus x is majorized by y. It is a more balanced allocation of the same mass.",
+        "If the totals differ, ordinary majorization does not apply even if every prefix comparison holds. The weaker relation is still meaningful and is the one needed for many norm inequalities."
       ],
-      "layout": "reading"
+      "mathtex": "x\\prec y\\iff x\\prec_w y\\ \\text{and}\\ \\sum_ix_i=\\sum_i y_i",
+      "diagram": "g2-majorization-bars",
+      "takeaway": "Equal total mass distinguishes ordinary from weak majorization.",
+      "layout": "equation",
+      "id": "01-00",
+      "eyebrow": "G2 · 055000 · Ordinary majorization also preserves the total"
     },
     {
-      "id": "02-overview",
-      "title": "What makes ordinary majorization stronger?",
-      "eyebrow": "G2 · 055000 · first-pass outline",
-      "lead": "Ordinary majorization adds one requirement: the full totals of the two lists must agree.",
+      "title": "Every prefix is needed",
+      "lead": "An inequality on the total sum alone cannot determine which list is more concentrated.",
       "body": [
-        "Equivalently, every proper prefix sum of x is at most the corresponding prefix sum of y, and the total sums are equal. The pair three, three and five, one satisfies this stronger relation. The pair two, one and three, three satisfies only the weak relation. One can think of ordinary majorization as redistributing a fixed quantity. The list five, one concentrates more of its total in the largest coordinate. The list three, three distributes the same total more evenly. In contrast, weak majorization also allows the total quantity to decrease."
+        "For x=(4,1,1) and y=(3,3,0), both totals are six, but x has a larger first prefix (4>3), while y has a larger second prefix (6>5). Neither list majorizes the other.",
+        "This example illustrates why the definition requires all k, not only k=1 or k=n: intermediate prefixes carry independent information."
       ],
-      "layout": "reading"
+      "diagram": "g2-majorization-bars",
+      "takeaway": "Equal totals do not imply comparable sorted lists.",
+      "layout": "figure",
+      "id": "02-00",
+      "eyebrow": "G2 · 055000 · Every prefix is needed"
     },
     {
-      "id": "03-overview",
-      "title": "Derive a weighted comparison from the prefixes",
-      "eyebrow": "G2 · 055000 · first-pass outline",
-      "lead": "Suppose x is weakly majorized by y.",
+      "title": "Summation by parts converts prefixes into weights",
+      "lead": "Suppose the weights a₁≥···≥aₙ≥0 are decreasing.",
       "body": [
-        "Choose another list of weights, also arranged in decreasing order, and assume the weights are nonnegative. We claim that the weighted sum of x is at most the weighted sum of y. The weighted inequality is the step that converts prefix-sum control into many matrix norm bounds. Write delta k for the prefix sum of y minus the prefix sum of x, through position k. By weak majorization, every delta is nonnegative. Now look at the weighted difference: the sum of each weight times the corresponding entry of y minus x. We can reorganize it. The first prefix difference, delta one, is multiplied by the drop from the first weight to the second."
+        "Write each coordinate as a difference of consecutive prefix sums. Collecting terms rewrites the weighted difference between y and x as nonnegative differences of their prefix sums multiplied by nonnegative differences of the weights.",
+        "If x is weakly majorized by y, every term in this expansion is nonnegative. This proves weighted domination without requiring coordinatewise comparison."
       ],
-      "layout": "reading"
+      "mathtex": "\\sum_i a_i(y_i-x_i)=\\sum_{k<n}(a_k-a_{k+1})\\Delta S_k+a_n\\Delta S_n",
+      "diagram": "g2-majorization-weights",
+      "takeaway": "Decreasing nonnegative weights preserve weak-majorization order.",
+      "layout": "equation",
+      "id": "03-00",
+      "eyebrow": "G2 · 055000 · Summation by parts converts prefixes into weights"
     },
     {
-      "id": "04-overview",
-      "title": "A numerical weighted example",
-      "eyebrow": "G2 · 055000 · first-pass outline",
-      "lead": "Return to x equal to three, three, zero, and y equal to five, one, zero.",
+      "title": "A weighted numerical example",
+      "lead": "Take x=(3,3,0), y=(5,1,0), and weights a=(4,2,1).",
       "body": [
-        "Use decreasing weights four, two, one. The weighted sum for x is twelve plus six, giving eighteen. For y it is twenty plus two, giving twenty-two. The inequality points in the expected direction. The prefix differences are two, zero, zero. The first weight drop is two. So summation by parts gives a difference of two times two, or four. That matches twenty-two minus eighteen. What if we use weights zero, one, zero, which are not decreasing? The weighted sum for x becomes three, while that for y becomes one. The inequality reverses. So the decreasing-weight hypothesis was doing actual work."
+        "The x-weighted sum equals 4·3+2·3=18; the y-weighted sum equals 4·5+2·1=22. Their difference is four.",
+        "The prefix gaps are (2,0,0). The weight differences are (2,1) and the final weight is 1; the summation-by-parts formula gives 2·2+1·0+1·0=4, matching the direct computation."
       ],
-      "layout": "reading"
+      "mathtex": "4\\cdot3+2\\cdot3=18\\le22=4\\cdot5+2\\cdot1",
+      "diagram": "g2-majorization-weights",
+      "takeaway": "The numerical calculation exposes the exact role of the first prefix gap.",
+      "layout": "equation",
+      "id": "04-00",
+      "eyebrow": "G2 · 055000 · A weighted numerical example"
     },
     {
-      "id": "05-overview",
-      "title": "Transfer mass between two coordinates",
-      "eyebrow": "G2 · 055000 · first-pass outline",
-      "lead": "There is a geometric way to produce majorized lists.",
+      "title": "A transfer evens out two coordinates",
+      "lead": "Moving some mass from a larger coordinate to a smaller one preserves the total but makes the list less concentrated.",
       "body": [
-        "Start with two entries a and b, with a at least b. Move some quantity from the larger entry to the smaller, stopping before they cross each other. The total is unchanged, and their difference becomes smaller. For example, start with five and one. Move two from the first entry to the second. We arrive at three and three. This is the simplest equalizing transfer. The operation can also be written as an average between the original list and the list obtained by swapping those two entries. In this example, three, three is one half of five, one plus one half of one, five. Such an operation is often called a T-transform."
+        "Starting from (5,1), moving two units from the first entry to the second gives (3,3). Algebraically this is averaging a vector with its coordinate-swapped copy.",
+        "Such two-coordinate transfers generate ordinary majorization in finite dimensions. They also provide a constructive route to the convexity comparison in the next lecture."
       ],
-      "layout": "reading"
+      "mathtex": "(3,3)=\\tfrac12(5,1)+\\tfrac12(1,5)",
+      "diagram": "g2-majorization-transfer",
+      "takeaway": "Pairwise averaging is the geometric mechanism behind ordinary majorization.",
+      "layout": "equation",
+      "id": "05-00",
+      "eyebrow": "G2 · 055000 · A transfer evens out two coordinates"
     },
     {
-      "id": "06-overview",
-      "title": "Apply the definition to singular values",
-      "eyebrow": "G2 · 055000 · first-pass outline",
-      "lead": "For a linear map A, collect its singular values in decreasing order.",
+      "title": "Singular values translate matrix inequalities into list inequalities",
+      "lead": "For any matrix A, the k largest singular values form the kth Ky Fan sum.",
       "body": [
-        "Every Ky Fan sum is precisely a prefix sum of that list. So the statement that every Ky Fan sum of A is at most the corresponding Ky Fan sum of B says exactly that the singular-value list of A is weakly majorized by that of B, after appending zeros if necessary. This gives us a compact mathematical summary. For maps A and B of the same size, the singular-value list of A plus B is weakly majorized by the componentwise sum of the singular-value lists of A and B. Both lists on the right are already decreasing, so their componentwise sum is decreasing too."
+        "Therefore Kₖ(A)≤Kₖ(B) for every k is exactly the statement σ(A)≺_w σ(B), after matching lengths by zeros. This is a powerful compression of infinitely many potential norm arguments into one list comparison.",
+        "We can use it for pinching, triangular estimates, and comparisons between operator measurements without checking each gauge separately."
       ],
-      "layout": "reading"
+      "mathtex": "\\bigl[\\forall k,\\ K_k(A)\\le K_k(B)\\bigr]\\iff\\sigma(A)\\prec_w\\sigma(B)",
+      "diagram": "g2-kyfan-staircase",
+      "takeaway": "Ky Fan domination and weak majorization are the same data in two notations.",
+      "layout": "equation",
+      "id": "06-00",
+      "eyebrow": "G2 · 055000 · Singular values translate matrix inequalities into list inequalities"
     },
     {
-      "id": "07-overview",
-      "title": "Check the limits of the definition",
-      "eyebrow": "G2 · 055000 · first-pass outline",
-      "lead": "A weak-majorization comparison must use sorted lists.",
+      "title": "Limits of the definition",
+      "lead": "Sorting and common length are essential parts of the comparison.",
       "body": [
-        "If you compare unsorted entries in their written order, the running sums depend on how someone happened to label coordinates. The same finite-length convention matters too. When two operators have different source and target dimensions, we will make their lists comparable by padding with zeros. Zero padding preserves every original singular value and makes the partial sums comparable; it is the appropriate convention when the rectangular source and target dimensions differ. And our nonnegativity hypothesis is deliberate. It is automatic for singular values but not for eigenvalues of arbitrary self-adjoint operators."
+        "A list written in an arbitrary coordinate order can have prefix sums that change under relabeling; those are not the invariants majorization studies. Negative coordinates also require a more careful general definition than the nonnegative singular-value version used here.",
+        "When working with rectangular matrices, pad the shorter singular-value list by zeros and sort both lists before comparing. That makes the statement independent of matrix coordinates and shape conventions."
       ],
-      "layout": "reading"
+      "diagram": "g2-majorization-bars",
+      "takeaway": "Sort, pad with zeros, and specify whether the totals must agree.",
+      "layout": "figure",
+      "id": "07-00",
+      "eyebrow": "G2 · 055000 · Limits of the definition"
     },
     {
-      "id": "08-overview",
-      "title": "What to reconstruct",
-      "eyebrow": "G2 · 055000 · first-pass outline",
-      "lead": "Given two decreasing nonnegative lists, compute every prefix and decide whether weak or ordinary majorization holds.",
+      "title": "Weak and ordinary majorization play different roles",
+      "lead": "Concentration comparisons usually preserve total mass; norm domination often does not.",
       "body": [
-        "Explain why comparing only their totals is insufficient. Next, prove the summation-by-parts identity by expanding the coefficients of each entry difference. Use it to prove the decreasing-nonnegative-weight comparison. Then verify the two T-transforms taking six, zero, zero to three, two, one. Finally, restate the Ky Fan triangle inequality as a weak-majorization statement about singular-value lists."
+        "Ordinary majorization supports the picture of repeated two-coordinate transfers because those preserve sums. Weak majorization also allows reductions in total mass, so its constructive description requires coordinatewise shrinking as well.",
+        "That extra step explains why sign invariance joins convexity and permutation symmetry in the norm-dominance theorem that follows."
       ],
-      "layout": "reading"
+      "diagram": "g2-majorization-transfer",
+      "takeaway": "Weak majorization adds the possibility of loss of total mass.",
+      "layout": "figure",
+      "id": "08-00",
+      "eyebrow": "G2 · 055000 · Weak and ordinary majorization play different roles"
     },
     {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 055000 · mathematical reference",
-      "lead": "Given two decreasing nonnegative lists, compute every prefix and decide whether weak or ordinary majorization holds.",
+      "title": "Reconstruct the comparison",
+      "lead": "Start from two decreasing nonnegative lists and compare each prefix.",
       "body": [
-        "Explain why comparing only their totals is insufficient. Next, prove the summation-by-parts identity by expanding the coefficients of each entry difference. Use it to prove the decreasing-nonnegative-weight comparison."
+        "Then derive the weighted summation-by-parts identity using telescoping sums. Check it on x=(3,3,0), y=(5,1,0), with weights (4,2,1).",
+        "Finally, translate a Ky Fan inequality for matrices into a weak-majorization statement about their singular values. The complete argument uses only sorted prefixes and elementary sums."
       ],
-      "mathtex": "S_k(x)=\\sum_{i=1}^k x_i,\\qquad\nx\\prec_w y\\iff S_k(x)\\le S_k(y)\\ (1\\le k\\le n),",
-      "layout": "equation"
-    },
-    {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 055000 · conclusion",
-      "lead": "Finally, restate the Ky Fan triangle inequality as a weak-majorization statement about singular-value lists.",
-      "body": [],
-      "layout": "reading"
+      "diagram": "g2-majorization-weights",
+      "takeaway": "Prefix inequalities are the reusable unit of spectral norm comparison.",
+      "layout": "figure",
+      "id": "09-00",
+      "eyebrow": "G2 · 055000 · Reconstruct the comparison"
     }
   ]
 }

@@ -2,132 +2,150 @@
   "schema_version": 1,
   "id": "g2-057000-schatten-and-frobenius-norms",
   "title": "Schatten and Frobenius norms",
-  "subtitle": "G2 lecture 057000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 057000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:057000"
   ],
   "source_lecture": "draft-stages/tts-lectures/057000-schatten-and-frobenius-norms.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Standalone slide treatment of the spoken lecture and display-only mathematical appendix; authored derivations, worked calculations and local SVG diagrams.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 057000 · first-pass outline",
-      "lead": "A linear map has several natural notions of size.",
+      "title": "One operator, several notions of size",
+      "lead": "Schatten norms turn the singular-value list of a map into familiar ℓₚ measurements.",
       "body": [
-        "If we care about its largest effect on a unit input, we use the operator norm. If we care about its total squared action on an orthonormal collection of inputs, we use the Frobenius norm. If we want the sum of all singular values, we use the nuclear norm. Operator norm, Frobenius norm, nuclear norm, and other sums of powers of singular values belong to one family: the Schatten norms. Singular-value decomposition and majorization let us derive their formulas, compare them, and explain their triangle inequalities. The central idea is simple."
+        "For a finite-dimensional map A:E→F, choose its nonnegative singular values. The Schatten p norm aggregates their pth powers, while the endpoint p=∞ keeps only the largest one.",
+        "The key examples are the nuclear norm at p=1, the Hilbert–Schmidt or Frobenius norm at p=2, and the operator norm at p=∞. They have different interpretations but depend on the same invariant singular-value data."
       ],
-      "layout": "opening"
+      "diagram": "g2-schatten-profile",
+      "takeaway": "Schatten norms are ℓₚ norms of singular values.",
+      "layout": "opening",
+      "id": "00-00",
+      "eyebrow": "G2 · 057000 · One operator, several notions of size"
     },
     {
-      "id": "01-overview",
-      "title": "Start from the singular values",
-      "eyebrow": "G2 · 057000 · first-pass outline",
-      "lead": "Let A map a finite-dimensional real or complex inner-product space E into another one F.",
+      "title": "A rectangular worked example",
+      "lead": "Take A from ℝ² to ℝ³ with columns (3,0,0) and (0,4,0).",
       "body": [
-        "Write its singular values in decreasing order, with zeros included when needed. There are as many right singular directions as the dimension of E; the positive singular values number at most the smaller dimension. Choose a real exponent p at least one and finite. Raise each singular value to the p-th power, add the results, and take the p-th root. That gives the Schatten p norm of A. For p equal to one, nothing is squared. We simply add all singular values. This is the nuclear norm, also called the trace norm. For p equal to two, we add the squares of the singular values and take a square root."
+        "The source Gram matrix is diag(9,16), so the singular values are four and three. Consequently the nuclear norm is seven, the Frobenius norm is five, and the operator norm is four.",
+        "For p=4 the norm is the fourth root of 4⁴+3⁴=337. There is no requirement that A be square: its stretching is still completely described by those two values."
       ],
-      "layout": "reading"
+      "mathtex": "\\|A\\|_{S_1}=7,\\quad\\|A\\|_{S_2}=5,\\quad\\|A\\|_{S_\\infty}=4",
+      "diagram": "g2-schatten-profile",
+      "takeaway": "One rectangular matrix produces several consistent but different size measurements.",
+      "layout": "equation",
+      "id": "01-00",
+      "eyebrow": "G2 · 057000 · A rectangular worked example"
     },
     {
-      "id": "02-overview",
-      "title": "A single example, four measurements",
-      "eyebrow": "G2 · 057000 · first-pass outline",
-      "lead": "Take a map from two-dimensional real space to three-dimensional real space.",
+      "title": "Frobenius norm is the total column energy",
+      "lead": "Choose any orthonormal basis (eᵢ) of the source space.",
       "body": [
-        "Its first column is three times the first output coordinate vector, and its second column is four times the second output coordinate vector. The third output coordinate is always zero. The right singular directions are the two input coordinate axes. The singular values are four and three, arranged from largest to smallest. The nuclear norm is four plus three, which equals seven. The Frobenius norm is the square root of sixteen plus nine, so it equals five. The operator norm is four."
+        "Adding ||Aeᵢ||² over the basis gives the trace of the source Gram operator A* A. The trace also equals the sum of the eigenvalues of A* A, which are the squared singular values.",
+        "This proves the Frobenius formula without assuming that the basis consists of singular vectors and explains why the result is coordinate invariant."
       ],
-      "layout": "reading"
+      "mathtex": "\\|A\\|_{S_2}^{2}=\\sum_i\\|Ae_i\\|^2=\\operatorname{tr}(A^*A)=\\sum_i\\sigma_i^2",
+      "diagram": "g2-frobenius-columns",
+      "takeaway": "The Frobenius norm aggregates squared output lengths over any orthonormal input basis.",
+      "layout": "equation",
+      "id": "02-00",
+      "eyebrow": "G2 · 057000 · Frobenius norm is the total column energy"
     },
     {
-      "id": "03-overview",
-      "title": "Derive the Frobenius formula from columns",
-      "eyebrow": "G2 · 057000 · first-pass outline",
-      "lead": "Choose any orthonormal basis of the source space E.",
+      "title": "The trace-norm identity",
+      "lead": "The modulus |A| is the positive square root of A* A.",
       "body": [
-        "Apply A to each basis vector, take the squared length of each output, and add these squared lengths. We claim that the result is the sum of the squares of all singular values. First prove it for a particularly convenient basis: the right singular-vector basis. The image of each basis vector has length equal to its singular value. So the sum of squared output lengths is exactly the sum of singular values squared. But why does the answer stay the same for a different orthonormal basis? Let G denote the Gram operator A adjoint followed by A. For every input vector e, the squared output length of A e equals the inner product of G e with e."
+        "Its eigenvalues are the singular values, so its trace is their sum. This gives the nuclear norm ||A||S₁=tr|A| even for a rectangular A, because |A| acts on the source space.",
+        "This identity must not be confused with tr(A* A), which is instead the square of the Frobenius norm. The two traces carry different powers of the singular values."
       ],
-      "layout": "reading"
+      "mathtex": "\\|A\\|_{S_1}=\\operatorname{tr}|A|,\\qquad\\|A\\|_{S_2}^{2}=\\operatorname{tr}(A^*A)",
+      "diagram": "g2-frobenius-columns",
+      "takeaway": "Trace of the modulus and trace of the Gram operator encode different norms.",
+      "layout": "equation",
+      "id": "03-00",
+      "eyebrow": "G2 · 057000 · The trace-norm identity"
     },
     {
-      "id": "04-overview",
-      "title": "Where the trace enters",
-      "eyebrow": "G2 · 057000 · first-pass outline",
-      "lead": "For a square endomorphism, the trace is the sum of its diagonal entries in an orthonormal basis.",
+      "title": "Why these measurements satisfy norm axioms",
+      "lead": "Nonnegativity, scalar homogeneity, and definiteness come directly from the singular-value formula.",
       "body": [
-        "We can also define it as the sum of its eigenvalues counted with multiplicity, when the operator is self-adjoint. The Gram operator A adjoint A acts on the source space, even when A itself is rectangular. It is positive, and its eigenvalues are singular values squared. Thus the square of the Frobenius norm equals the trace of A adjoint A. Similarly, the modulus of A is the positive square root of A adjoint A. Its eigenvalues are the singular values of A. Therefore the nuclear norm of A equals the trace of its modulus. This is why the nuclear norm is called the trace norm."
+        "The triangle inequality requires more structure: singular values of A+B are weakly majorized by the componentwise sum of singular-value lists, and ℓₚ is a symmetric gauge for p≥1.",
+        "The weak-majorization comparison and ordinary ℓₚ triangle inequality together yield the Schatten triangle inequality. This also explains why p below one does not give a norm."
       ],
-      "layout": "reading"
+      "mathtex": "\\sigma(A+B)\\prec_w\\sigma(A)+\\sigma(B)",
+      "diagram": "g2-majorization-bars",
+      "takeaway": "Triangle inequalities come from weak majorization and convex ℓₚ gauges.",
+      "layout": "equation",
+      "id": "04-00",
+      "eyebrow": "G2 · 057000 · Why these measurements satisfy norm axioms"
     },
     {
-      "id": "05-overview",
-      "title": "Why the Schatten measurements are norms",
-      "eyebrow": "G2 · 057000 · first-pass outline",
-      "lead": "A norm must be nonnegative, vanish only at zero, scale by absolute value under scalar multiplication, and satisfy the triangle inequality.",
+      "title": "Compare the three endpoints",
+      "lead": "For a nonnegative singular-value list, the maximum is no larger than the ℓ₂ norm, which is no larger than the ℓ₁ sum.",
       "body": [
-        "The first properties follow directly from singular values. They are nonnegative. If all vanish, the operator's modulus is zero, hence the operator is zero. Multiplying A by a scalar multiplies every singular value by the scalar's absolute value. The triangle inequality is the interesting part. The Ky Fan inequality states that, for every prefix length k, the sum of the k largest singular values of A plus B is at most the sum of the k largest singular values of A plus the corresponding sum for B."
+        "These are elementary list inequalities transferred to matrix norms. When the rank is r, Cauchy–Schwarz also gives an upper bound for ℓ₁ by √r times ℓ₂.",
+        "Keeping the dependence on rank visible prevents a dimension-free claim when the singular-value list grows."
       ],
-      "layout": "reading"
+      "mathtex": "\\|A\\|_{S_\\infty}\\le\\|A\\|_{S_2}\\le\\|A\\|_{S_1}\\le\\sqrt r\\,\\|A\\|_{S_2}",
+      "diagram": "g2-schatten-profile",
+      "takeaway": "Rank controls how far aggregate norms can exceed the largest singular value.",
+      "layout": "equation",
+      "id": "05-00",
+      "eyebrow": "G2 · 057000 · Compare the three endpoints"
     },
     {
-      "id": "06-overview",
-      "title": "Compare the endpoint norms",
-      "eyebrow": "G2 · 057000 · first-pass outline",
-      "lead": "For any finite nonnegative list, the largest entry is at most the square root of the sum of squared entries.",
+      "title": "Why unitary coordinates do not matter",
+      "lead": "A unitary change of input or output coordinates leaves all singular values unchanged.",
       "body": [
-        "That square root is at most the sum of all entries. Applying these facts to singular values gives the operator norm at most the Frobenius norm, and the Frobenius norm at most the nuclear norm. These comparisons do not need a matrix dimension constant. We can also obtain reverse bounds that depend on rank. Suppose A has exactly r positive singular values. By Cauchy–Schwarz, their sum is at most the square root of r times the square root of their squared sum. Thus the nuclear norm is at most the square root of r times the Frobenius norm."
+        "If A is replaced by UAV*, the source Gram operator becomes V A* A V*, a unitary conjugate of the original Gram matrix. It therefore has the same eigenvalues.",
+        "Every Schatten p norm stays unchanged under these transformations. This is why the formulas are intrinsic measurements of a linear map, not of one matrix presentation."
       ],
-      "layout": "reading"
+      "mathtex": "\\|UAV^*\\|_{S_p}=\\|A\\|_{S_p}",
+      "diagram": "g2-frobenius-columns",
+      "takeaway": "Unitary invariance is a consequence of Gram-eigenvalue invariance.",
+      "layout": "equation",
+      "id": "06-00",
+      "eyebrow": "G2 · 057000 · Why unitary coordinates do not matter"
     },
     {
-      "id": "07-overview",
-      "title": "Why orthonormal coordinates do not matter",
-      "eyebrow": "G2 · 057000 · first-pass outline",
-      "lead": "Suppose we change orthonormal coordinates in the source and target.",
+      "title": "What each norm reveals geometrically",
+      "lead": "The operator norm, Frobenius norm, and nuclear norm ask different questions of the same map.",
       "body": [
-        "The matrix of A becomes U A V adjoint, where U and V are unitary maps in the respective coordinate spaces. The new Gram operator is V followed by A adjoint A followed by V adjoint. It is unitarily similar to the old Gram operator, so it has the same eigenvalues, including multiplicities. Therefore it has the same singular values, and every Schatten norm is unchanged. This is a basis-independent measurement of the linear map. This unitary invariance also explains why the column-energy formula remains constant under a change of orthonormal input basis. The coordinates change, but the sum of squared output lengths does not."
+        "The operator norm records the worst single stretch. The Frobenius norm records the root of total squared stretch energy. The nuclear norm sums all stretches and is sensitive to how many directions participate.",
+        "For perturbations of spectral subspaces, the operator norm measures a maximal angle while the Frobenius norm can aggregate many orthogonal rotations. We choose a norm to match the quantity we want to control."
       ],
-      "layout": "reading"
+      "diagram": "g2-schatten-profile",
+      "takeaway": "A norm selection expresses which geometry the bound is intended to measure.",
+      "layout": "figure",
+      "id": "07-00",
+      "eyebrow": "G2 · 057000 · What each norm reveals geometrically"
     },
     {
-      "id": "08-overview",
-      "title": "What these norms prepare us to prove",
-      "eyebrow": "G2 · 057000 · first-pass outline",
-      "lead": "In Davis–Kahan theory, we want to measure how much a spectral subspace changes under perturbation.",
+      "title": "A second rectangular check",
+      "lead": "A single nonzero singular value gives equality of all three endpoint measurements.",
       "body": [
-        "The operator norm controls the single largest rotation. The Frobenius norm aggregates the squared motion across orthogonal directions. The nuclear norm aggregates all singular-value magnitudes. Using several Schatten norms lets us state perturbation estimates at different levels of sensitivity to rank and multiplicity. Our majorization work says even more: we can often prove an inequality about every Ky Fan sum and then deduce all the Schatten estimates at once."
+        "For a rank-one matrix with singular values (5,0,0), nuclear, Frobenius, and operator norms are all five. In contrast, the map with singular values (4,3) has measurements 7,5,4.",
+        "This contrast shows that the spread between norm values is controlled by the number and distribution of nonzero singular directions."
       ],
-      "layout": "reading"
+      "mathtex": "(5,0,0)\\ \\Longrightarrow\\ \\|A\\|_{S_1}=\\|A\\|_{S_2}=\\|A\\|_{S_\\infty}=5",
+      "diagram": "g2-schatten-profile",
+      "takeaway": "Rank-one maps eliminate the difference between these three measures.",
+      "layout": "equation",
+      "id": "08-00",
+      "eyebrow": "G2 · 057000 · A second rectangular check"
     },
     {
-      "id": "09-overview",
-      "title": "What to reconstruct",
-      "eyebrow": "G2 · 057000 · first-pass outline",
-      "lead": "Compute all four measurements of the rectangular example with singular values four and three.",
+      "title": "Reconstruct the formulas",
+      "lead": "Start from a rectangular SVD and the positive Gram operator.",
       "body": [
-        "Prove the Frobenius column-energy identity by expanding an arbitrary orthonormal basis in a right singular basis. Then reproduce the Schatten triangle inequality as two steps: first weak majorization, then Minkowski's inequality. Finally, prove the rank-dependent comparisons, and identify examples attaining equality. These calculations turn singular-value lists into concrete operator measurements that we can use in perturbation estimates."
+        "Derive the squared Frobenius formula by summing ||Aeᵢ||² across an orthonormal input basis, then identify tr|A| as the nuclear norm. Evaluate both formulas for the map with singular values four and three.",
+        "Finally, prove the endpoint comparisons using ordinary ℓ₁, ℓ₂, and ℓ∞ inequalities. The same proof works in any pair of finite-dimensional inner-product spaces."
       ],
-      "layout": "reading"
-    },
-    {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 057000 · mathematical reference",
-      "lead": "Compute all four measurements of the rectangular example with singular values four and three.",
-      "body": [
-        "Prove the Frobenius column-energy identity by expanding an arbitrary orthonormal basis in a right singular basis. Then reproduce the Schatten triangle inequality as two steps: first weak majorization, then Minkowski's inequality."
-      ],
-      "mathtex": "\\|A\\|_{S_p}=\\left(\\sum_i\\sigma_i(A)^p\\right)^{1/p}\n\\quad(1\\le p<\\infty),\\qquad\n\\|A\\|_{S_\\infty}=\\max_i\\sigma_i(A).",
-      "layout": "equation"
-    },
-    {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 057000 · conclusion",
-      "lead": "These calculations turn singular-value lists into concrete operator measurements that we can use in perturbation estimates.",
-      "body": [],
-      "layout": "reading"
+      "diagram": "g2-frobenius-columns",
+      "takeaway": "The Gram operator, trace, and singular values give three views of the same data.",
+      "layout": "figure",
+      "id": "09-00",
+      "eyebrow": "G2 · 057000 · Reconstruct the formulas"
     }
   ]
 }

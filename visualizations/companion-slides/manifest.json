@@ -655,7 +655,7 @@
       "lecture_nodes": [
         "g2:054000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-055000-majorization-and-weak-majorization",
@@ -663,7 +663,7 @@
       "lecture_nodes": [
         "g2:055000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-056000-convexity-and-majorization-descent",
@@ -671,7 +671,7 @@
       "lecture_nodes": [
         "g2:056000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-057000-schatten-and-frobenius-norms",
@@ -679,7 +679,7 @@
       "lecture_nodes": [
         "g2:057000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-058000-unitary-invariant-norms-and-symmetric-gauges",
@@ -687,7 +687,7 @@
       "lecture_nodes": [
         "g2:058000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-059000-rectangular-invariance-and-zero-padding",
@@ -695,7 +695,7 @@
       "lecture_nodes": [
         "g2:059000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-060000-pinching-and-block-direct-sums",
@@ -703,7 +703,7 @@
       "lecture_nodes": [
         "g2:060000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-061000-quadratic-form-inequalities-and-singular-values",
@@ -711,7 +711,7 @@
       "lecture_nodes": [
         "g2:061000"
       ],
-      "editorial_stage": "baseline"
+      "editorial_stage": "expanded"
     },
     {
       "id": "g2-062000-from-scalar-division-to-ax-xb-c",

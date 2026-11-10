@@ -2,122 +2,149 @@
   "schema_version": 1,
   "id": "g2-058000-unitary-invariant-norms-and-symmetric-gauges",
   "title": "Unitary-invariant norms and symmetric gauges",
-  "subtitle": "G2 lecture 058000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 058000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:058000"
   ],
   "source_lecture": "draft-stages/tts-lectures/058000-unitary-invariant-norms-and-symmetric-gauges.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Standalone slide treatment of the spoken lecture and display-only mathematical appendix; authored derivations, worked calculations and local SVG diagrams.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 058000 · first-pass outline",
-      "lead": "Suppose two people measure the same linear map, but one uses a different orthonormal basis for the inputs and a different orthonormal basis for the outputs.",
+      "title": "Which measurements survive a change of basis?",
+      "lead": "The same linear map can have different matrix entries in different orthonormal bases.",
       "body": [
-        "They should agree on the map's intrinsic size. The operator, Frobenius, and nuclear norms all have this property. Their common property is invariance under unitary changes of input and output coordinates. The statement we are heading toward is that, for a fixed finite matrix shape, an invariant norm can be read from its singular values using a symmetric gauge. Conversely, an appropriate symmetric gauge gives a norm on matrices by applying it to their singular values."
+        "If U and V are unitary matrices on the output and input spaces, respectively, a coordinate change replaces A by UAV*. A unitarily invariant norm assigns the same size to both matrices.",
+        "This invariance is the natural requirement for geometry: the measurement should depend on the map rather than on the arbitrary frames used to write it."
       ],
-      "layout": "opening"
+      "diagram": "g2-gauge-balls",
+      "takeaway": "Unitary invariance removes dependence on orthonormal coordinate choices.",
+      "layout": "opening",
+      "id": "00-00",
+      "eyebrow": "G2 · 058000 · Which measurements survive a change of basis?"
     },
     {
-      "id": "01-overview",
-      "title": "Begin with orthonormal changes of coordinates",
-      "eyebrow": "G2 · 058000 · first-pass outline",
-      "lead": "Let A send an input space of dimension n to an output space of dimension m.",
+      "title": "SVD reduces the problem to a vector gauge",
+      "lead": "For a fixed m-by-n shape, the SVD writes A as unitary factors around a rectangular diagonal matrix of singular values.",
       "body": [
-        "Choose orthonormal bases. The resulting matrix has m rows and n columns. Changing the output basis multiplies the matrix on the left by a unitary matrix. Changing the input basis multiplies it on the right by a unitary matrix, with an adjoint depending on which direction the coordinate change is written. So the mathematical question is whether a norm of A stays the same after multiplying by arbitrary unitaries on both sides. Call a matrix norm unitarily invariant if it does. For the operator norm, the reason is immediate. A unitary maps the unit sphere onto itself and preserves the length of every output vector."
+        "If the norm is unitarily invariant, its value on A equals its value on that singular-value diagonal. Therefore it is determined by a function of the nonnegative singular-value list.",
+        "Permuting diagonal singular values or changing individual signs can be implemented by unitary matrices. The corresponding list function must have permutation and sign symmetry."
       ],
-      "layout": "reading"
+      "mathtex": "A=U\\Sigma V^*,\\qquad\\|A\\|_\\Phi=\\phi(\\sigma(A))",
+      "diagram": "g2-gauge-balls",
+      "takeaway": "An invariant matrix norm is encoded by a symmetric gauge of singular values.",
+      "layout": "equation",
+      "id": "01-00",
+      "eyebrow": "G2 · 058000 · SVD reduces the problem to a vector gauge"
     },
     {
-      "id": "02-overview",
-      "title": "Use the singular-value decomposition",
-      "eyebrow": "G2 · 058000 · first-pass outline",
-      "lead": "The singular-value decomposition says that A can be expressed as a unitary change of output coordinates, followed by a rectangular diagonal matrix of singular values, followed by a unitary change of input coordinates.",
+      "title": "What is a symmetric gauge?",
+      "lead": "A symmetric gauge is a norm on a coordinate list that is unchanged by permutations and coordinatewise sign changes.",
       "body": [
-        "Because our norm is invariant under the two unitary factors, its value on A equals its value on that rectangular diagonal matrix. Every singular value is nonnegative. We can arrange them from largest to smallest. There are at most the smaller of m and n positive values, and we include zeros to get a fixed-length list. Thus a unitarily invariant norm is determined by a function of this list. But which functions are possible?"
+        "The usual ℓ₁, ℓ₂, and ℓ∞ norms are symmetric gauges. Their corresponding matrix measurements are nuclear, Frobenius, and operator norms.",
+        "For a fixed matrix shape, every such gauge defines a unitarily invariant matrix norm when applied to the singular values. The triangle inequality follows by weak majorization for sums."
       ],
-      "layout": "reading"
+      "mathtex": "\\phi(x)=\\phi(\\pi x)=\\phi(\\varepsilon\\odot x)\\quad(\\varepsilon_i\\in\\{-1,1\\})",
+      "diagram": "g2-gauge-balls",
+      "takeaway": "Permutation and sign invariance are the defining symmetries of singular-value gauges.",
+      "layout": "equation",
+      "id": "02-00",
+      "eyebrow": "G2 · 058000 · What is a symmetric gauge?"
     },
     {
-      "id": "03-overview",
-      "title": "Construct an invariant norm from a gauge",
-      "eyebrow": "G2 · 058000 · first-pass outline",
-      "lead": "Now begin with a symmetric gauge on lists of length equal to the smaller matrix dimension.",
+      "title": "One matrix, several gauges",
+      "lead": "Take a diagonal matrix with singular values (4,2,1).",
       "body": [
-        "Define the size of A to be the gauge of A's singular-value list. Nonnegativity and scaling are straightforward. The size is zero only if all singular values are zero, which happens exactly when A is the zero map. Unitary invariance follows from singular-value invariance. The challenge is the triangle inequality. The singular values of A plus B are generally not the coordinatewise sums of the singular values of A and B. Their singular vectors may point in entirely different directions. The Ky Fan inequalities give the needed common comparison across every leading singular-value prefix."
+        "The operator norm gives four, the nuclear norm gives seven, and the Frobenius norm gives √(16+4+1)=√21. All three are unitarily invariant; each emphasizes a different aspect of the singular-value profile.",
+        "A Ky Fan 2 norm gives 4+2=6. The family of symmetric gauges contains many more measurements than the three familiar Schatten endpoints."
       ],
-      "layout": "reading"
+      "mathtex": "\\|A\\|_{\\mathrm{op}}=4,\\quad\\|A\\|_{S_2}=\\sqrt{21},\\quad\\|A\\|_{S_1}=7",
+      "diagram": "g2-schatten-profile",
+      "takeaway": "The gauge determines what kind of singular-value information the norm aggregates.",
+      "layout": "equation",
+      "id": "03-00",
+      "eyebrow": "G2 · 058000 · One matrix, several gauges"
     },
     {
-      "id": "04-overview",
-      "title": "Compare the gauges with an example",
-      "eyebrow": "G2 · 058000 · first-pass outline",
-      "lead": "Take a square diagonal matrix with singular values four, two, and one.",
+      "title": "Why the gauge construction satisfies the triangle inequality",
+      "lead": "A singular-value sum obeys weak majorization, even when each singular value does not obey a separate triangle inequality.",
       "body": [
-        "The operator norm gives four, since it retains the largest entry. The nuclear norm gives seven, since it adds all entries. The Frobenius norm gives the square root of sixteen plus four plus one, which is the square root of twenty-one. The Ky Fan two norm gives six, the sum of the two largest singular values. Do not confuse that with the Schatten two norm, which is Frobenius. The two names both contain the number two, but one counts how many leading singular values we add, while the other specifies a power. For this same diagonal matrix, all four measurements are invariant if we rotate the input and output bases."
+        "Apply σ(A+B)≺_w σ(A)+σ(B), then use the symmetric gauge’s monotonicity under weak majorization. The final step is the ordinary triangle inequality for the gauge on lists.",
+        "This proof avoids trying to align the singular vectors of A and B, which in general belong to different directions."
       ],
-      "layout": "reading"
+      "mathtex": "\\phi(\\sigma(A+B))\\le\\phi(\\sigma(A)+\\sigma(B))\\le\\phi(\\sigma(A))+\\phi(\\sigma(B))",
+      "diagram": "g2-majorization-bars",
+      "takeaway": "Weak majorization is the bridge from list norms to matrix triangle inequalities.",
+      "layout": "equation",
+      "id": "04-00",
+      "eyebrow": "G2 · 058000 · Why the gauge construction satisfies the triangle inequality"
     },
     {
-      "id": "05-overview",
-      "title": "A general comparison theorem",
-      "eyebrow": "G2 · 058000 · first-pass outline",
-      "lead": "Suppose the singular values of A are weakly majorized by those of B.",
+      "title": "One comparison controls every invariant gauge",
+      "lead": "Suppose σ(A) is weakly majorized by σ(B).",
       "body": [
-        "Then every symmetric gauge gives A no larger a value than B. The proof is the same majorization principle used in the triangle inequality. It gives a way to move from finitely many scalar prefix inequalities to a whole family of norm inequalities. The converse is visible through the Ky Fan gauges. If all invariant gauges make A no larger than B, in particular each Ky Fan gauge does. Those Ky Fan comparisons are precisely the defining prefix inequalities of weak majorization. Thus the Ky Fan sums capture the common order information seen by all unitarily invariant norms in a fixed finite matrix shape."
+        "Every symmetric gauge is convex, sign invariant, and permutation invariant, so majorization descent proves φ(σ(A))≤φ(σ(B)). Consequently every unitarily invariant norm of the same matrix shape gives A no larger a value than B.",
+        "This is why Ky Fan domination is often a more informative theorem than a bound for any single norm."
       ],
-      "layout": "reading"
+      "mathtex": "\\sigma(A)\\prec_w\\sigma(B)\\Longrightarrow\\|A\\|_\\Phi\\le\\|B\\|_\\Phi",
+      "diagram": "g2-gauge-balls",
+      "takeaway": "Ky Fan prefix inequalities imply the complete family of fixed-shape invariant norm inequalities.",
+      "layout": "equation",
+      "id": "05-00",
+      "eyebrow": "G2 · 058000 · One comparison controls every invariant gauge"
     },
     {
-      "id": "06-overview",
-      "title": "An operator ideal is an additional structure",
-      "eyebrow": "G2 · 058000 · first-pass outline",
-      "lead": "So far, A and B have had one fixed matrix shape.",
+      "title": "An operator ideal asks for more",
+      "lead": "Being invariant for a single matrix shape does not guarantee a coherent norm across many spaces and dimensions.",
       "body": [
-        "In infinite-dimensional analysis, we may want to measure maps between many Hilbert spaces and restrict the domain to operators on which the chosen measurement is finite. Then the norm is part of a family, often called an operator ideal norm. In addition to ordinary norm laws, the family is required to behave predictably under composing with bounded operators on the left and right. For example, composing A with a contraction on the output side should not increase its ideal norm. The same is expected for a contraction on the input side. In the finite-dimensional setting, singular-value inequalities explain these facts for standard gauges."
+        "In operator-ideal theory the class of admissible operators and its norm must be stable under left and right composition by bounded maps. Standard estimates compare the ideal norm of LAR to the operator norms of L and R.",
+        "This additional compatibility is important for rectangular subspace residuals, restrictions, and infinite-dimensional problems."
       ],
-      "layout": "reading"
+      "mathtex": "\\|LAR\\|_{\\mathcal I}\\le\\|L\\|_{\\mathrm{op}}\\,\\|A\\|_{\\mathcal I}\\,\\|R\\|_{\\mathrm{op}}",
+      "diagram": "g2-gauge-balls",
+      "takeaway": "Operator ideals combine unitary symmetry with composition stability.",
+      "layout": "equation",
+      "id": "06-00",
+      "eyebrow": "G2 · 058000 · An operator ideal asks for more"
     },
     {
-      "id": "07-overview",
-      "title": "Why this matters for perturbations",
-      "eyebrow": "G2 · 058000 · first-pass outline",
-      "lead": "A perturbation may rotate several mutually orthogonal directions by different amounts.",
+      "title": "What an invariant norm can and cannot compare",
+      "lead": "Fixing a matrix shape makes left-right unitary invariance a straightforward condition.",
       "body": [
-        "An operator-norm estimate captures only the worst direction. A Frobenius estimate aggregates squared effects. A nuclear estimate sums their magnitudes. A general unitarily invariant norm lets us decide which aggregate is appropriate for the application. Our proofs show that the same singular-value comparison can control all these choices. We have converted an apparently open-ended question about norms into concrete inequalities about ordered nonnegative lists. The next issue is rectangularity. An operator might be represented in a larger output space or with extra zero input directions."
+        "Comparing an m-by-n matrix with a larger matrix obtained by zero padding requires more than choosing arbitrary invariant norms independently on each shape.",
+        "Compatible families such as the Schatten norms respect zero padding. The next lecture makes this extra rectangular compatibility explicit and shows why it cannot be inferred from fixed-shape invariance alone."
       ],
-      "layout": "reading"
+      "diagram": "g2-zero-padding",
+      "takeaway": "Invariant gauges on separate shapes need a compatibility rule before comparing dimensions.",
+      "layout": "figure",
+      "id": "07-00",
+      "eyebrow": "G2 · 058000 · What an invariant norm can and cannot compare"
     },
     {
-      "id": "08-overview",
-      "title": "What to reconstruct",
-      "eyebrow": "G2 · 058000 · first-pass outline",
-      "lead": "Start with a unitarily invariant norm on matrices of one fixed shape.",
+      "title": "Why the distinction matters in perturbation estimates",
+      "lead": "Spectral-subspace perturbations often involve different source and target subspaces.",
       "body": [
-        "Use the singular-value decomposition to derive its symmetric gauge. Prove the reverse triangle inequality using weak majorization and the gauge triangle inequality. Then calculate the operator, nuclear, Frobenius, and Ky Fan two values of the diagonal example with singular values four, two, and one. Finally, explain why invariance in one dimension does not yet guarantee consistency with another matrix dimension."
+        "A rectangular residual can be represented in several orthonormal frames. Its norm should be unchanged by those frame choices, and ideally unchanged by isometric embedding into a larger ambient Hilbert space.",
+        "The first demand is fixed-shape unitary invariance; the second asks for a coherent cross-space norm family. Keeping them separate prevents a missing hypothesis in later operator inequalities."
       ],
-      "layout": "reading"
+      "diagram": "g2-gauge-balls",
+      "takeaway": "Declare both coordinate invariance and any cross-dimensional compatibility required.",
+      "layout": "figure",
+      "id": "08-00",
+      "eyebrow": "G2 · 058000 · Why the distinction matters in perturbation estimates"
     },
     {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 058000 · mathematical reference",
-      "lead": "Start with a unitarily invariant norm on matrices of one fixed shape.",
+      "title": "Reconstruct the two directions",
+      "lead": "An invariant matrix norm corresponds to a symmetric gauge, and a symmetric gauge constructs an invariant matrix norm.",
       "body": [
-        "Use the singular-value decomposition to derive its symmetric gauge. Prove the reverse triangle inequality using weak majorization and the gauge triangle inequality."
+        "For the first direction, diagonalize by SVD and inspect permutation and sign matrices. For the second, define φ(σ(A)) and derive its triangle inequality through weak majorization.",
+        "Then state which extra ideal and padding hypotheses are needed when matrix shapes or underlying spaces change."
       ],
-      "mathtex": "\\sigma(A+B)\\prec_w\\sigma(A)+\\sigma(B),\\qquad\n\\phi(\\sigma(A+B))\\le\\phi(\\sigma(A)+\\sigma(B))\\le\\phi(\\sigma(A))+\\phi(\\sigma(B)).",
-      "layout": "equation"
-    },
-    {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 058000 · conclusion",
-      "lead": "Finally, explain why invariance in one dimension does not yet guarantee consistency with another matrix dimension.",
-      "body": [],
-      "layout": "reading"
+      "diagram": "g2-gauge-balls",
+      "takeaway": "SVD, weak majorization, and compatibility assumptions finish the classification.",
+      "layout": "figure",
+      "id": "09-00",
+      "eyebrow": "G2 · 058000 · Reconstruct the two directions"
     }
   ]
 }

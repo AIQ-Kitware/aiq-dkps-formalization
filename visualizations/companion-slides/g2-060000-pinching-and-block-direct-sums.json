@@ -2,122 +2,150 @@
   "schema_version": 1,
   "id": "g2-060000-pinching-and-block-direct-sums",
   "title": "Pinching and block direct sums",
-  "subtitle": "G2 lecture 060000 · baseline companion · needs expansion",
-  "editorial_stage": "baseline",
+  "subtitle": "G2 lecture 060000 · expanded companion",
+  "editorial_stage": "expanded",
   "lecture_nodes": [
     "g2:060000"
   ],
   "source_lecture": "draft-stages/tts-lectures/060000-pinching-and-block-direct-sums.md",
-  "adaptation": "First-pass source-derived outline. Section excerpts and any vector equation come from the spoken lecture and its display-only mathematics appendix. Expand with worked mathematics, proofs and topic-specific diagrams.",
+  "adaptation": "Standalone slide treatment of the spoken lecture and display-only mathematical appendix; authored derivations, worked calculations and local SVG diagrams.",
   "slides": [
     {
-      "id": "00-overview",
-      "title": "The problem and its setting",
-      "eyebrow": "G2 · 060000 · first-pass outline",
-      "lead": "Suppose a linear operator acts on a space split into two mutually orthogonal parts.",
+      "title": "Remove coupling between orthogonal pieces",
+      "lead": "Pinching keeps diagonal blocks of an operator and discards its off-diagonal blocks.",
       "body": [
-        "In block coordinates, the operator has four pieces. Two blocks describe what happens within each part. The other two describe how the operator sends vectors from one part into the other. What happens to the operator's size if we erase those two cross terms? For an arbitrary norm on a list of matrix entries, there is no universal answer. But for every unitarily invariant norm, the block-diagonal part cannot be larger than the original operator. This operation is called pinching."
+        "Split a Hilbert space H as M⊕M⊥ and let P project onto M. Relative to this decomposition, A has four blocks: two diagonal actions and two off-diagonal couplings.",
+        "The pinching map retains the action within each piece but deletes the transitions between them. The fundamental theorem is that this deletion cannot increase any unitarily invariant norm."
       ],
-      "layout": "opening"
+      "diagram": "g2-pinching-average",
+      "takeaway": "Pinching deletes coupling while keeping the diagonal blocks.",
+      "layout": "opening",
+      "id": "00-00",
+      "eyebrow": "G2 · 060000 · Remove coupling between orthogonal pieces"
     },
     {
-      "id": "01-overview",
-      "title": "The four blocks of an operator",
-      "eyebrow": "G2 · 060000 · first-pass outline",
-      "lead": "Let H be an inner-product space and let P be the orthogonal projection onto a subspace M.",
+      "title": "Write the four operator blocks",
+      "lead": "Block notation makes the geometry of pinching explicit.",
       "body": [
-        "Its orthogonal complement has projection I minus P. Write H as the orthogonal direct sum of M and its complement. Relative to this splitting, a linear operator A has four blocks. The upper-left block maps M back into M. The lower-right block maps the orthogonal complement back into itself. The upper-right block sends vectors from the complement into M. The lower-left block sends vectors from M into the complement. The block-diagonal part of A retains only the first and fourth blocks. In coordinate-free language it is P A P plus the complementary projection on both sides of A."
+        "PAP acts within M; (I−P)A(I−P) acts within M⊥. The blocks PA(I−P) and (I−P)AP carry vectors across the decomposition.",
+        "Thus the pinched matrix is block diagonal. This operation is not the same as a compression to M, which keeps only one of the diagonal blocks and loses the other."
       ],
-      "layout": "reading"
+      "mathtex": "A=\\begin{bmatrix}A_{11}&A_{12}\\\\A_{21}&A_{22}\\end{bmatrix},\\quad\\Pi_P(A)=\\begin{bmatrix}A_{11}&0\\\\0&A_{22}\\end{bmatrix}",
+      "diagram": "g2-block-diagonal",
+      "takeaway": "Both diagonal blocks survive; only off-diagonal coupling disappears.",
+      "layout": "equation",
+      "id": "01-00",
+      "eyebrow": "G2 · 060000 · Write the four operator blocks"
     },
     {
-      "id": "02-overview",
-      "title": "Build the reflection",
-      "eyebrow": "G2 · 060000 · first-pass outline",
-      "lead": "From P, construct a new operator J by taking twice P and subtracting the identity.",
+      "title": "Build the block-sign reflection",
+      "lead": "The reflection J=2P−I acts by +1 on M and by −1 on M⊥.",
       "body": [
-        "On M, J acts as plus one. On the orthogonal complement, J acts as minus one. Therefore J is self-adjoint and its square is the identity. In particular, it is unitary: it preserves all lengths and has itself as inverse. Consider J A J. In block form, the diagonal blocks are unchanged. Each off-diagonal block changes sign, because it crosses exactly one component on which J acts as minus one. So A plus J A J has the original diagonal blocks twice and the off-diagonal blocks zero. Divide by two. We obtain a simple identity: the pinch of A is the average of A and J A J."
+        "It is self-adjoint and squares to the identity, hence it is unitary. Conjugation by J leaves A₁₁ and A₂₂ unchanged while reversing the signs of A₁₂ and A₂₁.",
+        "Averaging the original matrix with its conjugate cancels the off-diagonal blocks, exactly producing the pinching map."
       ],
-      "layout": "reading"
+      "mathtex": "J=2P-I,\\quad J^*=J,\\quad J^2=I,\\quad\\Pi_P(A)=\\tfrac12(A+JAJ)",
+      "diagram": "g2-pinching-average",
+      "takeaway": "Reflection averaging gives a short coordinate-free proof of the block formula.",
+      "layout": "equation",
+      "id": "02-00",
+      "eyebrow": "G2 · 060000 · Build the block-sign reflection"
     },
     {
-      "id": "03-overview",
-      "title": "Prove the contraction inequality",
-      "eyebrow": "G2 · 060000 · first-pass outline",
-      "lead": "Let the symbol N denote any unitarily invariant matrix norm on the appropriate square matrix space.",
+      "title": "Prove pinching is contractive",
+      "lead": "Let ||·||Φ be any unitarily invariant norm on this fixed square-matrix space.",
       "body": [
-        "Because J is unitary, N of J A J equals N of A. Now use the triangle inequality on the average. The norm of one half of A plus J A J is at most one half the norm of A plus one half the norm of J A J. The two terms on the right are equal. Their average equals N of A. Thus the pinched operator has norm no larger than the original operator. The proof applies simultaneously to operator norm, Frobenius norm, nuclear norm, every Schatten p norm, and every Ky Fan norm. It does not require the blocks to be self-adjoint. It does not require the off-diagonal blocks to be adjoints of one another."
+        "By the triangle inequality, the norm of (A+JAJ)/2 is at most (||A||Φ+||JAJ||Φ)/2. Unitary invariance makes ||JAJ||Φ=||A||Φ.",
+        "Therefore the pinching norm cannot exceed the original. The same proof works separately for each Ky Fan sum and every Schatten norm."
       ],
-      "layout": "reading"
+      "mathtex": "\\|\\Pi_P(A)\\|_\\Phi\\le\\tfrac12(\\|A\\|_\\Phi+\\|JAJ\\|_\\Phi)=\\|A\\|_\\Phi",
+      "diagram": "g2-pinching-average",
+      "takeaway": "Triangle inequality plus unitary invariance proves every pinching contraction.",
+      "layout": "equation",
+      "id": "03-00",
+      "eyebrow": "G2 · 060000 · Prove pinching is contractive"
     },
     {
-      "id": "04-overview",
-      "title": "Work through a two-by-two example",
-      "eyebrow": "G2 · 060000 · first-pass outline",
-      "lead": "Consider the real matrix with first row three, four, and second row four, three.",
+      "title": "Check a two-by-two example",
+      "lead": "The matrix A=[[3,4],[4,3]] has singular values 7 and 1.",
       "body": [
-        "Split the space into the first coordinate axis and the second. The pinch erases the two fours, leaving the diagonal matrix with three in both positions. The original symmetric matrix has eigenvalues seven and negative one. Its singular values are seven and one. The pinched matrix has singular values three and three. The operator norm drops from seven to three. The nuclear norm drops from eight to six. The Frobenius norm drops from the square root of fifty to the square root of eighteen. The Ky Fan one norm is just the operator norm, so it also decreases."
+        "Pinch onto the coordinate axes. The off-diagonal fours disappear and the result is diag(3,3), with singular values 3 and 3.",
+        "The operator norm drops from 7 to 3 and the nuclear norm drops from 8 to 6. Yet the second singular value rises from 1 to 3, showing again why a universal componentwise singular-value inequality is too strong."
       ],
-      "layout": "reading"
+      "mathtex": "(7,1)\\ \\longmapsto\\ (3,3),\\quad K_1:3\\le7,\\quad K_2:6\\le8",
+      "diagram": "g2-pinching-average",
+      "takeaway": "Pinching contracts every Ky Fan sum without decreasing each singular value separately.",
+      "layout": "equation",
+      "id": "04-00",
+      "eyebrow": "G2 · 060000 · Check a two-by-two example"
     },
     {
-      "id": "05-overview",
-      "title": "Pinching as a Ky Fan statement",
-      "eyebrow": "G2 · 060000 · first-pass outline",
-      "lead": "Apply the norm inequality separately to every Ky Fan prefix norm.",
+      "title": "Ky Fan sums express a stronger conclusion",
+      "lead": "The same contraction holds for every k, not merely for one selected matrix norm.",
       "body": [
-        "For each positive integer k, the sum of the k largest singular values of the pinched operator is at most the corresponding sum for A. This says that the entire singular-value list of the pinch is weakly majorized by that of A. Conversely, once we know these Ky Fan inequalities, the weak-majorization theorem tells us that every symmetric gauge must also decrease. Therefore pinching illustrates both directions of our general strategy: the reflection proof gives the whole family of inequalities, and the Ky Fan comparisons encode their common numerical content."
+        "Because each Ky Fan k-sum is itself unitarily invariant and satisfies the triangle inequality, the reflection argument yields Kₖ(Π_P(A))≤Kₖ(A) for all k.",
+        "Equivalently, the singular-value list of the pinched operator is weakly majorized by that of A. The dominance of all symmetric gauges follows from majorization theory."
       ],
-      "layout": "reading"
+      "mathtex": "\\sigma(\\Pi_P(A))\\prec_w\\sigma(A)",
+      "diagram": "g2-kyfan-staircase",
+      "takeaway": "Pinching yields a full weak-majorization statement.",
+      "layout": "equation",
+      "id": "05-00",
+      "eyebrow": "G2 · 060000 · Ky Fan sums express a stronger conclusion"
     },
     {
-      "id": "06-overview",
-      "title": "Direct sums have a different rule",
-      "eyebrow": "G2 · 060000 · first-pass outline",
-      "lead": "Now suppose A acts on one space and B acts on another.",
+      "title": "A direct sum uses a different formula",
+      "lead": "If A and B act on separate orthogonal spaces, the block diagonal map A⊕B contains the singular values of both.",
       "body": [
-        "Form an operator that applies A to the first component and B to the second, with no coupling between them. This is a block direct sum. The Gram operator of the direct sum is the direct sum of the two Gram operators. Hence the positive singular values of the new operator are precisely the singular values of A together with those of B, rearranged in decreasing order, with zeros added as necessary. For the operator norm, this means the direct-sum norm is the larger of the two component operator norms. For Frobenius norm, the squared norm of the direct sum equals the sum of the two squared component norms."
+        "The source Gram operator is (A*A)⊕(B*B), whose eigenvalues combine the eigenvalues of the two Gram operators. Taking square roots concatenates their singular-value lists, with any necessary zeros.",
+        "The concatenation—not ordinary addition—determines the norms of a direct sum."
       ],
-      "layout": "reading"
+      "mathtex": "\\sigma(A\\oplus B)=\\operatorname{sort}(\\sigma(A)\\sqcup\\sigma(B))",
+      "diagram": "g2-block-diagonal",
+      "takeaway": "Direct-sum singular values concatenate rather than add pointwise.",
+      "layout": "equation",
+      "id": "06-00",
+      "eyebrow": "G2 · 060000 · A direct sum uses a different formula"
     },
     {
-      "id": "07-overview",
-      "title": "Where the block arguments will be used",
-      "eyebrow": "G2 · 060000 · first-pass outline",
-      "lead": "In the Davis–Kahan setting, we often have an operator represented relative to a target spectral subspace and its complement.",
+      "title": "Schatten p-norms of block sums",
+      "lead": "For finite p, Schatten norms add after taking the pth power; the operator norm uses a maximum.",
       "body": [
-        "The diagonal blocks describe the action within the chosen pieces. The off-diagonal blocks carry the defect of invariance. Pinching gives a controlled way to delete cross terms when comparing singular-value measurements. Block direct sums let us reassemble estimates that have already been established on independent orthogonal pieces. The two operations should not be conflated. Pinching starts with one operator and deletes couplings. Taking a direct sum builds a new operator from separate pieces whose singular values combine in a precise way."
+        "Summing the pth powers over the concatenated singular-value list immediately separates into the contribution of A and the contribution of B.",
+        "For p=2 this is the familiar Pythagorean addition of squared Frobenius norms. For p=∞ the largest singular value belongs to one of the two blocks."
       ],
-      "layout": "reading"
+      "mathtex": "\\|A\\oplus B\\|_{S_p}^p=\\|A\\|_{S_p}^p+\\|B\\|_{S_p}^p",
+      "diagram": "g2-block-diagonal",
+      "takeaway": "Schatten power sums are additive on orthogonal direct sums.",
+      "layout": "equation",
+      "id": "07-00",
+      "eyebrow": "G2 · 060000 · Schatten p-norms of block sums"
     },
     {
-      "id": "08-overview",
-      "title": "What to reconstruct",
-      "eyebrow": "G2 · 060000 · first-pass outline",
-      "lead": "Using the decomposition into M and its orthogonal complement, write J as plus identity on the first block and minus identity on the second.",
+      "title": "Pinching versus assembling blocks",
+      "lead": "Pinching begins with a coupled operator and deletes the off-diagonal blocks.",
       "body": [
-        "Multiply the block matrices to verify that the diagonal part is the average of A and J A J. Derive the invariant-norm contraction from the triangle inequality. Then check the singular values seven and one for our two-by-two example, and explain why the second singular value can increase even though every Ky Fan prefix sum decreases. Finally, derive the operator, Frobenius, and nuclear direct-sum formulas from the union of singular-value lists."
+        "A direct sum begins with independent operators on separate spaces and builds a larger block diagonal operator. The first has a contractive inequality; the second has an exact singular-value concatenation identity.",
+        "Keeping these constructions distinct is important when moving between selected and complementary spectral subspaces in a perturbation argument."
       ],
-      "layout": "reading"
+      "diagram": "g2-block-diagonal",
+      "takeaway": "One operation removes coupling; the other combines already-independent operators.",
+      "layout": "figure",
+      "id": "08-00",
+      "eyebrow": "G2 · 060000 · Pinching versus assembling blocks"
     },
     {
-      "id": "reference-equation",
-      "title": "The mathematical relationship",
-      "eyebrow": "G2 · 060000 · mathematical reference",
-      "lead": "Using the decomposition into M and its orthogonal complement, write J as plus identity on the first block and minus identity on the second.",
+      "title": "Rebuild the reflection proof",
+      "lead": "Write the four blocks of A relative to a projector P, then calculate JAJ for J=2P−I.",
       "body": [
-        "Multiply the block matrices to verify that the diagonal part is the average of A and J A J. Derive the invariant-norm contraction from the triangle inequality."
+        "Show that the average cancels the off-diagonal entries. Apply the triangle inequality and unitary invariance of a chosen gauge to obtain the pinching bound.",
+        "Finally compute singular values of A⊕B from the Gram direct sum and derive both the finite-p Schatten identity and the operator-norm maximum formula."
       ],
-      "mathtex": "\\mathcal P(A)=PAP+(I-P)A(I-P)=\\tfrac12(A+JAJ),",
-      "layout": "equation"
-    },
-    {
-      "id": "closing-perspective",
-      "title": "What to retain",
-      "eyebrow": "G2 · 060000 · conclusion",
-      "lead": "Finally, derive the operator, Frobenius, and nuclear direct-sum formulas from the union of singular-value lists.",
-      "body": [],
-      "layout": "reading"
+      "diagram": "g2-pinching-average",
+      "takeaway": "Reflection averaging and Gram block sums are the two reusable calculations.",
+      "layout": "figure",
+      "id": "09-00",
+      "eyebrow": "G2 · 060000 · Rebuild the reflection proof"
     }
   ]
 }
