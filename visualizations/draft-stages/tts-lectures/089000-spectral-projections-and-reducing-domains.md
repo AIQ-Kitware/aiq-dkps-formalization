@@ -4,87 +4,117 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# A subspace must reduce the domain as well as the operator
+# Cutting an unbounded operator into genuine spectral parts
 
-We know how to split a bounded self-adjoint operator into blocks along a spectral subspace. For an unbounded operator we must ask a prior question. If we project a legal input onto the selected subspace, is the result still a legal input? Without that property, even writing a block matrix for the operator may be meaningless.
+For a diagonal matrix, separating the coordinates into two groups is easy. If the matrix has no entries mixing those groups, each group evolves independently under the transformation.
 
-A spectral projection reduces a self-adjoint operator when it preserves the operator domain and commutes with the operator on that domain. The restriction to the projected space is then self-adjoint on its induced domain. This supplies the precise block operators used in unbounded Davis–Kahan estimates.
+In infinite-dimensional spectral theory, we want to make the same kind of separation. We may want the part of an operator associated with high energies, or with one cluster of spectral values, without carrying the rest of the space along.
 
-## The domain is part of the operator
+For a bounded operator, we can often describe this with a block matrix. For an unbounded operator, a block formula can be meaningless unless every vector to which we apply the operator belongs to its domain.
 
-Let A be self-adjoint on a complex Hilbert space H. Its domain, which we call D of A, is dense in H but need not equal H.
+The central question is therefore: when does a spectral projection split both the Hilbert space and the allowable inputs of an unbounded operator?
 
-Let P be an orthogonal projection, and M its range. If A were bounded, we could write A as four blocks using P and its complement. In particular, the upper-left block would take x in M to P A x.
+## Begin with the simple diagonal model
 
-For an unbounded A, A x is defined only if x is in D of A. A formula such as P A P x is valid only after verifying that P x lies in D of A. We therefore require that P carry D of A into itself.
+Take ell two, the Hilbert space of square-summable sequences. Let A multiply coordinate N by N. Its domain consists of all sequences for which the weighted sequence of N times the coordinates is also square summable.
 
-That is the first reducing-domain condition. The second is that A applied to P x equals P applied to A x, for every x in D of A. This is commutation on the operator domain, not an equality of everywhere-defined bounded operators.
+Suppose we keep only the even-numbered coordinates and erase the odd ones. Call this projection P.
 
-Together these properties imply that the complementary projection, identity minus P, also preserves the domain and commutes with A. Just subtract the first identity from A x, and use linearity of the domain.
+Every ell-two vector splits uniquely into its even part and its odd part, and those two parts are perpendicular.
 
-So both M and its orthogonal complement are preserved, and the action of A separates into two pieces.
+Now consider a vector in the domain of A. Its weighted coordinate squares have a finite sum. If we discard the odd terms, that sum can only decrease. So the even part remains in the domain.
 
-## Why spectral projections pass the domain test
+Also, multiplying the coordinates by their indices and then discarding the odd ones gives the same result as discarding the odd ones and then multiplying. In other words, P commutes with A on the domain of A.
 
-Let E of B be the spectral projection of A onto a Borel set B of real spectral values. Write P for this projection.
+These two facts are what we need. The even and odd parts are each legal inputs, and A never mixes them.
 
-The spectral theorem describes A by integration against E. It also describes its domain through a square-integrability condition: a vector x is legal precisely when its spectral measure has a finite second moment.
+This gives two operators: one acting on the even-coordinate Hilbert space, the other on the odd-coordinate Hilbert space. Both are unbounded, and both have precisely the weighted domain condition inherited from A.
 
-Projecting x onto B discards all spectral contributions outside B. It cannot increase that nonnegative integral. Therefore, if x belongs to D of A, so does P x.
+## What can fail for a different projection
 
-Next, compare A P x with P A x. The first action multiplies the spectral values in B by lambda. The second first multiplies all spectral values by lambda and then discards those outside B. The two operations give the same spectral integral. Hence A P x equals P A x on the domain.
+Now choose a different one-dimensional subspace: the line spanned by the vector whose first two coordinates are one and one, with all later coordinates zero.
 
-Notice what we have proved. A measurable spectral set can be unbounded. The projection P itself is bounded, but the restricted operator may remain unbounded. Domain invariance does not depend on B being a bounded interval.
+Projecting onto that line produces a perfectly valid bounded orthogonal projection. Its range consists of finite-support vectors, so it even behaves well with the domain condition in this example.
 
-## Constructing the operator part
+But the line is not invariant under A. Applying A to that vector changes its first two coordinates to one and two. The result no longer lies on the original line.
 
-Define A restricted to M on the domain consisting of vectors that lie in both D of A and M. Its output is A x. Because the spectral projection commutes with A on its domain, this output lies in M.
+So projecting and then applying A is not the same as applying A and then projecting. A mixes the chosen line with its perpendicular complement.
 
-The resulting map, call it A M, is densely defined in M. To see this, start with a vector y in M. Because D of A is dense in H, choose domain vectors x n approaching y. Their projections P x n still belong to D of A, now lie in M, and approach P y, which equals y.
+This distinguishes an arbitrary trial subspace from a reducing subspace. A trial subspace may be useful for approximation, but it does not necessarily define an independent part of the original operator.
 
-The operator A M is symmetric because A is symmetric. The remaining question is whether it is self-adjoint. Symmetry alone does not settle that question for unbounded operators.
+## The two reducing-domain conditions
 
-Here the resolvent makes the proof clean. Take a nonreal complex number z. Self-adjointness of A implies that A minus z times the identity maps D of A bijectively onto H, with a bounded inverse.
+Let A be a self-adjoint operator on a Hilbert space H, and let P be an orthogonal projection. Its range is a closed subspace M.
 
-The projection P commutes with that inverse. To prove it, set x equal to the inverse applied to y. We know x is in D of A. Commutation on the domain gives A minus z applied to P x equals P y. By uniqueness of the inverse, P x is the inverse applied to P y.
+For P to reduce A, we require two things on the domain of A.
 
-Consequently the inverse preserves M. If y lies in M, the vector x obtained this way also lies in M and solves the restricted resolvent equation. Thus A M minus z maps its domain onto M. Using both signs of the imaginary part, the usual resolvent criterion shows that A M is self-adjoint.
+First, P must preserve the domain. If x is an allowed input to A, then P x must also be allowed. Otherwise A applied after P might not even make sense.
 
-This proof verifies density, symmetry, domain preservation, and self-adjointness separately. None is being assumed from a formal block-matrix picture.
+Second, A applied to P x must equal P applied to A x, for every allowed x. This is commutation on the operator domain.
 
-## A concrete infinite-dimensional split
+When these conditions hold, the complementary projection, one minus P, also preserves the domain and commutes with A. Each domain vector splits into two legal pieces, one in M and the other in its perpendicular complement.
 
-Return to ell two, the space of square-summable sequences. Let A multiply the N-th coordinate by N, with N starting at one. Its domain consists of sequences for which the sum of N squared times the squared coordinate magnitudes is finite.
+The operator acts independently on those pieces, just as a block diagonal matrix would.
 
-Let P keep even-numbered coordinates and erase odd-numbered coordinates. This is a spectral projection, since the eigenvalues of A are precisely the positive integers.
+But we have earned the block picture by proving that the blocks are defined.
 
-If a sequence x is in the domain, its even-coordinate subsequence is also in the domain. Applying A before or after discarding odd coordinates gives the same result. The restriction to even coordinates is an unbounded self-adjoint operator on the even-coordinate subspace. The odd-coordinate restriction is another such operator.
+## Why spectral projections satisfy the conditions
 
-This is a literal orthogonal decomposition of the Hilbert space and its operator domain. Each piece retains the appropriate weighted square-summability condition.
+A self-adjoint operator has a spectral projection for every Borel set of real spectral values. For a diagonal operator, the projection selects coordinates whose eigenvalues lie in the chosen set. For an operator with continuous spectrum, it selects an entire spectral region.
 
-Now take instead the projection onto the span of the vector with first and second coordinates equal. The domain condition poses no problem for this finite-dimensional range, but the commutation condition fails: A changes the two coordinates by different factors. This is a projection onto a perfectly legitimate subspace, but not a reducing spectral subspace for A.
+Write E of B for this projection, and let P equal E of B.
 
-The distinction becomes important when a trial subspace is almost invariant. It does not necessarily provide an exact reducing restriction.
+The spectral theorem gives a useful test for membership in the domain of A. A vector x belongs to the domain when the integral of the square of the spectral value against the scalar spectral measure of x is finite.
 
-## Resolvents and the spectrum of a restriction
+Applying P discards spectral mass outside B. Since we are integrating a nonnegative quantity, the integral cannot increase. Thus P x remains in the domain whenever x was in the domain.
 
-Because the restricted resolvent is simply the original resolvent restricted to M, spectral values of A M must lie in the spectral region selected by P. More precisely, the spectrum of the restriction lies in the closed support of the spectral measure on that subspace.
+Commutation follows from the same picture. Applying A multiplies each spectral component by its spectral value. Applying P removes components outside B. Those operations can occur in either order without changing the result.
 
-Do not identify the selected Borel set itself with the restricted spectrum. A set B might contain points that carry no spectral mass, and it may omit limit points that nevertheless belong to the spectrum of the restriction. The spectrum is closed, while a Borel set need not be.
+So a spectral projection preserves the domain and commutes with the operator on that domain.
 
-Consider a multiplication operator on square-integrable functions over the real line, and select the open interval from zero to one. The restricted multiplication operator has spectrum the closed interval from zero to one. The endpoints can belong to its spectrum even though the selected set was open.
+The selected Borel set does not need to be bounded. It might include arbitrarily large spectral values. The projection is always bounded, but the restricted operator may still be unbounded.
 
-For a spectral gap estimate we must formulate separation using the actual restricted spectra, or using verified half-line bounds that imply the separation we need.
+## Construct the restricted operator carefully
 
-## Why this prepares a sine-theta proof
+We can now define the operator part associated with M. Its Hilbert space is M, rather than all of H. Its domain is the intersection of M with the original domain of A. And its action on an allowed vector x is simply A x.
 
-Imagine comparing A with a bounded perturbation, A plus V. A spectral projection P of A reduces A, and a spectral projection Q of the perturbed operator reduces A plus V. Because V is bounded, both unbounded operators have the same domain.
+Why does A x land back in M? Because P commutes with A, and P x equals x for vectors in M. Thus P A x equals A x.
 
-The cross map from Q H into the complement of P H is bounded. To obtain its Sylvester equation, however, we must first check that domain vectors in Q H are carried into the domain of the restricted operator on the complement of P H. The spectral-domain facts proved today make that possible.
+Why is the domain dense in M? Take any vector y in M. Since the original domain is dense in H, choose domain vectors approaching y. Project each of them into M. Domain preservation makes those projected vectors legal, and boundedness of P makes them approach y.
 
-Only after constructing the two self-adjoint restrictions can we apply a spectral separation estimate to the cross map. That order of operations is the main lesson.
+The restricted operator is symmetric because A is symmetric. But for unbounded operators, symmetry alone is not self-adjointness. We still need to justify the adjoint domain.
 
-Spectral projections supply a geometrical decomposition, a legal decomposition of the domain, and self-adjoint restricted operators. All three are required for the perturbation bounds that follow.
+## Resolvents establish self-adjointness
+
+The resolvent gives a clean route.
+
+Choose a nonreal complex number z. Because A is self-adjoint, A minus z has a bounded inverse on the whole Hilbert space.
+
+We claim that this inverse commutes with P. To see why, start with any vector y and let x be its image under the resolvent. Then x belongs to the domain of A, and A minus z applied to x equals y.
+
+Apply P to both sides. Domain preservation and commutation tell us that A minus z applied to P x equals P y. By uniqueness of the solution, P x must be the resolvent applied to P y.
+
+So applying P before or after the resolvent gives the same result.
+
+Now suppose y lies in M. Then P y equals y, which forces the resolvent output x to lie in M as well. That output solves the shifted equation for the restricted operator.
+
+Both nonreal shifts, with positive and negative imaginary parts, are therefore onto M. The restricted operator is densely defined and symmetric, and these surjectivity properties establish that it is self-adjoint.
+
+This argument shows exactly why the restriction inherits self-adjointness: not because the block formula looks symmetric, but because spectral projection preserves the domain and the resolvent.
+
+## The selected set is not automatically the spectrum
+
+There is one last distinction. Suppose we select a Borel set B and form the restricted operator. Does its spectrum equal B?
+
+Not necessarily. B might contain points that carry no spectral mass. And its boundary points might enter the restricted spectrum even if they were not included in the selected set.
+
+For a concrete example, consider the operator that multiplies square-integrable functions on the real line by their input coordinate t. Select functions supported in the open interval from zero to one.
+
+The restricted operator is multiplication by t on square-integrable functions over that interval. Its spectrum is the closed interval from zero to one. Zero and one are spectral values of the restriction, even though the selected Borel set was open.
+
+So spectral gaps must be checked using the actual spectra of the restricted operators, rather than only the written sets used to select them.
+
+A spectral projection gives more than a geometric decomposition. It supplies legal restricted domains, self-adjoint operator parts, and the bounded resolvents needed to analyze those parts. That is the foundation for comparing separated spectral subspaces of unbounded operators.
 
 <!-- END SPOKEN LECTURE -->
 
@@ -93,6 +123,14 @@ Spectral projections supply a geometrical decomposition, a legal decomposition o
 ## Companion: mathematics and Lean correspondence (display only)
 
 Let \(A:D(A)\subset H\to H\) be self-adjoint and \(P=E_A(B)\) a spectral projection. Then \(P D(A)\subset D(A)\), \(APx=PAx\) for \(x\in D(A)\), and \(D(A_P)=D(A)\cap\operatorname{ran}P\). The restriction \(A_P\) is self-adjoint on \(\operatorname{ran}P\). Its resolvent is the restriction of the full resolvent, with \(P(A-z)^{-1}=(A-z)^{-1}P\). The spectrum of the restricted operator is contained in the support of the restricted spectral measure, not generally equal to the original Borel selector.
+
+### Selected set versus restricted spectrum
+
+For \(A=M_t\) on \(L^2(\mathbb R)\), let
+\(P=E_A((0,1))\). Then \(PH\cong L^2(0,1)\) and the operator
+part \(A_P\) multiplies by \(t\). Its spectrum is \([0,1]\), although
+its Borel selector is \((0,1)\). Any spectral-gap hypothesis must use the
+actual restricted spectra or verified bounds on them.
 
 ### Actual source declarations
 

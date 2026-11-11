@@ -4,73 +4,115 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# An operator includes the question of where it is defined
+# Why an operator needs a domain, and what its graph remembers
 
-A matrix acts on every vector in its finite-dimensional coordinate space. But in infinite-dimensional Hilbert space, some of the most important operators cannot act on every vector. Their domain is part of the mathematical data.
+Imagine an infinite list of numbers. You want a rule that multiplies the first number by one, the second by two, the third by three, and so on. The rule is easy to describe. But there is a question that would never arise for an ordinary finite matrix: can we apply it to every vector in our space?
 
-The graph of an operator records its input-output pairs. Closedness and the graph norm let us pass to limits while respecting the operator's domain.
+The answer is no, and understanding that answer will lead us to three ideas: the domain of an operator, its graph, and the graph norm. Together they give a precise way to work with unbounded operators without losing control of limits.
 
-## A diagonal operator that grows without bound
+## One formula, two different questions
 
-Take the Hilbert space ell two: the sequences of complex numbers whose squared magnitudes have finite sum. The length of a sequence is the square root of that sum.
+Our space is called ell two. Its vectors are infinite sequences of real or complex numbers whose squared magnitudes have a finite sum. The length of a sequence is the square root of that sum.
 
-Define A by multiplying the first coordinate by one, the second by two, the third by three, and the N-th by N. Formally, the output coordinates are N times the input coordinates.
+Take the sequence whose entries are one, one half, one third, one fourth, and so on. This is an allowed vector. Its squared entries add to a finite number.
 
-It would be tempting to write that formula for every square-summable sequence. That is incorrect. Consider the sequence whose N-th entry is one divided by N. Its squares form a convergent series, so the sequence belongs to ell two. But multiplying by N produces the constant sequence of ones, which does not belong to ell two.
+Now apply our proposed rule. Multiply the first entry by one, the second by two, the third by three, and so on. Every output entry becomes one. The resulting sequence is not in ell two: the sum of its squared magnitudes is infinite.
 
-The domain of A must therefore consist of those sequences for which the sum of N squared times the squared magnitude of the N-th coordinate is finite. The operator is a linear map from that domain into ell two.
+The formula told us what the output coordinates would be. It did not guarantee that those coordinates would form a vector in the space.
 
-Every sequence having only finitely many nonzero coordinates belongs to the domain. Those finite sequences are dense in ell two, because their initial truncations converge to any square-summable sequence. We say that A is densely defined.
+That distinction determines the domain. For our operator A, we allow exactly the input sequences for which the sequence obtained by multiplying the N-th coordinate by N is still square summable. Equivalently, the sum of N squared times the squared magnitude of the N-th input coordinate must be finite.
 
-A is nevertheless unbounded. Let e N be the sequence with one in position N and zero elsewhere. Its length is one, while the length of A e N equals N. There is no single constant that bounds the output length by a constant times the input length on the whole domain.
+The operator is therefore a rule from this specified domain into ell two. The domain is part of the operator's definition, just as its action is.
 
-Notice the precise conclusion: A is unbounded as an operator on its domain. Each individual A x is still a perfectly good vector of finite length. Unboundedness does not mean that an individual operator value has infinite norm.
+The domain is large. Every sequence with only finitely many nonzero entries belongs to it. Given any ell-two sequence, keeping its first N entries and setting the rest to zero produces a finite sequence that approaches it in length. This proves that the domain is dense: every ell-two vector can be approximated arbitrarily well by allowed input vectors.
 
-## The graph records both input and output
+But dense does not mean equal to the whole space. Our sequence of reciprocals is an explicit vector outside the domain.
 
-For any operator A with domain D, form its graph: the set of ordered pairs, x together with A x, for x in D. This is a linear subspace of the product Hilbert space H times H.
+## What unbounded actually means
 
-The product norm of a graph pair is the square root of the squared length of x plus the squared length of A x. We call that the graph norm of x.
+Consider a sequence that is zero everywhere except for a one in coordinate N. Call it the N-th coordinate vector. Its length is one.
 
-An operator is closed when its graph is a closed subset of this product space. Equivalently, take a sequence of domain vectors x N that converges to x in H, and suppose A x N converges to y in H. Closedness says that x actually belongs to the domain and A x equals y.
+After applying A, its only nonzero coordinate is N, so the output length is N. As N gets larger, the output length grows without limit, although the input length stays one.
 
-That is exactly the limit passage needed for unbounded operators. We cannot infer that A x exists merely because x N converges. But when both input and output converge, closedness makes the limiting pair legal.
+A bounded operator would have one fixed constant that bounds the output length by that constant times the input length for every allowed input. Here no such constant exists. A is unbounded.
 
-Let's prove our diagonal operator is closed. Suppose x N approaches x and A x N approaches y in ell two. Taking the K-th coordinate is continuous: the absolute value of that coordinate never exceeds the length of the entire sequence. Therefore the K-th coordinates converge. For every N, the K-th coordinate of A x N is K times that of x N. Pass to the limit. The K-th coordinate of y is K times that of x. This holds for every K. Because y belongs to ell two, the weighted sequence formed from x is square summable. Thus x is in the domain, and A x equals y. The graph is closed.
+This does not mean that A takes an allowed vector to something of infinite length. That would violate its definition as an operator into ell two. Each allowed input has a legitimate ell-two output. Unbounded means there is no uniform amplification limit across all those inputs.
 
-The proof used neither a matrix inverse nor a uniform bound on A. Coordinatewise convergence was enough because the output limit itself supplied the required summability.
+We now have two different features. The domain is dense but proper, and the operator is unbounded. Neither fact alone tells us whether its behavior is well controlled under limits.
 
-## Complete in the right norm
+## A limit can leave the domain
 
-The graph norm provides another characterization of closedness. Give the domain D the graph norm, even when D is not closed in the ordinary Hilbert-space norm.
+Take the reciprocal sequence again, with entries one over N. Form its first truncation, keeping only the first coordinate. Then keep the first two coordinates, then the first three, and so on.
 
-Suppose A is closed and x N is a Cauchy sequence in graph norm. The definition says both x N and A x N are Cauchy in H. Since H is complete, they have limits x and y. Closedness puts x in the domain and identifies y with A x. Both pieces converge, so x N converges in graph norm. The domain is complete in its graph norm.
+Every truncated sequence is in the domain, and the truncated inputs converge in ell two to the original reciprocal sequence. But that limit lies outside the domain.
 
-Conversely, suppose the domain is complete in graph norm. If x N approaches x and A x N approaches y in H, then the pairs are Cauchy, so x N is graph-norm Cauchy. Completeness gives a domain vector v as its graph-norm limit. Ordinary convergence forces v to equal x, and output convergence forces A v to equal y. Hence the graph is closed.
+What happens to their outputs? After applying A, the first truncation becomes a single one. The second becomes two ones. The N-th becomes N ones. Its output length is the square root of N. Those output vectors do not converge in ell two.
 
-We have proved: on a Hilbert space, a linear operator is closed exactly when its domain, equipped with the graph norm, is complete.
+So ordinary convergence of allowed inputs need not produce another allowed input. Yet our example does not show a failure of the operator itself. It shows that input convergence alone is insufficient. We also need to know what happens to the outputs.
 
-There is a subtle but important point here. The domain of our diagonal A is dense and proper. It is not complete in the ordinary ell-two norm: finite truncations of the sequence one over N converge in ell two to a vector outside the domain. Yet it is complete in the graph norm.
+This motivates the graph.
 
-## Dense does not imply closed
+## The graph stores the whole input-output pair
 
-Take the zero operator but define it only on finite-support sequences. The formula is as harmless as possible: every allowed input maps to zero. Its domain is dense. Its graph is not closed, though.
+Picture the graph of a function from real numbers to real numbers. Each point records both an input and its output. We do the same for an operator, except that each coordinate of the graph point is now a vector in a Hilbert space.
 
-Take finite truncations of the sequence one over N. They converge in ell two to a sequence not having finite support. Their zero outputs converge to zero. The limiting pair does not belong to the graph. So this densely defined zero operator is not closed.
+The graph of A consists of every pair formed by an allowed input and its corresponding output. It lives in the product space ell two times ell two.
 
-Its closure is the zero operator on all of ell two. The word closure here means the operator whose graph is the closure of the original graph, provided that closed set is still the graph of a function.
+We say A is closed if its graph is closed in that product space. In more operational language, suppose allowed inputs approach some vector x, and their outputs also approach some vector y. Closedness guarantees that x is an allowed input and that A applied to x really equals y.
 
-Not every densely defined operator is closable. The closure of a graph may contain a pair with zero input and nonzero output, which would violate single-valuedness. To check closability, one useful criterion is this: whenever x N approaches zero and A x N approaches y, we must have y equal to zero. If that condition fails, no extension of A can have a closed graph.
+Both convergences are required. The reciprocal-sequence truncations do not contradict closedness, because their outputs fail to converge.
 
-A densely defined operator with a densely defined adjoint is closable: the closure of its graph remains the graph of a single-valued operator. Self-adjoint operators are closed, so their spectral and resolvent identities can be passed through graph limits on their specified domains.
+Let's prove that our diagonal operator is closed.
 
-## Why spectral cutoffs fit this framework
+Suppose a sequence of legal inputs approaches x, and the corresponding outputs approach y. Fix a coordinate, say coordinate seven. Convergence in ell two implies convergence of every individual coordinate, because the difference at any one coordinate is no larger than the length of the whole difference.
 
-Recall the spectral projections defined by a bounded spectral cutoff. For a self-adjoint operator A, let P R select the spectral interval from negative R to positive R. Every vector P R x lies in the domain of A, even when x itself does not.
+Every approximating output has its seventh coordinate equal to seven times the seventh input coordinate. Passing to the limit, the seventh coordinate of y equals seven times that of x. The same argument works for every coordinate number.
 
-If x belongs to the domain, P R x converges to x, and A P R x equals P R A x, which converges to A x. Thus the cutoffs converge in the graph norm. They are legal approximations in both input and output, rather than approximations that control only one side.
+Thus y is exactly the coordinate sequence prescribed by the formula for A applied to x. And because y is in ell two, that coordinate sequence is square summable. So x satisfies the domain condition, and A applied to x equals y.
 
-For an unbounded block identity, first state the domain, establish that each expression is defined, and only then pass to limits using closedness or graph-norm convergence.
+That establishes closedness. Even though A is unbounded, its graph cannot lose an input-output pair when both sides converge.
+
+## Measuring convergence in both directions
+
+Ordinary vector length measures only the input. For an operator, we often need to control the input and its output simultaneously.
+
+This leads to the graph norm. Take the squared length of the input, add the squared length of its image under A, and then take the square root.
+
+A sequence approaches another sequence in graph norm exactly when its inputs approach each other in ell two and their outputs under A also approach each other in ell two.
+
+Our reciprocal truncations are Cauchy in ordinary ell-two length, but not in graph norm, because the output lengths keep growing. So the graph norm detects the missing domain condition that the ordinary norm overlooks.
+
+Here is a major theorem: an operator between Hilbert spaces is closed precisely when its domain, equipped with the graph norm, is complete.
+
+To understand why, suppose first that A is closed. A graph-norm Cauchy sequence has inputs that are Cauchy and outputs that are Cauchy. The ambient Hilbert space is complete, so both converge. Closedness tells us that the two limits form a legal input-output pair. Therefore the original sequence converges in graph norm.
+
+For the converse, suppose the graph-norm domain is complete. If legal inputs converge to x and their outputs converge to y, then those inputs are Cauchy in graph norm. Their graph-norm limit must be an allowed vector. Uniqueness of the two ordinary limits identifies that vector with x and its image with y. Hence the graph is closed.
+
+Closedness is exactly the completeness needed to pass to limits while keeping the equation intact.
+
+## A dense operator that is not closed
+
+To see what closedness excludes, take the simplest possible formula: send every input to zero. But define this zero operator only on finite-support sequences.
+
+The domain is dense. However, the finite truncations of our reciprocal sequence have a limit outside that domain, while all their outputs converge to zero. The limiting input-output pair is missing from the graph. So this operator is not closed.
+
+It can be repaired by enlarging its domain to all of ell two, keeping the zero formula. That larger operator is the closure of the original one.
+
+Not every operator permits such a repair. Consider another rule on finite-support sequences: add all the coordinates and put the sum in the first output coordinate, leaving every other output coordinate zero.
+
+Take a vector whose first N entries are all one over N, and whose remaining entries are zero. Its input length is one divided by the square root of N, so it approaches zero. But the sum of its entries is always one, so every output is the first coordinate vector.
+
+If we tried to close this graph, the limit would insist that the zero input have a nonzero output, even though linearity also requires zero to map to zero. No single-valued closed extension is possible. This operator is not closable.
+
+The examples separate three properties: having a dense domain, being closed, and being closable. They are different questions.
+
+## What we gain from the graph viewpoint
+
+For a self-adjoint operator, closedness comes automatically. We can also approximate domain vectors by bounded spectral cutoffs. If A is self-adjoint and we keep only spectral values between negative R and positive R, the truncated vector approaches the original domain vector, and its image under A approaches the original output. That is graph-norm convergence.
+
+So an unbounded operator is not an uncontrolled infinite matrix. It is a rule with a domain, and its graph determines which limits preserve the rule.
+
+The model to retain is simple. Ordinary convergence watches the input. Graph convergence watches the input and output together. Closedness tells us that when both converge, the limiting equation remains legal.
 
 <!-- END SPOKEN LECTURE -->
 
@@ -79,6 +121,16 @@ For an unbounded block identity, first state the domain, establish that each exp
 ## Companion: mathematics and Lean correspondence (display only)
 
 Let \(A:D(A)\subseteq H\to H\). Its graph is \(G(A)=\{(x,Ax):x\in D(A)\}\). The graph norm is \(\|x\|_A=(\|x\|^2+\|Ax\|^2)^{1/2}\). In a Hilbert space, \(A\) is closed if and only if \((D(A),\|\cdot\|_A)\) is complete. For \(A:\ell^2\supset D(A)\to\ell^2\) with \((Ax)_n=nx_n\), \(D(A)=\{x:\sum n^2|x_n|^2<\infty\}\). The map is densely defined, unbounded, and closed. Conversely, zero on \(c_{00}\) is densely defined but not closed.
+
+### Worked distinction: dense, closed, and closable
+
+On \(c_{00}\subset\ell^2\), define
+\(Tx=(\sum_{n\ge1}x_n)e_1\), where the sum is finite. For
+\(x^{(N)}=N^{-1}\sum_{n=1}^Ne_n\), one has
+\(\|x^{(N)}\|=N^{-1/2}\to0\) but \(Tx^{(N)}=e_1\).
+Thus \(T\) is densely defined and not closable. By contrast, the zero map
+on \(c_{00}\) is densely defined and closable, but not closed; its closure
+is the everywhere-defined zero operator.
 
 ### Actual source declarations
 

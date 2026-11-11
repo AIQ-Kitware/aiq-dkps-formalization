@@ -4,83 +4,111 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# Why an unbounded self-adjoint operator must have a proper domain
+# Why an everywhere-defined symmetric operator cannot be unbounded
 
-There is a theorem that sounds surprising when first encountered: if a linear operator is defined on every vector of a Hilbert space and is symmetric, then it must be bounded. This is the Hellinger–Toeplitz theorem.
+Take a diagonal matrix whose entries are one, two, three, and so on. If that list were finite, the matrix would be bounded. In an infinite sequence space, the same pattern gives an unbounded operator, because the multiplication factors grow without limit.
 
-We will prove it, explain the closed graph theorem behind it, and then use it to understand why operator sums and perturbation identities require explicit common-domain hypotheses.
+But there is a restriction hidden in that example. The infinite operator cannot act on every square-summable sequence. Some input sequences would produce outputs that are not square summable.
 
-## The Hellinger–Toeplitz argument
+Is that merely a defect of our diagonal formula, or is it unavoidable? The Hellinger-Toeplitz theorem answers this question decisively. Every linear operator defined on an entire Hilbert space and symmetric with respect to its inner product must be bounded.
 
-Let T act on every vector of a Hilbert space H. Assume T is symmetric, meaning that for any x and y, the inner product of T x with y equals the inner product of x with T y.
+Let's understand why, and then see how the theorem guides calculations involving sums and perturbations of unbounded operators.
 
-Take any sequence x N converging to x, and suppose T x N converges to some y. We want to show that y equals T x. Fix an arbitrary test vector z.
+## The theorem has two separate hypotheses
 
-By continuity of the inner product, the inner product of y with z equals the limit of the inner products of T x N with z. Symmetry changes each of those terms into the inner product of x N with T z. Since T z is one fixed vector, we may pass to the limit again. The result is the inner product of x with T z. Apply symmetry in reverse: it equals the inner product of T x with z.
+Let T be a linear operator from a Hilbert space into itself. Assume first that its domain is the whole Hilbert space. Every vector is allowed as an input.
 
-Thus y and T x have the same inner product against every z. Their difference is orthogonal to every vector, including itself. Hence y equals T x.
+Assume second that T is symmetric. That means we can move T from one position to the other in an inner product: the inner product of T x with y equals the inner product of x with T y, for every pair of vectors.
 
-We have proved that the graph of T is closed. Because its domain is all of H, the closed graph theorem now says T is bounded.
+The conclusion is a uniform bound. There must be a finite constant C such that the length of T x is at most C times the length of x, for every x.
 
-That completes the proof of Hellinger–Toeplitz.
+This does not claim that every symmetric operator is bounded. An unbounded symmetric operator can exist, but it must have a proper domain. And the theorem does not say that every everywhere-defined linear operator is bounded. In infinite dimensions there are everywhere-defined discontinuous linear maps. The symmetry assumption is doing real work.
 
-Notice exactly where we used the full domain. We needed T z to exist for every test vector z, and we needed the closed graph theorem to apply to a linear map whose domain is the entire Banach space H.
+So why does symmetry, together with the full domain, force continuity?
 
-## Why the closed graph theorem is plausible
+## Prove that the graph is closed
 
-The closed graph theorem is a consequence of completeness, and it is worth understanding the mechanism rather than treating its name as an incantation.
+Imagine we have a sequence of inputs approaching a vector x. We apply T to each input and suppose the outputs approach a vector y. We want to prove that y equals T x.
 
-Equip the graph of a closed operator T with the product norm. It is a closed subspace of the Banach space H times H, so it is itself complete. Projection from the graph onto its first coordinate is continuous. If T is everywhere defined, that projection is a bijection from the graph onto H.
+To compare those two vectors, select an arbitrary test vector z. If two Hilbert-space vectors have the same inner product with every test vector, they must be equal.
 
-The bounded inverse theorem says a continuous linear bijection between Banach spaces has a continuous inverse. One route to that theorem uses the Baire category theorem: a complete metric space cannot be covered by countably many closed sets with empty interior. Applied to images of balls, that fact forces a surjective bounded linear map to send some neighborhood of zero onto a set containing a neighborhood of zero. Linear scaling then gives a uniform bound for the inverse.
+Start with the inner product of y with z. Since the outputs approach y, this equals the limit of the inner products of T x N with z.
 
-Now apply the inverse of the graph projection to x. It returns the pair x together with T x. Continuity of that inverse gives a constant C for which the product length of x and T x is at most C times the length of x. In particular, the length of T x is at most C times the length of x. So T is bounded.
+Use symmetry to move T onto the fixed test vector z. We get the limit of the inner products of x N with T z.
 
-The closed graph theorem and Hellinger–Toeplitz use completeness in a substantive way.
+Now T z is a fixed, legitimate vector. It is legitimate precisely because T acts on every vector in the Hilbert space. Since x N approaches x, the limit equals the inner product of x with T z.
 
-## Why the diagonal example has a restricted domain
+Apply symmetry one more time. This equals the inner product of T x with z.
 
-Our diagonal operator sends the N-th coordinate to N times that coordinate. On the basis vector e N it multiplies length by N, so it is unbounded. On its maximal weighted-square-summability domain it is self-adjoint: testing its adjoint on individual coordinate basis vectors forces exactly the same domain condition.
+Thus y and T x have the same inner product with every z, so y equals T x. We have proved that the graph of T is closed.
 
-Hellinger–Toeplitz tells us that this domain cannot equal all of ell two. The sequence with N-th coordinate one over N is a direct witness: it lies in ell two but not in the operator domain.
+Notice the two uses of the full-domain hypothesis. T z exists for every test vector, and T x exists for the limiting input. If T were defined only on a dense subspace, we could not assume either fact without checking the domain.
 
-There is no contradiction with symmetry. The operator is symmetric on its domain, not everywhere defined. Its graph is closed, but the closed graph theorem does not make it bounded as a map from the ambient Hilbert space because its domain is proper.
+## Why a closed graph gives a bound
 
-If we equip the domain with graph norm, the operator becomes bounded as a map from that graph-norm space into H. This is a different claim, using a stronger norm on the input.
+A closed graph is enough for a boundedness conclusion when the operator is defined on all of a Banach space. That is the closed graph theorem.
 
-## Adding a bounded perturbation
+Its mechanism is worth a short look. Put all pairs consisting of x and T x into a product space. Because the graph is closed, it is itself complete under the product norm.
 
-Let A be self-adjoint with domain D, and let V be an everywhere-defined bounded self-adjoint operator. Define B by B x equals A x plus V x, for x in D. The domain of B is exactly D.
+Project each graph pair onto its first component. That projection is a continuous linear map from the complete graph space to the original Hilbert space. And because T is everywhere defined, the projection is bijective: every input appears in exactly one graph pair.
 
-We can prove that B is self-adjoint. First observe the adjoint domain of B. A vector y lies in that domain when the functional in x given by the inner product of A x plus V x with y is bounded by a constant times the length of x, for x in D.
+The bounded inverse theorem says that a continuous linear bijection between Banach spaces has a continuous inverse. The inverse projection takes x back to the pair consisting of x and T x.
 
-The contribution from V is already bounded: by the adjoint identity for bounded V, it equals the inner product of x with V y. Subtracting this term shows that the whole functional is bounded if and only if the A functional is bounded. Thus the adjoint domains of B and A agree.
+Continuity of that inverse provides a constant controlling the combined lengths of x and T x by the length of x. In particular, it controls the length of T x. That is exactly the bound we wanted.
 
-For y in that common adjoint domain, B star y equals A star y plus V y. Since A is self-adjoint, and since V is self-adjoint, this is A y plus V y on D. Therefore B is self-adjoint on D.
+The Hellinger-Toeplitz proof is now complete. Symmetry and full domain give a closed graph. Full domain and completeness turn that closed graph into boundedness.
 
-This proof does not require V to be small in operator norm. Boundedness and self-adjointness of V are enough.
+## Test the theorem against a concrete operator
 
-## Comparing graph norms on a common domain
+Return to ell two, the space of square-summable sequences. Let A multiply coordinate N by N. Its legal domain consists of those sequences for which the weighted coordinate sequence is still square summable.
 
-The graph norm for A involves the lengths of x and A x. The graph norm for B involves x and A x plus V x.
+The vector supported at coordinate N has length one, while its image has length N. So A is unbounded.
 
-The triangle inequality gives the length of B x at most the length of A x plus the operator norm of V times the length of x. Therefore the graph norm of B is bounded above by a constant times the graph norm of A.
+On its domain, A is self-adjoint and therefore symmetric. It is also closed. But it does not violate Hellinger-Toeplitz, because its domain is not all of ell two.
 
-Reverse the relation by writing A x equals B x minus V x. The same reasoning gives an upper bound for the graph norm of A in terms of that of B.
+The sequence whose N-th entry is one over N belongs to ell two, but applying the coordinate formula would yield the constant sequence of ones. That output is not in ell two, so the vector must be excluded from the domain.
 
-So the two graph norms are equivalent on the same domain. They generate the same notion of graph-norm convergence, although their numerical values need not agree.
+There is another way to see the limit issue. The finite truncations of that reciprocal sequence are legal inputs approaching a vector outside the domain. Their outputs have lengths equal to the square root of the truncation length and do not converge. This is compatible with A having a closed graph.
 
-This is why bounded perturbations are technically manageable: no new operator domain is introduced.
+If we equip the domain with the graph norm, then A is bounded as a map from that graph-norm space into ell two. The input norm has changed, however. We have not made A bounded with respect to the ordinary ell-two norm.
 
-## What goes wrong without a common domain
+## Add a bounded perturbation without changing the domain
 
-For two genuinely unbounded operators, the formal sum A plus B is initially defined only on the intersection of their domains. That intersection may not have the properties one wants, and the sum need not be self-adjoint merely because each summand is self-adjoint.
+Suppose now that A is an unbounded self-adjoint operator with domain D. Let V be a bounded self-adjoint operator defined on the whole Hilbert space.
 
-Even identities like A x minus B x require x to belong to both domains. Writing A minus B as though it were automatically bounded on all of H can hide precisely the issue that an unbounded perturbation theorem must solve.
+We can form a new operator B by applying A and V to the same input and adding the outputs. Which inputs are allowed? Exactly those in D. A cannot be applied outside D, while V introduces no additional restriction. Thus B and A have the same domain.
 
-A perturbation V is relatively A-bounded when the length of V x is controlled by a multiple of the length of A x plus a multiple of the length of x. This is a bound in the graph norm. It lets us reason about a perturbation that need not be bounded in the ambient norm, provided it acts on the required domain.
+More surprisingly, B is self-adjoint even when V is not small.
 
-For Davis–Kahan's unbounded theorems, the common-domain assumption is often the hinge between a valid operator equation and an expression that is not even defined. We will state it before manipulating off-diagonal blocks.
+We can see the domain argument directly. To decide whether y belongs to the adjoint domain of B, examine the measurement obtained by taking the inner product of B x with y, with x ranging over D.
+
+Split it into two measurements, one from A and one from V. The V part is already bounded in the ordinary input norm, since V is a bounded operator. Subtracting a bounded functional cannot change whether the remaining A functional is bounded.
+
+Therefore the adjoint domains of A and B are the same. Their adjoint actions differ by V star. Since A and V are self-adjoint, this says B has the same adjoint domain and the same action as B star. Hence B is self-adjoint on D.
+
+The key facts are boundedness of V, self-adjointness of V, and self-adjointness of A. There is no perturbation-size condition in this theorem.
+
+## Compare the graph norms
+
+The graph norm of A measures both the size of x and the size of A x. The graph norm of B measures the size of x and the size of A x plus V x.
+
+Because V is bounded, the length of V x is at most the operator norm of V times the length of x. So the length of B x is controlled by the length of A x plus a fixed multiple of the length of x.
+
+That gives a bound for the graph norm of B in terms of the graph norm of A. Reversing the identity, A x equals B x minus V x, gives the opposite bound.
+
+The two graph norms are equivalent on the common domain. A sequence converges in the graph norm of A exactly when it converges in the graph norm of B.
+
+This is why bounded perturbations are friendly to domain arguments: the new operator uses the same allowable inputs and the same kind of convergence.
+
+## What changes when the perturbation is unbounded
+
+Suppose V is itself unbounded. Then the expression A x plus V x makes sense only for inputs that belong to both domains. That intersection may be too small or may behave poorly under limits. Neither self-adjointness of A nor self-adjointness of V, by itself, guarantees that their sum is self-adjoint.
+
+One way to regain control is to assume that V is relatively bounded with respect to A. That means the length of V x is bounded by a fixed multiple of the length of x plus another fixed multiple of the length of A x, for every x in the domain of A.
+
+This is a graph-norm estimate. With suitable extra assumptions, including symmetry of V and a relative coefficient strictly below one, the Kato-Rellich theorem gives self-adjointness of the sum. The coefficient restriction is relevant here; it was not needed when V was bounded on the whole space.
+
+So the correct habit for working with unbounded operators is to name the domain before adding operators, taking adjoints, or rearranging an equation. Hellinger-Toeplitz tells us why proper domains are unavoidable. The bounded-perturbation argument shows how a domain can stay intact. Relative bounds are one way to proceed when even the perturbation is unbounded.
 
 <!-- END SPOKEN LECTURE -->
 
@@ -89,6 +117,15 @@ For Davis–Kahan's unbounded theorems, the common-domain assumption is often th
 ## Companion: mathematics and Lean correspondence (display only)
 
 Hellinger–Toeplitz: an everywhere-defined symmetric linear operator on a Hilbert space has closed graph, and is therefore bounded by the closed graph theorem. A bounded self-adjoint \(V:H\to H\) added to a self-adjoint \(A:D(A)\to H\) satisfies \(D(A+V)=D(A)\), \((A+V)^*=A^*+V^*\), and is self-adjoint on that domain. For a domain-defined perturbation one may instead assume \(\|Vx\|\le a\|x\|+b\|Ax\|\), a graph-norm relative bound.
+
+### Relative-boundedness threshold
+
+The Kato--Rellich theorem applies when \(A\) is self-adjoint, \(V\) is
+symmetric on \(D(A)\), and for constants \(a\ge0\), \(0\le b<1\),
+\[\|Vx\|\le a\|x\|+b\|Ax\|\qquad(x\in D(A)).\]
+Then \(A+V\) is self-adjoint on \(D(A)\). In the bounded self-adjoint
+perturbation case, take \(b=0\); no smallness restriction is imposed on
+\(\|V\|\).
 
 ### Actual source declarations
 
