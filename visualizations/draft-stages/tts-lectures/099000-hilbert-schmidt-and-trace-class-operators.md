@@ -4,99 +4,143 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# Measuring the energy of an operator
+# Two ways to add up the size of an operator
 
-In finite dimensions, the Frobenius norm of a matrix can be calculated in two ways. We can square and sum every matrix entry, or square and sum its singular values. Those totals agree because orthonormal changes of coordinates preserve squared length.
+Imagine a two-by-two diagonal matrix. It stretches the first coordinate by three and the second by one.
 
-The Hilbert–Schmidt construction extends this to infinite-dimensional Hilbert spaces. It lets us measure the total squared output length of an operator on an orthonormal basis, and the result is independent of which basis we choose.
+What is the size of this matrix? If we ask for the maximum stretch of a unit vector, the answer is three. If we add the squared magnitudes of every entry and take the square root, the answer is square root of ten. If we add its two singular values, the answer is four.
 
-We will prove that independence, connect the formula to singular values, then distinguish Hilbert–Schmidt operators from trace-class operators. Finally, we will derive the trace and explain why products of two Hilbert–Schmidt operators are trace class.
+All three answers are correct. They measure different things.
 
-## Start with an orthonormal basis
+The first is the operator norm. The second is the Frobenius norm. The third is the trace norm.
 
-Let T map a Hilbert space E boundedly into another Hilbert space F. Choose an orthonormal basis e one, e two, and so on, assuming for illustration that E is separable.
+In infinite dimensions, the difference becomes more than a numerical choice. The Frobenius-style calculation may converge while the trace-norm calculation diverges. That is why we distinguish Hilbert-Schmidt operators from trace-class operators.
 
-Form the sum of the squared lengths of T e n. Every term is nonnegative, so the sum is well-defined as an extended nonnegative real value, possibly infinity.
+## Extend the Frobenius calculation
 
-We call this the Hilbert–Schmidt energy of T. If it is finite, T is Hilbert–Schmidt, and the square root of the energy is its Hilbert–Schmidt norm.
+Let's start with ell two, the Hilbert space of square-summable sequences. An operator T acts on each standard basis vector, one at a time. We can measure the length of every resulting output vector.
 
-For a diagonal operator on ell two with coefficients t n, the energy is simply the sum of squared absolute values of t n.
+Square those output lengths and add them over all basis vectors. This sum might be finite or infinite. When it is finite, we say T is Hilbert-Schmidt. The square root of the sum is its Hilbert-Schmidt norm.
 
-Take t n equal to one divided by n. The sum of one over n squared converges. Thus this diagonal operator is Hilbert–Schmidt. If instead t n equals one divided by the square root of n, the energy is the harmonic series and diverges. This operator is compact but not Hilbert–Schmidt.
+Why is this the infinite-dimensional Frobenius norm? In a finite matrix, the image of a standard basis vector is one column of the matrix. The squared length of that column is the sum of the squared magnitudes of its entries. Adding over all columns produces exactly the sum of squared magnitudes of every matrix entry.
 
-The definition seems to depend on the chosen basis. To make it intrinsic, we must prove otherwise.
+So the Hilbert-Schmidt construction is simply the same calculation allowed to run over infinitely many orthonormal input directions.
 
-## Why the basis does not matter
+For a diagonal operator with coefficients one over n, applying T to basis vector n produces a vector of length one over n. The squared lengths add to the convergent series one plus one quarter plus one ninth, and so forth. This operator is Hilbert-Schmidt.
 
-Choose an orthonormal basis f j of the output space as well. By Parseval's identity, the squared norm of T e n equals the sum over j of the squared absolute values of the inner products between T e n and f j.
+Change the coefficients to one over the square root of n. They still tend to zero, so the diagonal operator is compact. But their squared lengths add to the harmonic series, which diverges. So this operator is not Hilbert-Schmidt.
 
-Summing over n produces a double sum of nonnegative terms. Since nonnegative sums can be rearranged, interchange the order of the two indices.
+We are measuring accumulated squared output size, not merely the largest output size.
 
-By the defining identity of the adjoint, the inner product between T e n and f j equals the corresponding inner product between e n and T adjoint f j, up to the usual conjugation convention. Their absolute values are equal.
+## A serious question: which basis?
 
-Apply Parseval again, now in the input space. Summing over n yields the squared norm of T adjoint f j. Summing over j gives exactly the Hilbert–Schmidt energy of T adjoint, computed in the output basis.
+Our definition appeared to depend on the chosen orthonormal basis. Suppose we rotate the basis. Do we get a different Hilbert-Schmidt norm?
 
-So the energy of T in one input basis equals the energy of its adjoint in any output basis. Apply the same argument with a second input basis and the same output basis. Both calculations agree.
+We need to prove that we do not.
 
-This proves basis independence and, at the same time, equality of the Hilbert–Schmidt norms of T and T adjoint.
+Take one orthonormal basis in the input space, and another orthonormal basis in the output space. We will temporarily call their vectors e and f.
 
-For nonseparable Hilbert spaces the basis index can be arbitrary; sums of nonnegative terms are defined by suprema over finite subsets. The same proof works with that convention.
+Apply T to one input basis vector e. Parseval's identity says the squared length of T e equals the sum of the squared magnitudes of its inner products with all the output basis vectors f.
 
-## The operator inner product
+Now add that identity over every input basis vector. We have a double sum: one index for input directions and one for output directions.
 
-For two Hilbert–Schmidt operators S and T with the same input and output spaces, define their Hilbert–Schmidt pairing by summing the inner products of S e n with T e n over an orthonormal input basis.
+Every summand is nonnegative. That lets us exchange the order of summation without relying on conditional cancellation.
 
-The Cauchy–Schwarz inequality for series bounds the absolute value of the sum by the product of their Hilbert–Schmidt norms. It therefore converges absolutely and defines an inner product on the Hilbert–Schmidt class.
+Next use the adjoint. The inner product of T e with f has the same absolute value as the inner product of e with T adjoint applied to f. This simply transfers T from one side of the inner product to the other.
 
-Its squared norm agrees with the energy we just defined. The Hilbert–Schmidt class is complete under this norm, so it is itself a Hilbert space.
+For each fixed output basis vector f, Parseval's identity in the input space now adds the squared inner products over e. The result is the squared length of T adjoint f.
 
-In finite dimensions, this pairing is the familiar trace of S adjoint T. We will now explain when that trace makes sense in infinite dimensions.
+We have proved that the sum of squared output lengths of T in the input basis equals the corresponding sum for T adjoint in the output basis.
 
-## Trace class is a stronger condition
+Now repeat the calculation with a different input basis but the same output basis. Both versions give the same sum for T adjoint. Therefore the original sum is independent of the input basis.
 
-If T is compact, list its singular values s one, s two, and so on. T is trace class when the sum of these singular values is finite. Its trace norm is that sum.
+We also learned that T and its adjoint have equal Hilbert-Schmidt norms.
 
-Every trace-class operator is Hilbert–Schmidt: since the singular values have a finite sum, they are bounded and their squares also have a finite sum. But the reverse fails. The diagonal with t n equal to one divided by n is Hilbert–Schmidt, while its trace norm would be the divergent harmonic series.
+For a nonseparable Hilbert space, orthonormal bases may have arbitrary index sets. The same reasoning uses suprema of finite subsums in place of a single numbered series.
 
-For a positive trace-class operator, the trace is the sum of its nonnegative eigenvalues, counted with multiplicity. The trace norm and trace agree in this positive case.
+## Connect the energy to singular values
 
-For a general trace-class operator, define its trace by summing the diagonal inner products between e n and T e n. This sum converges absolutely and does not depend on the orthonormal basis.
+For a compact operator T, its singular values measure the stretches in its mutually orthogonal singular directions. When we choose those directions as part of an orthonormal basis, T sends the n-th singular direction to a vector of length equal to the n-th singular value.
 
-The bound on the absolute value of the trace by the trace norm is essential. It protects the definition against basis changes and conditional rearrangements.
+Because the Hilbert-Schmidt energy is basis independent, we may compute it using these convenient directions. We get the sum of the squares of all singular values.
 
-## Why two Hilbert–Schmidt factors make a trace-class product
+So there are two equivalent descriptions. We can square the output lengths on any orthonormal input basis, or we can square the singular values and sum them. They give the same Hilbert-Schmidt energy.
 
-Suppose S maps E to F and T maps F to E, and both are Hilbert–Schmidt. The composition T S maps E to itself.
+This equivalence helps us move between concrete matrix entries and the intrinsic spectral description of an operator.
 
-Intuitively, each factor loses enough singular-value mass that their product has summable singular values. More precisely, the Schatten Hölder inequality gives the trace norm of T S at most the Hilbert–Schmidt norm of T times the Hilbert–Schmidt norm of S.
+## The Hilbert-Schmidt operators form a Hilbert space
 
-One route to the inequality uses finite-rank approximations. First prove it for matrices by singular-value inequalities and Cauchy–Schwarz, then approximate S and T in their Hilbert–Schmidt norms by finite-rank maps. The estimates make the products Cauchy in trace norm; completeness of trace class supplies the limit, which agrees with T S in operator norm.
+There is a further payoff. Suppose S and T are both Hilbert-Schmidt and have the same input and output spaces.
 
-Another route factors a nuclear operator through the square root of its modulus, producing two Hilbert–Schmidt factors. This factorization explains why the trace norm is naturally connected to a product of two square-summable quantities.
+Apply each operator to an orthonormal input basis. Take the inner product of S e with T e for each basis vector e, and add those inner products.
 
-## An example of the product estimate
+The ordinary Cauchy-Schwarz inequality for series tells us that the absolute sum is bounded by the product of the two Hilbert-Schmidt norms. Therefore this pairing is well-defined.
 
-On ell two, let both factors be diagonal with entries one over n. Each is Hilbert–Schmidt because the sum of squared entries converges. Their product has diagonal entries one over n squared, whose ordinary sum is finite. Thus the product is trace class.
+It behaves like an inner product on the space of operators. Pairing T with itself gives its squared Hilbert-Schmidt norm. And the class is complete in that norm.
 
-This example makes the exponent arithmetic visible: multiplying two square-summable sequences gives a summable product by Cauchy–Schwarz. The operator theorem generalizes that estimate to maps that cannot be simultaneously diagonalized.
+That means Hilbert-Schmidt operators form a Hilbert space in their own right. We can use familiar geometric ideas, such as orthogonality and projections, but now the points of the space are operators rather than vectors.
 
-## Cyclicity with a bounded factor
+In finite dimensions this pairing is the Frobenius inner product. In infinite dimensions it is the corresponding trace pairing, once we establish why the trace exists.
 
-If T is trace class and B is bounded, both B T and T B are trace class when the compositions are square. The trace satisfies trace of B T equals trace of T B.
+## Why trace class is stricter
 
-The finite-dimensional proof expands entries and rearranges a finite sum. In infinite dimensions we justify cyclicity using finite-rank approximations and continuity of the trace in trace norm. Without the trace-class hypothesis, the two displayed traces might fail to exist.
+For a compact operator, take its singular values and add them without squaring. If the sum is finite, the operator is trace class. That sum is its trace norm.
 
-This caveat prevents a common error: the ordinary operator trace is not defined on every bounded operator, and cyclic rearrangement cannot rescue a divergent sum.
+Our diagonal operator with coefficients one over n is the perfect separator. It has a finite sum of squared singular values, but an infinite sum of singular values. So it is Hilbert-Schmidt and not trace class.
 
-## Spectral truncation in ideal norm
+Any trace-class operator is Hilbert-Schmidt. Here is the reason. A summable sequence of nonnegative singular values is bounded, and multiplying each value by itself cannot destroy summability when all the values are uniformly bounded. More concretely, the sum of squares is at most the largest singular value times the sum of singular values.
 
-For a Hilbert–Schmidt compact operator, truncate its singular-value expansion after N terms. The squared Hilbert–Schmidt norm of the remainder is the sum of squares of singular values beyond N, which tends to zero by summability.
+Thus trace class sits inside Hilbert-Schmidt. The containment is strict in infinite dimensions.
 
-For a trace-class operator, the trace norm of the same remainder is the tail sum of singular values, which also tends to zero.
+In finite dimensions every matrix belongs to both classes. It is the infinite number of directions that creates the membership question.
 
-This proves finite-rank density in both norms and provides the bridge from finite matrix proofs to the infinite-dimensional ideal theorems we need later.
+## The trace itself
 
-The central distinction to retain is that different summability conditions define different classes. A bound on the largest singular value alone says nothing about the total square energy or the trace sum. Those require their own ideal estimates.
+For a positive trace-class operator on a single Hilbert space, the trace is the sum of its eigenvalues, counted with multiplicity. Because the operator is positive, the eigenvalues are nonnegative, and this sum equals its trace norm.
+
+For a general trace-class operator on one Hilbert space, the trace can be computed by choosing any orthonormal basis and summing the diagonal inner products of each basis vector with its image under the operator.
+
+The trace-class condition ensures that this series converges absolutely and that the answer is independent of the basis. The absolute value of the trace is at most the trace norm.
+
+The distinction between trace and trace norm is important. The trace can involve cancellations, and it may even be zero for a nonzero operator. The trace norm adds the nonnegative singular values and never relies on cancellation.
+
+Also, the trace belongs naturally to operators from a Hilbert space back to itself. The trace norm still makes sense for rectangular operators between different Hilbert spaces.
+
+## Why multiplying two square-summable operators works
+
+Suppose S sends vectors from E to F, and T sends vectors from F back to E. Both are Hilbert-Schmidt.
+
+Their composition T after S maps E back to itself. A powerful theorem says that this product is trace class, with trace norm at most the Hilbert-Schmidt norm of T times the Hilbert-Schmidt norm of S.
+
+Let's see the mechanism in a diagonal example. Suppose both factors multiply coordinate number n by one over n. Each factor is Hilbert-Schmidt, because the sum of one over n squared converges.
+
+Their product multiplies coordinate n by one over n squared. Now the sum of the singular values of the product converges. So the product is trace class.
+
+The scalar calculation suggests Cauchy-Schwarz: multiplying two square-summable sequences produces a summable sequence.
+
+For general operators we cannot assume the factors share singular vectors. The operator version is a Schatten Holder inequality. One rigorous route starts with finite-rank approximations, proves the matrix inequality, and then passes to the limit in the Hilbert-Schmidt and trace norms. It yields exactly the same product bound without requiring simultaneous diagonalization.
+
+The operator inner product from a moment ago can now be identified with the trace of a product involving the adjoint. Its existence is explained by this theorem.
+
+## Cyclicity needs a finite trace
+
+In finite-dimensional linear algebra, we know the trace of B T equals the trace of T B. In infinite dimensions, we must ensure both traces are defined.
+
+If T is trace class and B is bounded on the same Hilbert space, then both products are trace class, and the traces are equal.
+
+The proof can begin with finite-rank T, where ordinary matrix cyclicity applies. Approximate a general trace-class T by finite-rank operators in trace norm. The trace is continuous in that norm, so the identity passes to the limit.
+
+Without a trace-class hypothesis, there may be no trace to cycle. A bounded operator can have infinitely many diagonal contributions whose sum diverges.
+
+## Return to finite-dimensional approximations
+
+For a Hilbert-Schmidt operator, retain its first N singular directions. The squared Hilbert-Schmidt error is the sum of the squares of all omitted singular values. Since the full square sum converges, that tail tends to zero.
+
+For a trace-class operator, the trace-norm error is the ordinary sum of the omitted singular values. It also tends to zero because the full sum is finite.
+
+These two facts justify using finite-rank operators to prove many infinite-dimensional statements, provided the approximation is taken in the correct norm.
+
+The lesson is that one operator can have several valid notions of size, each collecting its singular directions differently. The operator norm records the largest stretch. Hilbert-Schmidt records accumulated squared stretch. Trace norm records accumulated singular stretch. Only the last two impose the corresponding infinite-dimensional summability conditions.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -5,6 +5,10 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-spectral-theorem",
+      "reason": "Unbounded self-adjoint spectral representation and multiplication operators."
+    },
+    {
       "source_id": "kato-1995",
       "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
     },

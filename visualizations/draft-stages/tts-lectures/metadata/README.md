@@ -36,6 +36,18 @@ selection. Use `related_resources.reason` to identify the actual mathematics
 explained by each link, and avoid assigning an entire course to an episode when
 a more specific lesson is available.
 
+**Wikipedia and topic wikis:** For a newly written or substantively revised
+lecture, add one or two closely relevant wiki articles to `related_resources`
+when those pages exist. The catalog uses `kind: encyclopedia_article`,
+`access: free_no_login`, and `format: html`; a single catalog entry can be
+reused by many lectures. Give each lecture a specific reason to read the page.
+For example, the Wikipedia singular value decomposition article explains
+finite matrices and Ky Fan norms, whereas the lecture may prove an
+infinite-dimensional operator-ideal result. State that scope distinction in
+the reading reason. A wiki link is a learning aid, not the evidence for an exact
+historical assertion or the source of the formal Lean correspondence. Leave
+all reading links outside the TTS extraction markers.
+
 ## Sidecar format
 
 For `053000-the-best-map-when-we-keep-only-a-few-directions.md`, the companion

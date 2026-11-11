@@ -4,91 +4,103 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# When infinitely many directions become manageable
+# Why some infinite-dimensional operators behave like matrices
 
-An infinite-dimensional Hilbert space can contain a sequence of mutually perpendicular unit vectors. No two of those vectors get closer than the square root of two. Consequently, its closed unit ball is not compact. Yet some operators turn that noncompact ball into a set whose closure is compact. Those operators are called compact operators.
+Imagine an instrument that accepts an infinite list of numbers and produces another infinite list. Each input coordinate is an independent direction. If we could only keep the first ten directions, how much of the instrument's output would we lose?
 
-On Hilbert spaces, a bounded operator is compact exactly when it is an operator-norm limit of finite-rank maps. The two directions of this characterization explain why finite-dimensional approximations describe compact spectral behavior.
+For some operators, the answer depends dramatically on which ten directions we choose. For others, a carefully chosen finite collection of directions captures almost everything, with a guaranteed error even for the worst possible unit input. Compact operators are precisely the bounded operators for which we can make that error arbitrarily small using finite-dimensional output spaces, when we work between Hilbert spaces.
 
-This theorem explains why finite matrix methods remain useful in infinite dimensions. But it also tells us precisely when that usefulness stops.
+That statement is useful because it tells us when an infinite-dimensional problem can genuinely be approximated by finite matrices. Let's see what it means with one operator that works and one that does not.
 
-## What compactness asks
+## An infinite diagonal instrument
 
-Let T be a bounded linear map from a Hilbert space E to a Hilbert space F. The operator T is compact if the image of the closed unit ball has compact closure. Equivalently, whenever we choose a bounded sequence of input vectors, their output vectors have a norm-convergent subsequence.
+Our input and output space will be ell two: infinite sequences whose squared entries have a finite sum. The norm of a sequence is the square root of that sum. Every standard coordinate vector has norm one, and two different coordinate vectors are perpendicular.
 
-We need to distinguish this from ordinary boundedness. A bounded operator merely sends bounded inputs to bounded outputs. Compactness supplies convergent subsequences of outputs, even if the original inputs have no convergent subsequence.
+First consider the identity operator. It sends every sequence to itself. Suppose we keep only the first N output coordinates and discard the rest. For a particular square-summable input, the discarded tail eventually becomes small. But there is always an input concentrated entirely in coordinate N plus one. For that input, our finite-coordinate approximation misses everything. The error is one, regardless of how large N becomes.
 
-Consider ell two, the space of square-summable sequences, with standard unit vectors e one, e two, and so on. The identity operator maps each e n to itself. These outputs have no norm-convergent subsequence, so the identity is not compact.
+Now consider a different operator, D. It multiplies coordinate number one by one, coordinate number two by one half, coordinate number three by one third, and generally coordinate number n by one over n.
 
-Now take a diagonal operator D that multiplies the n-th coordinate by one divided by n. It maps e n to one over n times e n, which tends to zero. That observation alone is not a complete proof of compactness, because we must control every bounded sequence, not only the basis vectors. We will get that stronger control from finite-rank approximation.
+If we keep the first N output coordinates of D and discard the rest, every discarded coefficient is at most one over N plus one. Consequently, for any unit input at all, the discarded output has norm at most one over N plus one. And the input concentrated in coordinate N plus one achieves that bound exactly.
 
-## Why finite rank guarantees compactness
+So our worst-case error tends to zero. Ten coordinates give an error of one eleventh. A hundred coordinates give one over a hundred and one. We can choose a finite number of coordinates that meets any positive error tolerance.
 
-An operator has finite rank if all its outputs lie in a fixed finite-dimensional subspace. Suppose T has finite rank and the input sequence is bounded. Since T is bounded, its outputs form a bounded sequence in that finite-dimensional range.
+That difference between the identity and D is the central picture behind compactness. The identity preserves infinitely many independent unit directions at full size. D compresses the higher directions more and more strongly.
 
-The finite-dimensional Bolzano–Weierstrass theorem provides a convergent subsequence. The range is closed, so its limit belongs to the range. Thus T is compact.
+## The formal meaning of compact
 
-The argument uses two ingredients: finite-dimensional balls are compact, and a bounded map sends a bounded set into a bounded set. It applies equally to real and complex Hilbert spaces.
+Let's define what we have been seeing.
 
-What about the converse? We should not expect a compact operator to have literally finite rank. Our diagonal D has infinitely many nonzero diagonal entries, hence infinitely dimensional range. Nevertheless, its small tail should be approximable by zero.
+An operator is bounded if there is one constant that bounds its output norm by that constant times the input norm. Boundedness prevents unlimited amplification of unit inputs. Both the identity and D are bounded, with operator norm one.
 
-## Truncating the diagonal example
+Compactness asks for more. Take every input vector of norm at most one and look at the entire set of outputs. An operator is compact when that output set has compact closure. In a Hilbert space, this means that whenever we choose a bounded sequence of inputs, some subsequence of their outputs converges in norm.
 
-Define D sub N to retain only the first N diagonal entries of D and set all later entries to zero. This operator has rank N.
+Why is the sequence formulation helpful? Because we can test the identity immediately. Feed it the first standard basis vector, then the second, then the third, forever. Every output has norm one. Any two different outputs are distance square root of two apart, so no subsequence can converge. The identity is not compact on infinite-dimensional ell two.
 
-For any unit vector x, the squared norm of D x minus D sub N x is the sum over n greater than N of the squared absolute values of x n divided by n squared. Every denominator is at least N plus one, so the norm of the difference is at most one divided by N plus one.
+Don't confuse compactness with sending a single chosen sequence to a convergent sequence. We need a convergent output subsequence for every bounded input sequence. It is a uniform kind of finite-dimensional behavior.
 
-Taking x equal to e sub N plus one shows the bound is exact. Therefore the operator norm of D minus D sub N equals one divided by N plus one, which tends to zero.
+## Start with operators of finite rank
 
-Every D sub N is compact. We will soon prove that an operator-norm limit of compact operators is compact. Thus D is compact, as promised.
+An operator has finite rank when all its outputs lie in one fixed finite-dimensional subspace. Suppose the range fits in a plane, even if the input has infinitely many dimensions.
 
-Now replace the diagonal coefficients by ones. The corresponding truncations are the projections P sub N onto the first N coordinates. For each fixed x in ell two, P sub N x tends to x, because the tail of a square-summable sequence tends to zero in norm. But the operator norm of identity minus P sub N remains one: applying it to e sub N plus one proves that fact.
+A bounded collection of inputs produces a bounded collection of outputs. But a bounded sequence in a finite-dimensional plane always has a convergent subsequence. This is the finite-dimensional Bolzano-Weierstrass property. Therefore every bounded finite-rank operator is compact.
 
-This is the distinction between strong convergence and operator-norm convergence. Strong convergence controls one fixed vector at a time. Operator-norm convergence controls every unit vector by a single bound.
+The word bounded is important in that statement. We are talking about continuous linear maps between Hilbert spaces. A finite-dimensional range alone would not make a discontinuous linear map a compact operator.
 
-## Compact operators form an operator-norm closed class
+Our truncations of D are bounded finite-rank operators. Each one retains only a finite number of diagonal coefficients, and their operator-norm errors approach zero. Can we conclude that D itself is compact? Yes, provided we establish one more fact: an operator-norm limit of compact operators is compact.
 
-Suppose T sub n are compact and converge in operator norm to T. We want to show T is compact.
+## Why the type of convergence is crucial
 
-Take any bounded sequence x sub j. First choose a compact approximation T sub n so close to T that its output error on every x sub j is small. Because T sub n is compact, its output sequence has a convergent subsequence.
+Recall our two approximations. The coordinate projections onto the first N directions converge to the identity on every fixed vector in ell two. This is called strong operator convergence. Yet the worst-case error remains one, because the neglected direction can change with N.
 
-There is a subtlety: the subsequence may depend on n. To handle every desired accuracy, select successively smaller errors, passing to subsequences each time, and then take a diagonal subsequence. On that diagonal subsequence, the outputs of T are Cauchy: they are uniformly close to the outputs of a compact approximation, which are Cauchy sufficiently far along.
+For D, in contrast, the worst-case error goes to zero. This is operator-norm convergence. It uses one error bound that works simultaneously for every unit input.
 
-Completeness of F supplies a limit. Hence T is compact.
+Compactness survives the second kind of limit, but not the first. Let's see the reason without getting buried in subsequences.
 
-There is also a useful total-boundedness proof. Compact images of the unit ball have finite epsilon-nets. If T is uniformly close to one such compact operator, the same finite collection of centers provides a slightly larger epsilon-net for the image under T. This works at every positive accuracy, establishing precompactness.
+Suppose T is very close in operator norm to a compact operator C. Because C is compact, the outputs C produces from the unit ball can be covered by finitely many small balls in the output Hilbert space. In ordinary language, there are finitely many representative output vectors, and each C output is near at least one representative.
 
-The second proof highlights why the convergence must be in operator norm. Only then does one epsilon control all unit vectors at once.
+Now compare T to C. A uniform operator-norm bound says every T output lies close to its corresponding C output. Therefore those same finitely many representatives also approximate every T output, with a slightly larger error.
 
-## The converse: compactness produces finite-rank approximations
+If we can choose C arbitrarily close to T, we can make such finite approximations at every desired accuracy. In a complete output Hilbert space, that establishes compactness.
 
-Assume T is compact. Fix a positive error epsilon. The closure of the image of the unit ball is compact, so finitely many small balls cover it. Choose centers y one through y m in F, each within epsilon of some relevant outputs.
+This argument would collapse under strong convergence, because strong convergence lets the bad input depend on the approximation index. The identity projections are the precise counterexample.
 
-Let W be the finite-dimensional span of those centers and let Q denote the orthogonal projection onto W. For every unit vector x, the output T x is within epsilon of a center in W. Because Q T x is the nearest point in W, the distance from T x to Q T x is at most epsilon.
+## The converse: compactness gives finite-dimensional approximations
 
-Take the supremum over all unit vectors. We get that the operator norm of T minus Q T is at most epsilon.
+We have established that finite rank implies compactness, and that operator-norm limits of compact operators are compact. Now ask the more interesting question: does every compact operator admit finite-rank approximations in operator norm?
 
-Since Q T has range in W, it has finite rank. As epsilon can be made arbitrarily small, T is an operator-norm limit of finite-rank maps.
+Between Hilbert spaces, the answer is yes.
 
-Notice how the projection theorem does the work. We do not have to choose coordinates in the entire infinite-dimensional space. We only need a finite-dimensional output space that approximates T's image of the unit ball.
+Take a compact operator T and choose a positive error tolerance, say one hundredth. Its outputs on the unit ball form a set with compact closure. Such a set can be covered by finitely many balls of radius one hundredth.
 
-Combining both directions proves the equivalence.
+Choose the finitely many centers of those balls and form their linear span. Call this finite-dimensional output subspace W. Every output T x from the unit ball is close to at least one point of W.
 
-## Compactness survives multiplication
+Because we are in a Hilbert space, we can orthogonally project onto W. An orthogonal projection gives the closest point in W to any output. So projecting T x onto W makes an error no larger than the distance to the nearest chosen center.
 
-If T is compact and A and B are bounded maps of compatible types, then A T B is compact.
+Define a new operator by first applying T and then projecting its output onto W. This new operator has finite rank, because every result lies in W. And its operator-norm distance from T is at most our chosen error tolerance.
 
-To see this, start with any bounded sequence of inputs. Applying B gives a bounded sequence. Compactness of T provides a subsequence whose T B outputs converge in norm. Continuity of A preserves that convergence.
+Repeat with a smaller tolerance. We obtain finite-rank operators converging to T in operator norm.
 
-This is why compact operators form a two-sided operator ideal: composing them on either side with arbitrary bounded operators stays within the compact class.
+Put the two directions together. A bounded operator between Hilbert spaces is compact if and only if it is an operator-norm limit of finite-rank operators.
 
-Likewise, sums and scalar multiples of compact operators are compact. And because the class is operator-norm closed, it is a complete normed space with the operator norm.
+Notice what the proof did not require. We did not need an eigenvector basis for T. We did not need T to be self-adjoint. We only used compactness of the output set and the Hilbert-space projection theorem.
 
-## The singular values of a compact operator
+## What survives composition
 
-For a compact operator T, the modulus of T is positive and compact. Its positive eigenvalues can be listed with multiplicities, descending toward zero. Those eigenvalues are the nonzero singular values of T.
+Suppose T is compact. Put a bounded operator B before T and a bounded operator A after T, with compatible input and output spaces. The combined operator, written A T B and applied from right to left, is also compact.
 
-For a noncompact bounded operator, we can still define approximation numbers, but they need not tend to zero. The identity is the simplest example: no finite-rank approximation gets within operator-norm distance less than one.
+The reason follows directly from sequences. B sends bounded inputs to bounded vectors. T turns some subsequence of those vectors into convergent outputs. A is continuous, so it preserves convergence.
+
+That is why compact operators form a two-sided operator ideal. Sums and scalar multiples of compact operators are compact as well. In this setting, the compact operators form a norm-closed space under the ordinary operator norm.
+
+## What we gained
+
+Return to D, the operator with coefficients one over n. It has infinitely many nonzero output directions, so it is not finite rank. But its finite-rank truncations approximate it in operator norm, and that makes it compact.
+
+The identity is bounded but not compact. Its finite-coordinate truncations approach it strongly, yet never approach it in operator norm.
+
+The distinction is practical. Compactness says we can capture the action on every unit input to any desired accuracy with finitely many output directions. It is the justification for applying finite-dimensional approximation methods to a particular class of infinite-dimensional operators.
+
+For compact operators, we can go a step further. We can rank the important directions according to how much the operator stretches them. Those magnitudes are its singular values, and they tell us exactly how much error the best finite-rank approximation must leave behind.
 
 <!-- END SPOKEN LECTURE -->
 

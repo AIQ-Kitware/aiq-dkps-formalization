@@ -5,6 +5,14 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-hille-yosida-theorem",
+      "reason": "Resolvent criteria for contraction-semigroup generators."
+    },
+    {
+      "source_id": "wiki-c0-semigroup",
+      "reason": "Examples of strongly continuous semigroups and their generators."
+    },
+    {
       "source_id": "bell-unbounded-operators",
       "reason": "For unbounded generators, strong continuity, and semigroup constructions."
     },

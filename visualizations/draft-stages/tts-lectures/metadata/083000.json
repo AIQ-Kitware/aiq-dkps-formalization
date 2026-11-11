@@ -5,6 +5,10 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-unbounded-operator",
+      "reason": "Domains and closed graphs, with examples of densely defined operators."
+    },
+    {
       "source_id": "kato-1995",
       "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
     },

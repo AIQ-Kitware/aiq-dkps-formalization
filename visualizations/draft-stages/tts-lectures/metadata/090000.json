@@ -5,6 +5,14 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-quadratic-form",
+      "reason": "Finite-dimensional quadratic forms as an introductory analogy; unbounded form domains require further theory."
+    },
+    {
+      "source_id": "wiki-spectral-gap",
+      "reason": "Basic spectral-separation vocabulary; read with the lecture-specific ordered gap hypotheses."
+    },
+    {
       "source_id": "mit-strang-positive",
       "reason": "Quadratic-form and minimization examples in matrices; see the lecture assumptions for generalization."
     },

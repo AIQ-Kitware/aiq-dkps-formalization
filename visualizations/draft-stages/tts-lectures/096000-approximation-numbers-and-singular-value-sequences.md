@@ -4,89 +4,121 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# The price of losing dimensions
+# How much error must a low-rank approximation leave?
 
-Imagine compressing an operator into a map with only a limited number of independent output directions. How accurately can you reproduce its behavior on every unit input?
+Suppose a matrix stretches four perpendicular directions by amounts four, two, one, and one half. We are allowed to build a replacement matrix whose outputs occupy only one direction. What is the smallest possible error, measured on the worst unit input?
 
-For a finite matrix, the Eckart–Young theorem answered that question: keep its largest singular directions and discard the rest. In an infinite-dimensional Hilbert space, we can define the same approximation problem without assuming an infinite singular-value decomposition exists.
+Keeping the direction stretched by four seems sensible. That replacement reproduces the largest effect perfectly and discards the other three. Its worst-case error is two, from the second direction.
 
-The approximation numbers are the optimal errors of that rank-constrained problem. We will derive their basic properties and then see why compactness turns them into a genuine singular-value sequence.
+Could we do better by rotating our single retained direction, or mixing several directions together? The answer is no. There is a geometric reason, and understanding it will lead us to approximation numbers for operators on infinite-dimensional Hilbert spaces.
 
-## A definition that always makes sense
+## Why a rank restriction forces an error
 
-Let T be a bounded operator from E to F. Define a sub one of T to be the norm of T. For every positive integer k, define a sub k of T to be the infimum of the operator norms of T minus R, taken over operators R having rank strictly less than k.
+Start with the diagonal matrix from our opening: its stretching factors are four, two, one, and one half. Think of its four input directions as coordinate axes.
 
-So a sub one uses rank zero competitors: only the zero map is allowed, and the error is the norm of T. For a sub two, rank-one maps are permitted. For a sub three, rank at most two, and so on.
+Any rank-one replacement has an output range of dimension at most one. On the plane spanned by the first two coordinate axes, a rank-one map must kill some nonzero vector. This follows because we are mapping a two-dimensional space into at most one dimension.
 
-To avoid an off-by-one error, number approximation values consistently: the first is the best rank-zero approximation error, the second uses rank at most one, and so forth. A different zero-based index convention describes the same sequence after shifting indices.
+Normalize that killed vector to norm one. The original diagonal matrix stretches every unit vector in that plane by at least two. But the proposed replacement sends our chosen vector to zero.
 
-Because each new rank limit admits all competitors from the previous stage, the sequence is nonincreasing. Because norms are nonnegative, every approximation number is nonnegative. And since the zero map is always an admissible competitor, no approximation number exceeds the norm of T.
+Therefore the error between the original matrix and the replacement is at least two on that vector. Since the operator norm is the worst error over all unit inputs, no rank-one replacement can beat an error of two.
 
-Already this gives us a bounded, nonincreasing sequence for every bounded operator, compact or not.
+And keeping just the first singular direction achieves two. So the best rank-one error is exactly two.
 
-## The diagonal calculation
+If we allow rank two, retain the directions stretched by four and two. Then the worst neglected direction has stretch one. The best possible error is one. If we allow rank three, it is one half.
 
-Consider a diagonal operator on ell two with coefficients four, two, one, one half, one quarter, and so on. Its largest singular directions are the coordinate axes.
+The pattern is simple: the price of discarding all but the largest few singular directions is the first stretching factor we discarded.
 
-If we retain the first k minus one coordinates, the remaining diagonal tail has norm equal to the k-th coefficient. Thus a k is at most that coefficient.
+## Define the approximation numbers
 
-For the reverse inequality, take any competitor R of rank less than k. On the k-dimensional span of the first k basis vectors, R must have a nonzero kernel vector. Normalize that vector to unit length.
+Now let T be any bounded operator between Hilbert spaces. We do not assume T is compact or that we can list its singular vectors.
 
-On this span, the original diagonal operator has norm at least the k-th coefficient times the norm of every vector. Our chosen vector is killed by R, so the error T minus R on that vector has norm at least the k-th coefficient. This holds for every competitor R.
+The first approximation number of T is simply its operator norm. It is the error of approximating T by a rank-zero operator, meaning the zero operator.
 
-Thus a k is exactly the k-th diagonal coefficient.
+The second approximation number is the smallest error achievable by a replacement of rank strictly less than two. In other words, rank at most one.
 
-The proof is the infinite-dimensional version of the dimension-intersection argument behind Courant–Fischer and Eckart–Young. It uses only a finite-dimensional subspace at each rank.
+More generally, the k-th approximation number is the infimum of the operator-norm error between T and R, over all bounded replacement operators R of rank strictly less than k.
 
-## A minimax characterization
+Infimum means the best error we can approach. It need not be achieved by a particular replacement for an arbitrary bounded operator.
 
-The same argument suggests another description: a sub k of T equals the infimum, over all subspaces M of dimension strictly less than k, of the norm of T restricted to the orthogonal complement of M.
+The indexing can be easy to confuse. Approximation number one permits rank zero. Approximation number two permits rank one. Number k permits rank k minus one.
 
-For the easy direction, choose the orthogonal projection P onto M. The operator T P has rank less than k, and the error T minus T P is T followed by projection onto the complement. Its norm is exactly the norm of T restricted to that complement.
+As k increases, we allow more replacements, so the approximation numbers can only decrease. They are nonnegative and never exceed the operator norm of T. This gives a sequence for every bounded operator, even when it does not have a discrete singular-value list.
 
-For the converse, take any rank-less-than-k map R. Its kernel has codimension at most k minus one. Therefore we can find a subspace of that small codimension on which R vanishes. On that subspace, T minus R equals T, so the approximation error is at least the corresponding restriction norm.
+## Return to the infinite diagonal example
 
-This is one way to understand the min–max principle without invoking an eigenbasis.
+Consider ell two, the square-summable sequences. Let T multiply its first coordinate by four, its second by two, its third by one, and subsequent coordinates by one half, one quarter, one eighth, and so forth.
 
-There is a mild technical point: one can choose the orthogonal complement of the kernel, which has dimension no larger than the rank of R, and then use the kernel itself as the remaining large subspace. Hilbert-space orthogonal decomposition makes this formulation precise.
+We can keep the first k minus one coordinate directions. The largest discarded diagonal coefficient then gives an upper bound on the approximation error.
 
-## Why compactness is equivalent to decay
+For the lower bound, take any rank-less-than-k replacement R. Focus on the k-dimensional span of the first k coordinate vectors. R must kill some nonzero vector in that span. On this span, T stretches every vector by at least the k-th diagonal coefficient. So T minus R makes an error at least that large on a suitable unit vector.
 
-A bounded operator is compact precisely when it is a norm limit of finite-rank maps, in the Hilbert-space setting considered here.
+Together, these bounds prove that the k-th approximation number is exactly the k-th diagonal coefficient.
 
-If T is compact, then for every epsilon there is a finite-rank R within epsilon of T. Let its rank be r. For every k greater than r, R is an admissible competitor, so a sub k of T is smaller than epsilon. Thus the approximation numbers tend to zero.
+This proof is worth remembering. We never need to analyze every possible clever low-rank approximation. A dimension argument produces an input direction that the replacement must miss.
 
-Conversely, suppose a sub k tends to zero. By the definition of an infimum, for each desired positive error we can choose a sufficiently large k and a rank-less-than-k operator R whose distance to T is below that error. Therefore T is a norm limit of finite-rank maps and is compact.
+## A geometric minimax description
 
-So the decay of approximation numbers is exactly the compactness criterion, not just a consequence of it.
+There is a second way to think about the same quantity.
 
-For the identity on infinite-dimensional ell two, every a sub k equals one. A finite-rank R has a nonzero unit vector in its kernel, and the identity minus R acts as the identity on that vector. The zero competitor gives the matching upper bound.
+Instead of choosing a low-rank replacement, choose a subspace of inputs containing fewer than k independent directions. Imagine telling the operator that we will ignore those selected directions and examine its action on the perpendicular complement.
 
-This supplies a numerical signature for noncompactness.
+Now measure the worst stretch of T on that complement. Among every choice of fewer than k directions to exclude, find the smallest possible worst stretch. That value is the k-th approximation number.
 
-## Connecting approximation numbers to eigenvalues
+Why? If M is our selected input subspace, first project onto M and then apply T. That is a finite-rank replacement of rank less than k. The difference from T is precisely T acting on the perpendicular complement.
 
-Suppose now that T is compact. Its Gram operator, T adjoint T, is positive and compact. The positive square root, called the modulus of T, is also compact. The compact self-adjoint spectral theorem provides orthonormal singular directions with nonzero singular values decreasing to zero, repeated according to multiplicity.
+Conversely, every rank-less-than-k replacement R has a kernel whose perpendicular complement has dimension less than k. On the kernel of R, the approximation error equals T itself. Thus every such replacement has an error at least as large as T restricted to the appropriate complement.
 
-Truncating to the first k minus one singular directions gives a rank-less-than-k approximation with error equal to the k-th singular value. A dimension argument gives the reverse inequality. Hence our approximation number a sub k agrees with the k-th singular value.
+The two descriptions agree. We can optimize over replacement operators, or over the finite number of input directions we choose to remove.
 
-This statement includes multiplicity: if a singular value occurs three times, it occupies three consecutive positions. It also includes zeros after the rank when T has finite rank.
+That is the geometric content of a min-max principle.
 
-For general bounded noncompact operators, the approximation sequence is still defined, but it may not be the enumeration of eigenvalues of the modulus. The identity illustrates this: its modulus has eigenvalue one of infinite multiplicity, and the approximation numbers stay one. Multiplication operators may have continuous spectral values and no suitable discrete singular-vector list at all.
+## Compactness becomes numerical decay
 
-## Two stability estimates
+For an operator on infinite-dimensional ell two, the approximation numbers form an infinite sequence. What happens when that sequence approaches zero?
 
-First, approximation numbers are stable under operator-norm perturbation. For any fixed rank bound and any competitor R, the triangle inequality gives the distance from S to R at most the distance from T to R plus the norm of S minus T. Taking infima proves a sub k of S is at most a sub k of T plus the perturbation norm. Exchanging S and T yields the absolute difference bound.
+If the k-th approximation number tends to zero, we can find finite-rank replacements of T with arbitrarily small operator-norm error. That is exactly the finite-rank characterization of compactness between Hilbert spaces.
 
-Second, bounded maps on either side cannot increase an approximation number by more than their operator norms. If R approximates T with small rank, then A R B approximates A T B; its rank is no greater, and its error is bounded by the product of the three operator norms. Taking infima gives the ideal estimate.
+And conversely, if T is compact, finite-rank operators approximate it arbitrarily closely, so its approximation numbers must tend to zero.
 
-This will allow singular-value estimates to survive orthogonal projections, coordinate embeddings, and partial-isometry transport.
+Thus compactness is equivalent to decay of approximation numbers.
 
-## From approximation numbers to Ky Fan gauges
+Our diagonal operator with coefficients one over n is compact: its approximation numbers are one, one half, one third, and so on, tending to zero.
 
-A single approximation number measures the best rank-constrained error. A sum of the first several approximation numbers measures accumulated size in leading directions.
+But consider the identity on infinite-dimensional ell two. No matter how high a finite rank we allow, the replacement has a nonzero vector in its kernel. On that unit vector, the identity still acts with norm one. The best possible error is exactly one for every rank limit.
 
-Those sums are the infinite-dimensional Ky Fan gauges.
+So all approximation numbers of the identity equal one. This is a precise numerical witness that the identity is not compact.
+
+## When approximation numbers become singular values
+
+For a compact operator, there is more structure. Form its adjoint followed by the operator itself, and then take the positive square root. This positive operator is called the modulus of T.
+
+The modulus of a compact operator is itself compact. The compact self-adjoint spectral theorem lets us list its positive eigenvalues in descending order, repeating each according to multiplicity. These eigenvalues are the singular values of T.
+
+Truncating to the first k minus one singular directions gives an approximation with error equal to the k-th singular value. The same kernel-and-dimension argument supplies the matching lower bound.
+
+So for compact operators, approximation numbers and singular values are the same list, with the natural indexing adjustment if a formalization starts counting at zero.
+
+For a general noncompact operator, the approximation numbers still make sense. But we must not assume they are a list of isolated eigenvalues of its modulus. The identity, for example, retains approximation number one forever. More complicated operators can have continuous spectrum rather than discrete singular directions.
+
+## Why these numbers are stable
+
+Suppose S is a second operator and the operator-norm difference between S and T is at most one hundredth. Any rank-constrained approximation to T is also an approximation to S, with at most one hundredth of additional error. Reverse the argument, and we find that the k-th approximation numbers of S and T differ by no more than one hundredth.
+
+The key point is that this bound is independent of k. A small operator-norm perturbation cannot move any single approximation number by much.
+
+There is another useful estimate. If we put bounded operators before and after T, the approximation number of the resulting composition is at most the corresponding approximation number of T multiplied by the operator norms of those two surrounding maps.
+
+Why? Start with a low-rank approximation R of T. Composing R with bounded maps cannot increase its rank. And the error of the composed approximation is bounded by the usual product-of-norms inequality.
+
+This makes approximation numbers well suited to estimates involving projections, coordinate changes, and operator compositions.
+
+## The picture to retain
+
+For our diagonal matrix, a rank-one approximation cannot hide from the second-largest stretching direction. The same dimension argument works in an infinite Hilbert space, one finite-dimensional test plane at a time.
+
+Approximation numbers answer a concrete question: how accurately can we reproduce an operator while allowing fewer than k independent output directions? Their decay characterizes compactness. For compact operators, the answer is encoded by singular values.
+
+Once we have the entire sequence, we can compare operators through the sum of their largest few approximation numbers. Those finite sums are powerful even when an infinite trace or ideal norm would diverge.
 
 <!-- END SPOKEN LECTURE -->
 

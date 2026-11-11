@@ -5,6 +5,14 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-spectral-theorem",
+      "reason": "Spectral-measure viewpoint underlying functional calculus."
+    },
+    {
+      "source_id": "wiki-resolvent-formalism",
+      "reason": "How shifted inverses encode spectral information."
+    },
+    {
       "source_id": "kato-1995",
       "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
     },

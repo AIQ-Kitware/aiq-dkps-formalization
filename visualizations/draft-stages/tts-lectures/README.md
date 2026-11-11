@@ -67,8 +67,10 @@ The checker validates formatting and spoken-region boundaries. Mathematical revi
 `metadata/` has a JSON sidecar for each of the 150 transcripts and a shared
 bibliographic catalog. Historical attributions and claims about the scope or
 wording of a published paper are anchored to exact excerpts of the extracted
-spoken text, for later primary-source comparison. External videos, notes,
-texts, and original papers are listed separately under `related_resources`.
+spoken text, for later primary-source comparison. External wiki topic pages, videos, notes, texts, and original papers are
+listed separately under `related_resources`. For revised recordings, include a
+closely matching Wikipedia article when one exists, with a brief reading focus;
+more detailed sources remain alongside it.
 
 **Citation metadata is never interpolated into the spoken Markdown.** The
 existing `extract_narration.py` remains the sole TTS input producer. To check

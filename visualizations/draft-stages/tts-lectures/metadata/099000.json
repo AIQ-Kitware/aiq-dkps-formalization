@@ -5,6 +5,14 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-hilbert-schmidt-operator",
+      "reason": "Basis-independent sum of squared output norms and operator inner product."
+    },
+    {
+      "source_id": "wiki-trace-class",
+      "reason": "Trace norm, absolute convergence and basis-independent trace."
+    },
+    {
       "source_id": "bhatia-1997",
       "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
     },

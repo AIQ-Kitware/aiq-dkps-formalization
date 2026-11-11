@@ -5,6 +5,10 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-stone-theorem",
+      "reason": "Strong continuity, infinitesimal generators and Stone's theorem."
+    },
+    {
       "source_id": "mit-strang-exp",
       "reason": "Matrix-exponential method used in finite dimensions; compare with operator-domain assumptions in the lecture."
     },

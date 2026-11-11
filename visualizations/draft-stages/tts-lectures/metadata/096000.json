@@ -5,6 +5,14 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-singular-value",
+      "reason": "Modulus and ordered singular values of compact Hilbert-space operators."
+    },
+    {
+      "source_id": "wiki-singular-value-decomposition",
+      "reason": "Visual finite-matrix SVD and the rank-constrained approximation problem."
+    },
+    {
       "source_id": "bhatia-1997",
       "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
     },

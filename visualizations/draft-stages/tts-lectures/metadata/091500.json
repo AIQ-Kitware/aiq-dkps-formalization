@@ -5,6 +5,14 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-strong-operator-topology",
+      "reason": "Pointwise-on-vector convergence versus operator-norm convergence."
+    },
+    {
+      "source_id": "wiki-resolvent-set",
+      "reason": "Background for what is being inverted at each complex spectral parameter."
+    },
+    {
       "source_id": "teschl-qm-free",
       "reason": "For strong resolvent convergence, spectral measures, and the distinction from norm resolvent convergence."
     },

@@ -5,6 +5,14 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-operator-ideal",
+      "reason": "Ideal membership and stability under left and right composition."
+    },
+    {
+      "source_id": "wiki-schatten-norm",
+      "reason": "The p-summability hierarchy and special cases p equal to one and two."
+    },
+    {
       "source_id": "bhatia-1997",
       "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
     },

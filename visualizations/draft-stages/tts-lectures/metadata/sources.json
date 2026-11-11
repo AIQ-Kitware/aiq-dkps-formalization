@@ -828,6 +828,249 @@
       "notes": "Free full book; different applied explanations of geometry, matrix decomposition, PCA and regression.",
       "access": "free_no_login",
       "format": "pdf"
+    },
+    "wiki-compact-operator": {
+      "title": "Compact operator - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Compact_operator",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Relative compactness and finite-rank approximation in Hilbert spaces.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-singular-value": {
+      "title": "Singular value - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Singular_value",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Singular values, their relation to the modulus, and their ordering.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-singular-value-decomposition": {
+      "title": "Singular value decomposition - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Singular_value_decomposition",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Geometric SVD, best low-rank approximation and the Ky Fan norms subsection.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-majorization": {
+      "title": "Majorization - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Majorization",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Weak majorization and the interpretation of sorted prefix-sum comparisons.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-matrix-norm": {
+      "title": "Matrix norm - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Matrix_norm",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Schatten and unitarily invariant norms for finite matrices.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-operator-ideal": {
+      "title": "Operator ideal - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Operator_ideal",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Two-sided composition closure and examples of operator ideals.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-schatten-norm": {
+      "title": "Schatten norm - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Schatten_norm",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Singular-value p-summability, trace class and Hilbert-Schmidt special cases.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-hilbert-schmidt-operator": {
+      "title": "Hilbert-Schmidt operator - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Hilbert%E2%80%93Schmidt_operator",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Basis-independent square-sum definition and the operator inner product.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-trace-class": {
+      "title": "Trace class - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Trace_class",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Trace-norm summability, basis-independent traces and trace-class properties.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-huber-loss": {
+      "title": "Huber loss - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Huber_loss",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Pseudo-Huber smooth square-root penalty as a scalar analogue, with different scaling conventions.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-resolvent-formalism": {
+      "title": "Resolvent formalism - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Resolvent_formalism",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Shifted inverses and the resolvent identity; notes use their own sign convention.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-resolvent-set": {
+      "title": "Resolvent set - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Resolvent_set",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Resolvent-set definitions and the spectral complement for closed operators.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-rayleigh-ritz-method": {
+      "title": "Rayleigh-Ritz method - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Rayleigh%E2%80%93Ritz_method",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Finite-dimensional trial-space compression and approximate eigenvalues.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-unbounded-operator": {
+      "title": "Unbounded operator - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Unbounded_operator",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Operator domains, closedness, and self-adjoint unbounded examples.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-adjoint-operator": {
+      "title": "Hermitian adjoint - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Adjoint_operator",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Adjoint-domain and integration-by-parts ideas for unbounded operators.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-hellinger-toeplitz-theorem": {
+      "title": "Hellinger-Toeplitz theorem - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Hellinger%E2%80%93Toeplitz_theorem",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Everywhere-defined symmetric operators and why boundedness follows.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-cayley-transform": {
+      "title": "Cayley transform - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Cayley_transform",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Algebraic map from self-adjoint to unitary operators.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-spectral-theorem": {
+      "title": "Spectral theorem - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Spectral_theorem",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Spectral representation including operator and unbounded-operator cases.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-projection-valued-measure": {
+      "title": "Projection-valued measure - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Projection-valued_measure",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Spectral projections, reducing spaces and spectral integration.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-stone-theorem": {
+      "title": "Stone's theorem on one-parameter unitary groups - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Stone%27s_theorem_on_one-parameter_unitary_groups",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Strongly continuous unitary groups and their self-adjoint generators.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-hille-yosida-theorem": {
+      "title": "Hille-Yosida theorem - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Hille%E2%80%93Yosida_theorem",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Resolvent conditions and generators of contraction semigroups.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-sylvester-equation": {
+      "title": "Sylvester equation - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Sylvester_equation",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Finite-dimensional Sylvester equations, spectral separation and uniqueness.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-strong-operator-topology": {
+      "title": "Strong operator topology - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Strong_operator_topology",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Convergence on each fixed Hilbert-space vector versus uniform norm control.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-spectral-gap": {
+      "title": "Spectral gap - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Spectral_gap",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Basic interpretations of gaps between spectral regions; definitions vary by setting.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-eigenvalue-perturbation": {
+      "title": "Eigenvalue perturbation - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Eigenvalue_perturbation",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Finite-dimensional eigenvalue and eigenvector sensitivity as background for angle estimates.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-quadratic-form": {
+      "title": "Quadratic form - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Quadratic_form",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Elementary quadratic forms and associated matrices before unbounded form-domain questions.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-c0-semigroup": {
+      "title": "C0-semigroup - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/C0-semigroup",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Strongly continuous semigroups, generators, and examples of evolution operators.",
+      "access": "free_no_login",
+      "format": "html"
     }
   }
 }

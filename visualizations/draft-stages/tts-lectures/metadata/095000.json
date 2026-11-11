@@ -5,6 +5,10 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-compact-operator",
+      "reason": "Start with the sequence criterion and the compact/finite-rank approximation equivalence."
+    },
+    {
       "source_id": "bhatia-1997",
       "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
     },

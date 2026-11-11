@@ -5,6 +5,14 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-resolvent-set",
+      "reason": "Definition of the resolvent set and spectrum; focus on the closed-operator formulation."
+    },
+    {
+      "source_id": "wiki-resolvent-formalism",
+      "reason": "Resolvent identities and the inverse of a shifted operator; check the sign convention."
+    },
+    {
       "source_id": "mit-strang-18-06",
       "reason": "MIT 18.06 provides an accessible finite-dimensional counterpart; use the relevant vector-space, matrix, or orthogonality lecture."
     },

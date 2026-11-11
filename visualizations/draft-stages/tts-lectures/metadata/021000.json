@@ -5,6 +5,10 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-rayleigh-ritz-method",
+      "reason": "Trial-space projection and how Ritz values approximate spectral values."
+    },
+    {
       "source_id": "mit-strang-18-06",
       "reason": "MIT 18.06: lectures 9–17 on vector spaces, orthogonality, bases and projections; choose the topic matching this recording."
     },

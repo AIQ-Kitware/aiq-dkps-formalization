@@ -5,6 +5,14 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-majorization",
+      "reason": "Weak majorization: sorted leading partial sums, not termwise inequalities."
+    },
+    {
+      "source_id": "wiki-singular-value-decomposition",
+      "reason": "Jump to the Ky Fan norms subsection for finite-dimensional prefix sums."
+    },
+    {
       "source_id": "bhatia-1997",
       "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
     },

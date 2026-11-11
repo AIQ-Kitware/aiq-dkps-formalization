@@ -5,6 +5,10 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-c0-semigroup",
+      "reason": "Generators and bounded approximations in strongly continuous evolution theory."
+    },
+    {
       "source_id": "mit-strang-exp",
       "reason": "Matrix-exponential method used in finite dimensions; compare with operator-domain assumptions in the lecture."
     },

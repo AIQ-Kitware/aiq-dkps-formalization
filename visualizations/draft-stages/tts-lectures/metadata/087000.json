@@ -5,6 +5,10 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-cayley-transform",
+      "reason": "Möbius transformation between self-adjoint and unitary operators."
+    },
+    {
       "source_id": "kato-1995",
       "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
     },

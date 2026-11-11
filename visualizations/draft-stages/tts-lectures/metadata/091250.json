@@ -5,6 +5,10 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-hille-yosida-theorem",
+      "reason": "Resolvent bounds in generation theory, the setting of classical Yosida regularization."
+    },
+    {
       "source_id": "teschl-qm-free",
       "reason": "For resolvent bounds, unbounded domains, and the self-adjoint spectral theorem."
     },

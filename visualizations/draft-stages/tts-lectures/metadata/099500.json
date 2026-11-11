@@ -5,6 +5,14 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-huber-loss",
+      "reason": "Read the pseudo-Huber subsection for a related smooth square-root scalar loss; scaling differs."
+    },
+    {
+      "source_id": "wiki-schatten-norm",
+      "reason": "Hilbert-Schmidt and trace-class summability behind the penalty's finite-energy domain."
+    },
+    {
       "source_id": "bell-trace-ideals",
       "reason": "For Hilbert-Schmidt summability and the relationship with trace-class operators."
     },

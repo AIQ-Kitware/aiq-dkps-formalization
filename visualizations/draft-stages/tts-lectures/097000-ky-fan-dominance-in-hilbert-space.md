@@ -4,81 +4,121 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# Comparing operators one prefix at a time
+# Comparing whole patterns of singular values
 
-For a finite matrix, the sum of its first k singular values is its k-th Ky Fan norm. We proved that comparisons of all such sums can control many other unitarily invariant norms.
+Suppose two machines have the same total amount of stretching, but they distribute it differently. One stretches its three principal directions by three, one, and zero. The other stretches them by two, two, and zero.
 
-We now have an approximation-number sequence for every bounded operator between Hilbert spaces. That makes it possible to transplant the same idea to an infinite-dimensional setting. But we must be careful: finite prefix sums are always well-defined, while an infinite sum or ideal norm may be infinite.
+If you judge the machines by their single largest stretching factor, the first is larger: three versus two. If you add all their stretching factors, they tie at four. If you add the squares, the first gives ten, while the second gives eight.
 
-Ky Fan approximation gauges sum the largest approximation numbers of an operator. Their inequalities provide finite-prefix control, but ideal membership requires a suitable completeness and dominance principle.
+So a comparison based on one number can depend on which number we choose. What kind of information would let us compare operators under many different ways of measuring their size?
 
-## Finite prefixes in an infinite space
+The central idea is to compare the running totals of the largest singular values. These are called Ky Fan sums, and the resulting comparison is called weak majorization.
 
-Let a sub one of T, a sub two of T, and so forth denote the approximation numbers defined as the distance to operators of lower rank. Define K sub k of T to be the sum of the first k approximation numbers, for any positive integer k. Set K sub zero equal to zero.
+## Build the comparison from a short list
 
-Although there may be infinitely many singular directions, each fixed K sub k is a finite sum. Every approximation number is bounded above by the operator norm of T, so K sub k is at most k times that norm.
+Let's use our two lists again. List A has singular values three, one, and zero. List B has two, two, and zero.
 
-If T is compact, we may interpret these terms as the largest k singular values, with zeros inserted when the operator has finite rank. If T is not compact, the definition still works; for the identity on infinite-dimensional ell two, K sub k equals k.
+The first running total of A is three. The second is four. The third is still four.
 
-The first prefix, K sub one, is exactly the operator norm. Later prefixes measure how much leading size remains after the strongest direction has been accounted for.
+The running totals of B are two, four, and four.
 
-## The finite-rank picture returns
+At every stopping point, B's running total is no larger than A's. So B is weakly majorized by A.
 
-Suppose T is compact and positive, with eigenvalues five, two, one, and then zero. For k equal to two, K sub two equals seven. For k equal to three, K sub three equals eight.
+This does not mean each individual entry of B is smaller. Its second entry, two, is larger than A's second entry, one. We are comparing cumulative totals starting from the largest entry.
 
-The finite spectral theorem and the min–max principle give another description: K sub k is the maximum of sums of k suitable diagonal contributions when k orthonormal input vectors and corresponding output directions are chosen to align with the largest singular directions. In finite dimensions, we proved this by the singular-value decomposition and an orthonormal-frame variational principle.
+Why is that useful? A symmetric norm is insensitive to how singular directions are labeled. Many such norms also behave predictably when a fixed total is redistributed more evenly. Weak majorization captures the comparisons that survive this redistribution.
 
-For compact Hilbert-space operators, finite-rank truncations approximate T in operator norm. Each finite truncation has the familiar variational formula. A fixed prefix K sub k changes by at most k times the operator-norm change in T, so we may pass to the limit.
+For instance, the largest-singular-value norm is two for B and three for A. The trace norm is four for both. The square-root-of-sum-of-squares norm is square root of eight for B and square root of ten for A. All three comparisons point in the same allowed direction.
 
-A finite Ky Fan prefix controls only finitely many singular directions, even in an infinite-dimensional Hilbert space.
+The remarkable part is that, under the right conditions, checking every Ky Fan running total lets us compare a whole family of norms.
 
-## Prefix sums obey a triangle inequality
+## Define Ky Fan sums for operators
 
-Let S and T be bounded maps with the same source and target. We want K sub k of S plus T at most K sub k of S plus K sub k of T.
+A singular-value list is available for compact operators. But we want to discuss bounded operators on Hilbert spaces even when no discrete singular-value expansion exists.
 
-In finite dimensions the claim follows from the Ky Fan variational principle. For bounded operators on Hilbert space, finite-rank restrictions and approximation-number inequalities supply the extension, provided the limiting restrictions are justified.
+We can do that with approximation numbers. The first approximation number is the operator norm. The k-th is the best possible operator-norm error when we replace the operator by one of rank strictly less than k.
 
-We can understand the finite-rank proof. Choose orthonormal source vectors and matching orthonormal target vectors that nearly realize the leading k-value for S plus T. Pair the sum with those vectors. Split it into an S contribution and a T contribution. Each contribution is bounded by its own Ky Fan k-value. Taking the supremum gives the desired inequality.
+For each positive integer k, define the k-th Ky Fan approximation gauge as the sum of the first k approximation numbers. The first Ky Fan gauge is therefore the operator norm.
 
-Thus, for fixed k, K sub k is a norm on operators, provided the source and target spaces have sufficient dimensions and one handles the zero-dimensional convention appropriately. Even without that extra formulation, it is a finite, subadditive gauge that dominates the operator norm for k at least one.
+Each fixed sum is finite for every bounded operator. Since every approximation number is at most the operator norm, the sum of the first k is at most k times that norm.
 
-## Weak majorization between operators
+For a compact operator, this is exactly the sum of its k largest singular values, counting multiplicities and adding zeros after the rank if necessary.
 
-Say T is weakly dominated by S in approximation-number prefixes if K sub k of T is at most K sub k of S for every positive integer k.
+For the identity on infinite-dimensional ell two, every approximation number is one. Consequently its k-th Ky Fan gauge equals k. Every individual finite prefix is well-defined, although the infinite sum of all approximation numbers diverges.
 
-This relation compares the cumulative size of singular directions, not the values one by one. For example, compare the finite lists three, one, zero with two, two, zero. Both have total four. The first has a larger leading singular value, so the list two, two, zero is weakly dominated by three, one, zero. The reverse comparison fails at the first prefix.
+That distinction will become important. Being able to compare every finite prefix does not automatically mean an infinite trace norm is finite.
 
-Do not replace weak prefix domination by coordinatewise domination. The first relation is weaker and is the one naturally preserved by averaging and pinching.
+## Why the first few directions are enough
 
-Also, domination is relative to a chosen operator pair. It does not say that an arbitrary bounded operator has a finite trace norm. We can compare every finite prefix of the identity with something else while its infinite nuclear sum remains infinite.
+Consider a positive finite-rank operator whose nonzero eigenvalues are five, two, and one. Its first Ky Fan gauge is five. Its second is seven. Its third is eight. Every later gauge stays eight because the remaining singular values are zero.
 
-## From prefixes to other gauges
+In a finite-dimensional matrix, each Ky Fan sum has a variational interpretation. We look at collections of k orthonormal input directions and matching orthonormal output directions, and measure the total aligned action of the matrix. The largest achievable total equals the sum of the k largest singular values.
 
-A symmetric convex gauge on finite nonnegative lists is monotone under weak majorization: when each leading partial sum of one list is at most that of another, the first gauge is at most the second. This follows by expressing the smaller list through coordinate reductions and transfers that make entries more balanced, then using convexity and permutation symmetry.
+We can understand the idea from a diagonal matrix. If we choose two directions, the best pair is the pair with stretches five and two. Taking a smaller direction in place of either can only reduce the total.
 
-In infinite dimensions we can first apply that result to a finite initial segment. If an ideal norm is obtained as the supremum or an appropriate limit of such finite symmetric gauges, the finite inequalities can be passed to the limit—provided the norm has the required lower-semicontinuity or completeness property.
+The variational principle remains valid for the finite prefixes of bounded Hilbert-space operators, with the appropriate finite-dimensional conventions. Approximation numbers give a way to state the same result without assuming the entire operator has an eigenbasis.
 
-This leads to the Ky Fan dominance principle for a symmetric ideal: if S belongs to that ideal, and every approximation prefix of T is no larger than the matching prefix of S, then T also belongs and its ideal gauge is no larger than that of S.
+For compact operators, there is a particularly clean proof. Truncate the singular-value expansion. On each finite truncation, the matrix variational principle applies. Then let the truncation grow. Every fixed approximation number changes by no more than the operator-norm approximation error, so a fixed Ky Fan sum converges as well.
 
-I am stating this as an additional property of the ideal. The formal development calls it Ky Fan dominance. It should not be silently assigned to every possible norm or every arbitrary class of operators without checking its assumptions.
+The key is that we are fixing k. We are only asking about a finite amount of the leading behavior.
 
-## Why membership is part of the theorem
+## Why Ky Fan sums satisfy a triangle inequality
 
-Consider the Schatten two class, also called the Hilbert–Schmidt class. Its norm is the square root of the sum of squared singular values.
+Now suppose S and T act between the same pair of Hilbert spaces. Why should the k-th Ky Fan gauge of their sum be no larger than the sum of their separate k-th gauges?
 
-If the singular-value list of S is square-summable and the approximation-number prefixes of T are weakly dominated by those of S, majorization and monotone passage to the limit give square-summability for T and the norm inequality.
+Think first about matrices. Choose k orthonormal input and output directions that almost attain the largest aligned action for S plus T. When we evaluate S plus T on those chosen directions, linearity splits the total into an S contribution and a T contribution.
 
-The result has two parts. First, T is in the Hilbert–Schmidt class. Second, its Hilbert–Schmidt norm is bounded by the norm of S. The second statement has no finite real meaning before the first is established.
+Neither individual contribution can exceed its own optimal Ky Fan value. Therefore their sum cannot exceed the sum of the two optimal values. Taking better and better choices of directions proves the triangle inequality.
 
-For comparison, take the diagonal operator with entries one divided by n. Its singular values have finite square sum but divergent ordinary sum. Hence it is Hilbert–Schmidt and not trace class. The prefix sums of its singular values exist for every k, but grow without bound. Finite prefixes by themselves cannot certify nuclear membership.
+The Hilbert-space formulation uses the corresponding finite-frame variational principle. So the same argument gives a triangle inequality for each finite Ky Fan approximation gauge, including operators that are not compact.
 
-## Strong approximation does not supply ideal convergence
+This is a useful surprise. The finite prefixes behave like norms even when the full infinite singular-value sum is infinite.
 
-Suppose P sub N are projections onto the first N coordinates of ell two. Then P sub N converges strongly to the identity. But each P sub N has finite rank, and its trace norm equals N. Their ideal norms diverge. They cannot converge to the identity in trace norm, because the identity does not belong to the trace class.
+## Weak majorization is a family of inequalities
 
-This example warns us not to treat strong operator convergence as convergence in a symmetric ideal gauge. Ideal membership and ideal-norm convergence need their own proofs.
+We say the approximation numbers of T are weakly majorized by those of S if, for every positive integer k, the sum of the first k approximation numbers of T is at most the matching sum for S.
 
-We now have the comparison tool needed for the main Davis–Kahan program: control every leading singular-value sum of a displacement or residual, then transfer that control to a chosen symmetric norm, but only within a class where the required domination theorem applies.
+This is an infinite family of finite, checkable inequalities. It compares the cumulative leading size of the operators.
+
+Return to our short lists. The operator with singular values two, two, zero is weakly majorized by the one with three, one, zero. The reverse is false, because the first prefix would demand three to be no greater than two.
+
+Sometimes neither of two operators dominates the other. Consider five, one, zero and four, three, zero. The first list wins at the first position, while the second wins in the total of the first two. In that case there is no weak-majorization conclusion in either direction.
+
+Weak majorization is a partial comparison. It does not promise that any two operators can be ranked.
+
+## From prefixes to a chosen norm
+
+For finite vectors of nonnegative numbers, symmetric convex gauges are monotone under weak majorization. The proof is a general fact about redistributing entries: coordinate rearrangements leave the gauge unchanged, while suitable averaging operations cannot increase a convex symmetric gauge.
+
+This includes the largest-entry norm, the sum norm, and the square-root-of-sum-of-squares norm. It also includes every finite-dimensional unitarily invariant matrix norm through its symmetric gauge on singular values.
+
+Infinite dimensions introduce a new issue. A norm based on an infinite sequence may not be finite for every bounded operator. The trace norm, for example, is only finite for trace-class operators.
+
+Therefore an infinite-dimensional dominance theorem must address both membership and the bound. It should say that if S belongs to a particular symmetric operator ideal, and T is weakly dominated by S in all Ky Fan prefixes, then T also belongs to that ideal and its norm is no larger.
+
+That conclusion holds for familiar Schatten classes. In a more general abstract symmetric ideal, we require the appropriate Ky Fan dominance property as a hypothesis. We cannot simply assume every imaginable normed ideal has it.
+
+## See the membership issue with a sequence
+
+Take an operator diagonal on ell two with entries one over n. Its singular values are one, one half, one third, and so on.
+
+Each finite Ky Fan sum exists. But as we include more entries, the partial sums grow without bound, because the harmonic series diverges. This operator is not trace class.
+
+On the other hand, the sum of its squared singular values is finite. So it is Hilbert-Schmidt.
+
+Now think of a theorem that says the Hilbert-Schmidt norm of T is at most the Hilbert-Schmidt norm of S. That statement is only a finite numerical bound if both operators belong to the Hilbert-Schmidt class. A proper dominance theorem establishes the membership of T as part of its conclusion.
+
+The same distinction explains why a family of finite inequalities is not by itself an infinite-norm convergence theorem.
+
+For example, project ell two onto its first N coordinates. These finite-rank projections converge on each fixed vector to the identity. But their trace norms equal N, and the identity has infinite trace norm. Strong convergence is far too weak to imply trace-norm convergence.
+
+## A final comparison
+
+The idea of Ky Fan dominance is to avoid choosing a single preferred norm too early. Instead, we compare every leading singular-value total. Under the correct ideal hypothesis, that family of inequalities transfers to the ideal norm we actually need.
+
+The finite-dimensional example with three, one, zero versus two, two, zero explains the geometry. The infinite-dimensional diagonal with entries one over n explains why we must also prove summability.
+
+Those are the two pieces to retain: prefix inequalities control how singular-value mass is distributed, and an ideal's dominance property turns that control into a meaningful finite norm estimate.
 
 <!-- END SPOKEN LECTURE -->
 

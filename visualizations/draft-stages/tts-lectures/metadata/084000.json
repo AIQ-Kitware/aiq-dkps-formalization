@@ -5,6 +5,10 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-adjoint-operator",
+      "reason": "Adjoints of unbounded operators and how their domains are determined."
+    },
+    {
       "source_id": "kato-1995",
       "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
     },

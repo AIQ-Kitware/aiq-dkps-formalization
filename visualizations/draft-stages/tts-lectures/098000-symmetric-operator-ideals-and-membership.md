@@ -4,88 +4,137 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# A norm that is finite only where it belongs
+# Which operators have a finite notion of total size?
 
-In finite dimensions, every matrix has a finite nuclear norm, a finite Frobenius norm, and a finite operator norm. The space of matrices is so forgiving that we can describe all these norms without mentioning which matrices are allowed.
+Let's begin with an infinite diagonal operator. It acts on square-summable sequences, multiplying coordinate number n by one over n.
 
-Infinite-dimensional Hilbert spaces force a change. The identity operator is bounded, but its singular values do not decay. It is not compact, not Hilbert–Schmidt, and not trace class. Assigning it a finite trace norm would contradict the infinite sum of its singular values.
+Its largest amplification is one. Its coefficients tend to zero, so it is compact. The sum of the squares of its coefficients is finite. But the sum of the coefficients themselves is infinite.
 
-A symmetric operator ideal specifies both the class of admissible operators, called its carrier, and the associated norm. We will compare the ideal laws with the extended-valued gauge, which records nonmembership as an infinite value.
+Here is the question. Is this operator small or large?
 
-## What an operator ideal contains
+The answer depends on what we are measuring. In operator norm, its size is one. In Hilbert-Schmidt norm, its size is finite. In trace norm, it does not even have a finite value.
 
-Let E and F be Hilbert spaces. For each compatible source-target pair, an operator ideal selects some bounded maps T from E to F.
+That is why infinite-dimensional analysis needs operator ideals. An ideal records which operators satisfy a specified kind of summability or approximation condition, and a norm records their size inside that class.
 
-The selected maps are closed under addition and scalar multiplication. More importantly, if T is in the ideal and A and B are arbitrary bounded operators on either side, then A T B remains in the corresponding ideal.
+## Separate membership from measurement
 
-This is the two-sided ideal property. It says that the notion of smallness survives a bounded change of inputs and a bounded change of outputs.
+Imagine an ordinary number sequence. One sequence might have a finite sum of absolute values. Another might have a finite sum of squares but an infinite sum of absolute values. Both can be bounded sequences, but they belong to different summability classes.
 
-A norm or gauge on the ideal should obey the usual triangle inequality, scalar homogeneity, and a composition estimate: the gauge of A T B is at most the operator norm of A times the gauge of T times the operator norm of B.
+Exactly the same distinction occurs for sequences of singular values of operators.
 
-In the standard normalized setting, the ideal gauge also controls the ordinary operator norm. Thus convergence in ideal norm implies convergence in operator norm.
+In finite dimensions, any fixed list of singular values has finite sum and finite sum of squares. Every matrix is automatically trace class and Hilbert-Schmidt. There can be large quantitative differences between norms, but no membership obstruction.
 
-The index spaces matter. A bounded map between two different Hilbert spaces is not a square operator on one space, yet singular values and ideal gauges make sense for it. A useful theory must accommodate such rectangular operators from the beginning.
+In an infinite Hilbert space, there may be infinitely many singular values. Their ordinary sum can diverge even when their squared sum converges. A bounded operator may fail both conditions.
 
-## Three familiar carriers
+So when someone states an inequality in trace norm, we have two questions. First, does the operator belong to the trace class? Second, assuming it does, how large is the trace norm?
 
-The compact operators form an ideal. The carrier consists of exactly the compact bounded operators, and its gauge can be the ordinary operator norm. This is a complete ideal, because the compact operators form a closed subspace of the bounded maps in operator norm.
+An operator ideal is built to answer both questions coherently.
 
-The Hilbert–Schmidt class consists of maps whose squared singular values have finite sum. Its gauge is the square root of that sum. For Hilbert–Schmidt operators, an equivalent formula sums the squared output lengths of an arbitrary orthonormal basis; it does not require choosing singular vectors.
+## What makes a family of operators an ideal?
 
-The trace class consists of maps whose singular values have finite ordinary sum. Its gauge is the nuclear or trace norm.
+Let E and F be Hilbert spaces. We consider bounded linear maps from E to F. They need not be square operators on the same space; rectangular maps are essential when we study subspaces and coordinate embeddings.
 
-The trace class is contained in the Hilbert–Schmidt class, which is contained in the compact operators. To see why the first inclusion holds, suppose the nonnegative singular values have finite sum. They are bounded, so their squares have finite sum as well. For the second inclusion, a square-summable singular-value sequence tends to zero, which is the compactness criterion.
+An operator ideal selects admissible bounded maps for every compatible pair of Hilbert spaces. The admissible maps are closed under addition and multiplication by scalars.
 
-The inclusions are strict in infinite dimensions. On ell two, diagonal coefficients one over n give a Hilbert–Schmidt operator whose trace norm diverges. Coefficients one over the square root of n tend to zero and give a compact operator whose Hilbert–Schmidt sum diverges.
+The defining stability condition is this: start with an admissible operator T. Put any bounded map B before it and any bounded map A after it, provided all the source and target spaces match. The combined operator A T B must remain admissible.
 
-## Why the gauge takes an infinite value
+Think about why this makes sense. If T has only finitely many independent output directions, bounded transformations cannot create infinitely many new ones. If T has square-summable singular values, bounded transformations can amplify them by fixed factors, but cannot turn a finite square sum into an infinite one.
 
-One convenient formal design assigns an extended nonnegative real number to every bounded operator. If an operator belongs to the ideal, its extended gauge equals its finite norm. If it is outside, its extended gauge is infinity.
+This is called the two-sided ideal property.
 
-This allows one triangle inequality to be written for all bounded maps. If either input is outside the carrier, the right-hand side may be infinite, and the inequality remains valid. If both inputs belong, the extended inequality reduces to the ordinary triangle inequality.
+The ideal norm follows the same pattern. The size of A T B in the ideal norm is bounded by the ordinary operator norm of A, times the ideal norm of T, times the ordinary operator norm of B.
 
-But infinity is not a real number. We cannot divide by it or treat it as an ordinary finite norm. To work inside the Banach space of ideal operators, we first establish carrier membership and then use the finite gauge.
+This estimate is central when an operator is compressed to a subspace or moved through an isometric coordinate representation.
 
-For the extended gauge, finiteness is equivalent to membership in the ideal. An ideal-norm perturbation theorem therefore has two pieces: the angular displacement belongs to that ideal, and its finite norm obeys the required bound.
+## Three concrete examples
 
-## Why finite ideal gauge controls ordinary errors
+The first ideal is the compact operators. A compact operator is one that can be approximated arbitrarily well in operator norm by finite-rank operators. For this ideal, the ordinary operator norm is a natural ideal norm.
 
-Suppose a sequence of trace-class operators converges in trace norm. The ideal norm dominates the ordinary operator norm, so the same sequence converges in operator norm. This means we can identify its limit as a bounded map without ambiguity.
+The second example is the Hilbert-Schmidt class. For a compact operator, square every singular value, add the results, and take the square root. If that is finite, the operator is Hilbert-Schmidt.
 
-But operator-norm convergence alone is insufficient to conclude trace-norm convergence. Consider the diagonal maps that put one divided by N on the first N coordinate positions and zero elsewhere. Their operator norms tend to zero. Each map has finite rank, yet its trace norm equals one for every N. So these operators converge to zero in operator norm but not in trace norm.
+The third example is the trace class. Add the singular values themselves. If their sum is finite, the operator is trace class. That sum is the trace norm, sometimes called the nuclear norm.
 
-The same phenomenon matters when we replace an infinite-dimensional calculation with a finite cutoff. One must name the topology in which the approximation converges. A proof in the ordinary operator norm cannot automatically be used as a proof in a stronger ideal norm.
+In infinite dimensions, trace class is contained in Hilbert-Schmidt, and Hilbert-Schmidt is contained in compact operators.
 
-## The ideal inequality from approximation numbers
+Let's check this using diagonal examples rather than memorizing the containment diagram.
 
-We can see the composition estimate concretely for Schatten classes. Suppose T has singular values s one, s two, and so on. For bounded A and B, the rank-approximation inequality gives each approximation number of A T B at most the operator norm of A times the operator norm of B times the corresponding approximation number of T. Indeed, composing a rank-constrained approximation to T with A and B does not increase its rank, and the operator-norm error increases by at most those two norm factors.
+Our operator with coefficients one over n has squared coefficients one over n squared. Their sum is finite, so it belongs to the Hilbert-Schmidt class. But the harmonic series diverges, so it is not trace class.
 
-Raise both sides to the p-th power and sum for p at least one. Taking the p-th root proves the Schatten composition inequality. In particular, multiplication by an orthogonal projection cannot increase a Schatten norm, because the projection's operator norm is at most one.
+Now choose coefficients one over the square root of n. They tend to zero, so the diagonal operator is compact. But their squares are one over n, and that series diverges. So this operator is not Hilbert-Schmidt.
 
-For a general symmetric ideal, the same contraction rule is part of the defining structure or a theorem proved from it.
+Finally, the identity on infinite-dimensional ell two is bounded but not compact at all. Its singular-size sequence, understood through approximation numbers, remains equal to one forever.
 
-## Symmetry under isometries and adjoints
+These examples tell us that the three classes are genuinely different, even though every finite matrix belongs to all three.
 
-A unitary change of coordinates on the source or target preserves singular values. Therefore a symmetric ideal should preserve membership and gauge under such changes.
+## Why changing coordinates does not change the size
 
-Adjoints are equally important. T and T adjoint have the same positive nonzero singular values, with the appropriate zero-padding convention. Hence a symmetric ideal admits T exactly when it admits T adjoint, and their gauges agree.
+Suppose we rotate the source and output coordinates by unitary operators. These preserve lengths and inner products. They can change the matrix entries of T, but they preserve its singular values.
 
-For two Hilbert spaces of different dimensions, unitary equivalence between the whole spaces may not exist. This is why partial isometries, modulus, and rectangular transport are essential. We will prove that ideal gauges can be moved through these constructions without assuming the operator is invertible.
+A symmetric operator ideal is designed so that the associated gauge is unchanged by such unitary transformations. The choice of orthonormal coordinates should not change whether an operator belongs, or how large it is in that ideal.
 
-## Completion and finite-rank density
+The adjoint behaves similarly. T and its adjoint have the same positive nonzero singular values, counted with multiplicity. Hence the familiar symmetric ideals give them equal norms and corresponding membership.
 
-A well-behaved Banach ideal is complete in its ideal norm. If a sequence of ideal operators is Cauchy in that norm, it converges to another operator in the ideal, not merely to an arbitrary bounded operator outside it.
+When the source and target Hilbert spaces are different, one may not be able to extend every geometric correspondence to a unitary between the full spaces. This is why ideal theory also works with rectangular maps, partial isometries, and the positive modulus of an operator.
 
-Finite-rank operators are dense in the compact ideal under operator norm. They are also dense in the Schatten p-classes for finite p under their Schatten norms, by truncating singular values and using summability of the tail.
+The invariance is about the singular action, not about the superficial arrangement of matrix entries.
 
-Do not generalize finite-rank density to every possible symmetric ideal without checking its definition. A carrier may have a norm in which the finite-rank closure is a proper subideal.
+## An extended gauge records nonmembership
 
-## A test case to remember
+There is a useful mathematical convenience. Instead of defining the trace norm only for trace-class operators, we can first assign an extended value to every bounded operator.
 
-Let D be diagonal on ell two with coefficients one divided by n. It is compact, because its coefficients tend to zero. Its Hilbert–Schmidt gauge is finite because the sum of one over n squared converges. Its trace gauge is infinite because the harmonic series diverges.
+If the singular values have finite sum, the extended trace gauge is that sum. If the sum diverges, the extended gauge is infinity.
 
-The same bounded map therefore belongs to two ideals and lies outside a third. Which estimate we can apply depends on the requested ideal, not just on T's ordinary operator norm.
+The same design works for Hilbert-Schmidt energy and more general symmetric ideal gauges. A finite value indicates membership in the associated ideal. An infinite value indicates nonmembership.
 
+Why bother doing that? It lets us write certain inequalities uniformly without splitting them into separate cases at every line. But we must remember that infinity is not an ordinary real number.
+
+Suppose we want a perturbation bound in trace norm. The proper conclusion contains both statements: the perturbed quantity is trace class, and its finite trace norm satisfies the bound. We cannot skip the membership claim and treat an infinite extended value like a finite norm.
+
+## Operator norm convergence is too weak for some ideals
+
+Here is a revealing sequence of finite-rank operators. For each N, make a diagonal operator whose first N entries are one over N and whose later entries are zero.
+
+Its ordinary operator norm is one over N. That tends to zero. So the operators converge to zero in operator norm.
+
+But each has exactly N nonzero singular values, all equal to one over N. Their trace norm is N times one over N, which equals one.
+
+The sequence does not converge to zero in trace norm.
+
+This is the difference between controlling the worst individual stretching direction and controlling the sum over all directions. Even a huge collection of tiny stretches can have substantial total size.
+
+The ideal norm is generally stronger than the ordinary operator norm. A sequence converging in trace norm also converges in operator norm, but the converse is false.
+
+When we approximate an operator using finite spectral cutoffs, we have to specify which of these two kinds of error our theorem actually controls.
+
+## Where the composition bound comes from
+
+We can derive the ideal inequality for Schatten norms using approximation numbers.
+
+Start with an operator T and a low-rank approximation R. If we compose both with bounded maps A and B, the approximation A R B has rank no larger than R. The error between A T B and A R B is at most the product of the operator norms of A and B and the original approximation error.
+
+Taking the best error at each rank gives an inequality for every approximation number. If we then raise these nonnegative numbers to a power p at least one, sum them, and take the p-th root, we get the Schatten p composition bound.
+
+For p equal to one, this is the trace norm. For p equal to two, it is the Hilbert-Schmidt norm.
+
+An orthogonal projection has operator norm at most one. Consequently, compressing a Schatten-class operator with orthogonal projections cannot increase its Schatten norm.
+
+This is particularly useful when comparing a full operator with one of its spectral blocks.
+
+## Completeness and what it does not guarantee
+
+The standard Schatten ideals are complete under their ideal norms. Their finite-rank operators are dense for finite p, because we can discard singular values after N terms and make the remaining p-power sum as small as desired.
+
+The compact operators are also complete in the operator norm, and finite-rank operators are dense there as well.
+
+But finite-rank density is not a consequence of every possible symmetric-ideal axiom. Some larger ideals have norms for which the finite-rank closure is a proper subspace. So when a proof uses finite-rank approximation in a particular ideal norm, that property must be available for the chosen ideal.
+
+## One operator, three answers
+
+Return to the diagonal operator with coefficients one over n. In operator norm it has size one. In Hilbert-Schmidt norm it has a finite size determined by the convergent sum of one over n squared. In trace norm it has no finite size at all.
+
+We did not change the operator. We changed the kind of cumulative behavior we wanted to measure.
+
+That is the role of a symmetric operator ideal: it supplies a coordinate-invariant notion of operator size, a class of operators on which that size is finite, and stability under bounded composition. In infinite-dimensional perturbation theory, those three ingredients are what make a norm estimate meaningful.
 
 <!-- END SPOKEN LECTURE -->
 

@@ -5,6 +5,10 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-sylvester-equation",
+      "reason": "Spectral separation and uniqueness for matrix Sylvester equations; contrast unbounded-domain estimates."
+    },
+    {
       "source_id": "mit-strang-exp",
       "reason": "Matrix-exponential method used in finite dimensions; compare with operator-domain assumptions in the lecture."
     },

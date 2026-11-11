@@ -5,6 +5,14 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-eigenvalue-perturbation",
+      "reason": "Finite-dimensional eigenvector sensitivity as context; this lecture uses stronger subspace-angle estimates."
+    },
+    {
+      "source_id": "wiki-spectral-gap",
+      "reason": "Basic gap terminology, with the theorem-specific ordered gap hypotheses given in narration."
+    },
+    {
       "source_id": "higham-sylvester",
       "reason": "Matrix Sylvester equation; note the lecture-specific operator norm and spectral-gap conditions."
     },

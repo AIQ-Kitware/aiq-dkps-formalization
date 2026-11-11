@@ -5,6 +5,10 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-sylvester-equation",
+      "reason": "Matrix Sylvester equations as the finite-dimensional prototype; the lecture adds unbounded domain conditions."
+    },
+    {
       "source_id": "higham-sylvester",
       "reason": "Matrix Sylvester equation; note the lecture-specific operator norm and spectral-gap conditions."
     },

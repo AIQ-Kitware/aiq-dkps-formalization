@@ -5,6 +5,14 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-resolvent-set",
+      "reason": "Invertibility and boundedness conditions for shifted unbounded operators."
+    },
+    {
+      "source_id": "wiki-unbounded-operator",
+      "reason": "Why the original operator domain is only part of the Hilbert space."
+    },
+    {
       "source_id": "kato-1995",
       "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
     },

@@ -491,6 +491,25 @@ understand its material. Link to the particular topic page, lesson, video, or
 short set of notes. Explain briefly what each item teaches and where to focus.
 Keep this learning list distinct from the research bibliography.
 
+**Include relevant wiki topic pages by default.** A focused Wikipedia article is
+an accessible first reference for a mathematical topic, and should appear in the
+non-spoken `related_resources` when a genuinely relevant article exists. Other
+specialist wikis can be used as well. Prefer a direct article about the lecture's
+central concept rather than a generic encyclopedia homepage; check that the
+page exists and actually explains the material. For advanced material, give a
+short `reason` distinguishing the article's elementary or finite-dimensional
+scope from the theorem in the lecture. Do not invent an exact wiki match when
+none exists or add weakly related articles to meet a quota. Wikipedia complements
+worked university notes, open textbooks and original papers; it does not
+replace them.
+
+Store reusable wiki entries in `draft-stages/tts-lectures/metadata/sources.json`
+with `access: free_no_login` and link them from each touched lecture's
+`related_resources`. Keep links, citation keys and reference notes outside the
+spoken markers. When revising an existing lecture, check its learning references
+as part of the edit. Do not make a separate A/B listening pass or a reference
+collection project a prerequisite for releasing an otherwise complete lecture.
+
 ## Title slides, attribution, and history
 
 > “Don't need to read out the entire thing, just say the main concept.”
@@ -527,9 +546,11 @@ Ordinary mathematical assertions are supported by their proofs and the Lean
 companion; they do not need an external-reference tag merely because a related
 book exists. Add optional further-learning resources separately, describing
 what they explain and any material differences in assumptions or scope.
-Prefer source links already curated in the earlier lectures, verified
-institutional material, and original papers. Those references are displayed
-by the eventual learning system, never spoken. The TTS extractor operates
+For learning references, include relevant Wikipedia topic articles as
+accessible orientation, together with verified university material and the
+existing curated sources. Reserve primary papers for exact historical claims
+and advanced follow-up when useful. Those references are displayed by the
+eventual learning system, never spoken. The TTS extractor operates
 exclusively on the original marked spoken region.
 
 For schema, validator, and editing workflow, see
