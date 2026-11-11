@@ -71,7 +71,7 @@ historical account and theorem statements, with an explicit translation to the
 source where needed. Keep the symbol colors aligned with the Manim role
 palette. Use $P_{\mathrm{ex}}$ for the exact projection in the sine theorem,
 $P,Q$ for transport projections, $R$ for a residual, and $D$ for a direct
-rotation. Distinguish the planar quarter-turn $J_0$ from the source reflection
+rotation. Distinguish the planar $\pi/2$-rotation matrix $J_0$ from the source reflection
 $J_{\mathrm{src}}$, and the mixing matrix $H_{\mathrm{mix}}$ from the
 perturbation $H$. Each argument must also remain readable in monochrome.
 Resolve collisions among recurring central objects before renaming ordinary
@@ -91,6 +91,17 @@ parameter. Keep definitions and notation changes in the shared registry.
 
 Use the same term for the same object throughout an argument. Repeating
 “block”, “transporter”, or “edge weight” helps readers track the proof.
+Retain “headline theorems” for the four principal Davis--Kahan results and
+“competitor” for an alternative admissible transporter. For the two-projection
+geometry, define the right-angle intersection subspaces before calling them
+defect spaces. Introduce “leakage” in quotation marks with a parenthetical
+identifying the exact projected component or off-diagonal block norm; thereafter
+use the established term as needed. Name the branch-selection angle as
+$\pi/4$, and describe the planar matrix $J_0$ as a rotation through
+$\pi/2$. State equality of singular values explicitly rather than calling
+blocks “equisingular”. Attribute Spectra constructions as adaptations and
+Tau Ceti work as subsequent adaptations or independent developments, as
+appropriate to the supported history.
 For graph optimization, distinguish maximum-weight matching from maximum
 cardinality matching, and state whether the graph is finite and general.
 

@@ -46,7 +46,7 @@ rendered table or removing a review appendix does not change that denominator,
 the source inventories, or the repository's semantic and compiler obligations.
 
 The original complex-phase mechanism and earlier Q-norm results retain their
-attribution. Compare them precisely with the real short-angle assertion being
+attribution. Compare them precisely with the real small-angle assertion being
 refuted. Use the paper-directory evidence index to support direct statements
 about our foundations, reuse of Mathlib and Spectra, and later Tau Ceti work.
 Keep pinned revisions, PR bookkeeping, and proof-development history in author

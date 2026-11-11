@@ -221,8 +221,8 @@ This is the separation condition of Section~\ref{sec:gap-geometry}.
  Each diagonal block of $K$ is dominated by the corresponding block of
  $L$ in every $\sym{NormN}$. &
  The same domination holds for their block-diagonal sums.
- The converse holds if the two $K$ blocks are equisingular and the two
- $L$ blocks are equisingular.\\\addlinespace
+ The converse holds if the two $K$ blocks have identical singular values
+ (counting multiplicities), as do the two $L$ blocks.\\\addlinespace
 \path{DK-6.2-lem} &
  Orthogonal projections $\Omega,\Upsilon$; bounded $K$. &
  $\sym{NormN}(\Omega K\Upsilon+
@@ -262,7 +262,8 @@ This is the separation condition of Section~\ref{sec:gap-geometry}.
  $\sum_{j\le n}s_j(K\Psi)^2$\newline
  ${}>\sum_{j\le n}s_j(K)^2-\eta^2$, $\eta>0$. &
  $\|\Gamma K(I-\Psi)\|_{\mathrm{op}}<\eta$:
- a nearly maximizing finite-rank compression has small leakage.\\\addlinespace[5pt]
+ a nearly maximizing finite-rank compression has small ``leakage''
+ (i.e., the norm of this off-diagonal block is below $\eta$).\\\addlinespace[5pt]
 \multicolumn{3}{@{}l}{\textbf{Spectral selection and repulsion}}\\*\addlinespace[3pt]
 \path{DK-8.1-thm} &
  Ordered reference gap

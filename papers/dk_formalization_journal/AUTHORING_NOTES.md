@@ -334,7 +334,7 @@ declaration or the 29-result selection.
 
 - Exact sine-theta projections print as `P_ex`; transport projections remain
   `P,Q`. Direct rotations print as `D`, including the nonacute source-table
-  rotation; the polar partial isometry is `V_pol`. The quarter-turn, source
+  rotation; the polar partial isometry is `V_pol`. The planar $\pi/2$-rotation matrix, source
   reflection, angle generator, and mixing matrix have distinct subscripts.
   Full displacement in the counterexample is `Delta_W`, leaving `K` for the
   source subspace in the matching theorem. Updated semantic hover reminders,
@@ -414,7 +414,7 @@ and exact source declarations to a competing provenance inventory.
 | What supports the correction and its literature comparison? | [Proposition 4.4 literature map](PROPOSITION_4_4_LITERATURE_MAP.md), [literature audit](submission/LITERATURE_AUDIT.md), and [claims to evidence](claims_to_evidence.md). Check each claim at the source's real/complex, norm, and angle scope. |
 | Which formal results were adapted into Tau Ceti, independently re-proved there, or built on earlier donors? | [Contribution and lineage census](../../dev/tauceti/dkps-upstream-contribution-census.md) and [upstream consumption review](../../dev/tauceti/upstream-consumption-review-2026-10-22.md). These are dated evidence, not proof of current remote status. |
 | Did our Courant--Fischer/Weyl proofs originate here? | [28 October proof-lineage audit](COURANT_FISCHER_LINEAGE_AUDIT.md): immutable June/August donor sources, the accepted October port, and six declaration/proof comparisons establish local development followed by upstream adaptation and local consumption. The broader lineage consolidation requested in the review remains pending. |
-| Which parts have Spectra ancestry? | [Spectra provenance map](../../dev/tauceti/spectra-provenance-map.md), [preserved upstream attribution](../../retired/Spectra.UPSTREAM.md), and the Lean provenance headers. |
+| Which formal constructions derive from Spectra? | [Spectra provenance map](../../dev/tauceti/spectra-provenance-map.md), [preserved upstream attribution](../../retired/Spectra.UPSTREAM.md), and the Lean provenance headers. |
 | Which roadmap topics correspond to donor work? | [Donor topic map](../../dev/tauceti/roadmap-topic-map.md). Topic overlap alone does not establish proof descent. |
 | What notation and colors does this article use? | [Symbol macros](math_symbol_colors.tex), [notation appendix source](appendix_notation.tex), and the [Manim glossary](../../visualizations/dkvis/slides_glossary.py). |
 
@@ -437,3 +437,12 @@ inspect the accepted revision and distinguish submission, integration, direct
 adaptation, independent work, and transitive use. Add findings to the maintained
 census when appropriate; this index supplies navigation rather than a new
 campaign ledger.
+
+## Terminology decisions (11 November 2026)
+
+- Keep “headline theorems”, “transporter”, and “competitor”.
+- For the sine-theta argument, “leakage” is introduced in quotes as the exact complementary projection of the trial frame in $F_1$ coordinates. For DK-6.3-lem, it denotes the norm of the off-diagonal block $\Gamma K(I-\Psi)$.
+- Write the double-angle branch restriction as $\Theta\le\pi/4$; write the planar generator as a rotation through $\pi/2$.
+- Replace “equisingular” by equality of singular values with multiplicities and “short-angle” by “small-angle”.
+- Describe Spectra-derived constructions and their later Tau Ceti adaptations directly; avoid “ancestry” in article prose.
+- Preserve Lean-specific type names in signature explanations, distinguishing partial-map representation from dense-domain hypotheses.

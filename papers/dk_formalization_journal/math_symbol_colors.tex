@@ -218,7 +218,7 @@
 \dkDeclareSymbol{f0}{f_0}{wantedvector}{Component or coordinate vector in the desired exact subspace.}
 \dkDeclareSymbol{lambda0}{\lambda_0}{wantedspectrum}{Wanted exact eigenvalue or wanted spectral value.}
 \dkDeclareSymbol{lambdau}{\lambda_u}{wantedspectrum}{Eigenvalue associated with a desired exact vector.}
-\dkDeclareSymbol[Exact wanted orthogonal projection P_ex: E -> E, with P_ex = F_0 F_0*. It retains the desired exact spectral component. Its complementary projection is P_ex_perp = I - P_ex = F_1 F_1*; the trial leakage is S = P_ex_perp E_0.]
+\dkDeclareSymbol[Exact wanted orthogonal projection P_ex: E -> E, with P_ex = F_0 F_0*. It retains the desired exact spectral component. Its complementary projection is P_ex_perp = I - P_ex = F_1 F_1*; the projected trial frame is S = P_ex_perp E_0.]
   {Pexact}{P_{\mathrm{ex}}}{wantedprojection}{Orthogonal projection onto the desired exact subspace in the sine-theta theorem.}
 \dkDeclareSymbol[Exact complementary orthogonal projection P_ex_perp = I - P_ex = F_1 F_1*: E -> E. It retains the unwanted exact component. In Figure 1, P_ex_perp v = S(1), whereas P_ex_perp r is the unwanted component of the residual.]
   {PexactPerp}{P_{\mathrm{ex}}^\perp}{unwantedprojection}{Orthogonal projection onto the exact complementary subspace.}
@@ -328,8 +328,8 @@
 \dkDeclareSymbol{Q}{Q}{fg}{Orthogonal projection; its role is specified locally.}% Neutral historical Manim key; prefer Qtarget.
 \dkDeclareSymbol[Two-projection intertwiner T = QP + (I - Q)(I - P), satisfying TP = QT and T* T = I - (P - Q) squared. For ||P - Q|| < 1 it is invertible; its unitary polar factor T |T| inverse is the canonical direct rotation.]
   {IntertwinerT}{T}{intertwiner}{Two-projection intertwiner; its unitary polar factor is the acute direct rotation.}
-\dkDeclareSymbol[Planar quarter-turn J_0 = ((0, -1), (1, 0)), with J_0 squared = -I_2 and J_0 transpose = -J_0. It defines the rotation C = cos(2 theta) I_2 + sin(2 theta) J_0 used to construct the real competitor.]
-  {Jturn}{J_0}{turn}{Planar quarter-turn, with square minus the identity.}
+\dkDeclareSymbol[Planar pi/2-rotation matrix J_0 = ((0, -1), (1, 0)), with J_0 squared = -I_2 and J_0 transpose = -J_0. It defines the rotation C = cos(2 theta) I_2 + sin(2 theta) J_0 used to construct the real competitor.]
+  {Jturn}{J_0}{turn}{Planar rotation through $\pi/2$, with square minus the identity.}
 \dkDeclareSymbol[Partial isometry V_pol in the polar decomposition S = V_pol |S|, where |S| = sqrt(S* S). It is isometric on the orthogonal complement of kernel(S) and zero on kernel(S). For an invertible operator its polar factor is unitary.]
   {PolarU}{V_{\mathrm{pol}}}{intertwiner}{Partial isometry in the polar decomposition; unitary when the operator is invertible.}
 \dkDeclareSymbol[Planar rotation C = cos(2 theta) I_2 + sin(2 theta) J_0 through twice the principal angle. The competitor W_theta is orthogonally conjugate to C direct-sum I_2, so it rotates one two-plane and fixes the other.]
@@ -338,7 +338,7 @@
   {Hmix}{H_{\mathrm{mix}}}{mix}{Orthogonal mixing matrix in the counterexample.}
 \dkDeclareSymbol[Source reflection J_src = 2P - I: it acts as +I on the source subspace and -I on its orthogonal complement, so its square is I. In the matching proof stationarity gives J_src G J_src = -G for the skew-symmetric spectral gradient G.]
   {Jreflect}{J_{\mathrm{src}}}{trialprojection}{Reflection equal to twice the source projection minus the identity.}
-\dkDeclareSymbol[Skew angle generator J_ang for a direct rotation D = exp(J_ang Theta). On each principal plane it is the oriented quarter-turn; it vanishes on the common fixed directions. It commutes with the full angle operator Theta.]
+\dkDeclareSymbol[Skew angle generator J_ang for a direct rotation D = exp(J_ang Theta). On each principal plane it is the oriented rotation through pi/2; it vanishes on the common fixed directions. It commutes with the full angle operator Theta.]
   {AngleGenerator}{J_{\mathrm{ang}}}{turn}{Skew angle generator in the direct-rotation result summaries.}
 \dkDeclareSymbol{Dblock}{D}{mix}{Auxiliary diagonal or block matrix in the counterexample.}
 \dkDeclareSymbol[Orthogonal projection onto the first principal plane span(e_0, e_3) in the four-dimensional counterexample. For Delta_W = I - W_(pi/4), the Ky Fan 2-norm of Delta_W Omega_1 equals 2.]
