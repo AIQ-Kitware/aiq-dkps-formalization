@@ -2,121 +2,121 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-Consider the quarter-turn operator on the real plane, sending x comma y to negative y comma x. No nonzero real vector is an eigenvector, since the operator rotates every direction by ninety degrees. Over the complex numbers it has eigenvalues i and negative i. Those are exactly the scalar values for which the shifted operator A minus lambda times the identity fails to be invertible.
+# Resolvents and invertibility
 
-The spectrum is defined by the failure of an appropriate inverse, and the resolvent records where that inverse exists. This definition captures spectral behavior even when no eigenvector is present.
+Suppose a linear transformation takes a vector and produces an output. If we know the output, can we recover the input?
 
-We can do most of this using only what we already know: Banach spaces, bounded operators, inverse maps, and geometric series.
+For an invertible matrix, the answer is easy: apply its inverse. But if the matrix sends some nonzero vector to zero, information has been lost. No inverse can undo that transformation for every output.
 
-## Start with a diagonal matrix
+There is a useful way to investigate this failure. Choose a number, subtract that number times the identity from the operator, and try to invert the result. By changing the number, we discover where inversion works and where it breaks down. The inverses that do exist are called resolvents.
 
-Take a map on the ordinary two-dimensional complex vector space. It doubles the first coordinate and multiplies the second by five. If we write it as a diagonal matrix, its diagonal entries are two and five.
+The aim of this lecture is to understand that construction first with a tiny matrix, then with an infinite-dimensional operator, and finally to see two important facts about the resulting family: resolvents persist under small changes of the shift, and their size tells us something about the stability of inversion.
 
-Now choose a complex number z. Form the operator z times the identity minus A. On the first coordinate it multiplies by z minus two. On the second it multiplies by z minus five.
+## A matrix we can invert by hand
 
-When can we undo this operation? Exactly when neither multiplier is zero. In that case the inverse simply divides the first coordinate by z minus two, and divides the second by z minus five.
+Consider a matrix A that doubles the first coordinate of a vector and multiplies the second coordinate by five. In standard coordinates it is diagonal, with entries two and five.
 
-At z equal to two, this inverse fails because the first coordinate gets collapsed to zero. At z equal to five, the second coordinate gets collapsed. These are precisely the eigenvalues of A.
+Pick the number three. Subtract three times the identity from A. The new matrix multiplies the first coordinate by negative one and the second coordinate by two. We can invert it: divide the first output coordinate by negative one, and the second by two.
 
-So for this example, the values where z times the identity minus A fails to have an inverse form the set containing two and five. That set is the spectrum of A.
+So the inverse of A minus three times the identity multiplies the first coordinate by negative one and the second by one half.
 
-Notice that we are describing the operator through a family of inverses. For each z outside the spectrum, there is an operator that undoes z times the identity minus A. We call that inverse the resolvent at z.
+Now change the shift from three to two. The first multiplier becomes zero. Every vector pointing along the first coordinate axis is sent to zero, so the shifted matrix cannot be inverted.
 
-## The general definition
+A shift of five causes the same problem along the second axis.
 
-Let E be a complex Banach space, and let A be a bounded complex-linear operator from E to itself.
+These numbers are familiar. Two and five are the eigenvalues of A. When we subtract an eigenvalue, the corresponding eigenvector goes into the kernel of the shifted operator.
 
-We say that z is in the resolvent set of A if z times the identity minus A has a two-sided inverse that is also bounded and linear. Two-sided means we can compose the two operators in either order and obtain the identity.
+We have already found two sets of numbers. There are shifts where the inverse exists, such as three. And there are shifts where the inverse fails, such as two and five.
 
-The spectrum is the set of complex numbers not in the resolvent set.
+In finite-dimensional complex linear algebra, the second set consists exactly of the eigenvalues. In infinite dimensions, the second set can be larger. That is why we give it its own name: the spectrum.
 
-There are two requirements in that definition. The map must have a two-sided inverse, and that inverse must respect the norm through a boundedness estimate. In finite dimensions, linear inverses are automatically bounded. There is also a deep theorem, called the bounded inverse theorem, which says that a bijective bounded linear map between Banach spaces has a bounded inverse. Boundedness is explicit in the definition of the resolvent, including when the bounded inverse theorem makes it automatic. The distinction becomes even more important when we study operators defined only on part of a space.
+## Name the construction
 
-The resolvent operator, when it exists, will be denoted by the letter R with the chosen scalar z as its input. More explicitly, R at z means the inverse of z times the identity minus A.
+For the moment, take A to be a bounded linear operator on a complex Banach space. A Banach space is a normed vector space in which Cauchy sequences converge; it gives us a setting where continuity of the inverse makes sense.
 
-For a diagonal matrix, this is the diagonal inverse we just computed. But the definition works even when there is no preferred basis, and even when there is no matrix consisting of finitely many entries.
+A number z belongs to the resolvent set of A when A minus z times the identity has a bounded inverse defined on the whole space. We call that inverse the resolvent of A at z.
 
-## Why an eigenvalue belongs to the spectrum
+The spectrum is the collection of shifts where that bounded, everywhere-defined inverse does not exist.
 
-Suppose A has an eigenvector v with eigenvalue z. That means v is nonzero and A of v equals z times v.
+There are several ways inversion can fail. Two different inputs might produce the same output. Some outputs might not be produced at all. Or, in infinite dimensions, recovering an input might require arbitrarily large amplification of small changes in the output.
 
-Subtract. The operator z times the identity minus A sends v to zero. A map that sends a nonzero vector to zero cannot have an inverse: if it did, applying the inverse to both sides would imply that v equals zero.
+For bounded operators on Banach spaces, a bijective shift automatically has a bounded inverse, by the bounded inverse theorem. Still, boundedness belongs in the definition because it expresses the stability we want.
 
-Therefore every eigenvalue belongs to the spectrum.
+One convention writes the resolvent as the inverse of A minus z times the identity. That is the convention used throughout this recording. The inverse of z times the identity minus A is also frequently called the resolvent; the two operators differ by a minus sign. The spectrum is the same under either convention.
 
-This proves one direction. It does not prove that every spectral value is an eigenvalue. That reverse statement holds for matrices over the complex numbers, but it fails in general for infinite-dimensional operators.
+## What happens as we approach an eigenvalue?
 
-Let's construct a counterexample without introducing Hilbert spaces yet.
+Return to our diagonal matrix with eigenvalues two and five. If we choose a shift of two point one, the first entry of the shifted matrix is negative zero point one. Its inverse multiplies the first coordinate by negative ten.
 
-## A spectral value with no eigenvector
+A shift of two point zero one produces a factor of negative one hundred. A shift of two point zero zero one produces negative one thousand.
 
-Consider the Banach space of continuous complex-valued functions on the interval from zero to one. We measure a function by its maximum absolute value. This space is complete in the maximum norm: a uniformly Cauchy sequence of continuous functions converges uniformly, and a uniform limit of continuous functions is continuous.
+The inverse exists at each of those shifts. But it takes a tiny change in an output coordinate and turns it into a much larger change in the recovered input.
 
-Define the operator M by multiplying a function by its input coordinate. In other words, M of f is the function whose value at t is t times the value of f at t.
+This is why the size of the resolvent is informative. In our diagonal example, the operator norm is the larger of the absolute values of its two inverse diagonal entries. The largest entry comes from whichever eigenvalue is nearest the shift.
 
-This operator is linear. It is bounded, because t always lies between zero and one. Multiplication by t cannot make the maximum absolute value larger. In fact, its operator norm is one: apply M to the constant function one, and the output reaches one at the right endpoint.
+For a self-adjoint operator, this becomes an exact statement: the resolvent norm is one divided by the distance from the shift to the spectrum. A self-adjoint operator is an operator equal to its adjoint; real symmetric matrices are the familiar finite-dimensional examples. The sharp distance formula belongs to self-adjoint, and more generally normal, operators. For an arbitrary operator, the inverse can be very large even when the shift is relatively far from the spectrum.
 
-Now ask whether zero is an eigenvalue. An eigenvector at zero would be a continuous function f, not identically zero, such that t times f of t is zero for every t.
+For now, the central observation is that failure of invertibility has a neighborhood. Inverses get harder to control as we move toward certain spectral values.
 
-For every positive t, that condition forces f of t to be zero. Continuity then forces f at zero to be zero too. So the only function sent to zero is the zero function. Zero is not an eigenvalue.
+## Spectrum without an eigenvector
 
-But is M invertible? No. If there were a continuous function f satisfying M of f equals the constant function one, then at t equal to zero we would require zero times f of zero to equal one. That is impossible. M is not onto the entire function space.
+The matrix example might suggest that every point of the spectrum must have an eigenvector. Let's test that idea on an operator whose inputs are functions.
 
-Thus zero belongs to the spectrum even though it is not an eigenvalue. The failure is surjectivity, not the existence of a nonzero vector in the kernel.
+Consider all continuous complex-valued functions on the interval from zero to one. Measure the size of a function by its largest absolute value. This is a Banach space.
 
-There is an even more revealing way to see the difficulty. Choose a continuous triangular spike that has height one at zero and falls linearly to zero by t equal to one over n. Call this function f sub n. Its maximum norm is one. But multiplying it by t produces a function whose maximum norm is at most one over n.
+Define an operator M that multiplies a function by its input coordinate. At a number t between zero and one, the output is t times the original function's value at t.
 
-So we have unit-sized inputs whose outputs become arbitrarily small. No bounded inverse could recover the input from such tiny outputs: a bounded inverse would have to amplify the output by a factor growing without bound.
+The operator is bounded. Multiplication by a number between zero and one never increases the maximum absolute value.
 
-This example gives us two independent reasons for concern: the operator is not onto, and the inverse estimate cannot hold. Later, in Hilbert spaces, we will classify several different ways a spectral value can fail to be a resolvent point.
+Can zero be an eigenvalue? That would require a nonzero continuous function f for which t times f of t equals zero at every point. For every positive t, the equation forces f of t to be zero. Continuity then forces its value at zero to vanish as well. So there is no nonzero eigenvector with eigenvalue zero.
 
-## Why the resolvent set is open
+Yet M has no inverse on the whole function space. Think of trying to produce the constant function one. At t equal to zero, the output of M is always zero, no matter what input function we choose. The constant function one can never be an output.
 
-A standard Neumann-series argument shows that an operator close enough to the identity has an inverse, supplied by a Neumann series. That fact makes the resolvent set robust.
+Therefore zero is in the spectrum, even though zero is not an eigenvalue.
 
-Suppose z is a resolvent point and let R be the inverse of z times the identity minus A. Now move from z to a nearby complex number w.
+There is also a stability problem. Imagine a tall triangular function, one at t equal to zero, dropping steadily to zero at t equal to one over n, and vanishing beyond that point. Its maximum size is one. After multiplication by t, its maximum size is no greater than one over n.
 
-The operator w times the identity minus A can be factored into the original invertible operator, multiplied by an identity plus a scalar multiple of R. The size of that correction is at most the distance from w to z, multiplied by the norm of R.
+As n grows, the output gets arbitrarily small while the input remains size one. Any attempt to invert M would have to turn these tiny outputs back into unit-sized inputs. No bounded inverse can do that.
 
-If that product is less than one, the correction has a Neumann-series inverse. The original operator is invertible, and so is the correction. Their product is therefore invertible.
+This is the reason the spectrum is defined through bounded inversion rather than only through exact eigenvectors. In infinite-dimensional spaces, approximate eigenvectors and failures of surjectivity can reveal spectral points that ordinary eigenvectors miss.
 
-This proves that every resolvent point has a small disk around it containing only resolvent points. The resolvent set is open. Its complement, the spectrum, is closed.
+## Why resolvents survive small changes
 
-There is also a quantitative lesson. If the norm of the resolvent at z is very large, the argument only guarantees a small disk of safe nearby values. The resolvent norm is telling us how sensitive inversion is near z, even before we discuss perturbing the operator itself.
+Now suppose z is a shift where the resolvent exists. Could an arbitrarily tiny change of z immediately destroy invertibility?
 
-## A relation between two resolvents
+The answer is no. To see why, call the inverse at z simply R. If we replace z by a nearby number w, the new shifted operator is the old one minus w minus z times the identity.
 
-There is a simple algebraic identity that will be useful repeatedly.
+We can factor it into the old shifted operator, which is invertible, and a correction of the form identity minus w minus z times R.
 
-Suppose z and w are both resolvent points. Write R at z and R at w for their inverses. Subtract these two inverses.
+Here we use a familiar fact about geometric series. If a bounded operator T has norm less than one, then identity minus T is invertible. Its inverse is the sum of the identity, T, T squared, T cubed, and so on. This is the Neumann series, the operator version of a convergent geometric series.
 
-We can insert their defining inverse equations and rearrange the result. For our convention, where R at z is the inverse of z times the identity minus A, the difference R at z minus R at w equals w minus z, multiplied by R at z followed by R at w.
+For our correction, the norm is at most the distance between w and z, multiplied by the norm of R. If that product is less than one, the Neumann series supplies an inverse.
 
-Let's check the sign on an ordinary number. One over z minus a, minus one over w minus a, has numerator w minus z. That is exactly the sign we claimed.
+So every resolvent point has a whole disk of nearby resolvent points around it. The resolvent set is open, and the spectrum is closed.
 
-The operator identity is a noncommutative version of that familiar fraction calculation. It also shows why the resolvent varies continuously with z throughout the resolvent set: nearby scalar values lead to nearby inverse operators, with a bound supplied by the product of their norms.
+Notice the quantitative detail. A large resolvent norm makes the guaranteed safe disk smaller. That matches what we observed in the diagonal example as the shift approached two.
 
-## Far from the operator
+## Two other useful consequences
 
-For one last application of the geometric series, take a complex number z whose absolute value is greater than the operator norm of A.
+There is a compact algebraic relation between resolvents at two shifts. If z and w are both resolvent points, the resolvent at z minus the resolvent at w equals z minus w, multiplied by the resolvent at z and then the resolvent at w.
 
-Factor z times the identity minus A as z times the identity multiplied by the identity minus A divided by z. The operator A divided by z has norm less than one. Therefore the second factor has an inverse given by a convergent geometric series.
+We can check the sign with ordinary fractions. One divided by a minus z, minus one divided by a minus w, has numerator z minus w. The operator version follows by multiplying out the inverse equations.
 
-So every z with absolute value greater than the norm of A is in the resolvent set. Equivalently, the spectrum lies inside the closed disk centered at zero with radius equal to the operator norm.
+This is called the resolvent identity. It lets us compare how the inverse changes as the shift moves.
 
-That does not tell us where the spectral values actually are. It gives a guaranteed region outside which they cannot be. This is our first general spectral bound, obtained entirely from Banach-space methods.
+One more consequence comes from looking very far away. Suppose A is bounded and we choose z whose absolute value exceeds the operator norm of A. Factor A minus z times the identity into two pieces. The first is the scalar negative z. The second is the operator identity minus A divided by z. The norm of A divided by z is less than one, so another Neumann series gives an inverse.
 
-## Check your understanding
+Therefore the spectrum of a bounded operator must lie inside the closed disk whose radius is the operator norm of A. We have obtained a spectral bound without computing an eigenvalue.
 
-Here are three things to reconstruct.
+## What the family of inverses tells us
 
-First, for a diagonal operator with entries two and five, find the resolvent at z equal to three and explain why it does not exist at z equal to two.
+There is one question worth holding onto: when can we solve the shifted equation stably?
 
-Second, explain why multiplication by t on continuous functions has zero in its spectrum but no nonzero eigenvector with eigenvalue zero.
+A resolvent is the operator that solves it. The spectrum records the shifts where such a bounded inverse cannot be formed. An eigenvector gives one reason for failure, but the continuous-function example showed another. And the Neumann-series argument showed that resolvent points occur in open regions, not as isolated accidents.
 
-Third, derive the safe-disk condition around a resolvent point using the Neumann series. What role does the norm of the resolvent play?
+Try reconstructing two calculations. For our diagonal matrix, why does the resolvent at three have entries negative one and one half? And for multiplication by t on continuous functions, why does zero belong to the spectrum even though it is not an eigenvalue?
 
-We now have a definition of spectrum that survives beyond matrices. We also have a warning: spectral values need not be eigenvalues.
+Those two examples capture the essential distinction between eigenvalues and spectrum, and why a family of shifted inverses is a productive way to study an operator.
 
 <!-- END SPOKEN LECTURE -->
 
@@ -126,17 +126,17 @@ We now have a definition of spectrum that survives beyond matrices. We also have
 
 For a complex Banach space \(E\) and bounded \(A\in\mathcal B(E)\), use the narration convention
 \[
-R_A(z)=(zI-A)^{-1},\quad
-\rho(A)=\{z\in\mathbb C:zI-A\text{ has a bounded inverse}\},\quad
+R_A(z)=(A-zI)^{-1},\quad
+\rho(A)=\{z\in\mathbb C:A-zI\text{ has a bounded inverse}\},\quad
 \sigma(A)=\mathbb C\setminus\rho(A).
 \]
 For \(z,w\in\rho(A)\),
 \[
-R_A(z)-R_A(w)=(w-z)R_A(z)R_A(w).
+R_A(z)-R_A(w)=(z-w)R_A(z)R_A(w).
 \]
 If \(|z|>\|A\|\), then \(z\in\rho(A)\), by the Neumann series. In the continuous-function example \((Mf)(t)=t f(t)\) on \(C([0,1],\mathbb C)\), the value zero lies in \(\sigma(M)\) but is not an eigenvalue.
 
-**Lean bridge.** `DavisKahan/SpectralTheory/ResolventOperator.lean` contains source-defined resolvent predicates and a resolvent identity. **Its sign convention is the opposite of the spoken convention**: its `resolventOperator A z` is \((A-zI)^{-1}=-R_A(z)\), and its exact declaration is:
+**Lean bridge.** `DavisKahan/SpectralTheory/ResolventOperator.lean` contains source-defined resolvent predicates and a resolvent identity. **Its resolvent sign convention agrees with the spoken lecture**: `resolventOperator A z` is \((A-zI)^{-1}=R_A(z)\), and its exact declaration is:
 
 ```lean
 def InResolventSet (A : E →L[𝕜] E) (z : 𝕜) : Prop :=
@@ -155,6 +155,6 @@ theorem resolvent_identity
       (z - w) • (resolventOperator A z ∘L resolventOperator A w) := by
 ```
 
-The excerpted theorem header is followed by its proof in the source; the trailing `:= by` here marks an excerpt, not an independently compilable declaration. Since both resolvents gain a minus sign under the change of convention, the corresponding formulas agree. `∘L` is bounded-operator composition; a two-sided inverse is explicitly part of `InResolventSet`.
+The excerpted theorem header is followed by its proof in the source; the trailing `:= by` here marks an excerpt, not an independently compilable declaration. The displayed resolvent identity uses exactly the sign determined by the \(A-zI\) convention. `∘L` is bounded-operator composition; a two-sided inverse is explicitly part of `InResolventSet`.
 
 **Source and provenance.** Both declarations were found in the supplied DKPS snapshot. The file develops paper-related bounded-operator resolvent infrastructure using the real-or-complex `RCLike` interface and records additional planned contour work. The general spectrum and Banach-algebra mechanisms are not claimed to originate in this file. No new Lean code was compiled.

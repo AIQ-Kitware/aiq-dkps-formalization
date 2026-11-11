@@ -16,7 +16,7 @@ the per-lecture disposition, and the candidate disposition ledger for the
 changes and remaining verification work. The earlier
 [`standalone-review-2026-11-08.md`](standalone-review-2026-11-08.md) is
 the pre-revision audit. The extraction check passed; mathematical source
-comparison and synthesized-audio review remain on the follow-up list.
+comparison remained on the historical follow-up list. Audio spot checks now respond to concrete playback issues.
 
 **Pedagogical structure audit (2026-11-08):** The subsequent
 [structural revision report](pedagogical-structure-revision-report-2026-11-08.md)
@@ -60,7 +60,7 @@ python3 visualizations/draft-stages/tts-lectures/extract_narration.py --check \
   visualizations/draft-stages/tts-lectures/00[123]000-*.md
 ```
 
-The checker validates formatting and spoken-region boundaries. Mathematical source review and a synthesized-audio listening pass are separate acceptance steps.
+The checker validates formatting and spoken-region boundaries. Mathematical review and the audio-first editorial test are separate steps. Individual audio spot checks are optional, and listener feedback drives subsequent revisions; a per-lecture A/B comparison is not required.
 
 ## Non-spoken citations and further learning (8 November 2026)
 
@@ -113,5 +113,5 @@ Check independently that:
 5. The spoken region contains no raw code or notation that makes synthetic speech hard to follow.
 6. The listener can answer a new question using the ideas, not just repeat the conclusion.
 
-Publication follow-up: mathematical correspondence review, Lean compilation,
-and synthesized-audio listening evaluation.
+Publication follow-up: mathematical correspondence review, Lean compilation where applicable,
+and revisions prompted by listener feedback or concrete TTS defects. Ten minutes is a soft duration target; clarity and mathematical completeness set the actual length.

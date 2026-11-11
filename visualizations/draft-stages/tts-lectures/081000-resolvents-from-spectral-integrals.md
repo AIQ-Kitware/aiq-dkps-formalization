@@ -4,111 +4,145 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# Reading the spectrum through inverse operators
+# Resolvents from spectral integrals
 
-The spectrum of an operator is defined by failures of bounded invertibility of its scalar shifts, not merely by the presence of eigenvectors. A complex number z is outside the spectrum of A when A minus z times the identity has a bounded inverse. That inverse is called the resolvent at z.
+For a diagonal matrix, taking an inverse is a coordinate-by-coordinate calculation. If a diagonal entry is three and we subtract a shift of one, the corresponding entry of the inverse is one half. Each coordinate is handled by taking the reciprocal of its shifted multiplier.
 
-Now that we have spectral integration, we can write the resolvent explicitly. We will see why its norm is controlled by the distance from z to the spectrum, why resolvents become large near spectral values, and how their matrix elements encode the scalar spectral measures.
+But many self-adjoint operators do not have a basis of eigenvectors. Some have continuous spectrum, where no individual eigenvector represents a spectral value. How can the same idea of taking reciprocals still work?
 
-Throughout today, A is a bounded self-adjoint operator on a nonzero complex Hilbert space. Its spectrum is a nonempty compact subset of the real line.
+The spectral theorem provides an answer. It lets us treat a self-adjoint operator as multiplication by a spectral coordinate, even when that coordinate ranges continuously. A resolvent is then obtained by taking reciprocals inside a spectral integral.
 
-## Inverting pointwise on the spectrum
+This viewpoint explains three things: how the resolvent is constructed, why its norm measures the distance to the spectrum, and how a resolvent can reveal the distribution of spectral mass.
 
-Choose a complex number z outside the spectrum. The scalar function g of lambda equals one divided by lambda minus z.
+Throughout this recording, A is a bounded self-adjoint operator on a nonzero complex Hilbert space. Its spectrum is a nonempty compact set of real numbers. We use the convention that the resolvent at z is the inverse of A minus z times the identity.
 
-Because the denominator never vanishes on the compact spectrum, g is continuous and bounded there. We may therefore apply the continuous functional calculus, or equivalently the bounded Borel calculus, to obtain g of A.
+## Start where the answer is visible
 
-Multiply g of lambda by lambda minus z. At every spectral point, the product is one. Functional calculus preserves products and the constant-one function, so g of A times A minus z times the identity equals the identity. The reverse product is also the identity because both factors belong to the same commutative functional calculus.
+Take a diagonal matrix with entries negative two and three. Choose z equal to i, the imaginary unit.
 
-Thus g of A is the resolvent of A at z.
+Subtract i times the identity. The two diagonal entries become negative two minus i, and three minus i. Each is nonzero, so the resolvent exists. Its entries are their reciprocals.
 
-In spectral-integral notation, the resolvent is the integral of one divided by lambda minus z against the projection-valued measure E.
+The magnitudes of these reciprocal entries are one divided by the square root of five, and one divided by the square root of ten. The first is larger, so the norm of the resolvent is one over the square root of five.
 
-This argument is the infinite-dimensional analogue of inverting a diagonal matrix by taking reciprocals of its diagonal entries. It works even for operators with continuous spectrum and no eigenvectors.
+Now look at the spectrum. It consists of the points negative two and three on the real axis. The point i is distance square root of five from negative two, and distance square root of ten from three.
 
-## The distance estimate
+So the resolvent norm is the reciprocal of the distance to the nearest spectral value.
 
-Let d be the distance from z to the spectrum of A. Because z is outside that compact set, d is positive.
+The calculation suggests a general rule: if an operator behaves like multiplication by a number lambda, then A minus z behaves like multiplication by lambda minus z, and its inverse behaves like division by lambda minus z.
 
-The modulus of one divided by lambda minus z is at most one over d on the spectrum. The operator norm estimate for functional calculus therefore gives the resolvent norm at most one over d.
+What we need is a replacement for the list of diagonal entries when the spectrum contains a continuum.
 
-For a bounded self-adjoint operator, this is an equality. The continuous functional calculus is isometric: the norm of a continuous function of A equals its maximum absolute value on the spectrum. The reciprocal symbol attains its maximum at a spectral point nearest to z, so the resolvent norm equals one divided by the distance.
+## Replace diagonal entries by spectral slices
 
-This is a precise equality, not merely a qualitative statement that inverse operators become large near singularity.
+Consider the Hilbert space of square-integrable functions on the interval from zero to one. Define A by multiplying a function by its input coordinate. At a point t, the output is t times the function's value there.
 
-For a general nonnormal operator the equality may fail badly. Nonnormal matrices can have large resolvent norm far from their eigenvalues. The sharp inverse-distance formula depends on normality, which self-adjoint operators possess.
+This operator is bounded and self-adjoint. Its spectrum is the whole interval from zero to one. There is no nonzero square-integrable eigenfunction concentrated at a single value of t, because one point has measure zero.
 
-## An explicit two-level example
+Nevertheless, we can isolate a band of spectral values. For example, we can keep the part of a function supported where t lies between one quarter and one half, and set the rest to zero.
 
-Take the matrix with diagonal entries minus two and three. Choose z equal to i, the imaginary unit. The resolvent is diagonal, with entries one divided by minus two minus i, and one divided by three minus i.
+That operation is an orthogonal projection. It is exactly the spectral projection associated with that interval.
 
-The magnitudes of these entries are one over the square root of five and one over the square root of ten. The operator norm is their maximum, one over the square root of five.
+For a general self-adjoint operator, a projection-valued measure plays the same role. To every suitable set of real spectral values it assigns an orthogonal projection onto the part of the Hilbert space carried by those values.
 
-The distance from i to the spectrum consisting of minus two and three is the square root of five, exactly as the formula predicts.
+A spectral integral combines these projections, weighting each spectral slice by a scalar function of its spectral value. In the multiplication example, the construction simply multiplies the function at t by the chosen scalar function evaluated at t.
 
-If z approaches minus two along the imaginary direction, say z equals minus two plus i times eta with eta positive, one denominator has magnitude eta. The resolvent norm is therefore at least one over eta, and in fact equals that value for sufficiently small eta.
+The spectral theorem says that A itself is obtained by weighting its spectral slices by lambda. More generally, a bounded continuous function g on the spectrum defines an operator called g of A. Products of scalar functions become products of operators, and the constant-one function becomes the identity.
 
-Nothing in this calculation required an eigenvector expansion in the general theorem. The finite example merely makes the spectral-integral formula visible.
+That product rule is what makes inversion possible.
 
-## Why spectral points prevent a bounded inverse
+## Taking the reciprocal
 
-We have shown that every z outside the spectrum has the displayed inverse. Can we recognize the converse using spectral projections?
+Choose a complex number z outside the spectrum. On the spectrum, the scalar function that divides one by lambda minus z never has a zero denominator.
 
-Take a real spectral point c. For every positive epsilon, the interval of radius epsilon around c must have a nonzero spectral projection. If some such interval had zero projection, the reciprocal of lambda minus c could be defined as a bounded Borel function on the remaining spectral support, and would produce a bounded inverse. That would contradict c being spectral.
+Because the spectrum is compact, the reciprocal function is bounded and continuous there. We can therefore form its operator through the spectral calculus.
 
-Choose a unit vector x sub epsilon in the range of the projection onto that small interval. The squared norm of A minus c acting on x sub epsilon is the integral of the squared quantity lambda minus c over its scalar spectral measure.
+Now multiply the reciprocal function by lambda minus z. The product equals one at every spectral value. The functional calculus carries that scalar identity into an operator identity.
 
-All of that measure is supported inside the epsilon interval, so the norm of A minus c acting on x sub epsilon is at most epsilon.
+So the operator formed from the reciprocal function undoes A minus z times the identity, in either composition order. It is the resolvent.
 
-As epsilon approaches zero, these are approximate eigenvectors. There may be no actual eigenvector with eigenvalue c, but the operator A minus c still cannot have a bounded inverse, since a bounded inverse would give a positive lower bound on its action on unit vectors.
+In the language of spectral integrals, the resolvent is the integral of the reciprocal of lambda minus z against the projection-valued spectral measure.
 
-This is how spectral support recovers the spectrum even in the continuous-spectrum case.
+This is precisely the same calculation as inverting a diagonal matrix, except that the diagonal entries have been replaced by a continuum of spectral values and a corresponding family of projections.
 
-## The resolvent identity
+Return to the multiplication operator on square-integrable functions. Its resolvent at z divides a function's value at t by t minus z. If z lies outside the interval from zero to one, the denominator stays a positive distance from zero and this division is bounded.
 
-There is an algebraic identity connecting resolvents at two points z and w, both outside the spectrum.
+No eigenvectors were required to perform that calculation.
 
-Subtract the scalar reciprocal functions. One divided by lambda minus z, minus one divided by lambda minus w, equals z minus w divided by the product of those two denominators.
+## Why distance gives the norm
 
-Apply functional calculus. We obtain that the resolvent at z minus the resolvent at w equals z minus w times the product of the two resolvents.
+Let d be the distance from z to the spectrum. Because z lies outside the compact spectrum, d is positive.
 
-Because these resolvents are functions of the same A, they commute. The identity can also be proved abstractly by multiplying out inverses, so it is valid for general bounded operators at points of their resolvent sets.
+Every spectral denominator, lambda minus z, has absolute value at least d. Its reciprocal has absolute value at most one over d. Therefore the resolvent norm is at most one over d.
 
-Taking norms yields a local continuity estimate. At fixed positive distance from the spectrum, the two resolvent norms remain uniformly bounded, and their difference is controlled by the distance between z and w.
+Why is the estimate exact?
 
-In particular, the resolvent depends continuously on z outside the spectrum. More advanced analysis shows it is analytic there; that fact will later support contour formulas for spectral projections.
+There is at least one spectral value nearest z, because the spectrum is compact. In a neighborhood of that value, the reciprocal multiplier is as large as we wish, up to the maximum one over d. The spectral theorem guarantees nonzero spectral content in every neighborhood of a spectral point. We can choose unit vectors concentrated in such a neighborhood to obtain outputs arbitrarily close to that maximum size.
 
-## Matrix elements are scalar integral transforms
+Thus the norm is at least one over d as well. We have equality: for a bounded self-adjoint operator, resolvent norm equals one divided by distance to spectrum.
 
-Fix a vector x. The diagonal matrix element of the resolvent is the integral of one over lambda minus z against the positive spectral measure mu sub x.
+This equality extends to normal operators, for which the spectral calculus is still governed by scalar multiplication. It can fail for nonnormal operators, whose inverse may grow substantially even away from eigenvalues.
 
-This is often called a Cauchy transform or Stieltjes transform of the measure. It connects an operator-valued inverse to an ordinary scalar integral.
+The formula also explains what happens near an isolated spectral point. In our diagonal matrix, move z toward negative two along a vertical line in the complex plane. If z is negative two plus i times eta, with eta positive, the nearest spectral distance is eta. The resolvent norm is one over eta. It becomes large as eta approaches zero.
 
-Let z have real part u and positive imaginary part eta. The imaginary part of the scalar reciprocal one over lambda minus u minus i eta is eta divided by the sum of the square of lambda minus u and eta squared.
+## Where do approximate eigenvectors come from?
 
-Consequently, the imaginary part of the diagonal resolvent matrix element is the integral of this nonnegative kernel against mu sub x. It is nonnegative.
+The spectral-integral picture gives a way to understand why a spectral point need not be an eigenvalue.
 
-As eta becomes small, the kernel concentrates near u. After the appropriate normalization, its integral over u recovers spectral mass on intervals, with endpoint conventions requiring care. This is one route to recovering the spectral measure from the resolvent.
+Take a real number c in the spectrum. Every narrow interval around c has a nonzero spectral projection. Choose a unit vector supported in that spectral slice.
 
-For an eigenvector at c, the scalar measure is an atom at c, and the matrix element has a reciprocal singularity at c. For continuous spectral measure, the behavior is spread across a continuum.
+When we apply A minus c times the identity, every multiplier on that slice has absolute value no larger than the width of the interval. The output norm is therefore at most that width.
 
-## Cutoffs and the approach to unbounded theory
+As we shrink the interval, we obtain unit vectors for which A minus c times the identity produces arbitrarily small outputs. These are approximate eigenvectors.
 
-The reciprocal formula is simple for a bounded self-adjoint A because its spectral coordinate is bounded and its resolvent symbol is bounded whenever z avoids the spectrum.
+If the shifted operator had a bounded inverse, it could not shrink unit vectors arbitrarily close to zero. So c belongs to the spectrum whether or not an exact eigenvector exists.
 
-For an unbounded self-adjoint operator, the corresponding coordinate function is unbounded and the operator has a proper domain. Nevertheless, the scalar reciprocal one over lambda minus z is bounded for every nonreal z, since its denominator is at least the magnitude of the imaginary part.
+The multiplication operator on square-integrable functions gives a picture you can keep in mind: concentrate a normalized function on a narrower and narrower interval around c. Multiplication by t then acts more and more like multiplication by c.
 
-That observation will allow resolvents to remain bounded even when the original self-adjoint operator is unbounded. The spectral theorem for such operators is constructed with measurable cutoffs and careful domain statements.
+## A scalar resolvent can reveal a measure
 
-We must not treat those domain issues as merely notation. An identity for a bounded resolvent does not automatically make the unbounded operator act on every vector.
+Now fix one vector x in the Hilbert space. The spectral projections tell us how much of x lies in each spectral band. That information defines a positive scalar measure, often called the spectral measure of x.
 
-## Resolvents connect spectrum and spectral measures
+If x is a normalized eigenvector with eigenvalue c, all of its spectral mass sits at c. For the multiplication operator, a general square-integrable function spreads its spectral mass across the interval, weighted by the square of its magnitude.
 
-We began with projections assigned to Borel sets. We converted them into scalar and complex measures, used those measures to construct functional calculus, and represented the operator as multiplication on cyclic L two spaces. Restricting to spectral subspaces and inverting scalar functions then became compatible operations.
+Take the inner product of x with the resolvent applied to x. The result is a complex number. In the spectral calculus it equals the integral of one divided by lambda minus z against the spectral measure of x.
 
-The resolvent formula completes this chain: outside the spectrum, inversion of A minus z is simply division by lambda minus z inside the spectral integral. Its norm records the exact spectral distance for self-adjoint A.
+This scalar function of z is a Cauchy transform, also called a Stieltjes transform with the present sign convention.
 
-That approximation machinery is what we need before introducing unbounded operators with explicit domains.
+To see why it is informative, take z with real part u and positive imaginary part eta. The imaginary part of the reciprocal of lambda minus u minus i eta equals eta divided by the sum of the square of lambda minus u and eta squared.
+
+That expression is nonnegative. It is largest when lambda is near u, and becomes more concentrated near u as eta decreases. The imaginary part of our scalar resolvent is the integral of this concentrated kernel against the spectral measure.
+
+The kernel has total area pi when integrated along the real line in u. Consequently, if we integrate the imaginary part of the scalar resolvent over a real interval, divide by pi, and let eta approach zero, we recover the spectral measure of that interval, provided its endpoints carry no atoms. Other endpoint cases have the corresponding half-weight corrections.
+
+So the resolvent does more than report where the spectrum is. Its behavior near the real axis contains information about how a vector's spectral mass is distributed.
+
+## Compare two nearby shifts
+
+The same reciprocal picture explains an important algebraic identity. Subtract the reciprocal of lambda minus w from the reciprocal of lambda minus z. The numerator is z minus w, and the denominator is the product of the two shifted factors.
+
+Apply the functional calculus. The resolvent at z minus the resolvent at w equals z minus w times the product of those two resolvents.
+
+This resolvent identity controls how the inverse changes as the shift moves. Wherever both shifts remain a positive distance from the spectrum, their resolvents stay bounded and close shifts give close resolvents.
+
+The dependence on z is in fact complex analytic away from the spectrum. That additional structure underlies contour formulas for isolated spectral projections.
+
+## A glimpse of the unbounded case
+
+One might expect an unbounded self-adjoint operator to have only unbounded inverses. The spectral integral shows why that expectation is false.
+
+For a nonreal shift z, every real lambda is at least the absolute value of the imaginary part of z away from z. Therefore the reciprocal of lambda minus z is bounded, even if lambda ranges across the entire real line.
+
+An unbounded operator requires a proper domain, and we must still establish that the inverse maps into that domain. The reciprocal formula supplies the right candidate, and the spectral theorem provides the domain argument.
+
+The same picture survives: the resolvent is a bounded operator obtained by taking reciprocals of shifted spectral multipliers.
+
+## The central connection
+
+For a diagonal matrix, inversion means taking a reciprocal at each eigenvalue. For a general self-adjoint operator, spectral integration replaces the diagonal coordinates. The reciprocal becomes a function on the spectrum, and the spectral calculus turns that function into the resolvent.
+
+From this one construction we obtain the exact inverse-distance norm formula, approximate eigenvectors near spectral points, and a scalar transform that reveals spectral mass.
+
+For a final check, imagine moving the point z vertically toward the spectrum of the matrix with entries negative two and three. Explain why the inverse grows like one over the height above negative two. Then ask how the same idea works when the eigenvalues have been replaced by every number in an interval. The spectral integral is the answer.
 
 <!-- END SPOKEN LECTURE -->
 
@@ -116,7 +150,7 @@ That approximation machinery is what we need before introducing unbounded operat
 
 ## Companion: mathematics and Lean correspondence (display only)
 
-With `A = A*` bounded and `z` in the complex resolvent set, `R_A(z) = (A - z I)^(-1) = integral (lambda - z)^(-1) dE(lambda)`, and `||R_A(z)|| = 1 / dist(z,spectrum(A))` on a nonzero Hilbert space. For a scalar spectral measure `mu_x`, `<x,R_A(z)x> = integral (lambda-z)^(-1) d mu_x(lambda)`. The source formalizes inverse-distance *upper bounds* for bounded self-adjoint resolvents and resolvent identities; the full equality and scalar-transform interpretation here are derived mathematically, not attributed to those specific theorem headers.
+With `A = A*` bounded and `z` in the complex resolvent set, `R_A(z) = (A - z I)^(-1) = integral (lambda - z)^(-1) dE(lambda)`, and `||R_A(z)|| = 1 / dist(z,spectrum(A))` on a nonzero Hilbert space. For a scalar spectral measure `mu_x`, `<x,R_A(z)x> = integral (lambda-z)^(-1) d mu_x(lambda)`. For \(z=u+i\eta\) with \(\eta>0\), the imaginary part of the scalar transform has kernel \(\eta/((\lambda-u)^2+\eta^2)\); integrating over an interval and dividing by \(\pi\) recovers its measure in the \(\eta\to0^+\) limit when the endpoints have zero mass. The source formalizes inverse-distance *upper bounds* for bounded self-adjoint resolvents and resolvent identities; the full equality and scalar-transform interpretation here are derived mathematically, not attributed to those specific theorem headers.
 
 **Lean bridge (verbatim source declaration headers).**
 

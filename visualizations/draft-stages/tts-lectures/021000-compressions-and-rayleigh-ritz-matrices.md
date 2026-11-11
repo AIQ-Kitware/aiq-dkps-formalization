@@ -2,128 +2,147 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-Let V be an isometric embedding from a coefficient Hilbert space into an ambient Hilbert space. The adjoint V star measures the coordinates along the selected subspace. We have V star V equal to the coefficient identity, while V V star is the orthogonal projection onto the closed range of V. These identities let us compress an ambient operator to the smaller coordinate space.
+# Compressions and Rayleigh–Ritz matrices
 
-Given an operator A on ambient space, the compression V star A V describes its action through a chosen coordinate subspace.
+Suppose a matrix is too large to diagonalize directly. We might still know a small collection of vectors that seem to point in the directions of its important eigenvectors. Can we use those vectors to build a smaller eigenvalue problem?
 
-This construction is called compression. It turns a large operator into a smaller one that describes how A looks from inside our selected subspace. It is the basis of the Rayleigh–Ritz method, a standard route to approximate eigenvalues and eigenvectors.
+That is the idea behind the Rayleigh–Ritz method. Choose a small subspace, measure how the operator acts within it, and solve the resulting small matrix problem.
 
-But we need to be precise about the word approximate. The compressed operator does not necessarily contain an exact piece of the original operator. It can forget an important part of what A does.
+There is a catch. The original operator can send a vector partly outside the chosen subspace. If we only keep what remains inside, we discard information. The Rayleigh–Ritz construction gives us both a smaller operator and a precise way to measure what was discarded.
 
-## Start with a line in the plane
+We'll first see this in an ordinary two-dimensional plane, where every number is easy to calculate. Then we'll identify the general construction and prove its basic properties.
 
-Take the plane and let A act by stretching the horizontal direction by a factor of one and the vertical direction by a factor of three. Its matrix in the standard basis has one and three on the diagonal and zero elsewhere.
+## A line that points between two eigenvectors
 
-We know exactly what this operator does to the horizontal and vertical unit vectors. They remain in their own directions, so those directions are eigenvectors, with eigenvalues one and three.
+Let A act on the plane by multiplying horizontal coordinates by one and vertical coordinates by three. So A is diagonal, with entries one and three.
 
-Now suppose we decide to examine only the diagonal line, the line where both coordinates are equal. Choose its unit vector v. Each coordinate of v is one over the square root of two.
+The horizontal direction is an eigenvector with eigenvalue one. The vertical direction is another, with eigenvalue three. Imagine, however, that we have chosen only the diagonal line halfway between those directions as our trial space.
 
-Our coefficient space is one-dimensional. The embedding V takes a number c and produces c times v. Its adjoint measures how much an ambient vector points along v.
+Take the unit vector v pointing along that line. Both coordinates of v are one over the square root of two.
 
-What happens if we start with a coefficient c, embed it, apply A, and then measure along v again?
+Apply A to v. The horizontal coordinate stays the same; the vertical coordinate gets multiplied by three. The result has coordinates one over the square root of two and three over the square root of two.
 
-The answer is two times c. So the compressed operator V star A V is multiplication by two.
+That result no longer points along the diagonal line. The operator has pushed us outside our chosen space.
 
-That makes intuitive sense. The diagonal line samples the direction with stretch one and the direction with stretch three equally. From the viewpoint of this selected line, the average quadratic stretch is two.
+We could give up on the line, but there is a more useful question: how much of A applied to v still points along v?
 
-But notice the tension: two is not an eigenvalue of our original matrix. Its eigenvalues are one and three.
+To find out, take the inner product of v with A applied to v. We get one half plus three halves, which is two.
 
-Compression has produced a perfectly well-defined number that is not an exact ambient eigenvalue. That is not a mistake. It is telling us something different.
+So, within the one-dimensional view provided by our line, A behaves like multiplication by two.
 
-## What the compression actually measures
+This number is the Rayleigh quotient of A at the unit vector v. It will also be the eigenvalue of our one-dimensional compressed operator. In Rayleigh–Ritz language, it is a Ritz value.
 
-Call the compressed operator B. We define B as V star A V.
+But two is not an eigenvalue of A. The real eigenvalues are one and three. That discrepancy is exactly what we need to understand.
 
-For any coefficient vector c, the inner product of c with B of c equals the inner product of V of c with A applied to V of c. We get this identity simply by moving the adjoint across the inner product.
+## Keep the part that stays inside
 
-Thus the quadratic form of B is the quadratic form of A, restricted to vectors in the selected subspace and rewritten in its own coordinates.
+The projection of A applied to v back onto our line is two times v. Its coordinates are both two over the square root of two.
 
-This explains why compression is so useful. We can study a large operator using a much smaller matrix, without changing the quadratic measurements made on the chosen subspace.
+Subtract this projected vector from the actual result of applying A. We obtain a vector with horizontal coordinate negative one over the square root of two and vertical coordinate positive one over the square root of two.
 
-It also tells us what the construction does *not* promise. It does not say that applying A stays inside that subspace. To obtain B we apply A first, then throw away whatever component points outside, because V star measures only the part visible inside the selected subspace.
+This remaining vector points along the other diagonal. It is perpendicular to v. Its length is one.
 
-Our diagonal-line example exhibits exactly that loss.
+Our original action of A on v has therefore split into two exact parts. One part, two times v, lies in the chosen line. The other part, a perpendicular vector of length one, escapes the line.
 
-## The missing part is a residual
+Call that escaping part the residual.
 
-Let's compute the part that was discarded.
+The word residual is important. It is the error in claiming that v is an eigenvector with eigenvalue two. If v were an exact eigenvector, A applied to v would equal two times v and the residual would vanish. In this example it doesn't vanish, so the Ritz value two is an approximation generated by the chosen line, rather than a true eigenvalue.
 
-A applied to v has first coordinate one over the square root of two and second coordinate three over the square root of two.
+This calculation already suggests the general method. Represent the chosen space by a convenient set of orthonormal coordinates, calculate the operator as seen in those coordinates, and keep track of the perpendicular defect.
 
-The compressed operator says the best represented action on our line is two times v, which has both coordinates equal to two over the square root of two.
+## Turn the line into a coordinate map
 
-Subtract two times v from A of v. The difference has first coordinate negative one over the square root of two and second coordinate positive one over the square root of two.
+For the diagonal line, one coefficient is enough to describe any vector on it. A number c represents the ambient vector c times v.
 
-That difference is perpendicular to v. Its inner product with v is negative one half plus one half, which equals zero.
+Call the operation that takes a coefficient and produces that ambient vector V. It is an isometric embedding: the length of its output equals the length of its input.
 
-This difference is called the residual. More generally, for an embedding V and the canonical compression B, the residual is A V minus V B. It is a map from coefficient space into ambient space.
+The adjoint of V, pronounced V star, goes the other way. It takes an ambient vector and measures its coordinate along v. In the plane, that is just an inner product with v.
 
-Think carefully about the two pieces. V B stays in the selected subspace. The residual records what A does that our selected subspace cannot represent.
+Now there is a natural three-step calculation. Start with a coefficient. Use V to create the ambient vector. Apply A. Finally, use V star to extract the coefficient that is still visible along the chosen line.
 
-The residual is not an arbitrary numerical error. It is an exact algebraic quantity defined from A and V. A small residual can become evidence that our selected space is close to an invariant subspace, but an angle estimate requires a spectral separation condition in addition to a small residual.
+The operator performing those three steps is V star A V. We call it the compression of A to the chosen subspace.
 
-## Why every Ritz residual is perpendicular
+For our example, that compression is the one-by-one matrix whose only entry is two.
 
-We can prove a striking identity without using the spectral theorem.
+The same construction works for a trial plane inside a much larger space, or for any finite collection of orthonormal trial directions. The coefficient space then has one coordinate per trial direction, and V inserts those coordinates into the ambient Hilbert space.
 
-Apply V star to the residual. We get V star A V minus V star V B. The first term is B by definition. In the second term, V star V is the identity because V is an isometry. So the second term is also B.
+Because V preserves inner products, V star V is the identity on the coefficient space. Meanwhile V V star is the orthogonal projection onto the chosen subspace. These two identities have different jobs: the first says that extracting the coordinates of a trial vector returns the original coefficients; the second says that extracting and rebuilding an arbitrary ambient vector discards its perpendicular component.
 
-The difference is zero.
+For the moment, assume A is bounded so all the compositions are defined everywhere. The finite-dimensional calculations are a special case.
 
-Thus every residual vector is orthogonal to every vector in the range of V. It is not merely that the error happens to point away from our diagonal line. The canonical choice of compression forces it to lie in the perpendicular complement of the trial subspace.
+## What compression preserves
 
-This is called the Galerkin orthogonality condition. Its name is less important than its content: when we compress A to a trial subspace, we have accounted for all of the component of A V that lies *within* that subspace. Only the perpendicular component remains.
+Let's call the compressed operator B. So B equals V star A V.
 
-That is why the residual is so informative. It isolates the precise defect of invariance.
+For any coefficient vector c, compare the inner product of c with B applied to c against the inner product of the ambient vector V of c with A applied to that ambient vector.
 
-## When is compression exact?
+These are equal. The adjoint lets us move V star from one side of the first inner product to the other. So the quadratic measurements made by B match the measurements made by A on trial vectors.
 
-Suppose now that the selected subspace is invariant under A. That means applying A to any vector in the subspace leaves the result inside it.
+This explains the averaging effect in our diagonal-line example. The Rayleigh quotient two is an exact measurement of A on that line. It isn't guaranteed to be an eigenvalue of the full operator.
 
-If A V of c always remains in the range of V, then the projection V V star does nothing to it. So V B of c, which is V V star A V of c, is exactly A V of c. The residual is zero.
+If A is self-adjoint, then B is self-adjoint. If A is positive, meaning its quadratic measurements are nonnegative, then B is positive as well. Those facts follow directly from the equality of quadratic forms.
 
-Conversely, if the residual is zero, A V equals V B. Every output of A V therefore lies in the range of V. The selected subspace is invariant.
+But the compression only retains the part of A's output visible in the trial space. It does not automatically preserve products or inverses, and it need not preserve the original eigenvalues.
 
-We have proved an equivalence: the canonical Ritz residual vanishes exactly when the trial subspace is invariant under A.
+The next calculation makes the loss of information explicit.
 
-For a self-adjoint operator, invariance of a closed subspace also implies that its orthogonal complement is invariant. In that case the subspace is reducing, and we can decompose A into separate diagonal blocks. We established that on invariant and reducing subspaces.
+## The residual in any dimension
 
-As a simple exact example, take the horizontal axis under our diagonal matrix. A sends horizontal vectors back to the horizontal axis. Compression gives multiplication by one, and the residual is exactly zero. This time the compressed eigenvalue is a genuine ambient eigenvalue.
+Take the original action A V and subtract the action predicted by the compressed operator, V B. The result is the residual operator. It accepts trial coefficients and returns vectors in the ambient space.
 
-## An approximate eigenpair and a Ritz value
+For our line, applying the residual to the coefficient one gives the perpendicular vector we calculated, with length one.
 
-Now imagine we have a trial subspace with several orthonormal coordinate columns, not just one. Compression produces a small square matrix B. If we find an eigenvector c of B with eigenvalue mu, we can lift c into ambient space by forming V of c.
+Now apply V star to this residual. We get V star A V minus V star V B. The first term is B by definition. The second term is also B, because V star V is the identity. They cancel.
 
-The compression equation says that the part of A V of c visible in the trial subspace behaves like mu times V of c. The residual measures the remaining part, perpendicular to that subspace.
+So V star of the residual is zero.
 
-The pair consisting of mu and V of c is called a Ritz pair. Mu is a Ritz value. It need not be an exact eigenvalue of A, and V of c need not be an exact eigenvector.
+That means the residual is perpendicular to every vector in the trial subspace. This exact result is called Galerkin orthogonality.
 
-If the corresponding residual vanishes, the Ritz pair is exact. If it does not vanish, the residual tells us how far the proposed eigenvector equation fails, before we make any claim about the distance to a true eigenspace.
+The reason is geometric. We deliberately chose B to capture every component of the action that lies inside the trial space. Whatever remains must lie perpendicular to it.
 
-Our diagonal-line example was the simplest Ritz pair. Its Ritz value was two. Its candidate vector was v. Its residual had length one. We can compute all of those numbers directly, even without knowing a general perturbation theorem.
+A related observation gives us an exact criterion for invariance. A subspace is invariant under A if A sends every vector in it back into that same subspace.
 
-Later, when we prove spectral separation estimates, we will investigate when small residual length controls the angle to an exact subspace. For now, there is no reason to assume the relationship is always favorable.
+If our residual is zero, A V equals V B, so every output from a trial vector stays inside the trial subspace. Conversely, if the subspace is invariant, projecting A V back into it loses nothing, so the residual is zero.
 
-## Which properties survive compression?
+Thus the canonical residual vanishes exactly when the trial subspace is invariant.
 
-Compression preserves several important structures. If A is self-adjoint, then B is self-adjoint: taking the adjoint of V star A V reverses the product and replaces A by A star, which is still A. If A is positive, B is positive, because its quadratic form is the same nonnegative form evaluated on vectors of the kind V of c.
+For a bounded self-adjoint operator, an invariant closed subspace also has an invariant orthogonal complement. Such a subspace is called reducing. The key feature for our calculation is that no part of A's action leaks outside it.
 
-But compression is not an algebra homomorphism. In general, compressing A squared does not give the square of the compression of A.
+Compare two lines in the same plane. For the horizontal axis, A leaves every vector horizontal, the compression is multiplication by one, and the residual is zero. For the diagonal line, the compression is multiplication by two, but the residual has length one. The difference is invariance.
 
-Here is a tiny example. Let A swap horizontal and vertical coordinates, and choose the horizontal line as the trial subspace. Applying A to a horizontal vector sends it vertically, so its compression is zero. But A squared is the identity. Compressing A squared therefore gives the identity on our one-dimensional coordinate space, whereas squaring the zero compression still gives zero.
+## Ritz pairs and their meaning
 
-The missing contribution went out of the subspace during the first application of A, then came back during the second. Compressing after the first step threw it away.
+With several trial directions, B is a small self-adjoint matrix. We can find an eigenvector c of B with eigenvalue mu, then embed c into the ambient space using V.
 
-This is why one must never silently transfer an identity involving products, inverses, or exact eigenvalues from A to its compression. We have to check which structures the compression really preserves.
+The number mu and ambient vector V of c form a Ritz pair. The equation B applied to c equals mu times c holds exactly in the small coordinate space. In the ambient space, however, A applied to V of c equals mu times V of c plus the residual applied to c.
 
-## Where this leaves us
+The residual tells us exactly how much the candidate fails to satisfy the ambient eigenvector equation.
 
-We can now distinguish three objects. V represents the chosen subspace. B equals V star A V and records the part of A visible within that subspace. The residual A V minus V B records the part escaping it.
+For a normalized candidate and a self-adjoint A, there is also a useful spectral consequence. Some point in the spectrum lies within residual norm of the Ritz value. In our two-dimensional example, the Ritz value two has residual norm one, and both actual eigenvalues, one and three, are exactly distance one away.
 
-The compression, the off-diagonal residual, and the exact invariant-subspace condition describe three different aspects of an approximate eigenspace. Keeping them distinct prevents coordinate information from being mistaken for invariance.
+Notice the limitation: closeness to some spectral value does not identify which eigenspace our candidate is approximating. To control the angle to a particular invariant subspace, we also need information separating the desired spectrum from unwanted spectrum.
 
-Try to reconstruct the proof that V star applied to the residual is zero. Then explain why zero residual is equivalent to invariance. Finally, return to the diagonal-line example: why does a Ritz value of two fail to be an eigenvalue even though it is obtained from an exact calculation?
+## A small warning about repeated multiplication
 
+Here is a final example that shows why compression must be handled carefully.
+
+Let A swap horizontal and vertical coordinates, and choose the horizontal axis as the trial space. A sends a horizontal vector straight up, so its compression onto the horizontal axis is zero.
+
+Now apply A twice. Swapping coordinates twice returns every vector to where it started. Thus A squared is the identity, and its compression is the identity on our one-dimensional space.
+
+But the square of the compressed operator is still zero.
+
+The discrepancy has a physical explanation. The first application of A leaves the trial space. The second brings the vector back. If we compress after the first step, we discard the component that would have returned.
+
+Compression preserves the quadratic information on the trial space, but it does not preserve every algebraic operation.
+
+## The usable picture
+
+A trial subspace gives us a smaller coordinate system. Its compression tells us what the operator looks like from inside that system. Its residual tells us how much of the action escapes. Galerkin orthogonality guarantees that the escape is perpendicular to the trial space, and zero residual is equivalent to invariance.
+
+For the diagonal line under the matrix with entries one and three, keep three numbers in mind: the true eigenvalues are one and three, the Ritz value is two, and the residual has length one. Those numbers are compatible because Ritz values describe measurements within a chosen space, while true eigenvalues describe exact invariant directions.
+
+A useful check is to reconstruct the residual of that diagonal line and verify, directly from its two coordinates, that it is perpendicular to the trial vector. Once that calculation is clear, the general formula is simply its coordinate-free version.
 
 <!-- END SPOKEN LECTURE -->
 
@@ -137,7 +156,7 @@ Let \(V:F\to E\) be a linear isometric embedding and \(A:E\to E\) a linear opera
 B=V^*AV:F\to F,\qquad R=AV-VB:F\to E.
 \]
 
-By \(V^*V=I_F\), we have \(V^*R=0\), so \(\operatorname{ran}R\subseteq(\operatorname{ran}V)^\perp\). The residual vanishes exactly when \(\operatorname{ran}V\) is invariant under `A`. For self-adjoint `A`, `B` is self-adjoint. An eigenpair \(Bc=\mu c\) produces a Ritz pair \((\mu,Vc)\) with defect \(AVc-\mu Vc=Rc\).
+By \(V^*V=I_F\), we have \(V^*R=0\), so \(\operatorname{ran}R\subseteq(\operatorname{ran}V)^\perp\). The residual vanishes exactly when \(\operatorname{ran}V\) is invariant under `A`. For self-adjoint `A`, `B` is self-adjoint. An eigenpair \(Bc=\mu c\) produces a Ritz pair \((\mu,Vc)\) with defect \(AVc-\mu Vc=Rc\). For self-adjoint \(A\) and normalized \(Vc\), \(\operatorname{dist}(\mu,\sigma(A))\le\|Rc\|\). In the example \(A=\operatorname{diag}(1,3)\), \(v=(1,1)/\sqrt2\), \(B=2\), and \(R(1)=(-1,1)/\sqrt2\); the residual norm is one.
 
 **Lean bridge.** The DKPS-developed module `ForTauCeti/Analysis/InnerProductSpace/Residual/Ritz.lean` (moved from `DavisKahan/FiniteDimensional/Residual/Ritz.lean` during the upstream staging work) uses `F →ₗᵢ[𝕜] E` for the isometric embedding:
 

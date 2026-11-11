@@ -6,6 +6,82 @@ agent suggestions. Technical implementation belongs in the
 [authoring guide](dkvis/learning/README.md) and
 [slide implementation notes](briefs/slide-authoring.md).
 
+## Concept-first teaching and realistic listening pace (11 November 2026)
+
+The governing aim is **to develop mathematical understanding at the speed at
+which a listener can build a mental model**. Correct definitions and complete
+theorems are essential, but a sequence of correct statements is not by itself a
+teachable lecture. A reader can pause and inspect symbols; a TTS listener must
+follow the argument in real time without a board to look back at.
+
+**Ten minutes is a soft target, not a limit or a writing quota.** Take as long as
+is useful to establish the concept, work an example, and justify the important
+steps. Do not remove hypotheses, rush a proof, omit a calculation, or compress
+explanations to meet a spoken-word or runtime target. Do not pad a short,
+complete lesson either. If several substantial independent ideas are being
+introduced, consider separate, individually standalone recordings; maintain
+the mathematical coverage and the course's identifiers and navigation.
+
+**Build an explanation before presenting its abstraction.** Plan a mathematical
+learning path, not merely a theorem outline:
+
+1. Find an accessible problem or observation that the intended audience can
+   already reason about. Give the listener a concrete reason to care about the
+   question. Avoid starting with a dense inventory of named maps and spaces.
+2. Work a small, audible example. Explain the objects and the calculation in
+   plain language. When the example fails or leaves a question, make that
+   obstacle explicit; it provides the reason for introducing a new definition.
+3. Introduce the general construction when the listener has a referent for it.
+   State the mathematical setting and hypotheses at the point where they are
+   needed. Revisit the same example to interpret the definition and to expose
+   which features were specific to the example.
+4. Before a substantial proof, explain the desired conclusion and the idea of
+   the argument. At each key step, say what has now been established and what
+   remains. Slow down at domain restrictions, changes of space, and
+   implications that are not reversible.
+5. Consolidate with a second use of the running example, a meaningful failure
+   case, or a small calculation the listener can reconstruct. End with the
+   actual mathematical result and its important limitation.
+
+This is a **reasoning pattern, not a fixed section template**. Sometimes a
+theorem is the right opening, sometimes a physical model or an immediate
+calculation. Do not force repeated question headings, recaps, or exercises.
+What is required is an intelligible thread of *why this step comes next*.
+
+**Control the number of active objects.** Introduce the input, output, and
+role of a new map before naming the next one. Whenever a new coordinate space,
+projection, residual, spectral cluster, gap, or domain appears, locate it
+relative to the objects already in use. Reuse a small running example rather
+than changing numerical models at every definition. Revisiting the example
+with a new purpose is useful; repeating the same sentence is not. If several
+constructions are needed for a theorem, give a verbal preview of their jobs
+before presenting the full notation.
+
+**Work from the mathematics, not from the existing paragraphs.** In a deep
+revision, first record the correct definitions, hypotheses, main proof steps,
+examples, and target conclusions. Design the teaching progression independently
+of the draft's original order, and rewrite the spoken region accordingly.
+Preserve the mathematical coverage, exact conditions and counterexamples in the
+recording or a deliberately revised curriculum plan. Update the display-only
+mathematical/Lean companion when the exposition changes a convention, example,
+or theorem statement. In particular, use consistent resolvent signs within a
+lecture and explain any convention change across its displayed sources.
+
+**Audio-first editorial test.** Read the extracted spoken region in order, with
+appendices and visuals hidden. At each mathematical transition ask: can the
+listener identify the current objects; perform or visualize the example; see
+why the new fact was needed; and reconstruct the reason for the conclusion?
+A phrase scan, presence of headings, target word count, or satisfactory
+narration extraction is not a substitute for this judgement.
+
+**Review is feedback-driven.** The author should self-edit the transcript for
+clarity, mathematical fidelity, and clean TTS extraction. There is no required
+per-lecture A/B comparison, controlled listening study, or manual audio
+acceptance gate. Publish the revised lecture and use listener feedback to
+identify specific passages for another pass. Audio synthesis and spot
+listening remain useful when a concrete pronunciation or pacing problem needs
+testing, not as a recurring obligation for every lecture.
+
 ## Standalone and evergreen
 
 > “The lectures should stand alone.”
@@ -102,8 +178,8 @@ merely asserting a result calculated in another recording.
 
 The narration extractor validates markers and printable input, not prose,
 logic, operator domains, theorem correspondence, or voice quality. Keep
-editorial-review disposition, mathematical source checks, compilation checks,
-and synthesized-audio acceptance separate in the completion record.
+editorial review, mathematical source checks, compilation checks, and any
+optional audio spot checks separately identified in completion records.
 
 ## Pedagogical structure audit (8 November 2026)
 
@@ -134,7 +210,7 @@ signals; they are not grades for mathematical pedagogy, and a lack of a
 phrase such as “for example” does not prove that the lesson has no example.
 Do not rewrite clear mathematics to satisfy a uniform lecture template.
 Distinguish transcript extraction, editorial review, theorem-source checks,
-Lean compilation, and listening to synthesized audio in the validation record.
+Lean compilation, and any optional synthesized-audio checks in the validation record.
 
 The current TTS course phase is *lecture structure and narration audit*.
 Visualizations, slide decks, and a companion presentation are future work.
