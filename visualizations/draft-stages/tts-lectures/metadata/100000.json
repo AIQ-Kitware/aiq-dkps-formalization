@@ -5,6 +5,18 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-polar-decomposition",
+      "reason": "Start with the positive modulus and polar factor; the lecture uses the canonical partial isometry for maps with a kernel."
+    },
+    {
+      "source_id": "wiki-partial-isometry",
+      "reason": "Review the initial space, final space and kernel-zero construction that make the gauge proof work."
+    },
+    {
+      "source_id": "wiki-matrix-norm",
+      "reason": "Connect the finite matrix example to singular-value norms before general symmetric ideals."
+    },
+    {
       "source_id": "higham-polar",
       "reason": "Alternative polar-factor explanation; distinguish a kernel-zero partial isometry from full unitary extensions."
     },

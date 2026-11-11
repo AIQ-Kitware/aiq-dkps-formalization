@@ -4,101 +4,107 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# Bringing spectral information back to a real Hilbert space
+# Can a spectral projection built with complex numbers be real?
 
-To use the complex spectral theorem for a real self-adjoint operator, complexify its Hilbert space and extend the operator complex-linearly. Norms and adjoints behave compatibly under this extension. The subtler question is which spectral statements and operator functions return to the original real Hilbert space.
+Take a real diagonal matrix with eigenvalues negative two and three. Suppose you want to keep the first eigendirection and discard the second.
 
-For a real self-adjoint operator, our goal is to use complex spectral theory and then return to a real spectral assertion. To accomplish that, we will follow an explicit chain: invertibility, spectral location, functional calculus, conjugation symmetry, and descent.
+There's an obvious answer: use the projection that keeps the first coordinate and kills the second.
 
-The main point will be that continuous real-valued functions of a real self-adjoint operator descend cleanly. Spectral projections across a genuine gap can then be recovered by choosing a continuous function that agrees with an indicator on the spectrum.
+But let's construct that projection in a different way, without writing down the eigenvectors.
 
-## First recall what spectrum tests
+Consider the function that takes a number t to three minus t, divided by five. At negative two, the function is one. At three, it is zero.
 
-For a bounded operator T and a scalar lambda, the resolvent test asks whether T minus lambda times the identity is invertible with a bounded inverse.
+Now apply that function to the matrix. Since the function is a polynomial, this means take three times the identity, subtract the matrix, and divide by five. The resulting matrix is exactly the projection we wanted.
 
-The spectrum consists of those scalars for which this test fails. This includes failures of injectivity, surjectivity, and bounded invertibility. In infinite dimensions, eigenvalues alone do not describe the full spectrum.
+We've selected a spectral subspace by applying a scalar function to an operator. This is the basic idea of functional calculus.
 
-Complexifying a real operator preserves products and the identity. Therefore, if T minus a real scalar is invertible over the reals, its complexification has a bounded inverse obtained by complexifying the original inverse.
+Now imagine that the available spectral theorem was proved over complex Hilbert spaces, while the operator and the subspace we care about are real. Can we use the complex theorem and recover a genuine real projection, with no change in norms or spectral gaps?
 
-The converse is more interesting. Suppose the complexified operator has a bounded complex inverse at a real scalar. Because the original complexified operator commutes with canonical conjugation, its inverse also commutes with conjugation. We prove this by multiplying the commutation identity on both sides by the inverse. The inverse therefore sends real vectors to real vectors and descends to a bounded real inverse.
+## First preserve the resolvent test
 
-So, at real scalar parameters, invertibility agrees before and after complexification. That is the key reason the real spectral information is preserved.
+A real Hilbert space can be complexified by replacing each real vector with a pair, written x plus i y. A bounded real operator T becomes a complex operator by applying T separately to x and to y.
 
-Notice what we did not prove: that an arbitrary real operator has exactly the same full spectrum when viewed over the complex numbers. A ninety-degree real rotation has complex eigenvalues i and minus i. Its real spectrum, in the usual real-scalar sense, cannot list those complex eigenvalues. The comparison is of real spectral parameters, and self-adjointness is what makes that comparison sufficient for our later theory.
+The original real space sits inside as the vectors with imaginary part zero. Complex conjugation identifies that real copy: it fixes x plus i zero.
 
-## Why self-adjointness changes the situation
+Suppose we shift T by a real number t. The question is whether T minus t times the identity has a bounded inverse.
 
-Let A be a bounded real self-adjoint operator. Its complexification is complex self-adjoint because the adjoint commutes with complexification.
+If it has a real inverse, complexify the inverse. It undoes the complexified shifted operator, so the complex inverse exists.
 
-The spectral theorem for a complex self-adjoint operator says that its spectrum is a compact subset of the real axis. Therefore every spectral parameter of the complexified A is real.
+Conversely, suppose the complexified shifted operator has a bounded inverse. The shifted operator commutes with conjugation, and its inverse must commute with conjugation as well. Therefore that inverse carries real vectors to real vectors. Restricting to the real copy gives a bounded real inverse.
 
-Since the real-scalar invertibility test agrees with the complex test, the real spectrum of A and the complex spectrum of its complexification describe the same numerical subset of the real line, after identifying real numbers with complex numbers having zero imaginary part.
+So for a real scalar t, the shifted operator is invertible over the reals exactly when its complexification is invertible at that same t.
 
-This explains why we can safely use complex self-adjoint spectral theory to locate the spectrum of a real self-adjoint operator. The restriction to self-adjointness does real work.
+This proves agreement of the real-scalar resolvent tests. We have not said that an arbitrary real operator has the same entire spectrum in every sense. For example, a real ninety-degree rotation acquires the complex eigenvalues i and negative i after complexification.
 
-A further example makes this concrete. Let A be the real diagonal matrix with entries minus two and three. The complexification has exactly the same two eigenvalues. Nothing about their positions changes. If instead A were the ninety-degree rotation, complexification would reveal two imaginary spectral points. We should not transfer a self-adjoint spectral conclusion to that rotation.
+## Self-adjointness makes spectral location transfer
 
-## Continuous functional calculus preserves conjugation symmetry
+Now assume T is self-adjoint on the real Hilbert space.
 
-Now suppose f is a continuous real-valued function on the spectrum of the self-adjoint complexified operator.
+Its complexification is also self-adjoint, because complexification respects adjoints. The complex spectral theorem then places its spectrum on the real number line.
 
-The functional calculus associates to f an operator f of A. For polynomials with real coefficients, this is easy to understand: every power of the complexified A commutes with conjugation, real scalar coefficients preserve that property, and sums preserve it as well.
+That removes the extra nonreal spectral possibilities. The real spectrum of T, defined through real-scalar invertibility, agrees with the complex spectrum of its complexification after identifying real numbers with points on the real axis.
 
-The continuous functional calculus is obtained by extending these polynomial rules through uniform approximation. Since operator-norm limits of conjugation-commuting operators still commute with conjugation, f of A also commutes with conjugation.
+In our diagonal example, both versions have spectral values negative two and three. The same separation survives complexification.
 
-There is a more abstract proof using uniqueness of the continuous functional calculus as a real star-algebra homomorphism. Conjugating every operator value of the calculus gives another homomorphism that sends the identity function to the same self-adjoint operator. Uniqueness forces the two calculi to agree.
+Why do we care about exact preservation? If an estimate depends on a gap of five, changing fields should not replace that number with a weaker constant. The norm-preserving complexification and the matching real spectral locations let us keep the original numerical bound.
 
-Either proof establishes the same property: applying a continuous real-valued function to a conjugation-fixed self-adjoint operator produces another conjugation-fixed operator.
+## From polynomials to continuous functions
 
-A bounded complex-linear operator commuting with conjugation descends to a bounded real operator: restricting it to the real fixed vectors recovers the original action. This is the descent of the continuous functional calculus.
+The polynomial in our example was chosen to be one on the selected eigenvalue and zero on the other. But a matrix with many eigenvalues, or an operator with a continuous spectrum, may need a less elementary function.
 
-It also preserves positivity. If f is nonnegative on the spectrum, the spectral theorem says f of A is positive. Restricting its quadratic form to real vectors gives positivity of the descended real operator.
+For a bounded self-adjoint operator, continuous functional calculus assigns an operator to every continuous function on its spectrum. It respects addition, multiplication, adjoints, and norm limits.
 
-The same reasoning transports spectral estimates. If f lies between constants a and b on the spectrum, then the quadratic form of f of A lies between a times the squared norm and b times the squared norm. Since real vectors embed isometrically, the inequality descends with the same constants.
+Start with real polynomials. The complexified real operator commutes with conjugation. Powers of it commute with conjugation; so do real scalar multiples and sums. Thus every real polynomial applied to it commutes with conjugation.
 
-## An actual spectral projection requires more care
+Continuous real-valued functions on a compact real spectrum can be uniformly approximated by real polynomials. Applying the functional calculus and passing to the operator-norm limit preserves the conjugation relation.
 
-A spectral projection onto a subset S of the spectrum corresponds to the indicator function of S: one on S, zero outside S.
+Therefore a continuous real-valued function of a complexified real self-adjoint operator commutes with conjugation. It restricts to a bounded real operator.
 
-Indicators are usually discontinuous. Continuous functional calculus alone cannot evaluate an arbitrary discontinuous indicator. Bounded Borel calculus can, but descending every Borel operation requires additional machinery and the right invariance statements.
+Positivity and order estimates come back too. If the function is nonnegative at every spectral value, the resulting operator is positive. If it lies between two real constants on the spectrum, the operator's quadratic form lies between the corresponding bounds. Restricting to real vectors preserves those inequalities.
 
-There is an important case where continuous calculus is enough. Suppose the spectrum is separated into two pieces by an open gap. Then a function may switch continuously from one to zero inside the gap, where there is no spectrum at all.
+This is the central transfer principle for continuous spectral calculus.
 
-For our diagonal example with eigenvalues minus two and three, choose a threshold zero. Define a continuous real-valued function that equals one below zero, decreases through the empty gap, and equals zero at and above three. On the spectrum, that function is exactly the indicator of the lower spectral component.
+## Why the gap is useful when selecting a projection
 
-Functional calculus gives the projection onto the minus-two eigenspace. Its matrix is diagonal with entries one and zero. Because the function is real valued, the projection commutes with conjugation and therefore descends to the real plane.
+An indicator function takes the value one on a chosen set and zero outside it. Applied through spectral calculus, it should produce the projection onto that spectral part.
 
-We can also describe it without choosing eigenvectors. The descended real operator is idempotent and self-adjoint. Its complexification is the complex spectral projection. Hence its real range complexifies to the chosen complex spectral subspace.
+Indicators are generally discontinuous. This is where a spectral gap helps.
 
-This is the mechanism behind real spectral subspaces associated with an actual gap.
+Return to the matrix with eigenvalues negative two and three. There are no spectral values between them. We are free to choose a continuous function that is one on the lower spectral component, transitions across the empty gap, and is zero on the upper component.
 
-## What happens at a spectral boundary
+The function doesn't have to jump at a point in the spectrum. On the spectrum itself, it agrees exactly with the desired indicator.
 
-Consider a self-adjoint multiplication operator whose spectrum fills an interval and choose a threshold in its interior. The indicator of the lower half is discontinuous at that threshold.
+Our simple polynomial, three minus t divided by five, already does the job on those two spectral points. In a more general bounded self-adjoint operator, we can choose a continuous real-valued function that equals one on one isolated closed spectral piece and zero on the other. Continuous functional calculus produces a self-adjoint idempotent operator: an orthogonal projection.
 
-The bounded Borel spectral projection still exists in complex Hilbert space, but it no longer arises from the same simple continuous function that equals the indicator on the entire spectrum.
+Because the function is real valued, the projection commutes with conjugation. Its restriction is the corresponding real projection, whose range is a real spectral subspace.
 
-For special operators, we may prove conjugation invariance of that Borel projection directly, or approximate indicators in a suitable strong topology. Those are additional arguments. It would be incorrect to claim that the continuity proof above automatically handles every Borel set.
+The open gap did two jobs: it identified a genuinely isolated part of the spectrum, and it let us use continuous rather than discontinuous functional calculus to select that part.
 
-This difference matters because Davis–Kahan theorems frequently select exact spectral subspaces. Sometimes the selected set is separated from the remainder by a positive gap, so continuous calculus suffices. Other formulations permit boundaries touching the spectrum and need the full Borel spectral framework.
+## What changes at a spectral boundary
 
-## Resolvents and gap preservation
+Now replace the matrix with multiplication by the coordinate on square-integrable functions over the interval from zero to one.
 
-We can now connect spectra to numerical estimates. If a real self-adjoint A has spectrum at least delta away from a real scalar t, then the complex self-adjoint resolvent has operator norm at most one divided by delta.
+The spectrum fills the entire interval. Suppose we want to keep the functions supported below one half and discard those supported above one half.
 
-The resolvent of the real operator is obtained by descent, and complexification preserves operator norm. Therefore the same bound holds on the real Hilbert space, with no extra dimension-dependent constant.
+The required projection multiplies each function by an indicator: one for inputs below one half, zero for inputs above it. It is a perfectly well-defined bounded orthogonal projection.
 
-That is an example of a transferable inequality whose hypotheses and conclusion survive exactly.
+But the indicator jumps at one half, right in the spectrum. There is no continuous function on the entire spectral interval that agrees with it point by point.
 
-But spectral separation for two operators is not, by itself, a promise that every operator-norm Sylvester bound has constant one. Earlier we proved that ordering of spectra gives stronger integral estimates than mere pairwise disjointness. Complexification preserves our data; it does not strengthen the gap hypothesis.
+The continuous functional calculus alone therefore doesn't give this projection through a continuous symbol. We need bounded Borel functional calculus, or another argument that handles the discontinuity.
 
-## The strategy
+Real spectral measures do admit such projections, but the descent from complex space needs the corresponding conjugation-invariance argument for Borel operations. A proof that handled only uniform limits of polynomials is not enough.
 
-We have proved how to transfer bounded spectral structure.
+This distinction is especially important for spectral selections whose boundary touches the spectrum.
 
-Our standard will be the same. State the exact object being transported. Prove that its defining data survive. Then use complex theory and descend the conclusion with the same constants.
+## The numerical value of preserving spectra
 
-The spectrum of a self-adjoint operator controls its functional calculus. Conjugation symmetry tells us which of the constructed bounded operators are genuinely real. Together, these principles allow complex proofs to produce real spectral projections and resolvent estimates without replacing the underlying real problem.
+Suppose t lies a positive distance delta away from the spectrum of a real self-adjoint operator. The norm of the shifted inverse in complex Hilbert space equals the reciprocal of that distance.
+
+The complex inverse commutes with conjugation, so it descends to the real shifted inverse. Since complexification preserves operator norms, the same resolvent bound holds in real space with the same delta.
+
+This illustrates the full pattern. We transfer the operator, preserve its self-adjointness and real spectral location, apply the complex theorem, and recognize the resulting bounded operator by its conjugation symmetry.
+
+The result is a real operator with the same norm estimate. For spectral projections, a genuine gap makes the construction accessible through continuous functional calculus; a spectral boundary inside the spectrum calls for the stronger Borel theory.
 
 <!-- END SPOKEN LECTURE -->
 
@@ -107,6 +113,14 @@ The spectrum of a self-adjoint operator controls its functional calculus. Conjug
 ## Companion: mathematics and Lean correspondence (display only)
 
 For `T : E →L[ℝ] E`, invertibility at a real scalar parameter is preserved and reflected by complexification. If `T` is self-adjoint, the complexified operator is self-adjoint and its complex spectrum lies in `ℝ`; the real spectra agree. The operator-conjugation involution fixes `complexify T`. Continuous real-valued functional calculus preserves this fixed-point algebra. In a genuine gap, a continuous `spectralGapSymbol` agrees on the spectrum with the half-line indicator, permitting descent of the selected spectral projection and its range.
+
+### Worked example: a real spectral projection via functional calculus
+
+Let \(A=\operatorname{diag}(-2,3)\) on \(\mathbb R^2\). The real polynomial \(f(t)=(3-t)/5\) satisfies \(f(-2)=1\) and \(f(3)=0\). Therefore
+\[
+f(A)=\frac{3I-A}{5}=\begin{pmatrix}1&0\\0&0\end{pmatrix},
+\]
+which projects onto the lower eigenspace. A continuous function agreeing with the indicator on two disjoint closed spectral components produces the corresponding gap projection. For multiplication by \(t\) on \(L^2([0,1])\), the indicator of \([0,1/2]\) is discontinuous on the spectrum, so its projection requires Borel rather than continuous functional calculus.
 
 ### Actual Lean source declarations
 

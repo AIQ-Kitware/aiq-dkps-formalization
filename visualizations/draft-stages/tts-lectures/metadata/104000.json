@@ -5,6 +5,18 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-sylvester-equation",
+      "reason": "Begin with the finite matrix equation; the lecture adds real complexification, unbounded domains and ideal gauges."
+    },
+    {
+      "source_id": "wiki-complexification",
+      "reason": "Review why both real and imaginary coordinates are required for a complexified unbounded domain."
+    },
+    {
+      "source_id": "wiki-spectral-gap",
+      "reason": "Review spectral separation; the theorem uses a more specific form-bounded Sylvester gap."
+    },
+    {
       "source_id": "higham-sylvester",
       "reason": "Matrix Sylvester equation; note the lecture-specific operator norm and spectral-gap conditions."
     },

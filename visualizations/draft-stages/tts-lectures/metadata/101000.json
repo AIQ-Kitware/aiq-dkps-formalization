@@ -5,6 +5,18 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-projection-linear-algebra",
+      "reason": "Review how orthogonal projections select source and target components of an operator."
+    },
+    {
+      "source_id": "wiki-matrix-norm",
+      "reason": "Compare trace, Frobenius and operator norms under pinching and block direct sums."
+    },
+    {
+      "source_id": "wiki-majorization",
+      "reason": "Review descending singular-value prefix comparisons before the Ky Fan dominance conclusion."
+    },
+    {
       "source_id": "bhatia-1997",
       "reason": "Matrix inequalities and unitarily invariant norms; compare finite vs. infinite dimensional statements."
     },

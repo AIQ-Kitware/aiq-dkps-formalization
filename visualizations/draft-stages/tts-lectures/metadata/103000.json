@@ -5,6 +5,14 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-functional-calculus",
+      "reason": "Read how functions of a scalar variable become functions of a self-adjoint operator."
+    },
+    {
+      "source_id": "wiki-projection-valued-measure",
+      "reason": "Connect spectral sets with orthogonal projections and the more general Borel functional calculus."
+    },
+    {
       "source_id": "kato-1995",
       "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
     }

@@ -1071,6 +1071,60 @@
       "notes": "Strongly continuous semigroups, generators, and examples of evolution operators.",
       "access": "free_no_login",
       "format": "html"
+    },
+    "wiki-polar-decomposition": {
+      "title": "Polar decomposition - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Polar_decomposition",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Polar factors, positive modulus, and rectangular matrix examples; compare full-unitary extensions with the canonical kernel-zero partial isometry.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-partial-isometry": {
+      "title": "Partial isometry - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Partial_isometry",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Initial and final spaces, the kernel-zero convention, and the polar factor.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-projection-linear-algebra": {
+      "title": "Projection (linear algebra) - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Projection_%28linear_algebra%29",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Orthogonal projections and how they select source and target blocks.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-complexification": {
+      "title": "Complexification - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Complexification",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Extending scalars from real to complex vector spaces; the lecture also covers Hilbert norms and operator adjoints.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-functional-calculus": {
+      "title": "Functional calculus - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Functional_calculus",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "How scalar functions become operator functions; distinguish continuous calculus from the Borel indicator construction.",
+      "access": "free_no_login",
+      "format": "html"
+    },
+    "wiki-weyl-inequality": {
+      "title": "Weyl's inequality - Wikipedia",
+      "kind": "encyclopedia_article",
+      "url": "https://en.wikipedia.org/wiki/Weyl%27s_inequality",
+      "origin": "Wikipedia topic page checked 2026-11-11",
+      "notes": "Read the Hermitian eigenvalue-perturbation corollary based on ordered eigenvalues, separate from the number-theory usage.",
+      "access": "free_no_login",
+      "format": "html"
     }
   }
 }

@@ -5,6 +5,14 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-complexification",
+      "reason": "See the scalar-extension construction x plus i y; the lecture adds Hilbert norm, adjoint and conjugation details."
+    },
+    {
+      "source_id": "wiki-spectral-theorem",
+      "reason": "Background on why complex self-adjoint operators are convenient for spectral analysis."
+    },
+    {
       "source_id": "kato-1995",
       "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
     }

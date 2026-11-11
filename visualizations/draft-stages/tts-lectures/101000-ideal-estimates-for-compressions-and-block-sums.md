@@ -4,93 +4,113 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# Cutting an operator into pieces without losing its norm estimates
+# What happens to operator size when we cut a matrix into blocks?
 
-Suppose a bounded operator maps one Hilbert space into another, and suppose its symmetric ideal gauge is finite. We want to look at the operator only on selected source and target subspaces. Can we guarantee that the resulting block still belongs to the same ideal? And if several such blocks are put together, which inequalities survive?
+Take a two-by-two matrix. Imagine that its first row is three and four, and its second row is one and two.
 
-These questions will matter for subspace perturbation. The sine of an angle will appear as a rectangular block of a projection or of a coordinate map. We need to know that passing from a full operator to such a block does not introduce a larger ideal gauge.
+Suppose we're interested only in what happens when an input points horizontally, and only in the horizontal part of the output. Under those restrictions, the matrix behaves like multiplication by three.
 
-We will prove that contraction on either side never increases the gauge, distinguish that operation from addition of blocks, and then derive the exact behavior of Ky Fan prefixes under orthogonal direct sums.
+We have thrown away most of the original operation. A natural question is whether this remaining piece could somehow be larger, in a singular-value norm, than the operator it came from.
 
-## Begin with source and target projections
+The answer is no. Compressing an operator between orthogonal subspaces cannot increase a symmetric ideal gauge.
 
-Let T map a Hilbert space E into a Hilbert space F. Let P be an orthogonal projection on E, and Q an orthogonal projection on F.
+But there's a second question that looks similar and has a different answer. What if we keep several pieces, put them on the diagonal, or assemble independent operators into one big block matrix? To reason correctly about these operations, we'll distinguish three things: selecting a block, averaging away off-diagonal blocks, and forming a direct sum.
 
-The map Q T P first discards the source component outside P, then applies T, then discards the output component outside Q. Think of it as the upper-left rectangle in a block matrix whose rows refer to target subspaces and whose columns refer to source subspaces.
+## Selecting one block
 
-Orthogonal projections are contractions. Their operator norms are at most one. The defining ideal inequality therefore gives the gauge of Q T P at most the gauge of T.
+Return to our matrix with rows three, four and one, two.
 
-Here is the proof in two moves. First, composing T with P on the right cannot increase its gauge. Second, composing that result with Q on the left cannot increase it either. By transitivity, the block is no larger in ideal gauge than the original operator.
+Let P project an input onto the horizontal axis. So P keeps its first coordinate and discards its second. Let Q do the same thing to the output.
 
-The source and target spaces do not need to have equal dimensions. The argument uses legal compositions and norms of the factors. It does not require a square matrix.
+The composed map Q T P has just one nonzero entry: three in the upper-left position. This is the selected source-to-target block.
 
-There is also an important membership assertion. If T belongs to the ideal, then Q T P belongs to the ideal. For a trace-class operator, every compression is trace class. For a Hilbert–Schmidt operator, every compression is Hilbert–Schmidt. The same conclusion holds for every operator ideal with the composition property.
+Why can't this compression increase an ideal gauge?
 
-A number alone would not express this. In a general ideal, the gauge is only finite on its carrier. Proving that the compressed map belongs is part of the theorem, not a technical afterthought.
+Because an orthogonal projection never lengthens a vector. Its operator norm is at most one. An operator ideal is stable under composition by bounded operators: the gauge of A T B is at most the norm of A times the gauge of T times the norm of B.
 
-## Cutting all four corners
+With A equal to Q and B equal to P, both outside factors have norm at most one. So the compressed gauge is at most the original gauge.
 
-Decompose the input into the range of P and its orthogonal complement. Decompose the output using Q and its complement. Then T is the sum of four maps: Q T P, Q T times one minus P, one minus Q times T P, and one minus Q times T times one minus P.
+This argument works even if the source and target have different dimensions. And it does more than compare numerical values. If T belongs to a proper operator ideal, the compressed map belongs too.
 
-Each map has gauge at most the gauge of T. But do not add those four inequalities and conclude that the gauge of T is the sum of the block gauges. The triangle inequality gives one direction. It does not assert additivity, and cancellation or overlap can make the sum much larger.
+For example, a trace-class map stays trace class after compression. The same is true for Hilbert–Schmidt operators.
 
-A more useful construction retains just the two diagonal blocks. Define D to be Q T P plus one minus Q times T times one minus P. We call this rectangular diagonal pinching relative to the two orthogonal decompositions.
+## Four pieces, but no automatic addition rule
 
-Why should the gauge of D be no larger than the gauge of T? We could bound the two pieces separately and get twice the gauge, but that loses the sharp constant.
+Now keep both the horizontal and vertical parts of the source and target. Our matrix has four blocks: three in the upper-left, four in the upper-right, one in the lower-left, and two in the lower-right.
 
-Instead define a source reflection that acts as plus one on the range of P and minus one on its orthogonal complement. Define the analogous target reflection using Q. Both reflections are unitary: each is its own inverse and preserves lengths.
+Each individual block is a compression. Each has gauge at most the gauge of the full matrix.
 
-Compose T on the left with the target reflection and on the right with the source reflection. This changes the signs of the two off-diagonal blocks, while leaving the diagonal blocks unchanged. Average this reflected operator with T. The off-diagonal pieces cancel, leaving exactly D.
+Can we add all four of their gauges and get the gauge of T? Not in general.
 
-A symmetric ideal gauge is unchanged by unitary factors and obeys the triangle inequality. Thus the gauge of the average is at most the average of two copies of the gauge of T. This proves the constant-one pinching inequality.
+For instance, the trace norm of a rank-one matrix with all four entries equal to one is two. But each of its four single-entry blocks has trace norm one. Adding the block trace norms gives four, not two.
 
-The same averaging argument applies to a finite decomposition into several orthogonal blocks, using a suitable family of sign changes or phase rotations. The two-block version already contains the method.
+Blockwise estimates remain useful, but they don't turn the gauge into a sum over matrix entries.
 
-## Orthogonal sums are a different operation
+Let's try a different operation. Keep the two diagonal blocks and discard both off-diagonal blocks. For our running example, the result is the diagonal matrix with entries three and two.
 
-Now take two independent maps, A from E zero to F zero, and B from E one to F one. Their orthogonal direct sum sends the pair x zero, x one to A x zero, B x one.
+We would like a sharp estimate saying that this diagonal part has gauge no larger than the original matrix. Bounding the two diagonal entries separately and adding would waste a factor. There is a cleaner argument.
 
-This operator does not discard off-diagonal pieces of an existing map. It puts two maps next to each other on orthogonal input and output spaces.
+## Pinching by reflection and averaging
 
-In finite dimensions, the singular values of the direct sum are exactly the two singular-value lists merged into one descending list. To see why, compute its Gram operator. The adjoint of the direct sum times the direct sum is block diagonal, with A adjoint A in the first block and B adjoint B in the second. Each block contributes its positive eigenvalues. Taking square roots produces the merged singular values.
+Imagine reflecting the horizontal and vertical coordinates with opposite signs: keep the horizontal direction as it is and reverse the vertical one.
 
-Consider A with singular values five and one, and B with singular values four and two. The direct sum has singular values five, four, two, one. Its first Ky Fan sum is five; its second is nine; its third is eleven; its fourth is twelve.
+Apply this reflection to the input side and the output side of our matrix. The diagonal entries stay three and two. The off-diagonal entries change sign, from four and one to negative four and negative one.
 
-The second Ky Fan sum can be calculated without first merging the entire lists. Allocate two slots between the blocks. Taking two from A gives six. Taking one from each gives five plus four, or nine. Taking two from B gives six. Choose the largest allocation. The answer is nine.
+Now average the original matrix and this reflected matrix. The off-diagonal entries cancel, and the diagonal entries survive. The average is exactly the diagonal matrix with three and two.
 
-In general, the first k singular values of the direct sum have a total equal to the maximum, over all ways of allocating k slots, of the first r singular values of A plus the first k minus r singular values of B.
+Why does this give a norm estimate? Both reflections are unitary: they preserve all vector lengths. A symmetric ideal gauge is invariant under multiplying by unitaries. So the reflected matrix has exactly the same gauge as the original.
 
-This formula also works for approximation-number Ky Fan prefixes on Hilbert spaces. Proving that extension requires the min–max and finite-dimensional localization arguments developed earlier. We cannot simply appeal to an infinite list of eigenvectors when the blocks are arbitrary bounded operators.
+The triangle inequality then tells us that the gauge of their average is at most the average of their gauges. That's just the original gauge.
 
-## What different norms do with direct sums
+We've proved the constant-one pinching inequality.
 
-The exact merge rule explains several familiar formulas.
+There is a useful difference between the two proofs we've used. A single block is controlled by contractive composition. The sum of the diagonal blocks is controlled by symmetry and averaging. Those are different mechanisms, and recognizing which one applies prevents unnecessary constants.
 
-For operator norm, the norm of the direct sum is the larger of the norms of A and B. For Hilbert–Schmidt norm, the square of the direct-sum norm is the sum of the squares of the two Hilbert–Schmidt norms. For trace norm, the direct-sum norm is the sum of the two trace norms, provided both maps belong to trace class.
+## Put independent blocks next to each other
 
-These are three different combination laws. None should be treated as the general rule for an arbitrary symmetric ideal gauge.
+Now consider a new construction. Take an operator A with singular values five and one, and an operator B with singular values four and two.
 
-The Ky Fan prefix formula is more fundamental: it records the full singular-value distribution, from which many norm comparisons can be derived using dominance properties.
+Build a bigger operator that applies A to one input space and B to an orthogonal input space, without mixing the two. This is called their orthogonal direct sum.
 
-## Dominance persists under adding blocks
+Its singular values are the values from both blocks merged into one descending list: five, four, two, one.
 
-Suppose every Ky Fan prefix of A is at most the corresponding prefix of C. Also suppose every Ky Fan prefix of B is at most the corresponding prefix of D.
+Here is why. When we take the adjoint of the direct sum and multiply, the result stays block diagonal. Its diagonal blocks are A adjoint A and B adjoint B. So the eigenvalues that describe squared singular values come from the two blocks independently. We merge them and take square roots.
 
-For each possible allocation of k slots, add the two corresponding inequalities. The allocation sum for A and B is at most the allocation sum for C and D. Taking the maximum over all allocations preserves the inequality.
+Let's look at the Ky Fan sums: sums of the largest few singular values.
 
-Therefore every Ky Fan prefix of the direct sum of A and B is at most that of the direct sum of C and D.
+The first sum is five. The first two sum to nine. The first three sum to eleven. All four sum to twelve.
 
-If a symmetric ideal has Ky Fan dominance, and the larger direct sum belongs to the ideal, then the smaller direct sum belongs too, with a gauge no larger. That final step uses the ideal's dominance hypothesis. It does not follow merely from the definition of a symmetric gauge.
+The two-slot result is worth calculating another way. We could take both slots from A, giving five plus one, or six. We could take one from each, giving five plus four, or nine. Or we could take both from B, giving four plus two, or six. The best allocation gives nine.
 
-This distinction keeps our arguments legal in infinite dimensions. A statement about a finite number of singular values is one ingredient. A statement about membership in a possibly proper subset of bounded maps is another.
+For any number of slots, the Ky Fan sum of a direct sum is the maximum over possible allocations between its blocks.
 
-## Why the distinction will recur
+## Why the exact allocation rule is useful
 
-We now have three tools. A compression is bounded by the whole operator through contractive composition. A diagonal pinching is bounded by the whole operator through reflection averaging. An orthogonal direct sum has a Ky Fan prefix determined by the maximum over allocations between the blocks.
+The direct-sum rule immediately explains three familiar but different norms.
 
-In a perturbation proof, we will cut a residual into coordinates associated with a trial subspace and an exact spectral complement. Contractive factors will control its ideal size. Direct-sum formulas will reassemble estimates when several spectral pieces must be treated separately.
+For operator norm, we only take the largest singular value, so the direct-sum norm is the larger block norm.
 
-The critical habit is to specify which operation we are performing. Cutting a block, averaging away off-diagonal terms, and adjoining independent blocks are mathematically different constructions. Their estimates are related, but their proofs are not interchangeable.
+For Hilbert–Schmidt norm, we square all singular values and add them. Consequently, the square of the direct-sum Hilbert–Schmidt norm is the sum of the squares for the two blocks.
+
+For trace norm, we add the singular values directly. So the direct-sum trace norm is the sum of the two trace norms when both operators are trace class.
+
+These combination laws are different. An arbitrary symmetric gauge does not have to follow any single one of them.
+
+The Ky Fan allocation formula survives on general Hilbert spaces when singular values are expressed through approximation numbers. That extension uses the appropriate min–max theory; it does not require the operator to possess a finite eigenbasis.
+
+## Dominance and the membership question
+
+Suppose A has every Ky Fan prefix no larger than C, and B has every prefix no larger than D.
+
+Take any allocation of slots between A and B. The sum from those blocks is no larger than the corresponding allocation between C and D. Maximizing over allocations preserves the inequality.
+
+So the direct sum of A and B has every Ky Fan prefix no larger than the direct sum of C and D.
+
+Can we now conclude an inequality for every operator ideal gauge? Only if the ideal has the Ky Fan dominance property, and the dominating operator belongs to the ideal. Under those hypotheses, the dominated operator also belongs, and its gauge is no larger.
+
+In infinite dimensions, comparing each finite prefix does not automatically guarantee membership in any chosen ideal. The dominance property supplies that implication.
+
+The three constructions are now distinct. Selecting a block uses projections and contractions. Keeping diagonal blocks uses reflection averaging. Combining independent maps uses a merge of singular-value data. Knowing which operation we're performing tells us which proof and which constant are justified.
 
 <!-- END SPOKEN LECTURE -->
 
@@ -109,6 +129,18 @@ Both reflections are unitary, so the symmetric ideal triangle and invariance law
 \[
 K_k(A\oplus B)=\max_{0\le r\le k}\bigl(K_r(A)+K_{k-r}(B)\bigr).
 \]
+
+### Worked example: compression, pinching, direct sum
+
+For \(T=\begin{pmatrix}3&4\\1&2\end{pmatrix}\), let \(P=Q=\operatorname{diag}(1,0)\) and \(J=2P-I\). Then
+\[
+QTP=\begin{pmatrix}3&0\\0&0\end{pmatrix},\quad
+J T J=\begin{pmatrix}3&-4\\-1&2\end{pmatrix},\quad
+\tfrac12(T+JTJ)=\operatorname{diag}(3,2).
+\]
+The rectangular pinching is an average of two unitarily equivalent operators. The trace norm of the pinching is \(5\), while \(\|T\|_1=\sqrt{\|T\|_F^2+2|\det T|}=\sqrt{34}\).
+
+For \(A=\operatorname{diag}(5,1)\) and \(B=\operatorname{diag}(4,2)\), the singular values of \(A\oplus B\) are \((5,4,2,1)\), yielding prefixes \((5,9,11,12)\). For the two-slot prefix, \(\max\{K_2(A),K_1(A)+K_1(B),K_2(B)\}=\max\{6,9,6\}=9\).
 
 ### Actual Lean source declarations
 

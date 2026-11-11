@@ -5,6 +5,18 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-eigenvalue-perturbation",
+      "reason": "Explore small-matrix eigenvalue and eigenvector sensitivity before subspace estimates."
+    },
+    {
+      "source_id": "wiki-weyl-inequality",
+      "reason": "Read the Hermitian matrix eigenvalue displacement bound derived from the min–max principle."
+    },
+    {
+      "source_id": "wiki-spectral-gap",
+      "reason": "Review how a gap separates spectral clusters and why a collision disrupts a selected eigenspace."
+    },
+    {
       "source_id": "higham-eigen-ineq",
       "reason": "Concise matrix-level comparison of Rayleigh quotients and eigenvalue inequalities."
     },

@@ -4,99 +4,101 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# Giving a real Hilbert space complex coordinates
+# Why give a real Hilbert space complex scalars?
 
-Much of spectral theory is easiest to state over complex Hilbert spaces. Complex exponentials solve differential equations, complex resolvents detect the spectrum, and several functional-calculus constructions are available first in the complex setting.
+Imagine rotating a vector in the real plane by ninety degrees.
 
-But the original operator may act on a real Hilbert space. A stability theorem about a real symmetric matrix should remain a theorem about that real matrix. We need a controlled way to move into complex Hilbert space, use the analytic theory, and come back without altering the quantities in the conclusion.
+Point right and the rotation sends you up. Point up and it sends you left. If you apply the rotation twice, you get a half turn, which is multiplication by negative one.
 
-The construction is called complexification. We will build it explicitly, rather than treat it as an unnamed change of scalars.
+Could this rotation have an eigenvector? Over the real numbers, no. There is no nonzero direction that a ninety-degree rotation leaves on its own line.
 
-## Build complex vectors from two real vectors
+But if we allow complex scalars, the rotation has eigenvalues i and negative i. The missing spectral description appears when we enlarge our scalars.
 
-Let E be a real Hilbert space. Define its complexification to consist of ordered pairs of vectors from E. We write such a pair as x plus i y, with x and y in E.
+This gives us a reason to complexify a real Hilbert space. We want access to complex spectral theory while preserving the original real geometry. We also want to know which results can be brought back to the real setting without changing their constants.
 
-Addition is coordinatewise. A complex scalar with real part a and imaginary part b acts by sending x plus i y to the vector whose real coordinate is a x minus b y, and whose imaginary coordinate is b x plus a y.
+## One complex vector is two real vectors
 
-Check multiplication by i. It sends x plus i y to minus y plus i x. Apply i again and you get minus x minus i y. Thus multiplication by i twice is multiplication by minus one, as required.
+Start with a real Hilbert space E. It could be the plane, or it could be an infinite-dimensional space of real square-summable sequences.
 
-The real space sits inside the complexification as vectors x plus i zero. The inclusion preserves addition, real scalar multiplication, and distances. Yet the complexification now allows multiplication by any complex scalar.
+Construct a new space whose elements are pairs of real vectors, x and y. We write the pair as x plus i y.
 
-The norm is determined by the two coordinates. The square of the norm of x plus i y is the squared norm of x plus the squared norm of y.
+This notation is literal: x is the real component and y is the imaginary component. Both belong to E.
 
-Why this definition? It makes the real and imaginary copies orthogonal in the underlying real geometry, and multiplication by i preserves length. Indeed, replacing x,y by minus y,x leaves the sum of squared norms unchanged.
+Addition works component by component. To multiply x plus i y by a complex number a plus i b, use ordinary complex multiplication: the new real component is a x minus b y, and the new imaginary component is b x plus a y.
 
-The complex inner product can be constructed by extending the real inner product and imposing complex sesquilinearity. Its real part pairs the real coordinates and imaginary coordinates. Its imaginary part is built from the two cross terms, with signs determined by which argument is complex linear. The resulting squared norm is exactly the one we specified.
+Try multiplying by i alone. It sends x plus i y to negative y plus i x. Do it a second time and you get negative x minus i y. So multiplication by i really does square to negative one.
 
-Completeness follows from completeness of E. If a sequence of complex vectors is Cauchy, each real coordinate sequence and each imaginary coordinate sequence is Cauchy in E. They converge to vectors x and y. The complex sequence then converges to x plus i y.
+We have constructed a complex vector space from the original real one.
 
-## Complexify an operator coordinate by coordinate
+There is one dimension point worth keeping straight. The real plane becomes a complex space with complex dimension two, even though it has four real coordinates when viewed without its complex structure. We have not thrown away the original plane. It sits inside as vectors whose imaginary component is zero.
 
-Let T be a bounded real-linear map from E into another real Hilbert space F. Define its complexification by applying T separately to the real and imaginary coordinates.
+## Preserve lengths and completeness
 
-So T complexified sends x plus i y to T x plus i T y.
+We need more than complex scalar multiplication. A Hilbert space has a notion of distance, and it must be complete.
 
-This rule is complex linear. To check it, apply a plus i b to x plus i y and then apply T. Real linearity distributes T across each of the four real terms, producing exactly the result of multiplying T x plus i T y by a plus i b.
+Define the squared norm of x plus i y to be the squared norm of x plus the squared norm of y.
 
-The construction also respects addition and composition. If S follows T, the complexification of S composed with T equals the complexification of S composed with the complexification of T. The identity remains the identity.
+This makes geometric sense. The two copies of E are perpendicular in the underlying real geometry. Multiplying by i exchanges those copies with a sign, so it preserves length.
 
-These are essential properties: any algebraic equation built from addition, real scalar multiplication, and composition survives the transfer.
+For example, if x has length three and y has length four, the complexified vector has length five.
 
-There is a warning here. Complexification of operators is real-linear as a map between operator spaces, but it is not a complex-linear map defined on the real operator space. We have only real scalars to multiply the original operator by. Once T is complexified, the resulting operator itself is complex linear on the complexified vector space.
+The complex inner product is chosen to extend the original real inner product, with the appropriate cross terms. Its value on a vector paired with itself is precisely the squared norm we just defined.
 
-## Prove the operator norm is exactly preserved
+Completeness is inherited coordinatewise. A Cauchy sequence of these pairs has a Cauchy sequence of real components and a Cauchy sequence of imaginary components. Since E is complete, both converge. Their pair is the limit in the complexification.
 
-We want more than a bound. We want equality between the norm of T and the norm of its complexification.
+So we've genuinely built a complex Hilbert space, not just adopted a notation.
 
-First take any complex vector x plus i y. The squared norm of its image is the squared norm of T x plus the squared norm of T y. Each term is bounded by the square of the norm of T times the squared norm of its input coordinate. Adding gives the upper bound: the complexified operator norm is at most the real operator norm.
+## Apply the same real operator to both coordinates
 
-For the reverse bound, restrict to vectors with imaginary coordinate zero. The complexified operator acts on x plus i zero as T x plus i zero and preserves the norm of the underlying real vector. Whatever upper bound holds for the complexified operator therefore also bounds the original operator. This gives the reverse inequality.
+Suppose T is a bounded real-linear operator from a real Hilbert space E to another real Hilbert space F.
 
-So the norms are equal, exactly.
+Define its complexification in the obvious way: apply T to x, and separately apply T to y. Thus x plus i y is sent to T x plus i T y.
 
-Apply this identity to the difference of two real bounded operators. Because complexification preserves subtraction, the distance between their complexifications equals the distance between the original operators. Thus complexification is an isometric embedding of real operator spaces, not just a collection of unrelated norm equalities.
+It's important to check that this is complex linear. Multiplication by i exchanges the two real coordinates with a sign, and applying a real-linear T commutes with that exchange. The same holds for any complex scalar.
 
-## The adjoint survives transfer
+Complexification also respects composition and addition. If one real operator is applied after another, doing that first and complexifying gives the same result as complexifying both and then composing.
 
-In perturbation theory, taking adjoints and forming Gram operators is routine. We need those constructions to commute with complexification.
+Let's look at a simple diagonal matrix. Suppose T multiplies the first real coordinate by two and the second by five. Applied to a complex vector, it multiplies the first complex coordinate by two and the second by five. No new stretching has appeared.
 
-Recall the defining equation for the adjoint. Pair T x with y in the target space, and the result equals the pairing of x with T adjoint y in the source space.
+In fact, the operator norm is exactly preserved for every bounded real-linear T.
 
-Apply that identity separately to the real and imaginary coordinates, including the cross terms that define the complex inner product. The complex adjoint identity follows. Consequently, the complexification of T adjoint is exactly the adjoint of the complexification of T.
+## Why the norm does not change
 
-Combining this with compatibility with composition gives the Gram identity. Complexifying T adjoint T produces the complex adjoint of T complexified, followed by T complexified.
+Take any vector x plus i y. The squared length of its image under complexified T is the sum of the squared lengths of T x and T y.
 
-Positivity of the Gram operator and elementary length identities survive complexification. Equality of all approximation numbers requires a further approximation argument: a complex low-rank approximant need not initially be the complexification of a real low-rank approximant.
+Each term is at most the square of the original operator norm times the squared length of its input. Add the two inequalities. The norm of complexified T cannot exceed the norm of T.
 
-## Conjugation tells us which objects come from real space
+Now restrict the input to vectors with imaginary component zero. On those vectors, the complexified operator behaves exactly like T, with exactly the same lengths. That gives the reverse inequality.
 
-There is a canonical operation on the complexification: complex conjugation. It sends x plus i y to x minus i y.
+So the two operator norms are equal.
 
-It preserves length and applying it twice restores the original vector. It is conjugate linear rather than complex linear, because conjugating a complex scalar changes the sign of its imaginary part.
+This is stronger than saying complexification is continuous. Any quantitative estimate that depends only on bounded operator norms can carry over with its numerical constant intact, provided the other hypotheses also survive.
 
-The real copy of E consists exactly of the vectors fixed by this conjugation. If x plus i y equals x minus i y, then y is zero.
+## Adjoints, self-adjointness, and conjugation
 
-Likewise, every complexified real operator commutes with conjugation. Apply the operator and then conjugate; or conjugate first and then apply the operator. Either route produces T x minus i T y.
+The adjoint is defined by an inner-product relation: pairing T x with a target vector equals pairing x with the adjoint applied to that target vector.
 
-Conversely, suppose a bounded complex-linear operator on the complexification commutes with conjugation. It sends each fixed real vector into another fixed real vector. Restricting it to the real copy gives a bounded real-linear operator. The original complex operator is recovered by extending that real restriction coordinatewise.
+Because the complex inner product was built from the real one, this relation holds separately for the real and imaginary components and their cross terms. The complexification of the real adjoint is the adjoint of the complexified operator.
 
-Thus commuting with conjugation is the criterion for descending a bounded complex operator to the real space. This criterion will matter when our complex proof constructs a spectral projection or a functional-calculus operator rather than merely transporting an operator already defined over the reals.
+Consequently, a bounded real self-adjoint operator becomes a bounded complex self-adjoint operator. Its Gram operator also transfers: complexifying T adjoint T gives the Gram operator of complexified T.
 
-## A symmetric matrix and a rotation
+Now consider the operation of complex conjugation. It sends x plus i y to x minus i y. The original real vectors are exactly the ones fixed by this operation.
 
-Take a real two-by-two diagonal matrix with entries two and five. Its complexification applies the same matrix to both coordinates. Its operator norm remains five, its adjoint remains itself, and the real eigenvectors remain eigenvectors after embedding.
+Every complexified real operator commutes with conjugation. You get the same result whether you conjugate the input first or conjugate the output afterward.
 
-Now consider the real rotation by ninety degrees. This operator is not self-adjoint. Over the complex numbers it has eigenvalues i and minus i, even though it has no real eigenvectors. Complexification has allowed new spectral information to appear.
+There's also a converse. Suppose a bounded complex-linear operator on this complexified space commutes with conjugation. It must send real fixed vectors to real fixed vectors. Restrict it to that real copy of E, and it becomes a bounded real-linear operator. Complexifying the restriction reconstructs the original complex operator.
 
-This example explains why statements about arbitrary real and complex spectra need precise definitions. For self-adjoint operators, however, the complex spectrum lies on the real axis, and comparison of their real spectral information becomes much cleaner.
+That gives us a test for whether an operator constructed in complex space really comes from the real space.
 
-## What we have earned
+## Revisit the rotation
 
-We can now move a real bounded operator into complex Hilbert space without changing its operator norm, adjoint relations, or composition identities. We can recognize which bounded complex operators come back to the real space by checking compatibility with conjugation.
+Our ninety-degree real rotation has no real eigenvectors. Its complexification has two complex eigenvalues, i and negative i. So complexification can reveal spectral features that aren't expressible as real eigenvalues.
 
-A spectral projection obtained through a real-valued functional-calculus expression will commute with conjugation and therefore descend. But a projection defined by a discontinuous indicator needs special care at a spectral boundary.
+But the rotation is not self-adjoint. For self-adjoint operators, the complex spectrum lies on the real axis. That observation makes the transfer of their spectral information much cleaner.
 
-The transferable object is the whole proof, including its hypotheses, not just the final inequality.
+We have to keep the two claims separate. Complexifying any bounded real map preserves its norm and algebraic structure. Complexifying a self-adjoint real map also makes complex spectral theory available, but recovering a particular spectral projection requires checking that the construction respects conjugation.
+
+The useful mental picture is a real space embedded inside two coordinated real copies. Operators extend by acting on each copy in the same way. Their norms and adjoints stay intact. And conjugation tells us exactly which bounded complex operators can be returned to the real setting.
 
 <!-- END SPOKEN LECTURE -->
 
@@ -105,6 +107,14 @@ The transferable object is the whole proof, including its hypotheses, not just t
 ## Companion: mathematics and Lean correspondence (display only)
 
 The construction is `RealComplexification E = E ⊕₂ E`, with complex multiplication `(a+ib) • (x,y) = (ax−by,bx+ay)`. The real embedding `ofReal x = (x,0)` is isometric. For `T : E →L[ℝ] F`, `complexify T` acts on both coordinates, satisfies `‖complexify T‖=‖T‖`, respects composition and adjoint, and commutes with canonical conjugation.
+
+### Worked example: the real plane and rotation
+
+For \(E=\mathbb R^2\), the complexification has complex dimension two and is canonically identifiable with \(\mathbb C^2\). The real rotation
+\[
+R=\begin{pmatrix}0&-1\\1&0\end{pmatrix}
+\]
+satisfies \(R^2=-I\). Its complexification has eigenvalues \(i\) and \(-i\), while the real operator has no nonzero real eigenvector. For \(T=\operatorname{diag}(2,5)\), \(\|\operatorname{complexify}T\|=\|T\|=5\).
 
 ### Actual Lean source declarations
 

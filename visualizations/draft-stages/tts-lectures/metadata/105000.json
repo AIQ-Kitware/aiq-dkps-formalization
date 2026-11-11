@@ -5,6 +5,18 @@
   "historical_claims": [],
   "related_resources": [
     {
+      "source_id": "wiki-sylvester-equation",
+      "reason": "Background for the compressed residual equation between the trial space and exact complement."
+    },
+    {
+      "source_id": "wiki-rayleigh-ritz-method",
+      "reason": "Review trial subspaces and approximate eigenvalues before the residual-gap-sine estimate."
+    },
+    {
+      "source_id": "wiki-spectral-gap",
+      "reason": "Introductory background for why separating the trial spectrum from the exact complement is essential."
+    },
+    {
       "source_id": "kato-1995",
       "reason": "Independent operator-theoretic treatment; domain and spectral separation hypotheses may differ."
     },

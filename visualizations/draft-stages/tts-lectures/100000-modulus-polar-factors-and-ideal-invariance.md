@@ -4,101 +4,117 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# Moving operator size without losing it
+# What a linear map does to lengths, and what it does to directions
 
-A symmetric operator-ideal norm depends on the singular values of a bounded map, including maps between different Hilbert spaces. Polar decomposition separates such a map into a positive modulus and a partial isometry. The central question is whether this separation changes ideal membership or the ideal norm.
+Consider a map on the plane that takes the vector pointing straight up, stretches it by three, and sends it to the right. It sends every horizontal vector to zero.
 
-Let T be any bounded map between Hilbert spaces, with no assumption that it is invertible or square. Its modulus is the positive square root of T adjoint T. The polar decomposition writes T as a partial isometry followed by its modulus.
+There are two different effects in that description. The map decides how much of an input survives and how long its output becomes. It also decides which direction that output points.
 
-For a symmetric operator ideal, T and its modulus have exactly the same membership status and the same gauge. Our goal is to prove that statement using only the ideal composition inequality and the basic properties of the polar factor.
+Can we separate those two effects?
 
-## Review the modulus carefully
+That question leads to the modulus of an operator and its polar decomposition. It also gives us a way to show that changing output directions does not change singular-value norms, including the norms used for Hilbert–Schmidt and trace-class operators.
 
-Suppose T maps E to F. Its adjoint maps F back to E. Therefore T adjoint T acts on E, even though T itself need not act on a single space.
+We'll do the calculation in the plane first. Then we'll see why the same reasoning works for rectangular operators and infinite-dimensional Hilbert spaces.
 
-The operator T adjoint T is positive because its quadratic form at x equals the squared norm of T x. The positive square-root theorem gives a unique positive operator whose square is T adjoint T. We call it the modulus, written absolute T.
+## The simple map
 
-By construction, applying T and applying absolute T produce outputs with the same length on every input. Indeed, both squared lengths equal the quadratic form of T adjoint T at that input.
+Let T take an input with coordinates x and y and return a vector with first coordinate three y and second coordinate zero.
 
-Consequently, T and its modulus have the same kernel. A direction lost by T is also lost by the modulus, and conversely.
+The input pointing right has coordinates one and zero. T sends it to zero. The input pointing up has coordinates zero and one. T sends it to a vector of length three pointing right.
 
-This identity contains the metric information of T. The polar factor will supply the orientation information.
+The matrix of T has a three in its upper-right position and zeros everywhere else.
 
-## Construct the canonical polar factor
+Now ask what the length of T applied to an arbitrary input is. The answer is three times the absolute value of y. The x coordinate contributes nothing.
 
-On the range of absolute T, define a map by sending absolute T applied to x to T applied to x.
+Suppose we want another operator that preserves exactly this length information, but doesn't redirect the surviving vertical coordinate into the horizontal direction. A natural choice is the diagonal operator that kills the first coordinate and multiplies the second by three.
 
-Why is this well-defined? If two vectors have the same image under absolute T, their difference belongs to the kernel of absolute T and therefore to the kernel of T. So they also have the same image under T.
+This second operator sends x,y to zero,three y. On every input, its output has exactly the same length as the output of T.
 
-Why is the map an isometry on this range? The length identity gives the answer: the norm of T x equals the norm of absolute T x.
+That second operator is the modulus of T. The modulus records the stretching without the directional rearrangement.
 
-Extend this isometry by continuity to the closure of the range of absolute T. On its orthogonal complement, which is the kernel of T, set the map equal to zero. The resulting bounded operator U from E to F is the canonical polar factor.
+## Why the modulus has that definition
 
-It is a partial isometry. It preserves norms on its initial space, annihilates the orthogonal complement, and has operator norm at most one.
+For a general bounded operator T from a Hilbert space E to a Hilbert space F, the source and target may be different. We begin with its adjoint, which runs from F back to E.
 
-The polar decomposition is T equals U composed with absolute T.
+Compose T with its adjoint in the order T adjoint followed by T. The resulting operator acts on the source E.
 
-The other identity is equally important: absolute T equals U adjoint composed with T. This is valid for the canonical factor because U adjoint U is the projection onto the closure of the range of absolute T, where the modulus already takes its values.
+Here's the key identity. Pair T adjoint T applied to x with x. The answer is the squared length of T x.
 
-## The two-sided gauge comparison
+This tells us that T adjoint T is positive. It can therefore have a unique positive square root. We call that square root the modulus, or absolute T.
 
-Let N be a symmetric operator ideal family, with extended gauge so that the statement also covers operators outside its carrier.
+In our plane example, T adjoint T is diagonal with entries zero and nine. Its positive square root is diagonal with entries zero and three, just as we guessed.
 
-The ideal inequality says that composing on the left with a contraction cannot increase the gauge. Because the polar factor U has norm at most one, the factorization T equals U absolute T gives gauge of T at most gauge of absolute T.
+The definition is designed to ensure that T and absolute T give outputs of equal length for every input. It also ensures that they lose exactly the same input directions: their kernels agree.
 
-Now use the reverse identity, absolute T equals U adjoint T. The adjoint of a partial isometry is also a contraction. The same ideal inequality gives gauge of absolute T at most gauge of T.
+We have separated out the length data. What restores the direction?
 
-Put the two estimates together. The gauges are equal.
+## Restore the direction with a partial isometry
 
-This is a proof that does not refer to a singular-value basis and does not require T to be invertible. It even works when the gauge is infinite, because both inequalities live in the extended nonnegative reals.
+In the plane example, the modulus sends the upward unit vector to a vertical vector of length three. To recover T, we need to turn that surviving vertical direction into a horizontal direction, without changing its length.
 
-Since an operator belongs to the ideal exactly when its extended gauge is finite, equality of gauges also proves that T belongs if and only if its modulus belongs.
+Define U to send the upward unit vector to the rightward unit vector. Define U to send the rightward unit vector to zero.
 
-The argument is short because all the geometric work was already invested in the canonical polar factor.
+Then applying the modulus first and U second gives exactly T. The modulus supplies the factor three; U chooses the direction.
 
-## A two-dimensional example with a kernel
+Notice that U is not a rotation of the whole plane. It kills one direction. It only preserves lengths on the part of the source that survives the modulus.
 
-Consider the map on the Euclidean plane that sends the second standard basis vector to three times the first and sends the first basis vector to zero.
+That is what a partial isometry does. It acts isometrically on an initial subspace and vanishes on the orthogonal complement of that subspace. In particular, its operator norm is at most one.
 
-Its matrix has a three in the upper right corner and zeros everywhere else. Its adjoint times itself is the diagonal matrix with entries zero and nine. The modulus is therefore diagonal with entries zero and three.
+Now we can build U for any bounded T, even without a matrix or a basis of singular vectors.
 
-The polar factor sends the second basis vector to the first and annihilates the first. It is not invertible, and it cannot be unitary on the whole plane. Nevertheless, multiplying this polar factor by the modulus reconstructs T.
+First consider a vector that can be written as absolute T applied to some x. Send it to T x. This prescription is well-defined: if two choices of x give the same output under the modulus, their difference lies in the common kernel and gives the same output under T.
 
-Both T and its modulus have singular values three and zero. Their operator norm is three, their Frobenius norm is three, and their trace norm is three. Equality is not an accident of this example; it is the general gauge identity we just proved.
+And it preserves lengths, because T x and absolute T x have equal lengths.
 
-Notice also that we were free to rotate the nonzero output direction without changing the ideal gauge. The kernel information remained in the modulus.
+Extend that isometry to the closure of the range of the modulus. On its orthogonal complement, which is the kernel of T, set it to zero.
 
-## Why uniqueness uses the zero-kernel convention
+That gives the canonical polar factor U. We obtain the polar decomposition: T is U followed by the modulus.
 
-If T has a nontrivial kernel, a unitary extension of the isometric part may be nonunique, when such an extension exists at all. On the unused directions, different choices can act differently and still reconstruct T after multiplication by its modulus, because the modulus kills those directions.
+There's an equally useful reverse identity. The modulus is U adjoint followed by T. In the example, T sends the vertical direction to the horizontal one, and U adjoint turns that horizontal output back to the vertical direction. The stretch of three is unchanged.
 
-The canonical polar factor avoids that ambiguity. We require it to be zero on the kernel and an isometry on the closure of the modulus range. Those two requirements determine it completely. The ideal-gauge proof therefore uses a canonical contraction and remains valid even when a full unitary extension is impossible.
+These two factorizations are the heart of the ideal-norm argument.
 
-## Rectangular maps and zero padding
+## Why every symmetric ideal gauge is unchanged
 
-Suppose instead that E has dimension two and F has dimension three. Let T send one source basis vector to a nonzero target vector and annihilate the other source vector.
+Let's first recall what an operator ideal gives us. Its gauge is a way to measure an operator's size, defined on the appropriate family of operators. A symmetric ideal family has the property that composing with bounded operators on the left or right cannot enlarge the gauge by more than the product of their operator norms.
 
-The modulus still acts on the two-dimensional source E. The polar factor maps E into the three-dimensional target F. There need not be a unitary equivalence between the whole spaces, since their dimensions differ.
+Think about multiplying a matrix by a rotation. Its singular values stay the same. The ideal inequality extends the useful part of that observation beyond invertible rotations, to contractions and partial isometries.
 
-The polar proof still works because it uses contractions, adjoints, and legal compositions, not a unitary between entire spaces. This is why the formulation is the right one for rectangular operators and for different Hilbert spaces.
+Since U is a contraction and T equals U times absolute T, the gauge of T is no greater than the gauge of absolute T.
 
-If we want to compare a complete list of singular values, we insert the appropriate zeros when dimensions differ. But the proof of gauge equality needs no arbitrary completion of the polar factor to a full unitary.
+Now run the calculation backward. Absolute T equals U adjoint times T. U adjoint is also a contraction, so the gauge of absolute T is no greater than the gauge of T.
 
-## Compactness and Schatten classes
+Each is at most the other. Therefore they are equal.
 
-If T is compact, its modulus is compact. One way to see this is via the compact spectral theorem for T adjoint T and continuity of the positive square root. Conversely, T equals U absolute T, and the composition of a compact operator with a bounded operator is compact.
+We have also proved something about membership. Some ideals include only operators whose gauge is finite. The same comparison works with extended gauges that may be infinite. So T belongs to the ideal if and only if its modulus belongs to the ideal.
 
-The same argument applies to every symmetric ideal satisfying the composition rules. For instance, T is Hilbert–Schmidt exactly when its modulus is, and their Hilbert–Schmidt norms agree. The corresponding trace-class statement is also true.
+Let's check the conclusion on our little matrix. The only nonzero singular value of T is three, and the modulus has the same singular values, three and zero. The operator norm is three. The Hilbert–Schmidt norm is three. The trace norm is also three.
 
-This relationship lets us reduce many ideal inequalities to positive operators. Once an estimate is proved for positive moduli, the polar factor carries it back to arbitrary rectangular maps without altering the gauge.
+The fact that all three norms agree in this example is incidental. The fact that each norm of T equals the corresponding norm of its modulus is the general result.
 
-## Preparing compression and block estimates
+## Why a full unitary is unnecessary
 
-Both operations involve projections, inclusions, and partial isometries, all of which are contractions.
+Our map loses the horizontal direction. We cannot demand that U preserve lengths on every direction in the source, because the full operator T is allowed to have a kernel.
 
-Our result tells us exactly how to control those operations in symmetric ideals. A projection can only decrease the gauge under composition. A canonical polar factor preserves it. These are the building blocks for transporting Davis–Kahan sine, tangent, and residual estimates from geometric operators to their positive singular-value representatives.
+In higher or infinite dimensions, the source and target might not even have the same dimension. A full unitary between them might not exist.
 
-The principle to keep is the pair of factorization identities. One gives an inequality in one direction, and the adjoint factorization gives the reverse inequality. That is the complete proof of modulus invariance.
+But nothing in our proof needed one. We used a partial isometry from the source to the target and its adjoint in the reverse direction. Both have norm at most one, and their compositions are valid between the relevant Hilbert spaces.
+
+The construction also explains why the canonical factor is specified to be zero on the kernel. If we only required a factorization, other choices could be possible on directions that the modulus already kills. Setting U to zero there removes the ambiguity.
+
+As another check, imagine a map from the plane into three-dimensional space. It preserves only the upward input coordinate, stretches it, and sends it along some chosen axis in three-dimensional space. The modulus still acts on the source plane. U carries the surviving direction into the target. The two ideal-gauge inequalities are identical to the ones we just used.
+
+## Infinite dimensions and what the result buys us
+
+A bounded operator on a Hilbert space need not have a finite singular-vector basis. Its range need not be closed. That's why the general construction used the closure of the modulus range instead of assuming that every output is reached by a finite set of eigenvectors.
+
+The modulus is positive, so it can be studied with the spectral theorem. Many inequalities are easier to understand for positive operators than for arbitrary maps between different spaces.
+
+Polar decomposition lets us prove an estimate for the positive modulus, then transfer it back to the original operator without changing its symmetric ideal gauge.
+
+In particular, compactness, Hilbert–Schmidt membership, and trace-class membership agree between T and its modulus.
+
+The central calculation is now easy to remember. T factors through a partial isometry in one direction. Its modulus factors through the adjoint partial isometry in the other. Both factors are contractions. Those two inequalities force equality of ideal size, even for rectangular maps with kernels.
 
 <!-- END SPOKEN LECTURE -->
 
@@ -107,6 +123,16 @@ The principle to keep is the pair of factorization identities. One gives an ineq
 ## Companion: mathematics and Lean correspondence (display only)
 
 For T:E→F, |T|=(T* T)^{1/2} acts on E. The canonical polar factor U:E→F is a contraction satisfying T=U|T| and |T|=U* T. Every symmetric ideal gauge obeys gauge(A T B)≤‖A‖ gauge(T) ‖B‖ for bounded composable A,B. Thus gauge(T)≤gauge(|T|) and gauge(|T|)≤gauge(T), giving equality in the extended nonnegative reals. Consequently Mem(T) iff Mem(|T|). No invertibility or equality of source and target dimensions is required.
+
+### Worked example: canonical partial isometry
+
+For \(T=\begin{pmatrix}0&3\\0&0\end{pmatrix}\) on \(\mathbb R^2\),
+\[
+T^*T=\begin{pmatrix}0&0\\0&9\end{pmatrix},\qquad
+|T|=\begin{pmatrix}0&0\\0&3\end{pmatrix},\qquad
+U=\begin{pmatrix}0&1\\0&0\end{pmatrix}.
+\]
+Then \(T=U|T|\), \(|T|=U^*T\), and \(U^*U=\operatorname{diag}(0,1)\). The initial space of the canonical polar factor is \(\operatorname{span}(e_2)\), and the kernel is \(\operatorname{span}(e_1)\). Both \(T\) and \(|T|\) have singular values \((3,0)\).
 
 ### Actual Lean source declarations
 

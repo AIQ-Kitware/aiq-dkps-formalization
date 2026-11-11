@@ -4,133 +4,169 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# Reconstructing the route from residual to sine-angle estimate
+# How a residual becomes a bound on the angle between subspaces
 
-The full Hilbert-space sine-angle argument combines unbounded operator domains, spectral projections, residual equations, ordered-gap Sylvester estimates, and symmetric operator ideals. We will assemble these mathematical ingredients into one proof and track their hypotheses.
+Suppose the plane has two distinguished directions: horizontal and vertical. An operator A kills the horizontal component and multiplies the vertical component by five.
 
-Our target is a symmetric-ideal sine-angle bound for possibly unbounded self-adjoint operators. We will start with a trial map and its residual, pass to coordinates in an exact spectral complement, solve a Sylvester equation, and recover the sine of the angle between the trial space and the exact space.
+The horizontal line is an exact invariant subspace. We want to approximate it with a line tilted upward by thirty degrees.
 
-Every step will have an explicit hypothesis. We will also work through a two-dimensional example in which the final bound is an equality. That example will let us check the gap factor and the normalization factor independently.
+Choose a unit vector u along that tilted line. Its horizontal coordinate is the square root of three divided by two. Its vertical coordinate is one half.
 
-## Name the spaces and operators
+Apply A to u. The result is a vertical vector of length two and a half. If we propose zero as the trial eigenvalue, this output is exactly the residual: the error in the proposed eigenvalue equation.
 
-Let H be the ambient Hilbert space. Let A be a possibly unbounded self-adjoint operator on H.
+Now notice something. The vertical component of u has length one half. That is the sine of its angle with the horizontal axis. And the residual has length five times one half.
 
-Suppose A has an exact reducing decomposition into two orthogonal parts. We represent the first part using an isometric coordinate map F zero from one coordinate Hilbert space into H. We represent the complementary part using an isometric coordinate map F one from another coordinate Hilbert space into H.
+The factor five is the spectral separation between the trial eigenvalue zero and the unwanted vertical eigenvalue five.
 
-Their ranges are orthogonal and together span the ambient space. Because the decomposition reduces A, the action of A on the complement is represented by a self-adjoint operator Lambda one. In particular, applying A to F one y agrees with F one applied to Lambda one y for vectors in the appropriate operator domain.
+In this example, the relationship is exact: gap times sine of the angle equals residual norm.
 
-Now introduce a trial coordinate Hilbert space and a bounded trial map E zero from that space into H. E zero need not be an isometry. We will require a lower frame bound: its output length is at least epsilon times its input length, with epsilon positive.
+We want to understand how that elementary calculation extends to Hilbert spaces, possibly unbounded self-adjoint operators, nonorthonormal trial coordinates, and symmetric operator ideals.
 
-This ensures that E zero is injective, its range is closed, and it has a bounded inverse from that range back to its coordinate space.
+The proof has three main ideas. Project the residual into the unwanted spectral directions. Use a Sylvester equation and spectral separation to control that projection. Then remove any artificial scaling of the trial coordinates to recover an actual subspace angle.
 
-Finally choose a self-adjoint trial operator A zero on the trial coordinate space. It might be a compression or a separate reference operator. Define the residual by comparing A E zero against E zero A zero.
+## See the complementary equation in the plane
 
-The residual records the failure of the trial map to intertwine the two operators exactly.
+In our example, let the exact target line be the horizontal axis and its orthogonal complement be the vertical axis.
 
-## The common-domain hypothesis
+If we keep only the vertical coordinate of u, we get one half. Call that the complementary coordinate X.
 
-For bounded matrices, the residual is simply A E zero minus E zero A zero. For unbounded A, the expression A E zero x is defined only when E zero x belongs to the domain of A.
+The operator A acts on the vertical axis as multiplication by five. Our proposed trial eigenvalue is zero. So the complementary-coordinate equation is simply five times X minus X times zero equals the vertical component of the residual.
 
-The common-domain condition identifies the coordinates x for which E zero x belongs to the domain of A with the domain of A zero itself.
+The right-hand side is two and a half. The left-hand side is five times one half, also two and a half.
 
-So the two sides of the residual identity are defined on exactly the same dense subspace. We require the residual to agree there with a bounded operator R defined on the entire trial coordinate Hilbert space.
+That's a one-dimensional Sylvester equation.
 
-We also require the complementary coordinate map F one to carry the domain of Lambda one into the domain of A, and to intertwine their actions there.
+We can already see the structure. The gap lets us divide the complementary residual by five. What we recover is the amount of the trial vector that lies outside the target space.
 
-Without these conditions, the next calculation might look correct as symbolic matrix multiplication while being meaningless on an actual vector. We will use the domain information at each stage.
+But before generalizing, there's one complication that a geometric angle shouldn't have: dependence on how we scale our coordinates.
 
-## Compress the residual into the complementary space
+## A trial map may not be normalized
 
-Define X to be F one adjoint composed with E zero. This map measures how much the trial vectors lie in the exact complementary subspace.
+Instead of sending the scalar one to u, suppose our trial map sends it to two u. The trial subspace is still exactly the same tilted line.
 
-It is bounded because both factors are bounded. And on the domain of A zero, the definition of the residual gives A E zero x minus E zero A zero x equals R x.
+The complementary coordinate is now two times one half, which is one. The residual is also twice as large, with length five.
 
-Apply F one adjoint to both sides. The second term becomes X A zero x. The right-hand side becomes F one adjoint R x.
+The Sylvester equation still reads five times X equals the complementary residual, and the resulting inequality is still sharp. But X is now one, while the sine of the geometric angle remains one half.
 
-For the first term, use the reducing decomposition. Because F one intertwines the complementary operator with A, its adjoint converts the action of A on a legal domain vector into Lambda one applied to that vector's complementary coordinate. In particular, F one adjoint A E zero x becomes Lambda one X x.
+We need a separate normalization step.
 
-We have derived the complementary Sylvester equation: Lambda one X minus X A zero equals F one adjoint R, on the domain of A zero.
+In this scaled example, the trial map stretches every scalar by two. Its lower frame bound is two. Dividing X by that stretch recovers the sine of the angle.
 
-The equation follows from the residual identity and the exact reducing property. The domain assumptions ensure that every term is defined.
+This is why a general theorem involving a trial map needs a lower frame bound as well as a spectral gap.
 
-## Apply the right kind of spectral separation
+## Identify the spaces one at a time
 
-Assume a positive gap delta between the trial operator A zero and the complementary operator Lambda one, in one of the configurations covered by the unbounded Sylvester theorem.
+Now let H be a real or complex Hilbert space, and let A be a self-adjoint operator on H. It may be unbounded.
 
-These configurations include an ordered half-line separation and the stated interval-versus-exterior condition. A mere assertion that the two spectra are unequal would not suffice for the same uniform ideal estimate.
+Choose an exact reducing subspace for A. Call its orthogonal projection P. Reducing means both that subspace and its orthogonal complement are preserved by the operator in the domain-aware sense.
 
-The unbounded Sylvester theorem controls X by its right-hand side. In a symmetric ideal family with the needed Ky Fan dominance property, membership of F one adjoint R implies membership of X, and delta times the gauge of X is at most the gauge of F one adjoint R.
+Represent the exact target subspace by an isometric coordinate map F zero. Represent its orthogonal complement by another isometric coordinate map F one. The ranges of these maps are orthogonal and together fill H.
 
-Now F one adjoint is a contraction, because F one is an isometry. Therefore the ideal-composition law bounds the gauge of F one adjoint R by the gauge of R.
+On the complement, the action of A is represented by a self-adjoint operator Lambda one. Think of Lambda one as multiplication by five in our plane example.
 
-Combining the inequalities gives delta times the gauge of X at most the gauge of R.
+Now introduce a trial coordinate space and a bounded map E zero from that coordinate space into H. Its range is the trial subspace. We assume a positive lower frame bound epsilon: the length of E zero x is at least epsilon times the length of x.
 
-This is already a residual-to-complementary-block estimate. But X still contains the arbitrary normalization of the trial map E zero. An angle between subspaces should not change when we multiply the entire trial map by two.
+This condition keeps the trial map from collapsing nonzero coordinates. It also ensures that its range is closed and its positive modulus is invertible on the trial coordinate space.
 
-## Remove the trial-frame normalization
+Finally, choose a self-adjoint trial operator A zero on the trial coordinate space. In a Rayleigh–Ritz setting, it may come from compression; the abstract argument also allows other choices.
 
-Use the polar decomposition of E zero. Because E zero has a positive lower frame bound epsilon, its modulus has spectrum bounded below by epsilon. It is therefore invertible, and the inverse has norm at most one divided by epsilon.
+Our residual compares applying the ambient operator after E zero with applying the trial operator before E zero. In the plane example, the trial operator was simply multiplication by zero.
 
-Write E zero as U times its modulus. Here U is an isometry from the trial coordinate space onto the closed range of E zero.
+## Make the residual legal when A is unbounded
 
-The map U gives orthonormal coordinates for the trial subspace. It is the right object for defining its principal angles with the exact space.
+If A is unbounded, it cannot be applied to every vector in H. So an expression like A applied to E zero x needs a domain hypothesis.
 
-Recall X equals F one adjoint E zero. Substitute E zero equals U times its modulus. Then X equals F one adjoint U times the modulus of E zero.
+The common-domain condition says that E zero x belongs to the domain of A exactly when x belongs to the domain of A zero.
 
-Multiply on the right by the inverse modulus. We obtain F one adjoint U equals X times that inverse.
+On that common domain, define the residual by A E zero x minus E zero A zero x. We require this expression to agree with a bounded map R from the trial coordinate space into H.
 
-The ideal-composition inequality now bounds the gauge of F one adjoint U by one divided by epsilon times the gauge of X. Multiply by delta epsilon and combine with the preceding Sylvester estimate. We get delta times epsilon times the gauge of F one adjoint U at most the gauge of R.
+This bounded extension is what allows us to measure a residual in operator or ideal norms. The domain equality ensures that we haven't written down an expression that is undefined on half of its terms.
 
-That epsilon factor is essential. If the trial map is rescaled, its residual rescales in the same way, while its subspace and sine angles do not. The lower frame bound keeps the inequality consistent under this rescaling.
+Because the exact complement reduces A, its coordinate map also respects the operator domain: applying A in H and then taking the complementary coordinate agrees with applying Lambda one to that coordinate.
 
-## Identify the sine of the angle
+That is the second domain fact we'll need.
 
-Let P be the orthogonal projection onto the range of the exact first coordinate map F zero. Because F zero and F one give a complete orthogonal decomposition, one minus P equals F one F one adjoint.
+## Compress the residual and find the Sylvester equation
 
-The part of U that escapes the exact first subspace is one minus P applied to U. Its norm measures the largest directed sine of the angle between the trial range and the exact range.
+Define X by first applying E zero and then taking the F one adjoint coordinate. In words, X reports how much each trial vector lies in the exact complementary subspace.
 
-Compute its Gram operator. The adjoint of one minus P times U, followed by one minus P times U, equals U adjoint F one F one adjoint U.
+This map runs from the trial coordinate space into the complementary coordinate space. It is bounded.
 
-The Gram operator of F one adjoint U is exactly the same: U adjoint F one F one adjoint U.
+Take an input x in the domain of the trial operator A zero. The residual identity says that A E zero x minus E zero A zero x equals R x.
 
-Therefore the two maps have the same modulus and the same nonzero singular-value information. They represent the same directed sine geometry, although their targets are different coordinate spaces.
+Apply F one adjoint. The second term becomes X A zero x. The first becomes Lambda one X x, because the complement is reducing and the domain condition makes that composition legal.
 
-By polar and rectangular ideal invariance, any legitimate symmetric gauge comparison can use either representative. We obtain the sine-angle estimate: delta times epsilon times the ideal gauge of the directed sine is at most the ideal gauge of the residual.
+The right-hand side becomes F one adjoint R x.
 
-This statement includes membership of the sine representative in the ideal, provided the residual belongs to it and the ideal satisfies the required dominance assumptions.
+Thus Lambda one X minus X A zero equals F one adjoint R, as an equation on the domain of A zero.
 
-## Verify the constants in the plane
+This is exactly the scalar equation from the plane, now with operators between Hilbert spaces.
 
-Take the ambient plane with standard basis vectors e one and e two. Let A be diagonal, with eigenvalues zero and five.
+## Use the spectral gap to control X
 
-Choose the exact target subspace to be the first coordinate axis. Its complement is the second axis, and Lambda one is multiplication by five.
+Suppose the trial operator A zero and the complementary operator Lambda one satisfy a positive form-bounded Sylvester gap condition with parameter delta.
 
-Choose the trial unit vector u to make an angle of thirty degrees with the first axis. Its first coordinate is the square root of three divided by two, and its second coordinate is one half.
+The allowed configurations include ordered half-line separation and the specified interval-versus-exterior case. Mere disjointness of two spectra is not enough for this particular constant-one symmetric-ideal estimate.
 
-Define E zero to send a scalar t to two t times u. The lower frame bound is epsilon equals two. Let A zero be multiplication by zero.
+Also assume we're using a symmetric ideal family with Ky Fan dominance and that the bounded residual R belongs to this ideal.
 
-The residual is A E zero minus E zero A zero. Since A zero vanishes and the second coordinate of E zero applied to one is exactly one, the residual sends one to five times e two. Its operator norm is five.
+The unbounded Sylvester theorem now says that X belongs to the ideal and that delta times its gauge is at most the gauge of F one adjoint R.
 
-The gap between Lambda one, which is five, and A zero, which is zero, is delta equals five.
+But F one is an isometry. Its adjoint is a contraction. Composing the residual with it cannot increase an ideal gauge.
 
-The complementary block X equals F one adjoint E zero. Applied to one it gives one. Thus the Sylvester estimate reads five times one is at most five, with equality.
+Therefore delta times the gauge of X is at most the gauge of R.
 
-After normalizing E zero, we recover U applied to one equals u. The complementary coordinate F one adjoint U is one half, precisely the sine of thirty degrees.
+That is the abstract version of five times the complementary coordinate being bounded by the vertical residual.
 
-The final estimate reads gap five times lower frame bound two times sine one half is at most residual norm five. Both sides equal five.
+We still need to convert the possibly scaled trial coordinates into actual angle geometry.
 
-This calculation checks all three factors. If we accidentally omitted epsilon, the inequality would remain true here but fail to record the scaling correctly. If we accidentally used the sine of the complementary angle, the numerical result would change. And if we used the spectral gap to the exact first eigenvalue instead of the complementary eigenvalue, we would have solved the wrong Sylvester equation.
+## Remove the coordinate scaling
 
-## What the assembly does and does not prove
+Take the polar decomposition of E zero. It factors as an isometry U followed by the positive modulus of E zero.
 
-We have reconstructed the entire route: legal unbounded residual, exact complementary compression, self-adjoint Sylvester gap, membership and gauge estimate, lower-frame normalization, and identification with a directed sine modulus.
+Because the trial map has lower bound epsilon, its modulus has a bounded inverse with norm at most one divided by epsilon.
 
-The construction works in real or complex Hilbert spaces when the corresponding ideal and Sylvester hypotheses are available. In real Hilbert spaces, the complexification and Ky Fan descent from the real-to-complex transfer and Ky Fan prefix comparison supply the real estimate.
+U is the normalized coordinate map onto the trial subspace. Scaling E zero by two may change its modulus, but U still represents the same geometric line or subspace.
 
-The sharp estimate uses the stated spectral-separation condition, while an ideal-norm estimate also requires the relevant ideal membership. Arbitrary disjoint spectra and mere boundedness of the residual do not supply those conditions.
+Recall that X equals F one adjoint E zero. Substitute the polar decomposition of E zero. Then X equals F one adjoint U followed by the modulus.
 
-The mathematical toolkit is now assembled.
+Multiply on the right by the inverse modulus. We obtain F one adjoint U as X followed by that bounded inverse.
+
+The ideal-composition inequality gives: the gauge of F one adjoint U is at most one divided by epsilon times the gauge of X.
+
+Combine this with the Sylvester bound. The conclusion is that delta times epsilon times the gauge of F one adjoint U is at most the gauge of R.
+
+In our scaled plane example, delta is five, epsilon is two, and F one adjoint U is one half. The left-hand side is five. The residual norm is five. Equality is restored, and the angle no longer depends on the chosen coordinate scale.
+
+## Recognize the directed sine
+
+Let P project onto the exact target subspace. The component of the normalized trial map U outside that space is the complementary projection, one minus P, applied to U.
+
+For a unit vector along a trial line, the length of that component is exactly the sine of the angle to the exact line.
+
+In more dimensions, the corresponding positive modulus records the directed sine geometry of the trial subspace relative to the exact subspace.
+
+Why can we use F one adjoint U to measure the same thing? Because F one provides isometric coordinates on the exact complement. Taking the Gram operator of F one adjoint U gives U adjoint times one minus P times U. The Gram operator of the ambient complementary map, one minus P applied to U, is exactly the same.
+
+So both maps have the same modulus. The symmetric ideal gauge does not change when a map is replaced by its modulus, even if its source and target spaces differ.
+
+Thus the estimate for F one adjoint U is precisely an estimate for the directed sine representative.
+
+## What the theorem really says
+
+The full statement is now visible.
+
+We begin with a self-adjoint ambient operator, an exact reducing decomposition, a trial map with a positive lower frame bound, a self-adjoint trial operator, and a bounded residual satisfying the common-domain identity.
+
+We assume a positive allowed gap between the trial operator and the exact complementary operator. In a symmetric ideal family with Ky Fan dominance, if the residual belongs to that ideal, then the directed sine belongs as well.
+
+Its gauge, multiplied by the gap and by the lower frame bound, is at most the gauge of the residual.
+
+The plane example shows why each factor is present: the gap converts complementary error into displacement, and the frame bound converts coordinates into geometry.
+
+The proof's main operation is also simple to describe. Take only the part of the residual pointing into the wrong spectral subspace, solve a domain-aware Sylvester equation for that component, and normalize the trial map to measure a true angle.
+
+A small residual alone does not identify which spectral subspace the trial map approximates. The gap hypothesis must separate the trial spectrum from the exact complement. With that separation and the domain conditions in place, the sine estimate follows.
 
 <!-- END SPOKEN LECTURE -->
 
@@ -139,6 +175,12 @@ The mathematical toolkit is now assembled.
 ## Companion: mathematics and Lean correspondence (display only)
 
 Let `A` be self-adjoint on ambient `H`, let `F₀,F₁` define an exact reducing orthogonal decomposition, and let `E₀` have lower bound `‖E₀x‖ ≥ ε‖x‖` for `ε>0`. Require `HasCommonDomain A A₀ E₀`, the complement-domain intertwining property for `F₁` and `Λ₁`, and a bounded residual `R` agreeing with `A E₀−E₀ A₀` on the common domain. Then `X=F₁*E₀` satisfies the domain-aware Sylvester equation `Λ₁ X−X A₀=F₁*R`. A compatible unbounded gap `δ>0`, a symmetric ideal with Ky Fan dominance, and `Mem R` give `Mem X` and `δ gauge(X) ≤ gauge(R)`. The polar normalization `E₀=U|E₀|` with `‖|E₀|⁻¹‖≤1/ε` yields `δε gauge(F₁*U) ≤ gauge(R)`. Since `(F₁*U)* (F₁*U)=U* (I−P) U`, its modulus is the directed sine operator of the trial range relative to `P=F₀F₀*`.
+
+### Worked example: gap, normalization, and directed sine
+
+On \(H=\mathbb R^2\), let \(A=\operatorname{diag}(0,5)\) and target \(P=\operatorname{diag}(1,0)\). Define \(u=(\sqrt3/2,1/2)\), \(E_0t=2tu\), and \(A_0=0\). With \(F_1t=(0,t)\), the complementary operator is \(\Lambda_1=5I\), the form gap is \(\delta=5\), and the lower trial-frame bound is \(\varepsilon=2\).
+
+The residual is \(Rt=A E_0t=(0,5t)\), so \(\|R\|=5\). The complementary block is \(X=F_1^*E_0=I\), giving \(\Lambda_1X-XA_0=5I=F_1^*R\). The polar-normalized trial isometry is \(Ut=tu\), and \(F_1^*U=\tfrac12 I\). Thus \(\delta\varepsilon\|F_1^*U\|=5\cdot2\cdot\tfrac12=5=\|R\|\). The directed sine is \(\sin(30^\circ)=1/2\).
 
 ### Actual Lean source declarations
 

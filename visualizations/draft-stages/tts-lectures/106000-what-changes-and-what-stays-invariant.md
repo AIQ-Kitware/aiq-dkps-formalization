@@ -4,73 +4,117 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# What changes and what stays invariant
+# Why stable eigenvalues do not guarantee stable eigenvectors
 
-Perturbation theory asks how the spectral data of a self-adjoint operator change when the operator is modified. Eigenvalues may shift, eigenspaces may rotate, and individual eigenvectors may lose their identity when eigenvalues coincide. We will formulate the stable objects and the assumptions needed to control them.
+Imagine a symmetric two-by-two matrix that multiplies the horizontal coordinate by zero and the vertical coordinate by four.
 
-There are two separate quantities to track. An eigenvalue is a number. An eigenspace is a geometric object. A numerical bound on moving eigenvalues does not, by itself, control the angle between the eigenspaces. We will see both claims in two-by-two matrices, prove an elementary eigenvalue stability estimate, and discover why spectral separation is indispensable for controlling subspaces.
+Its lower eigenvalue is zero, and its lower eigenvector points horizontally. Its upper eigenvalue is four, with a vertical eigenvector. There's a spectral gap of four.
 
-## Begin with two energy levels
+Now change only the off-diagonal entries. Put a one in the upper-right corner and a one in the lower-left corner. We haven't changed either diagonal entry, but the eigenvectors are no longer horizontal and vertical.
 
-Take the plane with coordinates e one and e two. Let the original operator A multiply the first coordinate by zero and the second by four. Its lower eigenspace is the horizontal axis. Its upper eigenspace is the vertical axis. The spectral gap is four.
+The eigenvalues have changed too. Yet the numerical shifts are much smaller than the rotation of the eigenvectors might lead you to expect.
 
-Now add a symmetric perturbation H whose diagonal entries are zero and whose off-diagonal entries are both one. The new operator B has diagonal entries zero and four and off-diagonal entries one.
+This is the central tension in spectral perturbation theory. We can control how far eigenvalues move using one kind of argument. Controlling which eigenspaces they belong to, and how those spaces rotate, requires additional information about spectral separation.
 
-To see how its eigenspaces rotate, take a unit vector that makes an angle theta with the horizontal axis. Its coordinates are cosine theta and sine theta. The Rayleigh quotient of B on this vector is four times sine squared theta plus two times sine theta times cosine theta.
+## Work through the two-level example
 
-Differentiate with respect to theta. The stationary directions obey a double-angle equation. Equivalently, diagonalizing the symmetric two-by-two matrix gives an acute rotation whose magnitude satisfies tangent of twice theta equals one half. Thus the lower eigenvector rotates by approximately thirteen point three degrees in magnitude. Its orientation can be chosen negative, since the positive off-diagonal coupling bends the lower eigenvector slightly below the horizontal axis.
+Call the original diagonal matrix A and the perturbed matrix B. Their difference H has zeros on the diagonal and ones off the diagonal.
 
-The two eigenvalues are two minus the square root of five, and two plus the square root of five. Neither eigenvalue is still exactly zero or four. But both the eigenvalues and the eigendirections have moved continuously because a gap persists.
+The operator norm of H is one: it has eigenvalues one and negative one.
 
-The size of H in operator norm is one. The two eigenvalue displacements each have magnitude the square root of five minus two, approximately zero point two three six. Notice that the eigenvectors moved in angle even though the eigenvalues moved by considerably less than one. Eigenvalue displacement and eigenvector rotation are different measurements.
+To find the eigenvalues of B, solve its characteristic equation. The answer is two minus the square root of five, and two plus the square root of five.
 
-## Prove the elementary eigenvalue bound
+Numerically, those are about negative zero point two three six and four point two three six. Each eigenvalue has moved by about zero point two three six from its original value.
 
-For a unit vector x, the difference between the Rayleigh quotients of A and B is its inner product with H x. Cauchy–Schwarz gives an absolute value at most the operator norm of H.
+Now look at the lower eigenvector. Write it as a unit vector making an angle theta with the horizontal axis.
 
-Apply that observation to the min–max characterization of the kth eigenvalue. Every minimum over subspaces and every maximum over unit vectors shifts by at most the same number. Consequently, when the ordered eigenvalues of A and B are paired in increasing order, the kth eigenvalue of B differs from the kth eigenvalue of A by at most the norm of H.
+Its Rayleigh quotient under B is four times sine squared theta plus two times sine theta times cosine theta.
 
-That is a version of Weyl's perturbation inequality. It makes no claim that the individual eigenvectors associated with those ordered numbers remain close. The inequality also remains valid at repeated eigenvalues, precisely where individual eigenvectors can become ambiguous.
+At an eigenvector, this expression is stationary. Differentiating gives an equation involving twice the angle: four times sine of twice theta plus two times cosine of twice theta equals zero.
 
-## Watch a gap close and an eigenspace swap
+The lower eigenvector therefore rotates downward by about thirteen point three degrees. More precisely, its angle is negative one half of the arctangent of one half.
 
-Now change only the diagonal entries. Let A again be diagonal with entries zero and four. For a parameter t between zero and one, add t times the diagonal matrix with entries five and negative five. The resulting eigenvalues, before ordering, are five t and four minus five t.
+The perturbation had operator norm one. The eigenvalues moved by about a quarter of a unit. The lower eigendirection turned by over thirteen degrees.
 
-At t equals zero, the lower eigenspace is the horizontal axis. At t equals one, the lower eigenspace is the vertical axis. Those two lines are perpendicular.
+These measurements describe different aspects of the perturbation. A statement about eigenvalue displacement does not directly give an angle estimate.
 
-Where does the change occur? Set five t equal to four minus five t. The equality occurs at t equals two fifths. At that parameter the operator is a scalar multiple of the identity, so every line is an eigenspace. There is no uniquely distinguished lower one-dimensional eigenspace to follow through the crossing.
+## Why eigenvalues have a simple stability bound
 
-This shows why a theorem about subspace rotation needs a separation hypothesis. Merely knowing the size of the perturbation does not promise that a labeled spectral cluster remains isolated. Here the eigenvalues vary continuously, but the selection rule 'choose the lower eigenvector' jumps from one axis to the other at the collision.
+For any unit vector x, the Rayleigh quotient of B differs from the Rayleigh quotient of A by the inner product of x with H x.
 
-The problem is not restricted to changing coordinates: the two exact spectral projections really are different. Before the crossing, the lower spectral projection sends a vector to its first coordinate. After the crossing, it sends a vector to its second coordinate.
+Cauchy–Schwarz bounds that difference in absolute value by the operator norm of H. So every unit vector's Rayleigh quotient changes by at most one in our example.
 
-## Stable clusters are more intrinsic than individual eigenvectors
+The min–max principle identifies each ordered eigenvalue of a Hermitian matrix by optimizing these Rayleigh quotients over subspaces of the appropriate dimension.
 
-Suppose an operator has a cluster containing two eigenvalues, perhaps repeated or nearly equal, and another cluster far away. Inside the first cluster the eigenvectors may mix freely. If those first two eigenvalues become equal, any orthonormal basis of their joint eigenspace is legitimate.
+Since every candidate Rayleigh quotient changes by at most the same amount, the minima and maxima used by the min–max principle also change by at most that amount.
 
-Tracking a particular eigenvector therefore depends on a choice that the mathematics does not always specify. Tracking the whole invariant subspace is more robust. Its orthogonal projection is independent of the basis chosen inside it.
+Therefore the k-th ordered eigenvalue of B differs from the k-th ordered eigenvalue of A by no more than the norm of H.
 
-For example, consider a three-dimensional diagonal operator with diagonal entries zero, zero, and ten. Its first two coordinates form a two-dimensional eigenspace. Rotating the basis inside that plane does not change the plane or its projection. If we perturb the two-by-two block slightly while leaving the third coordinate isolated, its individual eigenvectors may change greatly while the plane itself stays exactly fixed.
+This is Weyl's perturbation bound for Hermitian matrices.
 
-We should therefore formulate our target questions using subspaces, projections, and their principal angles. Those are the objects that continue to make sense through eigenvalue multiplicities within an isolated cluster.
+The argument remains true when eigenvalues coincide. That's useful for eigenvalue estimates, but coincident eigenvalues are precisely where an individual eigenvector may cease to be uniquely determined.
 
-## What separation must be maintained?
+## Watch a subspace selection fail at a crossing
 
-Imagine a selected interval containing the target eigenvalues of A and separated from the rest of its spectrum by a positive distance. Weyl's bound tells us that eigenvalues of B cannot travel farther than the perturbation norm. In finite dimensions, if the perturbation is sufficiently small relative to that separating distance, a contour or interval boundary can still isolate the corresponding number of eigenvalues of B.
+Take the original diagonal matrix with entries zero and four again.
 
-That statement helps identify the appropriate perturbed cluster. But there are several different gap conditions in the literature. An ordered gap means one spectral set lies wholly to one side of another. A pairwise distance gap means every point of one set is some distance from every point of the other, without imposing order. Those conditions do not support every Sylvester norm estimate with the same constant.
+Now introduce a parameter t between zero and one. Increase the first diagonal entry by five t, and decrease the second by five t.
 
-We will always state which two operators are being separated, and whether the separation is ordered, interval-versus-exterior, or merely pairwise. This will prevent us from confusing a distance between an approximate eigenvalue and the nearest target eigenvalue with the distance to the exact complementary spectrum that actually appears in a sine theorem.
+The two eigenvalues are now five t and four minus five t.
 
-## The residual previews the answer
+At t equals zero, the lower eigenspace is horizontal. At t equals one, it is vertical.
 
-There is one more quantity to introduce before we state a perturbation theorem. Let u be a unit trial vector and let mu be a proposed eigenvalue. Its residual is A u minus mu times u. If that residual vanishes, u is an exact eigenvector with eigenvalue mu. If it is small, u is approximately invariant, but its angle to a particular eigenspace can still be large unless mu is spectrally separated from the unwanted eigenvalues.
+Where does the switch happen? Set five t equal to four minus five t. The equality occurs at t equals two fifths. At that instant, both eigenvalues equal two, and the matrix is two times the identity.
 
-In the first two-level example, choose the original horizontal basis vector as a trial vector for the perturbed operator B, and choose mu equal to its Rayleigh quotient, zero. The residual is exactly the vertical unit vector. Its norm is one. Its location in the complementary direction explains why the eigenvector rotates.
+Every direction is then an eigenvector. There is no distinguished one-dimensional lower eigenspace at the crossing.
 
-We will derive a matrix residual, compress it onto the exact complementary subspace, and turn it into a Sylvester equation. The operator on the other side of that equation will be the directed sine of a principal angle.
+Immediately before the crossing, choosing the lower eigenvalue selects the horizontal line. Immediately after, it selects the vertical line. Those lines are perpendicular.
 
-So our question is now precise. Given an exact reducing subspace, a trial subspace, a measurable residual, and an appropriate spectral gap, how large can the subspace angle be? The answer is a quantitative inequality, and we will prove it rather than memorize it.
+Yet the two eigenvalue curves themselves are continuous functions of t.
+
+This is an exact example of why tracking the lowest eigenvector can fail when a spectral gap closes. To follow an isolated subspace continuously, we need an isolation condition that remains valid along the perturbation.
+
+## Sometimes the right object is a whole cluster
+
+Consider a three-dimensional diagonal matrix with entries zero, zero, and ten.
+
+The first two coordinate directions span a two-dimensional eigenspace. But there is no preferred pair of basis vectors inside it. Any rotation within that plane gives another legitimate orthonormal basis of the same eigenspace.
+
+Now perturb only the upper-left two-by-two block. The individual eigenvectors in that block can rotate considerably, and the repeated zero eigenvalue can split.
+
+As long as the perturbation doesn't couple that plane to the third coordinate, the plane itself stays exactly the same invariant subspace. Its orthogonal projection is unchanged.
+
+That gives us a more stable object to track: the whole selected spectral subspace, represented by an orthogonal projection. Principal angles compare these subspaces without requiring us to match arbitrary eigenvector bases.
+
+## Which gap do we actually need?
+
+A spectral gap must be attached to two specified spectral sets.
+
+In the plane example, if our target is the lower eigenspace, the important competing spectrum is the upper eigenvalue. The distance to that unwanted part influences how easily a vector can leak into the wrong eigenspace.
+
+In more general problems, the chosen cluster might be an interval with unwanted spectrum on either side. In another problem, the two spectral sets might be ordered, with one entirely above the other.
+
+Those arrangements support different operator estimates. Knowing only that two spectra don't intersect is weaker than knowing the ordered separation used by a particular Sylvester theorem.
+
+Weyl's eigenvalue bound helps us determine whether an initially isolated cluster stays isolated under a sufficiently small perturbation. Once we know which cluster is selected, subspace perturbation theory asks how its projection changes.
+
+## The residual measures one vector's failure to be invariant
+
+There's a second way to approach the angle question, especially when we're given an approximate eigenvector rather than two complete matrices.
+
+Let u be a unit trial vector and mu a proposed eigenvalue. Apply the operator to u and subtract mu times u. The result is the residual.
+
+If the residual is zero, u is an exact eigenvector with eigenvalue mu. If the residual is small, u nearly satisfies that particular eigenvalue equation.
+
+For the perturbed matrix B in our first example, take the original horizontal vector as a trial vector and choose mu equal to its Rayleigh quotient, which is zero. Applying B gives the vertical unit vector. The residual is therefore vertical with norm one.
+
+That vertical error is the component trying to move us out of the original target direction.
+
+But a zero residual does not by itself say that the vector is near the *selected* eigenspace. Return to the original diagonal matrix. The vertical unit vector has zero residual when paired with its own eigenvalue four. It is nevertheless perpendicular to the lower eigenspace.
+
+We must specify the trial spectral value and separate it from the unwanted spectrum. The residual can then be converted into a complementary-coordinate equation, and a spectral-gap bound turns that equation into an angle estimate.
+
+The conclusion is a precise distinction. Eigenvalues of self-adjoint matrices are stable in operator norm, by the min–max principle. Eigenspaces are stable under additional conditions that keep the selected spectral component isolated. A residual measures failure of an eigenvalue equation, while a suitable gap tells us which subspace that residual can control.
 
 <!-- END SPOKEN LECTURE -->
 
@@ -81,6 +125,17 @@ So our question is now precise. Given an exact reducing subspace, a trial subspa
 Let `B=A+H` with self-adjoint matrices. Courant–Fischer gives `|λ_k(B)-λ_k(A)| ≤ ‖H‖`, but no analogous subspace estimate follows without separating the selected spectral sets. For `A=diag(0,4)` and `H=[[0,1],[1,0]]`, the lower eigendirection rotates through `θ=-(1/2) arctan(1/2)` and eigenvalues become `2±√5`. For `A(t)=diag(5t,4-5t)`, the lower spectral subspace changes at the collision `t=2/5`.
 
 The exact source-backed sharpness model below supplies a distinct planar perturbation model used by the sine theorem. It is an analogy, not a formalization of both examples in this lecture.
+
+### Worked example: eigenvalue motion and subspace crossing
+
+Let
+\[
+A=\begin{pmatrix}0&0\\0&4\end{pmatrix},\qquad
+H=\begin{pmatrix}0&1\\1&0\end{pmatrix},\qquad B=A+H.
+\]
+Then \(\|H\|=1\) and \(\sigma(B)=\{2-\sqrt5,2+\sqrt5\}\), so each ordered eigenvalue moves by \(\sqrt5-2\approx0.236\). The lower eigenvector makes angle \(\theta=-\tfrac12\arctan(1/2)\) with \(e_1\), approximately \(-13.28^\circ\).
+
+For \(A(t)=\operatorname{diag}(5t,4-5t)\), the eigenvalues collide at \(t=2/5\) and the selected lower one-dimensional eigenspace changes from \(\operatorname{span}(e_1)\) to \(\operatorname{span}(e_2)\). Individual eigenvectors are not trackable through that collision without an additional selection rule.
 
 ### Source declaration excerpts
 
