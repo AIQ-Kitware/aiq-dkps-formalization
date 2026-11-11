@@ -1,92 +1,108 @@
 # 091000 — Yosida approximation and bounded truncations
 
-**Draft status:** audio-first mathematical lecture. **Prerequisites:** `082000` spectral cutoffs, `087000` Cayley transforms, `088000` unbounded spectral calculus, `090000` semibounded forms. **Next:** `092000` one-parameter unitary groups.
+**Draft status:** audio-first mathematical lecture. **Prerequisites:** `082000` spectral cutoffs, `087000` Cayley transforms, `088000` unbounded spectral calculus, `090000` semibounded forms. **Next:** `091250` resolvents and Yosida regularization.
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# Replace an unbounded generator without losing its geometry
+# How can bounded operators approximate an unbounded one?
 
-Unbounded operators cause a problem whenever a proof uses an ordinary matrix exponential, a power series in operator norm, or differentiation of an operator-valued function. Those operations work naturally for bounded operators. We need a way to approximate an unbounded self-adjoint operator by bounded self-adjoint ones and then recover the original action on its correct domain.
+Suppose an operator stretches different directions by different amounts. In a two-dimensional matrix, those stretches are always bounded: there is some largest possible amplification. But on an infinite-dimensional Hilbert space, the amplification might keep growing as we look at higher and higher directions.
 
-Spectral truncation and symmetric Yosida approximation give two bounded approximations of a self-adjoint operator. Both preserve self-adjointness and converge appropriately on vectors in the operator domain.
+That raises a practical problem. Many familiar constructions, such as taking an exponential by a power series, are easy for bounded operators. How can we use them when the operator we actually care about is unbounded?
 
-## A first idea: cut off large spectral values
+The idea is to build bounded stand-ins. Each stand-in is allowed to have its own bound. As the approximations improve, those bounds may grow. What we want is that a fixed vector, on which the original operator is defined, eventually sees nearly the correct action.
 
-Let A be self-adjoint. For a positive radius R, let P R project onto spectral values between negative R and positive R.
+There are two useful ways to do this for a self-adjoint operator: cut off its large spectral values, or replace them with a smooth, bounded function. The second construction is a symmetric form of Yosida approximation.
 
-Define T R to act as A on that band and as zero outside the band. Since its spectral multiplier is bounded by R, T R is a bounded self-adjoint operator on the entire Hilbert space.
+## Start with an infinite diagonal matrix
 
-If x belongs to D of A, the spectral theorem shows that T R x approaches A x. The squared norm of the difference is the integral of lambda squared over the spectral region outside the band. Because x is in D of A, that integrand is integrable, and its tail tends to zero.
+Consider ell two, the Hilbert space of infinite sequences whose squared magnitudes add to a finite number. Define an operator A as follows. Multiply the first coordinate by one, the second by two, the third by three, and in general multiply coordinate number N by N.
 
-But this convergence is strong on D of A. It is not convergence in operator norm to A, because A does not belong to the space of bounded operators if it is genuinely unbounded.
+A is unbounded. A vector concentrated entirely in coordinate one hundred has length one, but A sends it to a vector of length one hundred. There is no single upper bound that works for every coordinate.
 
-There is also an issue with the action on the complement of the cutoff. Setting it to zero may destroy an important lower form bound. If A has spectrum above five, for example, T R has zero on the cutoff complement, so it is no longer bounded below by five there.
+A also has a restricted domain. A sequence is allowed as an input precisely when, after multiplying its N-th coordinate by N, the result is still square summable.
 
-We can repair that by filling the complement with a real constant. Define the filled truncation as T R plus a times identity minus P R. It agrees with A on the retained band, acts as scalar a outside, and remains bounded and self-adjoint.
+For example, a sequence whose N-th entry is one divided by N squared belongs to the domain. After applying A, its entries are one divided by N, and their squared magnitudes still have a finite sum.
 
-Choosing a appropriately can preserve a lower or upper bound. This is useful when the final estimate depends on ordered spectra.
+A sequence whose N-th entry is one divided by N is different. That input belongs to ell two, but applying A would produce the sequence of all ones. The output would not belong to ell two. So this vector lies outside the domain of A.
 
-## A smoother regularization
+Keep those two sequences in mind. They will tell us exactly where approximation can and cannot recover the original operator.
 
-Instead of deleting high spectral frequencies abruptly, apply the scalar function f n of lambda defined as N squared times lambda, divided by N squared plus lambda squared.
+## The simplest approximation: retain a finite spectral band
 
-For each fixed positive N, this function is real and bounded. Its absolute value is at most N divided by two, since twice N times the absolute value of lambda cannot exceed N squared plus lambda squared.
+Imagine keeping only the first ten coordinate multipliers of our diagonal operator. The first coordinate is multiplied by one, the second by two, and so on through ten. Every coordinate after that is multiplied by zero.
 
-The functional calculus therefore gives a bounded self-adjoint operator A N. Every input vector is legal for A N.
+This new operator is bounded. Its norm is ten. It is also self-adjoint, because its diagonal multipliers are real.
 
-For a fixed spectral value lambda, the multiplier approaches lambda as N grows. Moreover its absolute value never exceeds the absolute value of lambda.
+Increase the cutoff from ten to one hundred, then to a thousand. For a fixed coordinate, the approximation eventually acts exactly like A. For a vector in the domain of A, the entire output converges in Hilbert-space norm.
 
-If x lies in D of A, the difference between the multiplier and lambda, squared and integrated against the spectral measure of x, tends to zero by dominated convergence. The dominating function is a constant times lambda squared, which is integrable precisely because x is in D of A.
+Why does the whole output converge? Because the difference is exactly the tail of A applied to that vector. We already required that A applied to the vector be square summable. The squared lengths of its tails must therefore approach zero.
 
-Thus A N x approaches A x for every domain vector. The regularization is bounded at each stage, self-adjoint at each stage, and consistent with A on the original domain in the limit.
+That gives a straightforward spectral truncation scheme: keep the spectral values in a growing bounded interval, and replace everything outside that interval by zero. For a general self-adjoint operator, spectral projections perform the same operation without requiring an eigenvector basis.
 
-There is no claim that the norms of A N remain bounded independently of N. In fact their universal bound N divided by two grows, as it must if A is truly unbounded.
+There is, however, a drawback. Suppose the original operator has all its spectrum above five. Replacing the discarded part by zero introduces a new spectral value below five. An approximation meant to preserve a lower spectral bound has just destroyed it.
 
-## A diagonal worked example
+We can instead fill the discarded region with a chosen constant. On the retained spectral band, keep A. On its complement, use multiplication by a fixed real number, say five. That filled truncation is still bounded and self-adjoint. If the original spectrum lies above five, the filled operator does too.
 
-Let A multiply the N-th coordinate of an ell-two sequence by N. To avoid confusing the coordinate index with the approximation parameter, call the approximation parameter R.
+So hard cutoffs give simple approximations, and filling the complement can preserve inequalities that matter to spectral-gap arguments.
 
-On coordinate N, the regularized eigenvalue is R squared times N divided by R squared plus N squared.
+## A smoother approximation
 
-For N much smaller than R, this is close to N. For N much larger than R, it becomes small, approximately R squared divided by N. The regularizer preserves low-frequency behavior while controlling the extreme high-frequency part.
+Hard truncation abruptly changes what happens at the cutoff. There is another construction that modifies every spectral value continuously.
 
-Choose a vector with N-th coordinate one divided by N squared. This vector lies in D of A, because the coordinates of A x are one divided by N, which are square summable.
+Choose a positive scale R. For a spectral value s, replace s by the following number: R squared times s, divided by R squared plus s squared.
 
-For each fixed coordinate the regularized output tends to one divided by N. The dominated-convergence argument shows convergence in the norm of the entire sequence, not merely coordinate by coordinate.
+Let's use R equal to ten. The spectral value one becomes one hundred divided by one hundred and one, which is just under one. The spectral value ten becomes five. The spectral value one hundred becomes about zero point nine nine.
 
-Choose instead the vector with N-th coordinate one divided by N. It belongs to ell two but not D of A. Each A R can still act on it, because A R is bounded. Yet the outputs cannot converge in ell two to a finite vector that represents A x. If they converged, closedness of A and the appropriate spectral convergence would force x into D of A, which it is not.
+The last result deserves attention. This is not a clipping rule that stops at ten. Extremely large spectral values are suppressed toward zero. The rule faithfully approximates any fixed spectral value as R grows, but for a fixed R it controls the entire real line.
 
-That illustrates the role of the domain: regularization defines legal approximating actions on all vectors, but convergence to the original unbounded action is guaranteed only where that action exists.
+In fact, the magnitude of the modified value is never larger than R divided by two. At R equal to ten, the new operator has norm at most five, no matter how large the original spectral values become.
 
-## Why self-adjointness survives
+Apply this same scalar rule to the spectrum of A. The spectral theorem produces a bounded operator A sub R. Because the scalar rule is real-valued and A is self-adjoint, A sub R is self-adjoint as well.
 
-The symmetric Yosida multiplier is a real function of a self-adjoint operator. Applying real-valued bounded functional calculus gives a self-adjoint bounded operator automatically.
+This is called the symmetric Yosida regularization. Its formula is chosen because it has several useful properties at once: it is bounded, it preserves self-adjointness, and it approaches the original spectral value at each fixed location.
 
-That property is not an incidental convenience. For every real time t, multiply A R by the imaginary unit and by t, then exponentiate. The result is unitary, because its exponent is skew-adjoint.
+## What convergence actually means
 
-We can use the bounded exponential power series and the group law without having to confront the unbounded operator exponential directly. Each R produces a complete one-parameter unitary group.
+For our diagonal example, take coordinate number N. The regularized multiplier is R squared times N divided by R squared plus N squared. As R increases without bound, that multiplier approaches N.
 
-There is a second benefit: any two Yosida approximants are functions of the same operator A. Therefore they commute. Their exponentials commute as well, and the comparison of two approximating flows becomes much simpler.
+But convergence on each coordinate is not enough by itself. We need convergence of whole vectors in ell two.
 
-## Controlling the difference between flows
+Here is the key estimate. The magnitude of the regularized multiplier never exceeds the magnitude of the original spectral value. So when we subtract the original action from the regularized action, the size of the error on a spectral component is controlled by twice the original component's amplification.
 
-Let U R of t denote the unitary exponential of imaginary t times A R. For a vector x, compare U R of t x with U S of t x for two regularization parameters R and S.
+If x belongs to the domain of A, the squares of those original amplified components have a finite sum. Dominated convergence then lets us pass from convergence at each spectral value to convergence in the norm of the whole Hilbert space.
 
-Because the generators commute, we can differentiate an interpolating product of exponentials and integrate the derivative. The resulting Duhamel estimate bounds the length of the difference between the two flows by the absolute value of t times the length of A R x minus A S x.
+Return to the sequence with N-th entry one divided by N squared. It belongs to the domain. The regularized outputs converge to the sequence with N-th entry one divided by N, which is exactly A applied to x.
 
-The Yosida approximating generators converge on the domain of A. In particular, their differences applied to a fixed domain vector tend to zero. The Duhamel estimate therefore makes the approximating flows Cauchy on that dense domain.
+Now use the sequence with N-th entry one divided by N. Every bounded approximant can act on it. But the outputs cannot converge to a vector in ell two. Their N-th coordinates approach one, so any coordinatewise limit would be the sequence of all ones, and that is not in ell two.
 
-To extend convergence to an arbitrary vector y in H, approximate y by a domain vector x. Since each flow is unitary, replacing y by x causes an error of at most the distance between y and x. Do it for both flows and use the Cauchy estimate at x. The two approximation errors can be made as small as desired.
+This is the domain boundary in action. Each approximation is defined everywhere. The original operator is recovered on its domain, not on arbitrary vectors.
 
-Completeness of H then produces a limit flow on every vector, even when the original generator is not defined there.
+We also should not expect convergence in operator norm. The norms of the approximants can grow with R, while a genuinely unbounded A has no finite operator norm to converge to. The meaningful statement is convergence of A sub R applied to each fixed domain vector.
 
-## Strong limits versus norm limits
+## Why keeping self-adjointness helps
 
-The convergence just constructed is in the Hilbert-space norm for each fixed vector. This is strong operator convergence. We should not upgrade it to operator-norm convergence without a separate argument.
+There is another reason to prefer the symmetric construction. A bounded self-adjoint operator can generate a unitary evolution. Multiply it by imaginary time and exponentiate. The resulting operator preserves the length of every vector.
 
-The distinction is visible in the diagonal example. High-frequency coordinates can rotate extremely rapidly under the unitary group. For each fixed vector, their total squared mass becomes small in the tail, so strong convergence and strong continuity remain possible. But a norm estimate that takes the supremum over all unit vectors can always select a rapidly rotating high-frequency basis vector.
+For each R, the exponential of imaginary time times A sub R is a perfectly ordinary bounded-operator construction. Call this unitary evolution U sub R at time t.
 
-Yosida regularization supplies the bounded approximants that make the construction rigorous.
+Why should the evolutions approach one another? All our approximants come from scalar functions of the same operator A. They commute. When we compare two of their exponentials, we can interpolate between them and integrate the derivative.
+
+The result is a useful estimate. On a vector x, the distance between the two evolved vectors is no greater than the absolute value of time multiplied by the length of the difference between the two approximate generators applied to x.
+
+For a vector in the domain of A, that generator difference approaches zero. Consequently the unitary evolutions are Cauchy on domain vectors, uniformly over any fixed bounded interval of times.
+
+But the domain of a self-adjoint operator is dense in the Hilbert space. Given an arbitrary vector, approximate it by a domain vector. Unitarity means that the approximation error never grows during evolution. So convergence extends from the dense domain to every vector in the Hilbert space.
+
+Notice the change in what is defined. The original generator acts only on its domain. Yet the limiting unitary motion acts on every vector.
+
+## The result to keep
+
+Spectral truncation and symmetric Yosida regularization are two ways to replace an unbounded self-adjoint operator with bounded self-adjoint operators. Both recover the original action on vectors in its domain. Filled truncations can preserve one-sided spectral bounds; the symmetric regularizer is particularly convenient for building unitary evolutions.
+
+The decisive distinction is between approximating the generator and approximating its evolution. Generator convergence is restricted to the original domain. The unitary evolutions, because they are bounded and preserve norms, can converge strongly on the entire Hilbert space.
+
+That is how bounded tools can be used without pretending that an unbounded operator is defined everywhere.
 
 <!-- END SPOKEN LECTURE -->
 

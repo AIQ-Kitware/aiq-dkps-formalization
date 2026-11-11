@@ -4,57 +4,111 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# Approximating an unbounded operator with its resolvent
+# Build a bounded generator from a shifted inverse
 
-The derivative operator on a space of functions, or multiplication by an unbounded real variable, cannot be treated as an ordinary bounded matrix. We can nevertheless replace such an operator by a sequence of bounded operators that preserve important geometric properties. The tool is the resolvent: the inverse of a suitable scalar shift of the operator.
+Consider an evolution that damps high-frequency components. In a simple model, coordinate number one decays at rate one, coordinate number two at rate two, and coordinate number one hundred at rate one hundred.
 
-There are two closely related regularizations. The classical Yosida approximant is natural for generators of contraction semigroups. A symmetric version is natural for self-adjoint operators and unitary groups. Their formulas are different, and their common idea is more informative than memorizing either formula.
+The rule that assigns these decay rates is an unbounded operator. Yet the evolution itself can be perfectly well-defined on every square-summable sequence. We want a systematic way to construct the evolution using bounded operators, while keeping the decay instead of accidentally introducing growth.
 
-## The resolvent of a closed operator
+The resolvent supplies that construction. It takes a shifted operator, inverts it, and produces a bounded map. With the right combination of resolvent and scalar multiplication, we recover a bounded approximation to the original generator. This is the classical Yosida approximation.
 
-Let G be a densely defined closed linear operator on a complex Hilbert space. Its domain is a linear subspace, often proper, while its resolvent at a positive real number lambda is the bounded inverse of lambda times the identity minus G, when this inverse exists on the whole space.
+Let's build it first in a diagonal example, and then explain the general theorem.
 
-Write R lambda for that inverse. Solving for a vector y means solving the equation lambda y minus G y equals x. The solution y must lie in the domain of G even when the input x does not. Thus the resolvent maps arbitrary vectors into legal domain vectors.
+## Start with an operator that always damps
 
-Suppose G is dissipative: the real part of the inner product of G y with y is nonpositive for every domain vector y. Take the real part of the inner product of lambda y minus G y with y. It is at least lambda times the squared norm of y. Cauchy–Schwarz gives lambda times the norm of y at most the norm of lambda y minus G y.
+Our Hilbert space is ell two, the square-summable sequences. Define G to multiply coordinate number N by negative N.
 
-When the shifted operator is onto, this yields a resolvent norm bound of one over lambda. It also proves uniqueness of the solution. Surjectivity is essential: the estimate alone does not establish that the inverse exists everywhere.
+For example, G turns a vector supported on coordinate ten into negative ten times that vector. The corresponding time evolution should multiply that coordinate by the exponential of negative ten times time.
 
-## Build the classical approximant
+G is self-adjoint and unbounded. Its domain is the sequences for which N times the N-th coordinate is still square summable.
 
-Multiply the resolvent by lambda, and call the result J lambda. It is a bounded contraction. The classical Yosida approximant is lambda times J lambda minus lambda times the identity. Although this operator is bounded, it agrees with G increasingly well on the domain of G as lambda grows.
+How could we replace G by a bounded operator while preserving the fact that every coordinate has a nonpositive growth rate?
 
-To see this without a formal power series, take x in the domain of G. Substituting the equation defining the resolvent shows that J lambda x minus x is R lambda applied to G x. Its norm is at most the norm of G x divided by lambda, so J lambda x tends to x.
+Choose a positive number lambda. Instead of inverting G, invert lambda times identity minus G. On coordinate N, this shifted operator multiplies by lambda plus N. Its inverse therefore multiplies by one divided by lambda plus N.
 
-The same resolvent identity gives G lambda x equals J lambda applied to G x. Since J lambda converges strongly to the identity, G lambda x tends to G x for every x in the domain.
+No denominator is zero, and all the inverse multipliers are at most one divided by lambda. So this resolvent is bounded on the whole Hilbert space.
 
-That final qualification is crucial. Each G lambda acts on the whole Hilbert space, but G itself may not. The theorem asserts convergence of the generators on the vectors for which G is defined.
+Multiply it by lambda. We obtain a new bounded map, J sub lambda, whose multiplier on coordinate N is lambda divided by lambda plus N. Every multiplier lies between zero and one. In particular, J sub lambda is a contraction: it cannot increase the length of any vector.
 
-## A diagonal example with a negative generator
+Now take J sub lambda, subtract the identity, and multiply by lambda. The resulting operator has multiplier negative lambda times N divided by lambda plus N.
 
-Work on square-summable sequences. Let G multiply coordinate n by negative n. Its domain consists of sequences x for which the sequence of n times x n is square summable. It is self-adjoint and dissipative, but unbounded.
+This is the classical Yosida approximant of G.
 
-The resolvent of lambda minus G multiplies coordinate n by one divided by lambda plus n. Consequently J lambda multiplies that coordinate by lambda divided by lambda plus n. The Yosida approximant multiplies it by negative lambda n divided by lambda plus n.
+## Read the formula as an approximation
 
-For each fixed coordinate, this approaches negative n. But the approximating eigenvalues never have magnitude greater than lambda, so the operator is bounded for every fixed lambda. The exact semigroup acts on coordinate n by exponential decay at rate n. The bounded approximants replace arbitrarily fast decay rates by rates capped near lambda.
+Take lambda equal to four. On coordinate one, the approximate generator multiplies by negative four fifths. On coordinate four, it multiplies by negative two. On coordinate one hundred, it multiplies by a number close to negative four.
 
-Choose x n equal to one over n squared. Then x is in the domain because n x n equals one over n, which is square summable. The convergence of G lambda x to G x follows from the same dominated-sum argument as in the general theorem. If x n equals one over n, the original generator is undefined at x, even though every bounded approximant acts there.
+The approximation has capped the magnitude of all decay rates below four. That is why it is bounded. But if we hold coordinate one hundred fixed and increase lambda, its approximate rate moves closer and closer to negative one hundred.
 
-## A symmetric construction for self-adjoint operators
+So two statements coexist. For each fixed lambda, the approximate generator is bounded. For each fixed coordinate, increasing lambda recovers the original rate.
 
-Now take a self-adjoint operator A whose spectrum can extend in both positive and negative directions. Its evolution by complex phases should be unitary, not contractive decay. A convenient symmetric regularizer uses the scalar function R squared times s divided by R squared plus s squared.
+We still need to understand whole vectors, not only isolated coordinates. That is where the operator domain enters.
 
-This function is real, is bounded in magnitude by R divided by two, and approaches s for each fixed real spectral value s. Through the spectral calculus it defines a bounded self-adjoint operator A R. For x in the domain of A, dominated convergence proves that A R x tends to A x.
+For a vector whose N-th coordinate is one divided by N squared, G produces minus one divided by N. That output is square summable, so the vector lies in the domain. The Yosida outputs converge in ell-two norm to this original output.
 
-The connection to resolvents is explicit. Half the sum of the resolvents at positive and negative imaginary R, multiplied by R squared, is exactly this symmetric regularizer. In scalar terms, the two denominators s minus imaginary R and s plus imaginary R add to twice s divided by s squared plus R squared.
+For a vector whose N-th coordinate is one divided by N, the original output would be the sequence of negative ones. That vector is not in ell two, so G is undefined there. Every bounded approximant still acts, but there is no Hilbert-space vector that its outputs could converge to as the action of G.
 
-These two constructions solve related but different problems. The classical Yosida approximant preserves dissipativity and is adapted to contraction semigroups. The symmetric self-adjoint approximant preserves self-adjointness and is adapted to unitary groups.
+This is the essential scope of Yosida convergence: the bounded approximants recover the generator on its domain.
 
-## A convergence boundary
+## Why a resolvent gives stability
 
-Strong convergence on the operator domain does not mean the bounded approximants converge in operator norm. The diagonal example makes the reason plain: no uniform bound on the norms of the approximants can approach an actually unbounded generator. Nor should convergence on an arbitrary vector outside the domain be asserted.
+Now forget the diagonal coordinates for a moment. Suppose G is a densely defined, closed operator on a complex Hilbert space.
 
-The payoff is precise: resolvents turn a domain-restricted operator into bounded approximations; dissipativity or self-adjointness passes to those approximations in the appropriate construction; and convergence recovers the original action exactly where that action is defined.
+Call G dissipative if, for every allowed vector y, the real part of the inner product of G y with y is nonpositive. The intuition is that the infinitesimal motion generated by G does not increase squared length.
+
+Choose a positive lambda. If we can solve lambda times y minus G y equals x for every input x, then the solution operator is the resolvent at lambda, using the convention of inverting lambda identity minus G.
+
+Why is it bounded? Take the real part of the inner product of the equation with y. Dissipativity tells us that the left side is at least lambda times the squared length of y. Cauchy–Schwarz tells us the right side is no more than the length of x times the length of y.
+
+After canceling a nonzero length, we find that the length of y is at most one over lambda times the length of x.
+
+This also proves uniqueness. If the output x is zero, the only possible y is zero.
+
+There is one important condition we have not proved from this inequality: existence for every x. We must separately assume that lambda identity minus G is onto the whole Hilbert space. The energy estimate controls a solution; surjectivity ensures there is one.
+
+To construct an approximation family as lambda grows, we need this resolvent for arbitrarily large positive shifts. In the standard maximally dissipative setting, solvability at one positive shift guarantees solvability at every positive shift.
+
+With both conditions, multiplying the resolvent by lambda gives the contraction J sub lambda, just as in the diagonal example.
+
+## Recovering the original generator
+
+The general approximation has the same definition: G sub lambda is lambda times J sub lambda minus lambda times identity.
+
+To see why it works, start with a vector x in the domain of G. Rearranging the resolvent equation gives a useful identity: J sub lambda applied to x, minus x, equals the resolvent applied to G x.
+
+The resolvent bound tells us that the right side has length at most the length of G x divided by lambda. So J sub lambda x approaches x on the domain of G.
+
+Because J sub lambda is always a contraction and the domain is dense, this convergence extends to every vector in the Hilbert space. For an arbitrary vector, first choose a nearby domain vector; the contraction bound keeps the error under control.
+
+There is a second identity. On a vector in the domain of G, the approximate generator G sub lambda applied to x equals J sub lambda applied to G x.
+
+The right side approaches G x because J sub lambda approaches the identity strongly on the whole space. So G sub lambda x approaches G x on the original domain.
+
+This gives the full chain: shifted inverses produce bounded contractions, those contractions approach the identity, and the bounded Yosida generators approach G wherever G is defined.
+
+## Why these approximants still damp
+
+For any vector x, the real part of the inner product of G sub lambda x with x is lambda times the real part of the inner product of J sub lambda x with x, minus lambda times squared length.
+
+Since J sub lambda is a contraction, the first part cannot exceed lambda times squared length. The result is nonpositive.
+
+Thus G sub lambda is itself dissipative. Because it is bounded, we may exponentiate time times G sub lambda using the ordinary bounded-operator power series. For nonnegative time, the resulting evolution is contractive.
+
+In the diagonal model, the approximate evolution decays each coordinate at the capped rate. As lambda grows, it approaches the true exponential decay on every fixed square-summable sequence. The contraction property prevents the approximation errors from being amplified.
+
+This is why classical Yosida approximation is suited to one-sided, dissipative evolution.
+
+## A related construction for unitary motion
+
+There is another important setting. Suppose A is self-adjoint, but its spectrum extends in both positive and negative directions. We may want unitary motion, which rotates spectral components without changing their lengths.
+
+For that purpose, a symmetric regularizer is often preferable. At a spectral value s it uses R squared times s divided by R squared plus s squared. This is real, bounded in magnitude by R divided by two, and converges to s for every fixed spectral value.
+
+It too comes from resolvents. Take the two shifted inverses of A at positive imaginary R and negative imaginary R, add them, and multiply by R squared divided by two. The result is exactly that symmetric regularizer.
+
+The distinction is worth keeping clear. The classical approximation, built from a positive real shift of a dissipative generator, preserves contractive behavior. The symmetric approximation, built from two imaginary shifts of a self-adjoint operator, preserves self-adjointness and supports unitary behavior.
+
+They share one principle: study an unbounded operator through bounded shifted inverses, then recover the original action on its domain.
 
 <!-- END SPOKEN LECTURE -->
 

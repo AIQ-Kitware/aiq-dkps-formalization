@@ -4,61 +4,127 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# When an unbounded operator generates time evolution
+# Why some evolutions run only forward
 
-The heat equation evolves forward in time and loses energy. The Schrödinger equation, in its unitary formulation, preserves energy and evolves in both time directions. Both involve differential operators that are typically unbounded on their Hilbert spaces. What operator conditions guarantee that such equations define a continuous family of bounded evolutions?
+Think about heat spreading along a metal rod. A sharp temperature pattern smooths out. Its fine-scale oscillations disappear faster than its broad, slowly varying features.
 
-A contraction semigroup is a family S of t, defined for nonnegative time, with three properties. S of zero is the identity. Evolution through time s followed by time t is evolution through s plus t. And the norm of S of t is at most one. We also require strong continuity: for every fixed input vector x, S of t x depends continuously on t in Hilbert-space norm.
+Mathematically, it is tempting to say: take a differential operator, exponentiate it, and let the exponential move the temperature forward in time.
 
-The generator G is the right derivative at time zero, on precisely the vectors for which that derivative exists. That domain may be proper and dense. The Hille–Yosida and Lumer–Phillips theorems explain how resolvent and dissipativity conditions characterize these generators.
+But that is not automatically legitimate. Differential operators are typically unbounded, and exponentiating the wrong one can magnify high-frequency components without limit. We need a condition that guarantees a well-defined bounded evolution for every starting state.
 
-## Dissipativity as an energy inequality
+The Hille–Yosida theorem, together with the Hilbert-space Lumer–Phillips criterion, gives such conditions. Its central ingredients are energy dissipation and the ability to solve a shifted operator equation.
 
-Suppose x is in the domain of G, and the trajectory is differentiable. Differentiating the squared length of the trajectory at time zero gives twice the real part of the inner product of G x with x. If S is contractive, that derivative cannot be positive. Thus every contraction generator satisfies the dissipativity inequality: the real part of the inner product of G x with x is nonpositive.
+We'll start with an explicit heat-like model.
 
-The converse is more demanding. A densely defined dissipative operator might fail to have enough solutions to the equation lambda y minus G y equals x. The additional requirement is that this shifted operator map its domain onto the whole Hilbert space for at least one positive lambda.
+## An infinite set of decaying modes
 
-For a densely defined operator, dissipativity together with that range condition makes G maximally dissipative. The Lumer–Phillips theorem says that its closure, when appropriate, generates a strongly continuous contraction semigroup. In the common closed, densely defined setting, the two conditions are exactly what we need.
+Work on ell two. Define an operator G to multiply coordinate N by negative N squared.
 
-Why does surjectivity matter? Dissipativity controls the norm of a solution if it exists, but only the range condition guarantees that every input has one. We need the resolvent on the entire space to construct an everywhere-defined evolution.
+The first coordinate has decay rate one. The second has decay rate four. The third has decay rate nine. The higher the coordinate number, the faster the corresponding mode should decay.
 
-## Resolvent bounds
+G is unbounded. Its domain consists of sequences for which N squared times the N-th coordinate is still square summable.
 
-Take a positive lambda and solve lambda y minus G y equals x. Taking the real part of the inner product with y and using dissipativity gives lambda times the squared norm of y no greater than the norm of x times the norm of y.
+Now define S of t for nonnegative time by multiplying coordinate N by the exponential of negative N squared times t.
 
-So the resolvent has norm at most one divided by lambda. A resolvent identity then extends appropriate range information across the positive half-line, and each positive lambda has a bounded resolvent with this estimate.
+Every multiplier lies between zero and one. So S of t cannot increase the length of any vector. We call such an operator a contraction.
 
-The Hille–Yosida theorem provides a parallel formulation. A densely defined closed G generates a contraction semigroup precisely when the positive real half-line lies in its resolvent set and every positive integer power of the resolvent has norm at most lambda to the negative power. The one-power estimate and full-range condition in a Hilbert space arise naturally from maximal dissipativity, and then the higher power bounds follow by submultiplicativity.
+At time zero, every multiplier is one and S of zero is the identity. Evolving for time s and then for time t is the same as evolving for time s plus t. These are the semigroup laws.
 
-## Approximate G by bounded generators
+The word semigroup means that we only require nonnegative time. The evolution has a forward direction.
 
-Define J lambda as lambda times the resolvent of lambda minus G. The resolvent estimate makes J lambda a contraction. Define the bounded Yosida generator G lambda as lambda times J lambda minus lambda times identity.
+## Continuity does not mean differentiability everywhere
 
-G lambda is dissipative: for any x, the real part of its inner product with x is at most lambda times the norm of J lambda x times the norm of x, minus lambda times the squared norm of x, which is nonpositive.
+For each fixed ell-two vector, S of t x approaches x as time approaches zero from above.
 
-Because G lambda is bounded, the ordinary exponential series defines S lambda of t as the exponential of t G lambda. Differentiating the squared norm of its action on a vector shows that S lambda of t is contractive for every nonnegative t.
+You can prove this as in the case of rotations: control a finite number of coordinates using ordinary scalar continuity, then use the small squared length of the tail. Contractivity ensures the tail never grows.
 
-On every vector in the domain of G, the bounded generators G lambda converge to G. Their resolvent origins also make these approximants commute with each other, so a Duhamel comparison controls differences between their exponentials on domain vectors. On a bounded time interval, these differences approach zero uniformly for each fixed domain vector.
+This is strong continuity. It is the continuity required in a strongly continuous contraction semigroup.
 
-Now approximate an arbitrary vector by domain vectors. Contractivity prevents the approximation error from growing. Completeness gives a limiting family of contractions on the whole Hilbert space, and the estimates give strong continuity and the semigroup law.
+It is not operator-norm continuity. At any fixed positive time, sufficiently high modes have decayed almost completely. If we test the difference between S of t and the identity on one such basis vector, its norm is almost one, however close t may be to zero. Yet every fixed vector still has a small tail and moves continuously.
 
-This is the constructive content behind the generation theorem: the infinite-dimensional evolution is obtained as the strong limit of ordinary bounded exponentials.
+Now ask whether the trajectory has a derivative at time zero. On coordinate N, the derivative of the exponential factor is negative N squared. So the candidate derivative is G applied to x.
 
-## The heat equation as a model
+Take a vector whose N-th coordinate is one divided by N squared. It belongs to ell two. But G would turn it into the sequence of negative ones, which does not belong to ell two.
 
-Let the Hilbert space be square-integrable functions on an interval with zero boundary values. The Laplacian with Dirichlet boundary conditions has eigenfunctions given by sines and negative eigenvalues proportional to n squared.
+The evolution S of t x exists and is continuous for this vector, but its derivative at time zero does not exist in ell-two norm.
 
-Take G to be this Laplacian. It is dissipative because integration by parts gives the inner product of G f with f equal to minus the squared norm of the derivative, for functions satisfying the boundary conditions. Its spectrum is negative and its positive resolvents exist.
+If we restrict x to the domain of G, the derivative does exist and equals G x.
 
-The generated semigroup multiplies the n-th sine coefficient by an exponential with exponent negative n squared times time, up to the interval's geometric scale. Every mode contracts, and high-frequency modes decay faster. At time zero, the semigroup is strongly continuous on the whole square-integrable space, even though the initial derivative exists only for functions in the operator domain.
+That is how a semigroup can be defined everywhere while its generator remains an unbounded, domain-restricted operator.
 
-Contrast this with the multiplication operator whose eigenvalues are positive n squared. Its exponential grows without bound across high frequencies for positive time and does not define a bounded evolution on the entire Hilbert space. The sign of the generator's spectrum is essential to contractivity.
+## Why negative growth is the right condition
 
-## Groups, semigroups, and reversible motion
+In our example, every spectral value of G is nonpositive. But we want a condition that still makes sense for operators without an eigenvector basis.
 
-If the generator is skew-adjoint, its evolution is unitary and extends to positive and negative times. That is the setting of Stone's theorem. A maximally dissipative generator generally gives only forward contractive motion. Diffusion loses information, and the backwards heat evolution is not bounded on all square-integrable initial data.
+Take an allowed vector x. The real part of the inner product of G x with x measures the instantaneous tendency of its squared length to change. If this quantity is nonpositive for every allowed x, we call G dissipative.
 
-The distinction is mathematical, not terminological. Self-adjointness supports phase-preserving unitary flows after multiplication by the imaginary unit. Maximal dissipativity supports one-sided contraction semigroups. Yosida resolvent approximants provide a common route from an unbounded generator to bounded exponentials in both settings.
+To see the connection, suppose a trajectory x of t is differentiable and satisfies the evolution equation: its derivative equals G applied to x of t. Differentiate its squared length. The result is twice the real part of the inner product of G x of t with x of t.
+
+If G is dissipative, this derivative is nonpositive. The motion cannot increase the norm along such trajectories.
+
+So dissipativity is the infinitesimal version of contractivity.
+
+But it is not enough by itself to build a semigroup. An operator may be dissipative while having a domain too small to provide the solutions needed for a well-defined evolution on the whole Hilbert space.
+
+We need one more condition.
+
+## The missing condition is solvability
+
+Choose a positive number lambda and consider the equation lambda times y minus G y equals x.
+
+If y is a solution, take its inner product with y and then take the real part. Dissipativity gives a lower bound of lambda times squared length of y. Cauchy–Schwarz gives an upper bound of the length of x times the length of y.
+
+Thus the length of y is at most the length of x divided by lambda. The solution, if it exists, is unique and depends continuously on x.
+
+But an estimate on a possible solution does not guarantee that every x has one. We must require the shifted operator lambda identity minus G to map its domain onto the whole Hilbert space.
+
+For a densely defined, closed, dissipative operator on a Hilbert space, surjectivity at one positive lambda is enough. Such an operator is called maximally dissipative. The Lumer–Phillips theorem says that it generates a strongly continuous contraction semigroup.
+
+The same theorem gives the converse: the generator of any strongly continuous contraction semigroup is maximally dissipative.
+
+This is a characterization, not just a convenient sufficient condition.
+
+## How the resolvent constructs the motion
+
+When lambda identity minus G is onto, its inverse is the resolvent at lambda. The estimate we just proved says that the resolvent norm is at most one over lambda.
+
+Multiply it by lambda to obtain a bounded contraction J sub lambda. Then take lambda times J sub lambda minus lambda times identity. This is a bounded Yosida approximation G sub lambda of the generator.
+
+The approximate generator is dissipative. Therefore its ordinary exponential, at any nonnegative time t, is a contraction. Everything here is bounded, so the exponential can be defined by a norm-convergent power series.
+
+As lambda grows, G sub lambda x approaches G x for every vector in the original domain. Comparing the bounded exponentials shows that, on domain vectors, their trajectories become close over each fixed bounded time interval.
+
+Because the domain is dense and every approximating evolution is a contraction, this convergence extends to arbitrary starting vectors. The resulting limit is a strongly continuous contraction semigroup with generator G.
+
+That is the constructive idea behind the generation theorem: solve shifted equations, build bounded generators, exponentiate, and pass to a strong limit.
+
+The Hille–Yosida theorem expresses the conditions in resolvent language. For a densely defined closed contraction generator, every positive lambda belongs to the resolvent set of lambda identity minus G, and the norm of the N-th power of the resolvent is at most one divided by lambda to the N-th power, for every positive integer N.
+
+In a Hilbert space, maximal dissipativity provides the one-resolvent estimate and surjectivity; the higher-power bounds then follow by multiplying the bounded resolvent operators.
+
+## Return to the heat equation
+
+The diagonal model is exactly what appears when the heat equation on an interval is written in its sine-wave coordinates.
+
+Take square-integrable functions on the interval from zero to pi, with temperature fixed at zero at both endpoints. The spatial second-derivative operator, with its Dirichlet boundary conditions, sends the N-th sine wave to negative N squared times that sine wave.
+
+So a temperature profile can be expanded into sine waves, and each coefficient decays at the rate from our diagonal model. Broad modes decay slowly; fine-scale modes disappear quickly.
+
+The evolution is contractive because no coefficient grows. It is strongly continuous on the entire square-integrable space. But taking a derivative at time zero requires additional regularity of the initial temperature profile, exactly the condition that places it in the domain of the Laplacian.
+
+Now imagine reversing the sign of the Laplacian. Each sine coefficient would grow like the exponential of positive N squared times time. For any positive time, these multipliers are unbounded as N grows. That formula does not define a bounded evolution on every square-integrable initial state.
+
+The sign and the solvability conditions really do determine whether an evolution is well-posed on the chosen Hilbert space.
+
+## Forward semigroups and reversible groups
+
+A unitary group preserves lengths and allows both positive and negative times. For a self-adjoint A, multiplying A by the imaginary unit gives the skew-adjoint generator of such a group.
+
+A contraction semigroup allows loss of length and requires only forward time. Its generator is maximally dissipative, and it need not permit a bounded inverse evolution for negative time.
+
+Heat diffusion illustrates the difference. Forward time suppresses high-frequency information. Reversing time would require restoring those modes by arbitrarily large amplification.
+
+The general lesson is that an unbounded operator can generate a bounded evolution, but the operator must have enough domain and resolvent structure to support it. Dissipativity controls growth; surjectivity of a shifted operator supplies solvability; Yosida approximation turns both ingredients into a constructive family of bounded evolutions.
 
 <!-- END SPOKEN LECTURE -->
 

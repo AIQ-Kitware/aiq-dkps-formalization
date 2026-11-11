@@ -4,101 +4,159 @@
 
 <!-- BEGIN SPOKEN LECTURE -->
 
-# A bounded solution from two unbounded operators
+# A spectral gap turns into a bound on a Sylvester solution
 
-The Sylvester equation A X minus X B equals C can have a bounded solution even when the self-adjoint coefficient operators A and B are unbounded. The difficulty is that X must carry the domain of B into the domain of A, while the equation and its norm bound must be proved simultaneously.
+Suppose two numbers lie on opposite sides of a gap. One is three, and the other is negative one. Consider the equation: three times an unknown, minus the unknown times negative one, equals a prescribed number c.
 
-The crucial assumption in our first proof is that the spectra are ordered across a positive gap. We will construct the solution by an exponentially decaying integral, verify the unbounded equation on its legal domain, prove uniqueness, and connect the estimate to sine-theta perturbation bounds.
+The unknown is c divided by four. And four is the distance between those two numbers.
 
-## Set up the ordered equation
+This is the scalar version of a Sylvester equation. If we replace the two numbers by self-adjoint operators, does separation of their spectra still control the solution?
 
-Let A be self-adjoint on a Hilbert space E, and B self-adjoint on a Hilbert space F. Suppose A is bounded below by a real number a and B is bounded above by a real number b, where a is strictly greater than b.
+Yes, provided we state the separation and the operator domains correctly. The striking part is that the two coefficient operators may be unbounded, yet their Sylvester solution can be bounded by the reciprocal of the gap.
 
-Set delta equal to a minus b. It is positive.
+We will see why an integral of decaying exponentials produces the solution, and why a domain argument is needed before the formula really solves the equation.
 
-Let C be any bounded map from F into E. We seek a bounded map X such that X sends D of B into D of A, and A X y minus X B y equals C y for every y in D of B.
+## From division by a gap to an integral
 
-Observe that the two source and target spaces need not be the same. We cannot assume either A or B has a finite operator norm. Only C and the desired solution X are required to be bounded.
+Return to the scalar equation. Three minus negative one is four, so the answer is c divided by four.
 
-## Construct the solution by an integral
+There is another way to produce that number. Multiply c by the exponential of negative four times time, then integrate from time zero to infinity. The integral equals c divided by four.
 
-For nonnegative time t, let the left semigroup be the exponential of negative t A, and the right semigroup the exponential of t B. Both are bounded by the spectral calculus.
+Why use the integral instead of ordinary division? Because for operators, the expression A X minus X B contains multiplication on different sides of the unknown X. We cannot in general factor X and divide by A minus B as if they were scalar numbers.
 
-Define X y, for each y in F, as the integral from zero to infinity of the left semigroup, followed by C, followed by the right semigroup, applied to y.
+But we can still multiply by an exponential of A on the left, multiply by an exponential of B on the right, and integrate the result.
 
-The earlier form estimates show that the norm of this integrand is bounded by the norm of C times the exponential of negative delta times t, multiplied by the norm of y.
+This leads to a construction that works even when A and B are unbounded.
 
-Because delta is positive, this scalar function is integrable over the positive half-line. The integral therefore defines a vector X y, and the inequality shows that X is a bounded linear map.
+## What an ordered spectral gap means
 
-The operator norm of X is at most the norm of C divided by delta. We have obtained the same constant-one estimate as in the bounded ordered-spectra theory without requiring A or B to be bounded.
+Let A be self-adjoint on a Hilbert space E and B self-adjoint on a possibly different Hilbert space F.
 
-This construction can be understood using vector-valued integration. For each y, the integrand is a continuous E-valued function of t with an integrable norm majorant. We form X y by integrating that function. Strong continuity is sufficient for this step; we need not pretend that the semigroups are continuous in operator norm at zero.
+Suppose every spectral value of A lies at or above a real number a. Suppose every spectral value of B lies at or below a smaller number b.
 
-## The equation requires an additional proof
+Define delta to be a minus b. Delta is positive. It is an ordered spectral gap: all the spectrum of A lies above all the spectrum of B.
 
-The integral estimate tells us that X is bounded. It does not yet prove that X y belongs to D of A when y belongs to D of B.
+Let C be any bounded map from F to E. We seek a bounded map X, also from F to E, satisfying A X minus X B equals C.
 
-To establish the operator equation, take y in D of B and a test vector x in D of A. Consider the scalar inner product between x and the integrand at time t.
+Because the operators can be unbounded, this equation comes with a domain condition. For every y in the domain of B, X y must belong to the domain of A. Only then can we demand that A X y minus X B y equal C y.
 
-We may differentiate this scalar function. On the left, self-adjointness moves A from the potentially illegal output onto the test vector x, where A is defined. On the right, y belongs to D of B, so differentiating the B semigroup is legitimate.
+Notice that neither A nor B needs a finite operator norm. The useful hypotheses are one-sided spectral bounds and a strictly positive gap.
 
-The derivative is the negative pairing with A x plus the pairing involving B y. Integrate from zero to a finite time T. At zero the semigroups are identities, so the integrand is C y. At time T the exponential gap estimate makes the endpoint tend to zero as T tends to infinity.
+## Why the integral converges
 
-After passing to the limit we obtain, for every test vector x in D of A, an identity that pairs A x with X y and pairs x with X B y plus C y.
+For nonnegative time t, consider the exponential of negative t A. Because A is bounded below by a, its spectral multiplier is at most the exponential of negative a times t. The spectral theorem therefore defines a bounded operator, even when A itself is unbounded.
 
-This identity says that the functional obtained by pairing A x with X y is represented by the Hilbert-space vector X B y plus C y.
+Likewise, because B is bounded above by b, the exponential of positive t B is bounded in norm by the exponential of b times t.
 
-By the definition of the adjoint, this places X y in D of A star. Since A is self-adjoint, D of A star equals D of A. Its value is exactly X B y plus C y.
+Now compose three maps. First apply the exponential of t B to a vector in F. Then apply C to move into E. Finally apply the exponential of negative t A.
 
-Rearranging gives A X y minus X B y equals C y. We have now verified both required parts of the domain-aware Sylvester equation.
+The norm of this composition is at most the norm of C times the exponential of negative delta times t.
 
-The test-vector argument is the step that a formal manipulation of unbounded exponentials would omit.
+That is the essential calculation. The exponent is negative because a is greater than b. The two spectral bounds work together to produce decay.
 
-## Uniqueness of a bounded solution
+Individually, one exponential might not decay. If a is negative, the upper bound for the left exponential may grow. If b is positive, the upper bound for the right exponential may grow. But their product still decays at the gap rate.
 
-Suppose X and Y are two bounded solutions with the same C, both satisfying the domain-mapping condition. Their difference Z solves the homogeneous equation A Z minus Z B equals zero on D of B.
+Integrate the three-map composition from time zero to infinity. For each fixed input y, the integrand is a continuous E-valued function, and its length is bounded by an integrable exponential.
 
-The ordered semigroup identity now implies that the function of t given by the exponential of negative t A, followed by Z, followed by the exponential of t B is constant in t.
+So the integral defines a vector X y and therefore a bounded linear operator X.
 
-To see this, differentiate pairings with domain test vectors. The derivative contains negative A Z plus Z B, which vanishes by the homogeneous equation. Density extends the result to every test vector.
+Integrating the norm estimate gives the bound: the norm of X is at most the norm of C divided by delta.
 
-At time zero the value is Z. But the exponential gap estimate bounds its norm by the norm of Z times the exponential of negative delta times t. This tends to zero as t grows.
+We have already obtained the quantitative result. A larger ordered gap forces a smaller response to a fixed forcing term C.
 
-The same operator cannot be both constant and convergent to zero unless it is zero. Therefore Z is zero and X equals Y.
+But there is something we have not proved yet.
 
-Existence and uniqueness are both established. The estimate is independent of whether the two spaces are finite-dimensional.
+## A bounded integral is not automatically a solution
 
-## Sharpness on a diagonal model
+The estimate says X is bounded. It does not say X maps the domain of B into the domain of A.
 
-Return to ell two. Let A have eigenvalues N plus two and B have eigenvalues negative N, with N starting at one. Their ordered spectral gap is four.
+If we formally differentiate the integrand with respect to time, we get negative A applied on the left, plus B applied on the right. Integrating that derivative should give the desired Sylvester equation.
 
-Take C to be the identity map. The integral defining X acts coordinatewise. On coordinate N, the integrand is the exponential of negative two N plus two times t. Its integral is one divided by two N plus two.
+The problem is that writing A times the integral could be illegal. An unbounded operator cannot simply be passed through an integral without a domain argument.
 
-Thus X is diagonal with coefficients one divided by two N plus two. Its largest coefficient is one fourth, attained on the first basis vector.
+There are two ways to make the calculation rigorous. One uses cutoffs and closedness. Another uses the adjoint and test vectors. The second is especially instructive because it makes the missing domain condition appear at the end of the calculation.
 
-The norm of C is one, the gap is four, and the norm of X is exactly one fourth. So the bound is attained. The constant one cannot be improved in this class of ordered-gap problems.
+Take an input y from the domain of B. Then choose a test vector x from the domain of A.
 
-This example also makes the domain equation explicit: multiplying by A, subtracting the effect of B, and using the common denominator returns the original coordinate.
+Instead of applying A to the unknown X y, pair the integrand with x. Because A is self-adjoint, we may move A onto the legal test vector x. And because y belongs to the domain of B, we can differentiate the exponential of t B applied to y.
 
-## What changes for spectra separated but not ordered
+Now the scalar pairing can be differentiated without ever assuming that X y already belongs to the domain of A.
 
-If two spectra have positive pairwise distance but interlace, the single decaying semigroup above is no longer available. We cannot choose one sign of time that makes all spectral differences decay simultaneously.
+Integrate that scalar derivative from zero to a finite time T. At time zero, both exponentials are the identity, so the initial term is the pairing with C y.
 
-For bounded self-adjoint coefficients with separated spectra, a two-sided Fourier integral of unitary groups against a reciprocal kernel can solve the Sylvester equation. The construction gives an operator-norm estimate with the pi-over-two factor under its precise separation hypotheses. Unlike ordered-gap exponential decay, the method accommodates interlaced spectral sets.
+At time T, the exponential gap estimate shows that the remaining boundary term tends to zero as T grows.
 
-The unbounded extension requires strongly continuous groups and the domain arguments we have just practiced. We should not silently replace a gap based on ordered half-lines by an arbitrary disjoint-spectrum hypothesis while retaining the same constant-one proof.
+After taking the limit, we obtain this statement: for every test vector x in the domain of A, the pairing of A x with X y equals the pairing of x with X B y plus C y.
 
-The Davis-Kahan estimate also has variants under ordered half-line separation and interval-versus-exterior spectral placement. These are specific gap configurations; simply assuming the two spectra are disjoint does not automatically justify the same constant.
+What does that mean?
 
-## Return to subspace perturbations
+The expression on the right is the inner product with a fixed Hilbert-space vector, namely X B y plus C y. So the functional that sends x to the pairing of A x with X y is represented by a Hilbert-space vector.
 
-Let A and A plus V be the two self-adjoint operators with a bounded perturbation of the original operator, with P and Q their selected spectral projections. Their compressed cross map X obeys a domain-aware Sylvester equation whose right side is a compressed part of V.
+That is precisely the criterion for X y to belong to the domain of the adjoint of A.
 
-If the two restricted spectra are ordered across a positive gap delta, the theorem we proved gives the norm of X at most the norm of V divided by delta.
+Since A is self-adjoint, its adjoint is A itself, with the same domain. Therefore X y belongs to the domain of A, and A X y equals X B y plus C y.
 
-Because X is identity minus P restricted to Q H, its norm is the largest directed sine of the angle from Q H toward P H. We have therefore converted an unbounded operator perturbation into a geometrical angle estimate.
+Rearrange, and we have the desired Sylvester equation on the domain of B.
 
-Controlling every singular-value prefix, rather than only the operator norm, allows ideal-norm estimates that account for many angular directions at once.
+The weak calculation has supplied exactly what the formal calculation was missing: a proof that the output of X is a legal input for A.
+
+## Why the bounded solution is unique
+
+Could there be another bounded operator Y satisfying the same equation and domain condition?
+
+Subtract the two solutions and call the difference Z. The forcing terms cancel, giving A Z minus Z B equals zero on the domain of B.
+
+Consider the same three-part composition used in the integral, but replace C with Z. At time t it is the exponential of negative t A, followed by Z, followed by the exponential of t B.
+
+Because Z solves the homogeneous equation, differentiating appropriate test-vector pairings shows that this composition does not change with time. It remains equal to Z.
+
+On the other hand, the ordered spectral gap bounds its norm by the norm of Z times the exponential of negative delta times t. That upper bound tends to zero as time grows.
+
+A constant bounded operator that tends to zero must be the zero operator. Hence Z is zero, and the two solutions coincide.
+
+We have existence, domain preservation, uniqueness, and a quantitative norm estimate.
+
+## See the sharp constant in an infinite example
+
+Take E and F both equal to ell two. Let A multiply coordinate N by N plus two, and B multiply it by negative N, for N starting at one.
+
+The spectrum of A begins at three and increases without bound. The spectrum of B begins at negative one and decreases without bound. So their ordered gap is four.
+
+Let C be the identity. On coordinate N, our integral has multiplier equal to the integral of the exponential of negative two N plus two times t.
+
+That integral is one divided by two N plus two. Thus X multiplies coordinate N by one divided by two N plus two.
+
+The largest multiplier is one fourth, on coordinate one. Therefore the norm of X equals one fourth, the norm of C equals one, and the gap equals four.
+
+The bound is attained exactly. The constant one in the ordered-gap estimate cannot be lowered in general.
+
+Notice what the example has accomplished. A and B are both unbounded. X is bounded. We can check the domain mapping directly, and the numerical norm bound is sharp.
+
+## When separation has no single direction
+
+Now suppose the two spectra are separated by a positive distance but their pieces alternate along the real line. Some spectral values of A may lie above B, while other values lie below it.
+
+There is no single choice of the two exponentials that makes every spectral difference decay in the same time direction. So the ordered-gap integral no longer provides the same constant-one proof.
+
+There is a more general Sylvester theorem for self-adjoint operators whose spectra have positive distance without an ordering assumption. It uses a two-sided integral of unitary groups with a Fourier kernel representing reciprocal spectral differences.
+
+That argument gives a universal operator-norm bound with the factor pi divided by two in place of one. In the unbounded setting, the bounded solution must again satisfy the strong, domain-aware Sylvester equation.
+
+The change of constant reflects a genuine change of hypothesis. Positive distance between spectral sets is weaker than putting all of one set strictly above all of the other.
+
+## Turn the bound into an angle estimate
+
+One important application comes from perturbing a self-adjoint operator A by a bounded self-adjoint V.
+
+Let P select a spectral subspace of A, and let Q select a spectral subspace of A plus V. Consider the map that takes vectors in the range of Q and projects them onto the orthogonal complement of the range of P.
+
+That cross map measures the directed sine of the angles between the selected subspaces. A domain-aware calculation shows that it satisfies a Sylvester equation. The forcing term is a compression of V, so its norm is no greater than the norm of V.
+
+If the corresponding restricted spectra have an ordered gap delta, the theorem gives a directed-sine bound: the norm of the cross map is at most the norm of V divided by delta.
+
+The same mechanism explains the structure of more refined perturbation estimates. Spectral separation controls the solution of an operator equation. That solution describes how much a selected subspace points into the complementary directions.
+
+The ordered-gap estimate is therefore a precise bridge between the location of spectra and the geometry of spectral subspaces, valid even when the underlying self-adjoint operators are unbounded.
 
 <!-- END SPOKEN LECTURE -->
 
