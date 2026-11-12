@@ -2,21 +2,52 @@
 
 This is a **standalone, programmatically generated figure draft** for the
 Davis--Kahan sine-theta theorem. It is not included in the journal paper or
-its LaTeX build, and its SVG is text-based, not a binary image asset.
+its LaTeX build. The preferred version is now a Manim scene, with the older
+text-only SVG retained as an earlier draft.
 
-- `render.py` is the source of the SVG: named groups, explicit coordinates,
-  formula labels, and checks, using only Python's standard library.
-- `sine_theta_players.svg` is its editable vector output.
-- No fonts, PNGs, or raster images are stored in this figure directory.
+- **`manim_scene.py` is the preferred typeset slide source.** It uses
+  Manim `Tex` and `MathTex` for genuine LaTeX spacing and computes positions
+  from the actual rendered text bounds rather than Unicode subscript glyphs.
+- `sine_theta_figure_model.py` contains the small independent numerical
+  model and reads the actual semantic colors from the journal's symbol registry.
+- `render.py` / `sine_theta_players.svg` are the **earlier SVG draft**,
+  retained for comparison. They are not the new Manim output and will not
+  reflect subsequent Manim-only layout changes.
+- No fonts, PNGs, or raster images are stored in the figure directory.
 
-To regenerate and check from the repository root:
+To render the new slide (from the repository root):
+
+```bash
+cd visualizations
+uv run --extra manim python -m manim -s -qh \
+  figures/sine_theta_players/manim_scene.py SineThetaGeometryScene
+```
+
+The command creates a PNG through Manim's normal `media/images/` output
+structure. The slide is deliberately static so labels and equations can be
+inspected before any animation work. Manim uses a LaTeX toolchain and SVG
+conversion, just like other visualizations already in this repository.
+
+Run source/model checks without rendering (from repository root):
+
+```bash
+python visualizations/figures/sine_theta_players/sine_theta_figure_model.py
+python -m py_compile visualizations/figures/sine_theta_players/manim_scene.py
+```
+
+During a Manim render, a final bounds check tests every typeset label for
+frame overflow and substantive label-to-label collisions. It raises rather
+than accepting a crowded slide. The new scene has not been included in the
+journal paper's figure imports or compilation targets.
+
+The older SVG remains regenerable from the repository root:
 
 ```bash
 python visualizations/figures/sine_theta_players/render.py
 python visualizations/figures/sine_theta_players/render.py --check
 ```
 
-Optional preview outside the repository:
+Optional preview of the **older SVG draft** outside the repository:
 
 ```bash
 inkscape visualizations/figures/sine_theta_players/sine_theta_players.svg \
@@ -105,10 +136,10 @@ F_1* R(1) = (0.7-rho) sin(theta)
 Lambda_1 X(1) - X A_0(1) = (0.7-rho) sin(theta)
 ```
 
-`render.py --check` verifies the unit vector, exact decomposition,
-orthogonality, complementary readout, residual orthogonality for the Rayleigh
-choice, the Sylvester identity, and the scalar gap estimate. It also parses
-the SVG and verifies the ambient geometry group exists.
+`sine_theta_figure_model.py` verifies the unit vector, exact decomposition,
+residual orthogonality for the Rayleigh choice, the Sylvester identity, and
+the scalar gap estimate, and reads the paper's actual colors. The legacy
+`render.py --check` continues to validate the original SVG.
 
 The numerical model is finite-dimensional and ordered. The actual theorem
 also covers infinite-dimensional spaces and unbounded operators with the
@@ -128,6 +159,11 @@ The palette matches the mathematical-symbol registry in
 | Residual | Green `#087D43` |
 | Spectral gap | Violet `#6E4BD8` |
 
-The SVG requests **TeX Gyre Pagella** for prose and **STIX** for mathematics,
-with serif fallbacks. Fonts are referenced by name, never redistributed.
-Every visual object is generated from editable SVG elements with named groups.
+The **new Manim scene** uses LaTeX (`Tex` and `MathTex`) with the Latin Modern
+Roman font family, so operators, superscripts, indices, and equation spacing
+follow TeX rules. Its palette is read directly from the journal's
+`math_symbol_colors.tex`, avoiding a second hard-coded palette.
+
+The older SVG requests TeX Gyre Pagella and STIX as available system fonts;
+its glyph positions are not used by the Manim version. Fonts are not
+redistributed in the repository or ZIP overlay.
