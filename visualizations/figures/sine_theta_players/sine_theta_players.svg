@@ -1,149 +1,132 @@
 <?xml version='1.0' encoding='utf-8'?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1100" viewBox="0 0 1800 1100" role="img" aria-label="Sine-theta theorem notation: coordinate maps, rank-one geometry, Sylvester identity and spectral gap">
-  <title>Sine-theta theorem: the players and how they connect</title>
-  <desc>Deterministically constructed diagram. The coordinate spaces F, F_ex, and G embed in E through E_0, F_0, and F_1. A rank-one example shows the trial direction at 40 degrees to the wanted eigenspace and its unwanted component. The bottom panels give the residual and Sylvester identity and the exact separation delta between rho and lambda_1.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1120" viewBox="0 0 1800 1120" role="img" aria-label="Sine-theta theorem geometry. Orthogonal wanted and unwanted subspaces span E; a nearly aligned trial direction decomposes into their components. Other panels define coordinate maps, the residual and spectral separation.">
+  <title>Geometry and notation of the sine-theta theorem</title>
+  <desc>Programmatic, two-dimensional rank-one example with theta=12 degrees. The blue wanted and cyan complementary axes jointly span the ambient plane. The amber trial vector lies near the wanted axis and splits into wanted and complementary projections. Three coordinate systems map into the same E.</desc>
   <defs>
-    <marker id="tip-blue" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#235cca" />
+    <marker id="tip-ink" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="6.8" markerHeight="6.8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#1B1F24" />
     </marker>
-    <marker id="tip-green" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#187a5d" />
+    <marker id="tip-trial" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="6.8" markerHeight="6.8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#A66705" />
     </marker>
-    <marker id="tip-violet" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7954bf" />
+    <marker id="tip-wanted" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="6.8" markerHeight="6.8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#1F6FD1" />
     </marker>
-    <marker id="tip-orange" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b65f22" />
+    <marker id="tip-unwanted" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="6.8" markerHeight="6.8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#007C91" />
     </marker>
-    <marker id="tip-ink" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#17253a" />
+    <marker id="tip-gap" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="6.8" markerHeight="6.8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#6E4BD8" />
     </marker>
   </defs>
-  <rect x="0" y="0" width="1800" height="1100" rx="0" fill="#f6f8fc" stroke="#f6f8fc" stroke-width="0" />
-  <g id="heading">
-    <title>Names and types match the sine-theta section of the journal manuscript.</title>
-    <text x="58.00" y="65.00" fill="#17253a" font-size="45" font-weight="750" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">Sine-theta: who is who?</text>
-    <text x="59.00" y="110.00" fill="#5c6b7e" font-size="22" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">Trial coordinates, exact spectral coordinates, and the angle between their images</text>
-    <rect x="1450" y="44" width="292" height="37" rx="10" fill="#e9edf4" stroke="#e9edf4" stroke-width="0" />
-    <text x="1462.00" y="70.00" fill="#5c6b7e" font-size="20" font-weight="600" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">Rank-one example: E = R<tspan baseline-shift="super" font-size="14.60" font-style="normal">2</tspan>
+  <rect x="0" y="0" width="1800" height="1120" rx="0" fill="#F7F9FC" stroke="none" stroke-width="1.3" />
+  <text x="60.00" y="69.00" fill="#1B1F24" font-size="47" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">Geometry and Notation of the Sine-Theta Theorem</text>
+  <text x="61.00" y="112.00" fill="#6B7280" font-size="23" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">One ambient space, an exact orthogonal decomposition, and a nearby trial subspace</text>
+  <line x1="61.00" y1="136.00" x2="1738.00" y2="136.00" stroke="#D7E0EA" stroke-width="1.5" stroke-linecap="round" />
+  <g id="ambient-geometry">
+    <title>Exact subspaces span E; a trial line is slightly tilted</title>
+    <rect x="55" y="158" width="1070" height="666" rx="20" fill="#FFFFFF" stroke="#D7E0EA" stroke-width="1.3" />
+    <text x="84.00" y="207.00" fill="#1B1F24" font-size="28" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">1   Ambient geometry and exact decomposition</text>
+    <text x="85.00" y="258.00" fill="#36516A" font-size="32" font-weight="680" text-anchor="start" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="normal">E = ran(F<tspan baseline-shift="sub" font-size="23.36" font-style="normal">0</tspan>) ⊕ ran(F<tspan baseline-shift="sub" font-size="23.36" font-style="normal">1</tspan>)</text>
+    <text x="85.00" y="293.00" fill="#6B7280" font-size="19" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">Every ambient vector has a unique wanted and complementary component.</text>
+    <rect x="85" y="315" width="1008" height="482" rx="15" fill="#F4F7FB" stroke="#DEE7F0" stroke-width="1.3" />
+    <text x="106.00" y="353.00" fill="#36516A" font-size="30" font-weight="700" text-anchor="start" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="italic">E</text>
+    <text x="145.00" y="351.00" fill="#6B7280" font-size="17.5" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">rank-one model: E = R<tspan baseline-shift="super" font-size="12.78" font-style="normal">2</tspan>
     </text>
-    <text x="59.00" y="151.00" fill="#235cca" font-size="19" font-weight="500" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">Key distinction: F, F<tspan baseline-shift="sub" font-size="13.87" font-style="normal">ex</tspan>, and G are coordinate spaces; their images under the frames are subspaces of E.</text>
+    <line x1="167.00" y1="678.00" x2="1032.00" y2="678.00" stroke="#1F6FD1" stroke-width="3.6" stroke-linecap="round" marker-end="url(#tip-wanted)" id="exact-wanted-axis" />
+    <line x1="346.00" y1="761.00" x2="346.00" y2="382.00" stroke="#007C91" stroke-width="3.6" stroke-linecap="round" marker-end="url(#tip-unwanted)" id="exact-complement-axis" />
+    <line x1="346.00" y1="678.00" x2="858.55" y2="678.00" stroke="#1F6FD1" stroke-width="5.0" stroke-linecap="round" id="wanted-component" />
+    <line x1="858.55" y1="678.00" x2="858.55" y2="569.05" stroke="#007C91" stroke-width="4.0" stroke-linecap="round" stroke-dasharray="6 5" id="unwanted-component" />
+    <line x1="346.00" y1="678.00" x2="858.55" y2="569.05" stroke="#A66705" stroke-width="5.0" stroke-linecap="round" marker-end="url(#tip-trial)" id="trial-vector" />
+    <circle cx="346.00" cy="678.00" r="5.3" fill="#36516A" />
+    <circle cx="858.55" cy="569.05" r="7" fill="#A66705" />
+    <circle cx="858.55" cy="678.00" r="5.4" fill="#1F6FD1" />
+    <path d="M 838.55 678.00 v -20 h 20" fill="none" stroke="#6B7280" stroke-width="1.5" stroke-linecap="round" />
+    <path d="M 451.00 678.00 A 105 105 0 0 0 448.71 656.17" fill="none" stroke="#D12A7B" stroke-width="3.0" stroke-linecap="round" />
+    <text x="467.00" y="663.00" fill="#D12A7B" font-size="22" font-weight="650" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">θ = 12°</text>
+    <text x="369.00" y="393.00" fill="#007C91" font-size="24" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">ran(F<tspan baseline-shift="sub" font-size="17.52" font-style="normal">1</tspan>)</text>
+    <text x="371.00" y="421.00" fill="#6B7280" font-size="17" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">exact complement</text>
+    <text x="930.00" y="663.00" fill="#1F6FD1" font-size="24" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">ran(F<tspan baseline-shift="sub" font-size="17.52" font-style="normal">0</tspan>)</text>
+    <text x="930.00" y="692.00" fill="#6B7280" font-size="17" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">exact wanted</text>
+    <text x="683.00" y="545.00" fill="#A66705" font-size="25" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">ran(E<tspan baseline-shift="sub" font-size="18.25" font-style="normal">0</tspan>)</text>
+    <text x="683.00" y="574.00" fill="#6B7280" font-size="17" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">trial direction</text>
+    <text x="872.55" y="564.05" fill="#A66705" font-size="21" font-weight="650" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">v = E<tspan baseline-shift="sub" font-size="15.33" font-style="normal">0</tspan>(1)</text>
+    <text x="876.55" y="627.00" fill="#007C91" font-size="22" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">S(1)</text>
+    <text x="876.55" y="651.00" fill="#6B7280" font-size="17" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">unwanted part</text>
+    <text x="695.00" y="718.00" fill="#1F6FD1" font-size="22" font-weight="650" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">P<tspan baseline-shift="sub" font-size="16.06" font-style="normal">ex</tspan> v</text>
+    <text x="696.00" y="744.00" fill="#6B7280" font-size="17" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">wanted part</text>
+    <rect x="105" y="757" width="963" height="31" rx="7" fill="#FFFFFF" stroke="none" stroke-width="1.3" />
+    <text x="117.00" y="780.00" fill="#1B1F24" font-size="19" font-weight="550" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">v = P<tspan baseline-shift="sub" font-size="13.87" font-style="normal">ex</tspan> v + (I − P<tspan baseline-shift="sub" font-size="13.87" font-style="normal">ex</tspan>)v    ;    X = F<tspan baseline-shift="sub" font-size="13.87" font-style="normal">1</tspan>
+      <tspan baseline-shift="super" font-size="13.87" font-style="normal">∗</tspan>E<tspan baseline-shift="sub" font-size="13.87" font-style="normal">0</tspan> reads off the unwanted coordinates.</text>
   </g>
-  <g id="coordinates-and-embeddings">
-    <title>The three coordinate Hilbert spaces and the isometries into E.</title>
-    <rect x="55" y="183" width="840" height="550" rx="18" fill="#ffffff" stroke="#d4deeb" stroke-width="1.5" />
-    <text x="86.00" y="232.00" fill="#17253a" font-size="26" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">1   Coordinate spaces and embeddings</text>
-    <g id="space-f">
-      <title>trial coordinates</title>
-      <rect x="97" y="267" width="230" height="114" rx="14" fill="#eaf2ff" stroke="#235cca" stroke-width="2" />
-      <text x="112.00" y="304.00" fill="#235cca" font-size="29" font-weight="700" text-anchor="start" font-family="STIXGeneral, 'STIX Math', 'TeXGyrePagella', serif" font-style="italic">F</text>
-      <text x="112.00" y="329.00" fill="#17253a" font-size="15" font-weight="500" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">trial coordinates</text>
-      <text x="112.00" y="359.00" fill="#235cca" font-size="15" font-weight="600" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">A<tspan baseline-shift="sub" font-size="10.95" font-style="normal">0</tspan>: trial operator</text>
-    </g>
-    <g id="space-f-ex">
-      <title>wanted exact coordinates</title>
-      <rect x="361" y="267" width="230" height="114" rx="14" fill="#e9f7f0" stroke="#187a5d" stroke-width="2" />
-      <text x="376.00" y="304.00" fill="#187a5d" font-size="29" font-weight="700" text-anchor="start" font-family="STIXGeneral, 'STIX Math', 'TeXGyrePagella', serif" font-style="italic">F<tspan baseline-shift="sub" font-size="21.17" font-style="normal">ex</tspan>
+  <g id="coordinate-embeddings">
+    <title>All frames embed separate abstract coordinate spaces into the same E</title>
+    <rect x="1145" y="158" width="600" height="666" rx="20" fill="#FFFFFF" stroke="#D7E0EA" stroke-width="1.3" />
+    <text x="1173.00" y="207.00" fill="#1B1F24" font-size="27" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">2   Coordinates and embeddings</text>
+    <text x="1175.00" y="251.00" fill="#6B7280" font-size="19" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">The coordinate spaces need not be subsets of E.</text>
+    <g id="row-wanted">
+      <title>F_ex maps via F₀ to ran(F₀) ⊂ E</title>
+      <rect x="1175" y="298" width="540" height="101" rx="13" fill="#EAF2FF" stroke="#1F6FD1" stroke-width="1.3" />
+      <text x="1195.00" y="340.00" fill="#1F6FD1" font-size="30" font-weight="650" text-anchor="start" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="italic">F<tspan baseline-shift="sub" font-size="21.90" font-style="normal">ex</tspan>
       </text>
-      <text x="376.00" y="329.00" fill="#17253a" font-size="15" font-weight="500" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">wanted exact coordinates</text>
+      <line x1="1295.00" y1="336.00" x2="1361.00" y2="336.00" stroke="#1F6FD1" stroke-width="2.6" stroke-linecap="round" marker-end="url(#tip-wanted)" />
+      <text x="1326.00" y="326.00" fill="#1F6FD1" font-size="20" font-weight="650" text-anchor="middle" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="normal">F<tspan baseline-shift="sub" font-size="14.60" font-style="normal">0</tspan>
+      </text>
+      <text x="1382.00" y="342.00" fill="#1F6FD1" font-size="22" font-weight="660" text-anchor="start" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="normal">ran(F<tspan baseline-shift="sub" font-size="16.06" font-style="normal">0</tspan>) ⊂ E</text>
+      <text x="1196.00" y="377.00" fill="#6B7280" font-size="17" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">wanted exact coordinates</text>
     </g>
-    <g id="space-g">
-      <title>unwanted exact coordinates</title>
-      <rect x="625" y="267" width="230" height="114" rx="14" fill="#f3edfc" stroke="#7954bf" stroke-width="2" />
-      <text x="640.00" y="304.00" fill="#7954bf" font-size="29" font-weight="700" text-anchor="start" font-family="STIXGeneral, 'STIX Math', 'TeXGyrePagella', serif" font-style="italic">G</text>
-      <text x="640.00" y="329.00" fill="#17253a" font-size="15" font-weight="500" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">unwanted exact coordinates</text>
-      <text x="640.00" y="359.00" fill="#7954bf" font-size="15" font-weight="600" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">Λ<tspan baseline-shift="sub" font-size="10.95" font-style="normal">1</tspan>: complementary block</text>
+    <g id="row-unwanted">
+      <title>G maps via F₁ to ran(F₁) ⊂ E</title>
+      <rect x="1175" y="417" width="540" height="101" rx="13" fill="#E5F6F9" stroke="#007C91" stroke-width="1.3" />
+      <text x="1195.00" y="459.00" fill="#007C91" font-size="30" font-weight="650" text-anchor="start" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="italic">G</text>
+      <line x1="1295.00" y1="455.00" x2="1361.00" y2="455.00" stroke="#007C91" stroke-width="2.6" stroke-linecap="round" marker-end="url(#tip-unwanted)" />
+      <text x="1326.00" y="445.00" fill="#007C91" font-size="20" font-weight="650" text-anchor="middle" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="normal">F<tspan baseline-shift="sub" font-size="14.60" font-style="normal">1</tspan>
+      </text>
+      <text x="1382.00" y="461.00" fill="#007C91" font-size="22" font-weight="660" text-anchor="start" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="normal">ran(F<tspan baseline-shift="sub" font-size="16.06" font-style="normal">1</tspan>) ⊂ E</text>
+      <text x="1196.00" y="496.00" fill="#6B7280" font-size="17" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">complementary exact coordinates</text>
     </g>
-    <line x1="212.00" y1="382.00" x2="212.00" y2="475.00" stroke="#235cca" stroke-width="3" stroke-linecap="round" marker-end="url(#tip-blue)" id="embed-blue" />
-    <rect x="225" y="399" width="65" height="37" rx="10" fill="#eaf2ff" stroke="#eaf2ff" stroke-width="0" />
-    <text x="237.00" y="425.00" fill="#235cca" font-size="20" font-weight="600" text-anchor="start" font-family="STIXGeneral, 'STIX Math', 'TeXGyrePagella', serif" font-style="italic">E<tspan baseline-shift="sub" font-size="14.60" font-style="normal">0</tspan>
-    </text>
-    <line x1="476.00" y1="382.00" x2="476.00" y2="475.00" stroke="#187a5d" stroke-width="3" stroke-linecap="round" marker-end="url(#tip-green)" id="embed-green" />
-    <rect x="489" y="399" width="65" height="37" rx="10" fill="#e9f7f0" stroke="#e9f7f0" stroke-width="0" />
-    <text x="501.00" y="425.00" fill="#187a5d" font-size="20" font-weight="600" text-anchor="start" font-family="STIXGeneral, 'STIX Math', 'TeXGyrePagella', serif" font-style="italic">F<tspan baseline-shift="sub" font-size="14.60" font-style="normal">0</tspan>
-    </text>
-    <line x1="740.00" y1="382.00" x2="740.00" y2="475.00" stroke="#7954bf" stroke-width="3" stroke-linecap="round" marker-end="url(#tip-violet)" id="embed-violet" />
-    <rect x="753" y="399" width="65" height="37" rx="10" fill="#f3edfc" stroke="#f3edfc" stroke-width="0" />
-    <text x="765.00" y="425.00" fill="#7954bf" font-size="20" font-weight="600" text-anchor="start" font-family="STIXGeneral, 'STIX Math', 'TeXGyrePagella', serif" font-style="italic">F<tspan baseline-shift="sub" font-size="14.60" font-style="normal">1</tspan>
-    </text>
-    <rect x="99" y="467" width="752" height="200" rx="17" fill="#fcfdff" stroke="#d4deeb" stroke-width="1.5" />
-    <text x="119.00" y="500.00" fill="#17253a" font-size="33" font-weight="750" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">E</text>
-    <text x="160.00" y="498.00" fill="#5c6b7e" font-size="18" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">ambient Hilbert space</text>
-    <rect x="120" y="516" width="710" height="34" rx="9" fill="#eaf2ff" stroke="#eaf2ff" stroke-width="0" />
-    <text x="137.00" y="539.00" fill="#235cca" font-size="19" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">ran(E<tspan baseline-shift="sub" font-size="13.87" font-style="normal">0</tspan>)</text>
-    <text x="294.00" y="539.00" fill="#17253a" font-size="18" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">trial subspace</text>
-    <rect x="120" y="559" width="710" height="34" rx="9" fill="#e9f7f0" stroke="#e9f7f0" stroke-width="0" />
-    <text x="137.00" y="582.00" fill="#187a5d" font-size="19" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">ran(F<tspan baseline-shift="sub" font-size="13.87" font-style="normal">0</tspan>)</text>
-    <text x="294.00" y="582.00" fill="#17253a" font-size="18" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">desired exact subspace</text>
-    <rect x="120" y="602" width="710" height="34" rx="9" fill="#f3edfc" stroke="#f3edfc" stroke-width="0" />
-    <text x="137.00" y="625.00" fill="#7954bf" font-size="19" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">ran(F<tspan baseline-shift="sub" font-size="13.87" font-style="normal">1</tspan>)</text>
-    <text x="294.00" y="625.00" fill="#17253a" font-size="18" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">exact orthogonal complement</text>
-    <text x="119.00" y="658.00" fill="#5c6b7e" font-size="16" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">ran(F<tspan baseline-shift="sub" font-size="11.68" font-style="normal">0</tspan>) ⊥ ran(F<tspan baseline-shift="sub" font-size="11.68" font-style="normal">1</tspan>)    and    ran(F<tspan baseline-shift="sub" font-size="11.68" font-style="normal">0</tspan>) ⊕ ran(F<tspan baseline-shift="sub" font-size="11.68" font-style="normal">1</tspan>) = E</text>
-    <text x="111.00" y="710.00" fill="#235cca" font-size="19" font-weight="600" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">Readout: X = F<tspan baseline-shift="sub" font-size="13.87" font-style="normal">1</tspan>
-      <tspan baseline-shift="super" font-size="13.87" font-style="normal">∗</tspan>E<tspan baseline-shift="sub" font-size="13.87" font-style="normal">0</tspan>  :  F → G   (unwanted exact coordinates)</text>
+    <g id="row-trial">
+      <title>F maps via E₀ to ran(E₀) ⊂ E</title>
+      <rect x="1175" y="536" width="540" height="101" rx="13" fill="#FFF4E5" stroke="#A66705" stroke-width="1.3" />
+      <text x="1195.00" y="578.00" fill="#A66705" font-size="30" font-weight="650" text-anchor="start" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="italic">F</text>
+      <line x1="1295.00" y1="574.00" x2="1361.00" y2="574.00" stroke="#A66705" stroke-width="2.6" stroke-linecap="round" marker-end="url(#tip-trial)" />
+      <text x="1326.00" y="564.00" fill="#A66705" font-size="20" font-weight="650" text-anchor="middle" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="normal">E<tspan baseline-shift="sub" font-size="14.60" font-style="normal">0</tspan>
+      </text>
+      <text x="1382.00" y="580.00" fill="#A66705" font-size="22" font-weight="660" text-anchor="start" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="normal">ran(E<tspan baseline-shift="sub" font-size="16.06" font-style="normal">0</tspan>) ⊂ E</text>
+      <text x="1196.00" y="615.00" fill="#6B7280" font-size="17" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">chosen trial coordinates</text>
+    </g>
+    <rect x="1175" y="673" width="540" height="113" rx="12" fill="#F6F8FC" stroke="#E4E9F0" stroke-width="1.3" />
+    <text x="1192.00" y="703.00" fill="#36516A" font-size="20" font-weight="640" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">F<tspan baseline-shift="sub" font-size="14.60" font-style="normal">ex</tspan> ⊕ G gives exact coordinates for all of E.</text>
+    <text x="1192.00" y="736.00" fill="#1B1F24" font-size="19" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">F instead describes the approximate subspace.</text>
+    <text x="1192.00" y="765.00" fill="#6B7280" font-size="18" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">F need not be the same as F<tspan baseline-shift="sub" font-size="13.14" font-style="normal">ex</tspan>.</text>
   </g>
-  <g id="rank-one-geometry">
-    <title>Wanted horizontal eigenline, unwanted vertical eigenline, trial vector and its orthogonal projection.</title>
-    <rect x="925" y="183" width="820" height="550" rx="18" fill="#ffffff" stroke="#d4deeb" stroke-width="1.5" />
-    <text x="955.00" y="232.00" fill="#17253a" font-size="26" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">2   A rank-one geometric slice</text>
-    <text x="955.00" y="267.00" fill="#5c6b7e" font-size="19" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">F<tspan baseline-shift="sub" font-size="13.87" font-style="normal">0</tspan>(h) = (h,0)     F<tspan baseline-shift="sub" font-size="13.87" font-style="normal">1</tspan>(g) = (0,g)     E<tspan baseline-shift="sub" font-size="13.87" font-style="normal">0</tspan>(1) = v</text>
-    <line x1="1046.00" y1="639.00" x2="1679.00" y2="639.00" stroke="#187a5d" stroke-width="3.0" stroke-linecap="round" marker-end="url(#tip-green)" id="wanted-axis" />
-    <line x1="1063.00" y1="656.00" x2="1063.00" y2="311.00" stroke="#7954bf" stroke-width="3.0" stroke-linecap="round" marker-end="url(#tip-violet)" id="unwanted-axis" />
-    <text x="1512.00" y="620.00" fill="#187a5d" font-size="19" font-weight="600" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">ran(F<tspan baseline-shift="sub" font-size="13.87" font-style="normal">0</tspan>)  wanted</text>
-    <text x="1081.00" y="315.00" fill="#7954bf" font-size="18" font-weight="600" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">ran(F<tspan baseline-shift="sub" font-size="13.14" font-style="normal">1</tspan>)  unwanted</text>
-    <line x1="1063.00" y1="639.00" x2="1356.40" y2="392.81" stroke="#235cca" stroke-width="4.5" stroke-linecap="round" marker-end="url(#tip-blue)" id="trial-vector" />
-    <line x1="1356.40" y1="639.00" x2="1356.40" y2="392.81" stroke="#7954bf" stroke-width="4.0" stroke-linecap="round" marker-end="url(#tip-violet)" id="complementary-projection" />
-    <circle cx="1356.40" cy="392.81" r="6.5" fill="#235cca" />
-    <circle cx="1356.40" cy="639.00" r="5" fill="#187a5d" />
-    <path d="M 1338.40 639.00 v -18 h 18" fill="none" stroke="#5c6b7e" stroke-width="1.4" stroke-linecap="round" />
-    <path d="M 1152.00 639.00 A 89.0 89.0 0 0 0 1131.18 581.79" fill="none" stroke="#235cca" stroke-width="2.6" stroke-linecap="round" />
-    <text x="1159.00" y="607.00" fill="#235cca" font-size="21" font-weight="650" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">θ = 40°</text>
-    <text x="1372.40" y="387.81" fill="#235cca" font-size="21" font-weight="650" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">v = E<tspan baseline-shift="sub" font-size="15.33" font-style="normal">0</tspan>(1)</text>
-    <text x="1372.40" y="516.91" fill="#7954bf" font-size="21" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">S(1)</text>
-    <text x="1373.40" y="543.91" fill="#7954bf" font-size="16" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">= (I−P<tspan baseline-shift="sub" font-size="11.68" font-style="normal">ex</tspan>)v</text>
-    <text x="1368.40" y="670.00" fill="#187a5d" font-size="18" font-weight="650" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">P<tspan baseline-shift="sub" font-size="13.14" font-style="normal">ex</tspan> v</text>
-    <text x="1471.00" y="314.00" fill="#187a5d" font-size="18" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">P<tspan baseline-shift="sub" font-size="13.14" font-style="normal">ex</tspan> = F<tspan baseline-shift="sub" font-size="13.14" font-style="normal">0</tspan>F<tspan baseline-shift="sub" font-size="13.14" font-style="normal">0</tspan>
-      <tspan baseline-shift="super" font-size="13.14" font-style="normal">∗</tspan>
+  <g id="sylvester-mechanism">
+    <title>Residual produces the Sylvester equation controlling the unwanted component</title>
+    <rect x="55" y="846" width="935" height="229" rx="20" fill="#FFFFFF" stroke="#D7E0EA" stroke-width="1.3" />
+    <text x="85.00" y="895.00" fill="#1B1F24" font-size="27" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">3   Residual and the unwanted component</text>
+    <text x="86.00" y="936.00" fill="#007C91" font-size="23" font-weight="650" text-anchor="start" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="normal">X = F<tspan baseline-shift="sub" font-size="16.79" font-style="normal">1</tspan>
+      <tspan baseline-shift="super" font-size="16.79" font-style="normal">∗</tspan>E<tspan baseline-shift="sub" font-size="16.79" font-style="normal">0</tspan> : F → G</text>
+    <text x="518.00" y="936.00" fill="#087D43" font-size="22" font-weight="650" text-anchor="start" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="normal">R = ÂE<tspan baseline-shift="sub" font-size="16.06" font-style="normal">0</tspan> − E<tspan baseline-shift="sub" font-size="16.06" font-style="normal">0</tspan>A<tspan baseline-shift="sub" font-size="16.06" font-style="normal">0</tspan> : F → E</text>
+    <line x1="85.00" y1="957.00" x2="962.00" y2="957.00" stroke="#D7E0EA" stroke-width="1.1" stroke-linecap="round" />
+    <text x="87.00" y="1000.00" fill="#1B1F24" font-size="29" font-weight="670" text-anchor="start" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="normal">Λ<tspan baseline-shift="sub" font-size="21.17" font-style="normal">1</tspan>X − XA<tspan baseline-shift="sub" font-size="21.17" font-style="normal">0</tspan> = F<tspan baseline-shift="sub" font-size="21.17" font-style="normal">1</tspan>
+      <tspan baseline-shift="super" font-size="21.17" font-style="normal">∗</tspan>R</text>
+    <text x="87.00" y="1044.00" fill="#D12A7B" font-size="23" font-weight="630" text-anchor="start" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="normal">|X| = sin Θ<tspan baseline-shift="sub" font-size="16.79" font-style="normal">0</tspan>
     </text>
-    <text x="1471.00" y="342.00" fill="#7954bf" font-size="18" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">I − P<tspan baseline-shift="sub" font-size="13.14" font-style="normal">ex</tspan> = F<tspan baseline-shift="sub" font-size="13.14" font-style="normal">1</tspan>F<tspan baseline-shift="sub" font-size="13.14" font-style="normal">1</tspan>
-      <tspan baseline-shift="super" font-size="13.14" font-style="normal">∗</tspan>
-    </text>
-    <text x="988.00" y="712.00" fill="#5c6b7e" font-size="18" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">|S| = sin Θ<tspan baseline-shift="sub" font-size="13.14" font-style="normal">0</tspan>; in this slice,  |S| = sin(40°).</text>
+    <text x="408.00" y="1044.00" fill="#1B1F24" font-size="23" font-weight="630" text-anchor="start" font-family="STIXGeneral, 'STIX Math', TeXGyrePagella, serif" font-style="normal">δ N(sin Θ<tspan baseline-shift="sub" font-size="16.79" font-style="normal">0</tspan>) ≤ N(R)</text>
   </g>
-  <g id="residual-and-sylvester">
-    <title>The residual R, unwanted-coordinate map X and their Sylvester identity.</title>
-    <rect x="55" y="757" width="840" height="305" rx="18" fill="#ffffff" stroke="#d4deeb" stroke-width="1.5" />
-    <text x="86.00" y="803.00" fill="#17253a" font-size="25" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">3   Residual → Sylvester equation → angle</text>
-    <rect x="86" y="824" width="328" height="37" rx="10" fill="#fff4e8" stroke="#fff4e8" stroke-width="0" />
-    <text x="98.00" y="850.00" fill="#b65f22" font-size="20" font-weight="600" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">R = ÂE<tspan baseline-shift="sub" font-size="14.60" font-style="normal">0</tspan> − E<tspan baseline-shift="sub" font-size="14.60" font-style="normal">0</tspan>A<tspan baseline-shift="sub" font-size="14.60" font-style="normal">0</tspan>
-    </text>
-    <text x="435.00" y="850.00" fill="#5c6b7e" font-size="18" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">: F → E  (intertwining residual)</text>
-    <rect x="86" y="876" width="224" height="37" rx="10" fill="#eaf2ff" stroke="#eaf2ff" stroke-width="0" />
-    <text x="98.00" y="902.00" fill="#235cca" font-size="20" font-weight="600" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">X = F<tspan baseline-shift="sub" font-size="14.60" font-style="normal">1</tspan>
-      <tspan baseline-shift="super" font-size="14.60" font-style="normal">∗</tspan>E<tspan baseline-shift="sub" font-size="14.60" font-style="normal">0</tspan>
-    </text>
-    <text x="334.00" y="903.00" fill="#5c6b7e" font-size="18" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">: F → G  (unwanted readout)</text>
-    <text x="88.00" y="957.00" fill="#17253a" font-size="30" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">Λ<tspan baseline-shift="sub" font-size="21.90" font-style="normal">1</tspan> X − X A<tspan baseline-shift="sub" font-size="21.90" font-style="normal">0</tspan> = F<tspan baseline-shift="sub" font-size="21.90" font-style="normal">1</tspan>
-      <tspan baseline-shift="super" font-size="21.90" font-style="normal">∗</tspan> R</text>
-    <line x1="88.00" y1="976.00" x2="857.00" y2="976.00" stroke="#e7edf5" stroke-width="1" stroke-linecap="round" />
-    <text x="88.00" y="1008.00" fill="#17253a" font-size="22" font-weight="600" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">S = F<tspan baseline-shift="sub" font-size="16.06" font-style="normal">1</tspan>X;    |S| = sin Θ<tspan baseline-shift="sub" font-size="16.06" font-style="normal">0</tspan>;    δ N(sin Θ<tspan baseline-shift="sub" font-size="16.06" font-style="normal">0</tspan>) ≤ N(R)</text>
-    <text x="88.00" y="1040.00" fill="#5c6b7e" font-size="16" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">Bound assumes the theorem's spectral separation, domains, and ideal membership.</text>
-  </g>
-  <g id="spectral-separation-example">
-    <title>A0=rho approximately 1.404, Lambda1=0.7 and delta=rho-0.7.</title>
-    <rect x="925" y="757" width="820" height="305" rx="18" fill="#ffffff" stroke="#d4deeb" stroke-width="1.5" />
-    <text x="956.00" y="803.00" fill="#17253a" font-size="25" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">4   Spectral separation in this example</text>
-    <text x="957.00" y="840.00" fill="#5c6b7e" font-size="20" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">Â = diag(1.9, 0.7),     A<tspan baseline-shift="sub" font-size="14.60" font-style="normal">0</tspan> = ρ = ⟨v, Âv⟩,     Λ<tspan baseline-shift="sub" font-size="14.60" font-style="normal">1</tspan> = 0.7</text>
-    <line x1="995.00" y1="937.00" x2="1678.00" y2="937.00" stroke="#5c6b7e" stroke-width="2" stroke-linecap="round" marker-end="url(#tip-ink)" />
-    <line x1="1158.92" y1="922.00" x2="1158.92" y2="952.00" stroke="#7954bf" stroke-width="4" stroke-linecap="round" />
-    <circle cx="1158.92" cy="937.00" r="6.5" fill="#7954bf" />
-    <text x="1158.92" y="980.00" fill="#7954bf" font-size="19" font-weight="650" text-anchor="middle" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">λ<tspan baseline-shift="sub" font-size="13.87" font-style="normal">1</tspan> = 0.7</text>
-    <line x1="1543.69" y1="922.00" x2="1543.69" y2="952.00" stroke="#235cca" stroke-width="4" stroke-linecap="round" />
-    <circle cx="1543.69" cy="937.00" r="6.5" fill="#235cca" />
-    <text x="1543.69" y="980.00" fill="#235cca" font-size="19" font-weight="650" text-anchor="middle" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">ρ ≈ 1.404</text>
-    <path d="M 1158.92 898 V 879 H 1543.69 V 898" fill="none" stroke="#17253a" stroke-width="2" stroke-linecap="round" />
-    <text x="1351.30" y="870.00" fill="#17253a" font-size="19" font-weight="600" text-anchor="middle" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">δ = ρ − 0.7 ≈ 0.704</text>
-    <text x="957.00" y="1007.00" fill="#5c6b7e" font-size="18" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">Here δ separates σ(A<tspan baseline-shift="sub" font-size="13.14" font-style="normal">0</tspan>) from σ(Λ<tspan baseline-shift="sub" font-size="13.14" font-style="normal">1</tspan>); it is not the</text>
-    <text x="957.00" y="1036.00" fill="#5c6b7e" font-size="18" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', 'STIXGeneral', serif" font-style="normal">full 1.2 eigenvalue gap of the ambient operator.</text>
+  <g id="spectral-separation">
+    <title>Concrete ordered spectral gap of the same rank-one model</title>
+    <rect x="1010" y="846" width="735" height="229" rx="20" fill="#FFFFFF" stroke="#D7E0EA" stroke-width="1.3" />
+    <text x="1039.00" y="895.00" fill="#1B1F24" font-size="27" font-weight="700" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">4   Spectral separation</text>
+    <text x="1040.00" y="924.00" fill="#6B7280" font-size="18" font-weight="400" text-anchor="start" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">Â = diag(1.9, 0.7),  A<tspan baseline-shift="sub" font-size="13.14" font-style="normal">0</tspan> = ρ,  Λ<tspan baseline-shift="sub" font-size="13.14" font-style="normal">1</tspan> = 0.7</text>
+    <line x1="1065.00" y1="1016.00" x2="1682.00" y2="1016.00" stroke="#36516A" stroke-width="2" stroke-linecap="round" marker-end="url(#tip-ink)" />
+    <line x1="1180.69" y1="1004.00" x2="1180.69" y2="1028.00" stroke="#007C91" stroke-width="4" stroke-linecap="round" />
+    <circle cx="1180.69" cy="1016.00" r="5.6" fill="#007C91" />
+    <line x1="1623.43" y1="1004.00" x2="1623.43" y2="1028.00" stroke="#A66705" stroke-width="4" stroke-linecap="round" />
+    <circle cx="1623.43" cy="1016.00" r="5.6" fill="#A66705" />
+    <text x="1180.69" y="1047.00" fill="#007C91" font-size="18" font-weight="650" text-anchor="middle" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">λ<tspan baseline-shift="sub" font-size="13.14" font-style="normal">1</tspan> = 0.7</text>
+    <text x="1623.43" y="1047.00" fill="#A66705" font-size="18" font-weight="650" text-anchor="middle" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">ρ ≈ 1.848</text>
+    <path d="M 1180.69 974 V 963 H 1623.43 V 974" fill="none" stroke="#6E4BD8" stroke-width="2.6" stroke-linecap="round" />
+    <text x="1402.06" y="953.00" fill="#6E4BD8" font-size="20" font-weight="690" text-anchor="middle" font-family="TeXGyrePagella, 'TeX Gyre Pagella', STIXGeneral, serif" font-style="normal">δ ≈ 1.148</text>
   </g>
 </svg>
