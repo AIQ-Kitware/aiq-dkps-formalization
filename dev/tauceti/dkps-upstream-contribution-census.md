@@ -5198,3 +5198,42 @@ Retired-module build products were removed before the final full build.
 The static name-drift check has exactly the same 41 findings as its saved
 pre-migration baseline, with no added finding. The repository cache remains
 bind-mounted on VM-local ext4; dependency pins are unchanged.
+
+
+### November 16: repair pending SA-E01 and SA-E24 submissions
+
+Both directly submitted PRs remain open and unmerged: [#29129](https://github.com/TauCetiProject/TauCeti/pull/29129)
+(SA-E01, Cayley spectral-PVM construction) and [#30736](https://github.com/TauCetiProject/TauCeti/pull/30736)
+(SA-E24, compact-time uniform Cauchy convergence of symmetric Yosida orbits).
+Neither is counted as an accepted integration. Repaired heads
+`b2079662d849812b32c84672602dd3f023923d23` (#29129) and
+`292a7d472a646809988c8f5fe5ce214dc0eb2eb9` (#30736) are pushed;
+live GitHub metadata confirms both branches are mergeable.
+
+The local `SkewAdjointExponential.norm_expTime_sub_expTime_le` now consumes
+native `TauCeti.exp_add_sub_exp_eq_integral` at the unchanged accepted pin
+`a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8`. Evaluation at a vector,
+commutation of the generator difference and native unitarity give the original
+bound for every real time, on arbitrary complete complex Hilbert spaces.
+The duplicate interpolation/FTC proof is removed, together with unused
+`commute_expTime_of_commute` and private `hasDerivAt_expTime_sub`.
+The derivative helpers actually used by the Stone/Yosida integral argument remain.
+The identical reduction repairs #30736's reuse finding. This is consumption
+of an accepted identity, not a claim that the submitted Duhamel estimate has
+landed. Historical Spectra/Adam Bornemann and Kitware/Jon Crall/Claude Opus 5
+Apache-2.0 notices remain; the current native reduction is by OpenAI gpt-6.1-sol.
+
+#29129 restores simp rules only for the projection and diagonal observations,
+while leaving `spectralPVM_def` an explicit rewrite. The current API-design
+request conflicts with an earlier request to remove those same attributes;
+the campaign packet records both review links and prepares a reply requesting
+reassessment. Reviewer agreement is not claimed. Repair sources and validation
+are preserved in `tauceti-dkps-campaign/waves/2026-11-16/`.
+
+
+Validation for the November 16 donor reduction: focused exponential, Yosida
+and Stone-uniqueness consumers passed (5952 jobs); the full default build
+passed (21779 jobs), followed serially by Challenge (20001 jobs), without
+warnings. Logs are `.lake/pr-repairs-2026-11-16/donor-{focused,full,challenge}.log`;
+compressed copies are preserved in the shared campaign repair packet.
+Dependency pins are unchanged; the root `.lake` remains bind-mounted on ext4.

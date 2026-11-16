@@ -3837,6 +3837,7 @@
       "provenance_class": "adapted Duhamel proof architecture; Mathlib exponential and derivative APIs; native Tau Ceti bounded-group unitarity",
       "direct_dependencies": [
         "TauCeti.Analysis.Semigroups.Group.Stone.Basic",
+        "TauCeti.Analysis.SpecialFunctions.Exponential",
         "Mathlib"
       ],
       "blocked_dependencies": [],
@@ -3849,9 +3850,11 @@
         "IsSkewAdjointCLM",
         "isSkewAdjointCLM_I_smul",
         "commute_expTime",
-        "real_smul_I_smul"
+        "real_smul_I_smul",
+        "commute_expTime_of_commute",
+        "hasDerivAt_expTime_sub"
       ],
-      "migration_note": "November 9: replace the local adjoint/inner-product/norm proof engine for norm_expTime_I_smul by native isUnitary_ofBoundedExp and IsUnitary.norm_map, via the explicit exponential/restriction-of-scalars representation. Retire unused IsSkewAdjointCLM, its I-smul lemma, commute_expTime and real_smul_I_smul. Retain the commuting Duhamel estimate and its analytic support. This does not claim the Duhamel result is accepted upstream. Preserve original Kitware/Jon Crall/Claude Opus 5, Apache-2.0, and Spectra/Adam Bornemann ancestry at 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63. Native bounded Stone APIs at accepted TauCeti a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8 are independently available; no DKPS proof descent is asserted."
+      "migration_note": "November 9: replace the local adjoint/inner-product/norm proof engine for norm_expTime_I_smul by native isUnitary_ofBoundedExp and IsUnitary.norm_map, via the explicit exponential/restriction-of-scalars representation. Retire unused IsSkewAdjointCLM, its I-smul lemma, commute_expTime and real_smul_I_smul. Retain the commuting Duhamel estimate and its analytic support. This does not claim the Duhamel result is accepted upstream. Preserve original Kitware/Jon Crall/Claude Opus 5, Apache-2.0, and Spectra/Adam Bornemann ancestry at 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63. Native bounded Stone APIs at accepted TauCeti a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8 are independently available; no DKPS proof descent is asserted. November 16: consume native TauCeti.exp_add_sub_exp_eq_integral directly in norm_expTime_sub_expTime_le, evaluating the operator integral at the vector and using commutation and native unitarity. Delete the unused commutation facade and private interpolation-derivative helper. Keep hasDerivAt_expTime and hasDerivAt_expTime_apply for the downstream Stone/Yosida integral argument. All original hypotheses and real-time scope are preserved. The same repair is submitted to open PR #30736 (SA-E24); submission is not integration."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
