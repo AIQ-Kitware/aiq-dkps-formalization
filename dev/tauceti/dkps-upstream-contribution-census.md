@@ -5460,3 +5460,18 @@ is `waves/2026-11-16/c31-real/` in the shared campaign repo. Submission and
 integration remain separate: the real branch is prepared, not accepted, and
 full real/complex C31 must remain partial in the accepted-item census until it
 lands. No further roadmap item is credited by this preparation.
+
+Prepared upstream branch: `port-ssp-c31-real-quarter-acute`,
+`706bff9b65aa580d75506e6b6075a1096b53cce2`, based only on accepted
+`086028a6d8d186715b52fac7f3e7b23175ed2dc9`. It changes the existing
+`Complexification.lean`, `QuadraticForm/Bounds.lean` and
+`DoubleAngle/QuarterAcute.lean`; nine new public declarations, no parallel
+carrier or forwarding aliases. The focused upstream build passed (6475 jobs),
+as did 15 environment linters on 55 declarations plus 71 generated, standard
+axioms, raw-hypothesis/incomplete-ambient/zero-space examples and full source
+header/text style. Selected live connector overlap searches returned no open
+C31/theorem-term matches. The VM has no `gh`, so the host script must still run
+the existing live all-open collision preflight before publication. The
+source-review packet explicitly identifies a same-agent second source pass,
+not an independent model or upstream approval. Q3's lack of a proof of logical
+irredundancy of every printed hypothesis is disclosed rather than invented.

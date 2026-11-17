@@ -39,6 +39,7 @@ theorem complexifyL2_orthogonal (U : Submodule ℝ E) :
     rw [mem_orthogonal]
     intro w hw
     rw [mem_complexifyL2] at hw
+    -- Expose the two coordinate formulas for the native complex inner product.
     apply Complex.ext
     · change ⟪w.ofLp.re, z.ofLp.re⟫_ℝ + ⟪w.ofLp.im, z.ofLp.im⟫_ℝ = 0
       simp [inner_right_of_mem_orthogonal hw.1 hz.1,

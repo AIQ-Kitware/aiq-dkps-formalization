@@ -41,9 +41,11 @@ theorem lowerFormBoundOn_complexifyL2_iff (A : E →L[ℝ] E) (U : Submodule ℝ
     simpa using h _ hx'
   · intro h z hz
     rw [Submodule.mem_complexifyL2] at hz
+    -- The coordinate lemma uses Complex.re rather than the RCLike projection.
     change c * ‖z‖ ^ 2 ≤ (⟪A.complexifyL2 z, z⟫_ℂ).re
     rw [WithLp.complexification_norm_sq_eq, WithLp.complexification_re_inner]
     simp only [ofLp_complexifyL2_apply, complexify_apply_re, complexify_apply_im]
+    -- On real scalars the RCLike real-part map is the identity.
     change ∀ x ∈ U, c * ‖x‖ ^ 2 ≤ ⟪A x, x⟫_ℝ at h
     linarith [h _ hz.1, h _ hz.2]
 
@@ -60,9 +62,11 @@ theorem upperFormBoundOn_complexifyL2_iff (A : E →L[ℝ] E) (U : Submodule ℝ
     simpa using h _ hx'
   · intro h z hz
     rw [Submodule.mem_complexifyL2] at hz
+    -- The coordinate lemma uses Complex.re rather than the RCLike projection.
     change (⟪A.complexifyL2 z, z⟫_ℂ).re ≤ c * ‖z‖ ^ 2
     rw [WithLp.complexification_norm_sq_eq, WithLp.complexification_re_inner]
     simp only [ofLp_complexifyL2_apply, complexify_apply_re, complexify_apply_im]
+    -- On real scalars the RCLike real-part map is the identity.
     change ∀ x ∈ U, ⟪A x, x⟫_ℝ ≤ c * ‖x‖ ^ 2 at h
     linarith [h _ hz.1, h _ hz.2]
 
