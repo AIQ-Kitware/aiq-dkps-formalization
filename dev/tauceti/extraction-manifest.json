@@ -6570,7 +6570,7 @@
       ],
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/29129",
       "integration": null,
-      "scope": "Forward inverse law generalized to all complex parameters, including -i; reverse law for norm-one points other than 1. Existing native inverse identity and half-plane bijection replace local denominator algebra. Submission is not integration.",
+      "scope": "Forward inverse law generalized to all complex parameters, including -i; reverse law for norm-one points other than 1. Existing native inverse identity and half-plane bijection replace local denominator algebra. Submission is not integration. November 17 comment-only follow-up explains target-set conversion; no theorem or proof-term source changes.",
       "source_module": "ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure/Construction.lean",
       "staging_module": "ForTauCeti/Analysis/Complex/Cayley/Inverse.lean",
       "final_tauceti_module": "TauCeti/Analysis/Complex/UpperHalfPlane/Cayley.lean",
@@ -6588,7 +6588,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction",
         "ForTauCeti.Analysis.InnerProductSpace.Rosenblum"
       ],
-      "prepared_head": "85917941245d60feb2838b94e25de032e229cb0e",
+      "prepared_head": "0a85d596da2d7bad3fe178a69713133b0493a303",
       "prepared_packet": "/home/joncrall/code/tauceti-dkps-campaign/waves/2026-11-17/pr29129"
     }
   ]

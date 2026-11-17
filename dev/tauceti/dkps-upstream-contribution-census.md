@@ -5518,3 +5518,11 @@ Final DKPS validation after explicit Rosenblum bridges: focused construction
 20091 jobs all pass without warnings. Shared campaign packet `waves/2026-11-17/donor/`
 retains the final successful logs. The first full attempt exposed those two
 definition-unfolding dependencies; it is not cited as successful evidence.
+
+Later November 17 #29129 proof-quality findings 4601840758/4601867446 request
+explaining the explicit `surjOn` target-set conversion. Pushed follow-up
+`0a85d596da2d7bad3fe178a69713133b0493a303` adds that explanation; the DKPS
+coordinate donor carries the same two comments. Non-comment source is unchanged
+in both files, so the preceding build/linter/axiom evidence applies without
+rerunning builds. The campaign packet retains the actual comments and follow-up
+patch. This remains an open submission, not an integration.
