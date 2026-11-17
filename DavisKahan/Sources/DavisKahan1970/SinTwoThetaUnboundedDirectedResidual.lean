@@ -236,7 +236,7 @@ theorem
       δ * ((sinTwoThetaIdealBlock (selfAdjointSpectralSubspace A hA B hB) V).kyFanGauge k : ℝ) ≤
         ((((2 : ℝ) : ℂ) • R0).kyFanGauge k : ℝ) := by
     intro k
-    erw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+    erw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
       (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsameR.kyFanGauge_eq k)))]
     exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_kyFan_complex hA
@@ -396,7 +396,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
       δ * ((sinTwoThetaIdealBlock (selfAdjointSpectralSubspace A hA B hB) V).kyFanGauge k : ℝ) ≤
         ((((2 : ℝ) : ℂ) • R0).kyFanGauge k : ℝ) := by
     intro k
-    erw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+    erw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
       (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsameR.kyFanGauge_eq k)))]
     exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_complex
@@ -556,7 +556,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
       δ * ((sinTwoThetaIdealBlock U V).kyFanGauge k : ℝ) ≤
         ((((2 : ℝ) : ℂ) • R0).kyFanGauge k : ℝ) := by
     intro k
-    erw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+    erw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
       (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsameR.kyFanGauge_eq k)))]
     exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_complex

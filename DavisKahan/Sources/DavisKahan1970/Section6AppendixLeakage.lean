@@ -100,7 +100,7 @@ theorem opNorm_sq_le_approximationEnergy
   have hmem : 0 ∈ Finset.range n := Finset.mem_range.mpr hn
   have hzero :
       ((T.singularValue 0 : ℝ)) ^ 2 = ‖T‖ ^ 2 := by
-    rw [((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero T)).trans (coe_nnnorm T))]
+    rw [((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero T)).trans (coe_nnNorm T))]
   calc
     ‖T‖ ^ 2 = ((T.singularValue 0 : ℝ)) ^ 2 := hzero.symm
     _ ≤ ∑ i ∈ Finset.range n,

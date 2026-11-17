@@ -36,7 +36,7 @@ public section
 
 local instance {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
     [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : CompleteSpace E :=
-  FiniteDimensional.complete 𝕜 E
+  FiniteDimensional.completeSpace 𝕜 E
 
 
 namespace TauCeti
@@ -272,7 +272,7 @@ theorem directRotation_eq_exp_angleComplexStructure_comp_angleOperator
     (directRotation U V hacute).toLinearMap.toContinuousLinearMap =
       NormedSpace.exp
         ((angleComplexStructure U V hacute ∘ₗ angleOperator U V).toContinuousLinearMap) := by
-  have : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  have : CompleteSpace E := FiniteDimensional.completeSpace 𝕜 E
   have hsin := isSymmetric_sinAngleOperator U V
   set b := hsin.eigenvectorBasis rfl with hbdef
   set Y : E →ₗ[𝕜] E := angleComplexStructure U V hacute ∘ₗ angleOperator U V with hYdef

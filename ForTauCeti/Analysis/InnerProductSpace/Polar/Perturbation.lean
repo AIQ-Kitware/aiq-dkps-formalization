@@ -58,8 +58,7 @@ theorem eq_factorThru_modulus_of_unitary_factorization_of_coercive
     (hcoerc : ∀ x, a * ‖x‖ ^ 2 ≤ RCLike.re ⟪H x, x⟫_𝕜) :
     (U : E →L[𝕜] E) = T.factorThru T.modulus := by
   have hmod := hH.eq_modulus_of_unitary_factorization U hT
-  apply eq_factorThru_of_isStarNormal
-    (fun x => (T.norm_modulus_apply x).symm) T.isPositive_modulus.isSelfAdjoint.isStarNormal
+  apply eq_factorThru_of_isStarNormal T.isPositive_modulus.isSelfAdjoint.isStarNormal
   · rw [← hmod]
     exact hT.symm
   · intro x hx

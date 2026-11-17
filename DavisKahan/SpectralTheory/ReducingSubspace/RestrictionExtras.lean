@@ -59,7 +59,7 @@ noncomputable def boundedReducingBlock
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : Submodule.IsReducing U A) : U →ₗ.[𝕜] U :=
   (A.toLinearMap.toPMap ⊤).restrict
-    (ofBounded_reducesSubspace A U hred).isInvariant
+    (_root_.LinearPMap.isInvariant_iff.mp (ofBounded_reducesSubspace A U hred).isInvariant)
 
 /-- The block of a bounded operator on the orthogonal complement of a subspace
 it reduces.  A reducing subspace's complement is reducing, so this needs no
@@ -69,7 +69,8 @@ noncomputable def boundedReducingBlockCompl
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : Submodule.IsReducing U A) : Uᗮ →ₗ.[𝕜] Uᗮ :=
   (A.toLinearMap.toPMap ⊤).restrict
-    ((ofBounded_reducesSubspace A U hred).orthogonal.isInvariant)
+    (_root_.LinearPMap.isInvariant_iff.mp
+      (ofBounded_reducesSubspace A U hred).orthogonal.isInvariant)
 
 end PartialMap
 end DavisKahanExt

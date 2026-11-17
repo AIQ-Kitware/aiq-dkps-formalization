@@ -149,7 +149,9 @@ private theorem exists_modified_reference_of_commonDomain_residual
     (K : E →L[𝕜] E) (hK : K.IsSymmetric)
     (hcol : ∀ p : P, K (p : E) = R p) :
     ∃ (A' : E →ₗ.[𝕜] E) (hP' : _root_.LinearPMap.IsReducing A' P),
-      IsSelfAdjoint A' ∧ A'.restrict hP'.isInvariant = A.restrict hP.isInvariant ∧
+      IsSelfAdjoint A' ∧
+      A'.restrict (_root_.LinearPMap.isInvariant_iff.mp hP'.isInvariant) =
+        A.restrict (_root_.LinearPMap.isInvariant_iff.mp hP.isInvariant) ∧
       TauCeti.LinearPMap.addBounded A' K = T := by
   let A' := TauCeti.LinearPMap.addBounded T (-K)
   have hKneg : (-K).IsSymmetric := by
@@ -208,11 +210,13 @@ theorem theorem8_2_residual_commonDomain_normalizedUIN_complex
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing T Q)
     (hQspec : _root_.LinearPMap.realSpectrum
-      (T.restrict hQred.isInvariant) ⊆ Set.Icc beta alpha)
+      (T.restrict (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant)) ⊆ Set.Icc beta alpha)
     (hQperp : _root_.LinearPMap.realSpectrum
-      (T.restrict hQred.orthogonal.isInvariant) ⊆ bandExterior beta alpha delta)
+      (T.restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant))
+        ⊆ bandExterior beta alpha delta)
     (hPspec : _root_.LinearPMap.realSpectrum
-      (A.restrict hPred.isInvariant)
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant))
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (R : P →L[ℂ] H)
@@ -243,12 +247,15 @@ theorem theorem8_2_residual_commonDomain_normalizedUIN_complex
     rw [htotal]
     exact hQred
   have hQspec' : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A' K).restrict hQred'.isInvariant)
+      ((TauCeti.LinearPMap.addBounded A' K).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred'.isInvariant))
       ⊆ Set.Icc beta alpha := by simpa only [htotal] using hQspec
   have hQperp' : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A' K).restrict hQred'.orthogonal.isInvariant)
+      ((TauCeti.LinearPMap.addBounded A' K).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred'.orthogonal.isInvariant))
       ⊆ bandExterior beta alpha delta := by simpa only [htotal] using hQperp
-  have hPspec' : _root_.LinearPMap.realSpectrum (A'.restrict hPred'.isInvariant)
+  have hPspec' : _root_.LinearPMap.realSpectrum (A'.restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hPred'.isInvariant))
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2) := by
     rw [hrestrict]
     exact hPspec
@@ -257,7 +264,8 @@ theorem theorem8_2_residual_commonDomain_normalizedUIN_complex
     exact hsmall
   refine ⟨?_, ?_⟩
   · have hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
-        (T.restrict hQred.isInvariant) (T.restrict hQred.orthogonal.isInvariant) delta :=
+        (T.restrict (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
+        (T.restrict (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant)) delta :=
       .intervalExterior hab (Or.inl ⟨hQspec, hQperp⟩)
     have hresRitz : ∀ p : P, T ⟨(p : H), hPdomT p⟩ = R p + ((M p : P) : H) := by
       intro p
@@ -286,11 +294,13 @@ theorem theorem8_2_residual_commonDomain_normalizedUIN_real
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing T Q)
     (hQspec : _root_.LinearPMap.realSpectrum
-      (T.restrict hQred.isInvariant) ⊆ Set.Icc beta alpha)
+      (T.restrict (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant)) ⊆ Set.Icc beta alpha)
     (hQperp : _root_.LinearPMap.realSpectrum
-      (T.restrict hQred.orthogonal.isInvariant) ⊆ bandExterior beta alpha delta)
+      (T.restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant))
+        ⊆ bandExterior beta alpha delta)
     (hPspec : _root_.LinearPMap.realSpectrum
-      (A.restrict hPred.isInvariant)
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant))
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (R : P →L[ℝ] H)
@@ -321,12 +331,15 @@ theorem theorem8_2_residual_commonDomain_normalizedUIN_real
     rw [htotal]
     exact hQred
   have hQspec' : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A' K).restrict hQred'.isInvariant)
+      ((TauCeti.LinearPMap.addBounded A' K).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred'.isInvariant))
       ⊆ Set.Icc beta alpha := by simpa only [htotal] using hQspec
   have hQperp' : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A' K).restrict hQred'.orthogonal.isInvariant)
+      ((TauCeti.LinearPMap.addBounded A' K).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred'.orthogonal.isInvariant))
       ⊆ bandExterior beta alpha delta := by simpa only [htotal] using hQperp
-  have hPspec' : _root_.LinearPMap.realSpectrum (A'.restrict hPred'.isInvariant)
+  have hPspec' : _root_.LinearPMap.realSpectrum (A'.restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hPred'.isInvariant))
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2) := by
     rw [hrestrict]
     exact hPspec
@@ -335,7 +348,8 @@ theorem theorem8_2_residual_commonDomain_normalizedUIN_real
     exact hsmall
   refine ⟨?_, ?_⟩
   · have hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
-        (T.restrict hQred.isInvariant) (T.restrict hQred.orthogonal.isInvariant) delta :=
+        (T.restrict (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
+        (T.restrict (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant)) delta :=
       .intervalExterior hab (Or.inl ⟨hQspec, hQperp⟩)
     have hresRitz : ∀ p : P, T ⟨(p : H), hPdomT p⟩ = R p + ((M p : P) : H) := by
       intro p
@@ -360,11 +374,13 @@ theorem theorem8_2_residual_commonDomain_fullAngle_lt_complex
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing T Q)
     (hQspec : _root_.LinearPMap.realSpectrum
-      (T.restrict hQred.isInvariant) ⊆ Set.Icc beta alpha)
+      (T.restrict (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant)) ⊆ Set.Icc beta alpha)
     (hQperp : _root_.LinearPMap.realSpectrum
-      (T.restrict hQred.orthogonal.isInvariant) ⊆ bandExterior beta alpha delta)
+      (T.restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant))
+        ⊆ bandExterior beta alpha delta)
     (hPspec : _root_.LinearPMap.realSpectrum
-      (A.restrict hPred.isInvariant)
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant))
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (R : P →L[ℂ] H)
@@ -388,11 +404,13 @@ theorem theorem8_2_residual_commonDomain_fullAngle_lt_real
     (hPred : _root_.LinearPMap.IsReducing A P)
     (hQred : _root_.LinearPMap.IsReducing T Q)
     (hQspec : _root_.LinearPMap.realSpectrum
-      (T.restrict hQred.isInvariant) ⊆ Set.Icc beta alpha)
+      (T.restrict (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant)) ⊆ Set.Icc beta alpha)
     (hQperp : _root_.LinearPMap.realSpectrum
-      (T.restrict hQred.orthogonal.isInvariant) ⊆ bandExterior beta alpha delta)
+      (T.restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant))
+        ⊆ bandExterior beta alpha delta)
     (hPspec : _root_.LinearPMap.realSpectrum
-      (A.restrict hPred.isInvariant)
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant))
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (R : P →L[ℝ] H)

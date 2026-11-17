@@ -1074,7 +1074,7 @@ theorem approximationNumber_theorem63Residual_le
       sub_apply, map_sub, hAz, sub_zero]
   rw [hfac]
   refine le_trans ((NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_le_right _ _ n))) ?_
-  simp only [NNReal.coe_mul, coe_nnnorm]
+  simp only [NNReal.coe_mul, coe_nnNorm]
   have h1 : ‖U.subtypeL‖ ≤ (1 : ℝ) := U.norm_subtypeL_le
   have h0 : 0 ≤ ((projectionBlock Uᗮ U (T - A)).singularValue n : ℝ) :=
     (ContinuousLinearMap.singularValue _ _).coe_nonneg
@@ -1129,7 +1129,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
       ((projectionBlock Uᗮ U (((delta : ℝ) : ℂ) • K)).kyFanGauge j : ℝ) ≤
         ((projectionBlock Uᗮ U (T - A)).kyFanGauge j : ℝ) := by
     intro j
-    rw [projectionBlock_smul, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdeltac]
+    rw [projectionBlock_smul, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hdeltac]
     exact corner_all_kyFan hT hV hAU hdelta hCompressionUpper hUnwantedLower htr j
   have h₁ : ∀ j : ℕ,
       ((projectionBlock Uᗮᗮ Uᗮ (((delta : ℝ) : ℂ) • K)).kyFanGauge j : ℝ) ≤
@@ -1149,7 +1149,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
       simp only [star_mul, star_sub, star_one, hp.star_eq, hHsa.star_eq]
       noncomm_ring
     rw [hleft, hright, ContinuousLinearMap.kyFanGauge_adjoint,
-      ContinuousLinearMap.kyFanGauge_adjoint, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdeltac]
+      ContinuousLinearMap.kyFanGauge_adjoint, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hdeltac]
     exact corner_all_kyFan hT hV hAU hdelta hCompressionUpper hUnwantedLower htr j
   have hcombine := lemma61_all_kyFan Uᗮ U (((delta : ℝ) : ℂ) • K)
     (((delta : ℝ) : ℂ) • K) (T - A) (T - A) h₀ h₁ k
@@ -1161,7 +1161,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_transversality
     rfl
   have hsumH : projectionBlock Uᗮ U (T - A) +
       projectionBlock Uᗮᗮ Uᗮ (T - A) = diagonalPair Uᗮ U (T - A) := rfl
-  rw [hsum, hsumH, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdeltac] at hcombine
+  rw [hsum, hsumH, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hdeltac] at hcombine
   have hpinch := diagonalPair_all_kyFan_le Uᗮ U (T - A) k
   have hmodulus : ((tanAngleOperatorC U V).kyFanGauge k : ℝ) =
       ((tanBlockRepresentative U V).kyFanGauge k : ℝ) := by
@@ -1233,7 +1233,7 @@ theorem norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent
       hCompressionUpper hUnwantedLower 0
   have hambient : ‖directedSineAmbient U V‖ < 1 := by
     have h := approximationNumber_directedSineAmbient_le (U := U) (V := V) 0
-    rw [((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (directedSineAmbient U V))).trans (coe_nnnorm (directedSineAmbient U V)))] at h
+    rw [((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (directedSineAmbient U V))).trans (coe_nnNorm (directedSineAmbient U V)))] at h
     exact lt_of_le_of_lt h hdirected
   rw [norm_sinAngleOperatorC U V,
     DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent

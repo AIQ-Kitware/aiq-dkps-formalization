@@ -6198,7 +6198,7 @@
         "TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_orderedFormGap_unbounded_printed",
         "TauCeti.DavisKahan.subspaceGap_le_of_reflectionProduct_form_nonneg",
         "TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg",
-        "TauCeti.DavisKahan.reflectionProduct_add_swap_eq",
+        "Submodule.reflection_mul_add_mul_reflection",
         "TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg",
         "TauCeti.DavisKahan.reflectionProduct_form_nonneg_of_orderedFormGap_unbounded",
         "TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded",
@@ -6492,9 +6492,9 @@
           "note": "Unbounded-scope work toward this row's actual source scope.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
         },
         {
-          "declaration": "TauCeti.DavisKahan.reflectionProduct_add_swap_eq",
+          "declaration": "Submodule.reflection_mul_add_mul_reflection",
           "role": "generalization",
-          "note": "Unbounded-scope work toward this row's actual source scope.  These became the canonical evidence on 2026-09-06 or sit directly underneath it."
+          "note": "Unbounded-scope work toward this row's actual source scope.  These became the canonical evidence on 2026-09-06 or sit directly underneath it. November 16: the accepted native RCLike reflection polynomial replaces the local proof, preserving this supporting identity."
         },
         {
           "declaration": "TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg",

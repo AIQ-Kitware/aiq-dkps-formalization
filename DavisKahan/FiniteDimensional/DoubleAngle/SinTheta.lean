@@ -540,7 +540,7 @@ theorem sinTwoTheta_cross_perturbation_le
         N (Uᗮ.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap ∘ₗ
             U.starProjection.toLinearMap) ≤
       N (B - A) := by
-  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  let : CompleteSpace E := FiniteDimensional.completeSpace 𝕜 E
   have h := N.sin_two_theta_starProjection_le
     hA hB hU hV hab hgap.1 hgap.2
   rw [le_div_iff₀ (sub_pos.mpr hab)] at h
@@ -555,7 +555,7 @@ theorem sinTwoTheta_reflectionDefect_le
     (hU : (U ∈ Module.End.invtSubmodule A)) {a b : ℝ} (hab : a < b)
     (hgap : TwoBlockFormGap A U a b) :
     (b - a) * N ((U.sinTwoAngleOperator V).toLinearMap) ≤ N (reflectionDefect V A) := by
-  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  let : CompleteSpace E := FiniteDimensional.completeSpace 𝕜 E
   have hmirror :
       2 * N (Uᗮ.starProjection.toLinearMap ∘ₗ V.starProjection.toLinearMap ∘ₗ
           U.starProjection.toLinearMap) ≤

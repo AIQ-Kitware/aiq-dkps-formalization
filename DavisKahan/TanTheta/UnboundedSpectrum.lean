@@ -7,7 +7,8 @@ module
 
 public import DavisKahan.TanTheta.UnboundedVector
 public import DavisKahan.TanTheta.Spectrum
-public import TauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+public import TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.GapInverse
+public import TauCeti.Analysis.CStarAlgebra.SelfAdjointSpectrumInterval
 
 /-!
 # The unbounded tangent theorem with a genuine trial spectrum
@@ -125,11 +126,15 @@ theorem coercive_of_selfAdjoint_spectrum_exterior
     rw [hM₁def]
     exact TauCeti.DavisKahanExt.le_abs_of_spectrum_exterior hspec
   have hM₁unit : IsUnit M₁ :=
-    (hM₁sa.isUnit_and_norm_ringInverse_le (A := K →L[ℂ] K) hrd hM₁spec).1
+    (IsometricContinuousFunctionalCalculus.isUnit_and_norm_ringInverse_le (𝕜 := ℝ)
+      (A := K →L[ℂ] K) hM₁sa hrd
+      (fun x hx => by simpa only [Real.norm_eq_abs] using hM₁spec x hx)).1
   set J : K →L[ℂ] K := Ring.inverse M₁
   have hJleft : J * M₁ = 1 := Ring.inverse_mul_cancel _ hM₁unit
   have hJnorm : ‖J‖ ≤ ((β - α) / 2 + δ)⁻¹ :=
-    (hM₁sa.isUnit_and_norm_ringInverse_le (A := K →L[ℂ] K) hrd hM₁spec).2
+    (IsometricContinuousFunctionalCalculus.isUnit_and_norm_ringInverse_le (𝕜 := ℝ)
+      (A := K →L[ℂ] K) hM₁sa hrd
+      (fun x hx => by simpa only [Real.norm_eq_abs] using hM₁spec x hx)).2
   intro x
   have hJx : J (M₁ x) = x := by
     exact DFunLike.congr_fun hJleft x

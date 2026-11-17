@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1539
+**Unique cited Lean declarations:** 1573
 
 ## How to use this census
 
@@ -185,9 +185,8 @@ SEPARATELY, AND WORTH KNOWING FOR ANY FUTURE READING OF THAT DOCUMENT: `dev/davi
 - `TauCeti.ApproximationNumber.exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner`
 - `TauCeti.ApproximationNumber.exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner_complex`
 - `LinearMap.exists_orthonormal_sum_inner_eq_kyFanSum`
-- `ContinuousLinearMap.approximationNumber_comp_eq_of_leftInverse`
+- `ContinuousLinearMap.singularValue_comp_eq_of_leftInverse`
 - `ContinuousLinearMap.kyFanGaugeReal_comp_eq_of_leftInverse`
-- `TauCeti.ApproximationNumber.kyFanApproximationGauge_comp_eq_of_leftInverse`
 - `TauCeti.DavisKahan1970.equation1_18_directRotation_exponential`
 - `TauCeti.DavisKahan1970.equation1_18_directRotation_resolution`
 
@@ -415,6 +414,13 @@ SIGNATURE RETARGET 2026-09-08. Probes 17--43 established that unconditional `ENN
 - `TauCeti.DavisKahan1970.SectionTwo.tanTheta_directed`
 - `TauCeti.DavisKahan1970.SectionTwo.tanTheta_ambient`
 - `TauCeti.DavisKahan1970.hasDefinedAmbientTangentReal_iff_norm_sinAngleOperatorR_lt_one`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_definedTangent_whereDefinedUIN_real`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_whereDefinedUIN_real`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_real`
 
 **Curated source/Lean review:**
 
@@ -441,10 +447,14 @@ SIGNATURE RETARGET 2026-09-08. Probes 17--43 established that unconditional `ENN
 | H0=0 / Rayleigh--Ritz choice, with R the residual (A+H)E0 - E0 A0. | D : UnboundedRitzPair packages the genuinely unbounded Ritz compression and its residual. The directed endpoints expose R and hR : D.trial.residual = R; the ambient endpoints expose H and hResidual identifying the Ritz residual with the off-diagonal block of H. | claimed_exact |
 | delta \|\|tan Theta0\|\| <= \|\|R\|\|. | The directed complex and real endpoints construct a tangent representative, characterize all of its approximation numbers as tan(theta_j), prove norm membership, and conclude the factor-one residual inequality. | claimed_exact |
 | delta \|\|tan Theta\|\| <= \|\|H\|\|. | The ambient complex and real endpoints conclude ideal membership of tanAngleOperatorC/R and the factor-one bound by the full perturbation H. Their hdefined binder is the explicit where-defined condition for the displayed tangent, not a claim that Section 2 printed a numerical pole hypothesis. | claimed_exact |
-| Displayed tangent norms are read only where they exist; the source does not repeat that qualification in the Section 2 display. | All four façades quantify over NormalizedUnitaryInvariantNorm. The directed endpoints construct a bounded representative and prove its membership; the ambient endpoints require HasDefinedAmbientTangent/Real (bounded tangent exists) and then prove membership from N.Mem H. | claimed_exact |
+| Displayed tangent norms are read only where they exist; the source does not repeat that qualification in the Section 2 display. | 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis. | claimed_exact |
 | The Appendix permits a genuinely unbounded Ritz compression A0 and unwanted block Lambda1, with a bounded residual. | D : UnboundedRitzPair carries a densely defined self-adjoint compression rather than a bounded Ritz matrix, while A is a self-adjoint LinearPMap and the canonical endpoints require only a bounded residual/perturbation on the right-hand side. | claimed_exact |
 
-**Notes.** Finite arbitrary-UI-norm and Hilbert-space operator-norm forms are compiled. The source Hilbert-space arbitrary-UI-norm residual and perturbation statements remain open.
+**Notes.** 2026-11-02 literal directed boundary: canonical tangent inequalities now use the functional-calculus operator on the original scalar carrier. The real directed tan2 clause takes one real normalized symmetric family and a real residual; the complexified comparison is retained separately.
+
+2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis.
+
+Finite arbitrary-UI-norm and Hilbert-space operator-norm forms are compiled. The source Hilbert-space arbitrary-UI-norm residual and perturbation statements remain open.
 
 **2026-08-05: the Theorem 6.3 core this row is told to reuse is now unconditional.** It had been stated relative to a tangent representative that nothing constructed; `TanTheta.theorem63DirectedTangent` is now that representative and `theorem6_3_all_kyFan_core_directedTangent` needs no hypothesis beyond the printed ones.  See DK-6.3-thm for the details.  What remains for this row is unchanged: the source Hilbert-space arbitrary-UI-norm residual and perturbation statements at EQUAL rank -- Theorem 6.3 assumes `rank Z < rank V`, and the strict inequality is genuinely used only to make the directed reading meaningful, so the equal-rank statement needs its own argument, not a specialisation.
 
@@ -945,6 +955,13 @@ CURRENT API 2026-09-15: `sinTwoTheta_commonDomain_whereDefinedUIN_rclike` is the
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_rclike`
 - `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_directed`
 - `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_ambient`
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_whereDefinedUIN_real`
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_whereDefinedUIN_real`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily`
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_presentation_whereDefinedUIN_real`
 
 **Curated source/Lean review:**
 
@@ -970,12 +987,16 @@ CURRENT API 2026-09-15: `sinTwoTheta_commonDomain_whereDefinedUIN_rclike` is the
 | H0=H1=0: the perturbation is fully off diagonal. | Every canonical endpoint has hB : IsOddFor U B (with U the selected/reducing A-subspace). The definition expands literally to B(U) subset U-perp and B(U-perp) subset U, the block condition H0=H1=0. | claimed_exact |
 | Q is a reducing subspace of A+H; the printed theorem imposes no separate spectral placement on the perturbed Lambda blocks. | The directed endpoints state hV : ReducesSubspace (addBounded A B) V directly. The ambient endpoints use ReflectionIntertwines A B V, and ReflectionIntertwines.ofReducesSubspace is the registered bridge from the same source-facing reducing-subspace hypothesis. | claimed_exact |
 | No independent tan(2 Theta) pole-exclusion hypothesis is assumed; cos(2 theta_j) != 0 is derived in the proof. | None of the four canonical theorem telescopes contains a caller-supplied pole certificate. The ambient results explicitly conclude cos(2t) != 0 on the angle spectrum before membership and the inequality; the directed results expose the corresponding subunit sine sequence and tangent identification as result conjuncts. | claimed_exact |
-| delta \|\|tan(2 Theta0)\|\| <= 2 \|\|R\|\| in the source-shaped U,V corner notation. | The canonical directed endpoints are the full-unbounded normalized-UIN source witnesses. Over C the paper object is represented by the U -> U-perp projection block of the doubled tangent expression; over R it is tanTwoDirectedCornerR U V on the canonical complexification. Each endpoint states the complete approximation-number identification in its own result, and the pinned correspondence/transport chain carries that representation to the source tan(2 Theta0) norm without adding a pole or branch hypothesis. | claimed_exact |
+| delta \|\|tan(2 Theta0)\|\| <= 2 \|\|R\|\| on the literal directed angle. | The primary concludes directly on sourceDirectedTanTwoThetaOperator V U, defined by cfc (fun t => tan (2*t)) of the trial-side directed angle. Its two norm-domain implications implement the source where-defined convention; no rectangular-corner interpretation is required in the statement. | claimed_exact |
 | delta \|\|tan(2 Theta)\|\| <= 2 \|\|H\|\|. | The ambient complex/real endpoints conclude the factor-two estimate for absTanTwoAngleOperatorC/R and the same full perturbation B. Their result also exposes the derived pole exclusion, preventing the totalized functional calculus from hiding a quarter-turn failure. | claimed_exact |
-| The norm is arbitrary normalized unitary-invariant; the same source norm is used on the tangent and residual/perturbation sides. | All canonical endpoints use NormalizedUnitaryInvariantNorm. The real ambient endpoint is genuinely real. The real directed endpoint represents both source quantities on the canonical complexification and uses one complex norm on both sides; the already-pinned complexification transport chain preserves the approximation numbers/gauges exactly. | claimed_exact |
+| The norm is arbitrary normalized unitary-invariant; the same source norm is used on the tangent and residual/perturbation sides. | Each fixed-field primary takes one NormalizedSymmetricOperatorIdealFamily over the original scalar field. Both operands in the real clause are real operators; both in the complex clause are complex operators. Exactly both displayed norms must exist. No extension of a real norm family to complex operators is assumed. | claimed_exact |
 | Infinite-dimensional and unbounded scope. | The four canonical endpoints assume a separable Hilbert space but no finite-dimensionality; A is a self-adjoint LinearPMap, while B/residual blocks are bounded ContinuousLinearMaps. The ordered form bounds remain meaningful for unbounded A. | claimed_exact |
 
-**Notes.** UNBOUNDED SOURCE-SCOPE CLOSURE 2026-08-12: the remaining Section 2 scope advertised for infinite-dimensional unbounded self-adjoint operators is now compiler-verified. `tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` and `tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` provide the complex and real directed residual endpoints; `tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex` and `tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real` provide the complex and real ambient factor-two endpoints. These wrappers use only the printed ordered-gap, off-diagonal, reducing-subspace, and norm-domain data; pole exclusion/canonical cutoffs and the two-corner assembly remain internal. The result-only census therefore promotes S2-tan-two-theta to terminal exact at full printed scalar/dimension/unbounded/UI-norm scope.
+**Notes.** 2026-11-02 literal directed boundary: canonical tangent inequalities now use the functional-calculus operator on the original scalar carrier. The real directed tan2 clause takes one real normalized symmetric family and a real residual; the complexified comparison is retained separately.
+
+2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis.
+
+UNBOUNDED SOURCE-SCOPE CLOSURE 2026-08-12: the remaining Section 2 scope advertised for infinite-dimensional unbounded self-adjoint operators is now compiler-verified. `tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` and `tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` provide the complex and real directed residual endpoints; `tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex` and `tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real` provide the complex and real ambient factor-two endpoints. These wrappers use only the printed ordered-gap, off-diagonal, reducing-subspace, and norm-domain data; pole exclusion/canonical cutoffs and the two-corner assembly remain internal. The result-only census therefore promotes S2-tan-two-theta to terminal exact at full printed scalar/dimension/unbounded/UI-norm scope.
 
 SOURCE-FACING CLOSURE 2026-08-12: the Section 2 `tan 2 Theta` theorem now has exact source-facing wrappers for both printed conclusions and for both complex and real Hilbert spaces. `tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex` upgrades the branch-free Section 7 directed Ky Fan estimate to every `SymmetricNormingFunction` and derives `cos (2 theta) != 0` internally from the printed ordered spectral gap and `H_0 = H_1 = 0`; it states the sharp residual conclusion `delta * N(tan(2 Theta_0)) <= 2 * N(R)` on the canonical directed projection-block representative. `tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real` transports this exact source statement to real Hilbert spaces using the same canonical complexification convention already used by `sourceDirectedAngleR`, while the residual norm is descended to the real projection block. The ambient half is independently closed by `tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex` and `tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_real`, with `absTanTwoAngleOperatorC_eq_modulus_directedTanTwoAngleOperatorC` connecting the branch-free positive representative to the literal signed functional-calculus tangent. Neither exact endpoint assumes a quarter branch, explicit pole exclusion, nor perturbed-Q-block spectral placement. A semantic search before adding the directed wrapper found no existing source-facing theorem with this exact signature hidden elsewhere; the nearest declarations were the explicit-`hcos` Ky Fan corner specialization, the graph-coordinate real branch-free theorem, and the already-closed ambient theorem.
 
@@ -1320,8 +1341,9 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan.FiniteDimensional.sinTwoTheta_directSum_model_equality`
 - `TauCeti.DavisKahan.FiniteDimensional.tanTwoTheta_directSum_model_equality`
 - `TauCeti.DavisKahan.FiniteDimensional.directSum_model_all_four_equalities`
-- `TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSum_linearIsometryEquiv`
-- `TauCeti.UnitarilyInvariantSeminorm.singularValues_orthogonalBlockSum_congr`
+- `LinearIsometryEquiv.withLpProdCongr`
+- `LinearMap.prodMap_withLpMap_mem_twoSidedUnitaryOrbit`
+- `LinearMap.mem_twoSidedUnitaryOrbit_iff_singularValues_eq`
 - `TauCeti.UnitarilyInvariantSeminorm.apply_orthogonalBlockSum_eq_of_singularValues_smul_eq`
 - `TauCeti.DavisKahan.FiniteDimensional.sinTheta_model_isAdmissiblePair`
 - `TauCeti.DavisKahan.FiniteDimensional.sinTheta_perturbation_le_model_equality`
@@ -1336,8 +1358,9 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSumSubmodule`
 - `TauCeti.UnitarilyInvariantSeminorm.mem_orthogonalBlockSumSubmodule`
 - `TauCeti.UnitarilyInvariantSeminorm.starProjection_orthogonalBlockSumSubmodule`
-- `TauCeti.selfAdjointFunctionalCalculus_intertwines`
-- `TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSum_sub`
+- `LinearMap.IsSymmetric.comp_cfc_eq_cfc_comp`
+- `LinearMap.prodMap`
+- `LinearMap.withLpMap`
 - `TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSum_isSymmetric`
 - `TauCeti.UnitarilyInvariantSeminorm.orthogonalBlockSum_isPositive`
 - `TauCeti.UnitarilyInvariantSeminorm.operatorAbs_orthogonalBlockSum`
@@ -1379,7 +1402,9 @@ SOURCE-EXACT FAÇADES REGISTERED 2026-09-05. Canonical evidence for this row is 
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm.mem_rankOne`
 - `TauCeti.DavisKahan1970.finiteMultiplicitySineBlock_injective`
 
-**Notes.** Sine sharpness and finite multiplicity are compiled; full quartet simultaneous equality remains in the Part III campaign.
+**Notes.** 2026-11-02 dependency migration review: the retired block-sum names are replaced by the accepted product-map representation. LinearIsometryEquiv.withLpProdCongr assembles block isometries. LinearMap.prodMap_withLpMap_mem_twoSidedUnitaryOrbit and LinearMap.mem_twoSidedUnitaryOrbit_iff_singularValues_eq transport blockwise singular-value equality, as used by the existing apply_orthogonalBlockSum_eq_of_singularValues_smul_eq proof. Functional-calculus intertwining is LinearMap.IsSymmetric.comp_cfc_eq_cfc_comp. Subtraction compatibility is definitionally true for LinearMap.prodMap followed by LinearMap.withLpMap; it does not need a replacement theorem or a new source obligation.
+
+Sine sharpness and finite multiplicity are compiled; full quartet simultaneous equality remains in the Part III campaign.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_exact`. The three optimality/ratio witnesses are compiled, axiom-clean, and resolve against the default build. The earlier next_action instruction to "promote them into the build" is discharged -- they already resolve there.
 
@@ -1771,11 +1796,11 @@ What is left on this row is the DIMENSION axis on `J`, which is a different bloc
 
 **Lean declarations:**
 
-- `TauCeti.IsAcute`
+- `Submodule.IsAcute`
 - `TauCeti.isAcute_iff_inf_orthogonal_eq_bot`
 - `TauCeti.DavisKahan.IsUniformlyAcute`
-- `TauCeti.isAcute_of_projectionGap_lt_one`
-- `TauCeti.directedProjectionGap_lt_one_of_transverse`
+- `Submodule.IsAcute.of_projectionGap_lt_one`
+- `Submodule.directedProjectionGap_lt_one_iff`
 - `TauCeti.projectionGap_lt_one_of_isAcute`
 - `TauCeti.isAcute_iff_projectionGap_lt_one`
 - `TauCeti.one_le_projectionGap_of_forall_exists_unit_lt`
@@ -1831,6 +1856,8 @@ results are at the printed hypothesis exactly.
 (5) `one_le_projectionGap_of_forall_exists_unit_lt` isolates exactly what fails in infinite dimension, with no dimension hypothesis: if unit vectors of `U` are almost annihilated by `P_V` without any being annihilated exactly, the gap is forced to `1`.  That is the complement of `directedProjectionGap_lt_one_of_transverse`, where compactness turns the infimum into a positive minimum, and it supplies half of the missing counterexample.
 
 **M37, 2026-08-09 (Claude Opus 5).  STALE BLOCKER ENTRY REMOVED.**  The wrapper this blocker asked for is `TauCeti.IsAcute` together with `isAcute_iff_inf_orthogonal_eq_bot`, which states Definition 3.2 in the paper's own words (`U ⊓ Vᗮ = ⊥` and `Uᗮ ⊓ V = ⊥`); both were already listed here and both re-elaborate clean.  The row's single open `next_action` -- a compiled infinite-dimensional pair separating the printed predicate from the quantitative one -- is a counterexample, not a wrapper, and is not what this blocker described.  The blocker is retired; its text is preserved on `S1-block-residual`.
+
+2026-11-01 accepted-API consumption: the compiled native Submodule.IsAcute predicate replaces TauCeti.IsAcute. Its equivalence with the old projection-zero formulation was compiled in arbitrary RCLike inner-product spaces. The literal crossed-intersection theorem TauCeti.isAcute_iff_inf_orthogonal_eq_bot is retained in DavisKahan/Geometry/Halmos/TwoProjections.lean, with a direct proof from native isAcute_iff_disjoint. Native IsAcute.of_projectionGap_lt_one retains dimension-free gap-to-acuteness; the finite converse is a short consequence of native directedProjectionGap_lt_one_iff in both directions. The infinite-dimensional acute/gap-one counterexample remains. Earlier notes above are historical evidence for the retired representation.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
@@ -2715,7 +2742,8 @@ SOURCE INVARIANT CORRECTED 2026-09-05. Corollary 3.1 says the complete invariant
 - `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm_projection`
 - `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm_projection_right`
 - `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm_directRotation`
-- `TauCeti.adjoint_moorePenroseInverse_of_isSymmetric`
+- `LinearMap.moorePenroseInverse_adjoint`
+- `LinearMap.IsSymmetric.adjoint_eq`
 - `TauCeti.comp_moorePenroseInverse_comm_of_isSymmetric`
 - `TauCeti.moorePenroseInverse_comm_of_isSymmetric`
 - `TauCeti.DavisKahan.FiniteDimensional.directRotationCosine_comm_sinAngleOperator`
@@ -2723,7 +2751,7 @@ SOURCE INVARIANT CORRECTED 2026-09-05. Corollary 3.1 says the complete invariant
 - `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm_sinAngleOperator`
 - `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm_moorePenroseInverse_sinAngleOperator`
 - `TauCeti.DavisKahan.FiniteDimensional.angleOperator_comm_angleComplexStructure`
-- `TauCeti.complementaryProjection_eq_id_sub`
+- `Submodule.starProjection_orthogonal`
 - `TauCeti.DavisKahan.FiniteDimensional.vectorAngle_directRotation_eq_of_angleOperator_apply`
 - `TauCeti.DavisKahan.FiniteDimensional.adjoint_angleComplexStructure`
 - `TauCeti.DavisKahan.FiniteDimensional.re_inner_angleComplexStructure_apply_self`
@@ -2771,7 +2799,9 @@ SOURCE INVARIANT CORRECTED 2026-09-05. Corollary 3.1 says the complete invariant
 - `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_separable`
 - `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal_separable`
 
-**Notes.** Commutation identities are present, but the maximal eigenspace characterization is not represented.
+**Notes.** 2026-11-02 dependency migration review: adjoint compatibility of the symmetric Moore--Penrose inverse follows from the accepted general LinearMap.moorePenroseInverse_adjoint and LinearMap.IsSymmetric.adjoint_eq. The complementary orthogonal projector is given directly by Submodule.starProjection_orthogonal. These replace retired local helper names without changing the proposition or its source scope.
+
+Commutation identities are present, but the maximal eigenspace characterization is not represented.
 
 **ROW WAS STALE.  CORRECTED 2026-08-06: the maximal eigenspace characterisation IS represented, and is proved.**  The note above -- "the maximal eigenspace characterization is not represented" -- was written when the Section 3 frontier was unbuilt and was never revisited.  `proposition3_5_fixedAngle_maximal` states both halves: the fixed-cosine eigenspace `ker (cos^2 Theta - c^2)` is itself a fixed-cosine reducing subspace, and every such subspace is contained in it.  `#print axioms` gives exactly [propext, Classical.choice, Quot.sound] on it and on both halves, and since the Frontier promotion the same day it resolves against `DavisKahan.All`, so `lake build` guards it.  The frontier gate had been reporting `s3-prop3-5` as recursively grounded throughout; the census and the manifest disagreed and the manifest was right.
 
@@ -3010,8 +3040,13 @@ Equations (4.1) and (4.2), the closest-`Q`-vector step and the `V = UZ` factoris
 - `TauCeti.DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation`
 - `TauCeti.DavisKahan.sq_eq_reflectionProduct`
 - `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_isSourceDirectRotation`
+- `TauCeti.DavisKahan1970.corollary4_1_directRotation_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.corollary4_1_directRotation_whereDefinedUIN_real`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily`
 
-**Notes.** Compiled without any angle restriction, for every unitarily invariant norm, over every RCLike field (finite dimension).  The earlier note conflating this row with Proposition 4.4 is resolved: the corollary concerns the restricted displacement and needs no angle hypothesis.
+**Notes.** 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis.
+
+Compiled without any angle restriction, for every unitarily invariant norm, over every RCLike field (finite dimension).  The earlier note conflating this row with Proposition 4.4 is resolved: the corollary concerns the restricted displacement and needs no angle hypothesis.
 
 **SOURCE WRAPPER ADDED 2026-08-05**, in `DavisKahan/Sources/DavisKahan1970/Section4.lean` (namespace `TauCeti.DavisKahan1970`), so the facade can cite the paper's numbering directly.  The wrappers are `alias`es over the already-compiled general theorems, so they carry the exact statements.
 
@@ -3185,6 +3220,9 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan.norm_one_sub_apply_eq_of_isSourceDirectRotation`
 - `TauCeti.DavisKahan.sq_eq_reflectionProduct`
 - `TauCeti.DavisKahan1970.crossedDefectsEquivalent_of_isSourceDirectRotation`
+- `TauCeti.DavisKahan1970.proposition4_3_directRotation_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.proposition4_3_directRotation_whereDefinedUIN_real`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily`
 
 **Curated source/Lean review:**
 
@@ -3222,9 +3260,11 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 | The same formulas also imply minimality of the operator norm and of the Hilbert--Schmidt norm of 1 - V. | Not claimed. The strongest registered evidence is `directRotation_minimizes_sum_sq_basis_angles`, the finite-dimensional statement that the direct rotation minimizes the orthonormal-basis displacement energy `sum_k \|\|V v_k - v_k\|\|^2`, which is the squared Hilbert--Schmidt norm of `1 - V`; it is the neighbouring Proposition 4.2 in Hilbert--Schmidt form rather than a declaration on this row's own conclusion. The operator-norm half and the infinite-dimensional Hilbert--Schmidt half have no registered declaration here. | open |
 | The source warns that arbitrary unitary-invariant norms of 1 - V need not be minimized by the direct rotation. | Not claimed on this row. The repository does refute the corresponding printed minimality assertion -- Proposition 4.4, whose known-false status is recorded on the separate census row DK-4.4-prop -- but no declaration registered here states this negative scope clause, and this review makes no claim about Proposition 4.4 or its repair. | open |
 | The scope is a separable Hilbert space, real or complex, of unrestricted dimension. | Both canonical declarations are stated on an arbitrary Hilbert space with no finite-dimensionality hypothesis, one over the complex field and one over the real field. The finite-dimensional aliases `proposition4_3`, `proposition4_3_kyFan` and `proposition4_3_minimizer` are labelled specializations and are recorded as supporting evidence only. | claimed_exact |
-| The norm is an arbitrary normalized unitary-invariant norm. | `N : SymmetricNormingFunction` is an explicit argument of both canonical declarations; that is the repository's carrier for the source's norm class, with its axioms (1.9) and the rank-one normalization. | claimed_exact |
+| The norm is an arbitrary normalized unitary-invariant norm. | 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis. | claimed_exact |
 
-**Notes.** Compiled for every unitarily invariant norm over every RCLike field (finite dimension), via Fan-Hoffman majorization of the pinched competitor and two-block pinching contraction.
+**Notes.** 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis.
+
+Compiled for every unitarily invariant norm over every RCLike field (finite dimension), via Fan-Hoffman majorization of the pinched competitor and two-block pinching contraction.
 
 VERIFIED 2026-08-04: the finite-dimensional UI-norm minimality is compiled, axiom-clean and in the default build. The **infinite-dimensional** form is stated in `DavisKahan/Experimental/Frontier/Section4.lean` and is `sorry` (`#print axioms` reaches `sorryAx`). Proposition 4.1's infinite form *is* proved, in `Experimental/MathAhead/Section4/InfiniteProposition41.lean`, by a spectral-cutoff min-max argument -- that is the pattern to follow.
 
@@ -3483,6 +3523,9 @@ The first hole asked for a source-facing theorem for "(5.2) is not best possible
 - `TauCeti.DavisKahan1970.theorem5_2_sourceExact_complex`
 - `TauCeti.DavisKahan1970.theorem5_2_sourceExact_real`
 - `TauCeti.DavisKahan.ExactSinTheta.NormalizedUnitaryInvariantNorm`
+- `TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_real`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily`
 
 **Curated source/Lean review:**
 
@@ -3509,12 +3552,14 @@ The first hole asked for a source-facing theorem for "(5.2) is not best possible
 | Let X, Y be Hilbert spaces and let A on Y, B on X be semibounded self-adjoint operators. | `A : E ->L. E` and `B : F ->L. F` are Mathlib `LinearPMap`s with `IsSelfAdjoint` as a hypothesis, over complete inner-product spaces with no finite-dimensionality assumption. Semiboundedness is not a field of a carrier; it is the two form hypotheses below. | claimed_exact |
 | A >= gamma + delta > gamma >= B. | In `theorem5_2_symmetricNorming_complex` this is literal: `hAlow : SemiboundedBelow A (c + delta)` and `hBhigh : SemiboundedAbove B c` with `hdelta : 0 < delta`, which is exactly the printed chain. `theorem5_2_symmetricNorming_real` instead takes the whole `FormBoundedSylvesterGap A B delta`, of which the printed ordering is one constructor, so the real endpoint assumes strictly less than the print. | claimed_exact |
 | If X, C : X -> Y are bounded and A X = X B + C. | `X R : F ->L E` are bounded continuous linear maps and `hsyl : SylvesterEquation A B X R` is the printed equation on the domain where it is meaningful. | claimed_exact |
-| Then for every unitary-invariant norm, \|\|C\|\| >= delta \|\|X\|\|. | `N : SymmetricNormingFunction` is an explicit argument and the conclusion is `N.Mem X /\ delta * N.gauge X <= N.gauge R`. The printed inequality is the second conjunct with the printed sharp constant; the first conjunct additionally concludes that X lies in the norm's ideal whenever C does, which the source's own convention about vacuous norms leaves implicit. | claimed_exact |
-| The norm is an arbitrary normalized unitary-invariant norm. | `SymmetricNormingFunction` is the repository's carrier for that class. The ideal-family forms `theorem5_2` and `davisKahan1970_sylvester_real` quantify instead over an arbitrary Ky-Fan-dominant symmetric operator ideal family; `symmetricNorming_of_kyFanDominant` is the compiled promotion between the two, so the paper's norm class is reached by a theorem and not by an assertion. | claimed_exact |
+| Then for every unitary-invariant norm, \|\|C\|\| >= delta \|\|X\|\|. | 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis. | claimed_exact |
+| The norm is an arbitrary normalized unitary-invariant norm. | 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis. | claimed_exact |
 | This is the source's main Sylvester tool for the unbounded self-adjoint passages. | Both canonical declarations are stated for unbounded `LinearPMap` operators on arbitrary complete inner-product spaces; only the two cross maps are bounded, exactly as the printed theorem asks. The source states that the additional analytic work for the unbounded scope is concentrated in Theorem 5.2 and the Appendix to Section 6, and that is the scope these declarations are proved at. | claimed_exact |
 | The scalar field is the source's, real or complex. | `theorem5_2_symmetricNorming_complex` and `theorem5_2_symmetricNorming_real` are the two fixed-field endpoints, both at every source unitarily invariant norm and both without a finite-dimensionality hypothesis. `davisKahan1970_sylvester_real` and `real_unbounded_sylvester_kyFan` are the real ideal-family and per-Ky-Fan-level companions. | claimed_exact |
 
-**Notes.** The completed Section 6 route contains the needed constant-one engines, while the exact source theorem alias is still in the full Part III repair campaign.
+**Notes.** 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis.
+
+The completed Section 6 route contains the needed constant-one engines, while the exact source theorem alias is still in the full Part III repair campaign.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. The ordered Sylvester engine and the unbounded interval/exterior UI-norm theorem are compiled and axiom-clean; an exact Theorem 5.2 wrapper is absent.
 
@@ -3589,8 +3634,15 @@ SOURCE-EXACT FAÇADE REGISTERED 2026-09-05. Canonical evidence is now the printe
 - `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_separable_real`
 - `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_complex`
 - `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_separable_real`
+- `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.lemma6_1_sourceOperators_whereDefinedUIN_real`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.lemma6_1_converse_sourceOperators_whereDefinedUIN_real`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily`
 
-**Notes.** Both directions are proved; the converse should be added to the exact audit manifest.
+**Notes.** 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis.
+
+Both directions are proved; the converse should be added to the exact audit manifest.
 
 **STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.
 
@@ -3616,8 +3668,12 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 - `TauCeti.DavisKahan1970.lemma6_1_sourceExact`
 - `TauCeti.DavisKahan1970.lemma6_1_converse_sourceExact`
 - `TauCeti.DavisKahan1970.lemma6_2_separable`
+- `TauCeti.DavisKahan1970.lemma6_2_whereDefinedUIN_rclike`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily`
 
-**Notes.** Part of the clean Section 6 surface.
+**Notes.** 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis.
+
+Part of the clean Section 6 surface.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
@@ -3652,8 +3708,18 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 - `TauCeti.DavisKahan1970.proposition6_1_sourceExact_real`
 - `TauCeti.DavisKahan1970.proposition6_1_printedGap_sourceExact_complex`
 - `TauCeti.DavisKahan1970.proposition6_1_printedGap_sourceExact_real`
+- `TauCeti.DavisKahan1970.proposition6_1_commonDomain_normalizedUIN_rclike`
+- `TauCeti.DavisKahan1970.proposition6_1_commonDomain_presentation_rclike`
+- `TauCeti.DavisKahan1970.proposition6_1_commonDomain_whereDefinedUIN_rclike`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily`
+- `TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.theorem5_2_whereDefinedUIN_real`
 
-**Notes.** Complex and real source forms are compiled.
+**Notes.** 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis.
+
+2026-11-02: 2026-11-02 operator-scope repair: primary evidence now uses common-domain unbounded self-adjoint operators and the full form gaps. No new analytic proof was needed; the wrapper transports the existing common-domain presentation through the existing normalized-norm bridge. The initial norm-domain strengthening is superseded by the where-defined repair recorded above.
+
+Complex and real source forms are compiled.
 
 **STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.
 
@@ -3674,7 +3740,7 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 
 **ATOMIZATION CLOSED 2026-09-05.** The hole read: the source block contains the Sylvester identity (6.1), Proposition 6.1, and an explicit 2x2 counterexample showing the ambient one-sided sine conclusion fails; the counterexample exists elsewhere but is not registered as evidence for this row.  It is registered now.  `counterexample_sine_square_norm` gives the printed `2 * ||sin Theta||_sq = 2`, `counterexample_perturbation_square_norm` gives `||H||_sq = sqrt 3`, and `oneGap_does_not_imply_symmetric_square_estimate` is the printed strict inequality: one directional gap of width 2 does NOT give the symmetric square-norm estimate.  The Sylvester step is proof-only -- classified `proof_only` at the atom level -- and its content is Theorem 5.2 applied to the residual block, so the clause cites the Theorem 5.2 source-exact witnesses rather than manufacturing a separate obligation for a proof equation.
 
-**Next action.** None. The passage is split into three clauses -- the proof's Sylvester step, the printed 2x2 counterexample, and Proposition 6.1 -- each bound to evidence in the statement map.
+**Next action.** Preserve the compiled full operator scope and the explicit where-defined norm clauses. Retain the stronger membership-transfer endpoints as supporting results; the canonical inequalities use the weaker family and both displayed membership premises.
 
 ### `DK-6.1-thm` — Generalized sine theorem
 
@@ -3697,6 +3763,9 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.theorem6_1_sourceExact_real`
 - `TauCeti.DavisKahan1970.theorem6_1_printedGap_sourceExact_complex`
 - `TauCeti.DavisKahan1970.theorem6_1_printedGap_sourceExact_real`
+- `TauCeti.DavisKahan1970.theorem6_1_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.theorem6_1_whereDefinedUIN_real`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily`
 
 **Curated source/Lean review:**
 
@@ -3726,11 +3795,15 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 | sin Theta_0 is any operator having the same singular values as P Q-perp. | `S : SinThetaRepresentativeAcross (directedSinThetaOperator E_0 F_0 hframe hepsilon)` is an explicit argument, and the conclusion is stated about `S.operator`. The representative may live between different spaces; only the singular-value sequence is prescribed, which is the printed freedom. | claimed_exact |
 | If one of A_0, Lambda_1 has spectrum in [beta, alpha] and the other has spectrum outside (beta - delta, alpha + delta). | `hgap : FormBoundedSylvesterGap A_0 Lambda_1 delta` with `hdelta : 0 < delta`. The printed interval/exterior alternative in either orientation is two of that predicate's constructors; the other two are the ordered semibounded configurations the source's scope paragraph explicitly permits when the separating interval is half-infinite. The Lean hypothesis is therefore weaker than the printed one, so the theorem is stronger on this axis. | claimed_exact |
 | Then for every unitary-invariant norm, delta * epsilon * \|\|sin Theta_0\|\| <= \|\|R\|\|. | The text after the theorem colon is `N.Mem S.operator /\ delta * epsilon * N.gauge S.operator <= N.gauge R`. The second conjunct is the boxed inequality with both printed factors intact; the first additionally concludes that the sine representative lies in the norm's ideal whenever the residual does. | claimed_exact |
-| The norm is an arbitrary normalized unitary-invariant norm. | `N : SymmetricNormingFunction` is the first explicit argument of both canonical declarations; no Ky Fan family, ideal family or proof-capability class appears in either signature. | claimed_exact |
+| The norm is an arbitrary normalized unitary-invariant norm. | 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis. | claimed_exact |
 | The scalar field is real or complex and the dimension is unrestricted. | `theorem6_1_complex` and `theorem6_1_real` are the two fixed-field endpoints, on complete inner-product spaces with no finite-dimensionality hypothesis anywhere. | claimed_exact |
 | The source's unbounded self-adjoint scope applies to the single-angle theorems. | A, A_0 and Lambda_1 are `LinearPMap` values in both canonical declarations, with self-adjointness and the domain transport as hypotheses, so the unbounded reading is the statement rather than a later extension. The Appendix relaxations -- one dense common domain, and a common graph core -- are the supporting `theorem6_1_commonDomain`, `theorem6_1_real_commonDomain` and `theorem6_1_real_commonCore`. | claimed_exact |
 
-**Notes.** This is the canonical source-general sine theorem.
+**Notes.** 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis.
+
+2026-11-02: 2026-11-02: canonical evidence now selects the full-form-gap unbounded theorem directly; the former finite interval/exterior witnesses remain supporting specializations. Ambient separability is unnecessary in the selected theorem. The normalized-norm assumption is unchanged and its broader source comparison is deferred.
+
+This is the canonical source-general sine theorem.
 
 **STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.
 
@@ -3744,7 +3817,7 @@ REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly
 
 REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
-**Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
+**Next action.** Preserve the compiled full operator scope and the explicit where-defined norm clauses. Retain the stronger membership-transfer endpoints as supporting results; the canonical inequalities use the weaker family and both displayed membership premises.
 
 ### `DK-6.2-thm` — Pairwise-gap square-norm sine theorem
 
@@ -3848,6 +3921,11 @@ Residue, and not a gap: `[CompleteSpace Z]`, which `Theorem63InfiniteTrial.lean`
 - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists`
 - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real`
 - `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_real`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_whereDefinedUIN_real`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_presentation_whereDefinedUIN_real`
 
 **Curated source/Lean review:**
 
@@ -3886,11 +3964,15 @@ Residue, and not a gap: `[CompleteSpace Z]`, which `Theorem63InfiniteTrial.lean`
 | but allow dim X(E_0) < dim X(F_0). | The canonical declarations do not assume the strict dimension inequality; they prove the conclusion for an arbitrary complete trial subspace, so dropping the hypothesis strengthens rather than narrows. The literal form is registered as supporting evidence: `theorem6_3_generalizedTanTheta_ideal_directedTangent` binds `Module.rank Z < Module.rank V` exactly as printed, at the cost of also carrying a finite-dimensionality instance. | claimed_exact |
 | let the directed sine data have the singular values of E_0^* F_1. | The canonical declarations take the tangent representative `tanTheta0` as an explicit parameter together with `htan`, which prescribes exactly the tangents of the arcsines of the directed sine block's approximation numbers -- the printed 'let the directed tangent data have these singular values', as a hypothesis rather than an existential. That such a representative always exists is separately compiled: `theorem63DirectedTangent` and `theorem63DirectedTangentReal` are the explicit witnesses, and the bounded endpoints exhibit one in their conclusion. | claimed_exact |
 | If spec(A_0) subset [beta, alpha] and spec(Lambda_1) subset [alpha + delta, infinity). | The canonical declarations take the printed separation in its half-infinite ordered form, which is the configuration the source's scope paragraph explicitly permits: the Ritz compression is bounded above by alpha in quadratic form, and `A` has no spectrum in the open gap `(alpha, alpha + delta)`, so the exact subspace is the spectral subspace for `(-infinity, alpha]`. The printed lower endpoint beta is dropped, which weakens the hypothesis. The literal printed spectral inclusions, both of them, are carried by the supporting bounded endpoint `tanTheta_directed_bounded_spectralGap_symmetricNorming_complex`; over the reals the corresponding bounded endpoint is stated in the equivalent form-bound orientation, and there is no real declaration in the printed spectral orientation. | claimed_exact |
-| then the corresponding directed tangent operator satisfies, for every unitary-invariant norm, delta \|\|tan Theta_0\|\| <= \|\|R\|\|. | Both canonical declarations conclude `N.Mem tanTheta0 /\ delta * N.gauge tanTheta0 <= N.gauge D.residual` for an arbitrary `N : SymmetricNormingFunction`: the printed inequality with the printed constant, plus membership of the tangent in the norm's ideal whenever the residual is in it. | claimed_exact |
-| The norm is an arbitrary normalized unitary-invariant norm. | `N : SymmetricNormingFunction` in both canonical declarations. The ideal-family endpoints quantify over a `KyFanDominantIdealFamily` instead; the two abstractions are equi-strong for this theorem, because the paper's norm class literally contains the Ky Fan norms and Fan dominance recovers the family back. | claimed_exact |
+| then the corresponding directed tangent operator satisfies, for every unitary-invariant norm, delta \|\|tan Theta_0\|\| <= \|\|R\|\|. | 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis. | claimed_exact |
+| The norm is an arbitrary normalized unitary-invariant norm. | 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis. | claimed_exact |
 | The scalar field is real or complex and the dimension is unrestricted. | Both fields are covered at unbounded ambient operator, arbitrary Hilbert dimension and arbitrary complete trial subspace, and both endpoints are at the paper's norm class. | claimed_exact |
 
-**Notes.** Bounded finite-source Theorem 6.3 proved axiom-clean in DavisKahan.TanTheta.Theorem63FiniteSource (theorem6_3_all_kyFan_core, theorem6_3_generalizedTanTheta_ideal); promoted out of Scratch.
+**Notes.** 2026-11-02 literal directed boundary: canonical tangent inequalities now use the functional-calculus operator on the original scalar carrier. The real directed tan2 clause takes one real normalized symmetric family and a real residual; the complexified comparison is retained separately.
+
+2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis.
+
+Bounded finite-source Theorem 6.3 proved axiom-clean in DavisKahan.TanTheta.Theorem63FiniteSource (theorem6_3_all_kyFan_core, theorem6_3_generalizedTanTheta_ideal); promoted out of Scratch.
 
 **A HYPOTHESIS WITH NO PRODUCER, FOUND AND DISCHARGED 2026-08-05.** Every compiled form of Theorem 6.3 quantified over a `tanTheta0` satisfying `HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0`, and a grep for *producers* rather than consumers showed that nothing anywhere in the repository ever constructed one.  The compiled theorem was therefore a conditional whose antecedent had no witness -- strictly weaker than the printed theorem, which takes the tangent representative for granted.  The row said `proved_in_build`, which was true of the declarations and misleading about the mathematics.
 
@@ -4456,7 +4538,7 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 - `TauCeti.DavisKahan.subspaceGap_le_of_orderedFormGap_unbounded_printed`
 - `TauCeti.DavisKahan.subspaceGap_le_of_reflectionProduct_form_nonneg`
 - `TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg`
-- `TauCeti.DavisKahan.reflectionProduct_add_swap_eq`
+- `Submodule.reflection_mul_add_mul_reflection`
 - `TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg`
 - `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded`
 - `TauCeti.DavisKahan1970.Section8.canonicalLowBranchUnbounded_reduces`
@@ -4698,23 +4780,15 @@ SUPERSEDED LATER THE SAME DAY.  At this point only canonical evidence selection 
 
 REAL UNBOUNDED ENDPOINTS AND CANONICAL PROMOTION, 2026-09-06.  The unbounded Section 8 development now has its real siblings: `theorem8_1_canonicalBranchUnbounded_printed_real`, `theorem8_1_maximalAngle_le_iff_orderedFormGap_unbounded_real`, `theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le_real` and the two `..._CompressionRepulsion_unbounded_real`, transported by complexification through `realSpecRange` and `complexifySubmodule`.  With complex and real unbounded evidence for every clause of Theorem 8.1 that inherits ambient scope, the canonical evidence for `existence-correct-q`, `acute-iff-spectral-placement` and `part-i-compression` is promoted to the unbounded witnesses; the bounded declarations that were canonical are retained as registered specializations.  The explicit finite-dimensional formulas in parts (ii) and (iii) keep their finite-dimensional canonical evidence.  Part (ii)'s separate infinite-dimensional-extension phrase is classified rather than assigned a unique canonical theorem.
 
-SOURCE-FACING UNBOUNDED FAÇADES, 2026-09-06.  The canonical declarations were the general unbounded theorems -- the placements as form inequalities over the ambient domain, part (i) for an arbitrary partial map and reducing subspace.  Those are the right shapes for the mathematics and the wrong shapes for a source boundary.  `Theorem81SourceUnbounded.lean` restates them on the objects Davis and Kahan write: `Lambda_0`, `Lambda_1` as the reducing restrictions of `A + H` with the placements as operator inequalities on them, the existence clause as the existential, and part (i) in the `A/H/P/Q` context with `C_1` the cosine block.  The bridge `semiboundedAbove_reducingRestriction_iff` and its siblings are unfolding.  The general theorems are retained as registered generalizations.
+SOURCE-FACING UNBOUNDED FAÇADES, 2026-09-06.  The canonical declarations were the general unbounded theorems -- the placements as form inequalities over the ambient domain, part (i) for an arbitrary partial map and reducing subspace.  Those are the right shapes for the mathematics and the wrong shapes for a source boundary.  `Theorem81SourceUnbounded.lean` restates them on the objects Davis and Kahan write: `Lambda_0`, `Lambda_1` as the reducing restrictions of `A + H` with the placements as operator inequalities on them, the existence clause as the existential, and part (i) in the `A/H/P/Q` context with `C_1` the cosine block.  The bridge `semiboundedAbove_reducingRestriction_iff` and its siblings are unfolding.  The general theorems are retained as registered generalizations. November 16: consume accepted #27804 for the strict bounded quarter-angle branch and Submodule.reflection_mul_add_mul_reflection for the reflection polynomial; the broader non-strict and pointwise unbounded consumers remain local.
 
 **Next action.** No result-level hole remains for Theorem 8.1. Preserve the accepted exact source-facing evidence set and re-audit only if the source specification or theorem signatures change.
 
 ### `DK-8.2-thm` — Smallness selects the acute branch and closing extension remark
 
-**importance:** `major`  **section:** 8  **source:** Theorem 8.2 and final Section 8 extension remark  **kind:** theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `reopened_mapping`
+**importance:** `major`  **section:** 8  **source:** Theorem 8.2 and final Section 8 extension remark  **kind:** theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
 
 **Summary.** If the perturbation norm or the residual norm is below half the gap, and the unperturbed block's spectrum lies in the enlarged central interval, then the sine double-angle estimate is accompanied by Theta < pi/4.
-
-**Scope gap.** **ONE AXIS REMAINS.  Updated 2026-08-10 (Claude Opus 5, coordinator-verified); the two mechanical leftovers and the documentation defect this field used to record are all CLOSED.**
-
-**THE REMAINING AXIS: the RESIDUAL `sin 2Theta` at a general unitarily invariant norm, at the DIRECTED `Theta_0`, with the printed constant 2.**  The obstruction is MATHEMATICAL.  With `C` the `P`-to-`Pperp` block of `A + K`, the singular values of `C + C*` are those of `C` DOUBLED, so `N(C + C*) = 2 N(C)` in general -- the trace norm witnesses it.  Every route through `sinTwoTheta_ambient_bounded_symmetricNorming_complex` must supply a comparison operator REDUCED BY `P`, hence block-diagonal, whose displacement from `A + K` is at best exactly `-(C + C*)`; with `N(C) <= N(R)` that gives constant FOUR, not TWO, and it is not improvable within that route.  Recovering the printed constant needs the singular-value identification of `sin 2Theta_0` with `sin 2Theta_1` -- the HALMOS GENERIC DECOMPOSITION.  Contrast the DIMENSION axis of this row, which turned out NOT to need that machinery.
-
-THIS AXIS IS EQUALLY OPEN OVER `R` AND OVER `C`, AND THE SCALAR AXIS ADDS NOTHING TO IT: the real perturbation half reaches the full printed norm scope and the real residual half reaches the operator norm, EXACTLY MATCHING the complex coverage.
-
-At the OPERATOR norm the compiled residual statement is sound and in fact STRONGER than printed, because `norm_offdiag_add_eq` makes the two off-diagonal blocks equal there, so the AMBIENT reading is legitimate.  Note also that the paper's own proof (transcription L2342) delivers constant ONE, `delta ||sin 2Theta_0|| <= ||B|| <= ||R||`, via Lemma 6.1, where L757 and L2523-2525 print two.
 
 **Lean declarations:**
 
@@ -4807,11 +4881,20 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 - `TauCeti.DavisKahan1970.Section8.sourceResidual_eq_sub_ritzBlock`
 - `TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_complex`
 - `TauCeti.DavisKahan1970.Section8.exists_ritzBlock_of_realSpectrum_subset_Icc_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_fullAngle_lt_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_fullAngle_lt_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_normalizedUIN_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_normalizedUIN_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_whereDefinedUIN_unbounded_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_whereDefinedUIN_complex`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbation_whereDefinedUIN_unbounded_real`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_residual_commonDomain_whereDefinedUIN_real`
+- `TauCeti.DavisKahan.ExactSinTheta.NormalizedSymmetricOperatorIdealFamily`
 
 **Curated source/Lean review:**
 
 *Setup*
-- A is self-adjoint, A + H is the perturbation, R is the residual, Q is the exact spectral subspace and P the trial subspace, and Theta is the ambient angle between them.
+- A and T=A+H are common-domain self-adjoint operators, P reduces A and Q reduces T. The residual alternative requires only a bounded extension R of (T-A)|P; the perturbation alternative requires a bounded self-adjoint full H.
 
 *Hypotheses*
 - All hypotheses of the sin(2 theta) theorem, imported by reference.
@@ -4829,13 +4912,17 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 | source clause | Lean realization | status |
 | --- | --- | --- |
 | Add to the hypotheses of the $\sin 2\theta$ theorem … | The `sin 2theta` hypotheses are written out in the type of each of the four source façades: `hPred` that `P` reduces `A`, and `hQred`, `hQspec`, `hQperp` that `Q` reduces `A + H` with the printed spectral placement.  The row still has no Lean object standing for "the hypotheses of the previous theorem"; it has them enumerated. | claimed_exact |
-| either $\norm{H}_1<\delta/2$ or $\norm{R}_1<\delta/2$ | The alternative is split across two declarations rather than carried as a disjunction, which is what lets the residual branch keep the printed `‖R‖ < delta/2` and not acquire `‖H‖ < delta/2`.  `theorem8_2_perturbation_sourceExact_unbounded_{complex,real}` take `‖H‖ < delta/2`; `theorem8_2_residual_sourceExact_unbounded_{complex,real}` take `‖R‖ < delta/2` on the residual itself.  `theorem8_2_branch_maximalAngle_lt_unbounded_source_{complex,real}` carry the disjunction. | claimed_exact |
+| either $\norm{H}_1<\delta/2$ or $\norm{R}_1<\delta/2$ | The two alternatives are registered separately: bounded full H with \|\|H\|\|<delta/2, or common-domain A,T and only bounded R with \|\|R\|\|<delta/2. The earlier bounded-H disjunction wrappers remain supporting specializations. | claimed_exact |
 | and assume $\spec(A_0)\subset[\beta-\delta/2,\alpha+\delta/2]$ | `hPspec : realSpectrum (reducingRestriction A P hPred) ⊆ Set.Icc (beta - delta/2) (alpha + delta/2)`, the central-spectrum assumption on the block `A_0` at unbounded scope. | claimed_exact |
 | The two crossed subspaces have equal dimension — condition (3.5), never restated in Theorem 8.2. | Every unbounded source façade takes `CrossedDefectsEquivalent P Q` and no dimension hypothesis of any kind, which is (3.5) itself rather than the finite-dimensional sufficient condition (1.5). | claimed_exact |
-| the corresponding double-angle estimate remains valid | The first conjunct of each source façade: `delta * N(sin 2Theta) ≤ 2 * N(H)` for the perturbation alternative and `delta * N(sin 2Theta_0) ≤ 2 * N(R)` for the residual one, at every normalized unitarily invariant norm, with `A` a possibly unbounded self-adjoint partial map.  The bounded `theorem8_2_sinTwoTheta_*_sourceExact` family, canonical until 2026-09-06, is retained as a registered specialization. | claimed_exact |
-| $\Theta<\pi/4$ | `maximalAngle P Q < Real.pi / 4`, the second conjunct of each source façade and the whole conclusion of `theorem8_2_branch_maximalAngle_lt_unbounded_source_{complex,real}`. | claimed_exact |
+| the corresponding double-angle estimate remains valid | The perturbation witnesses retain the ambient double-angle bound. The common-domain residual witnesses retain the directed bound on the original R and conclude the full acute branch together, allowing T-A itself to be unbounded. The numerical comparison uses the weaker where-defined norm family with both displayed membership premises; the acute conclusion is independent of those premises. | claimed_exact |
+| $\Theta<\pi/4$ | The literal sourceFullAngleLtC/R at pi/4 is concluded in both alternatives. The common-domain residual-only branch corollaries require no ideal membership and no globally bounded full perturbation. | claimed_exact |
 
-**Notes.** REPAIRED AND RE-CLOSED 2026-08-12 (result inventory row `DK-8.2-thm`).  The reopening was correct on both counts.  (a) The standing post-Proposition-3.2 convention -- (3.5) is assumed as well as (1.5) except where the contrary is stated -- is now represented as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption` and linked to the two counted results it genuinely governs, Theorem 8.2 and Proposition 3.4.  It is scope, not a new counted result, so the denominator is unchanged at 29.  (b) The printed quarter-angle conclusion is the AMBIENT Theta < pi/4, and the selected evidence is now `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`, which conclude `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis.  No new Lean mathematics was needed once the scope was right.
+**Notes.** 2026-11-02 norm-boundary repair: the selected declaration quantifies over NormalizedSymmetricOperatorIdealFamily and compares the two displayed norm values only when both exist. It does not assume unconditional Fan dominance or conclude ideal membership from majorization. The older NormalizedUnitaryInvariantNorm endpoint is retained as supporting evidence at its stronger norm hypothesis.
+
+2026-11-02: 2026-11-02 residual-only unbounded repair: canonical residual and acute-branch evidence now accepts common-domain self-adjoint A,T with only bounded R on P. The source band supplies the full trial domain; a bounded self-adjoint completion K with ||K||<=||R|| and A'=T-K reduces to the existing homotopy proof. The old bounded-full-perturbation witnesses are retained as specializations. Stronger norm-domain assumptions remain deferred.
+
+REPAIRED AND RE-CLOSED 2026-08-12 (result inventory row `DK-8.2-thm`).  The reopening was correct on both counts.  (a) The standing post-Proposition-3.2 convention -- (3.5) is assumed as well as (1.5) except where the contrary is stated -- is now represented as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption` and linked to the two counted results it genuinely governs, Theorem 8.2 and Proposition 3.4.  It is scope, not a new counted result, so the denominator is unchanged at 29.  (b) The printed quarter-angle conclusion is the AMBIENT Theta < pi/4, and the selected evidence is now `theorem8_2_branch_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_real_maximalAngle_lt_of_crossedDefects`, which conclude `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis.  No new Lean mathematics was needed once the scope was right.
 
 `theorem8_2_perturbationHalfGap_selectedBranch` and `theorem8_2_residualHalfGap_selectedBranch` are proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` on the perturbation form gives [propext, Classical.choice, Quot.sound]. The half-gap bridges (`perturbationHalfGapBridge_of_circleContinuationData`, `residualHalfGapBridge_of_circleContinuationData`) are proved too.
 
@@ -5026,13 +5113,9 @@ SOURCE-EXACT FAÇADE REGISTERED 2026-09-05. Canonical evidence is now the printe
 
 SOURCE-FACING UNBOUNDED FAÇADES, 2026-09-06.  The retained double-angle estimates were still canonical at BOUNDED operator scope (`A K : H ->L[k] H`) while the acute conclusion was canonical at the inherited unbounded scope -- a visible signature mismatch.  Four façades now state Theorem 8.2 as the source states it, one theorem per alternative and scalar field concluding BOTH the retained estimate and `Theta < pi/4`, with `A` a possibly unbounded self-adjoint partial map: `theorem8_2_{perturbation,residual}_sourceExact_unbounded_{complex,real}`.  No new mathematics: the retained estimates are the Section 2 unbounded endpoints, with the printed spectral placement converted to the `FormBoundedSylvesterGap` they take by `intervalExterior`.  The bounded declarations are retained as registered specializations.
 
-**Next action.** Hostile re-audit reopened this row. A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions.
+**Next action.** Preserve the compiled full operator scope and the explicit where-defined norm clauses. Retain the stronger membership-transfer endpoints as supporting results; the canonical inequalities use the weaker family and both displayed membership premises.
 
 **Blocked by:** `hostile-audit-atomization`
-
-**Completion holes:**
-
-- {'kind': 'audit_atomization', 'detail': 'A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions.'}
 
 ### `DK-9-model` — Fourth-derivative Rayleigh–Ritz model
 
@@ -5749,17 +5832,13 @@ The asymptotic is the one worth naming explicitly. The source records it rather 
 - `TauCeti.DavisKahan1970.Section9.truncatedTrial_mem_diagonalDomain`
 - `TauCeti.DavisKahan1970.Section9.truncatedTrial_sub_geometricTrial_apply`
 - `TauCeti.DavisKahan1970.Section9.truncatedTrial_sub_geometricTrial_hasSum_sq`
-- `TauCeti.LinearPMap.adjoint_domain_le_lpDiagonal_domain`
-- `TauCeti.LinearPMap.dense_lpDiagonal_domain`
-- `TauCeti.LinearPMap.lpDiagonal`
-- `TauCeti.LinearPMap.lpDiagonalDomain`
-- `TauCeti.LinearPMap.lpDiagonal_apply`
-- `TauCeti.LinearPMap.lpDiagonal_domain`
-- `TauCeti.LinearPMap.lpDiagonal_isSelfAdjoint`
-- `TauCeti.LinearPMap.lpDiagonal_isSymmetric`
-- `TauCeti.LinearPMap.lpDiagonal_single`
-- `TauCeti.LinearPMap.mem_lpDiagonalDomain_iff`
-- `TauCeti.LinearPMap.single_mem_lpDiagonal_domain`
+- `HilbertBasis.diagonalPMap`
+- `HilbertBasis.mem_diagonalPMap_domain_iff_memℓp`
+- `HilbertBasis.repr_diagonalPMap_apply`
+- `HilbertBasis.self_mem_diagonalPMap_domain`
+- `HilbertBasis.dense_diagonalPMap_domain`
+- `HilbertBasis.adjoint_diagonalPMap`
+- `HilbertBasis.isSelfAdjoint_diagonalPMap`
 
 **Notes.** The pointwise constant image and divergent finite partial energies are formalized algebraically, together with an explicit finite-support truncation repair that agrees on arbitrary prescribed prefixes.
 
@@ -5810,7 +5889,7 @@ The hole was precise: Lean had the truncations lying in the domain and agreeing 
 
 `exists_truncatedTrial_mem_domain_and_dist_lt` is that claim: for every tolerance there is a truncation inside `diagonalDomain` within that tolerance of the trial vector. It rests on `tendsto_norm_truncatedTrial_sub_geometricTrial`, and the computation is exact rather than an estimate -- `truncatedTrial_sub_geometricTrial_hasSum_sq` gives the error's squared norm as the geometric tail `mu^(2N)/(1 - mu^2)`, since the difference vanishes below the cut and is `-mu^n` above it.
 
-This is what makes the example say what the source wants. The trial vector's failure to lie in the perturbed operator's domain is not stable: it obstructs the residual-based theorems, which need the vector itself, while leaving the lower-bound methods available, since those tolerate an arbitrarily small move into the domain.
+This is what makes the example say what the source wants. The trial vector's failure to lie in the perturbed operator's domain is not stable: it obstructs the residual-based theorems, which need the vector itself, while leaving the lower-bound methods available, since those tolerate an arbitrarily small move into the domain. November 16: the paper-facing maximal diagonal operator now directly instantiates accepted HilbertBasis.diagonalPMap at the coordinate lp Hilbert basis (#34547); the parallel lpDiagonal donor is retired. Domain, coordinate action, self-adjointness and density consumers use the native API. This does not claim DKPS proof descent for the upstream construction.
 
 **Next action.** None. The domain defect, the useful Rayleigh quotient, the truncations' membership and prefix agreement, and the arbitrarily small norm repair are all compiled, the last with the exact geometric tail rather than a bound.
 

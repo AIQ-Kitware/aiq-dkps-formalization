@@ -202,7 +202,7 @@ theorem sinTwoTheta_reflectionResidual_opNorm_real
     (by simp [SymmetricOperatorIdealFamily.Mem])
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-    ContinuousLinearMap.kyFanGauge_one, coe_nnnorm,
+    ContinuousLinearMap.kyFanGauge_one, coe_nnNorm,
     norm_sinTwoThetaIdealBlock_real] at h
   exact h.2
 
@@ -231,7 +231,7 @@ theorem sinTwoTheta_addBounded_opNorm_real
     (by simp [SymmetricOperatorIdealFamily.Mem])
   simp only [SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
     SymmetricOperatorIdealFamily.gaugeReal, OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal,
-    ContinuousLinearMap.kyFanGauge_one, coe_nnnorm,
+    ContinuousLinearMap.kyFanGauge_one, coe_nnNorm,
     norm_sinTwoThetaIdealBlock_real] at h
   exact h.2
 

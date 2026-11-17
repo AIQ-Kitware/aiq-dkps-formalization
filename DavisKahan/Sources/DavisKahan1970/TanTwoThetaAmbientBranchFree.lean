@@ -235,7 +235,7 @@ theorem tanTwoTheta_ambient_bounded_kyFan_complex_of_block
           (((((b - a) / 2 : ℝ)) : ℂ) • K)).kyFanGauge j : ℝ) ≤
         ((projectionBlock Uᗮ U H).kyFanGauge j : ℝ) := by
     intro j
-    rw [projectionBlock_smul_branchFree, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm,
+    rw [projectionBlock_smul_branchFree, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hcnorm,
       kyFan_lowerBlock_eq_upperBlock_branchFree H hH j]
     linarith [hcorner j]
   have h₁ : ∀ j : ℕ,
@@ -243,7 +243,7 @@ theorem tanTwoTheta_ambient_bounded_kyFan_complex_of_block
           (((((b - a) / 2 : ℝ)) : ℂ) • K)).kyFanGauge j : ℝ) ≤
         ((projectionBlock Uᗮᗮ Uᗮ H).kyFanGauge j : ℝ) := by
     intro j
-    rw [projectionBlock_smul_branchFree, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm,
+    rw [projectionBlock_smul_branchFree, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hcnorm,
       ← kyFan_lowerBlock_eq_upperBlock_branchFree K hK j]
     linarith [hcorner j]
   have hcombine := lemma61_all_kyFan Uᗮ U
@@ -259,7 +259,7 @@ theorem tanTwoTheta_ambient_bounded_kyFan_complex_of_block
   have hsumH :
       projectionBlock Uᗮ U H + projectionBlock Uᗮᗮ Uᗮ H =
         diagonalPair Uᗮ U H := rfl
-  rw [hsum, hsumH, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm] at hcombine
+  rw [hsum, hsumH, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hcnorm] at hcombine
   have hpinch := diagonalPair_all_kyFan_le Uᗮ U H k
   rw [hblockModulus k]
   linarith [hcombine.trans hpinch]
@@ -286,7 +286,7 @@ theorem tanTwoTheta_ambient_bounded_symmetricNorming_complex_of_block
       (b - a) * ((tanTwoAngleOperatorC U V).kyFanGauge k : ℝ) ≤
         ((((2 : ℝ) : ℂ) • H).kyFanGauge k : ℝ) := by
     intro k
-    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo]
+    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, htwo]
     exact tanTwoTheta_ambient_bounded_kyFan_complex_of_block hH hK hab
       hblockModulus hcorner k
   have hMem2 : N.Mem (((2 : ℝ) : ℂ) • H) := by

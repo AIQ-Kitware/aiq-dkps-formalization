@@ -139,7 +139,7 @@ theorem tendsto_gauge_schatten_sub_zero_of_singularValue_le
         by simpa only [sub_eq_add_neg] using (T n).singularValue_add_index_le (-A) (k / 2) (k / 2)
       _ ≤ S.singularValue (k / 2) + S.singularValue (k / 2) := by
         have hneg : (-A).singularValue (k / 2) = A.singularValue (k / 2) := by
-          simpa only [neg_one_smul, nnnorm_neg, nnnorm_one, one_mul] using
+          simpa only [neg_one_smul, nnNorm_neg, nnNorm_one, one_mul] using
             ContinuousLinearMap.singularValue_smul (-1 : 𝕜) A (k / 2)
         rw [hneg]
         exact add_le_add (hdom n _) (hAdom _)

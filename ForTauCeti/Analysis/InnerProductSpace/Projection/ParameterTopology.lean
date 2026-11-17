@@ -128,7 +128,7 @@ theorem isClosed_unitaryPairedProjectionSpace
     simp only [Set.ofPred_forall]
     apply isClosed_iInter
     intro x
-    exact S.closed_of_finiteDimensional.preimage
+    exact S.isClosed_of_finiteDimensional.preimage
       (continuous_id.clm_apply continuous_const)
   exact isClosed_setOf_isStarProjection.inter (hcomm.inter (href.inter hsupp))
 

@@ -337,7 +337,7 @@ theorem forward_all_kyFan
       ((-(D.residual.adjoint ∘L D.F₁)).kyFanGauge k : ℝ) := by
     erw [← (congrArg NNReal.toReal (ContinuousLinearMap.kyFanGauge_adjoint P.forwardResidualBlock k)),
       ← (congrArg NNReal.toReal (by
-          simpa only [neg_one_smul, nnnorm_neg, nnnorm_one, one_mul] using
+          simpa only [neg_one_smul, nnNorm_neg, nnNorm_one, one_mul] using
             (ContinuousLinearMap.kyFanGauge_smul (-1 : ℝ) P.forwardResidualBlock.adjoint k))),
       (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hres.kyFanGauge_eq k)))]
@@ -449,7 +449,7 @@ theorem symmetric_all_kyFan_real
           (isSelfAdjoint_starProjection P.V).adjoint_eq,
           (isSelfAdjoint_starProjection P.Uᗮ).adjoint_eq,
           ContinuousLinearMap.comp_assoc]
-      rw [hblockSine, hblockRes, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm,
+      rw [hblockSine, hblockRes, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm,
         hgapNorm, ContinuousLinearMap.kyFanGauge_adjoint]
       exact hrev)
     (fun j => by
@@ -472,7 +472,7 @@ theorem symmetric_all_kyFan_real
           (isSelfAdjoint_starProjection P.U).adjoint_eq,
           (isSelfAdjoint_starProjection P.Vᗮ).adjoint_eq,
           ContinuousLinearMap.comp_assoc]
-      rw [hblockSine, hblockRes, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm,
+      rw [hblockSine, hblockRes, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm,
         hgapNorm, ContinuousLinearMap.kyFanGauge_adjoint,
         ContinuousLinearMap.kyFanGauge_adjoint]
       exact hfwd) k
@@ -488,7 +488,7 @@ theorem symmetric_all_kyFan_real
   calc
     P.gap * ((crossSineSum P.U P.V).kyFanGauge k : ℝ) =
         ((P.gap • crossSineSum P.U P.V).kyFanGauge k : ℝ) := by
-      rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hgapNorm]
+      rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hgapNorm]
     _ ≤ ((diagonalPair P.Uᗮ P.V P.perturbation).kyFanGauge k : ℝ) := hcombine
     _ ≤ (P.perturbation.kyFanGauge k : ℝ) := hres
 

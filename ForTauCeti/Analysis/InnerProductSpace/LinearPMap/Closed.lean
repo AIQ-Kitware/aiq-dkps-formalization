@@ -152,20 +152,21 @@ not constructed a second time in the donor. -/
 noncomputable def reducingRestriction
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : _root_.LinearPMap.IsReducing A U) : U →ₗ.[𝕜] U :=
-  A.restrict hred.isInvariant
+  A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant)
 
 /-- The restricted partial map has the canonical domain preimage. -/
 @[simp] theorem reducingRestriction_domain
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : _root_.LinearPMap.IsReducing A U) :
     (reducingRestriction A U hred).domain = reducingRestrictionDomain A U := by
-  exact _root_.LinearPMap.restrict_domain hred.isInvariant
+  exact _root_.LinearPMap.restrict_domain (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant)
 /-- Membership in the canonical restriction's domain is ambient domain membership. -/
 theorem mem_reducingRestriction_domain_iff
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : _root_.LinearPMap.IsReducing A U) (x : U) :
     x ∈ (reducingRestriction A U hred).domain ↔ (x : E) ∈ A.domain := by
-  exact _root_.LinearPMap.mem_restrict_domain hred.isInvariant
+  exact _root_.LinearPMap.mem_restrict_domain
+    (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant)
 
 /-- Include a domain vector of the native restriction in the ambient domain.
 This uses the public domain-membership theorem, not opacity-sensitive unfolding. -/
@@ -212,13 +213,15 @@ theorem coe_reducingRestriction_apply
     ((reducingRestriction A U hred
         ⟨x, (mem_reducingRestriction_domain_iff A U hred x).mpr hx⟩ : U) : E) =
       A ⟨(x : E), hx⟩ := by
-  exact _root_.LinearPMap.coe_restrict_apply hred.isInvariant _
+  exact _root_.LinearPMap.coe_restrict_apply
+    (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant) _
 
 /-- No bridge proof is needed: the donor spelling is the canonical restriction. -/
 theorem reducingRestriction_eq_restrict
     (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (hred : _root_.LinearPMap.IsReducing A U) :
-    reducingRestriction A U hred = A.restrict hred.isInvariant :=
+    reducingRestriction A U hred =
+      A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant) :=
   rfl
 
 /-- Adjoint-domain membership of a reducing restriction is exactly ambient
@@ -308,7 +311,7 @@ theorem mem_reducingRestriction_adjoint_domain_iff
           (((reducingRestriction A U hred) x : U) : E) =
             A (reducingRestrictionDomainToAmbient A U hred x) := by
         exact _root_.LinearPMap.coe_restrict_apply
-          hred.isInvariant x
+          (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant) x
       rw [← hact]
       simp only [Submodule.coe_inner]
     rw [hfun] at hcomp'

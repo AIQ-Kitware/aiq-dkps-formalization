@@ -8,9 +8,10 @@ DKPS formalization, what the relationship was, and which connections remain
 uninvestigated. The census is about mathematics and formal proofs, not just the
 person who opened a PR.
 
-Latest accepted-main/lineage comparison and pending local consumption are in
-[the November 16 audit](#november-16-accepted-main-operator-roadmap-and-proof-lineage-audit).
-The DKPS dependency pin remains unchanged.
+The [November 16 audit](#november-16-accepted-main-operator-roadmap-and-proof-lineage-audit)
+records accepted integrations and proof lineage. The
+[consumption checkpoint](#november-16-consume-the-accepted-quarter-angle-diagonal-and-closed-ball-apis)
+advances DKPS to that accepted main and retires the three identified duplicates.
 
 ## Evidence and attribution rules
 
@@ -5294,7 +5295,7 @@ Exact introducing commits (all ancestors of the inspected main):
 - #39742: `dafb66493a8a59a32affd8d826306fc46633ea05`.
 - #34547: `f16b3e079896faf1c75dfcb8c498ebdb87230eed`.
 
-**Next consumption slices, in dependency order:**
+**Consumption plan at the initial audit (items 1–4 completed by the checkpoint below):**
 
 1. Upgrade to an accepted Tau Ceti revision together with its exact Mathlib
    inputs. Latest main still uses Lean v4.36.0-rc2 but Mathlib is now
@@ -5363,3 +5364,70 @@ closed as covered, without integration. #29129 and #30736 remain open at
 `b2079662d849812b32c84672602dd3f023923d23` and
 `292a7d472a646809988c8f5fe5ce214dc0eb2eb9` respectively; neither is credited
 as accepted. This audit ran no Lake builds and retired no mathematics.
+
+
+### November 16: consume the accepted quarter-angle, diagonal and closed-ball APIs
+
+The dependency is now accepted Tau Ceti
+`086028a6d8d186715b52fac7f3e7b23175ed2dc9`, with its exact Mathlib revision
+`e8ba86fa9744dd8d90f48c1752bc735f61a4ca81` and unchanged Lean v4.36.0-rc2.
+Every transitive dependency revision matches Tau Ceti's manifest. This replaces
+the prior `a67a65006c` / `1b1ccf4b088b` input pair; no dependency points into a
+coordination submodule. Mathlib's prebuilt artifacts and Tau Ceti's native
+artifact mappings were fetched; the root `.lake` remains on VM-local ext4.
+
+| Local mathematics | Native consumption and preserved scope |
+| --- | --- |
+| `DavisKahan.isQuarterAcute_of_orderedFormGap` | Its original paper-facing signature remains, with a direct application of `Submodule.projectionGap_lt_sqrt_two_div_two_of_orderedFormGap` and explicit raw-inequality/form-predicate conversions. Arbitrary complete complex Hilbert spaces, zero spaces and nonseparable spaces remain covered. No real or unbounded completion is inferred from this strict bounded result. |
+| `reflected_centered_form_lower`, `reflection_anticommutes_of_maps_orthogonal`, `reflectionProduct_add_swap_eq` | These local forwarding/proof engines are deleted. The spectral-repulsion and non-strict consumers apply native `Submodule.reflection_centered_form_lower`, `reflection_mul_eq_neg_mul_of_maps_orthogonal` and `reflection_mul_add_mul_reflection`, respectively. Bundled reflection/composition bridges are local proof equalities, not new public aliases. |
+| `LinearPMap/DiagonalMultiplication.lean` | The entire donor is deleted. The Section 9 `diagonalOperator` is directly `HilbertBasis.diagonalPMap` at the coordinate Hilbert basis of `lp`; `diagonalDomain` is its native domain. Source-facing membership, action, self-adjointness, symmetry, density and first-eigenvector declarations retain their names and formulas. No alternate diagonal carrier or ForTauCeti forwarding facade remains. |
+| `norm_comp_starProjection_orthogonal_eq_sSup_unitClosedBall` | The redundant local closed-ball formula is deleted. Native `sSup_image_inter_unitClosedBall_eq_nnNorm_comp_subtypeL` is the restricted-norm API and `singularValue_eq_iInf_sSup_image_orthogonal_inter_unitClosedBall` the global min-max API. The genuinely extra incomplete-ambient projection/restriction comparison and spectral-band estimate remain local. |
+
+The non-strict quarter-angle and pointwise strict consequences remain local,
+because they support the unbounded source theorem without the uniform positive
+constant of the bounded strict theorem. No source-result denominator, printed
+hypothesis, norm class or accepted boundary partition is changed. The source
+census, result inventory and semantic-surface audit now reference the accepted
+native reflection polynomial and diagonal declarations instead of retired names.
+`RoadmapBridge.CanonicalConsumers` exercises independent scalar/index universes,
+arbitrary RCLike star-fixed diagonal coefficients and the exact native domain;
+it also checks the restricted closed-ball identity without completeness or
+projection instances, and rejects reintroduction of the retired names.
+
+Provenance remains distinct: #27804 explicitly adapts the original DKPS
+Lyapunov/similarity/CFC proof (Jon Crall, OpenAI GPT-5.6 Thinking and Claude
+Opus 5, Kitware 2026, Apache-2.0). #34547 and #41373 were submitted by other
+contributors; overlap with the earlier local operator/formula is recorded,
+without inferring that their proofs copied or adapted DKPS. The deleted
+maximal-diagonal donor's Jon Crall/Claude Opus 5 Kitware notices remain in the
+manifest, Git history and paper-facing consumer. Current native reductions
+and compatibility repairs: OpenAI gpt-6.1-sol.
+
+Compatibility repairs consume the newly canonical locations and premises:
+real-algebra and finite-rank modules moved; the gap inverse is now the generic
+`IsometricContinuousFunctionalCalculus.isUnit_and_norm_ringInverse_le`;
+restriction proofs use `LinearPMap.isInvariant_iff`; Sylvester projection
+identities take a reducing subspace; adjoint intertwiners take isometry/coisometry
+identities; the eigenvector CFC theorem takes a continuous difference quotient
+(obtained from finite spectrum here). Native norm spellings replace deprecated
+Mathlib names. Hilbert–Schmidt consequences omit completeness premises that the
+accepted native results no longer need. The Acharyya strong-law consumer now
+supplies integrability to the generalized upstream API. Public paper-facing
+hypotheses and conclusions remain intact.
+
+
+Validation at this consumption checkpoint, without warnings: the focused
+mathematics build passed (8216 jobs), followed by focused compatibility checks.
+The final full default `lake build` passed (21907 jobs), then `lake build
+Challenge` passed (20085 jobs). The explicit `ResultSemanticSurface` audit
+passed (11390 jobs). The maintained source-census compiler probe resolves all
+1573 registered declarations against `DavisKahan.All`, and the existing
+result-inventory scalar-scope checks pass. This is compiler/registration
+evidence, not a new semantic acceptance of the paper.
+
+Final green logs are retained in the shared campaign checkout at
+`waves/2026-11-16/accepted-consumption/`; `full5.log.gz` is the final default
+checkpoint, `challenge.log.gz` and `audits2.log.gz` are the later validations.
+Artifacts were reused incrementally; no clean build was run. The rendered
+source-census Markdown was refreshed from its maintained JSON, including prior
+unrendered historical notes. No source atoms or boundary partitions changed.

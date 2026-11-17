@@ -1218,8 +1218,6 @@ theorem spectraCanonicalAbsoluteValue_commute_reflectionProduct
       (ContinuousLinearMap.modulus (spectraCanonicalIntertwiner U V))
       (spectraReflectionProduct U V) := by
   rw [ContinuousLinearMap.modulus_eq_abs]
-  change Commute (CFC.abs (spectraCanonicalIntertwiner U V))
-    (spectraReflectionProduct U V)
   exact
     (spectraCanonicalIntertwiner_commute_reflectionProduct U V).cfcAbs_left
       (spectraCanonicalIntertwiner_commute_star_reflectionProduct U V)

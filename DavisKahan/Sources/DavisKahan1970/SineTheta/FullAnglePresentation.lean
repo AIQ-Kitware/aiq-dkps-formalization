@@ -161,8 +161,8 @@ theorem norm_sineBlockC_eq_directedProjectionGap
   have hseq := ContinuousLinearMap.sameSingularValues_ambientSubspaceBlock
     U Vᗮ (sineBlockC U V)
   have h0 := (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hseq 0))
-  rw [ContinuousLinearMap.singularValue_zero, coe_nnnorm,
-    ContinuousLinearMap.singularValue_zero, coe_nnnorm] at h0
+  rw [ContinuousLinearMap.singularValue_zero, coe_nnNorm,
+    ContinuousLinearMap.singularValue_zero, coe_nnNorm] at h0
   have hamb :
       Vᗮ.subtypeL ∘L sineBlockC U V ∘L U.subtypeL.adjoint =
         Vᗮ.starProjection ∘L U.starProjection := by
@@ -227,8 +227,8 @@ theorem directedProjectionGap_orthogonal
   have h : (T.adjoint.singularValue 0 : ℝ) = (T.singularValue 0 : ℝ) := by
     rw [
       ContinuousLinearMap.singularValue_adjoint]
-  rw [ContinuousLinearMap.singularValue_zero, coe_nnnorm,
-    ContinuousLinearMap.singularValue_zero, coe_nnnorm, hadj] at h
+  rw [ContinuousLinearMap.singularValue_zero, coe_nnNorm,
+    ContinuousLinearMap.singularValue_zero, coe_nnNorm, hadj] at h
   exact h.symm
 
 /-- The source cosine-defined directed angle is a positive operator. -/

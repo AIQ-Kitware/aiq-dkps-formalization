@@ -59,7 +59,7 @@ operator norms over the maps of bounded rank, and the transport is a
 rank-preserving, norm-preserving bijection of those. -/
 theorem approximationNumber_clm (T : E →L[𝕜] F) (n : ℕ) :
     ((clm (e := e) T).singularValue n : ℝ) = (T.singularValue n : ℝ) := by
-  simp only [ContinuousLinearMap.singularValue_def, NNReal.coe_iInf, coe_nnnorm]
+  simp only [ContinuousLinearMap.singularValue_def, NNReal.coe_iInf, coe_nnNorm]
   refine (Equiv.iInf_congr (Equiv.subtypeEquiv (clmEquiv (e := e)) fun R => ?_) fun R => ?_).symm
   · rw [show ((clmEquiv (e := e)) R : ScalarTransport e E →L[𝕂] ScalarTransport e F) =
       clm (e := e) R from rfl, rank_clm_eq]

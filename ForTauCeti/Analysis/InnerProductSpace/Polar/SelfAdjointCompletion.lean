@@ -11,7 +11,7 @@ public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Domination
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
-public import TauCeti.Analysis.Normed.Operator.RealAlgebra
+public import TauCeti.Topology.Algebra.Module.ContinuousLinearMap.RealAlgebra
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Instances

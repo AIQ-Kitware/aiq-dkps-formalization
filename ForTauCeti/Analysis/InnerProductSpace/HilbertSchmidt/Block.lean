@@ -56,6 +56,7 @@ section Defs
 
 variable (b : HilbertBasis ι 𝕜 F) (P : E →L[𝕜] E) (Q : F →L[𝕜] F)
 
+omit [CompleteSpace F] in
 /-- Sandwiching a Hilbert--Schmidt operator between two bounded operators keeps its energy finite,
 so the block map lands back in the Hilbert--Schmidt class. -/
 theorem energy_block_ne_top (f : lp (fun _ : ι => E) 2) :
@@ -80,11 +81,13 @@ noncomputable def blockFun (f : lp (fun _ : ι => E) 2) : lp (fun _ : ι => E) 2
     (((P.comp (b.columnOperator f)).comp Q).hilbertSchmidtEnergy_ne_top_iff_memℓp b).mp
       (energy_block_ne_top b P Q f)⟩
 
+omit [CompleteSpace F] in
 /-- The block map, seen through the operator model. -/
 @[simp] theorem columnOperator_blockFun (f : lp (fun _ : ι => E) 2) :
     b.columnOperator (blockFun b P Q f) = (P.comp (b.columnOperator f)).comp Q :=
   b.columnOperator_mk _ _
 
+omit [CompleteSpace F] in
 /-- The two-sided block map is additive. -/
 theorem blockFun_add (f g : lp (fun _ : ι => E) 2) :
     blockFun b P Q (f + g) = blockFun b P Q f + blockFun b P Q g := by
@@ -93,6 +96,7 @@ theorem blockFun_add (f g : lp (fun _ : ι => E) 2) :
   ext x
   simp
 
+omit [CompleteSpace F] in
 /-- The two-sided block map is homogeneous.  With `blockFun_add` this makes it linear on the `lp`
 model, which is what lets it be bundled as a continuous linear map. -/
 theorem blockFun_smul (c : 𝕜) (f : lp (fun _ : ι => E) 2) :
@@ -133,6 +137,7 @@ end Defs
 
 /-! ### A block is fixed by its own projections -/
 
+omit [CompleteSpace F] in
 /-- An idempotent left factor fixes the block it cuts.  This is one of the two
 hypotheses the per-block Sylvester estimate takes. -/
 theorem comp_columnOperator_blockFun_left (b : HilbertBasis ι 𝕜 F) {P : E →L[𝕜] E}
@@ -141,6 +146,7 @@ theorem comp_columnOperator_blockFun_left (b : HilbertBasis ι 𝕜 F) {P : E �
   rw [columnOperator_blockFun, ← ContinuousLinearMap.comp_assoc,
     ← ContinuousLinearMap.comp_assoc, hP]
 
+omit [CompleteSpace F] in
 /-- An idempotent right factor fixes the block it cuts. -/
 theorem comp_columnOperator_blockFun_right (b : HilbertBasis ι 𝕜 F) (P : E →L[𝕜] E)
     {Q : F →L[𝕜] F} (hQ : Q.comp Q = Q) (f : lp (fun _ : ι => E) 2) :

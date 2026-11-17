@@ -99,7 +99,7 @@ theorem nuclearSignedSineTransport_norm_sub
   rw [SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily] at h
   simp only [OperatorIdealFamily.gauge_opNorm] at h
   have ht := congrArg ENNReal.toReal h
-  simpa only [toReal_enorm] using ht
+  simpa only [toReal_eNorm] using ht
 
 section Complex
 

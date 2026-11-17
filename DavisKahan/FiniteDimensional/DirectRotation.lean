@@ -33,7 +33,7 @@ public section
 
 local instance {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
     [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : CompleteSpace E :=
-  FiniteDimensional.complete 𝕜 E
+  FiniteDimensional.completeSpace 𝕜 E
 
 
 attribute [local instance] ContinuousLinearMap.realAlgebra ContinuousLinearMap.realIsScalarTower
@@ -244,7 +244,7 @@ theorem directRotation_minimizes_max_displacement
       UnitarilyInvariantSeminorm.opNorm (𝕜 := 𝕜) (E := E) (F := E) (displacementSquare X) =
         ‖(X - LinearMap.id).toContinuousLinearMap‖ ^ 2 := by
     intro X
-    have : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+    have : CompleteSpace E := FiniteDimensional.completeSpace 𝕜 E
     have hD : displacementSquare X =
         LinearMap.adjoint (LinearMap.id - X) ∘ₗ (LinearMap.id - X) := by
       simp only [displacementSquare, map_sub, LinearMap.adjoint_id]

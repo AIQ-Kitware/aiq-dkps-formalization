@@ -223,7 +223,7 @@ theorem kyFanGaugeReal_add_le_of_exists_finiteRestriction {S T : E →L[𝕜] F}
   let w : β → E := fun p => v p.1.1 p.2
   let V : Submodule 𝕜 E := Submodule.span 𝕜 (Set.range w)
   let : FiniteDimensional 𝕜 V := Module.Finite.span_of_finite 𝕜 (Set.finite_range w)
-  let : CompleteSpace V := FiniteDimensional.complete 𝕜 V
+  let : CompleteSpace V := FiniteDimensional.completeSpace 𝕜 V
   let SV : V →L[𝕜] F := S ∘L V.subtypeL
   let TV : V →L[𝕜] F := T ∘L V.subtypeL
   have hsumRestrict : (S + T) ∘L V.subtypeL = SV + TV := by

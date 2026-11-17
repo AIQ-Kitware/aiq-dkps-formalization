@@ -81,7 +81,7 @@ theorem extendedGauge_smul (N : SymmetricNormingFunction)
         (fun i : Fin n => ((c • A).singularValue (i : ℕ) : ℝ)) =
           ‖c‖ • (fun i : Fin n => (A.singularValue (i : ℕ) : ℝ)) := by
       funext i
-      rw [ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm]
+      rw [ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnNorm]
       simp [smul_eq_mul]
     rw [hprefix, N.finiteGauge_smul]
     simp [abs_of_nonneg (norm_nonneg c)]
@@ -257,7 +257,7 @@ theorem extendedGauge_comp_le (N : SymmetricNormingFunction)
       ((L ∘L A ∘L R).kyFanGauge k : ℝ) ≤
         ((((‖L‖ * ‖R‖ : ℝ) : 𝕜) • A).kyFanGauge k : ℝ) := by
     intro k
-    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm]
+    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hcnorm]
     calc
       ((L ∘L A ∘L R).kyFanGauge k : ℝ)
           ≤ ‖L‖ * (A.kyFanGauge k : ℝ) * ‖R‖ :=

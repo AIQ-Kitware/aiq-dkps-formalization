@@ -66,8 +66,8 @@ private theorem re_inner_real_smul_self (r : ℝ) (y : E) :
 omit [CompleteSpace E] in
 /-- **The reflected centered partial map is coercive by half the ordered gap.**
 
-This is `reflected_centered_form_lower` for an unbounded `A`.  The hypotheses
-that were "`U` is invariant" in the bounded statement become "`U` reduces `A`":
+This extends native `Submodule.reflection_centered_form_lower` to an unbounded
+`A`. The bounded hypothesis "`U` is invariant" becomes "`U` reduces `A`":
 that is what keeps `P x` and `P^⊥ x` inside the domain, so the two ordered form
 bounds can be applied to them at all. -/
 theorem reflected_centered_form_lower_pmap

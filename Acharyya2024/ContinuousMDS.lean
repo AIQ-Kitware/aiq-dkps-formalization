@@ -1096,13 +1096,10 @@ theorem ae_tendsto_averaged_pointStress {d : Nat} (P : Measure M) [IsProbability
         (𝓝 (continuousPointStress d P χ c v)) := by
   classical
   set f : M → Real := fun m => (‖v - χ m‖ - c m) ^ 2 with hf
-  have hfmeas : Measurable f := by
-    rw [hf]
-    exact ((measurable_const.sub hχ).norm.sub hc).pow_const 2
   have hfint : Integrable f P :=
     integrable_continuousPointStress_integrand P hχ.aestronglyMeasurable
       hc.aestronglyMeasurable hχb hcb v
-  have hslln := TauCeti.Probability.strong_law_ae_infinitePi P hfmeas hfint
+  have hslln := TauCeti.Probability.strong_law_ae_infinitePi P hfint
   filter_upwards [hslln] with φ hφ
   have hval : ∫ y, f y ∂P = continuousPointStress d P χ c v := rfl
   rw [hval] at hφ

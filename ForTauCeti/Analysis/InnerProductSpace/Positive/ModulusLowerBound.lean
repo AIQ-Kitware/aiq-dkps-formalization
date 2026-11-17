@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT-6 (Codex; configuration unspecified)
 module
 
 public import TauCeti.Analysis.InnerProductSpace.Modulus
-public import TauCeti.Analysis.Normed.Operator.RealAlgebra
+public import TauCeti.Topology.Algebra.Module.ContinuousLinearMap.RealAlgebra
 public import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order
 
 /-!

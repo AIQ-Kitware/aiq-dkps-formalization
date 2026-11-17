@@ -56,8 +56,9 @@ theorem schattenUnitaryGradient_apply_of_unitary_restriction
   have hinter : M.subtypeL ∘L (V : M →L[ℂ] M) = (U : E →L[ℂ] E) ∘L M.subtypeL := by
     ext y
     exact hV y
-  have hinterStar := ContinuousLinearMap.comp_star_eq_star_comp_of_mem_unitary M.subtypeL
-    hVunit hUunit hinter
+  have hinterStar := ContinuousLinearMap.comp_star_eq_star_comp_of_mul_star_self_of_star_mul_self
+    M.subtypeL (Unitary.coe_mul_star_self (Unitary.linearIsometryEquiv.symm V))
+    (Unitary.coe_star_mul_self (Unitary.linearIsometryEquiv.symm U)) hinter
   have h := ContinuousLinearMap.comp_cfc_eq_cfc_comp M.subtypeL hinter hinterStar
     (fun z => (schattenPhaseDerivative p z : ℂ))
     (Complex.continuous_ofReal.comp (continuous_schattenPhaseDerivative p hp)).continuousOn

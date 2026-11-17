@@ -9,6 +9,8 @@ public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinT
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.All
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Diagonal
+public import TauCeti.Analysis.Normed.Operator.Restrict
 public import ForTauCeti.Analysis.Normed.Operator.Restriction
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance
 
@@ -102,6 +104,41 @@ example [FiniteDimensional K E] [FiniteDimensional K F]
 
 end Hilbert
 
+section Diagonal
+
+-- The retired donor allowed independent scalar/index universes and arbitrary
+-- star-fixed coefficients, without countability or a bound on the multiplier.
+variable {K : Type u} [RCLike K] {ι : Type v}
+
+example (d : ι → K) (hd : ∀ i, star (d i) = d i) :
+    IsSelfAdjoint ((HilbertBasis.ofRepr
+      (LinearIsometryEquiv.refl K (lp (fun _ : ι => K) 2))).diagonalPMap d) :=
+  HilbertBasis.isSelfAdjoint_diagonalPMap _ (funext hd)
+
+example (d : ι → K) (x : lp (fun _ : ι => K) 2) :
+    x ∈ ((HilbertBasis.ofRepr (LinearIsometryEquiv.refl K _)).diagonalPMap d).domain ↔
+      Memℓp (fun i => d i * (x : ι → K) i) 2 := by
+  simpa only [← HilbertBasis.repr_apply_apply, LinearIsometryEquiv.coe_refl, id_eq] using
+    (HilbertBasis.mem_diagonalPMap_domain_iff_memℓp
+      (b := HilbertBasis.ofRepr (LinearIsometryEquiv.refl K _)) (c := d) (x := x))
+
+end Diagonal
+
+section ClosedBall
+
+-- This restricted-norm identity needs neither ambient completeness nor a
+-- projection instance. The global min-max infimum theorem has stronger premises.
+variable {K : Type u} [DenselyNormedField K]
+  {E : Type v} [NormedAddCommGroup E] [NormedSpace K E]
+  {F : Type w} [SeminormedAddCommGroup F] [NormedSpace K F]
+
+example (T : E →L[K] F) (M : Submodule K E) :
+    sSup ((fun x => ‖T x‖₊) '' ((M : Set E) ∩ Metric.closedBall 0 1)) =
+      ‖T ∘L M.subtypeL‖₊ :=
+  T.sSup_image_inter_unitClosedBall_eq_nnNorm_comp_subtypeL M
+
+end ClosedBall
+
 end RoadmapBridge.CanonicalConsumers
 
 -- Absence is checked after importing the production aggregate, not on an empty environment.
@@ -130,6 +167,12 @@ run_cmd do
       `TauCeti.uiNorm_sylvester_le_of_spectralDistance,
       `TauCeti.sinTheta_perturbation_le_of_spectralDistance,
       `TauCeti.uiNorm_sylvester_le_of_spectralDistance_real,
-      `TauCeti.uiNorm_sylvester_le_of_spectralDistance_complex] do
+      `TauCeti.uiNorm_sylvester_le_of_spectralDistance_complex,
+      `TauCeti.LinearPMap.lpDiagonal,
+      `TauCeti.LinearPMap.lpDiagonalDomain,
+      `ContinuousLinearMap.norm_comp_starProjection_orthogonal_eq_sSup_unitClosedBall,
+      `TauCeti.DavisKahan.reflected_centered_form_lower,
+      `TauCeti.DavisKahan.reflection_anticommutes_of_maps_orthogonal,
+      `TauCeti.DavisKahan.reflectionProduct_add_swap_eq] do
     if env.contains name then
       throwError "Noncanonical compatibility declaration remains: {name}"

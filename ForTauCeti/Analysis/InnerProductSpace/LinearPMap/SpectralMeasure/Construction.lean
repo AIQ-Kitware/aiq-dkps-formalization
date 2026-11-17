@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.PairShift
+
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
 public import Mathlib.MeasureTheory.Integral.DominatedConvergence
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley

@@ -667,7 +667,7 @@ theorem sinTwoTheta_reflectionResidual_of_spectrum_gap
     (by simp [TauCeti.SymmetricOperatorIdealFamily.Mem])).2
   simpa only [TauCeti.SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
-    TauCeti.OperatorIdealFamily.gauge_opNorm, toReal_enorm,
+    TauCeti.OperatorIdealFamily.gauge_opNorm, toReal_eNorm,
     norm_sinTwoThetaIdealBlock_complex] using h
 
 /-- Canonical complex operator-norm unbounded sine-two-theta theorem for a

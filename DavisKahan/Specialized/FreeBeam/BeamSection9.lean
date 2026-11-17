@@ -118,7 +118,7 @@ instance : FiniteDimensional ℂ beamTrial := by
   exact FiniteDimensional.span_of_finite ℂ (Set.toFinite _)
 
 /-- A finite-dimensional subspace is complete. -/
-instance : CompleteSpace beamTrial := FiniteDimensional.complete ℂ _
+instance : CompleteSpace beamTrial := FiniteDimensional.completeSpace ℂ _
 
 /-- The trial subspace lies in the operator's domain: it is the affine kernel
 identified in `BeamSpectrum`. -/
@@ -1158,7 +1158,7 @@ theorem beamKyFanTwo_gaugeReal_le (T : BeamL2 →L[ℂ] BeamL2) :
       Finset.sum_range_zero, zero_add]
     have h0 := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm T 0))
     have h1 := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_le_nnnorm T 1))
-    simp only [coe_nnnorm] at h0 h1
+    simp only [coe_nnNorm] at h0 h1
     linarith
   simpa only [beamKyFanTwo, SymmetricOperatorIdealFamily.gaugeReal,
     OperatorIdealFamily.gauge_kyFan, ENNReal.coe_toReal] using hsum
@@ -1624,7 +1624,7 @@ theorem kyFanTwo_beamResidual_le (ε : ℝ) :
   have h0 : ((beamResidual ε).singularValue 0 : ℝ)
       ≤ residualTopSingularValue ε := by
     have hz : ((beamResidual ε).singularValue 0 : ℝ) = ‖beamResidual ε‖ :=
-      ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (beamResidual ε))).trans (coe_nnnorm (beamResidual ε)))
+      ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (beamResidual ε))).trans (coe_nnNorm (beamResidual ε)))
     rw [hz]
     exact norm_beamPerturbation_comp_trialIncl_le ε
   have h1 := approximationSingularValue_one_beamResidual_le ε

@@ -80,8 +80,8 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
     (W : Submodule 𝕜 H) [W.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (A.restrict hred.isInvariant)
-      (A.restrict hred.orthogonal.isInvariant) δ)
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant))
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.orthogonal.isInvariant)) δ)
     (hJdom : ∀ x : A.domain, W.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (TauCeti.LinearPMap.addBounded A D)
@@ -93,18 +93,21 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
         N.gaugeReal (U.starProjection ∘L D ∘L
           (Uᗮ.map (W.reflection.toLinearEquiv : H →ₗ[𝕜] H)).starProjection) := by
   set Uc := (Uᗮ : Submodule 𝕜 H) with hUc
-  set A₀ := A.restrict hred.isInvariant with hA₀def
-  set Λ := A.restrict hred.orthogonal.isInvariant with hΛdef
+  set A₀ := A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant) with hA₀def
+  set Λ := A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.orthogonal.isInvariant) with hΛdef
   set J : H →L[𝕜] H := W.reflectionOperator with hJ
   set X : U →L[𝕜] H := U.subtypeL with hX
   set F₁ : Uc →L[𝕜] H := J ∘L Uc.subtypeL with hF₁
   have hXdom : ∀ x : A₀.domain, X (x : U) ∈ A.domain := fun x =>
-    (_root_.LinearPMap.mem_restrict_domain hred.isInvariant).mp x.2
+    (_root_.LinearPMap.mem_restrict_domain
+      (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant)).mp x.2
   have hXint : ∀ x : A₀.domain,
       A ⟨X (x : U), hXdom x⟩ = X (A₀ x) := fun x =>
-    (_root_.LinearPMap.coe_restrict_apply hred.isInvariant _).symm
+    (_root_.LinearPMap.coe_restrict_apply
+      (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant) _).symm
   have hUcdom : ∀ y : Λ.domain, ((y : Uc) : H) ∈ A.domain := fun y =>
-    (_root_.LinearPMap.mem_restrict_domain hred.orthogonal.isInvariant).mp y.2
+    (_root_.LinearPMap.mem_restrict_domain
+      (_root_.LinearPMap.isInvariant_iff.mp hred.orthogonal.isInvariant)).mp y.2
   have hF₁dom : ∀ y : Λ.domain, F₁ (y : Uc) ∈ A.domain := fun y =>
     hJdom ⟨((y : Uc) : H), hUcdom y⟩
   have hF₁int : ∀ y : Λ.domain,
@@ -112,7 +115,8 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_reducing_rclike
         F₁ (Λ y) := by
     intro y
     have hAy : A ⟨((y : Uc) : H), hUcdom y⟩ = ((Λ y : Uc) : H) :=
-      (_root_.LinearPMap.coe_restrict_apply hred.orthogonal.isInvariant _).symm
+      (_root_.LinearPMap.coe_restrict_apply
+        (_root_.LinearPMap.isInvariant_iff.mp hred.orthogonal.isInvariant) _).symm
     calc
       (TauCeti.LinearPMap.addBounded A D) ⟨F₁ (y : Uc), hF₁dom y⟩
           = J (A ⟨((y : Uc) : H), hUcdom y⟩) :=
@@ -224,8 +228,8 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (A.restrict hred.isInvariant)
-      (A.restrict hred.orthogonal.isInvariant) δ) :
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant))
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.orthogonal.isInvariant)) δ) :
     ∀ k : ℕ,
       δ * ((sinTwoThetaIdealBlock U V).kyFanGauge k : ℝ) ≤
         2 * (R.kyFanGauge k : ℝ) := by
@@ -305,8 +309,8 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (A.restrict hred.isInvariant)
-      (A.restrict hred.orthogonal.isInvariant) δ)
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant))
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.orthogonal.isInvariant)) δ)
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock U V) ∧
       δ * N.gauge (sinTwoThetaIdealBlock U V) ≤ 2 * N.gauge R := by
@@ -321,7 +325,7 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symm
       δ * ((sinTwoThetaIdealBlock U V).kyFanGauge k : ℝ) ≤
         (((2 : 𝕜) • R0).kyFanGauge k : ℝ) := by
     intro k
-    erw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
+    erw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, htwo, (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) =
       (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsameR.kyFanGauge_eq k)))]
     exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_rclike
@@ -348,8 +352,8 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_rclike
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (A.restrict hred.isInvariant)
-      (A.restrict hred.orthogonal.isInvariant) δ)
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant))
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.orthogonal.isInvariant)) δ)
     (hRmem : N.Mem R) :
     N.Mem (Angle.directedSinTwoAngleOperator V U) ∧
       δ * N.gauge (Angle.directedSinTwoAngleOperator V U) ≤ 2 * N.gauge R := by
@@ -375,8 +379,8 @@ theorem sinTwoTheta_directed_unboundedResidual_reducing_whereDefinedUIN_rclike
     (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (A.restrict hred.isInvariant)
-      (A.restrict hred.orthogonal.isInvariant) δ) :
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant))
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.orthogonal.isInvariant)) δ) :
     N.Mem (Angle.directedSinTwoAngleOperator V U) →
     N.Mem R →
       δ * N.gaugeReal (Angle.directedSinTwoAngleOperator V U) ≤ 2 * N.gaugeReal R := by
@@ -425,9 +429,10 @@ theorem sinTwoTheta_unbounded_perturbedGap_whereDefinedUIN_rclike
         R p + ((M p : P) : H))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict hQred.isInvariant)
       ((TauCeti.LinearPMap.addBounded A Hop).restrict
-        hQred.orthogonal.isInvariant) δ) :
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant)) δ) :
     (N.Mem (Angle.directedSinTwoAngleOperator P Q) →
       N.Mem R →
         δ * N.gaugeReal (Angle.directedSinTwoAngleOperator P Q) ≤

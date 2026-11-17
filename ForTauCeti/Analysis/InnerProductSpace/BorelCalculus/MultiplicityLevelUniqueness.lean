@@ -182,7 +182,7 @@ variable {X : Type*} [MeasurableSpace X]
 theorem eLpNorm_two_lt_top_iff_lintegral (ν : Measure X) (f : X → ℂ)
     (hf : AEStronglyMeasurable f ν) :
     eLpNorm f 2 ν < ∞ ↔ ∫⁻ x, ‖f x‖ₑ ^ 2 ∂ν < ∞ := by
-  rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top (by norm_num) (by norm_num) hf]
+  rw [eLpNorm_lt_top_iff_lintegral_rpow_eNorm_lt_top (by norm_num) (by norm_num) hf]
   have h2 : ((2 : ℝ≥0∞)).toReal = ((2 : ℕ) : ℝ) := by norm_num
   rw [h2]
   refine Iff.of_eq (congrArg (· < ∞) (lintegral_congr fun x => ?_))
@@ -195,7 +195,7 @@ theorem memLp_two_section {ν : ℕ → Measure X} {f : X × ℕ → ℂ} (hm : 
   change eLpNorm (fun z => f (z, n)) 2 (ν n) < ∞
   rw [eLpNorm_two_lt_top_iff_lintegral (ν n) (fun z => f (z, n))
     (hm.comp (measurable_id.prodMk measurable_const)).aestronglyMeasurable]
-  rw [lintegral_sliceSum ν (hm.enorm.pow_const 2)] at hf
+  rw [lintegral_sliceSum ν (hm.eNorm.pow_const 2)] at hf
   exact (le_tsum _ n).trans_lt hf
 
 /-- Every `L²` element admits a genuinely measurable representative with finite quadratic
@@ -460,7 +460,7 @@ theorem not_spectralGeneratedLE_mulLp_datumSymbol (D : MultiplicityDatum ℂ) {S
       omega
     exact D.antitone_level hjk hz.2
   have hlint : ∫⁻ p, ‖W p‖ₑ ^ 2 ∂D.measure = D.base (S ∩ D.level k) := by
-    rw [MultiplicityDatum.measure_def, lintegral_sliceSum _ (hWm.enorm.pow_const 2)]
+    rw [MultiplicityDatum.measure_def, lintegral_sliceSum _ (hWm.eNorm.pow_const 2)]
     have hterm : ∀ j : Fin (k + 1),
         ∫⁻ z, ‖W (z, (j : ℕ))‖ₑ ^ 2 ∂(D.base.restrict (D.level (j : ℕ)))
           = ∫⁻ z, ‖w₀ z j‖ₑ ^ 2 ∂(D.base.restrict (S ∩ D.level k)) := by
@@ -471,7 +471,7 @@ theorem not_spectralGeneratedLE_mulLp_datumSymbol (D : MultiplicityDatum ℂ) {S
         rw [hWval z (j : ℕ) j.isLt, Fin.eta]
         by_cases hz : z ∈ S ∩ D.level k
         · rw [Set.indicator_of_mem hz, Set.indicator_of_mem hz]
-        · rw [Set.indicator_of_notMem hz, Set.indicator_of_notMem hz, enorm_zero]
+        · rw [Set.indicator_of_notMem hz, Set.indicator_of_notMem hz, eNorm_zero]
           simp
       rw [lintegral_congr hpt, lintegral_indicator hS'm, ← hrestr j]
     rw [tsum_eq_sum (s := Finset.range (k + 1)) ?_, ← Fin.sum_univ_eq_sum_range]
@@ -479,7 +479,7 @@ theorem not_spectralGeneratedLE_mulLp_datumSymbol (D : MultiplicityDatum ℂ) {S
           ∫⁻ z, ‖W (z, (j : ℕ))‖ₑ ^ 2 ∂(D.base.restrict (D.level (j : ℕ)))
             = ∫⁻ z, ‖w₀ z j‖ₑ ^ 2 ∂(D.base.restrict (S ∩ D.level k)) := hterm
       rw [Finset.sum_congr rfl fun j _ => hstep j, ← lintegral_finsetSum _
-        (fun j _ => (hw₀m j).enorm.pow_const 2)]
+        (fun j _ => (hw₀m j).eNorm.pow_const 2)]
       have hone : ∀ z, (∑ j : Fin (k + 1), ‖w₀ z j‖ₑ ^ 2) = 1 := by
         intro z
         have h2 : ∀ j : Fin (k + 1), ‖w₀ z j‖ₑ ^ 2 = ENNReal.ofReal (‖w₀ z j‖ ^ 2) := by

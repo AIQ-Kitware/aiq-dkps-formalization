@@ -39,8 +39,6 @@ theorem hilbertSchmidtEnergy_eq_iSup_sum (T : E →L[𝕜] F) (b : HilbertBasis 
     (-T).hilbertSchmidtEnergy b = T.hilbertSchmidtEnergy b := by
   simp [hilbertSchmidtEnergy_def]
 
-variable [CompleteSpace E] [CompleteSpace F]
-
 /-- The energy bounds the squared norm of every value of the operator. -/
 theorem enorm_apply_sq_le_hilbertSchmidtEnergy_mul (T : E →L[𝕜] F) (b : HilbertBasis ι 𝕜 E)
     (x : E) : ‖T x‖ₑ ^ 2 ≤ T.hilbertSchmidtEnergy b * ‖x‖ₑ ^ 2 := by

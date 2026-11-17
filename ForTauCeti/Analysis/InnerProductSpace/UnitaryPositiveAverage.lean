@@ -7,7 +7,7 @@ module
 
 public import TauCeti.Analysis.InnerProductSpace.ContinuousFunctionalCalculus
 public import ForTauCeti.Analysis.CStarAlgebra.PositiveSquareRootCommute
-public import TauCeti.Analysis.Normed.Operator.RealAlgebra
+public import TauCeti.Topology.Algebra.Module.ContinuousLinearMap.RealAlgebra
 
 /-!
 # Two unitaries with a positive average

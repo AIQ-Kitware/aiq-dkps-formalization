@@ -1450,7 +1450,7 @@ theorem Proposition4_3_nonacute_real_fullDisplacement_opNorm
   have hk := proposition4_3_nonacute_real U V J W hWunitary hWmap 1
   rw [displacementSquare_eq_gramOperatorR, displacementSquare_eq_gramOperatorR] at hk
   simp only [
-    ContinuousLinearMap.kyFanGauge_one, coe_nnnorm, gramOperatorR,
+    ContinuousLinearMap.kyFanGauge_one, coe_nnNorm, gramOperatorR,
     ContinuousLinearMap.norm_adjoint_comp_self] at hk
   nlinarith [norm_nonneg (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J),
     norm_nonneg (1 - W)]

@@ -174,9 +174,9 @@ private def kyFanGaugeSeminorm (k : ℕ) : Seminorm ℂ (E →L[ℂ] F) where
     exact_mod_cast ContinuousLinearMap.kyFanGauge_add_le S T k
   neg' T := by
     simp only [← neg_one_smul ℂ T, ContinuousLinearMap.kyFanGauge_smul,
-      nnnorm_neg, nnnorm_one, one_mul]
+      nnNorm_neg, nnNorm_one, one_mul]
   smul' c T := by
-    simp only [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm]
+    simp only [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm]
 
 omit [CompleteSpace F] in
 private theorem kyFanGaugeSeminorm_apply (k : ℕ) (T : E →L[ℂ] F) :

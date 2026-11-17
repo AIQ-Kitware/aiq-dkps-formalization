@@ -405,8 +405,9 @@ theorem tanThetaResidualWitness_scalar
       have hbound : (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜 :=
         lowerFormBound_of_pointSpectrumIn hA hUperpRed hgap.2 y hyUperp
       simpa [hynorm] using hbound
+    have hred := (hA.isReducing_iff_mem_invtSubmodule U).mpr hU
     have hSyl := LinearMap.congr_fun
-      (hA.sylvester_starProjection_orthogonal_comp hU X.toLinearMap M) v
+      (hred.sylvester_starProjection_orthogonal_comp X.toLinearMap M) v
     have hpair :
         RCLike.re ⟪y, R v⟫_𝕜 =
           σ * (RCLike.re ⟪A y, y⟫_𝕜 - RCLike.re ⟪M v, v⟫_𝕜) := by

@@ -73,7 +73,7 @@ example
   simpa only [    SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
     TauCeti.OperatorIdealFamily.gauge_opNorm,
-    toReal_enorm] using hmain.2
+    toReal_eNorm] using hmain.2
 
 /-- The same natural theorem instantiated with the nontrivial two-term Ky Fan
 gauge rather than the operator norm. -/
@@ -138,7 +138,7 @@ example
   simpa only [    SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
     TauCeti.OperatorIdealFamily.gauge_opNorm,
-    toReal_enorm] using hmain.2
+    toReal_eNorm] using hmain.2
 
 end AbstractRealUse
 
@@ -180,7 +180,7 @@ example
   simpa only [    SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
     TauCeti.OperatorIdealFamily.gauge_opNorm,
-    toReal_enorm] using hmain.2
+    toReal_eNorm] using hmain.2
 
 end AbstractBoundedUse
 

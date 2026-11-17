@@ -693,7 +693,7 @@ theorem tanTheta_directed_unboundedRitz_symmetricNorming_presentation_rclike
   have hSseq_apply := (fun gaugeIndex => congrArg NNReal.toReal
     ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hSseq gaugeIndex))
   have htr : ‖directedSinAngleOperator Z V‖ < 1 := by
-    rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (directedSinAngleOperator Z V))).trans (coe_nnnorm (directedSinAngleOperator Z V))), hSseq_apply 0]
+    rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (directedSinAngleOperator Z V))).trans (coe_nnNorm (directedSinAngleOperator Z V))), hSseq_apply 0]
     exact hlt 0
   have hTanSeq : ContinuousLinearMap.SameSingularValues
       (sourceDirectedTanThetaOperator Z V) T := by
@@ -746,7 +746,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_present
   have hSseq_apply := (fun gaugeIndex => congrArg NNReal.toReal
     ((ContinuousLinearMap.sameSingularValues_iff _ _).mp hSseq gaugeIndex))
   have hSlt : ‖sourceDirectedSinTwoThetaOperator V U‖ < 1 := by
-    rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (sourceDirectedSinTwoThetaOperator V U))).trans (coe_nnnorm (sourceDirectedSinTwoThetaOperator V U))),
+    rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (sourceDirectedSinTwoThetaOperator V U))).trans (coe_nnNorm (sourceDirectedSinTwoThetaOperator V U))),
       hSseq_apply 0]
     exact hlt 0
   have hTanSeq : ContinuousLinearMap.SameSingularValues

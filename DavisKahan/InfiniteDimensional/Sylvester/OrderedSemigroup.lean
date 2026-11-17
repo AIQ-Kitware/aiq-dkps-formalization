@@ -30,6 +30,8 @@ constant is `pi/2`.
 
 public section
 
+open scoped Pointwise
+
 namespace TauCeti
 
 open TauCeti

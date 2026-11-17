@@ -174,7 +174,7 @@ theorem re_tsum_inner_eq_nuclearENorm_iff_isPositive
     rw [← henergy, hilbertSchmidtEnergy_def]
     have h := ENNReal.tsum_toReal_eq (f := fun i : ι => ‖H (b i)‖ₑ ^ 2)
       (fun _ => ENNReal.pow_ne_top (by finiteness))
-    simpa only [ENNReal.toReal_pow, toReal_enorm] using h.symm
+    simpa only [ENNReal.toReal_pow, toReal_eNorm] using h.symm
 
 
 /-- **Unitary nuclear trace support equality in arbitrary dimension.**

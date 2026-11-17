@@ -121,28 +121,33 @@ theorem exists_ritzBlock_of_realSpectrum_subset_Icc_complex
     [P.HasOrthogonalProjection] (hPred : _root_.LinearPMap.IsReducing A P)
     {b a : ℝ} (hba : b ≤ a)
     (hPspec : _root_.LinearPMap.realSpectrum
-      (A.restrict hPred.isInvariant) ⊆ Set.Icc b a) :
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant)) ⊆ Set.Icc b a) :
     ∃ (hPdom : ∀ v : P, (v : Hc) ∈ A.domain) (M : P →L[ℂ] P),
       ∀ v : P, ((M v : P) : Hc) = A ⟨(v : Hc), hPdom v⟩ := by
-  have hblock : IsSelfAdjoint (A.restrict hPred.isInvariant) :=
+  have hblock : IsSelfAdjoint (A.restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant)) :=
     hPred.isSelfAdjoint_restrict hA
   -- The canonical real spectrum is definitionally the real preimage of the
   -- canonical complex spectrum. No extra compatibility theorem is needed.
   obtain ⟨Rz, -⟩ := DavisKahan.ExactSinTheta.exists_boundedRealization_of_spectrum_subset_Icc
     hblock hba (fun r hr => hPspec (_root_.LinearPMap.mem_realSpectrum_iff.mpr hr))
-  have hdomP : ∀ v : P, v ∈ (A.restrict hPred.isInvariant).domain := by
+  have hdomP : ∀ v : P, v ∈ (A.restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant)).domain := by
     intro v
     rw [Rz.domain_eq_top]
     trivial
   have hdom : ∀ v : P, (v : Hc) ∈ A.domain := fun v =>
-    (_root_.LinearPMap.mem_restrict_domain hPred.isInvariant).mp (hdomP v)
+    (_root_.LinearPMap.mem_restrict_domain
+      (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant)).mp (hdomP v)
   refine ⟨hdom, Rz.operator, fun v => ?_⟩
   have hag := Rz.agrees ⟨v, hdomP v⟩
   have : ((Rz.operator v : P) : Hc)
-      = ((A.restrict hPred.isInvariant ⟨v, hdomP v⟩ : P) : Hc) :=
+      = ((A.restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant) ⟨v, hdomP v⟩ : P) : Hc) :=
     congrArg _ hag
   rw [this]
-  exact _root_.LinearPMap.coe_restrict_apply hPred.isInvariant _
+  exact _root_.LinearPMap.coe_restrict_apply
+    (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant) _
 
 open TauCeti.RealComplexification in
 /-- **The central-spectrum hypothesis supplies the Ritz block, over `ℝ`.**
@@ -156,43 +161,47 @@ theorem exists_ritzBlock_of_realSpectrum_subset_Icc_real
     [P.HasOrthogonalProjection] (hPred : _root_.LinearPMap.IsReducing A P)
     {b a : ℝ} (hba : b ≤ a)
     (hPspec : _root_.LinearPMap.realSpectrum
-      (A.restrict hPred.isInvariant) ⊆ Set.Icc b a) :
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant)) ⊆ Set.Icc b a) :
     ∃ (hPdom : ∀ v : P, (v : Er) ∈ A.domain) (M : P →L[ℝ] P),
       ∀ v : P, ((M v : P) : Er) = A ⟨(v : Er), hPdom v⟩ := by
-  have hblock : IsSelfAdjoint (A.restrict hPred.isInvariant) :=
+  have hblock : IsSelfAdjoint (A.restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant)) :=
     hPred.isSelfAdjoint_restrict hA
   have hBC : IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal
-      (A.restrict hPred.isInvariant)) :=
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant))) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hblock
   -- The nontrivial step is preservation of the spectrum by real
   -- complexification, not another real-slice-to-spectrum conversion.
   have hspecBC : _root_.LinearPMap.realSpectrum
       (TauCeti.LinearPMap.complexifyReal
-        (A.restrict hPred.isInvariant)) ⊆ Set.Icc b a := by
+        (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant))) ⊆ Set.Icc b a := by
     rw [TauCeti.LinearPMap.realSpectrum_complexifyReal]
     exact hPspec
   obtain ⟨Rz, -⟩ := DavisKahan.ExactSinTheta.exists_boundedRealization_of_spectrum_subset_Icc
     hBC hba (fun r hr => hspecBC (_root_.LinearPMap.mem_realSpectrum_iff.mpr hr))
-  have hdomP : ∀ v : P, v ∈ (A.restrict hPred.isInvariant).domain := by
+  have hdomP : ∀ v : P, v ∈ (A.restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant)).domain := by
     intro v
     have h : (ofReal v : RealComplexification P) ∈
         (TauCeti.LinearPMap.complexifyReal
-          (A.restrict hPred.isInvariant)).domain := by
+          (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant))).domain := by
       rw [Rz.domain_eq_top]
       trivial
     rw [TauCeti.LinearPMap.mem_complexifyReal_domain_iff] at h
     simpa using h.1
   have hdom : ∀ v : P, (v : Er) ∈ A.domain := fun v =>
-    (_root_.LinearPMap.mem_restrict_domain hPred.isInvariant).mp (hdomP v)
+    (_root_.LinearPMap.mem_restrict_domain
+      (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant)).mp (hdomP v)
   refine ⟨hdom, RealComplexification.realPartOperator Rz.operator, fun v => ?_⟩
   have hag := Rz.agrees (TauCeti.LinearPMap.complexifyRealOfRealDomain _ ⟨v, hdomP v⟩)
   rw [TauCeti.LinearPMap.complexifyRealOfRealDomain_coe,
     TauCeti.LinearPMap.complexifyReal_apply_ofReal] at hag
   have hM : (RealComplexification.realPartOperator Rz.operator) v
-      = (A.restrict hPred.isInvariant ⟨v, hdomP v⟩ : P) := by
+      = (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant) ⟨v, hdomP v⟩ : P) := by
     rw [RealComplexification.realPartOperator_apply, hag, re_ofReal]
   rw [hM]
-  exact _root_.LinearPMap.coe_restrict_apply hPred.isInvariant _
+  exact _root_.LinearPMap.coe_restrict_apply
+    (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant) _
 
 end RitzBlock
 
@@ -217,13 +226,15 @@ theorem theorem8_2_perturbation_sourceExact_unbounded_complex
     (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hQspec : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict hQred.isInvariant)
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
       ⊆ Set.Icc beta alpha)
     (hQperp : _root_.LinearPMap.realSpectrum
       ((TauCeti.LinearPMap.addBounded A Hop).restrict
-        hQred.orthogonal.isInvariant) ⊆ bandExterior beta alpha delta)
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant))
+        ⊆ bandExterior beta alpha delta)
     (hPspec : _root_.LinearPMap.realSpectrum
-      (A.restrict hPred.isInvariant)
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant))
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (hsmall : ‖Hop‖ < delta / 2)
@@ -253,13 +264,15 @@ theorem theorem8_2_perturbation_sourceExact_unbounded_real
     (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hQspec : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict hQred.isInvariant)
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
       ⊆ Set.Icc beta alpha)
     (hQperp : _root_.LinearPMap.realSpectrum
       ((TauCeti.LinearPMap.addBounded A Hop).restrict
-        hQred.orthogonal.isInvariant) ⊆ bandExterior beta alpha delta)
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant))
+        ⊆ bandExterior beta alpha delta)
     (hPspec : _root_.LinearPMap.realSpectrum
-      (A.restrict hPred.isInvariant)
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant))
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (hsmall : ‖Hop‖ < delta / 2)
@@ -294,13 +307,15 @@ theorem theorem8_2_residual_sourceExact_unbounded_complex
     (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hQspec : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict hQred.isInvariant)
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
       ⊆ Set.Icc beta alpha)
     (hQperp : _root_.LinearPMap.realSpectrum
       ((TauCeti.LinearPMap.addBounded A Hop).restrict
-        hQred.orthogonal.isInvariant) ⊆ bandExterior beta alpha delta)
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant))
+        ⊆ bandExterior beta alpha delta)
     (hPspec : _root_.LinearPMap.realSpectrum
-      (A.restrict hPred.isInvariant)
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant))
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (hsmall : ‖sourceResidual Hop P‖ < delta / 2)
@@ -312,8 +327,10 @@ theorem theorem8_2_residual_sourceExact_unbounded_complex
   have hAH : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
     DavisKahan.addBounded_isSelfAdjoint A hA Hop hHop
   have hgap : FormBoundedSylvesterGap
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict hQred.isInvariant)
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict hQred.orthogonal.isInvariant) delta :=
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant)) delta :=
     .intervalExterior hab (Or.inl ⟨hQspec, hQperp⟩)
   -- the Ritz block is supplied by the central-spectrum hypothesis, not by the caller
   obtain ⟨hPdom, M, hRitz⟩ :=
@@ -346,13 +363,15 @@ theorem theorem8_2_residual_sourceExact_unbounded_real
     (hQred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     (hQspec : _root_.LinearPMap.realSpectrum
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict hQred.isInvariant)
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
       ⊆ Set.Icc beta alpha)
     (hQperp : _root_.LinearPMap.realSpectrum
       ((TauCeti.LinearPMap.addBounded A Hop).restrict
-        hQred.orthogonal.isInvariant) ⊆ bandExterior beta alpha delta)
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant))
+        ⊆ bandExterior beta alpha delta)
     (hPspec : _root_.LinearPMap.realSpectrum
-      (A.restrict hPred.isInvariant)
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hPred.isInvariant))
       ⊆ Set.Icc (beta - delta / 2) (alpha + delta / 2))
     (hcross : DavisKahan.CrossedDefectsEquivalent P Q)
     (hsmall : ‖sourceResidual Hop P‖ < delta / 2)
@@ -364,8 +383,10 @@ theorem theorem8_2_residual_sourceExact_unbounded_real
   have hAH : IsSelfAdjoint (TauCeti.LinearPMap.addBounded A Hop) :=
     DavisKahan.addBounded_isSelfAdjoint A hA Hop hHop
   have hgap : FormBoundedSylvesterGap
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict hQred.isInvariant)
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict hQred.orthogonal.isInvariant) delta :=
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant)) delta :=
     .intervalExterior hab (Or.inl ⟨hQspec, hQperp⟩)
   -- the Ritz block is supplied by the central-spectrum hypothesis, not by the caller
   obtain ⟨hPdom, M, hRitz⟩ :=

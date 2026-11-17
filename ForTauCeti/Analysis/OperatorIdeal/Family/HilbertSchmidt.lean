@@ -65,6 +65,7 @@ omit [CompleteSpace F] in
   simpa only [neg_one_smul, norm_neg, norm_one, one_mul] using
     hilbertSchmidtNorm_smul (-1 : 𝕜) T
 
+omit [CompleteSpace F] [CompleteSpace G] in
 /-- Contractive factors do not enlarge the Hilbert–Schmidt norm of a finite-energy map. -/
 theorem hilbertSchmidtNorm_comp_isometries_le (L : F →L[𝕜] G) {T : E →L[𝕜] F}
     (b : HilbertBasis ι 𝕜 E) (hT : T.hilbertSchmidtEnergy b ≠ ∞)

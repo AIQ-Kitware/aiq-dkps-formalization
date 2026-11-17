@@ -87,8 +87,10 @@ theorem sinTwoTheta_ambient_unbounded_perturbedGap_whereDefinedUIN_rclike_probe
       (TauCeti.LinearPMap.addBounded A Hop) Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict hQred.isInvariant)
-      ((TauCeti.LinearPMap.addBounded A Hop).restrict hQred.orthogonal.isInvariant) δ) :
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.isInvariant))
+      ((TauCeti.LinearPMap.addBounded A Hop).restrict
+        (_root_.LinearPMap.isInvariant_iff.mp hQred.orthogonal.isInvariant)) δ) :
     N.Mem (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) →
     N.Mem Hop →
       δ * N.gaugeReal (TauCeti.DavisKahan.Angle.sinTwoAngleOperator P Q) ≤
@@ -115,8 +117,8 @@ theorem sinTwoTheta_directed_whereDefinedUIN_rclike_production_probe
     (hres : ∀ v : trial, A ⟨(v : E), htrialDom v⟩ = R v + ((M v : trial) : E))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
-      (A.restrict hred.isInvariant)
-      (A.restrict hred.orthogonal.isInvariant) δ) :
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.isInvariant))
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hred.orthogonal.isInvariant)) δ) :
     N.Mem (TauCeti.DavisKahan.Angle.directedSinTwoAngleOperator trial gapCarrier) →
     N.Mem R →
       δ * N.gaugeReal
@@ -138,8 +140,8 @@ theorem sinTwoTheta_complete_whereDefinedUIN_rclike_production_probe
     (hQ : _root_.LinearPMap.IsReducing T Q)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap
-      (T.restrict hQ.isInvariant)
-      (T.restrict hQ.orthogonal.isInvariant) δ) :
+      (T.restrict (_root_.LinearPMap.isInvariant_iff.mp hQ.isInvariant))
+      (T.restrict (_root_.LinearPMap.isInvariant_iff.mp hQ.orthogonal.isInvariant)) δ) :
     (∀ R : P →L[𝕜] E,
       (∀ p : P, ∀ hp : (p : E) ∈ T.domain,
         T ⟨(p : E), hp⟩ = A ⟨(p : E), by rw [← hdom]; exact hp⟩ + R p) →

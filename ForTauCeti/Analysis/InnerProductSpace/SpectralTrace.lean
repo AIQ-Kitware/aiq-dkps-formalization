@@ -433,7 +433,7 @@ theorem cfc_apply_of_apply_eq_smul_of_isStarNormal
   have halg (z : ℂ) : algebraMap ℂ (E →L[ℂ] E) z • x = z • x := by
     rw [_root_.ContinuousLinearMap.smul_def, _root_.ContinuousLinearMap.algebraMap_apply]
   rw [← _root_.ContinuousLinearMap.smul_def, ← halg] at hx ⊢
-  exact cfc_smul_of_smul_eq_algebraMap_smul f (T.finite_spectrum ℂ) hx
+  exact cfc_smul_of_smul_eq_algebraMap_smul f hx ((T.finite_spectrum ℂ).continuousOn _)
 
 /-- The real trace of the functional calculus of a real-valued symbol is its
 sum over any orthonormal eigenbasis, with multiplicity. -/

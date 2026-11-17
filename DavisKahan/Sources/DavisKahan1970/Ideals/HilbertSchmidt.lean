@@ -150,7 +150,7 @@ theorem approximationNumberEnergy_smul
   rw [← ENNReal.tsum_mul_left]
   congr 1
   funext n
-  rw [ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm, mul_pow,
+  rw [ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnNorm, mul_pow,
     ENNReal.ofReal_mul (sq_nonneg _)]
 
 

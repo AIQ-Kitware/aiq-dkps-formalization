@@ -54,10 +54,10 @@ variable {E F : Type v}
 these implementation instances local so completeness does not appear as an
 extra mathematical hypothesis in the reviewer-facing theorem signatures. -/
 local instance headlineCompleteE : CompleteSpace E :=
-  FiniteDimensional.complete 𝕜 E
+  FiniteDimensional.completeSpace 𝕜 E
 
 local instance headlineCompleteF : CompleteSpace F :=
-  FiniteDimensional.complete 𝕜 F
+  FiniteDimensional.completeSpace 𝕜 F
 
 /-- **Davis--Kahan 1970, Section 2 `tan Theta`, scalar-generic directed
 headline form.**
@@ -136,7 +136,7 @@ theorem sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike
       δ * (S.kyFanGauge k : ℝ) ≤
         ((((2 : ℝ) : 𝕜) • R).kyFanGauge k : ℝ) := by
     intro k
-    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo]
+    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, htwo]
     change δ * ((sinTwoThetaEmbedding U X).toContinuousLinearMap.kyFanGauge k : ℝ) ≤
       2 * ((residual A X M).toContinuousLinearMap.kyFanGauge k : ℝ)
     rw [ContinuousLinearMap.kyFanGauge_eq_kyFanSum, ContinuousLinearMap.kyFanGauge_eq_kyFanSum]

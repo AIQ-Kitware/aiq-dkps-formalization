@@ -75,7 +75,7 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 theorem SameSingularValues.norm_eq {A : E₁ →L[𝕜] F₁} {B : E₂ →L[𝕜] F₂}
     (h : A.SameSingularValues B) : ‖A‖ = ‖B‖ := by
   have hzero := (sameSingularValues_iff _ _).mp h 0
-  simpa only [singularValue_zero, coe_nnnorm] using congrArg NNReal.toReal hzero
+  simpa only [singularValue_zero, coe_nnNorm] using congrArg NNReal.toReal hzero
 
 /-! Equality of sequences and its equivalence laws are maintained by Tau Ceti's
 `ContinuousLinearMap.SameSingularValues`. Only the additional Hilbert-space

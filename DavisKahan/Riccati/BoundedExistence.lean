@@ -278,11 +278,15 @@ theorem exists_contractive_riccati_solution_of_spectrum_gap
   have hB0cnorm : ‖B0c‖ ≤ r :=
     (IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc hB0csa hr0).mpr hB0cspec
   have hA1cunit : IsUnit A1c :=
-    (hA1csa.isUnit_and_norm_ringInverse_le (A := E1 →L[ℂ] E1) hrd hA1cspec).1
+    (IsometricContinuousFunctionalCalculus.isUnit_and_norm_ringInverse_le (𝕜 := ℝ)
+      (A := E1 →L[ℂ] E1) hA1csa hrd
+      (fun x hx => by simpa only [Real.norm_eq_abs] using hA1cspec x hx)).1
   set J : E1 →L[ℂ] E1 := Ring.inverse A1c
   have hAJmul : A1c * J = 1 := Ring.mul_inverse_cancel _ hA1cunit
   have hJnorm : ‖J‖ ≤ (r + d)⁻¹ :=
-    (hA1csa.isUnit_and_norm_ringInverse_le (A := E1 →L[ℂ] E1) hrd hA1cspec).2
+    (IsometricContinuousFunctionalCalculus.isUnit_and_norm_ringInverse_le (𝕜 := ℝ)
+      (A := E1 →L[ℂ] E1) hA1csa hrd
+      (fun x hx => by simpa only [Real.norm_eq_abs] using hA1cspec x hx)).2
   have hAJ : A1c ∘L J = ContinuousLinearMap.id ℂ E1 := by
     rw [← ContinuousLinearMap.mul_def, hAJmul,
       ContinuousLinearMap.one_def]

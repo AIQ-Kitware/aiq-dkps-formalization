@@ -16,8 +16,10 @@ Tau Ceti owns the coercive-subspace lower bounds and orthogonal-tail min–max
 formula. Their duplicate local proofs and real-valued wrappers have been removed.
 Consumers use the accepted singular-value statements directly.
 
-The remaining donor results compare projection and restriction norms, express the
-norm on the closed unit ball, and bound an approximation number from a spectral band.
+The remaining donor results compare projection and restriction norms and bound an
+approximation number from a spectral band. The closed-unit-ball formulation is
+supplied by native #41373; its local formula has been retired. The projection
+comparison retains its original incomplete-ambient scope.
 
 ## Provenance
 
@@ -67,19 +69,6 @@ theorem norm_comp_starProjection_orthogonal_eq_norm_comp_subtypeL
       simp [ContinuousLinearMap.comp_apply, hfix]
     rw [hval]
     exact ContinuousLinearMap.le_opNorm _ _
-
-/-- **The unit-ball formulation of the orthogonal tail (T09 §B4).**  The tail is
-the supremum of `‖T x‖` over the closed unit ball of `Vᗮ`.
-
-Stated on the closed **ball** rather than the unit **sphere**, deliberately: on
-`Vᗮ = ⊥` the sphere is empty and its supremum is not the tail, whereas the ball
-form holds for every `V`. -/
-theorem norm_comp_starProjection_orthogonal_eq_sSup_unitClosedBall
-    (T : E₁ →L[𝕜] F₁) (V : Submodule 𝕜 E₁) [Vᗮ.HasOrthogonalProjection] :
-    ‖T ∘L Vᗮ.starProjection‖ =
-      sSup ((fun x : Vᗮ => ‖T (x : E₁)‖) '' Metric.closedBall 0 1) := by
-  rw [T.norm_comp_starProjection_orthogonal_eq_norm_comp_subtypeL V]
-  exact ((T ∘L Vᗮ.subtypeL).sSup_unitClosedBall_eq_norm).symm
 
 variable [CompleteSpace E₁]
 

@@ -39,7 +39,7 @@ theorem exists_nearest_nuclear_subspace_preserving_unitary_complex
       ∀ W : E ≃ₗᵢ[ℂ] E, K.map W.toLinearMap = K →
         UnitarilyInvariantSeminorm.schatten ℂ E E 1 (A.toLinearMap - V.toLinearMap) ≤
           UnitarilyInvariantSeminorm.schatten ℂ E E 1 (A.toLinearMap - W.toLinearMap) := by
-  have : CompleteSpace E := FiniteDimensional.complete ℂ E
+  have : CompleteSpace E := FiniteDimensional.completeSpace ℂ E
   let L := K.map A.toLinearMap
   obtain ⟨T, hT, hcost, hmin⟩ :=
     exists_unitary_minimizing_nuclear_transport_principalAngles_complex

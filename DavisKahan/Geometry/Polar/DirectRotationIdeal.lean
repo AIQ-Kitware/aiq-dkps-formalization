@@ -194,7 +194,7 @@ theorem gauge_nonacuteDirectRotation_ne_top_iff_projection_sub
     obtain ⟨B, hB, _⟩ := exists_nonacuteDirectRotation_displacement_factor K L J
     rw [hB]
     have hfinite : Φ.gauge (K.starProjection - L.starProjection) * ‖B‖ₑ ≠ ∞ :=
-      ENNReal.mul_ne_top hD enorm_ne_top
+      ENNReal.mul_ne_top hD eNorm_ne_top
     exact ne_top_of_le_ne_top hfinite (Φ.gauge_comp_right_le _ B)
 
 /-- **Compact restricted-unitary feasibility.** A compact-displacement
