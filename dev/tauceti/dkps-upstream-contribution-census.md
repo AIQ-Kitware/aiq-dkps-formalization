@@ -5475,3 +5475,46 @@ the existing live all-open collision preflight before publication. The
 source-review packet explicitly identifies a same-agent second source pass,
 not an independent model or upstream approval. Q3's lack of a proof of logical
 irredundancy of every printed hypothesis is disclosed rather than invented.
+
+### 2026-11-17 — Cayley coordinate review repair (SA-E01, still unmerged)
+
+The real inverse Cayley coordinate is factored into
+`ForTauCeti/Analysis/Complex/Cayley/Inverse.lean`; the existing spectral-measure
+construction consumes it. Its forward inverse law now covers every complex
+parameter, including the totalized pole `-i`. The reverse law reduces through
+Tau Ceti’s existing closed-half-plane bijection and strict-disc criterion,
+without another denominator-algebra proof. This is a revision of the DKPS donor,
+not consumption of an accepted spectral-PVM API. Kitware/Apache-2.0 and
+Jon Crall/Claude Opus 5 ancestry are retained; the current proof revision is by
+OpenAI gpt-6.1-sol.
+
+The corresponding repair of open #29129 puts complex coordinates in
+`Analysis/Complex/UpperHalfPlane/Cayley.lean`, the circle bridge in
+`Analysis/Complex/Pick/Nevanlinna.lean`, and the four partial-operator spectral
+modules under `LinearPMap/Spectral/`. Projection and diagonal observations remain
+explicit rewrite lemmas: their simp attributes are removed to preserve native
+PVM normalization. This supersedes the November 16 simp decision above.
+
+Open #30736’s November 17 CI compiled the mathematics, then timed out in the
+trusted duplicate audit (exit 124); this is not a compiler rejection. Its repair
+removes redundant exponential helper wrappers and uses the accepted bounded
+Stone group directly for norm preservation. Neither PR is counted as integrated.
+The new real SSP-C31 PR #43455 has green CI and no visible review comments in
+the November 17 observation; no unrelated repair is inferred from that status.
+
+Repaired upstream heads are pushed: #29129 `85917941245d60feb2838b94e25de032e229cb0e`
+and #30736 `f9632ab81cde7d7b8dd8d8455c8f5059219a675d`. Both branches merge
+accepted main `0642eae29e0a59ef798d04de325386445906e755`, with a separate
+Mathlib `048fffa1dbcd080d3058fab41d8c188168595c22` cache. DKPS retains
+its exact `086028a6d8d1` / `e8ba86fa9744` pins. Both upstream focused builds,
+15 environment linters, standard axiom reports and full source-style checks pass.
+The root Rosenblum consumer now bridges coordinates with `cayleyInv_def`
+explicitly instead of relying on definition unfolding. The campaign's
+`waves/2026-11-17` packet preserves actual review evidence and the metadata-only
+host command, because the GitHub connector denied description edits with 403.
+
+Final DKPS validation after explicit Rosenblum bridges: focused construction
+6538 jobs and Rosenblum 6640 jobs, full default build 21919 jobs, and Challenge
+20091 jobs all pass without warnings. Shared campaign packet `waves/2026-11-17/donor/`
+retains the final successful logs. The first full attempt exposed those two
+definition-unfolding dependencies; it is not cited as successful evidence.

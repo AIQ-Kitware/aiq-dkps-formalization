@@ -285,7 +285,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.YosidaApproximation",
         "ForTauCeti.Analysis.InnerProductSpace.SkewAdjointExponential",
         "ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded",
-        "ForTauCeti.Analysis.Semigroups.Group.ComplexOperator"
+        "ForTauCeti.Analysis.Semigroups.Group.ComplexOperator",
+        "ForTauCeti.Analysis.Complex.Cayley.Inverse"
       ]
     },
     {
@@ -338,7 +339,8 @@
         "ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded",
         "ForTauCeti.Analysis.RCLike.ScalarTransport",
         "ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus",
-        "ForTauCeti.Analysis.Semigroups.Group.ComplexOperator"
+        "ForTauCeti.Analysis.Semigroups.Group.ComplexOperator",
+        "ForTauCeti.Analysis.Complex.Cayley.Inverse"
       ]
     },
     {
@@ -6538,11 +6540,56 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null,
-      "migration_note": "Built against accepted TauCeti 086028a6d8d186715b52fac7f3e7b23175ed2dc9, Mathlib e8ba86fa9744dd8d90f48c1752bc735f61a4ca81, Lean v4.36.0-rc2. Native WithLp 2 (TauCeti.Complexification E), no new carrier. Projection/form transport needs no ambient completeness; endpoint covers arbitrary complete real Hilbert spaces, including zero and nonseparable spaces. Prepared work is not upstream acceptance. Existing complex endpoint #27804 remains accepted; full C31 is still only partially accepted until this real branch lands. Native branch prepared: 706bff9b65aa580d75506e6b6075a1096b53cce2. Focused 6475-job build, 15 environment linters on all three owning modules, standard axioms, raw/incomplete/zero-space scope examples and full source style pass. Host live gh preflight remains required; no PR number or integration is claimed.",
+      "status": "submitted-open-not-integrated",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/43455",
+      "migration_note": "Built against accepted TauCeti 086028a6d8d186715b52fac7f3e7b23175ed2dc9, Mathlib e8ba86fa9744dd8d90f48c1752bc735f61a4ca81, Lean v4.36.0-rc2. Native WithLp 2 (TauCeti.Complexification E), no new carrier. Projection/form transport needs no ambient completeness; endpoint covers arbitrary complete real Hilbert spaces, including zero and nonseparable spaces. Prepared work is not upstream acceptance. Existing complex endpoint #27804 remains accepted; full C31 is still only partially accepted until this real branch lands. Native branch prepared: 706bff9b65aa580d75506e6b6075a1096b53cce2. Focused 6475-job build, 15 environment linters on all three owning modules, standard axioms, raw/incomplete/zero-space scope examples and full source style pass. Host live gh preflight remains required; no PR number or integration is claimed. November 17 selected live observation: submitted as #43455 at the prepared head, green build/scope/bump CI and no visible review comments or threads. Earlier preparation and host-preflight statements above are historical; no upstream integration is claimed.",
       "prepared_head": "706bff9b65aa580d75506e6b6075a1096b53cce2",
       "prepared_packet": "waves/2026-11-16/c31-real"
+    },
+    {
+      "module": "ForTauCeti.Analysis.Complex.Cayley.Inverse",
+      "status": "unmerged-donor-review-repair",
+      "source_declarations": [
+        "TauCeti.LinearPMap.cayleyInv",
+        "TauCeti.LinearPMap.measurable_cayleyInv"
+      ],
+      "source_anchor": "ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure/Construction.lean (pre-repair 23b2a00fb)",
+      "authors": [
+        "Jon Crall",
+        "Claude Opus 5",
+        "OpenAI gpt-6.1-sol"
+      ],
+      "license": "Apache-2.0; copyright 2026 Kitware, Inc.",
+      "final_declarations": [
+        "Complex.inverseCayleyCoord",
+        "Complex.inverseCayleyCoord_def",
+        "Complex.measurable_inverseCayleyCoord",
+        "Complex.inverseCayleyCoord_one",
+        "Complex.inverseCayleyCoord_cayley",
+        "Complex.cayley_inverseCayleyCoord"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/29129",
+      "integration": null,
+      "scope": "Forward inverse law generalized to all complex parameters, including -i; reverse law for norm-one points other than 1. Existing native inverse identity and half-plane bijection replace local denominator algebra. Submission is not integration.",
+      "source_module": "ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure/Construction.lean",
+      "staging_module": "ForTauCeti/Analysis/Complex/Cayley/Inverse.lean",
+      "final_tauceti_module": "TauCeti/Analysis/Complex/UpperHalfPlane/Cayley.lean",
+      "current_namespace": "Complex",
+      "ownership_class": "unmerged-donor",
+      "roadmap_target": "SelfAdjointSpectralTheory SA-E01 (coordinate prerequisite)",
+      "provenance_class": "explicit-DKPS-adaptation",
+      "original_source_anchor": "ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure/Construction.lean (pre-repair 23b2a00fb)",
+      "direct_dependencies": [
+        "TauCeti.Analysis.Complex.UpperHalfPlane.Cayley",
+        "Mathlib.MeasureTheory.Constructions.BorelSpace.Complex"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction",
+        "ForTauCeti.Analysis.InnerProductSpace.Rosenblum"
+      ],
+      "prepared_head": "85917941245d60feb2838b94e25de032e229cb0e",
+      "prepared_packet": "/home/joncrall/code/tauceti-dkps-campaign/waves/2026-11-17/pr29129"
     }
   ]
 }

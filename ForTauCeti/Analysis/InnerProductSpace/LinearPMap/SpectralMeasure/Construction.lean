@@ -7,6 +7,7 @@ module
 
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.PairShift
 
+public import ForTauCeti.Analysis.Complex.Cayley.Inverse
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
 public import Mathlib.MeasureTheory.Integral.DominatedConvergence
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley
@@ -138,27 +139,22 @@ theorem injective_one_sub_cayley :
 /-- The **inverse Cayley map** `w ↦ i(1+w)/(1-w)`, as a real-valued relabelling
 of the spectrum of the Cayley transform.  Its value at `w = 1` is junk; see
 `diagMeasure_cayley_preimage_one`. -/
--- **Not exposed.** It was, as part of the spectral-measure chain; three call sites relied
--- on the body reducing, all of them proving a `Complex.ext` real-part goal by `rfl`, and
--- `cayleyInv_def` below covers them. Note that `measurable_cayleyInv` still `unfold`s this
--- definition, which is fine: that is inside the defining module, where the body is visible
--- whatever the attribute says.
 @[expose]
 noncomputable def cayleyInv (A : H →ₗ.[ℂ] H) (w : _root_.spectrum ℂ (A.cayley)) : ℝ :=
-  (Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))).re
+  Complex.inverseCayleyCoord (w : ℂ)
 
 omit [CompleteSpace H] in
 /-- Rewrite form of `cayleyInv`, so a call site need not unfold the definition.  It is the
 real part of the Cayley expression, which is what makes the value at `w = 1` junk. -/
 theorem cayleyInv_def (w : _root_.spectrum ℂ (A.cayley)) :
-    cayleyInv A w = (Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))).re := (rfl)
+    cayleyInv A w = (Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))).re := by
+  exact Complex.inverseCayleyCoord_def (w : ℂ)
 
 omit [CompleteSpace H] in
 /-- The inverse Cayley relabelling is measurable.  Measurability, not continuity, is all that is
 available and all that is needed: the map is genuinely singular at `w = 1`. -/
 theorem measurable_cayleyInv (A : H →ₗ.[ℂ] H) : Measurable (cayleyInv A) := by
-  unfold cayleyInv
-  fun_prop
+  exact Complex.measurable_inverseCayleyCoord.comp measurable_subtype_coe
 
 /-- **The spectral measure of an unbounded self-adjoint operator.**
 
@@ -452,7 +448,8 @@ theorem spectralPVM_resolvent_formula (hzr : z ∈ resolventSet A) (ξ : H) :
   have hd' : (w : ℂ) - 1 ≠ 0 := sub_ne_zero.mpr hw1
   have hden := cayleyDenom_ne_zero hA hz w
   have hcast : ((cayleyInv A w : ℝ) : ℂ) = Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ)) :=
-    Complex.ext rfl (by simpa using (inverseCayley_im_eq_zero hnorm hw1).symm)
+    Complex.ext (by simpa only [Complex.ofReal_re] using cayleyInv_def w)
+      (by simpa using (inverseCayley_im_eq_zero hnorm hw1).symm)
   -- `z - s = -((i - z) + (i + z)w)/(1 - w) = ((i - z) + (i + z)w)/(w - 1)`
   have key : z - Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))
       = ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) / ((w : ℂ) - 1) := by
