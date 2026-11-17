@@ -600,7 +600,7 @@ theorem approximationSingularValue_theorem63ResidualReal_le_of_invariant [Comple
       ((P ∘L Z.subtypeL).singularValue n : ℝ) := by
   rw [theorem63ResidualReal_eq_neg_of_invariant T P Z hinv,
     ← neg_one_smul ℝ (Zᗮ.starProjection ∘L (P ∘L Z.subtypeL)),
-    ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm]
+    ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnNorm]
   simp only [norm_neg, norm_one, one_mul]
   have hcomp := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le (𝕜 := ℝ)
     (Zᗮ.starProjection) (P ∘L Z.subtypeL) (1 : Z →L[ℝ] Z) n))
@@ -705,7 +705,7 @@ theorem norm_sinAngleOperatorR_lt_one_of_crossedDefectsEquivalent
     ‖sinAngleOperatorR U V‖ < 1 := by
   have hdirected := approximationSingularValue_sineBlock_lt_one_infiniteTrial_real
     T hT V U hV hdelta hCompressionUpper hUnwantedLower 0
-  rw [ContinuousLinearMap.singularValue_zero, coe_nnnorm] at hdirected
+  rw [ContinuousLinearMap.singularValue_zero, coe_nnNorm] at hdirected
   have hfactor : Vᗮ.starProjection ∘L U.starProjection =
       theorem63DirectedSineBlockReal U V ∘L U.orthogonalProjectionOnto := rfl
   have hnorm : ‖Vᗮ.starProjection ∘L U.starProjection‖ < 1 := by

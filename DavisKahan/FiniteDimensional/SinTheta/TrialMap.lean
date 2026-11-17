@@ -161,8 +161,9 @@ theorem complementaryTrialBlock_residual_le_of_intervalGap
         hreverse.2⟩
   have hEq : AV ∘ₗ Y - Y ∘ₗ M = C := by
     ext x
+    have hred := (hA.isReducing_iff_mem_invtSubmodule V).mpr hV
     have hx := LinearMap.congr_fun
-      (hA.sylvester_starProjection_orthogonal_comp hV X M) x
+      (hred.sylvester_starProjection_orthogonal_comp X M) x
     change A (Vᗮ.starProjection (X x)) - Vᗮ.starProjection (X (M x)) =
       Vᗮ.starProjection (generalResidual A X M x)
     exact hx

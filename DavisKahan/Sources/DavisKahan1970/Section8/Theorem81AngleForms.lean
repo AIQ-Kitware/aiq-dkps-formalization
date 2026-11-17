@@ -280,7 +280,7 @@ theorem norm_cosineBlock_eq_principalCosines_zero [FiniteDimensional 𝕜 H]
     (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] :
     ‖cosineBlock P Q‖ = Submodule.principalCosines Pᗮ Qᗮ 0 := by
   rw [← approximationNumber_cosineBlock_eq_principalCosines,
-    ContinuousLinearMap.singularValue_zero, coe_nnnorm]
+    ContinuousLinearMap.singularValue_zero, coe_nnNorm]
 
 omit [CompleteSpace H] in
 /-- The lower companion: `‖C₀‖₁` is the largest principal cosine of `(P, Q)`. -/
@@ -288,7 +288,7 @@ theorem norm_lowerCosineBlock_eq_principalCosines_zero [FiniteDimensional 𝕜 H
     (P Q : Submodule 𝕜 H) [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] :
     ‖lowerCosineBlock P Q‖ = Submodule.principalCosines P Q 0 := by
   rw [← approximationNumber_lowerCosineBlock_eq_principalCosines,
-    ContinuousLinearMap.singularValue_zero, coe_nnnorm]
+    ContinuousLinearMap.singularValue_zero, coe_nnNorm]
 
 end Generic
 

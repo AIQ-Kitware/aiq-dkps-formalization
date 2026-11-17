@@ -103,9 +103,11 @@ theorem proposition6_1_commonDomain_normalizedUIN_rclike
       B ⟨x, hxB⟩ - A ⟨x, hxA⟩ = Hop x)
     {δ : ℝ} (hδ : 0 < δ)
     (hgapUV : DavisKahan.Sylvester.FormBoundedSylvesterGap
-      (A.restrict hU.isInvariant) (B.restrict hV.orthogonal.isInvariant) δ)
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hU.isInvariant))
+      (B.restrict (_root_.LinearPMap.isInvariant_iff.mp hV.orthogonal.isInvariant)) δ)
     (hgapVU : DavisKahan.Sylvester.FormBoundedSylvesterGap
-      (B.restrict hV.isInvariant) (A.restrict hU.orthogonal.isInvariant) δ)
+      (B.restrict (_root_.LinearPMap.isInvariant_iff.mp hV.isInvariant))
+      (A.restrict (_root_.LinearPMap.isInvariant_iff.mp hU.orthogonal.isInvariant)) δ)
     (hMem : N.Mem Hop) :
     N.Mem (DavisKahan.Angle.ambientSinThetaOperator U V) ∧
       δ * N.gauge (DavisKahan.Angle.ambientSinThetaOperator U V) ≤ N.gauge Hop :=

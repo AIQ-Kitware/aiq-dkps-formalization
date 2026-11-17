@@ -89,7 +89,8 @@ private theorem commute_displacement_modulus (U : E ≃ₗᵢ[𝕜] E) (B : E �
     Commute B (((U : E →L[𝕜] E) - 1) : E →L[𝕜] E).modulus := by
   let u : unitary (E →L[𝕜] E) := Unitary.linearIsometryEquiv.symm U
   have hBUstar : Commute B (star (U : E →L[𝕜] E)) :=
-    ContinuousLinearMap.comp_star_eq_star_comp_of_mem_unitary B u.property u.property hBU.eq
+    ContinuousLinearMap.comp_star_eq_star_comp_of_mul_star_self_of_star_mul_self B
+      (Unitary.coe_mul_star_self u) (Unitary.coe_star_mul_self u) hBU.eq
   apply ContinuousLinearMap.commute_modulus_of_commute
   change Commute B (star ((U : E →L[𝕜] E) - 1) * ((U : E →L[𝕜] E) - 1))
   rw [star_sub, star_one]
@@ -153,7 +154,7 @@ theorem exists_finite_unitary_approximation
   · intro k
     have hneg : (-(T ∘L Mᗮ.starProjection)).singularValue k =
       (T ∘L Mᗮ.starProjection).singularValue k := by
-      simpa only [neg_one_smul, nnnorm_neg, nnnorm_one, one_mul] using
+      simpa only [neg_one_smul, nnNorm_neg, nnNorm_one, one_mul] using
         ContinuousLinearMap.singularValue_smul (-1 : 𝕜) (T ∘L Mᗮ.starProjection) k
     rw [herror, hneg]
     calc
@@ -176,7 +177,8 @@ theorem exists_finite_unitary_approximation
     have hBA : Commute B A := commute_displacement_modulus U B hUB.symm
     let u : unitary (E →L[𝕜] E) := Unitary.linearIsometryEquiv.symm U
     have hBUstar : Commute B (star (U : E →L[𝕜] E)) :=
-      ContinuousLinearMap.comp_star_eq_star_comp_of_mem_unitary B u.property u.property hUB.symm.eq
+      ContinuousLinearMap.comp_star_eq_star_comp_of_mul_star_self_of_star_mul_self B
+        (Unitary.coe_mul_star_self u) (Unitary.coe_star_mul_self u) hUB.symm.eq
     have hBstarU : Commute (star B) (U : E →L[𝕜] E) := by
       simpa only [star_star] using commute_star_star.mpr hBUstar
     have hBstarA : Commute (star B) A := commute_displacement_modulus U _ hBstarU

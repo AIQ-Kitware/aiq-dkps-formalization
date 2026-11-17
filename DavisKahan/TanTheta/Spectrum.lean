@@ -8,7 +8,8 @@ module
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
 public import DavisKahan.TanTheta.Vector
 public import DavisKahan.Sylvester.Spectrum
-public import TauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+public import TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.GapInverse
+public import TauCeti.Analysis.CStarAlgebra.SelfAdjointSpectrumInterval
 
 public section
 
@@ -40,6 +41,22 @@ open DavisKahan
 
 open scoped InnerProductSpace
 attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
+
+/- The two local instances here are load-bearing, exactly as in
+`Sources/DavisKahan1970/SineTheta/CosineAngle.lean`: without the
+`CompleteSpace` coercion instance and the C⋆-algebra instance recorded in
+the submodule shape, any statement mixing `spectrum ℝ C` with `‖C‖` for a
+compression `C : ↥W →L[ℂ] ↥W` sends `isDefEq` into a deterministic
+heartbeat blow-up (pending instance syntheses fail, so definitional
+unfolding of the `Submodule` algebra structures takes over).  With them in
+scope the same statements elaborate at ordinary heartbeats. -/
+
+noncomputable local instance instCStarAlgebraSubspaceCoordinateGenuineTanTheta
+    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
+    [CompleteSpace G]
+    (U : Submodule ℂ G) [U.HasOrthogonalProjection] :
+    CStarAlgebra (↥U →L[ℂ] ↥U) :=
+  inferInstance
 
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
@@ -184,11 +201,15 @@ theorem coercive_of_compress_spectrum_exterior
     rw [hM₁def]
     exact le_abs_of_spectrum_exterior hspec
   have hM₁unit : IsUnit M₁ :=
-    (hM₁sa.isUnit_and_norm_ringInverse_le (A := ↥Z →L[ℂ] ↥Z) hrd hM₁spec).1
+    (IsometricContinuousFunctionalCalculus.isUnit_and_norm_ringInverse_le (𝕜 := ℝ)
+      (A := ↥Z →L[ℂ] ↥Z) hM₁sa hrd
+      (fun x hx => by simpa only [Real.norm_eq_abs] using hM₁spec x hx)).1
   set J : ↥Z →L[ℂ] ↥Z := Ring.inverse M₁
   have hJ1 : J * M₁ = 1 := Ring.inverse_mul_cancel _ hM₁unit
   have hJnorm : ‖J‖ ≤ ((β - α) / 2 + δ)⁻¹ :=
-    (hM₁sa.isUnit_and_norm_ringInverse_le (A := ↥Z →L[ℂ] ↥Z) hrd hM₁spec).2
+    (IsometricContinuousFunctionalCalculus.isUnit_and_norm_ringInverse_le (𝕜 := ℝ)
+      (A := ↥Z →L[ℂ] ↥Z) hM₁sa hrd
+      (fun x hx => by simpa only [Real.norm_eq_abs] using hM₁spec x hx)).2
   intro x hx
   set v : Z := ⟨x, hx⟩ with hv
   have hJv : J (M₁ v) = v := by
@@ -250,22 +271,6 @@ theorem tanTheta_spectrum
   exact tan_theta_le' hT.isSymmetric hVinv hαβ hδ hρ0 hZcoer hVa hVb hρ
 
 section OneSided
-
-/- The two local instances below are load-bearing, exactly as in
-`Sources/DavisKahan1970/SineTheta/CosineAngle.lean`: without the
-`CompleteSpace` coercion instance and the C⋆-algebra instance recorded in
-the submodule shape, any statement mixing `spectrum ℝ C` with `‖C‖` for a
-compression `C : ↥W →L[ℂ] ↥W` sends `isDefEq` into a deterministic
-heartbeat blow-up (pending instance syntheses fail, so definitional
-unfolding of the `Submodule` algebra structures takes over).  With them in
-scope the same statements elaborate at ordinary heartbeats. -/
-
-noncomputable local instance instCStarAlgebraSubspaceCoordinateGenuineTanTheta
-    {G : Type*} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
-    [CompleteSpace G]
-    (U : Submodule ℂ G) [U.HasOrthogonalProjection] :
-    CStarAlgebra (↥U →L[ℂ] ↥U) :=
-  inferInstance
 
 /-- **The bounded `tan Θ` theorem in the source's one-sided orientation.**
 Theorem 6.3 of Davis--Kahan 1970 places the two spectra on one axis: the

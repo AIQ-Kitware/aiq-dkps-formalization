@@ -44,8 +44,8 @@ theorem frobenius_rightGram_sub_le
         (rightGram Â - rightGram A) ≤
       (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
         UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A) := by
-  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
+  let : CompleteSpace E := FiniteDimensional.completeSpace 𝕜 E
+  let : CompleteSpace F := FiniteDimensional.completeSpace 𝕜 F
   let D : E →ₗ[𝕜] F := Â - A
   have hidentityCLM :=
     ContinuousLinearMap.adjoint_comp_self_sub_adjoint_comp_self
@@ -100,8 +100,8 @@ theorem frobenius_leftGram_sub_le
         (leftGram Â - leftGram A) ≤
       (‖Â.toContinuousLinearMap‖ + ‖A.toContinuousLinearMap‖) *
         UnitarilyInvariantSeminorm.frobenius 𝕜 E F (Â - A) := by
-  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
+  let : CompleteSpace E := FiniteDimensional.completeSpace 𝕜 E
+  let : CompleteSpace F := FiniteDimensional.completeSpace 𝕜 F
   -- Left Gram is the right Gram of the adjoint.  Invariance of the
   -- rectangular Frobenius norm under adjoint gives the same coefficient.
   have h := frobenius_rightGram_sub_le A.adjoint Â.adjoint
@@ -147,8 +147,8 @@ theorem opNorm_rightGram_sub_le_paperCoefficient
       (2 * ‖A.toContinuousLinearMap‖ +
           ‖(Â - A).toContinuousLinearMap‖) *
         ‖(Â - A).toContinuousLinearMap‖ := by
-  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
+  let : CompleteSpace E := FiniteDimensional.completeSpace 𝕜 E
+  let : CompleteSpace F := FiniteDimensional.completeSpace 𝕜 F
   have h := ContinuousLinearMap.norm_adjoint_comp_self_sub_adjoint_comp_self_le
     Â.toContinuousLinearMap A.toContinuousLinearMap
   have hgram :
@@ -167,8 +167,8 @@ theorem opNorm_leftGram_sub_le_paperCoefficient
       (2 * ‖A.toContinuousLinearMap‖ +
           ‖(Â - A).toContinuousLinearMap‖) *
         ‖(Â - A).toContinuousLinearMap‖ := by
-  let : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-  let : CompleteSpace F := FiniteDimensional.complete 𝕜 F
+  let : CompleteSpace E := FiniteDimensional.completeSpace 𝕜 E
+  let : CompleteSpace F := FiniteDimensional.completeSpace 𝕜 F
   have h := ContinuousLinearMap.norm_self_comp_adjoint_sub_self_comp_adjoint_le
     Â.toContinuousLinearMap A.toContinuousLinearMap
   have hgram :

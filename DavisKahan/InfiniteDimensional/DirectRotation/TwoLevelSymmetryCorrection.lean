@@ -72,7 +72,7 @@ theorem exists_unique_nearest_schatten_two_level_symmetry
   have hPfinite : Φ.gauge
       ((A : E →L[ℂ] E) * K.starProjection - K.starProjection * (A : E →L[ℂ] E)) ≠ ∞ := by
     rw [hback, Φ.gauge_smul]
-    exact ENNReal.mul_ne_top enorm_ne_top hcomm
+    exact ENNReal.mul_ne_top eNorm_ne_top hcomm
   have hPnorm : ‖(A : E →L[ℂ] E) * K.starProjection -
       K.starProjection * (A : E →L[ℂ] E)‖ ≤ Real.sin (criticalAngle p.toReal) := by
     change ‖(A : E →L[ℂ] E) * H - H * (A : E →L[ℂ] E)‖ ≤ _ at hnorm

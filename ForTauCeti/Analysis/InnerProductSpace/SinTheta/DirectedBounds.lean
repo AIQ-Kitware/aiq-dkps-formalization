@@ -72,7 +72,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 omit [FiniteDimensional 𝕜 F] in
 /-- **The projected Sylvester equation, with the coercions discharged.**
 
-`LinearMap.IsSymmetric.sylvester_starProjection_orthogonal_comp` states the identity
+`Submodule.IsReducing.sylvester_starProjection_orthogonal_comp` states the identity
 in the ambient space; this is the restricted form the norm estimates use, and both
 `sinTheta_residual_le_of_sylvester` here and
 `frobenius_sinTheta_residual_le_of_spectralDistance` in `Perturbation.lean`
@@ -85,8 +85,9 @@ theorem sylvester_projectedResidual_eq {A : E →ₗ[𝕜] E} (hA : A.IsSymmetri
       (Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X.toLinearMap) ∘ₗ M =
       Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M := by
   ext x
+  have hred := (hA.isReducing_iff_mem_invtSubmodule U).mpr hU
   have hx := LinearMap.congr_fun
-    (hA.sylvester_starProjection_orthogonal_comp hU X.toLinearMap M) x
+    (hred.sylvester_starProjection_orthogonal_comp X.toLinearMap M) x
   change A (Uᗮ.starProjection (X x)) - Uᗮ.starProjection (X (M x)) =
     Uᗮ.starProjection (A (X x) - X (M x))
   exact hx
@@ -286,7 +287,7 @@ theorem opNorm_directed_sinTheta_le {A B : E →ₗ[𝕜] E}
     (hVspec : Module.End.PointSpectrumIn B V (Set.Iic c))
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖(V.starProjection ∘L U.starProjection : E →L[𝕜] E)‖ ≤ ε / g := by
-  have : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  have : CompleteSpace E := FiniteDimensional.completeSpace 𝕜 E
   set Ac : E →L[𝕜] E := A.toContinuousLinearMap with hAc
   set Bc : E →L[𝕜] E := B.toContinuousLinearMap with hBc
   have hApp : ∀ x, Ac x = A x := fun _ => rfl
@@ -349,7 +350,7 @@ theorem uiNorm_directed_sinTheta_le (N : UnitarilyInvariantSeminorm 𝕜 E E)
     (hVspec : Module.End.PointSpectrumIn B V (Set.Iic c)) :
     N ((V.starProjection ∘L U.starProjection : E →L[𝕜] E) : E →ₗ[𝕜] E)
       ≤ N (B - A) / g := by
-  have : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  have : CompleteSpace E := FiniteDimensional.completeSpace 𝕜 E
   exact UnitarilyInvariantSeminorm.apply_starProjection_comp_starProjection_le N
     hA hB hU hV hg
     (fun x hx => lowerFormBound_of_pointSpectrumIn hA hU hUspec x hx)
@@ -402,7 +403,7 @@ theorem opNorm_starProjection_sub_le {A B : E →ₗ[𝕜] E}
     (hWlo : Module.End.PointSpectrumIn B Wᗮ (Set.Iic c))
     (hε0 : 0 ≤ ε) (hε : ∀ x, ‖(B - A) x‖ ≤ ε * ‖x‖) :
     ‖(U.starProjection - W.starProjection : E →L[𝕜] E)‖ ≤ ε / g := by
-  have : CompleteSpace E := FiniteDimensional.complete 𝕜 E
+  have : CompleteSpace E := FiniteDimensional.completeSpace 𝕜 E
   let Ac : E →L[𝕜] E := A.toContinuousLinearMap
   let Bc : E →L[𝕜] E := B.toContinuousLinearMap
   have hAself : Ac.IsSymmetric := by

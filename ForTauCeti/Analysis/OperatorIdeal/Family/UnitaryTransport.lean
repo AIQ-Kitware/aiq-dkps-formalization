@@ -107,7 +107,7 @@ theorem gauge_projection_sub_le_unitary_displacement
       Φ.gauge_comp_linearIsometryEquiv_left _ W,
       Φ.gauge_comp_linearIsometryEquiv_right _ W.symm,
       Φ.gauge_comp_linearIsometryEquiv_left A R] at h
-    simpa only [enorm_eq_nnnorm, RCLike.nnnorm_ofNat, ENNReal.coe_ofNat, two_mul] using h
+    simpa only [eNorm_eq_nnNorm, RCLike.nnNorm_ofNat, ENNReal.coe_ofNat, two_mul] using h
   have h := mul_le_mul_left htwo ((2 : ℝ≥0∞)⁻¹)
   have hcancel (b : ℝ≥0∞) : (2 * b) * (2 : ℝ≥0∞)⁻¹ = b := by
     calc

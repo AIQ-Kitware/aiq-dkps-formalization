@@ -39,7 +39,7 @@ private theorem norm_columns_sq
     (T : E →L[𝕜] E) (b : HilbertBasis ι 𝕜 E)
     (f : ℓ²(ι, E)) (hf : b.columnOperator f = T) :
     ‖f‖ ^ 2 = (T.hilbertSchmidtEnergy b).toReal := by
-  rw [← hf, b.hilbertSchmidtEnergy_columnOperator, ENNReal.toReal_pow, toReal_enorm]
+  rw [← hf, b.hilbertSchmidtEnergy_columnOperator, ENNReal.toReal_pow, toReal_eNorm]
 
 /-- The diagonal trace of a product of Hilbert–Schmidt operators is
 absolutely summable, without a separability assumption. -/
@@ -146,7 +146,7 @@ theorem re_tsum_inner_comp_comm
       (T.adjoint - S).hilbertSchmidtEnergy b := by
     rw [← (S.adjoint - T).hilbertSchmidtEnergy_adjoint b b, map_sub, adjoint_adjoint,
       ← neg_sub T.adjoint S]
-    simp only [hilbertSchmidtEnergy_def, neg_apply, enorm_neg]
+    simp only [hilbertSchmidtEnergy_def, neg_apply, eNorm_neg]
   have hST := two_mul_re_tsum_inner_comp_eq_energy_deficit S T b hS hT
   have hTS := two_mul_re_tsum_inner_comp_eq_energy_deficit T S b hT hS
   rw [hdiff] at hST

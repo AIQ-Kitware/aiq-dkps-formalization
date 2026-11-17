@@ -57,7 +57,7 @@ theorem exists_ae_ne_zero_memLp_two (ρ : Measure α) [SigmaFinite ρ] :
     MeasureTheory.exists_pos_lintegral_lt_of_sigmaFinite ρ (ε := 1) one_ne_zero
   refine ⟨fun x => ((Real.sqrt (w x) : ℝ) : ℂ), ?_, ?_⟩
   · change eLpNorm (Complex.ofReal ∘ Real.sqrt ∘ NNReal.toReal ∘ w) 2 ρ < ∞
-    rw [eLpNorm_lt_top_iff_lintegral_rpow_enorm_lt_top (by norm_num) (by norm_num)
+    rw [eLpNorm_lt_top_iff_lintegral_rpow_eNorm_lt_top (by norm_num) (by norm_num)
       ((Complex.continuous_ofReal.measurable.comp
         (Real.continuous_sqrt.measurable.comp
           (measurable_coe_nnreal_real.comp hwmeas))).aestronglyMeasurable)]

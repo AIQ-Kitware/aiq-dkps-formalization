@@ -162,7 +162,7 @@ theorem norm_sylvester_le_of_orderedSeparation_rclike
     (by simp [TauCeti.SymmetricOperatorIdealFamily.Mem])
   simpa only [TauCeti.SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
-    TauCeti.OperatorIdealFamily.gauge_opNorm, toReal_enorm] using hsolve.2
+    TauCeti.OperatorIdealFamily.gauge_opNorm, toReal_eNorm] using hsolve.2
 
 open TauCeti.RealComplexification in
 open scoped TauCeti.DavisKahan.Foundation.RealScalarRestriction in
@@ -363,7 +363,7 @@ theorem sinTheta_perturbation
     (by simp [TauCeti.SymmetricOperatorIdealFamily.Mem])
   simp only [TauCeti.SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
-    TauCeti.OperatorIdealFamily.gauge_opNorm, toReal_enorm] at hsolve
+    TauCeti.OperatorIdealFamily.gauge_opNorm, toReal_eNorm] at hsolve
   have hC : ‖C‖ ≤ ‖B - A‖ :=
     restricted_projection_sandwich_norm_le _ _ _
   have h2 : d * ‖((Vᗮ.starProjection ∘L U.subtypeL)).codRestrict Vᗮ

@@ -119,7 +119,7 @@ theorem equation1_13_gauge_starProjection_comp_le
   simp only [ ContinuousLinearMap.kyFanGauge_def, NNReal.coe_sum]
   refine Finset.sum_le_sum fun n _ => ?_
   have h := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le Υ.starProjection K Ω.starProjection n))
-  simp only [NNReal.coe_mul, coe_nnnorm] at h
+  simp only [NNReal.coe_mul, coe_nnNorm] at h
   have h0 := (K.singularValue n).coe_nonneg
   have hΥ : ‖Υ.starProjection‖ ≤ 1 := Υ.starProjection_norm_le
   have hΩ : ‖Ω.starProjection‖ ≤ 1 := Ω.starProjection_norm_le

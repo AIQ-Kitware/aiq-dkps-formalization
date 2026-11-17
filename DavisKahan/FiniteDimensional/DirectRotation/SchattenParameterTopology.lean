@@ -48,7 +48,7 @@ theorem isCompact_schattenNormalizedPhaseProjections
     simp only [Set.ofPred_forall]
     apply isClosed_iInter
     intro x
-    exact N.closed_of_finiteDimensional.preimage
+    exact N.isClosed_of_finiteDimensional.preimage
       (continuous_id.clm_apply continuous_const)
   exact isCompact_setOf_isStarProjection.of_isClosed_subset
     (isClosed_setOf_isStarProjection.inter (hcomm.inter (href.inter hsupp)))

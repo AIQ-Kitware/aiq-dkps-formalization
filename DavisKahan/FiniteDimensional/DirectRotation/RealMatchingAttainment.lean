@@ -309,7 +309,7 @@ theorem exists_minimizing_real_schatten_transport_matching
           UnitarilyInvariantSeminorm.schatten ℝ E E p
             (LinearMap.id - T.toLinearMap) ^ p.toReal := by
   classical
-  have : CompleteSpace E := FiniteDimensional.complete ℝ E
+  have : CompleteSpace E := FiniteDimensional.completeSpace ℝ E
   let J := {j : Fin (Module.finrank ℝ K) // 0 < K.principalAngles L j}
   let theta : J → ℝ := fun j => K.principalAngles L j.val
   obtain ⟨s, hs, hcost⟩ := exists_attains_realSchattenMatchingMinimum p.toReal theta

@@ -82,11 +82,6 @@ theorem principalSineSequence_antitone (U V : Submodule 𝕜 H)
   (NNReal.coe_mono.comp_antitone (ContinuousLinearMap.antitone_singularValue
       (principalSineOperator U V)))
 
-variable [CompleteSpace H]
-
--- Use the native theorem locally; a global instance would create an instance cycle.
-attribute [local instance] Submodule.completeSpace_coe_of_hasOrthogonalProjection
-
 /-- The squared principal-sine sequence is exactly the Hilbert--Schmidt energy
 of `P_{Vᗮ}|_U`.  Both sides take values in `ℝ≥0∞`, so divergence is represented
 by `⊤`. -/

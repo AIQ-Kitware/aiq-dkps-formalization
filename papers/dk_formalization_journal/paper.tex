@@ -1403,6 +1403,14 @@ to its domain, the corresponding double-angle estimate also holds:
  \qquad\text{or}\qquad
  \sym{delta}\sym{NormN}(\sin(2\sym{Theta0}))\le2\sym{NormN}(\sym{R}).
 \]
+% Note (not for print): the factor 2 in the residual form is correct and
+% matches the 1970 Section 2 statement. The 1970 Section 7 proof, after (7.5),
+% rewrites delta||sin 2Theta|| <= ||H - XHX|| with right side ||[[0,B*],[B,0]]||
+% and concludes delta||sin 2Theta_0|| <= ||B|| <= ||R||; since H - XHX has
+% off-diagonal block 2B, the right side should be 2||B|| <= 2||R||. The
+% Section 7 example (A = diag(0,d), H = [[0,1],[1,-d]], delta = 2,
+% theta = pi/4, ||R|| = 1) attains delta sin 2theta = 2 = 2||R||. Proof-line
+% slip only; the stated theorem is unaffected.
 The perturbation estimate uses the full angle, and the residual estimate
 the directed angle on source coordinates. In the unbounded residual form,
 $\sym{A}$ and $\sym{Acurrent}$ are self-adjoint on a common domain; only

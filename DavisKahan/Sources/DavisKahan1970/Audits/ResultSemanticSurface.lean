@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+import TauCeti.Analysis.InnerProductSpace.Reflection
+
 public import DavisKahan.All
 
 public section
@@ -960,7 +962,7 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_unbounded
 #check @TauCeti.DavisKahan.subspaceGap_le_of_reflectionProduct_form_nonneg
 #check @TauCeti.DavisKahan.maximalAngle_le_pi_div_four_of_reflectionProduct_form_nonneg
-#check @TauCeti.DavisKahan.reflectionProduct_add_swap_eq
+#check @Submodule.reflection_mul_add_mul_reflection
 #check @TauCeti.ContinuousLinearMap.nonneg_of_lyapunov_nonneg
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn
 #check @TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real

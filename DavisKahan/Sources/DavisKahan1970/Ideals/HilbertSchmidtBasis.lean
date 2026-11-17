@@ -65,7 +65,7 @@ theorem hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy {ι : Type*}
     (b : HilbertBasis ι 𝕜 F) (A : F →L[𝕜] E) :
     hilbertSchmidtBasisEnergy b A = A.hilbertSchmidtEnergy b := by
   simp only [hilbertSchmidtBasisEnergy, ContinuousLinearMap.hilbertSchmidtEnergy_def,
-    enorm_eq_nnnorm]
+    eNorm_eq_nnNorm]
 
 /-- Adjoint cross-swap for rectangular operators. -/
 theorem hilbertSchmidtBasisEnergy_adjoint_swap
@@ -442,7 +442,7 @@ theorem hilbertSchmidtBasisEnergy_eq_iSup_finset {ι : Type*}
   unfold hilbertSchmidtBasisEnergy
   rw [tsum_eq_iSup_sum]
   refine iSup_congr fun s => Finset.sum_congr rfl fun i _ => ?_
-  rw [ENNReal.ofReal_pow (norm_nonneg _), ofReal_norm, enorm_eq_nnnorm]
+  rw [ENNReal.ofReal_pow (norm_nonneg _), ofReal_norm, eNorm_eq_nnNorm]
 
 /-- The approximation-number and basis definitions of rectangular
 Hilbert--Schmidt energy agree exactly. -/
@@ -488,7 +488,7 @@ theorem approximationNumberEnergy_ne_top_iff_summable_basis {ι : Type*}
     simp only [hilbertSchmidtBasisEnergy, ENNReal.coe_pow]
   rw [approximationNumberEnergy_eq_basisEnergy b A, hE,
     ENNReal.tsum_coe_ne_top_iff_summable, ← NNReal.summable_coe]
-  simp only [NNReal.coe_pow, coe_nnnorm]
+  simp only [NNReal.coe_pow, coe_nnNorm]
 
 /-- The paper square norm is the ordinary basis Hilbert--Schmidt norm. -/
 theorem hilbertSchmidtNorm_eq_sqrt_tsum_basis {ι : Type*}
@@ -498,7 +498,7 @@ theorem hilbertSchmidtNorm_eq_sqrt_tsum_basis {ι : Type*}
   have hsummable := (approximationNumberEnergy_ne_top_iff_summable_basis b A).1 hA
   have hnn : Summable (fun i => ‖A (b i)‖₊ ^ 2) := by
     rw [← NNReal.summable_coe]
-    simpa only [NNReal.coe_pow, coe_nnnorm] using hsummable
+    simpa only [NNReal.coe_pow, coe_nnNorm] using hsummable
   have hE : hilbertSchmidtBasisEnergy b A
       = ((∑' i, (‖A (b i)‖₊ ^ 2 : NNReal) : NNReal) : ENNReal) := by
     simp only [hilbertSchmidtBasisEnergy]
@@ -507,7 +507,7 @@ theorem hilbertSchmidtNorm_eq_sqrt_tsum_basis {ι : Type*}
     approximationNumberEnergy_eq_basisEnergy b A, hE, ENNReal.coe_toReal]
   congr 1
   rw [NNReal.coe_tsum]
-  simp only [NNReal.coe_pow, coe_nnnorm]
+  simp only [NNReal.coe_pow, coe_nnNorm]
 
 /-! ## Reconciliation with the accepted Hilbert–Schmidt ideal
 

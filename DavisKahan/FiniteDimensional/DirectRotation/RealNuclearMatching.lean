@@ -51,7 +51,7 @@ def realTransportPowerMinimum (p : ℝ) (K L : Submodule ℝ E) : ℝ :=
 /-- The full set of actual real transport displacements is compact. -/
 theorem isCompact_realTransportDisplacements (K L : Submodule ℝ E) :
     IsCompact (realTransportDisplacements K L) := by
-  have : CompleteSpace E := FiniteDimensional.complete ℝ E
+  have : CompleteSpace E := FiniteDimensional.completeSpace ℝ E
   exact (isCompact_unitary_transport_fiber K.starProjection L.starProjection).image
     (continuous_const.sub continuous_id)
 
@@ -74,7 +74,7 @@ private theorem conjugate_of_map_eq (K L : Submodule ℝ E) (V : E ≃ₗᵢ[ℝ
 private theorem displacement_mem_of_map_eq (K L : Submodule ℝ E) (V : E ≃ₗᵢ[ℝ] E)
     (hmap : K.map V.toLinearMap = L) :
     1-(V : E →L[ℝ] E) ∈ realTransportDisplacements K L := by
-  have : CompleteSpace E := FiniteDimensional.complete ℝ E
+  have : CompleteSpace E := FiniteDimensional.completeSpace ℝ E
   exact mem_image_of_mem _ ⟨(Unitary.linearIsometryEquiv.symm V).property,
     conjugate_of_map_eq K L V hmap⟩
 
@@ -93,7 +93,7 @@ theorem realTransportPowerMinimum_eq_matching
       (fun j : {j : Fin (Module.finrank ℝ K) // 0 < K.principalAngles L j} =>
         K.principalAngles L j.val) := by
   classical
-  have : CompleteSpace E := FiniteDimensional.complete ℝ E
+  have : CompleteSpace E := FiniteDimensional.completeSpace ℝ E
   let q := ENNReal.ofReal p
   have hq : q.toReal = p := ENNReal.toReal_ofReal (by linarith)
   have : Fact (1 ≤ q) := ⟨ENNReal.one_le_ofReal.mpr hp1.le⟩
@@ -170,7 +170,7 @@ theorem exists_minimizing_real_nuclear_transport_matching
       ∀ V : E ≃ₗᵢ[ℝ] E, K.map V.toLinearMap = L →
         UnitarilyInvariantSeminorm.schatten ℝ E E 1 (LinearMap.id - T.toLinearMap) ≤
           UnitarilyInvariantSeminorm.schatten ℝ E E 1 (LinearMap.id - V.toLinearMap) := by
-  have : CompleteSpace E := FiniteDimensional.complete ℝ E
+  have : CompleteSpace E := FiniteDimensional.completeSpace ℝ E
   let q := ENNReal.ofReal (3/2 : ℝ)
   have hq : q.toReal = (3/2 : ℝ) := ENNReal.toReal_ofReal (by norm_num)
   have : Fact (1 ≤ q) := ⟨ENNReal.one_le_ofReal.mpr (by norm_num)⟩

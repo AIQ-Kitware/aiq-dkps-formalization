@@ -145,7 +145,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_lowerCorner
         ((projectionBlock Uᗮ U H).kyFanGauge j : ℝ) := by
     intro j
     rw [projectionBlock_smul_unboundedTanThetaAmbient,
-      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdeltac]
+      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hdeltac]
     exact hlower j
   have h₁ : ∀ j : ℕ,
       ((projectionBlock Uᗮᗮ Uᗮ (((delta : ℝ) : ℂ) • K)).kyFanGauge j : ℝ) ≤
@@ -169,7 +169,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_lowerCorner
       simp only [star_mul, star_sub, star_one, hp.star_eq, hH.star_eq]
       noncomm_ring
     rw [hleft, hright, ContinuousLinearMap.kyFanGauge_adjoint,
-      ContinuousLinearMap.kyFanGauge_adjoint, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdeltac]
+      ContinuousLinearMap.kyFanGauge_adjoint, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hdeltac]
     exact hlower j
   have hcombine := lemma61_all_kyFan Uᗮ U
     (((delta : ℝ) : ℂ) • K) (((delta : ℝ) : ℂ) • K) H H h₀ h₁ k
@@ -184,7 +184,7 @@ theorem tanTheta_ambient_bounded_kyFan_complex_of_lowerCorner
   have hsumH :
       projectionBlock Uᗮ U H + projectionBlock Uᗮᗮ Uᗮ H =
         diagonalPair Uᗮ U H := rfl
-  rw [hsum, hsumH, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdeltac] at hcombine
+  rw [hsum, hsumH, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hdeltac] at hcombine
   have hpinch := diagonalPair_all_kyFan_le Uᗮ U H k
   have hmodulus :
       ((tanAngleOperatorC U V).kyFanGauge k : ℝ) =
@@ -326,7 +326,7 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_comp
       hdelta hCompression hcross 0
   have hambient : ‖directedSineAmbient U V‖ < 1 := by
     have h := approximationNumber_directedSineAmbient_le (U := U) (V := V) 0
-    rw [((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (directedSineAmbient U V))).trans (coe_nnnorm (directedSineAmbient U V)))] at h
+    rw [((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (directedSineAmbient U V))).trans (coe_nnNorm (directedSineAmbient U V)))] at h
     exact lt_of_le_of_lt h hdirected
   have htr : ‖sinAngleOperatorC U V‖ < 1 := by
     rw [norm_sinAngleOperatorC U V,
@@ -439,7 +439,7 @@ theorem tanTheta_ambient_unboundedRitzData_symmetricNorming_complex
     D.approximationSingularValue_sineBlock_lt_one V hdelta hupper hcross 0
   have hambient : ‖directedSineAmbient U V‖ < 1 := by
     have h := approximationNumber_directedSineAmbient_le (U := U) (V := V) 0
-    rw [((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (directedSineAmbient U V))).trans (coe_nnnorm (directedSineAmbient U V)))] at h
+    rw [((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (directedSineAmbient U V))).trans (coe_nnNorm (directedSineAmbient U V)))] at h
     exact lt_of_le_of_lt h hdirected
   have htr : ‖sinAngleOperatorC U V‖ < 1 := by
     rw [norm_sinAngleOperatorC U V,
@@ -563,7 +563,7 @@ theorem norm_sinAngleOperatorC_lt_one_of_unboundedRitz
     D.trial.approximationSingularValue_sineBlock_lt_one V hdelta hupper hcross 0
   have hambient : ‖directedSineAmbient U V‖ < 1 := by
     have h := approximationNumber_directedSineAmbient_le (U := U) (V := V) 0
-    rw [((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (directedSineAmbient U V))).trans (coe_nnnorm (directedSineAmbient U V)))] at h
+    rw [((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (directedSineAmbient U V))).trans (coe_nnNorm (directedSineAmbient U V)))] at h
     exact lt_of_le_of_lt h hdirected
   rw [norm_sinAngleOperatorC U V,
     DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent U V h35]

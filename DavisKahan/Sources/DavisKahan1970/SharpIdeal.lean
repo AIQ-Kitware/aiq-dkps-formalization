@@ -90,7 +90,7 @@ theorem sharp_standardSymmetricIdeal_scaled
       (S.kyFanGauge k : ℝ) ≤
         (B.B01.adjoint.kyFanGauge k : ℝ) := by
     intro k
-    simpa only [S, T, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hscalarNorm] using
+    simpa only [S, T, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hscalarNorm] using
       half_mul_kyFan_le_adjoint B hd hA0 hA1 hX hcontractive k
   have hfan : I.Mem S ∧ I.gauge S ≤ I.gauge B.B01.adjoint :=
     TauCeti.SymmetricIdeal.standard_fanDominance I hBadj hdom

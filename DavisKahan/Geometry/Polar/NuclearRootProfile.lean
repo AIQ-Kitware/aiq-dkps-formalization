@@ -176,7 +176,7 @@ theorem nuclearSignedSineTransport_operatorNorm_complex
           Φ.gauge_comp_linearIsometryEquiv_left, Φ.gauge_comp_linearIsometryEquiv_right]
   have hsame : ‖S - A‖ = ‖S + A‖ := by
     have h := congrArg ENNReal.toReal hsameGauge
-    simpa only [Φ, OperatorIdealFamily.gauge_opNorm, toReal_enorm] using h
+    simpa only [Φ, OperatorIdealFamily.gauge_opNorm, toReal_eNorm] using h
   have hadd := (hS.add hA).norm_add_eq_max (hS.sub hA) hzero
   have hsum : (S + A) + (S - A) = (2 : ℂ) • S := by rw [two_smul]; abel
   rw [hsum, norm_smul, Complex.norm_two, ← hsame, max_self] at hadd
@@ -187,7 +187,7 @@ theorem nuclearSignedSineTransport_operatorNorm_complex
   rw [SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily] at hc
   simp only [OperatorIdealFamily.gauge_opNorm] at hc
   have hcost := congrArg ENNReal.toReal hc
-  simp only [toReal_enorm] at hcost
+  simp only [toReal_eNorm] at hcost
   have hSnorm : ‖S‖ = ‖K.starProjection - L.starProjection‖ := by
     rw [show S = (K.starProjection - L.starProjection).modulus from K.sinAngleOperator_def L,
       ContinuousLinearMap.norm_modulus]
@@ -258,7 +258,7 @@ theorem nuclear_optimizer_operatorNorm_comparison_complex
   have h := (OperatorIdealFamily.opNorm ℂ).gauge_projection_sub_le_unitary_displacement K L W hW
   simp only [OperatorIdealFamily.gauge_opNorm] at h
   have hr := ENNReal.toReal_mono (by finiteness : ‖1 - (W : F →L[ℂ] F)‖ₑ ≠ ∞) h
-  simp only [toReal_enorm] at hr
+  simp only [toReal_eNorm] at hr
   linarith
 
 end Complex

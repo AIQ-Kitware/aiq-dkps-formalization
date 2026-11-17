@@ -47,7 +47,7 @@ theorem norm_polarFactor_le_one_rectangular (T : E →L[K] F) :
   exact ContinuousLinearMap.norm_factorThru_le zero_le_one
     (fun x => by rw [one_mul, T.norm_modulus_apply])
 
-/-- The polar partial isometry and its adjoint are contractions in `enorm`. -/
+/-- The polar partial isometry and its adjoint are contractions in `eNorm`. -/
 theorem polarFactor_and_adjoint_enorm_le_one_rectangular (T : E →L[K] F) :
     ‖T.polarFactor‖ₑ ≤ 1 ∧ ‖T.polarFactor.adjoint‖ₑ ≤ 1 := by
   have hU : ‖T.polarFactor‖ ≤ 1 := norm_polarFactor_le_one_rectangular T

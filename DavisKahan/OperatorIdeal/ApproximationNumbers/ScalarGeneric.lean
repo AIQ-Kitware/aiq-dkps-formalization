@@ -174,7 +174,7 @@ theorem mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
       ((d • A).kyFanGauge k : ℝ) ≤
         (B.kyFanGauge k : ℝ) := by
     intro k
-    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdnorm]
+    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hdnorm]
     exact h k
   obtain ⟨hdA, hgauge⟩ := mem_and_gauge_le_of_all_kyFanApproximationGauge_le N hB hscaled
   have hA : N.Mem A := by

@@ -186,7 +186,7 @@ theorem schattenENorm_smul {p : ℝ} (hp0 : 0 < p) (c : 𝕜) (T : E →L[𝕜] 
   have hterm : ∀ n : ℕ, ENNReal.ofReal (((c • T).singularValue n : ℝ)) ^ p =
       ‖c‖ₑ ^ p * ENNReal.ofReal ((T.singularValue n : ℝ)) ^ p := by
     intro n
-    rw [ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm, ENNReal.ofReal_mul
+    rw [ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnNorm, ENNReal.ofReal_mul
         (norm_nonneg c), ofReal_norm,
       ENNReal.mul_rpow_of_nonneg _ _ hp0.le]
   rw [schattenENorm, schattenENorm]
@@ -202,7 +202,7 @@ theorem enorm_le_schattenENorm {p : ℝ} (hp0 : 0 < p) (T : E →L[𝕜] F) :
   have hz : ‖T‖ₑ ^ p ≤ ∑' n : ℕ, ENNReal.ofReal ((T.singularValue n : ℝ)) ^ p := by
     refine le_trans (le_of_eq ?_) (le_tsum _ 0)
     rw [← ofReal_norm, ← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero
-        T)).trans (coe_nnnorm T))]
+        T)).trans (coe_nnNorm T))]
   have := ENNReal.rpow_le_rpow hz (by positivity : (0 : ℝ) ≤ p⁻¹)
   rwa [← ENNReal.rpow_mul, mul_inv_cancel₀ hp0.ne', ENNReal.rpow_one] at this
 
@@ -225,7 +225,7 @@ theorem schattenENorm_comp_le {p : ℝ} (hp0 : 0 < p) {G H : Type*}
     intro n
     have h := ENNReal.ofReal_le_ofReal ((NNReal.coe_le_coe.mpr
         (ContinuousLinearMap.singularValue_comp_comp_le L T R n)))
-    simp only [NNReal.coe_mul, coe_nnnorm] at h
+    simp only [NNReal.coe_mul, coe_nnNorm] at h
     refine le_trans (ENNReal.rpow_le_rpow h hp0.le) (le_of_eq ?_)
     -- The `rw` chain this replaced repeated `ofReal_norm` twice and
     -- `mul_rpow_of_nonneg` three times, once per occurrence.
@@ -278,7 +278,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 @[simp] theorem schattenENorm_neg (p : ℝ) (T : E →L[𝕜] F) :
     (-T).schattenENorm p = T.schattenENorm p := by
   simp only [schattenENorm,
-    ← neg_one_smul 𝕜 T, singularValue_smul, nnnorm_neg, nnnorm_one, one_mul]
+    ← neg_one_smul 𝕜 T, singularValue_smul, nnNorm_neg, nnNorm_one, one_mul]
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- `T` is **Schatten-`p`** when its Schatten norm is finite.

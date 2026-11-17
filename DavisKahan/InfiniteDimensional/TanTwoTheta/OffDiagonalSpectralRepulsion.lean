@@ -5,6 +5,8 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.QuadraticForm.Reflection
+
 public import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 
@@ -62,10 +64,9 @@ theorem re_inner_reflection_comp_offDiagonal_eq_zero
   have hHsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hH
   have hanti :
       U.reflectionOperator (H x) = -(H (U.reflectionOperator x)) := by
-    have h := DFunLike.congr_fun
-      (reflection_anticommutes_of_maps_orthogonal H U hHU hHUperp) x
-    simpa only [ContinuousLinearMap.comp_apply,
-      neg_apply] using h
+    rw [reflectionOperator_eq_reflection, reflectionOperator_eq_reflection]
+    exact DFunLike.congr_fun
+      (U.reflection_mul_eq_neg_mul_of_maps_orthogonal H hHU hHUperp) x
   have hw1 : ⟪U.reflectionOperator (H x), x⟫_ℂ
       = ⟪H x, U.reflectionOperator x⟫_ℂ := hJsym _ _
   have hw2 : ⟪U.reflectionOperator (H x), x⟫_ℂ
@@ -129,11 +130,19 @@ theorem realSpectrum_add_offDiagonal_subset_exterior_of_form_gap
       RCLike.re ⟪(U.reflectionOperator ∘L
         (A - ((lam : ℝ) : ℂ) • ContinuousLinearMap.id ℂ E)) x, x⟫_ℂ := by
     intro x
-    have h := reflected_centered_form_lower A U hA hAU
-      (a := lam - ε) (b := lam + ε) hUhigh' hUperpLow' x
+    have h := U.reflection_centered_form_lower A
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA) hAU
+      (a := lam - ε) (b := lam + ε)
+      ((ContinuousLinearMap.lowerFormBoundOn_iff A U (lam + ε)).mpr hUhigh')
+      ((ContinuousLinearMap.upperFormBoundOn_iff A Uᗮ (lam - ε)).mpr hUperpLow') x
     have e1 : (lam - ε + (lam + ε)) / 2 = lam := by ring
     have e2 : (lam + ε - (lam - ε)) / 2 = ε := by ring
     rw [e1, e2] at h
+    have hJ : U.reflectionOperator = (U.reflection : E →L[ℂ] E) := by
+      ext y
+      simp only [reflectionOperator_eq_reflection, LinearIsometryEquiv.coe_coe'']
+    rw [hJ, ← ContinuousLinearMap.mul_def]
+    rw [_root_.ContinuousLinearMap.one_def] at h
     exact h
   have hskew := re_inner_reflection_comp_offDiagonal_eq_zero H U hH hHU hHUperp
   have hcoer : ∀ x : E, ε * ‖x‖ ^ 2 ≤

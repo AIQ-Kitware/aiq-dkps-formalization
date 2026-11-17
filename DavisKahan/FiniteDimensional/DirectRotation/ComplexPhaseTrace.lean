@@ -39,7 +39,7 @@ public section
 
 local instance {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
     [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] : CompleteSpace E :=
-  FiniteDimensional.complete 𝕜 E
+  FiniteDimensional.completeSpace 𝕜 E
 
 
 attribute [local instance] ContinuousLinearMap.realAlgebra ContinuousLinearMap.realIsScalarTower
@@ -57,7 +57,7 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [FiniteDimensional ℂ H]
 
 private noncomputable instance finite_complete : CompleteSpace H :=
-  FiniteDimensional.complete ℂ H
+  FiniteDimensional.completeSpace ℂ H
 
 private abbrev BEnd (H : Type*) [NormedAddCommGroup H]
     [InnerProductSpace ℂ H] := H →L[ℂ] H

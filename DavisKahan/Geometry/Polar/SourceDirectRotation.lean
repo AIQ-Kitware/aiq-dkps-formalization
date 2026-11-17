@@ -8,7 +8,7 @@ module
 public import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 public import DavisKahan.Geometry.Polar.Section3Nonacute
 public import DavisKahan.Geometry.Angle.Proposition35Infinite
-public import TauCeti.Analysis.Normed.Operator.RealAlgebra
+public import TauCeti.Topology.Algebra.Module.ContinuousLinearMap.RealAlgebra
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 
 /-!

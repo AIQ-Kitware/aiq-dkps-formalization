@@ -167,7 +167,7 @@ theorem kyFanApproximationGauge_diagBlock_le_complex
     refine hreal.trans ?_
     have := kyFanApproximationGauge_reflectionConjugate_le U A k
     linarith
-  rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm] at hsum
+  rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm] at hsum
   have hnorm : ‖(2 : ℂ)‖ = 2 := by norm_num
   rw [hnorm] at hsum
   linarith

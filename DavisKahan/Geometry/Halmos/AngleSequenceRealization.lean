@@ -411,7 +411,7 @@ theorem approximationNumber_angleSinSqOp (hθ0 : ∀ n, 0 ≤ θ n)
     ((angleSinSqOp 𝕜 θ).singularValue n : ℝ) = Real.sin (θ n) ^ 2 := by
   rw [angleSinSqOp,
     lp.singularValue_diagonalCLM _ (antitone_norm_angleSinSqSeq hθ0 hθ2 hanti) n,
-    coe_nnnorm]
+    coe_nnNorm]
   change ‖angleSinSqSeq 𝕜 θ n‖ = Real.sin (θ n) ^ 2
   rw [angleSinSqSeq, RCLike.norm_ofReal, abs_of_nonneg (sq_nonneg (Real.sin (θ n)))]
 

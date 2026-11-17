@@ -310,11 +310,11 @@ theorem norm_continuousOrthogonalBlockSum
   apply le_antisymm
   · exact norm_continuousOrthogonalBlockSum_le A B
   · apply max_le
-    · rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero A)).trans (coe_nnnorm A)),
-        ← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (continuousOrthogonalBlockSum A B))).trans (coe_nnnorm (continuousOrthogonalBlockSum A B)))]
+    · rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero A)).trans (coe_nnNorm A)),
+        ← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (continuousOrthogonalBlockSum A B))).trans (coe_nnNorm (continuousOrthogonalBlockSum A B)))]
       exact approximationNumber_le_blockSum_left A B 0
-    · rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero B)).trans (coe_nnnorm B)),
-        ← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (continuousOrthogonalBlockSum A B))).trans (coe_nnnorm (continuousOrthogonalBlockSum A B)))]
+    · rw [← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero B)).trans (coe_nnNorm B)),
+        ← ((congrArg NNReal.toReal (ContinuousLinearMap.singularValue_zero (continuousOrthogonalBlockSum A B))).trans (coe_nnNorm (continuousOrthogonalBlockSum A B)))]
       exact approximationNumber_le_blockSum_right A B 0
 
 /-- A block sum splits as a sum of two compressions, one per summand. -/

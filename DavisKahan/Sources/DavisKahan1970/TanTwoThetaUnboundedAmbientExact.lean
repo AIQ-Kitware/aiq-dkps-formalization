@@ -124,7 +124,7 @@ private theorem kyFan_upper_eq_lower_of_skewAdjoint_unboundedAmbientExact
       (isSelfAdjoint_starProjection U).star_eq, hKstar]
     noncomm_ring
   rw [hadj, ← neg_one_smul ℂ, ContinuousLinearMap.kyFanGauge_smul,
-        nnnorm_neg, nnnorm_one, one_mul, ContinuousLinearMap.kyFanGauge_adjoint]
+        nnNorm_neg, nnNorm_one, one_mul, ContinuousLinearMap.kyFanGauge_adjoint]
 
 omit [CompleteSpace G] in
 private theorem diagonalPart_eq_zero_of_isOddFor_unboundedAmbientExact
@@ -342,7 +342,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
         ((projectionBlock Uᗮ U B).kyFanGauge k : ℝ) := by
     intro k
     rw [projectionBlock_smul_unboundedAmbientExact,
-      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm]
+      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hcnorm]
     erw [(show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ)
       from
       (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U T).kyFanGauge_eq k))),
@@ -357,12 +357,12 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
         ((projectionBlock Uᗮᗮ Uᗮ B).kyFanGauge k : ℝ) := by
     intro k
     rw [projectionBlock_smul_unboundedAmbientExact,
-      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm,
+      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hcnorm,
       kyFan_upper_eq_lower_of_skewAdjoint_unboundedAmbientExact T hTskew k,
       kyFan_upper_eq_lower_of_selfAdjoint_unboundedAmbientExact B hBsa k]
     have hk := h₀ k
     rw [projectionBlock_smul_unboundedAmbientExact,
-      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm] at hk
+      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hcnorm] at hk
     exact hk
   have hcombine := lemma61_all_kyFan Uᗮ U
     (((((b - a) / 2 : ℝ)) : ℂ) • T)
@@ -387,7 +387,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
         projectionBlock Uᗮ U B + projectionBlock Uᗮᗮ Uᗮ B = B := by
       change diagonalPair Uᗮ U B = B
       exact hpairB
-    rw [hsumT, hsumB, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm] at h
+    rw [hsumT, hsumB, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hcnorm] at h
     linarith
   have hscaled : ∀ k : ℕ,
       ((b - a) / 2) * (T.kyFanGauge k : ℝ) ≤ (B.kyFanGauge k : ℝ) := by
@@ -456,7 +456,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorm
         ((projectionBlock Uᗮ U B).kyFanGauge k : ℝ) := by
     intro k
     rw [projectionBlock_smul_unboundedAmbientExact,
-      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm]
+      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hcnorm]
     erw [(show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ)
       from
       (congrArg NNReal.toReal ((projectionBlock_same_compression Uᗮ U T).kyFanGauge_eq k))),
@@ -471,12 +471,12 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorm
         ((projectionBlock Uᗮᗮ Uᗮ B).kyFanGauge k : ℝ) := by
     intro k
     rw [projectionBlock_smul_unboundedAmbientExact,
-      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm,
+      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hcnorm,
       kyFan_upper_eq_lower_of_skewAdjoint_unboundedAmbientExact T hTskew k,
       kyFan_upper_eq_lower_of_selfAdjoint_unboundedAmbientExact B hBsa k]
     have hk := h₀ k
     rw [projectionBlock_smul_unboundedAmbientExact,
-      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm] at hk
+      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hcnorm] at hk
     exact hk
   have hcombine := lemma61_all_kyFan Uᗮ U
     (((((b - a) / 2 : ℝ)) : ℂ) • T)
@@ -501,7 +501,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorm
         projectionBlock Uᗮ U B + projectionBlock Uᗮᗮ Uᗮ B = B := by
       change diagonalPair Uᗮ U B = B
       exact hpairB
-    rw [hsumT, hsumB, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hcnorm] at h
+    rw [hsumT, hsumB, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hcnorm] at h
     linarith
   have hscaled : ∀ k : ℕ,
       ((b - a) / 2) * (T.kyFanGauge k : ℝ) ≤ (B.kyFanGauge k : ℝ) := by

@@ -51,7 +51,7 @@ theorem exists_unitary_minimizing_nuclear_transport_principalAngles_complex
       ∀ T : E ≃ₗᵢ[ℂ] E, K.map T.toLinearMap = L →
         (∑ i : Fin (Module.finrank ℂ K), 2 * Real.sin (K.principalAngles L i)) ≤
           UnitarilyInvariantSeminorm.schatten ℂ E E 1 (LinearMap.id - T.toLinearMap) := by
-  have : CompleteSpace E := FiniteDimensional.complete ℂ E
+  have : CompleteSpace E := FiniteDimensional.completeSpace ℂ E
   obtain ⟨W, hmap, hcost⟩ := exists_unitary_attaining_schatten_principalAngles_complex
     1 ENNReal.one_ne_top K L hKL
   simp only [ENNReal.toReal_one, Real.rpow_one] at hcost

@@ -7,7 +7,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import DavisKahan.Sources.DavisKahan1970.Section9.WeinbergerAngle
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.DiagonalMultiplication
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Diagonal
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 public import Mathlib.Analysis.Normed.Lp.lpSpace
 public import Mathlib.Analysis.SpecificLimits.Basic
 public import Mathlib.Analysis.SpecialFunctions.Pow.Real
@@ -163,29 +164,31 @@ open scoped ENNReal
 /-- The ambient sequence space of the example. -/
 abbrev DomainLimitationSpace : Type := lp (fun _ : ℕ => ℝ) 2
 
-/-- **The maximal domain of the diagonal operator with multiplier `d`**: the
-vectors whose scaled sequence is still square summable.
+/-- **The unbounded diagonal operator**, on its maximal domain.
 
-This is the reusable `TauCeti.LinearPMap.lpDiagonalDomain` at `𝕜 = ℝ`, `ι = ℕ`;
-the paper-facing name is kept so the Section 9 statements read as the source
-writes them. -/
+This is the accepted Hilbert-basis diagonal partial map from Tau Ceti #34547,
+using the coordinate Hilbert basis of `ℓ²(ℕ, ℝ)`. The paper-facing name retains
+its Section 9 role. The displaced local donor was authored by Jon Crall and
+Claude Opus 5 (Kitware 2026, Apache-2.0); proof descent of the general upstream
+construction from that donor has not been established. -/
+@[expose]
+noncomputable def diagonalOperator (d : ℕ → ℝ) :
+    DomainLimitationSpace →ₗ.[ℝ] DomainLimitationSpace :=
+  (HilbertBasis.ofRepr (LinearIsometryEquiv.refl ℝ _)).diagonalPMap d
+
+/-- The maximal domain on which the weighted coordinates are square summable. -/
 @[expose]
 noncomputable def diagonalDomain (d : ℕ → ℝ) : Submodule ℝ DomainLimitationSpace :=
-  TauCeti.LinearPMap.lpDiagonalDomain d
+  (diagonalOperator d).domain
 
 /-- Membership in the diagonal operator's domain is square-summability of the
 weighted coordinates. -/
 theorem mem_diagonalDomain_iff (d : ℕ → ℝ) (x : DomainLimitationSpace) :
-    x ∈ diagonalDomain d ↔ Memℓp (fun n => d n * (x : ℕ → ℝ) n) 2 :=
-  TauCeti.LinearPMap.mem_lpDiagonalDomain_iff d x
-
-/-- **The unbounded diagonal operator**, on its maximal domain.
-
-This is the reusable `TauCeti.LinearPMap.lpDiagonal` at `𝕜 = ℝ`, `ι = ℕ`. -/
-@[expose]
-noncomputable def diagonalOperator (d : ℕ → ℝ) :
-    DomainLimitationSpace →ₗ.[ℝ] DomainLimitationSpace :=
-  TauCeti.LinearPMap.lpDiagonal d
+    x ∈ diagonalDomain d ↔ Memℓp (fun n => d n * (x : ℕ → ℝ) n) 2 := by
+  simpa only [diagonalDomain, diagonalOperator, ← HilbertBasis.repr_apply_apply,
+    LinearIsometryEquiv.coe_refl, id_eq] using
+    (HilbertBasis.mem_diagonalPMap_domain_iff_memℓp
+      (b := HilbertBasis.ofRepr (LinearIsometryEquiv.refl ℝ _)) (c := d) (x := x))
 
 /-- The operator's domain is the maximal domain, by construction. -/
 @[simp]
@@ -196,32 +199,30 @@ theorem diagonalOperator_domain (d : ℕ → ℝ) :
 @[simp]
 theorem diagonalOperator_apply (d : ℕ → ℝ) (x : (diagonalOperator d).domain) (n : ℕ) :
     ((diagonalOperator d x : DomainLimitationSpace) : ℕ → ℝ) n
-      = d n * ((x : DomainLimitationSpace) : ℕ → ℝ) n :=
-  TauCeti.LinearPMap.lpDiagonal_apply d x n
+      = d n * ((x : DomainLimitationSpace) : ℕ → ℝ) n := by
+  simpa only [diagonalOperator, ← HilbertBasis.repr_apply_apply,
+    LinearIsometryEquiv.coe_refl, id_eq] using
+    (HilbertBasis.repr_diagonalPMap_apply
+      (b := HilbertBasis.ofRepr (LinearIsometryEquiv.refl ℝ _)) (c := d) x n)
 
-/-- **The diagonal operator is self-adjoint on its maximal domain** whenever the
-multiplier is real, which for `ℝ`-valued `d` is automatic.
-
-This is what makes "the Rayleigh quotient of a trial vector is useful"
-meaningful: without self-adjointness there is no spectral statement to compare
-the quotient against.  It is the paper-facing instance of the reusable
-`TauCeti.LinearPMap.lpDiagonal_isSelfAdjoint`. -/
+/-- The real diagonal operator is self-adjoint on its maximal domain. -/
 theorem diagonalOperator_isSelfAdjoint (d : ℕ → ℝ) :
-    IsSelfAdjoint (diagonalOperator d) :=
-  TauCeti.LinearPMap.lpDiagonal_isSelfAdjoint d fun n => by simp
+    IsSelfAdjoint (diagonalOperator d) := by
+  exact HilbertBasis.isSelfAdjoint_diagonalPMap
+    (b := HilbertBasis.ofRepr (LinearIsometryEquiv.refl ℝ _))
+    (show IsSelfAdjoint d from by ext n; simp)
 
-/-- Symmetry of the diagonal operator, the coordinatewise half of the previous
-theorem. -/
+/-- Symmetry on the maximal domain follows from native self-adjointness. -/
 theorem diagonalOperator_isSymmetric (d : ℕ → ℝ) :
     TauCeti.LinearPMap.IsSymmetric (diagonalOperator d) :=
-  TauCeti.LinearPMap.lpDiagonal_isSymmetric d fun n => by simp
+  TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint (diagonalOperator_isSelfAdjoint d)
 
-/-- The maximal domain is dense, so the adjoint of the diagonal operator is the
-honest Hilbert-space adjoint rather than the junk value. -/
+/-- The maximal diagonal domain is dense. -/
 theorem dense_diagonalDomain (d : ℕ → ℝ) :
     Dense ((diagonalDomain d : Submodule ℝ DomainLimitationSpace) :
       Set DomainLimitationSpace) :=
-  TauCeti.LinearPMap.dense_lpDiagonal_domain d
+  HilbertBasis.dense_diagonalPMap_domain
+    (HilbertBasis.ofRepr (LinearIsometryEquiv.refl ℝ _)) d
 
 /-- The `ℓ²` membership criterion, with the exponent already evaluated. -/
 theorem memℓp_two_of_summable_sq {f : ℕ → ℝ}
@@ -572,8 +573,17 @@ theorem norm_firstEigenvector : ‖(firstEigenvector : DomainLimitationSpace)‖
 /-- Having one nonzero coordinate, the first eigenvector is in every diagonal
 operator's domain. -/
 theorem firstEigenvector_mem_diagonalDomain (d : ℕ → ℝ) :
-    (firstEigenvector : DomainLimitationSpace) ∈ (diagonalOperator d).domain :=
-  TauCeti.LinearPMap.single_mem_lpDiagonal_domain d 0 1
+    (firstEigenvector : DomainLimitationSpace) ∈ (diagonalOperator d).domain := by
+  let b : HilbertBasis ℕ ℝ DomainLimitationSpace :=
+    HilbertBasis.ofRepr (LinearIsometryEquiv.refl ℝ _)
+  have hb : b 0 = lp.single 2 0 (1 : ℝ) := by
+    rw [← b.repr_symm_single]
+    simpa only [b, LinearIsometryEquiv.coe_refl, id_eq] using
+      (LinearIsometryEquiv.symm_apply_apply (LinearIsometryEquiv.refl ℝ DomainLimitationSpace)
+        (lp.single 2 (0 : ℕ) (1 : ℝ)))
+  change lp.single 2 0 (1 : ℝ) ∈ (b.diagonalPMap d).domain
+  rw [← hb]
+  exact b.self_mem_diagonalPMap_domain d 0
 
 /-- `(1,0,0,…)` really is an eigenvector of the source's operator, with
 eigenvalue `d₀ = 1`.  This is the `λ₁ = 1` against which the source's lower

@@ -66,7 +66,7 @@ theorem closedSylvester_homogeneous_eq_zero_complex
     SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
     TauCeti.OperatorIdealFamily.gauge_opNorm,
-    toReal_enorm] at hbound
+    toReal_eNorm] at hbound
   have hle : ‖X‖ ≤ 0 := by
     -- The bound is against the norm of zero, which the arithmetic tactics do not
     -- reduce, and the product of the gap with the norm is nonlinear in any case.
@@ -127,7 +127,7 @@ theorem closedSylvester_homogeneous_eq_zero_real
     SymmetricOperatorIdealFamily.gaugeReal_eq_toReal,
     TauCeti.SymmetricOperatorIdealFamily.opNorm_toOperatorIdealFamily,
     TauCeti.OperatorIdealFamily.gauge_opNorm,
-    toReal_enorm] at hbound
+    toReal_eNorm] at hbound
   have hle : ‖X‖ ≤ 0 := by
     -- The bound is against the norm of zero, which the arithmetic tactics do not
     -- reduce, and the product of the gap with the norm is nonlinear in any case.

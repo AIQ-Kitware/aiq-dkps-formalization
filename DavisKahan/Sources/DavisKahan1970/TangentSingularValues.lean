@@ -106,7 +106,7 @@ theorem approximationNumber_sinAngleOperatorC (n : ℕ) :
   have hneg : U.starProjection - V.starProjection =
       ((-1 : ℂ)) • (V.starProjection - U.starProjection) := by
     module
-  rw [hneg, ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm]
+  rw [hneg, ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnNorm]
   simp
 
 end SingleAngle

@@ -15,8 +15,10 @@ public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import DavisKahan.SpectralTheory.PartialMap.BoundedRealization
 public import DavisKahan.Sylvester.Gap
 public import DavisKahan.Sylvester.Unbounded.Neumann
-public import TauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
+public import TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.GapInverse
+public import TauCeti.Analysis.CStarAlgebra.SelfAdjointSpectrumInterval
 public import Mathlib.Analysis.CStarAlgebra.ContinuousLinearMap
+public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 public import TauCeti.Analysis.InnerProductSpace.Projection.SinTheta
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
@@ -162,11 +164,15 @@ theorem norm_sylvester_le_of_spectrum_intervalExterior
   have hB₁norm : ‖B₁‖ ≤ r :=
     (IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc hB₁sa hr0).mpr hB₁spec
   have hA₁unit : IsUnit A₁ :=
-    (hA₁sa.isUnit_and_norm_ringInverse_le (A := F →L[ℂ] F) hrd hA₁spec).1
+    (IsometricContinuousFunctionalCalculus.isUnit_and_norm_ringInverse_le (𝕜 := ℝ)
+      (A := F →L[ℂ] F) hA₁sa hrd
+      (fun x hx => by simpa only [Real.norm_eq_abs] using hA₁spec x hx)).1
   set J : F →L[ℂ] F := Ring.inverse A₁
   have hJ1 : J * A₁ = 1 := Ring.inverse_mul_cancel _ hA₁unit
   have hJnorm : ‖J‖ ≤ (r + d)⁻¹ :=
-    (hA₁sa.isUnit_and_norm_ringInverse_le (A := F →L[ℂ] F) hrd hA₁spec).2
+    (IsometricContinuousFunctionalCalculus.isUnit_and_norm_ringInverse_le (𝕜 := ℝ)
+      (A := F →L[ℂ] F) hA₁sa hrd
+      (fun x hx => by simpa only [Real.norm_eq_abs] using hA₁spec x hx)).2
   -- the shifted Sylvester equation
   have hEq₁ : A₁ ∘L X - X ∘L B₁ = C := by
     have h1 : algebraMap ℝ (F →L[ℂ] F) c ∘L X =
@@ -429,12 +435,16 @@ theorem mem_and_gauge_sylvester_le_of_spectrum_intervalExterior
   have hB₁norm : ‖B₁‖ ≤ r :=
     (IsSelfAdjoint.norm_le_iff_spectrum_subset_Icc hB₁sa hr0).mpr hB₁spec
   have hA₁unit : IsUnit A₁ :=
-    (hA₁sa.isUnit_and_norm_ringInverse_le (A := F₁ →L[ℂ] F₁) hrd hA₁spec).1
+    (IsometricContinuousFunctionalCalculus.isUnit_and_norm_ringInverse_le (𝕜 := ℝ)
+      (A := F₁ →L[ℂ] F₁) hA₁sa hrd
+      (fun x hx => by simpa only [Real.norm_eq_abs] using hA₁spec x hx)).1
   set J : F₁ →L[ℂ] F₁ := Ring.inverse A₁
   have hJ1 : J * A₁ = 1 := Ring.inverse_mul_cancel _ hA₁unit
   have hJ2 : A₁ * J = 1 := Ring.mul_inverse_cancel _ hA₁unit
   have hJnorm : ‖J‖ ≤ (r + d)⁻¹ :=
-    (hA₁sa.isUnit_and_norm_ringInverse_le (A := F₁ →L[ℂ] F₁) hrd hA₁spec).2
+    (IsometricContinuousFunctionalCalculus.isUnit_and_norm_ringInverse_le (𝕜 := ℝ)
+      (A := F₁ →L[ℂ] F₁) hA₁sa hrd
+      (fun x hx => by simpa only [Real.norm_eq_abs] using hA₁spec x hx)).2
   have hEq₁ : A₁ ∘L X - X ∘L B₁ = C := by
     have h1 : algebraMap ℝ (F₁ →L[ℂ] F₁) c ∘L X =
         X ∘L algebraMap ℝ (E₁ →L[ℂ] E₁) c := by

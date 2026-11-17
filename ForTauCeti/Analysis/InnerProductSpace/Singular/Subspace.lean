@@ -67,8 +67,8 @@ variable {𝕜 E F : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
 
-local instance instCompleteSpaceE : CompleteSpace E := FiniteDimensional.complete 𝕜 E
-local instance instCompleteSpaceF : CompleteSpace F := FiniteDimensional.complete 𝕜 F
+local instance instCompleteSpaceE : CompleteSpace E := FiniteDimensional.completeSpace 𝕜 E
+local instance instCompleteSpaceF : CompleteSpace F := FiniteDimensional.completeSpace 𝕜 F
 
 omit [FiniteDimensional 𝕜 E] in
 /-- **The quadratic form of a real dilation at a unit vector is the dilation factor**:

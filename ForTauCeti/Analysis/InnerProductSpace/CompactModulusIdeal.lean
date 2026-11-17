@@ -76,13 +76,13 @@ theorem isCompact_setOf_isSelfAdjoint_modulus_eq_schatten
   have hf : Continuous f := by
     apply continuous_iff_continuousAt.mpr
     intro A
-    apply tendsto_iff_enorm_sub_tendsto_zero.mpr
+    apply tendsto_iff_eNorm_sub_tendsto_zero.mpr
     have ht := tendsto_schatten_sub_zero_of_modulus_eq p hp S A.val hS
       (fun B : X => B.val) continuous_subtype_val.continuousAt
       (fun B => B.property.2) A.property.2
     simpa only [OperatorGauge.Carrier.enorm_eq_gauge,
       OperatorGauge.Carrier.toContinuousLinearMap_sub, OperatorIdealFamily.operatorGauge_apply,
-      f, enorm_neg, neg_sub] using ht
+      f, eNorm_neg, neg_sub] using ht
   have hc := isCompact_setOf_isSelfAdjoint_modulus_eq S hSpos
     (OperatorIdealFamily.isCompactOperator_of_gauge_schatten_ne_top p hp S hS)
   let : CompactSpace X := isCompact_iff_compactSpace.mp hc

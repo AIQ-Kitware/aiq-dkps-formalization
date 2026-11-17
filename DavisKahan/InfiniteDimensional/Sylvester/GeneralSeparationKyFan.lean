@@ -143,7 +143,7 @@ theorem kyFan_sylvester_le_of_generalSeparation_complex
       congr 1
       apply integral_congr_ae
       filter_upwards [] with t
-      rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm,
+      rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm,
         kyFanGaugeReal_unitaryGroup_orbit A hA B hB t C k]
     _ = d * ((∫ t : ℝ, ‖separatedSylvesterMultiplier d hd t‖) * (C.kyFanGauge k : ℝ)) := by
       rw [integral_mul_const]
@@ -231,7 +231,7 @@ theorem idealGauge_sylvester_le_of_generalSeparation_real
   have hfan : ∀ k, d * (X.kyFanGauge k : ℝ) ≤
       (((Real.pi / 2 : ℝ) • C).kyFanGauge k : ℝ) := by
     intro k
-    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, Real.norm_eq_abs, abs_of_pos hc]
+    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, Real.norm_eq_abs, abs_of_pos hc]
     exact kyFan_sylvester_le_of_generalSeparation_real hA hB hd hsep hEq k
   obtain ⟨hX, hg⟩ :=
     mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hd hCscaled hfan

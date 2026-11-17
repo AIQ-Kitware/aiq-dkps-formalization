@@ -202,15 +202,13 @@ theorem approximationNumberEnergy_ne_top_add_real
 theorem hilbertSchmidtNorm_add_le_real
     {A B : E →L[ℝ] F}
     (hA : approximationNumberEnergy A ≠ ⊤)
-    (hB : approximationNumberEnergy B ≠ ⊤) :
+    (_hB : approximationNumberEnergy B ≠ ⊤) :
     ContinuousLinearMap.hilbertSchmidtNorm (A + B) ≤
       ContinuousLinearMap.hilbertSchmidtNorm A + ContinuousLinearMap.hilbertSchmidtNorm B := by
   obtain ⟨_, b, -⟩ := exists_hilbertBasis ℝ E
   exact ContinuousLinearMap.hilbertSchmidtNorm_add_le A B b
     (by simpa only [approximationNumberEnergy_eq_basisEnergy b A,
       hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hA)
-    (by simpa only [approximationNumberEnergy_eq_basisEnergy b B,
-      hilbertSchmidtBasisEnergy_eq_hilbertSchmidtEnergy] using hB)
 
 /-- The complete rectangular Hilbert--Schmidt family over real Hilbert spaces. -/
 noncomputable def hilbertSchmidtReal :

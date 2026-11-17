@@ -108,7 +108,7 @@ theorem approximationSingularValue_theorem63Residual_le_of_invariant [CompleteSp
       ((E ∘L Z.subtypeL).singularValue n : ℝ) := by
   rw [theorem63Residual_eq_neg_of_invariant T E Z hinv,
     ← neg_one_smul ℂ (Zᗮ.starProjection ∘L (E ∘L Z.subtypeL)),
-    ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnnorm]
+    ContinuousLinearMap.singularValue_smul, NNReal.coe_mul, coe_nnNorm]
   simp only [norm_neg, norm_one, one_mul]
   have hcomp := (NNReal.coe_le_coe.mpr (ContinuousLinearMap.singularValue_comp_comp_le (𝕜 := ℂ)
     (Zᗮ.starProjection) (E ∘L Z.subtypeL) (1 : Z →L[ℂ] Z) n))
@@ -163,7 +163,7 @@ theorem theorem6_3_perturbation_equalRank
     N.Mem (theorem63DirectedTangent Z V) ∧
       delta * N.gaugeReal (theorem63DirectedTangent Z V) ≤
         N.gaugeReal (E ∘L Z.subtypeL) := by
-  have : CompleteSpace Z := FiniteDimensional.complete ℂ Z
+  have : CompleteSpace Z := FiniteDimensional.completeSpace ℂ Z
   refine mem_and_scaled_gauge_le_of_all_scaled_kyFan_le N hdelta
     hEmem ?_
   intro k

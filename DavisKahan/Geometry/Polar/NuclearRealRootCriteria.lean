@@ -198,7 +198,7 @@ theorem finrank_sine_eigenspace_eq_two_mul_source_side_real
   let N := Module.End.eigenspace S.toLinearMap s
   let : FiniteDimensional ℝ N := ContinuousLinearMap.finite_dimensional_eigenspace
     (nuclear_sine_compact_real K L hcompact) s hs
-  let : CompleteSpace N := FiniteDimensional.complete ℝ N
+  let : CompleteSpace N := FiniteDimensional.completeSpace ℝ N
   have hVS := Proposition35.commute_sinAngleOperator_of_commute_section3CosAngleOperator
     K L V (nuclearTransportDual_comm_cosine K L D)
   let v := V.restrict (ContinuousLinearMap.mapsTo_eigenspace_of_commute S V hVS s)
@@ -340,7 +340,7 @@ theorem nuclearSignedSineSpectralFactors_nonempty_one_real
   let N := Module.End.eigenspace S.toLinearMap 1
   have hSc : IsCompactOperator S := nuclear_sine_compact_real K L hcompact
   let : FiniteDimensional ℝ N := ContinuousLinearMap.finite_dimensional_eigenspace hSc 1 one_ne_zero
-  let : CompleteSpace N := FiniteDimensional.complete ℝ N
+  let : CompleteSpace N := FiniteDimensional.completeSpace ℝ N
   have hVS := Proposition35.commute_sinAngleOperator_of_commute_section3CosAngleOperator
     K L V (nuclearTransportDual_comm_cosine K L D)
   let v := V.restrict (ContinuousLinearMap.mapsTo_eigenspace_of_commute S V hVS 1)
@@ -433,7 +433,7 @@ theorem nuclearSignedSineParameters_nonempty_iff_four_dvd_real
     let N := Module.End.eigenspace S.toLinearMap μ.val
     let : FiniteDimensional ℝ N := ContinuousLinearMap.finite_dimensional_eigenspace
       (nuclear_sine_compact_real K L hcompact) μ.val μ.property
-    let : CompleteSpace N := FiniteDimensional.complete ℝ N
+    let : CompleteSpace N := FiniteDimensional.completeSpace ℝ N
     by_cases hN : Subsingleton N
     · let := hN
       change ∃ P : N →L[ℝ] N, IsStarProjection P ∧ Commute P _ ∧ _ = _

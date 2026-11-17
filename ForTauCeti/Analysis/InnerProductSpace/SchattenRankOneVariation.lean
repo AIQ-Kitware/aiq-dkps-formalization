@@ -72,7 +72,7 @@ theorem schatten_unitary_rankOne_variation_ne_top
     module
   have hVfinite : Φ.gauge (1 - (V : E →L[ℂ] E)) ≠ ∞ := by
     rw [hVdisp, Φ.gauge_smul]
-    exact (ENNReal.mul_lt_top enorm_lt_top (lt_top_iff_ne_top.mpr hHfinite)).ne
+    exact (ENNReal.mul_lt_top eNorm_lt_top (lt_top_iff_ne_top.mpr hHfinite)).ne
   have hfactor : 1 - (U : E →L[ℂ] E) * (V : E →L[ℂ] E) =
       (1 - (U : E →L[ℂ] E)) ∘L (V : E →L[ℂ] E) + (1 - (V : E →L[ℂ] E)) := by
     ext y

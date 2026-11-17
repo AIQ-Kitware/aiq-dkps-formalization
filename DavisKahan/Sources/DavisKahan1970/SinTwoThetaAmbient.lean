@@ -194,7 +194,7 @@ theorem sinTheta_spectrum_block_all_kyFan
       (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal ((projectionBlock_same_compression Vᗮ U (B - A)).kyFanGauge_eq k)))
     rw [hone, hpert, blockCompression_smul_one, blockCompression_apply,
-      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdnorm]
+      ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hdnorm]
     exact hraw
 
 /-! ### The sharp symmetric `sin Θ` theorem at genuine spectra -/
@@ -261,7 +261,7 @@ theorem symmetric_sinTheta_spectrum_all_kyFan
         ext x
         simp
       rw [hblock, ← neg_one_smul ℂ, ContinuousLinearMap.kyFanGauge_smul,
-        nnnorm_neg, nnnorm_one, one_mul] at h
+        nnNorm_neg, nnNorm_one, one_mul] at h
       exact h)
     (fun j => by
       have h := hforward j
@@ -274,8 +274,8 @@ theorem symmetric_sinTheta_spectrum_all_kyFan
           hpertsa.adjoint_eq]
         rfl
       rw [hblock, ContinuousLinearMap.kyFanGauge_adjoint, hid₁, hswap,
-        ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, ContinuousLinearMap.kyFanGauge_adjoint]
-      rw [hid₂, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm] at h
+        ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, ContinuousLinearMap.kyFanGauge_adjoint]
+      rw [hid₂, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm] at h
       exact h) k
   -- the two identity blocks add up to the cross sine sum
   have hcross :
@@ -296,7 +296,7 @@ theorem symmetric_sinTheta_spectrum_all_kyFan
       ℝ) from
       (congrArg NNReal.toReal ((ContinuousLinearMap.sameSingularValues_modulus
       (V.starProjection - U.starProjection)).kyFanGauge_eq k)))).symm
-  rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, hdnorm, hsine] at hcombine
+  rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, hdnorm, hsine] at hcombine
   exact hcombine.trans hpinch
 
 end Symmetric
@@ -346,7 +346,7 @@ private theorem kyFan_reflectionDisplacement_le
   have hAB : ((A - B).kyFanGauge k : ℝ) =
       ((B - A).kyFanGauge k : ℝ) := by
     rw [show A - B = -(B - A) from by abel, ← neg_one_smul ℂ, ContinuousLinearMap.kyFanGauge_smul,
-        nnnorm_neg, nnnorm_one, one_mul]
+        nnNorm_neg, nnNorm_one, one_mul]
   have h0 : 0 ≤ ((A - B).kyFanGauge k : ℝ) :=
     (NNReal.coe_nonneg _)
   have h1 : ‖(V.reflectionOperator : E →L[ℂ] E)‖ ≤ 1 := by
@@ -369,7 +369,7 @@ private theorem kyFan_reflectionDisplacement_le
     have h := NNReal.coe_le_coe.mpr (ContinuousLinearMap.kyFanGauge_add_le
       (V.reflectionOperator ∘L (A - B) ∘L V.reflectionOperator) (-(A - B)) k)
     rwa [← sub_eq_add_neg, ← neg_one_smul ℂ, ContinuousLinearMap.kyFanGauge_smul,
-        nnnorm_neg, nnnorm_one, one_mul] at h
+        nnNorm_neg, nnNorm_one, one_mul] at h
   rw [hdefect]
   rw [hAB] at hconj hsplit
   linarith
@@ -481,7 +481,7 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
     simp only [ContinuousLinearMap.comp_apply, smul_apply, one_apply_eq_self,
       map_smul]
   have hdnorm : ‖((d : ℝ) : ℂ)‖ = d := by simp [abs_of_pos hd]
-  rw [hleftBlock, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm,
+  rw [hleftBlock, ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm,
     ContinuousLinearMap.kyFanGauge_adjoint, hdnorm] at hraw
   have hblockDefect : ((projectionBlock Wᗮ U D).kyFanGauge k : ℝ) ≤
       2 * ((Vᗮ.starProjection ∘L A ∘L V.starProjection).kyFanGauge k : ℝ) := by
@@ -592,7 +592,7 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNormin
       d * ((sinTwoThetaIdealBlock U V).kyFanGauge k : ℝ) ≤
         ((((2 : ℝ) : ℂ) • R0).kyFanGauge k : ℝ) := by
     intro k
-    erw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo,
+    erw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, htwo,
       (show (ContinuousLinearMap.kyFanGauge _ k : ℝ) = (ContinuousLinearMap.kyFanGauge _ k : ℝ) from
       (congrArg NNReal.toReal (hsameR.kyFanGauge_eq k)))]
     exact sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
@@ -628,7 +628,7 @@ theorem sinTwoTheta_ambient_bounded_symmetricNorming_complex
       d * ((sinTwoAngleOperatorC U V).kyFanGauge k : ℝ) ≤
         ((((2 : ℝ) : ℂ) • (B - A)).kyFanGauge k : ℝ) := by
     intro k
-    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnnorm, htwo]
+    rw [ContinuousLinearMap.kyFanGauge_smul, NNReal.coe_mul, coe_nnNorm, htwo]
     exact sinTwoTheta_ambient_bounded_kyFan_complex hA hB hU hV hd hab hUspec hUspec' k
   have hMem2 : N.Mem (((2 : ℝ) : ℂ) • (B - A)) := by
     intro htop

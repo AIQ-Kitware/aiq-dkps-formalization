@@ -36,7 +36,7 @@ variable {E F : Type*}
 
 noncomputable section
 
-local instance : CompleteSpace E := FiniteDimensional.complete ℂ E
+local instance : CompleteSpace E := FiniteDimensional.completeSpace ℂ E
 
 noncomputable local instance finiteDimensional_range (A : E →L[ℂ] F) :
     FiniteDimensional ℂ A.range := by
@@ -47,7 +47,7 @@ noncomputable local instance finiteDimensional_range (A : E →L[ℂ] F) :
 
 noncomputable local instance completeSpace_range (A : E →L[ℂ] F) :
     CompleteSpace A.range :=
-  FiniteDimensional.complete ℂ A.range
+  FiniteDimensional.completeSpace ℂ A.range
 
 /-- Singular values of a finite-source operator, computed after restricting the codomain to
 its finite-dimensional range. -/
@@ -89,7 +89,7 @@ theorem approximationSingularValue_eq_finiteSourceSingularValue
     intro y
     rcases y.property with ⟨x, hx⟩
     exact ⟨x, Subtype.ext hx⟩
-  let : CompleteSpace W := FiniteDimensional.complete ℂ W
+  let : CompleteSpace W := FiniteDimensional.completeSpace ℂ W
   let : W.HasOrthogonalProjection :=
     Submodule.HasOrthogonalProjection.ofCompleteSpace W
   let AW : E →L[ℂ] W := W.orthogonalProjectionOnto ∘L A

@@ -1,12 +1,17 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
-**Status: intentionally incomplete provenance audit; latest integration update 2026-11-04.** This is a
+**Status: intentionally incomplete provenance audit; latest selected integration update 2026-11-16.** This is a
 maintained *provenance and results* record, not a PR action queue, a theorem
 census, or a claim of exclusive mathematical authorship. Its purpose is to make
 it possible to say exactly which results in TauCeti benefited from the Kitware
 DKPS formalization, what the relationship was, and which connections remain
 uninvestigated. The census is about mathematics and formal proofs, not just the
 person who opened a PR.
+
+The [November 16 audit](#november-16-accepted-main-operator-roadmap-and-proof-lineage-audit)
+records accepted integrations and proof lineage. The
+[consumption checkpoint](#november-16-consume-the-accepted-quarter-angle-diagonal-and-closed-ball-apis)
+advances DKPS to that accepted main and retires the three identified duplicates.
 
 ## Evidence and attribution rules
 
@@ -5198,3 +5203,231 @@ Retired-module build products were removed before the final full build.
 The static name-drift check has exactly the same 41 findings as its saved
 pre-migration baseline, with no added finding. The repository cache remains
 bind-mounted on VM-local ext4; dependency pins are unchanged.
+
+
+### November 16: repair pending SA-E01 and SA-E24 submissions
+
+Both directly submitted PRs remain open and unmerged: [#29129](https://github.com/TauCetiProject/TauCeti/pull/29129)
+(SA-E01, Cayley spectral-PVM construction) and [#30736](https://github.com/TauCetiProject/TauCeti/pull/30736)
+(SA-E24, compact-time uniform Cauchy convergence of symmetric Yosida orbits).
+Neither is counted as an accepted integration. Repaired heads
+`b2079662d849812b32c84672602dd3f023923d23` (#29129) and
+`292a7d472a646809988c8f5fe5ce214dc0eb2eb9` (#30736) are pushed;
+live GitHub metadata confirms both branches are mergeable.
+
+The local `SkewAdjointExponential.norm_expTime_sub_expTime_le` now consumes
+native `TauCeti.exp_add_sub_exp_eq_integral` at the unchanged accepted pin
+`a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8`. Evaluation at a vector,
+commutation of the generator difference and native unitarity give the original
+bound for every real time, on arbitrary complete complex Hilbert spaces.
+The duplicate interpolation/FTC proof is removed, together with unused
+`commute_expTime_of_commute` and private `hasDerivAt_expTime_sub`.
+The derivative helpers actually used by the Stone/Yosida integral argument remain.
+The identical reduction repairs #30736's reuse finding. This is consumption
+of an accepted identity, not a claim that the submitted Duhamel estimate has
+landed. Historical Spectra/Adam Bornemann and Kitware/Jon Crall/Claude Opus 5
+Apache-2.0 notices remain; the current native reduction is by OpenAI gpt-6.1-sol.
+
+#29129 restores simp rules only for the projection and diagonal observations,
+while leaving `spectralPVM_def` an explicit rewrite. The current API-design
+request conflicts with an earlier request to remove those same attributes;
+the campaign packet records both review links and prepares a reply requesting
+reassessment. Reviewer agreement is not claimed. Repair sources and validation
+are preserved in `tauceti-dkps-campaign/waves/2026-11-16/`.
+
+
+Validation for the November 16 donor reduction: focused exponential, Yosida
+and Stone-uniqueness consumers passed (5952 jobs); the full default build
+passed (21779 jobs), followed serially by Challenge (20001 jobs), without
+warnings. Logs are `.lake/pr-repairs-2026-11-16/donor-{focused,full,challenge}.log`;
+compressed copies are preserved in the shared campaign repair packet.
+Dependency pins are unchanged; the root `.lake` remains bind-mounted on ext4.
+
+
+### November 16: accepted-main operator roadmap and proof-lineage audit
+
+Audit inputs: DKPS `6b4cbc21d` with unchanged Tau Ceti dependency
+`a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8`; the user's parallel Tau Ceti
+main is `086028a6d8d186715b52fac7f3e7b23175ed2dc9` (37465 reachable commits,
+10562 after the dependency pin). The nine scoped roadmap README blobs at local
+roadmap `fe5400174e8f9e8ce96423e5122b6dc4c5acf632` are identical to reviewed
+`a0ad405e151ff6e42b3c5e372ac3f24e168ad68f`; no roadmap was edited.
+
+Discovery inspected commit bodies with explicit operator-roadmap/target mentions,
+core operator/PVM/partial-map/ideal/Hardy path history, and all changed Lean files
+with DKPS/Kitware/Spectra attribution. Selected PR bodies and original GitHub
+logins were fetched live. Accepted integrations below were verified as ancestors
+of the supplied main, with Source-PR/Accepted-Head trailers where present.
+A closed PR alone is not merge evidence. The shared campaign retains the
+42 selected PR records, exact integration commits, accepted heads, changed paths,
+source bodies and scope decisions at campaign commit
+`9bb6092142483886a4b94b553ab1501a81e2b3f2`, in
+`proof/campaign/reconciliations/2026-11-16-operator-integrations.json`.
+This is not a fresh exhaustive live PR inventory or an audit of all 899 targets.
+
+**Attribution boundary:** these roadmaps and local source developments document
+DKPS's contribution to the program of work. A roadmap item being implemented
+by someone else is recorded as such even when no DKPS proof descent is known.
+That does not establish that the contributor saw, copied or independently
+reinvented our exact proof. Original upstream PR authorship, local prior
+mathematics, explicit proof adaptation, transitive dependency use and unknown
+descent are recorded separately.
+
+| Accepted PR / target | Upstream submitter | Relationship to DKPS and consumption status |
+| --- | --- | --- |
+| [#27804](https://github.com/TauCetiProject/TauCeti/pull/27804), SSP-C31 complex branch | Erotemic | Explicit adaptation of the full DKPS Lyapunov/similarity/CFC argument; available on new main, not yet consumed at the DKPS pin. The real branch remains separate. |
+| [#38148](https://github.com/TauCetiProject/TauCeti/pull/38148), SSP-B17/B19 | tauceti-ai-for-science | New complex, domain-aware Rosenblum uniqueness and total-operator specialization. Uses the accepted DKPS-derived Sylvester interface; direct descent of its Cayley/CFC proof is not established. Quantitative SSP-B16 is not proved by uniqueness. |
+| [#37810](https://github.com/TauCetiProject/TauCeti/pull/37810), SSP-D15 | tauceti-ai-for-science | Exact finite RCLike dilation pairwise-gap bound; consumes accepted dilation and pairwise sine infrastructure, including DKPS-derived prerequisites. No direct adaptation claim for this new proof. Supersedes the former supporting-only D15 disposition. |
+| [#41373](https://github.com/TauCetiProject/TauCeti/pull/41373), OI-A37 | roed-math | Explicit closed-unit-ball tail/min-max statements on main; local `MinMax.lean` already proves a related real/subtype projection version. No DKPS descent established. Mathlib still owns the underlying whole-space closed-ball norm fact. |
+| [#29798](https://github.com/TauCetiProject/TauCeti/pull/29798), SA-B70 | mm3141-bot | Unitary transport of arbitrary compact-space representation PVMs/integrals, including different Hilbert spaces. Local normal-operator naturality is related but does not certify the full general representation theorem; no proof descent established. |
+| [#36869](https://github.com/TauCetiProject/TauCeti/pull/36869) | harahu | Explicit descendant of our accepted #13871: double graph adjoint equals closure, adjoint domain dense for closable operators without domain-density assumption. Kitware/Jon Crall/Claude Opus 5 Apache-2.0 notices remain. This is others improving our contributed code. |
+| [#39742](https://github.com/TauCetiProject/TauCeti/pull/39742) | tauceti-redteam[bot] | Moves `isSelfAdjoint_of_surjective_addSub` to `PairShift`, replaces its proof by a native pair-shift reduction, deletes `dense_domain_of_surjective_add_I`. The module explicitly preserves DKPS/Spectra formulation ancestry and says the current proof is new. |
+| [#34547](https://github.com/TauCetiProject/TauCeti/pull/34547), NoncommutativeGeometry N5 | tauceti-ai-for-science | General Hilbert-basis diagonal partial map, domain/closedness/adjoint/self-adjointness and eigenbasis calculus overlap our maximal `lpDiagonal` donor. Other submitter; no DKPS citation/descent found in the inspected PR/module. Related mathematics already developed here, but direct proof reuse is unknown. |
+
+Exact introducing commits (all ancestors of the inspected main):
+
+- #27804: `993a5a824395596d7c3d4e178aa62a8a8e82c167`.
+- #38148: `319186790ad16c0efd2951975077a03f2288dcbd`.
+- #37810: `ccb6b9ddd6558399086d839f2a8f8b65e21ada92`.
+- #41373: `4783d2bf60c4dfa93fbec59ab0005cfd6f960644`.
+- #29798: `4e060c394cae90c11fabbd39d8b3087a12ef9de4`.
+- #36869: `154b8c33283c59577438ca90641345115e1415f2`.
+- #39742: `dafb66493a8a59a32affd8d826306fc46633ea05`.
+- #34547: `f16b3e079896faf1c75dfcb8c498ebdb87230eed`.
+
+**Consumption plan at the initial audit (items 1–4 completed by the checkpoint below):**
+
+1. Upgrade to an accepted Tau Ceti revision together with its exact Mathlib
+   inputs. Latest main still uses Lean v4.36.0-rc2 but Mathlib is now
+   `e8ba86fa9744dd8d90f48c1752bc735f61a4ca81`, compared with DKPS's
+   `1b1ccf4b088b32fa3f23f2de1127433254a81e1e`. Treat this as a real dependency
+   migration, not a pin-only documentation edit. No pin or cache was changed here.
+2. Replace `isQuarterAcute_of_orderedFormGap`'s proof engine in
+   `DavisKahan/InfiniteDimensional/TanTwoTheta/QuarterAcuteFormGap.lean` by
+   `Submodule.projectionGap_lt_sqrt_two_div_two_of_orderedFormGap`, with its
+   native `LowerFormBoundOn`/`UpperFormBoundOn` premises. Consume the shared
+   native reflection/form lemmas; preserve paper-facing names and genuinely
+   extra non-strict/real/unbounded results. Existing callers include
+   `SelectedBranchSymmetricNorming` and `OffDiagonalSpectralRepulsion`.
+3. Compare `TauCeti.LinearPMap.lpDiagonal` and its `Memℓp` domain, density and
+   self-adjointness proofs in `LinearPMap/DiagonalMultiplication.lean` with
+   `HilbertBasis.diagonalPMap`/`mem_diagonalPMap_domain_iff_memℓp`/
+   `dense_diagonalPMap_domain`/`isSelfAdjoint_diagonalPMap`, using the native
+   Hilbert basis of `lp`. Preserve arbitrary index universes and RCLike
+   star-fixed coefficient scope, and migrate the Section 9 `DomainLimitation`
+   consumer. This representation reduction has not yet been compiled locally.
+4. Compare `norm_comp_starProjection_orthogonal_eq_sSup_unitClosedBall` with
+   `ContinuousLinearMap.sSup_image_inter_unitClosedBall_eq_nnNorm_comp_subtypeL`
+   and `singularValue_eq_iInf_sSup_image_orthogonal_inter_unitClosedBall`.
+   Keep its original incomplete-ambient scope when reducing projection to
+   restriction; the native global infimum theorem assumes complete source.
+   NNReal/real and subtype/ambient-set conversions require actual proof work.
+5. Use the Rosenblum and representation-transport APIs directly where needed;
+   do not delete local quantitative Sylvester bounds merely because uniqueness
+   or a finite-dimensional dilation specialization is now available.
+
+Compatibility work to include with the pin update: #39742 requires an explicit
+`LinearPMap.PairShift` import for the remaining spectral-measure construction
+caller of `isSelfAdjoint_of_surjective_addSub`. #34851 drops density and makes
+`T` explicit in `adjoint_smul`; #36869 changes `dense_adjoint_domain` to take
+closability. PVM #40245 renames `proj_range_mono` to `range_proj_mono`; #40244
+removes the duplicate `diag_univ_toReal` in favor of `diag_real_univ`.
+Check actual consumers rather than introducing compatibility facades.
+
+Additional accepted infrastructure is recorded in the campaign evidence:
+#29256 compact finite-codimensional restriction, #37118 self-adjointness of
+`T†T` (explicitly KLS-derived, **not DKPS**), #38071 compact-resolvent Green
+operators, #37506 bounded Hilbert-basis diagonal operators, and #38964/#38990
+polar normalization/smoothness. These are related APIs, not newly certified
+completions of our old 899-item index. The s-number sequence work
+#33152/#34507/#35196/#35664/#39075/#40235, WOT/ultraweak/Kaplansky results
+#31768/#33385/#33606/#31516, and Lomonosov/transitivity #34513/#30727 belong
+to other roadmaps; their existence is not evidence of DKPS proof ancestry.
+
+Within the ninth indexed family, Toeplitz #29209 (monomial index), #28098
+(continuous-symbol Fredholm index), #42647 (zero-winding invertibility),
+#30505 (boundary multiplier/shift commutant) and #39323 (Fejér kernels)
+advance T3, T2 and T1 respectively. These are other contributors' work and
+not identified DKPS donors. No entire compound Toeplitz milestone is credited
+from these selected statements. #40867 supplies the scalar pp/ac/sc split
+for the newer UnboundedOperators UO-C03 target, outside the frozen index;
+it does not construct an unbounded spectral PVM.
+
+The refreshed campaign index has 728 accepted coverage claims of 899 atomic
+targets: 115 with Erotemic completion PRs only, 607 with others' completion PRs
+only, one shared, and five with introducing PR still unknown. These are PR
+submission cohorts, not ownership of proofs or mathematical ideas. Seven newly
+credited items are SA-B70, SSP-B17/B19/D15 and the already-available native
+SA-A17/A18/E22; OI-A37's prior Mathlib-backed completion now has an explicit
+Tau Ceti introducing PR. Complex-only SSP-C31 remains partial. #30735 is
+closed as covered, without integration. #29129 and #30736 remain open at
+`b2079662d849812b32c84672602dd3f023923d23` and
+`292a7d472a646809988c8f5fe5ce214dc0eb2eb9` respectively; neither is credited
+as accepted. This audit ran no Lake builds and retired no mathematics.
+
+
+### November 16: consume the accepted quarter-angle, diagonal and closed-ball APIs
+
+The dependency is now accepted Tau Ceti
+`086028a6d8d186715b52fac7f3e7b23175ed2dc9`, with its exact Mathlib revision
+`e8ba86fa9744dd8d90f48c1752bc735f61a4ca81` and unchanged Lean v4.36.0-rc2.
+Every transitive dependency revision matches Tau Ceti's manifest. This replaces
+the prior `a67a65006c` / `1b1ccf4b088b` input pair; no dependency points into a
+coordination submodule. Mathlib's prebuilt artifacts and Tau Ceti's native
+artifact mappings were fetched; the root `.lake` remains on VM-local ext4.
+
+| Local mathematics | Native consumption and preserved scope |
+| --- | --- |
+| `DavisKahan.isQuarterAcute_of_orderedFormGap` | Its original paper-facing signature remains, with a direct application of `Submodule.projectionGap_lt_sqrt_two_div_two_of_orderedFormGap` and explicit raw-inequality/form-predicate conversions. Arbitrary complete complex Hilbert spaces, zero spaces and nonseparable spaces remain covered. No real or unbounded completion is inferred from this strict bounded result. |
+| `reflected_centered_form_lower`, `reflection_anticommutes_of_maps_orthogonal`, `reflectionProduct_add_swap_eq` | These local forwarding/proof engines are deleted. The spectral-repulsion and non-strict consumers apply native `Submodule.reflection_centered_form_lower`, `reflection_mul_eq_neg_mul_of_maps_orthogonal` and `reflection_mul_add_mul_reflection`, respectively. Bundled reflection/composition bridges are local proof equalities, not new public aliases. |
+| `LinearPMap/DiagonalMultiplication.lean` | The entire donor is deleted. The Section 9 `diagonalOperator` is directly `HilbertBasis.diagonalPMap` at the coordinate Hilbert basis of `lp`; `diagonalDomain` is its native domain. Source-facing membership, action, self-adjointness, symmetry, density and first-eigenvector declarations retain their names and formulas. No alternate diagonal carrier or ForTauCeti forwarding facade remains. |
+| `norm_comp_starProjection_orthogonal_eq_sSup_unitClosedBall` | The redundant local closed-ball formula is deleted. Native `sSup_image_inter_unitClosedBall_eq_nnNorm_comp_subtypeL` is the restricted-norm API and `singularValue_eq_iInf_sSup_image_orthogonal_inter_unitClosedBall` the global min-max API. The genuinely extra incomplete-ambient projection/restriction comparison and spectral-band estimate remain local. |
+
+The non-strict quarter-angle and pointwise strict consequences remain local,
+because they support the unbounded source theorem without the uniform positive
+constant of the bounded strict theorem. No source-result denominator, printed
+hypothesis, norm class or accepted boundary partition is changed. The source
+census, result inventory and semantic-surface audit now reference the accepted
+native reflection polynomial and diagonal declarations instead of retired names.
+`RoadmapBridge.CanonicalConsumers` exercises independent scalar/index universes,
+arbitrary RCLike star-fixed diagonal coefficients and the exact native domain;
+it also checks the restricted closed-ball identity without completeness or
+projection instances, and rejects reintroduction of the retired names.
+
+Provenance remains distinct: #27804 explicitly adapts the original DKPS
+Lyapunov/similarity/CFC proof (Jon Crall, OpenAI GPT-5.6 Thinking and Claude
+Opus 5, Kitware 2026, Apache-2.0). #34547 and #41373 were submitted by other
+contributors; overlap with the earlier local operator/formula is recorded,
+without inferring that their proofs copied or adapted DKPS. The deleted
+maximal-diagonal donor's Jon Crall/Claude Opus 5 Kitware notices remain in the
+manifest, Git history and paper-facing consumer. Current native reductions
+and compatibility repairs: OpenAI gpt-6.1-sol.
+
+Compatibility repairs consume the newly canonical locations and premises:
+real-algebra and finite-rank modules moved; the gap inverse is now the generic
+`IsometricContinuousFunctionalCalculus.isUnit_and_norm_ringInverse_le`;
+restriction proofs use `LinearPMap.isInvariant_iff`; Sylvester projection
+identities take a reducing subspace; adjoint intertwiners take isometry/coisometry
+identities; the eigenvector CFC theorem takes a continuous difference quotient
+(obtained from finite spectrum here). Native norm spellings replace deprecated
+Mathlib names. Hilbert–Schmidt consequences omit completeness premises that the
+accepted native results no longer need. The Acharyya strong-law consumer now
+supplies integrability to the generalized upstream API. Public paper-facing
+hypotheses and conclusions remain intact.
+
+
+Validation at this consumption checkpoint, without warnings: the focused
+mathematics build passed (8216 jobs), followed by focused compatibility checks.
+The final full default `lake build` passed (21907 jobs), then `lake build
+Challenge` passed (20085 jobs). The explicit `ResultSemanticSurface` audit
+passed (11390 jobs). The maintained source-census compiler probe resolves all
+1573 registered declarations against `DavisKahan.All`, and the existing
+result-inventory scalar-scope checks pass. This is compiler/registration
+evidence, not a new semantic acceptance of the paper.
+
+Final green logs are retained in the shared campaign checkout at
+`waves/2026-11-16/accepted-consumption/`; `full5.log.gz` is the final default
+checkpoint, `challenge.log.gz` and `audits2.log.gz` are the later validations.
+Artifacts were reused incrementally; no clean build was run. The rendered
+source-census Markdown was refreshed from its maintained JSON, including prior
+unrendered historical notes. No source atoms or boundary partitions changed.
