@@ -6460,6 +6460,78 @@
         "TauCeti.LinearPMap.lpDiagonal_isSelfAdjoint"
       ],
       "maintained_declarations": []
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Complexification.Projection",
+      "source_declarations": [
+        "Submodule.complexifyL2_orthogonal",
+        "Submodule.complexifyL2_starProjection_mem",
+        "Submodule.sub_complexifyL2_starProjection_mem_orthogonal",
+        "Submodule.instHasOrthogonalProjectionComplexifyL2",
+        "Submodule.starProjection_complexifyL2",
+        "Submodule.projectionGap_complexifyL2"
+      ],
+      "current_namespace": "Submodule",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Complexification.Projection",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Complexification",
+      "ownership_class": "tauceti",
+      "roadmap_target": "SSP-C31 real Hilbert-space branch; necessary complexification transport",
+      "provenance_class": "Explicit adaptation of DKPS real transfer and geometry: Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. Native-carrier adaptation and reverse form implications by OpenAI gpt-6.1-sol.",
+      "original_source_anchor": "DavisKahan/SpectralTheory/Complexification/Subspace.lean:147-268 at f2c90f51203e8361a5287a9851b269f0eddc4e9e",
+      "direct_dependencies": [
+        "TauCeti.Analysis.InnerProductSpace.Complexification",
+        "TauCeti.Analysis.InnerProductSpace.DoubleAngle.QuarterAcute"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null,
+      "migration_note": "Built against accepted TauCeti 086028a6d8d186715b52fac7f3e7b23175ed2dc9, Mathlib e8ba86fa9744dd8d90f48c1752bc735f61a4ca81, Lean v4.36.0-rc2. Native WithLp 2 (TauCeti.Complexification E), no new carrier. Projection/form transport needs no ambient completeness; endpoint covers arbitrary complete real Hilbert spaces, including zero and nonseparable spaces. Prepared work is not upstream acceptance. Existing complex endpoint #27804 remains accepted; full C31 is still only partially accepted until this real branch lands."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Complexification.FormBounds",
+      "source_declarations": [
+        "ContinuousLinearMap.lowerFormBoundOn_complexifyL2_iff",
+        "ContinuousLinearMap.upperFormBoundOn_complexifyL2_iff"
+      ],
+      "current_namespace": "ContinuousLinearMap",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Complexification.FormBounds",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.QuadraticForm.Bounds",
+      "ownership_class": "tauceti",
+      "roadmap_target": "SSP-C31 real Hilbert-space branch; necessary complexification transport",
+      "provenance_class": "Explicit adaptation of DKPS real transfer and geometry: Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. Native-carrier adaptation and reverse form implications by OpenAI gpt-6.1-sol.",
+      "original_source_anchor": "DavisKahan/SpectralTheory/Complexification/FormTransport.lean:60-96 at f2c90f51203e8361a5287a9851b269f0eddc4e9e",
+      "direct_dependencies": [
+        "TauCeti.Analysis.InnerProductSpace.Complexification",
+        "TauCeti.Analysis.InnerProductSpace.DoubleAngle.QuarterAcute"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null,
+      "migration_note": "Built against accepted TauCeti 086028a6d8d186715b52fac7f3e7b23175ed2dc9, Mathlib e8ba86fa9744dd8d90f48c1752bc735f61a4ca81, Lean v4.36.0-rc2. Native WithLp 2 (TauCeti.Complexification E), no new carrier. Projection/form transport needs no ambient completeness; endpoint covers arbitrary complete real Hilbert spaces, including zero and nonseparable spaces. Prepared work is not upstream acceptance. Existing complex endpoint #27804 remains accepted; full C31 is still only partially accepted until this real branch lands."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Complexification.QuarterAcute",
+      "source_declarations": [
+        "Submodule.projectionGap_lt_sqrt_two_div_two_of_orderedFormGap_real"
+      ],
+      "current_namespace": "Submodule",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Complexification.QuarterAcute",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.DoubleAngle.QuarterAcute",
+      "ownership_class": "tauceti",
+      "roadmap_target": "SSP-C31 real Hilbert-space branch; necessary complexification transport",
+      "provenance_class": "Explicit adaptation of DKPS real transfer and geometry: Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. Native-carrier adaptation and reverse form implications by OpenAI gpt-6.1-sol.",
+      "original_source_anchor": "DavisKahan/InfiniteDimensional/TanTwoTheta/SelectedBranchSymmetricNormingReal.lean:109-149 at f2c90f51203e8361a5287a9851b269f0eddc4e9e",
+      "direct_dependencies": [
+        "TauCeti.Analysis.InnerProductSpace.Complexification",
+        "TauCeti.Analysis.InnerProductSpace.DoubleAngle.QuarterAcute"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [],
+      "status": "staged",
+      "upstream_pr": null,
+      "migration_note": "Built against accepted TauCeti 086028a6d8d186715b52fac7f3e7b23175ed2dc9, Mathlib e8ba86fa9744dd8d90f48c1752bc735f61a4ca81, Lean v4.36.0-rc2. Native WithLp 2 (TauCeti.Complexification E), no new carrier. Projection/form transport needs no ambient completeness; endpoint covers arbitrary complete real Hilbert spaces, including zero and nonseparable spaces. Prepared work is not upstream acceptance. Existing complex endpoint #27804 remains accepted; full C31 is still only partially accepted until this real branch lands."
     }
   ]
 }

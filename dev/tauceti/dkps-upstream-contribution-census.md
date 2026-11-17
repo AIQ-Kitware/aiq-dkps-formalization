@@ -5431,3 +5431,32 @@ checkpoint, `challenge.log.gz` and `audits2.log.gz` are the later validations.
 Artifacts were reused incrementally; no clean build was run. The rendered
 source-census Markdown was refreshed from its maintained JSON, including prior
 unrendered historical notes. No source atoms or boundary partitions changed.
+
+
+### November 16: prepare the real SSP-C31 quarter-angle transfer
+
+The real branch now has a native-carrier donor in
+`ForTauCeti/Analysis/InnerProductSpace/Complexification/{Projection,FormBounds,QuarterAcute}.lean`.
+`Submodule.projectionGap_lt_sqrt_two_div_two_of_orderedFormGap_real` concludes
+`projectionGap U V < sqrt 2 / 2` under the original ordered form bounds,
+invariance, self-adjointness and full off-diagonality assumptions. It uses
+accepted #27804 and native Hilbert complexification, without finite dimension,
+separability, nontriviality or a small-perturbation hypothesis. The supporting
+orthogonal-complement/projection/gap transport and both form-bound equivalences
+need no ambient completeness. No second complexification carrier is introduced.
+
+The source is explicitly adapted from the real transfer in
+`SelectedBranchSymmetricNormingReal.lean` and its `Subspace.lean` /
+`FormTransport.lean` dependencies at DKPS `f2c90f512`; Jon Crall and Claude
+Opus 5, Kitware 2026, Apache-2.0. Current native-carrier adaptation and reverse
+form-bound implications: OpenAI gpt-6.1-sol. This extends our accepted complex
+C31 branch; it does not attribute the native complexification implementation
+itself to this new port.
+
+Focused transport (5554 jobs), endpoint (6482 jobs), full default (21913 jobs)
+and Challenge (20085 jobs) pass without warnings. Exact dependency inputs are
+unchanged from the accepted-consumption checkpoint above. The upstream packet
+is `waves/2026-11-16/c31-real/` in the shared campaign repo. Submission and
+integration remain separate: the real branch is prepared, not accepted, and
+full real/complex C31 must remain partial in the accepted-item census until it
+lands. No further roadmap item is credited by this preparation.
