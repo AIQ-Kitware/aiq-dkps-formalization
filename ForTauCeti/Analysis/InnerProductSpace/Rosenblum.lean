@@ -285,10 +285,8 @@ theorem cfcHom_separator_eq_zero (hA : IsSelfAdjoint A) (f : C(ℝ, ℝ))
     have hf0 : f (cayleyInv A w) = 0 := hfA hw
     have : g w = 0 := by
       rw [hgval w, cayleySymbolFun]
-      -- states the goal with the definition unfolded, in the shape the next step needs;
-      -- there is no `_apply` lemma to rewrite with here.
-      change ((f (cayleyInv A w) * damp n (w : ℂ) : ℝ) : ℂ) = 0
-      rw [hf0, zero_mul, Complex.ofReal_zero]
+      rw [show cayleyCoordFun (w : ℂ) = cayleyInv A w from (cayleyInv_def w).symm,
+        hf0, zero_mul, Complex.ofReal_zero]
     rw [this, mul_zero]
   have hnorm := norm_sq_cfcHom_apply (hA.isStarNormal_cayley) g v
   rw [MeasureTheory.integral_congr_ae hae, integral_zero] at hnorm
@@ -317,7 +315,9 @@ theorem tendsto_cfcHom_separator (hB : IsSelfAdjoint B) (f : C(ℝ, ℝ))
       filter_upwards [ae_cayleyInv_mem_spectrum hB ξ,
         MeasureTheory.compl_mem_ae_iff.mpr (diagMeasure_cayley_preimage_one hB ξ)]
         with w hw hw1
-      have hfeq : f (cayleyCoordFun (w : ℂ)) = 1 := hfB hw
+      have hfeq : f (cayleyCoordFun (w : ℂ)) = 1 := by
+        rw [show cayleyCoordFun (w : ℂ) = cayleyInv B w from (cayleyInv_def w).symm]
+        exact hfB hw
       have hne : (w : ℂ) ≠ 1 := fun hc => hw1 (by simpa using hc)
       have hconv : Tendsto (fun n => g n w) atTop (nhds 1) := by
         have h2 := tendsto_cayleySymbolFun f hne

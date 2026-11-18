@@ -5431,3 +5431,98 @@ checkpoint, `challenge.log.gz` and `audits2.log.gz` are the later validations.
 Artifacts were reused incrementally; no clean build was run. The rendered
 source-census Markdown was refreshed from its maintained JSON, including prior
 unrendered historical notes. No source atoms or boundary partitions changed.
+
+
+### November 16: prepare the real SSP-C31 quarter-angle transfer
+
+The real branch now has a native-carrier donor in
+`ForTauCeti/Analysis/InnerProductSpace/Complexification/{Projection,FormBounds,QuarterAcute}.lean`.
+`Submodule.projectionGap_lt_sqrt_two_div_two_of_orderedFormGap_real` concludes
+`projectionGap U V < sqrt 2 / 2` under the original ordered form bounds,
+invariance, self-adjointness and full off-diagonality assumptions. It uses
+accepted #27804 and native Hilbert complexification, without finite dimension,
+separability, nontriviality or a small-perturbation hypothesis. The supporting
+orthogonal-complement/projection/gap transport and both form-bound equivalences
+need no ambient completeness. No second complexification carrier is introduced.
+
+The source is explicitly adapted from the real transfer in
+`SelectedBranchSymmetricNormingReal.lean` and its `Subspace.lean` /
+`FormTransport.lean` dependencies at DKPS `f2c90f512`; Jon Crall and Claude
+Opus 5, Kitware 2026, Apache-2.0. Current native-carrier adaptation and reverse
+form-bound implications: OpenAI gpt-6.1-sol. This extends our accepted complex
+C31 branch; it does not attribute the native complexification implementation
+itself to this new port.
+
+Focused transport (5554 jobs), endpoint (6482 jobs), full default (21913 jobs)
+and Challenge (20085 jobs) pass without warnings. Exact dependency inputs are
+unchanged from the accepted-consumption checkpoint above. The upstream packet
+is `waves/2026-11-16/c31-real/` in the shared campaign repo. Submission and
+integration remain separate: the real branch is prepared, not accepted, and
+full real/complex C31 must remain partial in the accepted-item census until it
+lands. No further roadmap item is credited by this preparation.
+
+Prepared upstream branch: `port-ssp-c31-real-quarter-acute`,
+`706bff9b65aa580d75506e6b6075a1096b53cce2`, based only on accepted
+`086028a6d8d186715b52fac7f3e7b23175ed2dc9`. It changes the existing
+`Complexification.lean`, `QuadraticForm/Bounds.lean` and
+`DoubleAngle/QuarterAcute.lean`; nine new public declarations, no parallel
+carrier or forwarding aliases. The focused upstream build passed (6475 jobs),
+as did 15 environment linters on 55 declarations plus 71 generated, standard
+axioms, raw-hypothesis/incomplete-ambient/zero-space examples and full source
+header/text style. Selected live connector overlap searches returned no open
+C31/theorem-term matches. The VM has no `gh`, so the host script must still run
+the existing live all-open collision preflight before publication. The
+source-review packet explicitly identifies a same-agent second source pass,
+not an independent model or upstream approval. Q3's lack of a proof of logical
+irredundancy of every printed hypothesis is disclosed rather than invented.
+
+### 2026-11-17 — Cayley coordinate review repair (SA-E01, still unmerged)
+
+The real inverse Cayley coordinate is factored into
+`ForTauCeti/Analysis/Complex/Cayley/Inverse.lean`; the existing spectral-measure
+construction consumes it. Its forward inverse law now covers every complex
+parameter, including the totalized pole `-i`. The reverse law reduces through
+Tau Ceti’s existing closed-half-plane bijection and strict-disc criterion,
+without another denominator-algebra proof. This is a revision of the DKPS donor,
+not consumption of an accepted spectral-PVM API. Kitware/Apache-2.0 and
+Jon Crall/Claude Opus 5 ancestry are retained; the current proof revision is by
+OpenAI gpt-6.1-sol.
+
+The corresponding repair of open #29129 puts complex coordinates in
+`Analysis/Complex/UpperHalfPlane/Cayley.lean`, the circle bridge in
+`Analysis/Complex/Pick/Nevanlinna.lean`, and the four partial-operator spectral
+modules under `LinearPMap/Spectral/`. Projection and diagonal observations remain
+explicit rewrite lemmas: their simp attributes are removed to preserve native
+PVM normalization. This supersedes the November 16 simp decision above.
+
+Open #30736’s November 17 CI compiled the mathematics, then timed out in the
+trusted duplicate audit (exit 124); this is not a compiler rejection. Its repair
+removes redundant exponential helper wrappers and uses the accepted bounded
+Stone group directly for norm preservation. Neither PR is counted as integrated.
+The new real SSP-C31 PR #43455 has green CI and no visible review comments in
+the November 17 observation; no unrelated repair is inferred from that status.
+
+Repaired upstream heads are pushed: #29129 `85917941245d60feb2838b94e25de032e229cb0e`
+and #30736 `f9632ab81cde7d7b8dd8d8455c8f5059219a675d`. Both branches merge
+accepted main `0642eae29e0a59ef798d04de325386445906e755`, with a separate
+Mathlib `048fffa1dbcd080d3058fab41d8c188168595c22` cache. DKPS retains
+its exact `086028a6d8d1` / `e8ba86fa9744` pins. Both upstream focused builds,
+15 environment linters, standard axiom reports and full source-style checks pass.
+The root Rosenblum consumer now bridges coordinates with `cayleyInv_def`
+explicitly instead of relying on definition unfolding. The campaign's
+`waves/2026-11-17` packet preserves actual review evidence and the metadata-only
+host command, because the GitHub connector denied description edits with 403.
+
+Final DKPS validation after explicit Rosenblum bridges: focused construction
+6538 jobs and Rosenblum 6640 jobs, full default build 21919 jobs, and Challenge
+20091 jobs all pass without warnings. Shared campaign packet `waves/2026-11-17/donor/`
+retains the final successful logs. The first full attempt exposed those two
+definition-unfolding dependencies; it is not cited as successful evidence.
+
+Later November 17 #29129 proof-quality findings 4601840758/4601867446 request
+explaining the explicit `surjOn` target-set conversion. Pushed follow-up
+`0a85d596da2d7bad3fe178a69713133b0493a303` adds that explanation; the DKPS
+coordinate donor carries the same two comments. Non-comment source is unchanged
+in both files, so the preceding build/linter/axiom evidence applies without
+rerunning builds. The campaign packet retains the actual comments and follow-up
+patch. This remains an open submission, not an integration.
