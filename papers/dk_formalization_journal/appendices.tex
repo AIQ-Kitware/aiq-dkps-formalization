@@ -215,8 +215,10 @@ For real unitaries, spectral half-plane conditions refer to their
 complexifications.
 
 For perturbation results, $\sym{A0}$ is a self-adjoint trial operator.
-In a reducing decomposition of the reference operator $\sym{A}$, the same
-notation denotes its source block and $\sym{A1}$ the complementary block.
+In a reducing decomposition of the reference operator $\sym{A}$, the
+source and complementary reference blocks are $\sym{ReferenceBlock0}$
+and $\sym{ReferenceBlock1}$. The trial operator may be chosen to equal the
+source reference block when the trial coordinates identify that subspace.
 The operators $\sym{Lambda0},\sym{Lambda1}$ are the exact blocks of
 $\sym{Acurrent}=\sym{A}+\sym{H}$.
 The maps $\sym{E0},\sym{F0}$ give source and target coordinates,
@@ -456,5 +458,36 @@ This is the separation condition of Section~\ref{sec:gap-geometry}.
  [\sym{betaEndpoint}-\sym{delta}/2,\sym{alphaEndpoint}+\sym{delta}/2]$. &
  The corresponding ambient or directed double-angle sine bound holds
  on the branch with angles strictly below $\sym{PiConstant}/4$.\\
+\end{longtable}
+\endgroup
+
+\clearpage
+\section{Notation correspondence with Davis--Kahan (1970)}
+\label{app:dk-notation-correspondence}
+This table compares our notation with the corresponding symbols of
+Davis and Kahan~\citep[especially \S1]{davis1970rotation}. The correspondences
+are by mathematical role, not just by letter. In the original, the reference
+block $A_0$ also serves as the residual's comparison operator. Here
+$A_{\mathrm{tr}}$ is a general trial operator, which need not equal that block.
+Our additional matching constructions have no direct counterpart in the source.
+
+\begingroup
+\small
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.43\linewidth}>{\centering\arraybackslash}p{0.12\linewidth}>{\centering\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.23\linewidth}@{}}
+\caption{Documented correspondence with the source symbols of Davis--Kahan (1970).}
+\label{tab:dk-source-notation}\\
+\toprule
+Mathematical object & DK (1970) & This paper & DK location \\
+\midrule
+\endfirsthead
+\toprule
+Mathematical object & DK (1970) & This paper & DK location \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\dkDavisKahanRows
 \end{longtable}
 \endgroup

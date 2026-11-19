@@ -82,20 +82,21 @@
 }
 % An optional plain-text reminder supplies definitions and types on hover.
 % Required fields: {semantic key}{printed glyph}{color role}{glossary|local}
-%                  {short definition}. The "glossary" flag records whether an
+%                  {short definition}{mathematical type}. The "glossary" flag records whether an
 % entry appears in the curated printed notation table; "local" does not.
 % This registry is the sole authority for symbol meaning and printed form.
 % Use role "plain" for an uncolored symbol that still carries hover text.
 % Changing the glyph is a separate editorial decision: this audit preserves
-% the current E, F, F_ex, G, A_0, s_j, and other existing printed choices.
-\newcommand{\dkDeclareSymbol}[6][]{%
+% the current E, F, F_ex, G, and other existing printed choices.
+\newcommand{\dkDeclareSymbol}[7][]{%
   \expandafter\def\csname dkgloss@#2\endcsname{#6}%
   \expandafter\def\csname dkglossaryflag@#2\endcsname{#5}%
   \if\relax\detokenize{#1}\relax
-    \expandafter\pdfstringdef\csname dkpdfgloss@#2\endcsname{#6}%
+    \expandafter\pdfstringdef\csname dkpdfgloss@#2\endcsname{#7: #6}%
   \else
-    \expandafter\pdfstringdef\csname dkpdfgloss@#2\endcsname{\detokenize{#1}}%
+    \expandafter\pdfstringdef\csname dkpdfgloss@#2\endcsname{#7: \detokenize{#1}}%
   \fi
+  \expandafter\def\csname dktype@#2\endcsname{#7}%
   \expandafter\def\csname dkglyph@#2\endcsname{#3}%
   \expandafter\def\csname dkrole@#2\endcsname{#4}%
   \expandafter\def\csname dksym@#2\endcsname{\dkrole{#4}{#3}}%
@@ -123,6 +124,44 @@
 % The same descriptions are available to the notation appendix.
 \DeclareRobustCommand{\dkSymbolDescription}[1]{\csname dkgloss@#1\endcsname}
 \DeclareRobustCommand{\dkSymbolGlossaryStatus}[1]{\csname dkglossaryflag@#1\endcsname}
+\DeclareRobustCommand{\dkSymbolType}[1]{\csname dktype@#1\endcsname}
+
+% Citable alternative notation is metadata, not a request to rename glyphs.
+% The source identifier, the source's exact printed glyph, and the specific
+% source location are all mandatory. No alternative is inferred from a name.
+% One key may have alternatives from several works or multiple passages.
+\newcommand{\dkDeclareNotationSource}[3]{%
+  \expandafter\def\csname dksourcetitle@#1\endcsname{#2}%
+  \expandafter\def\csname dksourceurl@#1\endcsname{#3}%
+}
+\newcommand{\dkDavisKahanRows}{}
+\makeatletter
+\newcommand{\dkDeclareNotationAlternative}[5]{%
+  \ifcsname dkglyph@#1\endcsname\else
+    \PackageError{dk-math-colors}{Unknown alternative key #1}{Declare the symbol first}%
+  \fi
+  \ifcsname dksourcetitle@#2\endcsname\else
+    \PackageError{dk-math-colors}{Unknown notation source #2}{Declare the source first}%
+  \fi
+  \expandafter\def\csname dkaltglyph@#2@#1\endcsname{#3}%
+  \expandafter\def\csname dkaltlocator@#2@#1\endcsname{#4}%
+  \expandafter\def\csname dkaltnote@#2@#1\endcsname{#5}%
+  \def\dk@source{#2}%
+  \def\dk@original{DK1970}%
+  \ifx\dk@source\dk@original
+    \g@addto@macro\dkDavisKahanRows{\dkDavisKahanRow{#1}}%
+  \fi
+}
+\makeatother
+% A correspondence row is produced from the SAME registry records used by
+% \sym and by the source-census script. It is never spelled a second time.
+\newcommand{\dkDavisKahanRow}[1]{%
+  \csname dkaltnote@DK1970@#1\endcsname &
+  $\csname dkaltglyph@DK1970@#1\endcsname$ &
+  $\sym{#1}$ &
+  \csname dkaltlocator@DK1970@#1\endcsname\\
+}
+
 \newif\ifDKSymbolTooltips
 \DKSymbolTooltipstrue
 \ifdefined\DKNoSymbolTooltips\DKSymbolTooltipsfalse\fi
@@ -173,7 +212,7 @@
   \def\symglyph#1{\csname dkglyph@#1\endcsname}%
 }
 
-% Declarations: [detailed hover], key, glyph, role, glossary|local, short text.
+% Declarations: [detailed hover], key, glyph, role, glossary|local, short text, type.
 % A local entry has full semantic/hover support, but no notation-table row.
 % When two keys have the same glyph, it is an auditable collision, not an
 % instruction to change the printed notation automatically.
@@ -182,319 +221,319 @@
 % Manim's original symbol keys, now split into semantic subshades.
 % Ambient and perturbed operators (provenance is independent of geometry).
 \dkDeclareSymbol[Reference self-adjoint operator A on the ambient Hilbert space; the perturbed operator is Ahat = A + H. In a single-operator eigenproblem, A itself is the operator being approximated. An unbounded A acts only on domain(A).]
-  {A}{A}{old}{glossary}{Reference self-adjoint operator before perturbation.}
-\dkDeclareSymbol{A1}{A_1}{old}{local}{Complementary block of the reference operator.}
-\dkDeclareSymbol{a1}{a_1}{old}{local}{Reference eigenvalue or complementary spectral value.}
+  {A}{A}{old}{glossary}{Reference self-adjoint operator before perturbation.}{self-adjoint-operator}
+\dkDeclareSymbol{A1}{A_1}{old}{local}{Complementary block of the reference operator.}{self-adjoint-operator}
+\dkDeclareSymbol{a1}{a_1}{old}{local}{Reference eigenvalue or complementary spectral value.}{scalar}
 \dkDeclareSymbol[Reference block A_0: the restriction of A to the range of the reducing source projection P, expressed in source coordinates. In Theorem 8.1 it lies at or below alpha; in Theorem 8.2 its spectrum lies in the enlarged central interval. The perturbed blocks are denoted Lambda_0 and Lambda_1.]
-  {ReferenceBlock0}{A_0}{old}{glossary}{Reference operator restricted to the source subspace in Section 8.}
+  {ReferenceBlock0}{A_0}{old}{glossary}{Reference operator restricted to the source subspace in Section 8.}{self-adjoint-operator}
 \dkDeclareSymbol[Reference block A_1: the restriction of A to the kernel of the reducing source projection P, expressed in complementary coordinates. In Theorem 8.1 it lies at or above alpha + delta in quadratic-form order.]
-  {ReferenceBlock1}{A_1}{old}{glossary}{Reference operator restricted to the source complement in Section 8.}
+  {ReferenceBlock1}{A_1}{old}{glossary}{Reference operator restricted to the source complement in Section 8.}{self-adjoint-operator}
 \dkDeclareSymbol[Self-adjoint ambient operator Ahat being studied; in the perturbation setting Ahat = A + H. Its action on a trial vector is compared with the proposed eigenvalue times that vector.]
-  {Ahat}{\widehat A}{current}{local}{Operator under study; in the perturbation setting, the reference operator plus its perturbation.}
-\dkDeclareSymbol[Self-adjoint ambient operator Ahat being studied. In the perturbation setting Ahat = A + H. The trial residual is R = Ahat E_0 - E_0 A_0, and the exact complementary block satisfies Ahat F_1 = F_1 Lambda_1 on its domain.]
-  {Acurrent}{\widehat A}{current}{glossary}{Operator under study; in the perturbation setting, the reference operator plus its perturbation.}
+  {Ahat}{\widehat A}{current}{local}{Operator under study; in the perturbation setting, the reference operator plus its perturbation.}{self-adjoint-operator}
+\dkDeclareSymbol[Self-adjoint ambient operator Ahat being studied. In the perturbation setting Ahat = A + H. The trial residual is R = Ahat E_0 - E_0 A_tr, and the exact complementary block satisfies Ahat F_1 = F_1 Lambda_1 on its domain.]
+  {Acurrent}{\widehat A}{current}{glossary}{Operator under study; in the perturbation setting, the reference operator plus its perturbation.}{self-adjoint-operator}
 \dkDeclareSymbol[Additive self-adjoint perturbation H = Ahat - A. A bound on its norm can control the residual of an eigenspace of one operator relative to the other.]
-  {H}{H}{perturb}{glossary}{Additive self-adjoint perturbation of the reference operator.}
-\dkDeclareSymbol{H0}{H_0}{perturb}{local}{Wanted diagonal block of the perturbation.}
-\dkDeclareSymbol{H1}{H_1}{perturb}{local}{Unwanted diagonal block of the perturbation.}
-\dkDeclareSymbol{B}{B}{perturb}{local}{Off-diagonal perturbation or coupling block.}
-\dkDeclareSymbol{b}{b}{perturb}{local}{Scalar perturbation or coupling coefficient.}
+  {H}{H}{perturb}{glossary}{Additive self-adjoint perturbation of the reference operator.}{self-adjoint-operator}
+\dkDeclareSymbol{H0}{H_0}{perturb}{local}{Wanted diagonal block of the perturbation.}{self-adjoint-operator}
+\dkDeclareSymbol{H1}{H_1}{perturb}{local}{Unwanted diagonal block of the perturbation.}{self-adjoint-operator}
+\dkDeclareSymbol{B}{B}{perturb}{local}{Off-diagonal perturbation or coupling block.}{linear-operator}
+\dkDeclareSymbol{b}{b}{perturb}{local}{Scalar perturbation or coupling coefficient.}{scalar}
 % Trial/source family: subspace, frame, compressed operator, projector, vector.
-\dkDeclareSymbol{U}{U}{wanted}{local}{Desired exact subspace in the local geometric notation.}% Manim's U remains wanted in local slide notation.
-\dkDeclareSymbol{V}{V}{trial}{local}{Trial subspace in the local geometric notation.}% Manim's V remains trial in local slide notation.
+\dkDeclareSymbol{U}{U}{wanted}{local}{Desired exact subspace in the local geometric notation.}{linear-subspace}% Manim's U remains wanted in local slide notation.
+\dkDeclareSymbol{V}{V}{trial}{local}{Trial subspace in the local geometric notation.}{linear-subspace}% Manim's V remains trial in local slide notation.
 \dkDeclareSymbol[Source subspace U to be carried onto the target V by an orthogonal or unitary map W. In the transport sections P projects onto U and Q onto V. The matching theorem also names the source subspace K.]
-  {Usource}{U}{trial}{glossary}{Source subspace to be transported onto the target subspace.}
+  {Usource}{U}{trial}{glossary}{Source subspace to be transported onto the target subspace.}{linear-subspace}
 \dkDeclareSymbol[Trial frame E_0: F -> E, a linear isometry from trial-coordinate space F into ambient space E. Its range is the trial subspace; E_0* returns trial coordinates and E_0* E_0 = I_F. In rank one, E_0(x) = x v.]
-  {E0}{E_0}{trialframe}{glossary}{Isometric embedding of the trial subspace; its adjoint returns trial coordinates.}
-\dkDeclareSymbol[Self-adjoint trial operator A_0 on trial-coordinate space F. The residual compares Ahat E_0 with E_0 A_0. Rayleigh--Ritz chooses A_0 = E_0* Ahat E_0 when this compression is defined; the theorem allows other trial operators.]
-  {A0}{A_0}{trialspectrum}{glossary}{Self-adjoint operator on trial coordinates; its eigenvalues are the trial spectral values.}
+  {E0}{E_0}{trialframe}{glossary}{Isometric embedding of the trial subspace; its adjoint returns trial coordinates.}{isometric-embedding}
+\dkDeclareSymbol[Self-adjoint trial operator A_tr on trial-coordinate space F. The residual compares Ahat E_0 with E_0 A_tr. Rayleigh--Ritz chooses A_tr = E_0* Ahat E_0 when this compression is defined; the theorem allows other trial operators.]
+  {A0}{A_{\mathrm{tr}}}{trialspectrum}{glossary}{Self-adjoint operator on trial coordinates; its eigenvalues are the trial spectral values.}{self-adjoint-operator}
 \dkDeclareSymbol[Trial vector: a proposed approximate eigenvector. In the rank-one geometry v has unit length and E_0(x) = x v. Its residual for trial scalar rho is r = Ahat v - rho v.]
-  {v}{v}{trialvector}{local}{Trial vector or vector in the trial subspace.}
-\dkDeclareSymbol[Scalar trial operator in rank one, A_0(x) = rho x. Figure 1 uses the Rayleigh value rho = <v, Ahat v> for unit v; then rho v is the projection of Ahat v onto the trial line and r is perpendicular to v.]
-  {rho}{\rho}{trialspectrum}{local}{Trial eigenvalue or scalar trial operator.}
+  {v}{v}{trialvector}{local}{Trial vector or vector in the trial subspace.}{vector}
+\dkDeclareSymbol[Scalar trial operator in rank one, A_tr(x) = rho x. Figure 1 uses the Rayleigh value rho = <v, Ahat v> for unit v; then rho v is the projection of Ahat v onto the trial line and r is perpendicular to v.]
+  {rho}{\rho}{trialspectrum}{local}{Trial eigenvalue or scalar trial operator.}{scalar}
 \dkDeclareSymbol[Approximate eigenvalue assigned to a trial vector v. For the local operator A, its residual is A v - mu v. For unit v, the Rayleigh--Ritz choice is mu = <A v, v>.]
-  {mu}{\mu}{trialspectrum}{local}{Trial spectral value.}
-\dkDeclareSymbol{a0}{a_0}{trialspectrum}{local}{Wanted trial eigenvalue or trial spectral value.}
+  {mu}{\mu}{trialspectrum}{local}{Trial spectral value.}{scalar}
+\dkDeclareSymbol{a0}{a_0}{trialspectrum}{local}{Wanted trial eigenvalue or trial spectral value.}{scalar}
 \dkDeclareSymbol[Ambient orthogonal or unitary transporter W with W(U) = V, equivalently W P W* = Q. Its full displacement is I - W on the whole ambient space. The real matching theorem minimizes its trace norm over every such orthogonal W.]
-  {Wcompetitor}{W}{trialcompetitor}{glossary}{Orthogonal or unitary competitor carrying the source subspace onto the target.}
+  {Wcompetitor}{W}{trialcompetitor}{glossary}{Orthogonal or unitary competitor carrying the source subspace onto the target.}{unitary-operator}
 \dkDeclareSymbol[Orthogonal projection P onto the source subspace U in the transport problem; P = P* = P squared. A feasible orthogonal or unitary W satisfies W P W* = Q. Restricted displacement (I - W)P tests only source vectors.]
-  {Psource}{P}{trialprojection}{glossary}{Orthogonal projection onto the source subspace in the transport problem.}
-\dkDeclareSymbol{ProjSource}{P_U}{trialprojection}{local}{Orthogonal projection onto the source subspace in the transport problem.}
+  {Psource}{P}{trialprojection}{glossary}{Orthogonal projection onto the source subspace in the transport problem.}{orthogonal-projection}
+\dkDeclareSymbol{ProjSource}{P_U}{trialprojection}{local}{Orthogonal projection onto the source subspace in the transport problem.}{orthogonal-projection}
 \dkDeclareSymbol[Vector x in the source subspace U. For principal vectors, unit x_j in U and y_j in V are chosen with <x_i, y_j> = 0 for i different from j and <x_j, y_j> = cos(theta_j).]
-  {SourceVector}{x}{trialvector}{local}{Vector in the source subspace.}
+  {SourceVector}{x}{trialvector}{local}{Vector in the source subspace.}{vector}
 \dkDeclareSymbol[Orthonormal coordinate frame X for the source subspace, so X* X = I. Together with a target frame Y, the singular values of X* Y are the principal cosines. In the four-dimensional counterexample X is the vertical stack of I_2 and 0.]
-  {Xframe}{X}{trialframe}{glossary}{Orthonormal coordinate matrix for the source subspace in the counterexample.}
-\dkDeclareSymbol[Hilbert space F of trial coordinates. E_0 embeds F isometrically into ambient space E; A_0 and the positive sine operator sin(Theta_0) act on F, while the residual R maps F into E.]
-  {Ftrial}{F}{trialframe}{glossary}{Hilbert space of trial coordinates.}
+  {Xframe}{X}{trialframe}{glossary}{Orthonormal coordinate matrix for the source subspace in the counterexample.}{isometric-embedding}
+\dkDeclareSymbol[Hilbert space F of trial coordinates. E_0 embeds F isometrically into ambient space E; A_tr and the positive sine operator sin(Theta_0) act on F, while the residual R maps F into E.]
+  {Ftrial}{F}{trialframe}{glossary}{Hilbert space of trial coordinates.}{hilbert-space}
 \dkDeclareSymbol[Ambient Hilbert space E over the real or complex scalars. It contains the trial subspace range(E_0) and the orthogonal exact subspaces range(F_0) and range(F_1). The source theorem permits infinite-dimensional separable E.]
-  {Eambient}{E}{ambient}{glossary}{Ambient Hilbert space containing the trial and exact subspaces.}
+  {Eambient}{E}{ambient}{glossary}{Ambient Hilbert space containing the trial and exact subspaces.}{hilbert-space}
 % Zero and all-ones vectors are distinguished from scalar 0 and 1.
 \dkDeclareSymbol[Zero vector of the vector or Hilbert space in context: the additive identity. The zero subspace consists only of this vector.]
-  {ZeroVector}{\mathbf{0}}{fg}{glossary}{Zero vector; the additive identity of the ambient vector space.}
+  {ZeroVector}{\mathbf{0}}{fg}{glossary}{Zero vector; the additive identity of the ambient vector space.}{vector}
 \dkDeclareSymbol[All-ones vector in a specified finite-dimensional coordinate space: every coordinate equals 1. This vector depends on the chosen coordinates and dimension.]
-  {OnesVector}{\mathbf{1}}{fg}{local}{All-ones vector in a chosen finite-dimensional coordinate space.}
+  {OnesVector}{\mathbf{1}}{fg}{local}{All-ones vector in a chosen finite-dimensional coordinate space.}{vector}
 % Exact/wanted family: the target subspace, its frame, projection and rotation.
 \dkDeclareSymbol[Target subspace V in the transport problem: feasible maps satisfy W(U) = V, or equivalently W P W* = Q. The matching theorem also names this subspace L.]
-  {Vtarget}{V}{wanted}{glossary}{Target subspace in the transport problem.}
+  {Vtarget}{V}{wanted}{glossary}{Target subspace in the transport problem.}{linear-subspace}
 \dkDeclareSymbol[Exact wanted frame F_0: F_ex -> E, a linear isometry onto the desired exact spectral subspace. F_0* returns its coordinates. P_ex = F_0 F_0* is its ambient orthogonal projection; in Figure 1, F_0(h) = (h, 0).]
-  {F0}{F_0}{wantedframe}{glossary}{Isometric coordinates for the desired exact spectral subspace; star denotes the adjoint.}
+  {F0}{F_0}{wantedframe}{glossary}{Isometric coordinates for the desired exact spectral subspace; star denotes the adjoint.}{isometric-embedding}
 \dkDeclareSymbol[Self-adjoint operator block on coordinates for the desired exact spectral subspace. Its spectrum consists of the wanted exact spectral values; in the corresponding decomposition Ahat F_0 = F_0 Lambda_0 on the operator domain.]
-  {Lambda0}{\Lambda_0}{wantedspectrum}{local}{Self-adjoint block on the desired exact spectral subspace.}
-\dkDeclareSymbol{u}{u}{wantedvector}{local}{Vector in the desired exact subspace.}
-\dkDeclareSymbol{f0}{f_0}{wantedvector}{local}{Component or coordinate vector in the desired exact subspace.}
-\dkDeclareSymbol{lambda0}{\lambda_0}{wantedspectrum}{local}{Wanted exact eigenvalue or wanted spectral value.}
-\dkDeclareSymbol{lambdau}{\lambda_u}{wantedspectrum}{local}{Eigenvalue associated with a desired exact vector.}
+  {Lambda0}{\Lambda_0}{wantedspectrum}{local}{Self-adjoint block on the desired exact spectral subspace.}{self-adjoint-operator}
+\dkDeclareSymbol{u}{u}{wantedvector}{local}{Vector in the desired exact subspace.}{vector}
+\dkDeclareSymbol{f0}{f_0}{wantedvector}{local}{Component or coordinate vector in the desired exact subspace.}{vector}
+\dkDeclareSymbol{lambda0}{\lambda_0}{wantedspectrum}{local}{Wanted exact eigenvalue or wanted spectral value.}{scalar}
+\dkDeclareSymbol{lambdau}{\lambda_u}{wantedspectrum}{local}{Eigenvalue associated with a desired exact vector.}{scalar}
 \dkDeclareSymbol[Exact wanted orthogonal projection P_ex: E -> E, with P_ex = F_0 F_0*. It retains the desired exact spectral component. Its complementary projection is P_ex_perp = I - P_ex = F_1 F_1*; the projected trial frame is S = P_ex_perp E_0.]
-  {Pexact}{P_{\mathrm{ex}}}{wantedprojection}{glossary}{Orthogonal projection onto the desired exact subspace in the sine-theta theorem.}
+  {Pexact}{P_{\mathrm{ex}}}{wantedprojection}{glossary}{Orthogonal projection onto the desired exact subspace in the sine-theta theorem.}{orthogonal-projection}
 \dkDeclareSymbol[Exact complementary orthogonal projection P_ex_perp = I - P_ex = F_1 F_1*: E -> E. It retains the unwanted exact component. In Figure 1, P_ex_perp v = S(1), whereas P_ex_perp r is the unwanted component of the residual.]
-  {PexactPerp}{P_{\mathrm{ex}}^\perp}{unwantedprojection}{local}{Orthogonal projection onto the exact complementary subspace.}
-\dkDeclareSymbol{ReflectionSigma}{\Sigma}{wantedprojection}{local}{Reflection associated with the desired exact spectral projection.}
+  {PexactPerp}{P_{\mathrm{ex}}^\perp}{unwantedprojection}{local}{Orthogonal projection onto the exact complementary subspace.}{orthogonal-projection}
+\dkDeclareSymbol{ReflectionSigma}{\Sigma}{wantedprojection}{local}{Reflection associated with the desired exact spectral projection.}{unitary-operator}
 \dkDeclareSymbol[Orthogonal projection Q onto the target subspace V in the transport problem. A feasible orthogonal or unitary W satisfies W P W* = Q, where P projects onto the source U.]
-  {Qtarget}{Q}{wantedprojection}{glossary}{Orthogonal projection onto the target subspace in the transport problem.}
-\dkDeclareSymbol{ProjTarget}{P_V}{wantedprojection}{local}{Orthogonal projection onto the target subspace in the transport problem.}
+  {Qtarget}{Q}{wantedprojection}{glossary}{Orthogonal projection onto the target subspace in the transport problem.}{orthogonal-projection}
+\dkDeclareSymbol{ProjTarget}{P_V}{wantedprojection}{local}{Orthogonal projection onto the target subspace in the transport problem.}{orthogonal-projection}
 \dkDeclareSymbol[Canonical direct rotation D from the source U to the target V for an acute pair. It is the unitary polar factor of T = QP + (I - Q)(I - P), and acts by the principal angle on each principal plane. R is reserved for the trial residual.]
-  {Rrotation}{D}{wantedrotation}{glossary}{Canonical direct rotation carrying the source subspace onto the target.}
+  {Rrotation}{D}{wantedrotation}{glossary}{Canonical direct rotation carrying the source subspace onto the target.}{unitary-operator}
 \dkDeclareSymbol[Direct rotation D between the ranges of orthogonal projections P and Q, including the nonacute case. Relative to range(P) and kernel(P), its diagonal blocks are positive and its off-diagonal blocks are opposite adjoints. It exists when the two crossed defect spaces have equal dimension, and is unique when both defects vanish.]
-  {SourceDirectRotation}{D}{wantedrotation}{local}{Direct rotation, including the nonacute case in the source-result table.}
+  {SourceDirectRotation}{D}{wantedrotation}{local}{Direct rotation, including the nonacute case in the source-result table.}{unitary-operator}
 \dkDeclareSymbol[Orthonormal coordinate frame Y for the target subspace, so Y* Y = I. In the counterexample Y is the vertical stack of cos(theta) I_2 and sin(theta) J_0; hence X* Y = cos(theta) I_2 and both principal angles equal theta.]
-  {Yframe}{Y}{wantedframe}{glossary}{Orthonormal coordinate matrix for the target subspace in the counterexample.}
+  {Yframe}{Y}{wantedframe}{glossary}{Orthonormal coordinate matrix for the target subspace in the counterexample.}{isometric-embedding}
 \dkDeclareSymbol[Vector y in the target subspace V. For principal vectors, unit x_j in U and y_j in V are paired so that <x_j, y_j> = cos(theta_j); distinct pairs have zero cross inner product.]
-  {TargetVector}{y}{wantedvector}{local}{Vector in the target subspace.}
+  {TargetVector}{y}{wantedvector}{local}{Vector in the target subspace.}{vector}
 \dkDeclareSymbol[Hilbert space F_ex of exact wanted coordinates. The isometry F_0: F_ex -> E identifies it with the desired exact spectral subspace. This space differs from H, the additive perturbation.]
-  {Hexact}{F_{\mathrm{ex}}}{wantedframe}{glossary}{Hilbert space of coordinates for the desired exact spectral subspace.}% Coordinate Hilbert space (not perturbation).
+  {Hexact}{F_{\mathrm{ex}}}{wantedframe}{glossary}{Hilbert space of coordinates for the desired exact spectral subspace.}{hilbert-space}% Coordinate Hilbert space (not perturbation).
 % Exact/unwanted family; the trial error operators are MAGENTA, not cyan.
-\dkDeclareSymbol{Uperp}{U^{\perp}}{unwanted}{local}{Orthogonal complement of the desired exact subspace in the local notation.}
+\dkDeclareSymbol{Uperp}{U^{\perp}}{unwanted}{local}{Orthogonal complement of the desired exact subspace in the local notation.}{linear-subspace}
 \dkDeclareSymbol[Exact complementary frame F_1: G -> E, a linear isometry onto the orthogonal complement of range(F_0). F_1* returns unwanted coordinates; F_1 F_1* = I - P_ex. In Figure 1, F_1(g) = (0, g).]
-  {F1}{F_1}{unwantedframe}{glossary}{Isometric coordinates for the exact complementary subspace; star denotes the adjoint.}
-\dkDeclareSymbol[Self-adjoint unwanted block Lambda_1 on G, satisfying Ahat F_1 = F_1 Lambda_1 on its domain. Its spectrum is separated from the trial spectrum of A_0 by the specified positive delta. Figure 1 uses the scalar block 0.7.]
-  {Lambda1}{\Lambda_1}{unwantedspectrum}{glossary}{Self-adjoint operator on exact complementary coordinates: the unwanted spectral block.}
+  {F1}{F_1}{unwantedframe}{glossary}{Isometric coordinates for the exact complementary subspace; star denotes the adjoint.}{isometric-embedding}
+\dkDeclareSymbol[Self-adjoint unwanted block Lambda_1 on G, satisfying Ahat F_1 = F_1 Lambda_1 on its domain. Its spectrum is separated from the trial spectrum of A_tr by the specified positive delta. Figure 1 uses the scalar block 0.7.]
+  {Lambda1}{\Lambda_1}{unwantedspectrum}{glossary}{Self-adjoint operator on exact complementary coordinates: the unwanted spectral block.}{self-adjoint-operator}
 % Spectral measure and set (distinct from the ambient space E and sine block S).
 \dkDeclareSymbol[Projection-valued spectral measure E associated with a self-adjoint operator A: A = integral lambda dE(lambda). For a Borel set S, E(S) is the orthogonal projection onto the corresponding spectral subspace.]
-  {SpectralMeasure}{E}{wantedprojection}{glossary}{Projection-valued spectral measure of a self-adjoint operator.}
+  {SpectralMeasure}{E}{wantedprojection}{glossary}{Projection-valued spectral measure of a self-adjoint operator.}{projection-valued-measure}
 \dkDeclareSymbol[Borel subset S of the real spectral axis. The spectral projection E(S) selects the part of a self-adjoint operator with spectral values in S; its range is a reducing subspace.]
-  {SpectralSet}{S}{wantedspectrum}{glossary}{Borel spectral set used to select a spectral subspace.}
+  {SpectralSet}{S}{wantedspectrum}{glossary}{Borel spectral set used to select a spectral subspace.}{set}
 % Generic Sylvester coefficients and right side, by source/target role.
 \dkDeclareSymbol[Left coefficient B of the Sylvester map X -> B X - X C; B acts on the output space of X. For the sine bound, B = Lambda_1 on the unwanted-coordinate space G.]
-  {SylvesterLeft}{B}{unwantedspectrum}{glossary}{Left coefficient of the Sylvester equation; corresponds to the unwanted spectral block.}
-\dkDeclareSymbol[Right coefficient C of the Sylvester map X -> B X - X C; C acts on the input space of X. For the sine bound, C = A_0 on trial space F. The historical equation also denotes this coefficient by A.]
-  {SylvesterRight}{C}{trialspectrum}{glossary}{Right coefficient of the Sylvester equation; corresponds to the trial operator.}
+  {SylvesterLeft}{B}{unwantedspectrum}{glossary}{Left coefficient of the Sylvester equation; corresponds to the unwanted spectral block.}{self-adjoint-operator}
+\dkDeclareSymbol[Right coefficient C of the Sylvester map X -> B X - X C; C acts on the input space of X. For the sine bound, C = A_tr on trial space F. The historical equation also denotes this coefficient by A.]
+  {SylvesterRight}{C}{trialspectrum}{glossary}{Right coefficient of the Sylvester equation; corresponds to the trial operator.}{self-adjoint-operator}
 \dkDeclareSymbol[Right-hand side Y in B X - X C = Y, with the same input and output spaces as X. For the sine bound, Y = F_1* R: F -> G, the residual expressed in unwanted exact coordinates.]
-  {SylvesterRHS}{Y}{resid}{glossary}{Right-hand side of the Sylvester equation, obtained by projecting the residual.}
-\dkDeclareSymbol{w}{w}{unwantedvector}{local}{Vector in an unwanted or complementary spectral subspace.}
-\dkDeclareSymbol{f1}{f_1}{unwantedvector}{local}{Component or coordinate vector in the unwanted exact subspace.}
-\dkDeclareSymbol{lambda1}{\lambda_1}{unwantedspectrum}{local}{Unwanted exact eigenvalue or complementary spectral value.}
-\dkDeclareSymbol{lambdaw}{\lambda_w}{unwantedspectrum}{local}{Eigenvalue associated with an unwanted exact vector.}
+  {SylvesterRHS}{Y}{resid}{glossary}{Right-hand side of the Sylvester equation, obtained by projecting the residual.}{linear-operator}
+\dkDeclareSymbol{w}{w}{unwantedvector}{local}{Vector in an unwanted or complementary spectral subspace.}{vector}
+\dkDeclareSymbol{f1}{f_1}{unwantedvector}{local}{Component or coordinate vector in the unwanted exact subspace.}{vector}
+\dkDeclareSymbol{lambda1}{\lambda_1}{unwantedspectrum}{local}{Unwanted exact eigenvalue or complementary spectral value.}{scalar}
+\dkDeclareSymbol{lambdaw}{\lambda_w}{unwantedspectrum}{local}{Eigenvalue associated with an unwanted exact vector.}{scalar}
 \dkDeclareSymbol[Hilbert space G of exact complementary coordinates. F_1: G -> E embeds it onto the unwanted exact subspace; Lambda_1 acts on G and X = F_1* E_0 maps trial coordinates into G.]
-  {Gunwanted}{G}{unwantedframe}{glossary}{Hilbert space of exact complementary coordinates.}
-\dkDeclareSymbol{E1}{E_1}{unwantedframe}{local}{Isometric coordinates for the complementary trial subspace.}
-\dkDeclareSymbol{Vperp}{V^{\perp}}{unwanted}{local}{Orthogonal complement of the trial subspace in the local notation.}
+  {Gunwanted}{G}{unwantedframe}{glossary}{Hilbert space of exact complementary coordinates.}{hilbert-space}
+\dkDeclareSymbol{E1}{E_1}{unwantedframe}{local}{Isometric coordinates for the complementary trial subspace.}{isometric-embedding}
+\dkDeclareSymbol{Vperp}{V^{\perp}}{unwanted}{local}{Orthogonal complement of the trial subspace in the local notation.}{linear-subspace}
 % Angle and error geometry, including distinct rectangular and positive maps.
 \dkDeclareSymbol[Individual principal angle, between 0 and pi/2. For orthonormal subspace frames X and Y, the singular values of X* Y are the principal cosines. In Figure 1, theta is the angle between the unit trial vector v and the exact wanted line.]
-  {theta}{\theta}{sine}{glossary}{Principal angle between the subspaces under comparison.}
+  {theta}{\theta}{sine}{glossary}{Principal angle between the subspaces under comparison.}{angle}
 \dkDeclareSymbol[Full positive angle operator Theta = diag(Theta_0, Theta_1) for the source/target decompositions. Theta_0 compares the source with the target; Theta_1 compares their orthogonal complements. Its operator norm is the largest spectral angle. For positive c, the conditions Theta <= c and Theta < c mean operator norm at most c and strictly below c, respectively.]
-  {Theta}{\Theta}{angleoperator}{glossary}{Full angle operator, the diagonal sum of the source and complementary angle blocks.}
+  {Theta}{\Theta}{angleoperator}{glossary}{Full angle operator, the diagonal sum of the source and complementary angle blocks.}{angle-operator}
 \dkDeclareSymbol[Directed principal-angle operator Theta_0 on source or trial coordinates. For a trial frame E_0 and exact wanted projection P_ex, cos(Theta_0) = sqrt(E_0* P_ex E_0), and sin(Theta_0) = sqrt(I_F - E_0* P_ex E_0). In the two-projection geometry it comes from the positive cosine compression P Q P restricted to range(P).]
-  {Theta0}{\Theta_0}{angleoperator}{glossary}{Directed principal-angle operator acting on source or trial coordinates.}
+  {Theta0}{\Theta_0}{angleoperator}{glossary}{Directed principal-angle operator acting on source or trial coordinates.}{angle-operator}
 \dkDeclareSymbol[Complementary directed angle operator Theta_1, obtained from the projections I-P and I-Q by the same cosine-compression construction as Theta_0. It acts on the source complement, or its isometric coordinates. The full angle operator is diag(Theta_0, Theta_1).]
-  {Theta1}{\Theta_1}{angleoperator}{glossary}{Directed angle operator comparing the orthogonal complements.}
+  {Theta1}{\Theta_1}{angleoperator}{glossary}{Directed angle operator comparing the orthogonal complements.}{angle-operator}
 \dkDeclareSymbol[Right-angle source defect D_0 = range(P) intersect kernel(Q). These are source vectors orthogonal to the target. The full-angle conclusion in the Section 8 smallness criterion assumes dim(D_0) = dim(D_1); in Lean their identification is CrossedDefectsEquivalent.]
-  {CrossedSourceDefect}{D_0}{fg}{glossary}{Source directions perpendicular to the target subspace.}
+  {CrossedSourceDefect}{D_0}{fg}{glossary}{Source directions perpendicular to the target subspace.}{linear-subspace}
 \dkDeclareSymbol[Right-angle target defect D_1 = kernel(P) intersect range(Q). These are target vectors orthogonal to the source. Equality of its Hilbert dimension with that of D_0 is assumed for the full-angle conclusion of Theorem 8.2.]
-  {CrossedTargetDefect}{D_1}{fg}{glossary}{Target directions perpendicular to the source subspace.}
+  {CrossedTargetDefect}{D_1}{fg}{glossary}{Target directions perpendicular to the source subspace.}{linear-subspace}
 \dkDeclareSymbol[Positive complementary cosine block C_1 = cos(Theta_1). The reference complement is identified with the perturbed complement by the direct rotation D, so A_1 and Lambda_1 act on common coordinates. Theorem 8.1 compares A_1 - alpha I with C_1 (Lambda_1 - alpha I) C_1 as quadratic forms.]
-  {ComplementCosineBlock}{C_1}{anglecos}{local}{Cosine of the complementary angle block in the spectral-repulsion inequality.}
+  {ComplementCosineBlock}{C_1}{anglecos}{local}{Cosine of the complementary angle block in the spectral-repulsion inequality.}{self-adjoint-operator}
 \dkDeclareSymbol[Scalar sine of a principal angle. For a unit principal trial vector v and exact wanted projection P_ex, sin(theta) = ||(I - P_ex)v||. In Figure 1 it is the length of the pink leg S(1).]
-  {sintheta}{\sin\theta}{sine}{local}{Sine of an individual principal angle: the length of the complementary component of a unit principal trial vector.}
+  {sintheta}{\sin\theta}{sine}{local}{Sine of an individual principal angle: the length of the complementary component of a unit principal trial vector.}{scalar}
 \dkDeclareSymbol[Positive sine operator sin(Theta_0) = sqrt(I_F - E_0* P_ex E_0): F -> F. It equals |S| for S = (I - P_ex)E_0: F -> E. Its eigenvalues in finite dimensions are the principal sines; the sine theorem bounds its ideal norm by N(R)/delta.]
-  {sinTheta0}{\sin\Theta_0}{sineoperator}{glossary}{Positive sine operator on trial coordinates; the modulus of the rectangular complementary error.}
+  {sinTheta0}{\sin\Theta_0}{sineoperator}{glossary}{Positive sine operator on trial coordinates; the modulus of the rectangular complementary error.}{angle-operator}
 \dkDeclareSymbol[Rectangular complementary error S = (I - P_ex) E_0: F -> E. It records how much each trial vector leaks outside the exact wanted subspace. Its modulus |S| = sqrt(S* S) is sin(Theta_0): F -> F. In rank one S(1) = P_ex_perp v.]
-  {S}{S}{sineblock}{glossary}{Rectangular complementary error: the trial frame projected onto the unwanted exact subspace.}
-\dkDeclareSymbol[Complementary-coordinate map X = F_1* E_0: F -> G, with S = F_1 X. It satisfies Lambda_1 X - X A_0 = F_1* R on domain(A_0). Isometric multiplication gives N(X) = N(S); the separate modulus identity abs(S) = sin(Theta_0) gives N(S) = N(sin(Theta_0)), whenever these norms are finite.]
-  {X}{X}{sylvester}{glossary}{Solution of the Sylvester equation; for the sine bound, the trial frame in unwanted exact coordinates.}
-\dkDeclareSymbol{alphaAngle}{\alpha}{anglemax}{local}{Largest principal angle.}
+  {S}{S}{sineblock}{glossary}{Rectangular complementary error: the trial frame projected onto the unwanted exact subspace.}{linear-operator}
+\dkDeclareSymbol[Complementary-coordinate map X = F_1* E_0: F -> G, with S = F_1 X. It satisfies Lambda_1 X - X A_tr = F_1* R on domain(A_tr). Isometric multiplication gives N(X) = N(S); the separate modulus identity abs(S) = sin(Theta_0) gives N(S) = N(sin(Theta_0)), whenever these norms are finite.]
+  {X}{X}{sylvester}{glossary}{Solution of the Sylvester equation; for the sine bound, the trial frame in unwanted exact coordinates.}{linear-operator}
+\dkDeclareSymbol{alphaAngle}{\alpha}{anglemax}{local}{Largest principal angle.}{angle}
 \dkDeclareSymbol[Scalar c = cos(theta) in the counterexample. In the general two-projection decomposition, the same role denotes a positive cosine operator C; the cosine and sine blocks commute and satisfy C squared + S squared = I.]
-  {CosAngle}{c}{anglecos}{local}{Cosine of a principal angle or the corresponding positive cosine block.}
+  {CosAngle}{c}{anglecos}{local}{Cosine of a principal angle or the corresponding positive cosine block.}{scalar-or-operator}
 \dkDeclareSymbol[Scalar s = sin(theta) in the counterexample. In the general two-projection decomposition, the same role denotes a positive sine operator S; it commutes with the positive cosine block C and satisfies C squared + S squared = I.]
-  {SinAngle}{s}{sineoperator}{local}{Sine of a principal angle or the corresponding positive sine block.}
+  {SinAngle}{s}{sineoperator}{local}{Sine of a principal angle or the corresponding positive sine block.}{scalar-or-operator}
 \dkDeclareSymbol[Positive small-angle parameter in the local subspace comparison. It controls the allowed angular deviation; it is an angle parameter rather than a perturbation-operator norm.]
-  {EpsilonAngle}{\varepsilon}{anglemax}{local}{Angle parameter controlling the maximum subspace deviation.}
-\dkDeclareSymbol{PhiAngle}{\varphi}{angleoperator}{local}{Auxiliary angle or angle operator in the two-subspace comparison.}
-\dkDeclareSymbol{Bblock}{B}{sineblock}{local}{Off-diagonal block in the two-subspace decomposition.}
-\dkDeclareSymbol{Cblock}{C}{sylvester}{local}{Complementary or Sylvester block in the two-subspace decomposition.}
-\dkDeclareSymbol{Ablock}{A}{anglecos}{local}{Positive cosine-related block in the two-subspace decomposition.}
+  {EpsilonAngle}{\varepsilon}{anglemax}{local}{Angle parameter controlling the maximum subspace deviation.}{angle}
+\dkDeclareSymbol{PhiAngle}{\varphi}{angleoperator}{local}{Auxiliary angle or angle operator in the two-subspace comparison.}{angle}
+\dkDeclareSymbol{Bblock}{B}{sineblock}{local}{Off-diagonal block in the two-subspace decomposition.}{linear-operator}
+\dkDeclareSymbol{Cblock}{C}{sylvester}{local}{Complementary or Sylvester block in the two-subspace decomposition.}{linear-operator}
+\dkDeclareSymbol{Ablock}{A}{anglecos}{local}{Positive cosine-related block in the two-subspace decomposition.}{linear-operator}
 % Residual/error-displacement family.
 \dkDeclareSymbol[Residual vector r = Ahat v - rho v = R(1) for the rank-one frame E_0(x) = x v. Figure 1 draws it from rho v to Ahat v. For unit v and the Rayleigh value rho = <v, Ahat v>, <v, r> = 0; a general trial scalar need not give orthogonality.]
-  {r}{r}{residvector}{local}{Residual vector of an approximate eigenpair.}
-\dkDeclareSymbol[Bounded residual R: F -> E, agreeing with Ahat E_0 - E_0 A_0 on domain(A_0). The domain condition requires E_0(domain(A_0)) inside domain(Ahat). R = 0 means that E_0 intertwines A_0 with Ahat; its norm measures the defect.]
-  {R}{R}{resid}{glossary}{Bounded residual of the trial eigenproblem, agreeing with the operator difference on the trial domain.}
+  {r}{r}{residvector}{local}{Residual vector of an approximate eigenpair.}{vector}
+\dkDeclareSymbol[Bounded residual R: F -> E, agreeing with Ahat E_0 - E_0 A_tr on domain(A_tr). The domain condition requires E_0(domain(A_tr)) inside domain(Ahat). R = 0 means that E_0 intertwines A_tr with Ahat; its norm measures the defect.]
+  {R}{R}{resid}{glossary}{Bounded residual of the trial eigenproblem, agreeing with the operator difference on the trial domain.}{linear-operator}
 \dkDeclareSymbol[Full displacement Delta_W = I - W on the ambient space. In the failed Ky Fan comparison W = W_(pi/4); Delta_W has singular values sqrt(2), sqrt(2), 0, 0. Multiplying by a principal-plane projection restricts its input to that plane.]
-  {Kdisplacement}{\Delta_W}{displacement}{glossary}{Full displacement of a transporter from the identity.}
+  {Kdisplacement}{\Delta_W}{displacement}{glossary}{Full displacement of a transporter from the identity.}{operator-valued-function}
 \dkDeclareSymbol[Squared full displacement Dcal(W) = (I-W)* (I-W), a positive operator. Proposition 4.3 compares its unitarily invariant norm for a direct rotation D with that for every feasible transporter W.]
-  {SquaredDisplacement}{\mathcal D}{displacement}{local}{Squared full displacement as a function of the transporter.}
+  {SquaredDisplacement}{\mathcal D}{displacement}{local}{Squared full displacement as a function of the transporter.}{operator-valued-function}
 % Matching proof: the gradient and its spectral level are not a space or gap.
 \dkDeclareSymbol[Skew-symmetric spectral gradient G of Phi_p. It commutes with W and represents first variations by d/dt Phi_p(W exp(tB)) at t = 0 equal to -tr(G B) for skew-symmetric B. Feasible stationarity gives J_src G J_src = -G.]
-  {SpectralGradient}{G}{displacement}{local}{Skew-symmetric spectral gradient of the displacement power sum in the matching proof.}
+  {SpectralGradient}{G}{displacement}{local}{Skew-symmetric spectral gradient of the displacement power sum in the matching proof.}{linear-operator}
 \dkDeclareSymbol[Positive spectral level g of the skew-symmetric gradient G: on this invariant subspace, -G squared = g squared I. Consequently G/g squares to -I and supplies the complex structure used in the real matching proof.]
-  {GradientLevel}{g}{displacement}{local}{Positive gradient level; the gradient squared is minus this level squared times the identity.}
+  {GradientLevel}{g}{displacement}{local}{Positive gradient level; the gradient squared is minus this level squared times the identity.}{scalar}
 \dkDeclareSymbol[Complex structure I_g = G/g on the positive gradient-level space V_g. It is a real isometry with square -I. Multiplication by a+ib means a times identity plus b times I_g; source reflection J_src reverses I_g and acts as conjugation.]
-  {GradientComplexStructure}{\mathcal I_g}{displacement}{local}{Complex multiplication constructed from a positive gradient level.}
+  {GradientComplexStructure}{\mathcal I_g}{displacement}{local}{Complex multiplication constructed from a positive gradient level.}{linear-operator}
 \dkDeclareSymbol[Real skew-symmetric matrix B, with B transpose = -B, giving the orthogonal variation W exp(tB). If B commutes with the source projection P, this curve preserves the constraint W(U) = V.]
-  {SkewDirection}{B}{ambient}{local}{Skew-symmetric direction for a first variation of an orthogonal transporter.}
+  {SkewDirection}{B}{ambient}{local}{Skew-symmetric direction for a first variation of an orthogonal transporter.}{linear-operator}
 % Spectral separation family: gap and original gap are NOT identical.
 \dkDeclareSymbol[Positive spectral separation in the stated configuration. In the sine theorem it separates the trial operator from the exact complementary block; Theorem 8.1 uses it for the ordered reference gap, and Theorem 8.2 for the perturbed central-band separation. Figure 1 uses delta = abs(rho - 0.7).]
-  {delta}{\delta}{gap}{glossary}{Positive spectral separation in the stated gap configuration.}
-\dkDeclareSymbol{g}{g}{gaporiginal}{local}{Original spectral gap of the reference operator; distinct from the certified sine-theta separation.}
-\dkDeclareSymbol{Delta}{\Delta}{gapstat}{local}{Population or statistical spectral gap.}
+  {delta}{\delta}{gap}{glossary}{Positive spectral separation in the stated gap configuration.}{scalar}
+\dkDeclareSymbol{g}{g}{gaporiginal}{local}{Original spectral gap of the reference operator; distinct from the certified sine-theta separation.}{scalar}
+\dkDeclareSymbol{Delta}{\Delta}{gapstat}{local}{Population or statistical spectral gap.}{scalar}
 \dkDeclareSymbol[Spectral endpoint alpha. In the interval/exterior configuration, one spectrum lies between beta and alpha, the other at or below beta - delta or at or above alpha + delta. Theorem 8.2 places the selected perturbed block in the central interval. In Theorem 8.1, alpha bounds the lower reference block and alpha + delta bounds the upper block from below.]
-  {alphaEndpoint}{\alpha}{gapinterval}{glossary}{Upper endpoint of the central band, or lower-block cut in the ordered gap.}
+  {alphaEndpoint}{\alpha}{gapinterval}{glossary}{Upper endpoint of the central band, or lower-block cut in the ordered gap.}{scalar}
 \dkDeclareSymbol[Lower endpoint beta of the finite interval from beta to alpha in the gap hypothesis. One spectrum lies in that interval; the other lies at or below beta - delta or at or above alpha + delta.]
-  {betaEndpoint}{\beta}{gapinterval}{glossary}{Lower endpoint of the finite interval in the interval/exterior gap hypothesis.}
+  {betaEndpoint}{\beta}{gapinterval}{glossary}{Lower endpoint of the finite interval in the interval/exterior gap hypothesis.}{scalar}
 % Spectral/projector and auxiliary matrix objects, context-scoped.
-\dkDeclareSymbol{P}{P}{fg}{local}{Orthogonal projection; its source or exact-target role is specified locally.}% Neutral historical Manim key; prefer Pexact/Psource.
-\dkDeclareSymbol{Q}{Q}{fg}{local}{Orthogonal projection; its role is specified locally.}% Neutral historical Manim key; prefer Qtarget.
+\dkDeclareSymbol{P}{P}{fg}{local}{Orthogonal projection; its source or exact-target role is specified locally.}{orthogonal-projection}% Neutral historical Manim key; prefer Pexact/Psource.
+\dkDeclareSymbol{Q}{Q}{fg}{local}{Orthogonal projection; its role is specified locally.}{orthogonal-projection}% Neutral historical Manim key; prefer Qtarget.
 \dkDeclareSymbol[Two-projection intertwiner T = QP + (I - Q)(I - P), satisfying TP = QT and T* T = I - (P - Q) squared. For ||P - Q|| < 1 it is invertible; its unitary polar factor T |T| inverse is the canonical direct rotation.]
-  {IntertwinerT}{T}{intertwiner}{glossary}{Two-projection intertwiner; its unitary polar factor is the acute direct rotation.}
+  {IntertwinerT}{T}{intertwiner}{glossary}{Two-projection intertwiner; its unitary polar factor is the acute direct rotation.}{linear-operator}
 \dkDeclareSymbol[Planar pi/2-rotation matrix J_0 = ((0, -1), (1, 0)), with J_0 squared = -I_2 and J_0 transpose = -J_0. It defines the rotation C = cos(2 theta) I_2 + sin(2 theta) J_0 used to construct the real competitor.]
-  {Jturn}{J_0}{turn}{glossary}{Planar rotation through $\pi/2$, with square minus the identity.}
+  {Jturn}{J_0}{turn}{glossary}{Planar rotation through $\pi/2$, with square minus the identity.}{matrix}
 \dkDeclareSymbol[Partial isometry V_pol in the polar decomposition S = V_pol |S|, where |S| = sqrt(S* S). It is isometric on the orthogonal complement of kernel(S) and zero on kernel(S). For an invertible operator its polar factor is unitary.]
-  {PolarU}{V_{\mathrm{pol}}}{intertwiner}{glossary}{Partial isometry in the polar decomposition; unitary when the operator is invertible.}
+  {PolarU}{V_{\mathrm{pol}}}{intertwiner}{glossary}{Partial isometry in the polar decomposition; unitary when the operator is invertible.}{partial-isometry}
 \dkDeclareSymbol[Planar rotation C = cos(2 theta) I_2 + sin(2 theta) J_0 through twice the principal angle. The competitor W_theta is orthogonally conjugate to C direct-sum I_2, so it rotates one two-plane and fixes the other.]
-  {Cturn}{C}{turn}{glossary}{Planar rotation through twice the principal angle in the counterexample.}
+  {Cturn}{C}{turn}{glossary}{Planar rotation through twice the principal angle in the counterexample.}{matrix}
 \dkDeclareSymbol[Orthogonal mixing matrix H_mix = (1/sqrt(2)) times the block matrix ((I_2, I_2), (I_2, -I_2)). It constructs W_theta = H_mix (C direct-sum I_2) H_mix transpose.]
-  {Hmix}{H_{\mathrm{mix}}}{mix}{glossary}{Orthogonal mixing matrix in the counterexample.}
+  {Hmix}{H_{\mathrm{mix}}}{mix}{glossary}{Orthogonal mixing matrix in the counterexample.}{matrix}
 \dkDeclareSymbol[Source reflection J_src = 2P - I: it acts as +I on the source subspace and -I on its orthogonal complement, so its square is I. In the matching proof stationarity gives J_src G J_src = -G for the skew-symmetric spectral gradient G.]
-  {Jreflect}{J_{\mathrm{src}}}{trialprojection}{glossary}{Reflection equal to twice the source projection minus the identity.}
+  {Jreflect}{J_{\mathrm{src}}}{trialprojection}{glossary}{Reflection equal to twice the source projection minus the identity.}{linear-operator}
 \dkDeclareSymbol[Skew angle generator J_ang for a direct rotation D = exp(J_ang Theta). On each principal plane it is the oriented rotation through pi/2; it vanishes on the common fixed directions. It commutes with the full angle operator Theta.]
-  {AngleGenerator}{J_{\mathrm{ang}}}{turn}{glossary}{Skew angle generator in the direct-rotation result summaries.}
-\dkDeclareSymbol{Dblock}{D}{mix}{local}{Auxiliary diagonal or block matrix in the counterexample.}
+  {AngleGenerator}{J_{\mathrm{ang}}}{turn}{glossary}{Skew angle generator in the direct-rotation result summaries.}{linear-operator}
+\dkDeclareSymbol{Dblock}{D}{mix}{local}{Auxiliary diagonal or block matrix in the counterexample.}{matrix}
 \dkDeclareSymbol[Orthogonal projection onto the first principal plane span(e_0, e_3) in the four-dimensional counterexample. For Delta_W = I - W_(pi/4), the Ky Fan 2-norm of Delta_W Omega_1 equals 2.]
-  {OmegaOne}{\Omega_1}{turn}{glossary}{First principal-plane projection in the failed Ky Fan comparison.}
+  {OmegaOne}{\Omega_1}{turn}{glossary}{First principal-plane projection in the failed Ky Fan comparison.}{orthogonal-projection}
 \dkDeclareSymbol[Orthogonal projection onto the second principal plane span(e_1, e_2) in the four-dimensional counterexample. For Delta_W = I - W_(pi/4), the Ky Fan 2-norm of Delta_W Omega_2 equals 2, although the trace norm of Delta_W is only 2 sqrt(2).]
-  {OmegaTwo}{\Omega_2}{intertwiner}{glossary}{Second principal-plane projection in the failed Ky Fan comparison.}
-\dkDeclareSymbol{Dplanar}{D}{wantedrotation}{local}{Planar direct-rotation block.}
-\dkDeclareSymbol{Hreflection}{H}{trialcompetitor}{local}{Planar reflection carrying the source line to the target.}
+  {OmegaTwo}{\Omega_2}{intertwiner}{glossary}{Second principal-plane projection in the failed Ky Fan comparison.}{orthogonal-projection}
+\dkDeclareSymbol{Dplanar}{D}{wantedrotation}{local}{Planar direct-rotation block.}{unitary-operator}
+\dkDeclareSymbol{Hreflection}{H}{trialcompetitor}{local}{Planar reflection carrying the source line to the target.}{linear-operator}
 % Unitarily invariant gauge family; N, M are NOT a norm versus its input.
 \dkDeclareSymbol[Unitarily invariant norm N, or a symmetric operator-ideal norm on its domain of finiteness. It satisfies N(U T V) = N(T) for unitaries and N(B T) <= ||B||op N(T). In the sine theorem it is normalized by N(u v*) = ||u|| ||v|| and has Ky Fan dominance where both norms are finite. Both R and sin(Theta_0) must belong to its ideal.]
-  {NormN}{N}{norm}{glossary}{Unitarily invariant norm on its domain of finiteness; in the sine theorem, normalized by $N(uv^*)=\|u\|\|v\|$.}
+  {NormN}{N}{norm}{glossary}{Unitarily invariant norm on its domain of finiteness; in the sine theorem, normalized by $N(uv^*)=\|u\|\|v\|$.}{norm}
 \dkDeclareSymbol[Sine-theta separation G_delta(B,C): finite interval/exterior separation in either spectral order, or ordered separation B <= a I and C >= (a+delta) I, or the reverse. The ordered alternatives allow both spectra to be unbounded.]
-  {SineGap}{\mathcal G_\delta}{gap}{local}{Interval/exterior separation or either ordered separation, as in the sine-theta theorem.}
+  {SineGap}{\mathcal G_\delta}{gap}{local}{Interval/exterior separation or either ordered separation, as in the sine-theta theorem.}{predicate}
 \dkDeclareSymbol[Auxiliary unitarily invariant norm M witnessing the Q-norm property N(T) squared = M(T* T). For the Frobenius norm N, one can take M to be the trace norm.]
-  {NormM}{M}{normaux}{local}{Auxiliary unitarily invariant norm used to define a Q-norm through the squared modulus.}
+  {NormM}{M}{normaux}{local}{Auxiliary unitarily invariant norm used to define a Q-norm through the squared modulus.}{norm}
 \dkDeclareSymbol[Q-norm property: a unitarily invariant norm N is a Q-norm when N(T) squared = M(T* T) for some unitarily invariant norm M. The Frobenius norm is an example, with M the trace norm; the repaired full-displacement theorem uses this norm class.]
-  {NormQ}{Q}{normaux}{glossary}{Q-norm: its square is a unitarily invariant norm of the squared modulus.}
+  {NormQ}{Q}{normaux}{glossary}{Q-norm: its square is a unitarily invariant norm of the squared modulus.}{norm}
 \dkDeclareSymbol[Singleton trace cost s_i = min(4 sin(theta_i/2), 2) for angle label i. It transports one real principal plane independently, choosing a rotation of cost 4 sin(theta_i/2) or a reflection of cost 2.]
-  {SingletonCost}{s}{norm}{glossary}{Minimum trace displacement for one real principal plane: choose a rotation or a reflection.}
+  {SingletonCost}{s}{norm}{glossary}{Minimum trace displacement for one real principal plane: choose a rotation or a reflection.}{scalar-cost}
 \dkDeclareSymbol[Paired trace cost e_ij = 4 sin((theta_i + theta_j)/2) for distinct angle labels i,j. It is attained by coupling their principal planes in a real four-dimensional block. The edge weight s_i + s_j - e_ij is the difference between the cost of two singletons and this paired cost.]
-  {PairCost}{e}{norm}{glossary}{Trace displacement cost of coupling two principal planes in a four-dimensional block.}
+  {PairCost}{e}{norm}{glossary}{Trace displacement cost of coupling two principal planes in a four-dimensional block.}{scalar-cost}
 \dkDeclareSymbol[Scalar phase cost f_p(t) = (2 sin(t/2)) to the power p, for 0 <= t <= pi. A real planar rotation through t contributes two copies, so its displacement power cost is 2 f_p(t).]
-  {MatchingPhaseCost}{f_p}{norm}{local}{Displacement power cost for one scalar phase.}
+  {MatchingPhaseCost}{f_p}{norm}{local}{Displacement power cost for one scalar phase.}{scalar-cost}
 \dkDeclareSymbol[Singleton power cost a_i(p) = min(2 f_p(theta_i), 2 to the power p). These are the rotation and reflection choices for one principal plane. At p=1 it equals the trace-cost weight s_i.]
-  {SingletonPowerCost}{a}{norm}{local}{Minimum displacement power cost for one angle.}
+  {SingletonPowerCost}{a}{norm}{local}{Minimum displacement power cost for one angle.}{scalar-cost}
 \dkDeclareSymbol[Paired power cost b_ij(p) = min over d <= tau <= h of 2(f_p(h+tau) + f_p(h-tau)), where h=(theta_i+theta_j)/2 and d=abs(theta_i-theta_j)/2. This is the positive-determinant pair minimum; unrestricted block optimization also compares two singletons. At p=1 it equals e_ij.]
-  {PairPowerCost}{b}{norm}{local}{Positive-determinant displacement power cost for a pair of angles.}
+  {PairPowerCost}{b}{norm}{local}{Positive-determinant displacement power cost for a pair of angles.}{scalar-cost}
 \dkDeclareSymbol[Matching M on the finite general graph of positive principal-angle labels. Each label belongs to at most one edge; unmatched labels use singleton transporters. Minimizing paired and singleton costs is equivalent to maximum-weight matching with edge weights g_ij = s_i + s_j - e_ij. The empty matching is allowed.]
-  {Matching}{M}{normaux}{glossary}{Matching of positive principal-angle labels: each label is used in at most one pair.}
+  {Matching}{M}{normaux}{glossary}{Matching of positive principal-angle labels: each label is used in at most one pair.}{matching}
 \dkDeclareSymbol[Displacement power sum Phi_p(W) = sum_j s_j(I - W)^p. The matching proof first minimizes it for 1 < p < 2, then lets p decrease to 1, where it becomes the trace norm ||I - W||_1.]
-  {PowerCost}{\Phi}{norm}{local}{Sum of the p-th powers of displacement singular values.}
+  {PowerCost}{\Phi}{norm}{local}{Sum of the p-th powers of displacement singular values.}{scalar-cost}
 % Auxiliary matching-proof notation: neutral ink, with the same hover registry.
 \dkDeclareSymbol[Off-diagonal gradient block G_01 mapping the source complement K perpendicular into K. Stationarity makes the diagonal blocks of G zero, so G = ((0,G_01),(-G_01 transpose,0)) in the source/complement decomposition.]
-  {GradientOffDiagonal}{G_{01}}{fg}{local}{Complement-to-source block of the skew-symmetric gradient.}
+  {GradientOffDiagonal}{G_{01}}{fg}{local}{Complement-to-source block of the skew-symmetric gradient.}{linear-operator}
 \dkDeclareSymbol[Orthogonal group O(n): real n by n matrices W satisfying W transpose times W = I. Its elements preserve Euclidean inner products and lengths. The notation O(2) refers to the same group in dimension two.]
-  {OrthogonalGroup}{O(n)}{fg}{local}{Group of real orthogonal matrices.}
+  {OrthogonalGroup}{O(n)}{fg}{local}{Group of real orthogonal matrices.}{group}
 \dkDeclareSymbol[Feasible transporters F = {W in O(n) : W(K) = L}. Equivalently W P_K W transpose = P_L. This nonempty compact set is the optimization domain throughout the matching proof.]
-  {FeasibleTransport}{\mathcal F}{fg}{local}{Orthogonal maps carrying the source subspace onto the target.}
+  {FeasibleTransport}{\mathcal F}{fg}{local}{Orthogonal maps carrying the source subspace onto the target.}{set}
 \dkDeclareSymbol[Singular value s_j(T), the nonnegative square root of an eigenvalue of T transpose times T, counted with multiplicity. Summing s_j(I-W) gives the trace displacement; summing its p-th powers gives Phi_p(W). These singular values differ from the singleton weights s_i.]
-  {TransportSingularValues}{\symglyph{SingularValueBase}_j}{fg}{local}{A displacement singular value in the matching proof.}
+  {TransportSingularValues}{\symglyph{SingularValueBase}_j}{fg}{local}{A displacement singular value in the matching proof.}{scalar}
 \dkDeclareSymbol[Scalar singular-value magnitude s between zero and two for the displacement I-W of an orthogonal matrix. Uniform convergence of s to the power p to s on this interval permits the trace-norm limit. This variable differs from the rotation parameter s used earlier in the proof.]
-  {DisplacementSize}{s}{fg}{local}{Scalar displacement singular-value magnitude in the uniform limit.}
+  {DisplacementSize}{s}{fg}{local}{Scalar displacement singular-value magnitude in the uniform limit.}{scalar}
 \dkDeclareSymbol[All-singleton cost C_0 = sum_i s_i, before any two angle labels are paired. A matching has cost C_0 minus the sum of its selected edge weights.]
-  {SingletonBaseline}{C_0}{fg}{local}{Trace displacement when every angle uses its singleton transporter.}
+  {SingletonBaseline}{C_0}{fg}{local}{Trace displacement when every angle uses its singleton transporter.}{scalar-cost}
 \dkDeclareSymbol[Matching power cost C_p(M): sum of b_ij(p) over selected pairs plus a_i(p) over unmatched labels. Its minimum equals the minimum of Phi_p over feasible transporters. At p=1 it is C(M).]
-  {MatchingPowerCost}{C_p}{fg}{local}{Total paired and singleton power cost of a matching.}
+  {MatchingPowerCost}{C_p}{fg}{local}{Total paired and singleton power cost of a matching.}{scalar-cost}
 \dkDeclareSymbol[Invariant orthogonal block V_a preserved by the source projection, target projection, and minimizing transporter. The displacement cost adds over these blocks, and their principal-angle lists combine into the original list.]
-  {MatchingBlock}{V_a}{fg}{local}{Simultaneous invariant block in the matching proof.}
+  {MatchingBlock}{V_a}{fg}{local}{Simultaneous invariant block in the matching proof.}{linear-subspace}
 \dkDeclareSymbol[Gradient-level space V_g: the eigenspace of -G squared for a positive eigenvalue g squared. It is preserved by G, W, and the source reflection J_src. Multiplication by i on it is G/g.]
-  {GradientLevelSpace}{V_g}{fg}{local}{Positive gradient-level eigenspace.}
+  {GradientLevelSpace}{V_g}{fg}{local}{Positive gradient-level eigenspace.}{linear-subspace}
 \dkDeclareSymbol[Eigenphase varphi of W on V_g viewed as a complex space with multiplication by i = G/g. It lies between zero and pi and satisfies f_p prime(varphi) = g. There are at most two such phases.]
-  {GradientEigenphase}{\varphi}{fg}{local}{One of the at most two phases at a positive gradient level.}
+  {GradientEigenphase}{\varphi}{fg}{local}{One of the at most two phases at a positive gradient level.}{angle}
 \dkDeclareSymbol[Orthogonal projection E onto the first phase space of W on V_g. Here W = exp(i varphi_1) E + exp(i varphi_2) (I-E). In coordinates where the source reflection is conjugation, E = X + iY.]
-  {GradientPhaseProjection}{E}{fg}{local}{Projection onto the first phase space in a gradient-level space.}
+  {GradientPhaseProjection}{E}{fg}{local}{Projection onto the first phase space in a gradient-level space.}{orthogonal-projection}
 \dkDeclareSymbol[Real part X of the phase projection E = X + iY. It is a real symmetric matrix with spectrum in the closed interval from zero to one, satisfying X squared - Y squared = X and XY + YX = Y. This X differs from the source-coordinate and Sylvester matrices elsewhere in the paper.]
-  {ProjectionRealPart}{X}{fg}{local}{Real symmetric part of the phase projection.}
+  {ProjectionRealPart}{X}{fg}{local}{Real symmetric part of the phase projection.}{linear-operator}
 \dkDeclareSymbol[Imaginary part Y of the phase projection E = X + iY. It is a real skew-symmetric matrix. It maps the lambda eigenspace of X to the 1-lambda eigenspace and constructs the small invariant planes.]
-  {ProjectionImaginaryPart}{Y}{fg}{local}{Real skew-symmetric imaginary part of the phase projection.}
+  {ProjectionImaginaryPart}{Y}{fg}{local}{Real skew-symmetric imaginary part of the phase projection.}{linear-operator}
 \dkDeclareSymbol[Eigenvalue lambda in the closed interval from zero to one of the real part X of the phase projection. It is local to the block construction and differs from the original operator's spectral parameter.]
-  {ProjectionEigenvalue}{\lambda}{fg}{local}{Eigenvalue of the real part of the phase projection.}
+  {ProjectionEigenvalue}{\lambda}{fg}{local}{Eigenvalue of the real part of the phase projection.}{scalar}
 \dkDeclareSymbol[Plane coupling eta = sqrt(lambda (1-lambda)) for 0 < lambda < 1. If u is a unit lambda eigenvector of X, then v = Yu/eta completes its invariant real plane.]
-  {ProjectionCoupling}{\eta}{fg}{local}{Normalization used to construct an invariant real plane.}
+  {ProjectionCoupling}{\eta}{fg}{local}{Normalization used to construct an invariant real plane.}{scalar}
 \dkDeclareSymbol[Pair mean angle h = (theta_i + theta_j)/2. Together with d = (theta_i - theta_j)/2 after ordering theta_i >= theta_j, it parametrizes the two-angle block cost.]
-  {PairMeanAngle}{h}{fg}{local}{Mean of the two ordered principal angles.}
+  {PairMeanAngle}{h}{fg}{local}{Mean of the two ordered principal angles.}{angle}
 \dkDeclareSymbol[Pair half-difference d = (theta_i - theta_j)/2 after ordering theta_i >= theta_j. It satisfies 0 <= d <= h and h+d <= pi/2.]
-  {PairHalfDifference}{d}{fg}{local}{Half the difference of the two ordered principal angles.}
+  {PairHalfDifference}{d}{fg}{local}{Half the difference of the two ordered principal angles.}{angle}
 \dkDeclareSymbol[Scalar pair parameter tau in the closed interval from d to h. The paired power cost is the minimum of 2(f_p(h+tau) + f_p(h-tau)) over this interval. At p=1 a minimum is attained at tau=h.]
-  {PairPhaseParameter}{\tau}{fg}{local}{Scalar parameter in the two-angle power-cost minimum.}
+  {PairPhaseParameter}{\tau}{fg}{local}{Scalar parameter in the two-angle power-cost minimum.}{scalar}
 \dkDeclareSymbol[Attaining rotation angle gamma = arccos(cos(tau)/cos(d)). Choosing U_0 = U_1 = R_gamma realizes phase parameters x=h and y=tau in the four-dimensional block.]
-  {PairAttainingAngle}{\gamma}{fg}{local}{Rotation angle realizing a chosen scalar pair parameter.}
+  {PairAttainingAngle}{\gamma}{fg}{local}{Rotation angle realizing a chosen scalar pair parameter.}{angle}
 \dkDeclareSymbol[Four-dimensional direct rotation D = ((C,-S),(S,C)) in source and complementary principal coordinates, with C the diagonal principal cosines and S the diagonal principal sines. Every transporter on this block is D diag(U_0,U_1).]
-  {PairDirectRotation}{D}{fg}{local}{Direct rotation on the two principal planes.}
+  {PairDirectRotation}{D}{fg}{local}{Direct rotation on the two principal planes.}{unitary-operator}
 \dkDeclareSymbol[Diagonal cosine block C = diag(cos(theta_i), cos(theta_j)) in the four-dimensional direct rotation D. This matrix differs from the scalar displacement cost C(M).]
-  {PairCosineBlock}{C}{fg}{local}{Diagonal principal-cosine block.}
+  {PairCosineBlock}{C}{fg}{local}{Diagonal principal-cosine block.}{matrix}
 \dkDeclareSymbol[Diagonal sine block S = diag(sin(theta_i), sin(theta_j)) in the four-dimensional direct rotation D. This matrix is local to the matching proof.]
-  {PairSineBlock}{S}{fg}{local}{Diagonal principal-sine block.}
+  {PairSineBlock}{S}{fg}{local}{Diagonal principal-sine block.}{matrix}
 \dkDeclareSymbol[Free planar orthogonal matrices U_0 and U_1 acting on the two-dimensional source and its two-dimensional complement, respectively. Multiplying D by diag(U_0,U_1) parametrizes every transporter on this four-dimensional block.]
-  {PairFreeOrthogonal}{U}{fg}{local}{Free source or complementary planar orthogonal factor.}
+  {PairFreeOrthogonal}{U}{fg}{local}{Free source or complementary planar orthogonal factor.}{unitary-operator}
 \dkDeclareSymbol[Phase parameter x in the closed interval from h to pi-h for a positive-determinant four-dimensional transporter. Its eigenvalues are exp(plus or minus i(x+y)) and exp(plus or minus i(x-y)).]
-  {PairPhaseX}{x}{fg}{local}{First phase parameter of a four-dimensional transporter.}
+  {PairPhaseX}{x}{fg}{local}{First phase parameter of a four-dimensional transporter.}{angle}
 \dkDeclareSymbol[Phase parameter y in the closed interval from d to pi-d for a positive-determinant four-dimensional transporter. Together with x it gives rotational phases x+y and x-y, folded into the closed interval from zero to pi for the displacement cost.]
-  {PairPhaseY}{y}{fg}{local}{Second phase parameter of a four-dimensional transporter.}
+  {PairPhaseY}{y}{fg}{local}{Second phase parameter of a four-dimensional transporter.}{angle}
 \dkDeclareSymbol[Scalar a = cos(x) in the four-dimensional phase calculation. Together with b = cos(y), it expresses the trace as 4ab and determines the reciprocal characteristic polynomial.]
-  {PairPhaseCosineX}{a}{fg}{local}{Cosine of the first phase parameter in the trace calculation.}
+  {PairPhaseCosineX}{a}{fg}{local}{Cosine of the first phase parameter in the trace calculation.}{scalar}
 \dkDeclareSymbol[Scalar b = cos(y) in the four-dimensional phase calculation, paired with a = cos(x). These scalars are local to the characteristic-polynomial calculation.]
-  {PairPhaseCosineY}{b}{fg}{local}{Cosine of the second phase parameter in the trace calculation.}
+  {PairPhaseCosineY}{b}{fg}{local}{Cosine of the second phase parameter in the trace calculation.}{scalar}
 \dkDeclareSymbol[Rotation parameter r: the two free orthogonal factors use planar rotation angles r+s and r-s. It appears in cos(y) = cos(d) cos(r) for two rotations.]
-  {PairRotationR}{r}{fg}{local}{Half the sum of the two free planar rotation angles.}
+  {PairRotationR}{r}{fg}{local}{Half the sum of the two free planar rotation angles.}{angle}
 \dkDeclareSymbol[Rotation parameter s: the two free orthogonal factors use planar rotation angles r+s and r-s. It appears in cos(x) = cos(h) cos(s) for two rotations. This scalar differs from the singular values and singleton costs.]
-  {PairRotationS}{s}{fg}{local}{Half the difference of the two free planar rotation angles.}
+  {PairRotationS}{s}{fg}{local}{Half the difference of the two free planar rotation angles.}{angle}
 \dkDeclareSymbol[Planar reflection J_2 = diag(1,-1). Every two-dimensional orthogonal matrix of determinant -1 can be written as a planar rotation times J_2.]
-  {PairPlanarReflection}{J_2}{fg}{local}{Fixed planar reflection used to parametrize determinant -1 factors.}
+  {PairPlanarReflection}{J_2}{fg}{local}{Fixed planar reflection used to parametrize determinant -1 factors.}{unitary-operator}
 \dkDeclareSymbol[Real planar rotation R_t = ((cos(t),-sin(t)),(sin(t),cos(t))). Its two displacement singular values are both 2 times abs(sin(t/2)). In the matching proof a rotation through t in the closed interval from zero to pi contributes 2 f_p(t).]
-  {MatchingPlanarRotation}{\symglyph{PlanarRotationBase}_t}{fg}{local}{Planar rotation through the indicated angle.}
+  {MatchingPlanarRotation}{\symglyph{PlanarRotationBase}_t}{fg}{local}{Planar rotation through the indicated angle.}{unitary-operator}
 % Statistical application / operator provenance.
-\dkDeclareSymbol{Sigma}{\Sigma}{old}{local}{Population covariance matrix.}
-\dkDeclareSymbol{SigmaHat}{\widehat\Sigma}{current}{local}{Estimated or perturbed covariance matrix.}
-\dkDeclareSymbol{YWSV}{V}{wanted}{local}{Orthonormal coordinates for the population eigenspace in the statistical application.}
-\dkDeclareSymbol{YWSVhat}{\widehat V}{trialframe}{local}{Estimated eigenspace frame in the statistical application.}
+\dkDeclareSymbol{Sigma}{\Sigma}{old}{local}{Population covariance matrix.}{matrix}
+\dkDeclareSymbol{SigmaHat}{\widehat\Sigma}{current}{local}{Estimated or perturbed covariance matrix.}{matrix}
+\dkDeclareSymbol{YWSV}{V}{wanted}{local}{Orthonormal coordinates for the population eigenspace in the statistical application.}{isometric-embedding}
+\dkDeclareSymbol{YWSVhat}{\widehat V}{trialframe}{local}{Estimated eigenspace frame in the statistical application.}{isometric-embedding}
 
 % Figure-specific objects retain their own meanings when bare letters overlap.
 \dkDeclareSymbol[Signed rotation angle phi of the displayed map on its invariant real two-plane. At theta = pi/4 the direct rotation turns its two principal planes by opposite signed angles of magnitude pi/4; the competitor turns its moving plane by pi/2 and fixes its other plane.]
-  {PlaneRotationAngle}{\varphi}{sine}{local}{Signed rotation angle of the orthogonal map on the displayed invariant plane.}
+  {PlaneRotationAngle}{\varphi}{sine}{local}{Signed rotation angle of the orthogonal map on the displayed invariant plane.}{angle}
 \dkDeclareSymbol[Unit vector q in the displayed invariant plane. The map T is the direct rotation D or the competitor W in that panel; Tq is the image and (I - T)q = q - Tq is the displacement.]
-  {FigureInput}{q}{ambient}{local}{Unit input to the orthogonal map shown in this invariant-plane panel.}
+  {FigureInput}{q}{ambient}{local}{Unit input to the orthogonal map shown in this invariant-plane panel.}{vector}
 \dkDeclareSymbol[Image Tq of the panel unit input q under T = D or W. Both q and Tq lie on the unit circle; the green displacement arrow joins Tq to q, so it represents q - Tq.]
-  {FigureImage}{Tq}{wantedvector}{local}{Image of the unit input under the orthogonal map shown in this panel.}
+  {FigureImage}{Tq}{wantedvector}{local}{Image of the unit input under the orthogonal map shown in this panel.}{vector}
 \dkDeclareSymbol[Displacement (I - T)q = q - Tq, drawn from the image Tq to the unit input q. On a plane rotated through phi its length is 2 |sin(phi/2)|; it vanishes on a fixed plane.]
-  {DisplacementVector}{(I-T)q}{displacement}{local}{Difference between a unit input and its image under the displayed orthogonal map.}
+  {DisplacementVector}{(I-T)q}{displacement}{local}{Difference between a unit input and its image under the displayed orthogonal map.}{vector}
 \dkDeclareSymbol[First principal plane Pi_1 = span(e_0, e_3) for the source-target pair in the real four-dimensional counterexample. At theta = pi/4 the direct rotation acts on this plane by a quarter of pi, with displacement singular value sqrt(2 - sqrt(2)).]
-  {CounterPrincipalOne}{\Pi_1}{fg}{glossary}{First principal plane in the real counterexample: the span of e0 and e3.}
+  {CounterPrincipalOne}{\Pi_1}{fg}{glossary}{First principal plane in the real counterexample: the span of e0 and e3.}{linear-subspace}
 \dkDeclareSymbol[Second principal plane Pi_2 = span(e_1, e_2) for the source-target pair in the real four-dimensional counterexample. The direct rotation acts by the same angle magnitude as on Pi_1, with the opposite sign in the displayed plane coordinates.]
-  {CounterPrincipalTwo}{\Pi_2}{fg}{glossary}{Second principal plane in the real counterexample: the span of e1 and e2.}
+  {CounterPrincipalTwo}{\Pi_2}{fg}{glossary}{Second principal plane in the real counterexample: the span of e1 and e2.}{linear-subspace}
 \dkDeclareSymbol[Moving plane M = range(W - I) = span(e_0 + e_2, e_1 + e_3) for the competitor. W rotates it by 2 theta; at theta = pi/4 the two displacement singular values contributed by this plane are both sqrt(2).]
-  {CounterMovingPlane}{M}{ambient}{glossary}{Moving plane of the competing transporter: the range of W minus the identity.}
+  {CounterMovingPlane}{M}{ambient}{glossary}{Moving plane of the competing transporter: the range of W minus the identity.}{linear-subspace}
 \dkDeclareSymbol[Fixed plane Z = kernel(W - I) = span(e_0 - e_2, e_1 - e_3) for the competitor. W acts as the identity here, so this plane contributes two zero displacement singular values.]
-  {CounterFixedPlane}{Z}{ambient}{glossary}{Fixed plane of the competing transporter: the kernel of W minus the identity.}
+  {CounterFixedPlane}{Z}{ambient}{glossary}{Fixed plane of the competing transporter: the kernel of W minus the identity.}{linear-subspace}
 \dkDeclareSymbol[Direct-rotation displacement singular value a = 2 sin(pi/8) = sqrt(2 - sqrt(2)) at theta = pi/4. Each of its two principal planes contributes two copies, giving trace displacement 4a.]
-  {CounterChordA}{a}{displacement}{glossary}{Direct-rotation displacement singular value in the counterexample: sqrt(2 - sqrt(2)).}
+  {CounterChordA}{a}{displacement}{glossary}{Direct-rotation displacement singular value in the counterexample: sqrt(2 - sqrt(2)).}{scalar}
 \dkDeclareSymbol[Competitor displacement singular value b = 2 sin(pi/4) = sqrt(2) at theta = pi/4. Its moving plane contributes two copies; the fixed plane contributes two zeros, giving trace displacement 2b.]
-  {CounterChordB}{b}{displacement}{glossary}{Competing-transporter displacement singular value in the counterexample: square root of 2.}
+  {CounterChordB}{b}{displacement}{glossary}{Competing-transporter displacement singular value in the counterexample: square root of 2.}{scalar}
 \dkDeclareSymbol[Singular value s_j(I - T) of the full ambient displacement, ordered from largest to smallest. Each rotating real two-plane contributes two values 2 |sin(phi/2)|; fixed directions contribute zeros. Their sum is the trace cost.]
-  {DisplacementSingular}{\symglyph{SingularValueBase}_j}{displacement}{local}{An individual singular value of the full displacement from the identity.}
+  {DisplacementSingular}{\symglyph{SingularValueBase}_j}{displacement}{local}{An individual singular value of the full displacement from the identity.}{scalar}
 \dkDeclareSymbol[Edge weight g_ij = s_i + s_j - e_ij, the difference between the cost of two singletons and the paired cost. A matching has total cost C_0 minus the sum of its edge weights, with C_0 = sum_i s_i. Maximizing this sum gives the minimum transport cost; edges of negative weight may be omitted.]
-  {MatchingEdgeWeight}{g_{ij}}{current}{glossary}{Edge weight: the cost of two singletons minus their paired cost.}
+  {MatchingEdgeWeight}{g_{ij}}{current}{glossary}{Edge weight: the cost of two singletons minus their paired cost.}{scalar-weight}
 \dkDeclareSymbol[Total trace-norm displacement cost. For a transporter W, C(W) = ||I - W||_1, the sum of its displacement singular values. For a matching M, C(M) is the sum of its paired and unmatched singleton costs.]
-  {TraceCost}{C}{norm}{glossary}{Trace-norm displacement cost of the indicated orthogonal transporter or matching.}
+  {TraceCost}{C}{norm}{glossary}{Trace-norm displacement cost of the indicated orthogonal transporter or matching.}{scalar-cost}
 
 % Spectral values have their own key, distinct from an operator block.
-\dkDeclareSymbol[Spectral parameter lambda of a self-adjoint operator. In a finite-dimensional eigenvalue list lambda_j(A) it denotes an individual eigenvalue; in A = integral lambda dE(lambda), it is the real integration variable.]{SpectralValue}{\lambda}{wantedspectrum}{local}{Real spectral parameter or individual eigenvalue of a self-adjoint operator.}
+\dkDeclareSymbol[Spectral parameter lambda of a self-adjoint operator. In a finite-dimensional eigenvalue list lambda_j(A) it denotes an individual eigenvalue; in A = integral lambda dE(lambda), it is the real integration variable.]{SpectralValue}{\lambda}{wantedspectrum}{local}{Real spectral parameter or individual eigenvalue of a self-adjoint operator.}{scalar}
 
 
 
@@ -502,35 +541,35 @@
 % These are local (non-glossary) unless promoted explicitly by the author.
 % IdentityTwo and IdentityFour derive their I from Identity. Singular-value
 % registrations derive s_j from SingularValueBase; SingletonCost has its own s.
-\dkDeclareSymbol[Identity operator on the vector or Hilbert space in context. Its dimension is inferred from the expression and need not be finite.]{Identity}{I}{plain}{local}{Identity operator on the space in context.}
-\dkDeclareSymbol[Two-by-two identity matrix, acting on a two-dimensional coordinate space.]{IdentityTwo}{\symglyph{Identity}_2}{plain}{local}{Two-by-two identity matrix.}
-\dkDeclareSymbol[Four-by-four identity matrix, acting on a four-dimensional coordinate space.]{IdentityFour}{\symglyph{Identity}_4}{plain}{local}{Four-by-four identity matrix.}
-\dkDeclareSymbol[Two-by-two zero matrix. Unlike the bold zero vector, this is a linear operator/matrix with two rows and two columns.]{ZeroMatrixTwo}{0_2}{plain}{local}{Two-by-two zero matrix.}
-\dkDeclareSymbol[The constant pi, the ratio of the circumference of a circle to its diameter. Angles in this article use radians.]{PiConstant}{\pi}{plain}{local}{The constant pi (angles are in radians).}
-\dkDeclareSymbol[The field of real numbers.]{RealField}{\mathbb R}{plain}{local}{The real numbers.}
-\dkDeclareSymbol[The field of complex numbers.]{ComplexField}{\mathbb C}{plain}{local}{The complex numbers.}
-\dkDeclareSymbol[Generic Hilbert space used in the two-projection discussion; distinct from the paper's ambient space symbol E in the sine-theta theorem.]{GeneralHilbertSpace}{\mathcal H}{plain}{local}{Generic Hilbert space in a local discussion.}
-\dkDeclareSymbol[The spectrum sigma(T) of an operator T: the set of complex scalars for which T minus the scalar identity is not boundedly invertible. For self-adjoint T the spectrum is real.]{SpectrumSymbol}{\sigma}{plain}{local}{Spectrum of an operator.}
-\dkDeclareSymbol[Base letter for singular values, presently s. It is distinct from the base s for matching singleton costs.]{SingularValueBase}{s}{plain}{local}{Base letter for singular values.}
-\dkDeclareSymbol[Ordered singular value s_j(T), equal to the j-th eigenvalue of |T| for a finite matrix; distinguish this from the matching singleton cost s_j.]{SingularValueS}{\symglyph{SingularValueBase}_j}{plain}{glossary}{The j-th singular value, under the currently printed s_j convention.}
-\dkDeclareSymbol[Alternate indexed singular-value notation sigma_j(T). The current manuscript also uses s_j(T); this registered alias is available for a later deliberate notation decision.]{SingularValueSigma}{\sigma_j}{plain}{local}{Indexed singular value under the sigma_j convention.}
-\dkDeclareSymbol[Operator norm ||T||_op, the supremum of ||Tx|| over unit vectors x.]{OperatorNormNotation}{\|\cdot\|_{\mathrm{op}}}{plain}{glossary}{Operator norm.}
-\dkDeclareSymbol[Frobenius norm ||T||_F, the square root of the sum of squared matrix entries, equal to the finite-dimensional Hilbert--Schmidt norm.]{FrobeniusNormNotation}{\|\cdot\|_F}{plain}{glossary}{Frobenius norm.}
-\dkDeclareSymbol[Trace norm ||T||_1, the sum of singular values when finite.]{TraceNormNotation}{\|\cdot\|_1}{plain}{glossary}{Trace (nuclear) norm.}
-\dkDeclareSymbol[Hilbert--Schmidt norm ||T||_HS, the square root of the sum of squared singular values when finite.]{HilbertSchmidtNormNotation}{\|\cdot\|_{\mathrm{HS}}}{plain}{local}{Hilbert--Schmidt norm.}
-\dkDeclareSymbol[Ky Fan j-norm, the sum of the largest j singular values.]{KyFanNormNotation}{\|\cdot\|_{(j)}}{plain}{glossary}{Ky Fan j-norm.}
-\dkDeclareSymbol[Interval/exterior spectral separation predicate I_delta(B,C), specifying a central closed interval separated by delta from the other operator's spectrum.]{IntervalSeparation}{\mathcal I}{plain}{local}{Interval/exterior separation predicate.}
-\dkDeclareSymbol[Ordered spectral separation predicate O_delta(B,C), requiring one self-adjoint operator to lie below a spectral threshold and the other above it by at least delta.]{OrderedSeparation}{\mathcal O}{plain}{local}{Ordered spectral separation predicate.}
-\dkDeclareSymbol[Positive parameter epsilon controlling a small perturbation in the two-dimensional eigenvalue example.]{EigenvalueExampleEpsilon}{\varepsilon}{plain}{local}{Small positive parameter in the eigenvalue-example matrices.}
-\dkDeclareSymbol[Positive lower bound epsilon for the trial-coordinate map E_0, as in E_0* E_0 >= epsilon squared times the identity.]{FrameLowerBoundEpsilon}{\varepsilon}{plain}{local}{Lower-bound parameter for the trial-coordinate embedding.}
-\dkDeclareSymbol[Rotation angle vartheta of a planar orthogonal block in the matching-proof first-variation calculation.]{MatchingPlanarAngle}{\vartheta}{plain}{local}{Planar rotation angle in the matching-proof calculation.}
+\dkDeclareSymbol[Identity operator on the vector or Hilbert space in context. Its dimension is inferred from the expression and need not be finite.]{Identity}{I}{plain}{local}{Identity operator on the space in context.}{identity-operator}
+\dkDeclareSymbol[Two-by-two identity matrix, acting on a two-dimensional coordinate space.]{IdentityTwo}{\symglyph{Identity}_2}{plain}{local}{Two-by-two identity matrix.}{identity-operator}
+\dkDeclareSymbol[Four-by-four identity matrix, acting on a four-dimensional coordinate space.]{IdentityFour}{\symglyph{Identity}_4}{plain}{local}{Four-by-four identity matrix.}{identity-operator}
+\dkDeclareSymbol[Two-by-two zero matrix. Unlike the bold zero vector, this is a linear operator/matrix with two rows and two columns.]{ZeroMatrixTwo}{0_2}{plain}{local}{Two-by-two zero matrix.}{matrix}
+\dkDeclareSymbol[The constant pi, the ratio of the circumference of a circle to its diameter. Angles in this article use radians.]{PiConstant}{\pi}{plain}{local}{The constant pi (angles are in radians).}{constant}
+\dkDeclareSymbol[The field of real numbers.]{RealField}{\mathbb R}{plain}{local}{The real numbers.}{field}
+\dkDeclareSymbol[The field of complex numbers.]{ComplexField}{\mathbb C}{plain}{local}{The complex numbers.}{field}
+\dkDeclareSymbol[Generic Hilbert space used in the two-projection discussion; distinct from the paper's ambient space symbol E in the sine-theta theorem.]{GeneralHilbertSpace}{\mathcal H}{plain}{local}{Generic Hilbert space in a local discussion.}{hilbert-space}
+\dkDeclareSymbol[The spectrum sigma(T) of an operator T: the set of complex scalars for which T minus the scalar identity is not boundedly invertible. For self-adjoint T the spectrum is real.]{SpectrumSymbol}{\sigma}{plain}{local}{Spectrum of an operator.}{operator-notation}
+\dkDeclareSymbol[Base letter for singular values, presently s. It is distinct from the base s for matching singleton costs.]{SingularValueBase}{s}{plain}{local}{Base letter for singular values.}{notation-base}
+\dkDeclareSymbol[Ordered singular value s_j(T), equal to the j-th eigenvalue of |T| for a finite matrix; distinguish this from the matching singleton cost s_j.]{SingularValueS}{\symglyph{SingularValueBase}_j}{plain}{glossary}{The j-th singular value, under the currently printed s_j convention.}{scalar}
+\dkDeclareSymbol[Alternate indexed singular-value notation sigma_j(T). The current manuscript also uses s_j(T); this registered alias is available for a later deliberate notation decision.]{SingularValueSigma}{\sigma_j}{plain}{local}{Indexed singular value under the sigma_j convention.}{scalar}
+\dkDeclareSymbol[Operator norm ||T||_op, the supremum of ||Tx|| over unit vectors x.]{OperatorNormNotation}{\|\cdot\|_{\mathrm{op}}}{plain}{glossary}{Operator norm.}{norm}
+\dkDeclareSymbol[Frobenius norm ||T||_F, the square root of the sum of squared matrix entries, equal to the finite-dimensional Hilbert--Schmidt norm.]{FrobeniusNormNotation}{\|\cdot\|_F}{plain}{glossary}{Frobenius norm.}{norm}
+\dkDeclareSymbol[Trace norm ||T||_1, the sum of singular values when finite.]{TraceNormNotation}{\|\cdot\|_1}{plain}{glossary}{Trace (nuclear) norm.}{norm}
+\dkDeclareSymbol[Hilbert--Schmidt norm ||T||_HS, the square root of the sum of squared singular values when finite.]{HilbertSchmidtNormNotation}{\|\cdot\|_{\mathrm{HS}}}{plain}{local}{Hilbert--Schmidt norm.}{norm}
+\dkDeclareSymbol[Ky Fan j-norm, the sum of the largest j singular values.]{KyFanNormNotation}{\|\cdot\|_{(j)}}{plain}{glossary}{Ky Fan j-norm.}{norm}
+\dkDeclareSymbol[Interval/exterior spectral separation predicate I_delta(B,C), specifying a central closed interval separated by delta from the other operator's spectrum.]{IntervalSeparation}{\mathcal I}{plain}{local}{Interval/exterior separation predicate.}{predicate}
+\dkDeclareSymbol[Ordered spectral separation predicate O_delta(B,C), requiring one self-adjoint operator to lie below a spectral threshold and the other above it by at least delta.]{OrderedSeparation}{\mathcal O}{plain}{local}{Ordered spectral separation predicate.}{predicate}
+\dkDeclareSymbol[Positive parameter epsilon controlling a small perturbation in the two-dimensional eigenvalue example.]{EigenvalueExampleEpsilon}{\varepsilon}{plain}{local}{Small positive parameter in the eigenvalue-example matrices.}{scalar}
+\dkDeclareSymbol[Positive lower bound epsilon for the trial-coordinate map E_0, as in E_0* E_0 >= epsilon squared times the identity.]{FrameLowerBoundEpsilon}{\varepsilon}{plain}{local}{Lower-bound parameter for the trial-coordinate embedding.}{scalar}
+\dkDeclareSymbol[Rotation angle vartheta of a planar orthogonal block in the matching-proof first-variation calculation.]{MatchingPlanarAngle}{\vartheta}{plain}{local}{Planar rotation angle in the matching-proof calculation.}{angle}
 
 
 % Ordinary named mathematical operators already used throughout the manuscript.
 % Keeping these here makes their spelling a single editorial choice.
-\dkDeclareSymbol[Range of a linear operator: the set of its output vectors.]{RangeOperator}{\operatorname{ran}}{plain}{local}{Range (image) of an operator.}
-\dkDeclareSymbol[Kernel (null space) of a linear operator: inputs mapped to zero.]{KernelOperator}{\operatorname{ker}}{plain}{local}{Kernel (null space) of an operator.}
-\dkDeclareSymbol[Domain of an operator: the vectors on which the operator is defined, important for unbounded operators.]{DomainOperator}{\operatorname{dom}}{plain}{local}{Domain of an operator.}
+\dkDeclareSymbol[Range of a linear operator: the set of its output vectors.]{RangeOperator}{\operatorname{ran}}{plain}{local}{Range (image) of an operator.}{operator-notation}
+\dkDeclareSymbol[Kernel (null space) of a linear operator: inputs mapped to zero.]{KernelOperator}{\operatorname{ker}}{plain}{local}{Kernel (null space) of an operator.}{operator-notation}
+\dkDeclareSymbol[Domain of an operator: the vectors on which the operator is defined, important for unbounded operators.]{DomainOperator}{\operatorname{dom}}{plain}{local}{Domain of an operator.}{operator-notation}
 \DeclareRobustCommand{\DKRange}{\sym{RangeOperator}}
 \DeclareRobustCommand{\DKKernel}{\sym{KernelOperator}}
 \DeclareRobustCommand{\DKDom}{\sym{DomainOperator}}
@@ -544,52 +583,90 @@
 \DeclareRobustCommand{\dkKyFanNorm}[2]{\like{KyFanNormNotation}{\|#1\|_{(#2)}}}
 \DeclareRobustCommand{\dkSchattenNorm}[2]{\like{SchattenNormNotation}{\|#1\|_{S_{#2}}}}
 
-\dkDeclareSymbol[Schatten p-norm ||T||_{S_p}, obtained from the l^p-norm of the singular values and finite for operators in the Schatten p-class.]{SchattenNormNotation}{\|\cdot\|_{S_p}}{plain}{local}{Schatten p-norm.}
+\dkDeclareSymbol[Schatten p-norm ||T||_{S_p}, obtained from the l^p-norm of the singular values and finite for operators in the Schatten p-class.]{SchattenNormNotation}{\|\cdot\|_{S_p}}{plain}{local}{Schatten p-norm.}{norm}
 
 
-\dkDeclareSymbol[Positive modulus of an operator T: |T| = (T* T)^(1/2).]{OperatorModulusNotation}{|\cdot|}{plain}{glossary}{Positive modulus of an operator.}
-\dkDeclareSymbol[Linear span of the indicated vectors, i.e. the smallest linear subspace that contains them.]{SpanOperator}{\operatorname{span}}{plain}{local}{Linear span of vectors.}
-\dkDeclareSymbol[Diagonal or block-diagonal matrix/operator with the displayed entries or blocks.]{DiagonalOperator}{\operatorname{diag}}{plain}{local}{Diagonal or block-diagonal operator.}
-\dkDeclareSymbol[Trace of a trace-class operator, or ordinary matrix trace in finite dimensions.]{TraceOperator}{\operatorname{tr}}{plain}{local}{Trace of an operator.}
-\dkDeclareSymbol[Dimension of a vector space or subspace.]{DimensionOperator}{\dim}{plain}{local}{Dimension of a vector space.}
-\dkDeclareSymbol[Rank of a linear map or matrix: dimension of its range.]{RankOperator}{\operatorname{rank}}{plain}{local}{Rank of a linear map or matrix.}
-\dkDeclareSymbol[Distance between sets of spectral values: the infimum of pairwise distances.]{SpectralDistanceOperator}{\operatorname{dist}}{plain}{local}{Distance between two spectral sets.}
+\dkDeclareSymbol[Positive modulus of an operator T: |T| = (T* T)^(1/2).]{OperatorModulusNotation}{|\cdot|}{plain}{glossary}{Positive modulus of an operator.}{operator-notation}
+\dkDeclareSymbol[Linear span of the indicated vectors, i.e. the smallest linear subspace that contains them.]{SpanOperator}{\operatorname{span}}{plain}{local}{Linear span of vectors.}{operator-notation}
+\dkDeclareSymbol[Diagonal or block-diagonal matrix/operator with the displayed entries or blocks.]{DiagonalOperator}{\operatorname{diag}}{plain}{local}{Diagonal or block-diagonal operator.}{linear-operator}
+\dkDeclareSymbol[Trace of a trace-class operator, or ordinary matrix trace in finite dimensions.]{TraceOperator}{\operatorname{tr}}{plain}{local}{Trace of an operator.}{operator-notation}
+\dkDeclareSymbol[Dimension of a vector space or subspace.]{DimensionOperator}{\dim}{plain}{local}{Dimension of a vector space.}{operator-notation}
+\dkDeclareSymbol[Rank of a linear map or matrix: dimension of its range.]{RankOperator}{\operatorname{rank}}{plain}{local}{Rank of a linear map or matrix.}{operator-notation}
+\dkDeclareSymbol[Distance between sets of spectral values: the infimum of pairwise distances.]{SpectralDistanceOperator}{\operatorname{dist}}{plain}{local}{Distance between two spectral sets.}{operator-notation}
 \DeclareRobustCommand{\dkModulus}[1]{\like{OperatorModulusNotation}{|#1|}}
 
 % Context-specific glyphs previously hidden in variants of other semantic keys.
 % Keeping both the roles and the exact printed forms makes collisions explicit.
-\dkDeclareSymbol[Nonzero vector x tested in the Rayleigh quotient, before imposing unit length.]{RayleighTestVector}{x}{trialvector}{local}{Test vector in the Rayleigh quotient.}
-\dkDeclareSymbol[Positive cosine block C in the generic two-projection decomposition of Halmos; C and S commute and C squared plus S squared is the identity.]{HalmosCosineBlock}{C}{anglecos}{local}{Cosine block in the Halmos two-projection representation.}
-\dkDeclareSymbol[Positive sine block S in the generic two-projection decomposition of Halmos; C and S commute and C squared plus S squared is the identity.]{HalmosSineBlock}{S}{sineoperator}{local}{Sine block in the Halmos two-projection representation.}
-\dkDeclareSymbol[Riesz spectral projection P_Gamma defined by a contour Gamma that encloses selected spectral values.]{RieszProjection}{P_{\symglyph{RieszContour}}}{wantedprojection}{local}{Spectral projection associated with a contour Gamma.}
-\dkDeclareSymbol[Historical Sylvester right-hand coefficient matrix A, in B X - X A = Y. Distinct from the current paper's reference operator A.]{HistoricalSylvesterRight}{A}{trialspectrum}{local}{Right-hand coefficient A in the historical Sylvester equation.}
-\dkDeclareSymbol[Scalar coefficient b in the Sylvester prototype (b-a)x=y, with separated scalar spectral values a and b.]{SylvesterScalarLeft}{b}{unwantedspectrum}{local}{Scalar left coefficient b in a Sylvester equation.}
-\dkDeclareSymbol[Scalar coefficient a in the Sylvester prototype (b-a)x=y.]{SylvesterScalarRight}{a}{trialspectrum}{local}{Scalar right coefficient a in a Sylvester equation.}
-\dkDeclareSymbol[Scalar unknown x in the Sylvester prototype (b-a)x=y.]{SylvesterScalarUnknown}{x}{sylvester}{local}{Scalar unknown x in a Sylvester equation.}
-\dkDeclareSymbol[Scalar right side y in the Sylvester prototype (b-a)x=y.]{SylvesterScalarRHS}{y}{resid}{local}{Scalar right side y in a Sylvester equation.}
-\dkDeclareSymbol[Source subspace K of a real Euclidean space in the matching proof; an orthogonal transporter sends K onto L.]{MatchingSourceSubspace}{K}{trial}{local}{Source subspace K in the matching proof.}
-\dkDeclareSymbol[Target subspace L of a real Euclidean space in the matching proof; an orthogonal transporter sends K onto L.]{MatchingTargetSubspace}{L}{wanted}{local}{Target subspace L in the matching proof.}
-\dkDeclareSymbol[Orthogonal projection P_L onto the matching proof's target subspace L.]{MatchingTargetProjection}{P_L}{wantedprojection}{local}{Orthogonal projection onto the matching target L.}
-\dkDeclareSymbol[Real two-dimensional orthogonal group O(2): planar rotations and reflections.]{PlanarOrthogonalGroup}{O(2)}{fg}{local}{Orthogonal matrices of size two.}
-\dkDeclareSymbol[Base letter R used to denote planar rotation operators R_t in the matching proof.]{PlanarRotationBase}{R}{fg}{local}{Base letter for planar rotations.}
-\dkDeclareSymbol[Planar rotation R_(r+s) through the sum of scalar phases r and s.]{MatchingPlanarRotationSum}{\symglyph{PlanarRotationBase}_{r+s}}{fg}{local}{Planar rotation through phase r+s.}
-\dkDeclareSymbol[Planar rotation R_gamma through phase gamma in the block rotation calculation.]{MatchingPlanarRotationGamma}{\symglyph{PlanarRotationBase}_{\symglyph{MatchingPhaseGamma}}}{fg}{local}{Planar rotation through phase gamma.}
+\dkDeclareSymbol[Nonzero vector x tested in the Rayleigh quotient, before imposing unit length.]{RayleighTestVector}{x}{trialvector}{local}{Test vector in the Rayleigh quotient.}{vector}
+\dkDeclareSymbol[Positive cosine block C in the generic two-projection decomposition of Halmos; C and S commute and C squared plus S squared is the identity.]{HalmosCosineBlock}{C}{anglecos}{local}{Cosine block in the Halmos two-projection representation.}{linear-operator}
+\dkDeclareSymbol[Positive sine block S in the generic two-projection decomposition of Halmos; C and S commute and C squared plus S squared is the identity.]{HalmosSineBlock}{S}{sineoperator}{local}{Sine block in the Halmos two-projection representation.}{linear-operator}
+\dkDeclareSymbol[Riesz spectral projection P_Gamma defined by a contour Gamma that encloses selected spectral values.]{RieszProjection}{P_{\symglyph{RieszContour}}}{wantedprojection}{local}{Spectral projection associated with a contour Gamma.}{orthogonal-projection}
+\dkDeclareSymbol[Historical Sylvester right-hand coefficient matrix A, in B X - X A = Y. Distinct from the current paper's reference operator A.]{HistoricalSylvesterRight}{A}{trialspectrum}{local}{Right-hand coefficient A in the historical Sylvester equation.}{self-adjoint-operator}
+\dkDeclareSymbol[Scalar coefficient b in the Sylvester prototype (b-a)x=y, with separated scalar spectral values a and b.]{SylvesterScalarLeft}{b}{unwantedspectrum}{local}{Scalar left coefficient b in a Sylvester equation.}{scalar}
+\dkDeclareSymbol[Scalar coefficient a in the Sylvester prototype (b-a)x=y.]{SylvesterScalarRight}{a}{trialspectrum}{local}{Scalar right coefficient a in a Sylvester equation.}{scalar}
+\dkDeclareSymbol[Scalar unknown x in the Sylvester prototype (b-a)x=y.]{SylvesterScalarUnknown}{x}{sylvester}{local}{Scalar unknown x in a Sylvester equation.}{scalar}
+\dkDeclareSymbol[Scalar right side y in the Sylvester prototype (b-a)x=y.]{SylvesterScalarRHS}{y}{resid}{local}{Scalar right side y in a Sylvester equation.}{scalar}
+\dkDeclareSymbol[Source subspace K of a real Euclidean space in the matching proof; an orthogonal transporter sends K onto L.]{MatchingSourceSubspace}{K}{trial}{local}{Source subspace K in the matching proof.}{linear-subspace}
+\dkDeclareSymbol[Target subspace L of a real Euclidean space in the matching proof; an orthogonal transporter sends K onto L.]{MatchingTargetSubspace}{L}{wanted}{local}{Target subspace L in the matching proof.}{linear-subspace}
+\dkDeclareSymbol[Orthogonal projection P_L onto the matching proof's target subspace L.]{MatchingTargetProjection}{P_L}{wantedprojection}{local}{Orthogonal projection onto the matching target L.}{orthogonal-projection}
+\dkDeclareSymbol[Real two-dimensional orthogonal group O(2): planar rotations and reflections.]{PlanarOrthogonalGroup}{O(2)}{fg}{local}{Orthogonal matrices of size two.}{group}
+\dkDeclareSymbol[Base letter R used to denote planar rotation operators R_t in the matching proof.]{PlanarRotationBase}{R}{fg}{local}{Base letter for planar rotations.}{notation-base}
+\dkDeclareSymbol[Planar rotation R_(r+s) through the sum of scalar phases r and s.]{MatchingPlanarRotationSum}{\symglyph{PlanarRotationBase}_{r+s}}{fg}{local}{Planar rotation through phase r+s.}{unitary-operator}
+\dkDeclareSymbol[Planar rotation R_gamma through phase gamma in the block rotation calculation.]{MatchingPlanarRotationGamma}{\symglyph{PlanarRotationBase}_{\symglyph{MatchingPhaseGamma}}}{fg}{local}{Planar rotation through phase gamma.}{unitary-operator}
 
 % Specific symbols in the historical and appendix examples. They retain their
 % existing black-ink notation but receive locally accurate hover definitions.
-\dkDeclareSymbol[Contour Gamma, a positively oriented closed curve in the resolvent set enclosing a selected isolated spectral cluster.]{RieszContour}{\Gamma}{plain}{local}{Contour used in the Riesz spectral-projection formula.}
-\dkDeclareSymbol[Even integer nu in a tested Ky Fan comparison, with nu/2 principal-plane terms on the right side.]{KyFanEvenIndex}{\nu}{plain}{local}{Even integer in the principal-plane Ky Fan comparison.}
-\dkDeclareSymbol[Orthogonal projection Omega_k onto the k-th principal plane in the published displacement comparison.]{PrincipalPlaneProjectionBase}{\Omega}{plain}{local}{Projection onto the indicated principal plane.}
-\dkDeclareSymbol[Scalar gap threshold gamma in the ordered Sylvester spectral separation B >= (gamma+delta)I and C <= gamma I.]{SylvesterGapThreshold}{\gamma}{plain}{local}{Spectral separation threshold in a Sylvester estimate.}
-\dkDeclareSymbol[Projection Omega_t from a net or sequence that converges strongly to the identity in the singular-value approximation lemma.]{StrongApproxProjection}{\Omega_t}{plain}{local}{Orthogonal projection converging strongly to the identity.}
-\dkDeclareSymbol[First orthogonal projection Omega used in the two-block pinching inequality for a unitarily invariant norm.]{PinchingProjectionOne}{\Omega}{plain}{local}{First projection in the pinching inequality.}
-\dkDeclareSymbol[Second orthogonal projection Upsilon used in the two-block pinching inequality for a unitarily invariant norm.]{PinchingProjectionTwo}{\Upsilon}{plain}{local}{Second projection in the pinching inequality.}
-\dkDeclareSymbol[Finite-rank projection Gamma used to retain the image of a chosen finite-rank compression K Psi.]{CompressionProjectionImage}{\Gamma}{plain}{local}{Range projection in the finite-rank compression lemma.}
-\dkDeclareSymbol[Finite-rank projection Psi used to select input vectors in a nearly maximizing singular-value compression.]{CompressionProjectionInput}{\Psi}{plain}{local}{Domain projection in the finite-rank compression lemma.}
-\dkDeclareSymbol[Small positive tolerance eta in the finite-rank compression approximation estimate.]{CompressionTolerance}{\eta}{plain}{local}{Tolerance controlling the off-diagonal compression norm.}
+\dkDeclareSymbol[Contour Gamma, a positively oriented closed curve in the resolvent set enclosing a selected isolated spectral cluster.]{RieszContour}{\Gamma}{plain}{local}{Contour used in the Riesz spectral-projection formula.}{contour}
+\dkDeclareSymbol[Even integer nu in a tested Ky Fan comparison, with nu/2 principal-plane terms on the right side.]{KyFanEvenIndex}{\nu}{plain}{local}{Even integer in the principal-plane Ky Fan comparison.}{scalar}
+\dkDeclareSymbol[Orthogonal projection Omega_k onto the k-th principal plane in the published displacement comparison.]{PrincipalPlaneProjectionBase}{\Omega}{plain}{local}{Projection onto the indicated principal plane.}{notation-base}
+\dkDeclareSymbol[Scalar gap threshold gamma in the ordered Sylvester spectral separation B >= (gamma+delta)I and C <= gamma I.]{SylvesterGapThreshold}{\gamma}{plain}{local}{Spectral separation threshold in a Sylvester estimate.}{scalar}
+\dkDeclareSymbol[Projection Omega_t from a net or sequence that converges strongly to the identity in the singular-value approximation lemma.]{StrongApproxProjection}{\Omega_t}{plain}{local}{Orthogonal projection converging strongly to the identity.}{orthogonal-projection}
+\dkDeclareSymbol[First orthogonal projection Omega used in the two-block pinching inequality for a unitarily invariant norm.]{PinchingProjectionOne}{\Omega}{plain}{local}{First projection in the pinching inequality.}{orthogonal-projection}
+\dkDeclareSymbol[Second orthogonal projection Upsilon used in the two-block pinching inequality for a unitarily invariant norm.]{PinchingProjectionTwo}{\Upsilon}{plain}{local}{Second projection in the pinching inequality.}{orthogonal-projection}
+\dkDeclareSymbol[Finite-rank projection Gamma used to retain the image of a chosen finite-rank compression K Psi.]{CompressionProjectionImage}{\Gamma}{plain}{local}{Range projection in the finite-rank compression lemma.}{orthogonal-projection}
+\dkDeclareSymbol[Finite-rank projection Psi used to select input vectors in a nearly maximizing singular-value compression.]{CompressionProjectionInput}{\Psi}{plain}{local}{Domain projection in the finite-rank compression lemma.}{orthogonal-projection}
+\dkDeclareSymbol[Small positive tolerance eta in the finite-rank compression approximation estimate.]{CompressionTolerance}{\eta}{plain}{local}{Tolerance controlling the off-diagonal compression norm.}{scalar}
 
-\dkDeclareSymbol[Rotation phase gamma in a planar block from the matching proof.]{MatchingPhaseGamma}{\gamma}{plain}{local}{Rotation phase gamma in the matching calculation.}
+\dkDeclareSymbol[Rotation phase gamma in a planar block from the matching proof.]{MatchingPhaseGamma}{\gamma}{plain}{local}{Rotation phase gamma in the matching calculation.}{scalar}
 
 % Two common indices with local mathematical meanings distinct from other deltas.
-\dkDeclareSymbol[Kronecker delta: delta_ij is one when the indices i and j agree and zero otherwise. This is not the spectral-gap parameter delta.]{KroneckerDelta}{\delta}{plain}{local}{Kronecker delta: equals 1 for equal indices and 0 otherwise.}
-\dkDeclareSymbol[Sign variable epsilon taking the values -1 and +1 in the factorization over two phase choices.]{PhaseSignChoice}{\epsilon}{plain}{local}{Sign variable taking values minus one and plus one.}
+\dkDeclareSymbol[Kronecker delta: delta_ij is one when the indices i and j agree and zero otherwise. This is not the spectral-gap parameter delta.]{KroneckerDelta}{\delta}{plain}{local}{Kronecker delta: equals 1 for equal indices and 0 otherwise.}{scalar}
+\dkDeclareSymbol[Sign variable epsilon taking the values -1 and +1 in the factorization over two phase choices.]{PhaseSignChoice}{\epsilon}{plain}{local}{Sign variable taking values minus one and plus one.}{scalar}
+
+% Documented notation correspondence. The source column is a faithful
+% transcription of each cited original context, NOT an asserted universal DK
+% meaning. The original A_0 is deliberately listed for two distinct roles:
+% its reference block and the comparison/trial operator. The source uses the
+% same printed symbol for both; this paper is free to distinguish them.
+\dkDeclareNotationSource{DK1970}{Davis and Kahan (1970), The Rotation of Eigenvectors by a Perturbation. III}{https://doi.org/10.1137/0707001}
+\dkDeclareNotationSource{Seelmann2019}{Seelmann (2019), Semidefinite Perturbations in the Subspace Perturbation Problem}{https://arxiv.org/abs/1708.02463}
+\dkDeclareNotationSource{Blechta2020}{Blechta (2020), Stability of Linear GMRES Convergence with Respect to Compact Perturbations}{https://arxiv.org/abs/2005.12960}
+% Arguments: {key}{source ID}{source glyph}{section or equation}{role-specific qualification}
+\dkDeclareNotationAlternative{A}{DK1970}{A}{\S1, (1.2)}{Reference self-adjoint operator.}
+\dkDeclareNotationAlternative{H}{DK1970}{H}{\S1, (1.2)}{Additive perturbation.}
+\dkDeclareNotationAlternative{Acurrent}{DK1970}{A+H}{\S1}{Perturbed operator.}
+\dkDeclareNotationAlternative{E0}{DK1970}{E_0}{\S1, (1.1)}{Source isometric frame.}
+\dkDeclareNotationAlternative{E1}{DK1970}{E_1}{\S1, (1.1)}{Reference complement frame.}
+\dkDeclareNotationAlternative{F0}{DK1970}{F_0}{\S1}{Exact-target frame.}
+\dkDeclareNotationAlternative{F1}{DK1970}{F_1}{\S1}{Exact-target complement frame.}
+\dkDeclareNotationAlternative{ReferenceBlock0}{DK1970}{A_0}{\S1, (1.2)}{Reference source block.}
+\dkDeclareNotationAlternative{ReferenceBlock1}{DK1970}{A_1}{\S1, (1.2)}{Reference complement block.}
+\dkDeclareNotationAlternative{A0}{DK1970}{A_0}{\S1, residual discussion}{Residual comparison operator (the reference block in DK).}
+% We deliberately leave Lambda0 and Lambda1 without DK source-glyph metadata:
+% the available source transcription does not reliably preserve the source
+% accents/decorations on the perturbed spectral-block symbols.
+\dkDeclareNotationAlternative{Psource}{DK1970}{P}{\S1}{Reference/source projection.}
+\dkDeclareNotationAlternative{Qtarget}{DK1970}{Q}{\S1}{Target projection.}
+\dkDeclareNotationAlternative{Pexact}{DK1970}{Q}{\S1}{Exact-target projection.}
+\dkDeclareNotationAlternative{B}{DK1970}{B}{\S1, (1.2)}{Off-diagonal coupling block.}
+\dkDeclareNotationAlternative{Theta0}{DK1970}{\Theta_0}{\S1}{Source-side angle operator.}
+\dkDeclareNotationAlternative{Theta1}{DK1970}{\Theta_1}{\S1}{Complementary angle operator.}
+\dkDeclareNotationAlternative{Theta}{DK1970}{\Theta}{\S1}{Full angle operator.}
+\dkDeclareNotationAlternative{R}{DK1970}{R}{\S1, residual discussion}{Trial residual.}
+\dkDeclareNotationAlternative{Rrotation}{DK1970}{U}{\S1, (1.18)}{Canonical direct rotation.}
+\dkDeclareNotationAlternative{Wcompetitor}{DK1970}{V}{\S4}{Competing unitary transporter.}
+\dkDeclareNotationAlternative{delta}{DK1970}{\delta}{\S2}{Spectral separation parameter.}
+% Contemporary alternatives are recorded separately and do not enter the DK
+% correspondence table. Their citation locations must be individually checked.
+\dkDeclareNotationAlternative{Eambient}{Seelmann2019}{\mathcal H}{p.~1}{Ambient Hilbert space.}
+\dkDeclareNotationAlternative{SingularValueS}{Blechta2020}{\sigma_j}{Thm.~1.1}{Ordered singular values of a compact operator.}

@@ -85,6 +85,11 @@ that the article does not use.
 
 Register named mathematical objects, including local proof notation, in
 `math_symbol_colors.tex` and use their semantic macros for hover reminders.
+Each declaration must specify the mathematical type independently of its
+color and `glossary`/`local` status. For a source notation alternative, record
+the work, the exact source glyph, its section or equation, and its mathematical
+role. Do not infer alternatives from how familiar a letter looks; the
+Davis--Kahan comparison table is generated from these verified records.
 Neutral ink is appropriate for auxiliary objects. The printed notation table
 selects the symbols readers need for reference; it need not list every proof
 parameter. Keep definitions and notation changes in the shared registry.

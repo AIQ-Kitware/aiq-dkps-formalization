@@ -37,6 +37,7 @@ class Symbol:
     color: str
     glossary: str
     meaning: str
+    symbol_type: str
     hover: str
     line: int
 
@@ -70,7 +71,7 @@ def declarations(src: str) -> list[Symbol]:
         if src[pos] == "[":
             hover, pos = group(src, pos, "[", "]")
         args = []
-        for _ in range(5):
+        for _ in range(6):
             while pos < len(src) and src[pos].isspace():
                 pos += 1
             arg, pos = group(src, pos)
@@ -78,6 +79,24 @@ def declarations(src: str) -> list[Symbol]:
         out.append(Symbol(*args, hover, src.count("\n", 0, m.start()) + 1))
     return out
 
+
+# These records are authored in the symbol registry, not inferred from a
+# modern-notation preference. Each alternative must cite one named source and
+# one actual section, equation, page, or theorem in that source.
+SOURCE_START = re.compile(r"^\s*\\dkDeclareNotationSource\{", re.M)
+ALTERNATIVE_START = re.compile(r"^\s*\\dkDeclareNotationAlternative\{", re.M)
+
+def named_records(src: str, pattern: re.Pattern[str], arity: int) -> list[tuple[str, ...]]:
+    records = []
+    for m in pattern.finditer(src):
+        pos = m.end() - 1
+        fields = []
+        for j in range(arity):
+            while src[pos].isspace(): pos += 1
+            value, pos = group(src, pos)
+            fields.append(value)
+        records.append(tuple(fields))
+    return records
 
 def resolved_glyph(key: str, registry: dict[str, Symbol], stack: tuple[str, ...] = ()) -> str:
     if key in stack:
@@ -497,7 +516,7 @@ def discover_sources() -> tuple[list[str], list[str]]:
     return found,errors
 
 
-def output_report(reg: dict[str,Symbol], occurrences: list[Occurrence], spans: list[Span], errors: list[str], hashes: dict[str,str]) -> str:
+def output_report(reg: dict[str,Symbol], occurrences: list[Occurrence], spans: list[Span], errors: list[str], hashes: dict[str,str], sources: dict[str,tuple[str,str]], alternatives: list[tuple[str,str,str,str,str]]) -> str:
     semantic = [o for o in occurrences if o.kind in {"registered-key", "registered-glyph"}]
     raw = [o for o in occurrences if o.kind == "raw-symbol"]
     commands = [o for o in occurrences if o.kind == "raw-control"]
@@ -527,7 +546,8 @@ def output_report(reg: dict[str,Symbol], occurrences: list[Occurrence], spans: l
         "**Scope:** This is a source-wide *lexical* listing of TeX math-mode tokens in the active manuscript input graph, discovered recursively from `paper.tex`, including generated PGF figure labels. It is not an assertion that every mathematical object is semantically registered. Local proof variables and the meanings of unregistered expressions require editorial classification. The generated figures are inspected as rendered-source inputs; their Python generators remain the source of truth for rebuilding them.", "",
         "The companion `NOTATION_OCCURRENCES.csv` records every detected occurrence with its source file, line, column, and containing line. It includes standard math operators, digits, punctuation, and scripts so there is an evidence trail for *all* math-mode source tokens, not just proposed symbols. Neither report changes the typeset notation.", "",
         "## Coverage and status", "",
-        f"- Semantic registry: **{len(reg)} entries** ({sum(x.glossary=='glossary' for x in reg.values())} glossary, {sum(x.glossary=='local' for x in reg.values())} local).",
+        f"- Semantic registry: **{len(reg)} typed entries** ({sum(x.glossary=='glossary' for x in reg.values())} glossary, {sum(x.glossary=='local' for x in reg.values())} local).",
+        f"- Documented source alternatives: **{len(alternatives)}** ({sum(a[1]=='DK1970' for a in alternatives)} from DK 1970), across {len({a[0] for a in alternatives})} semantic keys.",
         f"- Math regions scanned: **{len(spans)}** ({', '.join(f'{k}: {v}' for k,v in sorted(total_by_file.items()))}).",
         f"- Occurrence records: **{len(occurrences)}**; category counts: " + ", ".join(f"{k}={n}" for k,n in counts.most_common()) + ".",
         f"- Registered references in math: **{len(semantic)}**, spanning **{len(semantic_groups)} keys**.",
@@ -555,10 +575,23 @@ def output_report(reg: dict[str,Symbol], occurrences: list[Occurrence], spans: l
         out.append(f"| `{safe(glyph)}` | {descriptions} | {len(raws)} | {trim_locations(raws) if raws else '—'} |")
     out += ["", "## Registered semantics, including glossary status", "",
             "The `glossary` column is directly declared in `math_symbol_colors.tex`. Occurrences here count only direct `\\sym`/`\\like`/`\\symglyph` use in math; the older audit separately counts prose and Python figure sources.", "",
-            "| Key | Glyph | Glossary | Color | In-math uses | Description |", "|---|---|---|---|---:|---|"]
+            "| Key | Glyph | Mathematical type | Glossary | Color | In-math uses | Description |", "|---|---|---|---|---|---:|---|"]
     for k,r in reg.items():
         glyph=resolved_glyph(k, reg)
-        out.append("| " + " | ".join([f"`{safe(k)}`",f"`{safe(glyph)}`",r.glossary,r.color,str(len(semantic_groups[k])),safe(r.meaning)]) + " |")
+        out.append("| " + " | ".join([f"`{safe(k)}`",f"`{safe(glyph)}`",r.symbol_type,r.glossary,r.color,str(len(semantic_groups[k])),safe(r.meaning)]) + " |")
+    out += ["", "## Source-attested notation alternatives", "",
+            "These rows are explicitly registered in `math_symbol_colors.tex`; they are not inferred by glyph matching. The table at the end of the paper uses the DK1970 rows from the same records.", "",
+            "| Semantic key | Our glyph | Type | Cited source | Source glyph | Exact location | Qualification |", "|---|---|---|---|---|---|---|"]
+    for key, source_id, glyph, locator, note in alternatives:
+        title, url = sources[source_id]
+        out.append("| " + " | ".join([f"`{safe(key)}`",f"`{safe(resolved_glyph(key, reg))}`",reg[key].symbol_type,
+            f"[{safe(title)}]({url})",f"`{safe(glyph)}`",safe(locator),safe(note)]) + " |")
+    out += ["", "## Types and glyph collisions", "",
+            "Every registered object has a declared mathematical type. Reused printed glyphs with different registered types deserve particular attention; this is a report, not an automatic rename.", "",
+            "| Printed glyph | Keys and types |", "|---|---|"]
+    for glyph, keys in sorted(glyph_to_keys.items()):
+        if len(keys) < 2: continue
+        out.append(f"| `{safe(glyph)}` | " + "; ".join(f"`{key}` ({reg[key].symbol_type})" for key in keys) + " |")
     variant_groups: dict[str, list[Occurrence]] = defaultdict(list)
     for o in variants:
         variant_groups[o.token].append(o)
@@ -608,7 +641,21 @@ def main() -> int:
     registry_text=(PAPER/REGISTRY_FILE).read_text()
     symbols=declarations(registry_text)
     reg={x.key:x for x in symbols}
+    source_records = named_records(registry_text, SOURCE_START, 3)
+    alternative_records = named_records(registry_text, ALTERNATIVE_START, 5)
+    notation_sources = {sid:(title,url) for sid,title,url in source_records}
     errors=[]
+    if len(notation_sources) != len(source_records): errors.append("Duplicate notation source IDs")
+    if any(not r.symbol_type.strip() for r in symbols): errors.append("Missing mathematical type")
+    if any(r.symbol_type in {"unknown", "unclassified", "unspecified"} for r in symbols):
+        errors.append("Unclassified mathematical type")
+    alternatives_seen = set()
+    for key, source, glyph, locator, note in alternative_records:
+        if key not in reg: errors.append(f"Alternative for unknown key: {key}")
+        if source not in notation_sources: errors.append(f"Alternative {key} cites unknown source: {source}")
+        if not glyph.strip() or not locator.strip() or not note.strip(): errors.append(f"Incomplete source alternative for {key}/{source}")
+        if (key, source) in alternatives_seen: errors.append(f"Duplicate alternative for {key}/{source}")
+        alternatives_seen.add((key, source))
     if len(reg) != len(symbols): errors.append("Duplicate semantic declaration keys")
     known=defaultdict(list)
     for key in reg:
@@ -640,7 +687,7 @@ def main() -> int:
             occurrences.append(scanner.occs[-1])
     unknown=sorted({o.token for o in occurrences if o.kind in {"registered-key", "registered-glyph"} and o.token not in reg})
     if unknown: errors.append("Unknown registered symbol keys: "+", ".join(unknown))
-    report=output_report(reg,occurrences,spans,errors,hashes)
+    report=output_report(reg,occurrences,spans,errors,hashes,notation_sources,alternative_records)
     if args.output:
         args.output.parent.mkdir(parents=True,exist_ok=True)
         args.output.write_text(report,encoding="utf-8")

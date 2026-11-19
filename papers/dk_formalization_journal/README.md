@@ -189,9 +189,13 @@ independent controls:
   affiliation details, identifying artifact links, and acknowledgments.
 - Set `\DKSymbolTooltipsfalse` after the symbol-macro input to disable the
   default glossary reminders on hover. Definitions, coordinate spaces, and
-  local roles live in the optional reminder argument of each semantic symbol
-  declaration in `math_symbol_colors.tex`. The final argument supplies a short
-  description for the notation appendix and the fallback hover text. Native PDF
+  local roles live in each semantic symbol declaration in
+  `math_symbol_colors.tex`: semantic key, printed glyph, color role, glossary
+  flag, description, and mathematical type, plus an optional hover reminder.
+  The appendix uses those same records. Verified historical or contemporary
+  alternatives are recorded with a named source, exact glyph, and source
+  location; the Davis--Kahan comparison table is generated from those records.
+  Native PDF
   tooltips have no navigation action and require viewer support. They cover `\sym` and `\like`
   expressions in text, equations, captions, and the three live PGF figures.
   In Okular, enable **View → Show Forms** to expose the hover regions. Other viewers may enable PDF tooltips automatically.
