@@ -22,6 +22,10 @@ bibliometrics:
 # The manuscript and editor builds regenerate missing/stale figures offline.
 paper: paper-figures
 	latexmk -pdf paper.tex
+	@if grep -Eq 'There were undefined (references|citations)' build/paper.log; then \
+		echo 'ERROR: paper has unresolved LaTeX references or citations' >&2; exit 1; fi
+	@if grep -Fq '???' build/paper.bbl; then \
+		echo 'ERROR: bibliography has ??? placeholders; check references.bib' >&2; exit 1; fi
 
 author-paper: paper-figures
 	latexmk -pdf -jobname=paper-author -pretex='\def\DKUseAuthorStyle{1}' paper.tex
