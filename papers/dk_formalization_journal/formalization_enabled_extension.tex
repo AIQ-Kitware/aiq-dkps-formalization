@@ -9,8 +9,8 @@ Its proof uses the principal-angle geometry, real and complex operator
   constructions, and singular-value norms developed for the formalization,
   together with additional optimization arguments.
 
-Let $\like{Usource}{K},\like{Vtarget}{L}\subseteq\mathbb R^n$ have the same dimension and let
-$\like{theta}{\theta_1},\ldots,\like{theta}{\theta_m}\in(0,\pi/2]$ be their positive principal angles,
+Let $\sym{MatchingSourceSubspace},\sym{MatchingTargetSubspace}\subseteq\sym{RealField}^n$ have the same dimension and let
+$\like{theta}{\symglyph{theta}_1},\ldots,\like{theta}{\symglyph{theta}_m}\in(0,\sym{PiConstant}/2]$ be their positive principal angles,
 counted with multiplicity. A matching $\sym{Matching}$ chooses unordered
 pairs of labels from $\{1,\ldots,m\}$, using each label at most once.
 Labels that are not used in a pair are unmatched.
@@ -20,24 +20,24 @@ label $2$ would occur in two pairs.
 
 Each positive principal angle describes a source line and a target line
 in a two-dimensional principal plane. Transporting that plane independently
-allows a rotation through $\like{theta}{\theta_i}$, with trace displacement
-$4\sin(\like{theta}{\theta_i}/2)$, or a reflection carrying the source line
+allows a rotation through $\like{theta}{\symglyph{theta}_i}$, with trace displacement
+$4\sin(\like{theta}{\symglyph{theta}_i}/2)$, or a reflection carrying the source line
 to the target, with trace displacement $2$. A pair of labels $\{i,j\}$
 allows the two principal planes to interact on their four-dimensional sum.
 For each possible pair of distinct labels $i,j$, define its paired cost
-$\like{PairCost}{e_{ij}}$; for each unmatched label $i$, define its singleton
-cost $\like{SingletonCost}{s_i}$:
+$\like{PairCost}{\symglyph{PairCost}_{ij}}$; for each unmatched label $i$, define its singleton
+cost $\like{SingletonCost}{\symglyph{SingletonCost}_i}$:
 \begin{equation}\label{eq:nuclear-matching-costs}
- \like{PairCost}{e_{ij}}=4\sin\bigl((\like{theta}{\theta_i}+\like{theta}{\theta_j})/2\bigr),\qquad
- \like{SingletonCost}{s_i}=\min\{4\sin(\like{theta}{\theta_i}/2),2\}.
+ \like{PairCost}{\symglyph{PairCost}_{ij}}=4\sin\bigl((\like{theta}{\symglyph{theta}_i}+\like{theta}{\symglyph{theta}_j})/2\bigr),\qquad
+ \like{SingletonCost}{\symglyph{SingletonCost}_i}=\min\{4\sin(\like{theta}{\symglyph{theta}_i}/2),2\}.
 \end{equation}
 The paired cost is attained by an orthogonal transporter on the two-plane sum.
 It fixes two real directions and rotates the other two through
-$\like{theta}{\theta_i}+\like{theta}{\theta_j}$, as the competitor does for
+$\like{theta}{\symglyph{theta}_i}+\like{theta}{\symglyph{theta}_j}$, as the competitor does for
 equal angles in \cref{fig:prop44-displacement-planes}. Step~6 below derives
 this construction and its cost from the block minimum.
 Write $\sym{OrthogonalGroup}$ for the orthogonal group of real
-$n\times n$ matrices, defined by $\sym{Wcompetitor}^T\sym{Wcompetitor}=I$.
+$n\times n$ matrices, defined by $\sym{Wcompetitor}^T\sym{Wcompetitor}=\sym{Identity}$.
 
 % Note:
 % this corresponds to exists_minimizing_real_nuclear_transport_matching
@@ -51,15 +51,15 @@ $n\times n$ matrices, defined by $\sym{Wcompetitor}^T\sym{Wcompetitor}=I$.
 %  exists_minimizing_real_schatten_transport_matching
 \begin{theorem}[Real trace-norm matching reduction]%
 \label{thm:real-matching-example}
-For equal-dimensional real subspaces $\like{Usource}{K},\like{Vtarget}{L}$ as above,
+For equal-dimensional real subspaces $\sym{MatchingSourceSubspace},\sym{MatchingTargetSubspace}$ as above,
 \begin{equation}\label{eq:real-nuclear-match}
-\min_{\substack{\sym{Wcompetitor}\in \sym{OrthogonalGroup}\\\sym{Wcompetitor}(\like{Usource}{K})=\like{Vtarget}{L}}}\|I-\sym{Wcompetitor}\|_1
+\min_{\substack{\sym{Wcompetitor}\in \sym{OrthogonalGroup}\\\sym{Wcompetitor}(\sym{MatchingSourceSubspace})=\sym{MatchingTargetSubspace}}}\|\sym{Identity}-\sym{Wcompetitor}\|_1
 =
 \min_{\sym{Matching}\text{ a matching}}
 \left(
-\sum_{\{i,j\}\in \sym{Matching}}\like{PairCost}{e_{ij}}
+\sum_{\{i,j\}\in \sym{Matching}}\like{PairCost}{\symglyph{PairCost}_{ij}}
 +
-\sum_{i\text{ unmatched}}\like{SingletonCost}{s_i}
+\sum_{i\text{ unmatched}}\like{SingletonCost}{\symglyph{SingletonCost}_i}
 \right).
 \end{equation}
 Both minima are attained.  The equality includes repeated angles,
@@ -68,14 +68,14 @@ principal-plane or determinant constraint.
 \end{theorem}
 
 To express the formula as maximum-weight matching, start from the
-all-singleton cost $\sym{SingletonBaseline}=\sum_i \like{SingletonCost}{s_i}$ and assign each edge $\{i,j\}$ the weight
+all-singleton cost $\sym{SingletonBaseline}=\sum_i \like{SingletonCost}{\symglyph{SingletonCost}_i}$ and assign each edge $\{i,j\}$ the weight
 \[
- \sym{MatchingEdgeWeight}=\like{SingletonCost}{s_i}+\like{SingletonCost}{s_j}-\like{PairCost}{e_{ij}}.
+ \sym{MatchingEdgeWeight}=\like{SingletonCost}{\symglyph{SingletonCost}_i}+\like{SingletonCost}{\symglyph{SingletonCost}_j}-\like{PairCost}{\symglyph{PairCost}_{ij}}.
 \]
 This weight is the difference between the cost of two singletons and the
 paired cost. Thus a matching $\sym{Matching}$ has cost
 \[
- \like{TraceCost}{C(M)}=\sym{SingletonBaseline}-
+ \like{TraceCost}{\symglyph{TraceCost}(M)}=\sym{SingletonBaseline}-
        \sum_{\{i,j\}\in\sym{Matching}}\sym{MatchingEdgeWeight}.
 \]
 Minimizing this cost is equivalent to maximizing the sum of edge weights.
@@ -87,16 +87,16 @@ Figure~\ref{fig:real-nuclear-matching} shows a three-angle example.
 \resizebox{119mm}{!}{\input{figures/Fig3.pgf}}
 \caption{
 Graph of principal-angle pairing choices for two three-dimensional subspaces
-of $\mathbb R^6$ whose intersection is $\{\sym{ZeroVector}\}$ and whose principal angles are
+of $\sym{RealField}^6$ whose intersection is $\{\sym{ZeroVector}\}$ and whose principal angles are
 $30^\circ$, $45^\circ$, and $75^\circ$.
 (a) Vertex positions are arbitrary; each vertex represents an angle label and
-each edge a possible pairing. Vertices carry singleton costs $\like{SingletonCost}{s_i}$;
-edges carry weights $\sym{MatchingEdgeWeight}=\like{SingletonCost}{s_i}+\like{SingletonCost}{s_j}-\like{PairCost}{e_{ij}}$. The solid edge
+each edge a possible pairing. Vertices carry singleton costs $\like{SingletonCost}{\symglyph{SingletonCost}_i}$;
+edges carry weights $\sym{MatchingEdgeWeight}=\like{SingletonCost}{\symglyph{SingletonCost}_i}+\like{SingletonCost}{\symglyph{SingletonCost}_j}-\like{PairCost}{\symglyph{PairCost}_{ij}}$. The solid edge
 pairs labels $1,2$ and leaves label $3$ unmatched. (b) The table lists all four
 matchings; costs and edge weights are rounded to four decimals. Geometrically,
 the selected pair is realized by a four-dimensional transporter and the
 unmatched angle by a two-dimensional reflection. Their orthogonal sum
-attains the minimum on $\mathbb R^6$, with trace displacement
+attains the minimum on $\sym{RealField}^6$, with trace displacement
 $4\sin(37.5^\circ)+2\approx4.4350$}
 \label{fig:real-nuclear-matching}
 \end{figure}
@@ -115,45 +115,45 @@ We then let $p$ approach $1$ from above to recover the trace norm.
 For $1<p<2$, set
 \[
  \sym{FeasibleTransport}=\{\sym{Wcompetitor}\in \sym{OrthogonalGroup}:
-                 \sym{Wcompetitor}(\like{Usource}{K})=\like{Vtarget}{L}\},
+                 \sym{Wcompetitor}(\sym{MatchingSourceSubspace})=\sym{MatchingTargetSubspace}\},
  \qquad
- \like{PowerCost}{\Phi_p}(\sym{Wcompetitor})
-       =\sum_{j=1}^n \like{TransportSingularValues}{s_j}(I-\sym{Wcompetitor})^p.
+ \like{PowerCost}{\symglyph{PowerCost}_p}(\sym{Wcompetitor})
+       =\sum_{j=1}^n \sym{TransportSingularValues}(\sym{Identity}-\sym{Wcompetitor})^p.
 \]
-Here $\like{TransportSingularValues}{s_j}(T)$ denotes a singular value of $T$. For $p>1$ this cost is
+Here $\sym{TransportSingularValues}(T)$ denotes a singular value of $T$. For $p>1$ this cost is
 differentiable, including at zero displacement singular values.
 
 \emph{(a) The cost attains a global minimum on $\sym{FeasibleTransport}$.}
-Write $\like{Psource}{P_K}$ and $\like{Qtarget}{P_L}$ for the orthogonal
+Write $\like{Psource}{\symglyph{Psource}_K}$ and $\sym{MatchingTargetProjection}$ for the orthogonal
 projections onto the source and target.
 \emph{Justification.} An orthogonal map carrying an
-orthonormal basis of $\like{Usource}{K}$ to one of $\like{Vtarget}{L}$,
+orthonormal basis of $\sym{MatchingSourceSubspace}$ to one of $\sym{MatchingTargetSubspace}$,
 extended to their orthogonal complements, belongs to $\sym{FeasibleTransport}$.
 Thus $\sym{FeasibleTransport}$ is nonempty. The group $\sym{OrthogonalGroup}$ is closed and bounded
-in $\mathbb R^{n\times n}$, hence compact by Heine--Borel.
+in $\sym{RealField}^{n\times n}$, hence compact by Heine--Borel.
 The equivalent transport equation
-$\sym{Wcompetitor}\like{Psource}{P_K}\sym{Wcompetitor}^T
- =\like{Qtarget}{P_L}$ is a closed constraint.
-Since $\like{PowerCost}{\Phi_p}$ is continuous, the extreme value theorem
+$\sym{Wcompetitor}\like{Psource}{\symglyph{Psource}_K}\sym{Wcompetitor}^T
+ =\sym{MatchingTargetProjection}$ is a closed constraint.
+Since $\like{PowerCost}{\symglyph{PowerCost}_p}$ is continuous, the extreme value theorem
 gives a global minimizer $\sym{Wcompetitor}\in\sym{FeasibleTransport}$.
 
 \emph{(b) A simultaneous invariant decomposition splits both the cost
 and the principal-angle list.}
 The decomposition we seek is an orthogonal sum
-$\mathbb R^n=\bigoplus_a\sym{MatchingBlock}$ in which each $\sym{MatchingBlock}$ is preserved by
-$\like{Psource}{P_K}$, $\like{Qtarget}{P_L}$, and $\sym{Wcompetitor}$.
+$\sym{RealField}^n=\bigoplus_a\sym{MatchingBlock}$ in which each $\sym{MatchingBlock}$ is preserved by
+$\like{Psource}{\symglyph{Psource}_K}$, $\sym{MatchingTargetProjection}$, and $\sym{Wcompetitor}$.
 \emph{Justification.} In a basis adapted to this sum all three matrices are block diagonal.
 Consequently, the source and target split as the sums of their
 intersections with the $\sym{MatchingBlock}$, and
 \begin{equation}\label{eq:matching-block-additivity}
- \like{PowerCost}{\Phi_p}(\sym{Wcompetitor})
- =\sum_a\like{PowerCost}{\Phi_p}(\sym{Wcompetitor}|_{\sym{MatchingBlock}}).
+ \like{PowerCost}{\symglyph{PowerCost}_p}(\sym{Wcompetitor})
+ =\sum_a\like{PowerCost}{\symglyph{PowerCost}_p}(\sym{Wcompetitor}|_{\sym{MatchingBlock}}).
 \end{equation}
 Indeed, the displacement is block diagonal too, and its singular-value
 list is the union of the block singular-value lists. The principal-angle
 lists also combine in this way: the compression
-$\like{Psource}{P_K}\like{Qtarget}{P_L}\like{Psource}{P_K}$
-is block diagonal, and its restriction to $\like{Usource}{K}$ has the
+$\like{Psource}{\symglyph{Psource}_K}\sym{MatchingTargetProjection}\like{Psource}{\symglyph{Psource}_K}$
+is block diagonal, and its restriction to $\sym{MatchingSourceSubspace}$ has the
 squared principal cosines as eigenvalues.
 These two additivity facts will turn the block decomposition into a
 matching of the original angle labels.
@@ -175,11 +175,11 @@ $\sym{SkewDirection}^T=-\sym{SkewDirection}$).
  =\exp(-t\sym{SkewDirection})
  =\exp(t\sym{SkewDirection})^{-1}.
 \]
-If $\sym{SkewDirection}$ commutes with $\like{Psource}{P_K}$, so does its
+If $\sym{SkewDirection}$ commutes with $\like{Psource}{\symglyph{Psource}_K}$, so does its
 exponential (every power of $\sym{SkewDirection}$ commutes with
-$\like{Psource}{P_K}$, hence so does the exponential power series).
+$\like{Psource}{\symglyph{Psource}_K}$, hence so does the exponential power series).
 Its inverse $\exp(-t\sym{SkewDirection})$ also commutes with
-$\like{Psource}{P_K}$, so the exponential maps the source onto itself.
+$\like{Psource}{\symglyph{Psource}_K}$, so the exponential maps the source onto itself.
 Consequently,
 $\sym{Wcompetitor}\exp(t\sym{SkewDirection})$ remains in $\sym{FeasibleTransport}$.
 This gives explicit curves on which to test stationarity.
@@ -187,43 +187,43 @@ This gives explicit curves on which to test stationarity.
 \emph{(b) The first variation is a trace pairing with a spectral gradient.}
 Define the scalar phase cost
 \[
- \sym{MatchingPhaseCost}(t)=(2\sin(t/2))^p,\qquad 0\le t\le\pi.
+ \sym{MatchingPhaseCost}(t)=(2\sin(t/2))^p,\qquad 0\le t\le\sym{PiConstant}.
 \]
-A planar rotation $\like{MatchingPlanarRotation}{R_t}$ through $t$ satisfies
+A planar rotation $\sym{MatchingPlanarRotation}$ through $t$ satisfies
 \[
- (I-\like{MatchingPlanarRotation}{R_t})^T(I-\like{MatchingPlanarRotation}{R_t})
-   =2I-\like{MatchingPlanarRotation}{R_t}-\like{MatchingPlanarRotation}{R_t}^T
-   =4\sin^2(t/2)I.
+ (\sym{Identity}-\sym{MatchingPlanarRotation})^T(\sym{Identity}-\sym{MatchingPlanarRotation})
+   =2\sym{Identity}-\sym{MatchingPlanarRotation}-\sym{MatchingPlanarRotation}^T
+   =4\sin^2(t/2)\sym{Identity}.
 \]
 Its two displacement singular values are therefore both $2\sin(t/2)$,
 and its contribution is $2\sym{MatchingPhaseCost}(t)$.
-On a plane of rotation angle $\vartheta$, use the planar rotation matrix through $\pi/2$
+On a plane of rotation angle $\sym{MatchingPlanarAngle}$, use the planar rotation matrix through $\sym{PiConstant}/2$
 $\sym{Jturn}=\bigl(\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\bigr)$
 and define the skew-symmetric spectral gradient by
 \[
  \sym{Wcompetitor}|_{\mathrm{plane}}
-   =\cos\vartheta\,I_2+\sin\vartheta\,\sym{Jturn},
+   =\cos\sym{MatchingPlanarAngle}\,\sym{IdentityTwo}+\sin\sym{MatchingPlanarAngle}\,\sym{Jturn},
  \qquad
  \sym{SpectralGradient}|_{\mathrm{plane}}
-   =\sym{MatchingPhaseCost}'(\vartheta)\sym{Jturn}.
+   =\sym{MatchingPhaseCost}'(\sym{MatchingPlanarAngle})\sym{Jturn}.
 \]
 On the $+1$ and $-1$ eigenspaces of the transporter, set the spectral
 gradient $\sym{SpectralGradient}$ to zero.
 Every real orthogonal matrix splits into these scalar blocks and planar
-rotations: diagonalize over $\mathbb C$ and pair conjugate eigenvectors
+rotations: diagonalize over $\sym{ComplexField}$ and pair conjugate eigenvectors
 to obtain the real planes. This defines $\sym{SpectralGradient}$ on the
 whole space. On each plane the displayed blocks are combinations of
-$I_2$ and the same $\sym{Jturn}$, so they commute; on the scalar blocks
+$\sym{IdentityTwo}$ and the same $\sym{Jturn}$, so they commute; on the scalar blocks
 the gradient is zero. Thus $\sym{SpectralGradient}\sym{Wcompetitor}
 =\sym{Wcompetitor}\sym{SpectralGradient}$ on the whole space.
 These rotation planes may mix source and complementary directions;
-stationarity will relate them to $\like{Psource}{P_K}$.
+stationarity will relate them to $\like{Psource}{\symglyph{Psource}_K}$.
 Then for every skew-symmetric $\sym{SkewDirection}$,
 \begin{equation}\label{eq:matching-first-variation}
  \left.\frac{d}{dt}
-   \like{PowerCost}{\Phi_p}(\sym{Wcompetitor}\exp(t\sym{SkewDirection}))
+   \like{PowerCost}{\symglyph{PowerCost}_p}(\sym{Wcompetitor}\exp(t\sym{SkewDirection}))
  \right|_{t=0}
- =-\operatorname{tr}(\sym{SpectralGradient}\sym{SkewDirection}).
+ =-\sym{TraceOperator}(\sym{SpectralGradient}\sym{SkewDirection}).
 \end{equation}
 \emph{Justification.} For $p>1$ the cost is differentiable, including at
 zero displacement singular values, and its derivative is linear in
@@ -236,18 +236,18 @@ every off-diagonal block of $\sym{SkewDirection}$ cancels. This averaging
 computes the derivative for arbitrary skew directions; feasibility is
 imposed afterward, when we apply stationarity.
 
-On a rotation plane of angle $\vartheta$, the diagonal skew block is
+On a rotation plane of angle $\sym{MatchingPlanarAngle}$, the diagonal skew block is
 $b\sym{Jturn}$. Since
 $\exp(tb\sym{Jturn})$ is a rotation through $tb$, the phase becomes
-$\vartheta+tb$ and the cost derivative is
-$2b\sym{MatchingPhaseCost}'(\vartheta)$. The trace pairing gives exactly
+$\sym{MatchingPlanarAngle}+tb$ and the cost derivative is
+$2b\sym{MatchingPhaseCost}'(\sym{MatchingPlanarAngle})$. The trace pairing gives exactly
 the same value:
 \[
- -\operatorname{tr}\bigl(
-   (\sym{MatchingPhaseCost}'(\vartheta)\sym{Jturn})(b\sym{Jturn})
+ -\sym{TraceOperator}\bigl(
+   (\sym{MatchingPhaseCost}'(\sym{MatchingPlanarAngle})\sym{Jturn})(b\sym{Jturn})
   \bigr)
- =-b\sym{MatchingPhaseCost}'(\vartheta)\operatorname{tr}(-I_2)
- =2b\sym{MatchingPhaseCost}'(\vartheta).
+ =-b\sym{MatchingPhaseCost}'(\sym{MatchingPlanarAngle})\sym{TraceOperator}(-\sym{IdentityTwo})
+ =2b\sym{MatchingPhaseCost}'(\sym{MatchingPlanarAngle}).
 \]
 On a scalar line the diagonal skew-symmetric block is zero.
 Summing proves \cref{eq:matching-first-variation}, including directions
@@ -256,26 +256,26 @@ that mix the rotation planes.
 \emph{(c) Stationarity forces the gradient to couple only source and
 complementary directions.}
 \emph{Justification.} Take the particular direction
-$\sym{SkewDirection}=\like{Psource}{P_K}\sym{SpectralGradient}\like{Psource}{P_K}$.
-It is skew-symmetric and commutes with $\like{Psource}{P_K}$, so stationarity
+$\sym{SkewDirection}=\like{Psource}{\symglyph{Psource}_K}\sym{SpectralGradient}\like{Psource}{\symglyph{Psource}_K}$.
+It is skew-symmetric and commutes with $\like{Psource}{\symglyph{Psource}_K}$, so stationarity
 and cyclicity of trace give
 \[
- 0=-\operatorname{tr}\bigl(
-      (\like{Psource}{P_K}\sym{SpectralGradient}\like{Psource}{P_K})^2
+ 0=-\sym{TraceOperator}\bigl(
+      (\like{Psource}{\symglyph{Psource}_K}\sym{SpectralGradient}\like{Psource}{\symglyph{Psource}_K})^2
      \bigr)
-   =\|\like{Psource}{P_K}\sym{SpectralGradient}\like{Psource}{P_K}\|_F^2.
+   =\|\like{Psource}{\symglyph{Psource}_K}\sym{SpectralGradient}\like{Psource}{\symglyph{Psource}_K}\|_F^2.
 \]
 The source diagonal block of the gradient is therefore zero.
-Using $I-\like{Psource}{P_K}$ instead gives the same conclusion for the
+Using $\sym{Identity}-\like{Psource}{\symglyph{Psource}_K}$ instead gives the same conclusion for the
 complementary diagonal block. Relative to
-$\like{Usource}{K}\oplus\like{Usource}{K}^{\perp}$, the gradient and source
+$\sym{MatchingSourceSubspace}\oplus\sym{MatchingSourceSubspace}^{\perp}$, the gradient and source
 reflection thus have the forms
 \[
  \sym{SpectralGradient}
-  =\begin{pmatrix}0&\sym{GradientOffDiagonal}\\-\like{GradientOffDiagonal}{G_{01}^T}&0\end{pmatrix},
+  =\begin{pmatrix}0&\sym{GradientOffDiagonal}\\-\like{GradientOffDiagonal}{\symglyph{GradientOffDiagonal}^T}&0\end{pmatrix},
  \qquad
- \sym{Jreflect}=2\like{Psource}{P_K}-I
-  =\begin{pmatrix}I&0\\0&-I\end{pmatrix}.
+ \sym{Jreflect}=2\like{Psource}{\symglyph{Psource}_K}-\sym{Identity}
+  =\begin{pmatrix}\sym{Identity}&0\\0&-\sym{Identity}\end{pmatrix}.
 \]
 Multiplication gives
 $\sym{Jreflect}\sym{SpectralGradient}\sym{Jreflect}
@@ -291,15 +291,15 @@ minimizer. Their size will explain why the final optimization needs only
 single labels and pairs.
 \emph{(a) Each positive gradient level carries compatible complex coordinates.}
 \emph{Justification.}
-The matrix $-\like{SpectralGradient}{G^2}$ is symmetric and nonnegative,
+The matrix $-\like{SpectralGradient}{\symglyph{SpectralGradient}^2}$ is symmetric and nonnegative,
 since
-$\langle-\like{SpectralGradient}{G^2}x,x\rangle
+$\langle-\like{SpectralGradient}{\symglyph{SpectralGradient}^2}x,x\rangle
   =\|\sym{SpectralGradient}x\|^2$.
 Decompose the space into its eigenspaces. The gradient, transporter,
 and source reflection all preserve them. On an eigenspace $\sym{GradientLevelSpace}$
-with positive eigenvalue $\like{GradientLevel}{g^2}$, put
+with positive eigenvalue $\like{GradientLevel}{\symglyph{GradientLevel}^2}$, put
 $\sym{GradientComplexStructure}=\sym{SpectralGradient}/\sym{GradientLevel}$.
-It satisfies $\sym{GradientComplexStructure}^2=-I$ and preserves lengths.
+It satisfies $\sym{GradientComplexStructure}^2=-\sym{Identity}$ and preserves lengths.
 We can therefore treat $\sym{GradientLevelSpace}$ as a complex space by defining
 \[
  (a+ib)x=ax+b\sym{GradientComplexStructure}x.
@@ -314,12 +314,12 @@ The source reflection reverses the complex structure:
 \]
 Consequently
 $\sym{Jreflect}((a+ib)x)=(a-ib)\sym{Jreflect}x$.
-Together with $\sym{Jreflect}^2=I$, this says that it acts as conjugation.
+Together with $\sym{Jreflect}^2=\sym{Identity}$, this says that it acts as conjugation.
 
 \emph{(b) The transporter has at most two phases on each positive level.}
 \emph{Justification.} The definition of the gradient says that an eigenphase $t$ of the
 transporter on this complex space satisfies
-$\sym{MatchingPhaseCost}'(t)=\sym{GradientLevel}$, with $0<t<\pi$.
+$\sym{MatchingPhaseCost}'(t)=\sym{GradientLevel}$, with $0<t<\sym{PiConstant}$.
 There are at most two such phases. To check this directly,
 \[
  \sym{MatchingPhaseCost}'(t)
@@ -332,11 +332,11 @@ There are at most two such phases. To check this directly,
 The second derivative changes sign once, where
 $\tan^2(t/2)=p-1$. The first derivative therefore increases and then
 decreases, so a positive horizontal level has at most two intersections.
-Writing the two phases as $\like{GradientEigenphase}{\varphi_1},\like{GradientEigenphase}{\varphi_2}$, with equality allowed,
+Writing the two phases as $\like{GradientEigenphase}{\symglyph{GradientEigenphase}_1},\like{GradientEigenphase}{\symglyph{GradientEigenphase}_2}$, with equality allowed,
 we obtain
 \[
  \sym{Wcompetitor}|_{\sym{GradientLevelSpace}}
-   =e^{i\like{GradientEigenphase}{\varphi_1}}\sym{GradientPhaseProjection}+e^{i\like{GradientEigenphase}{\varphi_2}}(I-\sym{GradientPhaseProjection}),
+   =e^{i\like{GradientEigenphase}{\symglyph{GradientEigenphase}_1}}\sym{GradientPhaseProjection}+e^{i\like{GradientEigenphase}{\symglyph{GradientEigenphase}_2}}(\sym{Identity}-\sym{GradientPhaseProjection}),
 \]
 where $\sym{GradientPhaseProjection}$ is the orthogonal projection onto the first phase space.
 A subspace preserved by $\sym{GradientPhaseProjection}$ is preserved by this transporter.
@@ -386,9 +386,9 @@ The complex spans of these lines and planes are invariant under
 $\sym{GradientPhaseProjection},\sym{Jreflect}$, and $\sym{Wcompetitor}$. Returning to the original
 real space gives blocks of dimension two or four. Each is also
 preserved by
-$\like{Psource}{P_K}=(\sym{Jreflect}+I)/2$, hence by
-$\like{Qtarget}{P_L}
- =\sym{Wcompetitor}\like{Psource}{P_K}\sym{Wcompetitor}^T$.
+$\like{Psource}{\symglyph{Psource}_K}=(\sym{Jreflect}+\sym{Identity})/2$, hence by
+$\sym{MatchingTargetProjection}
+ =\sym{Wcompetitor}\like{Psource}{\symglyph{Psource}_K}\sym{Wcompetitor}^T$.
 For example, the complex span of $u,v$ is the real span of
 $u,v,\sym{GradientComplexStructure}u,\sym{GradientComplexStructure}v$.
 The first two vectors are fixed by conjugation and hence belong to the
@@ -403,7 +403,7 @@ one-angle planes.}
 \emph{Justification.} On $\ker\sym{SpectralGradient}$ the transporter has eigenvalues $+1,-1$,
 because these are exactly the phases where the scalar derivative vanishes.
 It is therefore a reflection there. Apply the two-projection decomposition
-to $\like{Psource}{P_K}$ and the projection onto its $-1$ eigenspace:
+to $\like{Psource}{\symglyph{Psource}_K}$ and the projection onto its $-1$ eigenspace:
 this gives real lines and planes preserved by both projections and the
 transporter. On an invariant line the source and target are either both
 zero or both the whole line. Replacing a one-dimensional $-1$ block by
@@ -415,36 +415,36 @@ This completes the decomposition needed for
 
 \emph{Step 4: calculate the costs on a plane and on two planes.}
 \emph{(a) A one-angle block chooses a rotation or a reflection.}
-\emph{Justification.} For a principal angle $\like{theta}{\theta_i}$, the least rotation cost
-is $2\sym{MatchingPhaseCost}(\like{theta}{\theta_i})$.
+\emph{Justification.} For a principal angle $\like{theta}{\symglyph{theta}_i}$, the least rotation cost
+is $2\sym{MatchingPhaseCost}(\like{theta}{\symglyph{theta}_i})$.
 The alternative rotation sends a source unit vector to the opposite
-target unit vector and turns through $\pi-\like{theta}{\theta_i}$,
-which is at least $\like{theta}{\theta_i}$.
+target unit vector and turns through $\sym{PiConstant}-\like{theta}{\symglyph{theta}_i}$,
+which is at least $\like{theta}{\symglyph{theta}_i}$.
 A planar reflection has eigenvalues $+1,-1$, hence displacement singular values $0,2$,
 so its cost is $2^p$. The one-angle minimum is
 \[
- \like{SingletonPowerCost}{a_i(p)}
-   =\min\{2\sym{MatchingPhaseCost}(\like{theta}{\theta_i}),\,2^p\}.
+ \like{SingletonPowerCost}{\symglyph{SingletonPowerCost}_i(p)}
+   =\min\{2\sym{MatchingPhaseCost}(\like{theta}{\symglyph{theta}_i}),\,2^p\}.
 \]
 
 \emph{(b) A positive-determinant two-angle block reduces to a scalar minimum.}
 \emph{Justification.} For two angles, relabel within the pair so that
-$\like{theta}{\theta_i}\ge\like{theta}{\theta_j}$, and set
+$\like{theta}{\symglyph{theta}_i}\ge\like{theta}{\symglyph{theta}_j}$, and set
 \[
- \sym{PairMeanAngle}=(\like{theta}{\theta_i}+\like{theta}{\theta_j})/2,\qquad
- \sym{PairHalfDifference}=(\like{theta}{\theta_i}-\like{theta}{\theta_j})/2.
+ \sym{PairMeanAngle}=(\like{theta}{\symglyph{theta}_i}+\like{theta}{\symglyph{theta}_j})/2,\qquad
+ \sym{PairHalfDifference}=(\like{theta}{\symglyph{theta}_i}-\like{theta}{\symglyph{theta}_j})/2.
 \]
-Then $0\le \sym{PairHalfDifference}\le \sym{PairMeanAngle}$ and $\sym{PairMeanAngle}+\sym{PairHalfDifference}\le\pi/2$.
+Then $0\le \sym{PairHalfDifference}\le \sym{PairMeanAngle}$ and $\sym{PairMeanAngle}+\sym{PairHalfDifference}\le\sym{PiConstant}/2$.
 In principal coordinates the direct rotation is
 \[
  \sym{PairDirectRotation}=\begin{pmatrix}\sym{PairCosineBlock}&-\sym{PairSineBlock}\\\sym{PairSineBlock}&\sym{PairCosineBlock}\end{pmatrix},\qquad
- \sym{PairCosineBlock}=\operatorname{diag}(\cos\like{theta}{\theta_i},
-                      \cos\like{theta}{\theta_j}),\quad
- \sym{PairSineBlock}=\operatorname{diag}(\sin\like{theta}{\theta_i},
-                      \sin\like{theta}{\theta_j}).
+ \sym{PairCosineBlock}=\sym{DiagonalOperator}(\cos\like{theta}{\symglyph{theta}_i},
+                      \cos\like{theta}{\symglyph{theta}_j}),\quad
+ \sym{PairSineBlock}=\sym{DiagonalOperator}(\sin\like{theta}{\symglyph{theta}_i},
+                      \sin\like{theta}{\symglyph{theta}_j}).
 \]
 Every orthogonal transporter on this four-dimensional space is
-$\sym{PairDirectRotation}\operatorname{diag}(\like{PairFreeOrthogonal}{U_0},\like{PairFreeOrthogonal}{U_1})$ with $\like{PairFreeOrthogonal}{U_0},\like{PairFreeOrthogonal}{U_1}\in \like{OrthogonalGroup}{O(2)}$:
+$\sym{PairDirectRotation}\sym{DiagonalOperator}(\like{PairFreeOrthogonal}{\symglyph{PairFreeOrthogonal}_0},\like{PairFreeOrthogonal}{\symglyph{PairFreeOrthogonal}_1})$ with $\like{PairFreeOrthogonal}{\symglyph{PairFreeOrthogonal}_0},\like{PairFreeOrthogonal}{\symglyph{PairFreeOrthogonal}_1}\in \sym{PlanarOrthogonalGroup}$:
 multiplying by $\sym{PairDirectRotation}^T$ gives an orthogonal map preserving the source
 and its complement. This parametrization allows mixing between the
 principal planes.
@@ -454,7 +454,7 @@ reflections. Write their rotation angles as
 $\sym{PairRotationR}+\sym{PairRotationS}$ and
 $\sym{PairRotationR}-\sym{PairRotationS}$: the parameters
 $\sym{PairRotationR},\sym{PairRotationS}$ are the half-sum and half-difference
-of those angles. Define $\sym{PairPhaseX},\sym{PairPhaseY}\in[0,\pi]$ by
+of those angles. Define $\sym{PairPhaseX},\sym{PairPhaseY}\in[0,\sym{PiConstant}]$ by
 \[
  \begin{array}{c|cc}
   &\cos\sym{PairPhaseX}&\cos\sym{PairPhaseY}\\ \hline
@@ -467,60 +467,60 @@ of those angles. Define $\sym{PairPhaseX},\sym{PairPhaseY}\in[0,\pi]$ by
  \end{array}
 \]
 Here a reflection factor is a planar rotation followed by
-$\sym{PairPlanarReflection}=\operatorname{diag}(1,-1)$; for example,
-$\like{PairFreeOrthogonal}{U_0}
- =\like{MatchingPlanarRotation}{R_{r+s}}\sym{PairPlanarReflection}$.
+$\sym{PairPlanarReflection}=\sym{DiagonalOperator}(1,-1)$; for example,
+$\like{PairFreeOrthogonal}{\symglyph{PairFreeOrthogonal}_0}
+ =\sym{MatchingPlanarRotationSum}\sym{PairPlanarReflection}$.
 The cosine bounds imply
 \[
- \sym{PairMeanAngle}\le \sym{PairPhaseX}\le\pi-\sym{PairMeanAngle},\qquad
- \sym{PairHalfDifference}\le \sym{PairPhaseY}\le\pi-\sym{PairHalfDifference}.
+ \sym{PairMeanAngle}\le \sym{PairPhaseX}\le\sym{PiConstant}-\sym{PairMeanAngle},\qquad
+ \sym{PairHalfDifference}\le \sym{PairPhaseY}\le\sym{PiConstant}-\sym{PairHalfDifference}.
 \]
 For reflections, the initial bounds are
-$\pi/2-\sym{PairHalfDifference}\le\sym{PairPhaseX}\le\pi/2+\sym{PairHalfDifference}$
-and $\pi/2-\sym{PairMeanAngle}\le\sym{PairPhaseY}\le\pi/2+\sym{PairMeanAngle}$;
+$\sym{PiConstant}/2-\sym{PairHalfDifference}\le\sym{PairPhaseX}\le\sym{PiConstant}/2+\sym{PairHalfDifference}$
+and $\sym{PiConstant}/2-\sym{PairMeanAngle}\le\sym{PairPhaseY}\le\sym{PiConstant}/2+\sym{PairMeanAngle}$;
 these lie in the displayed ranges because
-$\sym{PairMeanAngle}+\sym{PairHalfDifference}\le\pi/2$.
+$\sym{PairMeanAngle}+\sym{PairHalfDifference}\le\sym{PiConstant}/2$.
 
 To check that these parameters give the actual eigenphases, put
 $\sym{PairPhaseCosineX}=\cos\sym{PairPhaseX}$ and
 $\sym{PairPhaseCosineY}=\cos\sym{PairPhaseY}$. Block multiplication gives
 \begin{align*}
- \operatorname{tr}\sym{Wcompetitor}
-   &=\operatorname{tr}(\sym{PairCosineBlock}\like{PairFreeOrthogonal}{U_0})
-     +\operatorname{tr}(\sym{PairCosineBlock}\like{PairFreeOrthogonal}{U_1})
+ \sym{TraceOperator}\sym{Wcompetitor}
+   &=\sym{TraceOperator}(\sym{PairCosineBlock}\like{PairFreeOrthogonal}{\symglyph{PairFreeOrthogonal}_0})
+     +\sym{TraceOperator}(\sym{PairCosineBlock}\like{PairFreeOrthogonal}{\symglyph{PairFreeOrthogonal}_1})
      =4\sym{PairPhaseCosineX}\sym{PairPhaseCosineY},\\
- \operatorname{tr}(\sym{Wcompetitor}^2)
-   &=\operatorname{tr}((\sym{PairCosineBlock}\like{PairFreeOrthogonal}{U_0})^2)
-     +\operatorname{tr}((\sym{PairCosineBlock}\like{PairFreeOrthogonal}{U_1})^2)
-     -2\operatorname{tr}(\sym{PairSineBlock}\like{PairFreeOrthogonal}{U_1}
-                        \sym{PairSineBlock}\like{PairFreeOrthogonal}{U_0})\\
+ \sym{TraceOperator}(\sym{Wcompetitor}^2)
+   &=\sym{TraceOperator}((\sym{PairCosineBlock}\like{PairFreeOrthogonal}{\symglyph{PairFreeOrthogonal}_0})^2)
+     +\sym{TraceOperator}((\sym{PairCosineBlock}\like{PairFreeOrthogonal}{\symglyph{PairFreeOrthogonal}_1})^2)
+     -2\sym{TraceOperator}(\sym{PairSineBlock}\like{PairFreeOrthogonal}{\symglyph{PairFreeOrthogonal}_1}
+                        \sym{PairSineBlock}\like{PairFreeOrthogonal}{\symglyph{PairFreeOrthogonal}_0})\\
    &=16\sym{PairPhaseCosineX}^2\sym{PairPhaseCosineY}^2
      -8(\sym{PairPhaseCosineX}^2+\sym{PairPhaseCosineY}^2)+4.
 \end{align*}
 The coefficient of $z^2$ in the characteristic polynomial is
-$((\operatorname{tr}\sym{Wcompetitor})^2
-   -\operatorname{tr}(\sym{Wcompetitor}^2))/2$.
+$((\sym{TraceOperator}\sym{Wcompetitor})^2
+   -\sym{TraceOperator}(\sym{Wcompetitor}^2))/2$.
 Orthogonality and determinant one make this polynomial reciprocal, so
 \begin{align*}
  \det(zI-\sym{Wcompetitor})
    &=z^4-4\sym{PairPhaseCosineX}\sym{PairPhaseCosineY}z^3
      +\bigl(4(\sym{PairPhaseCosineX}^2+\sym{PairPhaseCosineY}^2)-2\bigr)z^2
      -4\sym{PairPhaseCosineX}\sym{PairPhaseCosineY}z+1\\
-   &=\prod_{\epsilon=\pm1}
-       \bigl(z^2-2\cos(\sym{PairPhaseX}+\epsilon\sym{PairPhaseY})z+1\bigr).
+   &=\prod_{\sym{PhaseSignChoice}=\pm1}
+       \bigl(z^2-2\cos(\sym{PairPhaseX}+\sym{PhaseSignChoice}\sym{PairPhaseY})z+1\bigr).
 \end{align*}
 Its roots are therefore
 $e^{\pm i(\sym{PairPhaseX}+\sym{PairPhaseY})},
  e^{\pm i(\sym{PairPhaseX}-\sym{PairPhaseY})}$.
-Folding their angles into $[0,\pi]$ gives the displacement cost
+Folding their angles into $[0,\sym{PiConstant}]$ gives the displacement cost
 \[
  2\bigl(\sym{MatchingPhaseCost}(\min\{\sym{PairPhaseX}+\sym{PairPhaseY},
-                            2\pi-\sym{PairPhaseX}-\sym{PairPhaseY}\})
+                            2\sym{PiConstant}-\sym{PairPhaseX}-\sym{PairPhaseY}\})
        +\sym{MatchingPhaseCost}(|\sym{PairPhaseX}-\sym{PairPhaseY}|)\bigr).
 \]
 
-We can replace $(\sym{PairPhaseX},\sym{PairPhaseY})$ by $(\pi-\sym{PairPhaseX},\pi-\sym{PairPhaseY})$ when $\sym{PairPhaseX}+\sym{PairPhaseY}>\pi$ without
-changing this cost. Suppose therefore that $\sym{PairPhaseX}+\sym{PairPhaseY}\le\pi$.
+We can replace $(\sym{PairPhaseX},\sym{PairPhaseY})$ by $(\sym{PiConstant}-\sym{PairPhaseX},\sym{PiConstant}-\sym{PairPhaseY})$ when $\sym{PairPhaseX}+\sym{PairPhaseY}>\sym{PiConstant}$ without
+changing this cost. Suppose therefore that $\sym{PairPhaseX}+\sym{PairPhaseY}\le\sym{PiConstant}$.
 To replace the first parameter by $\sym{PairMeanAngle}$ without increasing the smaller
 phase, we need $\sym{PairMeanAngle}-\sym{PairPhaseParameter}\le|\sym{PairPhaseX}-\sym{PairPhaseY}|$, as well as $\sym{PairPhaseParameter}\ge \sym{PairHalfDifference}$.
 Choose the smallest such parameter,
@@ -531,18 +531,18 @@ also give $\sym{PairMeanAngle}+\sym{PairPhaseParameter}\le \sym{PairPhaseX}+\sym
  \sym{PairHalfDifference}\le\sym{PairPhaseParameter}\le \sym{PairMeanAngle},\qquad
  \sym{PairMeanAngle}+\sym{PairPhaseParameter}\le \sym{PairPhaseX}+\sym{PairPhaseY},\qquad \sym{PairMeanAngle}-\sym{PairPhaseParameter}\le|\sym{PairPhaseX}-\sym{PairPhaseY}|.
 \]
-Since $\sym{MatchingPhaseCost}$ is increasing on $[0,\pi]$, this
+Since $\sym{MatchingPhaseCost}$ is increasing on $[0,\sym{PiConstant}]$, this
 transporter costs at least
 $2\bigl(\sym{MatchingPhaseCost}(\sym{PairMeanAngle}+\sym{PairPhaseParameter})+
         \sym{MatchingPhaseCost}(\sym{PairMeanAngle}-\sym{PairPhaseParameter})\bigr)$.
 Every $\sym{PairPhaseParameter}\in[\sym{PairHalfDifference},\sym{PairMeanAngle}]$ is attained: take
-$\like{PairFreeOrthogonal}{U_0}=\like{PairFreeOrthogonal}{U_1}=\like{MatchingPlanarRotation}{R_\gamma}$, where
+$\like{PairFreeOrthogonal}{\symglyph{PairFreeOrthogonal}_0}=\like{PairFreeOrthogonal}{\symglyph{PairFreeOrthogonal}_1}=\sym{MatchingPlanarRotationGamma}$, where
 $\sym{PairAttainingAngle}=\arccos(\cos\sym{PairPhaseParameter}/\cos \sym{PairHalfDifference})$.
-The denominator is positive since $\sym{PairHalfDifference}\le\pi/4$.
+The denominator is positive since $\sym{PairHalfDifference}\le\sym{PiConstant}/4$.
 The preceding phase equations give $\sym{PairPhaseX}=\sym{PairMeanAngle},\sym{PairPhaseY}=\sym{PairPhaseParameter}$.
 Thus the positive-determinant pair minimum is
 \begin{equation}\label{eq:matching-pair-power-cost}
- \like{PairPowerCost}{b_{ij}(p)}
+ \like{PairPowerCost}{\symglyph{PairPowerCost}_{ij}(p)}
  =\min_{\sym{PairPhaseParameter}\in[\sym{PairHalfDifference},\sym{PairMeanAngle}]}
      2\bigl(\sym{MatchingPhaseCost}(\sym{PairMeanAngle}+\sym{PairPhaseParameter})+
              \sym{MatchingPhaseCost}(\sym{PairMeanAngle}-\sym{PairPhaseParameter})\bigr).
@@ -550,31 +550,31 @@ Thus the positive-determinant pair minimum is
 
 \emph{(c) The unrestricted two-angle minimum also compares two singletons.}
 \emph{Justification.} For determinant $-1$, the eigenvalues are $+1,-1$ and a conjugate
-rotational pair $e^{\pm it}$, with $0\le t\le\pi$.
+rotational pair $e^{\pm it}$, with $0\le t\le\sym{PiConstant}$.
 One free planar factor is a rotation and the other a reflection, so
 the absolute trace is at most
-$|\cos\like{theta}{\theta_i}+\cos\like{theta}{\theta_j}|
- +|\cos\like{theta}{\theta_i}-\cos\like{theta}{\theta_j}|
- =2\cos\like{theta}{\theta_j}$; thus
-$|\operatorname{tr}\sym{Wcompetitor}|\le2\cos\like{theta}{\theta_j}$.
+$|\cos\like{theta}{\symglyph{theta}_i}+\cos\like{theta}{\symglyph{theta}_j}|
+ +|\cos\like{theta}{\symglyph{theta}_i}-\cos\like{theta}{\symglyph{theta}_j}|
+ =2\cos\like{theta}{\symglyph{theta}_j}$; thus
+$|\sym{TraceOperator}\sym{Wcompetitor}|\le2\cos\like{theta}{\symglyph{theta}_j}$.
 Since this trace is $2\cos t$, the rotational phase satisfies
-$t\ge\like{theta}{\theta_j}$.
+$t\ge\like{theta}{\symglyph{theta}_j}$.
 Its least cost is therefore
-$2^p+2\sym{MatchingPhaseCost}(\like{theta}{\theta_j})$.
+$2^p+2\sym{MatchingPhaseCost}(\like{theta}{\symglyph{theta}_j})$.
 It is attained by reflecting on the larger-angle plane and rotating
 on the smaller-angle plane.
 Taking $\sym{PairPhaseParameter}=\sym{PairHalfDifference}$ bounds the positive-determinant minimum by the cost
 of two rotations. Taking $\sym{PairPhaseParameter}=\sym{PairMeanAngle}$ bounds it by
-$2\sym{MatchingPhaseCost}(\like{theta}{\theta_i}+\like{theta}{\theta_j})
+$2\sym{MatchingPhaseCost}(\like{theta}{\symglyph{theta}_i}+\like{theta}{\symglyph{theta}_j})
  \le2\cdot2^p$, the cost of two reflections.
 The less expensive mixed rotation/reflection choice is the
 negative-determinant minimum just computed.
 Comparing these four independent choices shows that the unrestricted
 four-dimensional minimum is
 \[
- \min\{\like{PairPowerCost}{b_{ij}(p)},\,
-         \like{SingletonPowerCost}{a_i(p)}
-          +\like{SingletonPowerCost}{a_j(p)}\}.
+ \min\{\like{PairPowerCost}{\symglyph{PairPowerCost}_{ij}(p)},\,
+         \like{SingletonPowerCost}{\symglyph{SingletonPowerCost}_i(p)}
+          +\like{SingletonPowerCost}{\symglyph{SingletonPowerCost}_j(p)}\}.
 \]
 A four-dimensional block therefore offers either a paired choice or
 two independent singleton choices.
@@ -588,8 +588,8 @@ correspond one-to-one.
 For a matching $\sym{Matching}$ define
 \[
  \sym{MatchingPowerCost}(\sym{Matching})
-   =\sum_{\{i,j\}\in\sym{Matching}}\like{PairPowerCost}{b_{ij}(p)}
-     +\sum_{i\text{ unmatched}}\like{SingletonPowerCost}{a_i(p)}.
+   =\sum_{\{i,j\}\in\sym{Matching}}\like{PairPowerCost}{\symglyph{PairPowerCost}_{ij}(p)}
+     +\sum_{i\text{ unmatched}}\like{SingletonPowerCost}{\symglyph{SingletonPowerCost}_i(p)}.
 \]
 \emph{(a) Every matching gives a feasible transporter of the same cost.}
 \emph{Justification.} The principal-angle decomposition gives mutually orthogonal planes
@@ -599,7 +599,7 @@ and identity on the remaining common directions.
 Their orthogonal sum is an element of $\sym{FeasibleTransport}$.
 By \cref{eq:matching-block-additivity}, its cost is
 $\sym{MatchingPowerCost}(\sym{Matching})$. Hence
-$\min_{\sym{FeasibleTransport}}\like{PowerCost}{\Phi_p}
+$\min_{\sym{FeasibleTransport}}\like{PowerCost}{\symglyph{PowerCost}_p}
  \le\min_{\sym{Matching}}\sym{MatchingPowerCost}(\sym{Matching})$.
 
 \emph{(b) A minimizing transporter gives a matching of the same cost.}
@@ -613,14 +613,14 @@ Each occurrence of an angle belongs to one block, so no label can be used twice.
 This produces a matching with the same total cost as the minimizer.
 
 Zero angles do not supply cheaper extra partners. Their singleton cost
-is zero; pairing an angle $\theta$ with zero forces $\sym{PairHalfDifference}=\sym{PairMeanAngle}=\theta/2$
-in \cref{eq:matching-pair-power-cost}, giving $2\sym{MatchingPhaseCost}(\theta)$,
+is zero; pairing an angle $\sym{theta}$ with zero forces $\sym{PairHalfDifference}=\sym{PairMeanAngle}=\sym{theta}/2$
+in \cref{eq:matching-pair-power-cost}, giving $2\sym{MatchingPhaseCost}(\sym{theta})$,
 which is at least its singleton cost.
 Thus we can leave zero-angle directions fixed and use only the original
 positive labels. Removing such pairs cannot strictly lower the minimizing
 cost, by the construction in (a), so it preserves that cost. We have proved
 \begin{equation}\label{eq:matching-power-equality}
- \min_{\sym{FeasibleTransport}}\like{PowerCost}{\Phi_p}
+ \min_{\sym{FeasibleTransport}}\like{PowerCost}{\symglyph{PowerCost}_p}
    =\min_{\sym{Matching}}\sym{MatchingPowerCost}(\sym{Matching}),
  \qquad 1<p<2.
 \end{equation}
@@ -633,8 +633,8 @@ uses one four-dimensional block for labels $1,2$ and one plane for label~$3$.
 Since $\sym{DisplacementSize}^p$ converges uniformly to $\sym{DisplacementSize}$ on this interval as $p$ approaches $1$ from above,
 \[
  \sup_{\sym{Wcompetitor}\in\sym{FeasibleTransport}}
-   \left|\like{PowerCost}{\Phi_p}(\sym{Wcompetitor})
-                  -\|I-\sym{Wcompetitor}\|_1\right|
+   \left|\like{PowerCost}{\symglyph{PowerCost}_p}(\sym{Wcompetitor})
+                  -\|\sym{Identity}-\sym{Wcompetitor}\|_1\right|
  \le n\sup_{0\le\sym{DisplacementSize}\le2}|\sym{DisplacementSize}^p-\sym{DisplacementSize}|\ \longrightarrow\ 0.
 \]
 The minimum values on the left of \cref{eq:matching-power-equality}
@@ -646,9 +646,9 @@ There are finitely many matchings, so their minimum values converge too.
 
 \emph{(b) The limiting block weights are the stated trace-norm costs.}
 \emph{Justification.} At $p=1$ the singleton formula gives
-$\like{SingletonPowerCost}{a_i(1)}
- =\min\{4\sin(\like{theta}{\theta_i}/2),2\}
- =\like{SingletonCost}{s_i}$.
+$\like{SingletonPowerCost}{\symglyph{SingletonPowerCost}_i(1)}
+ =\min\{4\sin(\like{theta}{\symglyph{theta}_i}/2),2\}
+ =\like{SingletonCost}{\symglyph{SingletonCost}_i}$.
 For the paired cost, the scalar expression becomes
 \[
  2\bigl(\sym{MatchingPhaseCost}(\sym{PairMeanAngle}+\sym{PairPhaseParameter})
@@ -656,10 +656,10 @@ For the paired cost, the scalar expression becomes
  =8\sin(\sym{PairMeanAngle}/2)\cos(\sym{PairPhaseParameter}/2).
 \]
 It is nonincreasing as $\sym{PairPhaseParameter}$ runs from $\sym{PairHalfDifference}$ to $\sym{PairMeanAngle}$, so its minimum is at $\sym{PairPhaseParameter}=\sym{PairMeanAngle}$,
-with value $4\sin \sym{PairMeanAngle}=\like{PairCost}{e_{ij}}$.
+with value $4\sin \sym{PairMeanAngle}=\like{PairCost}{\symglyph{PairCost}_{ij}}$.
 At this endpoint one rotational phase is $2\sym{PairMeanAngle}$ and the other is zero:
 the paired transporter fixes two real directions and rotates the other
-two through $\like{theta}{\theta_i}+\like{theta}{\theta_j}$.
+two through $\like{theta}{\symglyph{theta}_i}+\like{theta}{\symglyph{theta}_j}$.
 Taking the limit in \cref{eq:matching-power-equality} now gives
 \cref{eq:real-nuclear-match}. Compactness supplies an attaining transporter
 for the trace norm as well.
@@ -673,9 +673,9 @@ for the trace norm as well.
 % All paths are under DavisKahan/FiniteDimensional/DirectRotation/.
 % See AUTHORING_NOTES.md for the mathematical and provenance evidence.
 
-For $\like{theta}{\theta_1}=\like{theta}{\theta_2}=\pi/6$, the direct rotation costs
-$8\sin(\pi/12)>2$, whereas the paired competitor costs
-$4\sin(\pi/6)=2$. The theorem includes comparison with every ambient
+For $\like{theta}{\symglyph{theta}_1}=\like{theta}{\symglyph{theta}_2}=\sym{PiConstant}/6$, the direct rotation costs
+$8\sin(\sym{PiConstant}/12)>2$, whereas the paired competitor costs
+$4\sin(\sym{PiConstant}/6)=2$. The theorem includes comparison with every ambient
 orthogonal transporter, so this paired cost is globally minimal in the
 example.
 

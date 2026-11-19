@@ -58,7 +58,7 @@ def plane(fig, box, operator, basis, *, source_label, image_label, length_label,
     if fixed:
         ax.plot(*start, 'o', color=TARGET, markersize=5, zorder=6)
         ax.text(0.15, 0.17, image_label, color=TARGET, fontsize=17, ha='left')
-        ax.text(-0.80, -0.30, r'$(I-\sym{Wcompetitor})\like{FigureInput}{z}=0$', color=DISPLACEMENT, fontsize=14)
+        ax.text(-0.80, -0.30, r'$(\sym{Identity}-\sym{Wcompetitor})\like{FigureInput}{z}=0$', color=DISPLACEMENT, fontsize=14)
     else:
         # The chord points from the image back to the input: (I-T)q.
         arrow(ax, end, start, DISPLACEMENT, width=2.7)
@@ -95,7 +95,7 @@ def spectrum(fig, box, values, positive_label, groups):
                 ha='center', va='bottom', color=DISPLACEMENT, fontsize=17)
     ax.set_xlim(-.55, 3.55)
     ax.set_ylim(0, 1.72)
-    ax.set_xticks(x, [rf'$\like{{DisplacementSingular}}{{s_{j+1}}}$' for j in x], fontsize=15)
+    ax.set_xticks(x, [rf'$\like{{DisplacementSingular}}{{\symglyph{{SingularValueBase}}_{j+1}}}$' for j in x], fontsize=15)
     ax.set_yticks([0, .5, 1, 1.5], ['0', '0.5', '1.0', '1.5'], fontsize=14)
     ax.tick_params(axis='both', length=0, pad=5, colors=MUTED)
     ax.grid(axis='y', color=GUIDE, linewidth=.6, zorder=0)
@@ -115,12 +115,12 @@ def main():
     b = model.competitor_singular_values[0]
     fig = plt.figure(figsize=(8.2, 8.0), facecolor='white')
     fig.text(.5, .964, r'$\sym{Usource}=\mathrm{span}\{e_0,e_1\},\quad\sym{Vtarget}=\sym{Rrotation}(\sym{Usource})=\sym{Wcompetitor}(\sym{Usource}),\quad '
-             r'\like{theta}{\theta_1}=\like{theta}{\theta_2}=45^\circ$', ha='center', fontsize=18, color=FG)
+             r'\like{theta}{\symglyph{theta}_1}=\like{theta}{\symglyph{theta}_2}=45^\circ$', ha='center', fontsize=18, color=FG)
     fig.text(.25, .900, r'Direct rotation $\sym{Rrotation}$', ha='center', fontsize=22, color=ROTATION)
     fig.text(.75, .900, r'Competitor $\sym{Wcompetitor}$', ha='center', fontsize=22, color=COMPETITOR)
-    fig.text(.25, .861, r'$\sym{CounterPrincipalOne}\oplus\sym{CounterPrincipalTwo}=\mathbb{R}^4$  (principal planes)',
+    fig.text(.25, .861, r'$\sym{CounterPrincipalOne}\oplus\sym{CounterPrincipalTwo}=\sym{RealField}^4$  (principal planes)',
              ha='center', fontsize=16, color=MUTED)
-    fig.text(.75, .861, r'$\sym{CounterMovingPlane}\oplus\sym{CounterFixedPlane}=\mathbb{R}^4$  (moving and fixed planes)',
+    fig.text(.75, .861, r'$\sym{CounterMovingPlane}\oplus\sym{CounterFixedPlane}=\sym{RealField}^4$  (moving and fixed planes)',
              ha='center', fontsize=16, color=MUTED)
     fig.add_artist(plt.Line2D([.5, .5], [.065, .92], transform=fig.transFigure,
                              color=GUIDE, linewidth=1))

@@ -115,15 +115,15 @@ def matching():
     for i, ((x,y), theta, single) in enumerate(zip(points, ex['angles_deg'], ex['singleton_costs'])):
         ax.add_patch(Circle((x,y), .105, facecolor='white', edgecolor=SINE, lw=2.4, zorder=3))
         top = i < 2
-        ax.text(x, y+(.61 if top else -.36), rf'$\like{{theta}}{{\theta_{i+1}}}={theta:.0f}^\circ$',
+        ax.text(x, y+(.61 if top else -.36), rf'$\like{{theta}}{{\symglyph{{theta}}_{i+1}}}={theta:.0f}^\circ$',
                 ha='center', va='center', fontsize=20, color=SINE)
-        ax.text(x, y+(.31 if top else -.68), rf'$\like{{SingletonCost}}{{s_{i+1}}}={single:.4f}$',
+        ax.text(x, y+(.31 if top else -.68), rf'$\like{{SingletonCost}}{{\symglyph{{SingletonCost}}_{i+1}}}={single:.4f}$',
                 ha='center', va='center', fontsize=17, color=MUTED)
 
     table = fig.add_axes([.54, .09, .42, .75]); table.axis('off')
     table.set(xlim=(0,1), ylim=(0,1))
     table.text(.01,.94,r'$\sym{Matching}$',fontsize=17,color=MUTED)
-    table.text(.99,.94,r'$\like{TraceCost}{C(M)}$',fontsize=17,color=MUTED,ha='right')
+    table.text(.99,.94,r'$\like{TraceCost}{\symglyph{TraceCost}(M)}$',fontsize=17,color=MUTED,ha='right')
     entries = [(r'$\like{Matching}{\varnothing}$', ex['all_singletons'], False)]
     entries += [(rf'$\like{{Matching}}{{\{{\{{{i+1},{j+1}\}}\}}}}$', ex['all_singletons']-gain,
                  (i,j) in ex['pairs']) for (i,j),gain in ex['savings'].items()]

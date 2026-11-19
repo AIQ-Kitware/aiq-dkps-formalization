@@ -14,21 +14,21 @@ Write $\sym{Psource}$ and $\sym{Qtarget}$ for the orthogonal projections
 onto subspaces $\sym{Usource}$ and $\sym{Vtarget}$. For an orthogonal or
 unitary map $\sym{Wcompetitor}$ with
 $\sym{Wcompetitor}(\sym{Usource})=\sym{Vtarget}$, the vector
-$(I-\sym{Wcompetitor})x$ is the displacement of $x$ up to sign. Full
+$(\sym{Identity}-\sym{Wcompetitor})x$ is the displacement of $x$ up to sign. Full
 displacement measures this operator on the whole ambient space; restricted
-displacement measures $(I-\sym{Wcompetitor})\sym{Psource}$, which tests only
+displacement measures $(\sym{Identity}-\sym{Wcompetitor})\sym{Psource}$, which tests only
 vectors in the source subspace. We use the trace norm
-$\|Z\|_1=\sum_j s_j(Z)$.
+$\dkTraceNorm{Z}=\sum_j \sym{SingularValueS}(Z)$.
 
 For a finite-dimensional acute pair, the direct rotation $\sym{Rrotation}$
 is the orthogonal or unitary polar factor of
 \[
  \sym{IntertwinerT}=\sym{Qtarget}\sym{Psource}
- +(I-\sym{Qtarget})(I-\sym{Psource}).
+ +(\sym{Identity}-\sym{Qtarget})(\sym{Identity}-\sym{Psource}).
 \]
 The printed claim \citep[Proposition~4.4]{davis1970rotation} asserts that,
 for real subspaces with largest principal angle
-at most $\pi/3$, it minimizes $\sym{NormN}(I-\sym{Wcompetitor})$ for every
+at most $\sym{PiConstant}/3$, it minimizes $\sym{NormN}(\sym{Identity}-\sym{Wcompetitor})$ for every
 unitarily invariant norm $\sym{NormN}$.
 
 \subsection{The real four-dimensional counterexample}
@@ -40,13 +40,13 @@ larger.
 
 \begin{theorem}[Trace-norm failure throughout the acute angle range]
 \label{thm:small-angle}
-For every $0<\sym{theta}<\pi/2$, there are two-dimensional subspaces
-$\sym{Usource},\like{Vtarget}{V_\theta}\subset\mathbb R^4$ and an orthogonal map $\like{Wcompetitor}{W_\theta}$ with
-$\like{Wcompetitor}{W_\theta} \sym{Usource}=\like{Vtarget}{V_\theta}$, such that both principal angles equal $\sym{theta}$ and
-the canonical direct rotation $\like{Rrotation}{D_\theta}$ satisfies
+For every $0<\sym{theta}<\sym{PiConstant}/2$, there are two-dimensional subspaces
+$\sym{Usource},\like{Vtarget}{\symglyph{Vtarget}_{\symglyph{theta}}}\subset\sym{RealField}^4$ and an orthogonal map $\like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{theta}}}$ with
+$\like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{theta}}} \sym{Usource}=\like{Vtarget}{\symglyph{Vtarget}_{\symglyph{theta}}}$, such that both principal angles equal $\sym{theta}$ and
+the canonical direct rotation $\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}$ satisfies
 \begin{align}
- \|I-\like{Wcompetitor}{W_\theta}\|_1&=4\sin\sym{theta},\label{eq:competitor-trace}\\
- \|I-\like{Rrotation}{D_\theta}\|_1&=8\sin(\sym{theta}/2)>4\sin\sym{theta}.
+ \|\sym{Identity}-\like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{theta}}}\|_1&=4\sin\sym{theta},\label{eq:competitor-trace}\\
+ \|\sym{Identity}-\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}\|_1&=8\sin(\sym{theta}/2)>4\sin\sym{theta}.
  \label{eq:direct-trace}
 \end{align}
 \end{theorem}
@@ -55,89 +55,89 @@ the canonical direct rotation $\like{Rrotation}{D_\theta}$ satisfies
 Put $\sym{CosAngle}=\cos\sym{theta}$, $\sym{SinAngle}=\sin\sym{theta}$, and let
 \[
  \sym{Jturn}=\begin{pmatrix}0&-1\\1&0\end{pmatrix},\quad
- \sym{Cturn}=\cos(2\sym{theta})I_2+\sin(2\sym{theta})\sym{Jturn},\quad
- \sym{Hmix}=\frac{1}{\sqrt2}\begin{pmatrix}I_2&I_2\\I_2&-I_2\end{pmatrix}.
+ \sym{Cturn}=\cos(2\sym{theta})\sym{IdentityTwo}+\sin(2\sym{theta})\sym{Jturn},\quad
+ \sym{Hmix}=\frac{1}{\sqrt2}\begin{pmatrix}\sym{IdentityTwo}&\sym{IdentityTwo}\\I_2&-\sym{IdentityTwo}\end{pmatrix}.
 \]
 Define
 \begin{equation}
- \like{Wcompetitor}{W_\theta}=\sym{Hmix}\begin{pmatrix}\sym{Cturn}&0\\0&I_2\end{pmatrix}\sym{Hmix}^T
- =\begin{pmatrix}\like{CosAngle}{c^2}I_2+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}&-\like{SinAngle}{s^2}I_2+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\\
-                  -\like{SinAngle}{s^2}I_2+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}&\like{CosAngle}{c^2}I_2+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\end{pmatrix}.
+ \like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{theta}}}=\sym{Hmix}\begin{pmatrix}\sym{Cturn}&0\\0&\sym{IdentityTwo}\end{pmatrix}\sym{Hmix}^T
+ =\begin{pmatrix}\like{CosAngle}{\symglyph{CosAngle}^2}\sym{IdentityTwo}+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}&-\like{SinAngle}{\symglyph{SinAngle}^2}\sym{IdentityTwo}+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\\
+                  -\like{SinAngle}{\symglyph{SinAngle}^2}\sym{IdentityTwo}+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}&\like{CosAngle}{\symglyph{CosAngle}^2}\sym{IdentityTwo}+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\end{pmatrix}.
  \label{eq:wtheta}
 \end{equation}
-Both $\sym{Hmix}$ and $\sym{Cturn}$ are orthogonal, so $\like{Wcompetitor}{W_\theta}$ is orthogonal. Let
-$\sym{Usource}=\mathbb R^2\oplus\{\sym{ZeroVector}\}$ and $\like{Vtarget}{V_\theta}=\like{Wcompetitor}{W_\theta} \sym{Usource}$.
-The first two columns of $\like{Wcompetitor}{W_\theta}$ factor as
+Both $\sym{Hmix}$ and $\sym{Cturn}$ are orthogonal, so $\like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{theta}}}$ is orthogonal. Let
+$\sym{Usource}=\sym{RealField}^2\oplus\{\sym{ZeroVector}\}$ and $\like{Vtarget}{\symglyph{Vtarget}_{\symglyph{theta}}}=\like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{theta}}} \sym{Usource}$.
+The first two columns of $\like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{theta}}}$ factor as
 \[
- \begin{pmatrix}\like{CosAngle}{c^2}I_2+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\\-\like{SinAngle}{s^2}I_2+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\end{pmatrix}
- =\begin{pmatrix}\sym{CosAngle}I_2\\\sym{SinAngle}\sym{Jturn}\end{pmatrix}(\sym{CosAngle}I_2+\sym{SinAngle}\sym{Jturn}).
+ \begin{pmatrix}\like{CosAngle}{\symglyph{CosAngle}^2}\sym{IdentityTwo}+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\\-\like{SinAngle}{\symglyph{SinAngle}^2}\sym{IdentityTwo}+\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\end{pmatrix}
+ =\begin{pmatrix}\sym{CosAngle}\sym{IdentityTwo}\\\sym{SinAngle}\sym{Jturn}\end{pmatrix}(\sym{CosAngle}\sym{IdentityTwo}+\sym{SinAngle}\sym{Jturn}).
 \]
-Since $\sym{CosAngle}I_2+\sym{SinAngle}\sym{Jturn}$ is orthogonal, the columns of
-$\sym{Yframe}=\binom{\sym{CosAngle}I_2}{\sym{SinAngle}\sym{Jturn}}$ form an orthonormal basis of $\like{Vtarget}{V_\theta}$.
-With $\sym{Xframe}=\binom{I_2}{0}$, one has $\sym{Xframe}^T\sym{Yframe}=\sym{CosAngle}I_2$.
+Since $\sym{CosAngle}\sym{IdentityTwo}+\sym{SinAngle}\sym{Jturn}$ is orthogonal, the columns of
+$\sym{Yframe}=\binom{\sym{CosAngle}\sym{IdentityTwo}}{\sym{SinAngle}\sym{Jturn}}$ form an orthonormal basis of $\like{Vtarget}{\symglyph{Vtarget}_{\symglyph{theta}}}$.
+With $\sym{Xframe}=\binom{\sym{IdentityTwo}}{0}$, one has $\sym{Xframe}^T\sym{Yframe}=\sym{CosAngle}\sym{IdentityTwo}$.
 Thus both principal cosines are $\sym{CosAngle}>0$, and both principal angles are
 $\sym{theta}$.
 
 The corresponding projections and canonical intertwiner are
 \[
- \sym{Psource}=\begin{pmatrix}I_2&0\\0&0\end{pmatrix},\qquad
- \sym{Qtarget}=\sym{Yframe}\sym{Yframe}^T=\begin{pmatrix}\like{CosAngle}{c^2}I_2&-\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\\\sym{SinAngle}\sym{CosAngle}\sym{Jturn}&\like{SinAngle}{s^2}I_2\end{pmatrix},
+ \sym{Psource}=\begin{pmatrix}\sym{IdentityTwo}&0\\0&0\end{pmatrix},\qquad
+ \sym{Qtarget}=\sym{Yframe}\sym{Yframe}^T=\begin{pmatrix}\like{CosAngle}{\symglyph{CosAngle}^2}\sym{IdentityTwo}&-\sym{SinAngle}\sym{CosAngle}\sym{Jturn}\\\sym{SinAngle}\sym{CosAngle}\sym{Jturn}&\like{SinAngle}{\symglyph{SinAngle}^2}\sym{IdentityTwo}\end{pmatrix},
 \]
 \begin{equation}
- \sym{IntertwinerT}=\sym{Qtarget}\sym{Psource}+(I-\sym{Qtarget})(I-\sym{Psource})
-   =\sym{CosAngle}\begin{pmatrix}\sym{CosAngle}I_2&\sym{SinAngle}\sym{Jturn}\\\sym{SinAngle}\sym{Jturn}&\sym{CosAngle}I_2\end{pmatrix}.
+ \sym{IntertwinerT}=\sym{Qtarget}\sym{Psource}+(\sym{Identity}-\sym{Qtarget})(\sym{Identity}-\sym{Psource})
+   =\sym{CosAngle}\begin{pmatrix}\sym{CosAngle}\sym{IdentityTwo}&\sym{SinAngle}\sym{Jturn}\\\sym{SinAngle}\sym{Jturn}&\sym{CosAngle}\sym{IdentityTwo}\end{pmatrix}.
  \label{eq:intertwiner-theta}
 \end{equation}
-The last block matrix is orthogonal and $\sym{CosAngle}>0$, so $|\sym{IntertwinerT}|=\sym{CosAngle}I_4$ and
+The last block matrix is orthogonal and $\sym{CosAngle}>0$, so $|\sym{IntertwinerT}|=\sym{CosAngle}\sym{IdentityFour}$ and
 its polar factor is exactly
 \[
- \like{Rrotation}{D_\theta}=\begin{pmatrix}\sym{CosAngle}I_2&\sym{SinAngle}\sym{Jturn}\\\sym{SinAngle}\sym{Jturn}&\sym{CosAngle}I_2\end{pmatrix}.
+ \like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}=\begin{pmatrix}\sym{CosAngle}\sym{IdentityTwo}&\sym{SinAngle}\sym{Jturn}\\\sym{SinAngle}\sym{Jturn}&\sym{CosAngle}\sym{IdentityTwo}\end{pmatrix}.
 \]
 In particular, this calculation identifies the canonical direct rotation
-of the constructed pair. Since $\like{Rrotation}{D_\theta}+\like{Rrotation}{D_\theta}^T=2\sym{CosAngle}I_4$,
+of the constructed pair. Since $\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}+\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}^T=2\sym{CosAngle}\sym{IdentityFour}$,
 \[
- (I-\like{Rrotation}{D_\theta})^T(I-\like{Rrotation}{D_\theta})=(2-2\sym{CosAngle})I_4.
+ (\sym{Identity}-\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}})^T(\sym{Identity}-\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}})=(2-2\sym{CosAngle})\sym{IdentityFour}.
 \]
 Consequently all four displacement singular values equal
 $\sqrt{2-2\sym{CosAngle}}=2\sin(\sym{theta}/2)$.
 
 On the other hand, \cref{eq:wtheta} shows that the singular values of
-$I-\like{Wcompetitor}{W_\theta}$ are those of $(I_2-\sym{Cturn})\oplus0_2$.
+$\sym{Identity}-\like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{theta}}}$ are those of $(\sym{IdentityTwo}-\sym{Cturn})\oplus0_2$.
 The identity
-$(I_2-\sym{Cturn})^T(I_2-\sym{Cturn})=4\like{SinAngle}{s^2}I_2$ gives the list
+$(\sym{IdentityTwo}-\sym{Cturn})^T(\sym{IdentityTwo}-\sym{Cturn})=4\like{SinAngle}{\symglyph{SinAngle}^2}\sym{IdentityTwo}$ gives the list
 $(2\sym{SinAngle},2\sym{SinAngle},0,0)$. The two trace formulas follow. Finally,
 \[
  4\sin\sym{theta}
  =8\sin(\sym{theta}/2)\cos(\sym{theta}/2)
  <8\sin(\sym{theta}/2),
 \]
-because $0<\sym{theta}/2<\pi/4$.
+because $0<\sym{theta}/2<\sym{PiConstant}/4$.
 \end{proof}
 
 \begin{corollary}[No positive small-angle threshold]
 \label{cor:no-threshold}
 For every $\sym{EpsilonAngle}>0$, there are real two-dimensional subspaces of
-$\mathbb R^4$ whose largest principal angle is strictly between zero and
-$\sym{EpsilonAngle}$ and is at most $\pi/3$, together with an orthogonal competitor
+$\sym{RealField}^4$ whose largest principal angle is strictly between zero and
+$\sym{EpsilonAngle}$ and is at most $\sym{PiConstant}/3$, together with an orthogonal competitor
 having strictly smaller trace-norm displacement than the direct rotation.
 \end{corollary}
 
 \begin{proof}
 Apply \cref{thm:small-angle} with
-$\sym{theta}=\min\{\sym{EpsilonAngle}/2,\pi/4\}$.
+$\sym{theta}=\min\{\sym{EpsilonAngle}/2,\sym{PiConstant}/4\}$.
 \end{proof}
 
 The competitor rotates a diagonal real two-plane through $2\sym{theta}$ and
 fixes its orthogonal complement; its displacement has rank two, compared
-with rank four for $\like{Rrotation}{D_\theta}$. The operator norm favors the canonical
+with rank four for $\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}$. The operator norm favors the canonical
 rotation instead:
-$\|I-\like{Rrotation}{D_\theta}\|_{\mathrm{op}}=2\sin(\sym{theta}/2)
- <2\sin\sym{theta}=\|I-\like{Wcompetitor}{W_\theta}\|_{\mathrm{op}}$.
+$\dkOperatorNorm{\sym{Identity}-\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}}=2\sin(\sym{theta}/2)
+ <2\sin\sym{theta}=\dkOperatorNorm{\sym{Identity}-\like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{theta}}}}$.
 The competitor attains the global trace-norm minimum $4\sin\sym{theta}$.
 Indeed, the projection difference has trace norm
 $\|\sym{Psource}-\sym{Qtarget}\|_1=4\sin\sym{theta}$, and every orthogonal
 transporter $\sym{Wcompetitor}$ satisfies
-$\|\sym{Psource}-\sym{Qtarget}\|_1\leq\|I-\sym{Wcompetitor}\|_1$.
+$\|\sym{Psource}-\sym{Qtarget}\|_1\leq\|\sym{Identity}-\sym{Wcompetitor}\|_1$.
 Equation~\eqref{eq:competitor-trace} attains this lower bound.
 % Formal proof: DavisKahan/FiniteDimensional/DirectRotation/TraceOptimality.lean,
 % SmallAngleCounterexample.traceDisplacement_lower_bound and Wequiv_traceMinimizer.
@@ -150,7 +150,7 @@ Equation~\eqref{eq:competitor-trace} attains this lower bound.
 % Proposed corollary for the next prose review: Four is the least real ambient
 % dimension for trace-norm failure under the printed small-angle hypotheses.
 
-At $\sym{theta}=\pi/4$, \cref{fig:prop44-displacement-planes}
+At $\sym{theta}=\sym{PiConstant}/4$, \cref{fig:prop44-displacement-planes}
 shows the different displacement patterns of the canonical direct rotation
 and the competing transporter. Both carry the same source subspace onto the
 same target, with both principal angles equal to $45^\circ$. The competitor
@@ -161,49 +161,49 @@ fixes half of the ambient space; the direct rotation moves both principal planes
 \resizebox{119mm}{!}{\input{figures/Fig2.pgf}}
 \caption{A counterexample to the full-displacement claim
 \citep[Proposition~4.4]{davis1970rotation} at
-$\sym{theta}=\pi/4$. Both orthogonal maps carry $\sym{Usource}$ onto
+$\sym{theta}=\sym{PiConstant}/4$. Both orthogonal maps carry $\sym{Usource}$ onto
 $\sym{Vtarget}$. Each circle shows the action on one invariant real
 two-plane: (a,b) the principal planes $\Pi_1,\Pi_2$ for $\sym{Rrotation}$,
 and (c,d) the moving and fixed planes $M,Z$ for $\sym{Wcompetitor}$.
 The unit inputs are $u_1=e_0$, $u_2=e_1$,
 $x=(e_0+e_2)/\sqrt2$, and $z=(e_0-e_2)/\sqrt2$.
 For $T=\sym{Rrotation}$ or $\sym{Wcompetitor}$, the green arrow from
-the image $Tq$ to the input $q$ is the displacement $(I-T)q$.
-The bars list the four singular values of $I-T$, grouped by contributing
+the image $Tq$ to the input $q$ is the displacement $(\sym{Identity}-T)q$.
+The bars list the four singular values of $\sym{Identity}-T$, grouped by contributing
 plane, on the same vertical scale. Their sums give
-$\|I-\sym{Wcompetitor}\|_1=2\sqrt2<4\sqrt{2-\sqrt2}=\|I-\sym{Rrotation}\|_1$.
+$\|\sym{Identity}-\sym{Wcompetitor}\|_1=2\sqrt2<4\sqrt{2-\sqrt2}=\|\sym{Identity}-\sym{Rrotation}\|_1$.
 The two maps have different invariant-plane decompositions}
 \label{fig:prop44-displacement-planes}
 \end{figure}
 
 \subsection{Failure of the published proof}
 
-At $\sym{theta}=\pi/4$, the family gives
+At $\sym{theta}=\sym{PiConstant}/4$, the family gives
 \[
- \like{Wcompetitor}{W_{\pi/4}}=\frac12
+ \like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{PiConstant}/4}}=\frac12
  \begin{pmatrix}
  1&-1&-1&-1\\1&1&1&-1\\-1&-1&1&-1\\1&-1&1&1
  \end{pmatrix}.
 \]
 The two trace norms are
 \[
- \|I-\like{Wcompetitor}{W_{\pi/4}}\|_1=2\sqrt2
- <4\sqrt{2-\sqrt2}=\|I-\like{Rrotation}{D_{\pi/4}}\|_1.
+ \|\sym{Identity}-\like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{PiConstant}/4}}\|_1=2\sqrt2
+ <4\sqrt{2-\sqrt2}=\|\sym{Identity}-\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{PiConstant}/4}}\|_1.
 \]
 
-For $\sym{Kdisplacement}=I-\like{Wcompetitor}{W_{\pi/4}}$, the even-index part
+For $\sym{Kdisplacement}=\sym{Identity}-\like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{PiConstant}/4}}$, the even-index part
 of the published comparison \citep[equation~(4.3)]{davis1970rotation}
 reads, in our notation,
 \[
- \|\sym{Kdisplacement}\|_{(\nu)}\geq
- \sum_{k=1}^{\nu/2}\|\sym{Kdisplacement}\Omega_k\|_{(2)},
- \qquad \nu\ \text{even},
+ \|\sym{Kdisplacement}\|_{(\sym{KyFanEvenIndex})}\geq
+ \sum_{k=1}^{\sym{KyFanEvenIndex}/2}\|\sym{Kdisplacement}\like{PrincipalPlaneProjectionBase}{\symglyph{PrincipalPlaneProjectionBase}_k}\|_{(2)},
+ \qquad \sym{KyFanEvenIndex}\ \text{even},
 \]
-where $\|\cdot\|_{(j)}$ is the Ky Fan $j$-norm and $\Omega_k$ projects onto
-the $k$th principal plane. Choose $\nu=4$ and let
+where $\sym{KyFanNormNotation}$ is the Ky Fan $j$-norm and $\like{PrincipalPlaneProjectionBase}{\symglyph{PrincipalPlaneProjectionBase}_k}$ projects onto
+the $k$th principal plane. Choose $\sym{KyFanEvenIndex}=4$ and let
 $\sym{OmegaOne}$ and $\sym{OmegaTwo}$ project onto
-$\operatorname{span}\{e_0,e_3\}$ and
-$\operatorname{span}\{e_1,e_2\}$. These are principal planes for the pair.
+$\sym{SpanOperator}\{e_0,e_3\}$ and
+$\sym{SpanOperator}\{e_1,e_2\}$. These are principal planes for the pair.
 The comparison then requires
 \begin{equation}
  \|\sym{Kdisplacement}\|_{(4)}\geq
@@ -221,7 +221,7 @@ The displayed matrix also gives
  \DKRange(\sym{Kdisplacement}\sym{OmegaOne})
  =\DKRange(\sym{Kdisplacement}\sym{OmegaTwo})
  =\sym{CounterMovingPlane}
- =\operatorname{span}\{e_0+e_2,e_1+e_3\}.
+ =\sym{SpanOperator}\{e_0+e_2,e_1+e_3\}.
 \]
 Both restrictions map onto the same two-dimensional output plane. Each
 has singular values $1,1$, whereas the full displacement has just two
@@ -240,7 +240,7 @@ invariant norm $\sym{NormM}$ satisfying
 \end{equation}
 
 For example, the Frobenius norm is a $\sym{NormQ}$-norm because
-$\|Z\|_F^2=\|Z^*Z\|_1$: its squared norm is the sum of the eigenvalues of
+$\dkFrobeniusNorm{Z}^2=\dkTraceNorm{Z^*Z}$: its squared norm is the sum of the eigenvalues of
 the positive matrix $Z^*Z$. This identity uses the trace norm for
 $\sym{NormM}$. The squared-displacement comparison
 \citep[Proposition~4.3]{davis1970rotation} gives the following Q-norm consequence.
@@ -253,18 +253,18 @@ Let $\sym{Usource},\sym{Vtarget}$ be an acute pair of subspaces of a finite-dime
 complex Hilbert space, and let $\sym{Rrotation}$ be their canonical direct rotation.
 For every $\sym{NormQ}$-norm $\sym{NormN}$ and every orthogonal or unitary map $\sym{Wcompetitor}$ with $\sym{Wcompetitor}\sym{Usource}=\sym{Vtarget}$,
 \begin{equation}
- \sym{NormN}(I-\sym{Rrotation})\leq \sym{NormN}(I-\sym{Wcompetitor}).
+ \sym{NormN}(\sym{Identity}-\sym{Rrotation})\leq \sym{NormN}(\sym{Identity}-\sym{Wcompetitor}).
  \label{eq:qnorm-repair}
 \end{equation}
-No $\pi/3$ restriction is required.
+No $\sym{PiConstant}/3$ restriction is required.
 \end{proposition}
 
 \begin{proof}
 The valid squared-displacement theorem gives
 \[
- \sym{NormM}((I-\sym{Rrotation})^*(I-\sym{Rrotation}))\leq \sym{NormM}((I-\sym{Wcompetitor})^*(I-\sym{Wcompetitor})).
+ \sym{NormM}((\sym{Identity}-\sym{Rrotation})^*(\sym{Identity}-\sym{Rrotation}))\leq \sym{NormM}((\sym{Identity}-\sym{Wcompetitor})^*(\sym{Identity}-\sym{Wcompetitor})).
 \]
-By \cref{eq:qnorm-def}, these quantities are $\sym{NormN}(I-\sym{Rrotation})^2$ and $\sym{NormN}(I-\sym{Wcompetitor})^2$.
+By \cref{eq:qnorm-def}, these quantities are $\sym{NormN}(\sym{Identity}-\sym{Rrotation})^2$ and $\sym{NormN}(\sym{Identity}-\sym{Wcompetitor})^2$.
 Both norm values are nonnegative, so taking square roots proves the claim.
 \end{proof}
 
@@ -278,15 +278,15 @@ would imply.
 Davis and Kahan already exhibited a complex two-dimensional phase
 modification that decreases the trace norm of full displacement
 \citep[Example~4.2]{davis1970rotation}. Our real family is its
-realification. Indeed, under the identification $\mathbb C^2\simeq
-\mathbb R^2\oplus\mathbb R^2$ in which multiplication by $i$ is
+realification. Indeed, under the identification $\sym{ComplexField}^2\simeq
+\sym{RealField}^2\oplus\sym{RealField}^2$ in which multiplication by $i$ is
 represented by $\sym{Jturn}$ from \cref{eq:wtheta}, the matrices
 \[
- \like{Rrotation}{D_\theta}^{\mathbb C}=
+ \like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}^{\sym{ComplexField}}=
  \begin{pmatrix}\sym{CosAngle}&i\sym{SinAngle}\\i\sym{SinAngle}&\sym{CosAngle}\end{pmatrix},\qquad
- \like{Wcompetitor}{W_\theta}^{\mathbb C}=e^{i\sym{theta}}\like{Rrotation}{D_\theta}^{\mathbb C}
+ \like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{theta}}}^{\sym{ComplexField}}=e^{i\sym{theta}}\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}^{\sym{ComplexField}}
 \]
-become precisely $\like{Rrotation}{D_\theta}$ and $\like{Wcompetitor}{W_\theta}$ above. Realification doubles
+become precisely $\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}$ and $\like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{theta}}}$ above. Realification doubles
 the complex singular-value multiplicities. Thus the real small-angle
 restriction in the full-displacement claim
 \citep[Proposition~4.4]{davis1970rotation} does not eliminate the mechanism of the
@@ -298,7 +298,7 @@ minimization theorem and a counterexample for Schatten $p$-norms with
 $1\leq p<2$ \citep[Theorem~3.1 and Lemma~3.3]{bolotnikov2001minimal}.
 Those results establish the earlier norm-class
 distinction. \citet[Section~5]{qiu2006grassmann} subsequently repeated
-the $\pi/3$ assertion, whereas
+the $\sym{PiConstant}/3$ assertion, whereas
 \citet[Section~4, p.~1615]{zhang2010canonicalangles} explicitly noted
 general trace-norm nonminimality without addressing that particular
 real-space restriction. The present refutation identifies the invalid

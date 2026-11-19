@@ -34,20 +34,20 @@ notation and definitions also apply in monochrome.
 $\sym{A},\sym{H},\sym{Acurrent}$ & Reference operator, additive perturbation, and perturbed operator $\sym{Acurrent}=\sym{A}+\sym{H}$.\\
 $\sym{Eambient};\ \sym{Ftrial},\sym{Hexact},\sym{Gunwanted}$ & Ambient, trial-coordinate, exact-coordinate, and complementary-coordinate Hilbert spaces.\\
 $\sym{E0}:\sym{Ftrial}\to\sym{Eambient}$ & \dkSymbolDescription{E0}\\
-$\sym{A0}$ & Self-adjoint trial operator. A Rayleigh--Ritz choice is $\sym{A0}=\like{E0}{E_0^*}\sym{Acurrent}\sym{E0}$.\\
+$\sym{A0}$ & Self-adjoint trial operator. A Rayleigh--Ritz choice is $\sym{A0}=\like{E0}{\symglyph{E0}^*}\sym{Acurrent}\sym{E0}$.\\
 $\sym{ReferenceBlock0},\sym{ReferenceBlock1}$ & Reference blocks on $\DKRange(\sym{Psource})$ and $\DKKernel(\sym{Psource})$ in Section~\ref{sec:foundations}.\\
 $\sym{F0}:\sym{Hexact}\to\sym{Eambient}$ & \dkSymbolDescription{F0}\\
 $\sym{F1}:\sym{Gunwanted}\to\sym{Eambient}$ & \dkSymbolDescription{F1}\\
 $\sym{Lambda1}$ & Complementary self-adjoint block, with $\sym{Acurrent}\sym{F1}=\sym{F1}\sym{Lambda1}$ on its domain.\\
 $\sym{SpectralMeasure},\sym{SpectralSet}$ & Projection-valued measure and Borel spectral set; $\sym{SpectralMeasure}(\sym{SpectralSet})$ is the corresponding spectral projection. These symbols differ from the ambient space $\sym{Eambient}$ and complementary block $\sym{S}$.\\
-$\sym{Pexact}=\sym{F0}\like{F0}{F_0^*}$ & Projection onto the desired exact subspace in the sine-theta theorem.\\
-$\sym{Theta0},\sym{sinTheta0}$ & Trial-coordinate angle operator and its positive sine, with $\sym{sinTheta0}=(I-\like{E0}{E_0^*}\sym{Pexact}\sym{E0})^{1/2}$.\\
-$\sym{Theta}=\operatorname{diag}(\sym{Theta0},\sym{Theta1})$ & Full angle operator; $\sym{Theta1}$ compares the orthogonal complements. Its operator norm is the largest spectral angle.\\
-$\sym{CrossedSourceDefect},\sym{CrossedTargetDefect}$ & Source directions perpendicular to the target, and target directions perpendicular to the source. Section~\ref{sec:foundations} uses the condition $\dim\sym{CrossedSourceDefect}=\dim\sym{CrossedTargetDefect}$.\\
+$\sym{Pexact}=\sym{F0}\like{F0}{\symglyph{F0}^*}$ & Projection onto the desired exact subspace in the sine-theta theorem.\\
+$\sym{Theta0},\sym{sinTheta0}$ & Trial-coordinate angle operator and its positive sine, with $\sym{sinTheta0}=(\sym{Identity}-\like{E0}{\symglyph{E0}^*}\sym{Pexact}\sym{E0})^{1/2}$.\\
+$\sym{Theta}=\sym{DiagonalOperator}(\sym{Theta0},\sym{Theta1})$ & Full angle operator; $\sym{Theta1}$ compares the orthogonal complements. Its operator norm is the largest spectral angle.\\
+$\sym{CrossedSourceDefect},\sym{CrossedTargetDefect}$ & Source directions perpendicular to the target, and target directions perpendicular to the source. Section~\ref{sec:foundations} uses the condition $\sym{DimensionOperator}\sym{CrossedSourceDefect}=\sym{DimensionOperator}\sym{CrossedTargetDefect}$.\\
 $\{\sym{ZeroVector}\}$ & Zero subspace: the set containing only the zero vector.\\
-$\sym{S}=(I-\sym{Pexact})\sym{E0}$ & Complementary block, with modulus $|\sym{S}|=\sym{sinTheta0}$.\\
-$\sym{X}=\like{F1}{F_1^*}\sym{E0}$ & Coordinates of the trial component in the unwanted space; $\sym{S}=\sym{F1}\sym{X}$.\\
-$\sym{SylvesterLeft},\sym{SylvesterRight},\sym{SylvesterRHS}$ & Generic left and right Sylvester coefficients and right side: $\sym{SylvesterLeft}\sym{X}-\sym{X}\sym{SylvesterRight}=\sym{SylvesterRHS}$. The historical equation writes the right coefficient as $\like{SylvesterRight}{A}$.\\
+$\sym{S}=(\sym{Identity}-\sym{Pexact})\sym{E0}$ & Complementary block, with modulus $\dkModulus{\sym{S}}=\sym{sinTheta0}$.\\
+$\sym{X}=\like{F1}{\symglyph{F1}^*}\sym{E0}$ & Coordinates of the trial component in the unwanted space; $\sym{S}=\sym{F1}\sym{X}$.\\
+$\sym{SylvesterLeft},\sym{SylvesterRight},\sym{SylvesterRHS}$ & Generic left and right Sylvester coefficients and right side: $\sym{SylvesterLeft}\sym{X}-\sym{X}\sym{SylvesterRight}=\sym{SylvesterRHS}$. The historical equation writes the right coefficient as $\sym{HistoricalSylvesterRight}$.\\
 $\sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{A0}$ & Bounded residual agreeing with this difference on $\DKDom(\sym{A0})$.\\
 $\sym{delta}>0$ & \dkSymbolDescription{delta}\\
 $[\sym{betaEndpoint},\sym{alphaEndpoint}]$ & Interval in the interval/exterior gap hypothesis.\\
@@ -56,25 +56,25 @@ $\sym{Usource},\sym{Vtarget}$ & Source and target subspaces in the displacement 
 $\sym{Psource},\sym{Qtarget}$ & Orthogonal projections onto $\sym{Usource},\sym{Vtarget}$ in that problem.\\
 $\sym{Rrotation},\sym{Wcompetitor}$ & Direct rotation and an arbitrary orthogonal or unitary transporter carrying $\sym{Usource}$ onto $\sym{Vtarget}$.\\
 $\sym{PolarU}$ & Partial isometry in a polar decomposition, as in $\sym{S}=\sym{PolarU}|\sym{S}|$.\\
-$\sym{IntertwinerT}$ & The intertwiner $\sym{Qtarget}\sym{Psource}+(I-\sym{Qtarget})(I-\sym{Psource})$, whose unitary polar factor is the acute direct rotation.\\
-$\sym{theta},\like{theta}{\theta_j}$ & Individual principal angles, in $[0,\pi/2]$.\\
+$\sym{IntertwinerT}$ & The intertwiner $\sym{Qtarget}\sym{Psource}+(\sym{Identity}-\sym{Qtarget})(\sym{Identity}-\sym{Psource})$, whose unitary polar factor is the acute direct rotation.\\
+$\sym{theta},\like{theta}{\symglyph{theta}_j}$ & Individual principal angles, in $[0,\sym{PiConstant}/2]$.\\
 $\sym{Xframe},\sym{Yframe}$ & Orthonormal coordinate matrices for the source and target in the real counterexample.\\
-$\sym{Jturn},\sym{Cturn},\sym{Hmix}$ & Planar rotation through $\pi/2$, rotation through $2\sym{theta}$, and orthogonal mixing matrix used in that counterexample.\\
-$\sym{Jreflect};\ \sym{AngleGenerator}$ & Source reflection $2\sym{Psource}-I$, with square $I$; skew angle generator of a direct rotation. The $\pi/2$-rotation matrix $\sym{Jturn}$ has square $-I_2$.\\
+$\sym{Jturn},\sym{Cturn},\sym{Hmix}$ & Planar rotation through $\sym{PiConstant}/2$, rotation through $2\sym{theta}$, and orthogonal mixing matrix used in that counterexample.\\
+$\sym{Jreflect};\ \sym{AngleGenerator}$ & Source reflection $2\sym{Psource}-\sym{Identity}$, with square $\sym{Identity}$; skew angle generator of a direct rotation. The $\sym{PiConstant}/2$-rotation matrix $\sym{Jturn}$ has square $-\sym{IdentityTwo}$.\\
 $\sym{CounterPrincipalOne},\sym{CounterPrincipalTwo};\ \sym{CounterMovingPlane},\sym{CounterFixedPlane}$ & Principal planes of the direct rotation and moving/fixed planes of the competitor in \cref{fig:prop44-displacement-planes}.\\
 $\sym{CounterChordA},\sym{CounterChordB}$ & Displacement singular values $\sqrt{2-\sqrt2}$ and $\sqrt2$ in that counterexample.\\
-$\sym{Kdisplacement}=I-\sym{Wcompetitor}$ & Full displacement operator in the failed Ky Fan comparison.\\
+$\sym{Kdisplacement}=\sym{Identity}-\sym{Wcompetitor}$ & Full displacement operator in the failed Ky Fan comparison.\\
 $\sym{OmegaOne},\sym{OmegaTwo}$ & Principal-plane projections used to test that comparison.\\
-$|T|=(T^*T)^{1/2}$ & Positive modulus of an operator.\\
-$s_j(T)$ & Ordered singular values; approximation numbers provide the corresponding comparisons for bounded operators in Hilbert space.\\
+$\dkModulus{T}=(T^*T)^{1/2}$ & Positive modulus of an operator.\\
+$\sym{SingularValueS}(T)$ & Ordered singular values; approximation numbers provide the corresponding comparisons for bounded operators in Hilbert space.\\
 $\sym{NormN}(T)$ & \dkSymbolDescription{NormN}\\
-$\|T\|_{\mathrm{op}}$ & Operator norm; in finite dimension, the largest singular value.\\
-$\|T\|_F$ & Frobenius norm, $\bigl(\sum_j s_j(T)^2\bigr)^{1/2}$.\\
-$\|T\|_1$ & Trace norm, $\sum_j s_j(T)$.\\
-$\|T\|_{(j)}$ & Ky Fan norm, the sum of the $j$ largest singular values.\\
+$\dkOperatorNorm{T}$ & Operator norm; in finite dimension, the largest singular value.\\
+$\dkFrobeniusNorm{T}$ & Frobenius norm, $\bigl(\sum_j \sym{SingularValueS}(T)^2\bigr)^{1/2}$.\\
+$\dkTraceNorm{T}$ & Trace norm, $\sum_j \sym{SingularValueS}(T)$.\\
+$\dkKyFanNorm{T}{j}$ & Ky Fan norm, the sum of the $j$ largest singular values.\\
 $\sym{NormQ}\text{-norm}$ & A norm satisfying $\sym{NormN}(T)^2=\sym{NormM}(T^*T)$ for a unitarily invariant norm $\sym{NormM}$.\\
-$\sym{Matching},\like{SingletonCost}{s_i},\like{PairCost}{e_{ij}}$ & Matching of positive principal-angle labels, with singleton and paired costs in \cref{eq:nuclear-matching-costs}.\\
-$\sym{MatchingEdgeWeight};\ \like{TraceCost}{C(M)}$ & Edge weight $s_i+s_j-e_{ij}$; total trace-norm displacement cost of the matching.\\
+$\sym{Matching},\like{SingletonCost}{\symglyph{SingletonCost}_i},\like{PairCost}{\symglyph{PairCost}_{ij}}$ & Matching of positive principal-angle labels, with singleton and paired costs in \cref{eq:nuclear-matching-costs}.\\
+$\sym{MatchingEdgeWeight};\ \like{TraceCost}{\symglyph{TraceCost}(M)}$ & Edge weight $s_i+s_j-e_{ij}$; total trace-norm displacement cost of the matching.\\
 \end{longtable}
 \endgroup
 
@@ -95,7 +95,7 @@ instances supplying ambient algebraic, analytic, or topological structure.  The 
 \citep{demoura2021lean4}.
 
 In \Cref{lst:dk-sintheta-headline}, \texttt{RCLike} is the Mathlib abstraction
-covering $\mathbb{R}$ and $\mathbb{C}$.  A type
+covering $\sym{RealField}$ and $\sym{ComplexField}$.  A type
 \texttt{ContinuousLinearMap K F E} is a continuous linear map.  A type
 \texttt{LinearPMap K E E} is a linear partial map whose
 domain is a submodule; this is the representation used for possibly unbounded
@@ -179,12 +179,12 @@ Table~\ref{tab:dk-full-inventory}, using the same IDs
 Hilbert spaces are separable and real or complex unless specified otherwise.
 $\sym{NormN}$ denotes an arbitrary unitarily invariant norm on its domain of
 finiteness; each displayed norm is evaluated on an operator in that domain.
-$\|\cdot\|_{\mathrm{op}}$ and $\|\cdot\|_{\mathrm{HS}}$ denote the operator
+$\dkOperatorNorm{\cdot}$ and $\dkHilbertSchmidtNorm{\cdot}$ denote the operator
 and Hilbert--Schmidt norms. Self-adjoint operators may be unbounded:
 operator identities hold on their domains, and residuals or right-hand sides
 in norm estimates have bounded extensions.
 For the ambient tangent bound, the tangent is defined as a bounded operator,
-equivalently $\|\sym{Psource}-\sym{Qtarget}\|_{\mathrm{op}}<1$.
+equivalently $\dkOperatorNorm{\sym{Psource}-\sym{Qtarget}}<1$.
 
 For the geometric results, $\sym{Psource},\sym{Qtarget}$ are orthogonal
 projections, $\sym{SourceDirectRotation}$ is a direct rotation, and
@@ -192,18 +192,18 @@ $\sym{Wcompetitor}$ is any orthogonal or unitary transporter satisfying
 $\sym{Wcompetitor}\sym{Psource}\sym{Wcompetitor}^*=\sym{Qtarget}$.
 Write
 \[
- D_0=\DKRange(\sym{Psource})\cap\DKKernel(\sym{Qtarget}),\qquad
- D_1=\DKKernel(\sym{Psource})\cap\DKRange(\sym{Qtarget}).
+ \sym{CrossedSourceDefect}=\DKRange(\sym{Psource})\cap\DKKernel(\sym{Qtarget}),\qquad
+ \sym{CrossedTargetDefect}=\DKKernel(\sym{Psource})\cap\DKRange(\sym{Qtarget}).
 \]
-The pair is acute when $D_0=D_1=\{\sym{ZeroVector}\}$.
+The pair is acute when $\sym{CrossedSourceDefect}=\sym{CrossedTargetDefect}=\{\sym{ZeroVector}\}$.
 For geometric and displacement rows from \path{DK-3.3-prop} onward,
 the ranges and kernels of
 $\sym{Psource},\sym{Qtarget}$ have matching dimensions and
-$\dim D_0=\dim D_1$; the displacement results also assume
+$\sym{DimensionOperator} \sym{CrossedSourceDefect}=\sym{DimensionOperator} \sym{CrossedTargetDefect}$; the displacement results also assume
 the directed sine block
-$(I-\sym{Qtarget})|_{\DKRange(\sym{Psource})}$ compact.
-$\sym{Theta0},\Theta_1$ are the source and complementary angle operators,
-$\sym{Theta}$ their ambient direct sum, and $\theta_j$ the ordered principal
+$(\sym{Identity}-\sym{Qtarget})|_{\DKRange(\sym{Psource})}$ compact.
+$\sym{Theta0},\sym{Theta1}$ are the source and complementary angle operators,
+$\sym{Theta}$ their ambient direct sum, and $\like{theta}{\symglyph{theta}_j}$ the ordered principal
 angles. In the source decomposition the direct rotation has blocks
 $\bigl(\begin{smallmatrix}C_0&-S_0^*\\S_0&C_1\end{smallmatrix}\bigr)$
 with $C_j\ge0$; $\sym{AngleGenerator}$ is its skew angle generator, so
@@ -227,23 +227,23 @@ The exact frames have orthogonal ranges whose sum is the ambient space;
 reducing projections preserve operator domains.
 We abbreviate the two spectral hypotheses, for $\sym{delta}>0$, by
 \begin{align*}
- \mathcal I_{\sym{delta}}(B,C):\quad&
- \sigma(B)\subset[\beta,\alpha],\quad
- \sigma(C)\cap(\beta-\sym{delta},\alpha+\sym{delta})=\varnothing,
+ \sym{IntervalSeparation}_{\sym{delta}}(B,C):\quad&
+ \sym{SpectrumSymbol}(B)\subset[\sym{betaEndpoint},\sym{alphaEndpoint}],\quad
+ \sym{SpectrumSymbol}(C)\cap(\sym{betaEndpoint}-\sym{delta},\sym{alphaEndpoint}+\sym{delta})=\varnothing,
  \quad\text{or the roles interchanged};\\
- \mathcal O_{\sym{delta}}(B,C):\quad&
- B\le\alpha I,\quad C\ge(\alpha+\sym{delta})I.
+ \sym{OrderedSeparation}_{\sym{delta}}(B,C):\quad&
+ B\le\sym{alphaEndpoint} \sym{Identity},\quad C\ge(\sym{alphaEndpoint}+\sym{delta})\sym{Identity}.
 \end{align*}
-The endpoints are real, satisfy $\beta\le\alpha$, and are chosen for each row.
-The ordered condition $\mathcal O_{\sym{delta}}(B,C)$ places the spectra in
-the half-infinite intervals $(-\infty,\alpha]$ and
-$[\alpha+\sym{delta},\infty)$; it allows both operators to be unbounded.
+The endpoints are real, satisfy $\sym{betaEndpoint}\le\sym{alphaEndpoint}$, and are chosen for each row.
+The ordered condition $\sym{OrderedSeparation}_{\sym{delta}}(B,C)$ places the spectra in
+the half-infinite intervals $(-\infty,\sym{alphaEndpoint}]$ and
+$[\sym{alphaEndpoint}+\sym{delta},\infty)$; it allows both operators to be unbounded.
 To include both orientations, set
 \[
  \sym{SineGap}(B,C)\quad\Longleftrightarrow\quad
- \mathcal I_{\sym{delta}}(B,C)\quad\text{or}\quad
- \mathcal O_{\sym{delta}}(B,C)\quad\text{or}\quad
- \mathcal O_{\sym{delta}}(C,B).
+ \sym{IntervalSeparation}_{\sym{delta}}(B,C)\quad\text{or}\quad
+ \sym{OrderedSeparation}_{\sym{delta}}(B,C)\quad\text{or}\quad
+ \sym{OrderedSeparation}_{\sym{delta}}(C,B).
 \]
 This is the separation condition of Section~\ref{sec:gap-geometry}.
 
@@ -273,64 +273,64 @@ This is the separation condition of Section~\ref{sec:gap-geometry}.
  $\sym{SineGap}(\sym{A0},\sym{Lambda1})$. &
  $\sym{delta}\sym{NormN}(\sin\sym{Theta0})\le\sym{NormN}(\sym{R})$.\\\addlinespace
 \path{S2-tan-theta} &
- $\mathcal O_{\sym{delta}}(\sym{A0},\sym{Lambda1})$;
+ $\sym{OrderedSeparation}_{\sym{delta}}(\sym{A0},\sym{Lambda1})$;
  Rayleigh--Ritz condition $\sym{H0}=0$. &
  $\sym{delta}\sym{NormN}(\tan\sym{Theta0})\le\sym{NormN}(\sym{R})$;
  $\sym{delta}\sym{NormN}(\tan\sym{Theta})\le\sym{NormN}(\sym{H})$.\\\addlinespace
 \path{S2-sin-two-theta} &
  $\sym{A},\sym{Acurrent}$ have a common domain;
- $\sigma(\sym{Lambda0})\subset[\beta,\alpha]$;
- $\sigma(\sym{Lambda1})$ outside
- $(\beta-\sym{delta},\alpha+\sym{delta})$. &
+ $\sym{SpectrumSymbol}(\sym{Lambda0})\subset[\sym{betaEndpoint},\sym{alphaEndpoint}]$;
+ $\sym{SpectrumSymbol}(\sym{Lambda1})$ outside
+ $(\sym{betaEndpoint}-\sym{delta},\sym{alphaEndpoint}+\sym{delta})$. &
  $\sym{delta}\sym{NormN}(\sin(2\sym{Theta0}))\le2\sym{NormN}(\sym{R})$;
  $\sym{delta}\sym{NormN}(\sin(2\sym{Theta}))\le2\sym{NormN}(\sym{H})$.\\\addlinespace
 \path{S2-tan-two-theta} &
- $\mathcal O_{\sym{delta}}(\sym{A0},\sym{A1})$;
+ $\sym{OrderedSeparation}_{\sym{delta}}(\sym{A0},\sym{A1})$;
  bounded $\sym{H}$, $\sym{H0}=\sym{H1}=0$. &
  $\sym{delta}\sym{NormN}(\tan(2\sym{Theta0}))\le2\sym{NormN}(\sym{R})$;
  $\sym{delta}\sym{NormN}(\tan(2\sym{Theta}))\le2\sym{NormN}(\sym{H})$.\\\addlinespace[5pt]
 \multicolumn{3}{@{}l}{\textbf{Two subspaces and direct rotations}}\\*\addlinespace[3pt]
 \path{DK-3.1-prop} &
- $D_0=D_1=\{\sym{ZeroVector}\}$. &
+ $\sym{CrossedSourceDefect}=\sym{CrossedTargetDefect}=\{\sym{ZeroVector}\}$. &
  A unique direct rotation exists. Positive diagonal blocks characterize it
  among transporters.\\\addlinespace
 \path{DK-3.2-prop} &
  General pair of projections. &
- A direct rotation exists iff $\dim D_0=\dim D_1$.
- On $D_0\oplus D_1$, $\sym{SourceDirectRotation}^2=-I$;
+ A direct rotation exists iff $\sym{DimensionOperator} \sym{CrossedSourceDefect}=\sym{DimensionOperator} \sym{CrossedTargetDefect}$.
+ On $\sym{CrossedSourceDefect}\oplus \sym{CrossedTargetDefect}$, $\sym{SourceDirectRotation}^2=-\sym{Identity}$;
  uniqueness can fail.\\\addlinespace
 \path{DK-3.3-prop} &
  A direct rotation $\sym{SourceDirectRotation}$; conversely a unitary
  square root with spectrum in the closed right half-plane that maps
- $D_0$ onto $D_1$. &
- $\sym{SourceDirectRotation}^2=(2\sym{Qtarget}-I)(2\sym{Psource}-I)$,
+ $\sym{CrossedSourceDefect}$ onto $\sym{CrossedTargetDefect}$. &
+ $\sym{SourceDirectRotation}^2=(2\sym{Qtarget}-\sym{Identity})(2\sym{Psource}-\sym{Identity})$,
  and its spectrum lies in the closed right half-plane.
  Conversely, such a square root is a direct rotation.\\\addlinespace
 \path{DK-3.4-prop} &
- $C_0^2\ge\tfrac12 I$;
- $Q_-=(2\sym{Psource}-I)\sym{Qtarget}(2\sym{Psource}-I)$. &
+ $C_0^2\ge\tfrac12 \sym{Identity}$;
+ $Q_-=(2\sym{Psource}-\sym{Identity})\sym{Qtarget}(2\sym{Psource}-\sym{Identity})$. &
  $\sym{SourceDirectRotation}^2$ is a direct rotation from
  $\DKRange(Q_-)$ to $\DKRange(\sym{Qtarget})$.\\\addlinespace
 \path{DK-3.1-thm} &
  Matching dimensions as above; angle operators
- $0\le\sym{Theta0},\Theta_1\le\pi/2$. &
+ $0\le\sym{Theta0},\sym{Theta1}\le\sym{PiConstant}/2$. &
  The four intersection dimensions and the generic angle's spectral
  multiplicity completely classify pairs up to isometric equivalence.
  Any angle data with matching nonzero multiplicities
  and the prescribed total dimension are realizable.\\\addlinespace
 \path{DK-3.1-cor} &
  Classification hypotheses;
- $\sym{Psource}(I-\sym{Qtarget})\sym{Psource}$ compact. &
+ $\sym{Psource}(\sym{Identity}-\sym{Qtarget})\sym{Psource}$ compact. &
  Classification reduces to angle eigenvalues with multiplicity:
- $\theta_j\downarrow0$. The two angle operators may have different
+ $\like{theta}{\symglyph{theta}_j}\downarrow0$. The two angle operators may have different
  zero multiplicities.\\\addlinespace
 \path{DK-3.5-prop} &
  A direct rotation and its angle operator $\sym{Theta}$; the maximal
  eigenspace characterization assumes the acute case. &
  $\sym{Theta}$ commutes with $\sym{Psource},\sym{Qtarget},\sym{AngleGenerator},
  \sym{SourceDirectRotation}$. If $x\ne0$ and
- $\sym{Theta}x=\theta x$, then
- $\angle(x,\sym{SourceDirectRotation}x)=\theta$.
+ $\sym{Theta}x=\sym{theta} x$, then
+ $\angle(x,\sym{SourceDirectRotation}x)=\sym{theta}$.
  In the acute case these eigenspaces are the unique maximal reducing
  subspaces of the prescribed angle.\\\addlinespace
 \path{DK-3.2-cor} &
@@ -342,48 +342,48 @@ This is the separation condition of Section~\ref{sec:gap-geometry}.
  Compact angle data; arbitrary transporter $\sym{Wcompetitor}$. &
  For the positive principal angles, there are orthonormal
  $v_j\in\DKRange(\sym{Psource})$ with
- $\angle(v_j,\sym{Wcompetitor}v_j)\ge\theta_j$.
+ $\angle(v_j,\sym{Wcompetitor}v_j)\ge\like{theta}{\symglyph{theta}_j}$.
  Each singular value of restricted displacement is minimized by
- $\sym{SourceDirectRotation}$, with value $2\sin(\theta_j/2)$.\\\addlinespace
+ $\sym{SourceDirectRotation}$, with value $2\sin(\like{theta}{\symglyph{theta}_j}/2)$.\\\addlinespace
 \path{DK-4.1-cor} &
  Same displacement setting. &
- $\sym{NormN}((I-\sym{SourceDirectRotation})\sym{Psource})
- \le\sym{NormN}((I-\sym{Wcompetitor})\sym{Psource})$.\\\addlinespace
+ $\sym{NormN}((\sym{Identity}-\sym{SourceDirectRotation})\sym{Psource})
+ \le\sym{NormN}((\sym{Identity}-\sym{Wcompetitor})\sym{Psource})$.\\\addlinespace
 \path{DK-4.2-prop} &
  Any orthonormal basis $(v_j)$ of $\DKRange(\sym{Psource})$;
  arbitrary transporter $\sym{Wcompetitor}$. &
  $\sum_j\sin^2\angle(v_j,\sym{Wcompetitor}v_j)
- \ge\sum_j\sin^2\theta_j$, including an infinite right-hand side.\\\addlinespace
+ \ge\sum_j\sin^2\like{theta}{\symglyph{theta}_j}$, including an infinite right-hand side.\\\addlinespace
 \path{DK-4.3-prop} &
  Same displacement setting; put
- $\sym{SquaredDisplacement}(W)=(I-W)^*(I-W)$. &
+ $\sym{SquaredDisplacement}(W)=(\sym{Identity}-W)^*(\sym{Identity}-W)$. &
  $\sym{NormN}(\sym{SquaredDisplacement}(\sym{SourceDirectRotation}))
  \le\sym{NormN}(\sym{SquaredDisplacement}(\sym{Wcompetitor}))$:
  the direct rotation minimizes squared full displacement.\\\addlinespace
 \path{DK-4.4-prop} &
- Real space; largest principal angle at most $\pi/3$. &
+ Real space; largest principal angle at most $\sym{PiConstant}/3$. &
  The printed assertion that $\sym{SourceDirectRotation}$ minimizes
- every $\sym{NormN}(I-\sym{Wcompetitor})$ is false.
+ every $\sym{NormN}(\sym{Identity}-\sym{Wcompetitor})$ is false.
  A real four-dimensional trace-norm counterexample is given in
  \cref{sec:prop44}; the Q-norm repair is stated there separately.\\\addlinespace[5pt]
 \multicolumn{3}{@{}l}{\textbf{Sylvester estimates and spectral cutoffs}}\\*\addlinespace[3pt]
 \path{DK-5.1-thm} &
  Banach spaces; bounded $C,X,Y$; $BX-XC=Y$;
- $\|C\|_{\mathrm{op}}\le a$,
- $\|B^{-1}\|_{\mathrm{op}}\le(a+\sym{delta})^{-1}$, $a\ge0$.
+ $\dkOperatorNorm{C}\le a$,
+ $\dkOperatorNorm{B^{-1}}\le(a+\sym{delta})^{-1}$, $a\ge0$.
  If $B$ is unbounded, it is closed and densely defined with bounded inverse.
  The map norm is compatible with these operator norms. &
  $\sym{delta}\|X\|\le\|Y\|$.
  The coefficient hypotheses may be interchanged.\\\addlinespace
 \path{DK-5.2-thm} &
- Self-adjoint $B\ge(\gamma+\sym{delta})I$,
- $C\le\gamma I$; bounded $X,Y$;
+ Self-adjoint $B\ge(\sym{SylvesterGapThreshold}+\sym{delta})\sym{Identity}$,
+ $C\le\sym{SylvesterGapThreshold} \sym{Identity}$; bounded $X,Y$;
  $X\DKDom(C)\subset\DKDom(B)$ and $BX-XC=Y$ there. &
  $\sym{delta}\sym{NormN}(X)\le\sym{NormN}(Y)$,
  including unbounded $B,C$.\\\addlinespace
 \path{DK-5.1-lem} &
- Orthogonal projections $\Omega_t\to I$ strongly; bounded $K$. &
- $s_j(K\Omega_t)\to s_j(K)$ for each singular-value index $j$.\\\addlinespace[5pt]
+ Orthogonal projections $\sym{StrongApproxProjection}\to \sym{Identity}$ strongly; bounded $K$. &
+ $\sym{SingularValueS}(K\sym{StrongApproxProjection})\to \sym{SingularValueS}(K)$ for each singular-value index $j$.\\\addlinespace[5pt]
 \multicolumn{3}{@{}l}{\textbf{Generalized single-angle bounds}}\\*\addlinespace[3pt]
 \path{DK-6.1-lem} &
  Each diagonal block of $K$ is dominated by the corresponding block of
@@ -392,9 +392,9 @@ This is the separation condition of Section~\ref{sec:gap-geometry}.
  The converse holds if the two $K$ blocks have identical singular values
  (counting multiplicities), as do the two $L$ blocks.\\\addlinespace
 \path{DK-6.2-lem} &
- Orthogonal projections $\Omega,\Upsilon$; bounded $K$. &
- $\sym{NormN}(\Omega K\Upsilon+
- (I-\Omega)K(I-\Upsilon))\le\sym{NormN}(K)$.\\\addlinespace
+ Orthogonal projections $\sym{PinchingProjectionOne},\sym{PinchingProjectionTwo}$; bounded $K$. &
+ $\sym{NormN}(\sym{PinchingProjectionOne} K\sym{PinchingProjectionTwo}+
+ (\sym{Identity}-\sym{PinchingProjectionOne})K(\sym{Identity}-\sym{PinchingProjectionTwo}))\le\sym{NormN}(K)$.\\\addlinespace
 \path{DK-6.1-prop} &
  $\sym{A},\sym{Acurrent}$ have a common domain and bounded difference
  $\sym{H}$;
@@ -402,59 +402,59 @@ This is the separation condition of Section~\ref{sec:gap-geometry}.
  $\sym{SineGap}(\sym{A1},\sym{Lambda0})$. &
  $\sym{delta}\sym{NormN}(\sin\sym{Theta})\le\sym{NormN}(\sym{H})$.\\\addlinespace
 \path{DK-6.1-thm} &
- $\sym{E0}^*\sym{E0}\ge\varepsilon^2I$, $\varepsilon>0$;
+ $\sym{E0}^*\sym{E0}\ge\sym{FrameLowerBoundEpsilon}^2\sym{Identity}$, $\sym{FrameLowerBoundEpsilon}>0$;
  $\sym{SineGap}(\sym{A0},\sym{Lambda1})$.
  Source and target dimensions may differ. &
- $\sym{delta}\varepsilon\sym{NormN}(\sin\sym{Theta0})
+ $\sym{delta}\sym{FrameLowerBoundEpsilon}\sym{NormN}(\sin\sym{Theta0})
  \le\sym{NormN}(\sym{R})$.
  The directed sine has the singular values of
- $\sym{Psource}(I-\sym{Qtarget})$.\\\addlinespace
+ $\sym{Psource}(\sym{Identity}-\sym{Qtarget})$.\\\addlinespace
 \path{DK-6.2-thm} &
  Same lower-frame condition; only
- $\operatorname{dist}(\sigma(\sym{A0}),\sigma(\sym{Lambda1}))
+ $\sym{SpectralDistanceOperator}(\sym{SpectrumSymbol}(\sym{A0}),\sym{SpectrumSymbol}(\sym{Lambda1}))
  \ge\sym{delta}$. &
- $\sym{delta}\varepsilon\|\sin\sym{Theta0}\|_{\mathrm{HS}}
+ $\sym{delta}\sym{FrameLowerBoundEpsilon}\|\sin\sym{Theta0}\|_{\mathrm{HS}}
  \le\|\sym{R}\|_{\mathrm{HS}}$.
  If $\sym{R}$ has finite rank, also
- $\sym{delta}\varepsilon\|\sin\sym{Theta0}\|_{\mathrm{op}}
- \le\|\sym{R}\|_{\mathrm{op}}\sqrt{\operatorname{rank}\sym{R}}$.\\\addlinespace
+ $\sym{delta}\sym{FrameLowerBoundEpsilon}\dkOperatorNorm{\sin\sym{Theta0}}
+ \le\dkOperatorNorm{\sym{R}}\sqrt{\sym{RankOperator}\sym{R}}$.\\\addlinespace
 \path{DK-6.3-thm} &
  Isometric Rayleigh--Ritz trial data;
- $\mathcal O_{\sym{delta}}(\sym{A0},\sym{Lambda1})$.
+ $\sym{OrderedSeparation}_{\sym{delta}}(\sym{A0},\sym{Lambda1})$.
  The source dimension may be smaller than the target dimension. &
  $\sym{delta}\sym{NormN}(\tan\sym{Theta0})
  \le\sym{NormN}(\sym{R})$.\\\addlinespace
 \path{DK-6.3-lem} &
- Bounded $K$; projections $\Gamma,\Psi$ of rank at most $n\ge1$;
- $K\Psi=\Gamma K\Psi$;
- $\sum_{j\le n}s_j(K\Psi)^2$\newline
- ${}>\sum_{j\le n}s_j(K)^2-\eta^2$, $\eta>0$. &
- $\|\Gamma K(I-\Psi)\|_{\mathrm{op}}<\eta$:
+ Bounded $K$; projections $\sym{CompressionProjectionImage},\sym{CompressionProjectionInput}$ of rank at most $n\ge1$;
+ $K\sym{CompressionProjectionInput}=\sym{CompressionProjectionImage} K\sym{CompressionProjectionInput}$;
+ $\sum_{j\le n}\sym{SingularValueS}(K\sym{CompressionProjectionInput})^2$\newline
+ ${}>\sum_{j\le n}\sym{SingularValueS}(K)^2-\sym{CompressionTolerance}^2$, $\sym{CompressionTolerance}>0$. &
+ $\dkOperatorNorm{\sym{CompressionProjectionImage} K(\sym{Identity}-\sym{CompressionProjectionInput})}<\sym{CompressionTolerance}$:
  a nearly maximizing finite-rank compression has small ``leakage''
- (i.e., the norm of this off-diagonal block is below $\eta$).\\\addlinespace[5pt]
+ (i.e., the norm of this off-diagonal block is below $\sym{CompressionTolerance}$).\\\addlinespace[5pt]
 \multicolumn{3}{@{}l}{\textbf{Spectral selection and repulsion}}\\*\addlinespace[3pt]
 \path{DK-8.1-thm} &
  Ordered reference gap
- $\mathcal O_{\sym{delta}}(\sym{ReferenceBlock0},\sym{ReferenceBlock1})$ with endpoint $\sym{alphaEndpoint}$;
+ $\sym{OrderedSeparation}_{\sym{delta}}(\sym{ReferenceBlock0},\sym{ReferenceBlock1})$ with endpoint $\sym{alphaEndpoint}$;
  bounded $\sym{H}$, $\sym{H0}=\sym{H1}=0$.
- For the equivalence, $\dim\sym{CrossedSourceDefect}=\dim\sym{CrossedTargetDefect}$. &
+ For the equivalence, $\sym{DimensionOperator}\sym{CrossedSourceDefect}=\sym{DimensionOperator}\sym{CrossedTargetDefect}$. &
  For a chosen reducing target,
- $\sym{Theta}\le\pi/4$ iff
- $\sym{Lambda0}\le\sym{alphaEndpoint} I$ and
- $\sym{Lambda1}\ge(\sym{alphaEndpoint}+\sym{delta})I$; such a reducing target exists.
+ $\sym{Theta}\le\sym{PiConstant}/4$ iff
+ $\sym{Lambda0}\le\sym{alphaEndpoint} \sym{Identity}$ and
+ $\sym{Lambda1}\ge(\sym{alphaEndpoint}+\sym{delta})\sym{Identity}$; such a reducing target exists.
  With exact frames obtained by applying $\sym{SourceDirectRotation}$ to the reference frames,
- $\sym{ReferenceBlock1}-\sym{alphaEndpoint} I\le\sym{ComplementCosineBlock}(\sym{Lambda1}-\sym{alphaEndpoint} I)\sym{ComplementCosineBlock}$,
+ $\sym{ReferenceBlock1}-\sym{alphaEndpoint} \sym{Identity}\le\sym{ComplementCosineBlock}(\sym{Lambda1}-\sym{alphaEndpoint} \sym{Identity})\sym{ComplementCosineBlock}$,
  as quadratic forms, with the lower-block analogue.
  In finite dimensions there are eigenvalue and symmetric-gauge
  repulsion inequalities.\\\addlinespace
 \path{DK-8.2-thm} &
- Double-angle sine hypotheses; $\dim\sym{CrossedSourceDefect}=\dim\sym{CrossedTargetDefect}$;
+ Double-angle sine hypotheses; $\sym{DimensionOperator}\sym{CrossedSourceDefect}=\sym{DimensionOperator}\sym{CrossedTargetDefect}$;
  either bounded $\sym{H}$ with
- $\|\sym{H}\|_{\mathrm{op}}<\sym{delta}/2$, or bounded
- $\sym{R}$ with $\|\sym{R}\|_{\mathrm{op}}<\sym{delta}/2$;
- $\sigma(\sym{ReferenceBlock0})\subset
+ $\dkOperatorNorm{\sym{H}}<\sym{delta}/2$, or bounded
+ $\sym{R}$ with $\dkOperatorNorm{\sym{R}}<\sym{delta}/2$;
+ $\sym{SpectrumSymbol}(\sym{ReferenceBlock0})\subset
  [\sym{betaEndpoint}-\sym{delta}/2,\sym{alphaEndpoint}+\sym{delta}/2]$. &
  The corresponding ambient or directed double-angle sine bound holds
- on the branch with angles strictly below $\pi/4$.\\
+ on the branch with angles strictly below $\sym{PiConstant}/4$.\\
 \end{longtable}
 \endgroup
