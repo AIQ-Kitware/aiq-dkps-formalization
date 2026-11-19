@@ -1,7 +1,7 @@
 # Research in the Mathematical Sciences: manuscript audit
 
 Checked 4 November 2026 against the author's
-[guidelines](../submission_guidelines.md), the
+[guidelines](../docs/submission_guidelines.md), the
 [official journal instructions](https://link.springer.com/journal/40687/submission-guidelines),
 and the supplied Overleaf template, version 3.1 (December 2024).
 This file is an author record and is not included in the rendered manuscript.

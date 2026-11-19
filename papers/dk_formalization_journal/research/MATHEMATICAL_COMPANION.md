@@ -110,7 +110,7 @@ Compare singular-value vectors `(1,1,1,1)` and `(1.9,1.9,0,0)`. Their trace norm
 
 The displayed diagram represents eigenvalues on the complex unit circle. Each orange chord is measured from the point `1` to the indicated eigenvalue, because the eigenvalues of `I-W` are `1-lambda` when `W` is normal.
 
-![The two eigenvalue chords of direct rotation become one longer chord and one zero chord after a common complex phase.](figures/complex_phase_chords.svg)
+![The two eigenvalue chords of direct rotation become one longer chord and one zero chord after a common complex phase.](../figures/complex_phase_chords.svg)
 
 Over complex two-dimensional space, multiplying the canonical rotation by `e^{i theta}` changes eigenvalues
 

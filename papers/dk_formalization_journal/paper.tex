@@ -1569,34 +1569,6 @@ The matching result was derived using GPT-6.1 Sol and reviewed by the human
 \clearpage
 \appendix
 
-\input{appendix_notation.tex}
-
-\section{Reading the Lean signatures}
-\label{app:lean-guide}
-\label{app:reading-lean}
-
-A Lean theorem declaration has the form
-\[
-  \texttt{theorem name (parameters) (hypotheses) : conclusion := proof}.
-\]
-Parameters introduce the mathematical objects under discussion.  A hypothesis
-such as \texttt{(hA : IsSelfAdjoint A)} supplies the corresponding fact;
-bundled predicates such as \texttt{IsTrialResidual} and
-\texttt{IsExactSpectralDecomposition} collect related assumptions.  Braces mark
-arguments normally inferred by Lean, while square brackets request typeclass
-instances supplying ambient algebraic, analytic, or topological structure.  The proposition after the final colon is the theorem's conclusion
-\citep{demoura2021lean4}.
-
-In \Cref{lst:dk-sintheta-headline}, \texttt{RCLike} is the Mathlib abstraction
-covering $\mathbb{R}$ and $\mathbb{C}$.  A type
-\texttt{ContinuousLinearMap K F E} is a continuous linear map.  A type
-\texttt{LinearPMap K E E} is a linear partial map whose
-domain is a submodule; this is the representation used for possibly unbounded
-operators.  \texttt{N.Mem T} states that the ideal gauge associated with $\sym{NormN}$ is
-finite on $T$, and \texttt{N.gaugeReal T} is the corresponding real value.  The
-suffix \texttt{Real} refers to the codomain of the gauge and not to the scalar
-field.
-
-\input{appendix_process.tex}
+\input{appendices.tex}
 
 \end{document}

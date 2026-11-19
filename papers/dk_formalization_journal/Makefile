@@ -34,7 +34,7 @@ submission: paper-figures
 
 # Expanded offline derivations, built separately from the article.
 matching-study:
-	latexmk -pdf matching_proof_study.tex
+	latexmk -pdf -jobname=matching_proof_study studies/matching_proof_study.tex
 
 paper-figures: $(TEACHING_PGF) figures/Fig2.pgf
 
@@ -62,10 +62,10 @@ dependency-snapshots:
 	$(PYTHON) scripts/build_dependency_analysis.py
 
 literature: dependency-snapshots
-	latexmk -pdf literature_review.tex
+	latexmk -pdf -jobname=literature_review studies/literature_review.tex
 
 clean:
 	latexmk -C paper.tex
-	latexmk -C matching_proof_study.tex
-	latexmk -C literature_review.tex
+	latexmk -C -jobname=matching_proof_study studies/matching_proof_study.tex
+	latexmk -C -jobname=literature_review studies/literature_review.tex
 	rm -rf generated

@@ -1,8 +1,8 @@
 # Formalization paper style guide
 
-Use [../STYLE_GUIDE.md](../STYLE_GUIDE.md) for the shared affirmative guidance,
-[../BANNED_WORDS_AND_PHRASES.md](../BANNED_WORDS_AND_PHRASES.md) for rhetorical
-habits to remove, and [../SPECIFIC_NEGATIVE_PROMPTS.md](../SPECIFIC_NEGATIVE_PROMPTS.md)
+Use [../STYLE_GUIDE.md](../../STYLE_GUIDE.md) for the shared affirmative guidance,
+[../BANNED_WORDS_AND_PHRASES.md](../../BANNED_WORDS_AND_PHRASES.md) for rhetorical
+habits to remove, and [../SPECIFIC_NEGATIVE_PROMPTS.md](../../SPECIFIC_NEGATIVE_PROMPTS.md)
 for recurring review failures. [AUTHORING_NOTES.md](AUTHORING_NOTES.md) records
 this paper's current author decisions and evidence locations.
 

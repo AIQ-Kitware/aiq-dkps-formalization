@@ -16,8 +16,8 @@ import sys
 from dataclasses import dataclass
 
 HERE = pathlib.Path(__file__).resolve().parent
-DRAFT = HERE
-sys.path.insert(0, str(DRAFT / "scripts"))
+DRAFT = HERE.parent
+sys.path.insert(0, str(HERE))
 
 from accounting_lib import (
     canonical_model_name,
@@ -32,9 +32,9 @@ from accounting_lib import (
 ROOT = repo_root(DRAFT)
 GENERATED = DRAFT / "generated"
 SNAPSHOTS = DRAFT / "snapshots"
-CONFIG = json.loads((DRAFT / "analysis_config.json").read_text())
-ASSUMPTIONS_PATH = DRAFT / "resource_valuation_assumptions_20260817.json"
-PRICING_PATH = DRAFT / "resource_valuation_model_pricing_20260817.csv"
+CONFIG = json.loads((DRAFT / "analysis" / "analysis_config.json").read_text())
+ASSUMPTIONS_PATH = DRAFT / "analysis" / "resource_valuation_assumptions_20260817.json"
+PRICING_PATH = DRAFT / "analysis" / "resource_valuation_model_pricing_20260817.csv"
 ACCOUNTING_SUMMARY_PATH = GENERATED / "accounting_summary.json"
 ACCOUNTING_MANIFEST_PATH = GENERATED / "commit_accounting_manifest.csv"
 PRIMARY_REPOSITORY = CONFIG.get("primary_repository", "aiq-dkps-formalization")

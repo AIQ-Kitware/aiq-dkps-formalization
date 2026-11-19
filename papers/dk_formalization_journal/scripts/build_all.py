@@ -32,7 +32,7 @@ def main() -> None:
     accounting_args = ("--cutoff", args.cutoff) if args.cutoff else ()
     run("build_accounting.py", *accounting_args)
     subprocess.run(
-        [sys.executable, str(HERE.parent / "build_resource_valuation_20260817.py")],
+        [sys.executable, str(HERE / "build_resource_valuation_20260817.py")],
         check=True,
         cwd=HERE.parent,
     )

@@ -6,15 +6,15 @@ whether the current task is review, guidance maintenance, or manuscript editing.
 ## Read before writing
 
 - [../STYLE_GUIDE.md](../STYLE_GUIDE.md): shared affirmative writing guidance.
-- [STYLE_GUIDE.md](STYLE_GUIDE.md): this paper's audience, exposition, notation,
+- [STYLE_GUIDE.md](docs/STYLE_GUIDE.md): this paper's audience, exposition, notation,
   and contribution framing.
 - [../BANNED_WORDS_AND_PHRASES.md](../BANNED_WORDS_AND_PHRASES.md) and
   [../SPECIFIC_NEGATIVE_PROMPTS.md](../SPECIFIC_NEGATIVE_PROMPTS.md): rhetorical
   habits and recurring editorial mistakes.
-- [AUTHORING_NOTES.md](AUTHORING_NOTES.md): accepted and rejected review
+- [AUTHORING_NOTES.md](docs/AUTHORING_NOTES.md): accepted and rejected review
   suggestions, pending manuscript changes, and an index of supporting evidence.
-- [FORMALIZATION_PAPER_SCOPE.md](FORMALIZATION_PAPER_SCOPE.md): scientific scope.
-- [PAPER_CONTEXT.md](PAPER_CONTEXT.md): mathematical evidence and historical
+- [FORMALIZATION_PAPER_SCOPE.md](docs/FORMALIZATION_PAPER_SCOPE.md): scientific scope.
+- [PAPER_CONTEXT.md](research/PAPER_CONTEXT.md): mathematical evidence and historical
   checkpoints; its older manuscript plans are historical, as marked there.
 
 These instructions apply to the main text, captions, abstract, and appendices.
@@ -33,7 +33,7 @@ abstract may be compressed, while the body defines the objects it uses.
   removal, and retain macro definitions for the next round when requested.
 - Separate evergreen preferences from decisions about particular passages.
   Update shared guidance only for reusable principles; keep paper-specific
-  decisions and unresolved questions in `AUTHORING_NOTES.md`.
+  decisions and unresolved questions in `docs/AUTHORING_NOTES.md`.
 - Answer direct questions in chat when requested. A request to define a term in
   the paper calls for a definition in the correction pass, not just a chat reply.
 

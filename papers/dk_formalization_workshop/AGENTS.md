@@ -5,7 +5,7 @@ Davis--Kahan? Semantic Alignment for LLM-Assisted Lean Formalization** and the s
 
 Before editing prose, read and follow:
 
-- `../dk_formalization_journal/STYLE_GUIDE.md`
+- `../dk_formalization_journal/docs/STYLE_GUIDE.md`
 - `../BANNED_WORDS_AND_PHRASES.md`
 - `../SPECIFIC_NEGATIVE_PROMPTS.md`
 

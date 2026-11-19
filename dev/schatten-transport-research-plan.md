@@ -80,7 +80,7 @@ Start here on a new machine. The
 [dated research handoff](schatten-research-handoff-2026-10-26.md) contains the
 long proof history and implementation details. Its dated entries retain their
 original status; this plan and its current-frontier summary take precedence.
-[Paper context](../papers/dk_formalization_journal/PAPER_CONTEXT.md) separates
+[Paper context](../papers/dk_formalization_journal/research/PAPER_CONTEXT.md) separates
 compiled mathematics from manuscript integration. Manuscript and visualization
 changes remain assigned separately.
 

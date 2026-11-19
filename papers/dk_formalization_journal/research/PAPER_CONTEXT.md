@@ -6,9 +6,9 @@ The current article is *Formalizing Davis--Kahan Perturbation Theory in Lean 4*.
 Its main source is `paper.tex`, with `counterexample.tex` and
 `formalization_enabled_extension.tex` as the included mathematical sections.
 It is a formalization-first article with the Proposition 4.4 correction and a
-selected follow-on result. Use [FORMALIZATION_PAPER_SCOPE.md](FORMALIZATION_PAPER_SCOPE.md)
-for its scientific boundary, [STYLE_GUIDE.md](STYLE_GUIDE.md) for writing, and
-[AUTHORING_NOTES.md](AUTHORING_NOTES.md) for current review decisions and evidence
+selected follow-on result. Use [FORMALIZATION_PAPER_SCOPE.md](../docs/FORMALIZATION_PAPER_SCOPE.md)
+for its scientific boundary, [STYLE_GUIDE.md](../docs/STYLE_GUIDE.md) for writing, and
+[AUTHORING_NOTES.md](../docs/AUTHORING_NOTES.md) for current review decisions and evidence
 locations. The 28 October correction pass applies the accepted author
 responses. Review-note calls have been removed from the included manuscript;
 their macro definitions remain available for another round.

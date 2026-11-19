@@ -5,27 +5,50 @@ covering the 1970 Davis--Kahan source, its Lean operator-theory prerequisites,
 a source correction to Proposition 4.4, and one follow-on matching example.
 
 For scientific scope and publication boundaries, read
-[FORMALIZATION_PAPER_SCOPE.md](FORMALIZATION_PAPER_SCOPE.md).
+[FORMALIZATION_PAPER_SCOPE.md](docs/FORMALIZATION_PAPER_SCOPE.md).
 
 For editing, start with [AGENTS.md](AGENTS.md), the
 [shared positive style guide](../STYLE_GUIDE.md), and the
-[journal style guide](STYLE_GUIDE.md). [AUTHORING_NOTES.md](AUTHORING_NOTES.md)
+[journal style guide](docs/STYLE_GUIDE.md). [AUTHORING_NOTES.md](docs/AUTHORING_NOTES.md)
 records the current author-review decisions, pending manuscript changes, and
 paths to result mappings, provenance evidence, and the optional upstream campaign
-checkout. The older dated plans in `PAPER_CONTEXT.md` are historical checkpoints.
+checkout. The older dated plans in `research/PAPER_CONTEXT.md` are historical checkpoints.
 
 The older mathematics-first manuscript, including the complete two-parameter
 spectral-penalty theory, optimizer classifications, real matching, nuclear
 endpoint, and infinite-dimensional extensions, is preserved as a buildable
 source snapshot in [`../optimal_spectral_transport/`](../optimal_spectral_transport/).
-Existing transport-oriented `.tex` files in this directory are historical
-working sources and are **not included by `paper.tex`**. Work on that broader
-mathematics belongs in the companion paper directory.
+The main journal paper uses `paper.tex`, the shared `math_symbol_colors.tex`,
+the sections `counterexample.tex` and `formalization_enabled_extension.tex`,
+and a single `appendices.tex`. The notation table, Lean reader guide,
+and both result tables are together in that appendix.
+The standalone `studies/matching_proof_study.tex` and `studies/literature_review.tex`
+retain their own build targets.
+
+Older transport-oriented TeX fragments and the retired working-paper
+wrapper are in [`inactive/`](inactive/README.md). They are not included
+by `paper.tex` or exported with the manuscript. Work on the broader
+transport mathematics belongs in the companion paper directory.
 
 The retained 29 source targets consist of 28 formalized statements and one
 formally refuted proposition. For traceable support see the source inventory,
-`claims_to_evidence.md`, and the formalization appendices. Historical priority
+`research/claims_to_evidence.md`, and the formalization appendices. Historical priority
 of new transport results remains a separate literature question.
+
+## Source directory layout
+
+- `paper.tex`, `appendices.tex`, `counterexample.tex`, and `formalization_enabled_extension.tex`: the active paper and its includes
+- [`docs/`](docs/README.md): current authoring instructions and publisher guidance
+- [`research/`](research/README.md): supporting audits, working notes, and historical research
+- [`studies/`](studies/README.md): separately buildable TeX studies
+- [`analysis/`](analysis/README.md): inputs for optional accounting and resource analyses
+- [`explorations/coupled_rotation/`](explorations/coupled_rotation/README.md): independent geometric visualization
+- [`inactive/`](inactive/README.md): retired TeX sources, excluded from the paper
+- `scripts/`, `data/`, `snapshots/`, `figures/`: machinery, evidence inputs, derived snapshots, and figure sources
+- `build/` and `generated/`: ignored, regenerated outputs
+
+Run the Makefile from this directory as before. The Overleaf/submission exports
+retain their original flat TeX layout.
 
 ## Build
 
@@ -84,7 +107,7 @@ Download collaborator edits as an Overleaf source ZIP and overlay the edited
 `.tex`/`.bib` files here, reviewing `git diff` before committing. To send local
 edits back, rebuild and upload the modular Overleaf ZIP. This repository remains
 the primary source; no automatic synchronization or second maintained draft is
-introduced. See [README_OVERLEAF.md](README_OVERLEAF.md) for the editing workflow.
+introduced. See [README_OVERLEAF.md](docs/README_OVERLEAF.md) for the editing workflow.
 
 The publisher ZIP is generated from those same sources in journal style. Its
 `paper.tex` expands the included manuscript files into one document and uses
@@ -94,7 +117,7 @@ back into the source tree.
 
 The requirements audit is in
 [submission/GUIDELINE_AUDIT.md](submission/GUIDELINE_AUDIT.md), alongside the
-unaltered [submission guidelines](submission_guidelines.md).
+unaltered [submission guidelines](docs/submission_guidelines.md).
 
 To diagnose a silent LaTeXBox background build, run these commands in Vim with `paper.tex`
 open (these settings affect only the current session):
@@ -108,7 +131,7 @@ open (these settings affect only the current session):
 
 ## Matching proof study note
 
-`matching_proof_study.tex` expands Theorem 5 using the same six steps and
+`studies/matching_proof_study.tex` expands Theorem 5 using the same six steps and
 lettered inferences as the article. Each inference is followed by its
 justification, with the first-variation derivation, block calculations,
 and prompts for explaining the proof aloud. It is built separately from the

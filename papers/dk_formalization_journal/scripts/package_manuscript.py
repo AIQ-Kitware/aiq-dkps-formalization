@@ -10,10 +10,9 @@ from zipfile import ZIP_DEFLATED, ZipFile
 PAPER = Path(__file__).resolve().parents[1]
 SOURCES = (
     'paper.tex', 'math_symbol_colors.tex', 'counterexample.tex',
-    'formalization_enabled_extension.tex', 'appendix_notation.tex',
-    'appendix_process.tex', 'appendix_result_summaries.tex',
+    'formalization_enabled_extension.tex', 'appendices.tex',
     'references.bib', 'sn-jnl.cls', 'sn-mathphys-num.bst',
-    'sn-mathphys-ay.bst', 'latexmkrc', 'README_OVERLEAF.md',
+    'sn-mathphys-ay.bst', 'latexmkrc',
 )
 INPUT = re.compile(r'^\s*\\input\{([^}]+)\}\s*$', re.MULTILINE)
 
@@ -37,6 +36,7 @@ def main():
     (stage / 'figures').mkdir(parents=True)
     for name in SOURCES:
         shutil.copy2(PAPER / name, stage / name)
+    shutil.copy2(PAPER / 'docs/README_OVERLEAF.md', stage / 'README_OVERLEAF.md')
     for number in range(1, 4):
         for suffix in ('.pgf', '.pdf'):
             name = f'figures/Fig{number}{suffix}'

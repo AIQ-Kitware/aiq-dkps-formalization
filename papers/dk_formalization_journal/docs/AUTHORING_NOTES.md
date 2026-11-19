@@ -145,9 +145,9 @@ mathematical subject.
 
 The author accepted keeping both tables together in Appendix C: the compact
 Table 3 comes first, followed by the detailed table in subsection C.1.
-`appendix_result_summaries.tex` contains the same 29 IDs with columns for
-assumptions and main conclusions, grouped by mathematical topic, and is
-included from `appendix_process.tex`. There is no separate Appendix D.
+The detailed result table, now in `appendices.tex`, contains the same 29 IDs
+with columns for assumptions and main conclusions, grouped by mathematical
+topic. There is no separate Appendix D.
 The summaries were checked against the result passages in the distributable
 source specification. Shared conventions preserve domain and norm scope,
 the source's crossed-defect acute condition, and the distinct spectral gap
@@ -155,7 +155,7 @@ hypotheses. The false printed displacement claim and its Q-norm repair remain
 distinct. The source direct rotation has its own glossary key because the
 table also covers the nonacute case.
 
-The [Table 4 Lean audit](TABLE4_LEAN_AUDIT.md) compares all 29 rows with the
+The [Table 4 Lean audit](../research/TABLE4_LEAN_AUDIT.md) compares all 29 rows with the
 78 registered Lean statements and the supporting declarations needed for
 extensions and representation changes. The correction pass makes norm
 definedness, common domains, nonzero eigenvectors, finite residual rank,
@@ -274,7 +274,7 @@ arbitrary skew direction to its rotation-plane diagonal blocks. This supplies
 the missing general argument beyond checking a single planar variation.
 The negative-determinant trace bound is also explained explicitly.
 
-[matching_proof_study.tex](matching_proof_study.tex) follows the same labels,
+[matching_proof_study.tex](../studies/matching_proof_study.tex) follows the same labels,
 expands the block and scalar calculations, derives differentiability using
 symmetric dilation and a spectral-trace derivative, and includes rehearsal
 questions. `make matching-study` builds its ignored PDF separately from the
@@ -385,7 +385,7 @@ note remains supplementary; essential new proof explanations are in the article.
 For the current journal exports, figure filenames are `Fig1`--`Fig3` rather
 than the earlier descriptive stems. The Overleaf and single-manuscript publisher
 ZIPs are generated under `build/` and remain ignored. See the 4 November
-[guideline audit](submission/GUIDELINE_AUDIT.md) for the template provenance,
+[guideline audit](../submission/GUIDELINE_AUDIT.md) for the template provenance,
 format requirements, bibliographic updates, and author-supplied affiliations
 and competing-interest declaration. The supplied class and two bibliography
 styles are tracked without modifications. All ordinary manuscript edits stay
@@ -408,15 +408,15 @@ and exact source declarations to a competing provenance inventory.
 
 | Question | Evidence to consult |
 | --- | --- |
-| Which 29 source results were selected, and which Lean declarations represent each ID? | [Result inventory](../../dev/davis-kahan-1970-formalization-result-inventory.json), particularly `selection_definition` and each result's `id`, `source_anchor`, and `lean_declarations`. |
-| How are source passages, result IDs, and declarations connected? | [Statement map](../../dev/davis-kahan-1970-statement-map.json) and [full source census](../../dev/davis-kahan-1970-full-source-census.json). The result inventory already maps the table IDs directly to declarations. |
-| What is the source's mathematical scope? | [Distributable source specification](../../prose/distilled_literature/DavisKahan1970_part_III.tex) and [claims to evidence](claims_to_evidence.md). |
-| What supports the correction and its literature comparison? | [Proposition 4.4 literature map](PROPOSITION_4_4_LITERATURE_MAP.md), [literature audit](submission/LITERATURE_AUDIT.md), and [claims to evidence](claims_to_evidence.md). Check each claim at the source's real/complex, norm, and angle scope. |
-| Which formal results were adapted into Tau Ceti, independently re-proved there, or built on earlier donors? | [Contribution and lineage census](../../dev/tauceti/dkps-upstream-contribution-census.md) and [upstream consumption review](../../dev/tauceti/upstream-consumption-review-2026-10-22.md). These are dated evidence, not proof of current remote status. |
-| Did our Courant--Fischer/Weyl proofs originate here? | [28 October proof-lineage audit](COURANT_FISCHER_LINEAGE_AUDIT.md): immutable June/August donor sources, the accepted October port, and six declaration/proof comparisons establish local development followed by upstream adaptation and local consumption. The broader lineage consolidation requested in the review remains pending. |
-| Which formal constructions derive from Spectra? | [Spectra provenance map](../../dev/tauceti/spectra-provenance-map.md), [preserved upstream attribution](../../retired/Spectra.UPSTREAM.md), and the Lean provenance headers. |
-| Which roadmap topics correspond to donor work? | [Donor topic map](../../dev/tauceti/roadmap-topic-map.md). Topic overlap alone does not establish proof descent. |
-| What notation and colors does this article use? | [Symbol macros](math_symbol_colors.tex), [notation appendix source](appendix_notation.tex), and the [Manim glossary](../../visualizations/dkvis/slides_glossary.py). |
+| Which 29 source results were selected, and which Lean declarations represent each ID? | [Result inventory](../../../dev/davis-kahan-1970-formalization-result-inventory.json), particularly `selection_definition` and each result's `id`, `source_anchor`, and `lean_declarations`. |
+| How are source passages, result IDs, and declarations connected? | [Statement map](../../../dev/davis-kahan-1970-statement-map.json) and [full source census](../../../dev/davis-kahan-1970-full-source-census.json). The result inventory already maps the table IDs directly to declarations. |
+| What is the source's mathematical scope? | [Distributable source specification](../../../prose/distilled_literature/DavisKahan1970_part_III.tex) and [claims to evidence](../research/claims_to_evidence.md). |
+| What supports the correction and its literature comparison? | [Proposition 4.4 literature map](../research/PROPOSITION_4_4_LITERATURE_MAP.md), [literature audit](../submission/LITERATURE_AUDIT.md), and [claims to evidence](../research/claims_to_evidence.md). Check each claim at the source's real/complex, norm, and angle scope. |
+| Which formal results were adapted into Tau Ceti, independently re-proved there, or built on earlier donors? | [Contribution and lineage census](../../../dev/tauceti/dkps-upstream-contribution-census.md) and [upstream consumption review](../../../dev/tauceti/upstream-consumption-review-2026-10-22.md). These are dated evidence, not proof of current remote status. |
+| Did our Courant--Fischer/Weyl proofs originate here? | [28 October proof-lineage audit](../research/COURANT_FISCHER_LINEAGE_AUDIT.md): immutable June/August donor sources, the accepted October port, and six declaration/proof comparisons establish local development followed by upstream adaptation and local consumption. The broader lineage consolidation requested in the review remains pending. |
+| Which formal constructions derive from Spectra? | [Spectra provenance map](../../../dev/tauceti/spectra-provenance-map.md), [preserved upstream attribution](../../../retired/Spectra.UPSTREAM.md), and the Lean provenance headers. |
+| Which roadmap topics correspond to donor work? | [Donor topic map](../../../dev/tauceti/roadmap-topic-map.md). Topic overlap alone does not establish proof descent. |
+| What notation and colors does this article use? | [Symbol macros](../math_symbol_colors.tex), [notation appendix source](../appendices.tex), and the [Manim glossary](../../../visualizations/dkvis/slides_glossary.py). |
 
 ## Optional campaign checkout
 

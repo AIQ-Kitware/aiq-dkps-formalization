@@ -46,3 +46,6 @@ build/
 # Editor / OS noise
 *~
 .DS_Store
+
+# Preserved local publisher upload archives
+/submission/archive/*.zip

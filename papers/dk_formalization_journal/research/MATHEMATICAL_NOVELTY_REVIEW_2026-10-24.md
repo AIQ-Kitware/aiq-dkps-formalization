@@ -14,9 +14,9 @@ and matrix geometry?
 
 **Verification update:** 27 October 2026, mathematical checkpoint
 `96aeb922d`; full default build passed 21,413 jobs with warnings as errors.
-The [current research plan](../../dev/schatten-transport-research-plan.md)
+The [current research plan](../../../dev/schatten-transport-research-plan.md)
 and current-frontier paragraph of the
-[proof handoff](../../dev/schatten-research-handoff-2026-10-26.md) supersede
+[proof handoff](../../../dev/schatten-research-handoff-2026-10-26.md) supersede
 older proof-status statements in this chronological record. This documentation
 pass did not repeat or expand the historical source search.
 
@@ -67,7 +67,7 @@ hypotheses. Every optimizer is canonical outside the same finite strictly
 supercritical sector; no separability is needed. See
 `SchattenGlobalAttainment.lean`, `SchattenOptimizerClassification.lean`,
 `SchattenOptimizerRank.lean` and the current
-[research handoff](../../dev/schatten-research-handoff-2026-10-26.md).
+[research handoff](../../../dev/schatten-research-handoff-2026-10-26.md).
 The supplied claim that broader exact attainment is still open is
 superseded. Its priority search does **not** establish historical novelty
 of these newly completed infinite-dimensional endpoints.

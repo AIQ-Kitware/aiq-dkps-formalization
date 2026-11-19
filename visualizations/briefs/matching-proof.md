@@ -8,7 +8,7 @@ reconstruct each inference and explain why it follows.
 The mathematical source is Theorem 5 and its six-step proof in
 [`paper.tex`](../../papers/dk_formalization_journal/paper.tex), with the longer
 calculations in
-[`matching_proof_study.tex`](../../papers/dk_formalization_journal/matching_proof_study.tex).
+[`matching_proof_study.tex`](../../papers/dk_formalization_journal/studies/matching_proof_study.tex).
 The Lean endpoint is
 `exists_minimizing_real_nuclear_transport_matching` in
 [`RealNuclearMatching.lean`](../../DavisKahan/FiniteDimensional/DirectRotation/RealNuclearMatching.lean).

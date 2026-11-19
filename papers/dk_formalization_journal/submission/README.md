@@ -18,7 +18,7 @@ citation style, symbol colors, and hover reminders. The publisher export sets
 journal mode regardless of the local editing choice.
 
 Upload the modular ZIP to Overleaf and select LuaLaTeX and `paper.tex`.
-[README_OVERLEAF.md](../README_OVERLEAF.md) explains how to overlay collaborator
+[README_OVERLEAF.md](../docs/README_OVERLEAF.md) explains how to overlay collaborator
 edits and local edits without maintaining two drafts. The publisher ZIP contains
 a single expanded manuscript TeX file, separate vector figures, bibliography
 and class/styles, and a PDF compiled from those exported sources. Do not copy
@@ -26,7 +26,7 @@ its flattened manuscript back into the working tree.
 
 [GUIDELINE_AUDIT.md](GUIDELINE_AUDIT.md) records the manuscript requirements,
 changes, and author-supplied declarations against the supplied
-[guidelines](../submission_guidelines.md) and the official journal page.
+[guidelines](../docs/submission_guidelines.md) and the official journal page.
 The supplied template class and bibliography styles are tracked, unchanged;
 all ZIPs, PDFs, EPS/PGF exports, and build intermediates are regenerable and
 ignored. The mathematical result inventories and Lean declarations are unchanged.
