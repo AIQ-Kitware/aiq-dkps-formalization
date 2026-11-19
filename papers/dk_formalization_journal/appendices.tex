@@ -44,6 +44,7 @@ $\sym{Pexact}=\sym{F0}\like{F0}{F_0^*}$ & Projection onto the desired exact subs
 $\sym{Theta0},\sym{sinTheta0}$ & Trial-coordinate angle operator and its positive sine, with $\sym{sinTheta0}=(I-\like{E0}{E_0^*}\sym{Pexact}\sym{E0})^{1/2}$.\\
 $\sym{Theta}=\operatorname{diag}(\sym{Theta0},\sym{Theta1})$ & Full angle operator; $\sym{Theta1}$ compares the orthogonal complements. Its operator norm is the largest spectral angle.\\
 $\sym{CrossedSourceDefect},\sym{CrossedTargetDefect}$ & Source directions perpendicular to the target, and target directions perpendicular to the source. Section~\ref{sec:foundations} uses the condition $\dim\sym{CrossedSourceDefect}=\dim\sym{CrossedTargetDefect}$.\\
+$\{\sym{ZeroVector}\}$ & Zero subspace: the set containing only the zero vector.\\
 $\sym{S}=(I-\sym{Pexact})\sym{E0}$ & Complementary block, with modulus $|\sym{S}|=\sym{sinTheta0}$.\\
 $\sym{X}=\like{F1}{F_1^*}\sym{E0}$ & Coordinates of the trial component in the unwanted space; $\sym{S}=\sym{F1}\sym{X}$.\\
 $\sym{SylvesterLeft},\sym{SylvesterRight},\sym{SylvesterRHS}$ & Generic left and right Sylvester coefficients and right side: $\sym{SylvesterLeft}\sym{X}-\sym{X}\sym{SylvesterRight}=\sym{SylvesterRHS}$. The historical equation writes the right coefficient as $\like{SylvesterRight}{A}$.\\
@@ -194,7 +195,7 @@ Write
  D_0=\DKRange(\sym{Psource})\cap\DKKernel(\sym{Qtarget}),\qquad
  D_1=\DKKernel(\sym{Psource})\cap\DKRange(\sym{Qtarget}).
 \]
-The source's acute condition is $D_0=D_1=\{0\}$.
+The pair is acute when $D_0=D_1=\{\sym{ZeroVector}\}$.
 For geometric and displacement rows from \path{DK-3.3-prop} onward,
 the ranges and kernels of
 $\sym{Psource},\sym{Qtarget}$ have matching dimensions and
@@ -213,9 +214,9 @@ in the main text.
 For real unitaries, spectral half-plane conditions refer to their
 complexifications.
 
-For perturbation results, $\sym{A0}$ is the self-adjoint trial operator,
-also the source block of $\sym{A}$ in the reducing decomposition;
-$\sym{A1}$ is its complementary reference block when used.
+For perturbation results, $\sym{A0}$ is a self-adjoint trial operator.
+In a reducing decomposition of the reference operator $\sym{A}$, the same
+notation denotes its source block and $\sym{A1}$ the complementary block.
 The operators $\sym{Lambda0},\sym{Lambda1}$ are the exact blocks of
 $\sym{Acurrent}=\sym{A}+\sym{H}$.
 The maps $\sym{E0},\sym{F0}$ give source and target coordinates,
@@ -290,7 +291,7 @@ This is the separation condition of Section~\ref{sec:gap-geometry}.
  $\sym{delta}\sym{NormN}(\tan(2\sym{Theta}))\le2\sym{NormN}(\sym{H})$.\\\addlinespace[5pt]
 \multicolumn{3}{@{}l}{\textbf{Two subspaces and direct rotations}}\\*\addlinespace[3pt]
 \path{DK-3.1-prop} &
- $D_0=D_1=\{0\}$. &
+ $D_0=D_1=\{\sym{ZeroVector}\}$. &
  A unique direct rotation exists. Positive diagonal blocks characterize it
  among transporters.\\\addlinespace
 \path{DK-3.2-prop} &

@@ -416,7 +416,7 @@ For finite-dimensional subspaces $\sym{Usource}$ and $\sym{Vtarget}$ of equal di
 isometries $\sym{Xframe}$ and $\sym{Yframe}$ with those ranges.
 The singular values of the overlap matrix are the principal cosines:
 \begin{equation}
-  \sigma_j(\like{Xframe}{X^*}\sym{Yframe})=\cos\like{theta}{\theta_j},
+  s_j(\like{Xframe}{X^*}\sym{Yframe})=\cos\like{theta}{\theta_j},
   \qquad 0\leq\like{theta}{\theta_j}\leq\frac{\pi}{2}.
   \label{eq:history-principal-cosines}
 \end{equation}
@@ -577,11 +577,12 @@ subspaces (called defect spaces below) are
 \[
  \sym{CrossedSourceDefect}=\DKRange(\sym{Psource})\cap\DKKernel(\sym{Qtarget}),
  \qquad
- \sym{CrossedTargetDefect}=\DKKernel(\sym{Psource})\cap\DKRange(\sym{Qtarget})
+ \sym{CrossedTargetDefect}=\DKKernel(\sym{Psource})\cap\DKRange(\sym{Qtarget}).
 \]
-contain source directions orthogonal to the target, and target directions
-orthogonal to the source, respectively. At acute angles
-both disappear.  For a general pair they affect whether a specified
+These contain source directions orthogonal to the target, and target directions
+orthogonal to the source, respectively. The pair is called \emph{acute} when
+both are $\{\sym{ZeroVector}\}$, the zero subspace consisting only of the zero
+vector. For a general pair these spaces affect whether a specified
 intertwining operator exists. An operator $\sym{IntertwinerT}$ intertwines $\sym{Psource}$ and $\sym{Qtarget}$ when
 $\sym{IntertwinerT}\sym{Psource}=\sym{Qtarget}\sym{IntertwinerT}$: applying $\sym{IntertwinerT}$ after the source projection agrees with applying the
 target projection after $\sym{IntertwinerT}$. In particular, $\sym{IntertwinerT}$ maps the source range into
@@ -642,12 +643,13 @@ The transport equation
 $\sym{Wcompetitor}\sym{Psource}\sym{Wcompetitor}^*=\sym{Qtarget}$
 has many unitary solutions.
 The polar-factor formula selects one determined by the two projections
-and continuously connected to the identity in the acute regime.  That
+and continuously connected to the identity under the norm bound above. That
 choice makes the construction valuable in perturbation theory: the
 transport identifies moving spectral subspaces while avoiding an
-arbitrary choice of orthonormal bases. A pair is called acute here when
-$\|\sym{Psource}-\sym{Qtarget}\|<1$ (equivalently, the largest principal angle is less than $\pi/2$
-for equal-dimensional finite subspaces). For an orthogonal or unitary transporter $\sym{Wcompetitor}$, the operator
+arbitrary choice of orthonormal bases. In infinite dimensions,
+$\|\sym{Psource}-\sym{Qtarget}\|<1$ is stronger than acuteness: it also
+bounds the operator angles away from $\pi/2$. For equal-dimensional
+finite subspaces the conditions coincide. For an orthogonal or unitary transporter $\sym{Wcompetitor}$, the operator
 $I-\sym{Wcompetitor}$ records the displacement of every vector. Davis and Kahan ask which
 norms of this displacement are minimized by the direct rotation
 \citep[Section~4]{davis1970rotation}.
@@ -825,7 +827,8 @@ $p$-power sum. Thus a trace-norm inequality requires trace-class membership;
 this is an instance of the source's qualification that its norms be defined.
 
 The largest singular value gives the operator norm, the Euclidean
-norm of the singular-value sequence gives the Hilbert--Schmidt norm,
+norm of the singular-value sequence gives the Hilbert--Schmidt norm
+(the Frobenius norm $\|Z\|_F=\|Z\|_{S_2}$ for matrices),
 and its sum gives the trace norm. These norms can rank transporters
 differently. In Section~\ref{sec:prop44}, the two displacement singular-value
 lists are $(2\sin(\sym{theta}/2),\ldots,2\sin(\sym{theta}/2))$ with four entries and
@@ -1053,7 +1056,9 @@ and states orthogonality and completeness through
 
 \subsubsection{The sine operator and its rectangular representative}
 
-The source angle operator acts on the trial-coordinate space.  If
+Here $\sym{Theta0}$ acts on $\sym{Ftrial}$; under the isometry
+$\sym{E0}$ it represents the directed angle operator on the trial subspace
+introduced in \cref{sec:related-two-projections}. If
 $\sym{Pexact}=\sym{F0}\like{F0}{F_0^*}$ is the orthogonal projection onto the desired exact subspace, then
 \[
   \cos\sym{Theta0} = (\like{E0}{E_0^*}\sym{Pexact}\sym{E0})^{1/2},
