@@ -6690,7 +6690,7 @@
       "status": "prepared-upstream-port-not-accepted",
       "upstream_pr": null,
       "prepared_branch": "port-sa-e36-e40-spectral-blocks",
-      "prepared_head": "f42b581302",
+      "prepared_head": "f42b581302197e0d55939dd02b25f50f331aa8c5",
       "roadmap_targets": [
         "SA-E36",
         "SA-E37",
@@ -6704,17 +6704,20 @@
       "source_module": "ForTauCeti.Analysis.Fourier.Hardy.OppositeShifts",
       "source_declarations": [
         "TauCeti.ToeplitzOppositeShifts.matrixSymbol",
+        "TauCeti.ToeplitzOppositeShifts.matrixSymbol_apply",
         "TauCeti.ToeplitzOppositeShifts.det_matrixSymbol",
         "TauCeti.ToeplitzOppositeShifts.windingNumber_det_matrixSymbol",
         "TauCeti.ToeplitzOppositeShifts.symbol",
         "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_symbol",
         "TauCeti.ToeplitzOppositeShifts.isFredholm",
         "TauCeti.ToeplitzOppositeShifts.index_eq_zero",
+        "TauCeti.ToeplitzOppositeShifts.apply_second_constant",
         "TauCeti.ToeplitzOppositeShifts.not_isUnit",
         "TauCeti.ToeplitzOppositeShifts.sectionMatrix",
+        "TauCeti.ToeplitzOppositeShifts.sectionMatrix_apply",
         "TauCeti.ToeplitzOppositeShifts.det_sectionMatrix"
       ],
-      "original_source_anchor": "ForTauCeti/Analysis/Fourier/Hardy/OppositeShifts.lean (introduced with this record)",
+      "original_source_anchor": "d1c0bf02e:ForTauCeti/Analysis/Fourier/Hardy/OppositeShifts.lean",
       "authors_license": "Jon Crall, OpenAI gpt-6.1-sol; Kitware 2026, Apache-2.0. New proof of the standard opposite-shift example, mathematical reference Böttcher–Silbermann. No pre-existing DKPS donor claimed.",
       "final_tauceti_module": "TauCeti.Examples.Analysis.Fourier.Hardy.OppositeShifts",
       "final_declarations": [
@@ -6738,7 +6741,8 @@
       "roadmap_targets": [
         "ToeplitzOperators Layer 6, §6.1: diag(z,zbar) counterexample (partial compound TOEP-T6)"
       ],
-      "migration_note": "Concrete rank-two complex symbol with native PiLp block Hardy carrier; determinant/winding, Fredholm index, noninvertibility and all finite compression matrices. Depends only on accepted scalar shifts and binary products, not open general finite-product or quotient-stability PRs. Full default and Challenge builds pass. No whole-milestone or accepted credit."
+      "migration_note": "Concrete rank-two complex symbol with native PiLp block Hardy carrier; determinant/winding, Fredholm index, noninvertibility and all finite compression matrices. Depends only on accepted scalar shifts and binary products, not open general finite-product or quotient-stability PRs. Full default and Challenge builds pass. No whole-milestone or accepted credit.",
+      "prepared_head": "a5b2b8c1cce12d2f42bc6e8216e9262469f78376"
     }
   ]
 }
