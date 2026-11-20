@@ -6687,8 +6687,8 @@
         "IsSelfAdjoint.norm_spectralGapInverse_apply_le",
         "IsSelfAdjoint.mem_graph_spectralGapInverse"
       ],
-      "status": "prepared-upstream-port-not-accepted",
-      "upstream_pr": null,
+      "status": "submitted-upstream-not-accepted",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/44695",
       "prepared_branch": "port-sa-e36-e40-spectral-blocks",
       "prepared_head": "f42b581302197e0d55939dd02b25f50f331aa8c5",
       "roadmap_targets": [

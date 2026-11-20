@@ -2,6 +2,14 @@
 
 ## November 20 prepared spectral-block port and new Toeplitz example
 
+Submission update: the spectral branch is open as
+[#44695](https://github.com/TauCetiProject/TauCeti/pull/44695) at `f42b581302`;
+this is submission, not integration. The Toeplitz host submission stopped on
+a changed official README. The new roadmap revision `642398844a7c3295b673fca05acd2f60d70b9b52`
+retains byte-identical mathematical layers 1–6 and the exact opposite-shift target.
+The shared packet's scope snapshot and review context were refreshed without
+changing or rebuilding Lean code. The Toeplitz branch remains unsubmitted.
+
 The existing spectral-cut and vector-gap-inverse donors now have a compiled,
 independent upstream branch, `port-sa-e36-e40-spectral-blocks`, head `f42b581302`.
 It implements official SelfAdjointSpectralTheory SA-E36–E40 using the accepted
