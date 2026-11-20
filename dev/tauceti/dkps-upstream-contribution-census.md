@@ -2,6 +2,17 @@
 
 ## November 20 whole-roadmap frontier clarification
 
+The #30736 reuse follow-up is pushed at
+`1dce4d7c82579feaf5ab0587909ee54f9163e733`, addressing review 4645435921.
+The bounded Stone group supplies scalar restriction and unitary operator bounds;
+the compact-time proof uses the native product-filter uniform-Cauchy comparison.
+The redundant flow-norm lemma is removed. The scalar-restriction simplification
+is also applied here in `SkewAdjointExponential.lean`, preserving every public
+statement and the Spectra notices. This is an unmerged review repair, not new
+accepted roadmap credit. Native focused build, environment linters, standard
+axioms and changed-source style pass; the DKPS full build (22006 jobs) and
+Challenge (20176 jobs) also pass without warnings.
+
 The shared campaign's `docs/OPERATOR_THEORY_FRONTIER_2026_11_20.md` compares
 accepted TauCeti `8794ab329bb60340fa690a2902cf995f0571721b` with roadmap main
 `db6a5779878bcc57a942c5c3cb8ee15c6ec57f85`. The historical 740/899 accepted
