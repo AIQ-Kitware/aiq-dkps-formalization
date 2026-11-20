@@ -1,6 +1,40 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
-**Status: intentionally incomplete provenance audit; latest selected integration update 2026-11-16.** This is a
+## November 20 whole-roadmap frontier clarification
+
+The shared campaign's `docs/OPERATOR_THEORY_FRONTIER_2026_11_20.md` compares
+accepted TauCeti `8794ab329bb60340fa690a2902cf995f0571721b` with roadmap main
+`db6a5779878bcc57a942c5c3cb8ee15c6ec57f85`. The historical 740/899 accepted
+atomic claims exclude the newer UnboundedOperators roadmap and do not measure
+the expanded Toeplitz programme. Unmapped rows are not all missing mathematics.
+
+Existing DKPS spectral cuts (`SpectralCutOperator.lean` and supporting
+`SpectralMeasure.lean`, SA-E36–E37) and vector gap inversion
+(`SpectralGapInverse.lean`, SA-E38–E40) are candidates for native-PVM ports;
+no submission or new integration is claimed. Preserve the gap inverse's
+Spectra ancestry. SA-E09/E10 are already in open
+[Forgejo #1964](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1964),
+and SA-E44/E45 in open
+[#2123](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2123).
+These overlap DKPS-developed topics; direct proof descent has not been audited.
+They are pending work by other contributors, not accepted contributions.
+Our [#29129](https://github.com/TauCetiProject/TauCeti/pull/29129) is now confirmed
+closed as superseded by accepted #41596; it did not integrate.
+
+Additional accepted suppliers on the pinned main are chrisflav's
+[#42114](https://github.com/TauCetiProject/TauCeti/pull/42114), integration
+`a2b67ea6712e1b6d8e50830aaedb776b5cace143`, maximal Lp multiplication domains,
+closedness, cores, adjoints, reciprocal resolvents and essential-range spectrum;
+and [#40967](https://github.com/TauCetiProject/TauCeti/pull/40967), integration
+`477cccbcbf8f5ea242da7ff1914c6e102427821f`, Hilbert dimension/unitary
+classification. Native owners are `MeasureTheory.Lp.maximalMultiplication`
+(`MaximalMultiplication/Basic.lean`, `Spectrum.lean`) and `TauCeti.hilbertDim`
+(`HilbertBasis/Dimension.lean`). This is supplier registration, not whole UO-A07/
+A08 completion or a DKPS proof-authorship claim. No direct DKPS descent or
+displaced local counterpart is established here. Full cyclic/calculus
+comparisons remain separate. No Lean code or dependency pin changed in this audit.
+
+**Status: intentionally incomplete provenance audit; latest selected supplier/frontier update 2026-11-20.** This is a
 maintained *provenance and results* record, not a PR action queue, a theorem
 census, or a claim of exclusive mathematical authorship. Its purpose is to make
 it possible to say exactly which results in TauCeti benefited from the Kitware
