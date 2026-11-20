@@ -87,27 +87,27 @@ noncomputable def nonzeroGramEigenspaceEquiv (μ : 𝕜) (hμ : μ ≠ 0) :
     ((μ⁻¹ • T.adjoint.toLinearMap).restrict fun y hy =>
       Submodule.smul_mem _ _ (adjoint_apply_mem_rightGram_eigenspace T hy)) ?_ ?_
   · ext y
-    have hy := y.2
+    have hy := y.property
     rw [Module.End.mem_eigenspace_iff] at hy
     simp only [LinearMap.comp_apply, LinearMap.coe_restrict_apply, LinearMap.id_coe, id_eq,
       LinearMap.smul_apply]
     calc
-      T (μ⁻¹ • T.adjoint y.1) = μ⁻¹ • (T ∘L T.adjoint) y.1 := by
+      T (μ⁻¹ • T.adjoint y.val) = μ⁻¹ • (T ∘L T.adjoint) y.val := by
         rw [map_smul]
         rfl
-      _ = μ⁻¹ • (μ • y.1) := congrArg (fun z => μ⁻¹ • z) hy
-      _ = μ⁻¹ • μ • y.1 := by rw [smul_smul]
-      _ = y.1 := inv_smul_smul₀ hμ y.1
+      _ = μ⁻¹ • (μ • y.val) := congrArg (fun z => μ⁻¹ • z) hy
+      _ = μ⁻¹ • μ • y.val := by rw [smul_smul]
+      _ = y.val := inv_smul_smul₀ hμ y.val
   · ext x
-    have hx := x.2
+    have hx := x.property
     rw [Module.End.mem_eigenspace_iff] at hx
     simp only [LinearMap.comp_apply, LinearMap.coe_restrict_apply, LinearMap.id_coe, id_eq,
       LinearMap.smul_apply]
     calc
-      μ⁻¹ • T.adjoint (T x.1) = μ⁻¹ • (T.adjoint ∘L T) x.1 := rfl
-      _ = μ⁻¹ • (μ • x.1) := congrArg (fun z => μ⁻¹ • z) hx
-      _ = μ⁻¹ • μ • x.1 := by rw [smul_smul]
-      _ = x.1 := inv_smul_smul₀ hμ x.1
+      μ⁻¹ • T.adjoint (T x.val) = μ⁻¹ • (T.adjoint ∘L T) x.val := rfl
+      _ = μ⁻¹ • (μ • x.val) := congrArg (fun z => μ⁻¹ • z) hx
+      _ = μ⁻¹ • μ • x.val := by rw [smul_smul]
+      _ = x.val := inv_smul_smul₀ hμ x.val
 
 /-- If `T` is compact, every nonzero eigenspace of `T⋆T` is finite-dimensional. -/
 theorem finiteDimensional_rightGram_eigenspace (hT : IsCompactOperator T) (μ : 𝕜)

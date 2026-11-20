@@ -94,7 +94,7 @@ theorem range_blockFamily (b : OrthonormalBasis (Fin n) 𝕜 E) (s : Finset (Fin
   ext x
   constructor
   · rintro ⟨i, rfl⟩
-    exact ⟨_, (s.orderIsoOfFin hd i).2, rfl⟩
+    exact ⟨_, (s.orderIsoOfFin hd i).property, rfl⟩
   · rintro ⟨j, hj, rfl⟩
     refine ⟨(s.orderIsoOfFin hd).symm ⟨j, hj⟩, ?_⟩
     simp [blockFamily]

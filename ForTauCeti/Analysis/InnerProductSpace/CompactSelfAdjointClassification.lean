@@ -156,7 +156,7 @@ theorem exists_linearIsometryEquiv_intertwining_of_finrank_eigenspace_eq
     intro μ
     refine le_antisymm ?_ ?_
     · rintro _ ⟨x, rfl⟩
-      exact (eA μ x).2
+      exact (eA μ x).property
     · intro y hy
       exact ⟨(eA μ).symm ⟨y, hy⟩, by simp [hVA]⟩
   have hrangeB : ∀ μ : 𝕜, LinearMap.range (VB μ).toLinearMap =
@@ -164,7 +164,7 @@ theorem exists_linearIsometryEquiv_intertwining_of_finrank_eigenspace_eq
     intro μ
     refine le_antisymm ?_ ?_
     · rintro _ ⟨x, rfl⟩
-      exact (eB μ x).2
+      exact (eB μ x).property
     · intro y hy
       exact ⟨(eB μ).symm ⟨y, hy⟩, by simp [hVB]⟩
   -- Both are Hilbert sums over the same model family.
@@ -256,8 +256,8 @@ theorem finite_setOf_hasEigenvalue_le_norm {A : E →L[𝕜] E}
   have hmuinj : Function.Injective mu := by
     intro i j hij
     exact em.injective (Subtype.ext hij)
-  have hmuev : ∀ n, Module.End.HasEigenvalue A.toLinearMap (mu n) := fun n => (em n).2.1
-  have hmunorm : ∀ n, c ≤ ‖mu n‖ := fun n => (em n).2.2
+  have hmuev : ∀ n, Module.End.HasEigenvalue A.toLinearMap (mu n) := fun n => (em n).property.1
+  have hmunorm : ∀ n, c ≤ ‖mu n‖ := fun n => (em n).property.2
   -- normalized eigenvectors
   have hex : ∀ n, ∃ w : E, ‖w‖ = 1 ∧ A w = mu n • w := by
     intro n

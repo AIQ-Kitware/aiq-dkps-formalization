@@ -6488,11 +6488,20 @@
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.QuarterAcute"
       ],
-      "status": "staged",
-      "upstream_pr": null,
-      "migration_note": "Built against accepted TauCeti 086028a6d8d186715b52fac7f3e7b23175ed2dc9, Mathlib e8ba86fa9744dd8d90f48c1752bc735f61a4ca81, Lean v4.36.0-rc2. Native WithLp 2 (TauCeti.Complexification E), no new carrier. Projection/form transport needs no ambient completeness; endpoint covers arbitrary complete real Hilbert spaces, including zero and nonseparable spaces. Prepared work is not upstream acceptance. Existing complex endpoint #27804 remains accepted; full C31 is still only partially accepted until this real branch lands. Native branch prepared: 706bff9b65aa580d75506e6b6075a1096b53cce2. Focused 6475-job build, 15 environment linters on all three owning modules, standard axioms, raw/incomplete/zero-space scope examples and full source style pass. Host live gh preflight remains required; no PR number or integration is claimed.",
+      "status": "accepted-upstream-local-duplicate-retired",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/43455",
+      "migration_note": "Built against accepted TauCeti 086028a6d8d186715b52fac7f3e7b23175ed2dc9, Mathlib e8ba86fa9744dd8d90f48c1752bc735f61a4ca81, Lean v4.36.0-rc2. Native WithLp 2 (TauCeti.Complexification E), no new carrier. Projection/form transport needs no ambient completeness; endpoint covers arbitrary complete real Hilbert spaces, including zero and nonseparable spaces. Prepared work is not upstream acceptance. Existing complex endpoint #27804 remains accepted; full C31 is still only partially accepted until this real branch lands. Native branch prepared: 706bff9b65aa580d75506e6b6075a1096b53cce2. Focused 6475-job build, 15 environment linters on all three owning modules, standard axioms, raw/incomplete/zero-space scope examples and full source style pass. Host live gh preflight remains required; no PR number or integration is claimed. November 20: verified integration b80c0b9f49 on accepted main 8794ab329b. All original declarations now live in the recorded native owning modules at their original scope. The three duplicate donor modules are deleted, without forwarding shims. Original source names, anchors and attribution above are historical provenance; staging and open-submission notes above are historical. Pin consumes Lean v4.37.0-rc1 and Mathlib 31ce06eaadf4a200c0e1407c5f10953cf606b8f8.",
       "prepared_head": "706bff9b65aa580d75506e6b6075a1096b53cce2",
-      "prepared_packet": "waves/2026-11-16/c31-real"
+      "prepared_packet": "waves/2026-11-16/c31-real",
+      "integration_commit": "b80c0b9f49c3aa97cc22115f7d7d3a2361112d25",
+      "final_declarations": [
+        "Submodule.complexifyL2_orthogonal",
+        "Submodule.complexifyL2_starProjection_mem",
+        "Submodule.sub_complexifyL2_starProjection_mem_orthogonal",
+        "Submodule.instHasOrthogonalProjectionComplexifyL2",
+        "Submodule.starProjection_complexifyL2",
+        "Submodule.projectionGap_complexifyL2"
+      ]
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.Complexification.FormBounds",
@@ -6515,11 +6524,16 @@
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.Complexification.QuarterAcute"
       ],
-      "status": "staged",
-      "upstream_pr": null,
-      "migration_note": "Built against accepted TauCeti 086028a6d8d186715b52fac7f3e7b23175ed2dc9, Mathlib e8ba86fa9744dd8d90f48c1752bc735f61a4ca81, Lean v4.36.0-rc2. Native WithLp 2 (TauCeti.Complexification E), no new carrier. Projection/form transport needs no ambient completeness; endpoint covers arbitrary complete real Hilbert spaces, including zero and nonseparable spaces. Prepared work is not upstream acceptance. Existing complex endpoint #27804 remains accepted; full C31 is still only partially accepted until this real branch lands. Native branch prepared: 706bff9b65aa580d75506e6b6075a1096b53cce2. Focused 6475-job build, 15 environment linters on all three owning modules, standard axioms, raw/incomplete/zero-space scope examples and full source style pass. Host live gh preflight remains required; no PR number or integration is claimed.",
+      "status": "accepted-upstream-local-duplicate-retired",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/43455",
+      "migration_note": "Built against accepted TauCeti 086028a6d8d186715b52fac7f3e7b23175ed2dc9, Mathlib e8ba86fa9744dd8d90f48c1752bc735f61a4ca81, Lean v4.36.0-rc2. Native WithLp 2 (TauCeti.Complexification E), no new carrier. Projection/form transport needs no ambient completeness; endpoint covers arbitrary complete real Hilbert spaces, including zero and nonseparable spaces. Prepared work is not upstream acceptance. Existing complex endpoint #27804 remains accepted; full C31 is still only partially accepted until this real branch lands. Native branch prepared: 706bff9b65aa580d75506e6b6075a1096b53cce2. Focused 6475-job build, 15 environment linters on all three owning modules, standard axioms, raw/incomplete/zero-space scope examples and full source style pass. Host live gh preflight remains required; no PR number or integration is claimed. November 20: verified integration b80c0b9f49 on accepted main 8794ab329b. All original declarations now live in the recorded native owning modules at their original scope. The three duplicate donor modules are deleted, without forwarding shims. Original source names, anchors and attribution above are historical provenance; staging and open-submission notes above are historical. Pin consumes Lean v4.37.0-rc1 and Mathlib 31ce06eaadf4a200c0e1407c5f10953cf606b8f8.",
       "prepared_head": "706bff9b65aa580d75506e6b6075a1096b53cce2",
-      "prepared_packet": "waves/2026-11-16/c31-real"
+      "prepared_packet": "waves/2026-11-16/c31-real",
+      "integration_commit": "b80c0b9f49c3aa97cc22115f7d7d3a2361112d25",
+      "final_declarations": [
+        "ContinuousLinearMap.lowerFormBoundOn_complexifyL2_iff",
+        "ContinuousLinearMap.upperFormBoundOn_complexifyL2_iff"
+      ]
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.Complexification.QuarterAcute",
@@ -6540,11 +6554,15 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "submitted-open-not-integrated",
+      "status": "accepted-upstream-local-duplicate-retired",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/43455",
-      "migration_note": "Built against accepted TauCeti 086028a6d8d186715b52fac7f3e7b23175ed2dc9, Mathlib e8ba86fa9744dd8d90f48c1752bc735f61a4ca81, Lean v4.36.0-rc2. Native WithLp 2 (TauCeti.Complexification E), no new carrier. Projection/form transport needs no ambient completeness; endpoint covers arbitrary complete real Hilbert spaces, including zero and nonseparable spaces. Prepared work is not upstream acceptance. Existing complex endpoint #27804 remains accepted; full C31 is still only partially accepted until this real branch lands. Native branch prepared: 706bff9b65aa580d75506e6b6075a1096b53cce2. Focused 6475-job build, 15 environment linters on all three owning modules, standard axioms, raw/incomplete/zero-space scope examples and full source style pass. Host live gh preflight remains required; no PR number or integration is claimed. November 17 selected live observation: submitted as #43455 at the prepared head, green build/scope/bump CI and no visible review comments or threads. Earlier preparation and host-preflight statements above are historical; no upstream integration is claimed.",
+      "migration_note": "Built against accepted TauCeti 086028a6d8d186715b52fac7f3e7b23175ed2dc9, Mathlib e8ba86fa9744dd8d90f48c1752bc735f61a4ca81, Lean v4.36.0-rc2. Native WithLp 2 (TauCeti.Complexification E), no new carrier. Projection/form transport needs no ambient completeness; endpoint covers arbitrary complete real Hilbert spaces, including zero and nonseparable spaces. Prepared work is not upstream acceptance. Existing complex endpoint #27804 remains accepted; full C31 is still only partially accepted until this real branch lands. Native branch prepared: 706bff9b65aa580d75506e6b6075a1096b53cce2. Focused 6475-job build, 15 environment linters on all three owning modules, standard axioms, raw/incomplete/zero-space scope examples and full source style pass. Host live gh preflight remains required; no PR number or integration is claimed. November 17 selected live observation: submitted as #43455 at the prepared head, green build/scope/bump CI and no visible review comments or threads. Earlier preparation and host-preflight statements above are historical; no upstream integration is claimed. November 20: verified integration b80c0b9f49 on accepted main 8794ab329b. All original declarations now live in the recorded native owning modules at their original scope. The three duplicate donor modules are deleted, without forwarding shims. Original source names, anchors and attribution above are historical provenance; staging and open-submission notes above are historical. Pin consumes Lean v4.37.0-rc1 and Mathlib 31ce06eaadf4a200c0e1407c5f10953cf606b8f8.",
       "prepared_head": "706bff9b65aa580d75506e6b6075a1096b53cce2",
-      "prepared_packet": "waves/2026-11-16/c31-real"
+      "prepared_packet": "waves/2026-11-16/c31-real",
+      "integration_commit": "b80c0b9f49c3aa97cc22115f7d7d3a2361112d25",
+      "final_declarations": [
+        "Submodule.projectionGap_lt_sqrt_two_div_two_of_orderedFormGap_real"
+      ]
     },
     {
       "module": "ForTauCeti.Analysis.Complex.Cayley.Inverse",
@@ -6590,6 +6608,57 @@
       ],
       "prepared_head": "0a85d596da2d7bad3fe178a69713133b0493a303",
       "prepared_packet": "/home/joncrall/code/tauceti-dkps-campaign/waves/2026-11-17/pr29129"
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.Normed.Lp.ProdLp",
+      "source_declarations": [
+        "Continuous.withLpProdMap"
+      ],
+      "original_source_anchor": "2ef2b5c65:ForTauCeti/Analysis/Normed/Lp/ProdLp.lean:31",
+      "current_namespace": "Continuous",
+      "staging_module": null,
+      "final_tauceti_module": "TauCeti.Analysis.Normed.Lp.ProdLp",
+      "final_declarations": [
+        "Continuous.withLpProdMap"
+      ],
+      "status": "accepted-upstream-local-duplicate-retired",
+      "authors_license": "Local source: Jon Crall / GPT-6, Kitware copyright 2026, Apache-2.0; accepted upstream proof descent not established.",
+      "migration_note": "Verified exact native replacement in accepted main 8794ab329b, at the same full normed-field/topological-parameter scope. Delete the local continuity proof and migrate all three maintained imports directly; no forwarding shim. Source names and local copyright remain historical provenance. Originating roadmap target HeegaardFloer F1.3, not another OperatorTheory completion credit; direct DKPS proof descent undisclosed/unknown.",
+      "upstream_pr": "https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/630",
+      "integration_commit": "40822675c0a7f156b9534f0f95edf0087bed8475",
+      "accepted_head": "2fffedc4c07360fb21667cdee08ebeb84ec2f40f"
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.SchattenTransportRestriction",
+      "source_declarations": [
+        "ContinuousLinearMap.star_withLpProdMap"
+      ],
+      "original_source_anchor": "2ef2b5c65:ForTauCeti/Analysis/InnerProductSpace/SchattenTransportRestriction.lean:35-52",
+      "authors_license": "Jon Crall / GPT-6, Kitware 2026, Apache-2.0",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Spectral.BlockSum",
+      "final_declarations": [
+        "ContinuousLinearMap.star_withLpProdMap"
+      ],
+      "status": "accepted-upstream-local-duplicates-retired",
+      "upstream_pr": "https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/630",
+      "integration_commit": "40822675c0a7f156b9534f0f95edf0087bed8475",
+      "migration_note": "Retire both forwarding proof engines; direct native multiplication rewrites use the reverse equality orientation. Native star theorem has the same arbitrary complete RCLike Hilbert scope; native multiplication is broader. Preserve the genuine block-unitarity consequence and Schatten variation mathematics. Direct proof descent from DKPS is not disclosed/established."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.SchattenTransportRestriction",
+      "source_declarations": [
+        "ContinuousLinearMap.mul_withLpProdMap"
+      ],
+      "original_source_anchor": "2ef2b5c65:ForTauCeti/Analysis/InnerProductSpace/SchattenTransportRestriction.lean:35-52",
+      "authors_license": "Jon Crall / GPT-6, Kitware 2026, Apache-2.0",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.Lp.ProdLp",
+      "final_declarations": [
+        "ContinuousLinearMap.withLpProdMap_mul"
+      ],
+      "status": "accepted-upstream-local-duplicates-retired",
+      "upstream_pr": "https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/630",
+      "integration_commit": "40822675c0a7f156b9534f0f95edf0087bed8475",
+      "migration_note": "Retire both forwarding proof engines; direct native multiplication rewrites use the reverse equality orientation. Native star theorem has the same arbitrary complete RCLike Hilbert scope; native multiplication is broader. Preserve the genuine block-unitarity consequence and Schatten variation mathematics. Direct proof descent from DKPS is not disclosed/established."
     }
   ]
 }

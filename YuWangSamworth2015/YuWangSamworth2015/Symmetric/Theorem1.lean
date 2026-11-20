@@ -166,7 +166,7 @@ theorem yuWangSamworth_equation1_opNorm_le
     apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
     refine (hfamV.restrictedPointSpectrum_span_subset).trans ?_
     rintro x ⟨k, rfl⟩
-    have hk : (k : Fin p) ≠ j := fun h => k.2 (Set.mem_singleton_iff.mpr h)
+    have hk : (k : Fin p) ≠ j := fun h => k.property (Set.mem_singleton_iff.mpr h)
     have hd := hgap _ hk
     intro hmem
     have hlt : |lamhat (k : Fin p) - lam| < δ :=

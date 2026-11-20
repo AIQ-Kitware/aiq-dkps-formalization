@@ -433,13 +433,9 @@ transversality. -/
 theorem spectrum_sinAngleOperatorC_lt_one (htr : ‖sinAngleOperatorC U V‖ < 1)
     {t : ℝ} (ht : t ∈ spectrum ℝ (sinAngleOperatorC U V)) : 0 ≤ t ∧ t < 1 := by
   refine ⟨(spectrum_sinAngleOperatorC_subset_Icc U V ht).1, ?_⟩
-  have habs : |t| ≤ ‖sinAngleOperatorC U V‖ * ‖(1 : E →L[ℂ] E)‖ :=
-    spectrum.norm_le_norm_mul_of_mem ht
-  have hone : ‖(1 : E →L[ℂ] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have hle : t ≤ ‖sinAngleOperatorC U V‖ := by
-    refine (le_abs_self t).trans (habs.trans ?_)
-    nlinarith [norm_nonneg (sinAngleOperatorC U V)]
-  linarith
+  have habs : |t| ≤ ‖sinAngleOperatorC U V‖ := by
+    simpa only [Real.norm_eq_abs] using spectrum.norm_le_norm_of_mem ht
+  exact ((le_abs_self t).trans habs).trans_lt htr
 
 private theorem continuousOn_tan_image (htr : ‖sinAngleOperatorC U V‖ < 1) :
     ContinuousOn Real.tan

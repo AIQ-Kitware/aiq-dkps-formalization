@@ -37,7 +37,7 @@ norm on the entire unitary group, including at zero displacement. -/
 theorem continuous_schattenUnitaryGradient_unitary (p : ℝ) (hp : 1 < p) :
     Continuous (fun U : unitary (E →L[ℂ] E) => schattenUnitaryGradient p (U : E →L[ℂ] E)) := by
   simp only [schattenUnitaryGradient_def]
-  exact continuous_subtype_val.cfc' (isCompact_sphere (0 : ℂ) 1)
+  exact continuous_subtypeVal.cfc' (isCompact_sphere (0 : ℂ) 1)
     (fun z => (schattenPhaseDerivative p z : ℂ))
     (fun U => spectrum.subset_circle_of_unitary U.property)
     (Complex.continuous_ofReal.comp (continuous_schattenPhaseDerivative p hp)).continuousOn

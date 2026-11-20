@@ -82,7 +82,7 @@ variable {𝕜 m n : Type*} [Field 𝕜] [Fintype n] [DecidableEq n]
 dimension `Fin M.rank`. -/
 theorem exists_eq_mul_rank (M : Matrix m n 𝕜) :
     ∃ (L : Matrix m (Fin M.rank) 𝕜) (R : Matrix (Fin M.rank) n 𝕜), M = L * R := by
-  have hdim : finrank 𝕜 (LinearMap.range M.mulVecLin) = M.rank := rfl
+  have hdim : finrank 𝕜 (LinearMap.range M.mulVecLin) = M.rank := M.finrank_range_mulVecLin
   let b : Module.Basis (Fin M.rank) 𝕜 (LinearMap.range M.mulVecLin) :=
     Module.finBasisOfFinrankEq 𝕜 _ hdim
   have hcol : ∀ j : n, (fun i => M i j) ∈ LinearMap.range M.mulVecLin := by

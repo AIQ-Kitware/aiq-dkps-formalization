@@ -97,7 +97,7 @@ theorem two_mul_sq_le_sum_sq_sub_perm {n : ℕ} (w : Fin n → ℝ)
   -- A non-identity permutation moves at least two points.
   have hcard : 2 ≤ π.support.card := by
     have hne_empty : π.support ≠ ∅ := fun h => hπ (Equiv.Perm.support_eq_empty_iff.mp h)
-    have h0 := Finset.card_pos.mpr (Finset.nonempty_iff_ne_empty.mpr hne_empty)
+    have h0 := Finset.card_pos.mpr (Finset.ne_empty_iff_nonempty.mp hne_empty)
     have h1 := Equiv.Perm.card_support_ne_one π
     omega
   calc 2 * γ ^ 2 ≤ (π.support.card : ℝ) * γ ^ 2 := by

@@ -123,12 +123,12 @@ private theorem thresholdRamp_eventually_eq (c x : ℝ) :
 /-- A fixed-threshold projector is Borel measurable on finite Hermitian matrices. -/
 theorem measurable_spectralProjectionIci (c : ℝ) :
     Measurable fun A : {A : Matrix (Fin n) (Fin n) 𝕜 // A.IsHermitian} =>
-      spectralProjectionIci c A.1 A.2 := by
+      spectralProjectionIci c A.val A.property := by
   apply measurable_of_tendsto_metrizable' atTop
     (fun m => (continuous_cfc_on_hermitian _ (continuous_thresholdRamp c m)).measurable)
   apply tendsto_pi_nhds.mpr
   intro A
-  apply tendsto_cfc_of_pointwise A.2
+  apply tendsto_cfc_of_pointwise A.property
   intro x _
   exact tendsto_const_nhds.congr' (Filter.EventuallyEq.symm (thresholdRamp_eventually_eq c x))
 

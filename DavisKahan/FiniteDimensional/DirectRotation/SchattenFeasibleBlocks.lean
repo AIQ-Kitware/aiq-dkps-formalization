@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT-6
 module
 
 public import DavisKahan.FiniteDimensional.DirectRotation.SchattenNoMixing
-public import ForTauCeti.Analysis.Normed.Lp.ProdLp
+public import TauCeti.Analysis.Normed.Lp.ProdLp
 public import ForTauCeti.Analysis.InnerProductSpace.PairedTransportVariation
 
 /-!

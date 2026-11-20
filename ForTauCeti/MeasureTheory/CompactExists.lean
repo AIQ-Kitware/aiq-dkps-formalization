@@ -177,7 +177,7 @@ theorem exists_mem_le_iff_iInf_le (hS : IsCompact S) (hSne : S.Nonempty)
   · intro h
     obtain ⟨y, hyS, hy⟩ := hS.exists_isMinOn hSne (hFc ω)
     refine ⟨y, hyS, le_trans (le_of_eq ?_) h⟩
-    exact le_antisymm (le_ciInf fun z => hy z.2) (ciInf_le hbdd (⟨y, hyS⟩ : ↥S))
+    exact le_antisymm (le_ciInf fun z => hy z.property) (ciInf_le hbdd (⟨y, hyS⟩ : ↥S))
 
 /-- **The pointwise infimum over a compact parameter set is measurable.**
 

@@ -129,7 +129,7 @@ theorem norm_comp_boundedPVM_proj_sub_smul_le (hT : IsSelfAdjoint T)
   by_cases hw : w ∈ reCoord (T := T) ⁻¹' B
   · have hind1 : (reCoord ⁻¹' B).indicator (fun _ => (1 : ℂ)) w = 1 :=
       Set.indicator_of_mem hw _
-    have hre : ((w : ℂ)) = (((w : ℂ).re : ℝ) : ℂ) := hT.mem_spectrum_eq_re w.2
+    have hre : ((w : ℂ)) = (((w : ℂ).re : ℝ) : ℂ) := hT.mem_spectrum_eq_re w.property
     have hmem : (w : ℂ).re ∈ B := by
       have h := hw
       rwa [Set.mem_preimage, reCoord_apply] at h
@@ -238,7 +238,7 @@ theorem exists_finiteDimensional_le_almostInvariant (hT : IsSelfAdjoint T)
     intro w
     have habs : |reCoord (T := T) w| ≤ ‖T‖ := by
       rw [reCoord_apply]
-      exact (Complex.abs_re_le_norm _).trans (spectrum.norm_le_norm_of_mem w.2)
+      exact (Complex.abs_re_le_norm _).trans (spectrum.norm_le_norm_of_mem w.property)
     set t : ℝ := reCoord (T := T) w with ht_def
     have htR : -R < t ∧ t < R := by
       rw [abs_le] at habs

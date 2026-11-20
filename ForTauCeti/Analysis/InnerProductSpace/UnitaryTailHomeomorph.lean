@@ -98,7 +98,7 @@ theorem exists_reference_tail_homeomorph
     have hc : Continuous (fun U : X => M.orthogonalProjectionOnto ∘L
         (U.val : E →L[𝕜] E) ∘L M.subtypeL) :=
       continuous_const.clm_comp
-        ((isEmbedding_toContinuousLinearMap.continuous.comp continuous_subtype_val).clm_comp
+        ((isEmbedding_toContinuousLinearMap.continuous.comp continuous_subtypeVal).clm_comp
           continuous_const)
     apply hc.congr
     intro U

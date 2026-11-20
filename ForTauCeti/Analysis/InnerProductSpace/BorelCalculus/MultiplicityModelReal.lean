@@ -520,14 +520,12 @@ theorem exists_hasMultiplicityModel_star [TopologicalSpace.SeparableSpace H]
     ∃ D : MultiplicityDatum ℂ, D.base {z : ℂ | z.im ≠ 0} = 0 ∧
       StarOperatorUnitaryEquiv cH star a D.operator := by
   classical
-  have hR0 : (0 : ℝ) ≤ ‖a‖ * ‖(1 : H →L[ℂ] H)‖ := mul_nonneg (norm_nonneg _) (norm_nonneg _)
-  have hspec : ∀ w : spectrum ℂ a, ‖(w : ℂ)‖ ≤ ‖a‖ * ‖(1 : H →L[ℂ] H)‖ := by
-    intro w
-    have hw := spectrum.subset_closedBall_norm_mul a w.2
-    simpa [Metric.mem_closedBall, dist_zero_right] using hw
-  have hmeasSpec : MeasurableSet (spectrum ℂ a) := (spectrum.isCompact a).isClosed.measurableSet
+  have hR0 : (0 : ℝ) ≤ ‖a‖ := norm_nonneg _
+  have hspec : ∀ w : spectrum ℂ a, ‖(w : ℂ)‖ ≤ ‖a‖ :=
+    fun w => spectrum.norm_le_norm_of_mem w.property
+  have hmeasSpec : MeasurableSet (spectrum ℂ a) := (spectrum.isCompact ℂ a).isClosed.measurableSet
   have hemb : MeasurableEmbedding ((↑) : spectrum ℂ a → ℂ) :=
-    MeasurableEmbedding.subtype_coe hmeasSpec
+    MeasurableEmbedding.subtypeVal hmeasSpec
   have hfin : ∀ n, IsFiniteMeasure (Measure.map ((↑) : spectrum ℂ a → ℂ)
       ((cfcHom ha).representationDiagMeasure (ξ n))) := fun n => Measure.isFiniteMeasure_map _ _
   have hsum' : IsHilbertSum ℂ
@@ -546,14 +544,14 @@ theorem exists_hasMultiplicityModel_star [TopologicalSpace.SeparableSpace H]
           (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))).toLinearIsometry) F)
         = ((cyclicIsometry ha (ξ n)).comp
           (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))).toLinearIsometry)
-          (mulLp _ (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖))
+          (mulLp _ (measurable_coordTrunc (‖a‖))
             (norm_coordTrunc_le hR0) F) := by
     intro n F
     have h1 : embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))
-        (mulLp _ (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖)) (norm_coordTrunc_le hR0) F)
+        (mulLp _ (measurable_coordTrunc (‖a‖)) (norm_coordTrunc_le hR0) F)
         = coordMulLp ha (ξ n) (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n)) F) :=
       (embLpEquiv_mulLp hemb ((cfcHom ha).representationDiagMeasure (ξ n))
-        (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖)) (norm_coordTrunc_le hR0) F).trans
+        (measurable_coordTrunc (‖a‖)) (norm_coordTrunc_le hR0) F).trans
         (mulLp_eq_coordMulLp ha (ξ n) _ _ (fun w => coordTrunc_eq_self (hspec w)) _)
     change a (cyclicIsometry ha (ξ n) (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ
       n)) F))
@@ -562,17 +560,16 @@ theorem exists_hasMultiplicityModel_star [TopologicalSpace.SeparableSpace H]
   have hB : ∀ (n : ℕ)
       (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom ha).representationDiagMeasure (ξ
         n)))),
-      (mulLp _ ((measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖)).comp measurable_fst)
+      (mulLp _ ((measurable_coordTrunc (‖a‖)).comp measurable_fst)
           (fun p => norm_coordTrunc_le hR0 p.1))
         (sliceLp (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ)
           ((cfcHom ha).representationDiagMeasure (ξ n))) n F)
         = sliceLp (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom
           ha).representationDiagMeasure (ξ n))) n
-          (mulLp _ (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ] H)‖))
+          (mulLp _ (measurable_coordTrunc (‖a‖))
             (norm_coordTrunc_le hR0) F) :=
     fun n F => (sliceLp_mulLp (fun m => Measure.map ((↑) : spectrum ℂ a → ℂ)
-      ((cfcHom ha).representationDiagMeasure (ξ m))) n (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ]
-        H)‖))
+      ((cfcHom ha).representationDiagMeasure (ξ m))) n (measurable_coordTrunc (‖a‖))
       (norm_coordTrunc_le hR0) F).symm
   have hVc : ∀ (n : ℕ)
       (F : Lp ℂ 2 (Measure.map ((↑) : spectrum ℂ a → ℂ) ((cfcHom ha).representationDiagMeasure (ξ
@@ -600,16 +597,15 @@ theorem exists_hasMultiplicityModel_star [TopologicalSpace.SeparableSpace H]
     continuous_star_lp star_add_lp hVc hWc
   obtain ⟨ρ, D, hρfin, hDmeas, hDanti, hρsupp, hρzero, hstep2⟩ :=
     exists_multiplicityLevels (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ)
-      ((cfcHom ha).representationDiagMeasure (ξ n))) (measurable_coordTrunc (‖a‖ * ‖(1 : H →L[ℂ]
-        H)‖))
+      ((cfcHom ha).representationDiagMeasure (ξ n))) (measurable_coordTrunc (‖a‖))
       (norm_coordTrunc_le hR0)
   have hbase : ρ {z : ℂ | z.im ≠ 0} = 0 := by
     refine hρsupp _ measurableSet_im_ne_zero fun n => ?_
     rw [Measure.map_apply hemb.measurable measurableSet_im_ne_zero]
     convert measure_empty (μ := (cfcHom ha).representationDiagMeasure (ξ n))
     refine Set.eq_empty_iff_forall_notMem.mpr fun w hw => ?_
-    exact hw (hsa.im_eq_zero_of_mem_spectrum w.2)
-  refine ⟨⟨ρ, ‖a‖ * ‖(1 : H →L[ℂ] H)‖, D, hρfin, hR0, ?_, hρzero, hDmeas, hDanti⟩, hbase, ?_⟩
+    exact hw (hsa.im_eq_zero_of_mem_spectrum w.property)
+  refine ⟨⟨ρ, ‖a‖, D, hρfin, hR0, ?_, hρzero, hDmeas, hDanti⟩, hbase, ?_⟩
   · refine hρsupp _ (measurableSet_lt measurable_const measurable_norm) fun n => ?_
     rw [Measure.map_apply hemb.measurable (measurableSet_lt measurable_const measurable_norm)]
     convert measure_empty (μ := (cfcHom ha).representationDiagMeasure (ξ n))

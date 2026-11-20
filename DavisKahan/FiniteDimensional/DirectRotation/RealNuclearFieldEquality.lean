@@ -306,7 +306,7 @@ theorem sine_sum_lt_realNuclearMatchingMinimum_iff_odd_multiplicity
       exact (lt_irrefl _) hlt
     push Not at hnot
     obtain ⟨t, ht, hn⟩ := hnot
-    exact ⟨t, ht, Nat.not_even_iff_odd.mp hn⟩
+    exact ⟨t, ht, hn⟩
   · rintro ⟨t, ht, hodd⟩
     have hne : realNuclearMatchingMinimum theta ≠ ∑ i, 2 * Real.sin (theta i) := by
       intro heq

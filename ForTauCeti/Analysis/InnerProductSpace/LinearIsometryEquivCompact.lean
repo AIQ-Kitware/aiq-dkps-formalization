@@ -55,7 +55,7 @@ theorem compactSpace_end_operatorNorm : CompactSpace (E ≃ₗᵢ[𝕜] E) := by
   let : CompactSpace (unitary (E →L[𝕜] E)) := isCompact_iff_compactSpace.mp hcompact
   have hc : Continuous (Unitary.linearIsometryEquiv (𝕜 := 𝕜) (H := E)) := by
     apply continuous_operatorNorm_iff.mpr
-    exact continuous_subtype_val
+    exact continuous_subtypeVal
   exact Function.Surjective.compactSpace hc Unitary.linearIsometryEquiv.surjective
 
 omit [CompleteSpace F] in

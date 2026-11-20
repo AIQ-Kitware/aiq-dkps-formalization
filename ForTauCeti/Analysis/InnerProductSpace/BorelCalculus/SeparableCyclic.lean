@@ -174,7 +174,7 @@ theorem exists_countable_isHilbertSum_lp_diagMeasure_complex [TopologicalSpace.S
   have hle : (⨆ x : S, cyclicSubspace ha (x : H)) ≤ ⨆ n, cyclicSubspace ha (e n) := by
     refine iSup_le fun x => ?_
     have := le_iSup (fun n => cyclicSubspace ha (e n)) (f (x : H))
-    rwa [heS (x : H) x.2] at this
+    rwa [heS (x : H) x.property] at this
   have htotal := topologicalClosure_iSup_cyclicSubspace_of_maximal ha hSmax
   refine htotal.trans ((Submodule.topologicalClosure_mono hle).trans ?_)
   simp only [range_cyclicIsometry]

@@ -521,7 +521,7 @@ theorem continuous_circleRieszProjection_path
         (A + (p.1 : ℝ) • E) :=
     (((continuous_circleMap _ _).comp continuous_snd).smul continuous_const).sub
       (continuous_const.add
-        ((continuous_subtype_val.comp continuous_fst).smul continuous_const))
+        ((continuous_subtypeVal.comp continuous_fst).smul continuous_const))
   have hderiv2 : Continuous fun p : Set.Icc (0 : ℝ) 1 × ℝ =>
       deriv (circleMap (center : ℂ) radius) p.2 := by
     have : Continuous fun θ : ℝ => deriv (circleMap (center : ℂ) radius) θ := by

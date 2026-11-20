@@ -78,7 +78,7 @@ theorem nonempty_orderIso_nat_of_unbounded_of_finite_inter_Iic [Nonempty α]
   obtain ⟨m, hmS, hmlb⟩ := exists_isLeast_of_finite_inter_Iic hfin (subset_refl S) ⟨x₀, hx₀⟩
   let : OrderBot ↥S :=
     { bot := ⟨m, hmS⟩
-      bot_le := fun a => hmlb a.2 }
+      bot_le := fun a => hmlb a.property }
   have : NoMaxOrder ↥S :=
     ⟨fun a => by
       obtain ⟨y, hyS, hy⟩ := hub (a : α)
@@ -87,7 +87,7 @@ theorem nonempty_orderIso_nat_of_unbounded_of_finite_inter_Iic [Nonempty α]
     LocallyFiniteOrder.ofFiniteIcc fun a b => by
       have himg : (Subtype.val '' Set.Icc a b : Set α) ⊆ S ∩ Set.Iic (b : α) := by
         rintro _ ⟨z, hz, rfl⟩
-        exact ⟨z.2, hz.2⟩
+        exact ⟨z.property, hz.2⟩
       exact Set.Finite.of_finite_image ((hfin (b : α)).subset himg)
         Subtype.val_injective.injOn
   let : SuccOrder ↥S := LinearLocallyFiniteOrder.succOrder _

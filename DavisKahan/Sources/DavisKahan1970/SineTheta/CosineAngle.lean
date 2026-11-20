@@ -116,19 +116,9 @@ theorem spectrum_cosineBlockModulusC_subset_Icc
   intro x hx
   refine ⟨spectrum_nonneg_of_nonneg
     (ContinuousLinearMap.modulus_nonneg (cosineBlockC U V)) hx, ?_⟩
-  -- `spectrum.norm_le_norm_of_mem` would need `NormOneClass`, i.e. `‖id‖ = 1`,
-  -- which fails when `U` is the zero subspace.  The `mul` form carries no such
-  -- instance, and `norm_id_le` bounds the unit without nontriviality.
-  have hone : ‖(1 : ↥U →L[ℂ] ↥U)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have habs : ‖x‖ ≤ ‖cosineBlockModulusC U V‖ * ‖(1 : ↥U →L[ℂ] ↥U)‖ :=
-    spectrum.norm_le_norm_mul_of_mem hx
+  have habs : ‖x‖ ≤ ‖cosineBlockModulusC U V‖ := spectrum.norm_le_norm_of_mem hx
   rw [Real.norm_eq_abs] at habs
-  refine (le_abs_self x).trans (habs.trans ?_)
-  calc
-    ‖cosineBlockModulusC U V‖ * ‖(1 : ↥U →L[ℂ] ↥U)‖ ≤ 1 * 1 :=
-      mul_le_mul (norm_cosineBlockModulusC_le_one U V) hone
-        (norm_nonneg _) zero_le_one
-    _ = 1 := by ring
+  exact (le_abs_self x).trans (habs.trans (norm_cosineBlockModulusC_le_one U V))
 
 /-- The literal directed angle of Section 1 and Section 6 of the paper. -/
 @[expose]

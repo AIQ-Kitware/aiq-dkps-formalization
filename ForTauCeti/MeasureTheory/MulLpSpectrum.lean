@@ -175,7 +175,7 @@ theorem ae_mem_spectrum_mulLp : ∀ᵐ x ∂ρ, g x ∈ spectrum ℂ (mulLp ρ h
   classical
   rw [ae_iff]
   set V : Set ℂ := (spectrum ℂ (mulLp ρ hg hgC))ᶜ with hV
-  have hVopen : IsOpen V := (spectrum.isClosed (mulLp ρ hg hgC)).isOpen_compl
+  have hVopen : IsOpen V := (spectrum.isClosed ℂ (mulLp ρ hg hgC)).isOpen_compl
   choose! ε hεpos hεnull using fun z (hz : z ∉ spectrum ℂ (mulLp ρ hg hgC)) =>
     exists_measure_preimage_ball_eq_zero ρ hg hgC hz
   set s : V → Set ℂ := fun w => Metric.ball (w : ℂ) (ε (w : ℂ)) with hs
@@ -190,7 +190,7 @@ theorem ae_mem_spectrum_mulLp : ∀ᵐ x ∂ρ, g x ∈ spectrum ℂ (mulLp ρ h
     simpa only [Set.preimage_iUnion, Set.mem_iUnion, Set.mem_preimage] using this
   refine measure_mono_null hsub ?_
   rw [measure_biUnion_null_iff hTc]
-  exact fun w _ => hεnull (w : ℂ) w.2
+  exact fun w _ => hεnull (w : ℂ) w.property
 
 end Spectrum
 

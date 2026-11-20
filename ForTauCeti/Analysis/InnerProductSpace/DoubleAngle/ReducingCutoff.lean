@@ -71,7 +71,7 @@ private theorem adjoint_subtypeL_subtypeL_apply
     U.subtypeL.adjoint (U.subtypeL y) = y := by
   refine Subtype.ext ?_
   rw [Submodule.adjoint_subtypeL, Submodule.coe_orthogonalProjectionOnto_apply]
-  exact Submodule.starProjection_eq_self_iff.mpr y.2
+  exact Submodule.starProjection_eq_self_iff.mpr y.property
 
 private theorem adjoint_subtypeL_apply_of_mem
     (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] {x : G} (hx : x ∈ U) :
@@ -119,7 +119,7 @@ noncomputable def BoundedCutoff.ofReducingRestriction
     rfl
   mem_subspace := fun v => by
     rw [liftProj_apply]
-    exact (Ω.toProj (U.subtypeL.adjoint v)).2
+    exact (Ω.toProj (U.subtypeL.adjoint v)).property
   mem_domain := fun v => by
     rw [liftProj_apply]
     exact (LinearPMap.mem_reducingRestriction_domain_iff A U hred _).mp
@@ -261,7 +261,7 @@ theorem tendsto_reducingCutoffSeq (hA : IsSelfAdjoint A)
       (fun n : ℕ => ((LinearPMap.specProjection hAU
         (Set.Icc (-(n : ℝ)) (n : ℝ)) measurableSet_Icc ⟨x, hx⟩ : U) : H))
       Filter.atTop (nhds x) := by
-    have := (continuous_subtype_val.tendsto (⟨x, hx⟩ : U)).comp hband
+    have := (continuous_subtypeVal.tendsto (⟨x, hx⟩ : U)).comp hband
     simpa [Function.comp_def] using this
   refine hcoe.congr fun n => ?_
   exact (BoundedCutoff.ofReducingRestriction_toProj_apply hred

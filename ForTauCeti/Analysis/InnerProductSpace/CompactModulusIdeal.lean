@@ -78,7 +78,7 @@ theorem isCompact_setOf_isSelfAdjoint_modulus_eq_schatten
     intro A
     apply tendsto_iff_eNorm_sub_tendsto_zero.mpr
     have ht := tendsto_schatten_sub_zero_of_modulus_eq p hp S A.val hS
-      (fun B : X => B.val) continuous_subtype_val.continuousAt
+      (fun B : X => B.val) continuous_subtypeVal.continuousAt
       (fun B => B.property.2) A.property.2
     simpa only [OperatorGauge.Carrier.enorm_eq_gauge,
       OperatorGauge.Carrier.toContinuousLinearMap_sub, OperatorIdealFamily.operatorGauge_apply,

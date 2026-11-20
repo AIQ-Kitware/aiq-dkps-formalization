@@ -121,7 +121,7 @@ private theorem adjoint_subtype_eq_orthogonalProjectionOnto
   -- states the inner-product goal against the projection's defining property.
   change ⟪U.starProjection x, (y : E)⟫_𝕜 = ⟪x, (y : E)⟫_𝕜
   rw [U.inner_starProjection_left_eq_right,
-    U.starProjection_eq_self_iff.mpr y.2]
+    U.starProjection_eq_self_iff.mpr y.property]
 
 /-- Transporting the rectangular sine embedding on `U` back to the ambient
 square space gives the one-sided sine cross projection `P_{Vᗮ} P_U`. -/

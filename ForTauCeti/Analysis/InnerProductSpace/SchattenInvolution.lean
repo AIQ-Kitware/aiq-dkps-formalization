@@ -42,7 +42,7 @@ theorem schatten_displacement_rpow_of_isSelfAdjoint
       (U : E →L[𝕜] E) (b i) = (mu i : 𝕜) • b i :=
     hU.isSymmetric.apply_eigenvectorBasis rfl i
   have hnorm (i : Fin (Module.finrank 𝕜 E)) : |mu i| = 1 := by
-    have h := _root_.ContinuousLinearMap.norm_map_of_mem_unitary U.2 (b i)
+    have h := _root_.ContinuousLinearMap.norm_map_of_mem_unitary U.property (b i)
     rw [heigen, norm_smul, b.orthonormal.1 i, mul_one] at h
     simpa only [RCLike.norm_ofReal] using h
   have hlam (i : Fin (Module.finrank 𝕜 E)) : ‖lam i‖ = 0 ∨ ‖lam i‖ = 2 := by

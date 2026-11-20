@@ -190,22 +190,22 @@ noncomputable def nonzeroEigenspaceEquivAdjointCompSelfSelfCompAdjoint
     ((μ⁻¹ • A.adjoint).restrict fun y hy => Submodule.smul_mem _ _
       (adjoint_apply_mem_eigenspace_adjointCompSelf A hy)) ?_ ?_
   · ext y
-    have hy := y.2
+    have hy := y.property
     rw [Module.End.mem_eigenspace_iff] at hy
     simp only [LinearMap.comp_apply, LinearMap.coe_restrict_apply, LinearMap.id_coe, id_eq,
       LinearMap.smul_apply]
-    calc A (μ⁻¹ • A.adjoint y.1) = μ⁻¹ • (A.comp A.adjoint) y.1 := by
+    calc A (μ⁻¹ • A.adjoint y.val) = μ⁻¹ • (A.comp A.adjoint) y.val := by
           rw [map_smul]; rfl
-      _ = μ⁻¹ • μ • y.1 := by rw [hy]
-      _ = y.1 := inv_smul_smul₀ hμ y.1
+      _ = μ⁻¹ • μ • y.val := by rw [hy]
+      _ = y.val := inv_smul_smul₀ hμ y.val
   · ext x
-    have hx := x.2
+    have hx := x.property
     rw [Module.End.mem_eigenspace_iff] at hx
     simp only [LinearMap.comp_apply, LinearMap.coe_restrict_apply, LinearMap.id_coe, id_eq,
       LinearMap.smul_apply]
-    calc μ⁻¹ • A.adjoint (A x.1) = μ⁻¹ • (A.adjoint.comp A) x.1 := rfl
-      _ = μ⁻¹ • μ • x.1 := by rw [hx]
-      _ = x.1 := inv_smul_smul₀ hμ x.1
+    calc μ⁻¹ • A.adjoint (A x.val) = μ⁻¹ • (A.adjoint.comp A) x.val := rfl
+      _ = μ⁻¹ • μ • x.val := by rw [hx]
+      _ = x.val := inv_smul_smul₀ hμ x.val
 
 /-- Corresponding nonzero eigenspaces of `A†A` and `AA†` have equal dimension. -/
 theorem finrank_eigenspace_adjointCompSelf_eq_selfCompAdjoint
@@ -380,7 +380,7 @@ theorem le_eigenvalues_selfCompAdjoint_of_norm_sq_floor
     α ≤ (isSymmetric_self_comp_adjoint A).eigenvalues hn i := by
   rcases le_or_gt α 0 with hα | hα
   · exact hα.trans (A.isPositive_self_comp_adjoint.nonneg_eigenvalues hn i)
-  · rw [← eigenvalues_adjointCompSelf_eq_selfCompAdjoint A rfl hn hi i.2]
+  · rw [← eigenvalues_adjointCompSelf_eq_selfCompAdjoint A rfl hn hi i.isLt]
     exact le_eigenvalues_adjointCompSelf_of_norm_sq_floor A hfloor rfl ⟨i, hi⟩
 
 /-- Singular values only depend on the Gram operator. -/

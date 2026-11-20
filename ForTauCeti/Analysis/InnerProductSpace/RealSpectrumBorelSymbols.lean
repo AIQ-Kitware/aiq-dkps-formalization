@@ -130,7 +130,7 @@ omit [CompleteSpace H] in
 /-- The admissibility proof carried by an element of `realSpectrumBddSymbols`.  Consumers
 cannot unfold the submodule's carrier, so this is the accessor they use. -/
 theorem isRealSpectrumBddMeasurable_coe (f : realSpectrumBddSymbols a) :
-    IsRealSpectrumBddMeasurable (f : spectrum ℝ a → ℂ) := mem_realSpectrumBddSymbols.mp f.2
+    IsRealSpectrumBddMeasurable (f : spectrum ℝ a → ℂ) := mem_realSpectrumBddSymbols.mp f.property
 
 end Predicate
 

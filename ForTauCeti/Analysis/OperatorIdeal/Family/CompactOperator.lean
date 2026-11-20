@@ -186,7 +186,7 @@ noncomputable def compactOperatorIdealFamilyCarrierEquiv :
       ↥(_root_.compactOperator (RingHom.id 𝕜) E F) where
   toFun A := ⟨A.toContinuousLinearMap,
     mem_finiteSubmodule_compactOperatorIdealFamily.mp A.mem_finiteSubmodule⟩
-  invFun A := ⟨A.val, mem_finiteSubmodule_compactOperatorIdealFamily.mpr A.2⟩
+  invFun A := ⟨A.val, mem_finiteSubmodule_compactOperatorIdealFamily.mpr A.property⟩
   left_inv A := OperatorGauge.Carrier.ext rfl
   right_inv _ := rfl
   map_add' _ _ := rfl

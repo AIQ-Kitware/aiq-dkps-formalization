@@ -599,7 +599,7 @@ theorem norm_comp_subtypeL_eq_norm_comp_starProjection
   · refine ContinuousLinearMap.opNorm_le_bound _
       (ContinuousLinearMap.opNorm_nonneg _) fun u => ?_
     have hfix : P.starProjection (u : Z) = (u : Z) :=
-      Submodule.starProjection_eq_self_iff.mpr u.2
+      Submodule.starProjection_eq_self_iff.mpr u.property
     have : (T ∘L P.subtypeL) u = (T ∘L P.starProjection) (u : Z) := by
       change T (u : Z) = T (P.starProjection (u : Z))
       rw [hfix]

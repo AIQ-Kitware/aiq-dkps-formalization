@@ -44,11 +44,11 @@ def eigenspace_prodMap_withLpMap_equiv (A : V →ₗ[K] V) (B : W →ₗ[K] W) (
     · rintro ⟨h₁, h₂⟩
       simp [WithLp.map, WithLp.ext_iff, Prod.ext_iff, prodMap_apply, h₁, h₂]
   exact
-    { toFun := fun x => (⟨x.1.fst, (hmem.mp x.2).1⟩, ⟨x.1.snd, (hmem.mp x.2).2⟩)
-      invFun := fun y => ⟨WithLp.toLp 2 (y.1.1, y.2.1), hmem.mpr ⟨by simp, by simp⟩⟩
+    { toFun := fun x => (⟨x.val.fst, (hmem.mp x.property).1⟩, ⟨x.val.snd, (hmem.mp x.property).2⟩)
+      invFun := fun y => ⟨WithLp.toLp 2 (y.1.val, y.2.val), hmem.mpr ⟨by simp, by simp⟩⟩
       map_add' := fun _ _ => rfl
       map_smul' := fun _ _ => rfl
-      left_inv := fun x => Subtype.ext (WithLp.toLp_ofLp 2 x.1)
+      left_inv := fun x => Subtype.ext (WithLp.toLp_ofLp 2 x.val)
       right_inv := fun _ => rfl }
 
 /-- Eigenspace multiplicities add for an infinite-dimensional block

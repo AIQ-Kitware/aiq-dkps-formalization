@@ -94,7 +94,7 @@ theorem exists_schatten_locally_minimizing_reducing_restriction
     exact le_self_add
   have hVfinite := ne_top_of_le_ne_top hfinite hVle
   refine ⟨V, hV, hlocal, hVfinite, ?_⟩
-  have hf : Continuous f := continuous_subtype_val.comp e.continuous
+  have hf : Continuous f := continuous_subtypeVal.comp e.continuous
   have hloc : IsLocalMinOn
       (fun T : E ≃ₗᵢ[𝕜] E => (OperatorIdealFamily.schatten 𝕜 p hp).gauge (1 - (T : E →L[𝕜] E)))
       {T | K.map T.toLinearMap = L} (f V) := by rwa [hfV]

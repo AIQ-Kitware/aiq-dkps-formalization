@@ -318,7 +318,7 @@ theorem norm_le_of_selfAdjoint_spectrum_subset_closedBall
     {T : E →L[𝕜] E} (hSelf : T.IsSymmetric) {ρ : ℝ} (hρ : 0 ≤ ρ)
     (hspec : spectrum 𝕜 T ⊆ Metric.closedBall 0 ρ) : ‖T‖ ≤ ρ := by
   have hSA : IsSelfAdjoint T := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hSelf
-  have hrad : spectralRadius 𝕜 T = ‖T‖₊ := ContinuousLinearMap.spectralRadius_eq_nnNorm T hSA
+  have hrad : spectralRadius 𝕜 T = ‖T‖₊ := ContinuousLinearMap.spectralRadius_eq_eNorm T hSA
   have hquasispec : quasispectrum 𝕜 T ⊆ Metric.closedBall 0 ρ := by
     intro z hz
     have hz' : z ∈ spectrum 𝕜 T ∪ {0} := by

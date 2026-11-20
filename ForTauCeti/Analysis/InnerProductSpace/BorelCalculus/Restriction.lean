@@ -137,7 +137,7 @@ omit [CompleteSpace H] in
 /-- **The compression of an invariant operator is its restriction.** -/
 theorem coe_compress_apply {T : H →L[ℂ] H} (hT : ∀ x ∈ K, T x ∈ K) (x : K) :
     (compress K T x : H) = T (x : H) := by
-  have hmem : T (x : H) ∈ K := hT _ x.2
+  have hmem : T (x : H) ∈ K := hT _ x.property
   rw [compress_apply]
   exact congrArg Subtype.val
     (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self (⟨T (x : H), hmem⟩ : K))
@@ -336,7 +336,7 @@ theorem spectrum_compress_subset (ha : IsStarNormal a) (hK : IsCalculusInvariant
 the spectrum of `a`, which is what a symbol is restricted along. -/
 def specIncl (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K) :
     spectrum ℂ (compress K a) → spectrum ℂ a :=
-  fun w => ⟨(w : ℂ), spectrum_compress_subset ha hK w.2⟩
+  fun w => ⟨(w : ℂ), spectrum_compress_subset ha hK w.property⟩
 
 /-- The spectral inclusion is the identity on the underlying complex numbers. -/
 @[simp] theorem coe_specIncl (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K)
@@ -345,7 +345,7 @@ def specIncl (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K) :
 /-- The spectral inclusion is continuous. -/
 theorem continuous_specIncl (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K) :
     Continuous (specIncl ha hK) :=
-  Continuous.subtype_mk continuous_subtype_val _
+  Continuous.subtype_mk continuous_subtypeVal _
 
 /-- The spectral inclusion is measurable, which is what lets a symbol be pulled back. -/
 theorem measurable_specIncl (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K) :

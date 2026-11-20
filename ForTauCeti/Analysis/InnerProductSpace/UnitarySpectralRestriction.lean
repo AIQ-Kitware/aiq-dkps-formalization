@@ -56,11 +56,11 @@ theorem exists_two_phase_restriction_of_cfc_level
     have hxU : (U : E →L[ℂ] E) (x : E) = mu • (x : E) :=
       (hV x).symm.trans (congrArg (fun y : N => (y : E)) hx.apply_eq_smul)
     have hnorm : ‖mu‖ = 1 := by
-      have h := _root_.ContinuousLinearMap.norm_map_of_mem_unitary U.2 (x : E)
+      have h := _root_.ContinuousLinearMap.norm_map_of_mem_unitary U.property (x : E)
       rw [hxU, norm_smul] at h
       exact mul_right_cancel₀ (norm_ne_zero_iff.2 hx0) (by simpa using h)
     have hsymbol := ContinuousLinearMap.cfc_apply_of_apply_eq_smul_of_isStarNormal f hxU
-    rw [hlevel x x.2] at hsymbol
+    rw [hlevel x x.property] at hsymbol
     have hscalar : f mu = c := (smul_left_injective ℂ hx0 hsymbol).symm
     exact hroots mu hnorm hscalar
   obtain ⟨P, hP, hrepr⟩ := exists_isStarProjection_eq_affine_of_spectrum_subset_pair

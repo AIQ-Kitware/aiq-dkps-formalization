@@ -133,7 +133,7 @@ theorem map_val_diagMeasure_mulLp (F : Lp ℂ 2 ρ) :
     have hComplex := (cfcHom ha).integral_representationDiagMeasure F
       ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (⟨fun w : spectrum ℂ (mulLp ρ hg hgC) => φ (w :
         ℂ),
-        φ.continuous.comp continuous_subtype_val⟩ :
+        φ.continuous.comp continuous_subtypeVal⟩ :
         C(spectrum ℂ (mulLp ρ hg hgC), ℝ)))
     change (∫ w, (φ (w : ℂ) : ℂ)
       ∂((cfcHom ha).representationDiagMeasure F)) = _ at hComplex
@@ -168,7 +168,7 @@ theorem map_val_diagMeasure_mulLp (F : Lp ℂ 2 ρ) :
       linear_combination ((φ (g x) : ℂ)) * hz
     rw [hcongr, integral_complex_ofReal, Complex.ofReal_re]
   -- Assemble.
-  rw [integral_map measurable_subtype_coe.aemeasurable φ.continuous.aestronglyMeasurable,
+  rw [integral_map measurable_subtypeVal.aemeasurable φ.continuous.aestronglyMeasurable,
     hleft, hcfc, hinner,
     integral_map hg.aemeasurable φ.continuous.aestronglyMeasurable,
     integral_withDensity_eq_integral_toReal_smul₀ (aemeasurable_enorm_sq ρ F)

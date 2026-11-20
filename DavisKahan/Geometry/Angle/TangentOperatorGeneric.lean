@@ -100,40 +100,20 @@ theorem spectrum_angleOperator_lt_pi_div_two
     have hsnonneg := (StarOrderedRing.nonneg_iff_spectrum_nonneg
       (R := ℝ) _ ((U.isPositive_sinAngleOperator V).isSelfAdjoint)).mp
         ((ContinuousLinearMap.nonneg_iff_isPositive.mpr (U.isPositive_sinAngleOperator V))) s hs
-    have hnormK : ‖((s : 𝕜))‖ ≤ ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ :=
-      spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem 𝕜 hs)
-    have hnorm : |s| ≤ ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ := by
-      rwa [RCLike.norm_ofReal] at hnormK
-    have hone : ‖(1 : E →L[𝕜] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-    have hsle : s ≤ 1 := by
-      have habs : |s| ≤ ‖(Submodule.sinAngleOperator U V)‖ := by
-        calc
-          |s| ≤ ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ := hnorm
-          _ ≤ ‖(Submodule.sinAngleOperator U V)‖ * 1 :=
-            mul_le_mul_of_nonneg_left hone (norm_nonneg _)
-          _ = ‖(Submodule.sinAngleOperator U V)‖ := mul_one _
-      have hsin : ‖(Submodule.sinAngleOperator U V)‖ < 1 := by
-        rw [Submodule.norm_sinAngleOperator]
-        exact h
-      exact ((le_abs_self s).trans habs).trans (le_of_lt hsin)
-    exact ⟨hsnonneg, hsle⟩
-  have hnormK : ‖((s : 𝕜))‖ ≤ ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ :=
-    spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem 𝕜 hs)
-  have hnorm : |s| ≤ ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ := by
-    rwa [RCLike.norm_ofReal] at hnormK
-  have hone : ‖(1 : E →L[𝕜] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have hslt : s < 1 := by
-    have habs : |s| ≤ ‖(Submodule.sinAngleOperator U V)‖ := by
-      calc
-        |s| ≤ ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ := hnorm
-        _ ≤ ‖(Submodule.sinAngleOperator U V)‖ * 1 :=
-          mul_le_mul_of_nonneg_left hone (norm_nonneg _)
-        _ = ‖(Submodule.sinAngleOperator U V)‖ := mul_one _
-    have hsle : s ≤ ‖(Submodule.sinAngleOperator U V)‖ := (le_abs_self s).trans habs
-    have hsin : ‖(Submodule.sinAngleOperator U V)‖ < 1 := by
+    have habs : |s| ≤ ‖Submodule.sinAngleOperator U V‖ := by
+      simpa only [RCLike.norm_ofReal] using
+        spectrum.norm_le_norm_of_mem (spectrum.algebraMap_mem 𝕜 hs)
+    have hsin : ‖Submodule.sinAngleOperator U V‖ < 1 := by
       rw [Submodule.norm_sinAngleOperator]
       exact h
-    exact hsle.trans_lt hsin
+    exact ⟨hsnonneg, ((le_abs_self s).trans habs).trans hsin.le⟩
+  have habs : |s| ≤ ‖Submodule.sinAngleOperator U V‖ := by
+    simpa only [RCLike.norm_ofReal] using
+      spectrum.norm_le_norm_of_mem (spectrum.algebraMap_mem 𝕜 hs)
+  have hsin : ‖Submodule.sinAngleOperator U V‖ < 1 := by
+    rw [Submodule.norm_sinAngleOperator]
+    exact h
+  have hslt : s < 1 := ((le_abs_self s).trans habs).trans_lt hsin
   exact ⟨Real.arcsin_nonneg.mpr hsi.1, Real.arcsin_lt_pi_div_two.mpr hslt⟩
 
 /-- A defined single-angle tangent makes `tan` continuous on the angle spectrum. -/
@@ -161,19 +141,8 @@ theorem hasDefinedDoubleTangent_of_norm_sinTwoAngleOperator_lt_one
         (by fun_prop : ContinuousOn (fun s : ℝ => Real.sin (2 * s)) _)]
     exact ⟨t, ht, rfl⟩
   have hspec : |Real.sin (2 * t)| ≤ ‖sinTwoAngleOperator U V‖ := by
-    have h0K : ‖((Real.sin (2 * t) : 𝕜))‖ ≤
-        ‖sinTwoAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ :=
-      spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem 𝕜 hs)
-    have h0 : |Real.sin (2 * t)| ≤
-        ‖sinTwoAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ := by
-      rwa [RCLike.norm_ofReal] at h0K
-    have hone : ‖(1 : E →L[𝕜] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-    calc
-      |Real.sin (2 * t)|
-          ≤ ‖sinTwoAngleOperator U V‖ * ‖(1 : E →L[𝕜] E)‖ := h0
-      _ ≤ ‖sinTwoAngleOperator U V‖ * 1 :=
-        mul_le_mul_of_nonneg_left hone (norm_nonneg _)
-      _ = ‖sinTwoAngleOperator U V‖ := mul_one _
+    simpa only [RCLike.norm_ofReal] using
+      spectrum.norm_le_norm_of_mem (spectrum.algebraMap_mem 𝕜 hs)
   have hpyth := Real.sin_sq_add_cos_sq (2 * t)
   rw [hcos] at hpyth
   norm_num at hpyth

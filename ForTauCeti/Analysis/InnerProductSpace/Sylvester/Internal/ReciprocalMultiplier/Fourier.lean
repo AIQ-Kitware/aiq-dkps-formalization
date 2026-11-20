@@ -163,7 +163,7 @@ private theorem eval_circle_exp_eq_fourier_sum {q : ℕ} (τ : ℝ) (p : Polynom
   refine Finset.sum_congr rfl fun r _ => ?_
   congr 1
   simp only [Circle.coe_exp]
-  rw [← Complex.exp_nat_mul]
+  rw [← Complex.exp_natCast_mul]
   congr 1
   push_cast
   ring

@@ -122,7 +122,7 @@ theorem eigenspace_le_eigenSpan (A : E →L[𝕜] E) {S : Set ℝ} {s : ℝ} (hs
 containing all of them contains it. -/
 theorem eigenSpan_le (A : E →L[𝕜] E) {S : Set ℝ} {W : Submodule 𝕜 E}
     (h : ∀ s ∈ S, eigenspace A.toLinearMap (s : 𝕜) ≤ W) : eigenSpan A S ≤ W :=
-  iSup_le fun s => h s s.2
+  iSup_le fun s => h s s.property
 
 /-- A larger band spans a larger subspace. -/
 theorem eigenSpan_mono (A : E →L[𝕜] E) {S T : Set ℝ} (h : S ⊆ T) :
@@ -264,7 +264,7 @@ theorem le_norm_apply_of_mem_eigenSpan (hAs : IsSelfAdjoint A) {S : Set ℝ} {t 
   have hAsum : A x = ∑ s ∈ u, ((((s : ℝ) : 𝕜) • f s : _) : E) := by
     rw [hxsum, map_sum]
     refine Finset.sum_congr rfl fun s _ => ?_
-    have hfs := Module.End.mem_eigenspace_iff.mp (f s).2
+    have hfs := Module.End.mem_eigenspace_iff.mp (f s).property
     simpa using hfs
   have hAnorm : ‖A x‖ ^ 2 = ∑ s ∈ u, ‖(((s : ℝ) : 𝕜) • f s : _)‖ ^ 2 := by
     rw [hAsum]
@@ -272,7 +272,7 @@ theorem le_norm_apply_of_mem_eigenSpan (hAs : IsSelfAdjoint A) {S : Set ℝ} {t 
   have hkey : t ^ 2 * ‖x‖ ^ 2 ≤ ‖A x‖ ^ 2 := by
     rw [hxnorm, hAnorm, Finset.mul_sum]
     refine Finset.sum_le_sum fun s _ => ?_
-    have hts : t ≤ (s : ℝ) := hS s s.2
+    have hts : t ≤ (s : ℝ) := hS s s.property
     have hnorm : ‖(((s : ℝ) : 𝕜) • f s : _)‖ = |(s : ℝ)| * ‖f s‖ := by
       rw [norm_smul, RCLike.norm_ofReal]
     rw [hnorm, mul_pow, sq_abs]
@@ -359,7 +359,7 @@ theorem norm_comp_subtypeL_orthogonal_le (hAc : IsCompactOperator A)
   have hAcl : IsCompactOperator A.toLinearMap := hAc
   have hSc : IsCompactOperator S := hAcl.restrict' hinvL
   have hnorm : ‖S‖ ≤ (cn : ℝ) := by
-    have hsr : spectralRadius 𝕜 S = ‖S‖₊ := S.spectralRadius_eq_nnNorm hSsa
+    have hsr : spectralRadius 𝕜 S = ‖S‖₊ := S.spectralRadius_eq_eNorm hSsa
     have hle : (‖S‖₊ : ℝ≥0∞) ≤ (cn : ℝ≥0∞) := by
       rw [← hsr]
       simp only [spectralRadius]
@@ -379,7 +379,7 @@ theorem norm_comp_subtypeL_orthogonal_le (hAc : IsCompactOperator A)
           have hme := Module.End.mem_eigenspace_iff.mp hy
           simpa [hSdef] using congrArg (fun z : (Wᗮ : Submodule 𝕜 E) => (z : E)) hme
         have hkc : ‖k‖ ≤ (cn : ℝ) := by
-          refine hbd k (y : E) y.2 ?_ hyeq
+          refine hbd k (y : E) y.property ?_ hyeq
           simpa [Submodule.coe_eq_zero] using hy0
         exact_mod_cast hkc
     have hnn : ‖S‖₊ ≤ cn := by exact_mod_cast hle

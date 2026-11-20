@@ -365,10 +365,10 @@ theorem exists_aligned_orthonormalBasis
       (Fin.cast_injective hrankV.symm)
   have hspanU : Submodule.span 𝕜 (Set.range u) = U :=
     span_range_eq_of_orthonormal_of_mem hu
-      (fun i => (bU (Fin.cast hrankU.symm i)).2) hrankU.symm
+      (fun i => (bU (Fin.cast hrankU.symm i)).property) hrankU.symm
   have hspanV0 : Submodule.span 𝕜 (Set.range v0) = V :=
     span_range_eq_of_orthonormal_of_mem hv0
-      (fun i => (bV (Fin.cast hrankV.symm i)).2) hrankV.symm
+      (fun i => (bV (Fin.cast hrankV.symm i)).property) hrankV.symm
   let O := choosePolarUnitary (overlapOperator 𝕜 u v0)
   let v : Fin d → E := fun i =>
     hv0.synthesisMapIsometry (O.symm (EuclideanSpace.single i 1))

@@ -95,7 +95,7 @@ omit [CompleteSpace H] in
 /-- The real coordinate symbol -- the inclusion of the real spectrum into `ℂ` -- is measurable,
 being continuous for the subspace topology. -/
 theorem measurable_realCoord : Measurable (fun x : spectrum ℝ a => ((x : ℝ) : ℂ)) :=
-  (Complex.continuous_ofReal.comp continuous_subtype_val).measurable
+  (Complex.continuous_ofReal.comp continuous_subtypeVal).measurable
 
 /-- **The real coordinate is bounded by the complex coordinate's bound.**  A point of
 `spectrum ℝ a` is the real part of a point of `spectrum ℂ a`, and reading it back into `ℂ`

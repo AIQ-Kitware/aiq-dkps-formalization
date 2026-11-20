@@ -45,7 +45,7 @@ needing anything about approximation numbers.
 **Two hypotheses the move falsified, recorded because they are the argument for
 making such moves early.**  Under the stricter options this library is built with,
 the file needed `sub_apply` in place of a deprecated
-`ContinuousLinearMap.sub_apply` twice; and by *dependency* it is not
+`sub_apply` twice; and by *dependency* it is not
 approximation-number material at all — it imports `LinearPMap.Constructions` and
 `LinearPMap.SpectralFormBounds`, so it is submittable only after the unbounded
 spectral measure, not with the `a`-numbers its name suggests.

@@ -112,7 +112,7 @@ theorem hasDerivAt_deriv_schatten_unitary_two_phase
   let D : E →L[ℂ] E :=
     (da : ℂ) • ((1 - P) * H * (1 - P)) + (db : ℂ) • (P * H * P)
   have hunit (t : ℝ) : V t ∈ unitary (E →L[ℂ] E) := by
-    apply mul_mem U.2
+    apply mul_mem U.property
     apply NormedSpace.exp_mem_unitary_of_mem_skewAdjoint
     rw [skewAdjoint.mem_iff]
     simp [star_smul, hH.star_eq]

@@ -124,7 +124,7 @@ omit [CompleteSpace H] in
 /-- The admissibility proof carried by an element of `bddSymbols`.  Consumers cannot unfold
 the submodule's carrier, so this is the accessor they use. -/
 theorem isBddMeasurable_coe (f : bddSymbols a) :
-    IsBddMeasurable (f : spectrum ℂ a → ℂ) := mem_bddSymbols.mp f.2
+    IsBddMeasurable (f : spectrum ℂ a → ℂ) := mem_bddSymbols.mp f.property
 
 /-- **The calculus map on symbols**: `f ↦ f(a) ξ`, as a `ℂ`-linear map out of the bounded
 measurable symbols. -/

@@ -162,12 +162,12 @@ theorem exists_compact_modulus_spectral_homeomorph
     apply isClosed_iInter
     intro x
     apply isClosed_eq
-    · exact (continuous_subtype_val.comp continuous_snd).clm_apply continuous_const
+    · exact (continuous_subtypeVal.comp continuous_snd).clm_apply continuous_const
     · have hc : Continuous (fun z : X × Y => (z.1 μ).val x) :=
-        (continuous_subtype_val.comp ((continuous_apply μ).comp continuous_fst)).clm_apply
+        (continuous_subtypeVal.comp ((continuous_apply μ).comp continuous_fst)).clm_apply
           continuous_const
       exact continuous_const.smul ((continuous_const.smul
-        (continuous_subtype_val.comp hc)).sub continuous_const)
+        (continuous_subtypeVal.comp hc)).sub continuous_const)
   have hf : Continuous e := continuous_of_isClosed_graph hgraph
   exact ⟨e.toHomeomorphOfContinuousClosed hf hf.isClosedMap, he⟩
 

@@ -184,7 +184,7 @@ theorem eq_zero_of_anticommutator_nonpos {A K : H →L[ℂ] H}
       exact (hRunit.mul hK').mul hRinvunit
   -- the spectrum of `K` is `{0}`
   have hKsa : IsSelfAdjoint K := hK.isSelfAdjoint
-  have hzero : ∀ z ∈ spectrum ℂ K, ‖z‖₊ = 0 := by
+  have hzero : ∀ z ∈ spectrum ℂ K, z = 0 := by
     intro z hz
     have hre : z.re ≤ 0 := hspecZ z (hspecEq ▸ hz)
     have hz' : z ∈ (algebraMap ℝ ℂ) '' spectrum ℝ K := by
@@ -208,11 +208,8 @@ theorem eq_zero_of_anticommutator_nonpos {A K : H →L[ℂ] H}
         rcases hz' with hz' | hz'
         · exact hz'
         · exact (hz0 (by simpa using hz')).elim
-      exact_mod_cast hzero z hzspec
-  have hnn : ‖K‖₊ = 0 := by
-    have := (K.spectralRadius_eq_nnNorm hKsa).symm.trans hrad
-    exact_mod_cast this
-  exact nnNorm_eq_zero.mp hnn
+      exact eNorm_eq_zero.mpr (hzero z hzspec)
+  exact eNorm_eq_zero.mp ((K.spectralRadius_eq_eNorm hKsa).symm.trans hrad)
 
 /-- The anticommutator of two self-adjoint operators is self-adjoint. -/
 theorem anticommutator_isSelfAdjoint (S T : H →L[ℂ] H)

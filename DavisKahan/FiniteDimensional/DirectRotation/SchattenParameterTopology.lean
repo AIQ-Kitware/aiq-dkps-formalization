@@ -109,7 +109,7 @@ theorem exists_schatten_normalized_parameter_homeomorph
     have hDs : Continuous (fun z : X => z.1.2.symm) :=
       LinearIsometryEquiv.continuous_symm_operatorNorm.comp hD
     have hP : Continuous (fun z : X => z.1.1.val) :=
-      continuous_subtype_val.comp (continuous_fst.comp continuous_fst)
+      continuous_subtypeVal.comp (continuous_fst.comp continuous_fst)
     have hT : Continuous (fun z : X => (z.2 : E →L[ℂ] E)) :=
       LinearIsometryEquiv.isEmbedding_toContinuousLinearMap.continuous.comp continuous_snd
     have hRT : Continuous (fun z : X => (z.2.trans R.symm : E →L[ℂ] E)) :=
@@ -121,14 +121,14 @@ theorem exists_schatten_normalized_parameter_homeomorph
       apply isClosed_iInter
       intro x
       exact isClosed_eq (continuous_snd.eval_const (x : E))
-        (continuous_subtype_val.comp (hD.eval_const x))
+        (continuous_subtypeVal.comp (hD.eval_const x))
     have htgt : IsClosed {z : X | ∀ y : halmosTargetDefect K L,
         z.2 y = (z.1.2.symm y : E)} := by
       simp only [Set.ofPred_forall]
       apply isClosed_iInter
       intro y
       exact isClosed_eq (continuous_snd.eval_const (y : E))
-        (continuous_subtype_val.comp (hDs.eval_const y))
+        (continuous_subtypeVal.comp (hDs.eval_const y))
     have hphase : IsClosed {z : X | C * (z.2.trans R.symm : E →L[ℂ] E) =
         C * (F * z.1.1.val + star F * (1 - z.1.1.val))} :=
       isClosed_eq (continuous_const.mul hRT)

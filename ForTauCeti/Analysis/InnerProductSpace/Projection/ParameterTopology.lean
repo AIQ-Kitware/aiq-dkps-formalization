@@ -178,9 +178,9 @@ theorem exists_unitary_paired_projection_homeomorph
     apply isClosed_iInter
     intro x
     exact isClosed_eq
-      (continuous_subtype_val.comp continuous_snd |>.clm_apply continuous_const)
-      (continuous_subtype_val.comp
-        ((continuous_subtype_val.comp ((continuous_apply i).comp continuous_fst)).clm_apply
+      (continuous_subtypeVal.comp continuous_snd |>.clm_apply continuous_const)
+      (continuous_subtypeVal.comp
+        ((continuous_subtypeVal.comp ((continuous_apply i).comp continuous_fst)).clm_apply
           continuous_const))
   have hf : Continuous e := continuous_of_isClosed_graph hgraph
   exact ⟨e.toHomeomorphOfContinuousClosed hf hf.isClosedMap, he⟩

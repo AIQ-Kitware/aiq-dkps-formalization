@@ -168,7 +168,7 @@ theorem spectrum_subspaceBlockOperatorData
   let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
     (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   let e : H ≃L[ℂ] WithLp 2 (U × Uᗮ) :=
-    ContinuousLinearEquiv.equivOfInverse'
+    ContinuousLinearEquiv.ofContinuousLinearMap
       (subspaceCoordinateAnalysis U) (subspaceCoordinateSynthesis U)
       (subspaceCoordinateAnalysis_comp_synthesis U)
       (subspaceCoordinateSynthesis_comp_analysis U)

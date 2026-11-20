@@ -37,10 +37,10 @@ theorem continuousOn_phaseMinimum_exponent (theta : ℝ) :
   apply isCompact_Icc.continuous_sInf
   unfold phasePower phaseChord
   apply Continuous.add
-  · apply Continuous.rpow (by fun_prop) (continuous_subtype_val.comp continuous_fst)
+  · apply Continuous.rpow (by fun_prop) (continuous_subtypeVal.comp continuous_fst)
     intro x
     exact Or.inr x.1.property
-  · apply Continuous.rpow (by fun_prop) (continuous_subtype_val.comp continuous_fst)
+  · apply Continuous.rpow (by fun_prop) (continuous_subtypeVal.comp continuous_fst)
     intro x
     exact Or.inr x.1.property
 

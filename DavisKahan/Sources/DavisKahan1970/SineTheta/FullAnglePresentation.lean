@@ -65,16 +65,8 @@ private theorem norm_cfc_arcsin_of_nonneg
     · refine norm_cfc_le (Real.arcsin_nonneg.mpr (norm_nonneg A)) ?_
       intro t ht
       have ht0 : 0 ≤ t := spectrum_nonneg_of_nonneg hA ht
-      have hnormC : ‖((t : ℂ))‖ ≤ ‖A‖ * ‖(1 : G →L[ℂ] G)‖ :=
-        spectrum.norm_le_norm_mul_of_mem ht
-      have hnorm : |t| ≤ ‖A‖ * ‖(1 : G →L[ℂ] G)‖ := by
-        simpa using hnormC
       have habs : |t| ≤ ‖A‖ := by
-        calc
-          |t| ≤ ‖A‖ * ‖(1 : G →L[ℂ] G)‖ := hnorm
-          _ ≤ ‖A‖ * 1 :=
-            mul_le_mul_of_nonneg_left ContinuousLinearMap.norm_id_le (norm_nonneg A)
-          _ = ‖A‖ := mul_one _
+        simpa using spectrum.norm_le_norm_of_mem ht
       have htle : t ≤ ‖A‖ := (le_abs_self t).trans habs
       rw [Real.norm_eq_abs, abs_of_nonneg (Real.arcsin_nonneg.mpr ht0)]
       exact Real.arcsin_le_arcsin htle
@@ -98,16 +90,8 @@ private theorem spectrum_subset_Iic_iff_norm_le_of_nonneg
     · let _ := hG
       exact hspec (CStarAlgebra.norm_mem_spectrum_of_nonneg (a := A) hA)
   · intro hnorm t ht
-    have hnormC : ‖((t : ℂ))‖ ≤ ‖A‖ * ‖(1 : G →L[ℂ] G)‖ :=
-      spectrum.norm_le_norm_mul_of_mem ht
-    have habs0 : |t| ≤ ‖A‖ * ‖(1 : G →L[ℂ] G)‖ := by
-      simpa using hnormC
     have habs : |t| ≤ ‖A‖ := by
-      calc
-        |t| ≤ ‖A‖ * ‖(1 : G →L[ℂ] G)‖ := habs0
-        _ ≤ ‖A‖ * 1 :=
-          mul_le_mul_of_nonneg_left ContinuousLinearMap.norm_id_le (norm_nonneg A)
-        _ = ‖A‖ := mul_one _
+      simpa using spectrum.norm_le_norm_of_mem ht
     exact (le_abs_self t).trans (habs.trans hnorm)
 
 private theorem spectrum_subset_Iio_iff_norm_lt_of_nonneg
@@ -123,16 +107,8 @@ private theorem spectrum_subset_Iio_iff_norm_lt_of_nonneg
     · let _ := hG
       exact hspec (CStarAlgebra.norm_mem_spectrum_of_nonneg (a := A) hA)
   · intro hnorm t ht
-    have hnormC : ‖((t : ℂ))‖ ≤ ‖A‖ * ‖(1 : G →L[ℂ] G)‖ :=
-      spectrum.norm_le_norm_mul_of_mem ht
-    have habs0 : |t| ≤ ‖A‖ * ‖(1 : G →L[ℂ] G)‖ := by
-      simpa using hnormC
     have habs : |t| ≤ ‖A‖ := by
-      calc
-        |t| ≤ ‖A‖ * ‖(1 : G →L[ℂ] G)‖ := habs0
-        _ ≤ ‖A‖ * 1 :=
-          mul_le_mul_of_nonneg_left ContinuousLinearMap.norm_id_le (norm_nonneg A)
-        _ = ‖A‖ := mul_one _
+      simpa using spectrum.norm_le_norm_of_mem ht
     exact (le_abs_self t).trans_lt (habs.trans_lt hnorm)
 
 variable {E : Type v}

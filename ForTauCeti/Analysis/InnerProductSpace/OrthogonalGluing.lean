@@ -85,7 +85,7 @@ theorem norm_orthogonalGlueMap (f : A ≃ₗᵢ[𝕜] A') (g : Aᗮ ≃ₗᵢ[�
   have hperp' : ⟪(f (A.orthogonalProjectionOnto x) : H'),
       (g (Aᗮ.orthogonalProjectionOnto x) : H')⟫_𝕜 = 0 :=
     Submodule.inner_right_of_mem_orthogonal
-      (f (A.orthogonalProjectionOnto x)).2 (g (Aᗮ.orthogonalProjectionOnto x)).2
+      (f (A.orthogonalProjectionOnto x)).property (g (Aᗮ.orthogonalProjectionOnto x)).property
   have hperp : ⟪(A.starProjection x), (Aᗮ.starProjection x)⟫_𝕜 = 0 :=
     Submodule.inner_right_of_mem_orthogonal (A.starProjection_apply_mem x)
       (Aᗮ.starProjection_apply_mem x)
@@ -164,9 +164,9 @@ theorem orthogonalGlueIsometry_surjective (f : A ≃ₗᵢ[𝕜] A')
   refine ⟨(f.symm (A'.orthogonalProjectionOnto y) : H) +
     (g.symm (A'ᗮ.orthogonalProjectionOnto y) : H), ?_⟩
   rw [map_add,
-    orthogonalGlueIsometry_apply_of_mem f g (f.symm (A'.orthogonalProjectionOnto y)).2,
+    orthogonalGlueIsometry_apply_of_mem f g (f.symm (A'.orthogonalProjectionOnto y)).property,
     orthogonalGlueIsometry_apply_of_mem_orthogonal f g
-      (g.symm (A'ᗮ.orthogonalProjectionOnto y)).2]
+      (g.symm (A'ᗮ.orthogonalProjectionOnto y)).property]
   simp
 
 /-- **The glued isometric equivalence.** -/
@@ -200,12 +200,12 @@ theorem map_orthogonalGlue (f : A ≃ₗᵢ[𝕜] A') (g : Aᗮ ≃ₗᵢ[𝕜] 
   · rintro _ ⟨x, hx, rfl⟩
     rw [show (orthogonalGlue f g).toLinearMap x = orthogonalGlue f g x from rfl,
       orthogonalGlue_apply_of_mem f g hx]
-    exact (f ⟨x, hx⟩).2
+    exact (f ⟨x, hx⟩).property
   · intro y hy
-    refine ⟨(f.symm ⟨y, hy⟩ : H), (f.symm ⟨y, hy⟩).2, ?_⟩
+    refine ⟨(f.symm ⟨y, hy⟩ : H), (f.symm ⟨y, hy⟩).property, ?_⟩
     rw [show (orthogonalGlue f g).toLinearMap (f.symm ⟨y, hy⟩ : H) =
       orthogonalGlue f g (f.symm ⟨y, hy⟩ : H) from rfl,
-      orthogonalGlue_apply_of_mem f g (f.symm ⟨y, hy⟩).2]
+      orthogonalGlue_apply_of_mem f g (f.symm ⟨y, hy⟩).property]
     simp
 
 /-- The glue carries `Aᗮ` onto `A'ᗮ`. -/
@@ -215,12 +215,12 @@ theorem map_orthogonalGlue_orthogonal (f : A ≃ₗᵢ[𝕜] A') (g : Aᗮ ≃�
   · rintro _ ⟨x, hx, rfl⟩
     rw [show (orthogonalGlue f g).toLinearMap x = orthogonalGlue f g x from rfl,
       orthogonalGlue_apply_of_mem_orthogonal f g hx]
-    exact (g ⟨x, hx⟩).2
+    exact (g ⟨x, hx⟩).property
   · intro y hy
-    refine ⟨(g.symm ⟨y, hy⟩ : H), (g.symm ⟨y, hy⟩).2, ?_⟩
+    refine ⟨(g.symm ⟨y, hy⟩ : H), (g.symm ⟨y, hy⟩).property, ?_⟩
     rw [show (orthogonalGlue f g).toLinearMap (g.symm ⟨y, hy⟩ : H) =
       orthogonalGlue f g (g.symm ⟨y, hy⟩ : H) from rfl,
-      orthogonalGlue_apply_of_mem_orthogonal f g (g.symm ⟨y, hy⟩).2]
+      orthogonalGlue_apply_of_mem_orthogonal f g (g.symm ⟨y, hy⟩).property]
     simp
 
 /-! ## Gluing across an orthogonal pair of summands
@@ -302,8 +302,8 @@ theorem norm_supGlueAmbient_of_mem_sup (hAB : A ≤ Bᗮ) (hAB' : A' ≤ B'ᗮ)
   rw [map_add, supGlueAmbient_apply_of_mem_left hAB f g ha,
     supGlueAmbient_apply_of_mem_right hAB f g hb]
   have hperp' : ⟪(f ⟨a, ha⟩ : H'), (g ⟨b, hb⟩ : H')⟫_𝕜 = 0 :=
-    Submodule.inner_right_of_mem_orthogonal (f ⟨a, ha⟩).2
-      (le_orthogonal_symm hAB' (g ⟨b, hb⟩).2)
+    Submodule.inner_right_of_mem_orthogonal (f ⟨a, ha⟩).property
+      (le_orthogonal_symm hAB' (g ⟨b, hb⟩).property)
   have hperp : ⟪a, b⟫_𝕜 = 0 :=
     inner_eq_zero_symm.mp ((Submodule.mem_orthogonal _ _).mp (hAB ha) b hb)
   have hfa : ‖(f ⟨a, ha⟩ : H')‖ = ‖a‖ := by
@@ -324,8 +324,8 @@ theorem supGlueAmbient_mem_sup (hAB : A ≤ Bᗮ) (f : A ≃ₗᵢ[𝕜] A')
   obtain ⟨a, ha, b, hb, rfl⟩ := Submodule.mem_sup.mp hx
   rw [map_add, supGlueAmbient_apply_of_mem_left hAB f g ha,
     supGlueAmbient_apply_of_mem_right hAB f g hb]
-  exact Submodule.add_mem _ (Submodule.mem_sup_left (f ⟨a, ha⟩).2)
-    (Submodule.mem_sup_right (g ⟨b, hb⟩).2)
+  exact Submodule.add_mem _ (Submodule.mem_sup_left (f ⟨a, ha⟩).property)
+    (Submodule.mem_sup_right (g ⟨b, hb⟩).property)
 
 omit [A'.HasOrthogonalProjection] [B'.HasOrthogonalProjection] in
 /-- Every element of `A' ⊔ B'` is hit from `A ⊔ B`. -/
@@ -334,10 +334,10 @@ theorem supGlueAmbient_surjOn (hAB : A ≤ Bᗮ) (f : A ≃ₗᵢ[𝕜] A')
     ∃ x ∈ A ⊔ B, supGlueAmbient f g x = y := by
   obtain ⟨a', ha', b', hb', rfl⟩ := Submodule.mem_sup.mp hy
   refine ⟨(f.symm ⟨a', ha'⟩ : H) + (g.symm ⟨b', hb'⟩ : H),
-    Submodule.add_mem _ (Submodule.mem_sup_left (f.symm ⟨a', ha'⟩).2)
-      (Submodule.mem_sup_right (g.symm ⟨b', hb'⟩).2), ?_⟩
-  rw [map_add, supGlueAmbient_apply_of_mem_left hAB f g (f.symm ⟨a', ha'⟩).2,
-    supGlueAmbient_apply_of_mem_right hAB f g (g.symm ⟨b', hb'⟩).2]
+    Submodule.add_mem _ (Submodule.mem_sup_left (f.symm ⟨a', ha'⟩).property)
+      (Submodule.mem_sup_right (g.symm ⟨b', hb'⟩).property), ?_⟩
+  rw [map_add, supGlueAmbient_apply_of_mem_left hAB f g (f.symm ⟨a', ha'⟩).property,
+    supGlueAmbient_apply_of_mem_right hAB f g (g.symm ⟨b', hb'⟩).property]
   simp
 
 /-- **Gluing across an orthogonal pair of summands.**  Matched isometries on two
@@ -349,12 +349,12 @@ noncomputable def orthogonalSupGlue (hAB : A ≤ Bᗮ) (hAB' : A' ≤ B'ᗮ)
     { toLinearMap :=
         LinearMap.codRestrict (A' ⊔ B')
           ((supGlueAmbient f g).domRestrict (A ⊔ B))
-          (fun x => supGlueAmbient_mem_sup hAB f g x.2)
+          (fun x => supGlueAmbient_mem_sup hAB f g x.property)
       norm_map' := fun x => ?_ } ?_
   · change ‖supGlueAmbient f g (x : H)‖ = ‖x‖
-    rw [norm_supGlueAmbient_of_mem_sup hAB hAB' f g x.2, Submodule.norm_coe]
+    rw [norm_supGlueAmbient_of_mem_sup hAB hAB' f g x.property, Submodule.norm_coe]
   · intro y
-    obtain ⟨x, hx, hxy⟩ := supGlueAmbient_surjOn hAB f g y.2
+    obtain ⟨x, hx, hxy⟩ := supGlueAmbient_surjOn hAB f g y.property
     exact ⟨⟨x, hx⟩, Subtype.ext hxy⟩
 
 omit [A'.HasOrthogonalProjection] [B'.HasOrthogonalProjection] in

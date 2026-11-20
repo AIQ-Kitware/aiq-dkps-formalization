@@ -43,7 +43,7 @@ dimension `Fin M.rank`. -/
 theorem exists_eq_mul_fin_rank (M : Matrix m n 𝕜) :
     ∃ (L : Matrix m (Fin M.rank) 𝕜) (R : Matrix (Fin M.rank) n 𝕜), M = L * R := by
   classical
-  have hdim : _root_.Module.finrank 𝕜 (LinearMap.range M.mulVecLin) = M.rank := rfl
+  have hdim : _root_.Module.finrank 𝕜 (LinearMap.range M.mulVecLin) = M.rank := M.finrank_range_mulVecLin
   let b : _root_.Module.Basis (Fin M.rank) 𝕜 (LinearMap.range M.mulVecLin) :=
     _root_.Module.finBasisOfFinrankEq 𝕜 _ hdim
   have hcol : ∀ j : n, (fun i => M i j) ∈ LinearMap.range M.mulVecLin := by

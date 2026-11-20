@@ -149,7 +149,7 @@ theorem cfc_mulLp {f : ℂ → ℂ} (hf : ContinuousOn f (spectrum ℂ (mulLp ρ
       exact hz
     exact Subsingleton.elim _ _
   · -- Corestrict the symbol to the spectrum; off the spectrum it is sent to the basepoint.
-    have hspecMeas : MeasurableSet (spectrum ℂ a) := (spectrum.isClosed a).measurableSet
+    have hspecMeas : MeasurableSet (spectrum ℂ a) := (spectrum.isClosed ℂ a).measurableSet
     set g' : α → ℂ := fun x => if g x ∈ spectrum ℂ a then g x else z₀ with hg'
     have hg'm : Measurable g' := Measurable.ite (hg hspecMeas) hg measurable_const
     have hg'mem : ∀ x, g' x ∈ spectrum ℂ a := by

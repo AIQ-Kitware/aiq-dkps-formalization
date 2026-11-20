@@ -42,7 +42,7 @@ theorem hasOrthogonalProjection_comap_subtype_of_complete
     (K Z : Submodule 𝕜 E) [K.HasOrthogonalProjection] [CompleteSpace Z] :
     (K.comap Z.subtype).HasOrthogonalProjection := by
   apply hasOrthogonalProjection_iff_isClosed.mpr
-  exact K.isClosed_of_hasOrthogonalProjection.preimage continuous_subtype_val
+  exact K.isClosed_of_hasOrthogonalProjection.preimage continuous_subtypeVal
 
 /-- Restricting an ambient subspace transport to an invariant carrier
 transports the two actual intersections on that carrier. -/

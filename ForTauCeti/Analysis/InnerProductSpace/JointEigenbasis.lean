@@ -44,7 +44,7 @@ theorem exists_joint_orthonormalBasis
   let e := hsumJ.subordinateOrthonormalBasis rfl horthJ
   let p (i : Fin (Module.finrank 𝕜 E)) :=
     hsumJ.subordinateOrthonormalBasisIndex rfl i horthJ
-  refine ⟨e, fun i => (p i).1.2, fun i => (p i).1.1, ?_, ?_⟩
+  refine ⟨e, fun i => (p i).val.2, fun i => (p i).val.1, ?_, ?_⟩
   · intro i
     have hm := hsumJ.subordinateOrthonormalBasis_subordinate rfl i horthJ
     exact Module.End.mem_eigenspace_iff.mp hm.1

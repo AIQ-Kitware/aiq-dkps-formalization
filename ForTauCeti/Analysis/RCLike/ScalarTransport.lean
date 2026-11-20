@@ -400,8 +400,8 @@ theorem rank_eq (S : Submodule 𝕜 E) :
     Module.rank 𝕜 S = Module.rank 𝕂 (submodule (e := e) S) :=
   rank_eq_of_equiv_equiv (R := 𝕜) (R' := 𝕂) (M := S) (M₁ := submodule (e := e) S)
     (fun r => e r)
-    { toFun := fun x => ⟨of (e := e) (x : E), x.2⟩
-      invFun := fun x => ⟨out (x : ScalarTransport e E), x.2⟩
+    { toFun := fun x => ⟨of (e := e) (x : E), x.property⟩
+      invFun := fun x => ⟨out (x : ScalarTransport e E), x.property⟩
       left_inv := fun _ => rfl
       right_inv := fun _ => rfl
       map_add' := fun _ _ => rfl }
@@ -485,7 +485,7 @@ theorem isSelfAdjoint_clm_iff {T : E →L[𝕜] E} :
 /-- A point of the transported domain, read back in `A.domain`. -/
 @[expose]
 def domainOut (A : E →ₗ.[𝕜] F) (x : submodule (e := e) A.domain) : A.domain :=
-  ⟨out (x : ScalarTransport e E), x.2⟩
+  ⟨out (x : ScalarTransport e E), x.property⟩
 
 /-- A `𝕜`-linear partial map, as a `𝕂`-linear one on the transports:
 the same domain and the same function. -/

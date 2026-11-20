@@ -75,7 +75,7 @@ theorem pointInternalGap_span (hw : IsOrderedEigenframe hT hn e w) {Δ : ℝ} (h
     obtain ⟨k, rfl⟩ := hcomplFamily.restrictedPointSpectrum_span_subset hμ
     refine hgap i ↑k ?_
     rw [hrange]
-    exact fun hk => (Finset.mem_compl.mp k.2) hk
+    exact fun hk => (Finset.mem_compl.mp k.property) hk
 
 
 end LinearMap.IsSymmetric.IsOrderedEigenframe

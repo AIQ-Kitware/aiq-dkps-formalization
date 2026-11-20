@@ -378,11 +378,11 @@ theorem eq_zero_of_intertwines_of_disjoint_spectrum
   obtain ⟨f, hfA, hfB, hf01⟩ := exists_spectralSeparator (A := A) (B := B) hdisj
   set K : Set ℂ := _root_.spectrum ℂ (A.cayley) ∪ _root_.spectrum ℂ (B.cayley) with hKdef
   have hKc : IsCompact K :=
-    (spectrum.isCompact (A.cayley)).union (spectrum.isCompact (B.cayley))
+    (spectrum.isCompact ℂ (A.cayley)).union (spectrum.isCompact ℂ (B.cayley))
   have huK : _root_.spectrum ℂ (A.cayley) ⊆ K := Set.subset_union_left
   have hvK : _root_.spectrum ℂ (B.cayley) ⊆ K := Set.subset_union_right
   have hcont : ∀ n : ℕ, Continuous fun w : K => cayleySymbolFun f n (w : ℂ) :=
-    fun n => (continuous_cayleySymbolFun f hf01 n).comp continuous_subtype_val
+    fun n => (continuous_cayleySymbolFun f hf01 n).comp continuous_subtypeVal
   set G : ℕ → C(K, ℂ) := fun n => ⟨_, hcont n⟩ with hGdef
   refine ContinuousLinearMap.ext fun ξ => ?_
   -- the `A`-side calculus vanishes outright, for every `n`

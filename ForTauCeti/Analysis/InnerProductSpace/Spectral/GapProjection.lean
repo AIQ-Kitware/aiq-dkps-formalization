@@ -332,11 +332,11 @@ theorem cfc_eq_starProjection_of_blockGap [CompleteSpace U]
   have hAU : ∀ x ∈ U, A x ∈ U := by
     intro x hx
     rw [← coe_block_apply hA₀ ⟨x, hx⟩]
-    exact (A₀ ⟨x, hx⟩).2
+    exact (A₀ ⟨x, hx⟩).property
   have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := by
     intro x hx
     rw [← coe_block_apply hA₁ ⟨x, hx⟩]
-    exact (A₁ ⟨x, hx⟩).2
+    exact (A₁ ⟨x, hx⟩).property
   -- the block spectra become quadratic-form bounds
   have hlow : ∀ x ∈ U, RCLike.re ⟪A x, x⟫_𝕜 ≤ α * ‖x‖ ^ 2 := by
     intro x hx

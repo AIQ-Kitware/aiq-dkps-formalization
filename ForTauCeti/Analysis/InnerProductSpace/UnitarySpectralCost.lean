@@ -121,7 +121,7 @@ theorem normalDisplacementSpectralCost_of_isSelfAdjoint
       (U : E →L[ℂ] E) (b i) = (mu i : ℂ) • b i :=
     hU.isSymmetric.apply_eigenvectorBasis rfl i
   have hnorm (i : Fin (Module.finrank ℂ E)) : |mu i| = 1 := by
-    have h := _root_.ContinuousLinearMap.norm_map_of_mem_unitary U.2 (b i)
+    have h := _root_.ContinuousLinearMap.norm_map_of_mem_unitary U.property (b i)
     rw [heigen, norm_smul, b.orthonormal.1 i, mul_one] at h
     simpa only [Complex.norm_real, Real.norm_eq_abs] using h
   have hlam (i : Fin (Module.finrank ℂ E)) : ‖lam i‖ = 0 ∨ ‖lam i‖ = 2 := by

@@ -71,7 +71,7 @@ omit [StarRing R] [IsTopologicalSemiring R] [ContinuousStar R] [TopologicalSpace
   [TopologicalSpace B] in
 private theorem spectrumEquivMap_surjective (Φ : A ≃⋆ₐ[R] B) (a : A) :
     Function.Surjective (spectrumEquivMap Φ a) := fun y =>
-  ⟨⟨(y : R), by rw [AlgEquiv.spectrum_eq Φ a]; exact y.2⟩, Subtype.ext rfl⟩
+  ⟨⟨(y : R), by rw [AlgEquiv.spectrum_eq Φ a]; exact y.property⟩, Subtype.ext rfl⟩
 
 /-- **A continuous functional calculus transports along an isomorphism of topological
 `R`-`⋆`-algebras** that matches the two predicates.

@@ -48,7 +48,7 @@ theorem spectrum_eq_of_inverse_conjugation
     (hconj : Winv ∘L T ∘L W = S) :
     spectrum ℂ T = spectrum ℂ S := by
   let e : E ≃L[ℂ] E :=
-    ContinuousLinearEquiv.equivOfInverse' Winv W hleft hright
+    ContinuousLinearEquiv.ofContinuousLinearMap Winv W hleft hright
   have heconj : e.conjContinuousAlgEquiv.toAlgEquiv T = S := by
     ext x
     have hx := congrArg (fun R : E →L[ℂ] E => R x) hconj

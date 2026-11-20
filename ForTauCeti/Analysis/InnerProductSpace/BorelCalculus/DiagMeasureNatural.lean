@@ -136,15 +136,15 @@ theorem map_val_diagMeasure_eq_of_intertwines (ha : IsStarNormal a) (e : H ≃�
   refine MeasureTheory.ext_of_forall_integral_eq_of_IsFiniteMeasure fun g => ?_
   have hgc : Continuous fun z : ℂ => ((g z : ℝ) : ℂ) :=
     Complex.continuous_ofReal.comp g.continuous
-  rw [integral_map measurable_subtype_coe.aemeasurable
+  rw [integral_map measurable_subtypeVal.aemeasurable
       g.continuous.aestronglyMeasurable,
-    integral_map measurable_subtype_coe.aemeasurable
+    integral_map measurable_subtypeVal.aemeasurable
       g.continuous.aestronglyMeasurable]
   have hEa : ∫ w : spectrum ℂ a, g (w : ℂ) ∂((cfcHom ha).representationDiagMeasure ξ)
       = (⟪ξ, cfc (fun z : ℂ => ((g z : ℝ) : ℂ)) a ξ⟫_ℂ).re := by
     have hComplex := (cfcHom ha).integral_representationDiagMeasure ξ
       ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (⟨fun w : spectrum ℂ a => g (w : ℂ),
-        g.continuous.comp continuous_subtype_val⟩ :
+        g.continuous.comp continuous_subtypeVal⟩ :
         C(spectrum ℂ a, ℝ)))
     change (∫ w, (g (w : ℂ) : ℂ)
       ∂((cfcHom ha).representationDiagMeasure ξ)) = _ at hComplex
@@ -158,7 +158,7 @@ theorem map_val_diagMeasure_eq_of_intertwines (ha : IsStarNormal a) (e : H ≃�
       = (⟪e ξ, cfc (fun z : ℂ => ((g z : ℝ) : ℂ)) b (e ξ)⟫_ℂ).re := by
     have hComplex := (cfcHom hb).integral_representationDiagMeasure (e ξ)
       ((ContinuousMap.realToRCLikeStarAlgHom _ ℂ) (⟨fun w : spectrum ℂ b => g (w : ℂ),
-        g.continuous.comp continuous_subtype_val⟩ :
+        g.continuous.comp continuous_subtypeVal⟩ :
         C(spectrum ℂ b, ℝ)))
     change (∫ w, (g (w : ℂ) : ℂ)
       ∂((cfcHom hb).representationDiagMeasure (e ξ))) = _ at hComplex

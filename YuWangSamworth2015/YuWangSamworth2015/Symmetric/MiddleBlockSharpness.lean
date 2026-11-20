@@ -189,7 +189,7 @@ theorem card_middleSharpnessSample_level (hε : 0 < ε) (hε1 : ε < 3) (hdp : 2
     split_ifs with h1 h2
     · exact iff_of_false (by linarith) (by omega)
     · exact iff_of_false (by linarith) (by omega)
-    · exact iff_of_true rfl ⟨by omega, i.2⟩
+    · exact iff_of_true rfl ⟨by omega, i.isLt⟩
   rw [hset, card_filter_val_Ico p (p - d) p le_rfl]
   omega
 

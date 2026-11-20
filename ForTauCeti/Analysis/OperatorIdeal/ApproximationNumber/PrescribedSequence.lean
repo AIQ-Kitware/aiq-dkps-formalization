@@ -63,9 +63,9 @@ theorem approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto
       (W.subtypeL ∘L A ∘L W.orthogonalProjectionOnto) ∘L W.subtypeL := by
     refine ContinuousLinearMap.ext fun x => ?_
     have h1 : W.orthogonalProjectionOnto ((x : E)) = x :=
-      Subtype.ext (Submodule.starProjection_eq_self_iff.mpr x.2)
+      Subtype.ext (Submodule.starProjection_eq_self_iff.mpr x.property)
     have h2 : W.orthogonalProjectionOnto ((A x : W) : E) = A x :=
-      Subtype.ext (Submodule.starProjection_eq_self_iff.mpr (A x).2)
+      Subtype.ext (Submodule.starProjection_eq_self_iff.mpr (A x).property)
     change A x = W.orthogonalProjectionOnto
         ((A (W.orthogonalProjectionOnto (x : E)) : W) : E)
     rw [h1, h2]

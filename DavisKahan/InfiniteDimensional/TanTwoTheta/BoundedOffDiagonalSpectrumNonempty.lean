@@ -48,7 +48,7 @@ theorem realSpectrum_nonempty_of_selfAdjoint [Nontrivial E]
   have hTsa : IsSelfAdjoint T :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT
   have hrad : spectralRadius ℂ T = ‖T‖₊ :=
-    T.spectralRadius_eq_nnNorm hTsa
+    T.spectralRadius_eq_eNorm hTsa
   obtain ⟨z, hz⟩ : (spectrum ℂ T).Nonempty := by
     by_contra hempty
     rw [Set.not_nonempty_iff_eq_empty] at hempty

@@ -70,12 +70,12 @@ theorem invariantSubspace_pmap_iff {A : E →ₗ.[𝕜] E} (S : Submodule 𝕜 E
   constructor
   · intro h x hx
     have hd : (of (e := e) (x : E)) ∈ (pmap (e := e) A).domain :=
-      (mem_pmap_domain_iff (e := e) (A := A) _).mpr x.2
+      (mem_pmap_domain_iff (e := e) (A := A) _).mpr x.property
     exact (mem_submodule (e := e)).mp
       (h ⟨of (e := e) (x : E), hd⟩ ((mem_submodule (e := e)).mpr hx))
   · intro h x hx
     have hd : out (e := e) (x : ScalarTransport e E) ∈ A.domain :=
-      (mem_pmap_domain_iff (e := e) (A := A) _).mp x.2
+      (mem_pmap_domain_iff (e := e) (A := A) _).mp x.property
     exact (mem_submodule (e := e)).mpr
       (h ⟨out (e := e) (x : ScalarTransport e E), hd⟩ ((mem_submodule (e := e)).mp hx))
 

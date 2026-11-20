@@ -51,7 +51,7 @@ theorem restrictedPointSpectrum_restrict (A : E →ₗ[𝕜] E)
   constructor
   · intro hlam
     obtain ⟨x, -, hx0, hxEig⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam
-    refine Module.End.mem_restrictedPointSpectrum x.2 (fun hx => hx0 (Subtype.ext hx)) ?_
+    refine Module.End.mem_restrictedPointSpectrum x.property (fun hx => hx0 (Subtype.ext hx)) ?_
     -- The restriction equality is pointwise after taking the subtype coercion.
     exact congrArg (Subtype.val) hxEig
   · intro hlam

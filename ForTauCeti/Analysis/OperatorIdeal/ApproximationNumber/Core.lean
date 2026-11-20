@@ -430,7 +430,7 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
       refine Submodule.span_le.mpr fun t ht => Submodule.subset_span ?_
       simp only [hT'def, Finset.coe_union, Set.mem_union, Finset.coe_image]
       exact Or.inl ⟨t, ht, rfl⟩
-    exact hle z.2
+    exact hle z.property
   set K' : W →L[𝕜] W' := W'.orthogonalProjectionOnto ∘L (K ∘L W.subtypeL) with hK'def
   have hgaugeK' : (K'.kyFanGauge k : ℝ)
       = ((K ∘L W.subtypeL).kyFanGauge k : ℝ) :=
@@ -452,7 +452,7 @@ theorem exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner
       intro i
       have hval : ((K'.toLinearMap (v' i) : W') : F) = W'.starProjection (K ((v' i : E))) := rfl
       rw [Submodule.coe_inner, hval, ← W'.inner_starProjection_left_eq_right,
-        Submodule.starProjection_eq_self_iff.mpr (u' i).2]
+        Submodule.starProjection_eq_self_iff.mpr (u' i).property]
     have hsum : (∑ i, ⟪((u' i : F)), K ((v' i : E))⟫_𝕜)
         = ∑ i, ⟪u' i, K'.toLinearMap (v' i)⟫_𝕜 :=
       Finset.sum_congr rfl fun i _ => (hpair i).symm

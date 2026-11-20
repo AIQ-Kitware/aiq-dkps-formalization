@@ -318,7 +318,7 @@ theorem norm_sub_smul_ge_of_lowerFormBound {β lam : ℝ}
     (β - lam) * ‖(x : E)‖ ≤ ‖A x - (lam : ℂ) • (x : E)‖ := by
   have key : (⟪(x : E), A x - (lam : ℂ) • (x : E)⟫_ℂ).re
       = (⟪A x, (x : E)⟫_ℂ).re - lam * ‖(x : E)‖ ^ 2 :=
-    re_inner_self_sub_smul lam x.2
+    re_inner_self_sub_smul lam x.property
   have hcs : (⟪(x : E), A x - (lam : ℂ) • (x : E)⟫_ℂ).re
       ≤ ‖(x : E)‖ * ‖A x - (lam : ℂ) • (x : E)‖ :=
     (RCLike.re_le_norm (K := ℂ) _).trans (norm_inner_le_norm _ _)

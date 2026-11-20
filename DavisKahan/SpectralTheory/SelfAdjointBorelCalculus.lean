@@ -141,7 +141,7 @@ theorem isClosed_realSpectrum_boundedSelfAdjoint
     IsClosed (realSpectrum A) := by
   have hpre : realSpectrum A = (fun r : ℝ => (r : ℂ)) ⁻¹' spectrum ℂ A := rfl
   rw [hpre]
-  exact (spectrum.isClosed A).preimage Complex.continuous_ofReal
+  exact (spectrum.isClosed ℂ A).preimage Complex.continuous_ofReal
 
 /-- The real spectrum is measurable. -/
 theorem measurableSet_realSpectrum_boundedSelfAdjoint

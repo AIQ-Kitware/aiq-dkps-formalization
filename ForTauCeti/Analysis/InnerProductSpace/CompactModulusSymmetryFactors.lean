@@ -184,14 +184,14 @@ theorem exists_compact_modulus_symmetry_spectral_homeomorph
   have hcforget : Continuous forget := by
     apply continuous_pi
     intro μ
-    exact (continuous_subtype_val.comp (continuous_apply μ)).subtype_mk _
-  have hcbase : Continuous base := continuous_subtype_val.subtype_mk _
+    exact (continuous_subtypeVal.comp (continuous_apply μ)).subtype_mk _
+  have hcbase : Continuous base := continuous_subtypeVal.subtype_mk _
   have hcf : Continuous f :=
-    (continuous_subtype_val.comp (e.continuous.comp hcforget)).subtype_mk _
+    (continuous_subtypeVal.comp (e.continuous.comp hcforget)).subtype_mk _
   have hcb : Continuous b := by
     apply continuous_pi
     intro μ
-    exact (continuous_subtype_val.comp
+    exact (continuous_subtypeVal.comp
       ((continuous_apply μ).comp (e.symm.continuous.comp hcbase))).subtype_mk _
   refine ⟨⟨e', hcf, hcb⟩, ?_⟩
   intro Q μ x

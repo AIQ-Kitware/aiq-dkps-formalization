@@ -177,7 +177,7 @@ theorem nuclearSignedSineTransport_operatorNorm_complex
   have hsame : ‖S - A‖ = ‖S + A‖ := by
     have h := congrArg ENNReal.toReal hsameGauge
     simpa only [Φ, OperatorIdealFamily.gauge_opNorm, toReal_eNorm] using h
-  have hadd := (hS.add hA).norm_add_eq_max (hS.sub hA) hzero
+  have hadd := ((hS.add hA).isStarOrtho_iff_mul_eq_zero (hS.sub hA)).mpr hzero |>.norm_add
   have hsum : (S + A) + (S - A) = (2 : ℂ) • S := by rw [two_smul]; abel
   rw [hsum, norm_smul, Complex.norm_two, ← hsame, max_self] at hadd
   have hc := nuclearSignedSineTransport_gauge_displacement (SymmetricOperatorIdealFamily.opNorm ℂ)

@@ -99,7 +99,7 @@ precomposition with it injective on symbols, and what turns `Set.range (f ∘ _)
 `Set.range f`. -/
 theorem spectrumComplexifyMap_surjective (a : E →L[ℝ] E) :
     Function.Surjective (spectrumComplexifyMap a) := fun y =>
-  ⟨⟨(y : ℝ), by rw [spectrum_complexify]; exact y.2⟩, Subtype.ext rfl⟩
+  ⟨⟨(y : ℝ), by rw [spectrum_complexify]; exact y.property⟩, Subtype.ext rfl⟩
 
 /-! ## The calculus of `a`, computed in the complexification -/
 

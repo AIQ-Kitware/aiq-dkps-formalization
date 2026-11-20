@@ -82,7 +82,7 @@ include hA in
 theorem cayleyInv_add_I {w : _root_.spectrum ℂ (A.cayley)} (hw1 : (w : ℂ) ≠ 1) :
     ((cayleyInv A w : ℝ) : ℂ) + Complex.I = (2 * Complex.I) / (1 - (w : ℂ)) := by
   have hnorm : ‖(w : ℂ)‖ = 1 :=
-    spectrum.norm_eq_one_of_unitary (hA.cayley_mem_unitary) w.2
+    spectrum.norm_eq_one_of_unitary (hA.cayley_mem_unitary) w.property
   have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
   have hcast : ((cayleyInv A w : ℝ) : ℂ) = Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ)) :=
     Complex.ext (by simp [cayleyInv_def])
@@ -896,15 +896,15 @@ theorem mem_resolventSet_specRestrict_of_gap {lam ε : ℝ} (hε : 0 < ε)
       _root_.LinearPMap.map_neg A ⟨Rop y, hmemdom y⟩
     have hr := hright y
     have hPy : BorelCalculus.borelCalculus hU hindb y = y := by
-      rw [← hP]; exact (mem_specRange_iff hA B hB y).mp (φ : specRange hA B hB).2
+      rw [← hP]; exact (mem_specRange_iff hA B hB y).mp (φ : specRange hA B hB).property
     rw [hPy] at hr
     rw [hstep]
     linear_combination (norm := module) hr
   · -- left inverse on the domain: `-Rop ((lam • I - A) ψ) = ψ`
     apply Subtype.ext
-    have hydom : ((ψ : specRange hA B hB) : H) ∈ A.domain := ψ.2
+    have hydom : ((ψ : specRange hA B hB) : H) ∈ A.domain := ψ.property
     have hyK : ((ψ : specRange hA B hB) : H) ∈ specRange hA B hB :=
-      (ψ : specRange hA B hB).2
+      (ψ : specRange hA B hB).property
     -- states the goal with the definition unfolded, in the shape the next step needs.
     change -(Rop ((lam : ℂ) • ((ψ : specRange hA B hB) : H)
         - A ⟨((ψ : specRange hA B hB) : H), hydom⟩)) = ((ψ : specRange hA B hB) : H)

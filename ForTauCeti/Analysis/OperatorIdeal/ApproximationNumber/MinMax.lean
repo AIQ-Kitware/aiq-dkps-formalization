@@ -64,7 +64,7 @@ theorem norm_comp_starProjection_orthogonal_eq_norm_comp_subtypeL
           exact Vᗮ.norm_starProjection_apply_le x
   · refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun y => ?_
     have hfix : Vᗮ.starProjection (y : E₁) = (y : E₁) :=
-      Vᗮ.starProjection_eq_self_iff.mpr y.2
+      Vᗮ.starProjection_eq_self_iff.mpr y.property
     have hval : (T ∘L Vᗮ.subtypeL) y = (T ∘L Vᗮ.starProjection) (y : E₁) := by
       simp [ContinuousLinearMap.comp_apply, hfix]
     rw [hval]

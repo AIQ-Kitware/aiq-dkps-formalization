@@ -104,7 +104,7 @@ theorem integral_comp_val_diagMeasure_mulLp {h : ℂ → ℂ} (hm : Measurable h
       = ∫ x, h (g x) * ((‖(F : α → ℂ) x‖ : ℂ)) ^ 2 ∂ρ := by
   have h1 := integral_map (μ := (cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F)
     (φ := (Subtype.val : spectrum ℂ (mulLp ρ hg hgC) → ℂ))
-    measurable_subtype_coe.aemeasurable (f := h) hm.aestronglyMeasurable
+    measurable_subtypeVal.aemeasurable (f := h) hm.aestronglyMeasurable
   rw [← h1, map_val_diagMeasure_mulLp ρ hg hgC F,
     integral_map hg.aemeasurable hm.aestronglyMeasurable,
     integral_withDensity_eq_integral_toReal_smul₀ (aemeasurable_enorm_sq ρ F)

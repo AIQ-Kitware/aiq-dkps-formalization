@@ -159,19 +159,9 @@ theorem spectrum_directedSinAngleOperator_subset_Icc
     (StarOrderedRing.nonneg_iff_spectrum_nonneg
       (R := Real) _ (isSelfAdjoint_directedSinAngleOperator U V)).mp
         (directedSinAngleOperator_nonneg U V) x hx
-  have hnormK : ‖((x : K))‖ ≤
-      ‖directedSinAngleOperator U V‖ * ‖(1 : E →L[K] E)‖ :=
-    spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem K hx)
-  have hnorm : |x| ≤
-      ‖directedSinAngleOperator U V‖ * ‖(1 : E →L[K] E)‖ := by
-    rwa [RCLike.norm_ofReal] at hnormK
-  have hone : ‖(1 : E →L[K] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
   have habs : |x| ≤ ‖directedSinAngleOperator U V‖ := by
-    calc
-      |x| ≤ ‖directedSinAngleOperator U V‖ * ‖(1 : E →L[K] E)‖ := hnorm
-      _ ≤ ‖directedSinAngleOperator U V‖ * 1 :=
-        mul_le_mul_of_nonneg_left hone (norm_nonneg _)
-      _ = ‖directedSinAngleOperator U V‖ := mul_one _
+    simpa only [RCLike.norm_ofReal] using
+      spectrum.norm_le_norm_of_mem (spectrum.algebraMap_mem K hx)
   exact ⟨hx0, ((le_abs_self x).trans habs).trans
     (norm_directedSinAngleOperator_le_one U V)⟩
 
@@ -448,20 +438,10 @@ private theorem spectrum_directedSinAngleOperator_lt_one
     {t : Real} (ht : t ∈ spectrum Real (directedSinAngleOperator U V)) :
     0 ≤ t ∧ t < 1 := by
   refine ⟨(spectrum_directedSinAngleOperator_subset_Icc U V ht).1, ?_⟩
-  have habs : |t| ≤ ‖directedSinAngleOperator U V‖ * ‖(1 : E →L[K] E)‖ := by
-    have hk : ‖((t : K))‖ ≤
-        ‖directedSinAngleOperator U V‖ * ‖(1 : E →L[K] E)‖ :=
-      spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem K ht)
-    rwa [RCLike.norm_ofReal] at hk
-  have hone : ‖(1 : E →L[K] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have hle : t ≤ ‖directedSinAngleOperator U V‖ := by
-    refine (le_abs_self t).trans (habs.trans ?_)
-    calc
-      ‖directedSinAngleOperator U V‖ * ‖(1 : E →L[K] E)‖ ≤
-          ‖directedSinAngleOperator U V‖ * 1 :=
-        mul_le_mul_of_nonneg_left hone (norm_nonneg _)
-      _ = ‖directedSinAngleOperator U V‖ := mul_one _
-  linarith
+  have habs : |t| ≤ ‖directedSinAngleOperator U V‖ := by
+    simpa only [RCLike.norm_ofReal] using
+      spectrum.norm_le_norm_of_mem (spectrum.algebraMap_mem K ht)
+  exact ((le_abs_self t).trans habs).trans_lt htr
 
 private theorem continuousOn_tan_arcsin_image_directedSin
     (U V : Submodule K E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -569,18 +549,8 @@ private theorem sourceDirectedHasDefinedDoubleTangent_of_norm_sinTwo_lt_one
         (by fun_prop : ContinuousOn (fun s : Real => Real.sin (2 * s)) _)]
     exact ⟨t, ht, rfl⟩
   have hspec : |Real.sin (2 * t)| ≤ ‖sourceDirectedSinTwoThetaOperator U V‖ := by
-    have hk : ‖((Real.sin (2 * t) : K))‖ ≤
-        ‖sourceDirectedSinTwoThetaOperator U V‖ * ‖(1 : E →L[K] E)‖ :=
-      spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem K hs)
-    have hr : |Real.sin (2 * t)| ≤
-        ‖sourceDirectedSinTwoThetaOperator U V‖ * ‖(1 : E →L[K] E)‖ := by
-      rwa [RCLike.norm_ofReal] at hk
-    calc
-      |Real.sin (2 * t)| ≤
-          ‖sourceDirectedSinTwoThetaOperator U V‖ * ‖(1 : E →L[K] E)‖ := hr
-      _ ≤ ‖sourceDirectedSinTwoThetaOperator U V‖ * 1 :=
-        mul_le_mul_of_nonneg_left ContinuousLinearMap.norm_id_le (norm_nonneg _)
-      _ = ‖sourceDirectedSinTwoThetaOperator U V‖ := mul_one _
+    simpa only [RCLike.norm_ofReal] using
+      spectrum.norm_le_norm_of_mem (spectrum.algebraMap_mem K hs)
   have hpyth := Real.sin_sq_add_cos_sq (2 * t)
   rw [hcos] at hpyth
   norm_num at hpyth

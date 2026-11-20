@@ -116,19 +116,9 @@ theorem spectrum_sinAngleOperator_subset_Icc :
     (StarOrderedRing.nonneg_iff_spectrum_nonneg
       (R := ℝ) _ ((U.isPositive_sinAngleOperator V).isSelfAdjoint)).mp
         ((ContinuousLinearMap.nonneg_iff_isPositive.mpr (U.isPositive_sinAngleOperator V))) x hx
-  have hnormK : ‖((x : 𝕜))‖ ≤
-      ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ :=
-    spectrum.norm_le_norm_mul_of_mem (spectrum.algebraMap_mem 𝕜 hx)
-  have hnorm : |x| ≤
-      ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ := by
-    rwa [RCLike.norm_ofReal] at hnormK
-  have hone : ‖(1 : E →L[𝕜] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have habs : |x| ≤ ‖(Submodule.sinAngleOperator U V)‖ := by
-    calc
-      |x| ≤ ‖(Submodule.sinAngleOperator U V)‖ * ‖(1 : E →L[𝕜] E)‖ := hnorm
-      _ ≤ ‖(Submodule.sinAngleOperator U V)‖ * 1 :=
-        mul_le_mul_of_nonneg_left hone (norm_nonneg _)
-      _ = ‖(Submodule.sinAngleOperator U V)‖ := mul_one _
+  have habs : |x| ≤ ‖Submodule.sinAngleOperator U V‖ := by
+    simpa only [RCLike.norm_ofReal] using
+      spectrum.norm_le_norm_of_mem (spectrum.algebraMap_mem 𝕜 hx)
   exact ⟨hx0, ((le_abs_self x).trans habs).trans
     (Submodule.norm_sinAngleOperator_le_one U V)⟩
 

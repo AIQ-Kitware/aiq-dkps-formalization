@@ -52,7 +52,7 @@ noncomputable def circlePath (c : ℂ) (r : ℝ) :
     Path (circleMap c r 0) (circleMap c r 0) where
   toFun t := circleMap c r (2 * Real.pi * (t : ℝ))
   continuous_toFun :=
-    (continuous_circleMap c r).comp (continuous_const.mul continuous_subtype_val)
+    (continuous_circleMap c r).comp (continuous_const.mul continuous_subtypeVal)
   source' := by norm_num
   target' := by
     show circleMap c r (2 * Real.pi * ((1 : unitInterval) : ℝ)) = circleMap c r 0
@@ -188,7 +188,7 @@ theorem exists_circle_spectralMargin
       refine hsep.contour_resolvent z₀ ?_
       rwa [Metric.mem_sphere, dist_eq_norm] at hz₀K
     have hz₀pos : 0 < Metric.infDist z₀ (spectrum ℂ A) :=
-      ((spectrum.isClosed A).notMem_iff_infDist_pos hσ).mp hz₀notMem
+      ((spectrum.isClosed ℂ A).notMem_iff_infDist_pos hσ).mp hz₀notMem
     refine ⟨Metric.infDist z₀ (spectrum ℂ A), hz₀pos, ?_⟩
     intro t lam hlam
     have htK : (circleContour (c : ℂ) r).path t ∈ Metric.sphere (c : ℂ) r := by

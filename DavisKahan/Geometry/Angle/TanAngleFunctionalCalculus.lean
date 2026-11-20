@@ -111,18 +111,9 @@ theorem spectrum_angleOperatorC_lt_pi_div_two
       Real.continuous_arcsin.continuousOn] at ht
   obtain ⟨s, hs, rfl⟩ := ht
   have hsi := spectrum_sinAngleOperatorC_subset_Icc U V hs
-  have hnorm : |s| ≤ ‖sinAngleOperatorC U V‖ * ‖(1 : E →L[ℂ] E)‖ :=
-    spectrum.norm_le_norm_mul_of_mem hs
-  have hone : ‖(1 : E →L[ℂ] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have hslt : s < 1 := by
-    have : |s| ≤ ‖sinAngleOperatorC U V‖ := by
-      refine hnorm.trans ?_
-      calc ‖sinAngleOperatorC U V‖ * ‖(1 : E →L[ℂ] E)‖
-          ≤ ‖sinAngleOperatorC U V‖ * 1 :=
-            mul_le_mul_of_nonneg_left hone (norm_nonneg _)
-        _ = ‖sinAngleOperatorC U V‖ := mul_one _
-    have hle : s ≤ ‖sinAngleOperatorC U V‖ := (le_abs_self s).trans this
-    linarith
+  have hnorm : |s| ≤ ‖sinAngleOperatorC U V‖ := by
+    simpa only [Real.norm_eq_abs] using spectrum.norm_le_norm_of_mem hs
+  have hslt : s < 1 := ((le_abs_self s).trans hnorm).trans_lt hlt
   exact ⟨Real.arcsin_nonneg.mpr hsi.1, Real.arcsin_lt_pi_div_two.mpr hslt⟩
 
 /-- The paper's literal ambient `tan 2Θ`, obtained by applying `t ↦ tan (2 t)`
@@ -156,15 +147,9 @@ theorem spectrum_angleOperatorC_lt_pi_div_four
       Real.continuous_arcsin.continuousOn] at ht
   obtain ⟨s, hs, rfl⟩ := ht
   have hsi := spectrum_sinAngleOperatorC_subset_Icc U V hs
-  have hnorm : |s| ≤ ‖sinAngleOperatorC U V‖ * ‖(1 : E →L[ℂ] E)‖ :=
-    spectrum.norm_le_norm_mul_of_mem hs
-  have hone : ‖(1 : E →L[ℂ] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have hs' : s < Real.sqrt 2 / 2 := by
-    have habs : |s| ≤ ‖sinAngleOperatorC U V‖ := by
-      refine hnorm.trans ?_
-      nlinarith [norm_nonneg (sinAngleOperatorC U V), norm_nonneg (1 : E →L[ℂ] E)]
-    have := (le_abs_self s).trans habs
-    linarith
+  have hnorm : |s| ≤ ‖sinAngleOperatorC U V‖ := by
+    simpa only [Real.norm_eq_abs] using spectrum.norm_le_norm_of_mem hs
+  have hs' : s < Real.sqrt 2 / 2 := ((le_abs_self s).trans hnorm).trans_lt hlt
   refine ⟨Real.arcsin_nonneg.mpr hsi.1, ?_⟩
   have hmem : Real.pi / 4 ∈ Set.Ioc (-(Real.pi / 2)) (Real.pi / 2) := by
     constructor <;> [linarith [Real.pi_pos]; linarith [Real.pi_pos]]

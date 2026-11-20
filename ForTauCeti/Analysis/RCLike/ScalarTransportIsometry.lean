@@ -84,8 +84,8 @@ codomain is a closed subspace, such as an unbounded Ritz compression. -/
 @[expose]
 noncomputable def submoduleSubtypeEquiv (S : Submodule 𝕜 X) :
     ScalarTransport e S ≃ₗᵢ[𝕂] (submodule (e := e) S : Submodule 𝕂 (ScalarTransport e X)) where
-  toFun x := ⟨of (e := e) ((out (e := e) x : S) : X), (out (e := e) x : S).2⟩
-  invFun y := of (e := e) (⟨out (e := e) (y : ScalarTransport e X), y.2⟩ : S)
+  toFun x := ⟨of (e := e) ((out (e := e) x : S) : X), (out (e := e) x : S).property⟩
+  invFun y := of (e := e) (⟨out (e := e) (y : ScalarTransport e X), y.property⟩ : S)
   left_inv _ := rfl
   right_inv _ := rfl
   map_add' _ _ := rfl
@@ -115,13 +115,13 @@ noncomputable def orthogonalSubmoduleSubtypeEquiv (S : Submodule 𝕜 X) :
 @[simp] theorem submoduleSubtypeEquiv_symm_coe_apply (S : Submodule 𝕜 X)
     (x : submodule (e := e) S) :
     out (e := e) ((submoduleSubtypeEquiv (e := e) S).symm x) =
-      (⟨out (e := e) (x : ScalarTransport e X), x.2⟩ : S) := rfl
+      (⟨out (e := e) (x : ScalarTransport e X), x.property⟩ : S) := rfl
 
 /-- Two subspaces with the same carrier give isometric coercions. -/
 noncomputable def submoduleEquivOfEq {S T : Submodule 𝕜 X} (h : S = T) :
     (S : Submodule 𝕜 X) ≃ₗᵢ[𝕜] (T : Submodule 𝕜 X) where
-  toFun x := ⟨(x : X), h ▸ x.2⟩
-  invFun y := ⟨(y : X), h ▸ y.2⟩
+  toFun x := ⟨(x : X), h ▸ x.property⟩
+  invFun y := ⟨(y : X), h ▸ y.property⟩
   left_inv _ := rfl
   right_inv _ := rfl
   map_add' _ _ := rfl

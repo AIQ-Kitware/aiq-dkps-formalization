@@ -51,7 +51,7 @@ theorem continuous_singularValuePowerSum_positive :
     ((x.2.singularValue i : ℝ), x.1.val) x.1.property).comp₂
     ((NNReal.continuous_coe.comp (ContinuousLinearMap.continuous_singularValue i)).comp
       continuous_snd).continuousAt
-    (continuous_subtype_val.comp continuous_fst).continuousAt
+    (continuous_subtypeVal.comp continuous_fst).continuousAt
 
 /-- Identification with the accepted finite Schatten power. -/
 theorem singularValuePowerSum_eq_schatten_rpow

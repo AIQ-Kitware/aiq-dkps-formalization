@@ -40,15 +40,15 @@ theorem exists_smul_eq_of_inner_eq_ite
   have hon : Orthonormal 𝕜 (S.domRestrict u) := by
     rw [orthonormal_iff_ite]
     intro i j
-    change ⟪(r i.1 : 𝕜)⁻¹ • f i.1, (r j.1 : 𝕜)⁻¹ • f j.1⟫_𝕜 = _
+    change ⟪(r i.val : 𝕜)⁻¹ • f i.val, (r j.val : 𝕜)⁻¹ • f j.val⟫_𝕜 = _
     rw [inner_smul_left, inner_smul_right, hinner]
     simp only [map_inv₀, RCLike.conj_ofReal]
     by_cases hij : i = j
     · subst j
-      have hi : (r i.1 : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr i.property
+      have hi : (r i.val : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr i.property
       simp only [ite_true, RCLike.ofReal_pow]
       field_simp
-    · have hij' : i.1 ≠ j.1 := fun h => hij (Subtype.ext h)
+    · have hij' : i.val ≠ j.val := fun h => hij (Subtype.ext h)
       simp only [hij, hij', ite_false, mul_zero]
   obtain ⟨b, hb⟩ := hon.exists_orthonormalBasis_extension_of_card_eq hdim
   refine ⟨b, fun i => ?_⟩

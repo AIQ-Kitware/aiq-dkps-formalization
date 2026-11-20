@@ -71,17 +71,8 @@ theorem spectrum_directedSinAngleOperatorC_subset_Icc
   intro x hx
   refine ⟨spectrum_nonneg_of_nonneg
     (TauCeti.DavisKahan.Angle.directedSinAngleOperatorC_nonneg U V) hx, ?_⟩
-  -- `NormOneClass (E →L[ℂ] E)` fails for possibly trivial `E`, so the spectral
-  -- radius bound is used in its `‖1‖`-corrected form.
-  have hone : ‖(1 : E →L[ℂ] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have habs : |x| ≤
-      ‖TauCeti.DavisKahan.Angle.directedSinAngleOperatorC U V‖ :=
-    calc |x| = ‖x‖ := (Real.norm_eq_abs x).symm
-      _ ≤ ‖TauCeti.DavisKahan.Angle.directedSinAngleOperatorC U V‖ *
-            ‖(1 : E →L[ℂ] E)‖ := spectrum.norm_le_norm_mul_of_mem hx
-      _ ≤ ‖TauCeti.DavisKahan.Angle.directedSinAngleOperatorC U V‖ * 1 :=
-          mul_le_mul_of_nonneg_left hone (norm_nonneg _)
-      _ = ‖TauCeti.DavisKahan.Angle.directedSinAngleOperatorC U V‖ := mul_one _
+  have habs : |x| ≤ ‖TauCeti.DavisKahan.Angle.directedSinAngleOperatorC U V‖ := by
+    simpa only [Real.norm_eq_abs] using spectrum.norm_le_norm_of_mem hx
   exact (le_abs_self x).trans
     (habs.trans (norm_directedSinAngleOperatorC_le_one U V))
 

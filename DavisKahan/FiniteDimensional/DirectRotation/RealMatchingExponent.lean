@@ -41,10 +41,10 @@ theorem continuousOn_realVariationalPairWeight (theta psi : ℝ) :
   unfold fourEdgeCost fourPhasePenalty
   apply continuous_const.mul
   apply Continuous.add
-  · apply Continuous.rpow (by fun_prop) (continuous_subtype_val.comp continuous_fst)
+  · apply Continuous.rpow (by fun_prop) (continuous_subtypeVal.comp continuous_fst)
     intro x
     exact Or.inr x.1.property
-  · apply Continuous.rpow (by fun_prop) (continuous_subtype_val.comp continuous_fst)
+  · apply Continuous.rpow (by fun_prop) (continuous_subtypeVal.comp continuous_fst)
     intro x
     exact Or.inr x.1.property
 

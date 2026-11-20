@@ -93,13 +93,14 @@ theorem measurable_of_iUnion_restrict {Ω A : Type*}
       exact hxt
   rw [hpre]
   refine MeasurableSet.iUnion fun k => ?_
-  exact (MeasurableEmbedding.subtype_coe (hs k)).measurableSet_image.mpr (hg k ht)
+  exact (MeasurableEmbedding.subtypeVal (hs k)).measurableSet_image.mpr (hg k ht)
 
 variable {Ω A : Type*} [MeasurableSpace Ω]
   [NormedRing A] [StarRing A] [NormedAlgebra ℝ A] [ContinuousStar A] [CompleteSpace A]
   [IsometricContinuousFunctionalCalculus ℝ A IsSelfAdjoint] [NormOneClass A]
   [MeasurableSpace A] [BorelSpace A]
 
+omit [NormOneClass A] in
 /--
 **Measurability of the continuous functional calculus in the element.**
 
@@ -138,7 +139,7 @@ theorem measurable_cfc_comp
       (fun ω : (s k) =>
         (⟨B ω, hmaps ω⟩ :
           {a : A | IsSelfAdjoint a ∧ spectrum ℝ a ⊆ Metric.closedBall 0 (k : ℝ)})) :=
-    (hB.comp measurable_subtype_coe).subtype_mk
+    (hB.comp measurable_subtypeVal).subtype_mk
   exact hcont'.measurable.comp hcore
 
 end TauCeti

@@ -365,7 +365,7 @@ theorem realSpectrum_isCompact (T : H →L[ℂ] H) :
   have h : realSpectrum T = Complex.ofReal ⁻¹' spectrum ℂ T := rfl
   rw [h]
   exact Complex.isometry_ofReal.isClosedEmbedding.isProperMap.isCompact_preimage
-    (spectrum.isCompact T)
+    (spectrum.isCompact ℂ T)
 
 end SpectrumBridge
 

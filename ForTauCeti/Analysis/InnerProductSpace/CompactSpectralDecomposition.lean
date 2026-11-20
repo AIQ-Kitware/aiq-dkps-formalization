@@ -90,7 +90,7 @@ theorem isHilbertSum_eigenspaces_of_compact_selfAdjoint
     intro μ
     refine le_antisymm ?_ ?_
     · rintro y ⟨x, rfl⟩
-      exact x.2
+      exact x.property
     · intro y hy
       exact ⟨⟨y, hy⟩, rfl⟩
   have hortho : OrthogonalFamily 𝕜 (fun μ : 𝕜 => eigenspace A.toLinearMap μ) V := by
@@ -330,7 +330,7 @@ theorem orthonormal_positiveApproximationEigenvector
     (hAc : IsCompactOperator A) (hAs : IsSelfAdjoint A)
     (hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_𝕜) :
     Orthonormal 𝕜 (fun n : {n : ℕ // 0 < (A.singularValue n : ℝ)} =>
-      positiveApproximationEigenvector hAc hAs hApos n n.2) := by
+      positiveApproximationEigenvector hAc hAs hApos n n.property) := by
   classical
   rw [orthonormal_iff_ite]
   intro n m
@@ -338,7 +338,7 @@ theorem orthonormal_positiveApproximationEigenvector
   · subst m
     rw [ite_eq_left rfl]
     exact inner_self_eq_one_of_norm_eq_one
-      (norm_positiveApproximationEigenvector hAc hAs hApos n n.2)
+      (norm_positiveApproximationEigenvector hAc hAs hApos n n.property)
   · rw [ite_eq_right hnm]
     let μ := (A.singularValue n : ℝ)
     let ν := (A.singularValue m : ℝ)
@@ -349,16 +349,16 @@ theorem orthonormal_positiveApproximationEigenvector
       have hMn : finrank 𝕜 (eigenSpan A (Set.Ioi ν)) ≤ n := by
         by_contra h
         have hlt := (lt_approximationNumber_iff_lt_finrank_eigenSpan_Ioi
-          hAc hAs hApos (by simpa only [μ, hμν] using n.2) n).mpr (Nat.lt_of_not_ge h)
+          hAc hAs hApos (by simpa only [μ, hμν] using n.property) n).mpr (Nat.lt_of_not_ge h)
         exact (lt_irrefl ν) (by simpa only [μ, hμν] using hlt)
       have hMm : finrank 𝕜 (eigenSpan A (Set.Ioi ν)) ≤ m := by
         by_contra h
         have hlt := (lt_approximationNumber_iff_lt_finrank_eigenSpan_Ioi
-          hAc hAs hApos m.2 m).mpr (Nat.lt_of_not_ge h)
+          hAc hAs hApos m.property m).mpr (Nat.lt_of_not_ge h)
         exact (lt_irrefl ν) hlt
       have hi : n - finrank 𝕜 (eigenSpan A (Set.Ioi ν)) <
           finrank 𝕜 (eigenspace A.toLinearMap ((ν : ℝ) : 𝕜)) := by
-        have hi0 := positiveApproximation_index_lt hAc hAs hApos n n.2
+        have hi0 := positiveApproximation_index_lt hAc hAs hApos n n.property
         have hIoi : eigenSpan A (Set.Ioi ((A.singularValue n : ℝ))) =
             eigenSpan A (Set.Ioi ν) := by
           change eigenSpan A (Set.Ioi ((A.singularValue n : ℝ))) =
@@ -373,19 +373,19 @@ theorem orthonormal_positiveApproximationEigenvector
         rwa [hIoi, hEig] at hi0
       have hj : m - finrank 𝕜 (eigenSpan A (Set.Ioi ν)) <
           finrank 𝕜 (eigenspace A.toLinearMap ((ν : ℝ) : 𝕜)) := by
-        exact positiveApproximation_index_lt hAc hAs hApos m m.2
+        exact positiveApproximation_index_lt hAc hAs hApos m m.property
       have hspan : eigenSpan A (Set.Ioi ((A.singularValue n : ℝ))) =
           eigenSpan A (Set.Ioi ((A.singularValue m : ℝ))) := by rw [hμν]
       rw [hspan]
-      rw [inner_positiveEigenspaceVector hAc hAs ν (by simpa only [ν] using m.2) hi hj]
+      rw [inner_positiveEigenspaceVector hAc hAs ν (by simpa only [ν] using m.property) hi hj]
       rw [ite_eq_right]
       intro heq
       have : (n : ℕ) = m := by omega
       exact hnm (Subtype.ext this)
     · have hnmem := positiveApproximationEigenvector_mem_eigenspace
-        hAc hAs hApos n n.2
+        hAc hAs hApos n n.property
       have hmmem := positiveApproximationEigenvector_mem_eigenspace
-        hAc hAs hApos m m.2
+        hAc hAs hApos m m.property
       have hscalar : ((μ : ℝ) : 𝕜) ≠ ((ν : ℝ) : 𝕜) :=
         fun h => hμν (RCLike.ofReal_injective h)
       exact hAs.isSymmetric.orthogonalFamily_eigenspaces hscalar

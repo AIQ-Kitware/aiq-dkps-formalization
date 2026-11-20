@@ -142,7 +142,7 @@ theorem singularValues_comp_subtype (U : Submodule 𝕜 E)
     -- property applies; there is no `_apply` lemma to rewrite with here.
     change ⟪U.starProjection x, (y : E)⟫_𝕜 = ⟪x, (y : E)⟫_𝕜
     rw [U.inner_starProjection_left_eq_right,
-      U.starProjection_eq_self_iff.mpr y.2]
+      U.starProjection_eq_self_iff.mpr y.property]
   have hcomp : (A ∘ₗ U.subtype) ∘ₗ LinearMap.adjoint U.subtypeₗᵢ.toLinearMap =
       A ∘ₗ U.starProjection.toLinearMap := by
     rw [hadj]
@@ -211,7 +211,7 @@ theorem sum_sq_principalCosines_eq_sum_sq_norm_projection (U V : Submodule 𝕜 
     -- exposes the inner projection, which is the identity on a vector of `U`.
     change V.starProjection (U.starProjection ((b i : U) : E)) =
       V.starProjection ((b i : U) : E)
-    rw [U.starProjection_eq_self_iff.mpr (b i).2]
+    rw [U.starProjection_eq_self_iff.mpr (b i).property]
   rw [← singularValues_cosThetaMap_comp_subtype U V]
   let A := (U.cosThetaMap V).toLinearMap ∘ₗ U.subtype
   calc
@@ -241,7 +241,7 @@ theorem sum_sq_principalSines_eq_sum_sq_norm_complementaryProjection
     -- exposes the inner projection, which is the identity on a vector of `U`.
     change Vᗮ.starProjection (U.starProjection ((b i : U) : E)) =
       Vᗮ.starProjection ((b i : U) : E)
-    rw [U.starProjection_eq_self_iff.mpr (b i).2]
+    rw [U.starProjection_eq_self_iff.mpr (b i).property]
   rw [← singularValues_sinThetaMap_comp_subtype U V]
   let A := (U.sinThetaMap V).toLinearMap ∘ₗ U.subtype
   calc

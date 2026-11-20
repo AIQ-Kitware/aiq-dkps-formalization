@@ -298,11 +298,11 @@ noncomputable def starFixedLpEquivRealLp :
     change reLp (r • (F : Lp K p μ)) = _
     exact map_smul ((RCLike.reCLM : K →L[ℝ] ℝ).compLpₗ p μ) r _
   invFun f := ⟨ofRealLp f, star_ofRealLp f⟩
-  left_inv F := Subtype.ext (ofRealLp_reLp_of_star_eq_self F.2)
+  left_inv F := Subtype.ext (ofRealLp_reLp_of_star_eq_self F.property)
   right_inv f := reLp_ofRealLp f
   norm_map' F := by
     have h := norm_ofRealLp (K := K) (reLp (F : Lp K p μ))
-    rw [ofRealLp_reLp_of_star_eq_self F.2] at h
+    rw [ofRealLp_reLp_of_star_eq_self F.property] at h
     exact h.symm
 
 /-- The equivalence acts as the pointwise real part, for the same reason `ofRealLpₗᵢ_apply` is

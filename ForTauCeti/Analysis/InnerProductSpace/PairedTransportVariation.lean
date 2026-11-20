@@ -6,7 +6,7 @@ Authors: Jon Crall, GPT-6
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.SchattenTransportRestriction
-public import ForTauCeti.Analysis.Normed.Lp.ProdLp
+public import TauCeti.Analysis.Normed.Lp.ProdLp
 public import Mathlib.Analysis.CStarAlgebra.Exponential
 public import Mathlib.Analysis.SpecialFunctions.Exponential
 
@@ -99,7 +99,7 @@ theorem isLocalMin_paired_variation_of_isLocalMinOn_transports_complex
       (paired_block_commute_swap (B t))).smul_right (1 / 2 : ℂ)
     change D t * _ = _ * D t
     dsimp only [D]
-    rw [ContinuousLinearMap.mul_withLpProdMap, ContinuousLinearMap.mul_withLpProdMap,
+    rw [← ContinuousLinearMap.withLpProdMap_mul, ← ContinuousLinearMap.withLpProdMap_mul,
       hpair.eq, one_mul, mul_one]
   have hT (t : ℝ) : T t = (W : F →L[ℂ] F) * C t := by
     rw [hW]
@@ -113,7 +113,7 @@ theorem isLocalMin_paired_variation_of_isLocalMinOn_transports_complex
   have hfeasible (t : ℝ) : T t ∈
       {T | T ∈ unitary (F →L[ℂ] F) ∧ T * P * star T = Q} := by
     rw [hT t]
-    refine ⟨mul_mem W.2 (hCunit t), ?_⟩
+    refine ⟨mul_mem W.property (hCunit t), ?_⟩
     rw [star_mul]
     calc
       _ = (W : F →L[ℂ] F) * (C t * P) * star (C t) * star (W : F →L[ℂ] F) := by

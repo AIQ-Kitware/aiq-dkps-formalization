@@ -42,7 +42,7 @@ depend on the radius.
 
 Everything here is stated for a complex **Banach** space.  No proof below uses
 an inner product: they run on `Ring.inverse`, `DiffContOnCl.circleIntegral_eq_zero`,
-the annulus deformation, and `spectrum.resolvent_tendsto_cobounded`.
+the annulus deformation, and `resolvent_tendsto_cobounded`.
 -/
 
 public section
@@ -227,7 +227,7 @@ private theorem norm_circleIntegral_rieszRemainder_le (hr : 0 < radius)
   obtain ⟨M, hM⟩ : ∃ M : ℝ, ∀ b : ℝ, M ≤ b → ∀ z : ℂ, ‖z‖ = b →
       ‖resolvent A z‖ ≤ ε := by
     have hten : ∀ᶠ z : ℂ in Bornology.cobounded ℂ, ‖resolvent A z‖ ≤ ε := by
-      have h := (spectrum.resolvent_tendsto_cobounded (𝕜 := ℂ) (a := A)).norm
+      have h := (resolvent_tendsto_cobounded (𝕜 := ℂ) (a := A)).norm
       rw [norm_zero] at h
       exact h.eventually_le_const hε
     rw [← comap_norm_atTop, Filter.eventually_comap] at hten

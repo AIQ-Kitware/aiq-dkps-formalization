@@ -62,20 +62,20 @@ noncomputable def finiteValueLabel {n : ℕ} (a : Fin n → ℝ) (i : Fin n) :
 /-- The fiber of one occurring value. -/
 noncomputable def finiteValueFiber {n : ℕ} (a : Fin n → ℝ)
     (label : FiniteValueLabel a) : Finset (Fin n) :=
-  Finset.univ.filter fun i => a i = label.1
+  Finset.univ.filter fun i => a i = label.val
 
 /-- Membership in a fiber is exactly carrying that fiber's value. -/
 @[simp]
 theorem mem_finiteValueFiber {n : ℕ} (a : Fin n → ℝ)
     (label : FiniteValueLabel a) (i : Fin n) :
-    i ∈ finiteValueFiber a label ↔ a i = label.1 := by
+    i ∈ finiteValueFiber a label ↔ a i = label.val := by
   simp [finiteValueFiber]
 
 /-- Every value label has a nonempty fiber. -/
 theorem finiteValueFiber_nonempty {n : ℕ} (a : Fin n → ℝ)
     (label : FiniteValueLabel a) : (finiteValueFiber a label).Nonempty := by
   classical
-  rcases Finset.mem_image.mp label.2 with ⟨i, _, hi⟩
+  rcases Finset.mem_image.mp label.property with ⟨i, _, hi⟩
   refine ⟨i, ?_⟩
   rw [mem_finiteValueFiber]
   exact hi
@@ -95,7 +95,7 @@ noncomputable def finiteValueLast {n : ℕ} (a : Fin n → ℝ)
 Not `@[simp]`: the left-hand side `a (finiteValueFirst a label)` has the family `a`
 as head symbol, so simp would try it on every application of every function. -/
 theorem finiteValueFirst_value {n : ℕ} (a : Fin n → ℝ)
-    (label : FiniteValueLabel a) : a (finiteValueFirst a label) = label.1 := by
+    (label : FiniteValueLabel a) : a (finiteValueFirst a label) = label.val := by
   exact (mem_finiteValueFiber a label (finiteValueFirst a label)).mp
     (Finset.min'_mem _ _)
 
@@ -103,7 +103,7 @@ theorem finiteValueFirst_value {n : ℕ} (a : Fin n → ℝ)
 
 Not `@[simp]`, for the same reason as `finiteValueFirst_value`. -/
 theorem finiteValueLast_value {n : ℕ} (a : Fin n → ℝ)
-    (label : FiniteValueLabel a) : a (finiteValueLast a label) = label.1 := by
+    (label : FiniteValueLabel a) : a (finiteValueLast a label) = label.val := by
   exact (mem_finiteValueFiber a label (finiteValueLast a label)).mp
     (Finset.max'_mem _ _)
 
@@ -140,22 +140,22 @@ theorem finiteValueFiber_card_le_span {n : ℕ} (a : Fin n → ℝ)
   let q := (finiteValueLast a label).val
   let e : {i // i ∈ finiteValueFiber a label} →
       Fin (q + 1 - p) := fun i => by
-    have hpi : p ≤ i.1.val := by
-      exact_mod_cast finiteValueFirst_le a label i.2
-    have hiq : i.1.val ≤ q := by
-      exact_mod_cast le_finiteValueLast a label i.2
-    refine ⟨i.1.val - p, ?_⟩
+    have hpi : p ≤ i.val.val := by
+      exact_mod_cast finiteValueFirst_le a label i.property
+    have hiq : i.val.val ≤ q := by
+      exact_mod_cast le_finiteValueLast a label i.property
+    refine ⟨i.val.val - p, ?_⟩
     omega
   have he : Function.Injective e := by
     intro i j hij
     apply Subtype.ext
     apply Fin.ext
-    have hpi : p ≤ i.1.val := by
-      exact_mod_cast finiteValueFirst_le a label i.2
-    have hpj : p ≤ j.1.val := by
-      exact_mod_cast finiteValueFirst_le a label j.2
+    have hpi : p ≤ i.val.val := by
+      exact_mod_cast finiteValueFirst_le a label i.property
+    have hpj : p ≤ j.val.val := by
+      exact_mod_cast finiteValueFirst_le a label j.property
     have hval := congrArg Fin.val hij
-    change i.1.val - p = j.1.val - p at hval
+    change i.val.val - p = j.val.val - p at hval
     omega
   have hcard := Fintype.card_le_of_injective e he
   simpa only [Fintype.card_coe, Fintype.card_fin, p, q] using hcard

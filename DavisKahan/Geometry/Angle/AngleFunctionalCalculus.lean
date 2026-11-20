@@ -76,14 +76,9 @@ theorem spectrum_sinAngleOperatorC_subset_Icc (U V : Submodule ℂ E)
     spectrum ℝ (sinAngleOperatorC U V) ⊆ Set.Icc 0 1 := by
   intro x hx
   refine ⟨spectrum_nonneg_of_nonneg (sinAngleOperatorC_nonneg U V) hx, ?_⟩
-  have habs : |x| ≤ ‖sinAngleOperatorC U V‖ * ‖(1 : E →L[ℂ] E)‖ :=
-    spectrum.norm_le_norm_mul_of_mem hx
-  have hone : ‖(1 : E →L[ℂ] E)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  refine le_trans (le_abs_self x) (habs.trans ?_)
-  calc ‖sinAngleOperatorC U V‖ * ‖(1 : E →L[ℂ] E)‖ ≤ 1 * 1 :=
-        mul_le_mul (norm_sinAngleOperatorC_le_one U V) hone (norm_nonneg _)
-          zero_le_one
-    _ = 1 := by ring
+  have habs : |x| ≤ ‖sinAngleOperatorC U V‖ := by
+    simpa only [Real.norm_eq_abs] using spectrum.norm_le_norm_of_mem hx
+  exact (le_abs_self x).trans (habs.trans (norm_sinAngleOperatorC_le_one U V))
 
 /-- The literal Hermitian operator angle between two closed complex subspaces. -/
 @[expose]

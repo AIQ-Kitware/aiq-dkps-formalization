@@ -179,7 +179,7 @@ reciprocal half of the cosine hyperbolic is crushed by `exp 4.73 > 50`. -/
 theorem cosh_four_seventy_three_lt : Real.cosh (473 / 100) < 56.66 := by
   rw [Real.cosh_eq]
   have h4 : Real.exp 4 < 54.5982 := by
-    have h1 : Real.exp 4 = Real.exp 1 ^ 4 := by rw [← Real.exp_nat_mul]; norm_num
+    have h1 : Real.exp 4 = Real.exp 1 ^ 4 := by rw [← Real.exp_natCast_mul]; norm_num
     have h2 : Real.exp 1 ^ 4 < (2.7182818286 : ℝ) ^ 4 :=
       pow_lt_pow_left₀ Real.exp_one_lt_d9 (Real.exp_pos 1).le (by norm_num)
     have h3 : (2.7182818286 : ℝ) ^ 4 < 54.5982 := by norm_num
@@ -202,7 +202,7 @@ theorem cosh_four_seventy_three_lt : Real.cosh (473 / 100) < 56.66 := by
       _ < 54.5982 * 2.0751 := mul_lt_mul_of_pos_left h073 (by norm_num)
       _ < 113.297 := by norm_num
   have hlow : (50 : ℝ) < Real.exp (473 / 100) := by
-    have h1 : Real.exp 4 = Real.exp 1 ^ 4 := by rw [← Real.exp_nat_mul]; norm_num
+    have h1 : Real.exp 4 = Real.exp 1 ^ 4 := by rw [← Real.exp_natCast_mul]; norm_num
     have h2 : ((2.7182818283 : ℝ)) ^ 4 < Real.exp 1 ^ 4 :=
       pow_lt_pow_left₀ Real.exp_one_gt_d9 (by norm_num) (by norm_num)
     have h3 : (50 : ℝ) < (2.7182818283 : ℝ) ^ 4 := by norm_num

@@ -87,7 +87,7 @@ theorem exists_charbonnier_locally_minimizing_reducing_restriction
   rw [← hfV, hsplit] at hfinite'
   obtain ⟨hVfinite, htail⟩ := ENNReal.add_ne_top.mp hfinite'
   refine ⟨V, hV, hlocal, hVfinite, ?_⟩
-  have hf : Continuous f := continuous_subtype_val.comp e.continuous
+  have hf : Continuous f := continuous_subtypeVal.comp e.continuous
   have hloc : IsLocalMinOn
       (fun T : E ≃ₗᵢ[𝕜] E => (1 - (T : E →L[𝕜] E)).charbonnierCost tau)
       {T | K.map T.toLinearMap = L} (f V) := by rwa [hfV]

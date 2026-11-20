@@ -5526,3 +5526,92 @@ coordinate donor carries the same two comments. Non-comment source is unchanged
 in both files, so the preceding build/linter/axiom evidence applies without
 rerunning builds. The campaign packet retains the actual comments and follow-up
 patch. This remains an open submission, not an integration.
+
+### 2026-11-20 — accepted real SSP-C31 and canonical dependency migration
+
+[#43455](https://github.com/TauCetiProject/TauCeti/pull/43455) is integrated as
+`b80c0b9f49c3aa97cc22115f7d7d3a2361112d25`, ancestor of accepted main
+`8794ab329bb60340fa690a2902cf995f0571721b`. The accepted head is
+`706bff9b65aa580d75506e6b6075a1096b53cce2`; GitHub’s `merged=false` does not
+negate the verified Bors integration. It was submitted by Erotemic and explicitly
+adapts DKPS, with Jon Crall/Claude Opus 5/Kitware Apache-2.0 notices and the
+native-carrier revision by OpenAI gpt-6.1-sol retained. The original anchors
+and all original declaration names remain in the extraction manifest.
+
+The real endpoint
+`Submodule.projectionGap_lt_sqrt_two_div_two_of_orderedFormGap_real` and its
+projection/form transport are now consumed from their accepted owning modules:
+`Complexification`, `QuadraticForm.Bounds` and `DoubleAngle.QuarterAcute`. The
+three duplicate donor modules `Complexification/{Projection,FormBounds,QuarterAcute}`
+are deleted without compatibility aliases. Transport retains incomplete ambient
+scope; the endpoint retains arbitrary complete real Hilbert spaces, including
+zero and nonseparable spaces. Together with accepted complex #27804, this
+completes the real/complex SSP-C31 roadmap item; it does not complete the full
+Davis–Kahan source theorem or its unbounded/UI-norm obligations. Paper-specific
+transport and stronger norm statements remain where not superseded.
+
+The accepted pin uses Lean v4.37.0-rc1 and exact Mathlib
+`31ce06eaadf4a200c0e1407c5f10953cf606b8f8`. Compatibility changes replace
+compiler-diagnosed subtype numeric projections with named fields, adopt renamed
+Mathlib declarations, give the now-explicit scalar parameter to spectral
+compactness/closedness, and use native eNorm/spectral-radius and strengthened
+spectral norm bounds. No linter is disabled; public paper-facing conclusions
+retain their mathematical scope. The unused `NormOneClass` premise of the
+reusable measurable-CFC theorem is dropped because the native norm bound no
+longer needs it. Zero-dimensional matrix arguments remain valid.
+
+A further exact collision identifies accepted
+`Continuous.withLpProdMap`, integrated in Forgejo
+[PR #630](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/630),
+commit `40822675c0a7f156b9534f0f95edf0087bed8475`, accepted head
+`2fffedc4c07360fb21667cdee08ebeb84ec2f40f`. The target is HeegaardFloer
+F1.3; no extra OperatorTheory item credit is inferred. Native continuity has the
+full local normed-field/topological-parameter scope. Delete the local
+`ForTauCeti/Analysis/Normed/Lp/ProdLp.lean` proof and migrate its three imports.
+The same integration supplies block multiplication and star facts, so retire
+local `ContinuousLinearMap.mul_withLpProdMap` and `star_withLpProdMap` from
+`SchattenTransportRestriction`, migrate multiplication rewrites with the native
+equality’s opposite orientation, and retain the genuine block-unitarity
+consequence. Local sources: `2ef2b5c65` at those paths; Jon Crall / GPT-6,
+Kitware 2026, Apache-2.0. No direct proof-descent disclosure was found in that
+integration; overlapping prior local work and accepted work are recorded
+without inferring that the other contributor used DKPS.
+
+[#41596](https://github.com/TauCetiProject/TauCeti/pull/41596), submitted by
+roed-math, is integrated as `81171bd524be1b4f119bb36877630bb96aaed6f8`
+(accepted head `81ac90ae300b8a13dab49958b113afdcfb02fa71`), also on the new pin.
+Its `LinearPMap.spectralPVM` is exactly the same Cayley-PVM pushforward proposed
+in our #29129, at arbitrary complete complex Hilbert scope. It also proves
+null mass at the pole, resolvent representation, domain-aware intertwining and
+commutation, spectral support and one-/two-sided form bounds. The concrete
+`LinearPMap/ProjValMeasure.lean` declarations, not a title or closure, establish
+the overlap. DKPS’s earlier local spectral-measure development and roadmap
+priority remain recorded; this integration contains no explicit DKPS proof
+descent disclosure, so that relationship remains unknown. Our #29129 has not
+integrated. The user approved closing it as superseded; the connector denied
+closure with 403, so closure remains pending the credentialed host command.
+Consumption of every remaining local spectral-PVM donor is a separate scope
+review; this checkpoint does not claim they have all been retired.
+
+#30736’s previous head `f9632ab81cde7d7b8dd8d8455c8f5059219a675d` has green
+CI, but unresolved reuse finding 4496947546 requires replacing its direct
+Duhamel proof by native
+`Semigroups.norm_exp_smul_sub_exp_smul_apply_le_of_commute`. Both the donor and
+upstream repair now use bounds one after scalar restriction, transporting exp
+with `NormedSpace.map_exp`; negative times reduce by negating the generators.
+The original Spectra/DKPS notices are preserved as historical ancestry, without
+claiming the accepted generic semigroup proof was written here. The repair
+retains the same pointwise and compact-time mathematical scope.
+
+Final validation for this dependency/consumption slice: focused continuation
+and general sine consumers pass; full default `lake build` passes (22006 jobs),
+`lake build Challenge` passes (20176 jobs), and the original C31 scope examples
+pass against the accepted APIs, including incomplete ambient transport and an
+actual zero-dimensional endpoint invocation. No warnings remain. Final logs
+and source scope checks are retained in the shared campaign
+`waves/2026-11-20/donor/` packet, outside VM-local caches. Initial failing
+compatibility attempts are not cited as successful validation. #30736 repair
+`f66f208634db1600402ddae517062826db1fd348` also has green upstream build, scope
+and bump-guard checks (run 44779553235), with reviewer clearance still pending.
+The user-authorized #29129 closure remains pending the credentialed host script
+because the connector returned 403; it is not falsely recorded as closed.

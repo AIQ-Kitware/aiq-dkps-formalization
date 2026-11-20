@@ -72,7 +72,7 @@ theorem exists_isEigenFamily_span_eq (hT : T.IsSymmetric) {W : Submodule 𝕜 E}
     exact congrArg Subtype.val hk
   · refine Submodule.eq_of_le_of_finrank_eq (Submodule.span_le.mpr ?_) ?_
     · rintro _ ⟨k, rfl⟩
-      exact (b k).2
+      exact (b k).property
     · rw [finrank_span_eq_card hon.linearIndependent, Fintype.card_fin]
 
 /-- **The spectral-gap residual lower bound.**

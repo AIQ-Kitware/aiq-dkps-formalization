@@ -197,9 +197,9 @@ theorem sum_sq_floor_of_le_eigenvalues_finiteGramOperator
   have hlowE : ∀ i : Fin (finrank 𝕜 E),
       a ≤ (finiteAnalysis 𝕜 v).isSymmetric_adjoint_comp_self.eigenvalues rfl i := by
     intro i
-    have hin : (i : ℕ) < n := lt_of_lt_of_le i.2 hdn
-    rw [eigenvalues_adjointCompSelf_eq_selfCompAdjoint (finiteAnalysis 𝕜 v) rfl hn i.2 hin]
-    have hk := h ⟨i, hin⟩ i.2
+    have hin : (i : ℕ) < n := lt_of_lt_of_le i.isLt hdn
+    rw [eigenvalues_adjointCompSelf_eq_selfCompAdjoint (finiteAnalysis 𝕜 v) rfl hn i.isLt hin]
+    have hk := h ⟨i, hin⟩ i.isLt
     rw [congrFun hcongr ⟨i, hin⟩] at hk
     exact hk
   have hfloor := norm_sq_floor_of_le_eigenvalues_adjointCompSelf

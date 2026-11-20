@@ -159,14 +159,15 @@ theorem continuousOn_resolventOneForm_of_contour_distance
     complex_continuousOn_resolventOperator_of_distance
       A hA Γ.image delta hdelta hsep_image
   let L : (H →L[ℂ] H) →L[ℂ] (ℂ →L[ℂ] (H →L[ℂ] H)) :=
-    ContinuousLinearMap.smulRightL ℂ ℂ (H →L[ℂ] H)
+    ContinuousLinearMap.smulRightL ℂ ℂ ℂ ℂ (H →L[ℂ] H)
       (1 : ℂ →L[ℂ] ℂ)
   have hcomp : ContinuousOn (fun z ↦ L (resolventOperator A z)) Γ.image :=
     L.continuous.continuousOn.comp hres (fun _ _ ↦ Set.mem_univ _)
   refine hcomp.congr ?_
   intro z hz
-  change L (resolventOperator A z) = resolventOneForm A z
-  rfl
+  -- Evaluate the continuous scalar-multiplication map as the resolvent one-form.
+  ext v
+  simp [L, resolventOneForm_apply]
 
 /-- Uniform spectral separation gives curve integrability of the resolvent
 one-form on a fixed contour. -/

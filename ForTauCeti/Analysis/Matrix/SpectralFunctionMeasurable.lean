@@ -145,25 +145,22 @@ noncomputable local instance instRealNormedAlgebraMatrix :
 
 /-- A fixed continuous real spectral function is continuous on Hermitian matrices. -/
 theorem continuous_cfc_on_hermitian (h : ℝ → ℝ) (hh : Continuous h) :
-    Continuous fun A : {A : Matrix (Fin n) (Fin n) 𝕜 // A.IsHermitian} => cfc h A.1 := by
+    Continuous fun A : {A : Matrix (Fin n) (Fin n) 𝕜 // A.IsHermitian} => cfc h A.val := by
   rw [continuous_iff_continuousAt]
   intro A
   have hnorm : ∀ᶠ B : {B : Matrix (Fin n) (Fin n) 𝕜 // B.IsHermitian}
-      in 𝓝 A, ‖B.1‖ < ‖A.1‖ + 1 :=
-    (continuous_subtype_val.norm.continuousAt).eventually
+      in 𝓝 A, ‖B.val‖ < ‖A.val‖ + 1 :=
+    (continuous_subtypeVal.norm.continuousAt).eventually
       (gt_mem_nhds (lt_add_one _))
   refine ContinuousAt.cfc (𝕜 := ℝ) (p := IsSelfAdjoint)
-    (a := fun B : {B : Matrix (Fin n) (Fin n) 𝕜 // B.IsHermitian} => B.1)
-    (isCompact_closedBall (0 : ℝ)
-      ((‖A.1‖ + 1) * ‖(1 : Matrix (Fin n) (Fin n) 𝕜)‖)) h
-    continuous_subtype_val.continuousAt ?_ ?_ hh.continuousOn
-  · -- `‖1‖ = 1` needs `NormOneClass`, which fails on the zero matrix algebra `n = 0`;
-    -- the `‖a‖ * ‖1‖` bound holds unconditionally.
+    (a := fun B : {B : Matrix (Fin n) (Fin n) 𝕜 // B.IsHermitian} => B.val)
+    (isCompact_closedBall (0 : ℝ) (‖A.val‖ + 1)) h
+    continuous_subtypeVal.continuousAt ?_ ?_ hh.continuousOn
+  · -- The native spectral-radius bound holds also for the zero matrix algebra.
     filter_upwards [hnorm] with B hB
-    refine (spectrum.subset_closedBall_norm_mul B.1).trans
-      (Metric.closedBall_subset_closedBall ?_)
-    exact mul_le_mul_of_nonneg_right hB.le (norm_nonneg _)
-  · exact Filter.Eventually.of_forall fun B => B.2.isSelfAdjoint
+    exact (spectrum.subset_closedBall_norm (𝕜 := ℝ) B.val).trans
+      (Metric.closedBall_subset_closedBall hB.le)
+  · exact Filter.Eventually.of_forall fun B => B.property.isSelfAdjoint
 
 /-- A continuous real spectral function of a measurable Hermitian matrix is measurable. -/
 theorem measurable_cfc_of_hermitian {Ω : Type*} [MeasurableSpace Ω]

@@ -219,8 +219,8 @@ theorem kyFanGaugeReal_add_le_of_exists_finiteRestriction {S T : E →L[𝕜] F}
   have hkreal : 0 < (k : ℝ) := by exact_mod_cast hkpos
   have hδ : 0 < ε / (k : ℝ) := div_pos hε hkreal
   choose v hv using fun n => hfr n (ε / (k : ℝ)) hδ
-  let β : Type := Σ n : Fin k, Fin (n.1 + 1)
-  let w : β → E := fun p => v p.1.1 p.2
+  let β : Type := Σ n : Fin k, Fin (n.val + 1)
+  let w : β → E := fun p => v p.1.val p.2
   let V : Submodule 𝕜 E := Submodule.span 𝕜 (Set.range w)
   let : FiniteDimensional 𝕜 V := Module.Finite.span_of_finite 𝕜 (Set.finite_range w)
   let : CompleteSpace V := FiniteDimensional.completeSpace 𝕜 V

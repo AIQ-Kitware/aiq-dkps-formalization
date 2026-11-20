@@ -159,7 +159,7 @@ theorem isSelfAdjoint_of_schattenUnitaryGradient_eq_zero
   have hreal (i) : mu i = 1 ∨ mu i = -1 := by
     have hnorm : ‖mu i‖ = 1 := by
       simpa only [hU, norm_smul, b.orthonormal.1 i, mul_one] using
-        _root_.ContinuousLinearMap.norm_map_of_mem_unitary U.2 (b i)
+        _root_.ContinuousLinearMap.norm_map_of_mem_unitary U.property (b i)
     have heq := schattenUnitaryGradient_apply_of_apply_eq_smul p
       (U : E →L[ℂ] E) (b i) (mu i) (hU i)
     rw [hG, zero_apply] at heq
@@ -213,7 +213,7 @@ theorem hasDerivAt_schatten_displacement_rpow_mul_exp_at
   let a : ℝ → E →L[ℂ] E := fun s =>
     (U : E →L[ℂ] E) * NormedSpace.exp (s • (Complex.I • H))
   have hunit (s : ℝ) : a s ∈ unitary (E →L[ℂ] E) := by
-    apply mul_mem U.2
+    apply mul_mem U.property
     apply NormedSpace.exp_mem_unitary_of_mem_skewAdjoint
     rw [skewAdjoint.mem_iff]
     simp [star_smul, hH.star_eq]
@@ -255,7 +255,7 @@ theorem hasDerivAt_schatten_unitary_right_variation_at
   let +nondep : NormedAlgebra ℚ (E →L[ℂ] E) := .restrictScalars ℚ ℂ (E →L[ℂ] E)
   let V := (U : E →L[ℂ] E) * NormedSpace.exp (t • (Complex.I • H))
   have hunit : V ∈ unitary (E →L[ℂ] E) := by
-    apply mul_mem U.2
+    apply mul_mem U.property
     apply NormedSpace.exp_mem_unitary_of_mem_skewAdjoint
     rw [skewAdjoint.mem_iff]
     simp [star_smul, hH.star_eq]

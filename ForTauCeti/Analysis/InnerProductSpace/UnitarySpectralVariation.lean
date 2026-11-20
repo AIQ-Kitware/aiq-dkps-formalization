@@ -76,7 +76,7 @@ theorem isLocalMin_unitary_right_variation_of_isLocalMinOn_conjugacy
     simp only [a, V, zero_smul, NormedSpace.exp_zero, mul_one]
   have hfeasible (t : ℝ) : a t ∈
       {W | W ∈ unitary (E →L[ℂ] E) ∧ W * P * star W = Q} := by
-    refine ⟨mul_mem U.2 (hVunit t), ?_⟩
+    refine ⟨mul_mem U.property (hVunit t), ?_⟩
     change ((U : E →L[ℂ] E) * V t) * P * star ((U : E →L[ℂ] E) * V t) = Q
     rw [star_mul]
     calc
@@ -170,7 +170,7 @@ theorem hasDerivAt_unitary_spectral_right_variation_at
   let a : ℝ → E →L[ℂ] E := fun s =>
     (U : E →L[ℂ] E) * NormedSpace.exp (s • (Complex.I • H))
   have hunit (s : ℝ) : a s ∈ unitary (E →L[ℂ] E) := by
-    apply mul_mem U.2
+    apply mul_mem U.property
     apply NormedSpace.exp_mem_unitary_of_mem_skewAdjoint
     rw [skewAdjoint.mem_iff]
     simp [star_smul, hH.star_eq]

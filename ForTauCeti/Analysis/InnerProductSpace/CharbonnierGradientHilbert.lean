@@ -102,7 +102,7 @@ theorem continuous_smoothedUnitaryGradient_unitary (tau : ℝ) (hτ : 0 < tau) :
     Continuous (fun U : unitary (E →L[ℂ] E) => smoothedUnitaryGradient tau (U : E →L[ℂ] E)) := by
   change Continuous (fun U : unitary (E →L[ℂ] E) =>
     cfc (fun z => (smoothedPhaseDerivative tau z : ℂ)) (U : E →L[ℂ] E))
-  exact continuous_subtype_val.cfc' (isCompact_sphere (0 : ℂ) 1)
+  exact continuous_subtypeVal.cfc' (isCompact_sphere (0 : ℂ) 1)
     (fun z => (smoothedPhaseDerivative tau z : ℂ))
     (fun U => spectrum.subset_circle_of_unitary U.property)
     (Complex.continuous_ofReal.comp (continuous_smoothedPhaseDerivative tau hτ)).continuousOn

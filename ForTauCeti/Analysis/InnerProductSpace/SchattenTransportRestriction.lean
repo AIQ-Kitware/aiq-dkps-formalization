@@ -6,7 +6,8 @@ Authors: Jon Crall, GPT-6
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.BlockSchatten
-public import ForTauCeti.Analysis.Normed.Lp.ProdLp
+public import TauCeti.Analysis.Normed.Lp.ProdLp
+import TauCeti.Analysis.InnerProductSpace.Spectral.BlockSum
 public import ForTauCeti.Analysis.InnerProductSpace.FiniteUnitaryRestriction
 public import Mathlib.Topology.Order.LocalExtr
 
@@ -32,39 +33,16 @@ variable {𝕜 E F : Type*} [RCLike 𝕜]
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-theorem star_withLpProdMap (A : E →L[𝕜] E) (B : F →L[𝕜] F) :
-    star (A.withLpProdMap 2 B) = (star A).withLpProdMap 2 (star B) := by
-  symm
-  apply (ContinuousLinearMap.eq_adjoint_iff _ _).mpr
-  intro x y
-  simp only [withLpProdMap_apply, WithLp.prod_inner_apply]
-  change inner 𝕜 (star A x.fst) y.fst + inner 𝕜 (star B x.snd) y.snd =
-    inner 𝕜 x.fst (A y.fst) + inner 𝕜 x.snd (B y.snd)
-  rw [show star A = A.adjoint from rfl, show star B = B.adjoint from rfl,
-    A.adjoint_inner_left, B.adjoint_inner_left]
-
-omit [CompleteSpace E] [CompleteSpace F] in
-theorem mul_withLpProdMap (A A' : E →L[𝕜] E) (B B' : F →L[𝕜] F) :
-    A.withLpProdMap 2 B * A'.withLpProdMap 2 B' = (A * A').withLpProdMap 2 (B * B') := by
-  ext x
-  apply WithLp.ofLp_injective 2
-  simp [withLpProdMap_apply]
-
 /-- Orthogonal sums of unitary operators are unitary. No dimension
 assumption is required. -/
 theorem withLpProdMap_mem_unitary {A : E →L[𝕜] E} {B : F →L[𝕜] F}
     (hA : A ∈ unitary (E →L[𝕜] E)) (hB : B ∈ unitary (F →L[𝕜] F)) :
     A.withLpProdMap 2 B ∈ unitary (WithLp 2 (E × F) →L[𝕜] WithLp 2 (E × F)) := by
-  have hone : (1 : E →L[𝕜] E).withLpProdMap 2 (1 : F →L[𝕜] F) = 1 := by
-    ext x
-    apply WithLp.ofLp_injective 2
-    simp [withLpProdMap_apply]
-    simpa only [WithLp.ofLp_fst, WithLp.ofLp_snd] using Prod.eta x.ofLp
   refine Unitary.mem_iff.mpr ⟨?_, ?_⟩
-  · rw [star_withLpProdMap, mul_withLpProdMap,
-      Unitary.star_mul_self_of_mem hA, Unitary.star_mul_self_of_mem hB, hone]
-  · rw [star_withLpProdMap, mul_withLpProdMap,
-      Unitary.mul_star_self_of_mem hA, Unitary.mul_star_self_of_mem hB, hone]
+  · rw [star_withLpProdMap, ← withLpProdMap_mul,
+      Unitary.star_mul_self_of_mem hA, Unitary.star_mul_self_of_mem hB, withLpProdMap_one]
+  · rw [star_withLpProdMap, ← withLpProdMap_mul,
+      Unitary.mul_star_self_of_mem hA, Unitary.mul_star_self_of_mem hB, withLpProdMap_one]
 
 end ContinuousLinearMap
 
@@ -135,7 +113,7 @@ theorem isMinOn_block_transport_of_cost_orthogonal_sum
           ((V : F →L[𝕜] F) * P₁ * star (V : F →L[𝕜] F))) := by
     dsimp only [lift]
     rw [← map_star, ← map_mul, ← map_mul, ContinuousLinearMap.star_withLpProdMap,
-      ContinuousLinearMap.mul_withLpProdMap, ContinuousLinearMap.mul_withLpProdMap]
+      ← ContinuousLinearMap.withLpProdMap_mul, ← ContinuousLinearMap.withLpProdMap_mul]
   intro hmin A hA
   have hfeasible : lift A ∈ unitary (H →L[𝕜] H) ∧
       lift A * e.conjStarAlgEquiv (P₀.withLpProdMap 2 P₁) * star (lift A) =
@@ -176,7 +154,7 @@ theorem isLocalMinOn_block_transport_of_cost_orthogonal_sum
           ((V : F →L[𝕜] F) * P₁ * star (V : F →L[𝕜] F))) := by
     dsimp only [lift]
     rw [← map_star, ← map_mul, ← map_mul, ContinuousLinearMap.star_withLpProdMap,
-      ContinuousLinearMap.mul_withLpProdMap, ContinuousLinearMap.mul_withLpProdMap]
+      ← ContinuousLinearMap.withLpProdMap_mul, ← ContinuousLinearMap.withLpProdMap_mul]
   have hfeasible (A : E →L[𝕜] E)
       (hA : A ∈ unitary (E →L[𝕜] E) ∧ A * P₀ * star A = U * P₀ * star U) :
       lift A ∈ unitary (H →L[𝕜] H) ∧

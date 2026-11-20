@@ -292,15 +292,9 @@ theorem tanTheta_spectrum_oneSided
   have hcap : ∀ y ∈ spectrum ℝ (compressOperator Vᗮ T),
       y ≤ max ‖compressOperator Vᗮ T‖ (α₀ + δ) := by
     intro y hy
-    have hone : ‖(1 : ↥Vᗮ →L[ℂ] ↥Vᗮ)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-    have habs : ‖y‖ ≤ ‖compressOperator Vᗮ T‖ * ‖(1 : ↥Vᗮ →L[ℂ] ↥Vᗮ)‖ :=
-      spectrum.norm_le_norm_mul_of_mem hy
-    rw [Real.norm_eq_abs] at habs
-    refine le_max_of_le_left ((le_abs_self y).trans (habs.trans ?_))
-    calc ‖compressOperator Vᗮ T‖ * ‖(1 : ↥Vᗮ →L[ℂ] ↥Vᗮ)‖
-        ≤ ‖compressOperator Vᗮ T‖ * 1 :=
-          mul_le_mul_of_nonneg_left hone (norm_nonneg _)
-      _ = ‖compressOperator Vᗮ T‖ := mul_one _
+    have habs : |y| ≤ ‖compressOperator Vᗮ T‖ := by
+      simpa only [Real.norm_eq_abs] using spectrum.norm_le_norm_of_mem hy
+    exact le_max_of_le_left ((le_abs_self y).trans habs)
   refine tanTheta_spectrum hT hVinv (α := α₀ + δ)
     (β := max ‖compressOperator Vᗮ T‖ (α₀ + δ))
     (le_max_right _ _) hδ hρ0

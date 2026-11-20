@@ -98,7 +98,7 @@ variable {A : Type*} [Ring A] [Algebra ℂ A]
 This is the symbol that `realSpectrumCfcHom` sends back to the element itself, so it plays the
 role `(ContinuousMap.id ℂ).restrict (spectrum ℂ a)` plays for `cfcHom`. -/
 noncomputable def realSpectrumId (a : A) : C(spectrum ℝ a, ℂ) :=
-  ⟨fun x => ((x : ℝ) : ℂ), Complex.continuous_ofReal.comp continuous_subtype_val⟩
+  ⟨fun x => ((x : ℝ) : ℂ), Complex.continuous_ofReal.comp continuous_subtypeVal⟩
 
 private theorem realSpectrumId_apply_aux (a : A) (x : spectrum ℝ a) :
     realSpectrumId a x = ((x : ℝ) : ℂ) := rfl
@@ -153,7 +153,7 @@ spectrum of a self-adjoint element is real. -/
 theorem coe_realSpectrumHomeomorph {a : A} (ha : IsSelfAdjoint a) (z : spectrum ℂ a) :
     (((realSpectrumHomeomorph ha z : ℝ) : ℂ)) = (z : ℂ) := by
   rw [realSpectrumHomeomorph_apply_coe]
-  simpa using ha.spectrumRestricts.rightInvOn z.2
+  simpa using ha.spectrumRestricts.rightInvOn z.property
 
 private theorem realSpectrumHomeomorph_symm_apply_coe_aux {a : A} (ha : IsSelfAdjoint a)
     (x : spectrum ℝ a) : (((realSpectrumHomeomorph ha).symm x : ℂ)) = ((x : ℝ) : ℂ) := rfl

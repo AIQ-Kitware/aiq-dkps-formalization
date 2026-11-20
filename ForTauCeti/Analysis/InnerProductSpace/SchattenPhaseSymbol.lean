@@ -173,6 +173,6 @@ theorem schattenUnitaryGradient_eq_cfc_phaseExtension
   symm
   exact schattenPhaseExtension_eq_of_norm_eq_one p z
     (by simpa only [Metric.mem_sphere, dist_zero_right] using
-      spectrum.subset_circle_of_unitary U.2 hz)
+      spectrum.subset_circle_of_unitary U.property hz)
 
 end TauCeti

@@ -81,7 +81,7 @@ for the Borel calculus. -/
 theorem isBddMeasurable_comp_val {g : ℂ → ℂ} (hgm : Measurable g) {C : ℝ}
     (hgC : ∀ z, ‖g z‖ ≤ C) :
     IsBddMeasurable (a := a) fun w => g (w : ℂ) :=
-  ⟨hgm.comp measurable_subtype_coe,
+  ⟨hgm.comp measurable_subtypeVal,
     ⟨|C|, abs_nonneg C, fun w => (hgC (w : ℂ)).trans (le_abs_self C)⟩⟩
 
 /-- **Every bounded Borel symbol on the spectrum extends to `ℂ`**, keeping its bound: extend by
@@ -90,9 +90,9 @@ stated for symbols pulled back from `ℂ` without losing any generality. -/
 theorem exists_comp_val_eq {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) :
     ∃ g : ℂ → ℂ, Measurable g ∧ (∀ z, ‖g z‖ ≤ hf.chooseBound) ∧
       ∀ w : spectrum ℂ a, f w = g (w : ℂ) := by
-  have hmeas : MeasurableSet (spectrum ℂ a) := (spectrum.isCompact a).isClosed.measurableSet
+  have hmeas : MeasurableSet (spectrum ℂ a) := (spectrum.isCompact ℂ a).isClosed.measurableSet
   have hemb : MeasurableEmbedding ((↑) : spectrum ℂ a → ℂ) :=
-    MeasurableEmbedding.subtype_coe hmeas
+    MeasurableEmbedding.subtypeVal hmeas
   refine ⟨Function.extend Subtype.val f fun _ => 0,
     hemb.measurable_extend hf.measurable measurable_const, ?_, ?_⟩
   · intro z
@@ -119,10 +119,10 @@ theorem integral_comp_val_diagMeasure_of_intertwines (ha : IsStarNormal a) (e : 
   have hb : IsStarNormal b := isStarNormal_of_intertwines ha e he
   have h1 := integral_map (μ := (cfcHom hb).representationDiagMeasure (e ξ)) (φ := (Subtype.val :
     spectrum ℂ b → ℂ))
-    measurable_subtype_coe.aemeasurable (f := g) hgm.aestronglyMeasurable
+    measurable_subtypeVal.aemeasurable (f := g) hgm.aestronglyMeasurable
   have h2 := integral_map (μ := (cfcHom ha).representationDiagMeasure ξ) (φ := (Subtype.val :
     spectrum ℂ a → ℂ))
-    measurable_subtype_coe.aemeasurable (f := g) hgm.aestronglyMeasurable
+    measurable_subtypeVal.aemeasurable (f := g) hgm.aestronglyMeasurable
   rw [← h1, ← h2, map_val_diagMeasure_eq_of_intertwines ha e he ξ]
 
 /-- The polarised diagonal integrals of a symbol pulled back from `ℂ` are carried along by a

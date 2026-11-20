@@ -70,11 +70,8 @@ spectrum without any of the topology. -/
 private theorem abs_le_norm_of_mem_realSpectrum {G : Type v} [NormedAddCommGroup G]
     [InnerProductSpace 𝕜 G] [CompleteSpace G] {T : G →L[𝕜] G} {r : ℝ}
     (hr : r ∈ TauCeti.DavisKahan.Foundation.realSpectrum T) :
-    |r| ≤ ‖T‖ * ‖(1 : G →L[𝕜] G)‖ := by
-  -- `norm_le_norm_of_mem` would give the cleaner `‖T‖`, but it wants
-  -- `NormOneClass (G →L[𝕜] G)`, which fails when `G` is trivial.
-  have h : ‖((r : 𝕜))‖ ≤ ‖T‖ * ‖(1 : G →L[𝕜] G)‖ := spectrum.norm_le_norm_mul_of_mem hr
-  rwa [RCLike.norm_ofReal] at h
+    |r| ≤ ‖T‖ := by
+  simpa only [RCLike.norm_ofReal] using spectrum.norm_le_norm_of_mem hr
 
 /-- **A common cut between two ordered spectra**, over a general `RCLike` field.
 
@@ -104,14 +101,14 @@ private theorem exists_common_cut_of_orderedSeparation_rclike
     · refine ⟨sInf (TauCeti.DavisKahan.Foundation.realSpectrum A) - d,
         by simp [hB0], fun a ha => ?_⟩
       have hbdd : BddBelow (TauCeti.DavisKahan.Foundation.realSpectrum A) :=
-        ⟨-(‖A‖ * ‖(1 : F →L[𝕜] F)‖), fun r hr =>
+        ⟨-(‖A‖), fun r hr =>
           neg_le_of_abs_le (abs_le_norm_of_mem_realSpectrum hr)⟩
       have := csInf_le hbdd ha
       simp only [Set.mem_Ici]
       linarith
   · refine ⟨sSup (TauCeti.DavisKahan.Foundation.realSpectrum B),
       fun b hb => ?_, fun a ha => ?_⟩
-    · exact le_csSup ⟨‖B‖ * ‖(1 : E →L[𝕜] E)‖, fun r hr =>
+    · exact le_csSup ⟨‖B‖, fun r hr =>
         le_of_abs_le (abs_le_norm_of_mem_realSpectrum hr)⟩ hb
     · have hsup : sSup (TauCeti.DavisKahan.Foundation.realSpectrum B) ≤ a - d :=
         csSup_le hBne fun b hb => by linarith [hkey b hb a ha]
@@ -142,13 +139,13 @@ theorem norm_sylvester_le_of_orderedSeparation_rclike
     (hEq : ContinuousLinearMap.sylvester A B X = C) :
     d * ‖X‖ ≤ ‖C‖ := by
   obtain ⟨c, hBc, hAc⟩ := exists_common_cut_of_orderedSeparation_rclike hsep
-  set β : ℝ := min (-(‖B‖ * ‖(1 : E →L[𝕜] E)‖) - 1) (c - 1) with hβ
+  set β : ℝ := min (-(‖B‖) - 1) (c - 1) with hβ
   have hβc : β ≤ c := (min_le_right _ _).trans (by linarith)
   have hgap : ExactSinTheta.IntervalExteriorGap A B β c d := by
     refine Or.inr ⟨fun r hr => ?_, fun r hr => ?_⟩
     · rw [boundedRealSpectrum_eq_realSpectrum] at hr
       have hup : r ≤ c := hBc hr
-      have hlow : -(‖B‖ * ‖(1 : E →L[𝕜] E)‖) ≤ r :=
+      have hlow : -(‖B‖) ≤ r :=
         neg_le_of_abs_le (abs_le_norm_of_mem_realSpectrum hr)
       exact ⟨le_trans (min_le_left _ _) (by linarith), hup⟩
     · rw [boundedRealSpectrum_eq_realSpectrum] at hr

@@ -292,14 +292,14 @@ theorem continuous_iInf_of_isCompact [FirstCountableTopology P]
     intro q
     refine (hK.bddBelow_image (hgcont q).continuousOn).mono ?_
     rintro _ ⟨x, rfl⟩
-    exact ⟨↑x, x.2, rfl⟩
+    exact ⟨↑x, x.property, rfl⟩
   -- The value `⨅ x ∈ K, g q x` is a lower bound, attained at any minimizer.
   have hVle : ∀ (q : P) (y : X), y ∈ K → (⨅ x : ↥K, g q ↑x) ≤ g q y :=
     fun q y hy => ciInf_le (hbdd q) ⟨y, hy⟩
   have hval : ∀ (q : P) (xq : X), xq ∈ K → IsMinOn (g q) K xq →
       (⨅ x : ↥K, g q ↑x) = g q xq := by
     intro q xq hxqK hmin
-    exact le_antisymm (hVle q xq hxqK) (le_ciInf fun x => (isMinOn_iff.mp hmin) ↑x x.2)
+    exact le_antisymm (hVle q xq hxqK) (le_ciInf fun x => (isMinOn_iff.mp hmin) ↑x x.property)
   -- Sequential continuity (`P` is a sequential space).
   rw [continuous_iff_seqContinuous]
   intro p p₀ hp
@@ -611,7 +611,7 @@ theorem eventually_iInf_lt_of_lt_iInf
   obtain ⟨y, hyK, hymin⟩ := hK₀.exists_isMinOn hK₀ne hgcont.continuousOn
   have hyval : (⨅ x : ↥(K p₀), g p₀ ↑x) = g p₀ y :=
     le_antisymm (ciInf_le (hbdd p₀) ⟨y, hyK⟩)
-      (le_ciInf fun x => (isMinOn_iff.mp hymin) ↑x x.2)
+      (le_ciInf fun x => (isMinOn_iff.mp hymin) ↑x x.property)
   -- Feed the gap `b - V p₀` to the lower-hemicontinuity bound.
   have hε : 0 < b - g p₀ y := by rw [hyval] at hb; linarith
   filter_upwards [eventually_iInf_lt_of_lowerHemicontinuousAt hKl hg hbdd hyK hε]
@@ -648,7 +648,7 @@ theorem eventually_lt_iInf_of_iInf_lt
   have hxval : ∀ k, g (q k) (x k) = ⨅ y : ↥(K (q k)), g (q k) ↑y := by
     intro k
     have : Nonempty ↥(K (q k)) := (hKne (q k)).to_subtype
-    exact le_antisymm (le_ciInf fun y => (isMinOn_iff.mp (hxmin k)) ↑y y.2)
+    exact le_antisymm (le_ciInf fun y => (isMinOn_iff.mp (hxmin k)) ↑y y.property)
       (ciInf_le (hbdd (q k)) ⟨x k, hxK k⟩)
   -- Extract a convergent subsequence with feasible limit.
   obtain ⟨φ, hφmono, x₀, hx₀K, hx₀tend⟩ :=
@@ -726,7 +726,7 @@ theorem upperHemicontinuousAt_isMinOn_of_hemicontinuousAt
   have hval : ∀ n, g (p n) (c n) = ⨅ y : ↥(K (p n)), g (p n) ↑y := by
     intro n
     have : Nonempty ↥(K (p n)) := (hKne (p n)).to_subtype
-    exact le_antisymm (le_ciInf fun y => (isMinOn_iff.mp (hc n).2) ↑y y.2)
+    exact le_antisymm (le_ciInf fun y => (isMinOn_iff.mp (hc n).2) ↑y y.property)
       (ciInf_le (hbdd (p n)) ⟨c n, hcK n⟩)
   -- Two limits of the same sequence: joint continuity, and the value theorem.
   have hL : Tendsto (fun n => g (p n) (c n)) atTop (𝓝 (g p₀ c₀)) :=

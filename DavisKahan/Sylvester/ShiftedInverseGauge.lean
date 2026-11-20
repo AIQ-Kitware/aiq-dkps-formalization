@@ -82,7 +82,7 @@ theorem exists_bounded_shift_extension
     rw [hrange]
     exact hBdense
   have hui : IsUniformInducing ((B.domain.subtypeL : B.domain →L[𝕜] F)) :=
-    isometry_subtype_coe.isUniformInducing
+    isometry_subtypeVal.isUniformInducing
   refine ⟨f.extend (B.domain.subtypeL), ?_, ?_⟩
   · have h1 : ‖f.extend (B.domain.subtypeL)‖ ≤ ((1 : NNReal) : ℝ) * ‖f‖ := by
       refine ContinuousLinearMap.opNorm_extend_le f hdense fun x => ?_

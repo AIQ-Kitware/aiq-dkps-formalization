@@ -235,14 +235,15 @@ theorem continuousOn_resolventOneForm
     complex_continuousOn_resolventOperator_of_distance
       A Γ.selfAdjoint Γ.image Γ.spectralMargin Γ.spectralMargin_pos hsep
   let L : (H →L[ℂ] H) →L[ℂ] (ℂ →L[ℂ] (H →L[ℂ] H)) :=
-    ContinuousLinearMap.smulRightL ℂ ℂ (H →L[ℂ] H)
+    ContinuousLinearMap.smulRightL ℂ ℂ ℂ ℂ (H →L[ℂ] H)
       (1 : ℂ →L[ℂ] ℂ)
   have hcomp : ContinuousOn (fun z ↦ L (resolventOperator A z)) Γ.image :=
     L.continuous.continuousOn.comp hres (fun _ _ ↦ Set.mem_univ _)
   refine hcomp.congr ?_
   intro z hz
-  change L (resolventOperator A z) = resolventOneForm A z
-  rfl
+  -- The continuous scalar-multiplication map evaluates to the resolvent one-form.
+  ext v
+  simp [L, resolventOneForm_apply]
 
 /-- The operator-valued resolvent one-form is Bochner curve integrable around
 a proof-carrying separating contour. -/

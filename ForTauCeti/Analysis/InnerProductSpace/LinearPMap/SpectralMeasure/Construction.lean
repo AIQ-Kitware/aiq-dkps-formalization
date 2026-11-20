@@ -154,7 +154,7 @@ omit [CompleteSpace H] in
 /-- The inverse Cayley relabelling is measurable.  Measurability, not continuity, is all that is
 available and all that is needed: the map is genuinely singular at `w = 1`. -/
 theorem measurable_cayleyInv (A : H →ₗ.[ℂ] H) : Measurable (cayleyInv A) := by
-  exact Complex.measurable_inverseCayleyCoord.comp measurable_subtype_coe
+  exact Complex.measurable_inverseCayleyCoord.comp measurable_subtypeVal
 
 /-- **The spectral measure of an unbounded self-adjoint operator.**
 
@@ -182,7 +182,7 @@ theorem diagMeasure_cayley_preimage_one (ξ : H) :
   set U := A.cayley with hUdef
   set hU := hA.isStarNormal_cayley with hUn
   set S : Set (_root_.spectrum ℂ U) := (Subtype.val : _root_.spectrum ℂ U → ℂ) ⁻¹' {1} with hSdef
-  have hS : MeasurableSet S := measurable_subtype_coe (measurableSet_singleton 1)
+  have hS : MeasurableSet S := measurable_subtypeVal (measurableSet_singleton 1)
   set ind : _root_.spectrum ℂ U → ℂ := S.indicator (fun _ => (1 : ℂ)) with hind
   have hindb : BorelCalculus.IsBddMeasurable ind :=
     BorelCalculus.isBddMeasurable_indicator (a := U) hS
@@ -283,7 +283,7 @@ continuous rather than merely measurable. -/
 theorem cayleyDenom_ne_zero (w : _root_.spectrum ℂ (A.cayley)) :
     (Complex.I - z) + (Complex.I + z) * (w : ℂ) ≠ 0 :=
   cayley_denom_ne_zero hz
-    (spectrum.norm_eq_one_of_unitary (hA.cayley_mem_unitary) w.2)
+    (spectrum.norm_eq_one_of_unitary (hA.cayley_mem_unitary) w.property)
 
 /-- The symbol of `1 - (z + i) R(-i)`, up to the factor `2i`. -/
 noncomputable def cayleyDenomCM (A : H →ₗ.[ℂ] H) : C(_root_.spectrum ℂ (A.cayley), ℂ) :=
@@ -443,7 +443,7 @@ theorem spectralPVM_resolvent_formula (hzr : z ∈ resolventSet A) (ξ : H) :
   filter_upwards [hae] with w hw
   have hw1 : (w : ℂ) ≠ 1 := hw
   have hnorm : ‖(w : ℂ)‖ = 1 :=
-    spectrum.norm_eq_one_of_unitary (hA.cayley_mem_unitary) w.2
+    spectrum.norm_eq_one_of_unitary (hA.cayley_mem_unitary) w.property
   have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
   have hd' : (w : ℂ) - 1 ≠ 0 := sub_ne_zero.mpr hw1
   have hden := cayleyDenom_ne_zero hA hz w
@@ -730,16 +730,16 @@ noncomputable def specRestrict : specRange hA B hB →ₗ.[ℂ] specRange hA B h
   domain := A.domain.comap (specRange hA B hB).subtype
   toFun :=
     { toFun := fun x =>
-        ⟨A ⟨((x : specRange hA B hB) : H), x.2⟩,
-          apply_mem_specRange hA B hB (x : specRange hA B hB).2⟩
+        ⟨A ⟨((x : specRange hA B hB) : H), x.property⟩,
+          apply_mem_specRange hA B hB (x : specRange hA B hB).property⟩
       map_add' := fun x y => by
         apply Subtype.ext
-        change (A ⟨_, (x + y).2⟩ : H) = ((A ⟨_, x.2⟩ : H) + (A ⟨_, y.2⟩ : H))
+        change (A ⟨_, (x + y).property⟩ : H) = ((A ⟨_, x.property⟩ : H) + (A ⟨_, y.property⟩ : H))
         rw [← _root_.LinearPMap.map_add]
         exact congrArg _ (Subtype.ext rfl)
       map_smul' := fun c x => by
         apply Subtype.ext
-        change (A ⟨_, (c • x).2⟩ : H) = (c • (A ⟨_, x.2⟩ : H))
+        change (A ⟨_, (c • x).property⟩ : H) = (c • (A ⟨_, x.property⟩ : H))
         rw [← _root_.LinearPMap.map_smul]
         exact congrArg _ (Subtype.ext rfl) }
 
@@ -749,7 +749,7 @@ noncomputable def specRestrict : specRange hA B hB →ₗ.[ℂ] specRange hA B h
 /-- The spectral restriction acts as `A` on the underlying vector. -/
 @[simp] theorem specRestrict_apply (x : (specRestrict hA B hB).domain) :
     ((specRestrict hA B hB x : specRange hA B hB) : H)
-      = A ⟨((x : specRange hA B hB) : H), x.2⟩ := (rfl)
+      = A ⟨((x : specRange hA B hB) : H), x.property⟩ := (rfl)
 /-- The restriction of `A` to a spectral range is symmetric on its domain, inherited from
 self-adjointness of `A`. -/
 theorem isFormalAdjoint_specRestrict :
@@ -758,7 +758,8 @@ theorem isFormalAdjoint_specRestrict :
   have hsym : A.IsFormalAdjoint A := by
     have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
     rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
-  have := hsym ⟨((x : specRange hA B hB) : H), x.2⟩ ⟨((y : specRange hA B hB) : H), y.2⟩
+  have := hsym ⟨((x : specRange hA B hB) : H), x.property⟩
+    ⟨((y : specRange hA B hB) : H), y.property⟩
   simpa only [Submodule.coe_inner, specRestrict_apply] using this
 
 /-- Every vector of the spectral range is a resolvent image *inside* the
@@ -771,7 +772,7 @@ theorem exists_specRestrict_resolvent {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ r
   have hxK : x ∈ specRange hA B hB := by
     rw [mem_specRange_iff, hx, specProjection_resolvent_apply' hA hz hzr]
     congr 1
-    exact (mem_specRange_iff hA B hB _).mp φ.2
+    exact (mem_specRange_iff hA B hB _).mp φ.property
   have hxdom : x ∈ A.domain := resolvent_mem_domain hzr (φ : H)
   refine ⟨⟨⟨x, hxK⟩, hxdom⟩, ?_⟩
   apply Subtype.ext
@@ -792,7 +793,7 @@ theorem dense_specRestrict_domain :
     specProjection_mem_domain hA B hB ⟨y, hyd⟩
   refine ⟨⟨specProjection hA B hB y, hyK⟩, ?_, hydom⟩
   have hfix : specProjection hA B hB (φ : H) = (φ : H) :=
-    (mem_specRange_iff hA B hB _).mp φ.2
+    (mem_specRange_iff hA B hB _).mp φ.property
   have hnorm : ‖specProjection hA B hB y - (φ : H)‖ ≤ ‖y - (φ : H)‖ := by
     conv_lhs => rw [← hfix]
     rw [← map_sub]

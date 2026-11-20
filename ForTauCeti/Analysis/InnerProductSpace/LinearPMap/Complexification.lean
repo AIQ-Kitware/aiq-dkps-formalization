@@ -399,7 +399,7 @@ theorem realSpectrum_complexifyReal (A : E →ₗ.[ℝ] E) :
 private theorem continuous_complexifyRealOfRealDomain
     (A : E →ₗ.[ℝ] E) :
     Continuous (complexifyRealOfRealDomain A) :=
-  ((ofReal (E := E)).continuous.comp continuous_subtype_val).subtype_mk _
+  ((ofReal (E := E)).continuous.comp continuous_subtypeVal).subtype_mk _
 
 /-- The embedded imaginary-domain map is continuous. -/
 private theorem continuous_complexifyRealOfImaginaryDomain
@@ -407,20 +407,20 @@ private theorem continuous_complexifyRealOfImaginaryDomain
     Continuous (complexifyRealOfImaginaryDomain A) := by
   have h : Continuous fun x : A.domain => Complex.I • (ofReal (x : E) : Eℂ) :=
     (continuous_const_smul (Complex.I : ℂ)).comp
-      ((ofReal (E := E)).continuous.comp continuous_subtype_val)
+      ((ofReal (E := E)).continuous.comp continuous_subtypeVal)
   exact h.subtype_mk _
 
 /-- The real coordinate of the complexified domain is continuous. -/
 private theorem continuous_complexificationDomainRe
     (A : E →ₗ.[ℝ] E) :
     Continuous (complexificationDomainRe A) :=
-  (continuous_re_source.comp continuous_subtype_val).subtype_mk _
+  (continuous_re_source.comp continuous_subtypeVal).subtype_mk _
 
 /-- The imaginary coordinate of the complexified domain is continuous. -/
 private theorem continuous_complexificationDomainIm
     (A : E →ₗ.[ℝ] E) :
     Continuous (complexificationDomainIm A) :=
-  (continuous_im_source.comp continuous_subtype_val).subtype_mk _
+  (continuous_im_source.comp continuous_subtypeVal).subtype_mk _
 
 /-- Real part of a complex inner product against a real-copy vector. -/
 private theorem inner_ofReal_right_re (z : Eℂ) (v : E) :

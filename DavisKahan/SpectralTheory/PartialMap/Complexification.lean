@@ -528,7 +528,7 @@ through the `WithLp` wrapper or the subtype, so this is proved by hand. -/
 private theorem continuous_ofRealDomain
     (A : E →ₗ.[ℝ] E) :
     Continuous (ofRealDomain A) :=
-  ((ofReal (E := E)).continuous.comp continuous_subtype_val).subtype_mk _
+  ((ofReal (E := E)).continuous.comp continuous_subtypeVal).subtype_mk _
 
 omit [CompleteSpace E] in
 /-- The imaginary embedding of the domain is continuous. -/
@@ -537,7 +537,7 @@ private theorem continuous_ofImaginaryDomain
     Continuous (ofImaginaryDomain A) := by
   have h : Continuous fun x : A.domain => Complex.I • (ofReal (x : E) : Eℂ) :=
     (continuous_const_smul (Complex.I : ℂ)).comp
-      ((ofReal (E := E)).continuous.comp continuous_subtype_val)
+      ((ofReal (E := E)).continuous.comp continuous_subtypeVal)
   exact h.subtype_mk _
 
 omit [CompleteSpace E] in
@@ -545,14 +545,14 @@ omit [CompleteSpace E] in
 private theorem continuous_domainRe
     (A : E →ₗ.[ℝ] E) :
     Continuous (domainRe A) :=
-  (continuous_re.comp continuous_subtype_val).subtype_mk _
+  (continuous_re.comp continuous_subtypeVal).subtype_mk _
 
 omit [CompleteSpace E] in
 /-- The imaginary coordinate of the complexified domain is continuous. -/
 private theorem continuous_domainIm
     (A : E →ₗ.[ℝ] E) :
     Continuous (domainIm A) :=
-  (continuous_im.comp continuous_subtype_val).subtype_mk _
+  (continuous_im.comp continuous_subtypeVal).subtype_mk _
 
 omit [CompleteSpace E] in
 /-- Real part of a complex inner product against a real-copy vector. -/

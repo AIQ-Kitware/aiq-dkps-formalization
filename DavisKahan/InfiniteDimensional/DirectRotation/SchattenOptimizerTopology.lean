@@ -152,8 +152,8 @@ theorem exists_schatten_finite_cutoff_optimizer_homeomorph
       invFun := fun U => ⟨⟨U.val, htail U⟩, U.property⟩
       left_inv := fun _ => rfl
       right_inv := fun _ => rfl
-      continuous_toFun := (continuous_subtype_val.comp continuous_subtype_val).subtype_mk _
-      continuous_invFun := (continuous_subtype_val.subtype_mk _).subtype_mk _ }
+      continuous_toFun := (continuous_subtypeVal.comp continuous_subtypeVal).subtype_mk _
+      continuous_invFun := (continuous_subtypeVal.subtype_mk _).subtype_mk _ }
   let e := (e₀.subtype hiff).trans flatten
   exact ⟨hdim, e, fun V x => hhead V.val x, fun V => (e₀ V.val).property,
     fun V W => hnorm V.val W.val⟩

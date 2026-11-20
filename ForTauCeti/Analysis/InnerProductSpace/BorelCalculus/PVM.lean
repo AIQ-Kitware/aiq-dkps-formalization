@@ -199,7 +199,7 @@ omit [CompleteSpace H] in
 /-- The real-part relabelling of the spectrum is measurable, which is what lets a PVM on `ℝ` be
 pushed forward from one on the spectrum. -/
 theorem measurable_reCoord : Measurable (reCoord (T := T)) :=
-  Complex.measurable_re.comp measurable_subtype_coe
+  Complex.measurable_re.comp measurable_subtypeVal
 
 /-- **The spectral measure of a bounded self-adjoint operator**, indexed along
 the real part of its spectrum. -/
@@ -218,7 +218,7 @@ theorem continuous_reCoord : Continuous (reCoord (T := T)) := by
   have hcoord : reCoord (T := T) = fun w : spectrum ℂ T => (w : ℂ).re :=
     funext reCoord_apply
   rw [hcoord]
-  exact Complex.continuous_re.comp continuous_subtype_val
+  exact Complex.continuous_re.comp continuous_subtypeVal
 
 /-- The projections of `boundedPVM` are the Borel calculus of band indicators.  Rewrite
 form for consumers outside this module, where the definition bodies are not exposed. -/

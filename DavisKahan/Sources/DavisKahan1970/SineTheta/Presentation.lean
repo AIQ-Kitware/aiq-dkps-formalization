@@ -305,17 +305,10 @@ theorem spectrum_sourceDirectedSineModulus_subset_Icc
   intro x hx
   refine ⟨spectrum_nonneg_of_nonneg
     (ContinuousLinearMap.modulus_nonneg (sourceDirectedSineBlock E₀ F₀)) hx, ?_⟩
-  have hone : ‖(1 : F →L[𝕜] F)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
-  have habs : ‖x‖ ≤
-      ‖sourceDirectedSineModulus E₀ F₀‖ * ‖(1 : F →L[𝕜] F)‖ :=
-    spectrum.norm_le_norm_mul_of_mem hx
+  have habs : ‖x‖ ≤ ‖sourceDirectedSineModulus E₀ F₀‖ := spectrum.norm_le_norm_of_mem hx
   rw [Real.norm_eq_abs] at habs
-  refine (le_abs_self x).trans (habs.trans ?_)
-  calc
-    ‖sourceDirectedSineModulus E₀ F₀‖ * ‖(1 : F →L[𝕜] F)‖ ≤ 1 * 1 :=
-      mul_le_mul (norm_sourceDirectedSineModulus_le_one E₀ F₀ hE₀ hF₀)
-        hone (norm_nonneg _) zero_le_one
-    _ = 1 := by ring
+  exact (le_abs_self x).trans
+    (habs.trans (norm_sourceDirectedSineModulus_le_one E₀ F₀ hE₀ hF₀))
 
 /-- Applying sine to the source-directed angle recovers exactly the modulus of
 the rectangular complementary-projection block.  This is the bridge used by

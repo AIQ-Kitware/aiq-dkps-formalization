@@ -261,17 +261,10 @@ private theorem spectrum_sourceDirectedAngle_lt_pi_div_two
   have hs0 : 0 ≤ s :=
     spectrum_nonneg_of_nonneg
       (ContinuousLinearMap.modulus_nonneg (coordinateSine Z V)) hs
-  have hnorm : |s| ≤ ‖M‖ * ‖(1 : Z →L[ℂ] Z)‖ :=
-    spectrum.norm_le_norm_mul_of_mem hs
-  have hone : ‖(1 : Z →L[ℂ] Z)‖ ≤ 1 := ContinuousLinearMap.norm_id_le
+  have hnorm : |s| ≤ ‖M‖ := by
+    simpa only [Real.norm_eq_abs] using spectrum.norm_le_norm_of_mem hs
   have hslt : s < 1 := by
-    have habs : |s| ≤ ‖M‖ := by
-      refine hnorm.trans ?_
-      calc
-        ‖M‖ * ‖(1 : Z →L[ℂ] Z)‖ ≤ ‖M‖ * 1 :=
-          mul_le_mul_of_nonneg_left hone (norm_nonneg _)
-        _ = ‖M‖ := mul_one _
-    have hsle : s ≤ ‖M‖ := (le_abs_self s).trans habs
+    have hsle := (le_abs_self s).trans hnorm
     linarith
   exact ⟨Real.arcsin_nonneg.mpr hs0, Real.arcsin_lt_pi_div_two.mpr hslt⟩
 
