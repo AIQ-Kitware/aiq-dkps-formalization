@@ -6659,6 +6659,86 @@
       "upstream_pr": "https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/630",
       "integration_commit": "40822675c0a7f156b9534f0f95edf0087bed8475",
       "migration_note": "Retire both forwarding proof engines; direct native multiplication rewrites use the reverse equality orientation. Native star theorem has the same arbitrary complete RCLike Hilbert scope; native multiplication is broader. Preserve the genuine block-unitarity consequence and Schatten variation mathematics. Direct proof descent from DKPS is not disclosed/established."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator; SpectralMeasure; SpectralGapInverse",
+      "source_declarations": [
+        "TauCeti.LinearPMap.specCutOp",
+        "TauCeti.LinearPMap.norm_specCutOp_le",
+        "TauCeti.LinearPMap.specCutOp_apply",
+        "TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded",
+        "TauCeti.LinearPMap.borelCalculus_mem_domain_of_coord_mul",
+        "TauCeti.LinearPMap.gapInverse",
+        "TauCeti.LinearPMap.norm_gapInverse_apply_le",
+        "TauCeti.LinearPMap.apply_gapInverse"
+      ],
+      "original_source_anchor": "797408205:ForTauCeti/Analysis/InnerProductSpace/LinearPMap/{SpectralCutOperator.lean:51-81,SpectralMeasure.lean:335-343,SpectralGapInverse.lean:122-306}",
+      "authors_license": "Jon Crall, Claude Opus 5, Kitware 2026, Apache-2.0; gap reciprocal idea adapted from Adam Bornemann / Spectra 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63, Apache-2.0; native adaptation OpenAI gpt-6.1-sol",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Bounded",
+      "final_declarations": [
+        "IsSelfAdjoint.mem_graph_integral_spectralPVM",
+        "LinearPMap.spectralCut",
+        "IsSelfAdjoint.spectralCut_eq_integral",
+        "IsSelfAdjoint.norm_spectralCut_le",
+        "IsSelfAdjoint.mem_graph_spectralCut",
+        "LinearPMap.spectralGapInverse",
+        "IsSelfAdjoint.spectralGapInverse_eq_integral",
+        "IsSelfAdjoint.norm_spectralGapInverse_le",
+        "IsSelfAdjoint.norm_spectralGapInverse_apply_le",
+        "IsSelfAdjoint.mem_graph_spectralGapInverse"
+      ],
+      "status": "prepared-upstream-port-not-accepted",
+      "upstream_pr": null,
+      "prepared_branch": "port-sa-e36-e40-spectral-blocks",
+      "prepared_head": "f42b581302",
+      "roadmap_targets": [
+        "SA-E36",
+        "SA-E37",
+        "SA-E38",
+        "SA-E39",
+        "SA-E40"
+      ],
+      "migration_note": "Independent branch based on accepted 8794ab329bb60340fa690a2902cf995f0571721b. Native PVM and bounded integral replace donor proof plumbing; actual domains and vector-measure gap scope preserved, arbitrary complete complex Hilbert spaces including zero/nonseparable. Local donors retained pending acceptance. No new accepted census count."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.Fourier.Hardy.OppositeShifts",
+      "source_declarations": [
+        "TauCeti.ToeplitzOppositeShifts.matrixSymbol",
+        "TauCeti.ToeplitzOppositeShifts.det_matrixSymbol",
+        "TauCeti.ToeplitzOppositeShifts.windingNumber_det_matrixSymbol",
+        "TauCeti.ToeplitzOppositeShifts.symbol",
+        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_symbol",
+        "TauCeti.ToeplitzOppositeShifts.isFredholm",
+        "TauCeti.ToeplitzOppositeShifts.index_eq_zero",
+        "TauCeti.ToeplitzOppositeShifts.not_isUnit",
+        "TauCeti.ToeplitzOppositeShifts.sectionMatrix",
+        "TauCeti.ToeplitzOppositeShifts.det_sectionMatrix"
+      ],
+      "original_source_anchor": "ForTauCeti/Analysis/Fourier/Hardy/OppositeShifts.lean (introduced with this record)",
+      "authors_license": "Jon Crall, OpenAI gpt-6.1-sol; Kitware 2026, Apache-2.0. New proof of the standard opposite-shift example, mathematical reference Böttcher–Silbermann. No pre-existing DKPS donor claimed.",
+      "final_tauceti_module": "TauCeti.Examples.Analysis.Fourier.Hardy.OppositeShifts",
+      "final_declarations": [
+        "TauCeti.ToeplitzOppositeShifts.matrixSymbol",
+        "TauCeti.ToeplitzOppositeShifts.matrixSymbol_apply",
+        "TauCeti.ToeplitzOppositeShifts.det_matrixSymbol",
+        "TauCeti.ToeplitzOppositeShifts.windingNumber_det_matrixSymbol",
+        "TauCeti.ToeplitzOppositeShifts.symbol",
+        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_symbol",
+        "TauCeti.ToeplitzOppositeShifts.isFredholm",
+        "TauCeti.ToeplitzOppositeShifts.index_eq_zero",
+        "TauCeti.ToeplitzOppositeShifts.apply_second_constant",
+        "TauCeti.ToeplitzOppositeShifts.not_isUnit",
+        "TauCeti.ToeplitzOppositeShifts.sectionMatrix",
+        "TauCeti.ToeplitzOppositeShifts.sectionMatrix_apply",
+        "TauCeti.ToeplitzOppositeShifts.det_sectionMatrix"
+      ],
+      "status": "local-donor-prepared-upstream-not-accepted",
+      "upstream_pr": null,
+      "prepared_branch": "port-toeplitz-opposite-shifts",
+      "roadmap_targets": [
+        "ToeplitzOperators Layer 6, §6.1: diag(z,zbar) counterexample (partial compound TOEP-T6)"
+      ],
+      "migration_note": "Concrete rank-two complex symbol with native PiLp block Hardy carrier; determinant/winding, Fredholm index, noninvertibility and all finite compression matrices. Depends only on accepted scalar shifts and binary products, not open general finite-product or quotient-stability PRs. Full default and Challenge builds pass. No whole-milestone or accepted credit."
     }
   ]
 }

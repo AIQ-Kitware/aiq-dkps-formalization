@@ -1,5 +1,40 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 20 prepared spectral-block port and new Toeplitz example
+
+The existing spectral-cut and vector-gap-inverse donors now have a compiled,
+independent upstream branch, `port-sa-e36-e40-spectral-blocks`, head `f42b581302`.
+It implements official SelfAdjointSpectralTheory SA-E36–E40 using the accepted
+`LinearPMap.spectralPVM` and bounded integral. A shared graph-membership theorem
+supplies actual domain membership and coordinate action; no second PVM or
+unbounded spectral-integral carrier is added. Native code is in
+`LinearPMap/ProjValMeasure/Bounded.lean`; the old owning PVM file moves unchanged
+to `ProjValMeasure/Basic.lean`. The cut and gap ports stay together to avoid
+duplicating their shared domain argument or stacking unmerged submissions.
+Original donors are `SpectralCutOperator.lean`, supporting `SpectralMeasure.lean`,
+and `SpectralGapInverse.lean` at DKPS `797408205`; preserve Jon Crall/Claude Opus 5,
+Kitware Apache-2.0 and the latter's Adam Bornemann/Spectra reciprocal-cutoff ancestry.
+This branch is prepared, not accepted; the existing local donor layer is not
+claimed retired by an unmerged branch.
+
+The new `ForTauCeti/Analysis/Fourier/Hardy/OppositeShifts.lean` proves the current
+ToeplitzOperators Layer 6 §6.1 counterexample: the continuous symbol diag(z,z̄)
+has determinant one and winding zero; its native block Toeplitz operator is
+Fredholm of index zero but not invertible, and every pure finite block section
+has determinant zero. Scalar entries connect the continuous matrix symbol to
+the operator-valued L∞ symbol. This is new mathematics developed in this campaign,
+not a claim that a corresponding DKPS theorem existed before this request.
+It uses accepted scalar-shift and binary Fredholm-product APIs and does not
+depend on open #42005 or #42772. It supplies only this worked example, not all
+Toeplitz Layer 6 or the general finite-section stability theorem.
+
+The new donor passed focused compilation, the full default build (22278 jobs),
+and Challenge (20176 jobs), without warnings. The spectral branch's focused
+build, 15 environment linters, standard-axiom checks, external exact-scope
+probes and changed-source style pass. The shared campaign's November 20 packets
+will carry the committed branches and host-only submission commands. No new
+accepted roadmap credit or proof descent from unrelated contributors is inferred.
+
 ## November 20 whole-roadmap frontier clarification
 
 The #30736 reuse follow-up is pushed at
