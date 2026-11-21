@@ -195,6 +195,11 @@ independent controls:
   The appendix uses those same records. Verified historical or contemporary
   alternatives are recorded with a named source, exact glyph, and source
   location; the Davis--Kahan comparison table is generated from those records.
+  The Lean sine-theta correspondence is also declared there, scoped to one
+  verified Lean theorem rather than presented as a global naming convention.
+  Its paper table and the notation census are generated from those records.
+  `scripts/rename_symbol_keys.py` performs the four role-based semantic-key
+  renames idempotently, without renaming Lean binders or changing glyphs.
   Native PDF
   tooltips have no navigation action and require viewer support. They cover `\sym` and `\like`
   expressions in text, equations, captions, and the three live PGF figures.

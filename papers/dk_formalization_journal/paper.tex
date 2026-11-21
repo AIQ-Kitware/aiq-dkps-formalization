@@ -413,7 +413,7 @@ For finite-dimensional subspaces $\sym{Usource}$ and $\sym{Vtarget}$ of equal di
 isometries $\sym{Xframe}$ and $\sym{Yframe}$ with those ranges.
 The singular values of the overlap matrix are the principal cosines:
 \begin{equation}
-  \sym{SingularValueS}(\like{Xframe}{\symglyph{Xframe}^*}\sym{Yframe})=\cos\like{theta}{\symglyph{theta}_j},
+  \sym{SingularValue}(\like{Xframe}{\symglyph{Xframe}^*}\sym{Yframe})=\cos\like{theta}{\symglyph{theta}_j},
   \qquad 0\leq\like{theta}{\symglyph{theta}_j}\leq\frac{\sym{PiConstant}}{2}.
   \label{eq:history-principal-cosines}
 \end{equation}
@@ -726,14 +726,14 @@ orthonormal eigenbasis is nonunique.
 Write $\sym{A}$ for a reference operator and $\sym{Acurrent}=\sym{A}+\sym{H}$ for the perturbed
 ambient operator. We use this convention in the sine-theta statement below.
 Let $\sym{E0}$ embed a trial-coordinate Hilbert space into the ambient space
-isometrically, and let $\sym{A0}$ be a self-adjoint operator on those coordinates.
+isometrically, and let $\sym{TrialOperator}$ be a self-adjoint operator on those coordinates.
 The residual is the bounded operator agreeing, where defined, with
 \begin{equation}
- \sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{A0}.
+ \sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{TrialOperator}.
  \label{eq:history-residual}
 \end{equation}
 If $\sym{R}=0$, applying $\sym{Acurrent}$ after the embedding agrees with applying
-$\sym{A0}$ before it: the trial subspace is invariant and $\sym{A0}$ represents its
+$\sym{TrialOperator}$ before it: the trial subspace is invariant and $\sym{TrialOperator}$ represents its
 operator. For $\sym{R}\ne0$, the residual measures the failure of this identity.  A second isometric coordinate map for the
 desired exact spectral space defines its orthogonal projection $\sym{Pexact}$.
 The positive operator
@@ -768,7 +768,7 @@ Let $\sym{F1}$ give isometric coordinates for the exact complementary
 spectral subspace, with self-adjoint block $\sym{Lambda1}$.  Writing
 $\sym{X}=\like{F1}{\symglyph{F1}^*}\sym{E0}$ converts the residual identity into a Sylvester equation:
 \begin{equation}
- \sym{Lambda1}\sym{X}-\sym{X}\sym{A0}=\like{F1}{\symglyph{F1}^*}\sym{R}
+ \sym{Lambda1}\sym{X}-\sym{X}\sym{TrialOperator}=\like{F1}{\symglyph{F1}^*}\sym{R}
  \label{eq:history-sylvester}
 \end{equation}
 on the appropriate domain. Thus $\sym{X}$ represents the trial frame's
@@ -805,15 +805,15 @@ the role of symmetric gauge functions of singular values
 operator ideals; Ky Fan's 1951 eigenvalue and singular-value inequalities
 provided the partial-sum comparisons underlying majorization
 arguments \citep{schatten1950crossspaces,fan1951maximum,bhatia1997matrix}.
-The singular values $\sym{SingularValueS}(Z)$ are the nonnegative square roots of the
+The singular values $\sym{SingularValue}(Z)$ are the nonnegative square roots of the
 eigenvalues of $Z^*Z$, ordered decreasingly. They record the stretching
 factors of the matrix $Z$. For $1\leq p<\infty$, the Schatten norms include
 \begin{equation}
- \|Z\|_{S_p}=\left(\sum_j \sym{SingularValueS}(Z)^p\right)^{1/p},
+ \|Z\|_{S_p}=\left(\sum_j \sym{SingularValue}(Z)^p\right)^{1/p},
  \qquad
- \|Z\|_{S_1}=\sum_j \sym{SingularValueS}(Z),
+ \|Z\|_{S_1}=\sum_j \sym{SingularValue}(Z),
  \quad
- \|Z\|_{S_2}=\left(\sum_j \sym{SingularValueS}(Z)^2\right)^{1/2}.
+ \|Z\|_{S_2}=\left(\sum_j \sym{SingularValue}(Z)^2\right)^{1/2}.
  \label{eq:history-schatten}
 \end{equation}
 An operator ideal is a linear class of operators closed under multiplication
@@ -867,7 +867,7 @@ correction and for the trace-norm matching problem in
 Davis's papers of 1963 and 1965 and the Davis--Kahan announcement of 1969
 preceded the extended 1970 treatment
 \citep{davis1963rotation,davis1965rotation,daviskahan1969bounds,davis1970rotation}.
-For the sine-theta estimate, let $\sym{R}=\sym{Acurrent} \sym{E0}-\sym{E0}\sym{A0}$ be the residual
+For the sine-theta estimate, let $\sym{R}=\sym{Acurrent} \sym{E0}-\sym{E0}\sym{TrialOperator}$ be the residual
 and $\sym{Pexact}$ the desired exact spectral projection. The operator $(\sym{Identity}-\sym{Pexact})\sym{E0}$
 extracts the part of a trial vector outside that spectral subspace. In
 isometric coordinates $\sym{F1}$ for the complementary space, this component is
@@ -1012,33 +1012,33 @@ The symbol $\sym{Acurrent}$ corresponds to $\sym{A}+\sym{H}$ in the source.
 For a unit trial vector $\sym{v}$ and an approximate eigenvalue $\sym{mu}$, the residual
 is $\sym{Acurrent}\sym{v}-\sym{mu} \sym{v}$. An isometric coordinate map $\sym{E0}$ generalizes
 this construction to a trial subspace: its range consists of the candidate
-approximate vectors, and a self-adjoint operator $\sym{A0}$ represents their
+approximate vectors, and a self-adjoint operator $\sym{TrialOperator}$ represents their
 approximate dynamics. For a finite-dimensional Rayleigh--Ritz choice,
-$\sym{A0}=\like{E0}{\symglyph{E0}^*}\sym{Acurrent}\sym{E0}$. The theorem allows other self-adjoint trial
-operators as well. We write $\sym{A0}$ for the general trial operator,
+$\sym{TrialOperator}=\like{E0}{\symglyph{E0}^*}\sym{Acurrent}\sym{E0}$. The theorem allows other self-adjoint trial
+operators as well. We write $\sym{TrialOperator}$ for the general trial operator,
 reserving $\sym{ReferenceBlock0}$ for the reference spectral block that
 Davis and Kahan also call $A_0$.
 
-Let $\sym{Eambient}$ be the ambient Hilbert space.  Let $\sym{A0}$ be a self-adjoint operator on a
-trial-coordinate space $\sym{Ftrial}$, and let
+Let $\sym{AmbientHilbertSpace}$ be the ambient Hilbert space.  Let $\sym{TrialOperator}$ be a self-adjoint operator on a
+trial-coordinate space $\sym{TrialCoordinateSpace}$, and let
 \[
-  \sym{E0}:\sym{Ftrial}\to \sym{Eambient}
+  \sym{E0}:\sym{TrialCoordinateSpace}\to \sym{AmbientHilbertSpace}
 \]
 be an isometric coordinate map for the trial subspace.  The residual compares
 applying the ambient operator after embedding with applying the trial operator
 before embedding:
 \begin{equation}
-  \sym{R} = \sym{Acurrent}\sym{E0}-\sym{E0}\sym{A0}.
+  \sym{R} = \sym{Acurrent}\sym{E0}-\sym{E0}\sym{TrialOperator}.
   \label{eq:residual}
 \end{equation}
 When the operators are unbounded, \cref{eq:residual} is asserted on
-$\DKDom(\sym{A0})$ and $\sym{R}$ is the bounded residual that agrees there.
+$\DKDom(\sym{TrialOperator})$ and $\sym{R}$ is the bounded residual that agrees there.
 The Lean predicate \texttt{IsTrialResidual} packages the isometry, the required
 domain inclusion, and this residual identity.
 
-Let $\sym{F0}:\sym{Hexact}\to \sym{Eambient}$ be isometric coordinates for the desired exact spectral
-subspace and let $\sym{F1}:\sym{Gunwanted}\to \sym{Eambient}$ be isometric coordinates for its orthogonal
-complement.  A self-adjoint operator $\sym{Lambda1}$ on $\sym{Gunwanted}$ describes the
+Let $\sym{F0}:\sym{ExactCoordinateSpace}\to \sym{AmbientHilbertSpace}$ be isometric coordinates for the desired exact spectral
+subspace and let $\sym{F1}:\sym{ComplementaryCoordinateSpace}\to \sym{AmbientHilbertSpace}$ be isometric coordinates for its orthogonal
+complement.  A self-adjoint operator $\sym{Lambda1}$ on $\sym{ComplementaryCoordinateSpace}$ describes the
 complementary spectral block through
 \[
   \sym{Acurrent}\sym{F1} = \sym{F1}\sym{Lambda1}
@@ -1055,7 +1055,7 @@ and states orthogonality and completeness through
 
 \subsubsection{The sine operator and its rectangular representative}
 
-Here $\sym{Theta0}$ acts on $\sym{Ftrial}$; under the isometry
+Here $\sym{Theta0}$ acts on $\sym{TrialCoordinateSpace}$; under the isometry
 $\sym{E0}$ it represents the directed angle operator on the trial subspace
 introduced in \cref{sec:related-two-projections}. If
 $\sym{Pexact}=\sym{F0}\like{F0}{\symglyph{F0}^*}$ is the orthogonal projection onto the desired exact subspace, then
@@ -1069,8 +1069,8 @@ The analytic proof uses the rectangular complementary block
   \sym{S}=(\sym{Identity}-\sym{Pexact})\sym{E0}.
   \label{eq:rectangular-sine}
 \end{equation}
-The theorem uses the positive sine on the trial-coordinate space.  The rectangular block has codomain $\sym{Eambient}$, while the
-positive sine has codomain $\sym{Ftrial}$.  Their relationship is
+The theorem uses the positive sine on the trial-coordinate space.  The rectangular block has codomain $\sym{AmbientHilbertSpace}$, while the
+positive sine has codomain $\sym{TrialCoordinateSpace}$.  Their relationship is
 \[
   \sym{S}^*\sym{S}
   = \like{E0}{\symglyph{E0}^*}(\sym{Identity}-\sym{Pexact})\sym{E0}
@@ -1099,45 +1099,45 @@ This equality transfers an estimate for the complementary block $\sym{S}$ to the
 Fix $\sym{delta}>0$. There are two geometric forms of separation.
 \emph{Interval/exterior separation:} for some real
 $\sym{betaEndpoint}\leq\sym{alphaEndpoint}$, one of the two spectra
-$\sym{SpectrumSymbol}(\sym{A0})$ and $\sym{SpectrumSymbol}(\sym{Lambda1})$ lies in $[\sym{betaEndpoint},\sym{alphaEndpoint}]$ and the other
+$\sym{SpectrumSymbol}(\sym{TrialOperator})$ and $\sym{SpectrumSymbol}(\sym{Lambda1})$ lies in $[\sym{betaEndpoint},\sym{alphaEndpoint}]$ and the other
 lies in
 \[
  (-\infty,\sym{betaEndpoint}-\sym{delta}]\;\cup\;[\sym{alphaEndpoint}+\sym{delta},\infty).
 \]
 \emph{Ordered separation:} for some real $b$, the operator forms satisfy either
 \[
- \sym{A0}\geq (b+\sym{delta})\sym{Identity},\quad \sym{Lambda1}\leq bI,
+ \sym{TrialOperator}\geq (b+\sym{delta})\sym{Identity},\quad \sym{Lambda1}\leq bI,
  \qquad\text{or}\qquad
- \sym{A0}\leq bI,\quad \sym{Lambda1}\geq (b+\sym{delta})\sym{Identity}.
+ \sym{TrialOperator}\leq bI,\quad \sym{Lambda1}\geq (b+\sym{delta})\sym{Identity}.
 \]
 Each form inequality is asserted on the domain of the corresponding operator;
-for example, $\sym{A0}\geq aI$ means
-$\langle \sym{A0}x,x\rangle\geq a\|x\|^2$ for every
-$x\in\DKDom(\sym{A0})$. For self-adjoint operators, the source's ordered
+for example, $\sym{TrialOperator}\geq aI$ means
+$\langle \sym{TrialOperator}x,x\rangle\geq a\|x\|^2$ for every
+$x\in\DKDom(\sym{TrialOperator})$. For self-adjoint operators, the source's ordered
 hypotheses on half-infinite spectral intervals, such as $(-\infty,b]$ and
 $[b+\sym{delta},\infty)$, imply these form bounds. These cases are included
 in the source's unbounded sine theorem
 \citep[Section~6, discussion of unbounded operators]{davis1970rotation}.
-Write $\sym{SineGap}(\sym{A0},\sym{Lambda1})$ for their union.
+Write $\sym{SineGap}(\sym{TrialOperator},\sym{Lambda1})$ for their union.
 The Lean predicate \texttt{FormBoundedSylvesterGap} has three cases:
 the finite-interval alternative, which includes either spectral order,
 and the two ordered form alternatives.
 
 Both blocks may be unbounded in an ordered configuration. For instance,
 on $\ell^2(\mathbb N_{\geq1})$, take diagonal operators
-$\sym{A0}e_n=(n+\sym{delta})e_n$ and $\sym{Lambda1}e_n=-ne_n$, on the domains where their
+$\sym{TrialOperator}e_n=(n+\sym{delta})e_n$ and $\sym{Lambda1}e_n=-ne_n$, on the domains where their
 images are square summable. They satisfy the first ordered configuration
 with $b=0$, while neither spectrum lies in a finite interval. This example
 explains why retaining the half-infinite alternatives changes the theorem's
 applicability.
 
 For the unbounded trial configuration, the source assumes that
-$\sym{Acurrent}\sym{E0}$ and $\sym{E0}\sym{A0}$ have a common dense domain.
+$\sym{Acurrent}\sym{E0}$ and $\sym{E0}\sym{TrialOperator}$ have a common dense domain.
 Since $\sym{E0}$ is everywhere defined, this gives
 \[
- \DKDom(\sym{Acurrent}\sym{E0})=\DKDom(\sym{A0}),
+ \DKDom(\sym{Acurrent}\sym{E0})=\DKDom(\sym{TrialOperator}),
  \qquad
- \sym{E0}(\DKDom(\sym{A0}))\subseteq\DKDom(\sym{Acurrent}).
+ \sym{E0}(\DKDom(\sym{TrialOperator}))\subseteq\DKDom(\sym{Acurrent}).
 \]
 The residual agrees with the difference on this domain and extends to a
 bounded operator. The formal predicate \texttt{IsTrialResidual} includes the
@@ -1160,7 +1160,7 @@ operator norm on bounded operators is another. For an ideal norm, both the
 residual and the positive sine must belong to its domain.
 
 In two dimensions, take a one-dimensional trial frame $\sym{E0}(x)=x\sym{v}$ with
-$\|\sym{v}\|=1$. A scalar trial operator $\sym{A0}=\sym{rho}$ gives
+$\|\sym{v}\|=1$. A scalar trial operator $\sym{TrialOperator}=\sym{rho}$ gives
 $\sym{r}=\sym{R}(1)=\sym{Acurrent}\sym{v}-\sym{rho}\sym{v}$.
 Choosing $\sym{rho}=\langle\sym{v},\sym{Acurrent}\sym{v}\rangle$
 makes $\sym{rho}\sym{v}$ the orthogonal projection of
@@ -1177,9 +1177,9 @@ $\sym{RealField}^2$ (the rank-one case). With $\sym{E0}(x)=x\sym{v}$, the residu
 operator satisfies $\sym{R}(x)=x\sym{r}$, where
 $\sym{r}=\sym{Acurrent}\sym{v}-\sym{rho}\sym{v}$.
 For a higher-dimensional trial space,
-$\sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{A0}$ assigns a residual vector
+$\sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{TrialOperator}$ assigns a residual vector
 to each trial-coordinate vector. In a finite-dimensional eigenbasis of
-$\sym{A0}$, its columns are the individual eigenpair residuals.
+$\sym{TrialOperator}$, its columns are the individual eigenpair residuals.
 The exact frames in the drawing are
 $\sym{F0}(h)=(h,0)$ and $\sym{F1}(g)=(0,g)$, with
 $\sym{Pexact}=\sym{F0}\like{F0}{\symglyph{F0}^*}$ and $\sym{PexactPerp}=\sym{Identity}-\sym{Pexact}$.
@@ -1201,11 +1201,11 @@ defined above.
 
 \begin{theorem}[Sine-theta estimate]
 \label{thm:sine-theta}
-Let the scalar field be $\sym{RealField}$ or $\sym{ComplexField}$, let $\sym{Eambient}$ be separable,
-and let $\sym{Acurrent}$, $\sym{A0}$, and $\sym{Lambda1}$ be self-adjoint operators on the
+Let the scalar field be $\sym{RealField}$ or $\sym{ComplexField}$, let $\sym{AmbientHilbertSpace}$ be separable,
+and let $\sym{Acurrent}$, $\sym{TrialOperator}$, and $\sym{Lambda1}$ be self-adjoint operators on the
 Hilbert spaces above. Suppose the isometries, domain inclusions, residual
 identity, exact complementary decomposition, and the separation condition
-$\sym{SineGap}(\sym{A0},\sym{Lambda1})$ of
+$\sym{SineGap}(\sym{TrialOperator},\sym{Lambda1})$ of
 Section~\ref{sec:gap-geometry} hold. Let $\sym{NormN}$ be a normalized symmetric
 operator-ideal norm. Whenever $\sym{sinTheta0}$ and $\sym{R}$ belong to its domain,
 \begin{equation}
@@ -1217,12 +1217,14 @@ operator-ideal norm. Whenever $\sym{sinTheta0}$ and $\sym{R}$ belong to its doma
 \begin{lstlisting}[style=leanpaper,
   caption={Lean signature for the sine-theta estimate. The surrounding
   scalar-field and Hilbert-space context is omitted.
-  Lean's \texttt{A} denotes $\sym{Acurrent}$;
-  its carrier types \texttt{E}, \texttt{F}, \texttt{G}, \texttt{H} denote
-  $\sym{Eambient}$, $\sym{Ftrial}$, $\sym{Gunwanted}$, $\sym{Hexact}$, respectively,
-  and \texttt{K} is the scalar field. Thus \texttt{H} here is a coordinate
-  space, while $\sym{H}$ in the prose is the perturbation. The positive trial-coordinate
-  sine is \texttt{sourceDirectedSinThetaOperator E0 F0};
+  This is a readable ASCII transcription of the Lean declaration,
+  rather than a verbatim copy of its Unicode binders and operator arrows.
+  The paper-to-Lean names are registered centrally and displayed in
+  Table~\ref{tab:paper-lean-notation}. In particular, the Lean binder
+  displayed here as \texttt{A0} names our $\sym{TrialOperator}$, not the
+  distinct reference block $\sym{ReferenceBlock0}$.
+  The positive trial-coordinate sine is
+  \texttt{sourceDirectedSinThetaOperator E0 F0};
   \texttt{FormBoundedSylvesterGap} encodes the interval/exterior and ordered
   half-infinite separation hypotheses described above.},
   label={lst:dk-sintheta-headline}]
@@ -1252,7 +1254,7 @@ theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
 The two ideal-membership hypotheses ensure that the norm values in the
 conclusion are finite. The gap predicate includes the finite
 interval/exterior case and both ordered cases. In the ordered cases,
-$\sym{A0}$ and $\sym{Lambda1}$ may both be unbounded.
+$\sym{TrialOperator}$ and $\sym{Lambda1}$ may both be unbounded.
 
 \subsubsection{Why the Sylvester estimate gives the angle bound}
 
@@ -1261,23 +1263,23 @@ $\sym{S}=\sym{F1}\sym{X}$, and multiplication by the isometry $\sym{F1}$ preserv
 singular-value gauges. Self-adjointness, the domain hypotheses, and the
 residual identity yield the Sylvester relation
 \[
- \sym{Lambda1} \sym{X}-\sym{X}\sym{A0}=\like{F1}{\symglyph{F1}^*}\sym{R}
+ \sym{Lambda1} \sym{X}-\sym{X}\sym{TrialOperator}=\like{F1}{\symglyph{F1}^*}\sym{R}
 \]
-on $\DKDom(\sym{A0})$, with the left side represented by the bounded
+on $\DKDom(\sym{TrialOperator})$, with the left side represented by the bounded
 right side. The separated Sylvester estimate gives
 \[
  \sym{delta} \sym{NormN}(\sym{X})\leq \sym{NormN}(\like{F1}{\symglyph{F1}^*}\sym{R})\leq \sym{NormN}(\sym{R}).
 \]
 Combining this with $\sym{NormN}(\sym{X})=\sym{NormN}(\sym{S})=\sym{NormN}(\sym{sinTheta0})$ proves the conclusion.
 For unbounded operators, deriving the domain compatibility for $\sym{X}$ is part of
-the argument. The displayed relation holds on $\DKDom(\sym{A0})$ and
+the argument. The displayed relation holds on $\DKDom(\sym{TrialOperator})$ and
 has a bounded right side. The specified interval/exterior or ordered
 spectral positions give the factor $1/\sym{delta}$, with no additional
 multiplicative constant.
 
 For a one-dimensional trial space, take
 $\sym{Acurrent}=\sym{DiagonalOperator}(0,\sym{delta})$, the trial scalar
-$\sym{A0}=0$, and the unit vector
+$\sym{TrialOperator}=0$, and the unit vector
 $\like{v}{\symglyph{v}_{\symglyph{theta}}}=(\cos\sym{theta},\sin\sym{theta})$.
 Choose the desired exact subspace $\sym{SpanOperator}\{(1,0)\}$;
 its orthogonal complement is $\sym{SpanOperator}\{(0,1)\}$, on which
@@ -1459,7 +1461,7 @@ spectral-separation hypotheses, the estimate has the form
 \[
  \sym{delta} \sym{NormN}(\sym{X})\leq \sym{NormN}(\sym{SylvesterLeft}\sym{X}-\sym{X}\sym{SylvesterRight}).
 \]
-The sine-theta proof uses $\sym{SylvesterLeft}=\sym{Lambda1}$, $\sym{SylvesterRight}=\sym{A0}$, and
+The sine-theta proof uses $\sym{SylvesterLeft}=\sym{Lambda1}$, $\sym{SylvesterRight}=\sym{TrialOperator}$, and
 $\sym{X}=\like{F1}{\symglyph{F1}^*}\sym{E0}$. Other perturbation estimates choose related
 projection blocks for $\sym{X}$.
 

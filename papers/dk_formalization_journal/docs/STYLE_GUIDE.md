@@ -68,7 +68,18 @@ parentheses. Prefer “trace norm” consistently in this article. Use “range�
 
 Use one convention for the original and perturbed operators across the
 historical account and theorem statements, with an explicit translation to the
-source where needed. Keep the symbol colors aligned with the Manim role
+source where needed.
+Use calligraphic lettering for the ambient Hilbert space ($\mathcal H$),
+trial-coordinate space ($\mathcal F$), exact-coordinate space
+($\mathcal F_{\mathrm{ex}}$), and unwanted exact-coordinate space
+($\mathcal G$); retain $E_0,F_0,F_1$ for their isometric embeddings.
+Reserve $A_0,A_1$ for reference blocks and $A_{\mathrm{trial}}$ for the
+general trial operator. Matching trace costs use $c_i,c_{ij}$; their
+savings/edge weights use $w_{ij}$. Use $\sigma_j(T)$ for singular values.
+The feasible transporter set is $\mathcal W$, not the trial space
+$\mathcal F$. The separation predicate $\mathcal G_\delta$ is a distinct
+object whose subscript must be retained.
+ Keep the symbol colors aligned with the Manim role
 palette. Use $P_{\mathrm{ex}}$ for the exact projection in the sine theorem,
 $P,Q$ for transport projections, $R$ for a residual, and $D$ for a direct
 rotation. Distinguish the planar $\pi/2$-rotation matrix $J_0$ from the source reflection
@@ -93,6 +104,9 @@ Davis--Kahan comparison table is generated from these verified records.
 Neutral ink is appropriate for auxiliary objects. The printed notation table
 selects the symbols readers need for reference; it need not list every proof
 parameter. Keep definitions and notation changes in the shared registry.
+Record paper-to-Lean correspondences by mathematical role and theorem scope;
+Lean carrier letters and Unicode binders need not match the paper glyphs.
+Do not conflate the Lean trial binder `A_0` with the paper reference block $A_0$.
 
 Use the same term for the same object throughout an argument. Repeating
 “block”, “transporter”, or “edge weight” helps readers track the proof.

@@ -32,14 +32,14 @@ notation and definitions also apply in monochrome.
 \bottomrule
 \endfoot
 $\sym{A},\sym{H},\sym{Acurrent}$ & Reference operator, additive perturbation, and perturbed operator $\sym{Acurrent}=\sym{A}+\sym{H}$.\\
-$\sym{Eambient};\ \sym{Ftrial},\sym{Hexact},\sym{Gunwanted}$ & Ambient, trial-coordinate, exact-coordinate, and complementary-coordinate Hilbert spaces.\\
-$\sym{E0}:\sym{Ftrial}\to\sym{Eambient}$ & \dkSymbolDescription{E0}\\
-$\sym{A0}$ & Self-adjoint trial operator. A Rayleigh--Ritz choice is $\sym{A0}=\like{E0}{\symglyph{E0}^*}\sym{Acurrent}\sym{E0}$.\\
+$\sym{AmbientHilbertSpace},\ \sym{TrialCoordinateSpace},\ \sym{ExactCoordinateSpace},\ \sym{ComplementaryCoordinateSpace}$ & Ambient, trial-coordinate, exact-coordinate, and complementary-coordinate Hilbert spaces.\\
+$\sym{E0}:\sym{TrialCoordinateSpace}\to\sym{AmbientHilbertSpace}$ & \dkSymbolDescription{E0}\\
+$\sym{TrialOperator}$ & Self-adjoint trial operator. A Rayleigh--Ritz choice is $\sym{TrialOperator}=\like{E0}{\symglyph{E0}^*}\sym{Acurrent}\sym{E0}$.\\
 $\sym{ReferenceBlock0},\sym{ReferenceBlock1}$ & Reference blocks on $\DKRange(\sym{Psource})$ and $\DKKernel(\sym{Psource})$ in Section~\ref{sec:foundations}.\\
-$\sym{F0}:\sym{Hexact}\to\sym{Eambient}$ & \dkSymbolDescription{F0}\\
-$\sym{F1}:\sym{Gunwanted}\to\sym{Eambient}$ & \dkSymbolDescription{F1}\\
+$\sym{F0}:\sym{ExactCoordinateSpace}\to\sym{AmbientHilbertSpace}$ & \dkSymbolDescription{F0}\\
+$\sym{F1}:\sym{ComplementaryCoordinateSpace}\to\sym{AmbientHilbertSpace}$ & \dkSymbolDescription{F1}\\
 $\sym{Lambda1}$ & Complementary self-adjoint block, with $\sym{Acurrent}\sym{F1}=\sym{F1}\sym{Lambda1}$ on its domain.\\
-$\sym{SpectralMeasure},\sym{SpectralSet}$ & Projection-valued measure and Borel spectral set; $\sym{SpectralMeasure}(\sym{SpectralSet})$ is the corresponding spectral projection. These symbols differ from the ambient space $\sym{Eambient}$ and complementary block $\sym{S}$.\\
+$\sym{SpectralMeasure},\sym{SpectralSet}$ & Projection-valued measure and Borel spectral set; $\sym{SpectralMeasure}(\sym{SpectralSet})$ is the corresponding spectral projection. These symbols differ from the ambient space $\sym{AmbientHilbertSpace}$ and complementary block $\sym{S}$.\\
 $\sym{Pexact}=\sym{F0}\like{F0}{\symglyph{F0}^*}$ & Projection onto the desired exact subspace in the sine-theta theorem.\\
 $\sym{Theta0},\sym{sinTheta0}$ & Trial-coordinate angle operator and its positive sine, with $\sym{sinTheta0}=(\sym{Identity}-\like{E0}{\symglyph{E0}^*}\sym{Pexact}\sym{E0})^{1/2}$.\\
 $\sym{Theta}=\sym{DiagonalOperator}(\sym{Theta0},\sym{Theta1})$ & Full angle operator; $\sym{Theta1}$ compares the orthogonal complements. Its operator norm is the largest spectral angle.\\
@@ -48,7 +48,7 @@ $\{\sym{ZeroVector}\}$ & Zero subspace: the set containing only the zero vector.
 $\sym{S}=(\sym{Identity}-\sym{Pexact})\sym{E0}$ & Complementary block, with modulus $\dkModulus{\sym{S}}=\sym{sinTheta0}$.\\
 $\sym{X}=\like{F1}{\symglyph{F1}^*}\sym{E0}$ & Coordinates of the trial component in the unwanted space; $\sym{S}=\sym{F1}\sym{X}$.\\
 $\sym{SylvesterLeft},\sym{SylvesterRight},\sym{SylvesterRHS}$ & Generic left and right Sylvester coefficients and right side: $\sym{SylvesterLeft}\sym{X}-\sym{X}\sym{SylvesterRight}=\sym{SylvesterRHS}$. The historical equation writes the right coefficient as $\sym{HistoricalSylvesterRight}$.\\
-$\sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{A0}$ & Bounded residual agreeing with this difference on $\DKDom(\sym{A0})$.\\
+$\sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{TrialOperator}$ & Bounded residual agreeing with this difference on $\DKDom(\sym{TrialOperator})$.\\
 $\sym{delta}>0$ & \dkSymbolDescription{delta}\\
 $[\sym{betaEndpoint},\sym{alphaEndpoint}]$ & Interval in the interval/exterior gap hypothesis.\\
 $\DKRange(T),\DKKernel(T),\DKDom(T)$ & Range, kernel, and domain of an operator.\\
@@ -66,15 +66,15 @@ $\sym{CounterChordA},\sym{CounterChordB}$ & Displacement singular values $\sqrt{
 $\sym{Kdisplacement}=\sym{Identity}-\sym{Wcompetitor}$ & Full displacement operator in the failed Ky Fan comparison.\\
 $\sym{OmegaOne},\sym{OmegaTwo}$ & Principal-plane projections used to test that comparison.\\
 $\dkModulus{T}=(T^*T)^{1/2}$ & Positive modulus of an operator.\\
-$\sym{SingularValueS}(T)$ & Ordered singular values; approximation numbers provide the corresponding comparisons for bounded operators in Hilbert space.\\
+$\sym{SingularValue}(T)$ & Ordered singular values; approximation numbers provide the corresponding comparisons for bounded operators in Hilbert space.\\
 $\sym{NormN}(T)$ & \dkSymbolDescription{NormN}\\
 $\dkOperatorNorm{T}$ & Operator norm; in finite dimension, the largest singular value.\\
-$\dkFrobeniusNorm{T}$ & Frobenius norm, $\bigl(\sum_j \sym{SingularValueS}(T)^2\bigr)^{1/2}$.\\
-$\dkTraceNorm{T}$ & Trace norm, $\sum_j \sym{SingularValueS}(T)$.\\
+$\dkFrobeniusNorm{T}$ & Frobenius norm, $\bigl(\sum_j \sym{SingularValue}(T)^2\bigr)^{1/2}$.\\
+$\dkTraceNorm{T}$ & Trace norm, $\sum_j \sym{SingularValue}(T)$.\\
 $\dkKyFanNorm{T}{j}$ & Ky Fan norm, the sum of the $j$ largest singular values.\\
 $\sym{NormQ}\text{-norm}$ & A norm satisfying $\sym{NormN}(T)^2=\sym{NormM}(T^*T)$ for a unitarily invariant norm $\sym{NormM}$.\\
 $\sym{Matching},\like{SingletonCost}{\symglyph{SingletonCost}_i},\like{PairCost}{\symglyph{PairCost}_{ij}}$ & Matching of positive principal-angle labels, with singleton and paired costs in \cref{eq:nuclear-matching-costs}.\\
-$\sym{MatchingEdgeWeight};\ \like{TraceCost}{\symglyph{TraceCost}(M)}$ & Edge weight $s_i+s_j-e_{ij}$; total trace-norm displacement cost of the matching.\\
+$\sym{MatchingEdgeWeight};\ \like{TraceCost}{\symglyph{TraceCost}(M)}$ & Edge weight $\like{SingletonCost}{\symglyph{SingletonCost}_i}+\like{SingletonCost}{\symglyph{SingletonCost}_j}-\like{PairCost}{\symglyph{PairCost}_{ij}}$; total trace-norm displacement cost of the matching.\\
 \end{longtable}
 \endgroup
 
@@ -103,6 +103,44 @@ operators.  \texttt{N.Mem T} states that the ideal gauge associated with $\sym{N
 finite on $T$, and \texttt{N.gaugeReal T} is the corresponding real value.  The
 suffix \texttt{Real} refers to the codomain of the gauge and not to the scalar
 field.
+
+\subsection{Paper notation and Lean binder names}
+\label{app:paper-lean-notation}
+The following correspondence is for the particular sine-theta theorem
+in \Cref{lst:dk-sintheta-headline}, not a global naming rule for the Lean
+library. The Lean source is
+\texttt{DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean},
+the declaration \texttt{sinTheta\_unbounded\_formGap\_whereDefinedUIN\_rclike}.
+Lean's exact source uses Unicode subscripts and Greek letters (for example,
+its trial-operator binder is typeset here as $\mathtt{A_0}$). The listing
+in the main text uses ASCII transliterations and readable type names.
+In particular, the Lean binder $\mathtt{A_0}$ denotes the general
+$\sym{TrialOperator}$, while $\sym{ReferenceBlock0}$ is the separate
+reference spectral block and does not occur as a parameter of this theorem.
+The variable $\mathtt{H}$ is a coordinate-space carrier, not the
+perturbation $\sym{H}$. Lean's scalar-field type variable is rendered as \texttt{K} in the
+schematic listing (the source uses a blackboard-bold k).
+
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.11}
+\begin{longtable}{@{}>{\centering\arraybackslash}p{0.22\linewidth}>{\centering\arraybackslash}p{0.16\linewidth}>{\raggedright\arraybackslash}p{0.55\linewidth}@{}}
+\caption{Paper symbols and the corresponding Lean binders in the sine-theta declaration.}
+\label{tab:paper-lean-notation}\\
+\toprule
+This paper & Lean binder & Mathematical role \\
+\midrule
+\endfirsthead
+\toprule
+This paper & Lean binder & Mathematical role \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\dkLeanSineThetaRows
+\end{longtable}
+\endgroup
 
 \section{Formalized Davis--Kahan results}
 \label{app:dk-inventory}
@@ -214,7 +252,7 @@ in the main text.
 For real unitaries, spectral half-plane conditions refer to their
 complexifications.
 
-For perturbation results, $\sym{A0}$ is a self-adjoint trial operator.
+For perturbation results, $\sym{TrialOperator}$ is a self-adjoint trial operator.
 In a reducing decomposition of the reference operator $\sym{A}$, the
 source and complementary reference blocks are $\sym{ReferenceBlock0}$
 and $\sym{ReferenceBlock1}$. The trial operator may be chosen to equal the
@@ -223,7 +261,7 @@ The operators $\sym{Lambda0},\sym{Lambda1}$ are the exact blocks of
 $\sym{Acurrent}=\sym{A}+\sym{H}$.
 The maps $\sym{E0},\sym{F0}$ give source and target coordinates,
 $\sym{H0},\sym{H1}$ are the diagonal perturbation blocks, and
-$\sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{A0}$.
+$\sym{R}=\sym{Acurrent}\sym{E0}-\sym{E0}\sym{TrialOperator}$.
 Coordinate maps are isometries except in the two lower-frame rows.
 The exact frames have orthogonal ranges whose sum is the ambient space;
 reducing projections preserve operator domains.
@@ -272,10 +310,10 @@ This is the separation condition of Section~\ref{sec:gap-geometry}.
 \endlastfoot
 \multicolumn{3}{@{}l}{\textbf{Headline perturbation bounds}}\\*\addlinespace[3pt]
 \path{S2-sin-theta} &
- $\sym{SineGap}(\sym{A0},\sym{Lambda1})$. &
+ $\sym{SineGap}(\sym{TrialOperator},\sym{Lambda1})$. &
  $\sym{delta}\sym{NormN}(\sin\sym{Theta0})\le\sym{NormN}(\sym{R})$.\\\addlinespace
 \path{S2-tan-theta} &
- $\sym{OrderedSeparation}_{\sym{delta}}(\sym{A0},\sym{Lambda1})$;
+ $\sym{OrderedSeparation}_{\sym{delta}}(\sym{TrialOperator},\sym{Lambda1})$;
  Rayleigh--Ritz condition $\sym{H0}=0$. &
  $\sym{delta}\sym{NormN}(\tan\sym{Theta0})\le\sym{NormN}(\sym{R})$;
  $\sym{delta}\sym{NormN}(\tan\sym{Theta})\le\sym{NormN}(\sym{H})$.\\\addlinespace
@@ -287,7 +325,7 @@ This is the separation condition of Section~\ref{sec:gap-geometry}.
  $\sym{delta}\sym{NormN}(\sin(2\sym{Theta0}))\le2\sym{NormN}(\sym{R})$;
  $\sym{delta}\sym{NormN}(\sin(2\sym{Theta}))\le2\sym{NormN}(\sym{H})$.\\\addlinespace
 \path{S2-tan-two-theta} &
- $\sym{OrderedSeparation}_{\sym{delta}}(\sym{A0},\sym{A1})$;
+ $\sym{OrderedSeparation}_{\sym{delta}}(\sym{TrialOperator},\sym{A1})$;
  bounded $\sym{H}$, $\sym{H0}=\sym{H1}=0$. &
  $\sym{delta}\sym{NormN}(\tan(2\sym{Theta0}))\le2\sym{NormN}(\sym{R})$;
  $\sym{delta}\sym{NormN}(\tan(2\sym{Theta}))\le2\sym{NormN}(\sym{H})$.\\\addlinespace[5pt]
@@ -385,7 +423,7 @@ This is the separation condition of Section~\ref{sec:gap-geometry}.
  including unbounded $B,C$.\\\addlinespace
 \path{DK-5.1-lem} &
  Orthogonal projections $\sym{StrongApproxProjection}\to \sym{Identity}$ strongly; bounded $K$. &
- $\sym{SingularValueS}(K\sym{StrongApproxProjection})\to \sym{SingularValueS}(K)$ for each singular-value index $j$.\\\addlinespace[5pt]
+ $\sym{SingularValue}(K\sym{StrongApproxProjection})\to \sym{SingularValue}(K)$ for each singular-value index $j$.\\\addlinespace[5pt]
 \multicolumn{3}{@{}l}{\textbf{Generalized single-angle bounds}}\\*\addlinespace[3pt]
 \path{DK-6.1-lem} &
  Each diagonal block of $K$ is dominated by the corresponding block of
@@ -400,12 +438,12 @@ This is the separation condition of Section~\ref{sec:gap-geometry}.
 \path{DK-6.1-prop} &
  $\sym{A},\sym{Acurrent}$ have a common domain and bounded difference
  $\sym{H}$;
- both $\sym{SineGap}(\sym{A0},\sym{Lambda1})$ and
+ both $\sym{SineGap}(\sym{TrialOperator},\sym{Lambda1})$ and
  $\sym{SineGap}(\sym{A1},\sym{Lambda0})$. &
  $\sym{delta}\sym{NormN}(\sin\sym{Theta})\le\sym{NormN}(\sym{H})$.\\\addlinespace
 \path{DK-6.1-thm} &
  $\sym{E0}^*\sym{E0}\ge\sym{FrameLowerBoundEpsilon}^2\sym{Identity}$, $\sym{FrameLowerBoundEpsilon}>0$;
- $\sym{SineGap}(\sym{A0},\sym{Lambda1})$.
+ $\sym{SineGap}(\sym{TrialOperator},\sym{Lambda1})$.
  Source and target dimensions may differ. &
  $\sym{delta}\sym{FrameLowerBoundEpsilon}\sym{NormN}(\sin\sym{Theta0})
  \le\sym{NormN}(\sym{R})$.
@@ -413,7 +451,7 @@ This is the separation condition of Section~\ref{sec:gap-geometry}.
  $\sym{Psource}(\sym{Identity}-\sym{Qtarget})$.\\\addlinespace
 \path{DK-6.2-thm} &
  Same lower-frame condition; only
- $\sym{SpectralDistanceOperator}(\sym{SpectrumSymbol}(\sym{A0}),\sym{SpectrumSymbol}(\sym{Lambda1}))
+ $\sym{SpectralDistanceOperator}(\sym{SpectrumSymbol}(\sym{TrialOperator}),\sym{SpectrumSymbol}(\sym{Lambda1}))
  \ge\sym{delta}$. &
  $\sym{delta}\sym{FrameLowerBoundEpsilon}\|\sin\sym{Theta0}\|_{\mathrm{HS}}
  \le\|\sym{R}\|_{\mathrm{HS}}$.
@@ -422,15 +460,15 @@ This is the separation condition of Section~\ref{sec:gap-geometry}.
  \le\dkOperatorNorm{\sym{R}}\sqrt{\sym{RankOperator}\sym{R}}$.\\\addlinespace
 \path{DK-6.3-thm} &
  Isometric Rayleigh--Ritz trial data;
- $\sym{OrderedSeparation}_{\sym{delta}}(\sym{A0},\sym{Lambda1})$.
+ $\sym{OrderedSeparation}_{\sym{delta}}(\sym{TrialOperator},\sym{Lambda1})$.
  The source dimension may be smaller than the target dimension. &
  $\sym{delta}\sym{NormN}(\tan\sym{Theta0})
  \le\sym{NormN}(\sym{R})$.\\\addlinespace
 \path{DK-6.3-lem} &
  Bounded $K$; projections $\sym{CompressionProjectionImage},\sym{CompressionProjectionInput}$ of rank at most $n\ge1$;
  $K\sym{CompressionProjectionInput}=\sym{CompressionProjectionImage} K\sym{CompressionProjectionInput}$;
- $\sum_{j\le n}\sym{SingularValueS}(K\sym{CompressionProjectionInput})^2$\newline
- ${}>\sum_{j\le n}\sym{SingularValueS}(K)^2-\sym{CompressionTolerance}^2$, $\sym{CompressionTolerance}>0$. &
+ $\sum_{j\le n}\sym{SingularValue}(K\sym{CompressionProjectionInput})^2$\newline
+ ${}>\sum_{j\le n}\sym{SingularValue}(K)^2-\sym{CompressionTolerance}^2$, $\sym{CompressionTolerance}>0$. &
  $\dkOperatorNorm{\sym{CompressionProjectionImage} K(\sym{Identity}-\sym{CompressionProjectionInput})}<\sym{CompressionTolerance}$:
  a nearly maximizing finite-rank compression has small ``leakage''
  (i.e., the norm of this off-diagonal block is below $\sym{CompressionTolerance}$).\\\addlinespace[5pt]
@@ -468,7 +506,7 @@ This table compares our notation with the corresponding symbols of
 Davis and Kahan~\citep[especially \S1]{davis1970rotation}. The correspondences
 are by mathematical role, not just by letter. In the original, the reference
 block $A_0$ also serves as the residual's comparison operator. Here
-$A_{\mathrm{tr}}$ is a general trial operator, which need not equal that block.
+$\sym{TrialOperator}$ is a general trial operator, which need not equal that block.
 Our additional matching constructions have no direct counterpart in the source.
 
 \begingroup

@@ -6,25 +6,26 @@ The companion `NOTATION_OCCURRENCES.csv` records every detected occurrence with 
 
 ## Coverage and status
 
-- Semantic registry: **230 typed entries** (71 glossary, 159 local).
+- Semantic registry: **229 typed entries** (71 glossary, 158 local).
 - Documented source alternatives: **23** (21 from DK 1970), across 23 semantic keys.
-- Math regions scanned: **1185** (appendices.tex: 262, counterexample.tex: 137, figures/Fig1.pgf: 14, figures/Fig2.pgf: 54, figures/Fig3.pgf: 19, formalization_enabled_extension.tex: 295, paper.tex: 404).
-- Occurrence records: **8046**; category counts: registered-key=2480, standard-operator=1929, syntax=1384, raw-symbol=707, number=677, semantic-variant=327, registered-glyph=267, layout=195, registered-wrapper=80.
-- Registered references in math: **2747**, spanning **179 keys**.
-- Raw mathematical atoms: **707 occurrences**, **87 distinct printed TeX forms** (including indices/superscripts).
-- Derived semantic variants (`\like` or scripted `\sym`/`\symglyph`): **327 occurrences**, **117 distinct source forms**; these may still contain raw indices.
+- Scoped Lean sine-theta binder correspondences: **13** semantic keys.
+- Math regions scanned: **1191** (appendices.tex: 268, counterexample.tex: 137, figures/Fig1.pgf: 14, figures/Fig2.pgf: 54, figures/Fig3.pgf: 19, formalization_enabled_extension.tex: 295, paper.tex: 404).
+- Occurrence records: **8059**; category counts: registered-key=2487, standard-operator=1929, syntax=1384, raw-symbol=705, number=677, semantic-variant=330, registered-glyph=270, layout=197, registered-wrapper=80.
+- Registered references in math: **2757**, spanning **179 keys**.
+- Raw mathematical atoms: **705 occurrences**, **84 distinct printed TeX forms** (including indices/superscripts).
+- Derived semantic variants (`\like` or scripted `\sym`/`\symglyph`): **330 occurrences**, **117 distinct source forms**; these may still contain raw indices.
 - Raw commands needing classification: **0 occurrences**, **0 distinct commands**.
-- Raw forms exactly matching a registered glyph: **33** distinct forms; **54** have no exact match; all raw occurrences still bypass `\sym`.
+- Raw forms exactly matching a registered glyph: **31** distinct forms; **53** have no exact match; all raw occurrences still bypass `\sym`.
 - Scan errors: **0** (zero is necessary for lexical coverage).
 
 ### Source checksums (SHA-256)
 
-- `math_symbol_colors.tex`: `d077ad19750f1702a32337d53e8fcc21bbdaad0b523d9da0fa54f723772398d2`
-- `paper.tex`: `aec638b986b2b85e8c20ab03ecd8f96b2b6fc53af384b25ad52352e4f4285959`
+- `math_symbol_colors.tex`: `d71bc03ddc82da3763a847d0bad9a9dc954d61613ad9bb48edc62e568795985c`
+- `paper.tex`: `93760cbcbe74d7069f08c0710d55576a6fd03f2120863a9bc6ea42249d3299ac`
 - `figures/Fig1.pgf`: `6b343d6c4eb7d2b85df2e7f4de52d430a500dddfb66bf5a59e58b1f6c6294904`
-- `counterexample.tex`: `01efe243c9e92d77c902b8eedcd4300002881001f20230b9147a008cfd9dc075`
+- `counterexample.tex`: `b354bcfb6e1ac690ca5503a6e1ff187ce138cbc418abde548ba3101750d91839`
 - `formalization_enabled_extension.tex`: `eca9ae2205b42607205ee5fdca91a85d363b7647051c090ee8faeb5968eb6f13`
-- `appendices.tex`: `6cab64560b0c77e08d1aae94fef68ed77ddee203c2643bcf3843f6cf6b2e376d`
+- `appendices.tex`: `33f6e9a14363c87bc0bfa9562fa630953b47dabe050e95024e0d126c14857ece`
 - `figures/Fig2.pgf`: `e5d4ad6c9af0caaf788b8c9844d224375f9590c5975104069bc80209f32beb7d`
 - `figures/Fig3.pgf`: `7c368d9051a90d623c11232ff0511f5826db805c3baef2b8c17c301aa52de097`
 
@@ -34,7 +35,7 @@ The scanner encountered no unmatched math delimiters or malformed semantic wrapp
 
 | Source file | Math regions | Semantic uses | Raw atoms |
 |---|---:|---:|---:|
-| `appendices.tex` | 262 | 566 | 151 |
+| `appendices.tex` | 268 | 576 | 149 |
 | `counterexample.tex` | 137 | 416 | 62 |
 | `figures/Fig1.pgf` | 14 | 21 | 4 |
 | `figures/Fig2.pgf` | 54 | 81 | 30 |
@@ -51,30 +52,28 @@ This is the primary holistic table. Every glyph known to the central registry an
 | `(I-T)q` | `DisplacementVector` (local): Difference between a unit input and its image under the displayed orthogonal map. | 0 | — |
 | `0_2` | `ZeroMatrixTwo` (local): Two-by-two zero matrix. | 0 | — |
 | `A` | `A` (glossary): Reference self-adjoint operator before perturbation.<br>`Ablock` (local): Positive cosine-related block in the two-subspace decomposition.<br>`HistoricalSylvesterRight` (local): Right-hand coefficient A in the historical Sylvester equation. | 0 | — |
-| `A_0` | `ReferenceBlock0` (glossary): Reference operator restricted to the source subspace in Section 8. | 2 | `paper.tex:1020`, `appendices.tex:470` |
+| `A_0` | `ReferenceBlock0` (glossary): Reference operator restricted to the source subspace in Section 8. | 2 | `paper.tex:1020`, `appendices.tex:508` |
 | `A_1` | `A1` (local): Complementary block of the reference operator.<br>`ReferenceBlock1` (glossary): Reference operator restricted to the source complement in Section 8. | 0 | — |
-| `A_{\mathrm{tr}}` | `A0` (glossary): Self-adjoint operator on trial coordinates; its eigenvalues are the trial spectral values. | 1 | `appendices.tex:471` |
-| `B` | `B` (local): Off-diagonal perturbation or coupling block.<br>`SylvesterLeft` (glossary): Left coefficient of the Sylvester equation; corresponds to the unwanted spectral block.<br>`Bblock` (local): Off-diagonal block in the two-subspace decomposition.<br>`SkewDirection` (local): Skew-symmetric direction for a first variation of an orthogonal transporter. | 22 | `paper.tex:747`, `paper.tex:891`, `paper.tex:1157`, `appendices.tex:232` |
+| `A_{\mathrm{trial}}` | `TrialOperator` (glossary): Self-adjoint operator on trial coordinates; its eigenvalues are the trial spectral values. | 0 | — |
+| `B` | `B` (local): Off-diagonal perturbation or coupling block.<br>`SylvesterLeft` (glossary): Left coefficient of the Sylvester equation; corresponds to the unwanted spectral block.<br>`Bblock` (local): Off-diagonal block in the two-subspace decomposition.<br>`SkewDirection` (local): Skew-symmetric direction for a first variation of an orthogonal transporter. | 22 | `paper.tex:747`, `paper.tex:891`, `paper.tex:1157`, `appendices.tex:270` |
 | `B^*` | **UNREGISTERED** | 1 | `paper.tex:747` |
-| `B^{-1}` | **UNREGISTERED** | 1 | `appendices.tex:375` |
-| `C` | `SylvesterRight` (glossary): Right coefficient of the Sylvester equation; corresponds to the trial operator.<br>`Cblock` (local): Complementary or Sylvester block in the two-subspace decomposition.<br>`Cturn` (glossary): Planar rotation through twice the principal angle in the counterexample.<br>`PairCosineBlock` (local): Diagonal principal-cosine block.<br>`TraceCost` (glossary): Trace-norm displacement cost of the indicated orthogonal transporter or matching.<br>`HalmosCosineBlock` (local): Cosine block in the Halmos two-projection representation. | 18 | `paper.tex:891`, `appendices.tex:232`, `appendices.tex:234`, `appendices.tex:236` |
-| `C_0` | `SingletonBaseline` (local): Trace displacement when every angle uses its singleton transporter. | 1 | `appendices.tex:208` |
-| `C_0^2` | **UNREGISTERED** | 1 | `appendices.tex:312` |
-| `C_1` | `ComplementCosineBlock` (local): Cosine of the complementary angle block in the spectral-repulsion inequality. | 1 | `appendices.tex:208` |
-| `C_j` | **UNREGISTERED** | 1 | `appendices.tex:209` |
+| `B^{-1}` | **UNREGISTERED** | 1 | `appendices.tex:413` |
+| `C` | `SylvesterRight` (glossary): Right coefficient of the Sylvester equation; corresponds to the trial operator.<br>`Cblock` (local): Complementary or Sylvester block in the two-subspace decomposition.<br>`Cturn` (glossary): Planar rotation through twice the principal angle in the counterexample.<br>`PairCosineBlock` (local): Diagonal principal-cosine block.<br>`TraceCost` (glossary): Trace-norm displacement cost of the indicated orthogonal transporter or matching.<br>`HalmosCosineBlock` (local): Cosine block in the Halmos two-projection representation. | 18 | `paper.tex:891`, `appendices.tex:270`, `appendices.tex:272`, `appendices.tex:274` |
+| `C_0` | `SingletonBaseline` (local): Trace displacement when every angle uses its singleton transporter. | 1 | `appendices.tex:246` |
+| `C_0^2` | **UNREGISTERED** | 1 | `appendices.tex:350` |
+| `C_1` | `ComplementCosineBlock` (local): Cosine of the complementary angle block in the spectral-repulsion inequality. | 1 | `appendices.tex:246` |
+| `C_j` | **UNREGISTERED** | 1 | `appendices.tex:247` |
 | `C_p` | `MatchingPowerCost` (local): Total paired and singleton power cost of a matching. | 0 | — |
 | `D` | `Rrotation` (glossary): Canonical direct rotation carrying the source subspace onto the target.<br>`SourceDirectRotation` (local): Direct rotation, including the nonacute case in the source-result table.<br>`Dblock` (local): Auxiliary diagonal or block matrix in the counterexample.<br>`Dplanar` (local): Planar direct-rotation block.<br>`PairDirectRotation` (local): Direct rotation on the two principal planes. | 2 | `figures/Fig2.pgf:216`, `figures/Fig2.pgf:489` |
 | `D_0` | `CrossedSourceDefect` (glossary): Source directions perpendicular to the target subspace. | 0 | — |
 | `D_1` | `CrossedTargetDefect` (glossary): Target directions perpendicular to the source subspace. | 0 | — |
-| `E` | `Eambient` (glossary): Ambient Hilbert space containing the trial and exact subspaces.<br>`SpectralMeasure` (glossary): Projection-valued spectral measure of a self-adjoint operator.<br>`GradientPhaseProjection` (local): Projection onto the first phase space in a gradient-level space. | 0 | — |
+| `E` | `SpectralMeasure` (glossary): Projection-valued spectral measure of a self-adjoint operator.<br>`GradientPhaseProjection` (local): Projection onto the first phase space in a gradient-level space. | 0 | — |
 | `E_0` | `E0` (glossary): Isometric embedding of the trial subspace; its adjoint returns trial coordinates. | 0 | — |
 | `E_1` | `E1` (local): Isometric coordinates for the complementary trial subspace. | 0 | — |
-| `F` | `Ftrial` (glossary): Hilbert space of trial coordinates. | 0 | — |
 | `F^2` | **UNREGISTERED** | 1 | `formalization_enabled_extension.tex:266` |
 | `F_0` | `F0` (glossary): Isometric coordinates for the desired exact spectral subspace; star denotes the adjoint. | 0 | — |
 | `F_1` | `F1` (glossary): Isometric coordinates for the exact complementary subspace; star denotes the adjoint. | 0 | — |
-| `F_{\mathrm{ex}}` | `Hexact` (glossary): Hilbert space of coordinates for the desired exact spectral subspace. | 0 | — |
-| `G` | `Gunwanted` (glossary): Hilbert space of exact complementary coordinates.<br>`SpectralGradient` (local): Skew-symmetric spectral gradient of the displacement power sum in the matching proof. | 0 | — |
+| `G` | `SpectralGradient` (local): Skew-symmetric spectral gradient of the displacement power sum in the matching proof. | 0 | — |
 | `G_{01}` | `GradientOffDiagonal` (local): Complement-to-source block of the skew-symmetric gradient. | 0 | — |
 | `H` | `H` (glossary): Additive self-adjoint perturbation of the reference operator.<br>`Hreflection` (local): Planar reflection carrying the source line to the target. | 0 | — |
 | `H_0` | `H0` (local): Wanted diagonal block of the perturbation. | 0 | — |
@@ -88,9 +87,9 @@ This is the primary holistic table. Every glyph known to the central registry an
 | `J_{\mathrm{ang}}` | `AngleGenerator` (glossary): Skew angle generator in the direct-rotation result summaries. | 0 | — |
 | `J_{\mathrm{src}}` | `Jreflect` (glossary): Reflection equal to twice the source projection minus the identity. | 0 | — |
 | `K` | `MatchingSourceSubspace` (local): Source subspace K in the matching proof. | 36 | `formalization_enabled_extension.tex:127`, `formalization_enabled_extension.tex:135`, `formalization_enabled_extension.tex:144`, `formalization_enabled_extension.tex:155` |
-| `L` | `MatchingTargetSubspace` (local): Target subspace L in the matching proof. | 2 | `appendices.tex:392`, `appendices.tex:395` |
-| `M` | `NormM` (local): Auxiliary unitarily invariant norm used to define a Q-norm through the squared modulus.<br>`Matching` (glossary): Matching of positive principal-angle labels: each label is used in at most one pair.<br>`CounterMovingPlane` (glossary): Moving plane of the competing transporter: the range of W minus the identity. | 10 | `paper.tex:278`, `paper.tex:279`, `paper.tex:1350`, `paper.tex:1351` |
-| `M^\perp` | **UNREGISTERED** | 2 | `paper.tex:1351`, `paper.tex:1363` |
+| `L` | `MatchingTargetSubspace` (local): Target subspace L in the matching proof. | 2 | `appendices.tex:430`, `appendices.tex:433` |
+| `M` | `NormM` (local): Auxiliary unitarily invariant norm used to define a Q-norm through the squared modulus.<br>`Matching` (glossary): Matching of positive principal-angle labels: each label is used in at most one pair.<br>`CounterMovingPlane` (glossary): Moving plane of the competing transporter: the range of W minus the identity. | 10 | `paper.tex:278`, `paper.tex:279`, `paper.tex:1352`, `paper.tex:1353` |
+| `M^\perp` | **UNREGISTERED** | 2 | `paper.tex:1353`, `paper.tex:1365` |
 | `N` | `NormN` (glossary): Unitarily invariant norm on its domain of finiteness; in the sine theorem, normalized by $N(uv^*)=\\|u\\|\\|v\\|$. | 1 | `paper.tex:278` |
 | `O(2)` | `PlanarOrthogonalGroup` (local): Orthogonal matrices of size two. | 0 | — |
 | `O(n)` | `OrthogonalGroup` (local): Group of real orthogonal matrices. | 0 | — |
@@ -102,18 +101,18 @@ This is the primary holistic table. Every glyph known to the central registry an
 | `P_{\mathrm{ex}}` | `Pexact` (glossary): Orthogonal projection onto the desired exact subspace in the sine-theta theorem. | 0 | — |
 | `P_{\mathrm{ex}}^\perp` | `PexactPerp` (local): Orthogonal projection onto the exact complementary subspace. | 0 | — |
 | `Q` | `Qtarget` (glossary): Orthogonal projection onto the target subspace in the transport problem.<br>`Q` (local): Orthogonal projection; its role is specified locally.<br>`NormQ` (glossary): Q-norm: its square is a unitarily invariant norm of the squared modulus. | 0 | — |
-| `Q_-` | **UNREGISTERED** | 2 | `appendices.tex:313`, `appendices.tex:315` |
+| `Q_-` | **UNREGISTERED** | 2 | `appendices.tex:351`, `appendices.tex:353` |
 | `R` | `R` (glossary): Bounded residual of the trial eigenproblem, agreeing with the operator difference on the trial domain.<br>`PlanarRotationBase` (local): Base letter for planar rotations. | 0 | — |
 | `R_t` | `MatchingPlanarRotation` (local): Planar rotation through the indicated angle. | 0 | — |
 | `R_{\gamma}` | `MatchingPlanarRotationGamma` (local): Planar rotation through phase gamma. | 0 | — |
 | `R_{r+s}` | `MatchingPlanarRotationSum` (local): Planar rotation through phase r+s. | 0 | — |
 | `S` | `SpectralSet` (glossary): Borel spectral set used to select a spectral subspace.<br>`S` (glossary): Rectangular complementary error: the trial frame projected onto the unwanted exact subspace.<br>`PairSineBlock` (local): Diagonal principal-sine block.<br>`HalmosSineBlock` (local): Sine block in the Halmos two-projection representation. | 0 | — |
-| `S_0` | **UNREGISTERED** | 1 | `appendices.tex:208` |
-| `S_0^*` | **UNREGISTERED** | 1 | `appendices.tex:208` |
+| `S_0` | **UNREGISTERED** | 1 | `appendices.tex:246` |
+| `S_0^*` | **UNREGISTERED** | 1 | `appendices.tex:246` |
 | `S_1` | **UNREGISTERED** | 1 | `paper.tex:814` |
 | `S_2` | **UNREGISTERED** | 2 | `paper.tex:816`, `paper.tex:828` |
 | `S_p` | **UNREGISTERED** | 1 | `paper.tex:812` |
-| `T` | `IntertwinerT` (glossary): Two-projection intertwiner; its unitary polar factor is the acute direct rotation. | 46 | `paper.tex:278`, `paper.tex:1157`, `paper.tex:1474`, `paper.tex:1475` |
+| `T` | `IntertwinerT` (glossary): Two-projection intertwiner; its unitary polar factor is the acute direct rotation. | 46 | `paper.tex:278`, `paper.tex:1157`, `paper.tex:1476`, `paper.tex:1477` |
 | `T^*` | **UNREGISTERED** | 3 | `paper.tex:278`, `appendices.tex:68`, `appendices.tex:75` |
 | `Tq` | `FigureImage` (local): Image of the unit input under the orthogonal map shown in this panel. | 0 | — |
 | `U` | `U` (local): Desired exact subspace in the local geometric notation.<br>`Usource` (glossary): Source subspace to be transported onto the target subspace.<br>`PairFreeOrthogonal` (local): Free source or complementary planar orthogonal factor. | 1 | `paper.tex:840` |
@@ -123,9 +122,9 @@ This is the primary holistic table. Every glyph known to the central registry an
 | `V_a` | `MatchingBlock` (local): Simultaneous invariant block in the matching proof. | 0 | — |
 | `V_g` | `GradientLevelSpace` (local): Positive gradient-level eigenspace. | 0 | — |
 | `V_{\mathrm{pol}}` | `PolarU` (glossary): Partial isometry in the polar decomposition; unitary when the operator is invertible. | 0 | — |
-| `W` | `Wcompetitor` (glossary): Orthogonal or unitary competitor carrying the source subspace onto the target. | 5 | `appendices.tex:361`, `figures/Fig2.pgf:762`, `figures/Fig2.pgf:930` |
-| `X` | `Xframe` (glossary): Orthonormal coordinate matrix for the source subspace in the counterexample.<br>`X` (glossary): Solution of the Sylvester equation; for the sine bound, the trial frame in unwanted exact coordinates.<br>`ProjectionRealPart` (local): Real symmetric part of the phase projection. | 9 | `appendices.tex:373`, `appendices.tex:378`, `appendices.tex:382`, `appendices.tex:383` |
-| `Y` | `Yframe` (glossary): Orthonormal coordinate matrix for the target subspace in the counterexample.<br>`SylvesterRHS` (glossary): Right-hand side of the Sylvester equation, obtained by projecting the residual.<br>`ProjectionImaginaryPart` (local): Real skew-symmetric imaginary part of the phase projection. | 6 | `appendices.tex:373`, `appendices.tex:378`, `appendices.tex:382`, `appendices.tex:383` |
+| `W` | `Wcompetitor` (glossary): Orthogonal or unitary competitor carrying the source subspace onto the target. | 5 | `appendices.tex:399`, `figures/Fig2.pgf:762`, `figures/Fig2.pgf:930` |
+| `X` | `Xframe` (glossary): Orthonormal coordinate matrix for the source subspace in the counterexample.<br>`X` (glossary): Solution of the Sylvester equation; for the sine bound, the trial frame in unwanted exact coordinates.<br>`ProjectionRealPart` (local): Real symmetric part of the phase projection. | 9 | `appendices.tex:411`, `appendices.tex:416`, `appendices.tex:420`, `appendices.tex:421` |
+| `Y` | `Yframe` (glossary): Orthonormal coordinate matrix for the target subspace in the counterexample.<br>`SylvesterRHS` (glossary): Right-hand side of the Sylvester equation, obtained by projecting the residual.<br>`ProjectionImaginaryPart` (local): Real skew-symmetric imaginary part of the phase projection. | 6 | `appendices.tex:411`, `appendices.tex:416`, `appendices.tex:420`, `appendices.tex:421` |
 | `Z` | `CounterFixedPlane` (glossary): Fixed plane of the competing transporter: the kernel of W minus the identity. | 20 | `paper.tex:808`, `paper.tex:809`, `paper.tex:810`, `paper.tex:812` |
 | `Z^*` | **UNREGISTERED** | 4 | `paper.tex:809`, `counterexample.tex:238`, `counterexample.tex:243`, `counterexample.tex:244` |
 | `\Delta` | `Delta` (local): Population or statistical spectral gap. | 0 | — |
@@ -166,19 +165,23 @@ This is the primary holistic table. Every glyph known to the central registry an
 | `\mathbf{0}` | `ZeroVector` (glossary): Zero vector; the additive identity of the ambient vector space. | 0 | — |
 | `\mathbf{1}` | `OnesVector` (local): All-ones vector in a chosen finite-dimensional coordinate space. | 0 | — |
 | `\mathcalD` | `SquaredDisplacement` (local): Squared full displacement as a function of the transporter. | 0 | — |
-| `\mathcalF` | `FeasibleTransport` (local): Orthogonal maps carrying the source subspace onto the target. | 0 | — |
+| `\mathcalF` | `TrialCoordinateSpace` (glossary): Hilbert space of trial coordinates. | 0 | — |
+| `\mathcalF_{\mathrm{ex}}` | `ExactCoordinateSpace` (glossary): Hilbert space of coordinates for the desired exact spectral subspace. | 0 | — |
+| `\mathcalG` | `ComplementaryCoordinateSpace` (glossary): Hilbert space of exact complementary coordinates. | 0 | — |
 | `\mathcalG_\delta` | `SineGap` (local): Interval/exterior separation or either ordered separation, as in the sine-theta theorem. | 0 | — |
-| `\mathcalH` | `GeneralHilbertSpace` (local): Generic Hilbert space in a local discussion. | 0 | — |
+| `\mathcalH` | `AmbientHilbertSpace` (glossary): Ambient Hilbert space containing the trial and exact subspaces.<br>`GeneralHilbertSpace` (local): Generic Hilbert space in a local discussion. | 0 | — |
 | `\mathcalI` | `IntervalSeparation` (local): Interval/exterior separation predicate. | 0 | — |
 | `\mathcalI_g` | `GradientComplexStructure` (local): Complex multiplication constructed from a positive gradient level. | 0 | — |
 | `\mathcalO` | `OrderedSeparation` (local): Ordered spectral separation predicate. | 0 | — |
-| `\mathrm{HS}` | **UNREGISTERED** | 2 | `appendices.tex:418`, `appendices.tex:419` |
+| `\mathcalW` | `FeasibleTransport` (local): Orthogonal maps carrying the source subspace onto the target. | 0 | — |
+| `\mathrm{HS}` | **UNREGISTERED** | 2 | `appendices.tex:456`, `appendices.tex:457` |
 | `\mathrm{gen}` | **UNREGISTERED** | 2 | `paper.tex:559`, `paper.tex:561` |
 | `\mathrm{ker}` | **UNREGISTERED** | 1 | `figures/Fig2.pgf:1748` |
 | `\mathrm{plane}` | **UNREGISTERED** | 2 | `formalization_enabled_extension.tex:204`, `formalization_enabled_extension.tex:207` |
 | `\mathrm{range}` | **UNREGISTERED** | 5 | `figures/Fig1.pgf:206`, `figures/Fig1.pgf:212`, `figures/Fig1.pgf:409`, `figures/Fig1.pgf:415` |
 | `\mathrm{span}` | **UNREGISTERED** | 3 | `figures/Fig2.pgf:1700`, `figures/Fig2.pgf:1730`, `figures/Fig2.pgf:1736` |
-| `\mathrm{tr}` | **UNREGISTERED** | 1 | `appendices.tex:471` |
+| `\mathtt{A_0}` | **UNREGISTERED** | 2 | `appendices.tex:115`, `appendices.tex:117` |
+| `\mathtt{H}` | **UNREGISTERED** | 1 | `appendices.tex:120` |
 | `\mu` | `mu` (local): Trial spectral value. | 0 | — |
 | `\nu` | `KyFanEvenIndex` (local): Even integer in the principal-plane Ky Fan comparison. | 0 | — |
 | `\operatorname{Re}` | **UNREGISTERED** | 1 | `formalization_enabled_extension.tex:355` |
@@ -192,8 +195,8 @@ This is the primary holistic table. Every glyph known to the central registry an
 | `\operatorname{tr}` | `TraceOperator` (local): Trace of an operator. | 0 | — |
 | `\pi` | `PiConstant` (local): The constant pi (angles are in radians). | 0 | — |
 | `\rho` | `rho` (local): Trial eigenvalue or scalar trial operator. | 0 | — |
-| `\sigma` | `SpectrumSymbol` (local): Spectrum of an operator. | 0 | — |
-| `\sigma_j` | `SingularValueSigma` (local): Indexed singular value under the sigma_j convention. | 0 | — |
+| `\sigma` | `SpectrumSymbol` (local): Spectrum of an operator.<br>`SingularValueBase` (local): Base letter for singular values. | 0 | — |
+| `\sigma_j` | `TransportSingularValues` (local): A displacement singular value in the matching proof.<br>`DisplacementSingular` (local): An individual singular value of the full displacement from the identity.<br>`SingularValue` (glossary): The j-th singular value under the sigma_j convention. | 0 | — |
 | `\sin\Theta_0` | `sinTheta0` (glossary): Positive sine operator on trial coordinates; the modulus of the rectangular complementary error. | 0 | — |
 | `\sin\theta` | `sintheta` (local): Sine of an individual principal angle: the length of the complementary component of a unit principal trial vector. | 0 | — |
 | `\tau` | `PairPhaseParameter` (local): Scalar parameter in the two-angle power-cost minimum. | 0 | — |
@@ -214,13 +217,12 @@ This is the primary holistic table. Every glyph known to the central registry an
 | `a_0` | `a0` (local): Wanted trial eigenvalue or trial spectral value. | 0 | — |
 | `a_1` | `a1` (local): Reference eigenvalue or complementary spectral value. | 0 | — |
 | `b` | `b` (local): Scalar perturbation or coupling coefficient.<br>`PairPowerCost` (local): Positive-determinant displacement power cost for a pair of angles.<br>`PairPhaseCosineY` (local): Cosine of the second phase parameter in the trace calculation.<br>`CounterChordB` (glossary): Competing-transporter displacement singular value in the counterexample: square root of 2.<br>`SylvesterScalarLeft` (local): Scalar left coefficient b in a Sylvester equation. | 20 | `paper.tex:1107`, `paper.tex:1109`, `paper.tex:1111`, `paper.tex:1117` |
-| `c` | `CosAngle` (local): Cosine of a principal angle or the corresponding positive cosine block. | 7 | `paper.tex:536`, `paper.tex:537`, `formalization_enabled_extension.tex:459` |
+| `c` | `CosAngle` (local): Cosine of a principal angle or the corresponding positive cosine block.<br>`SingletonCost` (glossary): Minimum trace displacement for one real principal plane: choose a rotation or a reflection.<br>`PairCost` (glossary): Trace displacement cost of coupling two principal planes in a four-dimensional block. | 7 | `paper.tex:536`, `paper.tex:537`, `formalization_enabled_extension.tex:459` |
 | `d` | `PairHalfDifference` (local): Half the difference of the two ordered principal angles. | 4 | `paper.tex:669`, `paper.tex:693`, `formalization_enabled_extension.tex:223` |
-| `e` | `PairCost` (glossary): Trace displacement cost of coupling two principal planes in a four-dimensional block. | 0 | — |
 | `e^{\pmi(\sym{PairPhaseX}+\sym{PairPhaseY})}` | **UNREGISTERED** | 1 | `formalization_enabled_extension.tex:513` |
 | `e^{\pmi(\sym{PairPhaseX}-\sym{PairPhaseY})}` | **UNREGISTERED** | 1 | `formalization_enabled_extension.tex:514` |
 | `e^{\pmit}` | **UNREGISTERED** | 1 | `formalization_enabled_extension.tex:553` |
-| `e^{\sym{AngleGenerator}\sym{Theta}}` | **UNREGISTERED** | 1 | `appendices.tex:210` |
+| `e^{\sym{AngleGenerator}\sym{Theta}}` | **UNREGISTERED** | 1 | `appendices.tex:248` |
 | `e^{i\like{GradientEigenphase}{\symglyph{GradientEigenphase}_1}}` | **UNREGISTERED** | 1 | `formalization_enabled_extension.tex:339` |
 | `e^{i\like{GradientEigenphase}{\symglyph{GradientEigenphase}_2}}` | **UNREGISTERED** | 1 | `formalization_enabled_extension.tex:339` |
 | `e^{i\sym{theta}}` | **UNREGISTERED** | 1 | `counterexample.tex:287` |
@@ -229,12 +231,10 @@ This is the primary holistic table. Every glyph known to the central registry an
 | `e_2` | **UNREGISTERED** | 5 | `counterexample.tex:169`, `counterexample.tex:206`, `counterexample.tex:224`, `figures/Fig2.pgf:1736` |
 | `e_3` | **UNREGISTERED** | 3 | `counterexample.tex:205`, `counterexample.tex:224`, `figures/Fig2.pgf:1730` |
 | `e_n` | **UNREGISTERED** | 4 | `paper.tex:1128` |
-| `e_{ij}` | **UNREGISTERED** | 1 | `appendices.tex:77` |
 | `f_0` | `f0` (local): Component or coordinate vector in the desired exact subspace. | 0 | — |
 | `f_1` | `f1` (local): Component or coordinate vector in the unwanted exact subspace. | 0 | — |
 | `f_p` | `MatchingPhaseCost` (local): Displacement power cost for one scalar phase. | 0 | — |
 | `g` | `GradientLevel` (local): Positive gradient level; the gradient squared is minus this level squared times the identity.<br>`g` (local): Original spectral gap of the reference operator; distinct from the certified sine-theta separation. | 2 | `paper.tex:1184` |
-| `g_{ij}` | `MatchingEdgeWeight` (glossary): Edge weight: the cost of two singletons minus their paired cost. | 0 | — |
 | `h` | `PairMeanAngle` (local): Mean of the two ordered principal angles. | 2 | `paper.tex:1184` |
 | `i` | **UNREGISTERED** | 71 | `paper.tex:422`, `paper.tex:693`, `counterexample.tex:282`, `counterexample.tex:286` |
 | `j` | **UNREGISTERED** | 75 | `paper.tex:416`, `paper.tex:417`, `paper.tex:421`, `paper.tex:422` |
@@ -244,17 +244,16 @@ This is the primary holistic table. Every glyph known to the central registry an
 | `p` | **UNREGISTERED** | 50 | `paper.tex:810`, `paper.tex:812`, `paper.tex:822`, `paper.tex:823` |
 | `q` | `FigureInput` (local): Unit input to the orthogonal map shown in this invariant-plane panel. | 3 | `counterexample.tex:171` |
 | `r` | `r` (local): Residual vector of an approximate eigenpair.<br>`PairRotationR` (local): Half the sum of the two free planar rotation angles. | 0 | — |
-| `s` | `SinAngle` (local): Sine of a principal angle or the corresponding positive sine block.<br>`SingletonCost` (glossary): Minimum trace displacement for one real principal plane: choose a rotation or a reflection.<br>`DisplacementSize` (local): Scalar displacement singular-value magnitude in the uniform limit.<br>`PairRotationS` (local): Half the difference of the two free planar rotation angles.<br>`SingularValueBase` (local): Base letter for singular values. | 0 | — |
-| `s_i` | **UNREGISTERED** | 1 | `appendices.tex:77` |
-| `s_j` | `TransportSingularValues` (local): A displacement singular value in the matching proof.<br>`DisplacementSingular` (local): An individual singular value of the full displacement from the identity.<br>`SingularValueS` (glossary): The j-th singular value, under the currently printed s_j convention. | 1 | `appendices.tex:77` |
+| `s` | `SinAngle` (local): Sine of a principal angle or the corresponding positive sine block.<br>`DisplacementSize` (local): Scalar displacement singular-value magnitude in the uniform limit.<br>`PairRotationS` (local): Half the difference of the two free planar rotation angles. | 0 | — |
 | `t` | **UNREGISTERED** | 36 | `formalization_enabled_extension.tex:162`, `formalization_enabled_extension.tex:172`, `formalization_enabled_extension.tex:174`, `formalization_enabled_extension.tex:175` |
 | `u` | `u` (local): Vector in the desired exact subspace. | 27 | `paper.tex:1147`, `paper.tex:1150`, `paper.tex:1152`, `formalization_enabled_extension.tex:357` |
 | `u_1` | **UNREGISTERED** | 3 | `counterexample.tex:168`, `figures/Fig2.pgf:210`, `figures/Fig2.pgf:216` |
 | `u_2` | **UNREGISTERED** | 3 | `counterexample.tex:168`, `figures/Fig2.pgf:483`, `figures/Fig2.pgf:489` |
 | `v` | `v` (local): Trial vector or vector in the trial subspace. | 12 | `paper.tex:1147`, `paper.tex:1150`, `paper.tex:1152`, `formalization_enabled_extension.tex:363` |
 | `v^*` | **UNREGISTERED** | 2 | `paper.tex:1147`, `paper.tex:1150` |
-| `v_j` | **UNREGISTERED** | 6 | `appendices.tex:346`, `appendices.tex:347`, `appendices.tex:355`, `appendices.tex:357` |
+| `v_j` | **UNREGISTERED** | 6 | `appendices.tex:384`, `appendices.tex:385`, `appendices.tex:393`, `appendices.tex:395` |
 | `w` | `w` (local): Vector in an unwanted or complementary spectral subspace. | 0 | — |
+| `w_{ij}` | `MatchingEdgeWeight` (glossary): Edge weight: the cost of two singletons minus their paired cost. | 0 | — |
 | `x` | `SourceVector` (local): Vector in the source subspace.<br>`PairPhaseX` (local): First phase parameter of a four-dimensional transporter.<br>`RayleighTestVector` (local): Test vector in the Rayleigh quotient.<br>`SylvesterScalarUnknown` (local): Scalar unknown x in a Sylvester equation. | 42 | `paper.tex:683`, `paper.tex:684`, `paper.tex:1115`, `paper.tex:1116` |
 | `y` | `TargetVector` (local): Vector in the target subspace.<br>`PairPhaseY` (local): Second phase parameter of a four-dimensional transporter.<br>`SylvesterScalarRHS` (local): Scalar right side y in a Sylvester equation. | 0 | — |
 | `z` | **UNREGISTERED** | 13 | `paper.tex:687`, `paper.tex:688`, `paper.tex:689`, `paper.tex:693` |
@@ -272,11 +271,11 @@ The `glossary` column is directly declared in `math_symbol_colors.tex`. Occurren
 | `A` | `A` | self-adjoint-operator | glossary | old | 45 | Reference self-adjoint operator before perturbation. |
 | `A1` | `A_1` | self-adjoint-operator | local | old | 2 | Complementary block of the reference operator. |
 | `a1` | `a_1` | scalar | local | old | 0 | Reference eigenvalue or complementary spectral value. |
-| `ReferenceBlock0` | `A_0` | self-adjoint-operator | glossary | old | 10 | Reference operator restricted to the source subspace in Section 8. |
+| `ReferenceBlock0` | `A_0` | self-adjoint-operator | glossary | old | 11 | Reference operator restricted to the source subspace in Section 8. |
 | `ReferenceBlock1` | `A_1` | self-adjoint-operator | glossary | old | 8 | Reference operator restricted to the source complement in Section 8. |
 | `Ahat` | `\widehat A` | self-adjoint-operator | local | current | 0 | Operator under study; in the perturbation setting, the reference operator plus its perturbation. |
 | `Acurrent` | `\widehat A` | self-adjoint-operator | glossary | current | 52 | Operator under study; in the perturbation setting, the reference operator plus its perturbation. |
-| `H` | `H` | self-adjoint-operator | glossary | perturb | 26 | Additive self-adjoint perturbation of the reference operator. |
+| `H` | `H` | self-adjoint-operator | glossary | perturb | 27 | Additive self-adjoint perturbation of the reference operator. |
 | `H0` | `H_0` | self-adjoint-operator | local | perturb | 4 | Wanted diagonal block of the perturbation. |
 | `H1` | `H_1` | self-adjoint-operator | local | perturb | 3 | Unwanted diagonal block of the perturbation. |
 | `B` | `B` | linear-operator | local | perturb | 0 | Off-diagonal perturbation or coupling block. |
@@ -285,7 +284,7 @@ The `glossary` column is directly declared in `math_symbol_colors.tex`. Occurren
 | `V` | `V` | linear-subspace | local | trial | 0 | Trial subspace in the local geometric notation. |
 | `Usource` | `U` | linear-subspace | glossary | trial | 24 | Source subspace to be transported onto the target subspace. |
 | `E0` | `E_0` | isometric-embedding | glossary | trialframe | 66 | Isometric embedding of the trial subspace; its adjoint returns trial coordinates. |
-| `A0` | `A_{\mathrm{tr}}` | self-adjoint-operator | glossary | trialspectrum | 47 | Self-adjoint operator on trial coordinates; its eigenvalues are the trial spectral values. |
+| `TrialOperator` | `A_{\mathrm{trial}}` | self-adjoint-operator | glossary | trialspectrum | 49 | Self-adjoint operator on trial coordinates; its eigenvalues are the trial spectral values. |
 | `v` | `v` | vector | local | trialvector | 33 | Trial vector or vector in the trial subspace. |
 | `rho` | `\rho` | scalar | local | trialspectrum | 9 | Trial eigenvalue or scalar trial operator. |
 | `mu` | `\mu` | scalar | local | trialspectrum | 6 | Trial spectral value. |
@@ -295,8 +294,8 @@ The `glossary` column is directly declared in `math_symbol_colors.tex`. Occurren
 | `ProjSource` | `P_U` | orthogonal-projection | local | trialprojection | 0 | Orthogonal projection onto the source subspace in the transport problem. |
 | `SourceVector` | `x` | vector | local | trialvector | 6 | Vector in the source subspace. |
 | `Xframe` | `X` | isometric-embedding | glossary | trialframe | 6 | Orthonormal coordinate matrix for the source subspace in the counterexample. |
-| `Ftrial` | `F` | hilbert-space | glossary | trialframe | 6 | Hilbert space of trial coordinates. |
-| `Eambient` | `E` | hilbert-space | glossary | ambient | 11 | Ambient Hilbert space containing the trial and exact subspaces. |
+| `TrialCoordinateSpace` | `\mathcal F` | hilbert-space | glossary | trialframe | 6 | Hilbert space of trial coordinates. |
+| `AmbientHilbertSpace` | `\mathcal H` | hilbert-space | glossary | ambient | 11 | Ambient Hilbert space containing the trial and exact subspaces. |
 | `ZeroVector` | `\mathbf{0}` | vector | glossary | fg | 6 | Zero vector; the additive identity of the ambient vector space. |
 | `OnesVector` | `\mathbf{1}` | vector | local | fg | 0 | All-ones vector in a chosen finite-dimensional coordinate space. |
 | `Vtarget` | `V` | linear-subspace | glossary | wanted | 24 | Target subspace in the transport problem. |
@@ -315,7 +314,7 @@ The `glossary` column is directly declared in `math_symbol_colors.tex`. Occurren
 | `SourceDirectRotation` | `D` | unitary-operator | local | wantedrotation | 15 | Direct rotation, including the nonacute case in the source-result table. |
 | `Yframe` | `Y` | isometric-embedding | glossary | wantedframe | 7 | Orthonormal coordinate matrix for the target subspace in the counterexample. |
 | `TargetVector` | `y` | vector | local | wantedvector | 4 | Vector in the target subspace. |
-| `Hexact` | `F_{\mathrm{ex}}` | hilbert-space | glossary | wantedframe | 3 | Hilbert space of coordinates for the desired exact spectral subspace. |
+| `ExactCoordinateSpace` | `\mathcal F_{\mathrm{ex}}` | hilbert-space | glossary | wantedframe | 3 | Hilbert space of coordinates for the desired exact spectral subspace. |
 | `Uperp` | `U^{\perp}` | linear-subspace | local | unwanted | 0 | Orthogonal complement of the desired exact subspace in the local notation. |
 | `F1` | `F_1` | isometric-embedding | glossary | unwantedframe | 45 | Isometric coordinates for the exact complementary subspace; star denotes the adjoint. |
 | `Lambda1` | `\Lambda_1` | self-adjoint-operator | glossary | unwantedspectrum | 33 | Self-adjoint operator on exact complementary coordinates: the unwanted spectral block. |
@@ -328,7 +327,7 @@ The `glossary` column is directly declared in `math_symbol_colors.tex`. Occurren
 | `f1` | `f_1` | vector | local | unwantedvector | 0 | Component or coordinate vector in the unwanted exact subspace. |
 | `lambda1` | `\lambda_1` | scalar | local | unwantedspectrum | 0 | Unwanted exact eigenvalue or complementary spectral value. |
 | `lambdaw` | `\lambda_w` | scalar | local | unwantedspectrum | 0 | Eigenvalue associated with an unwanted exact vector. |
-| `Gunwanted` | `G` | hilbert-space | glossary | unwantedframe | 4 | Hilbert space of exact complementary coordinates. |
+| `ComplementaryCoordinateSpace` | `\mathcal G` | hilbert-space | glossary | unwantedframe | 4 | Hilbert space of exact complementary coordinates. |
 | `E1` | `E_1` | isometric-embedding | local | unwantedframe | 0 | Isometric coordinates for the complementary trial subspace. |
 | `Vperp` | `V^{\perp}` | linear-subspace | local | unwanted | 0 | Orthogonal complement of the trial subspace in the local notation. |
 | `theta` | `\theta` | angle | glossary | sine | 186 | Principal angle between the subspaces under comparison. |
@@ -381,8 +380,8 @@ The `glossary` column is directly declared in `math_symbol_colors.tex`. Occurren
 | `SineGap` | `\mathcal G_\delta` | predicate | local | gap | 7 | Interval/exterior separation or either ordered separation, as in the sine-theta theorem. |
 | `NormM` | `M` | norm | local | normaux | 7 | Auxiliary unitarily invariant norm used to define a Q-norm through the squared modulus. |
 | `NormQ` | `Q` | norm | glossary | normaux | 7 | Q-norm: its square is a unitarily invariant norm of the squared modulus. |
-| `SingletonCost` | `s` | scalar-cost | glossary | norm | 28 | Minimum trace displacement for one real principal plane: choose a rotation or a reflection. |
-| `PairCost` | `e` | scalar-cost | glossary | norm | 14 | Trace displacement cost of coupling two principal planes in a four-dimensional block. |
+| `SingletonCost` | `c` | scalar-cost | glossary | norm | 32 | Minimum trace displacement for one real principal plane: choose a rotation or a reflection. |
+| `PairCost` | `c` | scalar-cost | glossary | norm | 16 | Trace displacement cost of coupling two principal planes in a four-dimensional block. |
 | `MatchingPhaseCost` | `f_p` | scalar-cost | local | norm | 24 | Displacement power cost for one scalar phase. |
 | `SingletonPowerCost` | `a` | scalar-cost | local | norm | 10 | Minimum displacement power cost for one angle. |
 | `PairPowerCost` | `b` | scalar-cost | local | norm | 6 | Positive-determinant displacement power cost for a pair of angles. |
@@ -390,8 +389,8 @@ The `glossary` column is directly declared in `math_symbol_colors.tex`. Occurren
 | `PowerCost` | `\Phi` | scalar-cost | local | norm | 16 | Sum of the p-th powers of displacement singular values. |
 | `GradientOffDiagonal` | `G_{01}` | linear-operator | local | fg | 3 | Complement-to-source block of the skew-symmetric gradient. |
 | `OrthogonalGroup` | `O(n)` | group | local | fg | 4 | Group of real orthogonal matrices. |
-| `FeasibleTransport` | `\mathcal F` | set | local | fg | 11 | Orthogonal maps carrying the source subspace onto the target. |
-| `TransportSingularValues` | `s_j` | scalar | local | fg | 2 | A displacement singular value in the matching proof. |
+| `FeasibleTransport` | `\mathcal W` | set | local | fg | 11 | Orthogonal maps carrying the source subspace onto the target. |
+| `TransportSingularValues` | `\sigma_j` | scalar | local | fg | 2 | A displacement singular value in the matching proof. |
 | `DisplacementSize` | `s` | scalar | local | fg | 5 | Scalar displacement singular-value magnitude in the uniform limit. |
 | `SingletonBaseline` | `C_0` | scalar-cost | local | fg | 2 | Trace displacement when every angle uses its singleton transporter. |
 | `MatchingPowerCost` | `C_p` | scalar-cost | local | fg | 4 | Total paired and singleton power cost of a matching. |
@@ -433,8 +432,8 @@ The `glossary` column is directly declared in `math_symbol_colors.tex`. Occurren
 | `CounterFixedPlane` | `Z` | linear-subspace | glossary | ambient | 4 | Fixed plane of the competing transporter: the kernel of W minus the identity. |
 | `CounterChordA` | `a` | scalar | glossary | displacement | 9 | Direct-rotation displacement singular value in the counterexample: sqrt(2 - sqrt(2)). |
 | `CounterChordB` | `b` | scalar | glossary | displacement | 6 | Competing-transporter displacement singular value in the counterexample: square root of 2. |
-| `DisplacementSingular` | `s_j` | scalar | local | displacement | 10 | An individual singular value of the full displacement from the identity. |
-| `MatchingEdgeWeight` | `g_{ij}` | scalar-weight | glossary | current | 7 | Edge weight: the cost of two singletons minus their paired cost. |
+| `DisplacementSingular` | `\sigma_j` | scalar | local | displacement | 10 | An individual singular value of the full displacement from the identity. |
+| `MatchingEdgeWeight` | `w_{ij}` | scalar-weight | glossary | current | 7 | Edge weight: the cost of two singletons minus their paired cost. |
 | `TraceCost` | `C` | scalar-cost | glossary | norm | 10 | Trace-norm displacement cost of the indicated orthogonal transporter or matching. |
 | `SpectralValue` | `\lambda` | scalar | local | wantedspectrum | 6 | Real spectral parameter or individual eigenvalue of a self-adjoint operator. |
 | `Identity` | `I` | identity-operator | local | plain | 123 | Identity operator on the space in context. |
@@ -446,9 +445,8 @@ The `glossary` column is directly declared in `math_symbol_colors.tex`. Occurren
 | `ComplexField` | `\mathbb C` | field | local | plain | 7 | The complex numbers. |
 | `GeneralHilbertSpace` | `\mathcal H` | hilbert-space | local | plain | 1 | Generic Hilbert space in a local discussion. |
 | `SpectrumSymbol` | `\sigma` | operator-notation | local | plain | 9 | Spectrum of an operator. |
-| `SingularValueBase` | `s` | notation-base | local | plain | 8 | Base letter for singular values. |
-| `SingularValueS` | `s_j` | scalar | glossary | plain | 13 | The j-th singular value, under the currently printed s_j convention. |
-| `SingularValueSigma` | `\sigma_j` | scalar | local | plain | 0 | Indexed singular value under the sigma_j convention. |
+| `SingularValueBase` | `\sigma` | notation-base | local | plain | 8 | Base letter for singular values. |
+| `SingularValue` | `\sigma_j` | scalar | glossary | plain | 13 | The j-th singular value under the sigma_j convention. |
 | `OperatorNormNotation` | `\\|\cdot\\|_{\mathrm{op}}` | norm | glossary | plain | 0 | Operator norm. |
 | `FrobeniusNormNotation` | `\\|\cdot\\|_F` | norm | glossary | plain | 0 | Frobenius norm. |
 | `TraceNormNotation` | `\\|\cdot\\|_1` | norm | glossary | plain | 0 | Trace (nuclear) norm. |
@@ -515,7 +513,7 @@ These rows are explicitly registered in `math_symbol_colors.tex`; they are not i
 | `F1` | `F_1` | isometric-embedding | [Davis and Kahan (1970), The Rotation of Eigenvectors by a Perturbation. III](https://doi.org/10.1137/0707001) | `F_1` | \S1 | Exact-target complement frame. |
 | `ReferenceBlock0` | `A_0` | self-adjoint-operator | [Davis and Kahan (1970), The Rotation of Eigenvectors by a Perturbation. III](https://doi.org/10.1137/0707001) | `A_0` | \S1, (1.2) | Reference source block. |
 | `ReferenceBlock1` | `A_1` | self-adjoint-operator | [Davis and Kahan (1970), The Rotation of Eigenvectors by a Perturbation. III](https://doi.org/10.1137/0707001) | `A_1` | \S1, (1.2) | Reference complement block. |
-| `A0` | `A_{\mathrm{tr}}` | self-adjoint-operator | [Davis and Kahan (1970), The Rotation of Eigenvectors by a Perturbation. III](https://doi.org/10.1137/0707001) | `A_0` | \S1, residual discussion | Residual comparison operator (the reference block in DK). |
+| `TrialOperator` | `A_{\mathrm{trial}}` | self-adjoint-operator | [Davis and Kahan (1970), The Rotation of Eigenvectors by a Perturbation. III](https://doi.org/10.1137/0707001) | `A_0` | \S1, residual discussion | Residual comparison operator (the reference block in DK). |
 | `Psource` | `P` | orthogonal-projection | [Davis and Kahan (1970), The Rotation of Eigenvectors by a Perturbation. III](https://doi.org/10.1137/0707001) | `P` | \S1 | Reference/source projection. |
 | `Qtarget` | `Q` | orthogonal-projection | [Davis and Kahan (1970), The Rotation of Eigenvectors by a Perturbation. III](https://doi.org/10.1137/0707001) | `Q` | \S1 | Target projection. |
 | `Pexact` | `P_{\mathrm{ex}}` | orthogonal-projection | [Davis and Kahan (1970), The Rotation of Eigenvectors by a Perturbation. III](https://doi.org/10.1137/0707001) | `Q` | \S1 | Exact-target projection. |
@@ -527,8 +525,28 @@ These rows are explicitly registered in `math_symbol_colors.tex`; they are not i
 | `Rrotation` | `D` | unitary-operator | [Davis and Kahan (1970), The Rotation of Eigenvectors by a Perturbation. III](https://doi.org/10.1137/0707001) | `U` | \S1, (1.18) | Canonical direct rotation. |
 | `Wcompetitor` | `W` | unitary-operator | [Davis and Kahan (1970), The Rotation of Eigenvectors by a Perturbation. III](https://doi.org/10.1137/0707001) | `V` | \S4 | Competing unitary transporter. |
 | `delta` | `\delta` | scalar | [Davis and Kahan (1970), The Rotation of Eigenvectors by a Perturbation. III](https://doi.org/10.1137/0707001) | `\delta` | \S2 | Spectral separation parameter. |
-| `Eambient` | `E` | hilbert-space | [Seelmann (2019), Semidefinite Perturbations in the Subspace Perturbation Problem](https://arxiv.org/abs/1708.02463) | `\mathcal H` | p.~1 | Ambient Hilbert space. |
-| `SingularValueS` | `s_j` | scalar | [Blechta (2020), Stability of Linear GMRES Convergence with Respect to Compact Perturbations](https://arxiv.org/abs/2005.12960) | `\sigma_j` | Thm.~1.1 | Ordered singular values of a compact operator. |
+| `AmbientHilbertSpace` | `\mathcal H` | hilbert-space | [Seelmann (2019), Semidefinite Perturbations in the Subspace Perturbation Problem](https://arxiv.org/abs/1708.02463) | `\mathcal H` | p.~1 | Ambient Hilbert space. |
+| `SingularValue` | `\sigma_j` | scalar | [Blechta (2020), Stability of Linear GMRES Convergence with Respect to Compact Perturbations](https://arxiv.org/abs/2005.12960) | `\sigma_j` | Thm.~1.1 | Ordered singular values of a compact operator. |
+
+## Lean sine-theta correspondence (one theorem, not global aliases)
+
+Recorded at the semantic declarations in `math_symbol_colors.tex`. The printed correspondence table in the paper uses the same records. Lean binder spellings below are TeX renderings of the source identifiers, including subscript and Greek characters; they are scoped to `sinTheta_unbounded_formGap_whereDefinedUIN_rclike` in `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean`.
+
+| Semantic key | Paper glyph | Type | Lean binder (TeX rendering) | Mathematical role |
+|---|---|---|---|---|
+| `AmbientHilbertSpace` | `\mathcal H` | hilbert-space | `E` | Ambient Hilbert-space carrier. |
+| `TrialCoordinateSpace` | `\mathcal F` | hilbert-space | `F` | Trial-coordinate Hilbert-space carrier. |
+| `ExactCoordinateSpace` | `\mathcal F_{\mathrm{ex}}` | hilbert-space | `H` | Wanted exact-coordinate Hilbert-space carrier. |
+| `ComplementaryCoordinateSpace` | `\mathcal G` | hilbert-space | `G` | Complementary exact-coordinate Hilbert-space carrier. |
+| `Acurrent` | `\widehat A` | self-adjoint-operator | `A` | Self-adjoint operator under study. |
+| `TrialOperator` | `A_{\mathrm{trial}}` | self-adjoint-operator | `A_0` | General trial operator, not the reference block. |
+| `Lambda1` | `\Lambda_1` | self-adjoint-operator | `\Lambda_1` | Exact complementary spectral block. |
+| `E0` | `E_0` | isometric-embedding | `E_0` | Isometric trial-coordinate embedding. |
+| `F0` | `F_0` | isometric-embedding | `F_0` | Wanted exact-coordinate embedding. |
+| `F1` | `F_1` | isometric-embedding | `F_1` | Complementary exact-coordinate embedding. |
+| `R` | `R` | linear-operator | `R` | Bounded residual from trial coordinates. |
+| `delta` | `\delta` | scalar | `\delta` | Positive spectral-gap parameter. |
+| `NormN` | `N` | norm | `N` | Normalized symmetric operator-ideal norm. |
 
 ## Types and glyph collisions
 
@@ -541,8 +559,7 @@ Every registered object has a declared mathematical type. Reused printed glyphs 
 | `B` | `B` (linear-operator); `SylvesterLeft` (self-adjoint-operator); `Bblock` (linear-operator); `SkewDirection` (linear-operator) |
 | `C` | `SylvesterRight` (self-adjoint-operator); `Cblock` (linear-operator); `Cturn` (matrix); `PairCosineBlock` (matrix); `TraceCost` (scalar-cost); `HalmosCosineBlock` (linear-operator) |
 | `D` | `Rrotation` (unitary-operator); `SourceDirectRotation` (unitary-operator); `Dblock` (matrix); `Dplanar` (unitary-operator); `PairDirectRotation` (unitary-operator) |
-| `E` | `Eambient` (hilbert-space); `SpectralMeasure` (projection-valued-measure); `GradientPhaseProjection` (orthogonal-projection) |
-| `G` | `Gunwanted` (hilbert-space); `SpectralGradient` (linear-operator) |
+| `E` | `SpectralMeasure` (projection-valued-measure); `GradientPhaseProjection` (orthogonal-projection) |
 | `H` | `H` (self-adjoint-operator); `Hreflection` (linear-operator) |
 | `M` | `NormM` (norm); `Matching` (matching); `CounterMovingPlane` (linear-subspace) |
 | `P` | `Psource` (orthogonal-projection); `P` (orthogonal-projection) |
@@ -561,15 +578,18 @@ Every registered object has a declared mathematical type. Reused printed glyphs 
 | `\eta` | `ProjectionCoupling` (scalar); `CompressionTolerance` (scalar) |
 | `\gamma` | `PairAttainingAngle` (angle); `SylvesterGapThreshold` (scalar); `MatchingPhaseGamma` (scalar) |
 | `\lambda` | `ProjectionEigenvalue` (scalar); `SpectralValue` (scalar) |
+| `\mathcalH` | `AmbientHilbertSpace` (hilbert-space); `GeneralHilbertSpace` (hilbert-space) |
+| `\sigma` | `SpectrumSymbol` (operator-notation); `SingularValueBase` (notation-base) |
+| `\sigma_j` | `TransportSingularValues` (scalar); `DisplacementSingular` (scalar); `SingularValue` (scalar) |
 | `\varepsilon` | `EpsilonAngle` (angle); `EigenvalueExampleEpsilon` (scalar); `FrameLowerBoundEpsilon` (scalar) |
 | `\varphi` | `PhiAngle` (angle); `GradientEigenphase` (angle); `PlaneRotationAngle` (angle) |
 | `\widehatA` | `Ahat` (self-adjoint-operator); `Acurrent` (self-adjoint-operator) |
 | `a` | `SingletonPowerCost` (scalar-cost); `PairPhaseCosineX` (scalar); `CounterChordA` (scalar); `SylvesterScalarRight` (scalar) |
 | `b` | `b` (scalar); `PairPowerCost` (scalar-cost); `PairPhaseCosineY` (scalar); `CounterChordB` (scalar); `SylvesterScalarLeft` (scalar) |
+| `c` | `CosAngle` (scalar-or-operator); `SingletonCost` (scalar-cost); `PairCost` (scalar-cost) |
 | `g` | `GradientLevel` (scalar); `g` (scalar) |
 | `r` | `r` (vector); `PairRotationR` (angle) |
-| `s` | `SinAngle` (scalar-or-operator); `SingletonCost` (scalar-cost); `DisplacementSize` (scalar); `PairRotationS` (angle); `SingularValueBase` (notation-base) |
-| `s_j` | `TransportSingularValues` (scalar); `DisplacementSingular` (scalar); `SingularValueS` (scalar) |
+| `s` | `SinAngle` (scalar-or-operator); `DisplacementSize` (scalar); `PairRotationS` (angle) |
 | `x` | `SourceVector` (vector); `PairPhaseX` (angle); `RayleighTestVector` (vector); `SylvesterScalarUnknown` (scalar) |
 | `y` | `TargetVector` (vector); `PairPhaseY` (angle); `SylvesterScalarRHS` (scalar) |
 
@@ -585,11 +605,11 @@ Even when a base key is registered, `\like{Key}{...}` may manually spell a diffe
 | `F1 :: \symglyph{F1}^*` | 12 | `paper.tex:769`, `paper.tex:771`, `paper.tex:781`, `paper.tex:874` |
 | `Rrotation :: \symglyph{Rrotation}_{\symglyph{theta}}` | 12 | `counterexample.tex:46`, `counterexample.tex:49`, `counterexample.tex:94`, `counterexample.tex:97` |
 | `Wcompetitor :: \symglyph{Wcompetitor}_{\symglyph{theta}}` | 11 | `counterexample.tex:44`, `counterexample.tex:45`, `counterexample.tex:48`, `counterexample.tex:63` |
-| `SingletonCost :: \symglyph{SingletonCost}_i` | 9 | `formalization_enabled_extension.tex:29`, `formalization_enabled_extension.tex:32`, `formalization_enabled_extension.tex:62`, `formalization_enabled_extension.tex:71` |
+| `SingletonCost :: \symglyph{SingletonCost}_i` | 10 | `formalization_enabled_extension.tex:29`, `formalization_enabled_extension.tex:32`, `formalization_enabled_extension.tex:62`, `formalization_enabled_extension.tex:71` |
 | `E0 :: \symglyph{E0}^*` | 8 | `paper.tex:741`, `paper.tex:1017`, `paper.tex:1063`, `paper.tex:1065` |
-| `OrderedSeparation :: _{\sym{delta}}` | 8 | `appendices.tex:236`, `appendices.tex:240`, `appendices.tex:247`, `appendices.tex:248` |
+| `OrderedSeparation :: _{\sym{delta}}` | 8 | `appendices.tex:274`, `appendices.tex:278`, `appendices.tex:285`, `appendices.tex:286` |
+| `PairCost :: \symglyph{PairCost}_{ij}` | 8 | `formalization_enabled_extension.tex:28`, `formalization_enabled_extension.tex:31`, `formalization_enabled_extension.tex:60`, `formalization_enabled_extension.tex:73` |
 | `PowerCost :: \symglyph{PowerCost}_p` | 8 | `formalization_enabled_extension.tex:120`, `formalization_enabled_extension.tex:137`, `formalization_enabled_extension.tex:149`, `formalization_enabled_extension.tex:150` |
-| `PairCost :: \symglyph{PairCost}_{ij}` | 7 | `formalization_enabled_extension.tex:28`, `formalization_enabled_extension.tex:31`, `formalization_enabled_extension.tex:60`, `formalization_enabled_extension.tex:73` |
 | `PairFreeOrthogonal :: \symglyph{PairFreeOrthogonal}_0` | 7 | `formalization_enabled_extension.tex:447`, `formalization_enabled_extension.tex:471`, `formalization_enabled_extension.tex:489`, `formalization_enabled_extension.tex:493` |
 | `PairFreeOrthogonal :: \symglyph{PairFreeOrthogonal}_1` | 6 | `formalization_enabled_extension.tex:447`, `formalization_enabled_extension.tex:490`, `formalization_enabled_extension.tex:494`, `formalization_enabled_extension.tex:495` |
 | `F0 :: \symglyph{F0}^*` | 5 | `paper.tex:1052`, `paper.tex:1053`, `paper.tex:1061`, `paper.tex:1185` |
@@ -604,8 +624,9 @@ Even when a base key is registered, `\like{Key}{...}` may manually spell a diffe
 | `PairPhaseCosineY :: ^2` | 3 | `formalization_enabled_extension.tex:497`, `formalization_enabled_extension.tex:498`, `formalization_enabled_extension.tex:507` |
 | `PairPowerCost :: \symglyph{PairPowerCost}_{ij}(p)` | 3 | `formalization_enabled_extension.tex:545`, `formalization_enabled_extension.tex:575`, `formalization_enabled_extension.tex:591` |
 | `ProjectionImaginaryPart :: ^2` | 3 | `formalization_enabled_extension.tex:352`, `formalization_enabled_extension.tex:360`, `formalization_enabled_extension.tex:368` |
+| `SingletonCost :: \symglyph{SingletonCost}_j` | 3 | `formalization_enabled_extension.tex:73`, `formalization_enabled_extension.tex:94`, `appendices.tex:77` |
 | `SingletonPowerCost :: \symglyph{SingletonPowerCost}_i(p)` | 3 | `formalization_enabled_extension.tex:426`, `formalization_enabled_extension.tex:576`, `formalization_enabled_extension.tex:592` |
-| `SourceDirectRotation :: ^2` | 3 | `appendices.tex:302`, `appendices.tex:308`, `appendices.tex:314` |
+| `SourceDirectRotation :: ^2` | 3 | `appendices.tex:340`, `appendices.tex:346`, `appendices.tex:352` |
 | `TraceCost :: \symglyph{TraceCost}(M)` | 3 | `formalization_enabled_extension.tex:78`, `appendices.tex:77`, `figures/Fig3.pgf:301` |
 | `Wcompetitor :: \symglyph{Wcompetitor}_{\symglyph{PiConstant}/4}` | 3 | `counterexample.tex:183`, `counterexample.tex:190`, `counterexample.tex:194` |
 | `Wcompetitor :: ^T` | 3 | `formalization_enabled_extension.tex:40`, `formalization_enabled_extension.tex:135`, `formalization_enabled_extension.tex:391` |
@@ -623,26 +644,25 @@ Even when a base key is registered, `\like{Key}{...}` may manually spell a diffe
 | `GradientEigenphase :: \symglyph{GradientEigenphase}_2` | 2 | `formalization_enabled_extension.tex:335`, `formalization_enabled_extension.tex:339` |
 | `HalmosCosineBlock :: \symglyph{HalmosCosineBlock}^2` | 2 | `paper.tex:561`, `paper.tex:562` |
 | `HalmosSineBlock :: \symglyph{HalmosSineBlock}^2` | 2 | `paper.tex:561`, `paper.tex:562` |
-| `IntervalSeparation :: _{\sym{delta}}` | 2 | `appendices.tex:232`, `appendices.tex:246` |
+| `IntervalSeparation :: _{\sym{delta}}` | 2 | `appendices.tex:270`, `appendices.tex:284` |
 | `PrincipalPlaneProjectionBase :: \symglyph{PrincipalPlaneProjectionBase}_k` | 2 | `counterexample.tex:199`, `counterexample.tex:202` |
 | `RealField :: ^6` | 2 | `formalization_enabled_extension.tex:90`, `formalization_enabled_extension.tex:99` |
 | `RealField :: ^n` | 2 | `formalization_enabled_extension.tex:12`, `formalization_enabled_extension.tex:143` |
 | `S :: ^*` | 2 | `paper.tex:1075`, `paper.tex:1081` |
-| `SingletonCost :: \symglyph{SingletonCost}_j` | 2 | `formalization_enabled_extension.tex:73`, `formalization_enabled_extension.tex:94` |
 | `SpectralGradient :: \symglyph{SpectralGradient}^2` | 2 | `formalization_enabled_extension.tex:294`, `formalization_enabled_extension.tex:296` |
 | `SpectralValue :: \symglyph{SpectralValue}_j` | 2 | `paper.tex:483` |
 | `TargetVector :: \symglyph{TargetVector}_j` | 2 | `paper.tex:421`, `paper.tex:422` |
-| `Wcompetitor :: ^*` | 2 | `paper.tex:640`, `appendices.tex:192` |
+| `Wcompetitor :: ^*` | 2 | `paper.tex:640`, `appendices.tex:230` |
 | `Wcompetitor :: ^2` | 2 | `formalization_enabled_extension.tex:492`, `formalization_enabled_extension.tex:502` |
 | `ComplexField :: ^2` | 1 | `counterexample.tex:281` |
-| `CompressionTolerance :: ^2` | 1 | `appendices.tex:433` |
-| `E0 :: ^*` | 1 | `appendices.tex:407` |
+| `CompressionTolerance :: ^2` | 1 | `appendices.tex:471` |
+| `E0 :: ^*` | 1 | `appendices.tex:445` |
 | `FigureImage :: Du_1` | 1 | `figures/Fig2.pgf:216` |
 | `FigureImage :: Du_2` | 1 | `figures/Fig2.pgf:489` |
 | `FigureImage :: Wx` | 1 | `figures/Fig2.pgf:762` |
 | `FigureImage :: Wz` | 1 | `figures/Fig2.pgf:930` |
 | `FigureInput :: x` | 1 | `figures/Fig2.pgf:756` |
-| `FrameLowerBoundEpsilon :: ^2` | 1 | `appendices.tex:407` |
+| `FrameLowerBoundEpsilon :: ^2` | 1 | `appendices.tex:445` |
 | `GradientComplexStructure :: ^2` | 1 | `formalization_enabled_extension.tex:302` |
 | `GradientLevel :: \symglyph{GradientLevel}^2` | 1 | `formalization_enabled_extension.tex:300` |
 | `GradientOffDiagonal :: \symglyph{GradientOffDiagonal}^T` | 1 | `formalization_enabled_extension.tex:275` |
@@ -681,7 +701,7 @@ Even when a base key is registered, `\like{Key}{...}` may manually spell a diffe
 | `SingletonPowerCost :: \symglyph{SingletonPowerCost}_i(1)` | 1 | `formalization_enabled_extension.tex:649` |
 | `SingletonPowerCost :: \symglyph{SingletonPowerCost}_j(p)` | 1 | `formalization_enabled_extension.tex:577` |
 | `SkewDirection :: ^T` | 1 | `formalization_enabled_extension.tex:171` |
-| `SourceDirectRotation :: ^*` | 1 | `appendices.tex:341` |
+| `SourceDirectRotation :: ^*` | 1 | `appendices.tex:379` |
 | `SourceVector :: \symglyph{SourceVector}_i` | 1 | `paper.tex:422` |
 | `SourceVector :: \symglyph{SourceVector}_j` | 1 | `paper.tex:421` |
 | `SourceVector :: u_1` | 1 | `figures/Fig2.pgf:210` |
@@ -695,7 +715,7 @@ Even when a base key is registered, `\like{Key}{...}` may manually spell a diffe
 | `Yframe :: ^T` | 1 | `counterexample.tex:84` |
 | `theta :: \symglyph{theta}_3` | 1 | `figures/Fig3.pgf:194` |
 | `theta :: \symglyph{theta}_m` | 1 | `formalization_enabled_extension.tex:13` |
-| `v :: \symglyph{v}_{\symglyph{theta}}` | 1 | `paper.tex:1281` |
+| `v :: \symglyph{v}_{\symglyph{theta}}` | 1 | `paper.tex:1283` |
 
 ## Raw mathematical atoms: all distinct source forms
 
@@ -706,28 +726,28 @@ Every item below was printed directly in math mode rather than supplied by a `\s
 | `j` | 75 | 68 | — | `paper.tex:416`, `paper.tex:417`, `paper.tex:421`, `paper.tex:422` |
 | `i` | 71 | 59 | — | `paper.tex:422`, `paper.tex:693`, `counterexample.tex:282`, `counterexample.tex:286` |
 | `p` | 50 | 23 | — | `paper.tex:810`, `paper.tex:812`, `paper.tex:822`, `paper.tex:823` |
-| `T` | 46 | 12 | `IntertwinerT` | `paper.tex:278`, `paper.tex:1157`, `paper.tex:1474`, `paper.tex:1475` |
+| `T` | 46 | 12 | `IntertwinerT` | `paper.tex:278`, `paper.tex:1157`, `paper.tex:1476`, `paper.tex:1477` |
 | `x` | 42 | 2 | `SourceVector, PairPhaseX, RayleighTestVector, SylvesterScalarUnknown` | `paper.tex:683`, `paper.tex:684`, `paper.tex:1115`, `paper.tex:1116` |
 | `K` | 36 | 21 | `MatchingSourceSubspace` | `formalization_enabled_extension.tex:127`, `formalization_enabled_extension.tex:135`, `formalization_enabled_extension.tex:144`, `formalization_enabled_extension.tex:155` |
 | `t` | 36 | 1 | — | `formalization_enabled_extension.tex:162`, `formalization_enabled_extension.tex:172`, `formalization_enabled_extension.tex:174`, `formalization_enabled_extension.tex:175` |
 | `u` | 27 | 0 | `u` | `paper.tex:1147`, `paper.tex:1150`, `paper.tex:1152`, `formalization_enabled_extension.tex:357` |
-| `B` | 22 | 0 | `B, SylvesterLeft, Bblock, SkewDirection` | `paper.tex:747`, `paper.tex:891`, `paper.tex:1157`, `appendices.tex:232` |
+| `B` | 22 | 0 | `B, SylvesterLeft, Bblock, SkewDirection` | `paper.tex:747`, `paper.tex:891`, `paper.tex:1157`, `appendices.tex:270` |
 | `Z` | 20 | 0 | `CounterFixedPlane` | `paper.tex:808`, `paper.tex:809`, `paper.tex:810`, `paper.tex:812` |
 | `b` | 20 | 0 | `b, PairPowerCost, PairPhaseCosineY, CounterChordB, SylvesterScalarLeft` | `paper.tex:1107`, `paper.tex:1109`, `paper.tex:1111`, `paper.tex:1117` |
 | `n` | 20 | 11 | — | `paper.tex:400`, `paper.tex:480`, `paper.tex:1128`, `formalization_enabled_extension.tex:12` |
-| `C` | 18 | 0 | `SylvesterRight, Cblock, Cturn, PairCosineBlock, TraceCost, HalmosCosineBlock` | `paper.tex:891`, `appendices.tex:232`, `appendices.tex:234`, `appendices.tex:236` |
+| `C` | 18 | 0 | `SylvesterRight, Cblock, Cturn, PairCosineBlock, TraceCost, HalmosCosineBlock` | `paper.tex:891`, `appendices.tex:270`, `appendices.tex:272`, `appendices.tex:274` |
 | `z` | 13 | 3 | — | `paper.tex:687`, `paper.tex:688`, `paper.tex:689`, `paper.tex:693` |
 | `a` | 12 | 2 | `SingletonPowerCost, PairPhaseCosineX, CounterChordA, SylvesterScalarRight` | `paper.tex:256`, `paper.tex:1114`, `paper.tex:1115`, `formalization_enabled_extension.tex:143` |
 | `v` | 12 | 0 | `v` | `paper.tex:1147`, `paper.tex:1150`, `paper.tex:1152`, `formalization_enabled_extension.tex:363` |
 | `\infty` | 11 | 0 | — | `paper.tex:256`, `paper.tex:810`, `paper.tex:1105`, `paper.tex:1117` |
 | `I` | 10 | 0 | `Identity` | `paper.tex:1109`, `paper.tex:1111`, `paper.tex:1114`, `formalization_enabled_extension.tex:505` |
-| `M` | 10 | 3 | `NormM, Matching, CounterMovingPlane` | `paper.tex:278`, `paper.tex:279`, `paper.tex:1350`, `paper.tex:1351` |
-| `X` | 9 | 0 | `Xframe, X, ProjectionRealPart` | `appendices.tex:373`, `appendices.tex:378`, `appendices.tex:382`, `appendices.tex:383` |
-| `c` | 7 | 0 | `CosAngle` | `paper.tex:536`, `paper.tex:537`, `formalization_enabled_extension.tex:459` |
+| `M` | 10 | 3 | `NormM, Matching, CounterMovingPlane` | `paper.tex:278`, `paper.tex:279`, `paper.tex:1352`, `paper.tex:1353` |
+| `X` | 9 | 0 | `Xframe, X, ProjectionRealPart` | `appendices.tex:411`, `appendices.tex:416`, `appendices.tex:420`, `appendices.tex:421` |
+| `c` | 7 | 0 | `CosAngle, SingletonCost, PairCost` | `paper.tex:536`, `paper.tex:537`, `formalization_enabled_extension.tex:459` |
 | `e_0` | 7 | 0 | — | `counterexample.tex:168`, `counterexample.tex:169`, `counterexample.tex:205`, `counterexample.tex:224` |
-| `Y` | 6 | 0 | `Yframe, SylvesterRHS, ProjectionImaginaryPart` | `appendices.tex:373`, `appendices.tex:378`, `appendices.tex:382`, `appendices.tex:383` |
-| `v_j` | 6 | 0 | — | `appendices.tex:346`, `appendices.tex:347`, `appendices.tex:355`, `appendices.tex:357` |
-| `W` | 5 | 2 | `Wcompetitor` | `appendices.tex:361`, `figures/Fig2.pgf:762`, `figures/Fig2.pgf:930` |
+| `Y` | 6 | 0 | `Yframe, SylvesterRHS, ProjectionImaginaryPart` | `appendices.tex:411`, `appendices.tex:416`, `appendices.tex:420`, `appendices.tex:421` |
+| `v_j` | 6 | 0 | — | `appendices.tex:384`, `appendices.tex:385`, `appendices.tex:393`, `appendices.tex:395` |
+| `W` | 5 | 2 | `Wcompetitor` | `appendices.tex:399`, `figures/Fig2.pgf:762`, `figures/Fig2.pgf:930` |
 | `\mathrm{range}` | 5 | 0 | — | `figures/Fig1.pgf:206`, `figures/Fig1.pgf:212`, `figures/Fig1.pgf:409`, `figures/Fig1.pgf:415` |
 | `e_1` | 5 | 0 | — | `counterexample.tex:168`, `counterexample.tex:206`, `counterexample.tex:224`, `figures/Fig2.pgf:1700` |
 | `e_2` | 5 | 0 | — | `counterexample.tex:169`, `counterexample.tex:206`, `counterexample.tex:224`, `figures/Fig2.pgf:1736` |
@@ -743,31 +763,31 @@ Every item below was printed directly in math mode rather than supplied by a `\s
 | `u_1` | 3 | 2 | — | `counterexample.tex:168`, `figures/Fig2.pgf:210`, `figures/Fig2.pgf:216` |
 | `u_2` | 3 | 2 | — | `counterexample.tex:168`, `figures/Fig2.pgf:483`, `figures/Fig2.pgf:489` |
 | `z^2` | 3 | 0 | — | `formalization_enabled_extension.tex:500`, `formalization_enabled_extension.tex:507`, `formalization_enabled_extension.tex:510` |
-| `A_0` | 2 | 0 | `ReferenceBlock0` | `paper.tex:1020`, `appendices.tex:470` |
+| `A_0` | 2 | 0 | `ReferenceBlock0` | `paper.tex:1020`, `appendices.tex:508` |
 | `D` | 2 | 2 | `Rrotation, SourceDirectRotation, Dblock, Dplanar, PairDirectRotation` | `figures/Fig2.pgf:216`, `figures/Fig2.pgf:489` |
-| `L` | 2 | 0 | `MatchingTargetSubspace` | `appendices.tex:392`, `appendices.tex:395` |
-| `M^\perp` | 2 | 0 | — | `paper.tex:1351`, `paper.tex:1363` |
-| `Q_-` | 2 | 0 | — | `appendices.tex:313`, `appendices.tex:315` |
+| `L` | 2 | 0 | `MatchingTargetSubspace` | `appendices.tex:430`, `appendices.tex:433` |
+| `M^\perp` | 2 | 0 | — | `paper.tex:1353`, `paper.tex:1365` |
+| `Q_-` | 2 | 0 | — | `appendices.tex:351`, `appendices.tex:353` |
 | `S_2` | 2 | 0 | — | `paper.tex:816`, `paper.tex:828` |
-| `\mathrm{HS}` | 2 | 0 | — | `appendices.tex:418`, `appendices.tex:419` |
+| `\mathrm{HS}` | 2 | 0 | — | `appendices.tex:456`, `appendices.tex:457` |
 | `\mathrm{gen}` | 2 | 2 | — | `paper.tex:559`, `paper.tex:561` |
 | `\mathrm{plane}` | 2 | 0 | — | `formalization_enabled_extension.tex:204`, `formalization_enabled_extension.tex:207` |
+| `\mathtt{A_0}` | 2 | 0 | — | `appendices.tex:115`, `appendices.tex:117` |
 | `g` | 2 | 0 | `GradientLevel, g` | `paper.tex:1184` |
 | `h` | 2 | 0 | `PairMeanAngle` | `paper.tex:1184` |
 | `m` | 2 | 1 | — | `formalization_enabled_extension.tex:13`, `formalization_enabled_extension.tex:15` |
 | `v^*` | 2 | 0 | — | `paper.tex:1147`, `paper.tex:1150` |
-| `A_{\mathrm{tr}}` | 1 | 0 | `A0` | `appendices.tex:471` |
 | `B^*` | 1 | 0 | — | `paper.tex:747` |
-| `B^{-1}` | 1 | 0 | — | `appendices.tex:375` |
-| `C_0` | 1 | 0 | `SingletonBaseline` | `appendices.tex:208` |
-| `C_0^2` | 1 | 0 | — | `appendices.tex:312` |
-| `C_1` | 1 | 0 | `ComplementCosineBlock` | `appendices.tex:208` |
-| `C_j` | 1 | 0 | — | `appendices.tex:209` |
+| `B^{-1}` | 1 | 0 | — | `appendices.tex:413` |
+| `C_0` | 1 | 0 | `SingletonBaseline` | `appendices.tex:246` |
+| `C_0^2` | 1 | 0 | — | `appendices.tex:350` |
+| `C_1` | 1 | 0 | `ComplementCosineBlock` | `appendices.tex:246` |
+| `C_j` | 1 | 0 | — | `appendices.tex:247` |
 | `F^2` | 1 | 0 | — | `formalization_enabled_extension.tex:266` |
 | `I_2` | 1 | 0 | `IdentityTwo` | `counterexample.tex:59` |
 | `N` | 1 | 0 | `NormN` | `paper.tex:278` |
-| `S_0` | 1 | 0 | — | `appendices.tex:208` |
-| `S_0^*` | 1 | 0 | — | `appendices.tex:208` |
+| `S_0` | 1 | 0 | — | `appendices.tex:246` |
+| `S_0^*` | 1 | 0 | — | `appendices.tex:246` |
 | `S_1` | 1 | 0 | — | `paper.tex:814` |
 | `S_p` | 1 | 0 | — | `paper.tex:812` |
 | `U` | 1 | 1 | `U, Usource, PairFreeOrthogonal` | `paper.tex:840` |
@@ -776,18 +796,15 @@ Every item below was printed directly in math mode rather than supplied by a `\s
 | `\ell^2` | 1 | 0 | — | `paper.tex:1127` |
 | `\mathbb N_{\geq1}` | 1 | 0 | — | `paper.tex:1127` |
 | `\mathrm{ker}` | 1 | 0 | — | `figures/Fig2.pgf:1748` |
-| `\mathrm{tr}` | 1 | 1 | — | `appendices.tex:471` |
+| `\mathtt{H}` | 1 | 0 | — | `appendices.tex:120` |
 | `\operatorname{Re}` | 1 | 0 | — | `formalization_enabled_extension.tex:355` |
 | `e^{\pm i(\sym{PairPhaseX}+\sym{PairPhaseY})}` | 1 | 0 | — | `formalization_enabled_extension.tex:513` |
 | `e^{\pm i(\sym{PairPhaseX}-\sym{PairPhaseY})}` | 1 | 0 | — | `formalization_enabled_extension.tex:514` |
 | `e^{\pm it}` | 1 | 0 | — | `formalization_enabled_extension.tex:553` |
-| `e^{\sym{AngleGenerator}\sym{Theta}}` | 1 | 0 | — | `appendices.tex:210` |
+| `e^{\sym{AngleGenerator}\sym{Theta}}` | 1 | 0 | — | `appendices.tex:248` |
 | `e^{i\like{GradientEigenphase}{\symglyph{GradientEigenphase}_1}}` | 1 | 0 | — | `formalization_enabled_extension.tex:339` |
 | `e^{i\like{GradientEigenphase}{\symglyph{GradientEigenphase}_2}}` | 1 | 0 | — | `formalization_enabled_extension.tex:339` |
 | `e^{i\sym{theta}}` | 1 | 0 | — | `counterexample.tex:287` |
-| `e_{ij}` | 1 | 0 | — | `appendices.tex:77` |
-| `s_i` | 1 | 0 | — | `appendices.tex:77` |
-| `s_j` | 1 | 0 | `TransportSingularValues, DisplacementSingular, SingularValueS` | `appendices.tex:77` |
 | `z^3` | 1 | 0 | — | `formalization_enabled_extension.tex:506` |
 | `z^4` | 1 | 0 | — | `formalization_enabled_extension.tex:506` |
 
@@ -802,9 +819,9 @@ These are *not assumed to be mathematical symbols*. They include user-defined he
 
 No glyphs are discarded from the scanner. Standard LaTeX controls and punctuation are tallied here rather than being treated as candidate object names.
 
-### layout (195 occurrences; 18 distinct)
+### layout (197 occurrences; 18 distinct)
 
-`\qquad` × 42, `\\` × 31, `\quad` × 25, `\sqrt` × 22, `\bigl` × 15, `\bigr` × 15, `\,` × 10, `\` × 9, `\frac` × 5, `\left` × 5, `\right` × 5, `\ldots` × 3, `\underbrace` × 2, `\;` × 2, `\substack` × 1, `\hline` × 1, `\big` × 1, `\tfrac` × 1
+`\qquad` × 42, `\\` × 31, `\quad` × 25, `\sqrt` × 22, `\bigl` × 15, `\bigr` × 15, `\` × 11, `\,` × 10, `\frac` × 5, `\left` × 5, `\right` × 5, `\ldots` × 3, `\underbrace` × 2, `\;` × 2, `\substack` × 1, `\hline` × 1, `\big` × 1, `\tfrac` × 1
 
 ### number (677 occurrences; 34 distinct)
 
@@ -816,7 +833,7 @@ No glyphs are discarded from the scanner. Standard LaTeX controls and punctuatio
 
 ### standard-operator (1929 occurrences; 58 distinct)
 
-`=` × 362, `-` × 271, `,` × 268, `+` × 117, `/` × 103, `\\|` × 82, `\le` × 68, `&` × 63, `\sin` × 59, `\|` × 57, `*` × 54, `\{` × 40, `\}` × 40, `\cos` × 35, `<` × 34, `\leq` × 26, `\in` × 20, `>` × 20, `\sum` × 19, `\ge` × 18, `\circ` × 14, `\langle` × 13, `\rangle` × 13, `\min` × 13, `:` × 10, `\geq` × 9, `\oplus` × 8, `\to` × 8, `\tan` × 7, `\exp` × 7, `;` × 6, `\Vert` × 6, `\cap` × 5, `\subset` × 5, `\approx` × 5, `\pm` × 4, `\max` × 3, `\subseteq` × 3, `\perp` × 3, `\cdot` × 3, `\angle` × 3, `\int` × 2, `\ne` × 2, `\cup` × 2, `\mapsto` × 2, `\binom` × 2, `\times` × 2, `\sup` × 2, `\varnothing` × 2, `\simeq` × 1, `\bigoplus` × 1, `\ker` × 1, `\det` × 1, `\prod` × 1, `\arccos` × 1, `\longrightarrow` × 1, `\Longleftrightarrow` × 1, `\downarrow` × 1
+`=` × 362, `-` × 271, `,` × 269, `+` × 117, `/` × 103, `\\|` × 82, `\le` × 68, `&` × 63, `\sin` × 59, `\|` × 57, `*` × 54, `\{` × 40, `\}` × 40, `\cos` × 35, `<` × 34, `\leq` × 26, `\in` × 20, `>` × 20, `\sum` × 19, `\ge` × 18, `\circ` × 14, `\langle` × 13, `\rangle` × 13, `\min` × 13, `:` × 10, `\geq` × 9, `\oplus` × 8, `\to` × 8, `\tan` × 7, `\exp` × 7, `\Vert` × 6, `\cap` × 5, `;` × 5, `\subset` × 5, `\approx` × 5, `\pm` × 4, `\max` × 3, `\subseteq` × 3, `\perp` × 3, `\cdot` × 3, `\angle` × 3, `\int` × 2, `\ne` × 2, `\cup` × 2, `\mapsto` × 2, `\binom` × 2, `\times` × 2, `\sup` × 2, `\varnothing` × 2, `\simeq` × 1, `\bigoplus` × 1, `\ker` × 1, `\det` × 1, `\prod` × 1, `\arccos` × 1, `\longrightarrow` × 1, `\Longleftrightarrow` × 1, `\downarrow` × 1
 
 ### syntax (1384 occurrences; 10 distinct)
 

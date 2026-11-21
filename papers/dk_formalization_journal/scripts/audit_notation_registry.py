@@ -85,6 +85,7 @@ def declarations(src: str) -> list[Symbol]:
 # one actual section, equation, page, or theorem in that source.
 SOURCE_START = re.compile(r"^\s*\\dkDeclareNotationSource\{", re.M)
 ALTERNATIVE_START = re.compile(r"^\s*\\dkDeclareNotationAlternative\{", re.M)
+LEAN_START = re.compile(r"^\s*\\dkDeclareLeanSineThetaCorrespondence\{", re.M)
 
 def named_records(src: str, pattern: re.Pattern[str], arity: int) -> list[tuple[str, ...]]:
     records = []
@@ -516,7 +517,7 @@ def discover_sources() -> tuple[list[str], list[str]]:
     return found,errors
 
 
-def output_report(reg: dict[str,Symbol], occurrences: list[Occurrence], spans: list[Span], errors: list[str], hashes: dict[str,str], sources: dict[str,tuple[str,str]], alternatives: list[tuple[str,str,str,str,str]]) -> str:
+def output_report(reg: dict[str,Symbol], occurrences: list[Occurrence], spans: list[Span], errors: list[str], hashes: dict[str,str], sources: dict[str,tuple[str,str]], alternatives: list[tuple[str,str,str,str,str]], lean_rows: list[tuple[str,str,str]]) -> str:
     semantic = [o for o in occurrences if o.kind in {"registered-key", "registered-glyph"}]
     raw = [o for o in occurrences if o.kind == "raw-symbol"]
     commands = [o for o in occurrences if o.kind == "raw-control"]
@@ -548,6 +549,7 @@ def output_report(reg: dict[str,Symbol], occurrences: list[Occurrence], spans: l
         "## Coverage and status", "",
         f"- Semantic registry: **{len(reg)} typed entries** ({sum(x.glossary=='glossary' for x in reg.values())} glossary, {sum(x.glossary=='local' for x in reg.values())} local).",
         f"- Documented source alternatives: **{len(alternatives)}** ({sum(a[1]=='DK1970' for a in alternatives)} from DK 1970), across {len({a[0] for a in alternatives})} semantic keys.",
+        f"- Scoped Lean sine-theta binder correspondences: **{len(lean_rows)}** semantic keys.",
         f"- Math regions scanned: **{len(spans)}** ({', '.join(f'{k}: {v}' for k,v in sorted(total_by_file.items()))}).",
         f"- Occurrence records: **{len(occurrences)}**; category counts: " + ", ".join(f"{k}={n}" for k,n in counts.most_common()) + ".",
         f"- Registered references in math: **{len(semantic)}**, spanning **{len(semantic_groups)} keys**.",
@@ -586,6 +588,12 @@ def output_report(reg: dict[str,Symbol], occurrences: list[Occurrence], spans: l
         title, url = sources[source_id]
         out.append("| " + " | ".join([f"`{safe(key)}`",f"`{safe(resolved_glyph(key, reg))}`",reg[key].symbol_type,
             f"[{safe(title)}]({url})",f"`{safe(glyph)}`",safe(locator),safe(note)]) + " |")
+    out += ["", "## Lean sine-theta correspondence (one theorem, not global aliases)", "",
+            "Recorded at the semantic declarations in `math_symbol_colors.tex`. The printed correspondence table in the paper uses the same records. Lean binder spellings below are TeX renderings of the source identifiers, including subscript and Greek characters; they are scoped to `sinTheta_unbounded_formGap_whereDefinedUIN_rclike` in `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean`.", "",
+            "| Semantic key | Paper glyph | Type | Lean binder (TeX rendering) | Mathematical role |", "|---|---|---|---|---|"]
+    for key, lean_id, note in lean_rows:
+        out.append("| " + " | ".join([f"`{safe(key)}`", f"`{safe(resolved_glyph(key,reg))}`",
+                   reg[key].symbol_type, f"`{safe(lean_id)}`", safe(note)]) + " |")
     out += ["", "## Types and glyph collisions", "",
             "Every registered object has a declared mathematical type. Reused printed glyphs with different registered types deserve particular attention; this is a report, not an automatic rename.", "",
             "| Printed glyph | Keys and types |", "|---|---|"]
@@ -643,6 +651,7 @@ def main() -> int:
     reg={x.key:x for x in symbols}
     source_records = named_records(registry_text, SOURCE_START, 3)
     alternative_records = named_records(registry_text, ALTERNATIVE_START, 5)
+    lean_rows = named_records(registry_text, LEAN_START, 3)
     notation_sources = {sid:(title,url) for sid,title,url in source_records}
     errors=[]
     if len(notation_sources) != len(source_records): errors.append("Duplicate notation source IDs")
@@ -656,6 +665,12 @@ def main() -> int:
         if not glyph.strip() or not locator.strip() or not note.strip(): errors.append(f"Incomplete source alternative for {key}/{source}")
         if (key, source) in alternatives_seen: errors.append(f"Duplicate alternative for {key}/{source}")
         alternatives_seen.add((key, source))
+    seen_lean = set()
+    for key, binder, note in lean_rows:
+        if key not in reg: errors.append(f"Lean correspondence for unknown key: {key}")
+        if key in seen_lean: errors.append(f"Repeated Lean correspondence key: {key}")
+        if not binder.strip() or not note.strip(): errors.append(f"Incomplete Lean correspondence for key: {key}")
+        seen_lean.add(key)
     if len(reg) != len(symbols): errors.append("Duplicate semantic declaration keys")
     known=defaultdict(list)
     for key in reg:
@@ -687,7 +702,7 @@ def main() -> int:
             occurrences.append(scanner.occs[-1])
     unknown=sorted({o.token for o in occurrences if o.kind in {"registered-key", "registered-glyph"} and o.token not in reg})
     if unknown: errors.append("Unknown registered symbol keys: "+", ".join(unknown))
-    report=output_report(reg,occurrences,spans,errors,hashes,notation_sources,alternative_records)
+    report=output_report(reg,occurrences,spans,errors,hashes,notation_sources,alternative_records,lean_rows)
     if args.output:
         args.output.parent.mkdir(parents=True,exist_ok=True)
         args.output.write_text(report,encoding="utf-8")

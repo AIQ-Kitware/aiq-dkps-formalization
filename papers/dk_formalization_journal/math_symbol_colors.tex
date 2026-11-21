@@ -86,8 +86,8 @@
 % entry appears in the curated printed notation table; "local" does not.
 % This registry is the sole authority for symbol meaning and printed form.
 % Use role "plain" for an uncolored symbol that still carries hover text.
-% Changing the glyph is a separate editorial decision: this audit preserves
-% the current E, F, F_ex, G, and other existing printed choices.
+% Changing a glyph is a deliberate editorial decision; the trial/exact
+% Hilbert spaces now have calligraphic glyphs, unlike their embedding maps.
 \newcommand{\dkDeclareSymbol}[7][]{%
   \expandafter\def\csname dkgloss@#2\endcsname{#6}%
   \expandafter\def\csname dkglossaryflag@#2\endcsname{#5}%
@@ -162,6 +162,30 @@
   \csname dkaltlocator@DK1970@#1\endcsname\\
 }
 
+% Correspondence in the *specific* Lean sine-theta theorem listed in the paper.
+% The mathematical object and printed paper notation remain keyed in the
+% semantic registry. These Lean binder labels are NOT global Lean aliases.
+% Exact source: DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean,
+% theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike.
+\newcommand{\dkLeanSineThetaRows}{}
+\makeatletter
+\newcommand{\dkDeclareLeanSineThetaCorrespondence}[3]{%
+  \ifcsname dkglyph@#1\endcsname\else
+    \PackageError{dk-math-colors}{Unknown Lean correspondence key #1}{Declare the symbol first}%
+  \fi
+  \ifcsname dkleanbinder@#1\endcsname
+    \PackageError{dk-math-colors}{Duplicate Lean correspondence for key #1}{Use one binder per key in this scoped theorem}%
+  \fi
+  \expandafter\def\csname dkleanbinder@#1\endcsname{#2}%
+  \expandafter\def\csname dkleanrole@#1\endcsname{#3}%
+  \g@addto@macro\dkLeanSineThetaRows{\dkLeanSineThetaRow{#1}}%
+}
+\makeatother
+\newcommand{\dkLeanSineThetaRow}[1]{%
+  $\sym{#1}$ & $\mathtt{\csname dkleanbinder@#1\endcsname}$ &
+  \csname dkleanrole@#1\endcsname\\
+}
+
 \newif\ifDKSymbolTooltips
 \DKSymbolTooltipstrue
 \ifdefined\DKNoSymbolTooltips\DKSymbolTooltipsfalse\fi
@@ -230,7 +254,7 @@
   {ReferenceBlock1}{A_1}{old}{glossary}{Reference operator restricted to the source complement in Section 8.}{self-adjoint-operator}
 \dkDeclareSymbol[Self-adjoint ambient operator Ahat being studied; in the perturbation setting Ahat = A + H. Its action on a trial vector is compared with the proposed eigenvalue times that vector.]
   {Ahat}{\widehat A}{current}{local}{Operator under study; in the perturbation setting, the reference operator plus its perturbation.}{self-adjoint-operator}
-\dkDeclareSymbol[Self-adjoint ambient operator Ahat being studied. In the perturbation setting Ahat = A + H. The trial residual is R = Ahat E_0 - E_0 A_tr, and the exact complementary block satisfies Ahat F_1 = F_1 Lambda_1 on its domain.]
+\dkDeclareSymbol[Self-adjoint ambient operator Ahat being studied. In the perturbation setting Ahat = A + H. The trial residual is R = Ahat E_0 - E_0 A_trial, and the exact complementary block satisfies Ahat F_1 = F_1 Lambda_1 on its domain.]
   {Acurrent}{\widehat A}{current}{glossary}{Operator under study; in the perturbation setting, the reference operator plus its perturbation.}{self-adjoint-operator}
 \dkDeclareSymbol[Additive self-adjoint perturbation H = Ahat - A. A bound on its norm can control the residual of an eigenspace of one operator relative to the other.]
   {H}{H}{perturb}{glossary}{Additive self-adjoint perturbation of the reference operator.}{self-adjoint-operator}
@@ -243,13 +267,13 @@
 \dkDeclareSymbol{V}{V}{trial}{local}{Trial subspace in the local geometric notation.}{linear-subspace}% Manim's V remains trial in local slide notation.
 \dkDeclareSymbol[Source subspace U to be carried onto the target V by an orthogonal or unitary map W. In the transport sections P projects onto U and Q onto V. The matching theorem also names the source subspace K.]
   {Usource}{U}{trial}{glossary}{Source subspace to be transported onto the target subspace.}{linear-subspace}
-\dkDeclareSymbol[Trial frame E_0: F -> E, a linear isometry from trial-coordinate space F into ambient space E. Its range is the trial subspace; E_0* returns trial coordinates and E_0* E_0 = I_F. In rank one, E_0(x) = x v.]
+\dkDeclareSymbol[Trial frame E_0: an isometric embedding from the trial-coordinate Hilbert space (calligraphic F) into the ambient Hilbert space (calligraphic H). Its range is the trial subspace; E_0* returns trial coordinates and E_0* E_0 is the identity on the trial space.]
   {E0}{E_0}{trialframe}{glossary}{Isometric embedding of the trial subspace; its adjoint returns trial coordinates.}{isometric-embedding}
-\dkDeclareSymbol[Self-adjoint trial operator A_tr on trial-coordinate space F. The residual compares Ahat E_0 with E_0 A_tr. Rayleigh--Ritz chooses A_tr = E_0* Ahat E_0 when this compression is defined; the theorem allows other trial operators.]
-  {A0}{A_{\mathrm{tr}}}{trialspectrum}{glossary}{Self-adjoint operator on trial coordinates; its eigenvalues are the trial spectral values.}{self-adjoint-operator}
+\dkDeclareSymbol[Self-adjoint general trial operator A_trial acting on the trial-coordinate Hilbert space (calligraphic F). The residual compares Ahat E_0 with E_0 A_trial. Rayleigh--Ritz chooses the compression E_0* Ahat E_0 when defined; other trial operators are allowed. It need not equal the reference block A_0.]
+  {TrialOperator}{A_{\mathrm{trial}}}{trialspectrum}{glossary}{Self-adjoint operator on trial coordinates; its eigenvalues are the trial spectral values.}{self-adjoint-operator}
 \dkDeclareSymbol[Trial vector: a proposed approximate eigenvector. In the rank-one geometry v has unit length and E_0(x) = x v. Its residual for trial scalar rho is r = Ahat v - rho v.]
   {v}{v}{trialvector}{local}{Trial vector or vector in the trial subspace.}{vector}
-\dkDeclareSymbol[Scalar trial operator in rank one, A_tr(x) = rho x. Figure 1 uses the Rayleigh value rho = <v, Ahat v> for unit v; then rho v is the projection of Ahat v onto the trial line and r is perpendicular to v.]
+\dkDeclareSymbol[Scalar trial operator in rank one, A_trial(x) = rho x. Figure 1 uses the Rayleigh value rho = <v, Ahat v> for a unit vector v; then rho v is the projection of Ahat v onto the trial line and the residual is orthogonal to v.]
   {rho}{\rho}{trialspectrum}{local}{Trial eigenvalue or scalar trial operator.}{scalar}
 \dkDeclareSymbol[Approximate eigenvalue assigned to a trial vector v. For the local operator A, its residual is A v - mu v. For unit v, the Rayleigh--Ritz choice is mu = <A v, v>.]
   {mu}{\mu}{trialspectrum}{local}{Trial spectral value.}{scalar}
@@ -263,10 +287,10 @@
   {SourceVector}{x}{trialvector}{local}{Vector in the source subspace.}{vector}
 \dkDeclareSymbol[Orthonormal coordinate frame X for the source subspace, so X* X = I. Together with a target frame Y, the singular values of X* Y are the principal cosines. In the four-dimensional counterexample X is the vertical stack of I_2 and 0.]
   {Xframe}{X}{trialframe}{glossary}{Orthonormal coordinate matrix for the source subspace in the counterexample.}{isometric-embedding}
-\dkDeclareSymbol[Hilbert space F of trial coordinates. E_0 embeds F isometrically into ambient space E; A_tr and the positive sine operator sin(Theta_0) act on F, while the residual R maps F into E.]
-  {Ftrial}{F}{trialframe}{glossary}{Hilbert space of trial coordinates.}{hilbert-space}
-\dkDeclareSymbol[Ambient Hilbert space E over the real or complex scalars. It contains the trial subspace range(E_0) and the orthogonal exact subspaces range(F_0) and range(F_1). The source theorem permits infinite-dimensional separable E.]
-  {Eambient}{E}{ambient}{glossary}{Ambient Hilbert space containing the trial and exact subspaces.}{hilbert-space}
+\dkDeclareSymbol[Trial-coordinate Hilbert space (calligraphic F). The frame E_0 embeds it into the ambient Hilbert space; A_trial and sin(Theta_0) act on it, while the residual R maps it into the ambient space.]
+  {TrialCoordinateSpace}{\mathcal F}{trialframe}{glossary}{Hilbert space of trial coordinates.}{hilbert-space}
+\dkDeclareSymbol[Ambient real or complex Hilbert space (calligraphic H). It contains the trial subspace range(E_0) and the orthogonal exact subspaces range(F_0) and range(F_1); it may be infinite-dimensional and separable.]
+  {AmbientHilbertSpace}{\mathcal H}{ambient}{glossary}{Ambient Hilbert space containing the trial and exact subspaces.}{hilbert-space}
 % Zero and all-ones vectors are distinguished from scalar 0 and 1.
 \dkDeclareSymbol[Zero vector of the vector or Hilbert space in context: the additive identity. The zero subspace consists only of this vector.]
   {ZeroVector}{\mathbf{0}}{fg}{glossary}{Zero vector; the additive identity of the ambient vector space.}{vector}
@@ -275,7 +299,7 @@
 % Exact/wanted family: the target subspace, its frame, projection and rotation.
 \dkDeclareSymbol[Target subspace V in the transport problem: feasible maps satisfy W(U) = V, or equivalently W P W* = Q. The matching theorem also names this subspace L.]
   {Vtarget}{V}{wanted}{glossary}{Target subspace in the transport problem.}{linear-subspace}
-\dkDeclareSymbol[Exact wanted frame F_0: F_ex -> E, a linear isometry onto the desired exact spectral subspace. F_0* returns its coordinates. P_ex = F_0 F_0* is its ambient orthogonal projection; in Figure 1, F_0(h) = (h, 0).]
+\dkDeclareSymbol[Exact wanted frame F_0: isometric embedding from the wanted exact-coordinate Hilbert space into the ambient Hilbert space. F_0* returns exact coordinates and P_ex = F_0 F_0* projects onto its range. In Figure 1 F_0(h) = (h,0).]
   {F0}{F_0}{wantedframe}{glossary}{Isometric coordinates for the desired exact spectral subspace; star denotes the adjoint.}{isometric-embedding}
 \dkDeclareSymbol[Self-adjoint operator block on coordinates for the desired exact spectral subspace. Its spectrum consists of the wanted exact spectral values; in the corresponding decomposition Ahat F_0 = F_0 Lambda_0 on the operator domain.]
   {Lambda0}{\Lambda_0}{wantedspectrum}{local}{Self-adjoint block on the desired exact spectral subspace.}{self-adjoint-operator}
@@ -283,9 +307,9 @@
 \dkDeclareSymbol{f0}{f_0}{wantedvector}{local}{Component or coordinate vector in the desired exact subspace.}{vector}
 \dkDeclareSymbol{lambda0}{\lambda_0}{wantedspectrum}{local}{Wanted exact eigenvalue or wanted spectral value.}{scalar}
 \dkDeclareSymbol{lambdau}{\lambda_u}{wantedspectrum}{local}{Eigenvalue associated with a desired exact vector.}{scalar}
-\dkDeclareSymbol[Exact wanted orthogonal projection P_ex: E -> E, with P_ex = F_0 F_0*. It retains the desired exact spectral component. Its complementary projection is P_ex_perp = I - P_ex = F_1 F_1*; the projected trial frame is S = P_ex_perp E_0.]
+\dkDeclareSymbol[Exact wanted orthogonal projection P_ex on the ambient Hilbert space (calligraphic H); P_ex = F_0 F_0*. Its complement is I - P_ex = F_1 F_1*. The projected trial frame is S = (I - P_ex) E_0.]
   {Pexact}{P_{\mathrm{ex}}}{wantedprojection}{glossary}{Orthogonal projection onto the desired exact subspace in the sine-theta theorem.}{orthogonal-projection}
-\dkDeclareSymbol[Exact complementary orthogonal projection P_ex_perp = I - P_ex = F_1 F_1*: E -> E. It retains the unwanted exact component. In Figure 1, P_ex_perp v = S(1), whereas P_ex_perp r is the unwanted component of the residual.]
+\dkDeclareSymbol[Complementary orthogonal projection I - P_ex on the ambient Hilbert space, equal to F_1 F_1*. It retains the unwanted exact component; in Figure 1, (I - P_ex) v = S(1).]
   {PexactPerp}{P_{\mathrm{ex}}^\perp}{unwantedprojection}{local}{Orthogonal projection onto the exact complementary subspace.}{orthogonal-projection}
 \dkDeclareSymbol{ReflectionSigma}{\Sigma}{wantedprojection}{local}{Reflection associated with the desired exact spectral projection.}{unitary-operator}
 \dkDeclareSymbol[Orthogonal projection Q onto the target subspace V in the transport problem. A feasible orthogonal or unitary W satisfies W P W* = Q, where P projects onto the source U.]
@@ -299,32 +323,32 @@
   {Yframe}{Y}{wantedframe}{glossary}{Orthonormal coordinate matrix for the target subspace in the counterexample.}{isometric-embedding}
 \dkDeclareSymbol[Vector y in the target subspace V. For principal vectors, unit x_j in U and y_j in V are paired so that <x_j, y_j> = cos(theta_j); distinct pairs have zero cross inner product.]
   {TargetVector}{y}{wantedvector}{local}{Vector in the target subspace.}{vector}
-\dkDeclareSymbol[Hilbert space F_ex of exact wanted coordinates. The isometry F_0: F_ex -> E identifies it with the desired exact spectral subspace. This space differs from H, the additive perturbation.]
-  {Hexact}{F_{\mathrm{ex}}}{wantedframe}{glossary}{Hilbert space of coordinates for the desired exact spectral subspace.}{hilbert-space}% Coordinate Hilbert space (not perturbation).
+\dkDeclareSymbol[Exact wanted-coordinate Hilbert space (calligraphic F with ex subscript). F_0 embeds it isometrically into the ambient Hilbert space, with range equal to the wanted exact spectral subspace.]
+  {ExactCoordinateSpace}{\mathcal F_{\mathrm{ex}}}{wantedframe}{glossary}{Hilbert space of coordinates for the desired exact spectral subspace.}{hilbert-space}% Coordinate Hilbert space (not perturbation).
 % Exact/unwanted family; the trial error operators are MAGENTA, not cyan.
 \dkDeclareSymbol{Uperp}{U^{\perp}}{unwanted}{local}{Orthogonal complement of the desired exact subspace in the local notation.}{linear-subspace}
-\dkDeclareSymbol[Exact complementary frame F_1: G -> E, a linear isometry onto the orthogonal complement of range(F_0). F_1* returns unwanted coordinates; F_1 F_1* = I - P_ex. In Figure 1, F_1(g) = (0, g).]
+\dkDeclareSymbol[Exact complementary frame F_1: isometric embedding from the complementary-coordinate Hilbert space into the ambient Hilbert space, onto the orthogonal complement of range(F_0). F_1* returns unwanted coordinates and F_1 F_1* = I - P_ex.]
   {F1}{F_1}{unwantedframe}{glossary}{Isometric coordinates for the exact complementary subspace; star denotes the adjoint.}{isometric-embedding}
-\dkDeclareSymbol[Self-adjoint unwanted block Lambda_1 on G, satisfying Ahat F_1 = F_1 Lambda_1 on its domain. Its spectrum is separated from the trial spectrum of A_tr by the specified positive delta. Figure 1 uses the scalar block 0.7.]
+\dkDeclareSymbol[Self-adjoint unwanted block Lambda_1 on the complementary-coordinate Hilbert space. It satisfies Ahat F_1 = F_1 Lambda_1 on its domain. Its spectrum is separated from that of A_trial by the specified positive delta.]
   {Lambda1}{\Lambda_1}{unwantedspectrum}{glossary}{Self-adjoint operator on exact complementary coordinates: the unwanted spectral block.}{self-adjoint-operator}
-% Spectral measure and set (distinct from the ambient space E and sine block S).
+% Spectral measure and set (distinct from the ambient space H-calligraphic and sine block S).
 \dkDeclareSymbol[Projection-valued spectral measure E associated with a self-adjoint operator A: A = integral lambda dE(lambda). For a Borel set S, E(S) is the orthogonal projection onto the corresponding spectral subspace.]
   {SpectralMeasure}{E}{wantedprojection}{glossary}{Projection-valued spectral measure of a self-adjoint operator.}{projection-valued-measure}
 \dkDeclareSymbol[Borel subset S of the real spectral axis. The spectral projection E(S) selects the part of a self-adjoint operator with spectral values in S; its range is a reducing subspace.]
   {SpectralSet}{S}{wantedspectrum}{glossary}{Borel spectral set used to select a spectral subspace.}{set}
 % Generic Sylvester coefficients and right side, by source/target role.
-\dkDeclareSymbol[Left coefficient B of the Sylvester map X -> B X - X C; B acts on the output space of X. For the sine bound, B = Lambda_1 on the unwanted-coordinate space G.]
+\dkDeclareSymbol[Left coefficient B of X -> B X - X C. B acts on the output space of X; in the sine theorem it equals Lambda_1 on the complementary-coordinate Hilbert space (calligraphic G).]
   {SylvesterLeft}{B}{unwantedspectrum}{glossary}{Left coefficient of the Sylvester equation; corresponds to the unwanted spectral block.}{self-adjoint-operator}
-\dkDeclareSymbol[Right coefficient C of the Sylvester map X -> B X - X C; C acts on the input space of X. For the sine bound, C = A_tr on trial space F. The historical equation also denotes this coefficient by A.]
+\dkDeclareSymbol[Right coefficient C of X -> B X - X C. C acts on the input space of X; in the sine theorem it equals A_trial on the trial-coordinate Hilbert space (calligraphic F).]
   {SylvesterRight}{C}{trialspectrum}{glossary}{Right coefficient of the Sylvester equation; corresponds to the trial operator.}{self-adjoint-operator}
-\dkDeclareSymbol[Right-hand side Y in B X - X C = Y, with the same input and output spaces as X. For the sine bound, Y = F_1* R: F -> G, the residual expressed in unwanted exact coordinates.]
+\dkDeclareSymbol[Right-hand side Y in B X - X C = Y, with the same source and target Hilbert spaces as X. In the sine theorem Y = F_1* R maps trial coordinates to unwanted exact coordinates.]
   {SylvesterRHS}{Y}{resid}{glossary}{Right-hand side of the Sylvester equation, obtained by projecting the residual.}{linear-operator}
 \dkDeclareSymbol{w}{w}{unwantedvector}{local}{Vector in an unwanted or complementary spectral subspace.}{vector}
 \dkDeclareSymbol{f1}{f_1}{unwantedvector}{local}{Component or coordinate vector in the unwanted exact subspace.}{vector}
 \dkDeclareSymbol{lambda1}{\lambda_1}{unwantedspectrum}{local}{Unwanted exact eigenvalue or complementary spectral value.}{scalar}
 \dkDeclareSymbol{lambdaw}{\lambda_w}{unwantedspectrum}{local}{Eigenvalue associated with an unwanted exact vector.}{scalar}
-\dkDeclareSymbol[Hilbert space G of exact complementary coordinates. F_1: G -> E embeds it onto the unwanted exact subspace; Lambda_1 acts on G and X = F_1* E_0 maps trial coordinates into G.]
-  {Gunwanted}{G}{unwantedframe}{glossary}{Hilbert space of exact complementary coordinates.}{hilbert-space}
+\dkDeclareSymbol[Exact complementary-coordinate Hilbert space (calligraphic G). F_1 embeds it isometrically into the ambient Hilbert space as the unwanted exact spectral subspace.]
+  {ComplementaryCoordinateSpace}{\mathcal G}{unwantedframe}{glossary}{Hilbert space of exact complementary coordinates.}{hilbert-space}
 \dkDeclareSymbol{E1}{E_1}{unwantedframe}{local}{Isometric coordinates for the complementary trial subspace.}{isometric-embedding}
 \dkDeclareSymbol{Vperp}{V^{\perp}}{unwanted}{local}{Orthogonal complement of the trial subspace in the local notation.}{linear-subspace}
 % Angle and error geometry, including distinct rectangular and positive maps.
@@ -344,11 +368,11 @@
   {ComplementCosineBlock}{C_1}{anglecos}{local}{Cosine of the complementary angle block in the spectral-repulsion inequality.}{self-adjoint-operator}
 \dkDeclareSymbol[Scalar sine of a principal angle. For a unit principal trial vector v and exact wanted projection P_ex, sin(theta) = ||(I - P_ex)v||. In Figure 1 it is the length of the pink leg S(1).]
   {sintheta}{\sin\theta}{sine}{local}{Sine of an individual principal angle: the length of the complementary component of a unit principal trial vector.}{scalar}
-\dkDeclareSymbol[Positive sine operator sin(Theta_0) = sqrt(I_F - E_0* P_ex E_0): F -> F. It equals |S| for S = (I - P_ex)E_0: F -> E. Its eigenvalues in finite dimensions are the principal sines; the sine theorem bounds its ideal norm by N(R)/delta.]
+\dkDeclareSymbol[Positive sine operator sin(Theta_0) on the trial-coordinate Hilbert space (calligraphic F). It equals |S| for S = (I - P_ex)E_0, whose source is the trial-coordinate space and target is the ambient Hilbert space.]
   {sinTheta0}{\sin\Theta_0}{sineoperator}{glossary}{Positive sine operator on trial coordinates; the modulus of the rectangular complementary error.}{angle-operator}
-\dkDeclareSymbol[Rectangular complementary error S = (I - P_ex) E_0: F -> E. It records how much each trial vector leaks outside the exact wanted subspace. Its modulus |S| = sqrt(S* S) is sin(Theta_0): F -> F. In rank one S(1) = P_ex_perp v.]
+\dkDeclareSymbol[Rectangular complementary error S = (I - P_ex) E_0 from the trial-coordinate Hilbert space (calligraphic F) into the ambient Hilbert space (calligraphic H). Its modulus |S| = sqrt(S* S) equals the positive sine operator sin(Theta_0).]
   {S}{S}{sineblock}{glossary}{Rectangular complementary error: the trial frame projected onto the unwanted exact subspace.}{linear-operator}
-\dkDeclareSymbol[Complementary-coordinate map X = F_1* E_0: F -> G, with S = F_1 X. It satisfies Lambda_1 X - X A_tr = F_1* R on domain(A_tr). Isometric multiplication gives N(X) = N(S); the separate modulus identity abs(S) = sin(Theta_0) gives N(S) = N(sin(Theta_0)), whenever these norms are finite.]
+\dkDeclareSymbol[Complementary-coordinate map X = F_1* E_0 from trial coordinates (calligraphic F) to complementary exact coordinates (calligraphic G). It satisfies Lambda_1 X - X A_trial = F_1* R on domain(A_trial). Its nonzero singular values agree with those of S.]
   {X}{X}{sylvester}{glossary}{Solution of the Sylvester equation; for the sine bound, the trial frame in unwanted exact coordinates.}{linear-operator}
 \dkDeclareSymbol{alphaAngle}{\alpha}{anglemax}{local}{Largest principal angle.}{angle}
 \dkDeclareSymbol[Scalar c = cos(theta) in the counterexample. In the general two-projection decomposition, the same role denotes a positive cosine operator C; the cosine and sine blocks commute and satisfy C squared + S squared = I.]
@@ -364,7 +388,7 @@
 % Residual/error-displacement family.
 \dkDeclareSymbol[Residual vector r = Ahat v - rho v = R(1) for the rank-one frame E_0(x) = x v. Figure 1 draws it from rho v to Ahat v. For unit v and the Rayleigh value rho = <v, Ahat v>, <v, r> = 0; a general trial scalar need not give orthogonality.]
   {r}{r}{residvector}{local}{Residual vector of an approximate eigenpair.}{vector}
-\dkDeclareSymbol[Bounded residual R: F -> E, agreeing with Ahat E_0 - E_0 A_tr on domain(A_tr). The domain condition requires E_0(domain(A_tr)) inside domain(Ahat). R = 0 means that E_0 intertwines A_tr with Ahat; its norm measures the defect.]
+\dkDeclareSymbol[Bounded residual R from trial coordinates (calligraphic F) to the ambient Hilbert space (calligraphic H), agreeing with Ahat E_0 - E_0 A_trial on domain(A_trial). The domain condition requires E_0(domain(A_trial)) in domain(Ahat). R = 0 means the frame intertwines these operators.]
   {R}{R}{resid}{glossary}{Bounded residual of the trial eigenproblem, agreeing with the operator difference on the trial domain.}{linear-operator}
 \dkDeclareSymbol[Full displacement Delta_W = I - W on the ambient space. In the failed Ky Fan comparison W = W_(pi/4); Delta_W has singular values sqrt(2), sqrt(2), 0, 0. Multiplying by a principal-plane projection restricts its input to that plane.]
   {Kdisplacement}{\Delta_W}{displacement}{glossary}{Full displacement of a transporter from the identity.}{operator-valued-function}
@@ -421,32 +445,32 @@
   {NormM}{M}{normaux}{local}{Auxiliary unitarily invariant norm used to define a Q-norm through the squared modulus.}{norm}
 \dkDeclareSymbol[Q-norm property: a unitarily invariant norm N is a Q-norm when N(T) squared = M(T* T) for some unitarily invariant norm M. The Frobenius norm is an example, with M the trace norm; the repaired full-displacement theorem uses this norm class.]
   {NormQ}{Q}{normaux}{glossary}{Q-norm: its square is a unitarily invariant norm of the squared modulus.}{norm}
-\dkDeclareSymbol[Singleton trace cost s_i = min(4 sin(theta_i/2), 2) for angle label i. It transports one real principal plane independently, choosing a rotation of cost 4 sin(theta_i/2) or a reflection of cost 2.]
-  {SingletonCost}{s}{norm}{glossary}{Minimum trace displacement for one real principal plane: choose a rotation or a reflection.}{scalar-cost}
-\dkDeclareSymbol[Paired trace cost e_ij = 4 sin((theta_i + theta_j)/2) for distinct angle labels i,j. It is attained by coupling their principal planes in a real four-dimensional block. The edge weight s_i + s_j - e_ij is the difference between the cost of two singletons and this paired cost.]
-  {PairCost}{e}{norm}{glossary}{Trace displacement cost of coupling two principal planes in a four-dimensional block.}{scalar-cost}
+\dkDeclareSymbol[Singleton trace cost c_i = min(4 sin(theta_i/2),2) for principal-angle label i. It transports one real principal plane independently via rotation or reflection.]
+  {SingletonCost}{c}{norm}{glossary}{Minimum trace displacement for one real principal plane: choose a rotation or a reflection.}{scalar-cost}
+\dkDeclareSymbol[Pair trace cost c_ij = 4 sin((theta_i + theta_j)/2) for distinct principal-angle labels i,j. It is attained by coupling the two planes in four dimensions. The edge weight w_ij = c_i + c_j - c_ij is the cost saved by pairing.]
+  {PairCost}{c}{norm}{glossary}{Trace displacement cost of coupling two principal planes in a four-dimensional block.}{scalar-cost}
 \dkDeclareSymbol[Scalar phase cost f_p(t) = (2 sin(t/2)) to the power p, for 0 <= t <= pi. A real planar rotation through t contributes two copies, so its displacement power cost is 2 f_p(t).]
   {MatchingPhaseCost}{f_p}{norm}{local}{Displacement power cost for one scalar phase.}{scalar-cost}
-\dkDeclareSymbol[Singleton power cost a_i(p) = min(2 f_p(theta_i), 2 to the power p). These are the rotation and reflection choices for one principal plane. At p=1 it equals the trace-cost weight s_i.]
+\dkDeclareSymbol[Singleton power cost a_i(p) = min(2 f_p(theta_i),2^p); rotation and reflection choices for one plane. At p=1, it agrees with the trace cost c_i.]
   {SingletonPowerCost}{a}{norm}{local}{Minimum displacement power cost for one angle.}{scalar-cost}
-\dkDeclareSymbol[Paired power cost b_ij(p) = min over d <= tau <= h of 2(f_p(h+tau) + f_p(h-tau)), where h=(theta_i+theta_j)/2 and d=abs(theta_i-theta_j)/2. This is the positive-determinant pair minimum; unrestricted block optimization also compares two singletons. At p=1 it equals e_ij.]
+\dkDeclareSymbol[Pair power cost b_ij(p) given by the positive-determinant pair minimum. The full block optimization also compares two singletons; at p=1 this pair cost equals c_ij.]
   {PairPowerCost}{b}{norm}{local}{Positive-determinant displacement power cost for a pair of angles.}{scalar-cost}
-\dkDeclareSymbol[Matching M on the finite general graph of positive principal-angle labels. Each label belongs to at most one edge; unmatched labels use singleton transporters. Minimizing paired and singleton costs is equivalent to maximum-weight matching with edge weights g_ij = s_i + s_j - e_ij. The empty matching is allowed.]
+\dkDeclareSymbol[Matching M on the general graph of positive principal-angle labels. Every label belongs to at most one edge; unmatched labels use singleton transporters. The optimization is maximum-weight matching with weights w_ij = c_i + c_j - c_ij. The empty matching is allowed.]
   {Matching}{M}{normaux}{glossary}{Matching of positive principal-angle labels: each label is used in at most one pair.}{matching}
-\dkDeclareSymbol[Displacement power sum Phi_p(W) = sum_j s_j(I - W)^p. The matching proof first minimizes it for 1 < p < 2, then lets p decrease to 1, where it becomes the trace norm ||I - W||_1.]
+\dkDeclareSymbol[Displacement power sum Phi_p(W) = sum_j sigma_j(I-W)^p. The proof minimizes it for 1<p<2 and then lets p decrease to 1, yielding the trace norm of I-W.]
   {PowerCost}{\Phi}{norm}{local}{Sum of the p-th powers of displacement singular values.}{scalar-cost}
 % Auxiliary matching-proof notation: neutral ink, with the same hover registry.
 \dkDeclareSymbol[Off-diagonal gradient block G_01 mapping the source complement K perpendicular into K. Stationarity makes the diagonal blocks of G zero, so G = ((0,G_01),(-G_01 transpose,0)) in the source/complement decomposition.]
   {GradientOffDiagonal}{G_{01}}{fg}{local}{Complement-to-source block of the skew-symmetric gradient.}{linear-operator}
 \dkDeclareSymbol[Orthogonal group O(n): real n by n matrices W satisfying W transpose times W = I. Its elements preserve Euclidean inner products and lengths. The notation O(2) refers to the same group in dimension two.]
   {OrthogonalGroup}{O(n)}{fg}{local}{Group of real orthogonal matrices.}{group}
-\dkDeclareSymbol[Feasible transporters F = {W in O(n) : W(K) = L}. Equivalently W P_K W transpose = P_L. This nonempty compact set is the optimization domain throughout the matching proof.]
-  {FeasibleTransport}{\mathcal F}{fg}{local}{Orthogonal maps carrying the source subspace onto the target.}{set}
-\dkDeclareSymbol[Singular value s_j(T), the nonnegative square root of an eigenvalue of T transpose times T, counted with multiplicity. Summing s_j(I-W) gives the trace displacement; summing its p-th powers gives Phi_p(W). These singular values differ from the singleton weights s_i.]
+\dkDeclareSymbol[Feasible orthogonal transporters (calligraphic W): W in O(n) satisfying W(K) = L, equivalently W P_K W transpose = P_L. This compact, nonempty set is the domain of the matching optimization, not a Hilbert space.]
+  {FeasibleTransport}{\mathcal W}{fg}{local}{Orthogonal maps carrying the source subspace onto the target.}{set}
+\dkDeclareSymbol[Ordered singular value sigma_j(T), a nonnegative square root of an eigenvalue of T transpose T. Summing sigma_j(I-W) gives trace displacement; summing its p-th powers gives Phi_p(W). This is distinct from the singleton cost c_i.]
   {TransportSingularValues}{\symglyph{SingularValueBase}_j}{fg}{local}{A displacement singular value in the matching proof.}{scalar}
 \dkDeclareSymbol[Scalar singular-value magnitude s between zero and two for the displacement I-W of an orthogonal matrix. Uniform convergence of s to the power p to s on this interval permits the trace-norm limit. This variable differs from the rotation parameter s used earlier in the proof.]
   {DisplacementSize}{s}{fg}{local}{Scalar displacement singular-value magnitude in the uniform limit.}{scalar}
-\dkDeclareSymbol[All-singleton cost C_0 = sum_i s_i, before any two angle labels are paired. A matching has cost C_0 minus the sum of its selected edge weights.]
+\dkDeclareSymbol[All-singleton cost C_0 = sum_i c_i before any two angle labels are paired. A matching has cost C_0 minus the sum of its selected edge weights.]
   {SingletonBaseline}{C_0}{fg}{local}{Trace displacement when every angle uses its singleton transporter.}{scalar-cost}
 \dkDeclareSymbol[Matching power cost C_p(M): sum of b_ij(p) over selected pairs plus a_i(p) over unmatched labels. Its minimum equals the minimum of Phi_p over feasible transporters. At p=1 it is C(M).]
   {MatchingPowerCost}{C_p}{fg}{local}{Total paired and singleton power cost of a matching.}{scalar-cost}
@@ -525,10 +549,10 @@
   {CounterChordA}{a}{displacement}{glossary}{Direct-rotation displacement singular value in the counterexample: sqrt(2 - sqrt(2)).}{scalar}
 \dkDeclareSymbol[Competitor displacement singular value b = 2 sin(pi/4) = sqrt(2) at theta = pi/4. Its moving plane contributes two copies; the fixed plane contributes two zeros, giving trace displacement 2b.]
   {CounterChordB}{b}{displacement}{glossary}{Competing-transporter displacement singular value in the counterexample: square root of 2.}{scalar}
-\dkDeclareSymbol[Singular value s_j(I - T) of the full ambient displacement, ordered from largest to smallest. Each rotating real two-plane contributes two values 2 |sin(phi/2)|; fixed directions contribute zeros. Their sum is the trace cost.]
+\dkDeclareSymbol[Ordered singular value sigma_j(I-T) of the full ambient displacement. Each rotating real plane contributes two values 2 |sin(phi/2)| and fixed directions contribute zeros.]
   {DisplacementSingular}{\symglyph{SingularValueBase}_j}{displacement}{local}{An individual singular value of the full displacement from the identity.}{scalar}
-\dkDeclareSymbol[Edge weight g_ij = s_i + s_j - e_ij, the difference between the cost of two singletons and the paired cost. A matching has total cost C_0 minus the sum of its edge weights, with C_0 = sum_i s_i. Maximizing this sum gives the minimum transport cost; edges of negative weight may be omitted.]
-  {MatchingEdgeWeight}{g_{ij}}{current}{glossary}{Edge weight: the cost of two singletons minus their paired cost.}{scalar-weight}
+\dkDeclareSymbol[Weight w_ij = c_i + c_j - c_ij, the difference between the two singleton costs and their pair cost. A matching has total cost C_0 minus its edge weights, where C_0 = sum_i c_i. Maximizing weight minimizes transport cost; negative edges may be omitted.]
+  {MatchingEdgeWeight}{w_{ij}}{current}{glossary}{Edge weight: the cost of two singletons minus their paired cost.}{scalar-weight}
 \dkDeclareSymbol[Total trace-norm displacement cost. For a transporter W, C(W) = ||I - W||_1, the sum of its displacement singular values. For a matching M, C(M) is the sum of its paired and unmatched singleton costs.]
   {TraceCost}{C}{norm}{glossary}{Trace-norm displacement cost of the indicated orthogonal transporter or matching.}{scalar-cost}
 
@@ -540,7 +564,7 @@
 % Conventional mathematical notation. Hover text applies even when ink is plain.
 % These are local (non-glossary) unless promoted explicitly by the author.
 % IdentityTwo and IdentityFour derive their I from Identity. Singular-value
-% registrations derive s_j from SingularValueBase; SingletonCost has its own s.
+% registrations derive sigma_j from SingularValueBase; matching costs use c.
 \dkDeclareSymbol[Identity operator on the vector or Hilbert space in context. Its dimension is inferred from the expression and need not be finite.]{Identity}{I}{plain}{local}{Identity operator on the space in context.}{identity-operator}
 \dkDeclareSymbol[Two-by-two identity matrix, acting on a two-dimensional coordinate space.]{IdentityTwo}{\symglyph{Identity}_2}{plain}{local}{Two-by-two identity matrix.}{identity-operator}
 \dkDeclareSymbol[Four-by-four identity matrix, acting on a four-dimensional coordinate space.]{IdentityFour}{\symglyph{Identity}_4}{plain}{local}{Four-by-four identity matrix.}{identity-operator}
@@ -548,11 +572,10 @@
 \dkDeclareSymbol[The constant pi, the ratio of the circumference of a circle to its diameter. Angles in this article use radians.]{PiConstant}{\pi}{plain}{local}{The constant pi (angles are in radians).}{constant}
 \dkDeclareSymbol[The field of real numbers.]{RealField}{\mathbb R}{plain}{local}{The real numbers.}{field}
 \dkDeclareSymbol[The field of complex numbers.]{ComplexField}{\mathbb C}{plain}{local}{The complex numbers.}{field}
-\dkDeclareSymbol[Generic Hilbert space used in the two-projection discussion; distinct from the paper's ambient space symbol E in the sine-theta theorem.]{GeneralHilbertSpace}{\mathcal H}{plain}{local}{Generic Hilbert space in a local discussion.}{hilbert-space}
+\dkDeclareSymbol[A generic Hilbert space (calligraphic H) in the local two-projection discussion. As elsewhere in this article, calligraphic lettering denotes a space rather than an operator or coordinate frame.]{GeneralHilbertSpace}{\mathcal H}{plain}{local}{Generic Hilbert space in a local discussion.}{hilbert-space}
 \dkDeclareSymbol[The spectrum sigma(T) of an operator T: the set of complex scalars for which T minus the scalar identity is not boundedly invertible. For self-adjoint T the spectrum is real.]{SpectrumSymbol}{\sigma}{plain}{local}{Spectrum of an operator.}{operator-notation}
-\dkDeclareSymbol[Base letter for singular values, presently s. It is distinct from the base s for matching singleton costs.]{SingularValueBase}{s}{plain}{local}{Base letter for singular values.}{notation-base}
-\dkDeclareSymbol[Ordered singular value s_j(T), equal to the j-th eigenvalue of |T| for a finite matrix; distinguish this from the matching singleton cost s_j.]{SingularValueS}{\symglyph{SingularValueBase}_j}{plain}{glossary}{The j-th singular value, under the currently printed s_j convention.}{scalar}
-\dkDeclareSymbol[Alternate indexed singular-value notation sigma_j(T). The current manuscript also uses s_j(T); this registered alias is available for a later deliberate notation decision.]{SingularValueSigma}{\sigma_j}{plain}{local}{Indexed singular value under the sigma_j convention.}{scalar}
+\dkDeclareSymbol[Base glyph sigma for indexed singular values sigma_j(T); the same Greek letter without an index denotes the operator spectrum sigma(T).]{SingularValueBase}{\sigma}{plain}{local}{Base letter for singular values.}{notation-base}
+\dkDeclareSymbol[Indexed singular value sigma_j(T), the j-th eigenvalue of |T| for a finite matrix. Unlike the scalar singleton cost c_j, this is a spectral quantity.]{SingularValue}{\symglyph{SingularValueBase}_j}{plain}{glossary}{The j-th singular value under the sigma_j convention.}{scalar}
 \dkDeclareSymbol[Operator norm ||T||_op, the supremum of ||Tx|| over unit vectors x.]{OperatorNormNotation}{\|\cdot\|_{\mathrm{op}}}{plain}{glossary}{Operator norm.}{norm}
 \dkDeclareSymbol[Frobenius norm ||T||_F, the square root of the sum of squared matrix entries, equal to the finite-dimensional Hilbert--Schmidt norm.]{FrobeniusNormNotation}{\|\cdot\|_F}{plain}{glossary}{Frobenius norm.}{norm}
 \dkDeclareSymbol[Trace norm ||T||_1, the sum of singular values when finite.]{TraceNormNotation}{\|\cdot\|_1}{plain}{glossary}{Trace (nuclear) norm.}{norm}
@@ -638,6 +661,25 @@
 % meaning. The original A_0 is deliberately listed for two distinct roles:
 % its reference block and the comparison/trial operator. The source uses the
 % same printed symbol for both; this paper is free to distinguish them.
+% Lean binder correspondence for the sine-theta theorem only.
+% For Unicode Lean names A-subscript-zero etc., TeX notation below
+% reproduces the displayed glyph without depending on a Unicode mono font.
+% Crucial: Lean A_0 is the TRIAL operator; the paper's reference block A_0
+% is a different semantic key and is NOT a parameter of this signature.
+\dkDeclareLeanSineThetaCorrespondence{AmbientHilbertSpace}{E}{Ambient Hilbert-space carrier.}
+\dkDeclareLeanSineThetaCorrespondence{TrialCoordinateSpace}{F}{Trial-coordinate Hilbert-space carrier.}
+\dkDeclareLeanSineThetaCorrespondence{ExactCoordinateSpace}{H}{Wanted exact-coordinate Hilbert-space carrier.}
+\dkDeclareLeanSineThetaCorrespondence{ComplementaryCoordinateSpace}{G}{Complementary exact-coordinate Hilbert-space carrier.}
+\dkDeclareLeanSineThetaCorrespondence{Acurrent}{A}{Self-adjoint operator under study.}
+\dkDeclareLeanSineThetaCorrespondence{TrialOperator}{A_0}{General trial operator, not the reference block.}
+\dkDeclareLeanSineThetaCorrespondence{Lambda1}{\Lambda_1}{Exact complementary spectral block.}
+\dkDeclareLeanSineThetaCorrespondence{E0}{E_0}{Isometric trial-coordinate embedding.}
+\dkDeclareLeanSineThetaCorrespondence{F0}{F_0}{Wanted exact-coordinate embedding.}
+\dkDeclareLeanSineThetaCorrespondence{F1}{F_1}{Complementary exact-coordinate embedding.}
+\dkDeclareLeanSineThetaCorrespondence{R}{R}{Bounded residual from trial coordinates.}
+\dkDeclareLeanSineThetaCorrespondence{delta}{\delta}{Positive spectral-gap parameter.}
+\dkDeclareLeanSineThetaCorrespondence{NormN}{N}{Normalized symmetric operator-ideal norm.}
+
 \dkDeclareNotationSource{DK1970}{Davis and Kahan (1970), The Rotation of Eigenvectors by a Perturbation. III}{https://doi.org/10.1137/0707001}
 \dkDeclareNotationSource{Seelmann2019}{Seelmann (2019), Semidefinite Perturbations in the Subspace Perturbation Problem}{https://arxiv.org/abs/1708.02463}
 \dkDeclareNotationSource{Blechta2020}{Blechta (2020), Stability of Linear GMRES Convergence with Respect to Compact Perturbations}{https://arxiv.org/abs/2005.12960}
@@ -651,7 +693,7 @@
 \dkDeclareNotationAlternative{F1}{DK1970}{F_1}{\S1}{Exact-target complement frame.}
 \dkDeclareNotationAlternative{ReferenceBlock0}{DK1970}{A_0}{\S1, (1.2)}{Reference source block.}
 \dkDeclareNotationAlternative{ReferenceBlock1}{DK1970}{A_1}{\S1, (1.2)}{Reference complement block.}
-\dkDeclareNotationAlternative{A0}{DK1970}{A_0}{\S1, residual discussion}{Residual comparison operator (the reference block in DK).}
+\dkDeclareNotationAlternative{TrialOperator}{DK1970}{A_0}{\S1, residual discussion}{Residual comparison operator (the reference block in DK).}
 % We deliberately leave Lambda0 and Lambda1 without DK source-glyph metadata:
 % the available source transcription does not reliably preserve the source
 % accents/decorations on the perturbed spectral-block symbols.
@@ -666,7 +708,7 @@
 \dkDeclareNotationAlternative{Rrotation}{DK1970}{U}{\S1, (1.18)}{Canonical direct rotation.}
 \dkDeclareNotationAlternative{Wcompetitor}{DK1970}{V}{\S4}{Competing unitary transporter.}
 \dkDeclareNotationAlternative{delta}{DK1970}{\delta}{\S2}{Spectral separation parameter.}
-% Contemporary alternatives are recorded separately and do not enter the DK
+% Contemporary source correspondences are recorded separately and do not enter the DK
 % correspondence table. Their citation locations must be individually checked.
-\dkDeclareNotationAlternative{Eambient}{Seelmann2019}{\mathcal H}{p.~1}{Ambient Hilbert space.}
-\dkDeclareNotationAlternative{SingularValueS}{Blechta2020}{\sigma_j}{Thm.~1.1}{Ordered singular values of a compact operator.}
+\dkDeclareNotationAlternative{AmbientHilbertSpace}{Seelmann2019}{\mathcal H}{p.~1}{Ambient Hilbert space.}
+\dkDeclareNotationAlternative{SingularValue}{Blechta2020}{\sigma_j}{Thm.~1.1}{Ordered singular values of a compact operator.}

@@ -18,7 +18,7 @@
 \newcommand{\Ptgt}{\sym{Qtarget}}
 \newcommand{\Ggrad}{\sym{SpectralGradient}}
 \newcommand{\Jsrc}{\sym{Jreflect}}
-\newcommand{\Fset}{\sym{FeasibleTransport}}
+\newcommand{\Wset}{\sym{FeasibleTransport}}
 \newcommand{\Phicost}{\like{PowerCost}{\Phi_p}}
 \newcommand{\fphase}{\sym{MatchingPhaseCost}}
 \newcommand{\Vlevel}{\sym{GradientLevelSpace}}
@@ -63,17 +63,17 @@ The objective is its full ambient trace displacement $\|I-\W\|_1$.
 For positive principal angles $\like{theta}{\theta_1},\ldots,
 \like{theta}{\theta_m}$, put
 \[
- \like{SingletonCost}{s_i}=\min\{4\sin(\like{theta}{\theta_i}/2),2\},
+ \like{SingletonCost}{\symglyph{SingletonCost}_i}=\min\{4\sin(\like{theta}{\theta_i}/2),2\},
  \qquad
- \like{PairCost}{e_{ij}}
+ \like{PairCost}{\symglyph{PairCost}_{ij}}
    =4\sin((\like{theta}{\theta_i}+\like{theta}{\theta_j})/2).
 \]
 The theorem states that the minimum displacement is the minimum, over
 matchings $\sym{Matching}$ of the angle labels, of
 \[
  \like{TraceCost}{C(M)}
- =\sum_{\{i,j\}\in\sym{Matching}}\like{PairCost}{e_{ij}}
-   +\sum_{i\text{ unmatched}}\like{SingletonCost}{s_i}.
+ =\sum_{\{i,j\}\in\sym{Matching}}\like{PairCost}{\symglyph{PairCost}_{ij}}
+   +\sum_{i\text{ unmatched}}\like{SingletonCost}{\symglyph{SingletonCost}_i}.
 \]
 
 There are two bounds to prove. Constructing a transporter from a matching
@@ -88,17 +88,17 @@ trace-norm limit.
 \subsection{The cost attains a global minimum}
 \textbf{Inference.} For every $1<p<2$, the feasible set and cost
 \[
- \Fset=\{\W\in\sym{OrthogonalGroup}:
+ \Wset=\{\W\in\sym{OrthogonalGroup}:
               \W(\like{Usource}{K})=\like{Vtarget}{L}\},
  \qquad
  \Phicost(\W)=\sum_{j=1}^n
-       \like{TransportSingularValues}{s_j}(I-\W)^p
+       \like{TransportSingularValues}{\symglyph{SingularValueBase}_j}(I-\W)^p
 \]
 have a global minimizer. We fix one and call it $\W$.
 
 \why Equal dimensions let us choose orthonormal bases of the two subspaces,
 extend them to ambient orthonormal bases, and map the first full basis onto
-the second. Thus $\Fset$ is nonempty. Write $\Psrc=P_K$ and $\Ptgt=P_L$
+the second. Thus $\Wset$ is nonempty. Write $\Psrc=P_K$ and $\Ptgt=P_L$
 for the source and target projections. For orthogonal $\W$,
 \[
  \W(\like{Usource}{K})=\like{Vtarget}{L}
@@ -109,7 +109,7 @@ Indeed, the matrix on the left of the projection equation is the orthogonal
 projection onto $\W(\like{Usource}{K})$.
 The projection equation is closed under limits. The orthogonal group is
 closed because $\W^T\W=I$ is a closed equation, and bounded because every
-column has length one. Hence $\Fset$ is compact by Heine--Borel.
+column has length one. Hence $\Wset$ is compact by Heine--Borel.
 Singular values vary continuously with a matrix, so $\Phicost$ is continuous.
 The extreme value theorem now gives a minimizer.
 
@@ -160,7 +160,7 @@ that arbitrary mixing cannot improve the minimum?}
 
 \subsection{Source-preserving rotations give feasible curves}
 \textbf{Inference.} If $B^T=-B$ and $B\Psrc=\Psrc B$, then
-$\W\exp(tB)\in\Fset$ for every real $t$.
+$\W\exp(tB)\in\Wset$ for every real $t$.
 
 \why Transposition respects the exponential power series, so
 \[
@@ -621,7 +621,7 @@ For a matching $\sym{Matching}$, define
 
 \subsection{A matching constructs a transporter of the same cost}
 \textbf{Inference.}
-$\min_{\W\in\Fset}\Phicost(\W)
+$\min_{\W\in\Wset}\Phicost(\W)
  \le\min_{\sym{Matching}}\sym{MatchingPowerCost}(\sym{Matching})$.
 
 \why Use the mutually orthogonal principal planes from Step 1(b).
@@ -637,7 +637,7 @@ constructed transporter, hence no larger than the best matching cost.
 \subsection{A minimizing transporter constructs a matching of the same cost}
 \textbf{Inference.} The reverse inequality holds, and hence
 \begin{equation}\label{eq:study-power-matching}
- \min_{\W\in\Fset}\Phicost(\W)
+ \min_{\W\in\Wset}\Phicost(\W)
    =\min_{\sym{Matching}}\sym{MatchingPowerCost}(\sym{Matching}),
  \qquad 1<p<2.
 \end{equation}
@@ -685,7 +685,7 @@ $[1,3/2]\times[0,2]$, hence uniformly continuous. Therefore
  \epsilon_p=n\sup_{0\le s\le2}|s^p-s|\longrightarrow0,
  \qquad
  |\Phicost(\W)-\|I-\W\|_1|\le\epsilon_p
- \quad\text{for every }\W\in\Fset.
+ \quad\text{for every }\W\in\Wset.
 \]
 If two functions on the same nonempty set differ by at most $\epsilon$,
 their attained minima differ by at most $\epsilon$: evaluate each
@@ -705,8 +705,8 @@ minimizers is required.
 \subsection{The limiting weights are the stated trace costs}
 \textbf{Inference.} At $p=1$,
 \[
- a_i(1)=\min\{4\sin(\theta_i/2),2\}=s_i,
- \qquad b_{ij}(1)=4\sin((\theta_i+\theta_j)/2)=e_{ij}.
+ a_i(1)=\min\{4\sin(\theta_i/2),2\}=\like{SingletonCost}{\symglyph{SingletonCost}_i},
+ \qquad b_{ij}(1)=4\sin((\theta_i+\theta_j)/2)=\like{PairCost}{\symglyph{PairCost}_{ij}}.
 \]
 
 \why The singleton formula follows by substitution. For a pair,
@@ -724,12 +724,12 @@ it rotates one real plane through $\theta_i+\theta_j$ and fixes the
 other real plane. Its displacement has two singular values
 $2\sin\hmean$ and two zeros.
 Together with Step 6(a), this proves the stated trace-norm equality.
-Compactness of $\Fset$ also gives attainment at $p=1$.
+Compactness of $\Wset$ also gives attainment at $p=1$.
 
 Finally, define the all-singleton cost and edge weights
 \[
- \sym{SingletonBaseline}=\sum_i s_i,
- \qquad \sym{MatchingEdgeWeight}=s_i+s_j-e_{ij}.
+ \sym{SingletonBaseline}=\sum_i \like{SingletonCost}{\symglyph{SingletonCost}_i},
+ \qquad \sym{MatchingEdgeWeight}=\like{SingletonCost}{\symglyph{SingletonCost}_i}+\like{SingletonCost}{\symglyph{SingletonCost}_j}-\like{PairCost}{\symglyph{PairCost}_{ij}}.
 \]
 Replacing two singleton costs by one paired cost gives
 \[
@@ -805,7 +805,7 @@ $\bigl(\begin{smallmatrix}0&\Sigma\\\Sigma&0\end{smallmatrix}\bigr)$.
 Its eigenvalues are the positive and negative singular values of $D$,
 including zeros. Therefore, with $h(x)=|x|^p$,
 \[
- F_p(D):=\sum_j s_j(D)^p
+ F_p(D):=\sum_j \sym{SingularValue}(D)^p
        =\tfrac12\operatorname{tr}h(\mathcal A(D)).
 \]
 For $p>1$, $h$ is continuously differentiable with
