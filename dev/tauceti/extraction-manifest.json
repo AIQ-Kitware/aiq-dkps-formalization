@@ -6690,7 +6690,7 @@
       "status": "submitted-upstream-not-accepted",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/44695",
       "prepared_branch": "port-sa-e36-e40-spectral-blocks",
-      "prepared_head": "f42b581302197e0d55939dd02b25f50f331aa8c5",
+      "prepared_head": "0cbddd68934482fa9fc6d65482b35cf4abba9705",
       "roadmap_targets": [
         "SA-E36",
         "SA-E37",
@@ -6698,7 +6698,7 @@
         "SA-E39",
         "SA-E40"
       ],
-      "migration_note": "Independent branch based on accepted 8794ab329bb60340fa690a2902cf995f0571721b. Native PVM and bounded integral replace donor proof plumbing; actual domains and vector-measure gap scope preserved, arbitrary complete complex Hilbert spaces including zero/nonseparable. Local donors retained pending acceptance. No new accepted census count."
+      "migration_note": "Independent branch based on accepted 8794ab329bb60340fa690a2902cf995f0571721b. Native PVM and bounded integral replace donor proof plumbing; actual domains and vector-measure gap scope preserved, arbitrary complete complex Hilbert spaces including zero/nonseparable. Local donors retained pending acceptance. No new accepted census count. November 21 review repair merges accepted b608709b45, preserving its enlarged native PVM module unchanged under Basic and consuming canonical inverseCayleyCoord and cayley_diagMeasure_singleton_one. Focused build, linters, scope probes and style pass. PR remains unmerged."
     },
     {
       "source_module": "ForTauCeti.Analysis.Fourier.Hardy.OppositeShifts",
@@ -6731,18 +6731,56 @@
         "TauCeti.ToeplitzOppositeShifts.index_eq_zero",
         "TauCeti.ToeplitzOppositeShifts.apply_second_constant",
         "TauCeti.ToeplitzOppositeShifts.not_isUnit",
-        "TauCeti.ToeplitzOppositeShifts.sectionMatrix",
-        "TauCeti.ToeplitzOppositeShifts.sectionMatrix_apply",
-        "TauCeti.ToeplitzOppositeShifts.det_sectionMatrix"
+        "TauCeti.ToeplitzOppositeShifts.det_sectionMatrix",
+        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_zero_zero",
+        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_one_one",
+        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_zero_one",
+        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_one_zero",
+        "TauCeti.ToeplitzOppositeShifts.apply_zero",
+        "TauCeti.ToeplitzOppositeShifts.apply_one"
       ],
-      "status": "local-donor-prepared-upstream-not-accepted",
-      "upstream_pr": null,
+      "status": "submitted-upstream-not-accepted",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/44700",
       "prepared_branch": "port-toeplitz-opposite-shifts",
       "roadmap_targets": [
         "ToeplitzOperators Layer 6, §6.1: diag(z,zbar) counterexample (partial compound TOEP-T6)"
       ],
-      "migration_note": "Concrete rank-two complex symbol with native PiLp block Hardy carrier; determinant/winding, Fredholm index, noninvertibility and all finite compression matrices. Depends only on accepted scalar shifts and binary products, not open general finite-product or quotient-stability PRs. Full default and Challenge builds pass. No whole-milestone or accepted credit.",
-      "prepared_head": "a5b2b8c1cce12d2f42bc6e8216e9262469f78376"
+      "migration_note": "Concrete rank-two complex symbol with native PiLp block Hardy carrier; determinant/winding, Fredholm index, noninvertibility and all finite compression matrices. Depends only on accepted scalar shifts and binary products, not open general finite-product or quotient-stability PRs. Full default and Challenge builds pass. No whole-milestone or accepted credit. November 21: symbol now converts the continuous matrix through toEuclideanCLM/toLp. Generic block compression replaces the example-only sectionMatrix and its compatibility name; det_sectionMatrix specializes blockFiniteSectionMatrix. Exposes entry/action simp rules, shares the kernel proof, and links the exact original donor. New generic donor remains pending acceptance, with its block-order bridge to native finiteSection. No accepted credit.",
+      "prepared_head": "7613d6348a6e6761f6448ac282ca493e855bf584"
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.Fourier.Hardy.Block.FiniteSection",
+      "source_declarations": [
+        "TauCeti.blockFiniteInclusion",
+        "TauCeti.blockFiniteInclusion_single",
+        "TauCeti.blockFiniteSectionMatrix",
+        "TauCeti.blockFiniteSectionMatrix_apply",
+        "TauCeti.blockHardyBasisNat",
+        "TauCeti.blockHardyBasisNat_apply",
+        "TauCeti.blockFiniteSectionIndexEquiv",
+        "TauCeti.reindex_blockFiniteSectionMatrix"
+      ],
+      "original_source_anchor": "ForTauCeti/Analysis/Fourier/Hardy/Block/FiniteSection.lean; November 21 generalization of the finite matrices in d1c0bf02e:ForTauCeti/Analysis/Fourier/Hardy/OppositeShifts.lean",
+      "authors_license": "Jon Crall, OpenAI gpt-6.1-sol; Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.Fourier.Hardy.Block.FiniteSection",
+      "final_declarations": [
+        "TauCeti.blockFiniteInclusion",
+        "TauCeti.blockFiniteInclusion_single",
+        "TauCeti.blockFiniteSectionMatrix",
+        "TauCeti.blockFiniteSectionMatrix_apply",
+        "TauCeti.blockHardyBasisNat",
+        "TauCeti.blockHardyBasisNat_apply",
+        "TauCeti.blockFiniteSectionIndexEquiv",
+        "TauCeti.reindex_blockFiniteSectionMatrix"
+      ],
+      "status": "submitted-upstream-not-accepted",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/44700",
+      "prepared_branch": "port-toeplitz-opposite-shifts",
+      "prepared_head": "7613d6348a6e6761f6448ac282ca493e855bf584",
+      "roadmap_targets": [
+        "ToeplitzOperators Layer 6 §6.1 opposite-shift coefficient example; reusable finite block compression supporting that target"
+      ],
+      "migration_note": "Generic over every block Hardy continuous linear endomorphism and block size, including zero. Basis enumeration and identification with ordinary finiteSection require positive block size, expressed by NeZero r. The first n+1 full blocks correspond to (n+1)*r scalar coordinates. Uses native Module.Basis.constr, compression, inner_compression_apply, HilbertBasis.reindex, finiteSection_single_apply; no second stability API or aliases."
     }
   ]
 }

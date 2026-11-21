@@ -1,15 +1,42 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 21 repairs to all three open submissions
+
+- **#44695**, `0cbddd6893`: merge accepted TauCeti main `b608709b45`; retain its
+  expanded spectral-projection results and use canonical inverse-Cayley coordinate
+  and pole-nullity APIs. Bounded spectral cuts and the vector-gap inverse remain
+  new results. Focused build (6634 jobs), 15 linters, scope probes and style pass.
+- **#30736**, `492bfff9bf`: expose the existing native `restrictScalars_exp`;
+  derive one `norm_exp_smul_I_le` from bounded Stone unitarity and use it in both
+  Duhamel and uniform-Cauchy arguments. Remove the private-definition import and
+  `.eq_def` access. Focused build (6430 jobs), 15 linters on all three changed
+  modules, standard-axiom reports and style pass. These new native helpers are
+  unmerged; DKPS's accepted dependency pin has not been advanced to this branch.
+- **#44700**, `7613d6348a`: the continuous diagonal symbol now converts directly
+  to the native operator-valued L∞ symbol. Public simp lemmas expose its four
+  entries and both coordinate shifts. The generic `Block/FiniteSection.lean`
+  constructs matrices using native operator compression; a block-order basis
+  enumeration/reindexing identifies them with native `finiteSection`. The
+  example-only `sectionMatrix` and its forwarding entry name are removed.
+  The determinant theorem uses the generic matrix and a shared kernel lemma.
+  Exact original donor attribution is retained. Focused native build (7638 jobs),
+  15 linters, standard axioms, scoped style, zero-block-size and reindexed native
+  finite-section singularity probes pass. The same mathematics is maintained
+  here; full default build and Challenge pass without warnings.
+
+All three heads are pushed to Erotemic/TauCeti. Review findings are addressed in
+source; fresh upstream CI and reviewer clearance remain separate. No accepted
+roadmap count or third-party proof descent is inferred from these repairs.
+The shared campaign's `waves/2026-11-21/` preserves review evidence and provides
+host-only PR-description updates; those commands perform no Lean builds.
+
 ## November 20 prepared spectral-block port and new Toeplitz example
 
-Submission update: the spectral branch is open as
-[#44695](https://github.com/TauCetiProject/TauCeti/pull/44695) at `f42b581302`;
-this is submission, not integration. The Toeplitz host submission stopped on
-a changed official README. The new roadmap revision `642398844a7c3295b673fca05acd2f60d70b9b52`
-retains byte-identical mathematical layers 1–6 and the exact opposite-shift target.
-The shared packet's scope snapshot and review context were refreshed without
-changing or rebuilding Lean code. The Toeplitz branch remains unsubmitted.
-
+Submission update (November 21): both branches are open as
+[#44695](https://github.com/TauCetiProject/TauCeti/pull/44695) and
+[#44700](https://github.com/TauCetiProject/TauCeti/pull/44700). The earlier
+Toeplitz README guard was cleared after reviewing roadmap `642398844a`;
+these are submissions, not integrations.
 The existing spectral-cut and vector-gap-inverse donors now have a compiled,
 independent upstream branch, `port-sa-e36-e40-spectral-blocks`, head `f42b581302`.
 It implements official SelfAdjointSpectralTheory SA-E36–E40 using the accepted
