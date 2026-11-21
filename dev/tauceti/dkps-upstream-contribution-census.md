@@ -1,5 +1,13 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+November 21 reuse follow-up: #44695 is pushed at `8f6ab22843`, addressing
+review 4653264201 on `0cbddd6893`. The projection fixed-vector argument now
+directly applies `proj_apply_eq_self_iff`; the Cayley coordinate identity uses
+`borelCalculus_restrict_id`. Public formulas and hypotheses are unchanged.
+Focused build, all 15 linters, standard axioms, scope probes and style pass.
+This is an unmerged proof-reuse repair, with no accepted coverage increase.
+
+
 ## November 21 repairs to all three open submissions
 
 - **#44695**, `0cbddd6893`: merge accepted TauCeti main `b608709b45`; retain its

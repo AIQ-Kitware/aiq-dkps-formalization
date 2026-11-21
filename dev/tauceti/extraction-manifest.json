@@ -6690,7 +6690,7 @@
       "status": "submitted-upstream-not-accepted",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/44695",
       "prepared_branch": "port-sa-e36-e40-spectral-blocks",
-      "prepared_head": "0cbddd68934482fa9fc6d65482b35cf4abba9705",
+      "prepared_head": "8f6ab22843924102cfd86638fadbc587e3fd3e44",
       "roadmap_targets": [
         "SA-E36",
         "SA-E37",
@@ -6698,7 +6698,7 @@
         "SA-E39",
         "SA-E40"
       ],
-      "migration_note": "Independent branch based on accepted 8794ab329bb60340fa690a2902cf995f0571721b. Native PVM and bounded integral replace donor proof plumbing; actual domains and vector-measure gap scope preserved, arbitrary complete complex Hilbert spaces including zero/nonseparable. Local donors retained pending acceptance. No new accepted census count. November 21 review repair merges accepted b608709b45, preserving its enlarged native PVM module unchanged under Basic and consuming canonical inverseCayleyCoord and cayley_diagMeasure_singleton_one. Focused build, linters, scope probes and style pass. PR remains unmerged."
+      "migration_note": "Independent branch based on accepted 8794ab329bb60340fa690a2902cf995f0571721b. Native PVM and bounded integral replace donor proof plumbing; actual domains and vector-measure gap scope preserved, arbitrary complete complex Hilbert spaces including zero/nonseparable. Local donors retained pending acceptance. No new accepted census count. November 21 review repair merges accepted b608709b45, preserving its enlarged native PVM module unchanged under Basic and consuming canonical inverseCayleyCoord and cayley_diagMeasure_singleton_one. Focused build, linters, scope probes and style pass. PR remains unmerged. November 21 reuse follow-up 4653264201: 8f6ab22843 directly uses proj_apply_eq_self_iff and borelCalculus_restrict_id, removing duplicate norm/toReal/arithmetic and cfc steps. Public statements and hypotheses unchanged; local focused, linter/style and scope checks pass. Not accepted."
     },
     {
       "source_module": "ForTauCeti.Analysis.Fourier.Hardy.OppositeShifts",
