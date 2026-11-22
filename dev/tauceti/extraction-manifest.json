@@ -6764,22 +6764,16 @@
         "TauCeti.ToeplitzOppositeShifts.det_matrixSymbol",
         "TauCeti.ToeplitzOppositeShifts.windingNumber_det_matrixSymbol",
         "TauCeti.ToeplitzOppositeShifts.symbol",
-        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_symbol",
         "TauCeti.ToeplitzOppositeShifts.isFredholm",
         "TauCeti.ToeplitzOppositeShifts.index_eq_zero",
         "TauCeti.ToeplitzOppositeShifts.apply_second_constant",
         "TauCeti.ToeplitzOppositeShifts.not_isUnit",
         "TauCeti.ToeplitzOppositeShifts.det_sectionMatrix",
-        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_zero_zero",
-        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_one_one",
-        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_zero_one",
-        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_one_zero",
-        "TauCeti.ToeplitzOppositeShifts.apply_zero",
-        "TauCeti.ToeplitzOppositeShifts.apply_one",
         "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_eq",
         "TauCeti.ToeplitzOppositeShifts.apply_coordinate",
         "TauCeti.ToeplitzOppositeShifts.conjugate",
-        "TauCeti.ToeplitzOppositeShifts.not_isUnit_finiteSection"
+        "TauCeti.ToeplitzOppositeShifts.not_isUnit_finiteSection",
+        "TauCeti.ToeplitzOppositeShifts.symbol_def"
       ],
       "status": "submitted-upstream-not-accepted",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/44700",
@@ -6787,8 +6781,17 @@
       "roadmap_targets": [
         "ToeplitzOperators Layer 6, §6.1: diag(z,zbar) counterexample (partial compound TOEP-T6)"
       ],
-      "migration_note": "Concrete rank-two complex symbol with native PiLp block Hardy carrier; determinant/winding, Fredholm index, noninvertibility and all finite compression matrices. Depends only on accepted scalar shifts and binary products, not open general finite-product or quotient-stability PRs. Full default and Challenge builds pass. No whole-milestone or accepted credit. November 21: symbol now converts the continuous matrix through toEuclideanCLM/toLp. Generic block compression replaces the example-only sectionMatrix and its compatibility name; det_sectionMatrix specializes blockFiniteSectionMatrix. Exposes entry/action simp rules, shares the kernel proof, and links the exact original donor. New generic donor remains pending acceptance, with its block-order bridge to native finiteSection. No accepted credit. November 22 review repair: native orthonormal synthesis gives a linear isometry and public finite expansion; generic continuous matrix-entry and inverse matrix unit-vector bridges are shared; blockHardyBasisNat moves to Block.Basic. The public index value formula and whole compression bridge identify the first n+1 full blocks. Public canonical direct-sum conjugacy, indexed symbol/action laws and native finiteSection noninvertibility are exposed. All six native changed modules pass compilation, 15 linters, scope/axiom/style checks. Still unmerged.",
-      "prepared_head": "225fdc50145f393d4c4e5bf5fdd5edd94cfd85e2"
+      "migration_note": "Concrete rank-two complex symbol with native PiLp block Hardy carrier; determinant/winding, Fredholm index, noninvertibility and all finite compression matrices. Depends only on accepted scalar shifts and binary products, not open general finite-product or quotient-stability PRs. Full default and Challenge builds pass. No whole-milestone or accepted credit. November 21: symbol now converts the continuous matrix through toEuclideanCLM/toLp. Generic block compression replaces the example-only sectionMatrix and its compatibility name; det_sectionMatrix specializes blockFiniteSectionMatrix. Exposes entry/action simp rules, shares the kernel proof, and links the exact original donor. New generic donor remains pending acceptance, with its block-order bridge to native finiteSection. No accepted credit. November 22 review repair: native orthonormal synthesis gives a linear isometry and public finite expansion; generic continuous matrix-entry and inverse matrix unit-vector bridges are shared; blockHardyBasisNat moves to Block.Basic. The public index value formula and whole compression bridge identify the first n+1 full blocks. Public canonical direct-sum conjugacy, indexed symbol/action laws and native finiteSection noninvertibility are exposed. All six native changed modules pass compilation, 15 linters, scope/axiom/style checks. Still unmerged. November 22 second-round repair: use indexed diagonal/action APIs and canonical continuous algebra conjugation, delete seven redundant public specializations, expose whole-symbol conversion, adjoint inclusion coefficients, arbitrary basis-index evaluation, inverse quotient/remainder coordinates and the generic full-block determinant bridge. Matrix coordinates use the existing toMatrix API and one forward coordinate-unit helper. Restore the accepted synthesis signature without DecidableEq; reconcile the unit-vector equality choices explicitly. The root donor uses the accepted native finite-section unit representation without a new alias. No new acceptance credit. Five redundant imports removed; required Compression import retained with a failing-build countercheck. Native focused build, 15 linters on seven affected modules, scope/axiom/style checks green.",
+      "prepared_head": "ea0f92f25783805b6bdf8d956c1dcfd287175ad3",
+      "retired_local_specializations": [
+        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_symbol",
+        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_zero_zero",
+        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_one_one",
+        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_zero_one",
+        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_one_zero",
+        "TauCeti.ToeplitzOppositeShifts.apply_zero",
+        "TauCeti.ToeplitzOppositeShifts.apply_one"
+      ]
     },
     {
       "source_module": "ForTauCeti.Analysis.Fourier.Hardy.Block.FiniteSection",
@@ -6816,16 +6819,21 @@
         "TauCeti.reindex_blockFiniteSectionMatrix",
         "TauCeti.blockFiniteInclusion_apply",
         "TauCeti.toEuclideanCLM_blockFiniteSectionMatrix",
-        "TauCeti.blockFiniteSectionIndexEquiv_val"
+        "TauCeti.blockFiniteSectionIndexEquiv_val",
+        "TauCeti.adjoint_blockFiniteInclusion_apply",
+        "TauCeti.blockHardyBasisNat_apply_div_mod",
+        "TauCeti.blockFiniteSectionIndexEquiv_symm_fst",
+        "TauCeti.blockFiniteSectionIndexEquiv_symm_snd",
+        "TauCeti.det_finiteSection_eq_blockFiniteSectionMatrix"
       ],
       "status": "submitted-upstream-not-accepted",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/44700",
       "prepared_branch": "port-toeplitz-opposite-shifts",
-      "prepared_head": "225fdc50145f393d4c4e5bf5fdd5edd94cfd85e2",
+      "prepared_head": "ea0f92f25783805b6bdf8d956c1dcfd287175ad3",
       "roadmap_targets": [
         "ToeplitzOperators Layer 6 §6.1 opposite-shift coefficient example; reusable finite block compression supporting that target"
       ],
-      "migration_note": "Generic over every block Hardy continuous linear endomorphism and block size, including zero. Basis enumeration and identification with ordinary finiteSection require positive block size, expressed by NeZero r. The first n+1 full blocks correspond to (n+1)*r scalar coordinates. Uses native Module.Basis.constr, compression, inner_compression_apply, HilbertBasis.reindex, finiteSection_single_apply; no second stability API or aliases. November 22 review repair: native orthonormal synthesis gives a linear isometry and public finite expansion; generic continuous matrix-entry and inverse matrix unit-vector bridges are shared; blockHardyBasisNat moves to Block.Basic. The public index value formula and whole compression bridge identify the first n+1 full blocks. Public canonical direct-sum conjugacy, indexed symbol/action laws and native finiteSection noninvertibility are exposed. All six native changed modules pass compilation, 15 linters, scope/axiom/style checks. Still unmerged. Supporting donors now include ForTauCeti.Analysis.Fourier.Hardy.Block.Basic and ForTauCeti.Analysis.Matrix.EuclideanLin. Root uses the native finite expansion for the single-coordinate proof because pinned synthesisMapIsometry_single fixes a classical DecidableEq instance; the pending PR generalizes that existing lemma.",
+      "migration_note": "Generic over every block Hardy continuous linear endomorphism and block size, including zero. Basis enumeration and identification with ordinary finiteSection require positive block size, expressed by NeZero r. The first n+1 full blocks correspond to (n+1)*r scalar coordinates. Uses native Module.Basis.constr, compression, inner_compression_apply, HilbertBasis.reindex, finiteSection_single_apply; no second stability API or aliases. November 22 review repair: native orthonormal synthesis gives a linear isometry and public finite expansion; generic continuous matrix-entry and inverse matrix unit-vector bridges are shared; blockHardyBasisNat moves to Block.Basic. The public index value formula and whole compression bridge identify the first n+1 full blocks. Public canonical direct-sum conjugacy, indexed symbol/action laws and native finiteSection noninvertibility are exposed. All six native changed modules pass compilation, 15 linters, scope/axiom/style checks. Still unmerged. Supporting donors now include ForTauCeti.Analysis.Fourier.Hardy.Block.Basic and ForTauCeti.Analysis.Matrix.EuclideanLin. Root uses the native finite expansion for the single-coordinate proof because pinned synthesisMapIsometry_single fixes a classical DecidableEq instance; the pending PR generalizes that existing lemma. November 22 second-round repair: use indexed diagonal/action APIs and canonical continuous algebra conjugation, delete seven redundant public specializations, expose whole-symbol conversion, adjoint inclusion coefficients, arbitrary basis-index evaluation, inverse quotient/remainder coordinates and the generic full-block determinant bridge. Matrix coordinates use the existing toMatrix API and one forward coordinate-unit helper. Restore the accepted synthesis signature without DecidableEq; reconcile the unit-vector equality choices explicitly. The root donor uses the accepted native finite-section unit representation without a new alias. No new acceptance credit. Five redundant imports removed; required Compression import retained with a failing-build countercheck. Native focused build, 15 linters on seven affected modules, scope/axiom/style checks green.",
       "final_tauceti_modules": [
         "TauCeti.Analysis.Fourier.Hardy.Block.Basic",
         "TauCeti.Analysis.Fourier.Hardy.Block.FiniteSection"
@@ -6833,7 +6841,13 @@
       "declaration_placement": {
         "TauCeti.blockHardyBasisNat": "TauCeti.Analysis.Fourier.Hardy.Block.Basic",
         "TauCeti.blockHardyBasisNat_apply": "TauCeti.Analysis.Fourier.Hardy.Block.Basic",
-        "remaining_finite_section_declarations": "TauCeti.Analysis.Fourier.Hardy.Block.FiniteSection"
+        "remaining_finite_section_declarations": "TauCeti.Analysis.Fourier.Hardy.Block.FiniteSection",
+        "TauCeti.blockHardyBasisNat_apply_div_mod": "TauCeti.Analysis.Fourier.Hardy.Block.Basic"
+      },
+      "supporting_upstream_refinement": {
+        "module": "TauCeti.Analysis.InnerProductSpace.HilbertBasis.FiniteSection.Basic",
+        "declaration": "ContinuousLinearMap.finiteSection_single_apply",
+        "change": "State the existing theorem with EuclideanSpace.single; no new mathematical declaration or roadmap credit. DKPS consumes the accepted PiLp.single version through the explicit representation equality until integration."
       }
     },
     {
@@ -6869,12 +6883,13 @@
       "final_declarations": [
         "Matrix.toEuclideanCLM_symm_apply_single",
         "TauCeti.blockSymbolEntry_toLp_matrix",
-        "TauCeti.blockToeplitz_apply_of_row_offDiagonal_eq_zero"
+        "TauCeti.blockToeplitz_apply_of_row_offDiagonal_eq_zero",
+        "Matrix.toEuclideanCLM_apply_single"
       ],
       "status": "submitted-upstream-not-accepted",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/44700",
-      "prepared_head": "225fdc50145f393d4c4e5bf5fdd5edd94cfd85e2",
-      "scope": "Inverse matrix unit-coordinate evaluation for arbitrary finite RCLike matrices; continuous matrix-symbol entry bridge for arbitrary block size; row-diagonal action reduction for arbitrary block symbols. Supports exact official Toeplitz Layer 6 §6.1 example, no extra roadmap milestone credit."
+      "prepared_head": "ea0f92f25783805b6bdf8d956c1dcfd287175ad3",
+      "scope": "Forward and inverse coordinate-unit evaluation for finite square RCLike matrices; priority simp conversion for arbitrary continuous complex square block-matrix symbols; row-diagonal action reduction for arbitrary block symbols. Supports official Toeplitz Layer 6 §6.1; no new milestone or accepted credit."
     }
   ],
   "current_consumption_pin": "b7121f4d7408c1a323335f3547e857b0b547369a"

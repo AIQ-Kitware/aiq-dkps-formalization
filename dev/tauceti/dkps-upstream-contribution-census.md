@@ -1,6 +1,32 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
 
+November 22 #44700 review follow-up: current pushed head `ea0f92f25783805b6bdf8d956c1dcfd287175ad3`
+replaces the earlier `225fdc5014` repair. Canonical matrix coordinates and indexed
+symbol/action laws replace seven redundant example specializations. The public
+API now includes whole-symbol conversion, adjoint inclusion coordinates, arbitrary
+basis-index evaluation, inverse quotient/remainder coordinates and the generic
+full-block determinant transfer. The native synthesis signature is restored
+without an extra DecidableEq parameter. Both the native branch and the maintained
+DKPS donors preserve the opposite-shift determinant/winding/index and every
+leading full-block singularity result. No acceptance credit is added.
+
+Native focused compilation (7688 jobs), all 15 linters on seven affected modules,
+API/axiom probes and six-file source-style/header checks pass. DKPS focused
+compilation (7694 jobs), full default build (22354 jobs), Challenge (20252 jobs)
+and all 15 linters on the four changed donor modules pass without warnings.
+Inputs remain accepted TauCeti b7121f4d74, Mathlib 31ce06eaad and Lean v4.37.0-rc1.
+Existing caches are reused; the host helper runs no builds.
+
+Five requested import removals are applied. The direct Compression import in
+Block/Toeplitz must remain: removing it makes the existing norm estimate fail
+because its theorem is not re-exported by the remaining dependencies. The exact
+failed/passing compiler evidence and an unposted, model-identified reply draft are
+in waves/2026-11-22/pr44700 in the campaign checkout. The PR is open/mergeable;
+upstream CI and reviewer approval remain pending. Earlier heads below are
+historical snapshots.
+
+
 November 22 late #30736 reuse follow-up: current pushed head `abb7666de3fb335d10bdefc8f1b892622a02422b`
 replaces the first repair `32e13dca1f`. The new review confirms the earlier
 duplication fixes and requests removal of one single-use wrapper. The public

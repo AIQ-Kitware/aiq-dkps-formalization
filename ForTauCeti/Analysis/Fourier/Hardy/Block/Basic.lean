@@ -29,11 +29,18 @@ def blockHardyBasisNat (r : ℕ) [NeZero r] : HilbertBasis ℕ ℂ (BlockHardySp
 /-- Block order sends position `k` and coordinate `i` to `k * r + i`. -/
 @[simp] theorem blockHardyBasisNat_apply (r : ℕ) [NeZero r] (k : ℕ) (i : Fin r) :
     blockHardyBasisNat r (k * r + i) = blockHardyBasis r (k, i) := by
+  rw [blockHardyBasisNat, HilbertBasis.reindex_apply, Equiv.symm_symm]
+  rw [← Nat.divModEquiv_symm_apply r (k, i), Equiv.apply_symm_apply]
+
+/-- An arbitrary scalar index is its quotient block position and remainder coordinate. -/
+theorem blockHardyBasisNat_apply_div_mod (r : ℕ) [NeZero r] (m : ℕ) :
+    blockHardyBasisNat r m =
+      blockHardyBasis r (m / r, ⟨m % r, Nat.mod_lt m (NeZero.pos r)⟩) := by
   rw [blockHardyBasisNat, HilbertBasis.reindex_apply]
-  exact congrArg (blockHardyBasis r) ((Nat.divModEquiv r).apply_symm_apply (k, i))
+  rfl
 
 /-- The scalar entry of a continuous matrix symbol agrees with its entrywise `L∞` class. -/
-theorem blockSymbolEntry_toLp_matrix {r : ℕ}
+@[simp high] theorem blockSymbolEntry_toLp_matrix {r : ℕ}
     (F : C(UnitAddCircle, Matrix (Fin r) (Fin r) ℂ)) (i j : Fin r) :
     blockSymbolEntry r i j (ContinuousMap.toLp ∞ (haarAddCircle (T := 1)) ℂ
       ⟨fun t => Matrix.toEuclideanCLM (𝕜 := ℂ) (F t),
@@ -43,6 +50,7 @@ theorem blockSymbolEntry_toLp_matrix {r : ℕ}
   rw [blockSymbolEntry_toLp]
   congr 1
   ext t
-  exact congrFun (Matrix.mulVec_single_one (F t) j) i
+  exact congrArg (fun v : EuclideanSpace ℂ (Fin r) => v i)
+    (Matrix.toEuclideanCLM_apply_single (F t) j)
 
 end TauCeti
