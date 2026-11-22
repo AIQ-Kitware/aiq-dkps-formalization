@@ -1,6 +1,33 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
 
+November 22 response follow-up for #44700: the host-posted import rebuttal was
+accepted on ea0f92f; [the placement finding was withdrawn](https://github.com/TauCetiProject/TauCeti/pull/44700#discussion_r4659741843).
+No further import reply is needed, and its posting script is now historical.
+Current pushed head is `8e157bf28e2943a443f900072316a19c8c8c2b1a`. The new reuse/proof findings
+are fixed: native product-map injectivity replaces both manual proofs; single
+coordinates follow from the public finite expansion; quotient/remainder evaluation
+uses the named Nat/Fin laws; the matrix-column defeq is documented. The general
+`ContinuousLinearMap.IsFredholm.index_conj_prodMap` packages kernel/cokernel
+instances once, so the opposite-shift index proof needs no local instance setup.
+The helper covers topological additive modules over a nontrivially normed field
+with continuous constant scalar multiplication, without completeness or carrier
+dimension assumptions. It supports the same partial TOEP-T6 example, with no new
+accepted roadmap credit.
+
+Native focused build (7688 jobs), all 15 linters on eight affected modules, API
+and axiom probes and seven-file source-style checks pass. The five changed DKPS
+donor modules pass focused compilation (7696 jobs), all 15 linters, full default
+build (22356 jobs) and Challenge (20252 jobs), without warnings. Existing accepted
+pins are unchanged. The PR is open/mergeable; current-head CI and reviewer approval
+remain pending. The response round noted a rubrics-checkout drift warning; that
+evidence is retained without treating local tests as upstream approval.
+
+Refresh only this PR description on the credentialed host with
+`bash waves/2026-11-22/update-pr-descriptions.sh 44700`; it performs no builds,
+pushes or comments. Earlier heads and import-reply instructions below are historical.
+
+
 November 22 #44700 review follow-up: current pushed head `ea0f92f25783805b6bdf8d956c1dcfd287175ad3`
 replaces the earlier `225fdc5014` repair. Canonical matrix coordinates and indexed
 symbol/action laws replace seven redundant example specializations. The public
