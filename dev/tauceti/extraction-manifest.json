@@ -6371,10 +6371,10 @@
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "SA-E01 (construction portion; SA-E02 nullity remains)",
-      "provenance_class": "Jon Crall / Claude Opus 5, Kitware 2026 Apache-2.0; Cayley coordinate and measure adapted, independent accepted representation PVM and map consumed.",
+      "provenance_class": "Independent native PVM construction consumed; DKPS Cayley-coordinate adaptation integrated separately in narrowed #29129; legacy representation bridge retained.",
       "direct_dependencies": [
         "TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley",
         "TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Map",
@@ -6382,9 +6382,13 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null,
-      "migration_note": "2026-11-05 prepared and fork-pushed port-sa-e01-cayley-spectral-pvm at 2f582c0f01d06288b8401ced61f6ec030ed6ba34, based on accepted be6518de91d3cd0f039f0011b6b12f84690b0b62. Directly maps the native #27902 representation PVM of the Cayley transform to the real line; original subtype coordinate generalized to ℂ. SA-E02 nullity and downstream resolvent results are not claimed. Focused build 6515 jobs, 13 linters, scope examples and full style passed. Independent rubric review and live host preflight required; no PR submitted, no local retirement or integration claimed."
+      "status": "native-factory-consumed-representation-bridge-retained",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/41596",
+      "migration_note": "2026-11-05 prepared and fork-pushed port-sa-e01-cayley-spectral-pvm at 2f582c0f01d06288b8401ced61f6ec030ed6ba34, based on accepted be6518de91d3cd0f039f0011b6b12f84690b0b62. Directly maps the native #27902 representation PVM of the Cayley transform to the real line; original subtype coordinate generalized to ℂ. SA-E02 nullity and downstream resolvent results are not claimed. Focused build 6515 jobs, 13 linters, scope examples and full style passed. Independent rubric review and live host preflight required; no PR submitted, no local retirement or integration claimed. November 22: remove the local spectralPVM factory and use LinearPMap.spectralPVM A hA directly from independent #41596. spectralPVM_def remains a genuine bridge to the legacy BorelCalculus representation, proved by native diagonal measure characterization. Other local Borel/restriction APIs are not declared exhausted. The narrowed #29129 replay supplies only coordinate auxiliaries, not the PVM construction.",
+      "final_declarations": [
+        "LinearPMap.spectralPVM"
+      ],
+      "integration": "81171bd524be1b4f119bb36877630bb96aaed6f8"
     },
     {
       "source_module": "New native-carrier bridges, with the complex adjoint identity adapted from DKPS OneParameterUnitaryGroup/Basic.lean at 7327e26f4",
@@ -6566,7 +6570,7 @@
     },
     {
       "module": "ForTauCeti.Analysis.Complex.Cayley.Inverse",
-      "status": "unmerged-donor-review-repair",
+      "status": "accepted-upstream-local-copy-removed",
       "source_declarations": [
         "TauCeti.LinearPMap.cayleyInv",
         "TauCeti.LinearPMap.measurable_cayleyInv"
@@ -6587,13 +6591,13 @@
         "Complex.cayley_inverseCayleyCoord"
       ],
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/29129",
-      "integration": null,
-      "scope": "Forward inverse law generalized to all complex parameters, including -i; reverse law for norm-one points other than 1. Existing native inverse identity and half-plane bijection replace local denominator algebra. Submission is not integration. November 17 comment-only follow-up explains target-set conversion; no theorem or proof-term source changes.",
+      "integration": "557acd65e46af69e3208452678c225b6d75141bf",
+      "scope": "Forward inverse law generalized to all complex parameters, including -i; reverse law for norm-one points other than 1. Existing native inverse identity and half-plane bijection replace local denominator algebra. Submission is not integration. November 17 comment-only follow-up explains target-set conversion; no theorem or proof-term source changes. November 22: accepted narrowed replay 557acd65e46af69e3208452678c225b6d75141bf supplies exactly these six coordinate declarations and auxiliary Nevanlinna bridge/module moves. Local Cayley/Inverse.lean is deleted. The PVM construction was explicitly dropped from this replay in favor of independently accepted #41596; no SA-E01 construction credit is attributed to #29129.",
       "source_module": "ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure/Construction.lean",
       "staging_module": "ForTauCeti/Analysis/Complex/Cayley/Inverse.lean",
       "final_tauceti_module": "TauCeti/Analysis/Complex/UpperHalfPlane/Cayley.lean",
       "current_namespace": "Complex",
-      "ownership_class": "unmerged-donor",
+      "ownership_class": "tauceti",
       "roadmap_target": "SelfAdjointSpectralTheory SA-E01 (coordinate prerequisite)",
       "provenance_class": "explicit-DKPS-adaptation",
       "original_source_anchor": "ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure/Construction.lean (pre-repair 23b2a00fb)",
@@ -6607,7 +6611,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.Rosenblum"
       ],
       "prepared_head": "0a85d596da2d7bad3fe178a69713133b0493a303",
-      "prepared_packet": "/home/joncrall/code/tauceti-dkps-campaign/waves/2026-11-17/pr29129"
+      "prepared_packet": "/home/joncrall/code/tauceti-dkps-campaign/waves/2026-11-17/pr29129",
+      "consumed_at_pin": "b7121f4d7408c1a323335f3547e857b0b547369a"
     },
     {
       "source_module": "ForTauCeti.Analysis.Normed.Lp.ProdLp",
@@ -6687,7 +6692,7 @@
         "IsSelfAdjoint.norm_spectralGapInverse_apply_le",
         "IsSelfAdjoint.mem_graph_spectralGapInverse"
       ],
-      "status": "submitted-upstream-not-accepted",
+      "status": "accepted-upstream-local-duplicates-retired",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/44695",
       "prepared_branch": "port-sa-e36-e40-spectral-blocks",
       "prepared_head": "8f6ab22843924102cfd86638fadbc587e3fd3e44",
@@ -6698,7 +6703,10 @@
         "SA-E39",
         "SA-E40"
       ],
-      "migration_note": "Independent branch based on accepted 8794ab329bb60340fa690a2902cf995f0571721b. Native PVM and bounded integral replace donor proof plumbing; actual domains and vector-measure gap scope preserved, arbitrary complete complex Hilbert spaces including zero/nonseparable. Local donors retained pending acceptance. No new accepted census count. November 21 review repair merges accepted b608709b45, preserving its enlarged native PVM module unchanged under Basic and consuming canonical inverseCayleyCoord and cayley_diagMeasure_singleton_one. Focused build, linters, scope probes and style pass. PR remains unmerged. November 21 reuse follow-up 4653264201: 8f6ab22843 directly uses proj_apply_eq_self_iff and borelCalculus_restrict_id, removing duplicate norm/toReal/arithmetic and cfc steps. Public statements and hypotheses unchanged; local focused, linter/style and scope checks pass. Not accepted."
+      "migration_note": "Independent branch based on accepted 8794ab329bb60340fa690a2902cf995f0571721b. Native PVM and bounded integral replace donor proof plumbing; actual domains and vector-measure gap scope preserved, arbitrary complete complex Hilbert spaces including zero/nonseparable. Local donors retained pending acceptance. No new accepted census count. November 21 review repair merges accepted b608709b45, preserving its enlarged native PVM module unchanged under Basic and consuming canonical inverseCayleyCoord and cayley_diagMeasure_singleton_one. Focused build, linters, scope probes and style pass. PR remains unmerged. November 21 reuse follow-up 4653264201: 8f6ab22843 directly uses proj_apply_eq_self_iff and borelCalculus_restrict_id, removing duplicate norm/toReal/arithmetic and cfc steps. Public statements and hypotheses unchanged; local focused, linter/style and scope checks pass. Not accepted. November 22: actual accepted main integration 391615e058611f8ea2939836b382f716e2095ca4 replays accepted head f42b581302, not the later 8f6ab22843 review repair. Consume native spectralCut, spectralGapInverse and graph/norm laws directly. Delete SpectralCutOperator.lean, SpectralGapInverse.lean and the local truncation factory/proof engine. BoundedTruncation remains a paper-facing definition using the native zero-centered cut; genuine extra zero-centered self-adjointness and projection absorption laws remain in SpectralMeasure. Vector-gap hypotheses use the native vector spectral measure; no global gap, separability, nonzero or bounded-operator restriction added. Preserve all historical source authors and Spectra reciprocal-cutoff ancestry. The old all-spectral-projection truncation commutation wrapper is covered directly by the accepted ProjValMeasure.integral_mul_proj and proj_mul_integral laws after the native cut-to-integral identity; no unmatched commutation result is discarded.",
+      "integration": "391615e058611f8ea2939836b382f716e2095ca4",
+      "accepted_head": "f42b581302197e0d55939dd02b25f50f331aa8c5",
+      "consumed_at_pin": "b7121f4d7408c1a323335f3547e857b0b547369a"
     },
     {
       "source_module": "ForTauCeti.Analysis.Fourier.Hardy.OppositeShifts",
@@ -6737,7 +6745,11 @@
         "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_zero_one",
         "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_one_zero",
         "TauCeti.ToeplitzOppositeShifts.apply_zero",
-        "TauCeti.ToeplitzOppositeShifts.apply_one"
+        "TauCeti.ToeplitzOppositeShifts.apply_one",
+        "TauCeti.ToeplitzOppositeShifts.blockSymbolEntry_eq",
+        "TauCeti.ToeplitzOppositeShifts.apply_coordinate",
+        "TauCeti.ToeplitzOppositeShifts.conjugate",
+        "TauCeti.ToeplitzOppositeShifts.not_isUnit_finiteSection"
       ],
       "status": "submitted-upstream-not-accepted",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/44700",
@@ -6745,8 +6757,8 @@
       "roadmap_targets": [
         "ToeplitzOperators Layer 6, §6.1: diag(z,zbar) counterexample (partial compound TOEP-T6)"
       ],
-      "migration_note": "Concrete rank-two complex symbol with native PiLp block Hardy carrier; determinant/winding, Fredholm index, noninvertibility and all finite compression matrices. Depends only on accepted scalar shifts and binary products, not open general finite-product or quotient-stability PRs. Full default and Challenge builds pass. No whole-milestone or accepted credit. November 21: symbol now converts the continuous matrix through toEuclideanCLM/toLp. Generic block compression replaces the example-only sectionMatrix and its compatibility name; det_sectionMatrix specializes blockFiniteSectionMatrix. Exposes entry/action simp rules, shares the kernel proof, and links the exact original donor. New generic donor remains pending acceptance, with its block-order bridge to native finiteSection. No accepted credit.",
-      "prepared_head": "7613d6348a6e6761f6448ac282ca493e855bf584"
+      "migration_note": "Concrete rank-two complex symbol with native PiLp block Hardy carrier; determinant/winding, Fredholm index, noninvertibility and all finite compression matrices. Depends only on accepted scalar shifts and binary products, not open general finite-product or quotient-stability PRs. Full default and Challenge builds pass. No whole-milestone or accepted credit. November 21: symbol now converts the continuous matrix through toEuclideanCLM/toLp. Generic block compression replaces the example-only sectionMatrix and its compatibility name; det_sectionMatrix specializes blockFiniteSectionMatrix. Exposes entry/action simp rules, shares the kernel proof, and links the exact original donor. New generic donor remains pending acceptance, with its block-order bridge to native finiteSection. No accepted credit. November 22 review repair: native orthonormal synthesis gives a linear isometry and public finite expansion; generic continuous matrix-entry and inverse matrix unit-vector bridges are shared; blockHardyBasisNat moves to Block.Basic. The public index value formula and whole compression bridge identify the first n+1 full blocks. Public canonical direct-sum conjugacy, indexed symbol/action laws and native finiteSection noninvertibility are exposed. All six native changed modules pass compilation, 15 linters, scope/axiom/style checks. Still unmerged.",
+      "prepared_head": "225fdc50145f393d4c4e5bf5fdd5edd94cfd85e2"
     },
     {
       "source_module": "ForTauCeti.Analysis.Fourier.Hardy.Block.FiniteSection",
@@ -6771,16 +6783,69 @@
         "TauCeti.blockHardyBasisNat",
         "TauCeti.blockHardyBasisNat_apply",
         "TauCeti.blockFiniteSectionIndexEquiv",
-        "TauCeti.reindex_blockFiniteSectionMatrix"
+        "TauCeti.reindex_blockFiniteSectionMatrix",
+        "TauCeti.blockFiniteInclusion_apply",
+        "TauCeti.toEuclideanCLM_blockFiniteSectionMatrix",
+        "TauCeti.blockFiniteSectionIndexEquiv_val"
       ],
       "status": "submitted-upstream-not-accepted",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/44700",
       "prepared_branch": "port-toeplitz-opposite-shifts",
-      "prepared_head": "7613d6348a6e6761f6448ac282ca493e855bf584",
+      "prepared_head": "225fdc50145f393d4c4e5bf5fdd5edd94cfd85e2",
       "roadmap_targets": [
         "ToeplitzOperators Layer 6 §6.1 opposite-shift coefficient example; reusable finite block compression supporting that target"
       ],
-      "migration_note": "Generic over every block Hardy continuous linear endomorphism and block size, including zero. Basis enumeration and identification with ordinary finiteSection require positive block size, expressed by NeZero r. The first n+1 full blocks correspond to (n+1)*r scalar coordinates. Uses native Module.Basis.constr, compression, inner_compression_apply, HilbertBasis.reindex, finiteSection_single_apply; no second stability API or aliases."
+      "migration_note": "Generic over every block Hardy continuous linear endomorphism and block size, including zero. Basis enumeration and identification with ordinary finiteSection require positive block size, expressed by NeZero r. The first n+1 full blocks correspond to (n+1)*r scalar coordinates. Uses native Module.Basis.constr, compression, inner_compression_apply, HilbertBasis.reindex, finiteSection_single_apply; no second stability API or aliases. November 22 review repair: native orthonormal synthesis gives a linear isometry and public finite expansion; generic continuous matrix-entry and inverse matrix unit-vector bridges are shared; blockHardyBasisNat moves to Block.Basic. The public index value formula and whole compression bridge identify the first n+1 full blocks. Public canonical direct-sum conjugacy, indexed symbol/action laws and native finiteSection noninvertibility are exposed. All six native changed modules pass compilation, 15 linters, scope/axiom/style checks. Still unmerged. Supporting donors now include ForTauCeti.Analysis.Fourier.Hardy.Block.Basic and ForTauCeti.Analysis.Matrix.EuclideanLin. Root uses the native finite expansion for the single-coordinate proof because pinned synthesisMapIsometry_single fixes a classical DecidableEq instance; the pending PR generalizes that existing lemma.",
+      "final_tauceti_modules": [
+        "TauCeti.Analysis.Fourier.Hardy.Block.Basic",
+        "TauCeti.Analysis.Fourier.Hardy.Block.FiniteSection"
+      ],
+      "declaration_placement": {
+        "TauCeti.blockHardyBasisNat": "TauCeti.Analysis.Fourier.Hardy.Block.Basic",
+        "TauCeti.blockHardyBasisNat_apply": "TauCeti.Analysis.Fourier.Hardy.Block.Basic",
+        "remaining_finite_section_declarations": "TauCeti.Analysis.Fourier.Hardy.Block.FiniteSection"
+      }
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.UnitaryTransport; DavisKahan.SpectralTheory.PartialMap.UnitaryConjugation",
+      "source_declarations": [
+        "TauCeti.LinearPMap.unitaryConj_symm_unitaryConj",
+        "TauCeti.DavisKahan.unitaryConj_symm_unitaryConj"
+      ],
+      "status": "canonical-carrier-migrated-local-double-conjugation-facades-retired",
+      "integration": "d96626c4be077ab13dcc114d8d939eac61497e8c",
+      "upstream_pr": "https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1606",
+      "final_declarations": [
+        "LinearPMap.conj",
+        "LinearPMap.conj_conj_symm",
+        "IsSelfAdjoint.conj"
+      ],
+      "migration_note": "Independent generic transport development replaces accepted native unitaryConj. Migrate local/paper consumers to A.conj U.toLinearEquiv, normalize coercions explicitly, and delete the two duplicate inverse-conjugation lemmas. Retain genuine reducing-restriction and intertwining extras. This consumption does not claim new DKPS proof descent for #1606. The same accepted pin generalizes TauCeti.enorm_ge_of_blocks to arbitrary positive real exponents; the existing Hilbert–Schmidt square-norm consumer supplies p=2 and explicitly converts rpow_two, preserving its statement."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.Matrix.EuclideanLin; ForTauCeti.Analysis.Fourier.Hardy.Block.Basic; ForTauCeti.Analysis.Fourier.Hardy.OppositeShifts",
+      "source_declarations": [
+        "Matrix.toEuclideanCLM_symm_apply_single",
+        "TauCeti.blockSymbolEntry_toLp_matrix",
+        "TauCeti.blockToeplitz_apply_of_row_offDiagonal_eq_zero"
+      ],
+      "original_source_anchor": "November 22 review refinements of the campaign opposite-shift example, originally d1c0bf02e:ForTauCeti/Analysis/Fourier/Hardy/OppositeShifts.lean; new generic supporting lemmas, not pre-existing donor proof claims.",
+      "authors_license": "Jon Crall, OpenAI gpt-6.1-sol; Kitware 2026, Apache-2.0.",
+      "final_tauceti_modules": [
+        "TauCeti.Analysis.Matrix.EuclideanLin",
+        "TauCeti.Analysis.Fourier.Hardy.Block.Basic",
+        "TauCeti.Analysis.Fourier.Hardy.Block.Toeplitz"
+      ],
+      "final_declarations": [
+        "Matrix.toEuclideanCLM_symm_apply_single",
+        "TauCeti.blockSymbolEntry_toLp_matrix",
+        "TauCeti.blockToeplitz_apply_of_row_offDiagonal_eq_zero"
+      ],
+      "status": "submitted-upstream-not-accepted",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/44700",
+      "prepared_head": "225fdc50145f393d4c4e5bf5fdd5edd94cfd85e2",
+      "scope": "Inverse matrix unit-coordinate evaluation for arbitrary finite RCLike matrices; continuous matrix-symbol entry bridge for arbitrary block size; row-diagonal action reduction for arbitrary block symbols. Supports exact official Toeplitz Layer 6 §6.1 example, no extra roadmap milestone credit."
     }
-  ]
+  ],
+  "current_consumption_pin": "b7121f4d7408c1a323335f3547e857b0b547369a"
 }

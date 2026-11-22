@@ -10,7 +10,7 @@ public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 public import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 public import DavisKahan.Sylvester.ShiftedInverseGauge
-public import TauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGap
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Spectral.Gap
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 
 public section

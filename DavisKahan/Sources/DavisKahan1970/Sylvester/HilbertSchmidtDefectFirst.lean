@@ -8,7 +8,8 @@ public import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor
 public import DavisKahan.Sylvester.HomogeneousUniqueness
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Bounded
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
 
 public section
 
@@ -39,7 +40,7 @@ inputs came from Spectra's Born-rule stack.  Both are now native:
 * the flow is `TauCeti.HilbertSchmidt.sylvesterGroup`, whose generator is
   self-adjoint by Stone's theorem (`TauCeti/Analysis/Semigroups/Group/Unitary.lean`) and
   satisfies the Sylvester equation by `generator_sylvesterGroup_apply`;
-* the gap inverse is `TauCeti.LinearPMap.gapInverse`, with the sharp `δ⁻¹`;
+* the gap inverse is native `LinearPMap.spectralGapInverse`, with the sharp `δ⁻¹`;
 * `(genToGroup hA).val.stoneGenerator (genToGroup hA).property = A` is Stone's uniqueness half
   (`…/LinearPMap/StoneUniqueness.lean`), which is what lets a statement about
   the *flow* be read as a statement about `A` and `B`.
@@ -118,17 +119,20 @@ theorem hilbertSchmidt_sylvester_defectFirst
     (hunique : ∀ {Y : F →L[ℂ] E},
       _root_.LinearPMap.SylvesterEquation A B Y 0 → Y = 0)
     (hC : approximationNumberEnergy C ≠ ⊤)
-    (hCgap : TauCeti.LinearPMap.HasVectorSpectralGap
+    (hCgap : (_root_.LinearPMap.spectralPVM _
       (isSelfAdjoint_generator_sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
         (TauCeti.LinearPMap.genToGroup hB) (hSBasis F))
-      δ (hilbertSchmidtTensor C hC)) :
+       ).diag (hilbertSchmidtTensor C hC) (Set.Ioo (-δ) δ) = 0) :
     approximationNumberEnergy X ≠ ⊤ ∧
       δ * ContinuousLinearMap.hilbertSchmidtNorm X ≤ ContinuousLinearMap.hilbertSchmidtNorm C := by
   set hS := isSelfAdjoint_generator_sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
     (TauCeti.LinearPMap.genToGroup hB) (hSBasis F) with hSdef
   set c := hilbertSchmidtTensor C hC with hc
-  obtain ⟨hz0, hgen⟩ := TauCeti.LinearPMap.apply_gapInverse hS hδ hCgap
-  set z0 := TauCeti.LinearPMap.gapInverse hS hδ c with hz0def
+  have hgraph := hS.mem_graph_spectralGapInverse δ hδ c hCgap
+  have hz0 := _root_.LinearPMap.mem_domain_of_mem_graph hgraph
+  have hgen := _root_.LinearPMap.mem_graph_snd_inj _
+    (_root_.LinearPMap.mem_graph _ ⟨_, hz0⟩) hgraph rfl
+  set z0 := _root_.LinearPMap.spectralGapInverse _ hS δ hδ c with hz0def
   set X0 := (hSBasis F).columnOperator z0 with hX0
   have hEq0raw := hasClosedSylvesterEquation_of_generator hA hB ⟨z0, hz0⟩
   have hcOp : (hSBasis F).columnOperator c = C := toOperator_hilbertSchmidtTensor C hC
@@ -145,7 +149,7 @@ theorem hilbertSchmidt_sylvester_defectFirst
   calc
     δ * ‖z0‖ ≤ δ * (δ⁻¹ * ‖c‖) :=
       mul_le_mul_of_nonneg_left
-        (TauCeti.LinearPMap.norm_gapInverse_apply_le hS hδ c) hδ.le
+        (hS.norm_spectralGapInverse_apply_le δ hδ c) hδ.le
     _ = ‖c‖ := by field_simp
     _ = ContinuousLinearMap.hilbertSchmidtNorm C := norm_hilbertSchmidtTensor C hC
 

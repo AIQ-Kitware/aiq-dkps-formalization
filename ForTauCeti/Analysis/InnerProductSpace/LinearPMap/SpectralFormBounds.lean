@@ -93,12 +93,12 @@ carries the identity. -/
 theorem specProjection_eq_one_of_compl_eq_zero {S : Set ℝ} (hS : MeasurableSet S)
     (hz : specProjection hA Sᶜ hS.compl = 0) :
     specProjection hA S hS = 1 := by
-  have h1 : (spectralPVM hA).proj Sᶜ hS.compl
-      = ContinuousLinearMap.id ℂ H - (spectralPVM hA).proj S hS :=
-    (spectralPVM hA).proj_compl S hS
-  rw [show (spectralPVM hA).proj Sᶜ hS.compl = specProjection hA Sᶜ hS.compl from by
+  have h1 : (A.spectralPVM hA).proj Sᶜ hS.compl
+      = ContinuousLinearMap.id ℂ H - (A.spectralPVM hA).proj S hS :=
+    (A.spectralPVM hA).proj_compl S hS
+  rw [show (A.spectralPVM hA).proj Sᶜ hS.compl = specProjection hA Sᶜ hS.compl from by
       rw [specProjection_def], hz] at h1
-  rw [show specProjection hA S hS = (spectralPVM hA).proj S hS from by rw [specProjection_def],
+  rw [show specProjection hA S hS = (A.spectralPVM hA).proj S hS from by rw [specProjection_def],
     -- states the goal with the definition unfolded, in the shape the next step needs;
     -- there is no `_apply` lemma to rewrite with here.
     show (1 : H →L[ℂ] H) = ContinuousLinearMap.id ℂ H from ContinuousLinearMap.one_def]
@@ -117,14 +117,15 @@ theorem specProjection_Icc_eq_symm_of_Ici_eq_one {c τ : ℝ}
     constructor
     · rintro ⟨h1, -, h3⟩; exact ⟨h1, h3⟩
     · rintro ⟨h1, h2⟩; exact ⟨h1, by linarith, h2⟩
-  have hinter := (spectralPVM hA).proj_inter (Set.Ici c) (Set.Icc (-τ) τ)
+  have hinter := (A.spectralPVM hA).proj_inter (Set.Ici c) (Set.Icc (-τ) τ)
     measurableSet_Ici measurableSet_Icc
-  rw [show (spectralPVM hA).proj (Set.Ici c) measurableSet_Ici
+  rw [show (A.spectralPVM hA).proj (Set.Ici c) measurableSet_Ici
       = specProjection hA (Set.Ici c) measurableSet_Ici from by
           rw [specProjection_def], hone, one_mul] at hinter
   rw [show specProjection hA (Set.Icc c τ) measurableSet_Icc
-      = (spectralPVM hA).proj (Set.Icc c τ) measurableSet_Icc from by rw [specProjection_def],
-    (spectralPVM hA).proj_congr hset.symm measurableSet_Icc
+      = (A.spectralPVM hA).proj (Set.Icc c τ) measurableSet_Icc from by
+          rw [specProjection_def],
+    (A.spectralPVM hA).proj_congr hset.symm measurableSet_Icc
       (measurableSet_Ici.inter measurableSet_Icc),
     ← hinter, specProjection_def]
 
@@ -147,9 +148,9 @@ theorem le_re_inner_of_specProjection_Iio_eq_zero {c : ℝ}
   have hcompl : (Set.Ici c)ᶜ = Set.Iio c := Set.compl_Ici
   have hz' : specProjection hA (Set.Ici c)ᶜ measurableSet_Ici.compl = 0 := by
     rw [show specProjection hA (Set.Ici c)ᶜ measurableSet_Ici.compl
-        = (spectralPVM hA).proj (Set.Ici c)ᶜ measurableSet_Ici.compl from by
+        = (A.spectralPVM hA).proj (Set.Ici c)ᶜ measurableSet_Ici.compl from by
             rw [specProjection_def],
-      (spectralPVM hA).proj_congr hcompl measurableSet_Ici.compl measurableSet_Iio,
+      (A.spectralPVM hA).proj_congr hcompl measurableSet_Ici.compl measurableSet_Iio,
       ← specProjection_def]
     exact hz
   have hone := specProjection_eq_one_of_compl_eq_zero hA measurableSet_Ici hz'
@@ -180,9 +181,9 @@ theorem re_inner_le_of_specProjection_Ioi_eq_zero {c : ℝ}
   have hcompl : (Set.Iic c)ᶜ = Set.Ioi c := Set.compl_Iic
   have hz' : specProjection hA (Set.Iic c)ᶜ measurableSet_Iic.compl = 0 := by
     rw [show specProjection hA (Set.Iic c)ᶜ measurableSet_Iic.compl
-        = (spectralPVM hA).proj (Set.Iic c)ᶜ measurableSet_Iic.compl from by
+        = (A.spectralPVM hA).proj (Set.Iic c)ᶜ measurableSet_Iic.compl from by
             rw [specProjection_def],
-      (spectralPVM hA).proj_congr hcompl measurableSet_Iic.compl measurableSet_Ioi,
+      (A.spectralPVM hA).proj_congr hcompl measurableSet_Iic.compl measurableSet_Ioi,
       ← specProjection_def]
     exact hz
   have hone := specProjection_eq_one_of_compl_eq_zero hA measurableSet_Iic hz'
@@ -199,14 +200,15 @@ theorem re_inner_le_of_specProjection_Ioi_eq_zero {c : ℝ}
       specProjection hA (Set.Icc (-τ) c) measurableSet_Icc
         = specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc := by
     intro τ hτ
-    have hinter := (spectralPVM hA).proj_inter (Set.Iic c) (Set.Icc (-τ) τ)
+    have hinter := (A.spectralPVM hA).proj_inter (Set.Iic c) (Set.Icc (-τ) τ)
       measurableSet_Iic measurableSet_Icc
-    rw [show (spectralPVM hA).proj (Set.Iic c) measurableSet_Iic
+    rw [show (A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic
         = specProjection hA (Set.Iic c) measurableSet_Iic from by rw [specProjection_def], hone,
       one_mul] at hinter
     rw [show specProjection hA (Set.Icc (-τ) c) measurableSet_Icc
-        = (spectralPVM hA).proj (Set.Icc (-τ) c) measurableSet_Icc from by rw [specProjection_def],
-      (spectralPVM hA).proj_congr (hset τ hτ).symm measurableSet_Icc
+        = (A.spectralPVM hA).proj (Set.Icc (-τ) c) measurableSet_Icc from by
+          rw [specProjection_def],
+      (A.spectralPVM hA).proj_congr (hset τ hτ).symm measurableSet_Icc
         (measurableSet_Iic.inter measurableSet_Icc),
       ← hinter, specProjection_def]
   have hlim : ∀ v : H, Filter.Tendsto

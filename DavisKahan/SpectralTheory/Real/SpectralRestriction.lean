@@ -351,9 +351,9 @@ are conjugation invariant. -/
 theorem conjugatePVM_spectralPVM
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) :
     conjugatePVM
-        (TauCeti.LinearPMap.spectralPVM
+        (_root_.LinearPMap.spectralPVM _
           (PartialMapComplexification.isSelfAdjoint_complexify hA)) =
-      TauCeti.LinearPMap.spectralPVM
+      _root_.LinearPMap.spectralPVM _
         (PartialMapComplexification.isSelfAdjoint_complexify hA) :=
   by
     apply TauCeti.ProjValMeasure.ext_of_diag
@@ -436,7 +436,7 @@ theorem realSelfAdjointSpectralProjection_idem
       (PartialMapComplexification.complexify A)
       (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS = _
   simp only [selfAdjointSpectralProjection, TauCeti.LinearPMap.specProjection_def]
-  exact (TauCeti.LinearPMap.spectralPVM
+  exact (_root_.LinearPMap.spectralPVM _
     (PartialMapComplexification.isSelfAdjoint_complexify hA)).proj_idem S hS
 
 /-- The descended real spectral projection is self-adjoint. -/
@@ -449,7 +449,7 @@ theorem realSelfAdjointSpectralProjection_isSelfAdjoint
   rw [TauCeti.RealComplexification.complexify_adjoint,
     complexify_realSelfAdjointSpectralProjection]
   simp only [selfAdjointSpectralProjection, TauCeti.LinearPMap.specProjection_def]
-  exact (TauCeti.LinearPMap.spectralPVM
+  exact (_root_.LinearPMap.spectralPVM _
     (PartialMapComplexification.isSelfAdjoint_complexify hA)).isSelfAdjoint_proj S hS
     |>.adjoint_eq
 
@@ -567,7 +567,7 @@ theorem realSelfAdjointSpectralProjection_compl
     RealComplexification.complexify_id,
     complexify_realSelfAdjointSpectralProjection]
   simp only [selfAdjointSpectralProjection, TauCeti.LinearPMap.specProjection_def]
-  exact (TauCeti.LinearPMap.spectralPVM
+  exact (_root_.LinearPMap.spectralPVM _
     (PartialMapComplexification.isSelfAdjoint_complexify hA)).proj_compl S hS
 
 /-- The range selected by the complement set is the orthogonal complement of

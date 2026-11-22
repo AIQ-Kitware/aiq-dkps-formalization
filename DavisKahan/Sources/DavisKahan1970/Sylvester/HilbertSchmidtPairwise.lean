@@ -56,10 +56,10 @@ theorem hilbertSchmidtTensor_hasVectorSpectralGap
     {C : F →L[ℂ] E} {δ : ℝ}
     (hgap : PairwiseSpectrumGap A B δ)
     (hC : approximationNumberEnergy C ≠ ⊤) :
-    TauCeti.LinearPMap.HasVectorSpectralGap
+    (_root_.LinearPMap.spectralPVM _
       (TauCeti.HilbertSchmidt.isSelfAdjoint_generator_sylvesterGroup
         (TauCeti.LinearPMap.genToGroup hA) (TauCeti.LinearPMap.genToGroup hB) (hSBasis F))
-      δ (hilbertSchmidtTensor C hC) := by
+       ).diag (hilbertSchmidtTensor C hC) (Set.Ioo (-δ) δ) = 0 := by
   refine TauCeti.HilbertSchmidt.hasVectorSpectralGap_sylvesterGroup hA hB (hSBasis F)
     ?_ (hilbertSchmidtTensor C hC)
   intro lam hlam alp halp

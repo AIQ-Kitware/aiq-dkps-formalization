@@ -8,7 +8,7 @@ module
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import ForTauCeti.Analysis.RCLike.ScalarTransportFunctionalCalculus
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
-public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley.Basic
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Basic
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unital
 public import Mathlib.Topology.ContinuousMap.StoneWeierstrass

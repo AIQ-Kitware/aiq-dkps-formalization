@@ -52,7 +52,7 @@ theorem spectralSubspace_orthogonalExactDecomposition
             selfAdjointSpectralProjection A hA S hS from
         by
           simp only [selfAdjointSpectralProjection, TauCeti.LinearPMap.specProjection_def]
-          exact (TauCeti.LinearPMap.spectralPVM hA).proj_compl S hS]
+          exact (_root_.LinearPMap.spectralPVM _ hA).proj_compl S hS]
     change ContinuousLinearMap.id ℂ E -
         selfAdjointSpectralProjection A hA S hS =
       ContinuousLinearMap.id ℂ E - U.starProjection

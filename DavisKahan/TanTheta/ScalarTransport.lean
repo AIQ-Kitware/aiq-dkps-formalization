@@ -404,11 +404,10 @@ noncomputable def scalarTransport (D : UnboundedCompressionTrialData Z) :
     UnboundedCompressionTrialData (ScalarTransport.submodule (e := e) Z) := by
   let W := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
   refine
-    { compression := _root_.LinearPMap.unitaryConj W
-        (ScalarTransport.pmap (e := e) D.compression)
+    { compression := (((ScalarTransport.pmap (e := e) D.compression)).conj (W).toLinearEquiv)
       compression_isSelfAdjoint :=
-        _root_.LinearPMap.isSelfAdjoint_unitaryConj
-          ((ScalarTransport.isSelfAdjoint_pmap_iff e).2 D.compression_isSelfAdjoint)
+        _root_.IsSelfAdjoint.conj
+          ((ScalarTransport.isSelfAdjoint_pmap_iff e).2 D.compression_isSelfAdjoint) W
       residual := scalarTransportSubspaceCLM (e := e) Z D.residual
       residual_orthogonal := ?_ }
   intro z z'
@@ -476,7 +475,7 @@ theorem semiboundedAbove_scalarTransport_iff
       TauCeti.LinearPMap.SemiboundedAbove D.compression alpha := by
   let W := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
   change TauCeti.LinearPMap.SemiboundedAbove
-      (_root_.LinearPMap.unitaryConj W (ScalarTransport.pmap (e := e) D.compression)) alpha ↔ _
+      ((((ScalarTransport.pmap (e := e) D.compression)).conj (W).toLinearEquiv)) alpha ↔ _
   rw [TauCeti.LinearPMap.semiboundedAbove_unitaryConj_iff,
     ScalarTransport.semiboundedAbove_pmap_iff]
 
@@ -490,7 +489,7 @@ private def compressionDomainOut (D : UnboundedCompressionTrialData Z)
       (W.symm (z : ScalarTransport.submodule (e := e) Z)) ∈ D.compression.domain
   exact (ScalarTransport.mem_pmap_domain_iff (e := e)
     (A := D.compression) (W.symm (z : ScalarTransport.submodule (e := e) Z))).mp
-    (_root_.LinearPMap.mem_unitaryConj_domain_iff.mp z.property)
+    (_root_.LinearPMap.mem_conj_domain_iff.mp z.property)
 
 /-- The ambient action attached to transported trial data is exactly the
 transport of the original ambient action. -/
@@ -499,14 +498,13 @@ private theorem scalarTransport_action (D : UnboundedCompressionTrialData Z)
     (D.scalarTransport (e := e)).action z =
       ScalarTransport.of (e := e) (D.action (compressionDomainOut (e := e) D z)) := by
   let W := ScalarTransport.submoduleSubtypeEquiv (e := e) Z
-  let z' : (_root_.LinearPMap.unitaryConj W
-      (ScalarTransport.pmap (e := e) D.compression)).domain :=
+  let z' : ((((ScalarTransport.pmap (e := e) D.compression)).conj (W).toLinearEquiv)).domain :=
     ⟨(z : ScalarTransport.submodule (e := e) Z), z.property⟩
-  change ((_root_.LinearPMap.unitaryConj W (ScalarTransport.pmap (e := e) D.compression)
+  change (((((ScalarTransport.pmap (e := e) D.compression)).conj (W).toLinearEquiv)
       z' : ScalarTransport.submodule (e := e) Z) : ScalarTransport e H) +
       scalarTransportSubspaceCLM (e := e) Z D.residual
         (z : ScalarTransport.submodule (e := e) Z) = _
-  rw [_root_.LinearPMap.unitaryConj_apply]
+  rw [_root_.LinearPMap.conj_apply]
   rfl
 
 /-- **The crossed lower form bound used by the Appendix tangent argument is

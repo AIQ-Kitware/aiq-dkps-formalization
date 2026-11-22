@@ -1,5 +1,74 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 22 accepted spectral-block consumption and review repairs
+
+**SA-E36–E40 are accepted and consumed.** TauCeti main integration
+`391615e058611f8ea2939836b382f716e2095ca4` (#44695) supplies bounded spectral cuts,
+their domain/graph laws, and the sharp vector spectral-gap inverse. It replays
+accepted head `f42b581302`; later submission head `8f6ab22843` is not the accepted
+proof snapshot. DKPS now pins accepted `b7121f4d7408c1a323335f3547e857b0b547369a`
+(Mathlib `31ce06eaadf4a200c0e1407c5f10953cf606b8f8`, Lean v4.37.0-rc1).
+
+The native `spectralCut` and `spectralGapInverse` replace `specCutOp`, `gapInverse`,
+the local truncation factory and their displaced proof engines. Both obsolete donor
+modules are deleted; paper consumers use native graph/norm laws directly. The
+paper-facing bounded truncation definition and genuine zero-centered cut
+self-adjointness/projection-absorption laws remain. Arbitrary complete complex
+Hilbert spaces, zero/nonseparable spaces and vector-measure gap hypotheses are
+preserved. Original Jon Crall/Claude Opus 5, Kitware/Apache-2.0 attribution and
+Adam Bornemann/Spectra reciprocal-cutoff ancestry remain explicit.
+
+A second actual integration must be distinguished from the historical superseded
+closure of #29129: `557acd65e46af69e3208452678c225b6d75141bf` replays its narrowed
+head `0a85d596da`. It contributes six inverse-Cayley coordinate declarations,
+a Nevanlinna bridge and module moves. It explicitly drops the duplicate PVM
+construction. Independent #41596 remains the SA-E01 construction supplier. DKPS
+retires `Cayley/Inverse.lean` and its local PVM factory, while retaining the genuine
+`spectralPVM_def` bridge to the legacy Borel representation. This is partial
+auxiliary contribution credit, not a second PVM construction or a claim that the
+entire legacy Borel calculus has been consumed.
+
+Independent Forgejo #1606, integration `d96626c4be077ab13dcc114d8d939eac61497e8c`,
+supplies SA-C20–C24 and replaces native `unitaryConj` with generic `LinearPMap.conj`.
+SA-C25–C28 retain the earlier #13871 completion/provenance credit. DKPS consumers now
+use the canonical carrier and native inverse-conjugation law; two duplicate local
+inverse-conjugation lemmas are retired. No DKPS proof descent is inferred for this
+independent native refactor; genuine restriction/intertwining extras remain.
+
+The two still-open submissions are repaired and pushed after merging the accepted
+main pin: #30736 `32e13dca1f` shares the real/complex generator-convergence Cauchy
+argument and handles all real times through the native comparison at time one;
+#44700 `225fdc5014` uses native isometric synthesis, shared generic coordinate
+bridges, public canonical conjugacy and native finite-section noninvertibility.
+Both pass focused compilation, all 15 linters on six modules, scope/axiom/style
+checks; live metadata confirms open and mergeable. Submission is not acceptance.
+The Toeplitz refinements are maintained in the unmerged DKPS donor layer.
+
+**Frontier:** no newly unclaimed, ready-to-port official target was established
+by this selected refresh. SA-E35 is a mapping question against accepted PVM
+additivity, not an automatic new proof obligation. SA-E25–E27/E43/E46 still await
+#30736; SA-E44/E45 overlap open Forgejo #2123. Forgejo #2441 claims the bounded
+pairwise π/2 Sylvester estimate supporting SSP-B16; the unbounded lift still needs
+that supplier accepted. Generic conjugation adds no separate roadmap obligation
+for our extra reducing-restriction transport identity. The expired intention
+reserves nothing. The uncapped Forgejo scan (1103 open PRs, 23 pages) and targeted
+GitHub checks support this selected frontier; they are not a fresh complete audit
+of every roadmap item. No new duplicate PR is prepared.
+
+Final DKPS validation: full default build (22354 jobs), Challenge (20252 jobs),
+and the focused changed-consumer/Sylvester audit (7799 jobs) pass without warnings.
+All 15 environment linters pass on the new/rewritten API modules. An additional
+46-module sweep reports 18 findings in nine existing modules (retained explicit
+instances, two field docstrings and one older simp-normal-form rule); its failed
+raw audit and baseline source excerpts are preserved in the campaign packet.
+This is not a claim that all existing DKPS module lint is clean. No paper scope
+was narrowed, maintained gate weakened or linter disabled to clear that audit.
+
+Current campaign evidence and metadata-only host command are in
+`waves/2026-11-22/` in the campaign repository. Earlier dated entries below are
+historical snapshots, superseded where this entry records new evidence.
+
+
 November 21 reuse follow-up: #44695 is pushed at `8f6ab22843`, addressing
 review 4653264201 on `0cbddd6893`. The projection fixed-vector argument now
 directly applies `proj_apply_eq_self_iff`; the Cayley coordinate identity uses

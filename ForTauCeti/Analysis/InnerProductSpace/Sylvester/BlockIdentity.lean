@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 
 /-!
 # The Sylvester operator on a spectral block
@@ -17,7 +17,7 @@ operator is a scalar plus two small corrections:
 `𝒮 Z - (λ - α) Z = (A - λ)|_block ∘ Z - Z ∘ (B - α)|_block`
 
 and both corrections are *bounded* operators of norm at most the block radius
-(`specCutOp`).  That is what turns the pointwise Sylvester equation into a
+(`LinearPMap.spectralCut`).  That is what turns the pointwise Sylvester equation into a
 Hilbert–Schmidt estimate: the ideal properties of the energy need bounded
 factors, which the pointwise form does not provide.
 
@@ -87,7 +87,7 @@ theorem sylvester_block_identity
     {SA SB : Set ℝ} (hSA : MeasurableSet SA) (hSB : MeasurableSet SB)
     {MA lam rA : ℝ} (hbndA : ∀ s ∈ SA, |s| ≤ MA) (hrA : 0 ≤ rA)
     (hcrA : ∀ s ∈ SA, |s - lam| ≤ rA)
-    {MB alp rB : ℝ} (hbndB : ∀ s ∈ SB, |s| ≤ MB) (hrB : 0 ≤ rB)
+    {MB alp rB : ℝ} (_hbndB : ∀ s ∈ SB, |s| ≤ MB) (hrB : 0 ≤ rB)
     (hcrB : ∀ s ∈ SB, |s - alp| ≤ rB)
     (z : ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property).domain)
     (hZP : (TauCeti.LinearPMap.specProjection hA SA hSA).comp
@@ -98,10 +98,10 @@ theorem sylvester_block_identity
         = b.columnOperator (z : lp (fun _ : ι => E) 2)) :
     b.columnOperator ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property z)
         - ((lam : ℂ) - (alp : ℂ)) • b.columnOperator (z : lp (fun _ : ι => E) 2)
-      = (TauCeti.LinearPMap.specCutOp hA SA hSA hrA hcrA).comp
+      = (A.spectralCut hA SA hSA lam rA hrA hcrA).comp
           (b.columnOperator (z : lp (fun _ : ι => E) 2))
         - (b.columnOperator (z : lp (fun _ : ι => E) 2)).comp
-          (TauCeti.LinearPMap.specCutOp hB SB hSB hrB hcrB) := by
+          (Bop.spectralCut hB SB hSB alp rB hrB hcrB) := by
   set Z := b.columnOperator (z : lp (fun _ : ι => E) 2) with hZ
   set P := TauCeti.LinearPMap.specProjection hA SA hSA with hP
   set Q := TauCeti.LinearPMap.specProjection hB SB hSB with hQ
@@ -122,17 +122,31 @@ theorem sylvester_block_identity
     simpa [hP] using this
   have hZxdom : Z x ∈ A.domain :=
     TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded hA SA hSA hbndA hZx
-  have hleft : TauCeti.LinearPMap.specCutOp hA SA hSA hrA hcrA (Z x)
-      = A ⟨Z x, hZxdom⟩ - (lam : ℂ) • Z x :=
-    TauCeti.LinearPMap.specCutOp_apply hA SA hSA hbndA hrA hcrA hZx hZxdom
-  -- transport the generator values across the identifications
+  have hcutA := hA.mem_graph_spectralCut SA hSA lam rA hrA hcrA (Z x)
+  have hfixA : (A.spectralPVM hA).proj SA hSA (Z x) = Z x := by
+    simpa only [← TauCeti.LinearPMap.specProjection_def] using
+      (TauCeti.LinearPMap.mem_specRange_iff hA SA hSA (Z x)).mp hZx
+  rw [hfixA] at hcutA
+  have hactA := A.mem_graph_snd_inj (A.mem_graph ⟨Z x, hZxdom⟩) hcutA rfl
+  have hleft : A.spectralCut hA SA hSA lam rA hrA hcrA (Z x) =
+      A ⟨Z x, hZxdom⟩ - (lam : ℂ) • Z x := by
+    rw [hactA, add_sub_cancel_right]
   have hUval : (U.val.stoneGenerator U.property) ⟨Z x, hmem⟩ = A ⟨Z x, hZxdom⟩ :=
     (LinearPMap.ext_iff.mp hUA).2 (x := Z x) (hf := hmem) (hg := hZxdom)
   have hVval : (V.val.stoneGenerator V.property) ⟨x, hx⟩ = Bop ⟨x, hx'⟩ :=
     (LinearPMap.ext_iff.mp hVB).2 (x := x) (hf := hx) (hg := hx')
   -- the right factor, valid at every vector
-  obtain ⟨hQx, hright⟩ :=
-    TauCeti.LinearPMap.specProjection_apply_sub_smul hB SB hSB hbndB hrB hcrB x
+  have hcutB := hB.mem_graph_spectralCut SB hSB alp rB hrB hcrB x
+  have hQnative : Q = (Bop.spectralPVM hB).proj SB hSB :=
+    TauCeti.LinearPMap.specProjection_def hB SB hSB
+  rw [← hQnative] at hcutB
+  have hQx : Q x ∈ Bop.domain := by
+    simpa only [hQ, TauCeti.LinearPMap.specProjection_def] using
+      _root_.LinearPMap.mem_domain_of_mem_graph hcutB
+  have hactB := Bop.mem_graph_snd_inj (Bop.mem_graph ⟨Q x, hQx⟩) hcutB rfl
+  have hright : Bop ⟨Q x, hQx⟩ - (alp : ℂ) • Q x =
+      Bop.spectralCut hB SB hSB alp rB hrB hcrB x := by
+    rw [hactB, add_sub_cancel_right]
   have hQint : Bop ⟨Q x, TauCeti.LinearPMap.specProjection_mem_domain hB SB hSB ⟨x, hx'⟩⟩
       = Q (Bop ⟨x, hx'⟩) :=
     TauCeti.LinearPMap.specProjection_apply_domain hB SB hSB ⟨x, hx'⟩
@@ -145,7 +159,7 @@ theorem sylvester_block_identity
         b).property z)) x
       = A ⟨Z x, hZxdom⟩ - Z (Bop ⟨x, hx'⟩) := by
     rw [← heq, hUval, hVval]
-  have hcut : TauCeti.LinearPMap.specCutOp hB SB hSB hrB hcrB x
+  have hcut : Bop.spectralCut hB SB hSB alp rB hrB hcrB x
       = Bop ⟨Q x, hQx⟩ - (alp : ℂ) • Q x := hright.symm
   have hBQ : Z (Bop ⟨Q x, hQx⟩) = Z (Bop ⟨x, hx'⟩) := by
     rw [show (⟨Q x, hQx⟩ : Bop.domain)

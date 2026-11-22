@@ -44,7 +44,7 @@ transports any partial map -- but it is retained so that this name and
 @[expose] noncomputable def unitaryConjugate
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
     (_hA : IsSelfAdjoint A) : K →ₗ.[ℂ] K :=
-  _root_.LinearPMap.unitaryConj W A
+  (A.conj W.toLinearEquiv)
 
 omit [CompleteSpace K] in
 /-- The domain of a unitary conjugate is the image of the original domain. -/
@@ -54,7 +54,7 @@ omit [CompleteSpace K] in
     (unitaryConjugate W A hA).domain =
       A.domain.comap (W.symm.toLinearEquiv : K →ₗ[ℂ] H) := by
   ext x
-  exact _root_.LinearPMap.mem_unitaryConj_domain_iff
+  exact _root_.LinearPMap.mem_conj_domain_iff
 
 omit [CompleteSpace K] in
 /-- Membership in the transported domain is the expected inverse-image
@@ -63,7 +63,7 @@ theorem mem_unitaryConjugate_domain_iff
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
     (hA : IsSelfAdjoint A) {x : K} :
     x ∈ (unitaryConjugate W A hA).domain ↔ W.symm x ∈ A.domain :=
-  _root_.LinearPMap.mem_unitaryConj_domain_iff
+  _root_.LinearPMap.mem_conj_domain_iff
 
 omit [CompleteSpace K] in
 /-- The transported domain is also the direct image of the original domain. -/
@@ -90,7 +90,7 @@ omit [CompleteSpace K] in
     (unitaryConjugate W A hA) x =
       W (A ⟨W.symm (x : K),
         (mem_unitaryConjugate_domain_iff W A hA).mp x.property⟩) :=
-  _root_.LinearPMap.unitaryConj_apply W A x
+  _root_.LinearPMap.conj_apply (A := A) (e := W.toLinearEquiv) x
 
 omit [CompleteSpace K] in
 /-- The unitary sends every original-domain vector into the transported
@@ -134,54 +134,41 @@ theorem mem_resolventSet_unitaryConj_of_mem
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) {z : ℂ}
     (hz : z ∈ _root_.LinearPMap.resolventSet A) :
     z ∈ _root_.LinearPMap.resolventSet
-      (_root_.LinearPMap.unitaryConj W A) := by
+      (A.conj W.toLinearEquiv) := by
   obtain ⟨R, hR⟩ := _root_.LinearPMap.mem_resolventSet_iff.mp hz
   -- `IsResolventAt` has three fields: the domain condition, the right inverse, and the
   -- left inverse.  Each transports by conjugating with `W`.
   apply _root_.LinearPMap.mem_resolventSet_iff.mpr
   refine ⟨unitaryConjugateBounded W R, fun φ => ?_, fun φ => ?_, fun ψ => ?_⟩
   · rw [unitaryConjugateBounded_apply,
-      _root_.LinearPMap.mem_unitaryConj_domain_iff, W.symm_apply_apply]
+      _root_.LinearPMap.mem_conj_domain_iff,
+      LinearIsometryEquiv.coe_symm_toLinearEquiv, W.symm_apply_apply]
     exact hR.mem_domain _
   · have hφ := congrArg W (hR.smul_sub_apply (W.symm φ))
-    simpa only [_root_.LinearPMap.unitaryConj_apply,
+    simpa only [_root_.LinearPMap.conj_apply,
+      LinearIsometryEquiv.coe_toLinearEquiv, LinearIsometryEquiv.coe_symm_toLinearEquiv,
       unitaryConjugateBounded_apply, map_sub, map_smul,
       W.symm_apply_apply, W.apply_symm_apply] using hφ
   · let x : A.domain := ⟨W.symm (ψ : K),
-      _root_.LinearPMap.mem_unitaryConj_domain_iff.mp ψ.property⟩
+      _root_.LinearPMap.mem_conj_domain_iff.mp ψ.property⟩
     have hx := congrArg W (hR.apply_smul_sub x)
     simpa only [x, unitaryConjugateBounded_apply,
-      _root_.LinearPMap.unitaryConj_apply, map_sub, map_smul,
+      _root_.LinearPMap.conj_apply, LinearIsometryEquiv.coe_toLinearEquiv,
+      LinearIsometryEquiv.coe_symm_toLinearEquiv, map_sub, map_smul,
       W.symm_apply_apply, W.apply_symm_apply] using hx
-
-omit [CompleteSpace H] [CompleteSpace K] in
-/-- Conjugation first by `W` and then by `W⁻¹` returns the original partial
-operator. -/
-theorem unitaryConj_symm_unitaryConj
-    (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) :
-    _root_.LinearPMap.unitaryConj W.symm
-        (_root_.LinearPMap.unitaryConj W A) = A := by
-  refine LinearPMap.ext_iff.mpr ⟨?_, ?_⟩
-  · ext x
-    simp only [_root_.LinearPMap.mem_unitaryConj_domain_iff,
-      LinearIsometryEquiv.symm_symm, W.symm_apply_apply]
-  · intro x hx hy
-    rw [_root_.LinearPMap.unitaryConj_apply,
-      _root_.LinearPMap.unitaryConj_apply]
-    simp only [LinearIsometryEquiv.symm_symm, W.symm_apply_apply]
 
 omit [CompleteSpace H] [CompleteSpace K] in
 /-- Resolvent membership is invariant under unitary conjugation. -/
 theorem mem_resolventSet_unitaryConj_iff
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H) {z : ℂ} :
     z ∈ _root_.LinearPMap.resolventSet
-        (_root_.LinearPMap.unitaryConj W A) ↔
+        (A.conj W.toLinearEquiv) ↔
       z ∈ _root_.LinearPMap.resolventSet A := by
   constructor
   · intro hz
     have hz' := mem_resolventSet_unitaryConj_of_mem
-      W.symm (_root_.LinearPMap.unitaryConj W A) hz
-    rwa [unitaryConj_symm_unitaryConj W A] at hz'
+      W.symm (A.conj W.toLinearEquiv) hz
+    rwa [LinearIsometryEquiv.toLinearEquiv_symm, _root_.LinearPMap.conj_conj_symm] at hz'
   · exact mem_resolventSet_unitaryConj_of_mem W A
 
 omit [CompleteSpace K] in
@@ -194,7 +181,7 @@ theorem mem_resolventSet_unitaryConjugate_iff
         (unitaryConjugate W A hA) ↔
       z ∈ _root_.LinearPMap.resolventSet A := by
   change z ∈ _root_.LinearPMap.resolventSet
-      (_root_.LinearPMap.unitaryConj W A) ↔
+      (A.conj W.toLinearEquiv) ↔
     z ∈ _root_.LinearPMap.resolventSet A
   exact mem_resolventSet_unitaryConj_iff W A
 
@@ -202,8 +189,8 @@ theorem mem_resolventSet_unitaryConjugate_iff
 theorem unitaryConjugate_isSelfAdjoint
     (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
     (hA : IsSelfAdjoint A) : _root_.IsSelfAdjoint (unitaryConjugate W A hA) := by
-  change IsSelfAdjoint (_root_.LinearPMap.unitaryConj W A)
-  exact _root_.LinearPMap.isSelfAdjoint_unitaryConj hA
+  change IsSelfAdjoint (A.conj W.toLinearEquiv)
+  exact hA.conj W
 
 omit [CompleteSpace K] in
 /-- The real spectrum is invariant under unitary conjugation. -/

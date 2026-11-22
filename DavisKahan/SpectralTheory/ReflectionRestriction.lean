@@ -154,7 +154,7 @@ theorem addBounded_reflectionPerturbation_eq_unitaryConj
           ⟨V.reflectionOperator (x : H), hmem x⟩ =
         V.reflectionOperator (A x)) :
     TauCeti.LinearPMap.addBounded A (reflectionPerturbation V Eop) =
-      _root_.LinearPMap.unitaryConj V.reflection A := by
+      (A.conj V.reflection.toLinearEquiv) := by
   -- Use the public reflection identity to express domain preservation and intertwining.
   have hrefl : ∀ y : H, V.reflectionOperator y = V.reflection y :=
     Submodule.reflectionOperator_apply_eq_reflection V
@@ -164,10 +164,10 @@ theorem addBounded_reflectionPerturbation_eq_unitaryConj
     rwa [hrefl] at h
   have hdomain : (TauCeti.LinearPMap.addBounded A
       (reflectionPerturbation V Eop)).domain =
-      (_root_.LinearPMap.unitaryConj V.reflection A).domain := by
+      (A.conj V.reflection.toLinearEquiv).domain := by
     ext y
     rw [TauCeti.LinearPMap.addBounded_domain,
-      _root_.LinearPMap.mem_unitaryConj_domain_iff]
+      _root_.LinearPMap.mem_conj_domain_iff]
     refine ⟨fun hy => hmem' y hy, fun hy => ?_⟩
     have hy' : V.reflection y ∈ A.domain := hy
     have h := hmem' _ hy'
@@ -189,8 +189,10 @@ theorem addBounded_reflectionPerturbation_eq_unitaryConj
             hmem ⟨V.reflection y, hJy⟩⟩ := by rw [hcongr]
     _ = V.reflectionOperator (A ⟨V.reflection y, hJy⟩) :=
         hint ⟨V.reflection y, hJy⟩
-    _ = (_root_.LinearPMap.unitaryConj V.reflection A) ⟨y, hz⟩ := by
-      simp only [_root_.LinearPMap.unitaryConj_apply, Submodule.reflection_symm, hrefl]
+    _ = (A.conj V.reflection.toLinearEquiv) ⟨y, hz⟩ := by
+      simp only [_root_.LinearPMap.conj_apply, LinearIsometryEquiv.coe_toLinearEquiv,
+        hrefl]
+      rfl
 
 omit [CompleteSpace H] in
 /-- **The reflected perturbation intertwines whenever the reflection commutes with

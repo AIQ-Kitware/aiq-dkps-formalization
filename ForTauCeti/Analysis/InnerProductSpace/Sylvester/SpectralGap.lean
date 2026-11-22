@@ -11,7 +11,8 @@ public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGrid
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.RealLowerBound
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup
-public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Bounded
+public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
 
 /-!
 # The Sylvester spectral gap
@@ -268,8 +269,9 @@ theorem norm_sub_smul_ge_of_grid (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint Bop)
       exact ENNReal.ofReal_le_ofReal hreal
     · rw [ENNReal.ofReal_eq_zero.mpr hc.le, zero_mul]
       simp
-  have hgoal := TauCeti.enorm_ge_of_blocks
-    (fun p : ℤ × ℤ => blockCLM b (gridProj hA ε p.1) (gridProj hB ε p.2)) hsplit hblock
+  have hgoal := TauCeti.enorm_ge_of_blocks (p := 2) (by norm_num)
+    (fun p : ℤ × ℤ => blockCLM b (gridProj hA ε p.1) (gridProj hB ε p.2))
+    (by intro g; simpa only [ENNReal.rpow_two] using hsplit g) hblock
   -- back to `ℝ`
   rcases le_or_gt 0 (δ - |s| - 4 * ε) with hc | hc
   · rw [enorm_eq_ofReal_norm, enorm_eq_ofReal_norm, ← ENNReal.ofReal_mul hc,
@@ -284,9 +286,9 @@ theorem hasVectorSpectralGap_sylvesterGroup (hA : IsSelfAdjoint A) (hB : IsSelfA
     (hgap : ∀ lam : ℝ, (lam : ℂ) ∈ _root_.LinearPMap.spectrum A →
       ∀ alp : ℝ, (alp : ℂ) ∈ _root_.LinearPMap.spectrum Bop → δ ≤ |lam - alp|)
     (f : lp (fun _ : ι => E) 2) :
-    TauCeti.LinearPMap.HasVectorSpectralGap
+    (_root_.LinearPMap.spectralPVM _
       (isSelfAdjoint_generator_sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
-        (TauCeti.LinearPMap.genToGroup hB) b) δ f := by
+        (TauCeti.LinearPMap.genToGroup hB) b)).diag f (Set.Ioo (-δ) δ) = 0 := by
   set hS := isSelfAdjoint_generator_sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
     (TauCeti.LinearPMap.genToGroup hB) b with hSdef
   -- every real point inside the gap is a resolvent point
@@ -317,9 +319,9 @@ theorem hasVectorSpectralGap_sylvesterGroup (hA : IsSelfAdjoint A) (hB : IsSelfA
     -- `linarith` cannot finish here: the two `≤` sides carry different (defeq) `ℝ` order
     -- instances, so its atoms do not match.  Combine the two bounds directly instead.
     exact le_trans (le_of_eq (by ring)) (add_le_add hb hkey)
-  have := TauCeti.LinearPMap.diag_eq_zero_of_subset_resolventSet hS
-    (Set.Ioo (-δ) δ) measurableSet_Ioo hres f
-  exact this
+  have hp := hS.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet measurableSet_Ioo hres
+  exact (ProjValMeasure.proj_eq_zero_iff_forall_diag_apply_eq_zero _ _ _).1 hp f
+
 
 
 end Gap

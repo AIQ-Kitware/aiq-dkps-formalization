@@ -5,7 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
-public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester
+public import TauCeti.Topology.Algebra.Module.LinearPMap.Sylvester
+public import Mathlib.Analysis.InnerProductSpace.Basic
 
 /-!
 # Form bounds for partial linear maps

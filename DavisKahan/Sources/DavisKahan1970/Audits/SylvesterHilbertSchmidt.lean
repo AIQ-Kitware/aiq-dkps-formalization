@@ -49,7 +49,7 @@ namespace ExactSinTheta
 #check TauCeti.Semigroups.StronglyContinuousGroup.isSelfAdjoint_stoneGenerator
 #check TauCeti.LinearPMap.stoneGenerator_genToGroup
 #check TauCeti.HilbertSchmidt.isSelfAdjoint_generator_sylvesterGroup
-#check TauCeti.LinearPMap.apply_gapInverse
+#check IsSelfAdjoint.mem_graph_spectralGapInverse
 #check TauCeti.LinearPMap.eq_zero_of_intertwines_of_disjoint_spectrum
 #check closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
 #check TauCeti.HilbertSchmidt.hasVectorSpectralGap_sylvesterGroup
@@ -65,7 +65,7 @@ namespace ExactSinTheta
 #print axioms TauCeti.Semigroups.StronglyContinuousGroup.isSelfAdjoint_stoneGenerator
 #print axioms TauCeti.LinearPMap.stoneGenerator_genToGroup
 #print axioms TauCeti.HilbertSchmidt.isSelfAdjoint_generator_sylvesterGroup
-#print axioms TauCeti.LinearPMap.apply_gapInverse
+#print axioms IsSelfAdjoint.mem_graph_spectralGapInverse
 #print axioms TauCeti.LinearPMap.eq_zero_of_intertwines_of_disjoint_spectrum
 #print axioms closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
 #print axioms TauCeti.HilbertSchmidt.hasVectorSpectralGap_sylvesterGroup

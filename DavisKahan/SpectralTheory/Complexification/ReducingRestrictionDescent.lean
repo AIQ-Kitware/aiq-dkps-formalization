@@ -48,9 +48,9 @@ theorem unitaryConj_complexifyReal_reducingRestriction
     (hred : _root_.LinearPMap.IsReducing A P)
     (hredC : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P)) :
-    _root_.LinearPMap.unitaryConj (complexifySubmoduleEquiv P)
-        (TauCeti.LinearPMap.complexifyReal
-          (TauCeti.LinearPMap.reducingRestriction A P hred))
+    (TauCeti.LinearPMap.complexifyReal
+      (TauCeti.LinearPMap.reducingRestriction A P hred)).conj
+        (complexifySubmoduleEquiv P).toLinearEquiv
       = TauCeti.LinearPMap.reducingRestriction
           (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P) hredC := by
   let e := complexifySubmoduleEquiv P
@@ -70,14 +70,17 @@ theorem unitaryConj_complexifyReal_reducingRestriction
       ((TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A P hred _).mp z.property)
   refine LinearPMap.ext ?_ ?_
   · ext x
-    simp only [_root_.LinearPMap.mem_unitaryConj_domain_iff,
+    simp only [_root_.LinearPMap.mem_conj_domain_iff,
+      LinearIsometryEquiv.coe_symm_toLinearEquiv,
       TauCeti.LinearPMap.mem_complexifyReal_domain_iff,
       TauCeti.LinearPMap.mem_reducingRestriction_domain_iff]
     simpa only [e] using and_congr
       (Iff.of_eq (congrArg (fun z : E => z ∈ A.domain) (hre x)))
       (Iff.of_eq (congrArg (fun z : E => z ∈ A.domain) (him x)))
   · intro x y hxy
-    rw [_root_.LinearPMap.unitaryConj_apply]
+    rw [_root_.LinearPMap.conj_apply]
+    dsimp only [LinearIsometryEquiv.coe_toLinearEquiv,
+      LinearIsometryEquiv.coe_symm_toLinearEquiv]
     apply Subtype.ext
     have hxdom := (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff
       (TauCeti.LinearPMap.complexifyReal A) (complexifySubmodule P) hredC x).mp hxy
