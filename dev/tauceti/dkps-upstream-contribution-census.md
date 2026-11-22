@@ -1,5 +1,15 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+
+November 22 late #30736 reuse follow-up: current pushed head `abb7666de3fb335d10bdefc8f1b892622a02422b`
+replaces the first repair `32e13dca1f`. The new review confirms the earlier
+duplication fixes and requests removal of one single-use wrapper. The public
+Duhamel bound now exposes the generator difference norm directly; Yosida uses
+that bound without yosidaFlow_difference. Focused build (6452 jobs), all 15
+linters on all six affected modules, axiom/style checks pass. It remains open
+and mergeable; new CI/reviewer approval is pending. The accepted DKPS mathematics
+at `afed7c3cd` is unchanged by this unmerged PR-only cleanup.
+
 ## November 22 accepted spectral-block consumption and review repairs
 
 **SA-E36–E40 are accepted and consumed.** TauCeti main integration
