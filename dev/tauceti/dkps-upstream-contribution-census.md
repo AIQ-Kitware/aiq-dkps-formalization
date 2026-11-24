@@ -1,5 +1,30 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+November 24 review repair: [#30736](https://github.com/TauCetiProject/TauCeti/pull/30736)
+is pushed at `6eac60075a1f0d537ee27249189f08506c3e2835`. The existing TauCeti real commuting-exponential
+comparison is generalized to RCLike operators with real time; the complex proof
+applies it directly, and Stone's scalar-transport lemma is private again. This
+refines the submitted SA-E24 proof; it does not attribute the accepted real
+comparison to DKPS. Native focused build (6454 jobs), all 15 linters on seven
+modules, axiom and trusted style checks pass.
+
+[#44700](https://github.com/TauCetiProject/TauCeti/pull/44700) is pushed at
+`6f6cfc3da2c320ed37cc180d102be89499cd2cd4`. Native lower synthesis, inverse equivalence and determinant
+APIs replace the remaining proof detours. The scalar entry bridge explicitly
+normalizes PiLp evaluation. New `ContinuousLinearMap.IsFredholm.index_prodMap`
+packages the product-index formula for distinct domains/codomains, without
+extra topological-group or scalar-continuity assumptions; the conjugated
+endomorphism formula derives from it. Native focused build (7688 jobs), all
+15 linters on eight modules, axiom/API probes and trusted style checks pass.
+The maintained Toeplitz/Fredholm donors carry the same refinements. Accepted
+pins and mathematical target scopes are unchanged. Both are unmerged submissions;
+no new accepted roadmap or local retirement credit is recorded. The previous
+heads had green CI; the new sandboxed builds are running and review remains pending.
+
+DKPS validation passes: focused build (7696 jobs), full default build (22356
+jobs), Challenge (20252 jobs) and all 15 linters on five donor modules, without
+warnings. Logs and the guarded description-update script are in the shared
+campaign packet `waves/2026-11-24/`.
 
 November 22 response follow-up for #44700: the host-posted import rebuttal was
 accepted on ea0f92f; [the placement finding was withdrawn](https://github.com/TauCetiProject/TauCeti/pull/44700#discussion_r4659741843).

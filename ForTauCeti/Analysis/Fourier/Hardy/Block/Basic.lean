@@ -51,7 +51,8 @@ theorem blockHardyBasisNat_apply_div_mod (r : ℕ) [NeZero r] (m : ℕ) :
   rw [blockSymbolEntry_toLp]
   congr 1
   ext t
-  exact congrArg (fun v : EuclideanSpace ℂ (Fin r) => v i)
-    (Matrix.toEuclideanCLM_apply_single (F t) j)
+  simpa only [PiLp.toLp_apply, ContinuousMap.coe_mk] using
+    congrArg (fun v : EuclideanSpace ℂ (Fin r) => v i)
+      (Matrix.toEuclideanCLM_apply_single (F t) j)
 
 end TauCeti
