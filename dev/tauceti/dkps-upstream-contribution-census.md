@@ -1,5 +1,25 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+November 24 later #30736 reuse repair: current pushed head is `679445c86362d04ff5b196ab339e6c2ecab2a8c5`.
+One `TauCeti.Semigroups.uniformCauchySeqOn_exp_smul_apply_of_tendsto` now combines
+the Duhamel comparison and metric criterion for both real and complex Yosida
+proofs. It accepts arbitrary filters, eventual pairwise commutation, convergence
+on a vector and exponential bounds only along the required time segments. The
+signed-time rescaling occurs inside that criterion. The existing pointwise
+comparison now needs bounds only on its finite time segment. The unmerged
+complex-only wrapper and its Exponential module are deleted.
+
+The same SA-E24 scope and original Spectra/DKPS notices are retained. The accepted
+real comparison is an upstream dependency, not newly attributed to DKPS. The
+submission remains unmerged; this is neither acceptance nor a local donor
+retirement. Focused build (6448 jobs), all 15 linters on six modules, standard
+axiom reports and trusted style/header checks pass. This follow-up changes only
+TauCeti PR sources and DKPS documentation: accepted pins and DKPS Lean sources
+are unchanged, so its earlier full/Challenge validation is not repeated.
+Evidence and current PR body: shared campaign `waves/2026-11-24/pr30736/`.
+Refresh the body on the credentialed host with
+`bash waves/2026-11-24/update-pr-descriptions.sh 30736`.
+
 November 24 review repair: [#30736](https://github.com/TauCetiProject/TauCeti/pull/30736)
 is pushed at `6eac60075a1f0d537ee27249189f08506c3e2835`. The existing TauCeti real commuting-exponential
 comparison is generalized to RCLike operators with real time; the complex proof
