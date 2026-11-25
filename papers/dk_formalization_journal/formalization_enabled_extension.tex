@@ -22,8 +22,9 @@ Each positive principal angle describes a source line and a target line
 in a two-dimensional principal plane. Transporting that plane independently
 allows a rotation through $\like{theta}{\symglyph{theta}_i}$, with trace displacement
 $4\sin(\like{theta}{\symglyph{theta}_i}/2)$, or a reflection carrying the source line
-to the target, with trace displacement $2$. A pair of labels $\{i,j\}$
-allows the two principal planes to interact on their four-dimensional sum.
+to the target, with trace displacement $2$. Pairing two labels $\{i,j\}$
+allows a single orthogonal map to act on both principal planes together,
+on their four-dimensional sum.
 For each possible pair of distinct labels $i,j$, define its paired cost
 $\like{PairCost}{\symglyph{PairCost}_{ij}}$; for each unmatched label $i$, define its singleton
 cost $\like{SingletonCost}{\symglyph{SingletonCost}_i}$:
@@ -289,7 +290,7 @@ source. We now use the relation between the gradient and the source
 reflection to construct blocks that preserve the source as well as the
 minimizer. Their size will explain why the final optimization needs only
 single labels and pairs.
-\emph{(a) Each positive gradient level carries compatible complex coordinates.}
+\emph{(a) Each eigenspace of $-\sym{SpectralGradient}^2$ with positive eigenvalue admits a complex structure.}
 \emph{Justification.}
 The matrix $-\like{SpectralGradient}{\symglyph{SpectralGradient}^2}$ is symmetric and nonnegative,
 since
@@ -343,7 +344,8 @@ A subspace preserved by $\sym{GradientPhaseProjection}$ is preserved by this tra
 To preserve the source projection as well, we require invariance under
 the conjugation $\sym{Jreflect}$.
 
-\emph{(c) The two-phase projection and conjugation admit small common blocks.}
+\emph{(c) The phase projection and conjugation preserve common blocks of
+real dimension at most four.}
 \emph{Justification.} Choose complex coordinates in which $\sym{Jreflect}$ is coordinate
 conjugation and write $\sym{GradientPhaseProjection}=\sym{ProjectionRealPart}+i\sym{ProjectionImaginaryPart}$ with real matrices $\sym{ProjectionRealPart},\sym{ProjectionImaginaryPart}$.
 The equations $\sym{GradientPhaseProjection}^*=\sym{GradientPhaseProjection}$ and $\sym{GradientPhaseProjection}^2=\sym{GradientPhaseProjection}$ give
@@ -414,7 +416,7 @@ This completes the decomposition needed for
 \cref{eq:matching-block-additivity}.
 
 \emph{Step 4: calculate the costs on a plane and on two planes.}
-\emph{(a) A one-angle block chooses a rotation or a reflection.}
+\emph{(a) The optimal map on a one-angle block is a rotation or a reflection.}
 \emph{Justification.} For a principal angle $\like{theta}{\symglyph{theta}_i}$, the least rotation cost
 is $2\sym{MatchingPhaseCost}(\like{theta}{\symglyph{theta}_i})$.
 The alternative rotation sends a source unit vector to the opposite
@@ -683,8 +685,8 @@ Davis and Kahan's complex-phase example already shows how a phase change
 can decrease full trace displacement \citep[Example~4.2]{davis1970rotation}.
 Bolotnikov, Li, and Rodman formulate the ambient unitary minimal-distortion
 problem and prove Q-norm and Frobenius optimality results
-\citep[Problem~1.1 and Theorems~3.1, 4.2]{bolotnikov2001minimal}. The formula
-above specifies the unrestricted real trace-norm minimum through singleton
+\citep[Problem~1.1 and Theorems~3.1, 4.2]{bolotnikov2001minimal}. Our formula gives the exact minimum trace-norm displacement over all real
+orthogonal maps carrying one subspace onto the other, in terms of singleton
 and paired angle costs. We did not locate this exact matching formula in
 the sources compared here. The real field permits pairing between distinct
 principal planes, which is why the answer is an optimization over matchings.

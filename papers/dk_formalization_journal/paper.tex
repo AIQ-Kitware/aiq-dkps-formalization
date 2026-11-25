@@ -191,9 +191,9 @@ Kahan's 1970 paper in Lean~4. Of \DKResultCount{} selected results, we prove
 printed statement. The development includes the sine and tangent theorems,
 direct rotations, principal-angle operators, Sylvester separation, and
 operator-ideal norms on real and complex Hilbert spaces, including unbounded
-self-adjoint operators. We explain the mathematical lineage connecting these
-constructions. The refuted statement concerns minimization of full ambient
-displacement by direct rotation. We give real four-dimensional counterexamples
+self-adjoint operators. We review the mathematical origins of these results.
+The refuted statement claims that direct rotation minimizes displacement
+on the entire ambient space. We give real four-dimensional counterexamples
 at every prescribed positive acute angle and identify the failed
 singular-value comparison. A corrected optimality statement holds for Q-norms,
 whose squares are unitarily invariant norms of the squared modulus, including
@@ -227,10 +227,9 @@ Research Projects Agency.
 \section{Introduction}
 \label{sec:introduction}
 
-An approximate eigenvector gives a candidate direction for the action of an
-operator. If a unit vector $\sym{v}$ is paired with an approximate eigenvalue $\sym{mu}$,
+If a unit vector $\sym{v}$ is paired with an approximate eigenvalue $\sym{mu}$,
 the residual $\sym{A}\sym{v}-\sym{mu} \sym{v}$ measures how closely it satisfies the eigenvector
-equation. A small residual can identify an accurate approximation to an
+equation. A small residual can help identify an accurate approximation to an
 invariant subspace even when repeated or nearby eigenvalues make individual
 eigenvectors difficult to distinguish. Davis--Kahan theory bounds the angles
 between approximate and exact spectral subspaces in terms of a residual or
@@ -262,18 +261,17 @@ named theorem, proposition, lemma, and corollary established in the 1970 paper.
 This gives \DKResultCount{} targets, enumerated in
 Appendix~\ref{app:dk-inventory}. We prove \DKProvedCount{} of them and refute
 the printed statement \citep[Proposition~4.4]{davis1970rotation}.
-That proposition asserts a full-displacement
-optimality property for real direct rotations. We give a family of real
-four-dimensional examples exhibiting trace-norm failure at every prescribed
-positive acute angle and identify
-the invalid singular-value comparison in its proof. The phase construction
-behind the counterexample occurs over the complex field in the authors'
-example \citep[Example~4.2]{davis1970rotation}. To the best of our knowledge,
+That proposition claims that direct rotation minimizes full displacement
+for real subspaces under a small-angle hypothesis. We give real
+four-dimensional counterexamples for every positive acute angle and identify
+the invalid singular-value comparison in the proof. Davis and Kahan used
+the same phase construction over the complex numbers in their example
+\citep[Example~4.2]{davis1970rotation}. To the best of our knowledge,
 its contradiction of the printed real, small-angle claim has not previously
 been made explicit.
 For the constructed pair, whose two principal angles both equal
-$\sym{theta}$, the competing transporter attains the global trace-norm minimum
-$4\sin\sym{theta}$ for the constructed subspaces. Section~\ref{sec:prop44}
+$\sym{theta}$, the competing orthogonal map attains the minimum trace-norm displacement
+$4\sin\sym{theta}$. Section~\ref{sec:prop44}
 compares these statements and repairs the optimality claim by restricting
 the norm class to Q-norms (N is a Q-norm when $N(T)^2 = M(T^* T)$ for some
 unitarily invariant norm $M$). This repair follows from the squared-displacement
@@ -301,9 +299,9 @@ These operator-theory foundations include our
 Courant--Fischer and Weyl proofs, rectangular unitarily invariant seminorms,
 and projection-valued measures, which were subsequently adapted into Tau
 Ceti \citep{tauceti2026}.
-Section~\ref{sec:related} explains the mathematical history and formal
-provenance; Section~\ref{sec:foundations} describes the foundations used in
-our proofs.
+Section~\ref{sec:related} reviews the mathematical history and the libraries
+we used; Section~\ref{sec:foundations} describes the supporting results we
+formalized.
 
 The same principal-angle and operator-ideal results support a further
 optimization theorem. In Section~\ref{sec:example-transport}, we prove that
@@ -315,14 +313,14 @@ one subspace onto another reduces to weighted matching on principal angles.
 \item \textbf{Davis--Kahan formalization.} We prove 28 of the 29 source
 results and refute the full-displacement assertion
 \citep[Proposition~4.4]{davis1970rotation}. The sine-theta theorem covers real and
-complex Hilbert spaces, unbounded self-adjoint operators, the source's
-spectral-separation alternatives, and operator-ideal norms where finite
+complex Hilbert spaces, unbounded self-adjoint operators, Davis and Kahan's
+spectral-separation hypotheses, and operator-ideal norms where finite
 (\cref{sec:coverage,sec:sine-theta}).
 \item \textbf{Formalized operator-theoretic foundations.} We formalized the
 geometric and analytic results required by these theorems, adapted existing
 formal mathematics, and contributed foundations later used in Tau Ceti
 (\cref{sec:related-formal,sec:foundations}).
-\item \textbf{Source correction.} We identify a false comparison
+\item \textbf{Correction to Proposition 4.4.} We identify a false comparison
 of Ky Fan sums in the printed claim \citep[Proposition~4.4]{davis1970rotation},
 give a real counterexample at every positive acute angle,
 and prove the Q-norm consequence of the valid squared-displacement theorem
@@ -337,11 +335,12 @@ real trace-norm transport to a weighted-matching problem on principal angles
 \label{sec:related}
 
 The Davis--Kahan angle estimates use three constructions. Principal angles
-measure the error between subspaces; a residual measures how well a proposed
-subspace represents the operator; and a Sylvester estimate bounds the first
-quantity by the second under spectral separation. Operator ideals allow the
-same argument to express several norms. We describe the development of these
-constructions before stating the formalized sine-theta theorem.
+measure how far apart two subspaces are. A residual measures
+how well a trial operator approximates the action of the ambient operator
+on the trial subspace. Under spectral-separation hypotheses, a Sylvester
+estimate bounds the sines of the principal angles in terms of the residual.
+Operator ideals let us state this bound for several norms. We describe the
+development of these constructions before stating the formalized sine-theta theorem.
 
 Existing historical surveys cover these developments. Paige and Wei trace
 the cosine--sine decomposition from Jordan's subspace geometry through the
@@ -403,11 +402,9 @@ Camille Jordan studied the geometry of linear subspaces in $n$ dimensions in
 For two lines, a single acute angle describes their relative position.
 For subspaces of higher dimension, one needs a sequence of \emph{principal
   angles}.
-The successive principal vectors are selected under orthogonality constraints,
-  so their angles are independent of the coordinates used to describe either
-  subspace.
-This separates the geometry of a subspace from the arbitrary choice of its
-  orthonormal basis.
+The successive principal vectors are selected under orthogonality constraints.
+The principal angles depend only on the two subspaces, not on the choice of
+orthonormal bases.
 
 For finite-dimensional subspaces $\sym{Usource}$ and $\sym{Vtarget}$ of equal dimension, choose
 isometries $\sym{Xframe}$ and $\sym{Yframe}$ with those ranges.
@@ -428,12 +425,11 @@ together with their shared and orthogonal components.
 Principal angles also arise in statistics: Hotelling's 1936 canonical
   correlation analysis sought pairs of maximally correlated linear combinations
   of two sets of variables \citep{hotelling1936relations}.
-After appropriate whitening, the canonical correlations are singular values of a
-  cross-coordinate map.
-In numerical linear algebra, Bj\"orck and Golub developed algorithms for
-  computing principal angles and vectors in 1973 \citep{bjorck1973numerical}.
-Their computational formulation makes the basis-invariant angles available from
-  orthonormal matrix factorizations.
+After whitening both sets of variables, the canonical correlations are the
+singular values of their cross-covariance matrix. In 1973, Bj\"orck and Golub
+developed numerical algorithms for computing principal angles and vectors
+using orthogonal factorizations and singular value decompositions
+\citep{bjorck1973numerical}.
 
 A further formulation uses the cosine--sine decomposition of a
 partitioned orthogonal or unitary matrix.
@@ -445,8 +441,8 @@ angle operators, and the direct rotation carrying one subspace onto the other
 of the cosine--sine decomposition; Stewart completed and explicitly formulated
 the matrix decomposition in 1977
 \citep{stewart1977perturbation,paige1994history}.
-Paige and Wei explain how this decomposition and direct rotation represent
-the same principal-angle data
+Paige and Wei explain how the cosine--sine decomposition and direct rotation
+are related through principal angles
 \citep{paige1994history}. Our formalization uses projections and functional
 calculus for the Hilbert-space results and principal-plane coordinates for
 the finite-dimensional counterexample.
@@ -473,10 +469,9 @@ $\langle \sym{A}\sym{RayleighTestVector},\sym{RayleighTestVector}\rangle/\langle
 of $\sym{A}$ along a trial vector. A normalized trial vector $\sym{v}$ gives the
 Rayleigh--Ritz approximate eigenvalue $\sym{mu}=\langle \sym{A}\sym{v},\sym{v}\rangle$ and the
 residual $\sym{A}\sym{v}-\sym{mu} \sym{v}$. The Courant--Fischer min--max
-principle organizes the eigenvalues through extremal quotients over
-subspaces \citep{bhatia1997matrix}.  Weyl's eigenvalue comparison
-inequalities then control the motion of ordered eigenvalues under a
-Hermitian perturbation \citep{weyl1912eigenwerte,bhatia1997matrix}.  In modern notation,
+principle characterizes the eigenvalues by extrema of Rayleigh quotients
+over subspaces \citep{bhatia1997matrix}.  Weyl's inequalities bound how much the ordered eigenvalues can change under
+a Hermitian perturbation \citep{weyl1912eigenwerte,bhatia1997matrix}.  In modern notation,
 if $\sym{A}$ and $\sym{Acurrent}=\sym{A}+\sym{H}$ are Hermitian $n$-by-$n$ matrices and their eigenvalues
 are arranged in the same order, then
 \begin{equation}
@@ -499,9 +494,8 @@ $\dkOperatorNorm{\like{A}{\symglyph{A}_\varepsilon}-\like{Acurrent}{\symglyph{Ac
 yet their lowest-eigenvalue lines are perpendicular. The gap between the
 two eigenvalues of each matrix is $\sym{EigenvalueExampleEpsilon}$, equal to the perturbation
 norm. An eigenspace estimate therefore needs to compare the perturbation
-size with the spectral separation.  For a cluster with repeated eigenvalues, an
-entire invariant subspace is likewise more natural than a selected
-orthonormal eigenbasis.
+size with the spectral separation.  For a spectral cluster with repeated eigenvalues, the spectral subspace is
+uniquely determined, but its orthonormal eigenbasis is not.
 
 Rellich developed a rigorous perturbation theory of self-adjoint operators
 in papers published from 1937 to 1942. Kato's 1966 book gives a systematic
@@ -547,13 +541,10 @@ coordinate Hilbert spaces.
 
 The relative position of two closed subspaces was studied by Dixmier
 in 1948 and by Davis in his 1958 paper \emph{Separation of Two Linear
-Subspaces} \citep{dixmier1948position,davis1958separation}.  Davis's
-closeness and separation operators place the cosine/sine data in an
-operator-theoretic setting.  Halmos's 1969 \emph{Two Subspaces} gives a
+Subspaces} \citep{dixmier1948position,davis1958separation}.  Davis expressed the cosines and sines of subspace angles using operators.  Halmos's 1969 \emph{Two Subspaces} gives a
 block representation of the two projections
-\citep{halmos1969two}.  One first splits off the four intersection
-spaces corresponding to the combinations of membership in the ranges
-and kernels of $\sym{Psource}$ and $\sym{Qtarget}$.  On their remaining, generic part, the pair
+\citep{halmos1969two}.  First separate the four intersections of the ranges and kernels of
+$\sym{Psource}$ and $\sym{Qtarget}$.  On their remaining, generic part, the pair
 is unitarily equivalent to
 \begin{equation}
  \like{Psource}{\symglyph{Psource}_{\mathrm{gen}}}=\begin{pmatrix}\sym{Identity}&0\\0&0\end{pmatrix},
@@ -589,9 +580,8 @@ dimensions of these defect spaces \citep[Section~3]{davis1970rotation}.
 
 A finite-dimensional orthogonal matrix decomposes into invariant real
 lines and two-dimensional rotation planes.  In a general Hilbert space an
-angle operator can instead have continuous spectrum.  The spectral
-calculus of the pair of projections takes the place of a finite list
-of angles, and the intersection and defect spaces cannot be discarded.
+angle operator can instead have continuous spectrum.  Functional calculus replaces calculations with a finite list of angles,
+and we must also account for the intersection and defect spaces.
 Our Hilbert-space direct-rotation proofs therefore use projection identities
 and functional calculus. In finite dimensions these identities recover the
 principal-plane construction.
@@ -639,8 +629,9 @@ principal angle, acting trivially on common directions.
 The transport equation
 $\sym{Wcompetitor}\sym{Psource}\sym{Wcompetitor}^*=\sym{Qtarget}$
 has many unitary solutions.
-The polar-factor formula selects one determined by the two projections
-and continuously connected to the identity under the norm bound above. That
+The polar decomposition selects a unitary determined by the two projections.
+It depends continuously on them under the norm bound above and equals the
+identity when they coincide. That
 choice makes the construction valuable in perturbation theory: the
 transport identifies moving spectral subspaces while avoiding an
 arbitrary choice of orthonormal bases. In infinite dimensions,
@@ -668,9 +659,7 @@ $\|\sym{Psource}-\sym{Qtarget}\|<1$ applies in arbitrary Hilbert dimension.
 The spectral theorem represents a self-adjoint operator as
 $\sym{A}=\int\sym{SpectralValue}\,d\sym{SpectralMeasure}(\sym{SpectralValue})$ for a projection-valued measure $\sym{SpectralMeasure}$.
 For a Borel set $\sym{SpectralSet}$, the operator $\sym{SpectralMeasure}(\sym{SpectralSet})$ is the orthogonal projection onto
-the corresponding spectral subspace. This gives a second way of obtaining
-a subspace: select a region of the spectrum and take the range of its
-spectral projection. The functional-calculus
+the corresponding spectral subspace. A spectral subspace is thus the range of a spectral projection. The functional-calculus
 framework developed from the work of Riesz, von Neumann, and others;
 Kato made spectral projections central to the perturbation theory of
 closed operators \citep{kato1966perturbation,simon2018kato}.
@@ -697,9 +686,8 @@ The resolvent is bounded at each point of $\sym{RieszContour}$ even when $\sym{A
 This makes the spectral projection a stable object for perturbation analysis,
   while preserving the separate domain requirements whenever $\sym{A}$ itself appears
   in an identity.
-More general Borel spectral projections cover finite and half-infinite intervals,
-  including spectral configurations for which a single isolated
-  finite-eigenvalue cluster is not the right model.
+Borel spectral projections also cover finite and half-infinite intervals
+that need not contain an isolated finite cluster of eigenvalues.
 Our formalization uses Borel functional calculus to construct projections for
   these spectral sets, including for unbounded self-adjoint operators.
 
@@ -744,8 +732,8 @@ The positive operator
 measures the component of a trial vector lying outside the exact
 subspace.  The critical distinction for the formal proof is that this
 positive sine acts on the trial-coordinate space, whereas
-$(\sym{Identity}-\sym{Pexact})\sym{E0}$ maps into the ambient space.  For an operator $B$, its positive modulus $|B|=(B^*B)^{1/2}$ acts on its
-input space and records its stretching factors. The modulus of $(\sym{Identity}-\sym{Pexact})\sym{E0}$
+$(\sym{Identity}-\sym{Pexact})\sym{E0}$ maps into the ambient space.  For an operator $B$, its modulus $|B|=(B^*B)^{1/2}$ is a positive operator
+on its input space and satisfies $\|Bx\|=\||B|x\|$. The modulus of $(\sym{Identity}-\sym{Pexact})\sym{E0}$
 is $\sym{sinTheta0}$, so the two maps have equal unitarily invariant ideal
 norms whenever those norms are finite.
 
@@ -761,7 +749,7 @@ The scalar prototype is $(\sym{SylvesterScalarLeft}-\sym{SylvesterScalarRight})\
 then $\sym{delta}|\sym{SylvesterScalarUnknown}|\leq|\sym{SylvesterScalarRHS}|$.  In the operator problem the scalar
 multipliers are replaced by the spectral actions of two operators.
 The operator estimate has the form $\sym{delta} \sym{NormN}(\sym{X})\leq \sym{NormN}(\sym{SylvesterLeft}\sym{X}-\sym{X}\sym{HistoricalSylvesterRight})$.
-Its hypotheses specify the spectral positions of $\sym{HistoricalSylvesterRight}$ and $\sym{SylvesterLeft}$, their domains
+Its hypotheses specify the locations of the spectra of $\sym{HistoricalSylvesterRight}$ and $\sym{SylvesterLeft}$, their domains
 when unbounded, and the unitarily invariant norm $\sym{NormN}$.
 
 Let $\sym{F1}$ give isometric coordinates for the exact complementary
@@ -781,15 +769,14 @@ separated Sylvester estimates give
  \sym{delta}\,\sym{NormN}(\sym{X})\leq \sym{NormN}(\like{F1}{\symglyph{F1}^*}\sym{R})\leq \sym{NormN}(\sym{R}).
  \label{eq:history-separation-bound}
 \end{equation}
-This is the bridge from a spectral-gap assumption to the bound on the
-sine of a subspace angle.
+This bounds the norm of the trial frame projected onto the complementary
+subspace, and hence the norm of the sine operator, by the residual norm
+divided by the spectral gap.
 
-The coefficient of $\sym{NormN}(\sym{R})/\sym{delta}$ in this bound is one.
-This coefficient uses the ordered or interval/exterior spectral
-positions specified by Davis and Kahan. Arbitrarily interlaced spectra can
-require a different constant. Our theorem includes both of the source's
-spectral configurations, including ordered cases where both operators are
-unbounded.  A formal implementation
+The constant in this bound is one under Davis and Kahan's ordered or
+interval/exterior spectral-separation hypotheses. Arbitrarily interlaced spectra can
+require a different constant. Our theorem includes both forms of separation, including ordered cases
+where both operators are unbounded.  A formal implementation
 therefore needs the domains of unbounded self-adjoint operators,
 their spectral projections, strong spectral cutoffs, and the
 ideal-norm inequalities used to pass through bounded approximations.
@@ -857,8 +844,8 @@ counterexamples \citep{bolotnikov2001minimal}.  Later work on
 Grassmannian metrics and canonical-angle inequalities also separates
 intrinsic paths between subspaces from minimizing the extrinsic
 operator displacement \citep{qiu2006grassmann,zhang2010canonicalangles}.
-These results give the norm-theoretic context for the source
-correction and for the trace-norm matching problem in
+These results provide context for our correction to Proposition~4.4 and
+for the trace-norm matching problem in
 \cref{sec:example-transport}.
 
 \subsection{The Davis--Kahan angle estimates}
@@ -910,7 +897,7 @@ self-adjoint eigenvectors.  Wedin's 1972 singular-subspace
 perturbation bounds address the corresponding problem for singular
 vectors of general rectangular matrices
 \citep{wedin1972perturbation}.  Bj\"orck and Golub's angle algorithms
-made the subspace quantities computable
+provided algorithms for computing principal angles and vectors
 \citep{bjorck1973numerical}.  Stewart's work on pseudoinverses,
 projections, and least-squares sensitivity helped connect these
 geometric notions with matrix computations
@@ -933,17 +920,14 @@ control of the perturbation.
 \subsection{Foundations used in our formalization}
 \label{sec:related-formal}
 
-Each historical component above corresponds to a specific requirement
-in the formalization.  Jordan's angle geometry and Halmos's
-projection blocks lead to positive principal-angle operators rather
-than chosen eigenbases.  The Sz.-Nagy--Kato intertwiner requires
+Jordan's principal angles and Halmos's projection blocks motivate the use
+of positive angle operators instead of selected eigenbases.  The Sz.-Nagy--Kato intertwiner requires
 polar decomposition, square roots, and real/complex transfer.
 Spectral projections require Borel functional calculus, including for
-unbounded self-adjoint operators.  The Sylvester proof requires a
-representation carrying operator domains and a controlled passage
-through spectral cutoffs.  Schatten and Ky Fan theory requires
-approximation numbers and symmetric operator ideals to express
-inequalities with the source's norm generality.
+unbounded self-adjoint operators.  The Sylvester proof requires tracking operator domains and proving that
+norm bounds survive bounded spectral approximations. Approximation numbers
+and symmetric operator ideals let us express the inequalities for the norms
+considered by Davis and Kahan.
 
 We formalized principal-angle geometry, symmetric operator ideals, and
 unbounded Sylvester estimates using Lean~4 and Mathlib
@@ -967,8 +951,7 @@ results were subsequently adapted into Tau Ceti \citep{tauceti2026}.
 % AUTHORING_NOTES.md indexes accepted-source and campaign evidence.
 % Mathematical origin and formal proof provenance are separate attributions.
 
-This history also separates the two mathematical questions that meet
-in the project.  The sine-theta theorem estimates \emph{how far} an
+Our development addresses two mathematical problems.  The sine-theta theorem estimates \emph{how far} an
 approximate or perturbed spectral subspace lies from an exact one.
 The direct-rotation problem asks \emph{which} ambient transformation
 carries one given subspace onto another at minimum displacement cost.
@@ -1011,9 +994,9 @@ The symbol $\sym{Acurrent}$ corresponds to $\sym{A}+\sym{H}$ in the source.
 
 For a unit trial vector $\sym{v}$ and an approximate eigenvalue $\sym{mu}$, the residual
 is $\sym{Acurrent}\sym{v}-\sym{mu} \sym{v}$. An isometric coordinate map $\sym{E0}$ generalizes
-this construction to a trial subspace: its range consists of the candidate
-approximate vectors, and a self-adjoint operator $\sym{TrialOperator}$ represents their
-approximate dynamics. For a finite-dimensional Rayleigh--Ritz choice,
+this construction to a trial subspace: its range is the trial subspace, and a self-adjoint operator
+$\sym{TrialOperator}$ approximates the action of the ambient operator on
+that subspace. For a finite-dimensional Rayleigh--Ritz choice,
 $\sym{TrialOperator}=\like{E0}{\symglyph{E0}^*}\sym{Acurrent}\sym{E0}$. The theorem allows other self-adjoint trial
 operators as well. We write $\sym{TrialOperator}$ for the general trial operator,
 reserving $\sym{ReferenceBlock0}$ for the reference spectral block that
@@ -1033,8 +1016,8 @@ before embedding:
 \end{equation}
 When the operators are unbounded, \cref{eq:residual} is asserted on
 $\DKDom(\sym{TrialOperator})$ and $\sym{R}$ is the bounded residual that agrees there.
-The Lean predicate \texttt{IsTrialResidual} packages the isometry, the required
-domain inclusion, and this residual identity.
+The Lean predicate \texttt{IsTrialResidual} states these three conditions: the
+isometry, the domain inclusion, and the residual identity.
 
 Let $\sym{F0}:\sym{ExactCoordinateSpace}\to \sym{AmbientHilbertSpace}$ be isometric coordinates for the desired exact spectral
 subspace and let $\sym{F1}:\sym{ComplementaryCoordinateSpace}\to \sym{AmbientHilbertSpace}$ be isometric coordinates for its orthogonal
@@ -1053,7 +1036,7 @@ and states orthogonality and completeness through
  \sym{F0}\like{F0}{\symglyph{F0}^*}+\sym{F1}\like{F1}{\symglyph{F1}^*}=\sym{Identity}.
 \]
 
-\subsubsection{The sine operator and its rectangular representative}
+\subsubsection{The sine operator and complementary projection}
 
 Here $\sym{Theta0}$ acts on $\sym{TrialCoordinateSpace}$; under the isometry
 $\sym{E0}$ it represents the directed angle operator on the trial subspace
@@ -1093,7 +1076,7 @@ Unitarily invariant ideal norms assign the same value to an operator and its
 This equality transfers an estimate for the complementary block $\sym{S}$ to the
   positive sine operator.
 
-\subsubsection{Gap geometry and the inequality}
+\subsubsection{Spectral separation and the sine-theta bound}
 \label{sec:gap-geometry}
 
 Fix $\sym{delta}>0$. There are two geometric forms of separation.
@@ -1127,9 +1110,7 @@ Both blocks may be unbounded in an ordered configuration. For instance,
 on $\ell^2(\mathbb N_{\geq1})$, take diagonal operators
 $\sym{TrialOperator}e_n=(n+\sym{delta})e_n$ and $\sym{Lambda1}e_n=-ne_n$, on the domains where their
 images are square summable. They satisfy the first ordered configuration
-with $b=0$, while neither spectrum lies in a finite interval. This example
-explains why retaining the half-infinite alternatives changes the theorem's
-applicability.
+with $b=0$, while neither spectrum lies in a finite interval. Neither spectrum is bounded, so the finite-interval hypothesis does not apply.
 
 For the unbounded trial configuration, the source assumes that
 $\sym{Acurrent}\sym{E0}$ and $\sym{E0}\sym{TrialOperator}$ have a common dense domain.
@@ -1276,10 +1257,10 @@ right side. The separated Sylvester estimate gives
  \sym{delta} \sym{NormN}(\sym{X})\leq \sym{NormN}(\like{F1}{\symglyph{F1}^*}\sym{R})\leq \sym{NormN}(\sym{R}).
 \]
 Combining this with $\sym{NormN}(\sym{X})=\sym{NormN}(\sym{S})=\sym{NormN}(\sym{sinTheta0})$ proves the conclusion.
-For unbounded operators, deriving the domain compatibility for $\sym{X}$ is part of
-the argument. The displayed relation holds on $\DKDom(\sym{TrialOperator})$ and
-has a bounded right side. The specified interval/exterior or ordered
-spectral positions give the factor $1/\sym{delta}$, with no additional
+For unbounded operators, we must also prove that
+$\sym{X}(\DKDom(\sym{TrialOperator}))\subseteq\DKDom(\sym{Lambda1})$. The displayed relation holds on $\DKDom(\sym{TrialOperator})$ and
+has a bounded right side. The interval/exterior or ordered separation
+hypotheses give the factor $1/\sym{delta}$, with no additional
 multiplicative constant.
 
 For a one-dimensional trial space, take
@@ -1440,9 +1421,9 @@ majorization to norm inequalities.
 
 For example, let $\sym{Rrotation}$ be the direct rotation and
 $\sym{Wcompetitor}$ any unitary carrying $\sym{Usource}$ onto
-$\sym{Vtarget}$. The restricted displacement of the direct rotation has
-singular-value minimality, which implies minimality for unitarily invariant
-norms. The squared-displacement result compares
+$\sym{Vtarget}$. The direct rotation minimizes each singular value of the restricted
+displacement, and hence minimizes every unitarily invariant norm of that
+displacement. The squared-displacement result compares
 $(\sym{Identity}-\sym{Rrotation})^*(\sym{Identity}-\sym{Rrotation})$ and
 $(\sym{Identity}-\sym{Wcompetitor})^*(\sym{Identity}-\sym{Wcompetitor})$
 \citep[Proposition~4.3]{davis1970rotation}. Their singular values are the
@@ -1489,8 +1470,8 @@ the generalized angle estimates
 \subsection{Real and complex Hilbert spaces}
 
 The spectral constructions use complex functional calculus. We formalized
-the scalar-transfer results needed to carry these arguments to real Hilbert
-spaces through complexification. This permits the source theorems to be
+the complexification results needed to extend these arguments to real
+Hilbert spaces. This permits the source theorems to be
 stated over either field, including their domain and ideal-norm hypotheses.
 The underlying algebra, topology, and continuous functional calculus come
 from Mathlib; the adapted Spectra constructions and later Tau Ceti
@@ -1512,10 +1493,11 @@ the estimates address.
 
 The correction of the full-displacement claim
 \citep[Proposition~4.4]{davis1970rotation} separates two extremal statements.
-The valid comparison \citep[Proposition~4.3]{davis1970rotation}
-gives squared-displacement minimality; its Q-norm consequence
-is valid. Our real four-dimensional family exhibits full trace-norm failure
-at every prescribed positive acute angle. In each example, the competitor has
+Proposition~4.3 shows that direct rotation minimizes unitarily invariant
+norms of the squared displacement, which implies Q-norm optimality
+\citep[Proposition~4.3]{davis1970rotation}. Our real four-dimensional family
+shows that direct rotation can fail to minimize the trace norm of the full
+displacement at every positive acute angle. In each example, the competitor has
 two nonzero displacement singular values while the direct rotation has four.
 The sums and squared sums of these values account for their different norm
 comparisons. The earlier complex example supplied the construction; our
@@ -1526,7 +1508,8 @@ equal-dimensional pair of finite-dimensional real subspaces. Its proof uses
 principal-angle geometry, real orthogonal block decompositions, and
 singular-value norms. These are also among the foundations required for the
 Davis--Kahan formalization. The proof of the matching theorem uses additional
-optimization arguments, including a passage to the trace-norm endpoint.
+optimization arguments, including the limit of the Schatten $p$-norm
+problem as $p\to1^+$.
 
 \section{Conclusion}
 \label{sec:conclusion}

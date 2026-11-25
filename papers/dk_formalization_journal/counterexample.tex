@@ -34,11 +34,10 @@ unitarily invariant norm $\sym{NormN}$.
 \subsection{The real four-dimensional counterexample}
 
 The competitor below rotates one real two-plane and fixes its orthogonal
-complement. The direct rotation moves both principal planes. This permits a
-smaller trace norm even though the competitor's largest displacement is
-larger.
+complement. The direct rotation moves both principal planes. The competitor
+has a smaller trace norm but a larger operator norm of its displacement.
 
-\begin{theorem}[Trace-norm failure throughout the acute angle range]
+\begin{theorem}[Direct rotation can fail to minimize the trace norm at any acute angle]
 \label{thm:small-angle}
 For every $0<\sym{theta}<\sym{PiConstant}/2$, there are two-dimensional subspaces
 $\sym{Usource},\like{Vtarget}{\symglyph{Vtarget}_{\symglyph{theta}}}\subset\sym{RealField}^4$ and an orthogonal map $\like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{theta}}}$ with
@@ -93,8 +92,7 @@ its polar factor is exactly
 \[
  \like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}=\begin{pmatrix}\sym{CosAngle}\sym{IdentityTwo}&\sym{SinAngle}\sym{Jturn}\\\sym{SinAngle}\sym{Jturn}&\sym{CosAngle}\sym{IdentityTwo}\end{pmatrix}.
 \]
-In particular, this calculation identifies the canonical direct rotation
-of the constructed pair. Since $\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}+\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}^T=2\sym{CosAngle}\sym{IdentityFour}$,
+Since $\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}+\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}^T=2\sym{CosAngle}\sym{IdentityFour}$,
 \[
  (\sym{Identity}-\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}})^T(\sym{Identity}-\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}})=(2-2\sym{CosAngle})\sym{IdentityFour}.
 \]
@@ -210,7 +208,7 @@ The comparison then requires
  \|\sym{Kdisplacement}\sym{OmegaOne}\|_{(2)}+\|\sym{Kdisplacement}\sym{OmegaTwo}\|_{(2)},
  \label{eq:dk43-false}
 \end{equation}
-The checked calculations give
+Direct calculation gives
 \[
  \|\sym{Kdisplacement}\|_{(4)}=2\sqrt2,\qquad
  \|\sym{Kdisplacement}\sym{OmegaOne}\|_{(2)}=\|\sym{Kdisplacement}\sym{OmegaTwo}\|_{(2)}=2.
@@ -225,12 +223,11 @@ The displayed matrix also gives
 \]
 Both restrictions map onto the same two-dimensional output plane. Each
 has singular values $1,1$, whereas the full displacement has just two
-nonzero singular values, $\sqrt2,\sqrt2$. The proposed sum treats the
-restrictions as independent output blocks. A direct-sum argument would
-require orthogonal images as well as orthogonal domain planes; here the
-images coincide.
+nonzero singular values, $\sqrt2,\sqrt2$. The proposed inequality adds the contributions of restrictions whose ranges
+overlap. A direct-sum argument would require orthogonal images as well as
+orthogonal domain planes; here the images coincide.
 
-\subsection{A Q-norm repair from squared-displacement optimality}
+\subsection{Direct-rotation optimality for Q-norms}
 
 Call a unitarily invariant norm $\sym{NormN}$ a $\sym{NormQ}$-norm when there is a unitarily
 invariant norm $\sym{NormM}$ satisfying
