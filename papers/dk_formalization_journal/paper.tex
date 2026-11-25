@@ -425,7 +425,7 @@ two-dimensional plane in which the relative position is an ordinary
 rotation.  An entire pair of subspaces is described by these planes,
 together with their shared and orthogonal components.
 
-The same geometric data appeared in statistics: Hotelling's 1936 canonical
+Principal angles also arise in statistics: Hotelling's 1936 canonical
   correlation analysis sought pairs of maximally correlated linear combinations
   of two sets of variables \citep{hotelling1936relations}.
 After appropriate whitening, the canonical correlations are singular values of a
@@ -1194,6 +1194,8 @@ $\sym{theta}=40^\circ$, $\sym{rho}=\langle\sym{v},\sym{Acurrent}\sym{v}\rangle$,
 and $\sym{delta}=\sym{rho}-0.7$}
 \label{fig:sine-theta-residual}
 \end{figure}
+% Place the residual figure before the theorem and its Lean signature.
+\FloatBarrier
 
 Appendix~\ref{app:lean-guide} explains the general Lean syntax in the
 following theorem signature; the geometric and spectral hypotheses have been
@@ -1214,6 +1216,8 @@ operator-ideal norm. Whenever $\sym{sinTheta0}$ and $\sym{R}$ belong to its doma
 \end{equation}
 \end{theorem}
 
+% Keep the Lean signature and its caption together across page breaks.
+\noindent\begin{minipage}{\linewidth}
 \begin{lstlisting}[style=leanpaper,
   caption={Lean signature for the sine-theta estimate. The surrounding
   scalar-field and Hilbert-space context is omitted.
@@ -1250,6 +1254,7 @@ theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
       delta * N.gaugeReal (sourceDirectedSinThetaOperator E0 F0) <=
         N.gaugeReal R
 \end{lstlisting}
+\end{minipage}\par
 
 The two ideal-membership hypotheses ensure that the norm values in the
 conclusion are finite. The gap predicate includes the finite
