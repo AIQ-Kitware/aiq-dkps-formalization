@@ -51,9 +51,13 @@ revises those passages only. For subsequent reviews:
   direct-rotation discussion through the discovery of the error in Proposition
   4.4. Attribute existing mathematics to its authors and distinguish formalizing
   an existing argument from contributing a new mathematical proof.
-- Identify Proposition 4.4 as Davis and Kahan's, and retain the repair framing
-  of the Q-norm subsection. Use “sine-theta inequality” in the spectral
-  separation heading.
+- Every reference to an externally numbered result must name its authors or
+  include the corresponding citation with the result number in the postnote.
+  This applies to headings, captions, contribution summaries, and body text,
+  even when the source was identified earlier. In particular, never use an
+  unqualified “Proposition 4.4” to refer to Davis and Kahan's result. Retain
+  the repair framing of the Q-norm subsection. Use “sine-theta inequality”
+  in the spectral separation heading.
 - `IsTrialResidual` is a Lean structure valued in `Prop`; describing it as a
   structure that codifies the three conditions is appropriate.
 
