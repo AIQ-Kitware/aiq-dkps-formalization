@@ -1,6 +1,28 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
-November 24 Stone norm-wrapper cleanup for #30736: current pushed head
+November 24 late review repairs:
+
+- [#30736](https://github.com/TauCetiProject/TauCeti/pull/30736) at
+  `d7e882e0fb62f48d1bba896c9c0bbd8f5ffe2e33` exposes the SA-E24
+  `UniformCauchySeqOn` endpoint along cocompact real shifts on every bounded
+  time set. A Lean probe derives the earlier positive-integer estimate.
+  `ContinuousLinearMap.restrictScalars_exp` generalizes the accepted private
+  Stone proof to RCLike endomorphisms. Stone now applies it directly. The
+  Duhamel and convergence ancestry remains DKPS/Spectra.
+- [#44700](https://github.com/TauCetiProject/TauCeti/pull/44700) at
+  `9c7706ec6708730434a2f562195d73bb4e7e8a81` proves the inclusion unit law
+  with the caller's equality instance, simplifies both reindexed matrix
+  entries together, applies the named column formula, and shares the
+  determinant nonvanishing proof. It still covers the opposite-shift example
+  in Toeplitz Layer 6 §6.1. The campaign captures the conflicting reviewer
+  requests for the synthesis signature.
+
+Native focused builds (6478 and 7688 jobs), changed-module lint, axiom and
+style checks passed. Both branches are pushed and open. No new acceptance
+or donor retirement is recorded. DKPS Lean sources and dependency pins are
+unchanged. Current evidence is in the shared campaign `waves/2026-11-24/`.
+
+November 24 Stone norm-wrapper cleanup for #30736 at
 `586724517ca9dee58cda5ac92e9d2a0c6b5c366d` deletes the duplicate public `norm_exp_smul_I_le`.
 The Yosida theorem now proves one local norm bound directly from accepted
 `IsUnitary.opNorm_le_one`, normalizing the bounded Stone time slice and restricted
