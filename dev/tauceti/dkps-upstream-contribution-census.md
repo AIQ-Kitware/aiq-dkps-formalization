@@ -11,17 +11,14 @@ November 24 late review repairs:
   Duhamel and convergence ancestry remains DKPS/Spectra. The latest repair
   distinguishes the donor strategy from the shared Tau Ceti estimate and
   documents the continuity step in scalar restriction.
-- [#44700](https://github.com/TauCetiProject/TauCeti/pull/44700) at
-  `9ca0fcbd06e4051633d6b0c917b0891e5672f785` proves the inclusion unit law
-  with the caller's equality instance, simplifies both reindexed matrix
-  entries together, applies the named column formula, and shares the
-  determinant nonvanishing proof. It still covers the opposite-shift example
-  in Toeplitz Layer 6 §6.1. The November 25 repair gives the coordinate,
-  conjugacy, kernel and determinant laws conclusion-based names. The
-  extraction manifest retains the corresponding donor names.
+- #44700 at `6c71d1289130f9b379a1a5d6d42204080d86196f` covers the opposite-shift example in Toeplitz Layer 6 §6.1.
+  The block-section and inverse matrix entry APIs now use the
+  `ContinuousLinearMap` namespace. Arbitrary basis coordinates follow from
+  the native reindexing formula. The existing Schur-complement proof uses
+  `IsFredholm.index_prodMap`. Focused compilation (7692 jobs) and lint, axiom
+  and style checks passed. [PR #44700](https://github.com/TauCetiProject/TauCeti/pull/44700)
 
-Native focused builds (6478 and 7688 jobs), changed-module lint, axiom and
-style checks passed. Both branches are pushed and open. No new acceptance
+Both branches are pushed and open. No new acceptance
 or donor retirement is recorded. DKPS Lean sources and dependency pins are
 unchanged. Current evidence is in the shared campaign `waves/2026-11-24/`.
 
