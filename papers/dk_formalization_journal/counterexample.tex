@@ -92,6 +92,8 @@ its polar factor is exactly
 \[
  \like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}=\begin{pmatrix}\sym{CosAngle}\sym{IdentityTwo}&\sym{SinAngle}\sym{Jturn}\\\sym{SinAngle}\sym{Jturn}&\sym{CosAngle}\sym{IdentityTwo}\end{pmatrix}.
 \]
+By the polar-factor characterization in \cref{eq:history-kato-unitary},
+this is the canonical direct rotation for the constructed pair.
 Since $\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}+\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}^T=2\sym{CosAngle}\sym{IdentityFour}$,
 \[
  (\sym{Identity}-\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}})^T(\sym{Identity}-\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}})=(2-2\sym{CosAngle})\sym{IdentityFour}.
@@ -221,13 +223,16 @@ The displayed matrix also gives
  =\sym{CounterMovingPlane}
  =\sym{SpanOperator}\{e_0+e_2,e_1+e_3\}.
 \]
-Both restrictions map onto the same two-dimensional output plane. Each
-has singular values $1,1$, whereas the full displacement has just two
-nonzero singular values, $\sqrt2,\sqrt2$. The proposed inequality adds the contributions of restrictions whose ranges
-overlap. A direct-sum argument would require orthogonal images as well as
-orthogonal domain planes; here the images coincide.
+Both restrictions map onto the same two-dimensional output plane, even
+though their input planes are orthogonal. Each has singular values $1,1$,
+whereas the full displacement has just two nonzero singular values,
+$\sqrt2,\sqrt2$. The comparison in \cref{eq:dk43-false} would follow if the
+singular-value list of the full displacement were the concatenation of
+the two lists for the restrictions. This argument would be valid for an
+orthogonal direct sum, but it does not apply here because the output
+planes coincide.
 
-\subsection{Direct-rotation optimality for Q-norms}
+\subsection{Repair of Proposition 4.4: direct-rotation optimality for Q-norms}
 
 Call a unitarily invariant norm $\sym{NormN}$ a $\sym{NormQ}$-norm when there is a unitarily
 invariant norm $\sym{NormM}$ satisfying

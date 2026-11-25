@@ -32,6 +32,31 @@ from the pending correction pass. Current user instructions determine the stage.
   from earlier agent suggestions. Name systems “ChatGPT and Claude” if needed;
   no expanded tool taxonomy or task-allocation narrative is requested.
 
+## Plain-language review (25 November 2026)
+
+The author approved the preceding plain-language pass apart from specific
+passages requiring restored explanation or clearer attribution. The follow-up
+revises those passages only. For subsequent reviews:
+
+- Preserve mathematical intuition and explanations of why a calculation
+  establishes the intended object. Brevity alone does not justify removing
+  these sentences. Introduce approximate eigenpairs concretely, explain the
+  stretching interpretation of the modulus, and explain the scope gained by
+  the half-infinite spectral alternatives.
+- Pair descriptive terminology with its mathematical notation when that helps
+  the reader follow a proof (e.g., positive gradient levels and their defining
+  eigenspaces).
+- Lead the historical foundation discussion with its role in the formalization.
+  Make the sine-theta formalization the main exhibited result; explain the
+  direct-rotation discussion through the discovery of the error in Proposition
+  4.4. Attribute existing mathematics to its authors and distinguish formalizing
+  an existing argument from contributing a new mathematical proof.
+- Identify Proposition 4.4 as Davis and Kahan's, and retain the repair framing
+  of the Q-norm subsection. Use “sine-theta inequality” in the spectral
+  separation heading.
+- `IsTrialResidual` is a Lean structure valued in `Prop`; describing it as a
+  structure that codifies the three conditions is appropriate.
+
 ## Manuscript correction pass (28 October 2026)
 
 The accepted edits are now applied. The original review is preserved in Git;

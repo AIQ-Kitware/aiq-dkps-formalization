@@ -227,11 +227,13 @@ Research Projects Agency.
 \section{Introduction}
 \label{sec:introduction}
 
-If a unit vector $\sym{v}$ is paired with an approximate eigenvalue $\sym{mu}$,
-the residual $\sym{A}\sym{v}-\sym{mu} \sym{v}$ measures how closely it satisfies the eigenvector
-equation. A small residual can help identify an accurate approximation to an
-invariant subspace even when repeated or nearby eigenvalues make individual
-eigenvectors difficult to distinguish. Davis--Kahan theory bounds the angles
+To approximate an eigenpair of an operator $\sym{A}$, one seeks a unit vector
+$\sym{v}$ and a scalar $\sym{mu}$ for which the residual
+$\sym{A}\sym{v}-\sym{mu} \sym{v}$ is small. This residual measures how closely
+$\sym{v}$ satisfies the eigenvector equation with eigenvalue $\sym{mu}$.
+With sufficient spectral separation, a small residual can identify an accurate
+approximation to an invariant subspace even when repeated or nearby eigenvalues
+make individual eigenvectors difficult to distinguish. Davis--Kahan theory bounds the angles
 between approximate and exact spectral subspaces in terms of a residual or
 perturbation and a separation between the relevant spectra
 \citep{davis1970rotation}.
@@ -300,8 +302,8 @@ Courant--Fischer and Weyl proofs, rectangular unitarily invariant seminorms,
 and projection-valued measures, which were subsequently adapted into Tau
 Ceti \citep{tauceti2026}.
 Section~\ref{sec:related} reviews the mathematical history and the libraries
-we used; Section~\ref{sec:foundations} describes the supporting results we
-formalized.
+we used; Section~\ref{sec:foundations} describes the operator-theoretic
+foundations we formalized.
 
 The same principal-angle and operator-ideal results support a further
 optimization theorem. In Section~\ref{sec:example-transport}, we prove that
@@ -320,7 +322,7 @@ spectral-separation hypotheses, and operator-ideal norms where finite
 geometric and analytic results required by these theorems, adapted existing
 formal mathematics, and contributed foundations later used in Tau Ceti
 (\cref{sec:related-formal,sec:foundations}).
-\item \textbf{Correction to Proposition 4.4.} We identify a false comparison
+\item \textbf{Correction to Davis and Kahan's Proposition 4.4.} We identify a false comparison
 of Ky Fan sums in the printed claim \citep[Proposition~4.4]{davis1970rotation},
 give a real counterexample at every positive acute angle,
 and prove the Q-norm consequence of the valid squared-displacement theorem
@@ -580,8 +582,10 @@ dimensions of these defect spaces \citep[Section~3]{davis1970rotation}.
 
 A finite-dimensional orthogonal matrix decomposes into invariant real
 lines and two-dimensional rotation planes.  In a general Hilbert space an
-angle operator can instead have continuous spectrum.  Functional calculus replaces calculations with a finite list of angles,
-and we must also account for the intersection and defect spaces.
+angle operator can instead have continuous spectrum. Functional calculus
+allows us to work directly with this operator without enumerating principal
+angles. The four intersection spaces, including the two defect spaces,
+are treated separately from the generic part of Halmos's decomposition.
 Our Hilbert-space direct-rotation proofs therefore use projection identities
 and functional calculus. In finite dimensions these identities recover the
 principal-plane construction.
@@ -659,7 +663,9 @@ $\|\sym{Psource}-\sym{Qtarget}\|<1$ applies in arbitrary Hilbert dimension.
 The spectral theorem represents a self-adjoint operator as
 $\sym{A}=\int\sym{SpectralValue}\,d\sym{SpectralMeasure}(\sym{SpectralValue})$ for a projection-valued measure $\sym{SpectralMeasure}$.
 For a Borel set $\sym{SpectralSet}$, the operator $\sym{SpectralMeasure}(\sym{SpectralSet})$ is the orthogonal projection onto
-the corresponding spectral subspace. A spectral subspace is thus the range of a spectral projection. The functional-calculus
+the corresponding spectral subspace. Thus we obtain a subspace by choosing
+a region of the spectrum and taking the range of its spectral projection,
+rather than by choosing individual eigenvectors. The functional-calculus
 framework developed from the work of Riesz, von Neumann, and others;
 Kato made spectral projections central to the perturbation theory of
 closed operators \citep{kato1966perturbation,simon2018kato}.
@@ -733,7 +739,8 @@ measures the component of a trial vector lying outside the exact
 subspace.  The critical distinction for the formal proof is that this
 positive sine acts on the trial-coordinate space, whereas
 $(\sym{Identity}-\sym{Pexact})\sym{E0}$ maps into the ambient space.  For an operator $B$, its modulus $|B|=(B^*B)^{1/2}$ is a positive operator
-on its input space and satisfies $\|Bx\|=\||B|x\|$. The modulus of $(\sym{Identity}-\sym{Pexact})\sym{E0}$
+on its input space. It captures how much $B$ stretches each vector, since
+$\|Bx\|=\||B|x\|$. The modulus of $(\sym{Identity}-\sym{Pexact})\sym{E0}$
 is $\sym{sinTheta0}$, so the two maps have equal unitarily invariant ideal
 norms whenever those norms are finite.
 
@@ -920,8 +927,10 @@ control of the perturbation.
 \subsection{Foundations used in our formalization}
 \label{sec:related-formal}
 
-Jordan's principal angles and Halmos's projection blocks motivate the use
-of positive angle operators instead of selected eigenbases.  The Sz.-Nagy--Kato intertwiner requires
+To formalize the Davis--Kahan theorems, we needed formal versions of the
+operator-theoretic results discussed above. Jordan's principal angles and
+Halmos's projection blocks motivate the use of positive angle operators
+instead of selected eigenbases.  The Sz.-Nagy--Kato intertwiner requires
 polar decomposition, square roots, and real/complex transfer.
 Spectral projections require Borel functional calculus, including for
 unbounded self-adjoint operators.  The Sylvester proof requires tracking operator domains and proving that
@@ -951,17 +960,17 @@ results were subsequently adapted into Tau Ceti \citep{tauceti2026}.
 % AUTHORING_NOTES.md indexes accepted-source and campaign evidence.
 % Mathematical origin and formal proof provenance are separate attributions.
 
-Our development addresses two mathematical problems.  The sine-theta theorem estimates \emph{how far} an
-approximate or perturbed spectral subspace lies from an exact one.
-The direct-rotation problem asks \emph{which} ambient transformation
-carries one given subspace onto another at minimum displacement cost.
-Our proofs of the optimization results use the principal-angle,
-projection, and operator-ideal foundations developed for the formalization.
-The matching theorem has its own proof; the shared foundations explain the
-relationship between the two parts of the work. The resulting counterexample
-to the full-displacement claim \citep[Proposition~4.4]{davis1970rotation}
-and the follow-on matching theorem are examined in
-\cref{sec:prop44,sec:example-transport}.
+In the next section we present our formalization of the sine-theta theorem,
+which estimates \emph{how far} an approximate or perturbed spectral subspace
+lies from an exact one. During the formalization of the direct-rotation
+results, we identified an error in Davis and Kahan's full-displacement
+claim \citep[Proposition~4.4]{davis1970rotation}. That claim concerns
+\emph{which} ambient transformation carries one given subspace onto another
+at minimum displacement cost. We examine the error and give a counterexample
+in \cref{sec:prop44}. The principal-angle, projection, and operator-ideal
+foundations developed for the formalization also support our proof of the
+weighted-matching theorem in \cref{sec:example-transport}, which gives the
+minimum displacement in the real trace-norm problem.
 
 \section{Davis--Kahan formalization and the sine-theta theorem}
 \label{sec:coverage}
@@ -1016,8 +1025,8 @@ before embedding:
 \end{equation}
 When the operators are unbounded, \cref{eq:residual} is asserted on
 $\DKDom(\sym{TrialOperator})$ and $\sym{R}$ is the bounded residual that agrees there.
-The Lean predicate \texttt{IsTrialResidual} states these three conditions: the
-isometry, the domain inclusion, and the residual identity.
+In Lean, \texttt{IsTrialResidual} is a structure that codifies these three
+conditions: the isometry, the domain inclusion, and the residual identity.
 
 Let $\sym{F0}:\sym{ExactCoordinateSpace}\to \sym{AmbientHilbertSpace}$ be isometric coordinates for the desired exact spectral
 subspace and let $\sym{F1}:\sym{ComplementaryCoordinateSpace}\to \sym{AmbientHilbertSpace}$ be isometric coordinates for its orthogonal
@@ -1076,7 +1085,7 @@ Unitarily invariant ideal norms assign the same value to an operator and its
 This equality transfers an estimate for the complementary block $\sym{S}$ to the
   positive sine operator.
 
-\subsubsection{Spectral separation and the sine-theta bound}
+\subsubsection{Spectral separation and the sine-theta inequality}
 \label{sec:gap-geometry}
 
 Fix $\sym{delta}>0$. There are two geometric forms of separation.
@@ -1110,7 +1119,10 @@ Both blocks may be unbounded in an ordered configuration. For instance,
 on $\ell^2(\mathbb N_{\geq1})$, take diagonal operators
 $\sym{TrialOperator}e_n=(n+\sym{delta})e_n$ and $\sym{Lambda1}e_n=-ne_n$, on the domains where their
 images are square summable. They satisfy the first ordered configuration
-with $b=0$, while neither spectrum lies in a finite interval. Neither spectrum is bounded, so the finite-interval hypothesis does not apply.
+with $b=0$. Both spectra are unbounded, but they lie in opposite
+half-infinite intervals separated by $\sym{delta}$. The ordered alternatives
+therefore include this example, which the finite-interval alternative
+would exclude.
 
 For the unbounded trial configuration, the source assumes that
 $\sym{Acurrent}\sym{E0}$ and $\sym{E0}\sym{TrialOperator}$ have a common dense domain.
@@ -1257,7 +1269,7 @@ right side. The separated Sylvester estimate gives
  \sym{delta} \sym{NormN}(\sym{X})\leq \sym{NormN}(\like{F1}{\symglyph{F1}^*}\sym{R})\leq \sym{NormN}(\sym{R}).
 \]
 Combining this with $\sym{NormN}(\sym{X})=\sym{NormN}(\sym{S})=\sym{NormN}(\sym{sinTheta0})$ proves the conclusion.
-For unbounded operators, we must also prove that
+For unbounded operators, the argument also requires the domain inclusion
 $\sym{X}(\DKDom(\sym{TrialOperator}))\subseteq\DKDom(\sym{Lambda1})$. The displayed relation holds on $\DKDom(\sym{TrialOperator})$ and
 has a bounded right side. The interval/exterior or ordered separation
 hypotheses give the factor $1/\sym{delta}$, with no additional
