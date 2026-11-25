@@ -147,7 +147,7 @@ def complexifyDomainRe (D : UnboundedCompressionTrialData Z)
     D.compression.domain :=
   ⟨re ((complexifySubmoduleEquiv Z).symm (w : complexifySubmodule Z)),
     (((ExactSinTheta.PartialMapComplexification.mem_complexify_domain_iff
-      D.compression _).mp (_root_.LinearPMap.mem_unitaryConj_domain_iff.mp w.property)).1)⟩
+      D.compression _).mp (_root_.LinearPMap.mem_conj_domain_iff.mp w.property)).1)⟩
 
 /-- The imaginary coordinate of a complexified-data domain vector. -/
 @[expose]
@@ -156,7 +156,7 @@ def complexifyDomainIm (D : UnboundedCompressionTrialData Z)
     D.compression.domain :=
   ⟨im ((complexifySubmoduleEquiv Z).symm (w : complexifySubmodule Z)),
     (((ExactSinTheta.PartialMapComplexification.mem_complexify_domain_iff
-      D.compression _).mp (_root_.LinearPMap.mem_unitaryConj_domain_iff.mp w.property)).2)⟩
+      D.compression _).mp (_root_.LinearPMap.mem_conj_domain_iff.mp w.property)).2)⟩
 
 /-- **The complexified ambient action is the real one, coordinatewise.**  Real part. -/
 theorem re_action_complexifyUnboundedCompressionTrialData
@@ -165,14 +165,12 @@ theorem re_action_complexifyUnboundedCompressionTrialData
     re ((complexifyUnboundedCompressionTrialData D).action w) =
       D.action (complexifyDomainRe D w) := by
   let W := complexifySubmoduleEquiv Z
-  let w' : (_root_.LinearPMap.unitaryConj W
-      (ExactSinTheta.PartialMapComplexification.complexify D.compression)).domain :=
+  let w' : ((((ExactSinTheta.PartialMapComplexification.complexify D.compression)).conj (W).toLinearEquiv)).domain :=
     ⟨(w : complexifySubmodule Z), w.property⟩
-  change re (((_root_.LinearPMap.unitaryConj W
-      (ExactSinTheta.PartialMapComplexification.complexify D.compression)
+  change re ((((((ExactSinTheta.PartialMapComplexification.complexify D.compression)).conj (W).toLinearEquiv)
       w' : complexifySubmodule Z) : RealComplexification E) +
       complexify D.residual (W.symm (w : complexifySubmodule Z))) = _
-  rw [_root_.LinearPMap.unitaryConj_apply]
+  rw [_root_.LinearPMap.conj_apply]
   rfl
 
 /-- **The complexified ambient action is the real one, coordinatewise.**  Imaginary
@@ -183,14 +181,12 @@ theorem im_action_complexifyUnboundedCompressionTrialData
     im ((complexifyUnboundedCompressionTrialData D).action w) =
       D.action (complexifyDomainIm D w) := by
   let W := complexifySubmoduleEquiv Z
-  let w' : (_root_.LinearPMap.unitaryConj W
-      (ExactSinTheta.PartialMapComplexification.complexify D.compression)).domain :=
+  let w' : ((((ExactSinTheta.PartialMapComplexification.complexify D.compression)).conj (W).toLinearEquiv)).domain :=
     ⟨(w : complexifySubmodule Z), w.property⟩
-  change im (((_root_.LinearPMap.unitaryConj W
-      (ExactSinTheta.PartialMapComplexification.complexify D.compression)
+  change im ((((((ExactSinTheta.PartialMapComplexification.complexify D.compression)).conj (W).toLinearEquiv)
       w' : complexifySubmodule Z) : RealComplexification E) +
       complexify D.residual (W.symm (w : complexifySubmodule Z))) = _
-  rw [_root_.LinearPMap.unitaryConj_apply]
+  rw [_root_.LinearPMap.conj_apply]
   rfl
 
 /-! ## Exact transport of the finite Ky Fan data -/

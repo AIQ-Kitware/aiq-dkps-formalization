@@ -102,8 +102,8 @@ theorem norm_sylvester_block_sub_smul_le
         - ((lam : ℂ) - (alp : ℂ)) • (z : lp (fun _ : ι => E) 2)‖
       ≤ (rA + rB) * ‖(z : lp (fun _ : ι => E) 2)‖ := by
   set Z := b.columnOperator (z : lp (fun _ : ι => E) 2) with hZdef
-  set cutA := TauCeti.LinearPMap.specCutOp hA SA hSA hrA hcrA with hcutA
-  set cutB := TauCeti.LinearPMap.specCutOp hB SB hSB hrB hcrB with hcutB
+  set cutA := A.spectralCut hA SA hSA lam rA hrA hcrA with hcutA
+  set cutB := Bop.spectralCut hB SB hSB alp rB hrB hcrB with hcutB
   -- the difference is the difference of two one-sided blocks
   have hsplit : (sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property z
       - ((lam : ℂ) - (alp : ℂ)) • (z : lp (fun _ : ι => E) 2)
@@ -121,8 +121,8 @@ theorem norm_sylvester_block_sub_smul_le
   refine (norm_sub_le _ _).trans ?_
   have h1 := norm_blockFun_one_right b cutA (z : lp (fun _ : ι => E) 2)
   have h2 := norm_blockFun_one_left b cutB (z : lp (fun _ : ι => E) 2)
-  have hA' : ‖cutA‖ ≤ rA := TauCeti.LinearPMap.norm_specCutOp_le hA SA hSA hrA hcrA
-  have hB' : ‖cutB‖ ≤ rB := TauCeti.LinearPMap.norm_specCutOp_le hB SB hSB hrB hcrB
+  have hA' : ‖cutA‖ ≤ rA := hA.norm_spectralCut_le SA hSA lam rA hrA hcrA
+  have hB' : ‖cutB‖ ≤ rB := hB.norm_spectralCut_le SB hSB alp rB hrB hcrB
   nlinarith [norm_nonneg ((z : lp (fun _ : ι => E) 2)), norm_nonneg cutA, norm_nonneg cutB]
 
 end HilbertSchmidt

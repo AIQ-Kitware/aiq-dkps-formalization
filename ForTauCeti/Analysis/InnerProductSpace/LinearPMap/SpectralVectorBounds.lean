@@ -62,7 +62,7 @@ private theorem tendsto_specProjection_inter_of_fix
       Filter.atTop (nhds v) := by
   refine (tendsto_specProjection_Icc hA v).congr' ?_
   filter_upwards [hset] with τ hτset
-  set P := spectralPVM hA with hP
+  set P := (_root_.LinearPMap.spectralPVM _) hA with hP
   simp only [specProjection_def]
   symm
   calc
@@ -90,7 +90,7 @@ closed half-line fixes `x`. -/
 theorem specProjection_Ici_apply_eq_self_of_Iic_apply_eq_zero {c : ℝ} (x : H)
     (hz : specProjection hA (Set.Iic c) measurableSet_Iic x = 0) :
     specProjection hA (Set.Ici c) measurableSet_Ici x = x := by
-  set P := spectralPVM hA with hP
+  set P := (_root_.LinearPMap.spectralPVM _) hA with hP
   have hIio : P.proj (Set.Iio c) measurableSet_Iio x = 0 := by
     have hset : Set.Iio c ∩ Set.Iic c = Set.Iio c := by
       ext s
@@ -127,7 +127,7 @@ closed half-line fixes `x`. -/
 theorem specProjection_Iic_apply_eq_self_of_Ici_apply_eq_zero {c : ℝ} (x : H)
     (hz : specProjection hA (Set.Ici c) measurableSet_Ici x = 0) :
     specProjection hA (Set.Iic c) measurableSet_Iic x = x := by
-  set P := spectralPVM hA with hP
+  set P := (_root_.LinearPMap.spectralPVM _) hA with hP
   have hIoi : P.proj (Set.Ioi c) measurableSet_Ioi x = 0 := by
     have hset : Set.Ioi c ∩ Set.Ici c = Set.Ioi c := by
       ext s

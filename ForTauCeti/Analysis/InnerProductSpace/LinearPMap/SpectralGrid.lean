@@ -48,7 +48,7 @@ theorem tsum_enorm_sq_specProjection_gridCell (hε : 0 < ε) (v : H) :
     ∑' k : ℤ, ‖specProjection hA (Real.gridCell ε k) (Real.measurableSet_gridCell ε k) v‖ₑ ^ 2
       = ‖v‖ₑ ^ 2 := by
   simp only [specProjection_def]
-  exact (spectralPVM hA).tsum_enorm_sq_proj (Real.gridCell ε) (Real.measurableSet_gridCell ε)
+  exact (A.spectralPVM hA).tsum_enorm_sq_proj (Real.gridCell ε) (Real.measurableSet_gridCell ε)
     (Real.pairwise_disjoint_gridCell ε) (Real.iUnion_gridCell hε) v
 
 /-- The same, for the adjoints — which is the form the *right*-hand reassembly
@@ -61,7 +61,7 @@ theorem tsum_enorm_sq_adjoint_specProjection_gridCell (hε : 0 < ε) (v : H) :
       (specProjection hA (Real.gridCell ε k) (Real.measurableSet_gridCell ε k)).adjoint
         = specProjection hA (Real.gridCell ε k) (Real.measurableSet_gridCell ε k) := fun k => by
     simp only [specProjection_def]
-    exact ((spectralPVM hA).isSelfAdjoint_proj _ _).adjoint_eq
+    exact ((A.spectralPVM hA).isSelfAdjoint_proj _ _).adjoint_eq
   simp_rw [hsa]
   exact tsum_enorm_sq_specProjection_gridCell hA hε v
 
@@ -71,7 +71,7 @@ theorem specProjection_comp_self (Bset : Set ℝ) (hBset : MeasurableSet Bset) :
     (specProjection hA Bset hBset).comp (specProjection hA Bset hBset)
       = specProjection hA Bset hBset := by
   simp only [specProjection_def]
-  exact (spectralPVM hA).proj_idem Bset hBset
+  exact (A.spectralPVM hA).proj_idem Bset hBset
 
 
 /-- **A cell carrying a nonzero projection meets the spectrum.**  Contrapositive

@@ -135,7 +135,7 @@ theorem beamPerturbed_specRange_mono (ε : ℝ) {B C : Set ℝ}
       (C ∩ B) (hC.inter hB)
       = TauCeti.LinearPMap.specProjection (beamPerturbed_isSelfAdjoint ε) B hB := by
     simp only [TauCeti.LinearPMap.specProjection_def]
-    exact (TauCeti.LinearPMap.spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj_congr
+    exact (_root_.LinearPMap.spectralPVM _ (beamPerturbed_isSelfAdjoint ε)).proj_congr
       (Set.inter_eq_right.2 hBC) (hC.inter hB) hB
   conv_lhs => rw [← hfix]
   rw [TauCeti.LinearPMap.specProjection_apply_specProjection, hcongr, hfix]

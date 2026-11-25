@@ -20,7 +20,7 @@ open TauCeti.DavisKahan.Sylvester
 
 The cutoff at radius `τ` is the canonical spectral projection onto `[-τ, τ]`
 for a self-adjoint partial map, taken from its projection-valued measure
-`TauCeti.LinearPMap.spectralPVM`.
+`LinearPMap.spectralPVM`.
 
 The four interface laws come from that measure: projection algebra,
 bounded-band domain inclusion, commutation with the operator, and strong
@@ -59,9 +59,9 @@ theorem spectraSpectralCutoff_isOrthogonalProjection
   rw [spectraSpectralCutoff, selfAdjointSpectralProjection,
     LinearPMap.specProjection_def]
   constructor
-  · exact (TauCeti.LinearPMap.spectralPVM hA).proj_idem (Set.Icc (-τ) τ) measurableSet_Icc
+  · exact (_root_.LinearPMap.spectralPVM _ hA).proj_idem (Set.Icc (-τ) τ) measurableSet_Icc
   · exact (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mp
-      ((TauCeti.LinearPMap.spectralPVM hA).isSelfAdjoint_proj
+      ((_root_.LinearPMap.spectralPVM _ hA).isSelfAdjoint_proj
         (Set.Icc (-τ) τ) measurableSet_Icc)
 
 /-- Every spectral-cutoff vector lies in the closed-operator domain. -/

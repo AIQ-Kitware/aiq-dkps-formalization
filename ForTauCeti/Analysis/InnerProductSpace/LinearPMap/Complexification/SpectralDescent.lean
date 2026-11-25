@@ -455,7 +455,7 @@ theorem realSpecProjection_compl
   rw [complexify_realSpecProjection, RealComplexification.complexify_sub,
     RealComplexification.complexify_id, complexify_realSpecProjection]
   simpa only [specProjection_def] using
-    (spectralPVM (isSelfAdjoint_complexifyReal hA)).proj_compl S hS
+    ((_root_.LinearPMap.spectralPVM _) (isSelfAdjoint_complexifyReal hA)).proj_compl S hS
 
 /-- The real spectral range of a complement set is the orthogonal complement of
 the original real spectral range. -/

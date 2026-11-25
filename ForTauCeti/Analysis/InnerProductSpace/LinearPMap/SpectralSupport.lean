@@ -10,7 +10,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 /-!
 # The spectral measure is supported on the spectrum
 
-`spectralPVM hA` gives no mass to any Borel set of resolvent points:
+`(_root_.LinearPMap.spectralPVM _) hA` gives no mass to any Borel set of resolvent points:
 `specProjection_eq_zero_of_subset_resolventSet`.  This is the last property of
 the spectral measure the Davis--Kahan development consumes that does not follow
 from the resolvent formula by algebra alone.
@@ -105,8 +105,8 @@ one, which the projections themselves cannot do. -/
 theorem diag_eq_zero_of_subset_resolventSet
     (B : Set ℝ) (hB : MeasurableSet B)
     (hres : ∀ lam ∈ B, (lam : ℂ) ∈ resolventSet A) (ξ : H) :
-    ((spectralPVM hA).diag ξ) B = 0 := by
-  refine measure_null_of_locally_null (μ := (spectralPVM hA).diag ξ) B ?_
+    ((A.spectralPVM hA).diag ξ) B = 0 := by
+  refine measure_null_of_locally_null (μ := (A.spectralPVM hA).diag ξ) B ?_
   intro lam hlam
   set R := resolvent A (lam : ℂ) with hRdef
   have hRnn : (0 : ℝ) ≤ ‖R‖ := norm_nonneg _
@@ -132,8 +132,8 @@ theorem diag_eq_zero_of_subset_resolventSet
     · have h := hs.2
       rw [abs_le]
       exact ⟨by linarith [h.1], by linarith [h.2]⟩
-  have hq := (spectralPVM hA).norm_sq_proj_apply u humeas ξ
-  rw [show (spectralPVM hA).proj u humeas = specProjection hA u humeas from
+  have hq := (A.spectralPVM hA).norm_sq_proj_apply u humeas ξ
+  rw [show (A.spectralPVM hA).proj u humeas = specProjection hA u humeas from
       (specProjection_def hA u humeas).symm,
     hzero] at hq
   simp only [zero_apply, norm_zero, ne_eq,
@@ -148,8 +148,8 @@ theorem specProjection_eq_zero_of_subset_resolventSet
     (hres : ∀ lam ∈ B, (lam : ℂ) ∈ resolventSet A) :
     specProjection hA B hB = 0 := by
   refine ContinuousLinearMap.ext fun ξ => ?_
-  have hq := (spectralPVM hA).norm_sq_proj_apply B hB ξ
-  rw [show (spectralPVM hA).proj B hB = specProjection hA B hB from
+  have hq := (A.spectralPVM hA).norm_sq_proj_apply B hB ξ
+  rw [show (A.spectralPVM hA).proj B hB = specProjection hA B hB from
       (specProjection_def hA B hB).symm,
     diag_eq_zero_of_subset_resolventSet hA B hB hres ξ] at hq
   simp only [ENNReal.toReal_zero] at hq

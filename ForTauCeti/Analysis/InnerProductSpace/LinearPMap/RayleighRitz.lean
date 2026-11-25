@@ -67,8 +67,8 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 measure gives the set no mass.  Everything about *which* sets matter for a fixed
 vector is a statement about an honest Borel measure, and this is the bridge. -/
 theorem specProjection_apply_eq_zero_iff_diag (B : Set ℝ) (hB : MeasurableSet B) (x : H) :
-    specProjection hA B hB x = 0 ↔ (spectralPVM hA).diag x B = 0 := by
-  rw [← ProjValMeasure.enorm_sq_proj_apply (spectralPVM hA) B hB x, ← specProjection_def]
+    specProjection hA B hB x = 0 ↔ (A.spectralPVM hA).diag x B = 0 := by
+  rw [← ProjValMeasure.enorm_sq_proj_apply (A.spectralPVM hA) B hB x, ← specProjection_def]
   simp [pow_eq_zero_iff]
 
 /-- Composition of spectral projections is the projection of the intersection,
@@ -77,7 +77,7 @@ theorem specProjection_apply_specProjection {B C : Set ℝ} (hB : MeasurableSet 
     (hC : MeasurableSet C) (x : H) :
     specProjection hA B hB (specProjection hA C hC x)
       = specProjection hA (B ∩ C) (hB.inter hC) x := by
-  have h := congrArg (fun T : H →L[ℂ] H => T x) ((spectralPVM hA).proj_inter B C hB hC)
+  have h := congrArg (fun T : H →L[ℂ] H => T x) ((A.spectralPVM hA).proj_inter B C hB hC)
   simpa only [specProjection_def, _root_.mul_apply_eq_comp] using h
 
 /-- A vector with no spectral mass on `C` has none on a subset of `C`. -/
@@ -99,7 +99,7 @@ theorem specProjection_eq_zero_of_subset {B C : Set ℝ} (hB : MeasurableSet B)
 /-- The projections of a set and its complement recompose the vector. -/
 theorem specProjection_add_compl_apply {B : Set ℝ} (hB : MeasurableSet B) (x : H) :
     specProjection hA B hB x + specProjection hA Bᶜ hB.compl x = x := by
-  have h := congrArg (fun T : H →L[ℂ] H => T x) ((spectralPVM hA).proj_compl B hB)
+  have h := congrArg (fun T : H →L[ℂ] H => T x) ((A.spectralPVM hA).proj_compl B hB)
   simp only [specProjection_def] at h ⊢
   rw [h]
   simp
@@ -223,7 +223,7 @@ theorem lt_re_inner_of_specProjection_Iic_apply_eq_zero {c : ℝ} (x : A.domain)
     c * ‖(x : H)‖ ^ 2 < (⟪A x, (x : H)⟫_ℂ).re := by
   classical
   obtain ⟨n, hn⟩ : ∃ n : ℕ,
-      (spectralPVM hA).diag (x : H) (Set.Ici (c + 1 / (n + 1 : ℝ))) ≠ 0 := by
+      (A.spectralPVM hA).diag (x : H) (Set.Ici (c + 1 / (n + 1 : ℝ))) ≠ 0 := by
     by_contra hcon
     push Not at hcon
     have hcover : Set.Ioi c ⊆ ⋃ n : ℕ, Set.Ici (c + 1 / (n + 1 : ℝ)) := by
@@ -233,11 +233,11 @@ theorem lt_re_inner_of_specProjection_Iic_apply_eq_zero {c : ℝ} (x : A.domain)
         linarith
       obtain ⟨m, hm⟩ := exists_nat_one_div_lt htc
       exact Set.mem_iUnion.2 ⟨m, by simp only [Set.mem_Ici]; linarith⟩
-    have hIoi : (spectralPVM hA).diag (x : H) (Set.Ioi c) = 0 :=
+    have hIoi : (A.spectralPVM hA).diag (x : H) (Set.Ioi c) = 0 :=
       measure_mono_null hcover (measure_iUnion_null hcon)
-    have hIic : (spectralPVM hA).diag (x : H) (Set.Iic c) = 0 :=
+    have hIic : (A.spectralPVM hA).diag (x : H) (Set.Iic c) = 0 :=
       (specProjection_apply_eq_zero_iff_diag hA _ measurableSet_Iic (x : H)).1 hz
-    have huniv : (spectralPVM hA).diag (x : H) Set.univ = 0 := by
+    have huniv : (A.spectralPVM hA).diag (x : H) Set.univ = 0 := by
       rw [← Set.Iic_union_Ioi (a := c)]
       exact measure_union_null hIic hIoi
     rw [ProjValMeasure.diag_univ] at huniv
@@ -300,7 +300,7 @@ theorem re_inner_lt_of_specProjection_Ici_apply_eq_zero {c : ℝ} (x : A.domain)
     (⟪A x, (x : H)⟫_ℂ).re < c * ‖(x : H)‖ ^ 2 := by
   classical
   obtain ⟨n, hn⟩ : ∃ n : ℕ,
-      (spectralPVM hA).diag (x : H) (Set.Iic (c - 1 / (n + 1 : ℝ))) ≠ 0 := by
+      (A.spectralPVM hA).diag (x : H) (Set.Iic (c - 1 / (n + 1 : ℝ))) ≠ 0 := by
     by_contra hcon
     push Not at hcon
     have hcover : Set.Iio c ⊆ ⋃ n : ℕ, Set.Iic (c - 1 / (n + 1 : ℝ)) := by
@@ -310,11 +310,11 @@ theorem re_inner_lt_of_specProjection_Ici_apply_eq_zero {c : ℝ} (x : A.domain)
         linarith
       obtain ⟨m, hm⟩ := exists_nat_one_div_lt htc
       exact Set.mem_iUnion.2 ⟨m, by simp only [Set.mem_Iic]; linarith⟩
-    have hIio : (spectralPVM hA).diag (x : H) (Set.Iio c) = 0 :=
+    have hIio : (A.spectralPVM hA).diag (x : H) (Set.Iio c) = 0 :=
       measure_mono_null hcover (measure_iUnion_null hcon)
-    have hIci : (spectralPVM hA).diag (x : H) (Set.Ici c) = 0 :=
+    have hIci : (A.spectralPVM hA).diag (x : H) (Set.Ici c) = 0 :=
       (specProjection_apply_eq_zero_iff_diag hA _ measurableSet_Ici (x : H)).1 hz
-    have huniv : (spectralPVM hA).diag (x : H) Set.univ = 0 := by
+    have huniv : (A.spectralPVM hA).diag (x : H) Set.univ = 0 := by
       rw [← Set.Iio_union_Ici (a := c)]
       exact measure_union_null hIio hIci
     rw [ProjValMeasure.diag_univ] at huniv

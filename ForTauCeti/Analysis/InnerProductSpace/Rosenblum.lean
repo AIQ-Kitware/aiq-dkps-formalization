@@ -248,12 +248,12 @@ theorem ae_cayleyInv_mem_spectrum (v : E) :
       ((cayleyInv A w : ℝ) : ℂ) ∈ _root_.LinearPMap.spectrum A := by
   have hmeas : MeasurableSet (Complex.ofReal ⁻¹' resolventSet A) :=
     ((isOpen_resolventSet A).preimage Complex.continuous_ofReal).measurableSet
-  have hzero : (spectralPVM hA).diag v (Complex.ofReal ⁻¹' resolventSet A) = 0 :=
+  have hzero : (A.spectralPVM hA).diag v (Complex.ofReal ⁻¹' resolventSet A) = 0 :=
     diag_eq_zero_of_subset_resolventSet hA _ hmeas (fun _ h => h) v
-  have hmap : (spectralPVM hA).diag v (Complex.ofReal ⁻¹' resolventSet A)
+  have hmap : (A.spectralPVM hA).diag v (Complex.ofReal ⁻¹' resolventSet A)
       = (cfcHom (hA.isStarNormal_cayley)).representationDiagMeasure v
           (cayleyInv A ⁻¹' (Complex.ofReal ⁻¹' resolventSet A)) := by
-    rw [show (spectralPVM hA).diag v
+    rw [show (A.spectralPVM hA).diag v
         = Measure.map (cayleyInv A) ((cfcHom (hA.isStarNormal_cayley)).representationDiagMeasure v)
       from by
         rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag, BorelCalculus.specDiag_def],

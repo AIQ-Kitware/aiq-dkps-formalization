@@ -105,7 +105,7 @@ theorem pair_of_continuous (f : C(spectrum ℂ a, ℂ)) (ψ ξ : H) :
   rw [pair, StarAlgHom.integral_representationDiagMeasure,
     StarAlgHom.integral_representationDiagMeasure, StarAlgHom.integral_representationDiagMeasure,
     StarAlgHom.integral_representationDiagMeasure]
-  exact _root_.ContinuousLinearMap.inner_polarization (cfcHom ha f) ψ ξ
+  exact _root_.LinearMap.inner_polarization (cfcHom ha f) ψ ξ
 
 omit [CompleteSpace H] in
 /-- Two symbols close in `L¹` of a dominating measure have close integrals

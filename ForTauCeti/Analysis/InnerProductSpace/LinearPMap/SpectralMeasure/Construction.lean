@@ -6,11 +6,12 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.PairShift
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Bounded
 
-public import ForTauCeti.Analysis.Complex.Cayley.Inverse
+public import TauCeti.Analysis.Complex.UpperHalfPlane.Cayley
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM
 public import Mathlib.MeasureTheory.Integral.DominatedConvergence
-public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley.Basic
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjoint
 
@@ -21,7 +22,7 @@ The Cayley transform `U = (A - i)(A + i)⁻¹` of a self-adjoint `A : H →ₗ.[
 is a bounded unitary, so it carries the bounded Borel functional calculus of
 `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/`.  Relabelling its
 spectrum by the inverse Cayley map `w ↦ i(1+w)/(1-w)` turns that calculus into a
-projection-valued measure on the Borel sets of `ℝ`: `spectralPVM hA`.
+projection-valued measure on the Borel sets of `ℝ`: `(_root_.LinearPMap.spectralPVM _) hA`.
 
 The inverse Cayley map blows up at `w = 1`, which can lie in `spectrum ℂ U`.
 The relabelling therefore takes a junk value there, and the construction is only
@@ -33,7 +34,8 @@ inside the Borel calculus: `(1 - U)` annihilates the spectral projection of
 
 This module carries the construction and the reduction it supports:
 
-* `spectralPVM`, with the Cayley relabelling and the `{1}`-null lemma;
+* the accepted `_root_.LinearPMap.spectralPVM`, with a legacy Borel-coordinate
+  representation lemma for the remaining restriction consumers;
 * the resolvent formula `spectralPVM_resolvent_formula`, which identifies the
   resolvent of `A` with the Borel calculus of the relabelled symbol;
 * `specProjection`, the spectral projection of a Borel set, and its commutation
@@ -156,24 +158,20 @@ available and all that is needed: the map is genuinely singular at `w = 1`. -/
 theorem measurable_cayleyInv (A : H →ₗ.[ℂ] H) : Measurable (cayleyInv A) := by
   exact Complex.measurable_inverseCayleyCoord.comp measurable_subtypeVal
 
-/-- **The spectral measure of an unbounded self-adjoint operator.**
-
-Not exposed, and it no longer needs to be.  This definition carried `@[expose]` with a comment
-recording that removing it broke the root spectral-measure module at a dozen-plus sites.  That
-was true when it was written and is no longer: the sites were retired by the rewrite lemmas the
-chain acquired — `specProjection_eq_borelCalculus` and `specProjection_def` here,
-`spectralPVM_def`, and `toProjValMeasure_proj`/`_diag` and `specProj_def`/`specDiag_def` in
-`BorelCalculus/PVM.lean` — after which removing the attribute cost **zero** sites.  A consumer
-that rewrites by lemma rather than reducing through a body does not care whether the body is
-exposed, so each such rewiring retires consumers for every definition in the chain at once. -/
-noncomputable def spectralPVM : TauCeti.ProjValMeasure ℝ H :=
-  BorelCalculus.toProjValMeasure (hA.isStarNormal_cayley) (measurable_cayleyInv A)
-
-/-- Rewrite form of `spectralPVM`, so a call site need not unfold the definition. -/
+/-- The native PVM in the legacy Borel-coordinate representation used by the remaining
+restriction and Stone consumers. -/
 theorem spectralPVM_def :
-    spectralPVM hA
-      = BorelCalculus.toProjValMeasure (hA.isStarNormal_cayley)
-          (measurable_cayleyInv A) := (rfl)
+    A.spectralPVM hA = BorelCalculus.toProjValMeasure (hA.isStarNormal_cayley)
+      (measurable_cayleyInv A) := by
+  apply ProjValMeasure.ext_of_diag
+  intro ξ
+  rw [hA.spectralPVM_diag, BorelCalculus.toProjValMeasure_diag, BorelCalculus.specDiag_def]
+  congr 1
+  have := hA.isStarNormal_cayley
+  apply Eq.symm
+  apply (A.cayley.eq_diagMeasure_iff ξ _).2
+  intro f
+  exact (cfcHom (hA.isStarNormal_cayley)).integral_representationDiagMeasure ξ f
 
 /-- The Cayley singularity `{1}` is a null set for every diagonal measure. -/
 theorem diagMeasure_cayley_preimage_one (ξ : H) :
@@ -419,12 +417,12 @@ include hz in
 measure. -/
 theorem spectralPVM_resolvent_formula (hzr : z ∈ resolventSet A) (ξ : H) :
     ⟪ξ, resolvent A z ξ⟫_ℂ
-      = ∫ s, (z - (s : ℂ))⁻¹ ∂((spectralPVM hA).diag ξ) := by
+      = ∫ s, (z - (s : ℂ))⁻¹ ∂((A.spectralPVM hA).diag ξ) := by
   set hU := hA.isStarNormal_cayley with hhU
   have hlhs : ⟪ξ, resolvent A z ξ⟫_ℂ
       = ∫ w, resolventSymbol hA hz w ∂((cfcHom hU).representationDiagMeasure ξ) := by
     rw [resolvent_eq_cfcHom hA hz hzr, StarAlgHom.integral_representationDiagMeasure]
-  have hdiag : (spectralPVM hA).diag ξ
+  have hdiag : (A.spectralPVM hA).diag ξ
       = Measure.map (cayleyInv A) ((cfcHom hU).representationDiagMeasure ξ) := by
     rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag,
       BorelCalculus.specDiag_def]
@@ -472,13 +470,13 @@ set of the real line. -/
 -- `rw [specProjection, spectralPVM, toProjValMeasure_proj, specProj]` chains, which collapse to
 -- `rw [specProjection_eq_borelCalculus]`.
 noncomputable def specProjection (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=
-  (spectralPVM hA).proj B hB
+  (A.spectralPVM hA).proj B hB
 
 /-- Rewrite form of `specProjection` against the projection-valued measure, for the consumers
 that want the `ProjValMeasure` API (`norm_sq_proj_apply`, `inner_proj`) rather than the Borel
 calculus underneath it. -/
 theorem specProjection_def (B : Set ℝ) (hB : MeasurableSet B) :
-    specProjection hA B hB = (spectralPVM hA).proj B hB := (rfl)
+    specProjection hA B hB = (A.spectralPVM hA).proj B hB := (rfl)
 
 /-- Rewrite form of `specProjection`, so a call site need not unfold the definition: the
 spectral projection of `B` is the Borel calculus of the indicator of the Cayley preimage
@@ -508,8 +506,7 @@ theorem specProjection_comm_resolvent (B : Set ℝ) (hB : MeasurableSet B) :
   have hs : BorelCalculus.IsBddMeasurable
       (fun w => ((2 * Complex.I)⁻¹ • (cayleyCoord A - 1)) w) :=
     BorelCalculus.IsBddMeasurable.of_continuous _
-  rw [resolvent_negI_eq_borelCalculus hA hs, specProjection, spectralPVM,
-    BorelCalculus.toProjValMeasure_proj, BorelCalculus.specProj_def]
+  rw [resolvent_negI_eq_borelCalculus hA hs, specProjection_eq_borelCalculus]
   exact BorelCalculus.borelCalculus_comm _ _ _
 
 /-- Pointwise form: `P (R φ) = R (P φ)`. -/
@@ -563,8 +560,7 @@ theorem specProjection_comm_resolvent' {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ 
     BorelCalculus.IsBddMeasurable.of_continuous _
   have hR : resolvent A z = BorelCalculus.borelCalculus (hA.isStarNormal_cayley) hs := by
     rw [BorelCalculus.borelCalculus_of_continuous, resolvent_eq_cfcHom hA hz hzr]
-  rw [hR, specProjection, spectralPVM, BorelCalculus.toProjValMeasure_proj,
-    BorelCalculus.specProj_def]
+  rw [hR, specProjection_eq_borelCalculus]
   exact BorelCalculus.borelCalculus_comm _ _ _
 
 /-- Spectral projections commute with the resolvent, pointwise.  The operator-level statement is
@@ -581,13 +577,13 @@ theorem specProjection_resolvent_apply' {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈
 /-- Spectral projections are idempotent. -/
 theorem isIdempotentElem_specProjection (B : Set ℝ) (hB : MeasurableSet B) :
     IsIdempotentElem (specProjection hA B hB) :=
-  (spectralPVM hA).proj_idem B hB
+  (A.spectralPVM hA).proj_idem B hB
 
 /-- Spectral projections are self-adjoint.  With idempotence this makes them *orthogonal*
 projections, which is what gives `specRange` an orthogonal complement. -/
 theorem isSelfAdjoint_specProjection (B : Set ℝ) (hB : MeasurableSet B) :
     IsSelfAdjoint (specProjection hA B hB) :=
-  (spectralPVM hA).isSelfAdjoint_proj B hB
+  (A.spectralPVM hA).isSelfAdjoint_proj B hB
 
 end Restriction
 
@@ -681,7 +677,7 @@ projection. -/
 theorem specProjection_compl :
     specProjection hA Bᶜ hB.compl =
       ContinuousLinearMap.id ℂ H - specProjection hA B hB := by
-  simpa only [specProjection_def] using (spectralPVM hA).proj_compl B hB
+  simpa only [specProjection_def] using (A.spectralPVM hA).proj_compl B hB
 
 /-- The spectral range of a complement set is the orthogonal complement of the
 original spectral range. -/
@@ -797,7 +793,7 @@ theorem dense_specRestrict_domain :
   have hnorm : ‖specProjection hA B hB y - (φ : H)‖ ≤ ‖y - (φ : H)‖ := by
     conv_lhs => rw [← hfix]
     rw [← map_sub]
-    exact (spectralPVM hA).norm_proj_apply_le B hB _
+    exact (A.spectralPVM hA).norm_proj_apply_le B hB _
   have hdist : dist (⟨specProjection hA B hB y, hyK⟩ : specRange hA B hB) φ
       = ‖specProjection hA B hB y - (φ : H)‖ := by
     rw [Subtype.dist_eq, dist_eq_norm]

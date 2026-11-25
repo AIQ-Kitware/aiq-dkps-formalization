@@ -20,7 +20,7 @@ bounded interval `[β, α]` is defined on the whole space and bounded, with the
 sharp centered estimate `‖A - (β+α)/2‖ ≤ (α-β)/2`.
 
 The proof assembles three facts about the native spectral measure
-`TauCeti.LinearPMap.spectralPVM`:
+`LinearPMap.spectralPVM`:
 
 * `specProjection_eq_zero_of_subset_resolventSet` — the spectral projection
   vanishes off the spectrum, so `E([β,α]ᶜ) = 0`;
@@ -84,12 +84,14 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
   have hprojid :
       TauCeti.LinearPMap.specProjection hA (Set.Icc β α) hBm
         = ContinuousLinearMap.id ℂ H := by
-    have hc := (TauCeti.LinearPMap.spectralPVM hA).proj_compl (Set.Icc β α) hBm
-    rw [show (TauCeti.LinearPMap.spectralPVM hA).proj (Set.Icc β α)ᶜ hBm.compl
-        = TauCeti.LinearPMap.specProjection hA (Set.Icc β α)ᶜ hBm.compl from (TauCeti.LinearPMap.specProjection_def hA _ _).symm,
+    have hc := (_root_.LinearPMap.spectralPVM _ hA).proj_compl (Set.Icc β α) hBm
+    rw [show (_root_.LinearPMap.spectralPVM _ hA).proj (Set.Icc β α)ᶜ hBm.compl
+        = TauCeti.LinearPMap.specProjection hA (Set.Icc β α)ᶜ hBm.compl from
+          (TauCeti.LinearPMap.specProjection_def hA _ _).symm,
       hprojc] at hc
     rw [show TauCeti.LinearPMap.specProjection hA (Set.Icc β α) hBm
-        = (TauCeti.LinearPMap.spectralPVM hA).proj (Set.Icc β α) hBm from TauCeti.LinearPMap.specProjection_def hA _ _]
+        = (_root_.LinearPMap.spectralPVM _ hA).proj (Set.Icc β α) hBm from
+          TauCeti.LinearPMap.specProjection_def hA _ _]
     linear_combination (norm := module) hc
   have hfix : ∀ φ : H,
       TauCeti.LinearPMap.specProjection hA (Set.Icc β α) hBm φ = φ := by

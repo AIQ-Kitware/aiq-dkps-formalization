@@ -1,5 +1,323 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+November 24 late review repairs:
+
+- [#30736](https://github.com/TauCetiProject/TauCeti/pull/30736) at
+  `b33fb27f95971bf70c74e33a568ee7155fb17408` exposes the SA-E24
+  `UniformCauchySeqOn` endpoint along cocompact real shifts on every bounded
+  time set. A Lean probe derives the earlier positive-integer estimate.
+  `ContinuousLinearMap.restrictScalars_exp` generalizes the accepted private
+  Stone proof to RCLike endomorphisms. Stone now applies it directly. The
+  Duhamel and convergence ancestry remains DKPS/Spectra. The latest repair
+  distinguishes the donor strategy from the shared Tau Ceti estimate and
+  documents the continuity step in scalar restriction.
+- #44700 at `6c71d1289130f9b379a1a5d6d42204080d86196f` covers the opposite-shift example in Toeplitz Layer 6 §6.1.
+  The block-section and inverse matrix entry APIs now use the
+  `ContinuousLinearMap` namespace. Arbitrary basis coordinates follow from
+  the native reindexing formula. The existing Schur-complement proof uses
+  `IsFredholm.index_prodMap`. Focused compilation (7692 jobs) and lint, axiom
+  and style checks passed. [PR #44700](https://github.com/TauCetiProject/TauCeti/pull/44700)
+
+Both branches are pushed and open. No new acceptance
+or donor retirement is recorded. DKPS Lean sources and dependency pins are
+unchanged. Current evidence is in the shared campaign `waves/2026-11-24/`.
+
+November 24 Stone norm-wrapper cleanup for #30736 at
+`586724517ca9dee58cda5ac92e9d2a0c6b5c366d` deletes the duplicate public `norm_exp_smul_I_le`.
+The Yosida theorem now proves one local norm bound directly from accepted
+`IsUnitary.opNorm_le_one`, normalizing the bounded Stone time slice and restricted
+scalar norm once. Both uses share it at `t` and `s * t`. The shared real/complex
+uniform-Cauchy criterion and mathematical endpoint signatures are unchanged.
+
+Focused Uniform build (6446 jobs), all 15 linters on the two changed modules,
+standard axiom/signature checks and trusted source style/header checks on six
+PR files pass without warnings. Earlier checks of unchanged modules are retained.
+No DKPS Lean source or accepted pin changed, so its builds are not repeated.
+This remains an unmerged SA-E24 submission, without accepted integration or local
+retirement credit. Exact review evidence, current source bundle and PR body:
+shared campaign `waves/2026-11-24/pr30736/stone-local-review.json` and its packet.
+Refresh the description with
+`bash waves/2026-11-24/update-pr-descriptions.sh 30736`.
+
+November 24 later #44700 wrapper cleanup: pushed head `b7d2a27b39afb131eabad1d0de3e491cff2ca590`
+addresses the new reuse/proof-quality requests on 6f6cfc3. The block coordinate
+unit proof uses native `Orthonormal.synthesisMapIsometry_single` directly,
+bridging its classical equality instance to the concrete finite-index instance
+by `Subsingleton.elim`. The accepted theorem's signature is unchanged. Remove
+`blockFiniteSectionIndexEquiv_symm_fst`, `blockFiniteSectionIndexEquiv_symm_snd`
+and `ContinuousLinearMap.IsFredholm.index_conj_prodMap`. The example now uses
+native coordinate invariance and general `IsFredholm.index_prodMap` directly;
+no instance boilerplate returns to it. Native inverse/cast APIs still compute
+arbitrary quotient/remainder coordinates, checked by external probes.
+
+These are unmerged donor/API refinements, without new accepted roadmap or
+upstream-consumption retirement credit. Original source names, authors/license
+and the opposite-shift mathematical endpoints remain accounted for. Current
+requests reverse earlier explicit public-wrapper requests; exact review links,
+a clearly identified reply and a guarded host posting command are in the
+shared campaign packet `waves/2026-11-24/pr44700/`. No comment was posted by
+the agent. Native focused build (7688 jobs), all 15 linters on the three changed
+modules and trusted style/header checks on seven PR files pass without warnings.
+The same donor changes pass focused compilation (7696 jobs), full default
+build (22356 jobs), Challenge (20252 jobs) and all 15 linters on the three changed
+donor modules, without warnings. Logs are in the shared campaign packet.
+Accepted pins are unchanged.
+
+November 24 later #30736 reuse repair: current pushed head is `679445c86362d04ff5b196ab339e6c2ecab2a8c5`.
+One `TauCeti.Semigroups.uniformCauchySeqOn_exp_smul_apply_of_tendsto` now combines
+the Duhamel comparison and metric criterion for both real and complex Yosida
+proofs. It accepts arbitrary filters, eventual pairwise commutation, convergence
+on a vector and exponential bounds only along the required time segments. The
+signed-time rescaling occurs inside that criterion. The existing pointwise
+comparison now needs bounds only on its finite time segment. The unmerged
+complex-only wrapper and its Exponential module are deleted.
+
+The same SA-E24 scope and original Spectra/DKPS notices are retained. The accepted
+real comparison is an upstream dependency, not newly attributed to DKPS. The
+submission remains unmerged; this is neither acceptance nor a local donor
+retirement. Focused build (6448 jobs), all 15 linters on six modules, standard
+axiom reports and trusted style/header checks pass. This follow-up changes only
+TauCeti PR sources and DKPS documentation: accepted pins and DKPS Lean sources
+are unchanged, so its earlier full/Challenge validation is not repeated.
+Evidence and current PR body: shared campaign `waves/2026-11-24/pr30736/`.
+Refresh the body on the credentialed host with
+`bash waves/2026-11-24/update-pr-descriptions.sh 30736`.
+
+November 24 review repair: [#30736](https://github.com/TauCetiProject/TauCeti/pull/30736)
+is pushed at `6eac60075a1f0d537ee27249189f08506c3e2835`. The existing TauCeti real commuting-exponential
+comparison is generalized to RCLike operators with real time; the complex proof
+applies it directly, and Stone's scalar-transport lemma is private again. This
+refines the submitted SA-E24 proof; it does not attribute the accepted real
+comparison to DKPS. Native focused build (6454 jobs), all 15 linters on seven
+modules, axiom and trusted style checks pass.
+
+[#44700](https://github.com/TauCetiProject/TauCeti/pull/44700) is pushed at
+`6f6cfc3da2c320ed37cc180d102be89499cd2cd4`. Native lower synthesis, inverse equivalence and determinant
+APIs replace the remaining proof detours. The scalar entry bridge explicitly
+normalizes PiLp evaluation. New `ContinuousLinearMap.IsFredholm.index_prodMap`
+packages the product-index formula for distinct domains/codomains, without
+extra topological-group or scalar-continuity assumptions; the conjugated
+endomorphism formula derives from it. Native focused build (7688 jobs), all
+15 linters on eight modules, axiom/API probes and trusted style checks pass.
+The maintained Toeplitz/Fredholm donors carry the same refinements. Accepted
+pins and mathematical target scopes are unchanged. Both are unmerged submissions;
+no new accepted roadmap or local retirement credit is recorded. The previous
+heads had green CI; the new sandboxed builds are running and review remains pending.
+
+DKPS validation passes: focused build (7696 jobs), full default build (22356
+jobs), Challenge (20252 jobs) and all 15 linters on five donor modules, without
+warnings. Logs and the guarded description-update script are in the shared
+campaign packet `waves/2026-11-24/`.
+
+November 22 response follow-up for #44700: the host-posted import rebuttal was
+accepted on ea0f92f; [the placement finding was withdrawn](https://github.com/TauCetiProject/TauCeti/pull/44700#discussion_r4659741843).
+No further import reply is needed, and its posting script is now historical.
+Current pushed head is `8e157bf28e2943a443f900072316a19c8c8c2b1a`. The new reuse/proof findings
+are fixed: native product-map injectivity replaces both manual proofs; single
+coordinates follow from the public finite expansion; quotient/remainder evaluation
+uses the named Nat/Fin laws; the matrix-column defeq is documented. The general
+`ContinuousLinearMap.IsFredholm.index_conj_prodMap` packages kernel/cokernel
+instances once, so the opposite-shift index proof needs no local instance setup.
+The helper covers topological additive modules over a nontrivially normed field
+with continuous constant scalar multiplication, without completeness or carrier
+dimension assumptions. It supports the same partial TOEP-T6 example, with no new
+accepted roadmap credit.
+
+Native focused build (7688 jobs), all 15 linters on eight affected modules, API
+and axiom probes and seven-file source-style checks pass. The five changed DKPS
+donor modules pass focused compilation (7696 jobs), all 15 linters, full default
+build (22356 jobs) and Challenge (20252 jobs), without warnings. Existing accepted
+pins are unchanged. The PR is open/mergeable; current-head CI and reviewer approval
+remain pending. The response round noted a rubrics-checkout drift warning; that
+evidence is retained without treating local tests as upstream approval.
+
+Refresh only this PR description on the credentialed host with
+`bash waves/2026-11-22/update-pr-descriptions.sh 44700`; it performs no builds,
+pushes or comments. Earlier heads and import-reply instructions below are historical.
+
+
+November 22 #44700 review follow-up: current pushed head `ea0f92f25783805b6bdf8d956c1dcfd287175ad3`
+replaces the earlier `225fdc5014` repair. Canonical matrix coordinates and indexed
+symbol/action laws replace seven redundant example specializations. The public
+API now includes whole-symbol conversion, adjoint inclusion coordinates, arbitrary
+basis-index evaluation, inverse quotient/remainder coordinates and the generic
+full-block determinant transfer. The native synthesis signature is restored
+without an extra DecidableEq parameter. Both the native branch and the maintained
+DKPS donors preserve the opposite-shift determinant/winding/index and every
+leading full-block singularity result. No acceptance credit is added.
+
+Native focused compilation (7688 jobs), all 15 linters on seven affected modules,
+API/axiom probes and six-file source-style/header checks pass. DKPS focused
+compilation (7694 jobs), full default build (22354 jobs), Challenge (20252 jobs)
+and all 15 linters on the four changed donor modules pass without warnings.
+Inputs remain accepted TauCeti b7121f4d74, Mathlib 31ce06eaad and Lean v4.37.0-rc1.
+Existing caches are reused; the host helper runs no builds.
+
+Five requested import removals are applied. The direct Compression import in
+Block/Toeplitz must remain: removing it makes the existing norm estimate fail
+because its theorem is not re-exported by the remaining dependencies. The exact
+failed/passing compiler evidence and an unposted, model-identified reply draft are
+in waves/2026-11-22/pr44700 in the campaign checkout. The PR is open/mergeable;
+upstream CI and reviewer approval remain pending. Earlier heads below are
+historical snapshots.
+
+
+November 22 late #30736 reuse follow-up: current pushed head `abb7666de3fb335d10bdefc8f1b892622a02422b`
+replaces the first repair `32e13dca1f`. The new review confirms the earlier
+duplication fixes and requests removal of one single-use wrapper. The public
+Duhamel bound now exposes the generator difference norm directly; Yosida uses
+that bound without yosidaFlow_difference. Focused build (6452 jobs), all 15
+linters on all six affected modules, axiom/style checks pass. It remains open
+and mergeable; new CI/reviewer approval is pending. The accepted DKPS mathematics
+at `afed7c3cd` is unchanged by this unmerged PR-only cleanup.
+
+## November 22 accepted spectral-block consumption and review repairs
+
+**SA-E36–E40 are accepted and consumed.** TauCeti main integration
+`391615e058611f8ea2939836b382f716e2095ca4` (#44695) supplies bounded spectral cuts,
+their domain/graph laws, and the sharp vector spectral-gap inverse. It replays
+accepted head `f42b581302`; later submission head `8f6ab22843` is not the accepted
+proof snapshot. DKPS now pins accepted `b7121f4d7408c1a323335f3547e857b0b547369a`
+(Mathlib `31ce06eaadf4a200c0e1407c5f10953cf606b8f8`, Lean v4.37.0-rc1).
+
+The native `spectralCut` and `spectralGapInverse` replace `specCutOp`, `gapInverse`,
+the local truncation factory and their displaced proof engines. Both obsolete donor
+modules are deleted; paper consumers use native graph/norm laws directly. The
+paper-facing bounded truncation definition and genuine zero-centered cut
+self-adjointness/projection-absorption laws remain. Arbitrary complete complex
+Hilbert spaces, zero/nonseparable spaces and vector-measure gap hypotheses are
+preserved. Original Jon Crall/Claude Opus 5, Kitware/Apache-2.0 attribution and
+Adam Bornemann/Spectra reciprocal-cutoff ancestry remain explicit.
+
+A second actual integration must be distinguished from the historical superseded
+closure of #29129: `557acd65e46af69e3208452678c225b6d75141bf` replays its narrowed
+head `0a85d596da`. It contributes six inverse-Cayley coordinate declarations,
+a Nevanlinna bridge and module moves. It explicitly drops the duplicate PVM
+construction. Independent #41596 remains the SA-E01 construction supplier. DKPS
+retires `Cayley/Inverse.lean` and its local PVM factory, while retaining the genuine
+`spectralPVM_def` bridge to the legacy Borel representation. This is partial
+auxiliary contribution credit, not a second PVM construction or a claim that the
+entire legacy Borel calculus has been consumed.
+
+Independent Forgejo #1606, integration `d96626c4be077ab13dcc114d8d939eac61497e8c`,
+supplies SA-C20–C24 and replaces native `unitaryConj` with generic `LinearPMap.conj`.
+SA-C25–C28 retain the earlier #13871 completion/provenance credit. DKPS consumers now
+use the canonical carrier and native inverse-conjugation law; two duplicate local
+inverse-conjugation lemmas are retired. No DKPS proof descent is inferred for this
+independent native refactor; genuine restriction/intertwining extras remain.
+
+The two still-open submissions are repaired and pushed after merging the accepted
+main pin: #30736 `32e13dca1f` shares the real/complex generator-convergence Cauchy
+argument and handles all real times through the native comparison at time one;
+#44700 `225fdc5014` uses native isometric synthesis, shared generic coordinate
+bridges, public canonical conjugacy and native finite-section noninvertibility.
+Both pass focused compilation, all 15 linters on six modules, scope/axiom/style
+checks; live metadata confirms open and mergeable. Submission is not acceptance.
+The Toeplitz refinements are maintained in the unmerged DKPS donor layer.
+
+**Frontier:** no newly unclaimed, ready-to-port official target was established
+by this selected refresh. SA-E35 is a mapping question against accepted PVM
+additivity, not an automatic new proof obligation. SA-E25–E27/E43/E46 still await
+#30736; SA-E44/E45 overlap open Forgejo #2123. Forgejo #2441 claims the bounded
+pairwise π/2 Sylvester estimate supporting SSP-B16; the unbounded lift still needs
+that supplier accepted. Generic conjugation adds no separate roadmap obligation
+for our extra reducing-restriction transport identity. The expired intention
+reserves nothing. The uncapped Forgejo scan (1103 open PRs, 23 pages) and targeted
+GitHub checks support this selected frontier; they are not a fresh complete audit
+of every roadmap item. No new duplicate PR is prepared.
+
+Final DKPS validation: full default build (22354 jobs), Challenge (20252 jobs),
+and the focused changed-consumer/Sylvester audit (7799 jobs) pass without warnings.
+All 15 environment linters pass on the new/rewritten API modules. An additional
+46-module sweep reports 18 findings in nine existing modules (retained explicit
+instances, two field docstrings and one older simp-normal-form rule); its failed
+raw audit and baseline source excerpts are preserved in the campaign packet.
+This is not a claim that all existing DKPS module lint is clean. No paper scope
+was narrowed, maintained gate weakened or linter disabled to clear that audit.
+
+Current campaign evidence and metadata-only host command are in
+`waves/2026-11-22/` in the campaign repository. Earlier dated entries below are
+historical snapshots, superseded where this entry records new evidence.
+
+
+November 21 reuse follow-up: #44695 is pushed at `8f6ab22843`, addressing
+review 4653264201 on `0cbddd6893`. The projection fixed-vector argument now
+directly applies `proj_apply_eq_self_iff`; the Cayley coordinate identity uses
+`borelCalculus_restrict_id`. Public formulas and hypotheses are unchanged.
+Focused build, all 15 linters, standard axioms, scope probes and style pass.
+This is an unmerged proof-reuse repair, with no accepted coverage increase.
+
+
+## November 21 repairs to all three open submissions
+
+- **#44695**, `0cbddd6893`: merge accepted TauCeti main `b608709b45`; retain its
+  expanded spectral-projection results and use canonical inverse-Cayley coordinate
+  and pole-nullity APIs. Bounded spectral cuts and the vector-gap inverse remain
+  new results. Focused build (6634 jobs), 15 linters, scope probes and style pass.
+- **#30736**, `492bfff9bf`: expose the existing native `restrictScalars_exp`;
+  derive one `norm_exp_smul_I_le` from bounded Stone unitarity and use it in both
+  Duhamel and uniform-Cauchy arguments. Remove the private-definition import and
+  `.eq_def` access. Focused build (6430 jobs), 15 linters on all three changed
+  modules, standard-axiom reports and style pass. These new native helpers are
+  unmerged; DKPS's accepted dependency pin has not been advanced to this branch.
+- **#44700**, `7613d6348a`: the continuous diagonal symbol now converts directly
+  to the native operator-valued L∞ symbol. Public simp lemmas expose its four
+  entries and both coordinate shifts. The generic `Block/FiniteSection.lean`
+  constructs matrices using native operator compression; a block-order basis
+  enumeration/reindexing identifies them with native `finiteSection`. The
+  example-only `sectionMatrix` and its forwarding entry name are removed.
+  The determinant theorem uses the generic matrix and a shared kernel lemma.
+  Exact original donor attribution is retained. Focused native build (7638 jobs),
+  15 linters, standard axioms, scoped style, zero-block-size and reindexed native
+  finite-section singularity probes pass. The same mathematics is maintained
+  here; full default build and Challenge pass without warnings.
+
+All three heads are pushed to Erotemic/TauCeti. Review findings are addressed in
+source; fresh upstream CI and reviewer clearance remain separate. No accepted
+roadmap count or third-party proof descent is inferred from these repairs.
+The shared campaign's `waves/2026-11-21/` preserves review evidence and provides
+host-only PR-description updates; those commands perform no Lean builds.
+
+## November 20 prepared spectral-block port and new Toeplitz example
+
+Submission update (November 21): both branches are open as
+[#44695](https://github.com/TauCetiProject/TauCeti/pull/44695) and
+[#44700](https://github.com/TauCetiProject/TauCeti/pull/44700). The earlier
+Toeplitz README guard was cleared after reviewing roadmap `642398844a`;
+these are submissions, not integrations.
+The existing spectral-cut and vector-gap-inverse donors now have a compiled,
+independent upstream branch, `port-sa-e36-e40-spectral-blocks`, head `f42b581302`.
+It implements official SelfAdjointSpectralTheory SA-E36–E40 using the accepted
+`LinearPMap.spectralPVM` and bounded integral. A shared graph-membership theorem
+supplies actual domain membership and coordinate action; no second PVM or
+unbounded spectral-integral carrier is added. Native code is in
+`LinearPMap/ProjValMeasure/Bounded.lean`; the old owning PVM file moves unchanged
+to `ProjValMeasure/Basic.lean`. The cut and gap ports stay together to avoid
+duplicating their shared domain argument or stacking unmerged submissions.
+Original donors are `SpectralCutOperator.lean`, supporting `SpectralMeasure.lean`,
+and `SpectralGapInverse.lean` at DKPS `797408205`; preserve Jon Crall/Claude Opus 5,
+Kitware Apache-2.0 and the latter's Adam Bornemann/Spectra reciprocal-cutoff ancestry.
+This branch is prepared, not accepted; the existing local donor layer is not
+claimed retired by an unmerged branch.
+
+The new `ForTauCeti/Analysis/Fourier/Hardy/OppositeShifts.lean` proves the current
+ToeplitzOperators Layer 6 §6.1 counterexample: the continuous symbol diag(z,z̄)
+has determinant one and winding zero; its native block Toeplitz operator is
+Fredholm of index zero but not invertible, and every pure finite block section
+has determinant zero. Scalar entries connect the continuous matrix symbol to
+the operator-valued L∞ symbol. This is new mathematics developed in this campaign,
+not a claim that a corresponding DKPS theorem existed before this request.
+It uses accepted scalar-shift and binary Fredholm-product APIs and does not
+depend on open #42005 or #42772. It supplies only this worked example, not all
+Toeplitz Layer 6 or the general finite-section stability theorem.
+
+The new donor passed focused compilation, the full default build (22278 jobs),
+and Challenge (20176 jobs), without warnings. The spectral branch's focused
+build, 15 environment linters, standard-axiom checks, external exact-scope
+probes and changed-source style pass. The shared campaign's November 20 packets
+will carry the committed branches and host-only submission commands. No new
+accepted roadmap credit or proof descent from unrelated contributors is inferred.
+
 ## November 20 whole-roadmap frontier clarification
 
 The #30736 reuse follow-up is pushed at

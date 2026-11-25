@@ -459,7 +459,7 @@ theorem beamPerturbed_specRange_le_domain (ε : ℝ) (hε : 0 ≤ ε)
           (Set.Iio 0) measurableSet_Iio
         + TauCeti.LinearPMap.specProjection (beamPerturbed_isSelfAdjoint ε)
           (Set.Icc 0 500) measurableSet_Icc := by
-    have hunion := (TauCeti.LinearPMap.spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj_union
+    have hunion := (_root_.LinearPMap.spectralPVM _ (beamPerturbed_isSelfAdjoint ε)).proj_union
       (B₁ := Set.Iio (0 : ℝ)) (B₂ := Set.Icc (0 : ℝ) 500)
       measurableSet_Iio measurableSet_Icc
       (by
@@ -480,7 +480,7 @@ theorem beamPerturbed_specRange_le_domain (ε : ℝ) (hε : 0 ≤ ε)
         · exact Or.inl h0
         · exact Or.inr ⟨h0, h⟩
     simp only [TauCeti.LinearPMap.specProjection_def]
-    rw [← (TauCeti.LinearPMap.spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj_congr hset
+    rw [← (_root_.LinearPMap.spectralPVM _ (beamPerturbed_isSelfAdjoint ε)).proj_congr hset
       (measurableSet_Iio.union measurableSet_Icc) measurableSet_Iic, hunion]
   have hy' : TauCeti.LinearPMap.specProjection (beamPerturbed_isSelfAdjoint ε)
       (Set.Icc 0 500) measurableSet_Icc y = y := by

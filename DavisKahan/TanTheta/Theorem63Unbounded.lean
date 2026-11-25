@@ -168,9 +168,9 @@ theorem specProjection_eq_zero_of_subset {S T : Set ℝ}
     (hzero : TauCeti.LinearPMap.specProjection hA T hT = 0) :
     TauCeti.LinearPMap.specProjection hA S hS = 0 := by
   have hinter : S ∩ T = S := Set.inter_eq_left.mpr hST
-  have hmul := (TauCeti.LinearPMap.spectralPVM hA).proj_inter S T hS hT
-  rw [(TauCeti.LinearPMap.spectralPVM hA).proj_congr hinter (hS.inter hT) hS] at hmul
-  have hzero' : (TauCeti.LinearPMap.spectralPVM hA).proj T hT = 0 := by
+  have hmul := (_root_.LinearPMap.spectralPVM _ hA).proj_inter S T hS hT
+  rw [(_root_.LinearPMap.spectralPVM _ hA).proj_congr hinter (hS.inter hT) hS] at hmul
+  have hzero' : (_root_.LinearPMap.spectralPVM _ hA).proj T hT = 0 := by
     rw [← TauCeti.LinearPMap.specProjection_def]
     exact hzero
   rw [TauCeti.LinearPMap.specProjection_def, ← hmul, hzero', mul_zero]
@@ -187,7 +187,7 @@ theorem specProjection_Iic_apply_eq_zero_of_gap
     TauCeti.LinearPMap.specProjection hA (Set.Iic c) measurableSet_Iic
       (TauCeti.LinearPMap.specProjection hA (Set.Iic α)ᶜ measurableSet_Iic.compl x)
       = 0 := by
-  have hmul := (TauCeti.LinearPMap.spectralPVM hA).proj_inter
+  have hmul := (_root_.LinearPMap.spectralPVM _ hA).proj_inter
     (Set.Iic c) (Set.Iic α)ᶜ measurableSet_Iic measurableSet_Iic.compl
   have hset : Set.Iic c ∩ (Set.Iic α)ᶜ = Set.Ioc α c := by
     ext t
@@ -200,9 +200,9 @@ theorem specProjection_Iic_apply_eq_zero_of_gap
   have hzero : TauCeti.LinearPMap.specProjection hA (Set.Ioc α c)
       measurableSet_Ioc = 0 :=
     specProjection_eq_zero_of_subset A hA measurableSet_Ioc measurableSet_Ioo hsub hgap
-  have hcomp : (TauCeti.LinearPMap.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic *
-      (TauCeti.LinearPMap.spectralPVM hA).proj (Set.Iic α)ᶜ measurableSet_Iic.compl = 0 := by
-    rw [hmul, (TauCeti.LinearPMap.spectralPVM hA).proj_congr hset
+  have hcomp : (_root_.LinearPMap.spectralPVM _ hA).proj (Set.Iic c) measurableSet_Iic *
+      (_root_.LinearPMap.spectralPVM _ hA).proj (Set.Iic α)ᶜ measurableSet_Iic.compl = 0 := by
+    rw [hmul, (_root_.LinearPMap.spectralPVM _ hA).proj_congr hset
       (measurableSet_Iic.inter measurableSet_Iic.compl) measurableSet_Ioc]
     rw [← TauCeti.LinearPMap.specProjection_def]
     exact hzero

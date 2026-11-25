@@ -72,8 +72,8 @@ theorem specProjection_mul_specProjection_of_subset {B₁ B₂ : Set ℝ}
     specProjection hA B₁ hB₁ * specProjection hA B₂ hB₂ =
       specProjection hA B₂ hB₂ := by
   simp only [specProjection_def]
-  rw [(spectralPVM hA).proj_inter B₁ B₂ hB₁ hB₂]
-  exact (spectralPVM hA).proj_congr (Set.inter_eq_right.mpr h) _ _
+  rw [(A.spectralPVM hA).proj_inter B₁ B₂ hB₁ hB₂]
+  exact (A.spectralPVM hA).proj_congr (Set.inter_eq_right.mpr h) _ _
 
 omit hB in
 /-- Pointwise form of `specProjection_mul_specProjection_of_subset`. -/
@@ -203,9 +203,9 @@ theorem tendsto_spectralCutoff (hA : IsSelfAdjoint A) (c : ℝ) {x : H}
       LinearPMap.specProjection hA (Set.Icc (-T) T) measurableSet_Icc *
         LinearPMap.specProjection hA (Set.Iic c) measurableSet_Iic := by
     simp only [LinearPMap.specProjection_def]
-    rw [(LinearPMap.spectralPVM hA).proj_inter _ _ measurableSet_Icc
+    rw [(A.spectralPVM hA).proj_inter _ _ measurableSet_Icc
       measurableSet_Iic]
-    exact (LinearPMap.spectralPVM hA).proj_congr hset.symm _ _
+    exact (A.spectralPVM hA).proj_congr hset.symm _ _
   have happ := congrArg (fun P : H →L[ℂ] H => P x) hop
   simp only [_root_.mul_apply_eq_comp] at happ
   rw [spectralCutoffSeq_toProj, ← hTdef, happ, hxfix]

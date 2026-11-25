@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import Mathlib.Analysis.InnerProductSpace.LinearPMap
-public import TauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSeparation
+public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Spectral.Separation
 public import TauCeti.Analysis.InnerProductSpace.LinearPMap.Reducing
 public import TauCeti.Topology.Algebra.Module.LinearPMap.Restrict
 

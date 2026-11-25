@@ -38,7 +38,7 @@ theorem: `genToGroup hA` produced a one-parameter unitary group, and
 `spectralProjection_mem_generatorDomain_of_mem` and
 `generator_spectralProjection_comm` supplying the two facts below.
 
-The native replacement is `TauCeti.LinearPMap.spectralPVM`, built from the
+The native replacement is `LinearPMap.spectralPVM`, built from the
 bounded Borel functional calculus of the *Cayley transform* rather than from
 Stone's theorem — see
 `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/` and

@@ -834,11 +834,11 @@ theorem beamSpecProjection_lowSet_eq_singleton :
     exact Set.mem_Iic.2 (by norm_num)
   have hdisj : Disjoint ({0} : Set ℝ) (beamLowSet \ ({0} : Set ℝ)) :=
     Set.disjoint_sdiff_right
-  have hunion := (TauCeti.LinearPMap.spectralPVM beamOperator_isSelfAdjoint).proj_union
+  have hunion := (_root_.LinearPMap.spectralPVM _ beamOperator_isSelfAdjoint).proj_union
     (measurableSet_singleton 0)
     (measurableSet_beamLowSet.diff (measurableSet_singleton 0)) hdisj
   rw [TauCeti.LinearPMap.specProjection_def, TauCeti.LinearPMap.specProjection_def]
-  rw [← (TauCeti.LinearPMap.spectralPVM beamOperator_isSelfAdjoint).proj_congr hsplit
+  rw [← (_root_.LinearPMap.spectralPVM _ beamOperator_isSelfAdjoint).proj_congr hsplit
     ((measurableSet_singleton 0).union
       (measurableSet_beamLowSet.diff (measurableSet_singleton 0)))
     measurableSet_beamLowSet, hunion]
