@@ -19,16 +19,16 @@
     "non_committing_work": "requires_reconcile",
     "compaction_usage": "measured_signals_only_when_runtime_omits_usage"
   },
-  "through": "2026-11-25T00:47:49.110246+00:00",
-  "ledger_rows": 3164,
-  "commits_accounted": 2924,
-  "turns": 93143,
+  "through": "2026-11-25T03:33:02.086349+00:00",
+  "ledger_rows": 3166,
+  "commits_accounted": 2926,
+  "turns": 93197,
   "tokens": {
-    "input": 87756392,
+    "input": 87897756,
     "cache_write": 209777211,
-    "cache_read": 30044187943,
-    "output": 80174086,
-    "billable_input": 30341721546
+    "cache_read": 30050974375,
+    "output": 80199736,
+    "billable_input": 30348649342
   },
   "by_model": {
     "claude-fable-5": {
@@ -104,10 +104,10 @@
       "output": 3078946
     },
     "gpt-6.1-sol": {
-      "input": 52190204,
+      "input": 52192361,
       "cache_write": 0,
-      "cache_read": 4274507008,
-      "output": 14084380
+      "cache_read": 4276161920,
+      "output": 14087948
     },
     "litellm-namek/Qwen/Qwen3.5-0.8B": {
       "input": 0,
@@ -126,6 +126,12 @@
       "cache_write": 0,
       "cache_read": 308651264,
       "output": 245638
+    },
+    "gpt-6.2-sol": {
+      "input": 139207,
+      "cache_write": 0,
+      "cache_read": 5131520,
+      "output": 22082
     }
   },
   "by_activity": {
@@ -136,10 +142,10 @@
       "output": 10700449
     },
     "unlabeled": {
-      "input": 86907653,
+      "input": 87049017,
       "cache_write": 156218891,
-      "cache_read": 25129012128,
-      "output": 67184832
+      "cache_read": 25135798560,
+      "output": 67210482
     },
     "implementation": {
       "input": 79782,
@@ -162,10 +168,10 @@
       "output": 59621175
     },
     "codex": {
-      "input": 79854425,
+      "input": 79995789,
       "cache_write": 0,
-      "cache_read": 6844790016,
-      "output": 18608287
+      "cache_read": 6851576448,
+      "output": 18633937
     },
     "pi": {
       "input": 6685595,
@@ -179,7 +185,7 @@
     "web_fetch": 0
   },
   "time": {
-    "wall_clock_s": 8311823.6
+    "wall_clock_s": 8321702.4
   },
   "compaction_signals": {
     "events": 90,
