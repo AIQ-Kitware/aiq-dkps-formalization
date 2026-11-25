@@ -12,12 +12,13 @@ November 24 late review repairs:
   distinguishes the donor strategy from the shared Tau Ceti estimate and
   documents the continuity step in scalar restriction.
 - [#44700](https://github.com/TauCetiProject/TauCeti/pull/44700) at
-  `9c7706ec6708730434a2f562195d73bb4e7e8a81` proves the inclusion unit law
+  `9ca0fcbd06e4051633d6b0c917b0891e5672f785` proves the inclusion unit law
   with the caller's equality instance, simplifies both reindexed matrix
   entries together, applies the named column formula, and shares the
   determinant nonvanishing proof. It still covers the opposite-shift example
-  in Toeplitz Layer 6 §6.1. The campaign captures the conflicting reviewer
-  requests for the synthesis signature.
+  in Toeplitz Layer 6 §6.1. The November 25 repair gives the coordinate,
+  conjugacy, kernel and determinant laws conclusion-based names. The
+  extraction manifest retains the corresponding donor names.
 
 Native focused builds (6478 and 7688 jobs), changed-module lint, axiom and
 style checks passed. Both branches are pushed and open. No new acceptance
