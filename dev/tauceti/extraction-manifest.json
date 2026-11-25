@@ -3631,7 +3631,7 @@
       ],
       "pending_submission": {
         "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/30736",
-        "head": "b1cc1e07655a73cc5d1a875c22388e4e67159cb9",
+        "head": "b33fb27f95971bf70c74e33a568ee7155fb17408",
         "roadmap_target": "SA-E24",
         "tauceti_modules": [
           "TauCeti.Analysis.Semigroups.BoundedGenerator.Perturbation",
@@ -3642,7 +3642,7 @@
           "IsSelfAdjoint.uniformCauchySeqOn_exp_smul_I_smul_symmetricYosidaApproximation_apply"
         ],
         "scope": "Arbitrary complete complex Hilbert spaces, every vector and compact real-time intervals; uniform conclusion strengthens the original pointwise Cauchy donor. November 24 later reuse repair: real and complex domain proofs call one shared bounded-generator criterion over RCLike scalars and arbitrary filters. It takes eventual pairwise commutation, convergence on one vector and eventual exponential bounds only along segments from zero to a bounded real time set. Signed times are rescaled internally. The now-unused unmerged complex Duhamel wrapper and its Exponential module are deleted. Original DKPS/Spectra ancestry remains; the previously accepted real comparison is an upstream dependency, not claimed as a DKPS donor proof. Still unmerged: no accepted or local retirement credit. November 24 Stone follow-up: remove the duplicate public norm_exp_smul_I_le; both hypotheses share one local bound derived directly from accepted IsUnitary.opNorm_le_one, using the bounded Stone time-slice/norm/coercion identities. No new public norm spelling or local donor retirement. November 24 API follow-up: the endpoint now returns UniformCauchySeqOn over cocompact real shifts and any bounded set of times. The earlier positive-integer epsilon estimate follows by pulling back along the cofinal cast. The existing private Stone transport proof moves to ContinuousLinearMap.restrictScalars_exp in TauCeti.Analysis.Normed.Operator.Exponential and generalizes to RCLike endomorphisms with compatible real scalars. This is a refinement of accepted TauCeti code. The DKPS/Spectra donor attribution is for the Duhamel and convergence arguments.",
-        "validation": "Native focused build 6478 jobs, all 15 linters on three changed modules, standard axioms, the positive-integer specialization and trusted style checks on seven PR files pass without warnings. Pushed and observed open and mergeable. Current-head CI/review pending. DKPS Lean sources and pins are unchanged."
+        "validation": "Documentation repair describes the inherited comparison and density strategy, the native shared criterion, and the continuity reduction in ContinuousLinearMap.restrictScalars_exp. Focused 6446 jobs, all 15 linters on three modules, standard axioms, the positive-integer specialization and trusted style checks on seven PR files pass without warnings. Pushed and open."
       }
     },
     {
@@ -3876,7 +3876,7 @@
       "migration_note": "November 9: replace the local adjoint/inner-product/norm proof engine for norm_expTime_I_smul by native isUnitary_ofBoundedExp and IsUnitary.norm_map, via the explicit exponential/restriction-of-scalars representation. Retire unused IsSkewAdjointCLM, its I-smul lemma, commute_expTime and real_smul_I_smul. Retain the commuting Duhamel estimate and its analytic support. This does not claim the Duhamel result is accepted upstream. Preserve original Kitware/Jon Crall/Claude Opus 5, Apache-2.0, and Spectra/Adam Bornemann ancestry at 8dbaaf6728d1342ae16acf79fd7eef7c59b37e63. Native bounded Stone APIs at accepted TauCeti a67a65006c07449dcb2ebe1a3a8b6bf6e0b909f8 are independently available; no DKPS proof descent is asserted. November 16: consume native TauCeti.exp_add_sub_exp_eq_integral directly in norm_expTime_sub_expTime_le, evaluating the operator integral at the vector and using commutation and native unitarity. Delete the unused commutation facade and private interpolation-derivative helper. Keep hasDerivAt_expTime and hasDerivAt_expTime_apply for the downstream Stone/Yosida integral argument. All original hypotheses and real-time scope are preserved. The same repair is submitted to open PR #30736 (SA-E24); submission is not integration.",
       "pending_submission": {
         "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/30736",
-        "head": "b1cc1e07655a73cc5d1a875c22388e4e67159cb9",
+        "head": "b33fb27f95971bf70c74e33a568ee7155fb17408",
         "roadmap_target": "SA-E24",
         "tauceti_modules": [
           "TauCeti.Analysis.Semigroups.BoundedGenerator.Perturbation",
@@ -3887,7 +3887,7 @@
           "IsSelfAdjoint.uniformCauchySeqOn_exp_smul_I_smul_symmetricYosidaApproximation_apply"
         ],
         "scope": "Arbitrary complete complex Hilbert spaces, every vector and compact real-time intervals; uniform conclusion strengthens the original pointwise Cauchy donor. November 24 later reuse repair: real and complex domain proofs call one shared bounded-generator criterion over RCLike scalars and arbitrary filters. It takes eventual pairwise commutation, convergence on one vector and eventual exponential bounds only along segments from zero to a bounded real time set. Signed times are rescaled internally. The now-unused unmerged complex Duhamel wrapper and its Exponential module are deleted. Original DKPS/Spectra ancestry remains; the previously accepted real comparison is an upstream dependency, not claimed as a DKPS donor proof. Still unmerged: no accepted or local retirement credit. November 24 Stone follow-up: remove the duplicate public norm_exp_smul_I_le; both hypotheses share one local bound derived directly from accepted IsUnitary.opNorm_le_one, using the bounded Stone time-slice/norm/coercion identities. No new public norm spelling or local donor retirement. November 24 API follow-up: the endpoint now returns UniformCauchySeqOn over cocompact real shifts and any bounded set of times. The earlier positive-integer epsilon estimate follows by pulling back along the cofinal cast. The existing private Stone transport proof moves to ContinuousLinearMap.restrictScalars_exp in TauCeti.Analysis.Normed.Operator.Exponential and generalizes to RCLike endomorphisms with compatible real scalars. This is a refinement of accepted TauCeti code. The DKPS/Spectra donor attribution is for the Duhamel and convergence arguments.",
-        "validation": "Native focused build 6478 jobs, all 15 linters on three changed modules, standard axioms, the positive-integer specialization and trusted style checks on seven PR files pass without warnings. Pushed and observed open and mergeable. Current-head CI/review pending. DKPS Lean sources and pins are unchanged."
+        "validation": "Documentation repair describes the inherited comparison and density strategy, the native shared criterion, and the continuity reduction in ContinuousLinearMap.restrictScalars_exp. Focused 6446 jobs, all 15 linters on three modules, standard axioms, the positive-integer specialization and trusted style checks on seven PR files pass without warnings. Pushed and open."
       }
     },
     {

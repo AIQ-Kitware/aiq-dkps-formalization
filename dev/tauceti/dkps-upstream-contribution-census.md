@@ -3,14 +3,14 @@
 November 24 late review repairs:
 
 - [#30736](https://github.com/TauCetiProject/TauCeti/pull/30736) at
-  `b1cc1e07655a73cc5d1a875c22388e4e67159cb9` exposes the SA-E24
+  `b33fb27f95971bf70c74e33a568ee7155fb17408` exposes the SA-E24
   `UniformCauchySeqOn` endpoint along cocompact real shifts on every bounded
   time set. A Lean probe derives the earlier positive-integer estimate.
   `ContinuousLinearMap.restrictScalars_exp` generalizes the accepted private
   Stone proof to RCLike endomorphisms. Stone now applies it directly. The
-  Duhamel and convergence ancestry remains DKPS/Spectra. The pushed head
-  retries CI on the validated tree after the runner timed out checking
-  out the source before Lean ran.
+  Duhamel and convergence ancestry remains DKPS/Spectra. The latest repair
+  distinguishes the donor strategy from the shared Tau Ceti estimate and
+  documents the continuity step in scalar restriction.
 - [#44700](https://github.com/TauCetiProject/TauCeti/pull/44700) at
   `9c7706ec6708730434a2f562195d73bb4e7e8a81` proves the inclusion unit law
   with the caller's equality instance, simplifies both reindexed matrix
