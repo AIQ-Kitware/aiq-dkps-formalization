@@ -1,5 +1,22 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+November 24 Stone norm-wrapper cleanup for #30736: current pushed head
+`586724517ca9dee58cda5ac92e9d2a0c6b5c366d` deletes the duplicate public `norm_exp_smul_I_le`.
+The Yosida theorem now proves one local norm bound directly from accepted
+`IsUnitary.opNorm_le_one`, normalizing the bounded Stone time slice and restricted
+scalar norm once. Both uses share it at `t` and `s * t`. The shared real/complex
+uniform-Cauchy criterion and mathematical endpoint signatures are unchanged.
+
+Focused Uniform build (6446 jobs), all 15 linters on the two changed modules,
+standard axiom/signature checks and trusted source style/header checks on six
+PR files pass without warnings. Earlier checks of unchanged modules are retained.
+No DKPS Lean source or accepted pin changed, so its builds are not repeated.
+This remains an unmerged SA-E24 submission, without accepted integration or local
+retirement credit. Exact review evidence, current source bundle and PR body:
+shared campaign `waves/2026-11-24/pr30736/stone-local-review.json` and its packet.
+Refresh the description with
+`bash waves/2026-11-24/update-pr-descriptions.sh 30736`.
+
 November 24 later #44700 wrapper cleanup: pushed head `b7d2a27b39afb131eabad1d0de3e491cff2ca590`
 addresses the new reuse/proof-quality requests on 6f6cfc3. The block coordinate
 unit proof uses native `Orthonormal.synthesisMapIsometry_single` directly,
