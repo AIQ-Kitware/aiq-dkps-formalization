@@ -1,5 +1,29 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+November 24 later #44700 wrapper cleanup: pushed head `b7d2a27b39afb131eabad1d0de3e491cff2ca590`
+addresses the new reuse/proof-quality requests on 6f6cfc3. The block coordinate
+unit proof uses native `Orthonormal.synthesisMapIsometry_single` directly,
+bridging its classical equality instance to the concrete finite-index instance
+by `Subsingleton.elim`. The accepted theorem's signature is unchanged. Remove
+`blockFiniteSectionIndexEquiv_symm_fst`, `blockFiniteSectionIndexEquiv_symm_snd`
+and `ContinuousLinearMap.IsFredholm.index_conj_prodMap`. The example now uses
+native coordinate invariance and general `IsFredholm.index_prodMap` directly;
+no instance boilerplate returns to it. Native inverse/cast APIs still compute
+arbitrary quotient/remainder coordinates, checked by external probes.
+
+These are unmerged donor/API refinements, without new accepted roadmap or
+upstream-consumption retirement credit. Original source names, authors/license
+and the opposite-shift mathematical endpoints remain accounted for. Current
+requests reverse earlier explicit public-wrapper requests; exact review links,
+a clearly identified reply and a guarded host posting command are in the
+shared campaign packet `waves/2026-11-24/pr44700/`. No comment was posted by
+the agent. Native focused build (7688 jobs), all 15 linters on the three changed
+modules and trusted style/header checks on seven PR files pass without warnings.
+The same donor changes pass focused compilation (7696 jobs), full default
+build (22356 jobs), Challenge (20252 jobs) and all 15 linters on the three changed
+donor modules, without warnings. Logs are in the shared campaign packet.
+Accepted pins are unchanged.
+
 November 24 later #30736 reuse repair: current pushed head is `679445c86362d04ff5b196ab339e6c2ecab2a8c5`.
 One `TauCeti.Semigroups.uniformCauchySeqOn_exp_smul_apply_of_tendsto` now combines
 the Duhamel comparison and metric criterion for both real and complex Yosida
