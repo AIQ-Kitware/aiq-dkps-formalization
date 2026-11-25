@@ -617,8 +617,9 @@ The identity
  \like{IntertwinerT}{\symglyph{IntertwinerT}^*}\sym{IntertwinerT}=\sym{Identity}-(\sym{Psource}-\sym{Qtarget})^2
  \label{eq:history-kato-square}
 \end{equation}
-shows why $\|\sym{Psource}-\sym{Qtarget}\|<1$ is the natural threshold: it makes $\like{IntertwinerT}{\symglyph{IntertwinerT}^*}\sym{IntertwinerT}$
-strictly positive and invertible.  Hence
+also holds with the factors on the left reversed. If
+$\|\sym{Psource}-\sym{Qtarget}\|<1$, both products are bounded below by a positive
+constant, so $\sym{IntertwinerT}$ is invertible. Hence
 \begin{equation}
  \sym{Rrotation}=\sym{IntertwinerT}\bigl(\sym{Identity}-(\sym{Psource}-\sym{Qtarget})^2\bigr)^{-1/2},
  \qquad \sym{Rrotation}\sym{Psource}\like{Rrotation}{\symglyph{Rrotation}^*}=\sym{Qtarget}
@@ -640,8 +641,11 @@ choice makes the construction valuable in perturbation theory: the
 transport identifies moving spectral subspaces while avoiding an
 arbitrary choice of orthonormal bases. In infinite dimensions,
 $\|\sym{Psource}-\sym{Qtarget}\|<1$ is stronger than acuteness: it also
-bounds the operator angles away from $\sym{PiConstant}/2$. For equal-dimensional
-finite subspaces the conditions coincide. For an orthogonal or unitary transporter $\sym{Wcompetitor}$, the operator
+bounds the operator angles away from $\sym{PiConstant}/2$. An acute pair can
+have projection gap one: the angle operator can have $\sym{PiConstant}/2$ in
+its spectrum without having it as an eigenvalue. For finite-dimensional
+subspaces the conditions coincide. For an orthogonal or unitary transporter
+$\sym{Wcompetitor}$, the operator
 $\sym{Identity}-\sym{Wcompetitor}$ records the displacement of every vector. Davis and Kahan ask which
 norms of this displacement are minimized by the direct rotation
 \citep[Section~4]{davis1970rotation}.
@@ -651,11 +655,11 @@ subspaces of analytic operator families, thereby reducing the study
 of an isolated moving eigenvalue cluster to a fixed coordinate
 space.  Simon's historical account explains the earlier Sz.-Nagy
 construction, Kato's formula, and subsequent work on pairs of
-projections \citep[\S5]{simon2018kato}. Our proofs of direct-rotation
-existence, uniqueness, and symmetry use the square-root and
-polar-decomposition identities in
-\cref{eq:history-kato-square,eq:history-kato-unitary}. The condition
-$\|\sym{Psource}-\sym{Qtarget}\|<1$ applies in arbitrary Hilbert dimension.
+projections \citep[\S5]{simon2018kato}. Our formalization of direct-rotation
+existence, uniqueness, and symmetry uses polar decomposition and the
+square-root identity in \cref{eq:history-kato-square}. The polar factor
+is unitary even for acute pairs with projection gap one, for which the bounded
+inverse in \cref{eq:history-kato-unitary} is unavailable.
 
 \subsection{Spectral projections and residuals}
 \label{sec:related-spectral}
@@ -1297,25 +1301,29 @@ Davis--Kahan proofs.
 \subsection{Direct rotations and two-subspace geometry}
 
 Let $\sym{Psource}$ and $\sym{Qtarget}$ project onto closed subspaces
-$\sym{Usource}$ and $\sym{Vtarget}$. For an acute pair,
-$\|\sym{Psource}-\sym{Qtarget}\|<1$. The compression
-$\sym{Psource}\sym{Qtarget}\sym{Psource}$ on $\sym{Usource}$ determines
-the positive cosine operator. Its square root and the complementary
-compression give the cosine and sine factors in the direct-rotation
-construction. Polar decomposition gives the isometries between the
-corresponding parts of the two subspaces.
+$\sym{Usource}$ and $\sym{Vtarget}$. The kernel of the canonical intertwiner
+$\sym{IntertwinerT}$ from \cref{eq:history-kato-T}, and that of its adjoint,
+are both the sum of the two defect spaces. For an acute pair these spaces
+vanish, so $\sym{IntertwinerT}$ is injective and has dense range. Its polar
+factor $\sym{Rrotation}$ is therefore orthogonal or unitary and carries
+$\sym{Usource}$ onto $\sym{Vtarget}$. The positive square roots of the compression
+$\sym{Psource}\sym{Qtarget}\sym{Psource}$ on $\sym{Usource}$ and its
+complement on $\sym{Usource}$ are the cosine and sine operators,
+respectively.
 
-The resulting orthogonal or unitary map $\sym{Rrotation}$ carries
-$\sym{Usource}$ onto $\sym{Vtarget}$. In finite-dimensional principal-plane
-coordinates it rotates each plane through its principal angle and fixes
-common directions. The projection formula from
-\cref{eq:history-kato-unitary} defines it in Hilbert space without requiring
-a discrete list of principal vectors.
+In finite-dimensional principal-plane coordinates the direct rotation
+rotates each plane through its principal angle and fixes common directions.
+Polar decomposition defines it in Hilbert space without requiring a discrete
+list of principal vectors. Under the stronger hypothesis
+$\|\sym{Psource}-\sym{Qtarget}\|<1$, the intertwiner is invertible and the
+rotation can also be written using \cref{eq:history-kato-unitary}.
 
-Our formalization proves acute existence and uniqueness, the
-principal-square-root characterization, commutation with the angle
-operators, and reversal symmetry: interchanging the two subspaces replaces
-the rotation by its adjoint. For general pairs, the existence criteria
+Our formalization of Davis and Kahan's Proposition~3.1
+\citep{davis1970rotation} establishes existence and uniqueness under their
+original acuteness hypothesis, without a projection-gap bound. We also
+formalized the principal-square-root characterization, commutation with the
+angle operators, and reversal symmetry: interchanging the two subspaces
+replaces the rotation by its adjoint. For general pairs, the existence criteria
 include the right-angle defect spaces described in
 \cref{sec:related-two-projections}. When the angle operator is compact,
 its spectral decomposition recovers a sequence of principal angles
