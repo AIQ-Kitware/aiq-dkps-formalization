@@ -200,8 +200,9 @@ whose squares are unitarily invariant norms of the squared modulus, including
 the Frobenius norm. The formalization builds on Mathlib and adapts Spectra's
 projection-valued-measure and Borel-calculus constructions. Portions of the
 operator theory developed here were subsequently adapted into Tau Ceti.
-These foundations also support an exact reduction of trace-norm optimal real
-subspace transport to weighted matching on principal angles.}
+These foundations also support an exact reduction of trace-norm optimal
+transport between equal-dimensional subspaces in a finite-dimensional real
+inner-product space to weighted matching on principal angles.}
 
 \keywords{Davis--Kahan theory, spectral perturbation, formal verification,
 Lean 4, direct rotation, principal angles}
@@ -307,8 +308,9 @@ foundations we formalized.
 
 The same principal-angle and operator-ideal results support a further
 optimization theorem. In Section~\ref{sec:example-transport}, we prove that
-minimizing trace-norm displacement over all real orthogonal maps carrying
-one subspace onto another reduces to weighted matching on principal angles.
+for two equal-dimensional subspaces of a finite-dimensional real inner-product
+space, minimizing trace-norm displacement over all orthogonal maps carrying
+one subspace onto the other reduces to weighted matching on principal angles.
 
 \noindent\textbf{Contributions.}
 \begin{enumerate}
@@ -328,7 +330,8 @@ give a real counterexample at every positive acute angle,
 and prove the Q-norm consequence of the valid squared-displacement theorem
 (\cref{sec:prop44}).
 \item \textbf{A reduction to weighted matching.} We reduce unrestricted
-real trace-norm transport to a weighted-matching problem on principal angles
+real trace-norm transport between equal-dimensional subspaces in finite
+ambient dimension to a weighted-matching problem on principal angles
 (\cref{sec:example-transport}).
 
 \end{enumerate}
@@ -401,7 +404,7 @@ Dates identify the publications discussed in the text.}
 Camille Jordan studied the geometry of linear subspaces in $n$ dimensions in
   1875 \citep{jordan1875essai}.
 
-For two lines, a single acute angle describes their relative position.
+For two lines, a single angle in $[0,\sym{PiConstant}/2]$ describes their relative position.
 For subspaces of higher dimension, one needs a sequence of \emph{principal
   angles}.
 The successive principal vectors are selected under orthogonality constraints.
@@ -419,10 +422,12 @@ The singular values of the overlap matrix are the principal cosines:
 
 The corresponding principal vectors $\like{SourceVector}{\symglyph{SourceVector}_j}\in \sym{Usource}$ and $\like{TargetVector}{\symglyph{TargetVector}_j}\in \sym{Vtarget}$ satisfy
 $\langle \like{SourceVector}{\symglyph{SourceVector}_i},\like{TargetVector}{\symglyph{TargetVector}_j}\rangle=\like{KroneckerDelta}{\symglyph{KroneckerDelta}_{ij}}\cos\like{theta}{\symglyph{theta}_j}$ in suitably oriented
-coordinates.  For nonzero acute angles, each pair determines a real
-two-dimensional plane in which the relative position is an ordinary
-rotation.  An entire pair of subspaces is described by these planes,
-together with their shared and orthogonal components.
+coordinates. For angles strictly between zero and a right angle, each pair
+spans a two-dimensional plane over the underlying scalar field. In suitable
+orthonormal coordinates, the usual real planar rotation matrix maps the
+first principal vector to the second. An entire pair of subspaces is
+described by these planes, together with their shared and orthogonal
+components.
 
 Principal angles also arise in statistics: Hotelling's 1936 canonical
   correlation analysis sought pairs of maximally correlated linear combinations
@@ -974,7 +979,8 @@ at minimum displacement cost. We examine the error and give a counterexample
 in \cref{sec:prop44}. The principal-angle, projection, and operator-ideal
 foundations developed for the formalization also support our proof of the
 weighted-matching theorem in \cref{sec:example-transport}, which gives the
-minimum displacement in the real trace-norm problem.
+minimum trace-norm displacement between equal-dimensional real subspaces
+in finite ambient dimension.
 
 \section{Davis--Kahan formalization and the sine-theta theorem}
 \label{sec:coverage}
@@ -1009,7 +1015,8 @@ For a unit trial vector $\sym{v}$ and an approximate eigenvalue $\sym{mu}$, the 
 is $\sym{Acurrent}\sym{v}-\sym{mu} \sym{v}$. An isometric coordinate map $\sym{E0}$ generalizes
 this construction to a trial subspace: its range is the trial subspace, and a self-adjoint operator
 $\sym{TrialOperator}$ approximates the action of the ambient operator on
-that subspace. For a finite-dimensional Rayleigh--Ritz choice,
+that subspace. When the trial subspace is finite-dimensional and lies in
+$\DKDom(\sym{Acurrent})$, the Rayleigh--Ritz choice is
 $\sym{TrialOperator}=\like{E0}{\symglyph{E0}^*}\sym{Acurrent}\sym{E0}$. The theorem allows other self-adjoint trial
 operators as well. We write $\sym{TrialOperator}$ for the general trial operator,
 reserving $\sym{ReferenceBlock0}$ for the reference spectral block that
@@ -1329,8 +1336,9 @@ include the right-angle defect spaces described in
 its spectral decomposition recovers a sequence of principal angles
 \citep[Section~3]{davis1970rotation}.
 
-The double-angle theorems for $\sin(2\sym{Theta})$ and $\tan(2\sym{Theta})$
-  require selecting the branch on which $\sym{Theta}\le\sym{PiConstant}/4$.
+To obtain small-angle bounds from the double-angle inequalities for
+$\sin(2\sym{Theta})$ and $\tan(2\sym{Theta})$, one needs to identify the
+branch on which $\sym{Theta}\le\sym{PiConstant}/4$.
 Here $\sym{Theta}$ includes both the source and complementary angle blocks;
 $\sym{Theta0}$ alone is the directed angle on source coordinates.
 Because the function $\sin(2\sym{theta})$ is small both when $\sym{theta}$ is
@@ -1524,8 +1532,9 @@ comparisons. The earlier complex example supplied the construction; our
 calculation makes its contradiction of the printed real claim explicit.
 
 The matching theorem addresses the resulting optimization problem for any
-equal-dimensional pair of finite-dimensional real subspaces. Its proof uses
-principal-angle geometry, real orthogonal block decompositions, and
+equal-dimensional pair of subspaces of a finite-dimensional real inner-product
+space. Its proof uses principal-angle geometry, real orthogonal block
+decompositions, and
 singular-value norms. These are also among the foundations required for the
 Davis--Kahan formalization. The proof of the matching theorem uses additional
 optimization arguments, including the limit of the Schatten $p$-norm
@@ -1547,7 +1556,7 @@ angles and direct rotations, Borel spectral calculus, approximation numbers
 and symmetric ideals, and Sylvester separation. Parts of this development
 were subsequently adapted into Tau Ceti. Using these foundations, we proved
 an exact weighted-matching formula for the real trace-norm transport
-minimum.
+minimum between equal-dimensional subspaces in finite ambient dimension.
 
 \backmatter
 \section*{Statements and Declarations}
