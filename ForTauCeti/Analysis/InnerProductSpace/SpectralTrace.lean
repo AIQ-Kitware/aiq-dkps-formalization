@@ -18,7 +18,7 @@ public import TauCeti.Analysis.Convex.StrictConvexSpace
 public import TauCeti.Topology.Algebra.Module.Trace
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Continuity
 public import Mathlib.Analysis.Normed.Operator.Mul
-public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius.Trace
 public import Mathlib.Algebra.Star.StarProjection
 
 /-!

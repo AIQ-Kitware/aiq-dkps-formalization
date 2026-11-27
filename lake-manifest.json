@@ -19,10 +19,10 @@
    "type": "git",
    "subDir": null,
    "scope": "",
-   "rev": "0225663554f035014705ec78e8b721fd067b82b9",
+   "rev": "f0f7c4b96aba257ab68e23f04a4e2bbd141b0532",
    "name": "TauCeti",
    "manifestFile": "lake-manifest.json",
-   "inputRev": "0225663554f035014705ec78e8b721fd067b82b9",
+   "inputRev": "f0f7c4b96aba257ab68e23f04a4e2bbd141b0532",
    "inherited": false,
    "configFile": "lakefile.toml"
   },

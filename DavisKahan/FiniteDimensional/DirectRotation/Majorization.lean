@@ -449,7 +449,8 @@ theorem positive_affine_reverse_kyFanSum
     have hrev : Fin.rev j ≤ Fin.rev i := Fin.rev_le_rev.mpr hij
     have hlam := hC.eigenvalues_antitone rfl hrev
     linarith
-  have hAeig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis hA.isSymmetric rfl br hanti heig
+  have hAeig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis hA.isSymmetric rfl
+    br.toBasis hanti heig
   have hrange : A.kyFanSum k
       = ∑ i ∈ Finset.range (min k (finrank 𝕜 E)), A.singularValues i := by
     rw [LinearMap.kyFanSum_def]

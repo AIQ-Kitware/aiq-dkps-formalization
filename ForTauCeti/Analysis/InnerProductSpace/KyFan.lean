@@ -57,10 +57,11 @@ theorem eigenvalues_operatorAbs (A : E →ₗ[𝕜] E) :
     (A.isPositive_operatorAbs).isSymmetric.eigenvalues rfl
       = fun i : Fin (finrank 𝕜 E) => A.singularValues (i : ℕ) := by
   refine LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis _ rfl
-    (A.isSymmetric_adjoint_comp_self.eigenvectorBasis rfl)
+    (A.isSymmetric_adjoint_comp_self.eigenvectorBasis rfl).toBasis
     (fun i j hij => A.singularValues_antitone (by exact_mod_cast hij))
     fun i => ?_
-  rw [show A.operatorAbs = (LinearMap.isPositive_adjoint_comp_self A).sqrt from
+  rw [OrthonormalBasis.coe_toBasis,
+    show A.operatorAbs = (LinearMap.isPositive_adjoint_comp_self A).sqrt from
       (LinearMap.isPositive_adjoint_comp_self A).sqrt_unique
         A.isPositive_operatorAbs A.operatorAbs_sq,
     (LinearMap.isPositive_adjoint_comp_self A).sqrt_apply_eigenvectorBasis rfl i,

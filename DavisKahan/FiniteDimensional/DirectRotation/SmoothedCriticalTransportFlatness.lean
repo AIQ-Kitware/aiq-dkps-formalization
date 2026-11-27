@@ -9,7 +9,7 @@ public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedCriticalFlatne
 public import DavisKahan.FiniteDimensional.DirectRotation.SchattenPhaseTransport
 public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedQuarticStability
 public import DavisKahan.FiniteDimensional.DirectRotation.SmoothedSpectralCost
-public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius.Trace
 
 /-!
 # Failure of quadratic growth for actual critical planar transports

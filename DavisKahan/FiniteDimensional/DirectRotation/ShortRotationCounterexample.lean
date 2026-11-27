@@ -322,7 +322,7 @@ theorem singularValues_displacement_R (j : Fin 4) :
   set D := LinearMap.id - (directRotation U4 V4 acute).toLinearMap with hD
   have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis D.isSymmetric_adjoint_comp_self hfr
-    (EuclideanSpace.basisFun (Fin 4) ℝ)
+    (EuclideanSpace.basisFun (Fin 4) ℝ).toBasis
     (μ := fun _ => 2 - Real.sqrt 2) (fun _ _ _ => le_rfl)
     (fun i => by
       rw [show LinearMap.adjoint D ∘ₗ D = (2 - Real.sqrt 2) • LinearMap.id from
@@ -517,7 +517,7 @@ theorem singularValues_displacement_W (j : Fin 4) :
   set D := LinearMap.id - Wlin with hD
   have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
-    D.isSymmetric_adjoint_comp_self hfr mbasis
+    D.isSymmetric_adjoint_comp_self hfr mbasis.toBasis
     (μ := ![2, 2, 0, 0]) antitone_two_two_zero_zero
     (fun i => gram_displacement_W_apply i)
   rw [D.singularValues_of_lt hfr j.isLt, congrFun heig ⟨(j : ℕ), j.isLt⟩]
@@ -681,7 +681,7 @@ private theorem singularValues_equation43Block1 (j : Fin 4) :
       Real.sqrt ((![1, 1, 0, 0] : Fin 4 → ℝ) j) := by
   have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
-    equation43Block1.isSymmetric_adjoint_comp_self hfr omega1Basis
+    equation43Block1.isSymmetric_adjoint_comp_self hfr omega1Basis.toBasis
     (μ := ![1, 1, 0, 0]) antitone_one_one_zero_zero
     (fun i => by rw [gram_equation43Block1]; exact omega1Basis_projection i)
   rw [equation43Block1.singularValues_of_lt hfr j.isLt,
@@ -692,7 +692,7 @@ private theorem singularValues_equation43Block2 (j : Fin 4) :
       Real.sqrt ((![1, 1, 0, 0] : Fin 4 → ℝ) j) := by
   have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
-    equation43Block2.isSymmetric_adjoint_comp_self hfr omega2Basis
+    equation43Block2.isSymmetric_adjoint_comp_self hfr omega2Basis.toBasis
     (μ := ![1, 1, 0, 0]) antitone_one_one_zero_zero
     (fun i => by rw [gram_equation43Block2]; exact omega2Basis_projection i)
   rw [equation43Block2.singularValues_of_lt hfr j.isLt,
@@ -773,7 +773,7 @@ theorem principalSines_zero : Submodule.principalSines U4 V4 0 = Real.sqrt 2⁻�
   have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
     ((U4.sinThetaMap V4).toLinearMap).isSymmetric_adjoint_comp_self hfr
-    (EuclideanSpace.basisFun (Fin 4) ℝ)
+    (EuclideanSpace.basisFun (Fin 4) ℝ).toBasis
     (μ := ![2⁻¹, 2⁻¹, 0, 0]) antitone_half_half_zero_zero
     (fun i => gram_sinThetaMap_apply i)
   rw [Submodule.principalSines_def]

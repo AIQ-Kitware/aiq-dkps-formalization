@@ -24,7 +24,7 @@ identity `A A⋆ = U (A⋆A) U⁻¹` with `U = choosePolarUnitary A`.
 module
 
 public import TauCeti.Analysis.InnerProductSpace.SingularValues
-public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius.Trace
 public import TauCeti.Analysis.InnerProductSpace.CourantFischer
 public import TauCeti.Analysis.InnerProductSpace.Gram.Perturbation
 public import TauCeti.Analysis.InnerProductSpace.SchurHorn

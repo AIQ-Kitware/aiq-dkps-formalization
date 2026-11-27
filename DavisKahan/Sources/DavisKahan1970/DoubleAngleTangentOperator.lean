@@ -10,7 +10,7 @@ public import DavisKahan.Sources.DavisKahan1970.Ideals.SpectralSelection
 public import DavisKahan.DoubleAngle.TanTwoThetaKyFan
 public import TauCeti.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.GapInverse
 public import TauCeti.Analysis.CStarAlgebra.SelfAdjointSpectrumInterval
-public import TauCeti.Analysis.Normed.Lp.PiLp
+public import TauCeti.Analysis.Normed.Lp.PiLp.Basic
 
 public section
 

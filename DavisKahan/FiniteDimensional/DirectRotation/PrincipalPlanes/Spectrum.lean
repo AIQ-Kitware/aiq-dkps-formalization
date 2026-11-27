@@ -533,8 +533,9 @@ theorem singularValues_directRotation_displacement
         sub_self, smul_zero, hμ]
       simp [dite_eq_right hk]
   -- Identify the sorted eigenvalues.
-  have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis A.isSymmetric_adjoint_comp_self rfl b
-    hμanti hdiag
+  have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
+    A.isSymmetric_adjoint_comp_self rfl
+    b.toBasis hμanti hdiag
   rcases lt_or_ge n (finrank 𝕜 E) with hnE | hnE
   · rw [A.singularValues_of_lt rfl hnE, heig]
     rw [hμ]

@@ -137,7 +137,7 @@ theorem singularValues_projectionDifference (theta : ℝ)
   let D : E4 →ₗ[ℝ] E4 := U4.starProjection.toLinearMap - ((V4 theta)).starProjection.toLinearMap
   have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
-    D.isSymmetric_adjoint_comp_self hfr (EuclideanSpace.basisFun (Fin 4) ℝ)
+    D.isSymmetric_adjoint_comp_self hfr (EuclideanSpace.basisFun (Fin 4) ℝ).toBasis
     (μ := fun _ => Real.sin theta ^ 2) (fun _ _ _ => le_rfl)
     (fun i => by
       rw [show D.adjoint ∘ₗ D = Real.sin theta ^ 2 • LinearMap.id from

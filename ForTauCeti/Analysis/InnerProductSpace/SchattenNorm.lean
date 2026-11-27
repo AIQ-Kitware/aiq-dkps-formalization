@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Energy
-public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Frobenius.Trace
 public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Schatten
 
 /-!

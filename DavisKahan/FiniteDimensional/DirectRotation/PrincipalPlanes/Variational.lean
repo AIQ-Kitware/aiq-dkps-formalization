@@ -311,8 +311,9 @@ theorem singularValues_restrictedDisplacement_directRotation
         LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply, habs,
         sub_self, smul_zero, map_zero, hμ]
       simp [dite_eq_right hk]
-  have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis AR.isSymmetric_adjoint_comp_self rfl b
-    hμanti hdiag
+  have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
+    AR.isSymmetric_adjoint_comp_self rfl
+    b.toBasis hμanti hdiag
   rcases lt_or_ge n (finrank 𝕜 E) with hnE | hnE
   · rw [AR.singularValues_of_lt rfl hnE, heig]
     rw [hμ]

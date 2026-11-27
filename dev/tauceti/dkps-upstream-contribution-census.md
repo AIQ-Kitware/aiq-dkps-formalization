@@ -1,5 +1,47 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 compact-time Yosida convergence consumption
+
+TauCeti accepted our SA-E24 submission from head
+`c00248fbb5d67ac97142e3815566f2390bdcf111` at
+`f0f7c4b96aba257ab68e23f04a4e2bbd141b0532`. DKPS pins that integration
+with its existing exact Mathlib `31ce06eaadf4a200c0e1407c5f10953cf606b8f8`
+and Lean v4.37.0-rc1.
+[PR #30736](https://github.com/TauCetiProject/TauCeti/pull/30736) ·
+[Accepted commit](https://github.com/TauCetiProject/TauCeti/commit/f0f7c4b96aba257ab68e23f04a4e2bbd141b0532)
+
+The native
+`IsSelfAdjoint.uniformCauchySeqOn_exp_smul_I_smul_symmetricYosidaApproximation_apply`
+covers every vector and every bounded real-time set for signed real
+shifts along `cocompact ℝ`. Pulling back along the cofinal positive-integer
+cast supplies the fixed-time Cauchy fact used by the existing limit flow
+and uniform convergence on bounded time intervals. Strong continuity
+now follows from the continuous bounded-group orbits. This retires
+`norm_yosidaFlow_sub_le`, `cauchySeq_yosidaFlow_of_mem_domain`,
+`cauchySeq_yosidaFlow` and `continuous_expLimit_of_mem_domain`. The
+quantitative time-displacement bound and the Stone generator proof still
+use their local arguments. This is the SA-E24 convergence input to those
+arguments.
+
+The accepted proof adapts DKPS's Duhamel and density strategy at
+`b9a02d00c` (Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0).
+The Duhamel argument descends from
+`Spectra/YosidaHille/Approximation/Commutation.lean` at
+`8dbaaf6728d1342ae16acf79fd7eef7c59b37e63` (Adam Bornemann, Spectra
+Formalization Project, Apache-2.0). The shared bounded-generator criterion
+is used by both the real and complex upstream Yosida proofs.
+The retained signed-time Duhamel estimate calls the native complex
+comparison on nonnegative times and uses time reversal for negative times.
+The pin also adopts the moved Frobenius and PiLp imports. Existing orthonormal
+eigenbasis applications pass their underlying bases to the generalized
+eigenvalue identification theorem.
+`ContinuousLinearMap.restrictScalars_exp` generalizes the transport already
+in native bounded Stone theory.
+
+The focused Yosida, Stone uniqueness and spectral-projection build
+(7720 jobs), the full default build (22616 jobs) and `lake build Challenge`
+(20790 jobs) passed without warnings on the existing ext4-backed cache.
+
 ## November 27 census of other contributors' OperatorTheory integrations
 
 The review compares accepted TauCeti main `0be4294580a29a23dc04f8d6dc5c80ba83a11ea5`
@@ -35,8 +77,9 @@ The extraction manifest records the source and replacement declaration names.
 
 Our [#30736](https://github.com/TauCetiProject/TauCeti/pull/30736) was accepted
 as `f0f7c4b96aba257ab68e23f04a4e2bbd141b0532` from head
-`c00248fbb5d67ac97142e3815566f2390bdcf111`. This delivers SA-E24 and is
-newer than the DKPS pin. Our [#29129](https://github.com/TauCetiProject/TauCeti/pull/29129)
+`c00248fbb5d67ac97142e3815566f2390bdcf111`. This delivers SA-E24. The
+separate consumption above moves DKPS to that integration. Our
+[#29129](https://github.com/TauCetiProject/TauCeti/pull/29129)
 has the previously recorded narrower auxiliary integration
 `557acd65e46af69e3208452678c225b6d75141bf`. The Cayley-coordinate API was
 accepted there. The native Cayley PVM construction is supplied by #41596 and

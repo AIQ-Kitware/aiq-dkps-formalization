@@ -304,7 +304,7 @@ theorem singularValues_displacement_R (theta : Real) (hc : 0 < Real.cos theta) (
   let D := LinearMap.id - (directRotation U4 (V4 theta) (acute theta hc)).toLinearMap
   have hfr : finrank Real E4 = 4 := finrank_euclideanSpace_fin
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
-    D.isSymmetric_adjoint_comp_self hfr (EuclideanSpace.basisFun (Fin 4) Real)
+    D.isSymmetric_adjoint_comp_self hfr (EuclideanSpace.basisFun (Fin 4) Real).toBasis
     (μ := fun _ => 2 - 2 * Real.cos theta) (fun _ _ _ => le_rfl)
     (fun i => by
       rw [show LinearMap.adjoint D ∘ₗ D =
@@ -365,7 +365,7 @@ theorem singularValues_displacement_W (theta : Real) (j : Fin 4) :
   let D := LinearMap.id - Wlin theta
   have hfr : finrank Real E4 = 4 := finrank_euclideanSpace_fin
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
-    D.isSymmetric_adjoint_comp_self hfr mbasis
+    D.isSymmetric_adjoint_comp_self hfr mbasis.toBasis
     (μ := ![4 * Real.sin theta ^ 2, 4 * Real.sin theta ^ 2, 0, 0])
     (antitone_pair _ (by positivity)) (gram_displacement_W_basis theta)
   rw [D.singularValues_of_lt hfr j.isLt, congrFun heig ⟨(j : Nat), j.isLt⟩]
@@ -444,7 +444,7 @@ theorem principalSines_eq (theta : Real) (hs : 0 ≤ Real.sin theta)
   have hfr : finrank Real E4 = 4 := finrank_euclideanSpace_fin
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
     ((U4.sinThetaMap (V4 theta)).toLinearMap).isSymmetric_adjoint_comp_self hfr
-    (EuclideanSpace.basisFun (Fin 4) Real)
+    (EuclideanSpace.basisFun (Fin 4) Real).toBasis
     (μ := ![Real.sin theta ^ 2, Real.sin theta ^ 2, 0, 0])
     (antitone_pair _ (sq_nonneg _)) (gram_sinThetaMap_basis theta)
   rw [Submodule.principalSines_def]

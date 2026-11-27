@@ -139,11 +139,12 @@ theorem singularValues_of_isPositive {A : E →ₗ[𝕜] E} (hA : A.IsPositive)
   have hgram : A.isSymmetric_adjoint_comp_self.eigenvalues rfl =
       fun i => (hA.isSymmetric.eigenvalues rfl i) ^ 2 :=
     LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis A.isSymmetric_adjoint_comp_self rfl
-      (hA.isSymmetric.eigenvectorBasis rfl)
+      (hA.isSymmetric.eigenvectorBasis rfl).toBasis
       (fun a b hab => pow_le_pow_left₀ (hA.nonneg_eigenvalues rfl b)
         (hA.isSymmetric.eigenvalues_antitone rfl hab) 2)
       (fun i => by
-        rw [LinearMap.comp_apply, hA.isSymmetric.apply_eigenvectorBasis,
+        rw [OrthonormalBasis.coe_toBasis, LinearMap.comp_apply,
+          hA.isSymmetric.apply_eigenvectorBasis,
           map_smul, hA.isSymmetric.adjoint_eq,
           hA.isSymmetric.apply_eigenvectorBasis, smul_smul,
           ← RCLike.ofReal_mul, ← sq])
