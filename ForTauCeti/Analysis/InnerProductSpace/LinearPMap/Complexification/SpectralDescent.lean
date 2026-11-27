@@ -15,6 +15,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 module
 
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Polarization
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Complexification
 public import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
 public import ForTauCeti.Analysis.InnerProductSpace.Projection.Blocks
@@ -273,6 +274,13 @@ theorem conjugateOperator_specProjection_complexifyReal
     (Complex.measurable_inverseCayleyCoord.comp measurable_subtypeVal) hS
   set ind : _root_.spectrum ℂ ((complexifyReal A).cayley) → ℂ :=
     (κ ⁻¹' S).indicator (fun _ => (1 : ℂ)) with hind
+  have := hU
+  have hInd (w : _root_.spectrum ℂ ((complexifyReal A).cayley)) :
+      BoundedBorelFunction.indicator
+        ((fun w : _root_.spectrum ℂ ((complexifyReal A).cayley) =>
+          Complex.inverseCayleyCoord (w : ℂ)) ⁻¹' S)
+        ((Complex.measurable_inverseCayleyCoord.comp measurable_subtypeVal) hS) 1 w = ind w := by
+    by_cases hw : Complex.inverseCayleyCoord (w : ℂ) ∈ S <;> simp [hind, hκ, hw]
   have hIreal : ∀ η : Eℂ,
       (starRingEnd ℂ) (∫ w, ind w ∂((cfcHom hU).representationDiagMeasure η)) =
         ∫ w, ind w ∂((cfcHom hU).representationDiagMeasure η) := by
@@ -295,7 +303,9 @@ theorem conjugateOperator_specProjection_complexifyReal
       conjugation (ξ + Complex.I • ψ) := by
     rw [map_add, conjugation_complex_smul, Complex.conj_I]
     module
-  simp only [BorelCalculus.pair_def, h1, h2, h3, h4,
+  simp only [ContinuousLinearMap.pair_def, ← ContinuousLinearMap.spectralPVM_diag,
+    ContinuousLinearMap.spectralPVM_eq_ofRepresentation, ProjValMeasure.ofRepresentation_diag,
+    hInd, h1, h2, h3, h4,
     diagMeasure_conjugation_complexifyReal hA]
   have e1 := hIreal (ξ + ψ)
   have e2 := hIreal (ξ + Complex.I • ψ)

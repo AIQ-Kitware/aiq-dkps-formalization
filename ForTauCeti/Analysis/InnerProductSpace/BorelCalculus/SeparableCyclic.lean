@@ -62,7 +62,7 @@ variable {a : H →L[ℂ] H}
 /-- **The zero vector generates the trivial cyclic subspace.**  Every value of the calculus at
 `0` is `0`, so the span is trivial and so is its closure. -/
 theorem cyclicSubspace_zero (ha : IsStarNormal a) : cyclicSubspace ha (0 : H) = ⊥ := by
-  refine le_antisymm (cyclicSubspace_le ha ?_ fun f hf => ?_) bot_le
+  refine le_antisymm (cyclicSubspace_le ha ?_ fun f => ?_) bot_le
   · rw [Submodule.bot_coe]
     exact isClosed_singleton
   · rw [map_zero]

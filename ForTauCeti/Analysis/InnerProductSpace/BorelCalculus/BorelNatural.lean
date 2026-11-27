@@ -7,6 +7,7 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagMeasureNatural
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.CyclicDecomposition
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Polarization
 
 /-!
 # The bounded Borel calculus is natural under a unitary intertwiner
@@ -75,35 +76,27 @@ variable {a : H →L[ℂ] H} {b : K →L[ℂ] K}
 
 section Symbols
 
-omit [CompleteSpace H] in
-/-- A bounded measurable function on `ℂ`, restricted to the spectrum, is an admissible symbol
-for the Borel calculus. -/
-theorem isBddMeasurable_comp_val {g : ℂ → ℂ} (hgm : Measurable g) {C : ℝ}
-    (hgC : ∀ z, ‖g z‖ ≤ C) :
-    IsBddMeasurable (a := a) fun w => g (w : ℂ) :=
-  ⟨hgm.comp measurable_subtypeVal,
-    ⟨|C|, abs_nonneg C, fun w => (hgC (w : ℂ)).trans (le_abs_self C)⟩⟩
-
-/-- **Every bounded Borel symbol on the spectrum extends to `ℂ`**, keeping its bound: extend by
-zero, the spectrum being a closed -- hence measurable -- set.  This is what lets naturality be
-stated for symbols pulled back from `ℂ` without losing any generality. -/
-theorem exists_comp_val_eq {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) :
-    ∃ g : ℂ → ℂ, Measurable g ∧ (∀ z, ‖g z‖ ≤ hf.chooseBound) ∧
-      ∀ w : spectrum ℂ a, f w = g (w : ℂ) := by
-  have hmeas : MeasurableSet (spectrum ℂ a) := (spectrum.isCompact ℂ a).isClosed.measurableSet
-  have hemb : MeasurableEmbedding ((↑) : spectrum ℂ a → ℂ) :=
-    MeasurableEmbedding.subtypeVal hmeas
-  refine ⟨Function.extend Subtype.val f fun _ => 0,
-    hemb.measurable_extend hf.measurable measurable_const, ?_, ?_⟩
-  · intro z
+/-- Every symbol on the spectrum extends by zero to a bounded Borel symbol on `ℂ`,
+with the same supremum bound. -/
+theorem exists_comp_val_eq (f : BoundedBorelFunction (spectrum ℂ a)) :
+    ∃ g : BoundedBorelFunction ℂ, ‖g‖ ≤ ‖f‖ ∧
+      f = BoundedBorelFunction.compStarAlgHom' Subtype.val measurable_subtypeVal g := by
+  have hs : MeasurableSet (spectrum ℂ a) := (spectrum.isCompact ℂ a).isClosed.measurableSet
+  let g := Function.extend Subtype.val f (fun _ => 0)
+  have hgm : Measurable g :=
+    (MeasurableEmbedding.subtypeVal hs).measurable_extend f.measurable measurable_const
+  have hbound (z : ℂ) : ‖g z‖ ≤ ‖f‖ := by
     by_cases hz : ∃ w : spectrum ℂ a, (w : ℂ) = z
-    · obtain ⟨w, hw⟩ := hz
-      rw [← hw, Subtype.val_injective.extend_apply]
-      exact hf.norm_le_chooseBound w
-    · rw [Function.extend_apply' _ _ _ hz]
-      simpa using hf.chooseBound_nonneg
-  · intro w
-    rw [Subtype.val_injective.extend_apply]
+    · obtain ⟨w, rfl⟩ := hz
+      simpa only [g, Subtype.val_injective.extend_apply] using
+        BoundedBorelFunction.norm_coe_le_norm f w
+    · simpa only [g, Function.extend_apply' _ _ _ hz, norm_zero] using norm_nonneg f
+  let G := BoundedBorelFunction.ofFunction g hgm ⟨‖f‖, norm_nonneg _, hbound⟩
+  refine ⟨G, (BoundedBorelFunction.norm_le (norm_nonneg _)).mpr (fun z => ?_), ?_⟩
+  · simpa only [G, BoundedBorelFunction.ofFunction_apply] using hbound z
+  · ext w
+    simp only [BoundedBorelFunction.compStarAlgHom'_apply, G,
+      BoundedBorelFunction.ofFunction_apply, g, Subtype.val_injective.extend_apply]
 
 end Symbols
 
@@ -129,9 +122,14 @@ theorem integral_comp_val_diagMeasure_of_intertwines (ha : IsStarNormal a) (e : 
 unitary intertwiner. -/
 theorem pair_comp_val_of_intertwines (ha : IsStarNormal a) (e : H ≃ₗᵢ[ℂ] K)
     (he : ∀ x, e (a x) = b (e x)) {g : ℂ → ℂ} (hgm : Measurable g) (ψ ξ : H) :
-    pair (isStarNormal_of_intertwines ha e he) (fun w => g (w : ℂ)) (e ψ) (e ξ)
-      = pair ha (fun w => g (w : ℂ)) ψ ξ := by
-  rw [pair_def, pair_def, ← map_smul e, ← map_add e, ← map_add e, ← map_sub e, ← map_sub e]
+    haveI := ha
+    haveI := isStarNormal_of_intertwines ha e he
+    b.pair (fun w => g (w : ℂ)) (e ψ) (e ξ) = a.pair (fun w => g (w : ℂ)) ψ ξ := by
+  have := ha
+  have := isStarNormal_of_intertwines ha e he
+  simp only [ContinuousLinearMap.pair_def, ← ContinuousLinearMap.spectralPVM_diag,
+    ContinuousLinearMap.spectralPVM_eq_ofRepresentation, ProjValMeasure.ofRepresentation_diag]
+  rw [← map_smul e, ← map_add e, ← map_add e, ← map_sub e, ← map_sub e]
   rw [integral_comp_val_diagMeasure_of_intertwines ha e he hgm (ξ + ψ),
     integral_comp_val_diagMeasure_of_intertwines ha e he hgm (ξ + Complex.I • ψ),
     integral_comp_val_diagMeasure_of_intertwines ha e he hgm (ξ - ψ),
@@ -140,26 +138,28 @@ theorem pair_comp_val_of_intertwines (ha : IsStarNormal a) (e : H ≃ₗᵢ[ℂ]
 /-- **The bounded Borel calculus is natural under a unitary intertwiner.**  Stated for symbols
 pulled back from `ℂ`, which `exists_comp_val_eq` shows is no restriction. -/
 theorem borelCalculus_comp_val_of_intertwines (ha : IsStarNormal a) (e : H ≃ₗᵢ[ℂ] K)
-    (he : ∀ x, e (a x) = b (e x)) {g : ℂ → ℂ} (hgm : Measurable g) {C : ℝ}
-    (hgC : ∀ z, ‖g z‖ ≤ C) (ξ : H) :
-    e (borelCalculus ha (isBddMeasurable_comp_val hgm hgC) ξ)
-      = borelCalculus (isStarNormal_of_intertwines ha e he)
-          (isBddMeasurable_comp_val hgm hgC) (e ξ) := by
-  have hb : IsStarNormal b := isStarNormal_of_intertwines ha e he
+    (he : ∀ x, e (a x) = b (e x)) (g : BoundedBorelFunction ℂ) (ξ : H) :
+    haveI := ha
+    haveI := isStarNormal_of_intertwines ha e he
+    e (a.borelCalculus (BoundedBorelFunction.compStarAlgHom' Subtype.val measurable_subtypeVal g) ξ)
+      = b.borelCalculus
+          (BoundedBorelFunction.compStarAlgHom' Subtype.val measurable_subtypeVal g) (e ξ) := by
+  have := ha
+  have := isStarNormal_of_intertwines ha e he
+  let fa := BoundedBorelFunction.compStarAlgHom'
+    (Subtype.val : spectrum ℂ a → ℂ) measurable_subtypeVal g
+  let fb := BoundedBorelFunction.compStarAlgHom'
+    (Subtype.val : spectrum ℂ b → ℂ) measurable_subtypeVal g
   refine ext_inner_left ℂ fun χ => ?_
-  calc ⟪χ, e (borelCalculus ha (isBddMeasurable_comp_val hgm hgC) ξ)⟫_ℂ
-      = ⟪e (e.symm χ), e (borelCalculus ha (isBddMeasurable_comp_val hgm hgC) ξ)⟫_ℂ := by
-        rw [e.apply_symm_apply]
-    _ = ⟪e.symm χ, borelCalculus ha (isBddMeasurable_comp_val hgm hgC) ξ⟫_ℂ :=
-        e.inner_map_map _ _
-    _ = pair ha (fun w => g (w : ℂ)) (e.symm χ) ξ :=
-        inner_borelCalculus ha (isBddMeasurable_comp_val hgm hgC) _ ξ
-    _ = pair hb (fun w => g (w : ℂ)) (e (e.symm χ)) (e ξ) :=
-        (pair_comp_val_of_intertwines ha e he hgm (e.symm χ) ξ).symm
-    _ = pair hb (fun w => g (w : ℂ)) χ (e ξ) := by rw [e.apply_symm_apply]
-    _ = ⟪χ, borelCalculus (isStarNormal_of_intertwines ha e he)
-          (isBddMeasurable_comp_val hgm hgC) (e ξ)⟫_ℂ :=
-        (inner_borelCalculus hb (isBddMeasurable_comp_val hgm hgC) χ (e ξ)).symm
+  change ⟪χ, e (a.borelCalculus fa ξ)⟫_ℂ = ⟪χ, b.borelCalculus fb (e ξ)⟫_ℂ
+  rw [← e.apply_symm_apply χ, e.inner_map_map, inner_borelCalculus,
+    inner_borelCalculus]
+  have hfa : (fa : spectrum ℂ a → ℂ) = fun w : spectrum ℂ a => g w.val := funext fun w =>
+    BoundedBorelFunction.compStarAlgHom'_apply _ _ _ w
+  have hfb : (fb : spectrum ℂ b → ℂ) = fun w : spectrum ℂ b => g w.val := funext fun w =>
+    BoundedBorelFunction.compStarAlgHom'_apply _ _ _ w
+  rw [hfa, hfb]
+  exact (pair_comp_val_of_intertwines ha e he g.measurable (e.symm χ) ξ).symm
 
 end Naturality
 
@@ -186,20 +186,23 @@ to the spectral projections of two different operators -- which is what every tr
 statement of the uniqueness argument does. -/
 noncomputable def specProjC (ha : IsStarNormal a) {S : Set ℂ} (hS : MeasurableSet S) :
     H →L[ℂ] H :=
-  borelCalculus ha (isBddMeasurable_comp_val (measurable_indicator_one hS) norm_indicator_one_le)
+  letI := ha
+  a.borelCalculus (BoundedBorelFunction.compStarAlgHom' Subtype.val measurable_subtypeVal
+    (BoundedBorelFunction.indicator S hS 1))
 
 /-- The spectral projection, unfolded.  Stated so that consumers can rewrite with it without
 the definition having to be exposed. -/
 theorem specProjC_def (ha : IsStarNormal a) {S : Set ℂ} (hS : MeasurableSet S) :
-    specProjC ha hS = borelCalculus ha
-      (isBddMeasurable_comp_val (measurable_indicator_one hS) norm_indicator_one_le) := (rfl)
+    haveI := ha
+    specProjC ha hS = a.borelCalculus
+      (BoundedBorelFunction.compStarAlgHom' Subtype.val measurable_subtypeVal
+        (BoundedBorelFunction.indicator S hS 1)) := (rfl)
 
 /-- **Spectral projections are natural under a unitary intertwiner.** -/
 theorem specProjC_apply_of_intertwines (ha : IsStarNormal a) (e : H ≃ₗᵢ[ℂ] K)
     (he : ∀ x, e (a x) = b (e x)) {S : Set ℂ} (hS : MeasurableSet S) (x : H) :
     e (specProjC ha hS x) = specProjC (isStarNormal_of_intertwines ha e he) hS (e x) :=
-  borelCalculus_comp_val_of_intertwines ha e he (measurable_indicator_one hS)
-    norm_indicator_one_le x
+  borelCalculus_comp_val_of_intertwines ha e he (BoundedBorelFunction.indicator S hS 1) x
 
 end SpectralProjection
 
@@ -211,18 +214,16 @@ naturality. -/
 theorem apply_mem_cyclicSubspace_of_intertwines (ha : IsStarNormal a) (e : H ≃ₗᵢ[ℂ] K)
     (he : ∀ x, e (a x) = b (e x)) {ξ x : H} (hx : x ∈ cyclicSubspace ha ξ) :
     e x ∈ cyclicSubspace (isStarNormal_of_intertwines ha e he) (e ξ) := by
+  have := ha
   have hb : IsStarNormal b := isStarNormal_of_intertwines ha e he
   have hle : cyclicSubspace ha ξ ≤ Submodule.comap (e.toLinearEquiv : H →ₗ[ℂ] K)
       (cyclicSubspace hb (e ξ)) := by
-    refine cyclicSubspace_le ha ?_ fun f hf => ?_
-    · exact (isClosed_cyclicSubspace hb (e ξ)).preimage e.continuous
-    · obtain ⟨g, hgm, hgC, hgeq⟩ := exists_comp_val_eq hf
-      have hfeq : f = fun w : spectrum ℂ a => g (w : ℂ) := funext hgeq
-      subst hfeq
-      have hmem := borelCalculus_apply_mem_cyclicSubspace hb
-        (isBddMeasurable_comp_val (a := b) hgm hgC) (e ξ)
-      rw [← borelCalculus_comp_val_of_intertwines ha e he hgm hgC ξ] at hmem
-      exact hmem
+    refine cyclicSubspace_le ha ((isClosed_cyclicSubspace hb (e ξ)).preimage e.continuous) ?_
+    intro f
+    obtain ⟨g, -, rfl⟩ := exists_comp_val_eq f
+    change e (a.borelCalculus _ ξ) ∈ cyclicSubspace hb (e ξ)
+    rw [borelCalculus_comp_val_of_intertwines ha e he g ξ]
+    exact borelCalculus_apply_mem_cyclicSubspace hb _ (e ξ)
   exact hle hx
 
 /-- The closed span of finitely (or arbitrarily) many cyclic subspaces transports along a

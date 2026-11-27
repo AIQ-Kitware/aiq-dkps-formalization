@@ -36,9 +36,11 @@ theorem specProjection_eq_specProjC (B : Set ℝ) (hB : MeasurableSet B) :
     specProjection hA B hB =
       BorelCalculus.specProjC (hA.isStarNormal_cayley)
         (Complex.measurable_inverseCayleyCoord hB) := by
+  have := hA.isStarNormal_cayley
   rw [specProjection_eq_borelCalculus, BorelCalculus.specProjC_def]
-  exact BorelCalculus.borelCalculus_congr_ae _ _ _ fun _ =>
-    Filter.Eventually.of_forall fun _ => rfl
+  congr 1
+  ext w
+  by_cases hw : Complex.inverseCayleyCoord (w : ℂ) ∈ B <;> simp [hw]
 
 /-- **Spectral projections are natural under a unitary intertwiner.**
 

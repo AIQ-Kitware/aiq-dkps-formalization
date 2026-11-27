@@ -1,5 +1,33 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 bundled Borel calculus and real-spectrum pullback
+
+The cyclic, restriction, naturality, and spectral-projection arguments now
+use `BoundedBorelFunction` from Bryan Ehrlich's #14874 and the native bounded
+Borel calculus from #28859. The separate admissibility predicate and the
+local algebra, norm, and indicator wrappers retire. The paper-facing
+real-line calculus retains the same measurability and boundedness hypotheses.
+[PR #14874](https://github.com/TauCetiProject/TauCeti/pull/14874) ·
+[PR #28859](https://github.com/TauCetiProject/TauCeti/pull/28859)
+
+The real conjugation and intertwining proofs use the native polarized
+pairing from Jon Crall's DKPS-derived #18904 (`fd6b31d09255`, SA-B04).
+The local matrix-element identity now follows from that pairing and the
+native diagonal integral formula. The applications to DKPS's cyclic and
+real spectral models remain here.
+[PR #18904](https://github.com/TauCetiProject/TauCeti/pull/18904)
+
+The isometry between the two spectral `L²` spaces now uses the native
+`Lp.compMeasurePreservingₗᵢEquiv` from #1553 (`5eb11cced31a`, Cadence).
+Its forward and inverse maps are still the two pullbacks along the spectral
+homeomorphism. #1553 introduces a general almost-everywhere inverse-pair
+construction. Direct DKPS proof descent is unestablished.
+[PR #1553](https://github.com/TauCetiProject/TauCeti/pull/1553)
+
+The focused build (9057 jobs), full default build (22786 jobs), and combined
+Challenge and paper semantic-surface build (22492 jobs) passed without
+warnings. The declaration-name comparison kept the 49 baseline findings.
+
 ## November 27 native finite form and Frobenius bounds
 
 The finite sine and Ritz arguments use the point-spectrum-to-form laws
@@ -537,9 +565,8 @@ diagonal finiteness and total projection proofs.
 
 The two bounded half-line form estimates use `IsSelfAdjoint.spectralPVM_toPMap_top`
 from Forgejo #2123 and the native form estimates on the complementary
-spectral ranges. The existing predicate-based symbol interface remains
-in use while its consumers move to `BoundedBorelFunction`. The
-scalar types and the half-line hypotheses are preserved.
+spectral ranges. The scalar types and half-line hypotheses are preserved.
+This checkpoint preceded the bundled-symbol migration recorded above.
 [Forgejo #2123](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2123)
 
 The backport removes 968 net lines of Lean. The focused build (8839 jobs),

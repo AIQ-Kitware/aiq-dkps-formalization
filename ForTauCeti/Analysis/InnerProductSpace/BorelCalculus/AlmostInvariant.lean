@@ -66,17 +66,6 @@ theorem norm_sq_sum_of_pairwise_inner_eq_zero {ι : Type*} (s : Finset ι) (v : 
   exact Finset.sum_congr rfl fun i _ => by
     rw [norm_sq_eq_re_inner (𝕜 := ℂ), RCLike.re_eq_complex_re]
 
-/-- The native sharp operator norm bound implies the estimate used in the band argument. -/
-theorem norm_borelCalculus_le_of_forall_norm_le {a : H →L[ℂ] H} (ha : IsStarNormal a)
-    {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) {M : ℝ} (hM : 0 ≤ M)
-    (hb : ∀ x, ‖f x‖ ≤ M) :
-    ‖borelCalculus ha hf‖ ≤ 2 * M := by
-  have := ha
-  rw [borelCalculus_eq_native]
-  refine (a.norm_borelCalculus_le hM ?_).trans (by linarith)
-  intro x
-  simpa only [IsBddMeasurable.toBoundedBorelFunction_apply] using hb x
-
 section BoundedSelfAdjoint
 
 variable {T : H →L[ℂ] H}
@@ -89,46 +78,31 @@ theorem norm_comp_boundedPVM_proj_sub_smul_le (hT : IsSelfAdjoint T)
     (hband : ∀ t ∈ B, |t - lam| ≤ r) :
     ‖T ∘L (boundedPVM hT).proj B hB -
       ((lam : ℝ) : ℂ) • (boundedPVM hT).proj B hB‖ ≤ 2 * r := by
-  have hind : IsBddMeasurable
-      ((reCoord ⁻¹' B).indicator (fun _ => (1 : ℂ))) :=
-    isBddMeasurable_indicator (a := T) (measurable_reCoord (T := T) hB)
-  have hcoord : IsBddMeasurable (fun w : spectrum ℂ T => (w : ℂ)) :=
-    isBddMeasurable_coord
-  have hsym : IsBddMeasurable (fun w : spectrum ℂ T =>
-      (w : ℂ) * (reCoord ⁻¹' B).indicator (fun _ => (1 : ℂ)) w +
-        (-((lam : ℝ) : ℂ)) * (reCoord ⁻¹' B).indicator (fun _ => (1 : ℂ)) w) :=
-    (hcoord.mul hind).add (hind.const_smul (-((lam : ℝ) : ℂ)))
-  have hcalc : borelCalculus hT.isStarNormal hsym =
+  have := hT.isStarNormal
+  let ind : BoundedBorelFunction (spectrum ℂ T) :=
+    BoundedBorelFunction.indicator (reCoord ⁻¹' B) (measurable_reCoord hB) 1
+  let coord := BoundedBorelFunction.ofContinuousMap ((ContinuousMap.id ℂ).restrict (spectrum ℂ T))
+  have hcalc : T.borelCalculus (coord * ind - ((lam : ℝ) : ℂ) • ind) =
       T ∘L (boundedPVM hT).proj B hB -
         ((lam : ℝ) : ℂ) • (boundedPVM hT).proj B hB := by
-    rw [borelCalculus_add hT.isStarNormal (hcoord.mul hind)
-        (hind.const_smul (-((lam : ℝ) : ℂ))),
-      borelCalculus_mul hT.isStarNormal hcoord hind,
-      borelCalculus_const_smul hT.isStarNormal (-((lam : ℝ) : ℂ)) hind,
-      borelCalculus_coord hT.isStarNormal, ← boundedPVM_proj hT B hB, neg_smul,
-      ← sub_eq_add_neg]
+    rw [map_sub, map_mul, map_smul, T.borelCalculus_restrict_id, boundedPVM_proj]
     rfl
   rw [← hcalc]
-  refine norm_borelCalculus_le_of_forall_norm_le hT.isStarNormal hsym hr fun w => ?_
+  refine (T.norm_borelCalculus_le hr fun w => ?_).trans (by linarith)
+  have hCoord : coord w = (w : ℂ) := by simp [coord]
   by_cases hw : w ∈ reCoord (T := T) ⁻¹' B
-  · have hind1 : (reCoord ⁻¹' B).indicator (fun _ => (1 : ℂ)) w = 1 :=
-      Set.indicator_of_mem hw _
-    have hre : ((w : ℂ)) = (((w : ℂ).re : ℝ) : ℂ) := hT.mem_spectrum_eq_re w.property
-    have hmem : (w : ℂ).re ∈ B := by
-      have h := hw
-      rwa [Set.mem_preimage, reCoord_apply] at h
+  · have hind : ind w = 1 := by simp [ind, hw]
+    have hre : (w : ℂ) = (((w : ℂ).re : ℝ) : ℂ) := hT.mem_spectrum_eq_re w.property
+    have hmem : (w : ℂ).re ∈ B := by rwa [Set.mem_preimage, reCoord_apply] at hw
     calc
-      ‖(w : ℂ) * (reCoord ⁻¹' B).indicator (fun _ => (1 : ℂ)) w +
-          (-((lam : ℝ) : ℂ)) * (reCoord ⁻¹' B).indicator (fun _ => (1 : ℂ)) w‖
-          = ‖(w : ℂ) - ((lam : ℝ) : ℂ)‖ := by
-            rw [hind1, mul_one, mul_one, ← sub_eq_add_neg]
+      ‖(coord * ind - ((lam : ℝ) : ℂ) • ind) w‖ = ‖(w : ℂ) - ((lam : ℝ) : ℂ)‖ := by
+        simp only [sub_apply, mul_apply, smul_apply, hCoord, hind, smul_eq_mul, mul_one]
       _ = ‖((((w : ℂ).re - lam : ℝ)) : ℂ)‖ := by rw [hre]; norm_cast
       _ = |(w : ℂ).re - lam| := by rw [Complex.norm_real, Real.norm_eq_abs]
       _ ≤ r := hband _ hmem
-  · have hind0 : (reCoord ⁻¹' B).indicator (fun _ => (1 : ℂ)) w = 0 :=
-      Set.indicator_of_notMem hw _
-    rw [hind0, mul_zero, mul_zero, add_zero, norm_zero]
-    exact hr
+  · have hind : ind w = 0 := by simp [ind, hw]
+    simpa only [sub_apply, mul_apply, smul_apply, hind, mul_zero, smul_zero, sub_zero,
+      norm_zero] using hr
 
 /-- **Almost-invariant finite-dimensional enlargement.**  Every finite-dimensional
 subspace of a complex Hilbert space is contained in a finite-dimensional subspace that a

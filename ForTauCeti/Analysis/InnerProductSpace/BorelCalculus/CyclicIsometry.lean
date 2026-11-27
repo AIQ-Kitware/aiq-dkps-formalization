@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Fable 5
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative
+public import TauCeti.Analysis.InnerProductSpace.BorelCalculus.Basic
 
 /-!
 # The cyclic isometry of the Borel calculus
@@ -59,25 +59,24 @@ under the Borel calculus of `a`.
 The multiplication model identifies this subspace with `L²` of the scalar spectral
 measure of `ξ`, using `ContinuousLinearMap.norm_sq_borelCalculus_apply`. -/
 noncomputable def cyclicSubspace (ha : IsStarNormal a) (ξ : H) : Submodule ℂ H :=
-  (Submodule.span ℂ
-    {y : H | ∃ (f : spectrum ℂ a → ℂ) (hf : IsBddMeasurable f),
-      borelCalculus ha hf ξ = y}).topologicalClosure
+  letI := ha
+  (Submodule.span ℂ {y : H | ∃ f : BoundedBorelFunction (spectrum ℂ a),
+    a.borelCalculus f ξ = y}).topologicalClosure
 
 /-- Every value of the calculus at `ξ` lies in the cyclic subspace it generates. -/
 theorem borelCalculus_apply_mem_cyclicSubspace (ha : IsStarNormal a)
-    {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) (ξ : H) :
-    borelCalculus ha hf ξ ∈ cyclicSubspace ha ξ :=
+    (f : BoundedBorelFunction (spectrum ℂ a)) (ξ : H) :
+    haveI := ha
+    a.borelCalculus f ξ ∈ cyclicSubspace ha ξ :=
   (Submodule.span ℂ _).le_topologicalClosure
-    (Submodule.subset_span ⟨f, hf, rfl⟩)
+    (Submodule.subset_span ⟨f, rfl⟩)
 
 /-- The generating vector lies in its own cyclic subspace — the symbol is the constant
 one, whose calculus is the identity. -/
 theorem mem_cyclicSubspace_self (ha : IsStarNormal a) (ξ : H) :
     ξ ∈ cyclicSubspace ha ξ := by
-  have h1 : IsBddMeasurable (fun _ : spectrum ℂ a => (1 : ℂ)) :=
-    ⟨measurable_const, 1, zero_le_one, fun _ => by simp⟩
-  have hmem := borelCalculus_apply_mem_cyclicSubspace ha h1 ξ
-  rwa [borelCalculus_one ha h1, one_apply_eq_self] at hmem
+  have := ha
+  simpa only [map_one, one_apply_eq_self] using borelCalculus_apply_mem_cyclicSubspace ha 1 ξ
 
 /-- The cyclic subspace is closed, hence a complete space in its own right. -/
 theorem isClosed_cyclicSubspace (ha : IsStarNormal a) (ξ : H) :
@@ -93,12 +92,13 @@ instead of the definition body: the definition is a `topologicalClosure` of a `s
 Stated here so that consumers never unfold `cyclicSubspace`. -/
 theorem cyclicSubspace_le (ha : IsStarNormal a) {ξ : H} {S : Submodule ℂ H}
     (hS : IsClosed (S : Set H))
-    (h : ∀ (f : spectrum ℂ a → ℂ) (hf : IsBddMeasurable f), borelCalculus ha hf ξ ∈ S) :
+    (h : haveI := ha
+      ∀ f : BoundedBorelFunction (spectrum ℂ a), a.borelCalculus f ξ ∈ S) :
     cyclicSubspace ha ξ ≤ S := by
   refine Submodule.topologicalClosure_minimal _ ?_ hS
   rw [Submodule.span_le]
-  rintro y ⟨f, hf, rfl⟩
-  exact h f hf
+  rintro y ⟨f, rfl⟩
+  exact h f
 
 end BorelCalculus
 end TauCeti

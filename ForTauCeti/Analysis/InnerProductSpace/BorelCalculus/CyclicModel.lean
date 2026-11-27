@@ -138,7 +138,8 @@ theorem norm_symbolCalculus (ha : IsStarNormal a) (ξ : H)
   have hsq : ‖symbolCalculus ha ξ f‖ ^ 2 = ‖symbolToLp ha ξ f‖ ^ 2 := by
     have := ha
     rw [symbolCalculus_apply, norm_symbolToLp_sq]
-    simpa only [← a.spectralPVM_diag, spectralPVM_diag_eq_representation ha] using
+    simpa only [← a.spectralPVM_diag, a.spectralPVM_eq_ofRepresentation,
+      ProjValMeasure.ofRepresentation_diag] using
       a.norm_sq_borelCalculus_apply f ξ
   rw [← Real.sqrt_sq (norm_nonneg (symbolCalculus ha ξ f)),
     ← Real.sqrt_sq (norm_nonneg (symbolToLp ha ξ f)), hsq]
@@ -228,9 +229,7 @@ theorem cyclicIsometry_mem_cyclicSubspace (ha : IsStarNormal a) (ξ : H)
   refine (denseRange_symbolToLp ha ξ).induction_on F
     ((isClosed_cyclicSubspace ha ξ).preimage (cyclicIsometry ha ξ).continuous) fun f => ?_
   rw [cyclicIsometry_symbolToLp]
-  have h := borelCalculus_apply_mem_cyclicSubspace ha (.ofBoundedBorelFunction f) ξ
-  simpa only [borelCalculus_eq_native,
-    IsBddMeasurable.toBoundedBorelFunction_ofBoundedBorelFunction] using h
+  exact borelCalculus_apply_mem_cyclicSubspace ha f ξ
 
 /-- **The range of the cyclic isometry is the cyclic subspace.**
 
@@ -241,10 +240,8 @@ theorem range_cyclicIsometry (ha : IsStarNormal a) (ξ : H) :
   refine le_antisymm (fun y hy => ?_) ?_
   · obtain ⟨F, rfl⟩ := hy
     exact cyclicIsometry_mem_cyclicSubspace ha ξ F
-  · refine cyclicSubspace_le ha (isClosed_range_cyclicIsometry ha ξ) fun f hf => ?_
-    refine ⟨symbolToLp ha ξ hf.toBoundedBorelFunction, ?_⟩
-    rw [borelCalculus_eq_native]
-    exact cyclicIsometry_symbolToLp ha ξ hf.toBoundedBorelFunction
+  · refine cyclicSubspace_le ha (isClosed_range_cyclicIsometry ha ξ) fun f =>
+    ⟨symbolToLp ha ξ f, cyclicIsometry_symbolToLp ha ξ f⟩
 
 end Isometry
 
@@ -276,16 +273,16 @@ section Multiplication
 /-- The complex coordinate as an essentially bounded class of the scalar spectral measure. -/
 noncomputable def spectrumCoordinateLp (ha : IsStarNormal a) (ξ : H) :
     Lp ℂ ∞ ((cfcHom ha).representationDiagMeasure ξ) :=
-  let h := isBddMeasurable_coord (a := a)
-  (memLp_top_of_bound h.measurable.aestronglyMeasurable h.chooseBound
-    (Filter.Eventually.of_forall h.norm_le_chooseBound)).toLp (fun w : spectrum ℂ a => (w : ℂ))
+  let f := BoundedBorelFunction.ofContinuousMap ((ContinuousMap.id ℂ).restrict (spectrum ℂ a))
+  (memLp_top_of_bound f.measurable.aestronglyMeasurable ‖f‖
+    (Filter.Eventually.of_forall (BoundedBorelFunction.norm_coe_le_norm f))).toLp f
 
 /-- The spectral coordinate represents the pointwise inclusion almost everywhere. -/
 theorem coeFn_spectrumCoordinateLp (ha : IsStarNormal a) (ξ : H) :
     (spectrumCoordinateLp ha ξ : spectrum ℂ a → ℂ) =ᵐ[(cfcHom ha).representationDiagMeasure ξ]
       fun w => (w : ℂ) := by
   unfold spectrumCoordinateLp
-  exact MemLp.coeFn_toLp _
+  simpa using MemLp.coeFn_toLp _
 
 /-- The native multiplication operator for the spectral coordinate acts pointwise. -/
 theorem coeFn_spectrumCoordinateLp_multiplicationOperator (ha : IsStarNormal a) (ξ : H)

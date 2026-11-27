@@ -5,58 +5,29 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
-public import TauCeti.Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
-public import TauCeti.MeasureTheory.Function.ContinuousApproximation
-public import TauCeti.Analysis.InnerProductSpace.OperatorIdentities
+public import TauCeti.Analysis.InnerProductSpace.BorelCalculus.Basic
+public import TauCeti.Analysis.InnerProductSpace.BorelCalculus.Polarization
 
 /-!
-# Polarized diagonal integrals
+# Matrix elements of the bounded Borel calculus
 
-The four diagonal integrals in `pair` express matrix elements of the native
-Borel calculus. The explicit formula is used to transport those matrix
-elements under changes of representation and real conjugation.
+The native polarized pairing recovers all matrix elements from diagonal spectral integrals.
 -/
 
 public section
 
-open scoped InnerProductSpace ENNReal CompactlySupported
-open MeasureTheory
+open scoped InnerProductSpace
 
-attribute [local instance] IsStarNormal.instContinuousFunctionalCalculus
-
-namespace TauCeti
-namespace BorelCalculus
+namespace TauCeti.BorelCalculus
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-variable {a : H →L[ℂ] H}
 
-section Pair
+/-- The matrix elements of the native calculus are the polarized diagonal integrals. -/
+theorem inner_borelCalculus (a : H →L[ℂ] H) [IsStarNormal a]
+    (f : BoundedBorelFunction (spectrum ℂ a)) (ψ ξ : H) :
+    ⟪ψ, a.borelCalculus f ξ⟫_ℂ = a.pair f ψ ξ := by
+  rw [a.pair_def, ← a.inner_borelCalculus_self, ← a.inner_borelCalculus_self,
+    ← a.inner_borelCalculus_self, ← a.inner_borelCalculus_self]
+  exact (a.borelCalculus f).toLinearMap.inner_polarization ψ ξ |>.symm
 
-variable (ha : IsStarNormal a)
-
-/-- The **polarised diagonal integral** of a symbol at a pair of vectors.  For
-continuous symbols this is `⟪ψ, cfcHom f ξ⟫`; it is the blueprint for the
-matrix elements of the bounded Borel calculus. -/
-noncomputable def pair (f : spectrum ℂ a → ℂ) (ψ ξ : H) : ℂ :=
-  (1 / 4 : ℂ) *
-    ((∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ + ψ)))
-      + Complex.I * (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ + Complex.I • ψ)))
-      - (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ - ψ)))
-      - Complex.I * (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ - Complex.I • ψ))))
-
-/-- Rewrite form of `pair`, so call sites need not unfold the definition.
-
-Added 2026-07-30: `BorelCalculus/Operator` was doing `rw [pair]`, which requires the
-body to be exposed. Tau Ceti's `api-design` rubric asks for the lemma instead. -/
-theorem pair_def (f : spectrum ℂ a → ℂ) (ψ ξ : H) :
-    pair ha f ψ ξ = (1 / 4 : ℂ) *
-      ((∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ + ψ)))
-        + Complex.I * (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ + Complex.I • ψ)))
-        - (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ - ψ)))
-        - Complex.I * (∫ x, f x ∂((cfcHom ha).representationDiagMeasure (ξ - Complex.I • ψ)))) :=
-          (rfl)
-
-end Pair
-
-end BorelCalculus
-end TauCeti
+end TauCeti.BorelCalculus

@@ -220,24 +220,28 @@ variable {K : Submodule ℂ H}
 the calculus at the coordinate symbol. -/
 theorem IsCalculusInvariant.apply_mem {ha : IsStarNormal a} (hK : IsCalculusInvariant ha K)
     {x : H} (hx : x ∈ K) : a x ∈ K := by
-  have h := hK.borelCalculus_mem (isBddMeasurable_coord (a := a)) hx
-  rwa [borelCalculus_coord ha] at h
+  have := ha
+  have h := hK.borelCalculus_mem
+    (BoundedBorelFunction.ofContinuousMap ((ContinuousMap.id ℂ).restrict (spectrum ℂ a))) hx
+  rwa [a.borelCalculus_restrict_id] at h
 
 /-- A calculus-invariant subspace is invariant under `a⋆`: that is the value of the calculus at
 the conjugate of the coordinate symbol. -/
 theorem IsCalculusInvariant.star_apply_mem {ha : IsStarNormal a} (hK : IsCalculusInvariant ha K)
     {x : H} (hx : x ∈ K) : star a x ∈ K := by
-  have h := hK.borelCalculus_mem (isBddMeasurable_coord (a := a)).conj hx
-  rwa [borelCalculus_conj ha (isBddMeasurable_coord (a := a)), borelCalculus_coord ha,
-    ← ContinuousLinearMap.star_eq_adjoint] at h
+  have := ha
+  have h := hK.borelCalculus_mem
+    (star (BoundedBorelFunction.ofContinuousMap ((ContinuousMap.id ℂ).restrict (spectrum ℂ a)))) hx
+  rwa [map_star, a.borelCalculus_restrict_id] at h
 
 /-- A calculus-invariant subspace is invariant under every value of the *continuous* functional
 calculus, since those are values of the Borel calculus. -/
 theorem IsCalculusInvariant.cfcHom_apply_mem {ha : IsStarNormal a}
     (hK : IsCalculusInvariant ha K) (g : C(spectrum ℂ a, ℂ)) {x : H} (hx : x ∈ K) :
     cfcHom ha g x ∈ K := by
-  have h := hK.borelCalculus_mem (IsBddMeasurable.of_continuous g) hx
-  rwa [borelCalculus_of_continuous ha g (IsBddMeasurable.of_continuous g)] at h
+  have := ha
+  have h := hK.borelCalculus_mem (BoundedBorelFunction.ofContinuousMap g) hx
+  rwa [a.borelCalculus_ofContinuousMap] at h
 
 end Invariance
 
@@ -500,14 +504,6 @@ section BorelCompatibility
 
 variable {K : Submodule ℂ H} [CompleteSpace K]
 
-/-- Pulling a bounded measurable symbol back along the spectral inclusion keeps it admissible:
-measurability composes and the bound is unchanged. -/
-theorem IsBddMeasurable.comp_specIncl (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K)
-    {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) :
-    IsBddMeasurable (fun w : spectrum ℂ (compress K a) => f (specIncl ha hK w)) :=
-  ⟨hf.measurable.comp (measurable_specIncl ha hK), hf.chooseBound, hf.chooseBound_nonneg,
-    fun _ => hf.norm_le_chooseBound _⟩
-
 /-- **The compatibility law.**  For a bounded measurable symbol `f` on the spectrum of `a`, the
 Borel calculus of the restriction at the restricted symbol is the compression of the ambient
 Borel calculus at `f`.
@@ -516,33 +512,49 @@ Both sides are bounded operators on `K`, and a bounded operator on a complex Hil
 determined by its diagonal matrix elements; those are integrals against the diagonal measures,
 which correspond under `map_specIncl_diagMeasure`. -/
 theorem borelCalculus_compress (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K)
-    {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) :
-    borelCalculus (isStarNormal_compress ha hK) (hf.comp_specIncl ha hK)
-      = compress K (borelCalculus ha hf) := by
+    (f : BoundedBorelFunction (spectrum ℂ a)) :
+    haveI := ha
+    haveI := isStarNormal_compress ha hK
+    (compress K a).borelCalculus
+      (BoundedBorelFunction.compStarAlgHom' (specIncl ha hK) (measurable_specIncl ha hK) f)
+      = compress K (a.borelCalculus f) := by
+  have := ha
+  have := isStarNormal_compress ha hK
   refine op_ext_of_inner_self fun x => ?_
-  rw [inner_borelCalculus_self, inner_compress_self (fun _ hy => hK.borelCalculus_mem hf hy),
-    inner_borelCalculus_self, ← map_specIncl_diagMeasure ha hK x]
+  rw [(compress K a).inner_borelCalculus_self,
+    inner_compress_self (fun _ hy => hK.borelCalculus_mem f hy), a.inner_borelCalculus_self]
+  simp only [← ContinuousLinearMap.spectralPVM_diag,
+    ContinuousLinearMap.spectralPVM_eq_ofRepresentation, ProjValMeasure.ofRepresentation_diag,
+    BoundedBorelFunction.compStarAlgHom'_apply, ← map_specIncl_diagMeasure ha hK x]
   exact (integral_map (measurable_specIncl ha hK).aemeasurable
-    hf.measurable.aestronglyMeasurable).symm
+    f.measurable.aestronglyMeasurable).symm
 
 /-- **The compatibility law, at a vector.**  This is the form layer 4 uses: applying the
 restricted calculus to a vector of `K` and forgetting the subspace is applying the ambient
 calculus. -/
 theorem coe_borelCalculus_compress (ha : IsStarNormal a) (hK : IsCalculusInvariant ha K)
-    {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) (x : K) :
-    (borelCalculus (isStarNormal_compress ha hK) (hf.comp_specIncl ha hK) x : H)
-      = borelCalculus ha hf (x : H) := by
-  rw [borelCalculus_compress ha hK hf,
-    coe_compress_apply (fun _ hy => hK.borelCalculus_mem hf hy)]
+    (f : BoundedBorelFunction (spectrum ℂ a)) (x : K) :
+    haveI := ha
+    haveI := isStarNormal_compress ha hK
+    ((compress K a).borelCalculus
+      (BoundedBorelFunction.compStarAlgHom' (specIncl ha hK) (measurable_specIncl ha hK) f) x : H)
+      = a.borelCalculus f (x : H) := by
+  have := ha
+  have := isStarNormal_compress ha hK
+  rw [borelCalculus_compress ha hK f,
+    coe_compress_apply (fun _ hy => hK.borelCalculus_mem f hy)]
 
 /-- **The compatibility law, as an identity of operators `K →L[ℂ] H`.** -/
 theorem subtypeL_comp_borelCalculus_compress (ha : IsStarNormal a)
-    (hK : IsCalculusInvariant ha K) {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) :
-    K.subtypeL ∘L borelCalculus (isStarNormal_compress ha hK) (hf.comp_specIncl ha hK)
-      = borelCalculus ha hf ∘L K.subtypeL := by
+    (hK : IsCalculusInvariant ha K) (f : BoundedBorelFunction (spectrum ℂ a)) :
+    haveI := ha
+    haveI := isStarNormal_compress ha hK
+    K.subtypeL ∘L (compress K a).borelCalculus
+      (BoundedBorelFunction.compStarAlgHom' (specIncl ha hK) (measurable_specIncl ha hK) f)
+      = a.borelCalculus f ∘L K.subtypeL := by
   refine ContinuousLinearMap.ext fun x => ?_
   simp only [ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply]
-  exact coe_borelCalculus_compress ha hK hf x
+  exact coe_borelCalculus_compress ha hK f x
 
 end BorelCompatibility
 

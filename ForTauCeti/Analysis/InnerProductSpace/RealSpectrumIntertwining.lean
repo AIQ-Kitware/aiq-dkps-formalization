@@ -41,14 +41,14 @@ being continuous for the subspace topology. -/
 theorem measurable_realCoord : Measurable (fun x : spectrum ℝ a => ((x : ℝ) : ℂ)) :=
   (Complex.continuous_ofReal.comp continuous_subtypeVal).measurable
 
-/-- **The real coordinate is bounded by the complex coordinate's bound.**  A point of
-`spectrum ℝ a` is the real part of a point of `spectrum ℂ a`, and reading it back into `ℂ`
-returns that point, so the bound chosen for the complex coordinate serves unchanged.  Reusing
-the constant is what keeps the operator norm bound below identical to the complex one. -/
+/-- The real coordinate has the same bound as the complex coordinate. -/
 theorem norm_realCoord_le (ha : IsSelfAdjoint a) (x : spectrum ℝ a) :
-    ‖((x : ℝ) : ℂ)‖ ≤ (isBddMeasurable_coord (a := a)).chooseBound := by
+    ‖((x : ℝ) : ℂ)‖ ≤
+      ‖BoundedBorelFunction.ofContinuousMap ((ContinuousMap.id ℂ).restrict (spectrum ℂ a))‖ := by
   rw [← realSpectrumHomeomorph_symm_apply_coe ha x]
-  exact (isBddMeasurable_coord (a := a)).norm_le_chooseBound _
+  simpa using BoundedBorelFunction.norm_coe_le_norm
+    (BoundedBorelFunction.ofContinuousMap ((ContinuousMap.id ℂ).restrict (spectrum ℂ a)))
+    ((realSpectrumHomeomorph ha).symm x)
 
 end Symbol
 

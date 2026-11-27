@@ -133,18 +133,22 @@ include hg hgC in
 /-- **The bounded Borel calculus of a multiplication operator is multiplication by the composed
 symbol.**  Stated for an arbitrary symbol almost everywhere equal to `h ∘ g`, so call sites
 never match a composition syntactically. -/
-theorem borelCalculus_comp_val_mulLp {h : ℂ → ℂ} (hm : Measurable h) {C' : ℝ}
-    (hC : ∀ z, ‖h z‖ ≤ C') {h' : α → ℂ} (hm' : Measurable h') {C'' : ℝ}
+theorem borelCalculus_comp_val_mulLp (h : BoundedBorelFunction ℂ)
+    {h' : α → ℂ} (hm' : Measurable h') {C'' : ℝ}
     (hC' : ∀ x, ‖h' x‖ ≤ C'') (heq : ∀ᵐ x ∂ρ, h' x = h (g x)) :
-    borelCalculus (isStarNormal_mulLp ρ hg hgC) (isBddMeasurable_comp_val hm hC)
+    haveI := isStarNormal_mulLp ρ hg hgC
+    (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ hg hgC)).borelCalculus
+      (BoundedBorelFunction.compStarAlgHom' Subtype.val measurable_subtypeVal h)
       = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ hm' hC') := by
-  refine ContinuousLinearMap.ext fun ξ => ?_
-  refine ext_inner_left ℂ fun ψ => ?_
-  rw [inner_borelCalculus, pair_def]
-  have hint : ∀ F : Lp ℂ 2 ρ,
+  have := isStarNormal_mulLp ρ hg hgC
+  refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
+  simp only [inner_borelCalculus, ContinuousLinearMap.pair_def,
+    ← ContinuousLinearMap.spectralPVM_diag, ContinuousLinearMap.spectralPVM_eq_ofRepresentation,
+    ProjValMeasure.ofRepresentation_diag, BoundedBorelFunction.compStarAlgHom'_apply]
+  have hint (F : Lp ℂ 2 ρ) :
       ∫ w, h (w : ℂ) ∂((cfcHom (isStarNormal_mulLp ρ hg hgC)).representationDiagMeasure F)
-        = ⟪F, Lp.multiplicationOperator (boundedSymbolLp ρ hm' hC') F⟫_ℂ := fun F =>
-    integral_comp_val_diagMeasure_eq_inner_mulLp ρ hg hgC hm hm' hC' heq F
+        = ⟪F, Lp.multiplicationOperator (boundedSymbolLp ρ hm' hC') F⟫_ℂ :=
+    integral_comp_val_diagMeasure_eq_inner_mulLp ρ hg hgC h.measurable hm' hC' heq F
   rw [hint (ξ + ψ), hint (ξ + Complex.I • ψ), hint (ξ - ψ), hint (ξ - Complex.I • ψ)]
   exact _root_.LinearMap.inner_polarization (Lp.multiplicationOperator (E := ℂ) (p := 2)
     (boundedSymbolLp ρ hm' hC')) ψ ξ
@@ -156,10 +160,12 @@ theorem specProjC_mulLp {S : Set ℂ} (hS : MeasurableSet S) :
     specProjC (isStarNormal_mulLp ρ hg hgC) hS
       = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ ((measurable_indicator_one
         hS).comp hg) (fun x => norm_indicator_one_le (g x))) := by
+  have := isStarNormal_mulLp ρ hg hgC
   rw [specProjC_def]
-  exact borelCalculus_comp_val_mulLp ρ hg hgC (measurable_indicator_one hS)
-    norm_indicator_one_le ((measurable_indicator_one hS).comp hg)
-    (fun x => norm_indicator_one_le (g x)) (Filter.Eventually.of_forall fun x => rfl)
+  exact borelCalculus_comp_val_mulLp ρ hg hgC (BoundedBorelFunction.indicator S hS 1)
+    ((measurable_indicator_one hS).comp hg) (fun x => norm_indicator_one_le (g x))
+    (Filter.Eventually.of_forall fun x => by
+      by_cases hx : g x ∈ S <;> simp [hx])
 
 end BorelMulLp
 

@@ -40,9 +40,9 @@ Insisting on `ℕ` is what drags separability in, and nothing needs `ℕ`.
 ## The two mathematical steps
 
 1. **Invariance passes to the orthogonal complement.**  If `K` is invariant under every
-   `borelCalculus ha hf` then so is `Kᗮ`, because
+   `a.borelCalculus f` then so is `Kᗮ`, because
    `⟪x, f(a) η⟫ = ⟪f(a)⋆ x, η⟫ = ⟪f̄(a) x, η⟫ = 0` for `x ∈ K` — the calculus is
-   `⋆`-preserving (`borelCalculus_conj`) and `f̄(a) x` is back in `K`.  Consequently
+   `⋆`-preserving (`map_star`) and `f̄(a) x` is back in `K`.  Consequently
    `cyclicSubspace ha η ≤ Kᗮ` whenever `η ∈ Kᗮ`, by minimality of the cyclic subspace.
 2. **Maximality gives totality.**  Zorn produces a maximal set `S` of nonzero vectors with
    pairwise orthogonal cyclic subspaces.  If the closed span of those subspaces were not `⊤`,
@@ -102,16 +102,19 @@ maps it into itself.
 This is the hypothesis under which the orthogonal complement is again invariant, which is the
 step that makes a maximal orthogonal family of cyclic subspaces total. -/
 def IsCalculusInvariant (ha : IsStarNormal a) (K : Submodule ℂ H) : Prop :=
-  ∀ (f : spectrum ℂ a → ℂ) (hf : IsBddMeasurable f), ∀ x ∈ K, borelCalculus ha hf x ∈ K
+  letI := ha
+  ∀ f : BoundedBorelFunction (spectrum ℂ a), ∀ x ∈ K, a.borelCalculus f x ∈ K
 
 /-- Elimination form of `IsCalculusInvariant`, so a call site need not unfold the definition.
 
 The definition body is not exposed outside this module, so this is what a downstream consumer
 uses; `ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/Restriction.lean` is the first. -/
 theorem IsCalculusInvariant.borelCalculus_mem {ha : IsStarNormal a} {K : Submodule ℂ H}
-    (hK : IsCalculusInvariant ha K) {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) {x : H}
-    (hx : x ∈ K) : borelCalculus ha hf x ∈ K :=
-  hK f hf x hx
+    (hK : IsCalculusInvariant ha K) (f : BoundedBorelFunction (spectrum ℂ a)) {x : H}
+    (hx : x ∈ K) :
+    haveI := ha
+    a.borelCalculus f x ∈ K :=
+  hK f x hx
 
 /-- **A cyclic subspace is calculus-invariant.**
 
@@ -119,27 +122,26 @@ By minimality (`cyclicSubspace_le`) it suffices to check the calculus orbit of t
 vector, where the statement is multiplicativity: `f(a) (g(a) ξ) = (f g)(a) ξ`. -/
 theorem isCalculusInvariant_cyclicSubspace (ha : IsStarNormal a) (ξ : H) :
     IsCalculusInvariant ha (cyclicSubspace ha ξ) := by
-  intro f hf
+  have := ha
+  intro f
   have hle : cyclicSubspace ha ξ
-      ≤ Submodule.comap (borelCalculus ha hf).toLinearMap (cyclicSubspace ha ξ) := by
+      ≤ Submodule.comap (a.borelCalculus f).toLinearMap (cyclicSubspace ha ξ) := by
     refine cyclicSubspace_le ha
-      ((isClosed_cyclicSubspace ha ξ).preimage (borelCalculus ha hf).continuous) fun g hg => ?_
-    have hmul : borelCalculus ha (hf.mul hg) ξ
-        = borelCalculus ha hf (borelCalculus ha hg ξ) := by
-      rw [borelCalculus_mul ha hf hg, _root_.mul_apply_eq_comp]
-    change borelCalculus ha hf (borelCalculus ha hg ξ) ∈ cyclicSubspace ha ξ
-    rw [← hmul]
-    exact borelCalculus_apply_mem_cyclicSubspace ha (hf.mul hg) ξ
+      ((isClosed_cyclicSubspace ha ξ).preimage (a.borelCalculus f).continuous) fun g => ?_
+    change a.borelCalculus f (a.borelCalculus g ξ) ∈ cyclicSubspace ha ξ
+    rw [← _root_.mul_apply_eq_comp, ← map_mul]
+    exact borelCalculus_apply_mem_cyclicSubspace ha (f * g) ξ
   exact fun x hx => hle hx
 
 /-- A supremum of calculus-invariant submodules is calculus-invariant. -/
 theorem isCalculusInvariant_iSup {ha : IsStarNormal a} {ι : Type*} {K : ι → Submodule ℂ H}
     (hK : ∀ i, IsCalculusInvariant ha (K i)) : IsCalculusInvariant ha (⨆ i, K i) := by
-  intro f hf
-  have hle : (⨆ i, K i) ≤ Submodule.comap (borelCalculus ha hf).toLinearMap (⨆ i, K i) := by
+  have := ha
+  intro f
+  have hle : (⨆ i, K i) ≤ Submodule.comap (a.borelCalculus f).toLinearMap (⨆ i, K i) := by
     refine iSup_le fun i => ?_
     intro x hx
-    exact le_iSup K i (hK i f hf x hx)
+    exact le_iSup K i (hK i f x hx)
   exact fun x hx => hle hx
 
 /-- **The invariance lemma.**  The orthogonal complement of a calculus-invariant submodule is
@@ -150,13 +152,14 @@ The calculus is
 so the inner product vanishes for `η ∈ Kᗮ`. -/
 theorem IsCalculusInvariant.orthogonal {ha : IsStarNormal a} {K : Submodule ℂ H}
     (hK : IsCalculusInvariant ha K) : IsCalculusInvariant ha Kᗮ := by
-  intro f hf η hη
+  have := ha
+  intro f η hη
   rw [Submodule.mem_orthogonal]
   intro x hx
-  have hadj : ⟪x, borelCalculus ha hf η⟫_ℂ = ⟪borelCalculus ha hf.conj x, η⟫_ℂ := by
-    rw [borelCalculus_conj ha hf, ContinuousLinearMap.adjoint_inner_left]
+  have hadj : ⟪x, a.borelCalculus f η⟫_ℂ = ⟪a.borelCalculus (star f) x, η⟫_ℂ := by
+    rw [map_star, ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
   rw [hadj]
-  exact (Submodule.mem_orthogonal K η).mp hη _ (hK _ hf.conj x hx)
+  exact (Submodule.mem_orthogonal K η).mp hη _ (hK (star f) x hx)
 
 /-- **A vector of `Kᗮ` generates a cyclic subspace inside `Kᗮ`**, whenever `K` is
 calculus-invariant.
@@ -165,7 +168,7 @@ This is the invariance lemma followed by minimality of the cyclic subspace: `K�
 contains the whole calculus orbit of `η`. -/
 theorem cyclicSubspace_le_orthogonal {ha : IsStarNormal a} {K : Submodule ℂ H}
     (hK : IsCalculusInvariant ha K) {η : H} (hη : η ∈ Kᗮ) : cyclicSubspace ha η ≤ Kᗮ :=
-  cyclicSubspace_le ha K.isClosed_orthogonal fun f hf => hK.orthogonal f hf η hη
+  cyclicSubspace_le ha K.isClosed_orthogonal fun f => hK.orthogonal f η hη
 
 end Invariance
 

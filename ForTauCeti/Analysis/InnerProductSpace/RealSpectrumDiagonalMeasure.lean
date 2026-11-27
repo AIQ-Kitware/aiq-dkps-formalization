@@ -8,7 +8,7 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.RealSpectrumBorelSymbols
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.CyclicModel
 public import Mathlib.Dynamics.Ergodic.MeasurePreserving
-public import Mathlib.MeasureTheory.Function.LpSpace.Basic
+public import TauCeti.MeasureTheory.Function.Lp.CompMeasurePreserving.Equiv
 public import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
 /-!
@@ -41,23 +41,9 @@ realSpectrumDiagMeasureLpEquiv ha ξ :
   ha.isStarNormal).representationDiagMeasure ξ)
 ```
 
-Mathlib supplies `MeasureTheory.Lp.compMeasurePreservingₗᵢ` in each direction; what it does not
-supply is the equivalence, because `Lp.compMeasurePreserving_comp_apply` composes the two
-underlying maps into a composite whose *function argument* is `f ∘ f'` rather than `id`.  The
-private lemma `lp_compMeasurePreserving_eq_self_of_eq_id` closes exactly that gap, by
-substituting the function equality before appealing to
-`MeasureTheory.Lp.compMeasurePreserving_id_apply`; `MeasurePreserving` is a `Prop`, so the
-accompanying measure-preservation proof needs no transport.
-
-## What is deliberately not delivered
-
-Nothing here touches `BorelCalculus/`.  `cyclicIsometry` still lands in
-`Lp ℂ 2 ((cfcHom ha.isStarNormal).representationDiagMeasure ξ)`, and restating it over the real
-spectrum is a
-separate step: it is now the single composition
-`(cyclicIsometry ha.isStarNormal ξ).comp (realSpectrumDiagMeasureLpEquiv ha ξ).toLinearIsometry`,
-which has its own compile budget because `range_cyclicIsometry` is where the refuted
-lower-the-scalars route died.
+The equivalence uses Tau Ceti's `Lp.compMeasurePreservingₗᵢEquiv` on the homeomorphism
+and its inverse. The real cyclic model composes this equivalence with the complex cyclic
+isometry.
 
 ## Main results
 
@@ -79,12 +65,10 @@ lower-the-scalars route died.
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.); written here, new for
   this library.
-* Extraction class: **new**.  The pushforward and the measure-preservation statement are
-  immediate; the only assembled brick is the `Lp` equivalence, built from Mathlib's
-  `Lp.compMeasurePreservingₗᵢ` in both directions.
+* The original equivalence assembled the two Mathlib pullbacks and proved their inverse laws.
+  The native measure-preserving equivalence now supplies that construction.
 * Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026 Kitware, Inc.;
   Apache 2.0.
-* Spectra influence: **none** -- this module imports only Mathlib and `ForTauCeti`.
 -/
 
 public section
@@ -93,25 +77,6 @@ open MeasureTheory
 
 namespace TauCeti
 namespace BorelCalculus
-
-section LpHelper
-
-variable {α : Type*} [MeasurableSpace α] {μ : Measure α}
-
-/-- Composing an `L²` class with a measure-preserving self-map that is the identity function
-returns the class unchanged.
-
-`MeasureTheory.Lp.compMeasurePreserving_id_apply` states this only for the literal function
-`id`, and `MeasureTheory.Lp.compMeasurePreserving_comp_apply` produces a composite `f ∘ f'`
-instead.  Substituting the function equality is what bridges them; the measure-preservation
-argument needs no transport, `MeasurePreserving` being a `Prop`. -/
-private theorem lp_compMeasurePreserving_eq_self_of_eq_id (f : α → α)
-    (hmp : MeasurePreserving f μ μ) (hf : f = id) (F : Lp ℂ 2 μ) :
-    Lp.compMeasurePreserving f hmp F = F := by
-  subst hf
-  exact Lp.compMeasurePreserving_id_apply F
-
-end LpHelper
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 variable {a : H →L[ℂ] H}
@@ -196,44 +161,13 @@ end MeasurePreserving
 
 section LpTransport
 
-/-- **The `L²` transport, and the deliverable of this module.**
-
-Composition with `realSpectrumHomeomorph ha` is a `ℂ`-linear isometric equivalence from `L²`
-of the real-spectrum diagonal measure onto `L²` of the diagonal measure, with composition
-along the inverse homeomorphism as its inverse.  Both directions are
-`MeasureTheory.Lp.compMeasurePreservingₗᵢ`; what is proved here is that they invert each
-other, which is where the measure-preservation statement is used in both directions.
-
-With this in hand, restating the cyclic multiplication model over the real spectrum is the
-single composition of `cyclicIsometry` with this equivalence -- no further measure theory. -/
+/-- Pullback along the real-spectrum homeomorphism identifies the two spectral `L²` spaces. -/
 noncomputable def realSpectrumDiagMeasureLpEquiv (ha : IsSelfAdjoint a) (ξ : H) :
     Lp ℂ 2 (realSpectrumDiagMeasure ha ξ) ≃ₗᵢ[ℂ] Lp ℂ 2 ((cfcHom
-      ha.isStarNormal).representationDiagMeasure ξ) where
-  toLinearMap :=
-    Lp.compMeasurePreservingₗ ℂ (realSpectrumHomeomorph ha)
-      (measurePreserving_realSpectrumHomeomorph ha ξ)
-  invFun :=
-    Lp.compMeasurePreservingₗ ℂ (realSpectrumHomeomorph ha).symm
-      (measurePreserving_realSpectrumHomeomorph_symm ha ξ)
-  left_inv F := by
-    refine (Lp.compMeasurePreserving_comp_apply (E := ℂ) (p := 2) F
-      (measurePreserving_realSpectrumHomeomorph ha ξ)
-      (measurePreserving_realSpectrumHomeomorph_symm ha ξ)).symm.trans ?_
-    exact lp_compMeasurePreserving_eq_self_of_eq_id _ _
-      (funext fun x => (realSpectrumHomeomorph ha).apply_symm_apply x) F
-  right_inv F := by
-    refine (Lp.compMeasurePreserving_comp_apply (E := ℂ) (p := 2) F
-      (measurePreserving_realSpectrumHomeomorph_symm ha ξ)
-      (measurePreserving_realSpectrumHomeomorph ha ξ)).symm.trans ?_
-    exact lp_compMeasurePreserving_eq_self_of_eq_id _ _
-      (funext fun z => (realSpectrumHomeomorph ha).symm_apply_apply z) F
-  norm_map' := (Lp.norm_compMeasurePreserving · (measurePreserving_realSpectrumHomeomorph ha ξ))
-
-private theorem realSpectrumDiagMeasureLpEquiv_apply_aux (ha : IsSelfAdjoint a) (ξ : H)
-    (F : Lp ℂ 2 (realSpectrumDiagMeasure ha ξ)) :
-    realSpectrumDiagMeasureLpEquiv ha ξ F
-      = Lp.compMeasurePreserving (realSpectrumHomeomorph ha)
-          (measurePreserving_realSpectrumHomeomorph ha ξ) F := rfl
+      ha.isStarNormal).representationDiagMeasure ξ) :=
+  Lp.compMeasurePreservingₗᵢEquiv ℂ (measurePreserving_realSpectrumHomeomorph ha ξ)
+    (measurePreserving_realSpectrumHomeomorph_symm ha ξ)
+    (Filter.Eventually.of_forall fun x => (realSpectrumHomeomorph ha).apply_symm_apply x)
 
 /-- The equivalence is Mathlib's composition-with-a-measure-preserving-map, in the direction
 that reindexes a real-spectrum class into a complex-spectrum one. -/
@@ -242,13 +176,7 @@ theorem realSpectrumDiagMeasureLpEquiv_apply (ha : IsSelfAdjoint a) (ξ : H)
     realSpectrumDiagMeasureLpEquiv ha ξ F
       = Lp.compMeasurePreserving (realSpectrumHomeomorph ha)
           (measurePreserving_realSpectrumHomeomorph ha ξ) F :=
-  realSpectrumDiagMeasureLpEquiv_apply_aux ha ξ F
-
-private theorem realSpectrumDiagMeasureLpEquiv_symm_apply_aux (ha : IsSelfAdjoint a) (ξ : H)
-    (G : Lp ℂ 2 ((cfcHom ha.isStarNormal).representationDiagMeasure ξ)) :
-    (realSpectrumDiagMeasureLpEquiv ha ξ).symm G
-      = Lp.compMeasurePreserving (realSpectrumHomeomorph ha).symm
-          (measurePreserving_realSpectrumHomeomorph_symm ha ξ) G := rfl
+  Lp.compMeasurePreservingₗᵢEquiv_apply ℂ _ _ _ F
 
 /-- The inverse equivalence is composition with the inverse homeomorphism. -/
 theorem realSpectrumDiagMeasureLpEquiv_symm_apply (ha : IsSelfAdjoint a) (ξ : H)
@@ -256,7 +184,7 @@ theorem realSpectrumDiagMeasureLpEquiv_symm_apply (ha : IsSelfAdjoint a) (ξ : H
     (realSpectrumDiagMeasureLpEquiv ha ξ).symm G
       = Lp.compMeasurePreserving (realSpectrumHomeomorph ha).symm
           (measurePreserving_realSpectrumHomeomorph_symm ha ξ) G :=
-  realSpectrumDiagMeasureLpEquiv_symm_apply_aux ha ξ G
+  Lp.compMeasurePreservingₗᵢEquiv_symm_apply ℂ _ _ _ G
 
 /-- **The pointwise description of the transport.**  As a function on `spectrum ℂ a`, the
 image class is the original one read at the real part of the spectral point, almost everywhere

@@ -83,32 +83,32 @@ calculus-span of the `v i` as soon as every vector orthogonal to all their calcu
 orthogonal to it. -/
 theorem mem_closure_iSup_cyclicSubspace_of_forall_inner (ha : IsStarNormal a) {ι : Type*}
     (v : ι → H) {y : H}
-    (h : ∀ w : H,
-      (∀ (i : ι) (f : spectrum ℂ a → ℂ) (hf : IsBddMeasurable f),
-        ⟪borelCalculus ha hf (v i), w⟫_ℂ = 0) → ⟪w, y⟫_ℂ = 0) :
+    (h : haveI := ha
+      ∀ w : H, (∀ (i : ι) (f : BoundedBorelFunction (spectrum ℂ a)),
+        ⟪a.borelCalculus f (v i), w⟫_ℂ = 0) → ⟪w, y⟫_ℂ = 0) :
     y ∈ (⨆ i, cyclicSubspace ha (v i)).topologicalClosure := by
   rw [← Submodule.orthogonal_orthogonal_eq_closure, Submodule.mem_orthogonal]
   intro w hw
-  refine h w fun i f hf => ?_
+  refine h w fun i f => ?_
   exact (Submodule.mem_orthogonal _ w).mp hw _
     (le_iSup (fun i => cyclicSubspace ha (v i)) i
-      (borelCalculus_apply_mem_cyclicSubspace ha hf (v i)))
+      (borelCalculus_apply_mem_cyclicSubspace ha f (v i)))
 
 /-- A vector orthogonal to every calculus orbit of the `v i` is orthogonal to their closed
 calculus-span.  Converse companion to `mem_closure_iSup_cyclicSubspace_of_forall_inner`. -/
 theorem inner_eq_zero_of_mem_closure_iSup_cyclicSubspace (ha : IsStarNormal a) {ι : Type*}
     (v : ι → H) {w : H}
-    (hw : ∀ (i : ι) (f : spectrum ℂ a → ℂ) (hf : IsBddMeasurable f),
-      ⟪w, borelCalculus ha hf (v i)⟫_ℂ = 0)
+    (hw : haveI := ha
+      ∀ (i : ι) (f : BoundedBorelFunction (spectrum ℂ a)), ⟪w, a.borelCalculus f (v i)⟫_ℂ = 0)
     {x : H} (hx : x ∈ (⨆ i, cyclicSubspace ha (v i)).topologicalClosure) :
     ⟪w, x⟫_ℂ = 0 := by
   have hker : (⨆ i, cyclicSubspace ha (v i)).topologicalClosure
       ≤ LinearMap.ker ((innerSL ℂ w : H →L[ℂ] ℂ) : H →ₗ[ℂ] ℂ) := by
     refine Submodule.topologicalClosure_minimal _ (iSup_le fun i => ?_)
       (ContinuousLinearMap.isClosed_ker _)
-    refine cyclicSubspace_le ha (ContinuousLinearMap.isClosed_ker _) fun f hf => ?_
+    refine cyclicSubspace_le ha (ContinuousLinearMap.isClosed_ker _) fun f => ?_
     rw [LinearMap.mem_ker]
-    simpa using hw i f hf
+    simpa using hw i f
   have hmem := hker hx
   rw [LinearMap.mem_ker] at hmem
   simpa using hmem
@@ -321,10 +321,13 @@ theorem spectralGeneratedLE_mulLp_datumSymbol (E : MultiplicityDatum ℂ) {S : S
       have horbit : ⟪Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp E.measure (hm.comp
         (measurable_datumSymbol E)) (fun p => hC (datumSymbol E p)))
           (indicatorConstLp 2 (hAm j) (hAfin j) (1 : ℂ)), w⟫_ℂ = 0 := by
+        let F := BoundedBorelFunction.ofFunction h hm
+          ⟨|C|, abs_nonneg C, fun z => (hC z).trans (le_abs_self C)⟩
         rw [← borelCalculus_comp_val_mulLp E.measure (measurable_datumSymbol E)
-          (norm_datumSymbol_le E) hm hC (hm.comp (measurable_datumSymbol E))
-          (fun p => hC (datumSymbol E p)) (Filter.Eventually.of_forall fun p => rfl)]
-        exact hw j _ (isBddMeasurable_comp_val hm hC)
+          (norm_datumSymbol_le E) F (hm.comp (measurable_datumSymbol E))
+          (fun p => hC (datumSymbol E p)) (Filter.Eventually.of_forall fun p => by
+            simp only [F, BoundedBorelFunction.ofFunction_apply, Function.comp_apply])]
+        exact hw j (BoundedBorelFunction.compStarAlgHom' Subtype.val measurable_subtypeVal F)
       rw [inner_mulLp_comp_eq_tsum E hm hC _ w indicatorConstLp_coeFn hwb] at horbit
       rw [tsum_eq_single (j : ℕ) ?_] at horbit
       · rw [← horbit]
@@ -531,25 +534,24 @@ theorem not_spectralGeneratedLE_mulLp_datumSymbol (D : MultiplicityDatum ℂ) {S
     rw [lintegral_zero, hlint] at h1
     exact hpos h1
   -- The defect vector is orthogonal to every calculus orbit of the generators.
-  have horth : ∀ (i : Fin k)
-      (f : spectrum ℂ (Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp D.measure
-        (measurable_datumSymbol D) (norm_datumSymbol_le D))) → ℂ) (hf : IsBddMeasurable f),
-      ⟪w, borelCalculus (isStarNormal_mulLp D.measure (measurable_datumSymbol D)
-        (norm_datumSymbol_le D)) hf (v i)⟫_ℂ = 0 := by
-    intro i f hf
-    obtain ⟨h, hm, hC, hgeq⟩ := exists_comp_val_eq hf
-    have hfeq : f = fun ww : spectrum ℂ (Lp.multiplicationOperator (E := ℂ) (p := 2)
-      (boundedSymbolLp D.measure (measurable_datumSymbol D) (norm_datumSymbol_le D))) => h (ww : ℂ)
-      := funext hgeq
-    subst hfeq
-    have hbc : borelCalculus (isStarNormal_mulLp D.measure (measurable_datumSymbol D)
-        (norm_datumSymbol_le D)) hf (v i)
+  let M := Lp.multiplicationOperator (E := ℂ) (p := 2)
+    (boundedSymbolLp D.measure (measurable_datumSymbol D) (norm_datumSymbol_le D))
+  have : IsStarNormal M := isStarNormal_mulLp D.measure (measurable_datumSymbol D)
+    (norm_datumSymbol_le D)
+  have horth : ∀ (i : Fin k) (f : BoundedBorelFunction (spectrum ℂ M)),
+      ⟪w, M.borelCalculus f (v i)⟫_ℂ = 0 := by
+    intro i f
+    obtain ⟨h, hnorm, hfeq⟩ := exists_comp_val_eq f
+    have hm := h.measurable
+    have hC (z : ℂ) : ‖h z‖ ≤ ‖f‖ := (BoundedBorelFunction.norm_coe_le_norm h z).trans hnorm
+    have hbc : M.borelCalculus f (v i)
         = Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp D.measure (hm.comp
           (measurable_datumSymbol D)) (fun p => hC (datumSymbol D p))) (v i) := by
       have hlem := borelCalculus_comp_val_mulLp D.measure (measurable_datumSymbol D)
-        (norm_datumSymbol_le D) hm hC (hm.comp (measurable_datumSymbol D))
+        (norm_datumSymbol_le D) h (hm.comp (measurable_datumSymbol D))
         (fun p => hC (datumSymbol D p)) (Filter.Eventually.of_forall fun p => rfl)
-      exact congrArg (fun T : Lp ℂ 2 D.measure →L[ℂ] Lp ℂ 2 D.measure => T (v i)) hlem
+      exact (congrArg (fun f => M.borelCalculus f (v i)) hfeq).trans
+        (congrArg (fun T : Lp ℂ 2 D.measure →L[ℂ] Lp ℂ 2 D.measure => T (v i)) hlem)
     -- integrability of each slice term
     have hsecint : ∀ j : Fin (k + 1), Integrable
         (fun z => (starRingEnd ℂ) (h z * vb i (z, (j : ℕ))) * w₀ z j)
@@ -566,7 +568,7 @@ theorem not_spectralGeneratedLE_mulLp_datumSymbol (D : MultiplicityDatum ℂ) {S
         have := hsec.restrict (S ∩ D.level k)
         rwa [hrestr j] at this
       refine Integrable.mono' ((hsec'.integrable one_le_two).norm.const_mul
-        hf.chooseBound) ?_ (Filter.Eventually.of_forall fun z => ?_)
+        ‖f‖) ?_ (Filter.Eventually.of_forall fun z => ?_)
       · refine Measurable.aestronglyMeasurable ?_
         refine Measurable.mul ?_ ((hw₀m j).comp measurable_id)
         exact Complex.continuous_conj.measurable.comp
@@ -580,11 +582,11 @@ theorem not_spectralGeneratedLE_mulLp_datumSymbol (D : MultiplicityDatum ℂ) {S
               (fun i _ => by positivity) (Finset.mem_univ j)
           nlinarith [norm_nonneg (w₀ z j)]
         calc ‖h z‖ * ‖vb i (z, (j : ℕ))‖ * ‖w₀ z j‖
-            ≤ hf.chooseBound * ‖vb i (z, (j : ℕ))‖ * 1 := by
+            ≤ ‖f‖ * ‖vb i (z, (j : ℕ))‖ * 1 := by
               refine mul_le_mul (mul_le_mul_of_nonneg_right (hC z) (norm_nonneg _))
                 hw₀le (norm_nonneg _) ?_
-              exact mul_nonneg hf.chooseBound_nonneg (norm_nonneg _)
-          _ = hf.chooseBound * ‖vb i (z, (j : ℕ))‖ := by ring
+              exact mul_nonneg (norm_nonneg f) (norm_nonneg _)
+          _ = ‖f‖ * ‖vb i (z, (j : ℕ))‖ := by ring
     -- the slice sum vanishes by the pointwise kernel property
     have htsum : (∑' n, ∫ z, (starRingEnd ℂ) (h z * vb i (z, n)) * W (z, n)
         ∂(D.base.restrict (D.level n))) = 0 := by

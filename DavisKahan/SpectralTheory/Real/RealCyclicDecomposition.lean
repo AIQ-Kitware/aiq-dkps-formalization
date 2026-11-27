@@ -108,12 +108,11 @@ conjugation permutes the four polarisation vectors `ξ ± ψ`, `ξ ± i ψ` amon
 diagonal measures are conjugation invariant, and `integral_conj` moves the outer conjugation
 onto the symbol. -/
 theorem conjugateOperator_borelCalculus (hT : IsSelfAdjoint T)
-    {f : _root_.spectrum ℂ (complexify T) → ℂ}
-    (hf : TauCeti.BorelCalculus.IsBddMeasurable f) :
-    conjugateOperator (TauCeti.BorelCalculus.borelCalculus
-        (isSelfAdjoint_complexify_bounded hT).isStarNormal hf)
-      = TauCeti.BorelCalculus.borelCalculus
-          (isSelfAdjoint_complexify_bounded hT).isStarNormal hf.conj := by
+    (f : BoundedBorelFunction (_root_.spectrum ℂ (complexify T))) :
+    haveI := (isSelfAdjoint_complexify_bounded hT).isStarNormal
+    conjugateOperator ((complexify T).borelCalculus f) =
+      (complexify T).borelCalculus (star f) := by
+  have := (isSelfAdjoint_complexify_bounded hT).isStarNormal
   refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
   rw [conjugateOperator_apply, inner_conjugation_right, ← inner_conj_symm,
     TauCeti.BorelCalculus.inner_borelCalculus, TauCeti.BorelCalculus.inner_borelCalculus]
@@ -127,10 +126,14 @@ theorem conjugateOperator_borelCalculus (hT : IsSelfAdjoint T)
       = conjugation (ξ + Complex.I • ψ) := by
     rw [map_add, conjugation_complex_smul, Complex.conj_I]
     module
-  simp only [TauCeti.BorelCalculus.pair_def, h1, h2, h3, h4,
-    diagMeasure_conjugation_complexify hT]
-  simp only [map_mul, map_sub, map_add, map_one, map_div₀, Complex.conj_I,
-    Complex.conj_ofNat, integral_conj]
+  have hconj (μ : Measure (_root_.spectrum ℂ (complexify T))) :
+      (∫ x, star (f x) ∂μ) = (starRingEnd ℂ) (∫ x, f x ∂μ) :=
+    integral_conj (f := fun x => f x)
+  simp only [ContinuousLinearMap.pair_def, ← ContinuousLinearMap.spectralPVM_diag,
+    ContinuousLinearMap.spectralPVM_eq_ofRepresentation, ProjValMeasure.ofRepresentation_diag,
+    BoundedBorelFunction.star_apply, h1, h2, h3, h4,
+    diagMeasure_conjugation_complexify hT, hconj]
+  simp only [map_mul, map_sub, map_add, map_one, map_div₀, Complex.conj_I, Complex.conj_ofNat]
   ring
 
 /-- **Pointwise conjugation equivariance at a conjugation-fixed vector.**
@@ -138,13 +141,12 @@ theorem conjugateOperator_borelCalculus (hT : IsSelfAdjoint T)
 If `conjugation ξ = ξ` then conjugating `f(A) ξ` gives `f̄(A) ξ` -- the vector stays put and only
 the symbol is conjugated.  This is the form the cyclic-subspace argument consumes. -/
 theorem conjugation_borelCalculus_of_fixed (hT : IsSelfAdjoint T)
-    {f : _root_.spectrum ℂ (complexify T) → ℂ}
-    (hf : TauCeti.BorelCalculus.IsBddMeasurable f) {ξ : Eℂ} (hξ : conjugation ξ = ξ) :
-    conjugation (TauCeti.BorelCalculus.borelCalculus
-        (isSelfAdjoint_complexify_bounded hT).isStarNormal hf ξ)
-      = TauCeti.BorelCalculus.borelCalculus
-          (isSelfAdjoint_complexify_bounded hT).isStarNormal hf.conj ξ := by
-  have h := congrArg (fun A : Eℂ →L[ℂ] Eℂ => A ξ) (conjugateOperator_borelCalculus hT hf)
+    (f : BoundedBorelFunction (_root_.spectrum ℂ (complexify T))) {ξ : Eℂ}
+    (hξ : conjugation ξ = ξ) :
+    haveI := (isSelfAdjoint_complexify_bounded hT).isStarNormal
+    conjugation ((complexify T).borelCalculus f ξ)
+      = (complexify T).borelCalculus (star f) ξ := by
+  have h := congrArg (fun A : Eℂ →L[ℂ] Eℂ => A ξ) (conjugateOperator_borelCalculus hT f)
   simpa [conjugateOperator_apply, hξ] using h
 
 end Equivariance
@@ -200,9 +202,9 @@ theorem conjugation_mem_cyclicSubspace (hT : IsSelfAdjoint T) {ξ : Eℂ}
         ≤ conjComap (TauCeti.BorelCalculus.cyclicSubspace
           (isSelfAdjoint_complexify_bounded hT).isStarNormal ξ) := by
     refine TauCeti.BorelCalculus.cyclicSubspace_le _
-      (isClosed_conjComap (TauCeti.BorelCalculus.isClosed_cyclicSubspace _ ξ)) fun f hf => ?_
-    rw [mem_conjComap, conjugation_borelCalculus_of_fixed hT hf hξ]
-    exact TauCeti.BorelCalculus.borelCalculus_apply_mem_cyclicSubspace _ hf.conj ξ
+      (isClosed_conjComap (TauCeti.BorelCalculus.isClosed_cyclicSubspace _ ξ)) fun f => ?_
+    rw [mem_conjComap, conjugation_borelCalculus_of_fixed hT f hξ]
+    exact TauCeti.BorelCalculus.borelCalculus_apply_mem_cyclicSubspace _ (star f) ξ
   exact hle hz
 
 end CyclicSubspace
@@ -251,16 +253,7 @@ theorem cyclicIsometry_star (hT : IsSelfAdjoint T) {ξ : Eℂ} (hξ : conjugatio
           (TauCeti.BorelCalculus.cyclicIsometry _ ξ).continuous)) fun f => ?_
   rw [star_symbolToLp, TauCeti.BorelCalculus.cyclicIsometry_symbolToLp,
     TauCeti.BorelCalculus.cyclicIsometry_symbolToLp]
-  let hf := TauCeti.BorelCalculus.IsBddMeasurable.ofBoundedBorelFunction f
-  have h := conjugation_borelCalculus_of_fixed hT hf hξ
-  have hstar : hf.conj.toBoundedBorelFunction = star f :=
-    BoundedBorelFunction.ext fun x => by
-      rw [TauCeti.BorelCalculus.IsBddMeasurable.toBoundedBorelFunction_apply,
-        BoundedBorelFunction.star_apply]
-      rfl
-  simpa only [TauCeti.BorelCalculus.borelCalculus_eq_native,
-    TauCeti.BorelCalculus.IsBddMeasurable.toBoundedBorelFunction_ofBoundedBorelFunction, hstar]
-    using h.symm
+  exact (conjugation_borelCalculus_of_fixed hT f hξ).symm
 
 end Equivariance2
 

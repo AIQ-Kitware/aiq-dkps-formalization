@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 module
 
+public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Polarization
 public import DavisKahan.SpectralTheory.PartialMap.Complexification
 public import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
 public import DavisKahan.SpectralTheory.Complexification.Subspace
@@ -306,7 +307,13 @@ theorem conjugateOperator_specProjection (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjo
     (Complex.measurable_inverseCayleyCoord.comp measurable_subtypeVal) hS
   set ind : _root_.spectrum ℂ ((PartialMapComplexification.complexify A).cayley) → ℂ :=
     (κ ⁻¹' S).indicator (fun _ => (1 : ℂ)) with hind
-  -- the four polarisation integrals are real
+  have := hU
+  have hInd (w : _root_.spectrum ℂ ((PartialMapComplexification.complexify A).cayley)) :
+      BoundedBorelFunction.indicator
+        ((fun w : _root_.spectrum ℂ ((PartialMapComplexification.complexify A).cayley) =>
+          Complex.inverseCayleyCoord (w : ℂ)) ⁻¹' S)
+        ((Complex.measurable_inverseCayleyCoord.comp measurable_subtypeVal) hS) 1 w = ind w := by
+    by_cases hw : Complex.inverseCayleyCoord (w : ℂ) ∈ S <;> simp [hind, hκ, hw]
   have hIreal : ∀ η : Eℂ,
       (starRingEnd ℂ) (∫ w, ind w ∂((cfcHom hU).representationDiagMeasure η))
         = ∫ w, ind w ∂((cfcHom hU).representationDiagMeasure η) := by
@@ -333,7 +340,9 @@ theorem conjugateOperator_specProjection (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjo
     module
   -- The `rw` chain this replaced listed `pair` twice and `diagMeasure_conjugation` four
   -- times, once per occurrence; `simp only` reaches them all in one pass.
-  simp only [TauCeti.BorelCalculus.pair_def, h1, h2, h3, h4, diagMeasure_conjugation A hA]
+  simp only [ContinuousLinearMap.pair_def, ← ContinuousLinearMap.spectralPVM_diag,
+    ContinuousLinearMap.spectralPVM_eq_ofRepresentation, TauCeti.ProjValMeasure.ofRepresentation_diag,
+    hInd, h1, h2, h3, h4, diagMeasure_conjugation A hA]
   have e1 := hIreal (ξ + ψ)
   have e2 := hIreal (ξ + Complex.I • ψ)
   have e3 := hIreal (ξ - ψ)
@@ -359,8 +368,8 @@ theorem conjugatePVM_spectralPVM
     have hC := PartialMapComplexification.isSelfAdjoint_complexify hA
     have := hC.isStarNormal_cayley
     rw [conjugatePVM_diag, hC.spectralPVM_eq_map, TauCeti.ProjValMeasure.map_diag,
-      TauCeti.ProjValMeasure.map_diag, TauCeti.BorelCalculus.spectralPVM_diag_eq_representation,
-      TauCeti.BorelCalculus.spectralPVM_diag_eq_representation]
+      TauCeti.ProjValMeasure.map_diag, ContinuousLinearMap.spectralPVM_eq_ofRepresentation]
+    simp only [TauCeti.ProjValMeasure.ofRepresentation_diag]
     exact congrArg (MeasureTheory.Measure.map fun
       w : _root_.spectrum ℂ (PartialMapComplexification.complexify A).cayley =>
         Complex.inverseCayleyCoord (w : ℂ))

@@ -137,6 +137,11 @@ theorem conjugateOperator_boundedPVM_proj (hT : IsSelfAdjoint T)
     TauCeti.BorelCalculus.measurable_reCoord (T := complexify T) hB
   set ind : _root_.spectrum ℂ (complexify T) → ℂ :=
     (κ ⁻¹' B).indicator (fun _ => (1 : ℂ)) with hind
+  have := hTc.isStarNormal
+  have hInd (w : _root_.spectrum ℂ (complexify T)) :
+      BoundedBorelFunction.indicator (TauCeti.BorelCalculus.reCoord ⁻¹' B)
+        (TauCeti.BorelCalculus.measurable_reCoord hB) 1 w = ind w := by
+    by_cases hw : TauCeti.BorelCalculus.reCoord w ∈ B <;> simp [hind, hκ, hw]
   -- the four polarisation integrals are real
   have hIreal : ∀ η : Eℂ,
       (starRingEnd ℂ) (∫ w, ind w ∂((cfcHom hTc.isStarNormal).representationDiagMeasure η))
@@ -158,7 +163,9 @@ theorem conjugateOperator_boundedPVM_proj (hT : IsSelfAdjoint T)
       = conjugation (ξ + Complex.I • ψ) := by
     rw [map_add, conjugation_complex_smul, Complex.conj_I]
     module
-  simp only [TauCeti.BorelCalculus.pair_def, h1, h2, h3, h4,
+  simp only [ContinuousLinearMap.pair_def, ← ContinuousLinearMap.spectralPVM_diag,
+    ContinuousLinearMap.spectralPVM_eq_ofRepresentation, TauCeti.ProjValMeasure.ofRepresentation_diag,
+    hInd, h1, h2, h3, h4,
     diagMeasure_conjugation_complexify hT]
   have e1 := hIreal (ξ + ψ)
   have e2 := hIreal (ξ + Complex.I • ψ)

@@ -60,14 +60,13 @@ theorem specProjection_def (B : Set ℝ) (hB : MeasurableSet B) :
 /-- A spectral projection is the calculus of the pulled-back indicator on the Cayley
 spectrum. This form is used in the conjugation arguments. -/
 theorem specProjection_eq_borelCalculus (B : Set ℝ) (hB : MeasurableSet B) :
-    specProjection hA B hB =
-      BorelCalculus.borelCalculus (hA.isStarNormal_cayley)
-        (BorelCalculus.isBddMeasurable_indicator (a := A.cayley)
-          ((Complex.measurable_inverseCayleyCoord.comp measurable_subtypeVal) hB)) := by
+    haveI := hA.isStarNormal_cayley
+    specProjection hA B hB = A.cayley.borelCalculus
+      (BoundedBorelFunction.indicator
+        ((fun w : spectrum ℂ A.cayley => Complex.inverseCayleyCoord (w : ℂ)) ⁻¹' B)
+        ((Complex.measurable_inverseCayleyCoord.comp measurable_subtypeVal) hB) 1) := by
   have := hA.isStarNormal_cayley
-  rw [specProjection_def, hA.spectralPVM_proj]
-  exact (BorelCalculus.borelCalculus_indicator_eq_proj hA.isStarNormal_cayley
-    ((Complex.measurable_inverseCayleyCoord.comp measurable_subtypeVal) hB)).symm
+  rw [specProjection_def, hA.spectralPVM_proj, A.cayley.borelCalculus_indicator]
 
 /-- Spectral projections preserve the domain. -/
 theorem specProjection_mem_domain (B : Set ℝ) (hB : MeasurableSet B) (x : A.domain) :
