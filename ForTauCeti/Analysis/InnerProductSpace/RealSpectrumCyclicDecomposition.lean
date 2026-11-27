@@ -174,7 +174,8 @@ theorem exists_countable_isHilbertSum_realSpectrumCoordMulLp
         (fun n => realSpectrumCyclicIsometry ha (ξ n)) ∧
       ∀ (n : ℕ) (F : Lp ℂ 2 (realSpectrumDiagMeasure ha (ξ n))),
         a (realSpectrumCyclicIsometry ha (ξ n) F)
-          = realSpectrumCyclicIsometry ha (ξ n) (realSpectrumCoordMulLp ha (ξ n) F) := by
+          = realSpectrumCyclicIsometry ha (ξ n)
+              (Lp.multiplicationOperator (realSpectrumCoordinateLp ha (ξ n)) F) := by
   obtain ⟨ξ, hsum⟩ := exists_countable_isHilbertSum_lp_realSpectrumDiagMeasure ha
   exact ⟨ξ, hsum, fun n F =>
     (realSpectrumCyclicIsometry_realSpectrumCoordMulLp ha (ξ n) F).symm⟩

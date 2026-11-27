@@ -1,5 +1,40 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 native spectral multiplication
+
+The real- and complex-spectrum cyclic models and the field-indexed
+multiplicity model now use `MeasureTheory.Lp.multiplicationOperator` on
+their bounded coordinate classes. The cyclic intertwining laws and the
+real/complex transport of the multiplicity model retain their original
+measure and scalar hypotheses. The accepted bounded multiplier came from
+David Roe's #17156 (Toeplitz T1, integration
+`de7eb9dbeb51adc2e4af516b39323ee9fbb3a661`). Chrisflav's #42114 generalized it
+to `1 ≤ p ≤ ∞` and supplied the maximal multiplier, the bridge to bounded
+multiplication, and the essential-range spectrum (UO-A07/A08, integration
+`a2b67ea6712e1b6d8e50830aaedb776b5cace143`).
+[PR #17156](https://github.com/TauCetiProject/TauCeti/pull/17156) ·
+[PR #42114](https://github.com/TauCetiProject/TauCeti/pull/42114)
+
+DKPS identifies the bounded operator's spectrum with the support of the
+pushforward measure by composing the native maximal-multiplication bridge,
+its spectrum formula, and the spectrum comparison for a total partial map.
+The almost-everywhere spectrum membership used by the functional calculus
+follows from Mathlib's support theorem. This retires the inverse estimate
+and indicator-vector contradiction. The general complex `mulLp` entry point
+now delegates to the native operator and still serves the older algebra and
+measure-transport statements.
+
+Original DKPS sources are `2696f12ce`, `b5ef92d27`, `df351cd5d`, `c809e2a61`
+and `c30d516d3` (Jon Crall, Claude Fable 5 and Claude Opus 5 as credited in the
+respective modules, Kitware 2026, Apache-2.0). The upstream contribution
+uses Mathlib's heterogeneous `Lp` multiplication. Direct DKPS proof descent
+is unestablished. The pin remains `dde09e0dcec0e44e75739723bb2ba5baae6ae417`.
+
+The focused build (9601 jobs), full build (22672 jobs), and combined
+Challenge and result semantic-surface audit (22382 jobs) passed without
+warnings. The declaration-name comparison found the same 49 findings
+before and after this migration.
+
 ## November 27 native trace for nuclear transport
 
 DKPS now pins TauCeti `dde09e0dcec0e44e75739723bb2ba5baae6ae417` with

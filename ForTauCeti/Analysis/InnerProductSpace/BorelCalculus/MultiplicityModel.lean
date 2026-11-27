@@ -138,90 +138,19 @@ a consumer in another module cannot reach this by unfolding. -/
 
 end Coord
 
-section FieldMultiplication
+/-- The truncated spectral coordinate as an `L∞` class for the model measure. -/
+@[expose] noncomputable def coordTruncLp (𝕜 : Type*) [RCLike 𝕜]
+    (ρ : Measure (ℂ × ℕ)) (R : ℝ) (hR : 0 ≤ R) : Lp 𝕜 ∞ ρ :=
+  (memLp_top_of_bound ((measurable_coordTruncField 𝕜 R).comp measurable_fst).aestronglyMeasurable
+    _ (Filter.Eventually.of_forall fun p => norm_coordTruncField_le 𝕜 hR p.1)).toLp
+    (coordTruncField 𝕜 R ∘ Prod.fst)
 
-variable {𝕜 α : Type*} [RCLike 𝕜] [MeasurableSpace α]
-
-/-- A uniformly bounded measurable `𝕜`-valued function multiplies `L²(𝕜)` into itself.
-
-This is intentionally local to the multiplicity model rather than a generalisation of the
-complex Radon--Nikodym API: field-indexing `MultiplicityDatum.operator` is a typing refactor,
-whereas a field-generic Radon--Nikodym unitary is separate mathematics. -/
-theorem memLp_two_mul_field (ρ : Measure α) {g : α → 𝕜} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp 𝕜 2 ρ) : MemLp (fun x => g x * F x) 2 ρ := by
-  refine MemLp.mono' ((Lp.memLp F).norm.const_mul C)
-    (hg.aestronglyMeasurable.mul (Lp.aestronglyMeasurable F)) ?_
-  filter_upwards with x
-  rw [norm_mul]
-  exact mul_le_mul_of_nonneg_right (hgC x) (norm_nonneg _)
-
-/-- The `L²` seminorm estimate for multiplication by a bounded `𝕜`-valued symbol. -/
-theorem eLpNorm_two_mul_field_le (ρ : Measure α) {g : α → 𝕜} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ x, ‖g x‖ ≤ C) (f : α → 𝕜) (hf : AEStronglyMeasurable f ρ) :
-    eLpNorm (fun x => g x * f x) 2 ρ ≤ ENNReal.ofReal |C| * eLpNorm f 2 ρ := by
-  have hle : eLpNorm (fun x => g x * f x) 2 ρ ≤
-      eLpNorm (((|C| : ℝ) : 𝕜) • f) 2 ρ := by
-    refine eLpNorm_mono_ae (hg.aestronglyMeasurable.mul hf)
-      (Filter.Eventually.of_forall fun x => ?_)
-    simp only [Pi.smul_apply, smul_eq_mul, norm_mul, RCLike.norm_ofReal, abs_abs]
-    exact mul_le_mul_of_nonneg_right ((hgC x).trans (le_abs_self C)) (norm_nonneg _)
-  rw [eLpNorm_const_smul] at hle
-  refine hle.trans_eq ?_
-  congr 1
-  rw [← ofReal_norm, RCLike.norm_ofReal, abs_abs]
-
-/-- The norm estimate that makes field-valued multiplication a bounded operator on `L²`. -/
-theorem norm_toLp_mul_field_le (ρ : Measure α) {g : α → 𝕜} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp 𝕜 2 ρ) :
-    ‖MemLp.toLp (fun x => g x * F x) (memLp_two_mul_field ρ hg hgC F)‖ ≤ |C| * ‖F‖ := by
-  rw [Lp.norm_toLp, Lp.norm_def, ← ENNReal.toReal_ofReal (abs_nonneg C), ← ENNReal.toReal_mul]
-  refine ENNReal.toReal_mono ?_
-    (eLpNorm_two_mul_field_le ρ hg hgC _ (Lp.aestronglyMeasurable F))
-  exact ENNReal.mul_ne_top ENNReal.ofReal_ne_top (Lp.eLpNorm_ne_top F)
-
-/-- Multiplication by a bounded measurable `𝕜`-valued function on `L²(𝕜)`. -/
-noncomputable def mulLpField (ρ : Measure α) {g : α → 𝕜} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ x, ‖g x‖ ≤ C) : Lp 𝕜 2 ρ →L[𝕜] Lp 𝕜 2 ρ :=
-  LinearMap.mkContinuous
-    { toFun := fun F => MemLp.toLp (fun x => g x * F x) (memLp_two_mul_field ρ hg hgC F)
-      map_add' := fun F G => by
-        rw [← MemLp.toLp_add (memLp_two_mul_field ρ hg hgC F)
-          (memLp_two_mul_field ρ hg hgC G)]
-        refine (MemLp.toLp_eq_toLp_iff _ _).2 ?_
-        filter_upwards [Lp.coeFn_add F G] with x hx
-        simp only [Pi.add_apply, hx]
-        ring
-      map_smul' := fun c F => by
-        rw [RingHom.id_apply, ← MemLp.toLp_const_smul c (memLp_two_mul_field ρ hg hgC F)]
-        refine (MemLp.toLp_eq_toLp_iff _ _).2 ?_
-        filter_upwards [Lp.coeFn_smul c F] with x hx
-        simp only [Pi.smul_apply, hx, smul_eq_mul]
-        ring }
-    |C| (norm_toLp_mul_field_le ρ hg hgC)
-
-/-- Field-valued multiplication, unfolded. -/
-theorem mulLpField_apply (ρ : Measure α) {g : α → 𝕜} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp 𝕜 2 ρ) :
-    mulLpField ρ hg hgC F =
-      MemLp.toLp (fun x => g x * F x) (memLp_two_mul_field ρ hg hgC F) := (rfl)
-
-/-- Field-valued multiplication is pointwise multiplication almost everywhere. -/
-theorem coeFn_mulLpField (ρ : Measure α) {g : α → 𝕜} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp 𝕜 2 ρ) :
-    (mulLpField ρ hg hgC F : α → 𝕜) =ᵐ[ρ] fun x => g x * F x := by
-  rw [mulLpField_apply]
-  exact MemLp.coeFn_toLp _
-
-/-- Field-valued multiplication depends on the symbol only almost everywhere.  The `mulLp`
-counterpart is `TauCeti.mulLp_congr_ae`. -/
-theorem mulLpField_congr_ae (ρ : Measure α) {g g' : α → 𝕜} (hg : Measurable g)
-    (hg' : Measurable g') {C C' : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C) (hgC' : ∀ x, ‖g' x‖ ≤ C')
-    (h : g =ᵐ[ρ] g') : mulLpField ρ hg hgC = mulLpField ρ hg' hgC' := by
-  refine ContinuousLinearMap.ext fun F => Lp.ext ?_
-  filter_upwards [coeFn_mulLpField ρ hg hgC F, coeFn_mulLpField ρ hg' hgC' F, h] with x h1 h2 h3
-  rw [h1, h2, h3]
-
-end FieldMultiplication
+/-- The native operator of the truncated coordinate acts by pointwise multiplication. -/
+theorem coeFn_coordTruncLp_multiplicationOperator (𝕜 : Type*) [RCLike 𝕜]
+    (ρ : Measure (ℂ × ℕ)) {R : ℝ} (hR : 0 ≤ R) (F : Lp 𝕜 2 ρ) :
+    (Lp.multiplicationOperator (coordTruncLp 𝕜 ρ R hR) F : ℂ × ℕ → 𝕜) =ᵐ[ρ]
+      fun p => coordTruncField 𝕜 R p.1 * F p :=
+  coeFn_multiplicationOperator_toLp _ F
 
 section Datum
 
@@ -376,14 +305,13 @@ The model measure still lives on `ℂ × ℕ`; field-indexing changes only the `
 value field of the coordinate multiplier. -/
 noncomputable def MultiplicityDatum.operator {𝕜 : Type*} [RCLike 𝕜]
     (D : MultiplicityDatum 𝕜) : Lp 𝕜 2 D.measure →L[𝕜] Lp 𝕜 2 D.measure :=
-  mulLpField D.measure ((measurable_coordTruncField 𝕜 D.bound).comp measurable_fst)
-    (fun p => norm_coordTruncField_le 𝕜 D.bound_nonneg p.1)
+  Lp.multiplicationOperator (coordTruncLp 𝕜 D.measure D.bound D.bound_nonneg)
 
 /-- The model operator, unfolded.  Stated so that consumers can rewrite with it without the
 definition having to be exposed. -/
 theorem MultiplicityDatum.operator_def {𝕜 : Type*} [RCLike 𝕜] (D : MultiplicityDatum 𝕜) :
-    D.operator = mulLpField D.measure ((measurable_coordTruncField 𝕜 D.bound).comp measurable_fst)
-      (fun p => norm_coordTruncField_le 𝕜 D.bound_nonneg p.1) := (rfl)
+    D.operator = Lp.multiplicationOperator (coordTruncLp 𝕜 D.measure D.bound D.bound_nonneg) :=
+  (rfl)
 
 /-- The field-indexed model operator is pointwise multiplication by the field-valued truncated
 spectral coordinate. -/
@@ -391,8 +319,7 @@ theorem MultiplicityDatum.coeFn_operator {𝕜 : Type*} [RCLike 𝕜]
     (D : MultiplicityDatum 𝕜) (F : Lp 𝕜 2 D.measure) :
     (D.operator F : ℂ × ℕ → 𝕜) =ᵐ[D.measure]
       fun p => coordTruncField 𝕜 D.bound p.1 * F p :=
-  coeFn_mulLpField D.measure ((measurable_coordTruncField 𝕜 D.bound).comp measurable_fst)
-    (fun p => norm_coordTruncField_le 𝕜 D.bound_nonneg p.1) F
+  coeFn_coordTruncLp_multiplicationOperator 𝕜 D.measure D.bound_nonneg F
 
 /-- The model measure lives where the coordinate is bounded by the datum's bound. -/
 theorem MultiplicityDatum.ae_norm_le_bound {𝕜 : Type*} [RCLike 𝕜]
@@ -467,11 +394,11 @@ Same reason as `starOperatorUnitaryEquiv_operator_of_mulLp_sliceSum`: neither
 `TauCeti.MultiplicityDatum.retype` is exposed, so outside this module the model `L²` space of
 `D.retype ℝ` is not visibly the model `L²` space of `D`.  Inside it, the two sides are the same
 term. -/
-theorem operatorUnitaryEquiv_retype_real_operator_of_mulLpField {E : Type*}
+theorem operatorUnitaryEquiv_retype_real_operator {E : Type*}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] {T : E →L[ℝ] E} (D : MultiplicityDatum ℂ)
-    (h : OperatorUnitaryEquiv T (mulLpField D.measure
-      ((measurable_coordTruncField ℝ D.bound).comp measurable_fst)
-      (fun p => norm_coordTruncField_le ℝ D.bound_nonneg p.1))) :
+    (h : OperatorUnitaryEquiv T
+      (Lp.multiplicationOperator (E := ℝ) (p := 2)
+        (coordTruncLp ℝ D.measure D.bound D.bound_nonneg))) :
     OperatorUnitaryEquiv T (D.retype ℝ).operator :=
   h
 
@@ -504,18 +431,16 @@ theorem operator_eq_mulLp_of_le {D : MultiplicityDatum ℂ} {R : ℝ} (hR : 0 �
   rw [Function.comp_apply, Function.comp_apply, coordTrunc_eq_self hp,
     coordTrunc_eq_self (hp.trans hle)]
 
-/-- **The model operator is multiplication by the coordinate truncated at any larger bound**, at
-any scalar field.  The `𝕜 = ℂ` case is `operator_eq_mulLp_of_le`, stated separately because that
-one lands in `mulLp` rather than `mulLpField`. -/
-theorem MultiplicityDatum.operator_eq_mulLpField_of_le {𝕜 : Type*} [RCLike 𝕜]
+/-- The model measure gives the same multiplication operator at every larger cutoff. -/
+theorem MultiplicityDatum.operator_eq_multiplicationOperator_of_le {𝕜 : Type*} [RCLike 𝕜]
     {D : MultiplicityDatum 𝕜} {R : ℝ} (hR : 0 ≤ R) (hle : D.bound ≤ R) :
-    D.operator = mulLpField D.measure ((measurable_coordTruncField 𝕜 R).comp measurable_fst)
-      (fun p => norm_coordTruncField_le 𝕜 hR p.1) := by
-  rw [MultiplicityDatum.operator_def]
-  refine mulLpField_congr_ae _ _ _ _ _ ?_
-  filter_upwards [D.ae_norm_le_bound] with p hp
-  simp only [Function.comp_apply, coordTruncField, coordTrunc_eq_self hp,
-    coordTrunc_eq_self (hp.trans hle)]
+    D.operator = Lp.multiplicationOperator (coordTruncLp 𝕜 D.measure R hR) := by
+  refine ContinuousLinearMap.ext fun F => Lp.ext ?_
+  filter_upwards [D.coeFn_operator F,
+    coeFn_coordTruncLp_multiplicationOperator 𝕜 D.measure hR F,
+    D.ae_norm_le_bound] with p h₁ h₂ hp
+  rw [h₁, h₂]
+  simp only [coordTruncField, coordTrunc_eq_self hp, coordTrunc_eq_self (hp.trans hle)]
 
 /-- **Data agreeing up to measure class and null sets have model measures in the same
 class.**
@@ -568,10 +493,11 @@ theorem mulLp_eq_coordMulLp (ha : IsStarNormal a) (ξ : H) {g : spectrum ℂ a �
     (hg : Measurable g) {C : ℝ} (hgC : ∀ w, ‖g w‖ ≤ C)
     (hgeq : ∀ w : spectrum ℂ a, g w = (w : ℂ)) (F : Lp ℂ 2 ((cfcHom ha).representationDiagMeasure
       ξ)) :
-    mulLp ((cfcHom ha).representationDiagMeasure ξ) hg hgC F = coordMulLp ha ξ F := by
+    mulLp ((cfcHom ha).representationDiagMeasure ξ) hg hgC F =
+      Lp.multiplicationOperator (spectrumCoordinateLp ha ξ) F := by
   refine Lp.ext ?_
-  filter_upwards [coeFn_mulLp ((cfcHom ha).representationDiagMeasure ξ) hg hgC F, coeFn_coordMulLp
-    ha ξ F] with w h1 h2
+  filter_upwards [coeFn_mulLp ((cfcHom ha).representationDiagMeasure ξ) hg hgC F,
+    coeFn_spectrumCoordinateLp_multiplicationOperator ha ξ F] with w h1 h2
   rw [h1, h2, hgeq w]
 
 /-- **Every bounded normal operator on a separable complex Hilbert space has a multiplicity
@@ -609,7 +535,8 @@ theorem exists_hasMultiplicityModel [TopologicalSpace.SeparableSpace H] (ha : Is
     intro n F
     have h1 : embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))
         (mulLp _ (measurable_coordTrunc (‖a‖)) (norm_coordTrunc_le hR0) F)
-        = coordMulLp ha (ξ n) (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n)) F) :=
+        = Lp.multiplicationOperator (spectrumCoordinateLp ha (ξ n))
+            (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n)) F) :=
       (embLpEquiv_mulLp hemb ((cfcHom ha).representationDiagMeasure (ξ n))
         (measurable_coordTrunc (‖a‖)) (norm_coordTrunc_le hR0) F).trans
         (mulLp_eq_coordMulLp ha (ξ n) _ _ (fun w => coordTrunc_eq_self (hspec w)) _)

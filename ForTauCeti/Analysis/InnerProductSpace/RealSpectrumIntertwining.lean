@@ -8,79 +8,23 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.RealSpectrumCyclicModel
 
 /-!
-# The intertwining law of the cyclic model, on the real spectrum
+# The intertwining law of the cyclic model on the real spectrum
 
-`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/CyclicModel.lean` proves the intertwining
-law `cyclicIsometry_coordMulLp`: the cyclic isometry carries multiplication by the **complex**
-coordinate on `L²(μ_ξ)` to the action of `a` on `H`.
-`ForTauCeti/Analysis/InnerProductSpace/RealSpectrumCyclicModel.lean` moved the isometry and its
-range to `spectrum ℝ a`, and deliberately left the intertwining law behind: over the real
-spectrum the natural operator is multiplication by the **real** coordinate
-`x ↦ (x : ℝ) : ℂ`, which is a different operator on the nose -- a different function, on a
-different domain, on a different `L²` space.  This module supplies that operator and proves the
-law for it.
-
-## What the transport actually costs
-
-Nothing beyond one pointwise identity.  Both coordinate multiplications are `MemLp.toLp` of a
-pointwise product, so the whole question is whether the two multipliers agree after transport,
-and they do: `realSpectrumHomeomorph` *is* the real-part map on the spectrum, and
-`coe_realSpectrumHomeomorph` says the real part of a point of the complex spectrum of a
-self-adjoint operator, read back into `ℂ`, is that point again.  So on the nose
-
-```text
-((realSpectrumHomeomorph ha z : ℝ) : ℂ) = (z : ℂ)
-```
-
-and the two multipliers are literally equal at every transported point -- no almost-everywhere
-argument on the multiplier, and no density argument.  The one measure-theoretic step is that an
-almost-everywhere identity for `realSpectrumDiagMeasure` pulls back to one for `diagMeasure`,
-which is `MeasurePreserving.quasiMeasurePreserving` applied to
-`measurePreserving_realSpectrumHomeomorph`.
-
-The boundedness data is reused rather than re-chosen: the real coordinate is the complex
-coordinate read through `(realSpectrumHomeomorph ha).symm`, so
-`(isBddMeasurable_coord (a := a)).chooseBound` bounds it too, and the operator norm bound is the
-same constant as in `BorelCalculus/CyclicModel.lean`.
-
-## Main results
-
-* `TauCeti.BorelCalculus.isRealSpectrumBddMeasurable_realCoord`: the real coordinate symbol is
-  admissible, with `measurable_realCoord` and `norm_realCoord_le` as its two halves.
-* `TauCeti.BorelCalculus.realSpectrumCoordMulLp`: **multiplication by the real coordinate**, as
-  a bounded operator on `Lp ℂ 2 (realSpectrumDiagMeasure ha ξ)`; the real-spectrum analogue of
-  `coordMulLp`, defined the same way, with `realSpectrumCoordMulLp_apply` and
-  `coeFn_realSpectrumCoordMulLp` as its characteristic equations.
-* `TauCeti.BorelCalculus.realSpectrumDiagMeasureLpEquiv_realSpectrumCoordMulLp`: **the two
-  coordinate multiplications agree after transport** -- the `L²` transport conjugates the real
-  one into the complex one.  This is the whole content of the mission.
-* `TauCeti.BorelCalculus.realSpectrumCyclicIsometry_realSpectrumCoordMulLp`: **the intertwining
-  law on the real spectrum**, and `realSpectrumCyclicIsometry_realSpectrumCoordMulLp_comp` its
-  operator form.
-* `TauCeti.BorelCalculus.apply_mem_cyclicSubspace_of_realSpectrum`: invariance of the cyclic
-  subspace, re-derived from the real-spectrum model alone.
-
-## What is deliberately not delivered
-
-Nothing here builds a multiplicity datum.  The cyclic *decomposition* and the field-indexed
-`MultiplicityDatum ℝ` are separate families: the latter still has `base : Measure ℂ`, so changing
-the spectral base to `Measure ℝ` is neither required nor supplied by this module.
+The coordinate classes in `L∞` give native multiplication operators on the real
+and complex models. The homeomorphism between the scalar spectra identifies the
+coordinate functions, and the corresponding `L²` equivalence carries the real
+multiplication operator to the complex one. This transports the cyclic
+intertwining law to the real spectrum.
 
 ## Provenance
 
-* Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.); written here, new for
-  this library.
-* Extraction class: **new**.  The definition mirrors `TauCeti.BorelCalculus.coordMulLp` field
-  for field; the transport lemma is `coe_realSpectrumHomeomorph` under
-  `coeFn_realSpectrumDiagMeasureLpEquiv`, and the law itself is then
-  `cyclicIsometry_coordMulLp` unchanged.
-* Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026 Kitware, Inc.;
-  Apache 2.0.
-* Spectra influence: **none** -- this module imports only Mathlib and `ForTauCeti`.
+The transport and intertwining arguments were developed in DKPS by Jon Crall
+and Claude Opus 5 (Kitware 2026, Apache-2.0).
 -/
 
 public section
 
+open scoped ENNReal
 open MeasureTheory
 
 namespace TauCeti
@@ -117,105 +61,28 @@ end Symbol
 
 section Multiplication
 
-/-- The real coordinate multiple of an `L²` class is again `L²`, because the real spectrum is
-bounded.  This is `memLp_coord_mul` with the real coordinate in place of the complex one. -/
-theorem memLp_realCoord_mul (ha : IsSelfAdjoint a) (ξ : H)
-    (F : Lp ℂ 2 (realSpectrumDiagMeasure ha ξ)) :
-    MemLp (fun x : spectrum ℝ a => ((x : ℝ) : ℂ) * F x) 2 (realSpectrumDiagMeasure ha ξ) := by
-  refine MemLp.mono' ((Lp.memLp F).norm.const_mul
-    (isBddMeasurable_coord (a := a)).chooseBound) ?_ ?_
-  · exact (measurable_realCoord (a := a)).aestronglyMeasurable.mul (Lp.aestronglyMeasurable F)
-  · filter_upwards with x
-    rw [norm_mul]
-    exact mul_le_mul_of_nonneg_right (norm_realCoord_le ha x) (norm_nonneg _)
+/-- The real coordinate, read in `ℂ`, as an essentially bounded spectral class. -/
+noncomputable def realSpectrumCoordinateLp (ha : IsSelfAdjoint a) (ξ : H) :
+    Lp ℂ ∞ (realSpectrumDiagMeasure ha ξ) :=
+  (memLp_top_of_bound (measurable_realCoord (a := a)).aestronglyMeasurable _
+    (Filter.Eventually.of_forall (norm_realCoord_le ha))).toLp
+    (fun x : spectrum ℝ a => ((x : ℝ) : ℂ))
 
-/-- **The bound that makes real coordinate multiplication a bounded operator.**  Squaring both
-sides turns it into `∫ ‖x F x‖² ≤ C² ∫ ‖F x‖²`, which is `integral_mono` against the uniform
-bound on the real coordinate.  The proof is `norm_toLp_coord_mul_le` with the real coordinate
-substituted; the constant is the same one. -/
-theorem norm_toLp_realCoord_mul_le (ha : IsSelfAdjoint a) (ξ : H)
-    (F : Lp ℂ 2 (realSpectrumDiagMeasure ha ξ)) :
-    ‖MemLp.toLp (fun x : spectrum ℝ a => ((x : ℝ) : ℂ) * F x) (memLp_realCoord_mul ha ξ F)‖
-      ≤ (isBddMeasurable_coord (a := a)).chooseBound * ‖F‖ := by
-  set C := (isBddMeasurable_coord (a := a)).chooseBound with hCdef
-  have hC0 : 0 ≤ C := (isBddMeasurable_coord (a := a)).chooseBound_nonneg
-  have hmeas : AEStronglyMeasurable (fun x : spectrum ℝ a => ((x : ℝ) : ℂ) * F x)
-      (realSpectrumDiagMeasure ha ξ) :=
-    (measurable_realCoord (a := a)).aestronglyMeasurable.mul (Lp.aestronglyMeasurable F)
-  have hint1 : Integrable (fun x : spectrum ℝ a => ‖((x : ℝ) : ℂ) * F x‖ ^ 2)
-      (realSpectrumDiagMeasure ha ξ) :=
-    (memLp_two_iff_integrable_sq_norm hmeas).mp (memLp_realCoord_mul ha ξ F)
-  have hint2 : Integrable
-      (fun x : spectrum ℝ a => ‖(F : spectrum ℝ a → ℂ) x‖ ^ 2) (realSpectrumDiagMeasure ha ξ) :=
-    (memLp_two_iff_integrable_sq_norm (Lp.aestronglyMeasurable F)).mp (Lp.memLp F)
-  have hsq : ‖MemLp.toLp (fun x : spectrum ℝ a => ((x : ℝ) : ℂ) * F x)
-      (memLp_realCoord_mul ha ξ F)‖ ^ 2 ≤ (C * ‖F‖) ^ 2 := by
-    rw [norm_toLp_two_sq]
-    calc ∫ x, ‖((x : ℝ) : ℂ) * F x‖ ^ 2 ∂(realSpectrumDiagMeasure ha ξ)
-        ≤ ∫ x, C ^ 2 * ‖(F : spectrum ℝ a → ℂ) x‖ ^ 2 ∂(realSpectrumDiagMeasure ha ξ) := by
-          refine integral_mono hint1 (hint2.const_mul _) fun x => ?_
-          rw [norm_mul, mul_pow]
-          have hx := norm_realCoord_le ha x
-          have hsqx : ‖((x : ℝ) : ℂ)‖ ^ 2 ≤ C ^ 2 := by
-            nlinarith [norm_nonneg (((x : ℝ) : ℂ))]
-          nlinarith [sq_nonneg ‖(F : spectrum ℝ a → ℂ) x‖]
-      _ = C ^ 2 * ∫ x, ‖(F : spectrum ℝ a → ℂ) x‖ ^ 2 ∂(realSpectrumDiagMeasure ha ξ) :=
-          integral_const_mul _ _
-      _ = (C * ‖F‖) ^ 2 := by rw [← norm_Lp_two_sq]; ring
-  nlinarith [norm_nonneg (MemLp.toLp (fun x : spectrum ℝ a => ((x : ℝ) : ℂ) * F x)
-    (memLp_realCoord_mul ha ξ F)), mul_nonneg hC0 (norm_nonneg F)]
-
-/-- **Multiplication by the real coordinate**, as a bounded operator on `L²` of the
-real-spectrum diagonal measure of `ξ`.
-
-This is the real-spectrum analogue of `TauCeti.BorelCalculus.coordMulLp`, built the same way:
-`LinearMap.mkContinuous` of the pointwise product, with the bound
-`(isBddMeasurable_coord (a := a)).chooseBound`.  It is *not* `coordMulLp` transported -- the
-multiplier is the real coordinate `x ↦ (x : ℝ) : ℂ` on `spectrum ℝ a`, a different function on
-a different domain.  That the two nevertheless correspond under the `L²` transport is
-`realSpectrumDiagMeasureLpEquiv_realSpectrumCoordMulLp`. -/
-noncomputable def realSpectrumCoordMulLp (ha : IsSelfAdjoint a) (ξ : H) :
-    Lp ℂ 2 (realSpectrumDiagMeasure ha ξ) →L[ℂ] Lp ℂ 2 (realSpectrumDiagMeasure ha ξ) :=
-  LinearMap.mkContinuous
-    { toFun := fun F => MemLp.toLp (fun x : spectrum ℝ a => ((x : ℝ) : ℂ) * F x)
-        (memLp_realCoord_mul ha ξ F)
-      map_add' := fun F G => by
-        rw [← MemLp.toLp_add (memLp_realCoord_mul ha ξ F) (memLp_realCoord_mul ha ξ G)]
-        refine (MemLp.toLp_eq_toLp_iff _ _).2 ?_
-        filter_upwards [Lp.coeFn_add F G] with x hx
-        simp only [Pi.add_apply, hx]
-        ring
-      map_smul' := fun c F => by
-        rw [RingHom.id_apply, ← MemLp.toLp_const_smul c (memLp_realCoord_mul ha ξ F)]
-        refine (MemLp.toLp_eq_toLp_iff _ _).2 ?_
-        filter_upwards [Lp.coeFn_smul c F] with x hx
-        simp only [Pi.smul_apply, hx, smul_eq_mul]
-        ring }
-    (isBddMeasurable_coord (a := a)).chooseBound (norm_toLp_realCoord_mul_le ha ξ)
-
-private theorem realSpectrumCoordMulLp_apply_aux (ha : IsSelfAdjoint a) (ξ : H)
-    (F : Lp ℂ 2 (realSpectrumDiagMeasure ha ξ)) :
-    realSpectrumCoordMulLp ha ξ F
-      = MemLp.toLp (fun x : spectrum ℝ a => ((x : ℝ) : ℂ) * F x)
-          (memLp_realCoord_mul ha ξ F) := rfl
-
-/-- Real coordinate multiplication, unfolded: the characteristic equation, so no consumer needs
-the body of the definition. -/
-theorem realSpectrumCoordMulLp_apply (ha : IsSelfAdjoint a) (ξ : H)
-    (F : Lp ℂ 2 (realSpectrumDiagMeasure ha ξ)) :
-    realSpectrumCoordMulLp ha ξ F
-      = MemLp.toLp (fun x : spectrum ℝ a => ((x : ℝ) : ℂ) * F x)
-          (memLp_realCoord_mul ha ξ F) :=
-  realSpectrumCoordMulLp_apply_aux ha ξ F
-
-/-- Real coordinate multiplication really is pointwise multiplication by the real coordinate,
-almost everywhere for the real-spectrum diagonal measure. -/
-theorem coeFn_realSpectrumCoordMulLp (ha : IsSelfAdjoint a) (ξ : H)
-    (F : Lp ℂ 2 (realSpectrumDiagMeasure ha ξ)) :
-    (realSpectrumCoordMulLp ha ξ F : spectrum ℝ a → ℂ)
-      =ᵐ[realSpectrumDiagMeasure ha ξ] fun x => ((x : ℝ) : ℂ) * F x := by
-  rw [realSpectrumCoordMulLp_apply]
+/-- The real spectral coordinate represents the pointwise inclusion almost everywhere. -/
+theorem coeFn_realSpectrumCoordinateLp (ha : IsSelfAdjoint a) (ξ : H) :
+    (realSpectrumCoordinateLp ha ξ : spectrum ℝ a → ℂ) =ᵐ[realSpectrumDiagMeasure ha ξ]
+      fun x => ((x : ℝ) : ℂ) := by
+  unfold realSpectrumCoordinateLp
   exact MemLp.coeFn_toLp _
+
+/-- The native multiplication operator for the real spectral coordinate acts pointwise. -/
+theorem coeFn_realSpectrumCoordinateLp_multiplicationOperator (ha : IsSelfAdjoint a) (ξ : H)
+    (F : Lp ℂ 2 (realSpectrumDiagMeasure ha ξ)) :
+    (Lp.multiplicationOperator (realSpectrumCoordinateLp ha ξ) F : spectrum ℝ a → ℂ)
+      =ᵐ[realSpectrumDiagMeasure ha ξ] fun x => ((x : ℝ) : ℂ) * F x := by
+  filter_upwards [Lp.multiplicationOperator_ae (realSpectrumCoordinateLp ha ξ) F,
+    coeFn_realSpectrumCoordinateLp ha ξ] with x hm hx
+  rw [hm, hx, smul_eq_mul]
 
 end Multiplication
 
@@ -235,13 +102,17 @@ that an almost-everywhere identity for the pushforward pulls back along the meas
 homeomorphism. -/
 theorem realSpectrumDiagMeasureLpEquiv_realSpectrumCoordMulLp (ha : IsSelfAdjoint a) (ξ : H)
     (F : Lp ℂ 2 (realSpectrumDiagMeasure ha ξ)) :
-    realSpectrumDiagMeasureLpEquiv ha ξ (realSpectrumCoordMulLp ha ξ F)
-      = coordMulLp ha.isStarNormal ξ (realSpectrumDiagMeasureLpEquiv ha ξ F) := by
+    realSpectrumDiagMeasureLpEquiv ha ξ
+        (Lp.multiplicationOperator (realSpectrumCoordinateLp ha ξ) F)
+      = Lp.multiplicationOperator (spectrumCoordinateLp ha.isStarNormal ξ)
+          (realSpectrumDiagMeasureLpEquiv ha ξ F) := by
   have hpull := (measurePreserving_realSpectrumHomeomorph ha ξ).quasiMeasurePreserving.ae_eq_comp
-    (coeFn_realSpectrumCoordMulLp ha ξ F)
+    (coeFn_realSpectrumCoordinateLp_multiplicationOperator ha ξ F)
   refine Lp.ext ?_
-  filter_upwards [coeFn_realSpectrumDiagMeasureLpEquiv ha ξ (realSpectrumCoordMulLp ha ξ F),
-    hpull, coeFn_coordMulLp ha.isStarNormal ξ (realSpectrumDiagMeasureLpEquiv ha ξ F),
+  filter_upwards [coeFn_realSpectrumDiagMeasureLpEquiv ha ξ
+    (Lp.multiplicationOperator (realSpectrumCoordinateLp ha ξ) F), hpull,
+    coeFn_spectrumCoordinateLp_multiplicationOperator ha.isStarNormal ξ
+      (realSpectrumDiagMeasureLpEquiv ha ξ F),
     coeFn_realSpectrumDiagMeasureLpEquiv ha ξ F] with z h1 h2 h3 h4
   simp only [Function.comp_apply] at h1 h2 h4
   rw [h1, h2, h3, h4, coe_realSpectrumHomeomorph ha z]
@@ -268,7 +139,7 @@ No density argument is re-run: the law is `cyclicIsometry_coordMulLp` composed w
 of multipliers. -/
 theorem realSpectrumCyclicIsometry_realSpectrumCoordMulLp (ha : IsSelfAdjoint a) (ξ : H)
     (F : Lp ℂ 2 (realSpectrumDiagMeasure ha ξ)) :
-    realSpectrumCyclicIsometry ha ξ (realSpectrumCoordMulLp ha ξ F)
+    realSpectrumCyclicIsometry ha ξ (Lp.multiplicationOperator (realSpectrumCoordinateLp ha ξ) F)
       = a (realSpectrumCyclicIsometry ha ξ F) := by
   rw [realSpectrumCyclicIsometry_apply, realSpectrumCyclicIsometry_apply,
     realSpectrumDiagMeasureLpEquiv_realSpectrumCoordMulLp]
@@ -279,7 +150,7 @@ continuous linear maps, which is the shape a consumer building a unitary equival
 consumes. -/
 theorem realSpectrumCyclicIsometry_realSpectrumCoordMulLp_comp (ha : IsSelfAdjoint a) (ξ : H) :
     (realSpectrumCyclicIsometry ha ξ).toContinuousLinearMap.comp
-        (realSpectrumCoordMulLp ha ξ)
+        (Lp.multiplicationOperator (realSpectrumCoordinateLp ha ξ))
       = a.comp (realSpectrumCyclicIsometry ha ξ).toContinuousLinearMap :=
   ContinuousLinearMap.ext (realSpectrumCyclicIsometry_realSpectrumCoordMulLp ha ξ)
 

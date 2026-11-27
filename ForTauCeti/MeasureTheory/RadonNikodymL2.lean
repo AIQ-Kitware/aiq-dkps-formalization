@@ -8,6 +8,7 @@ module
 public import Mathlib.MeasureTheory.Function.L2Space
 public import Mathlib.MeasureTheory.Function.SpecialFunctions.Basic
 public import Mathlib.MeasureTheory.Measure.Decomposition.RadonNikodym
+public import TauCeti.MeasureTheory.Function.Lp.Multiplication
 
 /-!
 # The Radon--Nikodym unitary between the `L²` spaces of equivalent measures
@@ -346,32 +347,26 @@ theorem norm_toLp_mul_le (ρ : Measure α) {g : α → ℂ} (hg : Measurable g) 
     (eLpNorm_two_mul_le ρ hg hgC _ (Lp.aestronglyMeasurable F))
   exact ENNReal.mul_ne_top ENNReal.ofReal_ne_top (Lp.eLpNorm_ne_top F)
 
-/-- **Multiplication by a bounded measurable function**, as a bounded operator on `L²`.
+/-- Applying the native multiplication operator of an essentially bounded representative
+is pointwise multiplication almost everywhere. -/
+theorem coeFn_multiplicationOperator_toLp {𝕜 : Type*} [NormedField 𝕜] {ρ : Measure α}
+    {g : α → 𝕜} (hg : MemLp g ∞ ρ) {p : ℝ≥0∞} [Fact (1 ≤ p)] (F : Lp 𝕜 p ρ) :
+    (Lp.multiplicationOperator (hg.toLp g) F : α → 𝕜) =ᵐ[ρ] fun x => g x * F x := by
+  filter_upwards [Lp.multiplicationOperator_ae (hg.toLp g) F, hg.coeFn_toLp] with x hm hx
+  rw [hm, hx, smul_eq_mul]
 
-This is the "multiplication operator" of the multiplication models of spectral multiplicity
-theory, for an arbitrary measure on an arbitrary measurable space. -/
-noncomputable def mulLp (ρ : Measure α) {g : α → ℂ} (hg : Measurable g) {C : ℝ}
+/-- Multiplication on `L²` by the `L∞` class of a bounded measurable representative. -/
+@[expose] noncomputable def mulLp (ρ : Measure α) {g : α → ℂ} (hg : Measurable g) {C : ℝ}
     (hgC : ∀ x, ‖g x‖ ≤ C) : Lp ℂ 2 ρ →L[ℂ] Lp ℂ 2 ρ :=
-  LinearMap.mkContinuous
-    { toFun := fun F => MemLp.toLp (fun x => g x * F x) (memLp_two_mul_complex ρ hg hgC F)
-      map_add' := fun F G => by
-        rw [← MemLp.toLp_add (memLp_two_mul_complex ρ hg hgC F) (memLp_two_mul_complex ρ hg hgC G)]
-        refine (MemLp.toLp_eq_toLp_iff _ _).2 ?_
-        filter_upwards [Lp.coeFn_add F G] with x hx
-        simp only [Pi.add_apply, hx]
-        ring
-      map_smul' := fun c F => by
-        rw [RingHom.id_apply, ← MemLp.toLp_const_smul c (memLp_two_mul_complex ρ hg hgC F)]
-        refine (MemLp.toLp_eq_toLp_iff _ _).2 ?_
-        filter_upwards [Lp.coeFn_smul c F] with x hx
-        simp only [Pi.smul_apply, hx, smul_eq_mul]
-        ring }
-    |C| (norm_toLp_mul_le ρ hg hgC)
+  Lp.multiplicationOperator
+    ((memLp_top_of_bound hg.aestronglyMeasurable C (Filter.Eventually.of_forall hgC)).toLp g)
 
 /-- The multiplication operator, unfolded. -/
 theorem mulLp_apply (ρ : Measure α) {g : α → ℂ} (hg : Measurable g) {C : ℝ}
     (hgC : ∀ x, ‖g x‖ ≤ C) (F : Lp ℂ 2 ρ) :
-    mulLp ρ hg hgC F = MemLp.toLp (fun x => g x * F x) (memLp_two_mul_complex ρ hg hgC F) := (rfl)
+    mulLp ρ hg hgC F = MemLp.toLp (fun x => g x * F x) (memLp_two_mul_complex ρ hg hgC F) := by
+  unfold mulLp
+  exact Lp.ext ((coeFn_multiplicationOperator_toLp _ F).trans (MemLp.coeFn_toLp _).symm)
 
 /-- The multiplication operator really is pointwise multiplication. -/
 theorem coeFn_mulLp (ρ : Measure α) {g : α → ℂ} (hg : Measurable g) {C : ℝ}

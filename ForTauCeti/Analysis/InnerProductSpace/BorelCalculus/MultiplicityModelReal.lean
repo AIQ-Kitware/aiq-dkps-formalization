@@ -155,8 +155,7 @@ where the symbol is real or the class vanishes.**
 This is the pointwise heart of the D1 verdict: `star` conjugates the symbol and leaves the
 `star`-fixed factor alone, so the two products agree iff the conjugated symbol does.  It is
 stated for an arbitrary `G` presented by a pointwise product so that it serves both
-`mulLpField` and `MultiplicityDatum.operator`, whose bodies the module system does not
-expose. -/
+`Lp.multiplicationOperator` and `MultiplicityDatum.operator` through their pointwise formulas. -/
 theorem star_eq_self_iff_of_coeFn_mul {g : α → ℂ} {F G : Lp ℂ 2 μ}
     (hG : (G : α → ℂ) =ᵐ[μ] fun x => g x * (F : α → ℂ) x) (hF : star F = F) :
     star G = G ↔ ∀ᵐ x ∂μ, conj (g x) * (F : α → ℂ) x = g x * (F : α → ℂ) x := by
@@ -178,12 +177,14 @@ theorem star_eq_self_iff_of_coeFn_mul {g : α → ℂ} {F G : Lp ℂ 2 μ}
       _ = g x * (F : α → ℂ) x := h3
       _ = (G : α → ℂ) x := h2.symm
 
-/-- The `mulLpField` specialization of `star_eq_self_iff_of_coeFn_mul`. -/
-theorem star_mulLpField_eq_self_iff (ρ : Measure α) {g : α → ℂ} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ x, ‖g x‖ ≤ C) {F : Lp ℂ 2 ρ} (hF : star F = F) :
-    star (mulLpField ρ hg hgC F) = mulLpField ρ hg hgC F ↔
-      ∀ᵐ x ∂ρ, conj (g x) * (F : α → ℂ) x = g x * (F : α → ℂ) x :=
-  star_eq_self_iff_of_coeFn_mul (coeFn_mulLpField ρ hg hgC F) hF
+/-- Multiplication of a fixed vector is fixed precisely when the conjugate symbol gives
+the same pointwise product almost everywhere. -/
+theorem star_multiplicationOperator_eq_self_iff (ρ : Measure α) (g : Lp ℂ ∞ ρ)
+    {F : Lp ℂ 2 ρ} (hF : star F = F) :
+    star (Lp.multiplicationOperator g F) = Lp.multiplicationOperator g F ↔
+      ∀ᵐ x ∂ρ, conj (g x) * (F : α → ℂ) x = g x * (F : α → ℂ) x := by
+  apply star_eq_self_iff_of_coeFn_mul _ hF
+  simpa only [smul_eq_mul] using Lp.multiplicationOperator_ae g F
 
 end StarMultiplication
 
@@ -332,17 +333,15 @@ What it does **not** say is that the complex operator *restricts*: the compressi
 restriction exactly when `MultiplicityDatum.StarFixedInvariant` holds, which by
 `MultiplicityDatum.starFixedInvariant_iff_base_im_eq_zero` is exactly reality of the base
 measure. -/
-theorem reLp_mulLpField_ofRealLp (ρ : Measure α) {g : α → ℂ} (hg : Measurable g) {C : ℝ}
-    (hgC : ∀ x, ‖g x‖ ≤ C) (f : Lp ℝ 2 ρ) :
-    reLp (mulLpField ρ hg hgC (ofRealLp f)) =
-      mulLpField ρ (𝕜 := ℝ) (Complex.measurable_re.comp hg)
-        (fun x => (RCLike.norm_re_le_norm (K := ℂ) (g x)).trans (hgC x)) f := by
+theorem reLp_multiplicationOperator_ofRealLp (ρ : Measure α) {g : α → ℂ}
+    (hg : MemLp g ∞ ρ) (hr : MemLp (fun x => (g x).re) ∞ ρ) (f : Lp ℝ 2 ρ) :
+    reLp (Lp.multiplicationOperator (hg.toLp g) (ofRealLp (K := ℂ) f)) =
+      Lp.multiplicationOperator (hr.toLp (fun x => (g x).re)) f := by
   refine Lp.ext ?_
-  filter_upwards [coeFn_reLp (mulLpField ρ hg hgC (ofRealLp f)),
-    coeFn_mulLpField ρ hg hgC (ofRealLp (K := ℂ) f),
+  filter_upwards [coeFn_reLp (Lp.multiplicationOperator (hg.toLp g) (ofRealLp (K := ℂ) f)),
+    coeFn_multiplicationOperator_toLp hg (ofRealLp (K := ℂ) f),
     coeFn_ofRealLp (K := ℂ) f,
-    coeFn_mulLpField ρ (𝕜 := ℝ) (Complex.measurable_re.comp hg)
-      (fun x => (RCLike.norm_re_le_norm (K := ℂ) (g x)).trans (hgC x)) f] with x h1 h2 h3 h4
+    coeFn_multiplicationOperator_toLp hr f] with x h1 h2 h3 h4
   rw [h1, h2, h3, h4]
   simp
 
@@ -369,19 +368,15 @@ pointwise, through `conj_coordTrunc_of_im_eq_zero`, at almost every point of the
 which is where `MultiplicityDatum.ae_fst_notMem` and `MultiplicityDatum.ae_norm_le_bound` enter. -/
 theorem MultiplicityDatum.operator_ofRealLp {D : MultiplicityDatum ℂ}
     (hbase : D.base {z : ℂ | z.im ≠ 0} = 0) (f : Lp ℝ 2 D.measure) :
-    D.operator (ofRealLp f) = ofRealLp (mulLpField D.measure
-      ((measurable_coordTruncField ℝ D.bound).comp measurable_fst)
-      (fun p => norm_coordTruncField_le ℝ D.bound_nonneg p.1) f) := by
+    D.operator (ofRealLp f) = ofRealLp
+      (Lp.multiplicationOperator (coordTruncLp ℝ D.measure D.bound D.bound_nonneg) f) := by
   refine Lp.ext ?_
   filter_upwards [D.coeFn_operator (ofRealLp f), coeFn_ofRealLp (K := ℂ) f,
-    coeFn_ofRealLp (K := ℂ) (mulLpField D.measure
-      ((measurable_coordTruncField ℝ D.bound).comp measurable_fst)
-      (fun p => norm_coordTruncField_le ℝ D.bound_nonneg p.1) f),
-    coeFn_mulLpField D.measure ((measurable_coordTruncField ℝ D.bound).comp measurable_fst)
-      (fun p => norm_coordTruncField_le ℝ D.bound_nonneg p.1) f,
+    coeFn_ofRealLp (K := ℂ)
+      (Lp.multiplicationOperator (coordTruncLp ℝ D.measure D.bound D.bound_nonneg) f),
+    coeFn_coordTruncLp_multiplicationOperator ℝ D.measure D.bound_nonneg f,
     D.ae_fst_notMem measurableSet_im_ne_zero hbase, D.ae_norm_le_bound] with q h1 h2 h3 h4 h5 h6
   rw [h1, h2, h3, h4]
-  simp only [Function.comp_apply]
   exact coordTruncField_complex_mul_ofReal h6 (not_not.mp h5) _
 
 /-- **A real model, read off a `star`-equivariant complex model.**
@@ -404,7 +399,7 @@ theorem operatorUnitaryEquiv_retype_real_of_starOperatorUnitaryEquiv {H : Type*}
     (hrjE : ∀ y, cH y = y → jE (rE y) = y) (hT : ∀ x, A (jE x) = jE (T x))
     (h : StarOperatorUnitaryEquiv cH star A D.operator) :
     OperatorUnitaryEquiv T (D.retype ℝ).operator := by
-  refine operatorUnitaryEquiv_retype_real_operator_of_mulLpField D ?_
+  refine operatorUnitaryEquiv_retype_real_operator D ?_
   exact operatorUnitaryEquiv_of_starOperatorUnitaryEquiv jE rE hjEadd hjEsmul hjEnorm hfixE
     hrjE hT (fun f => (ofRealLp f : Lp ℂ 2 D.measure)) reLp (fun f g => ofRealLp_add f g)
     (fun c f => ofRealLp_coe_smul c f) (fun f => norm_ofRealLp f) (fun f => star_ofRealLp f)
@@ -419,14 +414,15 @@ of the real classification run entirely inside the complex Radon--Nikodym theory
 Compare `MultiplicityDatum.operator_ofRealLp`, where the symbol is the complex coordinate and the
 statement is therefore conditional on the base measure being carried by the real axis. -/
 theorem mulLp_ofReal_ofRealLp {α : Type*} [MeasurableSpace α] (ρ : Measure α) {g : α → ℝ}
-    (hg : Measurable g) {C : ℝ} (hgC : ∀ x, ‖g x‖ ≤ C)
-    (hgC' : ∀ x, ‖((g x : ℝ) : ℂ)‖ ≤ C) (f : Lp ℝ 2 ρ) :
-    mulLp ρ (Complex.measurable_ofReal.comp hg) hgC' (ofRealLp f)
-      = ofRealLp (mulLpField ρ (𝕜 := ℝ) hg hgC f) := by
+    (hg : Measurable g) (hgLp : MemLp g ∞ ρ) {C : ℝ}
+    (hgC : ∀ x, ‖((g x : ℝ) : ℂ)‖ ≤ C) (f : Lp ℝ 2 ρ) :
+    mulLp ρ (Complex.measurable_ofReal.comp hg) hgC (ofRealLp f)
+      = ofRealLp (Lp.multiplicationOperator (hgLp.toLp g) f) := by
   refine Lp.ext ?_
-  filter_upwards [coeFn_mulLp ρ (Complex.measurable_ofReal.comp hg) hgC' (ofRealLp f),
-    coeFn_ofRealLp (K := ℂ) f, coeFn_ofRealLp (K := ℂ) (mulLpField ρ (𝕜 := ℝ) hg hgC f),
-    coeFn_mulLpField ρ (𝕜 := ℝ) hg hgC f] with x h1 h2 h3 h4
+  filter_upwards [coeFn_mulLp ρ (Complex.measurable_ofReal.comp hg) hgC (ofRealLp f),
+    coeFn_ofRealLp (K := ℂ) f,
+    coeFn_ofRealLp (K := ℂ) (Lp.multiplicationOperator (hgLp.toLp g) f),
+    coeFn_multiplicationOperator_toLp hgLp f] with x h1 h2 h3 h4
   rw [h1, h2, h3, h4]
   simp
 
@@ -462,8 +458,8 @@ theorem operatorUnitaryEquiv_of_measureEquiv_real {D E : MultiplicityDatum ℝ}
     intro p
     rw [Complex.norm_real]
     exact hgC p
-  rw [MultiplicityDatum.operator_eq_mulLpField_of_le (D := D) hR0 (le_max_left _ _),
-    MultiplicityDatum.operator_eq_mulLpField_of_le (D := E) hR0 (le_max_right _ _)]
+  rw [MultiplicityDatum.operator_eq_multiplicationOperator_of_le (D := D) hR0 (le_max_left _ _),
+    MultiplicityDatum.operator_eq_multiplicationOperator_of_le (D := E) hR0 (le_max_right _ _)]
   have hstar : StarOperatorUnitaryEquiv star star
       (mulLp D.measure (Complex.measurable_ofReal.comp hgmeas) hgC')
       (mulLp E.measure (Complex.measurable_ofReal.comp hgmeas) hgC') :=
@@ -474,10 +470,13 @@ theorem operatorUnitaryEquiv_of_measureEquiv_real {D E : MultiplicityDatum ℝ}
   exact operatorUnitaryEquiv_of_starOperatorUnitaryEquiv
     (fun f => (ofRealLp f : Lp ℂ 2 D.measure)) reLp ofRealLp_add ofRealLp_coe_smul norm_ofRealLp
     star_ofRealLp (fun _ hG => ofRealLp_reLp_of_star_eq_self hG)
-    (fun f => mulLp_ofReal_ofRealLp D.measure hgmeas hgC hgC' f)
+    (fun f => mulLp_ofReal_ofRealLp D.measure hgmeas
+      (memLp_top_of_bound hgmeas.aestronglyMeasurable _ (Filter.Eventually.of_forall hgC)) hgC' f)
     (fun f => (ofRealLp f : Lp ℂ 2 E.measure)) reLp ofRealLp_add ofRealLp_coe_smul norm_ofRealLp
     star_ofRealLp (fun _ hG => ofRealLp_reLp_of_star_eq_self hG)
-    (fun f => mulLp_ofReal_ofRealLp E.measure hgmeas hgC hgC' f) hstar
+    (fun f => mulLp_ofReal_ofRealLp E.measure hgmeas
+      (memLp_top_of_bound hgmeas.aestronglyMeasurable _ (Filter.Eventually.of_forall hgC)) hgC' f)
+    hstar
 
 end RealModel
 
@@ -549,7 +548,8 @@ theorem exists_hasMultiplicityModel_star [TopologicalSpace.SeparableSpace H]
     intro n F
     have h1 : embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n))
         (mulLp _ (measurable_coordTrunc (‖a‖)) (norm_coordTrunc_le hR0) F)
-        = coordMulLp ha (ξ n) (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n)) F) :=
+        = Lp.multiplicationOperator (spectrumCoordinateLp ha (ξ n))
+            (embLpEquiv hemb ((cfcHom ha).representationDiagMeasure (ξ n)) F) :=
       (embLpEquiv_mulLp hemb ((cfcHom ha).representationDiagMeasure (ξ n))
         (measurable_coordTrunc (‖a‖)) (norm_coordTrunc_le hR0) F).trans
         (mulLp_eq_coordMulLp ha (ξ n) _ _ (fun w => coordTrunc_eq_self (hspec w)) _)

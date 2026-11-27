@@ -7300,6 +7300,78 @@
       "accepted_head": "e1fe9c0a7087bb99bede1b87ed74ee6bc20ab14f",
       "status": "accepted-upstream-local-duplicates-retired",
       "migration_note": "November 27: The native product trace laws cover the finite-energy endomorphism scope through Hilbert–Schmidt membership. The Gram trace now supplies the equality and projected-defect proofs. Keep local Hilbert–Schmidt polarization and its rigidity criterion at their original scope. Direct proof descent is unestablished."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.CyclicModel",
+      "staging_modules": [
+        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.CyclicModel",
+        "ForTauCeti.Analysis.InnerProductSpace.RealSpectrumIntertwining",
+        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.MultiplicityModel",
+        "ForTauCeti.MeasureTheory.RadonNikodymL2"
+      ],
+      "source_declarations": [
+        "TauCeti.BorelCalculus.coordMulLp",
+        "memLp_coord_mul",
+        "norm_toLp_coord_mul_le",
+        "coordMulLp_apply",
+        "coeFn_coordMulLp",
+        "TauCeti.BorelCalculus.realSpectrumCoordMulLp",
+        "memLp_realCoord_mul",
+        "norm_toLp_realCoord_mul_le",
+        "realSpectrumCoordMulLp_apply_aux",
+        "realSpectrumCoordMulLp_apply",
+        "coeFn_realSpectrumCoordMulLp",
+        "TauCeti.mulLpField",
+        "memLp_two_mul_field",
+        "eLpNorm_two_mul_field_le",
+        "norm_toLp_mul_field_le",
+        "mulLpField_apply",
+        "coeFn_mulLpField",
+        "mulLpField_congr_ae",
+        "TauCeti.mulLp"
+      ],
+      "original_source_anchor": "2696f12ced322d46f1fb896c6132524d866f2768; b5ef92d27f1ae6f9c1e2af3c45d25c9747d74fd3; df351cd5dbad33c595bb3982aa22482d7e6c3ec8; c809e2a61660cd2ec592dbc638e3c0c98b3148a1.",
+      "authors_license": "Jon Crall, Claude Opus 5 and Claude Fable 5 as credited in the source headers; Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.MeasureTheory.Function.Lp.Multiplication",
+      "final_declarations": [
+        "MeasureTheory.Lp.multiplicationOperator",
+        "MeasureTheory.Lp.multiplicationOperator_ae"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/17156",
+      "integration": "de7eb9dbeb51adc2e4af516b39323ee9fbb3a661",
+      "roadmap_targets": [
+        "ToeplitzOperators T1 bounded multiplier"
+      ],
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "November 27: Cyclic and multiplicity models use the native operator directly on the L∞ classes of the spectral coordinate. Retained real transport, intertwining and arbitrary RCLike field hypotheses. The generic complex mulLp forwarding definition still serves the algebra and measure transport layer. #42114 generalized the upstream operator to 1 ≤ p ≤ ∞. Direct DKPS proof descent is unestablished."
+    },
+    {
+      "source_module": "ForTauCeti.MeasureTheory.MulLpSpectrum",
+      "source_declarations": [
+        "TauCeti.algebraMap_sub_mulLp",
+        "TauCeti.exists_measure_preimage_ball_eq_zero",
+        "TauCeti.ae_mem_spectrum_mulLp"
+      ],
+      "original_source_anchor": "c30d516d3ae25bd07eb5321a72f4f659436f4e12:ForTauCeti/MeasureTheory/MulLpSpectrum.lean",
+      "authors_license": "Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0.",
+      "final_tauceti_modules": [
+        "TauCeti.MeasureTheory.Function.Lp.MaximalMultiplication.Basic",
+        "TauCeti.MeasureTheory.Function.Lp.MaximalMultiplication.Spectrum"
+      ],
+      "final_declarations": [
+        "MeasureTheory.Lp.maximalMultiplication_coeFn_eq_multiplicationOperator",
+        "MeasureTheory.Lp.spectrum_maximalMultiplication",
+        "ContinuousLinearMap.spectrum_toPMap_top"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/42114",
+      "integration": "a2b67ea6712e1b6d8e50830aaedb776b5cace143",
+      "accepted_head": "c050446199c1b6c290e5376802f632432ebe4d63",
+      "roadmap_targets": [
+        "UO-A07",
+        "UO-A08"
+      ],
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "November 27: Replace the local off-spectrum estimate with the native maximal-multiplier essential-range formula and total-operator bridge. The downstream bounded spectrum is the support of the pushforward, giving the original almost-everywhere membership at σ-finite scope. No direct proof descent is established."
     }
   ],
   "current_consumption_pin": "dde09e0dcec0e44e75739723bb2ba5baae6ae417"
