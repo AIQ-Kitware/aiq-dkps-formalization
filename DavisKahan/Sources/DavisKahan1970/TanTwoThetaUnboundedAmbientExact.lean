@@ -275,29 +275,29 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
     (hA : IsSelfAdjoint A)
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
       A ⟨Z (x : G), hZdom x⟩ + B (Z (x : G)) = Z (A x) + Z (B (x : G)))
     (hUa : ∀ x : A.domain,
-      (x : G) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      (x : G) ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range →
       RCLike.re ⟪A x, (x : G)⟫_ℂ ≤ a * ‖(x : G)‖ ^ 2)
     (hUb : ∀ x : A.domain,
       (x : G) ∈
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
     IsUnit
-        ((TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock Z *
-          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock Z) ∧
+        ((((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).diagBlock Z *
+          (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).diagBlock Z) ∧
       N.Mem (unboundedReflectionTangent
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ∧
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) Z) ∧
       (b - a) * N.gauge (unboundedReflectionTangent
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ≤
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) Z) ≤
         2 * N.gauge B := by
   let U : Submodule ℂ G :=
-    TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic
+    ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range
   have hred : _root_.LinearPMap.IsReducing A U :=
     hA.isReducing_range_spectralPVM_proj (Set.Iic c) measurableSet_Iic
   have hgU : ∀ y ∈ U,
@@ -597,26 +597,26 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symm
     (hA : IsSelfAdjoint A)
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B)
     (hV : DavisKahan.ReflectionIntertwines A B V)
     (hUa : ∀ x : A.domain,
-      (x : G) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      (x : G) ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range →
       RCLike.re ⟪A x, (x : G)⟫_ℂ ≤ a * ‖(x : G)‖ ^ 2)
     (hUb : ∀ x : A.domain,
       (x : G) ∈
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
     IsUnit
-        ((TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock
+        ((((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).diagBlock
             (V.reflectionOperator) *
-          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock
+          (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).diagBlock
             (V.reflectionOperator)) ∧
       N.Mem (unboundedReflectionTangent
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)
         (V.reflectionOperator)) ∧
       (b - a) * N.gauge (unboundedReflectionTangent
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)
         (V.reflectionOperator)) ≤
         2 * N.gauge B :=
   tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex N hA hBsa hB
@@ -654,32 +654,32 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_complex
     (hA : IsSelfAdjoint A)
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B)
     (hV : DavisKahan.ReflectionIntertwines A B V)
     (hUa : ∀ x : A.domain,
-      (x : G) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      (x : G) ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range →
       RCLike.re ⟪A x, (x : G)⟫_ℂ ≤ a * ‖(x : G)‖ ^ 2)
     (hUb : ∀ x : A.domain,
       (x : G) ∈
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
     (∀ t ∈ spectrum ℝ (TauCeti.DavisKahan.Angle.angleOperatorC
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V),
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V),
         Real.cos (2 * t) ≠ 0) ∧
       N.Mem (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ∧
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V) ∧
       (b - a) * N.gauge (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V) ≤
         2 * N.gauge B := by
   obtain ⟨hunit, hmem, hle⟩ :=
     tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex N
       V hA hBsa hB hV hUa hUb
       hab hBmem
   have hcos := DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
-    (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V hunit
+    (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V hunit
   have hgauge := DavisKahan.extendedGauge_unboundedReflectionTangent_complex
-    (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V N hcos
+    (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V N hcos
   refine ⟨hcos, ?_, ?_⟩
   · unfold SymmetricNormingFunction.Mem at hmem ⊢
     rwa [← hgauge]
@@ -701,23 +701,23 @@ theorem tanTwoTheta_ambient_unbounded_normalizedUIN_complex
     (hA : IsSelfAdjoint A)
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B)
     (hV : DavisKahan.ReflectionIntertwines A B V)
     (hUa : ∀ x : A.domain,
-      (x : G) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      (x : G) ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range →
       RCLike.re ⟪A x, (x : G)⟫_ℂ ≤ a * ‖(x : G)‖ ^ 2)
     (hUb : ∀ x : A.domain,
       (x : G) ∈
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
     (∀ t ∈ spectrum ℝ (TauCeti.DavisKahan.Angle.angleOperatorC
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V),
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V),
         Real.cos (2 * t) ≠ 0) ∧
       N.Mem (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ∧
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V) ∧
       (b - a) * N.gauge (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V) ≤
         2 * N.gauge B := by
   obtain ⟨hcos, -, -⟩ :=
     tanTwoTheta_ambient_unbounded_symmetricNorming_complex

@@ -42,7 +42,7 @@ Two things genuinely had to be proved here.
 ## Why this is a sibling and not a generalization
 
 `spectraSpectralCutoff` cannot be generalized in place to `[RCLike 𝕜]`: it is
-literally `TauCeti.LinearPMap.specProjection`, and the spectral projection-valued
+a projection of `LinearPMap.spectralPVM`, and the spectral projection-valued
 measure it comes from is built from the Borel functional calculus of the Cayley
 transform, which exists only over `ℂ`.  The real construction is a *different*
 external theorem — the conjugation-fixedness of the complexified PVM — so this

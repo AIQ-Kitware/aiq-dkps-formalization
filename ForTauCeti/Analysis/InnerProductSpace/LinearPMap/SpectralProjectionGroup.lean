@@ -58,25 +58,25 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : Measu
 /-- A spectral projection commutes with the symmetric Yosida approximant, which
 is a linear combination of two resolvents. -/
 theorem specProjection_comm_yosidaApproxSym (n : ℕ+) :
-    Commute (specProjection hA B hB) (A.symmetricYosidaApproximation (n : ℝ)) := by
+    Commute ((A.spectralPVM hA).proj B hB) (A.symmetricYosidaApproximation (n : ℝ)) := by
   have him : (I * (n : ℂ)).im ≠ 0 := I_mul_pnat_im_ne_zero n
   have hnim : (-I * (n : ℂ)).im ≠ 0 := neg_I_mul_pnat_im_ne_zero n
   have hrootIn : (I * (n : ℂ)) ∈ _root_.LinearPMap.resolventSet A :=
     hA.mem_resolventSet_of_im_ne_zero him
   have hrootNegIn : (-I * (n : ℂ)) ∈ _root_.LinearPMap.resolventSet A :=
     hA.mem_resolventSet_of_im_ne_zero hnim
-  have h1 : Commute (specProjection hA B hB) (A.resolvent (I * (n : ℂ))) :=
-    by simpa only [specProjection_def] using hA.commute_spectralPVM_proj_resolvent B hB hrootIn
-  have h2 : Commute (specProjection hA B hB) (A.resolvent (-I * (n : ℂ))) :=
-    by simpa only [specProjection_def] using hA.commute_spectralPVM_proj_resolvent B hB hrootNegIn
+  have h1 : Commute ((A.spectralPVM hA).proj B hB) (A.resolvent (I * (n : ℂ))) :=
+    hA.commute_spectralPVM_proj_resolvent B hB hrootIn
+  have h2 : Commute ((A.spectralPVM hA).proj B hB) (A.resolvent (-I * (n : ℂ))) :=
+    hA.commute_spectralPVM_proj_resolvent B hB hrootNegIn
   rw [A.symmetricYosidaApproximation_def]
   push_cast
   exact (h1.add_right h2).smul_right (-((n : ℂ) ^ 2 / 2))
 
 /-- A spectral projection commutes with each native bounded Yosida flow. -/
 theorem specProjection_comm_yosidaFlow (n : ℕ+) (t : ℝ) (ψ : H) :
-    specProjection hA B hB (ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t ψ) =
-      ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t (specProjection hA B hB ψ) := by
+    (A.spectralPVM hA).proj B hB (ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t ψ) =
+      ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t ((A.spectralPVM hA).proj B hB ψ) := by
   rw [Semigroups.StronglyContinuousGroup.ofBoundedExp_apply]
   have h := (((specProjection_comm_yosidaApproxSym hA B hB n).smul_right I).smul_right
     (t : ℂ)).exp_right
@@ -86,20 +86,22 @@ theorem specProjection_comm_yosidaFlow (n : ℕ+) (t : ℝ) (ψ : H) :
 the bounded approximants survives the strong limit. -/
 @[simp]
 theorem specProjection_expLimit_apply (t : ℝ) (ψ : H) :
-    specProjection hA B hB (expLimit hA t ψ) = expLimit hA t (specProjection hA B hB ψ) := by
+    (A.spectralPVM hA).proj B hB (expLimit hA t ψ) = expLimit hA t
+        ((A.spectralPVM hA).proj B hB ψ) := by
   have hstep : ∀ n : ℕ+,
-      specProjection hA B hB (ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t ψ)
-        = ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t (specProjection hA B hB ψ) := by
+      (A.spectralPVM hA).proj B hB (ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t ψ)
+        = ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t
+            ((A.spectralPVM hA).proj B hB ψ) := by
     intro n
     exact specProjection_comm_yosidaFlow hA B hB n t ψ
-  have hleft : Tendsto (fun n : ℕ+ => specProjection hA B hB (ofBoundedExp
+  have hleft : Tendsto (fun n : ℕ+ => (A.spectralPVM hA).proj B hB (ofBoundedExp
     (A.symmetricYosidaApproximation (n : ℝ)) t ψ))
-      atTop (𝓝 (specProjection hA B hB (expLimit hA t ψ))) :=
-    ((specProjection hA B hB).continuous.tendsto _).comp (tendsto_expLimitFun hA t ψ)
+      atTop (𝓝 ((A.spectralPVM hA).proj B hB (expLimit hA t ψ))) :=
+    (((A.spectralPVM hA).proj B hB).continuous.tendsto _).comp (tendsto_expLimitFun hA t ψ)
   have hright : Tendsto (fun n : ℕ+ => ofBoundedExp (A.symmetricYosidaApproximation (n : ℝ)) t
-    (specProjection hA B hB ψ))
-      atTop (𝓝 (expLimit hA t (specProjection hA B hB ψ))) :=
-    tendsto_expLimitFun hA t (specProjection hA B hB ψ)
+    ((A.spectralPVM hA).proj B hB ψ))
+      atTop (𝓝 (expLimit hA t ((A.spectralPVM hA).proj B hB ψ))) :=
+    tendsto_expLimitFun hA t ((A.spectralPVM hA).proj B hB ψ)
   exact tendsto_nhds_unique (by simpa only [hstep] using hleft) hright
 
 end LinearPMap

@@ -73,8 +73,8 @@ identifications `(U.val.stoneGenerator U.property) = A` and `(V.val.stoneGenerat
 manufactured internally from `isSelfAdjoint_generator`.  That is deliberate: the
 consumer has a given `hA : IsSelfAdjoint A` and works with projections of `A`,
 and `isSelfAdjoint_generator U` proves a different proposition — equal only
-across `(U.val.stoneGenerator U.property) = A`.  Since `specProjection` takes the proof as an
-argument, manufacturing it here would push a dependent rewrite through every
+across `(U.val.stoneGenerator U.property) = A`. Since `LinearPMap.spectralPVM`
+takes the proof as an argument, manufacturing it here would push a dependent rewrite through every
 projection, domain membership and cut operator at the call site.  Taking it as a
 hypothesis does the transport once, here. -/
 theorem sylvester_block_identity
@@ -90,11 +90,11 @@ theorem sylvester_block_identity
     {MB alp rB : ℝ} (_hbndB : ∀ s ∈ SB, |s| ≤ MB) (hrB : 0 ≤ rB)
     (hcrB : ∀ s ∈ SB, |s - alp| ≤ rB)
     (z : ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property).domain)
-    (hZP : (TauCeti.LinearPMap.specProjection hA SA hSA).comp
+    (hZP : ((A.spectralPVM hA).proj SA hSA).comp
         (b.columnOperator (z : lp (fun _ : ι => E) 2)) =
         b.columnOperator (z : lp (fun _ : ι => E) 2))
     (hZQ : (b.columnOperator (z : lp (fun _ : ι => E) 2)).comp
-        (TauCeti.LinearPMap.specProjection hB SB hSB)
+        ((Bop.spectralPVM hB).proj SB hSB)
         = b.columnOperator (z : lp (fun _ : ι => E) 2)) :
     b.columnOperator ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property z)
         - ((lam : ℂ) - (alp : ℂ)) • b.columnOperator (z : lp (fun _ : ι => E) 2)
@@ -103,8 +103,8 @@ theorem sylvester_block_identity
         - (b.columnOperator (z : lp (fun _ : ι => E) 2)).comp
           (Bop.spectralCut hB SB hSB alp rB hrB hcrB) := by
   set Z := b.columnOperator (z : lp (fun _ : ι => E) 2) with hZ
-  set P := TauCeti.LinearPMap.specProjection hA SA hSA with hP
-  set Q := TauCeti.LinearPMap.specProjection hB SB hSB with hQ
+  set P := (A.spectralPVM hA).proj SA hSA with hP
+  set Q := (Bop.spectralPVM hB).proj SB hSB with hQ
   have hdomV : ((V.val.stoneGenerator V.property)).domain = Bop.domain := congrArg
         LinearPMap.domain hVB
   have hdense : Dense (((V.val.stoneGenerator V.property)).domain : Set F) := by
@@ -116,16 +116,18 @@ theorem sylvester_block_identity
   have hx' : x ∈ Bop.domain := (le_of_eq hdomV) hx
   obtain ⟨hmem, heq⟩ := generator_sylvesterGroup_apply U V b z ⟨x, hx⟩
   -- the left factor
-  have hZx : Z x ∈ TauCeti.LinearPMap.specRange hA SA hSA := by
-    rw [TauCeti.LinearPMap.mem_specRange_iff]
+  have hZx : Z x ∈ ((A.spectralPVM hA).proj SA hSA).range := by
+    rw [← Submodule.starProjection_eq_self_iff, ProjValMeasure.starProjection_range_proj]
     have := congrArg (fun T : F →L[ℂ] E => T x) hZP
     simpa [hP] using this
   have hZxdom : Z x ∈ A.domain :=
     TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded hA SA hSA hbndA hZx
   have hcutA := hA.mem_graph_spectralCut SA hSA lam rA hrA hcrA (Z x)
   have hfixA : (A.spectralPVM hA).proj SA hSA (Z x) = Z x := by
-    simpa only [← TauCeti.LinearPMap.specProjection_def] using
-      (TauCeti.LinearPMap.mem_specRange_iff hA SA hSA (Z x)).mp hZx
+    exact
+      (LinearMap.IsIdempotentElem.mem_range_iff
+      (ContinuousLinearMap.IsIdempotentElem.toLinearMap ((A.spectralPVM hA).proj_idem SA hSA))
+      (x := (Z x))).mp hZx
   rw [hfixA] at hcutA
   have hactA := A.mem_graph_snd_inj (A.mem_graph ⟨Z x, hZxdom⟩) hcutA rfl
   have hleft : A.spectralCut hA SA hSA lam rA hrA hcrA (Z x) =
@@ -137,19 +139,16 @@ theorem sylvester_block_identity
     (LinearPMap.ext_iff.mp hVB).2 (x := x) (hf := hx) (hg := hx')
   -- the right factor, valid at every vector
   have hcutB := hB.mem_graph_spectralCut SB hSB alp rB hrB hcrB x
-  have hQnative : Q = (Bop.spectralPVM hB).proj SB hSB :=
-    TauCeti.LinearPMap.specProjection_def hB SB hSB
-  rw [← hQnative] at hcutB
   have hQx : Q x ∈ Bop.domain := by
-    simpa only [hQ, TauCeti.LinearPMap.specProjection_def] using
+    simpa only [hQ] using
       _root_.LinearPMap.mem_domain_of_mem_graph hcutB
   have hactB := Bop.mem_graph_snd_inj (Bop.mem_graph ⟨Q x, hQx⟩) hcutB rfl
   have hright : Bop ⟨Q x, hQx⟩ - (alp : ℂ) • Q x =
       Bop.spectralCut hB SB hSB alp rB hrB hcrB x := by
     rw [hactB, add_sub_cancel_right]
-  have hQint : Bop ⟨Q x, TauCeti.LinearPMap.specProjection_mem_domain hB SB hSB ⟨x, hx'⟩⟩
+  have hQint : Bop ⟨Q x, (hB.intertwines_spectralPVM_proj SB hSB).mem_domain ⟨x, hx'⟩⟩
       = Q (Bop ⟨x, hx'⟩) :=
-    TauCeti.LinearPMap.specProjection_apply_domain hB SB hSB ⟨x, hx'⟩
+    ((hB.intertwines_spectralPVM_proj SB hSB).apply_eq ⟨x, hx'⟩).symm
   have hZQx : ∀ y : F, Z (Q y) = Z y := by
     intro y
     have := congrArg (fun T : F →L[ℂ] E => T y) hZQ
@@ -163,7 +162,7 @@ theorem sylvester_block_identity
       = Bop ⟨Q x, hQx⟩ - (alp : ℂ) • Q x := hright.symm
   have hBQ : Z (Bop ⟨Q x, hQx⟩) = Z (Bop ⟨x, hx'⟩) := by
     rw [show (⟨Q x, hQx⟩ : Bop.domain)
-        = ⟨Q x, TauCeti.LinearPMap.specProjection_mem_domain hB SB hSB ⟨x, hx'⟩⟩ from rfl,
+        = ⟨Q x, (hB.intertwines_spectralPVM_proj SB hSB).mem_domain ⟨x, hx'⟩⟩ from rfl,
       hQint, hZQx]
   simp only [sub_apply, ContinuousLinearMap.comp_apply, smul_apply, hleft, heq', hcut,
     map_sub, map_smul, hBQ, hZQx]

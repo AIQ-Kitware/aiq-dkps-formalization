@@ -30,8 +30,7 @@ The complement side needs one step.  `((Icc l r)ᶜ` is not the exterior — it 
 contains the two open gaps `(l - d, l)` and `(r, r + d)` — but those consist of
 resolvent points, so the spectral support theorem kills them
 and the two spectral ranges coincide.  `specProjection_eq_of_diff_eq_zero` below
-is the bookkeeping that combines the two sets; there is no general
-`specProjection (S ∪ T)` additivity lemma, and none is needed.
+combines the two sets using finite additivity for disjoint sets.
 
 This is step (b) of the unbounded Theorem 8.2 path recorded in `GOAL.md` §10.4.
 -/
@@ -48,20 +47,20 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- **A null set may be removed from a spectral selection.**
 
-If `specProjection A S = 0` and `U ∩ Sᶜ = T`, then `U` and `T` select the same
+If the projection on `S` vanishes and `U ∩ Sᶜ = T`, then `U` and `T` select the same
 spectral projection.  With `S` a set of resolvent points this says that the
 spectral range does not see the part of the selecting set that carries no
 spectrum. -/
 theorem specProjection_eq_of_diff_eq_zero
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {U T S : Set ℝ}
     (hU : MeasurableSet U) (hT : MeasurableSet T) (hS : MeasurableSet S)
-    (hzero : TauCeti.LinearPMap.specProjection hA S hS = 0)
+    (hzero : (A.spectralPVM hA).proj S hS = 0)
     (heq : U ∩ Sᶜ = T) :
-    TauCeti.LinearPMap.specProjection hA U hU
-      = TauCeti.LinearPMap.specProjection hA T hT := by
+    (A.spectralPVM hA).proj U hU
+      = (A.spectralPVM hA).proj T hT := by
   refine ContinuousLinearMap.ext fun x => ?_
-  have hSx : TauCeti.LinearPMap.specProjection hA S hS x = 0 := by rw [hzero]; rfl
-  have hcompl : TauCeti.LinearPMap.specProjection hA Sᶜ hS.compl x = x := by
+  have hSx : (A.spectralPVM hA).proj S hS x = 0 := by rw [hzero]; rfl
+  have hcompl : (A.spectralPVM hA).proj Sᶜ hS.compl x = x := by
     have h := TauCeti.LinearPMap.specProjection_add_compl_apply hA hS x
     rw [hSx, zero_add] at h
     exact h
@@ -78,7 +77,7 @@ theorem specProjection_gaps_eq_zero
     (hlr : l ≤ r) (hd : 0 < d)
     (hspec : _root_.LinearPMap.realSpectrum A ⊆
       Set.Icc l r ∪ {x : ℝ | x ≤ l - d ∨ r + d ≤ x}) :
-    TauCeti.LinearPMap.specProjection hA
+    (A.spectralPVM hA).proj
         (Set.Ioo (l - d) l ∪ Set.Ioo r (r + d))
         (measurableSet_Ioo.union measurableSet_Ioo) = 0 := by
   refine hA.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet
@@ -123,9 +122,8 @@ theorem specRange_bandExterior_eq_orthogonal
     (hlr : l ≤ r) (hd : 0 < d)
     (hspec : _root_.LinearPMap.realSpectrum A ⊆
       Set.Icc l r ∪ bandExterior l r d) :
-    TauCeti.LinearPMap.specRange hA (bandExterior l r d)
-        (measurableSet_bandExterior l r d)
-      = (TauCeti.LinearPMap.specRange hA (Set.Icc l r) measurableSet_Icc)ᗮ := by
+    ((A.spectralPVM hA).proj (bandExterior l r d) (measurableSet_bandExterior l r d)).range
+      = (((A.spectralPVM hA).proj (Set.Icc l r) measurableSet_Icc).range)ᗮ := by
   have hgapsz := specProjection_gaps_eq_zero hA hlr hd hspec
   have hsplit : (Set.Icc l r)ᶜ ∩ (Set.Ioo (l - d) l ∪ Set.Ioo r (r + d))ᶜ
       = bandExterior l r d := by
@@ -153,18 +151,19 @@ theorem specRange_bandExterior_eq_orthogonal
         rcases hc with hc | hc
         · linarith [hc.2]
         · linarith [hc.2]
-  have hproj : TauCeti.LinearPMap.specProjection hA ((Set.Icc l r)ᶜ)
+  have hproj : (A.spectralPVM hA).proj ((Set.Icc l r)ᶜ)
         measurableSet_Icc.compl
-      = TauCeti.LinearPMap.specProjection hA (bandExterior l r d)
+      = (A.spectralPVM hA).proj (bandExterior l r d)
         (measurableSet_bandExterior l r d) :=
     specProjection_eq_of_diff_eq_zero hA measurableSet_Icc.compl
       (measurableSet_bandExterior l r d)
       (measurableSet_Ioo.union measurableSet_Ioo) hgapsz hsplit
-  have hrange : TauCeti.LinearPMap.specRange hA ((Set.Icc l r)ᶜ) measurableSet_Icc.compl
-      = TauCeti.LinearPMap.specRange hA (bandExterior l r d)
-        (measurableSet_bandExterior l r d) := by
+  have hrange : ((A.spectralPVM hA).proj ((Set.Icc l r)ᶜ) measurableSet_Icc.compl).range
+      = ((A.spectralPVM hA).proj (bandExterior l r d) (measurableSet_bandExterior l r d)).range
+          := by
     ext x
-    rw [TauCeti.LinearPMap.mem_specRange_iff, TauCeti.LinearPMap.mem_specRange_iff, hproj]
+    simp only [← Submodule.starProjection_eq_self_iff, ProjValMeasure.starProjection_range_proj,
+        hproj]
   rw [← hrange]
   exact TauCeti.LinearPMap.specRange_compl hA (Set.Icc l r) measurableSet_Icc
 
@@ -222,7 +221,7 @@ theorem realSpectrum_specRestrict_bandExterior_subset
 /-! ## Transport to an arbitrary reducing subspace
 
 `selfAdjointSpectralRestriction A hA B hB` and
-`reducingRestriction A (specRange hA B hB) _` agree by
+the restriction to the native PVM projection range agree by
 `selfAdjointSpectralRestriction_eq_reducingRestriction`, so the
 two containments above transfer to any subspace *presented* as a spectral range.
 Stating them this way is what lets a caller name the band subspace once and use
@@ -233,14 +232,14 @@ submodules. -/
 theorem realSpectrum_reducingRestriction_band_subset
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {l r : ℝ}
     {W : Submodule ℂ H} [W.HasOrthogonalProjection]
-    (hW : W = TauCeti.LinearPMap.specRange hA (Set.Icc l r) measurableSet_Icc)
+    (hW : W = ((A.spectralPVM hA).proj (Set.Icc l r) measurableSet_Icc).range)
     (hred : _root_.LinearPMap.IsReducing A W) :
     _root_.LinearPMap.realSpectrum (TauCeti.LinearPMap.reducingRestriction A W hred)
       ⊆ Set.Icc l r := by
   subst hW
   have heq : selfAdjointSpectralRestriction A hA (Set.Icc l r) measurableSet_Icc =
       TauCeti.LinearPMap.reducingRestriction A
-        (TauCeti.LinearPMap.specRange hA (Set.Icc l r) measurableSet_Icc) hred :=
+        (((A.spectralPVM hA).proj (Set.Icc l r) measurableSet_Icc).range) hred :=
     selfAdjointSpectralRestriction_eq_reducingRestriction A hA (Set.Icc l r) measurableSet_Icc
   rw [← heq]
   exact realSpectrum_specRestrict_Icc_subset hA
@@ -250,8 +249,8 @@ range. -/
 theorem realSpectrum_reducingRestriction_bandExterior_subset
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) {l r d : ℝ}
     {W : Submodule ℂ H} [W.HasOrthogonalProjection]
-    (hW : W = TauCeti.LinearPMap.specRange hA (bandExterior l r d)
-      (measurableSet_bandExterior l r d))
+    (hW : W = ((A.spectralPVM hA).proj (bandExterior l r d) (measurableSet_bandExterior l r
+        d)).range)
     (hred : _root_.LinearPMap.IsReducing A W) :
     _root_.LinearPMap.realSpectrum (TauCeti.LinearPMap.reducingRestriction A W hred)
       ⊆ bandExterior l r d := by
@@ -259,8 +258,8 @@ theorem realSpectrum_reducingRestriction_bandExterior_subset
   have heq : selfAdjointSpectralRestriction A hA (bandExterior l r d)
       (measurableSet_bandExterior l r d) =
       TauCeti.LinearPMap.reducingRestriction A
-        (TauCeti.LinearPMap.specRange hA (bandExterior l r d)
-          (measurableSet_bandExterior l r d)) hred :=
+        (((A.spectralPVM hA).proj (bandExterior l r d) (measurableSet_bandExterior l r
+            d)).range) hred :=
     selfAdjointSpectralRestriction_eq_reducingRestriction A hA (bandExterior l r d)
       (measurableSet_bandExterior l r d)
   rw [← heq]
@@ -276,9 +275,9 @@ theorem formBoundedSylvesterGap_band_exterior
     {A B : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B) {l r d : ℝ}
     (hlr : l ≤ r)
     {W W' : Submodule ℂ H} [W.HasOrthogonalProjection] [W'.HasOrthogonalProjection]
-    (hW : W = TauCeti.LinearPMap.specRange hA (Set.Icc l r) measurableSet_Icc)
-    (hW' : W' = TauCeti.LinearPMap.specRange hB (bandExterior l r d)
-      (measurableSet_bandExterior l r d))
+    (hW : W = ((A.spectralPVM hA).proj (Set.Icc l r) measurableSet_Icc).range)
+    (hW' : W' = ((B.spectralPVM hB).proj (bandExterior l r d) (measurableSet_bandExterior l r
+        d)).range)
     (hredA : _root_.LinearPMap.IsReducing A W)
     (hredB : _root_.LinearPMap.IsReducing B W') :
     TauCeti.DavisKahan.Sylvester.FormBoundedSylvesterGap

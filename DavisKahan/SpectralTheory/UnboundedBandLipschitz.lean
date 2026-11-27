@@ -45,12 +45,13 @@ closed interval `[l, r]`. -/
 @[expose]
 def bandSubspace {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (l r : ℝ) :
     Submodule ℂ H :=
-  TauCeti.LinearPMap.specRange hA (Set.Icc l r) measurableSet_Icc
+  ((A.spectralPVM hA).proj (Set.Icc l r) measurableSet_Icc).range
 
 /-- The band subspace is a spectral range, hence orthogonally complemented. -/
 instance bandSubspace_hasOrthogonalProjection {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
-    (l r : ℝ) : (bandSubspace hA l r).HasOrthogonalProjection :=
-  TauCeti.LinearPMap.instHasOrthogonalProjection_specRange hA _ _
+    (l r : ℝ) : (bandSubspace hA l r).HasOrthogonalProjection := by
+  unfold bandSubspace
+  infer_instance
 
 /-- The band subspace reduces the operator. -/
 theorem reducesSubspace_bandSubspace {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (l r : ℝ) :
@@ -75,8 +76,8 @@ theorem directedGap_bandSubspace_le
   have hQred : _root_.LinearPMap.IsReducing (TauCeti.LinearPMap.addBounded A K)
       (bandSubspace hB l r) := reducesSubspace_bandSubspace hB l r
   have hperp : (bandSubspace hB l r)ᗮ =
-      TauCeti.LinearPMap.specRange hB (bandExterior l r d)
-        (measurableSet_bandExterior l r d) :=
+      (((TauCeti.LinearPMap.addBounded A K).spectralPVM hB).proj
+        (bandExterior l r d) (measurableSet_bandExterior l r d)).range :=
     (specRange_bandExterior_eq_orthogonal hB hlr hd hBspec).symm
   have hgap := formBoundedSylvesterGap_band_exterior (A := A)
     (B := TauCeti.LinearPMap.addBounded A K) hA hB hlr
@@ -202,7 +203,7 @@ band spectrum and the other's complement carrying exterior spectrum, are already
 a `FormBoundedSylvesterGap` configuration, so the directed gap between them is at
 most `‖0‖ / d`, hence zero.
 
-This is why the commutation of `specProjection` with the projection onto a
+This is why the commutation of the spectral projection with the projection onto a
 reducing subspace -- which an earlier plan named as the missing prerequisite --
 is not needed: the uniqueness of the spectral splitting is delivered by the
 `sin Θ` theorem itself. -/

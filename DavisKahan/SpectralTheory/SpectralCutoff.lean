@@ -56,12 +56,11 @@ theorem spectraSpectralCutoff_isOrthogonalProjection
     spectraSpectralCutoff A hA τ ∘L spectraSpectralCutoff A hA τ =
         spectraSpectralCutoff A hA τ ∧
       (spectraSpectralCutoff A hA τ).IsSymmetric := by
-  rw [spectraSpectralCutoff, selfAdjointSpectralProjection,
-    LinearPMap.specProjection_def]
+  rw [spectraSpectralCutoff, selfAdjointSpectralProjection]
   constructor
-  · exact (_root_.LinearPMap.spectralPVM _ hA).proj_idem (Set.Icc (-τ) τ) measurableSet_Icc
+  · exact (A.spectralPVM hA).proj_idem (Set.Icc (-τ) τ) measurableSet_Icc
   · exact (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mp
-      ((_root_.LinearPMap.spectralPVM _ hA).isSelfAdjoint_proj
+      ((A.spectralPVM hA).isSelfAdjoint_proj
         (Set.Icc (-τ) τ) measurableSet_Icc)
 
 /-- Every spectral-cutoff vector lies in the closed-operator domain. -/
@@ -72,7 +71,7 @@ theorem spectraSpectralCutoff_range_le_domain
   rintro y ⟨x, rfl⟩
   exact TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded hA _ measurableSet_Icc
     (M := max 0 τ) (fun s hs => le_trans (abs_le.mpr ⟨hs.1, hs.2⟩) (le_max_right 0 τ))
-    (LinearPMap.specProjection_mem_specRange hA _ measurableSet_Icc x)
+    ((LinearMap.mem_range_self ((A.spectralPVM hA).proj _ measurableSet_Icc).toLinearMap x))
 
 /-- Spectral cutoffs preserve the domain and commute with the closed operator
 there. -/

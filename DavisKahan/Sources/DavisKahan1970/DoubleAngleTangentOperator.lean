@@ -226,11 +226,10 @@ theorem gramOperator_comm_gramSpectralPVM_proj (X : E0 →L[ℂ] E1)
   have hyDom : y ∈ (gramLinearPMap X).domain := by
     rw [gramLinearPMap_domain]
     exact Submodule.mem_top
-  have hcomm := LinearPMap.specProjection_apply_domain
-    (gramLinearPMap_isSelfAdjoint X) s hs
-    (⟨y, hyDom⟩ : (gramLinearPMap X).domain)
-  rw [← gramSpectralPVM_proj_eq_specProjection] at hcomm
-  simpa only [gramLinearPMap_apply] using hcomm
+  have hcomm := (((gramLinearPMap_isSelfAdjoint X).intertwines_spectralPVM_proj s hs).apply_eq
+      (⟨y, hyDom⟩ : (gramLinearPMap X).domain)).symm
+  simp only [gramLinearPMap_apply] at hcomm
+  simpa only [← gramSpectralPVM_proj_eq_specProjection] using hcomm
 
 /-- The graph denominator inherits the commutation, being `1` minus the Gram
 operator. -/
@@ -577,7 +576,7 @@ theorem norm_doubleAngleTangentOperator_comp_gramSpectralPVM_proj_Iic_le
     rw [gramLinearPMap_domain]
     exact Submodule.mem_top
   have hhighZero' :
-      LinearPMap.specProjection (gramLinearPMap_isSelfAdjoint X)
+      ((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj
           (Set.Ici (v ^ 2)) measurableSet_Ici w = 0 := by
     rw [← gramSpectralPVM_proj_eq_specProjection]
     exact hhighZero

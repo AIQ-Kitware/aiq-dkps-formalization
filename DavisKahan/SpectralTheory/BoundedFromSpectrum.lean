@@ -77,27 +77,23 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
     exact hlam (hσ hroot)
   -- the spectral projection of the complement vanishes
   have hprojc :
-      TauCeti.LinearPMap.specProjection hA (Set.Icc β α)ᶜ hBm.compl = 0 :=
+      (A.spectralPVM hA).proj (Set.Icc β α)ᶜ hBm.compl = 0 :=
     hA.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet hBm.compl hres
   -- the interval carries the full projection
   have hprojid :
-      TauCeti.LinearPMap.specProjection hA (Set.Icc β α) hBm
+      (A.spectralPVM hA).proj (Set.Icc β α) hBm
         = ContinuousLinearMap.id ℂ H := by
-    have hc := (_root_.LinearPMap.spectralPVM _ hA).proj_compl (Set.Icc β α) hBm
-    rw [show (_root_.LinearPMap.spectralPVM _ hA).proj (Set.Icc β α)ᶜ hBm.compl
-        = TauCeti.LinearPMap.specProjection hA (Set.Icc β α)ᶜ hBm.compl from
-          (TauCeti.LinearPMap.specProjection_def hA _ _).symm,
-      hprojc] at hc
-    rw [show TauCeti.LinearPMap.specProjection hA (Set.Icc β α) hBm
-        = (_root_.LinearPMap.spectralPVM _ hA).proj (Set.Icc β α) hBm from
-          TauCeti.LinearPMap.specProjection_def hA _ _]
+    have hc := (A.spectralPVM hA).proj_compl (Set.Icc β α) hBm
+    rw [hprojc] at hc
     linear_combination (norm := module) hc
   have hfix : ∀ φ : H,
-      TauCeti.LinearPMap.specProjection hA (Set.Icc β α) hBm φ = φ := by
+      (A.spectralPVM hA).proj (Set.Icc β α) hBm φ = φ := by
     intro φ; rw [hprojid]; rfl
   have hrange : ∀ φ : H,
-      φ ∈ TauCeti.LinearPMap.specRange hA (Set.Icc β α) hBm := fun φ =>
-    (TauCeti.LinearPMap.mem_specRange_iff hA _ hBm φ).mpr (hfix φ)
+      φ ∈ ((A.spectralPVM hA).proj (Set.Icc β α) hBm).range := fun φ =>
+    (LinearMap.IsIdempotentElem.mem_range_iff
+      (ContinuousLinearMap.IsIdempotentElem.toLinearMap ((A.spectralPVM hA).proj_idem _ hBm))
+      (x := φ)).mpr (hfix φ)
   -- absolute and centered bounds on the interval
   have hbnd : ∀ s ∈ Set.Icc β α, |s| ≤ max |β| |α| := by
     intro s hs

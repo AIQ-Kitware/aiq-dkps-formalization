@@ -119,8 +119,7 @@ asking the elaborator to unfold the full spectral construction through a
 theorem gramSpectralPVM_proj_eq_specProjection (X : E0 →L[ℂ] E1)
     (B : Set ℝ) (hB : MeasurableSet B) :
     (gramSpectralPVM X).proj B hB =
-      TauCeti.LinearPMap.specProjection (gramLinearPMap_isSelfAdjoint X) B hB := by
-  rw [TauCeti.LinearPMap.specProjection_def]
+      ((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj B hB := by
   rfl
 
 /-- A strict lower threshold for `a_n(X)` forces at least `n+1` dimensions in

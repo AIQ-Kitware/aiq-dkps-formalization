@@ -814,7 +814,7 @@ theorem beamOperator_mem_resolventSet_of_mem_lowSet_diff {lam : ℝ}
 
 /-- The spectral measure of the punctured region below the gap vanishes. -/
 theorem beamSpecProjection_lowSet_diff_eq_zero :
-    TauCeti.LinearPMap.specProjection beamOperator_isSelfAdjoint
+    (beamOperator.spectralPVM beamOperator_isSelfAdjoint).proj
         (beamLowSet \ ({0} : Set ℝ))
         (measurableSet_beamLowSet.diff (measurableSet_singleton 0)) = 0 :=
   beamOperator_isSelfAdjoint.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet
@@ -824,9 +824,9 @@ theorem beamSpecProjection_lowSet_diff_eq_zero :
 /-- **Everything below the gap is a zero mode**: the spectral projection of the whole
 region below `500.5` is the projection onto the kernel eigenvalue `{0}`. -/
 theorem beamSpecProjection_lowSet_eq_singleton :
-    TauCeti.LinearPMap.specProjection beamOperator_isSelfAdjoint beamLowSet
+    (beamOperator.spectralPVM beamOperator_isSelfAdjoint).proj beamLowSet
         measurableSet_beamLowSet
-      = TauCeti.LinearPMap.specProjection beamOperator_isSelfAdjoint
+      = (beamOperator.spectralPVM beamOperator_isSelfAdjoint).proj
         ({0} : Set ℝ) (measurableSet_singleton 0) := by
   have hsplit : ({0} : Set ℝ) ∪ (beamLowSet \ ({0} : Set ℝ)) = beamLowSet := by
     refine Set.union_sdiff_cancel ?_
@@ -836,25 +836,23 @@ theorem beamSpecProjection_lowSet_eq_singleton :
     exact Set.mem_Iic.2 (by norm_num)
   have hdisj : Disjoint ({0} : Set ℝ) (beamLowSet \ ({0} : Set ℝ)) :=
     Set.disjoint_sdiff_right
-  have hunion := (_root_.LinearPMap.spectralPVM _ beamOperator_isSelfAdjoint).proj_union
+  have hunion := (beamOperator.spectralPVM beamOperator_isSelfAdjoint).proj_union
     (measurableSet_singleton 0)
     (measurableSet_beamLowSet.diff (measurableSet_singleton 0)) hdisj
-  rw [TauCeti.LinearPMap.specProjection_def, TauCeti.LinearPMap.specProjection_def]
-  rw [← (_root_.LinearPMap.spectralPVM _ beamOperator_isSelfAdjoint).proj_congr hsplit
+  rw [← (beamOperator.spectralPVM beamOperator_isSelfAdjoint).proj_congr hsplit
     ((measurableSet_singleton 0).union
       (measurableSet_beamLowSet.diff (measurableSet_singleton 0)))
     measurableSet_beamLowSet, hunion]
   have hzero := beamSpecProjection_lowSet_diff_eq_zero
-  rw [TauCeti.LinearPMap.specProjection_def] at hzero
   rw [hzero, add_zero]
 
 /-- A vector selected below the gap is selected by the kernel eigenvalue. -/
 theorem mem_specRange_singleton_of_mem_lowSet {y : BeamL2}
-    (hy : y ∈ TauCeti.LinearPMap.specRange beamOperator_isSelfAdjoint beamLowSet
-      measurableSet_beamLowSet) :
-    y ∈ TauCeti.LinearPMap.specRange beamOperator_isSelfAdjoint ({0} : Set ℝ)
-      (measurableSet_singleton 0) := by
-  rw [TauCeti.LinearPMap.mem_specRange_iff] at hy ⊢
+    (hy : y ∈ ((beamOperator.spectralPVM beamOperator_isSelfAdjoint).proj beamLowSet
+        measurableSet_beamLowSet).range) :
+    y ∈ ((beamOperator.spectralPVM beamOperator_isSelfAdjoint).proj ({0} : Set ℝ)
+        (measurableSet_singleton 0)).range := by
+  rw [← Submodule.starProjection_eq_self_iff, ProjValMeasure.starProjection_range_proj] at hy ⊢
   rw [← beamSpecProjection_lowSet_eq_singleton]
   exact hy
 
@@ -2056,8 +2054,8 @@ theorem re_inner_beamPerturbation_nonneg (ε : ℝ) (hε : 0 ≤ ε) (x : BeamL2
 the eigenvalue `{0}` lies in the domain, is annihilated by the free beam, and is
 therefore affine. -/
 theorem mem_beamTrial_of_mem_specRange_singleton {y : BeamL2}
-    (hy : y ∈ TauCeti.LinearPMap.specRange beamOperator_isSelfAdjoint ({0} : Set ℝ)
-      (measurableSet_singleton 0)) :
+    (hy : y ∈ ((beamOperator.spectralPVM beamOperator_isSelfAdjoint).proj ({0} : Set ℝ)
+        (measurableSet_singleton 0)).range) :
     y ∈ beamTrial := by
   have hbnd : ∀ s ∈ ({0} : Set ℝ), |s| ≤ 0 := by
     intro s hs
@@ -2080,17 +2078,18 @@ theorem mem_beamTrial_of_mem_specRange_singleton {y : BeamL2}
 /-- A vector orthogonal to the trial subspace carries no kernel spectral mass. -/
 theorem beamSpecProjection_singleton_apply_eq_zero_of_mem_orthogonal {x : BeamL2}
     (hx : x ∈ beamTrialᗮ) :
-    TauCeti.LinearPMap.specProjection beamOperator_isSelfAdjoint ({0} : Set ℝ)
+    (beamOperator.spectralPVM beamOperator_isSelfAdjoint).proj ({0} : Set ℝ)
       (measurableSet_singleton 0) x = 0 := by
-  set P := TauCeti.LinearPMap.specProjection beamOperator_isSelfAdjoint ({0} : Set ℝ)
+  set P := (beamOperator.spectralPVM beamOperator_isSelfAdjoint).proj ({0} : Set ℝ)
     (measurableSet_singleton 0) with hP
   have hmem : P x ∈ beamTrial :=
     mem_beamTrial_of_mem_specRange_singleton
-      (TauCeti.LinearPMap.specProjection_mem_specRange beamOperator_isSelfAdjoint _ _ x)
+      ((LinearMap.mem_range_self ((beamOperator.spectralPVM beamOperator_isSelfAdjoint).proj _
+          _).toLinearMap x))
   have hfix : P (P x) = P x :=
     TauCeti.LinearPMap.specProjection_apply_self beamOperator_isSelfAdjoint _ _ x
   have hadj : (P : BeamL2 →L[ℂ] BeamL2).adjoint = P :=
-    (TauCeti.LinearPMap.isSelfAdjoint_specProjection beamOperator_isSelfAdjoint _ _).adjoint_eq
+    ((beamOperator.spectralPVM beamOperator_isSelfAdjoint).isSelfAdjoint_proj _ _).adjoint_eq
   have hzero : ⟪P x, P x⟫_ℂ = 0 := by
     nth_rewrite 1 [← hadj]
     rw [ContinuousLinearMap.adjoint_inner_left, hfix, ← inner_conj_symm, hx _ hmem, map_zero]
@@ -2104,7 +2103,7 @@ theorem beamOperator_form_ge_of_mem_orthogonal (x : beamOperator.domain)
       ≤ (⟪beamOperator x, (x : BeamL2)⟫_ℂ).re := by
   refine TauCeti.LinearPMap.le_re_inner_of_specProjection_Iic_apply_eq_zero
     beamOperator_isSelfAdjoint (c := 1001 / 2) x ?_
-  have hlow : TauCeti.LinearPMap.specProjection beamOperator_isSelfAdjoint beamLowSet
+  have hlow : (beamOperator.spectralPVM beamOperator_isSelfAdjoint).proj beamLowSet
       measurableSet_beamLowSet (x : BeamL2) = 0 := by
     rw [beamSpecProjection_lowSet_eq_singleton]
     exact beamSpecProjection_singleton_apply_eq_zero_of_mem_orthogonal hx
@@ -2152,7 +2151,7 @@ genuine operator: the compression to the affine trial subspace has form at most
 `ritzHigh ε`, and the complement of that subspace carries the sharp free-beam gap
 `500.5`, which the positive perturbation cannot lower. -/
 theorem beamPerturbed_specProjection_Ioo_eq_zero (ε : ℝ) (hε : 0 ≤ ε) :
-    TauCeti.LinearPMap.specProjection (beamPerturbed_isSelfAdjoint ε)
+    ((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj
       (Set.Ioo (ritzHigh ε) 500) measurableSet_Ioo = 0 := by
   refine TauCeti.LinearPMap.specProjection_eq_zero_of_subset
     (beamPerturbed_isSelfAdjoint ε) (C := Set.Ioo (ritzHigh ε) (1001 / 2))

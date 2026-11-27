@@ -357,8 +357,8 @@ theorem theorem8_2_perturbationHalfGap_unbounded_complex
       rw [realSpectrum_reducingRestriction_congr hApath hPred' hPred]
       exact hPspec
     have hWperp : (pathBand hA hHop l r 1)ᗮ =
-        TauCeti.LinearPMap.specRange (isSelfAdjoint_pathOperator hA hHop 1)
-          (bandExterior l r d) (DavisKahan.measurableSet_bandExterior l r d) :=
+        ((_root_.LinearPMap.spectralPVM _ (isSelfAdjoint_pathOperator hA hHop 1)).proj
+            (bandExterior l r d) (DavisKahan.measurableSet_bandExterior l r d)).range :=
       (DavisKahan.specRange_bandExterior_eq_orthogonal
         (isSelfAdjoint_pathOperator hA hHop 1) hlr hd (hspec 1 ⟨zero_le_one, le_rfl⟩)).symm
     have hWspec : _root_.LinearPMap.realSpectrum

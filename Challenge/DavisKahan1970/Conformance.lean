@@ -94,7 +94,7 @@ theorem partIII_sinTheta_residual_uiNorm
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
-    {a b δ : ℝ} (hδ : 0 < δ)
+    {a b δ : ℝ} (_hδ : 0 < δ)
     (hMspec : Module.End.PointSpectrumIn M ⊤ (Set.Icc a b))
     (hAspec : Module.End.PointSpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * N (_root_.TauCeti.sinThetaEmbedding U X) ≤
@@ -519,32 +519,32 @@ theorem tanTwoTheta_unbounded_directedResidual_symmetricNorming_exactPaper
     {A : G →ₗ.[ℂ] G} {B Z : G →L[ℂ] G} {a b c : ℝ}
     (hA : IsSelfAdjoint A)
     (hB : TauCeti.IsOddFor
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
       A ⟨Z (x : G), hZdom x⟩ + B (Z (x : G)) = Z (A x) + Z (B (x : G)))
     (hUa : ∀ x : A.domain,
-      (x : G) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      (x : G) ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range →
       RCLike.re ⟪A x, (x : G)⟫_ℂ ≤ a * ‖(x : G)‖ ^ 2)
     (hUb : ∀ x : A.domain,
       (x : G) ∈
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b)
     (hRmem : N.Mem (blockCompression
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)) :
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B)) :
     IsUnit
-        ((TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock Z *
-          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock Z) ∧
+        ((((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).diagBlock Z *
+          (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).diagBlock Z) ∧
       N.Mem (reflectionTangentCorner
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ∧
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) Z) ∧
       (b - a) * N.gauge (reflectionTangentCorner
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ≤
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) Z) ≤
         2 * N.gauge (blockCompression
-          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
-          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B) := by
+          (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ
+          (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B) := by
   sorry
 
 /-- Best currently proved ambient branch-free `tan 2Theta` endpoint.  The

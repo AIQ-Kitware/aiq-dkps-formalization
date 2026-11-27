@@ -264,8 +264,9 @@ partial map is fixed by canonical conjugation. -/
 theorem conjugateOperator_specProjection_complexifyReal
     {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) :
-    conjugateOperator (specProjection (isSelfAdjoint_complexifyReal hA) S hS) =
-      specProjection (isSelfAdjoint_complexifyReal hA) S hS := by
+    conjugateOperator ((_root_.LinearPMap.spectralPVM _ (isSelfAdjoint_complexifyReal hA)).proj
+        S hS) =
+      (_root_.LinearPMap.spectralPVM _ (isSelfAdjoint_complexifyReal hA)).proj S hS := by
   set hAℂ := isSelfAdjoint_complexifyReal hA with hhAc
   set hU := hAℂ.isStarNormal_cayley with hhU
   set κ : _root_.spectrum ℂ ((complexifyReal A).cayley) → ℝ :=
@@ -289,7 +290,7 @@ theorem conjugateOperator_specProjection_complexifyReal
     simp
   refine ContinuousLinearMap.ext fun ξ => ext_inner_left ℂ fun ψ => ?_
   rw [conjugateOperator_apply, inner_conjugation_right, ← inner_conj_symm,
-    specProjection_eq_borelCalculus hAℂ S hS,
+    hAℂ.spectralPVM_proj, ← ContinuousLinearMap.borelCalculus_indicator,
     BorelCalculus.inner_borelCalculus, BorelCalculus.inner_borelCalculus]
   have h1 : conjugation ξ + conjugation ψ = conjugation (ξ + ψ) :=
     (map_add _ _ _).symm
@@ -321,7 +322,7 @@ obtained by descending the complex spectral projection. -/
 noncomputable def realSpecProjection
     {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) : E →L[ℝ] E :=
-  realPartOperator (specProjection (isSelfAdjoint_complexifyReal hA) S hS)
+  realPartOperator ((_root_.LinearPMap.spectralPVM _ (isSelfAdjoint_complexifyReal hA)).proj S hS)
 
 /-- Complexifying the descended real spectral projection recovers exactly the
 canonical complex spectral projection. -/
@@ -329,7 +330,7 @@ theorem complexify_realSpecProjection
     {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) :
     RealComplexification.complexify (realSpecProjection hA S hS) =
-      specProjection (isSelfAdjoint_complexifyReal hA) S hS := by
+      (_root_.LinearPMap.spectralPVM _ (isSelfAdjoint_complexifyReal hA)).proj S hS := by
   exact complexify_realPartOperator
     (conjugateOperator_specProjection_complexifyReal hA S hS)
 
@@ -338,7 +339,7 @@ real projection. -/
 theorem specProjection_complexifyReal_ofReal
     {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) (x : E) :
-    specProjection (isSelfAdjoint_complexifyReal hA) S hS (ofReal x) =
+    (_root_.LinearPMap.spectralPVM _ (isSelfAdjoint_complexifyReal hA)).proj S hS (ofReal x) =
       ofReal (realSpecProjection hA S hS x) := by
   rw [← complexify_realSpecProjection hA S hS]
   simp
@@ -353,9 +354,9 @@ theorem realSpecProjection_idem
     realSpecProjection hA S hS
   apply RealComplexification.complexify_injective
   rw [RealComplexification.complexify_comp, complexify_realSpecProjection]
-  change specProjection (isSelfAdjoint_complexifyReal hA) S hS *
-      specProjection (isSelfAdjoint_complexifyReal hA) S hS = _
-  exact isIdempotentElem_specProjection (isSelfAdjoint_complexifyReal hA) S hS
+  change (_root_.LinearPMap.spectralPVM _ (isSelfAdjoint_complexifyReal hA)).proj S hS *
+      (_root_.LinearPMap.spectralPVM _ (isSelfAdjoint_complexifyReal hA)).proj S hS = _
+  exact (_root_.LinearPMap.spectralPVM _ (isSelfAdjoint_complexifyReal hA)).proj_idem S hS
 
 /-- The descended real spectral projection is self-adjoint. -/
 theorem realSpecProjection_isSelfAdjoint
@@ -365,7 +366,8 @@ theorem realSpecProjection_isSelfAdjoint
   rw [ContinuousLinearMap.isSelfAdjoint_iff']
   apply RealComplexification.complexify_injective
   rw [RealComplexification.complexify_adjoint, complexify_realSpecProjection]
-  exact (isSelfAdjoint_specProjection (isSelfAdjoint_complexifyReal hA) S hS).adjoint_eq
+  exact ((_root_.LinearPMap.spectralPVM _ (isSelfAdjoint_complexifyReal hA)).isSelfAdjoint_proj
+      S hS).adjoint_eq
 
 /-! ## Real spectral ranges
 
@@ -466,7 +468,7 @@ theorem realSpecProjection_compl
   apply RealComplexification.complexify_injective
   rw [complexify_realSpecProjection, RealComplexification.complexify_sub,
     RealComplexification.complexify_id, complexify_realSpecProjection]
-  simpa only [specProjection_def] using
+  exact
     ((_root_.LinearPMap.spectralPVM _) (isSelfAdjoint_complexifyReal hA)).proj_compl S hS
 
 /-- The real spectral range of a complement set is the orthogonal complement of
@@ -490,7 +492,7 @@ theorem realSpecProjection_mem_domain
     {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
     {S : Set ℝ} (hS : MeasurableSet S) (x : A.domain) :
     realSpecProjection hA S hS (x : E) ∈ A.domain := by
-  have hproj := specProjection_mem_domain (isSelfAdjoint_complexifyReal hA) S hS
+  have hproj := ((isSelfAdjoint_complexifyReal hA).intertwines_spectralPVM_proj S hS).mem_domain
     (complexifyRealOfRealDomain A x)
   rw [mem_complexifyReal_domain_iff] at hproj
   have hre := hproj.1
@@ -510,16 +512,16 @@ theorem realSpecProjection_apply_domain
     ⟨realSpecProjection hA S hS (x : E),
       realSpecProjection_mem_domain hA hS x⟩
   have hz :
-      (⟨specProjection (isSelfAdjoint_complexifyReal hA) S hS
+      (⟨(_root_.LinearPMap.spectralPVM _ (isSelfAdjoint_complexifyReal hA)).proj S hS
           (complexifyRealOfRealDomain A x),
-        specProjection_mem_domain (isSelfAdjoint_complexifyReal hA) S hS
+        ((isSelfAdjoint_complexifyReal hA).intertwines_spectralPVM_proj S hS).mem_domain
           (complexifyRealOfRealDomain A x)⟩ : (complexifyReal A).domain) =
         complexifyRealOfRealDomain A px := by
     apply Subtype.ext
     simp only [complexifyRealOfRealDomain_coe, px]
     exact specProjection_complexifyReal_ofReal hA S hS (x : E)
-  have hcomm := specProjection_apply_domain (isSelfAdjoint_complexifyReal hA) S hS
-    (complexifyRealOfRealDomain A x)
+  have hcomm := (((isSelfAdjoint_complexifyReal hA).intertwines_spectralPVM_proj S hS).apply_eq
+      (complexifyRealOfRealDomain A x)).symm
   rw [hz, complexifyReal_apply_ofReal, complexifyReal_apply_ofReal,
     specProjection_complexifyReal_ofReal hA S hS] at hcomm
   have hre := congrArg re hcomm

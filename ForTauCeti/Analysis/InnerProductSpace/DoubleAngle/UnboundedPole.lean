@@ -87,8 +87,8 @@ numbers, so the structure is stated for an arbitrary `RCLike` scalar field.  The
 the data itself is not, and a real cutoff is transported to the complexification
 coordinatewise.
 
-The intended instance — `A` self-adjoint, `U = specRange hA (Iic a)`, and
-`toProj = specProjection hA (Icc (-τ) a)` — is **not constructed here**; the
+For the intended instance, `A` is self-adjoint, `U` is its spectral range on `Iic a`, and
+`toProj` is its spectral projection on `Icc (-τ) a`. The
 results below consume this data rather than produce it.  Its four substantive
 fields would come from `specProjection_mem_domain`,
 `mem_domain_of_mem_specRange_of_bounded`, `norm_sub_smul_le_of_mem_specRange`

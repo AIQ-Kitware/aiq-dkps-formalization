@@ -849,11 +849,11 @@ theorem tanTwoTheta_unbounded_residual_opNorm_real
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
   have hUeq : complexifySubmodule
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) =
-      TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic :=
+      ((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range :=
     complexifySubmodule_realSpecRange hA (Set.Iic c) measurableSet_Iic
   -- the transported hypotheses
   have hB' : TauCeti.IsOddFor
-      (TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic)
+      (((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range)
       (complexify B) := hUeq ▸ isOddFor_complexifySubmodule hB
   have hZdom' := mapsDomainTo_complexifyReal hZdom
   have hZcomm' : ∀ x : (TauCeti.LinearPMap.complexifyReal A).domain,
@@ -870,7 +870,7 @@ theorem tanTwoTheta_unbounded_residual_opNorm_real
     · exact hZcomm ⟨im (y : RealComplexification E), hcoord.2⟩
   have hUa' : ∀ y : (TauCeti.LinearPMap.complexifyReal A).domain,
       (y : RealComplexification E) ∈
-        TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic →
+        ((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range →
       (⟪TauCeti.LinearPMap.complexifyReal A y,
           (y : RealComplexification E)⟫_ℂ).re ≤
         a * ‖(y : RealComplexification E)‖ ^ 2 := by
@@ -890,7 +890,7 @@ theorem tanTwoTheta_unbounded_residual_opNorm_real
     linarith
   have hUb' : ∀ y : (TauCeti.LinearPMap.complexifyReal A).domain,
       (y : RealComplexification E) ∈
-        (TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic)ᗮ →
+        (((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range)ᗮ →
       b * ‖(y : RealComplexification E)‖ ^ 2 ≤
         (⟪TauCeti.LinearPMap.complexifyReal A y,
           (y : RealComplexification E)⟫_ℂ).re := by
@@ -909,7 +909,7 @@ theorem tanTwoTheta_unbounded_residual_opNorm_real
     rw [hsplit, RealComplexification.norm_sq, mul_add]
     linarith
   have hxc : (ofReal x : RealComplexification E) ∈
-      TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic := by
+      ((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range := by
     rw [← hUeq, mem_complexifySubmodule]
     exact ⟨hx, Submodule.zero_mem _⟩
   -- the complex pointwise theorems, applied to the complexified data
@@ -920,14 +920,14 @@ theorem tanTwoTheta_unbounded_residual_opNorm_real
     ((complexify_isSelfAdjoint_iff Z).2 hZsa)
     (by rw [← complexify_mul, hZ2, complexify_one]) hZdom' hZcomm' hUa' hUb' hab hxc
   -- and the descent
-  have hoff : (TauCeti.LinearPMap.specRange hAc (Set.Iic c)
-        measurableSet_Iic).offDiagBlock (complexify Z) =
+  have hoff : (((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c)
+      measurableSet_Iic).range).offDiagBlock (complexify Z) =
       complexify ((TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
         measurableSet_Iic).offDiagBlock Z) := by
     rw [← offDiagonalPart_congr hUeq (complexify Z)]
     exact offDiagonalPart_complexifySubmodule _ Z
-  have hdiag : (TauCeti.LinearPMap.specRange hAc (Set.Iic c)
-        measurableSet_Iic).diagBlock (complexify Z) =
+  have hdiag : (((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c)
+      measurableSet_Iic).range).diagBlock (complexify Z) =
       complexify ((TauCeti.LinearPMap.realSpecRange hA (Set.Iic c)
         measurableSet_Iic).diagBlock Z) := by
     rw [← diagonalPart_congr hUeq (complexify Z)]

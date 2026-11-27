@@ -84,7 +84,7 @@ variable {A : E →ₗ.[ℂ] E} {Bop : F →ₗ.[ℂ] F}
 
 /-- The spectral projection of the `k`-th grid cell. -/
 noncomputable def gridProj (hA : IsSelfAdjoint A) (ε : ℝ) (k : ℤ) : E →L[ℂ] E :=
-  TauCeti.LinearPMap.specProjection hA (Real.gridCell ε k)
+  (A.spectralPVM hA).proj (Real.gridCell ε k)
     (Real.measurableSet_gridCell ε k)
 
 /-- The grid projections commute with the group they were built from. -/
@@ -176,7 +176,7 @@ theorem norm_block_ge (U : {G : TauCeti.Semigroups.StronglyContinuousGroup E // 
     (by
       -- states the goal with the definition unfolded, in the shape the next step needs;
       -- there is no `_apply` lemma to rewrite with here.
-      change (TauCeti.LinearPMap.specProjection hA (Real.gridCell ε k)
+      change ((A.spectralPVM hA).proj (Real.gridCell ε k)
         (Real.measurableSet_gridCell ε k)).comp (b.columnOperator W) =
         b.columnOperator W
       rw [hW, blockCLM_apply]
@@ -185,7 +185,7 @@ theorem norm_block_ge (U : {G : TauCeti.Semigroups.StronglyContinuousGroup E // 
     (by
       -- states the goal with the definition unfolded, in the shape the next step needs;
       -- there is no `_apply` lemma to rewrite with here.
-      change (b.columnOperator W).comp (TauCeti.LinearPMap.specProjection hB
+      change (b.columnOperator W).comp ((Bop.spectralPVM hB).proj
         (Real.gridCell ε l) (Real.measurableSet_gridCell ε l))
         = b.columnOperator W
       rw [hW, blockCLM_apply]

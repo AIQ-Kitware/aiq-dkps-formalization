@@ -44,15 +44,15 @@ theorem complexifySubmodule_realSpecRange
     {A : E →ₗ.[ℝ] E} (hA : _root_.IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) :
     complexifySubmodule (TauCeti.LinearPMap.realSpecRange hA S hS) =
-      TauCeti.LinearPMap.specRange
-        (TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA) S hS := by
+      ((_root_.LinearPMap.spectralPVM _ (TauCeti.LinearPMap.isSelfAdjoint_complexifyReal
+          hA)).proj S hS).range := by
   ext z
   rw [← Submodule.starProjection_eq_self_iff,
     ← Submodule.starProjection_eq_self_iff]
   rw [starProjection_complexifySubmodule,
     ← TauCeti.LinearPMap.realSpecProjection_eq_starProjection,
     TauCeti.LinearPMap.complexify_realSpecProjection,
-    ← TauCeti.LinearPMap.specProjection_eq_starProjection_specRange]
+    ProjValMeasure.starProjection_range_proj]
 
 end
 

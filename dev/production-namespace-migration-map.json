@@ -2292,7 +2292,6 @@
   "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamPerturbed_specProjection_Iio_zero": "TauCeti.DavisKahan.FreeBeam.Model.beamPerturbed_specProjection_Iio_zero",
   "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamPerturbed_specProjection_Ioo_eq_zero": "TauCeti.DavisKahan.FreeBeam.Model.beamPerturbed_specProjection_Ioo_eq_zero",
   "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamPerturbed_specRange_le_domain": "TauCeti.DavisKahan.FreeBeam.Model.beamPerturbed_specRange_le_domain",
-  "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamPerturbed_specRange_mono": "TauCeti.DavisKahan.FreeBeam.Model.beamPerturbed_specRange_mono",
   "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamQuadLp": "TauCeti.DavisKahan.FreeBeam.Model.beamQuadLp",
   "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamQuadLp_mem_beamTrial_orthogonal": "TauCeti.DavisKahan.FreeBeam.Model.beamQuadLp_mem_beamTrial_orthogonal",
   "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.beamQuadLp_ne_zero": "TauCeti.DavisKahan.FreeBeam.Model.beamQuadLp_ne_zero",

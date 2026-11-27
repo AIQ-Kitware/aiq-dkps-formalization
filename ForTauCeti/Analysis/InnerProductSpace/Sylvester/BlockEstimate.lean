@@ -92,11 +92,11 @@ theorem norm_sylvester_block_sub_smul_le
     {MB alp rB : ℝ} (hbndB : ∀ s ∈ SB, |s| ≤ MB) (hrB : 0 ≤ rB)
     (hcrB : ∀ s ∈ SB, |s - alp| ≤ rB)
     (z : ((sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property).domain)
-    (hZP : (TauCeti.LinearPMap.specProjection hA SA hSA).comp
+    (hZP : ((A.spectralPVM hA).proj SA hSA).comp
         (b.columnOperator (z : lp (fun _ : ι => E) 2)) =
         b.columnOperator (z : lp (fun _ : ι => E) 2))
     (hZQ : (b.columnOperator (z : lp (fun _ : ι => E) 2)).comp
-        (TauCeti.LinearPMap.specProjection hB SB hSB)
+        ((Bop.spectralPVM hB).proj SB hSB)
         = b.columnOperator (z : lp (fun _ : ι => E) 2)) :
     ‖(sylvesterGroup U V b).val.stoneGenerator (sylvesterGroup U V b).property z
         - ((lam : ℂ) - (alp : ℂ)) • (z : lp (fun _ : ι => E) 2)‖

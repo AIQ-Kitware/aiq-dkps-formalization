@@ -46,7 +46,7 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The restriction of a self-adjoint operator to one of its spectral ranges.
 
-Stated over the Davis--Kahan spectral subspace rather than `specRange`, which it
+Stated over the Davis--Kahan spectral subspace rather than the native PVM projection range, which it
 is definitionally; the instances downstream key on this name. -/
 @[expose]
 noncomputable def selfAdjointSpectralRestriction

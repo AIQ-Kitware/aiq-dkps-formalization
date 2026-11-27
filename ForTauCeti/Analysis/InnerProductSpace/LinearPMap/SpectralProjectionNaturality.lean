@@ -33,11 +33,11 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 /-- The real spectral projection equals the complex spectral projection of its
 inverse-Cayley preimage. -/
 theorem specProjection_eq_specProjC (B : Set ℝ) (hB : MeasurableSet B) :
-    specProjection hA B hB =
+    (A.spectralPVM hA).proj B hB =
       BorelCalculus.specProjC (hA.isStarNormal_cayley)
         (Complex.measurable_inverseCayleyCoord hB) := by
   have := hA.isStarNormal_cayley
-  rw [specProjection_eq_borelCalculus, BorelCalculus.specProjC_def]
+  rw [hA.spectralPVM_proj, ← A.cayley.borelCalculus_indicator, BorelCalculus.specProjC_def]
   congr 1
   ext w
   by_cases hw : Complex.inverseCayleyCoord (w : ℂ) ∈ B <;> simp [hw]
@@ -50,13 +50,13 @@ theorem specProjection_apply_of_unitary_intertwines (e : H ≃ₗᵢ[ℂ] H)
     (hmaps : ∀ x : A.domain, e (x : H) ∈ A.domain)
     (hint : ∀ x : A.domain, A ⟨e (x : H), hmaps x⟩ = e (A x))
     (B : Set ℝ) (hB : MeasurableSet B) (x : H) :
-    e (specProjection hA B hB x) = specProjection hA B hB (e x) := by
+    e ((A.spectralPVM hA).proj B hB x) = (A.spectralPVM hA).proj B hB (e x) := by
   let X := e.toLinearIsometry.toContinuousLinearMap
   have hX : A.Intertwines A X := ⟨hmaps, fun y => (hint y).symm⟩
   have hcay : Commute X A.cayley :=
     hX.comp_cayley_eq hA.neg_I_mem_resolventSet hA.neg_I_mem_resolventSet
   have := hA.isStarNormal_cayley
-  rw [specProjection_def, hA.spectralPVM_proj]
+  rw [hA.spectralPVM_proj]
   have hproj := (A.cayley.forall_commute_spectralPVM_proj_iff X).mpr hcay
     ((fun w : _root_.spectrum ℂ A.cayley => Complex.inverseCayleyCoord (w : ℂ)) ⁻¹' B)
     ((Complex.measurable_inverseCayleyCoord.comp measurable_subtypeVal) hB)

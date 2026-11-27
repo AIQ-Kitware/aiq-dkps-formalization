@@ -88,14 +88,13 @@ theorem spectraBoundedTruncation_tendsto_on_domain
     Tendsto (fun τ : ℝ => spectraBoundedTruncation A hA τ (x : H)) atTop
       (𝓝 (A x)) := by
   have hval : ∀ τ : ℝ, spectraBoundedTruncation A hA τ (x : H)
-      = TauCeti.LinearPMap.specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc
+      = (A.spectralPVM hA).proj (Set.Icc (-τ) τ) measurableSet_Icc
           (A x) := by
     intro τ
     obtain ⟨hx, hb⟩ := TauCeti.LinearPMap.spectralCut_zero_eq_on_specProjection hA
       (Set.Icc (-τ) τ) measurableSet_Icc (abs_le_max_zero_of_mem_Icc τ) (x : H)
     rw [show spectraBoundedTruncation A hA τ (x : H) = A ⟨_, hx⟩ from hb.symm]
-    exact TauCeti.LinearPMap.specProjection_apply_domain hA (Set.Icc (-τ) τ)
-      measurableSet_Icc x
+    exact ((hA.intertwines_spectralPVM_proj (Set.Icc (-τ) τ) measurableSet_Icc).apply_eq x).symm
   simp only [hval]
   exact TauCeti.LinearPMap.tendsto_specProjection_Icc hA (A x)
 

@@ -63,14 +63,14 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 noncomputable def selfAdjointSpectralProjection
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=
-  TauCeti.LinearPMap.specProjection hA B hB
+  (A.spectralPVM hA).proj B hB
 
 /-- The range subspace of a canonical self-adjoint spectral projection. -/
 @[expose]
 noncomputable def selfAdjointSpectralSubspace
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B) : Submodule ℂ H :=
-  TauCeti.LinearPMap.specRange hA B hB
+  ((A.spectralPVM hA).proj B hB).range
 
 /-- The self-adjoint spectral subspace is the range of its spectral projection. -/
 @[simp]
@@ -82,9 +82,11 @@ theorem selfAdjointSpectralSubspace_eq_range
   ext x
   constructor
   · intro hx
-    exact ⟨x, (LinearPMap.mem_specRange_iff hA B hB x).mp hx⟩
+    exact ⟨x, (LinearMap.IsIdempotentElem.mem_range_iff
+      (ContinuousLinearMap.IsIdempotentElem.toLinearMap ((A.spectralPVM hA).proj_idem B hB))
+      (x := x)).mp hx⟩
   · rintro ⟨y, rfl⟩
-    exact LinearPMap.specProjection_mem_specRange hA B hB y
+    exact (LinearMap.mem_range_self ((A.spectralPVM hA).proj B hB).toLinearMap y)
 
 /-- A canonical self-adjoint spectral range is complete. -/
 noncomputable instance selfAdjointSpectralSubspace_completeSpace
@@ -134,7 +136,8 @@ theorem selfAdjointSpectralProjection_eq_starProjection
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B) :
     selfAdjointSpectralProjection A hA B hB =
-      (selfAdjointSpectralSubspace A hA B hB).starProjection := LinearPMap.specProjection_eq_starProjection_specRange hA B hB
+      (selfAdjointSpectralSubspace A hA B hB).starProjection :=
+          ((A.spectralPVM hA).starProjection_range_proj B hB).symm
 
 /-- Every measurable spectral projection preserves the domain of its
 self-adjoint operator. -/
@@ -142,7 +145,7 @@ theorem selfAdjointSpectralProjection_mem_domain
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {B : Set ℝ} (hB : MeasurableSet B) (x : A.domain) :
     selfAdjointSpectralProjection A hA B hB (x : H) ∈ A.domain :=
-  TauCeti.LinearPMap.specProjection_mem_domain hA B hB x
+  (hA.intertwines_spectralPVM_proj B hB).mem_domain x
 
 /-- A self-adjoint operator commutes with each measurable spectral projection
 on its full operator domain. -/
@@ -153,7 +156,7 @@ theorem selfAdjoint_apply_spectralProjection
         ⟨selfAdjointSpectralProjection A hA B hB (x : H),
           selfAdjointSpectralProjection_mem_domain A hA hB x⟩ =
       selfAdjointSpectralProjection A hA B hB (A x) :=
-  TauCeti.LinearPMap.specProjection_apply_domain hA B hB x
+  ((hA.intertwines_spectralPVM_proj B hB).apply_eq x).symm
 
 /-- The domain-aware image of a vector in a spectral range remains in that
 spectral range. -/
@@ -161,7 +164,8 @@ theorem selfAdjoint_maps_spectralSubspace
     (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {B : Set ℝ} (hB : MeasurableSet B) (x : A.domain)
     (hx : (x : H) ∈ selfAdjointSpectralSubspace A hA B hB) :
-    A x ∈ selfAdjointSpectralSubspace A hA B hB := LinearPMap.apply_mem_specRange hA B hB hx
+    A x ∈ selfAdjointSpectralSubspace A hA B hB :=
+  (hA.isReducing_range_spectralPVM_proj B hB).isInvariant.apply_mem x hx
 
 end DavisKahan
 end TauCeti

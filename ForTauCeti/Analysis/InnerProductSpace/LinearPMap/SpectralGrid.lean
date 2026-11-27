@@ -45,9 +45,8 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 /-- **The grid's spectral projections split norms.**  This is the hypothesis the
 reassembly lemmas take, instantiated at the `ε`-grid. -/
 theorem tsum_enorm_sq_specProjection_gridCell (hε : 0 < ε) (v : H) :
-    ∑' k : ℤ, ‖specProjection hA (Real.gridCell ε k) (Real.measurableSet_gridCell ε k) v‖ₑ ^ 2
+    ∑' k : ℤ, ‖(A.spectralPVM hA).proj (Real.gridCell ε k) (Real.measurableSet_gridCell ε k) v‖ₑ ^ 2
       = ‖v‖ₑ ^ 2 := by
-  simp only [specProjection_def]
   exact (A.spectralPVM hA).tsum_enorm_sq_proj (Real.gridCell ε) (Real.measurableSet_gridCell ε)
     (Real.pairwise_disjoint_gridCell ε) (Real.iUnion_gridCell hε) v
 
@@ -55,12 +54,13 @@ theorem tsum_enorm_sq_specProjection_gridCell (hε : 0 < ε) (v : H) :
 takes.  Spectral projections are self-adjoint, so it is the same statement. -/
 theorem tsum_enorm_sq_adjoint_specProjection_gridCell (hε : 0 < ε) (v : H) :
     ∑' k : ℤ,
-        ‖(specProjection hA (Real.gridCell ε k) (Real.measurableSet_gridCell ε k)).adjoint v‖ₑ ^ 2
+        ‖((A.spectralPVM hA).proj (Real.gridCell ε k) (Real.measurableSet_gridCell ε k)).adjoint
+            v‖ₑ ^ 2
       = ‖v‖ₑ ^ 2 := by
   have hsa : ∀ k : ℤ,
-      (specProjection hA (Real.gridCell ε k) (Real.measurableSet_gridCell ε k)).adjoint
-        = specProjection hA (Real.gridCell ε k) (Real.measurableSet_gridCell ε k) := fun k => by
-    simp only [specProjection_def]
+      ((A.spectralPVM hA).proj (Real.gridCell ε k) (Real.measurableSet_gridCell ε k)).adjoint
+        = (A.spectralPVM hA).proj (Real.gridCell ε k) (Real.measurableSet_gridCell ε k) := fun k
+            => by
     exact ((A.spectralPVM hA).isSelfAdjoint_proj _ _).adjoint_eq
   simp_rw [hsa]
   exact tsum_enorm_sq_specProjection_gridCell hA hε v
@@ -68,9 +68,8 @@ theorem tsum_enorm_sq_adjoint_specProjection_gridCell (hε : 0 < ε) (v : H) :
 /-- Spectral projections are idempotent, in the composition form the block
 lemmas take. -/
 theorem specProjection_comp_self (Bset : Set ℝ) (hBset : MeasurableSet Bset) :
-    (specProjection hA Bset hBset).comp (specProjection hA Bset hBset)
-      = specProjection hA Bset hBset := by
-  simp only [specProjection_def]
+    ((A.spectralPVM hA).proj Bset hBset).comp ((A.spectralPVM hA).proj Bset hBset)
+      = (A.spectralPVM hA).proj Bset hBset := by
   exact (A.spectralPVM hA).proj_idem Bset hBset
 
 
@@ -78,7 +77,7 @@ theorem specProjection_comp_self (Bset : Set ℝ) (hBset : MeasurableSet Bset) :
 of the native spectral support theorem; it is what lets empty cells
 be discarded and the separation hypothesis be used on the survivors. -/
 theorem exists_mem_spectrum_of_specProjection_ne_zero (B : Set ℝ) (hB : MeasurableSet B)
-    (h : specProjection hA B hB ≠ 0) :
+    (h : (A.spectralPVM hA).proj B hB ≠ 0) :
     ∃ lam ∈ B, (lam : ℂ) ∈ _root_.LinearPMap.spectrum A := by
   by_contra hcon
   push Not at hcon

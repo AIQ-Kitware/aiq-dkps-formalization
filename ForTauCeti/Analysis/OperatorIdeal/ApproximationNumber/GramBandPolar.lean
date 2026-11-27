@@ -70,18 +70,18 @@ theorem mem_polarInitial_of_mem_gramBand
     rw [gramLinearPMap_domain]
     exact Submodule.mem_top
   have hgramPz : gramOperator X (P z) = 0 := by
-    have hcomm := LinearPMap.specProjection_apply_domain
-      (gramLinearPMap_isSelfAdjoint X) (Set.Icc lo hi) measurableSet_Icc
-      (⟨z, hzDom⟩ : (gramLinearPMap X).domain)
-    simp only [gramLinearPMap_apply, ← gramSpectralPVM_proj_eq_specProjection] at hcomm
+    have hcomm := (((gramLinearPMap_isSelfAdjoint X).intertwines_spectralPVM_proj
+        (Set.Icc lo hi) measurableSet_Icc).apply_eq (⟨z, hzDom⟩ : (gramLinearPMap X).domain)).symm
+    simp only [gramLinearPMap_apply] at hcomm
+    rw [← gramSpectralPVM_proj_eq_specProjection] at hcomm
     rw [hzGram, map_zero] at hcomm
     exact hcomm
-  have hPzRange : P z ∈ LinearPMap.specRange
-      (gramLinearPMap_isSelfAdjoint X) (Set.Icc lo hi) measurableSet_Icc := by
-    rw [show P = TauCeti.LinearPMap.specProjection (gramLinearPMap_isSelfAdjoint X)
+  have hPzRange : P z ∈ (((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj
+      (Set.Icc lo hi) measurableSet_Icc).range := by
+    rw [show P = ((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj
         (Set.Icc lo hi) measurableSet_Icc from
       gramSpectralPVM_proj_eq_specProjection X _ _]
-    exact LinearPMap.specProjection_mem_specRange _ _ _ z
+    exact (LinearMap.mem_range_self ((_root_.LinearPMap.spectralPVM _ _).proj _ _).toLinearMap z)
   have hSA := gramLinearPMap_isSelfAdjoint X
   have hform := hSA.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj
     measurableSet_Icc (fun _ hs => hs.1) (β := lo) (x := ⟨P z, hPzDom⟩) hPzRange
@@ -141,15 +141,15 @@ theorem gram_residual_le_of_mem_band
       linarith [hs.1]
     · have hright : b - c ≤ r := le_max_right _ _
       linarith [hs.2]
-  have hxRange : x ∈ LinearPMap.specRange
-      (gramLinearPMap_isSelfAdjoint X) (Set.Icc a b) measurableSet_Icc := by
+  have hxRange : x ∈ (((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj
+      (Set.Icc a b) measurableSet_Icc).range := by
     obtain ⟨y, rfl⟩ := (by simpa only [a, b] using hx :
       x ∈ ((gramSpectralPVM X).proj (Set.Icc a b) measurableSet_Icc).range)
     rw [show ((gramSpectralPVM X).proj (Set.Icc a b) measurableSet_Icc)
-        = TauCeti.LinearPMap.specProjection (gramLinearPMap_isSelfAdjoint X)
+        = ((gramLinearPMap X).spectralPVM (gramLinearPMap_isSelfAdjoint X)).proj
           (Set.Icc a b) measurableSet_Icc from
       gramSpectralPVM_proj_eq_specProjection X _ _]
-    exact LinearPMap.specProjection_mem_specRange _ _ _ y
+    exact (LinearMap.mem_range_self ((_root_.LinearPMap.spectralPVM _ _).proj _ _).toLinearMap y)
   have hxDom : x ∈ (gramLinearPMap X).domain := by
     rw [gramLinearPMap_domain]
     exact Submodule.mem_top

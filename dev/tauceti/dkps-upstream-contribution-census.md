@@ -1,5 +1,41 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 native spectral projections and ranges
+
+The spectral projection and range of a complex self-adjoint partial map are
+now written directly as `(A.spectralPVM hA).proj B hB` and its range.
+This retires the DKPS data aliases and their forwarding laws, including the
+range instances and the domain-membership and action wrappers. The paper
+and Challenge declarations use the original measurable sets and domain
+hypotheses. DKPS derives the complement-range identity from the native
+complement and orthogonal-projection laws.
+
+The partial-map PVM and domain intertwining come from roed-math's #41596
+at `81171bd524be1b4f119bb36877630bb96aaed6f8`. The abstract projection
+laws come from Jon Crall's #17527 at
+`fde7c341f8e9b59c5083a87835b330d15581ad8f`, adapted from the DKPS PVM
+donor with Spectra ancestry. FreeBeam now uses `ProjValMeasure.range_proj_mono`,
+which received its current name in #40245. The native reducing-range theorem
+and orthogonal projection onto a PVM range come from tauceti-ai-for-science's
+Forgejo #1964 at `c8bb063fe6bd7a441b156c5cc6e03b027dd29579`.
+The projection-to-indicator rewrite uses the bounded Borel calculus from
+#28859. Mathlib supplies the linear-map range criterion. The retired local
+declarations were in `SpectralMeasure/Construction.lean` at `9b17124f5`.
+That module was split from the original development in
+`f2250101339121c5129bab32f72a44383a679c83` (Jon Crall and Claude Opus 5,
+Kitware 2026, Apache-2.0).
+[#41596](https://github.com/TauCetiProject/TauCeti/pull/41596) ·
+[#17527](https://github.com/TauCetiProject/TauCeti/pull/17527) ·
+[#40245](https://github.com/TauCetiProject/TauCeti/pull/40245) ·
+[#28859](https://github.com/TauCetiProject/TauCeti/pull/28859) ·
+[Forgejo #1964](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1964)
+
+The full default build (22786 jobs), FreeBeam, and the combined Challenge
+and paper semantic-surface build (22492 jobs) passed without warnings.
+The Davis–Kahan comparator preflight matched all 17 available solutions.
+The finite residual conformance statement now uses the solution's gap
+hypothesis name. The name-drift check kept the 49 baseline findings.
+
 ## November 27 bundled Borel calculus and real-spectrum pullback
 
 The cyclic, restriction, naturality, and spectral-projection arguments now

@@ -241,17 +241,17 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
   have hAc : _root_.IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
   have hUeq : complexifySubmodule U =
-      TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic := by
+      ((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range := by
     simpa only [U] using
       complexifySubmodule_realSpecRange hA (Set.Iic c) measurableSet_Iic
   have hB' : TauCeti.IsOddFor
-      (TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic)
+      (((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range)
       (complexify B) := hUeq ▸ isOddFor_complexifySubmodule hB
   have hZdom' := mapsDomainTo_complexifyReal hZdom
   have hZcomm' := complexified_reducing_commutation hZdom hZcomm
   have hUa' : ∀ y : (TauCeti.LinearPMap.complexifyReal A).domain,
       (y : RealComplexification E) ∈
-        TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic →
+        ((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range →
       (⟪TauCeti.LinearPMap.complexifyReal A y,
           (y : RealComplexification E)⟫_ℂ).re ≤
         a * ‖(y : RealComplexification E)‖ ^ 2 := by
@@ -271,7 +271,7 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
     linarith
   have hUb' : ∀ y : (TauCeti.LinearPMap.complexifyReal A).domain,
       (y : RealComplexification E) ∈
-        (TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic)ᗮ →
+        (((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range)ᗮ →
       b * ‖(y : RealComplexification E)‖ ^ 2 ≤
         (⟪TauCeti.LinearPMap.complexifyReal A y,
           (y : RealComplexification E)⟫_ℂ).re := by
@@ -298,7 +298,7 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
     exact (directedCorner_mem_complexify_iff N U B).2 hRmem
   have hRmem' : N.Mem
       (reflectionResidualCorner
-        (TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic)
+        (((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range)
         (complexify B)) :=
     (reflectionResidualCorner_mem_congr_unboundedExactReal
       N hUeq (complexify B)).1 hRmem0
@@ -306,7 +306,7 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
     N hAc hB' hZsa' hZ2' hZdom' hZcomm' hUa' hUb' hab hRmem'
   have hCCc := hc.1
   have hdiag :
-      (TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic).diagBlock
+      (((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range).diagBlock
           (complexify Z) = complexify (U.diagBlock Z) := by
     rw [← diagonalPart_congr hUeq (complexify Z)]
     exact diagonalPart_complexifySubmodule U Z
@@ -388,17 +388,17 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real
   have hAc : _root_.IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
   have hUeq : complexifySubmodule U =
-      TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic := by
+      ((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range := by
     simpa only [U] using
       complexifySubmodule_realSpecRange hA (Set.Iic c) measurableSet_Iic
   have hB' : TauCeti.IsOddFor
-      (TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic)
+      (((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range)
       (complexify B) := hUeq ▸ isOddFor_complexifySubmodule hB
   have hZdom' := mapsDomainTo_complexifyReal hZdom
   have hZcomm' := complexified_reducing_commutation hZdom hZcomm
   have hUa' : ∀ y : (TauCeti.LinearPMap.complexifyReal A).domain,
       (y : RealComplexification E) ∈
-        TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic →
+        ((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range →
       (⟪TauCeti.LinearPMap.complexifyReal A y,
           (y : RealComplexification E)⟫_ℂ).re ≤
         a * ‖(y : RealComplexification E)‖ ^ 2 := by
@@ -418,7 +418,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real
     linarith
   have hUb' : ∀ y : (TauCeti.LinearPMap.complexifyReal A).domain,
       (y : RealComplexification E) ∈
-        (TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic)ᗮ →
+        (((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range)ᗮ →
       b * ‖(y : RealComplexification E)‖ ^ 2 ≤
         (⟪TauCeti.LinearPMap.complexifyReal A y,
           (y : RealComplexification E)⟫_ℂ).re := by
@@ -447,7 +447,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real
     N hAc hBsa' hB' hZsa' hZ2' hZdom' hZcomm' hUa' hUb' hab hBmem'
   have hCCc := hc.1
   have hdiag :
-      (TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic).diagBlock
+      (((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range).diagBlock
           (complexify Z) = complexify (U.diagBlock Z) := by
     rw [← diagonalPart_congr hUeq (complexify Z)]
     exact diagonalPart_complexifySubmodule U Z
@@ -456,13 +456,13 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real
   have hCC : IsUnit (U.diagBlock Z * U.diagBlock Z) := hCCc
   have hTsub :
       unboundedReflectionTangent
-          (TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic)
+          (((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range)
           (complexify Z) =
         unboundedReflectionTangent (complexifySubmodule U) (complexify Z) :=
     (unboundedReflectionTangent_congr_unboundedExactReal hUeq (complexify Z)).symm
   have hTcomplex :
       unboundedReflectionTangent
-          (TauCeti.LinearPMap.specRange hAc (Set.Iic c) measurableSet_Iic)
+          (((_root_.LinearPMap.spectralPVM _ hAc).proj (Set.Iic c) measurableSet_Iic).range)
           (complexify Z) =
         complexify (unboundedReflectionTangent U Z) :=
     hTsub.trans (unboundedReflectionTangent_complexifySubmodule U Z hCC)

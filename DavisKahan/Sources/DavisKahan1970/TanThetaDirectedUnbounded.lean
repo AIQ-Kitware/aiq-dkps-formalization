@@ -107,7 +107,7 @@ theorem tanTheta_directed_unboundedTrial_symmetricNorming_complex
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : TanTheta.BoundedCompressionTrialBlock A Z)
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo alpha (alpha + delta))
+    (hgap : (A.spectralPVM hA).proj (Set.Ioo alpha (alpha + delta))
       measurableSet_Ioo = 0)
     (hCompression : ∀ z : Z,
       RCLike.re ⟪D.operator z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)

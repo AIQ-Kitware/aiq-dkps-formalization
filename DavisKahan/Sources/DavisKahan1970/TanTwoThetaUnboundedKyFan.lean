@@ -2131,26 +2131,25 @@ operator and not a hypothesis. -/
 theorem isDoubleAngleTangent_unboundedReflectionTangent_specRange
     (hA : IsSelfAdjoint A)
     (hB : TauCeti.IsOddFor
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
       A ⟨Z (x : H), hZdom x⟩ + B (Z (x : H)) = Z (A x) + Z (B (x : H)))
     (hUa : ∀ x : A.domain,
-      (x : H) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      (x : H) ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range →
       RCLike.re ⟪A x, (x : H)⟫_ℂ ≤ a * ‖(x : H)‖ ^ 2)
     (hUb : ∀ x : A.domain,
       (x : H) ∈
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ →
       b * ‖(x : H)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : H)⟫_ℂ)
     (hab : a < b) :
     IsDoubleAngleTangent
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) Z
       (unboundedReflectionTangent
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) := by
-  have hgU : ∀ y ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic,
-      ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
-          measurableSet_Iic).offDiagBlock Z y‖ ≤
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) Z) := by
+  have hgU : ∀ y ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range,
+      ‖(((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).offDiagBlock Z y‖ ≤
         TauCeti.crossBlockBound (b - a) ‖B‖ * ‖y‖ := fun y hy =>
     TauCeti.norm_offDiagonalPart_apply_le_specRange hA hB hZsa hZ2 hZdom
       hZcomm hUa hUb hab hy

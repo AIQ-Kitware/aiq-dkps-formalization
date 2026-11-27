@@ -42,23 +42,24 @@ variable (B : Set ℝ) (hB : MeasurableSet B)
 
 /-- A bounded spectral range lies inside the operator domain. -/
 theorem mem_domain_of_mem_specRange_of_bounded {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M)
-    {x : H} (hx : x ∈ specRange hA B hB) : x ∈ A.domain := by
+    {x : H} (hx : x ∈ ((A.spectralPVM hA).proj B hB).range) : x ∈ A.domain := by
   have hM : 0 ≤ max 0 M := le_max_left _ _
   have hcut := hA.mem_graph_spectralCut B hB 0 (max 0 M) hM
     (fun s hs => by simpa only [sub_zero] using (hbnd s hs).trans (le_max_right _ _)) x
-  have hfix := (mem_specRange_iff hA B hB x).1 hx
-  rw [specProjection_def] at hfix
+  have hfix := Submodule.starProjection_eq_self_iff.mpr hx
+  rw [ProjValMeasure.starProjection_range_proj] at hfix
   rw [hfix] at hcut
   exact _root_.LinearPMap.mem_domain_of_mem_graph hcut
 
 /-- On a bounded spectral range, the operator differs from its center by the spectral radius. -/
 theorem norm_sub_smul_le_of_mem_specRange {M c r : ℝ} (_hbnd : ∀ s ∈ B, |s| ≤ M)
-    (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r) {x : H} (hx : x ∈ specRange hA B hB)
+    (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r) {x : H}
+    (hx : x ∈ ((A.spectralPVM hA).proj B hB).range)
     (hmem : x ∈ A.domain) :
     ‖A ⟨x, hmem⟩ - (c : ℂ) • x‖ ≤ r * ‖x‖ := by
   have hcut := hA.mem_graph_spectralCut B hB c r hr hcr x
-  have hfix := (mem_specRange_iff hA B hB x).1 hx
-  rw [specProjection_def] at hfix
+  have hfix := Submodule.starProjection_eq_self_iff.mpr hx
+  rw [ProjValMeasure.starProjection_range_proj] at hfix
   rw [hfix] at hcut
   have hact := A.mem_graph_snd_inj (A.mem_graph ⟨x, hmem⟩) hcut rfl
   rw [hact, add_sub_cancel_right]
@@ -68,12 +69,8 @@ theorem norm_sub_smul_le_of_mem_specRange {M c r : ℝ} (_hbnd : ∀ s ∈ B, |s
 /-- **The interval cutoffs converge strongly to the identity.** -/
 theorem tendsto_specProjection_Icc (x : H) :
     Filter.Tendsto
-      (fun τ : ℝ => specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x)
+      (fun τ : ℝ => (A.spectralPVM hA).proj (Set.Icc (-τ) τ) measurableSet_Icc x)
       Filter.atTop (nhds x) := by
-  rw [show (fun τ : ℝ => specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x) =
-      fun τ : ℝ => (A.spectralPVM hA).proj (Set.Icc (-τ) τ) measurableSet_Icc x from
-    funext fun τ => congrArg (fun P : H →L[ℂ] H => P x)
-      (specProjection_def hA (Set.Icc (-τ) τ) measurableSet_Icc)]
   exact (A.spectralPVM hA).tendsto_proj_apply (fun _ : ℝ => measurableSet_Icc) x
     (Filter.Eventually.of_forall fun s =>
       (Filter.eventually_ge_atTop |s|).mono fun τ hs => abs_le.mp hs)
@@ -98,13 +95,13 @@ private theorem spectralCut_zero_integral {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤
 
 /-- The centered-zero spectral cut agrees with the actual operator on its projection. -/
 theorem spectralCut_zero_eq_on_specProjection {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) (y : H) :
-    ∃ hy : specProjection hA B hB y ∈ A.domain,
-      A ⟨specProjection hA B hB y, hy⟩ =
+    ∃ hy : (A.spectralPVM hA).proj B hB y ∈ A.domain,
+      A ⟨(A.spectralPVM hA).proj B hB y, hy⟩ =
         A.spectralCut hA B hB 0 (max 0 M) (le_max_left _ _)
           (fun s hs => by simpa using (hbnd s hs).trans (le_max_right 0 M)) y := by
   have h := hA.mem_graph_spectralCut B hB 0 (max 0 M) (le_max_left _ _)
     (fun s hs => by simpa using (hbnd s hs).trans (le_max_right 0 M)) y
-  simp only [Complex.ofReal_zero, zero_smul, add_zero, ← specProjection_def] at h
+  simp only [Complex.ofReal_zero, zero_smul, add_zero] at h
   have hm := _root_.LinearPMap.mem_domain_of_mem_graph h
   exact ⟨hm, A.mem_graph_snd_inj (A.mem_graph ⟨_, hm⟩) h rfl⟩
 
@@ -125,10 +122,10 @@ theorem isSelfAdjoint_spectralCut_zero {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M)
 theorem spectralCut_zero_mul_specProjection {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) :
     A.spectralCut hA B hB 0 (max 0 M) (le_max_left _ _)
       (fun s hs => by simpa using (hbnd s hs).trans (le_max_right 0 M)) *
-        specProjection hA B hB =
+        (A.spectralPVM hA).proj B hB =
       A.spectralCut hA B hB 0 (max 0 M) (le_max_left _ _)
         (fun s hs => by simpa using (hbnd s hs).trans (le_max_right 0 M)) := by
-  rw [spectralCut_zero_integral hA B hB hbnd, specProjection_def, ProjValMeasure.integral_mul_proj]
+  rw [spectralCut_zero_integral hA B hB hbnd, ProjValMeasure.integral_mul_proj]
   congr 1
   ext s
   simp only [BoundedBorelFunction.indicator_apply, boundedCoordinate,
@@ -137,12 +134,12 @@ theorem spectralCut_zero_mul_specProjection {M : ℝ} (hbnd : ∀ s ∈ B, |s| �
 
 /-- The centered-zero cut already lands in its spectral range. -/
 theorem specProjection_mul_spectralCut_zero {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) :
-    specProjection hA B hB *
+    (A.spectralPVM hA).proj B hB *
       A.spectralCut hA B hB 0 (max 0 M) (le_max_left _ _)
         (fun s hs => by simpa using (hbnd s hs).trans (le_max_right 0 M)) =
       A.spectralCut hA B hB 0 (max 0 M) (le_max_left _ _)
         (fun s hs => by simpa using (hbnd s hs).trans (le_max_right 0 M)) := by
-  rw [spectralCut_zero_integral hA B hB hbnd, specProjection_def, ProjValMeasure.proj_mul_integral]
+  rw [spectralCut_zero_integral hA B hB hbnd, ProjValMeasure.proj_mul_integral]
   congr 1
   ext s
   simp only [BoundedBorelFunction.indicator_apply, boundedCoordinate,

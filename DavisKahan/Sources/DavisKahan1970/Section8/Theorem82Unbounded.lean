@@ -67,7 +67,7 @@ Riesz integrals or a continuation framework: the bounded proof
 `theorem8_2_perturbationHalfGap_complex` already has the right bootstrap, at the
 *constant* threshold `√2/2`, and only its bounded Riesz continuity has to be
 replaced.  With `γ = ‖H‖`, `l = β − γ`, `r = α + γ`, `d = δ − 2γ > 0`, and the
-path `B_t = (A + H) − tH` carrying `R_t = specRange B_t (centralBand l r d)`:
+path `B_t = (A + H) − tH`, with `R_t` its spectral range on `centralBand l r d`:
 
 * `centralBand l r d = Ioo (β − δ/2) (α + δ/2)` is exactly the extra interval
   Theorem 8.2 prints, so the band is not a second moving datum;

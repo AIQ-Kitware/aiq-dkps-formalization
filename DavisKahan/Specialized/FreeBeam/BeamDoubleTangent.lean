@@ -464,7 +464,7 @@ def beamTrialCutoff (ε : ℝ) :
 
 /-- The spectral projection of `A + ε t` onto `(-∞, 500]`. -/
 abbrev beamLowProjection (ε : ℝ) : BeamL2 →L[ℂ] BeamL2 :=
-  TauCeti.LinearPMap.specProjection (beamPerturbed_isSelfAdjoint ε)
+  ((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj
     (Set.Iic 500) measurableSet_Iic
 
 /-- The reducing reflection `Z = 2Q - 1` of the perturbed beam at the cut `500`. -/
@@ -484,7 +484,7 @@ theorem beamLowReflection_isSelfAdjoint (ε : ℝ) :
     simp
   have hone : IsSelfAdjoint (1 : BeamL2 →L[ℂ] BeamL2) := star_one _
   have hQ : IsSelfAdjoint (beamLowProjection ε) :=
-    TauCeti.LinearPMap.isSelfAdjoint_specProjection _ _ _
+    (_root_.LinearPMap.spectralPVM _ _).isSelfAdjoint_proj _ _
   have h2Q : IsSelfAdjoint ((2 : ℂ) • beamLowProjection ε) := h2.smul hQ
   exact IsSelfAdjoint.sub (R := BeamL2 →L[ℂ] BeamL2) h2Q hone
 
@@ -507,8 +507,7 @@ theorem beamLowReflection_mem_domain (ε : ℝ) {x : BeamL2}
     (hx : x ∈ (beamPerturbed ε).domain) :
     beamLowReflection ε x ∈ (beamPerturbed ε).domain := by
   have hQ : beamLowProjection ε x ∈ (beamPerturbed ε).domain :=
-    TauCeti.LinearPMap.specProjection_mem_domain (beamPerturbed_isSelfAdjoint ε)
-      _ _ ⟨x, hx⟩
+    ((beamPerturbed_isSelfAdjoint ε).intertwines_spectralPVM_proj _ _).mem_domain ⟨x, hx⟩
   rw [beamLowReflection_apply]
   exact (beamPerturbed ε).domain.sub_mem
     ((beamPerturbed ε).domain.smul_mem _ hQ) hx
@@ -527,15 +526,15 @@ theorem beamPerturbed_comm_beamLowReflection (ε : ℝ)
     (beamPerturbed ε) ⟨beamLowReflection ε (x : BeamL2), hzd⟩
       = beamLowReflection ε ((beamPerturbed ε) x) := by
   have hQd : beamLowProjection ε (x : BeamL2) ∈ (beamPerturbed ε).domain :=
-    TauCeti.LinearPMap.specProjection_mem_domain (beamPerturbed_isSelfAdjoint ε) _ _ x
+    ((beamPerturbed_isSelfAdjoint ε).intertwines_spectralPVM_proj _ _).mem_domain x
   have hsplit : (⟨beamLowReflection ε (x : BeamL2), hzd⟩ :
         (beamPerturbed ε).domain)
       = (2 : ℂ) • (⟨beamLowProjection ε (x : BeamL2), hQd⟩ :
           (beamPerturbed ε).domain) - x := by
     apply Subtype.ext
     exact beamLowReflection_apply ε (x : BeamL2)
-  have hcomm := TauCeti.LinearPMap.specProjection_apply_domain
-    (beamPerturbed_isSelfAdjoint ε) (Set.Iic 500) measurableSet_Iic x
+  have hcomm := (((beamPerturbed_isSelfAdjoint ε).intertwines_spectralPVM_proj
+      (Set.Iic 500) measurableSet_Iic).apply_eq x).symm
   rw [hsplit, _root_.LinearPMap.map_sub, _root_.LinearPMap.map_smul, hcomm,
     beamLowReflection_apply]
 

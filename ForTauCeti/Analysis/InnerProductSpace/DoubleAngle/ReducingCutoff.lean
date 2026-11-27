@@ -177,37 +177,37 @@ whole space.**  Unlike `TauCeti.spectralCutoff` it selects no half-line, so it
 applies to any self-adjoint operator with no reference to a cut point. -/
 noncomputable def spectralBandCutoff (hA : IsSelfAdjoint A) {T : ℝ} (hT : 0 ≤ T) :
     BoundedCutoff A ⊤ T where
-  toProj := LinearPMap.specProjection hA (Set.Icc (-T) T) measurableSet_Icc
-  isSelfAdjoint := LinearPMap.isSelfAdjoint_specProjection hA _ measurableSet_Icc
+  toProj := (A.spectralPVM hA).proj (Set.Icc (-T) T) measurableSet_Icc
+  isSelfAdjoint := (A.spectralPVM hA).isSelfAdjoint_proj _ measurableSet_Icc
   isIdempotentElem :=
-    LinearPMap.isIdempotentElem_specProjection hA _ measurableSet_Icc
+    (A.spectralPVM hA).proj_idem _ measurableSet_Icc
   mem_subspace := fun _ => Submodule.mem_top
   mem_domain := fun v =>
     LinearPMap.mem_domain_of_mem_specRange_of_bounded hA _ measurableSet_Icc
       (fun _ hs => abs_le_of_mem_Icc_symm hs)
-      (LinearPMap.specProjection_mem_specRange hA _ measurableSet_Icc v)
+      ((LinearMap.mem_range_self ((A.spectralPVM hA).proj _ measurableSet_Icc).toLinearMap v))
   norm_apply_le := fun v => by
     have h := LinearPMap.norm_sub_smul_le_of_mem_specRange hA _ measurableSet_Icc
       (M := T) (c := 0) (r := T) (fun _ hs => abs_le_of_mem_Icc_symm hs) hT
       (fun _ hs => by simpa using abs_le_of_mem_Icc_symm hs)
-      (LinearPMap.specProjection_mem_specRange hA _ measurableSet_Icc v)
+      ((LinearMap.mem_range_self ((A.spectralPVM hA).proj _ measurableSet_Icc).toLinearMap v))
       (LinearPMap.mem_domain_of_mem_specRange_of_bounded hA _ measurableSet_Icc
         (fun _ hs => abs_le_of_mem_Icc_symm hs)
-        (LinearPMap.specProjection_mem_specRange hA _ measurableSet_Icc v))
-    simpa only [Complex.ofReal_zero, zero_smul, sub_zero] using h
+        ((LinearMap.mem_range_self ((A.spectralPVM hA).proj _ measurableSet_Icc).toLinearMap v)))
+    simpa only [Complex.ofReal_zero, zero_smul, sub_zero, ContinuousLinearMap.coe_coe] using h
   apply_mem_range := fun v => by
     have hidem := LinearPMap.specProjection_apply_specProjection_of_subset hA
       measurableSet_Icc measurableSet_Icc (subset_refl (Set.Icc (-T) T)) v
-    have hmem : LinearPMap.specProjection hA (Set.Icc (-T) T) measurableSet_Icc v
+    have hmem : (A.spectralPVM hA).proj (Set.Icc (-T) T) measurableSet_Icc v
         ∈ A.domain :=
       LinearPMap.mem_domain_of_mem_specRange_of_bounded hA _ measurableSet_Icc
         (fun _ hs => abs_le_of_mem_Icc_symm hs)
-        (LinearPMap.specProjection_mem_specRange hA _ measurableSet_Icc v)
-    have h := LinearPMap.specProjection_apply_domain hA (Set.Icc (-T) T)
-      measurableSet_Icc ⟨_, hmem⟩
-    have hsub : (⟨LinearPMap.specProjection hA (Set.Icc (-T) T) measurableSet_Icc
-          (LinearPMap.specProjection hA (Set.Icc (-T) T) measurableSet_Icc v),
-        LinearPMap.specProjection_mem_domain hA _ measurableSet_Icc
+        ((LinearMap.mem_range_self ((A.spectralPVM hA).proj _ measurableSet_Icc).toLinearMap v))
+    have h := ((hA.intertwines_spectralPVM_proj (Set.Icc (-T) T)
+        measurableSet_Icc).apply_eq ⟨_, hmem⟩).symm
+    have hsub : (⟨(A.spectralPVM hA).proj (Set.Icc (-T) T) measurableSet_Icc
+          ((A.spectralPVM hA).proj (Set.Icc (-T) T) measurableSet_Icc v),
+        (hA.intertwines_spectralPVM_proj _ measurableSet_Icc).mem_domain
           ⟨_, hmem⟩⟩ : A.domain) = ⟨_, hmem⟩ := Subtype.ext hidem
     rw [hsub] at h
     exact h.symm
@@ -215,7 +215,7 @@ noncomputable def spectralBandCutoff (hA : IsSelfAdjoint A) {T : ℝ} (hT : 0 �
 /-- The projection underlying the symmetric band cutoff. -/
 theorem spectralBandCutoff_toProj (hA : IsSelfAdjoint A) {T : ℝ} (hT : 0 ≤ T) :
     (spectralBandCutoff hA hT).toProj =
-      LinearPMap.specProjection hA (Set.Icc (-T) T) measurableSet_Icc := by
+      (A.spectralPVM hA).proj (Set.Icc (-T) T) measurableSet_Icc := by
   simp only [spectralBandCutoff]
 
 end Band
@@ -253,12 +253,12 @@ theorem tendsto_reducingCutoffSeq (hA : IsSelfAdjoint A)
   have hshift : Filter.Tendsto (fun n : ℕ => (n : ℝ)) Filter.atTop Filter.atTop :=
     tendsto_natCast_atTop_atTop
   have hband : Filter.Tendsto
-      (fun n : ℕ => LinearPMap.specProjection hAU
+      (fun n : ℕ => (_root_.LinearPMap.spectralPVM _ hAU).proj
         (Set.Icc (-(n : ℝ)) (n : ℝ)) measurableSet_Icc ⟨x, hx⟩)
       Filter.atTop (nhds (⟨x, hx⟩ : U)) :=
     (LinearPMap.tendsto_specProjection_Icc hAU ⟨x, hx⟩).comp hshift
   have hcoe : Filter.Tendsto
-      (fun n : ℕ => ((LinearPMap.specProjection hAU
+      (fun n : ℕ => (((_root_.LinearPMap.spectralPVM _ hAU).proj
         (Set.Icc (-(n : ℝ)) (n : ℝ)) measurableSet_Icc ⟨x, hx⟩ : U) : H))
       Filter.atTop (nhds x) := by
     have := (continuous_subtypeVal.tendsto (⟨x, hx⟩ : U)).comp hband

@@ -596,7 +596,7 @@ theorem starProjection_selfAdjointSpectralSubspace_compl
   rw [← selfAdjointSpectralProjection_eq_starProjection A hA Bᶜ hB.compl,
     show selfAdjointSpectralProjection A hA Bᶜ hB.compl
         = ContinuousLinearMap.id ℂ H - selfAdjointSpectralProjection A hA B hB from
-      TauCeti.LinearPMap.specProjection_compl hA B hB]
+      (A.spectralPVM hA).proj_compl B hB]
   rw [selfAdjointSpectralProjection_eq_starProjection A hA B hB]
   exact (Submodule.starProjection_orthogonal' _).symm
 

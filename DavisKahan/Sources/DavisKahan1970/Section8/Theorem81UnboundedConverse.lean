@@ -71,8 +71,8 @@ theorem starProjection_specProjection_comm_of_reduces
     [Q.HasOrthogonalProjection]
     (hQ : _root_.LinearPMap.IsReducing B Q)
     (S : Set ℝ) (hS : MeasurableSet S) (x : H) :
-    Q.starProjection (TauCeti.LinearPMap.specProjection hB S hS x)
-      = TauCeti.LinearPMap.specProjection hB S hS (Q.starProjection x) := by
+    Q.starProjection ((B.spectralPVM hB).proj S hS x)
+      = (B.spectralPVM hB).proj S hS (Q.starProjection x) := by
   obtain ⟨hmaps, hcomm⟩ := TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace hQ
   have hmaps' : ∀ z : B.domain, Q.reflection (z : H) ∈ B.domain := by
     intro z
@@ -87,8 +87,8 @@ theorem starProjection_specProjection_comm_of_reduces
     exact Submodule.reflectionOperator_apply_eq_reflection Q _
   have hnat := TauCeti.LinearPMap.specProjection_apply_of_unitary_intertwines hB
     Q.reflection hmaps' hint S hS x
-  have hnat' : Q.reflectionOperator (TauCeti.LinearPMap.specProjection hB S hS x)
-      = TauCeti.LinearPMap.specProjection hB S hS (Q.reflectionOperator x) := by
+  have hnat' : Q.reflectionOperator ((B.spectralPVM hB).proj S hS x)
+      = (B.spectralPVM hB).proj S hS (Q.reflectionOperator x) := by
     rw [Submodule.reflectionOperator_apply_eq_reflection,
       Submodule.reflectionOperator_apply_eq_reflection]
     exact hnat
@@ -205,9 +205,10 @@ theorem theorem8_1_eq_canonicalBranchUnbounded_of_maximalAngle_le
     rw [TauCeti.DavisKahan.subspaceGap_orthogonal P M]
     exact hgapM
   have hQsp : (canonicalLowBranchUnbounded hB alpha).starProjection
-      = TauCeti.LinearPMap.specProjection hB (Set.Iic alpha) measurableSet_Iic :=
-    (TauCeti.LinearPMap.specProjection_eq_starProjection_specRange hB
-      (Set.Iic alpha) measurableSet_Iic).symm
+      = ((TauCeti.LinearPMap.addBounded A Hop).spectralPVM hB).proj
+        (Set.Iic alpha) measurableSet_Iic :=
+    ((TauCeti.LinearPMap.addBounded A Hop).spectralPVM hB).starProjection_range_proj
+      (Set.Iic alpha) measurableSet_Iic
   refine eq_of_starProjection_comm_of_crossed_trivial ?_ ?_ ?_
   · intro x
     rw [hQsp]

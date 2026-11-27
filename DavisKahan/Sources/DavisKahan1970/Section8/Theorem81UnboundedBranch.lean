@@ -18,7 +18,7 @@ projector `Q` with `Λ₀ ≤ α` and `Λ₁ ≥ α + δ` — "take the spectral
 `A + H` on the appropriate side of `α`".  This module takes it, at the paper's
 inherited unbounded scope.
 
-The branch is `specRange (A + H) (Iic α)`.  Its two ordered form bounds are the
+The branch is the spectral range of `A + H` on `Iic α`. Its two ordered form bounds are the
 pointwise half-line energy bounds of the spectral measure, applied through a
 one-sided limit:
 
@@ -55,13 +55,14 @@ of the perturbed operator for the closed half-line `Iic α`. -/
 @[expose]
 def canonicalLowBranchUnbounded {B : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) (alpha : ℝ) :
     Submodule ℂ H :=
-  TauCeti.LinearPMap.specRange hB (Set.Iic alpha) measurableSet_Iic
+  ((B.spectralPVM hB).proj (Set.Iic alpha) measurableSet_Iic).range
 
 /-- The branch is a spectral range, hence orthogonally complemented. -/
 instance canonicalLowBranchUnbounded_hasOrthogonalProjection
     {B : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) (alpha : ℝ) :
-    (canonicalLowBranchUnbounded hB alpha).HasOrthogonalProjection :=
-  TauCeti.LinearPMap.instHasOrthogonalProjection_specRange hB _ _
+    (canonicalLowBranchUnbounded hB alpha).HasOrthogonalProjection := by
+  unfold canonicalLowBranchUnbounded
+  infer_instance
 
 /-- The branch reduces the perturbed operator. -/
 theorem canonicalLowBranchUnbounded_reduces
@@ -74,26 +75,28 @@ half-line. -/
 theorem canonicalLowBranchUnbounded_orthogonal
     {B : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) (alpha : ℝ) :
     (canonicalLowBranchUnbounded hB alpha)ᗮ
-      = TauCeti.LinearPMap.specRange hB (Set.Ioi alpha) measurableSet_Ioi := by
+      = ((B.spectralPVM hB).proj (Set.Ioi alpha) measurableSet_Ioi).range := by
   rw [canonicalLowBranchUnbounded,
     ← TauCeti.LinearPMap.specRange_compl hB (Set.Iic alpha) measurableSet_Iic]
-  congr 1
-  exact (Set.compl_Iic (a := alpha))
+  rw [(B.spectralPVM hB).proj_congr (Set.compl_Iic (a := alpha))
+    measurableSet_Iic.compl measurableSet_Ioi]
 
 /-- **The sharp upper form bound on the branch.**  `Λ₀ ≤ α`. -/
 theorem re_inner_le_of_mem_canonicalLowBranchUnbounded
     {B : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) (alpha : ℝ) (x : B.domain)
     (hx : (x : H) ∈ canonicalLowBranchUnbounded hB alpha) :
     (⟪B x, (x : H)⟫_ℂ).re ≤ alpha * ‖(x : H)‖ ^ 2 := by
-  have hIoi : TauCeti.LinearPMap.specProjection hB (Set.Ioi alpha) measurableSet_Ioi
+  have hIoi : (B.spectralPVM hB).proj (Set.Ioi alpha) measurableSet_Ioi
       (x : H) = 0 := by
-    have hfix : TauCeti.LinearPMap.specProjection hB (Set.Iic alpha) measurableSet_Iic
+    have hfix : (B.spectralPVM hB).proj (Set.Iic alpha) measurableSet_Iic
         (x : H) = (x : H) :=
-      (TauCeti.LinearPMap.mem_specRange_iff hB _ _ _).mp hx
+      (LinearMap.IsIdempotentElem.mem_range_iff
+      (ContinuousLinearMap.IsIdempotentElem.toLinearMap ((B.spectralPVM hB).proj_idem _ _))
+      (x := _)).mp hx
     have hsum := TauCeti.LinearPMap.specProjection_add_compl_apply hB
       (B := Set.Iic alpha) measurableSet_Iic (x : H)
     rw [hfix] at hsum
-    have hzero : TauCeti.LinearPMap.specProjection hB ((Set.Iic alpha)ᶜ)
+    have hzero : (B.spectralPVM hB).proj ((Set.Iic alpha)ᶜ)
         measurableSet_Iic.compl (x : H) = 0 := by
       linear_combination (norm := module) hsum
     rw [← hzero]
@@ -103,7 +106,7 @@ theorem re_inner_le_of_mem_canonicalLowBranchUnbounded
       (⟪B x, (x : H)⟫_ℂ).re ≤ c * ‖(x : H)‖ ^ 2 := by
     intro c hc
     have hsub : Set.Ici c ⊆ Set.Ioi alpha := fun s hs => lt_of_lt_of_le hc hs
-    have hIci : TauCeti.LinearPMap.specProjection hB (Set.Ici c) measurableSet_Ici
+    have hIci : (B.spectralPVM hB).proj (Set.Ici c) measurableSet_Ici
         (x : H) = 0 :=
       TauCeti.LinearPMap.specProjection_apply_eq_zero_of_subset hB measurableSet_Ici
         measurableSet_Ioi hsub hIoi
@@ -140,7 +143,7 @@ theorem le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal
       ((lam : ℝ) : ℂ) ∉ _root_.LinearPMap.spectrum B)
     (x : B.domain) (hx : (x : H) ∈ (canonicalLowBranchUnbounded hB alpha)ᗮ) :
     (alpha + delta) * ‖(x : H)‖ ^ 2 ≤ (⟪B x, (x : H)⟫_ℂ).re := by
-  have hgapzero : TauCeti.LinearPMap.specProjection hB
+  have hgapzero : (B.spectralPVM hB).proj
       (Set.Ioo alpha (alpha + delta)) measurableSet_Ioo = 0 := by
     refine hB.spectralPVM_proj_eq_zero_of_forall_mem_resolventSet measurableSet_Ioo ?_
     intro lam hlam
@@ -148,13 +151,14 @@ theorem le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal
     have hresRoot : ((lam : ℝ) : ℂ) ∈ _root_.LinearPMap.resolventSet B := by
       simpa only [_root_.LinearPMap.mem_spectrum_iff, not_not] using this
     exact hresRoot
-  have hxIoi : (x : H) ∈ TauCeti.LinearPMap.specRange hB (Set.Ioi alpha)
-      measurableSet_Ioi := by
+  have hxIoi : (x : H) ∈ ((B.spectralPVM hB).proj (Set.Ioi alpha) measurableSet_Ioi).range := by
     rw [← canonicalLowBranchUnbounded_orthogonal hB alpha]
     exact hx
-  have hfix : TauCeti.LinearPMap.specProjection hB (Set.Ioi alpha) measurableSet_Ioi
+  have hfix : (B.spectralPVM hB).proj (Set.Ioi alpha) measurableSet_Ioi
       (x : H) = (x : H) :=
-    (TauCeti.LinearPMap.mem_specRange_iff hB _ _ _).mp hxIoi
+    (LinearMap.IsIdempotentElem.mem_range_iff
+      (ContinuousLinearMap.IsIdempotentElem.toLinearMap ((B.spectralPVM hB).proj_idem _ _))
+      (x := _)).mp hxIoi
   have hall : ∀ c : ℝ, c < alpha + delta →
       c * ‖(x : H)‖ ^ 2 ≤ (⟪B x, (x : H)⟫_ℂ).re := by
     intro c hc
@@ -164,12 +168,12 @@ theorem le_re_inner_of_mem_canonicalLowBranchUnbounded_orthogonal
     have hsub : Set.Iic c ∩ Set.Ioi alpha ⊆ Set.Ioo alpha (alpha + delta) := by
       rintro s ⟨hs1, hs2⟩
       exact ⟨hs2, lt_of_le_of_lt hs1 hc⟩
-    have hzero : TauCeti.LinearPMap.specProjection hB (Set.Iic c ∩ Set.Ioi alpha)
+    have hzero : (B.spectralPVM hB).proj (Set.Iic c ∩ Set.Ioi alpha)
         (measurableSet_Iic.inter measurableSet_Ioi) (x : H) = 0 :=
       TauCeti.LinearPMap.specProjection_apply_eq_zero_of_subset hB
         (measurableSet_Iic.inter measurableSet_Ioi) measurableSet_Ioo hsub
         (by rw [hgapzero]; rfl)
-    have hIic : TauCeti.LinearPMap.specProjection hB (Set.Iic c) measurableSet_Iic
+    have hIic : (B.spectralPVM hB).proj (Set.Iic c) measurableSet_Iic
         (x : H) = 0 := by rw [hinter]; exact hzero
     exact TauCeti.LinearPMap.le_re_inner_of_specProjection_Iic_apply_eq_zero hB x hIic
   by_contra hcon

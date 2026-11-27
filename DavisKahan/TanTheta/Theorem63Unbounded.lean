@@ -165,15 +165,14 @@ variable (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
 /-- A spectral projection of a subset of a null set is null. -/
 theorem specProjection_eq_zero_of_subset {S T : Set ℝ}
     (hS : MeasurableSet S) (hT : MeasurableSet T) (hST : S ⊆ T)
-    (hzero : TauCeti.LinearPMap.specProjection hA T hT = 0) :
-    TauCeti.LinearPMap.specProjection hA S hS = 0 := by
+    (hzero : (A.spectralPVM hA).proj T hT = 0) :
+    (A.spectralPVM hA).proj S hS = 0 := by
   have hinter : S ∩ T = S := Set.inter_eq_left.mpr hST
-  have hmul := (_root_.LinearPMap.spectralPVM _ hA).proj_inter S T hS hT
-  rw [(_root_.LinearPMap.spectralPVM _ hA).proj_congr hinter (hS.inter hT) hS] at hmul
-  have hzero' : (_root_.LinearPMap.spectralPVM _ hA).proj T hT = 0 := by
-    rw [← TauCeti.LinearPMap.specProjection_def]
+  have hmul := (A.spectralPVM hA).proj_inter S T hS hT
+  rw [(A.spectralPVM hA).proj_congr hinter (hS.inter hT) hS] at hmul
+  have hzero' : (A.spectralPVM hA).proj T hT = 0 := by
     exact hzero
-  rw [TauCeti.LinearPMap.specProjection_def, ← hmul, hzero', mul_zero]
+  rw [← hmul, hzero', mul_zero]
 
 /-- **A vector of `Vᗮ` carries no spectral mass below the gap.**
 
@@ -181,13 +180,13 @@ theorem specProjection_eq_zero_of_subset {S T : Set ℝ}
 `Set.Ioi α`; intersecting with `Set.Iic c` for `c < α + δ` lands inside the gap. -/
 theorem specProjection_Iic_apply_eq_zero_of_gap
     {α δ : ℝ}
-    (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo α (α + δ))
+    (hgap : (A.spectralPVM hA).proj (Set.Ioo α (α + δ))
       measurableSet_Ioo = 0)
     {c : ℝ} (hc : c < α + δ) (x : H) :
-    TauCeti.LinearPMap.specProjection hA (Set.Iic c) measurableSet_Iic
-      (TauCeti.LinearPMap.specProjection hA (Set.Iic α)ᶜ measurableSet_Iic.compl x)
+    (A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic
+      ((A.spectralPVM hA).proj (Set.Iic α)ᶜ measurableSet_Iic.compl x)
       = 0 := by
-  have hmul := (_root_.LinearPMap.spectralPVM _ hA).proj_inter
+  have hmul := (A.spectralPVM hA).proj_inter
     (Set.Iic c) (Set.Iic α)ᶜ measurableSet_Iic measurableSet_Iic.compl
   have hset : Set.Iic c ∩ (Set.Iic α)ᶜ = Set.Ioc α c := by
     ext t
@@ -197,17 +196,16 @@ theorem specProjection_Iic_apply_eq_zero_of_gap
   have hsub : Set.Ioc α c ⊆ Set.Ioo α (α + δ) := by
     intro t ht
     exact ⟨ht.1, lt_of_le_of_lt ht.2 hc⟩
-  have hzero : TauCeti.LinearPMap.specProjection hA (Set.Ioc α c)
+  have hzero : (A.spectralPVM hA).proj (Set.Ioc α c)
       measurableSet_Ioc = 0 :=
     specProjection_eq_zero_of_subset A hA measurableSet_Ioc measurableSet_Ioo hsub hgap
-  have hcomp : (_root_.LinearPMap.spectralPVM _ hA).proj (Set.Iic c) measurableSet_Iic *
-      (_root_.LinearPMap.spectralPVM _ hA).proj (Set.Iic α)ᶜ measurableSet_Iic.compl = 0 := by
-    rw [hmul, (_root_.LinearPMap.spectralPVM _ hA).proj_congr hset
+  have hcomp : (A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic *
+      (A.spectralPVM hA).proj (Set.Iic α)ᶜ measurableSet_Iic.compl = 0 := by
+    rw [hmul, (A.spectralPVM hA).proj_congr hset
       (measurableSet_Iic.inter measurableSet_Iic.compl) measurableSet_Ioc]
-    rw [← TauCeti.LinearPMap.specProjection_def]
     exact hzero
   have happ := congrArg (fun L : H →L[ℂ] H => L x) hcomp
-  simpa [TauCeti.LinearPMap.specProjection_def] using happ
+  exact happ
 
 /-! ### A spectral subspace reduces its operator
 
@@ -221,10 +219,10 @@ theorem starProjection_orthogonal_selfAdjointSpectralSubspace
     (B : Set ℝ) (hB : MeasurableSet B) :
     (selfAdjointSpectralSubspace A hA B hB)ᗮ.starProjection =
       selfAdjointSpectralProjection A hA Bᶜ hB.compl := by
-  show _ = TauCeti.LinearPMap.specProjection hA Bᶜ hB.compl
+  show _ = (A.spectralPVM hA).proj Bᶜ hB.compl
   rw [Submodule.starProjection_orthogonal',
     ← selfAdjointSpectralProjection_eq_starProjection A hA B hB,
-    TauCeti.LinearPMap.specProjection_compl hA B hB]
+    (A.spectralPVM hA).proj_compl B hB]
   rfl
 
 /-- **A spectral subspace reduces its operator, domain half.**  The projection onto the
@@ -282,7 +280,7 @@ spectrum, so `P_{Iic (α+δ)} y` need not vanish, while `P_{Iic c} y` does for e
 `c < α + δ`. -/
 theorem le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_of_gap
     {α δ : ℝ}
-    (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo α (α + δ))
+    (hgap : (A.spectralPVM hA).proj (Set.Ioo α (α + δ))
       measurableSet_Ioo = 0)
     (y : H)
     (hyV : y ∈ (selfAdjointSpectralSubspace A hA (Set.Iic α) measurableSet_Iic)ᗮ)
@@ -291,10 +289,10 @@ theorem le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_of_gap
   classical
   have hprojV' : (selfAdjointSpectralSubspace A hA (Set.Iic α)
       measurableSet_Iic)ᗮ.starProjection =
-      TauCeti.LinearPMap.specProjection hA (Set.Iic α)ᶜ measurableSet_Iic.compl :=
+      (A.spectralPVM hA).proj (Set.Iic α)ᶜ measurableSet_Iic.compl :=
     starProjection_orthogonal_selfAdjointSpectralSubspace A hA (Set.Iic α)
       measurableSet_Iic
-  have hfix : TauCeti.LinearPMap.specProjection hA (Set.Iic α)ᶜ
+  have hfix : (A.spectralPVM hA).proj (Set.Iic α)ᶜ
       measurableSet_Iic.compl y = y := by
     rw [← hprojV']
     exact Submodule.starProjection_eq_self_iff.mpr hyV
@@ -344,7 +342,7 @@ theorem crossed_lower_of_spectralGap
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : BoundedCompressionTrialBlock A Z)
     {α δ : ℝ}
-    (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo α (α + δ))
+    (hgap : (A.spectralPVM hA).proj (Set.Ioo α (α + δ))
       measurableSet_Ioo = 0)
     (z : Z) :
     (α + δ) * ‖(selfAdjointSpectralSubspace A hA (Set.Iic α)
@@ -386,7 +384,7 @@ theorem theorem6_3_unbounded_ideal
     [FiniteDimensional ℂ Z]
     (D : BoundedCompressionTrialBlock A Z)
     {α δ : ℝ} (hδ : 0 < δ)
-    (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo α (α + δ))
+    (hgap : (A.spectralPVM hA).proj (Set.Ioo α (α + δ))
       measurableSet_Ioo = 0)
     (hCompression : ∀ z : Z, RCLike.re ⟪D.operator z, z⟫_ℂ ≤ α * ‖z‖ ^ 2)
     (tanTheta0 : Z →L[ℂ] H)
@@ -414,7 +412,7 @@ theorem theorem6_3_unbounded_ideal_directedTangent
     [FiniteDimensional ℂ Z]
     (D : BoundedCompressionTrialBlock A Z)
     {α δ : ℝ} (hδ : 0 < δ)
-    (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo α (α + δ))
+    (hgap : (A.spectralPVM hA).proj (Set.Ioo α (α + δ))
       measurableSet_Ioo = 0)
     (hCompression : ∀ z : Z, RCLike.re ⟪D.operator z, z⟫_ℂ ≤ α * ‖z‖ ^ 2)
     (hResidual : N.Mem D.residual) :

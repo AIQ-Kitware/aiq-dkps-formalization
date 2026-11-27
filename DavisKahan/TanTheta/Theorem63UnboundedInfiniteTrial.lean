@@ -655,7 +655,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_exists
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : BoundedCompressionTrialBlock A Z)
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo alpha (alpha + delta))
+    (hgap : (A.spectralPVM hA).proj (Set.Ioo alpha (alpha + delta))
       measurableSet_Ioo = 0)
     (hCompression : ∀ z : Z,
       RCLike.re ⟪D.operator z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
@@ -684,7 +684,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : BoundedCompressionTrialBlock A Z)
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo alpha (alpha + delta))
+    (hgap : (A.spectralPVM hA).proj (Set.Ioo alpha (alpha + delta))
       measurableSet_Ioo = 0)
     (hCompression : ∀ z : Z,
       RCLike.re ⟪D.operator z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)

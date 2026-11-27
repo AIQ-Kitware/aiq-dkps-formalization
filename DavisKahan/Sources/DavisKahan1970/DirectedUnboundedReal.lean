@@ -509,7 +509,7 @@ theorem le_re_inner_of_mem_orthogonal_realSelfAdjointSpectralSubspace_of_gap
   have hAc : _root_.IsSelfAdjoint Ac :=
     PartialMapComplexification.isSelfAdjoint_complexify hA
   -- The complex gap hypothesis, obtained by complexifying the real one.
-  have hgapC : TauCeti.LinearPMap.specProjection hAc
+  have hgapC : (_root_.LinearPMap.spectralPVM _ hAc).proj
       (Set.Ioo alpha (alpha + delta)) measurableSet_Ioo = 0 := by
     have h := complexify_realSelfAdjointSpectralProjection A hA
       (Set.Ioo alpha (alpha + delta)) measurableSet_Ioo

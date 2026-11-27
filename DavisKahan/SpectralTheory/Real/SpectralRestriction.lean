@@ -295,10 +295,10 @@ fixes the diagonal measures; since indicator symbols are real, the four
 integrals are real and the polarisation sum is its own conjugate. -/
 theorem conjugateOperator_specProjection (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) :
-    conjugateOperator (TauCeti.LinearPMap.specProjection
-        (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS)
-      = TauCeti.LinearPMap.specProjection
-          (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS := by
+    conjugateOperator ((_root_.LinearPMap.spectralPVM _
+        (PartialMapComplexification.isSelfAdjoint_complexify hA)).proj S hS)
+      = (_root_.LinearPMap.spectralPVM _ (PartialMapComplexification.isSelfAdjoint_complexify
+          hA)).proj S hS := by
   set hAℂ := PartialMapComplexification.isSelfAdjoint_complexify hA with hhAc
   set hU := hAℂ.isStarNormal_cayley with hhU
   set κ : _root_.spectrum ℂ ((PartialMapComplexification.complexify A).cayley) → ℝ :=
@@ -325,7 +325,7 @@ theorem conjugateOperator_specProjection (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjo
   -- instance that `rw` obtains from the rewritten form; simp normalises before the instance
   -- argument is determined.
   rw [conjugateOperator_apply, inner_conjugation_right, ← inner_conj_symm,
-    TauCeti.LinearPMap.specProjection_eq_borelCalculus hAℂ S hS,
+    hAℂ.spectralPVM_proj, ← ContinuousLinearMap.borelCalculus_indicator,
     TauCeti.BorelCalculus.inner_borelCalculus, TauCeti.BorelCalculus.inner_borelCalculus]
   -- move the conjugation through the four diagonal measures
   have h1 : conjugation ξ + conjugation ψ = conjugation (ξ + ψ) := (map_add _ _ _).symm
@@ -445,7 +445,7 @@ theorem realSelfAdjointSpectralProjection_idem
     selfAdjointSpectralProjection
       (PartialMapComplexification.complexify A)
       (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS = _
-  simp only [selfAdjointSpectralProjection, TauCeti.LinearPMap.specProjection_def]
+  simp only [selfAdjointSpectralProjection]
   exact (_root_.LinearPMap.spectralPVM _
     (PartialMapComplexification.isSelfAdjoint_complexify hA)).proj_idem S hS
 
@@ -458,7 +458,7 @@ theorem realSelfAdjointSpectralProjection_isSelfAdjoint
   apply RealComplexification.complexify_injective
   rw [TauCeti.RealComplexification.complexify_adjoint,
     complexify_realSelfAdjointSpectralProjection]
-  simp only [selfAdjointSpectralProjection, TauCeti.LinearPMap.specProjection_def]
+  simp only [selfAdjointSpectralProjection]
   exact (_root_.LinearPMap.spectralPVM _
     (PartialMapComplexification.isSelfAdjoint_complexify hA)).isSelfAdjoint_proj S hS
     |>.adjoint_eq
@@ -576,7 +576,7 @@ theorem realSelfAdjointSpectralProjection_compl
     RealComplexification.complexify_sub,
     RealComplexification.complexify_id,
     complexify_realSelfAdjointSpectralProjection]
-  simp only [selfAdjointSpectralProjection, TauCeti.LinearPMap.specProjection_def]
+  simp only [selfAdjointSpectralProjection]
   exact (_root_.LinearPMap.spectralPVM _
     (PartialMapComplexification.isSelfAdjoint_complexify hA)).proj_compl S hS
 

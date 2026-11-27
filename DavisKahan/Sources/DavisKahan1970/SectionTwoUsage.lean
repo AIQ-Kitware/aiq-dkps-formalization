@@ -32,7 +32,7 @@ What the four ask for, in the vocabulary of the subject:
   `IsSelfAdjoint A` -- unbounded, with an explicit domain;
 * **the trial or spectral subspace** is a `Submodule 𝕜 H` carrying
   `[HasOrthogonalProjection]`, or is selected from `A` by a measurable set of
-  reals through `TauCeti.LinearPMap.specRange` / `realSpecRange`;
+  reals through the range of the native PVM projection and `realSpecRange`;
 * **the gap** is either a `FormBoundedSylvesterGap` between two self-adjoint
   restrictions, or the printed ordered/interval separation written out;
 * **the residual or perturbation** is bounded where it appears on the right-hand
@@ -395,26 +395,26 @@ theorem tanTwoTheta_from_reducingSubspace
     (hA : IsSelfAdjoint A)
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B)
     (hVred : _root_.LinearPMap.IsReducing
       (TauCeti.LinearPMap.addBounded A B) V)
     (hUa : ∀ x : A.domain,
-      (x : E) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      (x : E) ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range →
       RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain,
       (x : E) ∈
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
     (∀ t ∈ spectrum ℝ (angleOperatorC
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V),
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V),
         Real.cos (2 * t) ≠ 0) ∧
       N.Mem (tanTwoAngleOperatorC
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ∧
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V) ∧
       (b - a) * N.gauge (tanTwoAngleOperatorC
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V) ≤
         2 * N.gauge B := by
-  have hUred : A.IsReducing (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) :=
+  have hUred : A.IsReducing (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) :=
     hA.isReducing_range_spectralPVM_proj (Set.Iic c) measurableSet_Iic
   have hAlg : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := E) =
       (ContinuousLinearMap.algebra : Algebra ℝ (E →L[ℂ] E)) :=

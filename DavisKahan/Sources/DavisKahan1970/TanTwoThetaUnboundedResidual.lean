@@ -96,28 +96,25 @@ commutes with `A + B` there — that is, `Q` reduces the perturbed operator.
 theorem tanTwoTheta_unbounded_residual_opNorm_complex
     {A : H →ₗ.[ℂ] H} {B Z : H →L[ℂ] H} {a b c : ℝ} (hA : IsSelfAdjoint A)
     (hB : TauCeti.IsOddFor
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
       A ⟨Z (x : H), hZdom x⟩ + B (Z (x : H)) = Z (A x) + Z (B (x : H)))
     (hUa : ∀ x : A.domain,
-      (x : H) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      (x : H) ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range →
       (⟪A x, (x : H)⟫_ℂ).re ≤ a * ‖(x : H)‖ ^ 2)
     (hUb : ∀ x : A.domain,
-      (x : H) ∈ (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+      (x : H) ∈ (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ →
       b * ‖(x : H)‖ ^ 2 ≤ (⟪A x, (x : H)⟫_ℂ).re)
     (hab : a < b) {x : H}
-    (hx : x ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) :
+    (hx : x ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) :
     (b - a) *
-        ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
-          measurableSet_Iic).offDiagBlock Z x‖ ≤
+        ‖(((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).offDiagBlock Z x‖ ≤
       2 * ‖B‖ *
-        ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
-          measurableSet_Iic).diagBlock Z x‖ ∧
+        ‖(((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).diagBlock Z x‖ ∧
     TauCeti.diagonalBlockBound (b - a) ‖B‖ * ‖x‖ ≤
-      ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
-        measurableSet_Iic).diagBlock Z x‖ :=
+      ‖(((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).diagBlock Z x‖ :=
   ⟨TauCeti.gap_mul_norm_offDiagonalPart_apply_le_specRange hA hB hZsa hZ2 hZdom
       hZcomm hUa hUb hab hx,
    TauCeti.diagonalBlockBound_mul_le_norm_diagonalPart_apply_specRange hA hB
@@ -128,24 +125,23 @@ estimate can be divided through.  `‖sin 2Θ₀ x‖ / ‖cos 2Θ₀ x‖ ≤ 2
 theorem tanTwoTheta_unbounded_residual_div_complex
     {A : H →ₗ.[ℂ] H} {B Z : H →L[ℂ] H} {a b c : ℝ} (hA : IsSelfAdjoint A)
     (hB : TauCeti.IsOddFor
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
       A ⟨Z (x : H), hZdom x⟩ + B (Z (x : H)) = Z (A x) + Z (B (x : H)))
     (hUa : ∀ x : A.domain,
-      (x : H) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      (x : H) ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range →
       (⟪A x, (x : H)⟫_ℂ).re ≤ a * ‖(x : H)‖ ^ 2)
     (hUb : ∀ x : A.domain,
-      (x : H) ∈ (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+      (x : H) ∈ (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ →
       b * ‖(x : H)‖ ^ 2 ≤ (⟪A x, (x : H)⟫_ℂ).re)
     (hab : a < b) {x : H}
-    (hx : x ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)
+    (hx : x ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)
     (hx0 : x ≠ 0) :
-    ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
-        measurableSet_Iic).offDiagBlock Z x‖ /
-      ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
-        measurableSet_Iic).diagBlock Z x‖ ≤ 2 * ‖B‖ / (b - a) := by
+    ‖(((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).offDiagBlock Z x‖ /
+      ‖(((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).diagBlock Z x‖
+          ≤ 2 * ‖B‖ / (b - a) := by
   obtain ⟨htan, hpole⟩ := tanTwoTheta_unbounded_residual_opNorm_complex hA hB hZsa hZ2
     hZdom hZcomm hUa hUb hab hx
   have hδ : 0 < b - a := by linarith
@@ -155,8 +151,7 @@ theorem tanTwoTheta_unbounded_residual_div_complex
     have : (0 : ℝ) < √((b - a) ^ 2 + 4 * ‖B‖ ^ 2) :=
       Real.sqrt_pos.mpr (by positivity)
     positivity
-  have hden : 0 < ‖(TauCeti.LinearPMap.specRange hA (Set.Iic c)
-      measurableSet_Iic).diagBlock Z x‖ :=
+  have hden : 0 < ‖(((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).diagBlock Z x‖ :=
     lt_of_lt_of_le (by positivity) hpole
   rw [div_le_div_iff₀ hden hδ]
   linarith [htan]

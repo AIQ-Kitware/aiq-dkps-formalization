@@ -55,7 +55,7 @@ theorem stronglyTendsto_cutoffCorner_spectralCutoffSeq
       (fun n : ℕ => cutoffCorner (TauCeti.spectralCutoffSeq hA c n))
       atTop
       (ContinuousLinearMap.id ℂ
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)) := by
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)) := by
   intro y
   apply tendsto_subtype_rng.mpr
   have h := TauCeti.tendsto_spectralCutoff hA c y.property
@@ -83,34 +83,34 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
     {A : G →ₗ.[ℂ] G} {B Z : G →L[ℂ] G} {a b c : ℝ}
     (hA : IsSelfAdjoint A)
     (hB : TauCeti.IsOddFor
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B)
     (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
     (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
     (hZcomm : ∀ x : A.domain,
       A ⟨Z (x : G), hZdom x⟩ + B (Z (x : G)) = Z (A x) + Z (B (x : G)))
     (hUa : ∀ x : A.domain,
-      (x : G) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      (x : G) ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range →
       RCLike.re ⟪A x, (x : G)⟫_ℂ ≤ a * ‖(x : G)‖ ^ 2)
     (hUb : ∀ x : A.domain,
       (x : G) ∈
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b)
     (hRmem : N.Mem (blockCompression
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)) :
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B)) :
     IsUnit
-        ((TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock Z *
-          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock Z) ∧
+        ((((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).diagBlock Z *
+          (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range).diagBlock Z) ∧
       N.Mem (reflectionTangentCorner
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ∧
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) Z) ∧
       (b - a) * N.gauge (reflectionTangentCorner
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ≤
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) Z) ≤
         2 * N.gauge (blockCompression
-          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
-          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B) := by
+          (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ
+          (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B) := by
   let U : Submodule ℂ G :=
-    TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic
+    ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range
   have hred : _root_.LinearPMap.IsReducing A U :=
     hA.isReducing_range_spectralPVM_proj (Set.Iic c) measurableSet_Iic
   have hgU : ∀ y ∈ U,

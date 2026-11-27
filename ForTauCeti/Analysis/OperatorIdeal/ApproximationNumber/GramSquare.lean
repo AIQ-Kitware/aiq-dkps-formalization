@@ -80,8 +80,8 @@ theorem gramOperator_comm_gramProjection (X : E0 →L[ℂ] E1) (B : Set ℝ)
   have hdom : z ∈ (gramLinearPMap X).domain := by
     rw [gramLinearPMap_domain]
     exact Submodule.mem_top
-  have h := specProjection_apply_domain (gramLinearPMap_isSelfAdjoint X) B hB
-    (⟨z, hdom⟩ : (gramLinearPMap X).domain)
+  have h := (((gramLinearPMap_isSelfAdjoint X).intertwines_spectralPVM_proj B hB).apply_eq (⟨z,
+      hdom⟩ : (gramLinearPMap X).domain)).symm
   rw [gramSpectralPVM_proj_eq_specProjection]
   simpa only [gramLinearPMap_apply] using h
 

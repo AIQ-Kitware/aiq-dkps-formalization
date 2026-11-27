@@ -41,23 +41,23 @@ theorem tanTwoTheta_ambient_unbounded_whereDefinedUIN_complex
     (hA : IsSelfAdjoint A)
     (hBsa : IsSelfAdjoint B)
     (hB : TauCeti.IsOddFor
-      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+      (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) B)
     (hV : DavisKahan.ReflectionIntertwines A B V)
     (hUa : ∀ x : A.domain,
-      (x : G) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      (x : G) ∈ ((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range →
       RCLike.re ⟪A x, (x : G)⟫_ℂ ≤ a * ‖(x : G)‖ ^ 2)
     (hUb : ∀ x : A.domain,
       (x : G) ∈
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range)ᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b) :
     (∀ t ∈ spectrum ℝ (TauCeti.DavisKahan.Angle.angleOperatorC
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V),
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V),
         Real.cos (2 * t) ≠ 0) ∧
       (N.Mem (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) → N.Mem B →
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V) → N.Mem B →
       (b - a) * N.gaugeReal (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V) ≤
         2 * N.gaugeReal B) := by
   obtain ⟨hcos, -, -⟩ :=
     tanTwoTheta_ambient_unbounded_normalizedUIN_complex (kyFanNormalizedUnitaryInvariantNorm 1 one_pos)
@@ -65,7 +65,7 @@ theorem tanTwoTheta_ambient_unbounded_whereDefinedUIN_complex
   refine ⟨hcos, ?_⟩
   exact whereDefinedUIN_of_normalizedUnitaryInvariant_mul N (sub_pos.mpr hab) two_pos
     (X := (TauCeti.DavisKahan.Angle.absTanTwoAngleOperatorC
-        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V)) (Y := B) fun M hM => by
+        (((A.spectralPVM hA).proj (Set.Iic c) measurableSet_Iic).range) V)) (Y := B) fun M hM => by
       obtain ⟨-, hm, hl⟩ :=
         tanTwoTheta_ambient_unbounded_normalizedUIN_complex M V hA hBsa hB hV hUa hUb hab hM
       exact ⟨hm, hl⟩

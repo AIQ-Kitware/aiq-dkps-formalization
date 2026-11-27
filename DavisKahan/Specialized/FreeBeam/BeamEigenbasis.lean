@@ -80,8 +80,8 @@ same count. -/
 /-- The low spectral subspace is the spectral range of `Set.Iic 500`. -/
 theorem beamLowFiveHundred_eq_specRange (ε : ℝ) :
     beamLowFiveHundred ε =
-      TauCeti.LinearPMap.specRange (beamPerturbed_isSelfAdjoint ε)
-        (Set.Iic 500) measurableSet_Iic := rfl
+      (((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj
+          (Set.Iic 500) measurableSet_Iic).range := rfl
 
 /-- **The Rayleigh--Ritz cap, promoted from finite subspaces to the whole
 spectral range.**  Every finite linearly independent family inside the low
@@ -106,8 +106,8 @@ theorem rank_beamLowFiveHundred_le (ε : ℝ) (hε : 0 ≤ ε) :
     exact Fintype.card_coe s
   have hle : Submodule.span ℂ
       (Set.range (fun i : s => ((i : (beamLowFiveHundred ε)) : BeamL2)))
-      ≤ TauCeti.LinearPMap.specRange (beamPerturbed_isSelfAdjoint ε)
-        (Set.Iic 500) measurableSet_Iic := by
+      ≤ (((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj
+          (Set.Iic 500) measurableSet_Iic).range := by
     rw [Submodule.span_le]
     rintro _ ⟨i, rfl⟩
     exact (i : (beamLowFiveHundred ε)).2
@@ -122,24 +122,6 @@ theorem finiteDimensional_beamLowFiveHundred (ε : ℝ) (hε : 0 ≤ ε) :
     (lt_of_le_of_lt (rank_beamLowFiveHundred_le ε hε)
       (by exact_mod_cast (Cardinal.natCast_lt_aleph0 (n := 2))))
 
-/-- Spectral ranges of the perturbed beam grow with the Borel set. -/
-theorem beamPerturbed_specRange_mono (ε : ℝ) {B C : Set ℝ}
-    (hB : MeasurableSet B) (hC : MeasurableSet C) (hBC : B ⊆ C) :
-    TauCeti.LinearPMap.specRange (beamPerturbed_isSelfAdjoint ε) B hB
-      ≤ TauCeti.LinearPMap.specRange (beamPerturbed_isSelfAdjoint ε) C hC := by
-  intro x hx
-  have hfix : TauCeti.LinearPMap.specProjection (beamPerturbed_isSelfAdjoint ε) B hB x = x :=
-    (TauCeti.LinearPMap.mem_specRange_iff _ _ _ _).1 hx
-  refine (TauCeti.LinearPMap.mem_specRange_iff _ _ _ _).2 ?_
-  have hcongr : TauCeti.LinearPMap.specProjection (beamPerturbed_isSelfAdjoint ε)
-      (C ∩ B) (hC.inter hB)
-      = TauCeti.LinearPMap.specProjection (beamPerturbed_isSelfAdjoint ε) B hB := by
-    simp only [TauCeti.LinearPMap.specProjection_def]
-    exact (_root_.LinearPMap.spectralPVM _ (beamPerturbed_isSelfAdjoint ε)).proj_congr
-      (Set.inter_eq_right.2 hBC) (hC.inter hB) hB
-  conv_lhs => rw [← hfix]
-  rw [TauCeti.LinearPMap.specProjection_apply_specProjection, hcongr, hfix]
-
 /-- **The low spectral subspace is exactly two-dimensional.** -/
 theorem finrank_beamLowFiveHundred (ε : ℝ) (hε : 0 ≤ ε) (hε100 : ε < 100) :
     Module.finrank ℂ (beamLowFiveHundred ε) = 2 := by
@@ -148,10 +130,10 @@ theorem finrank_beamLowFiveHundred (ε : ℝ) (hε : 0 ≤ ε) (hε100 : ε < 10
     Module.finrank_le_of_rank_le (by
       have := rank_beamLowFiveHundred_le ε hε
       exact_mod_cast this)
-  have hmono : TauCeti.LinearPMap.specRange (beamPerturbed_isSelfAdjoint ε)
-      (Set.Iic (ritzHigh ε)) measurableSet_Iic ≤ beamLowFiveHundred ε :=
-    beamPerturbed_specRange_mono ε measurableSet_Iic measurableSet_Iic
-      (Set.Iic_subset_Iic.2 (ritzHigh_lt_five_hundred hε100).le)
+  have hmono : (((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj
+      (Set.Iic (ritzHigh ε)) measurableSet_Iic).range ≤ beamLowFiveHundred ε :=
+    ((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).range_proj_mono
+      (Set.Iic_subset_Iic.2 (ritzHigh_lt_five_hundred hε100).le) measurableSet_Iic measurableSet_Iic
   have hge := beamTrial_finrank_le ε hε hmono
   rw [finrank_beamTrial] at hge
   omega
@@ -161,19 +143,19 @@ value.**  The two ranges are nested and both two-dimensional, so they coincide;
 hence the perturbed beam has no spectrum at all in `(ritzHigh ε, 500]`. -/
 theorem beamLowFiveHundred_eq_specRange_ritzHigh (ε : ℝ) (hε : 0 ≤ ε) (hε100 : ε < 100) :
     beamLowFiveHundred ε
-      = TauCeti.LinearPMap.specRange (beamPerturbed_isSelfAdjoint ε)
-          (Set.Iic (ritzHigh ε)) measurableSet_Iic := by
+      = (((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj
+          (Set.Iic (ritzHigh ε)) measurableSet_Iic).range := by
   have := finiteDimensional_beamLowFiveHundred ε hε
-  have hmono : TauCeti.LinearPMap.specRange (beamPerturbed_isSelfAdjoint ε)
-      (Set.Iic (ritzHigh ε)) measurableSet_Iic ≤ beamLowFiveHundred ε :=
-    beamPerturbed_specRange_mono ε measurableSet_Iic measurableSet_Iic
-      (Set.Iic_subset_Iic.2 (ritzHigh_lt_five_hundred hε100).le)
-  have hfd : FiniteDimensional ℂ (TauCeti.LinearPMap.specRange
-      (beamPerturbed_isSelfAdjoint ε) (Set.Iic (ritzHigh ε)) measurableSet_Iic) :=
+  have hmono : (((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj
+      (Set.Iic (ritzHigh ε)) measurableSet_Iic).range ≤ beamLowFiveHundred ε :=
+    ((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).range_proj_mono
+      (Set.Iic_subset_Iic.2 (ritzHigh_lt_five_hundred hε100).le) measurableSet_Iic measurableSet_Iic
+  have hfd : FiniteDimensional ℂ ((((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint
+      ε)).proj (Set.Iic (ritzHigh ε)) measurableSet_Iic).range) :=
     Submodule.finiteDimensional_of_le hmono
   have hge := beamTrial_finrank_le ε hε
-    (W := TauCeti.LinearPMap.specRange (beamPerturbed_isSelfAdjoint ε)
-      (Set.Iic (ritzHigh ε)) measurableSet_Iic) le_rfl
+    (W := (((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj
+        (Set.Iic (ritzHigh ε)) measurableSet_Iic).range) le_rfl
   rw [finrank_beamTrial] at hge
   have hle : Module.finrank ℂ (beamLowFiveHundred ε) = 2 :=
     finrank_beamLowFiveHundred ε hε hε100
@@ -279,14 +261,18 @@ theorem beamLowEigenvalue_lt_five_hundred (ε : ℝ) (hε : 0 ≤ ε) (hε100 : 
     intro h
     rw [h, norm_zero] at hfn
     exact absurd hfn (by norm_num)
-  have hmem : f ∈ TauCeti.LinearPMap.specRange (beamPerturbed_isSelfAdjoint ε)
-      (Set.Iic (ritzHigh ε)) measurableSet_Iic := by
+  have hmem : f ∈ (((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj
+      (Set.Iic (ritzHigh ε)) measurableSet_Iic).range := by
     rw [← beamLowFiveHundred_eq_specRange_ritzHigh ε hε hε100]
     exact beamLowEigenvector_mem ε hε hε100 k
-  have hfix : TauCeti.LinearPMap.specProjection (beamPerturbed_isSelfAdjoint ε)
+  have hfix : ((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj
       (Set.Iic (ritzHigh ε)) measurableSet_Iic f = f :=
-    (TauCeti.LinearPMap.mem_specRange_iff _ _ _ _).1 hmem
-  have hIci : TauCeti.LinearPMap.specProjection (beamPerturbed_isSelfAdjoint ε)
+    (LinearMap.IsIdempotentElem.mem_range_iff
+      (ContinuousLinearMap.IsIdempotentElem.toLinearMap
+          (((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj_idem
+          (Set.Iic (ritzHigh ε)) measurableSet_Iic))
+      (x := _)).1 hmem
+  have hIci : ((beamPerturbed ε).spectralPVM (beamPerturbed_isSelfAdjoint ε)).proj
       (Set.Ici 500) measurableSet_Ici f = 0 := by
     conv_lhs => rw [← hfix]
     rw [TauCeti.LinearPMap.specProjection_apply_specProjection]

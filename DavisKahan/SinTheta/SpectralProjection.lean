@@ -104,7 +104,7 @@ theorem norm_spectralComplementaryOverlap_eq_directedGap
       show selfAdjointSpectralProjection C hC Sᶜ hS.compl
           = ContinuousLinearMap.id ℂ H -
             selfAdjointSpectralProjection C hC S hS from
-        TauCeti.LinearPMap.specProjection_compl hC S hS]
+        (C.spectralPVM hC).proj_compl S hS]
     change ContinuousLinearMap.id ℂ H -
         selfAdjointSpectralProjection C hC S hS =
       Wᗮ.starProjection
