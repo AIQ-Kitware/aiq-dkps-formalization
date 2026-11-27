@@ -267,8 +267,10 @@ theorem conjugateOperator_specProjection_complexifyReal
       specProjection (isSelfAdjoint_complexifyReal hA) S hS := by
   set hAℂ := isSelfAdjoint_complexifyReal hA with hhAc
   set hU := hAℂ.isStarNormal_cayley with hhU
-  set κ := cayleyInv (complexifyReal A) with hκ
-  have hSm : MeasurableSet (κ ⁻¹' S) := measurable_cayleyInv (complexifyReal A) hS
+  set κ : _root_.spectrum ℂ ((complexifyReal A).cayley) → ℝ :=
+    Complex.inverseCayleyCoord ∘ Subtype.val with hκ
+  have hSm : MeasurableSet (κ ⁻¹' S) :=
+    (Complex.measurable_inverseCayleyCoord.comp measurable_subtypeVal) hS
   set ind : _root_.spectrum ℂ ((complexifyReal A).cayley) → ℂ :=
     (κ ⁻¹' S).indicator (fun _ => (1 : ℂ)) with hind
   have hIreal : ∀ η : Eℂ,

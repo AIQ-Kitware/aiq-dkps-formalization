@@ -25,11 +25,9 @@ measures themselves.  That is exactly the case a reducing-subspace argument
 needs, since a subspace reduces `A` if and only if its *reflection* -- a
 unitary -- commutes with `A`.
 
-The one piece of glue is that `specProjection` and `BorelCalculus.specProjC`
-index their sets differently: `specProjection` cuts the spectrum subtype by the
-Cayley preimage of a real Borel set, while `specProjC` cuts by a Borel subset of
-`ℂ`.  `cayleyCoordFun` is the map that makes the two agree, and
-`specProjection_eq_specProjC` records the identification.
+Both spectral projections use `Complex.inverseCayleyCoord` to pull back real
+Borel sets. The comparison below relates the spectrum-subtype and complex
+plane versions of the indicator.
 
 ## Sources
 
@@ -52,49 +50,17 @@ namespace LinearPMap
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- The inverse Cayley map read on all of `ℂ`, so that the *same* Borel set can be
-handed to two operators' spectral projections.  On the spectrum of a Cayley
-transform it agrees with `cayleyInv` by definition. -/
-noncomputable def cayleyCoordPlane (z : ℂ) : ℝ := (Complex.I * (1 + z) / (1 - z)).re
-
-/-- The plane-level inverse Cayley map is Borel measurable, which is all a spectral
-projection needs of it: the singularity at `w = 1` is a single point. -/
-theorem measurable_cayleyCoordPlane : Measurable cayleyCoordPlane := by
-  unfold cayleyCoordPlane
-  fun_prop
-
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 
-omit [CompleteSpace H] in
-/-- On the spectrum of a Cayley transform the plane-level map agrees with `cayleyInv`.
-This is the equation that lets one Borel subset of `ℝ` be fed to `specProjection` and
-its `ℂ`-indexed spelling `specProjC` at the same time. -/
-theorem cayleyInv_eq_cayleyCoordPlane (w : _root_.spectrum ℂ (A.cayley)) :
-    cayleyInv A w = cayleyCoordPlane (w : ℂ) := by
-  rw [cayleyInv_def, cayleyCoordPlane]
-
-/-- **The two spellings of a spectral projection agree.**  `specProjection` cuts by a
-real Borel set through `cayleyInv`; `specProjC` cuts by a complex Borel set through the
-coordinate itself.  They are the same operator for the preimage set. -/
+/-- The real spectral projection equals the complex spectral projection of its
+inverse-Cayley preimage. -/
 theorem specProjection_eq_specProjC (B : Set ℝ) (hB : MeasurableSet B) :
-    specProjection hA B hB
-      = BorelCalculus.specProjC (hA.isStarNormal_cayley)
-          (measurable_cayleyCoordPlane hB) := by
+    specProjection hA B hB =
+      BorelCalculus.specProjC (hA.isStarNormal_cayley)
+        (Complex.measurable_inverseCayleyCoord hB) := by
   rw [specProjection_eq_borelCalculus, BorelCalculus.specProjC_def]
-  refine BorelCalculus.borelCalculus_congr_ae _ _ _ fun η => ?_
-  refine Filter.Eventually.of_forall fun w => ?_
-  have hEq : cayleyInv A w = cayleyCoordPlane (w : ℂ) := cayleyInv_eq_cayleyCoordPlane w
-  change (cayleyInv A ⁻¹' B).indicator (fun _ => (1 : ℂ)) w
-      = (cayleyCoordPlane ⁻¹' B).indicator (fun _ => (1 : ℂ)) (w : ℂ)
-  by_cases h : cayleyInv A w ∈ B
-  · have h' : (w : ℂ) ∈ cayleyCoordPlane ⁻¹' B := by
-      rw [Set.mem_preimage, ← hEq]; exact h
-    rw [Set.indicator_of_mem (show w ∈ cayleyInv A ⁻¹' B from h),
-      Set.indicator_of_mem h']
-  · have h' : (w : ℂ) ∉ cayleyCoordPlane ⁻¹' B := by
-      rw [Set.mem_preimage, ← hEq]; exact h
-    rw [Set.indicator_of_notMem (show w ∉ cayleyInv A ⁻¹' B from h),
-      Set.indicator_of_notMem h']
+  exact BorelCalculus.borelCalculus_congr_ae _ _ _ fun _ =>
+    Filter.Eventually.of_forall fun _ => rfl
 
 /-- **Spectral projections are natural under a unitary intertwiner.**
 
@@ -116,7 +82,7 @@ theorem specProjection_apply_of_unitary_intertwines (e : H ≃ₗᵢ[ℂ] H)
       LinearIsometryEquiv.coe_toLinearIsometry] using h
   rw [specProjection_eq_specProjC hA B hB]
   exact BorelCalculus.specProjC_apply_of_intertwines (hA.isStarNormal_cayley) e he
-    (measurable_cayleyCoordPlane hB) x
+    (Complex.measurable_inverseCayleyCoord hB) x
 
 end LinearPMap
 end TauCeti

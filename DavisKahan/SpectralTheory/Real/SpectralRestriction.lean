@@ -300,8 +300,10 @@ theorem conjugateOperator_specProjection (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjo
           (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS := by
   set hAℂ := PartialMapComplexification.isSelfAdjoint_complexify hA with hhAc
   set hU := hAℂ.isStarNormal_cayley with hhU
-  set κ := TauCeti.LinearPMap.cayleyInv (PartialMapComplexification.complexify A) with hκ
-  have hSm : MeasurableSet (κ ⁻¹' S) := TauCeti.LinearPMap.measurable_cayleyInv (PartialMapComplexification.complexify A) hS
+  set κ : _root_.spectrum ℂ ((PartialMapComplexification.complexify A).cayley) → ℝ :=
+    Complex.inverseCayleyCoord ∘ Subtype.val with hκ
+  have hSm : MeasurableSet (κ ⁻¹' S) :=
+    (Complex.measurable_inverseCayleyCoord.comp measurable_subtypeVal) hS
   set ind : _root_.spectrum ℂ ((PartialMapComplexification.complexify A).cayley) → ℂ :=
     (κ ⁻¹' S).indicator (fun _ => (1 : ℂ)) with hind
   -- the four polarisation integrals are real
@@ -315,10 +317,6 @@ theorem conjugateOperator_specProjection (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjo
   -- Left as a `rw` chain on purpose: `simp only` with this same list fails to synthesize an
   -- instance that `rw` obtains from the rewritten form; simp normalises before the instance
   -- argument is determined.
-  -- The four unfolding steps that used to be spelled as bare definition names
-  -- (`specProjection`, `spectralPVM`, `toProjValMeasure_proj`, `specProj`) are now the single
-  -- `specProjection_eq_borelCalculus`: `rw` with a definition name needs that definition's
-  -- equation theorems, which are no longer generated for these module-system definitions.
   rw [conjugateOperator_apply, inner_conjugation_right, ← inner_conj_symm,
     TauCeti.LinearPMap.specProjection_eq_borelCalculus hAℂ S hS,
     TauCeti.BorelCalculus.inner_borelCalculus, TauCeti.BorelCalculus.inner_borelCalculus]
@@ -358,11 +356,14 @@ theorem conjugatePVM_spectralPVM
   by
     apply TauCeti.ProjValMeasure.ext_of_diag
     intro ξ
-    rw [conjugatePVM_diag, TauCeti.LinearPMap.spectralPVM_def,
-      TauCeti.BorelCalculus.toProjValMeasure_diag]
-    rw [TauCeti.BorelCalculus.toProjValMeasure_diag]
-    exact congrArg (MeasureTheory.Measure.map (TauCeti.LinearPMap.cayleyInv
-      (PartialMapComplexification.complexify A)))
+    have hC := PartialMapComplexification.isSelfAdjoint_complexify hA
+    have := hC.isStarNormal_cayley
+    rw [conjugatePVM_diag, hC.spectralPVM_eq_map, TauCeti.ProjValMeasure.map_diag,
+      TauCeti.ProjValMeasure.map_diag, TauCeti.BorelCalculus.spectralPVM_diag_eq_representation,
+      TauCeti.BorelCalculus.spectralPVM_diag_eq_representation]
+    exact congrArg (MeasureTheory.Measure.map fun
+      w : _root_.spectrum ℂ (PartialMapComplexification.complexify A).cayley =>
+        Complex.inverseCayleyCoord (w : ℂ))
       (diagMeasure_conjugation A hA ξ)
 
 /-- Every measurable spectral projection of a complexified real self-adjoint

@@ -26,7 +26,7 @@ through the diagonal measures and it is the expensive part.
 It is avoidable.  The obstruction to a *continuous* separator is a single point:
 both Cayley spectra contain `1` as soon as both operators are unbounded, so no
 continuous symbol can be `0` on one and `1` on the other.  But `1` is a null
-point for every diagonal measure (`diagMeasure_cayley_preimage_one`), so a
+point for every diagonal measure (`LinearPMap.cayley_diagMeasure_singleton_one`), so a
 *sequence* of continuous symbols that vanish near `1` and separate elsewhere is
 enough:
 
@@ -80,13 +80,11 @@ variable [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 section Separator
 
-/-- The scalar inverse Cayley map on all of `ℂ`, with junk value at `1`. -/
-@[expose]
-noncomputable def cayleyCoordFun (w : ℂ) : ℝ := (Complex.I * (1 + w) / (1 - w)).re
-
-/-- The inverse Cayley map is continuous away from `w = 1`.  Only `ContinuousOn` is available: the
-singularity at `1` is genuine, and removing it is what `damp` exists for. -/
-theorem continuousOn_cayleyCoordFun : ContinuousOn cayleyCoordFun {w : ℂ | w ≠ 1} := by
+/-- The inverse Cayley coordinate is continuous away from the pole. -/
+private theorem continuousOn_inverseCayleyCoord :
+    ContinuousOn Complex.inverseCayleyCoord {w : ℂ | w ≠ 1} := by
+  rw [show Complex.inverseCayleyCoord = fun w => (Complex.I * (1 + w) / (1 - w)).re from
+    funext Complex.inverseCayleyCoord_def]
   refine Complex.continuous_re.comp_continuousOn ?_
   refine ContinuousOn.div (by fun_prop) (by fun_prop) ?_
   intro w hw
@@ -132,24 +130,24 @@ theorem tendsto_damp {w : ℂ} (hw : w ≠ 1) :
 **everywhere**, including at the Cayley singularity `w = 1`, where the damping
 factor squeezes it to zero. -/
 noncomputable def cayleySymbolFun (f : C(ℝ, ℝ)) (n : ℕ) (w : ℂ) : ℂ :=
-  ((f (cayleyCoordFun w) * damp n w : ℝ) : ℂ)
+  ((f (Complex.inverseCayleyCoord w) * damp n w : ℝ) : ℂ)
 
 /-- A damped separator symbol is bounded by `1` when the separator is, both factors lying in
 `[0, 1]`. -/
 theorem norm_cayleySymbolFun_le (f : C(ℝ, ℝ)) (hf : ∀ x, f x ∈ Set.Icc (0 : ℝ) 1)
     (n : ℕ) (w : ℂ) : ‖cayleySymbolFun f n w‖ ≤ 1 := by
   rw [cayleySymbolFun, Complex.norm_real, Real.norm_eq_abs, abs_mul]
-  have h1 : |f (cayleyCoordFun w)| ≤ 1 := by
+  have h1 : |f (Complex.inverseCayleyCoord w)| ≤ 1 := by
     rw [abs_le]
-    exact ⟨by linarith [(hf (cayleyCoordFun w)).1], (hf (cayleyCoordFun w)).2⟩
+    have hval := hf (Complex.inverseCayleyCoord w)
+    exact ⟨by linarith [hval.1], hval.2⟩
   have h2 : |damp n w| ≤ 1 := by
     rw [abs_of_nonneg (damp_nonneg n w)]
     exact damp_le_one n w
-  nlinarith [abs_nonneg (f (cayleyCoordFun w)), abs_nonneg (damp n w)]
+  nlinarith [abs_nonneg (f (Complex.inverseCayleyCoord w)), abs_nonneg (damp n w)]
 
-/-- **The damped symbol is continuous everywhere, including at `w = 1`.**  This is the point of the
-construction: `cayleyCoordFun` alone is only `ContinuousOn {w ≠ 1}`, and the damping squeezes the
-product to zero at the singularity so the two branches agree. -/
+/-- The inverse Cayley coordinate is continuous away from the pole. Damping squeezes the symbol
+to zero there, making it continuous everywhere. -/
 theorem continuous_cayleySymbolFun (f : C(ℝ, ℝ)) (hf : ∀ x, f x ∈ Set.Icc (0 : ℝ) 1)
     (n : ℕ) : Continuous (cayleySymbolFun f n) := by
   rw [continuous_iff_continuousAt]
@@ -162,22 +160,23 @@ theorem continuous_cayleySymbolFun (f : C(ℝ, ℝ)) (hf : ∀ x, f x ∈ Set.Ic
     rw [ContinuousAt, hval]
     refine squeeze_zero_norm (a := fun v : ℂ => (n : ℝ) * ‖v - 1‖) (fun v => ?_) ?_
     · rw [cayleySymbolFun, Complex.norm_real, Real.norm_eq_abs, abs_mul]
-      have h1 : |f (cayleyCoordFun v)| ≤ 1 := by
+      have h1 : |f (Complex.inverseCayleyCoord v)| ≤ 1 := by
         rw [abs_le]
-        exact ⟨by linarith [(hf (cayleyCoordFun v)).1], (hf (cayleyCoordFun v)).2⟩
+        have hval := hf (Complex.inverseCayleyCoord v)
+        exact ⟨by linarith [hval.1], hval.2⟩
       have h2 : |damp n v| ≤ (n : ℝ) * ‖v - 1‖ := by
         rw [abs_of_nonneg (damp_nonneg n v)]
         exact damp_le n v
-      nlinarith [abs_nonneg (f (cayleyCoordFun v)), abs_nonneg (damp n v),
+      nlinarith [abs_nonneg (f (Complex.inverseCayleyCoord v)), abs_nonneg (damp n v),
         mul_nonneg (Nat.cast_nonneg n : (0:ℝ) ≤ (n:ℝ)) (norm_nonneg (v - 1))]
     · have : Continuous fun v : ℂ => (n : ℝ) * ‖v - 1‖ := by fun_prop
       simpa using this.tendsto 1
   · -- away from the singularity: an ordinary product of continuous functions
     have hopen : IsOpen {v : ℂ | v ≠ 1} := isOpen_ne
     have hmem : w ∈ {v : ℂ | v ≠ 1} := hw
-    have hcoord : ContinuousAt cayleyCoordFun w :=
-      (continuousOn_cayleyCoordFun.continuousAt (hopen.mem_nhds hmem))
-    have hprod : ContinuousAt (fun v : ℂ => (f (cayleyCoordFun v) * damp n v : ℝ)) w :=
+    have hcoord : ContinuousAt Complex.inverseCayleyCoord w :=
+      (continuousOn_inverseCayleyCoord.continuousAt (hopen.mem_nhds hmem))
+    have hprod : ContinuousAt (fun v : ℂ => (f (Complex.inverseCayleyCoord v) * damp n v : ℝ)) w :=
       (f.continuous.continuousAt.comp hcoord).mul (continuous_damp n).continuousAt
     exact Complex.continuous_ofReal.continuousAt.comp hprod
 
@@ -186,9 +185,9 @@ recovered in the limit.  With the uniform bound this is what lets dominated conv
 monotone-class argument. -/
 theorem tendsto_cayleySymbolFun (f : C(ℝ, ℝ)) {w : ℂ} (hw : w ≠ 1) :
     Tendsto (fun n : ℕ => cayleySymbolFun f n w) atTop
-      (nhds ((f (cayleyCoordFun w) : ℝ) : ℂ)) := by
-  have h : Tendsto (fun n : ℕ => (f (cayleyCoordFun w) * damp n w : ℝ)) atTop
-      (nhds (f (cayleyCoordFun w) * 1)) :=
+      (nhds ((f (Complex.inverseCayleyCoord w) : ℝ) : ℂ)) := by
+  have h : Tendsto (fun n : ℕ => (f (Complex.inverseCayleyCoord w) * damp n w : ℝ)) atTop
+      (nhds (f (Complex.inverseCayleyCoord w) * 1)) :=
     tendsto_const_nhds.mul (tendsto_damp hw)
   rw [mul_one] at h
   exact (Complex.continuous_ofReal.tendsto _).comp h
@@ -245,20 +244,19 @@ spectrum.  This is `SpectralSupport`, transported through the pushforward that
 defines `spectralPVM`. -/
 theorem ae_cayleyInv_mem_spectrum (v : E) :
     ∀ᵐ w ∂((cfcHom (hA.isStarNormal_cayley)).representationDiagMeasure v),
-      ((cayleyInv A w : ℝ) : ℂ) ∈ _root_.LinearPMap.spectrum A := by
+      (Complex.inverseCayleyCoord ((w : _root_.spectrum ℂ A.cayley) : ℂ) : ℂ)
+        ∈ _root_.LinearPMap.spectrum A := by
+  have := hA.isStarNormal_cayley
   have hmeas : MeasurableSet (Complex.ofReal ⁻¹' resolventSet A) :=
     ((isOpen_resolventSet A).preimage Complex.continuous_ofReal).measurableSet
   have hzero : (A.spectralPVM hA).diag v (Complex.ofReal ⁻¹' resolventSet A) = 0 :=
     diag_eq_zero_of_subset_resolventSet hA _ hmeas (fun _ h => h) v
-  have hmap : (A.spectralPVM hA).diag v (Complex.ofReal ⁻¹' resolventSet A)
-      = (cfcHom (hA.isStarNormal_cayley)).representationDiagMeasure v
-          (cayleyInv A ⁻¹' (Complex.ofReal ⁻¹' resolventSet A)) := by
-    rw [show (A.spectralPVM hA).diag v
-        = Measure.map (cayleyInv A) ((cfcHom (hA.isStarNormal_cayley)).representationDiagMeasure v)
-      from by
-        rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag],
-      Measure.map_apply (measurable_cayleyInv A) hmeas]
-  rw [hmap] at hzero
+  have hcoord : Measurable
+      (fun w : _root_.spectrum ℂ A.cayley => Complex.inverseCayleyCoord (w : ℂ)) :=
+    Complex.measurable_inverseCayleyCoord.comp measurable_subtypeVal
+  rw [hA.spectralPVM_eq_map, ProjValMeasure.map_diag,
+    BorelCalculus.spectralPVM_diag_eq_representation,
+    Measure.map_apply hcoord hmeas] at hzero
   have := MeasureTheory.compl_mem_ae_iff.mpr hzero
   filter_upwards [this] with w hw
   exact (_root_.LinearPMap.mem_spectrum_iff A _).2 hw
@@ -282,11 +280,10 @@ theorem cfcHom_separator_eq_zero (hA : IsSelfAdjoint A) (f : C(ℝ, ℝ))
   have hae : ∀ᵐ w ∂((cfcHom (hA.isStarNormal_cayley)).representationDiagMeasure v),
       (starRingEnd ℂ) (g w) * g w = 0 := by
     filter_upwards [ae_cayleyInv_mem_spectrum hA v] with w hw
-    have hf0 : f (cayleyInv A w) = 0 := hfA hw
+    have hf0 : f (Complex.inverseCayleyCoord (w : ℂ)) = 0 := hfA hw
     have : g w = 0 := by
       rw [hgval w, cayleySymbolFun]
-      rw [show cayleyCoordFun (w : ℂ) = cayleyInv A w from (cayleyInv_def w).symm,
-        hf0, zero_mul, Complex.ofReal_zero]
+      rw [hf0, zero_mul, Complex.ofReal_zero]
     rw [this, mul_zero]
   have hnorm := norm_sq_cfcHom_apply (hA.isStarNormal_cayley) g v
   rw [MeasureTheory.integral_congr_ae hae, integral_zero] at hnorm
@@ -308,16 +305,20 @@ theorem tendsto_cfcHom_separator (hB : IsSelfAdjoint B) (f : C(ℝ, ℝ))
     Tendsto (fun n => cfcHom (hB.isStarNormal_cayley) (g n) ξ) atTop (nhds ξ) := by
   set hU := hB.isStarNormal_cayley with hhU
   set μ := (cfcHom hU).representationDiagMeasure ξ with hμ
+  have := hU
+  have hpole :
+      μ ((Subtype.val : _root_.spectrum ℂ B.cayley → ℂ) ⁻¹' {1}) = 0 := by
+    rw [hμ, ← BorelCalculus.spectralPVM_diag_eq_representation hU,
+      ContinuousLinearMap.spectralPVM_diag]
+    exact _root_.LinearPMap.cayley_diagMeasure_singleton_one hB.neg_I_mem_resolventSet ξ
   have hlim : Tendsto
       (fun n => ∫ w, (starRingEnd ℂ) ((g n - 1) w) * ((g n - 1) w) ∂μ) atTop (nhds 0) := by
     have hae : ∀ᵐ w ∂μ, Tendsto
         (fun n => (starRingEnd ℂ) ((g n - 1) w) * ((g n - 1) w)) atTop (nhds 0) := by
       filter_upwards [ae_cayleyInv_mem_spectrum hB ξ,
-        MeasureTheory.compl_mem_ae_iff.mpr (diagMeasure_cayley_preimage_one hB ξ)]
+        MeasureTheory.compl_mem_ae_iff.mpr hpole]
         with w hw hw1
-      have hfeq : f (cayleyCoordFun (w : ℂ)) = 1 := by
-        rw [show cayleyCoordFun (w : ℂ) = cayleyInv B w from (cayleyInv_def w).symm]
-        exact hfB hw
+      have hfeq : f (Complex.inverseCayleyCoord (w : ℂ)) = 1 := hfB hw
       have hne : (w : ℂ) ≠ 1 := fun hc => hw1 (by simpa using hc)
       have hconv : Tendsto (fun n => g n w) atTop (nhds 1) := by
         have h2 := tendsto_cayleySymbolFun f hne

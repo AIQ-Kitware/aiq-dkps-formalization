@@ -42,6 +42,46 @@ The focused Yosida, Stone uniqueness and spectral-projection build
 (7720 jobs), the full default build (22616 jobs) and `lake build Challenge`
 (20790 jobs) passed without warnings on the existing ext4-backed cache.
 
+## November 27 spectral projection and resolvent consumption
+
+The spectral projection proofs now use
+`IsSelfAdjoint.intertwines_spectralPVM_proj` and
+`IsSelfAdjoint.commute_spectralPVM_proj_resolvent` from roed-math's #41596
+integration `81171bd524be1b4f119bb36877630bb96aaed6f8`, accepted head
+`81ac90ae300b8a13dab49958b113afdcfb02fa71`. The resolvent commutation
+applies at every point of the native resolvent set. DKPS removes its
+separate Cayley resolvent-symbol construction and diagonal integral proof.
+The original DKPS construction was developed by Jon Crall and Claude
+Opus 5 (Kitware 2026, Apache-2.0) and split into the construction module at
+`f2250101339121c5129bab32f72a44383a679c83`. Its classical Cayley route
+replaced Spectra's Herglotz/Poisson construction.
+[PR #41596](https://github.com/TauCetiProject/TauCeti/pull/41596)
+
+The real and complex conjugation arguments use the native PVM pushforward.
+They share `Complex.inverseCayleyCoord` from our auxiliary #29129 replay
+`557acd65e46af69e3208452678c225b6d75141bf`. The pole-nullity input comes
+from kim-em's Forgejo #1165 integration `fb45507f3f0cacc2e9c175ed29acd861bea8bc8b`.
+The orthogonal projection onto each spectral range uses
+`ProjValMeasure.starProjection_range_proj` from Forgejo #1964. The two
+other-contributor integrations are distinct from the DKPS coordinate submission.
+[PR #29129](https://github.com/TauCetiProject/TauCeti/pull/29129) ·
+[Forgejo #1165](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1165) ·
+[Forgejo #1964](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1964)
+
+The real interval cutoffs use `ProjValMeasure.tendsto_proj_apply` from
+chrisflav's #43205 at `53cb857c7f0558aea91b355f1b354e2f86c4d7a6`, with
+eventual membership supplied by the absolute-value bound. The cyclic model
+uses `ContinuousLinearMap.norm_sq_borelCalculus_apply` from #28859, retiring
+the DKPS norm-square proof introduced at `c24e4ed2422fd46929e7198a9b139db23f18cbb4`
+(Jon Crall and Claude Fable 5, Kitware 2026, Apache-2.0). The cyclic and
+real descent constructions retain their original complex and real scopes.
+[PR #43205](https://github.com/TauCetiProject/TauCeti/pull/43205) ·
+[PR #28859](https://github.com/TauCetiProject/TauCeti/pull/28859)
+
+This slice removes 690 net lines of Lean. Focused compilation (8945 jobs),
+the full default build (22616 jobs), `lake build Challenge` (20790 jobs)
+and the source semantic-surface target (12483 jobs) passed without warnings.
+
 ## November 27 bounded Borel calculus consumption
 
 The bounded normal-operator calculus now uses `ContinuousLinearMap.borelCalculus`
@@ -91,7 +131,7 @@ integration does not identify a DKPS proof source.
 | SA-E44/E45, uniqueness and bounded compatibility | tauceti-ai-for-science, [Forgejo #2123](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2123), `54be75fd15440f9cd1312f7fd32b55cc2f837779` | `IsSelfAdjoint.eq_spectralPVM_iff` and `spectralPVM_toPMap_top` give the uniqueness characterization and pushforward comparison. The current E.1 also asks for the packaged `existsUnique_isSpectralMeasure` statement. The bounded Borel migration above consumes the pushforward comparison for the half-line form estimates. The unbundled symbol interface and resolvent-specific consumers still need direct native applications. |
 | SSP-B16 prerequisite, bounded pairwise π/2 estimate | tauceti-ai-for-science, [Forgejo #2441](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2441), `e5d890fd73f8e616241142c58517ef7212010e18` | Consume `ContinuousLinearMap.mul_norm_le_pi_div_two_mul_norm_sylvester_apply` after the existing RCLike transport. The native proof passes through finite spectral sums. The explicit Fourier inverse, compactness and arbitrary-dimensional Ky Fan estimates still need the DKPS solution formula. Full SSP-B16 concerns partial operators. |
 | SA-C37/C38/C41/C43, graph-norm estimates and closedness | tauceti-ai-for-science, [#42625](https://github.com/TauCetiProject/TauCeti/pull/42625), `d9704e3dae1ce39cc314e19c43e26a0ab12e1277` | Retire the unused scalar graph-norm definition and four laws. The canonical norm is `‖A.toGraphSpace x‖`, with the square identity and nonnegativity supplied by `norm_toGraphSpace_sq` from Forgejo #1197 and `norm_nonneg`. The free-beam graph embedding retains its separate analytic closedness argument. |
-| UO-A01 and integral-side UO-A02, unbounded spectral integral | chrisflav, [#43205](https://github.com/TauCetiProject/TauCeti/pull/43205), `53cb857c7f0558aea91b355f1b354e2f86c4d7a6` | Native `ProjValMeasure.spectralIntegral` supplies the maximal second-moment domain, action, norm, adjoint and normality laws. The local donor is a bounded spectral cut. Recovery of an arbitrary existing self-adjoint operator as the identity spectral integral is a separate comparison. |
+| UO-A01 and integral-side UO-A02, unbounded spectral integral | chrisflav, [#43205](https://github.com/TauCetiProject/TauCeti/pull/43205), `53cb857c7f0558aea91b355f1b354e2f86c4d7a6` | Native `ProjValMeasure.spectralIntegral` supplies the maximal second-moment domain, action, norm, adjoint and normality laws. Its generic strong projection convergence theorem now supplies the DKPS bounded cutoff limit. Recovery of an arbitrary existing self-adjoint operator as the identity spectral integral is a separate comparison. |
 | UO-D01, half-plane deficiency constancy | tauceti-ai-for-science, [#42251](https://github.com/TauCetiProject/TauCeti/pull/42251), `28431ae2d2e52ea544a7d8d71a0a104a8f283f24` | The native linear-isometry equivalences give constancy on each half-plane. The extension criterion is a separate dependency of the roadmap item. There is no DKPS deficiency-subspace carrier to retire. |
 | UO-D01a, symmetric resolvent alternatives | roed-math, [#41331](https://github.com/TauCetiProject/TauCeti/pull/41331), `4f67ec09bbbd56bc6f86ab21f423f21674d18944`, and kim-em, [Forgejo #1116](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1116), `52416fb69860317c3f27734f248a7949bc14bc27` | Accepted four-alternative results for symmetric partial operators have broader hypotheses than DKPS's self-adjoint nonreal resolvent facts. No duplicate four-alternative proof was found. |
 | Toeplitz §1.2 and §3.4 prerequisites | tauceti-ai-for-science, [Forgejo #2128](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2128), `17a078777d1d063560a42174b0f583771b73c229`, and [#42005](https://github.com/TauCetiProject/TauCeti/pull/42005), `0e8569f7db69522783a36639543207307e01c89f` | The harmonic-majorant model of Hardy space and finite-product Fredholm/index laws landed separately. The DKPS binary index proof was already retired through our #44700. These results supply parts of the corresponding Toeplitz sections. |

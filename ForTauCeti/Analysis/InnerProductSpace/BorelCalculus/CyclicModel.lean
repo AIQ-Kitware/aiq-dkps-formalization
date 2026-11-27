@@ -183,12 +183,16 @@ theorem norm_symbolToLp_sq (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
 /-- **The isometry identity, in norm form.**  On bounded measurable symbols, `f ↦ f(a) ξ` has
 exactly the `L²(μ_ξ)` norm of the symbol.
 
-This is `norm_borelCalculus_apply_sq` (layer 1) with both sides recognised as squares of
-norms; it is the hypothesis the extension in `cyclicIsometry` runs on. -/
+The native squared-norm identity gives the bound used to extend the map in
+`cyclicIsometry`. -/
 theorem norm_symbolCalculus (ha : IsStarNormal a) (ξ : H) (f : bddSymbols a) :
     ‖symbolCalculus ha ξ f‖ = ‖symbolToLp ha ξ f‖ := by
   have hsq : ‖symbolCalculus ha ξ f‖ ^ 2 = ‖symbolToLp ha ξ f‖ ^ 2 := by
-    rw [symbolCalculus_apply, norm_borelCalculus_apply_sq, norm_symbolToLp_sq]
+    have := ha
+    rw [symbolCalculus_apply, borelCalculus_eq_native, norm_symbolToLp_sq]
+    simpa only [← a.spectralPVM_diag, spectralPVM_diag_eq_representation ha,
+      IsBddMeasurable.toBoundedBorelFunction_apply] using
+      a.norm_sq_borelCalculus_apply (isBddMeasurable_coe f).toBoundedBorelFunction ξ
   rw [← Real.sqrt_sq (norm_nonneg (symbolCalculus ha ξ f)),
     ← Real.sqrt_sq (norm_nonneg (symbolToLp ha ξ f)), hsq]
 

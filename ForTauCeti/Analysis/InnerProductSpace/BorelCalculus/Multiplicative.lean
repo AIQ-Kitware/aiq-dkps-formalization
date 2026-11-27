@@ -109,14 +109,6 @@ theorem borelCalculus_zero (h0 : IsBddMeasurable (fun _ : spectrum ℂ a => (0 :
     show h0.toBoundedBorelFunction = 0 from BoundedBorelFunction.ext fun x => by simp,
     map_zero]
 
-/-- The image of the Borel calculus is commutative. -/
-theorem borelCalculus_comm (hf : IsBddMeasurable f) (hg : IsBddMeasurable g) :
-    borelCalculus ha hf * borelCalculus ha hg = borelCalculus ha hg * borelCalculus ha hf := by
-  have := ha
-  simp only [borelCalculus_eq_native]
-  exact (a.commute_borelCalculus_borelCalculus hf.toBoundedBorelFunction
-    hg.toBoundedBorelFunction).eq
-
 /-- The Borel calculus is multiplicative. -/
 theorem borelCalculus_mul (hf : IsBddMeasurable f) (hg : IsBddMeasurable g) :
     borelCalculus ha (hf.mul hg) = borelCalculus ha hf * borelCalculus ha hg := by

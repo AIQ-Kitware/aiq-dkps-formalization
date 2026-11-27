@@ -39,35 +39,19 @@ theorem isBddMeasurable_indicator {S : Set (spectrum ℂ a)} (hS : MeasurableSet
   refine ⟨measurable_const.indicator hS, 1, zero_le_one, fun x => ?_⟩
   by_cases hx : x ∈ S <;> simp [hx]
 
-section Projections
-
-variable (ha : IsStarNormal a) {κ : spectrum ℂ a → ℝ} (hκ : Measurable κ)
-
-/-- Reindex the spectral measure along a measurable real-valued coordinate. -/
-noncomputable def toProjValMeasure : TauCeti.ProjValMeasure ℝ H :=
-  letI := ha
-  a.spectralPVM.map κ hκ
-
-/-- The projections of the pushed-forward measure are the calculus of pulled-back indicators. -/
-@[simp] theorem toProjValMeasure_proj (B : Set ℝ) (hB : MeasurableSet B) :
-    (toProjValMeasure ha hκ).proj B hB =
-      borelCalculus ha (isBddMeasurable_indicator (a := a) (hκ hB)) := by
+/-- The calculus of a measurable-set indicator is its native spectral projection. -/
+theorem borelCalculus_indicator_eq_proj (ha : IsStarNormal a)
+    {S : Set (spectrum ℂ a)} (hS : MeasurableSet S) :
+    haveI := ha
+    borelCalculus ha (isBddMeasurable_indicator hS) = a.spectralPVM.proj S hS := by
   have := ha
-  rw [toProjValMeasure, ProjValMeasure.map_proj, borelCalculus_eq_native]
-  rw [show (isBddMeasurable_indicator (a := a) (hκ hB)).toBoundedBorelFunction =
-      BoundedBorelFunction.indicator (κ ⁻¹' B) (hκ hB) 1 from
+  rw [borelCalculus_eq_native, show (isBddMeasurable_indicator (a := a) hS).toBoundedBorelFunction =
+      BoundedBorelFunction.indicator S hS 1 from
       BoundedBorelFunction.ext fun x => by
         simp only [IsBddMeasurable.toBoundedBorelFunction_apply,
           BoundedBorelFunction.indicator_apply]
         rfl]
-  exact (a.borelCalculus_indicator (hκ hB)).symm
-
-/-- The diagonal measure of the pushforward in continuous representation coordinates. -/
-@[simp] theorem toProjValMeasure_diag (ξ : H) :
-    (toProjValMeasure ha hκ).diag ξ = Measure.map κ ((cfcHom ha).representationDiagMeasure ξ) := by
-  have := ha
-  rw [toProjValMeasure, ProjValMeasure.map_diag, spectralPVM_diag_eq_representation ha]
-end Projections
+  exact a.borelCalculus_indicator hS
 
 section Coordinate
 
@@ -85,14 +69,6 @@ theorem borelCalculus_coord :
     borelCalculus ha (isBddMeasurable_coord (a := a)) = a :=
   (borelCalculus_of_continuous ha ((ContinuousMap.id ℂ).restrict (spectrum ℂ a))
     (isBddMeasurable_coord (a := a))).trans (cfcHom_id ha)
-
-/-- **Every value of the Borel calculus commutes with its operator.**  This is
-the reason spectral subspaces reduce their operator, and it needs no spectral
-theorem beyond multiplicativity: `a` is itself a value of the calculus. -/
-theorem borelCalculus_comm_self {f : spectrum ℂ a → ℂ} (hf : IsBddMeasurable f) :
-    a * borelCalculus ha hf = borelCalculus ha hf * a := by
-  have h := borelCalculus_comm ha (isBddMeasurable_coord (a := a)) hf
-  rwa [borelCalculus_coord ha] at h
 
 end Coordinate
 
@@ -114,7 +90,8 @@ theorem measurable_reCoord : Measurable (reCoord (T := T)) :=
 /-- **The spectral measure of a bounded self-adjoint operator**, indexed along
 the real part of its spectrum. -/
 noncomputable def boundedPVM : TauCeti.ProjValMeasure ℝ H :=
-  toProjValMeasure hT.isStarNormal measurable_reCoord
+  letI := hT.isStarNormal
+  T.spectralPVM.map reCoord measurable_reCoord
 
 omit [CompleteSpace H] in
 /-- The real-part relabelling, unfolded.  Consumers outside this module cannot reduce
@@ -136,14 +113,16 @@ theorem boundedPVM_proj (B : Set ℝ) (hB : MeasurableSet B) :
     (boundedPVM hT).proj B hB =
       borelCalculus hT.isStarNormal
         (isBddMeasurable_indicator (a := T) (measurable_reCoord hB)) := by
-  rw [boundedPVM, toProjValMeasure_proj]
+  have := hT.isStarNormal
+  rw [boundedPVM, ProjValMeasure.map_proj, borelCalculus_indicator_eq_proj]
 
 /-- The diagonal measures of `boundedPVM` are the pushforwards of the diagonal measures
 along the real-part relabelling.  Rewrite form for consumers outside this module. -/
 theorem boundedPVM_diag (ξ : H) :
     (boundedPVM hT).diag ξ = Measure.map reCoord ((cfcHom
       hT.isStarNormal).representationDiagMeasure ξ) := by
-  rw [boundedPVM, toProjValMeasure_diag]
+  have := hT.isStarNormal
+  rw [boundedPVM, ProjValMeasure.map_diag, spectralPVM_diag_eq_representation]
 
 /-- **The bridge to the continuous functional calculus.**  A spectral projection
 of a bounded self-adjoint operator is the continuous functional calculus of any
@@ -153,7 +132,7 @@ theorem boundedPVM_proj_eq_cfcHom (s : Set ℝ) (hs : MeasurableSet s)
     (g : C(spectrum ℂ T, ℂ))
     (hg : ∀ w, g w = (reCoord ⁻¹' s).indicator (fun _ => (1 : ℂ)) w) :
     (boundedPVM hT).proj s hs = cfcHom hT.isStarNormal g := by
-  rw [boundedPVM, toProjValMeasure_proj,
+  rw [boundedPVM_proj,
     ← borelCalculus_of_continuous hT.isStarNormal g (IsBddMeasurable.of_continuous g)]
   exact borelCalculus_congr_ae _ _ _ fun η =>
     Filter.Eventually.of_forall fun w => (hg w).symm
@@ -163,8 +142,9 @@ it** -- so its range and the orthogonal complement of its range are both
 invariant, i.e. every spectral subspace reduces the operator. -/
 theorem boundedPVM_proj_comm (s : Set ℝ) (hs : MeasurableSet s) :
     T * (boundedPVM hT).proj s hs = (boundedPVM hT).proj s hs * T := by
-  rw [boundedPVM, toProjValMeasure_proj]
-  exact borelCalculus_comm_self hT.isStarNormal _
+  have := hT.isStarNormal
+  rw [boundedPVM, ProjValMeasure.map_proj]
+  exact ((T.forall_commute_spectralPVM_proj_iff T).2 (Commute.refl T) _ _).eq
 
 private theorem boundedPVM_eq_toPMap_top :
     boundedPVM hT = ((T : H →ₗ[ℂ] H).toPMap ⊤).spectralPVM

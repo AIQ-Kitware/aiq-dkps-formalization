@@ -2944,6 +2944,36 @@
       "migration_note": "October 25, following DKPS 32799562e: the independent local real-to-complex continuous-function map ofRealLM and its two accessor/star lemmas are removed. Their consumers use Mathlib ContinuousMap.realToRCLikeStarAlgHom, realToRCLikeStarAlgHom_apply, realToRCLike_apply and isSelfAdjoint_realToRCLike directly. The local positivity proof consumes accepted map_nonneg and the native positive-operator characterization. This is a preparatory retirement: diagFunctional, diagMeasure and their integral/measure consumers still remain local pending migration to the newly accepted representationDiagMeasure API. Retain original Kitware/Jon Crall/Claude Opus 5 provenance from the pre-change file; no proof descent from DKPS to the older Mathlib real-function API is claimed. Following DKPS 9380d70b0, the whole local DiagonalMeasure module is deleted, including diagFunctional, the duplicate measure/instances, real and complex integration helpers, mass formula and real-symbol CFC helper API. Every production carrier uses StarAlgHom.representationDiagMeasure (cfcHom ha) directly. Native finite/regular, integral, uniqueness and mass results are consumed without aliases or constructor wrappers. Three conjugation-invariance proofs now compare scalar continuous integrals. The restriction theorem uses complex symbols and native uniqueness directly. Source normality, arbitrary Hilbert-space dimension and complex-symbol scope are preserved. Accepted at Tau Ceti 97bf123075b7f142c1e37b827b6b37c156803248, including 8e692e2c (#20399); pre-retirement source/licensing are preserved by this record and Git history."
     },
     {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.CyclicIsometry at c24e4ed2422fd46929e7198a9b139db23f18cbb4",
+      "source_declarations": [
+        "TauCeti.BorelCalculus.norm_borelCalculus_apply_sq"
+      ],
+      "current_namespace": "TauCeti.BorelCalculus",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.CyclicIsometry",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.BorelCalculus.Basic",
+      "ownership_class": "tauceti",
+      "roadmap_target": "Bounded normal Borel calculus, vector norm identity used by the cyclic model",
+      "provenance_class": "DKPS donor by Jon Crall and Claude Fable 5, Kitware 2026, Apache-2.0. The upstream proof is from the native spectral PVM integral.",
+      "direct_dependencies": [
+        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Multiplicative"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.CyclicModel"
+      ],
+      "status": "partially-upstreamed",
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/28859",
+      "integration": "0ec5eb534c79f6de1055a7a522d295f35550b996",
+      "accepted_head": "6d0a839823911d3f4639b5229e6e143e7c03622a",
+      "retired_local_declarations": [
+        "TauCeti.BorelCalculus.norm_borelCalculus_apply_sq"
+      ],
+      "accepted_upstream_declarations": [
+        "ContinuousLinearMap.norm_sq_borelCalculus_apply"
+      ],
+      "migration_note": "November 27: use the native squared-norm theorem directly in the cyclic model. The diagonal measure is that of the same continuous representation. The cyclic subspace construction remains local."
+    },
+    {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
       "source_declarations": [
         "IsBddMeasurable.add",
@@ -2985,9 +3015,10 @@
       "retired_local_declarations": [
         "pair_conj",
         "pair_mul_eq_inner_comp",
-        "pair_self_eq_integral"
+        "pair_self_eq_integral",
+        "borelCalculus_comm"
       ],
-      "migration_note": "November 27: Use the bundled star algebra homomorphism and its laws in place of the continuous-approximation proofs of algebra, adjoint and norm laws. The consumers still pass unbundled symbols. Local source anchor 1a20ed0ac. The DKPS donors were developed by Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The #28859 integration cites Conway and Rudin and does not disclose DKPS proof descent.",
+      "migration_note": "November 27: Use the bundled star algebra homomorphism and its laws in place of the continuous-approximation proofs of algebra, adjoint and norm laws. The consumers still pass unbundled symbols. Local source anchor 1a20ed0ac. The DKPS donors were developed by Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The #28859 integration cites Conway and Rudin and does not disclose DKPS proof descent. November 27: Remove the unused unbundled commutativity facade after both resolvent and bounded spectral projection consumers move to native theorems.",
       "integration": "0ec5eb534c79f6de1055a7a522d295f35550b996",
       "accepted_head": "6d0a839823911d3f4639b5229e6e143e7c03622a",
       "accepted_upstream_declarations": [
@@ -3124,9 +3155,13 @@
         "specProj_inter",
         "specProj_univ",
         "re_inner_eq_integral_reCoord",
-        "integrable_reCoord"
+        "integrable_reCoord",
+        "toProjValMeasure",
+        "toProjValMeasure_diag",
+        "toProjValMeasure_proj",
+        "borelCalculus_comm_self"
       ],
-      "migration_note": "November 27: Use the native spectral PVM pushforward. The bounded form estimates use the #2123 bounded PVM comparison at 54be75fd15440f9cd1312f7fd32b55cc2f837779 and the partial-operator estimates on complementary spectral ranges. Local source anchor 1a20ed0ac. The DKPS donors were developed by Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The #28859 integration cites Conway and Rudin and does not disclose DKPS proof descent.",
+      "migration_note": "November 27: Use the native spectral PVM pushforward. The bounded form estimates use the #2123 bounded PVM comparison at 54be75fd15440f9cd1312f7fd32b55cc2f837779 and the partial-operator estimates on complementary spectral ranges. Local source anchor 1a20ed0ac. The DKPS donors were developed by Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0. The #28859 integration cites Conway and Rudin and does not disclose DKPS proof descent. November 27: Use native ProjValMeasure.map directly for the bounded self-adjoint real-coordinate PVM. Native spectral commutant supplies bounded projection commutation. The old unbundled indicator formula uses the accepted borelCalculus_indicator law during migration.",
       "integration": "0ec5eb534c79f6de1055a7a522d295f35550b996",
       "accepted_head": "6d0a839823911d3f4639b5229e6e143e7c03622a",
       "accepted_upstream_declarations": [
@@ -3137,7 +3172,8 @@
         "ProjValMeasure.map_diag",
         "IsSelfAdjoint.spectralPVM_toPMap_top",
         "IsSelfAdjoint.re_inner_le_mul_norm_sq_of_mem_range_spectralPVM_proj",
-        "IsSelfAdjoint.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj"
+        "IsSelfAdjoint.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj",
+        "ContinuousLinearMap.forall_commute_spectralPVM_proj_iff"
       ]
     },
     {
@@ -3541,7 +3577,14 @@
       ],
       "status": "staged",
       "upstream_pr": null,
-      "migration_note": "2026-11-27: Retire reducesSubspace_specRange, specRestrict, specRestrict_domain, specRestrict_apply, isFormalAdjoint_specRestrict, exists_specRestrict_resolvent, dense_specRestrict_domain, isSelfAdjoint_specRestrict, and mem_resolventSet_specRestrict_of_gap from the SpectralMeasure module and its Construction split. Their source is cc24e76466ace67f68c2e384af4ad8748a21e32b at those paths, Jon Crall / Claude Opus 5, Kitware 2026, Apache-2.0. Consume LinearPMap.restrict, restrict_domain, mem_restrict_domain, coe_restrict_apply, IsReducing.dense_restrict_domain and IsSelfAdjoint.isReducing_range_spectralPVM_proj, isSelfAdjoint_restrict_range_spectralPVM_proj and mem_resolventSet_restrict_range_spectralPVM_proj from the accepted Forgejo #1964 integration c8bb063fe6bd7a441b156c5cc6e03b027dd29579 (SA-E09/E10). The native gap theorem only needs the projection on the gap to vanish and hence covers the original set-theoretic gap. Retire re_inner_apply_bounds_of_subset_Icc in favor of IsSelfAdjoint.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj and re_inner_le_mul_norm_sq_of_mem_range_spectralPVM_proj (#41596, 81171bd524be1b4f119bb36877630bb96aaed6f8, SA-E11–E13). The paper-facing restriction, inclusion and localization preserve their hypotheses and conclusions, including for the trivial spectral range. Both upstream submissions are by other contributors, with direct DKPS proof descent undisclosed. Retain the Borel-coordinate bridge, spectral cut and exhaustion results."
+      "migration_note": "2026-11-27: Retire reducesSubspace_specRange, specRestrict, specRestrict_domain, specRestrict_apply, isFormalAdjoint_specRestrict, exists_specRestrict_resolvent, dense_specRestrict_domain, isSelfAdjoint_specRestrict, and mem_resolventSet_specRestrict_of_gap from the SpectralMeasure module and its Construction split. Their source is cc24e76466ace67f68c2e384af4ad8748a21e32b at those paths, Jon Crall / Claude Opus 5, Kitware 2026, Apache-2.0. Consume LinearPMap.restrict, restrict_domain, mem_restrict_domain, coe_restrict_apply, IsReducing.dense_restrict_domain and IsSelfAdjoint.isReducing_range_spectralPVM_proj, isSelfAdjoint_restrict_range_spectralPVM_proj and mem_resolventSet_restrict_range_spectralPVM_proj from the accepted Forgejo #1964 integration c8bb063fe6bd7a441b156c5cc6e03b027dd29579 (SA-E09/E10). The native gap theorem only needs the projection on the gap to vanish and hence covers the original set-theoretic gap. Retire re_inner_apply_bounds_of_subset_Icc in favor of IsSelfAdjoint.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj and re_inner_le_mul_norm_sq_of_mem_range_spectralPVM_proj (#41596, 81171bd524be1b4f119bb36877630bb96aaed6f8, SA-E11–E13). The paper-facing restriction, inclusion and localization preserve their hypotheses and conclusions, including for the trivial spectral range. Both upstream submissions are by other contributors, with direct DKPS proof descent undisclosed. Retain the Borel-coordinate bridge, spectral cut and exhaustion results. November 27: Derive interval cutoff convergence from ProjValMeasure.tendsto_proj_apply introduced by chrisflav in #43205 at 53cb857c7f0558aea91b355f1b354e2f86c4d7a6, accepted head 782bab02d0d540e29ed44b2a65b89718f4b446ae. The proof uses eventual membership in symmetric real intervals and no longer passes through Cayley-coordinate diagonal integrals.",
+      "retired_local_declarations": [
+        "cayleyInv_add_I",
+        "inv_two_I_mul_one_sub_mul_cayleyInv_add_I"
+      ],
+      "accepted_upstream_declarations": [
+        "ProjValMeasure.tendsto_proj_apply"
+      ]
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -4138,7 +4181,17 @@
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": "November 27: Use Complex.inverseCayleyCoord from #29129, and the native PVM pushforward and pole-nullity theorems from #41596 and Forgejo #1165. Keep continuity off the pole on the whole complex plane and the existing damped separator argument.",
+      "retired_local_declarations": [
+        "cayleyCoordFun",
+        "continuousOn_cayleyCoordFun"
+      ],
+      "accepted_upstream_declarations": [
+        "Complex.inverseCayleyCoord",
+        "IsSelfAdjoint.spectralPVM_eq_map",
+        "LinearPMap.cayley_diagMeasure_singleton_one"
+      ]
     },
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
@@ -6464,22 +6517,68 @@
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction",
       "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Basic",
       "ownership_class": "tauceti",
-      "roadmap_target": "SA-E01 (construction portion; SA-E02 nullity remains)",
-      "provenance_class": "Independent native PVM construction consumed; DKPS Cayley-coordinate adaptation integrated separately in narrowed #29129; legacy representation bridge retained.",
+      "roadmap_target": "SA-E01 native Cayley PVM, SA-E02 pole nullity, and spectral projection and resolvent laws",
+      "provenance_class": "Independent native PVM construction and resolvent calculus consumed. DKPS Cayley-coordinate contribution integrated separately in the narrower #29129 replay. The PVM construction in that submission was dropped.",
       "direct_dependencies": [
-        "TauCeti.Analysis.InnerProductSpace.LinearPMap.Cayley",
-        "TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Map",
-        "TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Representation.OfRepresentation"
+        "TauCeti.Analysis.InnerProductSpace.LinearPMap.ProjValMeasure.Bounded",
+        "TauCeti.Analysis.Complex.UpperHalfPlane.Cayley",
+        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM"
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "native-factory-consumed-representation-bridge-retained",
+      "status": "partially-upstreamed",
       "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/41596",
-      "migration_note": "2026-11-05 prepared and fork-pushed port-sa-e01-cayley-spectral-pvm at 2f582c0f01d06288b8401ced61f6ec030ed6ba34, based on accepted be6518de91d3cd0f039f0011b6b12f84690b0b62. Directly maps the native #27902 representation PVM of the Cayley transform to the real line; original subtype coordinate generalized to ℂ. SA-E02 nullity and downstream resolvent results are not claimed. Focused build 6515 jobs, 13 linters, scope examples and full style passed. Independent rubric review and live host preflight required; no PR submitted, no local retirement or integration claimed. November 22: remove the local spectralPVM factory and use LinearPMap.spectralPVM A hA directly from independent #41596. spectralPVM_def remains a genuine bridge to the legacy BorelCalculus representation, proved by native diagonal measure characterization. Other local Borel/restriction APIs are not declared exhausted. The narrowed #29129 replay supplies only coordinate auxiliaries, not the PVM construction.",
+      "migration_note": "2026-11-05 prepared and fork-pushed port-sa-e01-cayley-spectral-pvm at 2f582c0f01d06288b8401ced61f6ec030ed6ba34, based on accepted be6518de91d3cd0f039f0011b6b12f84690b0b62. Directly maps the native #27902 representation PVM of the Cayley transform to the real line; original subtype coordinate generalized to ℂ. SA-E02 nullity and downstream resolvent results are not claimed. Focused build 6515 jobs, 13 linters, scope examples and full style passed. Independent rubric review and live host preflight required; no PR submitted, no local retirement or integration claimed. November 22: remove the local spectralPVM factory and use LinearPMap.spectralPVM A hA directly from independent #41596. spectralPVM_def remains a genuine bridge to the legacy BorelCalculus representation, proved by native diagonal measure characterization. Other local Borel/restriction APIs are not declared exhausted. The narrowed #29129 replay supplies only coordinate auxiliaries, not the PVM construction. November 27: Retire the legacy PVM representation bridge, pole-nullity proof, and Cayley resolvent-symbol proof chain. Use the native PVM pushforward and spectral-projection intertwining and resolvent commutation from #41596 (81171bd524be1b4f119bb36877630bb96aaed6f8, accepted head 81ac90ae300b8a13dab49958b113afdcfb02fa71, roed-math). Use the Cayley coordinate and measurability from the narrower DKPS #29129 integration 557acd65e46af69e3208452678c225b6d75141bf, and the pole nullity from kim-em Forgejo #1165 at fb45507f3f0cacc2e9c175ed29acd861bea8bc8b. The orthogonal projection onto the spectral range uses Forgejo #1964 at c8bb063fe6bd7a441b156c5cc6e03b027dd29579. Keep the spectral projection and range names used by the paper, with native domain and action proofs. Original split f2250101339121c5129bab32f72a44383a679c83, Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0.",
       "final_declarations": [
         "LinearPMap.spectralPVM"
       ],
-      "integration": "81171bd524be1b4f119bb36877630bb96aaed6f8"
+      "integration": "81171bd524be1b4f119bb36877630bb96aaed6f8",
+      "retired_local_declarations": [
+        "one_sub_cayley_apply",
+        "injective_resolvent_negI",
+        "injective_one_sub_cayley",
+        "cayleyInv",
+        "cayleyInv_def",
+        "measurable_cayleyInv",
+        "spectralPVM_def",
+        "diagMeasure_cayley_preimage_one",
+        "borelCalculus_congr_of_ne_one",
+        "cayley_denom_ne_zero",
+        "cayleyCoord",
+        "cayleyCoord_apply",
+        "cayleyDenom_ne_zero",
+        "cayleyDenomCM",
+        "cayleyDenomCM_apply",
+        "resolventSymbol",
+        "resolventSymbol_apply",
+        "cayleyDenomInvCM",
+        "cayleyDenomInvCM_apply",
+        "two_I_ne_zero",
+        "resolvent_negI_eq_cfcHom",
+        "one_add_smul_resolvent_eq_cfcHom",
+        "resolvent_eq_cfcHom",
+        "inverseCayley_im_eq_zero",
+        "spectralPVM_resolvent_formula",
+        "resolvent_negI_eq_borelCalculus",
+        "specProjection_comm_resolvent",
+        "specProjection_resolvent_apply",
+        "exists_resolvent_eq_of_mem_domain",
+        "specProjection_comm_resolvent'",
+        "specProjection_resolvent_apply'"
+      ],
+      "accepted_upstream_declarations": [
+        "Complex.inverseCayleyCoord",
+        "Complex.measurable_inverseCayleyCoord",
+        "IsSelfAdjoint.spectralPVM_eq_map",
+        "IsSelfAdjoint.spectralPVM_proj",
+        "LinearPMap.cayley_diagMeasure_singleton_one",
+        "IsSelfAdjoint.resolvent_eq_cfc_cayley",
+        "IsSelfAdjoint.inner_resolvent_apply_eq_integral",
+        "IsSelfAdjoint.intertwines_spectralPVM_proj",
+        "IsSelfAdjoint.commute_spectralPVM_proj_resolvent",
+        "ProjValMeasure.starProjection_range_proj"
+      ],
+      "accepted_head": "81ac90ae300b8a13dab49958b113afdcfb02fa71"
     },
     {
       "source_module": "New native-carrier bridges, with the complex adjoint identity adapted from DKPS OneParameterUnitaryGroup/Basic.lean at 7327e26f4",

@@ -20,7 +20,7 @@ The route is the one the Yosida construction already lays out, and no new
 analysis is required at any step:
 
 * spectral projections commute with the resolvent at every non-real point
-  (`specProjection_comm_resolvent'`);
+  (`IsSelfAdjoint.commute_spectralPVM_proj_resolvent`);
 * the symmetric Yosida approximant is a linear combination of two resolvents,
   so it commutes too;
 * an exponential of a commuting operator commutes (`Commute.exp_right`);
@@ -66,9 +66,9 @@ theorem specProjection_comm_yosidaApproxSym (n : ℕ+) :
   have hrootNegIn : (-I * (n : ℂ)) ∈ _root_.LinearPMap.resolventSet A :=
     hA.mem_resolventSet_of_im_ne_zero hnim
   have h1 : Commute (specProjection hA B hB) (A.resolvent (I * (n : ℂ))) :=
-    specProjection_comm_resolvent' hA him hrootIn B hB
+    by simpa only [specProjection_def] using hA.commute_spectralPVM_proj_resolvent B hB hrootIn
   have h2 : Commute (specProjection hA B hB) (A.resolvent (-I * (n : ℂ))) :=
-    specProjection_comm_resolvent' hA hnim hrootNegIn B hB
+    by simpa only [specProjection_def] using hA.commute_spectralPVM_proj_resolvent B hB hrootNegIn
   rw [A.symmetricYosidaApproximation_def]
   push_cast
   exact (h1.add_right h2).smul_right (-((n : ℂ) ^ 2 / 2))

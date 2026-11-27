@@ -38,34 +38,6 @@ section BoundedSet
 
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 
-include hA in
-/-- Off the Cayley singularity, `κ(w) + i = 2i/(1 - w)`. -/
-theorem cayleyInv_add_I {w : _root_.spectrum ℂ (A.cayley)} (hw1 : (w : ℂ) ≠ 1) :
-    ((cayleyInv A w : ℝ) : ℂ) + Complex.I = (2 * Complex.I) / (1 - (w : ℂ)) := by
-  have hnorm : ‖(w : ℂ)‖ = 1 :=
-    spectrum.norm_eq_one_of_unitary (hA.cayley_mem_unitary) w.property
-  have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
-  have hcast : ((cayleyInv A w : ℝ) : ℂ) = Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ)) :=
-    Complex.ext (by simp [cayleyInv_def])
-      (by simpa using (inverseCayley_im_eq_zero hnorm hw1).symm)
-  rw [hcast]
-  field_simp
-  ring
-
-include hA in
-/-- **The Cayley symbol and `κ + i` are reciprocal off the singularity.**
-
-`(2i)⁻¹(1 - w)` is the value of the symbol every construction here calls `gsym`, and this
-says it inverts `κ(w) + i`.  Three proofs -- two `hprod`s and one `hgae`, in this file and
-in the retired `SpectralGapInverse.lean` -- each derived it inline from `cayleyInv_add_I` and
-`field_simp`; it is one line of algebra and belongs beside the identity it uses. -/
-theorem inv_two_I_mul_one_sub_mul_cayleyInv_add_I
-    {w : _root_.spectrum ℂ (A.cayley)} (hw1 : (w : ℂ) ≠ 1) :
-    (2 * Complex.I)⁻¹ * (1 - (w : ℂ)) * (((cayleyInv A w : ℝ) : ℂ) + Complex.I) = 1 := by
-  have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
-  rw [cayleyInv_add_I hA hw1]
-  field_simp
-
 variable (B : Set ℝ) (hB : MeasurableSet B)
 
 /-- A bounded spectral range lies inside the operator domain. -/
@@ -98,77 +70,13 @@ theorem tendsto_specProjection_Icc (x : H) :
     Filter.Tendsto
       (fun τ : ℝ => specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x)
       Filter.atTop (nhds x) := by
-  classical
-  set hU := hA.isStarNormal_cayley with hhU
-  set μ := (cfcHom hU).representationDiagMeasure x with hμ
-  set κ := cayleyInv A with hκ
-  set F : ℝ → _root_.spectrum ℂ (A.cayley) → ℝ :=
-    fun τ => (κ ⁻¹' Set.Icc (-τ) τ).indicator (fun _ => (1 : ℝ)) with hF
-  -- the diagonal masses are the indicator integrals
-  have hd : ∀ τ : ℝ, (((A.spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal
-      = ∫ w, F τ w ∂μ := by
-    intro τ
-    have hSm : MeasurableSet (κ ⁻¹' Set.Icc (-τ) τ) :=
-      measurable_cayleyInv A measurableSet_Icc
-    have hdiag : ((A.spectralPVM hA).diag x) = Measure.map κ μ := by
-      rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag, hμ, hκ]
-    -- Left as a `rw` chain on purpose: `simp only` with this same list leaves the
-    -- goal unsolved.  `integral_indicator_const` only applies once `Measure.map_apply`
-    -- has put the measure in the right form, and `simp only` normalises past that shape
-    -- before the integral lemma can see it.
-    rw [hdiag,
-      Measure.map_apply (measurable_cayleyInv A) measurableSet_Icc, hF,
-      integral_indicator_const _ hSm, smul_eq_mul, mul_one,
-      MeasureTheory.measureReal_def]
-  -- dominated convergence
-  have hlim : Filter.Tendsto (fun τ : ℝ => ∫ w, F τ w ∂μ) Filter.atTop
-      (nhds (∫ _w, (1 : ℝ) ∂μ)) := by
-    refine tendsto_integral_filter_of_dominated_convergence (fun _ => (1 : ℝ))
-      (Filter.Eventually.of_forall fun τ =>
-        (measurable_const.indicator
-          (measurable_cayleyInv A measurableSet_Icc)).aestronglyMeasurable)
-      (Filter.Eventually.of_forall fun τ => Filter.Eventually.of_forall fun w => ?_)
-      (integrable_const _)
-      (Filter.Eventually.of_forall fun w => ?_)
-    · by_cases hw : w ∈ κ ⁻¹' Set.Icc (-τ) τ <;> simp [hF, hw]
-    · refine Filter.Tendsto.congr' ?_ tendsto_const_nhds
-      filter_upwards [Filter.eventually_ge_atTop |κ w|] with τ hτ
-      have hmem : w ∈ κ ⁻¹' Set.Icc (-τ) τ :=
-        ⟨by linarith [neg_abs_le (κ w)], by linarith [le_abs_self (κ w)]⟩
-      simp [hF, hmem]
-  have htot : ∫ _w, (1 : ℝ) ∂μ = ‖x‖ ^ 2 := by
-    rw [integral_const, smul_eq_mul, mul_one, hμ,
-      StarAlgHom.representationDiagMeasure_real_univ]
-  -- the squared distance is the missing mass
-  have hsq : ∀ τ : ℝ,
-      ‖specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x - x‖ ^ 2
-        = ‖x‖ ^ 2 - (((A.spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal := by
-    intro τ
-    have hnormP : ‖specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x‖ ^ 2
-        = (((A.spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal := by
-      rw [specProjection_def]; exact (A.spectralPVM hA).norm_sq_proj_apply _ _ x
-    have hinner : ⟪x, specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x⟫_ℂ
-        = ((((A.spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal : ℂ) := by
-      rw [specProjection_def]; exact (A.spectralPVM hA).inner_proj _ _ x
-    have hre : RCLike.re (⟪specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x, x⟫_ℂ)
-        = (((A.spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal := by
-      rw [← inner_conj_symm, hinner]
-      simp
-    rw [norm_sub_sq (𝕜 := ℂ), hnormP, hre]
-    ring
-  -- conclude
-  refine tendsto_iff_norm_sub_tendsto_zero.mpr ?_
-  have hsq' : Filter.Tendsto
-      (fun τ : ℝ => ‖specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x - x‖ ^ 2)
-      Filter.atTop (nhds 0) := by
-    have hconv : Filter.Tendsto
-        (fun τ : ℝ => ‖x‖ ^ 2 - (((A.spectralPVM hA).diag x) (Set.Icc (-τ) τ)).toReal)
-        Filter.atTop (nhds (‖x‖ ^ 2 - ‖x‖ ^ 2)) := by
-      refine Filter.Tendsto.sub tendsto_const_nhds ?_
-      simpa only [hd, htot] using hlim
-    simpa only [hsq, sub_self] using hconv
-  have hfin := (Real.continuous_sqrt.tendsto 0).comp hsq'
-  simpa only [Function.comp_def, Real.sqrt_sq (norm_nonneg _), Real.sqrt_zero] using hfin
+  rw [show (fun τ : ℝ => specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc x) =
+      fun τ : ℝ => (A.spectralPVM hA).proj (Set.Icc (-τ) τ) measurableSet_Icc x from
+    funext fun τ => congrArg (fun P : H →L[ℂ] H => P x)
+      (specProjection_def hA (Set.Icc (-τ) τ) measurableSet_Icc)]
+  exact (A.spectralPVM hA).tendsto_proj_apply (fun _ : ℝ => measurableSet_Icc) x
+    (Filter.Eventually.of_forall fun s =>
+      (Filter.eventually_ge_atTop |s|).mono fun τ hs => abs_le.mp hs)
 
 private noncomputable def boundedCoordinate {M : ℝ} (hbnd : ∀ s ∈ B, |s| ≤ M) :
     BoundedBorelFunction ℝ :=
