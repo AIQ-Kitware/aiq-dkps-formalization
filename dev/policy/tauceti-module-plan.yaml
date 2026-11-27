@@ -158,7 +158,6 @@ topics:
   - Analysis.InnerProductSpace.BorelCalculus.PVM
   - Analysis.InnerProductSpace.BorelCalculus.Polarization
   - Analysis.InnerProductSpace.OperatorExt
-  - Analysis.InnerProductSpace.ProjValMeasure.Subspace
   - MeasureTheory.CfcMeasurable
   - MeasureTheory.CompactExists
   - MeasureTheory.HellySelection
@@ -475,7 +474,6 @@ rungs:
   - Analysis.InnerProductSpace.BorelCalculus.PVM
   - Analysis.InnerProductSpace.BorelCalculus.Polarization
   - Analysis.InnerProductSpace.OperatorExt
-  - Analysis.InnerProductSpace.ProjValMeasure.Subspace
   - MeasureTheory.CfcMeasurable
   - MeasureTheory.CompactExists
   - MeasureTheory.HellySelection

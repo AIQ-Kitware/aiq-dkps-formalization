@@ -414,8 +414,8 @@ theorem tanTwoTheta_from_reducingSubspace
       (b - a) * N.gauge (tanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
         2 * N.gauge B := by
-  have hUred := TauCeti.LinearPMap.reducesSubspace_specRange
-    hA (Set.Iic c) measurableSet_Iic
+  have hUred : A.IsReducing (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) :=
+    hA.isReducing_range_spectralPVM_proj (Set.Iic c) measurableSet_Iic
   have hAlg : ContinuousLinearMap.realAlgebra (𝕜 := ℂ) (E := E) =
       (ContinuousLinearMap.algebra : Algebra ℝ (E →L[ℂ] E)) :=
     ContinuousLinearMap.realAlgebra_eq_of_isScalarTower _ inferInstance

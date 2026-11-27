@@ -1,5 +1,55 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 census of other contributors' OperatorTheory integrations
+
+The review compares accepted TauCeti main `0be4294580a29a23dc04f8d6dc5c80ba83a11ea5`
+with the current OperatorTheory roadmap at `c3438fc0d5217918e71e3e2e359e0fa37971e32e`
+and the DKPS donors. The migration uses the installed pin
+`0225663554f035014705ec78e8b721fd067b82b9`. Intention #776 has expired. The
+table records the verified integrations relevant to the reviewed donors and
+their neighboring roadmap items. Proof descent is undisclosed where the
+integration does not identify a DKPS proof source.
+[Roadmap revision](https://github.com/TauCetiProject/TauCetiRoadmap/tree/c3438fc0d5217918e71e3e2e359e0fa37971e32e/TauCetiRoadmap/OperatorTheory)
+
+| Roadmap item | Supplier and integration | DKPS disposition |
+| --- | --- | --- |
+| SA-E09/E10, spectral restriction and gap resolvent | tauceti-ai-for-science, [Forgejo #1964](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1964), `c8bb063fe6bd7a441b156c5cc6e03b027dd29579` | Earlier DKPS results used domain invariance and a direct Cayley-symbol inverse. The accepted proof uses native reducing restrictions and a norm lower bound from the spectral projections on the two sides of the gap. Consume the restriction, self-adjointness, projection-range APIs and gap resolvent. |
+| SA-E11–E13, form bounds from spectral support | roed-math, [#41596](https://github.com/TauCetiProject/TauCeti/pull/41596), `81171bd524be1b4f119bb36877630bb96aaed6f8` | Consume the two half-line form bounds directly, including at the interval endpoints and on the zero spectral range. Retire the local interval form-bound proof. The same integration supplies the earlier Cayley PVM and resolvent APIs. The current roadmap also asks for a named resolvent predicate and the operator's full second-moment domain and action. |
+| SA-E44/E45, uniqueness and bounded compatibility | tauceti-ai-for-science, [Forgejo #2123](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2123), `54be75fd15440f9cd1312f7fd32b55cc2f837779` | `IsSelfAdjoint.eq_spectralPVM_iff` and `spectralPVM_toPMap_top` give the uniqueness characterization and pushforward comparison. The current E.1 also asks for the packaged `existsUnique_isSpectralMeasure` statement. The legacy DKPS bounded Borel calculus still uses its own representation-moment API. A further migration can identify its real-coordinate PVM with the native pushforward and use `TauCeti.cfc_inv_sub_eq_resolvent` after reconciling the signed resolvent conventions. |
+| SSP-B16 prerequisite, bounded pairwise π/2 estimate | tauceti-ai-for-science, [Forgejo #2441](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2441), `e5d890fd73f8e616241142c58517ef7212010e18` | Consume `ContinuousLinearMap.mul_norm_le_pi_div_two_mul_norm_sylvester_apply` after the existing RCLike transport. The native proof passes through finite spectral sums. The explicit Fourier inverse, compactness and arbitrary-dimensional Ky Fan estimates still need the DKPS solution formula. Full SSP-B16 concerns partial operators. |
+| SA-C37/C38/C41/C43, graph-norm estimates and closedness | tauceti-ai-for-science, [#42625](https://github.com/TauCetiProject/TauCeti/pull/42625), `d9704e3dae1ce39cc314e19c43e26a0ab12e1277` | Retire the unused scalar graph-norm definition and four laws. The canonical norm is `‖A.toGraphSpace x‖`, with the square identity and nonnegativity supplied by `norm_toGraphSpace_sq` from Forgejo #1197 and `norm_nonneg`. The free-beam graph embedding retains its separate analytic closedness argument. |
+| UO-A01 and integral-side UO-A02, unbounded spectral integral | chrisflav, [#43205](https://github.com/TauCetiProject/TauCeti/pull/43205), `53cb857c7f0558aea91b355f1b354e2f86c4d7a6` | Native `ProjValMeasure.spectralIntegral` supplies the maximal second-moment domain, action, norm, adjoint and normality laws. The local donor is a bounded spectral cut. Recovery of an arbitrary existing self-adjoint operator as the identity spectral integral is a separate comparison. |
+| UO-D01, half-plane deficiency constancy | tauceti-ai-for-science, [#42251](https://github.com/TauCetiProject/TauCeti/pull/42251), `28431ae2d2e52ea544a7d8d71a0a104a8f283f24` | The native linear-isometry equivalences give constancy on each half-plane. The extension criterion is a separate dependency of the roadmap item. There is no DKPS deficiency-subspace carrier to retire. |
+| UO-D01a, symmetric resolvent alternatives | roed-math, [#41331](https://github.com/TauCetiProject/TauCeti/pull/41331), `4f67ec09bbbd56bc6f86ab21f423f21674d18944`, and kim-em, [Forgejo #1116](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1116), `52416fb69860317c3f27734f248a7949bc14bc27` | Accepted four-alternative results for symmetric partial operators have broader hypotheses than DKPS's self-adjoint nonreal resolvent facts. No duplicate four-alternative proof was found. |
+| Toeplitz §1.2 and §3.4 prerequisites | tauceti-ai-for-science, [Forgejo #2128](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2128), `17a078777d1d063560a42174b0f583771b73c229`, and [#42005](https://github.com/TauCetiProject/TauCeti/pull/42005), `0e8569f7db69522783a36639543207307e01c89f` | The harmonic-majorant model of Hardy space and finite-product Fredholm/index laws landed separately. The DKPS binary index proof was already retired through our #44700. These results supply parts of the corresponding Toeplitz sections. |
+| OperatorIdeals §B2 diagonal check, membership clauses | tauceti-ai-for-science, [#46766](https://github.com/TauCetiProject/TauCeti/pull/46766), `a010562cb94530c5c5d115ecb6d20c828dc7f829` | This AutomorphicSpectralTheory submission also proves that the `1/(n+1)` diagonal is Hilbert–Schmidt and outside trace class. The exact energy and full Schatten classification are separate. There is no matching DKPS example proof to retire. |
+
+DKPS keeps the named spectral subspace and restriction in the paper-facing
+statements. The restriction now uses native `LinearPMap.restrict`; the
+proofs use its domain characterization and the inclusion intertwining law.
+The previously local PVM-range donor is deleted, including its range aliases
+and projection and completeness proofs. Its ancestry runs through
+`DavisKahan/SpectralTheory/PVMSubspace.lean` and the former Spectra-backed
+bridge (Jon Crall and OpenAI GPT-5.6 Thinking, Kitware 2026, Apache 2.0).
+The extraction manifest records the source and replacement declaration names.
+
+Our [#30736](https://github.com/TauCetiProject/TauCeti/pull/30736) was accepted
+as `f0f7c4b96aba257ab68e23f04a4e2bbd141b0532` from head
+`c00248fbb5d67ac97142e3815566f2390bdcf111`. This delivers SA-E24 and is
+newer than the DKPS pin. Our [#29129](https://github.com/TauCetiProject/TauCeti/pull/29129)
+has the previously recorded narrower auxiliary integration
+`557acd65e46af69e3208452678c225b6d75141bf`. The Cayley-coordinate API was
+accepted there. The native Cayley PVM construction is supplied by #41596 and
+its follow-up, Forgejo #1165 at `fb45507f3f0cacc2e9c175ed29acd861bea8bc8b`.
+[Forgejo #1165](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1165)
+The accepted #30736 and the two #29129 dispositions are separate ledger entries
+from the other contributors' proofs.
+
+Validation on the existing ext4-backed Lake cache: the focused build passed
+(9647 jobs) and the Section 2 consumer check passed (10149 jobs). The full
+default build (22416 jobs) and `lake build Challenge` (20602 jobs) passed without
+warnings. The migration removes 927 net lines of Lean.
+
 ## November 26 opposite-shift Toeplitz consumption
 
 TauCeti accepted the DKPS opposite-shift example at `0225663554f035014705ec78e8b721fd067b82b9`, from

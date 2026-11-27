@@ -82,9 +82,9 @@ theorem mem_polarInitial_of_mem_gramBand
         (Set.Icc lo hi) measurableSet_Icc from
       gramSpectralPVM_proj_eq_specProjection X _ _]
     exact LinearPMap.specProjection_mem_specRange _ _ _ z
-  have hform := (LinearPMap.re_inner_apply_bounds_of_subset_Icc
-    (gramLinearPMap_isSelfAdjoint X) (Set.Icc lo hi) measurableSet_Icc
-    (β := lo) (α := hi) Set.Subset.rfl hPzRange hPzDom).1
+  have hSA := gramLinearPMap_isSelfAdjoint X
+  have hform := hSA.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj
+    measurableSet_Icc (fun _ hs => hs.1) (β := lo) (x := ⟨P z, hPzDom⟩) hPzRange
   have hform0 : lo * ‖P z‖ ^ 2 ≤ 0 := by
     change lo * ‖P z‖ ^ 2 ≤
       RCLike.re ⟪gramOperator X (P z), P z⟫_ℂ at hform

@@ -74,14 +74,7 @@ noncomputable def boundedSelfAdjointSpectralProjection
     (s : Set ℝ) (hs : MeasurableSet s) : H →L[ℂ] H :=
   (boundedSelfAdjointSpectralPVM A hA).proj s hs
 
-/-- The selected spectral range of a bounded self-adjoint operator.
-
-This lane still runs on `vendor/Spectra`: it needs the spectral measure of a
-*bounded* operator to agree with that operator's own continuous functional
-calculus, which the native Cayley construction does not yet supply.  The range
-API is therefore kept local here rather than shared with
-`DavisKahan.SpectralTheory.PVMSubspace`, which has moved to
-`TauCeti.ProjValMeasure`. -/
+/-- The selected spectral range of a bounded self-adjoint operator. -/
 @[expose]
 noncomputable def boundedSelfAdjointSpectralSubspace
     (A : H →L[ℂ] H) (hA : A.IsSymmetric)
@@ -125,25 +118,8 @@ theorem boundedSelfAdjointSpectralProjection_eq_starProjection
     (A : H →L[ℂ] H) (hA : A.IsSymmetric)
     (s : Set ℝ) (hs : MeasurableSet s) :
     boundedSelfAdjointSpectralProjection A hA s hs =
-      (boundedSelfAdjointSpectralSubspace A hA s hs).starProjection := by
-  set P : TauCeti.ProjValMeasure ℝ H := boundedSelfAdjointSpectralPVM A hA with hP
-  set Q := boundedSelfAdjointSpectralProjection A hA s hs with hQ
-  have hidem : ∀ y : H, Q (Q y) = Q y := fun y => by
-    have h := congrArg (fun T : H →L[ℂ] H => T y) (P.proj_idem s hs)
-    simp only [mul_apply_eq_comp] at h
-    exact h
-  apply ContinuousLinearMap.ext
-  intro x
-  symm
-  apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero
-  · exact ⟨x, rfl⟩
-  · intro y hy
-    obtain ⟨z, rfl⟩ := hy
-    change ⟪x - Q x, Q z⟫_ℂ = 0
-    have hstarQ : star Q = Q := (P.isSelfAdjoint_proj s hs).star_eq
-    have hadj := ContinuousLinearMap.adjoint_inner_right Q (x - Q x) z
-    rw [← ContinuousLinearMap.star_eq_adjoint, hstarQ] at hadj
-    rw [hadj, map_sub, hidem, sub_self, inner_zero_left]
+      (boundedSelfAdjointSpectralSubspace A hA s hs).starProjection :=
+  ((boundedSelfAdjointSpectralPVM A hA).starProjection_range_proj s hs).symm
 
 /-- Every genuine bounded spectral projection is an orthogonal projection in
 the continuation-facing predicate. -/

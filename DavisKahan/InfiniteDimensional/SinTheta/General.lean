@@ -12,6 +12,7 @@ public import DavisKahan.SpectralTheory.Complexification.Spectrum
 public import TauCeti.Analysis.InnerProductSpace.Modulus
 public import TauCeti.Analysis.InnerProductSpace.Gram.Factor
 public import DavisKahan.SpectralTheory.AbstractSpectrum
+import TauCeti.Analysis.InnerProductSpace.Sylvester.Pairwise
 
 public section
 
@@ -170,7 +171,7 @@ leaf obligation this replaced described as "its complexification transport". -/
 theorem norm_sylvester_le_of_generalSeparation_rclike
     {A : F →L[𝕜] F} {B : E →L[𝕜] E} {X C : E →L[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {d : ℝ} (hd : 0 < d)
+    {d : ℝ} (_hd : 0 < d)
     (hsep : SpectraSeparated A ⊤ B ⊤ d)
     (hEq : ContinuousLinearMap.sylvester A B X = C) :
     d * ‖X‖ ≤ (Real.pi / 2) * ‖C‖ := by
@@ -188,26 +189,18 @@ theorem norm_sylvester_le_of_generalSeparation_rclike
     rw [← complexify_comp, ← complexify_comp, ← complexify_sub, hEqr]
   -- self-adjointness survives both steps: restricting scalars takes the real part
   -- of the form, and `complexify_adjoint` moves the adjoint through the second.
-  have hsymr : ∀ (G : Type v) (_ : NormedAddCommGroup G) (_ : InnerProductSpace 𝕜 G),
-      True := fun _ _ _ => trivial
   have hAr : (A.restrictScalars ℝ).IsSymmetric := fun x y => by
     simpa [real_inner_eq_re_inner (𝕜 := 𝕜)] using congrArg RCLike.re (hA x y)
   have hBr : (B.restrictScalars ℝ).IsSymmetric := fun x y => by
     simpa [real_inner_eq_re_inner (𝕜 := 𝕜)] using congrArg RCLike.re (hB x y)
-  have hAc : (complexify (A.restrictScalars ℝ)).IsSymmetric := by
-    have hsa : IsSelfAdjoint (complexify (A.restrictScalars ℝ)) := by
-      show ContinuousLinearMap.adjoint _ = _
-      rw [← TauCeti.RealComplexification.complexify_adjoint]
-      exact congrArg complexify
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.2 hAr)
-    exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.1 hsa
-  have hBc : (complexify (B.restrictScalars ℝ)).IsSymmetric := by
-    have hsa : IsSelfAdjoint (complexify (B.restrictScalars ℝ)) := by
-      show ContinuousLinearMap.adjoint _ = _
-      rw [← TauCeti.RealComplexification.complexify_adjoint]
-      exact congrArg complexify
-        (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.2 hBr)
-    exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.1 hsa
+  have hAc : IsSelfAdjoint (complexify (A.restrictScalars ℝ)) := by
+    show ContinuousLinearMap.adjoint _ = _
+    rw [← TauCeti.RealComplexification.complexify_adjoint]
+    exact congrArg complexify (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.2 hAr)
+  have hBc : IsSelfAdjoint (complexify (B.restrictScalars ℝ)) := by
+    show ContinuousLinearMap.adjoint _ = _
+    rw [← TauCeti.RealComplexification.complexify_adjoint]
+    exact congrArg complexify (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.2 hBr)
   -- the separation survives both steps: `realSpectrum` is what a `⊤`-separation
   -- hypothesis is about, it is the `ℝ`-spectrum after restricting scalars, and it
   -- is unchanged by complexification.
@@ -227,8 +220,15 @@ theorem norm_sylvester_le_of_generalSeparation_rclike
     rw [hreal F A] at ha
     rw [hreal E B] at hb
     exact (Foundation.spectraSeparated_top_iff A B d).1 hsep a ha b hb
-  have hmain := norm_sylvester_le_of_generalSeparation hAc hBc hd hsepc hEqc
-  rwa [TauCeti.RealComplexification.norm_complexify,
+  have hmain := ContinuousLinearMap.mul_norm_le_pi_div_two_mul_norm_sylvester_apply
+    hAc hBc (δ := d) (fun z hz w hw => by
+      have hzReal := hAc.mem_spectrum_eq_re hz
+      have hwReal := hBc.mem_spectrum_eq_re hw
+      have hgap := (Foundation.spectraSeparated_top_iff _ _ _).mp hsepc
+        z.re (hzReal ▸ hz) w.re (hwReal ▸ hw)
+      rwa [hzReal, hwReal, ← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs])
+    (complexify (X.restrictScalars ℝ))
+  rwa [hEqc, TauCeti.RealComplexification.norm_complexify,
     TauCeti.RealComplexification.norm_complexify,
     ContinuousLinearMap.norm_restrictScalars,
     ContinuousLinearMap.norm_restrictScalars] at hmain
@@ -412,7 +412,7 @@ Sylvester constant.
 Lean proof route for a weaker agent:
 
 1. Derive the Sylvester equation for `(I-P_V)P_U` from the two reducing relations.
-2. Apply `norm_sylvester_le_of_generalSeparation` with the hybrid spectral gap.
+2. Apply the pairwise Sylvester estimate with the hybrid spectral gap.
 3. Bound the residual block by `‖B-A‖` using projection contractions.
 4. Rewrite the block norm as `directedGap U V`.
 

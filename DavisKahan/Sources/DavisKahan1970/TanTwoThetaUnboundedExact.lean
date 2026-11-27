@@ -112,7 +112,7 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
   let U : Submodule ℂ G :=
     TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic
   have hred : _root_.LinearPMap.IsReducing A U :=
-    TauCeti.LinearPMap.reducesSubspace_specRange hA (Set.Iic c) measurableSet_Iic
+    hA.isReducing_range_spectralPVM_proj (Set.Iic c) measurableSet_Iic
   have hgU : ∀ y ∈ U,
       ‖U.offDiagBlock Z y‖ ≤
         TauCeti.crossBlockBound (b - a) ‖B‖ * ‖y‖ := by

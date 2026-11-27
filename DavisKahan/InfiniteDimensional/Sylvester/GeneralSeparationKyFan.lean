@@ -22,27 +22,17 @@ open TauCeti.DavisKahan.ExactSinTheta
 /-!
 # The separated Sylvester estimate in every finite Ky Fan gauge
 
-`DavisKahan/InfiniteDimensional/Sylvester/Basic.lean` proves the universal
-Bhatia--Davis--McIntosh bound
+Tau Ceti's pairwise Sylvester theorem gives the universal Bhatia--Davis--McIntosh
+operator-norm bound. This file proves the corresponding bound for every finite
+Ky Fan gauge, in arbitrary dimension, and then descends to real scalars.
 
-```
-d ‖X‖ ≤ (π/2) ‖C‖    whenever    A X − X B = C
-```
-
-on an arbitrary complex Hilbert space, for bounded self-adjoint `A`, `B` whose spectra are
-`d`-separated.  That is the operator-norm statement.  This file upgrades it to *every*
-finite Ky Fan gauge, still in arbitrary dimension, and then descends to real scalars.
-
-## Why the upgrade is not automatic
-
-The proof in `Basic.lean` estimates the Haagerup--Zsido Fourier reconstruction
+The proof uses the Haagerup--Zsido Fourier reconstruction from `Basic.lean`:
 
 ```
 X = ∫ m(t) • (e^{itA} C e^{-itB}) dt
 ```
 
-with `‖∫ f‖ ≤ ∫ ‖f‖` and the unitary invariance of the operator norm.  Replacing the norm
-by `kyFanGaugeReal k` needs both ingredients again, and neither is formal: the gauge is not the
+The Ky Fan estimate uses integral subadditivity and two-sided unitary invariance: the gauge is not the
 norm of the space being integrated in, so Minkowski's inequality has to be proved for it,
 and its two-sided unitary invariance is a genuine ideal statement.  Both are paper-independent
 and live upstream, in
@@ -118,7 +108,8 @@ For bounded self-adjoint `A`, `B` with `d`-separated spectra and `A X − X B = 
 d · kyFanGaugeReal k X ≤ (π/2) · kyFanGaugeReal k C    for every k.
 ```
 
-`norm_sylvester_le_of_generalSeparation` is the case `k = 1`. -/
+The operator-norm estimate in `ContinuousLinearMap.mul_norm_le_pi_div_two_mul_norm_sylvester_apply`
+corresponds to `k = 1`. -/
 theorem kyFan_sylvester_le_of_generalSeparation_complex
     {A : Fc →L[ℂ] Fc} {B : Ec →L[ℂ] Ec}
     {X C : Ec →L[ℂ] Fc}

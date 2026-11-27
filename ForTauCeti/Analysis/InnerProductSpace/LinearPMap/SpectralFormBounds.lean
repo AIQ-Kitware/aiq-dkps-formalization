@@ -24,7 +24,7 @@ function to be integrable against the diagonal measure, which needs a second
 moment, which needs a monotone-convergence argument over the interval cutoffs.
 
 None of it is necessary.  The *bounded* form bound
-`re_inner_apply_bounds_of_subset_Icc` is already available on every spectral
+Tau Ceti's half-line form bounds are available on every spectral
 range over a bounded set, and the interval cutoffs converge strongly
 (`tendsto_specProjection_Icc`).  Applying the bounded bound on `[c, τ]` and
 letting `τ → ∞` gives the half-line bound directly, because `E([c, τ])` acts as
@@ -83,10 +83,12 @@ theorem re_inner_specProjection_Icc_bounds {α β : ℝ} (x : A.domain) :
   have hAy : A ⟨y, hymem⟩ =
       specProjection hA (Set.Icc β α) measurableSet_Icc (A x) :=
     specProjection_apply_domain hA (Set.Icc β α) measurableSet_Icc x
-  have h := re_inner_apply_bounds_of_subset_Icc hA (Set.Icc β α) measurableSet_Icc
-    (β := β) (α := α) Set.Subset.rfl hyK hymem
-  rw [hAy] at h
-  exact h
+  have hlo := hA.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj
+    measurableSet_Icc (fun _ hs => hs.1) (β := β) (x := ⟨y, hymem⟩) hyK
+  have hhi := hA.re_inner_le_mul_norm_sq_of_mem_range_spectralPVM_proj
+    measurableSet_Icc (fun _ hs => hs.2) (α := α) (x := ⟨y, hymem⟩) hyK
+  rw [hAy] at hlo hhi
+  exact ⟨hlo, hhi⟩
 
 /-- If a half-line's complement carries no spectral projection, the half-line
 carries the identity. -/

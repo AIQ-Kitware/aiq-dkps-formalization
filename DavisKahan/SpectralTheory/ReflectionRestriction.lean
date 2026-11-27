@@ -647,7 +647,7 @@ theorem selfAdjointSpectralSubspace_reducing
 
 /-- **The canonical spectral restriction is the reducing restriction.**
 
-`selfAdjointSpectralRestriction` is `LinearPMap.specRestrict`, whose domain is
+`selfAdjointSpectralRestriction` uses `LinearPMap.restrict`, whose domain is
 `A.domain` pulled back along the range inclusion and whose action is `A`; that is
 the reducing restriction of `A` to the same subspace, on the nose.  The real
 track defines its restriction as `reducingRestriction` directly, so this is the
@@ -658,21 +658,7 @@ theorem selfAdjointSpectralRestriction_eq_reducingRestriction
     (B : Set ℝ) (hB : MeasurableSet B) :
     selfAdjointSpectralRestriction A hA B hB =
       TauCeti.LinearPMap.reducingRestriction A (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace_reducing A hA B hB) := by
-  let S := selfAdjointSpectralSubspace A hA B hB
-  let hred := selfAdjointSpectralSubspace_reducing A hA B hB
-  refine _root_.LinearPMap.ext_iff.mpr ⟨?_, ?_⟩
-  · ext x
-    change (x : H) ∈ A.domain ↔ x ∈ (TauCeti.LinearPMap.reducingRestriction A S hred).domain
-    exact (TauCeti.LinearPMap.mem_reducingRestriction_domain_iff A S hred x).symm
-  · intro x hx hy
-    apply Subtype.ext
-    have hxA : (x : H) ∈ A.domain := hx
-    calc
-      ((selfAdjointSpectralRestriction A hA B hB) ⟨x, hx⟩ : H) = A ⟨x, hxA⟩ :=
-        TauCeti.LinearPMap.specRestrict_apply hA B hB ⟨x, hx⟩
-      _ = (TauCeti.LinearPMap.reducingRestriction A S hred ⟨x, hy⟩ : H) :=
-        (TauCeti.LinearPMap.coe_reducingRestriction_apply A S hred x hxA).symm
+        (selfAdjointSpectralSubspace_reducing A hA B hB) := rfl
 
 /-- Reflection through a genuine spectral range preserves the full domain of
 the self-adjoint operator. -/

@@ -40,11 +40,10 @@ This module carries the construction and the reduction it supports:
   resolvent of `A` with the Borel calculus of the relabelled symbol;
 * `specProjection`, the spectral projection of a Borel set, and its commutation
   and idempotence lemmas;
-* `specRange` and `specRestrict`, the reduction of `A` to a spectral subspace,
-  culminating in `isSelfAdjoint_specRestrict`.
+* `specRange`, the range used by the remaining spectral-cut and projection
+  lemmas. Tau Ceti supplies the reducing restriction and its gap resolvent.
 
-What is *quantitative* about a bounded spectral set — the truncation operator and
-the resolvent-gap estimate — is in the root module
+The bounded spectral-cut results are in the root module
 `…LinearPMap.SpectralMeasure`, which imports this one.
 
 ## Sources
@@ -462,13 +461,8 @@ section Restriction
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 
 /-- The spectral projection of an unbounded self-adjoint operator onto a Borel
-set of the real line. -/
--- **Not exposed.** It was, on the grounds that consumers rewrite by definition name and need
--- the body to reduce; both were true of the call sites, and both are now served by the two
--- rewrite lemmas below. Twenty-two sites across five modules, in three shapes: `show P = pvm.proj
--- .. from rfl` (either direction), `exact h` against a Borel-calculus term, and two literal
--- `rw [specProjection, spectralPVM, toProjValMeasure_proj, specProj]` chains, which collapse to
--- `rw [specProjection_eq_borelCalculus]`.
+set of the real line. Its body lets the native spectral restriction use the same range. -/
+@[expose]
 noncomputable def specProjection (B : Set ℝ) (hB : MeasurableSet B) : H →L[ℂ] H :=
   (A.spectralPVM hA).proj B hB
 
@@ -593,10 +587,7 @@ variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (B : Set ℝ) (hB : Measu
 
 /-- The **spectral range** of `A` over a Borel set: the range of the spectral
 projection, a closed, orthogonally complemented subspace. -/
--- **Not exposed, and it does not need to be.** This definition carried `@[expose]` on the
--- grounds that consumers construct membership with `⟨y, h⟩`, which needs the range body to
--- reduce; that was true of the call sites and not of the mathematics. There were four such
--- sites, and `specProjection_mem_specRange` below now covers all of them.
+@[expose]
 noncomputable def specRange : Submodule ℂ H := (specProjection hA B hB).range
 
 /-- A vector lies in the spectral range exactly when the spectral projection fixes it -- the usable
@@ -691,134 +682,6 @@ theorem specRange_compl :
     specProjection_compl,
     Submodule.starProjection_orthogonal,
     ← specProjection_eq_starProjection_specRange]
-
-/-- **A spectral range reduces the operator.**  Both orthogonal components
-preserve the domain and are invariant under the self-adjoint partial map. -/
-theorem reducesSubspace_specRange : _root_.LinearPMap.IsReducing A (specRange hA B hB) := by
-  have hstar := specProjection_eq_starProjection_specRange hA B hB
-  refine ⟨?_, ?_, ?_⟩
-  · intro x hx
-    rw [← hstar]
-    exact specProjection_mem_domain hA B hB ⟨x, hx⟩
-  · rw [_root_.LinearPMap.isInvariant_iff]
-    intro x hx
-    exact apply_mem_specRange hA B hB hx
-  · rw [_root_.LinearPMap.isInvariant_iff]
-    intro x hx
-    have heq := congrArg (fun U : Submodule ℂ H => (x : H) ∈ U)
-      (specRange_compl hA B hB)
-    have hx' : (x : H) ∈ specRange hA Bᶜ hB.compl :=
-      heq.mpr hx
-    have hmem := apply_mem_specRange hA Bᶜ hB.compl hx'
-    exact (congrArg (fun U : Submodule ℂ H => A x ∈ U)
-      (specRange_compl hA B hB)).mp hmem
-
-/-- **The restriction of a self-adjoint operator to one of its spectral
-ranges.** -/
--- `@[expose]` is load-bearing here and is a clean carve-out rather than debt: the domain of
--- the restriction is `A.domain.comap _`, so `specRestrict_domain` and `specRestrict_apply`
--- cannot be *stated* — not merely proved — without `.domain` reducing, exactly as for
--- `addBounded` and `perturb`. Measured, not assumed: with the attribute removed the
--- elaborator rejects `specRestrict_apply`'s statement at `x.property`, reporting
--- `specRestrict` as the definition it could not unfold.
-@[expose]
-noncomputable def specRestrict : specRange hA B hB →ₗ.[ℂ] specRange hA B hB where
-  domain := A.domain.comap (specRange hA B hB).subtype
-  toFun :=
-    { toFun := fun x =>
-        ⟨A ⟨((x : specRange hA B hB) : H), x.property⟩,
-          apply_mem_specRange hA B hB (x : specRange hA B hB).property⟩
-      map_add' := fun x y => by
-        apply Subtype.ext
-        change (A ⟨_, (x + y).property⟩ : H) = ((A ⟨_, x.property⟩ : H) + (A ⟨_, y.property⟩ : H))
-        rw [← _root_.LinearPMap.map_add]
-        exact congrArg _ (Subtype.ext rfl)
-      map_smul' := fun c x => by
-        apply Subtype.ext
-        change (A ⟨_, (c • x).property⟩ : H) = (c • (A ⟨_, x.property⟩ : H))
-        rw [← _root_.LinearPMap.map_smul]
-        exact congrArg _ (Subtype.ext rfl) }
-
-/-- The domain of the spectral restriction, unfolded. -/
-@[simp] theorem specRestrict_domain :
-    (specRestrict hA B hB).domain = A.domain.comap (specRange hA B hB).subtype := (rfl)
-/-- The spectral restriction acts as `A` on the underlying vector. -/
-@[simp] theorem specRestrict_apply (x : (specRestrict hA B hB).domain) :
-    ((specRestrict hA B hB x : specRange hA B hB) : H)
-      = A ⟨((x : specRange hA B hB) : H), x.property⟩ := (rfl)
-/-- The restriction of `A` to a spectral range is symmetric on its domain, inherited from
-self-adjointness of `A`. -/
-theorem isFormalAdjoint_specRestrict :
-    (specRestrict hA B hB).IsFormalAdjoint (specRestrict hA B hB) := by
-  intro x y
-  have hsym : A.IsFormalAdjoint A := by
-    have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
-    rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
-  have := hsym ⟨((x : specRange hA B hB) : H), x.property⟩
-    ⟨((y : specRange hA B hB) : H), y.property⟩
-  simpa only [Submodule.coe_inner, specRestrict_apply] using this
-
-/-- Every vector of the spectral range is a resolvent image *inside* the
-range. -/
-theorem exists_specRestrict_resolvent {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ resolventSet A)
-    (φ : specRange hA B hB) :
-    ∃ ψ : (specRestrict hA B hB).domain,
-      z • (ψ : specRange hA B hB) - (specRestrict hA B hB ψ : specRange hA B hB) = φ := by
-  set x : H := resolvent A z (φ : H) with hx
-  have hxK : x ∈ specRange hA B hB := by
-    rw [mem_specRange_iff, hx, specProjection_resolvent_apply' hA hz hzr]
-    congr 1
-    exact (mem_specRange_iff hA B hB _).mp φ.property
-  have hxdom : x ∈ A.domain := resolvent_mem_domain hzr (φ : H)
-  refine ⟨⟨⟨x, hxK⟩, hxdom⟩, ?_⟩
-  apply Subtype.ext
-  have h := smul_sub_apply_resolvent hzr (φ : H)
-  simpa only [Submodule.coe_sub, Submodule.coe_smul, specRestrict_apply] using h
-
-/-- The restricted domain is dense in the spectral range.  This is the non-obvious half of the
-reduction: density of `A.domain` in `H` does not automatically survive intersecting with a
-subspace, and the proof goes through the projection rather than by restriction. -/
-theorem dense_specRestrict_domain :
-    Dense (((specRestrict hA B hB).domain : Submodule ℂ (specRange hA B hB)) :
-      Set (specRange hA B hB)) := by
-  rw [Metric.dense_iff]
-  rintro φ ε hε
-  obtain ⟨y, hy, hyd⟩ := Metric.dense_iff.mp hA.dense_domain (φ : H) ε hε
-  have hyK : specProjection hA B hB y ∈ specRange hA B hB := ⟨y, rfl⟩
-  have hydom : specProjection hA B hB y ∈ A.domain :=
-    specProjection_mem_domain hA B hB ⟨y, hyd⟩
-  refine ⟨⟨specProjection hA B hB y, hyK⟩, ?_, hydom⟩
-  have hfix : specProjection hA B hB (φ : H) = (φ : H) :=
-    (mem_specRange_iff hA B hB _).mp φ.property
-  have hnorm : ‖specProjection hA B hB y - (φ : H)‖ ≤ ‖y - (φ : H)‖ := by
-    conv_lhs => rw [← hfix]
-    rw [← map_sub]
-    exact (A.spectralPVM hA).norm_proj_apply_le B hB _
-  have hdist : dist (⟨specProjection hA B hB y, hyK⟩ : specRange hA B hB) φ
-      = ‖specProjection hA B hB y - (φ : H)‖ := by
-    rw [Subtype.dist_eq, dist_eq_norm]
-  rw [Metric.mem_ball, hdist]
-  have hy' : ‖y - (φ : H)‖ < ε := by
-    rw [← dist_eq_norm]; exact hy
-  linarith
-
-/-- **The restriction of a self-adjoint operator to a spectral range is
-self-adjoint.**  Symmetry is inherited; the two surjectivities come from the
-resolvent, which preserves the range because it commutes with the projection. -/
-theorem isSelfAdjoint_specRestrict : IsSelfAdjoint (specRestrict hA B hB) := by
-  refine _root_.LinearPMap.isSelfAdjoint_of_surjective_addSub _
-    (isFormalAdjoint_specRestrict hA B hB) ?_ ?_
-  -- the canonical resolvent solves `z • ψ - T ψ = φ`; the surjectivity criterion wants
-  -- `T ψ ± i • ψ = φ`, so solve at `-φ` and negate
-  · intro φ
-    obtain ⟨ψ, hψ⟩ := exists_specRestrict_resolvent hA B hB (z := -Complex.I) (by simp)
-      ((hA.mem_resolventSet_of_im_ne_zero (z := -Complex.I) (by simp))) (-φ)
-    exact ⟨ψ, by linear_combination (norm := module) -hψ⟩
-  · intro φ
-    obtain ⟨ψ, hψ⟩ := exists_specRestrict_resolvent hA B hB (z := Complex.I) (by simp)
-      ((hA.mem_resolventSet_of_im_ne_zero (z := Complex.I) (by simp))) (-φ)
-    exact ⟨ψ, by linear_combination (norm := module) -hψ⟩
-
 
 end Reduce
 
