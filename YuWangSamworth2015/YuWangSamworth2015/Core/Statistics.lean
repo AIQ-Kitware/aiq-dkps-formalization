@@ -5,10 +5,12 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
+public import TauCeti.Analysis.InnerProductSpace.UnitVector
 public import TauCeti.Analysis.InnerProductSpace.YuWangSamworth.Alignment
 public import TauCeti.Analysis.InnerProductSpace.YuWangSamworth.Eigenvector
 
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
+public import ForTauCeti.Analysis.InnerProductSpace.RankOneSinTheta
 public import TauCeti.Analysis.InnerProductSpace.Projection.FrobeniusSine
 public import TauCeti.Analysis.InnerProductSpace.Orthonormal.Overlap
 public import YuWangSamworth2015.Core.Residual
@@ -813,29 +815,6 @@ open Module (finrank)
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
   [FiniteDimensional ℝ F]
 
-omit [FiniteDimensional ℝ F] in
-/-- **Sign alignment beats any other orientation.**  For unit vectors with
-`⟪v, u⟫ ≥ 0` and a unit real scalar `c`, `‖v − u‖ ≤ ‖c • v − u‖`: both squared
-norms are `2 − 2 c ⟪v, u⟫` with `c = 1` on the left, and `c ≤ 1`. -/
-private theorem norm_sub_le_norm_smul_sub {u v : F} {c : ℝ}
-    (hu : ‖u‖ = 1) (hv : ‖v‖ = 1) (hc : ‖c‖ = 1) (hinner : 0 ≤ ⟪v, u⟫) :
-    ‖v - u‖ ≤ ‖c • v - u‖ := by
-  have hcabs : |c| = 1 := by rwa [Real.norm_eq_abs] at hc
-  have hcle : c ≤ 1 := (abs_le.mp hcabs.le).2
-  have hcsq : c ^ 2 = 1 := by
-    rw [← sq_abs, hcabs, one_pow]
-  have h1 : ‖v - u‖ ^ 2 = 2 - 2 * ⟪v, u⟫ := by
-    rw [norm_sub_sq_real, hu, hv]; ring
-  have h2 : ‖c • v - u‖ ^ 2 = 2 - 2 * (c * ⟪v, u⟫) := by
-    rw [norm_sub_sq_real, norm_smul, real_inner_smul_left, hu, hv, Real.norm_eq_abs]
-    rw [mul_one, sq_abs, hcsq]
-    ring
-  have hsq : ‖v - u‖ ^ 2 ≤ ‖c • v - u‖ ^ 2 := by
-    rw [h1, h2]
-    nlinarith [hinner, hcle]
-  have h := Real.sqrt_le_sqrt hsq
-  rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)] at h
-
 /-- **Yu--Wang--Samworth Corollary 1, the source-faithful `d = 1`
 specialization.**
 
@@ -851,9 +830,8 @@ orientation with `v̂ᵀ v ≥ 0`,
 
 `‖v̂ − v‖ ≤ 2^{3/2} ‖Σ̂ − Σ‖_op / Δⱼ`.
 
-The `RCLike` theorem `yuWangSamworth_eigenvector_frame_le` produces a unit scalar
-`c`; over `ℝ` that scalar is `±1`, and `norm_sub_le_norm_smul_sub` says the
-sign-aligned difference is the smaller of the two. -/
+The rank-one sine bound and the real unit-vector chord inequality give
+the estimate for this orientation. -/
 theorem yuWangSamworth_eigenvector_real_le
     {A B : F →ₗ[ℝ] F} {hA : A.IsSymmetric} {hB : B.IsSymmetric}
     {n : ℕ} {hn : finrank ℝ F = n} {j : Fin n} {u v : F}
@@ -864,8 +842,16 @@ theorem yuWangSamworth_eigenvector_real_le
     {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : ∀ k : Fin n, k ≠ j → Δ ≤ |hA.eigenvalues hn j - hA.eigenvalues hn k|) :
     ‖v - u‖ ≤ 2 * Real.sqrt 2 * ‖(B - A).toContinuousLinearMap‖ / Δ := by
-  obtain ⟨c, hc, hbound⟩ :=
-    yuWangSamworth_eigenvector_frame_le hu hv hAu hBv hΔ hgap
-  exact (norm_sub_le_norm_smul_sub hu hv hc hsign).trans hbound
+  have hsin := yuWangSamworth_eigenvector_frame_sinTheta_le hu hv hAu hBv hΔ hgap
+  rw [sinThetaFrobenius_span_singleton hu] at hsin
+  change ‖((ℝ ∙ v)ᗮ).starProjection u‖ ≤ _ at hsin
+  rw [Submodule.starProjection_orthogonal_val, Submodule.starProjection_unit_singleton ℝ hv] at hsin
+  calc
+    ‖v - u‖ = ‖u - v‖ := norm_sub_rev _ _
+    _ ≤ Real.sqrt 2 * ‖u - ⟪v, u⟫ • v‖ :=
+      norm_sub_le_sqrt_two_mul_norm_sub_inner_smul hv hu hsign
+    _ ≤ Real.sqrt 2 * (2 * ‖(B - A).toContinuousLinearMap‖ / Δ) :=
+      mul_le_mul_of_nonneg_left hsin (Real.sqrt_nonneg _)
+    _ = _ := by ring
 
 end YuWangSamworth2015

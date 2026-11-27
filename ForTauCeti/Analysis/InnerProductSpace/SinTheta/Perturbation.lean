@@ -62,7 +62,6 @@ over it. It is divided at its own `## Perturbation form` boundary:
   canonical isometric inclusion of a subspace, and the theorems built on them:
   `sinTheta_perturbation_le`,
   `sinTheta_perturbation_le_of_orderedGap`,
-  `opNorm_sinThetaMap_le_of_intervalGap`,
   `frobenius_sinTheta_residual_le_of_spectralDistance`,
   `frobenius_sinTheta_le` and `kyFan_sinTheta_le`.
 
@@ -251,28 +250,6 @@ theorem sinTheta_perturbation_le_of_orderedGap
         δ * NU (sinThetaEmbedding V U.subtypeₗᵢ) := by rw [hsin]
     _ ≤ NU (residual B U.subtypeₗᵢ (A.restrict hU)) := hres
     _ ≤ N (B - A) := hresBound
-
-/-- **Sharp one-sided interval/exterior `sin Θ` bound in operator norm.**
-
-The analytic estimate is delegated to the polar-absorption Sylvester theorem.
-Finite dimensionality enters only through restriction of the two diagonal
-blocks and the finite spectral bridge used by that theorem. -/
-theorem opNorm_sinThetaMap_le_of_intervalGap
-    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
-        Module.End.invtSubmodule B))
-    {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
-    δ * ‖(U.sinThetaMap V)‖ ≤
-      ‖(B - A).toContinuousLinearMap‖ := by
-  have hnative : (U.sinThetaMap V).toLinearMap.toContinuousLinearMap =
-      U.sinThetaMap V := by
-    ext x
-    rfl
-  simpa only [UnitarilyInvariantSeminorm.opNorm_apply, hnative] using
-    sinTheta_perturbation_le (UnitarilyInvariantSeminorm.opNorm 𝕜 E E)
-      hA hB hU hV hδ hgap
 
 /-- General disjoint-spectrum residual form for the Frobenius norm, with
 the sharp constant one.  Unlike a general symmetric gauge, the square norm

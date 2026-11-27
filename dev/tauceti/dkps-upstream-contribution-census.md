@@ -1,5 +1,46 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 native circle resolvent integral and directed sine bound
+
+DKPS pins TauCeti at `fba9bfbf453b` with the same Mathlib
+`31ce06eaadf4` and Lean `v4.37.0-rc1`. The whole-spectrum circle
+endpoint now uses the contour-cycle resolvent integral from #20797
+(`bdc2b3876c21`). Its original complex Banach-space statement is
+preserved. The private proof via the principal part and a remainder
+vanishing at infinity is retired. Its DKPS source is `440d10d3623f`
+(Claude Opus 5, Kitware 2026, Apache-2.0). Direct DKPS proof
+descent in #20797 is unestablished.
+[PR #20797](https://github.com/TauCetiProject/TauCeti/pull/20797)
+
+The Yu–Wang–Samworth Theorem 1 operator-norm specialization applies
+`Submodule.mul_norm_sinThetaMap_le_norm_sub_of_pointIntervalExteriorGap`
+from the DKPS campaign #19229 (`8d19f5b9cca5`), using the native
+gap fields and continuous-map coercion. The scalar, dimension and
+gap hypotheses of the paper statement are preserved. #19229 credits
+adaptation from Kitware DKPS.
+[PR #19229](https://github.com/TauCetiProject/TauCeti/pull/19229)
+
+The real Corollary 1 distance bound applies the unit-vector chord
+inequality from #45606 (`34405704668a`, bjbraams) to the first-display
+rank-one sine bound. This retires the private sign-minimization proof
+and keeps the original arbitrary sorted index and population gap.
+#45606 uses native UI-norm infrastructure for the trial-vector residual
+and credits lean-CKSD for the leading-eigenvector proof with existence
+and uniqueness up to sign. Its target is MathematicalStatisticsHighDimensional
+§8.1. DKPS retains the arbitrary-UI-norm trial-map and paper results.
+[PR #45606](https://github.com/TauCetiProject/TauCeti/pull/45606)
+
+Forgejo #7332 (`442a229ec864`, tauceti-ai-for-science) adds the Riesz
+idempotent for clopen compact spectral parts in a Banach algebra for
+BanachAlgebras §8.1.
+The DKPS zero endpoint, total circle-integral family and moving
+self-adjoint cut and continuation proofs keep their existing hypotheses.
+[Forgejo #7332](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/7332)
+
+The focused builds (10372 jobs), full default build (22790 jobs), and
+combined Challenge and result semantic-surface build (22494 jobs) passed
+without warnings. The name comparison reported the same 49 baseline findings.
+
 ## November 27 native bounded Borel symbols in the cyclic models
 
 The complex and real spectrum cyclic models now take

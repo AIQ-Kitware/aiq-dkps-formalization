@@ -7634,7 +7634,69 @@
       "integration": "57555a42c8b9ce4b90d39b639588cebcf07b5a7d",
       "status": "accepted-upstream-local-duplicates-retired",
       "migration_note": "November 27. Retire the real-spectrum admissibility predicate and submodule. The local spectrum-specific realSpectrumBorelEquiv is assembled from the two native pullbacks and preserves the original reindexing as a star algebra equivalence. The set-level measurability helpers and the prepared real-coordinate bounds remain. No DKPS proof descent is established for #14874."
+    },
+    {
+      "source_module": "DavisKahan.SpectralTheory.CircleRieszEndpoints",
+      "source_declarations": [
+        "TauCeti.DavisKahan.circleRieszProjection_eq_one",
+        "TauCeti.DavisKahan.rieszRemainder",
+        "TauCeti.DavisKahan.differentiableAt_rieszRemainder",
+        "TauCeti.DavisKahan.circleIntegral_rieszRemainder_eq",
+        "TauCeti.DavisKahan.circleIntegrable_rieszRemainder",
+        "TauCeti.DavisKahan.norm_circleIntegral_rieszRemainder_le",
+        "TauCeti.DavisKahan.circleIntegral_rieszRemainder_eq_zero"
+      ],
+      "original_source_anchor": "440d10d3623f5df3643ae3cb3d34034d9e46ca63:DavisKahan/SpectralTheory/CircleRieszEndpoints.lean",
+      "authors_license": "Claude Opus 5, Kitware 2026, Apache-2.0.",
+      "final_tauceti_modules": [
+        "TauCeti.Analysis.Contour.Cycle.Circle",
+        "TauCeti.Analysis.Normed.Algebra.HolomorphicFunctionalCalculus.Cycle"
+      ],
+      "final_declarations": [
+        "TauCeti.Contour.Cycle.integral_circleCycle",
+        "TauCeti.Contour.Cycle.trace_circleCycle",
+        "TauCeti.Contour.Cycle.windingNumber_circleCycle_eq_one_of_dist_lt",
+        "TauCeti.Contour.Cycle.integral_resolvent"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/20797",
+      "integration": "bdc2b3876c21bb5fcf024b6ef2068df132c0b21f",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "The whole-spectrum circle endpoint is now the native integral on a circle cycle winding once around each spectral point. The original formulation over bounded operators on a complex Banach space, real center, positive radius and open-disc containment is retained. The private principal-part integral proof retires. The opposite endpoint, total circle family, and self-adjoint cut and continuation laws remain local. Forgejo #7332 (442a229ec864e84d1a7343f2529d59ea34cad88e, accepted head bcdafcd1e9c9a646d1c484751a3b2137049b1f26) supplies a clopen Banach-algebra idempotent and a weighted contour formula on a neighborhood of the whole spectrum. The clopen carrier and its formula do not yet replace the DKPS moving-circle results. Direct DKPS proof descent is unestablished."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
+      "source_declarations": [
+        "TauCeti.opNorm_sinThetaMap_le_of_intervalGap"
+      ],
+      "original_source_anchor": "a48c0e0c2a51a26b9426c84856496ebc33fad793:ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean",
+      "authors_license": "Jon Crall and GPT 5.6 High as credited in the maintained source, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Corollaries",
+      "final_declarations": [
+        "Submodule.mul_norm_sinThetaMap_le_norm_sub_of_pointIntervalExteriorGap"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/19229",
+      "integration": "8d19f5b9cca59a646361f50af074fb54d079917e",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "Yu–Wang–Samworth Theorem 1 applies the native operator-norm corollary with the continuous-map coercion and two fields of the original point-spectrum gap. The paper still requires positive δ for division and keeps its original finite RCLike scope and projection hypotheses. #19229 is a DKPS campaign submission and explicitly credits adaptation from Kitware DKPS. The corollary is derived from the upstream UI-norm theorem. Preserve the DKPS arbitrary UI-norm trial-map results and paper statements."
+    },
+    {
+      "source_module": "YuWangSamworth2015.Core.Statistics",
+      "source_declarations": [
+        "YuWangSamworth2015.norm_sub_le_norm_smul_sub",
+        "YuWangSamworth2015.yuWangSamworth_eigenvector_real_le"
+      ],
+      "original_source_anchor": "6c7741125d3b025e7ac1ef2c13bf992711a9e1be:YuWangSamworth2015/YuWangSamworth2015/Core/Statistics.lean",
+      "authors_license": "Jon Crall and GPT 5.6 High, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitVector",
+      "final_declarations": [
+        "TauCeti.norm_sub_le_sqrt_two_mul_norm_sub_inner_smul"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/45606",
+      "integration": "34405704668a79e04ff8a394b9c4bc24e53102b1",
+      "accepted_head": "01993c4a4d90bdd49bd6cfd526d3753fd76d3c20",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "Use the real unit-vector chord inequality on the local first-display rank-one sine bound, then apply the native singleton projection formula. This removes the private sign-minimization proof and preserves the paper's arbitrary sorted index, inherited unit normalization, sign convention, and single population-gap hypothesis. #45606 reuses native UI-norm infrastructure for its finite-dimensional trial-vector bounds. Its leading-eigenvector existence, uniqueness up to sign and norm bound are adapted from lean-CKSD and have a different conclusion and perturbation hypothesis. DKPS direct proof descent for the chord lemma is unestablished."
     }
   ],
-  "current_consumption_pin": "dde09e0dcec0e44e75739723bb2ba5baae6ae417"
+  "current_consumption_pin": "fba9bfbf453bcf0d77efdde60fbce2376c2e35a8"
 }

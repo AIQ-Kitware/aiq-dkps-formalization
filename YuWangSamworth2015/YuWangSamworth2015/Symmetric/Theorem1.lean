@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import YuWangSamworth2015.GroundedImports
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Corollaries
 
 /-!
 # Yu--Wang--Samworth Theorem 1
@@ -73,8 +74,13 @@ theorem yuWangSamworth_theorem1_opNorm_le
     ‖(U.sinThetaMap V)‖ ≤
       ‖(B - A).toContinuousLinearMap‖ / δ := by
   rw [le_div_iff₀ hδ]
-  simpa only [mul_comm] using
-    opNorm_sinThetaMap_le_of_intervalGap hA hB hU hV hδ hgap
+  have hdiff : B.toContinuousLinearMap - A.toContinuousLinearMap =
+      (B - A).toContinuousLinearMap := by ext x; rfl
+  have h := Submodule.mul_norm_sinThetaMap_le_norm_sub_of_pointIntervalExteriorGap
+    U V (A := A.toContinuousLinearMap) (B := B.toContinuousLinearMap) hA hB
+    ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hU)
+    ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem B).mp hV) ⟨hgap.1, hgap.2⟩
+  simpa only [hdiff, mul_comm] using h
 
 /-! ## Equation (1)
 
