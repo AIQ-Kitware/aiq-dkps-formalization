@@ -6,6 +6,5 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import DavisKahan.InfiniteDimensional.SpectraBridge.DirectRotationAPI
-public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Subspace
 
 /-! # `DavisKahan/InfiniteDimensional/SpectraBridge` -/

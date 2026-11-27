@@ -725,33 +725,6 @@ theorem isSymmetric_of_isSelfAdjoint [CompleteSpace E] {A : E →ₗ.[𝕜] E}
   intro x y
   exact hformal x y
 
-/-- Graph norm associated with a partial linear map. -/
-noncomputable def graphNorm (A : E →ₗ.[𝕜] E) (x : A.domain) : ℝ :=
-  Real.sqrt (‖(x : E)‖ ^ 2 + ‖A x‖ ^ 2)
-
-/-- The graph norm is nonnegative. -/
-theorem graphNorm_nonneg (A : E →ₗ.[𝕜] E) (x : A.domain) :
-    0 ≤ graphNorm A x :=
-  Real.sqrt_nonneg _
-
-/-- Squaring the graph norm recovers its defining sum of squares. -/
-theorem graphNorm_sq (A : E →ₗ.[𝕜] E) (x : A.domain) :
-    graphNorm A x ^ 2 = ‖(x : E)‖ ^ 2 + ‖A x‖ ^ 2 := by
-  unfold graphNorm
-  exact Real.sq_sqrt (by positivity)
-
-/-- The ambient norm is controlled by the graph norm. -/
-theorem norm_coe_le_graphNorm (A : E →ₗ.[𝕜] E) (x : A.domain) :
-    ‖(x : E)‖ ≤ graphNorm A x := by
-  rw [graphNorm]
-  exact Real.le_sqrt_of_sq_le (by nlinarith [sq_nonneg ‖A x‖])
-
-/-- The operator-value norm is controlled by the graph norm. -/
-theorem norm_apply_le_graphNorm (A : E →ₗ.[𝕜] E) (x : A.domain) :
-    ‖A x‖ ≤ graphNorm A x := by
-  rw [graphNorm]
-  exact Real.le_sqrt_of_sq_le (by nlinarith [sq_nonneg ‖(x : E)‖])
-
 /-- Add a bounded ambient perturbation to a partial map on its original
 domain.  Closedness remains a separate property of the resulting map. -/
 -- `@[expose]` here is deliberate and minimal: the `_apply` lemma below cannot be

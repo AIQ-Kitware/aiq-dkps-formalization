@@ -67,7 +67,7 @@ instance canonicalLowBranchUnbounded_hasOrthogonalProjection
 theorem canonicalLowBranchUnbounded_reduces
     {B : H →ₗ.[ℂ] H} (hB : IsSelfAdjoint B) (alpha : ℝ) :
     _root_.LinearPMap.IsReducing B (canonicalLowBranchUnbounded hB alpha) :=
-  TauCeti.LinearPMap.reducesSubspace_specRange hB _ _
+  hB.isReducing_range_spectralPVM_proj _ _
 
 /-- The complement of the branch is the spectral range of the open upper
 half-line. -/

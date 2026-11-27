@@ -36,7 +36,6 @@ public import DavisKahan.SpectralTheory.SpectralGapFormBounds
 public import DavisKahan.SpectralTheory.SpectralRestriction
 public import DavisKahan.SpectralTheory.SpectralRestrictionLocalization
 public import DavisKahan.SpectralTheory.SpectralRestrictionOperator
-public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Subspace
 public import DavisKahan.SpectralTheory.UnboundedBandLipschitz
 public import DavisKahan.SpectralTheory.UnboundedCentralBand
 public import DavisKahan.SpectralTheory.UnboundedDirectedGapBound

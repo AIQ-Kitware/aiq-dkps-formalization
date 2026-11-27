@@ -299,7 +299,7 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
   let U : Submodule ℂ G :=
     TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic
   have hred : _root_.LinearPMap.IsReducing A U :=
-    TauCeti.LinearPMap.reducesSubspace_specRange hA (Set.Iic c) measurableSet_Iic
+    hA.isReducing_range_spectralPVM_proj (Set.Iic c) measurableSet_Iic
   have hgU : ∀ y ∈ U,
       ‖U.offDiagBlock Z y‖ ≤ TauCeti.crossBlockBound (b - a) ‖B‖ * ‖y‖ := by
     intro y hy

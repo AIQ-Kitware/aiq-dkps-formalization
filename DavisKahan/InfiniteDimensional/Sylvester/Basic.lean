@@ -27,8 +27,8 @@ open TauCeti.DavisKahan.Sylvester
 There are two distinct inverse estimates.
 
 * Ordered spectra give the sharp constant one by a decaying semigroup.
-* Arbitrarily separated spectra give the universal `pi/2` estimate through the
-  Haagerup--Zsido reciprocal Fourier kernel.
+* For arbitrarily separated spectra, the Haagerup--Zsido reciprocal Fourier
+  kernel gives a solution formula used by the ideal-norm estimates.
 
 The oscillatory construction is stated over complex Hilbert spaces.  A same-space
 formula `exp(i t A)` is not available over real scalars; real consequences must be
@@ -160,38 +160,6 @@ theorem sylvester_solve
   unfold separatedSylvesterSolution
   exact spectral_step_integral_right_inverse hA hB hd hsep C
 
-/-- Universal Bhatia--Davis--McIntosh bound. -/
-theorem norm_sylvester_le_of_generalSeparation
-    {A : Fc →L[ℂ] Fc} {B : Ec →L[ℂ] Ec}
-    {X C : Ec →L[ℂ] Fc}
-    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {d : ℝ} (hd : 0 < d)
-    (hsep : SpectraSeparated A ⊤ B ⊤ d)
-    (hEq : ContinuousLinearMap.sylvester A B X = C) :
-    d * ‖X‖ ≤ (Real.pi / 2) * ‖C‖ := by
-  rw [separatedSylvester_reconstruction hA hB hd hsep X C hEq]
-  have hint := separatedSylvester_integrable hA hB hd C
-  calc
-    d * ‖separatedSylvesterSolution A B d hd C‖
-        ≤ d * (∫ t : ℝ, ‖separatedSylvesterMultiplier d hd t‖ * ‖C‖) := by
-      gcongr
-      unfold separatedSylvesterSolution
-      calc
-        ‖∫ t : ℝ, separatedSylvesterMultiplier d hd t •
-            (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))‖
-            ≤ ∫ t : ℝ, ‖separatedSylvesterMultiplier d hd t •
-              (unitaryGroup A t ∘L C ∘L unitaryGroup B (-t))‖ :=
-                norm_integral_le_integral_norm _
-        _ = ∫ t : ℝ, ‖separatedSylvesterMultiplier d hd t‖ * ‖C‖ := by
-          apply integral_congr_ae
-          filter_upwards [] with t
-          rw [norm_smul, norm_unitary_left_right A hA B hB t C]
-    _ = d * ((∫ t : ℝ, ‖separatedSylvesterMultiplier d hd t‖) * ‖C‖) := by
-      rw [integral_mul_const]
-    _ = (Real.pi / 2) * ‖C‖ := by
-      rw [l1_norm_separatedSylvesterMultiplier d hd]
-      field_simp [ne_of_gt hd]
-
 /-- Uniqueness under separated spectra. -/
 theorem sylvester_unique
     {A : Fc →L[ℂ] Fc} {B : Ec →L[ℂ] Ec}
@@ -202,17 +170,8 @@ theorem sylvester_unique
     (hX : ContinuousLinearMap.sylvester A B X = ContinuousLinearMap.sylvester A B
       Y) :
     X = Y := by
-  have hzero : ContinuousLinearMap.sylvester A B (X - Y) = 0 := by
-    calc
-      _ = ContinuousLinearMap.sylvester A B X - ContinuousLinearMap.sylvester A B Y :=
-        map_sub (ContinuousLinearMap.sylvester A B) X Y
-      _ = 0 := by rw [hX, sub_self]
-  have hle := norm_sylvester_le_of_generalSeparation hA hB hd hsep hzero
-  rw [norm_zero, mul_zero] at hle
-  have hnorm : ‖X - Y‖ = 0 := by
-    have hd0 : 0 < d := hd
-    nlinarith [norm_nonneg (X - Y), Real.pi_pos]
-  exact sub_eq_zero.mp (norm_eq_zero.mp hnorm)
+  rw [separatedSylvester_reconstruction hA hB hd hsep X _ rfl,
+    separatedSylvester_reconstruction hA hB hd hsep Y _ rfl, hX]
 
 /-- Compact right-hand sides give compact separated solutions.
 

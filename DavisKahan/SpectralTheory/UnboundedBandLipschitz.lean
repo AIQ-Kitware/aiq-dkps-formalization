@@ -55,7 +55,7 @@ instance bandSubspace_hasOrthogonalProjection {A : H →ₗ.[ℂ] H} (hA : IsSel
 /-- The band subspace reduces the operator. -/
 theorem reducesSubspace_bandSubspace {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) (l r : ℝ) :
     _root_.LinearPMap.IsReducing A (bandSubspace hA l r) :=
-  TauCeti.LinearPMap.reducesSubspace_specRange hA _ _
+  hA.isReducing_range_spectralPVM_proj _ _
 
 /-- **The directed half of the Lipschitz estimate.**
 

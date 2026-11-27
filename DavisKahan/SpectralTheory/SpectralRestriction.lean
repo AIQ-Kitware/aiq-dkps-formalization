@@ -8,7 +8,6 @@ module
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed
 public import DavisKahan.BoundedOperator.Problem
 public import DavisKahan.SpectralTheory.AbstractSpectrum
-public import ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
 
 /-!

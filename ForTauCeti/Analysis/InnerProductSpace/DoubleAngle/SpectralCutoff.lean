@@ -20,7 +20,7 @@ matters, so the pole exclusion carries no cutoff hypothesis at all.
 Let `A` be self-adjoint and let `U = specRange hA (Iic c)` be its spectral
 subspace below a cut point `c`.  Then
 
-* `U` reduces `A` (`TauCeti.LinearPMap.reducesSubspace_specRange`);
+* `U` reduces `A` (`IsSelfAdjoint.isReducing_range_spectralPVM_proj`);
 * `1_{[-(|c| + n), c]}(A)` is a bounded cutoff at level `|c| + n`
   (`TauCeti.spectralCutoff`); and
 * those cutoffs converge strongly to the identity on `U`
@@ -36,7 +36,7 @@ intertwine `A`.
 ## Main results
 
 * `TauCeti.LinearPMap.specProjection_eq_starProjection_specRange`.
-* `TauCeti.LinearPMap.reducesSubspace_specRange`.
+* `IsSelfAdjoint.isReducing_range_spectralPVM_proj`.
 * `TauCeti.spectralCutoff`, `TauCeti.tendsto_spectralCutoff`.
 * `TauCeti.norm_offDiagonalPart_apply_le_specRange` and
   `TauCeti.diagonalBlockBound_mul_le_norm_diagonalPart_apply_specRange`: the
@@ -243,7 +243,7 @@ theorem norm_offDiagonalPart_apply_le_specRange {x : H}
     ‖(LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).offDiagBlock Z x‖ ≤
       crossBlockBound (b - a) ‖B‖ * ‖x‖ :=
   norm_offDiagonalPart_apply_le_of_tendsto
-    (LinearPMap.reducesSubspace_specRange hA (Set.Iic c) measurableSet_Iic) hB
+    (hA.isReducing_range_spectralPVM_proj (Set.Iic c) measurableSet_Iic) hB
     hZsa hZ2 hZdom hZcomm hUa hUb (fun n : ℕ => |c| + n)
     (fun n => spectralCutoffSeq hA c n) (fun n => by positivity) hab
     (tendsto_spectralCutoff hA c hx)
@@ -266,7 +266,7 @@ theorem diagonalBlockBound_mul_le_norm_diagonalPart_apply_specRange {x : H}
     diagonalBlockBound (b - a) ‖B‖ * ‖x‖ ≤
       ‖(LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock Z x‖ :=
   diagonalBlockBound_mul_le_norm_diagonalPart_apply_of_tendsto
-    (LinearPMap.reducesSubspace_specRange hA (Set.Iic c) measurableSet_Iic) hB
+    (hA.isReducing_range_spectralPVM_proj (Set.Iic c) measurableSet_Iic) hB
     hZsa hZ2 hZdom hZcomm hUa hUb (fun n : ℕ => |c| + n)
     (fun n => spectralCutoffSeq hA c n) (fun n => by positivity) hab hx
     (tendsto_spectralCutoff hA c hx)
@@ -286,7 +286,7 @@ theorem gap_mul_norm_offDiagonalPart_apply_le_specRange {x : H}
       2 * ‖B‖ *
         ‖(LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagBlock Z x‖ :=
   gap_mul_norm_offDiagonalPart_apply_le_of_tendsto
-    (LinearPMap.reducesSubspace_specRange hA (Set.Iic c) measurableSet_Iic) hB
+    (hA.isReducing_range_spectralPVM_proj (Set.Iic c) measurableSet_Iic) hB
     hZsa hZ2 hZdom hZcomm hUa hUb (fun n : ℕ => |c| + n)
     (fun n => spectralCutoffSeq hA c n) (fun n => by positivity) hab hx
     (tendsto_spectralCutoff hA c hx)

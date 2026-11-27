@@ -114,9 +114,8 @@ private theorem cosine_norm_le_on_low_range
     exact boundedSelfAdjointSpectralProjection_eq_starProjection
       C D.cosine_selfAdjoint (Set.Iic c₂) measurableSet_Iic
   have hPx : P x = x := by
-    exact pvmProjection_eq_self_of_mem_rangeSubspace
-      (boundedSelfAdjointSpectralPVM C D.cosine_selfAdjoint)
-      (Set.Iic c₂) measurableSet_Iic hx
+    rw [hPstar]
+    exact Submodule.starProjection_eq_self_iff.mpr hx
   have hPcomm (z : E) : C (P z) = P (C z) := by
     exact D.cosine_commutes_spectralProjection
       (Set.Iic c₂) measurableSet_Iic z
@@ -140,9 +139,7 @@ private theorem cosine_norm_le_on_low_range
     let y : E := P z
     have hyRange : y ∈ boundedSelfAdjointSpectralSubspace C
         D.cosine_selfAdjoint (Set.Iic c₂) measurableSet_Iic := by
-      exact pvmProjection_mem_rangeSubspace
-        (boundedSelfAdjointSpectralPVM C D.cosine_selfAdjoint)
-        (Set.Iic c₂) measurableSet_Iic z
+      exact ⟨z, rfl⟩
     have hhighZero :
         boundedSelfAdjointSpectralProjection C D.cosine_selfAdjoint
           (Set.Ici c₁) measurableSet_Ici y = 0 := by
@@ -303,7 +300,7 @@ theorem lt_approximationNumber_competitor_of_lt_direct
         _ ≤ s₂ := htailNorm
     exact (not_le_of_gt hs₂a) has₂
   let L : Submodule ℂ E :=
-    pvmRangeSubspace PVM (Set.Iic c₂) measurableSet_Iic
+    (PVM.proj (Set.Iic c₂) measurableSet_Iic).range
   have hnrank : ((n + 1 : ℕ) : Cardinal) ≤ Module.rank ℂ L := by
     change ((n + 1 : ℕ) : Cardinal) ≤ P.rank
     have hlt : (n : Cardinal) < P.rank := lt_of_not_ge hPrank
@@ -416,7 +413,7 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
       have hPrank : P.rank <= (n : Cardinal) := by
         by_contra hnot
         have hnlt : (n : Cardinal) < P.rank := lt_of_not_ge hnot
-        let L : Submodule ℂ E := pvmRangeSubspace PVM (Set.Iic c) measurableSet_Iic
+        let L : Submodule ℂ E := (PVM.proj (Set.Iic c) measurableSet_Iic).range
         have hnrank : (((n + 1 : ℕ) : Cardinal) <= Module.rank ℂ L) := by
           change ((n + 1 : ℕ) : Cardinal) <= P.rank
           rw [← Cardinal.natCast_add_one_le_iff, ← Nat.cast_add_one] at hnlt
@@ -611,7 +608,7 @@ theorem approximationNumber_direct_cosineCutoff_eq_sine
             _ = ‖S ∘L Q‖ := by rw [herr]
             _ <= t := htailNorm
         exact (not_le_of_gt htS) hsT
-      let L : Submodule ℂ E := pvmRangeSubspace PVM (Set.Iic c) measurableSet_Iic
+      let L : Submodule ℂ E := (PVM.proj (Set.Iic c) measurableSet_Iic).range
       have hnrank : (((n + 1 : ℕ) : Cardinal) <= Module.rank ℂ L) := by
         change ((n + 1 : ℕ) : Cardinal) <= P.rank
         have hnlt : (n : Cardinal) < P.rank := lt_of_not_ge hPrank

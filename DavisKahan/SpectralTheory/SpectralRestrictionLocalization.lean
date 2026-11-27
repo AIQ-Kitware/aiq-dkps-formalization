@@ -37,17 +37,9 @@ identified with the ambient one by Fourier uniqueness
 vector is fixed by `E_A(B)`, after which `weak_first_moment` and
 `mem_resolventSet_of_spectralProjection_Ioo_eq_zero` finished the job.
 
-The native replacements come from the Borel calculus of the Cayley transform
-(`ForTauCeti/Analysis/InnerProductSpace/LinearPMap/SpectralMeasure.lean`):
-
-* `re_inner_apply_bounds_of_subset_Icc` — the quadratic form of `A` on a
-  spectral range is confined to any interval containing `B`;
-* `mem_resolventSet_specRestrict_of_gap` — a gap between `B` and `lam` makes
-  `lam` a resolvent point, the inverse being the Borel calculus of
-  `(κ - lam)⁻¹ 1_B`.
-
-The two exported statements are unchanged; the scalar-measure machinery that
-supported them is gone, and with it this module's dependency on Spectra.
+The form bounds apply Tau Ceti's half-line estimates on the spectral range.
+Open-interval localization applies the spectral-measure gap resolvent to a
+smaller interval centered at the point in question.
 -/
 
 open scoped InnerProductSpace ENNReal
@@ -71,12 +63,24 @@ theorem selfAdjointSpectralRestriction_semibounded_of_subset_Icc
   constructor
   · apply (TauCeti.LinearPMap.semiboundedBelow_iff _ _).mpr
     intro x
-    exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc hA B hB hBsub
-      x.1.2 x.2).1
+    change β * ‖(x.val : H)‖ ^ 2 ≤
+      (⟪selfAdjointSpectralSubspaceInclusion A hA B hB
+        (selfAdjointSpectralRestriction A hA B hB x), (x.val : H)⟫_ℂ).re
+    rw [← selfAdjointSpectralRestriction_inclusion_intertwines A hA B hB x]
+    exact hA.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj hB
+      (fun _ hs => (hBsub hs).1)
+      (x := ⟨x.val.val, selfAdjointSpectralRestriction_inclusion_mem_domain A hA B hB x⟩)
+      x.val.property
   · apply (TauCeti.LinearPMap.semiboundedAbove_iff _ _).mpr
     intro x
-    exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc hA B hB hBsub
-      x.1.2 x.2).2
+    change (⟪selfAdjointSpectralSubspaceInclusion A hA B hB
+        (selfAdjointSpectralRestriction A hA B hB x), (x.val : H)⟫_ℂ).re ≤
+      α * ‖(x.val : H)‖ ^ 2
+    rw [← selfAdjointSpectralRestriction_inclusion_intertwines A hA B hB x]
+    exact hA.re_inner_le_mul_norm_sq_of_mem_range_spectralPVM_proj hB
+      (fun _ hs => (hBsub hs).2)
+      (x := ⟨x.val.val, selfAdjointSpectralRestriction_inclusion_mem_domain A hA B hB x⟩)
+      x.val.property
 
 /-- If the selecting set is disjoint from an open interval, the spectrum of the
 restriction avoids that interval. -/
@@ -88,38 +92,20 @@ theorem selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
       (lam : ℂ) ∉ _root_.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA B hB) := by
   intro lam hlam
-  have hleft : 0 < lam - a := by linarith [hlam.1]
-  have hright : 0 < b - lam := by linarith [hlam.2]
-  set ε : ℝ := min (lam - a) (b - lam) / 2 with hεdef
-  have hmin : 0 < min (lam - a) (b - lam) := lt_min hleft hright
-  have hε : 0 < ε := by rw [hεdef]; exact div_pos hmin (by norm_num)
-  have hεleft : ε ≤ lam - a := by
-    rw [hεdef]
-    have := min_le_left (lam - a) (b - lam)
-    linarith
-  have hεright : ε ≤ b - lam := by
-    rw [hεdef]
-    have := min_le_right (lam - a) (b - lam)
-    linarith
-  -- every point of `B` is at least `ε` away from `lam`
-  have hgap : ∀ s ∈ B, ε ≤ |s - lam| := by
-    intro s hs
-    by_contra hcon
-    rw [not_le, abs_lt] at hcon
-    have hsIoo : s ∈ Set.Ioo a b := by
-      constructor <;> [linarith [hcon.1]; linarith [hcon.2]]
-    have : s ∈ B ∩ Set.Ioo a b := ⟨hs, hsIoo⟩
-    rw [hdisj] at this
-    exact this
-  intro hnot
-  have hres : (lam : ℂ) ∈ _root_.LinearPMap.resolventSet
-      (selfAdjointSpectralRestriction A hA B hB) := by
-    convert (TauCeti.LinearPMap.mem_resolventSet_specRestrict_of_gap hA B hB hε hgap)
-      using 1
-    rfl
-
-  exact (_root_.LinearPMap.mem_spectrum_iff
-    (selfAdjointSpectralRestriction A hA B hB) (lam : ℂ)).mp hnot hres
+  let ε := min (lam - a) (b - lam)
+  have hε : 0 < ε := lt_min (sub_pos.mpr hlam.1) (sub_pos.mpr hlam.2)
+  have hsubset : Set.Ioo (lam - ε) (lam + ε) ⊆ Set.Ioo a b :=
+    Set.Ioo_subset_Ioo
+      (by dsimp [ε]; linarith [min_le_left (lam - a) (b - lam)])
+      (by dsimp [ε]; linarith [min_le_right (lam - a) (b - lam)])
+  have hempty : B ∩ Set.Ioo (lam - ε) (lam + ε) = ∅ :=
+    Set.eq_empty_of_subset_empty (hdisj ▸ Set.inter_subset_inter_right B hsubset)
+  have hgap : (A.spectralPVM hA).proj (B ∩ Set.Ioo (lam - ε) (lam + ε))
+      (hB.inter measurableSet_Ioo) = 0 := by
+    simp only [hempty, ProjValMeasure.proj_empty]
+  intro h
+  exact (_root_.LinearPMap.mem_spectrum_iff _ _).mp h
+    (hA.mem_resolventSet_restrict_range_spectralPVM_proj hB hε hgap)
 
 end DavisKahan
 end TauCeti

@@ -1234,7 +1234,8 @@
       "blocked_dependencies": [],
       "downstream_users": [],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": "2026-11-27: Retire graphNorm, graphNorm_nonneg, graphNorm_sq, norm_coe_le_graphNorm and norm_apply_le_graphNorm (original 5a34ee3d82f7eb7b6b3b20732afc6bd51d8ff25c at this path). The canonical value is the norm of LinearPMap.toGraphSpace x; its nonnegativity and square are norm_nonneg and LinearPMap.norm_toGraphSpace_sq (Forgejo #1197, 655dfa5463b392891870d640bd3f786e62f0c2d0). Independent #42625, d9704e3dae1ce39cc314e19c43e26a0ab12e1277, supplies norm_le_norm_toGraphSpace and norm_apply_le_norm_toGraphSpace (SA-C37/C38). Both cover the original arbitrary RCLike Hilbert-domain graph norm. No maintained caller used the deleted scalar facade."
     },
     {
       "source_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Sylvester",
@@ -3461,7 +3462,8 @@
         "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport"
       ],
       "status": "staged",
-      "upstream_pr": null
+      "upstream_pr": null,
+      "migration_note": "2026-11-27: Retire reducesSubspace_specRange, specRestrict, specRestrict_domain, specRestrict_apply, isFormalAdjoint_specRestrict, exists_specRestrict_resolvent, dense_specRestrict_domain, isSelfAdjoint_specRestrict, and mem_resolventSet_specRestrict_of_gap from the SpectralMeasure module and its Construction split. Their source is cc24e76466ace67f68c2e384af4ad8748a21e32b at those paths, Jon Crall / Claude Opus 5, Kitware 2026, Apache-2.0. Consume LinearPMap.restrict, restrict_domain, mem_restrict_domain, coe_restrict_apply, IsReducing.dense_restrict_domain and IsSelfAdjoint.isReducing_range_spectralPVM_proj, isSelfAdjoint_restrict_range_spectralPVM_proj and mem_resolventSet_restrict_range_spectralPVM_proj from the accepted Forgejo #1964 integration c8bb063fe6bd7a441b156c5cc6e03b027dd29579 (SA-E09/E10). The native gap theorem only needs the projection on the gap to vanish and hence covers the original set-theoretic gap. Retire re_inner_apply_bounds_of_subset_Icc in favor of IsSelfAdjoint.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj and re_inner_le_mul_norm_sq_of_mem_range_spectralPVM_proj (#41596, 81171bd524be1b4f119bb36877630bb96aaed6f8, SA-E11–E13). The paper-facing restriction, inclusion and localization preserve their hypotheses and conclusions, including for the trivial spectral range. Both upstream submissions are by other contributors, with direct DKPS proof descent undisclosed. Retain the Borel-coordinate bridge, spectral cut and exhaustion results."
     },
     {
       "source_module": "new -- authored directly in ForTauCeti",
@@ -3825,8 +3827,7 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.PVM",
-        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Restriction",
-        "ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Subspace"
+        "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.Restriction"
       ],
       "status": "upstreamed",
       "upstream_pr": null,
@@ -6917,7 +6918,51 @@
       "migration_note": " November 24: lower synthesisMap_single replaces the finite-sum unit proof; inverse indices use the actual equivalence inverse; determinant transfer uses native det_toEuclideanCLM. The matrix-symbol bridge normalizes PiLp.toLp_apply explicitly. General IsFredholm.index_prodMap covers distinct domains/codomains without topological additive-group or scalar-continuity hypotheses; the conjugated formula derives from it. Still submitted, not accepted. DKPS focused 7696 jobs, full default 22356 jobs, Challenge 20252 jobs and 15 linters on five donor modules pass without warnings; accepted dependency pins unchanged. November 24 later wrapper cleanup: follow the updated reuse/proof-quality requests on 6f6cfc3. blockFiniteInclusion_single uses native synthesisMapIsometry_single directly, with a local Subsingleton.elim bridge from its fixed classical equality to concrete finite-index equality. Remove the unused inverse-coordinate wrappers and the one-use index_conj_prodMap facade; keep IsFredholm.index_prodMap and use accepted index-invariance rewrites in the example. Original names remain in source/history; no accepted integration or newly upstream-derived retirement is claimed. Earlier contradictory public-wrapper requests are preserved in the campaign review capture and prepared host thread reply. Final DKPS wrapper-cleanup validation: focused 7696 jobs, full default 22356 jobs, Challenge 20252 jobs and all 15 linters on the three changed donor modules pass without warnings; accepted pins unchanged. Latest reuse review: the existing ContinuousLinearEquiv.index_coprod_prod_coprod proof in TauCeti.Analysis.Fredholm.SchurComplement now calls IsFredholm.index_prodMap. Schur-complement provenance remains with the existing Tau Ceti result. November 26 accepted consumption. Consume the accepted ContinuousLinearMap.IsFredholm.index_prodMap. The direct-sum example used this donor; accepted Tau Ceti also applies the helper in its existing Schur-complement proof.",
       "integration": "0225663554f035014705ec78e8b721fd067b82b9",
       "accepted_head": "6c71d1289130f9b379a1a5d6d42204080d86196f"
+    },
+    {
+      "source_module": "DavisKahan/SpectralTheory/PVMSubspace.lean",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.ProjValMeasure.Subspace",
+      "source_declarations": [
+        "pvmRangeSubspace",
+        "pvmRangeSubspace_eq_range",
+        "pvmProjection_mem_rangeSubspace",
+        "pvmProjection_eq_self_of_mem_rangeSubspace",
+        "mem_pvmRangeSubspace_iff",
+        "pvmRangeSubspace_completeSpace",
+        "pvmRangeSubspace_hasOrthogonalProjection",
+        "pvmProjection_eq_starProjection_rangeSubspace"
+      ],
+      "original_source_anchor": "412ff460002e77e183e6f176d7029e486091b4f7 at ForTauCeti/Analysis/InnerProductSpace/ProjValMeasure/Subspace.lean, earlier DavisKahan/SpectralTheory/PVMSubspace.lean over the Spectra carrier.",
+      "authors_license": "Jon Crall, OpenAI GPT-5.6 Thinking, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.ProjValMeasure.Basic",
+      "final_declarations": [
+        "TauCeti.ProjValMeasure.instCompleteSpaceRangeProj",
+        "TauCeti.ProjValMeasure.starProjection_range_proj",
+        "Submodule.starProjection_eq_self_iff"
+      ],
+      "upstream_pr": "https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1964",
+      "integration": "c8bb063fe6bd7a441b156c5cc6e03b027dd29579",
+      "accepted_head": "db7a90c4c4a9fec606280801f51740b5cac00a54",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "2026-11-27: Direct use of (P.proj B hB).range with native completeness, projection and fixed-vector APIs replaces the whole donor. Native PVM supports any measurable space and the original donor specializes to ℝ. Separate implementation by tauceti-ai-for-science; direct DKPS proof descent undisclosed."
+    },
+    {
+      "source_module": "DavisKahan.InfiniteDimensional.Sylvester.Basic",
+      "source_declarations": [
+        "TauCeti.DavisKahan.Sylvester.norm_sylvester_le_of_generalSeparation"
+      ],
+      "original_source_anchor": "507ea63b55d8ae002256a4d9863415fb3e798361:DavisKahan/InfiniteDimensional/Sylvester/Basic.lean",
+      "authors_license": "Jon Crall, OpenAI GPT-5.6 Thinking, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.Sylvester.Pairwise",
+      "final_declarations": [
+        "ContinuousLinearMap.mul_norm_le_pi_div_two_mul_norm_sylvester_apply"
+      ],
+      "upstream_pr": "https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2441",
+      "integration": "e5d890fd73f8e616241142c58517ef7212010e18",
+      "accepted_head": "335655bf383a624789a419fb4fbc876fa3f61be2",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "2026-11-27: Native finite-spectral-sum bound in arbitrary complex Hilbert dimension replaces the complex operator-norm proof. The RCLike consumer retains its real restriction and complexification. The local explicit Fourier inverse and its uniqueness and compactness consequences support the ideal-norm theory. Other contributor implementation, direct DKPS proof descent undisclosed. This is the bounded prerequisite of SSP-B16."
     }
   ],
-  "current_consumption_pin": "b7121f4d7408c1a323335f3547e857b0b547369a"
+  "current_consumption_pin": "0225663554f035014705ec78e8b721fd067b82b9"
 }

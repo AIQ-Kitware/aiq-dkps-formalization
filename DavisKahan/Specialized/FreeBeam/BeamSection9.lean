@@ -863,9 +863,18 @@ theorem beamLow_semiboundedBelow :
       beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet) 0 := by
   rw [TauCeti.LinearPMap.semiboundedBelow_iff]
   intro x
-  exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc
-    beamOperator_isSelfAdjoint ({0} : Set ℝ) (measurableSet_singleton 0)
-    (β := 0) (α := 0) (by simp) (mem_specRange_singleton_of_mem_lowSet x.1.2) x.2).1
+  let T := selfAdjointSpectralRestriction beamOperator beamOperator_isSelfAdjoint
+    beamLowSet measurableSet_beamLowSet
+  let i := selfAdjointSpectralSubspaceInclusion beamOperator beamOperator_isSelfAdjoint
+    beamLowSet measurableSet_beamLowSet
+  change 0 * ‖x.val‖ ^ 2 ≤ (⟪i (T x), i x.val⟫_ℂ).re
+  rw [← selfAdjointSpectralRestriction_inclusion_intertwines beamOperator
+    beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet x]
+  exact beamOperator_isSelfAdjoint.mul_norm_sq_le_re_inner_of_mem_range_spectralPVM_proj
+    (measurableSet_singleton 0) (by simp)
+    (x := ⟨x.val.val, selfAdjointSpectralRestriction_inclusion_mem_domain beamOperator
+      beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet x⟩)
+    (mem_specRange_singleton_of_mem_lowSet x.val.property)
 
 /-- The beam operator is bounded above on the low spectral set. -/
 theorem beamLow_semiboundedAbove :
@@ -873,9 +882,18 @@ theorem beamLow_semiboundedAbove :
       beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet) 0 := by
   rw [TauCeti.LinearPMap.semiboundedAbove_iff]
   intro x
-  exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc
-    beamOperator_isSelfAdjoint ({0} : Set ℝ) (measurableSet_singleton 0)
-    (β := 0) (α := 0) (by simp) (mem_specRange_singleton_of_mem_lowSet x.1.2) x.2).2
+  let T := selfAdjointSpectralRestriction beamOperator beamOperator_isSelfAdjoint
+    beamLowSet measurableSet_beamLowSet
+  let i := selfAdjointSpectralSubspaceInclusion beamOperator beamOperator_isSelfAdjoint
+    beamLowSet measurableSet_beamLowSet
+  change (⟪i (T x), i x.val⟫_ℂ).re ≤ 0 * ‖x.val‖ ^ 2
+  rw [← selfAdjointSpectralRestriction_inclusion_intertwines beamOperator
+    beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet x]
+  exact beamOperator_isSelfAdjoint.re_inner_le_mul_norm_sq_of_mem_range_spectralPVM_proj
+    (measurableSet_singleton 0) (by simp)
+    (x := ⟨x.val.val, selfAdjointSpectralRestriction_inclusion_mem_domain beamOperator
+      beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet x⟩)
+    (mem_specRange_singleton_of_mem_lowSet x.val.property)
 
 /-! ## Equation (9.2): the double-angle bound -/
 
