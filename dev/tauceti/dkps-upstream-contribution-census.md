@@ -1,5 +1,43 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 native trace for nuclear transport
+
+DKPS now pins TauCeti `dde09e0dcec0e44e75739723bb2ba5baae6ae417` with
+the same Lean v4.37.0-rc1 and Mathlib `31ce06eaadf4a200c0e1407c5f10953cf606b8f8`.
+The nuclear transport certificates use `ContinuousLinearMap.trace` from
+Forgejo #2779 at `2c2413104ab4d158e8a1b74b54684da6cc81d444`, accepted head
+`450d8acf8f789d8bb28afbf552ed333ae3dc66aa`. Their existing finite-cost
+hypotheses provide trace-class membership for every trace argument. The
+native trace supplies the diagonal series, basis independence, linearity,
+trace-norm bound, adjoint law and rectangular cyclicity. The old DKPS
+definition was a chosen-basis sum on all bounded endomorphisms. The two
+definitions agree on the trace class, the scope used by these certificates.
+[Forgejo #2779](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2779)
+
+The same migration uses `ContinuousLinearMap.trace_adjoint_comp_self` from
+#46753 at `32ff1cb530ef1e94e4c330d30946f13947b6a4b2`, accepted head
+`e1fe9c0a7087bb99bede1b87ed74ee6bc20ab14f`. Native Hilbert–Schmidt product
+membership, absolute summability, trace pairing and cyclicity supersede
+the local product trace engine. DKPS retains the real trace equality
+criterion for positivity, the projected-unitary defect and its rigidity,
+the all-energy nuclear Gram identity, and Hilbert–Schmidt energy polarization
+and its equality case. The absolute diagonal summability theorem for a single
+trace-class operator now applies the native Hilbert–Schmidt pairing bound to
+its two polar factors. The redundant complex-only specializations retire.
+[PR #46753](https://github.com/TauCetiProject/TauCeti/pull/46753)
+
+The old donor proofs are anchored at `1a9952ca8`, `a05470cf1` and `ff3c1657d`
+(Jon Crall and GPT-6 Codex, Kitware 2026, Apache-2.0). TauCeti's trace proof
+uses a summable rank-one expansion and its product proof uses the expansion
+through a Hilbert basis of the intermediate space. The retired DKPS
+arguments used square-root polar factorization and columns. Direct DKPS
+proof descent is unestablished for either contribution.
+
+The focused build (9463 jobs), full build (22644 jobs), and combined
+Challenge and result semantic-surface audit (22362 jobs) passed without
+warnings. The declaration-name comparison found the same 49 findings
+before and after this migration.
+
 ## November 27 canonical real-calculus instance
 
 The paper and donor modules now infer
@@ -220,8 +258,8 @@ integration does not identify a DKPS proof source.
 | UO-D01a, symmetric resolvent alternatives | roed-math, [#41331](https://github.com/TauCetiProject/TauCeti/pull/41331), `4f67ec09bbbd56bc6f86ab21f423f21674d18944`, and kim-em, [Forgejo #1116](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/1116), `52416fb69860317c3f27734f248a7949bc14bc27` | Accepted four-alternative results for symmetric partial operators have broader hypotheses than DKPS's self-adjoint nonreal resolvent facts. No duplicate four-alternative proof was found. |
 | Toeplitz §1.2 and §3.4 prerequisites | tauceti-ai-for-science, [Forgejo #2128](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2128), `17a078777d1d063560a42174b0f583771b73c229`, and [#42005](https://github.com/TauCetiProject/TauCeti/pull/42005), `0e8569f7db69522783a36639543207307e01c89f` | The harmonic-majorant model of Hardy space and finite-product Fredholm/index laws landed separately. The DKPS binary index proof was already retired through our #44700. These results supply parts of the corresponding Toeplitz sections. |
 | OperatorIdeals §B2 diagonal check, membership clauses | tauceti-ai-for-science, [#46766](https://github.com/TauCetiProject/TauCeti/pull/46766), `a010562cb94530c5c5d115ecb6d20c828dc7f829` | This AutomorphicSpectralTheory submission also proves that the `1/(n+1)` diagonal is Hilbert–Schmidt and outside trace class. The exact energy and full Schatten classification are separate. There is no matching DKPS example proof to retire. |
-| Trace-class API used by the DKPS nuclear transport certificates | tauceti-ai-for-science, [Forgejo #2779](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2779), `2c2413104ab4d158e8a1b74b54684da6cc81d444` | The VonNeumannAlgebras contribution supplies the native trace, basis independence, a trace norm bound and cyclicity on the current pin. Its proof uses a summable rank-one expansion. DKPS still uses its diagonal-sum definition and polar-factorization route. Migration must justify each use at trace-class scope because the native definition takes the value zero outside the class. |
-| Hilbert–Schmidt products and trace pairing for OperatorIdeals consumers | tauceti-ai-for-science, [#46753](https://github.com/TauCetiProject/TauCeti/pull/46753), `32ff1cb530ef1e94e4c330d30946f13947b6a4b2` | The VonNeumannAlgebras contribution supplies product membership in trace class, the trace-norm bound and trace cyclicity for two Hilbert–Schmidt factors. The two trace series and cyclicity cover the finite-energy hypotheses of DKPS `tsum_inner_comp_comm` through native membership. Present on newer TauCeti main, beyond the current DKPS pin. Direct DKPS proof descent is unestablished. |
+| Trace-class API used by the DKPS nuclear transport certificates | tauceti-ai-for-science, [Forgejo #2779](https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2779), `2c2413104ab4d158e8a1b74b54684da6cc81d444` | Consumed. The VonNeumannAlgebras contribution supplies the native trace and its laws. The certificates use it at trace-class scope through their original finite-cost hypotheses. |
+| Hilbert–Schmidt products and trace pairing for OperatorIdeals consumers | tauceti-ai-for-science, [#46753](https://github.com/TauCetiProject/TauCeti/pull/46753), `32ff1cb530ef1e94e4c330d30946f13947b6a4b2` | Consumed at the November 27 pin. The VonNeumannAlgebras contribution supplies the product and pairing laws. The projected-unitary defect and positivity proof use its Gram trace. The local energy polarization and equality theorem remain. |
 
 DKPS keeps the named spectral subspace and restriction in the paper-facing
 statements. The restriction now uses native `LinearPMap.restrict`; the

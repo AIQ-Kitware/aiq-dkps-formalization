@@ -7216,7 +7216,91 @@
       ],
       "status": "accepted-upstream-local-duplicates-retired",
       "migration_note": "November 27: Remove the forwarding theorem and its local instance activations. Use TauCeti's realification-based instance over arbitrary RCLike fields; keep the compatible real algebra and scalar tower local. The native authors independently wrote the realification proofs and retained the older DKPS real-calculus attribution. Naturality for a change between RCLike fields remains in the local transport module."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.OperatorIdeal.Nuclear.Trace",
+      "source_declarations": [
+        "ContinuousLinearMap.nuclearTrace",
+        "norm_tsum_inner_le_nuclearENorm",
+        "re_tsum_inner_eq_nuclearENorm_iff_isPositive",
+        "tsum_inner_eq_of_hilbertBasis_of_nuclearENorm_ne_top",
+        "nuclearTrace_eq_tsum_inner",
+        "norm_nuclearTrace_le_nuclearENorm",
+        "nuclearTrace_add",
+        "nuclearTrace_smul",
+        "nuclearTrace_adjoint",
+        "nuclearTrace_mul_comm",
+        "re_nuclearTrace_eq_nuclearENorm_iff_isPositive",
+        "nuclearTrace_conjStarAlgEquiv",
+        "nuclearTrace_eq_zero_of_conjStarAlgEquiv_eq_neg",
+        "nuclearTrace_eq_zero_iff_of_isPositive",
+        "two_mul_re_nuclearTrace_unitary_projection_defect",
+        "re_nuclearTrace_unitary_projection_defect_nonneg_and_eq_zero_iff",
+        "nuclearENorm_adjoint_comp_self_eq_hilbertSchmidtEnergy_complex",
+        "exists_polar_sqrt_factorization_with_hilbertSchmidtEnergy_complex",
+        "summable_norm_inner_of_nuclearENorm_ne_top_complex",
+        "norm_tsum_inner_le_nuclearENorm_complex",
+        "re_tsum_inner_eq_nuclearENorm_iff_isPositive_complex",
+        "re_tsum_inner_unitary_comp_eq_nuclearENorm_iff_isPositive_complex",
+        "tsum_inner_eq_of_hilbertBasis_of_nuclearENorm_ne_top_complex",
+        "nuclearTrace_eq_tsum_inner_complex",
+        "norm_nuclearTrace_le_nuclearENorm_complex",
+        "re_nuclearTrace_eq_nuclearENorm_iff_isPositive_complex",
+        "nuclearTrace_add_complex",
+        "nuclearTrace_smul_complex",
+        "nuclearTrace_adjoint_complex",
+        "nuclearTrace_mul_comm_complex",
+        "nuclearTrace_conjStarAlgEquiv_complex",
+        "nuclearTrace_eq_zero_of_conjStarAlgEquiv_eq_neg_complex",
+        "nuclearTrace_eq_zero_iff_of_isPositive_complex",
+        "two_mul_re_nuclearTrace_unitary_projection_defect_complex",
+        "re_nuclearTrace_unitary_projection_defect_nonneg_and_eq_zero_iff_complex"
+      ],
+      "original_source_anchor": "1a9952ca8a36a47bb33d978e759535575e361d95, a05470cf19bcc74ea827fcd48832de1b343f4a41 and ff3c1657d5229104ae8c1bbc134bf525790c9e3b: ForTauCeti/Analysis/OperatorIdeal/Nuclear/Trace.lean",
+      "authors_license": "Jon Crall and GPT-6 (Codex; configuration unspecified), Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.TraceClass.Trace",
+      "final_declarations": [
+        "ContinuousLinearMap.trace",
+        "ContinuousLinearMap.trace_eq_tsum_inner_apply",
+        "ContinuousLinearMap.norm_trace_le",
+        "ContinuousLinearMap.trace_add",
+        "ContinuousLinearMap.trace_smul",
+        "ContinuousLinearMap.trace_adjoint_eq_conj_trace",
+        "ContinuousLinearMap.trace_comp_comm"
+      ],
+      "upstream_pr": "https://git.taucetiproject.org/TauCetiProject/TauCeti/pulls/2779",
+      "integration": "2c2413104ab4d158e8a1b74b54684da6cc81d444",
+      "accepted_head": "450d8acf8f789d8bb28afbf552ed333ae3dc66aa",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "November 27: Adopt the native trace at trace-class scope for all DKPS certificates. Its value outside the trace class is zero. The local equality with the nuclear bound, conjugation and vanishing criteria, projected-unitary defect formulas and global Gram gauge identity retain their hypotheses and now use the native trace where applicable. Drop redundant complex specializations. The accepted proof uses nuclear series; DKPS used square-root factorization and columns. Direct proof descent is unestablished."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Trace",
+      "source_declarations": [
+        "ContinuousLinearMap.summable_norm_inner_comp_of_hilbertSchmidtEnergy_ne_top",
+        "norm_tsum_inner_comp_le_hilbertSchmidtNorm_mul",
+        "re_tsum_inner_comp_eq_of_hilbertBasis",
+        "tsum_inner_comp_eq_of_hilbertBasis",
+        "re_tsum_inner_comp_comm",
+        "tsum_inner_comp_comm"
+      ],
+      "original_source_anchor": "1a9952ca8a36a47bb33d978e759535575e361d95 and a05470cf19bcc74ea827fcd48832de1b343f4a41: ForTauCeti/Analysis/InnerProductSpace/HilbertSchmidt/Trace.lean",
+      "authors_license": "Jon Crall and GPT-6 (Codex; configuration unspecified), Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.TraceClass.HilbertSchmidt",
+      "final_declarations": [
+        "TauCeti.OperatorIdealFamily.comp_mem_traceClass",
+        "ContinuousLinearMap.hasSum_inner_adjoint_apply_apply_trace_comp_left",
+        "ContinuousLinearMap.summable_norm_inner_adjoint_apply_apply",
+        "ContinuousLinearMap.norm_trace_comp_le",
+        "ContinuousLinearMap.trace_comp_comm_of_mem_hilbertSchmidt",
+        "ContinuousLinearMap.trace_adjoint_comp_self"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/46753",
+      "integration": "32ff1cb530ef1e94e4c330d30946f13947b6a4b2",
+      "accepted_head": "e1fe9c0a7087bb99bede1b87ed74ee6bc20ab14f",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "November 27: The native product trace laws cover the finite-energy endomorphism scope through Hilbert–Schmidt membership. The Gram trace now supplies the equality and projected-defect proofs. Keep local Hilbert–Schmidt polarization and its rigidity criterion at their original scope. Direct proof descent is unestablished."
     }
   ],
-  "current_consumption_pin": "f0f7c4b96aba257ab68e23f04a4e2bbd141b0532"
+  "current_consumption_pin": "dde09e0dcec0e44e75739723bb2ba5baae6ae417"
 }

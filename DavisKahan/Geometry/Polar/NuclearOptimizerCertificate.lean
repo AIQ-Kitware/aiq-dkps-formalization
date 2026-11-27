@@ -28,24 +28,12 @@ noncomputable section
 namespace TauCeti.DavisKahan
 
 open scoped ENNReal
+open OperatorIdealFamily
 
 section General
 
 variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E]
   [InnerProductSpace 𝕜 E] [CompleteSpace E]
-
-omit [CompleteSpace E] in
-private theorem nuclear_mul_finite (A B : E →L[𝕜] E) (hA : A.nuclearENorm ≠ ∞) :
-    (A * B).nuclearENorm ≠ ∞ ∧ (B * A).nuclearENorm ≠ ∞ := by
-  constructor
-  · have h := ContinuousLinearMap.nuclearENorm_comp_comp_le (1 : E →L[𝕜] E) A B
-    change (A * B).nuclearENorm ≤ ‖(1 : E →L[𝕜] E)‖ₑ * A.nuclearENorm * ‖B‖ₑ at h
-    exact ne_top_of_le_ne_top
-      (ENNReal.mul_ne_top (ENNReal.mul_ne_top (by finiteness) hA) (by finiteness)) h
-  · have h := ContinuousLinearMap.nuclearENorm_comp_comp_le B A (1 : E →L[𝕜] E)
-    change (B * A).nuclearENorm ≤ ‖B‖ₑ * A.nuclearENorm * ‖(1 : E →L[𝕜] E)‖ₑ at h
-    exact ne_top_of_le_ne_top
-      (ENNReal.mul_ne_top (ENNReal.mul_ne_top (by finiteness) hA) (by finiteness)) h
 
 /-- **Exact infinite-dimensional nuclear calibration.** The excess of
 real dual trace over the sine minimum is precisely half the squared
@@ -62,7 +50,7 @@ theorem nuclearTransportDual_trace_calibration
     let B := R - Proposition35.section3CosAngleOperator K L
     let G := (1 - (Z : E →L[𝕜] E)) * B.ker.starProjection
     RCLike.re ((star (nuclearTransportDual K L D : E →L[𝕜] E) *
-        (R - (Z : E →L[𝕜] E))).nuclearTrace) =
+        (R - (Z : E →L[𝕜] E))).trace) =
       (K.starProjection - L.starProjection).nuclearENorm.toReal +
         G.hilbertSchmidtNorm ^ 2 / 2 := by
   let R := nonacuteDirectRotation K L D
@@ -105,7 +93,9 @@ theorem nuclearTransportDual_trace_calibration
     rw [sub_mul, sub_mul, one_mul, hRQ]
   have hGfinite : G.nuclearENorm ≠ ∞ := by
     rw [hG]
-    exact (nuclear_mul_finite X Q hfinite).1
+    exact (mem_finiteSubmodule_traceClass_iff_nuclearENorm_ne_top _).1
+      (mul_right_mem_finiteSubmodule
+        ((mem_finiteSubmodule_traceClass_iff_nuclearENorm_ne_top X).2 hfinite) Q)
   have hQCZ : Q * (1 - (Z : E →L[𝕜] E)) = Q * (C - (Z : E →L[𝕜] E)) := by
     have hCQ : C * Q = Q := by
       ext x
@@ -118,8 +108,8 @@ theorem nuclearTransportDual_trace_calibration
     have hQC : Q * C = Q := by
       simpa only [star_mul, hC.star_eq, hQ.star_eq] using h
     rw [mul_sub, mul_sub, hQC, mul_one]
-  have hQCZfinite := (nuclear_mul_finite _ Q hCZfinite).2
-  have hoddFinite := (nuclear_mul_finite _ (star F) hCZfinite).2
+  have hCZ := (mem_finiteSubmodule_traceClass_iff_nuclearENorm_ne_top _).2 hCZfinite
+  have hoddMem := mul_left_mem_finiteSubmodule (star F) hCZ
   have hCeven : K.reflection.conjStarAlgEquiv C = C := by
     have hc := (K.commute_reflection_iff.mpr
       (Proposition35.section3CosAngleOperator_comm_projection K L).symm).eq
@@ -138,12 +128,15 @@ theorem nuclearTransportDual_trace_calibration
   have hodd : K.reflection.conjStarAlgEquiv (star F * (C - (Z : E →L[𝕜] E))) =
       -(star F * (C - (Z : E →L[𝕜] E))) := by
     rw [map_mul, map_star, map_sub, hFodd, hCeven, hZeven, star_neg, neg_mul]
-  have hTrOdd := ContinuousLinearMap.nuclearTrace_eq_zero_of_conjStarAlgEquiv_eq_neg
-    _ K.reflection hoddFinite hodd
-  have hQCfinite : (Q * (1 - (Z : E →L[𝕜] E))).nuclearENorm ≠ ∞ := by
-    rwa [hQCZ]
-  have hTrQ : (Q * (1 - (Z : E →L[𝕜] E))).nuclearTrace = G.nuclearTrace := by
-    rw [hQCZ, ← ContinuousLinearMap.nuclearTrace_mul_comm _ Q hCZfinite]
+  have hTrOdd := ContinuousLinearMap.trace_eq_zero_of_conjStarAlgEquiv_eq_neg
+    _ K.reflection ((mem_finiteSubmodule_traceClass_iff_nuclearENorm_ne_top _).1 hoddMem) hodd
+  have hQCmem : Q * (1 - (Z : E →L[𝕜] E)) ∈ ((traceClass 𝕜).operatorGauge E E).finiteSubmodule := by
+    rw [hQCZ]
+    exact mul_left_mem_finiteSubmodule Q hCZ
+  have hTrQ : (Q * (1 - (Z : E →L[𝕜] E))).trace = G.trace := by
+    have hcyclic : (Q * (C - (Z : E →L[𝕜] E))).trace =
+        ((C - (Z : E →L[𝕜] E)) * Q).trace := ContinuousLinearMap.trace_comp_comm Q hCZ
+    rw [hQCZ, hcyclic]
     have hCQ : C * Q = Q := by
       ext x
       exact cosine_apply_eq_self_of_mem_nonacute_skew_ker K L D _
@@ -151,22 +144,20 @@ theorem nuclearTransportDual_trace_calibration
     congr 1
     dsimp only [G]
     rw [sub_mul, sub_mul, hCQ, one_mul]
-  have hsumfinite : (S + Q * (1 - (Z : E →L[𝕜] E))).nuclearENorm ≠ ∞ :=
-    ne_top_of_le_ne_top (ENNReal.add_ne_top.mpr ⟨hSfinite, hQCfinite⟩)
-      (S.nuclearENorm_add_le _)
+  have hSmem := (mem_finiteSubmodule_traceClass_iff_nuclearENorm_ne_top S).2 hSfinite
   have hSpos : S.IsPositive := by
     rw [show S = (K.starProjection - L.starProjection).modulus from
       K.sinAngleOperator_def L]
     exact (K.starProjection - L.starProjection).isPositive_modulus
-  have hTrS := (ContinuousLinearMap.re_nuclearTrace_eq_nuclearENorm_iff_isPositive
+  have hTrS := (ContinuousLinearMap.re_trace_eq_nuclearENorm_iff_isPositive
     S hSfinite).mpr hSpos
-  have hslack := ContinuousLinearMap.two_mul_re_nuclearTrace_unitary_projection_defect
+  have hslack := ContinuousLinearMap.two_mul_re_trace_unitary_projection_defect
     Z Q (isStarProjection_starProjection (U := B.ker)) hGfinite
-  change 2 * RCLike.re G.nuclearTrace = G.hilbertSchmidtNorm ^ 2 at hslack
-  change RCLike.re ((star (nuclearTransportDual K L D : E →L[𝕜] E) * X).nuclearTrace) = _
+  change 2 * RCLike.re G.trace = G.hilbertSchmidtNorm ^ 2 at hslack
+  change RCLike.re ((star (nuclearTransportDual K L D : E →L[𝕜] E) * X).trace) = _
   rw [nuclearTransportDual_adjoint_mul_displacement,
-    ContinuousLinearMap.nuclearTrace_add _ _ hsumfinite hoddFinite,
-    ContinuousLinearMap.nuclearTrace_add _ _ hSfinite hQCfinite,
+    ContinuousLinearMap.trace_add (Submodule.add_mem _ hSmem hQCmem) hoddMem,
+    ContinuousLinearMap.trace_add hSmem hQCmem,
     hTrOdd, add_zero, hTrQ, map_add, hTrS, hSnorm]
   linarith
 
@@ -198,14 +189,16 @@ theorem nuclearTransportDual_fixed_sector_gap
     rw [LinearIsometryEquiv.star_eq_symm]
     exact Φ.gauge_comp_linearIsometryEquiv_left X (nuclearTransportDual K L D).symm
   have hYfinite : Y.nuclearENorm ≠ ∞ := by rwa [hYnorm]
-  have hbound : RCLike.re Y.nuclearTrace ≤ X.nuclearENorm.toReal := by
+  have hbound : RCLike.re Y.trace ≤ X.nuclearENorm.toReal := by
     calc
-      _ ≤ ‖Y.nuclearTrace‖ := RCLike.re_le_norm _
-      _ ≤ Y.nuclearENorm.toReal := ContinuousLinearMap.norm_nuclearTrace_le_nuclearENorm Y hYfinite
+      _ ≤ ‖Y.trace‖ := RCLike.re_le_norm _
+      _ ≤ Y.nuclearENorm.toReal :=
+        ContinuousLinearMap.norm_trace_le
+          ((mem_finiteSubmodule_traceClass_iff_nuclearENorm_ne_top Y).2 hYfinite)
       _ = _ := congrArg ENNReal.toReal hYnorm
   have htrace := nuclearTransportDual_trace_calibration K L D Z hZ hΔ hfinite
   dsimp only at htrace ⊢
-  change RCLike.re Y.nuclearTrace = _ at htrace
+  change RCLike.re Y.trace = _ at htrace
   linarith
 
 /-- Every trace-class relative competitor attains the sine bound exactly
@@ -242,14 +235,16 @@ theorem nuclear_eq_projection_sub_iff_relative_certificate
     exact Φ.gauge_comp_linearIsometryEquiv_left X (nuclearTransportDual K L D).symm
   have hYfinite : Y.nuclearENorm ≠ ∞ := by rwa [hYnorm]
   have htrace := nuclearTransportDual_trace_calibration K L D Z hZ hΔ hfinite
-  change RCLike.re Y.nuclearTrace = (K.starProjection - L.starProjection).nuclearENorm.toReal +
+  change RCLike.re Y.trace = (K.starProjection - L.starProjection).nuclearENorm.toReal +
     G.hilbertSchmidtNorm ^ 2 / 2 at htrace
-  have hbound : RCLike.re Y.nuclearTrace ≤ X.nuclearENorm.toReal := by
+  have hbound : RCLike.re Y.trace ≤ X.nuclearENorm.toReal := by
     calc
-      _ ≤ ‖Y.nuclearTrace‖ := RCLike.re_le_norm _
-      _ ≤ Y.nuclearENorm.toReal := ContinuousLinearMap.norm_nuclearTrace_le_nuclearENorm Y hYfinite
+      _ ≤ ‖Y.trace‖ := RCLike.re_le_norm _
+      _ ≤ Y.nuclearENorm.toReal :=
+        ContinuousLinearMap.norm_trace_le
+          ((mem_finiteSubmodule_traceClass_iff_nuclearENorm_ne_top Y).2 hYfinite)
       _ = _ := congrArg ENNReal.toReal hYnorm
-  have hpos := ContinuousLinearMap.re_nuclearTrace_eq_nuclearENorm_iff_isPositive Y hYfinite
+  have hpos := ContinuousLinearMap.re_trace_eq_nuclearENorm_iff_isPositive Y hYfinite
   rw [hYnorm] at hpos
   have hRQ : R * Q = Q := by
     ext x
@@ -264,18 +259,20 @@ theorem nuclear_eq_projection_sub_iff_relative_certificate
       dsimp only [G, X]
       rw [sub_mul, sub_mul, one_mul, hRQ]
     rw [hG]
-    exact (nuclear_mul_finite X Q hfinite).1
-  have hslack := ContinuousLinearMap.two_mul_re_nuclearTrace_unitary_projection_defect
+    exact (mem_finiteSubmodule_traceClass_iff_nuclearENorm_ne_top _).1
+      (mul_right_mem_finiteSubmodule
+        ((mem_finiteSubmodule_traceClass_iff_nuclearENorm_ne_top X).2 hfinite) Q)
+  have hslack := ContinuousLinearMap.two_mul_re_trace_unitary_projection_defect
     Z Q (isStarProjection_starProjection (U := B.ker)) hGfinite
-  change 2 * RCLike.re G.nuclearTrace = G.hilbertSchmidtNorm ^ 2 at hslack
-  have hzero := (ContinuousLinearMap.re_nuclearTrace_unitary_projection_defect_nonneg_and_eq_zero_iff
+  change 2 * RCLike.re G.trace = G.hilbertSchmidtNorm ^ 2 at hslack
+  have hzero := (ContinuousLinearMap.re_trace_unitary_projection_defect_nonneg_and_eq_zero_iff
     Z Q (isStarProjection_starProjection (U := B.ker)) hGfinite).2
-  change RCLike.re G.nuclearTrace = 0 ↔ G = 0 at hzero
+  change RCLike.re G.trace = 0 ↔ G = 0 at hzero
   change X.nuclearENorm = _ ↔ G = 0 ∧ Y.IsPositive
   constructor
   · intro hcost
     have heq := congrArg ENNReal.toReal hcost
-    have hGzero : RCLike.re G.nuclearTrace = 0 := by nlinarith [sq_nonneg G.hilbertSchmidtNorm]
+    have hGzero : RCLike.re G.trace = 0 := by nlinarith [sq_nonneg G.hilbertSchmidtNorm]
     exact ⟨hzero.mp hGzero, hpos.mp (by linarith)⟩
   · rintro ⟨hfix, hpositive⟩
     have hGzero := hzero.mpr hfix
@@ -395,7 +392,7 @@ theorem nuclearTransportDual_trace_calibration_complex
     let B := R - Proposition35.section3CosAngleOperator K L
     let G := (1 - (Z : E →L[ℂ] E)) * B.ker.starProjection
     (star (nuclearTransportDual K L D : E →L[ℂ] E) *
-        (R - (Z : E →L[ℂ] E))).nuclearTrace.re =
+        (R - (Z : E →L[ℂ] E))).trace.re =
       (K.starProjection - L.starProjection).nuclearENorm.toReal +
         G.hilbertSchmidtNorm ^ 2 / 2 :=
   nuclearTransportDual_trace_calibration K L D Z hZ hΔ hfinite
