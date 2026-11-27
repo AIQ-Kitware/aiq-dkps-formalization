@@ -9,7 +9,7 @@ alongside the finite-dimensional spectral perturbation material.
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.EigenFrame
-public import TauCeti.Analysis.InnerProductSpace.Orthonormal.Family
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Corollaries
 
 /-! # The spectral-gap residual lower bound
 
@@ -23,9 +23,8 @@ mass of `w i` outside `U` is controlled by the residual `lam i • w i - T (w i)
 This is the lower half of the Davis--Kahan/Yu--Wang--Samworth residual sandwich,
 stated where it actually lives: it needs nothing about `w` beyond the residual,
 in particular neither orthonormality nor any relation to a second operator.  The
-proof expands `P_{Uᗮ} wᵢ` in an eigenfamily of `T|Uᗮ` (`exists_isEigenFamily_span_eq`);
-each coordinate is multiplied by `lam i − μₖ`, and every such difference is at
-least `Δ` because `lam i` and `μₖ` sit on opposite sides of the gap.
+proof applies TauCeti's vector residual inequality to each trial vector
+and sums the squared estimates.
 
 Because the trial values are only required to lie in `Module.End.restrictedPointSpectrum T U`,
 the statement is insensitive to which eigenvectors were chosen inside a repeated
@@ -33,8 +32,6 @@ eigenspace — the point of `Module.End.IsEigenfamily`.
 
 ## Main results
 
-* Native `Orthonormal.norm_starProjection_sq_eq_sum`: Parseval for the projection
-  onto the span of an orthonormal family.
 * `TauCeti.exists_isEigenFamily_span_eq`: an invariant subspace of a symmetric
   operator is spanned by an orthonormal eigenfamily.
 * `TauCeti.sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le`: the residual
@@ -82,44 +79,26 @@ With `U` invariant, `Δ`-separated from `Uᗮ` in `T`'s spectrum, and trial valu
 per unit of residual:
 `Δ² ∑ᵢ ‖P_{Uᗮ} wᵢ‖² ≤ ∑ᵢ ‖lam i • wᵢ − T wᵢ‖²`.
 
-No hypothesis is placed on `w`; the estimate is coordinatewise in an eigenfamily
-of `T|Uᗮ` followed by Bessel. -/
+The vector inequality applies separately at each trial value. -/
 theorem sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le (hT : T.IsSymmetric)
     {U : Submodule 𝕜 E} {Δ : ℝ} (hΔ : 0 ≤ Δ)
-    (hgap : PointInternalGap T U Δ) {d : ℕ} (w : Fin d → E) (lam : Fin d → ℝ)
+    (hgap : Module.End.PointInternalGap T U Δ) {d : ℕ} (w : Fin d → E) (lam : Fin d → ℝ)
     (hlam : ∀ i, lam i ∈ Module.End.restrictedPointSpectrum T U) :
     Δ ^ 2 * ∑ i, ‖Uᗮ.starProjection (w i)‖ ^ 2
       ≤ ∑ i, ‖(lam i : 𝕜) • w i - T (w i)‖ ^ 2 := by
-  classical
-  have hU := hgap.1
-  obtain ⟨m, y, c, hfam, hspan⟩ :=
-    exists_isEigenFamily_span_eq hT (LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule
-        hT hU)
-  -- Each complementary eigenvalue is separated from every trial value.
-  have hsep : ∀ (i : Fin d) (k : Fin m), Δ ≤ |lam i - c k| := fun i k =>
-    hgap.2 (lam i) (c k) (hlam i)
-      (hspan ▸ hfam.eigenvalue_mem_restrictedPointSpectrum k)
   rw [Finset.mul_sum]
   refine Finset.sum_le_sum fun i _ => ?_
-  -- The residual's coordinate at `y k` is `(lam i − cₖ) ⟪yₖ, wᵢ⟫`.
-  have hinner : ∀ k, ⟪y k, (lam i : 𝕜) • w i - T (w i)⟫_𝕜
-      = ((lam i - c k : ℝ) : 𝕜) * ⟪y k, w i⟫_𝕜 := by
-    intro k
-    rw [inner_sub_right, inner_smul_right, ← hT (y k) (w i), hfam.apply_eq k,
-      inner_smul_left, RCLike.conj_ofReal]
-    push_cast
-    ring
-  calc Δ ^ 2 * ‖Uᗮ.starProjection (w i)‖ ^ 2
-      = Δ ^ 2 * ∑ k, ‖⟪y k, w i⟫_𝕜‖ ^ 2 := by
-        rw [hfam.orthonormal.norm_starProjection_sq_eq_sum hspan]
-    _ = ∑ k, Δ ^ 2 * ‖⟪y k, w i⟫_𝕜‖ ^ 2 := Finset.mul_sum _ _ _
-    _ ≤ ∑ k, ‖⟪y k, (lam i : 𝕜) • w i - T (w i)⟫_𝕜‖ ^ 2 := by
-        refine Finset.sum_le_sum fun k _ => ?_
-        rw [hinner k, norm_mul, mul_pow, RCLike.norm_ofReal, sq_abs]
-        refine mul_le_mul_of_nonneg_right ?_ (sq_nonneg _)
-        rw [show (lam i - c k) ^ 2 = |lam i - c k| ^ 2 from (sq_abs _).symm]
-        exact pow_le_pow_left₀ hΔ (hsep i k) 2
-    _ ≤ ‖(lam i : 𝕜) • w i - T (w i)‖ ^ 2 :=
-        _root_.Orthonormal.sum_inner_products_le _ hfam.orthonormal
+  have hspec : Module.End.PointSpectrumIn T Uᗮ (Set.Ioo (lam i - Δ) (lam i + Δ))ᶜ := by
+    refine Module.End.pointSpectrumIn_iff.mpr fun y hy hy0 μ hTy => ?_
+    have hdist := hgap.pointSpectraSeparated.le_abs_sub (hlam i)
+      (Module.End.mem_restrictedPointSpectrum hy hy0 hTy)
+    intro hμ
+    exact hdist.not_gt (abs_lt.mpr ⟨by linarith [hμ.2], by linarith [hμ.1]⟩)
+  have h := LinearMap.IsSymmetric.mul_norm_starProjection_orthogonal_le_norm_apply_sub_smul
+    (A := T.toContinuousLinearMap) hT hgap.invariant hspec (w i)
+  change Δ * ‖Uᗮ.starProjection (w i)‖ ≤ ‖T (w i) - (lam i : 𝕜) • w i‖ at h
+  have hs := pow_le_pow_left₀ (mul_nonneg hΔ (norm_nonneg _)) h 2
+  rw [norm_sub_rev]
+  simpa only [mul_pow] using hs
 
 end TauCeti

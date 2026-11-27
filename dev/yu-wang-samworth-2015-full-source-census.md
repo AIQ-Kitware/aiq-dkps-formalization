@@ -599,7 +599,7 @@ Claim 2, the hidden interval-counting requirement: `section1_sample_crosses_into
 - `LinearMap.IsSymmetric.IsOrderedEigenframe`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_frame_le`
 - `YuWangSamworth2015.DavisKahanTheory.CorrespondingRightSingularBlock`
-- `TauCeti.PointInternalGap`
+- `Module.End.PointInternalGap`
 - `TauCeti.rightGram`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_le`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_opNormCoefficient_le`
@@ -649,7 +649,7 @@ November 3 compiler-probe maintenance: earlier migration registrations were stal
 - `LinearMap.IsSymmetric.IsOrderedEigenframe`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_frame_le`
 - `YuWangSamworth2015.DavisKahanTheory.CorrespondingLeftSingularBlock`
-- `TauCeti.PointInternalGap`
+- `Module.End.PointInternalGap`
 - `TauCeti.leftGram`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_le`
 - `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_opNormCoefficient_le`

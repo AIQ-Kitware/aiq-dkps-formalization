@@ -144,15 +144,15 @@ private theorem eq_of_smul_eq_smul_right {α β : 𝕜} {x : E} (hx : x ≠ 0)
 No `a < b` hypothesis: the separation is stated as the signed difference, which
 is the gap when `a < b` and a weaker true statement otherwise. -/
 theorem pointInternalGap_twoLevelOperator :
-    PointInternalGap (twoLevelOperator a b U) U (b - a) := by
+    Module.End.PointInternalGap (twoLevelOperator a b U) U (b - a) := by
   have hU : (U ∈ Module.End.invtSubmodule (twoLevelOperator a b U)) := by
     intro x hx
     change twoLevelOperator a b U x ∈ U
     rw [twoLevelOperator_apply,
       show U.starProjection.toLinearMap x = x from Submodule.starProjection_eq_self_iff.mpr hx]
     exact U.add_mem (U.smul_mem _ hx) (U.smul_mem _ hx)
-  refine ⟨hU, ?_⟩
-  intro lam μ hlam hμ
+  refine ⟨(Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp hU, ?_⟩
+  refine Module.End.pointSpectraSeparated_iff.mpr fun lam hlam μ hμ => ?_
   -- On `U` the operator is multiplication by `b`.
   have hb : lam = b := by
     obtain ⟨x, hxU, hx0, hxeq⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam

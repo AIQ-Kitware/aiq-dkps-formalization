@@ -40,19 +40,19 @@ variable {hT : T.IsSymmetric} {hn : finrank 𝕜 E = n}
   {e : Fin d ↪ Fin n} {w : Fin d → E}
 
 /-- **The intrinsic gap.**  A `Δ`-separated ordered eigenframe spans a subspace
-with `PointInternalGap T · Δ`: both the selected and the complementary spectrum are
+with `Module.End.PointInternalGap T · Δ`: both the selected and the complementary spectrum are
 read off the sorted eigenvalue list, and the index separation is exactly the
 hypothesis. -/
 theorem pointInternalGap_span (hw : IsOrderedEigenframe hT hn e w) {Δ : ℝ} (hΔ : 0 < Δ)
     (hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range e →
       Δ ≤ |hT.eigenvalues hn (e i) - hT.eigenvalues hn k|) :
-    TauCeti.PointInternalGap T (Submodule.span 𝕜 (Set.range w)) Δ := by
+    Module.End.PointInternalGap T (Submodule.span 𝕜 (Set.range w)) Δ := by
   classical
   have hfamily := isOrderedEigenframe_iff.mp hw
   refine ⟨?_, ?_⟩
   · intro x hx
     exact hfamily.map_span_le (Submodule.mem_map_of_mem hx)
-  · intro lam μ hlam hμ
+  · refine Module.End.pointSpectraSeparated_iff.mpr fun lam hlam μ hμ => ?_
     -- The selected side: `lam` is one of the frame's own eigenvalues.
     obtain ⟨i, rfl⟩ := hfamily.restrictedPointSpectrum_span_subset hlam
     -- The complementary side: `Uᗮ` is the span of the unselected basis vectors.

@@ -78,7 +78,7 @@ theorem generalizedSinTheta_frobenius_le_of_spectralDistance
     (hM : (whitenedCoordinateOperator X hX M).IsSymmetric)
     {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
-    (hgap : PointSpectraSeparated (whitenedCoordinateOperator X hX M) ⊤ A Vᗮ δ) :
+    (hgap : Module.End.PointSpectraSeparated (whitenedCoordinateOperator X hX M) ⊤ A Vᗮ δ) :
     δ * ε * UnitarilyInvariantSeminorm.frobenius 𝕜 F E
         (sinThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤
       UnitarilyInvariantSeminorm.frobenius 𝕜 F E
@@ -120,7 +120,7 @@ theorem generalizedSinTheta_nuclear_le_of_spectralDistance
     (hM : (whitenedCoordinateOperator X hX M).IsSymmetric)
     {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
-    (hgap : PointSpectraSeparated (whitenedCoordinateOperator X hX M) ⊤ A Vᗮ δ) :
+    (hgap : Module.End.PointSpectraSeparated (whitenedCoordinateOperator X hX M) ⊤ A Vᗮ δ) :
     δ * ε * UnitarilyInvariantSeminorm.nuclear 𝕜 F E
         (sinThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤
       Real.sqrt (finrank 𝕜 F) *
@@ -164,7 +164,7 @@ theorem generalizedTanTheta_residual_le
     (_htrans : Disjoint
       (approximateSubspace (orthonormalizedEmbedding X hX)) Vᗮ)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : OrderedGap (generalizedCompression A X hX) ⊤ A Vᗮ δ) :
+    (hgap : Module.End.PointOrderedGap (generalizedCompression A X hX) ⊤ A Vᗮ δ) :
     δ * N (tanThetaEmbedding V (orthonormalizedEmbedding X hX)) ≤
       N (residual A (orthonormalizedEmbedding X hX)
         (generalizedCompression A X hX)) :=
@@ -177,7 +177,7 @@ theorem generalizedSinTwoTheta_unequalFinrank
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) :
     δ * N (sinTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) :=
   sinTwoTheta_residual_le_of_orderedGap N hA hU X hM hδ hgap
 

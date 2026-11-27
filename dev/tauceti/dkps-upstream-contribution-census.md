@@ -1,5 +1,37 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 native point-spectrum gaps and vector residual bound
+
+The finite spectral-gap hypotheses now use `Module.End.PointSpectraSeparated`,
+`PointOrderedGap`, and `PointIntervalExteriorGap` from #14532
+(`7fcae82a6522`, tauceti-ai-for-science, PA-C24–PA-C29). The finite
+`HybridGap` alias and the local ordered-gap conversions retire with them.
+The predicates keep their original scope for signed gaps and empty spectra.
+The two-block form bound, disjunction of the two internal orderings, and
+bounded-operator hypotheses over full spectra retain their own statements.
+The DKPS source is `8c5d195c1f64` (Jon Crall and GPT 5.6 High, Kitware 2026,
+Apache-2.0). Direct DKPS proof descent in #14532 is unestablished.
+[PR #14532](https://github.com/TauCetiProject/TauCeti/pull/14532)
+
+`Module.End.PointInternalGap` from #18947 (`284013312c74`, Jon Crall,
+SSP-S01) replaces the local invariance and separation predicate. The
+integration explicitly credits adaptation from DKPS `Spectral/Gap.lean`.
+[PR #18947](https://github.com/TauCetiProject/TauCeti/pull/18947)
+
+The squared residual bound over arbitrary finite trial families now squares
+and sums the native vector bound from #45606. Each trial value selects its
+own open exclusion interval in the unwanted point spectrum. This preserves
+the finite real or complex scope and includes zero gap. The family statement
+and the independent eigenfamily spanning lemma stay local. The source is
+`519e08272205` (Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0).
+The native vector bound uses the upstream UI-norm theorem. #45606 credits
+lean-CKSD for its leading-eigenvector proof.
+[PR #45606](https://github.com/TauCetiProject/TauCeti/pull/45606)
+
+The focused build (9159 jobs), full default build (22790 jobs), and combined
+Challenge and paper semantic-surface build (22496 jobs) passed without
+warnings. The declaration-name comparison kept the 49 baseline findings.
+
 ## November 27 native circle resolvent integral and directed sine bound
 
 DKPS pins TauCeti at `fba9bfbf453b` with the same Mathlib

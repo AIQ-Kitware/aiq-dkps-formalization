@@ -284,7 +284,7 @@ theorem yuWangSamworth_sinTheta_le
     [V.HasOrthogonalProjection] (_hV : (V ∈ Module.End.invtSubmodule B))
     (hcorr : CorrespondingEigenblock hA hB U V)
     {d : ℕ} (hrank : finrank 𝕜 U = d) {Δ : ℝ} (hΔ : 0 < Δ)
-    (hgap : PointInternalGap A U Δ) :
+    (hgap : Module.End.PointInternalGap A U Δ) :
     Submodule.sinThetaFrobenius U V ≤
       2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
@@ -295,7 +295,7 @@ theorem yuWangSamworth_sinTheta_le
   have hindexGap : ∀ j ∈ s, ∀ k ∉ s,
       Δ ≤ |hA.eigenvalues hn j - hA.eigenvalues hn k| := by
     intro j hj k hk
-    apply hgap.2 (hA.eigenvalues hn j) (hA.eigenvalues hn k)
+    apply hgap.pointSpectraSeparated.le_abs_sub
     · refine Module.End.mem_restrictedPointSpectrum ?_
         ((hA.eigenvectorBasis hn).orthonormal.ne_zero j)
         (hA.apply_eigenvectorBasis hn j)
@@ -335,7 +335,7 @@ theorem yuWangSamworth_intervalBlock_le
     {a b Δ : ℝ} (hΔ : 0 < Δ)
     (_hUeq : U = Module.End.pointSpectralSubspace A (Set.Icc a b))
     (hcorr : CorrespondingEigenblock hA hB U V)
-    (hgap : PointInternalGap A U Δ) :
+    (hgap : Module.End.PointInternalGap A U Δ) :
     Submodule.sinThetaFrobenius U V ≤
       2 * min (Real.sqrt (finrank 𝕜 U) * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A)) / Δ := by
@@ -472,7 +472,7 @@ theorem yuWangSamworth_alignedBasis_le
     [V.HasOrthogonalProjection] (hV : (V ∈ Module.End.invtSubmodule B))
     (hcorr : CorrespondingEigenblock hA hB U V)
     {d : ℕ} (hrankU : finrank 𝕜 U = d) (hrankV : finrank 𝕜 V = d)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : PointInternalGap A U Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : Module.End.PointInternalGap A U Δ) :
     ∃ (u v : Fin d → E), Orthonormal 𝕜 u ∧ Orthonormal 𝕜 v ∧
       Submodule.span 𝕜 (Set.range u) = U ∧
       Submodule.span 𝕜 (Set.range v) = V ∧
@@ -562,9 +562,9 @@ theorem yuWangSamworth_eigenvector_le
   have hrankV : finrank 𝕜 (Submodule.span 𝕜 {v}) = 1 := finrank_span_singleton hv0
   -- The restricted spectrum of `A` on the eigenline is exactly `{lam}`, so the internal
   -- gap follows from `hgap`.
-  have hgap' : PointInternalGap A (Submodule.span 𝕜 {u}) Δ := by
-    refine ⟨hU, ?_⟩
-    intro l ν hl hν
+  have hgap' : Module.End.PointInternalGap A (Submodule.span 𝕜 {u}) Δ := by
+    refine ⟨(Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hU, ?_⟩
+    refine Module.End.pointSpectraSeparated_iff.mpr fun l hl ν hν => ?_
     obtain ⟨x, hxU, hx0, hAx⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hl
     rw [Submodule.mem_span_singleton] at hxU
     obtain ⟨a, rfl⟩ := hxU

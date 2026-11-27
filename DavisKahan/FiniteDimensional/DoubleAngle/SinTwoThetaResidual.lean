@@ -68,7 +68,7 @@ theorem sinTwoTheta_residual_le_of_orderedGap
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) :
     δ * N (sinTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) := by
   have hdouble := sinTwoThetaEmbedding_uiNorm_le_two_mul N U X
   have hsingle := sinTheta_residual_le_of_orderedGap N hA hU X hM hδ hgap
@@ -88,7 +88,7 @@ theorem sinTwoTheta_residual_le_of_spectralDistance
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated M ⊤ A Uᗮ δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointSpectraSeparated M ⊤ A Uᗮ δ) :
     δ * N (sinTwoThetaEmbedding U X) ≤
       Real.pi * N (residual A X M) := by
   have hdouble := sinTwoThetaEmbedding_uiNorm_le_two_mul N U X

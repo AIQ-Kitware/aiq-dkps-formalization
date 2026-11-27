@@ -9,7 +9,7 @@ uses the accepted TauCeti pairwise API (#24932) directly and is retired here.
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
--- `PointSpectraSeparated` is the *hypothesis* predicate of the challenge, not part of what is to
+-- `Module.End.PointSpectraSeparated` is the *hypothesis* predicate of the challenge, not part of what is to
 -- be proved; the challenged theorems live in `DavisKahan.FiniteDimensional.Sylvester.All`,
 -- which only the paired leaderboard imports.
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap
@@ -43,7 +43,7 @@ particular separated Sylvester solution. -/
 theorem sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     UnitarilyInvariantSeminorm.HasFiniteUnitaryOrbitCertificate
       (Real.pi / 2) (((δ : 𝕜)) • X) C := by

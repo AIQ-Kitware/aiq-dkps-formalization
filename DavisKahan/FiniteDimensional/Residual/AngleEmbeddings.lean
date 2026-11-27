@@ -339,7 +339,7 @@ private theorem exists_intervalGap_of_orderedGap
     {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [Nontrivial F]
     {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
-    {δ : ℝ} (hgap : OrderedGap M ⊤ A Uᗮ δ) :
+    {δ : ℝ} (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) :
     ∃ β α, β ≤ α ∧ Module.End.PointSpectrumIn M ⊤ (Set.Icc β α) ∧
       Module.End.PointSpectrumIn A Uᗮ (Set.Ici (α + δ)) := by
   let : NeZero (finrank 𝕜 F) := ⟨Nat.ne_of_gt Module.finrank_pos⟩
@@ -377,8 +377,7 @@ private theorem exists_intervalGap_of_orderedGap
   have hAspec : Module.End.PointSpectrumIn A Uᗮ (Set.Ici (α + δ)) := by
     apply Module.End.pointSpectrumIn_iff_restrictedPointSpectrum_subset.mpr
     intro μ hμ
-    exact hgap α μ
-      (eigenvalue_mem_restrictedPointSpectrum_top hM iTop) hμ
+    exact hgap.add_le (eigenvalue_mem_restrictedPointSpectrum_top hM iTop) hμ
   exact ⟨β, α, hβα, hMspec, hAspec⟩
 
 /-- An ordered Ritz-to-unwanted-spectrum gap forces transversality. -/
@@ -387,7 +386,7 @@ theorem isTransverse_of_orderedRitzGap
     [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) :
     Disjoint (approximateSubspace X) Uᗮ := by
   rcases subsingleton_or_nontrivial F with _ | _
   · rw [Submodule.disjoint_def]
@@ -409,7 +408,7 @@ theorem tanThetaEmbedding_residual_le_of_orderedGap
     [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) :
     δ * N (tanThetaEmbedding U X) ≤ N (residual A X M) := by
   rcases subsingleton_or_nontrivial F with _ | _
   · have hT : tanThetaEmbedding U X = 0 := by
@@ -459,7 +458,7 @@ theorem tanTheta_residual_le
     [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) :
     δ * N (tanThetaEmbedding U X) ≤ N (residual A X M) :=
   tanThetaEmbedding_residual_le_of_orderedGap
     N hA hU X hM hGalerkin hδ hgap
@@ -471,7 +470,7 @@ theorem isTransverse_of_tanTheta_residual_gap
     [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) :
     Disjoint (approximateSubspace X) Uᗮ :=
   isTransverse_of_orderedRitzGap
     hA hU X hM hGalerkin hδ hgap
@@ -486,7 +485,7 @@ theorem tanTheta_vector_le
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
     {δ ρ : ℝ} (hδ : 0 < δ)
-    (hgap : OrderedGap M ⊤ A Uᗮ δ)
+    (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ)
     (hres : ∀ y, ‖residual A X M y‖ ≤ ρ * ‖y‖) :
     ∀ y, δ * ‖sinThetaEmbedding U X y‖ ≤
       ρ * ‖cosThetaEmbedding U X y‖ := by

@@ -110,13 +110,14 @@ theorem leftSingularSubspace_sinTheta_le
 single Davis--Kahan application.
 
 Signature audit: the previous constant-one conclusion was too strong for an
-arbitrary `HybridGap`; constant one requires a stronger gap predicate.
+arbitrary separation of the two restricted point spectra.
 -/
 theorem singularSubspace_dilation_sinTheta_le
     {A Â : E →ₗ[𝕜] F} {Ω : Set ℝ} {δ : ℝ} (_hδ : 0 < δ)
-    (hgap : HybridGap (LinearMap.hermitianDilation A) (LinearMap.hermitianDilation Â)
+    (hgap : Module.End.PointSpectraSeparated (LinearMap.hermitianDilation A)
       (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation A) Ω)
-      (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω) δ) :
+      (LinearMap.hermitianDilation Â)
+      (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω)ᗮ δ) :
     δ * ‖((Module.End.pointSpectralSubspace (LinearMap.hermitianDilation A) Ω).sinThetaMap
         (Module.End.pointSpectralSubspace (LinearMap.hermitianDilation Â) Ω))‖
       ≤
@@ -131,7 +132,7 @@ theorem singularSubspace_dilation_sinTheta_le
         (Ω := Ω)) (Submodule.mem_map_of_mem hx)))
     ((fun _ hx => (Module.End.map_pointSpectralSubspace_le (A := (LinearMap.hermitianDilation Â))
         (Ω := Ω)) (Submodule.mem_map_of_mem hx)))
-    (Module.End.pointSpectraSeparated_iff.mpr fun lam hlam μ hμ => hgap lam μ hlam hμ)
+    hgap
   have hnative (T : WithLp 2 (E × F) →L[𝕜] WithLp 2 (E × F)) :
       T.toLinearMap.toContinuousLinearMap = T :=
     LinearMap.toContinuousLinearMap.apply_symm_apply T

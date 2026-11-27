@@ -320,11 +320,12 @@ carries only the value `3`, and its complement carries `5` and `1`, both at
 distance exactly `2`.  This is the feature the preprint's top-block example
 lacks. -/
 theorem pointInternalGap_middleSharpness (hdp : 2 * d ≤ p) :
-    PointInternalGap (middleSharpnessPopulation b d)
+    Module.End.PointInternalGap (middleSharpnessPopulation b d)
       (eigenspace (middleSharpnessPopulation b d) ((3 : ℝ) : 𝕜)) 2 := by
   refine ⟨?_, ?_⟩
-  · exact Module.End.eigenspace_mem_invtSubmodule _ _
-  · intro lam μ hlam hμ
+  · exact (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+      (Module.End.eigenspace_mem_invtSubmodule _ _)
+  · refine Module.End.pointSpectraSeparated_iff.mpr fun lam hlam μ hμ => ?_
     rw [eigenspace_middleSharpnessPopulation b] at hlam hμ
     have h3 : lam = 3 := by
       obtain ⟨i, hi, rfl⟩ :=

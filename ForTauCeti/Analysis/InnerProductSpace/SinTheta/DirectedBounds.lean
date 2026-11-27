@@ -206,7 +206,7 @@ theorem sinTheta_residual_le_of_orderedGap
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) :
     δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
   refine (sinTheta_residual_le_of_sylvester (c := 1) N hA hU X zero_le_one
     ?_).trans_eq (one_mul _)
@@ -215,8 +215,8 @@ theorem sinTheta_residual_le_of_orderedGap
   have hgap' : OrderedSylvesterGap (A.restrict
       ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hUperp)) M δ := by
     left
-    intro lam μ hlam hμ
-    apply hgap lam μ hlam
+    refine Module.End.pointOrderedGap_iff.mpr fun lam hlam μ hμ => ?_
+    apply hgap.add_le hlam
     -- restates the spectrum membership through the restriction, the form the
     -- following step matches.
     change μ ∈ Module.End.restrictedPointSpectrum (A.restrict
@@ -237,26 +237,25 @@ theorem sinTheta_residual_le_of_spectralDistance
     [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (_hδ : 0 < δ)
-    (hgap : PointSpectraSeparated M ⊤ A Uᗮ δ) :
+    (hgap : Module.End.PointSpectraSeparated M ⊤ A Uᗮ δ) :
     δ * N (sinThetaEmbedding U X) ≤ (Real.pi / 2) * N (residual A X M) := by
   refine sinTheta_residual_le_of_sylvester (c := Real.pi / 2) N hA hU X
     (by positivity) ?_
   intro Y C hEq
   have hUperp := LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU
-  have hgap' : PointSpectraSeparated (A.restrict
+  have hgap' : Module.End.PointSpectraSeparated (A.restrict
       ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hUperp)) ⊤ M ⊤ δ := by
-    intro lam μ hlam hμ
+    refine Module.End.pointSpectraSeparated_iff.mpr fun lam hlam μ hμ => ?_
     have hlam' : lam ∈ Module.End.restrictedPointSpectrum A Uᗮ := by
       rw [← restrictedPointSpectrum_restrict A hUperp]
       exact hlam
-    have hsep := hgap μ lam hμ hlam'
-    simpa [abs_sub_comm] using hsep
+    exact hgap.symm.le_abs_sub hlam' hμ
   have h := UnitarilyInvariantSeminorm.mul_map_le_pi_div_two_mul_map_sylvester_apply
       (N.codomainIsometryTransport Uᗮ.subtypeₗᵢ)
       (A := (A.restrict
         ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hUperp)).toContinuousLinearMap)
       (B := M.toContinuousLinearMap) (hA.restrict_invariant hUperp) hM
-      (Module.End.pointSpectraSeparated_iff.mpr fun lam hlam μ hμ => hgap' lam μ hlam hμ)
+      hgap'
       Y.toContinuousLinearMap
   simp only [ContinuousLinearMap.sylvester_apply, ContinuousLinearMap.toLinearMap_sub,
     ContinuousLinearMap.toLinearMap_comp, LinearMap.coe_toContinuousLinearMap] at h

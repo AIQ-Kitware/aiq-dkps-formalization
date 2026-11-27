@@ -82,19 +82,20 @@ variable {𝕜 : Type*} [RCLike 𝕜]
   {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
 
 example {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E} {δ : ℝ}
-    (hgap : PointInternalGap A U δ) : (U ∈ Module.End.invtSubmodule A) := hgap.1
+    (hgap : Module.End.PointInternalGap A U δ) : (U ∈ Module.End.invtSubmodule A) :=
+  (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mpr hgap.invariant
 
 example {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} {δ c : ℝ} (hgap : PointInternalGap A U δ)
+    {U : Submodule 𝕜 E} {δ c : ℝ} (hgap : Module.End.PointInternalGap A U δ)
     (hspec : Module.End.PointSpectrumIn A U (Set.Iic c)) :
     ∀ x ∈ U, RCLike.re ⟪A x, x⟫_𝕜 ≤ c * ‖x‖ ^ 2 :=
-  upperFormBound_of_pointSpectrumIn hA hgap.1 hspec
+  upperFormBound_of_pointSpectrumIn hA ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mpr hgap.invariant) hspec
 
 example {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} {δ c : ℝ} (hgap : PointInternalGap A U δ)
+    {U : Submodule 𝕜 E} {δ c : ℝ} (hgap : Module.End.PointInternalGap A U δ)
     (hspec : Module.End.PointSpectrumIn A U (Set.Ici c)) :
     ∀ x ∈ U, c * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜 :=
-  lowerFormBound_of_pointSpectrumIn hA hgap.1 hspec
+  lowerFormBound_of_pointSpectrumIn hA ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mpr hgap.invariant) hspec
 
 end PointGaps
 

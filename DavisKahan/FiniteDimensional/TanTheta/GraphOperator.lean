@@ -37,7 +37,7 @@ theorem tanTheta_perturbation_le
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) :
     δ * N (tanThetaEmbedding U X) ≤ N (residual A X M) :=
   tanThetaEmbedding_residual_le_of_orderedGap
     N hA hU X hM hGalerkin hδ hgap
@@ -49,7 +49,7 @@ theorem tanThetaMap_perturbation_le
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) :
     δ * N (graphOperator U X) ≤ N (residual A X M) := by
   simpa [graphOperator] using
     tanTheta_perturbation_le N hA hU X hM hGalerkin hδ hgap
@@ -60,7 +60,7 @@ theorem opNorm_tanTheta_le
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) :
     δ * ‖(tanThetaEmbedding U X).toContinuousLinearMap‖ ≤
       ‖(residual A X M).toContinuousLinearMap‖ := by
   simpa using tanTheta_perturbation_le
@@ -73,7 +73,7 @@ theorem frobenius_tanTheta_le
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) :
     δ * UnitarilyInvariantSeminorm.frobenius 𝕜 F E (tanThetaEmbedding U X) ≤
       UnitarilyInvariantSeminorm.frobenius 𝕜 F E (residual A X M) :=
   tanTheta_perturbation_le
@@ -86,7 +86,7 @@ theorem kyFan_tanTheta_le
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     (hGalerkin : M = compression A X)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : OrderedGap M ⊤ A Uᗮ δ) (k : ℕ) :
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointOrderedGap M ⊤ A Uᗮ δ) (k : ℕ) :
     δ * (tanThetaEmbedding U X).kyFanSum k ≤
       (residual A X M).kyFanSum k := by
   simpa only [UnitarilyInvariantSeminorm.kyFan_apply] using

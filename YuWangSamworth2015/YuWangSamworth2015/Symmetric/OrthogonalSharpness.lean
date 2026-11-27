@@ -239,11 +239,12 @@ spectrum of the leading block is `{3}` and of its complement is `{1}`.
 No size hypotheses on `d`: if either block is trivial the separation holds
 vacuously, so the statement is cleanest without them. -/
 theorem pointInternalGap_orthogonalSharpness :
-    PointInternalGap (orthogonalSharpnessPopulation b d)
+    Module.End.PointInternalGap (orthogonalSharpnessPopulation b d)
       (eigenspace (orthogonalSharpnessPopulation b d) ((3 : ℝ) : 𝕜)) 2 := by
   refine ⟨?_, ?_⟩
-  · exact Module.End.eigenspace_mem_invtSubmodule _ _
-  · intro lam μ hlam hμ
+  · exact (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+      (Module.End.eigenspace_mem_invtSubmodule _ _)
+  · refine Module.End.pointSpectraSeparated_iff.mpr fun lam hlam μ hμ => ?_
     rw [eigenspace_orthogonalSharpnessPopulation] at hlam hμ
     -- The block carries only the value `3`.
     have h3 : lam = 3 := by

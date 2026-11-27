@@ -189,18 +189,18 @@ theorem sinTheta_perturbation_le
     [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
         Module.End.invtSubmodule B))
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
+    (hgap : Module.End.PointIntervalExteriorGap A U B Vᗮ a b δ) :
     δ * N ((U.sinThetaMap V).toLinearMap) ≤ N (B - A) := by
   let NU : UnitarilyInvariantSeminorm 𝕜 U E :=
     N.domainIsometryTransport U.subtypeₗᵢ
   have hM : (A.restrict hU).IsSymmetric := hA.restrict_invariant hU
   have hMspec : Module.End.PointSpectrumIn (A.restrict hU) ⊤ (Set.Icc a b) :=
-    (pointSpectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgap.1
+    (pointSpectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgap.pointSpectrumIn_Icc
   have hres :
       δ * NU (sinThetaEmbedding V U.subtypeₗᵢ) ≤
         NU (residual B U.subtypeₗᵢ (A.restrict hU)) :=
     sinTheta_residual_le (A := B) (U := V) (M := A.restrict hU)
-      NU hB hV U.subtypeₗᵢ hM hδ hMspec hgap.2
+      NU hB hV U.subtypeₗᵢ hM hδ hMspec hgap.pointSpectrumIn_compl_Ioo
   have hsin :
       NU (sinThetaEmbedding V U.subtypeₗᵢ) = N ((U.sinThetaMap V).toLinearMap) :=
     domainTransport_sinThetaEmbedding_apply N U V
@@ -222,14 +222,14 @@ theorem sinTheta_perturbation_le_of_orderedGap
     [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
         Module.End.invtSubmodule B))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : OrderedGap A U B Vᗮ δ) :
+    (hgap : Module.End.PointOrderedGap A U B Vᗮ δ) :
     δ * N ((U.sinThetaMap V).toLinearMap) ≤ N (B - A) := by
   let NU : UnitarilyInvariantSeminorm 𝕜 U E :=
     N.domainIsometryTransport U.subtypeₗᵢ
   have hM : (A.restrict hU).IsSymmetric := hA.restrict_invariant hU
-  have hgap' : OrderedGap (A.restrict hU) ⊤ B Vᗮ δ := by
-    intro lam μ hlam hμ
-    apply hgap lam μ
+  have hgap' : Module.End.PointOrderedGap (A.restrict hU) ⊤ B Vᗮ δ := by
+    refine Module.End.pointOrderedGap_iff.mpr fun lam hlam μ hμ => ?_
+    apply hgap.add_le
     · rw [← restrictedPointSpectrum_restrict A hU]
       exact hlam
     · exact hμ
@@ -259,7 +259,7 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
     [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
     (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : PointSpectraSeparated M ⊤ A Uᗮ δ) :
+    (hgap : Module.End.PointSpectraSeparated M ⊤ A Uᗮ δ) :
     δ * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := E)
         (sinThetaEmbedding U X) ≤
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := F) (F := E)
@@ -272,13 +272,12 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
   let C : F →ₗ[𝕜] Uᗮ :=
     Uᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ residual A X M
   have hAU : AU.IsSymmetric := hA.restrict_invariant hUperp
-  have hgap' : PointSpectraSeparated AU ⊤ M ⊤ δ := by
-    intro lam mu hlam hmu
+  have hgap' : Module.End.PointSpectraSeparated AU ⊤ M ⊤ δ := by
+    refine Module.End.pointSpectraSeparated_iff.mpr fun lam hlam mu hmu => ?_
     have hlam' : lam ∈ Module.End.restrictedPointSpectrum A Uᗮ := by
       rw [← restrictedPointSpectrum_restrict A hUperp]
       exact hlam
-    have hsep := hgap mu lam hmu hlam'
-    simpa [abs_sub_comm] using hsep
+    exact hgap.symm.le_abs_sub hlam' hmu
   have hEq : AU ∘ₗ Y - Y ∘ₗ M = C :=
     sylvester_projectedResidual_eq hA hU hUperp X M
   have hSylv := frobenius_sylvester_le_of_pointSpectraSeparated
@@ -311,7 +310,7 @@ theorem frobenius_sinTheta_le
     [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
         Module.End.invtSubmodule B))
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
+    (hgap : Module.End.PointIntervalExteriorGap A U B Vᗮ a b δ) :
     δ * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)
         (U.sinThetaMap V).toLinearMap ≤
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) := by
@@ -326,7 +325,7 @@ theorem kyFan_sinTheta_le
     [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
         Module.End.invtSubmodule B))
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) (k : ℕ) :
+    (hgap : Module.End.PointIntervalExteriorGap A U B Vᗮ a b δ) (k : ℕ) :
     δ * ((U.sinThetaMap V).toLinearMap).kyFanSum k ≤ (B - A).kyFanSum k := by
   let NK : UnitarilyInvariantSeminorm 𝕜 E E :=
     (UnitarilyInvariantSeminorm.kyFan

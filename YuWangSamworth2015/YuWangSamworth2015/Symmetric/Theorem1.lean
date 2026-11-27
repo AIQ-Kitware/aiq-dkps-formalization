@@ -39,7 +39,7 @@ theorem yuWangSamworth_theorem1_uiNorm_le
     [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
         Module.End.invtSubmodule B))
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
+    (hgap : Module.End.PointIntervalExteriorGap A U B Vᗮ a b δ) :
     N ((U.sinThetaMap V).toLinearMap) ≤ N (B - A) / δ := by
   rw [le_div_iff₀ hδ]
   simpa only [mul_comm] using
@@ -55,7 +55,7 @@ theorem yuWangSamworth_theorem1_frobenius_le
     [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
         Module.End.invtSubmodule B))
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
+    (hgap : Module.End.PointIntervalExteriorGap A U B Vᗮ a b δ) :
     Submodule.sinThetaFrobenius U V ≤
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) / δ := by
   rw [Submodule.sinThetaFrobenius_def]
@@ -70,7 +70,7 @@ theorem yuWangSamworth_theorem1_opNorm_le
     [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
         Module.End.invtSubmodule B))
     {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : PointIntervalExteriorGap A U B Vᗮ a b δ) :
+    (hgap : Module.End.PointIntervalExteriorGap A U B Vᗮ a b δ) :
     ‖(U.sinThetaMap V)‖ ≤
       ‖(B - A).toContinuousLinearMap‖ / δ := by
   rw [le_div_iff₀ hδ]
@@ -79,7 +79,7 @@ theorem yuWangSamworth_theorem1_opNorm_le
   have h := Submodule.mul_norm_sinThetaMap_le_norm_sub_of_pointIntervalExteriorGap
     U V (A := A.toContinuousLinearMap) (B := B.toContinuousLinearMap) hA hB
     ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hU)
-    ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem B).mp hV) ⟨hgap.1, hgap.2⟩
+    ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem B).mp hV) hgap
   simpa only [hdiff, mul_comm] using h
 
 /-! ## Equation (1)

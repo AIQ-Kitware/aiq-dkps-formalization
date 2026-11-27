@@ -10,27 +10,11 @@ public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 /-!
 # Finite-dimensional spectral-gap predicates
 
-Canonical separation hypotheses used by the sine, tangent, double-angle, and
-Sylvester theorem families.
+The native point-spectrum predicates live in `Module.End`. This module
+records the two-sided form bound and the two orientations of an ordered
+internal gap used by the Davis–Kahan theorems.
 
-## Sources
-
-The spectral-gap predicates are the hypotheses of Davis--Kahan's `sin Θ` theorem in
-the form the theorem consumes; see
-`prose/core-arguments/Davis-Kahan-1970-part-III-core-arguments.tex`.
-
-## Provenance
-
-*Moved, not restated.*  This file was
-`DavisKahan/FiniteDimensional/Core/SpectralGap.lean`
-before the dependency-closed base of the sin-Θ core moved into the staging
-layer.  Statements, proofs, signatures and namespaces are
-unchanged; the declarations already lived in `TauCeti.DavisKahan*`, so the move
-was a path change and an import repoint and nothing else.
-
-The move became possible only once Y3(b2) took the `ForMathlib`
-inner-product-space component into `ForTauCeti`: before that this file's import
-closure crossed `ForMathlib`, which the `ForTauCeti` layer rule forbids.
+The original source was `DavisKahan/FiniteDimensional/Core/SpectralGap.lean`.
 -/
 
 public section
@@ -43,35 +27,6 @@ open Module (finrank)
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
-variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-  [FiniteDimensional 𝕜 F]
-
-/-- Two restricted spectra are separated by at least `δ`. -/
-@[expose]
-def PointSpectraSeparated (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
-    (B : F →ₗ[𝕜] F) (V : Submodule 𝕜 F) (δ : ℝ) : Prop :=
-  ∀ lam μ, lam ∈ Module.End.restrictedPointSpectrum A U →
-    μ ∈ Module.End.restrictedPointSpectrum B V →
-    δ ≤ |lam - μ|
-
-/-- The mixed separation used by the `sin Θ` theorem: the selected block of
-`A` is separated from the complementary block of `B`. -/
-@[expose]
-def HybridGap (A B : E →ₗ[𝕜] E) (U V : Submodule 𝕜 E) (δ : ℝ) : Prop :=
-  PointSpectraSeparated A U B Vᗮ δ
-
-/-- Invariance of `U` and separation of the point spectra on `U` and its complement.
-
-This predicate is appropriate for the `sin Θ` and `sin (2Θ)` families and for
-the general disjoint-spectrum Sylvester estimate.  It is not sufficient for
-the sharp `tan (2Θ)` theorem: interlacing spectra can satisfy absolute
-separation while an off-diagonal perturbation produces a quarter-turn angle.
-That theorem requires `OrderedInternalGap` (or an equivalent two-sided form
-ordering). -/
-@[expose]
-def PointInternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) : Prop :=
-  (U ∈ Module.End.invtSubmodule A) ∧ PointSpectraSeparated A U A Uᗮ δ
-
 /-- Ordered quadratic-form separation between the two blocks of `A`.
 
 The selected block `U` lies above `b`, while its orthogonal complement lies
@@ -83,51 +38,11 @@ def TwoBlockFormGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
   (∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜) ∧
     (∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_𝕜 ≤ a * ‖x‖ ^ 2)
 
-/-- Point spectra in an interval and its enlarged exterior, on possibly different spaces.
-The complementary subspace, when needed, is supplied explicitly by the caller. -/
-@[expose]
-def PointIntervalExteriorGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
-    (B : F →ₗ[𝕜] F) (V : Submodule 𝕜 F) (a b δ : ℝ) : Prop :=
-  Module.End.PointSpectrumIn A U (Set.Icc a b) ∧
-    Module.End.PointSpectrumIn B V {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}
-
-/-- The one-sided gap used by the tangent theorems. -/
-@[expose]
-def OrderedGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E)
-    (B : F →ₗ[𝕜] F) (V : Submodule 𝕜 F) (δ : ℝ) : Prop :=
-  ∀ lam μ, lam ∈ Module.End.restrictedPointSpectrum A U →
-    μ ∈ Module.End.restrictedPointSpectrum B V →
-    lam + δ ≤ μ
-
 /-- Ordered separation of the two diagonal blocks of `A`, in either
 orientation.  This stronger predicate is useful when reducing a double-angle
 argument to the elementary ordered Sylvester theorem. -/
 def OrderedInternalGap (A : E →ₗ[𝕜] E) (U : Submodule 𝕜 E) (δ : ℝ) : Prop :=
-  OrderedGap A U A Uᗮ δ ∨ OrderedGap A Uᗮ A U δ
-
-omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
-/-- The conversion between the two primitives, and the reason both are named: a theorem
-family stated against the weaker hypothesis applies to a caller holding the stronger one. -/
-theorem PointSpectraSeparated.of_orderedGap {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E}
-    {B : F →ₗ[𝕜] F} {V : Submodule 𝕜 F} {δ : ℝ} (hδ : 0 ≤ δ)
-    (h : OrderedGap A U B V δ) : PointSpectraSeparated A U B V δ := by
-  intro lam μ hlam hμ
-  have hle : lam + δ ≤ μ := h lam μ hlam hμ
-  rw [abs_sub_comm, abs_of_nonneg (by linarith : (0 : ℝ) ≤ μ - lam)]
-  linarith
-
-omit [FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F] in
-/-- Spectral inclusion on opposite sides of a cut gives ordered separation: the bridge that
-turns a hypothesis a caller can check into the one the theorems consume. -/
-theorem orderedGap_of_restrictedPointSpectrum_subset {A : E →ₗ[𝕜] E} {U : Submodule 𝕜 E}
-    {B : F →ₗ[𝕜] F} {V : Submodule 𝕜 F} {a δ : ℝ}
-    (hA : Module.End.restrictedPointSpectrum A U ⊆ Set.Iic a)
-    (hB : Module.End.restrictedPointSpectrum B V ⊆ Set.Ici (a + δ)) :
-    OrderedGap A U B V δ := by
-  intro lam μ hlam hμ
-  have h1 : lam ≤ a := hA hlam
-  have h2 : a + δ ≤ μ := hB hμ
-  linarith
+  Module.End.PointOrderedGap A U A Uᗮ δ ∨ Module.End.PointOrderedGap A Uᗮ A U δ
 
 omit [FiniteDimensional 𝕜 E] in
 /-- Spectral inclusion on opposite sides of a cut gives the corresponding
@@ -138,31 +53,19 @@ theorem orderedInternalGap_of_pointSpectrumIn_Iic_Ici
     (hUb : Module.End.PointSpectrumIn A Uᗮ (Set.Ici b)) :
     OrderedInternalGap A U (b - a) := by
   left
-  intro lam μ hlam hμ
-  obtain ⟨x, hxU, hx0, hAx⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam
-  obtain ⟨y, hyU, hy0, hAy⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hμ
-  have hlam_le : lam ≤ a := (Module.End.pointSpectrumIn_iff.mp hUa) x hxU hx0 lam hAx
-  have hb_le_hμ : b ≤ μ := (Module.End.pointSpectrumIn_iff.mp hUb) y hyU hy0 μ hAy
-  linarith
+  exact Module.End.PointOrderedGap.of_pointSpectrumIn hUa (by
+    rw [show a + (b - a) = b by ring]
+    exact hUb)
 
 omit [FiniteDimensional 𝕜 E] in
-/-- Ordered block separation implies absolute block separation.
--/
+/-- Ordered separation in either direction gives an internal point-spectrum gap. -/
 theorem OrderedInternalGap.pointInternalGap {A : E →ₗ[𝕜] E}
-    {U : Submodule 𝕜 E} {δ : ℝ} (hδ : 0 ≤ δ)
+    {U : Submodule 𝕜 E} {δ : ℝ} (_hδ : 0 ≤ δ)
     (h : OrderedInternalGap A U δ) (hU : (U ∈ Module.End.invtSubmodule A)) :
-    PointInternalGap A U δ := by
-  refine ⟨hU, ?_⟩
-  intro lam μ hlam hμ
+    Module.End.PointInternalGap A U δ := by
+  refine ⟨(Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hU, ?_⟩
   rcases h with hlow | hhigh
-  · have hle := hlow lam μ hlam hμ
-    have hlam_le : lam ≤ μ := by linarith
-    rw [abs_of_nonpos (sub_nonpos.mpr hlam_le)]
-    linarith
-  · have hle := hhigh μ lam hμ hlam
-    have hμ_le : μ ≤ lam := by linarith
-    rw [abs_of_nonneg (sub_nonneg.mpr hμ_le)]
-    linarith
-
+  · exact hlow.pointSpectraSeparated
+  · exact hhigh.pointSpectraSeparated.symm
 
 end TauCeti

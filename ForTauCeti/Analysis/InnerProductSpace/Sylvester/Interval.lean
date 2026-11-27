@@ -262,7 +262,7 @@ theorem uiNorm_sylvester_le_of_orderedGap
         hB.eigenvalues_antitone rfl (Fin.zero_le j))
     have hAform : ∀ y, (c + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A y, y⟫_𝕜 :=
       le_re_inner_of_le_eigenvalues hA fun i =>
-        hBA c (hA.eigenvalues rfl i)
+        hBA.add_le
           (eigenvalue_mem_restrictedPointSpectrum_top hB j₀)
           (eigenvalue_mem_restrictedPointSpectrum_top hA i)
     exact uiNorm_sylvester_le_of_form_bounds_aux N hA hB hδ hAform hBform hEq
@@ -273,7 +273,7 @@ theorem uiNorm_sylvester_le_of_orderedGap
         hA.eigenvalues_antitone rfl (Fin.zero_le i))
     have hBform : ∀ x, (c + δ) * ‖x‖ ^ 2 ≤ RCLike.re ⟪B x, x⟫_𝕜 :=
       le_re_inner_of_le_eigenvalues hB fun j =>
-        hAB c (hB.eigenvalues rfl j)
+        hAB.add_le
           (eigenvalue_mem_restrictedPointSpectrum_top hA i₀)
           (eigenvalue_mem_restrictedPointSpectrum_top hB j)
     have hEqAdj : B ∘ₗ X.adjoint - X.adjoint ∘ₗ A = -C.adjoint :=

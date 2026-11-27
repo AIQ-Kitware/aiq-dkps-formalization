@@ -7696,6 +7696,63 @@
       "accepted_head": "01993c4a4d90bdd49bd6cfd526d3753fd76d3c20",
       "status": "accepted-upstream-local-duplicates-retired",
       "migration_note": "Use the real unit-vector chord inequality on the local first-display rank-one sine bound, then apply the native singleton projection formula. This removes the private sign-minimization proof and preserves the paper's arbitrary sorted index, inherited unit normalization, sign convention, and single population-gap hypothesis. #45606 reuses native UI-norm infrastructure for its finite-dimensional trial-vector bounds. Its leading-eigenvector existence, uniqueness up to sign and norm bound are adapted from lean-CKSD and have a different conclusion and perturbation hypothesis. DKPS direct proof descent for the chord lemma is unestablished."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
+      "source_declarations": [
+        "TauCeti.PointSpectraSeparated",
+        "TauCeti.OrderedGap",
+        "TauCeti.PointIntervalExteriorGap",
+        "TauCeti.HybridGap",
+        "TauCeti.PointSpectraSeparated.of_orderedGap",
+        "TauCeti.orderedGap_of_restrictedPointSpectrum_subset"
+      ],
+      "original_source_anchor": "8c5d195c1f64a0a79ca418ee5b2f45ae7abc3fc5:ForTauCeti/Analysis/InnerProductSpace/Spectral/Gap.lean (formerly DavisKahan/FiniteDimensional/Core/SpectralGap.lean)",
+      "authors_license": "Jon Crall and GPT 5.6 High, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PointSpectrum",
+      "final_declarations": [
+        "Module.End.PointSpectraSeparated",
+        "Module.End.PointOrderedGap",
+        "Module.End.PointIntervalExteriorGap",
+        "Module.End.PointOrderedGap.pointSpectraSeparated",
+        "Module.End.PointOrderedGap.of_pointSpectrumIn"
+      ],
+      "roadmap_targets": ["PA-C24", "PA-C25", "PA-C26", "PA-C27", "PA-C28", "PA-C29"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/14532",
+      "integration": "7fcae82a65223af362d94a676a23698ce76142fc",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "Consume restricted point-spectrum predicates directly, with the original real separation parameters and no added nonemptiness assumptions. The finite HybridGap alias unfolds to native separation from the unwanted complement. The ordered-to-absolute implication now uses the upstream law for signed gaps. Keep the ordered internal disjunction, two-block form bound, and distinct bounded-operator full-spectrum predicates. Direct DKPS proof descent in this integration is unestablished."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
+      "source_declarations": ["TauCeti.PointInternalGap"],
+      "original_source_anchor": "8c5d195c1f64a0a79ca418ee5b2f45ae7abc3fc5:ForTauCeti/Analysis/InnerProductSpace/Spectral/Gap.lean",
+      "authors_license": "Jon Crall and GPT 5.6 High, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.PointSpectrum",
+      "final_declarations": [
+        "Module.End.PointInternalGap",
+        "Module.End.PointInternalGap.invariant",
+        "Module.End.PointInternalGap.pointSpectraSeparated"
+      ],
+      "roadmap_targets": ["SSP-S01"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/18947",
+      "integration": "284013312c7480b6b323163da3e5ce988998df96",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "DKPS's submission explicitly adapted Spectral/Gap.lean. The native structure expresses invariance by membership preservation and keeps the same point-spectrum separation. All callers now use the native predicate and named fields."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Spectral.ResidualGap",
+      "source_declarations": ["TauCeti.sq_gap_mul_sum_sq_norm_starProjection_orthogonal_le"],
+      "original_source_anchor": "519e08272205896c588aee4a6de90861bc897f01:ForTauCeti/Analysis/InnerProductSpace/Spectral/ResidualGap.lean",
+      "authors_license": "Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Corollaries",
+      "final_declarations": ["LinearMap.IsSymmetric.mul_norm_starProjection_orthogonal_le_norm_apply_sub_smul"],
+      "roadmap_targets": ["MathematicalStatisticsHighDimensional §8.1"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/45606",
+      "integration": "34405704668a79e04ff8a394b9c4bc24e53102b1",
+      "accepted_head": "01993c4a4d90bdd49bd6cfd526d3753fd76d3c20",
+      "status": "consumed-upstream-with-dkps-result-retained",
+      "migration_note": "The sum-of-squares estimate uses the native single-vector bound at each trial value. The finite-dimensional RCLike statement still covers arbitrary trial families and zero separation. The eigenfamily spanning lemma and family-level statement remain local. The single-vector theorem derives from the native UI-norm bound. #45606 credits lean-CKSD for the leading-eigenvector perturbation proof. Direct DKPS proof descent for the single-vector corollary is unestablished."
     }
   ],
   "current_consumption_pin": "fba9bfbf453bcf0d77efdde60fbce2376c2e35a8"

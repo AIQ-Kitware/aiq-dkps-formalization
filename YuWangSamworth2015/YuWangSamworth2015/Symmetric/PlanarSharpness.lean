@@ -113,7 +113,7 @@ theorem correspondingEigenblock_planarSharpness (hv : ‖v‖ = 1) (hw : ‖w‖
 omit [FiniteDimensional 𝕜 E] in
 /-- **The population gap is `λ₁ − λ₂ = 3 − 1 = 2`.** -/
 theorem pointInternalGap_planarSharpness :
-    PointInternalGap (twoLevelOperator (𝕜 := 𝕜) 1 3 (𝕜 ∙ v))
+    Module.End.PointInternalGap (twoLevelOperator (𝕜 := 𝕜) 1 3 (𝕜 ∙ v))
       (eigenspace (twoLevelOperator (𝕜 := 𝕜) 1 3 (𝕜 ∙ v)) ((3 : ℝ) : 𝕜)) 2 := by
   rw [eigenspace_planarSharpness]
   simpa only [show (3 : ℝ) - 1 = 2 by norm_num] using

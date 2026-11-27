@@ -110,7 +110,7 @@ scalar identity recovers `δ • X = p • Y`. -/
 theorem sylvester_barycentricOrbitRepresentation_of_spectralDistance
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     ∃ m : ℝ, 0 ≤ m ∧ m ≤ Real.pi / 2 ∧
       ∃ Y : E →ₗ[𝕜] F,
@@ -132,7 +132,7 @@ theorem sylvester_barycentricOrbitRepresentation_of_spectralDistance
     intro k
     have hcore := ContinuousLinearMap.mul_kyFanSum_le_pi_div_two_mul_kyFanSum_sylvester_apply
       (A := A.toContinuousLinearMap) (B := B.toContinuousLinearMap) hA hB
-      (Module.End.pointSpectraSeparated_iff.mpr fun lam hlam μ hμ => hgap lam μ hlam hμ)
+      hgap
       X.toContinuousLinearMap k
     simp only [ContinuousLinearMap.sylvester_apply, ContinuousLinearMap.toLinearMap_sub,
       ContinuousLinearMap.toLinearMap_comp, LinearMap.coe_toContinuousLinearMap, hEq] at hcore
@@ -171,7 +171,7 @@ certificate at that mass is refuted. -/
 theorem sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     UnitarilyInvariantSeminorm.HasFiniteUnitaryOrbitCertificate
       (Real.pi / 2) (((δ : 𝕜)) • X) C := by
@@ -196,7 +196,7 @@ controlled by the residual with no dimensional or analytic loss. -/
 theorem frobenius_sylvester_le_of_pointSpectraSeparated
     {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : PointSpectraSeparated A ⊤ B ⊤ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : Module.End.PointSpectraSeparated A ⊤ B ⊤ δ)
     (hEq : A ∘ₗ X - X ∘ₗ B = C) :
     δ * UnitarilyInvariantSeminorm.frobenius 𝕜 E F X ≤
       UnitarilyInvariantSeminorm.frobenius 𝕜 E F C := by
@@ -209,7 +209,7 @@ theorem frobenius_sylvester_le_of_pointSpectraSeparated
     intro i j
     have hcoef := sylvester_eigenbasis_coefficient_equation hA hB hEq i j
     have hsep : δ ≤ |hA.eigenvalues rfl i - hB.eigenvalues rfl j| :=
-      hgap _ _ (eigenvalue_mem_restrictedPointSpectrum_top hA i)
+      hgap.le_abs_sub (eigenvalue_mem_restrictedPointSpectrum_top hA i)
         (eigenvalue_mem_restrictedPointSpectrum_top hB j)
     have hnorm :
         ‖((hA.eigenvalues rfl i : 𝕜) - (hB.eigenvalues rfl j : 𝕜))‖ =

@@ -183,11 +183,12 @@ operator level.**  The block carries only `20`, and its complement carries `50`,
 Theorem 1 does not.  `pointInternalGap_section1_paperBlock` is the same fact at the
 block the article actually selects. -/
 theorem pointInternalGap_section1 :
-    PointInternalGap (section1Population b)
+    Module.End.PointInternalGap (section1Population b)
       (eigenspace (section1Population b) ((20 : ℝ) : 𝕜)) 10 := by
   refine ⟨?_, ?_⟩
-  · exact Module.End.eigenspace_mem_invtSubmodule _ _
-  · intro lam μ hlam hμ
+  · exact (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+      (Module.End.eigenspace_mem_invtSubmodule _ _)
+  · refine Module.End.pointSpectraSeparated_iff.mpr fun lam hlam μ hμ => ?_
     rw [eigenspace_section1Population] at hlam hμ
     have h20 : lam = 20 := by
       obtain ⟨i, hi, rfl⟩ := restrictedPointSpectrum_basisDiagonal_subset b _ _ hlam
@@ -209,10 +210,11 @@ The block carries `40`, `30` and `20`; its complement carries `50` and `10`; the
 closest pair is at distance `10`.  So the population-gap theorems apply to this
 pair at the article's own block, while Theorem 1 does not. -/
 theorem pointInternalGap_section1_paperBlock :
-    PointInternalGap (section1Population b)
+    Module.End.PointInternalGap (section1Population b)
       (b.spanIndices {i : Fin 5 | 1 ≤ (i : ℕ) ∧ (i : ℕ) ≤ 3}) 10 := by
-  refine ⟨isInvariant_basisDiagonal_spanIndices b _ _, ?_⟩
-  intro lam μ hlam hμ
+  refine ⟨(Module.End.mem_invtSubmodule_iff_forall_mem_of_mem _).mp
+    (isInvariant_basisDiagonal_spanIndices b _ _), ?_⟩
+  refine Module.End.pointSpectraSeparated_iff.mpr fun lam hlam μ hμ => ?_
   rw [section1Population] at hlam hμ
   obtain ⟨i, hi, rfl⟩ := restrictedPointSpectrum_basisDiagonal_subset b _ _ hlam
   rw [OrthonormalBasis.orthogonal_spanIndices] at hμ

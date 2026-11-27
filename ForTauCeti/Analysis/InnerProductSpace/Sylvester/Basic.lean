@@ -52,7 +52,7 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 @[expose]
 def OrderedSylvesterGap (A : F →ₗ[𝕜] F) (B : E →ₗ[𝕜] E)
     (δ : ℝ) : Prop :=
-  OrderedGap B ⊤ A ⊤ δ ∨ OrderedGap A ⊤ B ⊤ δ
+  Module.End.PointOrderedGap B ⊤ A ⊤ δ ∨ Module.End.PointOrderedGap A ⊤ B ⊤ δ
 
 /-- Interval/exterior separation with the spectrum of `B` in `[a,b]` and the
 spectrum of `A` outside `(a-δ,b+δ)`. -/
