@@ -60,10 +60,10 @@ over it. It is divided at its own `## Perturbation form` boundary:
   module imports;
 * this file keeps the **perturbation form** — the transport lemmas for the
   canonical isometric inclusion of a subspace, and the theorems built on them:
-  `sinTheta_perturbation_le`,
-  `sinTheta_perturbation_le_of_orderedGap`,
-  `frobenius_sinTheta_residual_le_of_spectralDistance`,
-  `frobenius_sinTheta_le` and `kyFan_sinTheta_le`.
+  `sinTheta_perturbation_le_of_orderedGap` and
+  `frobenius_sinTheta_residual_le_of_spectralDistance`. The interval/exterior
+  perturbation bounds are supplied by TauCeti’s `SinTheta.Basic` and
+  `SinTheta.Corollaries`.
 
 The former pairwise `sinTheta_perturbation_le_of_spectralDistance` facade is
 retired: its consumer now applies the accepted TauCeti `SinTheta.Pairwise`
@@ -180,39 +180,6 @@ private theorem domainTransport_residual_le
     _ = N (B - A) := mul_one _
 
 
-/-- **Davis--Kahan `sin Θ`, perturbation form, every square UI norm.**
--/
-theorem sinTheta_perturbation_le
-    (N : UnitarilyInvariantSeminorm 𝕜 E E)
-    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
-        Module.End.invtSubmodule B))
-    {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : Module.End.PointIntervalExteriorGap A U B Vᗮ a b δ) :
-    δ * N ((U.sinThetaMap V).toLinearMap) ≤ N (B - A) := by
-  let NU : UnitarilyInvariantSeminorm 𝕜 U E :=
-    N.domainIsometryTransport U.subtypeₗᵢ
-  have hM : (A.restrict hU).IsSymmetric := hA.restrict_invariant hU
-  have hMspec : Module.End.PointSpectrumIn (A.restrict hU) ⊤ (Set.Icc a b) :=
-    (pointSpectrumIn_restrict_iff A hU (Set.Icc a b)).2 hgap.pointSpectrumIn_Icc
-  have hres :
-      δ * NU (sinThetaEmbedding V U.subtypeₗᵢ) ≤
-        NU (residual B U.subtypeₗᵢ (A.restrict hU)) :=
-    sinTheta_residual_le (A := B) (U := V) (M := A.restrict hU)
-      NU hB hV U.subtypeₗᵢ hM hδ hMspec hgap.pointSpectrumIn_compl_Ioo
-  have hsin :
-      NU (sinThetaEmbedding V U.subtypeₗᵢ) = N ((U.sinThetaMap V).toLinearMap) :=
-    domainTransport_sinThetaEmbedding_apply N U V
-  have hresBound :
-      NU (residual B U.subtypeₗᵢ (A.restrict hU)) ≤ N (B - A) :=
-    domainTransport_residual_le (B := B) N hU
-  calc
-    δ * N ((U.sinThetaMap V).toLinearMap) =
-        δ * NU (sinThetaEmbedding V U.subtypeₗᵢ) := by rw [hsin]
-    _ ≤ NU (residual B U.subtypeₗᵢ (A.restrict hU)) := hres
-    _ ≤ N (B - A) := hresBound
-
 /-- Ordered half-line perturbation form.
 -/
 theorem sinTheta_perturbation_le_of_orderedGap
@@ -301,37 +268,5 @@ theorem frobenius_sinTheta_residual_le_of_spectralDistance
     simpa [ContinuousLinearMap.coe_coe, ContinuousLinearMap.coe_coe] using hproj
   rw [hY] at hSylv
   exact hSylv.trans hC
-
-/-- Frobenius form.
--/
-theorem frobenius_sinTheta_le
-    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
-        Module.End.invtSubmodule B))
-    {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : Module.End.PointIntervalExteriorGap A U B Vᗮ a b δ) :
-    δ * UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E)
-        (U.sinThetaMap V).toLinearMap ≤
-      UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) := by
-  exact sinTheta_perturbation_le (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E))
-    hA hB hU hV hδ hgap
-
-/-- Ky Fan form, simultaneously controlling every singular-value prefix.
--/
-theorem kyFan_sinTheta_le
-    {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A)) (hV : (V ∈
-        Module.End.invtSubmodule B))
-    {a b δ : ℝ} (hδ : 0 < δ)
-    (hgap : Module.End.PointIntervalExteriorGap A U B Vᗮ a b δ) (k : ℕ) :
-    δ * ((U.sinThetaMap V).toLinearMap).kyFanSum k ≤ (B - A).kyFanSum k := by
-  let NK : UnitarilyInvariantSeminorm 𝕜 E E :=
-    (UnitarilyInvariantSeminorm.kyFan
-      (𝕜 := 𝕜) (E := E) (F := E) k)
-  have h := sinTheta_perturbation_le NK hA hB hU hV hδ hgap
-  simpa only [NK, UnitarilyInvariantSeminorm.kyFan_apply] using h
-
 
 end TauCeti

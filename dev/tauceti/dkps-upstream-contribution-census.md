@@ -1,5 +1,35 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 native interval Sylvester and finite sine bounds
+
+The finite interval/exterior Sylvester estimates now use the two orientations
+from #16061 (`2b165f38aebf`, tauceti-ai-for-science, SSP-B09/B10). The local
+interval gap predicates, midpoint-shift proofs and polar-absorption proof
+retire. #16061 acknowledges the DKPS implementation and explicitly states
+that the TauCeti proof was written independently. The ordered-gap and
+quadratic-form estimates remain local. The finite Part III Sylvester theorem
+keeps its original equation and positive gap and takes the native predicate.
+[PR #16061](https://github.com/TauCetiProject/TauCeti/pull/16061)
+
+The finite residual and directed perturbation bounds now apply #16545
+(`a2a2c9a9ba5c`, tauceti-ai-for-science, SSP-C17/C18). The paper's
+Part III residual theorem keeps its isometric trial map and original binder
+order. Theorem 6.1 keeps arbitrary trial maps and both spectral orientations.
+Its reversed orientation uses the native interval bound on the complementary
+subspace, followed by projection contraction. #16545 uses the accepted
+Sylvester estimates and reports no vendored formalization.
+[PR #16545](https://github.com/TauCetiProject/TauCeti/pull/16545)
+
+Yu–Wang–Samworth Theorem 1 uses the native perturbation bound for every UI
+seminorm and the Frobenius corollary from Jon Crall's #16691 (`d27806f7c8de`,
+SSP-C21/C22). The unused local Frobenius and Ky Fan duplicates retire.
+#16691 specializes #16545's estimates with the native seminorms.
+[PR #16691](https://github.com/TauCetiProject/TauCeti/pull/16691)
+
+The focused build (10896 jobs), full default build (22790 jobs), and combined
+Challenge and paper semantic-surface build (22496 jobs) passed without
+warnings. The declaration-name comparison kept the 49 baseline findings.
+
 ## November 27 native point-spectrum gaps and vector residual bound
 
 The finite spectral-gap hypotheses now use `Module.End.PointSpectraSeparated`,

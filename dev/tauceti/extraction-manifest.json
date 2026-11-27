@@ -5253,9 +5253,9 @@
         "DavisKahan.FiniteDimensional.Sylvester.All",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval"
       ],
-      "status": "staged-needs-current-validation",
-      "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "status": "partially-upstreamed",
+      "upstream_pr": "#14532, #16061",
+      "migration_note": "Preserve the historical extraction from 5427f8bccf6d. The maintained DKPS ordered gap still permits either direction. The interval/exterior predicates retire after the consumers move to the native point interval predicate and bounds."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Sylvester/Internal/ReciprocalMultiplier.lean",
@@ -5345,9 +5345,9 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance"
       ],
-      "status": "staged-needs-current-validation",
-      "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "status": "partially-upstreamed",
+      "upstream_pr": "#16061",
+      "migration_note": "Preserve the historical extraction from 5427f8bccf6d. The native interval/exterior proof displaces the two local shifted norm lemmas. The eigenvalue-to-form and restricted spectrum arguments used by the other finite estimates remain."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Sylvester/Interval.lean",
@@ -5381,9 +5381,9 @@
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance"
       ],
-      "status": "staged-needs-current-validation",
-      "upstream_pr": null,
-      "migration_note": "Revised OperatorTheory roadmap port from 5427f8bccf6d; source declarations record provenance, not a current API inventory. Elaboration and downstream builds must be rerun."
+      "status": "partially-upstreamed",
+      "upstream_pr": "#16061, #16545",
+      "migration_note": "Preserve the historical extraction from 5427f8bccf6d. The native interval bounds cover both orientations and their operator-norm and Ky Fan specializations. The ordered or quadratic-form separation routes remain in the staged module and the Part III interval specialization stays source-facing."
     },
     {
       "source_module": "DavisKahan/FiniteDimensional/Sylvester/SpectralDistance.lean",
@@ -7753,6 +7753,67 @@
       "accepted_head": "01993c4a4d90bdd49bd6cfd526d3753fd76d3c20",
       "status": "consumed-upstream-with-dkps-result-retained",
       "migration_note": "The sum-of-squares estimate uses the native single-vector bound at each trial value. The finite-dimensional RCLike statement still covers arbitrary trial families and zero separation. The eigenfamily spanning lemma and family-level statement remain local. The single-vector theorem derives from the native UI-norm bound. #45606 credits lean-CKSD for the leading-eigenvector perturbation proof. Direct DKPS proof descent for the single-vector corollary is unestablished."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
+      "source_declarations": [
+        "TauCeti.IntervalSylvesterGap",
+        "TauCeti.UnorderedIntervalSylvesterGap",
+        "TauCeti.uiNorm_sylvester_le_of_intervalGap",
+        "TauCeti.uiNorm_sylvester_le_of_unorderedIntervalGap",
+        "TauCeti.opNorm_sylvester_le_of_intervalGap",
+        "TauCeti.kyFan_sylvester_le_of_intervalGap",
+        "TauCeti.opNorm_shift_le_of_pointSpectrumIn_Icc",
+        "TauCeti.norm_shift_lower_of_spectrumOutside"
+      ],
+      "original_source_anchor": "9e6479c690ab7e727f040e352f3e4f35273663c9:ForTauCeti/Analysis/InnerProductSpace/Sylvester/{Basic,Interval,Internal/SpectralBounds}.lean; original DavisKahan/FiniteDimensional/Sylvester paths",
+      "authors_license": "Jon Crall and GPT 5.6 High, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Sylvester.Basic",
+      "final_declarations": [
+        "TauCeti.UnitarilyInvariantSeminorm.mul_map_le_map_sylvester_apply_of_pointIntervalExteriorGap",
+        "TauCeti.UnitarilyInvariantSeminorm.mul_map_le_map_sylvester_apply_of_pointIntervalExteriorGap_swap"
+      ],
+      "roadmap_targets": ["SSP-B09", "SSP-B10"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/16061",
+      "integration": "2b165f38aebf1b6b7eab7245a13bc8d09c699b93",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "The Part III source-facing theorem retains finite RCLike operators, a positive gap and its explicit Sylvester equation. Its interval predicate takes the native top-subspace specialization. Theorem 6.1 uses the reverse spectral orientation on the unwanted invariant block directly, with the native projection contraction. Delete the polar-absorption and centered spectral proofs and the unused concrete norm wrappers. Keep the ordered and coercive form bounds and the paper's disjunction of native trial-map spectral hypotheses. Integration acknowledges DKPS and explicitly reports independent implementation. #16545 subsequently adds the invariant-subspace-localized form used by the reverse generalized trial-map proof."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds",
+      "source_declarations": ["TauCeti.sinTheta_residual_le", "TauCeti.sinTheta_perturbation_le"],
+      "original_source_anchor": "d365e1006e51558d8a07d12838891d4c3a963467:ForTauCeti/Analysis/InnerProductSpace/SinTheta/{DirectedBounds,Perturbation}.lean",
+      "authors_license": "Jon Crall and GPT 5.6 High, Kitware 2026, Apache-2.0.",
+      "final_tauceti_modules": [
+        "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Basic",
+        "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Sylvester.Basic"
+      ],
+      "final_declarations": [
+        "TauCeti.UnitarilyInvariantSeminorm.mul_map_starProjection_comp_le_map_sylvester_apply",
+        "TauCeti.UnitarilyInvariantSeminorm.mul_map_starProjection_comp_starProjection_le_map_sub",
+        "TauCeti.UnitarilyInvariantSeminorm.mul_map_le_map_sylvester_apply_of_pointIntervalExteriorGap_of_mem"
+      ],
+      "roadmap_targets": ["SSP-C17", "SSP-C18"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/16545",
+      "integration": "a2a2c9a9ba5c5d4e8a8dbb9ad641f17058b29206",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "Use the native one-orientation residual for arbitrary trial maps, the finite double-angle estimate and the public Part III isometric specialization. The source-facing theorem preserves the original binder order, maps and gap hypotheses. Use the native directed perturbation result for the YWS UI-seminorm theorem. Keep the other orientation in DKPS Theorem 6.1 as a direct application of the localized Sylvester theorem. No vendored proof was reported by #16545."
+    },
+    {
+      "source_module": "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
+      "source_declarations": ["TauCeti.frobenius_sinTheta_le", "TauCeti.kyFan_sinTheta_le"],
+      "original_source_anchor": "9e6479c690ab7e727f040e352f3e4f35273663c9:ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean",
+      "authors_license": "Jon Crall and GPT 5.6 High, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Corollaries",
+      "final_declarations": [
+        "TauCeti.UnitarilyInvariantSeminorm.mul_frobenius_starProjection_comp_starProjection_le_frobenius_sub",
+        "TauCeti.UnitarilyInvariantSeminorm.mul_kyFan_starProjection_comp_starProjection_le_kyFan_sub"
+      ],
+      "roadmap_targets": ["SSP-C21", "SSP-C22"],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/16691",
+      "integration": "d27806f7c8de8ac35302a6fe67a30798ee093955",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "Jon Crall submitted the native Frobenius and Ky Fan specializations of #16545. YWS Theorem 1's Frobenius conclusion consumes the specialization directly. Both obsolete local corollaries retire. The separate Frobenius bound under pairwise separation stays local."
     }
   ],
   "current_consumption_pin": "fba9bfbf453bcf0d77efdde60fbce2376c2e35a8"

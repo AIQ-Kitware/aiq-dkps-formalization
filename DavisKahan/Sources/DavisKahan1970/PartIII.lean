@@ -7,6 +7,7 @@ Authors: Jon Crall, GPT 5.6 High
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.Sylvester.Basic
 public import DavisKahan.FiniteDimensional.DirectRotation.Basic
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Symmetric
@@ -79,15 +80,44 @@ alias partIII_sylvester_ordered_uiNorm :=
 
 /-- The sharp interval/exterior Sylvester estimate for every rectangular
 unitarily invariant norm. -/
-alias partIII_sylvester_interval_uiNorm :=
-  uiNorm_sylvester_le_of_intervalGap
+theorem partIII_sylvester_interval_uiNorm
+    {𝕜 : Type*} [RCLike 𝕜]
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
+    (N : UnitarilyInvariantSeminorm 𝕜 E F)
+    {A : F →ₗ[𝕜] F} {B : E →ₗ[𝕜] E} {X C : E →ₗ[𝕜] F}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric)
+    {a b δ : ℝ} (_hδ : 0 < δ)
+    (hgap : Module.End.PointIntervalExteriorGap B ⊤ A ⊤ a b δ)
+    (hEq : A ∘ₗ X - X ∘ₗ B = C) : δ * N X ≤ N C := by
+  rw [← hEq]
+  have hbound := N.mul_map_le_map_sylvester_apply_of_pointIntervalExteriorGap_swap
+    (A := A.toContinuousLinearMap) (B := B.toContinuousLinearMap) hA hB hgap X.toContinuousLinearMap
+  rw [ContinuousLinearMap.sylvester_apply] at hbound
+  exact hbound
 
 /-! ## Section 6: single-angle theorems -/
 
 /-- The finite Part III `sin Theta` residual theorem for every rectangular
 unitarily invariant norm. -/
-alias partIII_sinTheta_residual_uiNorm :=
-  sinTheta_residual_le
+theorem partIII_sinTheta_residual_uiNorm
+    {𝕜 : Type*} [RCLike 𝕜]
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
+    (N : UnitarilyInvariantSeminorm 𝕜 F E)
+    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] (hU : U ∈ Module.End.invtSubmodule A)
+    (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
+    {a b δ : ℝ} (_hδ : 0 < δ)
+    (hMspec : Module.End.PointSpectrumIn M ⊤ (Set.Icc a b))
+    (hAspec : Module.End.PointSpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
+    δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
+  have hbound := N.mul_map_starProjection_comp_le_map_sylvester_apply
+    (A := A.toContinuousLinearMap) (M := M.toContinuousLinearMap) hA hM
+    ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hU)
+    ⟨hMspec, hAspec⟩ X.toContinuousLinearMap
+  rw [ContinuousLinearMap.sylvester_apply] at hbound
+  exact hbound
 
 /-- The paper's generalized `sin Theta` theorem in its Gram-bound and arbitrary
 representative form.

@@ -8,6 +8,7 @@ module
 public import DavisKahan.FiniteDimensional.DoubleAngle.SinTheta
 public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
 public import DavisKahan.FiniteDimensional.Residual.AngleEmbeddings
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Basic
 
 /-!
 # Experimental residual `sin (2 Theta)` interface
@@ -53,7 +54,13 @@ theorem sinTwoTheta_residual_le
     (hAspec : Module.End.PointSpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
     δ * N (sinTwoThetaEmbedding U X) ≤ 2 * N (residual A X M) := by
   have hdouble := sinTwoThetaEmbedding_uiNorm_le_two_mul N U X
-  have hsingle := sinTheta_residual_le N hA hU X hM hδ hMspec hAspec
+  have hsingle : δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
+    have hbound := N.mul_map_starProjection_comp_le_map_sylvester_apply
+      (A := A.toContinuousLinearMap) (M := M.toContinuousLinearMap) hA hM
+      ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hU)
+      ⟨hMspec, hAspec⟩ X.toContinuousLinearMap
+    rw [ContinuousLinearMap.sylvester_apply] at hbound
+    exact hbound
   calc
     δ * N (sinTwoThetaEmbedding U X)
         ≤ δ * (2 * N (sinThetaEmbedding U X)) :=

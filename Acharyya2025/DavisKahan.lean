@@ -135,8 +135,8 @@ route is
 which needs no perturbative smallness side condition at all.  The sharp form is already available in this repository as
 `TauCeti.sum_cross_norm_inner_eigenvectorBasis_sq_le_hilbertSchmidt`
 (`DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean`), of which
-this is a corollary, and the arbitrary-unitarily-invariant-norm form as
-`TauCeti.sinTheta_perturbation_le`. -/
+this is a corollary. TauCeti's `mul_map_starProjection_comp_starProjection_le_map_sub`
+gives the arbitrary UI-seminorm bound under interval/exterior separation. -/
 theorem sum_cross_inner_sq_le
     (hT : T.IsSymmetric) (hS : S.IsSymmetric)   -- both operators self-adjoint
     (hn : finrank ℝ E = n)                       -- finite-dimensionality (implicit in the paper)

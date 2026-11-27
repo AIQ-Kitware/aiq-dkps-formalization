@@ -12,7 +12,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 /-!
 # Sylvester separation predicates
 
-Source-facing interval and ordered gap predicates for Sylvester estimates. The
+The two orientations of ordered separation for Sylvester estimates. The
 finite-dimensional Sylvester operator and its separated-spectrum solution are
 provided by Tau Ceti's canonical `ContinuousLinearMap.sylvester` API.
 
@@ -25,7 +25,7 @@ distilled in
 
 ## Provenance
 
-The retained gap predicates were *moved, not restated*. This file was
+The ordered separation predicate originated in
 `DavisKahan/FiniteDimensional/Sylvester/Basic.lean`
 before the whole remaining sin-Θ closure moved into
 the staging layer. The local finite-dimensional Sylvester operator and solver
@@ -53,22 +53,5 @@ variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
 def OrderedSylvesterGap (A : F →ₗ[𝕜] F) (B : E →ₗ[𝕜] E)
     (δ : ℝ) : Prop :=
   Module.End.PointOrderedGap B ⊤ A ⊤ δ ∨ Module.End.PointOrderedGap A ⊤ B ⊤ δ
-
-/-- Interval/exterior separation with the spectrum of `B` in `[a,b]` and the
-spectrum of `A` outside `(a-δ,b+δ)`. -/
-@[expose]
-def IntervalSylvesterGap (A : F →ₗ[𝕜] F) (B : E →ₗ[𝕜] E)
-    (a b δ : ℝ) : Prop :=
-  Module.End.PointSpectrumIn B ⊤ (Set.Icc a b) ∧
-    Module.End.PointSpectrumIn A ⊤ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}
-
-/-- Interval/exterior separation in either orientation.  The first branch has
-the spectrum of `B` in `[a,b]` and that of `A` outside the enlarged interval;
-the second branch reverses those roles. -/
-@[expose]
-def UnorderedIntervalSylvesterGap (A : F →ₗ[𝕜] F) (B : E →ₗ[𝕜] E)
-    (a b δ : ℝ) : Prop :=
-  IntervalSylvesterGap A B a b δ ∨ IntervalSylvesterGap B A a b δ
-
 
 end TauCeti

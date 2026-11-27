@@ -41,9 +41,11 @@ theorem yuWangSamworth_theorem1_uiNorm_le
     {a b δ : ℝ} (hδ : 0 < δ)
     (hgap : Module.End.PointIntervalExteriorGap A U B Vᗮ a b δ) :
     N ((U.sinThetaMap V).toLinearMap) ≤ N (B - A) / δ := by
-  rw [le_div_iff₀ hδ]
-  simpa only [mul_comm] using
-    sinTheta_perturbation_le N hA hB hU hV hδ hgap
+  rw [le_div_iff₀ hδ, mul_comm, Submodule.sinThetaMap_def]
+  exact N.mul_map_starProjection_comp_starProjection_le_map_sub
+    (A := A.toContinuousLinearMap) (B := B.toContinuousLinearMap) hA hB
+    ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hU)
+    ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem B).mp hV) hgap
 
 /-- The printed Theorem 1 conclusion, in Frobenius norm.
 
@@ -58,10 +60,11 @@ theorem yuWangSamworth_theorem1_frobenius_le
     (hgap : Module.End.PointIntervalExteriorGap A U B Vᗮ a b δ) :
     Submodule.sinThetaFrobenius U V ≤
       UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E) (B - A) / δ := by
-  rw [Submodule.sinThetaFrobenius_def]
-  exact yuWangSamworth_theorem1_uiNorm_le
-      (UnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜) (E := E) (F := E))
-      hA hB hU hV hδ hgap
+  rw [Submodule.sinThetaFrobenius_def, le_div_iff₀ hδ, mul_comm, Submodule.sinThetaMap_def]
+  exact UnitarilyInvariantSeminorm.mul_frobenius_starProjection_comp_starProjection_le_frobenius_sub
+    (A := A.toContinuousLinearMap) (B := B.toContinuousLinearMap) hA hB
+    ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hU)
+    ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem B).mp hV) hgap
 
 /-- The operator-norm specialization explicitly mentioned after equation (1). -/
 theorem yuWangSamworth_theorem1_opNorm_le

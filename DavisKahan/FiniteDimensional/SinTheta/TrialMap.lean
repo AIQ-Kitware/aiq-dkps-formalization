@@ -10,7 +10,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.FrameFactorization
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap
 public import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
-public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval
+public import TauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm.SinTheta.Basic
 
 /-!
 # Generalized finite-dimensional Davis--Kahan theorems
@@ -124,10 +124,8 @@ unwanted exact spectrum of `A` on `Vᗮ` outside the enlarged interval.  The
 second branch reverses those roles, as allowed in Davis--Kahan Theorem 6.1. -/
 def TrialComplementIntervalGap (M : F →ₗ[𝕜] F) (A : E →ₗ[𝕜] E)
     (V : Submodule 𝕜 E) (a b δ : ℝ) : Prop :=
-  (Module.End.PointSpectrumIn M ⊤ (Set.Icc a b) ∧
-      Module.End.PointSpectrumIn A Vᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) ∨
-    (Module.End.PointSpectrumIn A Vᗮ (Set.Icc a b) ∧
-      Module.End.PointSpectrumIn M ⊤ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)})
+  Module.End.PointIntervalExteriorGap M ⊤ A Vᗮ a b δ ∨
+    Module.End.PointIntervalExteriorGap A Vᗮ M ⊤ a b δ
 
 /-- **Raw generalized sine-block residual estimate, every UI norm.**
 
@@ -139,64 +137,33 @@ theorem complementaryTrialBlock_residual_le_of_intervalGap
     {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
     {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : (V ∈ Module.End.invtSubmodule A))
     (X : F →ₗ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
-    {a b δ : ℝ} (hδ : 0 < δ)
+    {a b δ : ℝ} (_hδ : 0 < δ)
     (hgap : TrialComplementIntervalGap M A V a b δ) :
     δ * N (complementaryTrialBlock V X) ≤ N (generalResidual A X M) := by
-  have hVperp : (Vᗮ ∈ Module.End.invtSubmodule A) :=
-      LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hV
-  let AV : Vᗮ →ₗ[𝕜] Vᗮ := A.restrict hVperp
-  let Y : F →ₗ[𝕜] Vᗮ :=
-    Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ X
-  let C : F →ₗ[𝕜] Vᗮ :=
-    Vᗮ.orthogonalProjectionOnto.toLinearMap ∘ₗ generalResidual A X M
-  let NV : UnitarilyInvariantSeminorm 𝕜 F Vᗮ :=
-    N.codomainIsometryTransport Vᗮ.subtypeₗᵢ
-  have hAV : AV.IsSymmetric := hA.restrict_invariant hVperp
-  have hgap' : UnorderedIntervalSylvesterGap AV M a b δ := by
-    rcases hgap with hforward | hreverse
-    · exact Or.inl ⟨hforward.1,
-        (pointSpectrumIn_restrict_iff A hVperp _).2 hforward.2⟩
-    · exact Or.inr ⟨
-        (pointSpectrumIn_restrict_iff A hVperp _).2 hreverse.1,
-        hreverse.2⟩
-  have hEq : AV ∘ₗ Y - Y ∘ₗ M = C := by
-    ext x
+  rcases hgap with hforward | hreverse
+  · have hbound := N.mul_map_starProjection_comp_le_map_sylvester_apply
+      (A := A.toContinuousLinearMap) (M := M.toContinuousLinearMap) hA hM
+      ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp hV)
+      hforward X.toContinuousLinearMap
+    rw [ContinuousLinearMap.sylvester_apply] at hbound
+    exact hbound
+  · have hVperp := (Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp
+      (LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hV)
+    let Y := Vᗮ.starProjection ∘L X.toContinuousLinearMap
+    have hbound := N.mul_map_le_map_sylvester_apply_of_pointIntervalExteriorGap_of_mem
+      (A := A.toContinuousLinearMap) (B := M.toContinuousLinearMap) hA hM hVperp
+      (fun _ _ ↦ Submodule.mem_top) hreverse (X := Y)
+      (fun y ↦ Vᗮ.starProjection_apply_mem (X y))
+      (fun y hy ↦ by simp_all [Submodule.top_orthogonal_eq_bot])
+    rw [ContinuousLinearMap.sylvester_apply] at hbound
+    change δ * N (complementaryTrialBlock V X) ≤
+      N (A ∘ₗ complementaryTrialBlock V X - complementaryTrialBlock V X ∘ₗ M) at hbound
     have hred := (hA.isReducing_iff_mem_invtSubmodule V).mpr hV
-    have hx := LinearMap.congr_fun
-      (hred.sylvester_starProjection_orthogonal_comp X M) x
-    change A (Vᗮ.starProjection (X x)) - Vᗮ.starProjection (X (M x)) =
-      Vᗮ.starProjection (generalResidual A X M x)
-    exact hx
-  have hY : NV Y = N (complementaryTrialBlock V X) := by
-    change N (Vᗮ.subtypeₗᵢ.toLinearMap ∘ₗ Y) =
-      N (complementaryTrialBlock V X)
-    congr 1
-  have hC : NV C =
-      N (Vᗮ.starProjection.toLinearMap ∘ₗ generalResidual A X M) := by
-    change N (Vᗮ.subtypeₗᵢ.toLinearMap ∘ₗ C) =
-      N (Vᗮ.starProjection.toLinearMap ∘ₗ generalResidual A X M)
-    congr 1
-  have hproj : ‖(Vᗮ.starProjection.toLinearMap).toContinuousLinearMap‖ ≤ 1 := by
-    refine (Vᗮ.starProjection.toLinearMap).toContinuousLinearMap.opNorm_le_bound
-      zero_le_one fun x => ?_
-    change ‖Vᗮ.starProjection x‖ ≤ 1 * ‖x‖
-    simpa using Vᗮ.norm_starProjection_apply_le x
-  have hC_le : NV C ≤ N (generalResidual A X M) := by
-    rw [hC]
-    calc
-      N (Vᗮ.starProjection.toLinearMap ∘ₗ generalResidual A X M)
-          ≤ ‖(Vᗮ.starProjection.toLinearMap).toContinuousLinearMap‖ *
-              N (generalResidual A X M) :=
-        N.map_comp_le_left _ _ (c :=
-          ‖(Vᗮ.starProjection.toLinearMap).toContinuousLinearMap‖)
-          (fun x => (Vᗮ.starProjection.toLinearMap).toContinuousLinearMap.le_opNorm x)
-      _ ≤ 1 * N (generalResidual A X M) :=
-        mul_le_mul_of_nonneg_right hproj (apply_nonneg N _)
-      _ = N (generalResidual A X M) := one_mul _
-  have hSylvester :=
-    uiNorm_sylvester_le_of_unorderedIntervalGap NV hAV hM hδ hgap' hEq
-  rw [hY] at hSylvester
-  exact hSylvester.trans hC_le
+    have hEq : A ∘ₗ complementaryTrialBlock V X - complementaryTrialBlock V X ∘ₗ M =
+        Vᗮ.starProjection.toLinearMap ∘ₗ generalResidual A X M :=
+      hred.sylvester_starProjection_orthogonal_comp X M
+    rw [hEq] at hbound
+    exact hbound.trans (N.map_starProjection_comp_le Vᗮ (generalResidual A X M))
 
 /-- **Davis--Kahan Theorem 6.1, source-complete interval/exterior form.**
 

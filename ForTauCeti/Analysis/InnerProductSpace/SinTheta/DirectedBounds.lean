@@ -169,36 +169,6 @@ private theorem sinTheta_residual_le_of_sylvester
   rw [hY] at hS
   exact hS.trans (mul_le_mul_of_nonneg_left hC_le hc)
 
-/-- **Davis--Kahan `sin Θ`, residual form, every UI norm.**
-
-The spectrum of the approximate coordinate operator `M` lies in `[a,b]`, the
-unwanted spectrum of `A` on `Uᗮ` lies outside `(a-δ,b+δ)`, and `R = AX-XM`.
-Then `δ ‖sin Θ‖ ≤ ‖R‖`.
--/
-theorem sinTheta_residual_le
-    (N : UnitarilyInvariantSeminorm 𝕜 F E)
-    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric) {U : Submodule 𝕜 E}
-    [U.HasOrthogonalProjection] (hU : (U ∈ Module.End.invtSubmodule A))
-    (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
-    {a b δ : ℝ} (hδ : 0 < δ)
-    (hMspec : Module.End.PointSpectrumIn M ⊤ (Set.Icc a b))
-    (hAspec : Module.End.PointSpectrumIn A Uᗮ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
-    δ * N (sinThetaEmbedding U X) ≤ N (residual A X M) := by
-  refine (sinTheta_residual_le_of_sylvester (c := 1) N hA hU X zero_le_one
-    ?_).trans_eq (one_mul _)
-  intro Y C hEq
-  have hgap : IntervalSylvesterGap
-      (A.restrict ((Module.End.mem_invtSubmodule_iff_forall_mem_of_mem A).mp
-          (LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU))) M a b δ :=
-          by
-    refine ⟨hMspec, ?_⟩
-    exact (pointSpectrumIn_restrict_iff A
-        (LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU) _).2 hAspec
-  exact (uiNorm_sylvester_le_of_intervalGap (N.codomainIsometryTransport Uᗮ.subtypeₗᵢ)
-    (hA.restrict_invariant (LinearMap.IsSymmetric.orthogonalComplement_mem_invtSubmodule hA hU))
-        hM hδ hgap
-    hEq).trans_eq (one_mul _).symm
-
 /-- Ordered half-line residual form.
 -/
 theorem sinTheta_residual_le_of_orderedGap

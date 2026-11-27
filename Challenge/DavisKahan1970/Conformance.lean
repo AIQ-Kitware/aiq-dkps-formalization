@@ -78,13 +78,8 @@ universe u
 
 section SinThetaFinite
 
--- The binder order here is not the one the rest of this namespace uses, and it
--- must not be changed to match.  `partIII_sinTheta_residual_uiNorm` is an alias
--- for `TauCeti.sinTheta_residual_le`, whose module declares `𝕜` and `E` in
--- separate `variable` lines, so `[RCLike 𝕜]` occupies an earlier telescope slot
--- than it would under the combined `variable {𝕜 E : Type*}` below.  The
--- comparator compares the fully explicit type, in which that slot is visible, so
--- the two layouts are different statements to it.
+-- The separate variable declarations preserve the binder order of the
+-- paper-facing `partIII_sinTheta_residual_uiNorm` theorem for comparison.
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]

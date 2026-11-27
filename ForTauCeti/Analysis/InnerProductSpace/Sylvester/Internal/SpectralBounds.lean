@@ -11,9 +11,7 @@ public import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound
 /-!
 # Internal finite-dimensional spectral bounds for Sylvester estimates
 
-Eigenvalue-to-quadratic-form conversions and centered spectral bounds shared by
-the interval and arbitrary-distance Sylvester arguments. These declarations are
-implementation support rather than part of the public theorem surface.
+Eigenvalue-to-quadratic-form conversions used in the finite Sylvester estimates.
 
 ## Sources
 
@@ -93,103 +91,5 @@ theorem le_re_inner_of_le_eigenvalues
         hT.eigenvalues rfl i * ‖(hT.eigenvectorBasis rfl).repr x i‖ ^ 2 := by
           exact Finset.sum_le_sum fun i _ =>
             mul_le_mul_of_nonneg_right (hc i) (sq_nonneg _)
-
-/-- **Spectrum in `[a, b]` bounds the shifted operator norm by the half-width.**  Centring at the
-midpoint is what turns a two-sided spectral bound into a single norm bound. -/
-theorem opNorm_shift_le_of_pointSpectrumIn_Icc
-    {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {a b : ℝ} (hab : a ≤ b)
-    (hsp : Module.End.PointSpectrumIn T ⊤ (Set.Icc a b)) :
-    ‖(T - (((a + b) / 2 : ℝ) : 𝕜) • LinearMap.id).toContinuousLinearMap‖ ≤
-      (b - a) / 2 := by
-  let m : ℝ := (a + b) / 2
-  let r : ℝ := (b - a) / 2
-  let S : E →ₗ[𝕜] E := T - (m : 𝕜) • LinearMap.id
-  have hS : S.IsSymmetric := hT.sub fun x y => by
-    simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
-      inner_smul_right, RCLike.conj_ofReal]
-  have hspec : ∀ lam, lam ∈ Module.End.restrictedPointSpectrum T ⊤ → lam ∈ Set.Icc a b := by
-    intro lam hlam
-    obtain ⟨x, hxTop, hx0, hTx⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam
-    exact (Module.End.pointSpectrumIn_iff.mp hsp) x hxTop hx0 lam hTx
-  have ha : ∀ x, a * ‖x‖ ^ 2 ≤ RCLike.re ⟪T x, x⟫_𝕜 :=
-    le_re_inner_of_le_eigenvalues hT fun i =>
-      (hspec _ (eigenvalue_mem_restrictedPointSpectrum_top hT i)).1
-  have hb : ∀ x, RCLike.re ⟪T x, x⟫_𝕜 ≤ b * ‖x‖ ^ 2 :=
-    re_inner_le_of_eigenvalues_le hT fun i =>
-      (hspec _ (eigenvalue_mem_restrictedPointSpectrum_top hT i)).2
-  have hr : 0 ≤ r := by simp only [r]; linarith
-  have hform : ∀ x, |RCLike.re ⟪S x, x⟫_𝕜| ≤ r * ‖x‖ ^ 2 := by
-    intro x
-    have hval : RCLike.re ⟪S x, x⟫_𝕜 =
-        RCLike.re ⟪T x, x⟫_𝕜 - m * ‖x‖ ^ 2 := by
-      simp only [S, LinearMap.sub_apply, LinearMap.smul_apply, LinearMap.id_apply,
-        inner_sub_left, inner_smul_left, RCLike.conj_ofReal, map_sub,
-        RCLike.re_ofReal_mul, inner_self_eq_norm_sq]
-    rw [hval, abs_le]
-    constructor <;> simp only [m, r] <;> nlinarith [ha x, hb x]
-  -- names the application so the norm bound applies to it directly.
-  change ‖S.toContinuousLinearMap‖ ≤ r
-  exact ContinuousLinearMap.norm_le_of_abs_re_inner_map_self_le
-    (fun x y => hS x y) hr hform
-
-/-- The converse shape: spectrum avoiding a `δ`-enlarged interval bounds the shifted operator
-*below*.  This is the separation hypothesis in the form the Sylvester estimates consume. -/
-theorem norm_shift_lower_of_spectrumOutside
-    {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric) {a b δ : ℝ}
-    (hab : a ≤ b) (hδ : 0 < δ)
-    (hsp : Module.End.PointSpectrumIn T ⊤ {lam | lam ∉ Set.Ioo (a - δ) (b + δ)}) :
-    ∀ x : E, ((b - a) / 2 + δ) * ‖x‖ ≤
-      ‖(T - (((a + b) / 2 : ℝ) : 𝕜) •
-          (LinearMap.id : E →ₗ[𝕜] E)) x‖ := by
-  let m : ℝ := (a + b) / 2
-  let r : ℝ := (b - a) / 2
-  let S : E →ₗ[𝕜] E := T - (m : 𝕜) • LinearMap.id
-  have hS : S.IsSymmetric := hT.sub fun x y => by
-    simp only [LinearMap.smul_apply, LinearMap.id_apply, inner_smul_left,
-      inner_smul_right, RCLike.conj_ofReal]
-  have hr : 0 ≤ r := by simp only [r]; linarith
-  have hk : 0 ≤ r + δ := by linarith
-  have hspec : ∀ lam, lam ∈ Module.End.restrictedPointSpectrum T ⊤ →
-      lam ∉ Set.Ioo (a - δ) (b + δ) := by
-    intro lam hlam
-    obtain ⟨x, hxTop, hx0, hTx⟩ := Module.End.mem_restrictedPointSpectrum_iff.mp hlam
-    exact (Module.End.pointSpectrumIn_iff.mp hsp) x hxTop hx0 lam hTx
-  have hsep : ∀ i : Fin (Module.finrank 𝕜 E),
-      r + δ ≤ |hT.eigenvalues rfl i - m| := by
-    intro i
-    have hi := hspec _ (eigenvalue_mem_restrictedPointSpectrum_top hT i)
-    simp only [Set.mem_Ioo, not_and_or, not_lt] at hi
-    rcases hi with hi | hi
-    · rw [abs_of_nonpos]
-      · simp only [m, r]
-        linarith
-      · simp only [m]
-        linarith
-    · rw [abs_of_nonneg]
-      · simp only [m, r]
-        linarith
-      · simp only [m]
-        linarith
-  intro x
-  have hsq : (r + δ) ^ 2 * ‖x‖ ^ 2 ≤ ‖S x‖ ^ 2 := by
-    rw [← (hT.eigenvectorBasis rfl).sum_sq_norm_inner_right (S x),
-      ← (hT.eigenvectorBasis rfl).sum_sq_norm_inner_right x, Finset.mul_sum]
-    apply Finset.sum_le_sum
-    intro i _
-    have hinner :
-        ⟪hT.eigenvectorBasis rfl i, S x⟫_𝕜 =
-          (((hT.eigenvalues rfl i - m : ℝ) : 𝕜) *
-            ⟪hT.eigenvectorBasis rfl i, x⟫_𝕜) := by
-      rw [← hS (hT.eigenvectorBasis rfl i) x]
-      simp only [S, LinearMap.sub_apply, hT.apply_eigenvectorBasis,
-        LinearMap.smul_apply, LinearMap.id_apply, inner_sub_left,
-        inner_smul_left, RCLike.conj_ofReal, map_sub, sub_mul]
-    rw [hinner, norm_mul, RCLike.norm_ofReal, mul_pow]
-    gcongr
-    exact hsep i
-  -- names the application so the norm bound applies to it directly.
-  change (r + δ) * ‖x‖ ≤ ‖S x‖
-  rw [← sq_le_sq₀ (mul_nonneg hk (norm_nonneg x)) (norm_nonneg (S x))]
-  simpa [mul_pow] using hsq
 
 end TauCeti
