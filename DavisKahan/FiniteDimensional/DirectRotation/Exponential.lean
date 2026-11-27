@@ -118,7 +118,7 @@ theorem directRotationCosine_eq_calculus (hsin : ((Submodule.sinAngleOperator U 
   have hCpos : (directRotationCosine U V).IsPositive :=
     LinearMap.isPositive_operatorAbs (canonicalIntertwiner U V)
   have hFpos : F.IsPositive := by
-    refine hsin.isPositive_cfc fun s _ => ?_
+    refine hsin.isPositive_cfc_iff.mpr fun s _ => ?_
     rw [Real.cos_arcsin]
     exact Real.sqrt_nonneg _
   have hFsq : F ∘ₗ F =

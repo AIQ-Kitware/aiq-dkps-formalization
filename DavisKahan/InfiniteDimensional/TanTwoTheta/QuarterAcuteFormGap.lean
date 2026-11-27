@@ -167,7 +167,7 @@ theorem subspaceGap_le_of_reflectionProduct_form_nonneg
     rw [htwo, hfour, hDsq] at hx
     linarith
   have hDnorm : ‖D‖ ≤ Real.sqrt (1 / 2 : ℝ) :=
-    ContinuousLinearMap.opNorm_le_sqrt_of_forall_sq_norm_le D (by norm_num) hpoint
+    ContinuousLinearMap.opNorm_le_sqrt_of_forall_sq_norm_le D hpoint
   have hsqrt : Real.sqrt (1 / 2 : ℝ) = Real.sqrt 2 / 2 := by
     rw [show (1 / 2 : ℝ) = 2 / 2 ^ 2 by norm_num, Real.sqrt_div' 2 (by norm_num),
       Real.sqrt_sq (by norm_num : (0 : ℝ) ≤ 2)]

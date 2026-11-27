@@ -7,7 +7,7 @@ module
 
 public import Mathlib.Analysis.InnerProductSpace.Adjoint
 public import TauCeti.Analysis.InnerProductSpace.Modulus
-public import TauCeti.Analysis.InnerProductSpace.Sylvester
+public import TauCeti.Analysis.InnerProductSpace.Sylvester.Basic
 public import Mathlib.Analysis.Normed.Operator.NormedSpace
 
 /-!

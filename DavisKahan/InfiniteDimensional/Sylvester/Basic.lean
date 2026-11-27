@@ -9,7 +9,7 @@ public import DavisKahan.InfiniteDimensional.Ideals.Symmetric
 public import DavisKahan.InfiniteDimensional.Ideals.CompactIntegral
 public import DavisKahan.InfiniteDimensional.Sylvester.FourierSemigroup
 public import DavisKahan.InfiniteDimensional.Sylvester.OrderedSemigroup
-public import TauCeti.Analysis.InnerProductSpace.Sylvester
+public import TauCeti.Analysis.InnerProductSpace.Sylvester.Basic
 public import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 public import DavisKahan.SpectralTheory.AbstractSpectrum
 

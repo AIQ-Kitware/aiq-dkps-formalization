@@ -234,8 +234,7 @@ theorem ambient_doubleAngleTangent_eq_extendCoordinate
     intro y
     apply Subtype.ext
     rw [Submodule.adjoint_subtypeL, ← Submodule.starProjection_apply]
-    simpa using (Submodule.starProjection_apply_eq_zero_iff (K := U)).mpr
-      (Uᗮ.starProjection_apply_mem y)
+    simp
   have hPerpJApp : ∀ u : U, Uᗮ.starProjection (U.subtypeL u) = 0 := by
     intro u
     rw [Submodule.subtypeL_apply]

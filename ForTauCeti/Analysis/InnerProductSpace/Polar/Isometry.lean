@@ -10,6 +10,7 @@ public import TauCeti.Analysis.SpecialFunctions.Sqrt
 public import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 public import Mathlib.Analysis.Normed.Operator.Banach
 public import Mathlib.Analysis.Normed.Ring.Units
+import TauCeti.Analysis.Real.Sqrt
 
 /-!
 # Quantitative rectangular polar estimates
@@ -90,7 +91,7 @@ theorem norm_modulus_sub_one_le (M : E →L[ℂ] F) :
   rw [← hmod, ← hshift]
   refine norm_cfc_le (norm_nonneg _) fun t ht => ?_
   calc ‖Real.sqrt t - 1‖ = |Real.sqrt t - 1| := Real.norm_eq_abs _
-    _ ≤ |t - 1| := Real.abs_sqrt_sub_one_le_abs_sub_one
+    _ ≤ |t - 1| := Real.abs_sqrt_sub_one_le_abs_sub_one t
     _ = ‖t - 1‖ := (Real.norm_eq_abs _).symm
     _ ≤ ‖cfc (fun s : ℝ => s - 1) a‖ := norm_apply_le_norm_cfc (fun s : ℝ => s - 1) a ht
 

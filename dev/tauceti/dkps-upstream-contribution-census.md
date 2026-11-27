@@ -1,6 +1,35 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
-November 24 late review repairs:
+## November 26 opposite-shift Toeplitz consumption
+
+TauCeti accepted the DKPS opposite-shift example at `0225663554f035014705ec78e8b721fd067b82b9`, from
+Erotemic's submitted head `6c71d1289130f9b379a1a5d6d42204080d86196f`. The port
+adapts the Kitware example at `d1c0bf02e` and its later generalizations by
+Jon Crall and OpenAI gpt-6.1-sol (Kitware 2026, Apache 2.0).
+[PR #44700](https://github.com/TauCetiProject/TauCeti/pull/44700) ·
+[Accepted commit](https://github.com/TauCetiProject/TauCeti/commit/0225663554f035014705ec78e8b721fd067b82b9)
+
+DKPS pins the integration revision with Lean v4.37.0-rc1 and Mathlib
+`31ce06eaadf4a200c0e1407c5f10953cf606b8f8`. The five local donor files under
+`Analysis/Fourier/Hardy/{Block/Basic,Block/FiniteSection,OppositeShifts}`,
+`Analysis/Fredholm/Prod`, and `Analysis/Matrix/EuclideanLin` retire. The
+accepted modules supply the example, block coordinates and compression,
+matrix entry evaluation, row action, and binary Fredholm index. Native
+Hilbert-basis reindexing and natural quotient/remainder evaluation give the
+unused local arbitrary-index formula. The extraction manifest records the
+source and final declaration names. The pin also moves the Sylvester and
+acute-projection imports and requires explicit projection, square-root and
+functional-calculus APIs in a few older proofs. The focused native build
+(8354 jobs), importing and axiom probes, full DKPS build (22412 jobs),
+and Challenge (20598 jobs) all passed without warnings.
+
+This delivers the opposite-shift counterexample in Toeplitz Layer 6 §6.1.
+The two Fourier coefficient examples remain separate. The rank-one
+block/scalar section comparison in §4.1 can use the new section API and needs
+its own compatibility proof. See the campaign ledger for the adjacent
+stability and matrix-index work.
+
+November 24–26 review history:
 
 - [#30736](https://github.com/TauCetiProject/TauCeti/pull/30736) at
   `c00248fbb5d67ac97142e3815566f2390bdcf111` exposes the SA-E24
@@ -19,8 +48,7 @@ November 24 late review repairs:
   `IsFredholm.index_prodMap`. Focused compilation (7692 jobs) and lint, axiom
   and style checks passed. [PR #44700](https://github.com/TauCetiProject/TauCeti/pull/44700)
 
-Both branches are pushed and open. No new acceptance
-or donor retirement is recorded. DKPS Lean sources and dependency pins are
+Both branches were open at those checkpoints. DKPS Lean sources and dependency pins are
 unchanged. Current evidence is in the shared campaign `waves/2026-11-24/`.
 
 November 24 Stone norm-wrapper cleanup for #30736 at

@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 module
 
 public import TauCeti.Analysis.InnerProductSpace.Projection.Completeness
-public import TauCeti.Analysis.InnerProductSpace.Projection.Acute
+public import TauCeti.Analysis.InnerProductSpace.Projection.Acute.PrincipalAngle
 public import TauCeti.Analysis.InnerProductSpace.InvariantSubspace
 public import DavisKahan.Geometry.Polar.DirectRotation
 
