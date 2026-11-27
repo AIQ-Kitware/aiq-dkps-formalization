@@ -87,8 +87,12 @@
     IsExactSpectralDecomposition,FormBoundedSylvesterGap,
     NormalizedSymmetricOperatorIdealFamily},
 }
+% Proof bodies are omitted only in the paper's presentations; the Lean
+% declarations in the accompanying source contain their proofs.
+\newcommand{\laaettr}{\ensuremath{\square_{\mathrm{R}}}}
 \lstdefinestyle{leanpaper}{%
   language=lean,
+  escapeinside={(*@}{@*)},
   columns=fullflexible,
   backgroundcolor=\color{leanbackground},
   basicstyle=\ttfamily\scriptsize,
@@ -1196,8 +1200,9 @@ and $\sym{delta}=\sym{rho}-0.7$}
 \FloatBarrier
 
 Appendix~\ref{app:lean-guide} explains the general Lean syntax in the
-following theorem signature; the geometric and spectral hypotheses have been
-defined above.
+following theorem signature. In the formalization listings, the symbol
+\laaettr{} marks an omitted proof (``left as an exercise to the reader'');
+the complete machine-checked proofs are in the accompanying Lean source.
 
 \begin{theorem}[Sine-theta estimate]
 \label{thm:sine-theta}
@@ -1250,7 +1255,8 @@ theorem sinTheta_unbounded_formGap_whereDefinedUIN_rclike
     N.Mem (sourceDirectedSinThetaOperator E0 F0) ->
     N.Mem R ->
       delta * N.gaugeReal (sourceDirectedSinThetaOperator E0 F0) <=
-        N.gaugeReal R
+        N.gaugeReal R := by
+  (*@\laaettr@*)
 \end{lstlisting}
 \end{minipage}\par
 

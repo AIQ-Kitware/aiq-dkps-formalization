@@ -74,62 +74,43 @@ $\|\sym{Identity}-\sym{Wcompetitor}\|_p^p$ for $1\le p<2$.
 The exponent-dependent matching costs are developed in the proof below.
 \Cref{lst:real-transport-matching} states both results.
 
-% Source for both theorem signatures:
-% DavisKahan/FiniteDimensional/DirectRotation/RealNuclearMatching.lean,
-% exists_minimizing_real_nuclear_transport_matching and
-% exists_minimizing_real_schatten_transport_matching_of_one_le.
-% The local abbreviations factor repeated expressions in the signatures;
-% they are explanatory, not additional library declarations.
+% Source declarations (namespace TauCeti.DavisKahan.FiniteDimensional.RealTransport):
+% DavisKahan/FiniteDimensional/DirectRotation/RealNuclearMatching.lean:
+%   positivePrincipalAngles, realTransportCosts,
+%   real_nuclear_transport_matching, real_schatten_transport_matching.
 % The endpoint identity is RealMatchingExponent.lean:
-% realPositiveSchattenMatchingMinimum_one.
+%   realPositiveSchattenMatchingMinimum_one.
 \noindent\begin{minipage}{\linewidth}
-\begin{lstlisting}[style=leanpaper, escapeinside={(*@}{@*)},
-  caption={Lean signatures for the real trace-norm and Schatten matching
-  theorems, in ASCII transcription with shared abbreviations. The omitted
-  context supplies a finite-dimensional real inner-product space \texttt{E}.
-  \texttt{positiveAngles} retains the labels of the strictly positive
-  principal angles. \texttt{displacement p T} is the Schatten $p$-norm of
-  $\sym{Identity}-T$. The extended nonnegative real exponent \texttt{p}
-  has finite value in $[1,2)$.},
+\begin{lstlisting}[style=leanpaper,
+  caption={Lean presentation theorems for the trace-norm and Schatten
+  matching reductions. The omitted context supplies a finite-dimensional
+  real inner-product space \texttt{E}. The set \texttt{realTransportCosts p K L}
+  contains the power costs $\|\sym{Identity}-T\|_p^p$ of orthogonal transporters
+  $T$ carrying $K$ onto $L$. The function \texttt{positivePrincipalAngles}
+  retains the labels of the strictly positive principal angles.},
   label={lst:real-transport-matching}]
--- Shared abbreviations
-abbrev Ortho := LinearIsometryEquiv (RingHom.id Real) E E
-abbrev rank (K : Submodule Real E) := Module.finrank Real K
-abbrev carries (K L : Submodule Real E) (T : Ortho) :=
-  K.map T.toLinearMap = L
-abbrev positiveAngles (K L : Submodule Real E) :=
-  fun j : {j : Fin (rank K) // 0 < K.principalAngles L j} =>
-    K.principalAngles L j.val
-abbrev displacement (p : ENNReal) [Fact (1 <= p)] (T : Ortho) :=
-  UnitarilyInvariantSeminorm.schatten Real E E p
-    (LinearMap.id - T.toLinearMap)
+theorem real_nuclear_transport_matching
+    (K L : Submodule Real E)
+    (hKL : Module.finrank Real K = Module.finrank Real L) :
+    IsLeast (realTransportCosts 1 K L)
+      (realNuclearMatchingMinimum
+        (positivePrincipalAngles K L)) := by
+  (*@\laaettr@*)
 
-theorem exists_minimizing_real_nuclear_transport_matching
-    (K L : Submodule Real E) (hKL : rank K = rank L) :
-    (*@$\exists$@*) T : Ortho, carries K L T (*@$\land$@*)
-      displacement 1 T =
-        realNuclearMatchingMinimum (positiveAngles K L) (*@$\land$@*)
-      (*@$\forall$@*) V : Ortho, carries K L V ->
-        displacement 1 T <= displacement 1 V
-
-theorem exists_minimizing_real_schatten_transport_matching_of_one_le
-    (p : ENNReal) [Fact (1 <= p)] (hp : p (*@$\neq$@*) (*@$\top$@*))
-    (hp2 : p.toReal < 2)
-    (K L : Submodule Real E) (hKL : rank K = rank L) :
-    (*@$\exists$@*) T : Ortho, carries K L T (*@$\land$@*)
-      displacement p T ^ p.toReal =
-        realPositiveSchattenMatchingMinimum p.toReal
-          (positiveAngles K L) (*@$\land$@*)
-      (*@$\forall$@*) V : Ortho, carries K L V ->
-        displacement p T ^ p.toReal <= displacement p V ^ p.toReal
+theorem real_schatten_transport_matching
+    (p : Real) (hp1 : 1 <= p) (hp2 : p < 2)
+    (K L : Submodule Real E)
+    (hKL : Module.finrank Real K = Module.finrank Real L) :
+    IsLeast (realTransportCosts p K L)
+      (realPositiveSchattenMatchingMinimum p
+        (positivePrincipalAngles K L)) := by
+  (*@\laaettr@*)
 \end{lstlisting}
 \end{minipage}\par
 
-The first signature identifies the trace-norm minimum with the matching
-costs in \cref{eq:nuclear-matching-costs}; the second uses the corresponding
-Schatten power costs. Both give an attaining transporter and compare its
-cost with that of every feasible orthogonal competitor. At $p=1$ the two
-matching minima coincide.
+In Lean, \texttt{IsLeast S x} states that $x$ belongs to $S$ and is less
+than or equal to every element of $S$. Thus both signatures assert
+attainment and global optimality. At $p=1$ the two matching minima coincide.
 
 To express the formula as maximum-weight matching, start from the
 all-singleton cost $\sym{SingletonBaseline}=\sum_i \like{SingletonCost}{\symglyph{SingletonCost}_i}$ and assign each edge $\{i,j\}$ the weight

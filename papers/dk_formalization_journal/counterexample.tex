@@ -127,6 +127,46 @@ Apply \cref{thm:small-angle} with
 $\sym{theta}=\min\{\sym{EpsilonAngle}/2,\sym{PiConstant}/4\}$.
 \end{proof}
 
+\Cref{lst:prop44-refutation} gives the formalized arbitrarily small-angle
+counterexample and the explicit negation of the finite-dimensional printed
+Proposition~4.4. The latter is a proposition quantified over real
+finite-dimensional inner-product spaces and unitarily invariant seminorms;
+the four-dimensional trace-norm witness refutes it.
+
+% Source declarations (namespace TauCeti.DavisKahan.FiniteDimensional):
+% DavisKahan/FiniteDimensional/DirectRotation/SmallAngleCounterexample.lean:
+%   arbitrarilySmall_fullDisplacement_refuted
+% DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:
+%   E4 (in ShortRotationCounterexample), DavisKahanProposition4_4_Finite,
+%   not_davisKahanProposition4_4_Finite
+\noindent\begin{minipage}{\linewidth}
+\begin{lstlisting}[style=leanpaper,
+  caption={Lean signatures for the arbitrarily small-angle witness and the
+  refutation of Proposition~4.4. In this ASCII transcription,
+  \texttt{E4} abbreviates \texttt{EuclideanSpace Real (Fin 4)}.
+  The Ky Fan sum of all four singular values is the trace norm;
+  principal angle index zero selects the largest angle.},
+  label={lst:prop44-refutation}]
+theorem arbitrarilySmall_fullDisplacement_refuted
+    (epsilon : Real) (hepsilon : 0 < epsilon) :
+    (*@$\exists$@*) (U V : Submodule Real E4)
+      (hacute : Submodule.IsAcute U V)
+      (W : LinearIsometryEquiv (RingHom.id Real) E4 E4),
+      U.map W.toLinearMap = V (*@$\land$@*)
+      0 < Submodule.principalAngles U V 0 (*@$\land$@*)
+      Submodule.principalAngles U V 0 < epsilon (*@$\land$@*)
+      Submodule.principalAngles U V 0 <= Real.pi / 3 (*@$\land$@*)
+      (LinearMap.id - W.toLinearMap).kyFanSum 4 <
+        (LinearMap.id -
+          (directRotation U V hacute).toLinearMap).kyFanSum 4 := by
+  (*@\laaettr@*)
+
+theorem not_davisKahanProposition4_4_Finite :
+    Not DavisKahanProposition4_4_Finite.{0} := by
+  (*@\laaettr@*)
+\end{lstlisting}
+\end{minipage}\par
+
 The competitor rotates a diagonal real two-plane through $2\sym{theta}$ and
 fixes its orthogonal complement; its displacement has rank two, compared
 with rank four for $\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}$. The operator norm favors the canonical
