@@ -7481,6 +7481,87 @@
       "integration": "a5d2ff395790a7f0d4a5ba9da64c61cbbb16b293",
       "status": "accepted-upstream-local-duplicates-retired",
       "migration_note": "November 27. Kim Morrison's equal-measure isometry predates the DKPS source anchor. #2167 (af8211044881440ec24d7a745a114e1434c5755e) adds the application equation used by the retained multiplier and conjugation laws. The slice-sum assembly uses native casts and extension by zero."
+    },
+    {
+      "source_module": "ForTauCeti.MeasureTheory.LpStar",
+      "source_declarations": [
+        "TauCeti.coeFn_star_lp",
+        "TauCeti.norm_star_lp",
+        "TauCeti.star_sub_lp",
+        "TauCeti.isometry_star_lp",
+        "TauCeti.continuous_star_lp"
+      ],
+      "original_source_anchor": "1963e7be30ab1fb702a9dacd695da3680c1c9d26:ForTauCeti/MeasureTheory/LpStar.lean, extracted from 40ba298bcc4bd54d9ce8f3ea8e21f1dce37a57ab:DavisKahan/SpectralTheory/Real/RealCyclicDecomposition.lean.",
+      "authors_license": "Jon Crall, Claude Opus 5 and GPT-5.6 Sol, Kitware 2026, Apache-2.0.",
+      "final_tauceti_module": "TauCeti.MeasureTheory.Function.Lp.Star",
+      "final_declarations": [
+        "MeasureTheory.Lp.coeFn_star",
+        "MeasureTheory.Lp.instStarAddMonoid",
+        "MeasureTheory.Lp.instNormedStarGroup",
+        "star_sub",
+        "dist_star_star",
+        "continuous_star"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/25667",
+      "integration": "1cc9a0c7d67ed60a64e58ffa48f5a98ef93c3fc4",
+      "accepted_head": "890690c14ff6560fc714449612d1d8a41df28d9b",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "November 27. Remove the star representative facade and the subtraction, isometry and continuity proof duplicates. Real cyclic decomposition and spectral multiplicity use native instance laws. Keep norm_star_lp for arbitrary p, including p < 1, with a direct proof from Mathlib eLpNorm_star. The native normed instance requires 1 ≤ p. DKPS proof descent from #25667 is unestablished."
+    },
+    {
+      "source_module": "ForTauCeti.MeasureTheory.LpRealPart",
+      "source_declarations": [
+        "TauCeti.star_eq_self_of_ae_ofReal_re_eq",
+        "TauCeti.star_add_lp",
+        "TauCeti.star_zero_lp",
+        "TauCeti.star_real_smul_lp",
+        "TauCeti.reLp",
+        "TauCeti.ofRealLp",
+        "TauCeti.coeFn_reLp",
+        "TauCeti.coeFn_ofRealLp",
+        "TauCeti.ofRealLp_add",
+        "TauCeti.ofRealLp_real_smul",
+        "TauCeti.ofRealLp_coe_smul",
+        "TauCeti.star_ofRealLp",
+        "TauCeti.reLp_ofRealLp",
+        "TauCeti.ofRealLp_reLp_of_star_eq_self",
+        "TauCeti.norm_ofRealLp",
+        "TauCeti.starFixedSubmodule",
+        "TauCeti.mem_starFixedSubmodule",
+        "TauCeti.ofRealLpₗᵢ",
+        "TauCeti.ofRealLpₗᵢ_apply",
+        "TauCeti.range_ofRealLpₗᵢ",
+        "TauCeti.starFixedLpEquivRealLp",
+        "TauCeti.starFixedLpEquivRealLp_apply",
+        "TauCeti.starFixedLpEquivRealLp_symm_apply"
+      ],
+      "original_source_anchor": "afc94f37f3813bed842ab17478bfe9ce3868feb6:ForTauCeti/MeasureTheory/LpRealPart.lean",
+      "authors_license": "Jon Crall and Claude Opus 5, Kitware 2026, Apache-2.0.",
+      "final_tauceti_modules": [
+        "Mathlib.MeasureTheory.Function.LpSpace.Basic",
+        "TauCeti.MeasureTheory.Function.Lp.Basic",
+        "TauCeti.MeasureTheory.Function.Lp.Star",
+        "TauCeti.MeasureTheory.Function.Lp.RCLike"
+      ],
+      "final_declarations": [
+        "ContinuousLinearMap.compLp",
+        "MeasureTheory.Lp.instStarModule",
+        "MeasureTheory.Lp.star_eq_self_of_ae_eq_ofReal",
+        "MeasureTheory.Lp.ofRealLI",
+        "MeasureTheory.Lp.reCLM",
+        "MeasureTheory.Lp.coeFn_ofRealLI",
+        "MeasureTheory.Lp.coeFn_reCLM",
+        "MeasureTheory.Lp.star_ofRealLI",
+        "MeasureTheory.Lp.reCLM_ofRealLI",
+        "MeasureTheory.Lp.ofRealLI_reCLM_of_mem_selfAdjoint",
+        "MeasureTheory.Lp.selfAdjointLinearIsometryEquiv",
+        "MeasureTheory.Lp.norm_ofRealCLM_compLp"
+      ],
+      "upstream_pr": "https://github.com/TauCetiProject/TauCeti/pull/41350",
+      "integration": "8c4c645994aec0a8a66f85a2cdf15e203ec44914",
+      "accepted_head": "810b9af686f5554b84d37443b360a14e421ff0c2",
+      "status": "accepted-upstream-local-duplicates-retired",
+      "migration_note": "November 27. Replace the local fixed submodule and isometric equivalence with the native selfAdjoint carrier, scalar inclusion, real part and inverse identity. Retype the multiplicity operator preservation and multiplier intertwiners from 9ef7d61e5c9eed2081697966b67c489807456830 on these native maps. Preserve the arbitrary-exponent real-representative characterizations and both inverse identities at Mathlib's direct compLp operations. The real-valued witness uses #36916's star_eq_self_of_ae_eq_ofReal (31c225fb24e8b6d2d6228e341c17e4b627745c83). #40879 (d2255bc079f6322a02cd0a32e45f5b6656d7fe0c, accepted head 2838701651d7dc45a04f3fc8852adbd4daa939b8) supplies norm_ofRealCLM_compLp for every exponent. DKPS proof descent for these integrations is unestablished."
     }
   ],
   "current_consumption_pin": "dde09e0dcec0e44e75739723bb2ba5baae6ae417"

@@ -158,8 +158,8 @@ the value, so the two commute with nothing to prove beyond moving the representa
 other.
 
 This is what carries the real (`star`-fixed) part of an `L²` space along the relabelling step of
-the multiplicity model: `TauCeti.starFixedSubmodule` is a `star`-fixed set, so an equivariant
-isometry maps it into the corresponding one. -/
+the multiplicity model: a conjugation-equivariant isometry maps self-adjoint classes
+to self-adjoint classes. -/
 theorem star_compLp (hf : MeasurePreserving f μ ν) (F : Lp ℂ 2 ν) :
     star (Lp.compMeasurePreservingₗᵢ ℂ f hf F) = Lp.compMeasurePreservingₗᵢ ℂ f hf (star F) := by
   refine Lp.ext ?_

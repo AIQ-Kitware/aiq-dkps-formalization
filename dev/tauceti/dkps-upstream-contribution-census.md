@@ -1,5 +1,40 @@
 # DKPS -> TauCeti: contribution and mathematical-lineage census
 
+## November 27 native real-part and conjugation APIs for Lᵖ
+
+The real multiplicity models now use the inclusion `Lp.ofRealLI`, real
+part `Lp.reCLM`, and fixed-class inverse from
+`Lp.selfAdjointLinearIsometryEquiv`. TauCeti #41350
+(`8c4c645994ae`, mo271) supplies these as part of the real Gelfand
+representation of L∞. The multiplicity operator on a real-carried
+measure preserves the native `selfAdjoint` carrier. The compression
+and restriction formulas for complex and real symbols keep their
+respective hypotheses. #36916 (`31c225fb24e8`) supplies the
+almost-everywhere test used for the real-valued indicator witness.
+[PR #41350](https://github.com/TauCetiProject/TauCeti/pull/41350) ·
+[PR #36916](https://github.com/TauCetiProject/TauCeti/pull/36916)
+
+Cyclic conjugation equivariance and multiplicity assembly now use
+the native additive and normed star instances from #25667
+(`1cc9a0c7d67e`, tauceti-ai-for-science). The arbitrary-exponent norm
+of the scalar inclusion comes from #40879 (`d2255bc079f6`, chrisflav).
+DKPS retains the arbitrary-exponent conjugation norm, real-representative
+characterizations, and inverse identities for the underlying
+`ContinuousLinearMap.compLp` operations, including the range (p < 1).
+[PR #25667](https://github.com/TauCetiProject/TauCeti/pull/25667) ·
+[PR #40879](https://github.com/TauCetiProject/TauCeti/pull/40879)
+
+DKPS's earlier constructions are anchored at `afc94f37f381` and
+`1963e7be30ab1` (Jon Crall, Claude Opus 5, and GPT-5.6 Sol as credited
+in the source headers, Kitware 2026, Apache-2.0). The integrations
+supply overlapping mathematics. Direct DKPS proof descent is
+unestablished.
+
+The focused build (8989 jobs), full default build (22676 jobs), and
+combined Challenge and result semantic-surface build (22382 jobs) passed
+without warnings. The name comparison reported the same 49 baseline
+findings.
+
 ## November 27 native L² measure transport and partition maps
 
 Spectral multiplicity relabelling now uses Mathlib's pullback isometry and

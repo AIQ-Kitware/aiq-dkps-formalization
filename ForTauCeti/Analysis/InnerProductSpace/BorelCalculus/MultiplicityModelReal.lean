@@ -6,16 +6,15 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.MultiplicityModel
-public import ForTauCeti.MeasureTheory.LpRealPart
-public import ForTauCeti.MeasureTheory.LpStar
+public import TauCeti.MeasureTheory.Function.Lp.Star
 
 /-!
 # When the real part of a multiplicity model is invariant
 
 A `TauCeti.MultiplicityDatum ℂ` presents multiplication by the (truncated) spectral coordinate
 on `L²` of a measure living on `ℂ × ℕ`.  The `star`-fixed part of that `L²` space is the real
-`L²` space (`TauCeti.starFixedLpEquivRealLp`), so a real model can only be read off the complex
-one if the model operator maps the `star`-fixed part into itself.
+`L²` space via `MeasureTheory.Lp.selfAdjointLinearIsometryEquiv`. The real model descends
+when the model operator preserves these self-adjoint classes.
 
 **It does not, in general.**  Multiplication by a symbol `w` satisfies `star (w * F) = conj w * F`
 on a `star`-fixed `F`, so `w * F` is `star`-fixed exactly where `conj w = w` or `F = 0`.  The main
@@ -57,14 +56,14 @@ of the operator, not a well-formedness condition on presentations in general.
 * `TauCeti.MultiplicityDatum.StarFixedInvariant`: the property that the model operator preserves
   the `star`-fixed part.
 * `TauCeti.MultiplicityDatum.starFixedInvariant_iff_base_im_eq_zero`: **the D1 verdict.**
-* `TauCeti.MultiplicityDatum.mapsTo_starFixedSubmodule`: the submodule phrasing of the useful
-  direction.
+* `TauCeti.MultiplicityDatum.mapsTo_selfAdjoint`: the preservation statement on the native
+  self-adjoint carrier.
 
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Extraction class: **authored in place** for the Tau Ceti staging layer.
-* Spectra influence: **none** -- this module imports only Mathlib and `ForTauCeti`.
+* Spectra influence: **none**.
 -/
 
 public section
@@ -142,12 +141,12 @@ section StarMultiplication
 
 variable {α : Type*} [MeasurableSpace α] {μ : Measure α} {p : ℝ≥0∞}
 
-/-- A `star`-fixed `Lᵖ` class is almost everywhere fixed by pointwise conjugation.  This is
-`ae_ofReal_re_eq_of_star_eq_self` in the phrasing multiplication arguments want. -/
+/-- A `star`-fixed `Lᵖ` class is almost everywhere fixed by pointwise conjugation. -/
 theorem ae_conj_eq_self_of_star_eq_self {F : Lp ℂ p μ} (hF : star F = F) :
     ∀ᵐ x ∂μ, conj ((F : α → ℂ) x) = (F : α → ℂ) x := by
-  filter_upwards [ae_ofReal_re_eq_of_star_eq_self hF] with x hx
-  exact RCLike.conj_eq_iff_re.mpr hx
+  filter_upwards [Lp.coeFn_star F] with x hx
+  rw [hF] at hx
+  simpa only [Pi.star_apply, RCLike.star_def] using hx.symm
 
 /-- **A class presented as a bounded symbol times a `star`-fixed class is `star`-fixed exactly
 where the symbol is real or the class vanishes.**
@@ -267,10 +266,10 @@ theorem MultiplicityDatum.base_im_eq_zero_of_starFixedInvariant {D : Multiplicit
   have hFcoe : (F : ℂ × ℕ → ℂ) =ᵐ[D.measure] T.indicator fun _ => (1 : ℂ) :=
     indicatorConstLp_coeFn
   have hFstar : star F = F := by
-    rw [star_eq_self_iff_ae_im_eq_zero]
+    refine Lp.star_eq_self_of_ae_eq_ofReal (u := T.indicator fun _ => (1 : ℝ)) ?_
     filter_upwards [hFcoe] with q hq
     rw [hq, Set.indicator_apply]
-    split_ifs <;> simp
+    by_cases hqT : q ∈ T <;> simp [hqT]
   have hmain := (D.star_operator_eq_self_iff hFstar).mp (h F hFstar)
   have hnull : ∀ᵐ q ∂D.measure, q ∉ T := by
     filter_upwards [hmain, hFcoe, D.ae_norm_le_bound] with q h1 h2 h3
@@ -304,16 +303,11 @@ theorem MultiplicityDatum.starFixedInvariant_iff_base_im_eq_zero (D : Multiplici
   ⟨MultiplicityDatum.base_im_eq_zero_of_starFixedInvariant,
     MultiplicityDatum.starFixedInvariant_of_base_im_eq_zero⟩
 
-/-- The submodule phrasing: for a real-carried datum the model operator maps
-`TauCeti.starFixedSubmodule` into itself, which is the form `TauCeti.starFixedLpEquivRealLp`
-consumes. -/
-theorem MultiplicityDatum.mapsTo_starFixedSubmodule {D : MultiplicityDatum ℂ}
+/-- The model operator of a real-carried datum preserves the self-adjoint classes. -/
+theorem MultiplicityDatum.mapsTo_selfAdjoint {D : MultiplicityDatum ℂ}
     (h : D.base {z : ℂ | z.im ≠ 0} = 0) :
-    ∀ F ∈ starFixedSubmodule ℂ 2 D.measure,
-      D.operator F ∈ starFixedSubmodule ℂ 2 D.measure := by
-  intro F hF
-  rw [mem_starFixedSubmodule] at hF ⊢
-  exact MultiplicityDatum.starFixedInvariant_of_base_im_eq_zero h F hF
+    Set.MapsTo D.operator (selfAdjoint (Lp ℂ 2 D.measure)) (selfAdjoint (Lp ℂ 2 D.measure)) :=
+  MultiplicityDatum.starFixedInvariant_of_base_im_eq_zero h
 
 end StarFixedInvariance
 
@@ -333,14 +327,14 @@ What it does **not** say is that the complex operator *restricts*: the compressi
 restriction exactly when `MultiplicityDatum.StarFixedInvariant` holds, which by
 `MultiplicityDatum.starFixedInvariant_iff_base_im_eq_zero` is exactly reality of the base
 measure. -/
-theorem reLp_multiplicationOperator_ofRealLp (ρ : Measure α) {g : α → ℂ}
+theorem reCLM_multiplicationOperator_ofRealLI (ρ : Measure α) {g : α → ℂ}
     (hg : MemLp g ∞ ρ) (hr : MemLp (fun x => (g x).re) ∞ ρ) (f : Lp ℝ 2 ρ) :
-    reLp (Lp.multiplicationOperator (hg.toLp g) (ofRealLp (K := ℂ) f)) =
+    Lp.reCLM ℂ 2 ρ (Lp.multiplicationOperator (hg.toLp g) (Lp.ofRealLI ℂ 2 ρ f)) =
       Lp.multiplicationOperator (hr.toLp (fun x => (g x).re)) f := by
   refine Lp.ext ?_
-  filter_upwards [coeFn_reLp (Lp.multiplicationOperator (hg.toLp g) (ofRealLp (K := ℂ) f)),
-    coeFn_multiplicationOperator_toLp hg (ofRealLp (K := ℂ) f),
-    coeFn_ofRealLp (K := ℂ) f,
+  filter_upwards [Lp.coeFn_reCLM (Lp.multiplicationOperator (hg.toLp g) (Lp.ofRealLI ℂ 2 ρ f)),
+    coeFn_multiplicationOperator_toLp hg (Lp.ofRealLI ℂ 2 ρ f),
+    Lp.coeFn_ofRealLI (𝕜 := ℂ) f,
     coeFn_multiplicationOperator_toLp hr f] with x h1 h2 h3 h4
   rw [h1, h2, h3, h4]
   simp
@@ -362,17 +356,17 @@ theorem coordTruncField_complex_mul_ofReal {R : ℝ} {z : ℂ} (hzR : ‖z‖ �
 /-- **On a real-carried datum the model operator restricts to the real classes, and acts there by
 the real truncated coordinate.**
 
-This is the equational form of `MultiplicityDatum.mapsTo_starFixedSubmodule`: not merely that the
+This is the equational form of `MultiplicityDatum.mapsTo_selfAdjoint`: not merely that the
 `star`-fixed part is preserved, but *what the restriction is*.  The reality hypothesis is used
 pointwise, through `conj_coordTrunc_of_im_eq_zero`, at almost every point of the model measure --
 which is where `MultiplicityDatum.ae_fst_notMem` and `MultiplicityDatum.ae_norm_le_bound` enter. -/
-theorem MultiplicityDatum.operator_ofRealLp {D : MultiplicityDatum ℂ}
+theorem MultiplicityDatum.operator_ofRealLI {D : MultiplicityDatum ℂ}
     (hbase : D.base {z : ℂ | z.im ≠ 0} = 0) (f : Lp ℝ 2 D.measure) :
-    D.operator (ofRealLp f) = ofRealLp
+    D.operator (Lp.ofRealLI ℂ 2 D.measure f) = Lp.ofRealLI ℂ 2 D.measure
       (Lp.multiplicationOperator (coordTruncLp ℝ D.measure D.bound D.bound_nonneg) f) := by
   refine Lp.ext ?_
-  filter_upwards [D.coeFn_operator (ofRealLp f), coeFn_ofRealLp (K := ℂ) f,
-    coeFn_ofRealLp (K := ℂ)
+  filter_upwards [D.coeFn_operator (Lp.ofRealLI ℂ 2 D.measure f), Lp.coeFn_ofRealLI (𝕜 := ℂ) f,
+    Lp.coeFn_ofRealLI (𝕜 := ℂ)
       (Lp.multiplicationOperator (coordTruncLp ℝ D.measure D.bound D.bound_nonneg) f),
     coeFn_coordTruncLp_multiplicationOperator ℝ D.measure D.bound_nonneg f,
     D.ae_fst_notMem measurableSet_im_ne_zero hbase, D.ae_norm_le_bound] with q h1 h2 h3 h4 h5 h6
@@ -382,9 +376,8 @@ theorem MultiplicityDatum.operator_ofRealLp {D : MultiplicityDatum ℂ}
 /-- **A real model, read off a `star`-equivariant complex model.**
 
 `E` is presented as a real form of `H`: an `ℝ`-linear isometry `jE` into the fixed set of `cH`,
-with a retraction `rE` inverting it there, carrying `T` to `A`.  The model side needs no such
-hypothesis-shaped input, because `TauCeti.ofRealLpₗᵢ` and `TauCeti.reLp` *are* the corresponding
-data for `star`, by `TauCeti.star_ofRealLp` and `TauCeti.ofRealLp_reLp_of_star_eq_self`.
+with a retraction `rE` inverting it there, carrying `T` to `A`. On the model side, the
+native real inclusion and real part give the two maps on the self-adjoint classes.
 
 The retyped datum carries the same base measure and the same level sets
 (`MultiplicityDatum.retype_base`, `MultiplicityDatum.retype_level`), so no multiplicity content
@@ -401,28 +394,29 @@ theorem operatorUnitaryEquiv_retype_real_of_starOperatorUnitaryEquiv {H : Type*}
     OperatorUnitaryEquiv T (D.retype ℝ).operator := by
   refine operatorUnitaryEquiv_retype_real_operator D ?_
   exact operatorUnitaryEquiv_of_starOperatorUnitaryEquiv jE rE hjEadd hjEsmul hjEnorm hfixE
-    hrjE hT (fun f => (ofRealLp f : Lp ℂ 2 D.measure)) reLp (fun f g => ofRealLp_add f g)
-    (fun c f => ofRealLp_coe_smul c f) (fun f => norm_ofRealLp f) (fun f => star_ofRealLp f)
-    (fun _ hG => ofRealLp_reLp_of_star_eq_self hG)
-    (fun f => MultiplicityDatum.operator_ofRealLp hbase f) h
+    hrjE hT (Lp.ofRealLI ℂ 2 D.measure) (Lp.reCLM ℂ 2 D.measure)
+    (map_add _) (fun c f => (map_smul (Lp.ofRealLI ℂ 2 D.measure) c f).trans
+      (RCLike.real_smul_eq_coe_smul (K := ℂ) _ _)) (LinearIsometry.norm_map _)
+    Lp.star_ofRealLI (fun F hF => Lp.ofRealLI_reCLM_of_mem_selfAdjoint ⟨F, hF⟩)
+    (fun f => MultiplicityDatum.operator_ofRealLI hbase f) h
 
 /-- **Multiplication by a real-valued symbol restricts to the real classes**, with no reality
 hypothesis on the measure at all.
 
 A real symbol commutes with pointwise conjugation outright, which is what lets the *second* half
 of the real classification run entirely inside the complex Radon--Nikodym theory and then descend.
-Compare `MultiplicityDatum.operator_ofRealLp`, where the symbol is the complex coordinate and the
+Compare `MultiplicityDatum.operator_ofRealLI`, where the symbol is the complex coordinate and the
 statement is therefore conditional on the base measure being carried by the real axis. -/
-theorem mulLp_ofReal_ofRealLp {α : Type*} [MeasurableSpace α] (ρ : Measure α) {g : α → ℝ}
+theorem mulLp_ofReal_ofRealLI {α : Type*} [MeasurableSpace α] (ρ : Measure α) {g : α → ℝ}
     (hg : Measurable g) (hgLp : MemLp g ∞ ρ) {C : ℝ}
     (hgC : ∀ x, ‖((g x : ℝ) : ℂ)‖ ≤ C) (f : Lp ℝ 2 ρ) :
     Lp.multiplicationOperator (E := ℂ) (p := 2) (boundedSymbolLp ρ (Complex.measurable_ofReal.comp
-      hg) hgC) (ofRealLp f)
-      = ofRealLp (Lp.multiplicationOperator (hgLp.toLp g) f) := by
+      hg) hgC) (Lp.ofRealLI ℂ 2 ρ f)
+      = Lp.ofRealLI ℂ 2 ρ (Lp.multiplicationOperator (hgLp.toLp g) f) := by
   refine Lp.ext ?_
-  filter_upwards [coeFn_mulLp ρ (Complex.measurable_ofReal.comp hg) hgC (ofRealLp f),
-    coeFn_ofRealLp (K := ℂ) f,
-    coeFn_ofRealLp (K := ℂ) (Lp.multiplicationOperator (hgLp.toLp g) f),
+  filter_upwards [coeFn_mulLp ρ (Complex.measurable_ofReal.comp hg) hgC (Lp.ofRealLI ℂ 2 ρ f),
+    Lp.coeFn_ofRealLI (𝕜 := ℂ) f,
+    Lp.coeFn_ofRealLI (𝕜 := ℂ) (Lp.multiplicationOperator (hgLp.toLp g) f),
     coeFn_multiplicationOperator_toLp hgLp f] with x h1 h2 h3 h4
   rw [h1, h2, h3, h4]
   simp
@@ -471,13 +465,17 @@ theorem operatorUnitaryEquiv_of_measureEquiv_real {D E : MultiplicityDatum ℝ}
         (Complex.measurable_ofReal.comp hgmeas) hgC' F)
       (fun F => (star_rnDerivL2Equiv hmeas.1 hmeas.2 F).symm)
   exact operatorUnitaryEquiv_of_starOperatorUnitaryEquiv
-    (fun f => (ofRealLp f : Lp ℂ 2 D.measure)) reLp ofRealLp_add ofRealLp_coe_smul norm_ofRealLp
-    star_ofRealLp (fun _ hG => ofRealLp_reLp_of_star_eq_self hG)
-    (fun f => mulLp_ofReal_ofRealLp D.measure hgmeas
+    (Lp.ofRealLI ℂ 2 D.measure) (Lp.reCLM ℂ 2 D.measure)
+    (map_add _) (fun c f => (map_smul (Lp.ofRealLI ℂ 2 D.measure) c f).trans
+      (RCLike.real_smul_eq_coe_smul (K := ℂ) _ _)) (LinearIsometry.norm_map _)
+    Lp.star_ofRealLI (fun F hF => Lp.ofRealLI_reCLM_of_mem_selfAdjoint ⟨F, hF⟩)
+    (fun f => mulLp_ofReal_ofRealLI D.measure hgmeas
       (memLp_top_of_bound hgmeas.aestronglyMeasurable _ (Filter.Eventually.of_forall hgC)) hgC' f)
-    (fun f => (ofRealLp f : Lp ℂ 2 E.measure)) reLp ofRealLp_add ofRealLp_coe_smul norm_ofRealLp
-    star_ofRealLp (fun _ hG => ofRealLp_reLp_of_star_eq_self hG)
-    (fun f => mulLp_ofReal_ofRealLp E.measure hgmeas
+    (Lp.ofRealLI ℂ 2 E.measure) (Lp.reCLM ℂ 2 E.measure)
+    (map_add _) (fun c f => (map_smul (Lp.ofRealLI ℂ 2 E.measure) c f).trans
+      (RCLike.real_smul_eq_coe_smul (K := ℂ) _ _)) (LinearIsometry.norm_map _)
+    Lp.star_ofRealLI (fun F hF => Lp.ofRealLI_reCLM_of_mem_selfAdjoint ⟨F, hF⟩)
+    (fun f => mulLp_ofReal_ofRealLI E.measure hgmeas
       (memLp_top_of_bound hgmeas.aestronglyMeasurable _ (Filter.Eventually.of_forall hgC)) hgC' f)
     hstar
 
@@ -598,7 +596,7 @@ theorem exists_hasMultiplicityModel_star [TopologicalSpace.SeparableSpace H]
     fun n F => (star_sliceLp (fun m => Measure.map ((↑) : spectrum ℂ a → ℂ)
       ((cfcHom ha).representationDiagMeasure (ξ m))) n F).symm
   have hstep1 := starOperatorUnitaryEquiv_of_isHilbertSum hsum' hsum2 hA hB hcH hcHadd
-    continuous_star_lp star_add_lp hVc hWc
+    continuous_star star_add hVc hWc
   obtain ⟨ρ, D, hρfin, hDmeas, hDanti, hρsupp, hρzero, hstep2⟩ :=
     exists_multiplicityLevels (fun n => Measure.map ((↑) : spectrum ℂ a → ℂ)
       ((cfcHom ha).representationDiagMeasure (ξ n))) (measurable_coordTrunc (‖a‖))
