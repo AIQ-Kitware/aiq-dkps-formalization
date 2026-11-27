@@ -40,6 +40,19 @@ this construction and its cost from the block minimum.
 Write $\sym{OrthogonalGroup}$ for the orthogonal group of real
 $n\times n$ matrices, defined by $\sym{Wcompetitor}^T\sym{Wcompetitor}=\sym{Identity}$.
 
+The two $30^\circ$ angles in \cref{eq:prop44-thirty-degrees} have distinct
+labels. Each singleton costs $4\sin 15^\circ<2$, so the two matchings have
+the following costs:
+\[
+\begin{array}{@{}ll@{}}
+ \text{Both labels unmatched} & 8\sin 15^\circ\approx 2.071,\\
+ \text{The two labels paired} & 4\sin 30^\circ=2 .
+\end{array}
+\]
+The direct rotation realizes the empty matching. The explicit orthogonal
+competitor realizes the one-edge matching. By \cref{thm:real-matching-example},
+$2$ is the minimum over all ambient orthogonal transporters for this pair.
+
 % Note:
 \begin{theorem}[Real trace-norm matching reduction]%
 \label{thm:real-matching-example}

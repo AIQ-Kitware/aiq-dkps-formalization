@@ -127,13 +127,25 @@ Apply \cref{thm:small-angle} with
 $\sym{theta}=\min\{\sym{EpsilonAngle}/2,\sym{PiConstant}/4\}$.
 \end{proof}
 
-\Cref{lst:prop44-refutation} presents the formalized counterexample for every
-positive acute angle.
+\noindent\begin{minipage}{\linewidth}
+Take both principal angles to be $\sym{theta}=30^\circ$. The orthogonal map
+in \cref{eq:wtheta} has two nonzero displacement singular values, both
+equal to $1$. The direct rotation has four displacement singular values,
+each equal to $2\sin 15^\circ$. Hence
+\begin{equation}\label{eq:prop44-thirty-degrees}
+ \|\sym{Identity}-\like{Wcompetitor}{\symglyph{Wcompetitor}_{\symglyph{theta}}}\|_1
+ =4\sin 30^\circ=2
+ <8\sin 15^\circ
+ =\|\sym{Identity}-\like{Rrotation}{\symglyph{Rrotation}_{\symglyph{theta}}}\|_1 .
+\end{equation}
+The direct rotation costs approximately $2.071$, and the largest angle
+$30^\circ$ is below the printed bound of $60^\circ$.
+\Cref{lst:prop44-refutation} verifies the transport equation, the principal
+angles, and the strict trace-norm comparison for every positive acute angle.
 
 % Source: DavisKahan/FiniteDimensional/DirectRotation/SmallAngleCounterexample.lean,
 % TauCeti.DavisKahan.FiniteDimensional.SmallAngleCounterexample.explicit_traceNorm_counterexample.
 % U4 is defined in ShortRotationCounterexample.lean.
-\noindent\begin{minipage}{\linewidth}
 \begin{lstlisting}[style=leanpaper,
   caption={The explicit counterexample to Proposition~4.4.
   In $\sym{RealField}^4$, \texttt{U4} is the first coordinate plane,
